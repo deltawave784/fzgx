@@ -10411,7 +10411,8 @@
         ]
       }
     ],
-    "link": "pending"
+    "link": "verified",
+    "commit": "5b47a768"
   },
   "fn_1_12A7C4": {
     "seed_symbol": "fn_1_12A7C4",
@@ -10428,7 +10429,8 @@
     "headers_sha256": "ffe2f3705e2c5e3ba6c721fed1771f5de20612254417a59f486b5a3ed3538a44",
     "oracle_sha256": "f7685915459d64c15c3a0f781fa019d6ff8789da838592c92e6a24d5eba8b159",
     "recipe": [],
-    "link": "pending"
+    "link": "verified",
+    "commit": "5b47a768"
   },
   "fn_1_A358C": {
     "seed_symbol": "fn_1_A358C",
@@ -10484,6 +10486,7 @@
         ]
       }
     ],
-    "link": "pending"
+    "link": "verified",
+    "commit": "5b47a768"
   }
 }
