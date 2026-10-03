@@ -124,6 +124,12 @@ def generate(p: Project, s: str, sym, path: Path, body: str, check, outdir: Path
     return out
 
 
+def _score(r) -> float:
+    # the ledger's metric (api._record_check): adjusted for accepted pool rows, so a landed
+    # sweep body ranks against agent attempts on the same scale
+    return r.percent_adjusted if r.pool_rows else r.percent
+
+
 def climb(p: Project, selection: Dict[str, str], outdir: Path, rounds: int = 4,
           families: Optional[List[str]] = None) -> Dict[str, dict]:
     """Hill-climb every selected body: the best candidate by word score replaces the body when
@@ -135,7 +141,7 @@ def climb(p: Project, selection: Dict[str, str], outdir: Path, rounds: int = 4,
     for s, f in cur.items():
         r = checks.get(s)
         if r and r.ok:
-            state[s] = dict(base=r.percent, percent=r.percent, file=str(f), matched=r.matched, history=[], check=r)
+            state[s] = dict(base=_score(r), percent=_score(r), file=str(f), matched=r.matched, history=[], check=r)
     print('functions', len(state))
     for rnd in range(rounds):
         active = [s for s, x in state.items() if not x['matched']]
@@ -194,8 +200,8 @@ def climb(p: Project, selection: Dict[str, str], outdir: Path, rounds: int = 4,
             if not r or not r.ok:
                 continue
             # accepted on the aligned gain: objdiff's percent may dip while the shape improves
-            if r.matched or r.matched_pool or r.percent > state[s]['percent'] - 2.0:
-                state[s].update(percent=r.percent, file=str(f), matched=bool(r.matched or r.matched_pool), check=r)
+            if r.matched or r.matched_pool or _score(r) > state[s]['percent'] - 2.0:
+                state[s].update(percent=_score(r), file=str(f), matched=bool(r.matched or r.matched_pool), check=r)
                 state[s]['history'].append(best[s][3])
                 gained += 1
         print(f'round {rnd}: {gained} improved, matched so far {sum(1 for x in state.values() if x["matched"])}')
