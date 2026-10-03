@@ -24113,6 +24113,50 @@
   },
   {
     "module": "main",
+    "source": "dol/fn_8008CB20.c",
+    "symbols": [
+      "fn_8008CB20"
+    ],
+    "status": "matching",
+    "mw_version": null,
+    "extra_cflags": [],
+    "asm": true
+  },
+  {
+    "module": "main",
+    "source": "dol/fn_8008CB28.c",
+    "symbols": [
+      "fn_8008CB28"
+    ],
+    "status": "matching",
+    "mw_version": null,
+    "extra_cflags": [],
+    "asm": true
+  },
+  {
+    "module": "main",
+    "source": "dol/fn_8008CB30.c",
+    "symbols": [
+      "fn_8008CB30"
+    ],
+    "status": "matching",
+    "mw_version": null,
+    "extra_cflags": [],
+    "asm": true
+  },
+  {
+    "module": "main",
+    "source": "dol/fn_8008CB38.c",
+    "symbols": [
+      "fn_8008CB38"
+    ],
+    "status": "matching",
+    "mw_version": null,
+    "extra_cflags": [],
+    "asm": true
+  },
+  {
+    "module": "main",
     "source": "dol/fn_8008D028.c",
     "symbols": [
       "fn_8008D028"
@@ -32896,6 +32940,17 @@
     ],
     "status": "matching",
     "mw_version": null,
+    "extra_cflags": [],
+    "tu": "rel/main_rel/car.c"
+  },
+  {
+    "module": "main_rel",
+    "source": "rel/main_rel/car/fn_1_8CA70.c",
+    "symbols": [
+      "fn_1_8CA70"
+    ],
+    "status": "matching",
+    "mw_version": "GC/1.3.2",
     "extra_cflags": [],
     "tu": "rel/main_rel/car.c"
   },

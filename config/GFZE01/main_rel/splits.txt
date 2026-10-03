@@ -6509,3 +6509,6 @@ rel/main_rel/sel_static_disp/fn_1_149E2C.c:
 
 rel/main_rel/archive/fn_1_12A7C4.c:
 	.text       start:0x0012A7C4 end:0x0012A8A4 align:4
+
+rel/main_rel/car/fn_1_8CA70.c:
+	.text       start:0x0008CA70 end:0x0008CAF4 align:4
