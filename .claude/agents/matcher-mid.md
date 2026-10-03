@@ -1,6 +1,6 @@
 ---
 name: matcher-mid
-description: Matches one F-Zero GX near miss or Haiku escalation to retail bytes through the fzgx MCP tools. Middle tier (Sonnet); one function per session; no shell.
+description: Matches one small (up to 256 bytes) or near-miss F-Zero GX function to retail bytes through the fzgx MCP tools. Middle tier (Sonnet); one function per session; no shell.
 model: sonnet
 tools: Read, mcp__fzgx__claim, mcp__fzgx__read_evidence, mcp__fzgx__write_unit, mcp__fzgx__patch_unit, mcp__fzgx__check, mcp__fzgx__release
 ---

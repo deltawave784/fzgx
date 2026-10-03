@@ -14,6 +14,7 @@ import json
 import struct
 import os
 import re
+import threading
 import time
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -25,6 +26,7 @@ ROOT = Path(__file__).resolve().parent.parent.parent
 DEFAULT_VERSION = "GFZE01"
 # Ledger, locks, saved attempts and caches: outside build/ on purpose (a build wipe must not lose state).
 STATE_DIR = ROOT / ".fzgx"
+_ASM_INDEX_LOCK = threading.RLock()  # see Project.function_asm
 
 # "name = .section:0xADDR; // type:function size:0x10 scope:global align:4 data:4byte"
 SYMBOL_RE = re.compile(
@@ -345,6 +347,14 @@ class Project:
         """Parse every .s of a module once per process; cached on disk by mtime."""
         if module in self._asm_index:
             return self._asm_index[module]
+        # one builder per process: check_many's threads otherwise all parse the module and
+        # race on the cache's temporary file (Windows refuses a second open for writing)
+        with _ASM_INDEX_LOCK:
+            if module in self._asm_index:
+                return self._asm_index[module]
+            return self._build_function_asm(module)
+
+    def _build_function_asm(self, module: str) -> Dict[str, Function]:
         files = self._asm_files(module)
         cache = STATE_DIR / f"asm_index_{self.version}_{module}.json"
         stamp = max((f.stat().st_mtime for f in files), default=0)
@@ -398,7 +408,7 @@ class Project:
                 elif raw.strip().endswith(":"):
                     lines.append(raw.strip())  # local label
         cache.parent.mkdir(parents=True, exist_ok=True)
-        temporary = cache.with_suffix(f'.{os.getpid()}.tmp')
+        temporary = cache.with_suffix(f'.{os.getpid()}.{threading.get_ident()}.tmp')
         temporary.write_text(json.dumps({
             "stamp": stamp, "v": 3,
             "functions": {k: {"asm": v.asm, "refs": v.refs, "unit": v.unit} for k, v in result.items()},

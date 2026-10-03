@@ -99,15 +99,28 @@ def cmd_stuck(a, p):
 
 def cmd_route(a, p):
     from . import route
-    tried = route.tried_by(a.escalate_from) if a.escalate_from else None
+    escalate = route.tried_by(a.escalate_from) if a.escalate_from else None
     # functions a Claude tier already attempted (agent ids `haiku-`/`sonnet-`/`opus-...`)
-    skip = set().union(*(route.tried_by(t + "-") for t in route.AGENT)) if a.skip_tried else None
-    rows = route.plan(p, a.limit, a.small, module=a.module, tier=a.tier, mid=a.mid, haiku_tried=tried, exclude=skip)
+    skip = set().union(*(route.tried_by(t + "-") for t in ("haiku", "sonnet", "opus"))) if a.skip_tried else None
+    rows = route.plan(p, a.limit, a.small, module=a.module, tier=a.tier, escalate=escalate, exclude=skip)
     if a.json:
         print(json.dumps(rows, indent=1))
     else:
         for r in rows:
             print(f"{r['agent_type']:<14} {r['symbol']:<32} {r['module']:<12} {r['size']:>6} B  best {r['best']:>5.1f}%  tried {r['attempts']}")
+
+
+def cmd_seed_corpus(a, p):
+    from . import corpusseed
+    r = corpusseed.run(p, a.per_symbol, apply=not a.dry_run)
+    if a.json:
+        print(json.dumps(r, indent=1))
+    else:
+        for s, e in sorted(r.items(), key=lambda x: -x[1]['score']):
+            mark = 'MATCH' if e['matched'] else ('imported' if e.get('imported') else 'kept local')
+            print(f"{s:28s} {e['score']:6.2f}%  recorded {e['recorded']:6.2f}  local {e['local'] if e['local'] is not None else '-':>6}  {e['mw'] or '-'} {e['flags'] or ''}  {mark}")
+        print(f"{sum(1 for e in r.values() if e.get('imported'))} imported of {len(r)} rescored")
+    return 0
 
 
 def cmd_type_survey(a, p):
@@ -565,11 +578,12 @@ def build_parser() -> argparse.ArgumentParser:
     s.add_argument('--budget', type=float, help='total search seconds, including compilation')
     s.add_argument('--drafts', action='store_true', help='include saved lifter bodies')
     s = sub.add_parser("route", help="next functions for a Claude Code wave, each with the subagent type to run it"); s.set_defaults(fn=cmd_route)
-    s.add_argument("--limit", type=int, default=8); s.add_argument("--small", type=int, default=256, help="largest size (bytes) for the haiku tier")
-    s.add_argument("--module"); s.add_argument("--tier", choices=["haiku", "sonnet", "opus"]); s.add_argument("--json", action="store_true")
-    s.add_argument("--mid", action="store_true", help="route small near misses and haiku escalations to sonnet (matcher-mid)")
-    s.add_argument("--escalate-from", metavar="MODEL", help="escalate functions this model already attempted (e.g. claude-haiku): to sonnet with --mid, else opus")
-    s.add_argument("--skip-tried", action="store_true", help="leave out functions any Claude tier (haiku-/sonnet-/opus- agents) already attempted")
+    s.add_argument("--limit", type=int, default=8); s.add_argument("--small", type=int, default=256, help="largest size (bytes) for the sonnet tier")
+    s.add_argument("--module"); s.add_argument("--tier", choices=["sonnet", "opus"]); s.add_argument("--json", action="store_true")
+    s.add_argument("--escalate-from", metavar="PREFIX", help="send small functions this tier already attempted (agent-id prefix, e.g. sonnet-) to opus")
+    s.add_argument("--skip-tried", action="store_true", help="leave out functions any Claude tier (sonnet-/opus-, formerly haiku-) already attempted")
+    s = sub.add_parser("seed-corpus", help="rescore the best archived bodies in state/repairs and save them as local seeds"); s.set_defaults(fn=cmd_seed_corpus)
+    s.add_argument("--per-symbol", type=int, default=2); s.add_argument("--dry-run", action="store_true"); s.add_argument("--json", action="store_true")
     s = sub.add_parser("type-survey", help="group per-function struct views into candidate shared types (leads for the librarian)"); s.set_defaults(fn=cmd_type_survey)
     s.add_argument("--top", type=int, default=20); s.add_argument("--emit", type=int, metavar="ID", help="print a proposed merged struct for cluster ID")
     s.add_argument("--name", default="Merged", help="typedef name for --emit"); s.add_argument("--json", action="store_true")
