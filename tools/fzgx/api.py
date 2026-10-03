@@ -195,7 +195,9 @@ def _compiler_options(p: Project, key: str) -> dict:
 
 
 def claim(p: Project, symbol: str, agent: str, ttl: int = DEFAULT_TTL,
-          max_attempts: int = MAX_ATTEMPTS, no_carve: bool = False) -> Dict[str, Any]:
+          max_attempts: int = MAX_ATTEMPTS, no_carve: bool = False, local_seed: bool = True) -> Dict[str, Any]:
+    """local_seed=False for callers that install their own body (sweep landing): the seed's
+    best.c would otherwise be what release saves."""
     l = Ledger()
     if os.environ.get("FZGX_AGENT_ID", agent) != agent or os.environ.get("FZGX_SYMBOL", symbol) != symbol:
         return {"ok": False, "error": "use the function and agent identity assigned to this worker"}
@@ -216,7 +218,7 @@ def claim(p: Project, symbol: str, agent: str, ttl: int = DEFAULT_TTL,
     seed_body = None
     if os.environ.get('FZGX_SEEDS') and not seed:
         return {'ok': False, 'error': 'seeded batch has no candidate for this function'}
-    if not os.environ.get('FZGX_SEEDS') and not _is_revise(agent):
+    if local_seed and not os.environ.get('FZGX_SEEDS') and not _is_revise(agent):
         seed = _local_seed(l, key)
     if seed:
         seed_body = Path(seed['path']).read_text()

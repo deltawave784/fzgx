@@ -223,7 +223,7 @@ def land(p: Project, rep: Dict[str, dict], label: str) -> Dict[str, list]:
         if not r.get('matched') and pct <= r['base'] + 0.05:
             continue
         body = Path(r['file']).read_text()
-        c = api.claim(p, s, agent, max_attempts=999, no_carve=True)
+        c = api.claim(p, s, agent, max_attempts=999, no_carve=True, local_seed=False)
         if not c.get('ok'):
             failed.append((s, 'claim', c.get('error')))
             continue
