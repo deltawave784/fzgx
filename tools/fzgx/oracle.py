@@ -9,7 +9,6 @@ relink()       -> full `ninja`; the CHECK step fails unless every target in
 from __future__ import annotations
 
 import base64
-import fcntl
 import json
 import os
 import re
@@ -23,10 +22,10 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple
 
-from . import poolfix
+from . import compat, poolfix
 from .project import ROOT, STATE_DIR, Project, Symbol
 
-OBJDIFF = ROOT / "build" / "tools" / "objdiff-cli"
+OBJDIFF = compat.tool("objdiff-cli")
 
 
 @dataclass
@@ -79,7 +78,7 @@ def build_lock(name: str = "build.lock", timeout_s: float = 120.0):
         t0 = _time.time(); warned = False
         while True:
             try:
-                fcntl.flock(f, fcntl.LOCK_EX | fcntl.LOCK_NB)
+                compat.lock(f, blocking=False)
                 break
             except BlockingIOError:
                 if _time.time() - t0 > timeout_s:
@@ -90,7 +89,7 @@ def build_lock(name: str = "build.lock", timeout_s: float = 120.0):
         try:
             yield
         finally:
-            fcntl.flock(f, fcntl.LOCK_UN)
+            compat.unlock(f)
 
 
 def configure(project: Project) -> subprocess.CompletedProcess:
@@ -1035,7 +1034,7 @@ def compile_command(project: Project, module: str, mw_version: Optional[str] = N
             flags = " ".join(shlex.quote(olevel[-1] if f.startswith("-O") else f) for f in shlex.split(flags))
         flags = " ".join([flags] + [shlex.quote(f) for f in extra if not f.startswith("-O")])
     # mwcc names each object after its source in the -o directory; sources must have distinct stems
-    base_cmd = [str(ROOT / "build" / "tools" / "wibo"), str(ROOT / "build" / "compilers" / mw / "mwcceppc.exe")]
+    base_cmd = compat.mwcc(mw)
     # -nofail: a source that fails to compile is skipped and the rest of the batch still compiles
     arguments = shlex.split(flags)
     if include_dirs is not None:
@@ -1245,7 +1244,7 @@ def compile_source(project: Project, module: str, source: Path, obj: Path,
             flags = " ".join(shlex.quote(olevel[-1] if f.startswith("-O") else f) for f in shlex.split(flags))
         flags = " ".join([flags] + [shlex.quote(f) for f in extra if not f.startswith("-O")])
     obj.parent.mkdir(parents=True, exist_ok=True)
-    cmd = [str(ROOT / "build" / "tools" / "wibo"), str(ROOT / "build" / "compilers" / mw / "mwcceppc.exe")]
+    cmd = compat.mwcc(mw)
     # Regenerated headers must take precedence over their currently owned copy.
     cmd += [arg for path in include_dirs or [] for arg in ('-i', str(path))]
     cmd += shlex.split(flags) + ["-c", str(source), "-o", str(obj)]
@@ -1278,7 +1277,7 @@ def compile_unit(project: Project, unit: str, unit_src: str,
     obj = output or _base_object(project, unit)
     obj.parent.mkdir(parents=True, exist_ok=True)
     src = source or unit_source_path(project, unit_src)
-    cmd = [str(ROOT / "build" / "tools" / "wibo"), str(ROOT / "build" / "compilers" / mw / "mwcceppc.exe")]
+    cmd = compat.mwcc(mw)
     cmd += shlex.split(flags) + ucfg.get("extra_cflags", []) + ["-c", str(src), "-o", str(obj)]
     return subprocess.run(cmd, cwd=ROOT, text=True, capture_output=True, timeout=120)
 

@@ -14,7 +14,7 @@ import struct
 import sys
 from pathlib import Path
 
-from . import oracle
+from . import compat, oracle
 from .carve import _section_default_align, order_labels_after_functions
 from .poolfix import Elf
 from .project import ROOT, STATE_DIR, Project, Symbol
@@ -709,7 +709,7 @@ def _install(p, records, scratch):
             provenance.parent.mkdir(parents=True, exist_ok=True)
             provenance.write_text(json.dumps(saved, indent=2, sort_keys=True) + '\n')
         for command in ([sys.executable, 'configure.py', '--version', p.version], ['ninja'],
-                        ['build/tools/dtk', 'shasum', '-q', '-c', f'config/{p.version}/build.sha1']):
+                        [str(compat.tool('dtk')), 'shasum', '-q', '-c', f'config/{p.version}/build.sha1']):
             cp = oracle.run(command, timeout=1800)
             if cp.returncode:
                 raise ValueError((cp.stdout + cp.stderr)[-6000:])

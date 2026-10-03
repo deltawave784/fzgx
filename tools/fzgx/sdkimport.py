@@ -12,7 +12,7 @@ from collections import defaultdict
 from dataclasses import dataclass
 from pathlib import Path
 
-from . import api, oracle, sdkmatch
+from . import api, compat, oracle, sdkmatch
 from .ledger import Ledger
 from .poolfix import Elf, code_reloc_offset
 from .project import ROOT, STATE_DIR, Project
@@ -214,7 +214,7 @@ def preprocess(sdk: Path, source: str, mw: str) -> str:
     scratch = STATE_DIR / 'sdkimport' / sdk.name
     scratch.mkdir(parents=True, exist_ok=True)
     output = scratch / (Path(source).stem + '.i')
-    cmd = [str(ROOT / 'build/tools/wibo'), str(ROOT / 'build/compilers' / mw / 'mwcceppc.exe')]
+    cmd = compat.mwcc(mw)
     cmd += sdkmatch.DOLPHIN_FLAGS + ['-cwd', 'source'] + preprocessor_flags(sdk)
     for inc in include_directories(sdk):
         cmd += ['-i', str(inc)]

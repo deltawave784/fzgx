@@ -50,7 +50,8 @@ Jump tables and code-interior pointers remain with their reconstructed functions
 ## Librarian (serial; stronger model)
 
 Applies name proposals (`fzgx names`), promotes shared structs into
-`include/`, merges fully matched ranges into translation units, adjusts data
+`include/` (start from `fzgx type-survey`: clusters of per-function struct views
+that describe one object, with a proposed merged layout via `--emit ID`), merges fully matched ranges into translation units, adjusts data
 ownership in `splits.txt`, appends to `docs/MWCC_IDIOMS.md`. Always ends with
 `python3 configure.py && ninja` printing `16 files OK`, `fzgx lint`,
 `fzgx snapshot`, and a concise commit describing the actual changes.

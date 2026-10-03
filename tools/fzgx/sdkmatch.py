@@ -16,6 +16,7 @@ from collections import defaultdict
 from pathlib import Path
 from typing import Dict, List, Tuple
 
+from . import compat
 from .poolfix import Elf, CODE_RELOC_MASKS, masked_code
 from .project import ROOT, Project
 
@@ -57,8 +58,8 @@ FLAG_SETS = {"dolphin": DOLPHIN_FLAGS, "runtime": RUNTIME_FLAGS, "smb": SMB_FLAG
 def compile_sdk(sdk: Path, mw: str, out_dir: Path, roots=None):
     """Compile every SDK/runtime source (or `roots`: [(relative dir, flag set name)]);
     returns ([(source, object)], [failed sources])."""
-    wibo = ROOT / "build/tools/wibo"
-    mwcc = ROOT / "build/compilers" / mw / "mwcceppc.exe"
+    mwcc = compat.mwcc(mw)
+
     incs = []
     for inc in ("include", "src", "src/dolphin", "libs/dolphin"):
         if (sdk / inc).is_dir():
@@ -83,7 +84,7 @@ def compile_sdk(sdk: Path, mw: str, out_dir: Path, roots=None):
         rel = src.relative_to(sdk)
         obj = out_dir / rel.with_suffix(".o")
         obj.parent.mkdir(parents=True, exist_ok=True)
-        cmd = [str(wibo), str(mwcc)] + flags + incs + ["-c", str(rel), "-o", str(obj)]
+        cmd = mwcc + flags + incs + ["-c", str(rel), "-o", str(obj)]
         stamp = obj.with_suffix('.command.json')
         command = json.dumps(cmd)
         if (obj.exists() and obj.stat().st_mtime >= src.stat().st_mtime

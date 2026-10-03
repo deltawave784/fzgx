@@ -10,7 +10,7 @@ from collections import defaultdict
 from pathlib import Path
 from typing import Optional
 
-from . import oracle
+from . import compat, oracle
 from .ledger import Ledger
 from .project import Project, ROOT, STATE_DIR
 
@@ -169,7 +169,7 @@ class Declarations:
                 args[i + 1] = str(self.include(ROOT / args[i + 1]))
         wrapper = self.root / (row['id'][:24] + '.c')
         wrapper.write_text(self.protect(body))
-        cmd = [str(ROOT/'build/tools/wibo'), str(ROOT/'build/compilers'/row['mw']/'mwcceppc.exe'), *args, '-EP', str(wrapper)]
+        cmd = [*compat.mwcc(row['mw']), *args, '-EP', str(wrapper)]
         result = subprocess.run(cmd, cwd=ROOT, text=True, capture_output=True, timeout=60)
         if result.returncode:
             raise ValueError(result.stdout[-2000:] + result.stderr[-2000:])

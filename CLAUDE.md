@@ -8,10 +8,11 @@ and `main.rel`, which `tools/prepare_orig.py` derives from `enemy_line/line__.bi
 ## Setup (once)
 
 ```sh
-brew install ninja
+brew install ninja                              # Windows: pip install uv ninja (no WSL needed)
 # put the disc image in orig/ (RVZ/ISO), then:
 uv run tools/prepare_orig.py --version GFZE01   # extracts targets, derives main.rel
 python3 configure.py --version GFZE01 && ninja  # downloads dtk/objdiff/wibo/compilers on first run
+                                                # Windows: uv run python configure.py && uv run ninja
 uv run tools/fzgx.py sync                       # loads 7,308 functions into .fzgx/ledger.db
 uv run tools/fzgx.py restore                    # (optional) load state/ledger.json history
 ```
@@ -503,7 +504,7 @@ Rules that hold for everyone:
   sixteenth of the round), checks are memoized per compiler response, `Project.unit_of` is a
   bisect index, and candidate generation runs in forked workers. Twelve functions: 114 s -> 27 s.
   Remaining per-round cost is mwcc itself (~5 ms per candidate, 16 wide) and the objdiff checks.
-- Build speed: units compile in groups of 48 per mwcc process (`tools/mwcc_batch.sh`, one depfile
+- Build speed: units compile in groups of 48 per mwcc process (`tools/mwcc_batch.py`, one depfile
   per group, `mwcc_batch` rule); a full rebuild is ~8 s, of which ~5 s is the two-stage main_rel
   link. `build.ninja` names the interpreter `python3` on purpose: a baked-in path changed with every
   caller (uv venv vs homebrew) and rebuilt every unit. Candidate loops (fixup, spell, lifter)

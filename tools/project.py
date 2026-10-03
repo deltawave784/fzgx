@@ -353,7 +353,13 @@ def check_path_case(path: Path):
 def make_flags_str(flags: Optional[List[str]]) -> str:
     if flags is None:
         return ""
-    return " ".join(flags)
+    joined = " ".join(flags)
+    if is_windows():
+        # Imported units carry POSIX-quoted flags (`-pragma 'cats off'`, already split on
+        # spaces), which CreateProcess passes through literally. Double quotes mean the same
+        # thing to both shells; no flag here embeds a double quote inside single quotes.
+        joined = joined.replace("'", '"')
+    return joined
 
 
 def get_pch_out_name(config: ProjectConfig, pch: PrecompiledHeader) -> str:
@@ -468,7 +474,9 @@ def generate_build_ninja(
     python_lib_dir = python_lib.parent
     n.comment("The arguments passed to configure.py, for rerunning it.")
     n.variable("configure_args", sys.argv[1:])
-    n.variable("python", "python3")  # a fixed name: a baked-in interpreter path changed with every caller and rebuilt every unit
+    # A fixed name: a baked-in interpreter path changed with every caller and rebuilt every unit.
+    # On Windows `python3` is usually the Microsoft Store stub; `uv run ninja` puts the venv's `python` first.
+    n.variable("python", "python" if is_windows() else "python3")
     n.newline()
 
     ###
@@ -751,11 +759,11 @@ def generate_build_ninja(
     # run: the process start is most of a single compile, so a full rebuild of thousands of
     # small units is dominated by it. The driver retries one by one on failure to name the
     # culprit, and writes one depfile for the group (ninja accepts several targets in it).
-    mwcc_batch_script = config.tools_dir / "mwcc_batch.sh"
+    mwcc_batch_script = config.tools_dir / "mwcc_batch.py"
     n.comment("MWCC build, many units per invocation")
     n.rule(
         name="mwcc_batch",
-        command=f"sh {mwcc_batch_script} $depfile $basedir $in -- {wrapper_cmd}{mwcc} $cflags",
+        command=f"$python {mwcc_batch_script} $depfile $basedir $in -- {wrapper_cmd}{mwcc} $cflags",
         description="MWCC $basedir ($count units)",
         depfile="$depfile",
         deps="gcc",

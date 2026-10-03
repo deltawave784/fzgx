@@ -24,7 +24,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Dict, List, Optional
 
-from fzgx import api, reuse, trivial
+from fzgx import api, compat, reuse, trivial
 from fzgx.ledger import Ledger
 from fzgx.project import ROOT, STATE_DIR, Project
 
@@ -215,7 +215,7 @@ def run_one(p: Project, harness: str, model: str, symbol: str, idx: int, timeout
             # returned. Stop the process group before another model request.
             proc = subprocess.Popen(cmd, cwd=ROOT, text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
                                     stdin=subprocess.PIPE if stdin else subprocess.DEVNULL,
-                                    start_new_session=True, env=env)
+                                    **compat.new_group(), env=env)
             first = True
             while True:
                 remaining = timeout - (time.time() - t0)
@@ -228,14 +228,11 @@ def run_one(p: Project, harness: str, model: str, symbol: str, idx: int, timeout
                 except subprocess.TimeoutExpired:
                     first = False
                     if result_file.exists():
-                        try:
-                            os.killpg(proc.pid, signal.SIGTERM)
-                        except ProcessLookupError:
-                            pass
+                        compat.kill_group(proc.pid, force=False)
                         try:
                             so, se = proc.communicate(timeout=5)
                         except subprocess.TimeoutExpired:
-                            os.killpg(proc.pid, signal.SIGKILL)
+                            compat.kill_group(proc.pid, force=True)
                             so, se = proc.communicate()
                         out, rc = (so or '') + '\n' + (se or ''), proc.returncode
                         break
@@ -243,19 +240,13 @@ def run_one(p: Project, harness: str, model: str, symbol: str, idx: int, timeout
             out = 'Completed during deterministic preflight; no model request.\n'
     except subprocess.TimeoutExpired:
         if proc:
-            try:
-                os.killpg(proc.pid, signal.SIGKILL)
-            except ProcessLookupError:
-                pass
+            compat.kill_group(proc.pid, force=True)
             so, se = proc.communicate()
             out = (so or '') + '\n' + (se or '')
         rc = -9
     except Exception as error:
         if proc and proc.poll() is None:
-            try:
-                os.killpg(proc.pid, signal.SIGKILL)
-            except ProcessLookupError:
-                pass
+            compat.kill_group(proc.pid, force=True)
             so, se = proc.communicate()
             out += (so or '') + '\n' + (se or '')
         out += '\nHarness error: ' + str(error)

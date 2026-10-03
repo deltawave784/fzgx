@@ -43,7 +43,7 @@ def sha1(data: bytes) -> str:
 
 
 def find_dtk() -> Path:
-    local = ROOT / "build" / "tools" / "dtk"
+    local = ROOT / "build" / "tools" / ("dtk.exe" if sys.platform == "win32" else "dtk")
     if local.exists():
         return local
     raise SystemExit("dtk not found; run configure.py once or place it in build/tools/dtk")

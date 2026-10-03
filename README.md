@@ -83,6 +83,8 @@ All platforms
 -------------
 
 - Install [uv](https://docs.astral.sh/uv/) for the project tooling (`tools/`).
+  - On Windows, `pip install uv ninja` covers both; run the build as `uv run ninja` so the
+    project's Python (3.12+) is the `python` ninja invokes.
 
 Building
 ========

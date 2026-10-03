@@ -26,7 +26,6 @@ it. Nothing else serialises.
 
 from __future__ import annotations
 
-import fcntl
 import re
 import shlex
 import subprocess
@@ -34,6 +33,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple
 
+from . import compat
 from .project import ROOT, STATE_DIR, Project, Symbol
 
 BEGIN_RE = re.compile(r"^/\* fzgx:begin (?P<name>[A-Za-z_]\w*)(?P<flags>(?: [a-z]+)*) \*/\s*$")
@@ -141,7 +141,7 @@ def _lock(path: Path):
     lock = STATE_DIR / "locks" / (str(path.relative_to(ROOT)).replace("/", "__") + ".lock")
     lock.parent.mkdir(parents=True, exist_ok=True)
     f = lock.open("w")
-    fcntl.flock(f, fcntl.LOCK_EX)
+    compat.lock(f)
     return f
 
 
@@ -313,7 +313,7 @@ def tu_check(p: Project, tu_source: str) -> Tuple[bool, str]:
     mw = units[0].get("mw_version") or ("GC/1.2.5n" if module == "main" else "GC/1.3.2")
     out = p.build_dir / "gen" / "tu_check" / (Path(tu_source).stem + ".o")
     out.parent.mkdir(parents=True, exist_ok=True)
-    cmd = [str(ROOT / "build/tools/wibo"), str(ROOT / "build/compilers" / mw / "mwcceppc.exe")]
+    cmd = compat.mwcc(mw)
     cmd += shlex.split(flags) + ["-c", str(path), "-o", str(out)]
     cp = subprocess.run(cmd, cwd=ROOT, text=True, capture_output=True, timeout=300)
     text = "\n".join(l for l in (cp.stdout + cp.stderr).splitlines() if "Usage Warning" not in l)

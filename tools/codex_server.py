@@ -17,7 +17,7 @@ from collections import deque
 from datetime import datetime, timezone
 from pathlib import Path
 
-from fzgx import api
+from fzgx import api, compat
 from fzgx.ledger import Ledger
 from fzgx.project import ROOT, STATE_DIR
 
@@ -183,7 +183,7 @@ class ToolPool:
                     proc = await asyncio.create_subprocess_exec(
                         sys.executable, str(ROOT / 'tools/fzgx.py'), '--tool-worker', cwd=ROOT,
                         stdin=asyncio.subprocess.PIPE, stdout=asyncio.subprocess.PIPE,
-                        stderr=errors, start_new_session=True, limit=32 * 1024 * 1024)
+                        stderr=errors, **compat.new_group(), limit=32 * 1024 * 1024)
                 self.processes[slot] = proc
             keys = ('FZGX_AGENT_ID', 'FZGX_SYMBOL', 'FZGX_HARNESS', 'FZGX_MODEL', 'FZGX_RESULT_FILE')
             proc.stdin.write((json.dumps(dict(args=['--json', *args],
@@ -231,7 +231,7 @@ class AppServer:
         self.events = (self.directory / 'app-server.jsonl').open('w', buffering=1)
         self.process = await asyncio.create_subprocess_exec(
             *self.command, cwd=ROOT, stdin=asyncio.subprocess.PIPE, stdout=asyncio.subprocess.PIPE,
-            stderr=self.errors, start_new_session=True, limit=32 * 1024 * 1024)
+            stderr=self.errors, **compat.new_group(), limit=32 * 1024 * 1024)
         (self.directory / 'app-server.pid').write_text(str(self.process.pid) + '\n')
         self.reader = asyncio.create_task(self._read())
         await self.request('initialize', dict(clientInfo=dict(name='fzgx', version='1.0'),
@@ -342,7 +342,7 @@ class AppServer:
             try:
                 await asyncio.wait_for(self.process.wait(), 10)
             except TimeoutError:
-                os.killpg(self.process.pid, signal.SIGTERM)
+                compat.kill_group(self.process.pid, force=False)
                 await self.process.wait()
         await self.reader
         self.errors.close()

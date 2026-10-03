@@ -97,6 +97,17 @@ def cmd_stuck(a, p):
         print(stuck.summary(out))
 
 
+def cmd_type_survey(a, p):
+    from . import typesurvey
+    out = typesurvey.run()
+    if a.emit is not None:
+        print(typesurvey.emit(out["clusters"][a.emit], a.name)); return 0
+    if a.json:
+        print(json.dumps(out, indent=1))
+    else:
+        print(typesurvey.summary(out, a.top))
+
+
 def cmd_sweep(a, p):
     from . import sweep
     sweep.run(p, a.min_percent, a.max_percent, a.output, a.rounds,
@@ -540,6 +551,9 @@ def build_parser() -> argparse.ArgumentParser:
     s.add_argument('--max-candidates', type=int, default=80, help='per frontier seed per round, shared by every repair family')
     s.add_argument('--budget', type=float, help='total search seconds, including compilation')
     s.add_argument('--drafts', action='store_true', help='include saved lifter bodies')
+    s = sub.add_parser("type-survey", help="group per-function struct views into candidate shared types (leads for the librarian)"); s.set_defaults(fn=cmd_type_survey)
+    s.add_argument("--top", type=int, default=20); s.add_argument("--emit", type=int, metavar="ID", help="print a proposed merged struct for cluster ID")
+    s.add_argument("--name", default="Merged", help="typedef name for --emit"); s.add_argument("--json", action="store_true")
     s = sub.add_parser("stuck", help="classify plateaued attempts (>= N%%) by failure mode from the object diff"); s.set_defaults(fn=cmd_stuck)
     s.add_argument('--seeds', type=Path, help='analyse saved candidates with their recorded compiler settings')
     s.add_argument("--min-percent", type=float, default=80.0); s.add_argument("--module"); s.add_argument("--workers", type=int, default=12)

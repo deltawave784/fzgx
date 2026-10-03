@@ -392,6 +392,8 @@ def add_pool_rules() -> None:
     body = m.group(1)
     cmd = re.search(r"^  command = (.*?)(?=^  \w+ = |\Z)", body, re.M | re.S).group(1)
     cmd = " ".join(l.strip().rstrip("$").strip() for l in cmd.splitlines()).strip()
+    if is_windows() and not cmd.startswith("cmd /c "):
+        cmd = "cmd /c " + cmd   # `&&` below needs a shell; ninja on Windows runs commands directly
     rest = re.sub(r"^  command = .*?(?=^  \w+ = |\Z)", "", body, flags=re.M | re.S)
     rule = ("\n# MWCC build, then retarget private literal-pool constants to the retail pooled symbols\n"
             "rule mwcc_pool\n"
@@ -404,7 +406,9 @@ def add_pool_rules() -> None:
         stem = source.rsplit(".", 1)[0]
         # the edge is `...o: mwcc $` (inputs on the next line, generated units) or
         # `...o: mwcc src/... $` (a standalone unit): both become mwcc_pool
-        pat = re.compile(rf"^(build build/{re.escape(config.version)}/src/{re.escape(stem)}\.o: )mwcc( |\$)", re.M)
+        # ninja_syntax writes native separators: backslashes on Windows
+        obj = re.escape(f"build/{config.version}/src/{stem}.o").replace("/", r"[/\\]")
+        pat = re.compile(rf"^(build {obj}: )mwcc( |\$)", re.M)
         m = pat.search(text)
         if m:
             poolmap = ",".join(f"{k}={v}" for k, v in sorted(mapping.items()))

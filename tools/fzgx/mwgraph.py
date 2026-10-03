@@ -300,7 +300,7 @@ def replay_archive(path):
 
 
 def capture(project, args, locked=False):
-    from . import oracle, mwconstraints
+    from . import compat, oracle, mwconstraints
     import os, signal, shlex, subprocess, time
     from contextlib import nullcontext
     root = Path(__file__).resolve().parents[2]
@@ -364,13 +364,13 @@ def capture(project, args, locked=False):
                        '-o', f'script mwgraph_lldb.run(lldb.debugger, {str(config)!r})',
                        '-o', 'quit']
             process = subprocess.Popen(command, cwd=root, stdout=log, stderr=subprocess.STDOUT,
-                                       start_new_session=True)
+                                       **compat.new_group())
             try:
                 code = process.wait(timeout=max(60, len(jobs) * 20))
                 if code:
                     raise subprocess.CalledProcessError(code, command)
             except (subprocess.TimeoutExpired, KeyboardInterrupt):
-                os.killpg(process.pid, signal.SIGKILL)
+                compat.kill_group(process.pid, force=True)
                 process.wait()
                 raise
         capture_seconds = time.perf_counter() - start

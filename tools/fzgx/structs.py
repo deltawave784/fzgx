@@ -24,6 +24,7 @@ from collections import defaultdict
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple
 
+from . import compat
 from .project import Project
 
 ACCESS_RE = re.compile(r"^(l|st)(wz|w|hz|ha|h|bz|b|fs|fd)(u|x)?\s+(r|f)(\d+),\s*(-?0x[0-9a-fA-F]+|-?\d+)\((r\d+)\)")
@@ -520,7 +521,7 @@ def write_header(p, module: str, tu: Optional[str] = None, min_refs: int = 20) -
     out.write_text(text)
     chk = Path(".fzgx") / "header_selfcheck.c"
     chk.write_text(selfcheck(text, f"{p.module_src_prefix(module)}/{out.name}"))
-    cp = subprocess.run(["build/tools/wibo", "build/compilers/GC/1.3.2/mwcceppc.exe", "-nodefaults", "-proc", "gekko",
+    cp = subprocess.run([*compat.mwcc("GC/1.3.2"), "-nodefaults", "-proc", "gekko",
                          "-i", "include", "-c", str(chk), "-o", str(chk.with_suffix(".o"))], text=True, capture_output=True)
     if cp.returncode != 0:
         if previous is None:
