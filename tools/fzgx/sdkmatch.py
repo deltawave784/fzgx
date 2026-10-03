@@ -67,7 +67,7 @@ def compile_sdk(sdk: Path, mw: str, out_dir: Path, roots=None):
     # every `include` directory of the tree (runtime headers live in odd places per project)
     for d in sorted(x for x in sdk.rglob("*") if x.is_dir() and x.name.lower() in ("include", "inc")
                     and len(x.relative_to(sdk).parts) <= 6 and ".git" not in x.parts):
-        rel = str(d.relative_to(sdk))
+        rel = d.relative_to(sdk).as_posix()
         if rel not in incs:
             incs += ["-i", rel]
     jobs = []

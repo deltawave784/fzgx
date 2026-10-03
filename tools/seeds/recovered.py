@@ -215,7 +215,7 @@ class SavedCandidates:
                 # only candidates above the threshold matter here; replaying every low
                 # variant of every report cost 11 s per engine start
                 if percent(record) > self.threshold:
-                    self.add(record['symbol'], {**record, 'path': record['source']}, str(path.relative_to(ROOT)))
+                    self.add(record['symbol'], {**record, 'path': record['source']}, path.relative_to(ROOT).as_posix())
         if self._sha_dirty:
             SHA_CACHE.write_text(json.dumps(self._sha))
         if changed:
@@ -254,7 +254,7 @@ class SavedCandidates:
             # schema and contain no directly ranked C records.
             for record in data.get('records',[]):
                 if isinstance(record,dict) and record.get('symbol') and record.get('body'):
-                    self.add(record['symbol'],record,str(path.relative_to(ROOT)))
+                    self.add(record['symbol'],record,path.relative_to(ROOT).as_posix())
 
         # Only compile-result stores: donor discovery/fuzzy scores measure opcode
         # similarity, not how closely an owned C reconstruction compiles.
@@ -271,9 +271,9 @@ class SavedCandidates:
                 try:
                     data = json.loads(path.read_text())
                 except ValueError as error:
-                    self.unreadable.append(dict(path=str(path.relative_to(ROOT)), error=str(error)))
+                    self.unreadable.append(dict(path=path.relative_to(ROOT).as_posix(), error=str(error)))
                     continue
-                self.walk(data, str(path.relative_to(ROOT)))
+                self.walk(data, path.relative_to(ROOT).as_posix())
 
         path = STATE_DIR / 'draftscan/scores.json'
         if path.exists():

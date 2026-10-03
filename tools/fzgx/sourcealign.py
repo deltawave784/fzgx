@@ -203,7 +203,7 @@ def catalog(p: Project, minimum: int) -> list:
         if stamp.exists():
             command = json.loads(stamp.read_text())
             compiler = Path(command[1]).parent
-            mw = str(compiler.relative_to(ROOT / 'build/compilers'))
+            mw = compiler.relative_to(ROOT / 'build/compilers').as_posix()
         else:
             seed = ROOT / 'state/seeds' / f'sdkmatch_{sdk}.json'
             if sdk == 'smb-132':
@@ -230,7 +230,7 @@ def catalog(p: Project, minimum: int) -> list:
                 if identity in seen:
                     continue
                 seen.add(identity)
-                rows.append(dict(sdk=root.name, source=str(sources[obj.stem].relative_to(root)),
+                rows.append(dict(sdk=root.name, source=sources[obj.stem].relative_to(root).as_posix(),
                                  object=str(obj), sdk_symbol=name, mw='GC/1.3.2', flags=flags, words=words))
     manifest = STATE_DIR / 'sourcealign/libraries.json'
     if manifest.exists():
@@ -271,7 +271,7 @@ def compile_library(p: Project, sdk: str, roots: list, functions=False) -> dict:
         if functions:
             prepared, origins = [], {}
             for source in sources:
-                relative = str(source.relative_to(root))
+                relative = source.relative_to(root).as_posix()
                 try:
                     pieces = sdkimport.declarations(sdkimport.preprocess(root, relative, mw))
                 except (ValueError, RuntimeError, SyntaxError) as error:
@@ -314,7 +314,7 @@ def compile_library(p: Project, sdk: str, roots: list, functions=False) -> dict:
                     objects.update(oracle.compile_many(p, module, group, output / str(i), mw, flags,
                                                        include_dirs=None if functions else sdkimport.include_directories(root)))
                 for source, obj in objects.items():
-                    records.append(dict(sdk=sdk, source=str(origins[source].relative_to(root)), object=str(obj), mw=mw, flags=flags,
+                    records.append(dict(sdk=sdk, source=origins[source].relative_to(root).as_posix(), object=str(obj), mw=mw, flags=flags,
                                         mode='functions' if functions else 'files'))
                 failures.append(dict(profile=tag, failed=[str(s) for s in prepared if s not in objects]))
                 print(tag, len(objects), '/', len(prepared), 'compiled', flush=True)

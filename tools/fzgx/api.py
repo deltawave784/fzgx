@@ -573,7 +573,7 @@ def _install(p: Project, unit_src: str, text: str, pool: bool = False) -> None:
         paths = [ROOT / 'src' / u.get('tu', unit_src), p.units_path,
                  config / 'splits.txt', config / 'symbols.txt']
         with (STATE_DIR / 'verify_dependencies.jsonl').open('a') as out:
-            out.write(json.dumps([str(path.relative_to(ROOT)) for path in paths]) + '\n')
+            out.write(json.dumps([path.relative_to(ROOT).as_posix() for path in paths]) + '\n')
 
 
 def _discard_work(p: Project, key: str) -> None:

@@ -42,7 +42,9 @@ mcp = FastMCP("fzgx", instructions=(
 
 def _cli(*args: str, as_json: bool = True, timeout: int = 900) -> str | dict | list:
     cmd = [sys.executable, str(CLI)] + (["--json"] if as_json else []) + list(args)
-    cp = subprocess.run(cmd, cwd=ROOT, text=True, capture_output=True, timeout=timeout)
+    # stdin is the MCP JSON-RPC stream: a child must never inherit it
+    cp = subprocess.run(cmd, cwd=ROOT, text=True, capture_output=True, timeout=timeout,
+                        stdin=subprocess.DEVNULL)
     result_file = os.environ.get('FZGX_RESULT_FILE')
     if result_file and Path(result_file).exists():
         # The runner consumes the terminal result and stops this process group.

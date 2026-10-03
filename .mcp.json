@@ -3,7 +3,10 @@
     "fzgx": {
       "type": "stdio",
       "command": "uv",
-      "args": ["run", "tools/fzgx_mcp.py"]
+      "args": ["run", "tools/fzgx_mcp.py"],
+      "env": {
+        "FZGX_MAX_ATTEMPTS": "12"
+      }
     }
   }
 }

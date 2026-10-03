@@ -193,10 +193,10 @@ def include_directories(sdk: Path) -> list:
     includes = ['include', '.', 'src', 'src/dolphin', 'libs/dolphin']
     if sdk.name == 'fzerox':
         includes += ['include/PR', 'include/leo']
-    includes += [str(d.relative_to(sdk)) for d in sdk.rglob('*')
+    includes += [d.relative_to(sdk).as_posix() for d in sdk.rglob('*')
                  if d.is_dir() and d.name.lower() in ('include', 'inc') and '.git' not in d.parts
                  and len(d.relative_to(sdk).parts) <= 6]
-    includes += [str(path.parent.relative_to(sdk)) for path in sorted(sdk.rglob('stddef.h'))]
+    includes += [path.parent.relative_to(sdk).as_posix() for path in sorted(sdk.rglob('stddef.h'))]
     return [sdk / inc for inc in dict.fromkeys(includes) if (sdk / inc).is_dir()]
 
 

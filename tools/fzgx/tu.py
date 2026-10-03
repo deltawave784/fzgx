@@ -103,26 +103,26 @@ def rename(p: Project, old: str, new: str, verify: bool = True) -> Dict[str, obj
             if old in d:
                 d[new] = d.pop(old)
                 tpath.write_text(json.dumps(d, indent=1, sort_keys=True) + "\n")
-                changed.append(str(tpath.relative_to(ROOT)))
+                changed.append(tpath.relative_to(ROOT).as_posix())
         # symbols.txt
         spath = p.module_config_dir(module) / "symbols.txt"
         s = spath.read_text()
         s2 = re.sub(rf"^{re.escape(old)} = ", f"{new} = ", s, flags=re.M)
         if s2 != s:
             spath.write_text(s2)
-            changed.append(str(spath.relative_to(ROOT)))
+            changed.append(spath.relative_to(ROOT).as_posix())
         # sources
         pat = re.compile(IDENT_RE % re.escape(old))
         for f in [*(ROOT / "src").rglob("*.c"), *(ROOT / "src").rglob("*.s")]:
             t = f.read_text()
             if pat.search(t):
                 f.write_text(pat.sub(new, t))
-                changed.append(str(f.relative_to(ROOT)))
+                changed.append(f.relative_to(ROOT).as_posix())
         for f in (ROOT / "include").rglob("*.h"):
             t = f.read_text()
             if pat.search(t):
                 f.write_text(pat.sub(new, t))
-                changed.append(str(f.relative_to(ROOT)))
+                changed.append(f.relative_to(ROOT).as_posix())
         # units.json symbols + unit file/path if the unit is named after the function
         units = p.load_units()
         old_unit = new_unit = None
@@ -138,7 +138,7 @@ def rename(p: Project, old: str, new: str, verify: bool = True) -> Dict[str, obj
             rewritten = pat.sub(new, text)
             if rewritten != text:
                 template.write_text(rewritten)
-                changed.append(str(template.relative_to(ROOT)))
+                changed.append(template.relative_to(ROOT).as_posix())
         if old_unit:
             rec = next((u for u in units if u["source"] == new_unit), None)
             if not (rec and rec.get("tu")):  # block units have no file of their own

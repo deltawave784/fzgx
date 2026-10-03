@@ -21,21 +21,21 @@ def sdk_candidates():
         data = json.loads(path.read_text())
         for group in ('hits', 'ambiguous'):
             for row in data.get(group, []):
-                known[row['dol']].add(str(path.relative_to(ROOT)))
+                known[row['dol']].add(path.relative_to(ROOT).as_posix())
     paths = list((ROOT / 'state/sdkimports').glob('*.json'))
     paths += [STATE_DIR / 'sourcealign/matches.json']
     for path in paths:
         if path.exists():
             for symbol in json.loads(path.read_text()):
-                known[symbol].add(str(path.relative_to(ROOT)))
+                known[symbol].add(path.relative_to(ROOT).as_posix())
     for path in (STATE_DIR / 'sdkimport').glob('*/prepare.json'):
         for row in json.loads(path.read_text()).get('prepared', []):
-            known[row['symbol']].add(str(path.relative_to(ROOT)))
+            known[row['symbol']].add(path.relative_to(ROOT).as_posix())
     # A ranked donor candidate belongs to source reuse even before its import succeeds.
     path = STATE_DIR / 'sourcealign/discovery.json'
     if path.exists():
         for row in json.loads(path.read_text()).get('results', []):
-            known[row['symbol']].add(str(path.relative_to(ROOT)))
+            known[row['symbol']].add(path.relative_to(ROOT).as_posix())
     return known
 
 

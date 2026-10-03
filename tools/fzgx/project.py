@@ -366,7 +366,7 @@ class Project:
         # the current symbol wins, then an auto unit, then the newest file.
         rank: Dict[int, tuple] = {}
         for f in files:
-            unit = str(f.relative_to(self.module_build_dir(module) / "asm").with_suffix(""))
+            unit = f.relative_to(self.module_build_dir(module) / "asm").with_suffix("").as_posix()
             cur: Optional[str] = None
             lines: List[str] = []
             for raw in f.read_text(errors="replace").splitlines():
@@ -458,7 +458,7 @@ class Project:
             rewritten = (pattern if path.suffix == ".s" else c_pattern).sub(lambda match: mapping[match[0]], body)
             if rewritten != body:
                 path.write_text(rewritten)
-                changed.append(str(path.relative_to(ROOT)))
+                changed.append(path.relative_to(ROOT).as_posix())
         # Pool targets are linker references too. Keeping an old local suffix
         # here breaks already integrated callers when another unit exports it.
         from . import oracle
@@ -481,7 +481,7 @@ class Project:
                     updated = True
             if updated:
                 self.save_units(units)
-                changed.append(str(self.units_path.relative_to(ROOT)))
+                changed.append(self.units_path.relative_to(ROOT).as_posix())
         if changed:
             # A promoted function can rename callers outside its own new unit.
             # Those dependencies must land in the same hash-verified commit.
@@ -531,7 +531,7 @@ class Project:
                 walk(load_json_retry(cfg))
             except (OSError, ValueError):
                 pass
-            objs = sorted(o for o in (ROOT / rel for rel in listed) if o.exists() and "/obj/auto_" in str(o))
+            objs = sorted(o for o in (ROOT / rel for rel in listed) if o.exists() and "/obj/auto_" in o.as_posix())
             st = cfg.stat() if cfg.exists() else None
             stamp = f"v4:{st.st_mtime_ns}:{st.st_size}:{len(objs)}" if st else "0"
             idx: Dict[str, str] = {}
@@ -559,11 +559,11 @@ class Project:
                     for e in elf.symbols():
                         if (e["info"] & 0xF) == 2 and e["shndx"] in exec_idx:
                             key = f'{module}:{e["name"]}'
-                            idx.setdefault(key, str(o.relative_to(ROOT)))
+                            idx.setdefault(key, o.relative_to(ROOT).as_posix())
                             m = re.fullmatch(r"(.+)_[0-9A-F]{8}", e["name"])
                             if m and f"{module}:{m.group(1)}" not in idx:
                                 key = f"{module}:{m.group(1)}"
-                                idx[key] = str(o.relative_to(ROOT))
+                                idx[key] = o.relative_to(ROOT).as_posix()
                                 suffixed[key] = e["name"]
                 cache.parent.mkdir(parents=True, exist_ok=True)
                 cache.write_text(json.dumps({"stamp": stamp, "index": idx, "suffixed": suffixed}))

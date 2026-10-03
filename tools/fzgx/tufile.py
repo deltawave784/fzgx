@@ -138,7 +138,7 @@ def load(p: Project, tu_source: str) -> TuFile:
 
 
 def _lock(path: Path):
-    lock = STATE_DIR / "locks" / (str(path.relative_to(ROOT)).replace("/", "__") + ".lock")
+    lock = STATE_DIR / "locks" / (path.relative_to(ROOT).as_posix().replace("/", "__") + ".lock")
     lock.parent.mkdir(parents=True, exist_ok=True)
     f = lock.open("w")
     compat.lock(f)

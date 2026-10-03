@@ -98,7 +98,7 @@ class Engine:
         path = self.output / 'sources' / (identity[:24]+'.c')
         path.parent.mkdir(exist_ok=True)
         if not path.exists():
-            path.write_text(body)
+            path.write_bytes(body.encode())
         elif digest(path.read_bytes()) != sha:
             raise ValueError(f'changed content-addressed source: {path}')
         return dict(metadata, symbol=symbol, source=str(path), sha256=sha, mw=mw, flags=flags,
@@ -896,7 +896,7 @@ def integrate(project, report, inputs, output):
         provenance_path.write_text(json.dumps(provenance, indent=2) + '\n')
     if accepted:
         with (STATE_DIR / 'verify_dependencies.jsonl').open('a') as out:
-            out.write(json.dumps([str(provenance_path.relative_to(ROOT))]) + '\n')
+            out.write(json.dumps([provenance_path.relative_to(ROOT).as_posix()]) + '\n')
     message = 'Integrate deterministic fixup matches'
     verification = api.verify_links(project, message) if accepted else None
     if verification:

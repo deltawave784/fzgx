@@ -97,6 +97,17 @@ def cmd_stuck(a, p):
         print(stuck.summary(out))
 
 
+def cmd_route(a, p):
+    from . import route
+    tried = route.tried_by(a.escalate_from) if a.escalate_from else None
+    rows = route.plan(p, a.limit, a.small, module=a.module, tier=a.tier, mid=a.mid, haiku_tried=tried)
+    if a.json:
+        print(json.dumps(rows, indent=1))
+    else:
+        for r in rows:
+            print(f"{r['agent_type']:<14} {r['symbol']:<32} {r['module']:<12} {r['size']:>6} B  best {r['best']:>5.1f}%  tried {r['attempts']}")
+
+
 def cmd_type_survey(a, p):
     from . import typesurvey
     out = typesurvey.run()
@@ -551,6 +562,11 @@ def build_parser() -> argparse.ArgumentParser:
     s.add_argument('--max-candidates', type=int, default=80, help='per frontier seed per round, shared by every repair family')
     s.add_argument('--budget', type=float, help='total search seconds, including compilation')
     s.add_argument('--drafts', action='store_true', help='include saved lifter bodies')
+    s = sub.add_parser("route", help="next functions for a Claude Code wave, each with the subagent type to run it"); s.set_defaults(fn=cmd_route)
+    s.add_argument("--limit", type=int, default=8); s.add_argument("--small", type=int, default=256, help="largest size (bytes) for the haiku tier")
+    s.add_argument("--module"); s.add_argument("--tier", choices=["haiku", "sonnet", "opus"]); s.add_argument("--json", action="store_true")
+    s.add_argument("--mid", action="store_true", help="route small near misses and haiku escalations to sonnet (matcher-mid)")
+    s.add_argument("--escalate-from", metavar="MODEL", help="escalate functions this model already attempted (e.g. claude-haiku): to sonnet with --mid, else opus")
     s = sub.add_parser("type-survey", help="group per-function struct views into candidate shared types (leads for the librarian)"); s.set_defaults(fn=cmd_type_survey)
     s.add_argument("--top", type=int, default=20); s.add_argument("--emit", type=int, metavar="ID", help="print a proposed merged struct for cluster ID")
     s.add_argument("--name", default="Merged", help="typedef name for --emit"); s.add_argument("--json", action="store_true")

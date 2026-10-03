@@ -47,7 +47,7 @@ def header_fingerprint(root, version):
     for directory in (root / 'include', root / 'build' / version / 'include'):
         for path in sorted(directory.rglob('*')):
             if path.is_file():
-                digest.update(str(path.relative_to(root)).encode() + b'\0' + path.read_bytes())
+                digest.update(path.relative_to(root).as_posix().encode() + b'\0' + path.read_bytes())
     return digest.hexdigest()
 
 

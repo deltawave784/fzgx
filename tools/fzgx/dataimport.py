@@ -37,7 +37,7 @@ def declarations(p):
         return p._data_declarations
     out = {}
     for path in sorted((ROOT / 'include').rglob('*.h')) + sorted((ROOT / 'src').rglob('*.c')):
-        if '/data/' in str(path):
+        if '/data/' in path.as_posix():
             continue
         for match in re.finditer(r'^\s*extern\s+([^;{}\n]+);', path.read_text(), re.M):
             body = match[1].strip()

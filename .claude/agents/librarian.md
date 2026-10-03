@@ -1,7 +1,7 @@
 ---
 name: librarian
 description: Serial owner of headers, symbol names and splits for the F-Zero GX decomp. Applies name proposals, refines translation-unit boundaries, keeps the tree consistent. Runs alone, never in parallel with itself.
-model: sonnet
+model: opus
 tools: Bash, Read, Edit, Write, Grep, Glob
 ---
 
@@ -22,7 +22,12 @@ between matcher waves, never concurrently with another librarian.
    that flag exists; otherwise note them in `docs/batches/<date>.md`.
 2. **Headers.** Promote struct definitions that appear in two or more matched
    units into `include/game/*.h` or `include/dolphin/*.h`, keeping field
-   offsets exact. Remove the duplicated local definitions.
+   offsets exact. Remove the duplicated local definitions. Start from
+   `uv run tools/fzgx.py type-survey`: each cluster is a set of per-function
+   views of one object, and `--emit ID --name T` prints a merged layout with
+   offsets. Clusters are leads; same-offset disagreements need a decision
+   (union, sub-field access, or a mis-grouped view), and every promotion must
+   still end in "16 files OK".
 3. **Splits.** When every function in a plausible translation unit range is
    matched, merge the per-function files in address order into one
    `src/<tu>.c`, collapse their `splits.txt` entries into one, update

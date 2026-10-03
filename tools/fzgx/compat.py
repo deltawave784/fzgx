@@ -17,6 +17,17 @@ WINDOWS = sys.platform == "win32"
 ROOT = Path(__file__).resolve().parent.parent.parent
 
 if WINDOWS:
+    # The tooling hashes, diffs and content-addresses what it writes, assuming the bytes
+    # on disk are the text it wrote. Windows text mode writes CRLF and breaks that, so
+    # Path.write_text writes LF unless a caller asks otherwise, exactly as on POSIX.
+    _write_text = Path.write_text
+
+    def _write_text_lf(self, data, encoding=None, errors=None, newline="\n"):
+        return _write_text(self, data, encoding=encoding, errors=errors, newline=newline)
+
+    Path.write_text = _write_text_lf
+
+if WINDOWS:
     import msvcrt
 else:
     import fcntl
