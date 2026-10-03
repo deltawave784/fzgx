@@ -11,10 +11,13 @@ The routing is deterministic; you only dispatch and report. Run from the reposit
    available (they load when a session starts in this repo and the server is approved);
    if they are not, stop and say so.
 
-2. **Pick work.** `uv run tools/fzgx.py route --json --limit N [--skip-tried] [--escalate-from sonnet-] [--small B] [--module M]`
-   - `N` defaults to 8. Functions up to `--small` bytes (256) go to Sonnet (`matcher-mid`),
-     larger ones to Opus (`matcher-large`); the user's plan limits Opus, so keep it to 1-2
-     rows a wave unless told otherwise.
+2. **Pick work.** `uv run tools/fzgx.py route --json --limit 16 --skip-tried [--escalate-from sonnet-] [--small B] [--module M]`
+   - Take 8 rows. Functions up to `--small` bytes (256) go to Sonnet (`matcher-mid`), larger
+     ones to Opus (`matcher-large`); the user's plan limits Opus: at most 2 Opus rows a wave
+     unless told otherwise (skip further Opus rows, take the next Sonnet ones).
+   - One row per clone family: rows of the same module and size whose `seed_best` agree are
+     usually the same code twice (fn_1_8CA70 / fn_1_8CAF4). Dispatch the first; `reuse` in
+     step 5 carries a match to its twins.
    - Rows with `seeded: true` start from a saved body (`seed_best` %); they rank first.
    - `--skip-tried` leaves out what a Claude tier already attempted; `--escalate-from sonnet-`
      sends small functions Sonnet already failed to Opus.
@@ -31,8 +34,13 @@ The routing is deterministic; you only dispatch and report. Run from the reposit
 
 4. **Collect.** Each agent ends with one line: `SYMBOL: matched` or
    `SYMBOL: released at N% - reason`. Do not retry failures in the same wave.
+   - A release saying the body is an instruction MWCC never emits (`twui`, `mtspr`, other
+     privileged forms, no `blr`) goes to `uv run tools/fzgx.py asm-unit SYMBOL [TWINS...]`. It
+     commits with a plain `git commit`, so run it only with nothing staged.
 
-5. **Close the wave.**
+5. **Close the wave** (after every agent has reported; these touch the build).
+   - `uv run tools/fzgx.py reuse --max-size 2048`: rebinds matched C onto retail clones
+     (wave 4: fn_1_8CAF4 and a 612-byte fn_1_10B344 from one Sonnet match).
    - `uv run tools/fzgx.py fixup --min-percent 95 --apply --budget 1500 --output .fzgx/fixup/<wave>`:
      the deterministic engine over every saved body at 95%+ (register, pragma and pool
      families; wave 3 closed 3 functions in 7 minutes that agents had released). It submits,
@@ -45,5 +53,17 @@ The routing is deterministic; you only dispatch and report. Run from the reposit
    - Matches are committed by the tooling as they are accepted; check `git log`.
    - Report to the user: matched / released per tier, bytes matched, and the release
      reasons that repeat (candidates for `docs/MWCC_IDIOMS.md` or a librarian pass).
+     Append the same summary to `.fzgx/reports/waves.md` (local, not committed).
+
+## Unattended runs (`/goal`, `/loop`)
+
+Repeat steps 1-5; each wave starts only after the previous one closed. Stop, report and
+wait for the user when:
+- the hash check fails, or `verify`/`fixup` reports a rejected or failed link;
+- two consecutive waves match nothing (agents, reuse, fixup and asm units together);
+- `route --skip-tried` returns no rows (escalation is the user's decision);
+- a tool call is refused for permissions, or the same tooling error repeats.
+Do not edit tooling, agent definitions or headers in an unattended run, and never start the
+librarian or a type-recovery pass. Commit only what the steps above commit.
 
 Never push. Never run the librarian concurrently with matchers.

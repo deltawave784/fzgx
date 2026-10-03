@@ -34,6 +34,11 @@ DEFAULT_TTL = int(os.environ.get('FZGX_CLAIM_TTL', 1800))
 MAX_ATTEMPTS = int(os.environ.get("FZGX_MAX_ATTEMPTS", 3))  # a stronger-tier round raises it for its agents
 MAX_CHECKS = int(os.environ.get("FZGX_MAX_CHECKS", 16))   # per attempt
 MAX_STALE = int(os.environ.get("FZGX_MAX_STALE", 5))     # consecutive checks without improving the attempt's best %
+# functions above LARGE_BYTES (the Opus tier) get more room: one hypothesis per check over
+# hundreds of instructions spent the 5-check plateau after one or two real tries (wave 4)
+LARGE_BYTES = int(os.environ.get("FZGX_LARGE_BYTES", 256))
+MAX_CHECKS_LARGE = int(os.environ.get("FZGX_MAX_CHECKS_LARGE", 24))
+MAX_STALE_LARGE = int(os.environ.get("FZGX_MAX_STALE_LARGE", 8))
 STUB = '#include "types.h"\n\n// {symbol}: carved by fzgx; {note}\n'
 SHADOW_PREFIX = "shadow-"   # agent ids with this prefix run A/B trials that never relink or commit
 REVISE_PREFIX = "revise-"   # rewrite an already-matched unit for readability; kept only if still 100%
@@ -371,13 +376,22 @@ def patch_unit(p: Project, symbol: str, agent: str, old: str, new: str) -> Dict[
     return write_unit(p, symbol, agent, text.replace(old, new, 1))
 
 
+def _budget(symbol: str) -> tuple:
+    """(max checks, max stale checks) for one attempt on `symbol`, by function size."""
+    row = Ledger().get(symbol)
+    if row and (row["size"] or 0) > LARGE_BYTES:
+        return max(MAX_CHECKS, MAX_CHECKS_LARGE), max(MAX_STALE, MAX_STALE_LARGE)
+    return MAX_CHECKS, MAX_STALE
+
+
 def _budget_stop(att) -> Optional[str]:
     if att is None:
         return None
-    if (att["checks"] or 0) >= MAX_CHECKS:
-        return f"budget exhausted: {MAX_CHECKS} checks used"
-    if (att["stale_checks"] or 0) >= MAX_STALE:
-        return f"plateau: {MAX_STALE} consecutive checks without improvement (best {att['best_in_attempt']:.1f}%)"
+    checks, stale = _budget(att["symbol"])
+    if (att["checks"] or 0) >= checks:
+        return f"budget exhausted: {checks} checks used"
+    if (att["stale_checks"] or 0) >= stale:
+        return f"plateau: {stale} consecutive checks without improvement (best {att['best_in_attempt']:.1f}%)"
     return None
 
 
