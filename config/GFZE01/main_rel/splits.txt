@@ -6518,3 +6518,6 @@ rel/main_rel/car/fn_1_8CAF4.c:
 
 rel/main_rel/phys/fn_1_EB0B0.c:
 	.text       start:0x000EB0B0 end:0x000EB0D8 align:4
+
+rel/main_rel/driver/fn_1_A79D8.c:
+	.text       start:0x000A79D8 end:0x000A7A70 align:4
