@@ -10370,5 +10370,120 @@
     "recipe": [],
     "link": "verified",
     "commit": "61aec580"
+  },
+  "fn_12_2F970": {
+    "seed_symbol": "fn_12_2F970",
+    "generator": "fzgx fixup",
+    "transform": "regalloc: one-field carrier i",
+    "seed": "#include \"types.h\"\n\nstruct Sig_fn_12_2269C_fn_12_2269C_Copy16 {\n    u32 a[4];\n};\nextern void fn_12_2269C(u8 *, int, int, struct Sig_fn_12_2269C_fn_12_2269C_Copy16 *);\n\nint fn_12_2F970(u8 *arg0) {\n    int i;\n    u32 *p;\n    int v;\n    p = (u32 *)(arg0 + 0x28d4);\n    *(u32 **)(arg0 + 0x1cc8) = p;\n    v = *(int *)(arg0 + 0x1cd0);\n    *(u32 *)(arg0 + 0x28d4) = 0;\n    for (i = 0; i < 3; i++) {\n        struct Sig_fn_12_2269C_fn_12_2269C_Copy16 *q = (struct Sig_fn_12_2269C_fn_12_2269C_Copy16 *)(p + 1);\n        q->a[0] = 0;\n        q->a[1] = 0;\n        q->a[2] = 0;\n        q->a[3] = 0;\n        fn_12_2269C(arg0, v, i, q);\n        p += 4;\n    }\n    return 0;\n}\n",
+    "seed_sha256": "8e81506e4eebea0f667ed127d8f6653c76b9d48c3c1a531326238f861358b384",
+    "generated_sha256": "bb7ff410196813e2866b11142e7eb9e318f6477e8fd554bc497e599e7123514c",
+    "generated_source": "#include \"types.h\"\n\nstruct Sig_fn_12_2269C_fn_12_2269C_Copy16 {\n    u32 a[4];\n};\nextern void fn_12_2269C(u8 *, int, int, struct Sig_fn_12_2269C_fn_12_2269C_Copy16 *);\n\nint fn_12_2F970(u8 *arg0) {\n    struct { int value; } i;\n    u32 *p;\n    int v;\n    p = (u32 *)(arg0 + 0x28d4);\n    *(u32 **)(arg0 + 0x1cc8) = p;\n    v = *(int *)(arg0 + 0x1cd0);\n    *(u32 *)(arg0 + 0x28d4) = 0;\n    for (i.value = 0; i.value < 3; i.value++) {\n        struct Sig_fn_12_2269C_fn_12_2269C_Copy16 *q = (struct Sig_fn_12_2269C_fn_12_2269C_Copy16 *)(p + 1);\n        q->a[0] = 0;\n        q->a[1] = 0;\n        q->a[2] = 0;\n        q->a[3] = 0;\n        fn_12_2269C(arg0, v, i.value, q);\n        p += 4;\n    }\n    return 0;\n}\n",
+    "compiler": "GC/1.3.2",
+    "flags": "-use_lmw_stmw on",
+    "source": "rel/movie_module/fn_12_2F970.c",
+    "bytes": 120,
+    "headers_sha256": "ffe2f3705e2c5e3ba6c721fed1771f5de20612254417a59f486b5a3ed3538a44",
+    "oracle_sha256": "f7685915459d64c15c3a0f781fa019d6ff8789da838592c92e6a24d5eba8b159",
+    "recipe": [
+      {
+        "label": "regalloc: one-field carrier i",
+        "input_sha256": "8e81506e4eebea0f667ed127d8f6653c76b9d48c3c1a531326238f861358b384",
+        "output_sha256": "bb7ff410196813e2866b11142e7eb9e318f6477e8fd554bc497e599e7123514c",
+        "input_symbol": "fn_12_2F970",
+        "output_symbol": "fn_12_2F970",
+        "edits": [
+          [
+            200,
+            203,
+            "struct { int value; }"
+          ],
+          [
+            372,
+            386,
+            ".value = 0; i.value < 3; i.value"
+          ],
+          [
+            615,
+            615,
+            ".value"
+          ]
+        ]
+      }
+    ],
+    "link": "pending"
+  },
+  "fn_1_12A7C4": {
+    "seed_symbol": "fn_1_12A7C4",
+    "generator": "fzgx fixup",
+    "transform": "saved-body",
+    "seed": "#include \"types.h\"\n#include \"rel/main_rel/archive.h\"\n\n\ntypedef struct ArchiveState {\n    s32 count;\n    s32 loaded;\n    u8 pad[4];\n    u8 entries[1];\n} ArchiveState;\n\nextern s32 fn_8006A480(void *arg0, void *arg1, void *arg2);\nextern void *fn_8006A998(void *arg0);\nextern s32 fn_1_45730(void *arg0, void *arg1);\nextern s32 fn_1_45B2C(void *arg0);\nextern void fn_1_458A0(void *arg0, void *arg1, u32 arg2, u32 arg3);\nextern void fn_1_45850(void *arg0);\nextern void fn_80008BA8(void *arg0, void *arg1, u32 arg2);\n\n#pragma opt_propagation on\ntypedef struct lbl_1_bss_897AC_t {\n    u8 entries[1];\n    u8 pad_1[0x1b33];\n} lbl_1_bss_897AC_t;\n\n/* file-scope objects of the retail TU, in retail order: MWCC addresses them off one section base */\ns32 fzgx_obj_lbl_1_bss_897A0;\ns32 lbl_1_bss_897A4;\nu32 lbl_1_bss_897A8;\nlbl_1_bss_897AC_t fzgx_obj_lbl_1_bss_897AC;\nu32 fzgx_obj_lbl_1_bss_8B2E0[48];\nu32 fzgx_obj_lbl_1_bss_8B3A0[83];\n\n#pragma section code_type \".fzgxpool\"\nstatic void fzgx_bss_layout(void) {\n    volatile u8 s;  /* fzgx-allow: S2 layout primer sink: MWCC emits .bss objects in first-access order */\n    s = *(u8 *)&fzgx_obj_lbl_1_bss_897A0;\n    s = *(u8 *)&lbl_1_bss_897A4;\n    s = *(u8 *)&lbl_1_bss_897A8;\n    s = *(u8 *)&fzgx_obj_lbl_1_bss_897AC;\n    s = *(u8 *)&fzgx_obj_lbl_1_bss_8B2E0;\n    s = *(u8 *)&fzgx_obj_lbl_1_bss_8B3A0;\n}\n#pragma section code_type \".text\"\n\nstatic inline u8 * fn_1_12A7C4_read_pointer(lbl_1_bss_897AC_t * owner) { return owner->entries; }\ns32 fn_1_12A7C4(void *arg0, void *arg1, u32 arg2) {\n    u8 *entries;\n    void *result;\n    u8 work[12];\n    u8 info[0x60];\n\n    \n\n    if (lbl_1_bss_897A4 != 0) {\n        s32 count = fzgx_obj_lbl_1_bss_897A0;\n        entries = fn_1_12A7C4_read_pointer(&fzgx_obj_lbl_1_bss_897AC);\n        if (fn_8006A480(entries + count * 0x6C + 0x4C, arg0, work) != 0) {\n            result = fn_8006A998(work);\n        } else {\n            result = 0;\n        }\n        if (result != 0) {\n            fn_80008BA8(arg1, result, arg2);\n        } else {\n            return 0;\n        }\n    } else {\n        if (fn_1_45730(arg0, info) != 0) {\n            s32 aligned;\n            aligned = (fn_1_45B2C(info) + 0x1F) & ~0x1F;\n            fn_1_458A0(info, arg1, aligned, 0);\n            fn_1_45850(info);\n        }\n    }\n\n    return 1;\n}\n#pragma opt_propagation reset\n",
+    "seed_sha256": "b2eb13ea2068413ebae644cfa28eda6a0b5c69f98e56a539a0acec5c281b0f37",
+    "generated_sha256": "b2eb13ea2068413ebae644cfa28eda6a0b5c69f98e56a539a0acec5c281b0f37",
+    "generated_source": "#include \"types.h\"\n#include \"rel/main_rel/archive.h\"\n\n\ntypedef struct ArchiveState {\n    s32 count;\n    s32 loaded;\n    u8 pad[4];\n    u8 entries[1];\n} ArchiveState;\n\nextern s32 fn_8006A480(void *arg0, void *arg1, void *arg2);\nextern void *fn_8006A998(void *arg0);\nextern s32 fn_1_45730(void *arg0, void *arg1);\nextern s32 fn_1_45B2C(void *arg0);\nextern void fn_1_458A0(void *arg0, void *arg1, u32 arg2, u32 arg3);\nextern void fn_1_45850(void *arg0);\nextern void fn_80008BA8(void *arg0, void *arg1, u32 arg2);\n\n#pragma opt_propagation on\ntypedef struct lbl_1_bss_897AC_t {\n    u8 entries[1];\n    u8 pad_1[0x1b33];\n} lbl_1_bss_897AC_t;\n\n/* file-scope objects of the retail TU, in retail order: MWCC addresses them off one section base */\ns32 fzgx_obj_lbl_1_bss_897A0;\ns32 lbl_1_bss_897A4;\nu32 lbl_1_bss_897A8;\nlbl_1_bss_897AC_t fzgx_obj_lbl_1_bss_897AC;\nu32 fzgx_obj_lbl_1_bss_8B2E0[48];\nu32 fzgx_obj_lbl_1_bss_8B3A0[83];\n\n#pragma section code_type \".fzgxpool\"\nstatic void fzgx_bss_layout(void) {\n    volatile u8 s;  /* fzgx-allow: S2 layout primer sink: MWCC emits .bss objects in first-access order */\n    s = *(u8 *)&fzgx_obj_lbl_1_bss_897A0;\n    s = *(u8 *)&lbl_1_bss_897A4;\n    s = *(u8 *)&lbl_1_bss_897A8;\n    s = *(u8 *)&fzgx_obj_lbl_1_bss_897AC;\n    s = *(u8 *)&fzgx_obj_lbl_1_bss_8B2E0;\n    s = *(u8 *)&fzgx_obj_lbl_1_bss_8B3A0;\n}\n#pragma section code_type \".text\"\n\nstatic inline u8 * fn_1_12A7C4_read_pointer(lbl_1_bss_897AC_t * owner) { return owner->entries; }\ns32 fn_1_12A7C4(void *arg0, void *arg1, u32 arg2) {\n    u8 *entries;\n    void *result;\n    u8 work[12];\n    u8 info[0x60];\n\n    \n\n    if (lbl_1_bss_897A4 != 0) {\n        s32 count = fzgx_obj_lbl_1_bss_897A0;\n        entries = fn_1_12A7C4_read_pointer(&fzgx_obj_lbl_1_bss_897AC);\n        if (fn_8006A480(entries + count * 0x6C + 0x4C, arg0, work) != 0) {\n            result = fn_8006A998(work);\n        } else {\n            result = 0;\n        }\n        if (result != 0) {\n            fn_80008BA8(arg1, result, arg2);\n        } else {\n            return 0;\n        }\n    } else {\n        if (fn_1_45730(arg0, info) != 0) {\n            s32 aligned;\n            aligned = (fn_1_45B2C(info) + 0x1F) & ~0x1F;\n            fn_1_458A0(info, arg1, aligned, 0);\n            fn_1_45850(info);\n        }\n    }\n\n    return 1;\n}\n#pragma opt_propagation reset\n",
+    "compiler": "GC/1.3.2",
+    "flags": "",
+    "source": "rel/main_rel/archive/fn_1_12A7C4.c",
+    "bytes": 224,
+    "headers_sha256": "ffe2f3705e2c5e3ba6c721fed1771f5de20612254417a59f486b5a3ed3538a44",
+    "oracle_sha256": "f7685915459d64c15c3a0f781fa019d6ff8789da838592c92e6a24d5eba8b159",
+    "recipe": [],
+    "link": "pending"
+  },
+  "fn_1_A358C": {
+    "seed_symbol": "fn_1_A358C",
+    "generator": "fzgx fixup",
+    "transform": "fn_1_3F864: extern u8 fn_1_3F864(void); -> extern s32 fn_1_3F864(void);",
+    "seed": "#include \"types.h\"\n#include \"rel/main_rel/sound.h\"\n\nextern u8 fn_1_3F864(void);\nextern u32 fn_1_864E8(u32 arg0);\nextern void fn_80067898(u32 arg0);\n\nvoid fn_1_A358C(u32 arg0) {\n    u8 *base;\n    u8 *temp;\n    u8 *entry_74c;\n    u8 *entry_830;\n    s32 id = arg0;\n    s32 i;\n\n    base = (u8 *)&lbl_1_bss_6EA98;\n    if (fn_1_3F864() != 0) {\n        entry_74c = base + 0x74c;\n        entry_830 = base + 0x830;\n        i = 0;\n        while (i < *(s8 *)(base + 0x82c)) {\n            if (id == entry_74c[1] && entry_74c[2] != 0) {\n                if ((fn_1_864E8(id) & 0x400) != 0) {\n                    if ((*(u32 *)entry_830 & 0x400) == 0) {\n                        if (*(u8 *)(base + 0x740) == 0) {\n                            if (*(u32 *)(base + 0x744) <= 0x2d) {\n                                fn_80067898(0xa9091000);\n                            }\n                        }\n                    }\n                }\n            }\n            entry_74c += 0x14;\n            entry_830 += 0x4;\n            i++;\n        }\n    }\n}\n",
+    "seed_sha256": "588d1d5104ce5c3c4b3a838ea798bbaa8c8f5dcc69fa64186adbb012549504d8",
+    "generated_sha256": "1d080c6d2848689e9aaa7acc12b3418f738d2fdf4ec76c1769f56259a54666fb",
+    "generated_source": "#include \"types.h\"\n#include \"rel/main_rel/sound.h\"\n\nextern s32 fn_1_3F864(void);\nextern u32 fn_1_864E8(u32 arg0);\nextern void fn_80067898(u32 arg0);\n\nstatic inline u8 fn_1_A358C_array_read(u8 *array, s32 index) { return array[index]; }\n#pragma opt_loop_invariants off\nvoid fn_1_A358C(u32 arg0) {\n    u8 *base;\n    u8 *temp;\n    u8 *entry_74c;\n    u8 *entry_830;\n    s32 id = arg0;\n    s32 i;\n\n    base = (u8 *)&lbl_1_bss_6EA98;\n    if (fn_1_3F864() != 0) {\n        entry_74c = base + 0x74c;\n        entry_830 = base + 0x830;\n        i = 0;\n        while (i < *(s8 *)(base + 0x82c)) {\n            if (id == fn_1_A358C_array_read(entry_74c, 1) && entry_74c[2] != 0) {\n                if ((fn_1_864E8(id) & 0x400) != 0) {\n                    if ((*(u32 *)entry_830 & 0x400) == 0) {\n                        if (*(u8 *)(base + 0x740) == 0) {\n                            if (*(u32 *)(base + 0x744) <= 0x2d) {\n                                fn_80067898(0xa9091000);\n                            }\n                        }\n                    }\n                }\n            }\n            entry_74c += 0x14;\n            entry_830 += 0x4;\n            i++;\n        }\n    }\n}\n#pragma opt_loop_invariants reset\n\n",
+    "compiler": "GC/1.3",
+    "flags": "",
+    "source": "rel/main_rel/sound/fn_1_A358C.c",
+    "bytes": 200,
+    "headers_sha256": "ffe2f3705e2c5e3ba6c721fed1771f5de20612254417a59f486b5a3ed3538a44",
+    "oracle_sha256": "f7685915459d64c15c3a0f781fa019d6ff8789da838592c92e6a24d5eba8b159",
+    "recipe": [
+      {
+        "label": "address typed index at every site (u8) with opt_loop_invariants off",
+        "input_sha256": "588d1d5104ce5c3c4b3a838ea798bbaa8c8f5dcc69fa64186adbb012549504d8",
+        "output_sha256": "fcba73ce6285f3a613f3cdc6fb07d274c5dd03dc4cc4b5e13655b7c0ad06fb31",
+        "input_symbol": "fn_1_A358C",
+        "output_symbol": "fn_1_A358C",
+        "edits": [
+          [
+            149,
+            149,
+            "static inline u8 fn_1_A358C_array_read(u8 *array, s32 index) { return array[index]; }\n#pragma opt_loop_invariants off\n"
+          ],
+          [
+            487,
+            499,
+            "fn_1_A358C_array_read(entry_74c, 1)"
+          ],
+          [
+            1024,
+            1024,
+            "#pragma opt_loop_invariants reset\n\n"
+          ]
+        ]
+      },
+      {
+        "label": "fn_1_3F864: extern u8 fn_1_3F864(void); -> extern s32 fn_1_3F864(void);",
+        "input_sha256": "fcba73ce6285f3a613f3cdc6fb07d274c5dd03dc4cc4b5e13655b7c0ad06fb31",
+        "output_sha256": "1d080c6d2848689e9aaa7acc12b3418f738d2fdf4ec76c1769f56259a54666fb",
+        "input_symbol": "fn_1_A358C",
+        "output_symbol": "fn_1_A358C",
+        "edits": [
+          [
+            59,
+            61,
+            "s32"
+          ]
+        ]
+      }
+    ],
+    "link": "pending"
   }
 }

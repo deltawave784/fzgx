@@ -6506,3 +6506,6 @@ rel/main_rel/font/fn_1_49B70.c:
 
 rel/main_rel/sel_static_disp/fn_1_149E2C.c:
 	.text       start:0x00149E2C end:0x00149F04 align:4
+
+rel/main_rel/archive/fn_1_12A7C4.c:
+	.text       start:0x0012A7C4 end:0x0012A8A4 align:4
