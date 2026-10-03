@@ -678,8 +678,8 @@ void fn_1_D4370(void *arg0) {
     f32 temp_f4;
     f32 temp_f4_2;
     f32 var_f0;
-    struct { f32 value; } var_f1;
     f32 var_f2;
+    f32 var_f1;
     struct D4370State *temp_r30;
     struct fn_1_D4370_lbl_1_rodata_6168 *temp_r31;
     struct D4370State *var_r4;
@@ -723,9 +723,7 @@ void fn_1_D4370(void *arg0) {
         }
     } else {
         temp_r30->unk_38 = temp_r30->unk_38 - 1;
-        var_f1.value = (*(f32 *)((u8 *)(arg0) + 49216)) - (0.0250000004f);
-        var_f1.value = (var_f1.value > (0.0f)) ? var_f1.value : (0.0f);
-        (*(f32 *)((u8 *)(arg0) + 49216)) = var_f1.value;
+        (*(f32 *)((u8 *)(arg0) + 49216)) = ((*(f32 *)((u8 *)(arg0) + 49216)) - 0.025f > 0.0f) ? (*(f32 *)((u8 *)(arg0) + 49216)) - 0.025f : 0.0f;
         idx = temp_r30->unk_4;
         if (idx == (temp_r30->unk_8 - 1)) {
             if ((*(f32 *)((u8 *)(arg0) + 49216)) <= (0.0f)) {
@@ -738,9 +736,7 @@ void fn_1_D4370(void *arg0) {
         } else if (temp_r30->unk_38 <= 0) {
             temp_r30->unk_4 = idx + 1;
             temp_r30->unk_38 = temp_r30->arr20[temp_r30->unk_4];
-            var_f1.value = (*(f32 *)((u8 *)(arg0) + 49216)) + temp_r30->arrC[temp_r30->unk_4];
-            var_f1.value = (var_f1.value < (1.0f)) ? var_f1.value : (1.0f);
-            (*(f32 *)((u8 *)(arg0) + 49216)) = var_f1.value;
+            (*(f32 *)((u8 *)(arg0) + 49216)) = ((*(f32 *)((u8 *)(arg0) + 49216)) + temp_r30->arrC[temp_r30->unk_4] < 1.0f) ? (*(f32 *)((u8 *)(arg0) + 49216)) + temp_r30->arrC[temp_r30->unk_4] : 1.0f;
         }
     }
     temp_f4 = *(f32 *)((u8 *)(arg0) + 49216);
