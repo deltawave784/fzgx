@@ -104,6 +104,28 @@ void fn_3_1180C(void) {
 }
 /* fzgx:end fn_3_1180C */
 
+/* fzgx:begin fn_3_118BC */
+extern u32 fn_3_11A38(void);
+extern void fn_1_A2D84(u32);
+
+extern u8 lbl_1_bss_9F8[];
+
+#pragma opt_dead_assignments off
+void fn_3_118BC(void) {
+    u16 flags;
+    u8 *tbl;
+    fn_3_11A38();
+    tbl = lbl_1_bss_9F8 + 8;
+    flags = *(u16 *)(tbl + lbl_3_bss_7EDD8.unk_14 * 0x14);
+    if (((flags >> 4) & 1) || ((flags >> 9) & 1)) {
+        fn_1_A2D84(0xA9010200);
+        lbl_3_bss_7EDD8.unk_C = lbl_3_bss_7EDD8.unk_10;
+        lbl_3_bss_7EDD8.unk_10 = 0x1000000;
+    }
+}
+#pragma opt_dead_assignments reset
+/* fzgx:end fn_3_118BC */
+
 /* fzgx:begin fn_3_11930 */
 struct PasteEntry {
     u8 pad[0x2c];
