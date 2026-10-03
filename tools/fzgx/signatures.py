@@ -559,6 +559,7 @@ def _disk_index(p, identity, build):
     import io
     import os
     from .project import STATE_DIR
+    from . import compat
     from .oracle import build_lock
     key = hashlib.sha256(json.dumps(identity).encode()).hexdigest()
     directory = STATE_DIR / 'signatures'
@@ -583,7 +584,7 @@ def _disk_index(p, identity, build):
             state = {k: v for k, v in vars(result).items() if k not in ('p', '_flows')}
             temporary = path.with_suffix(f'.{os.getpid()}.tmp')
             temporary.write_bytes(pickle.dumps(state, protocol=pickle.HIGHEST_PROTOCOL))
-            temporary.replace(path)
+            compat.replace(temporary, path)
         result = Index.__new__(Index)
         result.__dict__.update(state)
         result.p = p

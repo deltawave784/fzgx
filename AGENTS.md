@@ -37,6 +37,10 @@ The manual CLI (`uv run tools/fzgx.py ...`) and MCP server
 humans and other harnesses. `fzgx verify` relinks all 16 targets and verifies
 every hash before committing accepted source. Batches verify every 60 seconds by
 default and drain again on exit; completed matches do not wait for outlier models.
+Without the Codex runner (Claude Code subagents, the CLI) the check that reaches a
+full match submits it for the claim holder and runs `fzgx verify` at once, and a
+claim starts from the best saved attempt that exists on this machine (restored
+ledger rows can point at bodies that stayed on the recording machine).
 Rules enforced by tooling:
 no hardcoded addresses, no inline asm, no writes outside the assigned work copy.
 

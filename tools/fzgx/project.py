@@ -19,6 +19,8 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Dict, Iterable, List, Optional
 
+from . import compat
+
 ROOT = Path(__file__).resolve().parent.parent.parent
 DEFAULT_VERSION = "GFZE01"
 # Ledger, locks, saved attempts and caches: outside build/ on purpose (a build wipe must not lose state).
@@ -402,9 +404,12 @@ class Project:
             "functions": {k: {"asm": v.asm, "refs": v.refs, "unit": v.unit} for k, v in result.items()},
         }))
         try:
-            temporary.replace(cache)
+            compat.replace(temporary, cache)
         except FileNotFoundError:
             pass  # another thread of this process built and installed the same index first
+        except PermissionError:
+            # Windows: another process kept the cache open; the index is only a cache
+            temporary.unlink(missing_ok=True)
         self._asm_index[module] = result
         return result
 
@@ -671,7 +676,7 @@ class Project:
         units.sort(key=lambda u: (u["module"], u["source"]))
         tmp = self.units_path.with_suffix(".json.tmp")
         tmp.write_text(json.dumps(units, indent=2) + "\n")
-        os.replace(tmp, self.units_path)  # readers in other processes never see a partial file
+        compat.replace(tmp, self.units_path)  # readers in other processes never see a partial file
 
     def objdiff_unit_name(self, module: str, source: str) -> str:
         return f"{module}/{source.rsplit('.', 1)[0]}"

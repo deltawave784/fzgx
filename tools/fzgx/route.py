@@ -8,8 +8,10 @@ with the agent type in `agent_type`. No model decides what to work on next.
                            functions the haiku tier already attempted (escalation)
   opus    `matcher-large`  larger functions; small escalations too when --mid is off
 
-Ordering puts cheap wins first: near misses by remaining bytes, then small functions, then
-the rest by size. Claimed, blocked and assembly-only functions are skipped.
+Ordering puts cheap wins first: near misses whose best body exists on this machine (the claim
+seeds the agent with it), then near misses without one (a restored ledger keeps the scores of
+bodies that stayed on the recording machine; those agents start over), both by remaining bytes,
+then small functions, then the rest by size. Claimed, blocked and assembly-only functions are skipped.
 """
 
 from __future__ import annotations
@@ -41,6 +43,7 @@ def plan(p: Project, limit: int = 8, small: int = 256, near: float = 80.0,
         "WHERE status = 'unmatched'" + (" AND module = ?" if module else ""),
         (module,) if module else ()).fetchall()
     haiku_tried = haiku_tried or set()
+    ledger = Ledger()
     out = []
     for r in rows:
         if r["claimed_by"]:
@@ -49,10 +52,15 @@ def plan(p: Project, limit: int = 8, small: int = 256, near: float = 80.0,
         t = tier_for(r["size"], best, r["symbol"], small, near, mid, haiku_tried)
         if tier and t != tier:
             continue
-        remaining = r["size"] * (1 - best / 100)
-        rank = (0, remaining) if best >= near else (1, r["size"]) if r["size"] <= small else (2, r["size"])
+        found = ledger.best_local_attempt(r["symbol"]) if best >= near else None
+        seeded = found is not None
+        seed_best = (found[0]["best_in_attempt"] or found[0]["final_percent"] or 0) if found else None
+        remaining = r["size"] * (1 - (seed_best if seeded else best) / 100)
+        rank = ((0 if seeded else 1, remaining) if best >= near else
+                (2, r["size"]) if r["size"] <= small else (3, r["size"]))
         out.append(dict(symbol=r["symbol"], module=r["module"], size=r["size"], attempts=r["attempts"],
-                        best=round(best, 1), tier=t, agent_type=AGENT[t], _rank=rank))
+                        best=round(best, 1), seeded=seeded,
+                        seed_best=round(seed_best, 1) if seeded else None, tier=t, agent_type=AGENT[t], _rank=rank))
     out.sort(key=lambda d: d.pop("_rank"))
     return out[:limit]
 

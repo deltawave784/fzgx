@@ -10,7 +10,7 @@ import signal
 from typing import Dict, List, Optional
 from pathlib import Path
 
-from . import oracle, tufile
+from . import compat, oracle, tufile
 from .ledger import Ledger
 from .project import ROOT, STATE_DIR, Project
 
@@ -186,11 +186,8 @@ def watch(version: str, interval: float, until_pid: Optional[int] = None,
         deadline = time.monotonic() + interval
         while True:
             stopping = stop_requested or (stop_file is not None and stop_file.exists())
-            if until_pid:
-                try:
-                    os.kill(until_pid, 0)
-                except ProcessLookupError:
-                    stopping = True
+            if until_pid and not compat.pid_alive(until_pid):
+                stopping = True
             if stopping:
                 # A submit may have completed during the last sleep.
                 if pending(Ledger()) or (STATE_DIR / 'verify_dependencies.jsonl').exists():

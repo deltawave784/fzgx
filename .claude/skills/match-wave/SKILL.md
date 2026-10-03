@@ -31,7 +31,10 @@ The routing is deterministic; you only dispatch and report. Run from the reposit
    `SYMBOL: released at N% - reason`. Do not retry failures in the same wave.
 
 5. **Close the wave.**
-   - `uv run ninja` must still end with `16 files OK`.
+   - `uv run tools/fzgx.py verify` drains anything still `pending` (a full match is submitted,
+     relinked and committed by the check that reaches 100%; this catches the rest).
+   - `uv run ninja` must still end with `16 files OK` (when ninja has nothing to do it prints no
+     summary; `build/tools/dtk shasum -c config/GFZE01/build.sha1` checks the hashes directly).
    - `uv run tools/fzgx.py report` for progress.
    - Matches are committed by the tooling as they are accepted; check `git log`.
    - Report to the user: matched / released per tier, bytes matched, and the release

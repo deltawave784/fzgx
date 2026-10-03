@@ -144,6 +144,22 @@ class Ledger:
             "SELECT * FROM attempts WHERE symbol=? AND ended IS NULL ORDER BY id DESC LIMIT 1",
             (symbol,)).fetchone()
 
+    def best_local_attempt(self, symbol: str) -> Optional[tuple]:
+        """(attempt row, body path) of the best ended attempt whose saved body exists on this
+        machine, ranked by best_in_attempt (the saved body is the attempt's best; final_percent
+        is only its last check). A restored state/ledger.json carries the recording machine's
+        absolute paths; a body copied into this checkout's .fzgx/attempts/ is found by name."""
+        rows = self.db.execute(
+            "SELECT * FROM attempts WHERE symbol=? AND ended IS NOT NULL AND best_body_path IS NOT NULL "
+            "ORDER BY COALESCE(best_in_attempt, final_percent) DESC, id DESC", (symbol,)).fetchall()
+        for row in rows:
+            path = Path(row["best_body_path"])
+            if not path.exists():
+                path = STATE_DIR / "attempts" / path.name.replace("\\", "/").rsplit("/", 1)[-1]
+            if path.exists():
+                return row, path
+        return None
+
     def bump_checks(self, symbol: str, percent: float) -> Dict[str, float]:
         """Record a check. Returns checks so far, consecutive non-improving checks, and bests."""
         with self.db:

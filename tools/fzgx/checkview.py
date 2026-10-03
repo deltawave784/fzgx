@@ -3,7 +3,7 @@ from __future__ import annotations
 
 import hashlib
 import json
-from . import oracle
+from . import compat, oracle
 from .evidence import data_context
 from .ledger import Ledger
 
@@ -38,7 +38,7 @@ def save(project, key, result):
     path.parent.mkdir(parents=True, exist_ok=True)
     temporary = path.with_suffix('.tmp')
     temporary.write_text(json.dumps(payload) + '\n')
-    temporary.replace(path)
+    compat.replace(temporary, path)
     if result.ok:
         result.diff = _page(payload, 'diff', 0)['diff']
 

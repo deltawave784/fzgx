@@ -61,6 +61,45 @@ def unlock(f) -> None:
     msvcrt.locking(f.fileno(), msvcrt.LK_UNLCK, 1)
 
 
+def replace(src, dst) -> None:
+    """os.replace that waits out a concurrent reader on Windows, where replacing a file
+    another process has open fails with PermissionError (POSIX rename never does).
+    Raises PermissionError if the destination stays busy for about five seconds."""
+    if not WINDOWS:
+        os.replace(src, dst)
+        return
+    import time
+    for delay in (0.02, 0.05, 0.1, 0.2, 0.4, 0.8, 1.6, 2.0):
+        try:
+            os.replace(src, dst)
+            return
+        except PermissionError:
+            time.sleep(delay)
+    os.replace(src, dst)
+
+
+def pid_alive(pid: int) -> bool:
+    """Whether process `pid` still runs. On Windows os.kill(pid, 0) is TerminateProcess
+    with exit code 0, not a probe: it would kill the process it asks about."""
+    if not WINDOWS:
+        try:
+            os.kill(pid, 0)
+        except ProcessLookupError:
+            return False
+        except PermissionError:
+            return True
+        return True
+    import ctypes
+    kernel32 = ctypes.windll.kernel32
+    handle = kernel32.OpenProcess(0x00100000, False, pid)  # SYNCHRONIZE
+    if not handle:
+        return False
+    try:
+        return kernel32.WaitForSingleObject(handle, 0) == 0x102  # WAIT_TIMEOUT: still running
+    finally:
+        kernel32.CloseHandle(handle)
+
+
 def new_group() -> dict:
     """Popen / create_subprocess_exec kwargs that put the child in its own group."""
     if WINDOWS:

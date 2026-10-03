@@ -164,6 +164,25 @@ def _seed_record(key: str) -> dict:
     return json.loads(Path(manifest).read_text()).get(key, {}) if manifest else {}
 
 
+def _local_seed(l: Ledger, key: str) -> dict:
+    """Without a batch manifest, a claim starts from the best saved attempt on this machine,
+    with the compiler settings recorded beside it."""
+    found = l.best_local_attempt(key)
+    if not found:
+        return {}
+    row, path = found
+    seed = dict(path=str(path), sha256=hashlib.sha256(path.read_text().encode()).hexdigest(),
+                percent=row["best_in_attempt"] or row["final_percent"], kind='best_attempt', notes=row["notes"])
+    meta = path.with_suffix('.json')
+    if meta.exists():
+        try:
+            saved = json.loads(meta.read_text())
+            seed.update({k: saved[k] for k in ('mw', 'flags') if saved.get(k)})
+        except ValueError:
+            pass
+    return seed
+
+
 def _compiler_options(p: Project, key: str) -> dict:
     options = _seed_record(key)
     path = p.work_path(key).with_suffix('.compiler.json')
@@ -197,11 +216,28 @@ def claim(p: Project, symbol: str, agent: str, ttl: int = DEFAULT_TTL,
     seed_body = None
     if os.environ.get('FZGX_SEEDS') and not seed:
         return {'ok': False, 'error': 'seeded batch has no candidate for this function'}
+    if not os.environ.get('FZGX_SEEDS') and not _is_revise(agent):
+        seed = _local_seed(l, key)
     if seed:
         seed_body = Path(seed['path']).read_text()
         if hashlib.sha256(seed_body.encode()).hexdigest() != seed['sha256']:
             return {'ok': False, 'error': 'seed source changed since batch preparation'}
     shadow = _is_shadow(agent)
+    held = l.get(key)
+    if held and held["status"] == "claimed" and held["claimed_by"] == agent and l.current_attempt(key):
+        # the same agent claiming again lost the first response (a crash while building the
+        # context): resume the open attempt and its work copy instead of refusing
+        work = p.work_path(key)
+        out = {"ok": True, "symbol": symbol, "unit": _unit_source(p, symbol), "attempt": held["attempts"] + 1,
+               "resumed": True}
+        if work.exists():
+            out["seed"] = {"source": work.read_text(),
+                           "instruction": "Your claim was already open; this is your current work copy. Continue with check."}
+        try:
+            out["context"] = build_context(p, l, symbol, compiler_options=_compiler_options(p, key))
+        except LookupError as e:
+            out["context"] = f"(no context: {e})"
+        return out
     try:
         row = l.claim(key, agent, ttl, max_attempts, shadow=shadow)
     except (LookupError, PermissionError) as e:
@@ -225,6 +261,12 @@ def claim(p: Project, symbol: str, agent: str, ttl: int = DEFAULT_TTL,
         best.write_text(seed_body)
         best.with_suffix('.json').write_text(json.dumps(dict(
             sha256=seed['sha256'], mw=seed.get('mw'), flags=seed.get('flags'))) + '\n')
+        attempt = l.current_attempt(key)
+        if seed.get('kind') == 'best_attempt' and attempt and (seed.get('mw') or seed.get('flags')):
+            # a manifest seed's compiler reaches checks through _seed_record; a local one through
+            # the attempt's compiler record, as a version probe would have left it
+            work.with_suffix('.compiler.json').write_text(json.dumps(dict(
+                attempt_id=attempt['id'], mw=seed.get('mw'), flags=seed.get('flags'))) + '\n')
     elif _is_revise(agent) and unit:
         work.write_text(_canonical_text(p, unit) or STUB.format(symbol=name, note="nothing to revise"))
     else:
@@ -334,18 +376,28 @@ def _budget_stop(att) -> Optional[str]:
 
 
 def _finish_check(p: Project, symbol: str, result: dict, checked: Optional[oracle.CheckResult] = None) -> dict:
-    """A bound headless worker needs no model decision to accept a match or stop."""
-    agent = os.environ.get('FZGX_AGENT_ID')
-    if not agent:
-        return result
+    """A bound headless worker needs no model decision to accept a match or stop.
+
+    Without a runner (Claude Code subagents over the MCP server, or the CLI) a full match is
+    still submitted for whoever holds the claim, then link-verified and committed at once:
+    no batch verifier drains it. Stopping stays the agent's call, so its release note survives."""
+    runner = os.environ.get('FZGX_AGENT_ID')
     row = Ledger().get(_key(p, symbol))
-    if not row or row['status'] != 'claimed' or row['claimed_by'] != agent:
+    if not row or row['status'] != 'claimed' or (runner and row['claimed_by'] != runner):
         return result
+    agent = runner or row['claimed_by']
     automatic = None
     if checked and checked.ok and oracle.unit_fully_matches(checked) is None:
         automatic = submit(p, symbol, agent=agent, message='oracle match accepted automatically',
                            harness=os.environ.get('FZGX_HARNESS'), model=os.environ.get('FZGX_MODEL'),
                            mw_version=checked.mw_version, extra_cflags=checked.extra_cflags)
+        if not runner and automatic.get('ok') and automatic.get('link') == 'pending':
+            automatic['verify'] = verify_links(p)
+    if not runner:
+        if automatic:
+            result['automatic'] = automatic
+            result['terminal'] = bool(automatic.get('ok'))
+        return result
     if not (automatic and automatic.get('ok')) and result.get('stop'):
         automatic = release(p, symbol, reason=result['stop'], agent=agent,
                             harness=os.environ.get('FZGX_HARNESS'), model=os.environ.get('FZGX_MODEL'))

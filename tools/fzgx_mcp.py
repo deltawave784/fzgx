@@ -146,7 +146,12 @@ async def submit(symbol: str, agent: str, message: str, harness: str = "", model
                 path = f.name
             args += ["--names", path]
         try:
-            return _cli(*args)
+            r = _cli(*args)
+            # outside the Codex runner no batch verifier drains accepted matches: link-verify
+            # and commit now, as this tool promises
+            if isinstance(r, dict) and r.get("ok") and r.get("link") == "pending":
+                r["verify"] = _cli("verify", timeout=2400)
+            return r
         finally:
             if path:
                 Path(path).unlink(missing_ok=True)

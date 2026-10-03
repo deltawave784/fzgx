@@ -318,17 +318,16 @@ def build_context(project: Project, ledger: Optional[Ledger], symbol: str,
             parts.append(f"\n## Current unit\n```c\n{cur}\n```")
 
     if ledger and not supplied_source and not (row and (row["claimed_by"] or "").startswith("shadow-")):
-        att = ledger.db.execute(
-            "SELECT * FROM attempts WHERE symbol=? AND ended IS NOT NULL ORDER BY final_percent DESC, id DESC LIMIT 1",
-            (symbol,)).fetchone()
-        if att and att["best_body_path"] and Path(att["best_body_path"]).exists():
-            body = Path(att["best_body_path"]).read_text()
-            parts.append(f"\n## Best prior attempt ({att['final_percent'] or 0:.1f}%, notes: {att['notes'] or '-'})\n```c\n{body}\n```")
+        found = ledger.best_local_attempt(symbol)
+        att, best_path = found if found else (None, None)
+        if att:
+            body = best_path.read_text()
+            parts.append(f"\n## Best prior attempt ({att['best_in_attempt'] or att['final_percent'] or 0:.1f}%, notes: {att['notes'] or '-'})\n```c\n{body}\n```")
             # the plateau itself: which rows still differ and what kind of difference they are, so the
             # next attempt changes their cause instead of resubmitting the same body
             try:
                 from . import oracle, stuck
-                res = oracle.check(project, symbol, 0, source=Path(att["best_body_path"]))
+                res = oracle.check(project, symbol, 0, source=best_path)
                 if res.ok and not res.matched:
                     lrows, rrows = getattr(res, "_rows", ([], []))
                     counts = stuck.classify_rows(lrows, rrows)
