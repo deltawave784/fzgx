@@ -1245,6 +1245,47 @@ void fn_1_41A8(void) {
 }
 /* fzgx:end fn_1_41A8 */
 
+/* fzgx:begin fn_1_426C noprologue */
+#include "types.h"
+
+struct Fn426CEntry {
+    u32 active;
+    u32 arg;
+    u32 pad[4];
+    void (*callback)(u32, u32);
+    u32 pad2[2];
+};
+
+struct Fn426CMgr {
+    u32 f0;
+    struct Fn426CEntry *entries;
+};
+
+extern struct Fn426CMgr *lbl_1_bss_DAC;
+extern struct Fn426CMgr *lbl_1_bss_DA8;
+extern void fn_1_4374(struct Fn426CMgr *, struct Fn426CEntry *);
+
+void fn_1_426C(u32 idx) {
+    struct { struct Fn426CMgr *value; } m;
+    struct Fn426CEntry *e;
+    void (*cb)(u32, u32);
+    m.value = lbl_1_bss_DAC;
+    e = &m.value->entries[idx];
+    if (idx < 0x20 || e->active == 0) {
+        return;
+    }
+    cb = e->callback;
+    if (cb != 0) {
+        struct Fn426CMgr *saved = lbl_1_bss_DA8;
+        lbl_1_bss_DA8 = m.value;
+        cb(e->arg, 1);
+        lbl_1_bss_DAC = m.value;
+        lbl_1_bss_DA8 = saved;
+    }
+    fn_1_4374(m.value, e);
+}
+/* fzgx:end fn_1_426C */
+
 /* fzgx:begin fn_1_4310 */
 // Store the value in the shared state object's field.
 void fn_1_4310(u32 arg0) {
