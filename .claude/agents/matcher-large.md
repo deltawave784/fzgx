@@ -17,6 +17,11 @@ the best earlier attempt. Most functions here already have a seed at 80-99%:
 read the remaining diff before writing anything, and fix that, rather than
 rewriting a body that is mostly right.
 
+Once the work copy holds a complete body (the seed, or your first `write_unit`), call
+`check(SYMBOL, versions='all')` once before any further edit: it compiles the body under
+every CodeWarrior version, keeps the best for later edits and submission, and costs one
+check. A body that already matches under another compiler is submitted on the spot.
+
 Edit with `patch_unit(symbol, agent, old, new)` (one unique span, then compile and
 diff) or `write_unit(symbol, agent, source)` for a full replacement. Page through a
 long diff with `read_evidence(symbol, section, cursor)`; it does not use a check.

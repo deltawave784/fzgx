@@ -283,7 +283,11 @@ def claim(p: Project, symbol: str, agent: str, ttl: int = DEFAULT_TTL,
                                        'and repair inferred declarations or lowering using the retail assembly, retaining the '
                                        'recovered structure. Compile your completed candidate with write_unit; do not restart from a stub.'
                                        if seed.get('kind') == 'lift_total' else
-                                       'Your work copy already contains this C. Start with check, then patch it; do not restart from a stub.')}
+                                       'Your work copy already contains this C. Start with check(symbol, versions="all") (one check; '
+                                       'it keeps the best compiler), then patch it; do not restart from a stub.')}
+    else:
+        out['next'] = ('Write the complete function with write_unit, then call check(symbol, versions="all") once '
+                       '(one check; it keeps the best compiler) before further edits.')
     try:
         out["context"] = build_context(p, l, symbol, compiler_options=_compiler_options(p, key))
     except LookupError as e:
@@ -446,7 +450,9 @@ def check(p: Project, symbol: str, max_diff_lines: int = 80, versions: Optional[
                 continue
             result = oracle.check(p, symbol, max_diff_lines, source=src,
                                   mw_version=ver, extra_cflags=options.get('flags'))
-            _record_check(p, key, src, result)
+            # one probe is one check, scored at its best compiler: charging every version
+            # spent half the check budget and tripped the plateau stop before any edit
+            _record_check(p, key, src, result, count=False)
             score = (result.percent_adjusted if result.pool_rows else result.percent) if result.ok else -2.0
             out[ver] = score
             fully_matches = result.ok and oracle.unit_fully_matches(result) is None
@@ -456,6 +462,7 @@ def check(p: Project, symbol: str, max_diff_lines: int = 80, versions: Optional[
                 break
         selected = None
         if best:
+            _record_check(p, key, src, best[1], archive=False)
             selected = dict(mw=best[1].mw_version, flags=best[1].extra_cflags)
             attempt = l.current_attempt(key)
             if attempt:
@@ -468,7 +475,7 @@ def check(p: Project, symbol: str, max_diff_lines: int = 80, versions: Optional[
                 "selected": selected, "selected_check": best[1].to_json() if best else None,
                 "stop": _budget_stop(l.current_attempt(key)),
                 "note": "The best tested compiler is retained for subsequent edits and submit. "
-                        "-1 compiler missing, -2 check failed; each compiler probe counts toward the attempt"}
+                        "-1 compiler missing, -2 check failed; the whole probe counts as one check"}
         return _finish_check(p, symbol, response, best[1] if best else None)
     res = oracle.check(p, symbol, max_diff_lines, source=src,
                        mw_version=options.get('mw'), extra_cflags=options.get('flags'))
@@ -493,9 +500,12 @@ def read_evidence(p: Project, symbol: str, section: str = 'diff', cursor: int = 
     return checkview.read(p, _key(p, symbol), section, cursor)
 
 
-def _record_check(p: Project, key: str, src: Optional[Path], res: oracle.CheckResult) -> dict:
-    """Archive the body and compiler settings together, including version probes."""
-    if src is not None:
+def _record_check(p: Project, key: str, src: Optional[Path], res: oracle.CheckResult,
+                  count: bool = True, archive: bool = True) -> dict:
+    """Archive the body and compiler settings together, including version probes.
+    count=False archives without spending a check (each compiler of a version probe);
+    archive=False spends the check without archiving again (the probe's one charge)."""
+    if src is not None and archive:
         # every checked body is kept with its score: the (before, after) pairs of a function that
         # went on to match are the exemplars a prompt with examples needs
         try:
@@ -511,7 +521,7 @@ def _record_check(p: Project, key: str, src: Optional[Path], res: oracle.CheckRe
                                     "mw": res.mw_version, "flags": res.extra_cflags}) + "\n")
         except OSError:
             pass
-    if src is not None:
+    if src is not None and count:
         stats = Ledger().bump_checks(key, (res.percent_adjusted if res.pool_rows else res.percent) if res.ok else 0.0)
         if stats.get("improved"):
             best = STATE_DIR / "attempts" / f"{key}.best.c"

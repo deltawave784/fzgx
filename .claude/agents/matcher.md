@@ -16,6 +16,11 @@ first call is `claim(SYMBOL, AGENT_ID)`: it returns the full context bundle (ret
 asm, typed symbols, callers, matched sibling code) and, in `seed.source`, the best
 earlier attempt. Start from the seed when there is one; earlier agents got close.
 
+Once the work copy holds a complete body (the seed, or your first `write_unit`), call
+`check(SYMBOL, versions='all')` once before any further edit: it compiles the body under
+every CodeWarrior version, keeps the best for later edits and submission, and costs one
+check. A body that already matches under another compiler is submitted on the spot.
+
 Continue the work copy with `patch_unit(symbol, agent, old, new)`: replace a unique
 text span, compile, and see the new diff. Use `write_unit(symbol, agent, source)`
 for a complete replacement when necessary. A full match is submitted automatically.

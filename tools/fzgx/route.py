@@ -37,7 +37,7 @@ def tier_for(size: int, best: float, symbol: str, small: int, near: float, mid: 
 
 def plan(p: Project, limit: int = 8, small: int = 256, near: float = 80.0,
          module: Optional[str] = None, tier: Optional[str] = None, mid: bool = False,
-         haiku_tried: Optional[set] = None) -> List[Dict]:
+         haiku_tried: Optional[set] = None, exclude: Optional[set] = None) -> List[Dict]:
     rows = Ledger().db.execute(
         "SELECT symbol, module, size, attempts, best_percent AS best, claimed_by FROM functions "
         "WHERE status = 'unmatched'" + (" AND module = ?" if module else ""),
@@ -46,7 +46,7 @@ def plan(p: Project, limit: int = 8, small: int = 256, near: float = 80.0,
     ledger = Ledger()
     out = []
     for r in rows:
-        if r["claimed_by"]:
+        if r["claimed_by"] or (exclude and r["symbol"] in exclude):
             continue
         best = r["best"] or 0
         t = tier_for(r["size"], best, r["symbol"], small, near, mid, haiku_tried)

@@ -100,7 +100,9 @@ def cmd_stuck(a, p):
 def cmd_route(a, p):
     from . import route
     tried = route.tried_by(a.escalate_from) if a.escalate_from else None
-    rows = route.plan(p, a.limit, a.small, module=a.module, tier=a.tier, mid=a.mid, haiku_tried=tried)
+    # functions a Claude tier already attempted (agent ids `haiku-`/`sonnet-`/`opus-...`)
+    skip = set().union(*(route.tried_by(t + "-") for t in route.AGENT)) if a.skip_tried else None
+    rows = route.plan(p, a.limit, a.small, module=a.module, tier=a.tier, mid=a.mid, haiku_tried=tried, exclude=skip)
     if a.json:
         print(json.dumps(rows, indent=1))
     else:
@@ -567,6 +569,7 @@ def build_parser() -> argparse.ArgumentParser:
     s.add_argument("--module"); s.add_argument("--tier", choices=["haiku", "sonnet", "opus"]); s.add_argument("--json", action="store_true")
     s.add_argument("--mid", action="store_true", help="route small near misses and haiku escalations to sonnet (matcher-mid)")
     s.add_argument("--escalate-from", metavar="MODEL", help="escalate functions this model already attempted (e.g. claude-haiku): to sonnet with --mid, else opus")
+    s.add_argument("--skip-tried", action="store_true", help="leave out functions any Claude tier (haiku-/sonnet-/opus- agents) already attempted")
     s = sub.add_parser("type-survey", help="group per-function struct views into candidate shared types (leads for the librarian)"); s.set_defaults(fn=cmd_type_survey)
     s.add_argument("--top", type=int, default=20); s.add_argument("--emit", type=int, metavar="ID", help="print a proposed merged struct for cluster ID")
     s.add_argument("--name", default="Merged", help="typedef name for --emit"); s.add_argument("--json", action="store_true")
