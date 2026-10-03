@@ -6524,3 +6524,6 @@ rel/main_rel/driver/fn_1_A79D8.c:
 
 rel/main_rel/spline/fn_1_F8CF0.c:
 	.text       start:0x000F8CF0 end:0x000F8D10 align:4
+
+rel/main_rel/archive/fn_1_12B4EC.c:
+	.text       start:0x0012B4EC end:0x0012B5B4 align:4

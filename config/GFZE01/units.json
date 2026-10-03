@@ -26946,6 +26946,17 @@
   },
   {
     "module": "main_rel",
+    "source": "rel/main_rel/archive/fn_1_12B4EC.c",
+    "symbols": [
+      "fn_1_12B4EC"
+    ],
+    "status": "matching",
+    "mw_version": null,
+    "extra_cflags": [],
+    "tu": "rel/main_rel/archive.c"
+  },
+  {
+    "module": "main_rel",
     "source": "rel/main_rel/archive/fn_1_12BF7C.c",
     "symbols": [
       "fn_1_12BF7C"

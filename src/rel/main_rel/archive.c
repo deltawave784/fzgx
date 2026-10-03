@@ -647,6 +647,37 @@ void fn_1_12B3F8(void *arg0, void *arg1, void *arg2, u32 arg3, u32 arg4, s32 *ar
 }
 /* fzgx:end fn_1_12B3F8 */
 
+/* fzgx:begin fn_1_12B4EC */
+struct Ent {
+    u8 b;
+    u8 pad[3];
+    u32 v[1];
+};
+struct Blk {
+    u8 pad[0x81A4];
+    struct Ent e[3];
+    u8 pad2[4];
+};
+
+extern struct Blk * fn_1_36AD0(void);
+extern u32 fn_1_151BE8(s16, s16);
+
+void fn_1_12B4EC(s16 arg0, s16 arg1) {
+    struct Blk *p;
+    s16 i;
+    s16 j;
+    u8 k;
+
+    p = fn_1_36AD0() + arg0;
+    k = arg1 % 4;
+    for (i = 0; i < 3; i++) {
+        for (j = 0; j < 1; j++) {
+            p->e[i].v[j] = fn_1_151BE8(p->e[i].b, k + j);
+        }
+    }
+}
+/* fzgx:end fn_1_12B4EC */
+
 /* fzgx:begin fn_1_12BF7C */
 #include "types.h"
 
