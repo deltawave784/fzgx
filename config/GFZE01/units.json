@@ -8684,6 +8684,20 @@
   },
   {
     "module": "main",
+    "source": "dol/TRKInitializeSerialHandler.c",
+    "symbols": [
+      "TRKInitializeSerialHandler"
+    ],
+    "status": "matching",
+    "mw_version": "GC/2.7",
+    "extra_cflags": [],
+    "pool": {
+      "...rodata.0": "lbl_800956C0",
+      "fzgx_pool_strings_lbl_800956C0_0": "lbl_800956C0"
+    }
+  },
+  {
+    "module": "main",
     "source": "dol/TRKInitializeTarget.c",
     "symbols": [
       "TRKInitializeTarget"

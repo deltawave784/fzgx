@@ -10533,7 +10533,8 @@
         }
       }
     ],
-    "link": "pending"
+    "link": "verified",
+    "commit": "bdd2e36e"
   },
   "fn_1_10B344": {
     "seed_symbol": "fn_1_10A43C",
@@ -10623,6 +10624,49 @@
             "fn_1_10A43C": "fn_1_10B344"
           }
         }
+      }
+    ],
+    "link": "verified",
+    "commit": "bdd2e36e"
+  },
+  "TRKInitializeSerialHandler": {
+    "seed_symbol": "TRKInitializeSerialHandler",
+    "generator": "fzgx fixup",
+    "transform": "native string objects lbl_800956C0",
+    "seed": "#include \"types.h\"\n\nstruct S {\n    u32 unk_0;\n    u8 pad_4[0x4];\n    u32 unk_8;\n    u32 unk_C;\n};\n\nextern struct S lbl_801A5098[];\nextern u8 lbl_800956C0[];\nextern void MWTRACE(u32, ...);\n\ns32 TRKInitializeSerialHandler(void) {\n    u8 *p = (u8 *)&lbl_800956C0;\n    lbl_801A5098[0].unk_0 = -1;\n    lbl_801A5098[0].unk_8 = 0;\n    lbl_801A5098[0].unk_C = 0;\n    MWTRACE(1, (u32)(p + 0), 64);\n    MWTRACE(1, (u32)(p + 36), 64);\n    MWTRACE(1, (u32)(p + 72), 64);\n    MWTRACE(1, (u32)(p + 108), 64);\n    MWTRACE(1, (u32)(p + 140), 64);\n    MWTRACE(1, (u32)(p + 172), 64);\n    return 0;\n}\n",
+    "seed_sha256": "056a9ef70958b08708aa37a604bd68d23f50a789749afa89056cece18f54c5b5",
+    "generated_sha256": "abda758ab86b209308a072b526a4562dec35f0cc881c81b5c66629fb6d8469b0",
+    "generated_source": "#include \"types.h\"\n\nstruct S {\n    u32 unk_0;\n    u8 pad_4[0x4];\n    u32 unk_8;\n    u32 unk_C;\n};\n\nextern struct S lbl_801A5098[];\nstatic const char fzgx_pool_strings_lbl_800956C0_0[36] = \"TRK_Packet_Header \\t    %ld bytes\\n\";\nstatic const char fzgx_pool_strings_lbl_800956C0_24[36] = \"TRK_CMD_ReadMemory     %ld bytes\\n\";\nstatic const char fzgx_pool_strings_lbl_800956C0_48[36] = \"TRK_CMD_WriteMemory    %ld bytes\\n\";\nstatic const char fzgx_pool_strings_lbl_800956C0_6C[32] = \"TRK_CMD_Connect \\t    %ld bytes\\n\";\nstatic const char fzgx_pool_strings_lbl_800956C0_8C[32] = \"TRK_CMD_ReplyAck\\t    %ld bytes\\n\";\nstatic const char fzgx_pool_strings_lbl_800956C0_AC[36] = \"TRK_CMD_ReadRegisters\\t%ld bytes\\n\";\n\nextern void MWTRACE(u32, ...);\n\ns32 TRKInitializeSerialHandler(void) {\n    \n    lbl_801A5098[0].unk_0 = -1;\n    lbl_801A5098[0].unk_8 = 0;\n    lbl_801A5098[0].unk_C = 0;\n    MWTRACE(1, (u32)(((u8 *)fzgx_pool_strings_lbl_800956C0_0)), 64);\n    MWTRACE(1, (u32)(((u8 *)fzgx_pool_strings_lbl_800956C0_24)), 64);\n    MWTRACE(1, (u32)(((u8 *)fzgx_pool_strings_lbl_800956C0_48)), 64);\n    MWTRACE(1, (u32)(((u8 *)fzgx_pool_strings_lbl_800956C0_6C)), 64);\n    MWTRACE(1, (u32)(((u8 *)fzgx_pool_strings_lbl_800956C0_8C)), 64);\n    MWTRACE(1, (u32)(((u8 *)fzgx_pool_strings_lbl_800956C0_AC)), 64);\n    return 0;\n}\n",
+    "compiler": "GC/2.7",
+    "flags": "",
+    "source": "dol/TRKInitializeSerialHandler.c",
+    "bytes": 196,
+    "headers_sha256": "ffe2f3705e2c5e3ba6c721fed1771f5de20612254417a59f486b5a3ed3538a44",
+    "oracle_sha256": "f7685915459d64c15c3a0f781fa019d6ff8789da838592c92e6a24d5eba8b159",
+    "recipe": [
+      {
+        "label": "native string objects lbl_800956C0",
+        "input_sha256": "056a9ef70958b08708aa37a604bd68d23f50a789749afa89056cece18f54c5b5",
+        "output_sha256": "abda758ab86b209308a072b526a4562dec35f0cc881c81b5c66629fb6d8469b0",
+        "input_symbol": "TRKInitializeSerialHandler",
+        "output_symbol": "TRKInitializeSerialHandler",
+        "edits": [
+          [
+            131,
+            156,
+            "static const char fzgx_pool_strings_lbl_800956C0_0[36] = \"TRK_Packet_Header \\t    %ld bytes\\n\";\nstatic const char fzgx_pool_strings_lbl_800956C0_24[36] = \"TRK_CMD_ReadMemory     %ld bytes\\n\";\nstatic const char fzgx_pool_strings_lbl_800956C0_48[36] = \"TRK_CMD_WriteMemory    %ld bytes\\n\";\nstatic const char fzgx_pool_strings_lbl_800956C0_6C[32] = \"TRK_CMD_Connect \\t    %ld bytes\\n\";\nstatic const char fzgx_pool_strings_lbl_800956C0_8C[32] = \"TRK_CMD_ReplyAck\\t    %ld bytes\\n\";\nstatic const char fzgx_pool_strings_lbl_800956C0_AC[36] = \"TRK_CMD_ReadRegisters\\t%ld bytes\\n\";\n"
+          ],
+          [
+            232,
+            260,
+            ""
+          ],
+          [
+            376,
+            559,
+            "((u8 *)fzgx_pool_strings_lbl_800956C0_0)), 64);\n    MWTRACE(1, (u32)(((u8 *)fzgx_pool_strings_lbl_800956C0_24)), 64);\n    MWTRACE(1, (u32)(((u8 *)fzgx_pool_strings_lbl_800956C0_48)), 64);\n    MWTRACE(1, (u32)(((u8 *)fzgx_pool_strings_lbl_800956C0_6C)), 64);\n    MWTRACE(1, (u32)(((u8 *)fzgx_pool_strings_lbl_800956C0_8C)), 64);\n    MWTRACE(1, (u32)(((u8 *)fzgx_pool_strings_lbl_800956C0_AC)"
+          ]
+        ]
       }
     ],
     "link": "pending"
