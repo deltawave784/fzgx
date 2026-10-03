@@ -254,3 +254,33 @@ void fn_3_12E4C(Customize *self, u8 index, Vec3 *first, Vec3 *second) {
 
 #pragma opt_strength_reduction reset
 /* fzgx:end fn_3_12E4C */
+
+/* fzgx:begin fn_3_12FD4 noprologue */
+#include "types.h"
+
+typedef struct {
+    f32 x;
+    f32 y;
+    u8 pad[24];
+} Ent;
+
+extern Ent lbl_3_data_1EEC[];
+extern Ent lbl_3_data_246C[];
+
+void fn_3_12FD4(u32 arg0, u32 arg1, u32 arg2, f32 *arg3, f32 *arg4) {
+    u32 v;
+    if (__rlwnm(arg0, 6, 31, 31) != 0) {
+        *arg3 = lbl_3_data_246C[(u8)arg2].x;
+        *arg4 = lbl_3_data_246C[(u8)arg2].y;
+        return;
+    }
+    v = arg2 & 0xFF;
+    if (v == 4) {
+        arg2 = 43;
+    } else if (v == 40) {
+        arg2 = (arg1 + 40) & 0xFF;
+    }
+    *arg3 = lbl_3_data_1EEC[(u8)arg2].x;
+    *arg4 = lbl_3_data_1EEC[(u8)arg2].y;
+}
+/* fzgx:end fn_3_12FD4 */
