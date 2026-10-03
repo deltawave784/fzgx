@@ -5336,3 +5336,15 @@ dol/fn_8006A9B4.c:
 
 dol/fn_8006A768.c:
 	.text       start:0x8006A768 end:0x8006A8CC align:4
+
+dol/fn_8008CB20.c:
+	.text       start:0x8008CB20 end:0x8008CB28 align:4
+
+dol/fn_8008CB28.c:
+	.text       start:0x8008CB28 end:0x8008CB30 align:4
+
+dol/fn_8008CB30.c:
+	.text       start:0x8008CB30 end:0x8008CB38 align:4
+
+dol/fn_8008CB38.c:
+	.text       start:0x8008CB38 end:0x8008CB40 align:4
