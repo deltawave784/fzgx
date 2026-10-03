@@ -606,6 +606,26 @@ void fn_1_FD27C(fn_1_FD27C_Fn1FD27CArg0 *arg0, fn_1_FD27C_Fn1FD27CArg1 *arg1) {
 }
 /* fzgx:end fn_1_FD27C */
 
+/* fzgx:begin fn_1_FD324 */
+int fn_1_FD324(void *arg0) {
+    u8 *p;
+    if (arg0 == NULL) {
+        return 0;
+    }
+    p = *(u8 **)arg0;
+    if (p == NULL) {
+        return 0;
+    }
+    if (__rlwnm(*(u32 *)(p + 0x390), 6, 31, 31) != 0 && *(u32 *)(p + 0x3A0) == 0) {
+        return 0;
+    }
+    if (*(u32 *)(p + 0x3A4) == 0) {
+        return 0;
+    }
+    return 1;
+}
+/* fzgx:end fn_1_FD324 */
+
 /* fzgx:begin fn_1_FD388 */
 void fn_1_FD388(void) {
     fn_1_FD3A8();
