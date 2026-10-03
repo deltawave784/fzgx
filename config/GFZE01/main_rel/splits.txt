@@ -6512,3 +6512,6 @@ rel/main_rel/archive/fn_1_12A7C4.c:
 
 rel/main_rel/car/fn_1_8CA70.c:
 	.text       start:0x0008CA70 end:0x0008CAF4 align:4
+
+rel/main_rel/car/fn_1_8CAF4.c:
+	.text       start:0x0008CAF4 end:0x0008CB78 align:4

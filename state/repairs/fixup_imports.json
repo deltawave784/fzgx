@@ -10488,5 +10488,143 @@
     ],
     "link": "verified",
     "commit": "5b47a768"
+  },
+  "fn_1_8CAF4": {
+    "seed_symbol": "fn_1_8CA70",
+    "generator": "fzgx fixup",
+    "transform": "bind exact clone",
+    "seed": "typedef unsigned char u8;\ntypedef unsigned long u32;\ntypedef signed long s32;\ntypedef float f32;\ntypedef double f64;\nextern f32 lbl_1_rodata_3508[4];\nextern u8 lbl_1_bss_6E160[1740];\nf32 fn_1_8CA70(u32 a, s32 b) {\nf32 value;\nu32 half;\nu32 total;\nu32 span;\nint swapped = 0;\nu8 *constants = (u8 *)lbl_1_rodata_3508;\nif (a == b) {\nreturn *((f32 *)(constants + 0x10));\n}\nif (a > b) {\nu32 temp = a;\na = b;\nb = temp;\nswapped = 1;\n}\nspan = b - a;\ntotal = a * 30;\nhalf = (a * (a + 1)) >> 1;\na = span + (total - half);\na -= 1;\nvalue = *((f32 *)(lbl_1_bss_6E160 + (a * 4)));\nif (swapped == 0) {\nreturn value;\n}\nif (*((f64 *)(constants + 0x668)) == value) {\nreturn value;\n}\nreturn (f32)(value * *((f64 *)(constants + 0x7e8)));\n}\n",
+    "seed_sha256": "d2c11d5618cfb8a19f8ccb75e1d779cfb388e4511084c43531e515d21b7cd238",
+    "generated_sha256": "622fce13ceabf3713905bcffecfd6552cb776f8b361b747e6ee03020475f08a5",
+    "generated_source": "typedef unsigned char u8;\ntypedef unsigned long u32;\ntypedef signed long s32;\ntypedef float f32;\ntypedef double f64;\nextern f32 lbl_1_rodata_3508[4];\nextern u8 lbl_1_bss_6DA80[1740];\nf32 fn_1_8CAF4(u32 a, s32 b) {\nf32 value;\nu32 half;\nu32 total;\nu32 span;\nint swapped = 0;\nu8 *constants = (u8 *)lbl_1_rodata_3508;\nif (a == b) {\nreturn *((f32 *)(constants + 0x10));\n}\nif (a > b) {\nu32 temp = a;\na = b;\nb = temp;\nswapped = 1;\n}\nspan = b - a;\ntotal = a * 30;\nhalf = (a * (a + 1)) >> 1;\na = span + (total - half);\na -= 1;\nvalue = *((f32 *)(lbl_1_bss_6DA80 + (a * 4)));\nif (swapped == 0) {\nreturn value;\n}\nif (*((f64 *)(constants + 0x668)) == value) {\nreturn value;\n}\nreturn (f32)(value * *((f64 *)(constants + 0x7e8)));\n}\n",
+    "compiler": "GC/1.3.2",
+    "flags": "",
+    "source": "rel/main_rel/car/fn_1_8CAF4.c",
+    "bytes": 132,
+    "headers_sha256": "ffe2f3705e2c5e3ba6c721fed1771f5de20612254417a59f486b5a3ed3538a44",
+    "oracle_sha256": "f7685915459d64c15c3a0f781fa019d6ff8789da838592c92e6a24d5eba8b159",
+    "recipe": [
+      {
+        "label": "bind exact clone",
+        "input_sha256": "d2c11d5618cfb8a19f8ccb75e1d779cfb388e4511084c43531e515d21b7cd238",
+        "output_sha256": "622fce13ceabf3713905bcffecfd6552cb776f8b361b747e6ee03020475f08a5",
+        "input_symbol": "fn_1_8CA70",
+        "output_symbol": "fn_1_8CAF4",
+        "edits": [
+          [
+            171,
+            197,
+            "DA80[1740];\nf32 fn_1_8CAF4"
+          ],
+          [
+            547,
+            550,
+            "DA8"
+          ]
+        ],
+        "clone": {
+          "donor": "fn_1_8CA70",
+          "recipient": "fn_1_8CAF4",
+          "bindings": {
+            "lbl_1_rodata_3508": "lbl_1_rodata_3508",
+            "lbl_1_bss_6E160": "lbl_1_bss_6DA80",
+            "fn_1_8CA70": "fn_1_8CAF4"
+          }
+        }
+      }
+    ],
+    "link": "pending"
+  },
+  "fn_1_10B344": {
+    "seed_symbol": "fn_1_10A43C",
+    "generator": "fzgx fixup",
+    "transform": "bind exact clone",
+    "seed": "#include \"types.h\"\n\nextern void fn_1_10846C(void);\nextern const f32 lbl_1_rodata_7B1C;\nextern const f32 lbl_1_rodata_7B20;\nextern void fn_1_128884(void *, void *, s32);\n\ntypedef struct AccessoryEntry {\n    u8 unk_0;\n    u8 pad_1[0x13];\n    f32 unk_14;\n    f32 unk_18;\n    u8 pad_1C[0x24];\n    f32 unk_40;\n} AccessoryEntry;\n\ntypedef struct AccessoryObject {\n    u8 pad_0[0x18];\n    u32 unk_18;\n    u8 pad_1C[8];\n    u8 *unk_24;\n} AccessoryObject;\n\nvoid fn_1_10A43C(AccessoryObject *self) {\n    int i;\n    int j;\n    AccessoryEntry *entry_i;\n    AccessoryEntry *entry_j;\n\n    if (self == NULL) {\n        return;\n    }\n\n    fn_1_10846C();\n\n    for (i = 0, entry_i = (AccessoryEntry *)self->unk_24; i < self->unk_18; i++, entry_i++) {\n        if (entry_i->unk_0 & 1) {\n            entry_i->unk_40 = lbl_1_rodata_7B1C;\n            entry_i->unk_0 = 0;\n        } else {\n            entry_i->unk_40 = lbl_1_rodata_7B20;\n            entry_i->unk_0 = 1;\n        }\n    }\n\n    for (i = 0, entry_i = (AccessoryEntry *)self->unk_24; i < self->unk_18; i++, entry_i++) {\n        for (j = i + 1, entry_j = (AccessoryEntry *)(self->unk_24 + i * 0x44 + 0x44); j < self->unk_18; j++, entry_j++) {\n            if ((entry_i->unk_0 & 1) && !(entry_j->unk_0 & 1)) {\n                fn_1_128884(entry_i, entry_j, sizeof(AccessoryEntry));\n            }\n        }\n    }\n\n    for (i = 0, entry_i = (AccessoryEntry *)self->unk_24; i < self->unk_18; i++, entry_i++) {\n        for (j = i + 1, entry_j = (AccessoryEntry *)(self->unk_24 + i * 0x44 + 0x44); j < self->unk_18; j++, entry_j++) {\n            if (entry_i->unk_0 == entry_j->unk_0) {\n                if (entry_i->unk_18 > entry_j->unk_18) {\n                    fn_1_128884(entry_i, entry_j, sizeof(AccessoryEntry));\n                }\n            }\n        }\n    }\n\n    for (i = 0, entry_i = (AccessoryEntry *)self->unk_24; i < self->unk_18; i++, entry_i++) {\n        for (j = i + 1, entry_j = (AccessoryEntry *)(self->unk_24 + i * 0x44 + 0x44); j < self->unk_18; j++, entry_j++) {\n            if (entry_i->unk_0 == entry_j->unk_0) {\n                if (entry_i->unk_14 < entry_j->unk_14 && entry_i->unk_18 > lbl_1_rodata_7B20 && entry_j->unk_18 > lbl_1_rodata_7B20) {\n                    fn_1_128884(entry_i, entry_j, sizeof(AccessoryEntry));\n                } else if (entry_i->unk_14 > entry_j->unk_14 && entry_i->unk_18 < lbl_1_rodata_7B20 && entry_j->unk_18 < lbl_1_rodata_7B20) {\n                    fn_1_128884(entry_i, entry_j, sizeof(AccessoryEntry));\n                }\n            }\n        }\n    }\n}\n",
+    "seed_sha256": "5c70d67cd10781647bd5289b6ae87a1e6208d0b118d35e2c612f19d88e0f5455",
+    "generated_sha256": "7b4024470da16708970fbbe1f1c9f77f10b9a12d377e12dfcaa2eabcefded840",
+    "generated_source": "\n\ntypedef signed long s32;\n\ntypedef unsigned char u8;\n\ntypedef unsigned long u32;\n\ntypedef float f32;\n\nextern void fn_1_10846C(void);\nextern const f32 lbl_1_rodata_7B1C;\nextern const f32 lbl_1_rodata_7B20;\nextern void fn_1_128884(void *, void *, s32);\ntypedef struct AccessoryEntry {\nu8 unk_0;\nu8 pad_1[0x13];\nf32 unk_14;\nf32 unk_18;\nu8 pad_1C[0x24];\nf32 unk_40;\n} AccessoryEntry;\ntypedef struct AccessoryObject {\nu8 pad_0[0x18];\nu32 unk_18;\nu8 pad_1C[8];\nu8 *unk_24;\n} AccessoryObject;\nvoid fn_1_10B344(AccessoryObject *self) {\nint i;\nint j;\nAccessoryEntry *entry_i;\nAccessoryEntry *entry_j;\nif (self == ((void *)0) ) {\nreturn;\n}\nfn_1_10846C();\nfor (i = 0, entry_i = (AccessoryEntry *)self->unk_24; i < self->unk_18; i++, entry_i++) {\nif (entry_i->unk_0 & 1) {\nentry_i->unk_40 = lbl_1_rodata_7B1C;\nentry_i->unk_0 = 0;\n} else {\nentry_i->unk_40 = lbl_1_rodata_7B20;\nentry_i->unk_0 = 1;\n}\n}\nfor (i = 0, entry_i = (AccessoryEntry *)self->unk_24; i < self->unk_18; i++, entry_i++) {\nfor (j = i + 1, entry_j = (AccessoryEntry *)(self->unk_24 + i * 0x44 + 0x44); j < self->unk_18; j++, entry_j++) {\nif ((entry_i->unk_0 & 1) && !(entry_j->unk_0 & 1)) {\nfn_1_128884(entry_i, entry_j, sizeof(AccessoryEntry));\n}\n}\n}\nfor (i = 0, entry_i = (AccessoryEntry *)self->unk_24; i < self->unk_18; i++, entry_i++) {\nfor (j = i + 1, entry_j = (AccessoryEntry *)(self->unk_24 + i * 0x44 + 0x44); j < self->unk_18; j++, entry_j++) {\nif (entry_i->unk_0 == entry_j->unk_0) {\nif (entry_i->unk_18 > entry_j->unk_18) {\nfn_1_128884(entry_i, entry_j, sizeof(AccessoryEntry));\n}\n}\n}\n}\nfor (i = 0, entry_i = (AccessoryEntry *)self->unk_24; i < self->unk_18; i++, entry_i++) {\nfor (j = i + 1, entry_j = (AccessoryEntry *)(self->unk_24 + i * 0x44 + 0x44); j < self->unk_18; j++, entry_j++) {\nif (entry_i->unk_0 == entry_j->unk_0) {\nif (entry_i->unk_14 < entry_j->unk_14 && entry_i->unk_18 > lbl_1_rodata_7B20 && entry_j->unk_18 > lbl_1_rodata_7B20) {\nfn_1_128884(entry_i, entry_j, sizeof(AccessoryEntry));\n} else if (entry_i->unk_14 > entry_j->unk_14 && entry_i->unk_18 < lbl_1_rodata_7B20 && entry_j->unk_18 < lbl_1_rodata_7B20) {\nfn_1_128884(entry_i, entry_j, sizeof(AccessoryEntry));\n}\n}\n}\n}\n}\n",
+    "compiler": "GC/1.3.2",
+    "flags": "",
+    "source": "rel/main_rel/accessory/fn_1_10B344.c",
+    "bytes": 612,
+    "headers_sha256": "ffe2f3705e2c5e3ba6c721fed1771f5de20612254417a59f486b5a3ed3538a44",
+    "oracle_sha256": "f7685915459d64c15c3a0f781fa019d6ff8789da838592c92e6a24d5eba8b159",
+    "recipe": [
+      {
+        "label": "expand owned clone declarations",
+        "input_sha256": "5c70d67cd10781647bd5289b6ae87a1e6208d0b118d35e2c612f19d88e0f5455",
+        "output_sha256": "10af60102f2e8059a5a90ac50c5de704a532bb751b8fa614460240b651389b7a",
+        "input_symbol": "fn_1_10A43C",
+        "output_symbol": "fn_1_10A43C",
+        "edits": [
+          [
+            0,
+            18,
+            "\n\ntypedef signed long s32;\n\ntypedef unsigned char u8;\n\ntypedef unsigned long u32;\n\ntypedef float f32;"
+          ],
+          [
+            169,
+            170,
+            ""
+          ],
+          [
+            202,
+            293,
+            "u8 unk_0;\nu8 pad_1[0x13];\nf32 unk_14;\nf32 unk_18;\nu8 pad_1C[0x24];\n"
+          ],
+          [
+            323,
+            324,
+            ""
+          ],
+          [
+            357,
+            415,
+            "u8 pad_0[0x18];\nu32 unk_18;\nu8 pad_1C[8];\n"
+          ],
+          [
+            446,
+            447,
+            ""
+          ],
+          [
+            489,
+            2535,
+            "int i;\nint j;\nAccessoryEntry *entry_i;\nAccessoryEntry *entry_j;\nif (self == ((void *)0) ) {\nreturn;"
+          ],
+          [
+            2538,
+            2538,
+            "fn_1_10846C();\nfor (i = 0, entry_i = (AccessoryEntry *)self->unk_24; i < self->unk_18; i++, entry_i++) {\nif (entry_i->unk_0 & 1) {\nentry_i->unk_40 = lbl_1_rodata_7B1C;\nentry_i->unk_0 = 0;\n} else {\nentry_i->unk_40 = lbl_1_rodata_7B20;\nentry_i->unk_0 = 1;\n}\n}\nfor (i = 0, entry_i = (AccessoryEntry *)self->unk_24; i < self->unk_18; i++, entry_i++) {\nfor (j = i + 1, entry_j = (AccessoryEntry *)(self->unk_24 + i * 0x44 + 0x44); j < self->unk_18; j++, entry_j++) {\nif ((entry_i->unk_0 & 1) && !(entry_j->unk_0 & 1)) {\nfn_1_128884(entry_i, entry_j, sizeof(AccessoryEntry));\n}\n}\n}\nfor (i = 0, entry_i = (AccessoryEntry *)self->unk_24; i < self->unk_18; i++, entry_i++) {\nfor (j = i + 1, entry_j = (AccessoryEntry *)(self->unk_24 + i * 0x44 + 0x44); j < self->unk_18; j++, entry_j++) {\nif (entry_i->unk_0 == entry_j->unk_0) {\nif (entry_i->unk_18 > entry_j->unk_18) {\nfn_1_128884(entry_i, entry_j, sizeof(AccessoryEntry));\n}\n}\n}\n}\nfor (i = 0, entry_i = (AccessoryEntry *)self->unk_24; i < self->unk_18; i++, entry_i++) {\nfor (j = i + 1, entry_j = (AccessoryEntry *)(self->unk_24 + i * 0x44 + 0x44); j < self->unk_18; j++, entry_j++) {\nif (entry_i->unk_0 == entry_j->unk_0) {\nif (entry_i->unk_14 < entry_j->unk_14 && entry_i->unk_18 > lbl_1_rodata_7B20 && entry_j->unk_18 > lbl_1_rodata_7B20) {\nfn_1_128884(entry_i, entry_j, sizeof(AccessoryEntry));\n} else if (entry_i->unk_14 > entry_j->unk_14 && entry_i->unk_18 < lbl_1_rodata_7B20 && entry_j->unk_18 < lbl_1_rodata_7B20) {\nfn_1_128884(entry_i, entry_j, sizeof(AccessoryEntry));\n}\n}\n}\n}\n}\n"
+          ]
+        ]
+      },
+      {
+        "label": "bind exact clone",
+        "input_sha256": "10af60102f2e8059a5a90ac50c5de704a532bb751b8fa614460240b651389b7a",
+        "output_sha256": "7b4024470da16708970fbbe1f1c9f77f10b9a12d377e12dfcaa2eabcefded840",
+        "input_symbol": "fn_1_10A43C",
+        "output_symbol": "fn_1_10B344",
+        "edits": [
+          [
+            499,
+            503,
+            "B344"
+          ]
+        ],
+        "clone": {
+          "donor": "fn_1_10A43C",
+          "recipient": "fn_1_10B344",
+          "bindings": {
+            "fn_1_10846C": "fn_1_10846C",
+            "lbl_1_rodata_7B1C": "lbl_1_rodata_7B1C",
+            "lbl_1_rodata_7B20": "lbl_1_rodata_7B20",
+            "fn_1_128884": "fn_1_128884",
+            "fn_1_10A43C": "fn_1_10B344"
+          }
+        }
+      }
+    ],
+    "link": "pending"
   }
 }

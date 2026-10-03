@@ -26187,7 +26187,7 @@
       "fn_1_10B344"
     ],
     "status": "matching",
-    "mw_version": null,
+    "mw_version": "GC/1.3.2",
     "extra_cflags": [],
     "tu": "rel/main_rel/accessory.c"
   },
@@ -32948,6 +32948,17 @@
     "source": "rel/main_rel/car/fn_1_8CA70.c",
     "symbols": [
       "fn_1_8CA70"
+    ],
+    "status": "matching",
+    "mw_version": "GC/1.3.2",
+    "extra_cflags": [],
+    "tu": "rel/main_rel/car.c"
+  },
+  {
+    "module": "main_rel",
+    "source": "rel/main_rel/car/fn_1_8CAF4.c",
+    "symbols": [
+      "fn_1_8CAF4"
     ],
     "status": "matching",
     "mw_version": "GC/1.3.2",

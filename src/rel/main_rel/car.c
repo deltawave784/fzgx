@@ -4526,6 +4526,46 @@ return (f32)(value * *((f64 *)(constants + 0x7e8)));
 }
 /* fzgx:end fn_1_8CA70 */
 
+/* fzgx:begin fn_1_8CAF4 noprologue */
+typedef unsigned char u8;
+typedef unsigned long u32;
+typedef signed long s32;
+typedef float f32;
+typedef double f64;
+extern f32 lbl_1_rodata_3508[4];
+extern u8 lbl_1_bss_6DA80[1740];
+f32 fn_1_8CAF4(u32 a, s32 b) {
+f32 value;
+u32 half;
+u32 total;
+u32 span;
+int swapped = 0;
+u8 *constants = (u8 *)lbl_1_rodata_3508;
+if (a == b) {
+return *((f32 *)(constants + 0x10));
+}
+if (a > b) {
+u32 temp = a;
+a = b;
+b = temp;
+swapped = 1;
+}
+span = b - a;
+total = a * 30;
+half = (a * (a + 1)) >> 1;
+a = span + (total - half);
+a -= 1;
+value = *((f32 *)(lbl_1_bss_6DA80 + (a * 4)));
+if (swapped == 0) {
+return value;
+}
+if (*((f64 *)(constants + 0x668)) == value) {
+return value;
+}
+return (f32)(value * *((f64 *)(constants + 0x7e8)));
+}
+/* fzgx:end fn_1_8CAF4 */
+
 /* fzgx:begin fn_1_8CB78 */
 typedef struct {
     u32 count;
