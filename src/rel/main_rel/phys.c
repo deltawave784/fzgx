@@ -1571,6 +1571,11 @@ void fn_1_EB080(int mode) {
 }
 /* fzgx:end fn_1_EB080 */
 
+/* fzgx:begin fn_1_EB0B0 */
+extern u8 lbl_1_bss_7C8CE;
+u8 fn_1_EB0B0(void) { if (lbl_1_bss_7B188 != 0) { return lbl_1_bss_7C8CE; } return 0; }
+/* fzgx:end fn_1_EB0B0 */
+
 /* fzgx:begin fn_1_EB200 */
 // Return whether the active state is one of the physics states.
 int fn_1_EB200(void) {
