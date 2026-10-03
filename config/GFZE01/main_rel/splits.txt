@@ -6533,3 +6533,6 @@ rel/main_rel/game/fn_1_384E8.c:
 
 rel/main_rel/_prolog/fn_1_426C.c:
 	.text       start:0x0000426C end:0x00004310 align:4
+
+rel/main_rel/ghost/fn_1_F1B94.c:
+	.text       start:0x000F1B94 end:0x000F1C54 align:4

@@ -927,6 +927,37 @@ u8 fn_1_F1B84(void) {
 }
 /* fzgx:end fn_1_F1B84 */
 
+/* fzgx:begin fn_1_F1B94 */
+extern u8 *fn_1_3F0D8(u32, f32 *, u8 *);
+
+u32 fn_1_F1B94(void) {
+    f32 a;
+    u8 b;
+    u8 *base = (u8 *)&lbl_1_bss_7B180;
+    u8 *rec;
+    u32 result;
+    u8 *cur;
+    u32 t0;
+    u32 t1;
+
+    if (*(s16 *)&lbl_1_bss_960 == 9) {
+        if (*(s32 *)(base + 0x16c8) >= 0) {
+            rec = fn_1_3F0D8(0, &a, &b);
+            cur = *(u8 **)(base + 0x16b4);
+            result = 1;
+            t0 = rec[0x1e0] * 60000 + rec[0x1e1] * 1000 + *(u16 *)(rec + 0x1e2);
+            t1 = cur[0x24] * 60000 + cur[0x25] * 1000 + *(u16 *)(cur + 0x26);
+            if (t0 >= t1) {
+                result = 3;
+            }
+            return result;
+        }
+        return 0;
+    }
+    return *(u8 *)(base + 0x174c);
+}
+/* fzgx:end fn_1_F1B94 */
+
 /* fzgx:begin fn_1_F1D60 */
 u32 fn_1_F1D60(void) {
     return lbl_1_bss_7C948;
