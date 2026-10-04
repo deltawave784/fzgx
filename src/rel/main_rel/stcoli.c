@@ -2511,6 +2511,98 @@ f32 fn_1_2B478(void *arg0) {
 }
 /* fzgx:end fn_1_2B478 */
 
+/* fzgx:begin fn_1_2BBD0 noprologue */
+#include "types.h"
+#include "dolphin/hw_regs.h"
+
+typedef struct {
+    f32 x;
+    f32 y;
+    f32 z;
+} Fn2BBD0_Vec;
+
+extern void lbl_8006DAEC(void);
+extern void lbl_8006DB30(void);
+
+typedef struct {
+    u8 pad_0[0x7c];
+    Fn2BBD0_Vec pos;
+    u8 pad_88[0xec - 0x88];
+    u8 mtx[0x4b4 - 0xec];
+    Fn2BBD0_Vec dir;
+    u8 active;
+    u8 owner;
+} Fn2BBD0_Self;
+
+typedef struct {
+    u8 pad_0[4];
+    s16 id;
+    u8 pad_6[0x7c - 6];
+    Fn2BBD0_Vec pos;
+} Fn2BBD0_Other;
+
+extern f32 lbl_8006D0B4(f32);
+extern void lbl_8006DBAC(void *);
+extern void fn_8006E250(void *, void *);
+extern f32 lbl_8006D668(void *);
+
+/* Keep the translation loads in their own registers (retail stores x, y, z from f2, f1, f0). */
+#pragma opt_propagation off
+void fn_1_2BBD0(Fn2BBD0_Self *self, Fn2BBD0_Other *other, f32 dist) {
+    Fn2BBD0_Vec local;
+    f32 dx, dy, dz;
+    f32 len;
+
+    if (self->active == 0) {
+        dx = self->dir.x;
+        dy = self->dir.y;
+        dz = self->dir.z;
+        len = dx * dx;
+        len += dy * dy;
+        len += dz * dz;
+        if (dist < lbl_8006D0B4(len)) {
+            f32 z, y, x;
+
+            lbl_8006DAEC();
+            lbl_8006DBAC(self->mtx);
+            /* Translation column of the locked-cache matrix. */
+            x = self->pos.x;
+            y = self->pos.y;
+            z = self->pos.z;
+            *(f32 *)(LC_BASE + 0x0C) = x;
+            *(f32 *)(LC_BASE + 0x1C) = y;
+            *(f32 *)(LC_BASE + 0x2C) = z;
+            fn_8006E250(&other->pos, &local);
+            lbl_8006D668(&local);
+            if (local.z < -0.1f) {
+                self->dir = local;
+                self->owner = other->id;
+                lbl_8006D668(&self->dir);
+            }
+            lbl_8006DB30();
+        }
+    } else if (self->owner == other->id) {
+        f32 z, y, x;
+
+        lbl_8006DAEC();
+        lbl_8006DBAC(self->mtx);
+        x = self->pos.x;
+        y = self->pos.y;
+        z = self->pos.z;
+        *(f32 *)(LC_BASE + 0x0C) = x;
+        *(f32 *)(LC_BASE + 0x1C) = y;
+        *(f32 *)(LC_BASE + 0x2C) = z;
+        fn_8006E250(&other->pos, &self->dir);
+        lbl_8006D668(&self->dir);
+        if (self->dir.z > -0.1f) {
+            self->dir.z = -0.1f;
+        }
+        lbl_8006DB30();
+    }
+}
+#pragma opt_propagation reset
+/* fzgx:end fn_1_2BBD0 */
+
 /* fzgx:begin fn_1_2C688 */
 u32 fn_1_2C688(u32 arg0, u32 arg1, u32 arg2) {
     u32 v1;
