@@ -487,6 +487,111 @@ void fn_1_A8528(void *arg0, void *arg1) {
 }
 /* fzgx:end fn_1_A8528 */
 
+/* fzgx:begin fn_1_A8834 noprologue */
+#include "types.h"
+
+typedef struct FnA8834Camera {
+    u8 pad_0[0x90];
+    u8 unk_90[0x48];
+    f32 unk_d8;
+    f32 unk_dc;
+    u8 pad_e0[4];
+    f32 unk_e4;
+    u8 pad_e8[0x18c - 0xe8];
+    u8 unk_18c[4];
+} FnA8834Camera;
+
+typedef struct FnA8834Vehicle {
+    u8 pad_0[8];
+    f32 unk_8;
+    u8 pad_c[0xa4 - 0xc];
+    f32 unk_a4;
+    u8 pad_a8[0xb0 - 0xa8];
+    f32 unk_b0;
+    u8 pad_b4[0xc0 - 0xb4];
+    f32 unk_c0;
+    u8 pad_c4[0x1fc - 0xc4];
+    f32 unk_1fc;
+} FnA8834Vehicle;
+
+extern void lbl_8006DAEC(void);
+extern void lbl_8006DFC4(void *pos);
+extern void mathutil_mtxA_rotate_x(s32 angle);
+extern void mathutil_mtxA_rotate_y(s32 angle);
+extern void mathutil_mtxA_rotate_z(s32 angle);
+extern void lbl_8006DB74(void *mtx);
+extern void lbl_8006DB30(void);
+
+/* The TU's shared literal pool (lbl_1_rodata_4A28 .. +0x58) in retail order, so the
+ * function's own literals dedupe onto retail's displacements. */
+#pragma section code_type ".fzgxpool"
+__declspec(section ".fzgxpool") static void fzgx_pool_prime1(void) {
+    volatile f32 s;  /* fzgx-allow: S2 pool primer sink */
+    s = 0.0f;
+    s = -0.1f;
+    s = 0.1f;
+    s = 5.0f;
+    s = 0.5f;
+    s = 50.0f;
+    s = 10.0f;
+    s = 57.2957763671875f;
+    s = -10.0f;
+    s = 0.2f;
+    s = -30.0f;
+    s = 1.8518518f;
+    s = -1.8518518f;
+    s = 4.166666507720947f;
+    s = 25.0f;
+    s = 30.0f;
+    s = 182.04444885253906f;
+    s = 0.46296295523643494f;
+    s = 1.0f;
+    s = 15.0f;
+    s = 45.0f;
+    s = -45.0f;
+    s = 0.75f;
+}
+#pragma section code_type ".text"
+
+void fn_1_A8834(FnA8834Camera *cam, FnA8834Vehicle *veh) {
+    lbl_8006DAEC();
+    if (veh == NULL) {
+        cam->unk_d8 = 0.0f;
+    } else {
+        f32 lateral;
+        f32 speed;
+        f32 yaw;
+        f32 roll;
+
+        lateral = -veh->unk_a4 / veh->unk_b0;
+        speed = -veh->unk_c0 / veh->unk_8;
+        speed = speed - 0.46296295523643494f;
+        if (speed < 0.0f) {
+            speed = 0.0f;
+        }
+        speed = speed / 4.166666507720947f;
+        if (speed > 1.0f) {
+            speed = 1.0f;
+        }
+        yaw = 15.0f * (57.2957763671875f * lateral);
+        speed = speed * (-30.0f * veh->unk_1fc);
+        roll = yaw + speed;
+        if (roll > 45.0f) {
+            roll = 45.0f;
+        } else if (roll < -45.0f) {
+            roll = -45.0f;
+        }
+        cam->unk_d8 = cam->unk_d8 + (f32)(0.1f * (roll - cam->unk_d8));
+    }
+    lbl_8006DFC4(cam->unk_90);
+    mathutil_mtxA_rotate_x((s32)(182.04444885253906f * (0.75f * cam->unk_dc)));
+    mathutil_mtxA_rotate_y((s32)(182.04444885253906f * cam->unk_e4));
+    mathutil_mtxA_rotate_z((s32)(182.04444885253906f * cam->unk_d8));
+    lbl_8006DB74(cam->unk_18c);
+    lbl_8006DB30();
+}
+/* fzgx:end fn_1_A8834 */
+
 /* fzgx:begin fn_1_A8D4C */
 void fn_1_A8D4C(void) {
     lbl_1_bss_6F640 += 1;
