@@ -66,3 +66,81 @@ def trial(p: Project, tu_source: str, extra_blocks: Optional[Dict[str, str]] = N
     full = sum(1 for v in scores.values() if v is not None and v >= 100.0)
     return {"ok": True, "tu": tu_source, "functions": len(scores), "at_100": full,
             "below": {k: v for k, v in scores.items() if v is None or v < 100.0}, "object": p.rel(obj)}
+
+
+def strip_declarations(body: str) -> str:
+    """The function definitions of a saved body without its private includes, externs and
+    struct/typedef definitions: the whole TU's prologue is the one declaration truth."""
+    import re
+    out: List[str] = []
+    depth = 0
+    skipping = False
+    for line in body.splitlines():
+        s = line.strip()
+        if depth == 0 and (s.startswith("#include") or re.match(r"extern\b.*;\s*$", s)):
+            continue
+        if depth == 0 and re.match(r"(typedef\s+)?(struct|union|enum)\b[^;(]*\{?\s*$", s) and not re.search(r"\)\s*\{?$", s):
+            skipping = True
+        if skipping:
+            depth += line.count("{") - line.count("}")
+            if depth <= 0 and (";" in s):
+                skipping, depth = False, 0
+            continue
+        out.append(line)
+    return "\n".join(out).strip("\n") + "\n"
+
+
+def near_misses(p: Project, tu_source: str, min_percent: float = 0.0) -> List[Dict[str, object]]:
+    """The TU's unmatched functions that have a saved body, each compiled inside the whole TU
+    (one trial per body: a body's own declarations may conflict with the TU's) and scored
+    against the function's retail object. `saved` is the best score of the body compiled alone
+    (the ledger's best attempt), `in_tu` its score inside the whole-TU object, `error` the
+    first compiler message when the body cannot join the TU as written."""
+    import json
+    from .ledger import Ledger
+    module = tu_source.split("/")[1] if tu_source.startswith("rel/") else "main"
+    tus_json = ROOT / "config" / p.version / module / "tus.json"
+    names: List[str] = []
+    if tus_json.exists():
+        for tu in json.loads(tus_json.read_text()).get("tus", []):
+            if tu.get("file") == Path(tu_source).name:
+                names = list(tu.get("functions", []))
+    ledger = Ledger()
+    rows: List[Dict[str, object]] = []
+    for name in names:
+        sym = p.find_symbol(name, module)
+        row = ledger.get(p.key(sym)) if sym else None
+        if not row or row["status"] != "unmatched":
+            continue
+        found = ledger.best_local_attempt(p.key(sym))
+        if not found:
+            continue
+        att, path = found
+        saved = att["best_in_attempt"] or att["final_percent"] or 0.0
+        if saved < min_percent:
+            continue
+        entry: Dict[str, object] = {"symbol": name, "size": row["size"], "saved": round(saved, 1)}
+        obj, msg = compile_tu(p, tu_source, {name: path.read_text()})
+        entry["body"] = "as written"
+        if obj is None:
+            obj, msg2 = compile_tu(p, tu_source, {name: strip_declarations(path.read_text())})
+            if obj is not None:
+                entry["body"] = "declarations stripped"
+            else:
+                msg = msg2 or msg
+        if obj is None:
+            lines = [l.strip("# ").strip() for l in msg.splitlines()]
+            at = next((i for i, l in enumerate(lines) if l.startswith("Error:")), None)
+            first = " ".join(x for x in lines[at + 1:at + 3] if x) if at is not None else msg[:120]
+            entry["in_tu"] = None
+            entry["error"] = first[:140]
+        else:
+            target = p.target_object_for(sym)
+            res = oracle._diff(p, module, name, "", 0, target=target, base=obj) if target else None
+            if res is not None and res.ok:
+                entry["in_tu"] = 100.0 if (res.matched or res.matched_pool) else round(res.percent, 1)
+            else:
+                entry["in_tu"] = None
+                entry["error"] = "no score" if res is None else str(res.error)[:140]
+        rows.append(entry)
+    return sorted(rows, key=lambda r: -(r["in_tu"] if r["in_tu"] is not None else -1))

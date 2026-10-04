@@ -356,6 +356,20 @@ def cmd_tu_check(a, p):
     print(("OK" if ok else "FAILED") + f": {a.tu}")
     if text and (not ok or a.verbose):
         print(text)
+    if ok and a.near_misses:
+        from . import tutrial
+        rows = tutrial.near_misses(p, a.tu, a.min_percent)
+        if a.json:
+            print(json.dumps(rows, indent=1))
+        for r in rows:
+            if a.json:
+                break
+            where = f"{r['in_tu']:6.1f}%" if r["in_tu"] is not None else "  n/a  "
+            gain = f"{r['in_tu'] - r['saved']:+5.1f}" if r["in_tu"] is not None else "     "
+            print(f"  {r['symbol']:22s} {r['size']:5d} B  alone {r['saved']:5.1f}%  in TU {where} {gain}" + (f"  [{r['error']}]" if r.get("error") else (f"  ({r['body']})" if r.get("body") == "declarations stripped" else "")))
+        better = [r for r in rows if r["in_tu"] is not None and r["in_tu"] > r["saved"] + 0.05]
+        exact = [r for r in rows if r["in_tu"] is not None and r["in_tu"] >= 100.0]
+        print(f"near misses: {len(rows)}, better in the whole TU: {len(better)}, exact: {len(exact)}")
     return 0 if ok else 1
 
 
@@ -534,6 +548,8 @@ def build_parser() -> argparse.ArgumentParser:
     s = sub.add_parser("tu-migrate", help="stitch a module's per-function units into TU files (blocks; objects generated)"); s.set_defaults(fn=cmd_tu_migrate)
     s.add_argument("--module", default="main_rel"); s.add_argument("--no-verify", action="store_true")
     s = sub.add_parser("tu-check", help="compile a whole TU file as one unit (the goal state)"); s.set_defaults(fn=cmd_tu_check)
+    s.add_argument("--near-misses", action="store_true", help="after an OK compile, score the TU's unmatched functions (saved bodies) inside the whole-TU object")
+    s.add_argument("--min-percent", type=float, default=0.0, help="with --near-misses: only saved bodies at or above this score")
     s.add_argument("tu", help="e.g. rel/main_rel/camera.c"); s.add_argument("-v", "--verbose", action="store_true")
     s = sub.add_parser("tu-finish", help="one pass over every TU of a module: include, tidy, hoist, reflag, collapse complete TUs; prints the revise queue"); s.set_defaults(fn=cmd_tu_finish)
     s.add_argument("--module", default="main_rel"); s.add_argument("-v", "--verbose", action="store_true")
