@@ -19464,6 +19464,19 @@
   },
   {
     "module": "main",
+    "source": "dol/fn_80050F90.c",
+    "symbols": [
+      "fn_80050F90"
+    ],
+    "status": "matching",
+    "mw_version": "GC/1.3.2",
+    "extra_cflags": [
+      "-use_lmw_stmw",
+      "on"
+    ]
+  },
+  {
+    "module": "main",
     "source": "dol/fn_800510C4.c",
     "symbols": [
       "fn_800510C4"
