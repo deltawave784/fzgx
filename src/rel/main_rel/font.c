@@ -3434,6 +3434,61 @@ void fn_1_55A84(FontCallback callback, FontInput *value, void *arg2, void *arg3)
 }
 /* fzgx:end fn_1_55A84 */
 
+/* fzgx:begin fn_1_55EA0 noprologue */
+#include "types.h"
+#include "dolphin/types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/font.h"
+
+typedef struct {
+    u8 pad_00[4];
+    u32 unk_04;
+    void *unk_08;
+    u8 unk_0C[0x30];
+    u16 unk_3C;
+    u8 pad_3E[2];
+    Obj_1_bss_6C7A4 unk_40;
+    void *unk_68[4];
+} Fn1_55EA0Object;
+
+extern u8 *lbl_801A66CC;
+extern void lbl_8006DBAC(void *);
+extern void fn_80072558(void);
+extern void fn_1_56470(Obj_1_bss_6C7A4 *);
+extern void fn_1_7BEAC(u16);
+extern void fn_800749B0(s32, void *);
+extern void fn_800781B8(void *);
+extern void fn_1_56554(void);
+
+void fn_1_55EA0(Fn1_55EA0Object *object) {
+    s32 i;
+    s32 j;
+    Obj_1_bss_6C7CC *flags;
+
+    lbl_8006DBAC((u8 *)object + 0xC);
+    fn_80072558();
+    fn_1_56470(&object->unk_40);
+    fn_1_7BEAC(object->unk_3C);
+    flags = &lbl_1_bss_6C7CC;
+    for (i = 0; i < 4; i++) {
+        if (object->unk_68[i] != 0) {
+            fn_800749B0(i, object->unk_68[i]);
+        } else if (__rlwnm(flags->unk_0, (i + 1) & 31, 31, 31)) {
+            fn_800749B0(i, 0);
+        }
+    }
+    fn_800781B8(object->unk_08);
+    fn_1_56554();
+    for (j = 0; j < 4; j++) {
+        if (__rlwnm(lbl_1_bss_6C7CC.unk_0, (j + 1) & 31, 31, 31)) {
+            fn_800749B0(j, lbl_801A66CC + j * 0x30 + 0xE0);
+        } else if (object->unk_68[j] != 0) {
+            fn_800749B0(j, 0);
+        }
+    }
+}
+/* fzgx:end fn_1_55EA0 */
+
 /* fzgx:begin fn_1_55FC4 */
 void fn_1_55FC4(f32 value) {
     lbl_1_bss_6C7A0 = value;
