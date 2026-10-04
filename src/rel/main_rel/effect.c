@@ -1080,6 +1080,114 @@ void fn_1_5B3D0(struct fn_1_5B3D0_Arg0 *arg0) {
 #pragma opt_common_subs reset
 /* fzgx:end fn_1_5B3D0 */
 
+/* fzgx:begin fn_1_5B450 */
+#pragma section code_type ".fzgxpool"
+__declspec(section ".fzgxpool") static void fzgx_pool_prime1(void) {
+    volatile f32 s; volatile f64 d;  /* fzgx-allow: S2 pool primer sinks */
+    s = 60.0f;
+    s = 0.10000000149011612f;
+    s = 32767.0f;
+    s = 0.05000000074505806f;
+    d = 0.07;
+    s = 20000.0f;
+    s = 0.0f;
+    d = 4503599627370496.0;
+    s = 1.0f;
+    s = -0.029999999329447746f;
+    d = 15.0;
+    d = 4503601774854144.0;
+    d = 1.5;
+    d = 0.5;
+}
+static const u32 fzgx_pool_table2[1] = {0x00000000};  /* fzgx-allow: A1 retail pool bytes */
+__declspec(section ".fzgxpool") static void fzgx_pool_keep2(void) { const u32 *volatile cp; cp = fzgx_pool_table2; }  /* fzgx-allow: S2 pool primer sink */
+__declspec(section ".fzgxpool") static void fzgx_pool_prime3(void) {
+    volatile f32 s; volatile f64 d;  /* fzgx-allow: S2 pool primer sinks */
+    s = 0.5f;
+    s = 8.0f;
+    s = 255.0f;
+    s = 15.0f;
+    s = 0.20000000298023224f;
+    s = 0.07999999821186066f;
+    s = 0.25f;
+    s = 0.9800000190734863f;
+    s = 0.9900000095367432f;
+    s = 40.0f;
+    s = 20.0f;
+    s = 1.5f;
+    s = 0.44999998807907104f;
+    s = -2.0f;
+    s = 0.0833333358168602f;
+    s = 0.15000000596046448f;
+    s = 0.125f;
+    s = -0.4000000059604645f;
+    s = -0.30000001192092896f;
+    s = 2.0f;
+    s = 250.0f;
+    d = 0.6;
+    d = 0.4;
+    s = 0.30000001192092896f;
+    s = -0.004000000189989805f;
+    s = 0.01666666753590107f;
+    s = 65536.0f;
+    s = 4096.0f;
+    s = 0.9599999785423279f;
+    s = 0.4000000059604645f;
+    s = 0.05050000175833702f;
+    s = 0.050999999046325684f;
+    s = 0.949999988079071f;
+}
+#pragma section code_type ".text"
+
+typedef struct {
+    u8 pad_0[0x10];
+    s32 unk_10;
+    u8 pad_14[0x4];
+    s16 unk_18;
+    u8 pad_1A[0x2];
+    f32 unk_1C;
+    f32 unk_20;
+    f32 unk_24;
+    f32 unk_28;
+    f32 unk_2C;
+    u8 pad_30[0xC];
+    u8 unk_3C[0x1C];
+    s16 unk_58;
+    u8 pad_5A[0x3A];
+    u8 unk_94[0x4];
+} Effect_5B450;
+
+extern void *lbl_801A6D00;
+extern void fn_1_8645C(s32, void *);
+extern void lbl_8006E1B0(void *, void *);
+
+/* Linear congruential random number, 15 bits (ANSI rand). */
+static inline s32 effect_rand(void) {
+    lbl_1_data_1D628 = lbl_1_data_1D628 * 0x41C64E6D + 0x3039;
+    return (lbl_1_data_1D628 >> 16) & 0x7FFF;
+}
+
+#pragma opt_propagation off
+void fn_1_5B450(Effect_5B450 *e) {
+    u8 * fzgx_live;
+    f32 t;
+
+    fn_1_8645C(e->unk_18, lbl_801A6D00);
+    fzgx_live = e->unk_94;
+    lbl_8006E1B0(fzgx_live, e->unk_3C);
+    e->unk_58 += effect_rand();
+    e->unk_2C *= 0.95f;
+    e->unk_28 += e->unk_2C;
+    if ((f32)e->unk_10 < 60.0f) {
+        t = 1.0f - 1.0f / (f32)(e->unk_10 + 1);
+        e->unk_1C *= t;
+        e->unk_20 *= 0.99f * t;
+        e->unk_24 *= 0.95f * t;
+    }
+}
+#pragma opt_propagation reset
+/* fzgx:end fn_1_5B450 */
+
 /* fzgx:begin fn_1_5B6F0 */
 // fn_1_5B6F0: empty in retail (single blr).
 void fn_1_5B6F0(void) {
