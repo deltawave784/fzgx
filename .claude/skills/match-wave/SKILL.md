@@ -80,10 +80,14 @@ One batch = steps 1-5 above with these changes:
 - If `route --fable` returns fewer than 4 rows, lower `--min-percent` to 95, then 90. Below 90 the match rate is
   unmeasured: stop and ask.
 
-Before EVERY batch check usage with the `mcp__ccd_session_mgmt__get_usage` tool (load it with ToolSearch):
-- weekly all-models or weekly Fable at 65% or more: STOP and push a notification (resets Monday 5pm).
-- 5-hour window at 80% or more: wait for it to reset (sleep in the background until `resetsAt`), then continue.
+Before EVERY batch check usage with the `mcp__ccd_session_mgmt__get_usage` tool (load it with ToolSearch). The user
+set a hard cap of 95% on both windows (the last 5% is for their other projects). A batch can itself use up to
+about 6% of a window, so a batch starts only if it can finish under the cap:
+- weekly all-models or weekly Fable at 89% or more: STOP and push a notification (the weekly window resets Monday 5pm).
+- 5-hour window at 88% or more: wait for it to reset (sleep in the background until `resetsAt`), then continue.
 - extra usage `spent` above 0: STOP and notify (the run must never spend money).
+After the first three batches, replace the 6% allowance with the largest weekly and 5-hour increase one batch
+actually caused (measure usage before and after each batch) plus 1 point, so the margin tracks real cost.
 
 Stop conditions (in addition to those under Unattended runs): hash check fails; two consecutive batches match
 nothing (agents + reuse + fixup); the same tooling error twice; a permission refusal; `git status` not clean after a
