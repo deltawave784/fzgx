@@ -1052,79 +1052,84 @@ void fn_1_157598(fn_1_157598_RankingState *state) {
 /* fzgx:end fn_1_157598 */
 
 /* fzgx:begin fn_1_1576B4 */
-extern s32 fn_8006B55C(u32, void *, void *);
-extern s32 fn_8006B628(void *, void *);
-extern s32 fn_8006B6F8(void *);
-
-typedef struct {
-    u8 field00;
-    u8 _pad01[3];
-    u32 field04;
-    u32 field08;
-    u8 field0c;
-    u8 _pad0d[1];
-    u16 field0e;
-    u16 field10;
-    u16 field12;
-    u16 field14;
-    u32 field18;
-    u32 field1c;
-    u8 field20;
-    u8 field21;
-} RankingConfig;
-
 typedef struct {
     u32 flags;
-    u32 field04;
-    u8 _pad08[0x24];
-    void *data;
-    u8 _pad30[0x1c];
-    u8 enabled;
-} fn_1_1576B4_RankingState;
+    u32 unk_4;
+    u8 pad_8[0x24];
+    u32 unk_2c;
+    u8 pad_30[0x1c];
+    u8 unk_4c;
+} Obj_fn_1_1576B4;
+
+typedef struct {
+    u8 unk_0;
+    u8 pad_1[3];
+    u32 unk_4;
+    u32 unk_8;
+    u8 unk_C;
+    u8 pad_D;
+    u16 unk_E;
+    u16 unk_10;
+    u16 unk_12;
+    u16 unk_14;
+    u8 pad_16[2];
+    u32 unk_18;
+    u32 unk_1C;
+    u8 unk_20;
+    u8 unk_21;
+    u8 pad_22[2];
+} Param_fn_1_1576B4;
+
+extern s32 fn_8006B55C(u32 handle, u32 *id, Param_fn_1_1576B4 *param);
+extern s32 fn_8006B628(u32 id, Param_fn_1_1576B4 *param);
+extern s32 fn_8006B6F8(u32 id);
 
 #pragma opt_propagation off
-void fn_1_1576B4(fn_1_1576B4_RankingState *state) {
-    RankingConfig config;
-    u32 field04;
-    void *data;
-    s32 success;
+void fn_1_1576B4(Obj_fn_1_1576B4 *obj) {
+    Param_fn_1_1576B4 param;
+    s32 ok;
 
-    if (state->enabled & 2) {
-        success = 0;
-        config.field00 = 4;
-        config.field04 = 0x258;
-        config.field08 = success;
-        config.field0c = 0xfa;
-        config.field0e = 0x32;
-        config.field10 = 0x96;
-        config.field12 = success;
-        config.field14 = success;
-        config.field18 = 0x14;
-        config.field1c = 0x64;
-        config.field20 = success;
-        config.field21 = success;
+    if (!(obj->unk_4c & 2)) {
+        return;
+    }
 
-        if (!(((0x100) & (state->flags)))) {
-            field04 = state->field04;
-            data = state->data;
-            if ((u32)data == 0xffffffffU) {
-                if (fn_8006B55C(field04, &state->data, &config) >= 0) {
-                    success = 1;
-                }
-            } else if (fn_8006B628(data, &config) >= 0) {
-                success = 1;
-            }
+    ok = 0;
+    param.unk_0 = 4;
+    param.unk_4 = 600;
+    param.unk_8 = ok;
+    param.unk_C = 250;
+    param.unk_E = 50;
+    param.unk_10 = 150;
+    param.unk_12 = ok;
+    param.unk_14 = ok;
+    param.unk_18 = 20;
+    param.unk_1C = 100;
+    param.unk_20 = ok;
+    param.unk_21 = ok;
 
-            if (success && !(((0x100) & (state->flags))) &&
-                fn_8006B6F8(state->data) >= 0) {
-                state->flags |= 0x100;
+    if (!(obj->flags & 0x100)) {
+        u32 id = obj->unk_2c;
+        u32 handle = obj->unk_4;
+
+        if (id == 0xFFFFFFFF) {
+            if (fn_8006B55C(handle, &obj->unk_2c, &param) >= 0) {
+                ok = 1;
             }
         } else {
-            fn_8006B6F8(state->data);
+            if (fn_8006B628(id, &param) >= 0) {
+                ok = 1;
+            }
         }
+
+        if (ok && !(obj->flags & 0x100)) {
+            if (fn_8006B6F8(obj->unk_2c) >= 0) {
+                obj->flags |= 0x100;
+            }
+        }
+    } else {
+        fn_8006B6F8(obj->unk_2c);
     }
 }
-#pragma opt_propagation reset
 /* fzgx:end fn_1_1576B4 */
 
 /* fzgx:begin fn_1_1577D0 noprologue */
