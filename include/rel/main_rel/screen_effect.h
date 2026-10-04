@@ -33,12 +33,7 @@ typedef struct {
 extern Obj_1_data_1DFA4 lbl_1_data_1DFA4;
 
 // lbl_1_data_1D960: .data size 0x58, 9 refs from screen_effect.c
-typedef struct {
-    u8 pad_0[0x4];
-    u32 unk_4;  // 1 loads, 0 stores
-    u8 pad_8[0x50];
-} Obj_1_data_1D960;
-extern Obj_1_data_1D960 lbl_1_data_1D960;
+extern u8 lbl_1_data_1D960[0x58];  // typedefs.json decl override
 
 // lbl_1_bss_6D600: .bss size 0x20, 6 refs from screen_effect.c
 typedef struct {
@@ -91,12 +86,7 @@ typedef struct {
 extern Obj_1_bss_6D7A8 lbl_1_bss_6D7A8;
 
 // lbl_1_data_1D9B8: .data size 0x108, 5 refs from screen_effect.c
-typedef struct {
-    u8 pad_0[0x5];
-    u8 unk_5;  // 3 loads, 0 stores
-    u8 pad_6[0x102];
-} Obj_1_data_1D9B8;
-extern Obj_1_data_1D9B8 lbl_1_data_1D9B8;
+extern u8 lbl_1_data_1D9B8[0xF8];  // typedefs.json decl override
 
 // lbl_1_bss_6D14C: .bss size 0x5C, 5 refs from screen_effect.c
 typedef struct {
@@ -125,7 +115,16 @@ typedef struct {
 extern Obj_1_bss_6D778 lbl_1_bss_6D778;
 
 // lbl_1_bss_6C8D8: .bss size 0x4, 3 refs from screen_effect.c
-extern u32 lbl_1_bss_6C8D8;
+// the TU's .bss run from 0x6C8D8 as fn_1_729F8 addresses it (one base register)
+typedef struct {
+    u8 pad_0[0x8D0];
+    u32 unk_8D0;
+    u16 unk_8D4;
+    u16 unk_8D6;
+    u16 unk_8D8;
+    u8 unk_8DA;
+} Obj_1_bss_6C8D8;
+extern Obj_1_bss_6C8D8 lbl_1_bss_6C8D8;  // typedefs.json decl override
 
 // lbl_1_bss_6C8E4: .bss size 0x4, 2 refs from screen_effect.c
 extern u32 lbl_1_bss_6C8E4;

@@ -585,7 +585,18 @@ def resolve(p: Project, tu_source: str, v, apply: bool = True,
         for n, ln in reconcile._decls(b.body):
             variants.setdefault(n, Counter())[ln] += 1
             where.setdefault(n, {})[b.name] = ln
-    symbols = list(dict.fromkeys(list(variants) + list(pdecl)))
+    # a TU-local definition called by a block before it (no declaration anywhere) was an
+    # implicit `int f()` there: the whole-file compile rejects the later definition, so it
+    # joins the prologue too (bg_cas.c: fn_1_FB96C calls fn_1_FB9DC before defining it)
+    called_early = []
+    for i_, b_ in enumerate(tf.blocks):
+        for n_ in definitions:
+            if n_ in variants or n_ in pdecl or n_ in called_early or re.search(r'\b(static|inline)\b', definitions[n_]):
+                continue
+            if any(re.search(r'\b' + re.escape(n_) + r'\s*\(', o.body) for o in tf.blocks[:i_]) and \
+                    re.search(r'\b' + re.escape(n_) + r'\s*\([^;{}()]*\)\s*\{', b_.body):
+                called_early.append(n_)
+    symbols = list(dict.fromkeys(list(variants) + list(pdecl) + called_early))
     private_types = set()
     for b in tf.blocks:
         private_types |= private_type_names(b.body)

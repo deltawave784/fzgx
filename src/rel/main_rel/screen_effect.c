@@ -118,7 +118,7 @@ typedef struct {
 } EffectManager;
 extern void fn_1_76650(fn_1_76650_ScreenEffect *effect);
 extern void fn_1_72980(Fn_1_72980_Obj *arg0);
-extern void fn_1_729F8(struct fn_1_729F8_Arg0 *arg0);
+extern void *fn_1_729F8(struct fn_1_729F8_Arg0 *arg0);
 extern f32 *lbl_801A6D00;
 extern u32 lbl_801A66A0;
 extern void fn_1_75D84(void *, void *, void *);
@@ -301,15 +301,7 @@ void fn_1_72848(void) {
 }
 /* fzgx:end fn_1_72848 */
 
-/* fzgx:begin fn_1_728B0 noprologue */
-#include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/screen_effect.h"
-
-extern void fn_1_4E500(void);
-extern void fn_1_4E638(int);
-extern void fn_1_4E6F4(void);
-
+/* fzgx:begin fn_1_728B0 */
 typedef struct {
     u8 pad_0[0xdc];
     s32 unk_DC;
@@ -318,8 +310,6 @@ typedef struct {
     void (*unk_104)(void *);
 } fn_1_728B0_ScreenEffectEntry;
 
-extern void fn_1_72980(fn_1_728B0_ScreenEffectEntry *);
-extern void *fn_1_729F8(fn_1_728B0_ScreenEffectEntry *);
 
 void fn_1_728B0(void) {
     u8 i;
@@ -337,8 +327,8 @@ void fn_1_728B0(void) {
                 if (obj->unk_DC == 0xe && obj->unk_E0 == 0) {
                     obj->unk_E0 = obj->unk_E0 + 1;
                 } else {
-                    fn_1_72980(obj);
-                    result = fn_1_729F8(obj);
+                    fn_1_72980( (Fn_1_72980_Obj *)(fn_1_728B0_ScreenEffectEntry *)(obj));
+                    result = fn_1_729F8( (struct fn_1_729F8_Arg0 *)(fn_1_728B0_ScreenEffectEntry *)(obj));
                     if (obj->unk_104 != 0) {
                         obj->unk_104(result);
                     }
@@ -368,39 +358,7 @@ void fn_1_72980(Fn_1_72980_Obj *arg0) {
 }
 /* fzgx:end fn_1_72980 */
 
-/* fzgx:begin fn_1_729F8 noprologue */
-#include "types.h"
-
-struct fn_1_729F8_Arg0 {
-    u8 pad_0[0xDC];
-    s32 unk_DC;
-    s32 unk_E0;
-    f32 unk_E4;
-    u16 unk_E8;
-    u16 unk_EA;
-    s16 unk_EC;
-    s16 unk_EE;
-    u16 unk_F0;
-    u16 unk_F2;
-    u32 unk_F4;
-    u16 unk_F8;
-    u16 unk_FA;
-    u16 unk_FC;
-    u16 unk_FE;
-    u16 unk_100;
-    u16 unk_102;
-    u32 unk_104;
-};
-
-struct fn_1_729F8_Bss {
-    u8 pad_0[0x8D0];
-    u32 unk_8D0;
-    u16 unk_8D4;
-    u16 unk_8D6;
-    u16 unk_8D8;
-    u8 unk_8DA;
-};
-
+/* fzgx:begin fn_1_729F8 */
 struct fn_1_729F8_Data {
     u8 pad_0[0x150];
     u8 unk_150[4];
@@ -419,7 +377,6 @@ struct fn_1_729F8_RoData {
     u32 w7;
 };
 
-extern struct fn_1_729F8_Bss lbl_1_bss_6C8D8;
 u8 lbl_1_data_1D960[88] = {0x00,0x00,0x00,0x01,0x00,0x00,0x00,0x11,0x00,0x00,0x00,0x01,0x00,0x00,0x00,0x39,0x00,0x00,0x00,0x01,0x00,0x00,0x00,0x3A,0x00,0x00,0x00,0x03,0x00,0x00,0x00,0x03,0x00,0x00,0x00,0x01,0x00,0x00,0x00,0x01,0x00,0x00,0x00,0x03,0x00,0x00,0x00,0x13,0x00,0x00,0x00,0x05,0x00,0x00,0x00,0x05,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x03,0x00,0x00,0x00,0x03,0x00,0x00,0x00,0x06,0x00,0x00,0x00,0x06,0x00,0x00,0x00,0x01,0x00,0x00,0x00,0x27};
 u8 lbl_1_data_1D9B8[248] = {0x00,0x00,0x00,0x00,0x00,0x00,0x06,0x00,0x00,0x00,0x00,0x01,0x06,0x00,0x00,0x00,0x00,0x01,0x06,0x00,0x00,0x00,0x00,0x01,0x06,0x00,0x00,0x00,0x00,0x01,0x06,0x00,0x00,0x00,0x00,0x01,0x06,0x00,0x00,0x00,0x00,0x01,0x06,0x00,0x00,0x00,0x00,0x01,0x06,0x06,0x00,0x00,0x00,0x02,0x06,0x06,0x00,0x00,0x00,0x02,0x06,0x06,0x00,0x00,0x00,0x02,0x06,0x06,0x00,0x00,0x00,0x02,0x00,0x01,0x06,0x00,0x00,0x03,0x00,0x01,0x06,0x00,0x00,0x03,0x00,0x01,0x06,0x00,0x00,0x03,0x00,0x01,0x06,0x03,0x00,0x04,0x00,0x00,0x00,0x00,0x00,0x01,0x04,0x06,0x00,0x00,0x00,0x02,0x04,0x06,0x00,0x00,0x00,0x02,0x04,0x06,0x00,0x00,0x00,0x02,0x04,0x06,0x00,0x00,0x00,0x02,0x04,0x06,0x00,0x00,0x00,0x02,0x04,0x06,0x00,0x00,0x00,0x02,0x04,0x06,0x00,0x00,0x00,0x02,0x04,0x06,0x00,0x00,0x00,0x02,0x06,0x06,0x00,0x00,0x00,0x02,0x06,0x03,0x00,0x00,0x00,0x02,0x06,0x03,0x00,0x00,0x00,0x02,0x05,0x00,0x00,0x00,0x00,0x01,0x06,0x00,0x00,0x00,0x00,0x01,0x05,0x04,0x00,0x00,0x00,0x02,0x09,0x00,0x00,0x00,0x00,0x01,0x04,0x08,0x00,0x00,0x00,0x02,0x04,0x00,0x00,0x00,0x00,0x01,0x01,0x01,0x06,0x00,0x00,0x03,0x06,0x00,0x00,0x00,0x00,0x01,0x00,0x01,0x07,0x00,0x00,0x03,0x04,0x00,0x00,0x00,0x00,0x01,0x30,0x50,0x60,0x20,0x38,0x62,0x34,0x20,0x60,0x60,0x50,0x40,0x60,0x50,0x50,0x30,0x70,0x50,0x40,0x20};
 u8 lbl_1_data_1D9B8__fzgx_offset_F8[4] = {0x30,0x50,0x60,0x20};
@@ -427,56 +384,9 @@ f32 lbl_1_data_1D9B8__fzgx_offset_FC = 1.0f;
 f32 lbl_1_data_1D9B8__fzgx_offset_100 = 1.0f;
 u8 lbl_1_data_1D9B8__fzgx_offset_104[4] = {0x08,0x00,0x00,0x00};
 u8 lbl_1_data_1DAC0[68] = {0x73,0x63,0x72,0x65,0x65,0x6E,0x5F,0x65,0x66,0x66,0x65,0x63,0x74,0x2E,0x63,0x00,0x43,0x61,0x6E,0x27,0x74,0x20,0x44,0x6F,0x75,0x62,0x6C,0x65,0x20,0x43,0x72,0x65,0x61,0x74,0x65,0x20,0x48,0x65,0x61,0x70,0x0A,0x00,0x00,0x00,0x45,0x72,0x72,0x6F,0x72,0x21,0x20,0x3A,0x20,0x57,0x72,0x6F,0x6E,0x67,0x20,0x56,0x61,0x6C,0x75,0x65,0x2E,0x00,0x00,0x00};
-extern f32 *lbl_801A6D00;
-extern u32 lbl_801A66A0;
 
 
 
-extern void fn_1_75D84(void *, void *, void *);
-extern void fn_1_761B8(void *, u32);
-extern void fn_1_76C60(void *);
-extern void fn_1_76EB8(void);
-extern void fn_1_77200(void);
-extern u32 fn_1_77C5C(void *, void *, void *);
-extern u32 fn_1_4E220(void *, u32, u32, u32, u32);
-extern void lbl_8006D758(void);
-extern void lbl_8006D784(void *);
-extern void lbl_8006E1B0(void *, void *);
-extern void mathutil_mtxA_rotate_z(s32);
-extern void fn_800371F8(u32, void *);
-extern void fn_8003726C(u32, void *);
-extern void fn_800720B0(u32);
-extern void fn_8007245C(u32);
-extern void fn_800724C8(void);
-extern void fn_80072808(void);
-extern void fn_80072864(u32);
-extern void fn_800728A8(s32, s32, s32, s32);
-extern void fn_800729B0(s32, s32, s32, s32, s32);
-extern void fn_80072AB0(s32, s32, s32);
-extern void fn_80072C24(s32, s32, s32, s32, s32);
-extern u32 fn_80072CC4(u32, u32, u32, u32, u32);
-extern void fn_80072D64(s32, s32, s32, s32, u8, s32);
-extern void fn_80072E20(s32, s32, s32, s32, u8, s32);
-extern void fn_80072EDC(u32, u32);
-extern void fn_800734A8(u32, s32, s32, s32);
-extern void fn_800735C8(s32, s32);
-extern void fn_80073620(s32, s32);
-extern void fn_80073678(u32);
-extern void fn_800736C0(u32, void *);
-extern void fn_80073778(void *, s32);
-extern void fn_80073898(u32);
-extern void fn_800738E0(s32, s32, s32);
-extern void fn_800739E0(s32, s32, s32);
-extern void fn_80073A58(s32, void *, s8);
-extern void fn_80073C6C(s32);
-extern void fn_80073D60(u32, u32, u32, u32, u32);
-extern void fn_800745A4(u32, s32, s32, u32, u32, u32);
-extern void fn_80074660(u32);
-extern void fn_80074788(u32);
-extern void fn_800747D0(u32, u32, s32, s32, u32, s32, s32);
-extern void fn_80074918(u8, s32, u8);
-extern void GXLoadTexMtxImm(void *, u32, u32);
-extern void GXSetAlphaCompare(s32, s32, s32, s32, s32);
 
 union Color { struct {u8 r, g, b, a;} bytes; u32 word; };
 #pragma fp_contract off
@@ -489,9 +399,9 @@ union Color { struct {u8 r, g, b, a;} bytes; u32 word; };
 #define v18C (vbuf + 9)
 #define w88 color88
 
-void fn_1_729F8(struct fn_1_729F8_Arg0 *arg0)
+void *fn_1_729F8(struct fn_1_729F8_Arg0 *arg0)
 {
-    struct fn_1_729F8_Bss *p_bss;
+    Obj_1_bss_6C8D8 *p_bss;
     f32 vbuf[12];
     f32 m138[12];
     f32 m108[12];
@@ -568,7 +478,7 @@ void fn_1_729F8(struct fn_1_729F8_Arg0 *arg0)
         color84.bytes.a = (u8)(s32)(255.0f - (f32)(s32)(arg0->unk_E0 * 255) / 40.0f);
         color7c = color84.word;
         fn_800371F8(1, (&color7c));
-        fn_1_761B8(arg0, mode);
+        fn_1_761B8( (struct fn_1_761B8_Arg0 *)(void *)(arg0), mode);
         fn_1_75D84(v168, &arg0->unk_E8, &arg0->unk_F8);
         break;
 
@@ -632,7 +542,7 @@ void fn_1_729F8(struct fn_1_729F8_Arg0 *arg0)
         v174[0] = v180[0] = (f32)(s32)arg0->unk_EC + (f32)(s32)arg0->unk_E0 * ((f32)(s32)(-arg0->unk_EC) / 40.0f);
         v168[1] = v174[1] = 0.0f;
         v180[1] = v18C[1] = (f32)(s32)arg0->unk_EE;
-        fn_1_761B8(arg0, 1);
+        fn_1_761B8( (struct fn_1_761B8_Arg0 *)(void *)(arg0), 1);
         s70 = color84.word;
         fn_800371F8(1, &s70);
         fn_1_75D84(v168, &arg0->unk_E8, &arg0->unk_F8);
@@ -649,7 +559,7 @@ void fn_1_729F8(struct fn_1_729F8_Arg0 *arg0)
         lbl_8006E1B0(v174, v174);
         lbl_8006E1B0(v180, v180);
         lbl_8006E1B0(v18C, v18C);
-        fn_1_761B8(arg0, 1);
+        fn_1_761B8( (struct fn_1_761B8_Arg0 *)(void *)(arg0), 1);
         s6C = color84.word;
         fn_800371F8(1, &s6C);
         fn_1_75D84(v168, &arg0->unk_E8, &arg0->unk_F8);
@@ -744,7 +654,7 @@ void fn_1_729F8(struct fn_1_729F8_Arg0 *arg0)
         v174[0] = v180[0] = (f32)(s32)arg0->unk_EC + (40.0f - (f32)(s32)arg0->unk_E0) * ((f32)(s32)(-arg0->unk_EC) / 40.0f);
         v168[1] = v174[1] = 0.0f;
         v180[1] = v18C[1] = (f32)(s32)arg0->unk_EE;
-        fn_1_761B8(arg0, 1);
+        fn_1_761B8( (struct fn_1_761B8_Arg0 *)(void *)(arg0), 1);
         s54 = color84.word;
         fn_800371F8(1, &s54);
         fn_800734A8(0, 0, 1, 255);
@@ -766,7 +676,7 @@ void fn_1_729F8(struct fn_1_729F8_Arg0 *arg0)
         lbl_8006E1B0(v174, v174);
         lbl_8006E1B0(v180, v180);
         lbl_8006E1B0(v18C, v18C);
-        fn_1_761B8(arg0, 1);
+        fn_1_761B8( (struct fn_1_761B8_Arg0 *)(void *)(arg0), 1);
         s4C = color84.word;
         fn_800371F8(1, &s4C);
         fn_800734A8(0, 0, 1, 255);
@@ -789,16 +699,16 @@ void fn_1_729F8(struct fn_1_729F8_Arg0 *arg0)
         lbl_8006D758();
         lbl_801A6D00[3] = 2.0f / (f32)(s32)arg0->unk_EC;
         lbl_801A6D00[7] = 2.0f / (f32)(s32)arg0->unk_EE;
-        GXLoadTexMtxImm(lbl_801A6D00, 30, 1);
+        GXLoadTexMtxImm( (f32 *)(void *)(lbl_801A6D00), 30, 1);
         lbl_801A6D00[3] = 2.0f / (f32)(s32)arg0->unk_EC;
         lbl_801A6D00[7] = -2.0f / (f32)(s32)arg0->unk_EE;
-        GXLoadTexMtxImm(lbl_801A6D00, 33, 1);
+        GXLoadTexMtxImm( (f32 *)(void *)(lbl_801A6D00), 33, 1);
         lbl_801A6D00[3] = -2.0f / (f32)(s32)arg0->unk_EC;
         lbl_801A6D00[7] = -2.0f / (f32)(s32)arg0->unk_EE;
-        GXLoadTexMtxImm(lbl_801A6D00, 36, 1);
+        GXLoadTexMtxImm( (f32 *)(void *)(lbl_801A6D00), 36, 1);
         lbl_801A6D00[3] = -2.0f / (f32)(s32)arg0->unk_EC;
         lbl_801A6D00[7] = 2.0f / (f32)(s32)arg0->unk_EE;
-        GXLoadTexMtxImm(lbl_801A6D00, 39, 1);
+        GXLoadTexMtxImm( (f32 *)(void *)(lbl_801A6D00), 39, 1);
         fn_800724C8();
         fn_8007245C(0x2200);
         fn_80074788(0);
@@ -934,7 +844,7 @@ void fn_1_729F8(struct fn_1_729F8_Arg0 *arg0)
         fn_800720B0(0);
         fn_80072864(2);
         if (arg0->unk_DC == 15) {
-            lbl_8006D784(m138);
+            lbl_8006D784( (f32 *)(void *)(m138));
             aC0[0] = 0.5f * m138[0];
             aC0[1] = 0.5f * m138[1];
             aC0[2] = 0.0f;
@@ -1002,7 +912,7 @@ void fn_1_729F8(struct fn_1_729F8_Arg0 *arg0)
         fn_800720B0(0);
         fn_80072864(2);
         if (arg0->unk_DC == 15) {
-            lbl_8006D784(m108);
+            lbl_8006D784( (f32 *)(void *)(m108));
             aA8[0] = 0.5f * m108[0];
             aA8[1] = 0.5f * m108[1];
             aA8[2] = 0.0f;
@@ -1029,19 +939,19 @@ void fn_1_729F8(struct fn_1_729F8_Arg0 *arg0)
         v168[1] = v174[1] = 0.0f;
         v180[1] = v18C[1] = (f32)(s32)arg0->unk_EE;
         lbl_8006D758();
-        GXLoadTexMtxImm(lbl_801A6D00, 30, 1);
+        GXLoadTexMtxImm( (f32 *)(void *)(lbl_801A6D00), 30, 1);
         lbl_801A6D00[3] = 2.0f / (f32)(s32)arg0->unk_EC;
         lbl_801A6D00[7] = 2.0f / (f32)(s32)arg0->unk_EE;
-        GXLoadTexMtxImm(lbl_801A6D00, 33, 1);
+        GXLoadTexMtxImm( (f32 *)(void *)(lbl_801A6D00), 33, 1);
         lbl_801A6D00[3] = 2.0f / (f32)(s32)arg0->unk_EC;
         lbl_801A6D00[7] = -2.0f / (f32)(s32)arg0->unk_EE;
-        GXLoadTexMtxImm(lbl_801A6D00, 36, 1);
+        GXLoadTexMtxImm( (f32 *)(void *)(lbl_801A6D00), 36, 1);
         lbl_801A6D00[3] = -2.0f / (f32)(s32)arg0->unk_EC;
         lbl_801A6D00[7] = -2.0f / (f32)(s32)arg0->unk_EE;
-        GXLoadTexMtxImm(lbl_801A6D00, 39, 1);
+        GXLoadTexMtxImm( (f32 *)(void *)(lbl_801A6D00), 39, 1);
         lbl_801A6D00[3] = -2.0f / (f32)(s32)arg0->unk_EC;
         lbl_801A6D00[7] = 2.0f / (f32)(s32)arg0->unk_EE;
-        GXLoadTexMtxImm(lbl_801A6D00, 42, 1);
+        GXLoadTexMtxImm( (f32 *)(void *)(lbl_801A6D00), 42, 1);
         fn_800724C8();
         fn_8007245C(0x2200);
         fn_80074660(2);
@@ -1111,7 +1021,7 @@ void fn_1_729F8(struct fn_1_729F8_Arg0 *arg0)
         fn_80074918(1, 7, 0);
         fn_800745A4(0, 1, 4, 30, 0, 125);
         lbl_8006D758();
-        GXLoadTexMtxImm(lbl_801A6D00, 30, 1);
+        GXLoadTexMtxImm( (f32 *)(void *)(lbl_801A6D00), 30, 1);
         fn_1_75D84(v168, &arg0->unk_E8, &arg0->unk_F8);
         break;
 
@@ -1180,12 +1090,12 @@ void fn_1_729F8(struct fn_1_729F8_Arg0 *arg0)
         a90[5] = 0.003f;
         fn_80073A58(1, a90, 1);
         fn_800739E0(0, 0, 0);
-        lbl_8006D784(mD8);
+        lbl_8006D784( (f32 *)(void *)(mD8));
         mD8[0] = 5.0f;
         mD8[5] = 15.0f;
         mD8[3] = 0.0f;
         mD8[7] = 0.01f * (f32)lbl_801A66A0;
-        GXLoadTexMtxImm(mD8, 36, 1);
+        GXLoadTexMtxImm( (f32 *)(void *)(mD8), 36, 1);
         fn_80072C24(0, 15, 15, 15, 8);
         fn_80072D64(0, 0, 0, 0, 1, 0);
         fn_80072CC4(0, 7, 7, 7, 5);
@@ -2203,10 +2113,7 @@ void fn_1_7B184(void *arg) {
 }
 /* fzgx:end fn_1_7B184 */
 
-/* fzgx:begin fn_1_7B218 noprologue */
-#include "types.h"
-#include "rel/main_rel/screen_effect.h"
-
+/* fzgx:begin fn_1_7B218 */
 typedef struct {
     u8 pad_0[0x7e0];
     char unk_7e0[0x4c];
@@ -2214,9 +2121,6 @@ typedef struct {
     char unk_840[0x20];
 } ScreenEffectData;
 
-extern u16 fn_1_12EF24(s16 value, s16 index);
-extern void sprintf(char *dst, const char *format, const char *text, ...);
-extern void fn_1_465D0(char *text, s32 mode);
 
 void fn_1_7B218(s32 enabled) {
     char text_a[0x20];
@@ -2227,7 +2131,7 @@ void fn_1_7B218(s32 enabled) {
 
     i = 0;
     do {
-        index = fn_1_12EF24(lbl_1_bss_8B3A0.unk_8C, i);
+        index = (s16)fn_1_12EF24(lbl_1_bss_8B3A0.unk_8C, i);
         if (index >= 0) {
             sprintf(text_a, data->unk_82c, data->unk_7e0, index);
             sprintf(text_b, data->unk_840, data->unk_7e0, index);
