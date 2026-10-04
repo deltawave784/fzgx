@@ -3918,6 +3918,36 @@ char *fn_1_14EA74(s16 arg0, char *arg1, s16 arg2) {
 #pragma opt_propagation reset
 /* fzgx:end fn_1_14EA74 */
 
+/* fzgx:begin fn_1_14EBF8 */
+typedef struct {
+    void *values[75][6];
+} Fn1_14EBF8Blob;
+
+extern u8 lbl_1_rodata_A894[0x708];
+extern s32 fn_1_14FE48(void *arg0, void *arg1);
+extern void *fn_1_14FDAC(void *arg0, void *arg1, s16 arg2, void *arg3);
+extern int sprintf(char *s, const char *format, ...);
+
+char *fn_1_14EBF8(s16 arg0, char *arg1, s16 arg2) {
+    char first[0x40];
+    char second[0x40];
+    Fn1_14EBF8Blob local;
+    const char *data;
+
+    data = (const char *)&lbl_1_data_43E78;
+    local = *(const Fn1_14EBF8Blob *)lbl_1_rodata_A894;
+    if ((s16)fn_1_14FE48(local.values[arg0][arg2], (void *)(data + 0x2428)) < 2) {
+        sprintf(arg1, data + 0x242c,
+                fn_1_14FDAC(local.values[arg0][arg2], (void *)(data + 0x2428), 0, first));
+    } else {
+        sprintf(arg1, data + 0x2438,
+                fn_1_14FDAC(local.values[arg0][arg2], (void *)(data + 0x2428), 2, first),
+                fn_1_14FDAC(local.values[arg0][arg2], (void *)(data + 0x2428), 3, second));
+    }
+    return arg1;
+}
+/* fzgx:end fn_1_14EBF8 */
+
 /* fzgx:begin fn_1_14ED00 */
 typedef struct {
     u32 values[5];
