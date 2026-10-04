@@ -1,18 +1,6 @@
 #include <types.h>
+#include "dolphin/ar.h"
 #include <dolphin/os/OSInterrupt.h>
-
-typedef void (*ARQCallback)(u32 pointerToARQRequest);
-
-typedef struct ARQRequest {
-    struct ARQRequest *next;
-    u32 owner;
-    u32 type;
-    u32 priority;
-    u32 source;
-    u32 dest;
-    u32 length;
-    ARQCallback callback;
-} ARQRequest;
 
 void ARStartDMA(u32 type, u32 mainmem_addr, u32 aram_addr, u32 length);
 
