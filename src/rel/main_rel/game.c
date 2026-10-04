@@ -228,6 +228,46 @@ typedef struct {
     u32 value_318;
     u32 value_31c;
 } Fn40710Config;
+extern void fn_1_12F308(void);
+extern int fn_1_4C10(void);
+extern u32 fn_1_12F358(u32);
+extern u32 fn_1_467F4(void);
+extern void fn_1_4A00(u32 arg0, u32 arg1, u32 arg2);
+extern int fn_1_402D4(void);
+extern void fn_1_A2D84(u32 arg0);
+extern u32 fn_1_101C0(void);
+extern u32 fn_1_A11EC(void);
+extern u32 fn_1_435C(u32 value);
+extern void ADXT_Pause(Sig_ADXT_Pause_ADXTHandle *, s32);
+extern void fn_1_4310(u32 arg0);
+extern void fn_1_48004(s32 index, s32 image);
+extern void fn_1_8616C(void);
+extern void fn_1_A1588(u32 arg0, u32 arg1);
+extern void fn_1_D0790(void);
+extern void fn_1_451E4(void);
+extern void fn_1_D3214(void);
+extern void fn_8001AF64(void);
+extern u32 fn_1_13018(void);
+extern u32 ghost_test_record_flag0(s32 arg);
+extern u32 fn_1_F9D44(u32 arg);
+extern u8 fn_1_F8C50(s32 arg0);
+extern void fn_1_2DB50(void);
+extern void fn_1_3F8C(void *, void *, Obj_1_bss_5138 *, int);
+extern void fn_1_2D888(void);
+extern void fn_1_2D524(void);
+extern u32 lbl_801A63C0;
+extern void fn_1_40BE4(void);
+extern u32 lbl_801A6CE0;
+extern u32 lbl_1_bss_38454;
+extern u32 fn_80070DE0(u32 arg0);
+extern void fn_1_40F54(void *arg0);
+extern void fn_1_D3884();
+extern void fn_1_D358C();
+extern void fn_1_465D0(char *value, u32 flag);
+extern int sprintf(char *s, const char *format, ...);
+extern void fn_1_41134(void *unused, char *value);
+extern int fn_80016DF8(char *buffer);
+extern void fn_1_412A0(u32 index);
 extern void fn_1_15E330(s32 index, u32 value, void *arg);
 extern void fn_1_15E5E4(s32 index, void *arg);
 extern void fn_1_15E688(s32 index, u32 value, u8 state, void *arg);
@@ -245,20 +285,10 @@ extern u16 lbl_1_bss_26B7A[3];
 extern u16 lbl_1_bss_26300;
 extern void fn_80008BA8(u32 arg0, u32 arg1, u32 arg2);
 extern void fn_80008BEC(void *dest, int value, u32 size);
-extern u32 fn_1_101C0(void);
-extern u32 fn_1_A11EC(void);
-extern u32 fn_1_435C(u32 value);
-extern void ADXT_Pause(Sig_ADXT_Pause_ADXTHandle *, s32);
-extern void fn_1_4310(u32 arg0);
-extern void fn_1_48004(s32 index, s32 image);
-extern void fn_1_8616C(void);
-extern void fn_1_A1588(u32 arg0, u32 arg1);
-extern void fn_1_D0790(void);
 extern void fn_1_817C0(void);
 extern u32 lbl_1_bss_381FC;
 extern void fn_1_EB080(int mode);
 extern s64 OSGetTime(void);
-extern void fn_1_4A00(u32 arg0, u32 arg1, u32 arg2);
 extern void fn_1_5370(u32 arg0, u32 arg1);
 extern void fn_1_15E27C(void);
 extern void fn_1_4811C(int arg);
@@ -280,27 +310,13 @@ extern Entry *lbl_1_bss_53F8[34];
 extern void OSPanic(const void *, u32, const char *, ...);
 extern Obj_1_bss_25E9C lbl_1_bss_25E9C[30];
 extern void fn_1_12AB38(void *arg0);
-extern void fn_1_465D0(char *value, u32 flag);
 extern void* fn_1_7F518(s16 car_type, void* car, s32 initialize);
-extern int sprintf(char *s, const char *format, ...);
-extern void fn_1_451E4(void);
-extern void fn_1_D3214(void);
-extern void fn_8001AF64(void);
-extern u32 fn_1_467F4(void);
-extern u32 fn_1_13018(void);
 extern u32 fn_1_46C60(void);
 extern u32 lbl_1_bss_26C2C[2];
 extern u32 lbl_1_bss_262F8[2];
 extern u16 lbl_1_bss_26C68[35526];
 extern u32 lbl_1_bss_3C08[2];
 extern u32 fn_800075AC(u32, u32, u32);
-extern u32 ghost_test_record_flag0(s32 arg);
-extern u32 fn_1_F9D44(u32 arg);
-extern u8 fn_1_F8C50(s32 arg0);
-extern void fn_1_2DB50(void);
-extern void fn_1_3F8C(void *, void *, Obj_1_bss_5138 *, int);
-extern void fn_1_2D888(void);
-extern void fn_1_2D524(void);
 extern u32 fn_1_FA070(void);
 extern int fn_1_FA180(int, u8);
 extern u32 fn_1_F9FEC(void);
@@ -313,24 +329,13 @@ extern u32 lbl_1_bss_26C34[9];
 extern u8 lbl_1_bss_38218[568];
 extern u32 fn_1_4060(void);
 extern void ARQPostRequest(u8 *arg0, u32 arg1, u32 arg2, u32 arg3, u32 arg4, u32 arg5, u32 arg6, u32 arg7);
-extern u32 lbl_801A63C0;
-extern void fn_1_40BE4(void);
 extern u32 GXGetTexBufferSize(u32, u32, u32, u32, u32);
 extern u32 lbl_1_bss_26B4C;
 extern u8 lbl_1_bss_25E90[8];
 extern s32 fn_1_48B0(u32 arg0, u32 arg1);
-extern void fn_1_40F54(void *arg0);
-extern u32 lbl_801A6CE0;
-extern u32 lbl_1_bss_38454;
-extern u32 fn_80070DE0(u32 arg0);
-extern void fn_1_D3884();
-extern void fn_1_D358C();
 extern void fn_800711A8(Obj_1_bss_38458_Target *target);
 extern void fn_80071718(u32 value);
-extern void fn_1_41134(void *unused, char *value);
-extern void fn_1_411D4(u32, char *);
-extern int fn_80016DF8(char *buffer);
-extern void fn_1_412A0(u32 index);
+extern void fn_1_411D4(u32 index, char *value);
 extern size_t strlen(const char *str);
 extern int fn_80083BCC(const char *s1, const char *s2);
 extern u8 lbl_1_A9011300;
@@ -582,16 +587,7 @@ void fn_1_36ADC(void) {
 }
 /* fzgx:end fn_1_36ADC */
 
-/* fzgx:begin fn_1_384E8 pool noprologue */
-#include "rel/main_rel/game.h"
-
-extern void fn_1_12F308(void);
-extern int fn_1_4C10(void);
-extern u32 fn_1_12F358(u32);
-extern int fn_1_467F4(void);
-extern void fn_1_4A00(u32, u32, void *);
-extern int fn_1_402D4(void);
-extern void fn_1_A2D84(u32);
+/* fzgx:begin fn_1_384E8 pool */
 
 typedef struct {
     u8 pad_0[6];
@@ -654,8 +650,8 @@ void fn_1_384E8(void) {
     if (fn_1_4C10() == 0) {
         fn_1_12F358(((Sub30 *)&fzgx_obj_lbl_1_bss_3C30)->unk_6);
         if ((s32)lbl_1_bss_26C28 == 2) {
-            if (fn_1_467F4() == 0) {
-                fn_1_4A00(0, 0x1e, fzgx_obj_lbl_1_bss_5100);
+            if ((int)fn_1_467F4() == 0) {
+                fn_1_4A00(0, 0x1e, (u32)(void *)(fzgx_obj_lbl_1_bss_5100));
                 lbl_1_bss_26C28 = 1;
             }
         } else if ((s32)lbl_1_bss_26C28 != 0) {
