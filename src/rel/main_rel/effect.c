@@ -196,7 +196,6 @@ void fn_1_58C6C(void) {
 /* fzgx:end fn_1_58C6C */
 
 /* fzgx:begin fn_1_58D38 */
-
 typedef struct fn_1_58D38_EffectState {
     fn_1_58D38_EffectEntry *unk_00;
     fn_1_58D38_EffectEntry *unk_04;
@@ -252,7 +251,6 @@ void fn_1_58D38(void) {
 /* fzgx:end fn_1_58D38 */
 
 /* fzgx:begin fn_1_58E3C */
-
 typedef struct {
     s8 unk_0;
     u8 pad_1;
@@ -553,7 +551,6 @@ void fn_1_59510(void) {
 /* fzgx:end fn_1_59510 */
 
 /* fzgx:begin fn_1_59514 */
-
 void fn_1_59514(void *obj) {
     if (*(s32 *)((u8 *)obj + 0x10) == 0) {
         u32 s = lbl_1_data_1D628 * 0x41c64e6d + 0x3039;
@@ -878,7 +875,7 @@ void fn_1_5ABC8(void) {
 }
 /* fzgx:end fn_1_5ABC8 */
 
-/* fzgx:begin fn_1_5ABCC noprologue */
+/* fzgx:begin fn_1_5ABCC */
 #include "types.h"
 #include "rel/main_rel/effect.h"
 
@@ -920,14 +917,14 @@ extern const struct fn_1_5ABCC_lbl_1_rodata_2950_pool {
     f32 unk_8;
     u8 pad_C[0x60];
     f32 unk_6C;
-} lbl_1_rodata_2950;
+} fn_1_5ABCC_lbl_1_rodata_2950;
 
 typedef struct {
     u8 pad_00[0x10];
     s32 unk_10;
 } Fn1_5ABCCOutput;
 
-extern u32 lbl_1_data_1D628;
+
 
 #pragma opt_loop_invariants off
 #pragma opt_common_subs off
@@ -999,7 +996,7 @@ void fn_1_5B3CC(void) {
 }
 /* fzgx:end fn_1_5B3CC */
 
-/* fzgx:begin fn_1_5B3D0 noprologue */
+/* fzgx:begin fn_1_5B3D0 */
 #include "types.h"
 
 #pragma section code_type ".fzgxpool"
@@ -1050,7 +1047,7 @@ extern const struct fn_1_5B3D0_lbl_1_rodata_2950_pool {
     f32 unk_8;
     u8 pad_C[0x88];
     f32 unk_94;
-} lbl_1_rodata_2950;
+} fn_1_5B3D0_lbl_1_rodata_2950;
 
 struct fn_1_5B3D0_Arg0 {
     u8 pad_0[0x10];
@@ -1061,7 +1058,7 @@ struct fn_1_5B3D0_State {
     u32 unk_0;
 };
 
-extern struct fn_1_5B3D0_State lbl_1_data_1D628;
+
 
 #pragma opt_common_subs off
 #pragma opt_lifetimes on
@@ -1072,7 +1069,7 @@ void fn_1_5B3D0(struct fn_1_5B3D0_Arg0 *arg0) {
     struct { u32 value; } random;
     struct { f32 value; } r;
 
-    state = &lbl_1_data_1D628;
+    state = &(*(struct fn_1_5B3D0_State *)&lbl_1_data_1D628);
     next = ((1103515245) * (state->unk_0)) + 12345;
     { u32 __reg_value_random = (next >> 16) & 0x7FFF; random.value = __reg_value_random; }
     { f32 __reg_value_r = (f32)random.value; r.value = __reg_value_r; }
@@ -1641,8 +1638,6 @@ void fn_1_5FE2C(void) {
 
 /* fzgx:begin fn_1_5FE30 noprologue */
 #include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/effect.h"
 
 extern void lbl_8006DCA4(void);
 extern s32 fn_1_54E34(void *object, f32 value);
@@ -1655,9 +1650,6 @@ extern void fn_1_5489C(void *, void *);
 extern void fn_1_862D4(s16 value, void *result);
 extern void *fn_1_548AC(u32 size);
 
-#include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/effect.h"
 
 typedef struct {
     u8 unk[0x18];
@@ -1694,9 +1686,6 @@ void fn_1_5FE30(fn_1_5FE30_FZeroObject *object) {
 /* fzgx:end fn_1_5FE30 */
 
 /* fzgx:begin fn_1_5FEBC */
-
-
-
 void fn_1_5FEBC(fn_1_5FEBC_EffectObject *object) {
     u8 result[12];
     u8 data[64];
@@ -1787,7 +1776,6 @@ void fn_1_601B4(EffectState *effect) {
 /* fzgx:end fn_1_601B4 */
 
 /* fzgx:begin fn_1_60734 */
-
 typedef struct Fn60734 {
     u8 pad_00[0x0e];
     s16 unk_0e;
@@ -2516,8 +2504,6 @@ void fn_1_61CE8(void) {
 /* fzgx:end fn_1_61CE8 */
 
 /* fzgx:begin fn_1_61D08 */
-
-
 typedef struct {
     u8 pad_0[0x20];
     void *unk_20;
@@ -2752,9 +2738,6 @@ fn_1_61D08_EffectObject *obj;
 /* fzgx:end fn_1_61D08 */
 
 /* fzgx:begin fn_1_61E60 */
-
-
-
 // Releases the effect resources and clears the active effect references.
 int fn_1_61E60(object)
 Fn1_61E60Object *object;
@@ -2796,7 +2779,6 @@ void fn_1_63130(struct fn_1_63130_obj *obj) {
 /* fzgx:end fn_1_63130 */
 
 /* fzgx:begin fn_1_632D4 */
-
 struct fn_1_632D4_obj {
     u8 unk_00[0x1C];
     f32 unk_1C;
@@ -3101,8 +3083,6 @@ void fn_1_64F2C(Fn_1_64F2C_Object *obj) {
 
 /* fzgx:begin fn_1_65268 noprologue */
 #include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/effect.h"
 
 extern void lbl_8006DCA4(void);
 extern s32 fn_1_54E34(void *object, f32 value);
@@ -3150,7 +3130,6 @@ void fn_1_65268(Object *object) {
 /* fzgx:end fn_1_65268 */
 
 /* fzgx:begin fn_1_652F4 */
-
 typedef struct {
     u8 pad_00[0x18];
     s16 unk_18;
@@ -3855,7 +3834,6 @@ void fn_1_6742C(void) {
 /* fzgx:end fn_1_6742C */
 
 /* fzgx:begin fn_1_6755C */
-
 typedef struct {
     u8 pad_0[0x18];
     s16 unk_18;

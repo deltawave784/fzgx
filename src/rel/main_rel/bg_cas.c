@@ -46,6 +46,14 @@ extern void fn_1_7F230(void *, s32, f32);
 extern void fn_1_FFC60(Obj_1_data_2A7E0_At3C *arg0);
 extern void fn_1_FEC7C(void *object);
 extern const f32 lbl_1_rodata_76A8;
+extern void fn_1_FC60C(void);
+extern void DCFlushRange(void *, u32);
+extern void GXInitTexObj(void *, void *, u32, u32, u32, u32, u32, u32);
+extern u32 fn_1_904(void);
+extern u32 fn_1_914(void);
+extern void fn_1_681C(u32, void *);
+extern u32 fn_1_1FB80(void *, u32);
+extern u32 fn_1_FF6B8(void *);
 
 /* fzgx:begin fn_1_FB798 */
 int fn_1_FB798(int mode, u32 *value) {
@@ -131,7 +139,8 @@ extern u8 lbl_1_bss_851E0[36];
 extern void fn_1_7F230(void *, s32, f32);
 extern void fn_1_FFC60(Obj_1_data_2A7E0_At3C *arg0);
 extern void fn_1_FEC7C(void *object);
-extern const f32 lbl_1_rodata_76A8;
+
+
 
 extern f32 lbl_1_rodata_7590[2];
 extern const f32 lbl_1_rodata_7598;
@@ -421,9 +430,6 @@ void fn_1_FC4E0(void *arg0, int arg1) {
 /* fzgx:end fn_1_FC4E0 */
 
 /* fzgx:begin fn_1_FC51C */
-extern void fn_1_FC60C(void);
-extern void DCFlushRange(void *, u32);
-extern void GXInitTexObj(void *, void *, u32, u32, u32, u32, u32, u32);
 extern void GXInitTexObjLOD(void *, f32, f32, f32, u32, u32, u32, u32, u32);
 
 #pragma opt_common_subs off
@@ -457,11 +463,8 @@ void fn_1_FC51C(void) {
 /* fzgx:begin fn_1_FC60C */
 extern u8 lbl_1_bss_850E0[256];
 
-
 extern u32 GXGetTexBufferSize(u16, u16, u32, u8, u8);
-extern void GXInitTexObj(void *, void *, u16, u16, u32, u32, u32, u8);
 extern void GXInitTexObjLOD(void *, u32, u32, f32, f32, f32, u8, u8, u32);
-extern void DCFlushRange(void *, u32);
 
 #pragma opt_common_subs off
 void fn_1_FC60C(void) {
@@ -747,6 +750,8 @@ void fn_1_FEC7C(void *object) {
 /* fzgx:begin fn_1_FED34 noprologue */
 #include "types.h"
 
+extern const f32 lbl_1_rodata_76A8;
+
 #pragma section code_type ".fzgxpool"
 __declspec(section ".fzgxpool") static void fzgx_pool_prime1(void) {
     volatile f32 s; volatile f64 d;  /* fzgx-allow: S2 pool primer sinks */
@@ -831,7 +836,7 @@ typedef struct {
     f32 z;
 } Vec3;
 
-extern f32 lbl_1_rodata_76A8[84];
+
 extern u32 fn_1_904(void);
 extern u32 fn_1_914(void);
 extern void fn_1_681C(u32, void *);
@@ -853,7 +858,7 @@ void fn_1_FED34(void *arg0) {
     f32 temp_f1;
     f32 temp_f3;
 
-    rd = (RoData_76A8 *)lbl_1_rodata_76A8;
+    rd = (RoData_76A8 *)(*(f32 (*)[84])&lbl_1_rodata_76A8);
     var_r28 = (u8 *)arg0 + 0x434;
     temp_r3 = fn_1_904();
     if (temp_r3 < 0xDACU) {

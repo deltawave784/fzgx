@@ -74,6 +74,7 @@ extern const f32 lbl_1_rodata_6BD0;
 extern const f64 lbl_1_rodata_6D48;
 extern const f32 lbl_1_rodata_6D50;
 extern f64 fn_80088598(f64, f64);
+extern u8 *fn_1_3F0D8(u32, f32 *, u8 *);
 
 /* fzgx:begin fn_1_EB330 noprologue */
 #include "types.h"
@@ -928,8 +929,6 @@ u8 fn_1_F1B84(void) {
 /* fzgx:end fn_1_F1B84 */
 
 /* fzgx:begin fn_1_F1B94 */
-extern u8 *fn_1_3F0D8(u32, f32 *, u8 *);
-
 u32 fn_1_F1B94(void) {
     f32 a;
     u8 b;

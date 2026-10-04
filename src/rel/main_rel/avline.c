@@ -8,6 +8,7 @@ extern void fn_1_46B4(u32, u32, void *, u32);
 extern u8 lbl_1_data_1D62C[148];
 extern void fn_1_9F870(void);
 extern void fn_1_58158(void);
+extern void fn_80008BA8(void*, void*, u32);
 
 /* fzgx:begin fn_1_58114 */
 void fn_1_58114(void) {
@@ -39,8 +40,6 @@ typedef struct AvLineEntry {
     u16 unk_02;
     u8 unk_04[0x100];
 } AvLineEntry;
-
-extern void fn_80008BA8(void*, void*, u32);
 
 #pragma opt_propagation off
 s32 fn_1_581AC(u16 value, u16 type, void* data) {

@@ -451,11 +451,14 @@ s16 camera_get_output(void) {
 /* fzgx:begin fn_1_6B48 noprologue */
 #include "types.h"
 
+extern u8 lbl_1_bss_F74;
+extern u8 lbl_1_bss_F75;
+
 typedef struct {
     u32 unk_0;
     u8 pad_4[0x44];
     u8 unk_48;
-} CameraState;
+} fn_1_6B48_CameraState;
 
 typedef struct {
     u8 pad_0[0x6];
@@ -466,20 +469,20 @@ typedef struct {
     u8 pad_0[0x2];
     s16 value;
     u8 pad_4[0x1f8];
-} CameraEntry;
+} fn_1_6B48_CameraEntry;
 
 typedef struct {
-    CameraState *state;
-    CameraEntry *entries;
+    fn_1_6B48_CameraState *state;
+    fn_1_6B48_CameraEntry *entries;
     CameraValue *value;
-} CameraGlobals;
+} fn_1_6B48_CameraGlobals;
 
 
 #pragma opt_common_subs off
 #pragma peephole on
 /* file-scope objects of the retail TU, in retail order: MWCC addresses them off one section base */
-CameraState *fzgx_obj_lbl_1_bss_F68;
-CameraEntry *fzgx_obj_game_camera_entries;
+fn_1_6B48_CameraState *fzgx_obj_lbl_1_bss_F68;
+fn_1_6B48_CameraEntry *fzgx_obj_game_camera_entries;
 CameraValue *fzgx_obj_live_camera;
 u8 lbl_1_bss_F74;
 u8 lbl_1_bss_F75;
@@ -497,9 +500,9 @@ static void fzgx_bss_layout(void) {
 }
 #pragma section code_type ".text"
 
-static inline CameraEntry *fn_1_6B48_array_read(CameraEntry *array) { return array; }
+static inline fn_1_6B48_CameraEntry *fn_1_6B48_array_read(fn_1_6B48_CameraEntry *array) { return array; }
 s16 fn_1_6B48(s32 index) {
-    CameraState * state;
+    fn_1_6B48_CameraState * state;
 {
     
     state = fzgx_obj_lbl_1_bss_F68;

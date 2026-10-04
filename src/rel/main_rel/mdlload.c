@@ -78,6 +78,8 @@ extern void fn_1_D3BE8(void);
 
 extern void fn_1_D3BE8(void);
 extern int fn_1_D3B6C(void);
+extern u32 fn_1_539CC(void *, void *, f32);
+extern void fn_1_9A7A8(u32 *);
 
 /* fzgx:begin fn_1_D35D4 noprologue */
 #include "types.h"
@@ -614,7 +616,7 @@ void fn_1_D4360(void *base) {
 }
 /* fzgx:end fn_1_D4360 */
 
-/* fzgx:begin fn_1_D4370 noprologue */
+/* fzgx:begin fn_1_D4370 */
 #include "types.h"
 
 #pragma section code_type ".fzgxpool"
@@ -646,15 +648,10 @@ struct fn_1_D4370_lbl_1_rodata_6168 {
     f32 unk_38;
     f32 unk_3C;
 };
-extern struct fn_1_D4370_lbl_1_rodata_6168 lbl_1_rodata_6168;
 
 struct fn_1_D4370_lbl_801A63C0 {
     u32 unk_0;
 };
-extern struct fn_1_D4370_lbl_801A63C0 lbl_801A63C0;
-
-extern u32 fn_1_539CC(void *, void *, f32);
-extern void fn_1_9A7A8(u32 *);
 
 struct FzgxCopy_4 { u32 words[1]; };
 
@@ -692,19 +689,19 @@ void fn_1_D4370(void *arg0) {
     s32 idx;
 
     temp_r30 = (struct D4370State *)((u8 *)(arg0) + 0xC040);
-    temp_r31 = &lbl_1_rodata_6168;
+    temp_r31 = &(*(struct fn_1_D4370_lbl_1_rodata_6168 *)&lbl_1_rodata_6168);
     if ((s32) (*(s32 *)((u8 *)(arg0) + 49268)) != 0) {
         temp_r30->unk_34 = temp_r30->unk_34 - 1;
         if (temp_r30->unk_34 <= 0) {
             var_r4 = temp_r30;
             var_r5 = 0;
-            temp_r9 = (lbl_801A63C0.unk_0 * 0x676A4B6B) + 0x33CB;
-            lbl_801A63C0.unk_0 = temp_r9;
+            temp_r9 = ((*(struct fn_1_D4370_lbl_801A63C0 *)&lbl_801A63C0).unk_0 * 0x676A4B6B) + 0x33CB;
+            (*(struct fn_1_D4370_lbl_801A63C0 *)&lbl_801A63C0).unk_0 = temp_r9;
             temp_r30->unk_8 = (s32) ((s32)((temp_r9 >> 0x10U) & 0x7FFF) % 3) + 1;
             temp_r30->unk_4 = 0;
             while (var_r5 < temp_r30->unk_8) {
-                temp_r9_2 = (lbl_801A63C0.unk_0 * 0x676A4B6B) + 0x33CB;
-                lbl_801A63C0.unk_0 = temp_r9_2;
+                temp_r9_2 = ((*(struct fn_1_D4370_lbl_801A63C0 *)&lbl_801A63C0).unk_0 * 0x676A4B6B) + 0x33CB;
+                (*(struct fn_1_D4370_lbl_801A63C0 *)&lbl_801A63C0).unk_0 = temp_r9_2;
                 temp_r7 = (u32) ((temp_r9_2 >> 0x10U) & 0x7FFF) >> 0x1FU;
                 if (((((temp_r9_2 >> 0x10U) & 1) ^ temp_r7) - temp_r7) != 0) {
                     var_f0 = (1.0f);
@@ -713,8 +710,8 @@ void fn_1_D4370(void *arg0) {
                 }
                 var_r4->arrC[0] = var_f0;
                 var_r5 += 1;
-                temp_r6 = (lbl_801A63C0.unk_0 * 0x676A4B6B) + 0x33CB;
-                lbl_801A63C0.unk_0 = temp_r6;
+                temp_r6 = ((*(struct fn_1_D4370_lbl_801A63C0 *)&lbl_801A63C0).unk_0 * 0x676A4B6B) + 0x33CB;
+                (*(struct fn_1_D4370_lbl_801A63C0 *)&lbl_801A63C0).unk_0 = temp_r6;
                 var_r4->arr20[0] = (s32) ((s32)((temp_r6 >> 0x10U) & 0x7FFF) % 60) + 0xA;
                 var_r4 = (struct D4370State *)((u8 *)(var_r4) + 4);
                             }
@@ -727,8 +724,8 @@ void fn_1_D4370(void *arg0) {
         idx = temp_r30->unk_4;
         if (idx == (temp_r30->unk_8 - 1)) {
             if ((*(f32 *)((u8 *)(arg0) + 49216)) <= (0.0f)) {
-                temp_r4_2 = (lbl_801A63C0.unk_0 * 0x676A4B6B) + 0x33CB;
-                lbl_801A63C0.unk_0 = temp_r4_2;
+                temp_r4_2 = ((*(struct fn_1_D4370_lbl_801A63C0 *)&lbl_801A63C0).unk_0 * 0x676A4B6B) + 0x33CB;
+                (*(struct fn_1_D4370_lbl_801A63C0 *)&lbl_801A63C0).unk_0 = temp_r4_2;
                 temp_r30->unk_34 = (s32) ((s32)((temp_r4_2 >> 0x10U) & 0x7FFF) % 180) + 0x78;
                 temp_r30->unk_38 = 0;
                 (*(f32 *)((u8 *)(arg0) + 49216)) = (f32) (0.0f);
@@ -787,6 +784,8 @@ void fn_1_D47D8(struct Base *base, s32 index) {
 /* fzgx:begin fn_1_D47F0 noprologue */
 #include "types.h"
 
+extern f32 lbl_1_rodata_6168[112];
+
 #pragma section code_type ".fzgxpool"
 __declspec(section ".fzgxpool") static void fzgx_pool_prime1(void) {
     volatile f32 s; volatile f64 d;  /* fzgx-allow: S2 pool primer sinks */
@@ -809,7 +808,8 @@ __declspec(section ".fzgxpool") static void fzgx_pool_prime1(void) {
 #pragma section code_type ".text"
 
 extern u32 lbl_1_bss_6D620[78];
-extern f32 lbl_1_rodata_6168[112];
+
+
 extern u32 fn_1_681C(u32 index, void *out);
 extern u32 fn_1_1FB80(void *data, u32 mode);
 

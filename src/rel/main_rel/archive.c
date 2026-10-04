@@ -53,6 +53,7 @@ extern u8 lbl_1_bss_8B4EC[128];
 extern void fn_80083DB0(void *arg0, char *arg1);
 extern void strcat(void *arg0, void *arg1);
 extern s32 fn_1_F89E4(u8 value);
+extern u32 fn_1_151BE8(s16, s16);
 
 /* fzgx:begin fn_1_12A2D0 */
 extern void OSPanic(u8 *arg0, s32 arg1, u8 *arg2, ...);
@@ -90,14 +91,15 @@ s32 fn_1_12A6D8(void *arg0) {
 
 /* fzgx:begin fn_1_12A7C4 noprologue */
 #include "types.h"
-#include "rel/main_rel/archive.h"
 
-typedef struct ArchiveState {
+extern s32 lbl_1_bss_897A4;
+
+typedef struct fn_1_12A7C4_ArchiveState {
     s32 count;
     s32 loaded;
     u8 pad[4];
     u8 entries[1];
-} ArchiveState;
+} fn_1_12A7C4_ArchiveState;
 
 extern s32 fn_8006A480(void *arg0, void *arg1, void *arg2);
 extern void *fn_8006A998(void *arg0);
@@ -108,16 +110,16 @@ extern void fn_1_45850(void *arg0);
 extern void fn_80008BA8(void *arg0, void *arg1, u32 arg2);
 
 #pragma opt_propagation on
-typedef struct lbl_1_bss_897AC_t {
+typedef struct fn_1_12A7C4_lbl_1_bss_897AC_t {
     u8 entries[1];
     u8 pad_1[0x1b33];
-} lbl_1_bss_897AC_t;
+} fn_1_12A7C4_lbl_1_bss_897AC_t;
 
 /* file-scope objects of the retail TU, in retail order: MWCC addresses them off one section base */
 s32 fzgx_obj_lbl_1_bss_897A0;
 s32 lbl_1_bss_897A4;
 u32 lbl_1_bss_897A8;
-lbl_1_bss_897AC_t fzgx_obj_lbl_1_bss_897AC;
+fn_1_12A7C4_lbl_1_bss_897AC_t fzgx_obj_lbl_1_bss_897AC;
 u32 fzgx_obj_lbl_1_bss_8B2E0[48];
 u32 fzgx_obj_lbl_1_bss_8B3A0[83];
 
@@ -133,7 +135,7 @@ static void fzgx_bss_layout(void) {
 }
 #pragma section code_type ".text"
 
-static inline u8 * fn_1_12A7C4_read_pointer(lbl_1_bss_897AC_t * owner) { return owner->entries; }
+static inline u8 * fn_1_12A7C4_read_pointer(fn_1_12A7C4_lbl_1_bss_897AC_t * owner) { return owner->entries; }
 s32 fn_1_12A7C4(void *arg0, void *arg1, u32 arg2) {
     u8 *entries;
     void *result;
@@ -660,7 +662,6 @@ struct Blk {
 };
 
 extern struct Blk * fn_1_36AD0(void);
-extern u32 fn_1_151BE8(s16, s16);
 
 void fn_1_12B4EC(s16 arg0, s16 arg1) {
     struct Blk *p;

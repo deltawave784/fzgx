@@ -59,6 +59,8 @@ extern void *fn_80008E84();
 extern u32 fn_1_45D0(void *arg0, void *arg1, u32 *arg2, int arg3);
 extern void fn_80063094(s32 arg0, void *arg1, s32 arg2);
 extern void fn_80065D70(int);
+extern const f32 lbl_1_rodata_42E0;
+extern void *fn_1_86254(int);
 
 /* fzgx:begin fn_1_9FE74 */
 // Initialize the sound resource and register it with the sound system.

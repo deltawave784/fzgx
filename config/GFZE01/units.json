@@ -27881,8 +27881,16 @@
     "extra_cflags": [],
     "tu": "rel/main_rel/bg_aur.c",
     "pool": {
+      "...rodata.0": "lbl_1_rodata_D508",
       "@19": "lbl_1_rodata_D508",
-      "...rodata.0": "lbl_1_rodata_D508"
+      "@20": "lbl_1_rodata_D508+0x4",
+      "@22": "lbl_1_rodata_D508+0xC",
+      "@23": "lbl_1_rodata_D508+0x10",
+      "@28": "lbl_1_rodata_D508+0x20",
+      "@24": "lbl_1_rodata_D508+0x14",
+      "@21": "lbl_1_rodata_D508+0x8",
+      "@25": "lbl_1_rodata_D508+0x18",
+      "@26": "lbl_1_rodata_D508+0x1C"
     }
   },
   {
@@ -29427,6 +29435,14 @@
     "tu": "rel/main_rel/bg_san.c",
     "pool": {
       "...rodata.0": "lbl_1_rodata_66D0",
+      "@16": "lbl_1_rodata_66D0+0x4",
+      "@17": "lbl_1_rodata_66D0+0x8",
+      "@18": "lbl_1_rodata_66D0+0xC",
+      "@19": "lbl_1_rodata_66D0+0x10",
+      "@24": "lbl_1_rodata_66D0+0x28",
+      "@20": "lbl_1_rodata_66D0+0x14",
+      "@21": "lbl_1_rodata_66D0+0x18",
+      "@22": "lbl_1_rodata_66D0+0x20",
       "lbl_1_rodata_66D0": "lbl_1_rodata_66D0"
     }
   },
@@ -35943,7 +35959,13 @@
     "extra_cflags": [],
     "tu": "rel/main_rel/effect_car.c",
     "pool": {
-      "...rodata.0": "lbl_1_rodata_2D70"
+      "...rodata.0": "lbl_1_rodata_2D70",
+      "@240": "lbl_1_rodata_2D70+0x290",
+      "@293": "lbl_1_rodata_2D70+0x308",
+      "@20": "lbl_1_rodata_2D70+0x40",
+      "@14": "lbl_1_rodata_2D70+0x24",
+      "@294": "lbl_1_rodata_2D70+0x30C",
+      "@227": "lbl_1_rodata_2D70+0x270"
     }
   },
   {
@@ -45641,13 +45663,20 @@
     "extra_cflags": [],
     "tu": "rel/main_rel/screen_effect.c",
     "pool": {
+      "...rodata.0": "lbl_1_rodata_3180",
       "@135": "lbl_1_rodata_31A0",
       "@4": "lbl_1_rodata_3180",
+      "@5": "lbl_1_rodata_3180+0x4",
       "@150": "lbl_1_rodata_31D8",
       "@152": "jumptable_1_data_1DB04",
       "@137": "lbl_1_rodata_31A8",
       "@138": "lbl_1_rodata_31AC",
       "@139": "lbl_1_rodata_31B0",
+      "@101": "lbl_1_rodata_3180+0x8",
+      "@102": "lbl_1_rodata_3180+0x10",
+      "@103": "lbl_1_rodata_3180+0x14",
+      "@104": "lbl_1_rodata_3180+0x18",
+      "@105": "lbl_1_rodata_3180+0x1C",
       "...data.0": "lbl_1_data_1D960",
       "lbl_1_data_1D960": "lbl_1_data_1D960",
       "lbl_1_data_1D9B8": "lbl_1_data_1D9B8",
@@ -45655,8 +45684,7 @@
       "lbl_1_data_1D9B8__fzgx_offset_FC": "lbl_1_data_1D9B8+0xFC",
       "lbl_1_data_1D9B8__fzgx_offset_100": "lbl_1_data_1D9B8+0x100",
       "lbl_1_data_1D9B8__fzgx_offset_104": "lbl_1_data_1D9B8+0x104",
-      "lbl_1_data_1DAC0": "lbl_1_data_1DAC0",
-      "...rodata.0": "lbl_1_rodata_3180"
+      "lbl_1_data_1DAC0": "lbl_1_data_1DAC0"
     }
   },
   {

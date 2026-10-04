@@ -225,6 +225,8 @@ extern f32 fn_1_51BFC(f32 value);
 extern const f64 lbl_1_rodata_2758;
 extern void lbl_8006D784(void *arg);
 extern void fn_1_55D6C(void);
+extern f32 lbl_1_rodata_10D8;
+extern f64 lbl_1_rodata_10E0[3];
 
 /* fzgx:begin fn_1_49410 */
 struct fn_1_49410_lbl_1_rodata_FD0 {
@@ -682,7 +684,7 @@ u16 fn_1_499BC(const u8 *value) {
 }
 /* fzgx:end fn_1_499BC */
 
-/* fzgx:begin fn_1_49B70 noprologue */
+/* fzgx:begin fn_1_49B70 */
 #include "types.h"
 
 typedef struct {
@@ -692,9 +694,6 @@ typedef struct {
     u8 pad_18[0x10];
     f32 unk_28;
 } UnkArg1;
-
-extern f32 lbl_1_rodata_10D8;
-extern f64 lbl_1_rodata_10E0[3];
 
 s32 fn_1_49B70(u8 *arg0, UnkArg1 *arg1) {
     /* volatile: retail reloads the accumulator from the frame in every case arm */

@@ -45,7 +45,6 @@ extern s32 fn_1_465D0(char *, s32);
 extern s8 fn_1_86690(s8);
 extern u32 fn_1_12C930(u32);
 extern u8 fn_1_86624(void);
-extern u8 lbl_1_bss_9C;
 extern void *fn_1_868C0(s8);
 extern void fn_80006E10(u32);
 

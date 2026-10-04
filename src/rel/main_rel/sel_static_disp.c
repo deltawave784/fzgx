@@ -833,7 +833,9 @@ void fn_1_135894(void* arg0, void* arg1, void* arg2, void* arg3, void* arg4, voi
 
 /* fzgx:begin fn_1_136714 noprologue */
 #include "types.h"
-#include "rel/main_rel/globals.h"
+#include "font.h"
+
+extern u32 lbl_801A66B4;
 
 extern void fn_1_49410(void);
 extern void fn_1_495FC(void);
@@ -852,7 +854,8 @@ extern const f32 lbl_1_rodata_85F0;
 extern const f32 lbl_1_rodata_85FC;
 extern const f32 lbl_1_rodata_8A30;
 extern const f64 lbl_1_rodata_8600;
-extern s32 lbl_801A66B4;
+
+
 
 void fn_1_136714(f32 arg0, f32 arg1, f32 arg2, s32 arg3, s32 arg4, s32 arg5,
                  s32 arg6, void* arg7) {
@@ -872,7 +875,7 @@ void fn_1_136714(f32 arg0, f32 arg1, f32 arg2, s32 arg3, s32 arg4, s32 arg5,
         fn_1_49738(arg7);
     }
     fn_1_495A0(arg2);
-    switch (lbl_801A66B4) {
+    switch ((*(s32 *)&lbl_801A66B4)) {
     case 5:
         break;
     case 0:
@@ -881,7 +884,7 @@ void fn_1_136714(f32 arg0, f32 arg1, f32 arg2, s32 arg3, s32 arg4, s32 arg5,
         fn_1_4955C(lbl_1_rodata_8A30 * arg1 / lbl_1_rodata_85FC, value);
         break;
     }
-    fn_1_4AE0C(fn_1_13F72C((f32)arg3, (s16)lbl_801A66B4, buffer));
+    fn_1_4AE0C(fn_1_13F72C((f32)arg3, (s16)(*(s32 *)&lbl_801A66B4), buffer));
 }
 /* fzgx:end fn_1_136714 */
 
@@ -1009,6 +1012,7 @@ void fn_1_1368A0(s32 arg0, s16 arg1, s32 arg2, f32 farg0, f32 farg1, f32 farg2, 
 
 /* fzgx:begin fn_1_137288 noprologue */
 #include "types.h"
+#include "font.h"
 
 extern void* fn_1_12F118(void);
 extern void* fn_1_36AD0(void);
@@ -2094,6 +2098,9 @@ int fn_1_13FB24(u32 arg0) {
 #include "types.h"
 #include "font.h"
 
+extern f32 lbl_1_rodata_26F8[22];
+extern f32 lbl_1_rodata_85E8;
+
 typedef struct {
     u32 words[11];
 } U32x11;
@@ -2111,10 +2118,12 @@ typedef struct {
 } Packet;
 
 extern u32 lbl_1_rodata_91C0[11];
-extern f32 lbl_1_rodata_26F8[22];
+
+
 extern const f64 lbl_1_rodata_8600;
 extern const f32 lbl_1_rodata_91EC;
-extern const f32 lbl_1_rodata_85E8;
+
+
 extern const f32 lbl_1_rodata_8674;
 extern const f32 lbl_1_rodata_91F0;
 extern const f32 lbl_1_rodata_8B30;
@@ -2132,7 +2141,7 @@ void fn_1_14108C(s16 arg0, s32 arg1, s32 arg2) {
     packet.unk0 = ids.words[arg0];
     packet.x = (f32)arg1;
     packet.y = (f32)arg2;
-    packet.z = lbl_1_rodata_85E8;
+    packet.z = (*(const f32 *)&lbl_1_rodata_85E8);
     packet.unk10 = packet.unk10 * lbl_1_rodata_91EC;
     packet.unk14 = packet.unk14 * lbl_1_rodata_91EC;
     packet.unk30 = 10;
@@ -3458,7 +3467,7 @@ void fn_1_14E078(void *arg0, void *arg1, void *arg2) {
 
 /* fzgx:begin fn_1_14E09C noprologue */
 #include "types.h"
-#include "rel/main_rel/globals.h"
+#include "font.h"
 
 extern const f32 lbl_1_rodata_9C30;
 extern void fn_1_55FF0(void);
@@ -3535,6 +3544,7 @@ void fn_1_14E1BC(void *arg0, void *arg1, void *arg2) {
 
 /* fzgx:begin fn_1_14E1E0 noprologue */
 #include "types.h"
+#include "font.h"
 
 typedef struct {
     unsigned char pad[8];
@@ -3902,6 +3912,7 @@ s16 fn_1_14F090(s16 value, s16 occurrence) {
 
 /* fzgx:begin fn_1_14F118 noprologue */
 #include "types.h"
+#include "font.h"
 
 extern s16 fn_1_14F090(void *table, s16 index);
 extern s16 fn_1_14F01C(void *table);
@@ -3950,9 +3961,10 @@ s16 fn_1_14F19C(s16 wanted, s16 arg, u32 mask) {
 
 /* fzgx:begin fn_1_14F270 noprologue */
 #include "types.h"
-#include "rel/main_rel/globals.h"
+#include "font.h"
 
-extern f32 lbl_1_rodata_99D8[75];
+extern u32 lbl_1_rodata_99D8[75];
+
 extern s16 fn_1_14F090(void *arg, s16 index);
 extern s16 fn_1_14F01C(void *arg);
 
@@ -3967,7 +3979,7 @@ s16 fn_1_14F270(s16 wanted, void *arg, u32 mask) {
     s16 count;
     s16 index;
 
-    source = (const MaskTable *)(void *)lbl_1_rodata_99D8;
+    source = (const MaskTable *)(void *)(*(f32 (*)[75])&lbl_1_rodata_99D8);
     i = 0;
     count = 0;
     for (; i < fn_1_14F01C(arg); i++) {
@@ -4118,8 +4130,7 @@ void fn_1_14F46C(DisplayState *state) {
 
 /* fzgx:begin fn_1_14FC80 noprologue */
 #include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/sel_static_disp.h"
+#include "font.h"
 
 extern void *fn_1_36AD0(s16 arg0, u32 arg1);
 extern void fn_1_14F6F8(u8 arg0, u8 arg1, u8 arg2, u32 arg3);
@@ -4154,8 +4165,7 @@ s32 fn_1_14FD6C(s32 *arg0, s32 *arg1) {
 
 /* fzgx:begin fn_1_14FD7C noprologue */
 #include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/sel_static_disp.h"
+#include "font.h"
 
 extern void fn_1_14FD7C(u32 *data, u32 count);
 

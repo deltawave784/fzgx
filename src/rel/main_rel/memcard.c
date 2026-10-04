@@ -49,6 +49,20 @@ extern s32 fn_8002FC14(s32 chan, void *fileName);
 extern s32 fn_80030338(s32 chan, void *oldName, void *newName);
 extern const f64 lbl_1_rodata_4CB8;
 extern void fn_1_C36EC(void);
+extern f32 lbl_1_rodata_4AE0[114];
+extern u8 lbl_1_data_2B0D4[];
+extern void *lbl_1_data_2AA24[];
+extern void fn_1_49410(void);
+extern void fn_1_49590(f32);
+extern void fn_1_495B0(u32);
+extern void fn_1_494DC(s32);
+extern void fn_1_5233C(void);
+extern void fn_1_49738(void (*)(void));
+extern void fn_1_49748(f32);
+extern void fn_1_4966C(f32, f32);
+extern void fn_1_4A0D8(void *);
+extern void fn_1_4AE0C(char *, ...);
+extern void fn_1_49614(void);
 
 /* fzgx:begin fn_1_AB478 */
 #include "rel/main_rel/memcard.h"
@@ -192,26 +206,26 @@ typedef struct {
     void *unk_24;
     u8 pad_28[0x2];
     u8 unk_2A;
-} MemcardArg;
+} fn_1_AB64C_MemcardArg;
 
 typedef struct {
     u8 pad_0[0x1];
     u8 unk_1;
     u8 pad_2[0x2];
     s32 unk_4;
-} MemcardState;
+} fn_1_AB64C_MemcardState;
 
 /* fzgx-allow: A1 absolute retail data address */
 #define DATA_A9011300 0xA9011300
 /* fzgx-allow: A1 absolute retail data address */
 #define DATA_A9011100 0xA9011100
 
-void fn_1_AB64C(MemcardArg *arg) {
-    MemcardState *state;
+void fn_1_AB64C(fn_1_AB64C_MemcardArg *arg) {
+    fn_1_AB64C_MemcardState *state;
     s32 value;
 
     if ((arg->unk_2A & 1) == 0) {
-        state = (MemcardState *)arg->unk_24;
+        state = (fn_1_AB64C_MemcardState *)arg->unk_24;
         if (((lbl_1_bss_9F8.unk_10 & 1) != 0 ||
              (lbl_1_bss_9F8.unk_12 & 1) != 0) &&
             state->unk_1 == 1) {
@@ -231,9 +245,9 @@ void fn_1_AB64C(MemcardArg *arg) {
         } else {
             value = 0;
         }
-        state = (MemcardState *)arg->unk_24;
+        state = (fn_1_AB64C_MemcardState *)arg->unk_24;
         state->unk_4 = value;
-        state = (MemcardState *)arg->unk_24;
+        state = (fn_1_AB64C_MemcardState *)arg->unk_24;
         if (state->unk_4 == 2) {
             state->unk_1 = 1;
         }
@@ -549,7 +563,7 @@ void fn_1_ABB24(fn_1_ABB24_MemcardArg *arg) {
 }
 /* fzgx:end fn_1_ABB24 */
 
-/* fzgx:begin fn_1_ABB4C noprologue */
+/* fzgx:begin fn_1_ABB4C */
 typedef signed long s32;
 
 typedef unsigned char u8;
@@ -567,8 +581,9 @@ u8 pad_C[0x4];
 u16 unk_10; /* 56 loads, 0 stores */
 u16 unk_12; /* 53 loads, 0 stores */
 u8 pad_14[0x3C];
-} Obj_1_bss_9F8;
-extern Obj_1_bss_9F8 lbl_1_bss_9F8;
+} fn_1_ABB4C_Obj_1_bss_9F8;
+
+
 
 extern void fn_1_A2DC4(u32);
 typedef struct {
@@ -576,41 +591,41 @@ u8 pad_0[0x24];
 void *unk_24;
 u8 pad_28[0x2];
 u8 unk_2A;
-} MemcardArg;
+} fn_1_ABB4C_MemcardArg;
 typedef struct {
 u8 pad_0[0x1];
 u8 unk_1;
 u8 pad_2[0x2];
 s32 unk_4;
-} MemcardState;
+} fn_1_ABB4C_MemcardState;
 /* fzgx-allow: A1 absolute retail data address */
 /* fzgx-allow: A1 absolute retail data address */
-void fn_1_ABB4C(MemcardArg *arg) {
-MemcardState *state;
+void fn_1_ABB4C(fn_1_ABB4C_MemcardArg *arg) {
+fn_1_ABB4C_MemcardState *state;
 s32 value;
 if ((arg->unk_2A & 1) == 0) {
-state = (MemcardState *)arg->unk_24;
-if (((lbl_1_bss_9F8.unk_10 & 1) != 0 ||
-(lbl_1_bss_9F8.unk_12 & 1) != 0) &&
+state = (fn_1_ABB4C_MemcardState *)arg->unk_24;
+if ((((*(fn_1_ABB4C_Obj_1_bss_9F8 *)&lbl_1_bss_9F8).unk_10 & 1) != 0 ||
+((*(fn_1_ABB4C_Obj_1_bss_9F8 *)&lbl_1_bss_9F8).unk_12 & 1) != 0) &&
 state->unk_1 == 1) {
 fn_1_A2DC4(0xA9011300 );
 state->unk_1 = 0;
 /* Volatile prevents the compiler from reusing the first status read. */
-} else if ((((*((volatile u16 *)&lbl_1_bss_9F8.unk_10) >> 1) & 1) != 0 ||
-((lbl_1_bss_9F8.unk_12 >> 1) & 1) != 0) &&
+} else if ((((*((volatile u16 *)&(*(fn_1_ABB4C_Obj_1_bss_9F8 *)&lbl_1_bss_9F8).unk_10) >> 1) & 1) != 0 ||
+(((*(fn_1_ABB4C_Obj_1_bss_9F8 *)&lbl_1_bss_9F8).unk_12 >> 1) & 1) != 0) &&
 state->unk_1 == 0) {
 fn_1_A2DC4(0xA9011300 );
 state->unk_1 = 1;
 }
-if (((lbl_1_bss_9F8.unk_8 >> 8) & 1) != 0) {
+if ((((*(fn_1_ABB4C_Obj_1_bss_9F8 *)&lbl_1_bss_9F8).unk_8 >> 8) & 1) != 0) {
 fn_1_A2DC4(0xA9011100 );
 value = 1;
 } else {
 value = 0;
 }
-state = (MemcardState *)arg->unk_24;
+state = (fn_1_ABB4C_MemcardState *)arg->unk_24;
 state->unk_4 = value;
-state = (MemcardState *)arg->unk_24;
+state = (fn_1_ABB4C_MemcardState *)arg->unk_24;
 if (state->unk_4 == 2) {
 state->unk_1 = 1;
 }
@@ -934,7 +949,6 @@ extern void fn_8002A74C(u16 value);
 extern int CARDCheck(int arg0);
 extern void fn_80008BEC(void *dst, s32 value, s32 size);
 extern void fn_1_AA6D8(s32 arg0, u32 arg1, void *arg2);
-extern void fn_1_A6840(u8 value);
 extern void OSPanic(void *arg0, u32 arg1, ...);
 extern void fn_1_F79C8(void);
 extern void strncpy(void *arg0, void *arg1, int arg2);
@@ -2008,7 +2022,6 @@ extern void fn_8002A74C(u16 value);
 extern int CARDCheck(int arg0);
 extern void fn_80008BEC(void *dst, s32 value, s32 size);
 extern void fn_1_AA6D8(s32 arg0, u32 arg1, void *arg2);
-extern void fn_1_A6840(u8 value);
 extern void OSPanic(void *arg0, u32 arg1, ...);
 extern void fn_1_F79C8(void);
 extern void strncpy(void *arg0, void *arg1, int arg2);
@@ -7558,7 +7571,8 @@ void fn_1_BF520(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u32 *arg4) {
 }
 /* fzgx:end fn_1_BF520 */
 
-/* fzgx:begin fn_1_BF600 */
+/* fzgx:begin fn_1_BF600 noprologue */
+#include "types.h"
 #include "font.h"
 
 struct fn_1_BF600_Copy88 { u32 words[22]; };
@@ -7962,27 +7976,15 @@ __declspec(section ".fzgxpool") static void fzgx_pool_keep25(void) { const u32 *
 
 extern s32 lbl_801A66B4;
 
-extern u8 lbl_1_data_2B0D4[];
-extern void *lbl_1_data_2AA24[];
-
 typedef struct {
     void *unk[6];
 } Fn1BF9C4_Data;
 
-extern void fn_1_49410(void);
-extern void fn_1_49590(f32);
-extern void fn_1_495B0(u32);
-extern void fn_1_494DC(s32);
-extern void fn_1_5233C(void);
-extern void fn_1_49738(void (*)(void));
-extern void fn_1_49748(f32);
 extern void fn_1_495C8(s32);
 extern void fn_1_4955C(f32, f32);
-extern void fn_1_4966C(f32, f32);
 extern void fn_1_496FC(f32, f32);
 extern void fn_1_4954C(f32);
 extern void fn_1_4954C(f32);
-extern void fn_1_4A0D8(void *);
 
 static const f32 C_1C8 = 0.0f;
 static const f32 C_1E0 = 1.0f;
@@ -8036,7 +8038,7 @@ void fn_1_BF9C4(s32 arg0, s32 arg1, s32 arg2, f32 arg3, f32 arg4) {
 }
 /* fzgx:end fn_1_BF9C4 */
 
-/* fzgx:begin fn_1_BFCF8 noprologue */
+/* fzgx:begin fn_1_BFCF8 */
 #include "types.h"
 
 #pragma section code_type ".fzgxpool"
@@ -8237,18 +8239,11 @@ __declspec(section ".fzgxpool") static void fzgx_pool_prime26(void) {
 #pragma section code_type ".text"
 
 extern s32 lbl_801A66B4;
-extern char lbl_1_data_3CF40[15];
 
-extern void fn_1_49410(void);
-extern void fn_1_49590(f32);
-extern void fn_1_495B0(s32);
-extern void fn_1_494DC(s32);
 extern void fn_1_495C8(s32);
 extern void fn_1_4955C(f32, f32);
-extern void fn_1_4966C(f32, f32);
 extern void fn_1_496FC(f32, f32);
 extern void fn_1_4954C(f32);
-extern void fn_1_4AE0C(char *, ...);
 
 void fn_1_BFCF8(void *arg0, void *arg1, void *arg2, s32 arg3, s32 arg4, f32 arg5, f32 arg6) {
     fn_1_49410();
@@ -8267,7 +8262,7 @@ void fn_1_BFCF8(void *arg0, void *arg1, void *arg2, s32 arg3, s32 arg4, f32 arg5
     fn_1_4966C(2.0f, 0.0f);
     fn_1_496FC((f32)arg3, (f32)arg4);
     fn_1_4954C(arg6);
-    fn_1_4AE0C(lbl_1_data_3CF40, arg0, arg1, arg2);
+    fn_1_4AE0C((*(char (*)[15])&lbl_1_data_3CF40), arg0, arg1, arg2);
 }
 /* fzgx:end fn_1_BFCF8 */
 
@@ -8742,18 +8737,10 @@ __declspec(section ".fzgxpool") static void fzgx_pool_keep30(void) { const u32 *
 
 extern s32 lbl_801A66B4;
 
-extern void fn_1_49410(void);
-extern void fn_1_49590(f32);
-extern void fn_1_495B0(s32);
-extern void fn_1_49614(void);
-extern void fn_1_5233C(void);
-extern void fn_1_49738(void *);
-extern void fn_1_49748(f32);
 extern void fn_1_49514(u32 *);
 extern void fn_1_495C8(s32);
 extern void fn_1_496FC(f32, f32);
 extern void fn_1_4955C(f32, f32);
-extern void fn_1_4966C(f32, f32);
 extern void fn_1_4954C(f32);
 extern void fn_1_14FEAC(u32, u32, u32, void *, s16);
 extern void fn_1_4CF3C(void *, ...);

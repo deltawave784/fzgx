@@ -38,6 +38,12 @@ extern void fn_80008BEC(void *, int, u32);
 extern void fn_1_446C(void);
 extern void fn_1_76BF8(void);
 extern void fn_1_72648(void);
+extern void fn_1_9A508(void);
+extern f32 lbl_1_rodata_64A0[33];
+extern void fn_1_D79E4(void *obj);
+extern u8 fn_1_5300(void);
+extern void fn_1_77B80(u32);
+extern void fn_1_D9224(void *, u32);
 
 /* fzgx:begin fn_1_D5C70 */
 extern int fn_1_58C4(void);
@@ -531,26 +537,26 @@ typedef struct {
     u8 pad28[0x4];
     s16 count;
     u8 pad2e[0x2];
-} LigEntry;
+} fn_1_D7B7C_LigEntry;
 
 typedef struct {
     u8 pad0[0x4];
     void (*callback)(void);
-    LigEntry *entry;
+    fn_1_D7B7C_LigEntry *entry;
 } LigEvent;
 
 extern void lbl_8006DCA4(void);
 
 
-extern s32 fn_1_54E34(LigEntry *entry, f32 value);
-extern void *fn_1_5448C(LigEntry *entry);
+extern s32 fn_1_54E34(fn_1_D7B7C_LigEntry *entry, f32 value);
+extern void *fn_1_5448C(fn_1_D7B7C_LigEntry *entry);
 extern LigEvent *fn_1_548AC(s32 size);
 extern void fn_1_D7C44(void);
 extern void fn_1_5489C(void *data, void *event);
 
-void fn_1_D7B7C(LigEntry *base) {
+void fn_1_D7B7C(fn_1_D7B7C_LigEntry *base) {
     void *data;
-    LigEntry *entry;
+    fn_1_D7B7C_LigEntry *entry;
     s32 i;
     LigEvent *event;
 
@@ -705,6 +711,8 @@ void fn_1_D8D08(LigContainer *container) {
 /* fzgx:begin fn_1_D8D58 noprologue */
 #include "types.h"
 
+extern struct fn_1_D66F8_lbl_801A66A0 lbl_801A66A0;
+
 #pragma section code_type ".fzgxpool"
 static const u32 fzgx_pool_table1[4] = {0x00000000, 0x0280012C, 0x00000000, 0x00000001};  /* fzgx-allow: A1 retail pool bytes */
 __declspec(section ".fzgxpool") static void fzgx_pool_keep1(void) { const u32 *volatile cp; cp = fzgx_pool_table1; }  /* fzgx-allow: S2 pool primer sink */
@@ -795,21 +803,21 @@ typedef struct {
     f32 y;
     f32 z;
     u8 pad_038[0x74];
-} LigEntry;
+} fn_1_D8D58_LigEntry;
 
 typedef struct {
     u8 pad_000[0x6d4];
     s32 count;
-    LigEntry entries[1];
+    fn_1_D8D58_LigEntry entries[1];
 } LigObject;
 
-extern u32 lbl_801A66A0;
+
 extern f32 lbl_8006D188(s32 value);
-extern void fn_1_1030D4(LigEntry *entry, void *arg);
+extern void fn_1_1030D4(fn_1_D8D58_LigEntry *entry, void *arg);
 
 void fn_1_D8D58(LigObject *obj, void *arg) {
     s32 count = obj->count;
-    LigEntry *entry = obj->entries;
+    fn_1_D8D58_LigEntry *entry = obj->entries;
 
     while (count > 0) {
         u32 flags = *(u32 *)((u8 *)entry + 8);
@@ -828,11 +836,11 @@ void fn_1_D8D58(LigObject *obj, void *arg) {
             entry->z = y;
         } else {
             entry->x = __fabs(lbl_8006D188(
-                (s32)((f32)lbl_801A66A0 * 182.04444885253906f)));
+                (s32)((f32)(*(u32 *)&lbl_801A66A0) * 182.04444885253906f)));
             entry->y = __fabs(lbl_8006D188(
-                (s32)((f32)lbl_801A66A0 * 182.04444885253906f * 0.5)));
+                (s32)((f32)(*(u32 *)&lbl_801A66A0) * 182.04444885253906f * 0.5)));
             entry->z = __fabs(lbl_8006D188(
-                (s32)((f32)lbl_801A66A0 * 182.04444885253906f * 2.0)));
+                (s32)((f32)(*(u32 *)&lbl_801A66A0) * 182.04444885253906f * 2.0)));
         }
 
         fn_1_1030D4(entry, arg);

@@ -396,8 +396,6 @@ int fn_1_17C6C(int current, int next, int limit) {
 /* fzgx:end fn_1_17C6C */
 
 /* fzgx:begin fn_1_17D5C */
-
-
 void fn_1_17D5C(Node *node, u32 *acc) {
     Node *root;
     s32 i1;
@@ -654,6 +652,8 @@ void fn_1_181F0(int a, int b, int c) {
 
 /* fzgx:begin fn_1_18214 noprologue */
 #include "types.h"
+#include "dolphin/hw_regs.h"
+#include "psvec.h"
 
 typedef struct {
     u32 f00, f04, f08, f0c, f10, f14, f18, f1c, f20, f24;
@@ -905,6 +905,8 @@ void fn_1_18B40(void * arg0, void * arg1, u32 arg2, struct fn_1_18B40_Obj *arg3,
 
 /* fzgx:begin fn_1_18F28 noprologue */
 #include "types.h"
+#include "dolphin/hw_regs.h"
+#include "psvec.h"
 
 typedef struct {
     unsigned char pad0[0x0c];
@@ -959,8 +961,8 @@ void fn_1_18FFC(int a, int b, int c, int d, int e, int f, int g) {
 
 /* fzgx:begin fn_1_1902C noprologue */
 #include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/stcoli.h"
+#include "dolphin/hw_regs.h"
+#include "psvec.h"
 
 extern void fn_1_18784(int, int, int, int);
 extern void lbl_8006DAEC(void);
@@ -1070,8 +1072,6 @@ void fn_1_1902C(StcoliNode *root, StcoliVec *vec, void *arg3, f32 value) {
 /* fzgx:end fn_1_1902C */
 
 /* fzgx:begin fn_1_20258 */
-
-
 typedef struct Fn_1_20258 {
     unsigned char pad00[0x30];
     f32 field30;
@@ -1174,7 +1174,6 @@ int fn_1_20994(void *arg, f32 *out) {
 /* fzgx:end fn_1_20994 */
 
 /* fzgx:begin fn_1_21644 */
-
 void *fn_1_21644(void *arg0, f32 *arg1, void *arg2) {
     int local;
 
@@ -2513,7 +2512,6 @@ f32 fn_1_2B478(void *arg0) {
 /* fzgx:end fn_1_2B478 */
 
 /* fzgx:begin fn_1_2C688 */
-
 u32 fn_1_2C688(u32 arg0, u32 arg1, u32 arg2) {
     u32 v1;
     s32 v0;

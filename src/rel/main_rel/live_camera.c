@@ -30,6 +30,17 @@ extern void lbl_8006DC6C(void *);
 extern void lbl_8006E1B0(void *, void *);
 extern s32 lbl_8006D24C(f32, f32);
 extern int sprintf(char *, const char *, ...);
+extern void * fn_1_86254(int);
+extern s8 fn_1_86624(void);
+extern void fn_1_8A0C(u32);
+extern u32 fn_1_56B8(void);
+extern u32 fn_1_864E8(int);
+extern void camera_set_selected_value(u8);
+extern void camera_set_result(s16);
+extern u32 lbl_1_bss_F5C;
+extern const f64 lbl_1_rodata_580;
+extern const f64 lbl_1_rodata_588;
+extern void fn_1_8840(void);
 
 /* fzgx:begin fn_1_DA34 */
 // Reports the camera source location and message used by this routine.
@@ -791,20 +802,15 @@ void fn_1_FA84(void) {
 }
 /* fzgx:end fn_1_FA84 */
 
-/* fzgx:begin fn_1_FB50 noprologue */
+/* fzgx:begin fn_1_FB50 */
 #include "types.h"
 #include "psvec.h"
-
-extern u32 lbl_1_bss_F5C;
-extern const f64 lbl_1_rodata_580;
-extern const f64 lbl_1_rodata_588;
-extern void fn_1_8840(void);
 
 typedef struct LiveCameraVec {
     f32 values[3];
 } LiveCameraVec;
 
-typedef struct LiveCamera {
+typedef struct fn_1_FB50_LiveCamera {
     u8 pad_00[0x1c];
     LiveCameraVec position;
     u8 pad_28[0x84];
@@ -813,9 +819,9 @@ typedef struct LiveCamera {
     LiveCameraVec saved;
     LiveCameraVec offset;
     LiveCameraVec velocity;
-} LiveCamera;
+} fn_1_FB50_LiveCamera;
 
-void fn_1_FB50(LiveCamera *camera) {
+void fn_1_FB50(fn_1_FB50_LiveCamera *camera) {
     f64 product;
     f64 damping;
     u32 i;
@@ -1024,13 +1030,13 @@ typedef struct {
     f32 unk_70;
     u8 pad_74[8];
     f32 unk_7C;
-} LiveCamera;
+} fn_1_11ABC_LiveCamera;
 
 extern void fn_1_862D4(s16, Vec3 *);
 extern void fn_8006E2B0(void *, Vec3 *);
 
 #pragma opt_propagation off
-void fn_1_11ABC(LiveCamera *camera) {
+void fn_1_11ABC(fn_1_11ABC_LiveCamera *camera) {
     Vec3 first;
     Vec3 second;
     u8 mode = camera->unk_0;

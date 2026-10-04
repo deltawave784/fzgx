@@ -197,12 +197,10 @@ extern void OSSetArenaLo(u32 arena_lo);
 extern u16 lbl_1_bss_990[28];
 extern u8 lbl_1_bss_D78;
 extern u8 lbl_1_bss_DA6;
-extern u32 lbl_1_bss_DB0[2];
-extern u32 lbl_1_bss_DA8;
-extern void fn_1_43A4(void);
+
 extern u32 lbl_1_data_2C70;
 extern void fn_80008E84(u32 value);
-extern u32 lbl_1_bss_DAC;
+
 extern struct fn_1_634_lbl_1_bss_54 lbl_1_bss_54;
 extern u32 fn_8006FFC4(u32);
 extern u32 fn_1_48780(void);
@@ -217,7 +215,7 @@ extern u32 camera_set_state_flag(u32);
 extern u32 fn_1_D31E0(u32);
 extern struct fn_1_12B4_lbl_1_bss_962 lbl_1_bss_962;
 extern u32 lbl_1_data_2A20;
-extern u32 lbl_1_data_7C0;
+
 extern u32 fn_1_15659C(u32);
 extern u32 fn_80008BEC(void *, u32, u32);
 extern u8 lbl_1_bss_978[];
@@ -233,11 +231,10 @@ extern u32 fn_1_156754(u32);
 extern u32 fn_1_A5864(void);
 extern u32 fn_1_F7578(void);
 extern struct fn_1_3C98_lbl_1_bss_DA5 lbl_1_bss_DA5;
-extern u32 fn_80008EC8(u32, u32, u32);
 extern u32 fn_800793D4(u32, u32, u32);
 extern struct fn_1_48B0_lbl_801A6CF8 lbl_801A6CF8;
 extern u32 lbl_801A6CFC;
-extern struct fn_1_44B4_lbl_1_bss_DB8 lbl_1_bss_DB8;
+
 extern struct fn_1_4438_lbl_1_bss_DC4 lbl_1_bss_DC4;
 extern u8 lbl_1_bss_8E6B0[308];
 extern void fn_1_14FCE4(void *data, s32 value);
@@ -419,7 +416,7 @@ void fn_1_E78(void) {
 }
 /* fzgx:end fn_1_E78 */
 
-/* fzgx:begin fn_1_E9C noprologue */
+/* fzgx:begin fn_1_E9C */
 #include "types.h"
 
 struct fn_1_E9C_lbl_1_bss_960 {
@@ -432,14 +429,14 @@ struct fn_1_E9C_lbl_1_bss_960 {
     u32 unk_C;
 };
 
-extern struct fn_1_E9C_lbl_1_bss_960 lbl_1_bss_960;
+
 
 #pragma peephole off
 #pragma opt_propagation off
 #pragma opt_common_subs off
 void fn_1_E9C(void) {
     s8 value = -1;
-    u8 *state = (u8 *)&lbl_1_bss_960;
+    u8 *state = (u8 *)&(*(struct fn_1_E9C_lbl_1_bss_960 *)&lbl_1_bss_960);
 
     *(u16 *)(state + 0) = value;
     *(u16 *)(state + 2) = value;
@@ -1129,8 +1126,6 @@ struct fn_1_407C_lbl_1_bss_DA8 {
     u32 unk_0;
 };
 
-extern void fn_1_43A4(void);
-
 void fn_1_407C(s32 arg_sp0) {
     u32 var_r31;
     u32 temp_r30;
@@ -1245,7 +1240,7 @@ void fn_1_41A8(void) {
 }
 /* fzgx:end fn_1_41A8 */
 
-/* fzgx:begin fn_1_426C noprologue */
+/* fzgx:begin fn_1_426C */
 #include "types.h"
 
 struct Fn426CEntry {
@@ -1261,26 +1256,24 @@ struct Fn426CMgr {
     struct Fn426CEntry *entries;
 };
 
-extern struct Fn426CMgr *lbl_1_bss_DAC;
-extern struct Fn426CMgr *lbl_1_bss_DA8;
 extern void fn_1_4374(struct Fn426CMgr *, struct Fn426CEntry *);
 
 void fn_1_426C(u32 idx) {
     struct { struct Fn426CMgr *value; } m;
     struct Fn426CEntry *e;
     void (*cb)(u32, u32);
-    m.value = lbl_1_bss_DAC;
+    m.value = (*(struct Fn426CMgr * *)&lbl_1_bss_DAC);
     e = &m.value->entries[idx];
     if (idx < 0x20 || e->active == 0) {
         return;
     }
     cb = e->callback;
     if (cb != 0) {
-        struct Fn426CMgr *saved = lbl_1_bss_DA8;
-        lbl_1_bss_DA8 = m.value;
+        struct Fn426CMgr *saved = (*(struct Fn426CMgr * *)&lbl_1_bss_DA8);
+        (*(struct Fn426CMgr * *)&lbl_1_bss_DA8) = m.value;
         cb(e->arg, 1);
-        lbl_1_bss_DAC = m.value;
-        lbl_1_bss_DA8 = saved;
+        (*(struct Fn426CMgr * *)&lbl_1_bss_DAC) = m.value;
+        (*(struct Fn426CMgr * *)&lbl_1_bss_DA8) = saved;
     }
     fn_1_4374(m.value, e);
 }
@@ -1310,8 +1303,6 @@ struct fn_1_4338_root {
     struct fn_1_4338_target *unk_0;
 };
 
-
-
 // Return the value stored in the pointed-to object's field at offset 0x14.
 u32 fn_1_4338(void) {
     return ((struct fn_1_4338_root *)&lbl_1_bss_DAC)->unk_0->unk_14;
@@ -1319,8 +1310,6 @@ u32 fn_1_4338(void) {
 /* fzgx:end fn_1_4338 */
 
 /* fzgx:begin fn_1_434C */
-extern u32 lbl_1_bss_DAC;
-
 // fn_1_434C returns the current main-rel state value.
 u32 fn_1_434C(void) {
     return lbl_1_bss_DAC;
@@ -1386,8 +1375,6 @@ typedef struct ListManager {
     ListNode *current;
 } ListManager;
 
-
-
 #pragma opt_propagation off
 void fn_1_43A4(void) {
     ListNode *next;
@@ -1416,8 +1403,6 @@ void fn_1_43A4(void) {
 /* fzgx:end fn_1_43A4 */
 
 /* fzgx:begin fn_1_43E8 */
-extern u32 lbl_1_bss_DB0[2];
-
 // Store the incoming value in the shared startup state.
 void fn_1_43E8(u32 arg0) {
     lbl_1_bss_DB0[0] = arg0;
@@ -1425,8 +1410,6 @@ void fn_1_43E8(u32 arg0) {
 /* fzgx:end fn_1_43E8 */
 
 /* fzgx:begin fn_1_43F4 */
-extern u32 lbl_1_bss_DB0[2];
-
 // Clear the first startup word used by the main REL state.
 void fn_1_43F4(void) {
     lbl_1_bss_DB0[0] = 0;
@@ -1515,6 +1498,8 @@ void fn_1_44B4(void) {
 /* fzgx:begin fn_1_451C noprologue */
 #include "types.h"
 
+extern struct fn_1_44B4_lbl_1_bss_DB8 lbl_1_bss_DB8;
+
 struct fn_1_451C_lbl_1_bss_DB8 {
     u8 pad_0[0x8];
     u32 unk_8;
@@ -1522,7 +1507,7 @@ struct fn_1_451C_lbl_1_bss_DB8 {
     u32 unk_10;
 };
 
-extern struct fn_1_451C_lbl_1_bss_DB8 lbl_1_bss_DB8;
+
 extern u32 OSGetArenaHi(void);
 extern u32 OSGetArenaLo(void);
 extern u32 fn_1_481E8(u32);
@@ -1547,7 +1532,7 @@ u32 fn_1_451C(void) {
     u32 v1;
     u32 v0;
     struct fn_1_451C_lbl_1_bss_DB8 *p_lbl_1_bss_DB8;
-    p_lbl_1_bss_DB8 = (struct fn_1_451C_lbl_1_bss_DB8 *)&lbl_1_bss_DB8;
+    p_lbl_1_bss_DB8 = (struct fn_1_451C_lbl_1_bss_DB8 *)&(*(struct fn_1_451C_lbl_1_bss_DB8 *)&lbl_1_bss_DB8);
     t0 = OSGetArenaHi();
     OSGetArenaLo();
     fn_1_481E8(188);

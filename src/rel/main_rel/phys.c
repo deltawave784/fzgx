@@ -45,8 +45,11 @@ extern void fn_1_12EF80(s16 arg, s16 *out_group, s16 *out_entry);
 extern void fn_1_9C724(void);
 extern void fn_1_DD890(void *);
 extern void fn_1_9CC40(void);
+extern u32 lbl_801A6410;
+extern u32 fn_1_4630(u32, u32, u8 *, u32);
+extern u8 lbl_1_bss_7C8CE;
 
-/* fzgx:begin fn_1_E1C10 noprologue */
+/* fzgx:begin fn_1_E1C10 */
 #include "types.h"
 #include "rel/main_rel/globals.h"
 
@@ -78,11 +81,6 @@ typedef struct {
     u8 pad_2E[0x2];
 } State7AE88;
 
-extern State7AE88 lbl_1_bss_7AE88;
-extern u32 fn_1_4630(u32, u32, u8 *, u32);
-extern u32 lbl_801A6410;
-extern u8 lbl_1_data_3DDB4[];
-
 #pragma opt_common_subs off
 void fn_1_E1C10(void) {
     s16 fzgx_value_;
@@ -94,13 +92,13 @@ void fn_1_E1C10(void) {
     State7AE88 *base;
     s16 *fzgx_value;
 
-    base = &lbl_1_bss_7AE88;
+    base = &(*(State7AE88 *)&lbl_1_bss_7AE88);
 
     count = base->unk_4;
     ptr = (Elem1A8 *)base->unk_0;
     if ((count != 0) && (ptr == 0)) {
         ptr = (Elem1A8 *)fn_1_4630(lbl_801A6410, (u32)(count * 0x1A8),
-                                   lbl_1_data_3DDB4, 0x7b7);
+                                   (*(u8 (*)[])&lbl_1_data_3DDB4), 0x7b7);
         cursor.value = ptr;
         i.value = 0;
         kind = 0;
@@ -117,7 +115,7 @@ void fn_1_E1C10(void) {
     ptr = (Elem1A8 *)base->unk_8;
     if ((count != 0) && (ptr == 0)) {
         ptr = (Elem1A8 *)fn_1_4630(lbl_801A6410, (u32)(count * 0x1A8),
-                                   lbl_1_data_3DDB4, 0x7b7);
+                                   (*(u8 (*)[])&lbl_1_data_3DDB4), 0x7b7);
         cursor.value = ptr;
         i.value = 0;
         kind = 1;
@@ -135,7 +133,7 @@ void fn_1_E1C10(void) {
     ptr = (Elem1A8 *)base->unk_10;
     if ((count != 0) && (ptr == 0)) {
         ptr = (Elem1A8 *)fn_1_4630(lbl_801A6410, (u32)(count * 0x1A8),
-                                   lbl_1_data_3DDB4, 0x7b7);
+                                   (*(u8 (*)[])&lbl_1_data_3DDB4), 0x7b7);
         cursor.value = ptr;
         i.value = 0;
         kind = 2;
@@ -152,7 +150,7 @@ void fn_1_E1C10(void) {
     ptr = (Elem1A8 *)base->unk_18;
     if ((count != 0) && (ptr == 0)) {
         ptr = (Elem1A8 *)fn_1_4630(lbl_801A6410, (u32)(count * 0x1A8),
-                                   lbl_1_data_3DDB4, 0x7b7);
+                                   (*(u8 (*)[])&lbl_1_data_3DDB4), 0x7b7);
         cursor.value = ptr;
         i.value = 0;
         kind = 3;
@@ -170,7 +168,7 @@ void fn_1_E1C10(void) {
     ptr = (Elem1A8 *)base->unk_20;
     if ((count != 0) && (ptr == 0)) {
         ptr = (Elem1A8 *)fn_1_4630(lbl_801A6410, (u32)(count * 0x1A8),
-                                   lbl_1_data_3DDB4, 0x7b7);
+                                   (*(u8 (*)[])&lbl_1_data_3DDB4), 0x7b7);
         cursor.value = ptr;
         i.value = 0;
         kind = 4;
@@ -187,7 +185,7 @@ void fn_1_E1C10(void) {
     ptr = (Elem1A8 *)base->unk_28;
     if ((count != 0) && (ptr == 0)) {
         ptr = (Elem1A8 *)fn_1_4630(lbl_801A6410, (u32)(count * 0x1A8),
-                                   lbl_1_data_3DDB4, 0x7b7);
+                                   (*(u8 (*)[])&lbl_1_data_3DDB4), 0x7b7);
         cursor.value = ptr;
         i.value = 0;
         kind = 5;
@@ -1572,7 +1570,6 @@ void fn_1_EB080(int mode) {
 /* fzgx:end fn_1_EB080 */
 
 /* fzgx:begin fn_1_EB0B0 */
-extern u8 lbl_1_bss_7C8CE;
 u8 fn_1_EB0B0(void) { if (lbl_1_bss_7B188 != 0) { return lbl_1_bss_7C8CE; } return 0; }
 /* fzgx:end fn_1_EB0B0 */
 

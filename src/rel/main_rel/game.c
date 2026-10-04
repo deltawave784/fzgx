@@ -1291,8 +1291,6 @@ void fn_1_3F4FC(void) {
 
 /* fzgx:begin fn_1_3F75C noprologue */
 #include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/game.h"
 
 extern void fn_1_451E4(void);
 extern void fn_1_D3214(void);

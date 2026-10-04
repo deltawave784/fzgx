@@ -4,7 +4,7 @@
 
 extern u32 OSGetTick(void);
 
-/* fzgx:begin fn_1_F2780 noprologue */
+/* fzgx:begin fn_1_F2780 */
 #include "types.h"
 
 typedef struct State {
@@ -37,7 +37,8 @@ typedef struct Object {
 } Object;
 
 extern u32 lbl_801A6410;
-extern char lbl_1_data_3E8C8[9];
+
+
 extern Object *fn_1_4630(u32 arg0, u32 arg1, char *arg2, u32 arg3);
 
 typedef struct lbl_1_bss_7F01C_t {
@@ -73,7 +74,7 @@ void fn_1_F2780(void) {
 
     
     state = &fzgx_obj_lbl_1_bss_7EFD8;
-    object = fn_1_4630(lbl_801A6410, (1 << 16) + 0x14c, lbl_1_data_3E8C8, 0x75);
+    object = fn_1_4630(lbl_801A6410, (1 << 16) + 0x14c, (*(char (*)[9])&lbl_1_data_3E8C8), 0x75);
     state->object = object;
     *(u16 *)((u8 *)&fzgx_obj_lbl_1_bss_7F01C.fzgx_byte_4C) = 0;
     object->halfa0 = 0;
@@ -151,8 +152,6 @@ u8 fn_1_F2D30(u8 *value, u8 **cursor, u32 index) {
 /* fzgx:end fn_1_F2D30 */
 
 /* fzgx:begin fn_1_F2DDC */
-extern u32 OSGetTick(void);
-
 extern u32 lbl_801A6410;
 extern void fn_1_46B4(u32, u32, u8 *, s32);
 

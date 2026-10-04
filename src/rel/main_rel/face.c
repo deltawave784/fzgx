@@ -27,6 +27,9 @@ extern u32 lbl_801A6CFC;
 extern void* fn_1_48E8(u32, u32);
 extern void OSLink(void*, void*);
 extern void OSReport(char*, ...);
+extern u8 lbl_1_bss_7ACF8[8];
+extern void fn_80083DB0(void *, void *);
+extern void strcat(void *, void *);
 
 /* fzgx:begin fn_1_D1780 */
 void fn_1_D1780(void) {

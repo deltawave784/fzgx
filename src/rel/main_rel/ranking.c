@@ -44,6 +44,8 @@ extern void fn_1_4811C(s16 value);
 extern void fn_1_48004(s16 value, u32 arg);
 extern u32 lbl_1_rodata_DAF8[16];
 extern void fn_1_9A508(void);
+extern int lbl_801A66B4;
+extern s8 fn_1_46DC4(void *object);
 
 /* fzgx:begin fn_1_1554D0 */
 // Rebuild the ranking object when the previous one has been consumed.
@@ -350,19 +352,19 @@ typedef struct {
     u8 pad_81[3];
     f32 unk_84;
     u8 pad_88[0x18];
-} RankingEntry;
+} fn_1_15659C_RankingEntry;
 
 extern f32 lbl_1_rodata_D8C8[18];
 extern void fn_80008BEC(void *dst, int value, int size);
 
 // Clears both ranking entries to their default sentinel values.
 void fn_1_15659C(void) {
-    RankingEntry *obj;
+    fn_1_15659C_RankingEntry *obj;
     f32 value;
     int i;
 
     fn_80008BEC(&lbl_1_bss_8F428, 0, 0x140);
-    obj = (RankingEntry *)&lbl_1_bss_8F428;
+    obj = (fn_1_15659C_RankingEntry *)&lbl_1_bss_8F428;
     value = lbl_1_rodata_D8C8[0];
     for (i = 0; i < 2; i++) {
         obj->unk_4 = -1;
@@ -720,7 +722,7 @@ typedef struct {
     f32 value;
     u8 _pad3c[0x10];
     u8 status;
-} RankingState;
+} fn_1_157200_RankingState;
 
 typedef struct {
     u8 kind;
@@ -740,7 +742,7 @@ typedef struct {
 
 static inline f32 fn_1_157200_array_read(f32 *array, s32 index) { return array[index]; }
 #pragma opt_dead_assignments off
-void fn_1_157200(RankingState *state) {
+void fn_1_157200(fn_1_157200_RankingState *state) {
     if (state->status & 0x10) {
         s32 success = 0;
         RankingRequest request;
@@ -1078,10 +1080,10 @@ typedef struct {
     void *data;
     u8 _pad30[0x1c];
     u8 enabled;
-} RankingState;
+} fn_1_1576B4_RankingState;
 
 #pragma opt_propagation off
-void fn_1_1576B4(RankingState *state) {
+void fn_1_1576B4(fn_1_1576B4_RankingState *state) {
     RankingConfig config;
     u32 field04;
     void *data;
@@ -1413,7 +1415,7 @@ int fn_1_159588(int arg) {
 }
 /* fzgx:end fn_1_159588 */
 
-/* fzgx:begin fn_1_1596DC noprologue */
+/* fzgx:begin fn_1_1596DC */
 #include "types.h"
 
 typedef struct {
@@ -1425,23 +1427,17 @@ typedef struct {
     u8 unk_2c;
     u8 pad_2d[0xb];
     s32 unk_38;
-} RankingEntry;
-
-extern RankingEntry lbl_1_data_4C810[4];
-extern u8 lbl_1_data_FCD4[];
-extern int lbl_801A66B4;
-extern int lbl_1_bss_8F588[];
+} fn_1_1596DC_RankingEntry;
 
 extern void fn_1_4811C(s16 value);
-extern s8 fn_1_46DC4(void *object);
 
 void fn_1_1596DC(int index) {
     struct { int value; } offset;
-    RankingEntry *entry;
+    fn_1_1596DC_RankingEntry *entry;
     int i;
     int count;
 
-    entry = &lbl_1_data_4C810[index];
+    entry = &(*(fn_1_1596DC_RankingEntry (*)[4])&lbl_1_data_4C810)[index];
     i = 0;
     while (entry->unk_2a + 1 != entry->unk_28 &&
            (entry->unk_2a != 0xf || entry->unk_28 != 0)) {
@@ -1460,10 +1456,10 @@ void fn_1_1596DC(int index) {
             if (*(s16 *)((u8 *)entry->unk_4 + offset.value) == -1) {
                 break;
             }
-            if (fn_1_46DC4(*(void **)(lbl_1_data_FCD4 +
+            if (fn_1_46DC4(*(void **)((*(u8 (*)[])&lbl_1_data_FCD4) +
                                       *(s16 *)((u8 *)entry->unk_4 + offset.value) * 0x28 +
                                       lbl_801A66B4 * 4 + 4)) != 0) {
-                lbl_1_bss_8F588[*(s16 *)((u8 *)entry->unk_4 + offset.value)] = count;
+                (*(int (*)[])&lbl_1_bss_8F588)[*(s16 *)((u8 *)entry->unk_4 + offset.value)] = count;
             }
             offset.value += 2;
         }
@@ -1480,9 +1476,9 @@ typedef struct {
     s16 unk_8[16];
     s16 unk_28;
     s16 unk_2a;
-} RankingEntry;
+} fn_1_159804_RankingEntry;
 
-s16 fn_1_159804(s16 value, RankingEntry *entry) {
+s16 fn_1_159804(s16 value, fn_1_159804_RankingEntry *entry) {
     s16 head;
     s16 next;
     int i;

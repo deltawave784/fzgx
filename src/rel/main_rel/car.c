@@ -491,6 +491,8 @@ extern s32 fn_1_3F8C(u32 arg3, u32 arg0, u32 arg1, u32 index);
 extern void fn_1_43F4(void);
 extern s32 fn_1_45D0();
 extern void fn_1_C487C();
+extern u8 lbl_1_bss_6E160[1740];
+extern u8 lbl_1_bss_6DA80[1740];
 
 /* fzgx:begin fn_1_7F3AC */
 typedef struct CarFn_1_7F3AC {
@@ -1623,6 +1625,8 @@ u32 fn_1_864E8(int index) {
 
 /* fzgx:begin fn_1_864FC noprologue */
 #include "types.h"
+#include "dolphin/hw_regs.h"
+#include "psvec.h"
 
 typedef struct {
     u8 pad_0[0x58c];
@@ -1833,7 +1837,7 @@ void *fn_1_868C0(s8 index) {
 }
 /* fzgx:end fn_1_868C0 */
 
-/* fzgx:begin fn_1_869B0 noprologue */
+/* fzgx:begin fn_1_869B0 */
 #include "types.h"
 
 typedef struct {
@@ -1849,7 +1853,7 @@ typedef struct {
     u8 pad_4a0[0x180];
 } Entry_1_869B0;
 
-extern Entry_1_869B0 *lbl_1_bss_6D838;
+
 
 typedef struct {
     u32 x;
@@ -1858,12 +1862,12 @@ typedef struct {
 } Vec3_1_869B0;
 
 void fn_1_869B0(int index, u32 *out) {
-    Data_1_869B0 *data = (Data_1_869B0 *)lbl_1_bss_6D838[index].data;
+    Data_1_869B0 *data = (Data_1_869B0 *)(*(Entry_1_869B0 * *)&lbl_1_bss_6D838)[index].data;
     *(Vec3_1_869B0 *)out = *(Vec3_1_869B0 *)&data->value_50;
 }
 /* fzgx:end fn_1_869B0 */
 
-/* fzgx:begin fn_1_869E0 noprologue */
+/* fzgx:begin fn_1_869E0 */
 #include "types.h"
 
 typedef struct {
@@ -1871,11 +1875,11 @@ typedef struct {
     u32 value_5c;
     u32 value_60;
     u32 value_64;
-} CarData;
+} fn_1_869E0_CarData;
 
 typedef struct {
     u8 pad_0[0x49c];
-    CarData *unk_49c;
+    fn_1_869E0_CarData *unk_49c;
     u8 pad_4a0[0x180];
 } Car;
 
@@ -1885,10 +1889,10 @@ typedef struct {
     u32 value_8;
 } Copy12;
 
-extern Car *lbl_1_bss_6D838;
+
 
 void fn_1_869E0(int index, u32 *out) {
-    CarData *data = lbl_1_bss_6D838[index].unk_49c;
+    fn_1_869E0_CarData *data = (*(Car * *)&lbl_1_bss_6D838)[index].unk_49c;
     *(Copy12 *)out = *(Copy12 *)&data->value_5c;
 }
 /* fzgx:end fn_1_869E0 */
@@ -4486,21 +4490,20 @@ u32 fn_1_8CA5C(void) {
 }
 /* fzgx:end fn_1_8CA5C */
 
-/* fzgx:begin fn_1_8CA70 noprologue */
+/* fzgx:begin fn_1_8CA70 */
 typedef unsigned char u8;
 typedef unsigned long u32;
 typedef signed long s32;
 typedef float f32;
 typedef double f64;
-extern f32 lbl_1_rodata_3508[4];
-extern u8 lbl_1_bss_6E160[1740];
+
 f32 fn_1_8CA70(u32 a, s32 b) {
 f32 value;
 u32 half;
 u32 total;
 u32 span;
 int swapped = 0;
-u8 *constants = (u8 *)lbl_1_rodata_3508;
+u8 *constants = (u8 *)(*(f32 (*)[4])&lbl_1_rodata_3508);
 if (a == b) {
 return *((f32 *)(constants + 0x10));
 }
@@ -4526,21 +4529,20 @@ return (f32)(value * *((f64 *)(constants + 0x7e8)));
 }
 /* fzgx:end fn_1_8CA70 */
 
-/* fzgx:begin fn_1_8CAF4 noprologue */
+/* fzgx:begin fn_1_8CAF4 */
 typedef unsigned char u8;
 typedef unsigned long u32;
 typedef signed long s32;
 typedef float f32;
 typedef double f64;
-extern f32 lbl_1_rodata_3508[4];
-extern u8 lbl_1_bss_6DA80[1740];
+
 f32 fn_1_8CAF4(u32 a, s32 b) {
 f32 value;
 u32 half;
 u32 total;
 u32 span;
 int swapped = 0;
-u8 *constants = (u8 *)lbl_1_rodata_3508;
+u8 *constants = (u8 *)(*(f32 (*)[4])&lbl_1_rodata_3508);
 if (a == b) {
 return *((f32 *)(constants + 0x10));
 }
@@ -4913,8 +4915,8 @@ void fn_1_8D168(Fn1_8D168State *state) {
 
 /* fzgx:begin fn_1_8D1C8 noprologue */
 #include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/car.h"
+#include "dolphin/hw_regs.h"
+#include "psvec.h"
 
 extern void fn_1_8D210(u32 arg0, u32 arg1, u32 arg2, u32 arg3);
 
@@ -4925,8 +4927,8 @@ void fn_1_8D1C8(u32 arg0, u32 arg1, u32 arg2) {
 
 /* fzgx:begin fn_1_8D1EC noprologue */
 #include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/car.h"
+#include "dolphin/hw_regs.h"
+#include "psvec.h"
 
 extern void fn_1_8D210(u32 arg0, u32 arg1, u32 arg2, u32 arg3);
 
@@ -5092,8 +5094,10 @@ s16 fn_1_8D640(s16 index) {
 
 /* fzgx:begin fn_1_8D690 noprologue */
 #include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/car.h"
+#include "dolphin/hw_regs.h"
+#include "psvec.h"
+
+extern u8 lbl_1_rodata_3D34[164];
 
 extern int fn_1_F7BE4(s16 arg0);
 
@@ -5101,7 +5105,7 @@ typedef struct {
     u32 entries[41];
 } FnTable;
 
-extern const FnTable lbl_1_rodata_3D34;
+
 
 // Return whether the indexed flag remains enabled after the preliminary check.
 u32 fn_1_8D690(s16 arg0) {
@@ -5110,7 +5114,7 @@ u32 fn_1_8D690(s16 arg0) {
 
     valid = 1;
     if (!fn_1_F7BE4(arg0)) {
-        table = lbl_1_rodata_3D34;
+        table = (*(const FnTable *)&lbl_1_rodata_3D34);
         if ((table.entries[(s32)arg0] & ~0x7fffffff) == 0) {
             valid = 0;
         }
@@ -5141,8 +5145,10 @@ u32 fn_1_8D72C(s16 index) {
 
 /* fzgx:begin fn_1_8D7C8 noprologue */
 #include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/car.h"
+#include "dolphin/hw_regs.h"
+#include "psvec.h"
+
+extern u8 lbl_1_rodata_3D34[164];
 
 extern int fn_1_F7BE4(s16 arg0);
 
@@ -5151,7 +5157,8 @@ typedef struct {
 } Fn1_8D7C8Data;
 
 extern int fn_1_F7BE4(s16 index);
-extern u8 lbl_1_rodata_3D34[164];
+
+
 
 s16 fn_1_8D7C8(void) {
     int enabled;
@@ -5504,6 +5511,8 @@ void fn_1_92530(void *arg0) {
 
 /* fzgx:begin fn_1_933D8 noprologue */
 #include "types.h"
+#include "dolphin/hw_regs.h"
+#include "psvec.h"
 
 typedef struct {
     u8 pad0[0x24];

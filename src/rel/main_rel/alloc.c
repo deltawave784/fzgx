@@ -102,8 +102,6 @@ __declspec(section ".fzgxpool") static void fzgx_pool_prime1(void) {
 }
 #pragma section code_type ".text"
 
-extern f32 lbl_1_rodata_160;
-
 f32 fn_1_4C24(void) {
     f32 *rodata;
     f32 ratio;
@@ -193,11 +191,6 @@ f32 fn_1_4D14(Fn14D14Data *data) {
 /* fzgx:end fn_1_4D14 */
 
 /* fzgx:begin fn_1_4DE0 */
-extern f32 lbl_1_rodata_16C;
-extern f32 lbl_1_rodata_164[2];
-
-void fn_8006CE1C(f32);
-
 #pragma opt_dead_assignments off
 void fn_1_4DE0(Obj_1_data_2CDC *obj, u32 arg1) {
     if (arg1 == 1) {
