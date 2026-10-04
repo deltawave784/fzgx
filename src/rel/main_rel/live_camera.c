@@ -376,13 +376,6 @@ void fn_1_DE14(Fn1DE14State *state) {
 /* fzgx:end fn_1_DE14 */
 
 /* fzgx:begin fn_1_E174 */
-extern u32 fn_1_A1588(Sig_ADXT_Stop_ADXTHandle *, u32);
-extern u32 fn_1_A1964(u32);
-extern u32 fn_1_A1CE8(u32);
-extern u32 fn_1_F2F34(void);
-extern s32 fn_1_40BB4(void);
-extern void fn_1_A2D84(u32);
-
 #pragma opt_lifetimes off
 #pragma opt_propagation off
 #pragma opt_strength_reduction off

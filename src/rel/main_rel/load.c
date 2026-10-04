@@ -356,10 +356,8 @@ u32 fn_1_467F4(void) {
 }
 /* fzgx:end fn_1_467F4 */
 
-/* fzgx:begin fn_1_469BC noprologue */
+/* fzgx:begin fn_1_469BC */
 #include "types.h"
-
-extern u32 lbl_1_bss_384C0[];
 
 // Clears invalid entries in the load table and mirrors its first value.
 void fn_1_469BC(void) {
@@ -400,7 +398,6 @@ typedef struct {
     u8 unk_8[0x4010];
     Entry entries[0x200];
 } State;
-
 
 u32 fn_1_46A8C(u32 value) {
     State *base;
