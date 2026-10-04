@@ -5345,6 +5345,44 @@ void fn_10_2228C(void) {
 }
 /* fzgx:end fn_10_2228C */
 
+/* fzgx:begin fn_10_22760 */
+extern u8 lbl_10_bss_55CE0;
+
+extern void fn_1_12EF80(u32, void *, void *);
+extern s16 fn_1_12EF24(s16, s16);
+extern s32 fn_1_F89E4(u8);
+
+s32 fn_10_22760(s32 dir) {
+    s16 result = -1;
+    s16 slot = 0;
+    s16 page = 0;
+
+    fn_1_12EF80(lbl_10_bss_55CE0, &slot, &page);
+
+    if (dir != 0) {
+        page += dir;
+        while (page >= 0 && page <= 5) {
+            result = fn_1_12EF24(slot, page);
+            if (slot == 5) {
+                if ((page == 5 && fn_1_F89E4(0) == 0) ||
+                    (page != 5 && fn_1_F89E4(page + 1) == 0)) {
+                    result = -1;
+                }
+            }
+            if (result != -1) {
+                break;
+            }
+            page += dir;
+        }
+
+        if (result != -1 && lbl_10_bss_55CE0 != result) {
+            return 1;
+        }
+    }
+    return 0;
+}
+/* fzgx:end fn_10_22760 */
+
 /* fzgx:begin fn_10_2287C */
 extern u8 lbl_10_bss_55CE0;
 extern u8 lbl_1_bss_718E0[];
