@@ -6557,3 +6557,6 @@ rel/main_rel/stcoli/fn_1_287E8.c:
 
 rel/main_rel/sound/fn_1_A3BD8.c:
 	.text       start:0x000A3BD8 end:0x000A3C78 align:4
+
+rel/main_rel/bitmap/fn_1_47E54.c:
+	.text       start:0x00047E54 end:0x00047EE4 align:4
