@@ -87,10 +87,10 @@ extern void fn_1_45850(void *arg0);
 extern void fn_80008BA8(u32 arg0, u32 arg1, u32 arg2);
 extern void *lbl_801A6410;
 extern void *fn_1_45D0(u32 arg0, u32 arg1, void *arg2, u32 arg3);
-extern void fn_8006A9AC(void *arg0);
+extern u32 fn_8006A9AC(void *arg0);
 extern u32 fn_1_4630();
-extern void fn_1_D38A4();
-extern void fn_1_D3884();
+extern void *fn_1_D38A4();
+extern void *fn_1_D3884();
 extern f32 lbl_1_rodata_8170;
 extern struct fn_1_12B120_lbl_1_rodata_8178 lbl_1_rodata_8178;
 extern void fn_1_12C0EC(fn_1_12C0EC_FnData *arg);
@@ -249,28 +249,14 @@ s32 fn_1_12A7C4(void *arg0, void *arg1, u32 arg2) {
 #pragma opt_propagation reset
 /* fzgx:end fn_1_12A7C4 */
 
-/* fzgx:begin fn_1_12A8A4 noprologue */
-#include "types.h"
-#include "rel/main_rel/archive.h"
-
-extern u32 lbl_1_bss_897A0;
-extern u32 lbl_801A6410;
-
-typedef struct ArchiveState {
+/* fzgx:begin fn_1_12A8A4 */
+typedef struct fn_1_12A8A4_ArchiveState {
     s32 count;
     s32 loaded;
     u8 pad[4];
     u8 entries[1];
-} ArchiveState;
+} fn_1_12A8A4_ArchiveState;
 
-extern s32 fn_8006A480(void *arg0, void *arg1, void *arg2);
-extern void *fn_8006A998(void *arg0);
-extern s32 fn_1_45730(void *arg0, void *arg1);
-extern s32 fn_1_45B2C(void *arg0);
-extern void *fn_1_45D0(u32 arg0, u32 arg1, void *arg2, u32 arg3);
-extern void fn_1_458A0(void *arg0, void *arg1, u32 arg2, u32 arg3);
-extern void fn_1_45850(void *arg0);
-extern void OSPanic(u8 *arg0, s32 arg1, u8 *arg2, ...);
 
 #pragma opt_propagation off
 s32 fn_1_12A8A4(u32 arg0, void *arg1) {
@@ -278,9 +264,9 @@ s32 fn_1_12A8A4(u32 arg0, void *arg1) {
     s32 result;
     u8 work[12];
     u8 info[0x60];
-    ArchiveState *state;
+    fn_1_12A8A4_ArchiveState *state;
 
-    state = (ArchiveState *)&lbl_1_bss_897A0;
+    state = (fn_1_12A8A4_ArchiveState *)&lbl_1_bss_897A0;
 
     if (state->loaded != 0) {
         s32 count = state->count;
@@ -299,12 +285,12 @@ s32 fn_1_12A8A4(u32 arg0, void *arg1) {
         if (fn_1_45730((void *)arg0, info) != 0) {
             s32 aligned;
             aligned = (fn_1_45B2C(info) + 0x1F) & ~0x1F;
-            *(void **)arg1 = fn_1_45D0(lbl_801A6410, aligned,
+            *(void **)arg1 = fn_1_45D0((*((u32 *)&lbl_801A6410)), aligned,
                                        lbl_1_data_40608, 0x188);
             fn_1_458A0(info, *(void **)arg1, aligned, 0);
             fn_1_45850(info);
         } else {
-            OSPanic(lbl_1_data_40608, 0x18C, lbl_1_data_40750);
+            OSPanic( (char *)(u8 *)(lbl_1_data_40608), 0x18C, lbl_1_data_40750);
         }
     }
 
@@ -366,28 +352,14 @@ s32 fn_1_12A9BC(void *arg0, void *arg1) {
 #pragma opt_propagation reset
 /* fzgx:end fn_1_12A9BC */
 
-/* fzgx:begin fn_1_12AAC8 noprologue */
-#include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/archive.h"
-
-extern void OSPanic(u8 *arg0, s32 arg1, u8 *arg2, ...);
-extern s32 fn_8006A480(void *arg0, void *arg1, void *arg2);
-extern void fn_8006A9AC(void *arg0);
-
-extern void OSPanic(u8 *arg0, s32 arg1, u8 *arg2, ...);
-
-extern void OSPanic(u8 *arg0, s32 arg1, u8 *arg2, ...);
-
-extern void OSPanic(u8 *arg0, s32 arg1, u8 *arg2, ...);
-
+/* fzgx:begin fn_1_12AAC8 */
 void fn_1_12AAC8(void *arg0) {
     u8 local_8[0x18];
     u8 *obj;
 
     obj = (u8 *)&lbl_1_bss_897AC + lbl_1_bss_897A0 * 0x6C + 0x4C;
     if (fn_8006A480(obj, arg0, local_8) == 0) {
-        OSPanic(lbl_1_data_40608, 0x1BE, lbl_1_data_4076C);
+        OSPanic( (char *)(u8 *)((char *)(u8 *)((char *)(u8 *)((char *)(u8 *)(lbl_1_data_40608)))), 0x1BE, lbl_1_data_4076C);
     }
     fn_8006A9AC(local_8);
 }
@@ -441,32 +413,18 @@ void fn_1_12AC00(void *arg0) {
 }
 /* fzgx:end fn_1_12AC00 */
 
-/* fzgx:begin fn_1_12AC28 noprologue */
-#include "types.h"
-#include "rel/main_rel/archive.h"
-
-extern void *lbl_801A6410;
-
-extern s32 fn_8006A480(void *entry, void *arg0, void *result);
-extern void *fn_8006A998(void *result);
-extern void *fn_8006A9AC(void *result);
-extern void OSPanic(u8 *message, s32 line, u8 *file, ...);
-extern void *fn_1_4630(void *arg0, void *arg1, void *arg2, s32 arg3);
-extern void fn_80008BA8(void *arg0, void *arg1, void *arg2);
-extern void *fn_1_D38A4(void *arg0, s32 arg1);
-extern void *fn_1_D3884(void *arg0);
-
+/* fzgx:begin fn_1_12AC28 */
 typedef struct ArchiveEntry {
     u8 field_0[0x4c];
     u8 data[0x20];
 } ArchiveEntry;
 
-typedef struct ArchiveState {
+typedef struct fn_1_12AC28_ArchiveState {
     s32 count;
     s32 ready;
     s32 fallback;
     ArchiveEntry entries[1];
-} ArchiveState;
+} fn_1_12AC28_ArchiveState;
 
 static inline ArchiveEntry *fn_1_12AC28_array_read(ArchiveEntry *array) { return array; }
 #pragma opt_loop_invariants off
@@ -505,7 +463,7 @@ void *fn_1_12AC28(void *arg0, void **arg1, void **arg2) {
     
     if (lbl_1_bss_897A4 != 0) {
         if (fn_8006A480(fn_1_12AC28_array_read(fzgx_obj_lbl_1_bss_897AC.entries)[fzgx_obj_lbl_1_bss_897A0].data, arg0, info1) != 0) {
-            lookup = fn_8006A998(info1);
+            lookup = (void *)fn_8006A998(info1);
         } else {
             lookup = 0;
         }
@@ -513,13 +471,13 @@ void *fn_1_12AC28(void *arg0, void **arg1, void **arg2) {
         if (lookup != 0) {
             if (arg1 != 0 && arg2 != 0) {
                 if (fn_8006A480(fn_1_12AC28_array_read(fzgx_obj_lbl_1_bss_897AC.entries)[fzgx_obj_lbl_1_bss_897A0].data, arg0, info2) == 0) {
-                    OSPanic(lbl_1_data_40608, 0x1be, lbl_1_data_4076C);
+                    OSPanic( (char *)(u8 *)(lbl_1_data_40608), 0x1be, lbl_1_data_4076C);
                 }
-                *arg2 = fn_8006A9AC(info2);
+                *arg2 = (void *)fn_8006A9AC(info2);
                 if (*arg2 != 0) {
-                    *arg1 = fn_1_4630(lbl_801A6410, *arg2,
+                    *arg1 = (void *)fn_1_4630(lbl_801A6410, *arg2,
                         lbl_1_data_40608, 0x1fc);
-                    fn_80008BA8(*arg1, lookup, *arg2);
+                    fn_80008BA8( (u32)(void *)(*arg1), (u32)(void *)(lookup), (u32)(void *)(*arg2));
                     archive = *arg1;
                 }
                 ret = fn_1_D38A4(archive, 0);
@@ -1026,26 +984,14 @@ u8 *fn_1_12D254(s32 arg0, s32 arg1) {
 #pragma opt_propagation reset
 /* fzgx:end fn_1_12D254 */
 
-/* fzgx:begin fn_1_12D354 noprologue */
-#include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/archive.h"
-
-extern void OSPanic(u8 *arg0, s32 arg1, u8 *arg2, ...);
-
-extern void OSPanic(u8 *arg0, s32 arg1, u8 *arg2, ...);
-
-extern void OSPanic(u8 *arg0, s32 arg1, u8 *arg2, ...);
-
-extern void OSPanic(u8 *arg0, s32 arg1, u8 *arg2, ...);
-
+/* fzgx:begin fn_1_12D354 */
 // Registers an object in the first available archive slot and reports overflow.
 void fn_1_12D354(void *arg0, void *arg1, void *arg2) {
     u8 *archive_data = lbl_1_data_40798;
     u32 slot;
 
     if (arg2 == 0) {
-        OSPanic(archive_data + 0x358, 0x388, archive_data + 0x368);
+        OSPanic( (char *)(u8 *)((char *)(u8 *)((char *)(u8 *)((char *)(u8 *)(archive_data + 0x358)))), 0x388, archive_data + 0x368);
     }
 
     for (slot = 0; slot < 12; slot++) {
@@ -1056,7 +1002,7 @@ void fn_1_12D354(void *arg0, void *arg1, void *arg2) {
         }
     }
 
-    OSPanic(archive_data + 0x358, 0x394, archive_data + 0x390);
+    OSPanic( (char *)(u8 *)((char *)(u8 *)((char *)(u8 *)((char *)(u8 *)(archive_data + 0x358)))), 0x394, archive_data + 0x390);
 }
 /* fzgx:end fn_1_12D354 */
 
@@ -1300,23 +1246,11 @@ s32 fn_1_12F258(void) {
 }
 /* fzgx:end fn_1_12F258 */
 
-/* fzgx:begin fn_1_12F28C noprologue */
-#include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/archive.h"
-
-extern void fn_1_7B2E8(u8 value);
-extern void fn_1_13C1A0(void);
-extern void *fn_1_3F8C(void *table, void (*callback)(void), void *arg1, void *arg2);
-
-
-
-extern void fn_1_435C();
-
+/* fzgx:begin fn_1_12F28C */
 void fn_1_12F28C(void *arg0, void **result, void *arg2, u8 *arg3) {
     fn_1_7B2E8(*arg3);
     fn_1_435C(arg0);
-    *result = fn_1_3F8C(lbl_1_data_40BC0, fn_1_13C1A0, arg3, arg2);
+    *result = (void *)fn_1_3F8C((u32)lbl_1_data_40BC0, (u32)fn_1_13C1A0, (u8 *)arg3, arg2);
 }
 /* fzgx:end fn_1_12F28C */
 
@@ -1338,35 +1272,11 @@ void fn_1_12F30C(void *arg0, Fn1_12F30CState *state) {
 }
 /* fzgx:end fn_1_12F30C */
 
-/* fzgx:begin fn_1_130EE8 noprologue */
-#include "types.h"
-
-struct fn_1_130EE8_lbl_1_bss_8CA40 {
-    u32 unk_0;
-    u32 unk_4;
-    u32 unk_8;
-    u32 unk_C;
-    u32 unk_10;
-    u32 unk_14;
-    u32 unk_18;
-    u32 unk_1C;
-    u32 unk_20;
-    u32 unk_24;
-    u32 unk_28;
-};
-
-extern s32 fn_1_3F8C(u32, u32, u32, u32);
-extern struct fn_1_130EE8_lbl_1_bss_8CA40 lbl_1_bss_8CA40;
-extern u32 fn_1_435C(u32);
-extern u32 lbl_1_data_40E7C;
-extern u32 lbl_1_data_40E90;
-extern void fn_1_130F98(void);
-extern void fn_1_131000(void);
-
+/* fzgx:begin fn_1_130EE8 */
 void fn_1_130EE8(u32 arg0, u32 arg1) {
-    struct fn_1_130EE8_lbl_1_bss_8CA40 *p_lbl_1_bss_8CA40;
+    Obj_1_bss_8CA40 *p_lbl_1_bss_8CA40;
     u32 t1, t3;
-    p_lbl_1_bss_8CA40 = (struct fn_1_130EE8_lbl_1_bss_8CA40 *)&lbl_1_bss_8CA40;
+    p_lbl_1_bss_8CA40 = (Obj_1_bss_8CA40 *)&(*((Obj_1_bss_8CA40 *)&lbl_1_bss_8CA40));
     p_lbl_1_bss_8CA40->unk_0 = -1;
     p_lbl_1_bss_8CA40->unk_4 = -1;
     p_lbl_1_bss_8CA40->unk_8 = -1;
@@ -1377,10 +1287,10 @@ void fn_1_130EE8(u32 arg0, u32 arg1) {
     p_lbl_1_bss_8CA40->unk_1C = arg0;
     p_lbl_1_bss_8CA40->unk_20 = arg1;
     fn_1_435C(arg0);
-    t1 = fn_1_3F8C((u32)&lbl_1_data_40E7C, (u32)fn_1_130F98, 0, 8);
+    t1 = fn_1_3F8C((u32)&(*((u32 *)&lbl_1_data_40E7C)), (u32)fn_1_130F98, (u8 *)(u32)(0), (void *)(u32)(8));
     p_lbl_1_bss_8CA40->unk_24 = t1;
     fn_1_435C(arg1);
-    t3 = fn_1_3F8C((u32)&lbl_1_data_40E90, (u32)fn_1_131000, 0, 8);
+    t3 = fn_1_3F8C((u32)&(*((u32 *)&lbl_1_data_40E90)), (u32)fn_1_131000, (u8 *)(u32)(0), (void *)(u32)(8));
     p_lbl_1_bss_8CA40->unk_28 = t3;
 }
 /* fzgx:end fn_1_130EE8 */
@@ -1392,11 +1302,11 @@ void fn_1_130F98(void) {
         s32 pending_operation = lbl_1_bss_8CA44[0];
 
         lbl_1_bss_8CA44[0] = -1;
-        lbl_1_bss_8CA40 = pending_operation;
+        lbl_1_bss_8CA40.unk_0 = pending_operation;
     }
 
     {
-        s32 operation = lbl_1_bss_8CA40;
+        s32 operation = lbl_1_bss_8CA40.unk_0;
 
         if (operation >= 0) {
             ((void (**)(void))lbl_1_data_40D50)[operation]();
@@ -1432,7 +1342,7 @@ void fn_1_131004(void) {
 
 /* fzgx:begin fn_1_131050 */
 void fn_1_131050(u32 value, u32 state) {
-    u32* data = &lbl_1_bss_8CA40;
+    u32* data = &lbl_1_bss_8CA40.unk_0;
     s32 previous;
 
     if (value == 0) {
@@ -1509,7 +1419,7 @@ void fn_1_1310B8(void) {
 
 /* fzgx:begin fn_1_1310E0 */
 s32 fn_1_1310E0(void) {
-    return lbl_1_bss_8CA40 != -1;
+    return lbl_1_bss_8CA40.unk_0 != -1;
 }
 /* fzgx:end fn_1_1310E0 */
 
@@ -1530,7 +1440,7 @@ void fn_1_1310FC(void) {
 /* fzgx:begin fn_1_131154 */
 void fn_1_131154(void) {
     if (fn_1_C24A4() == 0 && fn_1_B7C00() == 0) {
-        lbl_1_bss_8CA40 = -1;
+        lbl_1_bss_8CA40.unk_0 = -1;
     }
 }
 /* fzgx:end fn_1_131154 */

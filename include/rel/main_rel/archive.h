@@ -11,7 +11,21 @@
 extern u32 lbl_1_bss_897A0;
 
 // lbl_1_bss_8CA40: .bss size 0x4, 10 refs from archive.c
-extern u32 lbl_1_bss_8CA40;
+// fn_1_130EE8 initialises 0x2C bytes from here (dtk size 4)
+typedef struct {
+    u32 unk_0;
+    u32 unk_4;
+    u32 unk_8;
+    u32 unk_C;
+    u32 unk_10;
+    u32 unk_14;
+    u32 unk_18;
+    u32 unk_1C;
+    u32 unk_20;
+    u32 unk_24;
+    u32 unk_28;
+} Obj_1_bss_8CA40;
+extern Obj_1_bss_8CA40 lbl_1_bss_8CA40;  // typedefs.json decl override
 
 // lbl_1_data_40608: .data size 0xA, 8 refs from archive.c (own data block)
 extern u8 lbl_1_data_40608[0xA];

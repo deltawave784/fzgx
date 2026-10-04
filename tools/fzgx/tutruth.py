@@ -91,7 +91,8 @@ def split_args(text: str, start: int) -> Optional[Tuple[List[Tuple[int, int]], i
 INTS = {'s8', 'u8', 's16', 'u16', 's32', 'u32', 'int', 'char', 'short', 'long', 'unsigned', 'signed', 'BOOL', 'size_t'}
 
 
-def cast_calls(body: str, name: str, old: List[str], new: List[str], force: bool = False) -> str:
+def cast_calls(body: str, name: str, old: List[str], new: List[str], force: bool = False,
+               variadic: bool = False) -> str:
     """Wrap every argument whose old declared type differs from the truth's in a cast to the
     old type, so the conversion the block's prototype implied stays in the code."""
     out = body
@@ -106,10 +107,14 @@ def cast_calls(body: str, name: str, old: List[str], new: List[str], force: bool
         spans, end = res
         if body[end + 1:].lstrip().startswith('{'):
             continue  # the definition
-        if len(spans) != len(old) or len(old) != len(new):
+        if variadic:
+            # only the fixed parameters of a variadic truth have declared types
+            if len(old) != len(new) or len(spans) < len(old):
+                continue
+        elif len(spans) != len(old) or len(old) != len(new):
             continue
         text = out
-        for (a, b), t_old, t_new in reversed(list(zip(spans, old, new))):
+        for (a, b), t_old, t_new in reversed(list(zip(spans[:len(old)], old, new))):
             if t_old == '...' or t_new == '...' or _same(t_old, t_new):
                 continue
             if not force and t_old.split()[-1] in INTS and t_new.split()[-1] in INTS:
@@ -393,6 +398,12 @@ def adapt(body: str, n: str, old_decl: Optional[str], truth: str, report_bad: Li
     sv, st = _sig(old_decl), _sig(truth)
     if sv and st:
         if st[2] and st[2][-1] == '...':
+            # a variadic truth (OSPanic, OSReport): its fixed parameters still convert, and a
+            # block that declared them `u8 *` needs the pointer cast the truth's `char *` needs
+            k = len(st[2]) - 1
+            fixed = [t for t in sv[2] if t != '...']
+            if len(fixed) >= k and fixed[:k] != st[2][:k]:
+                body = cast_calls(body, n, fixed[:k], st[2][:k], force, variadic=True)
             return body
         if len(sv[2]) == len(st[2]):
             if sv[2] != st[2] and '...' not in sv[2]:
