@@ -23,3 +23,5 @@ typedefs, no code or data).
 Not promoted: padded-union views (`fields.view_<name>.<name>`) of `AdxBasicDecoder` in
 fn_80043B48 and fn_80044A94 change code when rewritten as plain members (main.dol hash fails);
 they stay local.
+
+| `MwsPlayer` (extended) | `include/sofdec/mwsfd.h` | 0x204 | CRI MWSFD player handle (`mwPly*` error strings: "mwPlyLinkStm: handle is invalid"). +0x40 `sfd` (passed to SFD functions), +0x4C `lsc` (passed to LSC_Start / fn_80056xxx stream-controller calls), +0x54/+0x70/+0x71 still unnamed. Eleven fn_12_34xxx accessor units converted from `MovieModule` views. The +0xA8/+0x128 views (fn_12_35xxx `MovieModuleState`, fn_12_34390/34798) are not yet converted: their files carry several local helper types. |
