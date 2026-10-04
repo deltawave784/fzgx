@@ -588,6 +588,29 @@ void fn_3_1ACE4(void *data, s32 first_a, s32 second_a, s32 first_b, s32 second_b
 }
 /* fzgx:end fn_3_1ACE4 */
 
+/* fzgx:begin fn_3_1AE40 */
+extern void fn_3_14E18(void *arg0, u32 arg1, u32 arg2, s16 arg3, u32 arg4);
+
+/* Mirror the left half of a region onto its right half, row by row. */
+void fn_3_1AE40(void *data, u32 x1, u32 y1, s16 x2, s16 y2) {
+    s16 y_end;
+    s32 width;
+    u32 y;
+    u32 x;
+    s16 x_mid;
+
+    width = x2 - (s16)x1;
+    y_end = y2;
+    x_mid = width / 2;
+
+    for (y = y1; (s16)y < y_end; y++) {
+        for (x = x1; (s16)x < x_mid; x++) {
+            fn_3_14E18(data, x, y, (s16)(width - x - 1), y);
+        }
+    }
+}
+/* fzgx:end fn_3_1AE40 */
+
 /* fzgx:begin fn_3_1D338 noprologue */
 #include "types.h"
 
