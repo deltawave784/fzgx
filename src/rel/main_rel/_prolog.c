@@ -28,7 +28,15 @@ extern u32 camera_set_state_flag(u32);
 extern u32 fn_1_D31E0(u32);
 extern struct fn_1_12B4_lbl_1_bss_962 lbl_1_bss_962;
 extern u32 lbl_1_data_2A20;
-extern u32 lbl_1_data_7C0;
+/* lbl_1_data_7C0: 0x2c-byte overlay descriptors (callbacks at 0x20/0x24/0x28), indexed by the overlay id */
+typedef void (*fn_1_ECC_Callback)(void);
+struct fn_1_ECC_Overlay {
+    u8 pad_0[0x20];
+    fn_1_ECC_Callback init;
+    fn_1_ECC_Callback update;
+    fn_1_ECC_Callback exit;
+};
+extern struct fn_1_ECC_Overlay lbl_1_data_7C0[];
 extern u32 fn_1_15659C(u32);
 extern u32 fn_80008BEC(void *, u32, u32);
 extern u8 lbl_1_bss_978[];
