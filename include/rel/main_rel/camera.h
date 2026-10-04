@@ -37,7 +37,32 @@ typedef struct {
 extern GameCameraEntry *game_camera_entries;  // array of 0x1FC-byte records
 
 // lbl_1_bss_1010: .bss size 0x4, 9 refs from camera.c
-extern f32 lbl_1_bss_1010;
+// the camera's .bss run from 0x1010 as camera_snapshot addresses it (dtk sizes it 4)
+typedef struct {
+    u8 pad_0[0x8];
+    u32 unk_8;
+    u32 unk_C;
+    u32 unk_10;
+    u32 unk_14;
+    u32 unk_18;
+    u32 unk_1C;
+    u32 unk_20;
+    u32 unk_24;
+    u32 unk_28;
+    u8 pad_2C[0x10];
+    u32 unk_3C;
+    u8 pad_40[0x88];
+    u32 unk_C8;
+    u32 unk_CC;
+    u32 unk_D0;
+    u32 unk_D4;
+    u32 unk_D8;
+    u32 unk_DC;
+    u32 unk_E0;
+    u32 unk_E4;
+    u32 unk_E8;
+} Obj_1_bss_1010;
+extern Obj_1_bss_1010 lbl_1_bss_1010;  // typedefs.json decl override
 
 // camera_state: .bss size 0x24, 9 refs from camera.c
 typedef struct {

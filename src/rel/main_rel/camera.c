@@ -57,8 +57,8 @@ extern struct fn_1_6400_lbl_801A6410 lbl_801A6410;
 extern void fn_1_46B4(u32 arg0, u32 arg1, const char *arg2, int arg3);
 extern u8 lbl_1_bss_F74;
 extern u8 lbl_1_bss_F75;
-extern u8 fn_1_86624();
-extern u8 fn_1_86634(int index);
+extern s8 fn_1_86624();
+extern s8 fn_1_86634(int index);
 extern u32 lbl_1_bss_7ADE8[40];
 extern void *lbl_1_data_3310;
 extern f32 fn_1_A6FE8(void);
@@ -451,27 +451,22 @@ void fn_1_6990(u32 index, u32 *output) {
 #pragma peephole reset
 /* fzgx:end fn_1_6990 */
 
-/* fzgx:begin camera_get_mode noprologue */
-#include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/camera.h"
-
-extern s16 fn_1_6B48(s16 value);
-
+/* fzgx:begin camera_get_mode */
 // Return the normalized camera status, treating inactive states as zero.
 s16 camera_get_mode(void) {
     Obj_1_bss_F68_Target *state = lbl_1_bss_F68;
+    s32 index;
     s16 value;
 
     if (state == 0) {
-        value = 0;
+        index = 0;
     } else if ((state->unk_0 & ((s32)1 << 31)) != 0) {
-        value = 0;
+        index = 0;
     } else {
-        value = state->unk_4A;
+        index = state->unk_4A;
     }
 
-    value = fn_1_6B48(value);
+    value = fn_1_6B48(index);
     if (value == 0xff) {
         value = -1;
     }
@@ -750,19 +745,7 @@ s32 camera_compare_values(const u8 *lhs_index, const u8 *rhs_index) {
 }
 /* fzgx:end camera_compare_values */
 
-/* fzgx:begin fn_1_8298 noprologue */
-#include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/camera.h"
-
-extern s8 fn_1_86624(void);
-extern s8 fn_1_86634(s32 index);
-extern void OSPanic(u8 *file, int line, u8 *message, ...);
-
-extern s8 fn_1_86624(void);
-extern s8 fn_1_86634(s32 index);
-extern void OSPanic(u8 *file, int line, u8 *message, ...);
-
+/* fzgx:begin fn_1_8298 */
 extern GameCameraEntry *game_camera_entries;  // array of 0x1FC-byte records
 
 // Initializes camera entry selections and updates the camera mode from the available entries.
@@ -962,19 +945,12 @@ void camera_set_state_flag(u8 value) {
 }
 /* fzgx:end camera_set_state_flag */
 
-/* fzgx:begin camera_get_values noprologue */
-#include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/camera.h"
-
-extern f32 lbl_1_rodata_188;
-extern s32 fn_1_8708(u8 mode, f32 *value0, f32 *value1);
-
+/* fzgx:begin camera_get_values */
 // Reads the camera values, falling back when the camera state cannot provide them.
 s32 camera_get_values(f32 *value0, f32 *value1) {
     f32 result0;
     f32 result1;
-    u8 mode;
+    s32 mode;
     Obj_1_bss_F68_Target *obj;
     f32 fallback;
 
@@ -993,7 +969,7 @@ s32 camera_get_values(f32 *value0, f32 *value1) {
         return 1;
     }
 
-    fallback = lbl_1_rodata_188;
+    fallback = (*((f32 *)&lbl_1_rodata_188));
     *value0 = fallback;
     *value1 = fallback;
     return -1;
@@ -1454,18 +1430,10 @@ void fn_1_C178(void *self) {
 }
 /* fzgx:end fn_1_C178 */
 
-/* fzgx:begin camera_report_position noprologue */
-#include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/camera.h"
-
-extern void OSReport(const unsigned char *, ...);
-
-extern void OSReport(const unsigned char *, ...);
-
+/* fzgx:begin camera_report_position */
 // Reports the camera's current position values for debugging.
 void camera_report_position(void) {
-    OSReport(lbl_1_data_4128, lbl_1_bss_10D8.unk_10,
+    OSReport((const char *)lbl_1_data_4128, lbl_1_bss_10D8.unk_10,
              lbl_1_bss_10D8.unk_14, lbl_1_bss_10D8.unk_18);
 }
 /* fzgx:end camera_report_position */
@@ -1493,18 +1461,10 @@ void fn_1_C268(s32 arg) {
 #pragma opt_common_subs reset
 /* fzgx:end fn_1_C268 */
 
-/* fzgx:begin fn_1_C304 noprologue */
-#include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/camera.h"
-
-extern void OSReport(const unsigned char *, ...);
-
-extern void OSReport(const unsigned char *, ...);
-
+/* fzgx:begin fn_1_C304 */
 // Reports the camera parameters and caller-supplied value for debugging.
 void fn_1_C304(s32 arg) {
-    OSReport(lbl_1_data_4198,
+    OSReport((const char *)lbl_1_data_4198,
              lbl_1_bss_10D8.unk_4, lbl_1_bss_10D8.unk_8,
              lbl_1_bss_10D8.unk_C, lbl_1_bss_10D8.unk_10,
              lbl_1_bss_10D8.unk_14, lbl_1_bss_10D8.unk_18,
@@ -1513,40 +1473,11 @@ void fn_1_C304(s32 arg) {
 }
 /* fzgx:end fn_1_C304 */
 
-/* fzgx:begin camera_snapshot noprologue */
-#include "types.h"
-
-typedef struct CameraGlobals {
-    u8 pad_00[0x08];
-    u32 unk_08;
-    u32 unk_0C;
-    u32 unk_10;
-    u32 unk_14;
-    u32 unk_18;
-    u32 unk_1C;
-    u32 unk_20;
-    u32 unk_24;
-    u32 unk_28;
-    u8 pad_2C[0x10];
-    u32 unk_3C;
-    u8 pad_40[0x88];
-    u32 unk_C8;
-    u32 unk_CC;
-    u32 unk_D0;
-    u32 unk_D4;
-    u32 unk_D8;
-    u32 unk_DC;
-    u32 unk_E0;
-    u32 unk_E4;
-    u32 unk_E8;
-} CameraGlobals;
-
-extern CameraGlobals lbl_1_bss_1010;
-
+/* fzgx:begin camera_snapshot */
 // Copies the live camera state into its snapshot and resets the snapshot flag.
 void camera_snapshot(void) {
-    lbl_1_bss_1010.unk_08 = lbl_1_bss_1010.unk_C8;
-    lbl_1_bss_1010.unk_0C = lbl_1_bss_1010.unk_CC;
+    lbl_1_bss_1010.unk_8 = lbl_1_bss_1010.unk_C8;
+    lbl_1_bss_1010.unk_C = lbl_1_bss_1010.unk_CC;
     lbl_1_bss_1010.unk_10 = lbl_1_bss_1010.unk_D0;
     lbl_1_bss_1010.unk_14 = lbl_1_bss_1010.unk_D4;
     lbl_1_bss_1010.unk_18 = lbl_1_bss_1010.unk_D8;
