@@ -1,34 +1,34 @@
 #include "types.h"
 #include "rel/main_rel/globals.h"
 #include "rel/main_rel/bg_cas.h"
-extern void fn_80008BEC(void *arg0, int arg1, int arg2);
+extern void fn_80008BEC(void *dest, int value, u32 size);
 extern void fn_1_FCA10(void);
 extern int fn_1_FCF50(void);
 extern void *fn_1_563B8(void *);
 extern f32 lbl_1_rodata_761C[13];
 extern void fn_1_7EB8C(void *, f32);
-extern void fn_1_7F20C(void *, s32, f32);
+extern void fn_1_7F20C();
 extern void lbl_8006DB74(void *);
 extern void lbl_8006DBAC(void *);
 extern void fn_1_FD3A8(void);
 extern void *memset(void *, int, u32);
 extern void fn_1_FE7D8(u8 *, s32);
 extern void fn_1_FF420(u8 *);
-extern void fn_80074788(int);
-extern void fn_80072864(int);
-extern void fn_800745A4(int, int, int, int, int, int);
-extern void fn_800734A8(int, int, int, int);
-extern void fn_80072AB0(int, int, int);
-extern void fn_800735C8(int, int);
-extern void fn_80073620(int, int);
-extern void fn_80073C6C(int);
-extern void fn_80072C24(int, int, int, int, int);
-extern void fn_80072D64(int, int, int, int, int, int);
-extern void fn_80072CC4(int, int, int, int, int);
-extern void fn_80072E20(int, int, int, int, int, int);
-extern void fn_80073678(int);
-extern void fn_80074660(int);
-extern void fn_80074918(int, int, int);
+extern void fn_80074788(u32 arg0);
+extern void fn_80072864(u32 arg0);
+extern void fn_800745A4(u32 arg0, s32 arg1, s32 arg2, u32 arg3, u32 arg4, u32 arg5);
+extern void fn_800734A8(u32 arg0, s32 arg1, s32 arg2, s32 arg3);
+extern void fn_80072AB0(s32 arg0, s32 arg1, s32 arg2);
+extern void fn_800735C8(s32 index, s32 value);
+extern void fn_80073620(s32 index, s32 value);
+extern void fn_80073C6C(s32 index);
+extern void fn_80072C24(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
+extern void fn_80072D64(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u8 arg4, s32 arg5);
+extern void fn_80072CC4(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
+extern void fn_80072E20(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u8 arg4, s32 arg5);
+extern void fn_80073678(u32 arg0);
+extern void fn_80074660(u32 arg0);
+extern void fn_80074918(u8 arg0, s32 arg1, u8 arg2);
 extern void fn_800720B0(int);
 extern void fn_1_9A508(Obj_1_data_2A7E0 *arg0);
 extern void fn_1_9AD54(void);
@@ -36,24 +36,33 @@ extern void fn_1_9AD88(void);
 extern void fn_1_10069C(Obj_1_data_2A7E0_At3C *);
 extern void fn_1_FF038(Obj_1_data_2A7E0_At3C *);
 extern const f64 lbl_1_rodata_760C;
-extern void OSPanic(const char *, int, const char *, ...);
+extern void OSPanic(const char *file, int line, const char *msg, ...);
 extern void lbl_8006D758(void);
 extern void lbl_8006E13C(void *);
 extern void lbl_8006E0A4(void *);
-extern void fn_80008BA8(void *, void *, u32);
+extern void fn_80008BA8(u32 arg0, u32 arg1, u32 arg2);
 extern u8 lbl_1_bss_851E0[36];
-extern void fn_1_7F230(void *, s32, f32);
+extern void fn_1_7F230();
 extern void fn_1_FFC60(Obj_1_data_2A7E0_At3C *arg0);
 extern void fn_1_FEC7C(void *object);
+extern f32 lbl_1_rodata_7590[2];
+extern const f32 lbl_1_rodata_7598;
+extern void GXInitTexObjLOD(void *, u32, u32, f32, f32, f32, u8, u8, u32);
+extern const f32 lbl_1_rodata_7600;
+extern const f32 lbl_1_rodata_7604;
+extern u32 GXGetTexBufferSize(u16, u16, u32, u8, u8);
+extern void fn_1_FC4E0(void *arg0, int arg1);
+extern void fn_1_FC51C(void);
+extern u8 lbl_1_bss_850E0[256];
 extern const f32 lbl_1_rodata_76A8;
+extern u32 fn_1_904(void);
+extern u32 fn_1_914(void);
+extern void fn_1_681C(u32 index, u32 *output);
+extern u32 fn_1_1FB80(void *, u32);
+extern u32 fn_1_FF6B8(void *);
 extern void fn_1_FC60C(void);
 extern void DCFlushRange(void *, u32);
 extern void GXInitTexObj(void *, void *, u32, u32, u32, u32, u32, u32);
-extern u32 fn_1_904(void);
-extern u32 fn_1_914(void);
-extern void fn_1_681C(u32, void *);
-extern u32 fn_1_1FB80(void *, u32);
-extern u32 fn_1_FF6B8(void *);
 
 /* fzgx:begin fn_1_FB798 */
 int fn_1_FB798(int mode, u32 *value) {
@@ -95,58 +104,9 @@ u8 *fn_1_FB870(void) {
 /* fzgx:end fn_1_FB870 */
 
 /* fzgx:begin fn_1_FB87C */
-extern void fn_80008BEC(void *arg0, int arg1, int arg2);
-extern void fn_1_FCA10(void);
-extern int fn_1_FCF50(void);
-extern void *fn_1_563B8(void *);
-extern f32 lbl_1_rodata_761C[13];
-extern void fn_1_7EB8C(void *, f32);
-extern void fn_1_7F20C(void *, s32, f32);
-extern void lbl_8006DB74(void *);
-extern void lbl_8006DBAC(void *);
-extern void fn_1_FD3A8(void);
-extern void *memset(void *, int, u32);
-extern void fn_1_FE7D8(u8 *, s32);
-extern void fn_1_FF420(u8 *);
-extern void fn_80074788(int);
-extern void fn_80072864(int);
-extern void fn_800745A4(int, int, int, int, int, int);
-extern void fn_800734A8(int, int, int, int);
-extern void fn_80072AB0(int, int, int);
-extern void fn_800735C8(int, int);
-extern void fn_80073620(int, int);
-extern void fn_80073C6C(int);
-extern void fn_80072C24(int, int, int, int, int);
-extern void fn_80072D64(int, int, int, int, int, int);
-extern void fn_80072CC4(int, int, int, int, int);
-extern void fn_80072E20(int, int, int, int, int, int);
-extern void fn_80073678(int);
-extern void fn_80074660(int);
-extern void fn_80074918(int, int, int);
-extern void fn_800720B0(int);
-extern void fn_1_9A508(Obj_1_data_2A7E0 *arg0);
-extern void fn_1_9AD54(void);
-extern void fn_1_9AD88(void);
-extern void fn_1_10069C(Obj_1_data_2A7E0_At3C *);
-extern void fn_1_FF038(Obj_1_data_2A7E0_At3C *);
-extern const f64 lbl_1_rodata_760C;
-extern void OSPanic(const char *, int, const char *, ...);
-extern void lbl_8006D758(void);
-extern void lbl_8006E13C(void *);
-extern void lbl_8006E0A4(void *);
-extern void fn_80008BA8(void *, void *, u32);
-extern u8 lbl_1_bss_851E0[36];
-extern void fn_1_7F230(void *, s32, f32);
-extern void fn_1_FFC60(Obj_1_data_2A7E0_At3C *arg0);
-extern void fn_1_FEC7C(void *object);
 
 
 
-extern f32 lbl_1_rodata_7590[2];
-extern const f32 lbl_1_rodata_7598;
-extern void fn_80008BEC(void *dst, int value, int size);
-extern void GXInitTexObjLOD(void *texObj, int minFilter, int magFilter, f32 minLod,
-                            f32 maxLod, f32 lodBias, int biasClamp, int edgeLod, int maxAniso);
 
 typedef struct {
     u8 unk_0[4];
@@ -231,8 +191,6 @@ void fn_1_FB87C(u32 *values, u8 count) {
 /* fzgx:end fn_1_FB87C */
 
 /* fzgx:begin fn_1_FB96C */
-#include "rel/main_rel/bg_cas.h"
-
 // Initializes the selected background-cas state before running its setup stages.
 void fn_1_FB96C(int index) {
     u32 *states = &lbl_1_bss_84454.unk_0;
@@ -245,9 +203,6 @@ void fn_1_FB96C(int index) {
 /* fzgx:end fn_1_FB96C */
 
 /* fzgx:begin fn_1_FB9C0 */
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/bg_cas.h"
-
 // Clear the selected CAS state value.
 void fn_1_FB9C0(int index) {
     (&lbl_1_bss_84454.unk_0)[(index & 0xff) * 0x9c] = 0;
@@ -255,9 +210,6 @@ void fn_1_FB9C0(int index) {
 /* fzgx:end fn_1_FB9C0 */
 
 /* fzgx:begin fn_1_FB9DC */
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/bg_cas.h"
-
 // Reset the per-slot flags and enable the flags associated with the selected slot.
 void fn_1_FB9DC(int index) {
     u32 slot = index & 0xff;
@@ -299,7 +251,6 @@ void fn_1_FB9DC(int index) {
 /* fzgx:end fn_1_FB9DC */
 
 /* fzgx:begin fn_1_FBEA8 */
-extern void lbl_8006DB74(void *);
 
 void fn_1_FBEA8(void) {
     Obj_1_bss_84454 *base;
@@ -430,7 +381,6 @@ void fn_1_FC4E0(void *arg0, int arg1) {
 /* fzgx:end fn_1_FC4E0 */
 
 /* fzgx:begin fn_1_FC51C */
-extern void GXInitTexObjLOD(void *, f32, f32, f32, u32, u32, u32, u32, u32);
 
 #pragma opt_common_subs off
 void fn_1_FC51C(void) {
@@ -445,26 +395,19 @@ void fn_1_FC51C(void) {
     lbl_1_bss_851E0[6] = 0;
     lbl_1_bss_851E0[7] = 0;
 
-    fn_80008BA8(lbl_1_bss_851E0 + 8, lbl_1_bss_851E0, 8);
-    fn_80008BA8(lbl_1_bss_851E0 + 0x10, lbl_1_bss_851E0, 8);
-    fn_80008BA8(lbl_1_bss_851E0 + 0x18, lbl_1_bss_851E0, 8);
+    fn_80008BA8( (u32)(void *)(lbl_1_bss_851E0 + 8), (u32)(void *)(lbl_1_bss_851E0), 8);
+    fn_80008BA8( (u32)(void *)(lbl_1_bss_851E0 + 0x10), (u32)(void *)(lbl_1_bss_851E0), 8);
+    fn_80008BA8( (u32)(void *)(lbl_1_bss_851E0 + 0x18), (u32)(void *)(lbl_1_bss_851E0), 8);
     DCFlushRange(lbl_1_bss_851E0, 0x20);
 
     GXInitTexObj((*(u8 (*)[32])&lbl_1_bss_85204), lbl_1_bss_851E0, 8, 4, 1, 0, 0, 0);
-    GXInitTexObjLOD((*(u8 (*)[32])&lbl_1_bss_85204),
-                *(const f32 *)&lbl_1_rodata_760C,
-                *(const f32 *)&lbl_1_rodata_760C,
-                *(const f32 *)&lbl_1_rodata_760C,
-                1, 1, 0, 0, 0);
+    GXInitTexObjLOD((*(u8 (*)[32])&lbl_1_bss_85204), 1, 1, *(const f32 *)&lbl_1_rodata_760C, *(const f32 *)&lbl_1_rodata_760C, *(const f32 *)&lbl_1_rodata_760C, (u8)(0), (u8)(0), 0);
 }
 #pragma opt_common_subs reset
 /* fzgx:end fn_1_FC51C */
 
 /* fzgx:begin fn_1_FC60C */
-extern u8 lbl_1_bss_850E0[256];
 
-extern u32 GXGetTexBufferSize(u16, u16, u32, u8, u8);
-extern void GXInitTexObjLOD(void *, u32, u32, f32, f32, f32, u8, u8, u32);
 
 #pragma opt_common_subs off
 void fn_1_FC60C(void) {
@@ -508,39 +451,6 @@ void fn_1_FCF74(void) {
 /* fzgx:end fn_1_FCF74 */
 
 /* fzgx:begin fn_1_FD1D4 */
-extern void fn_80008BEC(void *arg0, int arg1, int arg2);
-extern void fn_1_FCA10(void);
-extern int fn_1_FCF50(void);
-extern void *fn_1_563B8(void *);
-extern f32 lbl_1_rodata_761C[13];
-extern void fn_1_7EB8C(void *, f32);
-extern void lbl_8006DB74(void *);
-extern void lbl_8006DBAC(void *);
-extern void fn_1_FD3A8(void);
-extern void *memset(void *, int, u32);
-extern void fn_1_FE7D8(u8 *, s32);
-extern void fn_1_FF420(u8 *);
-extern void fn_80074788(int);
-extern void fn_80072864(int);
-extern void fn_800745A4(int, int, int, int, int, int);
-extern void fn_800734A8(int, int, int, int);
-extern void fn_80072AB0(int, int, int);
-extern void fn_800735C8(int, int);
-extern void fn_80073620(int, int);
-extern void fn_80073C6C(int);
-extern void fn_80072C24(int, int, int, int, int);
-extern void fn_80072D64(int, int, int, int, int, int);
-extern void fn_80072CC4(int, int, int, int, int);
-extern void fn_80072E20(int, int, int, int, int, int);
-extern void fn_80073678(int);
-extern void fn_80074660(int);
-extern void fn_80074918(int, int, int);
-extern void fn_800720B0(int);
-extern void fn_1_9A508(Obj_1_data_2A7E0 *arg0);
-extern void fn_1_9AD54(void);
-extern void fn_1_9AD88(void);
-extern void fn_1_10069C(Obj_1_data_2A7E0_At3C *);
-extern void fn_1_FF038(Obj_1_data_2A7E0_At3C *);
 
 typedef struct {
     void *value;
@@ -636,8 +546,6 @@ void fn_1_FD388(void) {
 /* fzgx:end fn_1_FD388 */
 
 /* fzgx:begin fn_1_FDFF4 */
-#include "rel/main_rel/bg_cas.h"
-
 // Mark the background-collision object as active.
 void fn_1_FDFF4(void) {
     lbl_1_bss_850C6.unk_0 = 1;
@@ -645,16 +553,12 @@ void fn_1_FDFF4(void) {
 /* fzgx:end fn_1_FDFF4 */
 
 /* fzgx:begin fn_1_FE004 */
-#include "rel/main_rel/bg_cas.h"
-
 void fn_1_FE004(void) {
     lbl_1_bss_850C6.unk_0 = 0;
 }
 /* fzgx:end fn_1_FE004 */
 
 /* fzgx:begin fn_1_FE5C4 */
-#include "rel/main_rel/bg_cas.h"
-
 void fn_1_FE5C4(u8 arg0, u32 arg1, u32 arg2, u8 arg3) {
     lbl_1_bss_850C0.unk_4 = arg3;
     lbl_1_bss_850C0.unk_5 = arg0;
@@ -671,7 +575,6 @@ void fn_1_FE5E0(void) {
 /* fzgx:end fn_1_FE5E0 */
 
 /* fzgx:begin fn_1_FE5E4 */
-extern void fn_1_9A508(Obj_1_data_2A7E0 *arg0);
 
 typedef struct {
     u8 pad_0[0x1B1E4];
@@ -722,8 +625,6 @@ void fn_1_FE7D4(void) {
 /* fzgx:end fn_1_FE7D4 */
 
 /* fzgx:begin fn_1_FEC7C */
-#include "rel/main_rel/bg_cas.h"
-
 void fn_1_FEC7C(void *object) {
     s32 count;
     s32 index;
@@ -747,10 +648,7 @@ void fn_1_FEC7C(void *object) {
 }
 /* fzgx:end fn_1_FEC7C */
 
-/* fzgx:begin fn_1_FED34 noprologue */
-#include "types.h"
-
-extern const f32 lbl_1_rodata_76A8;
+/* fzgx:begin fn_1_FED34 */
 
 #pragma section code_type ".fzgxpool"
 __declspec(section ".fzgxpool") static void fzgx_pool_prime1(void) {
@@ -837,12 +735,6 @@ typedef struct {
 } Vec3;
 
 
-extern u32 fn_1_904(void);
-extern u32 fn_1_914(void);
-extern void fn_1_681C(u32, void *);
-extern u32 fn_1_1FB80(void *, u32);
-extern void fn_1_FE7D8(void *, u32);
-extern u32 fn_1_FF6B8(void *);
 
 static inline f32 fn_1_FED34_operand(f32 right, f32 left) { return left + right; }
 void fn_1_FED34(void *arg0) {
@@ -871,7 +763,7 @@ void fn_1_FED34(void *arg0) {
     if (fn_1_914() > 1U) {
         var_f31 = (0.0f);
     }
-    fn_1_681C(0U, sp8);
+    fn_1_681C(0U, (u32 *)(void *)(sp8));
     if (fn_1_1FB80(sp8, 1U) != 0U) {
         var_f0 = (0.0f);
     } else if (fn_1_1FB80(sp8, 2U) != 0U) {
@@ -897,7 +789,7 @@ void fn_1_FED34(void *arg0) {
         }
         if (var_r30 <= var_r29) {
             if (*(s32 *)(var_r28 + 4) <= 0) {
-                fn_1_FE7D8(var_r28, *(u32 *)var_r28);
+                fn_1_FE7D8( (u8 *)(void *)(var_r28), *(u32 *)var_r28);
             }
         } else if (*(s32 *)(var_r28 + 4) > 0x1E) {
             *(s32 *)(var_r28 + 4) = 0x1E;
@@ -970,8 +862,6 @@ void fn_1_1011CC(int arg0, int arg1) {
 /* fzgx:end fn_1_1011CC */
 
 /* fzgx:begin fn_1_101348 */
-#include "rel/main_rel/bg_cas.h"
-
 int fn_1_101348(int index, u32 *value) {
     Obj_1_data_2A7E0_At3C *obj = lbl_1_data_2A7E0.unk_3C;
 
@@ -1016,8 +906,6 @@ void fn_1_1013C0(void) {
 /* fzgx:end fn_1_1013C0 */
 
 /* fzgx:begin fn_1_1013C4 */
-#include "rel/main_rel/bg_cas.h"
-
 void fn_1_1013C4(void) {
     Obj_1_data_2A7E0_At3C *ptr = lbl_1_data_2A7E0.unk_3C;
     fn_1_9A508(&lbl_1_data_2A7E0);

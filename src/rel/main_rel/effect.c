@@ -72,17 +72,23 @@ typedef struct {
     u8 pad38[0x38];
     Fn1_61E60Node *unk_38;
 } Fn1_61E60Object;
+extern void fn_1_8636C();
+extern void lbl_8006DCA4();
+extern s32 fn_1_54E34(void *arg0, f32 arg1);
+extern void fn_1_5FEBC(fn_1_5FEBC_EffectObject *object);
+extern void *fn_1_5448C(void *);
+extern void fn_1_5489C(void **arg0, void **arg1);
+extern void fn_1_862D4(s16 value, void *result);
+extern void *fn_1_548AC(u32 size);
+extern void fn_1_652F4(fn_1_652F4_Effect *effect);
 extern void fn_1_62360(fn_1_58D38_EffectEntry *arg0);
 extern u32 fn_1_3FC58(void);
 extern void *memcpy(void *, const void *, u32);
-extern void fn_1_862D4(s16 value, void *result);
 extern f32 lbl_8006D0B4(f32 value);
-extern s32 fn_1_54E34(void *arg0, f32 arg1);
 extern void lbl_8006D7B0(void);
 extern void lbl_8006D9D8(void *);
 extern void mathutil_mtxA_rotate_z(int);
 extern const f32 lbl_1_rodata_2950;
-extern void fn_1_8636C();
 extern void fn_1_867CC(s16 value, void *out);
 extern void mathutil_mtxA_rotate_y(s16 value);
 extern void mathutil_mtxA_rotate_x(s16 value);
@@ -103,7 +109,6 @@ extern s32 fn_1_45D0();
 extern u32 GXGetTexBufferSize(u16, u16, u32, u32, u8);
 extern void fn_1_46B4(u32 arg0, u32 arg1, const char *arg2, int arg3);
 extern void fn_1_4730(u32 value, u32 count, u32 size, const char *file, int line);
-extern void lbl_8006DCA4();
 extern void lbl_8006D7DC(void *obj);
 extern void *fn_1_868C0(s8 index);
 extern void *fn_1_86254(int index);
@@ -122,7 +127,6 @@ extern void fn_1_69BCC(void);
 extern f32 lbl_1_rodata_2978[4];
 extern f32 lbl_1_rodata_2AF4[14];
 extern void fn_1_5EB98(void);
-extern void fn_1_5FEBC(fn_1_5FEBC_EffectObject *object);
 extern f32 lbl_1_rodata_2A5C[5];
 extern int fn_1_61D08();
 extern void fn_1_61EF4(void);
@@ -131,12 +135,8 @@ extern f32 lbl_1_rodata_2B2C[145];
 extern void fn_1_638E8(void);
 extern const f32 lbl_1_rodata_2A70[12];
 extern void fn_1_64388(void);
-extern void fn_1_652F4(fn_1_652F4_Effect *effect);
 extern void fn_1_65748(void);
-extern void *fn_1_5448C(void *);
 extern int fn_1_61E60();
-extern void fn_1_5489C(void **arg0, void **arg1);
-extern void *fn_1_548AC(u32 size);
 extern u32 fn_1_3FC8C(void);
 extern const f32 lbl_1_rodata_29A4;
 extern f64 lbl_1_rodata_2988;
@@ -876,9 +876,6 @@ void fn_1_5ABC8(void) {
 /* fzgx:end fn_1_5ABC8 */
 
 /* fzgx:begin fn_1_5ABCC */
-#include "types.h"
-#include "rel/main_rel/effect.h"
-
 #pragma section code_type ".fzgxpool"
 __declspec(section ".fzgxpool") static void fzgx_pool_prime1(void) {
     volatile f32 s; volatile f64 d;  /* fzgx-allow: S2 pool primer sinks */
@@ -997,8 +994,6 @@ void fn_1_5B3CC(void) {
 /* fzgx:end fn_1_5B3CC */
 
 /* fzgx:begin fn_1_5B3D0 */
-#include "types.h"
-
 #pragma section code_type ".fzgxpool"
 __declspec(section ".fzgxpool") static void fzgx_pool_prime1(void) {
     volatile f32 s; volatile f64 d;  /* fzgx-allow: S2 pool primer sinks */

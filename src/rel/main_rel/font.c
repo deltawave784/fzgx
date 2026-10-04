@@ -110,7 +110,7 @@ extern void fn_80072AB0(s32 arg0, s32 arg1, s32 arg2);
 extern void fn_80074918(u8 arg0, s32 arg1, u8 arg2);
 extern void fn_80072C24(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
 extern void fn_80072CC4(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
-extern f32 fn_1_519AC(u32);
+extern f32 fn_1_519AC(u32 value);
 extern void DCFlushRange(void *, u32);
 extern void GXInitTexObj(void *, void *, u16, u16, u32, u32, u32, u8);
 extern void GXInitTexObjLOD(void *, u32, u32, f32, f32, f32, u8, u8, u32);
@@ -685,8 +685,6 @@ u16 fn_1_499BC(const u8 *value) {
 /* fzgx:end fn_1_499BC */
 
 /* fzgx:begin fn_1_49B70 */
-#include "types.h"
-
 typedef struct {
     u8 pad_0[0x10];
     u32 unk_10;

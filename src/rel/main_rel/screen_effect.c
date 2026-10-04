@@ -2,39 +2,215 @@
 #include "rel/main_rel/globals.h"
 #include "rel/main_rel/screen_effect.h"
 
+typedef struct fn_1_76650_ScreenEffect {
+    u8 pad_00[0xa0];
+    s32 field_a0;
+    s32 field_a4;
+    s32 field_a8;
+    s32 field_ac;
+    s32 field_b0;
+    u8 pad_b4[0x14];
+    s32 field_c8;
+    s32 field_cc;
+    s32 field_d0;
+    s32 field_d4;
+    s32 field_d8;
+    s32 field_dc;
+    s32 field_e0;
+    f32 field_e4;
+    s16 field_e8;
+    s16 field_ea;
+    s16 field_ec;
+    s16 field_ee;
+    s16 field_f0;
+    s16 field_f2;
+    s32 field_f4;
+    s16 field_f8;
+    s16 field_fa;
+    s16 field_fc;
+    s16 field_fe;
+    s16 field_100;
+    s16 field_102;
+    s32 field_104;
+    u8 field_108;
+} fn_1_76650_ScreenEffect;
+
+typedef struct {
+    u8 pad_0[0xdc];
+    u32 unk_dc;
+} Fn_1_72980_Obj;
+
+struct fn_1_729F8_Arg0 {
+    u8 pad_0[0xDC];
+    s32 unk_DC;
+    s32 unk_E0;
+    f32 unk_E4;
+    u16 unk_E8;
+    u16 unk_EA;
+    s16 unk_EC;
+    s16 unk_EE;
+    u16 unk_F0;
+    u16 unk_F2;
+    u32 unk_F4;
+    u16 unk_F8;
+    u16 unk_FA;
+    u16 unk_FC;
+    u16 unk_FE;
+    u16 unk_100;
+    u16 unk_102;
+    u32 unk_104;
+};
+
+typedef struct {
+    u8 unk00[0x2c];
+    f32 value;
+} GlobalData;
+
+struct fn_1_761B8_Arg0 {
+    u8 pad_0[0xE0];
+    u32 unk_E0;
+};
+
+typedef struct {
+    u8 pad_0[0xa0];
+    u32 unk_a0[5];
+    u32 unk_b4[5];
+    s32 unk_c8[5];
+    u32 unk_dc;
+    u32 unk_e0;
+    f32 unk_e4;
+    u16 unk_e8;
+    u16 unk_ea;
+    u16 unk_ec;
+    u16 unk_ee;
+    u16 unk_f0;
+    u16 unk_f2;
+    u32 unk_f4;
+    u16 unk_f8;
+    u16 unk_fa;
+    u16 unk_fc;
+    u16 unk_fe;
+    u16 unk_100;
+    u16 unk_102;
+    u32 unk_104;
+    u8 unk_108;
+} FnScreenEffect;
+
+struct Sig_fn_8004E278_fn_8004E278_Arg0 {
+    u32 unk_0;
+};
+
+struct fn_1_76448_Arg0 {
+    u8 pad_0[0xA0];
+    u32 unk_A0[1];
+    u8 pad_A4[0x38];
+    u32 unk_DC;
+    u8 pad_E0[0x18];
+    s16 unk_F8;
+};
+
+typedef u8 Sig_GXGetTexBufferSize_GXBool;
+
+typedef struct {
+    u32 flags;
+    s32 count;
+    void *nodes;
+} EffectManager;
+extern void fn_1_76650(fn_1_76650_ScreenEffect *effect);
+extern void fn_1_72980(Fn_1_72980_Obj *arg0);
+extern void fn_1_729F8(struct fn_1_729F8_Arg0 *arg0);
+extern f32 *lbl_801A6D00;
+extern u32 lbl_801A66A0;
+extern void fn_1_75D84(void *, void *, void *);
+extern void fn_1_761B8(struct fn_1_761B8_Arg0 *arg0, u32 arg1);
+extern void fn_1_76C60();
+extern void fn_1_76EB8(void);
+extern void fn_1_77200();
+extern u32 fn_1_77C5C(void *, void *, void *);
+extern u32 fn_1_4E220(void *, u32, u32, u32, u32);
+extern void lbl_8006D758(void);
+extern void lbl_8006D784(f32 *arg);
+extern void lbl_8006E1B0(void *arg0, void *arg1);
+extern void mathutil_mtxA_rotate_z(s32);
+extern void fn_800371F8(u32, void *);
+extern void fn_8003726C(u32, void *);
+extern void fn_800720B0(u32);
+extern void fn_8007245C(u32 value);
+extern void fn_800724C8(void);
+extern void fn_80072808(void);
+extern void fn_80072864(u32 arg0);
+extern void fn_800728A8(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
+extern void fn_800729B0(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
+extern void fn_80072AB0(s32 arg0, s32 arg1, s32 arg2);
+extern void fn_80072C24(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
+extern void fn_80072CC4(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
+extern void fn_80072D64(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u8 arg4, s32 arg5);
+extern void fn_80072E20(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u8 arg4, s32 arg5);
+extern void fn_80072EDC(s32 arg0, s32 arg1);
+extern void fn_800734A8(u32 arg0, s32 arg1, s32 arg2, s32 arg3);
+extern void fn_800735C8(s32 index, s32 value);
+extern void fn_80073620(s32 index, s32 value);
+extern void fn_80073678(u32 arg0);
+extern void fn_800736C0(u32, void *);
+extern void fn_80073778(void *obj, s32 index);
+extern void fn_80073898(u32 arg0);
+extern void fn_800738E0(s32 arg0, s32 arg1, s32 arg2);
+extern void fn_800739E0(s32 index, s32 arg1, s32 arg2);
+extern void fn_80073A58(int index, void *arg, s8 value);
+extern void fn_80073C6C(s32 index);
+extern void fn_80073D60(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
+extern void fn_800745A4(u32 arg0, s32 arg1, s32 arg2, u32 arg3, u32 arg4, u32 arg5);
+extern void fn_80074660(u32 arg0);
+extern void fn_80074788(u32 arg0);
+extern void fn_800747D0(u32 arg0, u32 arg1, s32 arg2, s32 arg3, u32 arg4, s32 arg5, s32 arg6);
+extern void fn_80074918(u8 arg0, s32 arg1, u8 arg2);
+extern void GXLoadTexMtxImm(f32 *arg0, int arg1, int arg2);
+extern void GXSetAlphaCompare(s32, s32, s32, s32, s32);
+extern const f32 lbl_1_rodata_31A8;
+extern const f64 lbl_1_rodata_31D8;
+extern void DCInvalidateRange(struct Sig_fn_8004E278_fn_8004E278_Arg0 *, u32);
+extern void fn_1_76448(struct fn_1_76448_Arg0 *arg0, u32 arg1);
+extern u32 fn_1_7880C(void);
+extern u32 fn_1_788B0(void);
+extern void GXInvalidateTexAll(void);
+extern const f32 lbl_1_rodata_31E8;
+extern u16 fn_1_A5DB0(void);
+extern void OSPanic(const char *file, int line, const char *msg, ...);
+extern u32 GXGetTexBufferSize(u16, u16, u32, Sig_GXGetTexBufferSize_GXBool, u8);
+extern u32 lbl_1_bss_6D1A8[278];
+extern const f64 lbl_1_rodata_31A0;
+extern u32 fn_80036104(void);
+extern u32 GXGetTexObjHeight(u32 arg0);
+extern u32 GXGetTexObjWidth(u32 arg0);
+extern u32 fn_800360D8(u32 arg0);
+extern void GXInitTexObj(u32 arg0, u32 arg1, u32 arg2, u32 arg3, u32 arg4, int arg5, int arg6, int arg7);
+extern void GXInitTexObjLOD(u32 arg0, int arg1, int arg2, int arg3, int arg4, int arg5, f32 arg6, f32 arg7, f32 arg8);
+extern const f32 lbl_1_rodata_323C;
+extern void fn_80008BEC(void *dest, int value, u32 size);
+extern void lbl_8006DB74(void *arg);
+extern void lbl_8006E0C8(void *arg);
+extern f32 lbl_1_rodata_3278[20];
+extern f32 fn_1_A71AC(void);
+extern s16 fn_1_12EF24(s16 row, s16 column);
+extern int sprintf(char *s, const char *format, ...);
+extern void fn_1_465D0(char *text, s32 mode);
 extern u32 lbl_1_bss_6C8DC[2];
 extern u32 lbl_801A6410;
-extern void fn_1_46B4(u32 arg0, u32 arg1, void *arg2, u32 arg3);
-extern void fn_1_727BC(u32 arg0, u32 arg1, void *arg2);
+extern void fn_1_46B4(u32 arg0, u32 arg1, const char *arg2, int arg3);
+extern void fn_1_727BC();
 extern void fn_1_76A94(void *arg0, u32 arg1);
 extern void fn_1_76DBC(void);
 extern void fn_1_4E500(void);
-extern void fn_1_4E638(int);
+extern void fn_1_4E638(s32 arg);
 extern void fn_1_4E6F4(void);
-extern void fn_80073778(void *arg0, int arg1);
-extern s32 fn_1_A5D9C(void);
+extern u16 fn_1_A5D9C(void);
 extern const f32 lbl_1_rodata_31AC;
-extern u32 fn_80008E84(u32 arg);
+extern u32 fn_80008E84(u32 arg0);
 extern void fn_1_77238(void);
 extern void fn_1_772E0(void);
 extern void fn_1_77384(void *arg);
-extern void fn_80072864(int arg0);
-extern void fn_800745A4(int arg0, int arg1, int arg2, int arg3, int arg4, int arg5);
-extern void fn_80074660(int arg0);
-extern void fn_80073678(int arg0);
-extern void fn_80073898(int arg0);
-extern void fn_80074788(int arg0);
-extern void fn_800738E0(int arg0, int arg1, int arg2);
-extern void fn_80073D60(int arg0, int arg1, int arg2, int arg3, int arg4);
-extern void fn_800734A8(int arg0, int arg1, int arg2, int arg3);
-extern void fn_80072EDC(int arg0, int arg1);
 extern f32 lbl_1_rodata_31B0[10];
-extern const f64 lbl_1_rodata_31A0;
-extern void lbl_8006D784(f32 *arg);
-extern void fn_80073A58(int arg0, f32 *arg1, int arg2);
-extern void fn_800739E0(int arg0, int arg1, int arg2);
-extern void GXLoadTexMtxImm(f32 *arg0, int arg1, int arg2);
-extern void fn_8006FDEC(void);
+extern s32 fn_8006FDEC(void);
 extern void fn_8006FEFC(void);
 extern void fn_8006FD1C(void);
 extern void fn_1_79810(void);
@@ -43,33 +219,25 @@ extern void fn_1_791B0(void);
 extern void fn_1_9A1E8(void);
 extern void fn_1_9A864(void);
 extern u8 fn_1_7B074(void);
-extern void fn_80071718(void *arg);
-extern void fn_800711A8(void *arg);
+extern void fn_80071718(void *);
+extern void fn_800711A8(void *);
 extern void fn_1_14CB4(void);
 extern void fn_1_FA84(void);
 extern const f32 lbl_1_rodata_32CC;
-extern void fn_1_79C88(void *arg0, s32 arg1, f32 arg2, s32 arg3);
+extern s32 fn_1_79C88(EffectManager *manager, u32 *out, s32 reverse, f32 value);
 extern void lbl_8006DBAC(void *arg0);
-extern void lbl_8006E1B0(void *arg0, void *arg1);
-extern void sprintf(char *dst, const char *format, ...);
-extern void fn_1_465D0(char *text, int arg);
-extern void fn_1_14D5C(void *object, int arg);
-extern void fn_1_46EA8(int value);
-extern void fn_1_12620(void *object);
-extern void fn_1_46DC4(void *obj);
-
-extern void fn_1_727BC();
-extern void fn_8006FDEC(void);
-extern void fn_80071718(void *);
-extern void fn_800711A8(void *);
+extern void fn_1_14D5C(char *arg0, int arg1);
+extern void fn_1_46EA8(u32 value);
+extern void fn_1_12620(s32 arg0);
+extern s32 fn_1_46DC4(s32 value);
 extern u32 fn_8003526C(u32, u32);
-extern u32 fn_80074300(u32, u32, u32, u32);
-extern u32 fn_80074438(u32, u32, u32, u32);
+extern void fn_80074300();
+extern void fn_80074438(u32 arg0, u32 arg1, u32 arg2, u32 arg3);
 
 /* fzgx:begin fn_1_72648 */
 void fn_1_72648(void) {
     if (lbl_1_bss_6C8DC[0] != 0) {
-        fn_1_46B4(lbl_801A6410, lbl_1_bss_6C8DC[0], lbl_1_data_1DAC0, 0xf9);
+        fn_1_46B4(lbl_801A6410, lbl_1_bss_6C8DC[0], (const char *)(void *)(lbl_1_data_1DAC0), 0xf9);
         lbl_1_bss_6C8DC[0] = 0;
     }
 }
@@ -122,20 +290,27 @@ void fn_1_72768(u32 arg0, u32 arg1) {
 /* fzgx:end fn_1_72768 */
 
 /* fzgx:begin fn_1_72848 */
-extern void fn_1_76650(void *);
 
 void fn_1_72848(void) {
     u8 i;
 
     // Reset each screen-effect entry before clearing the active-effect flag.
     for (i = 0; i < 8; i++) {
-        fn_1_76650((u8 *)&lbl_1_bss_6C8EC + i * 0x10c);
+        fn_1_76650( (fn_1_76650_ScreenEffect *)(void *)((u8 *)&lbl_1_bss_6C8EC + i * 0x10c));
     }
     lbl_1_bss_6D14C.unk_0 = 0;
 }
 /* fzgx:end fn_1_72848 */
 
-/* fzgx:begin fn_1_728B0 */
+/* fzgx:begin fn_1_728B0 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/screen_effect.h"
+
+extern void fn_1_4E500(void);
+extern void fn_1_4E638(int);
+extern void fn_1_4E6F4(void);
+
 typedef struct {
     u8 pad_0[0xdc];
     s32 unk_DC;
@@ -177,10 +352,6 @@ void fn_1_728B0(void) {
 /* fzgx:end fn_1_728B0 */
 
 /* fzgx:begin fn_1_72980 */
-typedef struct {
-    u8 pad_0[0xdc];
-    u32 unk_dc;
-} Fn_1_72980_Obj;
 
 void fn_1_72980(Fn_1_72980_Obj *arg0) {
     int index;
@@ -1185,14 +1356,7 @@ void fn_1_729F8(struct fn_1_729F8_Arg0 *arg0)
 /* fzgx:end fn_1_729F8 */
 
 /* fzgx:begin fn_1_761B8 */
-struct fn_1_761B8_Arg0 {
-    u8 pad_0[0xE0];
-    u32 unk_E0;
-};
 
-extern const f32 lbl_1_rodata_31A8;
-extern const f64 lbl_1_rodata_31D8[2];
-extern void fn_1_76C60(void);
 
 void fn_1_761B8(struct fn_1_761B8_Arg0 *arg0, u32 arg1) {
     u32 v0;
@@ -1206,12 +1370,7 @@ void fn_1_761B8(struct fn_1_761B8_Arg0 *arg0, u32 arg1) {
 }
 /* fzgx:end fn_1_761B8 */
 
-/* fzgx:begin fn_1_76218 noprologue */
-#include "types.h"
-
-struct Sig_fn_8004E278_fn_8004E278_Arg0 {
-    u32 unk_0;
-};
+/* fzgx:begin fn_1_76218 */
 
 struct Sig_fn_1_76448_fn_1_76448_Arg0 {
     u8 pad_0[0xA0];
@@ -1250,14 +1409,6 @@ typedef struct {
 struct fn_1_76218_jumptable_1_data_1DBC0 {
     u32 unk_0[1];
 };
-extern struct fn_1_76218_jumptable_1_data_1DBC0 jumptable_1_data_1DBC0;
-extern u8 lbl_1_bss_6C8EC[];
-extern void DCInvalidateRange(struct Sig_fn_8004E278_fn_8004E278_Arg0 *, u32);
-extern void fn_1_76448(struct Sig_fn_1_76448_fn_1_76448_Arg0 *, u32);
-extern void fn_1_76C60(Sig_fn_1_76C60_FnScreenEffect *);
-extern u32 fn_1_7880C(void);
-extern u32 fn_1_788B0(void);
-extern void GXInvalidateTexAll(void);
 
 
 void fn_1_76218(s32 arg0) {
@@ -1272,11 +1423,11 @@ void fn_1_76218(s32 arg0) {
     if (arg0 != 0) {
         var_r29 = 0;
         while (var_r29 < 8U) {
-            temp_r28 = (struct Sig_fn_1_76448_fn_1_76448_Arg0 *)((u8 *)(lbl_1_bss_6C8EC) + (var_r29 * 0x10C));
+            temp_r28 = (struct Sig_fn_1_76448_fn_1_76448_Arg0 *)((u8 *)((((u8 *)&lbl_1_bss_6C8EC))) + (var_r29 * 0x10C));
             if ((s32) temp_r28->unk_DC == 0x25) {
                 DCInvalidateRange((struct Sig_fn_8004E278_fn_8004E278_Arg0 *)(*(struct Sig_fn_8004E278_fn_8004E278_Arg0 **)((u8 *)(temp_r28) + 160)), (u32)(*(u32 *)((u8 *)(temp_r28) + 180)));
-                fn_1_76448((struct Sig_fn_1_76448_fn_1_76448_Arg0 *)(temp_r28), (u32)(0U));
-                fn_1_76C60((Sig_fn_1_76C60_FnScreenEffect *)((Sig_fn_1_76C60_FnScreenEffect *) temp_r28));
+                fn_1_76448( (struct fn_1_76448_Arg0 *)((struct Sig_fn_1_76448_fn_1_76448_Arg0 *)(temp_r28)), (u32)(0U));
+                fn_1_76C60( (FnScreenEffect *)((Sig_fn_1_76C60_FnScreenEffect *)((Sig_fn_1_76C60_FnScreenEffect *) temp_r28)));
                 var_r5 = 1;
             }
             var_r29 += 1;
@@ -1284,18 +1435,18 @@ void fn_1_76218(s32 arg0) {
     }
     var_r29_2 = 0;
     while (var_r29_2 < 8U) {
-        temp_r28_2 = (struct Sig_fn_1_76448_fn_1_76448_Arg0 *)((u8 *)(lbl_1_bss_6C8EC) + (var_r29_2 * 0x10C));
+        temp_r28_2 = (struct Sig_fn_1_76448_fn_1_76448_Arg0 *)((u8 *)((((u8 *)&lbl_1_bss_6C8EC))) + (var_r29_2 * 0x10C));
         temp_r4 = temp_r28_2->unk_DC;
         if ((temp_r4 != 0) && ((u8) (*(u8 *)((u8 *)(temp_r28_2) + 264)) == 0)) {
             if (arg0 != 0) {
                 switch (temp_r4) {
                 case 0xE:
-                    fn_1_76448((struct Sig_fn_1_76448_fn_1_76448_Arg0 *)(temp_r28_2), (u32)(2U));
+                    fn_1_76448( (struct fn_1_76448_Arg0 *)((struct Sig_fn_1_76448_fn_1_76448_Arg0 *)(temp_r28_2)), (u32)(2U));
                     break;
                 case 0x17:
                 case 0x18:
-                    fn_1_76448((struct Sig_fn_1_76448_fn_1_76448_Arg0 *)(temp_r28_2), (u32)(0U));
-                    fn_1_76448((struct Sig_fn_1_76448_fn_1_76448_Arg0 *)(temp_r28_2), (u32)(1U));
+                    fn_1_76448( (struct fn_1_76448_Arg0 *)((struct Sig_fn_1_76448_fn_1_76448_Arg0 *)(temp_r28_2)), (u32)(0U));
+                    fn_1_76448( (struct fn_1_76448_Arg0 *)((struct Sig_fn_1_76448_fn_1_76448_Arg0 *)(temp_r28_2)), (u32)(1U));
                     break;
                 }
             } else {
@@ -1308,20 +1459,20 @@ void fn_1_76218(s32 arg0) {
                 case 29:
                 case 33:
                 case 35:
-                    fn_1_76448((struct Sig_fn_1_76448_fn_1_76448_Arg0 *)(temp_r28_2), (u32)(0U));
+                    fn_1_76448( (struct fn_1_76448_Arg0 *)((struct Sig_fn_1_76448_fn_1_76448_Arg0 *)(temp_r28_2)), (u32)(0U));
                     break;
                 case 14:
                 case 30:
-                    fn_1_76448((struct Sig_fn_1_76448_fn_1_76448_Arg0 *)(temp_r28_2), (u32)(0U));
-                    fn_1_76448((struct Sig_fn_1_76448_fn_1_76448_Arg0 *)(temp_r28_2), (u32)(1U));
+                    fn_1_76448( (struct fn_1_76448_Arg0 *)((struct Sig_fn_1_76448_fn_1_76448_Arg0 *)(temp_r28_2)), (u32)(0U));
+                    fn_1_76448( (struct fn_1_76448_Arg0 *)((struct Sig_fn_1_76448_fn_1_76448_Arg0 *)(temp_r28_2)), (u32)(1U));
                     break;
                 case 12:
                 case 13:
                 case 15:
                 case 36:
-                    fn_1_76448((struct Sig_fn_1_76448_fn_1_76448_Arg0 *)(temp_r28_2), (u32)(0U));
-                    fn_1_76448((struct Sig_fn_1_76448_fn_1_76448_Arg0 *)(temp_r28_2), (u32)(1U));
-                    fn_1_76448((struct Sig_fn_1_76448_fn_1_76448_Arg0 *)(temp_r28_2), (u32)(2U));
+                    fn_1_76448( (struct fn_1_76448_Arg0 *)((struct Sig_fn_1_76448_fn_1_76448_Arg0 *)(temp_r28_2)), (u32)(0U));
+                    fn_1_76448( (struct fn_1_76448_Arg0 *)((struct Sig_fn_1_76448_fn_1_76448_Arg0 *)(temp_r28_2)), (u32)(1U));
+                    fn_1_76448( (struct fn_1_76448_Arg0 *)((struct Sig_fn_1_76448_fn_1_76448_Arg0 *)(temp_r28_2)), (u32)(2U));
                     break;
                 case 1:
                 case 2:
@@ -1331,7 +1482,7 @@ void fn_1_76218(s32 arg0) {
                 case 6:
                 case 7:
                     if ((s32) (*(s32 *)((u8 *)(temp_r28_2) + 224)) == 0) {
-                        fn_1_76448((struct Sig_fn_1_76448_fn_1_76448_Arg0 *)(temp_r28_2), (u32)(0U));
+                        fn_1_76448( (struct fn_1_76448_Arg0 *)((struct Sig_fn_1_76448_fn_1_76448_Arg0 *)(temp_r28_2)), (u32)(0U));
                     }
                     break;
                 case 8:
@@ -1339,16 +1490,16 @@ void fn_1_76218(s32 arg0) {
                 case 10:
                 case 11:
                     if ((s32) (*(s32 *)((u8 *)(temp_r28_2) + 224)) == 0) {
-                        fn_1_76448((struct Sig_fn_1_76448_fn_1_76448_Arg0 *)(temp_r28_2), (u32)(0U));
+                        fn_1_76448( (struct fn_1_76448_Arg0 *)((struct Sig_fn_1_76448_fn_1_76448_Arg0 *)(temp_r28_2)), (u32)(0U));
                     }
-                    fn_1_76448((struct Sig_fn_1_76448_fn_1_76448_Arg0 *)(temp_r28_2), (u32)(1U));
+                    fn_1_76448( (struct fn_1_76448_Arg0 *)((struct Sig_fn_1_76448_fn_1_76448_Arg0 *)(temp_r28_2)), (u32)(1U));
                     break;
                 case 34:
-                    fn_1_76448((struct Sig_fn_1_76448_fn_1_76448_Arg0 *)(temp_r28_2), (u32)(2U));
+                    fn_1_76448( (struct fn_1_76448_Arg0 *)((struct Sig_fn_1_76448_fn_1_76448_Arg0 *)(temp_r28_2)), (u32)(2U));
                     fn_1_7880C();
-                    fn_1_76448((struct Sig_fn_1_76448_fn_1_76448_Arg0 *)(temp_r28_2), (u32)(0U));
+                    fn_1_76448( (struct fn_1_76448_Arg0 *)((struct Sig_fn_1_76448_fn_1_76448_Arg0 *)(temp_r28_2)), (u32)(0U));
                     fn_1_788B0();
-                    fn_1_76448((struct Sig_fn_1_76448_fn_1_76448_Arg0 *)(temp_r28_2), (u32)(1U));
+                    fn_1_76448( (struct fn_1_76448_Arg0 *)((struct Sig_fn_1_76448_fn_1_76448_Arg0 *)(temp_r28_2)), (u32)(1U));
                     break;
                 }
             }
@@ -1363,16 +1514,6 @@ void fn_1_76218(s32 arg0) {
 /* fzgx:end fn_1_76218 */
 
 /* fzgx:begin fn_1_76448 */
-#include "types.h"
-
-struct fn_1_76448_Arg0 {
-    u8 pad_0[0xA0];
-    u32 unk_A0[1];
-    u8 pad_A4[0x38];
-    u32 unk_DC;
-    u8 pad_E0[0x18];
-    s16 unk_F8;
-};
 
 void fn_1_76448(struct fn_1_76448_Arg0 *arg0, u32 arg1) {
     u32 v0;
@@ -1390,38 +1531,6 @@ void fn_1_76448(struct fn_1_76448_Arg0 *arg0, u32 arg1) {
 /* fzgx:end fn_1_76448 */
 
 /* fzgx:begin fn_1_76650 */
-typedef struct fn_1_76650_ScreenEffect {
-    u8 pad_00[0xa0];
-    s32 field_a0;
-    s32 field_a4;
-    s32 field_a8;
-    s32 field_ac;
-    s32 field_b0;
-    u8 pad_b4[0x14];
-    s32 field_c8;
-    s32 field_cc;
-    s32 field_d0;
-    s32 field_d4;
-    s32 field_d8;
-    s32 field_dc;
-    s32 field_e0;
-    f32 field_e4;
-    s16 field_e8;
-    s16 field_ea;
-    s16 field_ec;
-    s16 field_ee;
-    s16 field_f0;
-    s16 field_f2;
-    s32 field_f4;
-    s16 field_f8;
-    s16 field_fa;
-    s16 field_fc;
-    s16 field_fe;
-    s16 field_100;
-    s16 field_102;
-    s32 field_104;
-    u8 field_108;
-} fn_1_76650_ScreenEffect;
 
 void fn_1_76650(fn_1_76650_ScreenEffect *effect) {
     s32 value;
@@ -1437,7 +1546,7 @@ void fn_1_76650(fn_1_76650_ScreenEffect *effect) {
     effect->field_f8 = 0;
     effect->field_100 = 0x280;
     effect->field_fc = 0x280;
-    value = fn_1_A5D9C();
+    value = (s32)fn_1_A5D9C();
     effect->field_102 = value;
     effect->field_fe = value;
     effect->field_dc = 0;
@@ -1461,12 +1570,6 @@ void fn_1_76650(fn_1_76650_ScreenEffect *effect) {
 /* fzgx:begin fn_1_76704 */
 struct fn_1_76704_Copy16 { u32 a[4]; };
 
-extern const f32 lbl_1_rodata_31E8;
-extern const f64 lbl_1_rodata_31D8;
-extern u16 fn_1_A5DB0(void);
-extern u8 lbl_1_data_1DAC0[0x44];
-extern u8 lbl_1_data_1DC80[0x48];
-extern void OSPanic(const char *, int, const char *, ...);
 
 static inline u32 fn_1_76704_operand(u32 right, u32 left) { left *= right; return left; }
 #pragma opt_propagation off
@@ -1545,8 +1648,6 @@ typedef struct {
     u8 unk_5;
 } Fn1_76964Record;
 
-typedef u8 Sig_GXGetTexBufferSize_GXBool;
-extern u32 GXGetTexBufferSize(u16, u16, u32, Sig_GXGetTexBufferSize_GXBool, u8);
 
 void fn_1_76964(Fn1_76964Obj *obj) {
     int i;
@@ -1575,7 +1676,6 @@ void fn_1_76BD0(u8 index, u8 value) {
 /* fzgx:end fn_1_76BD0 */
 
 /* fzgx:begin fn_1_76BF8 */
-extern void fn_1_76C60(void);
 
 typedef struct {
     u8 pad_0[0xDC];
@@ -1598,33 +1698,11 @@ void fn_1_76BF8(void) {
 /* fzgx:end fn_1_76BF8 */
 
 /* fzgx:begin fn_1_76C60 */
-typedef struct {
-    u8 pad_0[0xa0];
-    u32 unk_a0[5];
-    u32 unk_b4[5];
-    s32 unk_c8[5];
-    u32 unk_dc;
-    u32 unk_e0;
-    f32 unk_e4;
-    u16 unk_e8;
-    u16 unk_ea;
-    u16 unk_ec;
-    u16 unk_ee;
-    u16 unk_f0;
-    u16 unk_f2;
-    u32 unk_f4;
-    u16 unk_f8;
-    u16 unk_fa;
-    u16 unk_fc;
-    u16 unk_fe;
-    u16 unk_100;
-    u16 unk_102;
-    u32 unk_104;
-    u8 unk_108;
-} FnScreenEffect;
 
 // Clears the active screen-effect state and resets its rendering parameters.
-void fn_1_76C60(FnScreenEffect *arg) {
+void fn_1_76C60(arg)
+FnScreenEffect *arg;
+{
     u8 i;
     u16 value;
 
@@ -1632,7 +1710,7 @@ void fn_1_76C60(FnScreenEffect *arg) {
     i = 0;
     while (i < ((u8 *)&lbl_1_data_1D9B8)[arg->unk_dc * 6 + 5]) {
         if (arg->unk_c8[i] == 0) {
-            fn_1_46B4(lbl_801A6410, arg->unk_a0[i], lbl_1_data_1DAC0, 0x9a1);
+            fn_1_46B4(lbl_801A6410, arg->unk_a0[i], (const char *)(void *)(lbl_1_data_1DAC0), 0x9a1);
             arg->unk_a0[i] = 0;
         }
         i++;
@@ -1649,7 +1727,7 @@ void fn_1_76C60(FnScreenEffect *arg) {
     arg->unk_f8 = 0;
     arg->unk_100 = 0x280;
     arg->unk_fc = 0x280;
-    value = fn_1_A5D9C();
+    value = (s32)fn_1_A5D9C();
     arg->unk_102 = value;
     arg->unk_fe = value;
     arg->unk_dc = 0;
@@ -1678,7 +1756,9 @@ void fn_1_76DBC(void) {
 /* fzgx:end fn_1_76DBC */
 
 /* fzgx:begin fn_1_77200 */
-void fn_1_77200(void *arg) {
+void fn_1_77200(arg)
+void *arg;
+{
     fn_1_77238();
     fn_1_772E0();
     fn_1_77384(arg);
@@ -1713,25 +1793,15 @@ void fn_1_772E0(void) {
     values[3] = lbl_1_rodata_31B0[0] * first[8];
     values[4] = lbl_1_rodata_31B0[0] * first[9];
     values[5] = *(const f32 *)&lbl_1_rodata_31A0;
-    fn_80073A58(1, values, 1);
+    fn_80073A58(1, (void *)(f32 *)(values), 1);
     fn_800739E0(0, 0, 0);
     lbl_8006D784(second);
     GXLoadTexMtxImm(second, 30, 1);
 }
 /* fzgx:end fn_1_772E0 */
 
-/* fzgx:begin fn_1_77B80 noprologue */
-#include "types.h"
+/* fzgx:begin fn_1_77B80 */
 
-extern u32 lbl_1_bss_6D1A8[278];
-extern const f32 lbl_1_rodata_31A0;
-
-extern u32 fn_80036104(void);
-extern u32 GXGetTexObjHeight(u32 arg0);
-extern u32 GXGetTexObjWidth(u32 arg0);
-extern u32 fn_800360D8(u32 arg0);
-extern void GXInitTexObj(u32 arg0, u32 arg1, u32 arg2, u32 arg3, u32 arg4, int arg5, int arg6, int arg7);
-extern void GXInitTexObjLOD(u32 arg0, int arg1, int arg2, int arg3, int arg4, int arg5, f32 arg6, f32 arg7, f32 arg8);
 
 void fn_1_77B80(u32 arg0) {
     struct { u32 value; } value0;
@@ -1745,8 +1815,6 @@ void fn_1_77B80(u32 arg0) {
 /* fzgx:end fn_1_77B80 */
 
 /* fzgx:begin fn_1_7879C */
-extern const f32 lbl_1_rodata_323C;
-extern const f64 lbl_1_rodata_31D8;
 
 u8 fn_1_7879C(u32 arg0) {
     s32 v0;
@@ -1875,10 +1943,6 @@ typedef struct {
     u32 unk_104;
 } ScreenEffectSource;
 
-extern void fn_80008BEC(void *arg0, s32 arg1, u32 arg2);
-extern void lbl_8006D758(void);
-extern void lbl_8006DB74(void *arg);
-extern void lbl_8006E0C8(void *arg);
 
 void fn_1_79810(void) {
     u32 source_flags;
@@ -1921,14 +1985,7 @@ void fn_1_79810(void) {
 }
 /* fzgx:end fn_1_79810 */
 
-/* fzgx:begin fn_1_79C88 noprologue */
-#include "types.h"
-
-typedef struct {
-    u32 flags;
-    s32 count;
-    void *nodes;
-} EffectManager;
+/* fzgx:begin fn_1_79C88 */
 
 typedef struct {
     u32 type;
@@ -1947,15 +2004,7 @@ typedef struct {
     f32 angle;
 } EffectResult;
 
-typedef struct {
-    u8 unk00[0x2c];
-    f32 value;
-} GlobalData;
 
-extern f32 lbl_1_rodata_3278[20];
-extern GlobalData *lbl_801A6D00;
-extern void lbl_8006E1B0(void *arg0, void *arg1);
-extern f32 fn_1_A71AC(void);
 
 static inline f32 fn_1_79C88_operand(f32 left, f32 right) { return left * right; }
 s32 fn_1_79C88(EffectManager *manager, u32 *out, s32 reverse, f32 value) {
@@ -1980,7 +2029,7 @@ s32 fn_1_79C88(EffectManager *manager, u32 *out, s32 reverse, f32 value) {
 
     lbl_8006E1B0((u8 *)data + 8, &result);
     phase = -result.angle;
-    limit = -lbl_801A6D00->value;
+    limit = -((GlobalData *)lbl_801A6D00)->value;
     if ((manager->flags & 2) != 0) {
         if (limit < rodata[43]) {
             index = 0;
@@ -2038,7 +2087,7 @@ s32 fn_1_79C88(EffectManager *manager, u32 *out, s32 reverse, f32 value) {
 
 /* fzgx:begin fn_1_7A648 */
 void fn_1_7A648(void *arg0) {
-    fn_1_79C88(arg0, 0, lbl_1_rodata_32CC, 0);
+    fn_1_79C88((EffectManager *)(arg0), (u32 *)(0), 0, lbl_1_rodata_32CC);
 }
 /* fzgx:end fn_1_7A648 */
 
@@ -2136,14 +2185,14 @@ void fn_1_7B084(void *object, int value) {
     if (value == 0) {
         fn_1_465D0(text_a, 1);
         fn_1_465D0(text_b, 1);
-        fn_1_14D5C(object, 0);
+        fn_1_14D5C( (char *)(void *)(object), 0);
     } else {
         fn_1_465D0(text_a, 2);
         fn_1_465D0(text_b, 2);
-        fn_1_14D5C(object, 1);
+        fn_1_14D5C( (char *)(void *)(object), 1);
     }
     fn_1_46EA8(value);
-    fn_1_12620(object);
+    fn_1_12620( (s32)(void *)(object));
     sprintf(text_a, data + 0x7f8, object);
     fn_1_465D0(text_a, 1);
     fn_1_46EA8(0);
@@ -2161,9 +2210,9 @@ void fn_1_7B184(void *arg) {
     sprintf(buf_28, (const char *)(base + 0x7e8), (const char *)(base + 0x7e0), arg);
     sprintf(buf_08, (const char *)(base + 0x810), arg);
 
-    fn_1_46DC4(buf_48);
-    fn_1_46DC4(buf_28);
-    fn_1_46DC4(buf_08);
+    fn_1_46DC4( (s32)(void *)(buf_48));
+    fn_1_46DC4( (s32)(void *)(buf_28));
+    fn_1_46DC4( (s32)(void *)(buf_08));
 }
 /* fzgx:end fn_1_7B184 */
 

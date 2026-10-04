@@ -2,54 +2,119 @@
 #include "rel/main_rel/globals.h"
 #include "rel/main_rel/camera.h"
 
+struct fn_1_6400_lbl_801A6410 {
+    u32 unk_0;
+};
+
+typedef struct CameraTarget {
+    u8 pad_000[0x394];
+    void *data;
+} CameraTarget;
+
+struct fn_1_AA54_lbl_1_rodata_388 {
+    f64 unk_0;
+};
+
+typedef struct Vec3 {
+    f32 x;
+    f32 y;
+    f32 z;
+} Vec3;
+
+typedef struct camera_reset_transition_Camera {
+    u8 pad_00[0xA4];
+    s16 unk_A4;
+} camera_reset_transition_Camera;
+
+typedef struct camera_update_transition_Camera {
+    u8 pad_00[0x78];
+    s16 unk_78;
+    u8 pad_7A[0x2A];
+    s16 unk_A4;
+} camera_update_transition_Camera;
+
+typedef struct Transform {
+    u8 pad_08[0x8];
+    f32 unk_08;
+    u8 pad_0c[0xc];
+    f32 unk_18;
+    u8 pad_1c[0xc];
+    f32 unk_28;
+    u8 pad_2c[0x24];
+    u8 unk_50[0x2c];
+    u32 unk_7C;
+} Transform;
+
+typedef struct CameraStateLocal {
+    u8 pad_d4[0xd4];
+    f32 unk_D4;
+    f32 unk_D8;
+    f32 unk_DC;
+} CameraStateLocal;
+
+typedef struct { u8 pad_0[0x4]; f32 unk_4; u32 unk_8; f32 unk_C; } Bss_104C;
+extern struct fn_1_6400_lbl_801A6410 lbl_801A6410;
+extern void fn_1_46B4(u32 arg0, u32 arg1, const char *arg2, int arg3);
+extern u8 lbl_1_bss_F74;
+extern u8 lbl_1_bss_F75;
+extern u8 fn_1_86624();
+extern u8 fn_1_86634(int index);
+extern u32 lbl_1_bss_7ADE8[40];
+extern void *lbl_1_data_3310;
+extern f32 fn_1_A6FE8(void);
+extern void fn_1_DCE60(void *);
+extern u32 fn_1_435C(u32 value);
+extern s32 fn_1_3F8C(u32 arg3, u32 arg0, u32 arg1, u32 index);
+extern void fn_1_DCED0(void);
+extern const f32 lbl_1_rodata_194;
+extern const f32 lbl_1_rodata_188;
+extern void OSPanic(u8 *file, int line, u8 *message, ...);
+extern void *fn_1_868C0(s8 index);
+extern s32 fn_1_A5DC4(void);
+extern const f32 lbl_1_rodata_200;
+extern const f32 lbl_1_rodata_204;
+extern f64 lbl_1_rodata_360;
+extern struct fn_1_AA54_lbl_1_rodata_388 lbl_1_rodata_388;
+extern u8 fn_1_86678(int index);
+extern s16 camera_get_entry_field_0xa8(u32);
+extern u32 fn_1_864E8(int index);
+extern void camera_set_entry_field_0xa8(u8, s16);
+extern u16 fn_1_8664C(int index);
+extern void fn_1_862D4(u8 index, Vec3 *out);
+extern void fn_1_8658C(u8 index, Vec3 *out);
+extern void fn_1_AEB8(camera_reset_transition_Camera *);
+extern void fn_1_AFC8(camera_update_transition_Camera *);
+extern Transform *lbl_801A6D00;
+extern CameraStateLocal *lbl_801A66CC;
+extern Bss_104C lbl_1_bss_104C;
+extern void OSReport(const char *format, ...);
+extern f64 lbl_1_rodata_4A8[7];
+extern u8 lbl_1_bss_108C[52];
 extern void fn_1_BD54(void);
 extern void fn_1_B870(void);
-extern void camera_get_extended_state_storage(__typeof__(lbl_1_bss_F68));
+extern u8* camera_get_extended_state_storage();
 extern void lbl_8006DBAC(void);
 extern void fn_8006F038(void *, void *, s16);
 extern void lbl_8006DCDC(void);
-extern s16 fn_1_6B48(s16 value);
+extern s16 fn_1_6B48(s32 index);
 extern void fn_1_6D2C(u32);
 extern s32 lbl_1_bss_F78;
-extern void fn_1_A2DF4(u32, u32, u32);
-extern s8 fn_1_86624(void);
-extern s8 fn_1_86634(s32 index);
-extern void OSPanic(u8 *file, int line, u8 *message, ...);
-extern u8 lbl_1_bss_F74;
-extern u8 lbl_1_bss_F75;
-extern f32 lbl_1_rodata_188;
-extern s32 fn_1_8708(u8 mode, f32 *value0, f32 *value1);
+extern void fn_1_A2DF4(s32 arg0, void *arg1, s32 arg2);
+extern s32 fn_1_8708(s32 mode, f32 *value0, f32 *value1);
 extern void fn_1_8A0C(s16 index);
-extern void fn_1_A6FE8(void);
 extern void fn_1_8D08(GameCameraEntry *value);
 extern f32 lbl_1_bss_1040;
 extern f32 lbl_1_bss_1044;
-extern void OSReport(const unsigned char *, ...);
 extern u8 lbl_1_bss_103C[4];
-extern u8 lbl_1_bss_108C[52];
 extern u8 lbl_1_bss_1014;
-
-extern s8 fn_1_86624(void);
-extern s8 fn_1_86634(s32 index);
-extern void OSPanic(u8 *file, int line, u8 *message, ...);
-extern void fn_1_8A0C(s16 index);
-extern void OSReport(const unsigned char *, ...);
-
 extern f32 lbl_1_rodata_2E0[32];
 extern f32 lbl_8006D6FC(f32 *value, void *target);
-u32 fn_1_6514(u32);
-extern struct fn_1_6400_lbl_801A6410 lbl_801A6410;
-extern u32 fn_1_46B4(u32, u32, void *, u32);
+extern s32 fn_1_6514(s32 value);
 extern f64 lbl_1_rodata_478;
 extern f32 lbl_1_rodata_49C;
 extern f32 lbl_1_bss_10C0[6];
 
 /* fzgx:begin fn_1_6400 */
-struct fn_1_6400_lbl_801A6410 {
-    u32 unk_0;
-};
-extern struct fn_1_6400_lbl_801A6410 lbl_801A6410;
-extern u32 fn_1_46B4(u32, u32, void *, u32);
 
 
 
@@ -64,9 +129,9 @@ void fn_1_6400(void) {
     F68State *state;
 
     state = (F68State *)&lbl_1_bss_F68;
-    fn_1_46B4(lbl_801A6410.unk_0, state->unk_8, (*(u8 (*)[180])&lbl_1_data_3318), 0x396);
-    fn_1_46B4(lbl_801A6410.unk_0, state->unk_4, (*(u8 (*)[180])&lbl_1_data_3318), 0x397);
-    fn_1_46B4(lbl_801A6410.unk_0, state->unk_0, (*(u8 (*)[180])&lbl_1_data_3318), 0x398);
+    fn_1_46B4(lbl_801A6410.unk_0, state->unk_8, (const char *)(void *)((*(u8 (*)[180])&lbl_1_data_3318)), 0x396);
+    fn_1_46B4(lbl_801A6410.unk_0, state->unk_4, (const char *)(void *)((*(u8 (*)[180])&lbl_1_data_3318)), 0x397);
+    fn_1_46B4(lbl_801A6410.unk_0, state->unk_0, (const char *)(void *)((*(u8 (*)[180])&lbl_1_data_3318)), 0x398);
     state->unk_8 = 0;
     state->unk_4 = 0;
     state->unk_0 = 0;
@@ -104,11 +169,7 @@ u32 camera_get_status(void) {
 }
 /* fzgx:end camera_get_status */
 
-/* fzgx:begin fn_1_6514 noprologue */
-#include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/camera.h"
-
+/* fzgx:begin fn_1_6514 */
 s32 fn_1_6514(s32 value) {
     Obj_1_bss_F68_Target *camera = lbl_1_bss_F68;
     s8 mode;
@@ -190,8 +251,6 @@ void camera_update_state(__typeof__(lbl_1_bss_F68) state) {
 /* fzgx:end camera_update_state */
 
 /* fzgx:begin fn_1_681C */
-#include "types.h"
-
 struct fn_1_681C_Copy12 {
     u32 unk_0;
     u32 unk_4;
@@ -243,8 +302,6 @@ void fn_1_681C(u32 index, u32 *output) {
 /* fzgx:end fn_1_681C */
 
 /* fzgx:begin fn_1_6898 */
-#include "types.h"
-
 struct fn_1_6898_Copy12 {
     u32 unk_0;
     u32 unk_4;
@@ -296,8 +353,6 @@ void fn_1_6898(u32 index, u32 *output) {
 /* fzgx:end fn_1_6898 */
 
 /* fzgx:begin fn_1_6914 */
-#include "types.h"
-
 struct fn_1_6914_Copy12 {
     u32 unk_0;
     u32 unk_4;
@@ -349,8 +404,6 @@ void fn_1_6914(u32 index, u32 *output) {
 /* fzgx:end fn_1_6914 */
 
 /* fzgx:begin fn_1_6990 */
-#include "types.h"
-
 struct fn_1_6990_Copy12 {
     u32 unk_0;
     u32 unk_4;
@@ -401,7 +454,13 @@ void fn_1_6990(u32 index, u32 *output) {
 #pragma peephole reset
 /* fzgx:end fn_1_6990 */
 
-/* fzgx:begin camera_get_mode */
+/* fzgx:begin camera_get_mode noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/camera.h"
+
+extern s16 fn_1_6B48(s16 value);
+
 // Return the normalized camera status, treating inactive states as zero.
 s16 camera_get_mode(void) {
     Obj_1_bss_F68_Target *state = lbl_1_bss_F68;
@@ -448,11 +507,7 @@ s16 camera_get_output(void) {
 }
 /* fzgx:end camera_get_output */
 
-/* fzgx:begin fn_1_6B48 noprologue */
-#include "types.h"
-
-extern u8 lbl_1_bss_F74;
-extern u8 lbl_1_bss_F75;
+/* fzgx:begin fn_1_6B48 */
 
 typedef struct {
     u32 unk_0;
@@ -653,12 +708,12 @@ void fn_1_715C(u8 index, s16 value) {
     if (game_camera_entries[index].unk_A8 == 0 && index < 4) {
         if (value == 0) {
             if (lbl_1_bss_F78 == 0) {
-                fn_1_A2DF4(index, 0xa5000000, 8);
+                fn_1_A2DF4(index, (void *)(u32)(0xa5000000), 8);
                 lbl_1_bss_F78 = 1;
             }
         } else if (game_camera_entries[index].unk_A4 == 0 &&
                    lbl_1_bss_F78 != 0) {
-            fn_1_A2DF4(index, 0xa5000000,
+            fn_1_A2DF4(index, (void *)(u32)(0xa5000000),
                        (&lbl_1_bss_6F1E4.unk_8)[index * 10]);
             lbl_1_bss_F78 = 0;
         }
@@ -699,7 +754,19 @@ s32 camera_compare_values(const u8 *lhs_index, const u8 *rhs_index) {
 }
 /* fzgx:end camera_compare_values */
 
-/* fzgx:begin fn_1_8298 */
+/* fzgx:begin fn_1_8298 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/camera.h"
+
+extern s8 fn_1_86624(void);
+extern s8 fn_1_86634(s32 index);
+extern void OSPanic(u8 *file, int line, u8 *message, ...);
+
+extern s8 fn_1_86624(void);
+extern s8 fn_1_86634(s32 index);
+extern void OSPanic(u8 *file, int line, u8 *message, ...);
+
 extern GameCameraEntry *game_camera_entries;  // array of 0x1FC-byte records
 
 // Initializes camera entry selections and updates the camera mode from the available entries.
@@ -833,8 +900,6 @@ void fn_1_847C(s8 mode) {
 /* fzgx:end fn_1_847C */
 
 /* fzgx:begin fn_1_857C */
-#include "types.h"
-
 typedef struct {
     u32 unk_0;
     u16 entries[15];
@@ -853,18 +918,11 @@ typedef struct {
     u32 unk_50;
 } fn_1_857C_CameraState;
 
-extern u32 lbl_1_bss_7ADE8[40];
-extern void *lbl_1_data_3310;
 
 
 
 
 
-extern void fn_1_A6FE8(void);
-extern void fn_1_DCE60(void *);
-extern void fn_1_435C(u32);
-extern s16 fn_1_3F8C(char *, void *, void *, int);
-extern void fn_1_DCED0(void);
 
 #pragma opt_propagation off
 void fn_1_857C(void) {
@@ -876,7 +934,7 @@ void fn_1_857C(void) {
     fn_1_A6FE8();
     fn_1_DCE60(lbl_1_data_3310);
     fn_1_435C((*(fn_1_857C_CameraState * *)&lbl_1_bss_F68)->unk_50);
-    result = fn_1_3F8C((*(char (*)[14])&lbl_1_data_35FC), fn_1_DCED0, lbl_1_data_3310, 0x14);
+    result = (s16)fn_1_3F8C( (u32)(char *)((*(char (*)[14])&lbl_1_data_35FC)), (u32)(void *)(fn_1_DCED0), (u32)(void *)(lbl_1_data_3310), 0x14);
     {
         fn_1_857C_CameraState *camera = (*(fn_1_857C_CameraState * *)&lbl_1_bss_F68);
         index = camera->unk_22;
@@ -908,7 +966,14 @@ void camera_set_state_flag(u8 value) {
 }
 /* fzgx:end camera_set_state_flag */
 
-/* fzgx:begin camera_get_values */
+/* fzgx:begin camera_get_values noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/camera.h"
+
+extern f32 lbl_1_rodata_188;
+extern s32 fn_1_8708(u8 mode, f32 *value0, f32 *value1);
+
 // Reads the camera values, falling back when the camera state cannot provide them.
 s32 camera_get_values(f32 *value0, f32 *value1) {
     f32 result0;
@@ -939,12 +1004,7 @@ s32 camera_get_values(f32 *value0, f32 *value1) {
 }
 /* fzgx:end camera_get_values */
 
-/* fzgx:begin fn_1_8708 noprologue */
-#include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/camera.h"
-
-extern const f32 lbl_1_rodata_194;
+/* fzgx:begin fn_1_8708 */
 
 s32 fn_1_8708(s32 mode, f32 *value0, f32 *value1) {
     Obj_1_bss_F68_Target **pp;
@@ -989,13 +1049,7 @@ void live_camera_set_shake(s32 value, const f32 *delta) {
 }
 /* fzgx:end live_camera_set_shake */
 
-/* fzgx:begin fn_1_8840 noprologue */
-#include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/camera.h"
-
-extern const f32 lbl_1_rodata_188;
-extern void OSPanic(u8 *file, ...);
+/* fzgx:begin fn_1_8840 */
 
 void fn_1_8840(void) {
     LiveCamera *state;
@@ -1061,13 +1115,7 @@ void game_camera_set_shake(s16 index, s16 mode, s32 value, const f32 *delta) {
 }
 /* fzgx:end game_camera_set_shake */
 
-/* fzgx:begin fn_1_8A0C noprologue */
-#include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/camera.h"
-
-extern void OSPanic(u8 *file, int line, u8 *message, ...);
-extern const f32 lbl_1_rodata_188;
+/* fzgx:begin fn_1_8A0C */
 
 void fn_1_8A0C(s16 index) {
     GameCameraEntry *entry;
@@ -1120,8 +1168,6 @@ GameCameraEntry *game_camera_get(void) {
 /* fzgx:end game_camera_get */
 
 /* fzgx:begin fn_1_8B10 */
-#include "types.h"
-
 typedef struct fn_1_8B10_CameraObject {
     s16 pad_00;
     s16 kind;
@@ -1129,10 +1175,6 @@ typedef struct fn_1_8B10_CameraObject {
     s16 index;
 } fn_1_8B10_CameraObject;
 
-typedef struct CameraTarget {
-    u8 pad_000[0x394];
-    void *data;
-} CameraTarget;
 
 typedef struct CameraData {
     u8 pad_000[0x118];
@@ -1169,10 +1211,6 @@ typedef struct CameraOutput {
     s16 flags2;
 } CameraOutput;
 
-extern CameraTarget *fn_1_868C0(s8 index);
-extern s8 fn_1_A5DC4(void);
-extern const f32 lbl_1_rodata_200;
-extern const f32 lbl_1_rodata_204;
 
 
 
@@ -1180,7 +1218,7 @@ void fn_1_8B10(fn_1_8B10_CameraObject *camera, CameraOutput *output) {
     CameraTarget *target;
     CameraData *data;
 
-    target = fn_1_868C0((s8)camera->kind);
+    target = (CameraTarget *)fn_1_868C0((s8)camera->kind);
     if (camera->index == 0 && target != 0 && (data = target->data) != 0) {
         output->x0 = lbl_1_rodata_200 + data->x;
         output->y0 = data->y;
@@ -1202,7 +1240,7 @@ void fn_1_8B10(fn_1_8B10_CameraObject *camera, CameraOutput *output) {
         output->y2 = (*(fn_1_8B10_CameraEntry (*)[])&lbl_1_data_36EC)[camera->index].y2;
         output->flags2 = (*(fn_1_8B10_CameraEntry (*)[])&lbl_1_data_36EC)[camera->index].flags2;
 
-        if (fn_1_A5DC4() != 0) {
+        if ((s8)fn_1_A5DC4() != 0) {
             f32 adjust;
             switch (camera->index) {
             case 1:
@@ -1226,25 +1264,11 @@ void fn_1_8B10(fn_1_8B10_CameraObject *camera, CameraOutput *output) {
 }
 /* fzgx:end fn_1_8B10 */
 
-/* fzgx:begin fn_1_AA54 noprologue */
-#include "types.h"
-
+/* fzgx:begin fn_1_AA54 */
 struct fn_1_AA54_Arg0 {
     u8 pad_0[0x2];
     s16 unk_2;
 };
-struct fn_1_AA54_lbl_1_rodata_388 {
-    f64 unk_0;
-};
-extern f64 lbl_1_rodata_360;
-extern s16 lbl_1_bss_960;
-extern struct fn_1_AA54_lbl_1_rodata_388 lbl_1_rodata_388;
-extern u8 fn_1_86678(int);
-extern s8 fn_1_86634(int);
-extern s16 camera_get_entry_field_0xa8(u32);
-extern u32 fn_1_864E8(int);
-extern void camera_set_entry_field_0xa8(u8, s16);
-extern u16 fn_1_8664C(int);
 
 
 void fn_1_AA54(void *arg0) {
@@ -1253,9 +1277,9 @@ void fn_1_AA54(void *arg0) {
     u8 temp_r3;
 
     temp_r31 = fn_1_86678((s32) (*(s16 *)((u8 *)(arg0) + 2)));
-    temp_r3 = fn_1_86634((s32) (*(s16 *)((u8 *)(arg0) + 2)));
+    temp_r3 = (s8)fn_1_86634((s32) (*(s16 *)((u8 *)(arg0) + 2)));
     temp_r28 = camera_get_entry_field_0xa8((u32) temp_r3);
-    if (((s16) (*(s16 *)((u8 *)(&lbl_1_bss_960) + 0)) != 9) && (fn_1_864E8((s32) (*(s16 *)((u8 *)(arg0) + 2))) & 0x10000)) {
+    if (((s16) (*(s16 *)((u8 *)(&(*((s16 *)&lbl_1_bss_960))) + 0)) != 9) && (fn_1_864E8((s32) (*(s16 *)((u8 *)(arg0) + 2))) & 0x10000)) {
         camera_set_entry_field_0xa8(temp_r3, 2);
         return;
     }
@@ -1285,14 +1309,7 @@ block_7:
 /* fzgx:end fn_1_AA54 */
 
 /* fzgx:begin camera_get_position_delta */
-typedef struct Vec3 {
-    f32 x;
-    f32 y;
-    f32 z;
-} Vec3;
 
-extern void fn_1_862D4(u8 index, Vec3 *out);
-extern void fn_1_8658C(u8 index, Vec3 *out);
 
 // Computes the displacement between two camera positions.
 void camera_get_position_delta(u32 index, Vec3 *out) {
@@ -1309,12 +1326,7 @@ void camera_get_position_delta(u32 index, Vec3 *out) {
 /* fzgx:end camera_get_position_delta */
 
 /* fzgx:begin camera_reset_transition */
-typedef struct camera_reset_transition_Camera {
-    u8 pad_00[0xA4];
-    s16 unk_A4;
-} camera_reset_transition_Camera;
 
-extern void fn_1_AEB8(camera_reset_transition_Camera *);
 
 // Resets the camera transition state before refreshing the camera.
 void camera_reset_transition(camera_reset_transition_Camera *camera) {
@@ -1324,15 +1336,7 @@ void camera_reset_transition(camera_reset_transition_Camera *camera) {
 /* fzgx:end camera_reset_transition */
 
 /* fzgx:begin camera_update_transition */
-typedef struct camera_update_transition_Camera {
-    u8 pad_00[0x78];
-    s16 unk_78;
-    u8 pad_7A[0x2A];
-    s16 unk_A4;
-} camera_update_transition_Camera;
 
-extern void fn_1_AEB8(camera_update_transition_Camera *);
-extern void fn_1_AFC8(camera_update_transition_Camera *);
 
 // Advances the camera's transition state and updates its active view.
 void camera_update_transition(camera_update_transition_Camera *camera) {
@@ -1341,7 +1345,7 @@ void camera_update_transition(camera_update_transition_Camera *camera) {
         if (camera->unk_A4 >= camera_transition_count) {
             camera->unk_A4 = 0;
         }
-        fn_1_AEB8(camera);
+        fn_1_AEB8( (camera_reset_transition_Camera *)(camera_update_transition_Camera *)(camera));
     }
 
     fn_1_AFC8(camera);
@@ -1353,32 +1357,13 @@ void camera_update_transition(camera_update_transition_Camera *camera) {
 /* fzgx:end camera_update_transition */
 
 /* fzgx:begin camera_get_target_orientation */
-typedef struct Transform {
-    u8 pad_08[0x8];
-    f32 unk_08;
-    u8 pad_0c[0xc];
-    f32 unk_18;
-    u8 pad_1c[0xc];
-    f32 unk_28;
-    u8 pad_2c[0x24];
-    u8 unk_50[0x2c];
-    u32 unk_7C;
-} Transform;
 
-typedef struct CameraStateLocal {
-    u8 pad_d4[0xd4];
-    f32 unk_D4;
-    f32 unk_D8;
-    f32 unk_DC;
-} CameraStateLocal;
 
 typedef struct camera_get_target_orientation_CameraObject {
     u8 pad_49c[0x49c];
     Transform *unk_49C;
 } camera_get_target_orientation_CameraObject;
 
-extern Transform *lbl_801A6D00;
-extern CameraStateLocal *lbl_801A66CC;
 
 // Updates the camera orientation from the active target transform.
 f32 camera_get_target_orientation(camera_get_target_orientation_CameraObject *camera) {
@@ -1465,34 +1450,34 @@ void camera_save_slot(u8 index) {
 }
 /* fzgx:end camera_save_slot */
 
-/* fzgx:begin fn_1_C178 noprologue */
-#include "types.h"
-
-typedef struct { u8 pad_0[0x4]; f32 unk_4; u32 unk_8; f32 unk_C; } Bss_104C;
+/* fzgx:begin fn_1_C178 */
 typedef struct {
     u8 pad_0[0x4]; f32 unk_4; f32 unk_8; f32 unk_C; f32 unk_10; f32 unk_14; f32 unk_18; f32 unk_1C;
     s16 unk_20; u8 pad_22[0x6]; f32 unk_28; f32 unk_2C; f32 unk_30; f32 unk_34; f32 unk_38; f32 unk_3C; f32 unk_40;
     s16 unk_44; u8 pad_46[0x2A];
 } Obj_1_bss_10D8;
-extern Bss_104C lbl_1_bss_104C;
-extern char lbl_1_data_406C[91];
-extern char lbl_1_data_40C8[96];
-extern Obj_1_bss_10D8 lbl_1_bss_10D8;
-extern void OSReport(char *, ...);
 
 void fn_1_C178(void *self) {
-    OSReport(lbl_1_data_406C, lbl_1_bss_104C.unk_8, lbl_1_bss_104C.unk_C,
-        lbl_1_bss_10D8.unk_4, lbl_1_bss_10D8.unk_8, lbl_1_bss_10D8.unk_C,
-        lbl_1_bss_10D8.unk_10, lbl_1_bss_10D8.unk_14, lbl_1_bss_10D8.unk_18,
-        lbl_1_bss_10D8.unk_1C, lbl_1_bss_10D8.unk_20);
-    OSReport(lbl_1_data_40C8, lbl_1_bss_10D8.unk_28, lbl_1_bss_10D8.unk_2C,
-        lbl_1_bss_10D8.unk_30, lbl_1_bss_10D8.unk_34, lbl_1_bss_10D8.unk_38,
-        lbl_1_bss_10D8.unk_3C, lbl_1_bss_10D8.unk_40, lbl_1_bss_10D8.unk_44,
+    OSReport((((char *)&lbl_1_data_406C)), lbl_1_bss_104C.unk_8, lbl_1_bss_104C.unk_C,
+        (*((Obj_1_bss_10D8 *)&lbl_1_bss_10D8)).unk_4, (*((Obj_1_bss_10D8 *)&lbl_1_bss_10D8)).unk_8, (*((Obj_1_bss_10D8 *)&lbl_1_bss_10D8)).unk_C,
+        (*((Obj_1_bss_10D8 *)&lbl_1_bss_10D8)).unk_10, (*((Obj_1_bss_10D8 *)&lbl_1_bss_10D8)).unk_14, (*((Obj_1_bss_10D8 *)&lbl_1_bss_10D8)).unk_18,
+        (*((Obj_1_bss_10D8 *)&lbl_1_bss_10D8)).unk_1C, (*((Obj_1_bss_10D8 *)&lbl_1_bss_10D8)).unk_20);
+    OSReport((((char *)&lbl_1_data_40C8)), (*((Obj_1_bss_10D8 *)&lbl_1_bss_10D8)).unk_28, (*((Obj_1_bss_10D8 *)&lbl_1_bss_10D8)).unk_2C,
+        (*((Obj_1_bss_10D8 *)&lbl_1_bss_10D8)).unk_30, (*((Obj_1_bss_10D8 *)&lbl_1_bss_10D8)).unk_34, (*((Obj_1_bss_10D8 *)&lbl_1_bss_10D8)).unk_38,
+        (*((Obj_1_bss_10D8 *)&lbl_1_bss_10D8)).unk_3C, (*((Obj_1_bss_10D8 *)&lbl_1_bss_10D8)).unk_40, (*((Obj_1_bss_10D8 *)&lbl_1_bss_10D8)).unk_44,
         self);
 }
 /* fzgx:end fn_1_C178 */
 
-/* fzgx:begin camera_report_position */
+/* fzgx:begin camera_report_position noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/camera.h"
+
+extern void OSReport(const unsigned char *, ...);
+
+extern void OSReport(const unsigned char *, ...);
+
 // Reports the camera's current position values for debugging.
 void camera_report_position(void) {
     OSReport(lbl_1_data_4128, lbl_1_bss_10D8.unk_10,
@@ -1500,12 +1485,7 @@ void camera_report_position(void) {
 }
 /* fzgx:end camera_report_position */
 
-/* fzgx:begin fn_1_C268 noprologue */
-#include "types.h"
-#include "rel/main_rel/camera.h"
-
-extern f64 lbl_1_rodata_4A8[7];
-extern void OSReport(const char *format, ...);
+/* fzgx:begin fn_1_C268 */
 
 #pragma opt_common_subs off
 #pragma opt_strength_reduction off
@@ -1529,7 +1509,15 @@ void fn_1_C268(s32 arg) {
 #pragma opt_common_subs reset
 /* fzgx:end fn_1_C268 */
 
-/* fzgx:begin fn_1_C304 */
+/* fzgx:begin fn_1_C304 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/camera.h"
+
+extern void OSReport(const unsigned char *, ...);
+
+extern void OSReport(const unsigned char *, ...);
+
 // Reports the camera parameters and caller-supplied value for debugging.
 void fn_1_C304(s32 arg) {
     OSReport(lbl_1_data_4198,
@@ -1642,10 +1630,7 @@ u8* camera_get_state_storage(void) {
 }
 /* fzgx:end camera_get_state_storage */
 
-/* fzgx:begin camera_get_extended_state_storage noprologue */
-#include "types.h"
-
-extern u8 lbl_1_bss_108C[52];
+/* fzgx:begin camera_get_extended_state_storage */
 
 // Returns the storage reserved for the camera's extended state.
 u8* camera_get_extended_state_storage(void) {

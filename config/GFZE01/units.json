@@ -40522,7 +40522,7 @@
     "extra_cflags": [],
     "tu": "rel/main_rel/live_camera.c",
     "pool": {
-      "@6": "lbl_1_rodata_548"
+      "@24": "lbl_1_rodata_548"
     }
   },
   {
@@ -40536,7 +40536,7 @@
     "extra_cflags": [],
     "tu": "rel/main_rel/live_camera.c",
     "pool": {
-      "@9": "lbl_1_rodata_608"
+      "@27": "lbl_1_rodata_608"
     }
   },
   {
@@ -48708,8 +48708,14 @@
     "extra_cflags": [],
     "tu": "rel/main_rel/spline.c",
     "pool": {
+      "...rodata.0": "lbl_1_rodata_6D88",
       "@26": "lbl_1_rodata_6D88",
-      "...rodata.0": "lbl_1_rodata_6D88"
+      "@27": "lbl_1_rodata_6D88+0x4",
+      "@33": "lbl_1_rodata_6D88+0x18",
+      "@28": "lbl_1_rodata_6D88+0x8",
+      "@29": "lbl_1_rodata_6D88+0xC",
+      "@30": "lbl_1_rodata_6D88+0x10",
+      "@31": "lbl_1_rodata_6D88+0x14"
     }
   },
   {

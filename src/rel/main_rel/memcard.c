@@ -1,70 +1,168 @@
 #include "types.h"
 #include "rel/main_rel/globals.h"
 #include "rel/main_rel/memcard.h"
-extern void* lbl_801A6410;
-extern int fn_1_45D0(void *arg0, int arg1, Obj_1_data_3C7B8 *arg2, int arg3);
-extern void fn_1_AB45C(void);
+#include "dolphin/card.h"
+#include "dolphin/card/CARDPriv.h"
+#include "dolphin/dvd.h"
+#include "font.h"
+
+typedef struct MgrRoot {
+    u32 unk_0;
+} MgrRoot;
+
+typedef struct MemcardDvdFileInfo {
+    u8 pad_0[0x3C];
+} MemcardDvdFileInfo;
+
+typedef struct Sig_DVDOpen_DVDFileInfo Sig_DVDOpen_DVDFileInfo;
+
+typedef void (*Sig_DVDOpen_DVDCallback)(s32 result, Sig_DVDOpen_DVDFileInfo *fileInfo);
+
+struct Sig_DVDOpen_DVDFileInfo {
+    DVDCommandBlock cb;
+    u32 startAddr;
+    u32 length;
+    Sig_DVDOpen_DVDCallback callback;
+};
+
+typedef struct Sig_fn_800174D0_Fn800174D0Object {
+    u8 pad30[0x30];
+    u32 field30;
+    u32 field34;
+    void *field38;
+} Sig_fn_800174D0_Fn800174D0Object;
+
+typedef struct {
+    u8 pad_0[0x14];
+    s8 type;
+    s16 first;
+    s16 second;
+    s16 third;
+    s16 fourth;
+} Fn1C0510Obj;
+
+typedef struct {
+    u8 unk0[0x16];
+    s16 unk16;
+} Fn1C132CObject;
+
+typedef struct TimeParts {
+    u32 unused;
+    u32 field_4;
+    u32 field_8;
+    u32 field_C;
+    u32 field_10;
+    u32 field_14;
+    u32 spare_18;
+    u32 spare_1C;
+} TimeParts;
+extern void fn_1_A2DC4(u32 arg0);
+extern u32 fn_8002C0A0(u32 arg0);
+extern void CARDWriteAsync(void *dst, void *src, int size, int zero, int flags);
+extern s32 fn_1_45D0();
 extern void CARDMountAsync(u8, u32, void (*)(void), s32);
-extern int CARDGetSerialNo(u8 value, void *data);
 extern void CARDCheckAsync(u8 byte_val, int value);
-extern void CARDFormatAsync(u8 byte, int value);
-extern const f32 lbl_1_rodata_4CA8;
-extern const f64 lbl_1_rodata_4CB0;
-extern const f32 lbl_1_rodata_4CAC;
-extern void fn_80083DB0(void *dst, void *src);
-extern void strcat(void *dst, void *src);
-extern void CARDDeleteAsync(u8 byte, void *data, int arg);
-extern s32 CARDFreeBlocks(u8 byte_val, void *arg1, void *arg2);
-extern s32 CARDOpen(u8 byte_val, void *arg1, void *arg2);
+extern u32 CARDFormatAsync(u32 arg0, u32 arg1);
+extern char *fn_80083DB0(char *dst, const char *src);
+extern char *strcat(char *dest, const char *src);
 extern void CARDFastDeleteAsync(u8 byte_val, void *arg, s32 zero);
 extern void CARDCreateAsync(u8 byte_val, void *arg1, void *arg2, void *arg3, u32 arg4);
+extern u16 fn_8002A74C(u32 arg0);
+extern void fn_80008BEC(void *dest, int value, u32 size);
+extern void fn_1_AA6D8(s32 arg0, u32 arg1, void *arg2);
+extern void OSPanic(const char *file, int line, const char *msg, ...);
+extern void fn_1_F79C8(void);
+extern char *strncpy(char *dst, const char *src, size_t n);
+extern u32 lbl_1_bss_7730C;
+extern const f32 lbl_1_rodata_4CC0;
+extern const f32 lbl_1_rodata_4CC4;
+extern void fn_1_46B4(u32 arg0, u32 arg1, const char *arg2, int arg3);
+extern u8 fn_1_B7EF8(void);
+extern f32 lbl_1_rodata_4CD0;
+extern const f64 lbl_1_rodata_4CB8;
+extern void fn_1_B7FDC(void);
+extern void *lbl_801A6410;
+extern s32 lbl_801A66B4;
+extern const f32 lbl_1_rodata_4CA8;
+extern s32 DVDOpen(const char *, MemcardDvdFileInfo *);
+extern s32 DVDClose();
+extern u32 fn_80006354(u32 arg0, u32 arg1, u32 arg2, u32 arg3);
+extern int fn_80083BCC(const char *s1, const char *s2);
+extern u16 fn_1_1563E8(u8 *data, s32 len);
+extern void OSReport(const char *format, ...);
+extern void fn_80008BA8(u32 arg0, u32 arg1, u32 arg2);
+extern f32 lbl_1_rodata_4AE0[114];
+extern u32 fn_1_4630();
+extern u32 fn_1_B22AC(void *ctx, u32 arg);
+extern u32 fn_1_F4810(void *a0, void *a1, void *a2, void *a3, void *a4, void *a5, void *a6, void *a7, void *a8);
+extern u8 *fn_80083970(u8 *str, const u8 *needle);
+extern size_t strlen(const char *str);
+extern f32 lbl_1_rodata_4D18;
+extern f32 lbl_1_rodata_5080;
+extern u32 lbl_1_rodata_26F8;
+extern void fn_1_50164();
+extern void fn_1_495C8(u8 value);
+extern void fn_1_4955C(f32 value1, f32 value2);
+extern void fn_1_496FC(f32 value1, f32 value2);
+extern void fn_1_4954C(f32 value);
+extern void fn_1_49514(u32 *value);
+extern void fn_1_14FEAC(u8, u8, u8, u32 *, s16);
+extern void fn_1_4CF3C(const char *format, f32 x, ...);
+extern void *fn_1_7F49C(s16 arg0, s16 arg1, void *arg2);
+extern u64 OSGetTime(void);
+extern u64 __div2i(u64, u32, u32);
+extern u32 lbl_1_bss_7AB90[36];
+extern void fn_1_C062C(Fn1C0510Obj *, void *, void *);
+extern void fn_1_C0B0C(Fn1C0510Obj *, void *, void *);
+extern void fn_1_C0E00(Fn1C0510Obj *, void *, void *);
+extern void fn_1_C132C();
+extern void OSTicksToCalendarTime(u32 high, u32 low, TimeParts *parts);
+extern void fn_1_AB45C(int index);
+extern const f64 lbl_1_rodata_4CB0;
+extern const f32 lbl_1_rodata_4CAC;
+extern void CARDDeleteAsync(u8 byte, void *data, int arg);
 extern void CARDSetStatusAsync(u8 id, void *arg, void *data, int zero);
 extern void CARDRenameAsync(u8 id, void *data1, void *data2, int zero);
 extern void CARDReadAsync(void *arg0, void *arg1, void *arg2, int arg3, int arg4);
 extern const f64 lbl_1_rodata_4CC8;
-extern void fn_80030754(u8 value, void *data, int size, int mode);
+extern s32 fn_80030754(void *arg0, void *arg1, u8 arg2, void *arg3);
 extern u8 lbl_1_bss_71810[161];
 extern u8 lbl_1_bss_718B8;
 extern u8 lbl_1_bss_718B9[7];
-extern int fn_8002A744(void);
-extern void fn_8002A74C(u16 value);
-extern int fn_8002DFE0(int arg0, u32 arg1, int arg2);
-extern int CARDCheck(int arg0);
+extern u16 fn_8002A744(void);
+extern s32 fn_8002DFE0(u32 arg0, u32 arg1, u32 arg2);
 extern void fn_1_B9C38(s32 index);
-extern void fn_1_1596DC(u32);
-extern void fn_1_484CC(u32);
-extern void fn_80008BEC(void *dst, s32 value, s32 size);
-extern void fn_1_AA6D8(s32 arg0, u32 arg1, void *arg2);
+extern void fn_1_1596DC(int index);
+extern void fn_1_484CC(s32 index);
 extern void fn_1_F755C(u8 value);
-extern void fn_1_A6840(u8 value);
-extern void OSPanic(void *arg0, u32 arg1, ...);
-extern void fn_1_F79C8(void);
-extern void *lbl_801A6410;
-extern void strncpy(void *arg0, void *arg1, int arg2);
+extern void fn_1_A6840(u32 value);
 extern u32 lbl_1_bss_77310[28];
-extern u32 lbl_1_bss_7730C;
 extern u8 lbl_1_bss_772C8[66];
-extern u32 fn_1_4630(void *heap, u32 size, void *file, s32 line);
-extern s32 fn_8002FC14(s32 chan, void *fileName);
-extern s32 fn_80030338(s32 chan, void *oldName, void *newName);
-extern const f64 lbl_1_rodata_4CB8;
+extern s32 fn_8002FC14(u32 arg0, void *arg1);
+extern s32 fn_80030338(u32 arg0, u32 arg1, u32 arg2);
 extern void fn_1_C36EC(void);
-extern f32 lbl_1_rodata_4AE0[114];
 extern u8 lbl_1_data_2B0D4[];
 extern void *lbl_1_data_2AA24[];
 extern void fn_1_49410(void);
-extern void fn_1_49590(f32);
-extern void fn_1_495B0(u32);
-extern void fn_1_494DC(s32);
+extern void fn_1_49590(f32 value);
+extern void fn_1_495B0(u32 value);
+extern void fn_1_494DC(s16 index);
 extern void fn_1_5233C(void);
-extern void fn_1_49738(void (*)(void));
-extern void fn_1_49748(f32);
-extern void fn_1_4966C(f32, f32);
-extern void fn_1_4A0D8(void *);
-extern void fn_1_4AE0C(char *, ...);
+extern void fn_1_49738(u32 value);
+extern void fn_1_49748(f32 value);
+extern void fn_1_4966C(f32 value1, f32 value2);
 extern void fn_1_49614(void);
 
-/* fzgx:begin fn_1_AB478 */
+/* fzgx:begin fn_1_AB478 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/memcard.h"
+extern void* lbl_801A6410;
+extern int fn_1_45D0(void *arg0, int arg1, Obj_1_data_3C7B8 *arg2, int arg3);
+extern void fn_1_AB45C(void);
+extern void CARDMountAsync(u8, u32, void (*)(void), s32);
+extern void *lbl_801A6410;
+
 #include "rel/main_rel/memcard.h"
 
 typedef struct {
@@ -91,7 +189,12 @@ void fn_1_AB478(Fn1AB478Obj *obj) {
 }
 /* fzgx:end fn_1_AB478 */
 
-/* fzgx:begin fn_1_AB4F4 */
+/* fzgx:begin fn_1_AB4F4 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/memcard.h"
+extern int CARDGetSerialNo(u8 value, void *data);
+
 typedef struct {
     u8 pad[0x2];
     s16 field_0x2;
@@ -127,7 +230,12 @@ void fn_1_AB4F4(fn_1_AB4F4_ArgStruct *arg) {
 }
 /* fzgx:end fn_1_AB4F4 */
 
-/* fzgx:begin fn_1_AB598 */
+/* fzgx:begin fn_1_AB598 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/memcard.h"
+extern void CARDCheckAsync(u8 byte_val, int value);
+
 typedef struct {
     u8 pad[0x2];
     u16 field_0x2;
@@ -145,7 +253,11 @@ void fn_1_AB598(fn_1_AB598_ArgStruct *arg) {
 }
 /* fzgx:end fn_1_AB598 */
 
-/* fzgx:begin fn_1_AB5CC */
+/* fzgx:begin fn_1_AB5CC noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/memcard.h"
+
 typedef struct {
     u8 pad[0x2];
     u16 field_0x2;
@@ -175,7 +287,11 @@ void fn_1_AB5CC(fn_1_AB5CC_ArgStruct *arg) {
 }
 /* fzgx:end fn_1_AB5CC */
 
-/* fzgx:begin fn_1_AB61C */
+/* fzgx:begin fn_1_AB61C noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/memcard.h"
+
 typedef struct {
     u8 pad[1];
     u8 field_0x1;
@@ -198,7 +314,11 @@ void fn_1_AB61C(fn_1_AB61C_MemcardArg *arg) {
 }
 /* fzgx:end fn_1_AB61C */
 
-/* fzgx:begin fn_1_AB64C */
+/* fzgx:begin fn_1_AB64C noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/memcard.h"
+
 extern void fn_1_A2DC4(u32);
 
 typedef struct {
@@ -255,7 +375,13 @@ void fn_1_AB64C(fn_1_AB64C_MemcardArg *arg) {
 }
 /* fzgx:end fn_1_AB64C */
 
-/* fzgx:begin fn_1_AB75C */
+/* fzgx:begin fn_1_AB75C noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/memcard.h"
+extern void CARDFormatAsync(u8 byte, int value);
+extern const f32 lbl_1_rodata_4CA8;
+
 typedef struct {
     u8 pad[0x2];
     u16 field_0x2;
@@ -283,7 +409,12 @@ void fn_1_AB75C(fn_1_AB75C_ArgStruct *arg) {
 }
 /* fzgx:end fn_1_AB75C */
 
-/* fzgx:begin fn_1_AB7C4 */
+/* fzgx:begin fn_1_AB7C4 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/memcard.h"
+extern const f32 lbl_1_rodata_4CAC;
+
 typedef struct {
     u8 pad[0x2];
     u16 field_0x2;
@@ -313,7 +444,11 @@ void fn_1_AB7C4(fn_1_AB7C4_ArgStruct *arg) {
 }
 /* fzgx:end fn_1_AB7C4 */
 
-/* fzgx:begin fn_1_AB870 */
+/* fzgx:begin fn_1_AB870 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/memcard.h"
+
 typedef struct {
     u8 pad[0x2];
     u16 field_0x2;
@@ -330,7 +465,12 @@ void fn_1_AB870(fn_1_AB870_ArgStruct *arg) {
 }
 /* fzgx:end fn_1_AB870 */
 
-/* fzgx:begin fn_1_AB880 */
+/* fzgx:begin fn_1_AB880 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/memcard.h"
+extern int CARDGetSerialNo(u8 value, void *data);
+
 typedef struct {
     u8 pad[0x2];
     u16 field_0x2;
@@ -358,7 +498,14 @@ void fn_1_AB880(fn_1_AB880_ArgStruct *arg) {
 }
 /* fzgx:end fn_1_AB880 */
 
-/* fzgx:begin fn_1_AB8D8 */
+/* fzgx:begin fn_1_AB8D8 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/memcard.h"
+extern void fn_80083DB0(void *dst, void *src);
+extern void strcat(void *dst, void *src);
+extern void CARDDeleteAsync(u8 byte, void *data, int arg);
+
 typedef struct {
     u8 byte_0;
     u8 pad_0x1[0x23];
@@ -375,7 +522,11 @@ void fn_1_AB8D8(fn_1_AB8D8_ArgStruct *arg) {
 }
 /* fzgx:end fn_1_AB8D8 */
 
-/* fzgx:begin fn_1_AB93C */
+/* fzgx:begin fn_1_AB93C noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/memcard.h"
+
 typedef struct {
     u8 pad[0x2];
     u16 field_0x2;
@@ -403,7 +554,11 @@ void fn_1_AB93C(fn_1_AB93C_ArgStruct *arg) {
 }
 /* fzgx:end fn_1_AB93C */
 
-/* fzgx:begin fn_1_AB98C */
+/* fzgx:begin fn_1_AB98C noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/memcard.h"
+
 typedef struct {
     u8 pad[0x2];
     u16 field_0x2;
@@ -419,7 +574,12 @@ void fn_1_AB98C(fn_1_AB98C_ArgStruct *arg) {
 }
 /* fzgx:end fn_1_AB98C */
 
-/* fzgx:begin fn_1_AB99C */
+/* fzgx:begin fn_1_AB99C noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/memcard.h"
+extern s32 CARDFreeBlocks(u8 byte_val, void *arg1, void *arg2);
+
 typedef struct {
     u8 pad[0x2];
     u16 field_0x2;
@@ -448,7 +608,11 @@ void fn_1_AB99C(fn_1_AB99C_ArgStruct *arg) {
 }
 /* fzgx:end fn_1_AB99C */
 
-/* fzgx:begin fn_1_ABA14 */
+/* fzgx:begin fn_1_ABA14 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/memcard.h"
+
 typedef struct {
     u8 pad[0x2];
     u16 field_0x2;
@@ -464,7 +628,12 @@ void fn_1_ABA14(fn_1_ABA14_ArgStruct *arg) {
 }
 /* fzgx:end fn_1_ABA14 */
 
-/* fzgx:begin fn_1_ABA24 */
+/* fzgx:begin fn_1_ABA24 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/memcard.h"
+extern s32 CARDFreeBlocks(u8 byte_val, void *arg1, void *arg2);
+
 typedef struct {
     u8 pad[0x2];
     u16 field_0x2;
@@ -493,7 +662,11 @@ void fn_1_ABA24(fn_1_ABA24_ArgStruct *arg) {
 }
 /* fzgx:end fn_1_ABA24 */
 
-/* fzgx:begin fn_1_ABA9C */
+/* fzgx:begin fn_1_ABA9C noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/memcard.h"
+
 typedef struct {
     u8 pad[0x2];
     u16 field_0x2;
@@ -509,7 +682,14 @@ void fn_1_ABA9C(fn_1_ABA9C_ArgStruct *arg) {
 }
 /* fzgx:end fn_1_ABA9C */
 
-/* fzgx:begin fn_1_ABAAC */
+/* fzgx:begin fn_1_ABAAC noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/memcard.h"
+extern void fn_80083DB0(void *dst, void *src);
+extern void strcat(void *dst, void *src);
+extern s32 CARDOpen(u8 byte_val, void *arg1, void *arg2);
+
 typedef struct {
     u8 pad[0x2];
     u16 field_0x2;
@@ -536,7 +716,11 @@ void fn_1_ABAAC(fn_1_ABAAC_ArgStruct *arg) {
 }
 /* fzgx:end fn_1_ABAAC */
 
-/* fzgx:begin fn_1_ABB24 */
+/* fzgx:begin fn_1_ABB24 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/memcard.h"
+
 typedef struct {
     u8 pad_0x0[0x1];
     u8 field_0x1;
@@ -563,7 +747,11 @@ void fn_1_ABB24(fn_1_ABB24_MemcardArg *arg) {
 }
 /* fzgx:end fn_1_ABB24 */
 
-/* fzgx:begin fn_1_ABB4C */
+/* fzgx:begin fn_1_ABB4C noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/memcard.h"
+
 typedef signed long s32;
 
 typedef unsigned char u8;
@@ -633,7 +821,12 @@ state->unk_1 = 1;
 }
 /* fzgx:end fn_1_ABB4C */
 
-/* fzgx:begin fn_1_ABC5C */
+/* fzgx:begin fn_1_ABC5C noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/memcard.h"
+extern void CARDFastDeleteAsync(u8 byte_val, void *arg, s32 zero);
+
 typedef struct {
     u8 byte_0;
     u8 pad_0x1[0x13];
@@ -659,7 +852,11 @@ void fn_1_ABC5C(fn_1_ABC5C_ArgStruct *arg) {
 }
 /* fzgx:end fn_1_ABC5C */
 
-/* fzgx:begin fn_1_ABC98 */
+/* fzgx:begin fn_1_ABC98 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/memcard.h"
+
 typedef struct {
     u8 pad[0x2];
     u16 field_0x2;
@@ -680,7 +877,14 @@ void fn_1_ABC98(fn_1_ABC98_ArgStruct *arg) {
 }
 /* fzgx:end fn_1_ABC98 */
 
-/* fzgx:begin fn_1_ABCE8 */
+/* fzgx:begin fn_1_ABCE8 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/memcard.h"
+extern void fn_80083DB0(void *dst, void *src);
+extern void strcat(void *dst, void *src);
+extern void CARDCreateAsync(u8 byte_val, void *arg1, void *arg2, void *arg3, u32 arg4);
+
 typedef struct {
     u8 pad[0x2];
     u16 field_0x2;
@@ -706,7 +910,11 @@ void fn_1_ABCE8(fn_1_ABCE8_ArgStruct *arg) {
 }
 /* fzgx:end fn_1_ABCE8 */
 
-/* fzgx:begin fn_1_ABD58 */
+/* fzgx:begin fn_1_ABD58 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/memcard.h"
+
 typedef struct {
     u8 pad[0x2];
     u16 field_0x2;
@@ -727,7 +935,11 @@ void fn_1_ABD58(fn_1_ABD58_ArgStruct *arg) {
 }
 /* fzgx:end fn_1_ABD58 */
 
-/* fzgx:begin fn_1_ABDA8 */
+/* fzgx:begin fn_1_ABDA8 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/memcard.h"
+
 typedef struct {
     u8 pad[0x2];
     u16 field_0x2;
@@ -743,7 +955,11 @@ void fn_1_ABDA8(fn_1_ABDA8_ArgStruct *arg) {
 }
 /* fzgx:end fn_1_ABDA8 */
 
-/* fzgx:begin fn_1_ABDB8 */
+/* fzgx:begin fn_1_ABDB8 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/memcard.h"
+
 #include "rel/main_rel/globals.h"
 
 typedef struct {
@@ -772,7 +988,12 @@ void fn_1_ABDB8(fn_1_ABDB8_ArgStruct *arg) {
 }
 /* fzgx:end fn_1_ABDB8 */
 
-/* fzgx:begin fn_1_ABE14 */
+/* fzgx:begin fn_1_ABE14 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/memcard.h"
+extern const f32 lbl_1_rodata_4CA8;
+
 typedef struct Fn1ABE14Sub {
     u8 pad_00[0x2];
     u16 value;
@@ -807,7 +1028,11 @@ void fn_1_ABE14(Fn1ABE14Arg *arg) {
 }
 /* fzgx:end fn_1_ABE14 */
 
-/* fzgx:begin fn_1_ABE88 */
+/* fzgx:begin fn_1_ABE88 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/memcard.h"
+
 #include "types.h"
 
 struct fn_1_ABE88_Arg0 {
@@ -831,7 +1056,15 @@ void fn_1_ABE88(void *arg0) {
 }
 /* fzgx:end fn_1_ABE88 */
 
-/* fzgx:begin fn_1_ABF44 */
+/* fzgx:begin fn_1_ABF44 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/memcard.h"
+extern const f32 lbl_1_rodata_4CA8;
+extern void fn_80083DB0(void *dst, void *src);
+extern void strcat(void *dst, void *src);
+extern s32 CARDOpen(u8 byte_val, void *arg1, void *arg2);
+
 typedef struct {
     u8 pad_00[0x2];
     u16 field_0x2;
@@ -879,7 +1112,11 @@ void fn_1_ABF44(Fn1ABF44Object *arg) {
 }
 /* fzgx:end fn_1_ABF44 */
 
-/* fzgx:begin fn_1_AC000 */
+/* fzgx:begin fn_1_AC000 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/memcard.h"
+
 typedef struct Fn1AC000Table {
     u8 pad_00[0x48];
     u32 value_0x48;
@@ -933,7 +1170,29 @@ void fn_1_AC000(Fn1AC000Target *target) {
 }
 /* fzgx:end fn_1_AC000 */
 
-/* fzgx:begin fn_1_AC12C */
+/* fzgx:begin fn_1_AC12C noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/memcard.h"
+extern int fn_1_45D0(void *arg0, int arg1, Obj_1_data_3C7B8 *arg2, int arg3);
+extern void CARDMountAsync(u8, u32, void (*)(void), s32);
+extern int CARDGetSerialNo(u8 value, void *data);
+extern void CARDCheckAsync(u8 byte_val, int value);
+extern void CARDFormatAsync(u8 byte, int value);
+extern void fn_80083DB0(void *dst, void *src);
+extern void strcat(void *dst, void *src);
+extern s32 CARDOpen(u8 byte_val, void *arg1, void *arg2);
+extern void CARDFastDeleteAsync(u8 byte_val, void *arg, s32 zero);
+extern void CARDCreateAsync(u8 byte_val, void *arg1, void *arg2, void *arg3, u32 arg4);
+extern void fn_8002A74C(u16 value);
+extern int CARDCheck(int arg0);
+extern void fn_80008BEC(void *dst, s32 value, s32 size);
+extern void fn_1_AA6D8(s32 arg0, u32 arg1, void *arg2);
+extern void OSPanic(void *arg0, u32 arg1, ...);
+extern void fn_1_F79C8(void);
+extern void strncpy(void *arg0, void *arg1, int arg2);
+extern u32 lbl_1_bss_7730C;
+
 extern int fn_1_45D0(void *arg0, int arg1, Obj_1_data_3C7B8 *arg2, int arg3);
 extern void CARDMountAsync(u8, u32, void (*)(void), s32);
 extern int CARDGetSerialNo(u8 value, void *data);
@@ -981,7 +1240,11 @@ void fn_1_AC12C(fn_1_AC12C_MemcardRequest *request) {
 }
 /* fzgx:end fn_1_AC12C */
 
-/* fzgx:begin fn_1_AC188 */
+/* fzgx:begin fn_1_AC188 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/memcard.h"
+
 typedef struct Fn1AC188Config {
     u8 pad_00[0x48];
     int value;
@@ -1033,7 +1296,12 @@ void fn_1_AC188(Fn1AC188Target *target) {
 }
 /* fzgx:end fn_1_AC188 */
 
-/* fzgx:begin fn_1_AC294 */
+/* fzgx:begin fn_1_AC294 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/memcard.h"
+extern void CARDSetStatusAsync(u8 id, void *arg, void *data, int zero);
+
 typedef struct Fn1AC294State {
     u8 pad_00[0x2];
     u16 value;
@@ -1053,7 +1321,11 @@ void fn_1_AC294(Fn1AC294Target *target) {
 }
 /* fzgx:end fn_1_AC294 */
 
-/* fzgx:begin fn_1_AC2D8 */
+/* fzgx:begin fn_1_AC2D8 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/memcard.h"
+
 typedef struct Fn1AC2D8State {
     u8 pad_00[0x2];
     u16 value;
@@ -1074,7 +1346,14 @@ void fn_1_AC2D8(Fn1AC2D8Target *target) {
 }
 /* fzgx:end fn_1_AC2D8 */
 
-/* fzgx:begin fn_1_AC328 */
+/* fzgx:begin fn_1_AC328 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/memcard.h"
+extern void fn_80083DB0(void *dst, void *src);
+extern void strcat(void *dst, void *src);
+extern void CARDDeleteAsync(u8 byte, void *data, int arg);
+
 typedef struct Fn1AC328State {
     u8 pad_00[0x2];
     u16 value;
@@ -1097,7 +1376,11 @@ void fn_1_AC328(Fn1AC328Target *target) {
 }
 /* fzgx:end fn_1_AC328 */
 
-/* fzgx:begin fn_1_AC38C */
+/* fzgx:begin fn_1_AC38C noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/memcard.h"
+
 typedef struct Fn1AC38Data {
     u8 pad_00[0x2];
     u16 value;
@@ -1118,7 +1401,14 @@ void fn_1_AC38C(Fn1AC38Target *target) {
 }
 /* fzgx:end fn_1_AC38C */
 
-/* fzgx:begin fn_1_AC3DC */
+/* fzgx:begin fn_1_AC3DC noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/memcard.h"
+extern void fn_80083DB0(void *dst, void *src);
+extern void strcat(void *dst, void *src);
+extern void CARDRenameAsync(u8 id, void *data1, void *data2, int zero);
+
 typedef struct Fn1AC3DCState {
     u8 pad_00[0x2];
     u16 value;
@@ -1144,7 +1434,11 @@ void fn_1_AC3DC(Fn1AC3DCTarget *target) {
 }
 /* fzgx:end fn_1_AC3DC */
 
-/* fzgx:begin fn_1_AC464 */
+/* fzgx:begin fn_1_AC464 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/memcard.h"
+
 typedef struct Fn1AC464State {
     u16 pad_00;
     u16 value;
@@ -1165,7 +1459,11 @@ void fn_1_AC464(Fn1AC464Target *target) {
 }
 /* fzgx:end fn_1_AC464 */
 
-/* fzgx:begin fn_1_AC4B4 */
+/* fzgx:begin fn_1_AC4B4 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/memcard.h"
+
 typedef struct Fn1AC4B4Target {
     u8 pad_00[0x24];
     struct Fn1AC4B4State *state;
@@ -1181,7 +1479,12 @@ void fn_1_AC4B4(Fn1AC4B4Target *target) {
 }
 /* fzgx:end fn_1_AC4B4 */
 
-/* fzgx:begin fn_1_AC4C4 */
+/* fzgx:begin fn_1_AC4C4 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/memcard.h"
+extern s32 CARDFreeBlocks(u8 byte_val, void *arg1, void *arg2);
+
 typedef struct Fn1AC4C4State {
     u16 pad_00;
     u16 value_02;
@@ -1210,7 +1513,13 @@ void fn_1_AC4C4(Fn1AC4C4Target *target) {
 }
 /* fzgx:end fn_1_AC4C4 */
 
-/* fzgx:begin fn_1_AC53C */
+/* fzgx:begin fn_1_AC53C noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/memcard.h"
+extern void* lbl_801A6410;
+extern void *lbl_801A6410;
+
 #include "types.h"
 
 struct fn_1_AC53C_Arg0 {
@@ -1280,13 +1589,21 @@ void fn_1_AC53C(void *arg0) {
 }
 /* fzgx:end fn_1_AC53C */
 
-/* fzgx:begin fn_1_AC6A4 */
+/* fzgx:begin fn_1_AC6A4 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/memcard.h"
+
 // fn_1_AC6A4: empty in retail (single blr).
 void fn_1_AC6A4(void) {
 }
 /* fzgx:end fn_1_AC6A4 */
 
-/* fzgx:begin fn_1_AC6A8 */
+/* fzgx:begin fn_1_AC6A8 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/memcard.h"
+
 typedef struct {
     u8 unk0[8];
     u16 unk8;
@@ -1302,13 +1619,21 @@ void fn_1_AC6A8(Fn1AC6A8Data *data) {
 }
 /* fzgx:end fn_1_AC6A8 */
 
-/* fzgx:begin fn_1_AC6C8 */
+/* fzgx:begin fn_1_AC6C8 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/memcard.h"
+
 // fn_1_AC6C8: empty in retail (single blr).
 void fn_1_AC6C8(void) {
 }
 /* fzgx:end fn_1_AC6C8 */
 
-/* fzgx:begin fn_1_AC6CC */
+/* fzgx:begin fn_1_AC6CC noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/memcard.h"
+
 typedef struct fn_1_AC6CC_MemCardState {
     u8 padding[0x2a];
     u8 flags;
@@ -1319,13 +1644,21 @@ void fn_1_AC6CC(fn_1_AC6CC_MemCardState *self) {
 }
 /* fzgx:end fn_1_AC6CC */
 
-/* fzgx:begin fn_1_AC6DC */
+/* fzgx:begin fn_1_AC6DC noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/memcard.h"
+
 // fn_1_AC6DC: empty in retail (single blr).
 void fn_1_AC6DC(void) {
 }
 /* fzgx:end fn_1_AC6DC */
 
-/* fzgx:begin fn_1_AC6E0 */
+/* fzgx:begin fn_1_AC6E0 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/memcard.h"
+
 // fn_1_AC6E0: Write struct fields at offsets 0x8, 0xa, and 0x2a (with OR).
 void fn_1_AC6E0(void *r3) {
     *(u16 *)((u8 *)r3 + 0x8) = 0x34;
@@ -1334,13 +1667,22 @@ void fn_1_AC6E0(void *r3) {
 }
 /* fzgx:end fn_1_AC6E0 */
 
-/* fzgx:begin fn_1_AC700 */
+/* fzgx:begin fn_1_AC700 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/memcard.h"
+
 // fn_1_AC700: empty in retail (single blr).
 void fn_1_AC700(void) {
 }
 /* fzgx:end fn_1_AC700 */
 
-/* fzgx:begin fn_1_AC704 */
+/* fzgx:begin fn_1_AC704 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/memcard.h"
+extern void CARDReadAsync(void *arg0, void *arg1, void *arg2, int arg3, int arg4);
+
 void fn_1_AC704(void *r3) {
     *(u16 *)((u8 *)*(void **)((u8 *)r3 + 0x24) + 0x2) = 0x12c;
     CARDReadAsync((u8 *)r3 + 0x10,
@@ -1351,7 +1693,11 @@ void fn_1_AC704(void *r3) {
 }
 /* fzgx:end fn_1_AC704 */
 
-/* fzgx:begin fn_1_AC74C */
+/* fzgx:begin fn_1_AC74C noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/memcard.h"
+
 void fn_1_AC74C(void *r3) {
     s32 result;
 
@@ -1363,7 +1709,13 @@ void fn_1_AC74C(void *r3) {
 }
 /* fzgx:end fn_1_AC74C */
 
-/* fzgx:begin fn_1_AC79C */
+/* fzgx:begin fn_1_AC79C noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/memcard.h"
+extern void* lbl_801A6410;
+extern void *lbl_801A6410;
+
 #include "types.h"
 
 struct fn_1_AC79C_Arg0 {
@@ -1433,13 +1785,21 @@ void fn_1_AC79C(void *arg0) {
 }
 /* fzgx:end fn_1_AC79C */
 
-/* fzgx:begin fn_1_AC904 */
+/* fzgx:begin fn_1_AC904 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/memcard.h"
+
 // fn_1_AC904: empty in retail (single blr).
 void fn_1_AC904(void) {
 }
 /* fzgx:end fn_1_AC904 */
 
-/* fzgx:begin fn_1_AC908 */
+/* fzgx:begin fn_1_AC908 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/memcard.h"
+
 typedef struct {
     u8 unk0[8];
     u16 field8;
@@ -1455,13 +1815,22 @@ void fn_1_AC908(Fn1AC908State *state) {
 }
 /* fzgx:end fn_1_AC908 */
 
-/* fzgx:begin fn_1_AC928 */
+/* fzgx:begin fn_1_AC928 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/memcard.h"
+
 // fn_1_AC928: empty in retail (single blr).
 void fn_1_AC928(void) {
 }
 /* fzgx:end fn_1_AC928 */
 
-/* fzgx:begin fn_1_AC92C */
+/* fzgx:begin fn_1_AC92C noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/memcard.h"
+extern const f32 lbl_1_rodata_4CA8;
+
 struct fn_1_AC92C_Arg0 {
     u8 pad_0[0x24];
     u32 unk_24;
@@ -1486,7 +1855,12 @@ u32 fn_1_AC92C(struct fn_1_AC92C_Arg0 *arg0) {
 }
 /* fzgx:end fn_1_AC92C */
 
-/* fzgx:begin fn_1_AC960 */
+/* fzgx:begin fn_1_AC960 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/memcard.h"
+extern const f64 lbl_1_rodata_4CC8;
+
 struct MemcardData {
     u8 pad0[2];
     u16 status;
@@ -1519,7 +1893,11 @@ void fn_1_AC960(struct MemcardObject *obj) {
 }
 /* fzgx:end fn_1_AC960 */
 
-/* fzgx:begin fn_1_ACA00 */
+/* fzgx:begin fn_1_ACA00 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/memcard.h"
+
 typedef struct Fn1Aca00Target {
     u8 _pad00[0x24];
     struct Fn1Aca00Child *child;
@@ -1540,7 +1918,11 @@ void fn_1_ACA00(Fn1Aca00Target *self) {
 }
 /* fzgx:end fn_1_ACA00 */
 
-/* fzgx:begin fn_1_ACA1C */
+/* fzgx:begin fn_1_ACA1C noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/memcard.h"
+
 typedef struct MemCardData {
     u8 pad0[4];
     s32 value;
@@ -1564,7 +1946,13 @@ void fn_1_ACA1C(fn_1_ACA1C_MemCardState *state) {
 }
 /* fzgx:end fn_1_ACA1C */
 
-/* fzgx:begin fn_1_ACA78 */
+/* fzgx:begin fn_1_ACA78 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/memcard.h"
+extern void* lbl_801A6410;
+extern void *lbl_801A6410;
+
 #include "types.h"
 
 struct fn_1_ACA78_Arg0 {
@@ -1690,13 +2078,23 @@ void fn_1_ACA78(void *arg0) {
 }
 /* fzgx:end fn_1_ACA78 */
 
-/* fzgx:begin fn_1_ACD00 */
+/* fzgx:begin fn_1_ACD00 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/memcard.h"
+
 // fn_1_ACD00: empty in retail (single blr).
 void fn_1_ACD00(void) {
 }
 /* fzgx:end fn_1_ACD00 */
 
-/* fzgx:begin fn_1_ACD04 */
+/* fzgx:begin fn_1_ACD04 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/memcard.h"
+extern void* lbl_801A6410;
+extern void *lbl_801A6410;
+
 #include "rel/main_rel/globals.h"
 #include "rel/main_rel/memcard.h"
 
@@ -1789,13 +2187,22 @@ void fn_1_ACD04(Fn1Acd04Obj *obj) {
 }
 /* fzgx:end fn_1_ACD04 */
 
-/* fzgx:begin fn_1_ACE7C */
+/* fzgx:begin fn_1_ACE7C noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/memcard.h"
+
 // fn_1_ACE7C: empty in retail (single blr).
 void fn_1_ACE7C(void) {
 }
 /* fzgx:end fn_1_ACE7C */
 
-/* fzgx:begin fn_1_ACE80 */
+/* fzgx:begin fn_1_ACE80 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/memcard.h"
+extern void CARDDeleteAsync(u8 byte, void *data, int arg);
+
 typedef struct {
     u8 field_0;
     u8 pad_1[0x23];
@@ -1809,7 +2216,11 @@ void fn_1_ACE80(fn_1_ACE80_SomeObject* obj) {
 }
 /* fzgx:end fn_1_ACE80 */
 
-/* fzgx:begin fn_1_ACEBC */
+/* fzgx:begin fn_1_ACEBC noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/memcard.h"
+
 typedef struct {
     u8 field_0;
     u8 pad_1[0x23];
@@ -1826,7 +2237,11 @@ void fn_1_ACEBC(fn_1_ACEBC_SomeObject* obj) {
 }
 /* fzgx:end fn_1_ACEBC */
 
-/* fzgx:begin fn_1_ACF0C */
+/* fzgx:begin fn_1_ACF0C noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/memcard.h"
+
 typedef struct {
     u8 pad_0[0x8];
     u16 field_8;
@@ -1842,13 +2257,23 @@ void fn_1_ACF0C(Object* obj) {
 }
 /* fzgx:end fn_1_ACF0C */
 
-/* fzgx:begin fn_1_ACF2C */
+/* fzgx:begin fn_1_ACF2C noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/memcard.h"
+
 // fn_1_ACF2C: empty in retail (single blr).
 void fn_1_ACF2C(void) {
 }
 /* fzgx:end fn_1_ACF2C */
 
-/* fzgx:begin fn_1_ACF30 */
+/* fzgx:begin fn_1_ACF30 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/memcard.h"
+extern void* lbl_801A6410;
+extern void *lbl_801A6410;
+
 #include "rel/main_rel/globals.h"
 #include "rel/main_rel/memcard.h"
 
@@ -1932,13 +2357,21 @@ void fn_1_ACF30(MemcardObject* obj) {
 }
 /* fzgx:end fn_1_ACF30 */
 
-/* fzgx:begin fn_1_AD098 */
+/* fzgx:begin fn_1_AD098 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/memcard.h"
+
 // fn_1_AD098: empty in retail (single blr).
 void fn_1_AD098(void) {
 }
 /* fzgx:end fn_1_AD098 */
 
-/* fzgx:begin fn_1_AD09C */
+/* fzgx:begin fn_1_AD09C noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/memcard.h"
+
 // fn_1_AD09C: empty in retail (single blr).
 void fn_1_AD09C(void) {
 }
@@ -1973,7 +2406,11 @@ void fn_1_AD0A0(void *arg0) {
 }
 /* fzgx:end fn_1_AD0A0 */
 
-/* fzgx:begin fn_1_AD140 */
+/* fzgx:begin fn_1_AD140 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/memcard.h"
+
 #include "rel/main_rel/globals.h"
 
 extern int fn_1_B7FDC(u8 value);
@@ -1984,13 +2421,22 @@ int fn_1_AD140(const u8 *status_byte) {
 }
 /* fzgx:end fn_1_AD140 */
 
-/* fzgx:begin fn_1_AD164 */
+/* fzgx:begin fn_1_AD164 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/memcard.h"
+
 // fn_1_AD164: empty in retail (single blr).
 void fn_1_AD164(void) {
 }
 /* fzgx:end fn_1_AD164 */
 
-/* fzgx:begin fn_1_AD168 */
+/* fzgx:begin fn_1_AD168 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/memcard.h"
+extern void fn_80030754(u8 value, void *data, int size, int mode);
+
 typedef struct Fn1AD168Obj {
     u8 field0;
     u8 _pad1[0x13];
@@ -2006,7 +2452,29 @@ void fn_1_AD168(Fn1AD168Obj *obj) {
 }
 /* fzgx:end fn_1_AD168 */
 
-/* fzgx:begin fn_1_AD1AC */
+/* fzgx:begin fn_1_AD1AC noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/memcard.h"
+extern int fn_1_45D0(void *arg0, int arg1, Obj_1_data_3C7B8 *arg2, int arg3);
+extern void CARDMountAsync(u8, u32, void (*)(void), s32);
+extern int CARDGetSerialNo(u8 value, void *data);
+extern void CARDCheckAsync(u8 byte_val, int value);
+extern void CARDFormatAsync(u8 byte, int value);
+extern void fn_80083DB0(void *dst, void *src);
+extern void strcat(void *dst, void *src);
+extern s32 CARDOpen(u8 byte_val, void *arg1, void *arg2);
+extern void CARDFastDeleteAsync(u8 byte_val, void *arg, s32 zero);
+extern void CARDCreateAsync(u8 byte_val, void *arg1, void *arg2, void *arg3, u32 arg4);
+extern void fn_8002A74C(u16 value);
+extern int CARDCheck(int arg0);
+extern void fn_80008BEC(void *dst, s32 value, s32 size);
+extern void fn_1_AA6D8(s32 arg0, u32 arg1, void *arg2);
+extern void OSPanic(void *arg0, u32 arg1, ...);
+extern void fn_1_F79C8(void);
+extern void strncpy(void *arg0, void *arg1, int arg2);
+extern u32 lbl_1_bss_7730C;
+
 extern int fn_1_45D0(void *arg0, int arg1, Obj_1_data_3C7B8 *arg2, int arg3);
 extern void CARDMountAsync(u8, u32, void (*)(void), s32);
 extern int CARDGetSerialNo(u8 value, void *data);
@@ -2046,7 +2514,12 @@ void fn_1_AD1AC(Fn1AD1ACObject *object) {
 }
 /* fzgx:end fn_1_AD1AC */
 
-/* fzgx:begin fn_1_AD1E4 */
+/* fzgx:begin fn_1_AD1E4 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/memcard.h"
+extern void strncpy(void *arg0, void *arg1, int arg2);
+
 typedef struct Fn1AD1E4State {
     u8 unk_00[8];
     void *unk_08;
@@ -3995,7 +4468,14 @@ switch (fzgx_live->unk_04) {
 }
 /* fzgx:end fn_1_AD264 */
 
-/* fzgx:begin fn_1_AEC34 */
+/* fzgx:begin fn_1_AEC34 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/memcard.h"
+extern void strncpy(void *arg0, void *arg1, int arg2);
+extern u32 lbl_1_bss_77310[28];
+extern u32 lbl_1_bss_7730C;
+
 typedef struct Fn1AEC34A {
     u8 pad0[8];
     void *payload;
@@ -5061,7 +5541,11 @@ void fn_1_AECCC(MemcardObj *arg0, u32 unused) {
 #pragma opt_common_subs reset
 /* fzgx:end fn_1_AECCC */
 
-/* fzgx:begin fn_1_B03A8 */
+/* fzgx:begin fn_1_B03A8 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/memcard.h"
+
 void fn_1_B03A8(void *arg0, void *arg1) {
     void *child = *(void **)((u8 *)arg1 + 0x24);
     if ((*(u32 *)((u8 *)child + 0x8) & 0x20) == 0) {
@@ -5879,13 +6363,21 @@ void fn_1_B03CC(B03CC_State *arg0) {
 }
 /* fzgx:end fn_1_B03CC */
 
-/* fzgx:begin fn_1_B1710 */
+/* fzgx:begin fn_1_B1710 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/memcard.h"
+
 void fn_1_B1710(int unused, void *ptr) {
     *(u8 *)((u8 *)ptr + 3) = 0x3;
 }
 /* fzgx:end fn_1_B1710 */
 
-/* fzgx:begin fn_1_B2770 */
+/* fzgx:begin fn_1_B2770 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/memcard.h"
+
 // fn_1_B2770: main_rel .text:0x000B2770 size 0xC
 // Store byte 0x3 at offset 3 of the pointer argument
 
@@ -6690,7 +7182,11 @@ rec = record_address((u8 *)fzgx_live->unk_DC, off);
 #pragma opt_common_subs reset
 /* fzgx:end fn_1_B277C */
 
-/* fzgx:begin fn_1_B38F4 */
+/* fzgx:begin fn_1_B38F4 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/memcard.h"
+
 void fn_1_B38F4(int unused, void *ptr) {
     *(u8 *)((u8 *)ptr + 3) = 0x3;
 }
@@ -7015,7 +7511,11 @@ void fn_1_B3900(u8 *arg0) {
 #pragma opt_dead_assignments reset
 /* fzgx:end fn_1_B3900 */
 
-/* fzgx:begin fn_1_B40B4 */
+/* fzgx:begin fn_1_B40B4 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/memcard.h"
+
 void fn_1_B40B4(int unused, void *ptr) {
     *(u8 *)((u8 *)ptr + 3) = 0x3;
 }
@@ -7055,7 +7555,11 @@ void fn_1_B5258(char *destination, void *unused, const char *source, const char 
 }
 /* fzgx:end fn_1_B5258 */
 
-/* fzgx:begin fn_1_B5F00 */
+/* fzgx:begin fn_1_B5F00 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/memcard.h"
+
 typedef struct {
     u8 pad0[0x54];
     f32 value;
@@ -7078,7 +7582,12 @@ void fn_1_B5F00(B5F00Source *source, B5F00Dest *dest) {
 }
 /* fzgx:end fn_1_B5F00 */
 
-/* fzgx:begin fn_1_B7C00 */
+/* fzgx:begin fn_1_B7C00 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/memcard.h"
+extern u8 lbl_1_bss_71810[161];
+
 #include "rel/main_rel/memcard.h"
 
 u8 fn_1_B7C00(void) {
@@ -7098,7 +7607,11 @@ u8 fn_1_B7C00(void) {
 }
 /* fzgx:end fn_1_B7C00 */
 
-/* fzgx:begin fn_1_B7C5C */
+/* fzgx:begin fn_1_B7C5C noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/memcard.h"
+
 u32 fn_1_B7C5C(void) {
     return lbl_1_bss_718B4;
 }
@@ -7127,13 +7640,23 @@ s32 fn_1_B7C6C(u32 arg0) {
 }
 /* fzgx:end fn_1_B7C6C */
 
-/* fzgx:begin fn_1_B7CD4 */
+/* fzgx:begin fn_1_B7CD4 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/memcard.h"
+extern u8 lbl_1_bss_718B8;
+
 u8 fn_1_B7CD4(void) {
     return lbl_1_bss_718B8;
 }
 /* fzgx:end fn_1_B7CD4 */
 
-/* fzgx:begin fn_1_B7E14 */
+/* fzgx:begin fn_1_B7E14 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/memcard.h"
+extern void strncpy(void *arg0, void *arg1, int arg2);
+
 #include "rel/main_rel/memcard.h"
 #include "rel/main_rel/globals.h"
 
@@ -7144,7 +7667,11 @@ void fn_1_B7E14(void *memory_card_state) {
 }
 /* fzgx:end fn_1_B7E14 */
 
-/* fzgx:begin fn_1_B7E48 */
+/* fzgx:begin fn_1_B7E48 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/memcard.h"
+
 #include "rel/main_rel/memcard.h"
 #include "rel/main_rel/globals.h"
 
@@ -7166,7 +7693,11 @@ int fn_1_B7E48(void) {
 }
 /* fzgx:end fn_1_B7E48 */
 
-/* fzgx:begin fn_1_B7E98 */
+/* fzgx:begin fn_1_B7E98 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/memcard.h"
+
 #include "rel/main_rel/memcard.h"
 #include "rel/main_rel/globals.h"
 
@@ -7176,7 +7707,11 @@ int fn_1_B7E98(int index) {
 }
 /* fzgx:end fn_1_B7E98 */
 
-/* fzgx:begin fn_1_B7EC4 */
+/* fzgx:begin fn_1_B7EC4 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/memcard.h"
+
 int fn_1_B7EC4(int index) {
     int result = 0;
     s8 value = (s8)lbl_1_bss_716C8.pad_A0[index * 0xa0 - 0x9f];
@@ -7188,20 +7723,33 @@ int fn_1_B7EC4(int index) {
 }
 /* fzgx:end fn_1_B7EC4 */
 
-/* fzgx:begin fn_1_B7EF8 */
+/* fzgx:begin fn_1_B7EF8 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/memcard.h"
+extern u8 lbl_1_bss_718B9[7];
+
 // fn_1_B7EF8: Load and return first byte from lbl_1_bss_718B9
 u8 fn_1_B7EF8(void) {
     return lbl_1_bss_718B9[0];
 }
 /* fzgx:end fn_1_B7EF8 */
 
-/* fzgx:begin fn_1_B7F08 */
+/* fzgx:begin fn_1_B7F08 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/memcard.h"
+
 u32 fn_1_B7F08(void) {
     return lbl_1_bss_718B4 != 0;
 }
 /* fzgx:end fn_1_B7F08 */
 
-/* fzgx:begin fn_1_B7F24 */
+/* fzgx:begin fn_1_B7F24 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/memcard.h"
+
 typedef struct {
     u8 pad_0[0x48];
     u32 unk_48;
@@ -7227,7 +7775,11 @@ void fn_1_B7F24(void) {
 }
 /* fzgx:end fn_1_B7F24 */
 
-/* fzgx:begin fn_1_B7F58 */
+/* fzgx:begin fn_1_B7F58 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/memcard.h"
+
 typedef struct {
     u32 unk_0;
     u32 unk_4;
@@ -7262,7 +7814,11 @@ int fn_1_B7F58(Result *result) {
 #pragma opt_propagation reset
 /* fzgx:end fn_1_B7F58 */
 
-/* fzgx:begin fn_1_B7FC8 */
+/* fzgx:begin fn_1_B7FC8 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/memcard.h"
+
 #include "rel/main_rel/memcard.h"
 
 u32 fn_1_B7FC8(void) {
@@ -7270,7 +7826,13 @@ u32 fn_1_B7FC8(void) {
 }
 /* fzgx:end fn_1_B7FC8 */
 
-/* fzgx:begin fn_1_B7FDC */
+/* fzgx:begin fn_1_B7FDC noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/memcard.h"
+extern int fn_8002A744(void);
+extern void fn_8002A74C(u16 value);
+
 // Toggles the low 16-bit status value and stores the result.
 void fn_1_B7FDC(void) {
     u16 value = (u16)fn_8002A744();
@@ -7279,7 +7841,16 @@ void fn_1_B7FDC(void) {
 }
 /* fzgx:end fn_1_B7FDC */
 
-/* fzgx:begin fn_1_B800C */
+/* fzgx:begin fn_1_B800C noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/memcard.h"
+extern void* lbl_801A6410;
+extern int fn_1_45D0(void *arg0, int arg1, Obj_1_data_3C7B8 *arg2, int arg3);
+extern int fn_8002DFE0(int arg0, u32 arg1, int arg2);
+extern int CARDCheck(int arg0);
+extern void *lbl_801A6410;
+
 #include "rel/main_rel/globals.h"
 #include "rel/main_rel/memcard.h"
 
@@ -7310,7 +7881,13 @@ int fn_1_B800C(int index) {
 }
 /* fzgx:end fn_1_B800C */
 
-/* fzgx:begin fn_1_B80F0 */
+/* fzgx:begin fn_1_B80F0 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/memcard.h"
+extern void* lbl_801A6410;
+extern void *lbl_801A6410;
+
 #include "rel/main_rel/globals.h"
 #include "rel/main_rel/memcard.h"
 
@@ -7411,21 +7988,38 @@ u32 fn_1_B8170(s32 card) {
 }
 /* fzgx:end fn_1_B8170 */
 
-/* fzgx:begin fn_1_B9BE0 */
+/* fzgx:begin fn_1_B9BE0 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/memcard.h"
+extern void fn_1_B9C38(s32 index);
+
 void fn_1_B9BE0(void) {
     fn_1_B9C38(0);
     fn_1_B9C38(1);
 }
 /* fzgx:end fn_1_B9BE0 */
 
-/* fzgx:begin fn_1_B9C0C */
+/* fzgx:begin fn_1_B9C0C noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/memcard.h"
+extern void fn_1_B9C38(s32 index);
+
 void fn_1_B9C0C(void) {
     fn_1_B9C38(0);
     fn_1_B9C38(1);
 }
 /* fzgx:end fn_1_B9C0C */
 
-/* fzgx:begin fn_1_B9C38 */
+/* fzgx:begin fn_1_B9C38 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/memcard.h"
+extern void* lbl_801A6410;
+extern void fn_1_B9C38(s32 index);
+extern void *lbl_801A6410;
+
 #include "rel/main_rel/memcard.h"
 
 // Saves populated slots before resetting each slot for reuse.
@@ -7523,7 +8117,15 @@ void fn_1_B9CCC(s32 index, u32 flags) {
 }
 /* fzgx:end fn_1_B9CCC */
 
-/* fzgx:begin fn_1_BC29C */
+/* fzgx:begin fn_1_BC29C noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/memcard.h"
+extern void* lbl_801A6410;
+extern void fn_1_1596DC(u32);
+extern void fn_1_484CC(u32);
+extern void *lbl_801A6410;
+
 #include "rel/main_rel/memcard.h"
 
 // Completes the pending memory-card operation and resets the card state when needed.
@@ -7539,7 +8141,11 @@ void fn_1_BC29C(void) {
 }
 /* fzgx:end fn_1_BC29C */
 
-/* fzgx:begin fn_1_BF520 */
+/* fzgx:begin fn_1_BF520 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/memcard.h"
+
 #include "types.h"
 
 struct fn_1_BF520_Arg4 {
@@ -7780,7 +8386,22 @@ void fn_1_BF600(s32 a, s32 b, s32 c, s32 d, u32 *source, f32 initial) {
 }
 /* fzgx:end fn_1_BF600 */
 
-/* fzgx:begin fn_1_BF9C4 */
+/* fzgx:begin fn_1_BF9C4 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/memcard.h"
+extern u8 lbl_1_data_2B0D4[];
+extern void *lbl_1_data_2AA24[];
+extern void fn_1_49410(void);
+extern void fn_1_49590(f32);
+extern void fn_1_495B0(u32);
+extern void fn_1_494DC(s32);
+extern void fn_1_5233C(void);
+extern void fn_1_49738(void (*)(void));
+extern void fn_1_49748(f32);
+extern void fn_1_4966C(f32, f32);
+extern void fn_1_4A0D8(void *);
+
 #pragma section code_type ".fzgxpool"
 static const u32 fzgx_pool_table1[114] = {0x665F7A65, 0x726F5F64, 0x65627567, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x7379735F, 0x652E6269, 0x6E000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000350, 0x00000004, 0xFFFFFFFF, 0xFFFFFFFF, 0x665F7A65, 0x726F0000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000001, 0x7379735F, 0x652E6269, 0x6E000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000B4F, 0x000059E0, 0xFFFFFFFF, 0xFFFFFFFF, 0x667A6700, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000002, 0x67686F5F, 0x652E6269, 0x6E000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000153, 0x00000000, 0xFFFFFFFF, 0xFFFFFFFF, 0x667A6300, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000003, 0x6761725F, 0x652E6269, 0x6E000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000154, 0x00020700, 0xFFFFFFFF, 0xFFFFFFFF, 0x667A6500, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000004, 0x656D625F, 0x652E6269, 0x6E000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000152, 0x00000000, 0xFFFFFFFF, 0xFFFFFFFF, 0x667A7200, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000005, 0x7265705F, 0x652E6269, 0x6E000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000451, 0x00000000, 0xFFFFFFFF, 0xFFFFFFFF};  /* fzgx-allow: A1 retail pool bytes */
 __declspec(section ".fzgxpool") static void fzgx_pool_keep1(void) { const u32 *volatile cp; cp = fzgx_pool_table1; }  /* fzgx-allow: S2 pool primer sink */
@@ -8038,7 +8659,17 @@ void fn_1_BF9C4(s32 arg0, s32 arg1, s32 arg2, f32 arg3, f32 arg4) {
 }
 /* fzgx:end fn_1_BF9C4 */
 
-/* fzgx:begin fn_1_BFCF8 */
+/* fzgx:begin fn_1_BFCF8 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/memcard.h"
+extern void fn_1_49410(void);
+extern void fn_1_49590(f32);
+extern void fn_1_495B0(u32);
+extern void fn_1_494DC(s32);
+extern void fn_1_4966C(f32, f32);
+extern void fn_1_4AE0C(char *, ...);
+
 #include "types.h"
 
 #pragma section code_type ".fzgxpool"
@@ -8266,7 +8897,11 @@ void fn_1_BFCF8(void *arg0, void *arg1, void *arg2, s32 arg3, s32 arg4, f32 arg5
 }
 /* fzgx:end fn_1_BFCF8 */
 
-/* fzgx:begin fn_1_C023C */
+/* fzgx:begin fn_1_C023C noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/memcard.h"
+
 #pragma section code_type ".fzgxpool"
 static const u32 fzgx_pool_table1[114] = {0x665F7A65, 0x726F5F64, 0x65627567, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x7379735F, 0x652E6269, 0x6E000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000350, 0x00000004, 0xFFFFFFFF, 0xFFFFFFFF, 0x665F7A65, 0x726F0000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000001, 0x7379735F, 0x652E6269, 0x6E000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000B4F, 0x000059E0, 0xFFFFFFFF, 0xFFFFFFFF, 0x667A6700, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000002, 0x67686F5F, 0x652E6269, 0x6E000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000153, 0x00000000, 0xFFFFFFFF, 0xFFFFFFFF, 0x667A6300, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000003, 0x6761725F, 0x652E6269, 0x6E000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000154, 0x00020700, 0xFFFFFFFF, 0xFFFFFFFF, 0x667A6500, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000004, 0x656D625F, 0x652E6269, 0x6E000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000152, 0x00000000, 0xFFFFFFFF, 0xFFFFFFFF, 0x667A7200, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000005, 0x7265705F, 0x652E6269, 0x6E000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000451, 0x00000000, 0xFFFFFFFF, 0xFFFFFFFF};  /* fzgx-allow: A1 retail pool bytes */
 __declspec(section ".fzgxpool") static void fzgx_pool_keep1(void) { const u32 *volatile cp; cp = fzgx_pool_table1; }  /* fzgx-allow: S2 pool primer sink */
@@ -8525,7 +9160,19 @@ void fn_1_C023C(s32 a, s32 b, s32 c, s32 d, s32 e, s32 f, s32 g, f32 value) {
 }
 /* fzgx:end fn_1_C023C */
 
-/* fzgx:begin fn_1_C0374 */
+/* fzgx:begin fn_1_C0374 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/memcard.h"
+extern void fn_1_49410(void);
+extern void fn_1_49590(f32);
+extern void fn_1_495B0(u32);
+extern void fn_1_5233C(void);
+extern void fn_1_49738(void (*)(void));
+extern void fn_1_49748(f32);
+extern void fn_1_4966C(f32, f32);
+extern void fn_1_49614(void);
+
 #pragma section code_type ".fzgxpool"
 static const u32 fzgx_pool_table1[114] = {0x665F7A65, 0x726F5F64, 0x65627567, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x7379735F, 0x652E6269, 0x6E000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000350, 0x00000004, 0xFFFFFFFF, 0xFFFFFFFF, 0x665F7A65, 0x726F0000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000001, 0x7379735F, 0x652E6269, 0x6E000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000B4F, 0x000059E0, 0xFFFFFFFF, 0xFFFFFFFF, 0x667A6700, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000002, 0x67686F5F, 0x652E6269, 0x6E000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000153, 0x00000000, 0xFFFFFFFF, 0xFFFFFFFF, 0x667A6300, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000003, 0x6761725F, 0x652E6269, 0x6E000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000154, 0x00020700, 0xFFFFFFFF, 0xFFFFFFFF, 0x667A6500, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000004, 0x656D625F, 0x652E6269, 0x6E000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000152, 0x00000000, 0xFFFFFFFF, 0xFFFFFFFF, 0x667A7200, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000005, 0x7265705F, 0x652E6269, 0x6E000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000451, 0x00000000, 0xFFFFFFFF, 0xFFFFFFFF};  /* fzgx-allow: A1 retail pool bytes */
 __declspec(section ".fzgxpool") static void fzgx_pool_keep1(void) { const u32 *volatile cp; cp = fzgx_pool_table1; }  /* fzgx-allow: S2 pool primer sink */
@@ -8787,7 +9434,11 @@ void fn_1_C0374(s32 arg0, s32 arg1, u32 arg2, u32 arg3, u32 arg4, u32 arg5, u32 
 }
 /* fzgx:end fn_1_C0374 */
 
-/* fzgx:begin fn_1_C0510 */
+/* fzgx:begin fn_1_C0510 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/memcard.h"
+
 #include "types.h"
 
 typedef struct {
@@ -8848,7 +9499,13 @@ void fn_1_C0510(Fn1C0510Obj *obj) {
 }
 /* fzgx:end fn_1_C0510 */
 
-/* fzgx:begin fn_1_C132C */
+/* fzgx:begin fn_1_C132C noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/memcard.h"
+extern void fn_80008BEC(void *dst, s32 value, s32 size);
+extern void fn_1_AA6D8(s32 arg0, u32 arg1, void *arg2);
+
 typedef struct {
     u8 unk0[0x16];
     s16 unk16;
@@ -8864,13 +9521,21 @@ void fn_1_C132C(Fn1C132CObject *object, u8 *data) {
 }
 /* fzgx:end fn_1_C132C */
 
-/* fzgx:begin fn_1_C17CC */
+/* fzgx:begin fn_1_C17CC noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/memcard.h"
+
 // fn_1_C17CC: empty in retail (single blr).
 void fn_1_C17CC(void) {
 }
 /* fzgx:end fn_1_C17CC */
 
-/* fzgx:begin fn_1_C23CC */
+/* fzgx:begin fn_1_C23CC noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/memcard.h"
+
 extern void fn_80008BA8(void *arg0, void *arg1, u32 arg2);
 
 void fn_1_C23CC(void *base0, u32 stride0, u32 arg2, void *base1,
@@ -8894,7 +9559,12 @@ void fn_1_C23CC(void *base0, u32 stride0, u32 arg2, void *base1,
 }
 /* fzgx:end fn_1_C23CC */
 
-/* fzgx:begin fn_1_C2454 */
+/* fzgx:begin fn_1_C2454 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/memcard.h"
+extern void fn_1_C36EC(void);
+
 void fn_1_C2454(void) {
     u8 *state = (u8 *)&lbl_1_bss_716C0 + 0x10000;
 
@@ -8906,7 +9576,15 @@ void fn_1_C2454(void) {
 }
 /* fzgx:end fn_1_C2454 */
 
-/* fzgx:begin fn_1_C34F0 */
+/* fzgx:begin fn_1_C34F0 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/memcard.h"
+extern void fn_1_F755C(u8 value);
+extern void fn_1_A6840(u8 value);
+extern void OSPanic(void *arg0, u32 arg1, ...);
+extern void fn_1_F79C8(void);
+
 #include "rel/main_rel/globals.h"
 #include "rel/main_rel/memcard.h"
 
@@ -8939,7 +9617,11 @@ void fn_1_C34F0(void) {
 }
 /* fzgx:end fn_1_C34F0 */
 
-/* fzgx:begin fn_1_C3688 */
+/* fzgx:begin fn_1_C3688 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/memcard.h"
+
 typedef struct TimeParts {
     u32 unused;
     u32 field_4;
@@ -8969,7 +9651,13 @@ u32 fn_1_C3688(void) {
 }
 /* fzgx:end fn_1_C3688 */
 
-/* fzgx:begin fn_1_C36EC */
+/* fzgx:begin fn_1_C36EC noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/memcard.h"
+extern void OSPanic(void *arg0, u32 arg1, ...);
+extern void fn_1_C36EC(void);
+
 #include "rel/main_rel/globals.h"
 #include "rel/main_rel/memcard.h"
 
@@ -8988,7 +9676,21 @@ void fn_1_C36EC(void) {
 }
 /* fzgx:end fn_1_C36EC */
 
-/* fzgx:begin fn_1_C37A0 */
+/* fzgx:begin fn_1_C37A0 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/memcard.h"
+extern void* lbl_801A6410;
+extern void fn_80083DB0(void *dst, void *src);
+extern void strcat(void *dst, void *src);
+extern s32 CARDOpen(u8 byte_val, void *arg1, void *arg2);
+extern int fn_8002DFE0(int arg0, u32 arg1, int arg2);
+extern void *lbl_801A6410;
+extern u8 lbl_1_bss_772C8[66];
+extern u32 fn_1_4630(void *heap, u32 size, void *file, s32 line);
+extern s32 fn_8002FC14(s32 chan, void *fileName);
+extern s32 fn_80030338(s32 chan, void *oldName, void *newName);
+
 extern void fn_1_46B4(void *heap, u32 ptr, void *file, s32 line);
 extern s32 CARDGetResultCode(s32 chan);
 extern s32 CARDUnmount(s32 chan);
@@ -9090,7 +9792,11 @@ void fn_1_C37A0(void) {
 }
 /* fzgx:end fn_1_C37A0 */
 
-/* fzgx:begin fn_1_C39FC */
+/* fzgx:begin fn_1_C39FC noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/memcard.h"
+
 u32 fn_1_C39FC(void) {
     return lbl_1_data_3D230;
 }

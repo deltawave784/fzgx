@@ -2,11 +2,58 @@
 #include "rel/main_rel/globals.h"
 #include "rel/main_rel/sound.h"
 
+typedef struct {
+    u8 unk_0[0x3A0];
+    void *unk_3A0;
+} SoundObject;
+extern const f32 lbl_1_rodata_42E0;
 extern void *lbl_801A6410;
-extern void fn_1_44A4(void);
-extern void *fn_80008E84(void *arg);
-extern u32 fn_1_45D0(void *arg0, void *arg1, u32 *arg2, int arg3);
-extern void fn_1_46B4(u32, void *, void *, u32);
+extern int OSGetSoundMode(void);
+extern u32 fn_1_44A4(void);
+extern u32 fn_8001E954(u32 value);
+extern u32 fn_80020778(void);
+extern u32 fn_80025E18(void);
+extern u32 fn_8004CD70(u32, u32, u32);
+extern u32 fn_8004E59C(u32);
+extern u32 fn_8004EC34(u32);
+extern u32 fn_80068BFC(u32, u32, u32, u32, u32);
+extern s32 fn_1_45D0();
+extern void AIInit(u8 *stack);
+extern void fn_1_4438(void);
+extern u32 fn_1_9FE74(void *arg);
+extern void fn_1_9FEE8(void *arg);
+extern void fn_1_9FF50(void);
+extern void fn_1_9FF54(void);
+extern void fn_1_9FF58(void);
+extern void fn_1_A04AC(void);
+extern void fn_1_A2E24(u32, u32, s32);
+extern void fn_80008BEC(void *dest, int value, u32 size);
+extern void fn_80020724(void);
+extern void fn_80022014(u32 arg0);
+extern void fn_8002361C(u32 value0, u32 value1);
+extern void fn_80025D50(u32 arg0, u32 arg1);
+extern void fn_8002805C(void);
+extern void fn_800411F4(void);
+extern void fn_8004B7D4();
+extern void fn_8004BBA4();
+extern void fn_80065890();
+extern void fn_8006589C(u32 value);
+extern void fn_800658A8(u32 arg0);
+extern u32 ADXT_Stop(u32);
+extern u32 fn_8004CAC8(u32);
+extern s32 fn_1_3F864();
+extern s8 fn_1_86690(s8 index);
+extern SoundObject *fn_1_86854(s8 arg0);
+extern void fn_1_14E9E4(int arg0, void *arg1);
+extern s32 fn_80067344(u32 arg0, u32 arg1, u32 arg2, u32 arg3);
+extern s32 fn_80067898(u32 value);
+extern u32 lbl_1_rodata_451C[5];
+extern u32 lbl_1_rodata_4478[41];
+extern u32 fn_1_864E8(int index);
+extern void *fn_1_86254(int index);
+extern u32 lbl_1_rodata_45D0[82];
+extern u32 fn_80008E84();
+extern void fn_1_46B4(u32 arg0, u32 arg1, const char *arg2, int arg3);
 extern s8 lbl_1_bss_6EAA6;
 extern u8 lbl_1_bss_6EAA4;
 extern void fn_80067974(void);
@@ -14,53 +61,29 @@ extern void fn_800280F0(void);
 extern void fn_80026FE0(void);
 extern u8 lbl_1_bss_6EAA8[8];
 extern u8 lbl_1_bss_6EAB0;
-extern void ARInit(u8 *arg0, int arg1);
+extern u32 ARInit(u32 *stack_index_addr, u32 num_entries);
 extern void fn_80020530(void);
 extern u8 lbl_1_bss_6F1E1;
-extern void fn_1_A2DF4(s32, void *, s32);
-extern void fn_1_A2E24(u32 arg0, u32 arg1, s32 arg2);
-extern void fn_80008BEC(void *, s32, s32);
+extern void fn_1_A2DF4(s32 arg0, void *arg1, s32 arg2);
 extern void fn_1_A0680(void);
-extern void fn_80067898(u32);
 extern void fn_800674FC(u16 arg0, u32 arg1, s16 arg2);
-extern s32 camera_get_mode(void);
+extern s16 camera_get_mode(void);
 extern u8 lbl_1_bss_6F2D8[62];
-extern void fn_80067344(s32, s32, u32, s32);
 extern void fn_1_A5470(s32 value);
-extern u32 fn_1_3F13C(void);
+extern u8 fn_1_3F13C(void);
 extern u32 fn_1_EB0B0(void);
-extern s32 fn_1_F1B94(void);
-extern u32 lbl_1_rodata_45D0[];
+extern u32 fn_1_F1B94(void);
 extern u32 lbl_1_rodata_4718[];
 extern u32 lbl_1_rodata_4730[];
 extern u32 lbl_1_rodata_47A8[];
 extern u8 lbl_1_bss_6F41C[260];
-extern s32 fn_1_86690(s32 value);
 extern void *lbl_1_rodata_4820[41];
-extern int fn_8004C658(u32 obj);
+extern s32 fn_8004C658(char *arg0);
 extern int fn_8004BBCC(u32 obj);
 extern void ADXT_Pause(u32 obj, int arg);
 extern int fn_1_3FC38(void);
-
-extern void fn_1_A2DF4(s32, void *, s32);
-extern void fn_80008BEC(void *, s32, s32);
-extern s32 fn_1_86690(s32 value);
-extern void fn_80067344(s32 arg0, s32 arg1, u32 arg2, s32 arg3);
-extern void fn_80067898(u32 value);
-extern void *lbl_1_rodata_4820[41];
-
-extern void *lbl_801A6410;
-extern void *fn_80008E84();
-extern void fn_1_44A4(void);
-
-extern void *lbl_801A6410;
-extern void fn_1_44A4(void);
-extern void *fn_80008E84();
-extern u32 fn_1_45D0(void *arg0, void *arg1, u32 *arg2, int arg3);
-extern void fn_80063094(s32 arg0, void *arg1, s32 arg2);
+extern s32 fn_80063094(s32 arg0, s32 arg1, s32 arg2);
 extern void fn_80065D70(int);
-extern const f32 lbl_1_rodata_42E0;
-extern void *fn_1_86254(int);
 
 /* fzgx:begin fn_1_9FE74 */
 // Initialize the sound resource and register it with the sound system.
@@ -69,7 +92,7 @@ u32 fn_1_9FE74(void *arg) {
 
     fn_1_44A4();
     lbl_1_bss_6EA9C = (u32)fn_80008E84();
-    result = fn_1_45D0(lbl_801A6410, arg, &lbl_1_data_33F1C, 0x94);
+    result = (u32)fn_1_45D0(lbl_801A6410, arg, &lbl_1_data_33F1C, 0x94);
     fn_80008E84((void *)lbl_1_bss_6EA9C);
     return result;
 }
@@ -80,7 +103,7 @@ u32 fn_1_9FE74(void *arg) {
 void fn_1_9FEE8(void *arg) {
     fn_1_44A4();
     lbl_1_bss_6EA9C = (u32)fn_80008E84();
-    fn_1_46B4((u32)lbl_801A6410, arg, &lbl_1_data_33F1C, 0x9c);
+    fn_1_46B4((u32)lbl_801A6410, (u32)(void *)(arg), (const char *)(void *)(&lbl_1_data_33F1C), 0x9c);
     fn_80008E84((void *)lbl_1_bss_6EA9C);
 }
 /* fzgx:end fn_1_9FEE8 */
@@ -110,7 +133,7 @@ void fn_1_9FF58(void) {
 
 /* fzgx:begin fn_1_9FF9C */
 void fn_1_9FF9C(void) {
-    ARInit(lbl_1_bss_6EAA8, 2);
+    ARInit( (u32 *)(u8 *)(lbl_1_bss_6EAA8), 2);
     fn_80020530();
     lbl_1_bss_6EAB0 = 0;
 }
@@ -473,9 +496,6 @@ void fn_1_A0C68(void) {
 /* fzgx:end fn_1_A0C68 */
 
 /* fzgx:begin fn_1_A116C */
-#include "types.h"
-
-extern s16 lbl_1_bss_962;
 
 void fn_1_A116C(void) {
     switch ((*(s16 *)&lbl_1_bss_960)) {
@@ -535,7 +555,7 @@ void fn_1_A2DC4(u32 arg0) {
 // Forwards the sound event while sound processing is enabled.
 void fn_1_A2DF4(s32 arg0, void *arg1, s32 arg2) {
     if (lbl_1_bss_6EAC6.unk_0 != 0) {
-        fn_80063094(arg0, arg1, arg2);
+        fn_80063094(arg0, (s32)(void *)(arg1), arg2);
     }
 }
 /* fzgx:end fn_1_A2DF4 */
@@ -549,9 +569,7 @@ void fn_1_A2E24(u32 arg0, u32 arg1, s32 arg2) {
 }
 /* fzgx:end fn_1_A2E24 */
 
-/* fzgx:begin fn_1_A2E5C noprologue */
-#include "types.h"
-
+/* fzgx:begin fn_1_A2E5C */
 typedef struct {
     u8 unk_0[0x740];
     u8 unk_740;
@@ -562,30 +580,17 @@ typedef struct {
     u8 unk_82C;
 } SoundState;
 
-typedef struct {
-    u8 unk_0[0x3A0];
-    void *unk_3A0;
-} SoundObject;
 
 typedef struct {
     u8 unk_0[0x6C0];
     s16 unk_6C0;
-} SoundData;
+} fn_1_A2E5C_SoundData;
 
-extern SoundState lbl_1_bss_6EA98;
 
-extern s32 fn_1_3F864(void);
-extern s8 fn_1_86690(s8 arg0);
-extern SoundObject *fn_1_86854(s8 arg0);
-extern void fn_1_14E9E4(s16 arg0, void *arg1);
-extern void fn_80067344(u32 arg0, u32 arg1, u32 arg2, u32 arg3);
-extern void fn_80067898(u32 arg0);
 
-extern u32 lbl_1_rodata_451C[5];
-extern u32 lbl_1_rodata_4478[41];
 
 void fn_1_A2E5C(s32 arg0, s32 arg1) {
-    SoundState *state = &lbl_1_bss_6EA98;
+    SoundState *state = &(*((SoundState *)&lbl_1_bss_6EA98));
     s16 local[8];
     u8 *entry;
     s8 i;
@@ -601,10 +606,10 @@ void fn_1_A2E5C(s32 arg0, s32 arg1) {
                         fn_80067898(0xA9090B00);
                     }
                 } else if (fn_1_86690(arg0) > 0x28) {
-                    SoundData *data;
+                    fn_1_A2E5C_SoundData *data;
                     u32 snd;
                     s16 half;
-                    data = (SoundData *)fn_1_86854(fn_1_86690(arg0))->unk_3A0;
+                    data = (fn_1_A2E5C_SoundData *)fn_1_86854(fn_1_86690(arg0))->unk_3A0;
                     fn_1_14E9E4(data->unk_6C0, local);
                     half = (s16)(local[4] >> 1);
                     snd = lbl_1_rodata_451C[half];
@@ -626,9 +631,6 @@ void fn_1_A2E5C(s32 arg0, s32 arg1) {
 /* fzgx:end fn_1_A2E5C */
 
 /* fzgx:begin fn_1_A358C */
-extern s32 fn_1_3F864(void);
-extern u32 fn_1_864E8(u32 arg0);
-extern void fn_80067898(u32 arg0);
 
 static inline u8 fn_1_A358C_array_read(u8 *array, s32 index) { return array[index]; }
 #pragma opt_loop_invariants off
@@ -647,7 +649,7 @@ void fn_1_A358C(u32 arg0) {
         i = 0;
         while (i < *(s8 *)(base + 0x82c)) {
             if (id == fn_1_A358C_array_read(entry_74c, 1) && entry_74c[2] != 0) {
-                if ((fn_1_864E8(id) & 0x400) != 0) {
+                if ((fn_1_864E8( (u32)(id)) & 0x400) != 0) {
                     if ((*(u32 *)entry_830 & 0x400) == 0) {
                         if (*(u8 *)(base + 0x740) == 0) {
                             if (*(u32 *)(base + 0x744) <= 0x2d) {
@@ -666,14 +668,7 @@ void fn_1_A358C(u32 arg0) {
 #pragma opt_loop_invariants reset
 /* fzgx:end fn_1_A358C */
 
-/* fzgx:begin fn_1_A3C78 noprologue */
-#include "types.h"
-#include "rel/main_rel/sound.h"
-
-extern s32 fn_1_3F864(s32 arg0, s32 arg1);
-extern u32 fn_1_864E8(s32 arg0);
-extern void fn_80067344(s32 arg0, s32 arg1, u32 arg2, u32 arg3);
-extern void fn_80067898(u32 arg0);
+/* fzgx:begin fn_1_A3C78 */
 
 void fn_1_A3C78(s32 arg0, s32 arg1) {
     u8 *base;
@@ -688,7 +683,7 @@ void fn_1_A3C78(s32 arg0, s32 arg1) {
                 arg1 = 0;
                 while (arg1 < *(s8 *)(base + 0x82C)) {
                     if (arg0 == *(u8 *)(entry + 1) && *(u8 *)(entry + 2) != 0) {
-                        fn_80067344(1, 0x10, 0xB0270000, *(u8 *)(entry + 2));
+                        fn_80067344( (s32)(1), (s32)(0x10), 0xB0270000, *(u8 *)(entry + 2));
                         if (base[0x740] == 0 && *(u32 *)(base + 0x744) <= 0x2D) {
                             fn_80067898(0xA9090F00);
                         }
@@ -703,14 +698,7 @@ void fn_1_A3C78(s32 arg0, s32 arg1) {
 }
 /* fzgx:end fn_1_A3C78 */
 
-/* fzgx:begin fn_1_A4BC8 noprologue */
-#include "types.h"
-
-extern u32 fn_1_864E8(int);
-extern void *fn_1_86254(int);
-extern u32 fn_80067898(u32);
-extern u8 lbl_1_bss_6F1D8;
-extern u32 lbl_1_bss_6F1DC;
+/* fzgx:begin fn_1_A4BC8 */
 
 typedef struct {
     u8 pad[0x10C];
@@ -742,7 +730,7 @@ void fn_1_A4BC8(void *arg0, void *arg1, FnA4BC8State *state) {
 void fn_1_A4C9C(s32 index, u8 value) {
     s16 mode;
 
-    mode = camera_get_mode();
+    mode = (s32)camera_get_mode();
     if (value == lbl_1_bss_6F2D8[index * 2]) {
         return;
     }
@@ -758,13 +746,13 @@ void fn_1_A4C9C(s32 index, u8 value) {
         lbl_1_bss_6F2D8[index * 2] = value;
         break;
     case 3:
-        if ((fn_1_3F13C() & 0xFF) == 2 && fn_1_EB0B0() != 0) {
-            if (fn_1_F1B94() == 1) {
+        if (((u32)fn_1_3F13C() & 0xFF) == 2 && fn_1_EB0B0() != 0) {
+            if ((s32)fn_1_F1B94() == 1) {
                 if (lbl_1_bss_6F1DC <= 0x2D) {
                     fn_80067898(0xA9064E00);
                 }
                 lbl_1_bss_6F2D8[index * 2] = value;
-            } else if (fn_1_F1B94() == 3) {
+            } else if ((s32)fn_1_F1B94() == 3) {
                 if (lbl_1_bss_6F1DC <= 0x2D) {
                     fn_80067898(0xA9064F00);
                 }
@@ -781,12 +769,7 @@ void fn_1_A4C9C(s32 index, u8 value) {
 }
 /* fzgx:end fn_1_A4C9C */
 
-/* fzgx:begin fn_1_A4DF4 noprologue */
-#include "types.h"
-
-extern u32 fn_80067898(u32);
-extern u32 lbl_1_bss_6F1DC;
-extern u8 lbl_1_bss_6F1D8;
+/* fzgx:begin fn_1_A4DF4 */
 
 void fn_1_A4DF4(void) {
     u32 v0;
@@ -882,7 +865,7 @@ void fn_1_A50C8(s32 index) {
     if (index > 0x28) {
         value = 0xA9100700;
     } else {
-        value = lbl_1_rodata_45D0[index * 2];
+        value = (((u32 *)&lbl_1_rodata_45D0))[index * 2];
     }
 
     fn_80067344(2, 0xF, 0xB0270000, 0x7F);
@@ -894,12 +877,7 @@ void fn_1_A50C8(s32 index) {
 /* fzgx:end fn_1_A50C8 */
 
 /* fzgx:begin fn_1_A514C */
-extern u32 lbl_1_rodata_45D0[82];
-extern u8 lbl_1_bss_6F1D8;
-extern u32 lbl_1_bss_6F1DC;
 
-extern void fn_80067344(s32, s32, u32, s32);
-extern void fn_80067898(u32);
 
 void fn_1_A514C(s32 index) {
     u32 offset;
@@ -970,10 +948,6 @@ void fn_1_A5330(u8 value, s16 index) {
 /* fzgx:end fn_1_A5330 */
 
 /* fzgx:begin fn_1_A5344 */
-#include "types.h"
-
-
-extern void fn_80067898(u32 value);
 
 #pragma opt_dead_assignments off
 void fn_1_A5344(u8 value, s16 index) {
@@ -1015,7 +989,7 @@ void fn_1_A5470(s32 value) {
     }
 
     sound_id = (s8)value;
-    sound_id = fn_1_86690(sound_id);
+    sound_id = (s32)fn_1_86690(sound_id);
     sound_resource = (u32)lbl_1_rodata_4820[(s8)sound_id];
 
     fn_80067344(1, 0x10, 0xB0270000, 0x7F);
@@ -1086,14 +1060,14 @@ void fn_1_A5858(u8 value) {
 void fn_1_A5864(void) {
     if (lbl_1_bss_6EAD0.unk_0 != 0) {
         if (lbl_1_bss_6EAD0.unk_0->unk_0 != 0 &&
-            fn_8004C658(lbl_1_bss_6EAD0.unk_0->unk_0) == 3) {
+            fn_8004C658( (char *)(u32)(lbl_1_bss_6EAD0.unk_0->unk_0)) == 3) {
             if (fn_8004BBCC(lbl_1_bss_6EAD0.unk_0->unk_0) == 0) {
                 ADXT_Pause(lbl_1_bss_6EAD0.unk_0->unk_0, 1);
             }
         }
 
         if (lbl_1_bss_6EAD0.unk_0->unk_4 != 0 &&
-            fn_8004C658(lbl_1_bss_6EAD0.unk_0->unk_4) == 3) {
+            fn_8004C658( (char *)(u32)(lbl_1_bss_6EAD0.unk_0->unk_4)) == 3) {
             if (fn_8004BBCC(lbl_1_bss_6EAD0.unk_0->unk_4) == 0) {
                 ADXT_Pause(lbl_1_bss_6EAD0.unk_0->unk_4, 1);
             }
@@ -1121,14 +1095,14 @@ void fn_1_A59AC(void) {
 
     if (*(u32 *)(sound + 0x38) != 0) {
         if (*(u32 *)(*(u32 *)(sound + 0x38)) != 0 &&
-            fn_8004C658(*(u32 *)(*(u32 *)(sound + 0x38))) == 3 &&
+            fn_8004C658( (char *)(u32)(*(u32 *)(*(u32 *)(sound + 0x38)))) == 3 &&
             fn_8004BBCC(*(u32 *)(*(u32 *)(sound + 0x38))) != 0) {
             ADXT_Pause(*(u32 *)(*(u32 *)(sound + 0x38)), 0);
         }
 
         if (fn_1_3FC38() == 0 || *(u8 *)(sound + 0x749) == 0) {
             if (*(u32 *)(*(u32 *)(sound + 0x38) + 4) != 0 &&
-                fn_8004C658(*(u32 *)(*(u32 *)(sound + 0x38) + 4)) == 3 &&
+                fn_8004C658( (char *)(u32)(*(u32 *)(*(u32 *)(sound + 0x38) + 4))) == 3 &&
                 fn_8004BBCC(*(u32 *)(*(u32 *)(sound + 0x38) + 4)) != 0) {
                 ADXT_Pause(*(u32 *)(*(u32 *)(sound + 0x38) + 4), 0);
             }
