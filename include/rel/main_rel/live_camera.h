@@ -8,17 +8,42 @@
 // functions or living in its .data block), layouts recovered from every access in the module.
 
 // lbl_1_data_43B8: .data size 0xC, 11 refs from live_camera.c
-extern u8 lbl_1_data_43B8[0xC];
+// one view of the TU's .data run from 0x43B8 (strings follow at +0x68 and +0x280..)
+typedef struct {
+    u8 pad_0[0x13C];
+    u32 unk_13C;
+    u32 unk_140;
+    u32 unk_144;
+    s16 unk_148;
+    s16 unk_14A;
+    s16 unk_14C;
+} Obj_1_data_43B8;
+extern Obj_1_data_43B8 lbl_1_data_43B8;  // typedefs.json decl override
 
 // lbl_1_bss_1148: .bss size 0x14, 9 refs from live_camera.c
+// one view of the TU's .bss run from 0x1148: fn_1_E174 and fn_1_FA84 address it off one base
 typedef struct {
-    u8 unk_0;  // 0 loads, 1 stores
+    u8 unk_0;
     u8 pad_1[0x7];
-    f32 unk_8;  // 2 loads, 4 stores
-    f32 unk_C;  // 2 loads, 5 stores
-    f32 unk_10;  // 3 loads, 2 stores
+    f32 unk_8;
+    f32 unk_C;
+    f32 unk_10;
+    u8 unk_14;
+    u8 pad_15[0xF];
+    f32 unk_24;
+    u8 pad_28[0x4];
+    s16 unk_2C;
+    s16 unk_2E;
+    u8 pad_30[0x5D8];
+    s16 unk_608;
+    u8 pad_60A[0x5A];
+    u8 unk_664;
+    u8 pad_665[0x17];
+    u32 unk_67C;
+    u32 unk_680;
+    u32 unk_684;
 } Obj_1_bss_1148;
-extern Obj_1_bss_1148 lbl_1_bss_1148;
+extern Obj_1_bss_1148 lbl_1_bss_1148;  // typedefs.json decl override
 
 // lbl_1_data_4484: .data size 0x70, 4 refs from live_camera.c (own data block)
 typedef struct {

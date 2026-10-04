@@ -125,7 +125,7 @@ extern u32 fn_1_F2F34(void);
 extern u32 fn_1_F45A4(void);
 extern u32 fn_1_F4594(void);
 extern void *fn_1_86254(int index);
-extern u8 fn_1_86624(void);
+extern s8 fn_1_86624(void);
 extern void fn_1_6DD0(void *);
 extern void fn_1_8A0C(s16 index);
 extern u32 fn_1_56B8(void);
@@ -133,7 +133,7 @@ extern u32 fn_1_864E8(int index);
 extern void camera_set_selected_value(u8 value);
 extern void camera_set_result(s16 value);
 extern void fn_1_5370(s32, s16);
-extern f32 lbl_1_rodata_4E0[5];
+extern f32 lbl_1_rodata_4E0[];
 extern f32 lbl_1_bss_1160[403];
 extern u32 fn_1_A1588(Sig_ADXT_Stop_ADXTHandle *, u32);
 extern u32 fn_1_A1964(u32);
@@ -173,25 +173,7 @@ void fn_1_DA34(void) {
 }
 /* fzgx:end fn_1_DA34 */
 
-/* fzgx:begin fn_1_DA6C noprologue */
-#include "types.h"
-#include "rel/main_rel/live_camera.h"
-
-extern s32 fn_1_4C10(void);
-extern s32 fn_1_40BB4(void);
-extern s32 fn_1_F2F34(void);
-extern u32 fn_1_F45A4(void);
-extern u32 fn_1_F4594(void);
-extern void * fn_1_86254(int);
-extern s8 fn_1_86624(void);
-extern void fn_1_6DD0(u32);
-extern void fn_1_8A0C(u32);
-extern u32 fn_1_56B8(void);
-extern u32 fn_1_864E8(int);
-extern void camera_set_selected_value(u8);
-extern void camera_set_result(s16);
-extern void fn_1_5370(u32, u32);
-
+/* fzgx:begin fn_1_DA6C */
 typedef struct {
     u8 pad_0[6];
     s16 unk_6;
@@ -215,7 +197,7 @@ void fn_1_DA6C(DA6CArg *arg0) {
     if (fn_1_40BB4() != 0) {
         return;
     }
-    if (fn_1_F2F34() == 0) {
+    if ((s32)fn_1_F2F34() == 0) {
         return;
     }
     if (fn_1_F4594() >= fn_1_F45A4() - 0x1e) {
@@ -393,146 +375,12 @@ void fn_1_DE14(Fn1DE14State *state) {
 }
 /* fzgx:end fn_1_DE14 */
 
-/* fzgx:begin fn_1_E174 noprologue */
-#include "types.h"
-
-typedef struct Sig_ADXT_Stop_AdxSjdHandle Sig_ADXT_Stop_AdxSjdHandle;
-typedef struct Sig_ADXT_Stop_ADXStream Sig_ADXT_Stop_ADXStream;
-typedef struct Sig_ADXT_Stop_AXRNAHandle Sig_ADXT_Stop_AXRNAHandle;
-typedef struct Sig_ADXT_Stop_SJInterface Sig_ADXT_Stop_SJInterface;
-typedef struct Sig_ADXT_Stop_SJ Sig_ADXT_Stop_SJ;
-typedef struct Sig_ADXT_Stop_ADX_AMP Sig_ADXT_Stop_ADX_AMP;
-typedef struct Sig_ADXT_Stop_LSCObject Sig_ADXT_Stop_LSCObject;
-typedef struct Sig_ADXT_Stop_SJCK {
-    unsigned char *data;
-    int len;
-} Sig_ADXT_Stop_SJCK;
-typedef void (*Sig_ADXT_Stop_SJErrorCallback)(void *object, int error);
-struct Sig_ADXT_Stop_SJInterface {
-    void *reserved[3];
-    void (*destroy)(Sig_ADXT_Stop_SJ *sj);
-    const void *(*get_uuid)(Sig_ADXT_Stop_SJ *sj);
-    void (*reset)(Sig_ADXT_Stop_SJ *sj);
-    void (*get_chunk)(Sig_ADXT_Stop_SJ *sj, int channel, int max_size, Sig_ADXT_Stop_SJCK *chunk);
-    void (*unget_chunk)(Sig_ADXT_Stop_SJ *sj, int channel, Sig_ADXT_Stop_SJCK *chunk);
-    void (*put_chunk)(Sig_ADXT_Stop_SJ *sj, int channel, Sig_ADXT_Stop_SJCK *chunk);
-    int (*get_num_data)(Sig_ADXT_Stop_SJ *sj, int channel);
-    int (*is_get_chunk)(Sig_ADXT_Stop_SJ *sj, int channel, int size, int *available);
-    void (*entry_error_func)(Sig_ADXT_Stop_SJ *sj, Sig_ADXT_Stop_SJErrorCallback callback, void *object);
-};
-struct Sig_ADXT_Stop_SJ {
-    const Sig_ADXT_Stop_SJInterface *interface;
-};
-typedef struct Sig_ADXT_Stop_ADXTHandle {
-    s8 used;
-    s8 status;
-    s8 stream_type;
-    s8 maximum_channels;
-    Sig_ADXT_Stop_AdxSjdHandle *decoder;
-    Sig_ADXT_Stop_ADXStream *stream;
-    Sig_ADXT_Stop_AXRNAHandle *rna;
-    Sig_ADXT_Stop_SJ *stream_sj;
-    Sig_ADXT_Stop_SJ *input_sj;
-    Sig_ADXT_Stop_SJ *output_sj[2];
-    u8 *input_buffer;
-    s32 input_buffer_size;
-    s32 input_extra_size;
-    u8 *output_buffer;
-    s32 output_buffer_size;
-    s32 output_buffer_distance;
-    s32 server_frequency;
-    s16 stream_buffer_sectors;
-    s16 minimum_buffer_sectors;
-    s16 output_volume;
-    s16 output_pan[2];
-    s16 field_46;
-    s32 maximum_decode_samples;
-    s32 loop_count;
-    s32 link_data_length;
-    s32 field_54;
-    s32 field_58;
-    s32 field_5C;
-    s16 error_code;
-    u8 reserved_62[2];
-    s32 field_64;
-    s16 field_68;
-    s16 field_6A;
-    s8 stream_loop_enabled;
-    s8 auto_receiver;
-    u8 reserved_6E[2];
-    s8 suppress_playback;
-    s8 decoder_ready;
-    s8 paused;
-    u8 reserved_73;
-    Sig_ADXT_Stop_ADX_AMP *amplifier;
-    Sig_ADXT_Stop_SJ *amplifier_input[2];
-    Sig_ADXT_Stop_SJ *amplifier_output[2];
-    s32 time_offset;
-    s32 eos_sector;
-    s32 loop_sample_count;
-    Sig_ADXT_Stop_LSCObject *linked_stream_controller;
-    s8 link_enabled;
-    u8 reserved_99[3];
-    u32 playback_time;
-    s32 playback_start_vsync;
-    s32 linked_decoded_samples;
-    s8 pending_stream_start;
-    u8 reserved_A9[3];
-    u8 *work_end;
-    const char *pending_filename;
-    void *pending_directory;
-    s32 pending_file_offset;
-    s32 pending_file_sectors;
-} Sig_ADXT_Stop_ADXTHandle;
-
-struct fn_1_E174_lbl_1_bss_1148 {
-    u8 pad_0[0x8];
-    f32 unk_8;
-    f32 unk_C;
-    u8 pad_10[0x4];
-    u8 unk_14;
-    u8 pad_15[0xF];
-    f32 unk_24;
-    u8 pad_28[0x4];
-    s16 unk_2C;
-    s16 unk_2E;
-    u8 pad_30[0x5D8];
-    s16 unk_608;
-    u8 pad_60A[0x5A];
-    u8 unk_664;
-};
-struct fn_1_E174_lbl_1_data_43B8 {
-    u8 pad_0[0x148];
-    s16 unk_148;
-    s16 unk_14A;
-    s16 unk_14C;
-};
-struct fn_1_E174_lbl_1_rodata_4E0 {
-    f32 unk_0;
-    u8 pad_4[0x10];
-    f32 unk_14;
-    u8 pad_18[0x4];
-    f32 unk_1C;
-    f32 unk_20;
-    f32 unk_24;
-};
-struct fn_1_E174_lbl_1_bss_9F8 {
-    u8 pad_0[0x12];
-    u16 unk_12;
-};
-
-extern s16 lbl_1_bss_960;
-extern struct fn_1_E174_lbl_1_bss_1148 lbl_1_bss_1148;
-extern struct fn_1_E174_lbl_1_bss_9F8 lbl_1_bss_9F8;
-extern struct fn_1_E174_lbl_1_data_43B8 lbl_1_data_43B8;
-extern struct fn_1_E174_lbl_1_rodata_4E0 lbl_1_rodata_4E0;
+/* fzgx:begin fn_1_E174 */
 extern u32 fn_1_A1588(Sig_ADXT_Stop_ADXTHandle *, u32);
 extern u32 fn_1_A1964(u32);
 extern u32 fn_1_A1CE8(u32);
 extern u32 fn_1_F2F34(void);
-extern u32 lbl_1_bss_6EAD0;
 extern s32 fn_1_40BB4(void);
-extern u8 lbl_1_bss_6F243;
 extern void fn_1_A2D84(u32);
 
 #pragma opt_lifetimes off
@@ -542,10 +390,10 @@ static inline void fn_1_E174_store(s16 value, s16 *destination) { *destination =
 void fn_1_E174(f32 arg0) {
     f32 fzgx_live;
     s16 fzgx_value;
-    struct fn_1_E174_lbl_1_bss_1148 *p_lbl_1_bss_1148;
-    struct fn_1_E174_lbl_1_data_43B8 *p_lbl_1_data_43B8;
+    Obj_1_bss_1148 *p_lbl_1_bss_1148;
+    Obj_1_data_43B8 *p_lbl_1_data_43B8;
     struct fn_1_E174_lbl_1_rodata_4E0 *p_lbl_1_rodata_4E0;
-    struct fn_1_E174_lbl_1_bss_9F8 *p_lbl_1_bss_9F8;
+    Obj_1_bss_9F8 *p_lbl_1_bss_9F8;
     s16 v0;
     u32 v1;
     s32 v2;
@@ -582,13 +430,13 @@ void fn_1_E174(f32 arg0) {
     u32 t24;
     u32 t25;
     u32 t26;
-    p_lbl_1_data_43B8 = (struct fn_1_E174_lbl_1_data_43B8 *)&lbl_1_data_43B8;
-    p_lbl_1_bss_1148 = (struct fn_1_E174_lbl_1_bss_1148 *)&lbl_1_bss_1148;
+    p_lbl_1_data_43B8 = (Obj_1_data_43B8 *)&lbl_1_data_43B8;
+    p_lbl_1_bss_1148 = (Obj_1_bss_1148 *)&lbl_1_bss_1148;
     p_lbl_1_rodata_4E0 = (struct fn_1_E174_lbl_1_rodata_4E0 *)&lbl_1_rodata_4E0;
-    if (((10) == (lbl_1_bss_960))) {
+    if (((10) == (*(s16 *)&lbl_1_bss_960))) {
     fn_1_A1CE8((p_lbl_1_data_43B8->unk_148 & 0xFF));
     } else {
-    if (((12) == (lbl_1_bss_960)) || (s32)fn_1_F2F34() != 0) {
+    if (((12) == (*(s16 *)&lbl_1_bss_960)) || (s32)fn_1_F2F34() != 0) {
     v0 = p_lbl_1_data_43B8->unk_148;
     v1 = (v0 - 41);
     switch ((s32)v1) {
@@ -667,8 +515,8 @@ void fn_1_E174(f32 arg0) {
     }
     }
     }
-    if (((12) == (lbl_1_bss_960))) {
-    p_lbl_1_bss_9F8 = (struct fn_1_E174_lbl_1_bss_9F8 *)&lbl_1_bss_9F8;
+    if (((12) == (*(s16 *)&lbl_1_bss_960))) {
+    p_lbl_1_bss_9F8 = (Obj_1_bss_9F8 *)&lbl_1_bss_9F8;
     if (((p_lbl_1_bss_9F8->unk_12 >> 9) & 0x1) != 0) {
     v3 = (p_lbl_1_rodata_4E0->unk_1C);
     v2 = 0xA9010000;
@@ -840,30 +688,10 @@ void fn_1_EE04(Fn1EE04Context *context) {
 }
 /* fzgx:end fn_1_EE04 */
 
-/* fzgx:begin fn_1_FA84 noprologue */
-#include "types.h"
-
-struct fn_1_FA84_lbl_1_bss_1148 {
-    u8 pad_0[0x67C];
-    u32 unk_67C;
-    u32 unk_680;
-    u32 unk_684;
-};
-struct fn_1_FA84_lbl_1_data_43B8 {
-    u8 pad_0[0x13C];
-    u32 unk_13C;
-    u32 unk_140;
-    u32 unk_144;
-};
-
-extern struct fn_1_FA84_lbl_1_bss_1148 lbl_1_bss_1148;
-extern struct fn_1_FA84_lbl_1_data_43B8 lbl_1_data_43B8;
-extern u32 fn_1_46B4(u32, u32, u32, u32);
-extern u32 lbl_801A6410;
-
+/* fzgx:begin fn_1_FA84 */
 void fn_1_FA84(void) {
-    struct fn_1_FA84_lbl_1_data_43B8 *p_lbl_1_data_43B8;
-    struct fn_1_FA84_lbl_1_bss_1148 *p_lbl_1_bss_1148;
+    Obj_1_data_43B8 *p_lbl_1_data_43B8;
+    Obj_1_bss_1148 *p_lbl_1_bss_1148;
     u32 v0;
     u32 v1;
     u32 v2;
@@ -873,9 +701,8 @@ void fn_1_FA84(void) {
     u32 v6;
     s32 v7;
     u32 v8;
-    u32 t0, t1, t2;
-    p_lbl_1_data_43B8 = (struct fn_1_FA84_lbl_1_data_43B8 *)&lbl_1_data_43B8;
-    p_lbl_1_bss_1148 = (struct fn_1_FA84_lbl_1_bss_1148 *)&lbl_1_bss_1148;
+    p_lbl_1_data_43B8 = (Obj_1_data_43B8 *)&lbl_1_data_43B8;
+    p_lbl_1_bss_1148 = (Obj_1_bss_1148 *)&lbl_1_bss_1148;
     v1 = 0;
     v3 = 0;
     if ((s32)p_lbl_1_data_43B8->unk_13C > 0) {
@@ -885,8 +712,7 @@ void fn_1_FA84(void) {
     v1 = (u32)((u8 *)(u32)p_lbl_1_data_43B8 + 104);
     v2 = p_lbl_1_bss_1148->unk_67C;
     v3 = 1472;
-    t0 = fn_1_46B4(v0, v2, (u32)v1, v3);
-    v0 = t0;
+    fn_1_46B4(v0, v2, (const char *)((u32)v1), v3);
     }
     v4 = v0;
     v5 = v1;
@@ -899,16 +725,14 @@ void fn_1_FA84(void) {
     v5 = (u32)((u8 *)(u32)p_lbl_1_data_43B8 + 104);
     v6 = p_lbl_1_bss_1148->unk_680;
     v7 = 1473;
-    t1 = fn_1_46B4(v4, v6, (u32)v5, v7);
-    v4 = t1;
+    fn_1_46B4(v4, v6, (const char *)((u32)v5), v7);
     }
     v8 = v4;
     if ((s32)p_lbl_1_data_43B8->unk_144 > 0) {
     v8 = (u32)&lbl_801A6410;
     p_lbl_1_data_43B8->unk_144 = -1;
     v8 = *(u32 *)((u8 *)v8 + 0);
-    t2 = fn_1_46B4(v8, p_lbl_1_bss_1148->unk_684, (u32)((u8 *)(u32)p_lbl_1_data_43B8 + 104), 1474);
-    v8 = t2;
+    fn_1_46B4(v8, p_lbl_1_bss_1148->unk_684, (const char *)((u32)((u8 *)(u32)p_lbl_1_data_43B8 + 104)), 1474);
     }
 }
 /* fzgx:end fn_1_FA84 */
@@ -1179,7 +1003,7 @@ void fn_1_11ABC(fn_1_11ABC_LiveCamera *camera) {
 // Prints the live-camera status text for the current camera event.
 #pragma opt_common_subs off
 void fn_1_12620(s32 arg0) {
-    u8 *base = lbl_1_data_43B8;
+    u8 *base = (u8 *)&lbl_1_data_43B8;
     char buf[0x74];
 
     fn_80006E10((u32)(base + 0x280));

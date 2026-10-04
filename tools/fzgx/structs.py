@@ -254,13 +254,17 @@ def _tname(names: Dict[str, Dict[str, str]], symbol: str, role: str, default: st
 
 
 def _decl_override(names: Dict[str, Dict[str, str]], symbol: str, out: List[str]) -> bool:
-    """typedefs.json `{"<symbol>": {"decl": "u32 <symbol>[]"}}` fixes a declaration the access
+    """typedefs.json `{"<symbol>": {"decl": "u32 <symbol>[]", "typedef": [lines]}}` fixes a declaration the access
     analysis cannot recover: dtk under-sizes a cluster MWCC addressed as one array, and the
     declared object type changes the code (scheduling, loop strength reduction). Evidence for
     the override is a matched block that only matches under it."""
-    decl = (names.get(symbol) or {}).get("decl")
+    entry = names.get(symbol) or {}
+    decl = entry.get("decl")
     if not decl:
         return False
+    tdef = entry.get("typedef")  # a merged layout of every matched view (list of lines)
+    if tdef:
+        out.extend(tdef if isinstance(tdef, list) else str(tdef).splitlines())
     out.append(f"extern {decl.rstrip(';')};  // typedefs.json decl override")
     out.append("")
     return True
