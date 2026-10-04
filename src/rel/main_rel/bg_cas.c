@@ -429,6 +429,180 @@ void fn_1_FC60C(void) {
 #pragma opt_common_subs reset
 /* fzgx:end fn_1_FC60C */
 
+/* fzgx:begin fn_1_FCA10 */
+typedef f32 Mtx34[3][4];
+
+typedef struct {
+    f32 x;
+    f32 y;
+    f32 z;
+} CasVec;
+
+typedef struct {
+    u8 r;
+    u8 g;
+    u8 b;
+    u8 a;
+} CasColor;
+
+extern Mtx34 *lbl_801A6D00;
+
+extern void GXLoadTexMtxImm(void *, u32, u32);
+extern void fn_800736C0(u32, void *);
+extern void fn_80072AB0(s32, s32, s32);
+extern void fn_80072C24(s32, s32, s32, s32, s32);
+extern void fn_80072CC4(s32, s32, s32, s32, s32);
+extern void fn_80072D64(s32, s32, s32, s32, u8, s32);
+extern void fn_80072E20(s32, s32, s32, s32, u8, s32);
+extern void fn_800734A8(u32, s32, s32, s32);
+extern void fn_800735C8(s32, s32);
+extern void fn_80073620(s32, s32);
+extern void fn_80073678(u32);
+extern void fn_80073778(void *, s32);
+extern void fn_80073898(u32);
+extern void fn_80073C6C(s32);
+extern void fn_800745A4(u32, s32, s32, u32, u32, u32);
+extern void fn_80074660(u32);
+extern void lbl_8006D758(void);
+extern void lbl_8006DAEC(void);
+extern void lbl_8006DB30(void);
+extern void lbl_8006DBAC(void *);
+extern void lbl_8006E14C(f32);
+
+#define CAS_VIEW(field) (*(f32 *)(*(u32 *)(lbl_1_data_3EFA8 + 0x40F0) + (field)))
+
+/* Literal pool of the retail TU (lbl_1_rodata_7600): MWCC pools literals in
+ * first-use order across the TU, so the earlier functions' literals come first. */
+#pragma section code_type ".fzgxpool"
+static void fzgx_pool_layout(void) {
+    volatile f32 s; /* fzgx-allow: S2 pool primer sink: fixes the TU literal order */
+    volatile u32 w; /* fzgx-allow: S2 pool primer sink: fixes the TU literal order */
+    s = 2.0f;
+    s = 8.0f;
+}
+
+/* MWCC emits a function's aggregate initializers before its scalar literals,
+ * so each retail function with both gets its own primer. */
+static void fzgx_pool_layout_1(void) {
+    volatile f32 s; /* fzgx-allow: S2 pool primer sink: fixes the TU literal order */
+    volatile u32 w; /* fzgx-allow: S2 pool primer sink: fixes the TU literal order */
+    {
+        CasColor c = {0xFF, 0xFF, 0xFF, 0xFF};
+        w = *(u32 *)&c;
+    }
+    s = 0.0f;
+}
+
+static void fzgx_pool_layout_2(void) {
+    volatile f32 s; /* fzgx-allow: S2 pool primer sink: fixes the TU literal order */
+    volatile u32 w; /* fzgx-allow: S2 pool primer sink: fixes the TU literal order */
+    {
+        CasColor z = {0, 0, 0, 0};
+        w = *(u32 *)&z;
+    }
+    s = 0.5f;
+    s = 16.0f;
+    s = 1.0f;
+    s = 128.0f;
+}
+#pragma section code_type ".text"
+
+#pragma opt_common_subs off
+void fn_1_FCA10(void) {
+    CasColor color = {0xFF, 0xFF, 0xFF, 0xFF};
+    u16 j;
+    s32 i;
+    u32 obj;
+
+    fn_800736C0(0, &color);
+
+    for (i = 0; (u16)i < 4; i++) {
+        j = (u16)i;
+        fn_800735C8(j, 12);
+        fn_80073620(j, 28);
+    }
+
+    fn_80073778(lbl_1_bss_85224, 0);
+    fn_80073778((void *)lbl_1_data_3EFA8, 1);
+    fn_80073778((void *)(lbl_1_data_3EFA8 + 0x20), 2);
+    fn_80073778(lbl_1_bss_85204, 3);
+
+    GXLoadTexMtxImm((void *)(lbl_1_data_3EFA8 + 0x70), 30, 0);
+    GXLoadTexMtxImm((void *)(lbl_1_data_3EFA8 + 0x40), 33, 0);
+
+    lbl_8006DAEC();
+    {
+        CasVec trans = {0.0f, 0.0f, 0.0f};
+        lbl_8006DBAC((void *)(lbl_1_data_3EFA8 + 0xA0));
+        lbl_8006E14C(-1.0f);
+
+        /* Translation column of the locked-cache current matrix. */
+        *(f32 *)(0xE0000000 + 0x0C) = trans.x;
+        *(f32 *)(0xE0000000 + 0x1C) = trans.y;
+        *(f32 *)(0xE0000000 + 0x2C) = trans.z;
+    }
+
+    GXLoadTexMtxImm(lbl_801A6D00, 0x24, 0);
+    lbl_8006D758();
+
+    (*lbl_801A6D00)[0][0] = 0.0f;
+    obj = *(u32 *)(lbl_1_data_3EFA8 + 0x40F0);
+    if (*(f32 *)(obj + 0x10) < 0.5f || *(f32 *)(obj + 0x10) >= 1.0f) {
+        *(f32 *)(obj + 0x10) = 0.5f;
+    }
+    obj = *(u32 *)(lbl_1_data_3EFA8 + 0x40F0);
+    if (*(f32 *)(obj + 0x14) <= 0.0f || *(f32 *)(obj + 0x14) > 0.5f) {
+        *(f32 *)(obj + 0x14) = 0.5f;
+    }
+
+    (*lbl_801A6D00)[0][2] = CAS_VIEW(0x10);
+    (*lbl_801A6D00)[0][3] = CAS_VIEW(0x14);
+    (*lbl_801A6D00)[1][1] = 0.0f;
+    (*lbl_801A6D00)[2][2] = 0.0f;
+    (*lbl_801A6D00)[2][3] = 1.0f;
+
+    GXLoadTexMtxImm(lbl_801A6D00, 0x46, 0);
+    lbl_8006DB30();
+
+    fn_80074660(4);
+    fn_800745A4(0, 0, 0, 30, 0, 125);
+    fn_800745A4(1, 0, 0, 33, 0, 125);
+    fn_800745A4(2, 0, 0, 33, 0, 125);
+    fn_80073678(4);
+    fn_80073898(0);
+    fn_80073C6C(0);
+    fn_80072AB0(0, 0, 0);
+    fn_800734A8(0, 0, 0, 0xFF);
+    fn_80072C24(0, 0xF, 0xF, 0xF, 0xF);
+    fn_80072D64(0, 0, 0, 0, 1, 0);
+    fn_80072CC4(0, 7, 7, 7, 4);
+    fn_80072E20(0, 0, 0, 0, 1, 0);
+    fn_80073C6C(1);
+    fn_80072AB0(1, 0, 0);
+    fn_800734A8(1, 1, 1, 0xFF);
+    fn_80072C24(1, 0xF, 0xF, 0xF, 0xF);
+    fn_80072D64(1, 0, 0, 0, 1, 0);
+    fn_80072CC4(1, 4, 0, 6, 7);
+    fn_80072E20(1, 14, 0, 0, 0, 0);
+    fn_80073C6C(2);
+    fn_80072AB0(2, 0, 0);
+    fn_800734A8(2, 2, 2, 4);
+    fn_80072C24(2, 0xF, 0xF, 0xF, 8);
+    fn_80072D64(2, 0, 0, 0, 1, 0);
+    fn_80072CC4(2, 7, 0, 4, 7);
+    fn_80072E20(2, 0, 0, 1, 1, 0);
+    fn_80073C6C(3);
+    fn_80072AB0(3, 0, 0);
+    fn_800745A4(3, 0, 1, 36, 1, 70);
+    fn_800734A8(3, 3, 3, 4);
+    fn_80072C24(3, 0xF, 0xF, 0xF, 0);
+    fn_80072D64(3, 0, 0, 0, 1, 0);
+    fn_80072CC4(3, 7, 4, 0, 7);
+    fn_80072E20(3, 0, 0, 0, 1, 0);
+}
+#pragma opt_common_subs reset
+/* fzgx:end fn_1_FCA10 */
+
 /* fzgx:begin fn_1_FCF50 */
 int fn_1_FCF50(void) {
     fn_1_FCA10();
