@@ -6572,3 +6572,6 @@ rel/main_rel/driver/fn_1_A8834.c:
 
 rel/main_rel/car/fn_1_8CED0.c:
 	.text       start:0x0008CED0 end:0x0008D0A4 align:4
+
+rel/main_rel/effect/fn_1_5C83C.c:
+	.text       start:0x0005C83C end:0x0005CA00 align:4
