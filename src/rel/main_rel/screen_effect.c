@@ -1753,6 +1753,132 @@ void fn_1_789AC(void) {
 }
 /* fzgx:end fn_1_789AC */
 
+/* fzgx:begin fn_1_78EBC noprologue */
+#include "types.h"
+#include "rel/main_rel/screen_effect.h"
+
+typedef struct {
+    f32 x;
+    f32 y;
+} Fn1_78EBC_Vec2;
+
+typedef struct {
+    void *unk_0;
+    f32 pos[3];
+    s16 rot_x;
+    s16 rot_y;
+    s16 rot_z;
+    u8 pad_16[2];
+    f32 scale_x;
+    f32 scale_y;
+    f32 scale_z;
+} Fn1_78EBC_Node; /* 0x24 */
+
+typedef struct {
+    u8 pad_0[0xD4];
+    u32 node_count;
+    Fn1_78EBC_Node *nodes;
+    u32 effect_count;
+    void **effects;
+    u8 pad_E4[0x2C];
+    Fn1_78EBC_Vec2 *shake[4];
+    u8 pad_120[0x4B0 - 0x120];
+} Fn1_78EBC_Viewport; /* 0x4B0 */
+
+typedef struct {
+    u8 pad_0[0x2C];
+    u8 matrix[0x30];
+    u8 pad_5C[0xA0 - 0x5C];
+} Fn1_78EBC_Camera; /* 0xA0 */
+
+extern void *fn_1_7A648(void *);
+extern void fn_1_5616C(s32, f32, f32);
+extern void fn_1_556F8(void *);
+extern void fn_1_56018(s32);
+extern void fn_1_55FC4(f32);
+extern void *fn_1_79C88(void *, void *, s32, f32);
+extern void fn_1_5575C(void *);
+extern void lbl_8006DCA4(void);
+extern void lbl_8006DFE8(void *);
+extern void fn_80072558(void);
+extern void lbl_8006DAEC(void);
+extern void lbl_8006DBE4(void);
+extern void lbl_8006E0A4(void *);
+extern void mathutil_mtxA_rotate_z(s32);
+extern void mathutil_mtxA_rotate_y(s32);
+extern void mathutil_mtxA_rotate_x(s32);
+extern void lbl_8006E13C(void *);
+extern void lbl_8006DC20(void);
+
+void fn_1_78EBC(void) {
+    u32 i;
+    Fn1_78EBC_Camera *cam;
+    Fn1_78EBC_Viewport *vp;
+    u32 n;
+    u32 j;
+    void **effects;
+    Fn1_78EBC_Node *node;
+    void *effect;
+    s32 k;
+    f32 size;
+
+    if (lbl_1_data_1DFA4.unk_8 == -1) {
+        return;
+    }
+    if (lbl_1_bss_3BE0 == NULL) {
+        return;
+    }
+    vp = (Fn1_78EBC_Viewport *)lbl_1_bss_3BE0->unk_1C;
+    cam = (Fn1_78EBC_Camera *)lbl_1_bss_3BE4.unk_0;
+    for (i = 0; i < lbl_1_bss_3BE0->unk_18; i++, cam++, vp++) {
+        if (i == 0) {
+            lbl_8006DCA4();
+        } else {
+            lbl_8006DFE8(cam->matrix);
+        }
+        fn_80072558();
+        effects = vp->effects;
+        for (j = 0; j < vp->effect_count; j++, effects++) {
+            effect = fn_1_7A648(*effects);
+            if (effect != NULL) {
+                if (vp->shake[0] != NULL || vp->shake[1] != NULL ||
+                    vp->shake[2] != NULL || vp->shake[3] != NULL) {
+                    for (k = 0; k < 4; k++) {
+                        Fn1_78EBC_Vec2 *s = vp->shake[k];
+                        if (s != NULL) {
+                            f32 t = 0.016666668f * lbl_1_data_2A7E0.unk_1C;
+                            fn_1_5616C(k, s->x * t, s->y * t);
+                        }
+                    }
+                    fn_1_556F8(effect);
+                    fn_1_56018(0);
+                } else {
+                    fn_1_556F8(effect);
+                }
+            }
+        }
+        node = ((Fn1_78EBC_Viewport *)lbl_1_bss_3BE0->unk_1C)[i].nodes;
+        lbl_8006DAEC();
+        for (n = 0; n < ((Fn1_78EBC_Viewport *)lbl_1_bss_3BE0->unk_1C)[i].node_count; n++, node++) {
+            lbl_8006DBE4();
+            lbl_8006E0A4(node->pos);
+            mathutil_mtxA_rotate_z(node->rot_z);
+            mathutil_mtxA_rotate_y(node->rot_y);
+            mathutil_mtxA_rotate_x(node->rot_x);
+            lbl_8006E13C(&node->scale_x);
+            size = node->scale_x > node->scale_y ? node->scale_x : node->scale_y;
+            size = node->scale_z > size ? node->scale_z : size;
+            fn_1_55FC4(size);
+            effect = fn_1_79C88(node->unk_0, NULL, 0, size);
+            if (effect != NULL) {
+                fn_1_5575C(effect);
+            }
+        }
+        lbl_8006DC20();
+    }
+}
+/* fzgx:end fn_1_78EBC */
+
 /* fzgx:begin fn_1_79100 */
 // Release the active screen-effect resources and reset the effect state.
 void fn_1_79100(void) {

@@ -6593,3 +6593,6 @@ rel/main_rel/bg_san/fn_1_DABB4.c:
 
 rel/main_rel/live_camera/fn_1_EBE4.c:
 	.text       start:0x0000EBE4 end:0x0000EE04 align:4
+
+rel/main_rel/screen_effect/fn_1_78EBC.c:
+	.text       start:0x00078EBC end:0x00079100 align:4
