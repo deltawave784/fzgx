@@ -253,6 +253,19 @@ def _tname(names: Dict[str, Dict[str, str]], symbol: str, role: str, default: st
     return (names.get(symbol) or {}).get(role) or default
 
 
+def _decl_override(names: Dict[str, Dict[str, str]], symbol: str, out: List[str]) -> bool:
+    """typedefs.json `{"<symbol>": {"decl": "u32 <symbol>[]"}}` fixes a declaration the access
+    analysis cannot recover: dtk under-sizes a cluster MWCC addressed as one array, and the
+    declared object type changes the code (scheduling, loop strength reduction). Evidence for
+    the override is a matched block that only matches under it."""
+    decl = (names.get(symbol) or {}).get("decl")
+    if not decl:
+        return False
+    out.append(f"extern {decl.rstrip(';')};  // typedefs.json decl override")
+    out.append("")
+    return True
+
+
 def typedef(info: Dict[str, object], name: Optional[str] = None, fields: Optional[Dict[int, Dict]] = None,
             ptr_types: Optional[Dict[int, str]] = None, size: int = 0) -> str:
     """C typedef skeleton. ptr_types maps a field offset to the typedef name its pointer targets;
@@ -316,6 +329,8 @@ def header(p: Project, module: str, min_refs: int = 20, sections=(".data", ".bss
         info = analyze(p, module, name)
         tname = _tname(names, name, "self", name.replace("lbl_", "Obj_"))
         out.append(f"// {name}: {sd.section} size 0x{sd.size:X}, referenced by {n} functions, shape {info['shapes']}")
+        if _decl_override(names, name, out):
+            continue
         nfields = info["fields"]
         pointee0 = info.get("pointees", {}).get(0) or {}
         scalar_size = sd.size in (1, 2, 4, 8)  # a 7-byte object with no accesses is a string, not a u32
@@ -470,6 +485,8 @@ def tu_header(p: Project, module: str, tu: str, min_refs: int = 2) -> str:
         info = analyze(p, module, name)
         tname = _tname(names, name, "self", name.replace("lbl_", "Obj_").replace("jumptable_", "Jt_"))
         out.append(f"// {name}: {sd.section} size 0x{sd.size:X}, {n} refs from {tu}{' (own data block)' if own else ''}")
+        if _decl_override(names, name, out):
+            continue
         nfields = info["fields"]
         pointee0 = info.get("pointees", {}).get(0) or {}
         if sd.size <= 8 and (info["kind"] == "pointer" or len(nfields) <= 1 and 0 in nfields or not nfields):

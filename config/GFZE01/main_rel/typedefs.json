@@ -13,5 +13,8 @@
  },
  "live_camera": {
   "target": "LiveCamera"
+ },
+ "lbl_1_bss_384C0": {
+  "decl": "u32 lbl_1_bss_384C0[]"
  }
 }

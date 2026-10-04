@@ -352,7 +352,7 @@ u32 fn_1_467F4(void) {
 
     fn_8000659C();
     value = lbl_1_bss_384C4;
-    return lbl_1_bss_384C0 != value;
+    return lbl_1_bss_384C0[0] != value;
 }
 /* fzgx:end fn_1_467F4 */
 
