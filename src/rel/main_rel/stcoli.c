@@ -2765,6 +2765,184 @@ int fn_1_2A694(O *self, void *arg1, V *swap, u32 mask, V *out0, V *out1) {
 #pragma opt_propagation reset
 /* fzgx:end fn_1_2A694 */
 
+/* fzgx:begin fn_1_2A8D0 noprologue */
+#include "types.h"
+
+typedef struct Sig_fn_1_2A694_V { f32 x; f32 y; f32 z; } Sig_fn_1_2A694_V;
+typedef struct Sig_fn_1_2A694_N { u8 p[0x98]; u32 v98; u32 v9c; } Sig_fn_1_2A694_N;
+typedef struct Sig_fn_1_2A694_O {
+    u32 flags;
+    s16 id;
+    u8 p[0x8e];
+    f32 f94;
+    f32 f98;
+    f32 f9c;
+    f32 fa0;
+    f32 fa4;
+    f32 fa8;
+    u8 p1[0xd0];
+    f32 f17c;
+    u8 p1b[4];
+    f32 f184;
+    u8 p1c[0x9c];
+    f32 f224;
+    u8 p2[0x24c];
+    u8 v474;
+    u8 p3[0x23];
+    u32 field498;
+    Sig_fn_1_2A694_N *field49c;
+    u8 p4[0xec];
+    u32 field58c;
+} Sig_fn_1_2A694_O;
+
+/* Input to the collision query: a point at 0xc and a direction at 0x18. */
+typedef struct ColiQuery {
+    u8 p[0xc];
+    Sig_fn_1_2A694_V pos;
+    Sig_fn_1_2A694_V dir;
+} ColiQuery;
+
+/* Collision result record returned by fn_1_14F04. */
+typedef struct ColiResult {
+    u8 p0[0x40];
+    u32 hit3;
+    u8 p1[0x1c];
+    Sig_fn_1_2A694_V normal3;
+    u8 p2[0xc];
+    u32 attr3;
+    u8 p3[0xc];
+    u32 hit1;
+    u8 p4[0x1c];
+    Sig_fn_1_2A694_V normal1;
+    u8 p5[0xc];
+    u32 attr1;
+    u8 p6[0xc];
+    u32 hit0;
+    u8 p7[0x1c];
+    Sig_fn_1_2A694_V normal0;
+    u8 p8[0xc];
+    u32 attr0;
+    u8 p9[0x54];
+    u32 flags2;
+    u8 pa[0x1c];
+    Sig_fn_1_2A694_V normal2;
+} ColiResult;
+
+typedef struct ColiTarget {
+    u8 p[0x390];
+    u32 flags390;
+} ColiTarget;
+
+extern int fn_1_15578(Sig_fn_1_2A694_V *, Sig_fn_1_2A694_V *, void *, void *, u32, u32 *, u32, Sig_fn_1_2A694_V *, u32, Sig_fn_1_2A694_O *);
+extern ColiResult *fn_1_14F04(void);
+extern ColiTarget *fn_1_868C0(s8);
+extern void fn_1_F7338(int, int, int);
+extern void lbl_8006DAEC(void);
+extern void lbl_8006DB30(void);
+extern void lbl_8006E1B0(void *, void *);
+
+int fn_1_2A8D0(Sig_fn_1_2A694_O *obj, ColiQuery *query, Sig_fn_1_2A694_V *swap, u32 arg3,
+               Sig_fn_1_2A694_V *normals, u32 *attrs, u32 *masks, u32 bit)
+{
+    ColiTarget *target;
+    ColiResult *res;
+    int result;
+    u32 flags;
+    s8 slot;
+    u32 tmp;
+    struct { u32 a[4]; } loc_20;
+    Sig_fn_1_2A694_V dir;
+    u32 loc_10;
+    Sig_fn_1_2A694_O *loc_C;
+    u32 loc_8;
+
+    lbl_8006E1B0(query, &query->dir);
+    lbl_8006DAEC();
+    dir = query->dir;
+    result = fn_1_15578(&dir, &query->pos, &loc_10, &loc_20, arg3, &obj->field49c->v9c,
+                        obj->field49c->v98, swap, obj->field498, obj);
+    lbl_8006DB30();
+    if (swap != NULL) {
+        /* swap the first two words without going through the FPU */
+        u32 *w = (u32 *)swap;
+        tmp = w[0];
+        w[0] = w[1];
+        w[1] = tmp;
+    }
+    normals[0].x = 0.0f;
+    normals[0].y = 0.0f;
+    normals[0].z = 0.0f;
+    normals[1].x = 0.0f;
+    normals[1].y = 0.0f;
+    normals[1].z = 0.0f;
+    normals[2].x = 0.0f;
+    normals[2].y = 0.0f;
+    normals[2].z = 0.0f;
+    normals[3].x = 0.0f;
+    normals[3].y = 0.0f;
+    normals[3].z = 0.0f;
+    attrs[3] = 0;
+    attrs[2] = 0;
+    attrs[1] = 0;
+    attrs[0] = 0;
+    if (result != 0) {
+        res = fn_1_14F04();
+        if (res->hit0 != 0) {
+            normals[0] = res->normal0;
+            attrs[0] = res->attr0;
+            masks[0] |= bit;
+        }
+        if (res->hit1 != 0) {
+            normals[1] = res->normal1;
+            attrs[1] = res->attr1;
+            masks[1] |= bit;
+        }
+        flags = res->flags2;
+        if (flags != 0) {
+            if (flags & 0x100) {
+                result = 0;
+                obj->flags |= 0x800;
+            } else if (flags & 0x600) {
+                normals[2] = res->normal2;
+                target = fn_1_868C0((s8)obj->id);
+                if (!(obj->field58c & 0x10)) {
+                    slot = (s8)obj->v474;
+                    if (slot != -1) {
+                        fn_1_F7338(slot, 2, 30);
+                    }
+                    obj->flags |= 0x800;
+                    obj->flags |= 0x80;
+                    obj->flags |= 0x800000;
+                    obj->flags |= 0x40000000;
+                    obj->field58c |= 0x10;
+                    obj->f184 = 0.0f;
+                    obj->f224 = 0.0f;
+                    obj->f94 = 0.0f;
+                    obj->f98 = 0.0f;
+                    obj->f9c = 0.0f;
+                    obj->fa0 = 0.0f;
+                    obj->fa4 = 0.0f;
+                    obj->fa8 = 0.0f;
+                    obj->f17c = 0.0f;
+                    obj->field58c &= ~0x80;
+                    target->flags390 &= ~0x200000;
+                    target->flags390 |= 0x1000000;
+                }
+            } else {
+                normals[2] = res->normal2;
+            }
+            masks[2] |= bit;
+        }
+        if (res->hit3 != 0) {
+            normals[3] = res->normal3;
+            attrs[3] = res->attr3;
+            masks[3] |= bit;
+        }
+    }
+    return result;
+}
+/* fzgx:end fn_1_2A8D0 */
+
 /* fzgx:begin fn_1_2B478 */
 struct fn_1_2B478_Arg0 {
     u8 pad_0[0x1C8];
