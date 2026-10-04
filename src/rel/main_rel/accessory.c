@@ -54,6 +54,9 @@ struct fn_1_129D9C_rodata {
     f32 unk_CC;
     f32 unk_D0;
     f32 unk_D4;
+    f32 unk_D8;
+    f32 unk_DC;
+    f32 unk_E0;
 };
 
 typedef struct Sig_fn_80015EE8_Fn80015EE8Out {
@@ -86,13 +89,13 @@ extern void * fn_80077B64(struct Sig_fn_80077B64_fn_80077B64_Arg0 *);
 extern void fn_1_46B4(u32 arg0, u32 arg1, const char *arg2, int arg3);
 extern void fn_80008BEC(void *dest, int value, u32 size);
 extern void fn_1_10846C();
-extern f32 lbl_1_rodata_7B1C;
-extern f32 lbl_1_rodata_7B20;
+extern const f32 lbl_1_rodata_7B1C;
+extern const f32 lbl_1_rodata_7B20;
 extern void fn_1_128884(void *, void *, s32);
 extern void lbl_8006DBAC(void *);
 extern void fn_8006E250(void *, void *);
 extern f32 lbl_1_rodata_7AB8[];
-extern struct fn_1_129D9C_rodata lbl_1_rodata_8068;
+extern const struct fn_1_129D9C_rodata lbl_1_rodata_8068;
 extern void fn_80015EE8(Sig_fn_80015EE8_Fn80015EE8Out *, f32, f32, f32, f32, f32, f32);
 extern void fn_800737E4(void *, s32);
 extern void fn_80074918(u8, s32, u8);
@@ -278,30 +281,7 @@ void fn_1_109114(fn_1_109114_AccessoryObject *self) {
 }
 /* fzgx:end fn_1_109114 */
 
-/* fzgx:begin fn_1_10A43C noprologue */
-#include "types.h"
-
-extern void fn_1_10846C(void);
-extern const f32 lbl_1_rodata_7B1C;
-extern const f32 lbl_1_rodata_7B20;
-extern void fn_1_128884(void *, void *, s32);
-
-typedef struct AccessoryEntry {
-    u8 unk_0;
-    u8 pad_1[0x13];
-    f32 unk_14;
-    f32 unk_18;
-    u8 pad_1C[0x24];
-    f32 unk_40;
-} AccessoryEntry;
-
-typedef struct AccessoryObject {
-    u8 pad_0[0x18];
-    u32 unk_18;
-    u8 pad_1C[8];
-    u8 *unk_24;
-} AccessoryObject;
-
+/* fzgx:begin fn_1_10A43C */
 void fn_1_10A43C(AccessoryObject *self) {
     int i;
     int j;
@@ -356,7 +336,7 @@ void fn_1_10A43C(AccessoryObject *self) {
 }
 /* fzgx:end fn_1_10A43C */
 
-/* fzgx:begin fn_1_10B344 noprologue */
+/* fzgx:begin fn_1_10B344 */
 typedef signed long s32;
 
 typedef unsigned char u8;
@@ -365,24 +345,6 @@ typedef unsigned long u32;
 
 typedef float f32;
 
-extern void fn_1_10846C(void);
-extern const f32 lbl_1_rodata_7B1C;
-extern const f32 lbl_1_rodata_7B20;
-extern void fn_1_128884(void *, void *, s32);
-typedef struct AccessoryEntry {
-u8 unk_0;
-u8 pad_1[0x13];
-f32 unk_14;
-f32 unk_18;
-u8 pad_1C[0x24];
-f32 unk_40;
-} AccessoryEntry;
-typedef struct AccessoryObject {
-u8 pad_0[0x18];
-u32 unk_18;
-u8 pad_1C[8];
-u8 *unk_24;
-} AccessoryObject;
 void fn_1_10B344(AccessoryObject *self) {
 int i;
 int j;
@@ -1153,12 +1115,8 @@ void fn_1_129D9C(void *arg0, struct fn_1_129D9C_vec *arg1, struct fn_1_129D9C_ob
 #pragma opt_common_subs reset
 /* fzgx:end fn_1_129D9C */
 
-/* fzgx:begin fn_1_12A080 noprologue */
-#include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/accessory.h"
-
-extern const struct fn_1_12A080_lbl_1_rodata_8068_pool {
+/* fzgx:begin fn_1_12A080 */
+struct fn_1_12A080_lbl_1_rodata_8068_pool {
     f32 unk_0;
     u8 pad_4[0x4C];
     f32 unk_50;
@@ -1166,30 +1124,9 @@ extern const struct fn_1_12A080_lbl_1_rodata_8068_pool {
     f32 unk_D8;
     f32 unk_DC;
     f32 unk_E0;
-} lbl_1_rodata_8068;
+};
 
-typedef struct Sig_fn_80015EE8_Fn80015EE8Out {
-    f32 f0;
-    f32 f1;
-    f32 f2;
-    f32 f3;
-    f32 f4;
-    f32 f5;
-    f32 f6;
-    f32 f7;
-    f32 f8;
-    f32 f9;
-    f32 f10;
-    f32 f11;
-    f32 f12;
-    f32 f13;
-    f32 f14;
-    f32 f15;
-} Sig_fn_80015EE8_Fn80015EE8Out;
 
-extern void fn_80015EE8(Sig_fn_80015EE8_Fn80015EE8Out *, f32, f32, f32, f32, f32, f32);
-extern void fn_800737E4(void *, s32);
-extern void fn_80074918(u8, s32, u8);
 
 #pragma opt_propagation off
 #pragma opt_common_subs off
