@@ -293,6 +293,13 @@ def claim(p: Project, symbol: str, agent: str, ttl: int = DEFAULT_TTL,
     else:
         out['next'] = ('Write the complete function with write_unit, then call check(symbol, versions="all") once '
                        '(one check; it keeps the best compiler) before further edits.')
+        recorded = row['best_percent'] or 0
+        if recorded >= 50:
+            out['no_saved_body'] = (
+                f'The ledger records an earlier best of {recorded:.1f}%, but that body was never saved on this machine: '
+                'your work copy is an empty stub and there is no seed. Build the function from the retail assembly; '
+                'the recorded score only tells you it is reachable. Do not run check(versions="all") before you have '
+                'written a complete body: on the stub it scores 0% everywhere and picks a wrong compiler.')
     try:
         out["context"] = build_context(p, l, symbol, compiler_options=_compiler_options(p, key))
     except LookupError as e:
@@ -451,6 +458,9 @@ def check(p: Project, symbol: str, max_diff_lines: int = 80, versions: Optional[
     if versions:
         if src is None and unit:
             src = oracle.unit_source_path(p, unit)
+        if src is not None and not unit and "carved by fzgx;" in Path(src).read_text():
+            return {"ok": False, "symbol": symbol, "error": "the work copy is still the empty stub: write the complete "
+                    "function with write_unit first, then probe compilers (nothing was compiled, no check spent)"}
         vers = list(oracle.CANDIDATE_VERSIONS) if versions == "all" else versions.split(",")
         if versions == 'all' and options.get('mw') in vers:
             vers.remove(options['mw'])
