@@ -10728,5 +10728,42 @@
     ],
     "link": "verified",
     "commit": "c5085a87"
+  },
+  "fn_1_A3BD8": {
+    "seed_symbol": "fn_1_A3BD8",
+    "generator": "fzgx fixup",
+    "transform": "address displacement at 2569 base-first result home",
+    "seed": "#include \"types.h\"\n#include \"rel/main_rel/sound.h\"\n\nextern void fn_80067344(s32 arg0, s32 arg1, u32 arg2, u32 arg3);\nextern void fn_80067898(u32 arg0);\n\n/* file-scope objects of the retail TU, in retail order: MWCC addresses them off one section base */\nu32 fzgx_obj_lbl_1_bss_6EA98;\nu32 fzgx_obj_lbl_1_bss_6EA9C[2];\nu8 lbl_1_bss_6EAA4;\nu8 lbl_1_bss_6EA98_gap_6EAA5;\nu8 lbl_1_bss_6EAA6;\nu8 lbl_1_bss_6EA98_gap_6EAA7;\nu32 lbl_1_bss_6EAA8[2];\nu8 lbl_1_bss_6EAB0;\nu8 lbl_1_bss_6EA98_gap_6EAB1;\nu16 lbl_1_bss_6EA98_gap_6EAB1_fill_6EAB2;\nu32 fzgx_obj_lbl_1_bss_6EAB4[4];\nu16 lbl_1_bss_6EAB4_fill_6EAC4;\nu16 fzgx_obj_lbl_1_bss_6EAC6;\nu32 lbl_1_bss_6EAC6_fill_6EAC8[2];\nu32 fzgx_obj_lbl_1_bss_6EAD0[450];\nu8 fzgx_obj_lbl_1_bss_6F1D8;\nu8 lbl_1_bss_6EA98_gap_6F1D9;\nu16 lbl_1_bss_6EA98_gap_6F1D9_fill_6F1DA;\nu32 fzgx_obj_lbl_1_bss_6F1DC;\nu8 fzgx_obj_lbl_1_bss_6F1E0;\nu8 lbl_1_bss_6F1E1;\nu16 lbl_1_bss_6EA98_gap_6F1E2;\nu8 fzgx_obj_lbl_1_bss_6F1E4;\nu8 lbl_1_bss_6F1E4_fill_6F1E5;\nu16 lbl_1_bss_6F1E4_fill_6F1E6;\nu32 lbl_1_bss_6F1E4_fill_6F1E8[20];\nu8 lbl_1_bss_6F1E4_fill_6F238;\n\n#pragma section code_type \".fzgxpool\"\nstatic void fzgx_bss_layout(void) {\n    volatile u8 s;  /* fzgx-allow: S2 layout primer sink: MWCC emits .bss objects in first-access order */\n    s = *(u8 *)&fzgx_obj_lbl_1_bss_6EA98;\n    s = *(u8 *)&fzgx_obj_lbl_1_bss_6EA9C;\n    s = *(u8 *)&lbl_1_bss_6EAA4;\n    s = *(u8 *)&lbl_1_bss_6EA98_gap_6EAA5;\n    s = *(u8 *)&lbl_1_bss_6EAA6;\n    s = *(u8 *)&lbl_1_bss_6EA98_gap_6EAA7;\n    s = *(u8 *)&lbl_1_bss_6EAA8;\n    s = *(u8 *)&lbl_1_bss_6EAB0;\n    s = *(u8 *)&lbl_1_bss_6EA98_gap_6EAB1;\n    s = *(u8 *)&lbl_1_bss_6EA98_gap_6EAB1_fill_6EAB2;\n    s = *(u8 *)&fzgx_obj_lbl_1_bss_6EAB4;\n    s = *(u8 *)&lbl_1_bss_6EAB4_fill_6EAC4;\n    s = *(u8 *)&fzgx_obj_lbl_1_bss_6EAC6;\n    s = *(u8 *)&lbl_1_bss_6EAC6_fill_6EAC8;\n    s = *(u8 *)&fzgx_obj_lbl_1_bss_6EAD0;\n    s = *(u8 *)&fzgx_obj_lbl_1_bss_6F1D8;\n    s = *(u8 *)&lbl_1_bss_6EA98_gap_6F1D9;\n    s = *(u8 *)&lbl_1_bss_6EA98_gap_6F1D9_fill_6F1DA;\n    s = *(u8 *)&fzgx_obj_lbl_1_bss_6F1DC;\n    s = *(u8 *)&fzgx_obj_lbl_1_bss_6F1E0;\n    s = *(u8 *)&lbl_1_bss_6F1E1;\n    s = *(u8 *)&lbl_1_bss_6EA98_gap_6F1E2;\n    s = *(u8 *)&fzgx_obj_lbl_1_bss_6F1E4;\n    s = *(u8 *)&lbl_1_bss_6F1E4_fill_6F1E5;\n    s = *(u8 *)&lbl_1_bss_6F1E4_fill_6F1E6;\n    s = *(u8 *)&lbl_1_bss_6F1E4_fill_6F1E8;\n    s = *(u8 *)&lbl_1_bss_6F1E4_fill_6F238;\n}\n#pragma section code_type \".text\"\n\n#pragma opt_lifetimes off\nvoid fn_1_A3BD8(s32 arg0, u32 arg1) {\n    u8 *entry;\n    u8 v;\n\n    \n    entry = (u8 *)&fzgx_obj_lbl_1_bss_6F1E4;\n    entry = entry + arg0 * 0x14;\n    v = (*((4) + (entry)));\n    if ((*((2) + (entry))) != 0) {\n        fn_80067344(1, 0x10, 0xB0270000, (*((2) + (entry))));\n        fn_80067344(1, 0x10, 0xB02A0000, (s8)v);\n        if (fzgx_obj_lbl_1_bss_6F1D8 == 0 && fzgx_obj_lbl_1_bss_6F1DC <= 0x2D) {\n            fn_80067898(arg1);\n        }\n    }\n}\n#pragma opt_lifetimes reset\n\n",
+    "seed_sha256": "f1246c743c876f542c8c316c0beba01fedd6f92c70e012d3de3a268bbdf65dd7",
+    "generated_sha256": "9beaa43bb1e67e289631016c0d85a8e781e8edc4203e24c4798b4b2ac2db8bef",
+    "generated_source": "#include \"types.h\"\n#include \"rel/main_rel/sound.h\"\n\nextern void fn_80067344(s32 arg0, s32 arg1, u32 arg2, u32 arg3);\nextern void fn_80067898(u32 arg0);\n\n/* file-scope objects of the retail TU, in retail order: MWCC addresses them off one section base */\nu32 fzgx_obj_lbl_1_bss_6EA98;\nu32 fzgx_obj_lbl_1_bss_6EA9C[2];\nu8 lbl_1_bss_6EAA4;\nu8 lbl_1_bss_6EA98_gap_6EAA5;\nu8 lbl_1_bss_6EAA6;\nu8 lbl_1_bss_6EA98_gap_6EAA7;\nu32 lbl_1_bss_6EAA8[2];\nu8 lbl_1_bss_6EAB0;\nu8 lbl_1_bss_6EA98_gap_6EAB1;\nu16 lbl_1_bss_6EA98_gap_6EAB1_fill_6EAB2;\nu32 fzgx_obj_lbl_1_bss_6EAB4[4];\nu16 lbl_1_bss_6EAB4_fill_6EAC4;\nu16 fzgx_obj_lbl_1_bss_6EAC6;\nu32 lbl_1_bss_6EAC6_fill_6EAC8[2];\nu32 fzgx_obj_lbl_1_bss_6EAD0[450];\nu8 fzgx_obj_lbl_1_bss_6F1D8;\nu8 lbl_1_bss_6EA98_gap_6F1D9;\nu16 lbl_1_bss_6EA98_gap_6F1D9_fill_6F1DA;\nu32 fzgx_obj_lbl_1_bss_6F1DC;\nu8 fzgx_obj_lbl_1_bss_6F1E0;\nu8 lbl_1_bss_6F1E1;\nu16 lbl_1_bss_6EA98_gap_6F1E2;\nu8 fzgx_obj_lbl_1_bss_6F1E4;\nu8 lbl_1_bss_6F1E4_fill_6F1E5;\nu16 lbl_1_bss_6F1E4_fill_6F1E6;\nu32 lbl_1_bss_6F1E4_fill_6F1E8[20];\nu8 lbl_1_bss_6F1E4_fill_6F238;\n\n#pragma section code_type \".fzgxpool\"\nstatic void fzgx_bss_layout(void) {\n    volatile u8 s;  /* fzgx-allow: S2 layout primer sink: MWCC emits .bss objects in first-access order */\n    s = *(u8 *)&fzgx_obj_lbl_1_bss_6EA98;\n    s = *(u8 *)&fzgx_obj_lbl_1_bss_6EA9C;\n    s = *(u8 *)&lbl_1_bss_6EAA4;\n    s = *(u8 *)&lbl_1_bss_6EA98_gap_6EAA5;\n    s = *(u8 *)&lbl_1_bss_6EAA6;\n    s = *(u8 *)&lbl_1_bss_6EA98_gap_6EAA7;\n    s = *(u8 *)&lbl_1_bss_6EAA8;\n    s = *(u8 *)&lbl_1_bss_6EAB0;\n    s = *(u8 *)&lbl_1_bss_6EA98_gap_6EAB1;\n    s = *(u8 *)&lbl_1_bss_6EA98_gap_6EAB1_fill_6EAB2;\n    s = *(u8 *)&fzgx_obj_lbl_1_bss_6EAB4;\n    s = *(u8 *)&lbl_1_bss_6EAB4_fill_6EAC4;\n    s = *(u8 *)&fzgx_obj_lbl_1_bss_6EAC6;\n    s = *(u8 *)&lbl_1_bss_6EAC6_fill_6EAC8;\n    s = *(u8 *)&fzgx_obj_lbl_1_bss_6EAD0;\n    s = *(u8 *)&fzgx_obj_lbl_1_bss_6F1D8;\n    s = *(u8 *)&lbl_1_bss_6EA98_gap_6F1D9;\n    s = *(u8 *)&lbl_1_bss_6EA98_gap_6F1D9_fill_6F1DA;\n    s = *(u8 *)&fzgx_obj_lbl_1_bss_6F1DC;\n    s = *(u8 *)&fzgx_obj_lbl_1_bss_6F1E0;\n    s = *(u8 *)&lbl_1_bss_6F1E1;\n    s = *(u8 *)&lbl_1_bss_6EA98_gap_6F1E2;\n    s = *(u8 *)&fzgx_obj_lbl_1_bss_6F1E4;\n    s = *(u8 *)&lbl_1_bss_6F1E4_fill_6F1E5;\n    s = *(u8 *)&lbl_1_bss_6F1E4_fill_6F1E6;\n    s = *(u8 *)&lbl_1_bss_6F1E4_fill_6F1E8;\n    s = *(u8 *)&lbl_1_bss_6F1E4_fill_6F238;\n}\n#pragma section code_type \".text\"\n\n#pragma opt_lifetimes off\nstatic inline u8 * fn_1_A3BD8_address_2569(u8 * base, s32 offset) {\n    u8 * result;\n    result = (u8 *)offset;\n    result = base + (s32)result;\n    return result;\n}\nvoid fn_1_A3BD8(s32 arg0, u32 arg1) {\n    u8 *entry;\n    u8 v;\n\n    \n    entry = (u8 *)&fzgx_obj_lbl_1_bss_6F1E4;\n    entry = fn_1_A3BD8_address_2569(entry, arg0 * 0x14);\n    v = (*((4) + (entry)));\n    if ((*((2) + (entry))) != 0) {\n        fn_80067344(1, 0x10, 0xB0270000, (*((2) + (entry))));\n        fn_80067344(1, 0x10, 0xB02A0000, (s8)v);\n        if (fzgx_obj_lbl_1_bss_6F1D8 == 0 && fzgx_obj_lbl_1_bss_6F1DC <= 0x2D) {\n            fn_80067898(arg1);\n        }\n    }\n}\n#pragma opt_lifetimes reset\n\n",
+    "compiler": "GC/1.3.2",
+    "flags": "",
+    "source": "rel/main_rel/sound/fn_1_A3BD8.c",
+    "bytes": 160,
+    "headers_sha256": "73cf7422bff8955cde8d5ebf68ebefe0241675ac791653eb8a9749cb0d84419f",
+    "oracle_sha256": "f7685915459d64c15c3a0f781fa019d6ff8789da838592c92e6a24d5eba8b159",
+    "recipe": [
+      {
+        "label": "address displacement at 2569 base-first result home",
+        "input_sha256": "f1246c743c876f542c8c316c0beba01fedd6f92c70e012d3de3a268bbdf65dd7",
+        "output_sha256": "9beaa43bb1e67e289631016c0d85a8e781e8edc4203e24c4798b4b2ac2db8bef",
+        "input_symbol": "fn_1_A3BD8",
+        "output_symbol": "fn_1_A3BD8",
+        "edits": [
+          [
+            2443,
+            2443,
+            "static inline u8 * fn_1_A3BD8_address_2569(u8 * base, s32 offset) {\n    u8 * result;\n    result = (u8 *)offset;\n    result = base + (s32)result;\n    return result;\n}\n"
+          ],
+          [
+            2569,
+            2588,
+            "fn_1_A3BD8_address_2569(entry, arg0 * 0x14)"
+          ]
+        ]
+      }
+    ],
+    "link": "pool"
   }
 }
