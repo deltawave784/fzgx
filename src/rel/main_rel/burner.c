@@ -803,6 +803,94 @@ void fn_1_988DC(void *arg0) {
 #pragma opt_common_subs reset
 /* fzgx:end fn_1_988DC */
 
+/* fzgx:begin fn_1_98E18 */
+/* Shared literal pool primer (lbl_1_rodata_4100, retail order): the TU pools its
+   float literals in first-use order, so the earlier literals are referenced here. */
+#pragma section code_type ".fzgxpool"
+__declspec(section ".fzgxpool") static void fzgx_pool_prime1(void) {
+    volatile f32 s; volatile f64 d;  /* fzgx-allow: S2 pool primer sinks */
+    s = 14.0f;
+    s = 0.0f;
+    s = 900.0f;
+    s = 2.0f;
+    s = 10.0f;
+}
+static const u32 fzgx_pool_table2[1] = {0x00000000};  /* fzgx-allow: A1 retail pool bytes */
+__declspec(section ".fzgxpool") static void fzgx_pool_keep2(void) { const u32 *volatile cp; cp = fzgx_pool_table2; }  /* fzgx-allow: S2 pool primer sink */
+__declspec(section ".fzgxpool") static void fzgx_pool_prime3(void) {
+    volatile f32 s; volatile f64 d;  /* fzgx-allow: S2 pool primer sinks */
+    d = 1.0;
+    d = 0.8;
+    d = 0.1;
+    s = 0.003921568859368563f;
+}
+static const u32 fzgx_pool_table4[1] = {0x00000000};  /* fzgx-allow: A1 retail pool bytes */
+__declspec(section ".fzgxpool") static void fzgx_pool_keep4(void) { const u32 *volatile cp; cp = fzgx_pool_table4; }  /* fzgx-allow: S2 pool primer sink */
+__declspec(section ".fzgxpool") static void fzgx_pool_prime5(void) {
+    volatile f32 s; volatile f64 d;  /* fzgx-allow: S2 pool primer sinks */
+    d = 0.0;
+    s = 0.15000000596046448f;
+    s = 0.10000000149011612f;
+    s = 0.10999999940395355f;
+    s = 0.11999999731779099f;
+    d = 4503601774854144.0;
+    s = 0.5f;
+    s = 1.7f;
+}
+#pragma section code_type ".text"
+
+typedef struct {
+    f32 x, y, z;
+} fn_1_98E18_Vec;
+
+typedef struct {
+    u8 pad0[0x4c];
+    fn_1_98E18_Vec dir;
+    fn_1_98E18_Vec pos;
+    u8 pad64[0x10];
+    f32 radius;
+} fn_1_98E18_Burner;
+
+typedef struct {
+    u8 pad0[0x4];
+    void (*callback)(void);
+    fn_1_98E18_Burner *entry;
+} fn_1_98E18_Event;
+
+extern void lbl_8006DCA4(void);
+extern s32 fn_1_54E34(fn_1_98E18_Vec *pos, f32 radius);
+extern void *fn_1_5448C(fn_1_98E18_Vec *pos);
+extern fn_1_98E18_Event *fn_1_548AC(s32 size);
+extern void fn_1_98F28(void);
+extern void fn_1_5489C(void *data, void *event);
+
+void fn_1_98E18(fn_1_98E18_Burner *b) {
+    fn_1_98E18_Vec p;
+    void *data;
+    fn_1_98E18_Event *event;
+    f32 r;
+
+    p = b->pos;
+    r = 0.5f * (10.0f * (b->radius / 0.5f));
+    p.x = p.x + (f32)(b->dir.x * r);
+    p.y = p.y + (f32)(b->dir.y * r);
+    p.z = p.z + (f32)(b->dir.z * r);
+    r += 1.7f;
+
+    lbl_8006DCA4();
+    if (fn_1_54E34(&p, r)) {
+        lbl_8006DCA4();
+        data = fn_1_5448C(&b->pos);
+        event = fn_1_548AC(0xc);
+        if (event != 0) {
+            event->callback = fn_1_98F28;
+            event->entry = b;
+            fn_1_5489C(data, event);
+        }
+    }
+}
+/* fzgx:end fn_1_98E18 */
+
 /* fzgx:begin fn_1_9A0A4 */
 // fn_1_9A0A4: empty in retail (single blr).
 void fn_1_9A0A4(void) {
