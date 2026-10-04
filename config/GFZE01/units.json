@@ -20150,6 +20150,20 @@
   },
   {
     "module": "main",
+    "source": "dol/fn_800571EC.c",
+    "symbols": [
+      "fn_800571EC"
+    ],
+    "status": "matching",
+    "mw_version": "GC/1.3",
+    "extra_cflags": [],
+    "pool": {
+      "@43": "lbl_80092238",
+      "@44": "lbl_80092264"
+    }
+  },
+  {
+    "module": "main",
     "source": "dol/fn_80057378.c",
     "symbols": [
       "fn_80057378"
