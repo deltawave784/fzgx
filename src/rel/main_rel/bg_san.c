@@ -339,6 +339,94 @@ s32 fn_1_DAB5C(s32 mode, Fn1DAB5C_Obj **arg) {
 }
 /* fzgx:end fn_1_DAB5C */
 
+/* fzgx:begin fn_1_DABB4 */
+typedef struct {
+    f32 x, y, z;
+} Fn1DABB4_Vec;
+
+typedef struct {
+    u32 flags;
+    u8 pad_4[0x8];
+    Fn1DABB4_Vec pos;
+    s16 rot_x;
+    s16 rot_y;
+    s16 rot_z;
+    u8 pad_1E[0x2];
+    f32 scale_x;
+    f32 scale_y;
+    f32 scale_z;
+} Fn1DABB4_Obj;
+
+typedef struct {
+    Fn1DABB4_Obj *obj;
+    Fn1DABB4_Vec pos;
+    u8 unk_10[0xC];
+    u8 unk_1C[0x30];
+    f32 radius;
+} Fn1DABB4_Entry;
+
+extern const Fn1DABB4_Vec lbl_1_rodata_662C;
+extern void lbl_8006D91C(s32);
+extern void mathutil_mtxA_rotate_x(s32);
+extern void mathutil_mtxA_rotate_y(s32);
+extern void mathutil_mtxA_rotate_z(s32);
+extern void lbl_8006E1C0(void *, void *);
+extern void lbl_8006D7DC(void *);
+extern void lbl_8006E13C(void *);
+extern void lbl_8006DB74(void *);
+
+#define MAX(a, b) ((a) > (b) ? (a) : (b))
+
+s32 fn_1_DABB4(s32 mode, Fn1DABB4_Obj *obj) {
+    Obj_1_data_2A7E0_At3C *dest;
+    Fn1DABB4_Entry *entry;
+    Fn1DABB4_Vec vec;
+    s32 count;
+
+    dest = lbl_1_data_2A7E0.unk_3C;
+    switch (mode) {
+    case 0:
+        obj->flags |= 0x2000000;
+        break;
+    case 1:
+        obj->flags |= 0x2000000;
+        break;
+    case 2:
+    case 3:
+        obj->flags |= 0x2000000;
+        break;
+    case 4:
+        obj->flags |= 0x4000000;
+        count = dest->unk_10;
+        if (count < 30) {
+            entry = (Fn1DABB4_Entry *)((u8 *)dest + 0x14 + count * 0x50);
+            vec = lbl_1_rodata_662C;
+            entry->obj = obj;
+            entry->pos.x = obj->pos.x;
+            entry->pos.y = obj->pos.y;
+            entry->pos.z = obj->pos.z;
+            lbl_8006D91C(obj->rot_z);
+            mathutil_mtxA_rotate_y(obj->rot_y);
+            mathutil_mtxA_rotate_x(obj->rot_x);
+            lbl_8006E1C0(&vec, entry->unk_10);
+            lbl_8006D7DC(&obj->pos);
+            mathutil_mtxA_rotate_z(obj->rot_z);
+            mathutil_mtxA_rotate_y(obj->rot_y);
+            mathutil_mtxA_rotate_x(obj->rot_x);
+            lbl_8006E13C(&obj->scale_x);
+            lbl_8006DB74(entry->unk_1C);
+            dest->unk_10++;
+            entry->radius = MAX(obj->scale_x, MAX(obj->scale_y, obj->scale_z));
+        }
+        break;
+    case 8:
+        dest->unk_BD8 = (u32)obj;
+        break;
+    }
+    return 1;
+}
+/* fzgx:end fn_1_DABB4 */
+
 /* fzgx:begin fn_1_DAD68 */
 // fn_1_DAD68: empty in retail (single blr).
 void fn_1_DAD68(void) {
