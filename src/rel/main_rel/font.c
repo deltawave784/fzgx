@@ -228,6 +228,59 @@ extern void fn_1_55D6C(void);
 extern f32 lbl_1_rodata_10D8;
 extern f64 lbl_1_rodata_10E0[3];
 
+/* fzgx:begin fn_1_48C28 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/font.h"
+
+extern s32 lbl_801A6410;
+extern u32 lbl_1_bss_3E060[1387];
+extern void fn_1_46B4(u32 arg0, u32 arg1, char *arg2, s32 arg3);
+
+// Release every glyph texture owned by font slot `idx` that no other active
+// slot still references; shared ones are only unlinked from this slot.
+void fn_1_48C28(int idx) {
+    Obj_1_data_1AEA8 *entry;
+    u16 *names;
+    int i;
+
+    entry = (Obj_1_data_1AEA8 *)((u8 *)&lbl_1_data_1AEA8 + idx * 0x38);
+    if ((s32)entry->unk_0 == -1) {
+        names = (u16 *)entry->unk_2C;
+        for (i = 0; names[i] != 0; i++) {
+            s16 *slots = (s16 *)entry->unk_30;
+            int j;
+            int shared = 0;
+            s32 tex = slots[i];
+
+            if (tex == -1) {
+                continue;
+            }
+            if (((s32 *)lbl_1_bss_3F60C)[tex] == -1) {
+                continue;
+            }
+            for (j = 1; j < 44; j++) {
+                Obj_1_data_1AEA8 *other =
+                    (Obj_1_data_1AEA8 *)((u8 *)&lbl_1_data_1AEA8 + j * 0x38);
+                if (j != idx && (s32)other->unk_0 == -1 &&
+                    ((s16 *)other->unk_30)[i] != -1) {
+                    shared = 1;
+                    break;
+                }
+            }
+            if (shared) {
+                slots[i] = -1;
+            } else {
+                fn_1_46B4(lbl_801A6410, lbl_1_bss_3E060[tex], (char *)lbl_1_data_1BCC8, 0x217);
+                slots = (s16 *)entry->unk_30;
+                lbl_1_bss_3E060[slots[i]] = 0;
+                slots[i] = -1;
+            }
+        }
+    }
+}
+/* fzgx:end fn_1_48C28 */
+
 /* fzgx:begin fn_1_49410 */
 struct fn_1_49410_lbl_1_rodata_FD0 {
     u8 pad_0[0xF0];
