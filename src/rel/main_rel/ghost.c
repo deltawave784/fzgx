@@ -916,6 +916,75 @@ void fn_1_F1960(void *arg0, void *arg1, u32 arg2) {
 }
 /* fzgx:end fn_1_F1960 */
 
+/* fzgx:begin fn_1_F1A24 noprologue */
+#include "dolphin/types.h"
+#include "dolphin/ar.h"
+
+typedef struct {
+    u8 pad0[0x16b4];
+    u8 *bufs[0x28];        /* 0x16b4 */
+    u8 count;              /* 0x1754 */
+    u8 pad1[0x3b7c - 0x1755];
+    volatile s32 dmaDone;  /* 0x3b7c, set by the ARQ callback fn_1_F1950 */
+} GhostAramWork;
+
+typedef struct {
+    u8 pad0[0x2d4];
+    char file[0x4a0 - 0x2d4];     /* 0x2d4 */
+    char fmtA[0x10];              /* 0x4a0 */
+    char fmtB[0xc];               /* 0x4b0 */
+    char fmtC[0x10];              /* 0x4bc */
+} GhostAramStrings;
+
+extern GhostAramWork lbl_1_bss_7B180;
+extern GhostAramStrings lbl_1_data_3E358;
+extern void *lbl_801A6410;
+
+extern void fn_1_F1950(u32);
+extern void fn_1_46B4(void *, void *, const char *, int);
+extern void *fn_1_4630(void *, u32, const char *, int);
+extern u32 fn_8002071C(void);
+extern u32 fn_800206FC(u32);
+extern void OSReport(const char *, ...);
+extern u32 ARGetDMAStatus(void);
+extern void DCInvalidateRange(void *, u32);
+
+void fn_1_F1A24(void)
+{
+    ARQRequest req;
+    GhostAramStrings *str = &lbl_1_data_3E358;
+    GhostAramWork *work = &lbl_1_bss_7B180;
+    struct { u8 **value; } bufs;
+    struct { u8 *value; } buf;
+    struct { u32 value; } old;
+    u32 i;
+
+    bufs.value = work->bufs;
+    old.value = 0;
+    for (i = 0; i < work->count; i++) {
+        if (bufs.value[i] != NULL) {
+            fn_1_46B4(lbl_801A6410, bufs.value[i], str->file, 0x12a7);
+        }
+        bufs.value[i] = fn_1_4630(lbl_801A6410, 0x3ec0, str->file, 0x12a9);
+        buf.value = bufs.value[i];
+        old.value = fn_8002071C();
+        fn_800206FC(0x3ec0);
+        work->dmaDone = 0;
+        while (ARGetDMAStatus() != 0) {
+        }
+        DCInvalidateRange(buf.value, 0x3ec0);
+        ARQPostRequest(&req, 1, 1, 1, 0xf24000 + i * 0x3ec0, (u32)buf.value, 0x3ec0, fn_1_F1950);
+        while (work->dmaDone == 0) {
+        }
+        fn_800206FC(old.value);
+        buf.value = bufs.value[i];
+        OSReport(str->fmtA, buf.value[0]);
+        OSReport(str->fmtB, buf.value + 8);
+        OSReport(str->fmtC, *(u16 *)(buf.value + 0x18));
+    }
+}
+/* fzgx:end fn_1_F1A24 */
+
 /* fzgx:begin fn_1_F1B78 */
 void fn_1_F1B78(u32 value) {
     lbl_1_bss_7C848[0] = value;

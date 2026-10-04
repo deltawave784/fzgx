@@ -6578,3 +6578,6 @@ rel/main_rel/effect/fn_1_5C83C.c:
 
 rel/main_rel/sel_static_disp/fn_1_14EBF8.c:
 	.text       start:0x0014EBF8 end:0x0014ED00 align:4
+
+rel/main_rel/ghost/fn_1_F1A24.c:
+	.text       start:0x000F1A24 end:0x000F1B78 align:4
