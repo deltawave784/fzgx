@@ -665,6 +665,143 @@ void fn_1_E174(f32 arg0) {
 #pragma opt_lifetimes reset
 /* fzgx:end fn_1_E174 */
 
+/* fzgx:begin fn_1_EBE4 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/live_camera.h"
+
+extern s16 fn_1_7B054(void);
+extern void fn_1_10138(void *obj);
+extern void fn_1_8840(void);
+extern void fn_1_A1588(u32 arg0, u32 arg1);
+extern void fn_1_A1CE8(u32 arg0);
+extern s32 fn_1_F2F34(void);
+
+typedef struct {
+    f32 x, y, z;
+} CamVec3;
+
+/* live camera state object (first argument) */
+typedef struct {
+    u8 state;        /* 0x00 */
+    u8 unk_1;        /* 0x01 */
+    u8 pad_2[4];
+    s16 unk_6;       /* 0x06 */
+    s16 unk_8;       /* 0x08 */
+    u8 pad_A[2];
+    u32 flags;       /* 0x0C */
+    s16 unk_10;      /* 0x10 */
+    s16 unk_12;      /* 0x12 */
+    s16 unk_14;      /* 0x14 */
+    u8 pad_16[2];
+    u32 unk_18;      /* 0x18 */
+    CamVec3 pos;     /* 0x1C */
+    CamVec3 target;  /* 0x28 */
+    u8 pad_34[0x28];
+    s16 unk_5C;      /* 0x5C */
+    u8 pad_5E[2];
+    f32 unk_60;      /* 0x60 */
+    s16 unk_64;      /* 0x64 */
+    u8 pad_66[4];
+    s16 unk_6A;      /* 0x6A */
+} LiveCamera;
+
+/* wider views of the TU's shared state than the generated header carries */
+typedef struct {
+    u8 unk_0;
+    u8 pad_1[0xB];
+    f32 unk_C;
+    u8 pad_10[4];
+    u8 unk_14;
+    u8 pad_15[0x64F];
+    u8 unk_664;
+    u8 pad_665;
+    s16 unk_666;
+    s32 unk_668;
+    u8 unk_66C;
+    u8 pad_66D[3];
+    u32 unk_670;
+    u32 unk_674;
+    u8 unk_678;
+} LiveCameraState;
+
+typedef struct {
+    u8 pad_0[0xD0];
+    s32 ids[0x1A];   /* 0xD0 */
+    u8 pad_138[0x10];
+    s16 unk_148;
+    s16 unk_14A;
+    s16 unk_14C;
+} LiveCameraData;
+
+void fn_1_EBE4(LiveCamera *cam, s16 id, s32 mode, f32 value) {
+    LiveCameraData *dat = (LiveCameraData *)&lbl_1_data_43B8;
+    LiveCameraState *st = (LiveCameraState *)&lbl_1_bss_1148;
+    s32 *ids;
+    u32 i;
+
+    st->unk_666 = 0;
+    st->unk_668 = -1;
+    dat->unk_14C = 0x3C;
+    st->unk_C = 0.0f;
+    st->unk_14 = 0;
+    st->unk_0 = 0;
+    st->unk_66C = 0;
+    cam->flags &= ~0x00080000;
+    for (i = 0, ids = dat->ids; i < 0x1A; i++, ids++) {
+        if (*ids == fn_1_7B054()) {
+            cam->flags |= 0x00080000;
+        }
+    }
+
+    if (mode) {
+        cam->state = 6;
+        cam->unk_12 = 5;
+        cam->unk_14 = 0;
+        cam->unk_18 = 0;
+        cam->unk_10 = 0;
+        fn_1_10138(cam);
+    } else {
+        cam->state = 5;
+        cam->unk_12 = 2;
+        cam->unk_14 = 9;
+        cam->unk_18 = 0;
+        cam->unk_10 = 0;
+    }
+    cam->unk_1 = 0;
+    cam->unk_64 = 0xD2;
+    cam->unk_6A = 0;
+    cam->flags &= ~0x00200000;
+    cam->unk_60 = value;
+    cam->unk_5C = 0;
+    cam->target = cam->pos;
+    cam->unk_8 = id;
+    cam->unk_6 = id;
+    st->unk_670 = 0;
+    st->unk_674 = 0;
+    fn_1_8840();
+
+    if (*(s16 *)&lbl_1_bss_960 == 10 && !mode) {
+        st->unk_664 = 0;
+        st->unk_678 = 2;
+        cam->state = 0;
+        dat->unk_14A = 0x2A;
+        lbl_1_bss_6F243 = 0;
+        if (dat->unk_148 != 0x2A) {
+            dat->unk_148 = 0x2A;
+        }
+        fn_1_A1588(lbl_1_bss_6EAD0.unk_0->unk_0, 1);
+        fn_1_A1CE8((u8)dat->unk_148);
+    } else if (fn_1_F2F34() && !mode) {
+        cam->state = 0;
+    }
+
+    if (st->unk_664) {
+        st->unk_678 = 2;
+    }
+}
+/* fzgx:end fn_1_EBE4 */
+
 /* fzgx:begin fn_1_EE04 */
 typedef struct {
     u8 pad[2];
