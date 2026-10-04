@@ -1,28 +1,6 @@
 
 #include "types.h"
-
-typedef struct AdxXpndParams {
-    int channel_count;
-    const signed char *input;
-    int num_blocks;
-    short *output_left;
-    short *output_right;
-} AdxXpndParams;
-
-typedef struct AdxXpnd {
-    int used;
-    int index;
-    int mode;
-    int status;
-    int num_decoded_blocks;
-    AdxXpndParams params;
-    short delay[2][2];
-    short coefficients[2];
-    short random_state;
-    short random_multiplier;
-    short random_increment;
-    short reserved;
-} AdxXpnd;
+#include "sofdec/adxb.h"
 
 extern int fn_8004F55C(const signed char *input, int num_blocks, short *output, short delay[2],
                        short coefficient0, short coefficient1, short *random_state,

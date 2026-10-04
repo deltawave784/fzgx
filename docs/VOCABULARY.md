@@ -17,3 +17,4 @@ typedefs, no code or data).
 | `ARQRequest`, `ARQCallback` | `include/dolphin/ar.h` | 0x20 | Dolphin SDK ARQ (SDK field name `dest`); ARQPostRequest, __ARQInterruptServiceRoutine, __ARQServiceQueueLo, AXRNA units. |
 | `AXPB` (+ sub-blocks), `AXVPB` | `include/dolphin/ax.h` | 0xF4 / 0x22C | Dolphin SDK AX voice parameter block as used by the AXRNA units and fn_8002123C. fn_8005A9B8 had a 0x140-byte `pb` view (pointer use only). |
 | `AXRNAHandle` | `include/sofdec/axrna.h` | 0xE8 | CRI ADX AX renderer handle (AXRNA_Create/Finish/SetOutPan/ExecServer); six DOL units. |
+| `AdxBasicDecoder`, `AdxXpnd`, `AdxXpndParams`, `AdxDecodeParams` | `include/sofdec/adxb.h` | 0xA0 / 0x3C / 0x14 / 0x2C | CRI ADX basic decoder (ADXB_ExecOne*) and ADPCM expander (ADXPD_*); nine DOL units. Padded-union views in ADXB_Create, fn_80042228, fn_80043B48, fn_80044A94 remain local. |
