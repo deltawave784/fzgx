@@ -54,12 +54,12 @@ extern void *fn_1_86254(int index);
 extern u32 lbl_1_rodata_45D0[82];
 extern u32 fn_80008E84();
 extern void fn_1_46B4(u32 arg0, u32 arg1, const char *arg2, int arg3);
-extern s8 lbl_1_bss_6EAA6;
+extern u8 lbl_1_bss_6EAA6;
 extern u8 lbl_1_bss_6EAA4;
 extern void fn_80067974(void);
 extern void fn_800280F0(void);
 extern void fn_80026FE0(void);
-extern u8 lbl_1_bss_6EAA8[8];
+extern u32 lbl_1_bss_6EAA8[2];
 extern u8 lbl_1_bss_6EAB0;
 extern u32 ARInit(u32 *stack_index_addr, u32 num_entries);
 extern void fn_80020530(void);
@@ -122,7 +122,7 @@ void fn_1_9FF54(void) {
 
 /* fzgx:begin fn_1_9FF58 */
 void fn_1_9FF58(void) {
-    if (lbl_1_bss_6EAA6) {
+    if (*(s8 *)&lbl_1_bss_6EAA6) {
         fn_80067974();
         fn_800280F0();
         fn_80026FE0();
@@ -139,11 +139,7 @@ void fn_1_9FF9C(void) {
 }
 /* fzgx:end fn_1_9FF9C */
 
-/* fzgx:begin fn_1_9FFD8 noprologue */
-#include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/sound.h"
-
+/* fzgx:begin fn_1_9FFD8 */
 struct fn_1_9FFD8_lbl_1_bss_6EA98 {
     u32 unk_0;
     u8 pad_4[0x9];
@@ -169,40 +165,6 @@ struct fn_1_9FFD8_lbl_801A6410 {
     u32 unk_0;
 };
 
-extern const f32 lbl_1_rodata_42E0;
-extern void *lbl_801A6410;
-extern u32 lbl_1_data_33F1C;
-extern u32 OSGetSoundMode(void);
-extern u32 fn_1_44A4(void);
-extern u32 fn_8001E954(u32);
-extern u32 fn_80020778(void);
-extern u32 fn_80025E18(void);
-extern u32 fn_8004CD70(u32, u32, u32);
-extern u32 fn_8004E59C(u32);
-extern u32 fn_8004EC34(u32);
-extern u32 fn_80068BFC(u32, u32, u32, u32, u32);
-extern u32 fn_1_45D0(void *arg0, u32 arg1, u32 *arg2, int arg3);
-extern void AIInit(u8 *arg0);
-extern void fn_1_4438(void);
-extern void fn_1_9FE74(void);
-extern void fn_1_9FEE8(void);
-extern void fn_1_9FF50(void);
-extern void fn_1_9FF54(void);
-extern void fn_1_9FF58(void);
-extern void fn_1_A04AC(void);
-extern void fn_1_A2E24(u32, u32, s32);
-extern void fn_80008BEC(void *, int, u32);
-extern void fn_80020724(void);
-extern void fn_80022014(u32);
-extern void fn_8002361C(u32, u32);
-extern void fn_80025D50(u32, u32);
-extern void fn_8002805C(void);
-extern void fn_800411F4(void);
-extern void fn_8004B7D4(u32);
-extern void fn_8004BBA4(u32, u32);
-extern void fn_80065890(u32);
-extern void fn_8006589C(u32);
-extern void fn_800658A8(u32);
 
 #pragma opt_propagation off
 /* file-scope objects of the retail TU, in retail order: MWCC addresses them off one section base */
@@ -305,7 +267,7 @@ void fn_1_9FFD8(void) {
     lbl_1_bss_6EAB4__fzgx_offset_11 = 0;
     fzgx_obj_lbl_1_bss_6EAC6 = 0;
     fn_1_4438();
-    t11 = fn_1_45D0(lbl_801A6410, 0x28000, &lbl_1_data_33F1C, 0xf4);
+    t11 = (u32)fn_1_45D0(lbl_801A6410, 0x28000, &lbl_1_data_33F1C, 0xf4);
     lbl_1_bss_6EAC6__fzgx_offset_2 = t11;
     t12 = fn_8001E954(0x6be000);
     lbl_1_bss_6EAC6__fzgx_offset_6 = t12;
@@ -316,7 +278,7 @@ void fn_1_9FFD8(void) {
     fn_8006589C((u32)fn_1_9FF54);
     t17 = fn_1_44A4();
     fn_80065890(t17);
-    t19 = fn_1_45D0(lbl_801A6410, 0x974a0, &lbl_1_data_33F1C, 0x10b);
+    t19 = (u32)fn_1_45D0(lbl_801A6410, 0x974a0, &lbl_1_data_33F1C, 0x10b);
     fzgx_obj_lbl_1_bss_6EAD0 = t19;
     lab_t1 = 0;
     fn_80008BEC((void *)t19, lab_t1, 0x974a0);
@@ -328,7 +290,7 @@ void fn_1_9FFD8(void) {
     *(u32 *)((u8 *)v1 + 4) = t22;
     *(u32 *)((u8 *)fzgx_obj_lbl_1_bss_6EAD0 + 8) = 0;
     *(u32 *)((u8 *)fzgx_obj_lbl_1_bss_6EAD0 + 12) = 0;
-    t23 = OSGetSoundMode();
+    t23 = (u32)OSGetSoundMode();
     if (t23 == 0) {
         fn_1_A2E24(0, 0xa0000900, 0);
         fn_8004B7D4(1);

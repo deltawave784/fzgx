@@ -304,3 +304,24 @@ without row alignment (`retail - ours` net rows):
   DAG, not closable by flags (`-O3` disables scheduling entirely).
 - No other retail-only opcode family above 40 functions exists; the rest of the
   residuals are register allocation, frame layout and control-flow shape.
+
+## Whole-TU compiles: one declaration per symbol (librarian, 2026-10-04)
+
+- The declared size of an object changes scheduling and loop strength reduction even when
+  every access goes through a cast pointer: a view (`(T *)&sym`) over dtk's 4-byte
+  `lbl_1_bss_384C0` unrolls fn_1_469BC (`lwz` displacements) where retail keeps `lwzu`; an
+  `f32[5]`/0xD8-byte declaration reorders loads beyond its end (fn_1_E174, fn_1_12A080).
+  Fix the one declaration (typedefs.json `decl`/`typedef` override, or the TU prologue)
+  to the merged layout of every matched view; never a per-block view.
+- Callers re-extend narrow return values (`u8` -> `clrlwi`, `s8` -> `extsb`), so a caller
+  that sign-extends proves an `s8` truth in its TU (fn_1_86624 in live_camera/camera). A
+  redundant `(s16)` cast on an `s16` call result changes allocation and can be required
+  (fn_1_7B218); `(s8)x` on a `u8` global folds away, `*(s8 *)&x` keeps the `extsb.`.
+- Passing a narrow local to a 32-bit parameter inserts `extsh`/`clrlwi`; retail callers of
+  `fn_1_6B48(s32)` / `fn_1_8708(s32)` held the value in an `s32` local.
+- `const` on an `extern f32` rodata scalar changes load scheduling (accessory 7B1C/7B20).
+- A matched `void` wrapper whose caller consumes r3 (fn_1_D3884, fn_1_729F8) is declared
+  returning a value in the caller's TU; a definition without `return` compiles identically.
+- Duplicated per-block TU-layout definitions (`fzgx_obj_*`, `static fzgx_bss_layout`) and
+  inline copies of a TU function must agree in type and differ in name per block before a
+  TU compiles: unify the element type through a hoisted typedef (archive 897AC).
