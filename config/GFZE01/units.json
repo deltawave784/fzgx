@@ -50454,6 +50454,22 @@
   },
   {
     "module": "main_rel",
+    "source": "rel/main_rel/stcoli/fn_1_287E8.c",
+    "symbols": [
+      "fn_1_287E8"
+    ],
+    "status": "matching",
+    "mw_version": null,
+    "extra_cflags": [],
+    "tu": "rel/main_rel/stcoli.c",
+    "pool": {
+      "...rodata.0": "lbl_1_rodata_840",
+      "@8": "lbl_1_rodata_84C",
+      "@12": "lbl_1_rodata_85C"
+    }
+  },
+  {
+    "module": "main_rel",
     "source": "rel/main_rel/stcoli/fn_1_2A2A4.c",
     "symbols": [
       "fn_1_2A2A4"
