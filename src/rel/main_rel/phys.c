@@ -515,22 +515,6 @@ typedef struct LocalStruct {
     u8 pad_3C[0x1C];
 } LocalStruct;
 
-typedef struct RoData_6780 {
-    u8 pad_0[0x34];
-    f32 unk_34;
-    u8 pad_38[0x8];
-    f64 unk_40;
-    u8 pad_48[0x1CC];
-    f32 unk_214;
-    u8 pad_218[0x4];
-    u32 unk_21C;
-    f32 unk_220;
-    f32 unk_224;
-    f32 unk_228;
-    f32 unk_22C;
-    f32 unk_230;
-} RoData_6780;
-
 typedef struct Node_80077E0C {
     u8 pad[8];
     struct Node_80077E0C *child;
