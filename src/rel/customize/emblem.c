@@ -337,99 +337,99 @@ u8 fn_3_1443C(void) {
 }
 /* fzgx:end fn_3_1443C */
 
-/* fzgx:begin fn_3_1445C noprologue */
-#include "types.h"
+/* fzgx:begin fn_3_1445C */
+extern u8 lbl_3_bss_A17A0[44];
+extern s16 lbl_3_bss_A17CC;
+extern u32 lbl_3_bss_A176C;
+extern u32 *lbl_3_bss_A1770;
+extern u32 *lbl_3_bss_A1774;
+extern u8 lbl_3_data_3574[60];
+extern u32 lbl_801A6410;
+extern void fn_1_46B4(u32, u32, u8 *, s32);
 
 typedef struct {
     u32 flags;
-    u8 pad04[0x0c];
-    s16 field_10;
-    s16 field_12;
-    u8 pad14[2];
-    s16 field_16;
-    s16 field_18;
-    s16 field_1a;
-    u8 pad1c[4];
-    u32 field_20;
-} EmblemState;
+    u8 pad4[0xc];
+    s16 width;
+    s16 height;
+    s16 pad14;
+    s16 first;
+    s16 last;
+    s16 index;
+    u8 pad1c[0x4];
+    void *data;
+} fn_3_1445C_EmblemState;
 
 typedef struct {
-    u32 field_00;
-    u8 field_04;
-    u8 field_05;
-    u8 field_06;
-    u8 field_07;
-    u32 field_08;
-    u32 field_0c;
-    u8 pad10[4];
-    u32 field_14;
-} EmblemEntry;
+    u32 flags;
+    u8 kind;
+    u8 pad5;
+    u8 width;
+    u8 height;
+    u32 unk8;
+    u32 size;
+    u8 pad10[0x4];
+    void *resource;
+} fn_3_1445C_EmblemEntry;
 
-extern EmblemState lbl_3_bss_A17A0;
-extern EmblemEntry lbl_3_bss_A17D4[128];
-
-extern u8 fn_3_14600(void);
-extern u32 fn_3_17820(u8 *);
+extern fn_3_1445C_EmblemEntry lbl_3_bss_A17D4[128];
+extern s32 fn_3_14600(void);
+extern u32 fn_3_17820(void);
 extern u8 fn_3_19C94(void);
-extern void fn_80008BA8(u32, u32, u32);
+extern void fn_80008BA8(void *, void *, u32);
 
-static inline EmblemEntry *fn_3_1445C_array_read(EmblemEntry *array) { return array; }
+#define EMBLEM_STATE ((fn_3_1445C_EmblemState *)lbl_3_bss_A17A0)
+
 void fn_3_1445C(void) {
-    s32 next;
-    EmblemState *state2;
-    s32 flags;
+    fn_3_1445C_EmblemState *state;
+    s32 idx;
+    fn_3_1445C_EmblemEntry *entry;
+    u8 kind;
 
-    if ((lbl_3_bss_A17A0.flags & 0x04000000) == 0) {
-        if (fn_3_14600() != 0)
+    if (!(EMBLEM_STATE->flags & 0x04000000U)) {
+        if ((u8)fn_3_14600()) {
             return;
+        }
     } else {
-        lbl_3_bss_A17A0.flags &= ~0x04000000;
+        EMBLEM_STATE->flags &= ~0x04000000U;
     }
 
-    flags = lbl_3_bss_A17A0.flags;
-    flags |= 0x10000000;
-    lbl_3_bss_A17A0.flags = flags;
-    flags = lbl_3_bss_A17A0.field_1a;
-    next = flags;
-    next = next + 1;
-    if (((0x80) == (next)))
-        lbl_3_bss_A17A0.field_1a = 0;
-    else
-        lbl_3_bss_A17A0.field_1a = next;
-
-    if (lbl_3_bss_A17A0.field_1a == lbl_3_bss_A17A0.field_16) {
-        flags = lbl_3_bss_A17A0.field_16 + 1;
-        next = flags;
-        if (((0x80) == (next)))
-            lbl_3_bss_A17A0.field_16 = 0;
-        else
-            lbl_3_bss_A17A0.field_16 = next;
+    state = EMBLEM_STATE;
+    state->flags |= 0x10000000U;
+    if (state->index + 1 == 0x80) {
+        state->index = 0;
+    } else {
+        state->index += 1;
     }
 
-    if (lbl_3_bss_A17A0.field_1a != lbl_3_bss_A17A0.field_16)
-        lbl_3_bss_A17A0.field_16 = lbl_3_bss_A17A0.field_1a;
-
-    state2 = &lbl_3_bss_A17A0;
-    if (state2->field_18 == state2->field_16) {
-        state2->field_18 = state2->field_18 + 1;
+    if (state->index == EMBLEM_STATE->first) {
+        if (EMBLEM_STATE->first + 1 == 0x80) {
+            EMBLEM_STATE->first = 0;
+        } else {
+            EMBLEM_STATE->first += 1;
+        }
+    }
+    if (state->index != EMBLEM_STATE->first) {
+        EMBLEM_STATE->first = state->index;
+    }
+    if (EMBLEM_STATE->last == EMBLEM_STATE->first) {
+        EMBLEM_STATE->last += 1;
+    }
+    if (EMBLEM_STATE->last == 0x7f) {
+        EMBLEM_STATE->last = 0;
     }
 
-    if (state2->field_18 == 0x7f)
-        lbl_3_bss_A17A0.field_18 = 0;
-
-    if (fn_3_1445C_array_read(lbl_3_bss_A17D4)[lbl_3_bss_A17A0.field_1a].field_0c < 0x2000 &&
-        fn_3_1445C_array_read(lbl_3_bss_A17D4)[lbl_3_bss_A17A0.field_1a].field_0c != 0)
-        fn_3_1445C_array_read(lbl_3_bss_A17D4)[lbl_3_bss_A17A0.field_1a].field_00 = 0x20000000;
-
-    fn_3_1445C_array_read(lbl_3_bss_A17D4)[lbl_3_bss_A17A0.field_1a].field_06 =
-        (u8)lbl_3_bss_A17A0.field_10;
-    fn_3_1445C_array_read(lbl_3_bss_A17D4)[lbl_3_bss_A17A0.field_1a].field_07 =
-        (u8)lbl_3_bss_A17A0.field_12;
-    fn_3_1445C_array_read(lbl_3_bss_A17D4)[lbl_3_bss_A17A0.field_1a].field_08 =
-        fn_3_17820((u8 *)&lbl_3_bss_A17D4[lbl_3_bss_A17A0.field_1a]);
-    fn_3_1445C_array_read(lbl_3_bss_A17D4)[lbl_3_bss_A17A0.field_1a].field_04 = fn_3_19C94();
-    fn_80008BA8(fn_3_1445C_array_read(lbl_3_bss_A17D4)[lbl_3_bss_A17A0.field_1a].field_14,
-                 lbl_3_bss_A17A0.field_20, 0x2000);
+    idx = state->index;
+    if (lbl_3_bss_A17D4[idx].size < 0x2000 && lbl_3_bss_A17D4[idx].size != 0) {
+        lbl_3_bss_A17D4[idx].flags = 0x20000000U;
+    }
+    lbl_3_bss_A17D4[idx].width = EMBLEM_STATE->width;
+    lbl_3_bss_A17D4[idx].height = EMBLEM_STATE->height;
+    lbl_3_bss_A17D4[state->index].unk8 = fn_3_17820();
+    kind = fn_3_19C94();
+    entry = &lbl_3_bss_A17D4[state->index];
+    entry->kind = kind;
+    fn_80008BA8(entry->resource, EMBLEM_STATE->data, 0x2000);
 }
 /* fzgx:end fn_3_1445C */
 
