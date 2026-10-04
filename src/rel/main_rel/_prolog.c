@@ -465,134 +465,149 @@ void fn_1_E9C(void) {
 #include "types.h"
 #include "rel/main_rel/globals.h"
 
-typedef void (*Fn)(void);
-typedef struct { u8 pad[0x20]; Fn f20; Fn f24; Fn f28; } T28;
-typedef struct { u8 pad[0x20]; Fn f20; Fn f24; Fn f28; Fn f2c; } T30;
-typedef struct {
-    s16 a; s16 b; u16 c; u16 d; s16 e; s16 f; s32 g;
-} State;
+typedef void (*fn_1_ECC_Callback)(void);
+/* Overlay (lbl_1_data_7C0, 0x2c bytes) and scene (lbl_1_data_460, 0x30 bytes) descriptors. */
+struct fn_1_ECC_Overlay {
+    u8 pad_0[0x20];
+    fn_1_ECC_Callback init;
+    fn_1_ECC_Callback update;
+    fn_1_ECC_Callback exit;
+};
+struct fn_1_ECC_Scene {
+    u8 pad_0[0x20];
+    fn_1_ECC_Callback init;
+    fn_1_ECC_Callback update;
+    fn_1_ECC_Callback suspend;
+    fn_1_ECC_Callback exit;
+};
 
-extern T28 lbl_1_data_7C0[];
-extern T30 lbl_1_data_460[];
-extern void fn_1_128C(void);
+extern struct fn_1_ECC_Overlay lbl_1_data_7C0[];
+extern struct fn_1_ECC_Scene lbl_1_data_460[];
+extern u32 fn_1_128C(void);
 extern void fn_1_12F194(void);
 extern void fn_1_3C98(void);
 extern void fn_1_3CC4(void);
 extern u32 lbl_801A66C0;
 
 /* file-scope objects of the retail TU, in retail order: MWCC addresses them off one section base */
-s16 fzgx_obj_lbl_1_bss_960;
-s16 fzgx_obj_lbl_1_bss_962;
-u16 lbl_1_bss_964;
-u16 lbl_1_bss_966;
-s16 lbl_1_bss_968;
-s16 lbl_1_bss_96A;
-s32 lbl_1_bss_96C;
+s16 fzgx_obj_lbl_1_bss_960;   /* scene */
+s16 fzgx_obj_lbl_1_bss_962;   /* overlay */
+u16 lbl_1_bss_964;            /* prev_scene */
+u16 lbl_1_bss_966;            /* prev_overlay */
+s16 lbl_1_bss_968;            /* next_scene */
+s16 lbl_1_bss_96A;            /* next_overlay */
+s32 lbl_1_bss_96C;            /* keep */
+
+#define scene fzgx_obj_lbl_1_bss_960
+#define overlay fzgx_obj_lbl_1_bss_962
+#define prev_scene lbl_1_bss_964
+#define prev_overlay lbl_1_bss_966
+#define next_scene lbl_1_bss_968
+#define next_overlay lbl_1_bss_96A
+#define keep lbl_1_bss_96C
 
 #pragma section code_type ".fzgxpool"
 static void fzgx_bss_layout(void) {
     volatile u8 s;  /* fzgx-allow: S2 layout primer sink: MWCC emits .bss objects in first-access order */
-    s = *(u8 *)&fzgx_obj_lbl_1_bss_960;
-    s = *(u8 *)&fzgx_obj_lbl_1_bss_962;
-    s = *(u8 *)&lbl_1_bss_964;
-    s = *(u8 *)&lbl_1_bss_966;
-    s = *(u8 *)&lbl_1_bss_968;
-    s = *(u8 *)&lbl_1_bss_96A;
-    s = *(u8 *)&lbl_1_bss_96C;
+    s = *(u8 *)&scene;
+    s = *(u8 *)&overlay;
+    s = *(u8 *)&prev_scene;
+    s = *(u8 *)&prev_overlay;
+    s = *(u8 *)&next_scene;
+    s = *(u8 *)&next_overlay;
+    s = *(u8 *)&keep;
 }
 #pragma section code_type ".text"
 
 void fn_1_ECC(void) {
-    
-    s16 x;
+    s16 next;
 
-    if (lbl_1_bss_968 != -1) {
-        if (fzgx_obj_lbl_1_bss_962 != -1) {
-            lbl_1_data_7C0[fzgx_obj_lbl_1_bss_962].f28();
-            lbl_1_bss_966 = fzgx_obj_lbl_1_bss_962;
+    if (next_scene != -1) {
+        if (overlay != -1) {
+            lbl_1_data_7C0[overlay].exit();
+            prev_overlay = overlay;
         }
-        if (fzgx_obj_lbl_1_bss_960 != -1) {
-            lbl_1_data_460[fzgx_obj_lbl_1_bss_960].f2c();
-            lbl_1_bss_964 = fzgx_obj_lbl_1_bss_960;
+        if (scene != -1) {
+            lbl_1_data_460[scene].exit();
+            prev_scene = scene;
         }
-        x = lbl_1_bss_968;
-        fzgx_obj_lbl_1_bss_960 = x;
-        fzgx_obj_lbl_1_bss_962 = -1;
-        lbl_1_bss_968 = -1;
-        lbl_1_bss_96C = 0;
+        next = next_scene;
+        scene = next;
+        overlay = -1;
+        next_scene = -1;
+        keep = 0;
         fn_1_128C();
-        lbl_1_data_460[fzgx_obj_lbl_1_bss_960].f20();
-    } else if (lbl_1_bss_96A != -1) {
-        if (fzgx_obj_lbl_1_bss_962 != -1) {
-            lbl_1_data_7C0[fzgx_obj_lbl_1_bss_962].f28();
-            lbl_1_bss_966 = fzgx_obj_lbl_1_bss_962;
+        lbl_1_data_460[scene].init();
+    } else if (next_overlay != -1) {
+        if (overlay != -1) {
+            lbl_1_data_7C0[overlay].exit();
+            prev_overlay = overlay;
         }
-        x = lbl_1_bss_96A;
-        fzgx_obj_lbl_1_bss_962 = x;
-        lbl_1_bss_96A = -1;
+        next = next_overlay;
+        overlay = next;
+        next_overlay = -1;
         lbl_801A66C0 = 0;
         fn_1_12F194();
-        lbl_1_data_7C0[fzgx_obj_lbl_1_bss_962].f20();
+        lbl_1_data_7C0[overlay].init();
     }
 
-    if (fzgx_obj_lbl_1_bss_960 != -1) {
-        lbl_1_data_460[fzgx_obj_lbl_1_bss_960].f24();
+    if (scene != -1) {
+        lbl_1_data_460[scene].update();
     }
 
-    if (lbl_1_bss_968 != -1) {
-        if (fzgx_obj_lbl_1_bss_962 != -1) {
-            lbl_1_data_7C0[fzgx_obj_lbl_1_bss_962].f28();
-            lbl_1_bss_966 = fzgx_obj_lbl_1_bss_962;
+    if (next_scene != -1) {
+        if (overlay != -1) {
+            lbl_1_data_7C0[overlay].exit();
+            prev_overlay = overlay;
         }
-        if (fzgx_obj_lbl_1_bss_960 != -1) {
-            lbl_1_data_460[fzgx_obj_lbl_1_bss_960].f2c();
-            lbl_1_bss_964 = fzgx_obj_lbl_1_bss_960;
+        if (scene != -1) {
+            lbl_1_data_460[scene].exit();
+            prev_scene = scene;
         }
         fn_1_3C98();
         fn_1_3CC4();
-        fzgx_obj_lbl_1_bss_960 = -1;
-        fzgx_obj_lbl_1_bss_962 = -1;
+        scene = -1;
+        overlay = -1;
         return;
-    } else if (lbl_1_bss_96A != -1) {
-        if (fzgx_obj_lbl_1_bss_962 != -1) {
-            lbl_1_data_7C0[fzgx_obj_lbl_1_bss_962].f28();
-            lbl_1_bss_966 = fzgx_obj_lbl_1_bss_962;
+    } else if (next_overlay != -1) {
+        if (overlay != -1) {
+            lbl_1_data_7C0[overlay].exit();
+            prev_overlay = overlay;
         }
-        x = lbl_1_bss_96A;
-        fzgx_obj_lbl_1_bss_962 = x;
-        lbl_1_bss_96A = -1;
+        next = next_overlay;
+        overlay = next;
+        next_overlay = -1;
         lbl_801A66C0 = 0;
         fn_1_12F194();
-        lbl_1_data_7C0[fzgx_obj_lbl_1_bss_962].f20();
+        lbl_1_data_7C0[overlay].init();
     }
 
-    if (fzgx_obj_lbl_1_bss_962 != -1) {
-        lbl_1_data_7C0[fzgx_obj_lbl_1_bss_962].f24();
+    if (overlay != -1) {
+        lbl_1_data_7C0[overlay].update();
     }
-    if (lbl_1_bss_96C != 0) {
+    if (keep != 0) {
         fn_1_3C98();
-        lbl_1_data_460[fzgx_obj_lbl_1_bss_960].f28();
+        lbl_1_data_460[scene].suspend();
     }
 
-    if (fzgx_obj_lbl_1_bss_962 != -1 && (lbl_1_bss_96A != -1 || lbl_1_bss_968 != -1)) {
-        lbl_1_data_7C0[fzgx_obj_lbl_1_bss_962].f28();
-        x = lbl_1_bss_968;
-        lbl_1_bss_966 = fzgx_obj_lbl_1_bss_962;
-        fzgx_obj_lbl_1_bss_962 = -1;
-        if (x != -1 && fzgx_obj_lbl_1_bss_960 != -1) {
-            lbl_1_data_460[fzgx_obj_lbl_1_bss_960].f2c();
-            lbl_1_bss_964 = fzgx_obj_lbl_1_bss_960;
-            fzgx_obj_lbl_1_bss_960 = -1;
+    if (overlay != -1 && (next_overlay != -1 || next_scene != -1)) {
+        lbl_1_data_7C0[overlay].exit();
+        prev_overlay = overlay;
+        overlay = -1;
+        if (next_scene != -1 && scene != -1) {
+            lbl_1_data_460[scene].exit();
+            prev_scene = scene;
+            scene = -1;
         }
-        if (lbl_1_bss_96C == 0) {
+        if (keep == 0) {
             fn_1_3C98();
             fn_1_3CC4();
             return;
         }
     }
-    if (lbl_1_bss_96C == 0) {
+    if (keep == 0) {
         fn_1_3C98();
-        lbl_1_data_460[fzgx_obj_lbl_1_bss_960].f28();
+        lbl_1_data_460[scene].suspend();
     }
 }
 /* fzgx:end fn_1_ECC */
