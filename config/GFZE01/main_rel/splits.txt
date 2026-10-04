@@ -6569,3 +6569,6 @@ rel/main_rel/burner/fn_1_98E18.c:
 
 rel/main_rel/driver/fn_1_A8834.c:
 	.text       start:0x000A8834 end:0x000A89B0 align:4
+
+rel/main_rel/car/fn_1_8CED0.c:
+	.text       start:0x0008CED0 end:0x0008D0A4 align:4
