@@ -147,6 +147,16 @@ extern char *strcat(char *dest, const char *src);
 extern u32 fn_1_F89E4(u8 value);
 extern u32 fn_1_151BE8(s16 arg0, s16 arg1);
 
+typedef struct ArchiveEntry {
+    u8 field_0[0x4c];
+    u8 data[0x20];
+} ArchiveEntry;
+
+typedef struct lbl_1_bss_897AC_t {
+    ArchiveEntry entries[1];
+    u8 pad_6C[0x1ac8];
+} lbl_1_bss_897AC_t;
+
 /* fzgx:begin fn_1_12A2D0 */
 // Store the selected entry when it is valid; otherwise report an invalid entry.
 void fn_1_12A2D0(s32 value) {
@@ -188,21 +198,17 @@ typedef struct fn_1_12A7C4_ArchiveState {
 
 
 #pragma opt_propagation on
-typedef struct fn_1_12A7C4_lbl_1_bss_897AC_t {
-    u8 entries[1];
-    u8 pad_1[0x1b33];
-} fn_1_12A7C4_lbl_1_bss_897AC_t;
 
 /* file-scope objects of the retail TU, in retail order: MWCC addresses them off one section base */
 s32 fzgx_obj_lbl_1_bss_897A0;
 s32 lbl_1_bss_897A4;
-u32 lbl_1_bss_897A8;
-fn_1_12A7C4_lbl_1_bss_897AC_t fzgx_obj_lbl_1_bss_897AC;
+s32 lbl_1_bss_897A8;
+lbl_1_bss_897AC_t fzgx_obj_lbl_1_bss_897AC;
 u32 fzgx_obj_lbl_1_bss_8B2E0[48];
 u32 fzgx_obj_lbl_1_bss_8B3A0[83];
 
 #pragma section code_type ".fzgxpool"
-static void fzgx_bss_layout(void) {
+static void fzgx_bss_layout_12A7C4(void) {
     volatile u8 s;  /* fzgx-allow: S2 layout primer sink: MWCC emits .bss objects in first-access order */
     s = *(u8 *)&fzgx_obj_lbl_1_bss_897A0;
     s = *(u8 *)&lbl_1_bss_897A4;
@@ -213,7 +219,7 @@ static void fzgx_bss_layout(void) {
 }
 #pragma section code_type ".text"
 
-static inline u8 * fn_1_12A7C4_read_pointer(fn_1_12A7C4_lbl_1_bss_897AC_t * owner) { return owner->entries; }
+static inline u8 * fn_1_12A7C4_read_pointer(lbl_1_bss_897AC_t * owner) { return (u8 *)owner->entries; }
 s32 fn_1_12A7C4(void *arg0, void *arg1, u32 arg2) {
     u8 *entries;
     void *result;
@@ -414,11 +420,6 @@ void fn_1_12AC00(void *arg0) {
 /* fzgx:end fn_1_12AC00 */
 
 /* fzgx:begin fn_1_12AC28 */
-typedef struct ArchiveEntry {
-    u8 field_0[0x4c];
-    u8 data[0x20];
-} ArchiveEntry;
-
 typedef struct fn_1_12AC28_ArchiveState {
     s32 count;
     s32 ready;
@@ -428,10 +429,6 @@ typedef struct fn_1_12AC28_ArchiveState {
 
 static inline ArchiveEntry *fn_1_12AC28_array_read(ArchiveEntry *array) { return array; }
 #pragma opt_loop_invariants off
-typedef struct lbl_1_bss_897AC_t {
-    ArchiveEntry entries[1];
-    u8 pad_6C[0x1ac8];
-} lbl_1_bss_897AC_t;
 
 /* file-scope objects of the retail TU, in retail order: MWCC addresses them off one section base */
 s32 fzgx_obj_lbl_1_bss_897A0;
@@ -442,7 +439,7 @@ u32 fzgx_obj_lbl_1_bss_8B2E0[48];
 u32 fzgx_obj_lbl_1_bss_8B3A0[83];
 
 #pragma section code_type ".fzgxpool"
-static void fzgx_bss_layout(void) {
+static void fzgx_bss_layout_12AC28(void) {
     volatile u8 s;  /* fzgx-allow: S2 layout primer sink: MWCC emits .bss objects in first-access order */
     s = *(u8 *)&fzgx_obj_lbl_1_bss_897A0;
     s = *(u8 *)&lbl_1_bss_897A4;
@@ -898,7 +895,7 @@ s32 fn_1_12CB04(s16 arg) {
 /* fzgx:end fn_1_12CB04 */
 
 /* fzgx:begin fn_1_12CCB0 */
-static inline s16 fn_1_12C7B8(s16 arg) {
+static inline s16 fn_1_12CCB0_inline(s16 arg) {
     fn_1_12CCB0_FnEntry *table;
     s16 i;
 
@@ -933,7 +930,7 @@ static inline s16 fn_1_12C7B8(s16 arg) {
 }
 
 s16 fn_1_12CCB0(s16 arg0, s16 arg1) {
-    switch (fn_1_12C7B8(arg0)) {
+    switch (fn_1_12CCB0_inline(arg0)) {
     case 0x15:
         switch (arg1) {
         case 0:
