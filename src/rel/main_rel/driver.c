@@ -487,6 +487,113 @@ void fn_1_A8528(void *arg0, void *arg1) {
 }
 /* fzgx:end fn_1_A8528 */
 
+/* fzgx:begin fn_1_A861C noprologue */
+#include "dolphin/types.h"
+
+typedef struct FnA861CCamera {
+    u8 pad_0[0xdc];
+    f32 yaw;      /* 0xdc */
+    f32 roll;     /* 0xe0 */
+    f32 pitch;    /* 0xe4 */
+    u8 unk_e8;
+    u8 unk_e9;
+    u8 pad_ea[0x15c - 0xea];
+    u8 unk_15c[4];
+} FnA861CCamera;
+
+typedef struct FnA861CVehicle {
+    u8 pad_0[8];
+    f32 unk_8;
+    u8 pad_c[0xa4 - 0xc];
+    f32 unk_a4;
+    u8 pad_a8[0xb0 - 0xa8];
+    f32 unk_b0;
+    u8 pad_b4[0xb8 - 0xb4];
+    f32 unk_b8;
+    u8 pad_bc[0xc0 - 0xbc];
+    f32 unk_c0;
+} FnA861CVehicle;
+
+extern void lbl_8006DBAC(FnA861CCamera *);
+extern void lbl_8006DB74(void *);
+extern void mathutil_mtxA_rotate_z(s32);
+extern void mathutil_mtxA_rotate_y(s32);
+extern void mathutil_mtxA_rotate_x(s32);
+
+/* The TU's shared literal pool (lbl_1_rodata_4A28 .. +0x40) in retail order, so the
+ * function's own literals dedupe onto retail's displacements. */
+#pragma section code_type ".fzgxpool"
+__declspec(section ".fzgxpool") static void fzgx_pool_prime_a861c(void) {
+    volatile f32 s;  /* fzgx-allow: S2 pool primer sink */
+    s = 0.0f;
+    s = -0.1f;
+    s = 0.1f;
+    s = 5.0f;
+    s = 0.5f;
+    s = 50.0f;
+    s = 10.0f;
+    s = 57.2957763671875f;
+    s = -10.0f;
+    s = 0.2f;
+    s = -30.0f;
+    s = 1.8518518209457397f;
+    s = -1.8518518209457397f;
+    s = 4.166666507720947f;
+    s = 25.0f;
+    s = 30.0f;
+    s = 182.04444885253906f;
+}
+#pragma section code_type ".text"
+
+void fn_1_A861C(FnA861CCamera *cam, FnA861CVehicle *veh)
+{
+    lbl_8006DBAC(cam);
+    if (veh == NULL) {
+        cam->pitch = 0.0f;
+        cam->yaw = 0.0f;
+        cam->roll = 0.0f;
+    } else {
+        f32 rad = -veh->unk_a4 / veh->unk_b0;
+        f32 turn = 0.5f * (veh->unk_b8 / veh->unk_8);
+        f32 yaw = (f32)(50.0f * turn) + (f32)(10.0f * (57.2957763671875f * rad));
+        f32 roll = -10.0f * (turn + 57.2957763671875f * rad);
+        f32 lift;
+        f32 limit;
+        s32 locked;
+
+        lift = veh->unk_c0 / veh->unk_8;
+
+        cam->pitch += (f32)(0.2f * (f32)((f32)(-30.0f * ((lift < -1.8518518209457397f ? -(1.8518518209457397f + lift) : 0.0f) / 4.166666507720947f)) - cam->pitch));
+
+        locked = 0;
+        if (cam->unk_e9 != 0) {
+            u8 state = cam->unk_e8;
+            if (state == 0x21 || state == 0x2a || state == 0x2b) {
+                locked = 1;
+            }
+        }
+        limit = locked ? 0.0f : 25.0f;
+        if (yaw > limit) {
+            yaw = limit;
+        } else if (yaw < -limit) {
+            yaw = -limit;
+        }
+        cam->yaw += (f32)(0.2f * (yaw - cam->yaw));
+
+        if (roll > 30.0f) {
+            roll = 30.0f;
+        } else if (roll < -30.0f) {
+            roll = -30.0f;
+        }
+        cam->roll += (f32)(0.2f * (roll - cam->roll));
+    }
+    mathutil_mtxA_rotate_z((s32)(182.04444885253906f * cam->pitch));
+    mathutil_mtxA_rotate_y((s32)(182.04444885253906f * cam->yaw));
+    mathutil_mtxA_rotate_x((s32)(182.04444885253906f * cam->roll));
+    lbl_8006DB74(cam->unk_15c);
+}
+/* fzgx:end fn_1_A861C */
+
 /* fzgx:begin fn_1_A8834 noprologue */
 #include "types.h"
 

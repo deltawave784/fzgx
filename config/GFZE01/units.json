@@ -34380,6 +34380,21 @@
   },
   {
     "module": "main_rel",
+    "source": "rel/main_rel/driver/fn_1_A861C.c",
+    "symbols": [
+      "fn_1_A861C"
+    ],
+    "status": "matching",
+    "mw_version": null,
+    "extra_cflags": [],
+    "tu": "rel/main_rel/driver.c",
+    "pool": {
+      "...rodata.0": "lbl_1_rodata_4A28",
+      "@5": "lbl_1_rodata_4A28"
+    }
+  },
+  {
+    "module": "main_rel",
     "source": "rel/main_rel/driver/fn_1_A8834.c",
     "symbols": [
       "fn_1_A8834"
