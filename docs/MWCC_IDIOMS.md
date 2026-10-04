@@ -325,3 +325,7 @@ without row alignment (`retail - ours` net rows):
 - Duplicated per-block TU-layout definitions (`fzgx_obj_*`, `static fzgx_bss_layout`) and
   inline copies of a TU function must agree in type and differ in name per block before a
   TU compiles: unify the element type through a hoisted typedef (archive 897AC).
+- Every `enum` declaration (named or anonymous) consumes one compiler `@N` label number, so
+  adding enums to a header shifts the `@N` names of a unit's jump tables/literals and breaks
+  its recorded `pool` mapping in units.json (TRKDispatchMessage `@20` -> `@22`). Typedefs and
+  struct declarations do not. Keep enums out of headers included by pool-mapped units.

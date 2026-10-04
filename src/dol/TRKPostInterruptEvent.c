@@ -1,26 +1,6 @@
 #pragma peephole on
 #include "types.h"
-
-typedef int DSError;
-
-typedef enum {
-    NUBEVENT_Null = 0,
-    NUBEVENT_Shutdown = 1,
-    NUBEVENT_Request = 2,
-    NUBEVENT_Breakpoint = 3,
-    NUBEVENT_Exception = 4,
-    NUBEVENT_Support = 5,
-} NubEventType;
-
-typedef int MessageBufferID;
-
-typedef u32 NubEventID;
-
-typedef struct TRKEvent {
-    NubEventType eventType;
-    NubEventID eventID;
-    MessageBufferID msgBufID;
-} TRKEvent;
+#include "dolphin/trk.h"
 
 typedef struct Default_PPC {
     u32 GPR[32];
