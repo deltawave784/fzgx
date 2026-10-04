@@ -6563,3 +6563,6 @@ rel/main_rel/bitmap/fn_1_47E54.c:
 
 rel/main_rel/font/fn_1_48C28.c:
 	.text       start:0x00048C28 end:0x00048D80 align:4
+
+rel/main_rel/driver/fn_1_A75DC.c:
+	.text       start:0x000A75DC end:0x000A7728 align:4

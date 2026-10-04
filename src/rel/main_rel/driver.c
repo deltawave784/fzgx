@@ -49,6 +49,91 @@ extern void fn_1_A8528(void *arg0, void *arg1);
 extern u32 fn_1_A7024(f32, f32, f32, f32);
 extern u32 fn_80074918(u32, u32, u32);
 
+/* fzgx:begin fn_1_A75DC noprologue */
+#include "dolphin/types.h"
+
+/* strings of this TU's .data cluster, addressed off one base register */
+typedef struct {
+    u8 pad_0[0x18];
+    char fmt_plain[0xC];   /* 0x18 */
+    char fmt_named[0x10];  /* 0x24 */
+    char msg_begin[0x8];   /* 0x34 */
+    char msg_end[0x8];     /* 0x3C */
+} DriverStrings;
+
+extern u8 lbl_1_data_34348[];
+extern char *lbl_1_data_20D1C[0x2D];
+
+typedef struct {
+    u8 pad_0[0x8];
+    u32 unk_8;
+} DriverAsset;
+
+typedef struct {
+    u8 pad_0[0x108];
+    DriverAsset *unk_108;
+} DriverSlot;
+
+typedef struct {
+    u8 pad_0[0x328];
+    s8 unk_328;
+    u8 pad_329[0x394 - 0x329];
+    DriverSlot *unk_394[3];
+} Driver;
+
+extern void fn_80006E10(char *);
+extern s32 fn_1_12C930(s8);
+extern s32 fn_1_12CCB0(s8, s16);
+extern int sprintf(char *, const char *, ...);
+extern DriverAsset *fn_1_D3884(char *);
+extern u32 fn_80077D40(void);
+extern u32 fn_80071470(u32, u32);
+extern void fn_80008BA8(u32, u32, u32);
+extern void fn_80071718(DriverAsset *);
+
+void fn_1_A75DC(Driver *driver, s32 variant)
+{
+    DriverStrings *str = (DriverStrings *)lbl_1_data_34348;
+    DriverSlot *slot;
+    s32 i;
+    Driver *d;
+    s32 id;
+    s32 heap;
+    DriverAsset *asset;
+    u32 src;
+    u32 dst;
+    s8 index;
+    char buf[128];
+
+    fn_80006E10(str->msg_begin);
+    id = driver->unk_328;
+    d = driver;
+    for (i = 0; i < 3; i++, d = (Driver *)((u8 *)d + 4)) {
+        slot = d->unk_394[0];
+        if (slot == NULL) {
+            continue;
+        }
+        if (i == 0) {
+            index = fn_1_12C930(id);
+        } else {
+            index = fn_1_12CCB0(id, (s16)(i - 1));
+        }
+        if (index < 0) {
+            continue;
+        }
+        if (variant == 0) {
+            sprintf(buf, str->fmt_plain, lbl_1_data_20D1C[index]);
+        } else {
+            sprintf(buf, str->fmt_named, lbl_1_data_20D1C[index], variant);
+        }
+        asset = fn_1_D3884(buf);
+        fn_80008BA8(fn_80071470(slot->unk_108->unk_8, 0), fn_80071470(asset->unk_8, 0), fn_80077D40());
+        fn_80071718(asset);
+    }
+    fn_80006E10(str->msg_end);
+}
+/* fzgx:end fn_1_A75DC */
+
 /* fzgx:begin fn_1_A7728 */
 typedef struct FnA7728Resource {
     u8 pad_104[0x104];
