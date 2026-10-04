@@ -1,4 +1,5 @@
 #include "sdk_addresses.h"
+#include "dolphin/os/OSThread.h"
 
 #include "types.h"
 
@@ -7,89 +8,7 @@ typedef volatile u16 vu16;
 
 typedef unsigned int uint;
 
-typedef struct OSContext OSContext;
-
-typedef struct OSContext {
-    u32 gpr[32];
-    u32 cr;
-    u32 lr;
-    u32 ctr;
-    u32 xer;
-    f64 fpr[32];
-    u32 field_0x190;
-    u32 fpscr;
-    u32 srr0;
-    u32 srr1;
-    u16 mode;
-    u16 state;
-    u32 gqr[8];
-    f64 ps[32];
-} OSContext;
-
 typedef s16 __OSInterrupt;
-
-typedef u16 OSThreadState;
-
-typedef s32 OSPriority;
-
-typedef struct OSThread OSThread;
-
-typedef struct OSThreadQueue OSThreadQueue;
-
-typedef struct OSThreadLink OSThreadLink;
-
-typedef struct OSMutex OSMutex;
-
-typedef struct OSMutexQueue OSMutexQueue;
-
-typedef struct OSMutexLink OSMutexLink;
-
-struct OSThreadLink {
-    OSThread *next;
-    OSThread *prev;
-};
-
-struct OSThreadQueue {
-    OSThread *head;
-    OSThread *tail;
-};
-
-struct OSMutexLink {
-    OSMutex *next;
-    OSMutex *prev;
-};
-
-struct OSMutexQueue {
-    OSMutex *head;
-    OSMutex *tail;
-};
-
-struct OSThread {
-    OSContext context;
-    OSThreadState state;
-    u16 attributes;
-    s32 suspend_count;
-    OSPriority effective_priority;
-    OSPriority base_priority;
-    void *exit_value;
-    OSThreadQueue *queue;
-    OSThreadLink link;
-    OSThreadQueue join_queue;
-    OSMutex *mutex;
-    OSMutexQueue owned_mutexes;
-    OSThreadLink active_threads_link;
-    u8 *stack_base;
-    u32 *stack_end;
-    u8 *error_code;
-    void *data[2];
-};
-
-typedef struct OSMutex {
-    OSThreadQueue queue;
-    OSThread *thread;
-    s32 count;
-    OSMutexLink link;
-} OSMutex;
 
 typedef enum { VI_XFBMODE_SF = 0, VI_XFBMODE_DF } VIXFBMode;
 

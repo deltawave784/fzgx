@@ -57,11 +57,19 @@ struct OSThread {
     void *specific[2];
 };
 
+CHECK_OFFSET(OSThread, state, 0x2C8);
+CHECK_OFFSET(OSThread, queue, 0x2DC);
+CHECK_OFFSET(OSThread, queueMutex, 0x2F4);
+CHECK_OFFSET(OSThread, stackBase, 0x304);
+CHECK_SIZE(OSThread, 0x318);
+
 struct OSMutex {
     OSThreadQueue queue;
     OSThread *thread;
     s32 count;
     OSMutexLink link;
 };
+
+CHECK_SIZE(OSMutex, 0x18);
 
 #endif

@@ -2,6 +2,7 @@
 #define DOLPHIN_OS_OSCONTEXT_H
 
 #include <dolphin/types.h>
+#include "layout_check.h"
 
 typedef struct OSContext {
     u32 gpr[32];
@@ -20,6 +21,14 @@ typedef struct OSContext {
     u32 psf_pad;
     f64 psf[32];
 } OSContext;
+
+CHECK_OFFSET(OSContext, cr, 0x80);
+CHECK_OFFSET(OSContext, fpr, 0x90);
+CHECK_OFFSET(OSContext, srr0, 0x198);
+CHECK_OFFSET(OSContext, state, 0x1A2);
+CHECK_OFFSET(OSContext, gqr, 0x1A4);
+CHECK_OFFSET(OSContext, psf, 0x1C8);
+CHECK_SIZE(OSContext, 0x2C8);
 
 void OSSetCurrentContext(OSContext* context);
 

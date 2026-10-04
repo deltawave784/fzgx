@@ -1,75 +1,6 @@
 
 #include "types.h"
-
-typedef struct OSContext {
-    u32 gpr[32];
-    u32 cr;
-    u32 lr;
-    u32 ctr;
-    u32 xer;
-    f64 fpr[32];
-    f64 fpscr;
-    u32 srr0;
-    u32 srr1;
-    u16 mode;
-    u16 state;
-    u32 gqr[8];
-    u32 psf_pad;
-    f64 psf[32];
-} OSContext;
-
-typedef struct OSThread OSThread;
-
-typedef struct OSThreadQueue OSThreadQueue;
-
-typedef struct OSThreadLink OSThreadLink;
-
-typedef struct OSMutex OSMutex;
-
-typedef struct OSMutexQueue OSMutexQueue;
-
-typedef struct OSMutexLink OSMutexLink;
-
-typedef s32 OSPriority;
-
-struct OSThreadQueue {
-    OSThread *head;
-    OSThread *tail;
-};
-
-struct OSThreadLink {
-    OSThread *next;
-    OSThread *prev;
-};
-
-struct OSMutexQueue {
-    OSMutex *head;
-    OSMutex *tail;
-};
-
-struct OSMutexLink {
-    OSMutex *next;
-    OSMutex *prev;
-};
-
-struct OSThread {
-    OSContext context;
-    u16 state;
-    u16 attr;
-    s32 suspend;
-    OSPriority priority;
-    OSPriority base;
-    void *val;
-    OSThreadQueue *queue;
-    OSThreadLink link;
-    OSThreadQueue queueJoin;
-    OSMutex *mutex;
-    OSMutexQueue queueMutex;
-    OSThreadLink linkActive;
-    u8 *stackBase;
-    u32 *stackEnd;
-    s32 error;
-};
+#include "dolphin/os/OSThread.h"
 
 typedef struct DVDCommandBlock DVDCommandBlock;
 
@@ -109,13 +40,6 @@ struct DVDFileInfo {
     u32 startAddr;
     u32 length;
     DVDCallback callback;
-};
-
-struct OSMutex {
-    OSThreadQueue queue;
-    OSThread *thread;
-    int count;
-    OSMutexLink link;
 };
 
 s32 fn_800175C0(DVDFileInfo *fileInfo, void *addr, s32 length, s32 offset, s32 prio);

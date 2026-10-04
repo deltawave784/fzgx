@@ -1,5 +1,6 @@
 #pragma peephole off
 #include "types.h"
+#include "dolphin/os/OSThread.h"
 
 typedef u8 GXBool;
 
@@ -550,69 +551,6 @@ typedef enum _GXAlphaReadMode {
     GX_READ_NONE,
 } GXAlphaReadMode;
 
-typedef struct OSContext {
-    u32 gpr[32];
-    u32 cr;
-    u32 lr;
-    u32 ctr;
-    u32 xer;
-    f64 fpr[32];
-    u32 fpscr_pad;
-    u32 fpscr;
-    u32 srr0;
-    u32 srr1;
-    u16 mode;
-    u16 state;
-    u32 gqr[8];
-    f64 psf[32];
-} OSContext;
-
-typedef s32 OSPriority;
-
-struct OSThread;
-
-struct OSMutex;
-
-struct OSMutexQueue;
-
-typedef struct OSThreadQueue {
-    struct OSThread *head;
-    struct OSThread *tail;
-} OSThreadQueue;
-
-typedef struct OSThreadLink {
-    struct OSThread *next;
-    struct OSThread *prev;
-} OSThreadLink;
-
-typedef struct OSMutexQueue {
-    struct OSMutex *head;
-    struct OSMutex *tail;
-} OSMutexQueue;
-
-typedef struct OSMutexLink {
-    struct OSMutex *next;
-    struct OSMutex *prev;
-} OSMutexLink;
-
-typedef struct OSThread {
-    struct OSContext context;
-    u16 state;
-    u16 attr;
-    s32 suspend;
-    OSPriority priority;
-    OSPriority base;
-    void *val;
-    struct OSThreadQueue *queue;
-    struct OSThreadLink link;
-    struct OSThreadQueue queueJoin;
-    struct OSMutex *mutex;
-    struct OSMutexQueue queueMutex;
-    struct OSThreadLink linkActive;
-    u8 *stackBase;
-    u32 *stackEnd;
-} OSThread;
-
 typedef enum {
     VI_TVMODE_NTSC_INT = (((0) << 2) + (0)),
     VI_TVMODE_NTSC_DS = (((0) << 2) + (1)),
@@ -670,15 +608,6 @@ typedef struct _GXFogAdjTable {
 typedef GXTexRegion *(*GXTexRegionCallback)(GXTexObj *t_obj, GXTexMapID id);
 
 typedef GXTlutRegion *(*GXTlutRegionCallback)(u32 idx);
-
-typedef struct OSMutex {
-    OSThreadQueue queue;
-    OSThread *thread;
-    s32 count;
-    OSMutexLink link;
-} OSMutex;
-
-struct OSContext;
 
 struct __GXData_struct {
     u16 vNum;
