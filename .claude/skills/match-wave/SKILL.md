@@ -66,4 +66,31 @@ wait for the user when:
 Do not edit tooling, agent definitions or headers in an unattended run, and never start the
 librarian or a type-recovery pass. Commit only what the steps above commit.
 
+## Fable autonomous mode (the default for long unattended runs)
+
+Measured 2026-10-04: Fable agents matched 14 of 30 near misses (47%, 6.8 KB) that Sonnet and Opus had
+released at 98-99.9%; Sonnet/Opus waves matched about 25% of fresher functions. Use Fable batches.
+
+One batch = steps 1-5 above with these changes:
+- Pick: `uv run tools/fzgx.py route --fable --limit 8 --min-percent 98 --json` (best score first, never tried by
+  Fable, one per clone family). Dispatch each row with `subagent_type: matcher-large` and `model: fable`, prompt
+  `SYMBOL=<symbol> AGENT_ID=fable-<symbol>-<YYYYMMDD><batch letter>`; all 8 at once.
+- Close the batch: `reuse --max-size 2048`, then `fixup --min-percent 97 --apply --budget 1200 --output
+  .fzgx/fixup/<batch>`, then `verify`, then ninja/hash check, then `report`; append a line to `.fzgx/reports/waves.md`.
+- If `route --fable` returns fewer than 4 rows, lower `--min-percent` to 95, then 90. Below 90 the match rate is
+  unmeasured: stop and ask.
+
+Before EVERY batch check usage with the `mcp__ccd_session_mgmt__get_usage` tool (load it with ToolSearch):
+- weekly all-models or weekly Fable at 65% or more: STOP and push a notification (resets Monday 5pm).
+- 5-hour window at 80% or more: wait for it to reset (sleep in the background until `resetsAt`), then continue.
+- extra usage `spent` above 0: STOP and notify (the run must never spend money).
+
+Stop conditions (in addition to those under Unattended runs): hash check fails; two consecutive batches match
+nothing (agents + reuse + fixup); the same tooling error twice; a permission refusal; `git status` not clean after a
+close-out. On every stop, call PushNotification (load via ToolSearch) with one line that leads with the reason, e.g.
+`decomp stopped: hash check failed after batch 7 (fn_xxx); tree restored`. Also push once every 5 batches with the
+running total (`batch 10 done: 41 fn matched today, 31.9% code`). No other notifications.
+
+After a context compaction, re-read this skill and the last 40 lines of `.fzgx/reports/waves.md` before continuing.
+
 Never push. Never run the librarian concurrently with matchers.

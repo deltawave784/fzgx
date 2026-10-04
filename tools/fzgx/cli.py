@@ -99,6 +99,14 @@ def cmd_stuck(a, p):
 
 def cmd_route(a, p):
     from . import route
+    if a.fable:
+        rows = route.fable_plan(p, a.limit, a.min_percent)
+        if a.json:
+            print(json.dumps(rows, indent=1))
+        else:
+            for r in rows:
+                print(f"fable          {r['symbol']:<32} {r['module']:<12} {r['size']:>6} B  best {r['best']:>5.1f}%  tried {r['attempts']}")
+        return
     escalate = route.tried_by(a.escalate_from) if a.escalate_from else None
     # functions a Claude tier already attempted (agent ids `haiku-`/`sonnet-`/`opus-...`)
     skip = set().union(*(route.tried_by(t + "-") for t in ("haiku", "sonnet", "opus"))) if a.skip_tried else None
@@ -597,6 +605,8 @@ def build_parser() -> argparse.ArgumentParser:
     s.add_argument("--limit", type=int, default=8); s.add_argument("--small", type=int, default=256, help="largest size (bytes) for the sonnet tier")
     s.add_argument("--module"); s.add_argument("--tier", choices=["sonnet", "opus"]); s.add_argument("--json", action="store_true")
     s.add_argument("--escalate-from", metavar="PREFIX", help="send small functions this tier already attempted (agent-id prefix, e.g. sonnet-) to opus")
+    s.add_argument("--fable", action="store_true", help="next near misses for a Fable batch (matcher-large with model fable): best score first, never attempted by Fable, one per clone family")
+    s.add_argument("--min-percent", type=float, default=98.0, help="with --fable: lowest recorded best score to consider")
     s.add_argument("--skip-tried", action="store_true", help="leave out functions any Claude tier (sonnet-/opus-, formerly haiku-) already attempted")
     s = sub.add_parser("seed-corpus", help="rescore the best archived bodies in state/repairs and save them as local seeds"); s.set_defaults(fn=cmd_seed_corpus)
     s.add_argument("--per-symbol", type=int, default=2); s.add_argument("--dry-run", action="store_true"); s.add_argument("--json", action="store_true")
