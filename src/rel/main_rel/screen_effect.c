@@ -290,7 +290,6 @@ void fn_1_72768(u32 arg0, u32 arg1) {
 /* fzgx:end fn_1_72768 */
 
 /* fzgx:begin fn_1_72848 */
-
 void fn_1_72848(void) {
     u8 i;
 
@@ -352,7 +351,6 @@ void fn_1_728B0(void) {
 /* fzgx:end fn_1_728B0 */
 
 /* fzgx:begin fn_1_72980 */
-
 void fn_1_72980(Fn_1_72980_Obj *arg0) {
     int index;
     u8 *entry;
@@ -1356,8 +1354,6 @@ void fn_1_729F8(struct fn_1_729F8_Arg0 *arg0)
 /* fzgx:end fn_1_729F8 */
 
 /* fzgx:begin fn_1_761B8 */
-
-
 void fn_1_761B8(struct fn_1_761B8_Arg0 *arg0, u32 arg1) {
     u32 v0;
     f32 v1;
@@ -1371,7 +1367,6 @@ void fn_1_761B8(struct fn_1_761B8_Arg0 *arg0, u32 arg1) {
 /* fzgx:end fn_1_761B8 */
 
 /* fzgx:begin fn_1_76218 */
-
 struct Sig_fn_1_76448_fn_1_76448_Arg0 {
     u8 pad_0[0xA0];
     u32 unk_A0[1];
@@ -1514,7 +1509,6 @@ void fn_1_76218(s32 arg0) {
 /* fzgx:end fn_1_76218 */
 
 /* fzgx:begin fn_1_76448 */
-
 void fn_1_76448(struct fn_1_76448_Arg0 *arg0, u32 arg1) {
     u32 v0;
     s32 v1;
@@ -1531,7 +1525,6 @@ void fn_1_76448(struct fn_1_76448_Arg0 *arg0, u32 arg1) {
 /* fzgx:end fn_1_76448 */
 
 /* fzgx:begin fn_1_76650 */
-
 void fn_1_76650(fn_1_76650_ScreenEffect *effect) {
     s32 value;
 
@@ -1676,7 +1669,6 @@ void fn_1_76BD0(u8 index, u8 value) {
 /* fzgx:end fn_1_76BD0 */
 
 /* fzgx:begin fn_1_76BF8 */
-
 typedef struct {
     u8 pad_0[0xDC];
     s32 unk_DC;
@@ -1698,7 +1690,6 @@ void fn_1_76BF8(void) {
 /* fzgx:end fn_1_76BF8 */
 
 /* fzgx:begin fn_1_76C60 */
-
 // Clears the active screen-effect state and resets its rendering parameters.
 void fn_1_76C60(arg)
 FnScreenEffect *arg;
@@ -1801,8 +1792,6 @@ void fn_1_772E0(void) {
 /* fzgx:end fn_1_772E0 */
 
 /* fzgx:begin fn_1_77B80 */
-
-
 void fn_1_77B80(u32 arg0) {
     struct { u32 value; } value0;
 
@@ -1815,7 +1804,6 @@ void fn_1_77B80(u32 arg0) {
 /* fzgx:end fn_1_77B80 */
 
 /* fzgx:begin fn_1_7879C */
-
 u8 fn_1_7879C(u32 arg0) {
     s32 v0;
 
@@ -1986,7 +1974,6 @@ void fn_1_79810(void) {
 /* fzgx:end fn_1_79810 */
 
 /* fzgx:begin fn_1_79C88 */
-
 typedef struct {
     u32 type;
     u32 unk04;

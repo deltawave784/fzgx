@@ -203,7 +203,6 @@ void fn_1_F588C(f32 *out, f32 *a, f32 *b, f32 t) {
 /* fzgx:end fn_1_F588C */
 
 /* fzgx:begin fn_1_F5A2C */
-
 void fn_1_F5A2C(Vec4 *dst, const Vec4 *a, const Vec4 *b, f32 t) {
     f32 delta;
     f32 product;
@@ -286,7 +285,6 @@ void fn_1_F5B84(void) {
 /* fzgx:end fn_1_F5B84 */
 
 /* fzgx:begin fn_1_F5B88 */
-
 typedef struct {
     f32 x, y, z;
 } Vec3f;
@@ -449,7 +447,6 @@ void fn_1_F7308(void) {
 /* fzgx:end fn_1_F7308 */
 
 /* fzgx:begin fn_1_F7338 */
-
 void fn_1_F7338(int arg0, void *arg1, void *arg2) {
     s8 value;
 
@@ -578,7 +575,6 @@ s16 fn_1_F7B80(void) {
 /* fzgx:end fn_1_F7B80 */
 
 /* fzgx:begin fn_1_F7C48 */
-
 s16 fn_1_F7C48(s16 arg) {
     u64 mask = (u64)1 << arg;
     u64 bits = ((u64)lbl_1_bss_7F0C0.unk_48 << 32) | lbl_1_bss_7F0C0.unk_4C;
@@ -594,7 +590,6 @@ s16 fn_1_F7C48(s16 arg) {
 /* fzgx:end fn_1_F7C48 */
 
 /* fzgx:begin fn_1_F7CAC */
-
 void fn_1_F7CAC(s16 value) {
     u64 mask = (u64)1 << value;
 
@@ -728,7 +723,6 @@ s32 fn_1_F809C(s32 value) {
 /* fzgx:end fn_1_F809C */
 
 /* fzgx:begin fn_1_F8158 */
-
 s32 fn_1_F8158(s32 value) {
     u64 mask;
     if ((s16)value > 63) {
@@ -753,7 +747,6 @@ void fn_1_F82E0(void) {
 /* fzgx:end fn_1_F82E0 */
 
 /* fzgx:begin fn_1_F8334 */
-
 int fn_1_F8334(s16 value) {
     u64 mask;
 
@@ -777,7 +770,6 @@ void fn_1_F8580(void) {
 /* fzgx:end fn_1_F8580 */
 
 /* fzgx:begin fn_1_F8918 */
-
 void fn_1_F8918(u8 *src, u8 *dst) {
     u8 *hdr = src + 0x60;
     u32 seed = *(u32 *)hdr ^ 0xcae87fb5;
@@ -1023,8 +1015,6 @@ void fn_1_F8D5C(u32 arg0, u32 arg1) {
 
 /* fzgx:begin fn_1_F8DC4 noprologue */
 #include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/spline.h"
 
 extern struct Table lbl_1_rodata_6FF0;
 extern void fn_80083DB0(void *arg0, u32 arg1);
@@ -1348,7 +1338,6 @@ u32 fn_1_FA004(void) {
 /* fzgx:end fn_1_FA004 */
 
 /* fzgx:begin fn_1_FA01C */
-
 struct fn_1_FA01C_lbl_1_bss_84420 {
     u32 unk_0;
 };
@@ -1390,7 +1379,6 @@ u32 fn_1_FA088(void) {
 /* fzgx:end fn_1_FA088 */
 
 /* fzgx:begin fn_1_FA0A0 */
-
 struct fn_1_FA0A0_lbl_1_bss_84420 {
     u32 unk_0;
 };
@@ -1486,7 +1474,6 @@ u8 fn_1_FA4C0(void) {
 /* fzgx:end fn_1_FA4C0 */
 
 /* fzgx:begin fn_1_FA5A8 */
-
 void fn_1_FA5A8(s16 index, u8 bit) {
     u32 base;
     u16 value;
@@ -1503,7 +1490,6 @@ void fn_1_FA5A8(s16 index, u8 bit) {
 /* fzgx:end fn_1_FA5A8 */
 
 /* fzgx:begin fn_1_FA5E0 */
-
 u32 fn_1_FA5E0(u32 arg0, u32 arg1) {
     s16 v0;
     u32 v1;
@@ -1551,7 +1537,6 @@ void fn_1_FA650(void) {
 /* fzgx:end fn_1_FA650 */
 
 /* fzgx:begin fn_1_FA67C */
-
 void fn_1_FA67C(s32 index) {
     u8 *base;
 
@@ -1607,7 +1592,6 @@ void fn_1_FA6C0(void) {
 /* fzgx:end fn_1_FA6C0 */
 
 /* fzgx:begin fn_1_FA75C */
-
 // Reset spline state while preserving the active spline entry.
 void fn_1_FA75C(void) {
     s32 spline_index;
@@ -1684,7 +1668,6 @@ Obj_1_bss_84428 *fn_1_FB0A8(void) {
 /* fzgx:end fn_1_FB0A8 */
 
 /* fzgx:begin fn_1_FB0B4 */
-
 void fn_1_FB0B4(Obj_1_bss_84428 *data) {
     u32 first[3];
     u32 second[3];

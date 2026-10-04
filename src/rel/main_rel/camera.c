@@ -115,9 +115,6 @@ extern f32 lbl_1_rodata_49C;
 extern f32 lbl_1_bss_10C0[6];
 
 /* fzgx:begin fn_1_6400 */
-
-
-
 typedef struct {
     u32 unk_0;
     u32 unk_4;
@@ -508,7 +505,6 @@ s16 camera_get_output(void) {
 /* fzgx:end camera_get_output */
 
 /* fzgx:begin fn_1_6B48 */
-
 typedef struct {
     u32 unk_0;
     u8 pad_4[0x44];
@@ -1005,7 +1001,6 @@ s32 camera_get_values(f32 *value0, f32 *value1) {
 /* fzgx:end camera_get_values */
 
 /* fzgx:begin fn_1_8708 */
-
 s32 fn_1_8708(s32 mode, f32 *value0, f32 *value1) {
     Obj_1_bss_F68_Target **pp;
     Obj_1_bss_F68_Target *obj;
@@ -1050,7 +1045,6 @@ void live_camera_set_shake(s32 value, const f32 *delta) {
 /* fzgx:end live_camera_set_shake */
 
 /* fzgx:begin fn_1_8840 */
-
 void fn_1_8840(void) {
     LiveCamera *state;
     f32 value;
@@ -1116,7 +1110,6 @@ void game_camera_set_shake(s16 index, s16 mode, s32 value, const f32 *delta) {
 /* fzgx:end game_camera_set_shake */
 
 /* fzgx:begin fn_1_8A0C */
-
 void fn_1_8A0C(s16 index) {
     GameCameraEntry *entry;
     f32 value;
@@ -1309,8 +1302,6 @@ block_7:
 /* fzgx:end fn_1_AA54 */
 
 /* fzgx:begin camera_get_position_delta */
-
-
 // Computes the displacement between two camera positions.
 void camera_get_position_delta(u32 index, Vec3 *out) {
     u8 idx = (u8)index;
@@ -1326,8 +1317,6 @@ void camera_get_position_delta(u32 index, Vec3 *out) {
 /* fzgx:end camera_get_position_delta */
 
 /* fzgx:begin camera_reset_transition */
-
-
 // Resets the camera transition state before refreshing the camera.
 void camera_reset_transition(camera_reset_transition_Camera *camera) {
     camera->unk_A4 = 0;
@@ -1336,8 +1325,6 @@ void camera_reset_transition(camera_reset_transition_Camera *camera) {
 /* fzgx:end camera_reset_transition */
 
 /* fzgx:begin camera_update_transition */
-
-
 // Advances the camera's transition state and updates its active view.
 void camera_update_transition(camera_update_transition_Camera *camera) {
     if (camera->unk_78 == 0) {
@@ -1357,8 +1344,6 @@ void camera_update_transition(camera_update_transition_Camera *camera) {
 /* fzgx:end camera_update_transition */
 
 /* fzgx:begin camera_get_target_orientation */
-
-
 typedef struct camera_get_target_orientation_CameraObject {
     u8 pad_49c[0x49c];
     Transform *unk_49C;
@@ -1486,7 +1471,6 @@ void camera_report_position(void) {
 /* fzgx:end camera_report_position */
 
 /* fzgx:begin fn_1_C268 */
-
 #pragma opt_common_subs off
 #pragma opt_strength_reduction off
 void fn_1_C268(s32 arg) {
@@ -1631,7 +1615,6 @@ u8* camera_get_state_storage(void) {
 /* fzgx:end camera_get_state_storage */
 
 /* fzgx:begin camera_get_extended_state_storage */
-
 // Returns the storage reserved for the camera's extended state.
 u8* camera_get_extended_state_storage(void) {
     return lbl_1_bss_108C;

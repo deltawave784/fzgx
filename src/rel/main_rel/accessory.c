@@ -157,7 +157,6 @@ fn_1_108870_AccessoryEntry *fn_1_108870(void) {
 /* fzgx:end fn_1_108870 */
 
 /* fzgx:begin fn_1_1088B8 */
-
 typedef struct {
     u8 pad_0[0xc];
     u32 unk_c;
@@ -177,9 +176,6 @@ void fn_1_1088B8(void *arg) {
 /* fzgx:end fn_1_1088B8 */
 
 /* fzgx:begin fn_1_108920 */
-
-
-
 struct fn_1_108920_Copy12 { u32 a[3]; };
 
 
@@ -445,7 +441,6 @@ void fn_1_10B7D8(void *accessory) {
 /* fzgx:end fn_1_10B7D8 */
 
 /* fzgx:begin fn_1_10C7B4 */
-
 typedef struct {
     u8 pad_0[0x150];
     struct {
@@ -695,7 +690,6 @@ void fn_1_1166EC(Fn1166ECObject *obj) {
 /* fzgx:end fn_1_1166EC */
 
 /* fzgx:begin fn_1_125CE8 */
-
 typedef struct {
     u8 active;
     u8 pad_1[0x0f];
@@ -771,7 +765,6 @@ void fn_1_125CE8(fn_1_125CE8_AccessoryData *data) {
 /* fzgx:end fn_1_125CE8 */
 
 /* fzgx:begin fn_1_127FB8 */
-
 typedef struct {
     u8 active;
     u8 _pad01[0x3f];
@@ -811,7 +804,6 @@ void fn_1_127FB8(Fn127FB8Object *obj) {
 /* fzgx:end fn_1_127FB8 */
 
 /* fzgx:begin fn_1_128884 */
-
 void fn_1_128884(void *arg0, void *arg1, s32 type) {
     u8 tmp1[0x44];
     u8 tmp2[0x0c];
@@ -844,7 +836,6 @@ void fn_1_128884(void *arg0, void *arg1, s32 type) {
 /* fzgx:end fn_1_128884 */
 
 /* fzgx:begin fn_1_1289BC */
-
 typedef struct Point1024C4 {
     u8 pad[0x10];
     f32 v[3];
@@ -988,7 +979,6 @@ void fn_1_128E8C(u32 unused, FnData *data) {
 /* fzgx:end fn_1_128E8C */
 
 /* fzgx:begin fn_1_128F10 */
-
 typedef struct {
     u32 unk_0;
     u32 unk_4;

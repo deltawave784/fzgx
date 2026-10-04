@@ -104,10 +104,6 @@ u8 *fn_1_FB870(void) {
 /* fzgx:end fn_1_FB870 */
 
 /* fzgx:begin fn_1_FB87C */
-
-
-
-
 typedef struct {
     u8 unk_0[4];
     u8 unk_4;
@@ -251,7 +247,6 @@ void fn_1_FB9DC(int index) {
 /* fzgx:end fn_1_FB9DC */
 
 /* fzgx:begin fn_1_FBEA8 */
-
 void fn_1_FBEA8(void) {
     Obj_1_bss_84454 *base;
     Obj_1_bss_84454 *entry;
@@ -381,7 +376,6 @@ void fn_1_FC4E0(void *arg0, int arg1) {
 /* fzgx:end fn_1_FC4E0 */
 
 /* fzgx:begin fn_1_FC51C */
-
 #pragma opt_common_subs off
 void fn_1_FC51C(void) {
     fn_1_FC60C();
@@ -407,8 +401,6 @@ void fn_1_FC51C(void) {
 /* fzgx:end fn_1_FC51C */
 
 /* fzgx:begin fn_1_FC60C */
-
-
 #pragma opt_common_subs off
 void fn_1_FC60C(void) {
     u8 *tex;
@@ -451,7 +443,6 @@ void fn_1_FCF74(void) {
 /* fzgx:end fn_1_FCF74 */
 
 /* fzgx:begin fn_1_FD1D4 */
-
 typedef struct {
     void *value;
 } fn_1_FD1D4_Fn1FD27CArg0;
@@ -575,7 +566,6 @@ void fn_1_FE5E0(void) {
 /* fzgx:end fn_1_FE5E0 */
 
 /* fzgx:begin fn_1_FE5E4 */
-
 typedef struct {
     u8 pad_0[0x1B1E4];
     u16 unk_1B1E4;
@@ -649,7 +639,6 @@ void fn_1_FEC7C(void *object) {
 /* fzgx:end fn_1_FEC7C */
 
 /* fzgx:begin fn_1_FED34 */
-
 #pragma section code_type ".fzgxpool"
 __declspec(section ".fzgxpool") static void fzgx_pool_prime1(void) {
     volatile f32 s; volatile f64 d;  /* fzgx-allow: S2 pool primer sinks */

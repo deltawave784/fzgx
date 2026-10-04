@@ -588,7 +588,6 @@ void fn_1_36ADC(void) {
 /* fzgx:end fn_1_36ADC */
 
 /* fzgx:begin fn_1_384E8 pool */
-
 typedef struct {
     u8 pad_0[6];
     u8 unk_6;

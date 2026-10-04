@@ -255,8 +255,10 @@ void fn_1_AB598(fn_1_AB598_ArgStruct *arg) {
 
 /* fzgx:begin fn_1_AB5CC noprologue */
 #include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/memcard.h"
+#include "dolphin/card.h"
+#include "dolphin/card/CARDPriv.h"
+#include "dolphin/dvd.h"
+#include "font.h"
 
 typedef struct {
     u8 pad[0x2];
@@ -289,8 +291,10 @@ void fn_1_AB5CC(fn_1_AB5CC_ArgStruct *arg) {
 
 /* fzgx:begin fn_1_AB61C noprologue */
 #include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/memcard.h"
+#include "dolphin/card.h"
+#include "dolphin/card/CARDPriv.h"
+#include "dolphin/dvd.h"
+#include "font.h"
 
 typedef struct {
     u8 pad[1];
@@ -377,8 +381,13 @@ void fn_1_AB64C(fn_1_AB64C_MemcardArg *arg) {
 
 /* fzgx:begin fn_1_AB75C noprologue */
 #include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/memcard.h"
+#include "dolphin/card.h"
+#include "dolphin/card/CARDPriv.h"
+#include "dolphin/dvd.h"
+#include "font.h"
+
+extern u32 fn_8002C0A0(u32 arg0);
+
 extern void CARDFormatAsync(u8 byte, int value);
 extern const f32 lbl_1_rodata_4CA8;
 
@@ -446,8 +455,10 @@ void fn_1_AB7C4(fn_1_AB7C4_ArgStruct *arg) {
 
 /* fzgx:begin fn_1_AB870 noprologue */
 #include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/memcard.h"
+#include "dolphin/card.h"
+#include "dolphin/card/CARDPriv.h"
+#include "dolphin/dvd.h"
+#include "font.h"
 
 typedef struct {
     u8 pad[0x2];
@@ -524,8 +535,10 @@ void fn_1_AB8D8(fn_1_AB8D8_ArgStruct *arg) {
 
 /* fzgx:begin fn_1_AB93C noprologue */
 #include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/memcard.h"
+#include "dolphin/card.h"
+#include "dolphin/card/CARDPriv.h"
+#include "dolphin/dvd.h"
+#include "font.h"
 
 typedef struct {
     u8 pad[0x2];
@@ -556,8 +569,10 @@ void fn_1_AB93C(fn_1_AB93C_ArgStruct *arg) {
 
 /* fzgx:begin fn_1_AB98C noprologue */
 #include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/memcard.h"
+#include "dolphin/card.h"
+#include "dolphin/card/CARDPriv.h"
+#include "dolphin/dvd.h"
+#include "font.h"
 
 typedef struct {
     u8 pad[0x2];
@@ -610,8 +625,10 @@ void fn_1_AB99C(fn_1_AB99C_ArgStruct *arg) {
 
 /* fzgx:begin fn_1_ABA14 noprologue */
 #include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/memcard.h"
+#include "dolphin/card.h"
+#include "dolphin/card/CARDPriv.h"
+#include "dolphin/dvd.h"
+#include "font.h"
 
 typedef struct {
     u8 pad[0x2];
@@ -664,8 +681,10 @@ void fn_1_ABA24(fn_1_ABA24_ArgStruct *arg) {
 
 /* fzgx:begin fn_1_ABA9C noprologue */
 #include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/memcard.h"
+#include "dolphin/card.h"
+#include "dolphin/card/CARDPriv.h"
+#include "dolphin/dvd.h"
+#include "font.h"
 
 typedef struct {
     u8 pad[0x2];
@@ -718,8 +737,10 @@ void fn_1_ABAAC(fn_1_ABAAC_ArgStruct *arg) {
 
 /* fzgx:begin fn_1_ABB24 noprologue */
 #include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/memcard.h"
+#include "dolphin/card.h"
+#include "dolphin/card/CARDPriv.h"
+#include "dolphin/dvd.h"
+#include "font.h"
 
 typedef struct {
     u8 pad_0x0[0x1];
@@ -854,8 +875,10 @@ void fn_1_ABC5C(fn_1_ABC5C_ArgStruct *arg) {
 
 /* fzgx:begin fn_1_ABC98 noprologue */
 #include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/memcard.h"
+#include "dolphin/card.h"
+#include "dolphin/card/CARDPriv.h"
+#include "dolphin/dvd.h"
+#include "font.h"
 
 typedef struct {
     u8 pad[0x2];
@@ -912,8 +935,10 @@ void fn_1_ABCE8(fn_1_ABCE8_ArgStruct *arg) {
 
 /* fzgx:begin fn_1_ABD58 noprologue */
 #include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/memcard.h"
+#include "dolphin/card.h"
+#include "dolphin/card/CARDPriv.h"
+#include "dolphin/dvd.h"
+#include "font.h"
 
 typedef struct {
     u8 pad[0x2];
@@ -937,8 +962,10 @@ void fn_1_ABD58(fn_1_ABD58_ArgStruct *arg) {
 
 /* fzgx:begin fn_1_ABDA8 noprologue */
 #include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/memcard.h"
+#include "dolphin/card.h"
+#include "dolphin/card/CARDPriv.h"
+#include "dolphin/dvd.h"
+#include "font.h"
 
 typedef struct {
     u8 pad[0x2];
@@ -1323,8 +1350,10 @@ void fn_1_AC294(Fn1AC294Target *target) {
 
 /* fzgx:begin fn_1_AC2D8 noprologue */
 #include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/memcard.h"
+#include "dolphin/card.h"
+#include "dolphin/card/CARDPriv.h"
+#include "dolphin/dvd.h"
+#include "font.h"
 
 typedef struct Fn1AC2D8State {
     u8 pad_00[0x2];
@@ -1378,8 +1407,10 @@ void fn_1_AC328(Fn1AC328Target *target) {
 
 /* fzgx:begin fn_1_AC38C noprologue */
 #include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/memcard.h"
+#include "dolphin/card.h"
+#include "dolphin/card/CARDPriv.h"
+#include "dolphin/dvd.h"
+#include "font.h"
 
 typedef struct Fn1AC38Data {
     u8 pad_00[0x2];
@@ -1436,8 +1467,10 @@ void fn_1_AC3DC(Fn1AC3DCTarget *target) {
 
 /* fzgx:begin fn_1_AC464 noprologue */
 #include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/memcard.h"
+#include "dolphin/card.h"
+#include "dolphin/card/CARDPriv.h"
+#include "dolphin/dvd.h"
+#include "font.h"
 
 typedef struct Fn1AC464State {
     u16 pad_00;
@@ -1461,8 +1494,10 @@ void fn_1_AC464(Fn1AC464Target *target) {
 
 /* fzgx:begin fn_1_AC4B4 noprologue */
 #include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/memcard.h"
+#include "dolphin/card.h"
+#include "dolphin/card/CARDPriv.h"
+#include "dolphin/dvd.h"
+#include "font.h"
 
 typedef struct Fn1AC4B4Target {
     u8 pad_00[0x24];
@@ -1591,8 +1626,10 @@ void fn_1_AC53C(void *arg0) {
 
 /* fzgx:begin fn_1_AC6A4 noprologue */
 #include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/memcard.h"
+#include "dolphin/card.h"
+#include "dolphin/card/CARDPriv.h"
+#include "dolphin/dvd.h"
+#include "font.h"
 
 // fn_1_AC6A4: empty in retail (single blr).
 void fn_1_AC6A4(void) {
@@ -1601,8 +1638,10 @@ void fn_1_AC6A4(void) {
 
 /* fzgx:begin fn_1_AC6A8 noprologue */
 #include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/memcard.h"
+#include "dolphin/card.h"
+#include "dolphin/card/CARDPriv.h"
+#include "dolphin/dvd.h"
+#include "font.h"
 
 typedef struct {
     u8 unk0[8];
@@ -1621,8 +1660,10 @@ void fn_1_AC6A8(Fn1AC6A8Data *data) {
 
 /* fzgx:begin fn_1_AC6C8 noprologue */
 #include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/memcard.h"
+#include "dolphin/card.h"
+#include "dolphin/card/CARDPriv.h"
+#include "dolphin/dvd.h"
+#include "font.h"
 
 // fn_1_AC6C8: empty in retail (single blr).
 void fn_1_AC6C8(void) {
@@ -1631,8 +1672,10 @@ void fn_1_AC6C8(void) {
 
 /* fzgx:begin fn_1_AC6CC noprologue */
 #include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/memcard.h"
+#include "dolphin/card.h"
+#include "dolphin/card/CARDPriv.h"
+#include "dolphin/dvd.h"
+#include "font.h"
 
 typedef struct fn_1_AC6CC_MemCardState {
     u8 padding[0x2a];
@@ -1646,8 +1689,10 @@ void fn_1_AC6CC(fn_1_AC6CC_MemCardState *self) {
 
 /* fzgx:begin fn_1_AC6DC noprologue */
 #include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/memcard.h"
+#include "dolphin/card.h"
+#include "dolphin/card/CARDPriv.h"
+#include "dolphin/dvd.h"
+#include "font.h"
 
 // fn_1_AC6DC: empty in retail (single blr).
 void fn_1_AC6DC(void) {
@@ -1656,8 +1701,10 @@ void fn_1_AC6DC(void) {
 
 /* fzgx:begin fn_1_AC6E0 noprologue */
 #include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/memcard.h"
+#include "dolphin/card.h"
+#include "dolphin/card/CARDPriv.h"
+#include "dolphin/dvd.h"
+#include "font.h"
 
 // fn_1_AC6E0: Write struct fields at offsets 0x8, 0xa, and 0x2a (with OR).
 void fn_1_AC6E0(void *r3) {
@@ -1669,8 +1716,10 @@ void fn_1_AC6E0(void *r3) {
 
 /* fzgx:begin fn_1_AC700 noprologue */
 #include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/memcard.h"
+#include "dolphin/card.h"
+#include "dolphin/card/CARDPriv.h"
+#include "dolphin/dvd.h"
+#include "font.h"
 
 // fn_1_AC700: empty in retail (single blr).
 void fn_1_AC700(void) {
@@ -1695,8 +1744,10 @@ void fn_1_AC704(void *r3) {
 
 /* fzgx:begin fn_1_AC74C noprologue */
 #include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/memcard.h"
+#include "dolphin/card.h"
+#include "dolphin/card/CARDPriv.h"
+#include "dolphin/dvd.h"
+#include "font.h"
 
 void fn_1_AC74C(void *r3) {
     s32 result;
@@ -1787,8 +1838,10 @@ void fn_1_AC79C(void *arg0) {
 
 /* fzgx:begin fn_1_AC904 noprologue */
 #include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/memcard.h"
+#include "dolphin/card.h"
+#include "dolphin/card/CARDPriv.h"
+#include "dolphin/dvd.h"
+#include "font.h"
 
 // fn_1_AC904: empty in retail (single blr).
 void fn_1_AC904(void) {
@@ -1797,8 +1850,10 @@ void fn_1_AC904(void) {
 
 /* fzgx:begin fn_1_AC908 noprologue */
 #include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/memcard.h"
+#include "dolphin/card.h"
+#include "dolphin/card/CARDPriv.h"
+#include "dolphin/dvd.h"
+#include "font.h"
 
 typedef struct {
     u8 unk0[8];
@@ -1817,8 +1872,10 @@ void fn_1_AC908(Fn1AC908State *state) {
 
 /* fzgx:begin fn_1_AC928 noprologue */
 #include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/memcard.h"
+#include "dolphin/card.h"
+#include "dolphin/card/CARDPriv.h"
+#include "dolphin/dvd.h"
+#include "font.h"
 
 // fn_1_AC928: empty in retail (single blr).
 void fn_1_AC928(void) {
@@ -1827,8 +1884,11 @@ void fn_1_AC928(void) {
 
 /* fzgx:begin fn_1_AC92C noprologue */
 #include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/memcard.h"
+#include "dolphin/card.h"
+#include "dolphin/card/CARDPriv.h"
+#include "dolphin/dvd.h"
+#include "font.h"
+
 extern const f32 lbl_1_rodata_4CA8;
 
 struct fn_1_AC92C_Arg0 {
@@ -1857,8 +1917,11 @@ u32 fn_1_AC92C(struct fn_1_AC92C_Arg0 *arg0) {
 
 /* fzgx:begin fn_1_AC960 noprologue */
 #include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/memcard.h"
+#include "dolphin/card.h"
+#include "dolphin/card/CARDPriv.h"
+#include "dolphin/dvd.h"
+#include "font.h"
+
 extern const f64 lbl_1_rodata_4CC8;
 
 struct MemcardData {
@@ -1895,8 +1958,10 @@ void fn_1_AC960(struct MemcardObject *obj) {
 
 /* fzgx:begin fn_1_ACA00 noprologue */
 #include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/memcard.h"
+#include "dolphin/card.h"
+#include "dolphin/card/CARDPriv.h"
+#include "dolphin/dvd.h"
+#include "font.h"
 
 typedef struct Fn1Aca00Target {
     u8 _pad00[0x24];
@@ -2080,8 +2145,10 @@ void fn_1_ACA78(void *arg0) {
 
 /* fzgx:begin fn_1_ACD00 noprologue */
 #include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/memcard.h"
+#include "dolphin/card.h"
+#include "dolphin/card/CARDPriv.h"
+#include "dolphin/dvd.h"
+#include "font.h"
 
 // fn_1_ACD00: empty in retail (single blr).
 void fn_1_ACD00(void) {
@@ -2189,8 +2256,10 @@ void fn_1_ACD04(Fn1Acd04Obj *obj) {
 
 /* fzgx:begin fn_1_ACE7C noprologue */
 #include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/memcard.h"
+#include "dolphin/card.h"
+#include "dolphin/card/CARDPriv.h"
+#include "dolphin/dvd.h"
+#include "font.h"
 
 // fn_1_ACE7C: empty in retail (single blr).
 void fn_1_ACE7C(void) {
@@ -2218,8 +2287,10 @@ void fn_1_ACE80(fn_1_ACE80_SomeObject* obj) {
 
 /* fzgx:begin fn_1_ACEBC noprologue */
 #include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/memcard.h"
+#include "dolphin/card.h"
+#include "dolphin/card/CARDPriv.h"
+#include "dolphin/dvd.h"
+#include "font.h"
 
 typedef struct {
     u8 field_0;
@@ -2239,8 +2310,10 @@ void fn_1_ACEBC(fn_1_ACEBC_SomeObject* obj) {
 
 /* fzgx:begin fn_1_ACF0C noprologue */
 #include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/memcard.h"
+#include "dolphin/card.h"
+#include "dolphin/card/CARDPriv.h"
+#include "dolphin/dvd.h"
+#include "font.h"
 
 typedef struct {
     u8 pad_0[0x8];
@@ -2259,8 +2332,10 @@ void fn_1_ACF0C(Object* obj) {
 
 /* fzgx:begin fn_1_ACF2C noprologue */
 #include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/memcard.h"
+#include "dolphin/card.h"
+#include "dolphin/card/CARDPriv.h"
+#include "dolphin/dvd.h"
+#include "font.h"
 
 // fn_1_ACF2C: empty in retail (single blr).
 void fn_1_ACF2C(void) {
@@ -2359,8 +2434,10 @@ void fn_1_ACF30(MemcardObject* obj) {
 
 /* fzgx:begin fn_1_AD098 noprologue */
 #include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/memcard.h"
+#include "dolphin/card.h"
+#include "dolphin/card/CARDPriv.h"
+#include "dolphin/dvd.h"
+#include "font.h"
 
 // fn_1_AD098: empty in retail (single blr).
 void fn_1_AD098(void) {
@@ -2369,8 +2446,10 @@ void fn_1_AD098(void) {
 
 /* fzgx:begin fn_1_AD09C noprologue */
 #include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/memcard.h"
+#include "dolphin/card.h"
+#include "dolphin/card/CARDPriv.h"
+#include "dolphin/dvd.h"
+#include "font.h"
 
 // fn_1_AD09C: empty in retail (single blr).
 void fn_1_AD09C(void) {
@@ -2408,10 +2487,10 @@ void fn_1_AD0A0(void *arg0) {
 
 /* fzgx:begin fn_1_AD140 noprologue */
 #include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/memcard.h"
-
-#include "rel/main_rel/globals.h"
+#include "dolphin/card.h"
+#include "dolphin/card/CARDPriv.h"
+#include "dolphin/dvd.h"
+#include "font.h"
 
 extern int fn_1_B7FDC(u8 value);
 
@@ -2423,8 +2502,10 @@ int fn_1_AD140(const u8 *status_byte) {
 
 /* fzgx:begin fn_1_AD164 noprologue */
 #include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/memcard.h"
+#include "dolphin/card.h"
+#include "dolphin/card/CARDPriv.h"
+#include "dolphin/dvd.h"
+#include "font.h"
 
 // fn_1_AD164: empty in retail (single blr).
 void fn_1_AD164(void) {
@@ -2433,8 +2514,11 @@ void fn_1_AD164(void) {
 
 /* fzgx:begin fn_1_AD168 noprologue */
 #include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/memcard.h"
+#include "dolphin/card.h"
+#include "dolphin/card/CARDPriv.h"
+#include "dolphin/dvd.h"
+#include "font.h"
+
 extern void fn_80030754(u8 value, void *data, int size, int mode);
 
 typedef struct Fn1AD168Obj {
@@ -5543,8 +5627,10 @@ void fn_1_AECCC(MemcardObj *arg0, u32 unused) {
 
 /* fzgx:begin fn_1_B03A8 noprologue */
 #include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/memcard.h"
+#include "dolphin/card.h"
+#include "dolphin/card/CARDPriv.h"
+#include "dolphin/dvd.h"
+#include "font.h"
 
 void fn_1_B03A8(void *arg0, void *arg1) {
     void *child = *(void **)((u8 *)arg1 + 0x24);
@@ -6365,8 +6451,10 @@ void fn_1_B03CC(B03CC_State *arg0) {
 
 /* fzgx:begin fn_1_B1710 noprologue */
 #include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/memcard.h"
+#include "dolphin/card.h"
+#include "dolphin/card/CARDPriv.h"
+#include "dolphin/dvd.h"
+#include "font.h"
 
 void fn_1_B1710(int unused, void *ptr) {
     *(u8 *)((u8 *)ptr + 3) = 0x3;
@@ -6375,8 +6463,10 @@ void fn_1_B1710(int unused, void *ptr) {
 
 /* fzgx:begin fn_1_B2770 noprologue */
 #include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/memcard.h"
+#include "dolphin/card.h"
+#include "dolphin/card/CARDPriv.h"
+#include "dolphin/dvd.h"
+#include "font.h"
 
 // fn_1_B2770: main_rel .text:0x000B2770 size 0xC
 // Store byte 0x3 at offset 3 of the pointer argument
@@ -7184,8 +7274,10 @@ rec = record_address((u8 *)fzgx_live->unk_DC, off);
 
 /* fzgx:begin fn_1_B38F4 noprologue */
 #include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/memcard.h"
+#include "dolphin/card.h"
+#include "dolphin/card/CARDPriv.h"
+#include "dolphin/dvd.h"
+#include "font.h"
 
 void fn_1_B38F4(int unused, void *ptr) {
     *(u8 *)((u8 *)ptr + 3) = 0x3;
@@ -7513,8 +7605,10 @@ void fn_1_B3900(u8 *arg0) {
 
 /* fzgx:begin fn_1_B40B4 noprologue */
 #include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/memcard.h"
+#include "dolphin/card.h"
+#include "dolphin/card/CARDPriv.h"
+#include "dolphin/dvd.h"
+#include "font.h"
 
 void fn_1_B40B4(int unused, void *ptr) {
     *(u8 *)((u8 *)ptr + 3) = 0x3;
@@ -7523,6 +7617,10 @@ void fn_1_B40B4(int unused, void *ptr) {
 
 /* fzgx:begin fn_1_B5258 noprologue */
 #include "types.h"
+#include "dolphin/card.h"
+#include "dolphin/card/CARDPriv.h"
+#include "dolphin/dvd.h"
+#include "font.h"
 
 extern void fn_80083DB0(char *destination, const char *source);
 extern char *fn_80083970(char *buffer, const char *source);
@@ -7557,8 +7655,10 @@ void fn_1_B5258(char *destination, void *unused, const char *source, const char 
 
 /* fzgx:begin fn_1_B5F00 noprologue */
 #include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/memcard.h"
+#include "dolphin/card.h"
+#include "dolphin/card/CARDPriv.h"
+#include "dolphin/dvd.h"
+#include "font.h"
 
 typedef struct {
     u8 pad0[0x54];
@@ -7619,6 +7719,10 @@ u32 fn_1_B7C5C(void) {
 
 /* fzgx:begin fn_1_B7C6C noprologue */
 #include "types.h"
+#include "dolphin/card.h"
+#include "dolphin/card/CARDPriv.h"
+#include "dolphin/dvd.h"
+#include "font.h"
 
 extern s8 lbl_1_bss_716C8[320];
 extern u8 lbl_1_bss_718B1;
@@ -7642,8 +7746,11 @@ s32 fn_1_B7C6C(u32 arg0) {
 
 /* fzgx:begin fn_1_B7CD4 noprologue */
 #include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/memcard.h"
+#include "dolphin/card.h"
+#include "dolphin/card/CARDPriv.h"
+#include "dolphin/dvd.h"
+#include "font.h"
+
 extern u8 lbl_1_bss_718B8;
 
 u8 fn_1_B7CD4(void) {
@@ -7725,8 +7832,11 @@ int fn_1_B7EC4(int index) {
 
 /* fzgx:begin fn_1_B7EF8 noprologue */
 #include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/memcard.h"
+#include "dolphin/card.h"
+#include "dolphin/card/CARDPriv.h"
+#include "dolphin/dvd.h"
+#include "font.h"
+
 extern u8 lbl_1_bss_718B9[7];
 
 // fn_1_B7EF8: Load and return first byte from lbl_1_bss_718B9
@@ -7828,8 +7938,11 @@ u32 fn_1_B7FC8(void) {
 
 /* fzgx:begin fn_1_B7FDC noprologue */
 #include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/memcard.h"
+#include "dolphin/card.h"
+#include "dolphin/card/CARDPriv.h"
+#include "dolphin/dvd.h"
+#include "font.h"
+
 extern int fn_8002A744(void);
 extern void fn_8002A74C(u16 value);
 
@@ -7990,8 +8103,11 @@ u32 fn_1_B8170(s32 card) {
 
 /* fzgx:begin fn_1_B9BE0 noprologue */
 #include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/memcard.h"
+#include "dolphin/card.h"
+#include "dolphin/card/CARDPriv.h"
+#include "dolphin/dvd.h"
+#include "font.h"
+
 extern void fn_1_B9C38(s32 index);
 
 void fn_1_B9BE0(void) {
@@ -8002,8 +8118,11 @@ void fn_1_B9BE0(void) {
 
 /* fzgx:begin fn_1_B9C0C noprologue */
 #include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/memcard.h"
+#include "dolphin/card.h"
+#include "dolphin/card/CARDPriv.h"
+#include "dolphin/dvd.h"
+#include "font.h"
+
 extern void fn_1_B9C38(s32 index);
 
 void fn_1_B9C0C(void) {
@@ -8143,10 +8262,10 @@ void fn_1_BC29C(void) {
 
 /* fzgx:begin fn_1_BF520 noprologue */
 #include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/memcard.h"
-
-#include "types.h"
+#include "dolphin/card.h"
+#include "dolphin/card/CARDPriv.h"
+#include "dolphin/dvd.h"
+#include "font.h"
 
 struct fn_1_BF520_Arg4 {
     u32 unk_0;
@@ -8179,6 +8298,9 @@ void fn_1_BF520(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u32 *arg4) {
 
 /* fzgx:begin fn_1_BF600 noprologue */
 #include "types.h"
+#include "dolphin/card.h"
+#include "dolphin/card/CARDPriv.h"
+#include "dolphin/dvd.h"
 #include "font.h"
 
 struct fn_1_BF600_Copy88 { u32 words[22]; };
@@ -8899,8 +9021,10 @@ void fn_1_BFCF8(void *arg0, void *arg1, void *arg2, s32 arg3, s32 arg4, f32 arg5
 
 /* fzgx:begin fn_1_C023C noprologue */
 #include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/memcard.h"
+#include "dolphin/card.h"
+#include "dolphin/card/CARDPriv.h"
+#include "dolphin/dvd.h"
+#include "font.h"
 
 #pragma section code_type ".fzgxpool"
 static const u32 fzgx_pool_table1[114] = {0x665F7A65, 0x726F5F64, 0x65627567, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x7379735F, 0x652E6269, 0x6E000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000350, 0x00000004, 0xFFFFFFFF, 0xFFFFFFFF, 0x665F7A65, 0x726F0000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000001, 0x7379735F, 0x652E6269, 0x6E000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000B4F, 0x000059E0, 0xFFFFFFFF, 0xFFFFFFFF, 0x667A6700, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000002, 0x67686F5F, 0x652E6269, 0x6E000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000153, 0x00000000, 0xFFFFFFFF, 0xFFFFFFFF, 0x667A6300, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000003, 0x6761725F, 0x652E6269, 0x6E000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000154, 0x00020700, 0xFFFFFFFF, 0xFFFFFFFF, 0x667A6500, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000004, 0x656D625F, 0x652E6269, 0x6E000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000152, 0x00000000, 0xFFFFFFFF, 0xFFFFFFFF, 0x667A7200, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000005, 0x7265705F, 0x652E6269, 0x6E000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000451, 0x00000000, 0xFFFFFFFF, 0xFFFFFFFF};  /* fzgx-allow: A1 retail pool bytes */
@@ -9162,8 +9286,11 @@ void fn_1_C023C(s32 a, s32 b, s32 c, s32 d, s32 e, s32 f, s32 g, f32 value) {
 
 /* fzgx:begin fn_1_C0374 noprologue */
 #include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/memcard.h"
+#include "dolphin/card.h"
+#include "dolphin/card/CARDPriv.h"
+#include "dolphin/dvd.h"
+#include "font.h"
+
 extern void fn_1_49410(void);
 extern void fn_1_49590(f32);
 extern void fn_1_495B0(u32);
@@ -9501,8 +9628,11 @@ void fn_1_C0510(Fn1C0510Obj *obj) {
 
 /* fzgx:begin fn_1_C132C noprologue */
 #include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/memcard.h"
+#include "dolphin/card.h"
+#include "dolphin/card/CARDPriv.h"
+#include "dolphin/dvd.h"
+#include "font.h"
+
 extern void fn_80008BEC(void *dst, s32 value, s32 size);
 extern void fn_1_AA6D8(s32 arg0, u32 arg1, void *arg2);
 
@@ -9523,8 +9653,10 @@ void fn_1_C132C(Fn1C132CObject *object, u8 *data) {
 
 /* fzgx:begin fn_1_C17CC noprologue */
 #include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/memcard.h"
+#include "dolphin/card.h"
+#include "dolphin/card/CARDPriv.h"
+#include "dolphin/dvd.h"
+#include "font.h"
 
 // fn_1_C17CC: empty in retail (single blr).
 void fn_1_C17CC(void) {
@@ -9533,8 +9665,10 @@ void fn_1_C17CC(void) {
 
 /* fzgx:begin fn_1_C23CC noprologue */
 #include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/memcard.h"
+#include "dolphin/card.h"
+#include "dolphin/card/CARDPriv.h"
+#include "dolphin/dvd.h"
+#include "font.h"
 
 extern void fn_80008BA8(void *arg0, void *arg1, u32 arg2);
 

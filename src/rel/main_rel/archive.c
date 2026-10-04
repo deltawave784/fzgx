@@ -148,7 +148,6 @@ extern u32 fn_1_F89E4(u8 value);
 extern u32 fn_1_151BE8(s16 arg0, s16 arg1);
 
 /* fzgx:begin fn_1_12A2D0 */
-
 // Store the selected entry when it is valid; otherwise report an invalid entry.
 void fn_1_12A2D0(s32 value) {
     Obj_1_bss_897AC *entry;
@@ -180,7 +179,6 @@ s32 fn_1_12A6D8(void *arg0) {
 /* fzgx:end fn_1_12A6D8 */
 
 /* fzgx:begin fn_1_12A7C4 */
-
 typedef struct fn_1_12A7C4_ArchiveState {
     s32 count;
     s32 loaded;
@@ -316,7 +314,6 @@ s32 fn_1_12A8A4(u32 arg0, void *arg1) {
 /* fzgx:end fn_1_12A8A4 */
 
 /* fzgx:begin fn_1_12A9BC */
-
 typedef struct fn_1_12A9BC_ArchiveState {
     s32 count;
     s32 loaded;
@@ -699,8 +696,6 @@ void fn_1_12B3F8(void *arg0, void *arg1, void *arg2, u32 arg3, u32 arg4, s32 *ar
 /* fzgx:end fn_1_12B3F8 */
 
 /* fzgx:begin fn_1_12B4EC */
-
-
 void fn_1_12B4EC(s16 arg0, s16 arg1) {
     struct Blk *p;
     s16 i;
@@ -784,7 +779,6 @@ s32 fn_1_12C060(fn_1_12C060_FnData *arg) {
 /* fzgx:end fn_1_12C060 */
 
 /* fzgx:begin fn_1_12C0EC */
-
 void fn_1_12C0EC(fn_1_12C0EC_FnData *arg) {
     arg->unk18 = 0;
     arg->unk14 = 0;
@@ -863,8 +857,6 @@ s16 fn_1_12C710(int arg) {
 /* fzgx:end fn_1_12C710 */
 
 /* fzgx:begin fn_1_12C7B8 */
-
-
 s16 fn_1_12C7B8(s16 arg) {
     fn_1_12C7B8_FnEntry *table;
     s16 i;
@@ -901,8 +893,6 @@ s16 fn_1_12C7B8(s16 arg) {
 /* fzgx:end fn_1_12C7B8 */
 
 /* fzgx:begin fn_1_12CB04 */
-
-
 static inline s16 fn_1_12CB04_inline(s16 arg) {
     fn_1_12CB04_FnEntry *table;
     s16 i;
@@ -950,9 +940,6 @@ s32 fn_1_12CB04(s16 arg) {
 /* fzgx:end fn_1_12CB04 */
 
 /* fzgx:begin fn_1_12CCB0 */
-
-
-
 static inline s16 fn_1_12C7B8(s16 arg) {
     fn_1_12CCB0_FnEntry *table;
     s16 i;
@@ -1084,9 +1071,6 @@ u8 fn_1_12E424(void *arg0, u8 *arg1) {
 /* fzgx:end fn_1_12E424 */
 
 /* fzgx:begin fn_1_12ECA8 */
-
-
-
 #pragma opt_common_subs off
 static inline s16 fn_1_12ECA8_lookup(s16 arg) {
     fn_1_12ECA8_FnEntry *table;
@@ -1178,7 +1162,6 @@ void fn_1_12ECA8(s16 arg0, s16 arg1, void *arg2, void *arg3, void *arg4) {
 /* fzgx:end fn_1_12ECA8 */
 
 /* fzgx:begin fn_1_12EF24 */
-
 s16 fn_1_12EF24(s16 row, s16 column) {
     struct Table table = lbl_1_rodata_8230;
     return *(s16 *)((u8 *)table.values + row * 12 + column * 2);
@@ -1186,9 +1169,6 @@ s16 fn_1_12EF24(s16 row, s16 column) {
 /* fzgx:end fn_1_12EF24 */
 
 /* fzgx:begin fn_1_12F028 */
-
-
-
 s16 fn_1_12F028(s16 value) {
     EntryTable table;
     s16 count;
@@ -1347,8 +1327,6 @@ void fn_1_12F308(void) {
 /* fzgx:end fn_1_12F308 */
 
 /* fzgx:begin fn_1_12F30C */
-
-
 // Resets the active archive entry before advancing archive processing.
 void fn_1_12F30C(void *arg0, Fn1_12F30CState *state) {
     if (state->value != -1) {

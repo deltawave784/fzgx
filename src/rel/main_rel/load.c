@@ -32,7 +32,6 @@ extern char *strcat(char *dest, const char *src);
 extern void fn_1_48004(s32 index, s32 image);
 
 /* fzgx:begin fn_1_45730 */
-
 typedef struct {
     u32 flags;
     s32 unk_4;
@@ -445,7 +444,6 @@ u32 fn_1_46C60(void) {
 /* fzgx:end fn_1_46C60 */
 
 /* fzgx:begin fn_1_46C70 */
-
 s32 fn_1_46C70(void) {
     s32 value;
     s32 i;
@@ -469,7 +467,6 @@ s32 fn_1_46C70(void) {
 /* fzgx:end fn_1_46C70 */
 
 /* fzgx:begin fn_1_46DC4 */
-
 s32 fn_1_46DC4(s32 value) {
     u8 *entry;
     s32 count;

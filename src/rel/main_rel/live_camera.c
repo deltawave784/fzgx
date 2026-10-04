@@ -325,7 +325,6 @@ void fn_1_DA6C(DA6CArg *arg0) {
 /* fzgx:end fn_1_DA6C */
 
 /* fzgx:begin fn_1_DE14 */
-
 typedef struct {
     u8 unk_0;
     u8 unk_1;
@@ -1029,7 +1028,6 @@ void fn_1_101D0(Fn_1_101D0_State *self) {
 /* fzgx:end fn_1_101D0 */
 
 /* fzgx:begin fn_1_10268 */
-
 typedef struct {
     f32 unk_0;
     f32 unk_4;
@@ -1103,7 +1101,6 @@ void fn_1_10268(Camera_1_10268 *arg) {
 /* fzgx:end fn_1_10268 */
 
 /* fzgx:begin fn_1_11ABC */
-
 typedef struct {
     Vec3 v;              /* 0x00 */
     u8 pad_C[0x14];
@@ -1179,8 +1176,6 @@ void fn_1_11ABC(fn_1_11ABC_LiveCamera *camera) {
 /* fzgx:end fn_1_11ABC */
 
 /* fzgx:begin fn_1_12620 */
-
-
 // Prints the live-camera status text for the current camera event.
 #pragma opt_common_subs off
 void fn_1_12620(s32 arg0) {

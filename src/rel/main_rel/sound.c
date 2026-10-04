@@ -496,7 +496,6 @@ void fn_1_A0C68(void) {
 /* fzgx:end fn_1_A0C68 */
 
 /* fzgx:begin fn_1_A116C */
-
 void fn_1_A116C(void) {
     switch ((*(s16 *)&lbl_1_bss_960)) {
     case 2:
@@ -631,7 +630,6 @@ void fn_1_A2E5C(s32 arg0, s32 arg1) {
 /* fzgx:end fn_1_A2E5C */
 
 /* fzgx:begin fn_1_A358C */
-
 static inline u8 fn_1_A358C_array_read(u8 *array, s32 index) { return array[index]; }
 #pragma opt_loop_invariants off
 void fn_1_A358C(u32 arg0) {
@@ -669,7 +667,6 @@ void fn_1_A358C(u32 arg0) {
 /* fzgx:end fn_1_A358C */
 
 /* fzgx:begin fn_1_A3C78 */
-
 void fn_1_A3C78(s32 arg0, s32 arg1) {
     u8 *base;
     u8 *entry;
@@ -699,7 +696,6 @@ void fn_1_A3C78(s32 arg0, s32 arg1) {
 /* fzgx:end fn_1_A3C78 */
 
 /* fzgx:begin fn_1_A4BC8 */
-
 typedef struct {
     u8 pad[0x10C];
     s32 field_10C;
@@ -770,7 +766,6 @@ void fn_1_A4C9C(s32 index, u8 value) {
 /* fzgx:end fn_1_A4C9C */
 
 /* fzgx:begin fn_1_A4DF4 */
-
 void fn_1_A4DF4(void) {
     u32 v0;
     u32 v1;
@@ -877,8 +872,6 @@ void fn_1_A50C8(s32 index) {
 /* fzgx:end fn_1_A50C8 */
 
 /* fzgx:begin fn_1_A514C */
-
-
 void fn_1_A514C(s32 index) {
     u32 offset;
     u32 value;
@@ -948,7 +941,6 @@ void fn_1_A5330(u8 value, s16 index) {
 /* fzgx:end fn_1_A5330 */
 
 /* fzgx:begin fn_1_A5344 */
-
 #pragma opt_dead_assignments off
 void fn_1_A5344(u8 value, s16 index) {
     u8 *table;
