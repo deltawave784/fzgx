@@ -8,3 +8,4 @@ time_utc,git_head,matched_code_pct,matched_code,total_code,matched_functions,tot
 2026-10-05T16:19:11Z,e7c09e74,32.2414,946944,2937044,5294,7312,32.0998,fallback batch 23
 2026-10-05T16:50:30Z,ae657212,32.2414,946944,2937044,5294,7312,32.0998,fallback batch 24
 2026-10-05T17:18:42Z,71e7f542,32.2859,948252,2937044,5297,7312,32.1323,"after oracle tooling (extra-function rule, pool binding)"
+2026-10-05T17:51:27Z,e2a802f8,32.2859,948252,2937044,5297,7312,32.1323,fallback batch 25
