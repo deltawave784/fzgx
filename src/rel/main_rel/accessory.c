@@ -1006,6 +1006,186 @@ void fn_1_128F10(void) {
 }
 /* fzgx:end fn_1_128F10 */
 
+/* fzgx:begin fn_1_12999C noprologue */
+#include "types.h"
+
+typedef struct {
+    f32 x;
+    f32 y;
+    f32 z;
+} Vec3_12999C;
+
+typedef struct {
+    u32 flags;          /* 0x0 */
+    u8 pad_4[0x148];
+    u8 body[0x329];     /* 0x14c */
+    s8 slot;            /* 0x475 */
+    u8 pad_476[0x26];
+    u8 *info;           /* 0x49c */
+} Entry_12999C;
+
+typedef struct {
+    u8 pad_0[0x8];
+    u32 *items;         /* 0x8, 8-byte entries */
+} Table_12999C;
+
+typedef struct {
+    u8 pad_0[0x9];
+    u8 count;           /* 0x9 */
+    u8 pad_A[0x14A6];
+} Info_12999C;
+
+typedef struct {
+    u32 words[6];
+} Tmp_12999C;
+
+/* literal pool of the TU */
+typedef struct {
+    f32 zero;           /* 0x0 */
+    u8 pad_4[0xC];
+    f32 one;            /* 0x10 */
+    u8 pad_14[0x64];
+    u32 tbl3[3];        /* 0x78 */
+    u32 tbl4[4];        /* 0x84 */
+    u8 str[4];          /* 0x94 */
+} Pool_12999C;
+
+extern Pool_12999C lbl_1_rodata_8068;
+extern s16 lbl_1_bss_960;
+extern s8 lbl_1_bss_9C[8];
+extern u8 lbl_1_bss_89780;
+extern Table_12999C *lbl_1_bss_38458;
+extern u8 lbl_1_bss_7CA58[];
+extern s32 lbl_801A66B4;
+extern u32 lbl_1_data_405EC;
+
+extern s16 fn_1_3F0C8(void);
+extern s32 fn_1_F2F34(void);
+extern void fn_1_3EF14(Info_12999C *);
+extern f32 fn_1_A71AC(void);
+extern s32 fn_1_40B20(void);
+extern Entry_12999C *fn_1_86254(int);
+extern u32 fn_1_5910(void);
+extern s8 fn_1_12A24C(s8);
+extern u32 fn_1_862A8(u32, Vec3_12999C *);
+extern int fn_1_D66BC(u8, Tmp_12999C *);
+extern void fn_1_129D9C(void *, Vec3_12999C *, void *, f32, void *, u8, u8, u8);
+extern s32 fn_1_F1D60(void);
+extern int fn_1_4C10(void);
+extern u8 *fn_1_F1C54(u32);
+extern u32 fn_1_EB0B0(void);
+extern u8 *fn_80083970(u8 *, void *);
+
+void fn_1_12999C(void) {
+    u32 mask;
+    Entry_12999C *e;
+    s32 count;
+    Pool_12999C *pool = &lbl_1_rodata_8068;
+    s32 i;
+    u8 *info;
+    s32 flag;
+    s32 slot;
+    u8 last;
+    u32 j;
+    u8 *name;
+    Info_12999C buf;
+    Tmp_12999C tmp;
+    u32 tbl3[3];
+    u32 tbl4[4];
+    Vec3_12999C pos;
+    Vec3_12999C v1;
+    Vec3_12999C v2;
+    f32 scale;
+
+    tbl3[0] = pool->tbl3[0];
+    tbl3[1] = pool->tbl3[1];
+    tbl3[2] = pool->tbl3[2];
+    tbl4[0] = pool->tbl4[0];
+    tbl4[1] = pool->tbl4[1];
+    tbl4[2] = pool->tbl4[2];
+    tbl4[3] = pool->tbl4[3];
+    flag = 1;
+    if (lbl_1_bss_960 != 2 && lbl_1_bss_960 != 9) {
+        return;
+    }
+    switch (fn_1_3F0C8()) {
+    case 41:
+        break;
+    default:
+        switch (fn_1_3F0C8()) {
+        case 40:
+            break;
+        default:
+            return;
+        }
+        break;
+    }
+    if (fn_1_F2F34() != 0) {
+        return;
+    }
+    fn_1_3EF14(&buf);
+    scale = fn_1_A71AC();
+    count = fn_1_40B20();
+    if (lbl_1_bss_960 == 9) {
+        flag = lbl_1_bss_9C[7];
+    }
+    mask = 0x08000880;
+    for (i = 0; i < buf.count; i++) {
+        e = fn_1_86254(i);
+        if (e->flags & mask) {
+            continue;
+        }
+        info = e->info;
+        if (e->slot != -1) {
+            if ((u32)e->slot == fn_1_5910()) {
+                continue;
+            }
+        }
+        slot = fn_1_12A24C((s8)i);
+        last = (count - i) == 0;
+        if (flag == 0 || info[0x115] >= 3) {
+            if (slot == -1 && last == 0) {
+                continue;
+            }
+        }
+        if (e->flags & 0x10000) {
+            continue;
+        }
+        fn_1_862A8(i, &pos);
+        if (slot != -1) {
+            if (lbl_1_bss_89780 != 0 && (u8)fn_1_D66BC((u8)slot, &tmp)) {
+                fn_1_129D9C(e->body, &pos, &tmp, scale, NULL, 0, last, 0);
+            } else {
+                fn_1_129D9C(e->body, &pos, NULL, scale, (void *)lbl_1_bss_38458->items[tbl4[slot] * 2], 0, last, 0);
+            }
+        } else if (flag != 0 && info[0x115] < 3) {
+            fn_1_129D9C(e->body, &pos, NULL, scale, (void *)lbl_1_bss_38458->items[tbl3[info[0x115]] * 2], 0, last, 0);
+        } else if (last != 0) {
+            fn_1_129D9C(e->body, &pos, NULL, scale, NULL, 0, last, 0);
+        }
+    }
+    if (fn_1_F1D60() != 0 && lbl_1_bss_960 == 9 && lbl_1_bss_9C[6] == -2) {
+        v1.x = pool->zero;
+        v1.y = pool->one;
+        v1.z = pool->zero;
+        fn_1_129D9C(lbl_1_bss_7CA58, &v1, NULL, scale, NULL, 1, 1, 0);
+    } else if (fn_1_F1D60() != 0) {
+        v2.x = pool->zero;
+        v2.y = pool->one;
+        v2.z = pool->zero;
+        if (fn_1_4C10() == 0) {
+            for (j = 0; j < fn_1_EB0B0(); j++) {
+                name = fn_1_F1C54(j);
+                if (lbl_801A66B4 != 5 && fn_80083970(name, &lbl_1_data_405EC) != NULL) {
+                    name = pool->str;
+                }
+                fn_1_129D9C(&lbl_1_bss_7CA58[j * 0x30], &v2, name, scale, NULL, 1, 0, 0);
+            }
+        }
+    }
+}
+/* fzgx:end fn_1_12999C */
+
 /* fzgx:begin fn_1_129D9C */
 struct fn_1_129D9C_vec {
     f32 unk_0;
