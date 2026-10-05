@@ -5444,3 +5444,6 @@ dol/fn_8005BFB4.c:
 
 dol/fn_800529B0.c:
 	.text       start:0x800529B0 end:0x80052B10 align:4
+
+dol/fn_80052B10.c:
+	.text       start:0x80052B10 end:0x80052C70 align:4
