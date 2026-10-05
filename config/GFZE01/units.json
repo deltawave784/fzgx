@@ -27102,16 +27102,7 @@
     "status": "matching",
     "mw_version": "GC/1.3.2",
     "extra_cflags": [],
-    "tu": "rel/main_rel/archive.c",
-    "pool": {
-      "...bss.0": "lbl_1_bss_897A0",
-      "fzgx_obj_lbl_1_bss_897A0": "lbl_1_bss_897A0",
-      "lbl_1_bss_897A4": "lbl_1_bss_897A4",
-      "lbl_1_bss_897A8": "lbl_1_bss_897A8",
-      "fzgx_obj_lbl_1_bss_897AC": "lbl_1_bss_897AC",
-      "fzgx_obj_lbl_1_bss_8B2E0": "lbl_1_bss_8B2E0",
-      "fzgx_obj_lbl_1_bss_8B3A0": "lbl_1_bss_8B3A0"
-    }
+    "tu": "rel/main_rel/archive.c"
   },
   {
     "module": "main_rel",

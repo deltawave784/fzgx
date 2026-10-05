@@ -420,78 +420,67 @@ void fn_1_12AC00(void *arg0) {
 /* fzgx:end fn_1_12AC00 */
 
 /* fzgx:begin fn_1_12AC28 */
-typedef struct fn_1_12AC28_ArchiveState {
+typedef struct Fn1_12AC28State {
     s32 count;
-    s32 ready;
-    s32 fallback;
-    ArchiveEntry entries[1];
-} fn_1_12AC28_ArchiveState;
+    s32 loaded;
+    s32 owned;
+    u8 entries[1];
+} Fn1_12AC28State;
 
-static inline ArchiveEntry *fn_1_12AC28_array_read(ArchiveEntry *array) { return array; }
-#pragma opt_loop_invariants off
+extern void OSPanic(char *arg0, s32 arg1, ...);
+extern s32 fn_8006A480(void *arg0, void *arg1, void *arg2);
+extern s32 fn_8006A998(void *arg0);
+extern u32 fn_8006A9AC(void *arg0);
+extern void fn_80008BA8(u32 arg0, u32 arg1, u32 arg2);
+extern void *lbl_801A6410;
+extern u32 fn_1_4630();
+extern void *fn_1_D38A4();
+extern void *fn_1_D3884();
 
-/* file-scope objects of the retail TU, in retail order: MWCC addresses them off one section base */
-s32 fzgx_obj_lbl_1_bss_897A0;
-s32 lbl_1_bss_897A4;
-s32 lbl_1_bss_897A8;
-lbl_1_bss_897AC_t fzgx_obj_lbl_1_bss_897AC;
-u32 fzgx_obj_lbl_1_bss_8B2E0[48];
-u32 fzgx_obj_lbl_1_bss_8B3A0[83];
-
-#pragma section code_type ".fzgxpool"
-static void fzgx_bss_layout_12AC28(void) {
-    volatile u8 s;  /* fzgx-allow: S2 layout primer sink: MWCC emits .bss objects in first-access order */
-    s = *(u8 *)&fzgx_obj_lbl_1_bss_897A0;
-    s = *(u8 *)&lbl_1_bss_897A4;
-    s = *(u8 *)&lbl_1_bss_897A8;
-    s = *(u8 *)&fzgx_obj_lbl_1_bss_897AC;
-    s = *(u8 *)&fzgx_obj_lbl_1_bss_8B2E0;
-    s = *(u8 *)&fzgx_obj_lbl_1_bss_8B3A0;
-}
-#pragma section code_type ".text"
-
+#pragma opt_propagation off
 void *fn_1_12AC28(void *arg0, void **arg1, void **arg2) {
+    Fn1_12AC28State *state = (Fn1_12AC28State *)&lbl_1_bss_897A0;
+    void *result;
     void *ret;
-    void *lookup;
-    void *archive;
-    u8 info1[12];
-    u8 info2[12];
+    u8 *entries;
+    s32 count;
+    u8 work[12];
+    u8 work2[12];
 
-    
-    if (lbl_1_bss_897A4 != 0) {
-        if (fn_8006A480(fn_1_12AC28_array_read(fzgx_obj_lbl_1_bss_897AC.entries)[fzgx_obj_lbl_1_bss_897A0].data, arg0, info1) != 0) {
-            lookup = (void *)fn_8006A998(info1);
+    if (state->loaded != 0) {
+        count = state->count;
+        entries = state->entries;
+        if (fn_8006A480(entries + count * 0x6c + 0x4c, arg0, work) != 0) {
+            result = (void *)fn_8006A998(work);
         } else {
-            lookup = 0;
+            result = 0;
         }
-        archive = lookup;
-        if (lookup != 0) {
+        ret = result;
+        if (result != 0) {
             if (arg1 != 0 && arg2 != 0) {
-                if (fn_8006A480(fn_1_12AC28_array_read(fzgx_obj_lbl_1_bss_897AC.entries)[fzgx_obj_lbl_1_bss_897A0].data, arg0, info2) == 0) {
-                    OSPanic( (char *)(u8 *)(lbl_1_data_40608), 0x1be, lbl_1_data_4076C);
+                u8 *entries2 = state->entries;
+                s32 count2 = state->count;
+                if (fn_8006A480(entries2 + count2 * 0x6c + 0x4c, arg0, work2) == 0) {
+                    OSPanic((char *)lbl_1_data_40608, 0x1BE, lbl_1_data_4076C);
                 }
-                *arg2 = (void *)fn_8006A9AC(info2);
+                *arg2 = (void *)fn_8006A9AC(work2);
                 if (*arg2 != 0) {
-                    *arg1 = (void *)fn_1_4630(lbl_801A6410, *arg2,
-                        lbl_1_data_40608, 0x1fc);
-                    fn_80008BA8( (u32)(void *)(*arg1), (u32)(void *)(lookup), (u32)(void *)(*arg2));
-                    archive = *arg1;
+                    *arg1 = (void *)fn_1_4630(*(u32 *)&lbl_801A6410, *arg2, lbl_1_data_40608, 0x1FC);
+                    fn_80008BA8((u32)*arg1, (u32)result, (u32)*arg2);
+                    ret = *arg1;
                 }
-                ret = fn_1_D38A4(archive, 0);
-            } else {
-                ret = fn_1_D38A4(lookup, 0);
+                return fn_1_D38A4(ret, 0);
             }
-        } else if (lbl_1_bss_897A8 != 0) {
-            ret = fn_1_D3884(arg0);
-        } else {
-            ret = 0;
+            return fn_1_D38A4(result, 0);
         }
-    } else {
-        ret = fn_1_D3884(arg0);
+        if (state->owned != 0) {
+            return fn_1_D3884(arg0);
+        }
+        return 0;
     }
-    return ret;
+    return fn_1_D3884(arg0);
 }
-#pragma opt_loop_invariants reset
+#pragma opt_propagation reset
 /* fzgx:end fn_1_12AC28 */
 
 /* fzgx:begin fn_1_12ADA0 */
