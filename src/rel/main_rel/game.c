@@ -1643,6 +1643,124 @@ update_state:
 }
 /* fzgx:end fn_1_40710 */
 
+/* fzgx:begin fn_1_408E8 noprologue */
+#include "types.h"
+#include "font.h"
+
+typedef struct Fn408E8Obj {
+    u8 type;         /* 0x00 */
+    u8 pad_1[2];
+    u8 flags;        /* 0x03 */
+    u32 unk_4;
+    f32 fade;        /* 0x08 */
+    f32 z;           /* 0x0C */
+    f32 x;           /* 0x10 */
+    f32 y;           /* 0x14 */
+    f32 width;       /* 0x18 */
+    f32 height;      /* 0x1C */
+    void *data;      /* 0x20 */
+} Fn408E8Obj;
+
+struct fn_1_408E8_lbl_1_rodata_BD8 {
+    u8 pad_0[0x4];
+    f32 unk_4;
+    u8 pad_8[0x4];
+    f32 unk_C;
+    u8 pad_10[0x2C];
+    f32 unk_3C;
+    u8 pad_40[0x4];
+    f32 unk_44;
+    u8 pad_48[0x174];
+    f32 unk_1BC;
+    u8 pad_1C0[0xC];
+    f32 unk_1CC;
+    u8 pad_1D0[0xC];
+    f32 unk_1DC;
+    u8 pad_1E0[0x15C];
+    u32 unk_33C;
+    f32 unk_340;
+};
+
+extern struct fn_1_408E8_lbl_1_rodata_BD8 lbl_1_rodata_BD8;
+extern FontDrawPacket lbl_1_rodata_26F8;
+
+extern void fn_1_403D4(Fn408E8Obj *obj);
+extern void fn_1_50A90(FontDrawPacket *packet, s32 w, s32 h, s32 clipW, s32 clipH);
+extern void fn_1_49514(u32 *header);
+extern void fn_1_49614(void);
+
+#pragma opt_common_subs off
+void fn_1_408E8(Fn408E8Obj *obj) {
+    struct fn_1_408E8_lbl_1_rodata_BD8 *pool = &lbl_1_rodata_BD8;
+    u32 header;             /* the packet follows this word in the frame */
+    FontDrawPacket pkt;
+    f32 scale;
+    s32 w;
+    s32 h;
+    s32 clipW;
+    s32 clipH;
+
+    if (obj->flags & 1) {
+        if (obj->fade < pool->unk_340) {
+            obj->fade = obj->fade + pool->unk_1BC;
+        } else {
+            obj->fade = pool->unk_C;
+        }
+    } else {
+        if (obj->fade > pool->unk_1BC) {
+            obj->fade = obj->fade - pool->unk_1BC;
+        } else {
+            obj->fade = pool->unk_4;
+            return;
+        }
+    }
+
+    scale = pool->unk_1CC * obj->fade;
+    if (scale > pool->unk_C) {
+        scale = pool->unk_C;
+    }
+
+    switch (obj->type) {
+    case 1:
+        if (obj->data != NULL) {
+            break;
+        }
+        /* fallthrough */
+    case 0:
+        w = (s32)(obj->width * scale);
+        h = (s32)(obj->height * scale);
+        break;
+    case 2:
+        fn_1_403D4(obj);
+        w = (s32)obj->width;
+        h = (s32)(obj->height * scale);
+        break;
+    default:
+        return;
+    }
+
+    pkt = lbl_1_rodata_26F8;
+    pkt.x = obj->x;
+    pkt.y = obj->y;
+    pkt.z = obj->z;
+    pkt.flags = 10;
+    pkt.image = 2;
+    pkt.alpha = obj->fade;
+    clipW = (s32)(pool->unk_1DC * (pool->unk_44 * obj->fade));
+    clipH = (s32)(pool->unk_1DC * (pool->unk_3C * obj->fade));
+    if (clipW > 18 || w > 18) {
+        clipW = 18;
+    }
+    if (clipH > 45 || h > 45) {
+        clipH = 45;
+    }
+    fn_1_50A90(&pkt, clipW, clipH, w, h);
+    header = pool->unk_33C;
+    fn_1_49514(&header);
+    fn_1_49614();
+}
+/* fzgx:end fn_1_408E8 */
+
 /* fzgx:begin fn_1_40B14 */
 u8 *fn_1_40B14(void) {
     return lbl_1_bss_26B54;
