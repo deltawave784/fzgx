@@ -470,3 +470,6 @@ rel/customize/emb_paste_editor/fn_3_118BC.c:
 
 rel/customize/toolkit/fn_3_1AE40.c:
 	.text       start:0x0001AE40 end:0x0001AEE4 align:4
+
+rel/customize/_prolog/fn_3_131C.c:
+	.text       start:0x0000131C end:0x000014C4 align:4

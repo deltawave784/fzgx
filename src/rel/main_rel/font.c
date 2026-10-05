@@ -738,144 +738,108 @@ u16 fn_1_499BC(const u8 *value) {
 /* fzgx:end fn_1_499BC */
 
 /* fzgx:begin fn_1_49B70 */
-typedef struct {
+typedef struct fn_1_49B70_Target {
     u8 pad_0[0x10];
     u32 unk_10;
     u32 unk_14;
     u8 pad_18[0x10];
     f32 unk_28;
-} UnkArg1;
+} fn_1_49B70_Target;
 
-s32 fn_1_49B70(u8 *arg0, UnkArg1 *arg1) {
-    /* volatile: retail reloads the accumulator from the frame in every case arm */
-    volatile u32 flags;
-    u32 c1;
+/* Accumulates one hex digit of a colour tag into *value at bit position shift. */
+static inline void fn_1_49B70_hex_digit(u32 c, void *value, s32 shift) {
+    switch (c) {
+    case '0': break;
+    case '1': *(u32 *)value |= 1 << shift; break;
+    case '2': *(u32 *)value |= 2 << shift; break;
+    case '3': *(u32 *)value |= 3 << shift; break;
+    case '4': *(u32 *)value |= 4 << shift; break;
+    case '5': *(u32 *)value |= 5 << shift; break;
+    case '6': *(u32 *)value |= 6 << shift; break;
+    case '7': *(u32 *)value |= 7 << shift; break;
+    case '8': *(u32 *)value |= 8 << shift; break;
+    case '9': *(u32 *)value |= 9 << shift; break;
+    case 'A': *(u32 *)value |= 10 << shift; break;
+    case 'a': *(u32 *)value |= 10 << shift; break;
+    case 'B': *(u32 *)value |= 11 << shift; break;
+    case 'b': *(u32 *)value |= 11 << shift; break;
+    case 'C': *(u32 *)value |= 12 << shift; break;
+    case 'c': *(u32 *)value |= 12 << shift; break;
+    case 'D': *(u32 *)value |= 13 << shift; break;
+    case 'd': *(u32 *)value |= 13 << shift; break;
+    case 'E': *(u32 *)value |= 14 << shift; break;
+    case 'e': *(u32 *)value |= 14 << shift; break;
+    case 'F': *(u32 *)value |= 15 << shift; break;
+    case 'f': *(u32 *)value |= 15 << shift; break;
+    }
+}
+
+/* Parses "/bcRRGGBB/", "/ocRRGGBB/" or "/trXX/" tags; returns the tag length. */
+s32 fn_1_49B70(const u8 *s, fn_1_49B70_Target *out) {
     s32 i;
     s32 shift;
     s32 mode;
-    u8 *p;
-    s32 n;
-    s32 ret;
+    const u8 *p;
+    u32 value;
+    s32 count;
+    s32 len;
+    u32 c;
 
-    flags = 0;
-    if (arg0[0] != 0x2F) {
+    value = 0;
+    if (s[0] != '/') {
         return 0;
     }
-    c1 = arg0[1];
-    if (c1 == 0x62 || c1 == 0x6F) {
-        mode = (s32)(((0x62 - c1) | (c1 - 0x62)) >> 31);
-        p = arg0 + 2;
-        if (arg0[2] != 0x63) {
+    c = s[1];
+    if (c == 'b' || c == 'o') {
+        mode = (c != 'b');
+        p = s + 2;
+        if (s[2] != 'c') {
             return 0;
         }
-        if (p[7] != 0x2F) {
+        if (p[7] != '/') {
             return 0;
         }
-        n = 3;
-        shift = 0x1C;
-        ret = 9;
-    } else if (c1 == 0x74) {
-        p = arg0 + 2;
-        if (arg0[2] != 0x72) {
+        count = 3;
+        shift = 0x1c;
+        len = 9;
+    } else if (c == 't') {
+        p = s + 2;
+        if (s[2] != 'r') {
             return 0;
         }
-        if (p[3] != 0x2F) {
+        if (p[3] != '/') {
             return 0;
         }
         mode = 2;
-        n = 1;
+        count = 1;
         shift = 4;
-        ret = 5;
+        len = 5;
     } else {
         return 0;
     }
-    for (i = 0; i < n * 2; i++, shift -= 4) {
-        switch (p[i + 1]) {
-        case 0x30:
-            break;
-        case 0x31:
-            flags |= 1 << shift;
-            break;
-        case 0x32:
-            flags |= 2 << shift;
-            break;
-        case 0x33:
-            flags |= 3 << shift;
-            break;
-        case 0x34:
-            flags |= 4 << shift;
-            break;
-        case 0x35:
-            flags |= 5 << shift;
-            break;
-        case 0x36:
-            flags |= 6 << shift;
-            break;
-        case 0x37:
-            flags |= 7 << shift;
-            break;
-        case 0x38:
-            flags |= 8 << shift;
-            break;
-        case 0x39:
-            flags |= 9 << shift;
-            break;
-        case 0x61:
-            flags |= 0xA << shift;
-            break;
-        case 0x41:
-            flags |= 0xA << shift;
-            break;
-        case 0x62:
-            flags |= 0xB << shift;
-            break;
-        case 0x42:
-            flags |= 0xB << shift;
-            break;
-        case 0x63:
-            flags |= 0xC << shift;
-            break;
-        case 0x43:
-            flags |= 0xC << shift;
-            break;
-        case 0x64:
-            flags |= 0xD << shift;
-            break;
-        case 0x44:
-            flags |= 0xD << shift;
-            break;
-        case 0x65:
-            flags |= 0xE << shift;
-            break;
-        case 0x45:
-            flags |= 0xE << shift;
-            break;
-        case 0x66:
-            flags |= 0xF << shift;
-            break;
-        case 0x46:
-            flags |= 0xF << shift;
-            break;
-        }
+
+    for (i = 0; i < count * 2; i++, shift -= 4) {
+        fn_1_49B70_hex_digit(p[i + 1], &value, shift);
     }
+
     switch (mode) {
     case 0:
-        if (arg1 != NULL) {
-            arg1->unk_10 = flags;
+        if (out != NULL) {
+            out->unk_10 = value;
         }
         break;
     case 1:
-        if (arg1 != NULL) {
-            arg1->unk_14 = flags;
+        if (out != NULL) {
+            out->unk_14 = value;
         }
         break;
     case 2:
-        if (arg1 != NULL) {
-            arg1->unk_28 = (f32)flags / lbl_1_rodata_10D8;
+        if (out != NULL) {
+            out->unk_28 = (f32)value / 255.0f;
         }
         break;
     }
-    return ret;
+    return len;
 }
 /* fzgx:end fn_1_49B70 */
 

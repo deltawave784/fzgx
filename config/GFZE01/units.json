@@ -363,6 +363,23 @@
   },
   {
     "module": "customize",
+    "source": "rel/customize/_prolog/fn_3_131C.c",
+    "symbols": [
+      "fn_3_131C"
+    ],
+    "status": "matching",
+    "mw_version": "GC/1.3",
+    "extra_cflags": [],
+    "tu": "rel/customize/_prolog.c",
+    "pool": {
+      "...rodata.0": "lbl_3_rodata_0",
+      "@9": "lbl_3_rodata_0+0x4",
+      "@13": "lbl_3_rodata_0+0x14",
+      "@26": "lbl_3_rodata_44"
+    }
+  },
+  {
+    "module": "customize",
     "source": "rel/customize/_prolog/fn_3_14C4.c",
     "symbols": [
       "fn_3_14C4"
@@ -37584,8 +37601,9 @@
     "extra_cflags": [],
     "tu": "rel/main_rel/font.c",
     "pool": {
-      "@61": "jumptable_1_data_1BFD8",
-      "@63": "lbl_1_rodata_10E0"
+      "@90": "jumptable_1_data_1BFD8",
+      "@92": "lbl_1_rodata_10E0",
+      "@88": "lbl_1_rodata_10D8"
     }
   },
   {
