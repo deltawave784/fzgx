@@ -128,4 +128,41 @@ and fallback mode (`decomp: Fable limit reached, continuing with Opus/Sonnet`). 
 
 After a context compaction, re-read this skill and the last 40 lines of `.fzgx/reports/waves.md` before continuing.
 
+## Tooling rounds (between batches)
+
+Matching agents keep ending on the same causes; a tooling round fixes one cause for every future batch, behind a
+regression gate. A round runs only BETWEEN batches (never while any claim, `fixup`, `verify` or build is
+running), with `git status` clean.
+
+**Trigger** (check after each batch close-out; the interval starts at 5 batches and stretches, see decay):
+- every `round_interval` batches since the last round, OR
+- two consecutive batches closed fewer than 3 functions each.
+
+**Steps:**
+1. Census: from the last batches' release lines in `.fzgx/reports/waves.md`, the saved best bodies (`check` of each
+   with `oracle.check` / `fzgx stuck`) and the oracle's `pool_notes`, rank blocker classes by functions blocked and
+   bytes; skip classes the notes mark as needing the allocator capture (no macOS VM here). Also read
+   `state/pending_tooling/` (unapplied D patches are not re-proposed).
+2. If no class blocks at least 3 functions, stop the round (log "tooling round: nothing worth fixing"), which costs
+   only the census.
+3. Baseline for the cheaper-model measurement: pick up to 6 of the blocked functions of the top class and run ONE
+   Sonnet batch on them now (`matcher-mid`, ids `sonnet-<symbol>-<date>t0`); record matched/released and the
+   release scores in the round's log entry. Skip this step when the class is only reachable by deterministic tools.
+4. Dispatch ONE `tooling` agent (`subagent_type: tooling`, default model; pass `model: fable` instead only while
+   weekly Fable use is below 70%) with a brief: class, blocked functions with saved-body paths, evidence, and the
+   category rules in its definition. Wait for its report.
+5. After a kept (A/B/C) change: run the same Sonnet batch again on the same functions (ids `...t1`) and log the
+   before/after per-function result: this is the measurement of whether the change made cheaper models more
+   effective. Then run `fixup --min-percent 95 --apply` and `verify` (the change may close functions
+   deterministically), then `progress --note "tooling round <n>"`.
+6. After a D change: DO NOT apply it. Push a notification (`tooling round <n>: oracle change pending your approval:
+   <slug>, <measured gain>; see state/pending_tooling/`) and continue batches. The user applies it with
+   `git apply state/pending_tooling/<name>.patch` and `fzgx gate`, or asks to.
+
+**Budget and decay:** one agent, about 90 minutes; tooling must stay under about 15% of the run's usage. Log every
+round to `.fzgx/reports/waves.md` (class, category, files, gate result, measured gain, cheaper-model before/after,
+tokens). `round_interval` is 5 at first; two consecutive rounds with no kept change or no measured gain double it
+(5 -> 10 -> 20, capped at 20); a kept change with a gain resets it to 5. A round that fails its gate is reverted
+by the agent; two failed gates in a row stop the rounds for the rest of the run and notify.
+
 Never push. Never run the librarian concurrently with matchers.

@@ -149,6 +149,23 @@ def cmd_progress(a, p):
     return 0
 
 
+def cmd_gate(a, p):
+    from . import gate
+    r = gate.run(p, a.pool_sample, a.recent, also=a.also)
+    if a.json:
+        print(json.dumps(r, indent=1))
+    else:
+        print(f"lint: {r.get('lint')}; build ok: {r.get('build_ok')}; hashes OK: {r.get('hashes_ok')}/16")
+        for k in ("pool_sample", "recent", "named"):
+            if k in r:
+                v = r[k]
+                print(f"{k}: {len(v['passed'])} passed, {len(v['failed'])} failed, {len(v['skipped'])} skipped")
+                for line in v["failed"] + v["skipped"][:3]:
+                    print("   ", line)
+        print("GATE: " + ("PASS" if r["ok"] else "FAIL"))
+    return 0 if r["ok"] else 1
+
+
 def cmd_type_survey(a, p):
     from . import typesurvey
     out = typesurvey.run()
@@ -635,6 +652,9 @@ def build_parser() -> argparse.ArgumentParser:
     s.add_argument("--note", help="label for the row (e.g. 'fable batch 23'); a note records a row even if nothing changed")
     s.add_argument("--no-record", action="store_true"); s.add_argument("--stale-ok", action="store_true"); s.add_argument("--json", action="store_true")
     s.add_argument("--history", type=int, default=0, metavar="N", help="also print the last N recorded rows")
+    s = sub.add_parser("gate", help="the gate a tooling change must pass: lint, build, 16 hashes, a pool-unit sample and the latest matches re-checked"); s.set_defaults(fn=cmd_gate)
+    s.add_argument("--pool-sample", type=int, default=24); s.add_argument("--recent", type=int, default=24); s.add_argument("--json", action="store_true")
+    s.add_argument("--also", nargs="*", default=[], metavar="SYMBOL", help="matched units the change is known to affect, re-checked in full")
     s = sub.add_parser("type-survey", help="group per-function struct views into candidate shared types (leads for the librarian)"); s.set_defaults(fn=cmd_type_survey)
     s.add_argument("--top", type=int, default=20); s.add_argument("--emit", type=int, metavar="ID", help="print a proposed merged struct for cluster ID")
     s.add_argument("--name", default="Merged", help="typedef name for --emit"); s.add_argument("--json", action="store_true")
