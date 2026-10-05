@@ -5,3 +5,4 @@ time_utc,git_head,matched_code_pct,matched_code,total_code,matched_functions,tot
 2026-10-04T14:00:00Z,0b5f9a7d,30.8958,907424,2937044,5207,7312,,"after Fable batch 3 (backfilled, bytes derived)"
 2026-10-04T15:00:00Z,d9b425ee,30.973,909692,2937044,5213,7312,,"after Fable batch 4 (backfilled, bytes derived)"
 2026-10-05T15:49:03Z,b3167726,31.0746,912676,2937044,5223,7312,30.9951,"after Fable batch 22 (autonomous run, Mon 09:48)"
+2026-10-05T16:19:11Z,e7c09e74,32.2414,946944,2937044,5294,7312,32.0998,fallback batch 23
