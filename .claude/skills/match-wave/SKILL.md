@@ -49,7 +49,9 @@ The routing is deterministic; you only dispatch and report. Run from the reposit
      relinked and committed by the check that reaches 100%; this catches the rest).
    - `uv run ninja` must still end with `16 files OK` (when ninja has nothing to do it prints no
      summary; `build/tools/dtk shasum -c config/GFZE01/build.sha1` checks the hashes directly).
-   - `uv run tools/fzgx.py report` for progress.
+   - `uv run tools/fzgx.py progress --note "<wave or batch id>"` records the matched-code percentage in
+     `state/progress.csv` and prints the change since the last row and since the first; commit the CSV with the
+     close-out. Then `uv run tools/fzgx.py report` for the ledger totals.
    - Matches are committed by the tooling as they are accepted; check `git log`.
    - Report to the user: matched / released per tier, bytes matched, and the release
      reasons that repeat (candidates for `docs/MWCC_IDIOMS.md` or a librarian pass).
@@ -76,7 +78,8 @@ One batch = steps 1-5 above with these changes:
   Fable, one per clone family). Dispatch each row with `subagent_type: matcher-large` and `model: fable`, prompt
   `SYMBOL=<symbol> AGENT_ID=fable-<symbol>-<YYYYMMDD><batch letter>`; all 8 at once.
 - Close the batch: `reuse --max-size 2048`, then `fixup --min-percent 97 --apply --budget 1200 --output
-  .fzgx/fixup/<batch>`, then `verify`, then ninja/hash check, then `report`; append a line to `.fzgx/reports/waves.md`.
+  .fzgx/fixup/<batch>`, then `verify`, then ninja/hash check, then `progress --note "fable batch <n>"` and `report`; append a line to
+  `.fzgx/reports/waves.md` that includes the code percentage; commit `state/progress.csv`.
 - If `route --fable` returns fewer than 4 rows, lower `--min-percent` to 95, then 90. Below 90 the match rate is
   unmeasured: stop and ask.
 
@@ -120,7 +123,7 @@ Stop conditions (in addition to those under Unattended runs): hash check fails; 
 nothing (agents + reuse + fixup); the same tooling error twice; a permission refusal; `git status` not clean after a
 close-out. On every stop, call PushNotification (load via ToolSearch) with one line that leads with the reason, e.g.
 `decomp stopped: hash check failed after batch 7 (fn_xxx); tree restored`. Also push once every 5 batches with the
-running total (`batch 10 done: 41 fn matched today, 31.9% code`). Also push once when the run switches between Fable
+running total (`batch 10 done: 41 fn matched today, 31.9% code`, taking the percentage from `progress`). Also push once when the run switches between Fable
 and fallback mode (`decomp: Fable limit reached, continuing with Opus/Sonnet`). No other notifications.
 
 After a context compaction, re-read this skill and the last 40 lines of `.fzgx/reports/waves.md` before continuing.

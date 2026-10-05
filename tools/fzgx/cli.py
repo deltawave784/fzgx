@@ -133,6 +133,22 @@ def cmd_seed_corpus(a, p):
     return 0
 
 
+def cmd_progress(a, p):
+    from . import progress
+    row = progress.measure(p)
+    history = progress.rows()
+    if a.json:
+        print(json.dumps({k: v for k, v in row.items()}, indent=1)); return 0
+    if row["_report_age_s"] > 3600 and not a.stale_ok:
+        print(f"warning: build/report.json is {row['_report_age_s'] // 60} min old; run `uv run ninja` first (or pass --stale-ok)")
+    print(progress.summary(row, history))
+    if not a.no_record and progress.record(row, a.note or ""):
+        print(f"recorded in state/progress.csv ({len(history) + 1} rows)")
+    for r in history[-a.history:] if a.history else []:
+        print(f"  {r['time_utc'][:16]}  {float(r['matched_code_pct']):6.2f}%  {int(r['matched_functions']):5d} fns  {r['note']}")
+    return 0
+
+
 def cmd_type_survey(a, p):
     from . import typesurvey
     out = typesurvey.run()
@@ -615,6 +631,10 @@ def build_parser() -> argparse.ArgumentParser:
     s.add_argument("--max-attempts", type=int, default=None, help="skip functions with more recorded attempts than this")
     s = sub.add_parser("seed-corpus", help="rescore the best archived bodies in state/repairs and save them as local seeds"); s.set_defaults(fn=cmd_seed_corpus)
     s.add_argument("--per-symbol", type=int, default=2); s.add_argument("--dry-run", action="store_true"); s.add_argument("--json", action="store_true")
+    s = sub.add_parser("progress", help="the matched-code percentage over time: print it, record it in state/progress.csv, show the change"); s.set_defaults(fn=cmd_progress)
+    s.add_argument("--note", help="label for the row (e.g. 'fable batch 23'); a note records a row even if nothing changed")
+    s.add_argument("--no-record", action="store_true"); s.add_argument("--stale-ok", action="store_true"); s.add_argument("--json", action="store_true")
+    s.add_argument("--history", type=int, default=0, metavar="N", help="also print the last N recorded rows")
     s = sub.add_parser("type-survey", help="group per-function struct views into candidate shared types (leads for the librarian)"); s.set_defaults(fn=cmd_type_survey)
     s.add_argument("--top", type=int, default=20); s.add_argument("--emit", type=int, metavar="ID", help="print a proposed merged struct for cluster ID")
     s.add_argument("--name", default="Merged", help="typedef name for --emit"); s.add_argument("--json", action="store_true")
