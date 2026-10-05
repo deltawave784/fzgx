@@ -31236,12 +31236,9 @@
     "tu": "rel/main_rel/camera.c",
     "pool": {
       "...bss.0": "lbl_1_bss_F68",
-      "fzgx_obj_lbl_1_bss_F68": "lbl_1_bss_F68",
-      "fzgx_obj_game_camera_entries": "game_camera_entries",
-      "fzgx_obj_live_camera": "live_camera",
-      "lbl_1_bss_F74": "lbl_1_bss_F74",
-      "lbl_1_bss_F75": "lbl_1_bss_F75",
-      "lbl_1_bss_F76": "lbl_1_bss_F76"
+      "lbl_1_bss_F68": "lbl_1_bss_F68",
+      "game_camera_entries": "game_camera_entries",
+      "live_camera": "live_camera"
     }
   },
   {

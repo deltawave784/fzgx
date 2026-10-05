@@ -500,80 +500,40 @@ s16 camera_get_output(void) {
 /* fzgx:end camera_get_output */
 
 /* fzgx:begin fn_1_6B48 */
-typedef struct {
-    u32 unk_0;
-    u8 pad_4[0x44];
-    u8 unk_48;
-} fn_1_6B48_CameraState;
+/* The three camera pointers are one cluster of this TU's .bss; retail
+ * addresses them off a single base register. MWCC lays .bss out in
+ * first-access order, so the primer below (a section mwld ignores) fixes
+ * retail's order: lbl_1_bss_F68, game_camera_entries, live_camera. */
+Obj_1_bss_F68_Target *lbl_1_bss_F68;
+__typeof__(game_camera_entries) game_camera_entries;
+__typeof__(live_camera) live_camera;
 
-typedef struct {
-    u8 pad_0[0x6];
-    s16 value;
-} CameraValue;
-
-typedef struct {
-    u8 pad_0[0x2];
-    s16 value;
-    u8 pad_4[0x1f8];
-} fn_1_6B48_CameraEntry;
-
-typedef struct {
-    fn_1_6B48_CameraState *state;
-    fn_1_6B48_CameraEntry *entries;
-    CameraValue *value;
-} fn_1_6B48_CameraGlobals;
-
-
-#pragma opt_common_subs off
-#pragma peephole on
-/* file-scope objects of the retail TU, in retail order: MWCC addresses them off one section base */
-fn_1_6B48_CameraState *fzgx_obj_lbl_1_bss_F68;
-fn_1_6B48_CameraEntry *fzgx_obj_game_camera_entries;
-CameraValue *fzgx_obj_live_camera;
-u8 lbl_1_bss_F74;
-u8 lbl_1_bss_F75;
-u8 lbl_1_bss_F76;
-
-#pragma section code_type ".fzgxpool"
-static void fzgx_bss_layout(void) {
-    volatile u8 s;  /* fzgx-allow: S2 layout primer sink: MWCC emits .bss objects in first-access order */
-    s = *(u8 *)&fzgx_obj_lbl_1_bss_F68;
-    s = *(u8 *)&fzgx_obj_game_camera_entries;
-    s = *(u8 *)&fzgx_obj_live_camera;
-    s = *(u8 *)&lbl_1_bss_F74;
-    s = *(u8 *)&lbl_1_bss_F75;
-    s = *(u8 *)&lbl_1_bss_F76;
+#pragma section ".fzgxpool"
+__declspec(section ".fzgxpool") void fn_1_6B48_bss_primer(void *out[3]) {
+    out[0] = lbl_1_bss_F68;
+    out[1] = game_camera_entries;
+    out[2] = live_camera;
 }
-#pragma section code_type ".text"
 
-static inline fn_1_6B48_CameraEntry *fn_1_6B48_array_read(fn_1_6B48_CameraEntry *array) { return array; }
 s16 fn_1_6B48(s32 index) {
-    fn_1_6B48_CameraState * state;
-{
-    
-    state = fzgx_obj_lbl_1_bss_F68;
+    Obj_1_bss_F68_Target *state = lbl_1_bss_F68;
 
     if (state == 0) {
         return -1;
     }
-
-    if ((state->unk_0 & ((u32)1 << 31)) != 0) {
+    if ((state->unk_0 & ((s32)1 << 31)) != 0) {
         return -1;
     }
-
     switch ((s8)state->unk_48) {
     case 9:
     case 10:
-        return fzgx_obj_live_camera->value;
+        return live_camera->unk_6;
     case 11:
         return -1;
     default:
-        return fn_1_6B48_array_read(fzgx_obj_game_camera_entries)[index].value;
-}
+        return game_camera_entries[index].unk_2;
     }
 }
-#pragma peephole reset
-#pragma opt_common_subs reset
 /* fzgx:end fn_1_6B48 */
 
 /* fzgx:begin camera_set_result */
