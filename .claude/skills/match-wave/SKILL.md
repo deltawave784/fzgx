@@ -98,13 +98,23 @@ actually caused (measure usage before and after each batch) plus 1 point, so the
 
 ### Fallback mode (Opus and Sonnet, automatic when Fable is at its limit)
 
-One batch = the wave procedure in steps 1-5 above, unchanged: `route --json --limit 16 --skip-tried
---escalate-from sonnet-`, 8 rows (at most 2 Opus rows, the rest Sonnet `matcher-mid`), 6 agents at a time, close-out
-with `reuse`, `fixup`, `verify`, hash check, `report`. Agent ids use the `sonnet-`/`opus-` prefixes so the next
-wave's `--escalate-from` finds them. Expected yield is lower (about 25% of fresher functions, measured earlier) than
-Fable's near-miss yield, so apply the usual stop rule: two consecutive fallback batches matching nothing stops the
-run. While in fallback mode check usage before every batch; the 5-hour and weekly all-models caps above apply. When
-the Fable window resets, go back to Fable batches (they retry what Opus and Sonnet released).
+One batch = the wave procedure in steps 1-5 above, with a different pick. Do NOT use the plain
+`route --skip-tried`: it ranks saved 99% bodies first, which are the near misses Fable and the earlier waves
+already failed on (checked 2026-10-05: 14 of its top 16 rows were Fable releases). Use the easy ordering:
+
+    uv run tools/fzgx.py route --easy --small 512 --max-size 768 --max-attempts 3 --json --limit 16 [--escalate-from sonnet-]
+
+`--easy` skips everything a Haiku, Sonnet, Opus or Fable agent attempted, orders by size then recorded attempts
+(smallest first, no bonus for a saved body; untouched functions are all large, the small ones were tried long ago), keeps one function per (module, size) retail-clone family, and drops
+`:_prolog` entries and compiler save/restore helpers. `--small 512` sends rows up to 512 B to Sonnet
+(`matcher-mid`) and larger ones to Opus (`matcher-large`); at most 2 Opus rows per batch unless the user says
+otherwise. Take 8 rows, 6 agents at a time. Close-out is unchanged: `reuse`, `fixup`, `verify`, hash check,
+`report`. Agent ids use the `sonnet-`/`opus-` prefixes so the next batch's `--escalate-from` finds them. When the
+route returns fewer than 8 rows, raise `--max-attempts` to 5, then `--max-size` to 1024. Yield is lower than
+Fable's near-miss yield (about 25% of fresher functions, measured earlier), so two consecutive fallback batches
+matching nothing stops the run. While in fallback mode check usage before every batch; the 5-hour and weekly
+all-models caps above apply. When the Fable window resets, go back to Fable batches (they retry what Opus and
+Sonnet released).
 
 Stop conditions (in addition to those under Unattended runs): hash check fails; two consecutive batches match
 nothing (agents + reuse + fixup); the same tooling error twice; a permission refusal; `git status` not clean after a

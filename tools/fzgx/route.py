@@ -34,7 +34,13 @@ def tier_for(size: int, symbol: str, small: int, escalate: set) -> str:
 
 def plan(p: Project, limit: int = 8, small: int = 256, near: float = 80.0,
          module: Optional[str] = None, tier: Optional[str] = None,
-         escalate: Optional[set] = None, exclude: Optional[set] = None) -> List[Dict]:
+         escalate: Optional[set] = None, exclude: Optional[set] = None,
+         easy: bool = False, max_size: Optional[int] = None, max_attempts: Optional[int] = None) -> List[Dict]:
+    """`easy` is the Opus/Sonnet fallback ordering used while the Fable window is exhausted: smallest
+    functions first, no preference for a saved 99% body (those are the near misses Fable and the
+    earlier waves already failed on), one function per (module, size) retail-clone family, and
+    `max_size` / `max_attempts` cut off big or repeatedly failed functions. Ordering is size, then
+    attempts: untouched functions are all large (the small ones were attempted long ago)."""
     ledger = Ledger()
     rows = ledger.db.execute(
         "SELECT symbol, module, size, attempts, best_percent AS best, claimed_by FROM functions "
@@ -44,6 +50,12 @@ def plan(p: Project, limit: int = 8, small: int = 256, near: float = 80.0,
     out = []
     for r in rows:
         if r["claimed_by"] or (exclude and r["symbol"] in exclude):
+            continue
+        if easy and (r["symbol"].endswith(":_prolog") or r["symbol"].startswith(("__save_", "__restore_", "_savegpr", "_restgpr", "_savefpr", "_restfpr"))):
+            continue  # entry points and compiler FPR/GPR save helpers: not C a matcher can write
+        if max_size is not None and r["size"] > max_size:
+            continue
+        if max_attempts is not None and (r["attempts"] or 0) > max_attempts:
             continue
         best = r["best"] or 0
         t = tier_for(r["size"], r["symbol"], small, escalate)
@@ -55,10 +67,21 @@ def plan(p: Project, limit: int = 8, small: int = 256, near: float = 80.0,
         remaining = r["size"] * (1 - (seed_best if seeded else best) / 100)
         rank = ((0, remaining) if seeded else (1, remaining) if best >= near else
                 (2, r["size"]) if r["size"] <= small else (3, r["size"]))
+        if easy:
+            rank = (r["size"], r["attempts"] or 0)
         out.append(dict(symbol=r["symbol"], module=r["module"], size=r["size"], attempts=r["attempts"],
                         best=round(best, 1), seeded=seeded,
                         seed_best=round(seed_best, 1) if seeded else None, tier=t, agent_type=AGENT[t], _rank=rank))
     out.sort(key=lambda d: d.pop("_rank"))
+    if easy:
+        families, kept = set(), []
+        for d in out:
+            key = (d["module"], d["size"])
+            if key in families:
+                continue
+            families.add(key)
+            kept.append(d)
+        out = kept
     return out[:limit]
 
 

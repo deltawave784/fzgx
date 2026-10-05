@@ -109,8 +109,10 @@ def cmd_route(a, p):
         return
     escalate = route.tried_by(a.escalate_from) if a.escalate_from else None
     # functions a Claude tier already attempted (agent ids `haiku-`/`sonnet-`/`opus-...`)
-    skip = set().union(*(route.tried_by(t + "-") for t in ("haiku", "sonnet", "opus"))) if a.skip_tried else None
-    rows = route.plan(p, a.limit, a.small, module=a.module, tier=a.tier, escalate=escalate, exclude=skip)
+    tiers = ("haiku", "sonnet", "opus", "fable") if a.easy else ("haiku", "sonnet", "opus")
+    skip = set().union(*(route.tried_by(t + "-") for t in tiers)) if (a.skip_tried or a.easy) else None
+    rows = route.plan(p, a.limit, a.small, module=a.module, tier=a.tier, escalate=escalate, exclude=skip,
+                      easy=a.easy, max_size=a.max_size, max_attempts=a.max_attempts)
     if a.json:
         print(json.dumps(rows, indent=1))
     else:
@@ -608,6 +610,9 @@ def build_parser() -> argparse.ArgumentParser:
     s.add_argument("--fable", action="store_true", help="next near misses for a Fable batch (matcher-large with model fable): best score first, never attempted by Fable, one per clone family")
     s.add_argument("--min-percent", type=float, default=98.0, help="with --fable: lowest recorded best score to consider")
     s.add_argument("--skip-tried", action="store_true", help="leave out functions any Claude tier (sonnet-/opus-, formerly haiku-) already attempted")
+    s.add_argument("--easy", action="store_true", help="Opus/Sonnet fallback while Fable is out of usage: also skips what Fable attempted, orders by attempts then size (no preference for saved 99%% bodies), one function per (module, size) clone family; implies --skip-tried")
+    s.add_argument("--max-size", type=int, default=None, help="with --easy (or alone): skip functions larger than this many bytes")
+    s.add_argument("--max-attempts", type=int, default=None, help="skip functions with more recorded attempts than this")
     s = sub.add_parser("seed-corpus", help="rescore the best archived bodies in state/repairs and save them as local seeds"); s.set_defaults(fn=cmd_seed_corpus)
     s.add_argument("--per-symbol", type=int, default=2); s.add_argument("--dry-run", action="store_true"); s.add_argument("--json", action="store_true")
     s = sub.add_parser("type-survey", help="group per-function struct views into candidate shared types (leads for the librarian)"); s.set_defaults(fn=cmd_type_survey)
