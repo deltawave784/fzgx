@@ -3625,6 +3625,82 @@ void fn_8_6594(u32 arg0) {
 }
 /* fzgx:end fn_8_6594 */
 
+/* fzgx:begin fn_8_663C */
+typedef struct {
+    s16 kind;
+    s16 x;
+    s16 y;
+    s16 pad6;
+    u32 flags;
+    u32 padC;
+} TitleTextSource;
+
+typedef struct {
+    u32 unk0;
+    u32 unk4;
+    u32 unk8;
+    u32 unkC;
+    void *text0;
+    void *text1;
+} TitleTextState;
+
+extern u32 fn_1_3F8C0(void);
+extern u32 fn_1_5370(u32, u32);
+extern u32 fn_80008E84(u32);
+extern void *fn_1_4630(void *, u32, void *, u32);
+extern void fn_80006E10(void *);
+extern void fn_1_14D728(TitleTextSource *, void *);
+extern u32 lbl_8_bss_2A8[];
+extern u32 lbl_8_data_7E50;
+extern void *lbl_801A6410;
+extern void fn_8_6558(void);
+extern void fn_8_6560(void);
+extern void fn_8_6568(void);
+extern void fn_8_6570(void);
+
+void fn_8_663C(u32 arg0) {
+    s16 *fzgx_value;
+    u8 *data = (u8 *)&lbl_8_data_7E50;
+    TitleTextState *state = (TitleTextState *)&lbl_8_bss_2A8;
+    u32 saved;
+    TitleTextSource src0;
+    TitleTextSource src1;
+    void * lab_t0;
+
+    *(u32 *)((u8 *)arg0 + 168) = (u32)fn_8_6558;
+    *(u32 *)((u8 *)arg0 + 196) = (u32)fn_8_6568;
+    *(u32 *)((u8 *)arg0 + 204) = (u32)fn_8_6560;
+    *(u32 *)((u8 *)arg0 + 172) = (u32)fn_8_6570;
+    *(u32 *)((u8 *)arg0 + 0) = (*(u32 *)((u8 *)arg0 + 0) | 0x201);
+    *(u32 *)((u8 *)arg0 + 0) = (*(u32 *)((u8 *)arg0 + 0) | 0x200100);
+    *(u32 *)((u8 *)arg0 + 0) = (*(u32 *)((u8 *)arg0 + 0) | 0x8000);
+    *(u32 *)((u8 *)arg0 + 0) = (*(u32 *)((u8 *)arg0 + 0) | 0x1000000);
+    state->unkC = 0;
+    fn_1_5370(1, 0);
+    saved = fn_80008E84(fn_1_3F8C0());
+    lab_t0 = lbl_801A6410;
+    state->text0 = fn_1_4630(lab_t0, 0xa20, data + 0xc84, 0x3d9);
+    lab_t0 = lbl_801A6410;
+    state->text1 = fn_1_4630(lab_t0, 0xa20, data + 0xc84, 0x3da);
+
+    src0.flags = 2;
+    src0.kind = 7;
+    src0.x = 0x1f;
+    src0.y = 0x32;
+    src1.flags = 2;
+    src1.kind = 7;
+    fzgx_value = &(src1.x);
+    *fzgx_value = 0x1b;
+    src1.y = 0x3b;
+
+    fn_80006E10(data + 0xc90);
+    fn_1_14D728(&src0, state->text0);
+    fn_1_14D728(&src1, state->text1);
+    fn_80006E10(data + 0xca0);
+    fn_80008E84(saved);
+}
+/* fzgx:end fn_8_663C */
+
 /* fzgx:begin fn_8_67B0 */
 extern u32 fn_1_3F8C0(void);
 extern u32 fn_1_48140(u32);
