@@ -6602,3 +6602,6 @@ rel/main_rel/effect/fn_1_62AF8.c:
 
 rel/main_rel/driver/fn_1_A861C.c:
 	.text       start:0x000A861C end:0x000A8834 align:4
+
+rel/main_rel/sound/fn_1_A33F0.c:
+	.text       start:0x000A33F0 end:0x000A358C align:4
