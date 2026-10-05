@@ -60624,6 +60624,17 @@
   },
   {
     "module": "sel",
+    "source": "rel/sel/sel/fn_10_804C.c",
+    "symbols": [
+      "fn_10_804C"
+    ],
+    "status": "matching",
+    "mw_version": null,
+    "extra_cflags": [],
+    "tu": "rel/sel/sel.c"
+  },
+  {
+    "module": "sel",
     "source": "rel/sel/sel/fn_10_82BC.c",
     "symbols": [
       "fn_10_82BC"

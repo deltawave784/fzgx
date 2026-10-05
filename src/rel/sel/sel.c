@@ -1112,6 +1112,104 @@ void fn_10_757C(void) {
 }
 /* fzgx:end fn_10_757C */
 
+/* fzgx:begin fn_10_804C */
+typedef struct SelState {
+    u8 pad_0[0x94];
+    u32 flags_94;
+    u32 field_98;
+    u8 pad_9C[2];
+    u8 field_9E;
+    u8 pad_9F[0x140 - 0x9F];
+    u32 field_140;
+} SelState;
+
+typedef struct Entry9C8 {
+    u8 pad_0[0xA];
+    s8 field_A;
+    u8 pad_B[1];
+} Entry9C8;
+
+typedef struct Entry9F8 {
+    u8 pad_0[8];
+    u16 flags_8;
+    u8 pad_A[0x14 - 0xA];
+} Entry9F8;
+
+extern s32 lbl_10_bss_14;
+extern SelState lbl_1_bss_8B3A0;
+extern u16 lbl_1_bss_96A;
+extern Entry9C8 lbl_1_bss_9C8[];
+extern Entry9F8 lbl_1_bss_9F8[];
+extern u32 lbl_1_bss_6EAB4;
+extern s16 lbl_10_bss_4938C;
+extern u32 lbl_10_bss_49388;
+extern u32 lbl_10_bss_51744;
+
+extern s32 fn_1_4C10(void);
+extern void fn_1_12F150(s16, u32, u32);
+extern void fn_1_12F1E8(s32);
+extern s32 fn_1_12F228(void);
+extern void fn_1_4A00(s32, u32, u32);
+
+/* bit (31 - i) of x, spelled as a rotate so the shift count is masked */
+#define PLAYER_BIT(x, i) (__rlwnm((x), ((i) + 1) & 31, 31, 31))
+
+void fn_10_804C(void) {
+    s32 ready;
+    s16 i;
+
+    if (lbl_10_bss_14 == -1) {
+        fn_1_4C10();
+    }
+
+    if ((lbl_1_bss_8B3A0.field_140 & ((u32)1 << 31)) != 0 &&
+        (lbl_1_bss_8B3A0.field_140 & 0x40000000) == 0 &&
+        (lbl_1_bss_8B3A0.flags_94 & 0x8) == 0) {
+        ready = 1;
+    } else if (fn_1_4C10() != 0) {
+        ready = 1;
+    } else {
+        ready = 0;
+    }
+
+    if (ready == 0) {
+        if (lbl_10_bss_14 != -1) {
+            s32 state = lbl_10_bss_14;
+            lbl_10_bss_14 = -1;
+            lbl_1_bss_96A = (u16)state;
+        } else {
+            for (i = 0; i < 4; i++) {
+                if (lbl_1_bss_9C8[i].field_A != -1 &&
+                    PLAYER_BIT(lbl_1_bss_8B3A0.field_98, i) != 0 &&
+                    ((lbl_1_bss_9F8[lbl_1_bss_8B3A0.field_9E].flags_8 >> 8) & 1) != 0) {
+                    fn_1_12F150(i, 2, 1);
+                }
+            }
+            if (((lbl_1_bss_9F8[lbl_1_bss_8B3A0.field_9E].flags_8 >> 8) & 1) != 0) {
+                fn_1_12F1E8(0);
+            }
+            for (i = 0; i < 4; i++) {
+                if (lbl_1_bss_9C8[i].field_A != -1 &&
+                    PLAYER_BIT(lbl_1_bss_8B3A0.field_98, i) != 0 &&
+                    ((lbl_1_bss_9F8[lbl_1_bss_8B3A0.field_9E].flags_8 >> 12) & 1) != 0) {
+                    fn_1_12F150(i, 2, 1);
+                }
+            }
+            if (((lbl_1_bss_9F8[lbl_1_bss_8B3A0.field_9E].flags_8 >> 12) & 1) != 0 ||
+                fn_1_12F228() != 0) {
+                lbl_10_bss_14 = 0x18;
+                fn_1_12F1E8(0);
+                fn_1_4A00(0, (u32)(u8)lbl_10_bss_4938C, lbl_10_bss_49388);
+                lbl_10_bss_51744 = 0;
+                if (lbl_10_bss_14 == 14) {
+                    lbl_1_bss_6EAB4 |= 0x24;
+                }
+            }
+        }
+    }
+}
+/* fzgx:end fn_10_804C */
+
 /* fzgx:begin fn_10_82BC */
 extern s32 lbl_10_bss_51740;
 extern u32 lbl_10_bss_49388;
