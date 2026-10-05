@@ -11294,5 +11294,73 @@
     ],
     "link": "verified",
     "commit": "661310f4"
+  },
+  "fn_12_341C": {
+    "seed_symbol": "fn_12_341C",
+    "generator": "fzgx fixup",
+    "transform": "saved-body",
+    "seed": "#include \"types.h\"\n\ntypedef struct MovieInner {\n    u32 unk0;\n    u32 unk4;\n    u32 pad8[3];\n    u32 unk14;\n} MovieInner;\n\ntypedef struct MovieBss {\n    s32 count;\n    u32 unk4;\n    MovieInner inner;\n    u8 pad[0x4a8 - sizeof(MovieInner)];\n    const void *unk4B0;\n} MovieBss;\n\nextern u8 lbl_12_rodata_448[160];\nextern void fn_12_3D624(MovieInner *);\nextern void fn_12_4A18(void);\nextern void fn_12_4938(void);\nextern void fn_12_35F0(void);\nextern void *memset(void *, int, u32);\n\n/* file-scope objects of the retail TU, in retail order: MWCC addresses them off one section base */\ns32 lbl_12_bss_8;\nu32 lbl_12_bss_C;\nMovieInner lbl_12_bss_10;\nu32 lbl_12_bss_10_fill_28[292];\nconst void *lbl_12_bss_10_4A8;\nu32 lbl_12_bss_10_fill_4BC;\nu32 lbl_12_bss_4C0[42];\nu32 lbl_12_bss_568[140];\nu32 lbl_12_bss_798[258];\n\n#pragma section code_type \".fzgxpool\"\nstatic void fzgx_bss_layout(void) {\n    volatile u8 s;  /* fzgx-allow: S2 layout primer sink: MWCC emits .bss objects in first-access order */\n    s = *(u8 *)&lbl_12_bss_8;\n    s = *(u8 *)&lbl_12_bss_C;\n    s = *(u8 *)&lbl_12_bss_10;\n    s = *(u8 *)&lbl_12_bss_10_fill_28;\n    s = *(u8 *)&lbl_12_bss_10_4A8;\n    s = *(u8 *)&lbl_12_bss_10_fill_4BC;\n    s = *(u8 *)&lbl_12_bss_4C0;\n    s = *(u8 *)&lbl_12_bss_568;\n    s = *(u8 *)&lbl_12_bss_798;\n}\n#pragma section code_type \".text\"\n\nvoid fn_12_341C(void) {\n    \n    if (lbl_12_bss_8 < 1) {\n        lbl_12_bss_10_4A8 = lbl_12_rodata_448;\n        memset(&lbl_12_bss_10, 0, 0x4a8);\n        lbl_12_bss_10.unk4 = 8;\n        lbl_12_bss_10.unk14 = 1;\n        fn_12_3D624(&lbl_12_bss_10);\n        fn_12_4A18();\n        fn_12_4938();\n        fn_12_35F0();\n        lbl_12_bss_C = 0;\n        lbl_12_bss_8++;\n    }\n}\n",
+    "seed_sha256": "2d6fef59133d57fcc2dfc63ba815d3ad5aafe192661bd8a42b4cb1970d4607d0",
+    "generated_sha256": "2d6fef59133d57fcc2dfc63ba815d3ad5aafe192661bd8a42b4cb1970d4607d0",
+    "generated_source": "#include \"types.h\"\n\ntypedef struct MovieInner {\n    u32 unk0;\n    u32 unk4;\n    u32 pad8[3];\n    u32 unk14;\n} MovieInner;\n\ntypedef struct MovieBss {\n    s32 count;\n    u32 unk4;\n    MovieInner inner;\n    u8 pad[0x4a8 - sizeof(MovieInner)];\n    const void *unk4B0;\n} MovieBss;\n\nextern u8 lbl_12_rodata_448[160];\nextern void fn_12_3D624(MovieInner *);\nextern void fn_12_4A18(void);\nextern void fn_12_4938(void);\nextern void fn_12_35F0(void);\nextern void *memset(void *, int, u32);\n\n/* file-scope objects of the retail TU, in retail order: MWCC addresses them off one section base */\ns32 lbl_12_bss_8;\nu32 lbl_12_bss_C;\nMovieInner lbl_12_bss_10;\nu32 lbl_12_bss_10_fill_28[292];\nconst void *lbl_12_bss_10_4A8;\nu32 lbl_12_bss_10_fill_4BC;\nu32 lbl_12_bss_4C0[42];\nu32 lbl_12_bss_568[140];\nu32 lbl_12_bss_798[258];\n\n#pragma section code_type \".fzgxpool\"\nstatic void fzgx_bss_layout(void) {\n    volatile u8 s;  /* fzgx-allow: S2 layout primer sink: MWCC emits .bss objects in first-access order */\n    s = *(u8 *)&lbl_12_bss_8;\n    s = *(u8 *)&lbl_12_bss_C;\n    s = *(u8 *)&lbl_12_bss_10;\n    s = *(u8 *)&lbl_12_bss_10_fill_28;\n    s = *(u8 *)&lbl_12_bss_10_4A8;\n    s = *(u8 *)&lbl_12_bss_10_fill_4BC;\n    s = *(u8 *)&lbl_12_bss_4C0;\n    s = *(u8 *)&lbl_12_bss_568;\n    s = *(u8 *)&lbl_12_bss_798;\n}\n#pragma section code_type \".text\"\n\nvoid fn_12_341C(void) {\n    \n    if (lbl_12_bss_8 < 1) {\n        lbl_12_bss_10_4A8 = lbl_12_rodata_448;\n        memset(&lbl_12_bss_10, 0, 0x4a8);\n        lbl_12_bss_10.unk4 = 8;\n        lbl_12_bss_10.unk14 = 1;\n        fn_12_3D624(&lbl_12_bss_10);\n        fn_12_4A18();\n        fn_12_4938();\n        fn_12_35F0();\n        lbl_12_bss_C = 0;\n        lbl_12_bss_8++;\n    }\n}\n",
+    "compiler": "GC/2.5",
+    "flags": "",
+    "source": "rel/movie_module/fn_12_341C.c",
+    "bytes": 140,
+    "headers_sha256": "73cf7422bff8955cde8d5ebf68ebefe0241675ac791653eb8a9749cb0d84419f",
+    "oracle_sha256": "a6ae7b9acf87233fe9fd4029471150b7998eac228d7c95d874069a8cacaedda8",
+    "recipe": [],
+    "link": "pool"
+  },
+  "fn_10_A0E8": {
+    "seed_symbol": "fn_10_A0E8",
+    "generator": "fzgx fixup",
+    "transform": "block declarations a, b",
+    "seed": "#include \"types.h\"\n\nstruct SelG {\n    u8 pad[0x98];\n    u32 flags;\n};\nstruct E9C8 { u8 pad[10]; s8 id; u8 pad2; };\nstruct E9F8 { u8 pad[0x10]; u16 a; u16 b; };\n\nextern s16 lbl_10_bss_55608;\nextern struct SelG lbl_1_bss_8B3A0;\nextern struct E9C8 lbl_1_bss_9C8[];\nextern struct E9F8 lbl_1_bss_9F8[];\nextern u32 lbl_801A66A8;\nextern void fn_1_12F128(s16);\nextern void fn_1_A2D84(u32);\n\nstatic inline struct E9C8 *fn_10_A0E8_array_read(struct E9C8 *array) { return array; }\n#pragma opt_common_subs off\ns16 fn_10_A0E8(void) {\n    s16 old = lbl_10_bss_55608;\n    s16 delta = 0;\n    s16 i;\n    s32 v;\n    s32 sum;\n    u16 a, b;\n\n    for (i = 0; i < 4; i++) {\n        if (((i)[lbl_1_bss_9C8]).id != -1 && __rlwnm(lbl_1_bss_8B3A0.flags, (i + 1) & 31, 31, 31)) {\n            if (((((i)[lbl_1_bss_9F8]).a >> 3) & 1) || ((((i)[lbl_1_bss_9F8]).b >> 3) & 1)) {\n                delta--;\n            }\n            if (((((i)[lbl_1_bss_9F8]).a >> 2) & 1) || ((((i)[lbl_1_bss_9F8]).b >> 2) & 1)) {\n                delta++;\n            }\n            a = ((i)[lbl_1_bss_9F8]).a;\n            if (((a >> 2) & 1) || (((b = ((i)[lbl_1_bss_9F8]).b) >> 2) & 1)) {\n                fn_1_12F128(i);\n            } else if (((a >> 3) & 1) || ((b >> 3) & 1)) {\n                fn_1_12F128(i);\n            }\n        }\n    }\n    sum = lbl_10_bss_55608 + delta;\n    if (sum < 0) {\n        v = 0;\n    } else {\n        v = 1;\n        if (sum <= 1) {\n            v = sum;\n        }\n    }\n    lbl_10_bss_55608 = v;\n    if ((s16)v != old) {\n        fn_1_A2D84(0xA9010000);\n        lbl_801A66A8 = 0;\n    }\n    return lbl_10_bss_55608;\n}\n#pragma opt_common_subs reset\n\n",
+    "seed_sha256": "52e29f2428aa38c22764a0c8290ceddaa9235cf4dba8cf8bcc841e1e594c97f5",
+    "generated_sha256": "1986a7f4c32de2f23d50128596660ea35f5444cf5ec2f20046b1c25dd146952f",
+    "generated_source": "#include \"types.h\"\n\nstruct SelG {\n    u8 pad[0x98];\n    u32 flags;\n};\nstruct E9C8 { u8 pad[10]; s8 id; u8 pad2; };\nstruct E9F8 { u8 pad[0x10]; u16 a; u16 b; };\n\nextern s16 lbl_10_bss_55608;\nextern struct SelG lbl_1_bss_8B3A0;\nextern struct E9C8 lbl_1_bss_9C8[];\nextern struct E9F8 lbl_1_bss_9F8[];\nextern u32 lbl_801A66A8;\nextern void fn_1_12F128(s16);\nextern void fn_1_A2D84(u32);\n\nstatic inline struct E9C8 *fn_10_A0E8_array_read(struct E9C8 *array) { return array; }\n#pragma opt_common_subs off\ns16 fn_10_A0E8(void) {\n    s16 old = lbl_10_bss_55608;\n    s32 v;\n    s32 sum;\n    s16 delta = 0;\n    s16 i;\n    u16 b;\n    u16 a;\n\n    for (i = 0; i < 4; i++) {\n        if (((i)[lbl_1_bss_9C8]).id != -1 && __rlwnm(lbl_1_bss_8B3A0.flags, (i + 1) & 31, 31, 31)) {\n            if (((((i)[lbl_1_bss_9F8]).a >> 3) & 1) || ((((i)[lbl_1_bss_9F8]).b >> 3) & 1)) {\n                delta--;\n            }\n            if (((((i)[lbl_1_bss_9F8]).a >> 2) & 1) || ((((i)[lbl_1_bss_9F8]).b >> 2) & 1)) {\n                delta++;\n            }\n            a = ((i)[lbl_1_bss_9F8]).a;\n            if (((a >> 2) & 1) || (((b = ((i)[lbl_1_bss_9F8]).b) >> 2) & 1)) {\n                fn_1_12F128(i);\n            } else if (((a >> 3) & 1) || ((b >> 3) & 1)) {\n                fn_1_12F128(i);\n            }\n        }\n    }\n    sum = lbl_10_bss_55608 + delta;\n    if (sum < 0) {\n        v = 0;\n    } else {\n        v = 1;\n        if (sum <= 1) {\n            v = sum;\n        }\n    }\n    lbl_10_bss_55608 = v;\n    if ((s16)v != old) {\n        fn_1_A2D84(0xA9010000);\n        lbl_801A66A8 = 0;\n    }\n    return lbl_10_bss_55608;\n}\n#pragma opt_common_subs reset\n\n",
+    "compiler": "GC/1.3",
+    "flags": "",
+    "source": "rel/sel/sel/fn_10_A0E8.c",
+    "bytes": 372,
+    "headers_sha256": "73cf7422bff8955cde8d5ebf68ebefe0241675ac791653eb8a9749cb0d84419f",
+    "oracle_sha256": "a6ae7b9acf87233fe9fd4029471150b7998eac228d7c95d874069a8cacaedda8",
+    "recipe": [
+      {
+        "label": "decl-order: order old,v,sum,delta,i",
+        "input_sha256": "52e29f2428aa38c22764a0c8290ceddaa9235cf4dba8cf8bcc841e1e594c97f5",
+        "output_sha256": "dd1a910c433d217b99b8c3a1a883a8ce74f28dc15786ca9e3a899020f7ba83c9",
+        "input_symbol": "fn_10_A0E8",
+        "output_symbol": "fn_10_A0E8",
+        "edits": [
+          [
+            553,
+            553,
+            "    s32 v;\n    s32 sum;\n"
+          ],
+          [
+            583,
+            607,
+            ""
+          ]
+        ]
+      },
+      {
+        "label": "block declarations a, b",
+        "input_sha256": "dd1a910c433d217b99b8c3a1a883a8ce74f28dc15786ca9e3a899020f7ba83c9",
+        "output_sha256": "1986a7f4c32de2f23d50128596660ea35f5444cf5ec2f20046b1c25dd146952f",
+        "input_symbol": "fn_10_A0E8",
+        "output_symbol": "fn_10_A0E8",
+        "edits": [
+          [
+            615,
+            619,
+            "b;\n    u16 a"
+          ]
+        ]
+      }
+    ],
+    "link": "pending"
   }
 }

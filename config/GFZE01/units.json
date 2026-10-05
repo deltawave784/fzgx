@@ -55110,6 +55110,17 @@
   },
   {
     "module": "movie_module",
+    "source": "rel/movie_module/fn_12_341C.c",
+    "symbols": [
+      "fn_12_341C"
+    ],
+    "status": "nonmatching",
+    "mw_version": "GC/2.5",
+    "extra_cflags": [],
+    "pool": true
+  },
+  {
+    "module": "movie_module",
     "source": "rel/movie_module/fn_12_341C0.c",
     "symbols": [
       "fn_12_341C0"
@@ -61541,6 +61552,17 @@
     ],
     "status": "matching",
     "mw_version": null,
+    "extra_cflags": [],
+    "tu": "rel/sel/sel.c"
+  },
+  {
+    "module": "sel",
+    "source": "rel/sel/sel/fn_10_A0E8.c",
+    "symbols": [
+      "fn_10_A0E8"
+    ],
+    "status": "matching",
+    "mw_version": "GC/1.3",
     "extra_cflags": [],
     "tu": "rel/sel/sel.c"
   },
