@@ -126,6 +126,84 @@ void fn_17_1794(void) {
 }
 /* fzgx:end fn_17_1794 */
 
+/* fzgx:begin fn_17_2B9C */
+typedef struct {
+    u8 pad_00[0x28];
+    u8 b28;
+    u8 pad_29[7];
+    u8 b30;
+    u8 pad_31[0x27];
+    u32 flags;
+    u8 pad_5c[0xcc];
+    u8 b128;
+} IvLocal;
+
+typedef struct {
+    u16 flags;
+    u8 pad[0x12];
+} IvEntry;
+
+typedef struct {
+    u8 pad_00[0xe0];
+    u8 b_e0;
+    u8 pad_e1;
+    u8 b_e2;
+} IvOther;
+
+extern IvLocal lbl_17_bss_0;
+extern u8 lbl_1_bss_25E98;
+extern struct { u8 pad[8]; IvEntry e[1]; } lbl_1_bss_9F8;
+extern IvOther lbl_1_bss_5138;
+
+extern u32 fn_17_1798(void);
+extern u32 fn_17_9F8(void);
+extern u8 fn_1_B7C00(void);
+extern void fn_1_FA650(void);
+
+#define F23(x) (((x) >> 8) & 1)
+#define F19(x) (((x) >> 12) & 1)
+#define F27(x) (((x) >> 4) & 1)
+
+void fn_17_2B9C(void) {
+    IvLocal *l = (IvLocal *)&lbl_17_bss_0;
+    if (l->flags & 1) {
+        fn_17_1798();
+    }
+    if (l->flags & 1) {
+        IvEntry *e = lbl_1_bss_9F8.e;
+        u16 f = e[lbl_1_bss_25E98].flags;
+        if (F23(f) || F19(f)) {
+            if (!fn_1_B7C00() && l->b28 && !l->b128) goto call; /* goto: shared call block matches retail branch layout */
+        }
+        if (l->b30) {
+call:
+            fn_17_9F8();
+        }
+        if (F27(e[lbl_1_bss_25E98].flags)) {
+            fn_1_FA650();
+        }
+    } else {
+        if (F19(lbl_1_bss_9F8.e[lbl_1_bss_25E98].flags)) {
+            if (!fn_1_B7C00() && l->b28 && !l->b128) goto call2; /* goto: shared call block matches retail branch layout */
+        }
+        if (l->b30) {
+call2:
+            fn_17_9F8();
+        }
+    }
+    if ((s32)lbl_1_bss_5138.b_e2 != 0) {
+        u32 x = lbl_1_bss_5138.b_e2;
+        u32 g = F23(lbl_1_bss_9F8.e[lbl_1_bss_25E98].flags);
+        if (x != 0 && (s32)g != 0) {
+            u8 v = lbl_1_bss_5138.b_e0;
+            if (v >= 0xf && v <= 0x78) {
+                lbl_1_bss_5138.b_e0 = 0x78;
+            }
+        }
+    }
+}
+/* fzgx:end fn_17_2B9C */
+
 /* fzgx:begin fn_17_2D24 */
 extern u32 lbl_17_bss_14;
 extern u32 lbl_17_bss_18[2];
