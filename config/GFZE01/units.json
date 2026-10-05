@@ -51197,6 +51197,18 @@
   },
   {
     "module": "main_rel",
+    "source": "rel/main_rel/stcoli/fn_1_2D038.c",
+    "symbols": [
+      "fn_1_2D038"
+    ],
+    "status": "nonmatching",
+    "mw_version": "GC/1.3.2",
+    "extra_cflags": [],
+    "tu": "rel/main_rel/stcoli.c",
+    "pool": true
+  },
+  {
+    "module": "main_rel",
     "source": "rel/main_rel/stcoli/fn_1_3FCD4.c",
     "symbols": [
       "fn_1_3FCD4"
