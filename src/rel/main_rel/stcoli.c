@@ -1205,6 +1205,133 @@ void fn_1_2192C(void *self, void *arg) {
 }
 /* fzgx:end fn_1_2192C */
 
+/* fzgx:begin fn_1_21950 noprologue */
+#include "types.h"
+#include "dolphin/hw_regs.h"
+
+typedef struct Fn_1_21950Vec {
+    f32 x;
+    f32 y;
+    f32 z;
+} Fn_1_21950Vec;
+
+typedef struct Fn_1_21950Constants {
+    u8 pad_0[8];
+    f32 zero;      /* 0x08 */
+    u8 pad_c[0x14];
+    f32 half;      /* 0x20 */
+    u8 pad_24[0x10];
+    f32 neg_half;  /* 0x34 */
+} Fn_1_21950Constants;
+
+extern Fn_1_21950Constants lbl_1_rodata_6C8;
+/* transform a vector by the current matrix, in place when src == dst */
+extern void lbl_8006E1B0(Fn_1_21950Vec *src, Fn_1_21950Vec *dst);
+extern void lbl_8006DAEC(void);
+extern u32 lbl_8006DCA4(void);
+extern void fn_80072558(void);
+extern void fn_8003462C(u32, u32, u32);
+extern void lbl_8006DB30(void);
+
+/* GX write-gather FIFO: the compiler is free to reorder these stores */
+#define GX_FIFO_F32 (*(f32 *)GX_FIFO_BASE)
+
+static inline void fn_1_21950_set(Fn_1_21950Vec *v, f32 x, f32 y, f32 z) {
+    f32 *fzgx_value;
+    fzgx_value = &(v->x);
+    *fzgx_value = x;
+    v->y = y;
+    v->z = z;
+}
+
+static inline void fn_1_21950_pos3(f32 x, f32 y, f32 z) {
+    GX_FIFO_F32 = x;
+    GX_FIFO_F32 = y;
+    GX_FIFO_F32 = z;
+}
+
+#pragma opt_propagation off
+void fn_1_21950(f32 *scale, f32 arg1, f32 arg2) {
+    f32 fzgx_live;
+    Fn_1_21950Constants *c;
+    s32 drawA;
+    s32 drawB;
+    Fn_1_21950Vec c1;
+    Fn_1_21950Vec c0;
+    Fn_1_21950Vec b1;
+    Fn_1_21950Vec b0;
+    Fn_1_21950Vec a1;
+    Fn_1_21950Vec a0;
+
+    c = (Fn_1_21950Constants *)&lbl_1_rodata_6C8;
+    fzgx_live = c->zero;
+    drawA = fzgx_live != arg1;
+    fzgx_live = c->zero;
+    drawB = fzgx_live != arg2;
+
+    fzgx_live = c->zero;
+    fn_1_21950_set(&a0, c->neg_half, fzgx_live, fzgx_live);
+    a0.x *= *scale;
+    lbl_8006E1B0(&a0, &a0);
+
+    fzgx_live = c->zero;
+    fn_1_21950_set(&a1, c->half, fzgx_live, fzgx_live);
+    a1.x = c->half * *scale;
+    lbl_8006E1B0(&a1, &a1);
+
+    if (drawA) {
+        fzgx_live = c->zero;
+        fn_1_21950_set(&b0, c->neg_half, fzgx_live, fzgx_live);
+        b0.x = c->neg_half * *scale;
+        lbl_8006E1B0(&b0, &b0);
+
+        fzgx_live = c->zero;
+        fn_1_21950_set(&b1, c->neg_half, arg1, fzgx_live);
+        b1.x = c->neg_half * *scale;
+        lbl_8006E1B0(&b1, &b1);
+    }
+
+    if (drawB) {
+        fzgx_live = c->zero;
+        fn_1_21950_set(&c0, c->half, fzgx_live, fzgx_live);
+        c0.x = c->half * *scale;
+        lbl_8006E1B0(&c0, &c0);
+
+        fzgx_live = c->zero;
+        fn_1_21950_set(&c1, c->half, arg2, fzgx_live);
+        c1.x = c->half * *scale;
+        lbl_8006E1B0(&c1, &c1);
+    }
+
+    lbl_8006DAEC();
+    lbl_8006DCA4();
+    fn_80072558();
+
+    fn_8003462C(0xb0, 0, 2);
+    GX_FIFO_F32 = a0.x;
+    GX_FIFO_F32 = a0.y;
+    GX_FIFO_F32 = a0.z;
+    GX_FIFO_F32 = a1.x;
+    GX_FIFO_F32 = a1.y;
+    GX_FIFO_F32 = a1.z;
+
+    if (drawA) {
+        fn_8003462C(0xb0, 0, 2);
+        fn_1_21950_pos3(b0.x, b0.y, b0.z);
+        fn_1_21950_pos3(b1.x, b1.y, b1.z);
+    }
+
+    if (drawB) {
+        fn_8003462C(0xb0, 0, 2);
+        fn_1_21950_pos3(c0.x, c0.y, c0.z);
+        fn_1_21950_pos3(c1.x, c1.y, c1.z);
+    }
+
+    lbl_8006DB30();
+}
+#pragma opt_propagation reset
+/* fzgx:end fn_1_21950 */
+
 /* fzgx:begin fn_1_21BE4 */
 typedef struct Fn_1_21BE4 {
     u32 flags;

@@ -6611,3 +6611,6 @@ rel/main_rel/font/fn_1_553C4.c:
 
 rel/main_rel/stcoli/fn_1_28F08.c:
 	.text       start:0x00028F08 end:0x00029044 align:4
+
+rel/main_rel/stcoli/fn_1_21950.c:
+	.text       start:0x00021950 end:0x00021BE4 align:4

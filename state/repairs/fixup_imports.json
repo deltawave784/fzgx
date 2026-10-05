@@ -10851,5 +10851,101 @@
     ],
     "link": "verified",
     "commit": "8e2214cb"
+  },
+  "fn_1_21950": {
+    "seed_symbol": "fn_1_21950",
+    "generator": "fzgx fixup",
+    "transform": "region composition: attributed signed drawA at line 68 + lifetime pointer c->zero at every site with opt_propagation off",
+    "seed": "#include \"types.h\"\n#include \"dolphin/hw_regs.h\"\n\ntypedef struct Fn_1_21950Vec {\n    f32 x;\n    f32 y;\n    f32 z;\n} Fn_1_21950Vec;\n\ntypedef struct Fn_1_21950Constants {\n    u8 pad_0[8];\n    f32 zero;      /* 0x08 */\n    u8 pad_c[0x14];\n    f32 half;      /* 0x20 */\n    u8 pad_24[0x10];\n    f32 neg_half;  /* 0x34 */\n} Fn_1_21950Constants;\n\nextern Fn_1_21950Constants lbl_1_rodata_6C8;\n/* transform a vector by the current matrix, in place when src == dst */\nextern void lbl_8006E1B0(Fn_1_21950Vec *src, Fn_1_21950Vec *dst);\nextern void lbl_8006DAEC(void);\nextern u32 lbl_8006DCA4(void);\nextern void fn_80072558(void);\nextern void fn_8003462C(u32, u32, u32);\nextern void lbl_8006DB30(void);\n\n/* GX write-gather FIFO: the compiler is free to reorder these stores */\n#define GX_FIFO_F32 (*(f32 *)GX_FIFO_BASE)\n\nstatic inline void fn_1_21950_set(Fn_1_21950Vec *v, f32 x, f32 y, f32 z) {\n    v->x = x;\n    v->y = y;\n    v->z = z;\n}\n\nstatic inline void fn_1_21950_pos3(f32 x, f32 y, f32 z) {\n    GX_FIFO_F32 = x;\n    GX_FIFO_F32 = y;\n    GX_FIFO_F32 = z;\n}\n\nvoid fn_1_21950(f32 *scale, f32 arg1, f32 arg2) {\n    Fn_1_21950Constants *c;\n    u32 drawA;\n    s32 drawB;\n    Fn_1_21950Vec c1;\n    Fn_1_21950Vec c0;\n    Fn_1_21950Vec b1;\n    Fn_1_21950Vec b0;\n    Fn_1_21950Vec a1;\n    Fn_1_21950Vec a0;\n\n    c = (Fn_1_21950Constants *)&lbl_1_rodata_6C8;\n    drawA = c->zero != arg1;\n    drawB = c->zero != arg2;\n\n    fn_1_21950_set(&a0, c->neg_half, c->zero, c->zero);\n    a0.x *= *scale;\n    lbl_8006E1B0(&a0, &a0);\n\n    fn_1_21950_set(&a1, c->half, c->zero, c->zero);\n    a1.x = c->half * *scale;\n    lbl_8006E1B0(&a1, &a1);\n\n    if (drawA) {\n        fn_1_21950_set(&b0, c->neg_half, c->zero, c->zero);\n        b0.x = c->neg_half * *scale;\n        lbl_8006E1B0(&b0, &b0);\n\n        fn_1_21950_set(&b1, c->neg_half, arg1, c->zero);\n        b1.x = c->neg_half * *scale;\n        lbl_8006E1B0(&b1, &b1);\n    }\n\n    if (drawB) {\n        fn_1_21950_set(&c0, c->half, c->zero, c->zero);\n        c0.x = c->half * *scale;\n        lbl_8006E1B0(&c0, &c0);\n\n        fn_1_21950_set(&c1, c->half, arg2, c->zero);\n        c1.x = c->half * *scale;\n        lbl_8006E1B0(&c1, &c1);\n    }\n\n    lbl_8006DAEC();\n    lbl_8006DCA4();\n    fn_80072558();\n\n    fn_8003462C(0xb0, 0, 2);\n    GX_FIFO_F32 = a0.x;\n    GX_FIFO_F32 = a0.y;\n    GX_FIFO_F32 = a0.z;\n    GX_FIFO_F32 = a1.x;\n    GX_FIFO_F32 = a1.y;\n    GX_FIFO_F32 = a1.z;\n\n    if (drawA) {\n        fn_8003462C(0xb0, 0, 2);\n        fn_1_21950_pos3(b0.x, b0.y, b0.z);\n        fn_1_21950_pos3(b1.x, b1.y, b1.z);\n    }\n\n    if (drawB) {\n        fn_8003462C(0xb0, 0, 2);\n        fn_1_21950_pos3(c0.x, c0.y, c0.z);\n        fn_1_21950_pos3(c1.x, c1.y, c1.z);\n    }\n\n    lbl_8006DB30();\n}\n",
+    "seed_sha256": "f1c82198f6e979bacdbcbe541e0102e672984478e69c77fc5ccdc9797b79f773",
+    "generated_sha256": "d5e2996639074c1453024595e7c5c2cb282da7f333be1c81c6bd98781e3aeee7",
+    "generated_source": "#include \"types.h\"\n#include \"dolphin/hw_regs.h\"\n\ntypedef struct Fn_1_21950Vec {\n    f32 x;\n    f32 y;\n    f32 z;\n} Fn_1_21950Vec;\n\ntypedef struct Fn_1_21950Constants {\n    u8 pad_0[8];\n    f32 zero;      /* 0x08 */\n    u8 pad_c[0x14];\n    f32 half;      /* 0x20 */\n    u8 pad_24[0x10];\n    f32 neg_half;  /* 0x34 */\n} Fn_1_21950Constants;\n\nextern Fn_1_21950Constants lbl_1_rodata_6C8;\n/* transform a vector by the current matrix, in place when src == dst */\nextern void lbl_8006E1B0(Fn_1_21950Vec *src, Fn_1_21950Vec *dst);\nextern void lbl_8006DAEC(void);\nextern u32 lbl_8006DCA4(void);\nextern void fn_80072558(void);\nextern void fn_8003462C(u32, u32, u32);\nextern void lbl_8006DB30(void);\n\n/* GX write-gather FIFO: the compiler is free to reorder these stores */\n#define GX_FIFO_F32 (*(f32 *)GX_FIFO_BASE)\n\nstatic inline void fn_1_21950_set(Fn_1_21950Vec *v, f32 x, f32 y, f32 z) {\n    f32 *fzgx_value;\n    fzgx_value = &(v->x);\n    *fzgx_value = x;\n    v->y = y;\n    v->z = z;\n}\n\nstatic inline void fn_1_21950_pos3(f32 x, f32 y, f32 z) {\n    GX_FIFO_F32 = x;\n    GX_FIFO_F32 = y;\n    GX_FIFO_F32 = z;\n}\n\n#pragma opt_propagation off\nvoid fn_1_21950(f32 *scale, f32 arg1, f32 arg2) {\n    f32 fzgx_live;\n    Fn_1_21950Constants *c;\n    s32 drawA;\n    s32 drawB;\n    Fn_1_21950Vec c1;\n    Fn_1_21950Vec c0;\n    Fn_1_21950Vec b1;\n    Fn_1_21950Vec b0;\n    Fn_1_21950Vec a1;\n    Fn_1_21950Vec a0;\n\n    c = (Fn_1_21950Constants *)&lbl_1_rodata_6C8;\n    fzgx_live = c->zero;\n    drawA = fzgx_live != arg1;\n    fzgx_live = c->zero;\n    drawB = fzgx_live != arg2;\n\n    fzgx_live = c->zero;\n    fn_1_21950_set(&a0, c->neg_half, fzgx_live, fzgx_live);\n    a0.x *= *scale;\n    lbl_8006E1B0(&a0, &a0);\n\n    fzgx_live = c->zero;\n    fn_1_21950_set(&a1, c->half, fzgx_live, fzgx_live);\n    a1.x = c->half * *scale;\n    lbl_8006E1B0(&a1, &a1);\n\n    if (drawA) {\n        fzgx_live = c->zero;\n        fn_1_21950_set(&b0, c->neg_half, fzgx_live, fzgx_live);\n        b0.x = c->neg_half * *scale;\n        lbl_8006E1B0(&b0, &b0);\n\n        fzgx_live = c->zero;\n        fn_1_21950_set(&b1, c->neg_half, arg1, fzgx_live);\n        b1.x = c->neg_half * *scale;\n        lbl_8006E1B0(&b1, &b1);\n    }\n\n    if (drawB) {\n        fzgx_live = c->zero;\n        fn_1_21950_set(&c0, c->half, fzgx_live, fzgx_live);\n        c0.x = c->half * *scale;\n        lbl_8006E1B0(&c0, &c0);\n\n        fzgx_live = c->zero;\n        fn_1_21950_set(&c1, c->half, arg2, fzgx_live);\n        c1.x = c->half * *scale;\n        lbl_8006E1B0(&c1, &c1);\n    }\n\n    lbl_8006DAEC();\n    lbl_8006DCA4();\n    fn_80072558();\n\n    fn_8003462C(0xb0, 0, 2);\n    GX_FIFO_F32 = a0.x;\n    GX_FIFO_F32 = a0.y;\n    GX_FIFO_F32 = a0.z;\n    GX_FIFO_F32 = a1.x;\n    GX_FIFO_F32 = a1.y;\n    GX_FIFO_F32 = a1.z;\n\n    if (drawA) {\n        fn_8003462C(0xb0, 0, 2);\n        fn_1_21950_pos3(b0.x, b0.y, b0.z);\n        fn_1_21950_pos3(b1.x, b1.y, b1.z);\n    }\n\n    if (drawB) {\n        fn_8003462C(0xb0, 0, 2);\n        fn_1_21950_pos3(c0.x, c0.y, c0.z);\n        fn_1_21950_pos3(c1.x, c1.y, c1.z);\n    }\n\n    lbl_8006DB30();\n}\n#pragma opt_propagation reset\n\n",
+    "compiler": "GC/1.3",
+    "flags": "",
+    "source": "rel/main_rel/stcoli/fn_1_21950.c",
+    "bytes": 660,
+    "headers_sha256": "73cf7422bff8955cde8d5ebf68ebefe0241675ac791653eb8a9749cb0d84419f",
+    "oracle_sha256": "f7685915459d64c15c3a0f781fa019d6ff8789da838592c92e6a24d5eba8b159",
+    "recipe": [
+      {
+        "label": "inline fn_1_21950_set: lifetime store address at 883",
+        "input_sha256": "f1c82198f6e979bacdbcbe541e0102e672984478e69c77fc5ccdc9797b79f773",
+        "output_sha256": "b796c3502dc8fbaca040e2a5b498cfbe18011cd3fa64cf6c8426cfc49454cac7",
+        "input_symbol": "fn_1_21950",
+        "output_symbol": "fn_1_21950",
+        "edits": [
+          [
+            887,
+            891,
+            "f32 *fzgx_value;\n    fzgx_value = &(v->x);\n    *fzgx_value"
+          ]
+        ]
+      },
+      {
+        "label": "region composition: attributed signed drawA at line 68 + lifetime pointer c->zero at every site with opt_propagation off",
+        "input_sha256": "b796c3502dc8fbaca040e2a5b498cfbe18011cd3fa64cf6c8426cfc49454cac7",
+        "output_sha256": "d5e2996639074c1453024595e7c5c2cb282da7f333be1c81c6bd98781e3aeee7",
+        "input_symbol": "fn_1_21950",
+        "output_symbol": "fn_1_21950",
+        "edits": [
+          [
+            1106,
+            1106,
+            "#pragma opt_propagation off\n"
+          ],
+          [
+            1156,
+            1156,
+            "    f32 fzgx_live;\n"
+          ],
+          [
+            1188,
+            1189,
+            "s"
+          ],
+          [
+            1401,
+            1445,
+            "fzgx_live = c->zero;\n    drawA = fzgx_live != arg1;\n    fzgx_live = c->zero;\n    drawB = fzgx_live"
+          ],
+          [
+            1461,
+            1509,
+            "zgx_live = c->zero;\n    fn_1_21950_set(&a0, c->neg_half, fzgx_live, fzgx_live"
+          ],
+          [
+            1566,
+            1610,
+            "zgx_live = c->zero;\n    fn_1_21950_set(&a1, c->half, fzgx_live, fzgx_live"
+          ],
+          [
+            1697,
+            1745,
+            "zgx_live = c->zero;\n        fn_1_21950_set(&b0, c->neg_half, fzgx_live, fzgx_live"
+          ],
+          [
+            1827,
+            1872,
+            "zgx_live = c->zero;\n        fn_1_21950_set(&b1, c->neg_half, arg1, fzgx_live"
+          ],
+          [
+            1977,
+            2021,
+            "zgx_live = c->zero;\n        fn_1_21950_set(&c0, c->half, fzgx_live, fzgx_live"
+          ],
+          [
+            2099,
+            2140,
+            "zgx_live = c->zero;\n        fn_1_21950_set(&c1, c->half, arg2, fzgx_live"
+          ],
+          [
+            2757,
+            2757,
+            "#pragma opt_propagation reset\n\n"
+          ]
+        ]
+      }
+    ],
+    "link": "pending"
   }
 }
