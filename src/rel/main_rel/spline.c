@@ -1661,6 +1661,70 @@ void fn_1_FA898(void) {
 }
 /* fzgx:end fn_1_FA898 */
 
+/* fzgx:begin fn_1_FA89C noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+
+typedef struct {
+    u8 flag;          // 0x00
+    u8 pad[0x43];
+    f32 mtx[4][12];   // 0x44
+    u32 x[4];         // 0x104
+    u32 y[4];         // 0x114
+    u32 w[4];         // 0x124
+    u32 h[4];         // 0x134
+    u32 halfW[4];     // 0x144
+    u32 halfH[4];     // 0x154
+    f32 scale;        // 0x164
+} SplineViewport;
+
+typedef struct {
+    u32 unk_0;
+    SplineViewport vp;
+} SplineViewportHolder;
+
+extern int fn_1_58C4(void);
+extern void fn_1_5948(int);
+extern void fn_1_627C(int);
+extern void fn_1_A714C(f32 *, f32 *, f32 *, f32 *);
+extern void fn_80015CB0(f32 *, f32, f32, f32, f32, f32, f32);
+extern void fn_80038FD8(u32 *, u32 *, u32 *, u32 *);
+
+void fn_1_FA89C(SplineViewportHolder *holder) {
+    int count;
+    u32 x, w, y, h;
+    int i;
+    SplineViewport *s;
+    s16 cx, cy;
+    f32 xlo, ylo, xr, yr;
+    f32 near_, far_, unk0, unk1;
+
+    count = fn_1_58C4();
+    s = &holder->vp;
+    s->flag = 0;
+    s->scale = 1.0f;
+    for (i = 0; i < count; i++) {
+        fn_1_5948(i);
+        fn_80038FD8(&s->x[i], &s->y[i], &s->w[i], &s->h[i]);
+        s->halfW[i] = (u32)((f32)s->w[i] / s->scale);
+        s->halfH[i] = (u32)((f32)s->h[i] / s->scale);
+        w = s->w[i];
+        h = s->h[i];
+        x = s->x[i];
+        y = s->y[i];
+        cx = (s16)(x + (w >> 1));
+        cy = (s16)(y + (h >> 1));
+        xlo = (f32)(s16)x / (f32)cx - 1.0f;
+        ylo = (f32)(s16)y / (f32)cy - 1.0f;
+        fn_1_A714C(&near_, &far_, &unk0, &unk1);
+        yr = (f32)(s16)(y + h) / (f32)cy - 1.0f - ylo;
+        xr = (f32)(s16)(x + w) / (f32)cx - 1.0f - xlo;
+        fn_80015CB0(s->mtx[i], near_, far_, 1.0f / xr, -1.0f / yr, -xlo / xr, -ylo / yr);
+        fn_1_627C(i);
+    }
+}
+/* fzgx:end fn_1_FA89C */
+
 /* fzgx:begin fn_1_FB0A8 */
 Obj_1_bss_84428 *fn_1_FB0A8(void) {
     return &lbl_1_bss_84428;
