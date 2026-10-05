@@ -5423,3 +5423,6 @@ dol/fn_80067DE4.c:
 
 dol/fn_80039C40.c:
 	.text       start:0x80039C40 end:0x80039E48 align:4
+
+dol/fn_8004CAC8.c:
+	.text       start:0x8004CAC8 end:0x8004CD70 align:4
