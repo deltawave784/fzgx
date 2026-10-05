@@ -11363,5 +11363,57 @@
     ],
     "link": "verified",
     "commit": "3044730a"
+  },
+  "fn_12_31224": {
+    "seed_symbol": "fn_12_31224",
+    "generator": "fzgx fixup",
+    "transform": "reroll unrolled loop i (indexed): 13 x2 steps -> 26 x1 (stride 0x80) + narrow parameter arg1 to u8, casts kept, order i,base,e,found",
+    "seed": "#include \"types.h\"\n\nstruct fn_12_31224_Arg0 {\n    s32 unk_0;\n    u8 *unk_4;\n    u8 pad_8[0x4];\n    s32 unk_C;\n    u8 pad_10[0x10];\n    u8 unk_20;\n    u8 pad_21[2];\n    u8 unk_23;\n};\n\nstatic inline int fn_12_31224_a(struct fn_12_31224_Arg0 *a) {\n    int r;\n    switch (a->unk_0) {\n    case -1:\n    case 0:\n    case 1:\n        r = 0;\n        break;\n    default:\n        r = 1;\n        break;\n    }\n    return r;\n}\n\nstatic inline int fn_12_31224_b(struct fn_12_31224_Arg0 *a) {\n    int ok;\n    if (!fn_12_31224_a(a)) {\n        return 0;\n    }\n    ok = 0;\n    if (a->unk_C == 107 || a->unk_C >= 110) {\n        ok = 1;\n    }\n    if (!ok) {\n        return 0;\n    }\n    return 1;\n}\n\nstatic inline u8 *fn_12_31224_find(struct fn_12_31224_Arg0 *a, u8 ch) {\n    u8 *base = a->unk_4;\n    u8 *found;\n    int i;\n    if (!fn_12_31224_b(a)) {\n        return 0;\n    }\n    found = 0;\n    for (i = 0; i < 13; i++) {\n        u8 *e = base + i * 0x80 + 0x180;\n        if (e[0x18] == ch) {\n            found = e;\n            break;\n        }\n        e = base + i * 0x80 + 0x1c0;\n        if (e[0x18] == ch) {\n            found = e;\n            break;\n        }\n    }\n    return found;\n}\n\nstatic inline u32 fn_12_31224_cls(u32 c) {\n    if (c >= 0xc0 && c <= 0xdf) {\n        return 0xc0;\n    }\n    if (c >= 0xe0 && c <= 0xef) {\n        return 0xe0;\n    }\n    if (c == 0xbd || c == 0xbf) {\n        return 0xbd;\n    }\n    return 0;\n}\n\nstatic inline int fn_12_31224_d(struct fn_12_31224_Arg0 *a, u32 c) {\n    u32 v;\n    if (fn_12_31224_cls(c) != 0xe0) {\n        return 0;\n    }\n    v = a->unk_20;\n    if (v > 1) {\n        return 0;\n    }\n    if (v == 0) {\n        return 0;\n    }\n    return 1;\n}\n\nint fn_12_31224(struct fn_12_31224_Arg0 *arg0, u32 arg1, u32 *arg2) {\n    u8 *found = fn_12_31224_find(arg0, (u8)arg1);\n    if (found == 0) {\n        return 0;\n    }\n    if (!fn_12_31224_d((struct fn_12_31224_Arg0 *)found, (u8)arg1)) {\n        return 0;\n    }\n    *arg2 = ((struct fn_12_31224_Arg0 *)found)->unk_23 & 1;\n    return 1;\n}\n",
+    "seed_sha256": "df33e7a3fe9fa2ba234e8643f891ad0d510168b666996156cd3a5415c22916e4",
+    "generated_sha256": "1f70e349315fd39f890d925547550991ae7f21970ebd6fde1e800581b8f82dd0",
+    "generated_source": "#include \"types.h\"\n\nstruct fn_12_31224_Arg0 {\n    s32 unk_0;\n    u8 *unk_4;\n    u8 pad_8[0x4];\n    s32 unk_C;\n    u8 pad_10[0x10];\n    u8 unk_20;\n    u8 pad_21[2];\n    u8 unk_23;\n};\n\nstatic inline int fn_12_31224_a(struct fn_12_31224_Arg0 *a) {\n    int r;\n    switch (a->unk_0) {\n    case -1:\n    case 0:\n    case 1:\n        r = 0;\n        break;\n    default:\n        r = 1;\n        break;\n    }\n    return r;\n}\n\nstatic inline int fn_12_31224_b(struct fn_12_31224_Arg0 *a) {\n    int ok;\n    if (!fn_12_31224_a(a)) {\n        return 0;\n    }\n    ok = 0;\n    if (a->unk_C == 107 || a->unk_C >= 110) {\n        ok = 1;\n    }\n    if (!ok) {\n        return 0;\n    }\n    return 1;\n}\n\nstatic inline u8 *fn_12_31224_find(struct fn_12_31224_Arg0 *a, u8 ch) {\n    int i;\n    u8 *base = a->unk_4;\n    u8 *e;\n    u8 *found;\n    if (!fn_12_31224_b(a)) {\n        return 0;\n    }\n    found = 0;\n    for (i = 0; i < 26; i++) {\n        e = base + i * 0x40 + 0x180;\n        if (e[0x18] == ch) {\n            found = e;\n            break;\n        }\n    }\n    return found;\n}\n\nstatic inline u32 fn_12_31224_cls(u32 c) {\n    if (c >= 0xc0 && c <= 0xdf) {\n        return 0xc0;\n    }\n    if (c >= 0xe0 && c <= 0xef) {\n        return 0xe0;\n    }\n    if (c == 0xbd || c == 0xbf) {\n        return 0xbd;\n    }\n    return 0;\n}\n\nstatic inline int fn_12_31224_d(struct fn_12_31224_Arg0 *a, u32 c) {\n    u32 v;\n    if (fn_12_31224_cls(c) != 0xe0) {\n        return 0;\n    }\n    v = a->unk_20;\n    if (v > 1) {\n        return 0;\n    }\n    if (v == 0) {\n        return 0;\n    }\n    return 1;\n}\n\nint fn_12_31224(struct fn_12_31224_Arg0 *arg0, u8 arg1, u32 *arg2) {\n    u8 *found = fn_12_31224_find(arg0, (u8)arg1);\n    if (found == 0) {\n        return 0;\n    }\n    if (!fn_12_31224_d((struct fn_12_31224_Arg0 *)found, (u8)arg1)) {\n        return 0;\n    }\n    *arg2 = ((struct fn_12_31224_Arg0 *)found)->unk_23 & 1;\n    return 1;\n}\n",
+    "compiler": "GC/1.3.2",
+    "flags": "",
+    "source": "rel/movie_module/fn_12_31224.c",
+    "bytes": 388,
+    "headers_sha256": "73cf7422bff8955cde8d5ebf68ebefe0241675ac791653eb8a9749cb0d84419f",
+    "oracle_sha256": "a6ae7b9acf87233fe9fd4029471150b7998eac228d7c95d874069a8cacaedda8",
+    "recipe": [
+      {
+        "label": "reroll unrolled loop i (indexed): 13 x2 steps -> 26 x1 (stride 0x80) + narrow parameter arg1 to u8, casts kept, order i,base,e,found",
+        "input_sha256": "df33e7a3fe9fa2ba234e8643f891ad0d510168b666996156cd3a5415c22916e4",
+        "output_sha256": "1f70e349315fd39f890d925547550991ae7f21970ebd6fde1e800581b8f82dd0",
+        "input_symbol": "fn_12_31224",
+        "output_symbol": "fn_12_31224",
+        "edits": [
+          [
+            748,
+            748,
+            "    int i;\n"
+          ],
+          [
+            773,
+            773,
+            "    u8 *e;\n"
+          ],
+          [
+            788,
+            799,
+            ""
+          ],
+          [
+            887,
+            1054,
+            "26; i++) {\n        e = base + i * 0x40 + 0x18"
+          ],
+          [
+            1717,
+            1719,
+            "8"
+          ]
+        ]
+      }
+    ],
+    "link": "pending"
   }
 }
