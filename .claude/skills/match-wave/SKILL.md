@@ -80,20 +80,38 @@ One batch = steps 1-5 above with these changes:
 - If `route --fable` returns fewer than 4 rows, lower `--min-percent` to 95, then 90. Below 90 the match rate is
   unmeasured: stop and ask.
 
-Before EVERY batch check usage with the `mcp__ccd_session_mgmt__get_usage` tool (load it with ToolSearch). The user
-set a hard cap of 95% on both windows (the last 5% is for their other projects). A batch can itself use up to
-about 6% of a window, so a batch starts only if it can finish under the cap:
-- weekly all-models or weekly Fable at 89% or more: STOP and push a notification (the weekly window resets Monday 5pm).
-- 5-hour window at 88% or more: wait for it to reset (sleep in the background until `resetsAt`), then continue.
-- extra usage `spent` above 0: STOP and notify (the run must never spend money).
+Before EVERY batch check usage with the `mcp__ccd_session_mgmt__get_usage` tool (load it with ToolSearch). Changed
+2026-10-05 at the user's request: the user does not use Fable for anything else, so the **weekly Fable window may be
+run to its limit**; the 95% cap now applies only to the **5-hour window and the weekly all-models window** (shared
+with Opus/Sonnet and the user's other projects). A Fable batch costs 3-7% of the weekly Fable window (7 on
+2026-10-05 when agents ran long). Pick the mode for the next batch from the usage reading:
+- weekly Fable below 94%: run a Fable batch (the batch may end at or just over 100%; an agent that dies on the limit
+  commits nothing, so close the batch as usual and let `verify` drain whatever was submitted).
+- weekly Fable at 94% or more, or a Fable batch ended because the limit was hit: switch to **fallback mode** (below)
+  and stay there until `resetsAt` of the Fable window has passed (then re-read usage and return to Fable batches).
+- weekly all-models or 5-hour at 89% or more: 5-hour: wait for it to reset (sleep in the background until
+  `resetsAt`), then continue; weekly all-models: STOP and push a notification (resets Monday 5pm).
+- extra usage `spent` above 0: STOP and notify (the run must never spend money). Extra usage is enabled on this
+  account, so confirm after each Fable batch near the limit that `spent` is still 0.
 After the first three batches, replace the 6% allowance with the largest weekly and 5-hour increase one batch
 actually caused (measure usage before and after each batch) plus 1 point, so the margin tracks real cost.
+
+### Fallback mode (Opus and Sonnet, automatic when Fable is at its limit)
+
+One batch = the wave procedure in steps 1-5 above, unchanged: `route --json --limit 16 --skip-tried
+--escalate-from sonnet-`, 8 rows (at most 2 Opus rows, the rest Sonnet `matcher-mid`), 6 agents at a time, close-out
+with `reuse`, `fixup`, `verify`, hash check, `report`. Agent ids use the `sonnet-`/`opus-` prefixes so the next
+wave's `--escalate-from` finds them. Expected yield is lower (about 25% of fresher functions, measured earlier) than
+Fable's near-miss yield, so apply the usual stop rule: two consecutive fallback batches matching nothing stops the
+run. While in fallback mode check usage before every batch; the 5-hour and weekly all-models caps above apply. When
+the Fable window resets, go back to Fable batches (they retry what Opus and Sonnet released).
 
 Stop conditions (in addition to those under Unattended runs): hash check fails; two consecutive batches match
 nothing (agents + reuse + fixup); the same tooling error twice; a permission refusal; `git status` not clean after a
 close-out. On every stop, call PushNotification (load via ToolSearch) with one line that leads with the reason, e.g.
 `decomp stopped: hash check failed after batch 7 (fn_xxx); tree restored`. Also push once every 5 batches with the
-running total (`batch 10 done: 41 fn matched today, 31.9% code`). No other notifications.
+running total (`batch 10 done: 41 fn matched today, 31.9% code`). Also push once when the run switches between Fable
+and fallback mode (`decomp: Fable limit reached, continuing with Opus/Sonnet`). No other notifications.
 
 After a context compaction, re-read this skill and the last 40 lines of `.fzgx/reports/waves.md` before continuing.
 
