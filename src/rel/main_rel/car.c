@@ -1457,6 +1457,103 @@ void fn_1_85F70(void) {
 }
 /* fzgx:end fn_1_85F70 */
 
+/* fzgx:begin fn_1_85F90 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/car.h"
+
+typedef struct {
+    u8 pad_0[0x118];
+    u32 unk_118;
+    u32 unk_11C;
+    u8 pad_120[0x20];
+    s32 unk_140;
+    f32 unk_144;
+    f32 unk_148;
+    f32 unk_14C;
+    f32 unk_150;
+} CarSound;
+
+typedef struct {
+    u32 flags;
+    u8 pad_4[0x498];
+    CarSound *sound;
+} Car;
+
+typedef struct {
+    u8 pad_0[0x400];
+    u8 mtx[0x70];
+    u8 mtx2[0x30];
+} CamObj;
+
+// Shared literal pool of car.c: [4] = 0.0f, [10] = 1.0f, [0x15A] = 0.1f, [0x15C] = -0.1f.
+extern f32 lbl_1_rodata_3508[];
+extern s32 fn_1_20A5C(f32 *, f32 *);
+extern s32 fn_1_21644(f32 *, f32 *, s32);
+extern CamObj *fn_1_14F04(void);
+extern void fn_1_17920(s32, s32, f32);
+extern void fn_1_892FC(Car *, f32 *, f32 *);
+extern void fn_1_23500(Car *, f32);
+extern void lbl_8006D7F4(f32, f32, f32);
+extern void lbl_8006DBAC(void *);
+extern void lbl_8006E0A4(void *);
+extern void lbl_8006E0B4(f32, f32, f32);
+
+static inline void SetVec3(f32 *v, f32 x, f32 y, f32 z) {
+    v[0] = x;
+    v[1] = y;
+    v[2] = z;
+}
+
+void fn_1_85F90(Car *car, s32 idx, f32 arg0, f32 x, f32 y, f32 z) {
+    // One-member struct keeps the pool base in a register instead of rematerialising it.
+    struct { f32 *value; } pool;
+    s32 reset;
+    CarSound *snd;
+    s32 result;
+    u8 *cam;
+    f32 *pos;
+    f32 dist;
+
+    pool.value = lbl_1_rodata_3508;
+    snd = car->sound;
+    if (lbl_1_bss_3BE0 == NULL || snd == NULL) {
+        lbl_8006D7F4(pool.value[4], pool.value[10], pool.value[0x15C]);
+        reset = 1;
+    } else {
+        pos = &snd->unk_148;
+        SetVec3(pos, x, y, z);
+        if (idx < 0) {
+            result = fn_1_20A5C(pos, &dist);
+        } else {
+            result = fn_1_21644(pos, &dist, idx);
+        }
+        snd->unk_140 = result;
+        snd->unk_144 = dist;
+        if (lbl_1_bss_3BE0->unk_7D != 0 && result == 0 && dist < pool.value[4]) {
+            cam = (u8 *)fn_1_14F04() + 0x400;
+            fn_1_17920(0, 0, pool.value[4]);
+            lbl_8006DBAC(cam);
+            lbl_8006E0A4(cam + 0x70);
+            lbl_8006E0B4(x, (*(s16 *)&lbl_1_bss_960 == 9 && !(car->flags & 0x400)) ? pool.value[0x15A] : pool.value[10], z);
+            reset = 0;
+        } else {
+            fn_1_892FC(car, &x, &z);
+            if (lbl_1_bss_3BE0->unk_7D != 0) {
+                reset = 1;
+            } else {
+                reset = 0;
+            }
+        }
+    }
+    fn_1_23500(car, arg0);
+    if (snd != NULL && reset) {
+        snd->unk_11C = 0;
+        snd->unk_118 = 0;
+    }
+}
+/* fzgx:end fn_1_85F90 */
+
 /* fzgx:begin fn_1_8616C */
 // Passes the default handling value to the car update routine.
 void fn_1_8616C(void) {

@@ -6662,3 +6662,6 @@ rel/main_rel/background/fn_1_9F4B4.c:
 
 rel/main_rel/effect_car/fn_1_6D6A8.c:
 	.text       start:0x0006D6A8 end:0x0006D7BC align:4
+
+rel/main_rel/car/fn_1_85F90.c:
+	.text       start:0x00085F90 end:0x0008616C align:4
