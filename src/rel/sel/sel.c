@@ -774,6 +774,71 @@ void fn_10_3268(void) {
 }
 /* fzgx:end fn_10_3268 */
 
+/* fzgx:begin fn_10_3954 */
+#define SEL_STATE_ACTIVE ((u32)1 << 31)
+#define SEL_STATE_READY ((u32)1 << 30)
+
+typedef struct {
+    u8 id;
+    u8 pad[3];
+    u32 handle[1];
+} SelEntry;
+
+typedef struct {
+    u8 pad0[0x40e00];
+    u32 state;
+    u8 pad1;
+    u8 mode;
+    u8 pad2[0x48fa0 - 0x40e06];
+    u8 main_id;
+    u8 pad3[3];
+    SelEntry entries[3];
+} SelCtx;
+
+typedef struct {
+    u8 pad[0x94];
+    u32 flags;
+} GlobalState;
+
+extern GlobalState lbl_1_bss_8B3A0;
+extern u32 lbl_10_bss_3C0[74736];
+extern s32 fn_1_128B00(s16);
+extern s32 fn_1_14F270(s32, s16, u32);
+extern u32 fn_1_151BE8(s16, s32);
+
+#define SEL_CTX ((SelCtx *)lbl_10_bss_3C0)
+
+void fn_10_3954(void) {
+    s16 i;
+    s16 j;
+    u32 state;
+
+    if (!(lbl_1_bss_8B3A0.flags & SEL_STATE_READY)) {
+        SEL_CTX->state &= ~(SEL_STATE_ACTIVE | SEL_STATE_READY);
+        return;
+    }
+
+    state = SEL_CTX->state;
+    if ((state & SEL_STATE_ACTIVE) && (state & SEL_STATE_READY)) {
+        return;
+    }
+
+    SEL_CTX->state |= SEL_STATE_ACTIVE | SEL_STATE_READY;
+    SEL_CTX->mode = 0x31;
+
+    for (i = 0; i < 3; i++) {
+        SEL_CTX->entries[i].id = fn_1_14F270(fn_1_128B00(i), i, SEL_STATE_ACTIVE);
+    }
+    SEL_CTX->main_id = fn_1_128B00(i);
+
+    for (i = 0; i < 3; i++) {
+        for (j = 0; j < 1; j++) {
+            SEL_CTX->entries[i].handle[j] = fn_1_151BE8(SEL_CTX->entries[i].id, j);
+        }
+    }
+}
+/* fzgx:end fn_10_3954 */
+
 /* fzgx:begin fn_10_3A98 */
 typedef struct {
     u8 pad[4];
