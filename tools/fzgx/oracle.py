@@ -288,6 +288,11 @@ def _diff(project: Project, module: str, symbol: str, unit: str, max_diff_lines:
     res._rows = ([], [])  # objdiff's instruction rows (target, ours) for classifiers
     left_syms = {s["name"]: s for s in left.get("symbols", []) if s.get("kind") == "SYMBOL_FUNCTION"}
     right_syms = {s["name"]: s for s in right.get("symbols", []) if s.get("kind") == "SYMBOL_FUNCTION"}
+    # a function our object defines next to the target (a static helper retail inlines away, say) is
+    # code the retail unit does not have: it grows .text and the module and fails the link hash while the
+    # per-symbol comparison still reads 100%. Layout/pool primers (`fzgx_*`) live in `.fzgxpool`, which
+    # the link ignores.
+    stray = sorted(n for n in right_syms if n != symbol and not n.startswith("fzgx_"))
     if target is not None:  # the retail auto object holds many functions; only ours is in question
         left_syms = {k: v for k, v in left_syms.items() if k == symbol}
         right_syms = {k: v for k, v in right_syms.items() if k == symbol}
@@ -295,6 +300,10 @@ def _diff(project: Project, module: str, symbol: str, unit: str, max_diff_lines:
         res.symbols[name] = float(s.get("match_percent", 0.0))
     res.missing_in_base = sorted(set(left_syms) - set(right_syms))
     res.extra_in_base = sorted(set(right_syms) - set(left_syms))
+    if target is not None:
+        # only RELs keep it: the DOL link dead-strips an unreferenced static helper (fn_8006A768's
+        # myStrncpy, fn_80022028's update), a REL link does not (fn_17_750C's GetLine grew the module)
+        res.extra_in_base = stray if module != "main" else []
     for sec in left.get("sections", []):
         if sec.get("kind") in ("SECTION_DATA", "SECTION_BSS") and "match_percent" in sec:
             res.data_sections[sec["name"]] = float(sec["match_percent"])
@@ -1319,6 +1328,9 @@ def unit_fully_matches(res: CheckResult) -> Optional[str]:
     if not res.ok:
         return res.error or "check failed"
     if res.uncarved:  # only this symbol was compared, against the retail auto object
+        if res.extra_in_base:
+            return ("extra functions in our object (retail has no such function there: inline it, or make the "
+                    "helper a macro): " + ", ".join(res.extra_in_base))
         return None if (res.matched or res.matched_pool) else f"{res.symbol}={res.percent:.1f}%"
     bad = [f"{n}={p:.1f}%" for n, p in res.symbols.items()
            if p < 100.0 and not ((res.matched or res.matched_pool) and n == res.symbol)]
