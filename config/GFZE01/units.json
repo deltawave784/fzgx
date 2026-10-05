@@ -1934,6 +1934,17 @@
   },
   {
     "module": "customize",
+    "source": "rel/customize/toolkit/fn_3_1A488.c",
+    "symbols": [
+      "fn_3_1A488"
+    ],
+    "status": "matching",
+    "mw_version": null,
+    "extra_cflags": [],
+    "tu": "rel/customize/toolkit.c"
+  },
+  {
+    "module": "customize",
     "source": "rel/customize/toolkit/fn_3_1AB34.c",
     "symbols": [
       "fn_3_1AB34"
