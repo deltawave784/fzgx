@@ -499,3 +499,90 @@ void fn_1_9EDE8(Obj_1_9EDE8 *arg0) {
     FIFO(lbl_1_rodata_42D4);
 }
 /* fzgx:end fn_1_9EDE8 */
+
+/* fzgx:begin fn_1_9F4B4 */
+#include "dolphin/hw_regs.h"
+
+struct fn_1_9F4B4_Arg0 {
+    u8 pad_0[0xC];
+    f32 unk_C;
+    s16 unk_10;
+    u16 unk_12;
+    u32 unk_14;
+};
+
+/* Pool literals, declared non-const: retail reloads them after every FIFO store. */
+extern f32 lbl_1_rodata_42D0; /* 0.0f */
+extern f32 lbl_1_rodata_42D4; /* 1.0f */
+extern s32 fn_1_54E34(void *, f32);
+extern void mathutil_mtxA_rotate_z(s32);
+extern void fn_8003462C(u32, u32, u32);
+extern void fn_800736C0(u32, void *);
+extern void lbl_8006DAEC(void);
+extern void lbl_8006DB30(void);
+extern void lbl_8006E0A4(void *);
+extern void lbl_8006E1D8(f32 *, f32, f32, f32);
+
+/* write-gather FIFO */
+#define GX_WRITE_F32(v) (*(f32 *)GX_FIFO_BASE = (v))
+
+void fn_1_9F4B4(struct fn_1_9F4B4_Arg0 *arg0) {
+    f32 neg;
+    f32 half;
+    s32 rot;
+    f32 corner[4][3];
+    u32 tex;
+
+    if (fn_1_54E34(arg0, arg0->unk_C) == 0) {
+        arg0->unk_12 |= 1;
+        return;
+    }
+    arg0->unk_12 &= 0xFFFE;
+    tex = arg0->unk_14;
+    fn_800736C0(0, &tex);
+    fn_8003462C(0x90, 0, 8);
+    /* 8 vertices x 5 floats, all zero */
+    GX_WRITE_F32(lbl_1_rodata_42D0); GX_WRITE_F32(lbl_1_rodata_42D0); GX_WRITE_F32(lbl_1_rodata_42D0); GX_WRITE_F32(lbl_1_rodata_42D0); GX_WRITE_F32(lbl_1_rodata_42D0);
+    GX_WRITE_F32(lbl_1_rodata_42D0); GX_WRITE_F32(lbl_1_rodata_42D0); GX_WRITE_F32(lbl_1_rodata_42D0); GX_WRITE_F32(lbl_1_rodata_42D0); GX_WRITE_F32(lbl_1_rodata_42D0);
+    GX_WRITE_F32(lbl_1_rodata_42D0); GX_WRITE_F32(lbl_1_rodata_42D0); GX_WRITE_F32(lbl_1_rodata_42D0); GX_WRITE_F32(lbl_1_rodata_42D0); GX_WRITE_F32(lbl_1_rodata_42D0);
+    GX_WRITE_F32(lbl_1_rodata_42D0); GX_WRITE_F32(lbl_1_rodata_42D0); GX_WRITE_F32(lbl_1_rodata_42D0); GX_WRITE_F32(lbl_1_rodata_42D0); GX_WRITE_F32(lbl_1_rodata_42D0);
+    GX_WRITE_F32(lbl_1_rodata_42D0); GX_WRITE_F32(lbl_1_rodata_42D0); GX_WRITE_F32(lbl_1_rodata_42D0); GX_WRITE_F32(lbl_1_rodata_42D0); GX_WRITE_F32(lbl_1_rodata_42D0);
+    GX_WRITE_F32(lbl_1_rodata_42D0); GX_WRITE_F32(lbl_1_rodata_42D0); GX_WRITE_F32(lbl_1_rodata_42D0); GX_WRITE_F32(lbl_1_rodata_42D0); GX_WRITE_F32(lbl_1_rodata_42D0);
+    GX_WRITE_F32(lbl_1_rodata_42D0); GX_WRITE_F32(lbl_1_rodata_42D0); GX_WRITE_F32(lbl_1_rodata_42D0); GX_WRITE_F32(lbl_1_rodata_42D0); GX_WRITE_F32(lbl_1_rodata_42D0);
+    GX_WRITE_F32(lbl_1_rodata_42D0); GX_WRITE_F32(lbl_1_rodata_42D0); GX_WRITE_F32(lbl_1_rodata_42D0); GX_WRITE_F32(lbl_1_rodata_42D0); GX_WRITE_F32(lbl_1_rodata_42D0);
+    fn_8003462C(0x80, 0, 4);
+    half = arg0->unk_C;
+    neg = -half;
+    lbl_8006DAEC();
+    lbl_8006E0A4(arg0);
+    rot = arg0->unk_10;
+    if ((s16)rot != 0) {
+        mathutil_mtxA_rotate_z(rot);
+    }
+    lbl_8006E1D8(corner[0], neg, neg, lbl_1_rodata_42D0);
+    lbl_8006E1D8(corner[1], half, neg, lbl_1_rodata_42D0);
+    lbl_8006E1D8(corner[2], half, half, lbl_1_rodata_42D0);
+    lbl_8006E1D8(corner[3], neg, half, lbl_1_rodata_42D0);
+    lbl_8006DB30();
+    GX_WRITE_F32(corner[0][0]);
+    GX_WRITE_F32(corner[0][1]);
+    GX_WRITE_F32(corner[0][2]);
+    GX_WRITE_F32(lbl_1_rodata_42D0);
+    GX_WRITE_F32(lbl_1_rodata_42D0);
+    GX_WRITE_F32(corner[1][0]);
+    GX_WRITE_F32(corner[1][1]);
+    GX_WRITE_F32(corner[1][2]);
+    GX_WRITE_F32(lbl_1_rodata_42D4);
+    GX_WRITE_F32(lbl_1_rodata_42D0);
+    GX_WRITE_F32(corner[2][0]);
+    GX_WRITE_F32(corner[2][1]);
+    GX_WRITE_F32(corner[2][2]);
+    GX_WRITE_F32(lbl_1_rodata_42D4);
+    GX_WRITE_F32(lbl_1_rodata_42D4);
+    GX_WRITE_F32(corner[3][0]);
+    GX_WRITE_F32(corner[3][1]);
+    GX_WRITE_F32(corner[3][2]);
+    GX_WRITE_F32(lbl_1_rodata_42D0);
+    GX_WRITE_F32(lbl_1_rodata_42D4);
+}
+/* fzgx:end fn_1_9F4B4 */

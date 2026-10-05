@@ -6656,3 +6656,6 @@ rel/main_rel/spline/fn_1_FA89C.c:
 
 rel/main_rel/game/fn_1_34E08.c:
 	.text       start:0x00034E08 end:0x00034F38 align:4
+
+rel/main_rel/background/fn_1_9F4B4.c:
+	.text       start:0x0009F4B4 end:0x0009F7DC align:4
