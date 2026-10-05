@@ -50,6 +50,70 @@ void fn_1_D17E8(void) {
 }
 /* fzgx:end fn_1_D17E8 */
 
+/* fzgx:begin fn_1_D1848 noprologue */
+#include "types.h"
+
+typedef struct {
+    u32 unk_0;
+    u32 unk_4;
+    u32 unk_8;
+    u8 unk_C;
+    u8 pad_D[3];
+    u32 unk_10;
+} Mgr;
+
+typedef struct { u32 a, b, c; } V3;
+
+typedef struct {
+    u32 flags;
+    u32 unk_4;
+    u8 pad_8[0x14];
+    u32 unk_1C;
+    u8 pad_20[0xC];
+    V3 v;
+    u8 pad_38[0x28];
+    void *unk_60;
+} Ent;
+
+extern Mgr lbl_1_bss_7ACD8;
+extern u32 lbl_801A6410;
+extern u8 lbl_1_data_3DA2C[];
+extern V3 lbl_1_rodata_60A0;
+extern void fn_1_D2F50(void);
+extern void fn_1_D2F84(void);
+extern void *fn_1_4630(u32, u32, void *, u32);
+extern void *fn_1_45D0(u32, u32, void *, u32);
+extern u8 fn_1_86624(void);
+extern u32 GXGetTexBufferSize(u16, u16, u32, u8, u8);
+extern void *memset(void *, int, u32);
+
+void fn_1_D1848(void) {
+    Mgr *m = (Mgr *)&lbl_1_bss_7ACD8;
+    u32 size;
+    s32 i;
+    Ent *e;
+    fn_1_D2F50();
+    m->unk_0 = (u32)fn_1_4630(lbl_801A6410, 600, lbl_1_data_3DA2C, 0x15f);
+    m->unk_10 = 0;
+    m->unk_C = fn_1_86624();
+    m->unk_4 = (u32)fn_1_4630(lbl_801A6410, m->unk_C << 2, lbl_1_data_3DA2C, 0x173);
+    m->unk_8 = (u32)fn_1_4630(lbl_801A6410, m->unk_C << 2, lbl_1_data_3DA2C, 0x174);
+    size = GXGetTexBufferSize(0x40, 0x40, 5, 0, 0);
+    e = (Ent *)m->unk_0;
+    for (i = 0; i < 6; i++) {
+        e->v = lbl_1_rodata_60A0;
+        e->unk_1C = 0;
+        e->unk_4 = 255;
+        e->flags &= 0x7FFFFFFF;
+        e->flags &= 0xBFFFFFFF;
+        e->unk_60 = fn_1_45D0(lbl_801A6410, size, lbl_1_data_3DA2C, 0x18a);
+        memset(e->unk_60, 0, 4);
+        e++;
+    }
+    fn_1_D2F84();
+}
+/* fzgx:end fn_1_D1848 */
+
 /* fzgx:begin fn_1_D1C94 noprologue */
 #include "types.h"
 

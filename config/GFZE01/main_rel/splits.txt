@@ -6674,3 +6674,6 @@ rel/main_rel/font/fn_1_4E220.c:
 
 rel/main_rel/avline/fn_1_58248.c:
 	.text       start:0x00058248 end:0x000584AC align:4
+
+rel/main_rel/face/fn_1_D1848.c:
+	.text       start:0x000D1848 end:0x000D19B8 align:4
