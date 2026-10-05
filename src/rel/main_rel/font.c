@@ -3175,6 +3175,118 @@ void fn_1_550E0(void) {
 }
 /* fzgx:end fn_1_550E0 */
 
+/* fzgx:begin fn_1_553C4 noprologue */
+#include "types.h"
+#include "dolphin/types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/font.h"
+
+typedef struct fn_1_563E4_FontState {
+    u8 pad_00[8];
+    f32 scale;
+    u8 pad_0C[6];
+    u8 enabled;
+    u8 color;
+    u32 value;
+    f32 x;
+    f32 y;
+    u8 pad_20[4];
+    u32 state;
+} fn_1_563E4_FontState;
+
+extern const f32 lbl_1_rodata_28A8;
+extern u8 *lbl_801A66CC;
+extern void fn_1_556B8(void *value);
+extern void fn_1_563E4(fn_1_563E4_FontState *font);
+extern void **fn_1_54448(s32 arg0);
+extern void *fn_1_548AC(u32 amount);
+extern u16 fn_1_7BE94(void);
+extern void fn_1_5489C(void **arg0, void **arg1);
+extern void fn_1_56530(void);
+extern void lbl_8006DB74(void *value);
+extern void lbl_8006DD14(void *value, void *object);
+
+typedef struct {
+    u8 pad_00[0x1a];
+    u16 unk_1a;
+    u16 unk_1c;
+} Fn1_553C4Input;
+
+typedef struct {
+    u8 pad_00[0x4];
+    void *vtable;
+    void *owner;
+    u8 pad_0c[0x30];
+    u16 unk_3c;
+    u8 pad_3e[0x2];
+    Obj_1_bss_6C7A4 settings;
+    void *unk_68;
+    u8 pad_6c[0xc];
+} Fn1_553C4Object;
+
+extern void fn_1_55EA0();
+extern void fn_1_55924(void *value, void *arg);
+extern void fn_800780A4(void *value);
+
+void fn_1_553C4(Fn1_553C4Input *value, void *arg) {
+    Fn1_553C4Object *cursor;
+    int offset;
+    Fn1_553C4Object *object;
+    void *handle;
+    int ok;
+    int i;
+    u32 shift;
+    u32 *flags;
+
+    if (lbl_1_rodata_28A8 == lbl_1_bss_6C7A4.unk_8) {
+        if (value->unk_1c == 0) {
+            fn_1_556B8(value);
+        } else {
+            if (value->unk_1a != 0) {
+                fn_1_563E4((fn_1_563E4_FontState *)(void *)&lbl_1_bss_6C7A4);
+                fn_800780A4(value);
+            }
+            handle = (void *)fn_1_54448((s32)arg);
+            object = (Fn1_553C4Object *)fn_1_548AC(0x78);
+            if (object != 0) {
+                ok = 1;
+                object->vtable = (void *)fn_1_55EA0;
+                object->owner = value;
+                lbl_8006DB74((u8 *)object + 0xc);
+                object->unk_3c = fn_1_7BE94();
+                object->settings = lbl_1_bss_6C7A4;
+                i = 0;
+                offset = 0;
+                cursor = object;
+                flags = (u32 *)&lbl_1_bss_6C7CC;
+                while (i < 4) {
+                    shift = (i + 1) & 31;
+                    if (__rlwnm(*flags, shift, 31, 31) != 0) {
+                        cursor->unk_68 = fn_1_548AC(0x30);
+                        if (cursor->unk_68 != 0) {
+                            lbl_8006DD14(lbl_801A66CC + offset + 0xe0, cursor->unk_68);
+                        } else {
+                            ok = 0;
+                        }
+                    } else {
+                        cursor->unk_68 = 0;
+                    }
+                    i++;
+                    cursor = (Fn1_553C4Object *)((u8 *)cursor + 4);
+                    offset += 0x30;
+                }
+                if (ok != 0) {
+                    fn_1_5489C((void **)handle, (void **)object);
+                }
+            }
+            fn_1_56530();
+        }
+    } else {
+        fn_1_55924(value, arg);
+    }
+}
+/* fzgx:end fn_1_553C4 */
+
 /* fzgx:begin fn_1_5557C */
 typedef struct {
     u8 unk_00[8];
