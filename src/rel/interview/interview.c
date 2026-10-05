@@ -421,6 +421,127 @@ void fn_17_38C4(void) {
 }
 /* fzgx:end fn_17_38C4 */
 
+/* fzgx:begin fn_17_3C5C */
+struct fn_17_3C5C_Entry {
+    u8 pad_0[0x5];
+    u8 unk_5;
+    u8 pad_6[0x8];
+    u8 unk_E;
+};
+
+/* retail .bss objects of this TU (dtk symbols), in section order: MWCC addresses them all
+ * off one base register, which a single extern struct cannot reproduce */
+u8 lbl_17_bss_0;
+u8 lbl_17_bss_1;
+u8 lbl_17_bss_2;
+u8 lbl_17_bss_3;
+u8 lbl_17_bss_3__fzgx_offset_1;
+u8 lbl_17_bss_3__fzgx_offset_2;
+u8 lbl_17_bss_3__fzgx_offset_3;
+u8 lbl_17_bss_3__fzgx_offset_4;
+u8 lbl_17_bss_3__fzgx_offset_5;
+u8 lbl_17_bss_3__fzgx_offset_6;
+u8 lbl_17_bss_3__fzgx_offset_7;
+u8 lbl_17_bss_3__fzgx_offset_8;
+u32 lbl_17_bss_C;
+struct fn_17_3C5C_Entry *lbl_17_bss_10;
+u32 lbl_17_bss_14;
+u32 lbl_17_bss_18[2];
+u32 lbl_17_bss_20;
+u32 lbl_17_bss_24[4];
+u32 lbl_17_bss_34[8];
+u32 lbl_17_bss_54;
+u32 lbl_17_bss_58[2];
+u8 lbl_17_bss_60[0x76];
+u16 lbl_17_bss_D6;
+u32 lbl_17_bss_D8[8];
+u8 lbl_17_bss_D8__fzgx_offset_20;
+
+extern void fn_17_3A28(s16, s16, s16);
+extern s16 fn_1_12CB04(s16);
+extern s16 fn_1_12CCB0(s16, s16);
+extern void fzgx_sink(void *);
+
+/* .bss objects are laid out in first-access order: fix the retail order here */
+#pragma section ".fzgxpool"
+__declspec(section ".fzgxpool") void fn_17_3C5C_bss_primer(void) {
+    fzgx_sink(&lbl_17_bss_0);
+    fzgx_sink(&lbl_17_bss_1);
+    fzgx_sink(&lbl_17_bss_2);
+    fzgx_sink(&lbl_17_bss_3);
+    fzgx_sink(&lbl_17_bss_3__fzgx_offset_1);
+    fzgx_sink(&lbl_17_bss_3__fzgx_offset_2);
+    fzgx_sink(&lbl_17_bss_3__fzgx_offset_3);
+    fzgx_sink(&lbl_17_bss_3__fzgx_offset_4);
+    fzgx_sink(&lbl_17_bss_3__fzgx_offset_5);
+    fzgx_sink(&lbl_17_bss_3__fzgx_offset_6);
+    fzgx_sink(&lbl_17_bss_3__fzgx_offset_7);
+    fzgx_sink(&lbl_17_bss_3__fzgx_offset_8);
+    fzgx_sink(&lbl_17_bss_C);
+    fzgx_sink(&lbl_17_bss_10);
+    fzgx_sink(&lbl_17_bss_14);
+    fzgx_sink(lbl_17_bss_18);
+    fzgx_sink(&lbl_17_bss_20);
+    fzgx_sink(lbl_17_bss_24);
+    fzgx_sink(lbl_17_bss_34);
+    fzgx_sink(&lbl_17_bss_54);
+    fzgx_sink(lbl_17_bss_58);
+    fzgx_sink(lbl_17_bss_60);
+    fzgx_sink(&lbl_17_bss_D6);
+    fzgx_sink(lbl_17_bss_D8);
+    fzgx_sink(&lbl_17_bss_D8__fzgx_offset_20);
+}
+
+void fn_17_3C5C(void) {
+    s16 i;
+    struct fn_17_3C5C_Entry *entry;
+    s16 id;
+
+    entry = lbl_17_bss_10;
+    for (i = 0; i < 8; i++) {
+        lbl_17_bss_D8[i] = 0;
+    }
+
+    for (i = 0; i < 2; i++) {
+        if (i == 0) {
+            id = entry->unk_5;
+        } else {
+            switch (lbl_17_bss_D8__fzgx_offset_20) {
+            case 0:
+                entry->unk_E = 1;
+                break;
+            case 1:
+                entry->unk_E = 2;
+                break;
+            case 2:
+                entry->unk_E = 4;
+                break;
+            default:
+                entry->unk_E = 8;
+                break;
+            }
+            fn_17_3A28(0x2c, 1, 1);
+            return;
+        }
+
+        switch (fn_1_12CB04(id)) {
+        case 2:
+            fn_17_3A28(id, i, i);
+            fn_17_3A28(fn_1_12CCB0(id, 0), 2, i);
+            fn_17_3A28(fn_1_12CCB0(id, 1), 3, i);
+            break;
+        case 1:
+            fn_17_3A28(id, i, i);
+            fn_17_3A28(fn_1_12CCB0(id, 0), 2, i);
+            break;
+        case 0:
+            fn_17_3A28(id, i, i);
+            break;
+        }
+    }
+}
+/* fzgx:end fn_17_3C5C */
+
 /* fzgx:begin fn_17_416C */
 extern u32 lbl_17_bss_34[8];
 extern u32 lbl_17_bss_D8[8];
