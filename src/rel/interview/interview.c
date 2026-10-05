@@ -1224,6 +1224,58 @@ void fn_17_69EC(void *arg0, f32 farg0) {
 }
 /* fzgx:end fn_17_69EC */
 
+/* fzgx:begin fn_17_6B2C */
+typedef struct InterviewState {
+    u8 pad[0x88];
+    s32 mode;
+} InterviewState;
+
+typedef struct InterviewGlobals {
+    InterviewState *state;
+    u8 *object;
+} InterviewGlobals;
+
+extern u8 lbl_17_data_0[420];
+extern u8 lbl_17_bss_D8[34];
+extern const f32 lbl_17_rodata_1C;
+extern u8 lbl_17_bss_3;
+extern void fn_1_935E4(u8 *object, u8 *message, const char *text, f32 value);
+
+#pragma opt_propagation off
+void fn_17_6B2C(void) {
+    u8 *table = lbl_17_data_0 + 0x60000;
+    InterviewGlobals *globals = (InterviewGlobals *)lbl_17_bss_D8;
+    s32 mode = ((InterviewState *)globals->state)->mode;
+    u8 *object = globals->object;
+    s16 *modes = (s16 *)(table + 0x2c34);
+
+    switch (modes[mode]) {
+    case 2:
+        fn_1_935E4(object, object + 0x148,
+                   (const char *)(table + 0x43e8), lbl_17_rodata_1C);
+        break;
+    case 1:
+        fn_1_935E4(object, object + 0x148,
+                   (const char *)(table + 0x43fc), lbl_17_rodata_1C);
+        break;
+    case 0:
+        fn_1_935E4(object, object + 0x148,
+                   (const char *)(table + 0x440c), lbl_17_rodata_1C);
+        break;
+    case 3:
+        fn_1_935E4(object, object + 0x148,
+                   (const char *)(table + 0x4420), lbl_17_rodata_1C);
+        break;
+    case 4:
+        fn_1_935E4(object, object + 0x148,
+                   (const char *)(table + 0x4438), lbl_17_rodata_1C);
+        break;
+    }
+    lbl_17_bss_3 = 1;
+}
+#pragma opt_propagation reset
+/* fzgx:end fn_17_6B2C */
+
 /* fzgx:begin fn_17_6F30 */
 typedef struct InterviewText {
     u8 pad0[0x86];
