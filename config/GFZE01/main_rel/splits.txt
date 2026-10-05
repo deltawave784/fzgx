@@ -6686,3 +6686,6 @@ rel/main_rel/stcoli/fn_1_2BA48.c:
 
 rel/main_rel/car/fn_1_82EDC.c:
 	.text       start:0x00082EDC end:0x00083070 align:4
+
+rel/main_rel/stcoli/fn_1_29800.c:
+	.text       start:0x00029800 end:0x00029968 align:4

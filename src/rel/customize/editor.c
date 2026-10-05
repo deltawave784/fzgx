@@ -40,18 +40,12 @@ void fn_3_1552C(void) {
 /* fzgx:end fn_3_1552C */
 
 /* fzgx:begin fn_3_1560C */
-
-
-
 void fn_3_1560C(void) {
     *(u32 *)((*(u8 (*)[28])&lbl_3_bss_A23EC) + 0xC) = (u32)1 << 31;
 }
 /* fzgx:end fn_3_1560C */
 
 /* fzgx:begin fn_3_15620 */
-
-
-
 void fn_3_15620(void) {
     *(u8 *)((*(u8 (*)[28])&lbl_3_bss_A23EC) + 0x10) = 0;
     *(u32 *)((*(u8 (*)[28])&lbl_3_bss_A23EC) + 0xc) = 0x40000000;
@@ -68,9 +62,6 @@ void fn_3_1563C(void) {
 /* fzgx:end fn_3_1563C */
 
 /* fzgx:begin fn_3_156A8 */
-
-
-
 void fn_3_156A8(void) {
     u8 value = ((*(u8 (*)[28])&lbl_3_bss_A23EC)[0x11] & 0x7f) << 1;
     (*(u8 (*)[28])&lbl_3_bss_A23EC)[0x11] = value;
@@ -80,6 +71,56 @@ void fn_3_156A8(void) {
 }
 /* fzgx:end fn_3_156A8 */
 
+/* fzgx:begin fn_3_1683C */
+typedef struct { u32 c; } Col4;
+struct Arg0 {
+    u8 pad_0[4];
+    f32 unk_4;
+    f32 unk_8;
+};
+
+extern const Col4 lbl_3_rodata_5B8;
+extern const Col4 lbl_3_rodata_5BC;
+extern s8 fn_1_A5DC4(void);
+extern void fn_1_A9868(void);
+extern u32 fn_1_A9FFC(s16, s16, s16, s16, void *);
+extern void fn_1_AA538(void);
+extern void fn_1_4E0F4(void);
+
+void fn_3_1683C(struct Arg0 *arg0, s16 off, s16 size) {
+    s16 x;
+    s16 y;
+    u8 i;
+    u8 j;
+    Col4 colA;
+    Col4 colB;
+    Obj_3_bss_A23EC *p = &lbl_3_bss_A23EC;
+    x = arg0->unk_4;
+    y = arg0->unk_8;
+    off = 0;
+    size = p->unk_11 << 3;
+    colA = lbl_3_rodata_5B8;
+    colB = lbl_3_rodata_5BC;
+    if (fn_1_A5DC4()) {
+        off = 4 / p->unk_11;
+    }
+    fn_1_A9868();
+    for (i = 0; i < 256 / size; i++) {
+        for (j = off; j < 256 / size - off; j++) {
+            if (((i % 2) ^ (j % 2)) != 0) {
+                Col4 t = colA;
+                fn_1_A9FFC(x + size * j, y + size * i, size, size, &t);
+            } else {
+                Col4 t = colB;
+                fn_1_A9FFC(x + size * j, y + size * i, size, size, &t);
+            }
+        }
+    }
+    fn_1_AA538();
+    fn_1_4E0F4();
+}
+/* fzgx:end fn_3_1683C */
+
 /* fzgx:begin fn_3_170E0 */
 void fn_3_170E0(void) {
     fn_3_17100();
@@ -87,9 +128,6 @@ void fn_3_170E0(void) {
 /* fzgx:end fn_3_170E0 */
 
 /* fzgx:begin fn_3_17820 */
-
-
-
 u32 fn_3_17820(void) {
     return *(u32 *)&(*(u16 (*)[20])&lbl_3_bss_A2410)[2];
 }
