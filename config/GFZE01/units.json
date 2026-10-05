@@ -36551,6 +36551,30 @@
   },
   {
     "module": "main_rel",
+    "source": "rel/main_rel/effect_car/fn_1_6D6A8.c",
+    "symbols": [
+      "fn_1_6D6A8"
+    ],
+    "status": "matching",
+    "mw_version": null,
+    "extra_cflags": [],
+    "tu": "rel/main_rel/effect_car.c",
+    "pool": {
+      "...rodata.0": "lbl_1_rodata_2D70",
+      "@59": "lbl_1_rodata_2D70+0xBC",
+      "@5": "lbl_1_rodata_2D70",
+      "@20": "lbl_1_rodata_2D70+0x40",
+      "@14": "lbl_1_rodata_2D70+0x24",
+      "@30": "lbl_1_rodata_2D70+0x74",
+      "@43": "lbl_1_rodata_2D70+0x90",
+      "@44": "lbl_1_rodata_2D70+0x94",
+      "@12": "lbl_1_rodata_2D70+0x1C",
+      "@21": "lbl_1_rodata_2D70+0x48",
+      "@45": "lbl_1_rodata_2D70+0x98"
+    }
+  },
+  {
+    "module": "main_rel",
     "source": "rel/main_rel/effect_car/fn_1_6F288.c",
     "symbols": [
       "fn_1_6F288"

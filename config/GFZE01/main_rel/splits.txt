@@ -6659,3 +6659,6 @@ rel/main_rel/game/fn_1_34E08.c:
 
 rel/main_rel/background/fn_1_9F4B4.c:
 	.text       start:0x0009F4B4 end:0x0009F7DC align:4
+
+rel/main_rel/effect_car/fn_1_6D6A8.c:
+	.text       start:0x0006D6A8 end:0x0006D7BC align:4
