@@ -6620,3 +6620,6 @@ rel/main_rel/burner/fn_1_F8E30.c:
 
 rel/main_rel/live_camera/fn_1_11544.c:
 	.text       start:0x00011544 end:0x00011748 align:4
+
+rel/main_rel/effect/fn_1_60F84.c:
+	.text       start:0x00060F84 end:0x00061070 align:4
