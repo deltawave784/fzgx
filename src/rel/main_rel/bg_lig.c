@@ -526,6 +526,101 @@ void fn_1_D79E4(void *obj) {
 }
 /* fzgx:end fn_1_D79E4 */
 
+/* fzgx:begin fn_1_D7A10 noprologue */
+#include "types.h"
+
+#pragma section code_type ".fzgxpool"
+static const u32 fzgx_pool_table1[4] = {0x00000000, 0x0280012C, 0x00000000, 0x00000001};  /* fzgx-allow: A1 retail pool bytes */
+__declspec(section ".fzgxpool") static void fzgx_pool_keep1(void) { const u32 *volatile cp; cp = fzgx_pool_table1; }  /* fzgx-allow: S2 pool primer sink */
+__declspec(section ".fzgxpool") static void fzgx_pool_prime2(void) {
+    volatile f32 s; volatile f64 d;  /* fzgx-allow: S2 pool primer sinks */
+    s = 0.0f;
+    s = 100.0f;
+    s = 3.0f;
+}
+static const u32 fzgx_pool_table3[1] = {0x00000000};  /* fzgx-allow: A1 retail pool bytes */
+__declspec(section ".fzgxpool") static void fzgx_pool_keep3(void) { const u32 *volatile cp; cp = fzgx_pool_table3; }  /* fzgx-allow: S2 pool primer sink */
+__declspec(section ".fzgxpool") static void fzgx_pool_prime4(void) {
+    volatile f32 s; volatile f64 d;  /* fzgx-allow: S2 pool primer sinks */
+    d = 0.7;
+    d = 0.3;
+    s = 32767.0f;
+    s = 235.0f;
+    s = 80.0f;
+    s = 30.0f;
+    d = 512.0;
+    d = 0.5;
+    d = 300.0;
+    d = 17.0;
+    s = 3276.800048828125f;
+}
+static const u32 fzgx_pool_table5[1] = {0x00000000};  /* fzgx-allow: A1 retail pool bytes */
+__declspec(section ".fzgxpool") static void fzgx_pool_keep5(void) { const u32 *volatile cp; cp = fzgx_pool_table5; }  /* fzgx-allow: S2 pool primer sink */
+__declspec(section ".fzgxpool") static void fzgx_pool_prime6(void) {
+    volatile f32 s; volatile f64 d;  /* fzgx-allow: S2 pool primer sinks */
+    d = 4503601774854144.0;
+    d = 0.98;
+    s = 0.07999999821186066f;
+}
+static const u32 fzgx_pool_table7[1] = {0x00000000};  /* fzgx-allow: A1 retail pool bytes */
+__declspec(section ".fzgxpool") static void fzgx_pool_keep7(void) { const u32 *volatile cp; cp = fzgx_pool_table7; }  /* fzgx-allow: S2 pool primer sink */
+__declspec(section ".fzgxpool") static void fzgx_pool_prime8(void) {
+    volatile f32 s; volatile f64 d;  /* fzgx-allow: S2 pool primer sinks */
+    d = 0.99;
+    d = 0.02;
+    s = 400.0f;
+    s = 0.7071067690849304f;
+}
+#pragma section code_type ".text"
+
+typedef struct {
+    f32 pos[3];
+    f32 vel[3];
+    f32 scale[3];
+    f32 value;
+    s16 phase;
+    s16 step;
+    s16 count;
+    u8 pad2e[0x2];
+} fn_1_D7A10_LigEntry;
+
+// Steps every active light particle: damps and gravity-biases the velocity,
+// advances the position, decays the phase step and fades the scale out
+// over the last 80 frames of the particle's life.
+void fn_1_D7A10(fn_1_D7A10_LigEntry *base) {
+    fn_1_D7A10_LigEntry *entry;
+    s32 i;
+    f32 fade;
+    f64 delta;
+
+    for (i = 0; i < 0x14; i++) {
+        entry = base + i + 1;
+        if (entry->count > 0) {
+            entry->vel[0] *= 0.98;
+            entry->vel[1] *= 0.98;
+            entry->vel[2] *= 0.98;
+            entry->vel[1] -= 0.08f;
+            entry->pos[0] += entry->vel[0];
+            entry->pos[1] += entry->vel[1];
+            entry->pos[2] += entry->vel[2];
+            entry->phase += entry->step;
+            entry->step *= 0.99;
+            delta = 0.02 * (400.0f - entry->value);
+            entry->value = entry->value + delta;
+            if (entry->count < 0x50) {
+                fade = entry->count / 80.0f;
+                entry->scale[0] *= fade;
+                entry->scale[1] *= fade;
+                entry->scale[2] *= fade;
+            }
+            if (entry->count > 0) {
+                entry->count--;
+            }
+        }
+    }
+}
+/* fzgx:end fn_1_D7A10 */
+
 /* fzgx:begin fn_1_D7B7C noprologue */
 #include "types.h"
 
