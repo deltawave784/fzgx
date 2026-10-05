@@ -210,6 +210,149 @@ void fn_15_350(void) {
 }
 /* fzgx:end fn_15_350 */
 
+/* fzgx:begin fn_15_3AC */
+struct fn_15_3AC_Entry {
+    u32 unk_0;
+    u8 unk_4;
+    u8 unk_5;
+    u8 unk_6;
+    u8 pad_7;
+};
+
+struct fn_15_3AC_lbl_1_bss_525C {
+    struct fn_15_3AC_Entry entries[30];
+    u8 pad_F0[0x8];
+    u8 unk_F8;
+    u8 pad_F9[0x98];
+    u8 unk_191;
+    u8 unk_192;
+    u8 pad_193[5];
+};
+
+struct fn_15_3AC_lbl_15_bss_0 {
+    u8 pad_0[0x4];
+    u8 unk_4;
+    u8 pad_5[0xF];
+    u32 unk_14;
+    u8 pad_18[0x8];
+    u8 unk_20;
+    u8 pad_21[0x2];
+    u8 unk_23;
+    u8 pad_24[0x8];
+    struct fn_15_3AC_lbl_1_bss_525C *unk_2C;
+    u32 unk_30;
+    u8 unk_34;
+    u8 unk_35;
+    u8 unk_36;
+    u8 pad_37[0x1];
+    u16 unk_38;
+    u16 unk_3A;
+    u16 unk_3C;
+};
+
+struct fn_15_3AC_lbl_801A63C0 {
+    u32 seed;
+};
+
+extern s16 fn_1_12C7B8(s16);
+extern s16 lbl_1_bss_964;
+extern u16 lbl_1_bss_96A;
+extern struct fn_15_3AC_lbl_15_bss_0 lbl_15_bss_0;
+extern struct fn_15_3AC_lbl_1_bss_525C lbl_1_bss_525C;
+extern struct fn_15_3AC_lbl_801A63C0 lbl_801A63C0;
+extern u32 fn_1_3FC9C(void);
+extern u32 fn_1_4706C(void);
+extern void *memset(void *, int, u32);
+extern void fn_1_469BC(void);
+
+void fn_15_3AC(void) {
+    struct fn_15_3AC_lbl_15_bss_0 *s;
+    u32 seed;
+    struct fn_15_3AC_Entry *e;
+    s32 i;
+    u64 used;
+    struct fn_15_3AC_lbl_1_bss_525C *g;
+    s16 v;
+    struct fn_15_3AC_lbl_801A63C0 *rng;
+    u64 bit;
+
+    s = (struct fn_15_3AC_lbl_15_bss_0 *)&lbl_15_bss_0;
+    g = (struct fn_15_3AC_lbl_1_bss_525C *)&lbl_1_bss_525C;
+    s->unk_2C = g;
+    e = s->unk_2C->entries;
+    used = 0;
+    s->unk_30 = 0;
+    s->unk_20 = 1;
+    s->unk_23 = 0;
+    s->unk_4 = 0;
+    s->unk_34 = 0;
+    s->unk_35 = 0;
+    s->unk_36 = 0;
+    s->unk_38 = 3;
+    fn_1_469BC();
+    fn_1_4706C();
+    if (lbl_1_bss_964 == 10) {
+        memset(s->unk_2C, 0, sizeof(struct fn_15_3AC_lbl_1_bss_525C));
+        s->unk_3A = 3;
+        s->unk_14 |= 0x20000000;
+        s->unk_2C->unk_192 = 3;
+        s->unk_3C = 0;
+        s->unk_34 = 1;
+        s->unk_35 = 1;
+        s->unk_36 = 1;
+        i = 0;
+        while ((s16)i < 4) {
+            e->unk_4 = i;
+            e->unk_5 = i;
+            e->unk_6 = 0x10;
+            used |= (u64)1 << fn_1_12C7B8(e->unk_5);
+            i++;
+            e++;
+        }
+        while ((s16)i < 30) {
+            seed = lbl_801A63C0.seed;
+            do {
+                seed = seed * 0x676A4B6B + 0x33CB;
+                v = (s32)((seed >> 16) & 0x7FFF) % 41;
+                bit = (u64)1 << v;
+            } while ((used & bit) != 0);
+            lbl_801A63C0.seed = seed;
+            used |= bit;
+            e->unk_4 = v;
+            i++;
+            e->unk_5 = v;
+            e->unk_6 = 0x10;
+            e++;
+        }
+    } else {
+        s->unk_14 &= ~0xFE;
+        s->unk_14 |= 1;
+        s->unk_3C = (u8)fn_1_3FC9C();
+        if (s->unk_2C->unk_191 & 2) {
+            s->unk_14 |= 0x80;
+            s->unk_38 = s->unk_2C->unk_192;
+        } else {
+            switch (g->unk_F8) {
+            case 0:
+                s->unk_14 |= 0x8;
+                break;
+            case 1:
+                s->unk_14 |= 0x10;
+                break;
+            case 2:
+                s->unk_14 |= 0x20;
+                break;
+            default:
+                s->unk_14 |= 0x40;
+                break;
+            }
+        }
+        s->unk_3A = (s->unk_14 & 0x40) ? 1 : 3;
+        lbl_1_bss_96A = 0xB8;
+    }
+}
+/* fzgx:end fn_15_3AC */
+
 /* fzgx:begin fn_15_B8C */
 // fn_15_B8C: empty in retail (single blr).
 void fn_15_B8C(void) {
