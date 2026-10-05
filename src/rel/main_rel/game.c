@@ -514,6 +514,58 @@ fallback:
 }
 /* fzgx:end fn_1_33890 */
 
+/* fzgx:begin fn_1_34E08 noprologue */
+#include "types.h"
+#include "rel/main_rel/game.h"
+
+typedef struct {
+    u32 flags;
+    u8 pad_4[0x819C];
+    u8 unk_81A0;
+} Obj_1_34E08_Settings;
+
+extern s8 lbl_1_bss_26B5C[30];
+extern Obj_1_34E08_Settings *fn_1_36AD0(void);
+extern u32 fn_1_34AC0(void *, u32, u32, u32);
+extern void fn_1_8001C(void);
+extern void fn_1_12AB38(void *);
+extern s32 fn_1_465D0(void *, s32);
+extern void *fn_1_7F518(s16, void *, s32);
+extern int sprintf(char *, const char *, ...);
+
+void fn_1_34E08(void) {
+    struct { u8 *value; } data;
+    char buf[0x20];
+    u8 tmp[0x20];
+    s16 i;
+    s32 v;
+
+    data.value = (u8 *)&lbl_1_data_5730;
+    v = lbl_1_bss_8B3A0.unk_E;
+    if (v > 40) {
+        Obj_1_34E08_Settings *s = fn_1_36AD0();
+        v = 50;
+        if (!(s->flags & 0x40000000)) {
+            v = s->unk_81A0;
+        }
+    }
+    lbl_1_bss_26B5C[0] = v;
+    fn_1_34AC0(lbl_1_bss_26B5C, 1, 30, 1);
+    fn_1_8001C();
+    fn_1_12AB38(data.value + 0xCE4);
+    fn_1_465D0(data.value + 0xCF0, 1);
+    for (i = 0; i < 30; i++) {
+        if (i == 0) {
+            sprintf(buf, (const char *)(data.value + 0xD00), fn_1_7F518(lbl_1_bss_26B5C[i], tmp, 0));
+        } else {
+            sprintf(buf, (const char *)(data.value + 0xD0C), fn_1_7F518(lbl_1_bss_26B5C[i], tmp, 0));
+        }
+        fn_1_465D0(buf, 1);
+    }
+    fn_1_12AB38(data.value + 0xD18);
+}
+/* fzgx:end fn_1_34E08 */
+
 /* fzgx:begin fn_1_35124 */
 void fn_1_35124(void) {
     OSGetTick();
