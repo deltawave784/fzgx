@@ -58,6 +58,9 @@ class CheckResult:
     differing_rows: int = 0
     value_flow: List[dict] = field(default_factory=list)
     operand_order: List[dict] = field(default_factory=list)
+    # why a pool relocation could not be bound to retail's pool: where our private pool's bytes
+    # differ from retail's (otherwise the rows just stay unbound, with no hint)
+    pool_notes: List[str] = field(default_factory=list)
 
     def to_json(self) -> dict:
         return {k: v for k, v in self.__dict__.items() if not k.startswith("_")}
@@ -329,7 +332,8 @@ def _diff(project: Project, module: str, symbol: str, unit: str, max_diff_lines:
         if symbol not in right_syms:
             res.diff = [f"(symbol {symbol} not present in our object: define it, check the name)"]
         else:
-            pool_rows, res._pool_pairs = _pool_rows(project, module, left, right, lrows, rrows, base, symbol)
+            pool_rows, res._pool_pairs = _pool_rows(project, module, left, right, lrows, rrows, base, symbol,
+                                                    notes=res.pool_notes)
             interior_rows, interior_pairs = _interior_binding_rows(project, module, base, left, right, lrows, rrows)
             pool_rows |= interior_rows
             res._pool_pairs += interior_pairs
@@ -774,8 +778,26 @@ def _local_table_matches(project, module, elf, private, retail, function_name):
     return len(entries) * 4 == retail.size and all(struct.unpack_from('>I', data, off)[0] == value for off, value in entries.items())
 
 
+def _note(notes: Optional[List[str]], text: str) -> None:
+    if notes is not None and text not in notes:
+        notes.append(text)
+
+
+def _pool_byte_note(private: str, anchor_name: str, ours: bytes, retail: Optional[bytes], base_offset: int) -> str:
+    """One line saying where our private pool object differs from retail's bytes."""
+    if retail is None:
+        return f"pool {private}: retail has no readable bytes at {anchor_name}+0x{base_offset:X}"
+    if len(retail) != len(ours):
+        return f"pool {private}: our pool is {len(ours)} bytes, retail's range ends after {len(retail)}"
+    words = [(i, ours[i:i + 4], retail[i:i + 4]) for i in range(0, len(ours), 4) if ours[i:i + 4] != retail[i:i + 4]]
+    shown = ", ".join(f"+0x{base_offset + i:X} ours {a.hex()} retail {b.hex()}" for i, a, b in words[:5])
+    more = f" (+{len(words) - 5} more words)" if len(words) > 5 else ""
+    return f"pool {private} differs from retail {anchor_name} in {len(words)} of {len(ours) // 4} words: {shown}{more}"
+
+
 def _pool_rows(project: Project, module: str, left: dict, right: dict,
-               lrows: List[dict], rrows: List[dict], obj: Optional[Path] = None, function_name=None):
+               lrows: List[dict], rrows: List[dict], obj: Optional[Path] = None, function_name=None,
+               notes: Optional[List[str]] = None):
     """Rows that differ only by `relocation to a pooled constant (retail)` vs `relocation to
     our private literal with the same bytes`. Returns (row indices, [(private, pooled, desc)])."""
     lsyms, rsyms = left.get("symbols", []), right.get("symbols", [])
@@ -843,9 +865,12 @@ def _pool_rows(project: Project, module: str, left: dict, right: dict,
                 continue
             section = elf.sections[own['shndx']]
             if section['name'] not in ('.rodata', '.sdata2', '.data', '.sdata'):
+                _note(notes, f"pool {private_name} is in {section['name']}, not a literal-pool section")
                 continue
             if anonymous and any(rel['type'] == 4 and rel['info'] == own['shndx'] and rel['size']
                                  for rel in elf.sections):
+                _note(notes, f"pool {private_name}: our object carries relocations (pointers inside the pool), "
+                             "so its bytes cannot be proven equal to retail's; use plain values, not addresses")
                 continue
             if any(rel['type'] == 4 and rel['info'] == own['shndx'] and
                    any(own['value'] <= struct.unpack_from('>I', elf.data, off)[0] < own['value'] + own['size']
@@ -877,6 +902,7 @@ def _pool_rows(project: Project, module: str, left: dict, right: dict,
             if any(rel['type'] == 4 and rel['info'] == own['shndx'] and
                    any(own['value'] <= struct.unpack_from('>I', elf.data, off)[0] < own['value'] + size
                        for off in range(rel['offset'], rel['offset'] + rel['size'], 12)) for rel in elf.sections):
+                _note(notes, f"pool {private_name}: a relocation points into our pool object")
                 continue
             ours = bytes(elf.data[start:start + size])
         else:
@@ -892,6 +918,22 @@ def _pool_rows(project: Project, module: str, left: dict, right: dict,
             # the pool base to the object plus an offset): bind to the object with an addend
             anchor, interior = s, address - s.addr
         if anchor is None:
+            # the address lies inside another retail object of the same pool: the retail row names the
+            # first symbol of the TU's pool with an addend, but our relocation can name the object
+            container = next((t for t in syms.values() if t.section == s.section and t.kind == 'object'
+                              and t.addr < address < t.end), None)
+            if container is not None:
+                anchor, interior = container, address - container.addr
+        if anchor is None and address >= s.end:
+            # dtk under-sizes a pool object (`fzgx headers --oversize`): retail's pool continues past the
+            # recorded end, up to the next symbol. The relocation target is the same bytes either way, and
+            # the byte comparison below still decides.
+            following = min((t.addr for t in syms.values() if t.section == s.section and t.addr > s.addr), default=None)
+            if following is not None and address < following:
+                anchor, interior = s, address - s.addr
+        if anchor is None:
+            _note(notes, f"pool {private_name}: no retail object starts at {s.name}+0x{address - s.addr:X} "
+                         f"(the pooled constant the row points at)")
             continue
         if module == 'main':
             retail = next((raw[address - base:address - base + len(ours)]
@@ -904,6 +946,10 @@ def _pool_rows(project: Project, module: str, left: dict, right: dict,
             offset = address - project._section_base(module, s.section)
             retail = raw[offset:offset + len(ours)] if raw is not None and offset >= 0 else None
         if not ours or ours != retail:
+            if notes is not None and ours:
+                note = _pool_byte_note(private_name, anchor.name, ours, retail, interior)
+                if note not in notes:
+                    notes.append(note)
             continue
         lname = anchor.name if not interior else f"{anchor.name}+0x{interior:X}"
         rows.add(i)

@@ -590,6 +590,8 @@ def format_check(res: Dict[str, Any]) -> str:
         lines.append(f"{res['pool_rows']} row(s) marked `p` are literal-pool relocations ({', '.join(res['pool'])}); the tooling "
                      f"retargets them at submit, so they already count as matching: {res['percent_adjusted']:.1f}% "
                      "is the adjusted instruction-row score. Fix only the other marked rows.")
+    for note in (res.get("pool_notes") or [])[:3]:
+        lines.append(note + " (rows left `?` until the bytes agree: fix the initializer/literal values)")
     if res.get("matched_pool"):
         lines.append("pool: the only differences are relocations to shared literal-pool constants whose value "
                      "you reproduce (" + ", ".join(res["pool"]) + "); this counts as a match.")
