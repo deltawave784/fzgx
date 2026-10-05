@@ -61,6 +61,127 @@ s32 fn_1_581AC(u16 value, u16 type, void* data) {
 #pragma opt_propagation reset
 /* fzgx:end fn_1_581AC */
 
+/* fzgx:begin fn_1_58248 */
+#include "dolphin/hw_regs.h"
+
+typedef struct AvLineDrawState {
+    u8 unk_0;
+    u8 pad_1[3];
+    u32 unk_4;
+    u32 unk_8;
+    u32 unk_C;
+    u32 unk_10;
+    u32 unk_14;
+} AvLineDrawState;
+
+typedef struct AvLineVertex {
+    f32 x;
+    f32 y;
+    f32 z;
+    u8 r;
+    s8 g;
+    u8 b;
+    u8 a;
+} AvLineVertex;
+
+typedef struct AvLineEntry {
+    u16 unk_00;
+    u16 unk_02;
+    AvLineVertex verts[16];
+} AvLineEntry;
+
+typedef union {
+    volatile u8 u8;  // fzgx-allow: S2 GX write-gather FIFO
+    volatile f32 f32;  // fzgx-allow: S2 GX write-gather FIFO
+} AvLineFifo;
+
+#define WGFIFO (*(AvLineFifo *)GX_FIFO_BASE)
+
+static inline void FifoPosition3f32(f32 x, f32 y, f32 z) {
+    WGFIFO.f32 = x;
+    WGFIFO.f32 = y;
+    WGFIFO.f32 = z;
+}
+
+static inline void FifoColor4u8(u8 r, u8 g, s8 b, s8 a) {
+    WGFIFO.u8 = r;
+    WGFIFO.u8 = g;
+    WGFIFO.u8 = b;
+    WGFIFO.u8 = a;
+}
+
+extern AvLineDrawState lbl_1_data_1C670;
+extern u32 lbl_801A6D00;
+extern void GXLoadPosMtxImm(u32, u32);
+extern void fn_800720B0(u32);
+extern void lbl_8006DCA4(void);
+extern void fn_8003462C(u32, u32, u32);
+extern void fn_8007245C(u32);
+extern void fn_800728A8(s32, s32, s32, s32);
+extern void fn_80072EDC(s32, s32);
+extern void fn_800734A8(u32, s32, s32, s32);
+extern void fn_80073678(u32);
+extern void fn_80073898(u32);
+extern void fn_80073C6C(s32);
+extern void fn_80074660(u32);
+extern void fn_80074788(u32);
+extern void fn_800747D0(u32, u32, s32, s32, u32, s32, s32);
+extern void fn_80074918(u8, s32, u8);
+extern void fn_800746A8(u8, u32);
+
+static inline f32 fn_1_58248_read_pointer(AvLineVertex * owner) { return owner->x; }
+#pragma opt_loop_invariants off
+void fn_1_58248(void) {
+    AvLineVertex *v;
+    s32 i;
+    s32 j;
+    struct { u16 value; } n;
+    u32 off;
+    AvLineEntry *entry;
+    AvLineDrawState *st = &lbl_1_data_1C670;
+
+    st->unk_4 = 1;
+    st->unk_8 = 1;
+    st->unk_C = 1;
+    st->unk_10 = 0;
+    lbl_8006DCA4();
+    fn_80074918(1, 3, 1);
+    fn_800746A8(lbl_1_data_1C670.unk_0, lbl_1_data_1C670.unk_14);
+    fn_8007245C(0xa00);
+    fn_800728A8(st->unk_4, st->unk_8, st->unk_C, st->unk_10);
+    fn_800720B0(0);
+    fn_800747D0(4, 0, 1, 1, 0, 2, 1);
+    fn_800734A8(0, 0xff, 0xff, 4);
+    fn_80072EDC(0, 4);
+    fn_80073C6C(0);
+    fn_80073678(1);
+    fn_80074660(0);
+    fn_80073898(0);
+    fn_80074788(1);
+    GXLoadPosMtxImm(lbl_801A6D00, 0);
+
+    i = 0;
+    off = 0;
+    while (i < lbl_1_bss_6C844) {
+        entry = (AvLineEntry *)(lbl_1_bss_6C840 + off);
+        lbl_1_data_1C670.unk_0 = entry->unk_00;
+        v = entry->verts;
+        n.value = entry->unk_02;
+        if (n.value >= 2) {
+            fn_8003462C(0xb0, 0, n.value);
+            for (j = 0; j < n.value; j++, v++) {
+                FifoPosition3f32(fn_1_58248_read_pointer(v), v->y, v->z);
+                FifoColor4u8(v->r, v->g, v->b, v->a);
+            }
+        }
+        off += sizeof(AvLineEntry);
+        i++;
+    }
+    lbl_1_bss_6C844 = 0;
+}
+#pragma opt_loop_invariants reset
+/* fzgx:end fn_1_58248 */
+
 /* fzgx:begin fn_1_584AC */
 // fn_1_584AC: linear congruential generator.
 u32 fn_1_584AC(void) {
