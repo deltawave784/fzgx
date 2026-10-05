@@ -1441,6 +1441,112 @@ void fn_1_4E0F4(void) {
 }
 /* fzgx:end fn_1_4E0F4 */
 
+/* fzgx:begin fn_1_4E220 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/font.h"
+
+typedef struct fn_1_4E220_Sprite {
+    u32 unk_0;
+    f32 x;
+    f32 y;
+    u8 pad_C[4];
+    f32 scale_x;
+    f32 scale_y;
+    u8 pad_18[0x10];
+    s16 angle;
+    u8 pad_2A[6];
+    u32 flags;
+    u8 pad_34[0xC];
+    s32 format;
+    u16 width;
+    u16 height;
+    u32 image;
+} fn_1_4E220_Sprite;
+
+typedef struct fn_1_4E220_ImageInfo {
+    u8 unk_0[0xC];
+    u32 (*textures)[8];
+} fn_1_4E220_ImageInfo;
+
+typedef struct fn_1_4E220_Resource {
+    u8 unk_0[0x20];
+    fn_1_4E220_ImageInfo *images;
+    u32 unk_24;
+} fn_1_4E220_Resource;
+
+extern const f32 lbl_1_rodata_2750;
+extern const f32 lbl_1_rodata_2754;
+extern u8 lbl_1_bss_4E688[0x20];
+extern f32 fn_1_519AC(u32 value);
+extern void lbl_8006D7F4(f32 arg0, f32 arg1, f32 arg2);
+extern void lbl_8006E15C(f32 arg0, f32 arg1, f32 arg2);
+extern void mathutil_mtxA_rotate_z(s16 arg0);
+extern void lbl_8006DD7C(void);
+extern void lbl_8006DB74(void *value);
+extern void fn_800745A4(u32 arg0, s32 arg1, s32 arg2, u32 arg3, u32 arg4, u32 arg5);
+extern u32 GXLoadTexMtxImm(u32, u32, u32);
+extern void DCFlushRange(void *, u32);
+extern void GXInitTexObj(void *, void *, u16, u16, u32, u32, u32, u8);
+extern void fn_80073778(void *obj, s32 index);
+extern void fn_80073C6C(s32 index);
+extern void fn_800734A8(u32 arg0, s32 arg1, s32 arg2, s32 arg3);
+extern void fn_80072C24(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
+extern void fn_80072D64(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u8 arg4, s32 arg5);
+extern void fn_80072CC4(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
+extern void fn_80072E20(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u8 arg4, s32 arg5);
+extern void fn_800729B0(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
+extern void fn_80072AB0(s32 arg0, s32 arg1, s32 arg2);
+
+// Set up the texture matrix and TEV stages for drawing one sprite.
+void fn_1_4E220(fn_1_4E220_Sprite *sprite, u32 stage, u32 texcoord, u32 texmap, u32 mtxid) {
+    f32 mtx[3][4];
+
+    lbl_8006D7F4(sprite->x, sprite->y, lbl_1_rodata_2750);
+    lbl_8006E15C(sprite->scale_x, sprite->scale_y, lbl_1_rodata_2754);
+    if (sprite->angle != 0) {
+        mathutil_mtxA_rotate_z(sprite->angle);
+    }
+    lbl_8006DD7C();
+    lbl_8006DB74(mtx);
+    fn_800745A4(texcoord & 0xFF, 1, 4, mtxid & 0xFF, 0, 125);
+    GXLoadTexMtxImm((u32)mtx, mtxid & 0xFF, 1);
+
+    if (sprite->flags & 0x800000) {
+        DCFlushRange((void *)sprite->image, (u32)(sprite->height * (sprite->width * fn_1_519AC(sprite->format))));
+        {
+            u32 width = sprite->width, height = sprite->height;
+            GXInitTexObj(lbl_1_bss_4E688, (void *)sprite->image, width, height, sprite->format, 0, 0, 0);
+        }
+        fn_80073778(lbl_1_bss_4E688, texmap & 0xFF);
+    } else {
+        fn_1_4E220_Resource *table = (fn_1_4E220_Resource *)&lbl_1_data_FCD4;
+        u32 id = sprite->unk_0;
+        fn_1_4E220_ImageInfo *images = table[(id >> 8) & 0xFFFF].images;
+        if (!(lbl_1_rodata_2750 != sprite->scale_x && lbl_1_rodata_2750 != sprite->scale_y && images != NULL)) {
+            return;
+        }
+        fn_80073778(images->textures[id & 0xFF], texmap & 0xFF);
+    }
+
+    fn_80073C6C(stage & 0xFF);
+    fn_800734A8(stage & 0xFF, texcoord & 0xFF, texmap & 0xFF, 255);
+    if (sprite->format == 0 || sprite->format == 1) {
+        fn_80072C24(stage & 0xFF, 15, 15, 15, 0);
+        fn_80072D64(stage & 0xFF, 0, 0, 0, 1, 0);
+        fn_80072CC4(stage & 0xFF, 7, 0, 4, 7);
+        fn_80072E20(stage & 0xFF, 0, 0, 0, 1, 0);
+    } else {
+        fn_800729B0(2, 0, 0, 0, 0);
+        fn_80072AB0(stage & 0xFF, 0, 2);
+        fn_80072C24(stage & 0xFF, 8, 15, 0, 15);
+        fn_80072D64(stage & 0xFF, 8, 0, 0, 1, 0);
+        fn_80072CC4(stage & 0xFF, 4, 7, 0, 7);
+        fn_80072E20(stage & 0xFF, 14, 0, 0, 1, 0);
+    }
+}
+/* fzgx:end fn_1_4E220 */
+
 /* fzgx:begin fn_1_4E500 */
 void fn_1_4E500(void) {
     fn_1_A71CC();
