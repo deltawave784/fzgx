@@ -868,49 +868,53 @@ void fn_1_FA84(void) {
 /* fzgx:end fn_1_FA84 */
 
 /* fzgx:begin fn_1_FB50 */
-typedef struct LiveCameraVec {
-    f32 values[3];
-} LiveCameraVec;
+typedef struct V3_FB50 {
+    f32 x, y, z;
+} V3_FB50;
 
-typedef struct fn_1_FB50_LiveCamera {
+typedef struct LiveCam_FB50 {
     u8 pad_00[0x1c];
-    LiveCameraVec position;
+    V3_FB50 position;
     u8 pad_28[0x84];
     s32 mode;
     s32 timer;
-    LiveCameraVec saved;
-    LiveCameraVec offset;
-    LiveCameraVec velocity;
-} fn_1_FB50_LiveCamera;
+    V3_FB50 saved;
+    V3_FB50 offset;
+    V3_FB50 velocity;
+} LiveCam_FB50;
 
-void fn_1_FB50(fn_1_FB50_LiveCamera *camera) {
-    f64 product;
-    f64 damping;
-    u32 i;
+extern const f64 lbl_1_rodata_580;
+extern const f64 lbl_1_rodata_588;
+extern u32 lbl_1_bss_F5C;
+extern void fn_1_8840(void);
 
-    if (camera->mode == 0) {
-        camera->saved = camera->position;
-    } else {
-        if ((lbl_1_bss_F5C & 0x50000000) == 0) {
-            damping = lbl_1_rodata_580;
-            for (i = 0; i < 3; i++) {
-                product = damping * (f64)camera->offset.values[i];
-                camera->velocity.values[i] =
-                    (f32)((f64)camera->velocity.values[i] - product);
-            }
-            for (i = 0; i < 3; i++) {
-                camera->velocity.values[i] =
-                    (f32)((f64)camera->velocity.values[i] * lbl_1_rodata_588);
-            }
-            for (i = 0; i < 3; i++) {
-                camera->offset.values[i] =
-                    camera->offset.values[i] + camera->velocity.values[i];
-            }
-        }
-        psvec_add(&camera->saved.values[0], &camera->offset.values[0], &camera->position.values[0]);
-        if ((lbl_1_bss_F5C & 0x50000000) == 0 && camera->timer > 0) {
-            camera->timer--;
-            if (camera->timer == 0) {
+void fn_1_FB50(LiveCam_FB50 *cam) {
+    if (cam->mode == 0) {
+        cam->saved = cam->position;
+        return;
+    }
+    if ((lbl_1_bss_F5C & 0x50000000) == 0) {
+        f64 t0, t1, t2;
+        t0 = lbl_1_rodata_580 * cam->offset.x;
+        cam->velocity.x = cam->velocity.x - t0;
+        t1 = lbl_1_rodata_580 * cam->offset.y;
+        cam->velocity.y = cam->velocity.y - t1;
+        t2 = lbl_1_rodata_580 * cam->offset.z;
+        cam->velocity.z = cam->velocity.z - t2;
+        cam->velocity.x = cam->velocity.x * lbl_1_rodata_588;
+        cam->velocity.y = cam->velocity.y * lbl_1_rodata_588;
+        cam->velocity.z = cam->velocity.z * lbl_1_rodata_588;
+        cam->offset.x = cam->offset.x + cam->velocity.x;
+        cam->offset.y = cam->offset.y + cam->velocity.y;
+        cam->offset.z = cam->offset.z + cam->velocity.z;
+    }
+    {
+        psvec_add(&cam->saved, &cam->offset, &cam->position);
+    }
+    if ((lbl_1_bss_F5C & 0x50000000) == 0) {
+        if (cam->timer > 0) {
+            cam->timer--;
+            if (cam->timer == 0) {
                 fn_1_8840();
             }
         }
