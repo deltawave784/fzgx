@@ -1,5 +1,109 @@
 #include "types.h"
 
+/* fzgx:begin _epilog */
+#include "rel/sel/sel.h"
+#include "sofdec/adxt.h"
+
+struct Fn10834State {
+    u8 pad_0[0x94];
+    u32 flags;
+};
+
+typedef struct {
+    ADXTHandle *voice;
+    ADXTHandle *bgm;
+} SelAdxPair;
+
+extern struct Fn10834State lbl_1_bss_8B3A0;
+extern s16 lbl_1_bss_960;
+extern s16 lbl_1_bss_962;
+extern s16 lbl_1_bss_968;
+extern SelAdxPair *lbl_1_bss_6EAD0;
+extern u32 lbl_801A6410;
+
+extern void fn_10_95A0(void *);
+extern void fn_10_96F8(void *, void *);
+extern void fn_10_D2C(void);
+extern void fn_1_46B4(u32, u32, const char *, int);
+extern void fn_1_435C(u32);
+extern void fn_1_41A8(void);
+extern void fn_1_6400(void);
+extern void fn_1_46BFC(void);
+extern void fn_1_46DC4(void *);
+extern void fn_8004BF0C(ADXTHandle *, s32);
+extern void fn_1_A0AA4(void);
+extern void fn_1_1596DC(int);
+extern void fn_1_47A60(s16);
+extern void fn_1_484CC(s32);
+extern void fn_1_48140(int);
+extern void fn_1_412A0(u32);
+
+void _epilog(void) {
+    struct Fn10834State *state;
+    /* The TU's .bss cluster is addressed off one base; the +0x50000 half is
+       its own CSE'd value in retail, so both bases are held as struct members. */
+    struct { u8 *value; } hi;
+
+    hi.value = (u8 *)&lbl_10_bss_0 + 0x50000;
+    state = &lbl_1_bss_8B3A0;
+{
+    struct { u8 *value; } sel;
+    sel.value = (u8 *)&lbl_10_bss_0;
+
+    state->flags &= ~0x10;
+    state->flags &= ~0x20;
+    if (((state->flags) & 0x80000000) == 0) {
+        fn_10_95A0(*(void **)(hi.value - 0x6C80));
+        fn_10_96F8(hi.value - 0x6C60, hi.value - 0x1140);
+    }
+
+    fn_1_46B4(lbl_801A6410, ((Obj_10_bss_0 *)sel.value)->unk_4, (const char *)lbl_10_data_57C, 0x424);
+    fn_1_46B4(lbl_801A6410, *(u32 *)(hi.value - 0x6C80), (const char *)lbl_10_data_57C, 0x425);
+    fn_1_46B4(lbl_801A6410, ((Obj_10_bss_0 *)sel.value)->unk_0, (const char *)lbl_10_data_57C, 0x426);
+}
+
+    fn_1_435C(*(u32 *)(hi.value - 0x6C7C));
+    fn_1_41A8();
+    fn_1_435C(*(u32 *)(hi.value - 0x6C78));
+    fn_1_41A8();
+    fn_1_6400();
+    fn_1_46BFC();
+    fn_1_46DC4(lbl_10_data_59C);
+
+    if (!(lbl_1_bss_960 == 1 && lbl_1_bss_962 == 16)) {
+        if (lbl_1_bss_6EAD0 != NULL) {
+            fn_8004BF0C(lbl_1_bss_6EAD0->voice, -999);
+            fn_8004BF0C(lbl_1_bss_6EAD0->bgm, -999);
+            ADXT_Stop(lbl_1_bss_6EAD0->voice);
+            ADXT_Stop(lbl_1_bss_6EAD0->bgm);
+        }
+    }
+
+    fn_1_A0AA4();
+    if (state->flags & 0x40000000) {
+        fn_1_1596DC(3);
+        fn_1_1596DC(2);
+        fn_1_1596DC(1);
+        fn_1_47A60(lbl_1_bss_960);
+        fn_1_484CC(2);
+    } else {
+        fn_1_1596DC(2);
+        fn_1_48140(0xA2);
+        fn_1_48140(0x9C);
+        fn_1_48140(0xA1);
+        fn_1_48140(0x9D);
+        fn_1_48140(0x9B);
+        fn_1_48140(0x9A);
+        fn_1_48140(0x95);
+        fn_1_484CC(2);
+    }
+    fn_1_412A0(1);
+    if (lbl_1_bss_968 == 2) {
+        fn_10_D2C();
+    }
+}
+/* fzgx:end _epilog */
+
 /* fzgx:begin fn_10_1F28 */
 extern s32 lbl_10_bss_51740;
 extern s32 lbl_10_bss_49388;

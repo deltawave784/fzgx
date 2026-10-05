@@ -581,3 +581,6 @@ rel/sel/sel/fn_10_804C.c:
 
 rel/sel/sel/fn_10_107D4.c:
 	.text       start:0x000107D4 end:0x00010C24 align:4
+
+rel/sel/sel/_epilog.c:
+	.text       start:0x00000B00 end:0x00000D2C align:4

@@ -60344,6 +60344,17 @@
   },
   {
     "module": "sel",
+    "source": "rel/sel/sel/_epilog.c",
+    "symbols": [
+      "_epilog"
+    ],
+    "status": "matching",
+    "mw_version": "GC/1.3.2",
+    "extra_cflags": [],
+    "tu": "rel/sel/sel.c"
+  },
+  {
+    "module": "sel",
     "source": "rel/sel/sel/fn_10_107D4.c",
     "symbols": [
       "fn_10_107D4"
