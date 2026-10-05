@@ -1326,6 +1326,67 @@ void fn_1_9D3E8(void *arg0, s32 arg1, s32 arg2) {
 }
 /* fzgx:end fn_1_9D3E8 */
 
+/* fzgx:begin fn_1_F8E30 noprologue */
+#include "types.h"
+
+/* 44 format strings x 6 columns */
+struct FormatTable {
+    const char *fmt[44][6];
+};
+
+/* 44 entries x 10 bytes */
+struct FormatEntry {
+    s16 f[5];
+};
+
+struct EntryTable {
+    struct FormatEntry e[44];
+};
+
+extern const struct FormatTable lbl_1_rodata_7050;
+extern const struct EntryTable lbl_1_rodata_6E38;
+extern const char *lbl_1_data_2AB54[22];
+extern const char *lbl_1_data_2AA24[22];
+extern const char *lbl_1_data_2BD54[111][6];
+
+extern void fn_80008BA8(void *dst, const void *src, u32 n);
+extern int sprintf(char *, const char *, ...);
+extern char *fn_80083DB0(char *, const char *);
+
+char *fn_1_F8E30(s16 index, s16 col, char *out) {
+    struct FormatEntry entry;
+    struct EntryTable entries;
+    struct FormatTable formats;
+
+    formats = lbl_1_rodata_7050;
+    entries = lbl_1_rodata_6E38;
+    fn_80008BA8(&entry, &entries.e[index], sizeof(entry));
+
+    switch (entry.f[1]) {
+    case 3:
+        switch (col) {
+        case 5:
+            sprintf(out, formats.fmt[index][col], lbl_1_data_2AB54[entry.f[3]]);
+            break;
+        default:
+            sprintf(out, formats.fmt[index][col], lbl_1_data_2AA24[entry.f[3]]);
+            break;
+        }
+        break;
+    case 1:
+        sprintf(out, formats.fmt[index][col], lbl_1_data_2BD54[entry.f[3]][col]);
+        break;
+    case 2:
+        sprintf(out, formats.fmt[index][col], lbl_1_data_2BD54[entry.f[4]][col]);
+        break;
+    default:
+        fn_80083DB0(out, formats.fmt[index][col]);
+        break;
+    }
+    return out;
+}
+/* fzgx:end fn_1_F8E30 */
+
 /* fzgx:begin fn_1_13EE60 */
 typedef struct {
     u32 flags;
