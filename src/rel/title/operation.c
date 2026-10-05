@@ -691,6 +691,132 @@ void fn_8_C7B0(void *arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4) {
 }
 /* fzgx:end fn_8_C7B0 */
 
+/* fzgx:begin fn_8_C9A8 */
+extern u8 lbl_8_data_7E50[];
+
+extern void fn_1_49410(void);
+extern void fn_1_495B0(u32);
+extern void fn_1_49590(f32);
+extern void fn_1_495C8(u8);
+extern void fn_1_4954C(f32);
+extern void fn_1_495A0(f32);
+extern void fn_1_4965C(u8);
+extern void fn_1_49738(void *);
+extern void fn_1_49748(f32);
+extern void fn_1_49514(u32 *);
+extern void fn_1_4955C(f32, f32);
+extern void fn_1_496FC(f32, f32);
+extern void fn_1_4AE0C(const char *, ...);
+extern void fn_1_5233C(void);
+
+struct Color {
+    u8 r, g, b, a;
+};
+
+/* The retail TU's literal pool (lbl_8_rodata_160) in retail order. MWCC emits a file-scope
+ * object at its definition and a function's literals right after that function, so the words
+ * this function does not read are private tables and its own literals (and the compiler's
+ * int-to-float constant) are primed in between. Dropped at integration. */
+#pragma section code_type ".fzgxpool"
+static const f32 fzgx_pool_00[10] = {2.71875f, 0.0f, 320.0f, 640.0f, 1.875f, 0.0f, 150.0f, 0.1f, 20.0f, 0.8333333f};
+static void fzgx_pool_layout_28(void) {
+    volatile f32 s;  /* fzgx-allow: S2 layout primer sink: pools the 2^52 + 2^31 conversion constant */
+    volatile s32 n;  /* fzgx-allow: S2 layout primer source */
+    s = (f32)n;
+}
+static const u32 fzgx_pool_30[2] = {0xFFFFFF00, 0x00000000};
+static void fzgx_pool_layout_38(void) {
+    volatile f32 s;  /* fzgx-allow: S2 layout primer sink: MWCC pools literals in first-use order */
+    s = 1.0f;
+    s = 0.5f;
+    s = 0.09f;
+}
+static const f32 fzgx_pool_44[1] = {5.0f};
+static void fzgx_pool_layout_48(void) {
+    volatile f32 s;  /* fzgx-allow: S2 layout primer sink */
+    s = 255.0f;
+}
+static const u32 fzgx_pool_4C[6] = {0xFFFFFF00, 0xFFFFFF00, 0xFFFFFF00, 0xFFFFFF00, 0xFFFFFF00, 0xFFFFFF00};
+static const f32 fzgx_pool_64[1] = {0.3f};
+static const u32 fzgx_pool_68[5] = {0xFFFFFF00, 0xFFFFFF00, 0xFFFFFF00, 0xFFFFFF00, 0xFFFFFF00};
+static const f32 fzgx_pool_7C[36] = {
+    0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.01f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.01f,
+    60.0f, 0.7f, 0.01f, 240.0f, 45.0f, 0.001f, 100.0f, -200.0f, 120.0f, 200.0f, -120.0f, -0.01f,
+    10.0f, -10240.0f, 1.8f, -1.8f, -20.0f, -4096.0f, -2048.0f, 1.1f, -0.51f, 4096.0f, -1.1f, 0.8f,
+};
+static const u32 fzgx_pool_10C[1] = {0xFFFFFF00};
+static const f32 fzgx_pool_110[1] = {345.0f};
+static void fzgx_pool_layout_114(void) {
+    volatile f32 s;  /* fzgx-allow: S2 layout primer sink */
+    s = 2.0f;
+}
+static const f32 fzgx_pool_118[4] = {1.8375f, 0.00000004172325f, -160.0f, 90.0f};
+static const u32 fzgx_pool_128[1] = {0xFFFFFF00};
+static const f32 fzgx_pool_12C[4] = {112.0f, 272.0f, 30.0f, 70.0f};
+static const u32 fzgx_pool_13C[2] = {0xFFFFFF00, 0xFF4040FF};
+static const f32 fzgx_pool_144[2] = {1.1111112f, 160.0f};
+static const u32 fzgx_pool_14C[3] = {0xFFFFFF00, 0xFFFFFF00, 0xFFFFFF00};
+static const f32 fzgx_pool_158[1] = {-100.0f};
+static const u32 fzgx_pool_15C[2] = {0xFFFFFF00, 0xFFFFFFFF};
+static const f32 fzgx_pool_164[6] = {541.0f, 0.11f, 0.48f, 0.44f, 591.0f, 289.0f};
+static const u32 fzgx_pool_17C[1] = {0xFFFFFFFF};
+static const f32 fzgx_pool_180[5] = {0.0f, 6.5f, 81.25f, 26.0f, 620.0f};
+static const u32 fzgx_pool_194[1] = {0x00000080};
+static const f32 fzgx_pool_198[19] = {
+    448.0f, -1.0f, 481.0f, 641.0f, 0.000015f, 0.00006f, 0.00005f, 0.0f, 3.3515625f, 0.0f,
+    3.21875f, 0.0f, 2.96875f, 0.0f, 0.009f, -177.0f, 108.0f, -0.009f, -71.0f,
+};
+static const u32 fzgx_pool_1E4[1] = {0xFFC80000};
+static void fzgx_pool_layout_1E8(void) {
+    volatile f32 s;  /* fzgx-allow: S2 layout primer sink */
+    s = 3.0f;
+}
+#pragma section code_type ".text"
+
+void fn_8_C9A8(s32 x, s32 y, f32 alpha) {
+    struct { const char *value; } strings;
+    u32 packed;
+    struct Color color;
+
+    strings.value = (const char *)lbl_8_data_7E50;
+
+    fn_1_49410();
+    fn_1_495B0(0x80000000);
+    fn_1_49590(0.5f);
+    fn_1_495C8(8);
+    fn_1_4954C(0.09f);
+    fn_1_495A0(alpha);
+    fn_1_4965C(4);
+    fn_1_49738((void *)fn_1_5233C);
+    fn_1_49748(3.0f);
+
+    *(u32 *)&color = fzgx_pool_1E4[0];
+    color.a = (u8)(s32)(255.0f * alpha);
+    packed = *(u32 *)&color;
+    fn_1_49514(&packed);
+
+    fn_1_4955C(2.0f, 2.0f);
+    fn_1_496FC((f32)(x + 0x64), (f32)(y + 0xf0));
+    fn_1_4AE0C(strings.value + 0x224c);
+
+    fn_1_4955C(2.0f, 2.0f);
+    fn_1_496FC((f32)(x + 0xbd), (f32)(y + 0xf0));
+    fn_1_4AE0C(strings.value + 0x2254);
+
+    fn_1_4955C(1.0f, 2.0f);
+    fn_1_496FC((f32)(x + 0xdd), (f32)(y + 0xf0));
+    fn_1_4AE0C(strings.value + 0x2258);
+
+    fn_1_4955C(2.0f, 2.0f);
+    fn_1_496FC((f32)(x + 0x10d), (f32)(y + 0xf0));
+    fn_1_4AE0C(strings.value + 0x225c);
+
+    fn_1_4955C(1.0f, 2.0f);
+    fn_1_496FC((f32)(x + 0x208), (f32)(y + 0xf0));
+    fn_1_4AE0C(strings.value + 0x2268);
+}
+/* fzgx:end fn_8_C9A8 */
+
 /* fzgx:begin fn_8_CC2C */
 struct OperationValue {
     f32 value;
