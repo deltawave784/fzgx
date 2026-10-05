@@ -11213,5 +11213,42 @@
       }
     ],
     "link": "pool"
+  },
+  "fn_16_18CC": {
+    "seed_symbol": "fn_16_18CC",
+    "generator": "fzgx fixup",
+    "transform": "retail argument order: hoist arg 0 of fn_1_8F494",
+    "seed": "#include \"types.h\"\n#include \"rel/profile/data/lbl_16_data_0.h\"\n\ntypedef struct {\n    s32 active;\n    s32 entries[5];\n} Sig_fn_1_8F494_Fn1_8F494_Object;\n\nstruct fn_16_18CC_Tbl {\n    u32 unk_0[1];\n};\n\n/* save handles after the profile text data; retail addresses them off one base (data_0 + 0x80000) */\nstruct fn_16_18CC_ProfileHandles {\n    u8 pad_0[0x2B00];\n    s32 bioHandle;      /* 0x2B00 */\n    s32 machineHandle;  /* 0x2B04 */\n    s32 entryHandle[19];/* 0x2B08 */\n    struct fn_16_18CC_Tbl tbl; /* 0x2B54 */\n};\n\n/* one 0x4E8-byte entry; the first one starts at the head of lbl_1_bss_8B614 */\nstruct fn_16_18CC_Entry {\n    u8 pad_0[0xC];\n    s16 unk_C;\n    u8 pad_E[0x4A];\n    s16 unk_58;\n    u8 pad_5A[0x1A];\n    Sig_fn_1_8F494_Fn1_8F494_Object obj; /* 0x74 */\n    u8 pad_8C[0x4E8 - 0x8C];\n};\n\nstruct fn_16_18CC_lbl_16_bss_220_elem {\n    u8 pad_0[0x324];\n    u32 unk_324;\n    u8 pad_328[0x118];\n};\n\nextern u32 lbl_16_bss_150;\nextern u32 lbl_16_bss_14C;\nextern struct fn_16_18CC_lbl_16_bss_220_elem lbl_16_bss_220[];\nextern struct fn_16_18CC_Entry lbl_1_bss_8B614[];\n\nextern u32 fn_1_435C(u32);\nextern void fn_1_426C(u32);\nextern void fn_1_8F494(Sig_fn_1_8F494_Fn1_8F494_Object *);\nextern s32 fn_1_12CB04(s16);\nextern void fn_1_48140(int);\nextern void fn_1_80F1C(s32, void *);\n\n#pragma opt_propagation off\nvoid fn_16_18CC(void) {\n    struct fn_16_18CC_Entry *p;\n    struct fn_16_18CC_ProfileHandles *d;\n    struct { s32 value; } i;\n    struct { s16 value; } idx;\n    struct fn_16_18CC_lbl_16_bss_220_elem *e;\n    /* one-member carriers: a constant address in a plain pointer is rematerialised */\n    struct { struct fn_16_18CC_Entry *value; } ent;\n    s32 *handles;\n    struct { u32 value; } tb;\n\n    d = (struct fn_16_18CC_ProfileHandles *)((u8 *)&lbl_16_data_0 + 0x80000);\n    if (d->bioHandle != -1) {\n        fn_1_435C(lbl_16_bss_150);\n        fn_1_426C(d->bioHandle);\n        d->bioHandle = -1;\n    }\n    i.value = 0;\n    p = lbl_1_bss_8B614;\n    idx.value = p->unk_C;\n    if (p->unk_58 == 4) {\n        fn_1_8F494(&p->obj);\n        if (d->machineHandle != -1) {\n            fn_1_435C(lbl_16_bss_14C);\n            fn_1_426C(d->machineHandle);\n            d->machineHandle = -1;\n        }\n        ent.value = lbl_1_bss_8B614;\n        handles = d->entryHandle;\n        for (i.value = 0; (s16)i.value < (s16)fn_1_12CB04(idx.value); i.value++) {\n            fn_1_8F494(&ent.value[1].obj);\n            if (*handles != -1) {\n                fn_1_435C(lbl_16_bss_14C);\n                fn_1_426C(*handles);\n                *handles = -1;\n            }\n            ent.value++;\n            handles++;\n        }\n        p->unk_58 = 0;\n    }\n    tb.value = (u32)d + 0x2B54;\n    fn_1_48140(*(s32 *)(tb.value + p->unk_C * 4));\n    e = &lbl_16_bss_220[p->unk_C];\n    fn_1_80F1C((s16)e->unk_324, e);\n}\n#pragma opt_propagation reset\n\n",
+    "seed_sha256": "6c60e31a9b160fddc3ae0fd75f5f4d41f238dd45dc0f4f80ba73607c7ebd7b72",
+    "generated_sha256": "4471b445010b6589fcdf7aaaf6f7e262bda966c2dc062fae2e7ddc9d4bd887ae",
+    "generated_source": "#include \"types.h\"\n#include \"rel/profile/data/lbl_16_data_0.h\"\n\ntypedef struct {\n    s32 active;\n    s32 entries[5];\n} Sig_fn_1_8F494_Fn1_8F494_Object;\n\nstruct fn_16_18CC_Tbl {\n    u32 unk_0[1];\n};\n\n/* save handles after the profile text data; retail addresses them off one base (data_0 + 0x80000) */\nstruct fn_16_18CC_ProfileHandles {\n    u8 pad_0[0x2B00];\n    s32 bioHandle;      /* 0x2B00 */\n    s32 machineHandle;  /* 0x2B04 */\n    s32 entryHandle[19];/* 0x2B08 */\n    struct fn_16_18CC_Tbl tbl; /* 0x2B54 */\n};\n\n/* one 0x4E8-byte entry; the first one starts at the head of lbl_1_bss_8B614 */\nstruct fn_16_18CC_Entry {\n    u8 pad_0[0xC];\n    s16 unk_C;\n    u8 pad_E[0x4A];\n    s16 unk_58;\n    u8 pad_5A[0x1A];\n    Sig_fn_1_8F494_Fn1_8F494_Object obj; /* 0x74 */\n    u8 pad_8C[0x4E8 - 0x8C];\n};\n\nstruct fn_16_18CC_lbl_16_bss_220_elem {\n    u8 pad_0[0x324];\n    u32 unk_324;\n    u8 pad_328[0x118];\n};\n\nextern u32 lbl_16_bss_150;\nextern u32 lbl_16_bss_14C;\nextern struct fn_16_18CC_lbl_16_bss_220_elem lbl_16_bss_220[];\nextern struct fn_16_18CC_Entry lbl_1_bss_8B614[];\n\nextern u32 fn_1_435C(u32);\nextern void fn_1_426C(u32);\nextern void fn_1_8F494(Sig_fn_1_8F494_Fn1_8F494_Object *);\nextern s32 fn_1_12CB04(s16);\nextern void fn_1_48140(int);\nextern void fn_1_80F1C(s32, void *);\n\n#pragma opt_propagation off\nvoid fn_16_18CC(void) {\n    struct fn_16_18CC_Entry *p;\n    struct fn_16_18CC_ProfileHandles *d;\n    struct { s32 value; } i;\n    struct { s16 value; } idx;\n    struct fn_16_18CC_lbl_16_bss_220_elem *e;\n    /* one-member carriers: a constant address in a plain pointer is rematerialised */\n    struct { struct fn_16_18CC_Entry *value; } ent;\n    s32 *handles;\n    struct { u32 value; } tb;\n    Sig_fn_1_8F494_Fn1_8F494_Object * lab_t0;\n\n    d = (struct fn_16_18CC_ProfileHandles *)((u8 *)&lbl_16_data_0 + 0x80000);\n    if (d->bioHandle != -1) {\n        fn_1_435C(lbl_16_bss_150);\n        fn_1_426C(d->bioHandle);\n        d->bioHandle = -1;\n    }\n    i.value = 0;\n    p = lbl_1_bss_8B614;\n    idx.value = p->unk_C;\n    if (p->unk_58 == 4) {\n        lab_t0 = &p->obj;\n        fn_1_8F494(lab_t0);\n        if (d->machineHandle != -1) {\n            fn_1_435C(lbl_16_bss_14C);\n            fn_1_426C(d->machineHandle);\n            d->machineHandle = -1;\n        }\n        ent.value = lbl_1_bss_8B614;\n        handles = d->entryHandle;\n        for (i.value = 0; (s16)i.value < (s16)fn_1_12CB04(idx.value); i.value++) {\n            fn_1_8F494(&ent.value[1].obj);\n            if (*handles != -1) {\n                fn_1_435C(lbl_16_bss_14C);\n                fn_1_426C(*handles);\n                *handles = -1;\n            }\n            ent.value++;\n            handles++;\n        }\n        p->unk_58 = 0;\n    }\n    tb.value = (u32)d + 0x2B54;\n    fn_1_48140(*(s32 *)(tb.value + p->unk_C * 4));\n    e = &lbl_16_bss_220[p->unk_C];\n    fn_1_80F1C((s16)e->unk_324, e);\n}\n#pragma opt_propagation reset\n\n",
+    "compiler": "GC/1.3.2",
+    "flags": "",
+    "source": "rel/profile/fn_16_18CC.c",
+    "bytes": 344,
+    "headers_sha256": "73cf7422bff8955cde8d5ebf68ebefe0241675ac791653eb8a9749cb0d84419f",
+    "oracle_sha256": "674b10c66bb8dd9f71466438e5e5be193ce72f7703743ff7107f9a41d8f38004",
+    "recipe": [
+      {
+        "label": "retail argument order: hoist arg 0 of fn_1_8F494",
+        "input_sha256": "6c60e31a9b160fddc3ae0fd75f5f4d41f238dd45dc0f4f80ba73607c7ebd7b72",
+        "output_sha256": "4471b445010b6589fcdf7aaaf6f7e262bda966c2dc062fae2e7ddc9d4bd887ae",
+        "input_symbol": "fn_16_18CC",
+        "output_symbol": "fn_16_18CC",
+        "edits": [
+          [
+            1700,
+            1700,
+            "    Sig_fn_1_8F494_Fn1_8F494_Object * lab_t0;\n"
+          ],
+          [
+            2012,
+            2030,
+            "lab_t0 = &p->obj;\n        fn_1_8F494(lab_t0"
+          ]
+        ]
+      }
+    ],
+    "link": "pending"
   }
 }

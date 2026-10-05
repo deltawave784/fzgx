@@ -58978,6 +58978,16 @@
   },
   {
     "module": "profile",
+    "source": "rel/profile/fn_16_18CC.c",
+    "symbols": [
+      "fn_16_18CC"
+    ],
+    "status": "matching",
+    "mw_version": "GC/1.3.2",
+    "extra_cflags": []
+  },
+  {
+    "module": "profile",
     "source": "rel/profile/fn_16_1F1C.c",
     "symbols": [
       "fn_16_1F1C"
