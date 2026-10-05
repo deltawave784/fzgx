@@ -346,6 +346,83 @@ s32 fn_1_15C35C(s32 a, s32 b, s32 c, s32 d) {
 }
 /* fzgx:end fn_1_15C35C */
 
+/* fzgx:begin fn_1_15C36C noprologue */
+#include "types.h"
+
+extern int fn_1_5910(void);
+extern void fn_80038F10(f32 *);
+extern void fn_1_15EFEC(int);
+extern void fn_1_15DFD4(int, int);
+extern int fn_1_485A8(int);
+extern void fn_1_49410(void);
+extern void fn_1_49728(int);
+extern void fn_1_1420A4(void);
+
+extern u32 lbl_1_bss_3C30;
+extern u8 lbl_1_bss_26B18;
+extern u8 lbl_1_bss_26B19;
+extern u8 lbl_1_bss_26B1A;
+extern u8 lbl_1_bss_26B1E;
+extern u32 lbl_1_data_3D544[];
+extern u16 lbl_1_bss_50EC[];
+
+typedef struct {
+    f32 x, y, z, w;
+} BgWinVec4;
+
+typedef struct {
+    u8 unk_0;
+    u8 pad_1[0x33];
+} BgWin34;
+
+extern BgWinVec4 lbl_1_bss_8FD68[];
+extern BgWin34 lbl_1_bss_8FDA8[];
+
+void fn_1_15C36C(void) {
+    struct { int value; } idx;
+    u8 mask;
+    int hit;
+    u8 flags;
+    f32 vec[4];
+
+    idx.value = fn_1_5910();
+    mask = 1 << idx.value;
+    if (lbl_1_bss_3C30 & 0x800) {
+        return;
+    }
+
+    fn_80038F10(vec);
+    lbl_1_bss_8FD68[idx.value].x = vec[0];
+    lbl_1_bss_8FD68[idx.value].y = vec[1];
+    lbl_1_bss_8FD68[idx.value].z = vec[2];
+    lbl_1_bss_8FD68[idx.value].w = vec[3];
+
+    flags = lbl_1_bss_26B1E | lbl_1_bss_26B19 | lbl_1_bss_26B1A | lbl_1_bss_26B18;
+    hit = flags & mask;
+    if (hit) {
+        lbl_1_data_3D544[idx.value] &= 0x3c2;
+    }
+    if (!hit && !(lbl_1_bss_8FDA8[idx.value].unk_0 & 0x4)) {
+        fn_1_15EFEC(idx.value);
+    }
+
+    if (lbl_1_bss_3C30 & 0x8) {
+        return;
+    }
+    if (hit) {
+        fn_1_15DFD4(idx.value, mask);
+    }
+    if (lbl_1_bss_3C30 & 0x1000) {
+        if (fn_1_485A8(0x97) && lbl_1_bss_50EC[idx.value] == 0) {
+            fn_1_49410();
+            fn_1_49728(1);
+            fn_1_1420A4();
+            fn_1_49728(0);
+        }
+    }
+}
+/* fzgx:end fn_1_15C36C */
+
 /* fzgx:begin fn_1_15DFD4 noprologue */
 #include "types.h"
 
