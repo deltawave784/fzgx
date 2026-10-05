@@ -3349,6 +3349,95 @@ f32 fn_1_2B478(void *arg0) {
 }
 /* fzgx:end fn_1_2B478 */
 
+/* fzgx:begin fn_1_2BA48 noprologue */
+#include "types.h"
+#include "psvec.h"
+#include "rel/main_rel/stcoli.h"
+
+typedef struct {
+    f32 x, y, z;
+} Fn2BA48_Vec;
+
+typedef struct {
+    u32 flags;
+    s16 id;
+    u8 pad_6[0x7c - 6];
+    Fn2BA48_Vec v7c;
+    Fn2BA48_Vec v88;
+    Fn2BA48_Vec v94;
+    u8 pad_a0[0x390 - 0xa0];
+    u8 pad_390[0x474 - 0x390];
+    s8 s474;
+    s8 s475;
+    u8 pad_476[0x4e0 - 0x476];
+    u16 timer;
+    Fn2BA48_Vec v4e4;
+    Fn2BA48_Vec v4f0;
+    u8 pad_4fc[0x50d - 0x4fc];
+    u8 cnt;
+    u8 pad_50e[0x58c - 0x50e];
+    u32 flags2;
+} Fn2BA48_Obj;
+
+typedef struct {
+    u8 pad[0x390];
+    u32 f390;
+} Fn2BA48_Other;
+
+extern u32 fn_1_2B684(void *);
+extern Fn2BA48_Other *fn_1_868C0(s8);
+extern void fn_1_F7338(int, int, int);
+extern void fn_1_A2D84(u32);
+extern f32 lbl_1_rodata_84C[2];
+extern s32 lbl_801A66C8;
+
+void fn_1_2BA48(Fn2BA48_Obj *self) {
+    s32 limit;
+    u8 n;
+    s32 t;
+
+    limit = 0x3c;
+    if (*(s16 *)&lbl_1_bss_960 != 9) {
+        limit = 0xf0;
+    }
+    if (!(self->flags & 2)) {
+        fn_1_2B684(self);
+    }
+    if (self->timer < 0x3c) {
+        psvec_add(&self->v4f0, &self->v4e4, &self->v4e4);
+    }
+    t = self->cnt + 1;
+    self->cnt = t;
+    n = t;
+    if (n >= (u16)limit) {
+        if (!(self->flags & 2)) {
+            Fn2BA48_Other *o;
+            f32 z = lbl_1_rodata_84C[0];
+            self->v94.x = z;
+            self->v94.y = z;
+            self->v94.z = z;
+            self->v7c = self->v88;
+            o = fn_1_868C0((s8)self->id);
+            if (!(self->flags2 & 0x90)) {
+                self->flags2 |= 0x80;
+                self->flags2 |= 0x100;
+                o->f390 |= 0x200000;
+                if (self->s474 != -1) {
+                    fn_1_F7338(self->s474, 2, 0x1e);
+                }
+            }
+            if (lbl_801A66C8 + self->id == 0) {
+                fn_1_A2D84(0xa9092e00);
+                if (self->s475 != -1 && !(self->flags & 0x4000200)) {
+                    fn_1_A2D84(0xa9091200);
+                }
+            }
+        }
+        self->cnt = limit;
+    }
+}
+/* fzgx:end fn_1_2BA48 */
+
 /* fzgx:begin fn_1_2BBD0 noprologue */
 #include "types.h"
 #include "dolphin/hw_regs.h"
