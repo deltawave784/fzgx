@@ -11019,5 +11019,37 @@
     ],
     "link": "verified",
     "commit": "7560a0eb"
+  },
+  "fn_1_157070": {
+    "seed_symbol": "fn_1_157070",
+    "generator": "fzgx fixup",
+    "transform": "prime shared-pool layout (lbl_1_rodata_D8C8, 0x48 bytes)",
+    "seed": "#include \"types.h\"\n\nextern const struct fn_1_157070_lbl_1_rodata_D8C8_pool {\n    f32 unk_0;\n    u8 pad_4[0x28];\n    f32 unk_2C;\n    u8 pad_30[0x8];\n    f32 unk_38;\n    f32 unk_3C;\n    f32 unk_40;\n    f32 unk_44;\n} lbl_1_rodata_D8C8;\n\nextern s32 fn_8006B55C(void *, u32 *, void *);\nextern s32 fn_8006B628(u32, void *);\nextern s32 fn_8006B6F8(u32);\n\ntypedef struct {\n    u32 flags;\n    void *owner;\n    u8 _pad08[8];\n    u32 value;\n    u8 _pad14[0x20];\n    f32 speed;\n    u8 _pad38[0x10];\n    f32 impulse;\n    u8 state_flags;\n} fn_1_157070_RankingState;\n\ntypedef struct {\n    u8 type;\n    u8 _pad01[3];\n    u32 duration;\n    u32 flags;\n    u8 strength;\n    u8 _pad0d;\n    s16 angle;\n    s16 value10;\n    s16 value12;\n    s16 value14;\n    u32 value18;\n    u32 value1c;\n    u8 value20;\n    u8 value21;\n} fn_1_157070_RankingConfig;\n\n#pragma opt_propagation off\n#pragma opt_common_subs off\n#pragma opt_dead_assignments off\nvoid fn_1_157070(fn_1_157070_RankingState *state) {\n    fn_1_157070_RankingConfig config;\n    s32 started;\n    f32 t;\n\n    if (!(state->state_flags & 4)) {\n        return;\n    }\n\n    t = (-state->impulse) / state->speed;\n    t = (t - (2.0f)) / (2.80000019f);\n    if (t > (1.0f)) {\n        t = (1.0f);\n    } else if (t < (0.0f)) {\n        t = (0.0f);\n    }\n\n    /* the zero fields share the register of the cleared result flag */\n    started = 0;\n    config.type = 2;\n    config.duration = (s32)((600.0f) * t) + 300;\n    config.flags = started;\n    config.strength = (s32)((140.0f) * t) + 80;\n    config.angle = 90;\n    config.value10 = 100;\n    config.value12 = started;\n    config.value14 = started;\n    config.value18 = 5;\n    config.value1c = 200;\n    config.value20 = started;\n    config.value21 = started;\n\n    if (!(state->flags & 4)) {\n        u32 value = state->value;\n        void *owner = state->owner;\n\n        if (value + 0x10000u == 0xffffu) {\n            if (fn_8006B55C(owner, &state->value, &config) >= 0) {\n                started = 1;\n            }\n        } else {\n            if (fn_8006B628(value, &config) >= 0) {\n                started = 1;\n            }\n        }\n\n        if (started) {\n            if (!(state->flags & 4)) {\n                if (fn_8006B6F8(state->value) >= 0) {\n                    state->flags |= 4;\n                }\n            }\n        }\n    } else {\n        fn_8006B6F8(state->value);\n    }\n}\n#pragma opt_dead_assignments reset\n\n#pragma opt_common_subs reset\n\n",
+    "seed_sha256": "64d3d7121ba80c532cba69171b0762ea4e832012811a5de2c806b74fb31b3baf",
+    "generated_sha256": "df44b1ad6e647ee91e2722ff918f02e622f38bfdf8a1c089e93b6bb8263dfa6e",
+    "generated_source": "#include \"types.h\"\n#pragma section code_type \".fzgxpool\"\n__declspec(section \".fzgxpool\") static void fzgx_pool_prime1(void) {\n    volatile f32 s; volatile f64 d;  /* fzgx-allow: S2 pool primer sinks */\n    s = 0.0f;\n    s = -1.899999976158142f;\n    s = 25.0f;\n    s = -25.0f;\n    s = 30.0f;\n    s = 1.5f;\n    s = 170.0f;\n    s = 0.5f;\n    s = 248.0f;\n    s = 10.0f;\n    s = 60.0f;\n    s = 1.0f;\n    s = 1000.0f;\n    s = 0.10000000149011612f;\n    s = 2.0f;\n    s = 2.8000001907348633f;\n    s = 600.0f;\n    s = 140.0f;\n}\n#pragma section code_type \".text\"\n\nextern const struct fn_1_157070_lbl_1_rodata_D8C8_pool {\n    f32 unk_0;\n    u8 pad_4[0x28];\n    f32 unk_2C;\n    u8 pad_30[0x8];\n    f32 unk_38;\n    f32 unk_3C;\n    f32 unk_40;\n    f32 unk_44;\n} lbl_1_rodata_D8C8;\n\nextern s32 fn_8006B55C(void *, u32 *, void *);\nextern s32 fn_8006B628(u32, void *);\nextern s32 fn_8006B6F8(u32);\n\ntypedef struct {\n    u32 flags;\n    void *owner;\n    u8 _pad08[8];\n    u32 value;\n    u8 _pad14[0x20];\n    f32 speed;\n    u8 _pad38[0x10];\n    f32 impulse;\n    u8 state_flags;\n} fn_1_157070_RankingState;\n\ntypedef struct {\n    u8 type;\n    u8 _pad01[3];\n    u32 duration;\n    u32 flags;\n    u8 strength;\n    u8 _pad0d;\n    s16 angle;\n    s16 value10;\n    s16 value12;\n    s16 value14;\n    u32 value18;\n    u32 value1c;\n    u8 value20;\n    u8 value21;\n} fn_1_157070_RankingConfig;\n\n#pragma opt_propagation off\n#pragma opt_common_subs off\n#pragma opt_dead_assignments off\nvoid fn_1_157070(fn_1_157070_RankingState *state) {\n    fn_1_157070_RankingConfig config;\n    s32 started;\n    f32 t;\n\n    if (!(state->state_flags & 4)) {\n        return;\n    }\n\n    t = (-state->impulse) / state->speed;\n    t = (t - (2.0f)) / (2.80000019f);\n    if (t > (1.0f)) {\n        t = (1.0f);\n    } else if (t < (0.0f)) {\n        t = (0.0f);\n    }\n\n    /* the zero fields share the register of the cleared result flag */\n    started = 0;\n    config.type = 2;\n    config.duration = (s32)((600.0f) * t) + 300;\n    config.flags = started;\n    config.strength = (s32)((140.0f) * t) + 80;\n    config.angle = 90;\n    config.value10 = 100;\n    config.value12 = started;\n    config.value14 = started;\n    config.value18 = 5;\n    config.value1c = 200;\n    config.value20 = started;\n    config.value21 = started;\n\n    if (!(state->flags & 4)) {\n        u32 value = state->value;\n        void *owner = state->owner;\n\n        if (value + 0x10000u == 0xffffu) {\n            if (fn_8006B55C(owner, &state->value, &config) >= 0) {\n                started = 1;\n            }\n        } else {\n            if (fn_8006B628(value, &config) >= 0) {\n                started = 1;\n            }\n        }\n\n        if (started) {\n            if (!(state->flags & 4)) {\n                if (fn_8006B6F8(state->value) >= 0) {\n                    state->flags |= 4;\n                }\n            }\n        }\n    } else {\n        fn_8006B6F8(state->value);\n    }\n}\n#pragma opt_dead_assignments reset\n\n#pragma opt_common_subs reset\n\n",
+    "compiler": "GC/1.3.2",
+    "flags": "",
+    "source": "rel/main_rel/ranking/fn_1_157070.c",
+    "bytes": 400,
+    "headers_sha256": "73cf7422bff8955cde8d5ebf68ebefe0241675ac791653eb8a9749cb0d84419f",
+    "oracle_sha256": "f7685915459d64c15c3a0f781fa019d6ff8789da838592c92e6a24d5eba8b159",
+    "recipe": [
+      {
+        "label": "prime shared-pool layout (lbl_1_rodata_D8C8, 0x48 bytes)",
+        "input_sha256": "64d3d7121ba80c532cba69171b0762ea4e832012811a5de2c806b74fb31b3baf",
+        "output_sha256": "df44b1ad6e647ee91e2722ff918f02e622f38bfdf8a1c089e93b6bb8263dfa6e",
+        "input_symbol": "fn_1_157070",
+        "output_symbol": "fn_1_157070",
+        "edits": [
+          [
+            19,
+            19,
+            "#pragma section code_type \".fzgxpool\"\n__declspec(section \".fzgxpool\") static void fzgx_pool_prime1(void) {\n    volatile f32 s; volatile f64 d;  /* fzgx-allow: S2 pool primer sinks */\n    s = 0.0f;\n    s = -1.899999976158142f;\n    s = 25.0f;\n    s = -25.0f;\n    s = 30.0f;\n    s = 1.5f;\n    s = 170.0f;\n    s = 0.5f;\n    s = 248.0f;\n    s = 10.0f;\n    s = 60.0f;\n    s = 1.0f;\n    s = 1000.0f;\n    s = 0.10000000149011612f;\n    s = 2.0f;\n    s = 2.8000001907348633f;\n    s = 600.0f;\n    s = 140.0f;\n}\n#pragma section code_type \".text\"\n"
+          ]
+        ]
+      }
+    ],
+    "link": "pending"
   }
 }

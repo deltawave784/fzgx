@@ -705,6 +705,142 @@ void fn_1_156B18(fn_1_156B18_State *state) {
 }
 /* fzgx:end fn_1_156B18 */
 
+/* fzgx:begin fn_1_157070 noprologue */
+#include "types.h"
+
+#pragma section code_type ".fzgxpool"
+__declspec(section ".fzgxpool") static void fzgx_pool_prime1(void) {
+    volatile f32 s; volatile f64 d;  /* fzgx-allow: S2 pool primer sinks */
+    s = 0.0f;
+    s = -1.899999976158142f;
+    s = 25.0f;
+    s = -25.0f;
+    s = 30.0f;
+    s = 1.5f;
+    s = 170.0f;
+    s = 0.5f;
+    s = 248.0f;
+    s = 10.0f;
+    s = 60.0f;
+    s = 1.0f;
+    s = 1000.0f;
+    s = 0.10000000149011612f;
+    s = 2.0f;
+    s = 2.8000001907348633f;
+    s = 600.0f;
+    s = 140.0f;
+}
+#pragma section code_type ".text"
+
+extern const struct fn_1_157070_lbl_1_rodata_D8C8_pool {
+    f32 unk_0;
+    u8 pad_4[0x28];
+    f32 unk_2C;
+    u8 pad_30[0x8];
+    f32 unk_38;
+    f32 unk_3C;
+    f32 unk_40;
+    f32 unk_44;
+} lbl_1_rodata_D8C8;
+
+extern s32 fn_8006B55C(void *, u32 *, void *);
+extern s32 fn_8006B628(u32, void *);
+extern s32 fn_8006B6F8(u32);
+
+typedef struct {
+    u32 flags;
+    void *owner;
+    u8 _pad08[8];
+    u32 value;
+    u8 _pad14[0x20];
+    f32 speed;
+    u8 _pad38[0x10];
+    f32 impulse;
+    u8 state_flags;
+} fn_1_157070_RankingState;
+
+typedef struct {
+    u8 type;
+    u8 _pad01[3];
+    u32 duration;
+    u32 flags;
+    u8 strength;
+    u8 _pad0d;
+    s16 angle;
+    s16 value10;
+    s16 value12;
+    s16 value14;
+    u32 value18;
+    u32 value1c;
+    u8 value20;
+    u8 value21;
+} fn_1_157070_RankingConfig;
+
+#pragma opt_propagation off
+#pragma opt_common_subs off
+#pragma opt_dead_assignments off
+void fn_1_157070(fn_1_157070_RankingState *state) {
+    fn_1_157070_RankingConfig config;
+    s32 started;
+    f32 t;
+
+    if (!(state->state_flags & 4)) {
+        return;
+    }
+
+    t = (-state->impulse) / state->speed;
+    t = (t - (2.0f)) / (2.80000019f);
+    if (t > (1.0f)) {
+        t = (1.0f);
+    } else if (t < (0.0f)) {
+        t = (0.0f);
+    }
+
+    /* the zero fields share the register of the cleared result flag */
+    started = 0;
+    config.type = 2;
+    config.duration = (s32)((600.0f) * t) + 300;
+    config.flags = started;
+    config.strength = (s32)((140.0f) * t) + 80;
+    config.angle = 90;
+    config.value10 = 100;
+    config.value12 = started;
+    config.value14 = started;
+    config.value18 = 5;
+    config.value1c = 200;
+    config.value20 = started;
+    config.value21 = started;
+
+    if (!(state->flags & 4)) {
+        u32 value = state->value;
+        void *owner = state->owner;
+
+        if (value + 0x10000u == 0xffffu) {
+            if (fn_8006B55C(owner, &state->value, &config) >= 0) {
+                started = 1;
+            }
+        } else {
+            if (fn_8006B628(value, &config) >= 0) {
+                started = 1;
+            }
+        }
+
+        if (started) {
+            if (!(state->flags & 4)) {
+                if (fn_8006B6F8(state->value) >= 0) {
+                    state->flags |= 4;
+                }
+            }
+        }
+    } else {
+        fn_8006B6F8(state->value);
+    }
+}
+#pragma opt_dead_assignments reset
+
+#pragma opt_common_subs reset
+/* fzgx:end fn_1_157070 */
+
 /* fzgx:begin fn_1_157200 */
 extern const f32 lbl_1_rodata_D910;
 extern f32 lbl_1_rodata_D914[3];

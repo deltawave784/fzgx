@@ -6635,3 +6635,6 @@ rel/main_rel/game/fn_1_408E8.c:
 
 rel/main_rel/alloc/fn_1_4A00.c:
 	.text       start:0x00004A00 end:0x00004BB0 align:4
+
+rel/main_rel/ranking/fn_1_157070.c:
+	.text       start:0x00157070 end:0x00157200 align:4
