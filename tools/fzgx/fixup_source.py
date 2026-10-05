@@ -613,6 +613,266 @@ def rewrites(body: str, name: str) -> List[Tuple[str, str]]:
     return out
 
 
+def _top_statements(text: str) -> Optional[List[Tuple[int, int]]]:
+    """Spans of the top-level statements of a block's inner text (`;`-terminated or a
+    braced compound, an `else` continuing its `if`). None when comments or preprocessor
+    lines make the split unreliable."""
+    if '/*' in text or '//' in text or '#' in text:
+        return None
+    spans, start, paren, brace, i = [], None, 0, 0, 0
+    while i < len(text):
+        c = text[i]
+        if start is None:
+            if c.isspace():
+                i += 1
+                continue
+            start = i
+        if c == '(':
+            paren += 1
+        elif c == ')':
+            paren -= 1
+        elif c == '{':
+            brace += 1
+        elif c == '}':
+            brace -= 1
+            if brace == 0 and paren == 0 and not re.match(r'\s*else\b', text[i + 1:]):
+                spans.append((start, i + 1)); start = None
+        elif c == ';' and paren == 0 and brace == 0:
+            if not re.match(r'\s*else\b', text[i + 1:]):
+                spans.append((start, i + 1)); start = None
+        if paren < 0 or brace < 0:
+            return None
+        i += 1
+    return spans if start is None else None
+
+
+def _int_literal(token: str) -> Optional[int]:
+    m = re.fullmatch(r'(0[xX][0-9a-fA-F]+|\d+)[uUlL]*', token)
+    return int(m.group(1), 0) if m else None
+
+
+def rerolled_loops(body: str, name: str = "") -> List[Tuple[str, str]]:
+    """Fold a counted loop whose body is two copies of one search step back into one step.
+
+    MWCC -O4 unrolls a constant-count loop by two: `for (i = 0; i < 26; i++) { e = base + 0x180
+    + i * 0x40; if (e[0x18] == ch) { found = e; break; } }` becomes a 13-trip CTR loop with
+    the two steps at 0x180/0x1c0 off one base advanced by 0x80, and it keeps the original
+    counter as a dead induction value (`li r3, 0; mr r7, r3` ... `addi r7, r7, 1` before the
+    `bdnz`). A draft written as the unrolled loop (two steps, `base += 0x80`, `i < 13`) loses
+    that counter and moves the found pointer out of r3 (the fn_12_31224 clone family in
+    movie_module, 95.4 -> 99.1, probe-verified 2026-10-05). The two halves must agree token
+    for token up to a consistent identifier renaming and integer literals offset by one half
+    stride; the stride is a trailing `P += S;` or a `V * S` index in the first half."""
+    out: List[Tuple[str, str]] = []
+    for m in re.finditer(r'\bfor\s*\(', body):
+        depth, k = 0, m.end() - 1
+        while k < len(body):
+            depth += {'(': 1, ')': -1}.get(body[k], 0)
+            if depth == 0:
+                break
+            k += 1
+        parts = body[m.end():k].split(';')
+        if len(parts) != 3:
+            continue
+        init, cond, step = (s.strip() for s in parts)
+        up = re.fullmatch(r'(\w+)\s*=\s*0', init)
+        if up:
+            var = up.group(1)
+            bound = re.fullmatch(rf'{var}\s*(<|!=)\s*(0[xX][0-9a-fA-F]+|\d+)', cond)
+            if not bound or not re.fullmatch(rf'{var}\s*\+\+|\+\+\s*{var}|{var}\s*\+=\s*1', step):
+                continue
+            count_text = bound.group(2)
+        else:
+            down = re.fullmatch(r'(\w+)\s*=\s*(0[xX][0-9a-fA-F]+|\d+)', init)
+            if not down:
+                continue
+            var, count_text = down.group(1), down.group(2)
+            if not re.fullmatch(rf'{var}\s*(!=|>)\s*0', cond) or not re.fullmatch(rf'{var}\s*--|--\s*{var}|{var}\s*-=\s*1', step):
+                continue
+        open_ = re.match(r'\s*\{', body[k + 1:])
+        if not open_:
+            continue
+        lo = k + 1 + open_.end()
+        depth, hi = 1, lo
+        while hi < len(body) and depth:
+            depth += {'{': 1, '}': -1}.get(body[hi], 0)
+            hi += 1
+        hi -= 1
+        inner = body[lo:hi]
+        spans = _top_statements(inner)
+        if not spans:
+            continue
+        stmts = [inner[a:b] for a, b in spans]
+        # trailing steps: pointer advances and other counters stay after the folded body
+        tail: List[str] = []
+        while stmts and re.fullmatch(r'\w+\s*(\+=\s*\w+|\+\+|--)\s*;', stmts[-1]):
+            tail.insert(0, stmts.pop())
+        bare = re.compile(TYPE + r'\s*(\w+)\s*;')
+        decls = [s for s in stmts if bare.fullmatch(s) and not re.match(r'(return|break|continue)\b', s)]
+        core = [s for s in stmts if s not in decls]
+        if len(core) < 2 or len(core) % 2:
+            continue
+        half_a, half_b = core[:len(core) // 2], core[len(core) // 2:]
+        rename: Dict[str, str] = {}
+        delta: Optional[int] = None
+        ok = True
+        for sa, sb in zip(half_a, half_b):
+            ta = [t for t in TOKEN.findall(sa)]
+            tb = [t for t in TOKEN.findall(sb)]
+            if len(ta) > len(tb) and ta[len(ta) - len(tb)] == tb[0]:
+                ta = ta[len(ta) - len(tb):]   # `T *e = ...;` against `e = ...;`
+            if len(ta) != len(tb):
+                ok = False; break
+            for x, y in zip(ta, tb):
+                if x == y:
+                    continue
+                ix, iy = _int_literal(x), _int_literal(y)
+                if ix is not None and iy is not None:
+                    if iy <= ix or (delta is not None and iy - ix != delta):
+                        ok = False; break
+                    delta = iy - ix
+                elif re.fullmatch(r'[A-Za-z_]\w*', x) and re.fullmatch(r'[A-Za-z_]\w*', y):
+                    if rename.setdefault(x, y) != y:
+                        ok = False; break
+                else:
+                    ok = False; break
+            if not ok:
+                break
+        if not ok or delta is None or var in rename or len(set(rename.values())) != len(rename):
+            continue
+        stride = 2 * delta
+        first = '\n'.join(half_a)
+        advances = [i for i, s in enumerate(tail) if re.fullmatch(r'(\w+)\s*\+=\s*(0[xX][0-9a-fA-F]+|\d+)\s*;', s)
+                    and _int_literal(re.fullmatch(r'\w+\s*\+=\s*(\w+)\s*;', s).group(1)) == stride]
+        indexed = re.compile(rf'\b{var}\s*\*\s*({hex(stride)}|{stride})\b|\b({hex(stride)}|{stride})\s*\*\s*{var}\b', re.I)
+        forms: List[Tuple[str, List[str], List[str]]] = []
+        if len(advances) == 1:
+            i = advances[0]
+            stepped = list(tail)
+            stepped[i] = re.sub(r'\+=\s*\w+', f'+= {hex(delta) if "0x" in tail[i].lower() else delta}', tail[i])
+            forms.append(('advance', list(half_a), stepped))
+            # the indexed spelling `P + i * half` off the unadvanced base: retail folds the
+            # element's field offset into the base load (`lbz 0x198(r8)`), the stepped
+            # element pointer does not (`lbz 0x18(r9)`)
+            ptr = re.match(r'(\w+)\s*\+=', tail[i]).group(1)
+            if ptr != var and not re.search(rf'\b{ptr}\s*(=[^=]|\+\+|--|[-+*/|&^]=)', first):
+                forms.append(('indexed', [re.sub(rf'(?<![\w.>]){ptr}\b', f'({ptr} + {var} * {hex(delta)})', s)
+                                          for s in half_a], tail[:i] + tail[i + 1:]))
+        elif not advances and indexed.search(first):
+            forms.append(('indexed', [indexed.sub(lambda r: f'{var} * {hex(delta)}', s) for s in half_a], list(tail)))
+        if not forms:
+            continue
+        kept = [d for d in decls if re.search(rf'\b{bare.fullmatch(d).group(1)}\b', first)]
+        indent = re.search(r'\n([ \t]*)\S', '\n' + inner[:spans[0][0] + 1])
+        pad = indent.group(1) if indent else '    '
+        close = re.search(r'\n([ \t]*)$', inner)
+        count = int(count_text, 0) * 2
+        new_cond = cond.replace(count_text, hex(count) if count_text.lower().startswith('0x') else str(count)) if up else cond
+        new_init = init if up else init.replace(count_text, hex(count) if count_text.lower().startswith('0x') else str(count))
+        header = f'for ({new_init}; {new_cond}; {step})'
+        for form, new_a, new_tail in forms:
+            new_inner = '\n' + ''.join(pad + s + '\n' for s in kept + new_a + new_tail) + (close.group(1) if close else '')
+            text = body[:m.start()] + header + ' {' + new_inner + body[hi:]
+            label = f'reroll unrolled loop {var} ({form}): {count_text} x2 steps -> {count} x1 (stride {hex(stride)})'
+            out.append((label, text))
+            # the folded loop owns a new web (the dead counter), so the callee-saved and
+            # volatile order of its locals is searched again: the step pointer hoisted into
+            # the enclosing declarations, every order of those declarations, with and without
+            # the byte-cast parameters narrowed (fn_12_31224: counter, step, result, base)
+            hoisted = _hoist_step_locals(text, m.start())
+            for narrowed_label, narrowed in [('', hoisted)] + [(' + ' + l, t) for l, t in narrowed_parameters(hoisted, '')]:
+                for order_label, ordered in _declaration_orders(narrowed, m.start()):
+                    out.append((label + narrowed_label + order_label, ordered))
+    return out
+
+
+def _enclosing_function(body: str, pos: int) -> Optional[Tuple[int, int, int]]:
+    """(header start, body start after '{', closing brace) of the function containing pos."""
+    best = None
+    for h in re.finditer(r'(?m)^[A-Za-z_][^;{}()\n]*\b(\w+)\s*\([^;{}]*\)\s*\{', body):
+        if h.end() > pos:
+            break
+        span = _function_body_span(body[h.start():], h.group(1))
+        if span and h.start() + span[2] > pos:
+            best = (h.start(), h.start() + span[1], h.start() + span[2])
+    return best
+
+
+def _hoist_step_locals(text: str, pos: int) -> str:
+    """`T *e = expr;` declared at the top of the loop at pos becomes `T *e;` among the enclosing
+    function's declarations and `e = expr;` in the loop."""
+    fn = _enclosing_function(text, pos)
+    open_ = text.find('{', text.find(')', pos))
+    if not fn or open_ < 0:
+        return text
+    locs = _locals(text, (fn[0], fn[1], fn[2]))
+    if not locs:
+        return text
+    inner = DECL_RE.match(text[open_ + 1:].lstrip('\n').split('\n', 1)[0])
+    if not inner or inner.group(3) or not inner.group(4):
+        return text
+    line_start = open_ + 1 + (len(text[open_ + 1:]) - len(text[open_ + 1:].lstrip('\n')))
+    line_end = text.index('\n', line_start)
+    indent = re.match(r'[ \t]*', text[line_start:]).group(0)
+    text = text[:line_start] + f'{indent}{inner.group(2)} = {inner.group(4).strip()};' + text[line_end:]
+    decl_indent = re.match(r'[ \t]*', text[locs[-1][0]:]).group(0)
+    typ = inner.group(1).strip()
+    sep = '' if typ.endswith('*') else ' '
+    return text[:locs[-1][1]] + f'{decl_indent}{typ}{sep}{inner.group(2)};\n' + text[locs[-1][1]:]
+
+
+def _declaration_orders(text: str, pos: int, limit: int = 5) -> List[Tuple[str, str]]:
+    """Every order of the leading declarations of the function containing pos (at most
+    `limit` declarations, initializers kept on their declaration)."""
+    fn = _enclosing_function(text, pos)
+    if not fn:
+        return [('', text)]
+    locs = _locals(text, (fn[0], fn[1], fn[2]))
+    if len(locs) < 2 or len(locs) > limit or any(locs[i][1] != locs[i + 1][0] for i in range(len(locs) - 1)):
+        return [('', text)]
+    out = []
+    for order in itertools.permutations(range(len(locs))):
+        names = ','.join(locs[i][3] for i in order)
+        out.append(('' if order == tuple(range(len(locs))) else f', order {names}', reorder(text, locs, order)))
+    return out
+
+
+NARROW = {'u8': 'u8', 's8': 's8', 'u16': 'u16', 's16': 's16'}
+
+
+def narrowed_parameters(body: str, name: str = "") -> List[Tuple[str, str]]:
+    """A 32-bit parameter whose every use is one narrowing cast, `(u8)arg`, declared with that
+    type instead (the casts dropped). MWCC numbers a narrow parameter's truncated value as the
+    parameter's own web (a low vreg), where a cast at the use is a late lowering temporary: in
+    the fn_12_31224 search loop the key moves from r3 to retail's r9 (probe-verified
+    2026-10-05). With an empty name every function of the body is tried."""
+    out: List[Tuple[str, str]] = []
+    heads = [h for h in re.finditer(r'(?m)^[A-Za-z_][^;{}()\n]*\b(\w+)\s*\(([^;{}()]*)\)\s*\{', body)
+             if not name or h.group(1) == name]
+    for h in heads:
+        span = _function_body_span(body[h.start():], h.group(1))
+        if not span:
+            continue
+        lo, hi = h.end(), h.start() + span[2]
+        code = body[lo:hi]
+        for p in re.finditer(r'(?:^|,)\s*((?:unsigned\s+)?(?:u32|s32|int|long|unsigned))\s+(\w+)\s*(?=,|$)', h.group(2)):
+            pname = p.group(2)
+            uses = list(re.finditer(rf'(?<![\w.>]){pname}\b', code))
+            casts = list(re.finditer(rf'\(\s*(u8|s8|u16|s16)\s*\)\s*{pname}\b', code))
+            if not uses or len(casts) != len(uses) or len({c.group(1) for c in casts}) != 1:
+                continue
+            narrow = NARROW[casts[0].group(1)]
+            params = h.group(2)
+            new_params = params[:p.start(1)] + narrow + params[p.end(1):]
+            head = body[h.start():h.end()].replace('(' + params + ')', '(' + new_params + ')', 1)
+            # the redundant cast is not a no-op for allocation: an inline helper's
+            # `(u8)key` of a u8 argument keeps the key in its own web (fn_12_31224 needs it)
+            out.append((f'narrow parameter {pname} to {narrow}, casts kept', body[:h.start()] + head + code + body[hi:]))
+            new_code = re.sub(rf'\(\s*{casts[0].group(1)}\s*\)\s*{pname}\b', pname, code)
+            out.append((f'narrow parameter {pname} to {narrow}', body[:h.start()] + head + new_code + body[hi:]))
+    return out
+
+
 def return_values(body: str, name: str) -> List[Tuple[str, str]]:
     """Recover an omitted result when a void draft leaves the value outside r3.
 

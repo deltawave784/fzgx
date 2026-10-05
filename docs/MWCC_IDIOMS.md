@@ -85,6 +85,15 @@ file from what actually unblocked functions; keep each item one or two lines.
   already reproduces both, and a native literal pools them behind a base instead. Only reads
   through a base that retail reads at several offsets convert (`memory_loads` records the
   form; `pool_scalar_reads` keeps multi-offset pool bases).
+- **Compiler 2x loop unroll (2026-10-05, fn_12_31224).** A CTR loop with two copies of one step,
+  the base advanced by twice the element size, and a counter that only increments
+  (`li r3, 0; mr r7, r3` ... `addi r7, r7, 1; bdnz`) is MWCC -O4 unrolling a
+  `for (i = 0; i < 2N; i++)` loop by two; the dead counter is the unroller's. A hand-unrolled
+  draft (`i < N`, two steps, `p += 2K`) never gets it. Write one step over 2N trips, indexed
+  off the unadvanced base (`e = base + 0x180 + i * 0x40` folds into `lbz 0x198(r8)`).
+  The key compared in the loop moved r3 -> r9 only with the outer parameter declared `u8` and
+  the inline helper still casting `(u8)key`; then declaration order `i, e, found, base` matched.
+  `fixup_source.rerolled_loops` (with `narrowed_parameters` and the reordered locals) emits it.
 
 ## Selection panel evidence (2026-09-15)
 

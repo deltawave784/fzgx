@@ -473,6 +473,9 @@ class Engine:
             yield from evidence.attributed_inlines(self.project, row['symbol'], body, check, self.row_lines(row))
             yield from evidence.attributed_declaration_swaps(self.project, row['symbol'], body, check, self.row_lines(row))
             yield from evidence.induction_indexing(self.project, row['symbol'], body, check)
+            # a hand-unrolled counted loop (two steps per trip) folds back to MWCC's own 2x
+            # unroll, which keeps the dead counter retail carries; covers inline helpers too
+            yield from source.rerolled_loops(body, name)
             # structural spellings that change a web's numbering class (carriers, de-CSE,
             # held call results, splits) go before any declaration permutation: order within
             # a class is only worth searching once the class is right
