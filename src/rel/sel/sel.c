@@ -2752,6 +2752,205 @@ void fn_10_FF08(void) {
 }
 /* fzgx:end fn_10_FF08 */
 
+/* fzgx:begin fn_10_107D4 */
+/* Shared literal pool primer: retail addresses sel.c's .rodata literal pool through one
+ * base register (r30 = lbl_10_rodata_158). These dummy functions reproduce the TU pool
+ * layout ahead of the function so its own literals dedupe onto retail's offsets. */
+#pragma section code_type ".fzgxpool"
+static const u32 fzgx_pool_table1[19] = {0x00000000, 0x0000B500, 0x0000B600, 0x0000AD00, 0x0000B300, 0x0000B800, 0x0000B200, 0x0000B100, 0x0000AE00, 0x0000B400, 0x0000B900, 0x0000B000, 0x0000AF00, 0x0000B700, 0x00000000, 0x00000000, 0x00F0F0FF, 0x3F800000, 0x3F000000};  /* fzgx-allow: A1 retail pool bytes */
+__declspec(section ".fzgxpool") static void fzgx_pool_keep1(void) { const u32 *volatile cp; cp = fzgx_pool_table1; }  /* fzgx-allow: S2 pool primer sink */
+__declspec(section ".fzgxpool") static void fzgx_pool_prime2(void) {
+    volatile f32 s; volatile f64 d;  /* fzgx-allow: S2 pool primer sinks */
+    s = 0.0f;
+    s = 0.2f;
+    s = 0.4f;
+    s = 320.0f;
+    s = 3.0f;
+    s = 323.0f;
+    s = 4.0f;
+    s = 5.0f;
+    s = 6.0f;
+    s = 0.25f;
+    s = 16384.0f;
+    s = 65536.0f;
+    s = 60.0f;
+    s = 1.875f;
+    s = 0.555555582f;
+    d = 4503601774854144.0;
+}
+static const u32 fzgx_pool_table3[32] = {0x43300000, 0x00000000, 0x00110012, 0x00130014, 0x00150012, 0x00130014, 0x00000000, 0x00F0F0FF, 0x00000000, 0x00F0F0FF, 0x00010002, 0x00030004, 0x00050006, 0x00070008, 0x0009000A, 0x000B000C, 0x00110012, 0x00130014, 0x00150012, 0x00130014, 0x00FF0000, 0xFFFFFF00, 0x00FF0000, 0xFFFFFF00, 0x00FF0000, 0x00FF0000, 0x426C0000, 0x42A40000, 0x429A0000, 0x42C40000, 0x41C80000, 0x42E60000};  /* fzgx-allow: A1 retail pool bytes */
+__declspec(section ".fzgxpool") static void fzgx_pool_keep3(void) { const u32 *volatile cp; cp = fzgx_pool_table3; }  /* fzgx-allow: S2 pool primer sink */
+__declspec(section ".fzgxpool") static void fzgx_pool_prime4(void) {
+    volatile f32 s;  /* fzgx-allow: S2 pool primer sinks */
+    s = 0.7f;
+}
+static const u32 fzgx_pool_table5[17] = {0x41100000, 0x3F2AAAAB, 0x43D78000, 0x00000000, 0x00000000, 0x42740000, 0x42A20000, 0x42DC0000, 0x42200000, 0x42A00000, 0x43520000, 0x43660000, 0x43B78000, 0x425C0000, 0x42980000, 0x42C80000, 0x43B68000};  /* fzgx-allow: A1 retail pool bytes */
+__declspec(section ".fzgxpool") static void fzgx_pool_keep5(void) { const u32 *volatile cp; cp = fzgx_pool_table5; }  /* fzgx-allow: S2 pool primer sink */
+__declspec(section ".fzgxpool") static void fzgx_pool_prime6(void) {
+    volatile f32 s;  /* fzgx-allow: S2 pool primer sinks */
+    s = 75.0f;
+}
+static const u32 fzgx_pool_table7[62] = {0x42EA0000, 0x3EEAAAAB, 0x43250000, 0x431B0000, 0x42AE0000, 0x43380000, 0x42B40000, 0x43BE8000, 0x43ED8000, 0x432E0000, 0x43D38000, 0x43420000, 0x46000000, 0x41A00000, 0xC6000000, 0x43B50000, 0x44030000, 0x42900000, 0x41300000, 0x3F666666, 0x3F0AAAAB, 0xC0800000, 0x43A70000, 0x43AA8000, 0xC0C00000, 0x3F200000, 0x43AD0000, 0x43530000, 0x43210000, 0x43400000, 0x3D8F5C29, 0x00170018, 0x0019001A, 0x001B001C, 0x001D001E, 0x001F0021, 0x00220000, 0x00FF0000, 0xFFFFFF00, 0x00FF0000, 0xFFFFFF00, 0x00FF0000, 0xFFFFFF00, 0x00FF0000, 0xFFFFFF00, 0x00FF0000, 0x42EE0000, 0x430D0000, 0x43200000, 0x43230000, 0x422C0000, 0x43020000, 0x00000000, 0x40568000, 0x00000000, 0x4050E000, 0x00000000, 0x40368000, 0x00000000, 0x41B40000, 0x3C23D70A, 0x3F6AAAAB};  /* fzgx-allow: A1 retail pool bytes */
+__declspec(section ".fzgxpool") static void fzgx_pool_keep7(void) { const u32 *volatile cp; cp = fzgx_pool_table7; }  /* fzgx-allow: S2 pool primer sink */
+__declspec(section ".fzgxpool") static void fzgx_pool_prime8(void) {
+    volatile f32 s;  /* fzgx-allow: S2 pool primer sinks */
+    s = 2.0f;
+    s = 240.0f;
+    s = 0.0001f;
+    s = 278.0f;
+    s = 316.0f;
+}
+static const u32 fzgx_pool_table9[1] = {0xFFFFFFFF};  /* fzgx-allow: A1 retail pool bytes */
+__declspec(section ".fzgxpool") static void fzgx_pool_keep9(void) { const u32 *volatile cp; cp = fzgx_pool_table9; }  /* fzgx-allow: S2 pool primer sink */
+__declspec(section ".fzgxpool") static void fzgx_pool_prime10(void) {
+    volatile f32 s;  /* fzgx-allow: S2 pool primer sinks */
+    s = 0.75f;
+    s = 250.0f;
+    s = 373.0f;
+    s = 354.0f;
+    s = 68.0f;
+    s = 0.8666667f;
+    s = -1.0f;
+    s = 140.0f;
+    s = 50.0f;
+    s = 0.1f;
+    s = 620.0f;
+    s = 24.0f;
+    s = 10.0f;
+    s = 384.0f;
+    s = 640.0f;
+    s = 0.5833333f;
+    s = 0.6f;
+}
+#pragma section code_type ".text"
+
+typedef struct {
+    u8 r, g, b, a;
+} SelColor;
+
+typedef struct {
+    u32 image;
+    f32 x, y, z;
+    f32 scale_x, scale_y;
+    f32 u0, v0, u1, v1;
+    s16 rotation_z, rotation_y;
+    f32 alpha;
+    u32 flags;
+    f32 depth;
+    SelColor color;
+    SelColor color_add;
+    u32 format;
+    u16 width, height;
+    void *pixels;
+    void *secondary;
+    void *vertex_callback;
+    u32 unk_54;
+} SelFontPacket;
+
+extern SelFontPacket lbl_1_rodata_26F8;
+extern int fn_1_4F734(SelFontPacket *);
+extern void fn_10_139E4(void);
+extern s8 fn_1_A5DC4(void);
+extern void fn_1_508C4(SelFontPacket *, f32, f32);
+
+void fn_10_107D4(void) {
+    SelFontPacket *font;
+    SelColor black = {0, 0, 0, 0xFF};
+    SelFontPacket local;
+    s32 xi;
+    s16 i;
+
+    local = lbl_1_rodata_26F8;
+    local.image = 0x12;
+    local.x = 17.0f;
+    local.y = 338.0f;
+    local.z = 150.0f;
+    local.scale_x *= 75.0f;
+    local.scale_y *= 15.0f;
+    local.alpha = 0.7f;
+    local.color = black;
+    fn_1_4F734(&local);
+
+    local = lbl_1_rodata_26F8;
+    local.image = 0x9D05;
+    local.x = 0.0f;
+    local.y = 317.0f;
+    local.z = 4.0f;
+    fn_1_4F734(&local);
+
+    fn_10_139E4();
+    if (fn_1_A5DC4()) {
+        local = lbl_1_rodata_26F8;
+        local.image = 0x9D11;
+        local.x = -106.0f;
+        local.y = 318.0f;
+        fn_1_508C4(&local, 106.0f, 5.0f);
+
+        local = lbl_1_rodata_26F8;
+        local.image = 0x9D11;
+        local.x = -106.0f;
+        local.y = 333.0f;
+        fn_1_508C4(&local, 106.0f, 5.0f);
+
+        local = lbl_1_rodata_26F8;
+        local.image = 0x9D11;
+        local.x = 640.0f;
+        local.y = 318.0f;
+        fn_1_508C4(&local, 106.0f, 5.0f);
+
+        local = lbl_1_rodata_26F8;
+        local.image = 0x9D11;
+        local.x = 640.0f;
+        local.y = 333.0f;
+        fn_1_508C4(&local, 106.0f, 5.0f);
+
+        local = lbl_1_rodata_26F8;
+        local.image = 0x9D12;
+        local.x = -87.0f;
+        local.y = 318.0f;
+        local.z = 0.09f;
+        fn_1_4F734(&local);
+
+        local.x = -11.0f;
+        fn_1_4F734(&local);
+        local.x = 645.0f;
+        fn_1_4F734(&local);
+        local.x = 721.0f;
+        fn_1_4F734(&local);
+    }
+
+    font = &lbl_1_rodata_26F8;
+    i = 0;
+    xi = 0xB;
+    while (i < 4) {
+        local = *font;
+        local.image = 0x9D04;
+        local.x = (f32)xi;
+        local.y = 330.0f;
+        local.z = 0.99f;
+        fn_1_4F734(&local);
+
+        {
+            /* a fresh initialised colour each iteration, with no call between its
+             * initialiser and its use: retail reloads the pool word inside the loop */
+            SelColor row_black = {0, 0, 0, 0xFF};
+
+            local = *font;
+            local.image = 0x9D0F;
+            local.x = (f32)xi;
+            local.y = 330.0f;
+            local.z = 3.0f;
+            local.alpha = 0.7f;
+            local.color = row_black;
+            fn_1_4F734(&local);
+        }
+
+        xi += 0x96;
+        i++;
+    }
+}
+/* fzgx:end fn_10_107D4 */
+
 /* fzgx:begin fn_10_10C24 */
 #include "font.h"
 
