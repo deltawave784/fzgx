@@ -1054,6 +1054,122 @@ void fn_1_10268(Camera_1_10268 *arg) {
 }
 /* fzgx:end fn_1_10268 */
 
+/* fzgx:begin fn_1_11544 noprologue */
+#include "types.h"
+
+typedef struct {
+    f32 x;
+    f32 y;
+    f32 z;
+} LiveCamVec;
+
+typedef struct {
+    f32 m[3][4];
+} LiveCamMtx;
+
+typedef struct {
+    u8 unk_0;
+    u8 pad_1[0x3];
+    s16 unk_4;
+    s16 unk_6;
+    u8 pad_8[0xC];
+    s16 unk_14;
+    u8 pad_16[0x6];
+    u8 unk_1C[0x30];
+    LiveCamVec pos;        /* 0x4C */
+    u8 pad_58[0x18];
+    LiveCamVec target;     /* 0x70 */
+} LiveCamera;
+
+typedef struct {
+    u8 pad_0[0xA];
+    u16 unk_A;
+} LiveCamInput;
+
+typedef struct {
+    u8 pad_0[0x10];
+} LiveCamEntry;
+
+extern LiveCamInput lbl_1_bss_9F8;
+extern LiveCamEntry lbl_1_data_4754;
+extern s16 lbl_1_data_4484;
+
+extern s32 fn_1_40BB4(void);
+extern void fn_1_862D4(s32, LiveCamVec *);
+extern void fn_1_8636C(s32, LiveCamMtx *);
+extern void fn_1_862A8(s32, LiveCamVec *);
+extern void lbl_8006DC6C(LiveCamMtx *);
+extern void lbl_8006E1B0(void *, void *);
+extern void lbl_8006DAEC(void);
+extern void lbl_8006DB30(void);
+extern u32 fn_1_20A5C(void *, void *);
+extern void fn_1_15578(void *, LiveCamVec *, void *, void *, u32, void *, u32, u32, u32, u32);
+
+/* Translation column of the current matrix in the locked cache. Like psvec_set, the
+   components are passed z, y, x: the arguments are all loaded before the stores and
+   MWCC numbers the first parameter highest, which is the register order retail has. */
+static inline void LiveCam_SetCurMtxTrans(const volatile LiveCamVec *v) { /* volatile: pins the three loads in source order ahead of the stores, retail's register order (x f2, y f1, z f0) */
+    f32 x = v->x;
+    f32 y = v->y;
+    f32 z = v->z;
+    *(f32 *)(0xE0000000 + 0x0C) = x;
+    *(f32 *)(0xE0000000 + 0x1C) = y;
+    *(f32 *)(0xE0000000 + 0x2C) = z;
+}
+
+void fn_1_11544(LiveCamera *cam) {
+    LiveCamMtx mtx;
+    LiveCamVec eye;
+    LiveCamVec at;
+    LiveCamVec pos;
+    LiveCamVec out;
+    u32 handle;
+    u32 info;
+    f32 rate;
+    f32 cx, cy, cz;
+
+    if (cam->unk_0 == 3 && fn_1_40BB4() == 0) {
+        if ((lbl_1_bss_9F8.unk_A >> 1) & 1) {
+            cam->unk_14++;
+        }
+        if (lbl_1_bss_9F8.unk_A & 1) {
+            cam->unk_14--;
+        }
+        if (cam->unk_14 > 5) {
+            cam->unk_14 = 0;
+        }
+        if (cam->unk_14 < 0) {
+            cam->unk_14 = 5;
+        }
+    }
+
+    fn_1_862D4(cam->unk_6, &eye);
+    fn_1_8636C(cam->unk_6, &mtx);
+    fn_1_862A8(cam->unk_6, &at);
+    lbl_8006DC6C(&mtx);
+
+    LiveCam_SetCurMtxTrans(&eye);
+
+    lbl_8006E1B0((u8 *)&lbl_1_data_4754 + (cam->unk_4 << 4), cam->unk_1C);
+
+    cam->pos = eye;
+
+    rate = (f32)lbl_1_data_4484;
+    cx = cam->target.x;
+    cam->target.x = cx + (f32)(rate * (0.05f * (at.x - cx)));
+    cy = cam->target.y;
+    cam->target.y = cy + (f32)(rate * (0.05f * (at.y - cy)));
+    cz = cam->target.z;
+    cam->target.z = cz + (f32)(rate * (0.05f * (at.z - cz)));
+
+    lbl_8006DAEC();
+    handle = fn_1_20A5C(cam->unk_1C, &info);
+    pos = cam->pos;
+    fn_1_15578(cam->unk_1C, &pos, &info, &out, 0x40005, &handle, 1, 0, 0, 0);
+    lbl_8006DB30();
+}
+/* fzgx:end fn_1_11544 */
+
 /* fzgx:begin fn_1_11ABC */
 typedef struct {
     Vec3 v;              /* 0x00 */
