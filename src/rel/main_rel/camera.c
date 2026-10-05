@@ -688,6 +688,98 @@ s16 camera_get_entry_field_0xa4(u32 index) {
 }
 /* fzgx:end camera_get_entry_field_0xa4 */
 
+/* fzgx:begin fn_1_727C noprologue */
+#include "types.h"
+
+typedef struct {
+    u8 pad_0[0x48];
+    s8 unk_48;
+    u8 unk_49;
+    u8 unk_4A;
+} CameraObject;
+
+typedef struct {
+    u8 pad_0[0x10];
+    u8 unk_10[0x1EC];
+} CameraEntry;
+
+typedef struct {
+    u8 pad_0[0x1C];
+    u8 unk_1C;
+} CameraTable;
+
+typedef struct {
+    CameraObject *unk_0;
+    CameraEntry *unk_4;
+    CameraTable *unk_8;
+} CameraState;
+
+typedef struct {
+    u32 unk_0;
+    u8 pad_4[0xE];
+} Obj_1_bss_6EAB4;
+
+extern CameraState lbl_1_bss_F68;
+extern Obj_1_bss_6EAB4 lbl_1_bss_6EAB4;
+extern u8 lbl_1_bss_6F244[128];
+extern u8 lbl_1_bss_6EAC6[10];
+
+extern s32 fn_1_86624(void);
+extern s32 fn_1_3F864(void);
+extern int fn_1_4C10(void);
+extern s16 fn_1_3F0C8(void);
+extern void fn_1_739C(void *, u32, u32);
+
+void fn_1_727C(void) {
+    CameraState *state;
+    u8 mode;
+    u8 idx;
+
+    state = (CameraState *)&lbl_1_bss_F68;
+    mode = fn_1_86624();
+    idx = state->unk_0->unk_4A;
+    if (state->unk_0 == NULL) {
+        return;
+    }
+    if (mode == 0) {
+        return;
+    }
+    if (lbl_1_bss_6EAB4.unk_0 & 0x20) {
+        return;
+    }
+    if (fn_1_3F864() == 0) {
+        return;
+    }
+    if (fn_1_4C10() != 0) {
+        return;
+    }
+    if (lbl_1_bss_6F244[0] == 0 || lbl_1_bss_6EAC6[0] == 0) {
+        return;
+    }
+    switch (fn_1_3F0C8()) {
+    case 0x25:
+        return;
+    }
+    switch (state->unk_0->unk_48) {
+    case 0:
+    case 1:
+    case 2:
+    case 3:
+    case 4:
+    case 5:
+    case 6:
+    case 7:
+    case 8:
+    case 10:
+        fn_1_739C(&state->unk_4[idx].unk_10, mode, 4);
+        break;
+    case 9:
+        fn_1_739C(&state->unk_8->unk_1C, mode, 4);
+        break;
+    }
+}
+/* fzgx:end fn_1_727C */
+
 /* fzgx:begin camera_compare_values */
 s32 camera_compare_values(const u8 *lhs_index, const u8 *rhs_index) {
     f32 *camera_values = &lbl_1_bss_6F524.unk_0;
