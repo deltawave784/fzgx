@@ -3641,6 +3641,37 @@ def shared_pool_primer(p, symbol, body, check):
             ident = definition.group(2) + (f'__fzgx_offset_{definition.group(3)}' if definition.group(3) else '')
             body_ = body_.replace(definition.group(0), '')
             body_ = re.sub(r'\b' + re.escape(ident) + r'\[0\]', f'fzgx_pool_table{n}[{w}]', body_)
+        # integer reads through an extern word-array view of the pool (`w = pool[0xe4 / 4];`,
+        # fn_1_12A0E0): the extern keeps its own `lis/addi` base beside the compiler's section
+        # base; the word is a primer table entry, so read it there and drop the unused extern
+        try:
+            from .sdkimport import masked as _masked, integer_expression as _index
+            for decl in list(re.finditer(r'(?m)^extern\s+(?:const\s+)?(?:u32|s32)\s+(\w+)\s*\[[^\]\n]*\]\s*;[ \t]*\n', body_)):
+                base_sym = syms.get(decl[1])
+                if base_sym is None or base_sym.section != pool.section or not pool.addr <= base_sym.addr < pool.addr + end:
+                    continue
+                code_ = _masked(body_); span_ = _function_span(code_, sym.name)
+                if not span_:
+                    continue
+                edits = []
+                for use in re.finditer(r'\b' + re.escape(decl[1]) + r'\s*\[([^\]\n]+)\]', code_[span_[0]:span_[1]]):
+                    a, b = span_[0] + use.start(), span_[0] + use.end()
+                    if re.match(r'\s*(?:=(?!=)|[+*/&|^-]=|\+\+|--|\[)', code_[b:]) or re.search(r'(?:&|\+\+|--)\s*$', code_[:a]):
+                        continue
+                    quotient = re.fullmatch(r'\s*(0[xX][\da-fA-F]+|\d+)\s*/\s*4\s*', use[1])
+                    try:
+                        index = int(quotient[1], 0) // 4 if quotient and int(quotient[1], 0) % 4 == 0 else _index(use[1])
+                    except (ValueError, SyntaxError):
+                        continue
+                    o = base_sym.addr - pool.addr + 4 * index
+                    if o in table_at:
+                        edits.append((a, b, 'fzgx_pool_table%d[%d]' % table_at[o]))
+                for a, b, value in sorted(edits, reverse=True):
+                    body_ = body_[:a] + value + body_[b:]
+                if edits and not re.search(r'\b' + re.escape(decl[1]) + r'\b', body_.replace(decl[0], '', 1)):
+                    body_ = body_.replace(decl[0], '', 1)
+        except Exception:
+            pass
         # integer reads of pool words through an extern struct view of the pool head
         # (`local.words[k] = pool->unk_2B0`): those words are primer table entries, so read them
         # there; once nothing else uses the view, the extern and its pointer go, and the
