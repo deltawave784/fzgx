@@ -905,6 +905,32 @@ s32 fn_1_818AC(fn_1_818AC_Obj *a, fn_1_818AC_Obj *b) {
 }
 /* fzgx:end fn_1_818AC */
 
+/* fzgx:begin fn_1_82EDC noprologue */
+#include "types.h"
+
+extern u8 *fn_1_36AD0(void);
+extern void fn_1_14F6F8(u32, u32, u32, void *);
+
+u32 *fn_1_82EDC(s16 arg0, s16 arg1, u32 *arg2) {
+    u8 *p;
+    if (arg1 < 41) {
+        u32 i;
+        u32 dst = (u32)arg2;
+        u32 src = arg1 * 0xB4 + 0x23800000;
+        for (i = 0; i < 45; i++) {
+            *(u32 *)(dst + i * 4) = *(u32 *)(src + i * 4);
+        }
+    } else {
+        if (arg0 == -1) {
+            return 0;
+        }
+        p = fn_1_36AD0() + arg0 * 0x81C0;
+        fn_1_14F6F8(p[0x81A4], p[0x81AC], p[0x81B4], arg2);
+    }
+    return arg2;
+}
+/* fzgx:end fn_1_82EDC */
+
 /* fzgx:begin fn_1_835E0 */
 // Registers the car callbacks and publishes the supplied car context.
 void fn_1_835E0(void *car_context, void *initial_state, void *callback_context) {
