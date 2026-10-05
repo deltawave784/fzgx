@@ -792,6 +792,16 @@ void fn_1_3E628(void) {
 }
 /* fzgx:end fn_1_3E628 */
 
+/* fzgx:begin fn_1_3E62C */
+void fn_1_3E62C(void) {
+    if ((s32)lbl_1_bss_25BA0.unk_0 == 0) {
+        lbl_1_bss_53F4 = 0xD;
+        lbl_1_bss_6EAB4.unk_0 |= 0x2C;
+        lbl_1_bss_25BA0.unk_0 = 1;
+    }
+}
+/* fzgx:end fn_1_3E62C */
+
 /* fzgx:begin fn_1_3E66C */
 // fn_1_3E66C: empty in retail (single blr).
 void fn_1_3E66C(void) {
