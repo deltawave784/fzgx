@@ -66,6 +66,23 @@ class CheckResult:
         return {k: v for k, v in self.__dict__.items() if not k.startswith("_")}
 
 
+def progress_score(res: CheckResult) -> float:
+    """The one progress scale (ranking and best-body selection only, never acceptance): the
+    better of objdiff's similarity and the pool-adjusted row score. Choosing one by `pool_rows`
+    compared two scales (fn_1_5D91C: an 86.6% objdiff seed outranked 94-95% bodies whose pool
+    rows switched them to a 70-82% row score)."""
+    return max(res.percent, res.percent_adjusted) if res.ok else 0.0
+
+
+def progress_rows(res: CheckResult) -> Optional[int]:
+    """Rows still differing after accepted relocations; None when no row alignment exists."""
+    if not res.ok:
+        return None
+    if res.matched or res.matched_pool:
+        return 0
+    return res.differing_rows if res.instruction_rows else None
+
+
 def run(cmd: List[str], cwd: Path = ROOT, timeout: int = 600) -> subprocess.CompletedProcess:
     return subprocess.run(cmd, cwd=cwd, text=True, capture_output=True, timeout=timeout)
 
@@ -1377,7 +1394,7 @@ def check_versions(project: Project, symbol: str, versions: List[str],
             (tmp / (ver.replace("/", "_") + ".err")).write_text(res.error or "check failed")
             out[ver] = -2.0
         else:
-            out[ver] = res.percent_adjusted if res.pool_rows else res.percent
+            out[ver] = progress_score(res)
     return out
 
 

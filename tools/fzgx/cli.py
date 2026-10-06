@@ -124,14 +124,16 @@ def cmd_route(a, p):
 
 def cmd_seed_corpus(a, p):
     from . import corpusseed
-    r = corpusseed.run(p, a.per_symbol, apply=not a.dry_run)
+    r = corpusseed.run(p, a.per_symbol, apply=not a.dry_run, from_checks=a.from_checks)
     if a.json:
         print(json.dumps(r, indent=1))
     else:
         for s, e in sorted(r.items(), key=lambda x: -x[1]['score']):
-            mark = 'MATCH' if e['matched'] else ('imported' if e.get('imported') else 'kept local')
+            mark = 'MATCH' if e['matched'] else ('imported' if e.get('imported') else
+                                                 ('would import' if e.get('candidate') else 'kept local'))
             print(f"{s:28s} {e['score']:6.2f}%  recorded {e['recorded']:6.2f}  local {e['local'] if e['local'] is not None else '-':>6}  {e['mw'] or '-'} {e['flags'] or ''}  {mark}")
-        print(f"{sum(1 for e in r.values() if e.get('imported'))} imported of {len(r)} rescored")
+        print(f"{sum(1 for e in r.values() if e.get('imported'))} imported, "
+              f"{sum(1 for e in r.values() if e.get('candidate'))} better than the saved best, of {len(r)} rescored")
     return 0
 
 
@@ -652,6 +654,7 @@ def build_parser() -> argparse.ArgumentParser:
     s.add_argument("--skip-tried-by", action="append", metavar="PREFIX", help="leave out functions an agent id or model with this prefix attempted (repeatable, e.g. gpt-6.1-sol)")
     s = sub.add_parser("seed-corpus", help="rescore the best archived bodies in state/repairs and save them as local seeds"); s.set_defaults(fn=cmd_seed_corpus)
     s.add_argument("--per-symbol", type=int, default=2); s.add_argument("--dry-run", action="store_true"); s.add_argument("--json", action="store_true")
+    s.add_argument("--from-checks", action="store_true", help="seed from the per-function check archives (.fzgx/checks/) when a checked body beats the saved best")
     s = sub.add_parser("progress", help="the matched-code percentage over time: print it, record it in state/progress.csv, show the change"); s.set_defaults(fn=cmd_progress)
     s.add_argument("--note", help="label for the row (e.g. 'fable batch 23'); a note records a row even if nothing changed")
     s.add_argument("--no-record", action="store_true"); s.add_argument("--stale-ok", action="store_true"); s.add_argument("--json", action="store_true")

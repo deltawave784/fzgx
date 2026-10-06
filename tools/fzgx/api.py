@@ -553,17 +553,14 @@ def check_score(res: oracle.CheckResult) -> float:
     pool-adjusted row score. Choosing one or the other by `pool_rows` compared different
     scales: a seed without pool rows (objdiff 86.6%) outranked every later body whose pool
     rows switched it to the stricter row score (fn_1_5D91C: 94-95% objdiff, row score 70-82%),
-    so the plateau stop fired while the agent improved and the seed was saved as the best."""
-    return max(res.percent, res.percent_adjusted) if res.ok else 0.0
+    so the plateau stop fired while the agent improved and the seed was saved as the best.
+    Defined once in `oracle.progress_score` (sweep, seed-corpus and version probes share it)."""
+    return oracle.progress_score(res)
 
 
 def _differing_rows(res: oracle.CheckResult) -> Optional[int]:
     """Rows still differing after accepted relocations; None when no row alignment exists."""
-    if not res.ok:
-        return None
-    if res.matched or res.matched_pool:
-        return 0
-    return res.differing_rows if res.instruction_rows else None
+    return oracle.progress_rows(res)
 
 
 def _record_check(p: Project, key: str, src: Optional[Path], res: oracle.CheckResult,
