@@ -656,7 +656,10 @@ async def fan_out(p, options, model, symbols, batch, revise, command, price):
                   f"tools={row['tool_calls']} ${row['cost']:.3f} {row['secs']}s", flush=True)
 
     loop = asyncio.get_running_loop()
-    loop.add_signal_handler(signal.SIGTERM, server.stopping.set)
+    try:
+        loop.add_signal_handler(signal.SIGTERM, server.stopping.set)
+    except NotImplementedError:  # Windows event loops have no signal handlers; Ctrl+C still raises
+        pass
     try:
         await server.start()
         async with asyncio.TaskGroup() as group:
