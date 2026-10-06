@@ -602,9 +602,7 @@ struct fn_1_9F4B4_Arg0 {
     u32 unk_14;
 };
 
- /* 0.0f */
-
- /* 1.0f */
+/* Pool literals, declared non-const: retail reloads them after every FIFO store. */
 
 /* write-gather FIFO */
 #define GX_WRITE_F32(v) (*(f32 *)GX_FIFO_BASE = (v))
