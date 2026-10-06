@@ -5353,6 +5353,55 @@ void fn_1_8DBA4(u8 value) {
 }
 /* fzgx:end fn_1_8DBA4 */
 
+/* fzgx:begin fn_1_8E084 noprologue */
+#include "types.h"
+
+typedef struct {
+    u8 pad0[0x38c];
+    u8 slot_mask;      // 0x38c: bit per usable slot
+    u8 pad38d[0x2d];
+    s16 slot;          // 0x3ba: current slot, -1 when none
+} SlotCar;
+
+extern u16 lbl_1_bss_6E82C[30][5];
+
+#define CLAMP(v, lo, hi) ((v) < (lo) ? (lo) : ((v) > (hi) ? (hi) : (v)))
+
+// Slot to move to from `n` (the slot after the current one): 5 stays 5, out of
+// range clamps, otherwise the first usable slot at or after n, -1 when none.
+static inline s8 advance_slot(SlotCar *car, s32 n) {
+    s8 next;
+
+    if ((s8)n == 5) {
+        return n;
+    }
+    if ((s8)n < 0 || (s8)n > 5) {
+        return CLAMP((s8)n, 0, 5);
+    }
+    for (next = n; next < 5; next++) {
+        if (car->slot_mask & (1 << next)) {
+            return next;
+        }
+    }
+    return -1;
+}
+
+void fn_1_8E084(SlotCar *car, s32 *value, s32 row) {
+    s8 cur = (s8)car->slot;
+    s32 slot;
+
+    car->slot = advance_slot(car, cur + 1);
+
+    slot = car->slot;
+    if (slot == -1) {
+        car->slot = 5;
+        *value -= lbl_1_bss_6E82C[row][cur];
+    } else {
+        *value = *value - lbl_1_bss_6E82C[row][cur] + lbl_1_bss_6E82C[row][slot];
+    }
+}
+/* fzgx:end fn_1_8E084 */
+
 /* fzgx:begin fn_1_8E188 */
 void fn_1_8E188(void) {
     if (lbl_1_bss_6E958.unk_4 == 0) {
