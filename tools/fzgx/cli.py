@@ -111,8 +111,10 @@ def cmd_route(a, p):
     # functions a Claude tier already attempted (agent ids `haiku-`/`sonnet-`/`opus-...`)
     tiers = ("haiku", "sonnet", "opus", "fable") if a.easy else ("haiku", "sonnet", "opus")
     skip = set().union(*(route.tried_by(t + "-") for t in tiers)) if (a.skip_tried or a.easy) else None
+    for prefix in a.skip_tried_by or ():  # an agent-id or model prefix, e.g. gpt-6.1-sol
+        skip = (skip or set()) | route.tried_by(prefix)
     rows = route.plan(p, a.limit, a.small, module=a.module, tier=a.tier, escalate=escalate, exclude=skip,
-                      easy=a.easy, max_size=a.max_size, max_attempts=a.max_attempts)
+                      easy=a.easy, max_size=a.max_size, max_attempts=a.max_attempts, min_size=a.min_size)
     if a.json:
         print(json.dumps(rows, indent=1))
     else:
@@ -646,6 +648,8 @@ def build_parser() -> argparse.ArgumentParser:
     s.add_argument("--easy", action="store_true", help="Opus/Sonnet fallback while Fable is out of usage: also skips what Fable attempted, orders by attempts then size (no preference for saved 99%% bodies), one function per (module, size) clone family; implies --skip-tried")
     s.add_argument("--max-size", type=int, default=None, help="with --easy (or alone): skip functions larger than this many bytes")
     s.add_argument("--max-attempts", type=int, default=None, help="skip functions with more recorded attempts than this")
+    s.add_argument("--min-size", type=int, default=None, help="skip functions smaller than this many bytes (tiny hand-assembly shapes)")
+    s.add_argument("--skip-tried-by", action="append", metavar="PREFIX", help="leave out functions an agent id or model with this prefix attempted (repeatable, e.g. gpt-6.1-sol)")
     s = sub.add_parser("seed-corpus", help="rescore the best archived bodies in state/repairs and save them as local seeds"); s.set_defaults(fn=cmd_seed_corpus)
     s.add_argument("--per-symbol", type=int, default=2); s.add_argument("--dry-run", action="store_true"); s.add_argument("--json", action="store_true")
     s = sub.add_parser("progress", help="the matched-code percentage over time: print it, record it in state/progress.csv, show the change"); s.set_defaults(fn=cmd_progress)
