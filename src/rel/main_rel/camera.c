@@ -1329,6 +1329,119 @@ block_7:
 }
 /* fzgx:end fn_1_AA54 */
 
+/* fzgx:begin fn_1_ABAC noprologue */
+#include "types.h"
+
+typedef struct fn_1_ABAC_Camera {
+    u8 pad_0[0x2];
+    s16 unk_2;
+    u8 pad_4[0xA2];
+    s16 unk_A6;
+    s16 unk_A8;
+} fn_1_ABAC_Camera;
+
+typedef struct fn_1_ABAC_Target {
+    u8 pad_0[0x214];
+    u16 unk_214;
+} fn_1_ABAC_Target;
+
+// Pad input state: retail reloads the button words between the bit tests, so
+// the fields are volatile.
+typedef struct fn_1_ABAC_PadEntry {
+    u8 pad_0[0x10];
+    volatile u16 unk_10;  // volatile: pad input, retail reloads it at every bit test
+    volatile u16 unk_12;  // volatile: pad input, retail reloads it at every bit test
+} fn_1_ABAC_PadEntry;
+
+extern fn_1_ABAC_Target *fn_1_86254(s32 index);
+extern s32 fn_1_F2F34(void);
+extern s16 camera_get_entry_field_0xa4(u32);
+extern s8 fn_1_86678(int index);
+extern s8 fn_1_86634(int index);
+extern void fn_1_715C(u8, s16);
+extern u32 fn_1_864E8(int index);
+extern s32 fn_1_40BB4(void);
+extern s16 lbl_1_bss_960;
+extern fn_1_ABAC_PadEntry lbl_1_bss_9F8[];
+extern u8 lbl_1_bss_CC0[152];
+
+// Button byte per player, reloaded at every test like the pad words.
+#define FN_1_ABAC_BUTTONS(p) (((volatile u8 *)lbl_1_bss_CC0)[p])
+
+// Steps the camera view selection from the player's pad input.
+void fn_1_ABAC(fn_1_ABAC_Camera *camera) {
+    s16 view;
+    s8 slot;
+    fn_1_ABAC_Target *target;
+    s8 player;
+
+    target = fn_1_86254(camera->unk_2);
+    if (fn_1_F2F34() != 0) {
+        player = 0;
+        slot = 0;
+        view = camera_get_entry_field_0xa4(0);
+    } else {
+        player = fn_1_86678(camera->unk_2);
+        slot = fn_1_86634(camera->unk_2);
+        view = camera_get_entry_field_0xa4((u8)slot);
+    }
+
+    if (target->unk_214 > 1) {
+        fn_1_715C(slot, 5);
+        return;
+    }
+    if (target->unk_214 == 1) {
+        fn_1_715C(slot, camera->unk_A6);
+        return;
+    }
+    if (fn_1_864E8(camera->unk_2) & 0x80) {
+        fn_1_715C(slot, 5);
+        return;
+    }
+
+    camera->unk_A6 = view;
+    if (player == -1) {
+        return;
+    }
+    if (lbl_1_bss_960 == 10) {
+        return;
+    }
+    if (fn_1_40BB4() != 0) {
+        return;
+    }
+
+    if (fn_1_F2F34() != 0) {
+        if (((lbl_1_bss_9F8[player].unk_10 >> 2) & 1) || ((lbl_1_bss_9F8[player].unk_12 >> 2) & 1)) {
+            view++;
+        }
+        if (((lbl_1_bss_9F8[player].unk_10 >> 3) & 1) || ((lbl_1_bss_9F8[player].unk_12 >> 3) & 1)) {
+            view--;
+        }
+    } else {
+        if ((FN_1_ABAC_BUTTONS(player) >> 1) & 1) {
+            view++;
+        }
+        if (FN_1_ABAC_BUTTONS(player) & 1) {
+            view--;
+        }
+    }
+
+    if (view <= 0) {
+        view = 0;
+    }
+    if (camera->unk_A8 == 1) {
+        if ((u32)view >= 12) {
+            view = 11;
+        }
+    } else {
+        if ((u32)view >= 4) {
+            view = 3;
+        }
+    }
+    fn_1_715C(slot, view);
+}
+/* fzgx:end fn_1_ABAC */
+
 /* fzgx:begin camera_get_position_delta */
 // Computes the displacement between two camera positions.
 void camera_get_position_delta(u32 index, Vec3 *out) {

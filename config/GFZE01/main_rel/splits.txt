@@ -6698,3 +6698,6 @@ rel/main_rel/accessory/fn_1_10C4E4.c:
 
 rel/main_rel/car_test/fn_1_8DD54.c:
 	.text       start:0x0008DD54 end:0x0008E084 align:4
+
+rel/main_rel/camera/fn_1_ABAC.c:
+	.text       start:0x0000ABAC end:0x0000AD94 align:4
