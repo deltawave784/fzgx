@@ -525,6 +525,27 @@ void fn_3_146C0(void *arg0, s16 x, s16 y, s16 delta, u32 *arg4) {
 }
 /* fzgx:end fn_3_146C0 */
 
+/* fzgx:begin fn_3_14778 noprologue */
+#include "types.h"
+#include "rel/customize/emblem.h"
+
+struct EmblemParameters {
+    u16 width;
+    u16 height;
+    u8 format;
+    u32 data;
+};
+
+#pragma peephole off
+void fn_3_14778(u16 width, u16 height, u8 format, u32 data) {
+    struct EmblemParameters *p = (struct EmblemParameters *)&lbl_3_bss_A23D8;
+    p->width = width;
+    p->height = height;
+    p->format = format;
+    p->data = data;
+}
+/* fzgx:end fn_3_14778 */
+
 /* fzgx:begin fn_3_15240 */
 extern void fn_3_14E18(void *, s16, void *, s16, void *);
 
