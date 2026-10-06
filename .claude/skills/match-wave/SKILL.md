@@ -169,7 +169,7 @@ by the agent; two failed gates in a row stop the rounds for the rest of the run 
 
 When a second clone (a Codex harness or another person) works in parallel, read `docs/COLLABORATION.md`: this
 clone works only its own modules (`route --fable --module <module>`), merges the other clone's branch only between
-batches (`git pull --no-rebase fork <branch>`, then ninja, `fzgx gate`, `fzgx sync`), and does not push. The user
-pushes, or allows that one command for the loop. Do not merge, pull or push from inside a batch.
+batches (`git pull --no-rebase b-local codex`, then ninja, `fzgx gate`, `fzgx sync`), and does not push. The user
+pushes to the fork for backup. Do not merge, pull or push from inside a batch.
 
 Never push. Never run the librarian concurrently with matchers.

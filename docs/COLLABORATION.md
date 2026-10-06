@@ -45,17 +45,33 @@ Clone A's router takes `--module main_rel`; clone B's seed manifests list only i
    (and `uv run tools/fzgx.py sync` so the local ledger learns what the other side matched).
 5. **Never rewrite published history** (no rebase or filter-branch on pushed branches); merge instead.
 
-## The loop at each batch boundary
+## Staying in sync: local remotes, not GitHub
+
+Both clones are on the same PC, so they exchange commits directly; no push and no network are involved.
+Clone A has a remote `b-local` (the `codex` clone's folder) and clone B has `a-local` (A's folder):
 
 ```sh
-git pull --no-rebase fork codex          # in A: take B's work (in B: pull fork windows-and-types)
+# in A, between batches (tree clean, nothing claimed or running):
+git pull --no-rebase b-local codex
 uv run ninja && uv run tools/fzgx.py gate && uv run tools/fzgx.py sync
-# ... run a batch and its close-out (reuse, fixup, verify, progress) ...
-git push fork windows-and-types          # (in B: git push fork codex)
+# in B, the same with:  git pull --no-rebase a-local windows-and-types
 ```
-`git push` is on this project's deny list for Claude; the push step is run by the user, or the user
-allows exactly that command for the loop. A merge that conflicts anywhere other than `units.json`,
-`splits.txt` or `symbols.txt` hunks of different modules is a sign the split was broken: stop and look.
+
+A and B can both pull at any batch boundary and a pull is never destructive (it adds a merge commit, or
+fast-forwards). `fzgx sync` brings the local ledger in line with whatever the other clone matched; the repo
+is the truth and `sync` reads it (units, pool matches, assembly units).
+
+**Pushing to the fork is a backup and publication step, not part of the sync.** The user pushes
+(`git push fork windows-and-types`, `git push fork codex`) when they want the work backed up or shared.
+`git push` stays on the deny list so an unattended loop cannot publish on its own.
+
+A pull that conflicts anywhere other than `units.json`, `splits.txt` or `symbols.txt` hunks of different
+modules means the module split was broken: stop and look.
+
+## What a clone does not share
+
+The ledger database (claims, attempt history, blocked functions) is local. Functions blocked by hand in one
+clone (`fzgx block`) are not visible in the other, and a clone's `fzgx sync` leaves a function you blocked as it is.
 
 ## Untested
 
