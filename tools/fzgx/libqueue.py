@@ -1,8 +1,12 @@
 """The librarian's queue: conflicts found mechanically in the tree, plus matchers' notes.
 
 Read-only. Every row is `{kind, severity, resolution, module, tu, symbol, detail, source,
-blocks}`; `source` says where the row came from (`tree`, `type-survey`, `ledger`, `waves.md`)
-so a structured notes field can join later as one more source.
+blocks}`; `source` says where the row came from (`tree`, `type-survey`, `agent:<id>` or another
+recorder of a structured note, and with `--prose-notes` the old scrape of `ledger` attempt notes
+and `waves.md`). Structured notes (the ledger's `notes` table, written by `fzgx note add` and the
+matcher tools' `notes` argument on submit/release) also carry `note_id` (resolve it with
+`fzgx note resolve ID --by librarian`) and `maybe_resolved`: no mechanical row names the note's
+symbols any more.
 
   kind        prototype      a function's declarations disagree with its matched definition
               declaration    an unmatched function is declared with different signatures
@@ -14,7 +18,8 @@ so a structured notes field can join later as one more source.
               no_header      a matched function that unmatched callers in other TUs need,
                              declared by no header
               struct_views   a type-survey cluster: private struct views of one object
-              note           a matcher's recorded note naming the librarian/headers
+              note           a matcher's structured note (detail starts `[kind #id]`), or with
+                             --prose-notes a free-text note naming the librarian/headers
   severity    code      the disagreement changes generated code (register class, width,
                         signedness, arity, an implicit int/double conversion, object size)
               cosmetic  types are register-identical (pointer types, pointer vs 32-bit int)
@@ -581,7 +586,7 @@ def _struct_views() -> List[dict]:
     return rows
 
 
-def _notes(p, tree: Tree) -> List[dict]:
+def _notes(p, tree: Tree, prose: bool = False) -> List[dict]:
     rows = []
     where: Dict[str, Tuple[str, str]] = {}
     for key, f in tree.files.items():
@@ -600,6 +605,22 @@ def _notes(p, tree: Tree) -> List[dict]:
     db_path = STATE_DIR / "ledger.db"
     if db_path.exists():
         db = sqlite3.connect(f"file:{db_path.as_posix()}?mode=ro", uri=True)
+        has_notes = db.execute("select 1 from sqlite_master where type='table' and name='notes'").fetchone()
+        for nid, sym, kind, ntu, detail, source in (db.execute(
+                "select id, symbol, kind, tu, detail, source from notes where status = 'open' order by id")
+                if has_notes else []):
+            mod, tu = locate(sym)
+            if ntu:
+                tu = ntu if ntu.endswith(".c") else ntu + ".c"
+                mod = mod or tu.split("/")[1] if tu.startswith("rel/") and tu.count("/") >= 2 else mod
+            syms = [sym] + [s for s in SYM_RE.findall(detail) if s != sym and (s.startswith(("fn_", "lbl_")) or s in where)]
+            row = _row("note", "note", DECIDE, mod, tu, sym, f"[{kind} #{nid}] {detail}",
+                       source=source or "agent:unknown", blocks=syms)
+            row["note_id"] = nid
+            rows.append(row)
+    if not prose:
+        return rows
+    if db_path.exists():
         seen = set()
         for sym, outcome, notes, ended in db.execute(
                 "select symbol, outcome, notes, ended from attempts where notes is not null order by id desc"):
@@ -627,7 +648,7 @@ def _notes(p, tree: Tree) -> List[dict]:
 
 
 def queue(p: Project, module: Optional[str] = None, tu: Optional[str] = None, notes: bool = True,
-          survey_views: bool = True) -> List[dict]:
+          survey_views: bool = True, prose_notes: bool = False) -> List[dict]:
     tree = Tree(p)
     if module:
         tree.files = {k: v for k, v in tree.files.items() if v["module"] == module} if not tu else tree.files
@@ -640,7 +661,7 @@ def queue(p: Project, module: Optional[str] = None, tu: Optional[str] = None, no
     if survey_views:
         rows += _struct_views()
     if notes:
-        rows += _notes(p, tree)
+        rows += _notes(p, tree, prose_notes)
     if module:
         rows = [r for r in rows if r["module"] == module]
     if tu:
@@ -651,6 +672,13 @@ def queue(p: Project, module: Optional[str] = None, tu: Optional[str] = None, no
     for r in rows:
         if r["kind"] == "note" and any(s in mech for s in r["blocks"]):
             r["detail"] += "  (also found mechanically)"
+    # a structured note whose symbols no mechanical row names (as conflict or user) may be stale
+    named = mech | {b for r in rows if r["source"] == "tree" for b in r["blocks"]}
+    for r in rows:
+        if "note_id" in r:
+            r["maybe_resolved"] = not any(s in named for s in r["blocks"])
+            if r["maybe_resolved"]:
+                r["detail"] += "  (maybe resolved: no mechanical conflict names it)"
     rank = {"code": 0, "cosmetic": 1, "note": 2}
     rows.sort(key=lambda r: (r["module"], r["tu"], rank.get(r["severity"], 3), -len(r["blocks"]), r["kind"], r["symbol"]))
     return rows

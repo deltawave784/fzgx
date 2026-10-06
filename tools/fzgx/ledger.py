@@ -37,9 +37,19 @@ CREATE TABLE IF NOT EXISTS batches (
   spent_usd REAL DEFAULT 0, matched INTEGER DEFAULT 0, released INTEGER DEFAULT 0,
   blocked INTEGER DEFAULT 0
 );
+CREATE TABLE IF NOT EXISTS notes (
+  id INTEGER PRIMARY KEY, symbol TEXT NOT NULL, kind TEXT NOT NULL, tu TEXT, detail TEXT NOT NULL,
+  source TEXT, created_at INTEGER, status TEXT DEFAULT 'open', resolved_by TEXT, resolved_at INTEGER
+);
 CREATE INDEX IF NOT EXISTS idx_functions_status ON functions(status);
 CREATE INDEX IF NOT EXISTS idx_attempts_symbol ON attempts(symbol);
+CREATE INDEX IF NOT EXISTS idx_notes_symbol ON notes(symbol);
 """
+
+# Structured matcher notes for the librarian: conflicts only a human/librarian can resolve.
+NOTE_KINDS = ("prototype", "declaration", "data", "overlap", "hygiene", "naming", "other")
+NOTE_MAX = 5          # notes per submit/release call
+NOTE_CHARS = 300      # characters per note detail
 
 
 class Ledger:
@@ -240,6 +250,38 @@ class Ledger:
     def pending_names(self) -> List[sqlite3.Row]:
         return self.db.execute("SELECT * FROM names WHERE status='pending' ORDER BY id").fetchall()
 
+    # ----------------------------------------------------------------- notes
+    def add_note(self, symbol: str, kind: str, detail: str, tu: Optional[str] = None,
+                 source: Optional[str] = None) -> int:
+        """Record one open note; an identical open note (symbol, kind, detail) is not duplicated."""
+        if kind not in NOTE_KINDS:
+            raise ValueError(f"note kind must be one of {', '.join(NOTE_KINDS)}")
+        detail = " ".join(detail.split())[:NOTE_CHARS]
+        if not symbol or not detail:
+            raise ValueError("a note needs a symbol and a detail")
+        with self.db:
+            same = self.db.execute("SELECT id FROM notes WHERE symbol=? AND kind=? AND detail=? AND status='open'",
+                                   (symbol, kind, detail)).fetchone()
+            if same:
+                return same["id"]
+            return self.db.execute(
+                "INSERT INTO notes(symbol, kind, tu, detail, source, created_at) VALUES(?,?,?,?,?,?)",
+                (symbol, kind, tu or None, detail, source, int(time.time()))).lastrowid
+
+    def notes(self, status: Optional[str] = None, symbol: Optional[str] = None,
+              kind: Optional[str] = None) -> List[sqlite3.Row]:
+        q, args = "SELECT * FROM notes WHERE 1=1", []
+        for col, val in (("status", status), ("symbol", symbol), ("kind", kind)):
+            if val:
+                q += f" AND {col}=?"; args.append(val)
+        return self.db.execute(q + " ORDER BY id", args).fetchall()
+
+    def resolve_note(self, note_id: int, by: str = "librarian") -> bool:
+        with self.db:
+            return self.db.execute(
+                "UPDATE notes SET status='resolved', resolved_by=?, resolved_at=? WHERE id=? AND status='open'",
+                (by, int(time.time()), note_id)).rowcount == 1
+
     # ------------------------------------------------------------- reporting
     def summary(self) -> Dict[str, Dict[str, int]]:
         out: Dict[str, Dict[str, int]] = {}
@@ -263,6 +305,7 @@ class Ledger:
             "attempts": [dict(r) for r in self.db.execute("SELECT * FROM attempts ORDER BY id")],
             "names": [dict(r) for r in self.db.execute("SELECT * FROM names ORDER BY id")],
             "batches": [dict(r) for r in self.db.execute("SELECT * FROM batches ORDER BY started")],
+            "notes": [dict(r) for r in self.db.execute("SELECT * FROM notes ORDER BY id")],
         }
         path.write_text(json.dumps(data, indent=1) + "\n")
         return path
@@ -276,7 +319,8 @@ class Ledger:
         n = 0
         with self.db:
             self.db.execute("BEGIN")
-            for table in ("functions", "attempts", "names", "batches"):
+            # "notes" is absent from snapshots older than 2026-10-06; .get() keeps them loadable
+            for table in ("functions", "attempts", "names", "batches", "notes"):
                 for row in data.get(table, []):
                     if table == 'functions':
                         row.pop('blocked_issue', None)  # snapshots from the retired issue workflow

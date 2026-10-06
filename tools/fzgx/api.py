@@ -970,6 +970,67 @@ def report(p: Project) -> Dict[str, Any]:
             "pool_matched": pool}
 
 
+def add_note(p: Project, symbol: str, kind: str, detail: str, tu: Optional[str] = None,
+             source: Optional[str] = None) -> Dict[str, Any]:
+    """Record a structured note for the librarian (a prototype/declaration/data/overlap conflict
+    a matcher cannot resolve in its own unit). The symbol is stored by its ledger key when it
+    resolves, as written otherwise (a data label)."""
+    from .ledger import NOTE_KINDS
+    if kind not in NOTE_KINDS:
+        return {"ok": False, "error": f"kind must be one of {', '.join(NOTE_KINDS)}"}
+    try:
+        nid = Ledger().add_note(_key(p, symbol), kind, detail, tu, source)
+    except ValueError as e:
+        return {"ok": False, "error": str(e)}
+    return {"ok": True, "id": nid}
+
+
+def _store_notes(p: Project, symbol: str, agent: Optional[str], notes: Optional[List[Dict[str, Any]]]) -> Dict[str, Any]:
+    """Store a submit/release call's `notes` ({kind, tu?, detail}) after the call succeeded.
+    Bounded and lenient: at most NOTE_MAX notes of NOTE_CHARS characters; an unknown kind
+    becomes 'other'; a malformed entry is skipped with a warning and never fails the call."""
+    from .ledger import NOTE_CHARS, NOTE_KINDS, NOTE_MAX
+    out: Dict[str, Any] = {"ids": [], "warnings": []}
+    if not notes:
+        return out
+    if not isinstance(notes, list):
+        notes = [notes]
+    if len(notes) > NOTE_MAX:
+        out["warnings"].append(f"only the first {NOTE_MAX} of {len(notes)} notes were stored")
+    l = Ledger()
+    key = _key(p, symbol)
+    for n in notes[:NOTE_MAX]:
+        if not isinstance(n, dict) or not str(n.get("detail") or "").strip():
+            out["warnings"].append(f"skipped malformed note {str(n)[:80]!r}")
+            continue
+        kind = str(n.get("kind") or "other").strip().lower()
+        if kind not in NOTE_KINDS:
+            out["warnings"].append(f"unknown kind {kind!r} stored as 'other'")
+            kind = "other"
+        detail = str(n["detail"])
+        if len(detail) > NOTE_CHARS:
+            out["warnings"].append(f"note detail cut to {NOTE_CHARS} characters")
+        out["ids"].append(l.add_note(key, kind, detail, (str(n.get("tu")) if n.get("tu") else None),
+                                     f"agent:{agent or 'unknown'}"))
+    return out
+
+
+def load_notes_arg(value: Optional[str]) -> Optional[List[Dict[str, Any]]]:
+    """A `--notes` argument: inline JSON or a path to a JSON file (list of {kind, tu?, detail})."""
+    if not value or not value.strip():
+        return None
+    text = value
+    if not value.lstrip().startswith(("[", "{")):
+        path = Path(value)
+        text = path.read_text() if path.exists() else value
+    try:
+        data = json.loads(text)
+    except ValueError:
+        # plain text: keep it rather than fail the call, except placeholders such as "none" or "n/a"
+        return [{"kind": "other", "detail": value}] if len(value.strip()) >= 12 else None
+    return data if isinstance(data, list) else [data]
+
+
 def snapshot(p: Project) -> Dict[str, Any]:
     return {"ok": True, "path": p.rel(Ledger().snapshot())}
 

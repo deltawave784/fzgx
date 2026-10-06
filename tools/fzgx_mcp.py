@@ -64,6 +64,27 @@ async def _run(*args: str, as_json: bool = True):
     return await anyio.to_thread.run_sync(lambda: _cli(*args, as_json=as_json))
 
 
+SUBMIT_DOC = ("Accept a 100% match: lint, relink every target, verify all 16 hashes, commit. `names` is an optional "
+              "list of {kind,target,name,rationale} proposals for the librarian. Pass mw_version (e.g. 'GC/1.3') only "
+              "if check(versions=...) showed that version matches.")
+RELEASE_DOC = "Give up on SYMBOL. The best attempt is saved for the next agent; say precisely what still differs."
+NOTES_DOC = (
+    "`notes` (optional) is a list of at most 5 {kind, tu?, detail} entries (detail <= 300 chars) recorded "
+    "for the librarian. Use it ONLY for a conflict a human or librarian must resolve outside your unit: a "
+    "prototype or return type that disagrees with retail or with callers (kind 'prototype'), an extern/"
+    "prologue declaration that conflicts (kind 'declaration'), a header struct/data object with the wrong "
+    "type or size (kind 'data'), declared objects that overlap (kind 'overlap'), a missing prototype or "
+    "unused helper (kind 'hygiene'), a name (kind 'naming'), else 'other'. Name the symbols, e.g. "
+    "{\"kind\": \"prototype\", \"detail\": \"prologue declares extern u32 fn_X(void *) but retail returns nothing\"}. "
+    "Never use it for scheduling, register allocation or match-progress observations; put those in "
+    "the reason/message.")
+
+
+def _notes_args(notes: Optional[List[dict]]) -> List[str]:
+    """Inline JSON for the CLI's --notes (api.load_notes_arg); the CLI bounds and validates it."""
+    return ["--notes", json.dumps(notes[:5] if isinstance(notes, list) else [notes])] if notes else []
+
+
 @mcp.tool()
 async def claim(symbol: str, agent: str) -> dict:
     """Claim SYMBOL for AGENT, initialize its private work copy and return the full context bundle (retail asm, symbols, callers, nearby matched C, flags, idioms, rules) in `context`. Seeded claims include the complete existing candidate in `seed.source`."""
@@ -127,12 +148,12 @@ async def check(symbol: str, versions: Optional[str] = None, max_diff_lines: int
     return await _run(*args, as_json=False)
 
 
-@mcp.tool()
+@mcp.tool(description=SUBMIT_DOC + " " + NOTES_DOC)
 async def submit(symbol: str, agent: str, message: str, harness: str = "", model: str = "",
-                 mw_version: Optional[str] = None, names: Optional[List[dict]] = None) -> dict:
-    """Accept a 100% match: lint, relink every target, verify all 16 hashes, commit. `names` is an optional list of {kind,target,name,rationale} proposals for the librarian. Pass mw_version (e.g. 'GC/1.3') only if check(versions=...) showed that version matches."""
+                 mw_version: Optional[str] = None, names: Optional[List[dict]] = None,
+                 notes: Optional[List[dict]] = None) -> dict:
     def go():
-        args = ["submit", symbol, "--agent", agent, "--message", message]
+        args = ["submit", symbol, "--agent", agent, "--message", message] + _notes_args(notes)
         if harness:
             args += ["--harness", harness]
         if model:
@@ -159,10 +180,10 @@ async def submit(symbol: str, agent: str, message: str, harness: str = "", model
     return await anyio.to_thread.run_sync(go)
 
 
-@mcp.tool()
-async def release(symbol: str, agent: str, reason: str, harness: str = "", model: str = "") -> dict:
-    """Give up on SYMBOL. The best attempt is saved for the next agent; say precisely what still differs."""
-    args = ["release", symbol, "--agent", agent, "--reason", reason]
+@mcp.tool(description=RELEASE_DOC + " " + NOTES_DOC)
+async def release(symbol: str, agent: str, reason: str, harness: str = "", model: str = "",
+                  notes: Optional[List[dict]] = None) -> dict:
+    args = ["release", symbol, "--agent", agent, "--reason", reason] + _notes_args(notes)
     if harness:
         args += ["--harness", harness]
     if model:

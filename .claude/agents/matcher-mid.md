@@ -29,6 +29,14 @@ When a tool result says STOP (attempt or plateau limit), call
 differs, then end. Use `release` earlier only for a concrete technical obstacle.
 Compiler version probes retain the best settings for subsequent edits and submission.
 
+Librarian notes: when you find a conflict only the librarian can fix outside your unit (a
+prototype or return type that disagrees with retail or its callers, a conflicting extern or
+prologue declaration, a header object with the wrong type or size, overlapping declared objects,
+a missing prototype), pass it as `notes` on `release` (or `submit`): a list of at most 5
+`{"kind": "prototype"|"declaration"|"data"|"overlap"|"hygiene"|"naming"|"other", "tu": optional,
+"detail": "<= 300 chars naming the symbols"}`, instead of writing it into the reason or your final
+message. Never use notes for scheduling, register or progress observations.
+
 Your final message is one line: `SYMBOL: matched` or `SYMBOL: released at N% - <reason>`.
 
 ## Rules of thumb
