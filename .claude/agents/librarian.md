@@ -36,9 +36,11 @@ the defect in your report instead); `orig/`, `build/`, `.fzgx/` contents; the le
 
 1. **Queue.** `uv run tools/fzgx.py librarian-queue` lists conflicts found mechanically (prototype or return-type
    mismatches between a matched block, its TU prologue, headers and callers; declarations that overlap or
-   disagree; unused helpers; missing prototypes) plus notes matchers recorded. If the command is not available,
-   read the librarian notes in `.fzgx/reports/waves.md` and `uv run tools/fzgx.py report`. Group the work by module
-   and TU.
+   disagree; unused helpers; missing prototypes) plus the structured notes matchers recorded when they submitted
+   or released (`note` rows, each with its `#id`; `--prose-notes` adds the old free-text scrape from the ledger
+   and `.fzgx/reports/waves.md`). `uv run tools/fzgx.py note list --status open` lists the notes alone. A note
+   marked 'maybe resolved' is probably stale: confirm it first. After you fix or reject a note, close it with
+   `uv run tools/fzgx.py note resolve ID --by librarian`. Group the work by module and TU.
 2. **Organize and migrate.** `fzgx tu-organize --module M` places carved units in their TU directories;
    `fzgx tu-migrate --module M` stitches a module's per-function units into TU files (once per module).
 3. **TU truth.** For each TU with new matches: `fzgx tutruth rel/<module>/<tu>.c --dry-run`, then without
