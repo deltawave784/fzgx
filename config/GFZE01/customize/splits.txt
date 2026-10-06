@@ -491,3 +491,6 @@ rel/customize/customize/fn_3_B6E4.c:
 
 rel/customize/toolkit/fn_3_23724.c:
 	.text       start:0x00023724 end:0x00023A1C align:4
+
+rel/customize/toolkit/fn_3_2B268.c:
+	.text       start:0x0002B268 end:0x0002B750 align:4
