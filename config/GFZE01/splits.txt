@@ -5576,3 +5576,30 @@ dol/fn_8003E344.c:
 
 dol/fn_8005CBF4.c:
 	.text       start:0x8005CBF4 end:0x8005D258 align:4
+
+dol/fn_8006060C.c:
+	.text       start:0x8006060C end:0x80060724 align:4
+
+dol/fn_80064D4C.c:
+	.text       start:0x80064D4C end:0x80064E84 align:4
+
+dol/fn_8006B048.c:
+	.text       start:0x8006B048 end:0x8006B188 align:4
+
+dol/fn_80051448.c:
+	.text       start:0x80051448 end:0x80051594 align:4
+
+dol/fn_80078DA8.c:
+	.text       start:0x80078DA8 end:0x80078F0C align:4
+
+dol/fn_80052430.c:
+	.text       start:0x80052430 end:0x80052590 align:4
+
+dol/fn_80052590.c:
+	.text       start:0x80052590 end:0x800526F0 align:4
+
+dol/fn_80058498.c:
+	.text       start:0x80058498 end:0x80058630 align:4
+
+dol/fn_800526F0.c:
+	.text       start:0x800526F0 end:0x80052850 align:4

@@ -121,6 +121,126 @@ void fn_3_1683C(struct Arg0 *arg0, s16 off, s16 size) {
 }
 /* fzgx:end fn_3_1683C */
 
+/* fzgx:begin fn_3_16E14 */
+#include "font.h"
+
+#pragma section code_type ".fzgxpool"
+static const u32 fzgx_pool_table1[1] = {0xFFFFFFFF};  /* fzgx-allow: A1 retail pool bytes */
+__declspec(section ".fzgxpool") static void fzgx_pool_keep1(void) { const u32 *volatile cp; cp = fzgx_pool_table1; }  /* fzgx-allow: S2 pool primer sink */
+__declspec(section ".fzgxpool") static void fzgx_pool_prime2(void) {
+    volatile f32 s; volatile f64 d;  /* fzgx-allow: S2 pool primer sinks */
+    s = 192.0f;
+    s = 105.0f;
+    s = 90.0f;
+    s = 32.0f;
+    s = 0.0f;
+    s = 184.0f;
+    s = 86.0f;
+    s = 100.0f;
+    s = 175.0f;
+    s = 88.0f;
+    s = 0.5f;
+    s = 10.0f;
+    s = 420.0f;
+    s = 334.0f;
+    s = 29.0f;
+    s = 320.0f;
+    s = 232.0f;
+    s = 50.0f;
+    s = 4.0f;
+    s = 480.0f;
+    s = 92.0f;
+    s = 1.0f;
+    s = 1.0714285373687744f;
+    s = 64.0f;
+    s = 65535.0f;
+    s = 119.0f;
+    s = 30.0f;
+    d = 4503601774854144.0;
+    d = 4503599627370496.0;
+}
+static const u32 fzgx_pool_table3[1] = {0x00000064};  /* fzgx-allow: A1 retail pool bytes */
+__declspec(section ".fzgxpool") static void fzgx_pool_keep3(void) { const u32 *volatile cp; cp = fzgx_pool_table3; }  /* fzgx-allow: S2 pool primer sink */
+__declspec(section ".fzgxpool") static void fzgx_pool_prime4(void) {
+    volatile f32 s; volatile f64 d;  /* fzgx-allow: S2 pool primer sinks */
+    s = 1.0920546628767624e-05f;
+    s = -0.25f;
+    s = -0.6000000238418579f;
+    s = -0.949999988079071f;
+    s = 0.25f;
+    s = 0.6000000238418579f;
+    s = 0.949999988079071f;
+}
+static const u32 fzgx_pool_table5[1] = {0xFFFFFFFF};  /* fzgx-allow: A1 retail pool bytes */
+__declspec(section ".fzgxpool") static void fzgx_pool_keep5(void) { const u32 *volatile cp; cp = fzgx_pool_table5; }  /* fzgx-allow: S2 pool primer sink */
+__declspec(section ".fzgxpool") static void fzgx_pool_prime6(void) {
+    volatile f32 s; volatile f64 d;  /* fzgx-allow: S2 pool primer sinks */
+    s = 28.0f;
+    s = 0.05999999865889549f;
+    s = 10.680000305175781f;
+    s = 0.03999999910593033f;
+}
+static const u32 fzgx_pool_table7[1] = {0x00000000};  /* fzgx-allow: A1 retail pool bytes */
+__declspec(section ".fzgxpool") static void fzgx_pool_keep7(void) { const u32 *volatile cp; cp = fzgx_pool_table7; }  /* fzgx-allow: S2 pool primer sink */
+#pragma section code_type ".text"
+
+typedef struct {
+    u32 type;
+    f32 x;
+    f32 y;
+    f32 z;
+    f32 a;
+    f32 b;
+    u8 pad18[0x18];
+    u32 mode;
+    u8 pad34[8];
+    u32 color;
+    u8 pad40[0x18];
+} Packet16E14;
+extern const Packet16E14 lbl_1_rodata_26F8;
+extern u8 lbl_3_rodata_538[];
+extern int fn_1_4F734(FontDrawPacket *);
+
+void fn_3_16E14(void) {
+    u16 v2;
+    u8 *p_lbl_3_rodata_538;
+    u8 v3;
+    s32 end;
+    s32 middle;
+    s32 pos;
+    s32 index;
+    u8 i;
+    Packet16E14 packet;
+    v2 = 64 / lbl_3_bss_A23EC.unk_11;
+    p_lbl_3_rodata_538 = lbl_3_rodata_538;
+    v3 = 256 / v2 - 1;
+    packet = lbl_1_rodata_26F8;
+    packet.type = 12;
+    packet.mode = 5;
+    packet.z = 28.0f;
+    packet.color = fzgx_pool_table5[0];
+    middle = v3 / 2;
+    end = middle + 5;
+    for (i = 0; i < v3; i++) {
+        index = i;
+        pos = (index + 1) * v2;
+        packet.x = (f32)(pos + 191);
+        packet.y = 105.0f;
+        packet.a = 0.06f;
+        packet.b = 10.68f;
+        fn_1_4F734((FontDrawPacket *)&packet);
+        packet.x = 192.0f;
+        packet.y = (f32)(pos + 104);
+        packet.a = 10.68f;
+        if (index >= middle && index < end)
+            packet.b = 0.04f;
+        else
+            packet.b = 0.06f;
+        fn_1_4F734((FontDrawPacket *)&packet);
+    }
+}
+/* fzgx:end fn_3_16E14 */
+
 /* fzgx:begin fn_3_170E0 */
 void fn_3_170E0(void) {
     fn_3_17100();
