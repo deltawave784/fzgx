@@ -3940,6 +3940,35 @@ void fn_10_10DB0(void) {
 #pragma opt_propagation reset
 /* fzgx:end fn_10_10DB0 */
 
+/* fzgx:begin fn_10_139E4 */
+#include "font.h"
+
+extern f32 lbl_10_rodata_5D0[990];
+extern f32 lbl_10_rodata_3AC[119];
+extern const f64 lbl_10_rodata_1E0;
+extern FontDrawPacket lbl_1_rodata_26F8;
+extern void fn_1_51564(u16, u16, u16, u16, u16, u16);
+extern u32 fn_1_5158C(FontDrawPacket *, u32, s16, s16);
+extern int fn_1_4F734(FontDrawPacket *);
+
+void fn_10_139E4(void) {
+    FontDrawPacket packet;
+    s32 i;
+    u16 id = 0x9D0B;
+    for (i = 0; i < 4; i++) {
+        fn_1_51564(0, 0, 24, 20, 2, 2);
+        packet = lbl_1_rodata_26F8;
+        *(u32 *)((u8 *)&packet + 0) = id;
+        *(f32 *)((u8 *)&packet + 4) = (f32)(29 + i * 150);
+        *(f32 *)((u8 *)&packet + 8) = 348.0f;
+        *(f32 *)((u8 *)&packet + 12) = 2.0f;
+        *(u32 *)((u8 *)&packet + 0x30) = 10;
+        fn_1_5158C(&packet, *(u32 *)((u8 *)&packet + 0), (s16)(i % 2), (s16)(i / 2));
+        fn_1_4F734(&packet);
+    }
+}
+/* fzgx:end fn_10_139E4 */
+
 /* fzgx:begin fn_10_13D64 */
 extern struct fn_10_13D64_lbl_10_rodata_158 lbl_10_rodata_158;
 extern u32 fn_1_49410(void);
