@@ -26883,6 +26883,17 @@
   },
   {
     "module": "main_rel",
+    "source": "rel/main_rel/accessory/fn_1_10D2F0.c",
+    "symbols": [
+      "fn_1_10D2F0"
+    ],
+    "status": "matching",
+    "mw_version": null,
+    "extra_cflags": [],
+    "tu": "rel/main_rel/accessory.c"
+  },
+  {
+    "module": "main_rel",
     "source": "rel/main_rel/accessory/fn_1_1154D0.c",
     "symbols": [
       "fn_1_1154D0"

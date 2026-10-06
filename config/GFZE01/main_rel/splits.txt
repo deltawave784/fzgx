@@ -6797,3 +6797,6 @@ rel/main_rel/sound/fn_1_A24CC.c:
 
 rel/main_rel/archive/fn_1_12E0B8.c:
 	.text       start:0x0012E0B8 end:0x0012E424 align:4
+
+rel/main_rel/accessory/fn_1_10D2F0.c:
+	.text       start:0x0010D2F0 end:0x0010D7D4 align:4
