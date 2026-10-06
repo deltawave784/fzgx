@@ -6695,3 +6695,6 @@ rel/main_rel/accessory/fn_1_12999C.c:
 
 rel/main_rel/accessory/fn_1_10C4E4.c:
 	.text       start:0x0010C4E4 end:0x0010C7B4 align:4
+
+rel/main_rel/car_test/fn_1_8DD54.c:
+	.text       start:0x0008DD54 end:0x0008E084 align:4

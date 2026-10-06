@@ -34500,6 +34500,21 @@
   },
   {
     "module": "main_rel",
+    "source": "rel/main_rel/car_test/fn_1_8DD54.c",
+    "symbols": [
+      "fn_1_8DD54"
+    ],
+    "status": "matching",
+    "mw_version": null,
+    "extra_cflags": [],
+    "tu": "rel/main_rel/car_test.c",
+    "pool": {
+      "@100": "lbl_1_rodata_3E30",
+      "@101": "lbl_1_rodata_3CB0"
+    }
+  },
+  {
+    "module": "main_rel",
     "source": "rel/main_rel/cloth/fn_1_101AE8.c",
     "symbols": [
       "fn_1_101AE8"
