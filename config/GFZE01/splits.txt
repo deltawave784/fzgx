@@ -5504,3 +5504,6 @@ dol/fn_80007F70.c:
 
 dol/InitMetroTRKCommTable.c:
 	.text       start:0x8008D4D8 end:0x8008D744 align:4
+
+dol/fn_80065B08.c:
+	.text       start:0x80065B08 end:0x80065D70 align:4
