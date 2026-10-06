@@ -246,6 +246,148 @@ void fn_1_FB9DC(int index) {
 }
 /* fzgx:end fn_1_FB9DC */
 
+/* fzgx:begin fn_1_FBC5C noprologue */
+#include "types.h"
+
+/* one 0x60-byte track element; six of them per 0x270-byte entry starting at 0xC */
+typedef struct {
+    u32 unk_0;
+    u8 unk_4;
+    u8 unk_5;
+    u8 pad_6[2];
+    u32 unk_8;
+    f32 pos[3];   /* 0xC */
+    f32 rate;     /* 0x18 */
+    f32 rate2;    /* 0x1C */
+    f32 unk_20;
+    f32 scale[3]; /* 0x24 */
+    u8 pad_30[0x30];
+} CasElem;
+
+typedef struct {
+    u8 pad_0[0xC];
+    CasElem elem[6];  /* 0xC .. 0x24C */
+    u32 unk_24C;
+    u8 unk_250[4];
+    u8 flags[4];      /* 0x254 */
+    f32 speed[3];     /* 0x258 */
+    f32 speed2[3];    /* 0x264 */
+} CasEntry;
+
+extern CasEntry lbl_1_bss_84454[];
+
+/* Literal pool of the retail TU (lbl_1_rodata_7590): MWCC pools literals in
+ * first-use order across the TU, so the earlier functions' data comes first.
+ * MWCC emits a function's aggregate data before its scalar literals, so each
+ * retail function with both gets its own primer. */
+static const u8 fzgx_pool_7590[5] = {0x49, 0x4A, 0x4B, 0x4C, 0x64};
+
+#pragma section code_type ".fzgxpool"
+static void fzgx_pool_layout(void) {
+    volatile f32 s; /* fzgx-allow: S2 pool primer sink: fixes the TU literal order */
+    volatile u32 w; /* fzgx-allow: S2 pool primer sink: fixes the TU literal order */
+    w = fzgx_pool_7590[0];
+    s = 0.0f;
+}
+
+/* file-scope tables are emitted where they are defined: after the first primer's literal */
+static const u32 fzgx_pool_759C[6] = {0x2D, 0x30, 0x2A, 0x27, 0x39, 0x36};
+
+static void fzgx_pool_layout_1(void) {
+    volatile u32 w; /* fzgx-allow: S2 pool primer sink: fixes the TU literal order */
+    w = fzgx_pool_759C[0];
+}
+#pragma section code_type ".text"
+
+void fn_1_FBC5C(u8 idx) {
+    CasEntry *ent = &lbl_1_bss_84454[idx];
+    s32 i;
+
+    for (i = 0; i < 3; i++) {
+        ent->elem[i].pos[0] = 0.0f;
+        ent->elem[i].pos[1] = 0.0f;
+        ent->elem[i].pos[2] = 0.0f;
+        ent->elem[i].scale[0] = 1.0f;
+        ent->elem[i].scale[1] = 1.0f;
+        ent->elem[i].scale[2] = 1.0f;
+        ent->elem[i + 3].pos[0] = (i == 1) ? 0.5f : 0.0f;
+        ent->elem[i + 3].pos[1] = 0.0f;
+        ent->elem[i + 3].pos[2] = 0.0f;
+        ent->elem[i + 3].rate = 0.0f;
+        ent->elem[i + 3].rate2 = 0.0f;
+        ent->elem[i + 3].unk_20 = 0.0f;
+        ent->speed[i] = 0.1f;
+        ent->speed2[i] = 0.2f;
+        ent->flags[i] = 0;
+    }
+
+    for (i = 0; i < 3; i++) {
+        switch (idx) {
+        case 0:
+            ent->elem[i].rate = 0.0033333334140479565f;
+            ent->elem[i].rate2 = 0.005000000353902578f;
+            ent->elem[i + 3].scale[0] = 0.25f;
+            ent->elem[i + 3].scale[1] = 0.25f;
+            break;
+        case 1:
+            ent->elem[i].rate = 0.0016666667070239782f;
+            ent->elem[i].rate2 = 0.002500000176951289f;
+            ent->elem[i + 3].scale[0] = 0.3f;
+            ent->elem[i + 3].scale[1] = 0.25f;
+            break;
+        case 2:
+            ent->elem[i + 3].scale[0] = 1.0f;
+            ent->elem[i + 3].scale[1] = 1.0f;
+            break;
+        case 3:
+            ent->elem[i + 3].scale[0] = 1.0f;
+            ent->elem[i + 3].scale[1] = 1.0f;
+            break;
+        case 4:
+            ent->elem[i + 3].scale[0] = 1.0f;
+            ent->elem[i + 3].scale[1] = 0.25f;
+            ent->speed[i] = 0.05f;
+            ent->speed2[i] = 0.03f;
+            break;
+        }
+        ent->elem[i + 3].rate = ent->elem[i].rate / 3.0f;
+        ent->elem[i + 3].rate2 = ent->elem[i].rate2 / 3.0f;
+    }
+
+    switch (idx) {
+    case 0:
+        break;
+    case 1:
+        ent->speed[0] = 0.3f;
+        ent->speed2[0] = 0.3f;
+        ent->elem[3].rate = 0.005f;
+        ent->elem[3].rate2 = 0.005f;
+        break;
+    case 2:
+        ent->elem[3].rate = 0.001f;
+        ent->elem[3].rate2 = 0.001f;
+        ent->speed[0] = 0.0f;
+        ent->speed2[0] = 0.3f;
+        ent->speed2[2] = 0.07f;
+        break;
+    case 3:
+        ent->elem[3].rate = 0.015f;
+        ent->elem[3].rate2 = 0.0f;
+        ent->speed[0] = 0.1f;
+        ent->speed2[0] = 0.2f;
+        ent->elem[5].rate = 0.01f;
+        ent->elem[5].rate2 = 0.0f;
+        ent->elem[5].scale[0] = 0.25f;
+        ent->elem[5].scale[1] = 0.25f;
+        ent->speed[2] = 0.05f;
+        ent->speed2[2] = 0.05f;
+        break;
+    case 4:
+        break;
+    }
+}
+/* fzgx:end fn_1_FBC5C */
+
 /* fzgx:begin fn_1_FBEA8 */
 void fn_1_FBEA8(void) {
     Obj_1_bss_84454 *base;
