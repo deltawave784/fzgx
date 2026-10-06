@@ -1265,6 +1265,80 @@ void fn_15_2620(struct fn_15_2620_Arg0 *arg0) {
 }
 /* fzgx:end fn_15_2620 */
 
+/* fzgx:begin fn_15_2AE4 */
+struct WinningEntry {
+    u8 *unk_0;
+    u8 unk_4;
+    u8 pad_5[3];
+};
+struct WinningState {
+    u8 pad_0[4];
+    u8 unk_4;
+    u8 pad_5[0x27];
+    struct WinningEntry *unk_2C;
+    u8 pad_30[8];
+    s16 unk_38;
+    u8 pad_3A[0x1A];
+    u32 unk_54;
+    u32 unk_58;
+    u32 unk_5C;
+    u8 pad_60[0x3C];
+    u32 unk_9C[12];
+};
+extern struct WinningState lbl_15_bss_0;
+extern u32 fn_15_2458(s16, s16, s16, u32);
+extern s16 fn_1_12CB04(s16);
+extern s16 fn_1_12CCB0(s16, s16);
+
+void fn_15_2AE4(void) {
+    struct WinningState *p;
+    u32 *list;
+    s16 i;
+    s16 count;
+    s16 j;
+    struct WinningEntry *entries;
+    s16 extra;
+    s16 character;
+    p = (struct WinningState *)&lbl_15_bss_0;
+    p->unk_58 = 1;
+    list = p->unk_9C;
+    entries = p->unk_2C;
+    p->unk_54 = 1;
+    p->unk_5C = 1;
+    p->unk_4 = 0;
+    for (i = 0; i < 12; i++) *list++ = 0;
+    count = p->unk_38;
+    {
+        s16 c;
+        for (j = 0; j < count; j++) {
+            c = entries[j].unk_4;
+            if (c >= 41) c = entries[j].unk_0[0x81A0];
+            if (c == 34) p->unk_4++;
+        }
+    }
+    for (i = 0; i < p->unk_38; i++) {
+        character = entries[i].unk_4;
+        if (character >= 41) character = entries[i].unk_0[0x81A0];
+        switch (fn_1_12CB04(character)) {
+        case 2:
+            extra = p->unk_38 + i * 2;
+            fn_15_2458(character, i, i, 0x30000000);
+            fn_15_2458(fn_1_12CCB0(character, 0), extra, i, 0x30000000);
+            fn_15_2458(fn_1_12CCB0(character, 1), extra + 1, i, 0x30000000);
+            break;
+        case 1:
+            extra = p->unk_38 + i * 2;
+            fn_15_2458(character, i, i, 0x30000000);
+            fn_15_2458(fn_1_12CCB0(character, 0), extra, i, 0x30000000);
+            break;
+        case 0:
+            fn_15_2458(character, i, i, 0x60000000);
+            break;
+        }
+    }
+}
+/* fzgx:end fn_15_2AE4 */
+
 /* fzgx:begin fn_15_2CEC */
 // fn_15_2CEC: empty in retail (single blr).
 void fn_15_2CEC(void) {
