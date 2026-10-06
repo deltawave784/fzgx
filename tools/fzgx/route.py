@@ -35,7 +35,8 @@ def tier_for(size: int, symbol: str, small: int, escalate: set) -> str:
 def plan(p: Project, limit: int = 8, small: int = 256, near: float = 80.0,
          module: Optional[str] = None, tier: Optional[str] = None,
          escalate: Optional[set] = None, exclude: Optional[set] = None,
-         easy: bool = False, max_size: Optional[int] = None, max_attempts: Optional[int] = None) -> List[Dict]:
+         easy: bool = False, max_size: Optional[int] = None, max_attempts: Optional[int] = None,
+         min_size: Optional[int] = None) -> List[Dict]:
     """`easy` is the Opus/Sonnet fallback ordering used while the Fable window is exhausted: smallest
     functions first, no preference for a saved 99% body (those are the near misses Fable and the
     earlier waves already failed on), one function per (module, size) retail-clone family, and
@@ -54,6 +55,8 @@ def plan(p: Project, limit: int = 8, small: int = 256, near: float = 80.0,
         if easy and (r["symbol"].endswith(":_prolog") or r["symbol"].startswith(("__save_", "__restore_", "_savegpr", "_restgpr", "_savefpr", "_restfpr"))):
             continue  # entry points and compiler FPR/GPR save helpers: not C a matcher can write
         if max_size is not None and r["size"] > max_size:
+            continue
+        if min_size is not None and r["size"] < min_size:
             continue
         if max_attempts is not None and (r["attempts"] or 0) > max_attempts:
             continue
