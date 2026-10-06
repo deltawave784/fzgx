@@ -220,12 +220,7 @@ void fn_1_AB4F4(fn_1_AB4F4_ArgStruct *arg) {
 }
 /* fzgx:end fn_1_AB4F4 */
 
-/* fzgx:begin fn_1_AB598 noprologue */
-#include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/memcard.h"
-extern void CARDCheckAsync(u8 byte_val, int value);
-
+/* fzgx:begin fn_1_AB598 */
 typedef struct {
     u8 pad[0x2];
     u16 field_0x2;
@@ -237,6 +232,7 @@ typedef struct {
     fn_1_AB598_OffsetStruct *ptr_0x24;
 } fn_1_AB598_ArgStruct;
 
+// Start an asynchronous card check with a 300-frame timeout.
 void fn_1_AB598(fn_1_AB598_ArgStruct *arg) {
     arg->ptr_0x24->field_0x2 = 300;
     CARDCheckAsync(arg->byte_0, 0);
@@ -369,16 +365,9 @@ void fn_1_AB64C(fn_1_AB64C_MemcardArg *arg) {
 }
 /* fzgx:end fn_1_AB64C */
 
-/* fzgx:begin fn_1_AB75C noprologue */
-#include "types.h"
-#include "dolphin/card.h"
-#include "dolphin/card/CARDPriv.h"
-#include "dolphin/dvd.h"
-#include "font.h"
-
+/* fzgx:begin fn_1_AB75C */
 extern u32 fn_8002C0A0(u32 arg0);
-
-extern void CARDFormatAsync(u8 byte, int value);
+extern u32 CARDFormatAsync(u32 arg0, u32 arg1);
 extern const f32 lbl_1_rodata_4CA8;
 
 typedef struct {
@@ -398,50 +387,15 @@ typedef struct {
     f32 field_0x38;
 } fn_1_AB75C_ArgStruct;
 
-// fn_1_AB75C: main_rel .text:0x000AB75C size 0x68
+// Start asynchronous card formatting and initialize its status and timer.
 void fn_1_AB75C(fn_1_AB75C_ArgStruct *arg) {
-    arg->ptr_0x24->field_0x2 = 0x12c;
+    arg->ptr_0x24->field_0x2 = 300;
     arg->field_0x30 = fn_8002C0A0(arg->byte_0);
     arg->field_0x38 = lbl_1_rodata_4CA8;
     arg->flags_0x2a |= 2;
     CARDFormatAsync(arg->byte_0, 0);
 }
 /* fzgx:end fn_1_AB75C */
-
-/* fzgx:begin fn_1_AB7C4 noprologue */
-#include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/memcard.h"
-extern const f32 lbl_1_rodata_4CAC;
-
-typedef struct {
-    u8 pad[0x2];
-    u16 field_0x2;
-    s32 field_0x4;
-} fn_1_AB7C4_OffsetStruct;
-
-typedef struct {
-    u8 byte_0;
-    u8 pad_0x1[0x23];
-    fn_1_AB7C4_OffsetStruct *ptr_0x24;
-    u8 pad_0x28[0x2];
-    u8 flags_0x2a;
-    u8 pad_0x2b[0x5];
-    s32 field_0x30;
-    u8 pad_0x34[0x4];
-    f32 field_0x38;
-} fn_1_AB7C4_ArgStruct;
-
-void fn_1_AB7C4(fn_1_AB7C4_ArgStruct *arg) {
-    arg->ptr_0x24->field_0x4 = CARDGetResultCode(arg->byte_0);
-    arg->field_0x38 = (fn_8002C0A0(arg->byte_0) - arg->field_0x30) / lbl_1_rodata_4CAC;
-    if (arg->ptr_0x24->field_0x4 != -1) {
-        arg->flags_0x2a &= ~2;
-        arg->ptr_0x24->field_0x2 = 0;
-        arg->flags_0x2a &= ~16;
-    }
-}
-/* fzgx:end fn_1_AB7C4 */
 
 /* fzgx:begin fn_1_AB870 */
 #include "types.h"
@@ -466,60 +420,56 @@ void fn_1_AB870(fn_1_AB870_ArgStruct *arg) {
 }
 /* fzgx:end fn_1_AB870 */
 
-/* fzgx:begin fn_1_AB880 noprologue */
-#include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/memcard.h"
-extern int CARDGetSerialNo(u8 value, void *data);
-
+/* fzgx:begin fn_1_AB880 */
 typedef struct {
-    u8 pad[0x2];
-    u16 field_0x2;
-    s32 field_0x4;
+    u8 pad_0[2];
+    u16 unk_2;
+    s32 unk_4;
+    u8 pad_8[0x10];
+    u64 unk_18;
 } fn_1_AB880_OffsetStruct;
 
 typedef struct {
-    u8 byte_0;
-    u8 pad[0x23];
-    fn_1_AB880_OffsetStruct *ptr_0x24;
+    u8 unk_0;
+    u8 pad_1[0x23];
+    fn_1_AB880_OffsetStruct *unk_24;
 } fn_1_AB880_ArgStruct;
 
-// fn_1_AB880: main_rel .text:0x000AB880 size 0x58
+// Read the card serial number and clear the pending state when the request finishes.
 void fn_1_AB880(fn_1_AB880_ArgStruct *arg) {
-    fn_1_AB880_OffsetStruct *s = arg->ptr_0x24;
-    int result = CARDGetSerialNo(arg->byte_0, (u8 *)s + 0x18);
+    s32 result = CARDGetSerialNo(arg->unk_0, &arg->unk_24->unk_18);
+    fn_1_AB880_OffsetStruct *state;
 
-    s = arg->ptr_0x24;
-    s->field_0x4 = result;
-
-    s = arg->ptr_0x24;
-    if (s->field_0x4 != -1) {
-        s->field_0x2 = 0;
+    arg->unk_24->unk_4 = result;
+    state = arg->unk_24;
+    if (state->unk_4 != -1) {
+        state->unk_2 = 0;
     }
 }
 /* fzgx:end fn_1_AB880 */
 
-/* fzgx:begin fn_1_AB8D8 noprologue */
-#include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/memcard.h"
-extern void fn_80083DB0(void *dst, void *src);
-extern void strcat(void *dst, void *src);
-extern void CARDDeleteAsync(u8 byte, void *data, int arg);
+/* fzgx:begin fn_1_AB8D8 */
+typedef struct {
+    u8 unk_00[2];
+    u16 unk_02;
+    u8 unk_04[0x94];
+    char unk_98[0x40];
+} fn_1_AB8D8_FileState;
 
 typedef struct {
-    u8 byte_0;
-    u8 pad_0x1[0x23];
-    void *ptr_0x24;
+    u8 unk_00;
+    u8 unk_01[0x23];
+    fn_1_AB8D8_FileState *unk_24;
 } fn_1_AB8D8_ArgStruct;
 
+// Start asynchronous deletion of the card file with its appended suffix.
 void fn_1_AB8D8(fn_1_AB8D8_ArgStruct *arg) {
-    u8 data[0x40];
+    char filename[0x40];
 
-    fn_80083DB0(data, (u8 *)arg->ptr_0x24 + 0x98);
-    strcat(data, lbl_1_data_3C89C);
-    ((u16 *)arg->ptr_0x24)[1] = 0x12c;
-    CARDDeleteAsync(arg->byte_0, data, 0);
+    fn_80083DB0(filename, arg->unk_24->unk_98);
+    strcat(filename, (const char *)lbl_1_data_3C89C);
+    arg->unk_24->unk_02 = 300;
+    CARDDeleteAsync(arg->unk_00, filename, 0);
 }
 /* fzgx:end fn_1_AB8D8 */
 
@@ -635,19 +585,14 @@ void fn_1_ABA14(fn_1_ABA14_ArgStruct *arg) {
 }
 /* fzgx:end fn_1_ABA14 */
 
-/* fzgx:begin fn_1_ABA24 noprologue */
-#include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/memcard.h"
-extern s32 CARDFreeBlocks(u8 byte_val, void *arg1, void *arg2);
-
+/* fzgx:begin fn_1_ABA24 */
 typedef struct {
     u8 pad[0x2];
     u16 field_0x2;
     s32 field_0x4;
     s32 field_0x8;
     u8 pad_0xc[0x4];
-    u8 data[0x8];
+    s32 data[2];
 } fn_1_ABA24_OffsetStruct;
 
 typedef struct {
@@ -656,9 +601,11 @@ typedef struct {
     fn_1_ABA24_OffsetStruct *ptr_0x24;
 } fn_1_ABA24_ArgStruct;
 
+// Query free card space, recording the result and updating the request state.
 void fn_1_ABA24(fn_1_ABA24_ArgStruct *arg) {
-    s32 result = CARDFreeBlocks(arg->byte_0, arg->ptr_0x24->data,
-        &arg->ptr_0x24->data[0x4]);
+    s32 result = CARDFreeBlocks(arg->byte_0, &arg->ptr_0x24->data[0],
+        &arg->ptr_0x24->data[1]);
+
     arg->ptr_0x24->field_0x4 = result;
     if (arg->ptr_0x24->field_0x4 == 0) {
         arg->ptr_0x24->field_0x8 |= 0x80;
@@ -832,33 +779,23 @@ state->unk_1 = 1;
 }
 /* fzgx:end fn_1_ABB4C */
 
-/* fzgx:begin fn_1_ABC5C noprologue */
-#include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/memcard.h"
-extern void CARDFastDeleteAsync(u8 byte_val, void *arg, s32 zero);
-
-typedef struct {
-    u8 byte_0;
-    u8 pad_0x1[0x13];
-    void *field_0x14;
-} fn_1_ABC5C_ArgStruct;
-
+/* fzgx:begin fn_1_ABC5C */
 typedef struct {
     u8 pad[0x2];
     u16 field_0x2;
 } fn_1_ABC5C_ResultStruct;
 
 typedef struct {
-    u8 pad[0x24];
+    u8 byte_0;
+    u8 pad_0x1[0x13];
+    s32 field_0x14;
+    u8 pad_0x18[0xC];
     fn_1_ABC5C_ResultStruct *ptr_0x24;
-} StateStruct;
+} fn_1_ABC5C_ArgStruct;
 
+// Start asynchronous deletion of the selected memory-card file with a 300-tick timeout.
 void fn_1_ABC5C(fn_1_ABC5C_ArgStruct *arg) {
-    StateStruct *state;
-
-    state = (StateStruct *)arg;
-    state->ptr_0x24->field_0x2 = 0x12c;
+    arg->ptr_0x24->field_0x2 = 300;
     CARDFastDeleteAsync(arg->byte_0, arg->field_0x14, 0);
 }
 /* fzgx:end fn_1_ABC5C */
@@ -890,36 +827,32 @@ void fn_1_ABC98(fn_1_ABC98_ArgStruct *arg) {
 }
 /* fzgx:end fn_1_ABC98 */
 
-/* fzgx:begin fn_1_ABCE8 noprologue */
-#include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/memcard.h"
-extern void fn_80083DB0(void *dst, void *src);
-extern void strcat(void *dst, void *src);
-extern void CARDCreateAsync(u8 byte_val, void *arg1, void *arg2, void *arg3, u32 arg4);
-
+/* fzgx:begin fn_1_ABCE8 */
 typedef struct {
-    u8 pad[0x2];
-    u16 field_0x2;
-    u8 pad_0x4[0x8];
-    void *ptr_0xc;
+    u8 pad_0[2];
+    u16 unk_2;
+    u8 pad_4[8];
+    u32 unk_C;
+    u8 pad_10[0x88];
+    char unk_98[0x20];
 } fn_1_ABCE8_ResultStruct;
 
 typedef struct {
-    u8 byte_0;
-    u8 pad_0x1[0xf];
-    u8 data_0x10[0x14];
-    fn_1_ABCE8_ResultStruct *ptr_0x24;
+    u8 unk_0;
+    u8 pad_1[0xF];
+    CARDFileInfo unk_10;
+    fn_1_ABCE8_ResultStruct *unk_24;
 } fn_1_ABCE8_ArgStruct;
 
+// Create the memory-card file with its configured name and size.
 void fn_1_ABCE8(fn_1_ABCE8_ArgStruct *arg) {
-    u8 local[0x40];
+    char filename[0x40];
 
-    fn_80083DB0(local, (u8 *)arg->ptr_0x24 + 0x98);
-    strcat(local, lbl_1_data_3C89C);
-    arg->ptr_0x24->field_0x2 = 0x12c;
-    CARDCreateAsync(arg->byte_0, local, arg->ptr_0x24->ptr_0xc,
-        arg->data_0x10, 0);
+    fn_80083DB0(filename, arg->unk_24->unk_98);
+    strcat(filename, (const char *)lbl_1_data_3C89C);
+    arg->unk_24->unk_2 = 300;
+    CARDCreateAsync(arg->unk_0, filename, arg->unk_24->unk_C,
+        &arg->unk_10, 0);
 }
 /* fzgx:end fn_1_ABCE8 */
 
@@ -972,33 +905,27 @@ void fn_1_ABDA8(fn_1_ABDA8_ArgStruct *arg) {
 }
 /* fzgx:end fn_1_ABDA8 */
 
-/* fzgx:begin fn_1_ABDB8 noprologue */
-#include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/memcard.h"
-
-#include "rel/main_rel/globals.h"
-
+/* fzgx:begin fn_1_ABDB8 */
 typedef struct {
     u8 pad_0x0[0x2];
     u16 unk_0x2;
     s32 unk_0x4;
     u8 pad_0x8[0x18];
-    u8 unk_0x20[1];
+    CARDStat unk_0x20;
 } fn_1_ABDB8_ResultStruct;
 
 typedef struct {
     u8 byte_0x0;
     u8 pad_0x1[0x13];
-    void *ptr_0x14;
+    s32 ptr_0x14;
     u8 pad_0x18[0xc];
     fn_1_ABDB8_ResultStruct *ptr_0x24;
 } fn_1_ABDB8_ArgStruct;
 
-// Loads the payload into its result buffer and clears the stale offset on success.
+// Retrieves the file status and clears the pending counter unless the card is busy.
 void fn_1_ABDB8(fn_1_ABDB8_ArgStruct *arg) {
     arg->ptr_0x24->unk_0x4 =
-        CARDGetStatus(arg->byte_0x0, arg->ptr_0x14, arg->ptr_0x24->unk_0x20);
+        CARDGetStatus(arg->byte_0x0, arg->ptr_0x14, &arg->ptr_0x24->unk_0x20);
     if (arg->ptr_0x24->unk_0x4 != -1) {
         arg->ptr_0x24->unk_0x2 = 0;
     }

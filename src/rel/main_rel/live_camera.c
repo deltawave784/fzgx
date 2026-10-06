@@ -230,156 +230,21 @@ void fn_1_DA34(void) {
 }
 /* fzgx:end fn_1_DA34 */
 
-/* fzgx:begin fn_1_DA6C noprologue */
-#include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/live_camera.h"
-#include "psvec.h"
-#include "dolphin/hw_regs.h"
-
-struct fn_1_E174_lbl_1_rodata_4E0 {
-    f32 unk_0;
-    u8 pad_4[0x10];
-    f32 unk_14;
-    u8 pad_18[0x4];
-    f32 unk_1C;
-    f32 unk_20;
-    f32 unk_24;
-};
-
-typedef struct Sig_ADXT_Stop_AdxSjdHandle Sig_ADXT_Stop_AdxSjdHandle;
-
-typedef struct Sig_ADXT_Stop_ADXStream Sig_ADXT_Stop_ADXStream;
-
-typedef struct Sig_ADXT_Stop_AXRNAHandle Sig_ADXT_Stop_AXRNAHandle;
-
-typedef struct Sig_ADXT_Stop_SJCK {
-    unsigned char *data;
-    int len;
-} Sig_ADXT_Stop_SJCK;
-
-typedef void (*Sig_ADXT_Stop_SJErrorCallback)(void *object, int error);
-
-typedef struct Sig_ADXT_Stop_SJInterface Sig_ADXT_Stop_SJInterface;
-
-typedef struct Sig_ADXT_Stop_SJ Sig_ADXT_Stop_SJ;
-
-struct Sig_ADXT_Stop_SJInterface {
-    void *reserved[3];
-    void (*destroy)(Sig_ADXT_Stop_SJ *sj);
-    const void *(*get_uuid)(Sig_ADXT_Stop_SJ *sj);
-    void (*reset)(Sig_ADXT_Stop_SJ *sj);
-    void (*get_chunk)(Sig_ADXT_Stop_SJ *sj, int channel, int max_size, Sig_ADXT_Stop_SJCK *chunk);
-    void (*unget_chunk)(Sig_ADXT_Stop_SJ *sj, int channel, Sig_ADXT_Stop_SJCK *chunk);
-    void (*put_chunk)(Sig_ADXT_Stop_SJ *sj, int channel, Sig_ADXT_Stop_SJCK *chunk);
-    int (*get_num_data)(Sig_ADXT_Stop_SJ *sj, int channel);
-    int (*is_get_chunk)(Sig_ADXT_Stop_SJ *sj, int channel, int size, int *available);
-    void (*entry_error_func)(Sig_ADXT_Stop_SJ *sj, Sig_ADXT_Stop_SJErrorCallback callback, void *object);
-};
-
-struct Sig_ADXT_Stop_SJ {
-    const Sig_ADXT_Stop_SJInterface *interface;
-};
-
-typedef struct Sig_ADXT_Stop_ADX_AMP Sig_ADXT_Stop_ADX_AMP;
-
-typedef struct Sig_ADXT_Stop_LSCObject Sig_ADXT_Stop_LSCObject;
-
-typedef struct Sig_ADXT_Stop_ADXTHandle {
-    s8 used;
-    s8 status;
-    s8 stream_type;
-    s8 maximum_channels;
-    Sig_ADXT_Stop_AdxSjdHandle *decoder;
-    Sig_ADXT_Stop_ADXStream *stream;
-    Sig_ADXT_Stop_AXRNAHandle *rna;
-    Sig_ADXT_Stop_SJ *stream_sj;
-    Sig_ADXT_Stop_SJ *input_sj;
-    Sig_ADXT_Stop_SJ *output_sj[2];
-    u8 *input_buffer;
-    s32 input_buffer_size;
-    s32 input_extra_size;
-    u8 *output_buffer;
-    s32 output_buffer_size;
-    s32 output_buffer_distance;
-    s32 server_frequency;
-    s16 stream_buffer_sectors;
-    s16 minimum_buffer_sectors;
-    s16 output_volume;
-    s16 output_pan[2];
-    s16 field_46;
-    s32 maximum_decode_samples;
-    s32 loop_count;
-    s32 link_data_length;
-    s32 field_54;
-    s32 field_58;
-    s32 field_5C;
-    s16 error_code;
-    u8 reserved_62[2];
-    s32 field_64;
-    s16 field_68;
-    s16 field_6A;
-    s8 stream_loop_enabled;
-    s8 auto_receiver;
-    u8 reserved_6E[2];
-    s8 suppress_playback;
-    s8 decoder_ready;
-    s8 paused;
-    u8 reserved_73;
-    Sig_ADXT_Stop_ADX_AMP *amplifier;
-    Sig_ADXT_Stop_SJ *amplifier_input[2];
-    Sig_ADXT_Stop_SJ *amplifier_output[2];
-    s32 time_offset;
-    s32 eos_sector;
-    s32 loop_sample_count;
-    Sig_ADXT_Stop_LSCObject *linked_stream_controller;
-    s8 link_enabled;
-    u8 reserved_99[3];
-    u32 playback_time;
-    s32 playback_start_vsync;
-    s32 linked_decoded_samples;
-    s8 pending_stream_start;
-    u8 reserved_A9[3];
-    u8 *work_end;
-    const char *pending_filename;
-    void *pending_directory;
-    s32 pending_file_offset;
-    s32 pending_file_sectors;
-} Sig_ADXT_Stop_ADXTHandle;
-
-typedef struct {
-    f32 x;
-    f32 y;
-    f32 z;
-} Vec3;
-extern int fn_1_4C10(void);
-extern s32 fn_1_40BB4(void);
-extern u32 fn_1_F2F34(void);
-extern u32 fn_1_F45A4(void);
-extern u32 fn_1_F4594(void);
-extern void *fn_1_86254(int index);
-extern s8 fn_1_86624(void);
-extern void fn_1_6DD0(void *);
-extern void fn_1_8A0C(s16 index);
-extern u32 fn_1_56B8(void);
-extern u32 fn_1_864E8(int index);
-extern void camera_set_selected_value(u8 value);
-extern void camera_set_result(s16 value);
-extern void fn_1_5370(s32, s16);
-
+/* fzgx:begin fn_1_DA6C */
 typedef struct {
     u8 pad_0[6];
     s16 unk_6;
     s16 unk_8;
 } DA6CArg;
 
-void fn_1_DA6C(DA6CArg *arg0) {
-    s16 temp_r31;
-    s32 var_r30;
-    s32 var_r3;
-    s32 cnt;
+// Cycle the live camera target, wrapping indices and skipping unavailable entries.
+void fn_1_DA6C(DA6CArg *state) {
+    s16 originalIndex;
+    s32 direction;
+    struct { s32 value; } targetIndex;
     u32 flags;
-    s32 n;
+    s32 count;
+    u32 selectionDeadline;
 
     if (lbl_1_bss_115C == 0) {
         return;
@@ -393,109 +258,111 @@ void fn_1_DA6C(DA6CArg *arg0) {
     if ((s32)fn_1_F2F34() == 0) {
         return;
     }
-    if (fn_1_F4594() >= fn_1_F45A4() - 0x1e) {
+    selectionDeadline = fn_1_F45A4() - 30;
+    if (fn_1_F4594() >= selectionDeadline) {
         return;
     }
 
-    var_r30 = 1;
-    if (((u16) lbl_1_bss_9F8.unk_A >> 6) & 1) {
-        var_r30 = 1;
-        (*(s8 *)((u8 *)(fn_1_86254((s32) arg0->unk_6)) + 1141)) = -1;
-        arg0->unk_6++;
-        n = fn_1_86624();
-        if (arg0->unk_6 > n - 1) {
-            var_r3 = 0;
-        } else if (arg0->unk_6 < 0) {
-            var_r3 = (s32) fn_1_86624() - 1;
+    direction = 1;
+    if ((lbl_1_bss_9F8.unk_A >> 6) & 1) {
+        direction = 1;
+        *(s8 *)((u8 *)fn_1_86254(state->unk_6) + 0x475) = -1;
+        state->unk_6++;
+        count = (s8)fn_1_86624();
+        if (state->unk_6 > count - 1) {
+            targetIndex.value = 0;
+        } else if (state->unk_6 < 0) {
+            targetIndex.value = (s8)fn_1_86624() - 1;
         } else {
-            var_r3 = arg0->unk_6;
+            targetIndex.value = state->unk_6;
         }
-        (*(s8 *)((u8 *)(fn_1_86254((s32) var_r3)) + 1141)) = 0;
+        *(s8 *)((u8 *)fn_1_86254(targetIndex.value) + 0x475) = 0;
         fn_1_6DD0(0);
         fn_1_8A0C(0);
         fn_1_56B8();
     }
-    if (arg0->unk_6 >= fn_1_86624()) {
-        arg0->unk_6 = 0;
+    if (state->unk_6 >= (s8)fn_1_86624()) {
+        state->unk_6 = 0;
     }
-    if (arg0->unk_6 < 0) {
-        arg0->unk_6 = fn_1_86624() - 1;
+    if (state->unk_6 < 0) {
+        state->unk_6 = (s8)fn_1_86624() - 1;
     }
-    arg0->unk_8 = arg0->unk_6;
+    state->unk_8 = state->unk_6;
 
-    if (((u16) lbl_1_bss_9F8.unk_A >> 7) & 1) {
-        var_r30 = -1;
-        (*(s8 *)((u8 *)(fn_1_86254((s32) arg0->unk_6)) + 1141)) = -1;
-        arg0->unk_6--;
-        n = fn_1_86624();
-        if (arg0->unk_6 > n - 1) {
-            var_r3 = 0;
-        } else if (arg0->unk_6 < 0) {
-            var_r3 = (s32) fn_1_86624() - 1;
+    if ((lbl_1_bss_9F8.unk_A >> 7) & 1) {
+        direction = -1;
+        *(s8 *)((u8 *)fn_1_86254(state->unk_6) + 0x475) = -1;
+        state->unk_6--;
+        count = (s8)fn_1_86624();
+        if (state->unk_6 > count - 1) {
+            targetIndex.value = 0;
+        } else if (state->unk_6 < 0) {
+            targetIndex.value = (s8)fn_1_86624() - 1;
         } else {
-            var_r3 = arg0->unk_6;
+            targetIndex.value = state->unk_6;
         }
-        (*(s8 *)((u8 *)(fn_1_86254((s32) var_r3)) + 1141)) = 0;
+        *(s8 *)((u8 *)fn_1_86254(targetIndex.value) + 0x475) = 0;
         fn_1_6DD0(0);
         fn_1_8A0C(0);
         fn_1_56B8();
     }
-    if (arg0->unk_6 >= fn_1_86624()) {
-        arg0->unk_6 = 0;
+    if (state->unk_6 >= (s8)fn_1_86624()) {
+        state->unk_6 = 0;
     }
-    if (arg0->unk_6 < 0) {
-        arg0->unk_6 = fn_1_86624() - 1;
+    if (state->unk_6 < 0) {
+        state->unk_6 = (s8)fn_1_86624() - 1;
     }
-    arg0->unk_8 = arg0->unk_6;
+    state->unk_8 = state->unk_6;
 
-    flags = fn_1_864E8(arg0->unk_6);
+    flags = fn_1_864E8(state->unk_6);
     if ((flags & 0x800) && !(flags & 1)) {
-        temp_r31 = arg0->unk_6;
+        originalIndex = state->unk_6;
         do {
-            (*(s8 *)((u8 *)(fn_1_86254((s32) arg0->unk_6)) + 1141)) = -1;
-            arg0->unk_6 += var_r30;
-            if (arg0->unk_6 > (s32) fn_1_86624() - 1) {
-                var_r3 = 0;
-            } else if (arg0->unk_6 < 0) {
-                var_r3 = (s32) fn_1_86624() - 1;
+            *(s8 *)((u8 *)fn_1_86254(state->unk_6) + 0x475) = -1;
+            state->unk_6 += direction;
+            if (state->unk_6 > (s8)fn_1_86624() - 1) {
+                targetIndex.value = 0;
+            } else if (state->unk_6 < 0) {
+                targetIndex.value = (s8)fn_1_86624() - 1;
             } else {
-                var_r3 = arg0->unk_6;
+                targetIndex.value = state->unk_6;
             }
-            (*(s8 *)((u8 *)(fn_1_86254((s32) var_r3)) + 1141)) = 0;
-            if (arg0->unk_6 >= fn_1_86624()) {
-                arg0->unk_6 = 0;
+            *(s8 *)((u8 *)fn_1_86254(targetIndex.value) + 0x475) = 0;
+            if (state->unk_6 >= (s8)fn_1_86624()) {
+                state->unk_6 = 0;
             }
-            if (arg0->unk_6 < 0) {
-                arg0->unk_6 = fn_1_86624() - 1;
+            if (state->unk_6 < 0) {
+                state->unk_6 = (s8)fn_1_86624() - 1;
             }
-        } while ((fn_1_864E8(arg0->unk_6) & 0x800) && temp_r31 != arg0->unk_6);
+        } while ((fn_1_864E8(state->unk_6) & 0x800) &&
+                 originalIndex != state->unk_6);
 
-        if (arg0->unk_6 >= fn_1_86624()) {
-            arg0->unk_6 = 0;
+        if (state->unk_6 >= (s8)fn_1_86624()) {
+            state->unk_6 = 0;
         }
-        if (arg0->unk_6 < 0) {
-            arg0->unk_6 = fn_1_86624() - 1;
+        if (state->unk_6 < 0) {
+            state->unk_6 = (s8)fn_1_86624() - 1;
         }
-        arg0->unk_8 = arg0->unk_6;
-        if (temp_r31 == arg0->unk_6) {
+        state->unk_8 = state->unk_6;
+        if (originalIndex == state->unk_6) {
             camera_set_selected_value(1);
-            camera_set_result(arg0->unk_6);
+            camera_set_result(state->unk_6);
             fn_1_5370(0, 0);
-            camera_set_result(arg0->unk_6);
+            camera_set_result(state->unk_6);
             camera_set_selected_value(0);
             return;
         }
         fn_1_56B8();
     }
 
-    if (arg0->unk_6 >= fn_1_86624()) {
-        arg0->unk_6 = 0;
+    if (state->unk_6 >= (s8)fn_1_86624()) {
+        state->unk_6 = 0;
     }
-    if (arg0->unk_6 < 0) {
-        arg0->unk_6 = fn_1_86624() - 1;
+    if (state->unk_6 < 0) {
+        state->unk_6 = (s8)fn_1_86624() - 1;
     }
-    arg0->unk_8 = arg0->unk_6;
-    camera_set_result(arg0->unk_6);
+    state->unk_8 = state->unk_6;
+    camera_set_result(state->unk_6);
 }
 /* fzgx:end fn_1_DA6C */
 

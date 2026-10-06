@@ -2343,9 +2343,6 @@ rel/main_rel/memcard/fn_1_AB61C.c:
 rel/main_rel/memcard/fn_1_AB75C.c:
 	.text       start:0x000AB75C end:0x000AB7C4
 
-rel/main_rel/memcard/fn_1_AB7C4.c:
-	.text       start:0x000AB7C4 end:0x000AB870
-
 rel/main_rel/memcard/fn_1_AB870.c:
 	.text       start:0x000AB870 end:0x000AB880
 
