@@ -4665,9 +4665,6 @@ rel/main_rel/replay/fn_1_F2F34.c:
 rel/main_rel/_prolog/fn_1_4030.c:
 	.text       start:0x00004030 end:0x00004060 align:4
 
-rel/main_rel/spline/fn_1_FA1A8.c:
-	.text       start:0x000FA1A8 end:0x000FA1D8 align:4
-
 rel/main_rel/car/fn_1_862A8.c:
 	.text       start:0x000862A8 end:0x000862D4 align:4
 

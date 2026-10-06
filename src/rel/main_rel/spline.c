@@ -1304,23 +1304,10 @@ void fn_1_F9C6C(void) {
 }
 /* fzgx:end fn_1_F9C6C */
 
-/* fzgx:begin fn_1_F9CA0 noprologue */
-#include "types.h"
-
-extern struct fn_1_F9CA0_lbl_1_bss_7F0C0 lbl_1_bss_7F0C0;
-
-struct fn_1_F9CA0_lbl_1_bss_7F0C0_60_E48 {
-    u8 pad_0[0x4];
-    u16 unk_4;
-    u8 pad_6[0x2A];
-};
-struct fn_1_F9CA0_lbl_1_bss_7F0C0 {
-    u8 pad_0[0x60];
-    struct fn_1_F9CA0_lbl_1_bss_7F0C0_60_E48 unk_60[1];
-};
-
+/* fzgx:begin fn_1_F9CA0 */
+// Returns the selected high-to-low flag bit for a spline entry.
 u32 fn_1_F9CA0(u32 arg0, u32 arg1) {
-    return (lbl_1_bss_7F0C0.unk_60[(arg0 & 0xFF)].unk_4 & ((s32)(0x10000 + -32768) >> (arg1 & 0xFF)));
+    return (&lbl_1_bss_7F0C0.unk_64)[(u8)arg0 * 24] & ((s32)0x8000 >> (u8)arg1);
 }
 /* fzgx:end fn_1_F9CA0 */
 
@@ -1457,15 +1444,12 @@ void fn_1_F9EE4(s32 arg0) {
 }
 /* fzgx:end fn_1_F9EE4 */
 
-/* fzgx:begin fn_1_F9F2C noprologue */
-#include "types.h"
-
-extern u8 lbl_1_bss_7F0C0[];
-
+/* fzgx:begin fn_1_F9F2C */
+// Set the packed flag for a valid four-dimensional spline selection.
 void fn_1_F9F2C(u8 a, u8 b, u8 c, u8 d) {
     s32 index;
 
-    if (a >= 0x29) {
+    if (a >= 41) {
         return;
     }
     if (b >= 4) {
@@ -1479,7 +1463,7 @@ void fn_1_F9F2C(u8 a, u8 b, u8 c, u8 d) {
     }
 
     index = b * 20 + a * 100 + c * 4 + d;
-    lbl_1_bss_7F0C0[0x4956 + index / 8] |= 1 << (index % 8);
+    lbl_1_bss_7F0C0.pad_25A[0x46FC + index / 8] |= 1 << (index % 8);
 }
 /* fzgx:end fn_1_F9F2C */
 
@@ -1612,18 +1596,6 @@ void fn_1_FA154(u32 byte_index, u32 bit_index) {
     *(u8 *)(3 + addr) |= 1 << bit;
 }
 /* fzgx:end fn_1_FA154 */
-
-/* fzgx:begin fn_1_FA1A8 noprologue */
-#include "types.h"
-
-extern u32 fn_1_FA69C(u32);
-
-u32 fn_1_FA1A8(u32 arg0) {
-    u32 t0;
-    t0 = fn_1_FA69C((s16)arg0);
-    return ((u32)((-t0) | t0) >> 31);
-}
-/* fzgx:end fn_1_FA1A8 */
 
 /* fzgx:begin fn_1_FA450 */
 // Store the value when initialization permits the update.

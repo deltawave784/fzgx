@@ -5978,21 +5978,16 @@ s32 fn_1_14FD6C(s32 *arg0, s32 *arg1) {
 }
 /* fzgx:end fn_1_14FD6C */
 
-/* fzgx:begin fn_1_14FD7C noprologue */
-#include "types.h"
-#include "font.h"
+/* fzgx:begin fn_1_14FD7C */
+extern s32 fn_1_14FD6C(s32 *, s32 *);
+extern void qsort(void *data, u32 count, s32 element_size, void *compare);
 
-extern void fn_1_14FD7C(u32 *data, u32 count);
+// Sort the requested number of four-byte values using fn_1_14FD6C.
+void fn_1_14FD7C(u32 *data, u32 count) {
+    s16 element_count = count;
+    s32 (*compare)(s32 *, s32 *) = fn_1_14FD6C;
 
-extern void fn_1_14FD6C(void);
-extern void qsort(void *arg0, u32 arg1, s32 arg2, void *callback);
-
-// Forward a callback and its selector to the dispatch helper.
-void fn_1_14FD7C(u32 *arg0, u32 arg1) {
-    s16 selector = arg1;
-    void (*callback)(void) = fn_1_14FD6C;
-
-    qsort(arg0, selector, 4, callback);
+    qsort(data, element_count, sizeof(*data), compare);
 }
 /* fzgx:end fn_1_14FD7C */
 
@@ -6095,187 +6090,13 @@ void fn_1_150570(void) {
 }
 /* fzgx:end fn_1_150570 */
 
-/* fzgx:begin fn_1_150574 noprologue */
-#include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/sel_static_disp.h"
-#include "font.h"
-
-typedef struct {
-    u32 v[8];
-} Word8;
-
-typedef struct {
-    u8 pad0[0x4];
-    f32 unk_4;
-    f32 unk_8;
-    f32 unk_C;
-    f32 unk_10;
-    f32 unk_14;
-    u8 pad18[0x18];
-    s32 unk_30;
-    u8 pad34[0x24];
-} Sp8;
-
-typedef struct {
-    u32 value[22];
-} Fn139F18Data;
-
-typedef struct StaticDispParams {
-    s32 id;
-    f32 x;
-    f32 y;
-    f32 z;
-    u32 unk1[8];
-    s32 count;
-    u32 unk2[9];
-} StaticDispParams;
-
-struct Struct_26F8 {
-    u32 unk00;
-    f32 unk04;
-    f32 unk08;
-    f32 unk0C;
-    u8 pad10[0x1C];
-    f32 unk2C;
-    u32 unk30;
-    u8 pad34[4];
-    u32 unk38;
-    u8 pad3C[0x1C];
-};
-
-typedef struct {
-    const char *p[9];
-} PtrTab;
-
-struct fn_1_13F8C4_lbl_801A6410 {
-    u32 unk_0;
-};
-
-struct fn_1_149C64_lbl_1_bss_8E43C {
-    u32 unk_0;
-};
-
-struct fn_1_149C64_lbl_1_bss_8E440 {
-    u32 unk_0;
-};
-
-typedef struct {
-    s16 indices[2];
-    u8 pad8[4];
-    u32 flags;
-} Source;
-
-typedef struct {
-    s16 index;
-    u8 pad2[0x1e];
-    char text[0x320];
-    void *object;
-    void *handle[4];
-} Display;
-
-struct Sig_fn_80071718_fn_80071718_Arg0 {
-    u8 pad_0[0xC];
-    u32 unk_C;
-};
-
-struct Sig_fn_800711A8_fn_800711A8_Entry {
-    u8 pad_00[0x24];
-    void *field_24;
-};
-
-struct Sig_fn_800711A8_fn_800711A8_Arg0 {
-    s32 count;
-    u8 pad_04[4];
-    struct Sig_fn_800711A8_fn_800711A8_Entry **entries;
-    u8 pad_0C[4];
-    u32 field_10;
-    void *field_14;
-};
-
-typedef struct {
-    u8 data[4];
-    f32 value;
-    u8 tail[8];
-} Fn1_14E9E4Entry;
-
-typedef struct fn_1_150C8C_Entry {
-    u8 pad[0x68];
-    u32 active;
-    u8 tail[0x40];
-} fn_1_150C8C_Entry;
-
-typedef struct fn_1_150C8C_Object {
-    u8 pad_84[0x84];
-    s32 count;
-    fn_1_150C8C_Entry entries[1];
-} fn_1_150C8C_Object;
-
-typedef struct fn_1_150F30_StaticDisp {
-    u8 pad_2728[0x2728];
-    s32 unk_2728;
-    s32 unk_272c;
-} fn_1_150F30_StaticDisp;
-
-typedef struct Fn14E09CValue {
-    void *value;
-} Fn14E09CValue;
-
-typedef struct Fn14E09CRef {
-    u8 pad8[8];
-    Fn14E09CValue *value;
-} Fn14E09CRef;
-
-typedef struct Fn14E09CObj {
-    u8 pad344[0x344];
-    Fn14E09CRef *ref;
-} Fn14E09CObj;
-
-typedef struct DispNode {
-    u8 pad[4];
-    f32 value;
-} DispNode;
-
-typedef struct DispChildList {
-    DispNode *child[3];
-} DispChildList;
-
-typedef struct DispObject {
-    u32 flags;
-    u8 pad0[12];
-    f32 value;
-    u8 pad1[32];
-    DispChildList *children;
-} DispObject;
-
-typedef struct fn_1_151668_StaticDispEntry {
-    f32 first;
-    u8 pad0[0x18];
-    f32 values[3];
-    DispObject *object;
-    u8 active;
-    u8 scale_first;
-    u8 scale_second;
-    u8 clear_flag;
-    u8 pad2[0x0c];
-} fn_1_151668_StaticDispEntry;
-
-typedef struct fn_1_151668_StaticDisp {
-    u8 pad0[0x1830];
-    fn_1_151668_StaticDispEntry entries[63];
-    u8 pad1[0x30];
-    s32 entry_count;
-    s32 value_2728;
-    s32 value_272c;
-} fn_1_151668_StaticDisp;
-extern void fn_1_151668(fn_1_151668_StaticDisp *self);
-
+/* fzgx:begin fn_1_150574 */
 // Initializes the static display object referenced by the main state.
 void fn_1_150574(void) {
-    Obj_1_data_2A7E0_At3C *display = lbl_1_data_2A7E0.unk_3C;
+    void *display = lbl_1_data_2A7E0.unk_3C;
 
     fn_1_150CEC(display);
-    fn_1_151668( (fn_1_151668_StaticDisp *)(void *)(display));
+    fn_1_151668(display);
 }
 /* fzgx:end fn_1_150574 */
 
