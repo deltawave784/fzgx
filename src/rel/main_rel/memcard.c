@@ -2087,22 +2087,24 @@ void fn_1_ACE7C(void) {
 }
 /* fzgx:end fn_1_ACE7C */
 
-/* fzgx:begin fn_1_ACE80 noprologue */
-#include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/memcard.h"
-extern void CARDDeleteAsync(u8 byte, void *data, int arg);
+/* fzgx:begin fn_1_ACE80 */
+typedef struct {
+    u8 unk_0[2];
+    u16 unk_2;
+    u8 unk_4[0x94];
+    char unk_98[32];
+} fn_1_ACE80_FileState;
 
 typedef struct {
-    u8 field_0;
-    u8 pad_1[0x23];
-    void* field_24;
+    u8 unk_0;
+    u8 unk_1[0x23];
+    fn_1_ACE80_FileState *unk_24;
 } fn_1_ACE80_SomeObject;
 
-// fn_1_ACE80: writes 0x12c to pointed structure, then calls CARDDeleteAsync
-void fn_1_ACE80(fn_1_ACE80_SomeObject* obj) {
-    *(u16*)((u8*)obj->field_24 + 0x2) = 0x12c;
-    CARDDeleteAsync(obj->field_0, (u8*)obj->field_24 + 0x98, 0);
+// Start an asynchronous file deletion and set its timeout to 300.
+void fn_1_ACE80(fn_1_ACE80_SomeObject *obj) {
+    obj->unk_24->unk_2 = 300;
+    CARDDeleteAsync(obj->unk_0, obj->unk_24->unk_98, 0);
 }
 /* fzgx:end fn_1_ACE80 */
 
@@ -4330,45 +4332,19 @@ switch (fzgx_live->unk_04) {
 }
 /* fzgx:end fn_1_AD264 */
 
-/* fzgx:begin fn_1_AEC34 noprologue */
-#include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/memcard.h"
-extern void strncpy(void *arg0, void *arg1, int arg2);
+/* fzgx:begin fn_1_AEC34 */
 extern u32 lbl_1_bss_77310[28];
 extern u32 lbl_1_bss_7730C;
-
-typedef struct Fn1AEC34A {
-    u8 pad0[8];
-    void *payload;
-    void *result;
-} Fn1AEC34A;
-
-typedef struct Fn1AEC34P {
-    u8 pad0[8];
-    u32 flags;
-    u8 padC[0x88];
-    void *buffer;
-    u8 pad98[0x4c];
-    void *length;
-} Fn1AEC34P;
-
-typedef struct Fn1AEC34B {
-    u8 pad0[3];
-    u8 state;
-    u8 pad4[0x20];
-    Fn1AEC34P *card;
-} Fn1AEC34B;
-
+typedef struct Fn1AEC34A { u8 pad0[8]; char *payload; u32 result; } Fn1AEC34A;
+typedef struct Fn1AEC34P { u8 pad0[8]; u32 flags; u8 padC[0x88]; u8 *buffer; u8 pad98[0x4c]; u32 length; } Fn1AEC34P;
+typedef struct Fn1AEC34B { u8 pad0[3]; u8 state; u8 pad4[0x20]; Fn1AEC34P *card; } Fn1AEC34B;
 // Finalize the card operation and publish its completion state.
 void fn_1_AEC34(Fn1AEC34A *request, Fn1AEC34B *operation) {
     if ((operation->card->flags & 0x20) == 0) {
         if (request->payload != 0) {
-            strncpy((u8 *)operation->card->buffer + 0x24,
-                        request->payload, 0x20);
+            strncpy((char *)operation->card->buffer + 0x24, request->payload, 0x20);
         }
-        fn_80008BA8((u8 *)operation->card->buffer + 0x2060,
-                    request->result, operation->card->length);
+        fn_80008BA8((u32)(operation->card->buffer + 0x2060), request->result, operation->card->length);
     }
     operation->state = 3;
     lbl_1_bss_77310[0] = 1;
@@ -7393,40 +7369,29 @@ void fn_1_B40B4(int unused, void *ptr) {
 }
 /* fzgx:end fn_1_B40B4 */
 
-/* fzgx:begin fn_1_B5258 noprologue */
-#include "types.h"
-#include "dolphin/card.h"
-#include "dolphin/card/CARDPriv.h"
-#include "dolphin/dvd.h"
-#include "font.h"
-
-extern void fn_80083DB0(char *destination, const char *source);
-extern char *fn_80083970(char *buffer, const char *source);
-extern unsigned int strlen(const char *string);
-extern char *strncpy(char *destination, const char *source, unsigned int count);
-extern char *strcat(char *destination, const char *source);
-
-void fn_1_B5258(char *destination, void *unused, const char *source, const char *suffix) {
+/* fzgx:begin fn_1_B5258 */
+// Replace the first occurrence of a substring, preserving the surrounding text.
+void fn_1_B5258(char *destination, const char *text, const char *source, const char *suffix) {
     char buffer[0x400];
-    char *prefix;
-    unsigned int source_length;
-    unsigned int prefix_length;
+    char *match;
+    size_t source_length;
+    size_t prefix_length;
 
-    fn_80083DB0(buffer, unused);
-    prefix = fn_80083970(buffer, source);
-    if (prefix == 0) {
+    fn_80083DB0(buffer, text);
+    match = (char *)fn_80083970((u8 *)buffer, (const u8 *)source);
+    if (match == NULL) {
         fn_80083DB0(destination, buffer);
     } else {
         source_length = strlen(source);
-        if (prefix != buffer) {
-            prefix_length = (unsigned int)(prefix - buffer);
+        if (match != buffer) {
+            prefix_length = match - buffer;
             strncpy(destination, buffer, prefix_length);
-            destination[prefix_length] = 0;
+            destination[prefix_length] = '\0';
         } else {
-            destination[0] = 0;
+            destination[0] = '\0';
         }
         strcat(destination, suffix);
-        strcat(destination, prefix + source_length);
+        strcat(destination, match + source_length);
     }
 }
 /* fzgx:end fn_1_B5258 */
@@ -7713,24 +7678,6 @@ u32 fn_1_B7FC8(void) {
     return lbl_1_bss_718C0.unk_0->unk_0;
 }
 /* fzgx:end fn_1_B7FC8 */
-
-/* fzgx:begin fn_1_B7FDC noprologue */
-#include "types.h"
-#include "dolphin/card.h"
-#include "dolphin/card/CARDPriv.h"
-#include "dolphin/dvd.h"
-#include "font.h"
-
-extern int fn_8002A744(void);
-extern void fn_8002A74C(u16 value);
-
-// Toggles the low 16-bit status value and stores the result.
-void fn_1_B7FDC(void) {
-    u16 value = (u16)fn_8002A744();
-    value = (u16)(value ^ 1);
-    fn_8002A74C(value);
-}
-/* fzgx:end fn_1_B7FDC */
 
 /* fzgx:begin fn_1_B800C noprologue */
 #include "types.h"

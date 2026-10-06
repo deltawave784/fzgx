@@ -2565,9 +2565,6 @@ rel/main_rel/memcard/fn_1_B7F24.c:
 rel/main_rel/memcard/fn_1_B7FC8.c:
 	.text       start:0x000B7FC8 end:0x000B7FDC
 
-rel/main_rel/memcard/fn_1_B7FDC.c:
-	.text       start:0x000B7FDC end:0x000B800C
-
 rel/main_rel/memcard/fn_1_B800C.c:
 	.text       start:0x000B800C end:0x000B80F0
 
