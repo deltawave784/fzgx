@@ -2587,6 +2587,32 @@
   },
   {
     "module": "interview",
+    "source": "rel/interview/interview/fn_17_802C.c",
+    "symbols": [
+      "fn_17_802C"
+    ],
+    "status": "matching",
+    "mw_version": "GC/1.3.2",
+    "extra_cflags": [],
+    "tu": "rel/interview/interview.c",
+    "pool": {
+      "...rodata.0": "lbl_17_rodata_0",
+      "@37": "lbl_17_rodata_68+0x38",
+      "@87": "lbl_17_rodata_25C+0x24",
+      "@88": "lbl_17_rodata_25C+0x28",
+      "@89": "lbl_17_rodata_25C+0x2C",
+      "@90": "lbl_17_rodata_25C+0x30",
+      "@91": "lbl_17_rodata_25C+0x34",
+      "@28": "lbl_17_rodata_68",
+      "@92": "lbl_17_rodata_25C+0x38",
+      "@9": "lbl_17_rodata_18",
+      "@11": "lbl_17_rodata_20",
+      "@10": "lbl_17_rodata_1C",
+      "@62": "lbl_17_rodata_1B8+0x4C"
+    }
+  },
+  {
+    "module": "interview",
     "source": "rel/interview/interview/fn_17_86C4.c",
     "symbols": [
       "fn_17_86C4"
