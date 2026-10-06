@@ -106,6 +106,53 @@ extern void fn_1_FB18C(void);
 extern void fn_8001D3E4(u32 channel, u32 command);
 extern u32 lbl_801A66A0;
 
+/* fzgx:begin fn_1_F4F08 */
+extern void *lbl_801A6410;
+extern u8 lbl_1_data_3E8E0[0x9];
+
+extern void *fn_1_4630(void *, u32, const char *, int);
+extern void fn_1_46B4(void *, void *, const char *, int);
+
+/* Natural cubic spline setup: computes second derivatives y2[] for the
+ * knots (x[], y[]) by tridiagonal elimination. */
+void fn_1_F4F08(u32 n, f32 *x, f32 *y, f32 *y2) {
+    f32 *u;
+    f32 *d;
+    s32 m;
+    u32 i;
+    s32 k;
+    f32 t;
+    s32 tmp_cse1;
+tmp_cse1 = n * 4;
+
+    u = fn_1_4630(lbl_801A6410, tmp_cse1, (const char *)lbl_1_data_3E8E0, 0x37);
+    d = fn_1_4630(lbl_801A6410, tmp_cse1, (const char *)lbl_1_data_3E8E0, 0x38);
+
+    y2[n - 1] = 0.0f;
+    y2[0] = 0.0f;
+    for (i = 0; i < n - 1; i++) {
+        u[i] = x[i + 1] - x[i];
+        d[i + 1] = (y[i + 1] - y[i]) / u[i];
+    }
+
+    y2[1] = (d[2] - d[1]) - (f32)(u[0] * y2[0]);
+    d[1] = 2.0f * (x[2] - x[0]);
+    for (i = 1; i < n - 2; i++) {
+        t = u[i] / d[i];
+        y2[i + 1] = (d[i + 2] - d[i + 1]) - (f32)(t * y2[i]);
+        d[i + 1] = (f32)(2.0f * (x[i + 2] - x[i])) - (f32)(t * u[i]);
+    }
+
+    y2[n - 2] -= (f32)(u[n - 2] * y2[n - 1]);
+    for (k = n - 2; k > 0; k--) {
+        y2[k] = (y2[k] - (f32)(u[k] * y2[k + 1])) / d[k];
+    }
+
+    fn_1_46B4(lbl_801A6410, u, (const char *)lbl_1_data_3E8E0, 0x4c);
+    fn_1_46B4(lbl_801A6410, d, (const char *)lbl_1_data_3E8E0, 0x4d);
+}
+/* fzgx:end fn_1_F4F08 */
+
 /* fzgx:begin fn_1_F55C4 */
 void fn_1_F55C4(f32 *out, f32 *arg1, f32 *in, f32 *arg3) {
     f32 temp[4];

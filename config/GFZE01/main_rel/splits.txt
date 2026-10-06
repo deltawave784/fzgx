@@ -6740,3 +6740,6 @@ rel/main_rel/sound/fn_1_A31E4.c:
 
 rel/main_rel/bg_win/fn_1_15DD7C.c:
 	.text       start:0x0015DD7C end:0x0015DFD4 align:4
+
+rel/main_rel/spline/fn_1_F4F08.c:
+	.text       start:0x000F4F08 end:0x000F5458 align:4

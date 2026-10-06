@@ -49909,6 +49909,21 @@
   },
   {
     "module": "main_rel",
+    "source": "rel/main_rel/spline/fn_1_F4F08.c",
+    "symbols": [
+      "fn_1_F4F08"
+    ],
+    "status": "matching",
+    "mw_version": "GC/1.3",
+    "extra_cflags": [],
+    "tu": "rel/main_rel/spline.c",
+    "pool": {
+      "@47": "lbl_1_rodata_6D70",
+      "@48": "lbl_1_rodata_6D6C"
+    }
+  },
+  {
+    "module": "main_rel",
     "source": "rel/main_rel/spline/fn_1_F55C4.c",
     "symbols": [
       "fn_1_F55C4"
