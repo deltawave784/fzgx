@@ -2788,6 +2788,24 @@
   },
   {
     "module": "interview",
+    "source": "rel/interview/interview/fn_17_8C7C.c",
+    "symbols": [
+      "fn_17_8C7C"
+    ],
+    "status": "matching",
+    "mw_version": null,
+    "extra_cflags": [],
+    "tu": "rel/interview/interview.c",
+    "pool": {
+      "...rodata.0": "lbl_17_rodata_0",
+      "@10": "lbl_17_rodata_18",
+      "@230": "lbl_17_rodata_25C+0x78",
+      "@36": "lbl_17_rodata_68",
+      "@50": "lbl_17_rodata_68+0x34"
+    }
+  },
+  {
+    "module": "interview",
     "source": "rel/interview/interview/fn_17_8D28.c",
     "symbols": [
       "fn_17_8D28"
@@ -13215,6 +13233,16 @@
       "@30": "lbl_801A6F20",
       "@32": "lbl_801A6F28"
     }
+  },
+  {
+    "module": "main",
+    "source": "dol/fn_800081C8.c",
+    "symbols": [
+      "fn_800081C8"
+    ],
+    "status": "matching",
+    "mw_version": "GC/2.5",
+    "extra_cflags": []
   },
   {
     "module": "main",
@@ -60526,6 +60554,17 @@
     "source": "rel/option/_prolog/fn_4_AB90.c",
     "symbols": [
       "fn_4_AB90"
+    ],
+    "status": "matching",
+    "mw_version": null,
+    "extra_cflags": [],
+    "tu": "rel/option/_prolog.c"
+  },
+  {
+    "module": "option",
+    "source": "rel/option/_prolog/fn_4_AC58.c",
+    "symbols": [
+      "fn_4_AC58"
     ],
     "status": "matching",
     "mw_version": null,

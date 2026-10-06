@@ -1367,6 +1367,30 @@ void fn_4_AB90(void) {
 }
 /* fzgx:end fn_4_AB90 */
 
+/* fzgx:begin fn_4_AC58 */
+extern s32 lbl_801A66B4;
+extern u32 fn_1_1380F0(u32);
+extern u32 fn_1_B7C00(void);
+extern u32 fn_1_13ABA8(u32);
+
+#pragma opt_propagation off
+void fn_4_AC58(void) {
+    Obj_4_data_2F00 *p = &lbl_4_data_2F00;
+    u32 *table = (u32 *)&p->pad_0[0x60];
+    fn_1_1380F0(table[lbl_801A66B4]);
+    if ((u8)fn_1_B7C00() || (s32)lbl_4_bss_5630.unk_22 == 2) {
+        fn_1_13ABA8(0);
+    } else {
+        fn_1_13ABA8(0x28000000);
+    }
+    if ((s32)p->unk_18 >= 0) {
+        u32 offset = p->unk_18 * 4;
+        void (**callbacks)(void) = (void (**)(void))&p->pad_0[0xC];
+        (*(void (**)(void))((u8 *)callbacks + offset))();
+    }
+}
+/* fzgx:end fn_4_AC58 */
+
 /* fzgx:begin fn_4_ACF0 */
 void fn_4_ACF0(void) {
     u32 v0;
