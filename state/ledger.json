@@ -1,5 +1,5 @@
 {
- "generated": 1791321527,
+ "generated": 1791321664,
  "functions": [
   {
    "symbol": "car_colchg:_prolog",
@@ -29329,19 +29329,19 @@
   {
    "symbol": "fn_80053350",
    "module": "main",
-   "unit": null,
+   "unit": "dol/fn_80053350.c",
    "addr": 2147824464,
    "size": 352,
-   "status": "unmatched",
-   "attempts": 5,
-   "best_percent": 93.10227,
+   "status": "matched",
+   "attempts": 6,
+   "best_percent": 100.0,
    "claimed_by": null,
    "claimed_at": null,
    "claim_ttl": null,
-   "matched_commit": null,
+   "matched_commit": "764091a3",
    "blocked_reason": null,
    "prev_status": null,
-   "link_state": null
+   "link_state": "verified"
   },
   {
    "symbol": "fn_800534B0",
@@ -484027,6 +484027,25 @@
    "final_percent": 100.0,
    "tokens_in": 78650,
    "tokens_out": 622,
+   "cost_usd": 0.0,
+   "outcome": "matched",
+   "notes": "oracle match accepted automatically",
+   "best_body_path": null,
+   "stale_checks": 0,
+   "best_in_attempt": 100.0
+  },
+  {
+   "id": 18934,
+   "symbol": "fn_80053350",
+   "agent": "codex-goal-20261006-1519-6-codex-1",
+   "harness": "codex",
+   "model": "gpt-6.1-sol",
+   "started": 1791321563,
+   "ended": 1791321645,
+   "checks": 2,
+   "final_percent": 100.0,
+   "tokens_in": 62359,
+   "tokens_out": 578,
    "cost_usd": 0.0,
    "outcome": "matched",
    "notes": "oracle match accepted automatically",
