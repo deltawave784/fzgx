@@ -668,5 +668,8 @@ async def fan_out(p, options, model, symbols, batch, revise, command, price):
     finally:
         if server.process:
             await server.close()
-        loop.remove_signal_handler(signal.SIGTERM)
+        try:
+            loop.remove_signal_handler(signal.SIGTERM)
+        except NotImplementedError:
+            pass
     return results, spent
