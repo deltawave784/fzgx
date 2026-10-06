@@ -6483,6 +6483,16 @@
   },
   {
     "module": "main",
+    "source": "dol/InitMetroTRKCommTable.c",
+    "symbols": [
+      "InitMetroTRKCommTable"
+    ],
+    "status": "matching",
+    "mw_version": "GC/1.3.2",
+    "extra_cflags": []
+  },
+  {
+    "module": "main",
     "source": "dol/InitMetroTRK_BBA.c",
     "symbols": [
       "InitMetroTRK_BBA"
@@ -13060,6 +13070,20 @@
     "status": "matching",
     "mw_version": "GC/1.3.2",
     "extra_cflags": []
+  },
+  {
+    "module": "main",
+    "source": "dol/fn_80007F70.c",
+    "symbols": [
+      "fn_80007F70"
+    ],
+    "status": "matching",
+    "mw_version": "GC/1.3.2",
+    "extra_cflags": [],
+    "pool": {
+      "@30": "lbl_801A6F20",
+      "@32": "lbl_801A6F28"
+    }
   },
   {
     "module": "main",
