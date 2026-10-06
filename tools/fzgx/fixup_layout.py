@@ -1091,6 +1091,27 @@ def _initialized_data_views(p, symbol, text):
 BYTE_TYPES = r'(?:const\s+)?(?:u8|s8|char|unsigned\s+char|signed\s+char)'
 
 
+def _after_type_definitions(code, limit):
+    """Offset after the last file-scope typedef/struct/union/enum statement before `limit`
+    (masked code: comments and strings blanked), at a line start; 0 when there is none."""
+    end, depth, start = 0, 0, 0
+    for i in range(limit):
+        c = code[i]
+        if c == '\n' and depth == 0 and code[start:i].lstrip().startswith('#'):
+            start = i + 1
+        elif c == '{':
+            depth += 1
+        elif c == '}':
+            depth = max(0, depth - 1)
+        elif c == ';' and depth == 0:
+            # typedefs, `struct T {...};` and `struct T;`, not `struct T object = ...;`
+            if re.match(r'\s*(?:typedef\b|(?:struct|union|enum)\s*\w*\s*(?:\{.*\})?\s*$)', code[start:i], re.S):
+                nl = code.find('\n', i)
+                end = limit if nl < 0 or nl >= limit else nl + 1
+            start = i + 1
+    return end
+
+
 def tu_data_objects(p, symbol, text, top=False, limit=0x10000):
     """Retail `.data` as separate objects addressed off the TU's data section base.
 
@@ -1269,7 +1290,9 @@ def tu_data_objects(p, symbol, text, top=False, limit=0x10000):
         at = code.rfind('\n', 0, span[0]) + 1
         if top:
             directives = list(re.finditer(r'(?m)^[ \t]*#\s*include\b[^\n]*\n', code[:at]))
-            at = directives[-1].end() if directives else 0
+            # a self-contained body spells its own typedefs (fn_4_ADF4, fn_8_D630): the block
+            # goes after the last file-scope type definition, never above `typedef ... u32;`
+            at = max([directives[-1].end() if directives else 0, _after_type_definitions(code, at)])
         out = out[:at] + block + out[at:]
         code = masked(out)
         span = _function_body_span(code, sym.name)
