@@ -6776,3 +6776,9 @@ rel/main_rel/background/fn_1_9DDA8.c:
 
 rel/main_rel/enemy_ctrl/fn_1_CD7BC.c:
 	.text       start:0x000CD7BC end:0x000CDC8C align:4
+
+rel/main_rel/live_camera/fn_1_F6A8.c:
+	.text       start:0x0000F6A8 end:0x0000FA84 align:4
+
+rel/main_rel/live_camera/fn_1_103B0.c:
+	.text       start:0x000103B0 end:0x000107B8 align:4
