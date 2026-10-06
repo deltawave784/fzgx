@@ -170,6 +170,22 @@ def cmd_gate(a, p):
     return 0 if r["ok"] else 1
 
 
+def cmd_librarian_queue(a, p):
+    from . import libqueue
+    rows = libqueue.queue(p, a.module, a.tu, notes=not a.no_notes, survey_views=not a.no_survey)
+    if a.kind:
+        rows = [r for r in rows if r["kind"] in a.kind.split(",")]
+    if a.severity:
+        rows = [r for r in rows if r["severity"] == a.severity]
+    if a.decisions:
+        rows = [r for r in rows if r["resolution"] == libqueue.DECIDE]
+    if a.json:
+        print(json.dumps(rows, indent=1))
+    else:
+        print(libqueue.summary(rows, a.limit))
+    return 0
+
+
 def cmd_type_survey(a, p):
     from . import typesurvey
     out = typesurvey.run()
@@ -662,6 +678,12 @@ def build_parser() -> argparse.ArgumentParser:
     s = sub.add_parser("gate", help="the gate a tooling change must pass: lint, build, 16 hashes, a pool-unit sample and the latest matches re-checked"); s.set_defaults(fn=cmd_gate)
     s.add_argument("--pool-sample", type=int, default=24); s.add_argument("--recent", type=int, default=24); s.add_argument("--json", action="store_true")
     s.add_argument("--also", nargs="*", default=[], metavar="SYMBOL", help="matched units the change is known to affect, re-checked in full")
+    s = sub.add_parser("librarian-queue", help="read-only: conflicts a librarian must resolve (prototypes, data views, overlaps, hygiene) plus matchers' notes"); s.set_defaults(fn=cmd_librarian_queue)
+    s.add_argument("--module"); s.add_argument("--tu", help="rel/<module>/<tu>.c or its file name"); s.add_argument("--json", action="store_true")
+    s.add_argument("--kind", help="comma-separated kinds (prototype,declaration,data,overlap,unused_helper,implicit_call,no_header,struct_views,note)")
+    s.add_argument("--severity", choices=["code", "cosmetic", "note"]); s.add_argument("--decisions", action="store_true", help="only rows tutruth does not resolve")
+    s.add_argument("--limit", type=int, default=0, help="print at most N rows (text output)")
+    s.add_argument("--no-notes", action="store_true"); s.add_argument("--no-survey", action="store_true", help="skip type-survey struct-view clusters")
     s = sub.add_parser("type-survey", help="group per-function struct views into candidate shared types (leads for the librarian)"); s.set_defaults(fn=cmd_type_survey)
     s.add_argument("--top", type=int, default=20); s.add_argument("--emit", type=int, metavar="ID", help="print a proposed merged struct for cluster ID")
     s.add_argument("--name", default="Merged", help="typedef name for --emit"); s.add_argument("--json", action="store_true")
