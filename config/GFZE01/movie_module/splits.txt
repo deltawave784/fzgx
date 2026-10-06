@@ -1853,3 +1853,6 @@ rel/movie_module/fn_12_105BC.c:
 
 rel/movie_module/fn_12_9D08.c:
 	.text       start:0x00009D08 end:0x0000A0D8 align:4
+
+rel/movie_module/fn_12_2C0F8.c:
+	.text       start:0x0002C0F8 end:0x0002C640 align:4
