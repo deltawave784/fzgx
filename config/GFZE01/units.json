@@ -56392,6 +56392,16 @@
   },
   {
     "module": "movie_module",
+    "source": "rel/movie_module/fn_12_30D8C.c",
+    "symbols": [
+      "fn_12_30D8C"
+    ],
+    "status": "matching",
+    "mw_version": "GC/1.3.2",
+    "extra_cflags": []
+  },
+  {
+    "module": "movie_module",
     "source": "rel/movie_module/fn_12_30E8.c",
     "symbols": [
       "fn_12_30E8"
