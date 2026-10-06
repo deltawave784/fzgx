@@ -5525,3 +5525,6 @@ dol/fn_800285DC.c:
 
 dol/fn_80089EEC.c:
 	.text       start:0x80089EEC end:0x8008A1CC align:4
+
+dol/fn_80009CD4.c:
+	.text       start:0x80009CD4 end:0x80009FA4 align:4
