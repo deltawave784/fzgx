@@ -511,7 +511,17 @@ def tu_objects(p, symbol, text, mode, cache, retail_bases=()):
                     if a < q:
                         notes.append(f'{s.name}: overlapping fields'); return None, notes
                     if a > q:
-                        defs += filler(f'{s.name}_fill', q, a)
+                        parts = filler(f'{s.name}_fill', q, a)
+                        if q == s.addr:
+                            # the object's own name goes on whatever starts at its address: the
+                            # oracle binds the compiler's `...bss.N` base to the retail symbol
+                            # only through a unit symbol spelled like it (fn_1_7BAF8's first
+                            # referenced field is at +0x8; an unnamed leading filler left the
+                            # base rows unbound and unexplained)
+                            first = f"{s.name}_fill_{s.addr:X}"
+                            parts = [(pa, d.replace(first, s.name), acc.replace(first, s.name)) if pa == s.addr else (pa, d, acc)
+                                     for pa, d, acc in parts]
+                        defs += parts
                     name = s.name if inner == 0 else f"{s.name}_{inner:X}"
                     dims = decls[fname][1]
                     if a % max(ealign, 1) or (dims and a % 4):
