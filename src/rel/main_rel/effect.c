@@ -1767,119 +1767,6 @@ void fn_1_5F5C4(void) {
 }
 /* fzgx:end fn_1_5F5C4 */
 
-/* fzgx:begin fn_1_5F5C8 pool noprologue */
-#include "types.h"
-
-#pragma section code_type ".fzgxpool"
-__declspec(section ".fzgxpool") static void fzgx_pool_prime1(void) {
-    volatile f32 s; volatile f64 d;  /* fzgx-allow: S2 pool primer sinks */
-    s = 60.0f;
-    s = 0.10000000149011612f;
-    s = 32767.0f;
-    s = 0.05000000074505806f;
-    d = 0.07;
-    s = 20000.0f;
-    s = 0.0f;
-    d = 4503599627370496.0;
-    s = 1.0f;
-    s = -0.029999999329447746f;
-    d = 15.0;
-    d = 4503601774854144.0;
-    d = 1.5;
-    d = 0.5;
-}
-static const u32 fzgx_pool_table2[1] = {0x00000000};  /* fzgx-allow: A1 retail pool bytes */
-__declspec(section ".fzgxpool") static void fzgx_pool_keep2(void) { const u32 *volatile cp; cp = fzgx_pool_table2; }  /* fzgx-allow: S2 pool primer sink */
-__declspec(section ".fzgxpool") static void fzgx_pool_prime3(void) {
-    volatile f32 s; volatile f64 d;  /* fzgx-allow: S2 pool primer sinks */
-    s = 0.5f;
-    s = 8.0f;
-    s = 255.0f;
-    s = 15.0f;
-    s = 0.20000000298023224f;
-    s = 0.07999999821186066f;
-    s = 0.25f;
-    s = 0.9800000190734863f;
-    s = 0.9900000095367432f;
-    s = 40.0f;
-    s = 20.0f;
-    s = 1.5f;
-    s = 0.44999998807907104f;
-    s = -2.0f;
-    s = 0.0833333358168602f;
-    s = 0.15000000596046448f;
-    s = 0.125f;
-    s = -0.4000000059604645f;
-    s = -0.30000001192092896f;
-    s = 2.0f;
-    s = 250.0f;
-    d = 0.6;
-    d = 0.4;
-    s = 0.30000001192092896f;
-    s = -0.004000000189989805f;
-}
-#pragma section code_type ".text"
-
-struct fn_1_5F5C8_Arg0 {
-    u8 pad_0[0x10];
-    u32 unk_10;
-};
-struct fn_1_5F5C8_lbl_1_data_1D628 {
-    u32 unk_0;
-};
-struct fn_1_5F5C8_lbl_1_rodata_2950 {
-    f32 unk_0;
-    u8 pad_4[0x4];
-    f32 unk_8;
-    u8 pad_C[0x14];
-    f64 unk_20;
-    u8 pad_28[0x44];
-    f32 unk_6C;
-    u8 pad_70[0x48];
-    f32 unk_B8;
-};
-
-extern struct fn_1_5F5C8_lbl_1_data_1D628 lbl_1_data_1D628;
-const f32 lbl_1_rodata_2950 = 60.0f;
-const u8 lbl_1_rodata_2954[4] = {0x3D,0xCC,0xCC,0xCD};
-const f32 lbl_1_rodata_2954__fzgx_offset_4 = 32767.0f;
-const u8 lbl_1_rodata_295C[20] = {0x3D,0x4C,0xCC,0xCD,0x3F,0xB1,0xEB,0x85,0x1E,0xB8,0x51,0xEC,0x46,0x9C,0x40,0x00,0x00,0x00,0x00,0x00};
-const f64 lbl_1_rodata_295C__fzgx_offset_14 = 4503599627370496.0;
-const u8 lbl_1_rodata_2978[16] = {0x3F,0x80,0x00,0x00,0xBC,0xF5,0xC2,0x8F,0x40,0x2E,0x00,0x00,0x00,0x00,0x00,0x00};
-const u8 lbl_1_rodata_2988[28] = {0x43,0x30,0x00,0x00,0x80,0x00,0x00,0x00,0x3F,0xF8,0x00,0x00,0x00,0x00,0x00,0x00,0x3F,0xE0,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00};
-const u8 lbl_1_rodata_29A4[8] = {0x3F,0x00,0x00,0x00,0x41,0x00,0x00,0x00};
-const u8 lbl_1_rodata_29AC[16] = {0x43,0x7F,0x00,0x00,0x41,0x70,0x00,0x00,0x3E,0x4C,0xCC,0xCD,0x3D,0xA3,0xD7,0x0A};
-const f32 lbl_1_rodata_29AC__fzgx_offset_10 = 0.25f;
-const u8 lbl_1_rodata_29C0[48] = {0x3F,0x7A,0xE1,0x48,0x3F,0x7D,0x70,0xA4,0x42,0x20,0x00,0x00,0x41,0xA0,0x00,0x00,0x3F,0xC0,0x00,0x00,0x3E,0xE6,0x66,0x66,0xC0,0x00,0x00,0x00,0x3D,0xAA,0xAA,0xAB,0x3E,0x19,0x99,0x9A,0x3E,0x00,0x00,0x00,0xBE,0xCC,0xCC,0xCD,0xBE,0x99,0x99,0x9A};
-const u8 lbl_1_rodata_29F0[24] = {0x40,0x00,0x00,0x00,0x43,0x7A,0x00,0x00,0x3F,0xE3,0x33,0x33,0x33,0x33,0x33,0x33,0x3F,0xD9,0x99,0x99,0x99,0x99,0x99,0x9A};
-const f32 lbl_1_rodata_29F0__fzgx_offset_18 = 0.300000012f;
-const u8 lbl_1_rodata_29F0__fzgx_offset_1C[80] = {0xBB,0x83,0x12,0x6F,0x3C,0x88,0x88,0x89,0x47,0x80,0x00,0x00,0x45,0x80,0x00,0x00,0x3F,0x75,0xC2,0x8F,0x3E,0xCC,0xCC,0xCD,0x3D,0x4E,0xD9,0x17,0x3D,0x50,0xE5,0x60,0x3F,0x73,0x33,0x33,0x3F,0x66,0x66,0x66,0x00,0x00,0x00,0x00,0x40,0x62,0xC0,0x00,0x00,0x00,0x00,0x00,0x40,0x24,0x00,0x00,0x00,0x00,0x00,0x00,0x40,0x08,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x3D,0xCC,0xCC,0xCD,0xC0,0x19,0x99,0x9A};
-
-#pragma opt_dead_assignments off
-f32 fn_1_5F5C8(struct fn_1_5F5C8_Arg0 *arg0, f32 arg1) {
-    f32 v0;
-    u32 v1;
-    f32 v2;
-    f32 v3;
-    f32 v4;
-    f32 v5;
-    f32 v6;
-    v0 = arg1;
-    if ((s32)arg0->unk_10 == 0) {
-    v1 = (((12345) + ((lbl_1_data_1D628.unk_0 * (0x41C60000 + 20077)))));
-    v2 = (4503599627370496.0);
-    v4 = (0.25f);
-    v5 = (0.300000012f);
-    v6 = (60.0f);
-    lbl_1_data_1D628.unk_0 = v1;
-    v0 = (f32)(u32)((v1 >> 16) & 0x7FFF);
-    arg0->unk_10 = (s32)(f32)(v6 * (f32)(v5 + (f32)(v4 * (f32)(v0 / ((32767.0f))))));
-    }
-    return v0;
-}
-#pragma opt_dead_assignments reset
-/* fzgx:end fn_1_5F5C8 */
-
 /* fzgx:begin fn_1_5FE24 */
 // fn_1_5FE24: empty in retail (single blr).
 void fn_1_5FE24(void) {
@@ -1898,20 +1785,14 @@ void fn_1_5FE2C(void) {
 }
 /* fzgx:end fn_1_5FE2C */
 
-/* fzgx:begin fn_1_5FE30 noprologue */
-#include "types.h"
-
+/* fzgx:begin fn_1_5FE30 */
 extern void lbl_8006DCA4(void);
 extern s32 fn_1_54E34(void *object, f32 value);
-extern void fn_1_5FEBC(void);
-
-extern void lbl_8006DCA4(void);
-extern s32 fn_1_54E34(void *object, f32 value);
+extern void fn_1_5FEBC();
 extern void *fn_1_5448C(void *);
-extern void fn_1_5489C(void *, void *);
+extern void fn_1_5489C(void **, void **);
 extern void fn_1_862D4(s16 value, void *result);
 extern void *fn_1_548AC(u32 size);
-
 
 typedef struct {
     u8 unk[0x18];
@@ -1924,24 +1805,25 @@ typedef struct {
 
 typedef struct {
     u8 unk0[4];
-    void (*callback)(void);
+    void (*callback)();
     fn_1_5FE30_FZeroObject *owner;
 } FZeroEvent;
 
+// Queue an effect update when the object passes its activation test.
 void fn_1_5FE30(fn_1_5FE30_FZeroObject *object) {
     u8 result[8];
-    void *callback;
+    void **callback;
     FZeroEvent *event;
 
     fn_1_862D4(object->value, result);
     lbl_8006DCA4();
     if (fn_1_54E34(object->field3C, object->rate) != 0) {
         callback = fn_1_5448C(result);
-        event = (FZeroEvent *)fn_1_548AC(12);
+        event = fn_1_548AC(sizeof(FZeroEvent));
         if (event != 0) {
             event->callback = fn_1_5FEBC;
             event->owner = object;
-            fn_1_5489C(callback, event);
+            fn_1_5489C(callback, (void **)event);
         }
     }
 }

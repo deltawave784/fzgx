@@ -1170,25 +1170,6 @@ void fn_1_3F4FC(void) {
 }
 /* fzgx:end fn_1_3F4FC */
 
-/* fzgx:begin fn_1_3F75C noprologue */
-#include "types.h"
-#include "font.h"
-
-extern void fn_1_451E4(void);
-extern void fn_1_D3214(void);
-extern void fn_8001AF64(void);
-extern s32 fn_1_467F4(void);
-extern s32 fn_1_13018(void);
-
-void fn_1_3F75C(void) {
-    while (fn_1_467F4() || fn_1_13018()) {
-        fn_1_451E4();
-        fn_1_D3214();
-        fn_8001AF64();
-    }
-}
-/* fzgx:end fn_1_3F75C */
-
 /* fzgx:begin fn_1_3F7A0 */
 void fn_1_3F7A0(u32* self) {
     self[0] = fn_1_46C60();

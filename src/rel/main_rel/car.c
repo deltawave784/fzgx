@@ -4961,27 +4961,23 @@ void fn_1_8D168(Fn1_8D168State *state) {
 }
 /* fzgx:end fn_1_8D168 */
 
-/* fzgx:begin fn_1_8D1C8 noprologue */
-#include "types.h"
-#include "dolphin/hw_regs.h"
-#include "psvec.h"
+/* fzgx:begin fn_1_8D1C8 */
+struct fn_1_8D210_car;
+extern s32 fn_1_8D210(struct fn_1_8D210_car *car, s32 (*callback)(u32), u32 arg, s32 enable);
 
-extern void fn_1_8D210(u32 arg0, u32 arg1, u32 arg2, u32 arg3);
-
-void fn_1_8D1C8(u32 arg0, u32 arg1, u32 arg2) {
-    fn_1_8D210(arg0, arg1, arg2, 1);
+// Invoke the car callback with processing enabled.
+void fn_1_8D1C8(struct fn_1_8D210_car *car, s32 (*callback)(u32), u32 arg) {
+    fn_1_8D210(car, callback, arg, 1);
 }
 /* fzgx:end fn_1_8D1C8 */
 
-/* fzgx:begin fn_1_8D1EC noprologue */
-#include "types.h"
-#include "dolphin/hw_regs.h"
-#include "psvec.h"
+/* fzgx:begin fn_1_8D1EC */
+struct fn_1_8D210_car;
+extern s32 fn_1_8D210(struct fn_1_8D210_car *car, s32 (*callback)(u32), u32 arg, s32 enable);
 
-extern void fn_1_8D210(u32 arg0, u32 arg1, u32 arg2, u32 arg3);
-
-void fn_1_8D1EC(u32 arg0, u32 arg1, u32 arg2) {
-    fn_1_8D210(arg0, arg1, arg2, 0);
+// Call the car initializer with the enable flag cleared.
+void fn_1_8D1EC(struct fn_1_8D210_car *car, s32 (*callback)(u32), u32 arg) {
+    fn_1_8D210(car, callback, arg, 0);
 }
 /* fzgx:end fn_1_8D1EC */
 

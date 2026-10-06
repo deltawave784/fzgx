@@ -456,9 +456,6 @@ rel/main_rel/game/fn_1_3F264.c:
 rel/main_rel/game/fn_1_3F440.c:
 	.text       start:0x0003F440 end:0x0003F4B8
 
-rel/main_rel/game/fn_1_3F75C.c:
-	.text       start:0x0003F75C end:0x0003F7A0
-
 rel/main_rel/game/fn_1_3F7A0.c:
 	.text       start:0x0003F7A0 end:0x0003F7D0
 
@@ -6347,9 +6344,6 @@ rel/main_rel/effect/fn_1_5B3D0.c:
 
 rel/main_rel/face/fn_1_D1C94.c:
 	.text       start:0x000D1C94 end:0x000D1F88 align:4
-
-rel/main_rel/effect/fn_1_5F5C8.c:
-	.text       start:0x0005F5C8 end:0x0005F654 align:4
 
 rel/main_rel/memcard/fn_1_AD264.c:
 	.text       start:0x000AD264 end:0x000AEC34 align:4
