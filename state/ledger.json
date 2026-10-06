@@ -1,5 +1,5 @@
 {
- "generated": 1791323133,
+ "generated": 1791323440,
  "functions": [
   {
    "symbol": "car_colchg:_prolog",
@@ -6604,7 +6604,7 @@
    "addr": 35652,
    "size": 312,
    "status": "unmatched",
-   "attempts": 4,
+   "attempts": 5,
    "best_percent": 98.333336,
    "claimed_by": null,
    "claimed_at": null,
@@ -483620,19 +483620,19 @@
    "id": 18912,
    "symbol": "fn_17_8B44",
    "agent": "codex-goal-20261006-1503-2-codex-10",
-   "harness": null,
-   "model": null,
+   "harness": "codex",
+   "model": "gpt-6.1-sol",
    "started": 1791320643,
-   "ended": null,
-   "checks": 23,
-   "final_percent": 92.76923,
+   "ended": 1791323440,
+   "checks": 47,
+   "final_percent": 98.333336,
    "tokens_in": 0,
    "tokens_out": 0,
    "cost_usd": 0.0,
-   "outcome": null,
-   "notes": null,
-   "best_body_path": null,
-   "stale_checks": 8,
+   "outcome": "released",
+   "notes": "budget exhausted: 24 checks used",
+   "best_body_path": "C:\\Users\\tyler\\Documents\\Git\\FZero-GX-Decomp-codex\\.fzgx\\attempts\\fn_17_8B44.1791323440.c",
+   "stale_checks": 1,
    "best_in_attempt": 98.333336
   },
   {
@@ -484679,6 +484679,25 @@
    "best_body_path": "C:\\Users\\tyler\\Documents\\Git\\FZero-GX-Decomp-codex\\.fzgx\\attempts\\fn_14_B484.1791322996.c",
    "stale_checks": 12,
    "best_in_attempt": 90.70974
+  },
+  {
+   "id": 18968,
+   "symbol": "fn_17_8B44",
+   "agent": "codex-goal-20261006-1548-1-codex-1",
+   "harness": "codex",
+   "model": "gpt-6.1-sol",
+   "started": 1791323311,
+   "ended": 1791323440,
+   "checks": 24,
+   "final_percent": 98.333336,
+   "tokens_in": 433556,
+   "tokens_out": 4135,
+   "cost_usd": 0.0,
+   "outcome": "released",
+   "notes": "budget exhausted: 24 checks used",
+   "best_body_path": "C:\\Users\\tyler\\Documents\\Git\\FZero-GX-Decomp-codex\\.fzgx\\attempts\\fn_17_8B44.1791323440.c",
+   "stale_checks": 1,
+   "best_in_attempt": 98.333336
   }
  ],
  "names": [
