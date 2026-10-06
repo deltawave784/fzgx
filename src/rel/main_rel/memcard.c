@@ -1362,8 +1362,6 @@ void fn_1_AC4C4(Fn1AC4C4Target *target) {
 /* fzgx:end fn_1_AC4C4 */
 
 /* fzgx:begin fn_1_AC53C */
-
-
 extern void fn_1_46B4(u32, u32, const char *, int);
 
 typedef struct MemcardCleanupState {
