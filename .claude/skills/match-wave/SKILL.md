@@ -67,8 +67,8 @@ wait for the user when:
 - two consecutive waves match nothing (agents, reuse, fixup and asm units together);
 - `route --skip-tried` returns no rows (escalation is the user's decision);
 - a tool call is refused for permissions, or the same tooling error repeats.
-Do not edit tooling, agent definitions or headers in an unattended run, and never start the
-librarian or a type-recovery pass. Commit only what the steps above commit.
+Do not edit tooling, agent definitions or headers in an unattended run, and never start a
+type-recovery pass or the librarian except as the scheduled pass in 'Librarian passes' below. Commit only what the steps above commit.
 
 ## Fable autonomous mode (the default for long unattended runs)
 
@@ -168,6 +168,37 @@ round to `.fzgx/reports/waves.md` (class, category, files, gate result, measured
 tokens). `round_interval` is 5 at first; two consecutive rounds with no kept change or no measured gain double it
 (5 -> 10 -> 20, capped at 20); a kept change with a gain resets it to 5. A round that fails its gate is reverted
 by the agent; two failed gates in a row stop the rounds for the rest of the run and notify.
+
+## Librarian passes (between batches)
+
+Matched units pile up declarations that only had to make one function match (private structs, own externs,
+prototypes that disagree with callers or headers). A librarian pass reconciles them with the deterministic TU
+pipeline (`tutruth`, `tu-finish`, `tu-check`, `headers`) and decides what is left. It runs only BETWEEN batches,
+under the same conditions as a tooling round (`git status` clean; no claim, `fixup`, `verify`, build, batch or
+tooling agent running), never alongside a matcher, and it is the one exception to "never start the librarian"
+above. Its definition is `.claude/agents/librarian.md`; its work list is `uv run tools/fzgx.py librarian-queue`.
+
+**Trigger** (check after each batch close-out, after the tooling-round check):
+- every 10 batches since the last pass, OR
+- `fzgx librarian-queue --severity code --decisions --module <module> --json` shows more than 25 rows that need a
+  decision for the module this clone is working, OR
+- after any tooling round that changed header, layout or TU-pass behaviour (its candidates only become real when
+  the TU compiles as one unit).
+
+**Steps:**
+1. `fzgx librarian-queue` (counts by kind and module) and `fzgx tu-check` on the TUs of the module's recent matches;
+   log both to `.fzgx/reports/waves.md`.
+2. Dispatch ONE `librarian` agent (`subagent_type: librarian`, default model) with one module and the top queue
+   items. Wait for its report: it commits its own work (`librarian:`), runs the gate and the snapshot.
+3. After it: `fixup --min-percent 95 --apply` and `verify` (a TU that now compiles as one unit can close near
+   misses; `tu-check --near-misses` lists them), `uv run ninja` before `progress --note "librarian pass <n>"`, and
+   log the result (items resolved, items left, blocks it reported for `revise-`, gate output, near misses made
+   closable).
+
+**Budget:** one agent, about 90 minutes, one module per pass. Blocks `tu-finish` reports as uncompilable under
+their prologue go to a `revise-` batch, not to the librarian. Two failed gates in a row stop the passes for the
+rest of the run and notify. Anything the queue marks as a generator defect (not a decision) becomes a tooling
+round.
 
 ## Two clones
 
