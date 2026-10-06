@@ -950,6 +950,196 @@ def initialized_data_views(p, symbol, text):
         yield 'native initialized data objects ' + base, rest[:at] + '\n' + block + rest[at:]
 
 
+BYTE_TYPES = r'(?:const\s+)?(?:u8|s8|char|unsigned\s+char|signed\s+char)'
+
+
+def tu_data_objects(p, symbol, text, top=False, limit=0x10000):
+    """Retail `.data` as separate objects addressed off the TU's data section base.
+
+    A byte view of a retail `.data` block (`u8 *s = lbl;`, `lbl + N`) keeps one object, so
+    MWCC folds every constant offset into a load displacement (`add; lwz 0x5c84(r3)`) and keeps
+    the view in a declared local. Retail defines each object separately: an indexed table gets
+    its own address (`addi r4, r30, 0x5c84; lwzx`) and the section base is a compiler
+    temporary. This defines the block from the model's symbol up to its last referenced object
+    as word arrays split at every referenced dtk object, with retail bytes and every pointer
+    word as a symbolic `__fzgx_offset_` initializer, in retail order (a `.fzgxpool` primer
+    touches them in that order). The definitions are `fzgx_pool_` statics: the oracle proves
+    the whole section against retail before binding its base. MWCC addresses objects off a
+    section base only when a function references three or more of them (two are addressed by
+    name), and numbers the section-base temporaries by where their sections' first definitions
+    sit in the file (fn_1_B5F20: the block above the literal pool gives retail's pool r29,
+    data r30), so `top` places the block before every other file-scope definition."""
+    import struct
+    from .sdkimport import masked
+    from .fixup_source import _function_body_span
+    from .dataimport import payload, pool_objects
+    sym = p.resolve(symbol)
+    syms = p.symbols(sym.module)
+    code = masked(text)
+    span = _function_body_span(code, sym.name)
+    if not span:
+        return None, ['function definition not found']
+    head, lo, hi = span[0], span[1], span[2]
+
+    def collect(code, head, lo, hi):
+        """label -> ([(token, pointee type)], edits removing the byte-pointer models)"""
+        found = {}
+        for m in re.finditer(r'(?:\b(%s)\s*\*\s*)?\b(\w+)\s*=\s*(?:\(\s*(?:%s|void)\s*\*\s*\)\s*)?(&\s*)?\b(lbl_\w+)\s*;'
+                             % (BYTE_TYPES, BYTE_TYPES), code[lo:hi]):
+            declared, var, amp, label = m.groups()
+            known = syms.get(label)
+            if not known or known.section != '.data' or known.kind != 'object':
+                continue
+            if len(re.findall(r'\b%s\s*=(?!=)' % re.escape(var), code[lo:hi])) != 1:
+                continue
+            edits = [(lo + m.start(), lo + m.end())]
+            ptype = declared
+            if ptype is None:
+                d = re.search(r'(?m)^[ \t]*(%s)\s*\*\s*%s\s*;[ \t]*\n?' % (BYTE_TYPES, re.escape(var)), code[lo:hi])
+                if not d:
+                    continue
+                ptype = d[1]
+                edits.append((lo + d.start(), lo + d.end()))
+            if amp is None:
+                decl = re.search(r'\bextern\s+(?:const\s+)?(\w+(?:\s+char)?)\s+%s\s*\[' % re.escape(label), code[:head] + include_text())
+                if not decl or not re.fullmatch(BYTE_TYPES, decl[1]):
+                    continue
+            tokens, all_edits = found.setdefault(label, ([], []))
+            tokens.append((var, re.sub(r'\s+', ' ', ptype)))
+            all_edits.extend(edits)
+        # a byte array label used directly, also beside a model: `lbl + N`, `(T *)(lbl + N)`
+        for label in sorted(set(re.findall(r'\b(lbl_\w+)\s*\+\s*\(?\s*(?:0x[\da-fA-F]+|\d+)\b', code[lo:hi]))):
+            known = syms.get(label)
+            if not known or known.section != '.data' or known.kind != 'object':
+                continue
+            decl = re.search(r'\bextern\s+((?:const\s+)?\w+(?:\s+char)?)\s+%s\s*\[' % re.escape(label), code[:head] + include_text())
+            if decl and re.fullmatch(BYTE_TYPES, decl[1]):
+                found.setdefault(label, ([], []))[0].append((label, re.sub(r'\s+', ' ', decl[1])))
+        return found
+
+    labels = sorted(collect(code, head, lo, hi))
+    if not labels:
+        return None, ['no byte view of a same-module .data object']
+    notes, out = [], text
+    for label in labels:
+        # positions move with every rewrite: collect each label on the current text
+        models = collect(code, head, lo, hi)
+        if label not in models:
+            continue
+        tokens, edits = models[label]
+        types = dict(tokens)
+        known = syms[label]
+        token = '(?:%s)' % '|'.join(re.escape(name) for name in types)
+        # every use: `x + N`, `x + (N)`, `x[N]`, or the bare pointer (offset 0); the scan covers
+        # the body and the file-scope macros that spell the view
+        regions = [(lo, hi)] + [(m.start(), m.end()) for m in re.finditer(r'(?m)^[ \t]*#\s*define\b.*$', code[:head])]
+        uses = []
+        for a, b in regions:
+            for m in re.finditer(r'(?<![\w.>])(%s)\b(?!\s*=[^=])(?:\s*\+\s*(\()?\s*(0x[\da-fA-F]+|\d+)\b(?(2)\s*\))'
+                                 r'|\s*\[\s*(0x[\da-fA-F]+|\d+)\s*\])?' % token, code[a:b]):
+                s, e = a + m.start(), a + m.end()
+                if any(x <= s < y for x, y in edits):
+                    continue
+                if re.search(r'&\s*$', code[max(0, s - 4):s]):
+                    break
+                off, index = m[3], m[4]
+                if off and not m[2] and re.match(r'\s*[*/%\[]', code[e:]):
+                    # `x + 4 * i`: only the pointer itself is a constant address
+                    e, off = s + len(m[1]), None
+                uses.append((s, e, int(off or index or '0', 0), 'index' if index else 'ptr', types[m[1]]))
+            else:
+                continue
+            uses = None
+            break
+        if not uses:
+            notes.append(f'{label}: no usable references'); continue
+        objects = sorted((s for s in syms.values() if s.section == '.data' and s.kind == 'object'), key=lambda s: s.addr)
+        section = section_bytes(p, sym.module, '.data', known.addr)
+        if section is None:
+            notes.append(f'{label}: no retail .data bytes'); continue
+        origin, whole = section
+        cuts, refs = {0}, {}
+        for _, _, off, _, _ in uses:
+            address = known.addr + off
+            owner = next((s for s in objects if s.addr <= address < max(s.end, s.addr + 1)), None)
+            start = owner.addr if owner and owner.addr >= known.addr else address
+            if start != address and address % 4 == 0:
+                # dtk joins unlabelled string literals into one object; each literal is its own
+                # retail object (MWCC pools a section base only over three referenced objects),
+                # and `(u8 *)obj + k` never folds into the base's `addi rX, rBase, off`
+                start = address
+            following = next((s.addr for s in objects if s.addr > start), None)
+            end = owner.end if owner and owner.addr >= known.addr else address + 1
+            end = (end + 3) & ~3
+            if following is not None and following < end:
+                end = following
+            refs[off] = start - known.addr
+            cuts.update((start - known.addr, end - known.addr))
+        extent = max(cuts)
+        if any(c % 4 for c in cuts) or known.addr % 4:
+            notes.append(f'{label}: a referenced object is not word aligned'); continue
+        if extent > limit:
+            notes.append(f'{label}: block of {extent:#x} bytes exceeds {limit:#x}'); continue
+        raw = whole[known.addr - origin:known.addr - origin + extent]
+        if len(raw) != extent:
+            notes.append(f'{label}: block runs past the section'); continue
+        relocations = {}
+        try:
+            for obj in pool_objects(p, sym.module, '.data', known.addr, extent):
+                for rel in payload(p, obj)[1]:
+                    offset = obj.addr + rel['offset'] - known.addr
+                    if 0 <= offset < extent:
+                        if rel['kind'] != 1 or offset % 4 or rel['addend'] < 0 or not re.fullmatch(r'[A-Za-z_]\w*', rel['symbol']):
+                            raise ValueError('unsupported initialized pointer')
+                        relocations[offset] = rel
+        except (ValueError, KeyError) as exc:
+            notes.append(f'{label}: {exc}'); continue
+        declarations, definitions, names = set(), [], {}
+        def word(offset):
+            rel = relocations.get(offset)
+            if rel:
+                alias = rel['symbol'] + '__fzgx_offset_%X' % rel['addend']
+                declarations.add('extern u8 ' + alias + '[];')
+                return '(u32)' + alias
+            return '0x%X' % struct.unpack_from('>I', raw, offset)[0]
+        bounds = sorted(cuts)
+        for a, b in zip(bounds, bounds[1:]):
+            owner = next((s for s in objects if s.addr == known.addr + a), None)
+            name = f'fzgx_pool_data_{owner.name if owner else label + "_%X" % a}'
+            names[a] = name
+            words = [word(i) for i in range(a, b, 4)]
+            lines = ',\n'.join('    ' + ', '.join(words[i:i + 8]) for i in range(0, len(words), 8))
+            definitions.append(f'static u32 {name}[{len(words)}] = {{  /* fzgx-allow: A1 retail data bytes and bindings */\n{lines}\n}};')
+        replacements = [(s, e, '') for s, e in edits]
+        for s, e, off, kind, ptype in uses:
+            start = refs[off]
+            inner = off - start
+            value = f'(({ptype} *){names[start]} + {inner:#x})' if inner else f'(({ptype} *){names[start]})'
+            replacements.append((s, e, f'(*{value})' if kind == 'index' else value))
+        for s, e, value in sorted(replacements, reverse=True):
+            out = out[:s] + value + out[e:]
+            code = code[:s] + value + code[e:]
+        if not re.search(r'\b%s\b' % re.escape(label), re.sub(r'(?m)^[^\n]*\bextern\b[^\n;]*;', '', code)):
+            out = re.sub(r'(?m)^[ \t]*extern\b[^\n;]*\b%s\b[^\n;]*;[ \t]*\n?' % re.escape(label), '', out)
+        primer = ('#pragma section code_type ".fzgxpool"\nstatic void fzgx_data_layout_%s(void) {\n'
+                  '    volatile u8 s;  /* fzgx-allow: S2 layout primer sink: keeps the retail .data objects in retail order */\n' % label
+                  + ''.join(f'    s = *(u8 *){n};\n' for _, n in sorted(names.items()))
+                  + '}\n#pragma section code_type ".text"\n')
+        block = '\n'.join(sorted(declarations)) + '\n' + '\n'.join(definitions) + '\n' + primer + '\n'
+        code = masked(out)
+        span = _function_body_span(code, sym.name)
+        at = code.rfind('\n', 0, span[0]) + 1
+        if top:
+            directives = list(re.finditer(r'(?m)^[ \t]*#\s*include\b[^\n]*\n', code[:at]))
+            at = directives[-1].end() if directives else 0
+        out = out[:at] + block + out[at:]
+        code = masked(out)
+        span = _function_body_span(code, sym.name)
+        head, lo, hi = span
+        notes.append(f'{label}: {len(names)} objects over {extent:#x} bytes, {len(relocations)} pointers')
+    return (out if out != text else None), notes
+
+
 def string_run(p, symbol, text, cast=''):
     sym = p.resolve(symbol)
     syms = p.symbols(sym.module)
@@ -1069,6 +1259,13 @@ def tu_section_layout(p, symbol, body, check):
             out.append((f'define retail TU bss objects ({mode})', text))
             bases.append((mode, text))
     for name, base in bases + [('body', body)]:
+        for top in (False, True):
+            try:
+                text, notes = tu_data_objects(p, symbol, base, top)
+            except (ValueError, KeyError, IndexError, AttributeError, TypeError, OSError):
+                text = None
+            if text:
+                out.append((f'define retail TU data objects ({name}, {"file start" if top else "before the function"})', text))
         for cast in ('', '(u8 *)'):
             try:
                 text, notes = string_run(p, symbol, base, cast)
