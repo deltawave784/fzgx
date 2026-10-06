@@ -6716,3 +6716,6 @@ rel/main_rel/sel_static_disp/fn_1_142BDC.c:
 
 rel/main_rel/stcoli/fn_1_2D524.c:
 	.text       start:0x0002D524 end:0x0002D888 align:4
+
+rel/main_rel/screen_effect/fn_1_788B0.c:
+	.text       start:0x000788B0 end:0x00078950 align:4

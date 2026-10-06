@@ -1728,6 +1728,115 @@ u8 fn_1_7879C(u32 arg0) {
 }
 /* fzgx:end fn_1_7879C */
 
+/* fzgx:begin fn_1_788B0 */
+typedef struct {
+    f32 x, y, z;
+} Vec3f;
+
+extern void fn_80072864(u32);
+extern void lbl_8006DCA4(void);
+extern void lbl_8006E0A4(Vec3f *);
+extern void lbl_8006E13C(Vec3f *);
+extern void fn_80072558(void);
+extern u32 fn_800384FC(u32, u32);
+
+/* Shared literal pool primer: screen_effect.c pools every literal of the TU
+   behind one base (lbl_1_rodata_3180). These dummy functions, in a section
+   the link ignores, reference the pooled literals in retail address order so
+   this function's own literals and initializer images land on retail's offsets. */
+#pragma section ".fzgxpool"
+
+union FzgxPoolColor { struct { u8 r, g, b, a; } bytes; u32 word; };
+
+extern void fzgx_pool_sink_p(void *);
+extern void fzgx_pool_sink_f(f32);
+extern void fzgx_pool_sink_d(f64);
+
+__declspec(section ".fzgxpool") void fzgx_pool_primer_0(void) {
+    union FzgxPoolColor c0 = {{0xFF, 0xFF, 0xFF, 0xFF}};
+    union FzgxPoolColor c1 = {{0xFF, 0xFF, 0xFF, 0xFF}};
+    union FzgxPoolColor c2[2] = {{{0xFF, 0x91, 0x00, 0x00}}, {{0xFF, 0x76, 0x00, 0x44}}};
+    union FzgxPoolColor c3 = {{0x66, 0x00, 0xFF, 0x32}};
+    union FzgxPoolColor c4 = {{0x94, 0x00, 0x94, 0x94}};
+    union FzgxPoolColor c5 = {{0xCB, 0x00, 0x05, 0xCF}};
+    union FzgxPoolColor c6 = {{0x00, 0xFF, 0x00, 0x00}};
+    fzgx_pool_sink_p(&c0);
+    fzgx_pool_sink_p(&c1);
+    fzgx_pool_sink_p(c2);
+    fzgx_pool_sink_p(&c3);
+    fzgx_pool_sink_p(&c4);
+    fzgx_pool_sink_p(&c5);
+    fzgx_pool_sink_p(&c6);
+    fzgx_pool_sink_f(0.0f);
+    fzgx_pool_sink_f(255.0f);
+    fzgx_pool_sink_f(40.0f);
+    fzgx_pool_sink_f(1.0f);
+    fzgx_pool_sink_f(0.5f);
+    fzgx_pool_sink_f(0.025f);
+    fzgx_pool_sink_f(40.96f);
+    fzgx_pool_sink_f(409.6f);
+    fzgx_pool_sink_f(2.0f);
+    fzgx_pool_sink_f(-2.0f);
+    fzgx_pool_sink_f(0.01f);
+    fzgx_pool_sink_f(0.003f);
+    fzgx_pool_sink_f(5.0f);
+    fzgx_pool_sink_f(15.0f);
+}
+
+__declspec(section ".fzgxpool") void fzgx_pool_primer_1(s32 a, u32 b) {
+    fzgx_pool_sink_f((f32)a);
+    fzgx_pool_sink_f((f32)b);
+}
+
+__declspec(section ".fzgxpool") void fzgx_pool_primer_2(void) {
+    fzgx_pool_sink_f(480.0f);
+    fzgx_pool_sink_f(0.95f);
+    fzgx_pool_sink_f(640.0f);
+    fzgx_pool_sink_f(30.0f);
+    fzgx_pool_sink_f(127.0f);
+    fzgx_pool_sink_f(0.2f);
+    fzgx_pool_sink_f(-128.0f);
+    fzgx_pool_sink_f(320.0f);
+    fzgx_pool_sink_f(0.25f);
+    fzgx_pool_sink_d(0.3);
+    fzgx_pool_sink_d(-128.0);
+    fzgx_pool_sink_d(127.0);
+    fzgx_pool_sink_f(0.0009765625f);
+    fzgx_pool_sink_f(32.0f);
+    fzgx_pool_sink_f(1.46f);
+    fzgx_pool_sink_f(639.0f);
+    fzgx_pool_sink_f(10.0f);
+    fzgx_pool_sink_f(0.1422991f);
+}
+
+__declspec(section ".fzgxpool") void fzgx_pool_primer_3(void) {
+    Vec3f eye = { 0.0f, 0.0f, 0.0f };
+    Vec3f target = { 20.0f, 20.0f, 20.0f };
+    fzgx_pool_sink_p(&eye);
+    fzgx_pool_sink_p(&target);
+    fzgx_pool_sink_f(20.0f);
+}
+
+u32 fn_1_788B0(void) {
+    Vec3f eye = { 0.0f, 0.0f, 0.0f };
+    Vec3f target = { 20.0f, 20.0f, 20.0f };
+
+    eye.x = 0.0f;
+    eye.y = 0.0f;
+    eye.z = 0.0f;
+    target.x = 20.0f;
+    target.y = 20.0f;
+    target.z = 20.0f;
+
+    fn_80072864(2);
+    lbl_8006DCA4();
+    lbl_8006E0A4(&eye);
+    lbl_8006E13C(&target);
+    fn_80072558();
+    return fn_800384FC(10, 10);
+}
+/* fzgx:end fn_1_788B0 */
+
 /* fzgx:begin fn_1_78950 */
 // Reset the screen effect state and refresh its processing stages twice.
 void fn_1_78950(void) {
