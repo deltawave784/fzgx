@@ -479,3 +479,6 @@ rel/customize/toolkit/fn_3_1A488.c:
 
 rel/customize/editor/fn_3_1683C.c:
 	.text       start:0x0001683C end:0x000169B8 align:4
+
+rel/customize/emblem/fn_3_14778.c:
+	.text       start:0x00014778 end:0x00014794 align:4
