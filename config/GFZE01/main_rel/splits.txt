@@ -6710,3 +6710,6 @@ rel/main_rel/screen_effect/fn_1_7BAF8.c:
 
 rel/main_rel/car/fn_1_8E084.c:
 	.text       start:0x0008E084 end:0x0008E188 align:4
+
+rel/main_rel/sel_static_disp/fn_1_142BDC.c:
+	.text       start:0x00142BDC end:0x0014328C align:4
