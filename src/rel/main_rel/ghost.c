@@ -1,39 +1,82 @@
 #include "types.h"
+#include "dolphin/types.h"
 #include "rel/main_rel/globals.h"
 #include "rel/main_rel/ghost.h"
+#include "dolphin/ar.h"
 
-extern void fn_1_F23E8(void);
-extern void fn_1_EE530(void);
-extern u8 fn_1_B7C00(void);
+typedef struct {
+    f32 x;
+    f32 y;
+    f32 z;
+} Vec3;
+
+typedef struct {
+    u32 field_0;
+    s16 field_4;
+    s16 field_6;
+    u8 _pad8[0x74];
+    Vec3 field_7c;
+    u8 _pad88[0x64];
+    u8 _pad_ec[0x60];
+    u8 field_14c[0xb4];
+    f32 field_200;
+    u8 _pad204[0x20];
+    f32 field_224;
+    u8 _pad228[0x24d];
+    u8 field_475;
+} FnObject;
+
+typedef struct {
+    u32 unk_0;
+    u8 unk_4;
+    u8 pad_5[0xF];
+    u8 unk_14;
+    u8 pad_15[0x33];
+} fn_1_EF4F8_Obj_1_bss_7ECB4;
+extern u32 lbl_801A6410[];
+extern void fn_1_46B4(u32 arg0, u32 arg1, const char *arg2, int arg3);
+extern int fn_1_B7E98(int index);
+extern void fn_1_B9C0C(void);
 extern void fn_1_B9BE0(void);
+extern void fn_1_AA6D8(s32, s32, void *);
+extern void fn_1_F1D70(void);
+extern void fn_80008BEC(void *dest, int value, u32 size);
+extern void fn_1_F143C(FnObject *obj, s32 index, const f32 *a, const f32 *b, void *arg5);
+extern s32 fn_1_BA144(fn_1_EF4F8_Obj_1_bss_7ECB4 *);
+extern void fn_1_BC310(fn_1_EF4F8_Obj_1_bss_7ECB4 *);
+extern void fn_1_BC29C();
+extern void fn_1_EE530(void);
+extern u32 fn_1_4630();
+extern void fn_80008BA8(u32 arg0, u32 arg1, u32 arg2);
+extern void fn_1_C0510(void *);
+extern void ARQPostRequest(void *arg0, u32 arg1, u32 arg2, u32 arg3, void *arg4, void *arg5, u32 arg6, void (*callback)(void));
+extern void fn_1_F1950(void);
+extern u32 fn_8002071C();
+extern u32 fn_800206FC(u32 arg0);
+extern void OSReport(const char *, ...);
+extern u32 ARGetDMAStatus(void);
+extern void DCInvalidateRange(void *, u32);
+extern void fn_1_F23E8(void);
+extern u8 fn_1_B7C00(void);
 extern void fn_1_B9DE8(Obj_1_bss_7ECB4 *obj);
 extern u8 lbl_1_bss_7EA00[56];
 extern int fn_1_B7CD4(void);
-extern int fn_1_B7C5C(void);
+extern u32 fn_1_B7C5C(void);
 extern u32 lbl_1_bss_7B19C[2];
-extern u32 lbl_801A6410[];
-extern void fn_1_46B4(u32, u32, void *, u32);
 extern void fn_1_C1394(void);
-extern void OSReport(const char *, ...);
 extern void fn_1_49410(void);
 extern void fn_1_495FC(void);
 extern const f32 lbl_1_rodata_6D20;
 extern const f32 lbl_1_rodata_6D24;
-extern void fn_1_496FC(f32, f32);
-extern void fn_1_495C8(s32);
+extern void fn_1_496FC(f32 value1, f32 value2);
+extern void fn_1_495C8(u8 value);
 extern s32 lbl_1_bss_7B198;
-extern void fn_1_4AE0C(void *, ...);
+extern void fn_1_4AE0C(const char* format, ...);
 extern u8 lbl_1_bss_7C8CE[70];
-extern void fn_1_F1D70(void);
 extern u32 lbl_1_bss_7EA38[159];
 extern const f64 lbl_1_rodata_6B68;
 extern const f32 lbl_1_rodata_6D10;
 extern const f32 lbl_1_rodata_6D44;
-extern void fn_80008BEC(void *dst, int value, int size);
-extern void fn_1_F1950(void);
-extern u32 fn_8002071C(void *arg);
-extern void fn_800206FC(u32 arg);
-extern u32 ARGetDMAStatus(void);
 extern void DCFlushRange(void *addr, u32 size);
 extern u32 lbl_1_bss_7C848[2];
 extern u8 lbl_1_bss_7C8CD;
@@ -41,25 +84,14 @@ extern u32 lbl_1_bss_7C948;
 extern void fn_1_12EF80(s16 arg, s16 *out_a, s16 *out_b);
 extern u32 lbl_1_bss_7B190[2];
 extern u32 lbl_1_bss_7ED58[158];
-
-extern void fn_1_12EF80(s16 arg, s16 *out_a, s16 *out_b);
-
-extern void OSReport(const char *, ...);
-extern void fn_1_12EF80(s16 arg, s16 *out_a, s16 *out_b);
-
-extern void fn_1_12EF80(s16 arg, s16 *out_a, s16 *out_b);
-
-extern void fn_1_12EF80(s16 arg, s16 *out_a, s16 *out_b);
 extern f64 lbl_1_rodata_6C88;
-extern void fn_80008BA8(u32 *out, const void *value, s32 size);
 extern s32 fn_1_F21B8(s32 arg);
 extern void fn_1_F0D10(s32, void *);
 extern void fn_1_F0B5C(s32, void *);
 extern void fn_1_F0E00(s32, void *);
 extern s32 fn_1_3F164(void);
-extern void fn_1_B9C0C(void);
-extern void fn_1_1596DC(s32);
-extern void fn_1_484CC(s32);
+extern void fn_1_1596DC(int index);
+extern void fn_1_484CC(s32 index);
 extern u32 lbl_1_bss_7C914[13];
 extern const f32 lbl_1_rodata_6D38;
 extern const f32 lbl_1_rodata_6D3C;
@@ -74,7 +106,7 @@ extern const f32 lbl_1_rodata_6BD0;
 extern const f64 lbl_1_rodata_6D48;
 extern const f32 lbl_1_rodata_6D50;
 extern f64 fn_80088598(f64, f64);
-extern u8 *fn_1_3F0D8(u32, f32 *, u8 *);
+extern u8 *fn_1_3F0D8(u32 index, f32 *value, u8 *flag);
 
 /* fzgx:begin fn_1_EB330 noprologue */
 #include "types.h"
@@ -280,8 +312,6 @@ void fn_1_ECF68(void) {
 /* fzgx:end fn_1_ECF68 */
 
 /* fzgx:begin fn_1_EE3F4 */
-extern void fn_1_F143C(void *, s32, void *, void *, void *);
-
 void fn_1_EE3F4(void) {
     u8 *base;
     void *unk_38c4;
@@ -321,7 +351,7 @@ void fn_1_EE3F4(void) {
         }
         fn_1_F0D10(i, unk_3a04);
         fn_1_F0B5C(i, unk_3af4);
-        fn_1_F143C(unk_19c8, i, unk_3af4, unk_39b4, unk_3a04);
+        fn_1_F143C( (FnObject *)(void *)(unk_19c8), i, (const f32 *)(void *)(unk_3af4), (const f32 *)(void *)(unk_39b4), unk_3a04);
         unk_38c4 = (u8 *)unk_38c4 + 0x30;
         unk_39b4 = (u8 *)unk_39b4 + 0xc;
         unk_39f0 = (u8 *)unk_39f0 + 4;
@@ -375,8 +405,6 @@ void fn_1_EF4F4(void) {
 /* fzgx:end fn_1_EF4F4 */
 
 /* fzgx:begin fn_1_EF4F8 */
-#include "types.h"
-
 typedef struct {
     u8 pad_000[0x1D4];
     s32 state;
@@ -390,17 +418,7 @@ typedef struct {
     u8 pad_4[0x2C0];
 } fn_1_EF4F8_Obj_1_bss_7C584;
 
-typedef struct {
-    u32 unk_0;
-    u8 unk_4;
-    u8 pad_5[0xF];
-    u8 unk_14;
-    u8 pad_15[0x33];
-} fn_1_EF4F8_Obj_1_bss_7ECB4;
 
-extern s32 fn_1_BA144(fn_1_EF4F8_Obj_1_bss_7ECB4 *);
-extern void fn_1_BC310(fn_1_EF4F8_Obj_1_bss_7ECB4 *);
-extern void fn_1_BC29C(fn_1_EF4F8_Obj_1_bss_7ECB4 *);
 
 void fn_1_EF4F8(void) {
     struct { u32 * value; } entries;
@@ -430,7 +448,7 @@ void fn_1_EF4F8(void) {
     zero = 0;
     for (; i < 0x7F; i++) {
         if (*entries.value != 0) {
-            fn_1_46B4(*global, *entries.value, &data->work[0xF0], 0xEBA);
+            fn_1_46B4(*global, *entries.value, (const char *)(void *)(&data->work[0xF0]), 0xEBA);
             *entries.value = zero;
         }
         entries.value++;
@@ -601,12 +619,11 @@ void fn_1_EF860(void) {
     fn_1_EE530();
     if (!fn_1_B7C00()) {
         if (!fn_1_B7CD4()) {
-            value = fn_1_B7C5C();
+            value = (int)fn_1_B7C5C();
             OSReport((const char *)(base + 0x3ac), value);
         }
         if (lbl_1_bss_7B19C[0] != 0) {
-            fn_1_46B4(lbl_801A6410[0], lbl_1_bss_7B19C[0],
-                      (void *)(base + 0x2d4), 0xf44);
+            fn_1_46B4(lbl_801A6410[0], lbl_1_bss_7B19C[0], (const char *)((void *)(base + 0x2d4)), 0xf44);
             lbl_1_bss_7B19C[0] = 0;
         }
         if (lbl_1_bss_7ECB4.unk_14 == (s8)8) {
@@ -647,9 +664,9 @@ void fn_1_EF97C(void) {
     fn_1_495C8(9);
 
     if (lbl_1_bss_7B198) {
-        fn_1_4AE0C(base + 0x40C);
+        fn_1_4AE0C( (const char*)(void *)(base + 0x40C));
     } else {
-        fn_1_4AE0C(base + 0x458);
+        fn_1_4AE0C( (const char*)(void *)(base + 0x458));
     }
 }
 /* fzgx:end fn_1_EF97C */
@@ -687,28 +704,6 @@ void fn_1_F0164(void) {
 /* fzgx:end fn_1_F0164 */
 
 /* fzgx:begin fn_1_F143C */
-typedef struct {
-    f32 x;
-    f32 y;
-    f32 z;
-} Vec3;
-
-typedef struct {
-    u32 field_0;
-    s16 field_4;
-    s16 field_6;
-    u8 _pad8[0x74];
-    Vec3 field_7c;
-    u8 _pad88[0x64];
-    u8 _pad_ec[0x60];
-    u8 field_14c[0xb4];
-    f32 field_200;
-    u8 _pad204[0x20];
-    f32 field_224;
-    u8 _pad228[0x24d];
-    u8 field_475;
-} FnObject;
-
 #pragma opt_common_subs off
 void fn_1_F143C(FnObject *obj, s32 index, const f32 *a, const f32 *b, void *arg5) {
     u32 *entry;
@@ -777,8 +772,6 @@ u32 fn_1_F1588(void) {
 /* fzgx:end fn_1_F1588 */
 
 /* fzgx:begin fn_1_F1650 */
-#include "types.h"
-
 #pragma opt_common_subs off
 f32 fn_1_F1650(const u32 *value) {
     s32 i;
@@ -820,8 +813,6 @@ f32 fn_1_F1650(const u32 *value) {
 /* fzgx:end fn_1_F1650 */
 
 /* fzgx:begin fn_1_F17B4 */
-#include "types.h"
-
 s32 fn_1_F17B4(const void *value) {
     u32 bits;
     s32 exponent;
@@ -831,7 +822,7 @@ s32 fn_1_F17B4(const void *value) {
     s32 magnitude;
     s32 result;
 
-    fn_80008BA8(&bits, value, 4);
+    fn_80008BA8( (u32)(u32 *)(&bits), (u32)(const void *)(value), 4);
 
     exponent = (s32)((bits >> 23) & 0xff) - 0x7f;
     sign = bits >> 31;
@@ -892,10 +883,6 @@ void fn_1_F1950(void) {
 /* fzgx:end fn_1_F1950 */
 
 /* fzgx:begin fn_1_F1960 */
-extern void ARQPostRequest(void *arg0, u32 arg1, u32 arg2, u32 arg3,
-                        void *arg4, void *arg5, u32 arg6,
-                        void (*callback)(void));
-
 void fn_1_F1960(void *arg0, void *arg1, u32 arg2) {
     u32 result;
     u8 temp[0x20];

@@ -87,6 +87,61 @@ struct fn_1_530C8_lbl_1_rodata_282C {
 };
 
 struct FzgxCopy_88 { u32 words[22]; };
+
+typedef struct {
+    u8 pad_00[4];
+    u32 unk_04;
+    void *unk_08;
+    u8 unk_0C[0x30];
+    u16 unk_3C;
+    u8 pad_3E[2];
+    Obj_1_bss_6C7A4 unk_40;
+    void *unk_68[4];
+} Fn1_55EA0Object;
+
+typedef struct fn_1_56470_FontState {
+    u8 unk_00[4];
+    void *unk_04;
+    f32 unk_08;
+    s8 unk_0C;
+    u8 unk_0D;
+    s8 unk_0E;
+    u8 unk_0F;
+    u8 unk_10;
+    u8 unk_11;
+    u8 unk_12;
+    u8 unk_13;
+    u32 unk_14;
+    f32 unk_18;
+    f32 unk_1C;
+    u32 unk_20;
+    u32 unk_24;
+} fn_1_56470_FontState;
+extern s32 lbl_801A6410;
+extern u32 lbl_1_bss_3E060[1387];
+extern void fn_1_46B4(u32 arg0, u32 arg1, const char *arg2, int arg3);
+extern const f32 lbl_1_rodata_2750;
+extern const f32 lbl_1_rodata_2754;
+extern u8 lbl_1_bss_4E688[0x20];
+extern f32 fn_1_519AC(u32);
+extern void lbl_8006D7F4(f32 arg0, f32 arg1, f32 arg2);
+extern void lbl_8006E15C(f32 arg0, f32 arg1, f32 arg2);
+extern void mathutil_mtxA_rotate_z(s16 arg0);
+extern void lbl_8006DD7C(void);
+extern void lbl_8006DB74(void *value);
+extern void fn_800745A4(u32 arg0, s32 arg1, s32 arg2, u32 arg3, u32 arg4, u32 arg5);
+extern u32 GXLoadTexMtxImm(u32, u32, u32);
+extern void DCFlushRange(void *, u32);
+extern void GXInitTexObj(void *, void *, u16, u16, u32, u32, u32, u8);
+extern void fn_80073778(void *obj, s32 index);
+extern void fn_80073C6C(s32 index);
+extern void fn_800734A8(u32 arg0, s32 arg1, s32 arg2, s32 arg3);
+extern void fn_80072C24(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
+extern void fn_80072D64(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u8 arg4, s32 arg5);
+extern void fn_80072CC4(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
+extern void fn_80072E20(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u8 arg4, s32 arg5);
+extern void fn_800729B0(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
+extern void fn_80072AB0(s32 arg0, s32 arg1, s32 arg2);
 extern void *lbl_801A6D00;
 extern void fn_1_A71CC(void);
 extern void fn_800724C8(void);
@@ -98,52 +153,50 @@ extern void fn_80074788(u32 arg0);
 extern void fn_80074660(u32 arg0);
 extern void fn_80073678(u32 arg0);
 extern void fn_80073898(u32 arg0);
-extern void fn_80073C6C(s32 index);
 extern void fn_800720B0(int);
 extern void fn_80072864(u32 arg0);
-extern void fn_800745A4(u32 arg0, s32 arg1, s32 arg2, u32 arg3, u32 arg4, u32 arg5);
-extern void fn_80072D64(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u8 arg4, s32 arg5);
-extern void fn_80072E20(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u8 arg4, s32 arg5);
-extern void fn_800734A8(u32 arg0, s32 arg1, s32 arg2, s32 arg3);
 extern void fn_800728A8(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
-extern void fn_80072AB0(s32 arg0, s32 arg1, s32 arg2);
 extern void fn_80074918(u8 arg0, s32 arg1, u8 arg2);
-extern void fn_80072C24(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
-extern void fn_80072CC4(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
-extern f32 fn_1_519AC(u32 value);
-extern void DCFlushRange(void *, u32);
-extern void GXInitTexObj(void *, void *, u16, u16, u32, u32, u32, u8);
 extern void GXInitTexObjLOD(void *, u32, u32, f32, f32, f32, u8, u8, u32);
-extern void fn_80073778(void *obj, s32 index);
 extern int fn_1_159588(int arg);
 extern void OSReport(const char *format, ...);
 extern void fn_80008BA8(u32 arg0, u32 arg1, u32 arg2);
 extern u32 fn_1_54298(void);
 extern u32 fn_1_542A8(void);
 extern f32 fn_1_542B8(void);
+extern const f32 lbl_1_rodata_28A8;
+extern u8 *lbl_801A66CC;
+extern void fn_1_556B8(void *value);
+extern void fn_1_563E4(fn_1_563E4_FontState *font);
+extern void **fn_1_54448(s32 arg0);
+extern void * fn_1_548AC(u32);
+extern u16 fn_1_7BE94(void);
+extern void fn_1_5489C(void **arg0, void **arg1);
+extern void fn_1_56530(void);
+extern void lbl_8006DD14(void *value, void *object);
+extern void fn_1_55EA0(Fn1_55EA0Object *object);
+extern void fn_1_55924(void *value, void *arg);
+extern void fn_800780A4(void *value);
+extern void lbl_8006DBAC(void *);
+extern void fn_1_56470(fn_1_56470_FontState *state);
+extern void fn_1_7BEAC(u16);
+extern void fn_800749B0(s32 arg0, void *arg1);
+extern void fn_800781B8(void *);
+extern void fn_1_56554(void);
 extern f32 fn_1_4B1D4(s32 mode, s32 value);
 extern const f64 lbl_1_rodata_10F8;
 extern s32 fn_8008077C(u32 arg0, u32 arg1, u32 arg2);
 extern u8 lbl_1_rodata_FD0[];
-extern u8 *lbl_801A66CC;
 extern const f32 lbl_1_rodata_2870;
 extern const f64 lbl_1_rodata_2878;
 extern void lbl_8006E1B0();
 extern f32 lbl_8006D0B4(f32 value);
-extern void **fn_1_54448(s32 arg0);
-extern void * fn_1_548AC(u32 amount);
 extern void fn_1_55C48(void);
-extern u16 fn_1_7BE94(void);
-extern void fn_1_5489C(void **arg0, void **arg1);
-extern void fn_1_56530(void);
-extern void lbl_8006DB74(void *value);
-extern void lbl_8006DD14(void *value, void *object);
 extern void fn_1_4E500(void);
 extern void fn_1_48D80(void *value);
 extern void fn_1_4E6F4(void);
 extern s32 fn_1_4E724(FontParams *arg);
 extern s32 fn_1_4B16C(s32 value);
-extern const f32 lbl_1_rodata_2750;
 extern s32 fn_1_4EC74(FontParams *);
 extern s32 fn_1_4EB74(fn_1_4EB74_FontObject *self);
 extern f64 lbl_1_rodata_2778[2];
@@ -154,19 +207,12 @@ extern u16 fn_1_A5D88(void);
 extern u16 fn_1_A5DB0(void);
 extern const f32 lbl_1_rodata_2770;
 extern const f32 lbl_1_rodata_276C;
-extern const f32 lbl_1_rodata_2754;
-extern void lbl_8006D7F4(f32 arg0, f32 arg1, f32 arg2);
-extern void lbl_8006E15C(f32 arg0, f32 arg1, f32 arg2);
-extern void mathutil_mtxA_rotate_z(s16 arg0);
-extern void lbl_8006DD7C(void);
-extern u32 GXLoadTexMtxImm(u32, u32, u32);
 extern f32 lbl_8006D188(s16);
 extern struct fn_1_530C8_lbl_1_rodata_282C lbl_1_rodata_282C;
 extern u32 fn_1_54320(void);
 extern void fn_1_54668(fn_1_54668_node *node, s32 count, u32 reverse);
 extern void fn_1_547F8(fn_1_547F8_node *node);
 extern u32 fn_1_5448C();
-extern void fn_1_563E4(fn_1_563E4_FontState *font);
 extern void fn_80074B40(u8 *arg0);
 extern void fn_80077B04(f32 value);
 extern void fn_80071ED4(u8 value, f32 x, f32 y);
@@ -197,16 +243,13 @@ extern u32 lbl_801A66B4;
 extern void fn_1_9FA18(void);
 extern void fn_1_58248(void);
 extern void fn_1_54848(void);
-extern void fn_800794F0(u8 *data, void *value, s32 size);
+extern void fn_800794F0(u8 *dst, u8 *src, s32 len);
 extern s32 fn_1_54F5C(void *arg0, f32 arg1, f32 arg2);
 extern void fn_1_55210(void *value);
-extern const f32 lbl_1_rodata_28A8;
 extern void fn_1_557C4(void *value);
-extern void fn_1_556B8(void *value);
 extern void fn_80077E7C(void *value);
 extern void fn_80077F8C(void *value);
 extern void fn_80074CF4();
-extern void fn_800749B0(s32 arg0, void *arg1);
 extern const f32 lbl_1_rodata_28AC;
 extern u8 lbl_1_bss_6C7DC[100];
 extern u8 *fn_1_565E8(void);
@@ -228,15 +271,7 @@ extern void fn_1_55D6C(void);
 extern f32 lbl_1_rodata_10D8;
 extern f64 lbl_1_rodata_10E0[3];
 
-/* fzgx:begin fn_1_48C28 noprologue */
-#include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/font.h"
-
-extern s32 lbl_801A6410;
-extern u32 lbl_1_bss_3E060[1387];
-extern void fn_1_46B4(u32 arg0, u32 arg1, char *arg2, s32 arg3);
-
+/* fzgx:begin fn_1_48C28 */
 // Release every glyph texture owned by font slot `idx` that no other active
 // slot still references; shared ones are only unlinked from this slot.
 void fn_1_48C28(int idx) {
@@ -1441,11 +1476,7 @@ void fn_1_4E0F4(void) {
 }
 /* fzgx:end fn_1_4E0F4 */
 
-/* fzgx:begin fn_1_4E220 noprologue */
-#include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/font.h"
-
+/* fzgx:begin fn_1_4E220 */
 typedef struct fn_1_4E220_Sprite {
     u32 unk_0;
     f32 x;
@@ -1475,28 +1506,6 @@ typedef struct fn_1_4E220_Resource {
     u32 unk_24;
 } fn_1_4E220_Resource;
 
-extern const f32 lbl_1_rodata_2750;
-extern const f32 lbl_1_rodata_2754;
-extern u8 lbl_1_bss_4E688[0x20];
-extern f32 fn_1_519AC(u32 value);
-extern void lbl_8006D7F4(f32 arg0, f32 arg1, f32 arg2);
-extern void lbl_8006E15C(f32 arg0, f32 arg1, f32 arg2);
-extern void mathutil_mtxA_rotate_z(s16 arg0);
-extern void lbl_8006DD7C(void);
-extern void lbl_8006DB74(void *value);
-extern void fn_800745A4(u32 arg0, s32 arg1, s32 arg2, u32 arg3, u32 arg4, u32 arg5);
-extern u32 GXLoadTexMtxImm(u32, u32, u32);
-extern void DCFlushRange(void *, u32);
-extern void GXInitTexObj(void *, void *, u16, u16, u32, u32, u32, u8);
-extern void fn_80073778(void *obj, s32 index);
-extern void fn_80073C6C(s32 index);
-extern void fn_800734A8(u32 arg0, s32 arg1, s32 arg2, s32 arg3);
-extern void fn_80072C24(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
-extern void fn_80072D64(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u8 arg4, s32 arg5);
-extern void fn_80072CC4(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
-extern void fn_80072E20(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u8 arg4, s32 arg5);
-extern void fn_800729B0(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
-extern void fn_80072AB0(s32 arg0, s32 arg1, s32 arg2);
 
 // Set up the texture matrix and TEV stages for drawing one sprite.
 void fn_1_4E220(fn_1_4E220_Sprite *sprite, u32 stage, u32 texcoord, u32 texmap, u32 mtxid) {
@@ -3120,13 +3129,13 @@ s32 fn_1_548EC(void *arg0) {
 
 /* fzgx:begin fn_1_54DCC */
 void fn_1_54DCC(u8 *data) {
-    fn_800794F0(data, (u8 *)lbl_801A66CC + 0x50, 0x84);
+    fn_800794F0(data, (u8 *)(void *)((u8 *)lbl_801A66CC + 0x50), 0x84);
 }
 /* fzgx:end fn_1_54DCC */
 
 /* fzgx:begin fn_1_54E00 */
 void fn_1_54E00(void *value) {
-    fn_800794F0((u8 *)lbl_801A66CC + 0x50, value, 0x84);
+    fn_800794F0((u8 *)lbl_801A66CC + 0x50, (u8 *)(void *)(value), 0x84);
 }
 /* fzgx:end fn_1_54E00 */
 
@@ -3235,47 +3244,17 @@ s32 fn_1_54F5C(void *arg0, f32 arg1, f32 arg2) {
 
 /* fzgx:begin fn_1_550A8 */
 void fn_1_550A8(void) {
-    fn_800794F0(lbl_1_bss_6C710, (u8 *)lbl_801A66CC + 0x50, 0x84);
+    fn_800794F0(lbl_1_bss_6C710, (u8 *)(void *)((u8 *)lbl_801A66CC + 0x50), 0x84);
 }
 /* fzgx:end fn_1_550A8 */
 
 /* fzgx:begin fn_1_550E0 */
 void fn_1_550E0(void) {
-    fn_800794F0((u8 *)lbl_801A66CC + 0x50, lbl_1_bss_6C710, 0x84);
+    fn_800794F0((u8 *)lbl_801A66CC + 0x50, (u8 *)(void *)(lbl_1_bss_6C710), 0x84);
 }
 /* fzgx:end fn_1_550E0 */
 
-/* fzgx:begin fn_1_553C4 noprologue */
-#include "types.h"
-#include "dolphin/types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/font.h"
-
-typedef struct fn_1_563E4_FontState {
-    u8 pad_00[8];
-    f32 scale;
-    u8 pad_0C[6];
-    u8 enabled;
-    u8 color;
-    u32 value;
-    f32 x;
-    f32 y;
-    u8 pad_20[4];
-    u32 state;
-} fn_1_563E4_FontState;
-
-extern const f32 lbl_1_rodata_28A8;
-extern u8 *lbl_801A66CC;
-extern void fn_1_556B8(void *value);
-extern void fn_1_563E4(fn_1_563E4_FontState *font);
-extern void **fn_1_54448(s32 arg0);
-extern void *fn_1_548AC(u32 amount);
-extern u16 fn_1_7BE94(void);
-extern void fn_1_5489C(void **arg0, void **arg1);
-extern void fn_1_56530(void);
-extern void lbl_8006DB74(void *value);
-extern void lbl_8006DD14(void *value, void *object);
-
+/* fzgx:begin fn_1_553C4 */
 typedef struct {
     u8 pad_00[0x1a];
     u16 unk_1a;
@@ -3294,9 +3273,6 @@ typedef struct {
     u8 pad_6c[0xc];
 } Fn1_553C4Object;
 
-extern void fn_1_55EA0();
-extern void fn_1_55924(void *value, void *arg);
-extern void fn_800780A4(void *value);
 
 void fn_1_553C4(Fn1_553C4Input *value, void *arg) {
     Fn1_553C4Object *cursor;
@@ -3669,32 +3645,7 @@ void fn_1_55A84(FontCallback callback, FontInput *value, void *arg2, void *arg3)
 }
 /* fzgx:end fn_1_55A84 */
 
-/* fzgx:begin fn_1_55EA0 noprologue */
-#include "types.h"
-#include "dolphin/types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/font.h"
-
-typedef struct {
-    u8 pad_00[4];
-    u32 unk_04;
-    void *unk_08;
-    u8 unk_0C[0x30];
-    u16 unk_3C;
-    u8 pad_3E[2];
-    Obj_1_bss_6C7A4 unk_40;
-    void *unk_68[4];
-} Fn1_55EA0Object;
-
-extern u8 *lbl_801A66CC;
-extern void lbl_8006DBAC(void *);
-extern void fn_80072558(void);
-extern void fn_1_56470(Obj_1_bss_6C7A4 *);
-extern void fn_1_7BEAC(u16);
-extern void fn_800749B0(s32, void *);
-extern void fn_800781B8(void *);
-extern void fn_1_56554(void);
-
+/* fzgx:begin fn_1_55EA0 */
 void fn_1_55EA0(Fn1_55EA0Object *object) {
     s32 i;
     s32 j;
@@ -3702,7 +3653,7 @@ void fn_1_55EA0(Fn1_55EA0Object *object) {
 
     lbl_8006DBAC((u8 *)object + 0xC);
     fn_80072558();
-    fn_1_56470(&object->unk_40);
+    fn_1_56470( (fn_1_56470_FontState *)(Obj_1_bss_6C7A4 *)(&object->unk_40));
     fn_1_7BEAC(object->unk_3C);
     flags = &lbl_1_bss_6C7CC;
     for (i = 0; i < 4; i++) {
@@ -3896,26 +3847,6 @@ void fn_1_563E4(fn_1_563E4_FontState *font) {
 /* fzgx:end fn_1_563E4 */
 
 /* fzgx:begin fn_1_56470 */
-typedef struct fn_1_56470_FontState {
-    u8 unk_00[4];
-    void *unk_04;
-    f32 unk_08;
-    s8 unk_0C;
-    u8 unk_0D;
-    s8 unk_0E;
-    u8 unk_0F;
-    u8 unk_10;
-    u8 unk_11;
-    u8 unk_12;
-    u8 unk_13;
-    u32 unk_14;
-    f32 unk_18;
-    f32 unk_1C;
-    u32 unk_20;
-    u32 unk_24;
-} fn_1_56470_FontState;
-
-
 void fn_1_56470(fn_1_56470_FontState *state) {
     u32 value;
 

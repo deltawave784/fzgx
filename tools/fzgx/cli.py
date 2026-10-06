@@ -124,14 +124,16 @@ def cmd_route(a, p):
 
 def cmd_seed_corpus(a, p):
     from . import corpusseed
-    r = corpusseed.run(p, a.per_symbol, apply=not a.dry_run)
+    r = corpusseed.run(p, a.per_symbol, apply=not a.dry_run, from_checks=a.from_checks)
     if a.json:
         print(json.dumps(r, indent=1))
     else:
         for s, e in sorted(r.items(), key=lambda x: -x[1]['score']):
-            mark = 'MATCH' if e['matched'] else ('imported' if e.get('imported') else 'kept local')
+            mark = 'MATCH' if e['matched'] else ('imported' if e.get('imported') else
+                                                 ('would import' if e.get('candidate') else 'kept local'))
             print(f"{s:28s} {e['score']:6.2f}%  recorded {e['recorded']:6.2f}  local {e['local'] if e['local'] is not None else '-':>6}  {e['mw'] or '-'} {e['flags'] or ''}  {mark}")
-        print(f"{sum(1 for e in r.values() if e.get('imported'))} imported of {len(r)} rescored")
+        print(f"{sum(1 for e in r.values() if e.get('imported'))} imported, "
+              f"{sum(1 for e in r.values() if e.get('candidate'))} better than the saved best, of {len(r)} rescored")
     return 0
 
 
@@ -166,6 +168,25 @@ def cmd_gate(a, p):
                     print("   ", line)
         print("GATE: " + ("PASS" if r["ok"] else "FAIL"))
     return 0 if r["ok"] else 1
+
+
+def cmd_librarian_queue(a, p):
+    from . import libqueue
+    rows = libqueue.queue(p, a.module, a.tu, notes=not a.no_notes, survey_views=not a.no_survey,
+                          prose_notes=a.prose_notes)
+    if a.kind:
+        rows = [r for r in rows if r["kind"] in a.kind.split(",")]
+    if a.severity:
+        rows = [r for r in rows if r["severity"] == a.severity]
+    if a.decisions:
+        rows = [r for r in rows if r["resolution"] == libqueue.DECIDE]
+    if a.json:
+        print(json.dumps(rows, indent=1))
+    else:
+        import sys
+        sys.stdout.reconfigure(errors="replace")   # waves.md prose carries arrows a cp1252 console cannot print
+        print(libqueue.summary(rows, a.limit))
+    return 0
 
 
 def cmd_type_survey(a, p):
@@ -220,12 +241,24 @@ def cmd_submit(a, p):
     names = json.loads(Path(a.names).read_text()) if a.names else None
     r = api.submit(p, a.symbol, a.agent, a.message or "", a.harness, a.model, a.mw_version, a.extra_cflags,
                    names, a.tokens_in, a.tokens_out, a.cost_usd, a.max_diff_lines)
+    _attach_notes(p, a, r)
     _print(r, a.json); return 0 if r["ok"] else 1
+
+
+def _attach_notes(p, a, r) -> None:
+    """Store `--notes` once the submit/release succeeded (the claim proved the caller's identity)."""
+    notes = api.load_notes_arg(a.notes)
+    if notes and r.get("ok"):
+        stored = api._store_notes(p, a.symbol, a.agent, notes)
+        r["notes"] = stored["ids"]
+        if stored["warnings"]:
+            r["note_warnings"] = stored["warnings"]
 
 
 def cmd_release(a, p):
     r = api.release(p, a.symbol, a.reason, a.harness, a.model, a.tokens_in, a.tokens_out, a.cost_usd, agent=a.agent,
                     save_only=a.save_only)
+    _attach_notes(p, a, r)
     _print(r, a.json); return 0 if r["ok"] else 2
 
 
@@ -251,6 +284,26 @@ def cmd_report(a, p):
         print("costs:", r["costs"])
         if r["objdiff"]:
             print("objdiff:", r["objdiff"])
+    return 0
+
+
+def cmd_note(a, p):
+    from .ledger import Ledger
+    if a.note_cmd == "add":
+        r = api.add_note(p, a.symbol, a.kind, a.detail, a.tu, a.source)
+        _print(r, a.json); return 0 if r["ok"] else 1
+    if a.note_cmd == "resolve":
+        ok = Ledger().resolve_note(a.id, a.by)
+        r = {"ok": ok, "id": a.id} if ok else {"ok": False, "error": f"note {a.id} is not open"}
+        _print(r, a.json); return 0 if ok else 1
+    rows = [dict(r) for r in Ledger().notes(a.status, api._key(p, a.symbol) if a.symbol else None, a.kind)]
+    if a.json:
+        _print(rows, True)
+    else:
+        for r in rows:
+            print(f"#{r['id']:<5} {r['status']:<8} {r['kind']:<11} {r['symbol']:<22} {r['tu'] or '-'}  {r['detail']}"
+                  f"  <{r['source'] or '?'}>" + (f"  [resolved by {r['resolved_by']}]" if r["status"] == "resolved" else ""))
+        print(f"{len(rows)} note(s)")
     return 0
 
 
@@ -570,11 +623,23 @@ def build_parser() -> argparse.ArgumentParser:
         sp.add_argument("--model"); sp.add_argument("--harness")
         sp.add_argument("--tokens-in", type=int, default=0); sp.add_argument("--tokens-out", type=int, default=0)
         sp.add_argument("--cost-usd", type=float, default=0.0)
+        sp.add_argument("--notes", help="librarian notes: JSON list of {kind, tu?, detail} (inline or a file path); "
+                                        "kinds prototype|declaration|data|overlap|hygiene|naming|other, at most 5 x 300 chars")
     s = sub.add_parser("block", help="record a blocked function locally"); s.set_defaults(fn=cmd_block)
     s.add_argument("symbol"); s.add_argument("--reason", required=True)
     s = sub.add_parser("unblock"); s.set_defaults(fn=cmd_unblock); s.add_argument("symbol")
     s = sub.add_parser("report", help="progress and cost summary"); s.set_defaults(fn=cmd_report)
     s = sub.add_parser("snapshot", help="write state/ledger.json"); s.set_defaults(fn=cmd_snapshot)
+    s = sub.add_parser("note", help="structured notes for the librarian (prototype/declaration/data/overlap conflicts)"); s.set_defaults(fn=cmd_note)
+    ns = s.add_subparsers(dest="note_cmd", required=True)
+    n = ns.add_parser("add", help="record an open note"); n.add_argument("symbol"); n.add_argument("detail")
+    n.add_argument("--kind", required=True, choices=["prototype", "declaration", "data", "overlap", "hygiene", "naming", "other"])
+    n.add_argument("--tu", help="rel/<module>/<tu>.c"); n.add_argument("--source", default="cli", help="who recorded it (agent id, backfill-DATE)")
+    n.add_argument("--json", action="store_true", default=argparse.SUPPRESS)
+    n = ns.add_parser("list", help="list notes"); n.add_argument("--status", choices=["open", "resolved"])
+    n.add_argument("--symbol"); n.add_argument("--kind"); n.add_argument("--json", action="store_true", default=argparse.SUPPRESS)
+    n = ns.add_parser("resolve", help="mark a note resolved"); n.add_argument("id", type=int)
+    n.add_argument("--by", default="librarian"); n.add_argument("--json", action="store_true", default=argparse.SUPPRESS)
     s = sub.add_parser("restore", help="load state/ledger.json into the local ledger"); s.set_defaults(fn=cmd_restore)
     s = sub.add_parser("lint", help="shiftability/style lint"); s.set_defaults(fn=cmd_lint); s.add_argument("paths", nargs="*")
     s = sub.add_parser("tu-organize", help="move carved units into TU directories from tus.json; relink-verify"); s.set_defaults(fn=cmd_tu_organize)
@@ -652,6 +717,7 @@ def build_parser() -> argparse.ArgumentParser:
     s.add_argument("--skip-tried-by", action="append", metavar="PREFIX", help="leave out functions an agent id or model with this prefix attempted (repeatable, e.g. gpt-6.1-sol)")
     s = sub.add_parser("seed-corpus", help="rescore the best archived bodies in state/repairs and save them as local seeds"); s.set_defaults(fn=cmd_seed_corpus)
     s.add_argument("--per-symbol", type=int, default=2); s.add_argument("--dry-run", action="store_true"); s.add_argument("--json", action="store_true")
+    s.add_argument("--from-checks", action="store_true", help="seed from the per-function check archives (.fzgx/checks/) when a checked body beats the saved best")
     s = sub.add_parser("progress", help="the matched-code percentage over time: print it, record it in state/progress.csv, show the change"); s.set_defaults(fn=cmd_progress)
     s.add_argument("--note", help="label for the row (e.g. 'fable batch 23'); a note records a row even if nothing changed")
     s.add_argument("--no-record", action="store_true"); s.add_argument("--stale-ok", action="store_true"); s.add_argument("--json", action="store_true")
@@ -659,6 +725,13 @@ def build_parser() -> argparse.ArgumentParser:
     s = sub.add_parser("gate", help="the gate a tooling change must pass: lint, build, 16 hashes, a pool-unit sample and the latest matches re-checked"); s.set_defaults(fn=cmd_gate)
     s.add_argument("--pool-sample", type=int, default=24); s.add_argument("--recent", type=int, default=24); s.add_argument("--json", action="store_true")
     s.add_argument("--also", nargs="*", default=[], metavar="SYMBOL", help="matched units the change is known to affect, re-checked in full")
+    s = sub.add_parser("librarian-queue", help="read-only: conflicts a librarian must resolve (prototypes, data views, overlaps, hygiene) plus matchers' notes"); s.set_defaults(fn=cmd_librarian_queue)
+    s.add_argument("--module"); s.add_argument("--tu", help="rel/<module>/<tu>.c or its file name"); s.add_argument("--json", action="store_true")
+    s.add_argument("--kind", help="comma-separated kinds (prototype,declaration,data,overlap,unused_helper,implicit_call,no_header,struct_views,note)")
+    s.add_argument("--severity", choices=["code", "cosmetic", "note"]); s.add_argument("--decisions", action="store_true", help="only rows tutruth does not resolve")
+    s.add_argument("--limit", type=int, default=0, help="print at most N rows (text output)")
+    s.add_argument("--no-notes", action="store_true"); s.add_argument("--no-survey", action="store_true", help="skip type-survey struct-view clusters")
+    s.add_argument("--prose-notes", action="store_true", help="also scrape free-text ledger attempt notes and waves.md (the pre-`fzgx note` fallback)")
     s = sub.add_parser("type-survey", help="group per-function struct views into candidate shared types (leads for the librarian)"); s.set_defaults(fn=cmd_type_survey)
     s.add_argument("--top", type=int, default=20); s.add_argument("--emit", type=int, metavar="ID", help="print a proposed merged struct for cluster ID")
     s.add_argument("--name", default="Merged", help="typedef name for --emit"); s.add_argument("--json", action="store_true")

@@ -66,6 +66,23 @@ class CheckResult:
         return {k: v for k, v in self.__dict__.items() if not k.startswith("_")}
 
 
+def progress_score(res: CheckResult) -> float:
+    """The one progress scale (ranking and best-body selection only, never acceptance): the
+    better of objdiff's similarity and the pool-adjusted row score. Choosing one by `pool_rows`
+    compared two scales (fn_1_5D91C: an 86.6% objdiff seed outranked 94-95% bodies whose pool
+    rows switched them to a 70-82% row score)."""
+    return max(res.percent, res.percent_adjusted) if res.ok else 0.0
+
+
+def progress_rows(res: CheckResult) -> Optional[int]:
+    """Rows still differing after accepted relocations; None when no row alignment exists."""
+    if not res.ok:
+        return None
+    if res.matched or res.matched_pool:
+        return 0
+    return res.differing_rows if res.instruction_rows else None
+
+
 def run(cmd: List[str], cwd: Path = ROOT, timeout: int = 600) -> subprocess.CompletedProcess:
     return subprocess.run(cmd, cwd=cwd, text=True, capture_output=True, timeout=timeout)
 
@@ -345,7 +362,8 @@ def _diff(project: Project, module: str, symbol: str, unit: str, max_diff_lines:
                 ro_rows, ro_pairs = _data_pool_rows(project, module, base, left, right, lrows, rrows, ".rodata")
                 pool_rows |= ro_rows
                 res._pool_pairs += ro_pairs
-                bss_rows, bss_pairs = _bss_base_rows(project, module, base, left, right, lrows, rrows, symbol)
+                bss_rows, bss_pairs = _bss_base_rows(project, module, base, left, right, lrows, rrows, symbol,
+                                                       notes=res.pool_notes)
                 pool_rows |= bss_rows
                 res._pool_pairs += bss_pairs
             res.pool = [d for _, _, d in res._pool_pairs]
@@ -447,7 +465,7 @@ def _equivalent_reloc_rows(project, module, obj, left, right, lrows, rrows):
     return rows
 
 
-def _bss_base_rows(project, module, obj, left, right, lrows, rrows, function_name=None):
+def _bss_base_rows(project, module, obj, left, right, lrows, rrows, function_name=None, notes=None):
     """A compiler section base and its named BSS object denote the same storage."""
     elf = poolfix.Elf(obj.read_bytes())
     symbols = {s['name']: s for s in elf.symbols()}
@@ -519,9 +537,20 @@ def _bss_base_rows(project, module, obj, left, right, lrows, rrows, function_nam
         # The unit's copy is dropped at integration and every displacement off the base is
         # compared as code, so a section base only needs its retail symbol at the same start;
         # dtk's symbol size is a heuristic (a retail TU's first object is often smaller).
-        if not rname.startswith('...bss') or not owned or owned['size'] > retail.size:
+        if not rname.startswith('...bss'):
+            continue
+        # diagnostics only: say why a compiler section base stayed unbound
+        if not owned:
+            _note(notes, f"bss base {rname}: the unit defines no object named {retail.name} "
+                         f"(or fzgx_obj_{retail.name}) at the base, so it cannot be bound to {retail.name}")
+            continue
+        if owned['size'] > retail.size:
+            _note(notes, f"bss base {rname}: our {owned['name']} is {owned['size']:#x} bytes, "
+                         f"larger than retail {retail.name} ({retail.size:#x})")
             continue
         if anchor['shndx'] != section['index'] or owned['shndx'] != section['index'] or anchor['value'] != owned['value']:
+            _note(notes, f"bss base {rname}: {owned['name']} is not at the base's offset "
+                         f"({owned['value']:#x} vs {anchor['value']:#x}); define it first in the section")
             continue
         rows.add(i)
         for private in ((rname,) if owned_here else (rname, owned['name'])):
@@ -1365,7 +1394,7 @@ def check_versions(project: Project, symbol: str, versions: List[str],
             (tmp / (ver.replace("/", "_") + ".err")).write_text(res.error or "check failed")
             out[ver] = -2.0
         else:
-            out[ver] = res.percent_adjusted if res.pool_rows else res.percent
+            out[ver] = progress_score(res)
     return out
 
 

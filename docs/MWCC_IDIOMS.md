@@ -238,6 +238,16 @@ Each line is a family that turned a 60–99% body into a match; the count is how
   interior pieces canonical `OWNER__fzgx_offset_HEX` names. Private primer storage
   can disappear only after its section base is proven and no live relocation
   reaches the remaining storage. This linked the 6,608-byte `fn_1_AD264`.
+- `.data` section bases (probe compiles, 2026-10-06): MWCC addresses a TU's own
+  `.data` objects off one `...data.0` base only when the function references
+  three or more distinct objects; with two it addresses each by name. A byte view
+  `(u8 *)obj + k` never folds into `addi rX, rBase, off`: every referenced word-
+  aligned address must be its own object (dtk joins unlabelled string literals).
+  Section-base temporaries are ordered by where each section's first definition
+  sits in the file: defining the data block above the literal pool turned
+  `fn_1_B5F20`'s data r29/pool r30 into retail's pool r29/data r30.
+  `fixup_layout.tu_data_objects` emits this layout (whole block, pointer words as
+  `__fzgx_offset_` initializers, `.fzgxpool` primer in retail order).
 
 ## Shared SDK state (2026-09-15)
 

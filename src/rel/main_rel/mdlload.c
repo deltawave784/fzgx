@@ -2,64 +2,75 @@
 #include "rel/main_rel/globals.h"
 #include "rel/main_rel/mdlload.h"
 
-extern void fn_80071484(void);
-extern void fn_80071678(void);
-extern void *OSGetArenaHi(void);
-extern void fn_1_D3BE8(void);
-extern u8 lbl_1_bss_7AD58[8];
-extern void fn_1_9A508(void);
-extern void fn_1_D3F24(void *base);
-extern void fn_1_D3F88(void *base);
-extern f32 lbl_1_rodata_6168[112];
-extern u32 fn_1_5910(void);
-extern void fn_1_9AD88(Obj_1_data_2A7E0 *obj);
-extern u32 fn_1_9D260(void);
-extern s32 fn_1_D3E90(void);
-extern void fn_1_1067A8(void *obj, f32 value, f32 limit);
-extern void fn_1_D4174(void *base, void *arg);
-extern s16 camera_get_mode(void);
-extern s32 fn_1_6EC0(u8 value);
-extern u32 fn_1_864E8(s32 value);
-extern s32 fn_1_7000(void);
-extern void fn_1_681C(u8 value, void *out);
-extern s32 fn_1_1FB80(void *value, s32 mode);
-extern void fn_1_103090(void *ptr);
-extern void fn_1_1030A4(void *ptr);
-extern void fn_1_103264(void *item, void *arg);
-extern s16 fn_1_3F0C8(void);
-extern void fn_1_D6748(void *obj, u32 *arg1, s16 arg2);
-extern u32 lbl_801A63C0;
-extern void fn_1_D550C(void *);
+typedef struct {
+    u32 unk_00;
+    void *resource;
+} ModelReleaseEntry;
 
+typedef struct {
+    s32 entry_count;
+    u8 unk_04[4];
+    ModelReleaseEntry *entry_table;
+} ModelReleaseList;
+
+struct Entry {
+    s8 flag[0x18];
+};
+
+struct Base {
+    char pad[0xe780];
+    struct Entry entries[1];
+};
 extern int fn_1_45730(void *owner, void *buffer);
 extern int fn_1_458A0(void *buffer, void *work, int size, int mode);
 extern u32 lbl_801A6410;
-extern void *fn_1_45D0(u32 allocator, u32 size, const unsigned char *name, int mode);
+extern s32 fn_1_45D0();
 extern int fn_1_45850(void *buffer);
-extern void fn_1_12F78(void *owner, void *data);
+extern u32 fn_1_12860(u32 arg0, u32 arg1);
+extern void fn_1_46B4(u32 arg0, u32 arg1, const char *arg2, int arg3);
+extern u32 fn_80071100(u32 arg0, u32 arg1, u32 arg2);
+extern void *fn_1_D3B6C(ModelReleaseList *list);
 extern void DCFlushRange(void *address, u32 length);
-extern void *fn_80071100(void *data, void *size, void *user);
-extern void fn_1_D3BE8(void);
-extern void fn_80071484(void);
-extern void fn_80071678(void);
-extern void *OSGetArenaHi(void);
+extern void * fn_80071678();
+extern u32 fn_1_12F78(void *arg0, u32 arg1);
+extern u32 OSGetArenaHi(void);
+extern void fn_1_D3BE8();
+extern s32 fn_1_58C4(void);
+extern void fn_1_5948(int);
+extern void fn_1_105AB8(void *base, s32 index);
+extern void fn_1_D47D8(struct Base *base, s32 index);
+extern void fn_1_627C(s32 index);
+extern void fn_1_D5958(void *);
+extern void fn_1_D4360(void *);
+extern void fn_1_D4964(void *state);
+extern f32 lbl_1_rodata_6168[112];
+extern void fn_1_9AD54(void);
+extern u32 fn_1_9D260(void);
+extern void fn_1_D42A8(u32, int);
+extern s32 fn_1_D3E90(void);
+extern void fn_1_106084(u32, int, f32, f32, f32);
+extern void fn_1_D4FFC(u32, int);
+extern void fn_1_D47F0(void *base, u32 index);
+extern void fn_1_D59A8(u32);
+extern void fn_1_D4370(u32);
+extern void fn_1_D41D8(void);
+extern void fn_1_D3FDC(u32, void *);
+extern u32 lbl_1_bss_6D620[78];
+extern void fn_1_681C(u32 index, u32 *output);
+extern s32 fn_1_1FB80(void *value, s32 mode);
+extern void * fn_80071484();
 extern u8 lbl_1_bss_7AD58[8];
 extern void fn_1_9A508(void);
 extern void fn_1_D3F24(void *base);
 extern void fn_1_D3F88(void *base);
-extern f32 lbl_1_rodata_6168[112];
 extern u32 fn_1_5910(void);
-extern void fn_1_9AD88(Obj_1_data_2A7E0 *obj);
-extern u32 fn_1_9D260(void);
-extern s32 fn_1_D3E90(void);
-extern void fn_1_1067A8(void *obj, f32 value, f32 limit);
+extern void fn_1_9AD88();
+extern void fn_1_1067A8(void *arg0, f32 arg1, f32 arg2);
 extern void fn_1_D4174(void *base, void *arg);
 extern s16 camera_get_mode(void);
 extern s32 fn_1_6EC0(u8 value);
-extern u32 fn_1_864E8(s32 value);
+extern u32 fn_1_864E8(int index);
 extern s32 fn_1_7000(void);
-extern void fn_1_681C(u8 value, void *out);
-extern s32 fn_1_1FB80(void *value, s32 mode);
 extern void fn_1_103090(void *ptr);
 extern void fn_1_1030A4(void *ptr);
 extern void fn_1_103264(void *item, void *arg);
@@ -67,19 +78,8 @@ extern s16 fn_1_3F0C8(void);
 extern void fn_1_D6748(void *obj, u32 *arg1, s16 arg2);
 extern u32 lbl_801A63C0;
 extern void fn_1_D550C(void *);
-
-extern void fn_1_D3BE8(void);
-
-extern void fn_1_D3BE8(void);
-
-extern void fn_1_D3BE8(void);
-
-extern void fn_1_D3BE8(void);
-
-extern void fn_1_D3BE8(void);
-extern int fn_1_D3B6C(void);
 extern u32 fn_1_539CC(void *, void *, f32);
-extern void fn_1_9A7A8(u32 *);
+extern void fn_1_9A7A8(u32 *value);
 
 /* fzgx:begin fn_1_D35D4 noprologue */
 #include "types.h"
@@ -142,7 +142,27 @@ int fn_1_D35D4(void *unused, void *arg) {
 }
 /* fzgx:end fn_1_D35D4 */
 
-/* fzgx:begin fn_1_D3768 */
+/* fzgx:begin fn_1_D3768 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/mdlload.h"
+
+
+extern int fn_1_45730(void *owner, void *buffer);
+extern int fn_1_458A0(void *buffer, void *work, int size, int mode);
+extern u32 lbl_801A6410;
+extern void *fn_1_45D0(u32 allocator, u32 size, const unsigned char *name, int mode);
+extern int fn_1_45850(void *buffer);
+extern void fn_1_12F78(void *owner, void *data);
+extern void DCFlushRange(void *address, u32 length);
+extern void *fn_80071100(void *data, void *size, void *user);
+
+
+
+
+
+extern int fn_1_D3B6C(void);
+
 typedef struct {
     u8 _pad[0x10];
     u32 flags;
@@ -197,21 +217,7 @@ void fn_1_D38A4(void) {
 }
 /* fzgx:end fn_1_D38A4 */
 
-/* fzgx:begin fn_1_D38C4 noprologue */
-#include "types.h"
-
-extern int fn_1_45730(void *arg, void *path);
-extern u8 lbl_1_bss_3BC0[32];
-extern int fn_1_458A0(void *path, void *data, int size, int offset);
-extern char lbl_1_data_3DBD8[10];
-extern void *lbl_801A6410;
-extern void *fn_1_45D0(void *base, int offset, void *source, int size);
-extern int fn_1_45850(void *path);
-extern void fn_1_12860(void *data, int size);
-extern void fn_1_46B4(void *base, int offset, void *source, int size);
-extern void DCFlushRange(void *address, u32 size);
-extern void *fn_80071678(void *address, u32 size);
-
+/* fzgx:begin fn_1_D38C4 */
 typedef struct {
     u8 pad[0xc];
     u32 field_c;
@@ -231,20 +237,20 @@ void *fn_1_D38C4(void *arg) {
     if (fn_1_45730(arg, path) == 0) {
         return 0;
     }
-    if (fn_1_458A0(path, lbl_1_bss_3BC0, 0x20, 0) < 0) {
+    if (fn_1_458A0(path, (((u8 *)&lbl_1_bss_3BC0)), 0x20, 0) < 0) {
         return 0;
     }
 
-    size = (__lwbrx((void *)lbl_1_bss_3BC0, 0) + 0x27) & ~0x1f;
-    size2 = (__lwbrx((void *)lbl_1_bss_3BC0, 4) + 0x1f) & ~0x1f;
+    size = (__lwbrx((void *)(((u8 *)&lbl_1_bss_3BC0)), 0) + 0x27) & ~0x1f;
+    size2 = (__lwbrx((void *)(((u8 *)&lbl_1_bss_3BC0)), 4) + 0x1f) & ~0x1f;
 
-    data = fn_1_45D0(lbl_801A6410, ((size2 + 0x1f) & ~0x1f) + 0x20,
-                     lbl_1_data_3DBD8, 0x1d6);
+    data = (void *)fn_1_45D0((*((void * *)&lbl_801A6410)), ((size2 + 0x1f) & ~0x1f) + 0x20,
+                     (((char *)&lbl_1_data_3DBD8)), 0x1d6);
     aligned = (void *)(((u32)data + 0x3f) & ~0x1f);
     if (aligned == 0) {
         return 0;
     }
-    data2 = fn_1_45D0(lbl_801A6410, size, lbl_1_data_3DBD8, 0x1dc);
+    data2 = (void *)fn_1_45D0((*((void * *)&lbl_801A6410)), size, (((char *)&lbl_1_data_3DBD8)), 0x1dc);
     if (data2 == 0) {
         return 0;
     }
@@ -255,11 +261,11 @@ void *fn_1_D38C4(void *arg) {
         return 0;
     }
 
-    fn_1_12860(data2, (int)aligned);
-    fn_1_46B4(lbl_801A6410, (int)data2, lbl_1_data_3DBD8, 0x1ea);
+    fn_1_12860( (u32)(void *)(data2), (int)aligned);
+    fn_1_46B4( (u32)(void *)((*((void * *)&lbl_801A6410))), (int)data2, (const char *)(void *)((((char *)&lbl_1_data_3DBD8))), 0x1ea);
     DCFlushRange(aligned, size2);
 
-    result = (Fn1D38C4Result *)fn_80071678(aligned, (u32)data);
+    result = (Fn1D38C4Result *)fn_80071678( (s32 *)(void *)(aligned), (void *)((u32)data));
     result->field_c = 0;
     return result;
 }
@@ -268,20 +274,7 @@ void *fn_1_D38C4(void *arg) {
 #pragma opt_propagation reset
 /* fzgx:end fn_1_D38C4 */
 
-/* fzgx:begin fn_1_D3A4C noprologue */
-#include "types.h"
-
-extern int fn_1_45730(void *arg, void *buffer);
-extern u8 lbl_1_bss_3BC0[32];
-extern int fn_1_458A0(void *buffer, void *work, int size, int flags);
-extern char lbl_1_data_3DBD8[10];
-extern void *lbl_801A6410;
-extern void *fn_1_45D0(void *arg0, u32 size, void *data, int count);
-extern int fn_1_45850(void *buffer);
-extern void fn_1_12F78(void *arg, void *buffer);
-extern void DCFlushRange(void *buffer, u32 size);
-extern void *fn_80071678(void *buffer, u32 size);
-
+/* fzgx:begin fn_1_D3A4C */
 int fn_1_D3A4C(void *arg) {
     u8 buffer[96];
     u32 result;
@@ -293,16 +286,16 @@ int fn_1_D3A4C(void *arg) {
     if (fn_1_45730(arg, buffer) == 0) {
         return 0;
     }
-    if (fn_1_458A0(buffer, lbl_1_bss_3BC0, 32, 0) < 0) {
+    if (fn_1_458A0(buffer, (((u8 *)&lbl_1_bss_3BC0)), 32, 0) < 0) {
         return 0;
     }
 
-    value0 = __lwbrx((void *)lbl_1_bss_3BC0, 0);
-    value1 = __lwbrx((void *)lbl_1_bss_3BC0, 4);
+    value0 = __lwbrx((void *)(((u8 *)&lbl_1_bss_3BC0)), 0);
+    value1 = __lwbrx((void *)(((u8 *)&lbl_1_bss_3BC0)), 4);
     size = (value1 + 31) & ~31;
-    ptr = (u32)fn_1_45D0(lbl_801A6410,
+    ptr = (u32)fn_1_45D0((*((void * *)&lbl_801A6410)),
                          (((size + 31) & ~31) + 32),
-                         lbl_1_data_3DBD8, 470);
+                         (((char *)&lbl_1_data_3DBD8)), 470);
     result = (ptr + 63) & ~31;
     if (result == 0) {
         return 0;
@@ -311,32 +304,15 @@ int fn_1_D3A4C(void *arg) {
         return 0;
     }
 
-    fn_1_12F78(arg, (void *)result);
+    fn_1_12F78(arg, (u32)((void *)result));
     DCFlushRange((void *)result, size);
-    ptr = (u32)fn_80071678((void *)result, ptr);
+    ptr = (u32)fn_80071678( (s32 *)((void *)result), (void *)(u32)(ptr));
     *(u32 *)((u8 *)ptr + 12) = 0;
     return (int)ptr;
 }
 /* fzgx:end fn_1_D3A4C */
 
-/* fzgx:begin fn_1_D3B6C noprologue */
-#include "types.h"
-
-extern void *OSGetArenaHi(void);
-
-extern void fn_1_D3BE8();
-
-typedef struct {
-    u32 unk_00;
-    void *resource;
-} ModelReleaseEntry;
-
-typedef struct {
-    s32 entry_count;
-    u8 unk_04[4];
-    ModelReleaseEntry *entry_table;
-} ModelReleaseList;
-
+/* fzgx:begin fn_1_D3B6C */
 // Release the list's resources only when it resides above the arena high-water mark.
 void *fn_1_D3B6C(ModelReleaseList *list) {
     s32 index;
@@ -376,15 +352,6 @@ void fn_1_D3C04(void) {
 /* fzgx:end fn_1_D3C04 */
 
 /* fzgx:begin fn_1_D3C58 */
-extern s32 fn_1_58C4(void);
-extern void fn_1_5948(s32 index);
-extern void fn_1_105AB8(void *base, s32 index);
-extern void fn_1_D47D8(void *state, s32 index);
-extern void fn_1_627C(s32 index);
-extern void fn_1_D5958(void *state);
-extern void fn_1_D4360(void *state);
-extern void fn_1_D4964(void *state);
-
 // Initializes the model-loader state for every available entry.
 void fn_1_D3C58(void) {
     Obj_1_data_2A7E0_At3C *state;
@@ -396,7 +363,7 @@ void fn_1_D3C58(void) {
     for (index = 0; index < count; index++) {
         fn_1_5948(index);
         fn_1_105AB8(&state->unk_20, index);
-        fn_1_D47D8(state, index);
+        fn_1_D47D8( (struct Base *)(void *)(state), index);
         fn_1_627C(index);
     }
     fn_1_D5958(state);
@@ -505,7 +472,7 @@ s32 fn_1_D3E90(void) {
         return 1;
     }
 
-    fn_1_681C((u8)fn_1_5910(), data);
+    fn_1_681C((u8)fn_1_5910(), (u32 *)(void *)(data));
     return fn_1_1FB80(data, 1);
 }
 /* fzgx:end fn_1_D3E90 */
@@ -617,8 +584,6 @@ void fn_1_D4360(void *base) {
 /* fzgx:end fn_1_D4360 */
 
 /* fzgx:begin fn_1_D4370 */
-#include "types.h"
-
 #pragma section code_type ".fzgxpool"
 __declspec(section ".fzgxpool") static void fzgx_pool_prime1(void) {
     volatile f32 s; volatile f64 d;  /* fzgx-allow: S2 pool primer sinks */
@@ -665,7 +630,7 @@ struct D4370State {
     s32 unk_38;
 };
 
-void fn_1_D4370(void *arg0) {
+void fn_1_D4370(u32 arg0) {
     struct FzgxCopy_4 loc_1C;
     struct FzgxCopy_4 loc_18;
     struct FzgxCopy_4 loc_14;
@@ -767,25 +732,12 @@ void fn_1_D4370(void *arg0) {
 /* fzgx:end fn_1_D4370 */
 
 /* fzgx:begin fn_1_D47D8 */
-struct Entry {
-    s8 flag[0x18];
-};
-
-struct Base {
-    char pad[0xe780];
-    struct Entry entries[1];
-};
-
 void fn_1_D47D8(struct Base *base, s32 index) {
     base->entries[index].flag[0] = -1;
 }
 /* fzgx:end fn_1_D47D8 */
 
-/* fzgx:begin fn_1_D47F0 noprologue */
-#include "types.h"
-
-extern f32 lbl_1_rodata_6168[112];
-
+/* fzgx:begin fn_1_D47F0 */
 #pragma section code_type ".fzgxpool"
 __declspec(section ".fzgxpool") static void fzgx_pool_prime1(void) {
     volatile f32 s; volatile f64 d;  /* fzgx-allow: S2 pool primer sinks */
@@ -807,11 +759,8 @@ __declspec(section ".fzgxpool") static void fzgx_pool_prime1(void) {
 }
 #pragma section code_type ".text"
 
-extern u32 lbl_1_bss_6D620[78];
 
 
-extern u32 fn_1_681C(u32 index, void *out);
-extern u32 fn_1_1FB80(void *data, u32 mode);
 
 typedef struct {
     s8 state;
@@ -840,8 +789,8 @@ void fn_1_D47F0(void *base, u32 index) {
     constants = lbl_1_rodata_6168;
     entry = (D47F0Entry *)((u8 *)lbl_1_bss_6D620 + index * 0x18);
     cached = (D47F0Entry *)((u8 *)base + index * 0x18 + 0xe780);
-    fn_1_681C(index & 0xff, temp);
-    result = fn_1_1FB80(temp, 1);
+    fn_1_681C(index & 0xff, (u32 *)(void *)(temp));
+    result = (u32)fn_1_1FB80(temp, 1);
     base_value = *(f32 *)((u8 *)base + 0xc040);
 
     if (base_value > (0.0f) && !(result & 1)) {

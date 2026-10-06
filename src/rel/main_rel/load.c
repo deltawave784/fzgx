@@ -357,8 +357,6 @@ u32 fn_1_467F4(void) {
 /* fzgx:end fn_1_467F4 */
 
 /* fzgx:begin fn_1_469BC */
-#include "types.h"
-
 // Clears invalid entries in the load table and mirrors its first value.
 void fn_1_469BC(void) {
     u32 *base;
@@ -390,24 +388,24 @@ typedef struct {
     u32 type;
     u32 value;
     u32 unk_8;
-} Entry;
+} fn_1_46A8C_Entry;
 
 typedef struct {
     u32 unk_0;
     u32 unk_4;
     u8 unk_8[0x4010];
-    Entry entries[0x200];
-} State;
+    fn_1_46A8C_Entry entries[0x200];
+} fn_1_46A8C_State;
 
 u32 fn_1_46A8C(u32 value) {
-    State *base;
+    fn_1_46A8C_State *base;
     s32 next;
     s32 current;
     u32 initial;
     u32 arg;
-    Entry *entry;
+    fn_1_46A8C_Entry *entry;
 
-    base = (State *)&lbl_1_bss_384C0;
+    base = (fn_1_46A8C_State *)&lbl_1_bss_384C0;
     arg = value;
     initial = base->unk_0;
     next = initial + 1;
@@ -433,6 +431,70 @@ u32 fn_1_46A8C(u32 value) {
     return current;
 }
 /* fzgx:end fn_1_46A8C */
+
+/* fzgx:begin fn_1_46BA0 pool */
+typedef struct {
+    u32 type;
+    u32 value;
+    u32 unk_8;
+} Entry;
+
+typedef struct {
+    u32 unk_0;
+    u32 unk_4;
+    u8 unk_8[0x4010];
+    Entry entries[0x200];
+} State;
+
+
+/* file-scope objects of the retail TU, in retail order: MWCC addresses them off one section base */
+u32 fzgx_obj_lbl_1_bss_384C0;
+u32 lbl_1_bss_384C4;
+u32 fzgx_obj_lbl_1_bss_384C8;
+u32 lbl_1_bss_384CC;
+u32 fzgx_obj_lbl_1_bss_384D0[2];
+u32 fzgx_obj_lbl_1_bss_384D8[4096];
+Entry lbl_1_bss_384D8_4000[0x200];
+
+#pragma section code_type ".fzgxpool"
+static void fzgx_bss_layout(void) {
+    volatile u8 s;  /* fzgx-allow: S2 layout primer sink: MWCC emits .bss objects in first-access order */
+    s = *(u8 *)&fzgx_obj_lbl_1_bss_384C0;
+    s = *(u8 *)&lbl_1_bss_384C4;
+    s = *(u8 *)&fzgx_obj_lbl_1_bss_384C8;
+    s = *(u8 *)&lbl_1_bss_384CC;
+    s = *(u8 *)&fzgx_obj_lbl_1_bss_384D0;
+    s = *(u8 *)&fzgx_obj_lbl_1_bss_384D8;
+    s = *(u8 *)&lbl_1_bss_384D8_4000;
+}
+#pragma section code_type ".text"
+
+u32 fn_1_46BA0(u32 arg0, u32 arg1) {
+    s32 next;
+    Entry *entry;
+    s32 current;
+
+    
+    current = fzgx_obj_lbl_1_bss_384C0;
+    next = current + 1;
+    if (next >= 0x200) {
+        next = 0;
+    }
+
+    if ((s32)lbl_1_bss_384C4 == next) {
+        return -1;
+    }
+
+    entry = lbl_1_bss_384D8_4000;
+    entry += fzgx_obj_lbl_1_bss_384C0;
+    fzgx_obj_lbl_1_bss_384C0 = next;
+    entry->type = 0xc;
+    entry->value = arg0;
+    entry->unk_8 = arg1;
+
+    return current;
+}
+/* fzgx:end fn_1_46BA0 */
 
 /* fzgx:begin fn_1_46C60 */
 u32 fn_1_46C60(void) {

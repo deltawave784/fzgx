@@ -2,26 +2,25 @@
 #include "rel/main_rel/globals.h"
 #include "rel/main_rel/light.h"
 
-extern u16 lbl_1_bss_6D7C0[20];
-
-extern void *lbl_801A6410;
-extern u32 fn_1_4630(u32, int, void *, int);
-extern void fn_800793D4(u32, int, int);
-extern void fn_1_7C13C(void *);
-extern void fn_1_7C1E8(u32);
-extern u8 fn_1_816E8(void *, u8);
-extern const f32 lbl_1_rodata_33A8;
-extern void fn_1_495D8(int, int, f32);
-extern void fn_1_495FC(void);
-extern void OSPanic(const char *, int, const char *, ...);
-
-/* fzgx:begin fn_1_7BCCC */
 typedef struct {
     u32 unk_0;
     u32 unk_4;
     u32 unk_8;
 } Triple_80074D28;
+extern void fn_80074D28(Triple_80074D28 *);
+extern u16 lbl_1_bss_6D7C0[20];
+extern void *lbl_801A6410;
+extern u32 fn_1_4630();
+extern u32 fn_800793D4(u8 *arg0, u32 arg1, u32 arg2);
+extern void fn_1_7C13C(void *);
+extern void fn_1_7C1E8(void *out);
+extern u8 fn_1_816E8(void *, u8);
+extern const f32 lbl_1_rodata_33A8;
+extern void fn_1_495D8(u16 value1, u16 value2, f32 value3);
+extern void fn_1_495FC(void);
+extern void OSPanic(const char *file, int line, const char *msg, ...);
 
+/* fzgx:begin fn_1_7BCCC */
 typedef struct {
     u8 pad_0[0x2];
     u16 unk_2;
@@ -31,7 +30,6 @@ typedef struct {
     u32 unk_20;
 } Fn17BCCCState;
 
-extern void fn_80074D28(Triple_80074D28 *);
 
 void fn_1_7BCCC(Triple_80074D28 *arg0) {
     Fn17BCCCState *state;
@@ -88,9 +86,9 @@ void fn_1_7BF9C(void *arg, s8 flag) {
     resource_c = fn_1_4630(
         (u32)lbl_801A6410, 0xa4, resource_table + 0xac, 0x36);
 
-    fn_800793D4(resource_c, 0xff, 0xa4);
+    fn_800793D4( (u8 *)(u32)(resource_c), 0xff, 0xa4);
     fn_1_7C13C(arg);
-    fn_1_7C1E8(resource_1c);
+    fn_1_7C1E8( (void *)(u32)(resource_1c));
 
     ((LightState *)lbl_1_bss_6D7E8)->unk_0 = arg;
     ((LightState *)lbl_1_bss_6D7E8)->unk_4 = 2;

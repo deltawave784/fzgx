@@ -1,37 +1,93 @@
 #include "types.h"
 #include "rel/main_rel/globals.h"
 #include "rel/main_rel/effect_car.h"
+#include "dolphin/hw_regs.h"
 
-extern void fn_1_6F90C(void *arg0, void *arg1);
-extern s16 fn_1_72318(void);
-extern void fn_1_71D0C(void *arg0, void *arg1);
+struct fn_1_72318_EffectCar {
+    u8 pad_18[0x18];
+    s16 field_18;
+    u8 pad_1a[0x1e];
+    u32 field_38;
+    u8 pad_3c[0x7c];
+    u8 field_b8;
+};
 
+struct fn_1_6F404_lbl_1_rodata_2D70 {
+    f32 unk_0;
+    u8 pad_4[0x14];
+    f32 unk_18;
+    f32 unk_1C;
+    u8 pad_20[0x8];
+    f32 unk_28;
+    u8 pad_2C[0x48];
+    f32 unk_74;
+    u8 pad_78[0x4];
+    f32 unk_7C;
+    u8 pad_80[0x10];
+    f32 unk_90;
+    u8 pad_94[0x18];
+    f32 unk_AC;
+    f32 unk_B0;
+    u8 pad_B4[0x24];
+    f32 unk_D8;
+    u8 pad_DC[0x1BC];
+    f32 unk_298;
+    u8 pad_29C[0x74];
+    u32 unk_310;
+    u32 unk_314;
+    u32 unk_318;
+    f32 unk_31C;
+    f32 unk_320;
+};
+
+typedef struct Fn1_714A8Vec {
+    f32 x;
+    f32 y;
+    f32 z;
+} Fn1_714A8Vec;
+
+struct Fn1_714A8Car {
+    u8 pad_00[0x38];
+    u8 *field_38;
+    f32 field_3c;
+    f32 field_40;
+    f32 field_44;
+    Fn1_714A8Vec field_48;
+};
+extern void *memset(void *dest, int value, u32 size);
 extern void *lbl_801A6410;
-extern void fn_1_46B4(u32 value, void *field, u8 *data, s32 code);
-extern u32 fn_1_4630(u32 value, u32 size, u8 *data, s32 code);
+extern void fn_1_867CC(s16 arg0, void *arg1);
+extern u16 fn_1_584AC(void);
+extern s16 fn_1_59078(void *arg0);
+extern u32 fn_1_864E8(int index);
+extern s16 fn_1_58F50(const void *source);
+extern u32 lbl_1_rodata_314C[13];
+extern void lbl_8006DC6C(void *arg0, u32 arg1);
+extern void lbl_8006E1B0(void *arg0, void *arg1);
+extern void fn_1_6F90C(void *arg0, void *arg1);
+extern s16 fn_1_72318();
+extern void fn_1_71D0C(void *arg0, void *arg1);
+extern void fn_1_46B4(u32 arg0, u32 arg1, const char *arg2, int arg3);
+extern u32 fn_1_4630();
 extern void fn_1_862D4(s16 value, void *result);
-extern void fn_1_58E3C(void *entry);
+extern s16 fn_1_58E3C(void *source);
 extern u32 fn_1_58C4(void);
 extern s8 lbl_1_bss_6C878[];
 extern struct fn_1_6F404_lbl_1_rodata_2D70 lbl_1_rodata_2D70;
-extern void * fn_1_868C0(s8);
+extern void *fn_1_868C0(s8 index);
 extern u32 fn_1_71024(void *, void *, u32, f32);
 extern u32 fn_1_7099C(void *, void *, u32, f32, f32);
 extern u32 fn_1_71768(void *, void *);
 extern u32 fn_1_702A0(void *, void *, u32, u32);
 extern u32 fn_80008C20(void *, void *, void *);
 extern u32 lbl_8006E1C0(void *, void *);
-extern u32 fn_1_584AC(void);
 extern u32 fn_1_6FD58(void *, void *, f32, f32);
-extern u32 fn_1_A33F0(u32, f32);
+extern void fn_1_A33F0(s32 id, f32 level);
 extern u32 fn_1_6D7BC(void *, void *, f32);
 extern u32 fn_1_A5594(u32, void *);
-extern u32 fn_1_714A8(void *, void *, u32, f32);
+extern void fn_1_714A8(struct Fn1_714A8Car *car, f32 *axis, u32 arg2, f32 size);
 
 /* fzgx:begin fn_1_680F8 */
-extern u8 *memset(u8 *dst, int value, u32 size);
-extern void *lbl_801A6410;
-
 typedef struct Fn1_680F8Arg {
     u8 pad_00[0x18];
     s16 unk_18;
@@ -64,7 +120,7 @@ void fn_1_680F8(Fn1_680F8Arg *arg) {
     base = arg->unk_38;
     arg->unk_34 = fn_1_4630((u32)lbl_801A6410, 0x300, lbl_1_data_1D8A8, 0xc7);
     fn_1_862D4(arg->unk_18, arg->unk_3c);
-    memset((u8 *)&entry, 0, 0xe8);
+    memset( (void *)((u8 *)&entry), 0, 0xe8);
     entry.unk_18 = arg->unk_18;
     entry.unk_0c = 4;
     p = base;
@@ -89,7 +145,7 @@ typedef struct Fn1_68248Arg {
 
 // Register the effect resource with the shared effect manager.
 void fn_1_68248(Fn1_68248Arg *arg) {
-    fn_1_46B4((u32)lbl_801A6410, arg->unk_34, lbl_1_data_1D8A8, 0xe2);
+    fn_1_46B4((u32)lbl_801A6410, (u32)(void *)(arg->unk_34), (const char *)(u8 *)(lbl_1_data_1D8A8), 0xe2);
 }
 /* fzgx:end fn_1_68248 */
 
@@ -100,22 +156,17 @@ void fn_1_68B68(void) {
 /* fzgx:end fn_1_68B68 */
 
 /* fzgx:begin fn_1_69BBC */
-typedef struct EffectCar {
+typedef struct fn_1_69BBC_EffectCar {
     u8 pad_00[0x1a];
     u16 field_1a;
-} EffectCar;
+} fn_1_69BBC_EffectCar;
 
-void fn_1_69BBC(EffectCar *car) {
+void fn_1_69BBC(fn_1_69BBC_EffectCar *car) {
     car->field_1a = 0xffff;
 }
 /* fzgx:end fn_1_69BBC */
 
 /* fzgx:begin fn_1_6D6A8 */
-extern void fn_1_867CC(s16 arg0, void *arg1);
-extern u32 fn_1_584AC(void);
-extern s16 fn_1_59078(void *arg0);
-extern void *memset(void *dest, int value, u32 size);
-
 struct Fn1_6D6A8Car {
     u8 pad_00[0x18];
     s16 field_18;
@@ -401,16 +452,8 @@ void fn_1_6D6A8(struct Fn1_6D6A8Car *car) {
 }
 /* fzgx:end fn_1_6D6A8 */
 
-/* fzgx:begin fn_1_6F288 noprologue */
-#include "types.h"
-
-extern s32 fn_1_864E8(s16 arg0);
-extern void fn_1_867CC(s16 arg0, void *arg1);
-extern s16 fn_1_58F50(const void *arg0);
-extern u16 fn_1_584AC(void);
-extern void *memset(void *dest, int value, u32 size);
-
-struct EffectCar {
+/* fzgx:begin fn_1_6F288 */
+struct fn_1_6F288_EffectCar {
     u8 pad_00[0x18];
     s16 field_18;
     u8 pad_1a[0x1a];
@@ -665,13 +708,13 @@ __declspec(section ".fzgxpool") static void fzgx_pool_prime43(void) {
     s = 1280.0f;
 }
 #pragma section code_type ".text"
-void fn_1_6F288(struct EffectCar *arg0) {
+void fn_1_6F288(struct fn_1_6F288_EffectCar *arg0) {
     s32 result;
     u8 temp[0xc];
     struct EffectData data;
     f32 scale;
 
-    result = fn_1_864E8(arg0->field_18);
+    result = (s32)fn_1_864E8(arg0->field_18);
     fn_1_867CC(arg0->field_18, temp);
     memset(&data, 0, 0xe8);
     data.field_2c = arg0->field_18;
@@ -700,34 +743,6 @@ void fn_1_6F288(struct EffectCar *arg0) {
 /* fzgx:end fn_1_6F288 */
 
 /* fzgx:begin fn_1_6F404 */
-struct fn_1_6F404_lbl_1_rodata_2D70 {
-    f32 unk_0;
-    u8 pad_4[0x14];
-    f32 unk_18;
-    f32 unk_1C;
-    u8 pad_20[0x8];
-    f32 unk_28;
-    u8 pad_2C[0x48];
-    f32 unk_74;
-    u8 pad_78[0x4];
-    f32 unk_7C;
-    u8 pad_80[0x10];
-    f32 unk_90;
-    u8 pad_94[0x18];
-    f32 unk_AC;
-    f32 unk_B0;
-    u8 pad_B4[0x24];
-    f32 unk_D8;
-    u8 pad_DC[0x1BC];
-    f32 unk_298;
-    u8 pad_29C[0x74];
-    u32 unk_310;
-    u32 unk_314;
-    u32 unk_318;
-    f32 unk_31C;
-    f32 unk_320;
-};
-
 void fn_1_6F404(void *arg0, void *arg1) {
     struct fn_1_6F404_lbl_1_rodata_2D70 *tbl;
     u32 sp[3];
@@ -813,7 +828,7 @@ void fn_1_6F404(void *arg0, void *arg1) {
             }
             rnd = (s32) fn_1_584AC();
             if ((rnd % 5) == 0) {
-                fn_1_714A8((void *)(arg0), (void *)(arg1), (u32)(0x16U), (f32)(tbl->unk_B0));
+                fn_1_714A8( (struct Fn1_714A8Car *)((void *)(arg0)), (f32 *)((void *)(arg1)), (u32)(0x16U), (f32)(tbl->unk_B0));
             }
         } else {
             rnd = (s32) fn_1_584AC();
@@ -854,31 +869,7 @@ void fn_1_6F8D0(void *arg0, void *arg1) {
 }
 /* fzgx:end fn_1_6F8D0 */
 
-/* fzgx:begin fn_1_714A8 noprologue */
-#include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/effect_car.h"
-
-extern u32 fn_1_584AC(void);
-extern s16 fn_1_59078(void *arg0);
-extern s16 fn_1_58F50(const void *arg0);
-extern void *memset(void *dest, int value, u32 size);
-
-typedef struct Fn1_714A8Vec {
-    f32 x;
-    f32 y;
-    f32 z;
-} Fn1_714A8Vec;
-
-struct Fn1_714A8Car {
-    u8 pad_00[0x38];
-    u8 *field_38;
-    f32 field_3c;
-    f32 field_40;
-    f32 field_44;
-    Fn1_714A8Vec field_48;
-};
-
+/* fzgx:begin fn_1_714A8 */
 struct Fn1_714A8Work {
     u8 pad_00[0xc];
     s16 field_0c;
@@ -1176,7 +1167,7 @@ void fn_1_714A8(struct Fn1_714A8Car *car, f32 *axis, u32 arg2, f32 size) {
     work.field_20 = (136.0f * scale) / 255.0f;
     work.field_24 = 0.0f;
 
-    work.field_58 = fn_1_584AC();
+    work.field_58 = (u32)fn_1_584AC();
     work.field_10 = arg2;
     if ((s8)state[0x475] != -1) {
         fn_1_59078(&work);
@@ -1200,26 +1191,7 @@ void fn_1_71CA0(void *arg0, void *arg1, u16 arg2) {
 }
 /* fzgx:end fn_1_71CA0 */
 
-/* fzgx:begin fn_1_72318 noprologue */
-#include "types.h"
-#include "dolphin/hw_regs.h"
-
-extern void fn_1_867CC(s16 arg0, void *arg1);
-extern u32 lbl_1_rodata_314C[13];
-extern void lbl_8006DC6C(void *arg0, u32 arg1);
-extern void lbl_8006E1B0(void *arg0, void *arg1);
-extern s16 fn_1_59078(void *arg0);
-extern void *memset(void *dest, int value, u32 size);
-
-struct EffectCar {
-    u8 pad_18[0x18];
-    s16 field_18;
-    u8 pad_1a[0x1e];
-    u32 field_38;
-    u8 pad_3c[0x7c];
-    u8 field_b8;
-};
-
+/* fzgx:begin fn_1_72318 */
 struct EffectWorkData {
     u8 pad_00[0xc];
     s16 field_0c;
@@ -1237,7 +1209,9 @@ struct EffectWorkData {
 };
 
 #pragma opt_propagation off
-s16 fn_1_72318(struct EffectCar *arg0) {
+s16 fn_1_72318(arg0)
+struct fn_1_72318_EffectCar *arg0;
+{
     f32 vec[3];
     struct EffectWorkData data;
     u32 lab_t0;

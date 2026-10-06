@@ -1,84 +1,23 @@
 #include "types.h"
 #include "rel/main_rel/globals.h"
 
-extern struct ArenaData lbl_1_data_8;
-extern u32 OSGetArenaLo(void);
-extern u32 OSGetArenaHi(void);
-extern void OSSetArenaLo(u32 arena_lo);
-extern u16 lbl_1_bss_990[28];
-extern u8 lbl_1_bss_D78;
-extern u8 lbl_1_bss_DA6;
-extern u32 lbl_1_bss_DB0[2];
-extern u32 lbl_1_bss_DA8;
-extern void fn_1_43A4(void);
-extern u32 lbl_1_data_2C70;
-extern void fn_80008E84(u32 value);
-extern u32 lbl_1_bss_DAC;
-extern struct fn_1_634_lbl_1_bss_54 lbl_1_bss_54;
-extern u32 fn_8006FFC4(u32);
-extern u32 fn_1_48780(void);
-extern u32 lbl_801A66B4;
-extern u32 lbl_801A66BC;
-extern struct fn_1_904_lbl_1_bss_4 lbl_1_bss_4;
-extern struct fn_1_914_lbl_1_bss_0 lbl_1_bss_0;
-extern u16 lbl_1_bss_96A;
-extern u32 fn_1_37E98(void);
-extern u32 lbl_1_bss_96C;
-extern u32 camera_set_state_flag(u32);
-extern u32 fn_1_D31E0(u32);
-extern struct fn_1_12B4_lbl_1_bss_962 lbl_1_bss_962;
-extern u32 lbl_1_data_2A20;
 /* lbl_1_data_7C0: 0x2c-byte overlay descriptors (callbacks at 0x20/0x24/0x28), indexed by the overlay id */
 typedef void (*fn_1_ECC_Callback)(void);
+typedef void (*fn_1_ECC_Callback)(void);
+
 struct fn_1_ECC_Overlay {
     u8 pad_0[0x20];
     fn_1_ECC_Callback init;
     fn_1_ECC_Callback update;
     fn_1_ECC_Callback exit;
 };
-extern struct fn_1_ECC_Overlay lbl_1_data_7C0[];
-extern u32 fn_1_15659C(u32);
-extern u32 fn_80008BEC(void *, u32, u32);
-extern u8 lbl_1_bss_978[];
-extern u32 lbl_1_data_2B78;
-extern u32 OSGetTick(u32);
-extern u32 lbl_1_bss_D7C;
-extern u8 lbl_1_bss_DA4;
-extern char lbl_1_data_2C9C[20];
-extern char lbl_1_data_2CB0[31];
-extern void OSPanic(const char *message, int line, const char *file, ...);
-extern void fn_80009AA8(u32 value, u32 count, const char *file, int line);
-extern u32 fn_1_156754(u32);
-extern u32 fn_1_A5864(void);
-extern u32 fn_1_F7578(void);
-extern struct fn_1_3C98_lbl_1_bss_DA5 lbl_1_bss_DA5;
-extern u32 fn_80008EC8(u32, u32, u32);
-extern u32 fn_800793D4(u32, u32, u32);
-extern struct fn_1_48B0_lbl_801A6CF8 lbl_801A6CF8;
-extern u32 lbl_801A6CFC;
-extern struct fn_1_44B4_lbl_1_bss_DB8 lbl_1_bss_DB8;
-extern struct fn_1_4438_lbl_1_bss_DC4 lbl_1_bss_DC4;
-extern u8 lbl_1_bss_8E6B0[308];
-extern void fn_1_14FCE4(void *data, s32 value);
-extern struct fn_1_798_slot lbl_1_bss_8E7E4[];
-extern u8 lbl_1_bss_AA0[336];
-extern u8 lbl_1_rodata_108[88];
-extern u32 fn_80008BA8(void *, void *, u32);
-extern void fn_1_3BDC(u32 arg0);
-extern u32 fn_1_3C18(s32);
 
-/* fzgx:begin fn_1_634 */
-struct fn_1_634_lbl_1_bss_54 {
-    u32 unk_0;
+struct fn_1_798_slot {
+    u8 unk_0[8];
+    s32 value_8;
+    u8 unk_C[0x3C];
 };
 
-void * fn_1_634(void) {
-    fn_8006FFC4(lbl_1_bss_54.unk_0);
-    return &lbl_1_bss_54;
-}
-/* fzgx:end fn_1_634 */
-
-/* fzgx:begin fn_1_668 */
 struct ArenaData {
     u32 *arena_lo;
     u32 arena_lo_size;
@@ -86,11 +25,175 @@ struct ArenaData {
     u32 aligned_lo_size;
 };
 
+struct fn_1_634_lbl_1_bss_54 {
+    u32 unk_0;
+};
+
+struct fn_1_904_lbl_1_bss_4 {
+    u32 unk_0;
+};
+
+struct fn_1_914_lbl_1_bss_0 {
+    u32 unk_0;
+};
+
+struct fn_1_12B4_lbl_1_bss_962 {
+    s16 unk_0;
+};
+
+struct fn_1_3C98_lbl_1_bss_DA5 {
+    u8 unk_0;
+};
+
+struct fn_1_48B0_lbl_801A6CF8 {
+    u32 unk_0;
+};
+
+struct fn_1_4438_lbl_1_bss_DC4 {
+    u32 unk_0;
+};
+
+struct fn_1_ECC_Scene {
+    u8 pad_0[0x20];
+    fn_1_ECC_Callback init;
+    fn_1_ECC_Callback update;
+    fn_1_ECC_Callback suspend;
+    fn_1_ECC_Callback exit;
+};
+
+typedef struct fn_1_4374_Node fn_1_4374_Node;
+
+struct fn_1_4374_Node {
+    u32 field_0;
+    u32 field_4;
+    fn_1_4374_Node *next;
+    fn_1_4374_Node *prev;
+};
+
+struct fn_1_4404_lbl_1_bss_DC0 {
+    u32 unk_0;
+};
+
+struct fn_1_44B4_lbl_1_bss_DB8 {
+    u8 pad_0[0x8];
+    u32 unk_8;
+    u32 unk_C;
+    u32 unk_10;
+};
+
+typedef struct {
+    u32 unk_00;
+    u32 unk_04;
+    u32 unk_08;
+} Fn1_4730Entry;
+extern u32 fn_80008BEC(void *, u32, u32);
+extern u8 lbl_1_bss_8E6B0[308];
+extern void fn_1_14FCE4(u32 arg0, s16 arg1);
+extern struct fn_1_798_slot lbl_1_bss_8E7E4[];
+extern struct ArenaData lbl_1_data_8;
+extern void* OSGetArenaLo(void);
+extern u32 OSGetArenaHi(void);
+extern void OSSetArenaLo(u32 arg0);
+extern u16 lbl_1_bss_990[28];
+extern u8 lbl_1_bss_D78;
+extern u8 lbl_1_bss_DA6;
+extern u32 lbl_1_data_2C70;
+extern u32 fn_80008E84();
+extern struct fn_1_634_lbl_1_bss_54 lbl_1_bss_54;
+extern void fn_8006FFC4(u32 arg0);
+extern void fn_1_48780(void);
+extern u32 lbl_801A66B4;
+extern u32 lbl_801A66BC;
+extern struct fn_1_904_lbl_1_bss_4 lbl_1_bss_4;
+extern struct fn_1_914_lbl_1_bss_0 lbl_1_bss_0;
+extern u16 lbl_1_bss_96A;
+extern u32 fn_1_37E98(void);
+extern u32 lbl_1_bss_96C;
+extern void camera_set_state_flag(u8 value);
+extern void fn_1_D31E0(void);
+extern struct fn_1_12B4_lbl_1_bss_962 lbl_1_bss_962;
+extern u32 lbl_1_data_2A20;
+extern void fn_1_15659C();
+extern u8 lbl_1_bss_978[];
+extern u32 lbl_1_data_2B78;
+extern u32 OSGetTick(u32);
+extern u32 lbl_1_bss_D7C;
+extern u8 lbl_1_bss_DA4;
+extern char lbl_1_data_2C9C[20];
+extern char lbl_1_data_2CB0[31];
+extern void OSPanic(const char *file, int line, const char *msg, ...);
+extern void fn_80009AA8();
+extern void fn_1_156754(s32 index);
+extern void fn_1_A5864(void);
+extern void fn_1_F7578(void);
+extern struct fn_1_3C98_lbl_1_bss_DA5 lbl_1_bss_DA5;
+extern u32 fn_800793D4(u8 *arg0, u32 arg1, u32 arg2);
+extern struct fn_1_48B0_lbl_801A6CF8 lbl_801A6CF8;
+extern u32 lbl_801A6CFC;
+extern struct fn_1_4438_lbl_1_bss_DC4 lbl_1_bss_DC4;
+extern u8 lbl_1_bss_AA0[336];
+extern u8 lbl_1_rodata_108[88];
+extern u32 fn_80008BA8(void *, void *, u32);
+extern void fn_1_3BDC(u32 arg0);
+extern u32 fn_1_3C18(s32);
+extern u32 fn_1_15B970(u32);
+extern void fn_80006E10(u32 arg0);
+extern u8 lbl_1_data_0[];
+extern void OSSetArenaHi(u32 arg0);
+extern s32 fn_1_45730(void *, void *);
+extern u32 fn_1_45850(void *);
+extern void fn_1_458A0(void *, u32, u32, u32);
+extern u32 fn_1_45B2C(void *);
+extern u32 OSReport(u32, ...);
+extern void fn_1_3BC0();
+extern u32 fn_1_A59AC(void);
+extern struct fn_1_ECC_Overlay lbl_1_data_7C0[];
+extern struct fn_1_ECC_Scene lbl_1_data_460[];
+extern u32 fn_1_128C(void);
+extern void fn_1_12F194(void);
+extern void fn_1_3C98(void);
+extern void fn_1_3CC4(void);
+extern u32 lbl_801A66C0;
+extern u32 lbl_1_data_2B68[4];
+extern u8 lbl_1_data_2B64;
+extern u8 fn_1_D357C(void);
+extern void fn_8001CF80(void *);
+extern void SIProbe();
+extern void fn_8006B470(void *);
+extern void fn_1_D332C(u16 *data);
+extern void fn_1_4374(fn_1_4374_Node **list, fn_1_4374_Node *node);
+extern struct fn_1_4404_lbl_1_bss_DC0 lbl_1_bss_DC0;
+extern u32 fn_80008F60(u32, u32);
+extern struct fn_1_44B4_lbl_1_bss_DB8 lbl_1_bss_DB8;
+extern void fn_1_481E8(int arg0);
+extern u32 fn_1_566DC(void);
+extern void fn_80009064(u32 arg0);
+extern u32 fn_80009FA4(u32 arg0);
+extern void fn_80077848(void);
+extern u32 fn_8007785C(u32 count, s32 useArena);
+extern u32 fn_800090A4(u32);
+extern u32 fn_80009830();
+extern u32 lbl_1_data_2C74;
+extern Fn1_4730Entry lbl_1_bss_DCC[32];
+extern u32 lbl_1_bss_DB0[2];
+extern u32 lbl_1_bss_DA8;
+extern void fn_1_43A4(void);
+extern u32 lbl_1_bss_DAC;
+extern u32 fn_80008EC8(u32, u32, u32);
+
+/* fzgx:begin fn_1_634 */
+void * fn_1_634(void) {
+    fn_8006FFC4(lbl_1_bss_54.unk_0);
+    return &lbl_1_bss_54;
+}
+/* fzgx:end fn_1_634 */
+
+/* fzgx:begin fn_1_668 */
 void fn_1_668(void) {
     u32 arena_lo;
     u32 aligned_lo;
 
-    arena_lo = OSGetArenaLo();
+    arena_lo = (u32)OSGetArenaLo();
     OSGetArenaHi();
     *lbl_1_data_8.arena_lo = arena_lo;
     aligned_lo = (arena_lo + lbl_1_data_8.arena_lo_size + 0x1f) & ~0x1f;
@@ -101,8 +204,6 @@ void fn_1_668(void) {
 /* fzgx:end fn_1_668 */
 
 /* fzgx:begin fn_1_6D4 */
-extern u32 fn_80008BEC(void *, u32, u32);
-
 struct fn_1_6D4_Data {
     s16 unk_0;
     s16 unk_2;
@@ -170,25 +271,12 @@ void fn_1_6D4(struct fn_1_6D4_Data *data) {
 }
 /* fzgx:end fn_1_6D4 */
 
-/* fzgx:begin fn_1_798 noprologue */
-#include "types.h"
-
-struct fn_1_798_slot {
-    u8 unk_0[8];
-    s32 value_8;
-    u8 unk_C[0x3C];
-};
-
-extern u8 lbl_1_bss_8E6B0[308];
-extern void fn_1_14FCE4(void *data, s32 value);
-extern struct fn_1_798_slot lbl_1_bss_8E7E4[];
-extern void fn_80008BEC(void *data, u32 value, u32 size);
-
+/* fzgx:begin fn_1_798 */
 void fn_1_798(void) {
     s32 value;
     s16 index;
 
-    fn_1_14FCE4(lbl_1_bss_8E6B0, 0x4d);
+    fn_1_14FCE4( (u32)(void *)(lbl_1_bss_8E6B0), 0x4d);
     fn_80008BEC(lbl_1_bss_8E7E4, 0, 0x5a4);
     value = -1;
     for (index = 0; index < 0x14; index++) {
@@ -198,77 +286,12 @@ void fn_1_798(void) {
 /* fzgx:end fn_1_798 */
 
 /* fzgx:begin fn_1_814 */
-extern struct ArenaData lbl_1_data_8;
-extern u32 OSGetArenaLo(void);
-extern u32 OSGetArenaHi(void);
-extern void OSSetArenaLo(u32 arena_lo);
-extern u16 lbl_1_bss_990[28];
-extern u8 lbl_1_bss_D78;
-extern u8 lbl_1_bss_DA6;
-
-extern u32 lbl_1_data_2C70;
-extern void fn_80008E84(u32 value);
-
-extern struct fn_1_634_lbl_1_bss_54 lbl_1_bss_54;
-extern u32 fn_8006FFC4(u32);
-extern u32 fn_1_48780(void);
-extern u32 lbl_801A66B4;
-extern u32 lbl_801A66BC;
-extern struct fn_1_904_lbl_1_bss_4 lbl_1_bss_4;
-extern struct fn_1_914_lbl_1_bss_0 lbl_1_bss_0;
-extern u16 lbl_1_bss_96A;
-extern u32 fn_1_37E98(void);
-extern u32 lbl_1_bss_96C;
-extern u32 camera_set_state_flag(u32);
-extern u32 fn_1_D31E0(u32);
-extern struct fn_1_12B4_lbl_1_bss_962 lbl_1_bss_962;
-extern u32 lbl_1_data_2A20;
-
-extern u32 fn_1_15659C(u32);
-extern u32 fn_80008BEC(void *, u32, u32);
-extern u8 lbl_1_bss_978[];
-extern u32 lbl_1_data_2B78;
-extern u32 OSGetTick(u32);
-extern u32 lbl_1_bss_D7C;
-extern u8 lbl_1_bss_DA4;
-extern char lbl_1_data_2C9C[20];
-extern char lbl_1_data_2CB0[31];
-extern void OSPanic(const char *message, int line, const char *file, ...);
-extern void fn_80009AA8(u32 value, u32 count, const char *file, int line);
-extern u32 fn_1_156754(u32);
-extern u32 fn_1_A5864(void);
-extern u32 fn_1_F7578(void);
-extern struct fn_1_3C98_lbl_1_bss_DA5 lbl_1_bss_DA5;
-extern u32 fn_800793D4(u32, u32, u32);
-extern struct fn_1_48B0_lbl_801A6CF8 lbl_801A6CF8;
-extern u32 lbl_801A6CFC;
-
-extern struct fn_1_4438_lbl_1_bss_DC4 lbl_1_bss_DC4;
-extern u8 lbl_1_bss_8E6B0[308];
-extern void fn_1_14FCE4(void *data, s32 value);
-extern struct fn_1_798_slot lbl_1_bss_8E7E4[];
-extern u8 lbl_1_bss_AA0[336];
-extern u8 lbl_1_rodata_108[88];
-extern u32 fn_80008BA8(void *, void *, u32);
-extern void fn_1_3BDC(u32 arg0);
-extern u32 fn_1_3C18(s32);
-
 struct fn_1_814_Arg0 {
     u8 unk_0;
     u8 unk_1;
 };
 
-extern u32 OSGetArenaHi(void);
-extern u32 fn_1_15B970(u32);
-extern void fn_80006E10(void *);
-extern u8 lbl_1_data_0[];
-extern void OSSetArenaHi(u32);
-extern s32 fn_1_45730(void *, void *);
-extern u32 fn_1_45850(void *);
-extern void fn_1_458A0(void *, u32, u32, u32);
-extern u32 fn_1_45B2C(void *);
 
-extern void OSReport(const char *, ...);
 static u32 fzgx_pool_fzgx_data_lbl_1_data_0[0x113] = {  /* fzgx-allow: A1 retail data bytes: the TU's .data objects before its string literals; dropped at integration */
     0x00800000, 0x7F7FFFFF, 0x00000000, 0x0001E000, 0x00000000, 0x00018000, 0x4E4F4E00, 0x4D415354,
     0x45522052, 0x45435600, 0x4D415354, 0x45522053, 0x454E4400, 0x534C4156, 0x45205345, 0x4E440000,
@@ -310,9 +333,9 @@ static u32 fzgx_pool_fzgx_data_lbl_1_data_0[0x113] = {  /* fzgx-allow: A1 retail
 #pragma section code_type ".fzgxpool"
 static void fzgx_string_layout(void) {
     /* fzgx-allow: S2 layout primer: MWCC emits string literals in first-use order; the section is dropped at integration */
-    OSReport("ja.gmo");
-    OSReport("game");
-    OSReport("..");
+    OSReport( (u32)(const char *)("ja.gmo"));
+    OSReport( (u32)(const char *)("game"));
+    OSReport( (u32)(const char *)(".."));
 }
 #pragma section code_type ".text"
 
@@ -330,7 +353,7 @@ void fn_1_814(struct fn_1_814_Arg0 *arg0) {
     w = v0;
     w->unk_0 = arg0->unk_0;
     w->unk_1 = arg0->unk_1;
-    fn_80006E10((void *)((u8 *)"game"));
+    fn_80006E10( (u32)((void *)((u8 *)"game")));
     if (!fn_1_45730((void *)v0, &loc_8)) {
         v3 = 0;
     } else {
@@ -344,7 +367,7 @@ void fn_1_814(struct fn_1_814_Arg0 *arg0) {
         OSSetArenaHi(v3);
     }
     fn_1_15B970(v3);
-    fn_80006E10((void *)((u8 *)".."));
+    fn_80006E10( (u32)((void *)((u8 *)"..")));
 }
 /* fzgx:end fn_1_814 */
 
@@ -356,20 +379,12 @@ void fn_1_8D4(void) {
 /* fzgx:end fn_1_8D4 */
 
 /* fzgx:begin fn_1_904 */
-struct fn_1_904_lbl_1_bss_4 {
-    u32 unk_0;
-};
-
 u32 fn_1_904(void) {
     return lbl_1_bss_4.unk_0;
 }
 /* fzgx:end fn_1_904 */
 
 /* fzgx:begin fn_1_914 */
-struct fn_1_914_lbl_1_bss_0 {
-    u32 unk_0;
-};
-
 u32 fn_1_914(void) {
     return lbl_1_bss_0.unk_0;
 }
@@ -414,9 +429,6 @@ void fn_1_E34(void) {
 /* fzgx:end fn_1_E34 */
 
 /* fzgx:begin fn_1_E78 */
-extern u32 fn_1_3BC0(u32);
-extern u32 fn_1_A59AC(void);
-
 void fn_1_E78(void) {
     u32 t0;
     t0 = fn_1_A59AC();
@@ -425,8 +437,6 @@ void fn_1_E78(void) {
 /* fzgx:end fn_1_E78 */
 
 /* fzgx:begin fn_1_E9C */
-#include "types.h"
-
 struct fn_1_E9C_lbl_1_bss_960 {
     u16 unk_0;
     u16 unk_2;
@@ -618,7 +628,22 @@ void fn_1_1280(u32 arg0) {
 }
 /* fzgx:end fn_1_1280 */
 
-/* fzgx:begin fn_1_128C */
+/* fzgx:begin fn_1_128C noprologue */
+#include "types.h"
+
+extern struct fn_1_ECC_Overlay lbl_1_data_7C0[];
+
+extern u32 camera_set_state_flag(u32);
+extern u32 fn_1_D31E0(u32);
+/* lbl_1_data_7C0: 0x2c-byte overlay descriptors (callbacks at 0x20/0x24/0x28), indexed by the overlay id */
+typedef void (*fn_1_ECC_Callback)(void);
+struct fn_1_ECC_Overlay {
+    u8 pad_0[0x20];
+    fn_1_ECC_Callback init;
+    fn_1_ECC_Callback update;
+    fn_1_ECC_Callback exit;
+};
+
 u32 fn_1_128C(void) {
     u32 t0;
     t0 = camera_set_state_flag(0);
@@ -627,16 +652,10 @@ u32 fn_1_128C(void) {
 /* fzgx:end fn_1_128C */
 
 /* fzgx:begin fn_1_12B4 */
-extern u32 OSReport(void *, ...);
-
-struct fn_1_12B4_lbl_1_bss_962 {
-    s16 unk_0;
-};
-
 void fn_1_12B4(void) {
     s16 v0;
     v0 = lbl_1_bss_962.unk_0;
-    OSReport(&lbl_1_data_2A20, v0, ((u8 *)&lbl_1_data_7C0 + (v0 * 44)));
+    OSReport( (u32)(void *)(&lbl_1_data_2A20), v0, ((u8 *)&lbl_1_data_7C0 + (v0 * 44)));
 }
 /* fzgx:end fn_1_12B4 */
 
@@ -965,8 +984,6 @@ void fn_1_3920(void) {
 /* fzgx:end fn_1_3920 */
 
 /* fzgx:begin fn_1_3B34 */
-extern u32 fn_80008BEC(void *, u32, u32);
-
 void fn_1_3B34(void) {
     u32 i;
 
@@ -1003,8 +1020,6 @@ void fn_1_3BDC(u32 arg0) {
 /* fzgx:end fn_1_3BDC */
 
 /* fzgx:begin fn_1_3C78 */
-extern u8 lbl_1_bss_D78;
-
 void fn_1_3C78(void) {
     if (lbl_1_bss_D78 == 0) { return; }
     lbl_1_bss_DA4 = 0;
@@ -1012,12 +1027,6 @@ void fn_1_3C78(void) {
 /* fzgx:end fn_1_3C78 */
 
 /* fzgx:begin fn_1_3C98 */
-struct fn_1_3C98_lbl_1_bss_DA5 {
-    u8 unk_0;
-};
-
-extern u8 lbl_1_bss_D78;
-
 void fn_1_3C98(void) {
     if (lbl_1_bss_D78 == 0) { return; }
     if (lbl_1_bss_DA5.unk_0 != 0) { return; }
@@ -1101,10 +1110,6 @@ u32 fn_1_4010(u32 arg0, u32 arg1) {
 /* fzgx:end fn_1_4010 */
 
 /* fzgx:begin fn_1_4030 */
-#include "types.h"
-
-
-
 struct fn_1_4030_lbl_1_bss_DA8 {
     u32 unk_0;
 };
@@ -1139,8 +1144,6 @@ u32 fn_1_4060(void) {
 /* fzgx:end fn_1_4060 */
 
 /* fzgx:begin fn_1_407C */
-#include "types.h"
-
 typedef u32 (*fn_1_407C_Fn0)(u32);
 struct fn_1_407C_lbl_1_bss_DAC {
     s32 unk_0;
@@ -1198,11 +1201,11 @@ void fn_1_407C(s32 arg_sp0) {
 /* fzgx:end fn_1_407C */
 
 /* fzgx:begin fn_1_41A8 */
-typedef struct Node Node;
-struct Node {
+typedef struct fn_1_41A8_Node fn_1_41A8_Node;
+struct fn_1_41A8_Node {
     u32 field_0;
     void *field_4;
-    Node *next;
+    fn_1_41A8_Node *next;
     u32 field_c;
     u32 field_10;
     u32 field_14;
@@ -1213,14 +1216,14 @@ typedef struct List List;
 struct List {
     u32 field_0;
     u32 field_4;
-    Node *head;
+    fn_1_41A8_Node *head;
 };
 
 typedef struct Manager Manager;
 struct Manager {
     u32 field_0;
     u32 field_4;
-    Node *head;
+    fn_1_41A8_Node *head;
 };
 
 void fn_1_41A8(void) {
@@ -1229,7 +1232,7 @@ void fn_1_41A8(void) {
     u32 *dac;
     u32 *da8;
     int i;
-    Node *node;
+    fn_1_41A8_Node *node;
     void (*callback)(void *, u32);
 
     dac = &lbl_1_bss_DAC;
@@ -1264,8 +1267,6 @@ void fn_1_41A8(void) {
 /* fzgx:end fn_1_41A8 */
 
 /* fzgx:begin fn_1_426C */
-#include "types.h"
-
 struct Fn426CEntry {
     u32 active;
     u32 arg;
@@ -1279,7 +1280,6 @@ struct Fn426CMgr {
     struct Fn426CEntry *entries;
 };
 
-extern void fn_1_4374(struct Fn426CMgr *, struct Fn426CEntry *);
 
 void fn_1_426C(u32 idx) {
     struct { struct Fn426CMgr *value; } m;
@@ -1298,7 +1298,7 @@ void fn_1_426C(u32 idx) {
         (*(struct Fn426CMgr * *)&lbl_1_bss_DAC) = m.value;
         (*(struct Fn426CMgr * *)&lbl_1_bss_DA8) = saved;
     }
-    fn_1_4374(m.value, e);
+    fn_1_4374( (fn_1_4374_Node **)(struct Fn426CMgr *)(m.value), (fn_1_4374_Node *)(struct Fn426CEntry *)(e));
 }
 /* fzgx:end fn_1_426C */
 
@@ -1356,17 +1356,9 @@ void fn_1_4370(void) {
 /* fzgx:end fn_1_4370 */
 
 /* fzgx:begin fn_1_4374 */
-typedef struct Node Node;
-struct Node {
-    u32 field_0;
-    u32 field_4;
-    Node *next;
-    Node *prev;
-};
-
-void fn_1_4374(Node **list, Node *node) {
-    Node *prev;
-    Node *next;
+void fn_1_4374(fn_1_4374_Node **list, fn_1_4374_Node *node) {
+    fn_1_4374_Node *prev;
+    fn_1_4374_Node *next;
 
     next = node->next;
     prev = node->prev;
@@ -1381,8 +1373,6 @@ void fn_1_4374(Node **list, Node *node) {
 /* fzgx:end fn_1_4374 */
 
 /* fzgx:begin fn_1_43A4 */
-#include "types.h"
-
 typedef struct ListNode ListNode;
 
 struct ListNode {
@@ -1439,17 +1429,7 @@ void fn_1_43F4(void) {
 }
 /* fzgx:end fn_1_43F4 */
 
-/* fzgx:begin fn_1_4404 noprologue */
-#include "types.h"
-
-extern struct fn_1_4404_lbl_1_bss_DC0 lbl_1_bss_DC0;
-extern u32 fn_80008E84(u32);
-extern u32 lbl_1_data_2C70;
-
-struct fn_1_4404_lbl_1_bss_DC0 {
-    u32 unk_0;
-};
-
+/* fzgx:begin fn_1_4404 */
 void fn_1_4404(void) {
     u32 t0;
     t0 = fn_80008E84(lbl_1_bss_DC0.unk_0);
@@ -1457,17 +1437,7 @@ void fn_1_4404(void) {
 }
 /* fzgx:end fn_1_4404 */
 
-/* fzgx:begin fn_1_4438 noprologue */
-#include "types.h"
-
-extern struct fn_1_4438_lbl_1_bss_DC4 lbl_1_bss_DC4;
-extern u32 fn_80008E84(u32);
-extern u32 lbl_1_data_2C70;
-
-struct fn_1_4438_lbl_1_bss_DC4 {
-    u32 unk_0;
-};
-
+/* fzgx:begin fn_1_4438 */
 void fn_1_4438(void) {
     u32 t0;
     t0 = fn_80008E84(lbl_1_bss_DC4.unk_0);
@@ -1493,23 +1463,12 @@ u32 fn_1_44A4(void) {
 /* fzgx:end fn_1_44A4 */
 
 /* fzgx:begin fn_1_44B4 */
-extern u32 OSGetArenaHi(void);
-extern u32 OSGetArenaLo(void);
-extern u32 fn_80008F60(u32, u32);
-
-struct fn_1_44B4_lbl_1_bss_DB8 {
-    u8 pad_0[0x8];
-    u32 unk_8;
-    u32 unk_C;
-    u32 unk_10;
-};
-
 void fn_1_44B4(void) {
     struct fn_1_44B4_lbl_1_bss_DB8 *p_lbl_1_bss_DB8;
     u32 t0, t1, t2, t3;
     p_lbl_1_bss_DB8 = (struct fn_1_44B4_lbl_1_bss_DB8 *)&lbl_1_bss_DB8;
     t0 = OSGetArenaHi();
-    t1 = OSGetArenaLo();
+    t1 = (u32)OSGetArenaLo();
     t2 = fn_80008EC8(t1, t0, 8);
     p_lbl_1_bss_DB8->unk_10 = t2;
     t3 = fn_80008F60(t2, ((t2 + 0xE0000) - 2848));
@@ -1591,11 +1550,6 @@ u32 fn_1_451C(void) {
 /* fzgx:end fn_1_451C */
 
 /* fzgx:begin fn_1_45D0 */
-extern u32 OSReport(u32, ...);
-extern u32 fn_800090A4(u32);
-extern u32 fn_80009830(u32);
-extern u32 lbl_1_data_2C74;
-
 s32 fn_1_45D0(u32 arg0, u32 arg1) {
     u32 v0;
     u32 t0, t1, t2;
@@ -1620,11 +1574,6 @@ s32 fn_1_45D0(u32 arg0, u32 arg1) {
 /* fzgx:end fn_1_45D0 */
 
 /* fzgx:begin fn_1_4630 */
-extern u32 OSReport(u32, ...);
-extern u32 fn_800090A4(u32);
-extern u32 fn_80009830(void);
-extern u32 lbl_1_data_2C74;
-
 u32 fn_1_4630(u32 arg0, u32 arg1) {
     u32 v0;
     u32 v1;
@@ -1649,7 +1598,7 @@ u32 fn_1_4630(u32 arg0, u32 arg1) {
     }
     }
     v0 = v1;
-    t3 = fn_800793D4(v0, 0, arg1);
+    t3 = fn_800793D4( (u8 *)(u32)(v0), 0, arg1);
     v0 = t3;
     v0 = v1;
     return v0;
@@ -1657,10 +1606,6 @@ u32 fn_1_4630(u32 arg0, u32 arg1) {
 /* fzgx:end fn_1_4630 */
 
 /* fzgx:begin fn_1_46B4 */
-extern char lbl_1_data_2C9C[20];
-extern void OSPanic(const char *message, int line, const char *file, ...);
-extern void fn_80009AA8(u32 value, u32 count, const char *file, int line);
-
 void fn_1_46B4(u32 arg0, u32 arg1, const char *arg2, int arg3) {
     if (arg1 == 0) {
         OSPanic(arg2, arg3, lbl_1_data_2C9C);
@@ -1670,14 +1615,6 @@ void fn_1_46B4(u32 arg0, u32 arg1, const char *arg2, int arg3) {
 /* fzgx:end fn_1_46B4 */
 
 /* fzgx:begin fn_1_4730 */
-typedef struct {
-    u32 unk_00;
-    u32 unk_04;
-    u32 unk_08;
-} Fn1_4730Entry;
-
-extern Fn1_4730Entry lbl_1_bss_DCC[32];
-
 void fn_1_4730(u32 value, u32 count, u32 size, const char *file, int line) {
     s32 remaining;
     Fn1_4730Entry *entry;
@@ -1711,10 +1648,6 @@ void fn_1_4730(u32 value, u32 count, u32 size, const char *file, int line) {
 /* fzgx:end fn_1_4730 */
 
 /* fzgx:begin fn_1_48B0 */
-struct fn_1_48B0_lbl_801A6CF8 {
-    u32 unk_0;
-};
-
 s32 fn_1_48B0(u32 arg0, u32 arg1) {
     s32 v0;
     v0 = (arg1 * ((u32)(lbl_801A6CF8.unk_0 - arg0) / (u32)arg1));
@@ -1728,13 +1661,6 @@ s32 fn_1_48B0(u32 arg0, u32 arg1) {
 /* fzgx:end fn_1_48B0 */
 
 /* fzgx:begin fn_1_48E8 */
-#include "types.h"
-#include "rel/main_rel/globals.h"
-
-extern u32 lbl_801A6CFC;
-
-
-
 #pragma opt_propagation off
 s32 fn_1_48E8(u32 arg0, u32 arg1) {
     u32 step;

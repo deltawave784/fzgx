@@ -1,6 +1,8 @@
 #include "types.h"
 #include "rel/main_rel/globals.h"
 #include "rel/main_rel/game.h"
+#include "font.h"
+
 
 typedef struct Sig_ADXT_Pause_AdxSjdHandle Sig_ADXT_Pause_AdxSjdHandle;
 
@@ -228,25 +230,61 @@ typedef struct {
     u32 value_318;
     u32 value_31c;
 } Fn40710Config;
-extern void fn_1_12F308(void);
-extern int fn_1_4C10(void);
-extern u32 fn_1_12F358(u32);
-extern u32 fn_1_467F4(void);
-extern void fn_1_4A00(u32 arg0, u32 arg1, u32 arg2);
-extern int fn_1_402D4(void);
-extern void fn_1_A2D84(u32 arg0);
-extern u32 fn_1_101C0(void);
-extern u32 fn_1_A11EC(void);
+
+struct fn_1_408E8_lbl_1_rodata_BD8 {
+    u8 pad_0[0x4];
+    f32 unk_4;
+    u8 pad_8[0x4];
+    f32 unk_C;
+    u8 pad_10[0x2C];
+    f32 unk_3C;
+    u8 pad_40[0x4];
+    f32 unk_44;
+    u8 pad_48[0x174];
+    f32 unk_1BC;
+    u8 pad_1C0[0xC];
+    f32 unk_1CC;
+    u8 pad_1D0[0xC];
+    f32 unk_1DC;
+    u8 pad_1E0[0x15C];
+    u32 unk_33C;
+    f32 unk_340;
+};
+
+typedef struct Fn408E8Obj {
+    u8 type;         /* 0x00 */
+    u8 pad_1[2];
+    u8 flags;        /* 0x03 */
+    u32 unk_4;
+    f32 fade;        /* 0x08 */
+    f32 z;           /* 0x0C */
+    f32 x;           /* 0x10 */
+    f32 y;           /* 0x14 */
+    f32 width;       /* 0x18 */
+    f32 height;      /* 0x1C */
+    void *data;      /* 0x20 */
+} Fn408E8Obj;
+extern s8 lbl_1_bss_26B5C[30];
+extern u8* fn_1_36AD0(void);
+extern u32 fn_1_34AC0(void *, u32, u32, u32);
+extern void fn_1_8001C(void);
+extern void fn_1_12AB38(void *arg0);
+extern void fn_1_465D0(char *value, u32 flag);
+extern void* fn_1_7F518(s16 car_type, void* car, s32 initialize);
+extern int sprintf(char *s, const char *format, ...);
 extern u32 fn_1_435C(u32 value);
-extern void ADXT_Pause(Sig_ADXT_Pause_ADXTHandle *, s32);
 extern void fn_1_4310(u32 arg0);
-extern void fn_1_48004(s32 index, s32 image);
 extern void fn_1_8616C(void);
-extern void fn_1_A1588(u32 arg0, u32 arg1);
+extern u32 fn_1_A11EC(void);
 extern void fn_1_D0790(void);
+extern u32 fn_1_101C0(void);
+extern void fn_1_A1588(u32 arg0, u32 arg1);
+extern void fn_1_48004(s32 index, s32 image);
+extern void ADXT_Pause(Sig_ADXT_Pause_ADXTHandle *, s32);
 extern void fn_1_451E4(void);
 extern void fn_1_D3214(void);
 extern void fn_8001AF64(void);
+extern u32 fn_1_467F4(void);
 extern u32 fn_1_13018(void);
 extern u32 ghost_test_record_flag0(s32 arg);
 extern u32 fn_1_F9D44(u32 arg);
@@ -255,6 +293,12 @@ extern void fn_1_2DB50(void);
 extern void fn_1_3F8C(void *, void *, Obj_1_bss_5138 *, int);
 extern void fn_1_2D888(void);
 extern void fn_1_2D524(void);
+extern Fn40710Config lbl_1_rodata_BD8;
+extern FontDrawPacket lbl_1_rodata_26F8;
+extern void fn_1_403D4(Fn408E8Obj *obj);
+extern void fn_1_50A90(FontDrawPacket *packet, s32 w, s32 h, s32 clipW, s32 clipH);
+extern void fn_1_49514(u32 *value);
+extern void fn_1_49614(void);
 extern u32 lbl_801A63C0;
 extern void fn_1_40BE4(void);
 extern u32 lbl_801A6CE0;
@@ -263,11 +307,15 @@ extern u32 fn_80070DE0(u32 arg0);
 extern void fn_1_40F54(void *arg0);
 extern void fn_1_D3884();
 extern void fn_1_D358C();
-extern void fn_1_465D0(char *value, u32 flag);
-extern int sprintf(char *s, const char *format, ...);
 extern void fn_1_41134(void *unused, char *value);
 extern int fn_80016DF8(char *buffer);
 extern void fn_1_412A0(u32 index);
+extern void fn_1_12F308(void);
+extern int fn_1_4C10(void);
+extern u32 fn_1_12F358(u32);
+extern void fn_1_4A00(s32 fadeIn, u8 steps, u32 arg);
+extern int fn_1_402D4(void);
+extern void fn_1_A2D84(u32 arg0);
 extern void fn_1_15E330(s32 index, u32 value, void *arg);
 extern void fn_1_15E5E4(s32 index, void *arg);
 extern void fn_1_15E688(s32 index, u32 value, u8 state, void *arg);
@@ -307,10 +355,8 @@ extern u8 lbl_1_bss_26314[2032];
 extern s16 fn_1_12EF24(s16 row, s16 column);
 extern u8 lbl_1_bss_523C[32];
 extern Entry *lbl_1_bss_53F8[34];
-extern void OSPanic(const void *, u32, const char *, ...);
+extern void OSPanic(const char *file, int line, const char *msg, ...);
 extern Obj_1_bss_25E9C lbl_1_bss_25E9C[30];
-extern void fn_1_12AB38(void *arg0);
-extern void* fn_1_7F518(s16 car_type, void* car, s32 initialize);
 extern u32 fn_1_46C60(void);
 extern u32 lbl_1_bss_26C2C[2];
 extern u32 lbl_1_bss_262F8[2];
@@ -321,7 +367,6 @@ extern u32 fn_1_FA070(void);
 extern int fn_1_FA180(int, u8);
 extern u32 fn_1_F9FEC(void);
 extern void fn_1_A2DC4(u32 arg0);
-extern Fn40710Config lbl_1_rodata_BD8;
 extern u8 lbl_1_bss_26B54[8];
 extern u32 fn_1_40EE4(void);
 extern u32 lbl_801A63D0;
@@ -514,24 +559,13 @@ fallback:
 }
 /* fzgx:end fn_1_33890 */
 
-/* fzgx:begin fn_1_34E08 noprologue */
-#include "types.h"
-#include "rel/main_rel/game.h"
-
+/* fzgx:begin fn_1_34E08 */
 typedef struct {
     u32 flags;
     u8 pad_4[0x819C];
     u8 unk_81A0;
 } Obj_1_34E08_Settings;
 
-extern s8 lbl_1_bss_26B5C[30];
-extern Obj_1_34E08_Settings *fn_1_36AD0(void);
-extern u32 fn_1_34AC0(void *, u32, u32, u32);
-extern void fn_1_8001C(void);
-extern void fn_1_12AB38(void *);
-extern s32 fn_1_465D0(void *, s32);
-extern void *fn_1_7F518(s16, void *, s32);
-extern int sprintf(char *, const char *, ...);
 
 void fn_1_34E08(void) {
     struct { u8 *value; } data;
@@ -543,7 +577,7 @@ void fn_1_34E08(void) {
     data.value = (u8 *)&lbl_1_data_5730;
     v = lbl_1_bss_8B3A0.unk_E;
     if (v > 40) {
-        Obj_1_34E08_Settings *s = fn_1_36AD0();
+        Obj_1_34E08_Settings *s = (Obj_1_34E08_Settings *)fn_1_36AD0();
         v = 50;
         if (!(s->flags & 0x40000000)) {
             v = s->unk_81A0;
@@ -553,14 +587,14 @@ void fn_1_34E08(void) {
     fn_1_34AC0(lbl_1_bss_26B5C, 1, 30, 1);
     fn_1_8001C();
     fn_1_12AB38(data.value + 0xCE4);
-    fn_1_465D0(data.value + 0xCF0, 1);
+    fn_1_465D0( (char *)(void *)(data.value + 0xCF0), 1);
     for (i = 0; i < 30; i++) {
         if (i == 0) {
             sprintf(buf, (const char *)(data.value + 0xD00), fn_1_7F518(lbl_1_bss_26B5C[i], tmp, 0));
         } else {
             sprintf(buf, (const char *)(data.value + 0xD0C), fn_1_7F518(lbl_1_bss_26B5C[i], tmp, 0));
         }
-        fn_1_465D0(buf, 1);
+        fn_1_465D0( (char *)(void *)(buf), 1);
     }
     fn_1_12AB38(data.value + 0xD18);
 }
@@ -715,21 +749,7 @@ void fn_1_384E8(void) {
 }
 /* fzgx:end fn_1_384E8 */
 
-/* fzgx:begin fn_1_3908C noprologue */
-#include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/game.h"
-
-extern u32 fn_1_435C(u32 value);
-extern void fn_1_4310(u32 arg0);
-extern void fn_1_8616C(void);
-extern u32 fn_1_A11EC(void);
-extern void fn_1_D0790(void);
-extern u32 fn_1_101C0(void);
-extern void fn_1_A1588(u32 arg0, u32 arg1);
-extern void fn_1_48004(s32 index, s32 image);
-extern void ADXT_Pause(void *, s32);
-
+/* fzgx:begin fn_1_3908C */
 void fn_1_3908C(void) {
     u8 inRange;
     s32 count;
@@ -773,7 +793,7 @@ void fn_1_3908C(void) {
 
     lbl_1_bss_3C30.unk_1474 = 0;
     lbl_1_bss_381F5 = 1;
-    ADXT_Pause((void *)lbl_1_bss_6EAD0.unk_0->unk_0, 1);
+    ADXT_Pause( (Sig_ADXT_Pause_ADXTHandle *)((void *)lbl_1_bss_6EAD0.unk_0->unk_0), 1);
 
     if (lbl_1_bss_3C30.unk_5 == 1) {
         fn_1_48004(0xBB, 1);
@@ -1103,7 +1123,7 @@ s32 fn_1_3F440(u8 index) {
     u8 *limits;
 
     if (index > 0x1d) {
-        OSPanic(&lbl_1_data_62EC, 0x2654, (const char *)lbl_1_data_65E8);
+        OSPanic( (const char *)(const void *)(&lbl_1_data_62EC), 0x2654, (const char *)lbl_1_data_65E8);
     }
 
     limits = (u8 *)&lbl_1_bss_3C30.unk_0;
@@ -1149,24 +1169,6 @@ void fn_1_3F4FC(void) {
     fn_1_12AB38(dp + 0xd18);
 }
 /* fzgx:end fn_1_3F4FC */
-
-/* fzgx:begin fn_1_3F75C noprologue */
-#include "types.h"
-
-extern void fn_1_451E4(void);
-extern void fn_1_D3214(void);
-extern void fn_8001AF64(void);
-extern s32 fn_1_467F4(void);
-extern s32 fn_1_13018(void);
-
-void fn_1_3F75C(void) {
-    while (fn_1_467F4() || fn_1_13018()) {
-        fn_1_451E4();
-        fn_1_D3214();
-        fn_8001AF64();
-    }
-}
-/* fzgx:end fn_1_3F75C */
 
 /* fzgx:begin fn_1_3F7A0 */
 void fn_1_3F7A0(u32* self) {
@@ -1393,22 +1395,7 @@ u32 fn_1_3FCF8(void) {
 }
 /* fzgx:end fn_1_3FCF8 */
 
-/* fzgx:begin fn_1_3FDA8 noprologue */
-#include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/game.h"
-
-extern void *fn_1_435C(void *value);
-extern s32 ghost_test_record_flag0(u8 value);
-extern s32 fn_1_F9D44(u32 value);
-extern u8 fn_1_F8C50(u8 value);
-extern void fn_1_2DB50(void);
-extern void fn_1_3F8C(void *arg0, void (*arg1)(void), Obj_1_bss_5138 *arg2, u32 arg3);
-extern void fn_1_2D888(void);
-extern void fn_1_2D524(void);
-
-extern void *fn_1_435C(void *value);
-
+/* fzgx:begin fn_1_3FDA8 */
 void fn_1_3FDA8(void *arg0, void *arg1) {
     s32 condition;
     void *value;
@@ -1418,7 +1405,7 @@ void fn_1_3FDA8(void *arg0, void *arg1) {
     } else {
         if (lbl_1_bss_5138.unk_E3 == 0xff) {
             condition = 0;
-        } else if (ghost_test_record_flag0(lbl_1_bss_3C30.unk_6) != 0) {
+        } else if ((s32)ghost_test_record_flag0(lbl_1_bss_3C30.unk_6) != 0) {
             condition = 0;
         } else {
             condition = 1;
@@ -1428,7 +1415,7 @@ void fn_1_3FDA8(void *arg0, void *arg1) {
         } else {
             if (lbl_1_bss_5138.unk_E5 == 0xff) {
                 condition = 0;
-            } else if (fn_1_F9D44(lbl_1_bss_5138.unk_E5 & 0xf) != 0) {
+            } else if ((s32)fn_1_F9D44(lbl_1_bss_5138.unk_E5 & 0xf) != 0) {
                 condition = 0;
             } else {
                 condition = 1;
@@ -1455,11 +1442,11 @@ void fn_1_3FDA8(void *arg0, void *arg1) {
         }
     }
 
-    value = fn_1_435C(arg0);
-    fn_1_3F8C(lbl_1_data_6608, fn_1_2DB50, &lbl_1_bss_5138, 30);
-    fn_1_435C(arg1);
-    fn_1_3F8C(lbl_1_data_6618, fn_1_2D888, &lbl_1_bss_5138, 30);
-    fn_1_435C(value);
+    value = (void *)fn_1_435C( (u32)(void *)(arg0));
+    fn_1_3F8C(lbl_1_data_6608, (void *)(void (*)(void))(fn_1_2DB50), &lbl_1_bss_5138, 30);
+    fn_1_435C( (u32)(void *)(arg1));
+    fn_1_3F8C(lbl_1_data_6618, (void *)(void (*)(void))(fn_1_2D888), &lbl_1_bss_5138, 30);
+    fn_1_435C( (u32)(void *)(value));
     lbl_1_bss_5138.unk_E2 = 1;
     fn_1_2D524();
 
@@ -1705,55 +1692,10 @@ update_state:
 }
 /* fzgx:end fn_1_40710 */
 
-/* fzgx:begin fn_1_408E8 noprologue */
-#include "types.h"
-#include "font.h"
-
-typedef struct Fn408E8Obj {
-    u8 type;         /* 0x00 */
-    u8 pad_1[2];
-    u8 flags;        /* 0x03 */
-    u32 unk_4;
-    f32 fade;        /* 0x08 */
-    f32 z;           /* 0x0C */
-    f32 x;           /* 0x10 */
-    f32 y;           /* 0x14 */
-    f32 width;       /* 0x18 */
-    f32 height;      /* 0x1C */
-    void *data;      /* 0x20 */
-} Fn408E8Obj;
-
-struct fn_1_408E8_lbl_1_rodata_BD8 {
-    u8 pad_0[0x4];
-    f32 unk_4;
-    u8 pad_8[0x4];
-    f32 unk_C;
-    u8 pad_10[0x2C];
-    f32 unk_3C;
-    u8 pad_40[0x4];
-    f32 unk_44;
-    u8 pad_48[0x174];
-    f32 unk_1BC;
-    u8 pad_1C0[0xC];
-    f32 unk_1CC;
-    u8 pad_1D0[0xC];
-    f32 unk_1DC;
-    u8 pad_1E0[0x15C];
-    u32 unk_33C;
-    f32 unk_340;
-};
-
-extern struct fn_1_408E8_lbl_1_rodata_BD8 lbl_1_rodata_BD8;
-extern FontDrawPacket lbl_1_rodata_26F8;
-
-extern void fn_1_403D4(Fn408E8Obj *obj);
-extern void fn_1_50A90(FontDrawPacket *packet, s32 w, s32 h, s32 clipW, s32 clipH);
-extern void fn_1_49514(u32 *header);
-extern void fn_1_49614(void);
-
+/* fzgx:begin fn_1_408E8 */
 #pragma opt_common_subs off
 void fn_1_408E8(Fn408E8Obj *obj) {
-    struct fn_1_408E8_lbl_1_rodata_BD8 *pool = &lbl_1_rodata_BD8;
+    struct fn_1_408E8_lbl_1_rodata_BD8 *pool = &(*((struct fn_1_408E8_lbl_1_rodata_BD8 *)&lbl_1_rodata_BD8));
     u32 header;             /* the packet follows this word in the frame */
     FontDrawPacket pkt;
     f32 scale;
@@ -1902,15 +1844,7 @@ void fn_1_40D44(void) {
 }
 /* fzgx:end fn_1_40D44 */
 
-/* fzgx:begin fn_1_40E08 noprologue */
-#include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/game.h"
-
-extern void fn_1_3F8C(void *arg0, void (*arg1)(void), Obj_1_bss_5138 *arg2, u32 arg3);
-extern u32 lbl_801A63C0;
-extern void fn_1_40BE4(void);
-
+/* fzgx:begin fn_1_40E08 */
 // Initializes the random-selection bounds and schedules the next callback.
 void fn_1_40E08(u32 arg0) {
     u32 value;
@@ -1938,7 +1872,7 @@ void fn_1_40E08(u32 arg0) {
         lbl_1_bss_38214 = max;
     }
 
-    fn_1_3F8C(lbl_1_data_662C, fn_1_40BE4, 0, 1);
+    fn_1_3F8C(lbl_1_data_662C, (void *)(void (*)(void))(fn_1_40BE4), 0, 1);
 }
 /* fzgx:end fn_1_40E08 */
 
@@ -2064,23 +1998,14 @@ void fn_1_41104(u32 message_index) {
 }
 /* fzgx:end fn_1_41104 */
 
-/* fzgx:begin fn_1_41134 noprologue */
-#include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/game.h"
-
-extern void fn_1_465D0(char *value, u32 flag);
-extern void sprintf(char *buffer, u32 *format, ...);
-
-extern void fn_1_41134(void *unused, char *value);
-
+/* fzgx:begin fn_1_41134 */
 // Format the value with each registered template and publish both results.
 void fn_1_41134(void *unused, char *value) {
     char buffer[128];
 
-    sprintf(buffer, &lbl_1_data_6700, value);
+    sprintf(buffer, (const char *)(u32 *)(&lbl_1_data_6700), value);
     fn_1_465D0(buffer, 1);
-    sprintf(buffer, &lbl_1_data_6708, value);
+    sprintf(buffer, (const char *)(u32 *)(&lbl_1_data_6708), value);
     fn_1_465D0(buffer, 1);
 }
 /* fzgx:end fn_1_41134 */

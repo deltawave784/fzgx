@@ -119,32 +119,99 @@ typedef struct {
     f32 y;
     f32 z;
 } Vec3;
-extern int fn_1_4C10(void);
+
+typedef struct {
+    u32 flags;
+    s32 unk_4;
+    u32 unk_8;
+    u32 unk_C;
+} Sig_fn_1_45730_LoadEntry;
+
+typedef struct {
+    u32 unk_0;
+    u8 pad_4[0x48];
+    Sig_fn_1_45730_LoadEntry entry;
+} Sig_fn_1_45730_LoadResult;
+
+typedef struct {
+    u8 unk_0;
+    u8 pad_1;
+    s16 unk_2;
+    s16 unk_4;
+    s16 unk_6;
+    u16 unk_8;
+    u8 pad_A[0x2];
+    u32 unk_C;
+    u16 unk_10;
+    s16 unk_12;
+    s16 unk_14;
+    u8 pad_16[0x2];
+    u32 unk_18;
+    u8 pad_1C[0x48];
+    u16 unk_64;
+} Sig_fn_1_101D0_Fn_1_101D0_State;
+
+typedef struct {
+    f32 x;
+    f32 y;
+    f32 z;
+} fn_1_11544_LiveCamVec;
+
+typedef struct {
+    f32 m[3][4];
+} LiveCamMtx;
+extern s16 fn_1_7B054(void);
+extern void fn_1_10138();
+extern void fn_1_8840(void);
+extern u32 fn_1_A1588(Sig_ADXT_Stop_ADXTHandle *, u32);
+extern u32 fn_1_A1CE8(u32);
+extern s32 fn_1_F2F34(void);
+extern u8 fn_1_3F1F8(void);
+extern int fn_1_45730(char *, Sig_fn_1_45730_LoadResult *);
+extern u32 fn_1_45B2C(Sig_fn_1_45730_LoadResult *);
+extern u32 fn_1_4630();
+extern void fn_1_458A0(Sig_fn_1_45730_LoadResult *, void *, u32, u32);
+extern void fn_1_45850(Sig_fn_1_45730_LoadResult *);
+extern void fn_80006E10(u32 arg0);
+extern int sprintf(char *s, const char *format, ...);
+extern u32 lbl_801A6410;
+extern const f64 lbl_1_rodata_580;
+extern const f64 lbl_1_rodata_588;
+extern u32 lbl_1_bss_F5C;
+extern s32 camera_get_state(void);
+extern u32 lbl_801A63C0;
+extern u32 fn_1_107B8(Sig_fn_1_101D0_Fn_1_101D0_State *);
+extern u32 fn_1_864E8(int index);
+extern u8 fn_1_86624(void);
+extern void camera_set_result(s16 value);
+extern void camera_set_selected_value(u8 value);
+extern void fn_1_5370(s32, s16);
+extern s32 fn_80008E30(u32);
 extern s32 fn_1_40BB4(void);
-extern u32 fn_1_F2F34(void);
+extern void *lbl_8006D5A4(void *, void *, void *, f32);
+extern void fn_1_862D4(s16, Vec3 *);
+extern void fn_1_8636C(int index, void *arg);
+extern void fn_1_862A8(s16, void *);
+extern void lbl_8006DC6C(void *);
+extern void lbl_8006E1B0(void *, void *);
+extern void lbl_8006DAEC(void);
+extern void lbl_8006DB30(void);
+extern u32 fn_1_20A5C(void *, void *);
+extern void fn_1_15578(void *, fn_1_11544_LiveCamVec *, void *, void *, u32, void *, u32, u32, u32, u32);
+extern int fn_1_4C10(void);
 extern u32 fn_1_F45A4(void);
 extern u32 fn_1_F4594(void);
 extern void *fn_1_86254(int index);
-extern s8 fn_1_86624(void);
 extern void fn_1_6DD0(void *);
 extern void fn_1_8A0C(s16 index);
 extern u32 fn_1_56B8(void);
-extern u32 fn_1_864E8(int index);
-extern void camera_set_selected_value(u8 value);
-extern void camera_set_result(s16 value);
-extern void fn_1_5370(s32, s16);
 extern f32 lbl_1_rodata_4E0[];
 extern f32 lbl_1_bss_1160[403];
-extern u32 fn_1_A1588(Sig_ADXT_Stop_ADXTHandle *, u32);
 extern u32 fn_1_A1964(u32);
-extern u32 fn_1_A1CE8(u32);
 extern void fn_1_A2D84(u32 arg0);
 extern void fn_1_46B4(u32 arg0, u32 arg1, const char *arg2, int arg3);
-extern u32 lbl_801A6410;
-extern u32 fn_80008E30(u32);
-extern void fn_1_862D4(s16, Vec3 *);
 extern void fn_8006E2B0(void *, Vec3 *);
-extern void OSPanic(u8 *file, int line, u8 *message, ...);
+extern void OSPanic(const char *file, int line, const char *msg, ...);
 extern u8 lbl_1_bss_17B4[12];
 extern char *fn_80083DB0(char *dst, const char *src);
 extern u32 *fn_1_1304C(Obj_1_bss_3B30 *, u32);
@@ -154,22 +221,12 @@ extern u32 OSIsThreadTerminated(u8 *);
 extern u32 *fn_1_1289C(u32 *);
 extern f32 lbl_1_rodata_4F4[19];
 extern const f64 lbl_1_rodata_548[2];
-extern u32 lbl_801A63C0;
-extern void fn_1_8636C(int index, void *arg);
-extern void fn_1_862A8(s16, void *);
-extern void lbl_8006DC6C(void *);
-extern void lbl_8006E1B0(void *, void *);
 extern s32 lbl_8006D24C(f32, f32);
-extern int sprintf(char *s, const char *format, ...);
-extern u32 lbl_1_bss_F5C;
-extern const f64 lbl_1_rodata_580;
-extern const f64 lbl_1_rodata_588;
-extern void fn_1_8840(void);
 
 /* fzgx:begin fn_1_DA34 */
 // Reports the camera source location and message used by this routine.
 void fn_1_DA34(void) {
-    OSPanic(lbl_1_data_4420, 0x34, lbl_1_data_4430);
+    OSPanic( (const char *)(u8 *)(lbl_1_data_4420), 0x34, (const char *)(u8 *)(lbl_1_data_4430));
 }
 /* fzgx:end fn_1_DA34 */
 
@@ -180,13 +237,14 @@ typedef struct {
     s16 unk_8;
 } DA6CArg;
 
-void fn_1_DA6C(DA6CArg *arg0) {
-    s16 temp_r31;
-    s32 var_r30;
-    s32 var_r3;
-    s32 cnt;
+// Cycle the live camera target, wrapping indices and skipping unavailable entries.
+void fn_1_DA6C(DA6CArg *state) {
+    s16 originalIndex;
+    s32 direction;
+    struct { s32 value; } targetIndex;
     u32 flags;
-    s32 n;
+    s32 count;
+    u32 selectionDeadline;
 
     if (lbl_1_bss_115C == 0) {
         return;
@@ -200,109 +258,111 @@ void fn_1_DA6C(DA6CArg *arg0) {
     if ((s32)fn_1_F2F34() == 0) {
         return;
     }
-    if (fn_1_F4594() >= fn_1_F45A4() - 0x1e) {
+    selectionDeadline = fn_1_F45A4() - 30;
+    if (fn_1_F4594() >= selectionDeadline) {
         return;
     }
 
-    var_r30 = 1;
-    if (((u16) lbl_1_bss_9F8.unk_A >> 6) & 1) {
-        var_r30 = 1;
-        (*(s8 *)((u8 *)(fn_1_86254((s32) arg0->unk_6)) + 1141)) = -1;
-        arg0->unk_6++;
-        n = fn_1_86624();
-        if (arg0->unk_6 > n - 1) {
-            var_r3 = 0;
-        } else if (arg0->unk_6 < 0) {
-            var_r3 = (s32) fn_1_86624() - 1;
+    direction = 1;
+    if ((lbl_1_bss_9F8.unk_A >> 6) & 1) {
+        direction = 1;
+        *(s8 *)((u8 *)fn_1_86254(state->unk_6) + 0x475) = -1;
+        state->unk_6++;
+        count = (s8)fn_1_86624();
+        if (state->unk_6 > count - 1) {
+            targetIndex.value = 0;
+        } else if (state->unk_6 < 0) {
+            targetIndex.value = (s8)fn_1_86624() - 1;
         } else {
-            var_r3 = arg0->unk_6;
+            targetIndex.value = state->unk_6;
         }
-        (*(s8 *)((u8 *)(fn_1_86254((s32) var_r3)) + 1141)) = 0;
+        *(s8 *)((u8 *)fn_1_86254(targetIndex.value) + 0x475) = 0;
         fn_1_6DD0(0);
         fn_1_8A0C(0);
         fn_1_56B8();
     }
-    if (arg0->unk_6 >= fn_1_86624()) {
-        arg0->unk_6 = 0;
+    if (state->unk_6 >= (s8)fn_1_86624()) {
+        state->unk_6 = 0;
     }
-    if (arg0->unk_6 < 0) {
-        arg0->unk_6 = fn_1_86624() - 1;
+    if (state->unk_6 < 0) {
+        state->unk_6 = (s8)fn_1_86624() - 1;
     }
-    arg0->unk_8 = arg0->unk_6;
+    state->unk_8 = state->unk_6;
 
-    if (((u16) lbl_1_bss_9F8.unk_A >> 7) & 1) {
-        var_r30 = -1;
-        (*(s8 *)((u8 *)(fn_1_86254((s32) arg0->unk_6)) + 1141)) = -1;
-        arg0->unk_6--;
-        n = fn_1_86624();
-        if (arg0->unk_6 > n - 1) {
-            var_r3 = 0;
-        } else if (arg0->unk_6 < 0) {
-            var_r3 = (s32) fn_1_86624() - 1;
+    if ((lbl_1_bss_9F8.unk_A >> 7) & 1) {
+        direction = -1;
+        *(s8 *)((u8 *)fn_1_86254(state->unk_6) + 0x475) = -1;
+        state->unk_6--;
+        count = (s8)fn_1_86624();
+        if (state->unk_6 > count - 1) {
+            targetIndex.value = 0;
+        } else if (state->unk_6 < 0) {
+            targetIndex.value = (s8)fn_1_86624() - 1;
         } else {
-            var_r3 = arg0->unk_6;
+            targetIndex.value = state->unk_6;
         }
-        (*(s8 *)((u8 *)(fn_1_86254((s32) var_r3)) + 1141)) = 0;
+        *(s8 *)((u8 *)fn_1_86254(targetIndex.value) + 0x475) = 0;
         fn_1_6DD0(0);
         fn_1_8A0C(0);
         fn_1_56B8();
     }
-    if (arg0->unk_6 >= fn_1_86624()) {
-        arg0->unk_6 = 0;
+    if (state->unk_6 >= (s8)fn_1_86624()) {
+        state->unk_6 = 0;
     }
-    if (arg0->unk_6 < 0) {
-        arg0->unk_6 = fn_1_86624() - 1;
+    if (state->unk_6 < 0) {
+        state->unk_6 = (s8)fn_1_86624() - 1;
     }
-    arg0->unk_8 = arg0->unk_6;
+    state->unk_8 = state->unk_6;
 
-    flags = fn_1_864E8(arg0->unk_6);
+    flags = fn_1_864E8(state->unk_6);
     if ((flags & 0x800) && !(flags & 1)) {
-        temp_r31 = arg0->unk_6;
+        originalIndex = state->unk_6;
         do {
-            (*(s8 *)((u8 *)(fn_1_86254((s32) arg0->unk_6)) + 1141)) = -1;
-            arg0->unk_6 += var_r30;
-            if (arg0->unk_6 > (s32) fn_1_86624() - 1) {
-                var_r3 = 0;
-            } else if (arg0->unk_6 < 0) {
-                var_r3 = (s32) fn_1_86624() - 1;
+            *(s8 *)((u8 *)fn_1_86254(state->unk_6) + 0x475) = -1;
+            state->unk_6 += direction;
+            if (state->unk_6 > (s8)fn_1_86624() - 1) {
+                targetIndex.value = 0;
+            } else if (state->unk_6 < 0) {
+                targetIndex.value = (s8)fn_1_86624() - 1;
             } else {
-                var_r3 = arg0->unk_6;
+                targetIndex.value = state->unk_6;
             }
-            (*(s8 *)((u8 *)(fn_1_86254((s32) var_r3)) + 1141)) = 0;
-            if (arg0->unk_6 >= fn_1_86624()) {
-                arg0->unk_6 = 0;
+            *(s8 *)((u8 *)fn_1_86254(targetIndex.value) + 0x475) = 0;
+            if (state->unk_6 >= (s8)fn_1_86624()) {
+                state->unk_6 = 0;
             }
-            if (arg0->unk_6 < 0) {
-                arg0->unk_6 = fn_1_86624() - 1;
+            if (state->unk_6 < 0) {
+                state->unk_6 = (s8)fn_1_86624() - 1;
             }
-        } while ((fn_1_864E8(arg0->unk_6) & 0x800) && temp_r31 != arg0->unk_6);
+        } while ((fn_1_864E8(state->unk_6) & 0x800) &&
+                 originalIndex != state->unk_6);
 
-        if (arg0->unk_6 >= fn_1_86624()) {
-            arg0->unk_6 = 0;
+        if (state->unk_6 >= (s8)fn_1_86624()) {
+            state->unk_6 = 0;
         }
-        if (arg0->unk_6 < 0) {
-            arg0->unk_6 = fn_1_86624() - 1;
+        if (state->unk_6 < 0) {
+            state->unk_6 = (s8)fn_1_86624() - 1;
         }
-        arg0->unk_8 = arg0->unk_6;
-        if (temp_r31 == arg0->unk_6) {
+        state->unk_8 = state->unk_6;
+        if (originalIndex == state->unk_6) {
             camera_set_selected_value(1);
-            camera_set_result(arg0->unk_6);
+            camera_set_result(state->unk_6);
             fn_1_5370(0, 0);
-            camera_set_result(arg0->unk_6);
+            camera_set_result(state->unk_6);
             camera_set_selected_value(0);
             return;
         }
         fn_1_56B8();
     }
 
-    if (arg0->unk_6 >= fn_1_86624()) {
-        arg0->unk_6 = 0;
+    if (state->unk_6 >= (s8)fn_1_86624()) {
+        state->unk_6 = 0;
     }
-    if (arg0->unk_6 < 0) {
-        arg0->unk_6 = fn_1_86624() - 1;
+    if (state->unk_6 < 0) {
+        state->unk_6 = (s8)fn_1_86624() - 1;
     }
-    arg0->unk_8 = arg0->unk_6;
-    camera_set_result(arg0->unk_6);
+    state->unk_8 = state->unk_6;
+    camera_set_result(state->unk_6);
 }
 /* fzgx:end fn_1_DA6C */
 
@@ -665,18 +725,7 @@ void fn_1_E174(f32 arg0) {
 #pragma opt_lifetimes reset
 /* fzgx:end fn_1_E174 */
 
-/* fzgx:begin fn_1_EBE4 noprologue */
-#include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/live_camera.h"
-
-extern s16 fn_1_7B054(void);
-extern void fn_1_10138(void *obj);
-extern void fn_1_8840(void);
-extern void fn_1_A1588(u32 arg0, u32 arg1);
-extern void fn_1_A1CE8(u32 arg0);
-extern s32 fn_1_F2F34(void);
-
+/* fzgx:begin fn_1_EBE4 */
 typedef struct {
     f32 x, y, z;
 } CamVec3;
@@ -704,7 +753,7 @@ typedef struct {
     s16 unk_64;      /* 0x64 */
     u8 pad_66[4];
     s16 unk_6A;      /* 0x6A */
-} LiveCamera;
+} fn_1_EBE4_LiveCamera;
 
 /* wider views of the TU's shared state than the generated header carries */
 typedef struct {
@@ -734,7 +783,7 @@ typedef struct {
     s16 unk_14C;
 } LiveCameraData;
 
-void fn_1_EBE4(LiveCamera *cam, s16 id, s32 mode, f32 value) {
+void fn_1_EBE4(fn_1_EBE4_LiveCamera *cam, s16 id, s32 mode, f32 value) {
     LiveCameraData *dat = (LiveCameraData *)&lbl_1_data_43B8;
     LiveCameraState *st = (LiveCameraState *)&lbl_1_bss_1148;
     s32 *ids;
@@ -790,7 +839,7 @@ void fn_1_EBE4(LiveCamera *cam, s16 id, s32 mode, f32 value) {
         if (dat->unk_148 != 0x2A) {
             dat->unk_148 = 0x2A;
         }
-        fn_1_A1588(lbl_1_bss_6EAD0.unk_0->unk_0, 1);
+        fn_1_A1588( (Sig_ADXT_Stop_ADXTHandle *)(u32)(lbl_1_bss_6EAD0.unk_0->unk_0), 1);
         fn_1_A1CE8((u8)dat->unk_148);
     } else if (fn_1_F2F34() && !mode) {
         cam->state = 0;
@@ -818,34 +867,7 @@ void fn_1_EE04(Fn1EE04Context *context) {
 }
 /* fzgx:end fn_1_EE04 */
 
-/* fzgx:begin fn_1_F6A8 noprologue */
-#include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/live_camera.h"
-
-typedef struct {
-    u32 flags;
-    s32 unk_4;
-    u32 unk_8;
-    u32 unk_C;
-} Sig_fn_1_45730_LoadEntry;
-typedef struct {
-    u32 unk_0;
-    u8 pad_4[0x48];
-    Sig_fn_1_45730_LoadEntry entry;
-} Sig_fn_1_45730_LoadResult;
-
-extern u8 fn_1_3F1F8(void);
-extern int fn_1_45730(char *, Sig_fn_1_45730_LoadResult *);
-extern u32 fn_1_45B2C(Sig_fn_1_45730_LoadResult *);
-extern void *fn_1_4630(u32 heap, u32 size, const char *file, int line);
-extern void fn_1_458A0(Sig_fn_1_45730_LoadResult *, void *, u32, u32);
-extern void fn_1_45850(Sig_fn_1_45730_LoadResult *);
-extern s16 fn_1_7B054(void);
-extern void fn_80006E10(const char *);
-extern int sprintf(char *s, const char *format, ...);
-extern u32 lbl_801A6410;
-
+/* fzgx:begin fn_1_F6A8 */
 #define ALIGN32(n) (((n) + 0x1F) & ~0x1F)
 
 /* Retail rematerialises the __FILE__ string address (dat + 0x68) at each
@@ -866,7 +888,7 @@ void fn_1_F6A8(void) {
         return;
     }
 
-    fn_80006E10((const char *)dat + 0x280);
+    fn_80006E10( (u32)((const char *)dat + 0x280));
     dat->unk_13C = 0;
     st->unk_67C = 0;
     dat->unk_140 = 0;
@@ -918,7 +940,7 @@ void fn_1_F6A8(void) {
     fn_1_45850(&file);
 
     if (fn_1_7B054() == 50) {
-        fn_80006E10((const char *)dat + 0x350);
+        fn_80006E10( (u32)((const char *)dat + 0x350));
         return;
     }
 
@@ -946,7 +968,7 @@ void fn_1_F6A8(void) {
     fn_1_458A0(&file, (void *)st->unk_684, size, 0);
     fn_1_45850(&file);
 
-    fn_80006E10((const char *)dat + 0x350);
+    fn_80006E10( (u32)((const char *)dat + 0x350));
 }
 #pragma opt_common_subs reset
 /* fzgx:end fn_1_F6A8 */
@@ -1016,10 +1038,6 @@ typedef struct LiveCam_FB50 {
     V3_FB50 velocity;
 } LiveCam_FB50;
 
-extern const f64 lbl_1_rodata_580;
-extern const f64 lbl_1_rodata_588;
-extern u32 lbl_1_bss_F5C;
-extern void fn_1_8840(void);
 
 void fn_1_FB50(LiveCam_FB50 *cam) {
     if (cam->mode == 0) {
@@ -1055,36 +1073,7 @@ void fn_1_FB50(LiveCam_FB50 *cam) {
 }
 /* fzgx:end fn_1_FB50 */
 
-/* fzgx:begin fn_1_FCB0 noprologue */
-#include "types.h"
-
-typedef struct {
-    u8 unk_0;
-    u8 pad_1;
-    s16 unk_2;
-    s16 unk_4;
-    s16 unk_6;
-    u16 unk_8;
-    u8 pad_A[0x2];
-    u32 unk_C;
-    u16 unk_10;
-    s16 unk_12;
-    s16 unk_14;
-    u8 pad_16[0x2];
-    u32 unk_18;
-    u8 pad_1C[0x48];
-    u16 unk_64;
-} Sig_fn_1_101D0_Fn_1_101D0_State;
-
-extern s32 camera_get_state(void);
-extern u32 lbl_801A63C0;
-extern u32 fn_1_107B8(Sig_fn_1_101D0_Fn_1_101D0_State *);
-extern u32 fn_1_864E8(int);
-extern u8 fn_1_86624(void);
-extern void camera_set_result(s16);
-extern void camera_set_selected_value(u8);
-extern void fn_1_5370(s8, u32);
-
+/* fzgx:begin fn_1_FCB0 */
 #define NEXT_RAND() (lbl_801A63C0 = lbl_801A63C0 * 0x676A4B6B + 13259)
 #define RAND15(v) ((s32)(((v) >> 16) & 0x7FFF))
 
@@ -1197,7 +1186,7 @@ void fn_1_10138(void) {
     obj = lbl_1_bss_17C4.unk_0;
     i = 0;
     while (i < count) {
-        lbl_1_bss_17B0 += fn_80008E30(obj->unk_0);
+        lbl_1_bss_17B0 += (u32)fn_80008E30(obj->unk_0);
         i++;
         obj++;
     }
@@ -1237,7 +1226,7 @@ void fn_1_101D0(Fn_1_101D0_State *self) {
         self->unk_10++;
         off = self->unk_10 * 0x54;
         if (self->unk_10 < count) {
-            self->unk_64 = fn_80008E30(*(u32 *)((u8 *)base + off));
+            self->unk_64 = (u32)fn_80008E30(*(u32 *)((u8 *)base + off));
             self->unk_12 = 5;
             self->unk_14 = self->unk_10;
             self->unk_6 = 0;
@@ -1299,7 +1288,7 @@ void fn_1_10268(Camera_1_10268 *arg) {
     e = &lbl_1_bss_17C4.unk_0[arg->unk_4];
     t = *(Copy_1_10268 *)((u8 *)e + 8);
 
-    n = fn_80008E30(e->unk_0);
+    n = (u32)fn_80008E30(e->unk_0);
 
     ((Bss_1_17D0 *)&lbl_1_bss_17D0)->unk_0 = lbl_1_rodata_4F4[0];
     ((Bss_1_17D0 *)&lbl_1_bss_17D0)->unk_4 = lbl_1_rodata_4E0[0];
@@ -1309,7 +1298,7 @@ void fn_1_10268(Camera_1_10268 *arg) {
     ((Bss_1_17D0 *)&lbl_1_bss_17D0)->unk_C = a;
     ((Bss_1_17D0 *)&lbl_1_bss_17D0)->unk_8 = a;
 
-    arg->unk_64 = fn_80008E30(e->unk_0);
+    arg->unk_64 = (u32)fn_80008E30(e->unk_0);
 
     arg->unk_1C = t.unk_4;
     arg->unk_20 = t.unk_8;
@@ -1322,10 +1311,7 @@ void fn_1_10268(Camera_1_10268 *arg) {
 }
 /* fzgx:end fn_1_10268 */
 
-/* fzgx:begin fn_1_103B0 noprologue */
-#include "types.h"
-#include "rel/main_rel/live_camera.h"
-
+/* fzgx:begin fn_1_103B0 */
 #pragma section code_type ".fzgxpool"
 __declspec(section ".fzgxpool") static void fzgx_pool_prime1(void) {
     volatile f32 s; volatile f64 d;  /* fzgx-allow: S2 pool primer sinks */
@@ -1383,13 +1369,13 @@ __declspec(section ".fzgxpool") static void fzgx_pool_prime7(void) {
 
 typedef struct {
     f32 x, y, z;
-} LiveCamVec;
+} fn_1_103B0_LiveCamVec;
 
 /* one keyframe endpoint: position/target pair plus fov and roll */
 typedef struct {
     u32 unk_0;
-    LiveCamVec pos;
-    LiveCamVec target;
+    fn_1_103B0_LiveCamVec pos;
+    fn_1_103B0_LiveCamVec target;
     f32 fov;
     s16 roll;
     s16 pad_22;
@@ -1412,18 +1398,15 @@ typedef struct {
     u8 pad_6[0xE];
     s16 unk_14;
     u8 pad_16[0x6];
-    LiveCamVec pos;
+    fn_1_103B0_LiveCamVec pos;
     u8 pad_28[0x24];
-    LiveCamVec target;
+    fn_1_103B0_LiveCamVec target;
     f32 fov;
     s16 roll;
     u8 pad_5E[0x6];
     u16 unk_64;
 } LiveCamState;
 
-extern s32 fn_80008E30(u32);
-extern s32 fn_1_40BB4(void);
-extern void *lbl_8006D5A4(void *, void *, void *, f32);
 
 void fn_1_103B0(LiveCamState *cam) {
     LiveCamKey *key;
@@ -1489,19 +1472,7 @@ void fn_1_103B0(LiveCamState *cam) {
 }
 /* fzgx:end fn_1_103B0 */
 
-/* fzgx:begin fn_1_11544 noprologue */
-#include "types.h"
-
-typedef struct {
-    f32 x;
-    f32 y;
-    f32 z;
-} LiveCamVec;
-
-typedef struct {
-    f32 m[3][4];
-} LiveCamMtx;
-
+/* fzgx:begin fn_1_11544 */
 typedef struct {
     u8 unk_0;
     u8 pad_1[0x3];
@@ -1511,10 +1482,10 @@ typedef struct {
     s16 unk_14;
     u8 pad_16[0x6];
     u8 unk_1C[0x30];
-    LiveCamVec pos;        /* 0x4C */
+    fn_1_11544_LiveCamVec pos;        /* 0x4C */
     u8 pad_58[0x18];
-    LiveCamVec target;     /* 0x70 */
-} LiveCamera;
+    fn_1_11544_LiveCamVec target;     /* 0x70 */
+} fn_1_11544_LiveCamera;
 
 typedef struct {
     u8 pad_0[0xA];
@@ -1525,25 +1496,12 @@ typedef struct {
     u8 pad_0[0x10];
 } LiveCamEntry;
 
-extern LiveCamInput lbl_1_bss_9F8;
-extern LiveCamEntry lbl_1_data_4754;
-extern s16 lbl_1_data_4484;
 
-extern s32 fn_1_40BB4(void);
-extern void fn_1_862D4(s32, LiveCamVec *);
-extern void fn_1_8636C(s32, LiveCamMtx *);
-extern void fn_1_862A8(s32, LiveCamVec *);
-extern void lbl_8006DC6C(LiveCamMtx *);
-extern void lbl_8006E1B0(void *, void *);
-extern void lbl_8006DAEC(void);
-extern void lbl_8006DB30(void);
-extern u32 fn_1_20A5C(void *, void *);
-extern void fn_1_15578(void *, LiveCamVec *, void *, void *, u32, void *, u32, u32, u32, u32);
 
 /* Translation column of the current matrix in the locked cache. Like psvec_set, the
    components are passed z, y, x: the arguments are all loaded before the stores and
    MWCC numbers the first parameter highest, which is the register order retail has. */
-static inline void LiveCam_SetCurMtxTrans(const volatile LiveCamVec *v) { /* volatile: pins the three loads in source order ahead of the stores, retail's register order (x f2, y f1, z f0) */
+static inline void LiveCam_SetCurMtxTrans(const volatile fn_1_11544_LiveCamVec *v) { /* volatile: pins the three loads in source order ahead of the stores, retail's register order (x f2, y f1, z f0) */
     f32 x = v->x;
     f32 y = v->y;
     f32 z = v->z;
@@ -1552,22 +1510,22 @@ static inline void LiveCam_SetCurMtxTrans(const volatile LiveCamVec *v) { /* vol
     *(f32 *)(0xE0000000 + 0x2C) = z;
 }
 
-void fn_1_11544(LiveCamera *cam) {
+void fn_1_11544(fn_1_11544_LiveCamera *cam) {
     LiveCamMtx mtx;
-    LiveCamVec eye;
-    LiveCamVec at;
-    LiveCamVec pos;
-    LiveCamVec out;
+    fn_1_11544_LiveCamVec eye;
+    fn_1_11544_LiveCamVec at;
+    fn_1_11544_LiveCamVec pos;
+    fn_1_11544_LiveCamVec out;
     u32 handle;
     u32 info;
     f32 rate;
     f32 cx, cy, cz;
 
     if (cam->unk_0 == 3 && fn_1_40BB4() == 0) {
-        if ((lbl_1_bss_9F8.unk_A >> 1) & 1) {
+        if (((*((LiveCamInput *)&lbl_1_bss_9F8)).unk_A >> 1) & 1) {
             cam->unk_14++;
         }
-        if (lbl_1_bss_9F8.unk_A & 1) {
+        if ((*((LiveCamInput *)&lbl_1_bss_9F8)).unk_A & 1) {
             cam->unk_14--;
         }
         if (cam->unk_14 > 5) {
@@ -1578,18 +1536,18 @@ void fn_1_11544(LiveCamera *cam) {
         }
     }
 
-    fn_1_862D4(cam->unk_6, &eye);
-    fn_1_8636C(cam->unk_6, &mtx);
-    fn_1_862A8(cam->unk_6, &at);
-    lbl_8006DC6C(&mtx);
+    fn_1_862D4( (s32)(cam->unk_6), (Vec3 *)(fn_1_11544_LiveCamVec *)(&eye));
+    fn_1_8636C(cam->unk_6, (void *)(LiveCamMtx *)(&mtx));
+    fn_1_862A8( (s32)(cam->unk_6), (void *)(fn_1_11544_LiveCamVec *)(&at));
+    lbl_8006DC6C( (void *)(LiveCamMtx *)(&mtx));
 
     LiveCam_SetCurMtxTrans(&eye);
 
-    lbl_8006E1B0((u8 *)&lbl_1_data_4754 + (cam->unk_4 << 4), cam->unk_1C);
+    lbl_8006E1B0((u8 *)&(*((LiveCamEntry *)&lbl_1_data_4754)) + (cam->unk_4 << 4), cam->unk_1C);
 
     cam->pos = eye;
 
-    rate = (f32)lbl_1_data_4484;
+    rate = (f32)(*((s16 *)&lbl_1_data_4484));
     cx = cam->target.x;
     cam->target.x = cx + (f32)(rate * (0.05f * (at.x - cx)));
     cy = cam->target.y;

@@ -58,15 +58,10 @@ typedef struct TimeParts {
 } TimeParts;
 extern void fn_1_A2DC4(u32 arg0);
 extern u32 fn_8002C0A0(u32 arg0);
-extern void CARDWriteAsync(void *dst, void *src, int size, int zero, int flags);
 extern s32 fn_1_45D0();
-extern void CARDMountAsync(u8, u32, void (*)(void), s32);
-extern void CARDCheckAsync(u8 byte_val, int value);
 extern u32 CARDFormatAsync(u32 arg0, u32 arg1);
 extern char *fn_80083DB0(char *dst, const char *src);
 extern char *strcat(char *dest, const char *src);
-extern void CARDFastDeleteAsync(u8 byte_val, void *arg, s32 zero);
-extern void CARDCreateAsync(u8 byte_val, void *arg1, void *arg2, void *arg3, u32 arg4);
 extern u16 fn_8002A74C(u32 arg0);
 extern void fn_80008BEC(void *dest, int value, u32 size);
 extern void fn_1_AA6D8(s32 arg0, u32 arg1, void *arg2);
@@ -109,7 +104,6 @@ extern void fn_1_49514(u32 *value);
 extern void fn_1_14FEAC(u8, u8, u8, u32 *, s16);
 extern void fn_1_4CF3C(const char *format, f32 x, ...);
 extern void *fn_1_7F49C(s16 arg0, s16 arg1, void *arg2);
-extern u64 OSGetTime(void);
 extern u64 __div2i(u64, u32, u32);
 extern u32 lbl_1_bss_7AB90[36];
 extern void fn_1_C062C(Fn1C0510Obj *, void *, void *);
@@ -120,10 +114,6 @@ extern void OSTicksToCalendarTime(u32 high, u32 low, TimeParts *parts);
 extern void fn_1_AB45C(int index);
 extern const f64 lbl_1_rodata_4CB0;
 extern const f32 lbl_1_rodata_4CAC;
-extern void CARDDeleteAsync(u8 byte, void *data, int arg);
-extern void CARDSetStatusAsync(u8 id, void *arg, void *data, int zero);
-extern void CARDRenameAsync(u8 id, void *data1, void *data2, int zero);
-extern void CARDReadAsync(void *arg0, void *arg1, void *arg2, int arg3, int arg4);
 extern const f64 lbl_1_rodata_4CC8;
 extern s32 fn_80030754(void *arg0, void *arg1, u8 arg2, void *arg3);
 extern u8 lbl_1_bss_71810[161];
@@ -230,12 +220,7 @@ void fn_1_AB4F4(fn_1_AB4F4_ArgStruct *arg) {
 }
 /* fzgx:end fn_1_AB4F4 */
 
-/* fzgx:begin fn_1_AB598 noprologue */
-#include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/memcard.h"
-extern void CARDCheckAsync(u8 byte_val, int value);
-
+/* fzgx:begin fn_1_AB598 */
 typedef struct {
     u8 pad[0x2];
     u16 field_0x2;
@@ -247,13 +232,14 @@ typedef struct {
     fn_1_AB598_OffsetStruct *ptr_0x24;
 } fn_1_AB598_ArgStruct;
 
+// Start an asynchronous card check with a 300-frame timeout.
 void fn_1_AB598(fn_1_AB598_ArgStruct *arg) {
     arg->ptr_0x24->field_0x2 = 300;
     CARDCheckAsync(arg->byte_0, 0);
 }
 /* fzgx:end fn_1_AB598 */
 
-/* fzgx:begin fn_1_AB5CC noprologue */
+/* fzgx:begin fn_1_AB5CC */
 #include "types.h"
 #include "dolphin/card.h"
 #include "dolphin/card/CARDPriv.h"
@@ -289,7 +275,7 @@ void fn_1_AB5CC(fn_1_AB5CC_ArgStruct *arg) {
 }
 /* fzgx:end fn_1_AB5CC */
 
-/* fzgx:begin fn_1_AB61C noprologue */
+/* fzgx:begin fn_1_AB61C */
 #include "types.h"
 #include "dolphin/card.h"
 #include "dolphin/card/CARDPriv.h"
@@ -318,7 +304,7 @@ void fn_1_AB61C(fn_1_AB61C_MemcardArg *arg) {
 }
 /* fzgx:end fn_1_AB61C */
 
-/* fzgx:begin fn_1_AB64C noprologue */
+/* fzgx:begin fn_1_AB64C */
 #include "types.h"
 #include "rel/main_rel/globals.h"
 #include "rel/main_rel/memcard.h"
@@ -379,16 +365,9 @@ void fn_1_AB64C(fn_1_AB64C_MemcardArg *arg) {
 }
 /* fzgx:end fn_1_AB64C */
 
-/* fzgx:begin fn_1_AB75C noprologue */
-#include "types.h"
-#include "dolphin/card.h"
-#include "dolphin/card/CARDPriv.h"
-#include "dolphin/dvd.h"
-#include "font.h"
-
+/* fzgx:begin fn_1_AB75C */
 extern u32 fn_8002C0A0(u32 arg0);
-
-extern void CARDFormatAsync(u8 byte, int value);
+extern u32 CARDFormatAsync(u32 arg0, u32 arg1);
 extern const f32 lbl_1_rodata_4CA8;
 
 typedef struct {
@@ -408,9 +387,9 @@ typedef struct {
     f32 field_0x38;
 } fn_1_AB75C_ArgStruct;
 
-// fn_1_AB75C: main_rel .text:0x000AB75C size 0x68
+// Start asynchronous card formatting and initialize its status and timer.
 void fn_1_AB75C(fn_1_AB75C_ArgStruct *arg) {
-    arg->ptr_0x24->field_0x2 = 0x12c;
+    arg->ptr_0x24->field_0x2 = 300;
     arg->field_0x30 = fn_8002C0A0(arg->byte_0);
     arg->field_0x38 = lbl_1_rodata_4CA8;
     arg->flags_0x2a |= 2;
@@ -418,42 +397,7 @@ void fn_1_AB75C(fn_1_AB75C_ArgStruct *arg) {
 }
 /* fzgx:end fn_1_AB75C */
 
-/* fzgx:begin fn_1_AB7C4 noprologue */
-#include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/memcard.h"
-extern const f32 lbl_1_rodata_4CAC;
-
-typedef struct {
-    u8 pad[0x2];
-    u16 field_0x2;
-    s32 field_0x4;
-} fn_1_AB7C4_OffsetStruct;
-
-typedef struct {
-    u8 byte_0;
-    u8 pad_0x1[0x23];
-    fn_1_AB7C4_OffsetStruct *ptr_0x24;
-    u8 pad_0x28[0x2];
-    u8 flags_0x2a;
-    u8 pad_0x2b[0x5];
-    s32 field_0x30;
-    u8 pad_0x34[0x4];
-    f32 field_0x38;
-} fn_1_AB7C4_ArgStruct;
-
-void fn_1_AB7C4(fn_1_AB7C4_ArgStruct *arg) {
-    arg->ptr_0x24->field_0x4 = CARDGetResultCode(arg->byte_0);
-    arg->field_0x38 = (fn_8002C0A0(arg->byte_0) - arg->field_0x30) / lbl_1_rodata_4CAC;
-    if (arg->ptr_0x24->field_0x4 != -1) {
-        arg->flags_0x2a &= ~2;
-        arg->ptr_0x24->field_0x2 = 0;
-        arg->flags_0x2a &= ~16;
-    }
-}
-/* fzgx:end fn_1_AB7C4 */
-
-/* fzgx:begin fn_1_AB870 noprologue */
+/* fzgx:begin fn_1_AB870 */
 #include "types.h"
 #include "dolphin/card.h"
 #include "dolphin/card/CARDPriv.h"
@@ -476,64 +420,60 @@ void fn_1_AB870(fn_1_AB870_ArgStruct *arg) {
 }
 /* fzgx:end fn_1_AB870 */
 
-/* fzgx:begin fn_1_AB880 noprologue */
-#include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/memcard.h"
-extern int CARDGetSerialNo(u8 value, void *data);
-
+/* fzgx:begin fn_1_AB880 */
 typedef struct {
-    u8 pad[0x2];
-    u16 field_0x2;
-    s32 field_0x4;
+    u8 pad_0[2];
+    u16 unk_2;
+    s32 unk_4;
+    u8 pad_8[0x10];
+    u64 unk_18;
 } fn_1_AB880_OffsetStruct;
 
 typedef struct {
-    u8 byte_0;
-    u8 pad[0x23];
-    fn_1_AB880_OffsetStruct *ptr_0x24;
+    u8 unk_0;
+    u8 pad_1[0x23];
+    fn_1_AB880_OffsetStruct *unk_24;
 } fn_1_AB880_ArgStruct;
 
-// fn_1_AB880: main_rel .text:0x000AB880 size 0x58
+// Read the card serial number and clear the pending state when the request finishes.
 void fn_1_AB880(fn_1_AB880_ArgStruct *arg) {
-    fn_1_AB880_OffsetStruct *s = arg->ptr_0x24;
-    int result = CARDGetSerialNo(arg->byte_0, (u8 *)s + 0x18);
+    s32 result = CARDGetSerialNo(arg->unk_0, &arg->unk_24->unk_18);
+    fn_1_AB880_OffsetStruct *state;
 
-    s = arg->ptr_0x24;
-    s->field_0x4 = result;
-
-    s = arg->ptr_0x24;
-    if (s->field_0x4 != -1) {
-        s->field_0x2 = 0;
+    arg->unk_24->unk_4 = result;
+    state = arg->unk_24;
+    if (state->unk_4 != -1) {
+        state->unk_2 = 0;
     }
 }
 /* fzgx:end fn_1_AB880 */
 
-/* fzgx:begin fn_1_AB8D8 noprologue */
-#include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/memcard.h"
-extern void fn_80083DB0(void *dst, void *src);
-extern void strcat(void *dst, void *src);
-extern void CARDDeleteAsync(u8 byte, void *data, int arg);
+/* fzgx:begin fn_1_AB8D8 */
+typedef struct {
+    u8 unk_00[2];
+    u16 unk_02;
+    u8 unk_04[0x94];
+    char unk_98[0x40];
+} fn_1_AB8D8_FileState;
 
 typedef struct {
-    u8 byte_0;
-    u8 pad_0x1[0x23];
-    void *ptr_0x24;
+    u8 unk_00;
+    u8 unk_01[0x23];
+    fn_1_AB8D8_FileState *unk_24;
 } fn_1_AB8D8_ArgStruct;
 
+// Start asynchronous deletion of the card file with its appended suffix.
 void fn_1_AB8D8(fn_1_AB8D8_ArgStruct *arg) {
-    u8 data[0x40];
+    char filename[0x40];
 
-    fn_80083DB0(data, (u8 *)arg->ptr_0x24 + 0x98);
-    strcat(data, lbl_1_data_3C89C);
-    ((u16 *)arg->ptr_0x24)[1] = 0x12c;
-    CARDDeleteAsync(arg->byte_0, data, 0);
+    fn_80083DB0(filename, arg->unk_24->unk_98);
+    strcat(filename, (const char *)lbl_1_data_3C89C);
+    arg->unk_24->unk_02 = 300;
+    CARDDeleteAsync(arg->unk_00, filename, 0);
 }
 /* fzgx:end fn_1_AB8D8 */
 
-/* fzgx:begin fn_1_AB93C noprologue */
+/* fzgx:begin fn_1_AB93C */
 #include "types.h"
 #include "dolphin/card.h"
 #include "dolphin/card/CARDPriv.h"
@@ -567,7 +507,7 @@ void fn_1_AB93C(fn_1_AB93C_ArgStruct *arg) {
 }
 /* fzgx:end fn_1_AB93C */
 
-/* fzgx:begin fn_1_AB98C noprologue */
+/* fzgx:begin fn_1_AB98C */
 #include "types.h"
 #include "dolphin/card.h"
 #include "dolphin/card/CARDPriv.h"
@@ -623,7 +563,7 @@ void fn_1_AB99C(fn_1_AB99C_ArgStruct *arg) {
 }
 /* fzgx:end fn_1_AB99C */
 
-/* fzgx:begin fn_1_ABA14 noprologue */
+/* fzgx:begin fn_1_ABA14 */
 #include "types.h"
 #include "dolphin/card.h"
 #include "dolphin/card/CARDPriv.h"
@@ -645,19 +585,14 @@ void fn_1_ABA14(fn_1_ABA14_ArgStruct *arg) {
 }
 /* fzgx:end fn_1_ABA14 */
 
-/* fzgx:begin fn_1_ABA24 noprologue */
-#include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/memcard.h"
-extern s32 CARDFreeBlocks(u8 byte_val, void *arg1, void *arg2);
-
+/* fzgx:begin fn_1_ABA24 */
 typedef struct {
     u8 pad[0x2];
     u16 field_0x2;
     s32 field_0x4;
     s32 field_0x8;
     u8 pad_0xc[0x4];
-    u8 data[0x8];
+    s32 data[2];
 } fn_1_ABA24_OffsetStruct;
 
 typedef struct {
@@ -666,9 +601,11 @@ typedef struct {
     fn_1_ABA24_OffsetStruct *ptr_0x24;
 } fn_1_ABA24_ArgStruct;
 
+// Query free card space, recording the result and updating the request state.
 void fn_1_ABA24(fn_1_ABA24_ArgStruct *arg) {
-    s32 result = CARDFreeBlocks(arg->byte_0, arg->ptr_0x24->data,
-        &arg->ptr_0x24->data[0x4]);
+    s32 result = CARDFreeBlocks(arg->byte_0, &arg->ptr_0x24->data[0],
+        &arg->ptr_0x24->data[1]);
+
     arg->ptr_0x24->field_0x4 = result;
     if (arg->ptr_0x24->field_0x4 == 0) {
         arg->ptr_0x24->field_0x8 |= 0x80;
@@ -679,7 +616,7 @@ void fn_1_ABA24(fn_1_ABA24_ArgStruct *arg) {
 }
 /* fzgx:end fn_1_ABA24 */
 
-/* fzgx:begin fn_1_ABA9C noprologue */
+/* fzgx:begin fn_1_ABA9C */
 #include "types.h"
 #include "dolphin/card.h"
 #include "dolphin/card/CARDPriv.h"
@@ -701,41 +638,39 @@ void fn_1_ABA9C(fn_1_ABA9C_ArgStruct *arg) {
 }
 /* fzgx:end fn_1_ABA9C */
 
-/* fzgx:begin fn_1_ABAAC noprologue */
-#include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/memcard.h"
-extern void fn_80083DB0(void *dst, void *src);
-extern void strcat(void *dst, void *src);
-extern s32 CARDOpen(u8 byte_val, void *arg1, void *arg2);
+/* fzgx:begin fn_1_ABAAC */
+extern char *fn_80083DB0(char *dst, const char *src);
+extern char *strcat(char *dst, const char *src);
 
 typedef struct {
-    u8 pad[0x2];
-    u16 field_0x2;
-    s32 field_0x4;
+    u8 pad_0[2];
+    u16 unk_2;
+    s32 unk_4;
+    u8 pad_8[0x90];
+    char unk_98[0x20];
 } fn_1_ABAAC_ResultStruct;
 
 typedef struct {
-    u8 byte_0;
-    u8 pad_0x1[0xf];
-    u8 data_0x10[0x14];
-    fn_1_ABAAC_ResultStruct *ptr_0x24;
+    u8 unk_0;
+    u8 pad_1[0xF];
+    CARDFileInfo unk_10;
+    fn_1_ABAAC_ResultStruct *unk_24;
 } fn_1_ABAAC_ArgStruct;
 
+// Open the card file and clear the pending state once the operation completes.
 void fn_1_ABAAC(fn_1_ABAAC_ArgStruct *arg) {
-    u8 local[0x40];
+    char filename[0x40];
 
-    fn_80083DB0(local, (u8 *)arg->ptr_0x24 + 0x98);
-    strcat(local, lbl_1_data_3C7C4);
-    arg->ptr_0x24->field_0x4 =
-        CARDOpen(arg->byte_0, local, arg->data_0x10);
-    if (arg->ptr_0x24->field_0x4 != -1) {
-        arg->ptr_0x24->field_0x2 = 0;
+    fn_80083DB0(filename, arg->unk_24->unk_98);
+    strcat(filename, (const char *)lbl_1_data_3C7C4);
+    arg->unk_24->unk_4 = CARDOpen(arg->unk_0, filename, &arg->unk_10);
+    if (arg->unk_24->unk_4 != -1) {
+        arg->unk_24->unk_2 = 0;
     }
 }
 /* fzgx:end fn_1_ABAAC */
 
-/* fzgx:begin fn_1_ABB24 noprologue */
+/* fzgx:begin fn_1_ABB24 */
 #include "types.h"
 #include "dolphin/card.h"
 #include "dolphin/card/CARDPriv.h"
@@ -768,7 +703,7 @@ void fn_1_ABB24(fn_1_ABB24_MemcardArg *arg) {
 }
 /* fzgx:end fn_1_ABB24 */
 
-/* fzgx:begin fn_1_ABB4C noprologue */
+/* fzgx:begin fn_1_ABB4C */
 #include "types.h"
 #include "rel/main_rel/globals.h"
 #include "rel/main_rel/memcard.h"
@@ -842,38 +777,28 @@ state->unk_1 = 1;
 }
 /* fzgx:end fn_1_ABB4C */
 
-/* fzgx:begin fn_1_ABC5C noprologue */
-#include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/memcard.h"
-extern void CARDFastDeleteAsync(u8 byte_val, void *arg, s32 zero);
-
-typedef struct {
-    u8 byte_0;
-    u8 pad_0x1[0x13];
-    void *field_0x14;
-} fn_1_ABC5C_ArgStruct;
-
+/* fzgx:begin fn_1_ABC5C */
 typedef struct {
     u8 pad[0x2];
     u16 field_0x2;
 } fn_1_ABC5C_ResultStruct;
 
 typedef struct {
-    u8 pad[0x24];
+    u8 byte_0;
+    u8 pad_0x1[0x13];
+    s32 field_0x14;
+    u8 pad_0x18[0xC];
     fn_1_ABC5C_ResultStruct *ptr_0x24;
-} StateStruct;
+} fn_1_ABC5C_ArgStruct;
 
+// Start asynchronous deletion of the selected memory-card file with a 300-tick timeout.
 void fn_1_ABC5C(fn_1_ABC5C_ArgStruct *arg) {
-    StateStruct *state;
-
-    state = (StateStruct *)arg;
-    state->ptr_0x24->field_0x2 = 0x12c;
+    arg->ptr_0x24->field_0x2 = 300;
     CARDFastDeleteAsync(arg->byte_0, arg->field_0x14, 0);
 }
 /* fzgx:end fn_1_ABC5C */
 
-/* fzgx:begin fn_1_ABC98 noprologue */
+/* fzgx:begin fn_1_ABC98 */
 #include "types.h"
 #include "dolphin/card.h"
 #include "dolphin/card/CARDPriv.h"
@@ -900,40 +825,36 @@ void fn_1_ABC98(fn_1_ABC98_ArgStruct *arg) {
 }
 /* fzgx:end fn_1_ABC98 */
 
-/* fzgx:begin fn_1_ABCE8 noprologue */
-#include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/memcard.h"
-extern void fn_80083DB0(void *dst, void *src);
-extern void strcat(void *dst, void *src);
-extern void CARDCreateAsync(u8 byte_val, void *arg1, void *arg2, void *arg3, u32 arg4);
-
+/* fzgx:begin fn_1_ABCE8 */
 typedef struct {
-    u8 pad[0x2];
-    u16 field_0x2;
-    u8 pad_0x4[0x8];
-    void *ptr_0xc;
+    u8 pad_0[2];
+    u16 unk_2;
+    u8 pad_4[8];
+    u32 unk_C;
+    u8 pad_10[0x88];
+    char unk_98[0x20];
 } fn_1_ABCE8_ResultStruct;
 
 typedef struct {
-    u8 byte_0;
-    u8 pad_0x1[0xf];
-    u8 data_0x10[0x14];
-    fn_1_ABCE8_ResultStruct *ptr_0x24;
+    u8 unk_0;
+    u8 pad_1[0xF];
+    CARDFileInfo unk_10;
+    fn_1_ABCE8_ResultStruct *unk_24;
 } fn_1_ABCE8_ArgStruct;
 
+// Create the memory-card file with its configured name and size.
 void fn_1_ABCE8(fn_1_ABCE8_ArgStruct *arg) {
-    u8 local[0x40];
+    char filename[0x40];
 
-    fn_80083DB0(local, (u8 *)arg->ptr_0x24 + 0x98);
-    strcat(local, lbl_1_data_3C89C);
-    arg->ptr_0x24->field_0x2 = 0x12c;
-    CARDCreateAsync(arg->byte_0, local, arg->ptr_0x24->ptr_0xc,
-        arg->data_0x10, 0);
+    fn_80083DB0(filename, arg->unk_24->unk_98);
+    strcat(filename, (const char *)lbl_1_data_3C89C);
+    arg->unk_24->unk_2 = 300;
+    CARDCreateAsync(arg->unk_0, filename, arg->unk_24->unk_C,
+        &arg->unk_10, 0);
 }
 /* fzgx:end fn_1_ABCE8 */
 
-/* fzgx:begin fn_1_ABD58 noprologue */
+/* fzgx:begin fn_1_ABD58 */
 #include "types.h"
 #include "dolphin/card.h"
 #include "dolphin/card/CARDPriv.h"
@@ -960,7 +881,7 @@ void fn_1_ABD58(fn_1_ABD58_ArgStruct *arg) {
 }
 /* fzgx:end fn_1_ABD58 */
 
-/* fzgx:begin fn_1_ABDA8 noprologue */
+/* fzgx:begin fn_1_ABDA8 */
 #include "types.h"
 #include "dolphin/card.h"
 #include "dolphin/card/CARDPriv.h"
@@ -982,131 +903,95 @@ void fn_1_ABDA8(fn_1_ABDA8_ArgStruct *arg) {
 }
 /* fzgx:end fn_1_ABDA8 */
 
-/* fzgx:begin fn_1_ABDB8 noprologue */
-#include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/memcard.h"
-
-#include "rel/main_rel/globals.h"
-
+/* fzgx:begin fn_1_ABDB8 */
 typedef struct {
     u8 pad_0x0[0x2];
     u16 unk_0x2;
     s32 unk_0x4;
     u8 pad_0x8[0x18];
-    u8 unk_0x20[1];
+    CARDStat unk_0x20;
 } fn_1_ABDB8_ResultStruct;
 
 typedef struct {
     u8 byte_0x0;
     u8 pad_0x1[0x13];
-    void *ptr_0x14;
+    s32 ptr_0x14;
     u8 pad_0x18[0xc];
     fn_1_ABDB8_ResultStruct *ptr_0x24;
 } fn_1_ABDB8_ArgStruct;
 
-// Loads the payload into its result buffer and clears the stale offset on success.
+// Retrieves the file status and clears the pending counter unless the card is busy.
 void fn_1_ABDB8(fn_1_ABDB8_ArgStruct *arg) {
     arg->ptr_0x24->unk_0x4 =
-        CARDGetStatus(arg->byte_0x0, arg->ptr_0x14, arg->ptr_0x24->unk_0x20);
+        CARDGetStatus(arg->byte_0x0, arg->ptr_0x14, &arg->ptr_0x24->unk_0x20);
     if (arg->ptr_0x24->unk_0x4 != -1) {
         arg->ptr_0x24->unk_0x2 = 0;
     }
 }
 /* fzgx:end fn_1_ABDB8 */
 
-/* fzgx:begin fn_1_ABE14 noprologue */
-#include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/memcard.h"
+/* fzgx:begin fn_1_ABE14 */
 extern const f32 lbl_1_rodata_4CA8;
 
 typedef struct Fn1ABE14Sub {
-    u8 pad_00[0x2];
+    u8 pad_00[2];
     u16 value;
-    u8 pad_04[0x8];
-    void *arg_0xC;
+    u8 pad_04[8];
+    s32 arg_0xC;
     u8 pad_10[0x84];
     void *arg_0x94;
 } Fn1ABE14Sub;
 
 typedef struct Fn1ABE14Arg {
     u8 id;
-    u8 pad_01[0x23];
+    u8 pad_01[0xF];
+    CARDFileInfo fileInfo;
     Fn1ABE14Sub *sub;
-    u8 pad_28[0x2];
+    u8 pad_28[2];
     u8 flags;
-    u8 pad_2B[0x4];
-    s32 result;
-    u8 pad_34[0x4];
+    u8 pad_2B[5];
+    u32 result;
+    u8 pad_34[4];
     f32 value;
-    u8 pad_3C[0x58];
 } Fn1ABE14Arg;
 
-extern s32 fn_8002C0A0(u8 id);
-extern void CARDWriteAsync(void *data, void *arg_0x94, void *arg_0xC, int zero_1, int zero_2);
-
+// Starts an asynchronous card write and resets its progress state.
 void fn_1_ABE14(Fn1ABE14Arg *arg) {
     arg->sub->value = 300;
     arg->result = fn_8002C0A0(arg->id);
     arg->value = lbl_1_rodata_4CA8;
     arg->flags |= 2;
-    CARDWriteAsync((u8 *)arg + 0x10, arg->sub->arg_0x94, arg->sub->arg_0xC, 0, 0);
+    CARDWriteAsync(&arg->fileInfo, arg->sub->arg_0x94, arg->sub->arg_0xC, 0, 0);
 }
 /* fzgx:end fn_1_ABE14 */
 
-/* fzgx:begin fn_1_ABE88 noprologue */
-#include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/memcard.h"
-
-#include "types.h"
-
-struct fn_1_ABE88_Arg0 {
-    u8 unk_0;
-};
-
-
-
-
-extern u32 CARDGetResultCode(u32);
-extern u32 fn_8002C0A0(u32);
-
-
-void fn_1_ABE88(void *arg0) {
-    (*(u32 *)((u8 *)((*(void **)((u8 *)(arg0) + 36))) + 4)) = CARDGetResultCode((u32)((u32) (*(u8 *)((u8 *)(arg0) + 0))));
-    (*(f32 *)((u8 *)(arg0) + 56)) = (f32) (s32) (fn_8002C0A0((u32)((u32) (*(u8 *)((u8 *)(arg0) + 0)))) - (*(s32 *)((u8 *)(arg0) + 48))) / (f32) (u32) ((*(s32 *)((u8 *)((*(void **)((u8 *)(arg0) + 36))) + 12)) + 0x2000);
-    if ((s32) (*(u32 *)((u8 *)((*(void **)((u8 *)(arg0) + 36))) + 4)) != -1) {
-        (*(u8 *)((u8 *)(arg0) + 42)) = (u8) ((*(u8 *)((u8 *)(arg0) + 42)) & 0xFFFFFFFD);
-        (*(s16 *)((u8 *)((*(void **)((u8 *)(arg0) + 36))) + 2)) = 0;
-    }
-}
-/* fzgx:end fn_1_ABE88 */
-
-/* fzgx:begin fn_1_ABF44 noprologue */
-#include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/memcard.h"
+/* fzgx:begin fn_1_ABF44 */
 extern const f32 lbl_1_rodata_4CA8;
-extern void fn_80083DB0(void *dst, void *src);
-extern void strcat(void *dst, void *src);
-extern s32 CARDOpen(u8 byte_val, void *arg1, void *arg2);
+extern char *fn_80083DB0(char *dst, const char *src);
+extern char *strcat(char *dest, const char *src);
+extern u32 fn_8002C0A0(u32 arg0);
+
+typedef struct {
+    u8 pad_00[0x44];
+    s32 unk_44;
+    s32 unk_48;
+} Fn1ABF44WriteInfo;
 
 typedef struct {
     u8 pad_00[0x2];
     u16 field_0x2;
     s32 field_0x4;
     u8 pad_08[0x84];
-    void *field_0x8c;
+    Fn1ABF44WriteInfo *field_0x8c;
     s32 field_0x90;
-    s32 field_0x94;
-    u8 field_0x98[0x10];
+    u8 *field_0x94;
+    char field_0x98[0x10];
 } Fn1ABF44State;
 
 typedef struct {
     u8 id;
     u8 pad_01[0xF];
-    u8 data_0x10[0x14];
+    CARDFileInfo data_0x10;
     Fn1ABF44State *state;
     u8 pad_28[0x2];
     u8 flags_0x2a;
@@ -1116,34 +1001,29 @@ typedef struct {
     f32 value_0x38;
 } Fn1ABF44Object;
 
+// Open the card file and begin writing its sector-aligned data.
 void fn_1_ABF44(Fn1ABF44Object *arg) {
-    u8 work[0x40];
+    char work[0x40];
     s32 value;
-    s32 size;
+    const void *data;
     s32 aligned;
 
     arg->state->field_0x2 = 300;
-    fn_80083DB0(work, (u8 *)arg->state + 0x98);
-    strcat(work, lbl_1_data_3C7C4);
-    value = CARDOpen(arg->id, work, arg->data_0x10);
+    fn_80083DB0(work, arg->state->field_0x98);
+    strcat(work, (const char *)lbl_1_data_3C7C4);
+    value = CARDOpen(arg->id, work, &arg->data_0x10);
     arg->state->field_0x4 = value;
     arg->value_0x30 = fn_8002C0A0(arg->id);
     arg->value_0x38 = lbl_1_rodata_4CA8;
     arg->flags_0x2a |= 2;
-    size = arg->state->field_0x94 +
-        *(s32 *)((u8 *)arg->state->field_0x8c + 0x44);
-    aligned = (*(s32 *)((u8 *)arg->state->field_0x8c + 0x48) + 0x1fff) &
-        ~0x1fff;
-    CARDWriteAsync(arg->data_0x10, size, aligned,
-                *(s32 *)((u8 *)arg->state->field_0x8c + 0x44), 0);
+    data = arg->state->field_0x94 + arg->state->field_0x8c->unk_44;
+    aligned = (arg->state->field_0x8c->unk_48 + 0x1fff) & ~0x1fff;
+    CARDWriteAsync(&arg->data_0x10, data, aligned,
+                   arg->state->field_0x8c->unk_44, 0);
 }
 /* fzgx:end fn_1_ABF44 */
 
-/* fzgx:begin fn_1_AC000 noprologue */
-#include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/memcard.h"
-
+/* fzgx:begin fn_1_AC000 */
 typedef struct Fn1AC000Table {
     u8 pad_00[0x48];
     u32 value_0x48;
@@ -1169,79 +1049,31 @@ typedef struct Fn1AC000Target {
     f32 ratio;
 } Fn1AC000Target;
 
-
-
-
-extern u32 CARDGetResultCode(u32);
-extern u32 fn_8002C0A0(u32);
-
+// Update card write progress and clear the active flag on failure.
 void fn_1_AC000(Fn1AC000Target *target) {
-    f32 numerator;
-    f32 denominator;
-    f32 ratio;
+    f32 bytesWritten;
+    f32 totalBytes;
+    f32 dataFraction;
 
     target->state->value_0x4 = CARDGetResultCode(target->id);
+    dataFraction = (f32)(u32)((target->state->table->value_0x48 + 0x1fff) & ~0x1fff);
+    totalBytes = (f32)(u32)(((target->state->table->value_0x48 + 0x1fff) & ~0x1fff) + 0x4000);
+    dataFraction = dataFraction / totalBytes;
 
-    ratio = (f32)(u32)((target->state->table->value_0x48 + 0x1fff) & ~0x1fff);
-    denominator = (f32)(u32)(((target->state->table->value_0x48 + 0x1fff) & ~0x1fff) + 0x4000);
-    ratio = ratio / denominator;
-
-    numerator = (f32)(s32)(fn_8002C0A0(target->id) - target->start);
-    denominator = (f32)(u32)(((target->state->table->value_0x48 + 0x1fff) & ~0x1fff) + 0x2000);
-    target->ratio = ratio * numerator / denominator;
+    bytesWritten = (f32)(s32)(fn_8002C0A0(target->id) - target->start);
+    totalBytes = (f32)(u32)(((target->state->table->value_0x48 + 0x1fff) & ~0x1fff) + 0x2000);
+    target->ratio = dataFraction * bytesWritten / totalBytes;
 
     if (target->state->value_0x4 != -1 && target->state->value_0x4 != 0) {
-        target->flags = target->flags & 0xfffffffd;
+        target->flags &= ~2;
         target->state->value_0x2 = 0;
     }
 }
 /* fzgx:end fn_1_AC000 */
 
-/* fzgx:begin fn_1_AC12C noprologue */
-#include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/memcard.h"
-extern int fn_1_45D0(void *arg0, int arg1, Obj_1_data_3C7B8 *arg2, int arg3);
-extern void CARDMountAsync(u8, u32, void (*)(void), s32);
-extern int CARDGetSerialNo(u8 value, void *data);
-extern void CARDCheckAsync(u8 byte_val, int value);
-extern void CARDFormatAsync(u8 byte, int value);
-extern void fn_80083DB0(void *dst, void *src);
-extern void strcat(void *dst, void *src);
-extern s32 CARDOpen(u8 byte_val, void *arg1, void *arg2);
-extern void CARDFastDeleteAsync(u8 byte_val, void *arg, s32 zero);
-extern void CARDCreateAsync(u8 byte_val, void *arg1, void *arg2, void *arg3, u32 arg4);
-extern void fn_8002A74C(u16 value);
-extern int CARDCheck(int arg0);
-extern void fn_80008BEC(void *dst, s32 value, s32 size);
-extern void fn_1_AA6D8(s32 arg0, u32 arg1, void *arg2);
-extern void OSPanic(void *arg0, u32 arg1, ...);
-extern void fn_1_F79C8(void);
-extern void strncpy(void *arg0, void *arg1, int arg2);
-extern u32 lbl_1_bss_7730C;
-
-extern int fn_1_45D0(void *arg0, int arg1, Obj_1_data_3C7B8 *arg2, int arg3);
-extern void CARDMountAsync(u8, u32, void (*)(void), s32);
-extern int CARDGetSerialNo(u8 value, void *data);
-extern void CARDCheckAsync(u8 byte_val, int value);
-extern void CARDFormatAsync(u8 byte, int value);
-
-extern void fn_80083DB0(void *dst, void *src);
-extern void strcat(void *dst, void *src);
-extern s32 CARDOpen(u8 byte_val, void *arg1, void *arg2);
-extern void CARDFastDeleteAsync(u8 byte_val, void *arg, s32 zero);
-extern void CARDCreateAsync(u8 byte_val, void *arg1, void *arg2, void *arg3, u32 arg4);
-extern void fn_8002A74C(u16 value);
-extern int CARDCheck(int arg0);
-extern void fn_80008BEC(void *dst, s32 value, s32 size);
-extern void fn_1_AA6D8(s32 arg0, u32 arg1, void *arg2);
-extern void OSPanic(void *arg0, u32 arg1, ...);
-extern void fn_1_F79C8(void);
-extern void strncpy(void *arg0, void *arg1, int arg2);
-extern u32 lbl_1_bss_7730C;
-
+/* fzgx:begin fn_1_AC12C */
 typedef struct MemcardRequestState {
-    u8 pad_00[0x2];
+    u8 pad_00[2];
     u16 value;
     u8 pad_04[0x90];
     void *data;
@@ -1250,20 +1082,17 @@ typedef struct MemcardRequestState {
 typedef struct fn_1_AC12C_MemcardRequest {
     u8 id;
     u8 pad_01[0xF];
-    u8 buffer[0x14];
+    CARDFileInfo fileInfo;
     MemcardRequestState *state;
-    u8 pad_28[0x8];
-    void *result;
+    u8 pad_28[8];
+    u32 start;
 } fn_1_AC12C_MemcardRequest;
 
-extern void *fn_8002C0A0(u8 id);
-extern void CARDWriteAsync(void *dst, void *src, int size, int zero, int flags);
-
-// Initializes the request state, records the backing resource, and starts its transfer.
+// Starts writing the request data and records the transfer start time.
 void fn_1_AC12C(fn_1_AC12C_MemcardRequest *request) {
     request->state->value = 300;
-    request->result = fn_8002C0A0(request->id);
-    CARDWriteAsync(request->buffer, request->state->data, 0x4000, 0, 0);
+    request->start = fn_8002C0A0(request->id);
+    CARDWriteAsync(&request->fileInfo, request->state->data, 0x4000, 0, 0);
 }
 /* fzgx:end fn_1_AC12C */
 
@@ -1323,32 +1152,30 @@ void fn_1_AC188(Fn1AC188Target *target) {
 }
 /* fzgx:end fn_1_AC188 */
 
-/* fzgx:begin fn_1_AC294 noprologue */
-#include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/memcard.h"
-extern void CARDSetStatusAsync(u8 id, void *arg, void *data, int zero);
-
+/* fzgx:begin fn_1_AC294 */
 typedef struct Fn1AC294State {
-    u8 pad_00[0x2];
+    u8 pad_00[2];
     u16 value;
+    u8 pad_04[0x1C];
+    CARDStat status;
 } Fn1AC294State;
 
 typedef struct Fn1AC294Target {
     u8 id;
     u8 pad_01[0x13];
-    void *arg;
+    s32 fileNo;
     u8 pad_18[0xC];
     Fn1AC294State *state;
 } Fn1AC294Target;
 
+// Set the operation timeout and asynchronously update the card file status.
 void fn_1_AC294(Fn1AC294Target *target) {
     target->state->value = 300;
-    CARDSetStatusAsync(target->id, target->arg, (u8 *)target->state + 0x20, 0);
+    CARDSetStatusAsync(target->id, target->fileNo, &target->state->status, NULL);
 }
 /* fzgx:end fn_1_AC294 */
 
-/* fzgx:begin fn_1_AC2D8 noprologue */
+/* fzgx:begin fn_1_AC2D8 */
 #include "types.h"
 #include "dolphin/card.h"
 #include "dolphin/card/CARDPriv.h"
@@ -1375,37 +1202,32 @@ void fn_1_AC2D8(Fn1AC2D8Target *target) {
 }
 /* fzgx:end fn_1_AC2D8 */
 
-/* fzgx:begin fn_1_AC328 noprologue */
-#include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/memcard.h"
-extern void fn_80083DB0(void *dst, void *src);
-extern void strcat(void *dst, void *src);
-extern void CARDDeleteAsync(u8 byte, void *data, int arg);
-
+/* fzgx:begin fn_1_AC328 */
 typedef struct Fn1AC328State {
     u8 pad_00[0x2];
-    u16 value;
+    u16 unk_02;
     u8 pad_04[0x94];
+    char unk_98[0x20];
 } Fn1AC328State;
 
 typedef struct Fn1AC328Target {
-    u8 id;
+    u8 unk_00;
     u8 pad_01[0x23];
-    Fn1AC328State *state;
+    Fn1AC328State *unk_24;
 } Fn1AC328Target;
 
+// Begin asynchronous deletion of the card file with the appended suffix.
 void fn_1_AC328(Fn1AC328Target *target) {
-    u8 data[0x40];
+    char filename[0x40];
 
-    fn_80083DB0(data, (u8 *)target->state + 0x98);
-    strcat(data, lbl_1_data_3C7C4);
-    target->state->value = 300;
-    CARDDeleteAsync(target->id, data, 0);
+    fn_80083DB0(filename, target->unk_24->unk_98);
+    strcat(filename, (const char *)lbl_1_data_3C7C4);
+    target->unk_24->unk_02 = 300;
+    CARDDeleteAsync(target->unk_00, filename, 0);
 }
 /* fzgx:end fn_1_AC328 */
 
-/* fzgx:begin fn_1_AC38C noprologue */
+/* fzgx:begin fn_1_AC38C */
 #include "types.h"
 #include "dolphin/card.h"
 #include "dolphin/card/CARDPriv.h"
@@ -1432,18 +1254,12 @@ void fn_1_AC38C(Fn1AC38Target *target) {
 }
 /* fzgx:end fn_1_AC38C */
 
-/* fzgx:begin fn_1_AC3DC noprologue */
-#include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/memcard.h"
-extern void fn_80083DB0(void *dst, void *src);
-extern void strcat(void *dst, void *src);
-extern void CARDRenameAsync(u8 id, void *data1, void *data2, int zero);
-
+/* fzgx:begin fn_1_AC3DC */
 typedef struct Fn1AC3DCState {
-    u8 pad_00[0x2];
+    u8 pad_00[2];
     u16 value;
     u8 pad_04[0x94];
+    char filename[0x40];
 } Fn1AC3DCState;
 
 typedef struct Fn1AC3DCTarget {
@@ -1452,20 +1268,21 @@ typedef struct Fn1AC3DCTarget {
     Fn1AC3DCState *state;
 } Fn1AC3DCTarget;
 
+// Rename the temporary card file to its final filename.
 void fn_1_AC3DC(Fn1AC3DCTarget *target) {
-    u8 data1[0x40];
-    u8 data2[0x40];
+    char oldName[0x40];
+    char newName[0x40];
 
-    fn_80083DB0(data1, (u8 *)target->state + 0x98);
-    fn_80083DB0(data2, (u8 *)target->state + 0x98);
-    strcat(data1, lbl_1_data_3C89C);
-    strcat(data2, lbl_1_data_3C7C4);
+    fn_80083DB0(oldName, target->state->filename);
+    fn_80083DB0(newName, target->state->filename);
+    strcat(oldName, (const char *)lbl_1_data_3C89C);
+    strcat(newName, (const char *)lbl_1_data_3C7C4);
     target->state->value = 300;
-    CARDRenameAsync(target->id, data1, data2, 0);
+    CARDRenameAsync(target->id, oldName, newName, 0);
 }
 /* fzgx:end fn_1_AC3DC */
 
-/* fzgx:begin fn_1_AC464 noprologue */
+/* fzgx:begin fn_1_AC464 */
 #include "types.h"
 #include "dolphin/card.h"
 #include "dolphin/card/CARDPriv.h"
@@ -1492,7 +1309,7 @@ void fn_1_AC464(Fn1AC464Target *target) {
 }
 /* fzgx:end fn_1_AC464 */
 
-/* fzgx:begin fn_1_AC4B4 noprologue */
+/* fzgx:begin fn_1_AC4B4 */
 #include "types.h"
 #include "dolphin/card.h"
 #include "dolphin/card/CARDPriv.h"
@@ -1514,20 +1331,15 @@ void fn_1_AC4B4(Fn1AC4B4Target *target) {
 }
 /* fzgx:end fn_1_AC4B4 */
 
-/* fzgx:begin fn_1_AC4C4 noprologue */
-#include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/memcard.h"
-extern s32 CARDFreeBlocks(u8 byte_val, void *arg1, void *arg2);
-
+/* fzgx:begin fn_1_AC4C4 */
 typedef struct Fn1AC4C4State {
     u16 pad_00;
     u16 value_02;
     s32 result;
     u32 flags;
-    u8 pad_0c[0x4];
-    u8 data_10[0x4];
-    u8 data_14[0x4];
+    u8 pad_0c[4];
+    s32 data_10;
+    s32 data_14;
 } Fn1AC4C4State;
 
 typedef struct Fn1AC4C4Target {
@@ -1536,9 +1348,10 @@ typedef struct Fn1AC4C4Target {
     Fn1AC4C4State *state;
 } Fn1AC4C4Target;
 
+// Query free card space and finish the request unless the card is busy.
 void fn_1_AC4C4(Fn1AC4C4Target *target) {
-    target->state->result =
-        CARDFreeBlocks(target->value, &target->state->data_10, &target->state->data_14);
+    target->state->result = CARDFreeBlocks(target->value,
+        &target->state->data_10, &target->state->data_14);
     if (target->state->result == 0) {
         target->state->flags |= 0x80;
     }
@@ -1548,83 +1361,90 @@ void fn_1_AC4C4(Fn1AC4C4Target *target) {
 }
 /* fzgx:end fn_1_AC4C4 */
 
-/* fzgx:begin fn_1_AC53C noprologue */
-#include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/memcard.h"
-extern void* lbl_801A6410;
-extern void *lbl_801A6410;
-
-#include "types.h"
-
-struct fn_1_AC53C_Arg0 {
-    u8 pad_0[0xC];
-    u32 unk_C;
-};
-struct fn_1_AC53C_lbl_801A6410 {
-    u32 unk_0;
-};
-struct fn_1_AC53C_lbl_1_bss_716C0 {
-    u8 unk_0;
-};
-
-
-
-
-
-
-extern s32 CARDUnmount(void *);
+/* fzgx:begin fn_1_AC53C */
 extern void fn_1_46B4(u32, u32, const char *, int);
 
-void fn_1_AC53C(void *arg0) {
-    u32 temp_r4;
-    u32 temp_r5_2;
-    void *temp_r3;
-    void *temp_r3_2;
-    void *temp_r5;
-    void *temp_r6;
+typedef struct MemcardCleanupState {
+    u8 pad_0[8];
+    u32 unk_8;
+    u8 pad_C[4];
+    s32 unk_10;
+    s32 unk_14;
+    s32 unk_18;
+    s32 unk_1C;
+    u8 pad_20[0x74];
+    u32 unk_94;
+    u8 pad_98[0x44];
+    u32 unk_DC;
+} MemcardCleanupState;
 
-    if ((u32) (*(u32 *)((u8 *)(arg0) + 12)) != 0) {
+typedef struct MemcardCleanupTarget {
+    u8 unk_0;
+    u8 pad_1;
+    u8 unk_2;
+    u8 pad_3[4];
+    u8 unk_7;
+    s16 unk_8;
+    s16 unk_A;
+    u32 unk_C;
+    u8 pad_10[0x14];
+    MemcardCleanupState *unk_24;
+    u8 pad_28[2];
+    u8 unk_2A;
+    u8 pad_2B[0x11];
+    s32 unk_3C;
+    s32 unk_40;
+} MemcardCleanupTarget;
+
+// Unmount the card, release its buffers, and advance the cleanup state.
+void fn_1_AC53C(MemcardCleanupTarget *target) {
+    u32 buffer;
+    MemcardCleanupState *state;
+    u32 savedBuffer;
+
+    if (target->unk_C != 0) {
         do {
-
-        } while (CARDUnmount((void *)((void *)((*(u8 *)((u8 *)(arg0) + 0))))) == -1);
-        fn_1_46B4((*(struct fn_1_AC53C_lbl_801A6410 *)&lbl_801A6410).unk_0, *(u32 *)((u8 *)(arg0) + 12), (const char *)((s8 *) &(*(u32 *)&lbl_1_data_3C7B8)), 0x3C8);
-        (*(s8 *)((u8 *)(arg0) + 7)) = 0;
-        (*(u32 *)((u8 *)(arg0) + 12)) = 0U;
-        temp_r3 = (void *)(*(void **)((u8 *)(arg0) + 36));
-        (*(s32 *)((u8 *)(temp_r3) + 28)) = 0;
-        (*(s32 *)((u8 *)(temp_r3) + 24)) = 0;
+        } while (CARDUnmount(target->unk_0) == -1);
+        fn_1_46B4((u32)lbl_801A6410, target->unk_C,
+                   (const char *)&lbl_1_data_3C7B8, 0x3C8);
+        target->unk_7 = 0;
+        target->unk_C = 0;
+        state = target->unk_24;
+        state->unk_1C = 0;
+        state->unk_18 = 0;
     }
-    temp_r3_2 = (void *)(*(void **)((u8 *)(arg0) + 36));
-    if ((*(s32 *)((u8 *)(temp_r3_2) + 8)) & 0x80) {
-        (*(s32 *)((u8 *)(arg0) + 60)) = (s32) ((s32) (*(s32 *)((u8 *)(temp_r3_2) + 16)) / 8192);
-        (*(s32 *)((u8 *)(arg0) + 64)) = (s32) (*(s32 *)((u8 *)((*(void **)((u8 *)(arg0) + 36))) + 20));
+    state = target->unk_24;
+    if (state->unk_8 & 0x80) {
+        target->unk_3C = state->unk_10 / 8192;
+        target->unk_40 = target->unk_24->unk_14;
     }
-    temp_r5 = (void *)(*(void **)((u8 *)(arg0) + 36));
-    if (!((*(s32 *)((u8 *)(temp_r5) + 8)) & 0x20)) {
-        fn_1_46B4((*(struct fn_1_AC53C_lbl_801A6410 *)&lbl_801A6410).unk_0, *(u32 *)((u8 *)(temp_r5) + 148), (const char *)((s8 *) &(*(u32 *)&lbl_1_data_3C7B8)), 0x3D4);
+    state = target->unk_24;
+    if (!(state->unk_8 & 0x20)) {
+        fn_1_46B4((u32)lbl_801A6410, state->unk_94,
+                   (const char *)&lbl_1_data_3C7B8, 0x3D4);
     }
-    if ((u8) (*(u8 *)((u8 *)(arg0) + 2)) == 4) {
-        if ((u8) (*(struct fn_1_AC53C_lbl_1_bss_716C0 *)&lbl_1_bss_716C0).unk_0 != 0) {
-            temp_r6 = (void *)(*(void **)((u8 *)(arg0) + 36));
-            temp_r5_2 = *(u32 *)((u8 *)(temp_r6) + 148);
-            (*(u32 *)((u8 *)(temp_r6) + 148)) = (u32) (*(u32 *)((u8 *)(temp_r6) + 220));
-            (*(u32 *)((u8 *)(temp_r6) + 220)) = temp_r5_2;
-            (*(struct fn_1_AC53C_lbl_1_bss_716C0 *)&lbl_1_bss_716C0).unk_0 = 0;
+    if (target->unk_2 == 4) {
+        if (lbl_1_bss_716C0 != 0) {
+            MemcardCleanupState *swapState = target->unk_24;
+            savedBuffer = swapState->unk_94;
+            swapState->unk_94 = swapState->unk_DC;
+            swapState->unk_DC = savedBuffer;
+            lbl_1_bss_716C0 = 0;
         }
-        temp_r4 = *(u32 *)((u8 *)((*(void **)((u8 *)(arg0) + 36))) + 220);
-        if (temp_r4 != 0) {
-            fn_1_46B4((*(struct fn_1_AC53C_lbl_801A6410 *)&lbl_801A6410).unk_0, temp_r4, (const char *)((s8 *) &(*(u32 *)&lbl_1_data_3C7B8)), 0x3DE);
-            (*(u32 *)((u8 *)((*(void **)((u8 *)(arg0) + 36))) + 220)) = 0U;
+        buffer = target->unk_24->unk_DC;
+        if (buffer != 0) {
+            fn_1_46B4((u32)lbl_801A6410, buffer,
+                       (const char *)&lbl_1_data_3C7B8, 0x3DE);
+            target->unk_24->unk_DC = 0;
         }
     }
-    (*(s16 *)((u8 *)(arg0) + 8)) = 0x30;
-    (*(s16 *)((u8 *)(arg0) + 10)) = 0xE;
-    (*(u8 *)((u8 *)(arg0) + 42)) = (u8) ((*(u8 *)((u8 *)(arg0) + 42)) | 4);
+    target->unk_8 = 0x30;
+    target->unk_A = 0xE;
+    target->unk_2A |= 4;
 }
 /* fzgx:end fn_1_AC53C */
 
-/* fzgx:begin fn_1_AC6A4 noprologue */
+/* fzgx:begin fn_1_AC6A4 */
 #include "types.h"
 #include "dolphin/card.h"
 #include "dolphin/card/CARDPriv.h"
@@ -1636,7 +1456,7 @@ void fn_1_AC6A4(void) {
 }
 /* fzgx:end fn_1_AC6A4 */
 
-/* fzgx:begin fn_1_AC6A8 noprologue */
+/* fzgx:begin fn_1_AC6A8 */
 #include "types.h"
 #include "dolphin/card.h"
 #include "dolphin/card/CARDPriv.h"
@@ -1658,7 +1478,7 @@ void fn_1_AC6A8(Fn1AC6A8Data *data) {
 }
 /* fzgx:end fn_1_AC6A8 */
 
-/* fzgx:begin fn_1_AC6C8 noprologue */
+/* fzgx:begin fn_1_AC6C8 */
 #include "types.h"
 #include "dolphin/card.h"
 #include "dolphin/card/CARDPriv.h"
@@ -1670,7 +1490,7 @@ void fn_1_AC6C8(void) {
 }
 /* fzgx:end fn_1_AC6C8 */
 
-/* fzgx:begin fn_1_AC6CC noprologue */
+/* fzgx:begin fn_1_AC6CC */
 #include "types.h"
 #include "dolphin/card.h"
 #include "dolphin/card/CARDPriv.h"
@@ -1687,7 +1507,7 @@ void fn_1_AC6CC(fn_1_AC6CC_MemCardState *self) {
 }
 /* fzgx:end fn_1_AC6CC */
 
-/* fzgx:begin fn_1_AC6DC noprologue */
+/* fzgx:begin fn_1_AC6DC */
 #include "types.h"
 #include "dolphin/card.h"
 #include "dolphin/card/CARDPriv.h"
@@ -1699,7 +1519,7 @@ void fn_1_AC6DC(void) {
 }
 /* fzgx:end fn_1_AC6DC */
 
-/* fzgx:begin fn_1_AC6E0 noprologue */
+/* fzgx:begin fn_1_AC6E0 */
 #include "types.h"
 #include "dolphin/card.h"
 #include "dolphin/card/CARDPriv.h"
@@ -1714,7 +1534,7 @@ void fn_1_AC6E0(void *r3) {
 }
 /* fzgx:end fn_1_AC6E0 */
 
-/* fzgx:begin fn_1_AC700 noprologue */
+/* fzgx:begin fn_1_AC700 */
 #include "types.h"
 #include "dolphin/card.h"
 #include "dolphin/card/CARDPriv.h"
@@ -1742,7 +1562,7 @@ void fn_1_AC704(void *r3) {
 }
 /* fzgx:end fn_1_AC704 */
 
-/* fzgx:begin fn_1_AC74C noprologue */
+/* fzgx:begin fn_1_AC74C */
 #include "types.h"
 #include "dolphin/card.h"
 #include "dolphin/card/CARDPriv.h"
@@ -1836,7 +1656,7 @@ void fn_1_AC79C(void *arg0) {
 }
 /* fzgx:end fn_1_AC79C */
 
-/* fzgx:begin fn_1_AC904 noprologue */
+/* fzgx:begin fn_1_AC904 */
 #include "types.h"
 #include "dolphin/card.h"
 #include "dolphin/card/CARDPriv.h"
@@ -1848,7 +1668,7 @@ void fn_1_AC904(void) {
 }
 /* fzgx:end fn_1_AC904 */
 
-/* fzgx:begin fn_1_AC908 noprologue */
+/* fzgx:begin fn_1_AC908 */
 #include "types.h"
 #include "dolphin/card.h"
 #include "dolphin/card/CARDPriv.h"
@@ -1870,7 +1690,7 @@ void fn_1_AC908(Fn1AC908State *state) {
 }
 /* fzgx:end fn_1_AC908 */
 
-/* fzgx:begin fn_1_AC928 noprologue */
+/* fzgx:begin fn_1_AC928 */
 #include "types.h"
 #include "dolphin/card.h"
 #include "dolphin/card/CARDPriv.h"
@@ -1882,7 +1702,7 @@ void fn_1_AC928(void) {
 }
 /* fzgx:end fn_1_AC928 */
 
-/* fzgx:begin fn_1_AC92C noprologue */
+/* fzgx:begin fn_1_AC92C */
 #include "types.h"
 #include "dolphin/card.h"
 #include "dolphin/card/CARDPriv.h"
@@ -1915,7 +1735,7 @@ u32 fn_1_AC92C(struct fn_1_AC92C_Arg0 *arg0) {
 }
 /* fzgx:end fn_1_AC92C */
 
-/* fzgx:begin fn_1_AC960 noprologue */
+/* fzgx:begin fn_1_AC960 */
 #include "types.h"
 #include "dolphin/card.h"
 #include "dolphin/card/CARDPriv.h"
@@ -1956,7 +1776,7 @@ void fn_1_AC960(struct MemcardObject *obj) {
 }
 /* fzgx:end fn_1_AC960 */
 
-/* fzgx:begin fn_1_ACA00 noprologue */
+/* fzgx:begin fn_1_ACA00 */
 #include "types.h"
 #include "dolphin/card.h"
 #include "dolphin/card/CARDPriv.h"
@@ -2143,7 +1963,7 @@ void fn_1_ACA78(void *arg0) {
 }
 /* fzgx:end fn_1_ACA78 */
 
-/* fzgx:begin fn_1_ACD00 noprologue */
+/* fzgx:begin fn_1_ACD00 */
 #include "types.h"
 #include "dolphin/card.h"
 #include "dolphin/card/CARDPriv.h"
@@ -2254,7 +2074,7 @@ void fn_1_ACD04(Fn1Acd04Obj *obj) {
 }
 /* fzgx:end fn_1_ACD04 */
 
-/* fzgx:begin fn_1_ACE7C noprologue */
+/* fzgx:begin fn_1_ACE7C */
 #include "types.h"
 #include "dolphin/card.h"
 #include "dolphin/card/CARDPriv.h"
@@ -2266,26 +2086,28 @@ void fn_1_ACE7C(void) {
 }
 /* fzgx:end fn_1_ACE7C */
 
-/* fzgx:begin fn_1_ACE80 noprologue */
-#include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/memcard.h"
-extern void CARDDeleteAsync(u8 byte, void *data, int arg);
+/* fzgx:begin fn_1_ACE80 */
+typedef struct {
+    u8 unk_0[2];
+    u16 unk_2;
+    u8 unk_4[0x94];
+    char unk_98[32];
+} fn_1_ACE80_FileState;
 
 typedef struct {
-    u8 field_0;
-    u8 pad_1[0x23];
-    void* field_24;
+    u8 unk_0;
+    u8 unk_1[0x23];
+    fn_1_ACE80_FileState *unk_24;
 } fn_1_ACE80_SomeObject;
 
-// fn_1_ACE80: writes 0x12c to pointed structure, then calls CARDDeleteAsync
-void fn_1_ACE80(fn_1_ACE80_SomeObject* obj) {
-    *(u16*)((u8*)obj->field_24 + 0x2) = 0x12c;
-    CARDDeleteAsync(obj->field_0, (u8*)obj->field_24 + 0x98, 0);
+// Start an asynchronous file deletion and set its timeout to 300.
+void fn_1_ACE80(fn_1_ACE80_SomeObject *obj) {
+    obj->unk_24->unk_2 = 300;
+    CARDDeleteAsync(obj->unk_0, obj->unk_24->unk_98, 0);
 }
 /* fzgx:end fn_1_ACE80 */
 
-/* fzgx:begin fn_1_ACEBC noprologue */
+/* fzgx:begin fn_1_ACEBC */
 #include "types.h"
 #include "dolphin/card.h"
 #include "dolphin/card/CARDPriv.h"
@@ -2308,7 +2130,7 @@ void fn_1_ACEBC(fn_1_ACEBC_SomeObject* obj) {
 }
 /* fzgx:end fn_1_ACEBC */
 
-/* fzgx:begin fn_1_ACF0C noprologue */
+/* fzgx:begin fn_1_ACF0C */
 #include "types.h"
 #include "dolphin/card.h"
 #include "dolphin/card/CARDPriv.h"
@@ -2330,7 +2152,7 @@ void fn_1_ACF0C(Object* obj) {
 }
 /* fzgx:end fn_1_ACF0C */
 
-/* fzgx:begin fn_1_ACF2C noprologue */
+/* fzgx:begin fn_1_ACF2C */
 #include "types.h"
 #include "dolphin/card.h"
 #include "dolphin/card/CARDPriv.h"
@@ -2432,7 +2254,7 @@ void fn_1_ACF30(MemcardObject* obj) {
 }
 /* fzgx:end fn_1_ACF30 */
 
-/* fzgx:begin fn_1_AD098 noprologue */
+/* fzgx:begin fn_1_AD098 */
 #include "types.h"
 #include "dolphin/card.h"
 #include "dolphin/card/CARDPriv.h"
@@ -2444,7 +2266,7 @@ void fn_1_AD098(void) {
 }
 /* fzgx:end fn_1_AD098 */
 
-/* fzgx:begin fn_1_AD09C noprologue */
+/* fzgx:begin fn_1_AD09C */
 #include "types.h"
 #include "dolphin/card.h"
 #include "dolphin/card/CARDPriv.h"
@@ -2456,7 +2278,7 @@ void fn_1_AD09C(void) {
 }
 /* fzgx:end fn_1_AD09C */
 
-/* fzgx:begin fn_1_AD0A0 noprologue */
+/* fzgx:begin fn_1_AD0A0 */
 #include "types.h"
 #include "dolphin/card.h"
 #include "dolphin/card/CARDPriv.h"
@@ -2466,7 +2288,8 @@ struct fn_1_AD0A0_Arg0 {
     u8 unk_2C;
 };
 extern f32 lbl_1_rodata_4CD0;
-extern f64 lbl_1_rodata_4CB8;
+
+
 extern s32 CARDGetStatus(s32, s32, CARDStat *);
 
 
@@ -2500,7 +2323,7 @@ int fn_1_AD140(const u8 *status_byte) {
 }
 /* fzgx:end fn_1_AD140 */
 
-/* fzgx:begin fn_1_AD164 noprologue */
+/* fzgx:begin fn_1_AD164 */
 #include "types.h"
 #include "dolphin/card.h"
 #include "dolphin/card/CARDPriv.h"
@@ -2536,52 +2359,10 @@ void fn_1_AD168(Fn1AD168Obj *obj) {
 }
 /* fzgx:end fn_1_AD168 */
 
-/* fzgx:begin fn_1_AD1AC noprologue */
-#include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/memcard.h"
-extern int fn_1_45D0(void *arg0, int arg1, Obj_1_data_3C7B8 *arg2, int arg3);
-extern void CARDMountAsync(u8, u32, void (*)(void), s32);
-extern int CARDGetSerialNo(u8 value, void *data);
-extern void CARDCheckAsync(u8 byte_val, int value);
-extern void CARDFormatAsync(u8 byte, int value);
-extern void fn_80083DB0(void *dst, void *src);
-extern void strcat(void *dst, void *src);
-extern s32 CARDOpen(u8 byte_val, void *arg1, void *arg2);
-extern void CARDFastDeleteAsync(u8 byte_val, void *arg, s32 zero);
-extern void CARDCreateAsync(u8 byte_val, void *arg1, void *arg2, void *arg3, u32 arg4);
-extern void fn_8002A74C(u16 value);
-extern int CARDCheck(int arg0);
-extern void fn_80008BEC(void *dst, s32 value, s32 size);
-extern void fn_1_AA6D8(s32 arg0, u32 arg1, void *arg2);
-extern void OSPanic(void *arg0, u32 arg1, ...);
-extern void fn_1_F79C8(void);
-extern void strncpy(void *arg0, void *arg1, int arg2);
-extern u32 lbl_1_bss_7730C;
-
-extern int fn_1_45D0(void *arg0, int arg1, Obj_1_data_3C7B8 *arg2, int arg3);
-extern void CARDMountAsync(u8, u32, void (*)(void), s32);
-extern int CARDGetSerialNo(u8 value, void *data);
-extern void CARDCheckAsync(u8 byte_val, int value);
-extern void CARDFormatAsync(u8 byte, int value);
-
-extern void fn_80083DB0(void *dst, void *src);
-extern void strcat(void *dst, void *src);
-extern s32 CARDOpen(u8 byte_val, void *arg1, void *arg2);
-extern void CARDFastDeleteAsync(u8 byte_val, void *arg, s32 zero);
-extern void CARDCreateAsync(u8 byte_val, void *arg1, void *arg2, void *arg3, u32 arg4);
-extern void fn_8002A74C(u16 value);
-extern int CARDCheck(int arg0);
-extern void fn_80008BEC(void *dst, s32 value, s32 size);
-extern void fn_1_AA6D8(s32 arg0, u32 arg1, void *arg2);
-extern void OSPanic(void *arg0, u32 arg1, ...);
-extern void fn_1_F79C8(void);
-extern void strncpy(void *arg0, void *arg1, int arg2);
-extern u32 lbl_1_bss_7730C;
-
+/* fzgx:begin fn_1_AD1AC */
 typedef struct Fn1AD1ACOutput {
     u8 unk_00[4];
-    void *unk_04;
+    s32 unk_04;
 } Fn1AD1ACOutput;
 
 typedef struct Fn1AD1ACObject {
@@ -2590,9 +2371,7 @@ typedef struct Fn1AD1ACObject {
     Fn1AD1ACOutput *unk_24;
 } Fn1AD1ACObject;
 
-extern void *CARDGetResultCode(u8 arg0);
-
-// Store the generated value in the object's output record.
+// Store the memory card channel's current result in the output record.
 void fn_1_AD1AC(Fn1AD1ACObject *object) {
     object->unk_24->unk_04 = CARDGetResultCode(object->unk_00);
 }
@@ -4552,45 +4331,19 @@ switch (fzgx_live->unk_04) {
 }
 /* fzgx:end fn_1_AD264 */
 
-/* fzgx:begin fn_1_AEC34 noprologue */
-#include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/memcard.h"
-extern void strncpy(void *arg0, void *arg1, int arg2);
+/* fzgx:begin fn_1_AEC34 */
 extern u32 lbl_1_bss_77310[28];
 extern u32 lbl_1_bss_7730C;
-
-typedef struct Fn1AEC34A {
-    u8 pad0[8];
-    void *payload;
-    void *result;
-} Fn1AEC34A;
-
-typedef struct Fn1AEC34P {
-    u8 pad0[8];
-    u32 flags;
-    u8 padC[0x88];
-    void *buffer;
-    u8 pad98[0x4c];
-    void *length;
-} Fn1AEC34P;
-
-typedef struct Fn1AEC34B {
-    u8 pad0[3];
-    u8 state;
-    u8 pad4[0x20];
-    Fn1AEC34P *card;
-} Fn1AEC34B;
-
+typedef struct Fn1AEC34A { u8 pad0[8]; char *payload; u32 result; } Fn1AEC34A;
+typedef struct Fn1AEC34P { u8 pad0[8]; u32 flags; u8 padC[0x88]; u8 *buffer; u8 pad98[0x4c]; u32 length; } Fn1AEC34P;
+typedef struct Fn1AEC34B { u8 pad0[3]; u8 state; u8 pad4[0x20]; Fn1AEC34P *card; } Fn1AEC34B;
 // Finalize the card operation and publish its completion state.
 void fn_1_AEC34(Fn1AEC34A *request, Fn1AEC34B *operation) {
     if ((operation->card->flags & 0x20) == 0) {
         if (request->payload != 0) {
-            strncpy((u8 *)operation->card->buffer + 0x24,
-                        request->payload, 0x20);
+            strncpy((char *)operation->card->buffer + 0x24, request->payload, 0x20);
         }
-        fn_80008BA8((u8 *)operation->card->buffer + 0x2060,
-                    request->result, operation->card->length);
+        fn_80008BA8((u32)(operation->card->buffer + 0x2060), request->result, operation->card->length);
     }
     operation->state = 3;
     lbl_1_bss_77310[0] = 1;
@@ -5625,7 +5378,7 @@ void fn_1_AECCC(MemcardObj *arg0, u32 unused) {
 #pragma opt_common_subs reset
 /* fzgx:end fn_1_AECCC */
 
-/* fzgx:begin fn_1_B03A8 noprologue */
+/* fzgx:begin fn_1_B03A8 */
 #include "types.h"
 #include "dolphin/card.h"
 #include "dolphin/card/CARDPriv.h"
@@ -6449,7 +6202,7 @@ void fn_1_B03CC(B03CC_State *arg0) {
 }
 /* fzgx:end fn_1_B03CC */
 
-/* fzgx:begin fn_1_B1710 noprologue */
+/* fzgx:begin fn_1_B1710 */
 #include "types.h"
 #include "dolphin/card.h"
 #include "dolphin/card/CARDPriv.h"
@@ -6461,7 +6214,7 @@ void fn_1_B1710(int unused, void *ptr) {
 }
 /* fzgx:end fn_1_B1710 */
 
-/* fzgx:begin fn_1_B2770 noprologue */
+/* fzgx:begin fn_1_B2770 */
 #include "types.h"
 #include "dolphin/card.h"
 #include "dolphin/card/CARDPriv.h"
@@ -7272,7 +7025,7 @@ rec = record_address((u8 *)fzgx_live->unk_DC, off);
 #pragma opt_common_subs reset
 /* fzgx:end fn_1_B277C */
 
-/* fzgx:begin fn_1_B38F4 noprologue */
+/* fzgx:begin fn_1_B38F4 */
 #include "types.h"
 #include "dolphin/card.h"
 #include "dolphin/card/CARDPriv.h"
@@ -7284,12 +7037,12 @@ void fn_1_B38F4(int unused, void *ptr) {
 }
 /* fzgx:end fn_1_B38F4 */
 
-/* fzgx:begin fn_1_B3900 noprologue */
+/* fzgx:begin fn_1_B3900 */
 #include "types.h"
 #include "rel/main_rel/globals.h"
 #include "rel/main_rel/memcard.h"
 
-extern u32 lbl_801A6410;
+
 extern s32 lbl_801A66B4;
 extern const f32 lbl_1_rodata_4CA8;
 extern void OSReport(const char *fmt, ...);
@@ -7336,7 +7089,7 @@ void fn_1_B3900(u8 *arg0) {
             if (fn_1_B3900_array_read(arg0, 5) == 3 && *(u32 *)(arg0 + 0xC) != 0) {
                 while (CARDUnmount(fn_1_B3900_array_read(arg0, 0)) == -1) {
                 }
-                fn_1_46B4(lbl_801A6410, *(u32 *)(arg0 + 0xC), (const char *)(data + 0x6CF0), 0x1A52);
+                fn_1_46B4((*(u32 *)&lbl_801A6410), *(u32 *)(arg0 + 0xC), (const char *)(data + 0x6CF0), 0x1A52);
                 arg0[7] = 0;
                 *(u32 *)(arg0 + 0xC) = 0;
                 state = *(u8 **)(arg0 + 0x24);
@@ -7573,7 +7326,7 @@ void fn_1_B3900(u8 *arg0) {
     case 0x1D:
         if (((u16)lbl_1_bss_9F8.unk_8 >> 8) & 1) {
             *(u32 *)(bss + 0x1F4) = *(u32 *)(*(u8 **)(arg0 + 0x24) + 4);
-            fn_1_46B4(lbl_801A6410, *(u32 *)(arg0 + 0x24), (const char *)(data + 0x6CF0), 0x3EC);
+            fn_1_46B4((*(u32 *)&lbl_801A6410), *(u32 *)(arg0 + 0x24), (const char *)(data + 0x6CF0), 0x3EC);
             *(u32 *)(arg0 + 0x24) = 0;
             arg0[2] = 0xFF;
             arg0[3] = 0xFF;
@@ -7603,7 +7356,7 @@ void fn_1_B3900(u8 *arg0) {
 #pragma opt_dead_assignments reset
 /* fzgx:end fn_1_B3900 */
 
-/* fzgx:begin fn_1_B40B4 noprologue */
+/* fzgx:begin fn_1_B40B4 */
 #include "types.h"
 #include "dolphin/card.h"
 #include "dolphin/card/CARDPriv.h"
@@ -7615,45 +7368,34 @@ void fn_1_B40B4(int unused, void *ptr) {
 }
 /* fzgx:end fn_1_B40B4 */
 
-/* fzgx:begin fn_1_B5258 noprologue */
-#include "types.h"
-#include "dolphin/card.h"
-#include "dolphin/card/CARDPriv.h"
-#include "dolphin/dvd.h"
-#include "font.h"
-
-extern void fn_80083DB0(char *destination, const char *source);
-extern char *fn_80083970(char *buffer, const char *source);
-extern unsigned int strlen(const char *string);
-extern char *strncpy(char *destination, const char *source, unsigned int count);
-extern char *strcat(char *destination, const char *source);
-
-void fn_1_B5258(char *destination, void *unused, const char *source, const char *suffix) {
+/* fzgx:begin fn_1_B5258 */
+// Replace the first occurrence of a substring, preserving the surrounding text.
+void fn_1_B5258(char *destination, const char *text, const char *source, const char *suffix) {
     char buffer[0x400];
-    char *prefix;
-    unsigned int source_length;
-    unsigned int prefix_length;
+    char *match;
+    size_t source_length;
+    size_t prefix_length;
 
-    fn_80083DB0(buffer, unused);
-    prefix = fn_80083970(buffer, source);
-    if (prefix == 0) {
+    fn_80083DB0(buffer, text);
+    match = (char *)fn_80083970((u8 *)buffer, (const u8 *)source);
+    if (match == NULL) {
         fn_80083DB0(destination, buffer);
     } else {
         source_length = strlen(source);
-        if (prefix != buffer) {
-            prefix_length = (unsigned int)(prefix - buffer);
+        if (match != buffer) {
+            prefix_length = match - buffer;
             strncpy(destination, buffer, prefix_length);
-            destination[prefix_length] = 0;
+            destination[prefix_length] = '\0';
         } else {
-            destination[0] = 0;
+            destination[0] = '\0';
         }
         strcat(destination, suffix);
-        strcat(destination, prefix + source_length);
+        strcat(destination, match + source_length);
     }
 }
 /* fzgx:end fn_1_B5258 */
 
-/* fzgx:begin fn_1_B5F00 noprologue */
+/* fzgx:begin fn_1_B5F00 */
 #include "types.h"
 #include "dolphin/card.h"
 #include "dolphin/card/CARDPriv.h"
@@ -7682,7 +7424,7 @@ void fn_1_B5F00(B5F00Source *source, B5F00Dest *dest) {
 }
 /* fzgx:end fn_1_B5F00 */
 
-/* fzgx:begin fn_1_B7C00 noprologue */
+/* fzgx:begin fn_1_B7C00 */
 #include "types.h"
 #include "rel/main_rel/globals.h"
 #include "rel/main_rel/memcard.h"
@@ -7707,7 +7449,7 @@ u8 fn_1_B7C00(void) {
 }
 /* fzgx:end fn_1_B7C00 */
 
-/* fzgx:begin fn_1_B7C5C noprologue */
+/* fzgx:begin fn_1_B7C5C */
 #include "types.h"
 #include "rel/main_rel/globals.h"
 #include "rel/main_rel/memcard.h"
@@ -7744,7 +7486,7 @@ s32 fn_1_B7C6C(u32 arg0) {
 }
 /* fzgx:end fn_1_B7C6C */
 
-/* fzgx:begin fn_1_B7CD4 noprologue */
+/* fzgx:begin fn_1_B7CD4 */
 #include "types.h"
 #include "dolphin/card.h"
 #include "dolphin/card/CARDPriv.h"
@@ -7774,7 +7516,7 @@ void fn_1_B7E14(void *memory_card_state) {
 }
 /* fzgx:end fn_1_B7E14 */
 
-/* fzgx:begin fn_1_B7E48 noprologue */
+/* fzgx:begin fn_1_B7E48 */
 #include "types.h"
 #include "rel/main_rel/globals.h"
 #include "rel/main_rel/memcard.h"
@@ -7800,7 +7542,7 @@ int fn_1_B7E48(void) {
 }
 /* fzgx:end fn_1_B7E48 */
 
-/* fzgx:begin fn_1_B7E98 noprologue */
+/* fzgx:begin fn_1_B7E98 */
 #include "types.h"
 #include "rel/main_rel/globals.h"
 #include "rel/main_rel/memcard.h"
@@ -7814,7 +7556,7 @@ int fn_1_B7E98(int index) {
 }
 /* fzgx:end fn_1_B7E98 */
 
-/* fzgx:begin fn_1_B7EC4 noprologue */
+/* fzgx:begin fn_1_B7EC4 */
 #include "types.h"
 #include "rel/main_rel/globals.h"
 #include "rel/main_rel/memcard.h"
@@ -7830,7 +7572,7 @@ int fn_1_B7EC4(int index) {
 }
 /* fzgx:end fn_1_B7EC4 */
 
-/* fzgx:begin fn_1_B7EF8 noprologue */
+/* fzgx:begin fn_1_B7EF8 */
 #include "types.h"
 #include "dolphin/card.h"
 #include "dolphin/card/CARDPriv.h"
@@ -7845,7 +7587,7 @@ u8 fn_1_B7EF8(void) {
 }
 /* fzgx:end fn_1_B7EF8 */
 
-/* fzgx:begin fn_1_B7F08 noprologue */
+/* fzgx:begin fn_1_B7F08 */
 #include "types.h"
 #include "rel/main_rel/globals.h"
 #include "rel/main_rel/memcard.h"
@@ -7855,7 +7597,7 @@ u32 fn_1_B7F08(void) {
 }
 /* fzgx:end fn_1_B7F08 */
 
-/* fzgx:begin fn_1_B7F24 noprologue */
+/* fzgx:begin fn_1_B7F24 */
 #include "types.h"
 #include "rel/main_rel/globals.h"
 #include "rel/main_rel/memcard.h"
@@ -7885,7 +7627,7 @@ void fn_1_B7F24(void) {
 }
 /* fzgx:end fn_1_B7F24 */
 
-/* fzgx:begin fn_1_B7F58 noprologue */
+/* fzgx:begin fn_1_B7F58 */
 #include "types.h"
 #include "rel/main_rel/globals.h"
 #include "rel/main_rel/memcard.h"
@@ -7924,7 +7666,7 @@ int fn_1_B7F58(Result *result) {
 #pragma opt_propagation reset
 /* fzgx:end fn_1_B7F58 */
 
-/* fzgx:begin fn_1_B7FC8 noprologue */
+/* fzgx:begin fn_1_B7FC8 */
 #include "types.h"
 #include "rel/main_rel/globals.h"
 #include "rel/main_rel/memcard.h"
@@ -7935,24 +7677,6 @@ u32 fn_1_B7FC8(void) {
     return lbl_1_bss_718C0.unk_0->unk_0;
 }
 /* fzgx:end fn_1_B7FC8 */
-
-/* fzgx:begin fn_1_B7FDC noprologue */
-#include "types.h"
-#include "dolphin/card.h"
-#include "dolphin/card/CARDPriv.h"
-#include "dolphin/dvd.h"
-#include "font.h"
-
-extern int fn_8002A744(void);
-extern void fn_8002A74C(u16 value);
-
-// Toggles the low 16-bit status value and stores the result.
-void fn_1_B7FDC(void) {
-    u16 value = (u16)fn_8002A744();
-    value = (u16)(value ^ 1);
-    fn_8002A74C(value);
-}
-/* fzgx:end fn_1_B7FDC */
 
 /* fzgx:begin fn_1_B800C noprologue */
 #include "types.h"
@@ -8101,7 +7825,7 @@ u32 fn_1_B8170(s32 card) {
 }
 /* fzgx:end fn_1_B8170 */
 
-/* fzgx:begin fn_1_B9BE0 noprologue */
+/* fzgx:begin fn_1_B9BE0 */
 #include "types.h"
 #include "dolphin/card.h"
 #include "dolphin/card/CARDPriv.h"
@@ -8116,7 +7840,7 @@ void fn_1_B9BE0(void) {
 }
 /* fzgx:end fn_1_B9BE0 */
 
-/* fzgx:begin fn_1_B9C0C noprologue */
+/* fzgx:begin fn_1_B9C0C */
 #include "types.h"
 #include "dolphin/card.h"
 #include "dolphin/card/CARDPriv.h"
@@ -8260,7 +7984,7 @@ void fn_1_BC29C(void) {
 }
 /* fzgx:end fn_1_BC29C */
 
-/* fzgx:begin fn_1_BED04 noprologue */
+/* fzgx:begin fn_1_BED04 */
 #include "types.h"
 #include "font.h"
 
@@ -8451,7 +8175,7 @@ __declspec(section ".fzgxpool") static void fzgx_pool_prime24(void) {
 }
 #pragma section code_type ".text"
 
-extern FontDrawPacket lbl_1_rodata_26F8;
+
 
 /* MWCC may commute a constant to the left of a product; routing the product
  * through a helper keeps retail's operand order. */
@@ -8475,7 +8199,7 @@ void fn_1_BED04(s32 x, s32 y, s32 width, s32 height, u32 *color, s32 flip) {
     if (inner_height < 0) {
         inner_height = 0;
     }
-    packet = lbl_1_rodata_26F8;
+    packet = (*(FontDrawPacket *)&lbl_1_rodata_26F8);
     packet.image = 0xC;
     *(u32 *)packet.color_add = *color;
     packet.z = 0.11f;
@@ -8568,6 +8292,8 @@ void fn_1_BED04(s32 x, s32 y, s32 width, s32 height, u32 *color, s32 flip) {
 #include "dolphin/dvd.h"
 #include "font.h"
 
+extern u32 lbl_1_rodata_26F8;
+
 struct fn_1_BF520_Arg4 {
     u32 unk_0;
 };
@@ -8579,7 +8305,6 @@ extern f32 lbl_1_rodata_4D18;
 extern f32 lbl_1_rodata_5080;
 
 
-extern u32 lbl_1_rodata_26F8;
 extern void fn_1_50164(f32, f32, f32, f32, void *);
 
 struct FzgxCopy_88 { u32 words[22]; };
@@ -8597,7 +8322,7 @@ void fn_1_BF520(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u32 *arg4) {
 }
 /* fzgx:end fn_1_BF520 */
 
-/* fzgx:begin fn_1_BF600 noprologue */
+/* fzgx:begin fn_1_BF600 */
 #include "types.h"
 #include "dolphin/card.h"
 #include "dolphin/card/CARDPriv.h"
@@ -8606,7 +8331,7 @@ void fn_1_BF520(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u32 *arg4) {
 
 struct fn_1_BF600_Copy88 { u32 words[22]; };
 
-extern u32 lbl_1_rodata_26F8;
+
 extern int fn_1_4F734(FontDrawPacket *);
 
 #pragma section code_type ".fzgxpool"
@@ -9082,241 +8807,232 @@ void fn_1_BF9C4(s32 arg0, s32 arg1, s32 arg2, f32 arg3, f32 arg4) {
 }
 /* fzgx:end fn_1_BF9C4 */
 
-/* fzgx:begin fn_1_BFCF8 noprologue */
-#include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/memcard.h"
+/* fzgx:begin fn_1_BFCF8 */
+extern s32 lbl_801A66B4;
 extern void fn_1_49410(void);
 extern void fn_1_49590(f32);
 extern void fn_1_495B0(u32);
-extern void fn_1_494DC(s32);
+extern void fn_1_494DC(s16);
+extern void fn_1_495C8(u8);
+extern void fn_1_4955C(f32, f32);
 extern void fn_1_4966C(f32, f32);
-extern void fn_1_4AE0C(char *, ...);
-
-#include "types.h"
+extern void fn_1_496FC(f32, f32);
+extern void fn_1_4954C(f32);
+extern void fn_1_4AE0C(const char *format, ...);
 
 #pragma section code_type ".fzgxpool"
-static const u32 fzgx_pool_table1[114] = {0x665F7A65, 0x726F5F64, 0x65627567, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x7379735F, 0x652E6269, 0x6E000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000350, 0x00000004, 0xFFFFFFFF, 0xFFFFFFFF, 0x665F7A65, 0x726F0000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000001, 0x7379735F, 0x652E6269, 0x6E000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000B4F, 0x000059E0, 0xFFFFFFFF, 0xFFFFFFFF, 0x667A6700, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000002, 0x67686F5F, 0x652E6269, 0x6E000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000153, 0x00000000, 0xFFFFFFFF, 0xFFFFFFFF, 0x667A6300, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000003, 0x6761725F, 0x652E6269, 0x6E000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000154, 0x00020700, 0xFFFFFFFF, 0xFFFFFFFF, 0x667A6500, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000004, 0x656D625F, 0x652E6269, 0x6E000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000152, 0x00000000, 0xFFFFFFFF, 0xFFFFFFFF, 0x667A7200, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000005, 0x7265705F, 0x652E6269, 0x6E000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000451, 0x00000000, 0xFFFFFFFF, 0xFFFFFFFF};  /* fzgx-allow: A1 retail pool bytes */
-__declspec(section ".fzgxpool") static void fzgx_pool_keep1(void) { const u32 *volatile cp; cp = fzgx_pool_table1; }  /* fzgx-allow: S2 pool primer sink */
+static const u32 fzgx_pool_table1[114] = {0x665f7a65, 0x726f5f64, 0x65627567, 0x0, 0x0, 0x0, 0x0, 0x0, 0x7379735f, 0x652e6269, 0x6e000000, 0x0, 0x0, 0x0, 0x0, 0x350, 0x4, 0xffffffff, 0xffffffff, 0x665f7a65, 0x726f0000, 0x0, 0x0, 0x0, 0x0, 0x0, 0x1, 0x7379735f, 0x652e6269, 0x6e000000, 0x0, 0x0, 0x0, 0x0, 0xb4f, 0x59e0, 0xffffffff, 0xffffffff, 0x667a6700, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x2, 0x67686f5f, 0x652e6269, 0x6e000000, 0x0, 0x0, 0x0, 0x0, 0x153, 0x0, 0xffffffff, 0xffffffff, 0x667a6300, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x3, 0x6761725f, 0x652e6269, 0x6e000000, 0x0, 0x0, 0x0, 0x0, 0x154, 0x20700, 0xffffffff, 0xffffffff, 0x667a6500, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x4, 0x656d625f, 0x652e6269, 0x6e000000, 0x0, 0x0, 0x0, 0x0, 0x152, 0x0, 0xffffffff, 0xffffffff, 0x667a7200, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x5, 0x7265705f, 0x652e6269, 0x6e000000, 0x0, 0x0, 0x0, 0x0, 0x451, 0x0, 0xffffffff, 0xffffffff}; /* fzgx-allow: A1 retail pool bytes */
+__declspec(section ".fzgxpool") static void fzgx_pool_keep1(void) { const u32 *volatile cp; cp = fzgx_pool_table1; } /* fzgx-allow: S2 pool primer sink */
 __declspec(section ".fzgxpool") static void fzgx_pool_prime2(void) {
-    volatile f32 s; volatile f64 d;  /* fzgx-allow: S2 pool primer sinks */
-    s = 0.0f;
-    s = 40960.0f;
-    d = 4503601774854144.0;
-    d = 4503599627370496.0;
-    s = 1.0f;
-    s = 24576.0f;
-    d = 126.0;
-    s = 126.0f;
+volatile f32 s; volatile f64 d; /* fzgx-allow: S2 pool primer sinks */
+    s=0.0f;
+    s=40960.0f;
+    d=4503601774854144.0;
+    d=4503599627370496.0;
+    s=1.0f;
+    s=24576.0f;
+    d=126.0;
+    s=126.0f;
 }
-static const u32 fzgx_pool_table3[4] = {0x00000000, 0xFFFFFF00, 0x00000000, 0xFFFFFF00};  /* fzgx-allow: A1 retail pool bytes */
-__declspec(section ".fzgxpool") static void fzgx_pool_keep3(void) { const u32 *volatile cp; cp = fzgx_pool_table3; }  /* fzgx-allow: S2 pool primer sink */
+static const u32 fzgx_pool_table3[4] = {0x0, 0xffffff00, 0x0, 0xffffff00}; /* fzgx-allow: A1 retail pool bytes */
+__declspec(section ".fzgxpool") static void fzgx_pool_keep3(void) { const u32 *volatile cp; cp = fzgx_pool_table3; } /* fzgx-allow: S2 pool primer sink */
 __declspec(section ".fzgxpool") static void fzgx_pool_prime4(void) {
-    volatile f32 s; volatile f64 d;  /* fzgx-allow: S2 pool primer sinks */
-    s = 10.0f;
+volatile f32 s; volatile f64 d; /* fzgx-allow: S2 pool primer sinks */
+    s=10.0f;
 }
-static const u32 fzgx_pool_table5[9] = {0xA0505000, 0xA0A0A000, 0xFFFFFF00, 0x70707000, 0x00000000, 0x70707000, 0x00000000, 0xFFFFFF00, 0x00000000};  /* fzgx-allow: A1 retail pool bytes */
-__declspec(section ".fzgxpool") static void fzgx_pool_keep5(void) { const u32 *volatile cp; cp = fzgx_pool_table5; }  /* fzgx-allow: S2 pool primer sink */
+static const u32 fzgx_pool_table5[9] = {0xa0505000, 0xa0a0a000, 0xffffff00, 0x70707000, 0x0, 0x70707000, 0x0, 0xffffff00, 0x0}; /* fzgx-allow: A1 retail pool bytes */
+__declspec(section ".fzgxpool") static void fzgx_pool_keep5(void) { const u32 *volatile cp; cp = fzgx_pool_table5; } /* fzgx-allow: S2 pool primer sink */
 __declspec(section ".fzgxpool") static void fzgx_pool_prime6(void) {
-    volatile f32 s; volatile f64 d;  /* fzgx-allow: S2 pool primer sinks */
-    s = 0.0010000000474974513f;
-    s = 0.800000011920929f;
-    s = -1.0f;
-    s = 8.0f;
-    s = 0.5f;
-    s = 4.0f;
-    s = 320.0f;
-    s = 152.0f;
-    s = 288.0f;
-    s = 280.0f;
-    s = 0.10500000417232513f;
-    s = 352.0f;
-    s = 350.0f;
-    s = 0.009999999776482582f;
+volatile f32 s; volatile f64 d; /* fzgx-allow: S2 pool primer sinks */
+    s=0.0010000000474974513f;
+    s=0.800000011920929f;
+    s=-1.0f;
+    s=8.0f;
+    s=0.5f;
+    s=4.0f;
+    s=320.0f;
+    s=152.0f;
+    s=288.0f;
+    s=280.0f;
+    s=0.10500000417232513f;
+    s=352.0f;
+    s=350.0f;
+    s=0.009999999776482582f;
 }
-static const u32 fzgx_pool_table7[9] = {0xA0505000, 0xA0A0A000, 0xFFFFFF00, 0x70707000, 0x00000000, 0x70707000, 0x00000000, 0xFFFFFF00, 0x00000000};  /* fzgx-allow: A1 retail pool bytes */
-__declspec(section ".fzgxpool") static void fzgx_pool_keep7(void) { const u32 *volatile cp; cp = fzgx_pool_table7; }  /* fzgx-allow: S2 pool primer sink */
+static const u32 fzgx_pool_table7[9] = {0xa0505000, 0xa0a0a000, 0xffffff00, 0x70707000, 0x0, 0x70707000, 0x0, 0xffffff00, 0x0}; /* fzgx-allow: A1 retail pool bytes */
+__declspec(section ".fzgxpool") static void fzgx_pool_keep7(void) { const u32 *volatile cp; cp = fzgx_pool_table7; } /* fzgx-allow: S2 pool primer sink */
 __declspec(section ".fzgxpool") static void fzgx_pool_prime8(void) {
-    volatile f32 s; volatile f64 d;  /* fzgx-allow: S2 pool primer sinks */
-    s = 198.0f;
-    s = 298.0f;
-    s = 0.0949999988079071f;
+volatile f32 s; volatile f64 d; /* fzgx-allow: S2 pool primer sinks */
+    s=198.0f;
+    s=298.0f;
+    s=0.0949999988079071f;
 }
-static const u32 fzgx_pool_table9[9] = {0xA0505000, 0xA0A0A000, 0xFFFFFF00, 0x70707000, 0x00000000, 0x70707000, 0x00000000, 0xFFFFFF00, 0x00000000};  /* fzgx-allow: A1 retail pool bytes */
-__declspec(section ".fzgxpool") static void fzgx_pool_keep9(void) { const u32 *volatile cp; cp = fzgx_pool_table9; }  /* fzgx-allow: S2 pool primer sink */
+static const u32 fzgx_pool_table9[9] = {0xa0505000, 0xa0a0a000, 0xffffff00, 0x70707000, 0x0, 0x70707000, 0x0, 0xffffff00, 0x0}; /* fzgx-allow: A1 retail pool bytes */
+__declspec(section ".fzgxpool") static void fzgx_pool_keep9(void) { const u32 *volatile cp; cp = fzgx_pool_table9; } /* fzgx-allow: S2 pool primer sink */
 __declspec(section ".fzgxpool") static void fzgx_pool_prime10(void) {
-    volatile f32 s; volatile f64 d;  /* fzgx-allow: S2 pool primer sinks */
-    s = 192.0f;
+volatile f32 s; volatile f64 d; /* fzgx-allow: S2 pool primer sinks */
+    s=192.0f;
 }
-static const u32 fzgx_pool_table11[16] = {0xF0F0F000, 0x9090FF00, 0xFFFF6000, 0xFFFF6000, 0xFFFFFF00, 0xFFFFFF00, 0xFFA0A000, 0xFFFF6000, 0xFFFF6000, 0xFFFFFF00, 0xFFFFFF00, 0xFFA0A000, 0xFFFF6000, 0xFFFFFF00, 0xFFFFFF00, 0xFFA0A000};  /* fzgx-allow: A1 retail pool bytes */
-__declspec(section ".fzgxpool") static void fzgx_pool_keep11(void) { const u32 *volatile cp; cp = fzgx_pool_table11; }  /* fzgx-allow: S2 pool primer sink */
+static const u32 fzgx_pool_table11[16] = {0xf0f0f000, 0x9090ff00, 0xffff6000, 0xffff6000, 0xffffff00, 0xffffff00, 0xffa0a000, 0xffff6000, 0xffff6000, 0xffffff00, 0xffffff00, 0xffa0a000, 0xffff6000, 0xffffff00, 0xffffff00, 0xffa0a000}; /* fzgx-allow: A1 retail pool bytes */
+__declspec(section ".fzgxpool") static void fzgx_pool_keep11(void) { const u32 *volatile cp; cp = fzgx_pool_table11; } /* fzgx-allow: S2 pool primer sink */
 __declspec(section ".fzgxpool") static void fzgx_pool_prime12(void) {
-    volatile f32 s; volatile f64 d;  /* fzgx-allow: S2 pool primer sinks */
-    s = 1.0000000116860974e-07f;
-    d = 1.8;
-    d = 0.0;
-    d = 1.0;
-    d = 1.3;
-    d = 0.5;
-    d = 0.2;
-    d = 0.7;
-    d = 0.3;
-    s = 225.0f;
-    s = 0.09000000357627869f;
-    s = 0.699999988079071f;
+volatile f32 s; volatile f64 d; /* fzgx-allow: S2 pool primer sinks */
+    s=1.0000000116860974e-07f;
+    d=1.8;
+    d=0.0;
+    d=1.0;
+    d=1.3;
+    d=0.5;
+    d=0.2;
+    d=0.7;
+    d=0.3;
+    s=225.0f;
+    s=0.09000000357627869f;
+    s=0.699999988079071f;
 }
-static const u32 fzgx_pool_table13[1] = {0x00000000};  /* fzgx-allow: A1 retail pool bytes */
-__declspec(section ".fzgxpool") static void fzgx_pool_keep13(void) { const u32 *volatile cp; cp = fzgx_pool_table13; }  /* fzgx-allow: S2 pool primer sink */
+static const u32 fzgx_pool_table13[1] = {0x0}; /* fzgx-allow: A1 retail pool bytes */
+__declspec(section ".fzgxpool") static void fzgx_pool_keep13(void) { const u32 *volatile cp; cp = fzgx_pool_table13; } /* fzgx-allow: S2 pool primer sink */
 __declspec(section ".fzgxpool") static void fzgx_pool_prime14(void) {
-    volatile f32 s; volatile f64 d;  /* fzgx-allow: S2 pool primer sinks */
-    d = 125.0;
-    d = 45.0;
-    s = 310.0f;
-    s = 258.0f;
-    s = 17.0f;
-    s = 15.625f;
-    s = 0.5625f;
-    s = 0.75f;
-    d = 40.0;
-    s = 340.0f;
-    s = 370.0f;
-    s = 10.416666984558105f;
-    s = 380.0f;
+volatile f32 s; volatile f64 d; /* fzgx-allow: S2 pool primer sinks */
+    d=125.0;
+    d=45.0;
+    s=310.0f;
+    s=258.0f;
+    s=17.0f;
+    s=15.625f;
+    s=0.5625f;
+    s=0.75f;
+    d=40.0;
+    s=340.0f;
+    s=370.0f;
+    s=10.416666984558105f;
+    s=380.0f;
 }
-static const u32 fzgx_pool_table15[7] = {0xFFFFFF00, 0xFFFFFF00, 0xFFFFFF00, 0xFFFFFF00, 0xFFFFFF00, 0xFFFFFF00, 0xFFFFFF00};  /* fzgx-allow: A1 retail pool bytes */
-__declspec(section ".fzgxpool") static void fzgx_pool_keep15(void) { const u32 *volatile cp; cp = fzgx_pool_table15; }  /* fzgx-allow: S2 pool primer sink */
+static const u32 fzgx_pool_table15[7] = {0xffffff00, 0xffffff00, 0xffffff00, 0xffffff00, 0xffffff00, 0xffffff00, 0xffffff00}; /* fzgx-allow: A1 retail pool bytes */
+__declspec(section ".fzgxpool") static void fzgx_pool_keep15(void) { const u32 *volatile cp; cp = fzgx_pool_table15; } /* fzgx-allow: S2 pool primer sink */
 __declspec(section ".fzgxpool") static void fzgx_pool_prime16(void) {
-    volatile f32 s; volatile f64 d;  /* fzgx-allow: S2 pool primer sinks */
-    s = 1.5f;
-    s = 40.0f;
-    s = 120.0f;
-    s = 9.999999747378752e-05f;
-    s = 180.0f;
-    s = 240.0f;
-    s = 220.0f;
-    s = 190.0f;
-    s = 200.0f;
-    s = 360.0f;
+volatile f32 s; volatile f64 d; /* fzgx-allow: S2 pool primer sinks */
+    s=1.5f;
+    s=40.0f;
+    s=120.0f;
+    s=9.999999747378752e-05f;
+    s=180.0f;
+    s=240.0f;
+    s=220.0f;
+    s=190.0f;
+    s=200.0f;
+    s=360.0f;
 }
-static const u32 fzgx_pool_table17[2] = {0xFF402000, 0xFFFFFF00};  /* fzgx-allow: A1 retail pool bytes */
-__declspec(section ".fzgxpool") static void fzgx_pool_keep17(void) { const u32 *volatile cp; cp = fzgx_pool_table17; }  /* fzgx-allow: S2 pool primer sink */
+static const u32 fzgx_pool_table17[2] = {0xff402000, 0xffffff00}; /* fzgx-allow: A1 retail pool bytes */
+__declspec(section ".fzgxpool") static void fzgx_pool_keep17(void) { const u32 *volatile cp; cp = fzgx_pool_table17; } /* fzgx-allow: S2 pool primer sink */
 __declspec(section ".fzgxpool") static void fzgx_pool_prime18(void) {
-    volatile f32 s; volatile f64 d;  /* fzgx-allow: S2 pool primer sinks */
-    s = 15.0f;
-    s = 5.0f;
-    s = 100.0f;
-    s = 1.1111111640930176f;
-    s = 3.0f;
-    s = 185.0f;
-    s = 255.0f;
-    s = 0.019999999552965164f;
+volatile f32 s; volatile f64 d; /* fzgx-allow: S2 pool primer sinks */
+    s=15.0f;
+    s=5.0f;
+    s=100.0f;
+    s=1.1111111640930176f;
+    s=3.0f;
+    s=185.0f;
+    s=255.0f;
+    s=0.019999999552965164f;
 }
-static const u32 fzgx_pool_table19[8] = {0xA0505000, 0xA0A0A000, 0xFFFFFF00, 0x70707000, 0x00000000, 0x70707000, 0x00000000, 0xFFFFFF00};  /* fzgx-allow: A1 retail pool bytes */
-__declspec(section ".fzgxpool") static void fzgx_pool_keep19(void) { const u32 *volatile cp; cp = fzgx_pool_table19; }  /* fzgx-allow: S2 pool primer sink */
+static const u32 fzgx_pool_table19[8] = {0xa0505000, 0xa0a0a000, 0xffffff00, 0x70707000, 0x0, 0x70707000, 0x0, 0xffffff00}; /* fzgx-allow: A1 retail pool bytes */
+__declspec(section ".fzgxpool") static void fzgx_pool_keep19(void) { const u32 *volatile cp; cp = fzgx_pool_table19; } /* fzgx-allow: S2 pool primer sink */
 __declspec(section ".fzgxpool") static void fzgx_pool_prime20(void) {
-    volatile f32 s; volatile f64 d;  /* fzgx-allow: S2 pool primer sinks */
-    s = 270.0f;
-    s = 4.999999873689376e-05f;
+volatile f32 s; volatile f64 d; /* fzgx-allow: S2 pool primer sinks */
+    s=270.0f;
+    s=4.999999873689376e-05f;
 }
-static const u32 fzgx_pool_table21[46] = {0x32000000, 0x00320000, 0x00000000, 0xFFFFFFFF, 0xFFFFA000, 0x80808000, 0xFFFFA000, 0x80808000, 0xFFFFFF00, 0xFFFFFF00, 0xFFFFA000, 0xFFFFA000, 0xFFFFA000, 0x70707000, 0xA0808000, 0xFFFFFFFF, 0x70707000, 0xFFFF4000, 0x00FFFF00, 0x80808000, 0xFFFF4000, 0xFFFFFF00, 0xFFFFA0FF, 0xA0A0FFFF, 0xFFA0A0FF, 0xFFFFFFFF, 0x808080FF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0x00000000, 0x00000000, 0xFFFFA000, 0x00FFFF00, 0x80808000, 0x80808000, 0xFFFFFF00, 0x00FFFF00, 0x80808000, 0x00FFFF00, 0xFFFFFF00, 0xFFFFFF00, 0xFFFFFF00, 0xFFFFFFFF, 0x808080FF, 0xFFFFFFFF};  /* fzgx-allow: A1 retail pool bytes */
-__declspec(section ".fzgxpool") static void fzgx_pool_keep21(void) { const u32 *volatile cp; cp = fzgx_pool_table21; }  /* fzgx-allow: S2 pool primer sink */
+static const u32 fzgx_pool_table21[46] = {0x32000000, 0x320000, 0x0, 0xffffffff, 0xffffa000, 0x80808000, 0xffffa000, 0x80808000, 0xffffff00, 0xffffff00, 0xffffa000, 0xffffa000, 0xffffa000, 0x70707000, 0xa0808000, 0xffffffff, 0x70707000, 0xffff4000, 0xffff00, 0x80808000, 0xffff4000, 0xffffff00, 0xffffa0ff, 0xa0a0ffff, 0xffa0a0ff, 0xffffffff, 0x808080ff, 0xffffffff, 0xffffffff, 0xffffffff, 0x0, 0x0, 0xffffa000, 0xffff00, 0x80808000, 0x80808000, 0xffffff00, 0xffff00, 0x80808000, 0xffff00, 0xffffff00, 0xffffff00, 0xffffff00, 0xffffffff, 0x808080ff, 0xffffffff}; /* fzgx-allow: A1 retail pool bytes */
+__declspec(section ".fzgxpool") static void fzgx_pool_keep21(void) { const u32 *volatile cp; cp = fzgx_pool_table21; } /* fzgx-allow: S2 pool primer sink */
 __declspec(section ".fzgxpool") static void fzgx_pool_prime22(void) {
-    volatile f32 s; volatile f64 d;  /* fzgx-allow: S2 pool primer sinks */
-    s = 300.0f;
-    s = 0.020999999716877937f;
-    s = 0.020499998703598976f;
-    s = 0.020549999549984932f;
-    s = -2.0f;
-    s = 95.0f;
-    s = 80.0f;
-    s = 54.0f;
-    s = 73.0f;
-    s = 203.0f;
-    s = 164.0f;
-    s = 333.0f;
-    s = 215.0f;
-    d = 112.0;
-    d = 64.0;
-    s = 86.0f;
+volatile f32 s; volatile f64 d; /* fzgx-allow: S2 pool primer sinks */
+    s=300.0f;
+    s=0.020999999716877937f;
+    s=0.020499998703598976f;
+    s=0.020549999549984932f;
+    s=-2.0f;
+    s=95.0f;
+    s=80.0f;
+    s=54.0f;
+    s=73.0f;
+    s=203.0f;
+    s=164.0f;
+    s=333.0f;
+    s=215.0f;
+    d=112.0;
+    d=64.0;
+    s=86.0f;
 }
-static const u32 fzgx_pool_table23[1] = {0x00000000};  /* fzgx-allow: A1 retail pool bytes */
-__declspec(section ".fzgxpool") static void fzgx_pool_keep23(void) { const u32 *volatile cp; cp = fzgx_pool_table23; }  /* fzgx-allow: S2 pool primer sink */
+static const u32 fzgx_pool_table23[1] = {0x0}; /* fzgx-allow: A1 retail pool bytes */
+__declspec(section ".fzgxpool") static void fzgx_pool_keep23(void) { const u32 *volatile cp; cp = fzgx_pool_table23; } /* fzgx-allow: S2 pool primer sink */
 __declspec(section ".fzgxpool") static void fzgx_pool_prime24(void) {
-    volatile f32 s; volatile f64 d;  /* fzgx-allow: S2 pool primer sinks */
-    d = 8.399999999999999;
-    s = 0.9900000095367432f;
-    s = 0.8999999761581421f;
-    s = 0.5400000214576721f;
-    s = -4.0f;
-    s = 16.0f;
-    s = 55.0f;
-    s = 0.30000001192092896f;
-    s = 0.07999999821186066f;
-    s = 0.550000011920929f;
-    s = 0.06000000238418579f;
-    s = 64.0f;
-    s = 460.0f;
-    s = 0.6499999761581421f;
-    s = 130.0f;
-    d = 60.0;
-    d = 6.0;
-    d = 110.0;
-    d = 10.0;
-    d = 255.0;
-    d = 320.0;
-    s = 0.06499999761581421f;
-    s = 53.0f;
-    s = 0.07000000029802322f;
-    s = 204.0f;
-    s = 1.2000000476837158f;
-    s = 0.6000000238418579f;
-    s = 308.0f;
-    s = 337.0f;
-    s = 1.0714285373687744f;
-    s = 0.10999999940395355f;
-    s = 0.3333333432674408f;
-    s = 0.6666666865348816f;
-    s = 0.125f;
-    s = 0.1666666716337204f;
-    s = 0.1428571492433548f;
-    s = 22.0f;
-    s = 24.0f;
-    s = 2.0f;
-    s = 38.0f;
+volatile f32 s; volatile f64 d; /* fzgx-allow: S2 pool primer sinks */
+    d=8.399999999999999;
+    s=0.9900000095367432f;
+    s=0.8999999761581421f;
+    s=0.5400000214576721f;
+    s=-4.0f;
+    s=16.0f;
+    s=55.0f;
+    s=0.30000001192092896f;
+    s=0.07999999821186066f;
+    s=0.550000011920929f;
+    s=0.06000000238418579f;
+    s=64.0f;
+    s=460.0f;
+    s=0.6499999761581421f;
+    s=130.0f;
+    d=60.0;
+    d=6.0;
+    d=110.0;
+    d=10.0;
+    d=255.0;
+    d=320.0;
+    s=0.06499999761581421f;
+    s=53.0f;
+    s=0.07000000029802322f;
+    s=204.0f;
+    s=1.2000000476837158f;
+    s=0.6000000238418579f;
+    s=308.0f;
+    s=337.0f;
+    s=1.0714285373687744f;
+    s=0.10999999940395355f;
+    s=0.3333333432674408f;
+    s=0.6666666865348816f;
+    s=0.125f;
+    s=0.1666666716337204f;
+    s=0.1428571492433548f;
+    s=22.0f;
+    s=24.0f;
+    s=2.0f;
+    s=38.0f;
 }
-static const u32 fzgx_pool_table25[1] = {0xB0FFB000};  /* fzgx-allow: A1 retail pool bytes */
-__declspec(section ".fzgxpool") static void fzgx_pool_keep25(void) { const u32 *volatile cp; cp = fzgx_pool_table25; }  /* fzgx-allow: S2 pool primer sink */
+static const u32 fzgx_pool_table25[1] = {0xb0ffb000}; /* fzgx-allow: A1 retail pool bytes */
+__declspec(section ".fzgxpool") static void fzgx_pool_keep25(void) { const u32 *volatile cp; cp = fzgx_pool_table25; } /* fzgx-allow: S2 pool primer sink */
 __declspec(section ".fzgxpool") static void fzgx_pool_prime26(void) {
-    volatile f32 s; volatile f64 d;  /* fzgx-allow: S2 pool primer sinks */
-    d = 1.2;
+volatile f32 s; volatile f64 d; /* fzgx-allow: S2 pool primer sinks */
+    d=1.2;
 }
 #pragma section code_type ".text"
 
-extern s32 lbl_801A66B4;
 
-extern void fn_1_495C8(s32);
-extern void fn_1_4955C(f32, f32);
-extern void fn_1_496FC(f32, f32);
-extern void fn_1_4954C(f32);
-
-void fn_1_BFCF8(void *arg0, void *arg1, void *arg2, s32 arg3, s32 arg4, f32 arg5, f32 arg6) {
+// Draw formatted text with the requested position, scale, and opacity.
+void fn_1_BFCF8(void *arg0, void *arg1, void *arg2, s32 x, s32 y, f32 scale, f32 opacity) {
     fn_1_49410();
-
     if (lbl_801A66B4 != 5) {
         fn_1_49590(0.5f);
-        // fzgx-allow: A1 target uses the absolute sentinel address.
-        fn_1_495B0((s32)0x80000000);
+        fn_1_495B0(0x80000000u);
     }
-
     fn_1_494DC(6);
-    // fzgx-allow: A1 target uses the absolute sentinel address.
-    fn_1_495B0((s32)0x80000000);
+    fn_1_495B0(0x80000000u);
     fn_1_495C8(1);
-    fn_1_4955C(0.9f * arg5, (f32)(1.2 * arg5));
+    fn_1_4955C(0.9f * scale, (f32)(1.2 * scale));
     fn_1_4966C(2.0f, 0.0f);
-    fn_1_496FC((f32)arg3, (f32)arg4);
-    fn_1_4954C(arg6);
-    fn_1_4AE0C((*(char (*)[15])&lbl_1_data_3CF40), arg0, arg1, arg2);
+    fn_1_496FC((f32)x, (f32)y);
+    fn_1_4954C(opacity);
+    fn_1_4AE0C((const char *)lbl_1_data_3CF40, arg0, arg1, arg2);
 }
 /* fzgx:end fn_1_BFCF8 */
 
@@ -9585,279 +9301,133 @@ void fn_1_C023C(s32 a, s32 b, s32 c, s32 d, s32 e, s32 f, s32 g, f32 value) {
 }
 /* fzgx:end fn_1_C023C */
 
-/* fzgx:begin fn_1_C0374 noprologue */
-#include "types.h"
-#include "dolphin/card.h"
-#include "dolphin/card/CARDPriv.h"
-#include "dolphin/dvd.h"
-#include "font.h"
-
+/* fzgx:begin fn_1_C0374 */
+extern s32 lbl_801A66B4;
 extern void fn_1_49410(void);
 extern void fn_1_49590(f32);
 extern void fn_1_495B0(u32);
-extern void fn_1_5233C(void);
-extern void fn_1_49738(void (*)(void));
-extern void fn_1_49748(f32);
-extern void fn_1_4966C(f32, f32);
 extern void fn_1_49614(void);
-
-#pragma section code_type ".fzgxpool"
-static const u32 fzgx_pool_table1[114] = {0x665F7A65, 0x726F5F64, 0x65627567, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x7379735F, 0x652E6269, 0x6E000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000350, 0x00000004, 0xFFFFFFFF, 0xFFFFFFFF, 0x665F7A65, 0x726F0000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000001, 0x7379735F, 0x652E6269, 0x6E000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000B4F, 0x000059E0, 0xFFFFFFFF, 0xFFFFFFFF, 0x667A6700, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000002, 0x67686F5F, 0x652E6269, 0x6E000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000153, 0x00000000, 0xFFFFFFFF, 0xFFFFFFFF, 0x667A6300, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000003, 0x6761725F, 0x652E6269, 0x6E000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000154, 0x00020700, 0xFFFFFFFF, 0xFFFFFFFF, 0x667A6500, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000004, 0x656D625F, 0x652E6269, 0x6E000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000152, 0x00000000, 0xFFFFFFFF, 0xFFFFFFFF, 0x667A7200, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000005, 0x7265705F, 0x652E6269, 0x6E000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000451, 0x00000000, 0xFFFFFFFF, 0xFFFFFFFF};  /* fzgx-allow: A1 retail pool bytes */
-__declspec(section ".fzgxpool") static void fzgx_pool_keep1(void) { const u32 *volatile cp; cp = fzgx_pool_table1; }  /* fzgx-allow: S2 pool primer sink */
-__declspec(section ".fzgxpool") static void fzgx_pool_prime2(void) {
-    volatile f32 s; volatile f64 d;  /* fzgx-allow: S2 pool primer sinks */
-    s = 0.0f;
-    s = 40960.0f;
-    d = 4503601774854144.0;
-    d = 4503599627370496.0;
-    s = 1.0f;
-    s = 24576.0f;
-    d = 126.0;
-    s = 126.0f;
-}
-static const u32 fzgx_pool_table3[4] = {0x00000000, 0xFFFFFF00, 0x00000000, 0xFFFFFF00};  /* fzgx-allow: A1 retail pool bytes */
-__declspec(section ".fzgxpool") static void fzgx_pool_keep3(void) { const u32 *volatile cp; cp = fzgx_pool_table3; }  /* fzgx-allow: S2 pool primer sink */
-__declspec(section ".fzgxpool") static void fzgx_pool_prime4(void) {
-    volatile f32 s; volatile f64 d;  /* fzgx-allow: S2 pool primer sinks */
-    s = 10.0f;
-}
-static const u32 fzgx_pool_table5[9] = {0xA0505000, 0xA0A0A000, 0xFFFFFF00, 0x70707000, 0x00000000, 0x70707000, 0x00000000, 0xFFFFFF00, 0x00000000};  /* fzgx-allow: A1 retail pool bytes */
-__declspec(section ".fzgxpool") static void fzgx_pool_keep5(void) { const u32 *volatile cp; cp = fzgx_pool_table5; }  /* fzgx-allow: S2 pool primer sink */
-__declspec(section ".fzgxpool") static void fzgx_pool_prime6(void) {
-    volatile f32 s; volatile f64 d;  /* fzgx-allow: S2 pool primer sinks */
-    s = 0.0010000000474974513f;
-    s = 0.800000011920929f;
-    s = -1.0f;
-    s = 8.0f;
-    s = 0.5f;
-    s = 4.0f;
-    s = 320.0f;
-    s = 152.0f;
-    s = 288.0f;
-    s = 280.0f;
-    s = 0.10500000417232513f;
-    s = 352.0f;
-    s = 350.0f;
-    s = 0.009999999776482582f;
-}
-static const u32 fzgx_pool_table7[9] = {0xA0505000, 0xA0A0A000, 0xFFFFFF00, 0x70707000, 0x00000000, 0x70707000, 0x00000000, 0xFFFFFF00, 0x00000000};  /* fzgx-allow: A1 retail pool bytes */
-__declspec(section ".fzgxpool") static void fzgx_pool_keep7(void) { const u32 *volatile cp; cp = fzgx_pool_table7; }  /* fzgx-allow: S2 pool primer sink */
-__declspec(section ".fzgxpool") static void fzgx_pool_prime8(void) {
-    volatile f32 s; volatile f64 d;  /* fzgx-allow: S2 pool primer sinks */
-    s = 198.0f;
-    s = 298.0f;
-    s = 0.0949999988079071f;
-}
-static const u32 fzgx_pool_table9[9] = {0xA0505000, 0xA0A0A000, 0xFFFFFF00, 0x70707000, 0x00000000, 0x70707000, 0x00000000, 0xFFFFFF00, 0x00000000};  /* fzgx-allow: A1 retail pool bytes */
-__declspec(section ".fzgxpool") static void fzgx_pool_keep9(void) { const u32 *volatile cp; cp = fzgx_pool_table9; }  /* fzgx-allow: S2 pool primer sink */
-__declspec(section ".fzgxpool") static void fzgx_pool_prime10(void) {
-    volatile f32 s; volatile f64 d;  /* fzgx-allow: S2 pool primer sinks */
-    s = 192.0f;
-}
-static const u32 fzgx_pool_table11[16] = {0xF0F0F000, 0x9090FF00, 0xFFFF6000, 0xFFFF6000, 0xFFFFFF00, 0xFFFFFF00, 0xFFA0A000, 0xFFFF6000, 0xFFFF6000, 0xFFFFFF00, 0xFFFFFF00, 0xFFA0A000, 0xFFFF6000, 0xFFFFFF00, 0xFFFFFF00, 0xFFA0A000};  /* fzgx-allow: A1 retail pool bytes */
-__declspec(section ".fzgxpool") static void fzgx_pool_keep11(void) { const u32 *volatile cp; cp = fzgx_pool_table11; }  /* fzgx-allow: S2 pool primer sink */
-__declspec(section ".fzgxpool") static void fzgx_pool_prime12(void) {
-    volatile f32 s; volatile f64 d;  /* fzgx-allow: S2 pool primer sinks */
-    s = 1.0000000116860974e-07f;
-    d = 1.8;
-    d = 0.0;
-    d = 1.0;
-    d = 1.3;
-    d = 0.5;
-    d = 0.2;
-    d = 0.7;
-    d = 0.3;
-    s = 225.0f;
-    s = 0.09000000357627869f;
-    s = 0.699999988079071f;
-}
-static const u32 fzgx_pool_table13[1] = {0x00000000};  /* fzgx-allow: A1 retail pool bytes */
-__declspec(section ".fzgxpool") static void fzgx_pool_keep13(void) { const u32 *volatile cp; cp = fzgx_pool_table13; }  /* fzgx-allow: S2 pool primer sink */
-__declspec(section ".fzgxpool") static void fzgx_pool_prime14(void) {
-    volatile f32 s; volatile f64 d;  /* fzgx-allow: S2 pool primer sinks */
-    d = 125.0;
-    d = 45.0;
-    s = 310.0f;
-    s = 258.0f;
-    s = 17.0f;
-    s = 15.625f;
-    s = 0.5625f;
-    s = 0.75f;
-    d = 40.0;
-    s = 340.0f;
-    s = 370.0f;
-    s = 10.416666984558105f;
-    s = 380.0f;
-}
-static const u32 fzgx_pool_table15[7] = {0xFFFFFF00, 0xFFFFFF00, 0xFFFFFF00, 0xFFFFFF00, 0xFFFFFF00, 0xFFFFFF00, 0xFFFFFF00};  /* fzgx-allow: A1 retail pool bytes */
-__declspec(section ".fzgxpool") static void fzgx_pool_keep15(void) { const u32 *volatile cp; cp = fzgx_pool_table15; }  /* fzgx-allow: S2 pool primer sink */
-__declspec(section ".fzgxpool") static void fzgx_pool_prime16(void) {
-    volatile f32 s; volatile f64 d;  /* fzgx-allow: S2 pool primer sinks */
-    s = 1.5f;
-    s = 40.0f;
-    s = 120.0f;
-    s = 9.999999747378752e-05f;
-    s = 180.0f;
-    s = 240.0f;
-    s = 220.0f;
-    s = 190.0f;
-    s = 200.0f;
-    s = 360.0f;
-}
-static const u32 fzgx_pool_table17[2] = {0xFF402000, 0xFFFFFF00};  /* fzgx-allow: A1 retail pool bytes */
-__declspec(section ".fzgxpool") static void fzgx_pool_keep17(void) { const u32 *volatile cp; cp = fzgx_pool_table17; }  /* fzgx-allow: S2 pool primer sink */
-__declspec(section ".fzgxpool") static void fzgx_pool_prime18(void) {
-    volatile f32 s; volatile f64 d;  /* fzgx-allow: S2 pool primer sinks */
-    s = 15.0f;
-    s = 5.0f;
-    s = 100.0f;
-    s = 1.1111111640930176f;
-    s = 3.0f;
-    s = 185.0f;
-    s = 255.0f;
-    s = 0.019999999552965164f;
-}
-static const u32 fzgx_pool_table19[8] = {0xA0505000, 0xA0A0A000, 0xFFFFFF00, 0x70707000, 0x00000000, 0x70707000, 0x00000000, 0xFFFFFF00};  /* fzgx-allow: A1 retail pool bytes */
-__declspec(section ".fzgxpool") static void fzgx_pool_keep19(void) { const u32 *volatile cp; cp = fzgx_pool_table19; }  /* fzgx-allow: S2 pool primer sink */
-__declspec(section ".fzgxpool") static void fzgx_pool_prime20(void) {
-    volatile f32 s; volatile f64 d;  /* fzgx-allow: S2 pool primer sinks */
-    s = 270.0f;
-    s = 4.999999873689376e-05f;
-}
-static const u32 fzgx_pool_table21[46] = {0x32000000, 0x00320000, 0x00000000, 0xFFFFFFFF, 0xFFFFA000, 0x80808000, 0xFFFFA000, 0x80808000, 0xFFFFFF00, 0xFFFFFF00, 0xFFFFA000, 0xFFFFA000, 0xFFFFA000, 0x70707000, 0xA0808000, 0xFFFFFFFF, 0x70707000, 0xFFFF4000, 0x00FFFF00, 0x80808000, 0xFFFF4000, 0xFFFFFF00, 0xFFFFA0FF, 0xA0A0FFFF, 0xFFA0A0FF, 0xFFFFFFFF, 0x808080FF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0x00000000, 0x00000000, 0xFFFFA000, 0x00FFFF00, 0x80808000, 0x80808000, 0xFFFFFF00, 0x00FFFF00, 0x80808000, 0x00FFFF00, 0xFFFFFF00, 0xFFFFFF00, 0xFFFFFF00, 0xFFFFFFFF, 0x808080FF, 0xFFFFFFFF};  /* fzgx-allow: A1 retail pool bytes */
-__declspec(section ".fzgxpool") static void fzgx_pool_keep21(void) { const u32 *volatile cp; cp = fzgx_pool_table21; }  /* fzgx-allow: S2 pool primer sink */
-__declspec(section ".fzgxpool") static void fzgx_pool_prime22(void) {
-    volatile f32 s; volatile f64 d;  /* fzgx-allow: S2 pool primer sinks */
-    s = 300.0f;
-    s = 0.020999999716877937f;
-    s = 0.020499998703598976f;
-    s = 0.020549999549984932f;
-    s = -2.0f;
-    s = 95.0f;
-    s = 80.0f;
-    s = 54.0f;
-    s = 73.0f;
-    s = 203.0f;
-    s = 164.0f;
-    s = 333.0f;
-    s = 215.0f;
-    d = 112.0;
-    d = 64.0;
-    s = 86.0f;
-}
-static const u32 fzgx_pool_table23[1] = {0x00000000};  /* fzgx-allow: A1 retail pool bytes */
-__declspec(section ".fzgxpool") static void fzgx_pool_keep23(void) { const u32 *volatile cp; cp = fzgx_pool_table23; }  /* fzgx-allow: S2 pool primer sink */
-__declspec(section ".fzgxpool") static void fzgx_pool_prime24(void) {
-    volatile f32 s; volatile f64 d;  /* fzgx-allow: S2 pool primer sinks */
-    d = 8.399999999999999;
-    s = 0.9900000095367432f;
-    s = 0.8999999761581421f;
-    s = 0.5400000214576721f;
-    s = -4.0f;
-    s = 16.0f;
-    s = 55.0f;
-    s = 0.30000001192092896f;
-    s = 0.07999999821186066f;
-    s = 0.550000011920929f;
-    s = 0.06000000238418579f;
-    s = 64.0f;
-    s = 460.0f;
-    s = 0.6499999761581421f;
-    s = 130.0f;
-    d = 60.0;
-    d = 6.0;
-    d = 110.0;
-    d = 10.0;
-    d = 255.0;
-    d = 320.0;
-    s = 0.06499999761581421f;
-    s = 53.0f;
-    s = 0.07000000029802322f;
-    s = 204.0f;
-    s = 1.2000000476837158f;
-    s = 0.6000000238418579f;
-    s = 308.0f;
-    s = 337.0f;
-    s = 1.0714285373687744f;
-    s = 0.10999999940395355f;
-    s = 0.3333333432674408f;
-    s = 0.6666666865348816f;
-    s = 0.125f;
-    s = 0.1666666716337204f;
-    s = 0.1428571492433548f;
-    s = 22.0f;
-    s = 24.0f;
-    s = 2.0f;
-    s = 38.0f;
-}
-static const u32 fzgx_pool_table25[1] = {0xB0FFB000};  /* fzgx-allow: A1 retail pool bytes */
-__declspec(section ".fzgxpool") static void fzgx_pool_keep25(void) { const u32 *volatile cp; cp = fzgx_pool_table25; }  /* fzgx-allow: S2 pool primer sink */
-__declspec(section ".fzgxpool") static void fzgx_pool_prime26(void) {
-    volatile f32 s; volatile f64 d;  /* fzgx-allow: S2 pool primer sinks */
-    d = 1.2;
-    s = 7.0f;
-    s = 12.0f;
-}
-static const u32 fzgx_pool_table27[1] = {0xFFB0B0FF};  /* fzgx-allow: A1 retail pool bytes */
-__declspec(section ".fzgxpool") static void fzgx_pool_keep27(void) { const u32 *volatile cp; cp = fzgx_pool_table27; }  /* fzgx-allow: S2 pool primer sink */
-__declspec(section ".fzgxpool") static void fzgx_pool_prime28(void) {
-    volatile f32 s; volatile f64 d;  /* fzgx-allow: S2 pool primer sinks */
-    s = 117.0f;
-}
-static const u32 fzgx_pool_table29[1] = {0xFFFFA0FF};  /* fzgx-allow: A1 retail pool bytes */
-__declspec(section ".fzgxpool") static void fzgx_pool_keep29(void) { const u32 *volatile cp; cp = fzgx_pool_table29; }  /* fzgx-allow: S2 pool primer sink */
-static const u32 fzgx_pool_table30[1] = {0xFFFFA0FF};  /* fzgx-allow: A1 retail pool bytes */
-__declspec(section ".fzgxpool") static void fzgx_pool_keep30(void) { const u32 *volatile cp; cp = fzgx_pool_table30; }  /* fzgx-allow: S2 pool primer sink */
-#pragma section code_type ".text"
-
-extern s32 lbl_801A66B4;
-
+extern void fn_1_5233C(void);
+extern void fn_1_49738(u32);
+extern void fn_1_49748(f32);
 extern void fn_1_49514(u32 *);
-extern void fn_1_495C8(s32);
+extern void fn_1_495C8(u8);
 extern void fn_1_496FC(f32, f32);
 extern void fn_1_4955C(f32, f32);
+extern void fn_1_4966C(f32, f32);
 extern void fn_1_4954C(f32);
-extern void fn_1_14FEAC(u32, u32, u32, void *, s16);
-extern void fn_1_4CF3C(void *, ...);
-extern void fn_1_7F49C(u32, s16, void *);
+extern void fn_1_14FEAC(u8, u8, u8, u32 *, s16);
+extern void fn_1_4CF3C(const char *, f32, ...);
+extern void *fn_1_7F49C(s16, s16, void *);
 
+#pragma section code_type ".fzgxpool"
+static const u32 fzgx_pool_table1[114] = {0x665f7a65, 0x726f5f64, 0x65627567, 0x0, 0x0, 0x0, 0x0, 0x0, 0x7379735f, 0x652e6269, 0x6e000000, 0x0, 0x0, 0x0, 0x0, 0x350, 0x4, 0xffffffff, 0xffffffff, 0x665f7a65, 0x726f0000, 0x0, 0x0, 0x0, 0x0, 0x0, 0x1, 0x7379735f, 0x652e6269, 0x6e000000, 0x0, 0x0, 0x0, 0x0, 0xb4f, 0x59e0, 0xffffffff, 0xffffffff, 0x667a6700, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x2, 0x67686f5f, 0x652e6269, 0x6e000000, 0x0, 0x0, 0x0, 0x0, 0x153, 0x0, 0xffffffff, 0xffffffff, 0x667a6300, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x3, 0x6761725f, 0x652e6269, 0x6e000000, 0x0, 0x0, 0x0, 0x0, 0x154, 0x20700, 0xffffffff, 0xffffffff, 0x667a6500, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x4, 0x656d625f, 0x652e6269, 0x6e000000, 0x0, 0x0, 0x0, 0x0, 0x152, 0x0, 0xffffffff, 0xffffffff, 0x667a7200, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x5, 0x7265705f, 0x652e6269, 0x6e000000, 0x0, 0x0, 0x0, 0x0, 0x451, 0x0, 0xffffffff, 0xffffffff}; /* fzgx-allow: A1 retail pool bytes */
+__declspec(section ".fzgxpool") static void fzgx_pool_keep1(void) { const u32 *volatile cp; cp = fzgx_pool_table1; } /* fzgx-allow: S2 pool primer sink */
+__declspec(section ".fzgxpool") static void fzgx_pool_prime2(void) { volatile f32 s; volatile f64 d; /* fzgx-allow: S2 pool primer sinks */
+s=0.0f;s=40960.0f;d=4503601774854144.0;d=4503599627370496.0;s=1.0f;s=24576.0f;d=126.0;s=126.0f;
+}
+static const u32 fzgx_pool_table3[4] = {0x0, 0xffffff00, 0x0, 0xffffff00}; /* fzgx-allow: A1 retail pool bytes */
+__declspec(section ".fzgxpool") static void fzgx_pool_keep3(void) { const u32 *volatile cp; cp = fzgx_pool_table3; } /* fzgx-allow: S2 pool primer sink */
+__declspec(section ".fzgxpool") static void fzgx_pool_prime4(void) { volatile f32 s; volatile f64 d; /* fzgx-allow: S2 pool primer sinks */
+s=10.0f;
+}
+static const u32 fzgx_pool_table5[9] = {0xa0505000, 0xa0a0a000, 0xffffff00, 0x70707000, 0x0, 0x70707000, 0x0, 0xffffff00, 0x0}; /* fzgx-allow: A1 retail pool bytes */
+__declspec(section ".fzgxpool") static void fzgx_pool_keep5(void) { const u32 *volatile cp; cp = fzgx_pool_table5; } /* fzgx-allow: S2 pool primer sink */
+__declspec(section ".fzgxpool") static void fzgx_pool_prime6(void) { volatile f32 s; volatile f64 d; /* fzgx-allow: S2 pool primer sinks */
+s=0.0010000000474974513f;s=0.800000011920929f;s=-1.0f;s=8.0f;s=0.5f;s=4.0f;s=320.0f;s=152.0f;s=288.0f;s=280.0f;s=0.10500000417232513f;s=352.0f;s=350.0f;s=0.009999999776482582f;
+}
+static const u32 fzgx_pool_table7[9] = {0xa0505000, 0xa0a0a000, 0xffffff00, 0x70707000, 0x0, 0x70707000, 0x0, 0xffffff00, 0x0}; /* fzgx-allow: A1 retail pool bytes */
+__declspec(section ".fzgxpool") static void fzgx_pool_keep7(void) { const u32 *volatile cp; cp = fzgx_pool_table7; } /* fzgx-allow: S2 pool primer sink */
+__declspec(section ".fzgxpool") static void fzgx_pool_prime8(void) { volatile f32 s; volatile f64 d; /* fzgx-allow: S2 pool primer sinks */
+s=198.0f;s=298.0f;s=0.0949999988079071f;
+}
+static const u32 fzgx_pool_table9[9] = {0xa0505000, 0xa0a0a000, 0xffffff00, 0x70707000, 0x0, 0x70707000, 0x0, 0xffffff00, 0x0}; /* fzgx-allow: A1 retail pool bytes */
+__declspec(section ".fzgxpool") static void fzgx_pool_keep9(void) { const u32 *volatile cp; cp = fzgx_pool_table9; } /* fzgx-allow: S2 pool primer sink */
+__declspec(section ".fzgxpool") static void fzgx_pool_prime10(void) { volatile f32 s; volatile f64 d; /* fzgx-allow: S2 pool primer sinks */
+s=192.0f;
+}
+static const u32 fzgx_pool_table11[16] = {0xf0f0f000, 0x9090ff00, 0xffff6000, 0xffff6000, 0xffffff00, 0xffffff00, 0xffa0a000, 0xffff6000, 0xffff6000, 0xffffff00, 0xffffff00, 0xffa0a000, 0xffff6000, 0xffffff00, 0xffffff00, 0xffa0a000}; /* fzgx-allow: A1 retail pool bytes */
+__declspec(section ".fzgxpool") static void fzgx_pool_keep11(void) { const u32 *volatile cp; cp = fzgx_pool_table11; } /* fzgx-allow: S2 pool primer sink */
+__declspec(section ".fzgxpool") static void fzgx_pool_prime12(void) { volatile f32 s; volatile f64 d; /* fzgx-allow: S2 pool primer sinks */
+s=1.0000000116860974e-07f;d=1.8;d=0.0;d=1.0;d=1.3;d=0.5;d=0.2;d=0.7;d=0.3;s=225.0f;s=0.09000000357627869f;s=0.699999988079071f;
+}
+static const u32 fzgx_pool_table13[1] = {0x0}; /* fzgx-allow: A1 retail pool bytes */
+__declspec(section ".fzgxpool") static void fzgx_pool_keep13(void) { const u32 *volatile cp; cp = fzgx_pool_table13; } /* fzgx-allow: S2 pool primer sink */
+__declspec(section ".fzgxpool") static void fzgx_pool_prime14(void) { volatile f32 s; volatile f64 d; /* fzgx-allow: S2 pool primer sinks */
+d=125.0;d=45.0;s=310.0f;s=258.0f;s=17.0f;s=15.625f;s=0.5625f;s=0.75f;d=40.0;s=340.0f;s=370.0f;s=10.416666984558105f;s=380.0f;
+}
+static const u32 fzgx_pool_table15[7] = {0xffffff00, 0xffffff00, 0xffffff00, 0xffffff00, 0xffffff00, 0xffffff00, 0xffffff00}; /* fzgx-allow: A1 retail pool bytes */
+__declspec(section ".fzgxpool") static void fzgx_pool_keep15(void) { const u32 *volatile cp; cp = fzgx_pool_table15; } /* fzgx-allow: S2 pool primer sink */
+__declspec(section ".fzgxpool") static void fzgx_pool_prime16(void) { volatile f32 s; volatile f64 d; /* fzgx-allow: S2 pool primer sinks */
+s=1.5f;s=40.0f;s=120.0f;s=9.999999747378752e-05f;s=180.0f;s=240.0f;s=220.0f;s=190.0f;s=200.0f;s=360.0f;
+}
+static const u32 fzgx_pool_table17[2] = {0xff402000, 0xffffff00}; /* fzgx-allow: A1 retail pool bytes */
+__declspec(section ".fzgxpool") static void fzgx_pool_keep17(void) { const u32 *volatile cp; cp = fzgx_pool_table17; } /* fzgx-allow: S2 pool primer sink */
+__declspec(section ".fzgxpool") static void fzgx_pool_prime18(void) { volatile f32 s; volatile f64 d; /* fzgx-allow: S2 pool primer sinks */
+s=15.0f;s=5.0f;s=100.0f;s=1.1111111640930176f;s=3.0f;s=185.0f;s=255.0f;s=0.019999999552965164f;
+}
+static const u32 fzgx_pool_table19[8] = {0xa0505000, 0xa0a0a000, 0xffffff00, 0x70707000, 0x0, 0x70707000, 0x0, 0xffffff00}; /* fzgx-allow: A1 retail pool bytes */
+__declspec(section ".fzgxpool") static void fzgx_pool_keep19(void) { const u32 *volatile cp; cp = fzgx_pool_table19; } /* fzgx-allow: S2 pool primer sink */
+__declspec(section ".fzgxpool") static void fzgx_pool_prime20(void) { volatile f32 s; volatile f64 d; /* fzgx-allow: S2 pool primer sinks */
+s=270.0f;s=4.999999873689376e-05f;
+}
+static const u32 fzgx_pool_table21[46] = {0x32000000, 0x320000, 0x0, 0xffffffff, 0xffffa000, 0x80808000, 0xffffa000, 0x80808000, 0xffffff00, 0xffffff00, 0xffffa000, 0xffffa000, 0xffffa000, 0x70707000, 0xa0808000, 0xffffffff, 0x70707000, 0xffff4000, 0xffff00, 0x80808000, 0xffff4000, 0xffffff00, 0xffffa0ff, 0xa0a0ffff, 0xffa0a0ff, 0xffffffff, 0x808080ff, 0xffffffff, 0xffffffff, 0xffffffff, 0x0, 0x0, 0xffffa000, 0xffff00, 0x80808000, 0x80808000, 0xffffff00, 0xffff00, 0x80808000, 0xffff00, 0xffffff00, 0xffffff00, 0xffffff00, 0xffffffff, 0x808080ff, 0xffffffff}; /* fzgx-allow: A1 retail pool bytes */
+__declspec(section ".fzgxpool") static void fzgx_pool_keep21(void) { const u32 *volatile cp; cp = fzgx_pool_table21; } /* fzgx-allow: S2 pool primer sink */
+__declspec(section ".fzgxpool") static void fzgx_pool_prime22(void) { volatile f32 s; volatile f64 d; /* fzgx-allow: S2 pool primer sinks */
+s=300.0f;s=0.020999999716877937f;s=0.020499998703598976f;s=0.020549999549984932f;s=-2.0f;s=95.0f;s=80.0f;s=54.0f;s=73.0f;s=203.0f;s=164.0f;s=333.0f;s=215.0f;d=112.0;d=64.0;s=86.0f;
+}
+static const u32 fzgx_pool_table23[1] = {0x0}; /* fzgx-allow: A1 retail pool bytes */
+__declspec(section ".fzgxpool") static void fzgx_pool_keep23(void) { const u32 *volatile cp; cp = fzgx_pool_table23; } /* fzgx-allow: S2 pool primer sink */
+__declspec(section ".fzgxpool") static void fzgx_pool_prime24(void) { volatile f32 s; volatile f64 d; /* fzgx-allow: S2 pool primer sinks */
+d=8.399999999999999;s=0.9900000095367432f;s=0.8999999761581421f;s=0.5400000214576721f;s=-4.0f;s=16.0f;s=55.0f;s=0.30000001192092896f;s=0.07999999821186066f;s=0.550000011920929f;s=0.06000000238418579f;s=64.0f;s=460.0f;s=0.6499999761581421f;s=130.0f;d=60.0;d=6.0;d=110.0;d=10.0;d=255.0;d=320.0;s=0.06499999761581421f;s=53.0f;s=0.07000000029802322f;s=204.0f;s=1.2000000476837158f;s=0.6000000238418579f;s=308.0f;s=337.0f;s=1.0714285373687744f;s=0.10999999940395355f;s=0.3333333432674408f;s=0.6666666865348816f;s=0.125f;s=0.1666666716337204f;s=0.1428571492433548f;s=22.0f;s=24.0f;s=2.0f;s=38.0f;
+}
+static const u32 fzgx_pool_table25[1] = {0xb0ffb000}; /* fzgx-allow: A1 retail pool bytes */
+__declspec(section ".fzgxpool") static void fzgx_pool_keep25(void) { const u32 *volatile cp; cp = fzgx_pool_table25; } /* fzgx-allow: S2 pool primer sink */
+__declspec(section ".fzgxpool") static void fzgx_pool_prime26(void) { volatile f32 s; volatile f64 d; /* fzgx-allow: S2 pool primer sinks */
+d=1.2;s=7.0f;s=12.0f;
+}
+static const u32 fzgx_pool_table27[1] = {0xffb0b0ff}; /* fzgx-allow: A1 retail pool bytes */
+__declspec(section ".fzgxpool") static void fzgx_pool_keep27(void) { const u32 *volatile cp; cp = fzgx_pool_table27; } /* fzgx-allow: S2 pool primer sink */
+__declspec(section ".fzgxpool") static void fzgx_pool_prime28(void) { volatile f32 s; volatile f64 d; /* fzgx-allow: S2 pool primer sinks */
+s=117.0f;
+}
+static const u32 fzgx_pool_table29[1] = {0xffffa0ff}; /* fzgx-allow: A1 retail pool bytes */
+__declspec(section ".fzgxpool") static void fzgx_pool_keep29(void) { const u32 *volatile cp; cp = fzgx_pool_table29; } /* fzgx-allow: S2 pool primer sink */
+static const u32 fzgx_pool_table30[1] = {0xffffa0ff}; /* fzgx-allow: A1 retail pool bytes */
+__declspec(section ".fzgxpool") static void fzgx_pool_keep30(void) { const u32 *volatile cp; cp = fzgx_pool_table30; } /* fzgx-allow: S2 pool primer sink */
+#pragma section code_type ".text"
+
+// Draw a memory-card label with the selected language and text styling.
 void fn_1_C0374(s32 arg0, s32 arg1, u32 arg2, u32 arg3, u32 arg4, u32 arg5, u32 arg6, f32 value) {
-    u32 local;
-    u8 buffer[0x40];
-    f32 lab_t1;
+    u32 color;
+    u32 buffer[0x10];
 
     fn_1_49410();
-
     if (lbl_801A66B4 != 5) {
-        fn_1_49590((0.5f));
-        fn_1_495B0(-2147483648);
+        fn_1_49590(0.5f);
+        fn_1_495B0(0x80000000);
     }
 
     fn_1_49614();
-    fn_1_49738(fn_1_5233C);
-    fn_1_49748((1.0f));
-    local = fzgx_pool_table30[0];
-    fn_1_49514(&local);
+    fn_1_49738((u32)fn_1_5233C);
+    fn_1_49748(1.0f);
+    color = fzgx_pool_table30[0];
+    fn_1_49514(&color);
     fn_1_495C8(9);
     fn_1_496FC((f32)arg0, (f32)arg1);
     fn_1_4955C(value, value);
-    fn_1_4966C((-2.0f), (0.0f));
-
+    fn_1_4966C(-2.0f, 0.0f);
     if (lbl_801A66B4 != 5) {
-        fn_1_4966C((-1.0f), (0.0f));
+        fn_1_4966C(-1.0f, 0.0f);
     }
+    fn_1_4954C(0.0600000024f);
 
-    fn_1_4954C((0.0600000024f));
-
-    if ((u32)(arg2 & 0xff) >= 0x29u && (u32)(arg3 & 0xff) != 0u) {
-        fn_1_14FEAC(arg4 & 0xff, arg5 & 0xff, arg6 & 0xff, buffer, (s16)lbl_801A66B4);
-        lab_t1 = (120.0f);
-        fn_1_4CF3C(buffer, lab_t1);
+    if ((u8)arg2 >= 41 && (u8)arg3 != 0) {
+        fn_1_14FEAC((u8)arg4, (u8)arg5, (u8)arg6, buffer, (s16)lbl_801A66B4);
+        fn_1_4CF3C((char *)buffer, 120.0f);
     } else {
-        u32 c2 = (u8)arg2;
-        fn_1_7F49C(c2, (s16)lbl_801A66B4, buffer);
-        lab_t1 = (120.0f);
-        fn_1_4CF3C(buffer, lab_t1);
+        fn_1_7F49C((u8)arg2, (s16)lbl_801A66B4, buffer);
+        fn_1_4CF3C((char *)buffer, 120.0f);
     }
 }
 /* fzgx:end fn_1_C0374 */
@@ -9952,7 +9522,7 @@ void fn_1_C132C(Fn1C132CObject *object, u8 *data) {
 }
 /* fzgx:end fn_1_C132C */
 
-/* fzgx:begin fn_1_C17CC noprologue */
+/* fzgx:begin fn_1_C17CC */
 #include "types.h"
 #include "dolphin/card.h"
 #include "dolphin/card/CARDPriv.h"
@@ -9964,37 +9534,29 @@ void fn_1_C17CC(void) {
 }
 /* fzgx:end fn_1_C17CC */
 
-/* fzgx:begin fn_1_C23CC noprologue */
-#include "types.h"
-#include "dolphin/card.h"
-#include "dolphin/card/CARDPriv.h"
-#include "dolphin/dvd.h"
-#include "font.h"
+/* fzgx:begin fn_1_C23CC */
+// Copy rows of eight-byte elements over the requested four-unit range.
+void fn_1_C23CC(u32 destination, u32 destinationStride, u32 unused, u32 source,
+                u32 sourceStride, u32 rangeLength, u32 destinationOffset, u32 rangeStart) {
+    s32 row;
+    u32 rowBytes;
+    u32 rangeEnd;
+    u32 position;
 
-extern void fn_80008BA8(void *arg0, void *arg1, u32 arg2);
-
-void fn_1_C23CC(void *base0, u32 stride0, u32 arg2, void *base1,
-                u32 stride1, u32 count_add, u32 offset, u32 count) {
-    s32 i;
-    u32 size;
-    u32 end;
-    u32 p;
-
-    i = count >> 2;
-    size = (stride1 & 0x7FFFFFF) << 3;
-    end = count + count_add;
-    p = count;
-    while (p < end) {
-        fn_80008BA8((u8 *)base0 + (((offset + i * stride0) & 0x7FFFFFF) << 3),
-                    (u8 *)base1 + (((i * stride1) & 0x7FFFFFF) << 3),
-                    size);
-        i++;
-        p += 4;
+    row = rangeStart >> 2;
+    rowBytes = (sourceStride & 0x07FFFFFF) << 3;
+    rangeEnd = rangeStart + rangeLength;
+    position = rangeStart;
+    while (position < rangeEnd) {
+        fn_80008BA8(destination + (((destinationOffset + row * destinationStride) & 0x07FFFFFF) << 3),
+                    source + (((row * sourceStride) & 0x07FFFFFF) << 3), rowBytes);
+        row++;
+        position += 4;
     }
 }
 /* fzgx:end fn_1_C23CC */
 
-/* fzgx:begin fn_1_C2454 noprologue */
+/* fzgx:begin fn_1_C2454 */
 #include "types.h"
 #include "rel/main_rel/globals.h"
 #include "rel/main_rel/memcard.h"
@@ -10227,7 +9789,7 @@ void fn_1_C37A0(void) {
 }
 /* fzgx:end fn_1_C37A0 */
 
-/* fzgx:begin fn_1_C39FC noprologue */
+/* fzgx:begin fn_1_C39FC */
 #include "types.h"
 #include "rel/main_rel/globals.h"
 #include "rel/main_rel/memcard.h"

@@ -125,9 +125,9 @@ def generate(p: Project, s: str, sym, path: Path, body: str, check, outdir: Path
 
 
 def _score(r) -> float:
-    # the ledger's metric (api._record_check): adjusted for accepted pool rows, so a landed
-    # sweep body ranks against agent attempts on the same scale
-    return r.percent_adjusted if r.pool_rows else r.percent
+    # the ledger's metric (api.check_score): one scale, so a landed sweep body ranks against
+    # agent attempts and the saved best body the same way (ranking only; acceptance is `matched`)
+    return oracle.progress_score(r)
 
 
 def climb(p: Project, selection: Dict[str, str], outdir: Path, rounds: int = 4,
@@ -141,7 +141,8 @@ def climb(p: Project, selection: Dict[str, str], outdir: Path, rounds: int = 4,
     for s, f in cur.items():
         r = checks.get(s)
         if r and r.ok:
-            state[s] = dict(base=_score(r), percent=_score(r), file=str(f), matched=r.matched, history=[], check=r)
+            state[s] = dict(base=_score(r), percent=_score(r), rows=oracle.progress_rows(r), file=str(f),
+                            matched=r.matched, history=[], check=r)
     print('functions', len(state))
     for rnd in range(rounds):
         active = [s for s, x in state.items() if not x['matched']]
@@ -201,7 +202,8 @@ def climb(p: Project, selection: Dict[str, str], outdir: Path, rounds: int = 4,
                 continue
             # accepted on the aligned gain: objdiff's percent may dip while the shape improves
             if r.matched or r.matched_pool or _score(r) > state[s]['percent'] - 2.0:
-                state[s].update(percent=_score(r), file=str(f), matched=bool(r.matched or r.matched_pool), check=r)
+                state[s].update(percent=_score(r), rows=oracle.progress_rows(r), file=str(f),
+                                matched=bool(r.matched or r.matched_pool), check=r)
                 state[s]['history'].append(best[s][3])
                 gained += 1
         print(f'round {rnd}: {gained} improved, matched so far {sum(1 for x in state.values() if x["matched"])}')
@@ -238,7 +240,7 @@ def land(p: Project, rep: Dict[str, dict], label: str) -> Dict[str, list]:
         work.write_text(body)
         # the sweep already holds this body's objdiff verdict: record it instead of a second
         # check (5 s each); `submit` re-verifies matches itself
-        Ledger().bump_checks(api._key(p, s), pct)
+        Ledger().bump_checks(api._key(p, s), pct, r.get('rows'))
         if r.get('matched'):
             sub = api.submit(p, s, agent=agent, message=f'{s}: {label}', harness='deterministic')
             if sub.get('ok'):

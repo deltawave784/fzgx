@@ -41,9 +41,11 @@ The routing is deterministic; you only dispatch and report. Run from the reposit
 5. **Close the wave** (after every agent has reported; these touch the build).
    - `uv run tools/fzgx.py reuse --max-size 2048`: rebinds matched C onto retail clones
      (wave 4: fn_1_8CAF4 and a 612-byte fn_1_10B344 from one Sonnet match).
-   - `uv run tools/fzgx.py fixup --min-percent 95 --apply --budget 1500 --output .fzgx/fixup/<wave>`:
+   - `uv run tools/fzgx.py fixup --min-percent 95 --apply --budget 300 --output .fzgx/fixup/<wave>`:
      the deterministic engine over every saved body at 95%+ (register, pragma and pool
-     families; wave 3 closed 3 functions in 7 minutes that agents had released). It submits,
+     families; wave 3 closed 3 functions in 7 minutes that agents had released). Use
+     `--budget 1500` every 4th wave and on the last wave of a run: agents already run this engine on
+     their own body at release, so the per-wave search mostly repeats it. It submits,
      verifies and commits exact results itself; commit `state/repairs/fixup_imports.json` after.
    - `uv run tools/fzgx.py verify` drains anything still `pending` (a full match is submitted,
      relinked and committed by the check that reaches 100%; this catches the rest).
@@ -65,8 +67,8 @@ wait for the user when:
 - two consecutive waves match nothing (agents, reuse, fixup and asm units together);
 - `route --skip-tried` returns no rows (escalation is the user's decision);
 - a tool call is refused for permissions, or the same tooling error repeats.
-Do not edit tooling, agent definitions or headers in an unattended run, and never start the
-librarian or a type-recovery pass. Commit only what the steps above commit.
+Do not edit tooling, agent definitions or headers in an unattended run, and never start a
+type-recovery pass or the librarian except as the scheduled pass in 'Librarian passes' below. Commit only what the steps above commit.
 
 ## Fable autonomous mode (the default for long unattended runs)
 
@@ -77,8 +79,10 @@ One batch = steps 1-5 above with these changes:
 - Pick: `uv run tools/fzgx.py route --fable --limit 8 --min-percent 98 --json` (best score first, never tried by
   Fable, one per clone family). Dispatch each row with `subagent_type: matcher-large` and `model: fable`, prompt
   `SYMBOL=<symbol> AGENT_ID=fable-<symbol>-<YYYYMMDD><batch letter>`; all 8 at once.
-- Close the batch: `reuse --max-size 2048`, then `fixup --min-percent 97 --apply --budget 1200 --output
-  .fzgx/fixup/<batch>`, then `verify`, then ninja/hash check, then `progress --note "fable batch <n>"` and `report`; append a line to
+- Close the batch: `reuse --max-size 2048`, then `fixup --min-percent 97 --apply --budget 300 --output
+  .fzgx/fixup/<batch>` (every 4th batch, and the last batch of a run, use `--budget 1200`: each agent already runs
+  the same engine on its own body at release, so the per-batch search mostly repeats it and a 20-minute close-out
+  was closing 0 functions in most batches), then `verify`, then ninja/hash check, then `progress --note "fable batch <n>"` and `report`; append a line to
   `.fzgx/reports/waves.md` that includes the code percentage; commit `state/progress.csv`.
 - If `route --fable` returns fewer than 4 rows, lower `--min-percent` to 95, then 90. Below 90 the match rate is
   unmeasured: stop and ask.
@@ -111,8 +115,8 @@ already failed on (checked 2026-10-05: 14 of its top 16 rows were Fable releases
 (smallest first, no bonus for a saved body; untouched functions are all large, the small ones were tried long ago), keeps one function per (module, size) retail-clone family, and drops
 `:_prolog` entries and compiler save/restore helpers. `--small 512` sends rows up to 512 B to Sonnet
 (`matcher-mid`) and larger ones to Opus (`matcher-large`); at most 2 Opus rows per batch unless the user says
-otherwise. Take 8 rows, 6 agents at a time. Close-out is unchanged: `reuse`, `fixup`, `verify`, hash check,
-`report`. Agent ids use the `sonnet-`/`opus-` prefixes so the next batch's `--escalate-from` finds them. When the
+otherwise. Take 8 rows, 6 agents at a time. Close-out is the Fable batch close-out: `reuse`, `fixup` (`--budget 300`, `--budget 1200` every 4th batch and on the
+last), `verify`, hash check, `report`. Agent ids use the `sonnet-`/`opus-` prefixes so the next batch's `--escalate-from` finds them. When the
 route returns fewer than 8 rows, raise `--max-attempts` to 5, then `--max-size` to 1024. Yield is lower than
 Fable's near-miss yield (about 25% of fresher functions, measured earlier), so two consecutive fallback batches
 matching nothing stops the run. While in fallback mode check usage before every batch; the 5-hour and weekly
@@ -164,6 +168,37 @@ round to `.fzgx/reports/waves.md` (class, category, files, gate result, measured
 tokens). `round_interval` is 5 at first; two consecutive rounds with no kept change or no measured gain double it
 (5 -> 10 -> 20, capped at 20); a kept change with a gain resets it to 5. A round that fails its gate is reverted
 by the agent; two failed gates in a row stop the rounds for the rest of the run and notify.
+
+## Librarian passes (between batches)
+
+Matched units pile up declarations that only had to make one function match (private structs, own externs,
+prototypes that disagree with callers or headers). A librarian pass reconciles them with the deterministic TU
+pipeline (`tutruth`, `tu-finish`, `tu-check`, `headers`) and decides what is left. It runs only BETWEEN batches,
+under the same conditions as a tooling round (`git status` clean; no claim, `fixup`, `verify`, build, batch or
+tooling agent running), never alongside a matcher, and it is the one exception to "never start the librarian"
+above. Its definition is `.claude/agents/librarian.md`; its work list is `uv run tools/fzgx.py librarian-queue`.
+
+**Trigger** (check after each batch close-out, after the tooling-round check):
+- every 10 batches since the last pass, OR
+- `fzgx librarian-queue --severity code --decisions --module <module> --json` shows more than 25 rows that need a
+  decision for the module this clone is working, OR
+- after any tooling round that changed header, layout or TU-pass behaviour (its candidates only become real when
+  the TU compiles as one unit).
+
+**Steps:**
+1. `fzgx librarian-queue` (counts by kind and module) and `fzgx tu-check` on the TUs of the module's recent matches;
+   log both to `.fzgx/reports/waves.md`.
+2. Dispatch ONE `librarian` agent (`subagent_type: librarian`, default model) with one module and the top queue
+   items. Wait for its report: it commits its own work (`librarian:`), runs the gate and the snapshot.
+3. After it: `fixup --min-percent 95 --apply` and `verify` (a TU that now compiles as one unit can close near
+   misses; `tu-check --near-misses` lists them), `uv run ninja` before `progress --note "librarian pass <n>"`, and
+   log the result (items resolved, items left, blocks it reported for `revise-`, gate output, near misses made
+   closable).
+
+**Budget:** one agent, about 90 minutes, one module per pass. Blocks `tu-finish` reports as uncompilable under
+their prologue go to a `revise-` batch, not to the librarian. Two failed gates in a row stop the passes for the
+rest of the run and notify. Anything the queue marks as a generator defect (not a decision) becomes a tooling
+round.
 
 ## Two clones
 

@@ -1,29 +1,57 @@
 #include "types.h"
+#include "dolphin/types.h"
 #include "rel/main_rel/globals.h"
 #include "rel/main_rel/background.h"
+#include "dolphin/hw_regs.h"
 
+typedef struct {
+    s32 type;     /* 0: constant, 1: linear, else: hermite */
+    f32 time;
+    f32 value;
+    f32 tanIn;
+    f32 tanOut;
+} CurveKey;
+extern s32 fn_8006FC1C(const char *, const char *);
+extern s32 fn_8006FC5C(const char *, const char *, s32);
+extern size_t strlen(const char *str);
+extern f32 lbl_1_rodata_42C0[4];
+extern void fn_80038BFC(f32* out);
+extern u32 __cvt_fp2unsigned(f32);
+extern u32 lbl_801A6D00;
+extern s32 fn_1_54E34(void *arg0, f32 arg1);
+extern void fn_800724C8(void);
+extern void fn_8007245C(u32 value);
+extern void lbl_8006DAEC(void);
+extern void lbl_8006D758(void);
+extern u32 GXLoadPosMtxImm(u32, u32);
+extern void lbl_8006DB30(void);
+extern void fn_800736C0(u32, void *);
+extern void fn_8003462C(u32 arg0, u32 arg1, u32 arg2);
+extern void lbl_8006DFC4(u32);
+extern void lbl_8006E1D8(u32, f32, f32, f32);
+extern vu32 __DIRegs[];
+extern void mathutil_mtxA_rotate_z(s32);
+extern void lbl_8006E0A4(void *);
 extern u32 lbl_1_bss_6EA78;
 extern u32 lbl_1_bss_6EA7C;
 extern u32 lbl_801A6410;
-extern void fn_1_46B4(u32, u32, void *, s32);
+extern void fn_1_46B4(u32 arg0, u32 arg1, const char *arg2, int arg3);
 extern const f32 lbl_1_rodata_41FC;
 extern u8 fn_1_86624(void);
-extern void *fn_1_14F04(void);
+extern u8 *fn_1_14F04(void);
 extern f32 lbl_1_rodata_4244[7];
 extern void fn_1_17920(s32, s32, f32);
 extern void fn_1_85C58(s32, f32);
 extern void lbl_8006DB74(void *);
-extern void fn_1_9DDA8(u32, u32, u32);
+extern f32 fn_1_9DDA8();
 extern void fn_1_9DFB8(u32, u32, u32, u32);
 extern void GXPeekZ(u32, u32, void *);
-extern void fn_80034200(u32);
+extern void fn_80034200(u32 arg0);
 extern void fn_8003432C(u32, u32, u32 *);
+extern f32 lbl_1_rodata_42D0;
+extern f32 lbl_1_rodata_42D4;
 
 /* fzgx:begin fn_1_9CF78 */
-extern s32 fn_8006FC1C(const char *, const char *);
-extern s32 fn_8006FC5C(const char *, const char *, s32);
-extern s32 strlen(const char *);
-
 typedef u32 (*FilterCallback)(u32, void *);
 
 typedef struct {
@@ -61,18 +89,18 @@ void fn_1_9CF78(void *arg0, FilterCallback arg1) {
         n = g->count;
         for (; n > 0; n--, e++) {
             s = e->str;
-            slen = strlen(s);
+            slen = (s32)strlen(s);
             q = (TblEntry *)arg0;
             for (idx = 0; q->str != 0; idx++, q++) {
                 switch (q->type) {
                 case 0:
-                    res = fn_8006FC5C(s, q->str, strlen(q->str));
+                    res = fn_8006FC5C(s, q->str, (s32)strlen(q->str));
                     break;
                 case 1:
                     res = fn_8006FC1C(s, q->str);
                     break;
                 case 2: {
-                    s32 len = strlen(q->str);
+                    s32 len = (s32)strlen(q->str);
                     if (len > slen) {
                         res = 0;
                     } else {
@@ -126,11 +154,11 @@ void fn_1_9D77C(Fn1_9D77C_Item *items, s32 count) {
 
     for (i = 0; i < 5; i++) {
         if (lbl_1_bss_6EA78 != 0 && first != 0 && *first != 0) {
-            fn_1_46B4(lbl_801A6410, *first, lbl_1_data_2CB60, 0x922);
+            fn_1_46B4(lbl_801A6410, *first, (const char *)(void *)(lbl_1_data_2CB60), 0x922);
             *first = 0;
         }
         if (lbl_1_bss_6EA7C != 0 && second != 0 && *second != 0) {
-            fn_1_46B4(lbl_801A6410, *second, lbl_1_data_2CB60, 0x923);
+            fn_1_46B4(lbl_801A6410, *second, (const char *)(void *)(lbl_1_data_2CB60), 0x923);
             *second = 0;
         }
         first++;
@@ -143,8 +171,7 @@ void fn_1_9D77C(Fn1_9D77C_Item *items, s32 count) {
             items->link != 0 &&
             ((Fn1_9D77C_Link *)items->link)->value != 0) {
             fn_1_46B4(lbl_801A6410,
-                       ((Fn1_9D77C_Link *)items->link)->value,
-                       lbl_1_data_2CB60, 0x92b);
+                       ((Fn1_9D77C_Link *)items->link)->value, (const char *)(void *)(lbl_1_data_2CB60), 0x92b);
             ((Fn1_9D77C_Link *)items->link)->value = 0;
         }
         i++;
@@ -152,11 +179,11 @@ void fn_1_9D77C(Fn1_9D77C_Item *items, s32 count) {
     }
 
     if (lbl_1_bss_6EA78 != 0) {
-        fn_1_46B4(lbl_801A6410, lbl_1_bss_6EA78, lbl_1_data_2CB60, 0x92e);
+        fn_1_46B4(lbl_801A6410, lbl_1_bss_6EA78, (const char *)(void *)(lbl_1_data_2CB60), 0x92e);
         lbl_1_bss_6EA78 = 0;
     }
     if (lbl_1_bss_6EA7C != 0) {
-        fn_1_46B4(lbl_801A6410, lbl_1_bss_6EA7C, lbl_1_data_2CB60, 0x92f);
+        fn_1_46B4(lbl_801A6410, lbl_1_bss_6EA7C, (const char *)(void *)(lbl_1_data_2CB60), 0x92f);
         lbl_1_bss_6EA7C = 0;
     }
 }
@@ -227,6 +254,8 @@ void fn_1_9D9E4(void) {
 
 /* fzgx:begin fn_1_9DDA8 noprologue */
 #include "types.h"
+#include "dolphin/types.h"
+#include "dolphin/hw_regs.h"
 
 typedef struct {
     s32 type;     /* 0: constant, 1: linear, else: hermite */
@@ -375,10 +404,6 @@ void fn_1_9E1D0(void) {
 /* fzgx:end fn_1_9E1D0 */
 
 /* fzgx:begin fn_1_9E514 */
-extern f32 lbl_1_rodata_42C0[4];
-extern void fn_80038BFC(f32 *);
-extern u32 __cvt_fp2unsigned(f32);
-
 typedef struct {
     u8 unk_00[0x14];
     f32 unk_14;
@@ -440,26 +465,9 @@ void fn_1_9E5B8(Obj_1_bss_6EA80_Target *node) {
 /* fzgx:end fn_1_9E5B8 */
 
 /* fzgx:begin fn_1_9EDE8 */
-#include "dolphin/hw_regs.h"
-#include "types.h"
-#include "dolphin/types.h"
+#define lbl_1_rodata_42D0 (*(volatile const f32 *)&lbl_1_rodata_42D0) /* Reload before each ordered FIFO write. */
+#define lbl_1_rodata_42D4 (*(volatile const f32 *)&lbl_1_rodata_42D4) /* Reload before each ordered FIFO write. */
 
-extern volatile const f32 lbl_1_rodata_42D0; /* Reload before each ordered FIFO write. */
-extern volatile const f32 lbl_1_rodata_42D4; /* Reload before each ordered FIFO write. */
-extern u32 lbl_801A6D00;
-extern s32 fn_1_54E34(void *, f32);
-extern void fn_800724C8(void);
-extern void fn_8007245C(u32);
-extern void lbl_8006DAEC(void);
-extern void lbl_8006D758(void);
-extern u32 GXLoadPosMtxImm(u32, u32);
-extern void lbl_8006DB30(void);
-extern void fn_800736C0(u32, void *);
-extern u32 fn_8003462C(u32, u32, u32);
-extern void lbl_8006DFC4(u32);
-extern void lbl_8006E1D8(u32, f32, f32, f32);
-
-extern vu32 __DIRegs[];
 
 typedef struct {
     f32 x;
@@ -581,11 +589,11 @@ void fn_1_9EDE8(Obj_1_9EDE8 *arg0) {
     FIFO(lbl_1_rodata_42D0);
     FIFO(lbl_1_rodata_42D4);
 }
+#undef lbl_1_rodata_42D0
+#undef lbl_1_rodata_42D4
 /* fzgx:end fn_1_9EDE8 */
 
 /* fzgx:begin fn_1_9F4B4 */
-#include "dolphin/hw_regs.h"
-
 struct fn_1_9F4B4_Arg0 {
     u8 pad_0[0xC];
     f32 unk_C;
@@ -595,16 +603,6 @@ struct fn_1_9F4B4_Arg0 {
 };
 
 /* Pool literals, declared non-const: retail reloads them after every FIFO store. */
-extern f32 lbl_1_rodata_42D0; /* 0.0f */
-extern f32 lbl_1_rodata_42D4; /* 1.0f */
-extern s32 fn_1_54E34(void *, f32);
-extern void mathutil_mtxA_rotate_z(s32);
-extern void fn_8003462C(u32, u32, u32);
-extern void fn_800736C0(u32, void *);
-extern void lbl_8006DAEC(void);
-extern void lbl_8006DB30(void);
-extern void lbl_8006E0A4(void *);
-extern void lbl_8006E1D8(f32 *, f32, f32, f32);
 
 /* write-gather FIFO */
 #define GX_WRITE_F32(v) (*(f32 *)GX_FIFO_BASE = (v))
@@ -642,10 +640,10 @@ void fn_1_9F4B4(struct fn_1_9F4B4_Arg0 *arg0) {
     if ((s16)rot != 0) {
         mathutil_mtxA_rotate_z(rot);
     }
-    lbl_8006E1D8(corner[0], neg, neg, lbl_1_rodata_42D0);
-    lbl_8006E1D8(corner[1], half, neg, lbl_1_rodata_42D0);
-    lbl_8006E1D8(corner[2], half, half, lbl_1_rodata_42D0);
-    lbl_8006E1D8(corner[3], neg, half, lbl_1_rodata_42D0);
+    lbl_8006E1D8( (u32)(f32 *)(corner[0]), neg, neg, lbl_1_rodata_42D0);
+    lbl_8006E1D8( (u32)(f32 *)(corner[1]), half, neg, lbl_1_rodata_42D0);
+    lbl_8006E1D8( (u32)(f32 *)(corner[2]), half, half, lbl_1_rodata_42D0);
+    lbl_8006E1D8( (u32)(f32 *)(corner[3]), neg, half, lbl_1_rodata_42D0);
     lbl_8006DB30();
     GX_WRITE_F32(corner[0][0]);
     GX_WRITE_F32(corner[0][1]);

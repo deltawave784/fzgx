@@ -2,22 +2,31 @@
 #include "rel/main_rel/globals.h"
 #include "rel/main_rel/cloth.h"
 
+struct fn_1_10240C_lbl_801A6410 {
+    u32 unk_0;
+};
+
+struct fn_1_101AE8_lbl_801A6410 {
+    u32 unk_0;
+};
+extern struct fn_1_10240C_lbl_801A6410 lbl_801A6410;
+extern u32 fn_1_435C(u32 value);
+extern u32 fn_1_46B4(u32, u32, void *, u32);
+extern void fn_1_41A8(void);
+extern void fn_800711A8(void *);
+extern void fn_80071718(void *);
 extern void fn_1_105744(void);
-extern void fn_1_106DB4(void);
+extern s32 fn_1_106DB4(u32 arg0, u32 arg1);
 extern void fn_1_9D0EC(u32, u32, void*, void*);
 extern void fn_1_103AA8(void);
 extern u32 lbl_1_bss_85288[2];
 extern void fn_1_103AD4(void);
 extern void fn_1_105768(void);
 extern void fn_1_9E5B8(void *);
-extern struct fn_1_10240C_lbl_801A6410 lbl_801A6410;
 extern u32 fn_1_45D0(u32, u32, void *, u32);
-extern u32 fn_1_46B4(u32, u32, void *, u32);
-extern u32 fn_80008BA8(u32, u32, u32);
+extern void fn_80008BA8(u32 arg0, u32 arg1, u32 arg2);
 
-/* fzgx:begin fn_1_101AE8 noprologue */
-#include "types.h"
-
+/* fzgx:begin fn_1_101AE8 */
 struct fn_1_101AE8_lbl_1_bss_85250 {
     u8 pad_0[0xC];
     u32 unk_C;
@@ -27,18 +36,7 @@ struct fn_1_101AE8_lbl_1_bss_85250 {
     u8 pad_1C[0x4];
     u32 unk_20;
 };
-struct fn_1_101AE8_lbl_801A6410 {
-    u32 unk_0;
-};
 
-extern struct fn_1_101AE8_lbl_1_bss_85250 lbl_1_bss_85250;
-extern struct fn_1_101AE8_lbl_801A6410 lbl_801A6410;
-extern u32 fn_1_435C(u32);
-extern u32 fn_1_46B4(u32, u32, u32, u32);
-extern u32 lbl_1_data_3F17C;
-extern void fn_1_41A8(void);
-extern void fn_800711A8(void *);
-extern void fn_80071718(void *);
 
 void fn_1_101AE8(u32 arg0, u32 arg1, u32 arg2, u32 arg3) {
     struct fn_1_101AE8_lbl_1_bss_85250 *p_lbl_1_bss_85250;
@@ -51,7 +49,7 @@ void fn_1_101AE8(u32 arg0, u32 arg1, u32 arg2, u32 arg3) {
     u32 v6;
     u32 v7;
     u32 t6, t7;
-    p_lbl_1_bss_85250 = (struct fn_1_101AE8_lbl_1_bss_85250 *)&lbl_1_bss_85250;
+    p_lbl_1_bss_85250 = (struct fn_1_101AE8_lbl_1_bss_85250 *)&(*((struct fn_1_101AE8_lbl_1_bss_85250 *)&lbl_1_bss_85250));
     fn_1_435C(arg0);
     fn_1_41A8();
     fn_1_435C(arg1);
@@ -69,19 +67,19 @@ void fn_1_101AE8(u32 arg0, u32 arg1, u32 arg2, u32 arg3) {
     v2 = p_lbl_1_bss_85250->unk_18;
     v5 = arg3;
     if (v2 != 0) {
-    v5 = (u32)&lbl_801A6410;
+    v5 = (u32)&(*((struct fn_1_101AE8_lbl_801A6410 *)&lbl_801A6410));
     v3 = (u32)&lbl_1_data_3F17C;
     v4 = *(u32 *)((u8 *)v5 + 0);
     v5 = 257;
-    t6 = fn_1_46B4(v4, v2, (u32)v3, v5);
+    t6 = fn_1_46B4(v4, v2, (void *)((u32)v3), v5);
     v4 = t6;
     p_lbl_1_bss_85250->unk_18 = 0;
     }
     v6 = p_lbl_1_bss_85250->unk_20;
     v7 = v4;
     if (v6 != 0) {
-    v7 = lbl_801A6410.unk_0;
-    t7 = fn_1_46B4(v7, v6, (u32)&lbl_1_data_3F17C, 258);
+    v7 = (*((struct fn_1_101AE8_lbl_801A6410 *)&lbl_801A6410)).unk_0;
+    t7 = fn_1_46B4(v7, v6, (void *)((u32)&lbl_1_data_3F17C), 258);
     v7 = t7;
     p_lbl_1_bss_85250->unk_20 = 0;
     }
@@ -89,10 +87,6 @@ void fn_1_101AE8(u32 arg0, u32 arg1, u32 arg2, u32 arg3) {
 /* fzgx:end fn_1_101AE8 */
 
 /* fzgx:begin fn_1_10240C */
-struct fn_1_10240C_lbl_801A6410 {
-    u32 unk_0;
-};
-
 void fn_1_10240C(u32 arg0, u32 arg1, s32 arg2) {
     u32 t0;
     t0 = fn_1_45D0(lbl_801A6410.unk_0, arg2, &lbl_1_data_3F17C, 561);

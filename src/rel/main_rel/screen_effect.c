@@ -116,6 +116,36 @@ typedef struct {
     s32 count;
     void *nodes;
 } EffectManager;
+
+typedef struct {
+    f32 x, y, z;
+} Vec3f;
+extern u16 fn_1_A5DB0(void);
+extern void OSPanic(const char *file, int line, const char *msg, ...);
+extern void fn_80072864(u32 arg0);
+extern void lbl_8006DCA4(void);
+extern void lbl_8006E0A4(void *);
+extern void lbl_8006E13C(void *);
+extern void fn_80072558(void);
+extern u32 fn_800384FC(u32, u32);
+extern void fzgx_pool_sink_p(void *);
+extern void fzgx_pool_sink_f(f32);
+extern void fzgx_pool_sink_d(f64);
+extern void fn_1_7A648(void *arg0);
+extern void fn_1_5616C(s32 value, f32 value1, f32 value2);
+extern void fn_1_556F8(void *);
+extern u32 fn_1_56018(s32 value);
+extern void fn_1_55FC4(f32 value);
+extern s32 fn_1_79C88(EffectManager *manager, u32 *out, s32 reverse, f32 value);
+extern void fn_1_5575C(void *);
+extern void lbl_8006DFE8(void *);
+extern void lbl_8006DAEC(void);
+extern void lbl_8006DBE4(void);
+extern void mathutil_mtxA_rotate_z(s32);
+extern void mathutil_mtxA_rotate_y(s32);
+extern void mathutil_mtxA_rotate_x(s32);
+extern void lbl_8006DC20(void);
+extern u32 fn_800793D4(u8 *arg0, u32 arg1, u32 arg2);
 extern void fn_1_76650(fn_1_76650_ScreenEffect *effect);
 extern void fn_1_72980(Fn_1_72980_Obj *arg0);
 extern void *fn_1_729F8(struct fn_1_729F8_Arg0 *arg0);
@@ -131,14 +161,12 @@ extern u32 fn_1_4E220(void *, u32, u32, u32, u32);
 extern void lbl_8006D758(void);
 extern void lbl_8006D784(f32 *arg);
 extern void lbl_8006E1B0(void *arg0, void *arg1);
-extern void mathutil_mtxA_rotate_z(s32);
 extern void fn_800371F8(u32, void *);
 extern void fn_8003726C(u32, void *);
 extern void fn_800720B0(u32);
 extern void fn_8007245C(u32 value);
 extern void fn_800724C8(void);
 extern void fn_80072808(void);
-extern void fn_80072864(u32 arg0);
 extern void fn_800728A8(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
 extern void fn_800729B0(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
 extern void fn_80072AB0(s32 arg0, s32 arg1, s32 arg2);
@@ -174,8 +202,6 @@ extern u32 fn_1_7880C(void);
 extern u32 fn_1_788B0(void);
 extern void GXInvalidateTexAll(void);
 extern const f32 lbl_1_rodata_31E8;
-extern u16 fn_1_A5DB0(void);
-extern void OSPanic(const char *file, int line, const char *msg, ...);
 extern u32 GXGetTexBufferSize(u16, u16, u32, Sig_GXGetTexBufferSize_GXBool, u8);
 extern u32 lbl_1_bss_6D1A8[278];
 extern const f64 lbl_1_rodata_31A0;
@@ -224,7 +250,6 @@ extern void fn_800711A8(void *);
 extern void fn_1_14CB4(void);
 extern void fn_1_FA84(void);
 extern const f32 lbl_1_rodata_32CC;
-extern s32 fn_1_79C88(EffectManager *manager, u32 *out, s32 reverse, f32 value);
 extern void lbl_8006DBAC(void *arg0);
 extern void fn_1_14D5C(char *arg0, int arg1);
 extern void fn_1_46EA8(u32 value);
@@ -1498,8 +1523,6 @@ typedef struct fn_1_76704_Effect {
     s16 field_102;
 } fn_1_76704_Effect;
 
-extern u16 fn_1_A5DB0(void);
-extern void OSPanic(const char *file, int line, const char *msg, ...);
 
 void fn_1_76704(fn_1_76704_Effect *effect, fn_1_76704_Rect *rect) {
     if (rect != NULL) {
@@ -1729,17 +1752,6 @@ u8 fn_1_7879C(u32 arg0) {
 /* fzgx:end fn_1_7879C */
 
 /* fzgx:begin fn_1_788B0 */
-typedef struct {
-    f32 x, y, z;
-} Vec3f;
-
-extern void fn_80072864(u32);
-extern void lbl_8006DCA4(void);
-extern void lbl_8006E0A4(Vec3f *);
-extern void lbl_8006E13C(Vec3f *);
-extern void fn_80072558(void);
-extern u32 fn_800384FC(u32, u32);
-
 /* Shared literal pool primer: screen_effect.c pools every literal of the TU
    behind one base (lbl_1_rodata_3180). These dummy functions, in a section
    the link ignores, reference the pooled literals in retail address order so
@@ -1748,9 +1760,6 @@ extern u32 fn_800384FC(u32, u32);
 
 union FzgxPoolColor { struct { u8 r, g, b, a; } bytes; u32 word; };
 
-extern void fzgx_pool_sink_p(void *);
-extern void fzgx_pool_sink_f(f32);
-extern void fzgx_pool_sink_d(f64);
 
 __declspec(section ".fzgxpool") void fzgx_pool_primer_0(void) {
     union FzgxPoolColor c0 = {{0xFF, 0xFF, 0xFF, 0xFF}};
@@ -1830,8 +1839,8 @@ u32 fn_1_788B0(void) {
 
     fn_80072864(2);
     lbl_8006DCA4();
-    lbl_8006E0A4(&eye);
-    lbl_8006E13C(&target);
+    lbl_8006E0A4( (void *)(Vec3f *)(&eye));
+    lbl_8006E13C( (void *)(Vec3f *)(&target));
     fn_80072558();
     return fn_800384FC(10, 10);
 }
@@ -2424,7 +2433,6 @@ typedef struct {
     u32 unk_38;
 } Fn17BAF8State;
 
-extern u32 fn_800793D4(u8 *, u32, u32);
 
 /* file-scope objects of the retail TU, in retail order: MWCC addresses them off one section base */
 u32 fzgx_obj_lbl_1_bss_6D7A8[2];

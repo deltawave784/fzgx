@@ -20,7 +20,50 @@ from .project import ROOT, STATE_DIR, Project
 
 SCALAR = {'void', 'int', 'char', 'short', 'long', 'unsigned', 'signed', 'float', 'double',
           's8', 'u8', 's16', 'u16', 's32', 'u32', 's64', 'u64', 'f32', 'f64', 'BOOL', 'size_t'}
-PROTO_RE = re.compile(r'^\s*(?:extern\s+)?(.*?)\b([A-Za-z_]\w*)\s*\(([^()]*)\)\s*(?:,|;)')
+# parameter lists may hold function-pointer parameters: two levels of nested parentheses
+PROTO_RE = re.compile(r'^\s*(?:extern\s+)?(.*?)\b([A-Za-z_]\w*)\s*\(((?:[^()]|\((?:[^()]|\([^()]*\))*\))*)\)\s*(?:,|;)')
+QUALIFIERS = {'const', 'volatile', 'register'}
+
+
+def split_params(inner: str) -> List[str]:
+    """Top-level comma-separated parts of a parameter list (commas inside a function-pointer
+    parameter's own list stay in it)."""
+    parts, depth, start = [], 0, 0
+    for i, c in enumerate(inner):
+        if c in '([':
+            depth += 1
+        elif c in ')]':
+            depth -= 1
+        elif c == ',' and depth == 0:
+            parts.append(inner[start:i])
+            start = i + 1
+    parts.append(inner[start:])
+    return [x.strip() for x in parts]
+
+
+def param_type(part: str) -> str:
+    """The type of one parameter declaration, its name dropped: `CurveKey *keys` ->
+    `CurveKey *`, `CurveKey` and `const T *` stay, `void (*cb)(s32)` -> `void (*)(s32)`,
+    `u8 a[4]` -> `u8 *`."""
+    part = re.sub(r'\s+', ' ', part.strip())
+    if part in ('', '...'):
+        return part
+    fp = re.match(r'^(.*?)\(\s*\*\s*(?:[A-Za-z_]\w*)?\s*\)\s*(\(.*\))\s*$', part)
+    if fp:
+        return f'{fp.group(1).strip()} (*){fp.group(2)}'
+    decayed = False
+    dims = re.search(r'(?:\s*\[[^\]]*\])+\s*$', part)
+    if dims:
+        part, decayed = part[:dims.start()].rstrip(), True
+    m = re.search(r'\b([A-Za-z_]\w*)\s*$', part)
+    if m and m.group(1) not in SCALAR and m.group(1) not in QUALIFIERS:
+        # a trailing identifier is the name only when what precedes it is a whole type
+        # (not empty, not only qualifiers, not a bare `struct`/`union`/`enum` keyword)
+        head = part[:m.start()].strip()
+        core = ' '.join(w for w in re.findall(r'[A-Za-z_]\w*|\*', head) if w not in QUALIFIERS)
+        if core and core not in ('struct', 'union', 'enum'):
+            part = head
+    return part + (' *' if decayed else '')
 
 
 def _sig(decl: str) -> Optional[Tuple[str, str, List[str]]]:
@@ -32,14 +75,7 @@ def _sig(decl: str) -> Optional[Tuple[str, str, List[str]]]:
     params = []
     inner = m.group(3).strip()
     if inner and inner != 'void':
-        for part in inner.split(','):
-            part = part.strip()
-            if part == '...':
-                params.append('...')
-                continue
-            # drop the parameter name: the last identifier not followed by '*' or a type word
-            t = re.sub(r'\b([A-Za-z_]\w*)\s*$', lambda mm: '' if mm.group(1) not in SCALAR else mm.group(1), part).strip()
-            params.append(re.sub(r'\s+', ' ', t))
+        params = [param_type(part) for part in split_params(inner)]
     return ret, m.group(2), params
 
 
@@ -88,13 +124,21 @@ def split_args(text: str, start: int) -> Optional[Tuple[List[Tuple[int, int]], i
     return None
 
 
+class Unmodelled(ValueError):
+    """A signature the call-site rewrites cannot model: the block keeps its own form."""
+
+
 INTS = {'s8', 'u8', 's16', 'u16', 's32', 'u32', 'int', 'char', 'short', 'long', 'unsigned', 'signed', 'BOOL', 'size_t'}
 
 
 def cast_calls(body: str, name: str, old: List[str], new: List[str], force: bool = False,
                variadic: bool = False) -> str:
     """Wrap every argument whose old declared type differs from the truth's in a cast to the
-    old type, so the conversion the block's prototype implied stays in the code."""
+    old type, so the conversion the block's prototype implied stays in the code. A parameter
+    type it cannot model (empty) raises `Unmodelled`: `resolve` reports the block and keeps
+    its own form."""
+    if any(not t.strip() for t in list(old) + list(new)):
+        raise Unmodelled(f'{name}: parameter types {old} -> {new}')
     out = body
     for m in reversed(list(re.finditer(r'\b' + re.escape(name) + r'\s*\(', body))):
         line_start = body.rfind('\n', 0, m.start()) + 1
@@ -664,6 +708,8 @@ def resolve(p: Project, tu_source: str, v, apply: bool = True,
                 # a definer's field accesses need its own struct pointer)
                 if _same(a, b):
                     return True
+                if not a.strip() or not b.strip():
+                    return False
                 ia, ib = a.split()[-1] in INTS and '*' not in a, b.split()[-1] in INTS and '*' not in b
                 return ia != ib and ('*' in a or '*' in b) and a != '...' and b != '...'
 
@@ -711,6 +757,8 @@ def resolve(p: Project, tu_source: str, v, apply: bool = True,
     definer_of = {n: next((bn for bn, ob in original.items() if re.search(r'\b' + re.escape(n) + r'\s*\([^;{}()]*\)\s*\{', ob)), None)
                   for n in symbols if n in definitions}
 
+    unmodelled: Dict[Tuple[str, str], str] = {}
+
     def derive(bname: str) -> Optional[str]:
         body = original[bname]
         for n in symbols:
@@ -733,7 +781,12 @@ def resolve(p: Project, tu_source: str, v, apply: bool = True,
                     if not _same(st_[0], dr_ret := _sig(d_full := definitions[n])[0]):
                         body = re.sub(r'\breturn\s+([^;]+);', lambda mm: f'return ({st_[0]})({mm.group(1)});' if not mm.group(1).strip().startswith('(' + st_[0]) else mm.group(0), body)
                 continue
-            body = adapt(body, n, old_decl_for(bname, n), truth, [], force=bname in forced)
+            try:
+                body = adapt(body, n, old_decl_for(bname, n), truth, [], force=bname in forced)
+            except (Unmodelled, IndexError, ValueError) as e:
+                # a signature the rewrites cannot model: the block keeps its own form (reported)
+                unmodelled.setdefault((bname, n), f'{type(e).__name__}: {e}')
+                return None
             if body is None:
                 return None
         return body
@@ -842,6 +895,8 @@ def resolve(p: Project, tu_source: str, v, apply: bool = True,
             failing = [n for n in names if not verdict.get(n)]
     for n in symbols:
         report['truth'][n] = candidates[n][choice[n]]
+    if unmodelled:
+        report['unmodelled'] = [f'{b_} {n_}: {why}' for (b_, n_), why in sorted(unmodelled.items())]
     report['rewritten'] = [n for n in names if verdict.get(n)]
     report['reverted'] = failing
     # a block that cannot be adapted keeps its committed, self-contained form (still contested)

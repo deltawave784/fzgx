@@ -32,7 +32,7 @@ MODULES = ["main", "movie_module", "customize", "sel", "pilotpoint", "option", "
            "story", "profile", "movie", "winning", "replay", "car_colchg", "sample"]
 # (min bytes, max bytes, effort, checks per worker, stale checks) in the order they are worked
 BANDS = [(512, 1023, "medium", 24, 8), (1024, 2047, "high", 32, 10), (256, 511, "medium", 16, 5),
-         (2048, 4095, "high", 40, 12)]
+         (2048, 4095, "high", 40, 12), (0, 255, "medium", 12, 4), (4096, 100000, "high", 48, 14)]
 
 
 def run(cmd: list, capture: bool = False) -> subprocess.CompletedProcess:
@@ -61,13 +61,19 @@ def pick(model: str, lo: int, hi: int, per_module: int, count: int, max_attempts
     return out[:count]
 
 
-def usage_limit(batch: str):
+def usage_limit(batch: str, failed: int = 1):
     """The reset time (datetime) when the batch's sessions hit the usage limit, else None.
-    Falls back to 30 minutes ahead when the message carries no time."""
+    Falls back to 30 minutes ahead when the message carries no time. A real limit crashes
+    sessions (`failed` > 0), and prompts/assignments quote earlier attempts' notes (a
+    function's best prior attempt can carry an old limit message), so those never count."""
+    if failed <= 0:
+        return None
     folder = ROOT / ".fzgx" / "runs" / batch
     hit, when = False, None
     for path in folder.glob("*"):
         if path.suffix not in (".log", ".jsonl", ".json"):
+            continue
+        if ".assignment." in path.name or ".prompt." in path.name:
             continue
         text = path.read_text(encoding="utf-8", errors="replace")
         if "usageLimitExceeded" not in text and "usage limit" not in text:
@@ -155,7 +161,7 @@ def main() -> int:
         total += matched
         log(f"{batch}: {matched} matched, {summary.get('released', '?')} released, "
             f"{summary.get('failed', '?')} failed, {summary.get('wall_s', '?')}s (total {total})")
-        reset = usage_limit(batch)
+        reset = usage_limit(batch, summary.get("failed", 0))
         if reset:
             log(f"{forgive_crashes()} crashed sessions returned to the pool")
             waits += 1

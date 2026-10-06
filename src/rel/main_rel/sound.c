@@ -1,55 +1,67 @@
 #include "types.h"
 #include "rel/main_rel/globals.h"
 #include "rel/main_rel/sound.h"
+#include "sofdec/adxt.h"
+
 
 typedef struct {
     u8 unk_0[0x3A0];
     void *unk_3A0;
 } SoundObject;
 extern const f32 lbl_1_rodata_42E0;
-extern void *lbl_801A6410;
 extern int OSGetSoundMode(void);
 extern u32 fn_1_44A4(void);
-extern u32 fn_8001E954(u32 value);
-extern u32 fn_80020778(void);
-extern u32 fn_80025E18(void);
+extern void fn_1_A2E24(u32 arg0, u32 arg1, s32 arg2);
+extern void fn_80008BEC(void *dest, int value, u32 size);
+extern void fn_80022014(u32 arg0);
+extern void fn_80025D50(u32 arg0, u32 arg1);
+extern void fn_8004B7D4();
+extern void fn_8004BBA4();
+extern void ADXT_Stop(ADXTHandle *handle);
+extern void fn_8004CAC8(ADXTHandle *handle);
 extern u32 fn_8004CD70(u32, u32, u32);
 extern u32 fn_8004E59C(u32);
 extern u32 fn_8004EC34(u32);
-extern u32 fn_80068BFC(u32, u32, u32, u32, u32);
-extern s32 fn_1_45D0();
-extern void AIInit(u8 *stack);
-extern void fn_1_4438(void);
+extern void fn_80065890();
+extern void fn_8006589C(u32 value);
+extern void fn_800658A8(u32 arg0);
 extern u32 fn_1_9FE74(void *arg);
 extern void fn_1_9FEE8(void *arg);
 extern void fn_1_9FF50(void);
 extern void fn_1_9FF54(void);
 extern void fn_1_9FF58(void);
 extern void fn_1_A04AC(void);
-extern void fn_1_A2E24(u32, u32, s32);
-extern void fn_80008BEC(void *dest, int value, u32 size);
+extern s16 fn_1_3F0C8(void);
+extern void fn_1_3EF14(void *arg1);
+extern u32 fn_1_F2F34(void);
+extern u32 fn_1_864E8(int index);
+extern u8 lbl_1_rodata_43B4[184];
+extern void ADXT_Pause(ADXTHandle *handle, s32 paused);
+extern u8 lbl_1_bss_A88[24];
+extern u8 lbl_1_bss_CC0[152];
+extern s32 fn_1_3F864();
+extern s32 fn_1_3F854(void);
+extern u32 fn_1_86514(int index);
+extern f32 fn_1_8652C(int index);
+extern s32 fn_80067344(u32 arg0, u32 arg1, u32 arg2, u32 arg3);
+extern s32 fn_80067898(u32 value);
+extern void *lbl_801A6410;
+extern u32 fn_8001E954(u32 value);
+extern u32 fn_80020778(void);
+extern u32 fn_80025E18(void);
+extern u32 fn_80068BFC(u32, u32, u32, u32, u32);
+extern s32 fn_1_45D0();
+extern void AIInit(u8 *stack);
+extern void fn_1_4438(void);
 extern void fn_80020724(void);
-extern void fn_80022014(u32 arg0);
 extern void fn_8002361C(u32 value0, u32 value1);
-extern void fn_80025D50(u32 arg0, u32 arg1);
 extern void fn_8002805C(void);
 extern void fn_800411F4(void);
-extern void fn_8004B7D4();
-extern void fn_8004BBA4();
-extern void fn_80065890();
-extern void fn_8006589C(u32 value);
-extern void fn_800658A8(u32 arg0);
-extern u32 ADXT_Stop(u32);
-extern u32 fn_8004CAC8(u32);
-extern s32 fn_1_3F864();
 extern s8 fn_1_86690(s8 index);
 extern SoundObject *fn_1_86854(s8 arg0);
 extern void fn_1_14E9E4(int arg0, void *arg1);
-extern s32 fn_80067344(u32 arg0, u32 arg1, u32 arg2, u32 arg3);
-extern s32 fn_80067898(u32 value);
 extern u32 lbl_1_rodata_451C[5];
 extern u32 lbl_1_rodata_4478[41];
-extern u32 fn_1_864E8(int index);
 extern void *fn_1_86254(int index);
 extern u32 lbl_1_rodata_45D0[82];
 extern u32 fn_80008E84();
@@ -80,10 +92,9 @@ extern u8 lbl_1_bss_6F41C[260];
 extern void *lbl_1_rodata_4820[41];
 extern s32 fn_8004C658(char *arg0);
 extern int fn_8004BBCC(u32 obj);
-extern void ADXT_Pause(u32 obj, int arg);
 extern int fn_1_3FC38(void);
 extern s32 fn_80063094(s32 arg0, s32 arg1, s32 arg2);
-extern void fn_80065D70(int);
+extern s32 fn_80065D70(u32 idx);
 
 /* fzgx:begin fn_1_9FE74 */
 // Initialize the sound resource and register it with the sound system.
@@ -496,12 +507,7 @@ void fn_1_A1360(void) {
 }
 /* fzgx:end fn_1_A1360 */
 
-/* fzgx:begin fn_1_A24CC pool noprologue */
-#include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/sound.h"
-#include "sofdec/adxt.h"
-
+/* fzgx:begin fn_1_A24CC pool */
 typedef struct {
     ADXTHandle *unk_0;
     ADXTHandle *unk_4;
@@ -533,13 +539,6 @@ typedef struct {
     u8 pad_A4[0x14C0 - 0xA4];
 } fn_1_A24CC_RaceInfo;
 
-extern s16 fn_1_3F0C8(void);
-extern void fn_1_3EF14(void *);
-extern s32 fn_1_F2F34(void);
-extern u32 fn_1_864E8(int index);
-extern u8 lbl_1_rodata_43B4[184];
-extern void ADXT_Stop(ADXTHandle *);
-extern void ADXT_Pause(ADXTHandle *, s32);
 
 /* file-scope objects of the retail TU, in retail order: MWCC addresses them off one section base */
 u32 fzgx_obj_lbl_1_bss_6EA98;
@@ -630,7 +629,7 @@ void fn_1_A24CC(void) {
         info.unk_5 == 4 || info.unk_4 == 1) {
         return;
     }
-    if (fn_1_F2F34() != 0) {
+    if ((s32)fn_1_F2F34() != 0) {
         return;
     }
 
@@ -707,7 +706,7 @@ typedef struct {
     u8 unk_748[4];
     u8 unk_74C[0xE0];
     u8 unk_82C;
-} SoundState;
+} fn_1_A2E5C_SoundState;
 
 
 typedef struct {
@@ -719,7 +718,7 @@ typedef struct {
 
 
 void fn_1_A2E5C(s32 arg0, s32 arg1) {
-    SoundState *state = &(*((SoundState *)&lbl_1_bss_6EA98));
+    fn_1_A2E5C_SoundState *state = &(*((fn_1_A2E5C_SoundState *)&lbl_1_bss_6EA98));
     s16 local[8];
     u8 *entry;
     s8 i;
@@ -782,32 +781,21 @@ typedef struct {
     u8 pad_79C[0xC];
     s8 last26;          // 0x7A8
     s8 last25;          // 0x7A9
-} SoundState;
+} fn_1_A31E4_SoundState;
 
 typedef struct {
     u8 flags;
     u8 pad_1[5];
 } Obj_1_bss_A88_Entry;
 
-extern u32 lbl_1_bss_6EA98;
-extern u8 lbl_1_bss_A88[24];
-extern u8 lbl_1_bss_CC0[152];
-extern s32 fn_1_3F864(void);
-extern s32 fn_1_3F854(void);
-extern u32 fn_1_864E8(int);
-extern u32 fn_1_86514(int);
-extern f32 fn_1_8652C(int);
-extern s16 fn_1_3F0C8(void);
-extern s32 fn_80067344(u32, u32, u32, u32);
-extern s32 fn_80067898(u32);
 
 // Held in a one-member struct so the base is CSE'd into one register
 // instead of being rematerialised at every access.
 typedef struct {
-    SoundState *value;
+    fn_1_A31E4_SoundState *value;
 } SoundStateRef;
 
-static inline void play_voice(SoundState *state, u32 id) {
+static inline void play_voice(fn_1_A31E4_SoundState *state, u32 id) {
     if (state->busy == 0 && state->timer <= 0x2d) {
         fn_80067898(id);
     }
@@ -824,7 +812,7 @@ void fn_1_A31E4(void) {
     u32 flags;
     f32 f;
 
-    st.value = (SoundState *)&lbl_1_bss_6EA98;
+    st.value = (fn_1_A31E4_SoundState *)&lbl_1_bss_6EA98;
     if (fn_1_3F864() == 0) {
         return;
     }
@@ -879,9 +867,6 @@ struct SoundSlot {
 
 extern const f32 lbl_1_rodata_4544;  /* 0.1f */
 extern const f32 lbl_1_rodata_4548;  /* 0.2f */
-extern s32 fn_1_3F864(void);
-extern s32 fn_80067344(u32, u32, u32, u32);
-extern s32 fn_80067898(u32);
 
 /* file-scope objects of the retail TU, in retail order: MWCC addresses them off one section base */
 u32 lbl_1_bss_6EA98;
@@ -992,13 +977,7 @@ void fn_1_A358C(u32 arg0) {
 #pragma opt_loop_invariants reset
 /* fzgx:end fn_1_A358C */
 
-/* fzgx:begin fn_1_A3BD8 pool noprologue */
-#include "types.h"
-#include "rel/main_rel/sound.h"
-
-extern void fn_80067344(s32 arg0, s32 arg1, u32 arg2, u32 arg3);
-extern void fn_80067898(u32 arg0);
-
+/* fzgx:begin fn_1_A3BD8 pool */
 /* file-scope objects of the retail TU, in retail order: MWCC addresses them off one section base */
 u32 fzgx_obj_lbl_1_bss_6EA98;
 u32 fzgx_obj_lbl_1_bss_6EA9C[2];
@@ -1475,14 +1454,14 @@ void fn_1_A5864(void) {
         if (lbl_1_bss_6EAD0.unk_0->unk_0 != 0 &&
             fn_8004C658( (char *)(u32)(lbl_1_bss_6EAD0.unk_0->unk_0)) == 3) {
             if (fn_8004BBCC(lbl_1_bss_6EAD0.unk_0->unk_0) == 0) {
-                ADXT_Pause(lbl_1_bss_6EAD0.unk_0->unk_0, 1);
+                ADXT_Pause( (ADXTHandle *)(u32)(lbl_1_bss_6EAD0.unk_0->unk_0), 1);
             }
         }
 
         if (lbl_1_bss_6EAD0.unk_0->unk_4 != 0 &&
             fn_8004C658( (char *)(u32)(lbl_1_bss_6EAD0.unk_0->unk_4)) == 3) {
             if (fn_8004BBCC(lbl_1_bss_6EAD0.unk_0->unk_4) == 0) {
-                ADXT_Pause(lbl_1_bss_6EAD0.unk_0->unk_4, 1);
+                ADXT_Pause( (ADXTHandle *)(u32)(lbl_1_bss_6EAD0.unk_0->unk_4), 1);
             }
         }
 
@@ -1510,14 +1489,14 @@ void fn_1_A59AC(void) {
         if (*(u32 *)(*(u32 *)(sound + 0x38)) != 0 &&
             fn_8004C658( (char *)(u32)(*(u32 *)(*(u32 *)(sound + 0x38)))) == 3 &&
             fn_8004BBCC(*(u32 *)(*(u32 *)(sound + 0x38))) != 0) {
-            ADXT_Pause(*(u32 *)(*(u32 *)(sound + 0x38)), 0);
+            ADXT_Pause( (ADXTHandle *)(u32)(*(u32 *)(*(u32 *)(sound + 0x38))), 0);
         }
 
         if (fn_1_3FC38() == 0 || *(u8 *)(sound + 0x749) == 0) {
             if (*(u32 *)(*(u32 *)(sound + 0x38) + 4) != 0 &&
                 fn_8004C658( (char *)(u32)(*(u32 *)(*(u32 *)(sound + 0x38) + 4))) == 3 &&
                 fn_8004BBCC(*(u32 *)(*(u32 *)(sound + 0x38) + 4)) != 0) {
-                ADXT_Pause(*(u32 *)(*(u32 *)(sound + 0x38) + 4), 0);
+                ADXT_Pause( (ADXTHandle *)(u32)(*(u32 *)(*(u32 *)(sound + 0x38) + 4)), 0);
             }
         }
 

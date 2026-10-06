@@ -1,33 +1,35 @@
 #include "types.h"
 #include "rel/main_rel/globals.h"
 #include "rel/main_rel/rep_memcard.h"
-
 extern u32 lbl_801A6410;
-extern void fn_80008BA8(u32 arg0, u32 arg1, u32 arg2);
-extern void fn_1_46B4(u32 arg0, u32 arg1, u8 *arg2, s32 arg3);
-extern u32 fn_1_4630(u32 arg0, u32 arg1, u8 *arg2, s32 arg3);
-extern u8 lbl_1_bss_8EDA0;
-extern void fn_1_154F1C(void);
+extern void fn_1_46B4(u32 arg0, u32 arg1, const char *arg2, int arg3);
+extern f32 lbl_1_rodata_D598;
+extern f32 lbl_1_rodata_D59C;
+extern void fn_1_154FA8();
 extern void *memset(void *dest, int value, u32 size);
-extern void fn_1_155120(void);
-extern const f64 lbl_1_rodata_D5A8;
-extern void fn_1_496FC(f32, f32);
-extern void fn_1_4955C(f32, f32);
-extern void fn_1_495FC(void);
-extern f32 fn_1_4B090(void *);
-extern int fn_1_4B16C(void *);
-extern const f32 lbl_1_rodata_D5A0;
-extern void fn_1_4966C(f32, f32);
-extern int fn_1_FA638(void);
-extern void fn_1_4AF64(void *, ...);
-extern void fn_1_49614(void);
 extern const f64 lbl_1_rodata_D5B0;
 extern f64 fn_80083E84(u8 *text);
-extern s32 atoi(u8 *text);
+extern int atoi(const char *str);
+extern void fn_80008BA8(u32 arg0, u32 arg1, u32 arg2);
+extern u32 fn_1_4630();
+extern u8 lbl_1_bss_8EDA0;
+extern void fn_1_154F1C(void);
+extern void fn_1_155120(void);
+extern const f64 lbl_1_rodata_D5A8;
+extern void fn_1_496FC(f32 value1, f32 value2);
+extern void fn_1_4955C(f32 value1, f32 value2);
+extern void fn_1_495FC(void);
+extern f32 fn_1_4B090(s32 value);
+extern s32 fn_1_4B16C(s32 value);
+extern const f32 lbl_1_rodata_D5A0;
+extern void fn_1_4966C(f32 value1, f32 value2);
+extern u8 fn_1_FA638(void);
+extern void fn_1_4AF64(const char *format, ...);
+extern void fn_1_49614(void);
 extern u32 lbl_1_data_49A18[5];
 extern void fn_1_B9C0C(void);
-extern void fn_1_1596DC(s32);
-extern void fn_1_484CC(s32);
+extern void fn_1_1596DC(int index);
+extern void fn_1_484CC(s32 index);
 
 /* fzgx:begin fn_1_154BE4 pool */
 struct fn_1_154BE4_bss {
@@ -43,8 +45,6 @@ struct fn_1_154BE4_data {
     u32 unk_98;
     u32 unk_9C;
 };
-extern u32 lbl_801A6410;
-extern void fn_1_46B4(u32 arg0, u32 arg1, u8 *arg2, s32 arg3);
 
 typedef struct lbl_1_bss_8ED94_t {
     u32 unk_4;
@@ -83,7 +83,7 @@ void fn_1_154BE4(void) {
     
     struct fn_1_154BE4_data *d = (struct fn_1_154BE4_data *)&lbl_1_data_49A18;
     if (fzgx_obj_lbl_1_bss_8EDA4.unk_28 != 2 && fzgx_obj_lbl_1_bss_8ED90 != 0) {
-        fn_1_46B4(lbl_801A6410, fzgx_obj_lbl_1_bss_8ED90, (u8 *)d + 0xb0, 0x10d);
+        fn_1_46B4(lbl_801A6410, fzgx_obj_lbl_1_bss_8ED90, (const char *)((u8 *)d + 0xb0), 0x10d);
         fzgx_obj_lbl_1_bss_8ED90 = 0;
         fzgx_obj_lbl_1_bss_8ED94.unk_4 = 0;
     }
@@ -105,7 +105,7 @@ void fn_1_154CC4(u32 arg0) {
 /* fzgx:begin fn_1_154CD0 */
 void fn_1_154CD0(u32 arg0, u32 arg1) {
     if (lbl_1_bss_8ED90 != 0) {
-        fn_1_46B4(lbl_801A6410, lbl_1_bss_8ED90, lbl_1_data_49AC8, 0x12f);
+        fn_1_46B4(lbl_801A6410, lbl_1_bss_8ED90, (const char *)(u8 *)(lbl_1_data_49AC8), 0x12f);
         lbl_1_bss_8ED90 = 0;
         lbl_1_bss_8ED94.unk_0 = 0;
     }
@@ -127,7 +127,7 @@ u32 fn_1_154D84(u32 arg0) {
     }
 
     fn_80008BA8(arg0, lbl_1_bss_8ED90, lbl_1_bss_8ED94.unk_0);
-    fn_1_46B4(lbl_801A6410, lbl_1_bss_8ED90, lbl_1_data_49AC8, 0x13f);
+    fn_1_46B4(lbl_801A6410, lbl_1_bss_8ED90, (const char *)(u8 *)(lbl_1_data_49AC8), 0x13f);
     lbl_1_bss_8ED90 = 0;
     lbl_1_bss_8ED94.unk_0 = 0;
     return 1;
@@ -147,9 +147,7 @@ u32 fn_1_154E34(u32 *arg0) {
 }
 /* fzgx:end fn_1_154E34 */
 
-/* fzgx:begin fn_1_154E4C noprologue */
-#include "types.h"
-
+/* fzgx:begin fn_1_154E4C */
 struct fn_1_154E4C_lbl_1_bss_8EDF0 {
     u8 pad_0[0x8];
     u32 unk_8;
@@ -163,23 +161,18 @@ struct fn_1_154E4C_lbl_1_bss_8EDF0 {
     u32 unk_30;
 };
 
-extern f32 lbl_1_rodata_D598;
-extern f32 lbl_1_rodata_D59C;
-extern struct fn_1_154E4C_lbl_1_bss_8EDF0 lbl_1_bss_8EDF0;
-extern u32 fn_1_154FA8(f32);
-extern u32 memset(u32, u32, u32);
 
 void fn_1_154E4C(void) {
     u32 v0;
-    memset((u32)&lbl_1_bss_8EDF0, 0, 304);
-    lbl_1_bss_8EDF0.unk_C = 0;
-    lbl_1_bss_8EDF0.unk_28 = lbl_1_rodata_D598;
-    lbl_1_bss_8EDF0.unk_30 = 2;
-    lbl_1_bss_8EDF0.unk_8 = ((lbl_1_bss_8EDF0.unk_8 & 0xFFFFFFFD));
-    lbl_1_bss_8EDF0.unk_10 = 0;
-    lbl_1_bss_8EDF0.unk_20 = 80;
-    lbl_1_bss_8EDF0.unk_24 = 385;
-    lbl_1_bss_8EDF0.unk_2C = lbl_1_rodata_D59C;
+    memset( (void *)((u32)&(*((struct fn_1_154E4C_lbl_1_bss_8EDF0 *)&lbl_1_bss_8EDF0))), 0, 304);
+    (*((struct fn_1_154E4C_lbl_1_bss_8EDF0 *)&lbl_1_bss_8EDF0)).unk_C = 0;
+    (*((struct fn_1_154E4C_lbl_1_bss_8EDF0 *)&lbl_1_bss_8EDF0)).unk_28 = lbl_1_rodata_D598;
+    (*((struct fn_1_154E4C_lbl_1_bss_8EDF0 *)&lbl_1_bss_8EDF0)).unk_30 = 2;
+    (*((struct fn_1_154E4C_lbl_1_bss_8EDF0 *)&lbl_1_bss_8EDF0)).unk_8 = (((*((struct fn_1_154E4C_lbl_1_bss_8EDF0 *)&lbl_1_bss_8EDF0)).unk_8 & 0xFFFFFFFD));
+    (*((struct fn_1_154E4C_lbl_1_bss_8EDF0 *)&lbl_1_bss_8EDF0)).unk_10 = 0;
+    (*((struct fn_1_154E4C_lbl_1_bss_8EDF0 *)&lbl_1_bss_8EDF0)).unk_20 = 80;
+    (*((struct fn_1_154E4C_lbl_1_bss_8EDF0 *)&lbl_1_bss_8EDF0)).unk_24 = 385;
+    (*((struct fn_1_154E4C_lbl_1_bss_8EDF0 *)&lbl_1_bss_8EDF0)).unk_2C = lbl_1_rodata_D59C;
     fn_1_154FA8(lbl_1_rodata_D598);
 }
 /* fzgx:end fn_1_154E4C */
@@ -243,7 +236,23 @@ void fn_1_154FC0(void) {
 }
 /* fzgx:end fn_1_154FC0 */
 
-/* fzgx:begin fn_1_154FD8 */
+/* fzgx:begin fn_1_154FD8 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/rep_memcard.h"
+
+extern void fn_1_155120(void);
+extern void fn_1_496FC(f32, f32);
+extern void fn_1_4955C(f32, f32);
+extern void fn_1_495FC(void);
+extern f32 fn_1_4B090(void *);
+extern int fn_1_4B16C(void *);
+extern const f32 lbl_1_rodata_D5A0;
+extern void fn_1_4966C(f32, f32);
+extern int fn_1_FA638(void);
+extern void fn_1_4AF64(void *, ...);
+extern void fn_1_49614(void);
+
 void fn_1_154FD8(void) {
     Obj_1_bss_8EDF0 *obj;
     f32 value;
@@ -280,15 +289,7 @@ void fn_1_154FD8(void) {
 }
 /* fzgx:end fn_1_154FD8 */
 
-/* fzgx:begin fn_1_15530C noprologue */
-#include "types.h"
-#include "rel/main_rel/rep_memcard.h"
-
-extern const f64 lbl_1_rodata_D5B0;
-extern f64 fn_80083E84(u8 *text);
-extern s32 atoi(u8 *text);
-extern void *memset(void *dest, s32 value, u32 size);
-
+/* fzgx:begin fn_1_15530C */
 u8 *fn_1_15530C(u8 *text) {
     Obj_1_bss_8EDF0 *obj = &lbl_1_bss_8EDF0;
 
@@ -320,7 +321,7 @@ u8 *fn_1_15530C(u8 *text) {
     {
         s32 value;
         text++;
-        value = atoi(text);
+        value = atoi( (const char *)(u8 *)(text));
         while ((*text >= '0' && *text <= '9') || *text == '.') {
             text++;
         }

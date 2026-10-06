@@ -39,6 +39,13 @@ MATCHER_TOOLS = [
          section='diff or data', cursor='Line cursor from the previous result, or 0 for the first page'),
     tool('release', 'Stop working on this function, saving your best candidate.', reason='Precise remaining technical obstacle'),
 ]
+# Optional librarian notes on release (a JSON string; the CLI bounds it to 5 x 300 characters).
+MATCHER_TOOLS[-1]['inputSchema']['properties']['notes'] = dict(type='string', description=(
+    'Optional JSON list of at most 5 {"kind", "tu"?, "detail"} notes for the librarian, only for a conflict '
+    'that must be resolved outside your unit: prototype/return type disagreeing with retail or callers '
+    '(prototype), conflicting extern or prologue declaration (declaration), header object with the wrong '
+    'type or size (data), overlapping declared objects (overlap), missing prototype or unused helper '
+    '(hygiene), naming, other. Never for scheduling, register or progress observations.'))
 
 
 class RpcError(RuntimeError):
@@ -485,7 +492,8 @@ class Matcher:
                 self.turn = params['turnId']
                 name, args = params['tool'], params['arguments']
                 spec = next((t for t in MATCHER_TOOLS if t['name'] == name), None)
-                if not spec or params.get('namespace') or not isinstance(args, dict) or set(args) != set(spec['inputSchema']['required']):
+                if (not spec or params.get('namespace') or not isinstance(args, dict)
+                        or not set(spec['inputSchema']['required']) <= set(args) <= set(spec['inputSchema']['properties'])):
                     raise ValueError('invalid assigned tool or arguments')
                 if not all(isinstance(v, str) for v in args.values()):
                     raise ValueError('tool arguments must be strings')
@@ -508,7 +516,8 @@ class Matcher:
                 elif name == 'read_evidence':
                     result = await self.cli('read-evidence', self.symbol, '--section', args['section'], '--cursor', args['cursor'])
                 else:
-                    result = await self.cli('release', self.symbol, '--agent', self.agent, '--reason', args['reason'])
+                    result = await self.cli('release', self.symbol, '--agent', self.agent, '--reason', args['reason'],
+                                            *(['--notes', args['notes']] if args.get('notes', '').strip() else []))
                 self.log.write(json.dumps(dict(timestamp=utcnow(), method='fzgx/tool/result',
                                                params=dict(tool=name, result=result))) + '\n')
                 if self.terminal.exists():

@@ -1,19 +1,38 @@
 #include "types.h"
 #include "rel/main_rel/globals.h"
 #include "rel/main_rel/bg_win.h"
-
+#include "font.h"
+extern u8 fn_1_5910(void);
+extern void fn_80038F10(f32* out);
+extern void fn_1_15EFEC(int);
+extern void fn_1_15DFD4(int, int);
+extern u32 fn_1_485A8(s32 index);
+extern void fn_1_49410(void);
+extern void fn_1_49728(u8 value);
+extern void fn_1_1420A4(void);
+extern FontDrawPacket lbl_1_rodata_26F8;
+extern u32 fn_1_58C4(void);
+extern f32 fn_1_519FC(f32 value);
+extern f32 fn_1_51AC0(f32 value);
+extern f32 lbl_1_rodata_DD6C[11];
+extern f32 lbl_1_rodata_DE50[39];
+extern void fn_1_496FC(f32 value1, f32 value2);
+extern void fn_1_495FC(void);
+extern void fn_1_495C8(u8 value);
+extern void fn_1_15DD7C(s32 timer);
+extern void fn_1_15C6C0(u16, int);
+extern void fn_1_49614(void);
+extern void fn_1_A4C9C(s32 index, u8 value);
+extern u32 fn_1_435C(u32 value);
+extern s32 fn_1_3F8C(u32 arg3, u32 arg0, u32 arg1, u32 index);
+extern void fn_1_15E220(u8 *value);
 extern u32 lbl_1_bss_8FD60[2];
 extern int fn_1_15BCDC(void *);
-extern void fn_1_4060(void);
-
+extern u32 fn_1_4060(void);
 extern u32 lbl_1_bss_8FE80[8];
-
-extern void *fn_1_435C(void *);
-extern void fn_1_15E220(u8 *value);
-extern void fn_1_3F8C(void *, void *, u8 *, s32);
 extern u32 lbl_1_bss_8FEA0;
 extern u8 lbl_1_bss_8FE7C;
-extern u32 strlen(const char *str);
+extern size_t strlen(const char *str);
 extern s32 fn_8006FC1C(const char *a, const char *b);
 extern void fn_1_15E1E8(u8 *value);
 
@@ -65,8 +84,6 @@ void fn_1_15B970(WinObject *obj) {
 /* fzgx:end fn_1_15B970 */
 
 /* fzgx:begin fn_1_15BA78 */
-#include "types.h"
-
 typedef struct {
     u8 pad_00[0x08];
     u32 count;
@@ -86,7 +103,7 @@ char *fn_1_15BA78(char *name) {
         return name;
     }
 
-    name_length.value = strlen(name);
+    name_length.value = (u32)strlen(name);
     index = 0;
     entry_offset.value = 0;
     while (index < table.value->count) {
@@ -424,13 +441,6 @@ void fn_1_15C36C(void) {
 /* fzgx:end fn_1_15C36C */
 
 /* fzgx:begin fn_1_15DD7C */
-#include "font.h"
-
-extern FontDrawPacket lbl_1_rodata_26F8;
-extern u32 fn_1_58C4(void);
-extern f32 fn_1_519FC(f32);
-extern f32 fn_1_51AC0(f32);
-
 /* Literal-pool primer: this TU's shared pool (retail lbl_1_rodata_DD58) is laid out in
  * first-use order across the whole TU, so the words that precede this function's own
  * literals are referenced here, in retail order, from a section the link drops. */
@@ -677,20 +687,16 @@ void fn_1_15E260(s32 index) {
 /* fzgx:end fn_1_15E260 */
 
 /* fzgx:begin fn_1_15E330 */
-extern void *fn_1_435C(void *arg);
-extern void fn_1_3F8C(void *arg0, void *arg1, u8 *arg2, s32 arg3);
-
 void fn_1_15E330(s32 index, u32 value, void *arg) {
     if (lbl_1_bss_3C30.unk_13F4 - (&lbl_1_bss_8FDA8.unk_8)[index * 0x34] < 4) {
         void *result;
 
         (&lbl_1_bss_8FDA8.unk_0)[index * 0x34] |= 8;
         (&lbl_1_bss_8FDA8.unk_C)[index * 13] = value;
-        result = fn_1_435C(arg);
-        fn_1_3F8C(lbl_1_data_4C980, fn_1_15E1E8,
-                  &(&lbl_1_bss_8FDA8.unk_9)[index * 0x34], 13);
+        result = (void *)fn_1_435C( (u32)(void *)(arg));
+        fn_1_3F8C( (u32)(void *)(lbl_1_data_4C980), (u32)(void *)(fn_1_15E1E8), (u32)(u8 *)(&(&lbl_1_bss_8FDA8.unk_9)[index * 0x34]), 13);
         (&lbl_1_bss_8FDA8.unk_9)[index * 0x34] = 0x3c;
-        fn_1_435C(result);
+        fn_1_435C( (u32)(void *)(result));
     }
 }
 /* fzgx:end fn_1_15E330 */
@@ -718,22 +724,17 @@ void fn_1_15E434(u32 value) {
 // Initializes a background-window entry once, then marks it ready for reuse.
 void fn_1_15E540(s32 index, void *arg) {
     if (!((&lbl_1_bss_8FDA8.unk_0)[index * 0x34] & 1)) {
-        void *value = fn_1_435C(arg);
+        void *value = (void *)fn_1_435C( (u32)(void *)(arg));
 
-        fn_1_3F8C(lbl_1_data_4C994, fn_1_15E220,
-                  &lbl_1_bss_8FDA8.unk_1 + index * 0x34, 13);
+        fn_1_3F8C( (u32)(void *)(lbl_1_data_4C994), (u32)(void *)(fn_1_15E220), (u32)(u8 *)(&lbl_1_bss_8FDA8.unk_1 + index * 0x34), 13);
         (&lbl_1_bss_8FDA8.unk_1)[index * 0x34] = 0xff;
-        fn_1_435C(value);
+        fn_1_435C( (u32)(void *)(value));
         (&lbl_1_bss_8FDA8.unk_0)[index * 0x34] |= 1;
     }
 }
 /* fzgx:end fn_1_15E540 */
 
 /* fzgx:begin fn_1_15E5E4 */
-extern void *fn_1_435C(void *);
-extern void fn_1_15E220(u8 *value);
-extern void fn_1_3F8C(void *, void *, u8 *, s32);
-
 // Initializes a background-window entry once, then marks it ready for reuse.
 void fn_1_15E5E4(s32 index, void *arg) {
     Obj_1_bss_8FDA8 *obj;
@@ -742,29 +743,25 @@ void fn_1_15E5E4(s32 index, void *arg) {
     obj = (Obj_1_bss_8FDA8 *)((u8 *)&lbl_1_bss_8FDA8 + offset);
 
     if (!(obj->unk_0 & 2)) {
-        void *value = fn_1_435C(arg);
+        void *value = (void *)fn_1_435C( (u32)(void *)(arg));
 
-        fn_1_3F8C(lbl_1_data_4C994, fn_1_15E220, &obj->unk_2, 13);
+        fn_1_3F8C( (u32)(void *)(lbl_1_data_4C994), (u32)(void *)(fn_1_15E220), (u32)(u8 *)(&obj->unk_2), 13);
         (&lbl_1_bss_8FDA8.unk_2)[offset] = 0xff;
-        fn_1_435C(value);
+        fn_1_435C( (u32)(void *)(value));
         obj->unk_0 |= 2;
     }
 }
 /* fzgx:end fn_1_15E5E4 */
 
 /* fzgx:begin fn_1_15E688 */
-extern void *fn_1_435C(void *arg);
-extern void fn_1_3F8C(void *arg0, void *arg1, u8 *arg2, s32 arg3);
-
 void fn_1_15E688(s32 index, u32 value, u8 state, void *arg) {
     void *obj;
     Obj_1_bss_8FDA8 *entry;
 
-    obj = fn_1_435C(arg);
-    fn_1_3F8C(lbl_1_data_4C980, fn_1_15E1E8,
-              &(&lbl_1_bss_8FDA8.unk_0)[index * 0x34] + 3, 13);
+    obj = (void *)fn_1_435C( (u32)(void *)(arg));
+    fn_1_3F8C( (u32)(void *)(lbl_1_data_4C980), (u32)(void *)(fn_1_15E1E8), (u32)(u8 *)(&(&lbl_1_bss_8FDA8.unk_0)[index * 0x34] + 3), 13);
     (&lbl_1_bss_8FDA8.unk_0)[index * 0x34 + 3] = 0x5a;
-    fn_1_435C(obj);
+    fn_1_435C( (u32)(void *)(obj));
     entry = (Obj_1_bss_8FDA8 *)((u8 *)&lbl_1_bss_8FDA8 + index * 0x34);
     ((u32 *)&entry->unk_10)[(state - 1) % 8] = value;
     entry->unk_4 = value;
@@ -773,18 +770,13 @@ void fn_1_15E688(s32 index, u32 value, u8 state, void *arg) {
 /* fzgx:end fn_1_15E688 */
 
 /* fzgx:begin fn_1_15E764 */
-extern void *fn_1_435C(void *);
-extern void fn_1_15E220(u8 *value);
-extern void fn_1_3F8C(void *, void *, u8 *, s32);
-
 // Initializes the entry's 13-byte block, then marks it ready for reuse.
 void fn_1_15E764(s32 index, void *arg) {
-    void *value = fn_1_435C(arg);
+    void *value = (void *)fn_1_435C( (u32)(void *)(arg));
 
-    fn_1_3F8C(lbl_1_data_4C994, fn_1_15E220,
-              &lbl_1_bss_8FDA8.unk_A + index * 0x34, 13);
+    fn_1_3F8C( (u32)(void *)(lbl_1_data_4C994), (u32)(void *)(fn_1_15E220), (u32)(u8 *)(&lbl_1_bss_8FDA8.unk_A + index * 0x34), 13);
     (&lbl_1_bss_8FDA8.unk_A)[index * 0x34] = 0xff;
-    fn_1_435C(value);
+    fn_1_435C( (u32)(void *)(value));
     (&lbl_1_bss_8FDA8.unk_A)[index * 0x34] = 0xff;
 }
 /* fzgx:end fn_1_15E764 */
