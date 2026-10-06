@@ -2300,3 +2300,76 @@ void fn_1_7B4C0(void) {
     lbl_1_data_1DFA4.unk_8 = -1;
 }
 /* fzgx:end fn_1_7B4C0 */
+
+/* fzgx:begin fn_1_7BAF8 pool */
+typedef struct {
+    u8 pad_0[0x8];
+    u32 unk_8;
+    u32 unk_C;
+    u32 unk_10;
+    u16 unk_14;
+    u16 unk_16;
+    u16 unk_18;
+    u8 pad_1A[0xE];
+    u16 unk_28[8];
+    u32 unk_38;
+} Fn17BAF8State;
+
+extern u32 fn_800793D4(u8 *, u32, u32);
+
+/* file-scope objects of the retail TU, in retail order: MWCC addresses them off one section base */
+u32 fzgx_obj_lbl_1_bss_6D7A8[2];
+u32 lbl_1_bss_6D7A8_8;
+u32 lbl_1_bss_6D7A8_C;
+u32 lbl_1_bss_6D7A8_10;
+u16 lbl_1_bss_6D7A8_14;
+u16 lbl_1_bss_6D7A8_16;
+u16 lbl_1_bss_6D7C0;
+u16 lbl_1_bss_6D7C0_fill_6D7C2;
+u32 lbl_1_bss_6D7C0_fill_6D7C4[3];
+u16 lbl_1_bss_6D7C0_10[8];
+u32 lbl_1_bss_6D7C0_20;
+u32 lbl_1_bss_6D7C0_fill_6D7E4;
+u32 fzgx_obj_lbl_1_bss_6D7E8[2];
+u8 fzgx_obj_lbl_1_bss_6D7F0;
+u8 lbl_1_bss_6D7A8_gap_6D7F1;
+u16 lbl_1_bss_6D7A8_gap_6D7F1_fill_6D7F2;
+u32 fzgx_obj_lbl_1_bss_6D7F4[11];
+
+#pragma section code_type ".fzgxpool"
+static void fzgx_bss_layout(void) {
+    volatile u8 s;  /* fzgx-allow: S2 layout primer sink: MWCC emits .bss objects in first-access order */
+    s = *(u8 *)&fzgx_obj_lbl_1_bss_6D7A8;
+    s = *(u8 *)&lbl_1_bss_6D7A8_8;
+    s = *(u8 *)&lbl_1_bss_6D7A8_C;
+    s = *(u8 *)&lbl_1_bss_6D7A8_10;
+    s = *(u8 *)&lbl_1_bss_6D7A8_14;
+    s = *(u8 *)&lbl_1_bss_6D7A8_16;
+    s = *(u8 *)&lbl_1_bss_6D7C0;
+    s = *(u8 *)&lbl_1_bss_6D7C0_fill_6D7C2;
+    s = *(u8 *)&lbl_1_bss_6D7C0_fill_6D7C4;
+    s = *(u8 *)&lbl_1_bss_6D7C0_10;
+    s = *(u8 *)&lbl_1_bss_6D7C0_20;
+    s = *(u8 *)&lbl_1_bss_6D7C0_fill_6D7E4;
+    s = *(u8 *)&fzgx_obj_lbl_1_bss_6D7E8;
+    s = *(u8 *)&fzgx_obj_lbl_1_bss_6D7F0;
+    s = *(u8 *)&lbl_1_bss_6D7A8_gap_6D7F1;
+    s = *(u8 *)&lbl_1_bss_6D7A8_gap_6D7F1_fill_6D7F2;
+    s = *(u8 *)&fzgx_obj_lbl_1_bss_6D7F4;
+}
+#pragma section code_type ".text"
+
+void fn_1_7BAF8(u8 *arg0) {
+    int i;
+
+    
+    fn_800793D4(arg0, 0, ((lbl_1_bss_6D7A8_10) + ((lbl_1_bss_6D7A8_8) + (lbl_1_bss_6D7A8_C))));
+    lbl_1_bss_6D7C0 = 0;
+    lbl_1_bss_6D7A8_16 = 0;
+    lbl_1_bss_6D7A8_14 = 0;
+    for (i = 0; i < 8; i++) {
+        lbl_1_bss_6D7C0_10[i] = 0xFFFF;
+    }
+    lbl_1_bss_6D7C0_20 = 0;
+}
+/* fzgx:end fn_1_7BAF8 */

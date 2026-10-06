@@ -11416,5 +11416,76 @@
     ],
     "link": "verified",
     "commit": "dd615f16"
+  },
+  "fn_1_7BAF8": {
+    "seed_symbol": "fn_1_7BAF8",
+    "generator": "fzgx fixup",
+    "transform": "expression-tree + at 1858",
+    "seed": "#include \"types.h\"\n#include \"rel/main_rel/globals.h\"\n\ntypedef struct {\n    u8 pad_0[0x8];\n    u32 unk_8;\n    u32 unk_C;\n    u32 unk_10;\n    u16 unk_14;\n    u16 unk_16;\n    u16 unk_18;\n    u8 pad_1A[0xE];\n    u16 unk_28[8];\n    u32 unk_38;\n} Fn17BAF8State;\n\nextern Fn17BAF8State lbl_1_bss_6D7A8;\nextern u32 fn_800793D4(u8 *, u32, u32);\n\nvoid fn_1_7BAF8(u8 *arg0) {\n    Fn17BAF8State *s;\n    int i;\n\n    s = (Fn17BAF8State *)&lbl_1_bss_6D7A8;\n    fn_800793D4(arg0, 0, s->unk_10 + s->unk_C + s->unk_8);\n    s->unk_18 = 0;\n    s->unk_16 = 0;\n    s->unk_14 = 0;\n    for (i = 0; i < 8; i++) {\n        s->unk_28[i] = 0xFFFF;\n    }\n    s->unk_38 = 0;\n}\n",
+    "seed_sha256": "bff292eab506168b7acd0c4075d6b16ada53830d95ec4a2eedde4499e0f26504",
+    "generated_sha256": "983d2c607f840c7f02989acf549d1ebd372b5b0dc5647e0750f5f3398bd12abd",
+    "generated_source": "#include \"types.h\"\n#include \"rel/main_rel/globals.h\"\n\ntypedef struct {\n    u8 pad_0[0x8];\n    u32 unk_8;\n    u32 unk_C;\n    u32 unk_10;\n    u16 unk_14;\n    u16 unk_16;\n    u16 unk_18;\n    u8 pad_1A[0xE];\n    u16 unk_28[8];\n    u32 unk_38;\n} Fn17BAF8State;\n\nextern u32 fn_800793D4(u8 *, u32, u32);\n\n/* file-scope objects of the retail TU, in retail order: MWCC addresses them off one section base */\nu32 fzgx_obj_lbl_1_bss_6D7A8[2];\nu32 lbl_1_bss_6D7A8_8;\nu32 lbl_1_bss_6D7A8_C;\nu32 lbl_1_bss_6D7A8_10;\nu16 lbl_1_bss_6D7A8_14;\nu16 lbl_1_bss_6D7A8_16;\nu16 lbl_1_bss_6D7C0;\nu16 lbl_1_bss_6D7C0_fill_6D7C2;\nu32 lbl_1_bss_6D7C0_fill_6D7C4[3];\nu16 lbl_1_bss_6D7C0_10[8];\nu32 lbl_1_bss_6D7C0_20;\nu32 lbl_1_bss_6D7C0_fill_6D7E4;\nu32 fzgx_obj_lbl_1_bss_6D7E8[2];\nu8 fzgx_obj_lbl_1_bss_6D7F0;\nu8 lbl_1_bss_6D7A8_gap_6D7F1;\nu16 lbl_1_bss_6D7A8_gap_6D7F1_fill_6D7F2;\nu32 fzgx_obj_lbl_1_bss_6D7F4[11];\n\n#pragma section code_type \".fzgxpool\"\nstatic void fzgx_bss_layout(void) {\n    volatile u8 s;  /* fzgx-allow: S2 layout primer sink: MWCC emits .bss objects in first-access order */\n    s = *(u8 *)&fzgx_obj_lbl_1_bss_6D7A8;\n    s = *(u8 *)&lbl_1_bss_6D7A8_8;\n    s = *(u8 *)&lbl_1_bss_6D7A8_C;\n    s = *(u8 *)&lbl_1_bss_6D7A8_10;\n    s = *(u8 *)&lbl_1_bss_6D7A8_14;\n    s = *(u8 *)&lbl_1_bss_6D7A8_16;\n    s = *(u8 *)&lbl_1_bss_6D7C0;\n    s = *(u8 *)&lbl_1_bss_6D7C0_fill_6D7C2;\n    s = *(u8 *)&lbl_1_bss_6D7C0_fill_6D7C4;\n    s = *(u8 *)&lbl_1_bss_6D7C0_10;\n    s = *(u8 *)&lbl_1_bss_6D7C0_20;\n    s = *(u8 *)&lbl_1_bss_6D7C0_fill_6D7E4;\n    s = *(u8 *)&fzgx_obj_lbl_1_bss_6D7E8;\n    s = *(u8 *)&fzgx_obj_lbl_1_bss_6D7F0;\n    s = *(u8 *)&lbl_1_bss_6D7A8_gap_6D7F1;\n    s = *(u8 *)&lbl_1_bss_6D7A8_gap_6D7F1_fill_6D7F2;\n    s = *(u8 *)&fzgx_obj_lbl_1_bss_6D7F4;\n}\n#pragma section code_type \".text\"\n\nvoid fn_1_7BAF8(u8 *arg0) {\n    int i;\n\n    \n    fn_800793D4(arg0, 0, ((lbl_1_bss_6D7A8_10) + ((lbl_1_bss_6D7A8_8) + (lbl_1_bss_6D7A8_C))));\n    lbl_1_bss_6D7C0 = 0;\n    lbl_1_bss_6D7A8_16 = 0;\n    lbl_1_bss_6D7A8_14 = 0;\n    for (i = 0; i < 8; i++) {\n        lbl_1_bss_6D7C0_10[i] = 0xFFFF;\n    }\n    lbl_1_bss_6D7C0_20 = 0;\n}\n",
+    "compiler": "GC/1.3.2",
+    "flags": "",
+    "source": "rel/main_rel/screen_effect/fn_1_7BAF8.c",
+    "bytes": 136,
+    "headers_sha256": "73cf7422bff8955cde8d5ebf68ebefe0241675ac791653eb8a9749cb0d84419f",
+    "oracle_sha256": "a6ae7b9acf87233fe9fd4029471150b7998eac228d7c95d874069a8cacaedda8",
+    "recipe": [
+      {
+        "label": "define retail TU bss objects (split)",
+        "input_sha256": "bff292eab506168b7acd0c4075d6b16ada53830d95ec4a2eedde4499e0f26504",
+        "output_sha256": "ca1947a1210940208ad746d5dc3c58ac8b1731be8a96ba28049dd4d29b5f42aa",
+        "input_symbol": "fn_1_7BAF8",
+        "output_symbol": "fn_1_7BAF8",
+        "edits": [
+          [
+            257,
+            295,
+            ""
+          ],
+          [
+            336,
+            336,
+            "/* file-scope objects of the retail TU, in retail order: MWCC addresses them off one section base */\nu32 fzgx_obj_lbl_1_bss_6D7A8[2];\nu32 lbl_1_bss_6D7A8_8;\nu32 lbl_1_bss_6D7A8_C;\nu32 lbl_1_bss_6D7A8_10;\nu16 lbl_1_bss_6D7A8_14;\nu16 lbl_1_bss_6D7A8_16;\nu16 lbl_1_bss_6D7C0;\nu16 lbl_1_bss_6D7C0_fill_6D7C2;\nu32 lbl_1_bss_6D7C0_fill_6D7C4[3];\nu16 lbl_1_bss_6D7C0_10[8];\nu32 lbl_1_bss_6D7C0_20;\nu32 lbl_1_bss_6D7C0_fill_6D7E4;\nu32 fzgx_obj_lbl_1_bss_6D7E8[2];\nu8 fzgx_obj_lbl_1_bss_6D7F0;\nu8 lbl_1_bss_6D7A8_gap_6D7F1;\nu16 lbl_1_bss_6D7A8_gap_6D7F1_fill_6D7F2;\nu32 fzgx_obj_lbl_1_bss_6D7F4[11];\n\n#pragma section code_type \".fzgxpool\"\nstatic void fzgx_bss_layout(void) {\n    volatile u8 s;  /* fzgx-allow: S2 layout primer sink: MWCC emits .bss objects in first-access order */\n    s = *(u8 *)&fzgx_obj_lbl_1_bss_6D7A8;\n    s = *(u8 *)&lbl_1_bss_6D7A8_8;\n    s = *(u8 *)&lbl_1_bss_6D7A8_C;\n    s = *(u8 *)&lbl_1_bss_6D7A8_10;\n    s = *(u8 *)&lbl_1_bss_6D7A8_14;\n    s = *(u8 *)&lbl_1_bss_6D7A8_16;\n    s = *(u8 *)&lbl_1_bss_6D7C0;\n    s = *(u8 *)&lbl_1_bss_6D7C0_fill_6D7C2;\n    s = *(u8 *)&lbl_1_bss_6D7C0_fill_6D7C4;\n    s = *(u8 *)&lbl_1_bss_6D7C0_10;\n    s = *(u8 *)&lbl_1_bss_6D7C0_20;\n    s = *(u8 *)&lbl_1_bss_6D7C0_fill_6D7E4;\n    s = *(u8 *)&fzgx_obj_lbl_1_bss_6D7E8;\n    s = *(u8 *)&fzgx_obj_lbl_1_bss_6D7F0;\n    s = *(u8 *)&lbl_1_bss_6D7A8_gap_6D7F1;\n    s = *(u8 *)&lbl_1_bss_6D7A8_gap_6D7F1_fill_6D7F2;\n    s = *(u8 *)&fzgx_obj_lbl_1_bss_6D7F4;\n}\n#pragma section code_type \".text\"\n\n"
+          ],
+          [
+            364,
+            386,
+            ""
+          ],
+          [
+            402,
+            548,
+            "\n    fn_800793D4(arg0, 0, lbl_1_bss_6D7A8_10 + lbl_1_bss_6D7A8_C + lbl_1_bss_6D7A8_8);\n    lbl_1_bss_6D7C0 = 0;\n    lbl_1_bss_6D7A8_16 = 0;\n    lbl_1_bss_6D7A8"
+          ],
+          [
+            595,
+            604,
+            "lbl_1_bss_6D7C0_10"
+          ],
+          [
+            628,
+            637,
+            "lbl_1_bss_6D7C0_20"
+          ]
+        ]
+      },
+      {
+        "label": "expression-tree + at 1858",
+        "input_sha256": "ca1947a1210940208ad746d5dc3c58ac8b1731be8a96ba28049dd4d29b5f42aa",
+        "output_sha256": "983d2c607f840c7f02989acf549d1ebd372b5b0dc5647e0750f5f3398bd12abd",
+        "input_symbol": "fn_1_7BAF8",
+        "output_symbol": "fn_1_7BAF8",
+        "edits": [
+          [
+            1858,
+            1916,
+            "((lbl_1_bss_6D7A8_10) + ((lbl_1_bss_6D7A8_8) + (lbl_1_bss_6D7A8_C)))"
+          ]
+        ]
+      }
+    ],
+    "link": "pool"
   }
 }
