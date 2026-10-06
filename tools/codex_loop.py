@@ -97,6 +97,9 @@ def main() -> int:
         total += matched
         log(f"{batch}: {matched} matched, {summary.get('released', '?')} released, "
             f"{summary.get('failed', '?')} failed, {summary.get('wall_s', '?')}s (total {total})")
+        if summary.get("failed", 0) >= len(symbols) and not matched:
+            log("every session crashed (usage limit or login?); stopping. Check .fzgx/runs/" + batch)
+            break
         if res.returncode != 0 and not summary:
             log("orchestrate failed:\n" + (res.stderr or res.stdout)[-1500:]); break
         gate = run(["tools/fzgx.py", "gate"], capture=True)
