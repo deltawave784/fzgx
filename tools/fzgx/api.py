@@ -155,8 +155,10 @@ def sync(p: Project) -> Dict[str, int]:
             if row is None:
                 sym = p.find_symbol(s, u["module"])
                 row = l.get(p.key(sym)) if sym is not None else None
-            if row is None or row["status"] in ("matched", "asm", "claimed", "blocked"):
+            if row is None or row["status"] in ("asm", "claimed", "blocked"):
                 continue
+            if row["status"] == "matched" and not u.get("asm"):
+                continue  # already matched; only an assembly unit re-labels a plain match as `asm`
             if u.get("asm"):
                 l.db.execute("UPDATE functions SET status='asm', link_state='verified' WHERE symbol=?", (row["symbol"],))
             else:
