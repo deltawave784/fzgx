@@ -11708,5 +11708,42 @@
     "oracle_sha256": "a6ae7b9acf87233fe9fd4029471150b7998eac228d7c95d874069a8cacaedda8",
     "recipe": [],
     "link": "pool"
+  },
+  "fn_1_A96BC": {
+    "seed_symbol": "fn_1_A96BC",
+    "generator": "fzgx fixup",
+    "transform": "define retail TU bss objects (merge)",
+    "seed": "#include \"types.h\"\n#include \"rel/main_rel/globals.h\"\n#include \"rel/main_rel/driver.h\"\n\nvoid fn_1_A96BC(void) {\n    Obj_1_bss_6F648 *p = &lbl_1_bss_6F648;\n    *(u32 *)((u8 *)p + 0x2010) = 0;\n    p->unk_C = (u32)p->pad_10;\n}\n",
+    "seed_sha256": "06ee10ce9c1c5c401302ad92e2dedc9db9a73bbf179b5fcbbb46e796c8376b6e",
+    "generated_sha256": "f2849d13900f392f60c854507cdaf3b5dcb6adcf87d6859304b00102d7f8e208",
+    "generated_source": "#include \"types.h\"\n#include \"rel/main_rel/globals.h\"\n#include \"rel/main_rel/driver.h\"\n\ntypedef struct lbl_1_bss_6F648_t {\n    u8 pad_0[0xc];\n    u32 unk_C;\n} lbl_1_bss_6F648_t;\n\n/* file-scope objects of the retail TU, in retail order: MWCC addresses them off one section base */\nlbl_1_bss_6F648_t fzgx_obj_lbl_1_bss_6F648;\nu8 lbl_1_bss_6F648_10[0x1000];\nu32 lbl_1_bss_70658[1024];\nu8 lbl_1_bss_71658;\nu8 lbl_1_bss_71658_fill_71659;\nu16 lbl_1_bss_71658_fill_7165A;\nu32 lbl_1_bss_71658_fill_7165C[5];\nu32 lbl_1_bss_71670;\nu32 fzgx_obj_lbl_1_bss_71674[2];\nu32 lbl_1_bss_7167C;\n\n#pragma section code_type \".fzgxpool\"\nstatic void fzgx_bss_layout(void) {\n    volatile u8 s;  /* fzgx-allow: S2 layout primer sink: MWCC emits .bss objects in first-access order */\n    s = *(u8 *)&fzgx_obj_lbl_1_bss_6F648;\n    s = *(u8 *)&lbl_1_bss_6F648_10;\n    s = *(u8 *)&lbl_1_bss_70658;\n    s = *(u8 *)&lbl_1_bss_71658;\n    s = *(u8 *)&lbl_1_bss_71658_fill_71659;\n    s = *(u8 *)&lbl_1_bss_71658_fill_7165A;\n    s = *(u8 *)&lbl_1_bss_71658_fill_7165C;\n    s = *(u8 *)&lbl_1_bss_71670;\n    s = *(u8 *)&fzgx_obj_lbl_1_bss_71674;\n    s = *(u8 *)&lbl_1_bss_7167C;\n}\n#pragma section code_type \".text\"\n\nvoid fn_1_A96BC(void) {\n    \n    *(u32 *)((u8 *)&lbl_1_bss_71658) = 0;\n    fzgx_obj_lbl_1_bss_6F648.unk_C = (u32)lbl_1_bss_6F648_10;\n}\n",
+    "compiler": "GC/1.3.2",
+    "flags": "",
+    "source": "rel/main_rel/driver/fn_1_A96BC.c",
+    "bytes": 32,
+    "headers_sha256": "73cf7422bff8955cde8d5ebf68ebefe0241675ac791653eb8a9749cb0d84419f",
+    "oracle_sha256": "cc9adb66562dbd3c2331dbe8490f48e671b5a0ecf01a16ff15185dbb0b3759fe",
+    "recipe": [
+      {
+        "label": "define retail TU bss objects (merge)",
+        "input_sha256": "06ee10ce9c1c5c401302ad92e2dedc9db9a73bbf179b5fcbbb46e796c8376b6e",
+        "output_sha256": "f2849d13900f392f60c854507cdaf3b5dcb6adcf87d6859304b00102d7f8e208",
+        "input_symbol": "fn_1_A96BC",
+        "output_symbol": "fn_1_A96BC",
+        "edits": [
+          [
+            87,
+            87,
+            "typedef struct lbl_1_bss_6F648_t {\n    u8 pad_0[0xc];\n    u32 unk_C;\n} lbl_1_bss_6F648_t;\n\n/* file-scope objects of the retail TU, in retail order: MWCC addresses them off one section base */\nlbl_1_bss_6F648_t fzgx_obj_lbl_1_bss_6F648;\nu8 lbl_1_bss_6F648_10[0x1000];\nu32 lbl_1_bss_70658[1024];\nu8 lbl_1_bss_71658;\nu8 lbl_1_bss_71658_fill_71659;\nu16 lbl_1_bss_71658_fill_7165A;\nu32 lbl_1_bss_71658_fill_7165C[5];\nu32 lbl_1_bss_71670;\nu32 fzgx_obj_lbl_1_bss_71674[2];\nu32 lbl_1_bss_7167C;\n\n#pragma section code_type \".fzgxpool\"\nstatic void fzgx_bss_layout(void) {\n    volatile u8 s;  /* fzgx-allow: S2 layout primer sink: MWCC emits .bss objects in first-access order */\n    s = *(u8 *)&fzgx_obj_lbl_1_bss_6F648;\n    s = *(u8 *)&lbl_1_bss_6F648_10;\n    s = *(u8 *)&lbl_1_bss_70658;\n    s = *(u8 *)&lbl_1_bss_71658;\n    s = *(u8 *)&lbl_1_bss_71658_fill_71659;\n    s = *(u8 *)&lbl_1_bss_71658_fill_7165A;\n    s = *(u8 *)&lbl_1_bss_71658_fill_7165C;\n    s = *(u8 *)&lbl_1_bss_71670;\n    s = *(u8 *)&fzgx_obj_lbl_1_bss_71674;\n    s = *(u8 *)&lbl_1_bss_7167C;\n}\n#pragma section code_type \".text\"\n\n"
+          ],
+          [
+            115,
+            216,
+            "\n    *(u32 *)((u8 *)&lbl_1_bss_71658) = 0;\n    fzgx_obj_lbl_1_bss_6F648.unk_C = (u32)lbl_1_bss_6F648"
+          ]
+        ]
+      }
+    ],
+    "link": "pool"
   }
 }

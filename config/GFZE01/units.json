@@ -35631,6 +35631,18 @@
   },
   {
     "module": "main_rel",
+    "source": "rel/main_rel/driver/fn_1_A96BC.c",
+    "symbols": [
+      "fn_1_A96BC"
+    ],
+    "status": "nonmatching",
+    "mw_version": "GC/1.3.2",
+    "extra_cflags": [],
+    "tu": "rel/main_rel/driver.c",
+    "pool": true
+  },
+  {
+    "module": "main_rel",
     "source": "rel/main_rel/driver/fn_1_A96DC.c",
     "symbols": [
       "fn_1_A96DC"
