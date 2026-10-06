@@ -25107,6 +25107,19 @@
   },
   {
     "module": "main",
+    "source": "dol/fn_8008A1CC.c",
+    "symbols": [
+      "fn_8008A1CC"
+    ],
+    "status": "matching",
+    "mw_version": "GC/1.3",
+    "extra_cflags": [],
+    "pool": {
+      "@25": "jumptable_8015B830"
+    }
+  },
+  {
+    "module": "main",
     "source": "dol/fn_8008A3C0.c",
     "symbols": [
       "fn_8008A3C0"
