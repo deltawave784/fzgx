@@ -6794,3 +6794,6 @@ rel/main_rel/bg_common/fn_1_1185B4.c:
 
 rel/main_rel/sound/fn_1_A24CC.c:
 	.text       start:0x000A24CC end:0x000A266C align:4
+
+rel/main_rel/archive/fn_1_12E0B8.c:
+	.text       start:0x0012E0B8 end:0x0012E424 align:4
