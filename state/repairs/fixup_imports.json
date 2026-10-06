@@ -11529,5 +11529,52 @@
       }
     ],
     "link": "pending"
+  },
+  "fn_1_154798": {
+    "seed_symbol": "fn_1_154798",
+    "generator": "fzgx fixup",
+    "transform": "native initialized data objects lbl_1_data_49A18",
+    "seed": "#include \"types.h\"\n\nstruct fn_1_154798_data {\n    void (*funcs[0x25])(void);\n    s32 unk_94;\n    s32 unk_98;\n    s32 unk_9C;\n};\n\nextern struct fn_1_154798_data lbl_1_data_49A18;\n\nvoid fn_1_154798(void) {\n    struct fn_1_154798_data *p = &lbl_1_data_49A18;\n\n    if (p->unk_9C >= 0) {\n        p->unk_94 = p->unk_98;\n        p->unk_98 = p->unk_9C;\n        p->unk_9C = -1;\n    }\n    if (p->unk_98 >= 0) {\n        p->funcs[p->unk_98]();\n    }\n}\n",
+    "seed_sha256": "cc9d355779945d08e817ce7c9e608f140edf410f2ee690dbcf230d5b517c3c78",
+    "generated_sha256": "ef14b56858a3620e361f2a92dcfe3b09abc99c7aa753a86bf9e292f0d93f2cc4",
+    "generated_source": "#include \"types.h\"\n\nstruct fn_1_154798_data {\n    void (*funcs[0x25])(void);\n    s32 unk_94;\n    s32 unk_98;\n    s32 unk_9C;\n};\n\nextern struct fn_1_154798_data lbl_1_data_49A18;\n\nextern u8 fn_1_1548A8__fzgx_offset_0[];\nextern u8 fn_1_154930__fzgx_offset_0[];\nextern u8 fn_1_1549B8__fzgx_offset_0[];\nextern u8 fn_1_154A08__fzgx_offset_0[];\nextern u8 fn_1_154BE4__fzgx_offset_0[];\nextern u8 lbl_1_data_49A2C__fzgx_offset_0[];\nextern u8 lbl_1_data_49A40__fzgx_offset_0[];\nextern u8 lbl_1_data_49A54__fzgx_offset_0[];\nextern u8 lbl_1_data_49A6C__fzgx_offset_0[];\nextern u8 lbl_1_data_49A80__fzgx_offset_0[];\nstatic union {u32 words[37]; void (*view[0x25])(void);} fzgx_pool_native_lbl_1_data_49A18_funcs = {{(u32)fn_1_1548A8__fzgx_offset_0, (u32)fn_1_154930__fzgx_offset_0, (u32)fn_1_1549B8__fzgx_offset_0, (u32)fn_1_154A08__fzgx_offset_0, (u32)fn_1_154BE4__fzgx_offset_0, 0x5245505F, 0x4D454D43, 0x4152445F, 0x494E4954, 0x00000000, 0x5245505F, 0x4D454D43, 0x4152445F, 0x57414954, 0x00000000, 0x5245505F, 0x4D454D43, 0x4152445F, 0x41435449, 0x4F4E5F49, 0x4E495400, 0x5245505F, 0x4D454D43, 0x4152445F, 0x41435449, 0x4F4E0000, 0x5245505F, 0x4D454D43, 0x4152445F, 0x46494E49, 0x53480000, (u32)lbl_1_data_49A2C__fzgx_offset_0, (u32)lbl_1_data_49A40__fzgx_offset_0, (u32)lbl_1_data_49A54__fzgx_offset_0, (u32)lbl_1_data_49A6C__fzgx_offset_0, (u32)lbl_1_data_49A80__fzgx_offset_0, 0xFFFFFFFF}}; /* fzgx-allow: A1 measured pool bytes and bindings */\nstatic s32 fzgx_pool_native_lbl_1_data_49A18_unk_94 = 0xFFFFFFFF; /* fzgx-allow: A1 measured pool bytes and bindings */\nstatic s32 fzgx_pool_native_lbl_1_data_49A18_unk_98 = 0xFFFFFFFF; /* fzgx-allow: A1 measured pool bytes and bindings */\nstatic s32 fzgx_pool_native_lbl_1_data_49A18_unk_9C = 0xFFFFFFFF; /* fzgx-allow: A1 measured pool bytes and bindings */\n\nvoid fn_1_154798(void) {\n    \n\n    if (fzgx_pool_native_lbl_1_data_49A18_unk_9C >= 0) {\n        fzgx_pool_native_lbl_1_data_49A18_unk_94 = fzgx_pool_native_lbl_1_data_49A18_unk_98;\n        fzgx_pool_native_lbl_1_data_49A18_unk_98 = fzgx_pool_native_lbl_1_data_49A18_unk_9C;\n        fzgx_pool_native_lbl_1_data_49A18_unk_9C = -1;\n    }\n    if (fzgx_pool_native_lbl_1_data_49A18_unk_98 >= 0) {\n        fzgx_pool_native_lbl_1_data_49A18_funcs.view[fzgx_pool_native_lbl_1_data_49A18_unk_98]();\n    }\n}\n",
+    "compiler": "GC/1.3.2",
+    "flags": "",
+    "source": "rel/main_rel/bg_tow/fn_1_154798.c",
+    "bytes": 100,
+    "headers_sha256": "73cf7422bff8955cde8d5ebf68ebefe0241675ac791653eb8a9749cb0d84419f",
+    "oracle_sha256": "a6ae7b9acf87233fe9fd4029471150b7998eac228d7c95d874069a8cacaedda8",
+    "recipe": [
+      {
+        "label": "native initialized data objects lbl_1_data_49A18",
+        "input_sha256": "cc9d355779945d08e817ce7c9e608f140edf410f2ee690dbcf230d5b517c3c78",
+        "output_sha256": "ef14b56858a3620e361f2a92dcfe3b09abc99c7aa753a86bf9e292f0d93f2cc4",
+        "input_symbol": "fn_1_154798",
+        "output_symbol": "fn_1_154798",
+        "edits": [
+          [
+            179,
+            179,
+            "extern u8 fn_1_1548A8__fzgx_offset_0[];\nextern u8 fn_1_154930__fzgx_offset_0[];\nextern u8 fn_1_1549B8__fzgx_offset_0[];\nextern u8 fn_1_154A08__fzgx_offset_0[];\nextern u8 fn_1_154BE4__fzgx_offset_0[];\nextern u8 lbl_1_data_49A2C__fzgx_offset_0[];\nextern u8 lbl_1_data_49A40__fzgx_offset_0[];\nextern u8 lbl_1_data_49A54__fzgx_offset_0[];\nextern u8 lbl_1_data_49A6C__fzgx_offset_0[];\nextern u8 lbl_1_data_49A80__fzgx_offset_0[];\nstatic union {u32 words[37]; void (*view[0x25])(void);} fzgx_pool_native_lbl_1_data_49A18_funcs = {{(u32)fn_1_1548A8__fzgx_offset_0, (u32)fn_1_154930__fzgx_offset_0, (u32)fn_1_1549B8__fzgx_offset_0, (u32)fn_1_154A08__fzgx_offset_0, (u32)fn_1_154BE4__fzgx_offset_0, 0x5245505F, 0x4D454D43, 0x4152445F, 0x494E4954, 0x00000000, 0x5245505F, 0x4D454D43, 0x4152445F, 0x57414954, 0x00000000, 0x5245505F, 0x4D454D43, 0x4152445F, 0x41435449, 0x4F4E5F49, 0x4E495400, 0x5245505F, 0x4D454D43, 0x4152445F, 0x41435449, 0x4F4E0000, 0x5245505F, 0x4D454D43, 0x4152445F, 0x46494E49, 0x53480000, (u32)lbl_1_data_49A2C__fzgx_offset_0, (u32)lbl_1_data_49A40__fzgx_offset_0, (u32)lbl_1_data_49A54__fzgx_offset_0, (u32)lbl_1_data_49A6C__fzgx_offset_0, (u32)lbl_1_data_49A80__fzgx_offset_0, 0xFFFFFFFF}}; /* fzgx-allow: A1 measured pool bytes and bindings */\nstatic s32 fzgx_pool_native_lbl_1_data_49A18_unk_94 = 0xFFFFFFFF; /* fzgx-allow: A1 measured pool bytes and bindings */\nstatic s32 fzgx_pool_native_lbl_1_data_49A18_unk_98 = 0xFFFFFFFF; /* fzgx-allow: A1 measured pool bytes and bindings */\nstatic s32 fzgx_pool_native_lbl_1_data_49A18_unk_9C = 0xFFFFFFFF; /* fzgx-allow: A1 measured pool bytes and bindings */\n\n"
+          ],
+          [
+            208,
+            255,
+            ""
+          ],
+          [
+            265,
+            356,
+            "fzgx_pool_native_lbl_1_data_49A18_unk_9C >= 0) {\n        fzgx_pool_native_lbl_1_data_49A18_unk_94 = fzgx_pool_native_lbl_1_data_49A18_unk_98;\n        fzgx_pool_native_lbl_1_data_49A18_unk_98 = fzgx_pool_native_lbl_1_data_49A18_unk_9C;\n        fzgx_pool_native_lbl_1_data_49A18_"
+          ],
+          [
+            383,
+            421,
+            "fzgx_pool_native_lbl_1_data_49A18_unk_98 >= 0) {\n        fzgx_pool_native_lbl_1_data_49A18_funcs.view[fzgx_pool_native_lbl_1_data_49A18_"
+          ]
+        ]
+      }
+    ],
+    "link": "pending"
   }
 }

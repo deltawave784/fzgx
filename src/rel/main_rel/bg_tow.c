@@ -64,6 +64,47 @@ void fn_1_154708(u32 arg0) {
 }
 /* fzgx:end fn_1_154708 */
 
+/* fzgx:begin fn_1_154798 noprologue */
+#include "types.h"
+
+struct fn_1_154798_data {
+    void (*funcs[0x25])(void);
+    s32 unk_94;
+    s32 unk_98;
+    s32 unk_9C;
+};
+
+extern struct fn_1_154798_data lbl_1_data_49A18;
+
+extern u8 fn_1_1548A8__fzgx_offset_0[];
+extern u8 fn_1_154930__fzgx_offset_0[];
+extern u8 fn_1_1549B8__fzgx_offset_0[];
+extern u8 fn_1_154A08__fzgx_offset_0[];
+extern u8 fn_1_154BE4__fzgx_offset_0[];
+extern u8 lbl_1_data_49A2C__fzgx_offset_0[];
+extern u8 lbl_1_data_49A40__fzgx_offset_0[];
+extern u8 lbl_1_data_49A54__fzgx_offset_0[];
+extern u8 lbl_1_data_49A6C__fzgx_offset_0[];
+extern u8 lbl_1_data_49A80__fzgx_offset_0[];
+static union {u32 words[37]; void (*view[0x25])(void);} fzgx_pool_native_lbl_1_data_49A18_funcs = {{(u32)fn_1_1548A8__fzgx_offset_0, (u32)fn_1_154930__fzgx_offset_0, (u32)fn_1_1549B8__fzgx_offset_0, (u32)fn_1_154A08__fzgx_offset_0, (u32)fn_1_154BE4__fzgx_offset_0, 0x5245505F, 0x4D454D43, 0x4152445F, 0x494E4954, 0x00000000, 0x5245505F, 0x4D454D43, 0x4152445F, 0x57414954, 0x00000000, 0x5245505F, 0x4D454D43, 0x4152445F, 0x41435449, 0x4F4E5F49, 0x4E495400, 0x5245505F, 0x4D454D43, 0x4152445F, 0x41435449, 0x4F4E0000, 0x5245505F, 0x4D454D43, 0x4152445F, 0x46494E49, 0x53480000, (u32)lbl_1_data_49A2C__fzgx_offset_0, (u32)lbl_1_data_49A40__fzgx_offset_0, (u32)lbl_1_data_49A54__fzgx_offset_0, (u32)lbl_1_data_49A6C__fzgx_offset_0, (u32)lbl_1_data_49A80__fzgx_offset_0, 0xFFFFFFFF}}; /* fzgx-allow: A1 measured pool bytes and bindings */
+static s32 fzgx_pool_native_lbl_1_data_49A18_unk_94 = 0xFFFFFFFF; /* fzgx-allow: A1 measured pool bytes and bindings */
+static s32 fzgx_pool_native_lbl_1_data_49A18_unk_98 = 0xFFFFFFFF; /* fzgx-allow: A1 measured pool bytes and bindings */
+static s32 fzgx_pool_native_lbl_1_data_49A18_unk_9C = 0xFFFFFFFF; /* fzgx-allow: A1 measured pool bytes and bindings */
+
+void fn_1_154798(void) {
+    
+
+    if (fzgx_pool_native_lbl_1_data_49A18_unk_9C >= 0) {
+        fzgx_pool_native_lbl_1_data_49A18_unk_94 = fzgx_pool_native_lbl_1_data_49A18_unk_98;
+        fzgx_pool_native_lbl_1_data_49A18_unk_98 = fzgx_pool_native_lbl_1_data_49A18_unk_9C;
+        fzgx_pool_native_lbl_1_data_49A18_unk_9C = -1;
+    }
+    if (fzgx_pool_native_lbl_1_data_49A18_unk_98 >= 0) {
+        fzgx_pool_native_lbl_1_data_49A18_funcs.view[fzgx_pool_native_lbl_1_data_49A18_unk_98]();
+    }
+}
+/* fzgx:end fn_1_154798 */
+
 /* fzgx:begin fn_1_1547FC */
 #include "types.h"
 
