@@ -30,7 +30,26 @@ from fzgx.project import ROOT, STATE_DIR, Project
 
 MATCHER_TOOLS = ["Read", "mcp__fzgx__write_unit", "mcp__fzgx__patch_unit", "mcp__fzgx__check", "mcp__fzgx__read_evidence", "mcp__fzgx__release"]
 # The user's defaults are Fable 5.1 (claude) and GPT-6 Astra (codex); matchers must never run on those.
-EXPECTED_MODEL = {"claude": "claude-haiku-4-5", "codex": "gpt-5.6-luna"}
+DEFAULT_CODEX_MODEL = "gpt-6.1-sol"   # the account's Codex default (config.toml `model`); `--model` overrides
+EXPECTED_MODEL = {"claude": "claude-haiku-4-5", "codex": DEFAULT_CODEX_MODEL}
+
+
+def codex_binary() -> str:
+    """`codex` from the PATH, else the newest one in the Windows Codex app's install folder
+    (%LOCALAPPDATA%/OpenAI/Codex/bin/<build>/codex.exe), which is not on the PATH by default."""
+    import glob
+    import shutil
+    found = shutil.which('codex')
+    if found:
+        return found
+    local = os.environ.get('LOCALAPPDATA')
+    if local:
+        builds = sorted(glob.glob(os.path.join(local, 'OpenAI', 'Codex', 'bin', '*', 'codex.exe')),
+                        key=os.path.getmtime, reverse=True)
+        if builds:
+            return builds[0]
+    return 'codex'
+
 CLAUDE_MODELS = {"haiku": "claude-haiku-4-5", "sonnet": "claude-sonnet-5", "opus": "claude-opus-5"}
 # $/M tokens from platform.openai.com/docs/pricing (2026-09-08): input, cached input, cache write, output.
 # Codex reports usage but no cost; Claude Code reports total_cost_usd itself.
@@ -115,7 +134,7 @@ def codex_server_cmd(model: str, provider: str, effort: Optional[str], fast: boo
             'model_providers.deepseek.requires_openai_auth': False,
             'model_catalog_json': str(ROOT / 'tools/codex_models.json'),
         })
-    command = ['codex', 'app-server']
+    command = [codex_binary(), 'app-server']
     for key, value in overrides.items():
         command += ['-c', key + '=' + json.dumps(value)]
     return command
@@ -385,7 +404,7 @@ def main(argv: Optional[List[str]] = None) -> int:
     ap.add_argument("--harness", choices=["claude", "codex"], default="codex")
     ap.add_argument("--provider", choices=["openai", "deepseek"], default="openai", help="codex model provider")
     ap.add_argument("--api-key-file", type=Path, help="DeepSeek key file; otherwise use DEEPSEEK_API_KEY")
-    ap.add_argument("--model", help="claude: haiku|sonnet|opus (default haiku); codex: model name (default gpt-5.6-luna)")
+    ap.add_argument("--model", help="claude: haiku|sonnet|opus (default haiku); codex: model name (default gpt-6.1-sol)")
     ap.add_argument("--parallel", type=int, default=48)
     ap.add_argument("--tool-parallel", type=int, default=min(16, os.cpu_count() or 4),
                     help="maximum simultaneous local tool processes, independent of model sessions")
@@ -452,11 +471,14 @@ def main(argv: Optional[List[str]] = None) -> int:
     os.environ['FZGX_CLAIM_TTL'] = str(max(api.DEFAULT_TTL, a.timeout + 300))
     if a.seeds:
         os.environ['FZGX_SEEDS'] = str(a.seeds.resolve())
-    model = a.model or ("haiku" if a.harness == "claude" else "gpt-5.6-luna")
+    model = a.model or ("haiku" if a.harness == "claude" else DEFAULT_CODEX_MODEL)
     if a.harness == "claude":
         EXPECTED_MODEL["claude"] = CLAUDE_MODELS.get(model, model)  # the guard checks the tier that was asked for
-    elif a.model:
-        EXPECTED_MODEL["codex"] = a.model
+    else:
+        EXPECTED_MODEL["codex"] = model
+        if a.provider == "openai" and model not in CODEX_PRICES:
+            print(f"warning: no price entry for {model} in CODEX_PRICES: cost estimates read $0 and "
+                  "--budget-usd cannot stop this batch", flush=True)
     p = Project()
 
     if a.finish_only:
