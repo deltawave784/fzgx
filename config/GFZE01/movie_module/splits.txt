@@ -1820,3 +1820,6 @@ rel/movie_module/fn_12_8E4.c:
 
 rel/movie_module/fn_12_11168.c:
 	.text       start:0x00011168 end:0x00011188 align:4
+
+rel/movie_module/fn_12_23BFC.c:
+	.text       start:0x00023BFC end:0x00023E0C align:4
