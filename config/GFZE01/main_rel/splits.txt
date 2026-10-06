@@ -6731,3 +6731,9 @@ rel/main_rel/bg_cas/fn_1_FF6B8.c:
 
 rel/main_rel/live_camera/fn_1_FCB0.c:
 	.text       start:0x0000FCB0 end:0x00010138 align:4
+
+rel/main_rel/spline/fn_1_F7A20.c:
+	.text       start:0x000F7A20 end:0x000F7B2C align:4
+
+rel/main_rel/sound/fn_1_A31E4.c:
+	.text       start:0x000A31E4 end:0x000A33F0 align:4

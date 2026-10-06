@@ -591,6 +591,116 @@ void fn_1_A2E5C(s32 arg0, s32 arg1) {
 }
 /* fzgx:end fn_1_A2E5C */
 
+/* fzgx:begin fn_1_A31E4 */
+typedef struct {
+    u8 unk_0;
+    u8 id;      // 0x1
+    u8 unk_2;   // 0x2
+    u8 pad_3[7];
+    u8 unk_A;   // 0xA
+    u8 pad_B[9];
+} SoundEntry;  // size 0x14
+
+// The sound state cluster, addressed off lbl_1_bss_6EA98.
+typedef struct {
+    u8 pad_0[0x1C];
+    u32 flags_1C;       // 0x1C
+    u8 pad_20[0x720];
+    u8 busy;            // 0x740
+    u8 pad_741[3];
+    u32 timer;          // 0x744
+    u8 pad_748[4];
+    SoundEntry entries[4]; // 0x74C
+    u8 pad_79C[0xC];
+    s8 last26;          // 0x7A8
+    s8 last25;          // 0x7A9
+} SoundState;
+
+typedef struct {
+    u8 flags;
+    u8 pad_1[5];
+} Obj_1_bss_A88_Entry;
+
+extern u32 lbl_1_bss_6EA98;
+extern u8 lbl_1_bss_A88[24];
+extern u8 lbl_1_bss_CC0[152];
+extern s32 fn_1_3F864(void);
+extern s32 fn_1_3F854(void);
+extern u32 fn_1_864E8(int);
+extern u32 fn_1_86514(int);
+extern f32 fn_1_8652C(int);
+extern s16 fn_1_3F0C8(void);
+extern s32 fn_80067344(u32, u32, u32, u32);
+extern s32 fn_80067898(u32);
+
+// Held in a one-member struct so the base is CSE'd into one register
+// instead of being rematerialised at every access.
+typedef struct {
+    SoundState *value;
+} SoundStateRef;
+
+static inline void play_voice(SoundState *state, u32 id) {
+    if (state->busy == 0 && state->timer <= 0x2d) {
+        fn_80067898(id);
+    }
+}
+
+void fn_1_A31E4(void) {
+    s32 n;
+    SoundStateRef st;
+    SoundEntry *entries;
+    s32 cnt26 = 0;
+    u8 cnt25 = 0;
+    s32 i;
+    s32 id;
+    u32 flags;
+    f32 f;
+
+    st.value = (SoundState *)&lbl_1_bss_6EA98;
+    if (fn_1_3F864() == 0) {
+        return;
+    }
+    n = fn_1_3F854();
+    entries = st.value->entries;
+    for (i = 0; i < n; i++) {
+        id = entries[i].id;
+        flags = fn_1_864E8(id);
+        if (id == 0xff) continue;
+        if (flags & 0x280) continue;
+        if ((fn_1_86514(id) >> 27) & 1) {
+            if (!(st.value->flags_1C & 0x20)) {
+                fn_80067344(1, 7, 0xb0070000, entries[i].unk_A);
+            }
+            cnt26++;
+        }
+        if ((((Obj_1_bss_A88_Entry *)lbl_1_bss_A88)[i].flags >> 3) & 1) {
+            cnt25++;
+        }
+        f = fn_1_8652C(id);
+        if (((lbl_1_bss_CC0[i] >> 3) & 1) && f > 100.0f) {
+            if (fn_1_3F0C8() != 0x28) {
+                fn_80067344(1, 0x10, 0xb0270000, entries[i].unk_2);
+                play_voice(st.value, 0xa9091500);
+            }
+        }
+    }
+    if (st.value->last26 < (u8)cnt26) {
+        play_voice(st.value, 0xa9090c00);
+    } else if (st.value->last26 > (u8)cnt26) {
+        if ((u8)cnt26 == 0) {
+            play_voice(st.value, 0xa9090d00);
+        }
+    }
+    if (st.value->last25 > cnt25) {
+        if (cnt25 == 0) {
+            play_voice(st.value, 0xa9091600);
+        }
+    }
+    st.value->last26 = cnt26;
+    st.value->last25 = cnt25;
+}
+/* fzgx:end fn_1_A31E4 */
+
 /* fzgx:begin fn_1_A33F0 pool */
 struct SoundSlot {
     u8 unk_0;

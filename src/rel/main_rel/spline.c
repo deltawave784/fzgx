@@ -547,6 +547,98 @@ void fn_1_F79C8(void) {
 }
 /* fzgx:end fn_1_F79C8 */
 
+/* fzgx:begin fn_1_F7A20 pool noprologue */
+#include "types.h"
+
+typedef struct {
+    u8 data[0x180];
+} SplineEntry;
+
+typedef struct {
+    u8 kind;        // 0x00
+    u8 pad[7];
+    u8 flag;        // 0x08
+} SplineMarker;
+
+typedef struct {
+    u8 head[0xF4];
+    s32 count;                  // 0x0F4
+    SplineEntry entries[48];    // 0x0F8
+    s32 count2;                 // 0x48F8
+    u8 rest[0x260];             // 0x48FC
+    SplineMarker marker;        // 0x4B5C
+    u8 tail[0x5360 - 0x4B65];
+} SplineBuf;                    // 0x5360
+
+/* retail lays these objects out consecutively in the TU's .bss and
+ * addresses them off one section base */
+u32 lbl_1_bss_7F0A0;
+u32 lbl_1_bss_7F0A4;
+u8 lbl_1_bss_7F0A8[0x18];
+SplineBuf lbl_1_bss_7F0C0;
+SplineMarker *lbl_1_bss_84420;
+
+extern void fn_1_F7B2C(void);
+extern void fn_1_F7E88(void);
+extern void fn_1_F8048(void);
+extern void fn_1_F82E0(void);
+extern void fn_1_F8A18(void);
+extern void fn_1_F89C0(void);
+extern void fn_1_F8B24(void);
+extern void fn_1_F9C6C(void);
+extern void fn_1_F9E4C(void);
+extern void fn_1_F9D24(void);
+extern void fn_1_F9DA4(void);
+extern void fn_1_F9CD0(u8, u8);
+extern void fn_1_FA1D8(s32, s32, SplineEntry *);
+extern u32 fn_1_FA4D4(void);
+extern void fn_1_FA61C(void);
+extern u32 fn_800793D4(void *, u32, u32);
+
+/* MWCC emits .bss objects in first-access order: this primer (in a section the
+ * linker ignores) fixes the retail layout, including the untouched 0x18-byte gap */
+#pragma section ".fzgxpool"
+__declspec(section ".fzgxpool") void fzgx_primer_fn_1_F7A20(void)
+{
+    lbl_1_bss_7F0A0 = 0;
+    lbl_1_bss_7F0A4 = 0;
+    lbl_1_bss_7F0A8[0] = 0;
+    lbl_1_bss_7F0C0.count = 0;
+    lbl_1_bss_84420 = 0;
+}
+
+void fn_1_F7A20(void)
+{
+    s32 i;
+
+    lbl_1_bss_7F0A4 = 0;
+    lbl_1_bss_7F0A0 = 0;
+    fn_800793D4(&lbl_1_bss_7F0C0, 0, sizeof(SplineBuf));
+    lbl_1_bss_84420 = &lbl_1_bss_7F0C0.marker;
+    fn_1_F7B2C();
+    fn_1_F7E88();
+    fn_1_F8048();
+    fn_1_F82E0();
+    fn_1_F8A18();
+    fn_1_F89C0();
+    fn_1_F8B24();
+    fn_1_F9C6C();
+    fn_1_F9E4C();
+    fn_1_F9D24();
+    fn_1_F9DA4();
+    fn_1_F9CD0(0, 0);
+    lbl_1_bss_7F0C0.count = 0;
+    lbl_1_bss_7F0C0.count2 = 0;
+    for (i = 0; i < 48; i++) {
+        fn_1_FA1D8(i / 6, i % 6, &lbl_1_bss_7F0C0.entries[i]);
+    }
+    lbl_1_bss_84420->kind = 0x7C;
+    lbl_1_bss_84420->flag = 1;
+    fn_1_FA4D4();
+    fn_1_FA61C();
+}
+/* fzgx:end fn_1_F7A20 */
+
 /* fzgx:begin fn_1_F7B2C */
 void fn_1_F7B2C(void) {
     s16 i;

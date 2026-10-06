@@ -49630,6 +49630,20 @@
   },
   {
     "module": "main_rel",
+    "source": "rel/main_rel/sound/fn_1_A31E4.c",
+    "symbols": [
+      "fn_1_A31E4"
+    ],
+    "status": "matching",
+    "mw_version": null,
+    "extra_cflags": [],
+    "tu": "rel/main_rel/sound.c",
+    "pool": {
+      "@59": "lbl_1_rodata_4540"
+    }
+  },
+  {
+    "module": "main_rel",
     "source": "rel/main_rel/sound/fn_1_A33F0.c",
     "symbols": [
       "fn_1_A33F0"
@@ -50189,6 +50203,18 @@
     "mw_version": null,
     "extra_cflags": [],
     "tu": "rel/main_rel/spline.c"
+  },
+  {
+    "module": "main_rel",
+    "source": "rel/main_rel/spline/fn_1_F7A20.c",
+    "symbols": [
+      "fn_1_F7A20"
+    ],
+    "status": "nonmatching",
+    "mw_version": null,
+    "extra_cflags": [],
+    "tu": "rel/main_rel/spline.c",
+    "pool": true
   },
   {
     "module": "main_rel",
