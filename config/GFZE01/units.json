@@ -43831,6 +43831,29 @@
   },
   {
     "module": "main_rel",
+    "source": "rel/main_rel/memcard/fn_1_BED04.c",
+    "symbols": [
+      "fn_1_BED04"
+    ],
+    "status": "matching",
+    "mw_version": "GC/1.3.2",
+    "extra_cflags": [],
+    "tu": "rel/main_rel/memcard.c",
+    "pool": {
+      "...rodata.0": "lbl_1_rodata_4AE0",
+      "@11": "lbl_1_rodata_4CB0",
+      "@218": "lbl_1_rodata_5080+0x28",
+      "@216": "lbl_1_rodata_5080+0x20",
+      "@215": "lbl_1_rodata_5080+0x1C",
+      "@9": "lbl_1_rodata_4CA8",
+      "@217": "lbl_1_rodata_5080+0x24",
+      "@13": "lbl_1_rodata_4CC0",
+      "@38": "lbl_1_rodata_4D1C",
+      "@47": "lbl_1_rodata_4D1C+0x24"
+    }
+  },
+  {
+    "module": "main_rel",
     "source": "rel/main_rel/memcard/fn_1_BF520.c",
     "symbols": [
       "fn_1_BF520"
