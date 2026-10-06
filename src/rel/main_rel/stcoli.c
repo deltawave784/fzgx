@@ -4280,6 +4280,155 @@ void fn_1_2D038(void) {
 }
 /* fzgx:end fn_1_2D038 */
 
+/* fzgx:begin fn_1_2D524 noprologue */
+#include "types.h"
+
+struct fn_1_2D524_Obj {
+    u16 unk_0;
+    u8 unk_2;
+    u8 unk_3;
+    u8 unk_4[4];
+    u16 unk_8[6];
+    f32 unk_14;
+    f32 unk_18;
+    u8 pad_1C[0x4];
+    char unk_20[0xC1];
+    u8 unk_E1;
+    u8 unk_E2;
+    u8 unk_E3;
+    u8 unk_E4;
+    u8 unk_E5;
+    u8 unk_E6[5];
+    u8 unk_EB;
+};
+struct fn_1_2D524_Copy8 { u32 a[2]; };
+struct fn_1_2D524_Copy200 { u32 a[10][5]; };
+struct fn_1_2D524_lbl_1_rodata_BD8 {
+    u8 pad_0[0x24];
+    f32 unk_24;
+    u8 pad_28[0x30];
+    struct fn_1_2D524_Copy200 unk_58;
+    struct fn_1_2D524_Copy8 unk_120;
+    f32 unk_128;
+    f32 unk_12C;
+    f32 unk_130;
+};
+struct fn_1_2D524_lbl_1_data_5730 {
+    u8 pad_0[0x538];
+    char *unk_538;
+    u8 pad_53C[0x50];
+    char *unk_58C;
+    u8 pad_590[0x58];
+    char *unk_5E8;
+    u8 pad_5EC[0x58];
+    char *unk_644;
+    u8 pad_648[0x4C];
+    char *unk_694;
+    u8 pad_698[0x50];
+    char *unk_6E8;
+    u8 pad_6EC[0x1C];
+    char *unk_708;
+};
+struct fn_1_2D524_lbl_1_bss_3C30 {
+    u8 pad_0[0x6];
+    u8 unk_6;
+};
+
+extern char *fn_1_14EA74(s16, char *, s16);
+extern char *fn_1_15BA78(char *);
+extern f32 fn_1_4B068(char *);
+extern f32 fn_1_4B090(char *);
+extern int sprintf(char *, const char *, ...);
+extern s16 fn_1_12EF24(s16, s16);
+extern struct fn_1_2D524_lbl_1_bss_3C30 lbl_1_bss_3C30;
+extern struct fn_1_2D524_lbl_1_data_5730 lbl_1_data_5730;
+extern struct fn_1_2D524_lbl_1_rodata_BD8 lbl_1_rodata_BD8;
+extern u32 lbl_801A66B4;
+extern u32 lbl_1_data_2BD54[111][6];
+extern u32 fn_1_4AEC0(u32);
+extern u32 fn_1_F83F0(s16);
+extern u32 fn_1_F8D10(void);
+extern void *fn_1_7F49C(s16, s16, void *);
+extern void fn_1_49410(void);
+extern void fn_1_4955C(f32, f32);
+extern void fn_1_49590(f32);
+extern void fn_1_495B0(u32);
+extern void fn_1_495C8(u8);
+extern void fn_1_A2DC4(u32);
+extern void fn_1_F2008(s32);
+extern void fn_1_F7F48(s16);
+extern void fn_1_F8A58(u32);
+extern void fn_1_F8C00(s32);
+extern void fn_1_F8D38(u32);
+extern void fn_1_F9D68(u32);
+extern void fn_1_F9DE8(u32);
+
+void fn_1_2D524(struct fn_1_2D524_Obj *o) {
+    struct fn_1_2D524_lbl_1_rodata_BD8 *pool;
+    struct fn_1_2D524_lbl_1_data_5730 *strs;
+    u8 kind;
+    u16 idx;
+    u32 t0;
+    u32 v2;
+    u32 saved;
+    char *name;
+    struct fn_1_2D524_Copy200 table;
+    char buf30[0x40];
+    char buf10[0x20];
+    struct fn_1_2D524_Copy8 names;
+
+    pool = (struct fn_1_2D524_lbl_1_rodata_BD8 *)&lbl_1_rodata_BD8;
+    strs = (struct fn_1_2D524_lbl_1_data_5730 *)&lbl_1_data_5730;
+    kind = o->unk_E1;
+    if (kind == 0) {
+        t0 = fn_1_F8D10();
+        sprintf(o->unk_20, fn_1_15BA78(strs->unk_708), o->unk_0);
+        fn_1_F8D38(t0 + o->unk_0);
+        o->unk_0 = 0;
+    } else if (kind == 1) {
+        v2 = lbl_1_data_2BD54[o->unk_E3][lbl_801A66B4];
+        sprintf(o->unk_20, fn_1_15BA78(strs->unk_5E8), v2);
+        fn_1_F2008(lbl_1_bss_3C30.unk_6);
+    } else if (kind == 2) {
+        table = pool->unk_58;
+        sprintf(o->unk_20, fn_1_15BA78(strs->unk_694), table.a[o->unk_E5 & 0xF][lbl_801A66B4]);
+        fn_1_F9D68(o->unk_E5 & 0xF);
+        fn_1_F9DE8(o->unk_E5 & 0xF);
+    } else if (kind == 3) {
+        names = pool->unk_120;
+        sprintf(o->unk_20, fn_1_15BA78(strs->unk_6E8), fn_1_15BA78((char *)names.a[o->unk_EB]));
+        fn_1_F8C00(o->unk_EB);
+    } else {
+        idx = (u16)(kind - 4);
+        if (idx < o->unk_3) {
+            fn_1_7F49C(o->unk_4[idx], (s16)lbl_801A66B4, buf10);
+            sprintf(o->unk_20, fn_1_15BA78(strs->unk_58C), buf10);
+            fn_1_F7F48(o->unk_4[idx]);
+        } else if (idx < o->unk_3 + o->unk_2) {
+            idx -= o->unk_3;
+            fn_1_14EA74((s16)o->unk_8[(u16)idx], buf30, (s16)lbl_801A66B4);
+            sprintf(o->unk_20, fn_1_15BA78(strs->unk_538), buf30);
+            fn_1_F83F0((s16)o->unk_8[(u16)idx]);
+        } else {
+            idx -= o->unk_3 + o->unk_2;
+            v2 = lbl_1_data_2BD54[fn_1_12EF24(6, o->unk_E6[(u16)idx])][lbl_801A66B4];
+            sprintf(o->unk_20, fn_1_15BA78(strs->unk_644), v2);
+            fn_1_F8A58(o->unk_E6[(u16)idx]);
+        }
+    }
+    fn_1_49410();
+    fn_1_4955C(pool->unk_128, pool->unk_128);
+    fn_1_49590(pool->unk_24);
+    fn_1_495B0(0x80000000);
+    fn_1_495C8(1);
+    saved = fn_1_4AEC0(1);
+    o->unk_14 = pool->unk_12C + fn_1_4B068(o->unk_20);
+    o->unk_18 = pool->unk_130 + fn_1_4B090(o->unk_20);
+    fn_1_4AEC0(saved);
+    fn_1_A2DC4(0xA9011700);
+}
+/* fzgx:end fn_1_2D524 */
+
 /* fzgx:begin fn_1_3FCD4 */
 void fn_1_3FCD4(u32 mask) {
     if (mask == 0) {

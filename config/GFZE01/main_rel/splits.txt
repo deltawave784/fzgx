@@ -6713,3 +6713,6 @@ rel/main_rel/car/fn_1_8E084.c:
 
 rel/main_rel/sel_static_disp/fn_1_142BDC.c:
 	.text       start:0x00142BDC end:0x0014328C align:4
+
+rel/main_rel/stcoli/fn_1_2D524.c:
+	.text       start:0x0002D524 end:0x0002D888 align:4
