@@ -2644,6 +2644,17 @@
   },
   {
     "module": "interview",
+    "source": "rel/interview/interview/fn_17_750C.c",
+    "symbols": [
+      "fn_17_750C"
+    ],
+    "status": "matching",
+    "mw_version": null,
+    "extra_cflags": [],
+    "tu": "rel/interview/interview.c"
+  },
+  {
+    "module": "interview",
     "source": "rel/interview/interview/fn_17_802C.c",
     "symbols": [
       "fn_17_802C"
@@ -21935,6 +21946,16 @@
     ],
     "status": "matching",
     "mw_version": null,
+    "extra_cflags": []
+  },
+  {
+    "module": "main",
+    "source": "dol/fn_8006C190.c",
+    "symbols": [
+      "fn_8006C190"
+    ],
+    "status": "matching",
+    "mw_version": "GC/1.3.2",
     "extra_cflags": []
   },
   {

@@ -1590,6 +1590,107 @@ void fn_17_74C0(Interview *interview) {
 }
 /* fzgx:end fn_17_74C0 */
 
+/* fzgx:begin fn_17_750C */
+#include "rel/interview/interview.h"
+
+extern void fn_17_7728(void *);
+extern u32 fn_17_7A74(void *);
+
+typedef struct InterviewState750C {
+    u8 active;
+    u8 pad_1[3];
+    u8 flag;
+    u8 pad_5[0x53];
+    u32 flags;
+    u16 stage;
+} InterviewState750C;
+
+typedef struct InterviewChild750C {
+    u8 pad_0[0x22];
+    s16 timer;
+    u8 pad_24[0x1C];
+    s16 index;
+    s16 racer;
+    s16 category;
+} InterviewChild750C;
+
+typedef struct Interview750C {
+    u32 value;
+    u8 pad_4[0x14];
+    InterviewChild750C child;
+} Interview750C;
+
+typedef struct InterviewEntry750C {
+    s32 type;
+    u32 pad_4;
+    u32 value;
+    u8 pad_C[0x48];
+} InterviewEntry750C;
+
+static inline InterviewEntry750C *select750C(InterviewState750C *state, s32 category, s32 racer, u32 flags) {
+    if (flags && state->stage < 5) {
+        return (InterviewEntry750C *)&lbl_17_data_63BD0;
+    } else if (flags && state->stage >= 9) {
+        return (InterviewEntry750C *)&lbl_17_data_63D20;
+    } else {
+        return ((InterviewEntry750C *(*)[16])lbl_17_data_63190)[category][racer];
+    }
+}
+
+static inline InterviewEntry750C *entry750C(InterviewState750C *state, s32 category, s32 racer, s32 index, u32 flags) {
+    InterviewEntry750C *base = select750C(state, category, racer, flags);
+    InterviewEntry750C *entry;
+    if (!base) {
+        return 0;
+    }
+    if (base->type == -1) {
+        state->flag = 1;
+        base = (InterviewEntry750C *)&lbl_17_data_0;
+    } else {
+        state->flag = 0;
+    }
+    entry = base + index;
+    if (!entry) {
+        return 0;
+    }
+    return entry;
+}
+
+void fn_17_750C(Interview750C *interview) {
+    InterviewState750C *state = (InterviewState750C *)&lbl_17_bss_0;
+    InterviewChild750C *child;
+    InterviewEntry750C *base;
+    u32 value;
+    u32 flags;
+    if (state->active) return;
+    child = &interview->child;
+    flags = state->flags & 1;
+    base = select750C(state, child->category, child->racer, flags);
+    if (base) {
+        if (base->type == -1) state->flag = 1;
+        else state->flag = 0;
+    }
+    value = entry750C(state, child->category, child->racer, child->index + 1, flags)->value;
+    if (value == 0) {
+        if (child->timer == 0) {
+            child->index++;
+            fn_17_7728(child);
+        }
+    } else if (value == interview->value) {
+        child->index++;
+        fn_17_7728(child);
+    }
+    if (child->timer >= 0) {
+        if ((u16)(state->stage - 4) > 1) {
+            fn_17_7A74(child);
+            child->timer--;
+        }
+    } else if (state->stage == 6) {
+        state->stage = 7;
+    }
+}
+/* fzgx:end fn_17_750C */
+
 /* fzgx:begin fn_17_802C */
 /* Retail addresses the whole TU literal pool (lbl_17_rodata_0) through one base register.
  * The primer below lays the pool out in retail order ahead of the function, so the
