@@ -388,24 +388,24 @@ typedef struct {
     u32 type;
     u32 value;
     u32 unk_8;
-} Entry;
+} fn_1_46A8C_Entry;
 
 typedef struct {
     u32 unk_0;
     u32 unk_4;
     u8 unk_8[0x4010];
-    Entry entries[0x200];
-} State;
+    fn_1_46A8C_Entry entries[0x200];
+} fn_1_46A8C_State;
 
 u32 fn_1_46A8C(u32 value) {
-    State *base;
+    fn_1_46A8C_State *base;
     s32 next;
     s32 current;
     u32 initial;
     u32 arg;
-    Entry *entry;
+    fn_1_46A8C_Entry *entry;
 
-    base = (State *)&lbl_1_bss_384C0;
+    base = (fn_1_46A8C_State *)&lbl_1_bss_384C0;
     arg = value;
     initial = base->unk_0;
     next = initial + 1;
