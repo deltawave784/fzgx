@@ -2,50 +2,198 @@
 #include "rel/main_rel/globals.h"
 #include "rel/main_rel/ranking.h"
 
+typedef struct {
+    u32 flags;
+    u32 value;
+    u32 key;
+} fn_1_1568C4_RankingState;
+
+typedef struct {
+    u32 flags;
+    u8 _pad04[8];
+    void *data0;
+    void *data1;
+    void *data2;
+    s32 value;
+    void *data3;
+    void *data4;
+} fn_1_156B18_State;
+
+typedef struct {
+    u32 flags;
+    u8 _pad04[4];
+    void *data;
+} fn_1_1569A0_State;
+
+typedef struct {
+    u8 pad_0[0x4];
+    u32 unk_4;
+    u8 pad_8[0x2c];
+    f32 unk_34;
+    u8 pad_38[0x14];
+    u8 unk_4c;
+} Entry;
+
+typedef struct {
+    u32 flags;
+    void *owner;
+    u8 _pad08[8];
+    u32 value;
+    u8 _pad14[0x20];
+    f32 speed;
+    u8 _pad38[0x10];
+    f32 impulse;
+    u8 state_flags;
+} fn_1_157070_RankingState;
+
+typedef struct {
+    u32 flags;
+    void *arg04;
+    u8 _pad08[0x14];
+    u32 entry;
+    u8 _pad20[0x18];
+    f32 value;
+    u8 _pad3c[0x10];
+    u8 status;
+} fn_1_157200_RankingState;
+
+typedef struct {
+    u32 flags;
+    void *field04;
+    u8 _pad08[0x18];
+    void *data;
+    u8 _pad24[0x0c];
+    u8 value30;
+    u8 _pad31[0x0f];
+    f32 value40;
+    u8 _pad44[8];
+    u8 enabled4c;
+} fn_1_157358_RankingState;
+
+typedef struct {
+    u32 flags;
+    u32 unk_4;
+    u8 pad_8[0x24];
+    u32 unk_2c;
+    u8 pad_30[0x1c];
+    u8 unk_4c;
+} Obj_fn_1_1576B4;
+
+typedef struct {
+    u32 flags;
+    void *owner;
+    u8 _pad08[0x20];
+    u32 value;
+    u8 _pad2c[0x20];
+    u8 state;
+} fn_1_157598_RankingState;
+
+typedef struct {
+    u8 field8;
+    u8 _pad9[3];
+    s32 fieldC;
+    s32 field10;
+    u8 field14;
+    u8 field15;
+    u8 field16;
+    u8 field17;
+    u16 field18;
+    u16 field1A;
+    u8 _pad1C[0x14];
+} fn_1_1568C4_RankingConfig;
+
+typedef struct {
+    u8 unk_0;
+    u8 pad_1[3];
+    u32 unk_4;
+    u32 unk_8;
+    u8 unk_C;
+    u8 pad_D;
+    u16 unk_E;
+    u16 unk_10;
+    u16 unk_12;
+    u16 unk_14;
+    u8 pad_16[2];
+    u32 unk_18;
+    u32 unk_1C;
+    u8 unk_20;
+    u8 unk_21;
+    u8 pad_22[2];
+} Param_fn_1_1576B4;
+
+typedef struct {
+    u8 _pad00[4];
+    void *owner;
+    u8 _pad08[0x1c];
+    u32 value;
+} fn_1_1574E0_RankingState;
+
+typedef struct {
+    u32 unk_0;
+    u32 unk_4;
+    s16 unk_8[16];
+    s16 unk_28;
+    s16 unk_2a;
+} fn_1_159804_RankingEntry;
+extern void fn_1_12EF80(s16 value, s16 *out_0, s16 *out_1);
+extern void fn_80008BA8(u32 arg0, u32 arg1, u32 arg2);
+extern void fn_80008BEC(void *dest, int value, u32 size);
+extern void fn_1_3EF14(void *arg1);
+extern char *strncpy(char *dst, const char *src, size_t n);
+extern f32 lbl_1_rodata_D8C8[18];
+extern void fn_1_1569E8(void *entry);
+extern void fn_1_1568C4(fn_1_1568C4_RankingState *state);
+extern void fn_1_156B18(fn_1_156B18_State *state);
+extern void fn_1_1569A0(fn_1_1569A0_State *state);
+extern void fn_1_156C08(Entry *);
+extern void fn_1_156D9C(Entry *);
+extern void fn_1_157070(fn_1_157070_RankingState *state);
+extern void fn_1_156F54(Entry *);
+extern void fn_1_157200(fn_1_157200_RankingState *state);
+extern void fn_1_157358(fn_1_157358_RankingState *state);
+extern void fn_1_1576B4(Obj_fn_1_1576B4 *obj);
+extern void fn_1_157598(fn_1_157598_RankingState *state);
+extern s32 fn_8006B55C(void *, u32 *, void *);
+extern s32 fn_8006B628(u32 value, u32 param);
+extern s32 fn_8006B6F8(u32 value);
+extern const f32 lbl_1_rodata_D910;
+extern f32 lbl_1_rodata_D914[3];
+extern s32 fn_8006B7B4(u32 value);
+extern f32 lbl_1_rodata_D920;
+extern u32 fn_1_157920(void);
+extern void fn_1_4060(void);
+extern void fn_1_157950(void);
+extern void fn_1_157FC8(void);
+extern void fn_1_4811C(int arg);
+extern f32 lbl_1_rodata_DAE8;
+extern f64 lbl_1_rodata_DAF0;
+extern s16 fn_1_14F01C(s16 value);
 extern u32 lbl_801A6410[];
-extern void fn_1_46B4(u32, Obj_1_bss_8EF20_At0 *, u8 *, u32);
+extern void fn_1_46B4(u32 arg0, u32 arg1, const char *arg2, int arg3);
 extern Obj_1_bss_8EF20_At0 *fn_1_4630(u32, u32, u8 *, u32);
-extern void fn_1_451C(void);
+extern u32 fn_1_451C(void);
 extern void fn_1_A1340(void);
 extern s16 lbl_1_bss_962;
 extern s16 lbl_1_bss_96A;
 extern void fn_1_A1360(void);
 extern void fn_1_A1364(void);
 extern u8 lbl_1_bss_8F420[8];
-extern f32 lbl_1_rodata_D8C8[18];
-extern void fn_80008BEC(void *dst, int value, int size);
-extern void fn_1_1568C4(void *);
-extern void fn_80008BA8(void *, void *, int);
-extern void fn_1_1574E0(Obj_1_bss_8F428 *entry, u32 value);
-extern void fn_8006B7B4(void *);
-extern void fn_8006B870(void);
-extern void fn_1_157950(void);
-extern void fn_1_157FC8(void);
-extern u32 fn_1_157920(void);
-extern void fn_1_4060(void);
+extern void fn_1_1574E0();
+extern s32 fn_8006B870();
 extern u32 lbl_1_bss_8F57C[3];
 extern void fn_1_9AD88(void);
 extern void fn_1_1594AC(int index, int flag);
 extern void OSReport(const char *format, ...);
-extern void fn_1_465D0(void *object, int value);
+extern s32 fn_1_465D0(s32 arg0, s32 arg1);
 extern void fn_1_9AD54(void);
-
-extern void fn_1_1568C4(void *entry);
-
-extern u32 lbl_801A6410[];
-extern void fn_1_46B4(u32, Obj_1_bss_8EF20_At0 *, u8 *, u32);
-extern Obj_1_bss_8EF20_At0 *fn_1_4630(u32, u32, u8 *, u32);
-extern void fn_1_1569E8(void *entry);
-extern void fn_1_12EF80(s16 value, s16 *out_0, s16 *out_1);
 extern s32 fn_1_156218(u32 arg, void *out0, void *out1, void *out2);
 extern u32 lbl_1_bss_8F3FC[9];
-extern void fn_1_159804(int index, Obj_1_data_4C810 *entry);
-extern void fn_1_4811C(s16 value);
-extern void fn_1_48004(s16 value, u32 arg);
+extern s16 fn_1_159804(s16 value, fn_1_159804_RankingEntry *entry);
+extern void fn_1_48004(s32 index, s32 image);
 extern u32 lbl_1_rodata_DAF8[16];
 extern void fn_1_9A508(void);
 extern int lbl_801A66B4;
-extern s8 fn_1_46DC4(void *object);
+extern s32 fn_1_46DC4(s32 value);
 
 /* fzgx:begin fn_1_1554D0 */
 // Rebuild the ranking object when the previous one has been consumed.
@@ -53,7 +201,7 @@ void fn_1_1554D0(void) {
     Obj_1_bss_8EF20_At0 *obj = lbl_1_bss_8EF20.unk_0;
 
     if (obj != 0) {
-        fn_1_46B4(lbl_801A6410[0], obj, lbl_1_data_49B08, 0xD50);
+        fn_1_46B4(lbl_801A6410[0], (u32)(Obj_1_bss_8EF20_At0 *)(obj), (const char *)(u8 *)(lbl_1_data_49B08), 0xD50);
         lbl_1_bss_8EF20.unk_0 = 0;
     }
 
@@ -68,19 +216,13 @@ void fn_1_1554D0(void) {
 void fn_1_15555C(void) {
     Obj_1_bss_8EF20_At0 *obj = lbl_1_bss_8EF20.unk_0;
     if (obj != 0) {
-        fn_1_46B4(lbl_801A6410[0], obj, lbl_1_data_49B08, 0xD63);
+        fn_1_46B4(lbl_801A6410[0], (u32)(Obj_1_bss_8EF20_At0 *)(obj), (const char *)(u8 *)(lbl_1_data_49B08), 0xD63);
         lbl_1_bss_8EF20.unk_0 = 0;
     }
 }
 /* fzgx:end fn_1_15555C */
 
-/* fzgx:begin fn_1_1555B0 noprologue */
-#include "types.h"
-#include "rel/main_rel/ranking.h"
-
-extern void fn_1_12EF80(s16 value, s16 *out_0, s16 *out_1);
-extern void fn_80008BA8(void *arg0, void *arg1, u32 size);
-extern void fn_80008BEC(void *dst, u32 value, u32 size);
+/* fzgx:begin fn_1_1555B0 */
 
 s32 fn_1_1555B0(s32 value) {
     u32 state = (u32)&lbl_1_bss_8EF20;
@@ -100,14 +242,14 @@ s32 fn_1_1555B0(s32 value) {
     table = (u32)&lbl_1_bss_7F0C0 + (index_1 + index_0 * 6) * 0x180;
 
     for (i = 0; i < 10; i++) {
-        fn_80008BA8((void *)(*(u32 *)state + i * 0x38), (void *)(table + i * 0x20 + 0xf8), 0x20);
+        fn_80008BA8( (u32)((void *)(*(u32 *)state + i * 0x38)), (u32)((void *)(table + i * 0x20 + 0xf8)), 0x20);
     }
 
     fn_80008BEC((void *)(state + 0x48), 0, 0x230);
     dst = (u8 *)state + 0x48;
 
     for (j = 0; j < 10; j++, dst += 0x38) {
-        fn_80008BA8(dst, (void *)(*(u32 *)state + j * 0x38), 0x38);
+        fn_80008BA8( (u32)(void *)(dst), (u32)((void *)(*(u32 *)state + j * 0x38)), 0x38);
     }
 
     return 1;
@@ -448,8 +590,6 @@ typedef struct {
     u8 pad_88[0x18];
 } fn_1_15659C_RankingEntry;
 
-extern f32 lbl_1_rodata_D8C8[18];
-extern void fn_80008BEC(void *dst, int value, int size);
 
 // Clears both ranking entries to their default sentinel values.
 void fn_1_15659C(void) {
@@ -514,14 +654,14 @@ void fn_1_15665C(void *owner, s32 index) {
     entry->unk_28 = -1;
     entry->unk_2C = -1;
     entry->unk_34 = lbl_1_rodata_D8C8[0];
-    fn_1_1568C4(entry);
+    fn_1_1568C4( (fn_1_1568C4_RankingState *)(void *)(entry));
 }
 /* fzgx:end fn_1_15665C */
 
 /* fzgx:begin fn_1_1566F8 */
 // Updates the indexed ranking entry's value through the shared ranking helper.
 void fn_1_1566F8(s32 index, void *arg) {
-    fn_80008BA8(&lbl_1_bss_8F428.unk_34 + index * 0x14, arg, 0x1c);
+    fn_80008BA8( (u32)(void *)(&lbl_1_bss_8F428.unk_34 + index * 0x14), (u32)(void *)(arg), 0x1c);
 }
 /* fzgx:end fn_1_1566F8 */
 
@@ -542,44 +682,20 @@ void fn_1_156754(s32 index) {
 
     if (entry[1] + 0x10000 != 0xffff) {
         fn_1_1569E8(entry);
-        fn_1_1568C4(entry);
+        fn_1_1568C4( (fn_1_1568C4_RankingState *)(void *)(entry));
     }
 }
 /* fzgx:end fn_1_156754 */
 
-/* fzgx:begin fn_1_1567A8 noprologue */
-#include "types.h"
+/* fzgx:begin fn_1_1567A8 */
 
-typedef struct {
-    u8 pad_0[0x4];
-    u32 unk_4;
-    u8 pad_8[0x2c];
-    f32 unk_34;
-    u8 pad_38[0x14];
-    u8 unk_4c;
-} Entry;
-
-extern Entry lbl_1_bss_8F428;
-extern f32 lbl_1_rodata_D8C8[18];
-extern void fn_1_1569E8(Entry *);
-extern void fn_1_1568C4(Entry *);
-extern void fn_1_156B18(Entry *);
-extern void fn_1_1569A0(Entry *);
-extern void fn_1_156C08(Entry *);
-extern void fn_1_156D9C(Entry *);
-extern void fn_1_157070(Entry *);
-extern void fn_1_156F54(Entry *);
-extern void fn_1_157200(Entry *);
-extern void fn_1_157358(Entry *);
-extern void fn_1_1576B4(Entry *);
-extern void fn_1_157598(Entry *);
 
 void fn_1_1567A8(s32 index) {
     Entry *entry;
     u32 value;
     f32 field_value;
 
-    entry = &lbl_1_bss_8F428 + index;
+    entry = &(*((Entry *)&lbl_1_bss_8F428)) + index;
     value = entry->unk_4;
     if (entry->unk_4 + 0x10000 != 0xffff) {
         field_value = entry->unk_34;
@@ -587,24 +703,24 @@ void fn_1_1567A8(s32 index) {
             if (entry->unk_4 + 0x10000 == 0xffff) {
                 return;
             } else {
-                fn_1_1569E8(entry);
-                fn_1_1568C4(entry);
+                fn_1_1569E8( (void *)(Entry *)(entry));
+                fn_1_1568C4( (fn_1_1568C4_RankingState *)(Entry *)(entry));
                 return;
             }
         } else if (entry->unk_4c & 0x80) {
-            fn_1_156B18(entry);
-            fn_1_1568C4(entry);
+            fn_1_156B18( (fn_1_156B18_State *)(Entry *)(entry));
+            fn_1_1568C4( (fn_1_1568C4_RankingState *)(Entry *)(entry));
         } else {
-            fn_1_1569A0(entry);
+            fn_1_1569A0( (fn_1_1569A0_State *)(Entry *)(entry));
             fn_1_156C08(entry);
             fn_1_156D9C(entry);
-            fn_1_157070(entry);
+            fn_1_157070( (fn_1_157070_RankingState *)(Entry *)(entry));
             fn_1_156F54(entry);
-            fn_1_157200(entry);
-            fn_1_157358(entry);
+            fn_1_157200( (fn_1_157200_RankingState *)(Entry *)(entry));
+            fn_1_157358( (fn_1_157358_RankingState *)(Entry *)(entry));
         }
-        fn_1_1576B4(entry);
-        fn_1_157598(entry);
+        fn_1_1576B4( (Obj_fn_1_1576B4 *)(Entry *)(entry));
+        fn_1_157598( (fn_1_157598_RankingState *)(Entry *)(entry));
     }
 }
 /* fzgx:end fn_1_1567A8 */
@@ -623,32 +739,9 @@ void fn_1_156884(s32 index) {
 }
 /* fzgx:end fn_1_156884 */
 
-/* fzgx:begin fn_1_1568C4 noprologue */
-#include "types.h"
+/* fzgx:begin fn_1_1568C4 */
 
-typedef struct {
-    u32 flags;
-    u32 value;
-    u32 key;
-} fn_1_1568C4_RankingState;
 
-typedef struct {
-    u8 field8;
-    u8 _pad9[3];
-    s32 fieldC;
-    s32 field10;
-    u8 field14;
-    u8 field15;
-    u8 field16;
-    u8 field17;
-    u16 field18;
-    u16 field1A;
-    u8 _pad1C[0x14];
-} fn_1_1568C4_RankingConfig;
-
-extern s32 fn_8006B55C(u32, u32 *, fn_1_1568C4_RankingConfig *);
-extern s32 fn_8006B628(u32, fn_1_1568C4_RankingConfig *);
-extern s32 fn_8006B6F8(u32);
 
 #pragma opt_propagation off
 void fn_1_1568C4(fn_1_1568C4_RankingState *state) {
@@ -671,11 +764,11 @@ void fn_1_1568C4(fn_1_1568C4_RankingState *state) {
     value = state->value;
     key = state->key;
     if (((0x10000) + (key)) == 0xffff) {
-        if (fn_8006B55C(value, &state->key, &config) >= 0) {
+        if (fn_8006B55C( (void *)(u32)(value), &state->key, (void *)(fn_1_1568C4_RankingConfig *)(&config)) >= 0) {
             success = 1;
         }
     } else {
-        if (fn_8006B628(key, &config) >= 0) {
+        if (fn_8006B628(key, (u32)(fn_1_1568C4_RankingConfig *)(&config)) >= 0) {
             success = 1;
         }
     }
@@ -689,15 +782,10 @@ void fn_1_1568C4(fn_1_1568C4_RankingState *state) {
 /* fzgx:end fn_1_1568C4 */
 
 /* fzgx:begin fn_1_1569A0 */
-typedef struct {
-    u32 flags;
-    u8 _pad04[4];
-    void *data;
-} fn_1_1569A0_State;
 
 void fn_1_1569A0(fn_1_1569A0_State *state) {
     if (state->flags & 1) {
-        fn_8006B7B4(state->data);
+        fn_8006B7B4( (u32)(void *)(state->data));
         state->flags &= ~1;
     }
 }
@@ -723,23 +811,23 @@ void fn_1_1569E8(void *entry) {
     fn_1_1569E8_State *state = (fn_1_1569E8_State *)entry;
 
     if (state->flags & 4) {
-        fn_8006B7B4(state->data1);
+        fn_8006B7B4( (u32)(void *)(state->data1));
         state->flags &= ~4;
     }
     if (state->flags & 2) {
-        fn_8006B7B4(state->data0);
+        fn_8006B7B4( (u32)(void *)(state->data0));
         state->flags &= ~2;
     }
     if (state->flags & 8) {
-        fn_8006B7B4(state->data2);
+        fn_8006B7B4( (u32)(void *)(state->data2));
         state->flags &= ~8;
     }
     if (state->flags & 0x20) {
-        fn_8006B7B4(state->data3);
+        fn_8006B7B4( (u32)(void *)(state->data3));
         state->flags &= ~0x20;
     }
     if (state->flags & 0x40) {
-        fn_8006B7B4(state->data4);
+        fn_8006B7B4( (u32)(void *)(state->data4));
         state->flags &= ~0x40;
     }
     if ((u32)(state->value + 0x10000) != 0xffff) {
@@ -748,47 +836,37 @@ void fn_1_1569E8(void *entry) {
     }
     state->flags &= ~0x10;
     if (state->flags & 0x80) {
-        fn_8006B7B4(state->data5);
+        fn_8006B7B4( (u32)(void *)(state->data5));
         state->flags &= ~0x80;
     }
     if (state->flags & 0x100) {
-        fn_8006B7B4(state->data6);
+        fn_8006B7B4( (u32)(void *)(state->data6));
         state->flags &= ~0x100;
     }
 }
 /* fzgx:end fn_1_1569E8 */
 
 /* fzgx:begin fn_1_156B18 */
-typedef struct {
-    u32 flags;
-    u8 _pad04[8];
-    void *data0;
-    void *data1;
-    void *data2;
-    s32 value;
-    void *data3;
-    void *data4;
-} fn_1_156B18_State;
 
 void fn_1_156B18(fn_1_156B18_State *state) {
     if (state->flags & 4) {
-        fn_8006B7B4(state->data1);
+        fn_8006B7B4( (u32)(void *)(state->data1));
         state->flags &= ~4;
     }
     if (state->flags & 2) {
-        fn_8006B7B4(state->data0);
+        fn_8006B7B4( (u32)(void *)(state->data0));
         state->flags &= ~2;
     }
     if (state->flags & 8) {
-        fn_8006B7B4(state->data2);
+        fn_8006B7B4( (u32)(void *)(state->data2));
         state->flags &= ~8;
     }
     if (state->flags & 32) {
-        fn_8006B7B4(state->data3);
+        fn_8006B7B4( (u32)(void *)(state->data3));
         state->flags &= ~32;
     }
     if (state->flags & 64) {
-        fn_8006B7B4(state->data4);
+        fn_8006B7B4( (u32)(void *)(state->data4));
         state->flags &= ~64;
     }
     if ((u32)(state->value + 0x10000) != 0xffff) {
@@ -936,23 +1014,8 @@ void fn_1_157070(fn_1_157070_RankingState *state) {
 /* fzgx:end fn_1_157070 */
 
 /* fzgx:begin fn_1_157200 */
-extern const f32 lbl_1_rodata_D910;
-extern f32 lbl_1_rodata_D914[3];
 
-extern s32 fn_8006B55C(void *, u32 *, void *);
-extern s32 fn_8006B628(u32, void *);
-extern s32 fn_8006B6F8(u32);
 
-typedef struct {
-    u32 flags;
-    void *arg04;
-    u8 _pad08[0x14];
-    u32 entry;
-    u8 _pad20[0x18];
-    f32 value;
-    u8 _pad3c[0x10];
-    u8 status;
-} fn_1_157200_RankingState;
 
 typedef struct {
     u8 kind;
@@ -1008,7 +1071,7 @@ void fn_1_157200(fn_1_157200_RankingState *state) {
                 if (fn_8006B55C(arg04, &state->entry, &request) >= 0) {
                     success = 1;
                 }
-            } else if (fn_8006B628(entry, &request) >= 0) {
+            } else if (fn_8006B628(entry, (u32)(void *)(&request)) >= 0) {
                 success = 1;
             }
             if (success && !(state->flags & 0x20) &&
@@ -1025,24 +1088,7 @@ void fn_1_157200(fn_1_157200_RankingState *state) {
 /* fzgx:end fn_1_157200 */
 
 /* fzgx:begin fn_1_157358 */
-extern f32 lbl_1_rodata_D8C8[18];
-extern void fn_8006B7B4(void *);
-extern s32 fn_8006B55C(void *, void *, void *);
-extern s32 fn_8006B628(void *, void *);
-extern s32 fn_8006B6F8(void *);
 
-typedef struct {
-    u32 flags;
-    void *field04;
-    u8 _pad08[0x18];
-    void *data;
-    u8 _pad24[0x0c];
-    u8 value30;
-    u8 _pad31[0x0f];
-    f32 value40;
-    u8 _pad44[8];
-    u8 enabled4c;
-} fn_1_157358_RankingState;
 
 typedef struct {
     u8 type;
@@ -1089,7 +1135,7 @@ void fn_1_157358(fn_1_157358_RankingState *state) {
         if (!(state->flags & 0x40)) {
             return;
         }
-        fn_8006B7B4(state->data);
+        fn_8006B7B4( (u32)(void *)(state->data));
         state->flags &= ~0x40;
         return;
     }
@@ -1111,16 +1157,16 @@ void fn_1_157358(fn_1_157358_RankingState *state) {
     data = state->data;
     node = state->field04;
     if (data == (void *)-1) {
-        if (fn_8006B55C(node, &state->data, &packet) >= 0) {
+        if (fn_8006B55C(node, (u32 *)(void *)(&state->data), &packet) >= 0) {
             success = 1;
         }
     } else {
-        if (fn_8006B628(data, &packet) >= 0) {
+        if (fn_8006B628( (u32)(void *)(data), (u32)(void *)(&packet)) >= 0) {
             success = 1;
         }
     }
     if (success && !(state->flags & 0x40)) {
-        if (fn_8006B6F8(state->data) >= 0) {
+        if (fn_8006B6F8( (u32)(void *)(state->data)) >= 0) {
             state->flags |= 0x40;
         }
     }
@@ -1130,20 +1176,8 @@ void fn_1_157358(fn_1_157358_RankingState *state) {
 #pragma opt_propagation reset
 /* fzgx:end fn_1_157358 */
 
-/* fzgx:begin fn_1_1574E0 noprologue */
-#include "types.h"
+/* fzgx:begin fn_1_1574E0 */
 
-extern void fn_8006B55C(void *, void *, void *);
-extern void fn_8006B628(u32, void *);
-extern void fn_8006B7B4(u32);
-extern void fn_8006B6F8(u32);
-
-typedef struct {
-    u8 _pad00[4];
-    void *owner;
-    u8 _pad08[0x1c];
-    u32 value;
-} fn_1_1574E0_RankingState;
 
 typedef struct {
     u8 type;
@@ -1184,9 +1218,9 @@ void fn_1_1574E0(fn_1_1574E0_RankingState *state) {
 
         owner = state->owner;
         if (value + 0x10000u == 0xffffu) {
-            fn_8006B55C(owner, &state->value, &config);
+            fn_8006B55C(owner, (u32 *)(void *)(&state->value), &config);
         } else {
-            fn_8006B628(value, &config);
+            fn_8006B628(value, (u32)(void *)(&config));
         }
     } else {
         fn_8006B7B4(value);
@@ -1197,18 +1231,7 @@ void fn_1_1574E0(fn_1_1574E0_RankingState *state) {
 /* fzgx:end fn_1_1574E0 */
 
 /* fzgx:begin fn_1_157598 */
-extern s32 fn_8006B55C(void *, void *, void *);
-extern s32 fn_8006B628(u32, void *);
-extern s32 fn_8006B6F8(u32);
 
-typedef struct {
-    u32 flags;
-    void *owner;
-    u8 _pad08[0x20];
-    u32 value;
-    u8 _pad2c[0x20];
-    u8 state;
-} fn_1_157598_RankingState;
 
 typedef struct {
     u8 type;
@@ -1258,11 +1281,11 @@ void fn_1_157598(fn_1_157598_RankingState *state) {
         owner = state->owner;
 
         if (value + 0x10000u == 0xffffu) {
-            if (fn_8006B55C(owner, &state->value, &config) >= 0) {
+            if (fn_8006B55C(owner, (u32 *)(void *)(&state->value), &config) >= 0) {
                 success = 1;
             }
         } else {
-            if (fn_8006B628(value, &config) >= 0) {
+            if (fn_8006B628(value, (u32)(void *)(&config)) >= 0) {
                 success = 1;
             }
         }
@@ -1282,37 +1305,8 @@ void fn_1_157598(fn_1_157598_RankingState *state) {
 /* fzgx:end fn_1_157598 */
 
 /* fzgx:begin fn_1_1576B4 */
-typedef struct {
-    u32 flags;
-    u32 unk_4;
-    u8 pad_8[0x24];
-    u32 unk_2c;
-    u8 pad_30[0x1c];
-    u8 unk_4c;
-} Obj_fn_1_1576B4;
 
-typedef struct {
-    u8 unk_0;
-    u8 pad_1[3];
-    u32 unk_4;
-    u32 unk_8;
-    u8 unk_C;
-    u8 pad_D;
-    u16 unk_E;
-    u16 unk_10;
-    u16 unk_12;
-    u16 unk_14;
-    u8 pad_16[2];
-    u32 unk_18;
-    u32 unk_1C;
-    u8 unk_20;
-    u8 unk_21;
-    u8 pad_22[2];
-} Param_fn_1_1576B4;
 
-extern s32 fn_8006B55C(u32 handle, u32 *id, Param_fn_1_1576B4 *param);
-extern s32 fn_8006B628(u32 id, Param_fn_1_1576B4 *param);
-extern s32 fn_8006B6F8(u32 id);
 
 #pragma opt_propagation off
 void fn_1_1576B4(Obj_fn_1_1576B4 *obj) {
@@ -1342,11 +1336,11 @@ void fn_1_1576B4(Obj_fn_1_1576B4 *obj) {
         u32 handle = obj->unk_4;
 
         if (id == 0xFFFFFFFF) {
-            if (fn_8006B55C(handle, &obj->unk_2c, &param) >= 0) {
+            if (fn_8006B55C( (void *)(u32)(handle), &obj->unk_2c, (void *)(Param_fn_1_1576B4 *)(&param)) >= 0) {
                 ok = 1;
             }
         } else {
-            if (fn_8006B628(id, &param) >= 0) {
+            if (fn_8006B628(id, (u32)(Param_fn_1_1576B4 *)(&param)) >= 0) {
                 ok = 1;
             }
         }
@@ -1448,19 +1442,12 @@ void fn_1_157820(void) {
 }
 /* fzgx:end fn_1_157820 */
 
-/* fzgx:begin fn_1_1578C4 noprologue */
-#include "types.h"
-
-extern u32 fn_1_157920(void);
-extern u32 fn_1_157950(void);
-extern u32 fn_1_157FC8(void);
-extern u32 fn_1_4060(void);
-extern u8 lbl_1_bss_8F568;
+/* fzgx:begin fn_1_1578C4 */
 
 void fn_1_1578C4(void) {
     s8 v0;
     u32 t2;
-    v0 = (s8)lbl_1_bss_8F568;
+    v0 = (s8)(*((u8 *)&lbl_1_bss_8F568));
     switch (v0) {
     case 0:
     fn_1_157950();
@@ -1575,9 +1562,9 @@ void fn_1_1594AC(int index, int flag) {
     }
 
     if (flag != 0) {
-        fn_1_465D0((void *)entry->unk_0, 6);
+        fn_1_465D0( (s32)((void *)entry->unk_0), 6);
     } else {
-        fn_1_465D0((void *)entry->unk_0, 5);
+        fn_1_465D0( (s32)((void *)entry->unk_0), 5);
     }
 
     offset = 0;
@@ -1630,7 +1617,7 @@ int fn_1_159588(int arg) {
 
         table = (s32 *)&lbl_1_data_FCD4;
         if (table[index * 10] != 0) {
-            fn_1_159804(index, entry);
+            fn_1_159804(index, (fn_1_159804_RankingEntry *)(Obj_1_data_4C810 *)(entry));
         } else {
             if (count >= view->limit) {
                 fn_1_4811C(view->values[view->start]);
@@ -1651,8 +1638,6 @@ int fn_1_159588(int arg) {
 /* fzgx:end fn_1_159588 */
 
 /* fzgx:begin fn_1_1596DC */
-#include "types.h"
-
 typedef struct {
     u32 unk_0;
     u32 unk_4;
@@ -1664,7 +1649,6 @@ typedef struct {
     s32 unk_38;
 } fn_1_1596DC_RankingEntry;
 
-extern void fn_1_4811C(s16 value);
 
 void fn_1_1596DC(int index) {
     struct { int value; } offset;
@@ -1691,9 +1675,9 @@ void fn_1_1596DC(int index) {
             if (*(s16 *)((u8 *)entry->unk_4 + offset.value) == -1) {
                 break;
             }
-            if (fn_1_46DC4(*(void **)((*(u8 (*)[])&lbl_1_data_FCD4) +
+            if ((s8)fn_1_46DC4( (s32)(void *)(*(void **)((*(u8 (*)[])&lbl_1_data_FCD4) +
                                       *(s16 *)((u8 *)entry->unk_4 + offset.value) * 0x28 +
-                                      lbl_801A66B4 * 4 + 4)) != 0) {
+                                      lbl_801A66B4 * 4 + 4))) != 0) {
                 (*(int (*)[])&lbl_1_bss_8F588)[*(s16 *)((u8 *)entry->unk_4 + offset.value)] = count;
             }
             offset.value += 2;
@@ -1702,16 +1686,7 @@ void fn_1_1596DC(int index) {
 }
 /* fzgx:end fn_1_1596DC */
 
-/* fzgx:begin fn_1_159804 noprologue */
-#include "types.h"
-
-typedef struct {
-    u32 unk_0;
-    u32 unk_4;
-    s16 unk_8[16];
-    s16 unk_28;
-    s16 unk_2a;
-} fn_1_159804_RankingEntry;
+/* fzgx:begin fn_1_159804 */
 
 s16 fn_1_159804(s16 value, fn_1_159804_RankingEntry *entry) {
     s16 head;
@@ -1741,9 +1716,7 @@ s16 fn_1_159804(s16 value, fn_1_159804_RankingEntry *entry) {
 }
 /* fzgx:end fn_1_159804 */
 
-/* fzgx:begin fn_1_1598C4 noprologue */
-#include "types.h"
-
+/* fzgx:begin fn_1_1598C4 */
 struct fn_1_1598C4_lbl_1_bss_8F878 {
     u8 pad_0[0x34];
     u32 unk_34;
@@ -1755,52 +1728,47 @@ struct fn_1_1598C4_lbl_1_bss_8F878 {
     u8 unk_3D;
     u8 unk_3E;
 };
-extern f32 lbl_1_rodata_DAE8;
-extern f64 lbl_1_rodata_DAF0;
-extern struct fn_1_1598C4_lbl_1_bss_8F878 lbl_1_bss_8F878;
-extern void fn_80008BA8(u32, u32, u32);
-extern s16 fn_1_14F01C(s16);
 
 void fn_1_1598C4(s32 arg0, u8 arg1, u8 arg2, u8 arg3, u8 arg4, u8 arg5, u8 arg6, u32 arg7, u64 arg8, u8 arg10) {
     s32 i;
 
-    fn_80008BA8((u32)(&lbl_1_bss_8F878), arg7, 0x10U);
+    fn_80008BA8((u32)(&(*((struct fn_1_1598C4_lbl_1_bss_8F878 *)&lbl_1_bss_8F878))), arg7, 0x10U);
 
     for (i = 0; i < 0x10; i += 2) {
-        if (*(u8 *)((u8 *)(&lbl_1_bss_8F878) + i) == 0) {
+        if (*(u8 *)((u8 *)(&(*((struct fn_1_1598C4_lbl_1_bss_8F878 *)&lbl_1_bss_8F878))) + i) == 0) {
             s32 j;
             s32 t = i + 1;
             for (j = t; j < 0x10; j++) {
-                *(u8 *)((u8 *)(&lbl_1_bss_8F878) + j) = 0;
+                *(u8 *)((u8 *)(&(*((struct fn_1_1598C4_lbl_1_bss_8F878 *)&lbl_1_bss_8F878))) + j) = 0;
             }
             break;
         }
     }
 
-    lbl_1_bss_8F878.pad_38[0] = arg10;
-    *(s32 *)((u8 *)(&lbl_1_bss_8F878) + 20) = (s32)arg8;
-    *(s32 *)((u8 *)(&lbl_1_bss_8F878) + 16) = (s32)(arg8 >> 32);
-    lbl_1_bss_8F878.unk_34 = arg0 & 0x3FFFF;
-    lbl_1_bss_8F878.unk_39 = arg1;
-    lbl_1_bss_8F878.unk_3D = arg6;
-    lbl_1_bss_8F878.unk_3E = (u8)(s32)((*(f32 *)((u8 *)(&lbl_1_rodata_DAE8) + 0)) * (f32)arg5);
+    (*((struct fn_1_1598C4_lbl_1_bss_8F878 *)&lbl_1_bss_8F878)).pad_38[0] = arg10;
+    *(s32 *)((u8 *)(&(*((struct fn_1_1598C4_lbl_1_bss_8F878 *)&lbl_1_bss_8F878))) + 20) = (s32)arg8;
+    *(s32 *)((u8 *)(&(*((struct fn_1_1598C4_lbl_1_bss_8F878 *)&lbl_1_bss_8F878))) + 16) = (s32)(arg8 >> 32);
+    (*((struct fn_1_1598C4_lbl_1_bss_8F878 *)&lbl_1_bss_8F878)).unk_34 = arg0 & 0x3FFFF;
+    (*((struct fn_1_1598C4_lbl_1_bss_8F878 *)&lbl_1_bss_8F878)).unk_39 = arg1;
+    (*((struct fn_1_1598C4_lbl_1_bss_8F878 *)&lbl_1_bss_8F878)).unk_3D = arg6;
+    (*((struct fn_1_1598C4_lbl_1_bss_8F878 *)&lbl_1_bss_8F878)).unk_3E = (u8)(s32)((*(f32 *)((u8 *)(&lbl_1_rodata_DAE8) + 0)) * (f32)arg5);
 
     if (arg1 >= 0x29U) {
         if ((s32)arg2 < fn_1_14F01C(0)) {
-            lbl_1_bss_8F878.unk_3A = arg2;
+            (*((struct fn_1_1598C4_lbl_1_bss_8F878 *)&lbl_1_bss_8F878)).unk_3A = arg2;
         } else {
-            lbl_1_bss_8F878.unk_3A = 0;
+            (*((struct fn_1_1598C4_lbl_1_bss_8F878 *)&lbl_1_bss_8F878)).unk_3A = 0;
         }
         if ((s32)arg3 < fn_1_14F01C(1)) {
-            lbl_1_bss_8F878.unk_3B = arg3;
+            (*((struct fn_1_1598C4_lbl_1_bss_8F878 *)&lbl_1_bss_8F878)).unk_3B = arg3;
         } else {
-            lbl_1_bss_8F878.unk_3B = 0;
+            (*((struct fn_1_1598C4_lbl_1_bss_8F878 *)&lbl_1_bss_8F878)).unk_3B = 0;
         }
         if ((s32)arg4 < fn_1_14F01C(2)) {
-            lbl_1_bss_8F878.unk_3C = arg4;
+            (*((struct fn_1_1598C4_lbl_1_bss_8F878 *)&lbl_1_bss_8F878)).unk_3C = arg4;
             return;
         }
-        lbl_1_bss_8F878.unk_3C = 0;
+        (*((struct fn_1_1598C4_lbl_1_bss_8F878 *)&lbl_1_bss_8F878)).unk_3C = 0;
     }
 }
 /* fzgx:end fn_1_1598C4 */

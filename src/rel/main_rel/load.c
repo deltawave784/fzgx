@@ -357,8 +357,6 @@ u32 fn_1_467F4(void) {
 /* fzgx:end fn_1_467F4 */
 
 /* fzgx:begin fn_1_469BC */
-#include "types.h"
-
 // Clears invalid entries in the load table and mirrors its first value.
 void fn_1_469BC(void) {
     u32 *base;

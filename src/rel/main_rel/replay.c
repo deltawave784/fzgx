@@ -2,11 +2,68 @@
 #include "rel/main_rel/globals.h"
 #include "rel/main_rel/replay.h"
 
+typedef struct Object {
+    u8 pad0[0xa0];
+    u16 halfa0;
+} Object;
+
+typedef struct {
+    u32 x;
+    u32 y;
+    u32 z;
+} ReplayTriple_F3574;
+
+typedef struct {
+    u32 start0 : 15;   // 0x0 copy of start
+    u32 kind : 3;
+    u32 index : 5;
+    u32 value : 5;
+    u32 pad0 : 4;
+    u32 start : 15;    // 0x4 frame the event began
+    u32 count : 5;
+    u32 result : 5;
+    u32 stage : 5;
+    u32 pad1 : 2;
+    ReplayTriple_F3574 begin[4];  // 0x8
+    ReplayTriple_F3574 end[4];    // 0x38
+    ReplayTriple_F3574 begin1;    // 0x68
+    ReplayTriple_F3574 end1;      // 0x74
+} ReplayEvent_F3574;
+
+typedef struct {
+    u8 pad0[0xFEF0];
+    u16 eventCount;               // 0xFEF0
+    u8 pad1[0x1E];
+    u16 slots[30];                // 0xFF10
+    ReplayEvent_F3574 events[1];  // 0xFF4C
+} ReplayBuffer_F3574;
+
+typedef struct {
+    u32 unk_0;
+    u32 frame;                    // 0x4
+    u8 pad0[0x10];
+    u8 playerCount;               // 0x18
+    u8 pad1[0x27];
+    ReplayBuffer_F3574 *buffer;   // 0x40
+} ReplayState_F3574;
+
+typedef struct { u8 raw[0x84]; } ReplayOutput;
+extern u32 lbl_801A6410;
+extern u32 fn_1_4630();
+extern void fn_1_46B4(u32 arg0, u32 arg1, const char *arg2, int arg3);
+extern void fn_1_862D4(s32 value, f32 *out);
+extern u8 fn_1_8682C(int index);
+extern u8 fn_1_86678(int index);
+extern u32 fn_1_864E8(int index);
+extern u32 fn_1_86810(s32 index);
+extern void fn_1_F3574(ReplayState_F3574 *state, u8 index, u8 value, u8 kind, u8 result);
+extern s32 fn_1_F45CC(u32 key, ReplayOutput *out);
+extern void fn_80008BA8();
+extern const f32 lbl_1_rodata_6D6C;
+extern const f32 lbl_1_rodata_6D68;
 extern u32 OSGetTick(void);
 
 /* fzgx:begin fn_1_F2780 */
-#include "types.h"
-
 typedef struct State {
     u8 pad0[0x19];
     u8 byte19;
@@ -31,15 +88,9 @@ typedef struct Global {
     State state;
 } Global;
 
-typedef struct Object {
-    u8 pad0[0xa0];
-    u16 halfa0;
-} Object;
-
-extern u32 lbl_801A6410;
 
 
-extern Object *fn_1_4630(u32 arg0, u32 arg1, char *arg2, u32 arg3);
+
 
 typedef struct lbl_1_bss_7F01C_t {
     u8 fzgx_byte_4C;
@@ -74,7 +125,7 @@ void fn_1_F2780(void) {
 
     
     state = &fzgx_obj_lbl_1_bss_7EFD8;
-    object = fn_1_4630(lbl_801A6410, (1 << 16) + 0x14c, (*(char (*)[9])&lbl_1_data_3E8C8), 0x75);
+    object = (Object *)fn_1_4630(lbl_801A6410, (1 << 16) + 0x14c, (*(char (*)[9])&lbl_1_data_3E8C8), 0x75);
     state->object = object;
     *(u16 *)((u8 *)&fzgx_obj_lbl_1_bss_7F01C.fzgx_byte_4C) = 0;
     object->halfa0 = 0;
@@ -152,8 +203,6 @@ u8 fn_1_F2D30(u8 *value, u8 **cursor, u32 index) {
 /* fzgx:end fn_1_F2D30 */
 
 /* fzgx:begin fn_1_F2DDC */
-extern u32 lbl_801A6410;
-extern void fn_1_46B4(u32, u32, u8 *, s32);
 
 typedef struct lbl_1_bss_7EFD8_t {
     u8 pad_0[0x40];
@@ -186,8 +235,7 @@ void fn_1_F2DDC(void) {
     
 
     if ((fzgx_obj_lbl_1_bss_7EFD4 & 1) != 0) {
-        fn_1_46B4(lbl_801A6410, fzgx_obj_lbl_1_bss_7EFD8.fzgx_u32_48,
-                   lbl_1_data_3E8C8, 0x19d);
+        fn_1_46B4(lbl_801A6410, fzgx_obj_lbl_1_bss_7EFD8.fzgx_u32_48, (const char *)(u8 *)(lbl_1_data_3E8C8), 0x19d);
         fzgx_obj_lbl_1_bss_7EFD8.fzgx_u32_48 = 0;
         fzgx_obj_lbl_1_bss_7F01C = 0;
         fzgx_obj_lbl_1_bss_7EFD4 = 0;
@@ -196,8 +244,6 @@ void fn_1_F2DDC(void) {
 /* fzgx:end fn_1_F2DDC */
 
 /* fzgx:begin fn_1_F2EB8 */
-#include "types.h"
-
 struct fn_1_F2EB8_lbl_1_bss_7EFD4 {
     s8 unk_0;
 };
@@ -213,8 +259,6 @@ void fn_1_F2EB8(void) {
 /* fzgx:end fn_1_F2EB8 */
 
 /* fzgx:begin fn_1_F2EDC */
-#include "types.h"
-
 struct fn_1_F2EDC_lbl_1_bss_7EFD4 {
     s8 unk_0;
 };
@@ -247,10 +291,6 @@ void fn_1_F2EFC(void) {
 /* fzgx:end fn_1_F2EFC */
 
 /* fzgx:begin fn_1_F2F34 */
-#include "types.h"
-
-
-
 struct fn_1_F2F34_lbl_1_bss_7EFD4 {
     u8 unk_0;
 };
@@ -279,49 +319,11 @@ u32 fn_1_F2F58(void) {
 /* fzgx:end fn_1_F2F58 */
 
 /* fzgx:begin fn_1_F3574 */
-typedef struct {
-    u32 x;
-    u32 y;
-    u32 z;
-} ReplayTriple_F3574;
 
-extern void fn_1_862D4(s32 index, ReplayTriple_F3574 *out);
-extern u8 fn_1_8682C(s32 index);
 
 // One 0x80-byte event record in the replay buffer.
-typedef struct {
-    u32 start0 : 15;   // 0x0 copy of start
-    u32 kind : 3;
-    u32 index : 5;
-    u32 value : 5;
-    u32 pad0 : 4;
-    u32 start : 15;    // 0x4 frame the event began
-    u32 count : 5;
-    u32 result : 5;
-    u32 stage : 5;
-    u32 pad1 : 2;
-    ReplayTriple_F3574 begin[4];  // 0x8
-    ReplayTriple_F3574 end[4];    // 0x38
-    ReplayTriple_F3574 begin1;    // 0x68
-    ReplayTriple_F3574 end1;      // 0x74
-} ReplayEvent_F3574;
 
-typedef struct {
-    u8 pad0[0xFEF0];
-    u16 eventCount;               // 0xFEF0
-    u8 pad1[0x1E];
-    u16 slots[30];                // 0xFF10
-    ReplayEvent_F3574 events[1];  // 0xFF4C
-} ReplayBuffer_F3574;
 
-typedef struct {
-    u32 unk_0;
-    u32 frame;                    // 0x4
-    u8 pad0[0x10];
-    u8 playerCount;               // 0x18
-    u8 pad1[0x27];
-    ReplayBuffer_F3574 *buffer;   // 0x40
-} ReplayState_F3574;
 
 void fn_1_F3574(ReplayState_F3574 *state, u8 index, u8 value, u8 kind, u8 result) {
     ReplayEvent_F3574 *event;
@@ -359,9 +361,9 @@ void fn_1_F3574(ReplayState_F3574 *state, u8 index, u8 value, u8 kind, u8 result
             }
             if (hit) {
                 event->start = state->frame;
-                fn_1_862D4(event->stage, &event->end1);
+                fn_1_862D4(event->stage, (f32 *)(ReplayTriple_F3574 *)(&event->end1));
                 for (i = 0; i < state->playerCount; i++) {
-                    fn_1_862D4(i, &event->end[i]);
+                    fn_1_862D4(i, (f32 *)(ReplayTriple_F3574 *)(&event->end[i]));
                 }
                 return;
             }
@@ -383,16 +385,20 @@ void fn_1_F3574(ReplayState_F3574 *state, u8 index, u8 value, u8 kind, u8 result
     }
     event->result = result;
     event->stage = fn_1_8682C(0);
-    fn_1_862D4(event->stage, &event->begin1);
+    fn_1_862D4(event->stage, (f32 *)(ReplayTriple_F3574 *)(&event->begin1));
     event->end1 = event->begin1;
     for (i = 0; i < state->playerCount; i++) {
-        fn_1_862D4(i, &event->begin[i]);
+        fn_1_862D4(i, (f32 *)(ReplayTriple_F3574 *)(&event->begin[i]));
         event->end[i] = event->begin[i];
     }
 }
 /* fzgx:end fn_1_F3574 */
 
-/* fzgx:begin fn_1_F37F4 */
+/* fzgx:begin fn_1_F37F4 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/replay.h"
+
 #include "types.h"
 
 
@@ -423,8 +429,6 @@ void fn_1_F37F4(void) {
 /* fzgx:end fn_1_F37F4 */
 
 /* fzgx:begin fn_1_F3AB0 */
-extern s32 fn_1_F45CC(u16 value, void *out);
-extern void fn_1_862D4(s32 value, f32 *out);
 
 typedef struct {
     u16 unk_0;
@@ -459,7 +463,7 @@ void fn_1_F3AB0(Obj_1_bss_7EFD8 *obj) {
     }
 
     obj->unk_4++;
-    count = fn_1_F45CC((u16)obj->unk_4, (void *)data);
+    count = fn_1_F45CC((u16)obj->unk_4, (ReplayOutput *)((void *)data));
     if (count <= 0) {
         return;
     }
@@ -502,7 +506,6 @@ void fn_1_F43F0(u8 *bits, u32 *position, u32 mask, u32 count, u32 limit) {
 /* fzgx:end fn_1_F43F0 */
 
 /* fzgx:begin fn_1_F444C */
-extern void fn_80008BA8(u32 *, f32 *, int, f32);
 
 void fn_1_F444C(u8 *out, u32 *pos, u32 limit, f32 value) {
     u32 mask;
@@ -582,7 +585,6 @@ u32 fn_1_F45B4(void) {
 
 /* fzgx:begin fn_1_F45CC */
 typedef struct { u8 raw[0x80]; } ReplayEntry;
-typedef struct { u8 raw[0x84]; } ReplayOutput;
 typedef struct { u32 w[3]; } CopyChunk;
 
 s32 fn_1_F45CC(u32 key, ReplayOutput *out) {
@@ -672,8 +674,6 @@ u32 fn_1_F47AC(void) {
 /* fzgx:end fn_1_F47AC */
 
 /* fzgx:begin fn_1_F4E3C */
-extern const f32 lbl_1_rodata_6D6C;
-extern const f32 lbl_1_rodata_6D68;
 
 f32 fn_1_F4E3C(s32 count, f32 *x, f32 *z, f32 *y, f32 value) {
     s32 lo;

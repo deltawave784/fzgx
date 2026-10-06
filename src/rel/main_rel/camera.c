@@ -53,12 +53,48 @@ typedef struct CameraStateLocal {
 } CameraStateLocal;
 
 typedef struct { u8 pad_0[0x4]; f32 unk_4; u32 unk_8; f32 unk_C; } Bss_104C;
+
+typedef struct fn_1_ABAC_Target {
+    u8 pad_0[0x214];
+    u16 unk_214;
+} fn_1_ABAC_Target;
+
+typedef struct { u8 pad_0[0x20]; u32 unk_20; } Inner;
+
+typedef struct { u8 pad_0[0x8]; Inner *unk_8; } Outer;
+
+typedef struct {
+    u8 data[0x10];
+} CamEntry;
+extern u8 lbl_1_bss_6F244[128];
+extern u8 lbl_1_bss_6EAC6[10];
+extern s8 fn_1_86624();
+extern s32 fn_1_3F864(void);
+extern int fn_1_4C10(void);
+extern s16 fn_1_3F0C8(void);
+extern void fn_1_739C(void *, u32, u32);
+extern u8 fn_1_86634(int index);
+extern void *fn_1_86254(int index);
+extern u32 fn_1_F2F34(void);
+extern s16 camera_get_entry_field_0xa4(u32);
+extern u8 fn_1_86678(int index);
+extern void fn_1_715C(u8, s16);
+extern u32 fn_1_864E8(int index);
+extern u8 fn_1_40BB4(void);
+extern u8 lbl_1_bss_CC0[152];
+extern u32 fn_1_CC5C(void);
+extern void fn_1_55FC4(f32 value);
+extern void fn_1_55FF0(f32 value);
+extern Outer *lbl_1_bss_38454;
+extern u32 fn_1_55210(u32);
+extern void lbl_8006D9D8(CamEntry *);
+extern void lbl_8006E14C(f32);
+extern void fn_80072558(void);
+extern u32 lbl_801A6CE0;
 extern struct fn_1_6400_lbl_801A6410 lbl_801A6410;
 extern void fn_1_46B4(u32 arg0, u32 arg1, const char *arg2, int arg3);
 extern u8 lbl_1_bss_F74;
 extern u8 lbl_1_bss_F75;
-extern s8 fn_1_86624();
-extern s8 fn_1_86634(int index);
 extern u32 lbl_1_bss_7ADE8[40];
 extern void *lbl_1_data_3310;
 extern f32 fn_1_A6FE8(void);
@@ -68,17 +104,15 @@ extern s32 fn_1_3F8C(u32 arg3, u32 arg0, u32 arg1, u32 index);
 extern void fn_1_DCED0(void);
 extern const f32 lbl_1_rodata_194;
 extern const f32 lbl_1_rodata_188;
-extern void OSPanic(u8 *file, int line, u8 *message, ...);
+extern void OSPanic(const char *file, int line, const char *msg, ...);
 extern void *fn_1_868C0(s8 index);
 extern s32 fn_1_A5DC4(void);
 extern const f32 lbl_1_rodata_200;
 extern const f32 lbl_1_rodata_204;
 extern f64 lbl_1_rodata_360;
 extern struct fn_1_AA54_lbl_1_rodata_388 lbl_1_rodata_388;
-extern u8 fn_1_86678(int index);
-extern s16 camera_get_entry_field_0xa8(u32);
-extern u32 fn_1_864E8(int index);
-extern void camera_set_entry_field_0xa8(u8, s16);
+extern s16 camera_get_entry_field_0xa8(u32 index);
+extern void camera_set_entry_field_0xa8(u8 index, s16 value);
 extern u16 fn_1_8664C(int index);
 extern void fn_1_862D4(u8 index, Vec3 *out);
 extern void fn_1_8658C(u8 index, Vec3 *out);
@@ -94,7 +128,7 @@ extern void fn_1_BD54(void);
 extern void fn_1_B870(void);
 extern u8* camera_get_extended_state_storage();
 extern void lbl_8006DBAC(void);
-extern void fn_8006F038(void *, void *, s16);
+extern void fn_8006F038(Vec3 *arg0, Vec3 *arg1, s16 arg2);
 extern void lbl_8006DCDC(void);
 extern s16 fn_1_6B48(s32 index);
 extern void fn_1_6D2C(u32);
@@ -113,6 +147,7 @@ extern s32 fn_1_6514(s32 value);
 extern f64 lbl_1_rodata_478;
 extern f32 lbl_1_rodata_49C;
 extern f32 lbl_1_bss_10C0[6];
+extern CameraState* camera_get_state_object(void);
 
 /* fzgx:begin fn_1_6400 */
 typedef struct {
@@ -217,7 +252,65 @@ u32 camera_get_flags(void) {
 }
 /* fzgx:end camera_get_flags */
 
-/* fzgx:begin camera_update */
+/* fzgx:begin camera_update noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/camera.h"
+
+struct fn_1_6400_lbl_801A6410 {
+    u32 unk_0;
+};
+
+typedef struct CameraTarget {
+    u8 pad_000[0x394];
+    void *data;
+} CameraTarget;
+
+struct fn_1_AA54_lbl_1_rodata_388 {
+    f64 unk_0;
+};
+
+typedef struct Vec3 {
+    f32 x;
+    f32 y;
+    f32 z;
+} Vec3;
+
+typedef struct camera_reset_transition_Camera {
+    u8 pad_00[0xA4];
+    s16 unk_A4;
+} camera_reset_transition_Camera;
+
+typedef struct camera_update_transition_Camera {
+    u8 pad_00[0x78];
+    s16 unk_78;
+    u8 pad_7A[0x2A];
+    s16 unk_A4;
+} camera_update_transition_Camera;
+
+typedef struct Transform {
+    u8 pad_08[0x8];
+    f32 unk_08;
+    u8 pad_0c[0xc];
+    f32 unk_18;
+    u8 pad_1c[0xc];
+    f32 unk_28;
+    u8 pad_2c[0x24];
+    u8 unk_50[0x2c];
+    u32 unk_7C;
+} Transform;
+
+typedef struct CameraStateLocal {
+    u8 pad_d4[0xd4];
+    f32 unk_D4;
+    f32 unk_D8;
+    f32 unk_DC;
+} CameraStateLocal;
+
+typedef struct { u8 pad_0[0x4]; f32 unk_4; u32 unk_8; f32 unk_C; } Bss_104C;
+extern void fn_1_BD54(void);
+extern void fn_1_B870(void);
+
 __typeof__(lbl_1_bss_F68) camera_get_state_object(void);
 
 // Dispatches to the camera update routine selected by the returned camera state.
@@ -239,7 +332,7 @@ void camera_update_state(__typeof__(lbl_1_bss_F68) state) {
         camera_get_extended_state_storage(state);
         lbl_8006DBAC();
     } else {
-        fn_8006F038(&state->unk_4, &state->unk_4 + 6,
+        fn_8006F038( (Vec3 *)(void *)(&state->unk_4), (Vec3 *)(void *)(&state->unk_4 + 6),
                      *((s16 *)&state->unk_4 + 14));
     }
 
@@ -536,7 +629,64 @@ s16 fn_1_6B48(s32 index) {
 }
 /* fzgx:end fn_1_6B48 */
 
-/* fzgx:begin fn_1_6BC0 */
+/* fzgx:begin fn_1_6BC0 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/camera.h"
+
+struct fn_1_6400_lbl_801A6410 {
+    u32 unk_0;
+};
+
+typedef struct CameraTarget {
+    u8 pad_000[0x394];
+    void *data;
+} CameraTarget;
+
+struct fn_1_AA54_lbl_1_rodata_388 {
+    f64 unk_0;
+};
+
+typedef struct Vec3 {
+    f32 x;
+    f32 y;
+    f32 z;
+} Vec3;
+
+typedef struct camera_reset_transition_Camera {
+    u8 pad_00[0xA4];
+    s16 unk_A4;
+} camera_reset_transition_Camera;
+
+typedef struct camera_update_transition_Camera {
+    u8 pad_00[0x78];
+    s16 unk_78;
+    u8 pad_7A[0x2A];
+    s16 unk_A4;
+} camera_update_transition_Camera;
+
+typedef struct Transform {
+    u8 pad_08[0x8];
+    f32 unk_08;
+    u8 pad_0c[0xc];
+    f32 unk_18;
+    u8 pad_1c[0xc];
+    f32 unk_28;
+    u8 pad_2c[0x24];
+    u8 unk_50[0x2c];
+    u32 unk_7C;
+} Transform;
+
+typedef struct CameraStateLocal {
+    u8 pad_d4[0xd4];
+    f32 unk_D4;
+    f32 unk_D8;
+    f32 unk_DC;
+} CameraStateLocal;
+
+typedef struct { u8 pad_0[0x4]; f32 unk_4; u32 unk_8; f32 unk_C; } Bss_104C;
+extern s8 fn_1_86624();
+
 // lbl_1_bss_9F8.unk_8 read as a bitfield: retail keeps the halfword load and extracts the
 // two low bits with extrwi/clrlwi
 typedef struct {
@@ -734,55 +884,44 @@ s16 camera_get_entry_field_0xa4(u32 index) {
 }
 /* fzgx:end camera_get_entry_field_0xa4 */
 
-/* fzgx:begin fn_1_727C noprologue */
-#include "types.h"
-
+/* fzgx:begin fn_1_727C */
 typedef struct {
     u8 pad_0[0x48];
     s8 unk_48;
     u8 unk_49;
     u8 unk_4A;
-} CameraObject;
+} fn_1_727C_CameraObject;
 
 typedef struct {
     u8 pad_0[0x10];
     u8 unk_10[0x1EC];
-} CameraEntry;
+} fn_1_727C_CameraEntry;
 
 typedef struct {
     u8 pad_0[0x1C];
     u8 unk_1C;
-} CameraTable;
+} fn_1_727C_CameraTable;
 
 typedef struct {
-    CameraObject *unk_0;
-    CameraEntry *unk_4;
-    CameraTable *unk_8;
-} CameraState;
+    fn_1_727C_CameraObject *unk_0;
+    fn_1_727C_CameraEntry *unk_4;
+    fn_1_727C_CameraTable *unk_8;
+} fn_1_727C_CameraState;
 
 typedef struct {
     u32 unk_0;
     u8 pad_4[0xE];
-} Obj_1_bss_6EAB4;
+} fn_1_727C_Obj_1_bss_6EAB4;
 
-extern CameraState lbl_1_bss_F68;
-extern Obj_1_bss_6EAB4 lbl_1_bss_6EAB4;
-extern u8 lbl_1_bss_6F244[128];
-extern u8 lbl_1_bss_6EAC6[10];
 
-extern s32 fn_1_86624(void);
-extern s32 fn_1_3F864(void);
-extern int fn_1_4C10(void);
-extern s16 fn_1_3F0C8(void);
-extern void fn_1_739C(void *, u32, u32);
 
 void fn_1_727C(void) {
-    CameraState *state;
+    fn_1_727C_CameraState *state;
     u8 mode;
     u8 idx;
 
-    state = (CameraState *)&lbl_1_bss_F68;
-    mode = fn_1_86624();
+    state = (fn_1_727C_CameraState *)&(*((fn_1_727C_CameraState *)&lbl_1_bss_F68));
+    mode = (s32)fn_1_86624();
     idx = state->unk_0->unk_4A;
     if (state->unk_0 == NULL) {
         return;
@@ -790,7 +929,7 @@ void fn_1_727C(void) {
     if (mode == 0) {
         return;
     }
-    if (lbl_1_bss_6EAB4.unk_0 & 0x20) {
+    if ((*((fn_1_727C_Obj_1_bss_6EAB4 *)&lbl_1_bss_6EAB4)).unk_0 & 0x20) {
         return;
     }
     if (fn_1_3F864() == 0) {
@@ -860,7 +999,7 @@ void fn_1_8298(void) {
     }
 
     for (i = 0; i < count; i++) {
-        s8 index = fn_1_86634(i);
+        s8 index = (s8)fn_1_86634(i);
 
         if (index != -1) {
             found++;
@@ -870,7 +1009,7 @@ void fn_1_8298(void) {
 
     switch (found) {
     case 0:
-        OSPanic(lbl_1_data_3318, 0x7d2, lbl_1_data_35E8);
+        OSPanic( (const char *)(u8 *)(lbl_1_data_3318), 0x7d2, (const char *)(u8 *)(lbl_1_data_35E8));
         break;
     case 1:
         lbl_1_bss_F68->unk_48 = 0;
@@ -1101,7 +1240,7 @@ void live_camera_set_shake(s32 value, const f32 *delta) {
     LiveCamera *state;
 
     if (live_camera == 0) {
-        OSPanic(lbl_1_data_3318, 0x89a, lbl_1_data_360C);
+        OSPanic( (const char *)(u8 *)(lbl_1_data_3318), 0x89a, (const char *)(u8 *)(lbl_1_data_360C));
     }
 
     state = live_camera;
@@ -1124,7 +1263,7 @@ void fn_1_8840(void) {
     f32 value;
 
     if (live_camera == 0) {
-        OSPanic(lbl_1_data_3318, 0x8b6, lbl_1_data_3630);
+        OSPanic( (const char *)(u8 *)(lbl_1_data_3318), 0x8b6, (const char *)(u8 *)(lbl_1_data_3630));
     }
 
     state = live_camera;
@@ -1158,7 +1297,7 @@ void game_camera_set_shake(s16 index, s16 mode, s32 value, const f32 *delta) {
     }
 
     if (game_camera_entries + index == 0) {
-        OSPanic(lbl_1_data_3318, 0x8d1, lbl_1_data_3654);
+        OSPanic( (const char *)(u8 *)(lbl_1_data_3318), 0x8d1, (const char *)(u8 *)(lbl_1_data_3654));
     }
 
     camera = game_camera_entries + index;
@@ -1190,7 +1329,7 @@ void fn_1_8A0C(s16 index) {
 
     if (index >= 0) {
         if (game_camera_entries + index == 0) {
-            OSPanic(lbl_1_data_3318, 0x8f8, lbl_1_data_3654);
+            OSPanic( (const char *)(u8 *)(lbl_1_data_3318), 0x8f8, (const char *)(u8 *)(lbl_1_data_3654));
         }
         entry = game_camera_entries + index;
         value = lbl_1_rodata_188;

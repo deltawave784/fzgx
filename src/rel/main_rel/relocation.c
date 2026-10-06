@@ -1,31 +1,42 @@
 #include "types.h"
 #include "rel/main_rel/globals.h"
 #include "rel/main_rel/relocation.h"
+#include "dolphin/os/OSTime.h"
 
+struct fn_1_A6480_d58 {
+    u8 pad[8];
+    u16 unk_8;
+    u16 unk_A;
+};
+extern u32 lbl_1_bss_6F5C0;
+extern u8 lbl_1_bss_6F5C4[44];
+extern u8 *lbl_801A6410;
+extern void OSUnlink(void *);
+extern void OSPanic(void *, ...);
+extern void fn_1_46B4(u32 arg0, u32 arg1, const char *arg2, int arg3);
+extern u32 VIGetDTVStatus(void);
+extern void fn_1_3308(void);
+extern u32 OSGetProgressiveMode(void);
+extern f32 lbl_1_rodata_49D8;
+extern struct fn_1_A6480_d58 lbl_1_bss_D58;
+extern void fn_8006CE1C(f32 arg0);
+extern u32 OSGetResetCode(void);
+extern void OSSetProgressiveMode(u32 mode);
+extern void fn_80070620(s32 arg0);
+extern int fn_1_4C10(void);
+extern void fn_1_A6870(u32 *arg0);
 extern u8 *lbl_801A6CF4;
 extern u32 lbl_1_bss_6F5F4;
 extern u8 lbl_801A66B0[];
-extern s32 OSGetResetCode(void);
-extern u32 OSGetProgressiveMode(void);
-extern void OSSetProgressiveMode(s32);
-extern void fn_1_A6870(u32 *);
 extern void fn_1_A5F44(void);
 extern s32 fn_1_A6480(void);
 
 /* fzgx:begin fn_1_A5C98 */
-#include "types.h"
-
-extern u32 lbl_1_bss_6F5C0;
-extern u8 lbl_1_bss_6F5C4[44];
 
 
 
 
-extern u8 *lbl_801A6410;
 
-extern void OSUnlink(void *);
-extern void OSPanic(void *, ...);
-extern void fn_1_46B4(void *, void *, void *, int);
 
 typedef struct Fn1A5C98Object {
     void *unk0;
@@ -49,9 +60,9 @@ void fn_1_A5C98(Fn1A5C98Object *self) {
         lbl_1_bss_6F5C0--;
 
         if (self->unk4 != 0) {
-            fn_1_46B4(lbl_801A6410, self->unk4, (*(u8 (*)[84])&lbl_1_data_34140), 0x7b);
+            fn_1_46B4( (u32)(void *)(lbl_801A6410), (u32)(void *)(self->unk4), (const char *)(void *)((*(u8 (*)[84])&lbl_1_data_34140)), 0x7b);
         }
-        fn_1_46B4(lbl_801A6410, self->unk0, (*(u8 (*)[84])&lbl_1_data_34140), 0x7c);
+        fn_1_46B4( (u32)(void *)(lbl_801A6410), (u32)(void *)(self->unk0), (const char *)(void *)((*(u8 (*)[84])&lbl_1_data_34140)), 0x7c);
 
         self->unk0 = 0;
         self->unk4 = 0;
@@ -88,16 +99,6 @@ s32 fn_1_A5DC4(void) {
 /* fzgx:end fn_1_A5DC4 */
 
 /* fzgx:begin fn_1_A5DEC */
-#include "types.h"
-#include "dolphin/os/OSTime.h"
-
-
-
-
-extern u32 VIGetDTVStatus(void);
-extern void fn_1_3308(void);
-extern OSTick OSGetTick(void);
-extern u32 OSGetProgressiveMode(void);
 
 extern u32 __OSBusClock : 0x800000F8; /* fzgx-allow: A1 OS globals block */
 void fn_1_A5DEC(void) {
@@ -133,24 +134,8 @@ void fn_1_A5EFC(void) {
 }
 /* fzgx:end fn_1_A5EFC */
 
-/* fzgx:begin fn_1_A6480 noprologue */
-#include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/relocation.h"
+/* fzgx:begin fn_1_A6480 */
 
-struct fn_1_A6480_d58 {
-    u8 pad[8];
-    u16 unk_8;
-    u16 unk_A;
-};
-
-extern f32 lbl_1_rodata_49D8;
-extern struct fn_1_A6480_d58 lbl_1_bss_D58;
-extern void fn_8006CE1C(f32);
-extern u32 OSGetResetCode(void);
-extern void OSSetProgressiveMode(s32);
-extern void fn_80070620(s32);
-extern s32 fn_1_4C10(void);
 
 s32 fn_1_A6480(void) {
     s32 var_r31;
@@ -252,14 +237,11 @@ s32 fn_1_A66FC(s32 value) {
 /* fzgx:end fn_1_A66FC */
 
 /* fzgx:begin fn_1_A67E8 */
-#include "types.h"
-
 struct fn_1_A67E8_lbl_1_bss_6F5F0 {
     u32 unk_0;
 };
 
 
-extern void fn_1_A6870(u32 *);
 
 void fn_1_A67E8(void) {
     s32 var_r0;

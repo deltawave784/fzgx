@@ -2,16 +2,6 @@
 #include "rel/main_rel/globals.h"
 #include "rel/main_rel/prog.h"
 
-extern u32 lbl_1_bss_6F5F4;
-extern void fn_1_4A00(s32, s32, u32);
-extern s8 fn_1_A5DC4(void);
-extern const f32 lbl_1_rodata_49F8;
-extern f32 lbl_1_rodata_49FC[11];
-extern f32 fn_1_A6FE8(void);
-extern void fn_1_A714C(f32 *, f32 *, f32 *, f32 *);
-extern u32 lbl_1_bss_6F5F0;
-
-/* fzgx:begin fn_1_A6870 */
 typedef enum {
     Sig_GXAdjustForOverscan_VI_TVMODE_NTSC_INT = ((((0)) << 2) + ((0))),
     Sig_GXAdjustForOverscan_VI_TVMODE_NTSC_DS = ((((0)) << 2) + ((1))),
@@ -30,10 +20,12 @@ typedef enum {
     Sig_GXAdjustForOverscan_VI_TVMODE_GCA_DS = ((((6)) << 2) + ((1))),
     Sig_GXAdjustForOverscan_VI_TVMODE_GCA_PROG = ((((6)) << 2) + ((2))),
 } Sig_GXAdjustForOverscan_VITVMode;
+
 typedef enum {
     Sig_GXAdjustForOverscan_VI_XFBMODE_SF = 0,
     Sig_GXAdjustForOverscan_VI_XFBMODE_DF = 1,
 } Sig_GXAdjustForOverscan_VIXFBMode;
+
 typedef struct Sig_GXAdjustForOverscan__GXRenderModeObj {
     Sig_GXAdjustForOverscan_VITVMode viTVmode;
     u16 fbWidth;
@@ -49,49 +41,65 @@ typedef struct Sig_GXAdjustForOverscan__GXRenderModeObj {
     u8 sample_pattern[12][2];
     u8 vfilter[7];
 } Sig_GXAdjustForOverscan_GXRenderModeObj;
-typedef u8 Sig_fn_80035110_GXBool;
-typedef u8 Sig_fn_80034ECC_GXBool;
-
-extern Sig_GXAdjustForOverscan_GXRenderModeObj *lbl_801A6CF4;
-extern Sig_GXAdjustForOverscan_GXRenderModeObj lbl_8012B030;
-extern Sig_GXAdjustForOverscan_GXRenderModeObj lbl_8012AFB8;
-extern Sig_GXAdjustForOverscan_GXRenderModeObj lbl_8012B0A8;
-extern Sig_GXAdjustForOverscan_GXRenderModeObj lbl_8012B06C;
-extern Sig_GXAdjustForOverscan_GXRenderModeObj lbl_8019E150;
 
 struct fn_1_A6870_lbl_801A6D30_obj {
     u32 unk_0;
     u32 unk_4;
     u32 unk_8;
 };
+
 struct fn_1_A6870_lbl_801A6D30 {
     struct fn_1_A6870_lbl_801A6D30_obj *unk_0;
 };
-extern struct fn_1_A6870_lbl_801A6D30 lbl_801A6D30;
 
+typedef u8 Sig_fn_80035110_GXBool;
+
+typedef u8 Sig_fn_80034ECC_GXBool;
+extern u32 lbl_801A6CF4;
+extern Sig_GXAdjustForOverscan_GXRenderModeObj lbl_8012B030;
+extern Sig_GXAdjustForOverscan_GXRenderModeObj lbl_8012AFB8;
+extern Sig_GXAdjustForOverscan_GXRenderModeObj lbl_8012B0A8;
+extern Sig_GXAdjustForOverscan_GXRenderModeObj lbl_8012B06C;
+extern Sig_GXAdjustForOverscan_GXRenderModeObj lbl_8019E150;
+extern struct fn_1_A6870_lbl_801A6D30 lbl_801A6D30;
 extern const f32 lbl_1_rodata_49D8;
 extern const f32 lbl_1_rodata_49DC;
 extern const f64 lbl_1_rodata_49E0;
-
-extern void fn_1_54DCC(u8 *);
+extern void fn_1_54DCC(u8 *data);
 extern void fn_1_549F4(void *, void *, f32, f32, f32, f32);
 extern void fn_1_A7024(f32, f32, f32, f32);
 extern u32 VIGetTvFormat(void);
 extern u32 OSGetProgressiveMode(void);
-extern void OSPanic(const char *, int, const char *, ...);
+extern void OSPanic(const char *file, int line, const char *msg, ...);
 extern void GXAdjustForOverscan(Sig_GXAdjustForOverscan_GXRenderModeObj *, Sig_GXAdjustForOverscan_GXRenderModeObj *, u16, u16);
 extern s32 fn_8001B42C(u32);
 extern void fn_8001AF64(void);
 extern void fn_8001BC54(void);
-extern void fn_8007423C(u32, u32, u32, u32);
-extern void fn_800743C4(s32, u32);
+extern void fn_8007423C(u32 arg0, u32 arg1, u32 arg2, u32 arg3);
+extern void fn_800743C4(s32 a, u32 b);
 extern void fn_80035110(void *, Sig_fn_80035110_GXBool);
 extern u32 fn_80038EEC(f32, f32, f32, f32, f32, f32);
-extern void fn_80074188(u32, u32, u32, u32);
+extern u32 fn_80074188(u32 arg0, u32 arg1, u32 arg2, u32 arg3);
 extern void fn_80034ECC(Sig_fn_80034ECC_GXBool, void *, Sig_fn_80034ECC_GXBool, void *);
-extern u32 lbl_1_data_3431C;
-extern u8 lbl_1_data_34324[0x20];
 extern u8 lbl_801A66B0[];
+extern u8 lbl_1_rodata_48C8[];
+extern void fn_1_A9868();
+extern void fn_1_A9A28(int, int, int, int, u32 *);
+extern void fn_1_AA538(void);
+extern void fn_80072344(void);
+extern void fn_80072378(void);
+extern u32 lbl_1_bss_6F5F4;
+extern void fn_1_4A00(s32 fadeIn, u8 steps, u32 arg);
+extern s32 fn_1_A5DC4(void);
+extern const f32 lbl_1_rodata_49F8;
+extern f32 lbl_1_rodata_49FC[11];
+extern f32 fn_1_A6FE8(void);
+extern void fn_1_A714C(f32 *a, f32 *b, f32 *c, f32 *d);
+
+/* fzgx:begin fn_1_A6870 */
+
+
+
 
 void fn_1_A6870(u32 *arg0) {
     Sig_GXAdjustForOverscan_GXRenderModeObj *rmode;
@@ -109,16 +117,16 @@ void fn_1_A6870(u32 *arg0) {
     switch (VIGetTvFormat()) {
     case 0:
         if (OSGetProgressiveMode() != 0) {
-            *lbl_801A6CF4 = lbl_8012B030;
+            *(*((Sig_GXAdjustForOverscan_GXRenderModeObj * *)&lbl_801A6CF4)) = lbl_8012B030;
         } else {
-            *lbl_801A6CF4 = lbl_8012AFB8;
+            *(*((Sig_GXAdjustForOverscan_GXRenderModeObj * *)&lbl_801A6CF4)) = lbl_8012AFB8;
         }
         break;
     case 1:
-        *lbl_801A6CF4 = lbl_8012B0A8;
+        *(*((Sig_GXAdjustForOverscan_GXRenderModeObj * *)&lbl_801A6CF4)) = lbl_8012B0A8;
         break;
     case 2:
-        *lbl_801A6CF4 = lbl_8012B06C;
+        *(*((Sig_GXAdjustForOverscan_GXRenderModeObj * *)&lbl_801A6CF4)) = lbl_8012B06C;
         break;
     default:
         OSPanic((const char *)&lbl_1_data_3431C, 557, (const char *)&lbl_1_data_34324);
@@ -127,8 +135,8 @@ void fn_1_A6870(u32 *arg0) {
 
     switch (*arg0) {
     case 0:
-        GXAdjustForOverscan(lbl_801A6CF4, &lbl_8019E150, 0, 16);
-        lbl_801A6CF4 = &lbl_8019E150;
+        GXAdjustForOverscan((*((Sig_GXAdjustForOverscan_GXRenderModeObj * *)&lbl_801A6CF4)), &lbl_8019E150, 0, 16);
+        (*((Sig_GXAdjustForOverscan_GXRenderModeObj * *)&lbl_801A6CF4)) = &lbl_8019E150;
         fn_8001B42C((u32)&lbl_8019E150);
         fn_8001AF64();
         fn_8001AF64();
@@ -136,8 +144,8 @@ void fn_1_A6870(u32 *arg0) {
         *arg0 = 0;
         break;
     case 1:
-        GXAdjustForOverscan(lbl_801A6CF4, &lbl_8019E150, 0, 16);
-        lbl_801A6CF4 = &lbl_8019E150;
+        GXAdjustForOverscan((*((Sig_GXAdjustForOverscan_GXRenderModeObj * *)&lbl_801A6CF4)), &lbl_8019E150, 0, 16);
+        (*((Sig_GXAdjustForOverscan_GXRenderModeObj * *)&lbl_801A6CF4)) = &lbl_8019E150;
         fn_8001B42C((u32)&lbl_8019E150);
         fn_8001AF64();
         fn_8001AF64();
@@ -145,12 +153,12 @@ void fn_1_A6870(u32 *arg0) {
         *arg0 = 1;
         break;
     case 2:
-        lbl_801A6CF4->xfbHeight = 360;
-        lbl_801A6CF4->viHeight = 360;
-        lbl_801A6CF4->viXOrigin = 40;
-        lbl_801A6CF4->viYOrigin = 60;
-        GXAdjustForOverscan(lbl_801A6CF4, &lbl_8019E150, 0, 12);
-        lbl_801A6CF4 = &lbl_8019E150;
+        (*((Sig_GXAdjustForOverscan_GXRenderModeObj * *)&lbl_801A6CF4))->xfbHeight = 360;
+        (*((Sig_GXAdjustForOverscan_GXRenderModeObj * *)&lbl_801A6CF4))->viHeight = 360;
+        (*((Sig_GXAdjustForOverscan_GXRenderModeObj * *)&lbl_801A6CF4))->viXOrigin = 40;
+        (*((Sig_GXAdjustForOverscan_GXRenderModeObj * *)&lbl_801A6CF4))->viYOrigin = 60;
+        GXAdjustForOverscan((*((Sig_GXAdjustForOverscan_GXRenderModeObj * *)&lbl_801A6CF4)), &lbl_8019E150, 0, 12);
+        (*((Sig_GXAdjustForOverscan_GXRenderModeObj * *)&lbl_801A6CF4)) = &lbl_8019E150;
         fn_8001B42C((u32)&lbl_8019E150);
         fn_8001AF64();
         fn_8001AF64();
@@ -158,8 +166,8 @@ void fn_1_A6870(u32 *arg0) {
         *arg0 = 2;
         break;
     case 3:
-        GXAdjustForOverscan(lbl_801A6CF4, &lbl_8019E150, 0, 0);
-        lbl_801A6CF4 = &lbl_8019E150;
+        GXAdjustForOverscan((*((Sig_GXAdjustForOverscan_GXRenderModeObj * *)&lbl_801A6CF4)), &lbl_8019E150, 0, 0);
+        (*((Sig_GXAdjustForOverscan_GXRenderModeObj * *)&lbl_801A6CF4)) = &lbl_8019E150;
         fn_8001B42C((u32)&lbl_8019E150);
         fn_8001AF64();
         fn_8001AF64();
@@ -168,8 +176,8 @@ void fn_1_A6870(u32 *arg0) {
         break;
     }
 
-    fn_8007423C(0, 0, lbl_801A6CF4->fbWidth, lbl_801A6CF4->efbHeight);
-    fn_800743C4(lbl_801A6CF4->fbWidth, lbl_801A6CF4->xfbHeight);
+    fn_8007423C(0, 0, (*((Sig_GXAdjustForOverscan_GXRenderModeObj * *)&lbl_801A6CF4))->fbWidth, (*((Sig_GXAdjustForOverscan_GXRenderModeObj * *)&lbl_801A6CF4))->efbHeight);
+    fn_800743C4((*((Sig_GXAdjustForOverscan_GXRenderModeObj * *)&lbl_801A6CF4))->fbWidth, (*((Sig_GXAdjustForOverscan_GXRenderModeObj * *)&lbl_801A6CF4))->xfbHeight);
     fn_80035110((void *)lbl_801A6D30.unk_0->unk_4, 1);
     fn_80035110((void *)lbl_801A6D30.unk_0->unk_8, 0);
     fn_80035110((void *)lbl_801A6D30.unk_0->unk_4, 0);
@@ -179,10 +187,10 @@ void fn_1_A6870(u32 *arg0) {
     fn_1_A714C(&loc_14, &loc_10, &loc_C, &loc_8);
     fn_1_A7024(loc_14, fn_1_A6FE8(), loc_C, loc_8);
 
-    rmode = lbl_801A6CF4;
+    rmode = (*((Sig_GXAdjustForOverscan_GXRenderModeObj * *)&lbl_801A6CF4));
     fn_80038EEC(0.0f, 0.0f, (f32)rmode->fbWidth, (f32)rmode->efbHeight, 0.0f, 1.0f);
-    fn_80074188(0, 0, lbl_801A6CF4->fbWidth, lbl_801A6CF4->efbHeight);
-    fn_80034ECC(lbl_801A6CF4->aa, lbl_801A6CF4->sample_pattern, 1, lbl_801A6CF4->vfilter);
+    fn_80074188(0, 0, (*((Sig_GXAdjustForOverscan_GXRenderModeObj * *)&lbl_801A6CF4))->fbWidth, (*((Sig_GXAdjustForOverscan_GXRenderModeObj * *)&lbl_801A6CF4))->efbHeight);
+    fn_80034ECC((*((Sig_GXAdjustForOverscan_GXRenderModeObj * *)&lbl_801A6CF4))->aa, (*((Sig_GXAdjustForOverscan_GXRenderModeObj * *)&lbl_801A6CF4))->sample_pattern, 1, (*((Sig_GXAdjustForOverscan_GXRenderModeObj * *)&lbl_801A6CF4))->vfilter);
 
     tv = lbl_1_bss_6F5F0;
     if (tv == 1 || tv == 2) {
@@ -227,11 +235,6 @@ static const u32 fzgx_pool_table6[1] = {0x00000000};  /* fzgx-allow: A1 retail p
 __declspec(section ".fzgxpool") static void fzgx_pool_keep6(void) { const u32 *volatile cp; cp = fzgx_pool_table6; }  /* fzgx-allow: S2 pool primer sink */
 #pragma section code_type ".text"
 
-extern u32 lbl_801A6CF4;
-extern u8 lbl_1_rodata_48C8[];
-extern void fn_1_A9868(void);
-extern void fn_1_A9A28(int, int, int, int, u32 *);
-extern void fn_1_AA538(void);
 
 void fn_1_A6E68(void) {
     u8 *rodata;
@@ -305,7 +308,7 @@ void fn_1_A6FA0(void) {
 
 /* fzgx:begin fn_1_A6FE8 */
 f32 fn_1_A6FE8(void) {
-    if (fn_1_A5DC4()) {
+    if ((s8)fn_1_A5DC4()) {
         return lbl_1_rodata_49F8;
     }
 
@@ -343,7 +346,6 @@ f32 fn_1_A71BC(void) {
 /* fzgx:end fn_1_A71BC */
 
 /* fzgx:begin fn_1_A71CC */
-extern void fn_80072344(void);
 
 typedef struct {
     u32 unk_0;
@@ -363,12 +365,6 @@ void fn_1_A71CC(void) {
 /* fzgx:end fn_1_A71CC */
 
 /* fzgx:begin fn_1_A722C */
-#include "types.h"
-
-
-
-
-extern void fn_80072378(void);
 
 typedef struct {
     u32 unk_0;

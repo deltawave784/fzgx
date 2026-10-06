@@ -2,51 +2,141 @@
 #include "rel/main_rel/globals.h"
 #include "rel/main_rel/bg_lig.h"
 
-extern void fn_80008BA8(void *arg0, void *arg1, int arg2);
-extern u32 lbl_1_rodata_6490[4];
-extern u32 lbl_801A63D0;
-extern u32 fn_1_76504(s32, void *, s32);
-extern void fn_1_7269C(u32, s32, u32);
-extern void fn_1_5948(s32 index);
-extern void fn_1_D8388(void *obj);
-extern void fn_1_627C(s32 index);
-extern void *fn_1_9D260(Obj_1_data_2A7E0 *data);
-extern void fn_1_D7B7C(Obj_1_data_2A7E0_At3C *obj);
-extern void fn_1_9AD88(void);
-extern void *memset(void *dst, int value, u32 size);
-extern void fn_1_D7EF4(void *, u32);
-extern f32 lbl_1_rodata_6594[];
-extern f32 lbl_1_rodata_6524[];
-extern void lbl_8006DCA4(void);
-extern s32 fn_1_54E34(void *obj, f32 value);
-extern void *fn_1_54448(s32 value);
-extern void *fn_1_548AC(s32 value);
-extern void fn_1_D8878(void);
-extern void fn_1_5489C(void *obj, void *arg);
-extern void fn_1_D83E4(Obj_1_data_2A7E0_At3C *obj, s32 index);
-extern void fn_1_D7A10(Obj_1_data_2A7E0_At3C *obj);
-extern void fn_1_D8D58(Obj_1_data_2A7E0_At3C *obj, Obj_1_data_2A7E0_At3C *arg);
-extern void fn_1_D9D8C(Obj_1_bss_7AD78 *obj, u32 arg, s32 index);
-extern void fn_1_DA3A0(Obj_1_bss_7AD78 *obj);
-extern void fn_1_E87FC(void);
-extern void OSPanic(const char *file, int line, const char *msg, ...);
-extern struct fn_1_D66F8_lbl_801A66A0 lbl_801A66A0;
-extern u32 lbl_1_rodata_6358;
-extern void fn_1_4404(void);
-extern u32 fn_1_DA6A8(void *, u32);
-extern void fn_80008BEC(void *, int, u32);
-extern void fn_1_446C(void);
-extern void fn_1_76BF8(void);
-extern void fn_1_72648(void);
+typedef struct {
+    u8 pad_000[0x6c0];
+    f32 threshold;
+} fn_1_D8784_LigObject;
+
+typedef struct {
+    u8 pad_00[0x68];
+    u32 field_68;
+    u8 pad_6c[0x40];
+} fn_1_D8CA8_LigEntry;
+
+typedef struct {
+    u8 pad_00[0x6d4];
+    s32 count;
+    fn_1_D8CA8_LigEntry entries[1];
+} fn_1_D8CA8_LigObject;
+
+typedef struct {
+    u8 pad0[0x24];
+    f32 value;
+    u8 pad28[0x4];
+    s16 count;
+    u8 pad2e[0x2];
+} fn_1_D7B7C_LigEntry;
+
+typedef struct {
+    u8 pad0[0x4];
+    void (*callback)(void);
+    fn_1_D7B7C_LigEntry *entry;
+} LigEvent;
+
+typedef struct {
+    u8 data[0xac];
+} fn_1_D8D08_LigEntry;
+
+typedef struct {
+    u8 pad[0x6d4];
+    s32 count;
+    fn_1_D8D08_LigEntry entries[1];
+} LigContainer;
+
+typedef struct {
+    u8 unk_0[0xac];
+} fn_1_D8EEC_LigEntry;
+
+typedef struct {
+    u8 unk_0[0x6d4];
+    s32 unk_6d4;
+    fn_1_D8EEC_LigEntry unk_6d8[1];
+} fn_1_D8EEC_LigObject;
+
+struct fn_1_D66F8_lbl_801A66A0 {
+    u32 unk_0;
+};
+
+typedef struct {
+    u8 pad_000[0x2c];
+    f32 x;
+    f32 y;
+    f32 z;
+    u8 pad_038[0x74];
+} fn_1_D8D58_LigEntry;
+
+typedef struct {
+    f32 pos[3];
+    f32 vel[3];
+    f32 scale[3];
+    f32 value;
+    s16 phase;
+    s16 step;
+    s16 count;
+    u8 pad2e[0x2];
+} fn_1_D7A10_LigEntry;
+
+typedef struct {
+    u8 pad_000[0x6d4];
+    s32 count;
+    fn_1_D8D58_LigEntry entries[1];
+} LigObject;
+extern s32 fn_1_58C4();
 extern void fn_1_9A508(void);
 extern f32 lbl_1_rodata_64A0[33];
 extern void fn_1_D79E4(void *obj);
 extern u8 fn_1_5300(void);
-extern void fn_1_77B80(u32);
+extern void fn_1_77B80(u32 arg0);
+extern void fn_1_76BF8(void);
+extern void fn_1_72648(void);
+extern void fn_1_D8CA8(fn_1_D8CA8_LigObject *obj);
+extern void fn_1_4404(void);
+extern u32 fn_1_DA6A8(void *, u32);
 extern void fn_1_D9224(void *, u32);
+extern void fn_1_446C(void);
+extern void fn_1_D9D8C(Obj_1_bss_7AD78 *obj, u32 arg, s32 index);
+extern void fn_1_DA3A0(Obj_1_bss_7AD78 *obj);
+extern void fn_80008BEC(void *dest, int value, u32 size);
+extern void fn_80008BA8(u32 arg0, u32 arg1, u32 arg2);
+extern u32 lbl_1_rodata_6490[4];
+extern u32 lbl_801A63D0;
+extern u32 fn_1_76504(s32, void *, s32);
+extern void fn_1_7269C(u32 arg0, u32 arg1, void *arg2);
+extern void fn_1_5948(s32 index);
+extern void fn_1_D8388();
+extern void fn_1_627C(s32 index);
+extern u32 fn_1_9D260();
+extern void fn_1_D7B7C(fn_1_D7B7C_LigEntry *base);
+extern void fn_1_9AD88(void);
+extern void *memset(void *dst, int value, u32 size);
+extern void fn_1_D7EF4(void *, u32);
+extern f32 lbl_1_rodata_6594[];
+extern void lbl_8006DCA4(void);
+extern s32 fn_1_54E34(void *arg0, f32 arg1);
+extern void **fn_1_54448(s32 arg0);
+extern void * fn_1_548AC(u32 amount);
+extern void fn_1_D8878(void);
+extern void fn_1_5489C(void **arg0, void **arg1);
+extern void fn_1_D8D08(LigContainer *container);
+extern void fn_1_D8784(fn_1_D8784_LigObject *obj);
+extern void fn_1_D8EEC(fn_1_D8EEC_LigObject *obj, void *arg);
+extern f32 lbl_1_rodata_6524[];
+extern void *fn_1_5448C(fn_1_D7B7C_LigEntry *entry);
+extern void fn_1_D7C44(void);
+extern void fn_1_103090(fn_1_D8CA8_LigEntry *entry);
+extern void fn_1_1030A4(fn_1_D8D08_LigEntry *entry);
+extern struct fn_1_D66F8_lbl_801A66A0 lbl_801A66A0;
+extern f32 lbl_8006D188(s32 value);
+extern void fn_1_1030D4(fn_1_D8D58_LigEntry *entry, void *arg);
+extern void fn_1_103264(fn_1_D8EEC_LigEntry *entry, void *arg);
+extern void fn_1_D83E4(Obj_1_data_2A7E0_At3C *obj, s32 index);
+extern void fn_1_D7A10(fn_1_D7A10_LigEntry *base);
+extern void fn_1_D8D58(LigObject *obj, void *arg);
+extern void fn_1_E87FC(void);
+extern void OSPanic(const char *file, int line, const char *msg, ...);
+extern u32 lbl_1_rodata_6358;
 
 /* fzgx:begin fn_1_D5C70 */
-extern int fn_1_58C4(void);
 
 typedef struct {
     u32 unk0;
@@ -204,7 +294,7 @@ void fn_1_D66B8(void) {
 /* fzgx:begin fn_1_D66BC */
 int fn_1_D66BC(void *unused, void *arg)
 {
-    fn_80008BA8(arg, lbl_1_data_3DC38, 0x10);
+    fn_80008BA8( (u32)(void *)(arg), (u32)(void *)(lbl_1_data_3DC38), 0x10);
     return 1;
 }
 /* fzgx:end fn_1_D66BC */
@@ -221,9 +311,6 @@ struct fn_1_D66F8_Arg1 {
 };
 struct fn_1_D66F8_Arg2 {
     u8 unk_0;
-};
-struct fn_1_D66F8_lbl_801A66A0 {
-    u32 unk_0;
 };
 
 void fn_1_D66F8(u8 arg0, u8 *arg1, s8 *arg2) {
@@ -252,29 +339,11 @@ void fn_1_D720C(void) {
     local[2] = lbl_1_rodata_6490[2];
     local[3] = lbl_1_rodata_6490[3];
     result = fn_1_76504(0x1d, local, 0);
-    fn_1_7269C(result, 0, lbl_801A63D0);
+    fn_1_7269C(result, 0, (void *)(u32)(lbl_801A63D0));
 }
 /* fzgx:end fn_1_D720C */
 
-/* fzgx:begin fn_1_D7274 noprologue */
-#include "rel/main_rel/bg_lig.h"
-
-extern s32 fn_1_58C4(void);
-extern void fn_1_9A508(void);
-extern f32 lbl_1_rodata_64A0[33];
-extern void fn_1_D79E4(Obj_1_data_2A7E0_At3C *);
-extern u8 fn_1_5300(void);
-extern void fn_1_77B80(u32);
-extern void fn_1_76BF8(void);
-extern void fn_1_72648(void);
-extern void fn_1_D8CA8(Obj_1_data_2A7E0_At3C *);
-extern void fn_1_4404(void);
-extern void fn_1_DA6A8(void *, u32);
-extern void fn_1_D9224(void *, u32);
-extern void fn_1_446C(void);
-extern void fn_1_D9D8C(void *, u32, s32);
-extern void fn_1_DA3A0(void *);
-extern void fn_80008BEC(void *, u32, u32);
+/* fzgx:begin fn_1_D7274 */
 
 #pragma opt_dead_assignments off
 #pragma opt_pointer_analysis on
@@ -290,7 +359,7 @@ void fn_1_D7274(void) {
     obj->unk_6D4 = 0;
     fn_1_9A508();
     obj->unk_6C0 = (0.0f);
-    fn_1_D79E4(obj);
+    fn_1_D79E4( (void *)(Obj_1_data_2A7E0_At3C *)(obj));
 
     if (obj->unk_6CC != 0
         && (mode == 1 || (mode == 2 && fn_1_5300() == 1))) {
@@ -300,29 +369,29 @@ void fn_1_D7274(void) {
         fn_1_72648();
     }
 
-    fn_1_D8CA8(obj);
+    fn_1_D8CA8( (fn_1_D8CA8_LigObject *)(Obj_1_data_2A7E0_At3C *)(obj));
     fn_1_4404();
 
     if (lbl_1_bss_7AD78.unk_14 != 0) {
         fn_1_DA6A8(&lbl_1_bss_7AD78, obj->unk_1C58);
-        fn_80008BEC(&lbl_1_bss_7AD78, 0, 0x20);
+        fn_80008BEC(&lbl_1_bss_7AD78, (u32)(0), 0x20);
     }
 
     if (lbl_1_bss_7AD78.unk_34 != 0) {
         state = &lbl_1_bss_7AD78;
         state2 = (Obj_1_bss_7AD78 *)((u8 *)state + 0x20);
         fn_1_DA6A8(state2, obj->unk_1C5C);
-        fn_80008BEC(state2, 0, 0x20);
+        fn_80008BEC(state2, (u32)(0), 0x20);
     }
 
     if (obj->unk_1C58 != 0) {
-        fn_80008BEC(&lbl_1_bss_7AD78, 0, 0x20);
+        fn_80008BEC(&lbl_1_bss_7AD78, (u32)(0), 0x20);
         fn_1_D9224(&lbl_1_bss_7AD78, obj->unk_1C58);
     }
 
     if (obj->unk_1C5C) {
         state2 = (Obj_1_bss_7AD78 *)((u8 *)&lbl_1_bss_7AD78 + 0x20);
-        fn_80008BEC(state2, 0, 0x20);
+        fn_80008BEC(state2, (u32)(0), 0x20);
         fn_1_D9224(state2, obj->unk_1C5C);
     }
 
@@ -331,12 +400,12 @@ void fn_1_D7274(void) {
     state2 = (Obj_1_bss_7AD78 *)((u8 *)state + 0x20);
     for (i = 0; i < 0x78; i++) {
         if (obj->unk_1C58 != 0) {
-            fn_1_D9D8C(state, obj->unk_1C58, 0);
-            fn_1_DA3A0((&lbl_1_bss_7AD78));
+            fn_1_D9D8C( (Obj_1_bss_7AD78 *)(void *)(state), obj->unk_1C58, 0);
+            fn_1_DA3A0( (Obj_1_bss_7AD78 *)(void *)((&lbl_1_bss_7AD78)));
         }
         if (obj->unk_1C5C != 0) {
-            fn_1_D9D8C(state2, obj->unk_1C5C, 1);
-            fn_1_DA3A0(state2);
+            fn_1_D9D8C( (Obj_1_bss_7AD78 *)(void *)(state2), obj->unk_1C5C, 1);
+            fn_1_DA3A0( (Obj_1_bss_7AD78 *)(void *)(state2));
         }
     }
 }
@@ -346,33 +415,9 @@ void fn_1_D7274(void) {
 /* fzgx:end fn_1_D7274 */
 
 /* fzgx:begin fn_1_D744C */
-extern void fn_80008BA8(void *arg0, void *arg1, int arg2);
-extern u32 lbl_1_rodata_6490[4];
-extern u32 lbl_801A63D0;
-extern u32 fn_1_76504(s32, void *, s32);
-extern void fn_1_7269C(u32, s32, u32);
-extern void fn_1_5948(s32 index);
-extern void fn_1_D8388(void *obj);
-extern void fn_1_627C(s32 index);
-extern void *fn_1_9D260(Obj_1_data_2A7E0 *data);
-extern void fn_1_D7B7C(Obj_1_data_2A7E0_At3C *obj);
-extern void fn_1_9AD88(void);
-extern void *memset(void *dst, int value, u32 size);
-extern void fn_1_D7EF4(void *, u32);
-extern f32 lbl_1_rodata_6594[];
 
 
-extern void lbl_8006DCA4(void);
-extern s32 fn_1_54E34(void *obj, f32 value);
-extern void *fn_1_54448(s32 value);
-extern void *fn_1_548AC(s32 value);
-extern void fn_1_D8878(void);
-extern void fn_1_5489C(void *obj, void *arg);
 
-extern s32 fn_1_58C4(void);
-extern void fn_1_5948(s32 index);
-extern void fn_1_D8388();
-extern void fn_1_627C(s32 index);
 
 // Initializes each available background-light entry.
 void fn_1_D744C(void) {
@@ -409,8 +454,8 @@ void fn_1_D74C4(void) {
         fn_1_627C(i);
     }
 
-    fn_1_D7A10(obj);
-    fn_1_D8D58(obj, arg);
+    fn_1_D7A10( (fn_1_D7A10_LigEntry *)(Obj_1_data_2A7E0_At3C *)(obj));
+    fn_1_D8D58( (LigObject *)(Obj_1_data_2A7E0_At3C *)(obj), (void *)(Obj_1_data_2A7E0_At3C *)(arg));
     if (obj->unk_1C58 != 0) {
         fn_1_D9D8C(&lbl_1_bss_7AD78, obj->unk_1C58, 0);
         fn_1_DA3A0(&lbl_1_bss_7AD78);
@@ -425,8 +470,6 @@ void fn_1_D74C4(void) {
 /* fzgx:end fn_1_D74C4 */
 
 /* fzgx:begin fn_1_D75CC */
-#include "types.h"
-
 typedef struct {
     u8 data[0xac];
 } Sig_fn_1_D8D08_fn_1_D8D08_LigEntry;
@@ -442,7 +485,6 @@ struct fn_1_D75CC_lbl_1_data_2A7E0 {
     u32 unk_3C;
 };
 
-extern void fn_1_D8D08(Sig_fn_1_D8D08_LigContainer *);
 
 void fn_1_D75CC(void) {
     u32 *temp_r31;
@@ -468,20 +510,18 @@ void fn_1_D75CC(void) {
     fn_1_446C();
     fn_1_76BF8();
     fn_1_72648();
-    fn_1_D8D08((Sig_fn_1_D8D08_LigContainer *)((Sig_fn_1_D8D08_LigContainer *)(temp_r30)));
+    fn_1_D8D08( (LigContainer *)((Sig_fn_1_D8D08_LigContainer *)((Sig_fn_1_D8D08_LigContainer *)(temp_r30))));
 }
 /* fzgx:end fn_1_D75CC */
 
 /* fzgx:begin fn_1_D7688 */
-extern void fn_1_D8784(Obj_1_data_2A7E0_At3C *obj);
-extern void fn_1_D8EEC(Obj_1_data_2A7E0_At3C *obj, void *value);
 
 void fn_1_D7688(void) {
     Obj_1_data_2A7E0_At3C *obj = lbl_1_data_2A7E0.unk_3C;
-    void *value = fn_1_9D260(&lbl_1_data_2A7E0);
-    fn_1_D8784(obj);
-    fn_1_D7B7C(obj);
-    fn_1_D8EEC(obj, value);
+    void *value = (void *)fn_1_9D260(&lbl_1_data_2A7E0);
+    fn_1_D8784( (fn_1_D8784_LigObject *)(Obj_1_data_2A7E0_At3C *)(obj));
+    fn_1_D7B7C( (fn_1_D7B7C_LigEntry *)(Obj_1_data_2A7E0_At3C *)(obj));
+    fn_1_D8EEC( (fn_1_D8EEC_LigObject *)(Obj_1_data_2A7E0_At3C *)(obj), value);
     fn_1_9AD88();
 }
 /* fzgx:end fn_1_D7688 */
@@ -526,9 +566,7 @@ void fn_1_D79E4(void *obj) {
 }
 /* fzgx:end fn_1_D79E4 */
 
-/* fzgx:begin fn_1_D7A10 noprologue */
-#include "types.h"
-
+/* fzgx:begin fn_1_D7A10 */
 #pragma section code_type ".fzgxpool"
 static const u32 fzgx_pool_table1[4] = {0x00000000, 0x0280012C, 0x00000000, 0x00000001};  /* fzgx-allow: A1 retail pool bytes */
 __declspec(section ".fzgxpool") static void fzgx_pool_keep1(void) { const u32 *volatile cp; cp = fzgx_pool_table1; }  /* fzgx-allow: S2 pool primer sink */
@@ -573,16 +611,6 @@ __declspec(section ".fzgxpool") static void fzgx_pool_prime8(void) {
 }
 #pragma section code_type ".text"
 
-typedef struct {
-    f32 pos[3];
-    f32 vel[3];
-    f32 scale[3];
-    f32 value;
-    s16 phase;
-    s16 step;
-    s16 count;
-    u8 pad2e[0x2];
-} fn_1_D7A10_LigEntry;
 
 // Steps every active light particle: damps and gravity-biases the velocity,
 // advances the position, decays the phase step and fades the scale out
@@ -621,33 +649,12 @@ void fn_1_D7A10(fn_1_D7A10_LigEntry *base) {
 }
 /* fzgx:end fn_1_D7A10 */
 
-/* fzgx:begin fn_1_D7B7C noprologue */
-#include "types.h"
-
-extern f32 lbl_1_rodata_6524[];
-
-typedef struct {
-    u8 pad0[0x24];
-    f32 value;
-    u8 pad28[0x4];
-    s16 count;
-    u8 pad2e[0x2];
-} fn_1_D7B7C_LigEntry;
-
-typedef struct {
-    u8 pad0[0x4];
-    void (*callback)(void);
-    fn_1_D7B7C_LigEntry *entry;
-} LigEvent;
-
-extern void lbl_8006DCA4(void);
+/* fzgx:begin fn_1_D7B7C */
 
 
-extern s32 fn_1_54E34(fn_1_D7B7C_LigEntry *entry, f32 value);
-extern void *fn_1_5448C(fn_1_D7B7C_LigEntry *entry);
-extern LigEvent *fn_1_548AC(s32 size);
-extern void fn_1_D7C44(void);
-extern void fn_1_5489C(void *data, void *event);
+
+
+
 
 void fn_1_D7B7C(fn_1_D7B7C_LigEntry *base) {
     void *data;
@@ -660,13 +667,13 @@ void fn_1_D7B7C(fn_1_D7B7C_LigEntry *base) {
     for (i = 0; i < 0x14; i++) {
         entry = base + i + 1;
         if (entry->count > 0 &&
-            fn_1_54E34(entry, (*(f32 (*)[28])&lbl_1_rodata_6524)[0] * entry->value)) {
+            fn_1_54E34( (void *)(fn_1_D7B7C_LigEntry *)(entry), (*(f32 (*)[28])&lbl_1_rodata_6524)[0] * entry->value)) {
             data = fn_1_5448C(entry);
-            event = fn_1_548AC(0xc);
+            event = (LigEvent *)fn_1_548AC(0xc);
             if (event != 0) {
                 event->callback = fn_1_D7C44;
                 event->entry = entry;
-                fn_1_5489C(data, event);
+                fn_1_5489C( (void **)(void *)(data), (void **)(void *)(event));
             }
         }
     }
@@ -674,14 +681,13 @@ void fn_1_D7B7C(fn_1_D7B7C_LigEntry *base) {
 /* fzgx:end fn_1_D7B7C */
 
 /* fzgx:begin fn_1_D8388 */
-extern u32 fn_1_58C4(void);
 
 // Initializes each lighting entry while the lighting system is available.
 void fn_1_D8388(void *obj) {
     u8 *entry = (u8 *)obj;
     s32 i;
 
-    if (fn_1_58C4() < 2) {
+    if ((u32)fn_1_58C4() < 2) {
         i = 0;
         do {
             fn_1_D7EF4(entry + 0x3f0, 0);
@@ -707,12 +713,7 @@ typedef struct {
     f32 scale;
 } fn_1_D8784_LigEntry;
 
-typedef struct {
-    u8 pad_000[0x6c0];
-    f32 threshold;
-} fn_1_D8784_LigObject;
 
-extern u32 fn_1_58C4(fn_1_D8784_LigObject *obj);
 
 // Queues callbacks for eligible lig entries.
 void fn_1_D8784(fn_1_D8784_LigObject *obj) {
@@ -722,7 +723,7 @@ void fn_1_D8784(fn_1_D8784_LigObject *obj) {
     f32 factor;
     fn_1_D8784_LigEntry *entry;
 
-    if (fn_1_58C4(obj) >= 2) {
+    if ((u32)fn_1_58C4(obj) >= 2) {
         return;
     }
     if (obj->threshold < lbl_1_rodata_6594[0]) {
@@ -736,13 +737,13 @@ void fn_1_D8784(fn_1_D8784_LigObject *obj) {
         entry = (fn_1_D8784_LigEntry *)((u8 *)obj + (i * 0x30));
         callback_data = entry->callback_data;
         if (fn_1_54E34(callback_data, factor * entry->scale) != 0) {
-            owner = fn_1_54448(0);
+            owner = (void *)fn_1_54448(0);
             {
-                LigCallbackObject *callback = (LigCallbackObject *)fn_1_548AC(0xc);
+                LigCallbackObject *callback = (LigCallbackObject *)fn_1_548AC( (s32)(0xc));
                 if (callback != 0) {
                     callback->callback = fn_1_D8878;
                     callback->data = callback_data;
-                    fn_1_5489C(owner, callback);
+                    fn_1_5489C( (void **)(void *)(owner), (void **)(void *)(callback));
                 }
             }
         }
@@ -751,19 +752,8 @@ void fn_1_D8784(fn_1_D8784_LigObject *obj) {
 /* fzgx:end fn_1_D8784 */
 
 /* fzgx:begin fn_1_D8CA8 */
-typedef struct {
-    u8 pad_00[0x68];
-    u32 field_68;
-    u8 pad_6c[0x40];
-} fn_1_D8CA8_LigEntry;
 
-typedef struct {
-    u8 pad_00[0x6d4];
-    s32 count;
-    fn_1_D8CA8_LigEntry entries[1];
-} fn_1_D8CA8_LigObject;
 
-extern void fn_1_103090(fn_1_D8CA8_LigEntry *entry);
 
 void fn_1_D8CA8(fn_1_D8CA8_LigObject *obj) {
     s32 count = obj->count;
@@ -779,17 +769,8 @@ void fn_1_D8CA8(fn_1_D8CA8_LigObject *obj) {
 /* fzgx:end fn_1_D8CA8 */
 
 /* fzgx:begin fn_1_D8D08 */
-typedef struct {
-    u8 data[0xac];
-} fn_1_D8D08_LigEntry;
 
-typedef struct {
-    u8 pad[0x6d4];
-    s32 count;
-    fn_1_D8D08_LigEntry entries[1];
-} LigContainer;
 
-extern void fn_1_1030A4(fn_1_D8D08_LigEntry *entry);
 
 void fn_1_D8D08(LigContainer *container) {
     s32 count = container->count;
@@ -803,10 +784,7 @@ void fn_1_D8D08(LigContainer *container) {
 }
 /* fzgx:end fn_1_D8D08 */
 
-/* fzgx:begin fn_1_D8D58 noprologue */
-#include "types.h"
-
-extern struct fn_1_D66F8_lbl_801A66A0 lbl_801A66A0;
+/* fzgx:begin fn_1_D8D58 */
 
 #pragma section code_type ".fzgxpool"
 static const u32 fzgx_pool_table1[4] = {0x00000000, 0x0280012C, 0x00000000, 0x00000001};  /* fzgx-allow: A1 retail pool bytes */
@@ -892,23 +870,9 @@ __declspec(section ".fzgxpool") static void fzgx_pool_prime14(void) {
 }
 #pragma section code_type ".text"
 
-typedef struct {
-    u8 pad_000[0x2c];
-    f32 x;
-    f32 y;
-    f32 z;
-    u8 pad_038[0x74];
-} fn_1_D8D58_LigEntry;
-
-typedef struct {
-    u8 pad_000[0x6d4];
-    s32 count;
-    fn_1_D8D58_LigEntry entries[1];
-} LigObject;
 
 
-extern f32 lbl_8006D188(s32 value);
-extern void fn_1_1030D4(fn_1_D8D58_LigEntry *entry, void *arg);
+
 
 void fn_1_D8D58(LigObject *obj, void *arg) {
     s32 count = obj->count;
@@ -946,17 +910,8 @@ void fn_1_D8D58(LigObject *obj, void *arg) {
 /* fzgx:end fn_1_D8D58 */
 
 /* fzgx:begin fn_1_D8EEC */
-typedef struct {
-    u8 unk_0[0xac];
-} fn_1_D8EEC_LigEntry;
 
-typedef struct {
-    u8 unk_0[0x6d4];
-    s32 unk_6d4;
-    fn_1_D8EEC_LigEntry unk_6d8[1];
-} fn_1_D8EEC_LigObject;
 
-extern void fn_1_103264(fn_1_D8EEC_LigEntry *entry, void *arg);
 
 // Applies the operation to each entry in the object.
 void fn_1_D8EEC(fn_1_D8EEC_LigObject *obj, void *arg) {

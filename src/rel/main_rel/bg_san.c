@@ -1,44 +1,153 @@
 #include "types.h"
 #include "rel/main_rel/globals.h"
 #include "rel/main_rel/bg_san.h"
-extern void fn_1_DC6FC(void *context);
-extern void fn_1_DC5E8(Obj_1_data_2A7E0_At3C *, s32);
-extern void fn_1_9AD54(void);
-extern void fn_1_FBEA8(void);
-extern void fn_1_103F58(void *arg);
-extern void fn_1_9AD88(void);
-extern void fn_1_9A508(void);
-extern void fn_1_DAF94(Obj_1_data_2A7E0_At3C *);
-extern s32 fn_1_5910(void);
-extern void *fn_1_9D260(Obj_1_data_2A7E0 *arg0);
-extern s16 fn_1_7B054(void);
-extern s16 fn_1_3F0C8(void);
-extern const f32 lbl_1_rodata_663C;
-extern void fn_1_1067A8(void *arg0, f32 arg1, f32 arg2);
+
+typedef struct {
+    u8 unk_00[0x10];
+    s32 unk_10;
+} BgSanContext;
+
+typedef struct {
+    f32 x, y, z;
+} Fn1DABB4_Vec;
+
+typedef struct BgSanObject {
+    u8 unk_00[0x10];
+    s32 unk_10;
+    void *unk_14;
+    u8 unk_18[0x80c];
+    f32 unk_824;
+    f32 unk_828;
+    f32 unk_82c;
+} BgSanObject;
+
+typedef struct BgSanPosition {
+    f32 unk_00;
+    f32 unk_04;
+    f32 unk_08;
+} BgSanPosition;
+
+typedef struct fn_1_DC3A4_Entry {
+    u8 unk00[0x68];
+    s32 initialized;
+    u8 unk6c[0x40];
+} fn_1_DC3A4_Entry;
+
+typedef struct fn_1_DC3A4_Container {
+    s32 count;
+    fn_1_DC3A4_Entry entries[1];
+} fn_1_DC3A4_Container;
+
+typedef struct SanEntry {
+    u8 unk00[0x08];
+    u32 unk08;
+    u8 unk0c[0x20];
+    f32 value2c;
+    f32 value30;
+    f32 value34;
+    u8 unk38[0x74];
+} SanEntry;
+
+typedef struct SanContainer {
+    s32 count;
+    SanEntry entries[1];
+} SanContainer;
+
+typedef struct fn_1_DC404_Entry {
+    u8 data[0xac];
+} fn_1_DC404_Entry;
+
+typedef struct fn_1_DC404_Container {
+    s32 count;
+    fn_1_DC404_Entry entries[1];
+} fn_1_DC404_Container;
+
+struct fn_1_DA6A8_lbl_801A6410 {
+    u32 unk_0;
+};
+
+struct Sig_fn_80077B64_fn_80077B64_Arg0 {
+    u8 pad_0[0x4];
+    u32 unk_4;
+};
+
+struct Sig_fn_80077B14_fn_80077B14_Arg0 {
+    u8 pad_0[0x4];
+    u32 unk_4;
+    u8 pad_8[0x18];
+    u32 unk_20;
+};
+extern void fn_1_DAAFC();
+extern f32 lbl_1_rodata_6628;
+extern void fn_1_FB87C(u32 *values, u8 count);
+extern u32 fn_1_FBFE4();
+extern s32 fn_1_58C4();
 extern void fn_1_103D28(void *arg0, int arg1, f32 arg2);
+extern void fn_1_9A508(void);
+extern void fn_1_FB96C(int index);
+extern void fn_1_DAB1C();
+extern void fn_1_FB9C0(int index);
+extern void fn_1_103F10(void *arg);
+extern void fn_1_DAB3C();
+extern const Fn1DABB4_Vec lbl_1_rodata_662C;
+extern void lbl_8006D91C(s32);
+extern void mathutil_mtxA_rotate_x(s32);
+extern void mathutil_mtxA_rotate_y(s32);
+extern void mathutil_mtxA_rotate_z(s32);
+extern void lbl_8006E1C0(void *, void *);
+extern void lbl_8006D7DC(void *);
+extern void lbl_8006E13C(void *);
+extern void lbl_8006DB74(void *);
+void fn_1_5948(s32);
+void fn_1_627C(s32);
+extern void fn_1_9AD54(void);
+extern s16 fn_1_7B054();
+extern s16 fn_1_3F0C8(void);
+extern f32 lbl_1_rodata_6638;
+extern const f32 lbl_1_rodata_663C;
+extern void fn_1_106084(void *target, s32 index, f32 x, f32 y, f32 z);
+extern void fn_1_DB138(BgSanContext *context);
+extern void fn_1_DB198(BgSanObject *object, void *arg1);
+extern void fn_1_DB268(void *entry);
+extern void *fn_1_5448C(BgSanPosition *position);
+extern void fn_1_DC3A4(fn_1_DC3A4_Container *container);
+extern u32 fn_1_9D260();
+extern void fn_1_DCB10(void);
+extern void fn_1_DC454(SanContainer *container, void *arg);
+extern void fn_1_DC648(void *object);
+extern void fn_1_DC404(fn_1_DC404_Container *container);
+extern u32 lbl_801A66A0;
+extern f32 lbl_8006D188(s32);
+extern void fn_1_1030D4(void *entry, void *arg);
+extern s32 fn_1_5910();
+extern void fn_1_681C(u32 index, u32 *output);
+extern s32 fn_1_1FB80(u8 *, s32);
+extern void fn_1_DC6FC(void *context);
+extern void fn_1_DC5E8(Obj_1_data_2A7E0_At3C *container, s32 arg);
+extern void fn_1_FBEA8(void);
+extern void fn_1_103F58(void *arg0);
+extern void fn_1_9AD88(void);
+extern void fn_1_DAF94(Obj_1_data_2A7E0_At3C *);
+extern void fn_1_1067A8(void *arg0, f32 arg1, f32 arg2);
 extern f32 lbl_1_rodata_66D0[30];
-extern void fn_1_72648(Obj_1_data_2A7E0 *);
+extern void fn_1_72648();
 extern void fn_1_103090(void *);
 extern void fn_1_1030A4(void *);
-extern void *fn_1_54448(s32);
-extern void *fn_1_548AC(s32);
+extern void **fn_1_54448(s32 arg0);
+extern void * fn_1_548AC(u32 amount);
 extern void fn_1_DC764(void);
-extern void fn_1_5489C(void *, void *);
+extern void fn_1_5489C(void **arg0, void **arg1);
 extern const f64 lbl_1_rodata_6748;
 extern void fn_1_D6C10(void *, f32);
 extern f32 lbl_1_rodata_6644[35];
 extern void lbl_8006DCA4(void *data);
 extern void fn_1_DB53C(void);
 extern void fn_1_103264(void *, void *);
-extern void OSPanic(const char *, int, const char *, ...);
+extern void OSPanic(const char *file, int line, const char *msg, ...);
 extern struct fn_1_DA6A8_lbl_801A6410 lbl_801A6410;
 extern void * fn_80077B64(struct Sig_fn_80077B64_fn_80077B64_Arg0 *);
 extern s32 fn_80077B14(struct Sig_fn_80077B14_fn_80077B14_Arg0 *);
-extern void fn_1_46B4(u32, u32, const char *, int);
-extern f32 lbl_1_rodata_6628;
-extern void fn_1_FB87C(u32 *, u32);
-extern u32 fn_1_FBFE4();
-extern void fn_1_FB96C(int);
+extern void fn_1_46B4(u32 arg0, u32 arg1, const char *arg2, int arg3);
 extern u32 fn_1_105AB8(u32, u32);
 
 /* fzgx:begin fn_1_D8FC4 */
@@ -103,24 +212,9 @@ s32 fn_1_D8FC4(s32 arg0, s32 arg1) {
 /* fzgx:end fn_1_D8FC4 */
 
 /* fzgx:begin fn_1_DA6A8 */
-#include "types.h"
 
-struct Sig_fn_80077B64_fn_80077B64_Arg0 {
-    u8 pad_0[0x4];
-    u32 unk_4;
-};
-
-struct Sig_fn_80077B14_fn_80077B14_Arg0 {
-    u8 pad_0[0x4];
-    u32 unk_4;
-    u8 pad_8[0x18];
-    u32 unk_20;
-};
 
 struct fn_1_DA6A8_Copy12 { u32 a[3]; };
-struct fn_1_DA6A8_lbl_801A6410 {
-    u32 unk_0;
-};
 
 struct FzgxCopy_12 { u32 words[3]; };
 void fn_1_DA6A8(void *arg0, struct Sig_fn_80077B64_fn_80077B64_Arg0 *arg1) {
@@ -162,9 +256,6 @@ void fn_1_DA6A8(void *arg0, struct Sig_fn_80077B64_fn_80077B64_Arg0 *arg1) {
 /* fzgx:end fn_1_DA6A8 */
 
 /* fzgx:begin fn_1_DA7B8 */
-#include "rel/main_rel/bg_san.h"
-
-extern void fn_1_DAAFC(Obj_1_data_2A7E0_At3C *obj);
 
 // Forwards the active background state to the next processing stage.
 void fn_1_DA7B8(void) {
@@ -172,9 +263,7 @@ void fn_1_DA7B8(void) {
 }
 /* fzgx:end fn_1_DA7B8 */
 
-/* fzgx:begin fn_1_DA7E4 noprologue */
-#include "types.h"
-
+/* fzgx:begin fn_1_DA7E4 */
 struct fn_1_DA7E4_Sub {
     u8 pad_0[0x9A0];
     u32 blk[141];
@@ -189,14 +278,6 @@ struct fn_1_DA7E4_lbl_1_data_2A7E0 {
     struct fn_1_DA7E4_Sub *unk_3C;
 };
 
-extern f32 lbl_1_rodata_6628;
-extern struct fn_1_DA7E4_lbl_1_data_2A7E0 lbl_1_data_2A7E0;
-extern void fn_1_FB87C(u32 *, u32);
-extern u32 fn_1_FBFE4();
-extern s32 fn_1_58C4(void);
-extern void fn_1_103D28(void *, u32, f32);
-extern void fn_1_9A508(void);
-extern void fn_1_FB96C(int);
 
 void fn_1_DA7E4(void) {
     struct fn_1_DA7E4_Sub *obj;
@@ -204,7 +285,7 @@ void fn_1_DA7E4(void) {
     s32 n;
     s32 i;
 
-    obj = lbl_1_data_2A7E0.unk_3C;
+    obj = (*((struct fn_1_DA7E4_lbl_1_data_2A7E0 *)&lbl_1_data_2A7E0)).unk_3C;
     n = fn_1_58C4();
     for (i = 0; i < n; i++) {
         tmp[i] = obj->blk[i];
@@ -221,22 +302,18 @@ void fn_1_DA7E4(void) {
         fn_1_FB96C(2);
         fn_1_FB96C(4);
     }
-    lbl_1_data_2A7E0.unk_2C = (u32)fn_1_FBFE4;
+    (*((struct fn_1_DA7E4_lbl_1_data_2A7E0 *)&lbl_1_data_2A7E0)).unk_2C = (u32)fn_1_FBFE4;
     fn_1_103D28(&obj->unk_BD8, 10, lbl_1_rodata_6628);
 }
 /* fzgx:end fn_1_DA7E4 */
 
 /* fzgx:begin fn_1_DA9F0 */
-#include "rel/main_rel/bg_san.h"
-
-extern u32 fn_1_58C4(void);
-extern void fn_1_DAB1C(Obj_1_data_2A7E0_At3C *state);
 
 // Applies the background transition after the scene reports readiness.
 void fn_1_DA9F0(void) {
     Obj_1_data_2A7E0_At3C *background_state = lbl_1_data_2A7E0.unk_3C;
 
-    if (fn_1_58C4() == 1) {
+    if ((u32)fn_1_58C4() == 1) {
         fn_1_DAB1C(background_state);
     }
 }
@@ -250,11 +327,6 @@ void fn_1_DAA34(void) {
 /* fzgx:end fn_1_DAA34 */
 
 /* fzgx:begin fn_1_DAA58 */
-#include "rel/main_rel/bg_san.h"
-
-extern void fn_1_FB9C0(u32 value);
-extern void fn_1_103F10(void *state);
-extern void fn_1_DAB3C(Obj_1_data_2A7E0_At3C *state);
 
 // Loads pending background resources before advancing the scene state.
 void fn_1_DAA58(void) {
@@ -273,8 +345,6 @@ void fn_1_DAA58(void) {
 /* fzgx:end fn_1_DAA58 */
 
 /* fzgx:begin fn_1_DAAC4 */
-#include "rel/main_rel/bg_san.h"
-
 void fn_1_DAAC4(void) {
     fn_1_103F58(&lbl_1_data_2A7E0.unk_3C->unk_BD8);
     fn_1_9AD88();
@@ -340,9 +410,6 @@ s32 fn_1_DAB5C(s32 mode, Fn1DAB5C_Obj **arg) {
 /* fzgx:end fn_1_DAB5C */
 
 /* fzgx:begin fn_1_DABB4 */
-typedef struct {
-    f32 x, y, z;
-} Fn1DABB4_Vec;
 
 typedef struct {
     u32 flags;
@@ -365,15 +432,6 @@ typedef struct {
     f32 radius;
 } Fn1DABB4_Entry;
 
-extern const Fn1DABB4_Vec lbl_1_rodata_662C;
-extern void lbl_8006D91C(s32);
-extern void mathutil_mtxA_rotate_x(s32);
-extern void mathutil_mtxA_rotate_y(s32);
-extern void mathutil_mtxA_rotate_z(s32);
-extern void lbl_8006E1C0(void *, void *);
-extern void lbl_8006D7DC(void *);
-extern void lbl_8006E13C(void *);
-extern void lbl_8006DB74(void *);
 
 #define MAX(a, b) ((a) > (b) ? (a) : (b))
 
@@ -434,8 +492,6 @@ void fn_1_DAD68(void) {
 /* fzgx:end fn_1_DAD68 */
 
 /* fzgx:begin fn_1_DAD6C */
-#include "rel/main_rel/bg_san.h"
-
 void fn_1_DAD6C(void) {
     Obj_1_data_2A7E0_At3C *obj;
 
@@ -446,11 +502,6 @@ void fn_1_DAD6C(void) {
 /* fzgx:end fn_1_DAD6C */
 
 /* fzgx:begin fn_1_DADA8 */
-#include "types.h"
-
-extern u32 fn_1_58C4(void);
-extern u32 fn_1_5948(u32);
-extern u32 fn_1_627C(u32);
 
 struct fn_1_DADA8_lbl_1_data_2A7E0 {
     u8 pad_0[0x3C];
@@ -462,12 +513,12 @@ void fn_1_DADA8(void) {
     s32 v1;
     u32 t0;
     v0 = (*(struct fn_1_DADA8_lbl_1_data_2A7E0 *)&lbl_1_data_2A7E0).unk_3C;
-    t0 = fn_1_58C4();
+    t0 = (u32)fn_1_58C4();
     v1 = 0;
     while (v1 < (s32)t0) {
-    fn_1_5948(v1);
+    fn_1_5948( (u32)(v1));
     fn_1_105AB8(((v0 + 0x10000) + 17056), v1);
-    fn_1_627C(v1);
+    fn_1_627C( (u32)(v1));
     v1++;
     }
 }
@@ -519,7 +570,6 @@ void fn_1_DAEF8(void) {
 /* fzgx:end fn_1_DAEF8 */
 
 /* fzgx:begin fn_1_DAEFC */
-extern void fn_1_DB198(void *arg0, void *arg1);
 
 // Initializes the current background object and updates it for the active state.
 void fn_1_DAEFC(void) {
@@ -528,7 +578,7 @@ void fn_1_DAEFC(void) {
 
     slot = fn_1_5910();
     background = lbl_1_data_2A7E0.unk_3C;
-    fn_1_DB198(background, fn_1_9D260(&lbl_1_data_2A7E0));
+    fn_1_DB198( (BgSanObject *)(void *)(background), (void *)fn_1_9D260(&lbl_1_data_2A7E0));
     fn_1_9AD88();
     if (fn_1_7B054() == 42) {
         if (fn_1_3F0C8() != 39) {
@@ -549,20 +599,14 @@ void fn_1_DAF90(void) {
 /* fzgx:end fn_1_DAF90 */
 
 /* fzgx:begin fn_1_DB138 */
-typedef struct {
-    u8 unk_00[0x10];
-    s32 unk_10;
-} BgSanContext;
 
-extern u32 fn_1_58C4(BgSanContext *context);
-extern void fn_1_DB268(void *entry);
 
 // Process each background-san entry when the object is in an eligible state.
 void fn_1_DB138(BgSanContext *context) {
     u8 *entry;
     s32 count;
 
-    if (fn_1_58C4(context) < 2) {
+    if ((u32)fn_1_58C4(context) < 2) {
         count = context->unk_10;
         entry = (u8 *)context + 0x14;
         while (count > 0) {
@@ -575,21 +619,7 @@ void fn_1_DB138(BgSanContext *context) {
 /* fzgx:end fn_1_DB138 */
 
 /* fzgx:begin fn_1_DB198 */
-typedef struct BgSanObject {
-    u8 unk_00[0x10];
-    s32 unk_10;
-    void *unk_14;
-    u8 unk_18[0x80c];
-    f32 unk_824;
-    f32 unk_828;
-    f32 unk_82c;
-} BgSanObject;
 
-typedef struct BgSanPosition {
-    f32 unk_00;
-    f32 unk_04;
-    f32 unk_08;
-} BgSanPosition;
 
 typedef struct BgSanAllocation {
     u8 unk_00[0x4];
@@ -597,8 +627,6 @@ typedef struct BgSanAllocation {
     void *unk_08;
 } BgSanAllocation;
 
-extern u32 fn_1_58C4(Obj_1_data_2A7E0 *object);
-extern void *fn_1_5448C(BgSanPosition *position);
 
 // Builds a scaled position event when the object is active.
 void fn_1_DB198(BgSanObject *object, void *arg1) {
@@ -606,17 +634,17 @@ void fn_1_DB198(BgSanObject *object, void *arg1) {
     void *result;
     BgSanAllocation *allocation;
 
-    if (fn_1_58C4((Obj_1_data_2A7E0 *)object) < 2 && object->unk_10 != 0) {
+    if ((u32)fn_1_58C4((Obj_1_data_2A7E0 *)object) < 2 && object->unk_10 != 0) {
         position.unk_00 = (((f32 *)object->unk_14)[3] + object->unk_824) * lbl_1_rodata_6644[0];
         position.unk_04 = (((f32 *)object->unk_14)[4] + object->unk_828) * lbl_1_rodata_6644[0];
         position.unk_08 = (((f32 *)object->unk_14)[5] + object->unk_82c) * lbl_1_rodata_6644[0];
         lbl_8006DCA4(object->unk_14);
         result = fn_1_5448C(&position);
-        allocation = (BgSanAllocation *)fn_1_548AC(12);
+        allocation = (BgSanAllocation *)fn_1_548AC( (s32)(12));
         if (allocation != 0) {
             allocation->unk_04 = fn_1_DB53C;
             allocation->unk_08 = arg1;
-            fn_1_5489C(result, allocation);
+            fn_1_5489C( (void **)(void *)(result), (void **)(void *)(allocation));
         }
     }
 }
@@ -661,9 +689,6 @@ void fn_1_DC204(void) {
 /* fzgx:end fn_1_DC204 */
 
 /* fzgx:begin fn_1_DC208 */
-#include "rel/main_rel/bg_san.h"
-
-extern void fn_1_DC3A4(Obj_1_data_2A7E0_At3C *arg0);
 
 void fn_1_DC208(void) {
     Obj_1_data_2A7E0_At3C *obj = lbl_1_data_2A7E0.unk_3C;
@@ -671,7 +696,7 @@ void fn_1_DC208(void) {
     obj->unk_0 = 0;
     fn_1_9A508();
     fn_1_103D28((u8 *)obj + 0x1588, 0x14, lbl_1_rodata_66D0[0]);
-    fn_1_DC3A4(obj);
+    fn_1_DC3A4( (fn_1_DC3A4_Container *)(Obj_1_data_2A7E0_At3C *)(obj));
 }
 /* fzgx:end fn_1_DC208 */
 
@@ -681,17 +706,7 @@ void fn_1_DC264(void) {
 }
 /* fzgx:end fn_1_DC264 */
 
-/* fzgx:begin fn_1_DC268 noprologue */
-#include "rel/main_rel/bg_san.h"
-
-void fn_1_9AD54(void);
-s32 fn_1_9D260(void);
-void fn_1_DCB10(void);
-void fn_1_DC454(Obj_1_data_2A7E0_At3C *, s32);
-s32 fn_1_58C4(void);
-void fn_1_5948(s32);
-void fn_1_DC648(Obj_1_data_2A7E0_At3C *);
-void fn_1_627C(s32);
+/* fzgx:begin fn_1_DC268 */
 
 // Initializes scene data and updates each active scene entry.
 void fn_1_DC268(void) {
@@ -701,30 +716,27 @@ void fn_1_DC268(void) {
 
     scene_data = lbl_1_data_2A7E0.unk_3C;
     fn_1_9AD54();
-    entry_count = fn_1_9D260();
+    entry_count = (s32)fn_1_9D260();
     fn_1_DCB10();
-    fn_1_DC454(scene_data, entry_count);
+    fn_1_DC454( (SanContainer *)(Obj_1_data_2A7E0_At3C *)(scene_data), (void *)(s32)(entry_count));
 
     entry_count = fn_1_58C4();
     for (entry_index = 0; entry_index < entry_count; entry_index++) {
         fn_1_5948(entry_index);
-        fn_1_DC648(scene_data);
+        fn_1_DC648( (void *)(Obj_1_data_2A7E0_At3C *)(scene_data));
         fn_1_627C(entry_index);
     }
 }
 /* fzgx:end fn_1_DC268 */
 
 /* fzgx:begin fn_1_DC2F8 */
-#include "rel/main_rel/bg_san.h"
-
-extern void fn_1_DC404(Obj_1_data_2A7E0_At3C *);
 
 void fn_1_DC2F8(void) {
     Obj_1_data_2A7E0_At3C *obj;
 
     obj = lbl_1_data_2A7E0.unk_3C;
     fn_1_72648(&lbl_1_data_2A7E0);
-    fn_1_DC404(obj);
+    fn_1_DC404( (fn_1_DC404_Container *)(Obj_1_data_2A7E0_At3C *)(obj));
     fn_1_103F10((u8 *)obj + 0x1588);
 }
 /* fzgx:end fn_1_DC2F8 */
@@ -751,16 +763,7 @@ void fn_1_DC3A0(void) {
 /* fzgx:end fn_1_DC3A0 */
 
 /* fzgx:begin fn_1_DC3A4 */
-typedef struct fn_1_DC3A4_Entry {
-    u8 unk00[0x68];
-    s32 initialized;
-    u8 unk6c[0x40];
-} fn_1_DC3A4_Entry;
 
-typedef struct fn_1_DC3A4_Container {
-    s32 count;
-    fn_1_DC3A4_Entry entries[1];
-} fn_1_DC3A4_Container;
 
 // Marks each entry as initialized and processes all entries in the container.
 void fn_1_DC3A4(fn_1_DC3A4_Container *container) {
@@ -780,14 +783,7 @@ void fn_1_DC3A4(fn_1_DC3A4_Container *container) {
 
 /* fzgx:begin fn_1_DC404 */
 // Calls the cleanup routine for each entry in the container.
-typedef struct fn_1_DC404_Entry {
-    u8 data[0xac];
-} fn_1_DC404_Entry;
 
-typedef struct fn_1_DC404_Container {
-    s32 count;
-    fn_1_DC404_Entry entries[1];
-} fn_1_DC404_Container;
 
 void fn_1_DC404(fn_1_DC404_Container *container) {
     s32 count;
@@ -887,12 +883,7 @@ void fn_1_DC5E8(Obj_1_data_2A7E0_At3C *container, s32 arg) {
 }
 /* fzgx:end fn_1_DC5E8 */
 
-/* fzgx:begin fn_1_DC648 noprologue */
-#include "types.h"
-
-extern u32 fn_1_5910(void *);
-extern void fn_1_681C(u8, u8 *);
-extern s32 fn_1_1FB80(u8 *, s32);
+/* fzgx:begin fn_1_DC648 */
 
 void fn_1_DC648(void *object) {
     u32 index;
@@ -901,8 +892,8 @@ void fn_1_DC648(void *object) {
     u8 local;
     s32 value;
 
-    index = fn_1_5910(object);
-    fn_1_681C((u8)index, &local);
+    index = (u32)fn_1_5910(object);
+    fn_1_681C((u8)index, (u32 *)(u8 *)(&local));
     direction = fn_1_1FB80(&local, 1);
     offset = (index << 1) + 0x2264;
     if ((direction & 1) != 0) {
@@ -929,19 +920,17 @@ void fn_1_DC6FC(void *context) {
     void *value;
     Handler *handler;
 
-    value = fn_1_54448(0);
+    value = (void *)fn_1_54448(0);
     handler = fn_1_548AC(12);
     if (handler != 0) {
         handler->unk_04 = fn_1_DC764;
         handler->unk_08 = context;
-        fn_1_5489C(value, handler);
+        fn_1_5489C( (void **)(void *)(value), (void **)(void *)(handler));
     }
 }
 /* fzgx:end fn_1_DC6FC */
 
 /* fzgx:begin fn_1_DCB10 */
-#include "rel/main_rel/bg_san.h"
-
 typedef struct fn_1_DCB10_Entry {
     u8 pad_00[0x20];
     u32 flags;
@@ -972,8 +961,6 @@ void fn_1_DCB10(void) {
 /* fzgx:end fn_1_DCB10 */
 
 /* fzgx:begin fn_1_DCB9C */
-#include "rel/main_rel/bg_san.h"
-
 s32 fn_1_DCB9C(s32 value, u32 *data) {
     Obj_1_data_2A7E0_At3C *obj;
 

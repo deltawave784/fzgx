@@ -1,10 +1,9 @@
 #include "types.h"
 #include "rel/main_rel/globals.h"
 #include "rel/main_rel/som.h"
-
 extern u32 lbl_1_bss_3BBC;
-extern void sprintf(char *, const char *, ...);
-extern void fn_1_465D0(char *, int);
+extern int sprintf(char *s, const char *format, ...);
+extern s32 fn_1_465D0(s32 arg0, s32 arg1);
 
 /* fzgx:begin fn_1_1383C */
 void fn_1_1383C(void) {
@@ -93,9 +92,9 @@ void fn_1_14D5C(char *arg0, int arg1) {
 
     sprintf(buffer, (const char *)lbl_1_data_5194, arg0);
     if (arg1 != 0) {
-        fn_1_465D0(buffer, 2);
+        fn_1_465D0( (s32)(char *)(buffer), 2);
     } else {
-        fn_1_465D0(buffer, 1);
+        fn_1_465D0( (s32)(char *)(buffer), 1);
     }
 }
 /* fzgx:end fn_1_14D5C */

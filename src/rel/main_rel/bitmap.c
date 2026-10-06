@@ -2,22 +2,38 @@
 #include "rel/main_rel/globals.h"
 #include "rel/main_rel/bitmap.h"
 
+typedef struct {
+    s32 unk_0;
+    u8 pad_4[0x24];
+} BitmapEntry;
+
+typedef struct {
+    s32 unk_0;
+    u8 pad_4[0x24];
+} Fn147EE4Entry;
+
+typedef struct {
+    s32 unk_0;
+    u8 pad_4[0x24];
+} Fn147F74Entry;
+extern u32 lbl_801A66B4;
+extern void OSPanic(const unsigned char *, ...);
+extern s32 fn_1_465D0(s32 arg0, s32 arg1);
+extern void fn_1_47AD4(BitmapEntry *, s32, s32, s32);
+extern void fn_1_48418(s32);
+extern u32 lbl_1_bss_3E020;
 extern void fn_1_48214(int index, int enabled);
 extern void fn_1_4DDC0(void);
 extern void fn_1_4F724(void);
 extern s32 lbl_801A6410;
-extern void OSPanic(const unsigned char *, ...);
-extern int fn_1_45D0(int, int, const unsigned char *, int);
+extern s32 fn_1_45D0();
 extern int fn_80008F88(int, int);
-extern void fn_8006FDEC(void);
-extern void fn_80009064(u32 value);
-extern void fn_1_46B4(u32 arg0, u32 arg1, char *arg2, s32 arg3);
+extern s32 fn_8006FDEC(void);
+extern void fn_80009064(u32 arg0);
+extern void fn_1_46B4(u32 arg0, u32 arg1, const char *arg2, int arg3);
 extern void *fn_1_48730(u32 value);
-extern void fn_1_47AD4(Obj_1_data_FCD4 *obj, u8 value, int arg2, int arg3);
 extern f32 lbl_1_rodata_10C0[5];
 extern f32 lbl_1_bss_3E05C;
-
-extern void *fn_1_48730(u32 value);
 
 /* fzgx:begin fn_1_47E54 */
 typedef struct {
@@ -26,9 +42,6 @@ typedef struct {
     u8 pad_8[0x20];
 } Fn147E54Entry;
 
-extern u32 lbl_801A66B4;
-extern void OSPanic(const u8 *, ...);
-extern s32 fn_1_465D0(s32, s32);
 
 void fn_1_47E54(s32 index) {
     Fn147E54Entry *table;
@@ -40,23 +53,15 @@ void fn_1_47E54(s32 index) {
         valid = index >= 0;
     }
     if (valid == 0) {
-        OSPanic(lbl_1_data_1A368, 0x18c, lbl_1_data_1A374);
+        OSPanic( (const unsigned char *)(const u8 *)(lbl_1_data_1A368), 0x18c, lbl_1_data_1A374);
     }
     table = (Fn147E54Entry *)&lbl_1_data_FCD4;
     fn_1_465D0(table[index].unk_4[lbl_801A66B4], 1);
 }
 /* fzgx:end fn_1_47E54 */
 
-/* fzgx:begin fn_1_47EE4 noprologue */
-#include "rel/main_rel/bitmap.h"
+/* fzgx:begin fn_1_47EE4 */
 
-typedef struct {
-    s32 unk_0;
-    u8 pad_4[0x24];
-} Fn147EE4Entry;
-
-extern void OSPanic(const unsigned char *, ...);
-extern void fn_1_47AD4(Fn147EE4Entry *object, s32 arg1, s32 arg2, s32 arg3);
 
 void fn_1_47EE4(s32 index) {
     Fn147EE4Entry *object;
@@ -72,21 +77,13 @@ void fn_1_47EE4(s32 index) {
         OSPanic(lbl_1_data_1A368, 0x1a8, lbl_1_data_1A374);
     }
     if (object->unk_0 == 0) {
-        fn_1_47AD4(object, 0, 1, 1);
+        fn_1_47AD4( (BitmapEntry *)(Fn147EE4Entry *)(object), 0, 1, 1);
     }
 }
 /* fzgx:end fn_1_47EE4 */
 
-/* fzgx:begin fn_1_47F74 noprologue */
-#include "rel/main_rel/bitmap.h"
+/* fzgx:begin fn_1_47F74 */
 
-typedef struct {
-    s32 unk_0;
-    u8 pad_4[0x24];
-} Fn147F74Entry;
-
-extern void OSPanic(const unsigned char *, ...);
-extern void fn_1_47AD4(Fn147F74Entry *object, s32 arg1, s32 arg2, s32 arg3);
 
 void fn_1_47F74(s32 index) {
     Fn147F74Entry *object;
@@ -102,22 +99,13 @@ void fn_1_47F74(s32 index) {
         OSPanic(lbl_1_data_1A368, 0x1b5, lbl_1_data_1A374);
     }
     if (object->unk_0 == 0) {
-        fn_1_47AD4(object, 0, 0, 1);
+        fn_1_47AD4( (BitmapEntry *)(Fn147F74Entry *)(object), 0, 0, 1);
     }
 }
 /* fzgx:end fn_1_47F74 */
 
-/* fzgx:begin fn_1_48004 noprologue */
-#include "rel/main_rel/bitmap.h"
+/* fzgx:begin fn_1_48004 */
 
-typedef struct {
-    s32 unk_0;
-    u8 pad_4[0x24];
-} BitmapEntry;
-
-extern void OSPanic(const u8 *, ...);
-extern void fn_1_47AD4(BitmapEntry *, s32, s32, s32);
-extern void fn_1_48418(s32);
 
 void fn_1_48004(s32 index, s32 image) {
     BitmapEntry *entry;
@@ -130,7 +118,7 @@ void fn_1_48004(s32 index, s32 image) {
         valid = index >= 0;
     }
     if (valid == 0) {
-        OSPanic(lbl_1_data_1A368, 0x1c5, lbl_1_data_1A374);
+        OSPanic( (const unsigned char *)(const u8 *)(lbl_1_data_1A368), 0x1c5, lbl_1_data_1A374);
     }
     if (entry->unk_0 == 0) {
         if (image == 0) {
@@ -140,7 +128,7 @@ void fn_1_48004(s32 index, s32 image) {
                 valid = index >= 0;
             }
             if (valid == 0) {
-                OSPanic(lbl_1_data_1A368, 0x1b5, lbl_1_data_1A374);
+                OSPanic( (const unsigned char *)(const u8 *)(lbl_1_data_1A368), 0x1b5, lbl_1_data_1A374);
             }
             if (entry->unk_0 == 0) {
                 fn_1_47AD4(entry, 0, 0, 1);
@@ -199,7 +187,7 @@ typedef struct {
     s32 unk_8;
 } BitmapSlot;
 
-void fn_1_48418(int index) {
+void fn_1_48418(s32 index) {
     BitmapSlot *obj = (BitmapSlot *)&lbl_1_data_6CA0 + index;
     int valid;
     if (index > 2) {
@@ -339,7 +327,7 @@ void fn_1_48780(void) {
     obj = (Obj_1_data_FCD4 *)((u8 *)&lbl_1_data_FCD4 + 0x28);
     for (i = 1; i < 0xBC; i++) {
         if ((int)obj->unk_0 != 0) {
-            fn_1_47AD4(obj, obj->unk_24, 0, 0);
+            fn_1_47AD4( (BitmapEntry *)(Obj_1_data_FCD4 *)(obj), obj->unk_24, 0, 0);
         }
         obj = (Obj_1_data_FCD4 *)((u8 *)obj + 0x28);
     }

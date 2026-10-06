@@ -1,25 +1,52 @@
 #include "types.h"
 #include "rel/main_rel/globals.h"
 #include "rel/main_rel/custom_memcard.h"
-
+#include "font.h"
+extern void OSPanic(const char *file, int line, const char *msg, ...);
+extern void fn_80008BEC(void *dest, int value, u32 size);
+extern void fn_1_AA6D8(s32 arg0, u8 arg1, void* arg2);
 extern u32 lbl_801A6410;
+extern u32 fn_1_4630();
+extern int fn_1_B7E98(int index);
+extern void fn_1_13198C(s16, u32*, u32*, u32, u32, u32);
+extern u32 lbl_1_rodata_8694[4];
+extern u32 lbl_1_rodata_86A4[4];
+extern const f64 lbl_1_rodata_8600;
+extern const f32 lbl_1_rodata_85F0;
+extern const f32 lbl_1_rodata_8658;
+extern const f32 lbl_1_rodata_86B4;
+extern const f32 lbl_1_rodata_86B8;
+extern const f32 lbl_1_rodata_86BC;
+extern const f32 lbl_1_rodata_86C0;
+extern const f32 lbl_1_rodata_86C4;
+extern const f32 lbl_1_rodata_86C8;
+extern const f32 lbl_1_rodata_86CC;
+extern const f32 lbl_1_rodata_86D0;
+extern const f32 lbl_1_rodata_86D4;
+extern f32 lbl_1_rodata_26F8[22];
+extern int fn_1_D66B0(void);
+extern u8 fn_1_D6740(u8);
+extern void fn_1_51564(u16 first, u16 second, u16 third, u16 fourth, u16 fifth, u16 sixth);
+extern u32 fn_1_5158C(FontDrawPacket *, u32, u32, u32);
+extern char *strncpy(char *dst, const char *src, size_t n);
+extern void fn_1_50164();
+extern void fn_1_49410(void);
+extern void fn_1_496FC(f32 value1, f32 value2);
+extern void fn_1_495C8(u8 value);
+extern void fn_1_4955C(f32 value1, f32 value2);
+extern void fn_1_49590(f32 value);
+extern void fn_1_4965C(u8 value);
+extern void fn_1_495B0(u32 value);
+extern void fn_1_4CE48(Obj_1_bss_4B9CC *obj, f32 limit);
 extern u8 fn_1_B7C00(void);
 extern s32 fn_1_B7CD4(void);
-extern s32 fn_1_B7C5C(void);
-extern void OSReport(const char* format, ...);
-extern void fn_1_46B4(u32 arg0, void* arg1, u8* arg2, s32 arg3);
-extern void fn_80008BA8(void*, void*, s32);
+extern u32 fn_1_B7C5C(void);
+extern void OSReport(const char *format, ...);
+extern void fn_1_46B4(u32 arg0, u32 arg1, const char *arg2, int arg3);
+extern void fn_80008BA8(u32 arg0, u32 arg1, u32 arg2);
 extern u32 lbl_1_bss_8CA6C[1605];
 extern void fn_1_1324C4(void *arg0);
 extern void fn_1_132774(void *arg0);
-
-extern u32 lbl_801A6410;
-extern u8 fn_1_B7C00(void);
-extern s32 fn_1_B7CD4(void);
-extern s32 fn_1_B7C5C(void);
-extern void OSReport(const char* format, ...);
-extern void fn_80008BA8(void*, void*, s32);
-extern void fn_1_46B4(u32 arg0, void* arg1, u8* arg2, s32 arg3);
 
 /* fzgx:begin fn_1_1312F0 */
 // Reset the memcard state after reporting an unavailable card.
@@ -30,7 +57,7 @@ void fn_1_1312F0(void) {
 
     if (fn_1_B7C00() == 0) {
         if (fn_1_B7CD4() == 0) {
-            OSReport((const char*)lbl_1_data_40EF8, fn_1_B7C5C());
+            OSReport((const char*)lbl_1_data_40EF8, (s32)fn_1_B7C5C());
         }
 
         memcard = *(void**)(state + 0x18);
@@ -38,7 +65,7 @@ void fn_1_1312F0(void) {
         *(s32*)(state + 0x08) = -1;
         *(s32*)(state + 0x0c) = 0;
         if (memcard != 0) {
-            fn_1_46B4(lbl_801A6410, memcard, lbl_1_data_40EA4, 0x136);
+            fn_1_46B4(lbl_801A6410, (u32)(void*)(memcard), (const char *)(u8*)(lbl_1_data_40EA4), 0x136);
             *(void**)(state + 0x18) = 0;
         }
     }
@@ -53,12 +80,10 @@ void fn_1_1314A4(void) {
 
     if (fn_1_B7C00() == 0) {
         if (fn_1_B7CD4() == 0) {
-            OSReport((const char*)lbl_1_data_40EF8, fn_1_B7C5C());
+            OSReport((const char*)lbl_1_data_40EF8, (s32)fn_1_B7C5C());
         }
 
-        fn_80008BA8(*(void**)(state + 0x10),
-                    *(void**)(state + 0x18),
-                    0x20700);
+        fn_80008BA8( (u32)(void*)(*(void**)(state + 0x10)), (u32)(void*)(*(void**)(state + 0x18)), (s32)(0x20700));
 
         card = *(void**)(state + 0x18);
         *(s32*)(state + 0x00) = -1;
@@ -66,7 +91,7 @@ void fn_1_1314A4(void) {
         *(void**)(state + 0x10) = 0;
 
         if (card != 0) {
-            fn_1_46B4(lbl_801A6410, card, lbl_1_data_40EA4, 0x188);
+            fn_1_46B4(lbl_801A6410, (u32)(void*)(card), (const char *)(u8*)(lbl_1_data_40EA4), 0x188);
             *(void**)(state + 0x18) = 0;
         }
     }
@@ -122,13 +147,8 @@ u32 fn_1_1317B4(void) {
 /* fzgx:end fn_1_1317B4 */
 
 /* fzgx:begin fn_1_1317C4 */
-extern u32 lbl_801A6410;
 
 
-extern u32 fn_1_4630(u32 arg0, u32 arg1, u8 *arg2, u32 arg3);
-extern void fn_80008BEC(void *arg0, u32 arg1, u32 arg2);
-extern s32 fn_1_B7E98(s32 arg0);
-extern void fn_1_AA6D8(s32 arg0, s32 arg1, void *arg2);
 
 typedef struct {
     u8 unk_0;
@@ -185,13 +205,12 @@ s32 fn_1_1318D4(void) {
     }
 
     if (fn_1_B7CD4() == 0) {
-        error = fn_1_B7C5C();
+        error = (s32)fn_1_B7C5C();
         OSReport((const char*)lbl_1_data_40EF8, error);
     }
 
     if (lbl_1_bss_8E384.unk_0 != 0) {
-        fn_1_46B4(lbl_801A6410, (void*)lbl_1_bss_8E384.unk_0,
-                   lbl_1_data_40EA4, 0x22b);
+        fn_1_46B4(lbl_801A6410, (u32)((void*)lbl_1_bss_8E384.unk_0), (const char *)(u8*)(lbl_1_data_40EA4), 0x22b);
         lbl_1_bss_8E384.unk_0 = 0;
     }
 
@@ -218,7 +237,6 @@ struct Obj {
     u32 field_50[1];
 };
 
-extern void fn_1_13198C(s16, u32*, u32*, u32, u32, u32);
 
 #pragma opt_propagation off
 s32 fn_1_131B90(Obj* obj) {
@@ -259,40 +277,7 @@ void fn_1_132488(void *arg0) {
 /* fzgx:end fn_1_132488 */
 
 /* fzgx:begin fn_1_132FB4 */
-#include "font.h"
 
-extern u32 lbl_1_rodata_8694[4];
-extern u32 lbl_1_rodata_86A4[4];
-extern const f64 lbl_1_rodata_8600;
-extern const f32 lbl_1_rodata_85F0;
-extern const f32 lbl_1_rodata_8658;
-extern const f32 lbl_1_rodata_86B4;
-extern const f32 lbl_1_rodata_86B8;
-extern const f32 lbl_1_rodata_86BC;
-extern const f32 lbl_1_rodata_86C0;
-extern const f32 lbl_1_rodata_86C4;
-extern const f32 lbl_1_rodata_86C8;
-extern const f32 lbl_1_rodata_86CC;
-extern const f32 lbl_1_rodata_86D0;
-extern const f32 lbl_1_rodata_86D4;
-extern f32 lbl_1_rodata_26F8[22];
-
-extern u8 fn_1_D66B0(void);
-extern u8 fn_1_D6740(u8);
-extern void fn_80008BEC(void *, int, u32);
-extern void fn_1_51564(u16, u16, u16, u16, u16, u16);
-extern u32 fn_1_5158C(FontDrawPacket *, u32, u32, u32);
-extern int fn_1_4F734(FontDrawPacket *);
-extern char *strncpy(char *, const char *, size_t);
-extern void fn_1_50164(f32, f32, f32, f32, void *);
-extern void fn_1_49410(void);
-extern void fn_1_496FC(f32, f32);
-extern void fn_1_495C8(s32);
-extern void fn_1_4955C(f32, f32);
-extern void fn_1_49590(f32);
-extern void fn_1_4965C(s32);
-extern void fn_1_495B0(s32);
-extern void fn_1_4CE48(Obj_1_bss_4B9CC *, f32);
 
 #pragma opt_common_subs off
 #pragma opt_propagation off
@@ -328,7 +313,7 @@ void fn_1_132FB4(void) {
     pbuf = buf;
 
     do {
-        if (var_r29 == fn_1_D66B0()) {
+        if (var_r29 == (u8)fn_1_D66B0()) {
             var_r28 += 1;
             var_r26 += 4;
         } else if (fn_1_D6740(var_r29) != 0) {

@@ -72,7 +72,11 @@ typedef struct {
     u8 pad38[0x38];
     Fn1_61E60Node *unk_38;
 } Fn1_61E60Object;
+extern void *lbl_801A6D00;
+extern void fn_1_8645C(int index, void *arg);
+extern void lbl_8006E1B0(void *src, void *dst);
 extern void fn_1_8636C();
+extern void fn_8006FA24(void *, void *, void *, f32);
 extern void lbl_8006DCA4();
 extern s32 fn_1_54E34(void *arg0, f32 arg1);
 extern void fn_1_5FEBC(fn_1_5FEBC_EffectObject *object);
@@ -97,12 +101,10 @@ extern int fn_1_9F914(const void *src0, const void *src1);
 extern const f32 lbl_1_rodata_2AA0[21];
 extern f32 lbl_1_rodata_29AC[5];
 extern void *memset(void *, int, u32);
-extern void *lbl_801A6D00;
 extern void fn_1_55FC4(f32 value);
 extern void fn_1_55FF0(f32 value);
 extern void fn_1_5557C(void *object);
 extern void fn_1_555D0(void *object);
-extern void lbl_8006E1B0(void *src, void *dst);
 extern void lbl_8006E14C(f32);
 extern void *lbl_801A6410;
 extern s32 fn_1_45D0();
@@ -1157,9 +1159,6 @@ typedef struct {
     u8 unk_94[0x4];
 } Effect_5B450;
 
-extern void *lbl_801A6D00;
-extern void fn_1_8645C(s32, void *);
-extern void lbl_8006E1B0(void *, void *);
 
 /* Linear congruential random number, 15 bits (ANSI rand). */
 static inline s32 effect_rand(void) {
@@ -1616,7 +1615,6 @@ struct Fn1_5C83CObject {
     u8 matrix_b8[1];
 };
 
-extern void fn_8006FA24(void *, void *, void *, f32);
 
 void fn_1_5C83C(struct Fn1_5C83CObject *self) {
     f32 mtx[12];

@@ -1,67 +1,6 @@
 #include "types.h"
 #include "rel/main_rel/globals.h"
 #include "rel/main_rel/avline.h"
-
-extern u32 lbl_801A6410;
-extern u32 fn_1_45D0(u32, u32, unsigned char *, u32);
-extern void fn_1_46B4(u32, u32, void *, u32);
-extern u8 lbl_1_data_1D62C[148];
-extern void fn_1_9F870(void);
-extern void fn_1_58158(void);
-extern void fn_80008BA8(void*, void*, u32);
-
-/* fzgx:begin fn_1_58114 */
-void fn_1_58114(void) {
-    lbl_1_bss_6C840 = fn_1_45D0(lbl_801A6410, 0x6590, lbl_1_data_1C68C, 0x39f);
-}
-/* fzgx:end fn_1_58114 */
-
-/* fzgx:begin fn_1_58158 */
-// fn_1_58158: loads global values and calls fn_1_46B4.
-void fn_1_58158(void) {
-    u32 v1 = lbl_801A6410;
-    u32 v2 = lbl_1_bss_6C840;
-    fn_1_46B4(v1, v2, &lbl_1_data_1C68C, 0x3a6);
-}
-/* fzgx:end fn_1_58158 */
-
-/* fzgx:begin fn_1_5819C */
-void fn_1_5819C(void) {
-    lbl_1_bss_6C844 = 0;
-}
-/* fzgx:end fn_1_5819C */
-
-/* fzgx:begin fn_1_581AC */
-extern u16 lbl_1_bss_6C844;
-extern u32 lbl_1_bss_6C840;
-
-typedef struct AvLineEntry {
-    u16 unk_00;
-    u16 unk_02;
-    u8 unk_04[0x100];
-} AvLineEntry;
-
-#pragma opt_propagation off
-s32 fn_1_581AC(u16 value, u16 type, void* data) {
-    AvLineEntry *entry;
-    u8 *p;
-
-    if (lbl_1_bss_6C844 == 0x64) {
-        return 0;
-    }
-
-    ((AvLineEntry*)lbl_1_bss_6C840)[lbl_1_bss_6C844].unk_00 = value;
-    p = (u8*)lbl_1_bss_6C840 + lbl_1_bss_6C844 * 0x104;
-    entry = (AvLineEntry*)p;
-    entry->unk_02 = type;
-    fn_80008BA8(((AvLineEntry*)lbl_1_bss_6C840)[lbl_1_bss_6C844].unk_04, data, 0x100);
-    lbl_1_bss_6C844++;
-    return 1;
-}
-#pragma opt_propagation reset
-/* fzgx:end fn_1_581AC */
-
-/* fzgx:begin fn_1_58248 */
 #include "dolphin/hw_regs.h"
 
 typedef struct AvLineDrawState {
@@ -73,6 +12,85 @@ typedef struct AvLineDrawState {
     u32 unk_10;
     u32 unk_14;
 } AvLineDrawState;
+extern AvLineDrawState lbl_1_data_1C670;
+extern u32 lbl_801A6D00;
+extern void GXLoadPosMtxImm(u32, u32);
+extern void fn_800720B0(u32);
+extern void lbl_8006DCA4(void);
+extern void fn_8003462C(u32 arg0, u32 arg1, u32 arg2);
+extern void fn_8007245C(u32 value);
+extern void fn_800728A8(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
+extern void fn_80072EDC(s32 arg0, s32 arg1);
+extern void fn_800734A8(u32 arg0, s32 arg1, s32 arg2, s32 arg3);
+extern void fn_80073678(u32 arg0);
+extern void fn_80073898(u32 arg0);
+extern void fn_80073C6C(s32 index);
+extern void fn_80074660(u32 arg0);
+extern void fn_80074788(u32 arg0);
+extern void fn_800747D0(u32 arg0, u32 arg1, s32 arg2, s32 arg3, u32 arg4, s32 arg5, s32 arg6);
+extern void fn_80074918(u8 arg0, s32 arg1, u8 arg2);
+extern void fn_800746A8();
+extern s16 fn_1_3F0C8(void);
+extern void fn_1_3BDC(s32);
+extern void fn_1_3C18(s32);
+extern u32 lbl_801A6410;
+extern s32 fn_1_45D0();
+extern void fn_1_46B4(u32 arg0, u32 arg1, const char *arg2, int arg3);
+extern u8 lbl_1_data_1D62C[148];
+extern void fn_1_9F870(void);
+extern void fn_1_58158(void);
+extern void fn_80008BA8(u32 arg0, u32 arg1, u32 arg2);
+
+/* fzgx:begin fn_1_58114 */
+void fn_1_58114(void) {
+    lbl_1_bss_6C840 = (u32)fn_1_45D0(lbl_801A6410, 0x6590, lbl_1_data_1C68C, 0x39f);
+}
+/* fzgx:end fn_1_58114 */
+
+/* fzgx:begin fn_1_58158 */
+// fn_1_58158: loads global values and calls fn_1_46B4.
+void fn_1_58158(void) {
+    u32 v1 = lbl_801A6410;
+    u32 v2 = lbl_1_bss_6C840;
+    fn_1_46B4(v1, v2, (const char *)(void *)(&lbl_1_data_1C68C), 0x3a6);
+}
+/* fzgx:end fn_1_58158 */
+
+/* fzgx:begin fn_1_5819C */
+void fn_1_5819C(void) {
+    lbl_1_bss_6C844 = 0;
+}
+/* fzgx:end fn_1_5819C */
+
+/* fzgx:begin fn_1_581AC */
+
+typedef struct fn_1_581AC_AvLineEntry {
+    u16 unk_00;
+    u16 unk_02;
+    u8 unk_04[0x100];
+} fn_1_581AC_AvLineEntry;
+
+#pragma opt_propagation off
+s32 fn_1_581AC(u16 value, u16 type, void* data) {
+    fn_1_581AC_AvLineEntry *entry;
+    u8 *p;
+
+    if (lbl_1_bss_6C844 == 0x64) {
+        return 0;
+    }
+
+    ((fn_1_581AC_AvLineEntry*)lbl_1_bss_6C840)[lbl_1_bss_6C844].unk_00 = value;
+    p = (u8*)lbl_1_bss_6C840 + lbl_1_bss_6C844 * 0x104;
+    entry = (fn_1_581AC_AvLineEntry*)p;
+    entry->unk_02 = type;
+    fn_80008BA8( (u32)(void*)(((fn_1_581AC_AvLineEntry*)lbl_1_bss_6C840)[lbl_1_bss_6C844].unk_04), (u32)(void*)(data), 0x100);
+    lbl_1_bss_6C844++;
+    return 1;
+}
+#pragma opt_propagation reset
+/* fzgx:end fn_1_581AC */
+
+/* fzgx:begin fn_1_58248 */
 
 typedef struct AvLineVertex {
     f32 x;
@@ -84,11 +102,11 @@ typedef struct AvLineVertex {
     u8 a;
 } AvLineVertex;
 
-typedef struct AvLineEntry {
+typedef struct fn_1_58248_AvLineEntry {
     u16 unk_00;
     u16 unk_02;
     AvLineVertex verts[16];
-} AvLineEntry;
+} fn_1_58248_AvLineEntry;
 
 typedef union {
     volatile u8 u8;  // fzgx-allow: S2 GX write-gather FIFO
@@ -110,24 +128,6 @@ static inline void FifoColor4u8(u8 r, u8 g, s8 b, s8 a) {
     WGFIFO.u8 = a;
 }
 
-extern AvLineDrawState lbl_1_data_1C670;
-extern u32 lbl_801A6D00;
-extern void GXLoadPosMtxImm(u32, u32);
-extern void fn_800720B0(u32);
-extern void lbl_8006DCA4(void);
-extern void fn_8003462C(u32, u32, u32);
-extern void fn_8007245C(u32);
-extern void fn_800728A8(s32, s32, s32, s32);
-extern void fn_80072EDC(s32, s32);
-extern void fn_800734A8(u32, s32, s32, s32);
-extern void fn_80073678(u32);
-extern void fn_80073898(u32);
-extern void fn_80073C6C(s32);
-extern void fn_80074660(u32);
-extern void fn_80074788(u32);
-extern void fn_800747D0(u32, u32, s32, s32, u32, s32, s32);
-extern void fn_80074918(u8, s32, u8);
-extern void fn_800746A8(u8, u32);
 
 static inline f32 fn_1_58248_read_pointer(AvLineVertex * owner) { return owner->x; }
 #pragma opt_loop_invariants off
@@ -137,7 +137,7 @@ void fn_1_58248(void) {
     s32 j;
     struct { u16 value; } n;
     u32 off;
-    AvLineEntry *entry;
+    fn_1_58248_AvLineEntry *entry;
     AvLineDrawState *st = &lbl_1_data_1C670;
 
     st->unk_4 = 1;
@@ -163,7 +163,7 @@ void fn_1_58248(void) {
     i = 0;
     off = 0;
     while (i < lbl_1_bss_6C844) {
-        entry = (AvLineEntry *)(lbl_1_bss_6C840 + off);
+        entry = (fn_1_58248_AvLineEntry *)(lbl_1_bss_6C840 + off);
         lbl_1_data_1C670.unk_0 = entry->unk_00;
         v = entry->verts;
         n.value = entry->unk_02;
@@ -174,7 +174,7 @@ void fn_1_58248(void) {
                 FifoColor4u8(v->r, v->g, v->b, v->a);
             }
         }
-        off += sizeof(AvLineEntry);
+        off += sizeof(fn_1_58248_AvLineEntry);
         i++;
     }
     lbl_1_bss_6C844 = 0;
@@ -321,10 +321,8 @@ void fn_1_58854(void) {
         obj = (AvlineObj *)((u8 *)obj + 0xe8);
     }
 
-    fn_1_46B4(lbl_801A6410, *(u32 *)&lbl_1_bss_6C848,
-              lbl_1_data_1D62C, 0x156);
-    fn_1_46B4(lbl_801A6410, *(u32 *)&lbl_1_bss_6C84C,
-              lbl_1_data_1D62C, 0x157);
+    fn_1_46B4(lbl_801A6410, *(u32 *)&lbl_1_bss_6C848, (const char *)(void *)(lbl_1_data_1D62C), 0x156);
+    fn_1_46B4(lbl_801A6410, *(u32 *)&lbl_1_bss_6C84C, (const char *)(void *)(lbl_1_data_1D62C), 0x157);
 
     *(u32 *)&lbl_1_bss_6C848 = 0;
     lbl_1_bss_6C84C = 0;

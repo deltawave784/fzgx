@@ -27,23 +27,75 @@ struct fn_1_FA6C0_lbl_1_rodata_7480 {
     u32 unk_8;
     u32 unk_C;
 };
+
+typedef struct {
+    u8 data[0x180];
+} SplineEntry;
+
+struct fn_1_F8DC4_Table {
+    u32 values[4][6];
+};
+
+typedef struct {
+    u8 flag;          // 0x00
+    u8 pad[0x43];
+    f32 mtx[4][12];   // 0x44
+    u32 x[4];         // 0x104
+    u32 y[4];         // 0x114
+    u32 w[4];         // 0x124
+    u32 h[4];         // 0x134
+    u32 halfW[4];     // 0x144
+    u32 halfH[4];     // 0x154
+    f32 scale;        // 0x164
+} SplineViewport;
+
+typedef struct {
+    u32 unk_0;
+    SplineViewport vp;
+} SplineViewportHolder;
+extern void *lbl_801A6410;
+extern void *fn_1_4630(void *, u32, const char *, int);
+extern void fn_1_46B4(u32 arg0, u32 arg1, const char *arg2, int arg3);
+extern void fn_1_F7B2C(void);
+extern void fn_1_F7E88(void);
+extern void fn_1_F8048(void);
+extern void fn_1_F82E0(void);
+extern void fn_1_F8A18(void);
+extern void fn_1_F89C0(void);
+extern void fn_1_F8B24(void);
+extern void fn_1_F9C6C(void);
+extern void fn_1_F9E4C(void);
+extern void fn_1_F9D24(void);
+extern void fn_1_F9DA4(void);
+extern void fn_1_F9CD0(u8, u8);
+extern void fn_1_FA1D8(s32, s32, SplineEntry *);
+extern u32 fn_1_FA4D4(void);
+extern void fn_1_FA61C(void);
+extern u32 fn_800793D4(u8 *arg0, u32 arg1, u32 arg2);
+extern struct fn_1_F8DC4_Table lbl_1_rodata_6FF0;
+extern char *fn_80083DB0(char *dst, const char *src);
+extern u32 lbl_1_rodata_6E38;
+extern void fn_80008BA8(u32 arg0, u32 arg1, u32 arg2);
+extern u32 fn_1_F9CA0(u32 arg0, u32 arg1);
+extern s32 fn_1_F21B8(s32 arg);
+extern u8 fn_1_FA69C(s32 index);
+extern s32 fn_1_58C4(void);
+extern void fn_1_5948(int);
+extern void fn_1_627C(int);
+extern void fn_1_A714C(f32 *a, f32 *b, f32 *c, f32 *d);
+extern void fn_80015CB0(f32 *out, f32 a, f32 b, f32 c, f32 d, f32 e, f32 f);
+extern void fn_80038FD8(u32 *, u32 *, u32 *, u32 *);
 extern const f32 lbl_1_rodata_6D7C;
 extern const f32 lbl_1_rodata_6D80;
 extern const f32 lbl_1_rodata_6D74;
 extern f64 fn_80088538(f32);
 extern f64 fn_800883E8(f64 angle);
 extern void fn_1_F5A2C(Vec4 *dst, const Vec4 *a, const Vec4 *b, f32 t);
-extern s32 fn_1_58C4(void);
 extern u32 lbl_801A63C0;
 extern int fn_1_866B4(s8);
 extern u32 fn_1_864FC(u32 index);
 extern void fn_1_F73A8(int, void *, void *);
 extern u64 __shl2i(u32, u32, s32);
-extern u32 lbl_1_rodata_6E38;
-extern void fn_80008BA8(u32 arg0, u32 arg1, u32 arg2);
-extern u32 fn_1_F9CA0(u32 arg0, u32 arg1);
-extern s32 fn_1_F21B8(s32 arg);
-extern u8 fn_1_FA69C(s32 index);
 extern struct fn_1_FA6C0_lbl_1_rodata_7480 lbl_1_rodata_7480;
 extern u32 fn_1_76504(s32, void *, s32);
 extern u32 lbl_801A63D0;
@@ -51,7 +103,7 @@ extern void fn_1_7269C(u32 arg0, u32 arg1, void *arg2);
 extern void fn_1_72768(u32 arg0, u32 arg1);
 extern void fn_1_FAB40(void);
 extern void fn_80008BEC(void *dest, int value, u32 size);
-extern void fn_1_FA89C(Obj_1_data_2A7E0_At3C *obj);
+extern void fn_1_FA89C(SplineViewportHolder *holder);
 extern void fn_1_76BF8(void);
 extern void fn_1_72648(void);
 extern void fn_1_9A508();
@@ -95,7 +147,6 @@ extern void fn_1_F8BD4(void);
 extern void fn_1_F8C28(s32 value);
 extern void fn_1_F8CCC(s32 value);
 extern void fn_1_F8CA0(s32 value);
-extern char *fn_80083DB0(char *dst, const char *src);
 extern void fn_1_F9D04(u8 index);
 extern void fn_1_F9D90(void);
 extern void fn_1_F9E38(void);
@@ -107,11 +158,7 @@ extern void fn_8001D3E4(u32 channel, u32 command);
 extern u32 lbl_801A66A0;
 
 /* fzgx:begin fn_1_F4F08 */
-extern void *lbl_801A6410;
-extern u8 lbl_1_data_3E8E0[0x9];
 
-extern void *fn_1_4630(void *, u32, const char *, int);
-extern void fn_1_46B4(void *, void *, const char *, int);
 
 /* Natural cubic spline setup: computes second derivatives y2[] for the
  * knots (x[], y[]) by tridiagonal elimination. */
@@ -148,8 +195,8 @@ tmp_cse1 = n * 4;
         y2[k] = (y2[k] - (f32)(u[k] * y2[k + 1])) / d[k];
     }
 
-    fn_1_46B4(lbl_801A6410, u, (const char *)lbl_1_data_3E8E0, 0x4c);
-    fn_1_46B4(lbl_801A6410, d, (const char *)lbl_1_data_3E8E0, 0x4d);
+    fn_1_46B4( (u32)(void *)(lbl_801A6410), (u32)(void *)(u), (const char *)lbl_1_data_3E8E0, 0x4c);
+    fn_1_46B4( (u32)(void *)(lbl_801A6410), (u32)(void *)(d), (const char *)lbl_1_data_3E8E0, 0x4d);
 }
 /* fzgx:end fn_1_F4F08 */
 
@@ -1152,21 +1199,14 @@ void fn_1_F8D5C(u32 arg0, u32 arg1) {
 }
 /* fzgx:end fn_1_F8D5C */
 
-/* fzgx:begin fn_1_F8DC4 noprologue */
-#include "types.h"
+/* fzgx:begin fn_1_F8DC4 */
 
-extern struct Table lbl_1_rodata_6FF0;
-extern void fn_80083DB0(void *arg0, u32 arg1);
-
-struct Table {
-    u32 values[4][6];
-};
 
 void fn_1_F8DC4(s16 index0, s16 index1, void *arg0) {
-    struct Table table;
+    struct fn_1_F8DC4_Table table;
 
     table = lbl_1_rodata_6FF0;
-    fn_80083DB0(arg0, table.values[index0][index1]);
+    fn_80083DB0( (char *)(void *)(arg0), (const char *)(u32)(table.values[index0][index1]));
 }
 /* fzgx:end fn_1_F8DC4 */
 
@@ -1746,7 +1786,7 @@ void fn_1_FA75C(void) {
     obj->unk_170 = saved_entry;
 
     if (obj->unk_170 != 0 && spline_index <= 1) {
-        fn_1_FA89C(obj);
+        fn_1_FA89C( (SplineViewportHolder *)(Obj_1_data_2A7E0_At3C *)(obj));
     } else {
         fn_1_76BF8();
         fn_1_72648();
@@ -1800,34 +1840,9 @@ void fn_1_FA898(void) {
 }
 /* fzgx:end fn_1_FA898 */
 
-/* fzgx:begin fn_1_FA89C noprologue */
-#include "types.h"
-#include "rel/main_rel/globals.h"
+/* fzgx:begin fn_1_FA89C */
 
-typedef struct {
-    u8 flag;          // 0x00
-    u8 pad[0x43];
-    f32 mtx[4][12];   // 0x44
-    u32 x[4];         // 0x104
-    u32 y[4];         // 0x114
-    u32 w[4];         // 0x124
-    u32 h[4];         // 0x134
-    u32 halfW[4];     // 0x144
-    u32 halfH[4];     // 0x154
-    f32 scale;        // 0x164
-} SplineViewport;
 
-typedef struct {
-    u32 unk_0;
-    SplineViewport vp;
-} SplineViewportHolder;
-
-extern int fn_1_58C4(void);
-extern void fn_1_5948(int);
-extern void fn_1_627C(int);
-extern void fn_1_A714C(f32 *, f32 *, f32 *, f32 *);
-extern void fn_80015CB0(f32 *, f32, f32, f32, f32, f32, f32);
-extern void fn_80038FD8(u32 *, u32 *, u32 *, u32 *);
 
 void fn_1_FA89C(SplineViewportHolder *holder) {
     int count;

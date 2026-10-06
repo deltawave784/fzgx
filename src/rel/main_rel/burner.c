@@ -2,13 +2,116 @@
 #include "rel/main_rel/globals.h"
 #include "rel/main_rel/burner.h"
 
+typedef struct Node {
+    struct Node *prev;
+    struct Node *next;
+} Node;
+
+typedef struct fn_1_984F0_BurnerNode fn_1_984F0_BurnerNode;
+
+struct fn_1_984F0_BurnerNode {
+    u8 pad_0[0x4];
+    fn_1_984F0_BurnerNode *next;
+    u32 index;
+    u8 pad_C[0x3C];
+    u32 key;
+};
+
+typedef struct {
+    u8 pad[0x60];
+} fn_1_9CD6C_GlobalState;
+
+typedef struct {
+    f32 x, y, z;
+} fn_1_98E18_Vec;
+
+typedef struct {
+    u8 pad0[0x4c];
+    fn_1_98E18_Vec dir;
+    fn_1_98E18_Vec pos;
+    u8 pad64[0x10];
+    f32 radius;
+} fn_1_98E18_Burner;
+
+typedef struct {
+    u8 pad0[0x4];
+    void (*callback)(void);
+    fn_1_98E18_Burner *entry;
+} fn_1_98E18_Event;
+
+typedef struct {
+    f32 x;
+    f32 y;
+    f32 z;
+} fn_1_9CCE8_Vec3;
+
+typedef struct {
+    u8 pad[0x1e];
+    u8 count;
+} Burner;
+
+struct FormatTable {
+    const char *fmt[44][6];
+};
+
+struct FormatEntry {
+    s16 f[5];
+};
+
+struct EntryTable {
+    struct FormatEntry e[44];
+};
+
+struct fn_1_98804_Arg0 {
+    u32 unk_0;
+    u32 unk_4;
+};
+
+typedef struct {
+    u8 pad[8];
+    u8 *entries;
+} fn_1_9D360_BurnerTable;
+extern void fn_1_98640(Obj_1_data_27DE0 *obj);
+extern void fn_1_98840(Node *node);
+extern void fn_1_987D0(u32 address);
+extern s16 camera_get_mode(void);
+extern u32 fn_1_58C4(void);
+extern void *memset(void *dest, int value, u32 size);
+extern void fn_1_8645C(int index, void *arg);
+extern void lbl_8006E1B0(void *, void *);
+extern s16 fn_1_58E3C(void *source);
+extern void lbl_8006DBAC(void *arg0);
+extern void lbl_8006E0A4(void *arg0);
+extern void *fn_1_868C0(s8 index);
+extern void *fn_1_14DDF4(u32 arg0);
+extern void lbl_8006E1C0(void *mtx, void *dst);
+extern void lbl_8006D668(void *dst);
+extern u32 fn_1_584AC(void);
+extern void lbl_8006DB74(void *);
+extern void lbl_8006DD14(void *arg0, void *arg1);
+extern u32 lbl_801A6D00;
+extern void lbl_8006DCA4(void);
+extern s32 fn_1_54E34(void *arg0, f32 arg1);
+extern void *fn_1_5448C(fn_1_98E18_Vec *pos);
+extern void * fn_1_548AC(u32 amount);
+extern void fn_1_98F28(void);
+extern void fn_1_5489C(void **arg0, void **arg1);
+extern int sprintf(char *s, const char *format, ...);
+extern s32 fn_1_46DC4(s32 value);
+extern void fn_8006E294(fn_1_9CCE8_Vec3 *);
+extern u32 fn_80077A18();
+extern void fn_80077F8C(Burner *);
+extern const struct FormatTable lbl_1_rodata_7050;
+extern const struct EntryTable lbl_1_rodata_6E38;
+extern void fn_80008BA8(u32 arg0, u32 arg1, u32 arg2);
+extern char *fn_80083DB0(char *, const char *);
 extern u8 lbl_1_rodata_EB4[124];
 extern void *lbl_801A6410;
-extern void fn_1_46B4(void *, Obj_1_bss_6EA04_Target *, u8 *, u32);
+extern void fn_1_46B4(u32 arg0, u32 arg1, const char *arg2, int arg3);
 extern f32 lbl_1_rodata_4104[59];
-extern Obj_1_data_27DE0 *fn_1_986A4(Obj_1_data_27DE0 *obj);
-extern void fn_800794F0(Obj_1_data_27DE0 *arg0, Obj_1_data_27DE0 *arg1, s32 arg2);
-extern void fn_1_98804(Obj_1_data_27DE0 *obj);
+extern void * fn_1_986A4();
+extern void fn_800794F0(u8 *dst, u8 *src, s32 len);
+extern void fn_1_98804(struct fn_1_98804_Arg0 *arg0);
 extern void fn_1_9AF80(u32 arg0, u32 arg1, u32 arg2);
 extern u32 lbl_1_rodata_4210;
 extern void fn_80007AB4(u32 *arg0);
@@ -17,41 +120,32 @@ extern void lbl_8006D7B0(s32);
 extern s32 lbl_8006D24C(f32, f32);
 extern void mathutil_mtxA_rotate_x(s16);
 extern void mathutil_mtxA_rotate_y(s32);
-extern s32 strlen(const char *);
+extern size_t strlen(const char *str);
 extern s32 fn_8006FC5C(const char *, const char *, s32);
 extern s32 fn_8006FC1C(const char *, const char *);
 extern u32 fn_1_9D260(void);
-extern s32 fn_1_3F0C8(void);
+extern s16 fn_1_3F0C8(void);
 extern u8 lbl_1_bss_8E51D;
 extern u8 fn_1_7B074(void);
-extern void fn_8006FDEC(void);
+extern s32 fn_8006FDEC(void);
 extern void fn_80071718(u32);
 extern void fn_800711A8(u32);
 extern void fn_1_55A84(void (*callback)(void), void *arg0, s32 arg1, s32 arg2);
-extern void *fn_1_12F118(void);
-extern void *fn_1_36AD0(void);
+extern void * fn_1_12F118(void);
+extern u8* fn_1_36AD0(void);
 extern void fn_1_14F6F8(u8 arg0, u8 arg1, u8 arg2, void *arg3);
-extern void fn_80008BA8(void *arg0, const void *arg1, int arg2);
-
-extern u32 lbl_1_rodata_4210;
-extern void fn_80007AB4(u32 *arg0);
-extern void fn_1_9CC6C(void *arg0, s32 arg1);
-extern void fn_1_9D360(void);
+extern void fn_1_9D360(Burner *burner, fn_1_9D360_BurnerTable *table, u8 *indices);
 extern Obj_1_data_2A7E0_At3C * lbl_801A66CC;
 extern u32 fn_1_4630(u32, u32, u32, u32);
 extern const f32 lbl_1_rodata_4100;
-extern void *memset(void *dest, int value, u32 size);
-extern u32 fn_1_584AC(void);
 extern void lbl_8006D7DC(void *);
 extern void lbl_8006DFC4(void *);
-extern void lbl_8006E1B0(void *, void *);
 extern void fn_1_862D4(u32 arg0, void *arg1);
 extern u32 fn_1_1FB80(void *arg0, s32 arg1);
 extern u32 fn_1_41488(u32 arg0, void *arg1);
 extern void fn_1_4270C(void *arg0, u32 arg1, u32 arg2);
 extern f32 lbl_1_rodata_4260[16];
 extern f32 lbl_8006D0B4(f32);
-extern void lbl_8006DB74(void *);
 extern void lbl_8006D848(f32);
 extern f32 lbl_1_rodata_26F8[22];
 extern u32 lbl_1_rodata_9194[10];
@@ -59,7 +153,7 @@ extern u8 lbl_1_rodata_85AC[60];
 extern const f32 lbl_1_rodata_8658;
 extern const f32 lbl_1_rodata_8BA8;
 extern const f32 lbl_1_rodata_8A4C;
-extern s8 fn_1_A5DC4(void);
+extern s32 fn_1_A5DC4(void);
 extern const f32 lbl_1_rodata_91BC;
 extern void fn_1_4E724(void *);
 
@@ -77,8 +171,6 @@ s16 fn_1_402A4(u32 index) {
 /* fzgx:end fn_1_402A4 */
 
 /* fzgx:begin fn_1_981C4 */
-#include "types.h"
-
 struct fn_1_981C4_lbl_1_bss_6EA00 {
     u8 pad_0[0x4];
     u32 unk_4;
@@ -105,17 +197,17 @@ void fn_1_981C4(void) {
 /* fzgx:end fn_1_981C4 */
 
 /* fzgx:begin fn_1_98230 */
-typedef struct BurnerNode BurnerNode;
-typedef struct BurnerEntry BurnerEntry;
-typedef void (*BurnerCallback)(BurnerNode *, BurnerEntry *);
+typedef struct fn_1_98230_BurnerNode fn_1_98230_BurnerNode;
+typedef struct fn_1_98230_BurnerEntry fn_1_98230_BurnerEntry;
+typedef void (*BurnerCallback)(fn_1_98230_BurnerNode *, fn_1_98230_BurnerEntry *);
 
-struct BurnerNode {
+struct fn_1_98230_BurnerNode {
     u8 pad_0[0x4];
-    BurnerNode *next;
+    fn_1_98230_BurnerNode *next;
     u32 index;
 };
 
-struct BurnerEntry {
+struct fn_1_98230_BurnerEntry {
     u8 pad_0[0x8];
     BurnerCallback callback;
     u8 pad_C[0x8];
@@ -123,12 +215,12 @@ struct BurnerEntry {
 
 /* Dispatchs each queued burner callback, then advances the burner frame. */
 void fn_1_98230(void) {
-    BurnerNode *node = (BurnerNode *)lbl_1_bss_6EA04->unk_4;
+    fn_1_98230_BurnerNode *node = (fn_1_98230_BurnerNode *)lbl_1_bss_6EA04->unk_4;
 
     while (node != 0) {
-        BurnerNode *next = node->next;
-        BurnerEntry *entry =
-            (BurnerEntry *)((u8 *)&lbl_1_data_27DE0 + node->index * 0x14);
+        fn_1_98230_BurnerNode *next = node->next;
+        fn_1_98230_BurnerEntry *entry =
+            (fn_1_98230_BurnerEntry *)((u8 *)&lbl_1_data_27DE0 + node->index * 0x14);
 
         entry->callback(node, entry);
         node = next;
@@ -169,35 +261,35 @@ void fn_1_982C4(void) {
         node = next;
     }
 
-    fn_1_46B4(lbl_801A6410, lbl_1_bss_6EA04, lbl_1_data_27E08, 0x1d0);
+    fn_1_46B4( (u32)(void *)(lbl_801A6410), (u32)(Obj_1_bss_6EA04_Target *)(lbl_1_bss_6EA04), (const char *)(u8 *)(lbl_1_data_27E08), 0x1d0);
 }
 /* fzgx:end fn_1_982C4 */
 
 /* fzgx:begin fn_1_9835C */
-typedef struct BurnerNode BurnerNode;
-typedef struct BurnerEntry BurnerEntry;
+typedef struct fn_1_9835C_BurnerNode fn_1_9835C_BurnerNode;
+typedef struct fn_1_9835C_BurnerEntry fn_1_9835C_BurnerEntry;
 
-struct BurnerNode {
+struct fn_1_9835C_BurnerNode {
     u8 pad_0[0x4];
-    BurnerNode *next;
+    fn_1_9835C_BurnerNode *next;
     u32 index;
 };
 
-typedef void (*BurnerCallback)(BurnerNode *, BurnerEntry *);
+typedef void (*BurnerCallback)(fn_1_9835C_BurnerNode *, fn_1_9835C_BurnerEntry *);
 
-struct BurnerEntry {
+struct fn_1_9835C_BurnerEntry {
     u8 pad_0[0xC];
     BurnerCallback callback;
     u8 pad_10[0x4];
 };
 
 void fn_1_9835C(void) {
-    BurnerNode *node = (BurnerNode *)lbl_1_bss_6EA04->unk_4;
+    fn_1_9835C_BurnerNode *node = (fn_1_9835C_BurnerNode *)lbl_1_bss_6EA04->unk_4;
 
     while (node != 0) {
-        BurnerNode *next = node->next;
-        BurnerEntry *entry =
-            (BurnerEntry *)((u8 *)&lbl_1_data_27DE0 + node->index * 0x14);
+        fn_1_9835C_BurnerNode *next = node->next;
+        fn_1_9835C_BurnerEntry *entry =
+            (fn_1_9835C_BurnerEntry *)((u8 *)&lbl_1_data_27DE0 + node->index * 0x14);
         entry->callback(node, entry);
         node = next;
     }
@@ -251,7 +343,6 @@ typedef union {
     u8 raw[0x4B0];
 } Fn1983CCWork;
 
-extern void fn_1_98640(Fn1983CCWork *work);
 
 void fn_1_983CC(void *arg0, Fn1983CCEntry *entries) {
     Fn1983CCWork work;
@@ -273,40 +364,28 @@ void fn_1_983CC(void *arg0, Fn1983CCEntry *entries) {
         work.data.unk_38 = entry->unk_70;
         work.data.unk_3C = entry->unk_74;
         work.data.unk_4A4 = lbl_1_bss_6EA00;
-        fn_1_98640(&work);
+        fn_1_98640( (Obj_1_data_27DE0 *)(Fn1983CCWork *)(&work));
         entry = (Fn1983CCEntry *)((u8 *)entry + 0x38);
     }
 }
 /* fzgx:end fn_1_983CC */
 
 /* fzgx:begin fn_1_984F0 */
-typedef struct BurnerNode BurnerNode;
+typedef void (*BurnerCallback)(fn_1_984F0_BurnerNode *, void *);
 
-struct BurnerNode {
-    u8 pad_0[0x4];
-    BurnerNode *next;
-    u32 index;
-    u8 pad_C[0x3C];
-    u32 key;
-};
-
-typedef void (*BurnerCallback)(BurnerNode *, void *);
-
-extern void fn_1_98840(BurnerNode *node);
-extern void fn_1_987D0(BurnerNode *node);
 
 void fn_1_984F0(void *object) {
-    BurnerNode *node = (BurnerNode *)lbl_1_bss_6EA04->unk_4;
+    fn_1_984F0_BurnerNode *node = (fn_1_984F0_BurnerNode *)lbl_1_bss_6EA04->unk_4;
     u8 *table = (u8 *)&lbl_1_data_27DE0;
 
     while (node != 0) {
-        BurnerNode *next = node->next;
+        fn_1_984F0_BurnerNode *next = node->next;
 
         if (node->key == (u32)object) {
             BurnerCallback callback = *(BurnerCallback *)(table + node->index * 0x14 + 0x4);
             callback(node, table + node->index * 0x14);
-            fn_1_98840(node);
-            fn_1_987D0(node);
+            fn_1_98840( (Node *)(fn_1_984F0_BurnerNode *)(node));
+            fn_1_987D0( (u32)(fn_1_984F0_BurnerNode *)(node));
         }
 
         node = next;
@@ -347,11 +426,11 @@ void fn_1_98590(void) {
 /* fzgx:end fn_1_98590 */
 
 /* fzgx:begin fn_1_985EC */
-typedef struct BurnerEntry BurnerEntry;
+typedef struct fn_1_985EC_BurnerEntry fn_1_985EC_BurnerEntry;
 
-struct BurnerEntry {
+struct fn_1_985EC_BurnerEntry {
     u8 unk_00[0x04];
-    BurnerEntry *next;
+    fn_1_985EC_BurnerEntry *next;
     u8 unk_08[0x40];
     u32 key;
     u8 unk_4C[0x28];
@@ -362,12 +441,12 @@ struct BurnerEntry {
 
 // Reset matching burner entries while walking the global entry list.
 void fn_1_985EC(u32 key) {
-    BurnerEntry *node = (BurnerEntry *)lbl_1_bss_6EA04->unk_4;
+    fn_1_985EC_BurnerEntry *node = (fn_1_985EC_BurnerEntry *)lbl_1_bss_6EA04->unk_4;
     f32 value = lbl_1_rodata_4104[0];
     u32 zero = 0;
 
     while (node != 0) {
-        BurnerEntry *next = node->next;
+        fn_1_985EC_BurnerEntry *next = node->next;
         if (node->key == key) {
             node->value = value;
             node->flags = zero;
@@ -385,23 +464,20 @@ void fn_1_98634(f32 value) {
 
 /* fzgx:begin fn_1_98640 */
 void fn_1_98640(Obj_1_data_27DE0 *obj) {
-    Obj_1_data_27DE0 *result = fn_1_986A4(obj);
+    Obj_1_data_27DE0 *result = (Obj_1_data_27DE0 *)fn_1_986A4(obj);
 
-    fn_800794F0(result, obj, 0x4ac);
-    fn_1_98804(result);
+    fn_800794F0( (u8 *)(Obj_1_data_27DE0 *)(result), (u8 *)(Obj_1_data_27DE0 *)(obj), 0x4ac);
+    fn_1_98804( (struct fn_1_98804_Arg0 *)(Obj_1_data_27DE0 *)(result));
     ((void (*)(Obj_1_data_27DE0 *))(*(u32 *)((u8 *)&lbl_1_data_27DE0 +
         result->unk_8 * 0x14)))(result);
 }
 /* fzgx:end fn_1_98640 */
 
-/* fzgx:begin fn_1_986A4 noprologue */
-#include "types.h"
-
-extern u32 lbl_1_bss_6EA04;
+/* fzgx:begin fn_1_986A4 */
 
 void *fn_1_986A4(void) {
     u8 *q;
-    s8 *p = (s8 *)lbl_1_bss_6EA04 + 8;
+    s8 *p = (s8 *)(*((u32 *)&lbl_1_bss_6EA04)) + 8;
     s32 n = 120;
     s32 i;
 
@@ -431,7 +507,7 @@ void *fn_1_986A4(void) {
         return 0;
     }
     *p = 1;
-    q = (u8 *)lbl_1_bss_6EA04 + (120 - n) * 0x4ac + 0x80;
+    q = (u8 *)(*((u32 *)&lbl_1_bss_6EA04)) + (120 - n) * 0x4ac + 0x80;
     *(u32 *)(q + 0) = 0;
     *(u32 *)(q + 4) = 0;
     return q;
@@ -449,36 +525,25 @@ void fn_1_987D0(u32 address) {
 }
 /* fzgx:end fn_1_987D0 */
 
-/* fzgx:begin fn_1_98804 noprologue */
-#include "types.h"
+/* fzgx:begin fn_1_98804 */
 
-extern struct fn_1_98804_lbl_1_bss_6EA04 lbl_1_bss_6EA04;
-
-struct fn_1_98804_Arg0 {
-    u32 unk_0;
-    u32 unk_4;
-};
 struct fn_1_98804_lbl_1_bss_6EA04 {
     u32 unk_0;
 };
 
 void fn_1_98804(struct fn_1_98804_Arg0 *arg0) {
     u32 v0;
-    v0 = *(u32 *)((u8 *)lbl_1_bss_6EA04.unk_0 + 4);
+    v0 = *(u32 *)((u8 *)(*((struct fn_1_98804_lbl_1_bss_6EA04 *)&lbl_1_bss_6EA04)).unk_0 + 4);
     arg0->unk_4 = v0;
-    arg0->unk_0 = lbl_1_bss_6EA04.unk_0;
+    arg0->unk_0 = (*((struct fn_1_98804_lbl_1_bss_6EA04 *)&lbl_1_bss_6EA04)).unk_0;
     if (v0 != 0) {
     *(u32 *)((u8 *)v0 + 0) = (u32)arg0;
     }
-    *(u32 *)((u8 *)lbl_1_bss_6EA04.unk_0 + 4) = (u32)arg0;
+    *(u32 *)((u8 *)(*((struct fn_1_98804_lbl_1_bss_6EA04 *)&lbl_1_bss_6EA04)).unk_0 + 4) = (u32)arg0;
 }
 /* fzgx:end fn_1_98804 */
 
 /* fzgx:begin fn_1_98840 */
-typedef struct Node {
-    struct Node *prev;
-    struct Node *next;
-} Node;
 
 void fn_1_98840(Node *node) {
     Node *next = node->next;
@@ -534,11 +599,7 @@ void fn_1_988D8(void) {
 }
 /* fzgx:end fn_1_988D8 */
 
-/* fzgx:begin fn_1_988DC noprologue */
-#include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/burner.h"
-
+/* fzgx:begin fn_1_988DC */
 #pragma section code_type ".fzgxpool"
 __declspec(section ".fzgxpool") static void fzgx_pool_prime1(void) {
     volatile f32 s; volatile f64 d;  /* fzgx-allow: S2 pool primer sinks */
@@ -570,23 +631,6 @@ __declspec(section ".fzgxpool") static void fzgx_pool_prime5(void) {
 }
 #pragma section code_type ".text"
 
-extern s16 camera_get_mode(void);
-extern u32 fn_1_58C4(void);
-extern u8 *memset(u8 *dst, int value, u32 size);
-extern u32 fn_1_8645C(s32 arg0, u32 arg1);
-extern void lbl_8006E1B0(void *mtx, void *dst);
-extern void fn_1_58E3C(void *entry);
-extern void lbl_8006DBAC(void *arg0);
-extern void lbl_8006E0A4(void *arg0);
-extern void *fn_1_868C0(s8 arg0);
-extern void *fn_1_14DDF4(u32 arg0);
-extern void lbl_8006E1C0(void *mtx, void *dst);
-extern void lbl_8006D668(void *dst);
-extern u32 fn_1_584AC(void);
-extern void lbl_8006DB74(void *arg0);
-extern void lbl_8006DD14(void *arg0, void *arg1);
-extern u16 lbl_1_bss_960;
-extern u32 lbl_801A6D00;
 
 typedef struct Vec3 {
     f32 x;
@@ -702,11 +746,11 @@ void fn_1_988DC(void *arg0) {
         if (fn_1_58C4() != 1) {
             break;
         }
-        memset((u8 *)&entry, 0, 0xe8);
+        memset( (void *)((u8 *)&entry), 0, 0xe8);
         entry.unk_0c = 6;
         id = *(s16 *)(p + 4);
         entry.unk_18 = id;
-        fn_1_8645C(id, lbl_801A6D00);
+        fn_1_8645C(id, (void *)(u32)(lbl_801A6D00));
         lbl_8006E1B0((u8 *)arg0 + 0xc, (u8 *)&entry + 0x3c);
         entry.unk_94 = *(Vec3 *)((u8 *)arg0 + 0xc);
         entry.unk_1c = 0.003921568859368563f * *(f32 *)((u8 *)arg0 + 40);
@@ -839,30 +883,9 @@ __declspec(section ".fzgxpool") static void fzgx_pool_prime5(void) {
 }
 #pragma section code_type ".text"
 
-typedef struct {
-    f32 x, y, z;
-} fn_1_98E18_Vec;
 
-typedef struct {
-    u8 pad0[0x4c];
-    fn_1_98E18_Vec dir;
-    fn_1_98E18_Vec pos;
-    u8 pad64[0x10];
-    f32 radius;
-} fn_1_98E18_Burner;
 
-typedef struct {
-    u8 pad0[0x4];
-    void (*callback)(void);
-    fn_1_98E18_Burner *entry;
-} fn_1_98E18_Event;
 
-extern void lbl_8006DCA4(void);
-extern s32 fn_1_54E34(fn_1_98E18_Vec *pos, f32 radius);
-extern void *fn_1_5448C(fn_1_98E18_Vec *pos);
-extern fn_1_98E18_Event *fn_1_548AC(s32 size);
-extern void fn_1_98F28(void);
-extern void fn_1_5489C(void *data, void *event);
 
 void fn_1_98E18(fn_1_98E18_Burner *b) {
     fn_1_98E18_Vec p;
@@ -878,14 +901,14 @@ void fn_1_98E18(fn_1_98E18_Burner *b) {
     r += 1.7f;
 
     lbl_8006DCA4();
-    if (fn_1_54E34(&p, r)) {
+    if (fn_1_54E34( (void *)(fn_1_98E18_Vec *)(&p), r)) {
         lbl_8006DCA4();
         data = fn_1_5448C(&b->pos);
-        event = fn_1_548AC(0xc);
+        event = (fn_1_98E18_Event *)fn_1_548AC(0xc);
         if (event != 0) {
             event->callback = fn_1_98F28;
             event->entry = b;
-            fn_1_5489C(data, event);
+            fn_1_5489C( (void **)(void *)(data), (void **)(void *)(event));
         }
     }
 }
@@ -995,7 +1018,7 @@ typedef struct {
     u8 pad_A;
     s8 unk_B;
     s32 slots[4];
-} BurnerEntry;
+} fn_1_9ADCC_BurnerEntry;
 
 typedef struct {
     u8 pad_0[0x24];
@@ -1004,14 +1027,14 @@ typedef struct {
 
 void fn_1_9ADCC(Obj_1_data_2A7E0_At3C *arg0, s32 arg1) {
     s32 i;
-    BurnerEntry *entry;
+    fn_1_9ADCC_BurnerEntry *entry;
     s32 *slotp;
     s32 value;
     u32 temp_word;
     u8 temp[3];
     u32 ret;
 
-    entry = (BurnerEntry *)arg0->unk_C;
+    entry = (fn_1_9ADCC_BurnerEntry *)arg0->unk_C;
     i = 0;
     while (i < (s32)arg0->unk_8) {
         if ((entry->unk_9 & lbl_1_data_2A7E0.unk_48) != 0 &&
@@ -1034,11 +1057,11 @@ void fn_1_9ADCC(Obj_1_data_2A7E0_At3C *arg0, s32 arg1) {
                 }
                 if (value) {
                     s32 j;
-                    BurnerEntry *scan;
+                    fn_1_9ADCC_BurnerEntry *scan;
                     s32 slot;
                     u8 c;
 
-                    scan = (BurnerEntry *)arg0->unk_C;
+                    scan = (fn_1_9ADCC_BurnerEntry *)arg0->unk_C;
                     j = 0;
                     while (j < (s32)arg0->unk_8) {
                         slot = lbl_1_data_2A7E0.unk_60;
@@ -1050,7 +1073,7 @@ void fn_1_9ADCC(Obj_1_data_2A7E0_At3C *arg0, s32 arg1) {
                             }
                         }
                         j++;
-                        scan = (BurnerEntry *)((u8 *)scan + 0x1c);
+                        scan = (fn_1_9ADCC_BurnerEntry *)((u8 *)scan + 0x1c);
                     }
                     *slotp = 0;
                     arg0 = (Obj_1_data_2A7E0_At3C *)arg0->unk_4;
@@ -1068,7 +1091,7 @@ void fn_1_9ADCC(Obj_1_data_2A7E0_At3C *arg0, s32 arg1) {
             }
         }
         i++;
-        entry = (BurnerEntry *)((u8 *)entry + 0x1c);
+        entry = (fn_1_9ADCC_BurnerEntry *)((u8 *)entry + 0x1c);
     }
 }
 /* fzgx:end fn_1_9ADCC */
@@ -1102,13 +1125,7 @@ void fn_1_9CC6C(void *arg0, s32 arg1) {
 /* fzgx:end fn_1_9CC6C */
 
 /* fzgx:begin fn_1_9CCE8 */
-typedef struct {
-    f32 x;
-    f32 y;
-    f32 z;
-} fn_1_9CCE8_Vec3;
 
-extern void fn_8006E294(fn_1_9CCE8_Vec3 *);
 
 void fn_1_9CCE8(s32 arg0) {
     fn_1_9CCE8_Vec3 value;
@@ -1141,11 +1158,7 @@ typedef struct {
     f32 z;
 } fn_1_9CD6C_Vec3;
 
-typedef struct {
-    u8 pad[0x60];
-} fn_1_9CD6C_GlobalState;
 
-extern fn_1_9CD6C_GlobalState *lbl_801A6D00;
 
 #pragma opt_common_subs off
 void fn_1_9CD6C(void *arg0, f32 arg1) {
@@ -1160,9 +1173,9 @@ void fn_1_9CD6C(void *arg0, f32 arg1) {
     length = lbl_8006D0B4(squared);
 
     if (length > lbl_1_rodata_4260[0] + arg1) {
-        lbl_8006DB74((u8 *)lbl_801A6D00 + 0x60);
+        lbl_8006DB74((u8 *)(*((fn_1_9CD6C_GlobalState * *)&lbl_801A6D00)) + 0x60);
         lbl_8006D848((length - arg1) / length);
-        lbl_8006DFC4((u8 *)lbl_801A6D00 + 0x60);
+        lbl_8006DFC4((u8 *)(*((fn_1_9CD6C_GlobalState * *)&lbl_801A6D00)) + 0x60);
     }
 }
 #pragma opt_common_subs reset
@@ -1202,7 +1215,7 @@ s32 fn_1_9CE1C(const char *arg0, s32 arg1) {
         count = table->count;
         while (count > 0) {
             entry = entries->name;
-            if (fn_8006FC5C(entry, arg0, strlen(arg0)) != 0) {
+            if (fn_8006FC5C(entry, arg0, (s32)strlen(arg0)) != 0) {
                 found = 1;
                 break;
             }
@@ -1225,8 +1238,8 @@ s32 fn_1_9CE1C(const char *arg0, s32 arg1) {
         count = table->count;
         while (count > 0) {
             entry = entries->name;
-            entry_length = strlen(entry);
-            input_length = strlen(arg0);
+            entry_length = (s32)strlen(entry);
+            input_length = (s32)strlen(arg0);
             if (input_length <= entry_length &&
                 fn_8006FC5C(entry + (entry_length - input_length), arg0, input_length) != 0) {
                 found = 1;
@@ -1288,21 +1301,9 @@ void fn_1_9D2EC(void) {
 }
 /* fzgx:end fn_1_9D2EC */
 
-/* fzgx:begin fn_1_9D360 noprologue */
-#include "types.h"
+/* fzgx:begin fn_1_9D360 */
 
-typedef struct {
-    u8 pad[0x1e];
-    u8 count;
-} Burner;
 
-typedef struct {
-    u8 pad[8];
-    u8 *entries;
-} fn_1_9D360_BurnerTable;
-
-extern void *fn_80077A18(Burner *);
-extern void fn_80077F8C(Burner *);
 
 // Builds the burner's entry pointers from its index list, then finalizes it.
 void fn_1_9D360(Burner *burner, fn_1_9D360_BurnerTable *table, u8 *indices) {
@@ -1320,7 +1321,15 @@ void fn_1_9D360(Burner *burner, fn_1_9D360_BurnerTable *table, u8 *indices) {
 }
 /* fzgx:end fn_1_9D360 */
 
-/* fzgx:begin fn_1_9D3E8 */
+/* fzgx:begin fn_1_9D3E8 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/burner.h"
+
+extern void fn_1_55A84(void (*callback)(void), void *arg0, s32 arg1, s32 arg2);
+
+extern void fn_1_9D360(void);
+
 void fn_1_9D3E8(void *arg0, s32 arg1, s32 arg2) {
     fn_1_55A84(fn_1_9D360, arg0, arg1, arg2);
 }
@@ -1407,7 +1416,7 @@ void fn_1_13EE60(s16 arg0, s16 arg1, void *arg2) {
 
     if (arg0 >= 0x29) {
         base = fn_1_12F118();
-        if (base == fn_1_36AD0()) {
+        if (base == (void *)fn_1_36AD0()) {
             entry = &((fn_1_13EE60_BurnerEntry *)base)[arg1];
         } else {
             entry = &((fn_1_13EE60_BurnerEntry *)base)[arg0 - 0x29];
@@ -1416,14 +1425,12 @@ void fn_1_13EE60(s16 arg0, s16 arg1, void *arg2) {
             fn_1_14F6F8(entry->unk_81a4, entry->unk_81ac,
                         entry->unk_81b4, arg2);
         } else {
-            fn_80008BA8(arg2,
-                        (const u8 *)&lbl_1_data_28060 +
-                            entry->unk_81a0 * 0xb4,
+            fn_80008BA8( (u32)(void *)(arg2), (u32)(const void *)((const u8 *)&lbl_1_data_28060 +
+                            entry->unk_81a0 * 0xb4),
                         0xb4);
         }
     } else {
-        fn_80008BA8(arg2,
-                    (const u8 *)&lbl_1_data_28060 + arg0 * 0xb4,
+        fn_80008BA8( (u32)(void *)(arg2), (u32)(const void *)((const u8 *)&lbl_1_data_28060 + arg0 * 0xb4),
                     0xb4);
     }
 }

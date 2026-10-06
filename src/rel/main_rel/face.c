@@ -2,41 +2,66 @@
 #include "rel/main_rel/globals.h"
 #include "rel/main_rel/face.h"
 
+typedef struct { u32 a, b, c; } V3;
+
+typedef struct Output {
+    void* data;
+    void* aux;
+} Output;
+
+typedef struct LocalData {
+    u8 unk_0[0x34];
+    u32 size;
+} LocalData;
 extern u32 lbl_801A6410;
-extern u32 lbl_1_bss_7ACEC;
-extern u32 fn_1_45D0(u32, u32, void*, u32);
-extern u32 fn_80008F88(void*, u32);
-extern void fn_80009064(u32);
-extern void fn_1_46B4(u32, u32, u8*, int);
+extern V3 lbl_1_rodata_60A0;
 extern void fn_1_D2F50(void);
+extern void fn_1_D2F84(void);
+extern u32 fn_1_4630();
+extern s32 fn_1_45D0();
+extern u8 fn_1_86624(void);
+extern u32 GXGetTexBufferSize(u16, u16, u32, u8, u8);
+extern void *memset(void *, int, u32);
+extern u32 fn_1_864E8(int index);
+extern s32 fn_1_D2E44(u32);
+extern s8 fn_1_86690(s8 index);
+extern s16 fn_1_12C7B8(s16 arg);
+extern s32 fn_1_D123C(u32);
+extern s32 fn_1_3F440(u32);
 extern void fn_80071718(u32);
 extern void fn_800711A8(u32);
-extern void fn_1_D2F84(void);
-extern s16 fn_1_3F0C8(void *obj);
-extern u32 fn_1_864E8(u32 value);
-extern void OSPanic(char*, ...);
+extern void fn_1_D3020(void* unused, Output* output);
+extern u8 lbl_1_bss_7ACF8[8];
+extern char *fn_80083DB0(char *dst, const char *src);
+extern char *strcat(char *dest, const char *src);
+extern void OSReport(const char *format, ...);
+extern int DVDOpen(void*, LocalData*);
+extern u32 fn_80006354(u32 arg0, u32 arg1, u32 arg2, u32 arg3);
+extern s32 DVDClose();
+extern u32 lbl_1_bss_7ACEC;
+extern u32 fn_80008F88(void*, u32);
+extern void fn_80009064(u32 arg0);
+extern void fn_1_46B4(u32 arg0, u32 arg1, const char *arg2, int arg3);
+extern s16 fn_1_3F0C8();
+extern void OSPanic(const char *file, int line, const char *msg, ...);
 extern u32 fn_1_86810(u32);
 extern void qsort(void*, u32, u32, void*);
-extern s32 fn_1_D2E18(u8*, u8*);
+extern s32 fn_1_D2E18(u8* a, u8* b);
 extern u32 lbl_1_bss_7AD00;
 extern u32 lbl_1_bss_7AD04;
 extern u32 lbl_1_bss_7AD08[7];
 extern u32 lbl_1_bss_7AD24[9];
 extern u32 lbl_801A6CE0;
 extern u32 lbl_801A6CFC;
-extern void* fn_1_48E8(u32, u32);
-extern void OSLink(void*, void*);
-extern void OSReport(char*, ...);
-extern u8 lbl_1_bss_7ACF8[8];
-extern void fn_80083DB0(void *, void *);
-extern void strcat(void *, void *);
+extern s32 fn_1_48E8(u32 arg0, u32 arg1);
+extern void OSLink(u32 arg0, u32 arg1);
 
 /* fzgx:begin fn_1_D1780 */
 void fn_1_D1780(void) {
     u32 result;
 
     lbl_1_bss_7ACEC = 0x40000;
-    result = fn_1_45D0(lbl_801A6410, 0x40000, lbl_1_data_3DA2C, 0x14a);
+    result = (u32)fn_1_45D0(lbl_801A6410, 0x40000, lbl_1_data_3DA2C, 0x14a);
     lbl_1_bss_7ACF0 = result;
     lbl_1_data_3D924 = fn_80008F88((void*)result, result + lbl_1_bss_7ACEC);
 }
@@ -45,7 +70,7 @@ void fn_1_D1780(void) {
 /* fzgx:begin fn_1_D17E8 */
 void fn_1_D17E8(void) {
     fn_80009064(lbl_1_data_3D924);
-    fn_1_46B4(lbl_801A6410, lbl_1_bss_7ACF0, lbl_1_data_3DA2C, 0x152);
+    fn_1_46B4(lbl_801A6410, lbl_1_bss_7ACF0, (const char *)(u8*)(lbl_1_data_3DA2C), 0x152);
     lbl_1_data_3D924 = -1;
 }
 /* fzgx:end fn_1_D17E8 */
@@ -114,10 +139,7 @@ void fn_1_D1848(void) {
 }
 /* fzgx:end fn_1_D1848 */
 
-/* fzgx:begin fn_1_D1C94 noprologue */
-#include "types.h"
-
-extern u32 lbl_1_data_3D924;
+/* fzgx:begin fn_1_D1C94 */
 
 typedef struct {
     u32 unk_0;
@@ -142,29 +164,18 @@ typedef struct {
     u32 unk_38;
     u32 unk_3C;
     u8 pad_40[0x24];
-} Ent;
+} fn_1_D1C94_Ent;
 
-extern State_7ACD8 lbl_1_bss_7ACD8;
-extern u32 fn_1_864E8(s32);
-extern s32 fn_1_D2E44(u32);
-extern s8 fn_1_86690(s8);
-extern s16 fn_1_12C7B8(s16);
-extern s32 fn_1_D123C(u32);
-extern s32 fn_1_3F440(u32);
-extern void fn_1_D2F50(void);
-extern void fn_1_D2F84(void);
-extern void fn_80071718(u32);
-extern void fn_800711A8(u32);
 
 void fn_1_D1C94(void) {
     State_7ACD8 *p;
-    Ent *obj;
+    fn_1_D1C94_Ent *obj;
     s32 count;
     u32 mask;
     s32 i;
     s32 n;
 
-    p = (State_7ACD8 *)&lbl_1_bss_7ACD8;
+    p = (State_7ACD8 *)&(*((State_7ACD8 *)&lbl_1_bss_7ACD8));
     if ((s32)lbl_1_data_3D924 != -1) {
         fn_1_D2F50();
         if (p->unk_10 != 0) {
@@ -188,7 +199,7 @@ void fn_1_D1C94(void) {
             }
         }
 
-        obj = (Ent *)p->unk_0;
+        obj = (fn_1_D1C94_Ent *)p->unk_0;
         i = 0;
         while ((u32)i < p->unk_D) {
             if (obj == 0) {
@@ -214,7 +225,7 @@ void fn_1_D1C94(void) {
         count = 0;
         if (p->unk_10 != 0) {
             i = 0;
-            obj = (Ent *)p->unk_0;
+            obj = (fn_1_D1C94_Ent *)p->unk_0;
             while ((u32)i < p->unk_D) {
                 u32 res = fn_1_D2E44(i);
                 if (obj == 0) {
@@ -244,7 +255,7 @@ void fn_1_D1C94(void) {
         } else {
 {
     s32 fzgx_loop_i_3321;
-            obj = (Ent *)p->unk_0;
+            obj = (fn_1_D1C94_Ent *)p->unk_0;
             fzgx_loop_i_3321 = 0;
             while ((u32)fzgx_loop_i_3321 < p->unk_C) {
                 u32 res = fn_1_D2E44(fzgx_loop_i_3321);
@@ -296,7 +307,7 @@ void fn_1_D1F88(void) {
         obj = (Obj_1_bss_7ACD8_Target*)state->unk_0;
         for (; i < 6; i++, obj = (Obj_1_bss_7ACD8_Target*)((u8*)obj + 0x64)) {
             if (obj->unk_60 != 0) {
-                fn_1_46B4(lbl_801A6410, obj->unk_60, lbl_1_data_3DA2C, 0x271);
+                fn_1_46B4(lbl_801A6410, obj->unk_60, (const char *)(u8*)(lbl_1_data_3DA2C), 0x271);
                 obj->unk_60 = 0;
             }
             if (i < *(u8*)((u8*)state + 0xD)) {
@@ -312,15 +323,15 @@ void fn_1_D1F88(void) {
             }
         }
         if (state->unk_4 != 0) {
-            fn_1_46B4(lbl_801A6410, state->unk_4, lbl_1_data_3DA2C, 0x277);
+            fn_1_46B4(lbl_801A6410, state->unk_4, (const char *)(u8*)(lbl_1_data_3DA2C), 0x277);
             state->unk_4 = 0;
         }
         if (state->unk_8 != 0) {
-            fn_1_46B4(lbl_801A6410, state->unk_8, lbl_1_data_3DA2C, 0x278);
+            fn_1_46B4(lbl_801A6410, state->unk_8, (const char *)(u8*)(lbl_1_data_3DA2C), 0x278);
             state->unk_8 = 0;
         }
         if (state->unk_0 != 0) {
-            fn_1_46B4(lbl_801A6410, state->unk_0, lbl_1_data_3DA2C, 0x27B);
+            fn_1_46B4(lbl_801A6410, state->unk_0, (const char *)(u8*)(lbl_1_data_3DA2C), 0x27B);
             state->unk_0 = 0;
         }
         fn_1_D2F84();
@@ -410,15 +421,8 @@ u32 fn_1_D2FB0(void) {
 }
 /* fzgx:end fn_1_D2FB0 */
 
-/* fzgx:begin fn_1_D2FC0 noprologue */
-#include "types.h"
+/* fzgx:begin fn_1_D2FC0 */
 
-extern u32 fn_1_D3020(void *, void *);
-extern u8 lbl_1_bss_7ACF8[8];
-extern void fn_80083DB0(void *, void *);
-extern void strcat(void *, void *);
-
-extern void OSReport(const char *, ...);
 #pragma section code_type ".fzgxpool"
 static void fzgx_string_layout(void) {
     /* fzgx-allow: S2 layout primer: MWCC emits string literals in first-use order; the section is dropped at integration */
@@ -434,25 +438,15 @@ void fn_1_D2FC0(void) {
     } loc_8;
 
     
-    fn_80083DB0((void *)&loc_8, (void *)(u32)("fze."));
-    strcat((void *)&loc_8, (void *)(u32)("window"));
-    strcat((void *)&loc_8, (void *)(u32)(".rel"));
-    fn_1_D3020((void *)&loc_8, (void *)&lbl_1_bss_7ACF8);
+    fn_80083DB0( (char *)((void *)&loc_8), (const char *)((void *)(u32)("fze.")));
+    strcat( (char *)((void *)&loc_8), (const char *)((void *)(u32)("window")));
+    strcat( (char *)((void *)&loc_8), (const char *)((void *)(u32)(".rel")));
+    fn_1_D3020((void *)&loc_8, (Output*)((void *)&lbl_1_bss_7ACF8));
 }
 /* fzgx:end fn_1_D2FC0 */
 
 /* fzgx:begin fn_1_D3020 */
-#include "types.h"
 
-typedef struct LocalData {
-    u8 unk_0[0x34];
-    u32 size;
-} LocalData;
-
-typedef struct Output {
-    void* data;
-    void* aux;
-} Output;
 
 typedef struct Allocated {
     u8 unk_0[0x20];
@@ -461,9 +455,6 @@ typedef struct Allocated {
     void (*init)(void);
 } Allocated;
 
-extern int DVDOpen(void*, LocalData*);
-extern int fn_80006354(LocalData*, void*, u32, u32);
-extern void DVDClose(LocalData*);
 
 void fn_1_D3020(void* unused, Output* output) {
     LocalData local;
@@ -480,20 +471,20 @@ void fn_1_D3020(void* unused, Output* output) {
     }
     size = (local.size + 0x1f) & ~0x1f;
     if (lbl_801A6CFC < 0x82000000) {
-        object = fn_1_48E8(size, 0x20);
+        object = (void*)fn_1_48E8(size, 0x20);
         output->data = object;
     } else {
         OSReport((*(char (*)[51])&lbl_1_data_3DB58));
         return;
     }
-    if (fn_80006354(&local, output->data, size, 0) != 0) {
+    if ((int)fn_80006354( (u32)(LocalData*)(&local), (u32)(void*)(output->data), size, 0) != 0) {
         object = output->data;
         size = 0x20;
         if (object->size != 0) {
             size = object->size;
         }
-        output->aux = fn_1_48E8(size, 0x20);
-        OSLink(output->data, output->aux);
+        output->aux = (void*)fn_1_48E8(size, 0x20);
+        OSLink( (u32)(void*)(output->data), (u32)(void*)(output->aux));
         object = output->data;
         object->init();
     } else {

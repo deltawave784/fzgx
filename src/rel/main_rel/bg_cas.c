@@ -1,33 +1,80 @@
 #include "types.h"
 #include "rel/main_rel/globals.h"
 #include "rel/main_rel/bg_cas.h"
+
+typedef struct {
+    f32 x, y, z;
+} fn_1_FF6B8_CasVec;
+
+typedef struct {
+    s32 life;        /* 0x00 */
+    fn_1_FF6B8_CasVec pos;      /* 0x04 */
+    fn_1_FF6B8_CasVec prev;     /* 0x10 */
+    fn_1_FF6B8_CasVec vel;      /* 0x1C */
+    s16 rot;         /* 0x28 */
+    s16 rotVel;      /* 0x2A */
+    f32 scale;       /* 0x2C */
+    f32 size;        /* 0x30 */
+} CasParticle;
+
+typedef struct {
+    u8 pad_0[0x4];
+    s32 active;      /* 0x04 */
+    fn_1_FF6B8_CasVec pos;      /* 0x08 */
+    u8 pad_14[0xC];
+    fn_1_FF6B8_CasVec vel;      /* 0x20 */
+    u8 pad_2C[0xC];
+    f32 size;        /* 0x38 */
+    CasParticle particles[20]; /* 0x3C */
+} CasEmitter;
+extern const f32 lbl_1_rodata_7600;
+extern const f32 lbl_1_rodata_7604;
+extern u32 GXGetTexBufferSize(u16, u16, u32, u8, u8);
 extern void fn_80008BEC(void *dest, int value, u32 size);
-extern void fn_1_FCA10(void);
-extern int fn_1_FCF50(void);
+extern void fn_1_FC4E0(void *arg0, int arg1);
+extern void fn_1_FC51C(void);
+extern void GXLoadTexMtxImm(void *, u32, u32);
+extern void fn_800736C0(u32, void *);
+extern void fn_80072AB0(s32 arg0, s32 arg1, s32 arg2);
+extern void fn_80072C24(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
+extern void fn_80072CC4(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
+extern void fn_80072D64(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u8 arg4, s32 arg5);
+extern void fn_80072E20(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u8 arg4, s32 arg5);
+extern void fn_800734A8(u32 arg0, s32 arg1, s32 arg2, s32 arg3);
+extern void fn_800735C8(s32 index, s32 value);
+extern void fn_80073620(s32 index, s32 value);
+extern void fn_80073678(u32 arg0);
+extern void fn_80073778(void *obj, s32 index);
+extern void fn_80073898(u32 arg0);
+extern void fn_80073C6C(s32 index);
+extern void fn_800745A4(u32 arg0, s32 arg1, s32 arg2, u32 arg3, u32 arg4, u32 arg5);
+extern void fn_80074660(u32 arg0);
+extern void lbl_8006D758(void);
+extern void lbl_8006DAEC(void);
+extern void lbl_8006DB30(void);
+extern void lbl_8006DBAC(void *);
+extern void lbl_8006E14C(f32);
 extern void *fn_1_563B8(void *);
-extern f32 lbl_1_rodata_761C[13];
+extern void fn_1_566EC(int arg0, int arg1);
 extern void fn_1_7EB8C(void *, f32);
 extern void fn_1_7F20C();
+extern void fn_1_7F230();
+extern void fn_1_7F1E8();
+extern void *fn_1_14DD68(void *);
+extern void *fn_1_14DDF4(void *);
 extern void lbl_8006DB74(void *);
-extern void lbl_8006DBAC(void *);
+extern void lbl_8006E0A4(void *);
+extern void fn_80072558(void);
+extern int fn_1_FCF50(void);
+extern u32 fn_1_584AC(void);
+extern void fn_1_FCA10(void);
+extern f32 lbl_1_rodata_761C[13];
 extern void fn_1_FD3A8(void);
 extern void *memset(void *, int, u32);
 extern void fn_1_FE7D8(u8 *, s32);
 extern void fn_1_FF420(u8 *);
 extern void fn_80074788(u32 arg0);
 extern void fn_80072864(u32 arg0);
-extern void fn_800745A4(u32 arg0, s32 arg1, s32 arg2, u32 arg3, u32 arg4, u32 arg5);
-extern void fn_800734A8(u32 arg0, s32 arg1, s32 arg2, s32 arg3);
-extern void fn_80072AB0(s32 arg0, s32 arg1, s32 arg2);
-extern void fn_800735C8(s32 index, s32 value);
-extern void fn_80073620(s32 index, s32 value);
-extern void fn_80073C6C(s32 index);
-extern void fn_80072C24(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
-extern void fn_80072D64(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u8 arg4, s32 arg5);
-extern void fn_80072CC4(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
-extern void fn_80072E20(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u8 arg4, s32 arg5);
-extern void fn_80073678(u32 arg0);
-extern void fn_80074660(u32 arg0);
 extern void fn_80074918(u8 arg0, s32 arg1, u8 arg2);
 extern void fn_800720B0(int);
 extern void fn_1_9A508(Obj_1_data_2A7E0 *arg0);
@@ -37,32 +84,26 @@ extern void fn_1_10069C(Obj_1_data_2A7E0_At3C *);
 extern void fn_1_FF038(Obj_1_data_2A7E0_At3C *);
 extern const f64 lbl_1_rodata_760C;
 extern void OSPanic(const char *file, int line, const char *msg, ...);
-extern void lbl_8006D758(void);
 extern void lbl_8006E13C(void *);
-extern void lbl_8006E0A4(void *);
 extern void fn_80008BA8(u32 arg0, u32 arg1, u32 arg2);
 extern u8 lbl_1_bss_851E0[36];
-extern void fn_1_7F230();
 extern void fn_1_FFC60(Obj_1_data_2A7E0_At3C *arg0);
 extern void fn_1_FEC7C(void *object);
 extern f32 lbl_1_rodata_7590[2];
 extern const f32 lbl_1_rodata_7598;
 extern void GXInitTexObjLOD(void *, u32, u32, f32, f32, f32, u8, u8, u32);
-extern const f32 lbl_1_rodata_7600;
-extern const f32 lbl_1_rodata_7604;
-extern u32 GXGetTexBufferSize(u16, u16, u32, u8, u8);
-extern void fn_1_FC4E0(void *arg0, int arg1);
-extern void fn_1_FC51C(void);
 extern u8 lbl_1_bss_850E0[256];
 extern const f32 lbl_1_rodata_76A8;
 extern u32 fn_1_904(void);
 extern u32 fn_1_914(void);
 extern void fn_1_681C(u32 index, u32 *output);
 extern u32 fn_1_1FB80(void *, u32);
-extern u32 fn_1_FF6B8(void *);
+extern void fn_1_FF6B8(CasEmitter *em);
 extern void fn_1_FC60C(void);
 extern void DCFlushRange(void *, u32);
 extern void GXInitTexObj(void *, void *, u32, u32, u32, u32, u32, u32);
+extern void fn_1_FB9DC(int index);
+extern void fn_1_FBC5C(u8 idx);
 
 /* fzgx:begin fn_1_FB798 */
 int fn_1_FB798(int mode, u32 *value) {
@@ -186,7 +227,11 @@ void fn_1_FB87C(u32 *values, u8 count) {
 }
 /* fzgx:end fn_1_FB87C */
 
-/* fzgx:begin fn_1_FB96C */
+/* fzgx:begin fn_1_FB96C noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/bg_cas.h"
+
 // Initializes the selected background-cas state before running its setup stages.
 void fn_1_FB96C(int index) {
     u32 *states = &lbl_1_bss_84454.unk_0;
@@ -246,9 +291,7 @@ void fn_1_FB9DC(int index) {
 }
 /* fzgx:end fn_1_FB9DC */
 
-/* fzgx:begin fn_1_FBC5C noprologue */
-#include "types.h"
-
+/* fzgx:begin fn_1_FBC5C */
 /* one 0x60-byte track element; six of them per 0x270-byte entry starting at 0xC */
 typedef struct {
     u32 unk_0;
@@ -274,7 +317,6 @@ typedef struct {
     f32 speed2[3];    /* 0x264 */
 } CasEntry;
 
-extern CasEntry lbl_1_bss_84454[];
 
 /* Literal pool of the retail TU (lbl_1_rodata_7590): MWCC pools literals in
  * first-use order across the TU, so the earlier functions' data comes first.
@@ -300,7 +342,7 @@ static void fzgx_pool_layout_1(void) {
 #pragma section code_type ".text"
 
 void fn_1_FBC5C(u8 idx) {
-    CasEntry *ent = &lbl_1_bss_84454[idx];
+    CasEntry *ent = &(((CasEntry *)&lbl_1_bss_84454))[idx];
     s32 i;
 
     for (i = 0; i < 3; i++) {
@@ -578,7 +620,7 @@ typedef struct {
     f32 x;
     f32 y;
     f32 z;
-} CasVec;
+} fn_1_FCA10_CasVec;
 
 typedef struct {
     u8 r;
@@ -589,27 +631,6 @@ typedef struct {
 
 extern Mtx34 *lbl_801A6D00;
 
-extern void GXLoadTexMtxImm(void *, u32, u32);
-extern void fn_800736C0(u32, void *);
-extern void fn_80072AB0(s32, s32, s32);
-extern void fn_80072C24(s32, s32, s32, s32, s32);
-extern void fn_80072CC4(s32, s32, s32, s32, s32);
-extern void fn_80072D64(s32, s32, s32, s32, u8, s32);
-extern void fn_80072E20(s32, s32, s32, s32, u8, s32);
-extern void fn_800734A8(u32, s32, s32, s32);
-extern void fn_800735C8(s32, s32);
-extern void fn_80073620(s32, s32);
-extern void fn_80073678(u32);
-extern void fn_80073778(void *, s32);
-extern void fn_80073898(u32);
-extern void fn_80073C6C(s32);
-extern void fn_800745A4(u32, s32, s32, u32, u32, u32);
-extern void fn_80074660(u32);
-extern void lbl_8006D758(void);
-extern void lbl_8006DAEC(void);
-extern void lbl_8006DB30(void);
-extern void lbl_8006DBAC(void *);
-extern void lbl_8006E14C(f32);
 
 #define CAS_VIEW(field) (*(f32 *)(*(u32 *)(lbl_1_data_3EFA8 + 0x40F0) + (field)))
 
@@ -674,7 +695,7 @@ void fn_1_FCA10(void) {
 
     lbl_8006DAEC();
     {
-        CasVec trans = {0.0f, 0.0f, 0.0f};
+        fn_1_FCA10_CasVec trans = {0.0f, 0.0f, 0.0f};
         lbl_8006DBAC((void *)(lbl_1_data_3EFA8 + 0xA0));
         lbl_8006E14C(-1.0f);
 
@@ -865,10 +886,7 @@ void fn_1_FE004(void) {
 }
 /* fzgx:end fn_1_FE004 */
 
-/* fzgx:begin fn_1_FE014 noprologue */
-#include "types.h"
-#include "rel/main_rel/bg_cas.h"
-
+/* fzgx:begin fn_1_FE014 */
 typedef struct {
     s16 unk_0;
     u8 pad_2[0x360 - 2];
@@ -909,19 +927,6 @@ typedef struct {
     u8 *unk_C;
 } CasBase;
 
-extern void *fn_1_563B8(void *);
-extern void fn_1_566EC(int, int);
-extern void fn_1_7EB8C(void *, f32);
-extern void fn_1_7F20C(void *, s32, f32);
-extern void fn_1_7F230(void *, s32, f32);
-extern void fn_1_7F1E8(void *, s32, f32);
-extern void *fn_1_14DD68(void *);
-extern void *fn_1_14DDF4(void *);
-extern void lbl_8006DB74(void *);
-extern void lbl_8006DBAC(void *);
-extern void lbl_8006E0A4(void *);
-extern void fn_80072558(void);
-extern int fn_1_FCF50(void);
 
 /* Draw the object with the current view; DRAW_FN is the multi-view variant. */
 #define CAS_DRAW(DRAW_FN)                                       \
@@ -1304,7 +1309,7 @@ void fn_1_FED34(void *arg0) {
                     }
                 }
             }
-            fn_1_FF6B8(var_r28);
+            fn_1_FF6B8( (CasEmitter *)(void *)(var_r28));
         }
         var_r30 += 1;
         var_r28 += 0x44C;
@@ -1312,10 +1317,7 @@ void fn_1_FED34(void *arg0) {
 }
 /* fzgx:end fn_1_FED34 */
 
-/* fzgx:begin fn_1_FF6B8 noprologue */
-#include "types.h"
-
-extern u32 fn_1_584AC(void);
+/* fzgx:begin fn_1_FF6B8 */
 
 /* Literal pool of the retail TU (lbl_1_rodata_76A8): MWCC pools literals in
  * first-use order across the TU, so the earlier functions' literals come first. */
@@ -1388,31 +1390,9 @@ __declspec(section ".fzgxpool") static void fzgx_pool_prime11(void) {
 }
 #pragma section code_type ".text"
 
-typedef struct {
-    f32 x, y, z;
-} CasVec;
 
-typedef struct {
-    s32 life;        /* 0x00 */
-    CasVec pos;      /* 0x04 */
-    CasVec prev;     /* 0x10 */
-    CasVec vel;      /* 0x1C */
-    s16 rot;         /* 0x28 */
-    s16 rotVel;      /* 0x2A */
-    f32 scale;       /* 0x2C */
-    f32 size;        /* 0x30 */
-} CasParticle;       /* 0x34 */
+       /* 0x34 */
 
-typedef struct {
-    u8 pad_0[0x4];
-    s32 active;      /* 0x04 */
-    CasVec pos;      /* 0x08 */
-    u8 pad_14[0xC];
-    CasVec vel;      /* 0x20 */
-    u8 pad_2C[0xC];
-    f32 size;        /* 0x38 */
-    CasParticle particles[20]; /* 0x3C */
-} CasEmitter;
 
 /* random fraction in [0, 1] */
 #define RAND_FRAC() ((f32)(u16)fn_1_584AC() / 32767.0f)
