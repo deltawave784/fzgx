@@ -59414,6 +59414,29 @@
   },
   {
     "module": "profile",
+    "source": "rel/profile/fn_16_61D4.c",
+    "symbols": [
+      "fn_16_61D4"
+    ],
+    "status": "matching",
+    "mw_version": null,
+    "extra_cflags": [],
+    "pool": {
+      "...rodata.0": "lbl_16_rodata_58",
+      "@33": "lbl_16_rodata_58+0x48",
+      "@19": "lbl_16_rodata_58+0x2C",
+      "@42": "lbl_16_rodata_AC",
+      "@16": "lbl_16_rodata_58+0x20",
+      "@149": "lbl_16_rodata_1DC+0xC",
+      "@150": "lbl_16_rodata_1DC+0x10",
+      "@151": "lbl_16_rodata_1DC+0x14",
+      "@152": "lbl_16_rodata_1DC+0x18",
+      "@12": "lbl_16_rodata_58+0x10",
+      "@138": "lbl_16_rodata_AC+0x124"
+    }
+  },
+  {
+    "module": "profile",
     "source": "rel/profile/fn_16_6834.c",
     "symbols": [
       "fn_16_6834"
