@@ -6728,3 +6728,6 @@ rel/main_rel/camera/fn_1_6BC0.c:
 
 rel/main_rel/bg_cas/fn_1_FF6B8.c:
 	.text       start:0x000FF6B8 end:0x000FFA0C align:4
+
+rel/main_rel/live_camera/fn_1_FCB0.c:
+	.text       start:0x0000FCB0 end:0x00010138 align:4

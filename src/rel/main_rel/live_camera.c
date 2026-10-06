@@ -922,6 +922,137 @@ void fn_1_FB50(LiveCam_FB50 *cam) {
 }
 /* fzgx:end fn_1_FB50 */
 
+/* fzgx:begin fn_1_FCB0 noprologue */
+#include "types.h"
+
+typedef struct {
+    u8 unk_0;
+    u8 pad_1;
+    s16 unk_2;
+    s16 unk_4;
+    s16 unk_6;
+    u16 unk_8;
+    u8 pad_A[0x2];
+    u32 unk_C;
+    u16 unk_10;
+    s16 unk_12;
+    s16 unk_14;
+    u8 pad_16[0x2];
+    u32 unk_18;
+    u8 pad_1C[0x48];
+    u16 unk_64;
+} Sig_fn_1_101D0_Fn_1_101D0_State;
+
+extern s32 camera_get_state(void);
+extern u32 lbl_801A63C0;
+extern u32 fn_1_107B8(Sig_fn_1_101D0_Fn_1_101D0_State *);
+extern u32 fn_1_864E8(int);
+extern u8 fn_1_86624(void);
+extern void camera_set_result(s16);
+extern void camera_set_selected_value(u8);
+extern void fn_1_5370(s8, u32);
+
+#define NEXT_RAND() (lbl_801A63C0 = lbl_801A63C0 * 0x676A4B6B + 13259)
+#define RAND15(v) ((s32)(((v) >> 16) & 0x7FFF))
+
+void fn_1_FCB0(Sig_fn_1_101D0_Fn_1_101D0_State * arg0, f32 arg1) {
+    s32 rnd;
+    s16 prev14;
+    u32 mask;
+    s32 start;
+    u8 kind;
+
+    kind = arg0->unk_0;
+    if (kind == 1 && (arg0->unk_C & 0x80000) != 0) {
+        arg0->unk_12 = 4;
+        if ((f64)(u32)arg0->unk_64 > 210.0) {
+            arg0->unk_64 = 0;
+        } else {
+            arg0->unk_64 = 210;
+        }
+        return;
+    }
+    if (kind == 0) {
+        if ((arg0->unk_C & 0x80000) == 0) {
+            arg0->unk_12 = (s16)(RAND15(NEXT_RAND()) % 4);
+            if ((s32)arg0->unk_12 == arg0->unk_2) {
+                arg0->unk_12 = (s16)((arg0->unk_2 + 1) % 4);
+            }
+        } else {
+            arg0->unk_12 = (s16)(RAND15(NEXT_RAND()) % 6);
+            if ((s32)arg0->unk_12 >= 5) {
+                arg0->unk_12 = 4;
+            }
+            if ((s32)arg0->unk_12 == arg0->unk_2) {
+                if ((s32)arg0->unk_12 == 4) {
+                    prev14 = arg0->unk_4;
+                    fn_1_107B8(arg0);
+                    if (prev14 == (s32)arg0->unk_14) {
+                        arg0->unk_12 = (s16)((arg0->unk_2 + 1) % 5);
+                    }
+                } else {
+                    arg0->unk_12 = (s16)((arg0->unk_2 + 1) % 5);
+                }
+            }
+        }
+    } else {
+        arg0->unk_12 = (s16)(RAND15(NEXT_RAND()) % 6);
+        if ((s32)arg0->unk_12 == arg0->unk_2) {
+            arg0->unk_12 = (s16)((arg0->unk_2 + 1) % 6);
+        }
+        if ((s32)arg0->unk_12 == 5) {
+            arg0->unk_12 = 4;
+        }
+        if ((s32)arg0->unk_12 == 4) {
+            if ((arg0->unk_C & 0x80000) == 0) {
+                arg0->unk_12 = 3;
+            }
+            if (arg0->unk_0 == 2) {
+                arg0->unk_12 = (s16)((arg0->unk_2 + 1) % 3);
+            }
+        }
+        if ((s8)camera_get_state() == 6) {
+            if ((s32)arg0->unk_12 == 2) {
+                arg0->unk_12 = (s16)(((s32)arg0->unk_12 + 1) % 3);
+            }
+        }
+    }
+    if ((f64)(u32)arg0->unk_64 > 210.0) {
+        arg0->unk_64 = 0;
+    } else {
+        arg0->unk_64 = 210;
+    }
+    if ((s8)camera_get_state() == 6) {
+        rnd = RAND15(NEXT_RAND());
+        arg0->unk_6 = (s16)(rnd % (s32)(s8)fn_1_86624());
+        if ((fn_1_864E8(arg0->unk_6) & 0x1) == 0) {
+            mask = 0x8000880;
+            if ((fn_1_864E8(arg0->unk_6) & mask) != 0) {
+                start = arg0->unk_6;
+                do {
+                    arg0->unk_6++;
+                    if ((s32)arg0->unk_6 >= (s32)(s8)fn_1_86624()) {
+                        arg0->unk_6 = 0;
+                    }
+                    if ((s32)arg0->unk_6 < 0) {
+                        arg0->unk_6 = (s8)fn_1_86624() - 1;
+                    }
+                } while ((fn_1_864E8(arg0->unk_6) & mask) != 0 && start != (s32)arg0->unk_6);
+                if (start == (s32)arg0->unk_6) {
+                    camera_set_selected_value(1);
+                    camera_set_result(arg0->unk_6);
+                    fn_1_5370(0, 0);
+                    camera_set_result(arg0->unk_6);
+                    camera_set_selected_value(0);
+                    return;
+                }
+            }
+        }
+        arg0->unk_8 = arg0->unk_6;
+    }
+}
+/* fzgx:end fn_1_FCB0 */
+
 /* fzgx:begin fn_1_10138 */
 void fn_1_10138(void) {
     Obj_1_bss_17C4_At0 *obj;
