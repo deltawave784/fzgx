@@ -402,6 +402,169 @@ void fn_1_10B7D8(void *accessory) {
 }
 /* fzgx:end fn_1_10B7D8 */
 
+/* fzgx:begin fn_1_10C4E4 */
+#pragma section code_type ".fzgxpool"
+static const u32 fzgx_pool_table1[6] = {0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000};  /* fzgx-allow: A1 retail pool bytes */
+__declspec(section ".fzgxpool") static void fzgx_pool_keep1(void) { const u32 *volatile cp; cp = fzgx_pool_table1; }  /* fzgx-allow: S2 pool primer sink */
+__declspec(section ".fzgxpool") static void fzgx_pool_prime2(void) {
+    volatile f32 s; volatile f64 d;  /* fzgx-allow: S2 pool primer sinks */
+    d = 1.1920928955078125e-07;
+    s = 0.009999999776482582f;
+}
+static const u32 fzgx_pool_table3[3] = {0x00000000, 0x00000000, 0x00000000};  /* fzgx-allow: A1 retail pool bytes */
+__declspec(section ".fzgxpool") static void fzgx_pool_keep3(void) { const u32 *volatile cp; cp = fzgx_pool_table3; }  /* fzgx-allow: S2 pool primer sink */
+__declspec(section ".fzgxpool") static void fzgx_pool_prime4(void) {
+    volatile f32 s; volatile f64 d;  /* fzgx-allow: S2 pool primer sinks */
+    d = 1e-07;
+}
+static const u32 fzgx_pool_table5[3] = {0x00000000, 0x00000000, 0x00000000};  /* fzgx-allow: A1 retail pool bytes */
+__declspec(section ".fzgxpool") static void fzgx_pool_keep5(void) { const u32 *volatile cp; cp = fzgx_pool_table5; }  /* fzgx-allow: S2 pool primer sink */
+__declspec(section ".fzgxpool") static void fzgx_pool_prime6(void) {
+    volatile f32 s; volatile f64 d;  /* fzgx-allow: S2 pool primer sinks */
+    s = 0.5f;
+    s = 0.25f;
+}
+static const u32 fzgx_pool_table7[1] = {0x00000000};  /* fzgx-allow: A1 retail pool bytes */
+__declspec(section ".fzgxpool") static void fzgx_pool_keep7(void) { const u32 *volatile cp; cp = fzgx_pool_table7; }  /* fzgx-allow: S2 pool primer sink */
+__declspec(section ".fzgxpool") static void fzgx_pool_prime8(void) {
+    volatile f32 s; volatile f64 d;  /* fzgx-allow: S2 pool primer sinks */
+    d = 4503599627370496.0;
+    d = 0.0013611111376020642;
+    s = 0.0027222223579883575f;
+    s = -1.0f;
+    s = 0.0f;
+    s = -2.0f;
+    s = 2.0f;
+    s = 1.1920928955078125e-07f;
+    s = -1.0000001192092896f;
+}
+static const u32 fzgx_pool_table9[1] = {0x00000000};  /* fzgx-allow: A1 retail pool bytes */
+__declspec(section ".fzgxpool") static void fzgx_pool_keep9(void) { const u32 *volatile cp; cp = fzgx_pool_table9; }  /* fzgx-allow: S2 pool primer sink */
+#pragma section code_type ".text"
+
+typedef struct Node10C4E4 {
+    u8 flag;
+    u8 pad[0x13];
+    f32 keyA;
+    f32 keyB;
+    u8 pad2[0x24];
+    f32 value;
+} Node10C4E4;
+
+typedef struct Edge10C4E4 {
+    Node10C4E4 *a;
+    Node10C4E4 *b;
+    u32 pad;
+} Edge10C4E4;
+
+typedef struct Graph10C4E4 {
+    u8 pad[0x18];
+    u32 nodeCount;
+    u32 edgeCount;
+    u32 pad2;
+    Node10C4E4 *nodes;
+    Edge10C4E4 *edges;
+} Graph10C4E4;
+
+extern void fn_1_10846C(Graph10C4E4 *);
+extern void fn_1_128884(void *, void *, s32);
+
+void fn_1_10C4E4(Graph10C4E4 *g) {
+    u32 a;
+    Node10C4E4 *base;
+    u32 k;
+    Node10C4E4 *pa;
+    u32 b;
+    u32 i;
+    Node10C4E4 *p;
+    Node10C4E4 *q;
+    u32 j;
+    Node10C4E4 *na;
+    Node10C4E4 *nb;
+    u8 changed;
+    f32 t;
+    u16 limit;
+
+    if (g == NULL) {
+        return;
+    }
+
+    fn_1_10846C(g);
+
+    for (i = 0, p = g->nodes; i < g->nodeCount; i++, p++) {
+        if (p->flag & 1) {
+            p->value = -1.0f;
+            p->flag = 0;
+        } else {
+            p->value = 0.0f;
+            p->flag = 1;
+        }
+    }
+
+    limit = 10000;
+    do {
+        i = 0;
+        changed = 0;
+        for (; i < g->edgeCount; i++) {
+            na = g->edges[i].a;
+            nb = g->edges[i].b;
+            if (na->value >= 0.0f && nb->value < 0.0f) {
+                if (na->value < 1.1920928955078125e-07f) {
+                    t = -2.0f;
+                } else {
+                    t = 2.0f * -na->value;
+                }
+                if (na->value > -1.0000001192092896f || t > nb->value) {
+                    nb->value = t;
+                }
+            } else if (nb->value >= 0.0f && na->value < 0.0f) {
+                if (nb->value < 1.1920928955078125e-07f) {
+                    t = -2.0f;
+                } else {
+                    t = 2.0f * -nb->value;
+                }
+                if (nb->value > -1.0000001192092896f || t > na->value) {
+                    na->value = t;
+                }
+            }
+        }
+        for (i = 0; i < g->edgeCount; i++) {
+            na = g->edges[i].a;
+            nb = g->edges[i].b;
+            if (na->value < -1.0000001192092896f) {
+                na->value = -na->value;
+                changed = 1;
+            } else if (nb->value < -1.0000001192092896f) {
+                nb->value = -nb->value;
+                changed = 1;
+            }
+        }
+    } while (changed && limit-- != 0);
+
+    for (i = 0, p = g->nodes; i < g->nodeCount; i++, p++) {
+        q = &g->nodes[i] + 1;
+        for (j = i + 1; j < g->nodeCount; j++, q++) {
+            if (p->keyA > q->keyA) {
+                fn_1_128884(p, q, sizeof(Node10C4E4));
+            }
+        }
+    }
+
+    base = g->nodes;
+    for (k = 0; k < g->nodeCount; k += 4, base += 4) {
+        a = 0;
+        pa = base;
+        for (; a < 4; a++, pa++) {
+            for (b = a + 1; b < 4; b++) {
+                if (base->keyB > pa->keyB) {
+                    fn_1_128884(base, pa, sizeof(Node10C4E4));
+                }
+            }
+        }
+    }
+}
+/* fzgx:end fn_1_10C4E4 */
+
 /* fzgx:begin fn_1_10C7B4 */
 typedef struct {
     u8 pad_0[0x150];
