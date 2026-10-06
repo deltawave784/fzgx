@@ -5504,3 +5504,75 @@ dol/fn_80007F70.c:
 
 dol/InitMetroTRKCommTable.c:
 	.text       start:0x8008D4D8 end:0x8008D744 align:4
+
+dol/fn_80065B08.c:
+	.text       start:0x80065B08 end:0x80065D70 align:4
+
+dol/fn_80076238.c:
+	.text       start:0x80076238 end:0x800764A0 align:4
+
+dol/fn_80089C5C.c:
+	.text       start:0x80089C5C end:0x80089EEC align:4
+
+dol/fn_800692A4.c:
+	.text       start:0x800692A4 end:0x8006953C align:4
+
+dol/fn_80068BFC.c:
+	.text       start:0x80068BFC end:0x80068EB4 align:4
+
+dol/fn_800285DC.c:
+	.text       start:0x800285DC end:0x800288B4 align:4
+
+dol/fn_80089EEC.c:
+	.text       start:0x80089EEC end:0x8008A1CC align:4
+
+dol/fn_80009CD4.c:
+	.text       start:0x80009CD4 end:0x80009FA4 align:4
+
+dol/fn_800764A0.c:
+	.text       start:0x800764A0 end:0x80076790 align:4
+
+dol/fn_80073E8C.c:
+	.text       start:0x80073E8C end:0x80074188 align:4
+
+dol/longlong2str.c:
+	.text       start:0x80081D2C end:0x80082040 align:4
+
+dol/fn_80064A30.c:
+	.text       start:0x80064A30 end:0x80064D4C align:4
+
+dol/fn_8008596C.c:
+	.text       start:0x8008596C end:0x80085C7C align:4
+
+dol/fn_8007F13C.c:
+	.text       start:0x8007F13C end:0x8007F48C align:4
+
+dol/fn_8007698C.c:
+	.text       start:0x8007698C end:0x80076CD4 align:4
+
+dol/fn_800674FC.c:
+	.text       start:0x800674FC end:0x80067898 align:4
+
+dol/fn_8006C190.c:
+	.text       start:0x8006C190 end:0x8006C570 align:4
+
+dol/fn_8004D528.c:
+	.text       start:0x8004D528 end:0x8004D8DC align:4
+
+dol/fn_8004A80C.c:
+	.text       start:0x8004A80C end:0x8004AC04 align:4
+
+dol/fn_8008BB7C.c:
+	.text       start:0x8008BB7C end:0x8008BFB4 align:4
+
+dol/fn_80046F88.c:
+	.text       start:0x80046F88 end:0x80047464 align:4
+
+dol/fn_8008C124.c:
+	.text       start:0x8008C124 end:0x8008C5F0 align:4
+
+dol/fn_8003E344.c:
+	.text       start:0x8003E344 end:0x8003E8CC align:4
+
+dol/fn_8005CBF4.c:
+	.text       start:0x8005CBF4 end:0x8005D258 align:4

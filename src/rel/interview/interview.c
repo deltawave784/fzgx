@@ -120,6 +120,112 @@ void fn_17_394(void) {
 }
 /* fzgx:end fn_17_394 */
 
+/* fzgx:begin fn_17_9F8 */
+#include "sofdec/adxt.h"
+#include "rel/interview/interview.h"
+
+struct fn_17_9F8_lbl_17_bss_0 {
+    u8 pad_0[0x14];
+    u32 unk_14;
+    u32 unk_18;
+    u32 unk_1C;
+    u8 pad_20[0x4];
+    u32 unk_24;
+    u8 pad_28[0x8];
+    u8 unk_30;
+    u8 pad_31[0x27];
+    u32 unk_58;
+    u16 unk_5C;
+    u8 pad_5E[0x9A];
+    u8 unk_F8;
+    u8 unk_F9;
+    u8 unk_FA;
+    u8 unk_FB;
+};
+struct fn_17_9F8_lbl_1_bss_6EAB4 { u32 unk_0; };
+
+extern int fn_1_4C10(void);
+extern struct fn_17_9F8_lbl_1_bss_6EAB4 lbl_1_bss_6EAB4;
+extern u32 fn_1_A2A70(u32, u32);
+extern s32 fn_1_C24A4(void);
+struct fn_17_9F8_lbl_1_bss_5138 { u8 pad[0xE2]; u8 unk_E2; };
+extern struct fn_17_9F8_lbl_1_bss_5138 lbl_1_bss_5138;
+extern u32 lbl_1_bss_6EAD0;
+extern u8 fn_1_B7C00(void);
+extern void fn_1_3FDA8(void *, void *);
+extern void fn_1_4A00(s32, u8, void *);
+
+void fn_17_9F8(void) {
+    struct fn_17_9F8_lbl_17_bss_0 *p_lbl_17_bss_0;
+    u32 v0;
+    u32 v1;
+    u32 v2;
+    p_lbl_17_bss_0 = (struct fn_17_9F8_lbl_17_bss_0 *)&lbl_17_bss_0;
+    if (p_lbl_17_bss_0->unk_58 & 0x200000) {
+        if (fn_1_C24A4()) {
+            p_lbl_17_bss_0->unk_24 = 30;
+        } else if (fn_1_B7C00()) {
+            p_lbl_17_bss_0->unk_24 = 30;
+        } else {
+            v1 = p_lbl_17_bss_0->unk_18;
+            p_lbl_17_bss_0->unk_58 |= 0x10000000;
+            fn_1_4A00(0, 30, (void *)v1);
+        }
+        return;
+    }
+    if (p_lbl_17_bss_0->unk_5C >= 4 && p_lbl_17_bss_0->unk_5C <= 5) return;
+    if (fn_1_4C10()) return;
+    if ((p_lbl_17_bss_0->unk_F9 || p_lbl_17_bss_0->unk_FA) &&
+        p_lbl_17_bss_0->unk_FB && p_lbl_17_bss_0->unk_5C >= 11) return;
+    v0 = p_lbl_17_bss_0->unk_58;
+    if (v0 & 0x10000000) return;
+    v2 = v0 & 1;
+    if (v2 && (s32)p_lbl_17_bss_0->unk_1C < 60) return;
+    if (v2 && p_lbl_17_bss_0->unk_5C < 4) {
+        p_lbl_17_bss_0->unk_58 |= 0x10000000;
+        v0 = *(u32 *)&lbl_1_bss_6EAD0;
+        v0 = *(u32 *)(v0 + 4);
+        ADXT_Stop((ADXTHandle *)v0);
+        fn_1_4A00(0, 30, (void *)p_lbl_17_bss_0->unk_18);
+        return;
+    }
+    if (v2 && p_lbl_17_bss_0->unk_5C < 12) {
+        p_lbl_17_bss_0->unk_58 |= 0x10000000;
+        lbl_1_bss_6EAB4.unk_0 |= 164;
+        fn_1_A2A70(4, 1);
+        v0 = *(u32 *)&lbl_1_bss_6EAD0;
+        v0 = *(u32 *)(v0 + 4);
+        ADXT_Stop((ADXTHandle *)v0);
+        fn_1_4A00(0, 30, (void *)p_lbl_17_bss_0->unk_18);
+        return;
+    }
+    if (p_lbl_17_bss_0->unk_F8 == 3 || (v0 & 0x20000000)) {
+        p_lbl_17_bss_0->unk_58 |= 0x10000000;
+        lbl_1_bss_6EAB4.unk_0 |= 172;
+        fn_1_A2A70(12, 29);
+        fn_1_4A00(0, 30, (void *)p_lbl_17_bss_0->unk_18);
+        return;
+    }
+    if (p_lbl_17_bss_0->unk_30 == 0) {
+        fn_1_3FDA8((void *)p_lbl_17_bss_0->unk_14, (void *)p_lbl_17_bss_0->unk_18);
+    }
+    v0 = (u32)&lbl_1_bss_5138;
+    p_lbl_17_bss_0->unk_30 = 1;
+    if ((s32)*(u8 *)((u8 *)v0 + 226) != 0) return;
+    if (fn_1_C24A4()) {
+        p_lbl_17_bss_0->unk_24 = 30;
+    } else if (fn_1_B7C00()) {
+        p_lbl_17_bss_0->unk_24 = 30;
+    } else {
+        p_lbl_17_bss_0->unk_58 |= 0x10000000;
+        lbl_1_bss_6EAB4.unk_0 |= 44;
+        fn_1_A2A70(12, 29);
+        fn_1_4A00(0, 30, (void *)p_lbl_17_bss_0->unk_18);
+        p_lbl_17_bss_0->unk_30 = 0;
+    }
+}
+/* fzgx:end fn_17_9F8 */
+
 /* fzgx:begin fn_17_1794 */
 // fn_17_1794: empty in retail (single blr).
 void fn_17_1794(void) {
@@ -1557,6 +1663,65 @@ void fn_17_72BC(void) {
 }
 /* fzgx:end fn_17_72BC */
 
+/* fzgx:begin fn_17_72C0 */
+#include "rel/interview/interview.h"
+
+struct fn_17_72C0_lbl_1_data_20D1C { u32 unk_0[1]; };
+extern struct fn_17_72C0_lbl_1_data_20D1C lbl_1_data_20D1C;
+extern int sprintf(char *, const char *, ...);
+extern u32 fn_1_12C930(u32);
+extern void fn_80006E10(void *);
+typedef struct { u32 flags; s32 unk_4; u32 unk_8; u32 unk_C; } Sig_fn_1_45730_LoadEntry;
+typedef struct { u32 unk_0; u8 pad_4[0x48]; Sig_fn_1_45730_LoadEntry entry; } Sig_fn_1_45730_LoadResult;
+extern int fn_1_45730(void *, Sig_fn_1_45730_LoadResult *);
+extern u32 fn_1_45B2C(Sig_fn_1_45730_LoadResult *);
+extern void *lbl_801A6410;
+extern void *fn_1_4630(void *, u32, void *, u32);
+extern void fn_1_458A0(Sig_fn_1_45730_LoadResult *, void *, u32, u32);
+extern void fn_1_45850(Sig_fn_1_45730_LoadResult *);
+typedef struct { u8 pad[0x134]; u32 unk_134; } RelEntry;
+
+void *fn_17_72C0(u32 arg0) {
+    u8 *v0;
+    u32 v1;
+    struct { u32 a[33]; } loc_64;
+    Sig_fn_1_45730_LoadResult loc_8;
+    u32 t1;
+    u32 name;
+    s32 size;
+    RelEntry *data;
+    s32 i;
+    v0 = (u8 *)&lbl_17_data_0 + 0x60000;
+    fn_80006E10(v0 + 0x4464);
+    t1 = fn_1_12C930((s16)arg0);
+    v1 = lbl_17_bss_54;
+    name = lbl_1_data_20D1C.unk_0[(s16)t1];
+    switch ((s32)v1) {
+    case 5: sprintf((char *)&loc_64, (char *)v0 + 0x4468, name); break;
+    case 0: sprintf((char *)&loc_64, (char *)v0 + 0x4474, name); break;
+    case 1: sprintf((char *)&loc_64, (char *)v0 + 0x4484, name); break;
+    case 2: sprintf((char *)&loc_64, (char *)v0 + 0x4494, name); break;
+    case 3: sprintf((char *)&loc_64, (char *)v0 + 0x44a4, name); break;
+    case 4: sprintf((char *)&loc_64, (char *)v0 + 0x44b4, name); break;
+    }
+    if (!fn_1_45730(&loc_64, &loc_8)) {
+        fn_1_45730(v0 + 0x44c4, &loc_8);
+    }
+    size = (fn_1_45B2C(&loc_8) + 31) & ~31;
+    data = fn_1_4630(lbl_801A6410, size, v0 + 0x3e50, 0x118f);
+    fn_1_458A0(&loc_8, data, size, 0);
+    fn_1_45850(&loc_8);
+    {
+        RelEntry *p = data;
+        for (i = 0; i < 16; i++, p++) {
+            p->unk_134 += (u32)data;
+        }
+    }
+    fn_80006E10(v0 + 0x4108);
+    return data;
+}
+/* fzgx:end fn_17_72C0 */
+
 /* fzgx:begin fn_17_74C0 */
 extern u8 lbl_17_bss_D8[34];
 extern void fn_17_7728(void *);
@@ -1589,6 +1754,107 @@ void fn_17_74C0(Interview *interview) {
     fn_17_7728(child);
 }
 /* fzgx:end fn_17_74C0 */
+
+/* fzgx:begin fn_17_750C */
+#include "rel/interview/interview.h"
+
+extern void fn_17_7728(void *);
+extern u32 fn_17_7A74(void *);
+
+typedef struct InterviewState750C {
+    u8 active;
+    u8 pad_1[3];
+    u8 flag;
+    u8 pad_5[0x53];
+    u32 flags;
+    u16 stage;
+} InterviewState750C;
+
+typedef struct InterviewChild750C {
+    u8 pad_0[0x22];
+    s16 timer;
+    u8 pad_24[0x1C];
+    s16 index;
+    s16 racer;
+    s16 category;
+} InterviewChild750C;
+
+typedef struct Interview750C {
+    u32 value;
+    u8 pad_4[0x14];
+    InterviewChild750C child;
+} Interview750C;
+
+typedef struct InterviewEntry750C {
+    s32 type;
+    u32 pad_4;
+    u32 value;
+    u8 pad_C[0x48];
+} InterviewEntry750C;
+
+static inline InterviewEntry750C *select750C(InterviewState750C *state, s32 category, s32 racer, u32 flags) {
+    if (flags && state->stage < 5) {
+        return (InterviewEntry750C *)&lbl_17_data_63BD0;
+    } else if (flags && state->stage >= 9) {
+        return (InterviewEntry750C *)&lbl_17_data_63D20;
+    } else {
+        return ((InterviewEntry750C *(*)[16])lbl_17_data_63190)[category][racer];
+    }
+}
+
+static inline InterviewEntry750C *entry750C(InterviewState750C *state, s32 category, s32 racer, s32 index, u32 flags) {
+    InterviewEntry750C *base = select750C(state, category, racer, flags);
+    InterviewEntry750C *entry;
+    if (!base) {
+        return 0;
+    }
+    if (base->type == -1) {
+        state->flag = 1;
+        base = (InterviewEntry750C *)&lbl_17_data_0;
+    } else {
+        state->flag = 0;
+    }
+    entry = base + index;
+    if (!entry) {
+        return 0;
+    }
+    return entry;
+}
+
+void fn_17_750C(Interview750C *interview) {
+    InterviewState750C *state = (InterviewState750C *)&lbl_17_bss_0;
+    InterviewChild750C *child;
+    InterviewEntry750C *base;
+    u32 value;
+    u32 flags;
+    if (state->active) return;
+    child = &interview->child;
+    flags = state->flags & 1;
+    base = select750C(state, child->category, child->racer, flags);
+    if (base) {
+        if (base->type == -1) state->flag = 1;
+        else state->flag = 0;
+    }
+    value = entry750C(state, child->category, child->racer, child->index + 1, flags)->value;
+    if (value == 0) {
+        if (child->timer == 0) {
+            child->index++;
+            fn_17_7728(child);
+        }
+    } else if (value == interview->value) {
+        child->index++;
+        fn_17_7728(child);
+    }
+    if (child->timer >= 0) {
+        if ((u16)(state->stage - 4) > 1) {
+            fn_17_7A74(child);
+            child->timer--;
+        }
+    } else if (state->stage == 6) {
+        state->stage = 7;
+    }
+}
+/* fzgx:end fn_17_750C */
 
 /* fzgx:begin fn_17_802C */
 /* Retail addresses the whole TU literal pool (lbl_17_rodata_0) through one base register.
