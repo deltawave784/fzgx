@@ -30,6 +30,77 @@ void fn_3_1349C(void) {
 }
 /* fzgx:end fn_3_1349C */
 
+/* fzgx:begin fn_3_137AC noprologue */
+#include "types.h"
+#include "font.h"
+#include "rel/customize/emblem.h"
+
+struct fn_3_137AC_lbl_3_bss_A17D0 { u8 unk_0; u8 unk_1; };
+extern struct fn_3_137AC_lbl_3_bss_A17D0 lbl_3_bss_A17D0;
+extern f32 lbl_3_rodata_4E0[22];
+extern FontDrawPacket lbl_1_rodata_26F8;
+extern void fn_1_133DBC(void *);
+extern void fn_1_134AD4(void);
+extern u32 fn_1_13ABA8(u32);
+extern u8 fn_3_19C94(void);
+extern u32 fn_3_19CE0(void);
+extern s32 fn_1_1318D4(void);
+extern s32 fn_1_B8EDC(u32);
+extern u32 fn_3_18960(s16);
+extern u32 fn_3_15F44(s16);
+extern u32 fn_3_17854(s16);
+extern u32 fn_3_BF1C(void);
+extern u32 fn_3_139F0(void);
+
+void fn_3_137AC(void) {
+    f32 *p_lbl_3_rodata_4E0;
+    struct fn_3_137AC_lbl_3_bss_A17D0 *p_lbl_3_bss_A17D0;
+    Obj_3_bss_A17A0 *p_lbl_3_bss_A17A0;
+    s32 v3;
+    FontDrawPacket loc_8;
+    p_lbl_3_rodata_4E0 = lbl_3_rodata_4E0;
+    fn_1_133DBC((void *)1);
+    fn_1_134AD4();
+    if (__rlwnm(lbl_3_bss_A17A0.unk_0, 7, 31, 31)) {
+        fn_1_13ABA8(0x20000000);
+    } else if (fn_3_19C94() == 9) {
+        if ((u8)fn_3_19CE0() == 0) fn_1_13ABA8(0x2A200000);
+        else fn_1_13ABA8(0x28200000);
+    } else if (fn_3_19C94() == 10) {
+        if ((u8)fn_3_19CE0() == 0) fn_1_13ABA8(0x29200000);
+        else fn_1_13ABA8(0x28200000);
+    } else if (fn_3_19C94() == 16 || fn_3_19C94() == 15 ||
+               fn_3_19C94() == 12 || fn_3_19C94() == 17) {
+        fn_1_13ABA8(0x28000000);
+    } else {
+        fn_1_13ABA8(0x28200000);
+    }
+    loc_8 = lbl_1_rodata_26F8;
+    loc_8.image = 0x8606;
+    loc_8.x = p_lbl_3_rodata_4E0[1];
+    loc_8.y = p_lbl_3_rodata_4E0[2];
+    loc_8.z = p_lbl_3_rodata_4E0[3];
+    loc_8.flags = 10;
+    fn_1_4F734(&loc_8);
+    if (fn_1_1318D4() == 0) {
+        p_lbl_3_bss_A17D0 = &lbl_3_bss_A17D0;
+        if (p_lbl_3_bss_A17D0->unk_0 != 0) {
+            if (fn_1_B8EDC(0) != 0) lbl_3_bss_A17D0.unk_0 = 0;
+        } else if (p_lbl_3_bss_A17D0->unk_1 != 0) {
+            if (fn_1_B8EDC(1) != 0) p_lbl_3_bss_A17D0->unk_1 = 0;
+        } else {
+            p_lbl_3_bss_A17A0 = &lbl_3_bss_A17A0;
+            v3 = p_lbl_3_bss_A17A0->unk_14 - 15;
+            fn_3_18960((s16)(v3 < 0 ? 0 : v3 > 15 ? 15 : v3));
+            fn_3_15F44(p_lbl_3_bss_A17A0->unk_14);
+            fn_3_17854(p_lbl_3_bss_A17A0->unk_14);
+            fn_3_BF1C();
+            if (__rlwnm(lbl_3_bss_A17A0.unk_0, 7, 31, 31)) fn_3_139F0();
+        }
+    }
+}
+/* fzgx:end fn_3_137AC */
+
 /* fzgx:begin fn_3_13D98 noprologue */
 #include "types.h"
 
