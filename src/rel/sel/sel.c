@@ -2083,6 +2083,77 @@ s16 fn_10_A0E8(void) {
 #pragma opt_common_subs reset
 /* fzgx:end fn_10_A0E8 */
 
+/* fzgx:begin fn_10_A634 */
+struct fn_10_A634_lbl_1_bss_8B3A0 {
+    u8 pad_0[0x98];
+    u32 unk_98;
+};
+struct E9C8 { u8 pad[10]; s8 id; u8 pad2; };
+struct E9F8 { u8 pad[0x10]; u16 a; u16 b; };
+
+extern struct fn_10_A634_lbl_1_bss_8B3A0 lbl_1_bss_8B3A0;
+extern u32 fn_1_F9FEC(void);
+extern u32 lbl_801A66A8;
+extern struct E9C8 lbl_1_bss_9C8[];
+extern struct E9F8 lbl_1_bss_9F8[];
+extern void fn_1_12F128(s16);
+extern void fn_1_A2D84(u32);
+
+#pragma opt_common_subs off
+void fn_10_A634(void *arg0) {
+    struct { s32 value; } v0;
+    s16 v2;
+    s16 v1;
+    u16 v7;
+    u16 v6;
+    s32 out;
+    s32 v8;
+    s32 v9;
+    v0.value = fn_1_F9FEC() != 0;
+    v2 = 0;
+    for (v1 = 0; v1 < 4; v1++) {
+        if (lbl_1_bss_9C8[v1].id != -1 &&
+            __rlwnm(lbl_1_bss_8B3A0.unk_98, (v1 + 1) & 31, 31, 31)) {
+            if (((lbl_1_bss_9F8[v1].a >> 3) & 1) || ((lbl_1_bss_9F8[v1].b >> 3) & 1)) {
+                v2--;
+            }
+            if (((lbl_1_bss_9F8[v1].a >> 2) & 1) || ((lbl_1_bss_9F8[v1].b >> 2) & 1)) {
+                v2++;
+            }
+            v6 = lbl_1_bss_9F8[v1].a;
+            if (((v6 >> 2) & 1) || (((v7 = lbl_1_bss_9F8[v1].b) >> 2) & 1)) {
+                fn_1_12F128(v1);
+            } else if (((v6 >> 3) & 1) || ((v7 >> 3) & 1)) {
+                fn_1_12F128(v1);
+            }
+        }
+    }
+    if (v0.value) {
+        v8 = *(s16 *)((u8 *)arg0 + 8) + v2;
+        if (v8 > 3) out = 0;
+        else {
+            out = 3;
+            if (v8 >= 0) out = v8;
+        }
+        *(s16 *)((u8 *)arg0 + 8) = out;
+    } else {
+        v9 = *(s16 *)((u8 *)arg0 + 8) + v2;
+        if (v9 > 2) out = 0;
+        else {
+            out = 2;
+            if (v9 >= 0) out = v9;
+        }
+        *(s16 *)((u8 *)arg0 + 8) = out;
+    }
+    *(s16 *)((u8 *)arg0 + 10) = *(s16 *)((u8 *)arg0 + 8);
+    if (v2 != 0) {
+        fn_1_A2D84(0xA9010000);
+        lbl_801A66A8 = 0;
+    }
+}
+#pragma opt_common_subs reset
+/* fzgx:end fn_10_A634 */
+
 /* fzgx:begin fn_10_A7DC */
 extern int fn_1_FA070(void);
 extern int fn_1_FA0BC(int);
