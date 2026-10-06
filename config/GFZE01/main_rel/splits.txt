@@ -6806,3 +6806,6 @@ rel/main_rel/car_test/fn_1_83D28.c:
 
 rel/main_rel/motasglist/fn_1_42AD0.c:
 	.text       start:0x00042AD0 end:0x00042E74 align:4
+
+rel/main_rel/shadowmap/fn_1_568F8.c:
+	.text       start:0x000568F8 end:0x00056D4C align:4
