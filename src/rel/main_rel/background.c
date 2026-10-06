@@ -48,10 +48,9 @@ extern void fn_1_9DFB8(u32, u32, u32, u32);
 extern void GXPeekZ(u32, u32, void *);
 extern void fn_80034200(u32 arg0);
 extern void fn_8003432C(u32, u32, u32 *);
-extern f32 lbl_1_rodata_42D0;
-extern f32 lbl_1_rodata_42D4;
 
 /* fzgx:begin fn_1_9CF78 */
+
 typedef u32 (*FilterCallback)(u32, void *);
 
 typedef struct {
@@ -254,8 +253,6 @@ void fn_1_9D9E4(void) {
 
 /* fzgx:begin fn_1_9DDA8 noprologue */
 #include "types.h"
-#include "dolphin/types.h"
-#include "dolphin/hw_regs.h"
 
 typedef struct {
     s32 type;     /* 0: constant, 1: linear, else: hermite */
@@ -404,6 +401,7 @@ void fn_1_9E1D0(void) {
 /* fzgx:end fn_1_9E1D0 */
 
 /* fzgx:begin fn_1_9E514 */
+
 typedef struct {
     u8 unk_00[0x14];
     f32 unk_14;
@@ -465,9 +463,8 @@ void fn_1_9E5B8(Obj_1_bss_6EA80_Target *node) {
 /* fzgx:end fn_1_9E5B8 */
 
 /* fzgx:begin fn_1_9EDE8 */
- /* Reload before each ordered FIFO write. */
-
- /* Reload before each ordered FIFO write. */
+extern volatile const f32 lbl_1_rodata_42D0; /* Reload before each ordered FIFO write. */
+extern volatile const f32 lbl_1_rodata_42D4; /* Reload before each ordered FIFO write. */
 
 
 typedef struct {
@@ -519,76 +516,76 @@ void fn_1_9EDE8(Obj_1_9EDE8 *arg0) {
     z = arg0->unk_3c;
     fn_800736C0(0, &z);
     fn_8003462C(0x90, 0, 8);
-    FIFO((*(volatile const f32 *)&lbl_1_rodata_42D0));
-    FIFO((*(volatile const f32 *)&lbl_1_rodata_42D0));
-    FIFO((*(volatile const f32 *)&lbl_1_rodata_42D0));
-    FIFO((*(volatile const f32 *)&lbl_1_rodata_42D0));
-    FIFO((*(volatile const f32 *)&lbl_1_rodata_42D0));
-    FIFO((*(volatile const f32 *)&lbl_1_rodata_42D0));
-    FIFO((*(volatile const f32 *)&lbl_1_rodata_42D0));
-    FIFO((*(volatile const f32 *)&lbl_1_rodata_42D0));
-    FIFO((*(volatile const f32 *)&lbl_1_rodata_42D0));
-    FIFO((*(volatile const f32 *)&lbl_1_rodata_42D0));
-    FIFO((*(volatile const f32 *)&lbl_1_rodata_42D0));
-    FIFO((*(volatile const f32 *)&lbl_1_rodata_42D0));
-    FIFO((*(volatile const f32 *)&lbl_1_rodata_42D0));
-    FIFO((*(volatile const f32 *)&lbl_1_rodata_42D0));
-    FIFO((*(volatile const f32 *)&lbl_1_rodata_42D0));
-    FIFO((*(volatile const f32 *)&lbl_1_rodata_42D0));
-    FIFO((*(volatile const f32 *)&lbl_1_rodata_42D0));
-    FIFO((*(volatile const f32 *)&lbl_1_rodata_42D0));
-    FIFO((*(volatile const f32 *)&lbl_1_rodata_42D0));
-    FIFO((*(volatile const f32 *)&lbl_1_rodata_42D0));
-    FIFO((*(volatile const f32 *)&lbl_1_rodata_42D0));
-    FIFO((*(volatile const f32 *)&lbl_1_rodata_42D0));
-    FIFO((*(volatile const f32 *)&lbl_1_rodata_42D0));
-    FIFO((*(volatile const f32 *)&lbl_1_rodata_42D0));
-    FIFO((*(volatile const f32 *)&lbl_1_rodata_42D0));
-    FIFO((*(volatile const f32 *)&lbl_1_rodata_42D0));
-    FIFO((*(volatile const f32 *)&lbl_1_rodata_42D0));
-    FIFO((*(volatile const f32 *)&lbl_1_rodata_42D0));
-    FIFO((*(volatile const f32 *)&lbl_1_rodata_42D0));
-    FIFO((*(volatile const f32 *)&lbl_1_rodata_42D0));
-    FIFO((*(volatile const f32 *)&lbl_1_rodata_42D0));
-    FIFO((*(volatile const f32 *)&lbl_1_rodata_42D0));
-    FIFO((*(volatile const f32 *)&lbl_1_rodata_42D0));
-    FIFO((*(volatile const f32 *)&lbl_1_rodata_42D0));
-    FIFO((*(volatile const f32 *)&lbl_1_rodata_42D0));
-    FIFO((*(volatile const f32 *)&lbl_1_rodata_42D0));
-    FIFO((*(volatile const f32 *)&lbl_1_rodata_42D0));
-    FIFO((*(volatile const f32 *)&lbl_1_rodata_42D0));
-    FIFO((*(volatile const f32 *)&lbl_1_rodata_42D0));
-    FIFO((*(volatile const f32 *)&lbl_1_rodata_42D0));
+    FIFO(lbl_1_rodata_42D0);
+    FIFO(lbl_1_rodata_42D0);
+    FIFO(lbl_1_rodata_42D0);
+    FIFO(lbl_1_rodata_42D0);
+    FIFO(lbl_1_rodata_42D0);
+    FIFO(lbl_1_rodata_42D0);
+    FIFO(lbl_1_rodata_42D0);
+    FIFO(lbl_1_rodata_42D0);
+    FIFO(lbl_1_rodata_42D0);
+    FIFO(lbl_1_rodata_42D0);
+    FIFO(lbl_1_rodata_42D0);
+    FIFO(lbl_1_rodata_42D0);
+    FIFO(lbl_1_rodata_42D0);
+    FIFO(lbl_1_rodata_42D0);
+    FIFO(lbl_1_rodata_42D0);
+    FIFO(lbl_1_rodata_42D0);
+    FIFO(lbl_1_rodata_42D0);
+    FIFO(lbl_1_rodata_42D0);
+    FIFO(lbl_1_rodata_42D0);
+    FIFO(lbl_1_rodata_42D0);
+    FIFO(lbl_1_rodata_42D0);
+    FIFO(lbl_1_rodata_42D0);
+    FIFO(lbl_1_rodata_42D0);
+    FIFO(lbl_1_rodata_42D0);
+    FIFO(lbl_1_rodata_42D0);
+    FIFO(lbl_1_rodata_42D0);
+    FIFO(lbl_1_rodata_42D0);
+    FIFO(lbl_1_rodata_42D0);
+    FIFO(lbl_1_rodata_42D0);
+    FIFO(lbl_1_rodata_42D0);
+    FIFO(lbl_1_rodata_42D0);
+    FIFO(lbl_1_rodata_42D0);
+    FIFO(lbl_1_rodata_42D0);
+    FIFO(lbl_1_rodata_42D0);
+    FIFO(lbl_1_rodata_42D0);
+    FIFO(lbl_1_rodata_42D0);
+    FIFO(lbl_1_rodata_42D0);
+    FIFO(lbl_1_rodata_42D0);
+    FIFO(lbl_1_rodata_42D0);
+    FIFO(lbl_1_rodata_42D0);
     fn_8003462C(0x80, 0, 4);
     radius.value = *(f32 *)arg0;
     neg.value = -radius.value;
     lbl_8006DAEC();
     lbl_8006DFC4((u32)((u8 *)arg0 + 8));
-    lbl_8006E1D8((u32)&vtx[0], neg.value, neg.value, (*(volatile const f32 *)&lbl_1_rodata_42D0));
-    lbl_8006E1D8((u32)&vtx[1], radius.value, neg.value, (*(volatile const f32 *)&lbl_1_rodata_42D0));
-    lbl_8006E1D8((u32)&vtx[2], radius.value, radius.value, (*(volatile const f32 *)&lbl_1_rodata_42D0));
-    lbl_8006E1D8((u32)&vtx[3], neg.value, radius.value, (*(volatile const f32 *)&lbl_1_rodata_42D0));
+    lbl_8006E1D8((u32)&vtx[0], neg.value, neg.value, lbl_1_rodata_42D0);
+    lbl_8006E1D8((u32)&vtx[1], radius.value, neg.value, lbl_1_rodata_42D0);
+    lbl_8006E1D8((u32)&vtx[2], radius.value, radius.value, lbl_1_rodata_42D0);
+    lbl_8006E1D8((u32)&vtx[3], neg.value, radius.value, lbl_1_rodata_42D0);
     lbl_8006DB30();
     FIFO(vtx[0].x);
     FIFO(vtx[0].y);
     FIFO(vtx[0].z);
-    FIFO((*(volatile const f32 *)&lbl_1_rodata_42D0));
-    FIFO((*(volatile const f32 *)&lbl_1_rodata_42D0));
+    FIFO(lbl_1_rodata_42D0);
+    FIFO(lbl_1_rodata_42D0);
     FIFO(vtx[1].x);
     FIFO(vtx[1].y);
     FIFO(vtx[1].z);
-    FIFO((*(volatile const f32 *)&lbl_1_rodata_42D4));
-    FIFO((*(volatile const f32 *)&lbl_1_rodata_42D0));
+    FIFO(lbl_1_rodata_42D4);
+    FIFO(lbl_1_rodata_42D0);
     FIFO(vtx[2].x);
     FIFO(vtx[2].y);
     FIFO(vtx[2].z);
-    FIFO((*(volatile const f32 *)&lbl_1_rodata_42D4));
-    FIFO((*(volatile const f32 *)&lbl_1_rodata_42D4));
+    FIFO(lbl_1_rodata_42D4);
+    FIFO(lbl_1_rodata_42D4);
     FIFO(vtx[3].x);
     FIFO(vtx[3].y);
     FIFO(vtx[3].z);
-    FIFO((*(volatile const f32 *)&lbl_1_rodata_42D0));
-    FIFO((*(volatile const f32 *)&lbl_1_rodata_42D4));
+    FIFO(lbl_1_rodata_42D0);
+    FIFO(lbl_1_rodata_42D4);
 }
 /* fzgx:end fn_1_9EDE8 */
 
@@ -601,9 +598,9 @@ struct fn_1_9F4B4_Arg0 {
     u32 unk_14;
 };
 
- /* 0.0f */
-
- /* 1.0f */
+/* Pool literals, declared non-const: retail reloads them after every FIFO store. */
+extern f32 lbl_1_rodata_42D0; /* 0.0f */
+extern f32 lbl_1_rodata_42D4; /* 1.0f */
 
 /* write-gather FIFO */
 #define GX_WRITE_F32(v) (*(f32 *)GX_FIFO_BASE = (v))
