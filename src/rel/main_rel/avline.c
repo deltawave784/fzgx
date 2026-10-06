@@ -63,7 +63,6 @@ void fn_1_5819C(void) {
 /* fzgx:end fn_1_5819C */
 
 /* fzgx:begin fn_1_581AC */
-
 typedef struct fn_1_581AC_AvLineEntry {
     u16 unk_00;
     u16 unk_02;
@@ -91,7 +90,6 @@ s32 fn_1_581AC(u16 value, u16 type, void* data) {
 /* fzgx:end fn_1_581AC */
 
 /* fzgx:begin fn_1_58248 */
-
 typedef struct AvLineVertex {
     f32 x;
     f32 y;

@@ -940,7 +940,6 @@ s32 fn_1_818AC(fn_1_818AC_Obj *a, fn_1_818AC_Obj *b) {
 /* fzgx:end fn_1_818AC */
 
 /* fzgx:begin fn_1_82EDC */
-
 u32 *fn_1_82EDC(s16 arg0, s16 arg1, u32 *arg2) {
     u8 *p;
     if (arg1 < 41) {
@@ -1514,9 +1513,6 @@ void fn_1_85F70(void) {
 /* fzgx:end fn_1_85F70 */
 
 /* fzgx:begin fn_1_85F90 */
-
-
-
 // Shared literal pool of car.c: [4] = 0.0f, [10] = 1.0f, [0x15A] = 0.1f, [0x15C] = -0.1f.
 
 static inline void SetVec3(f32 *v, f32 x, f32 y, f32 z) {
@@ -5454,7 +5450,6 @@ void fn_1_8E448(fn_1_8E448_Object *obj, u32 value) {
 /* fzgx:end fn_1_8E448 */
 
 /* fzgx:begin fn_1_8E450 */
-
 void fn_1_8E450(u32 value) {
     lbl_1_bss_6D824 = value;
     fn_80074A7C( (u32)(void (*)(void))(fn_1_8E3A4));

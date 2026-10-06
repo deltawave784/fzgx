@@ -920,6 +920,7 @@ void fn_1_181F0(int a, int b, int c) {
 
 /* fzgx:begin fn_1_18214 noprologue */
 #include "types.h"
+#include "dolphin/types.h"
 #include "dolphin/hw_regs.h"
 #include "psvec.h"
 
@@ -1173,6 +1174,7 @@ void fn_1_18B40(void * arg0, void * arg1, u32 arg2, struct fn_1_18B40_Obj *arg3,
 
 /* fzgx:begin fn_1_18F28 noprologue */
 #include "types.h"
+#include "dolphin/types.h"
 #include "dolphin/hw_regs.h"
 #include "psvec.h"
 
@@ -1229,6 +1231,7 @@ void fn_1_18FFC(int a, int b, int c, int d, int e, int f, int g) {
 
 /* fzgx:begin fn_1_1902C noprologue */
 #include "types.h"
+#include "dolphin/types.h"
 #include "dolphin/hw_regs.h"
 #include "psvec.h"
 
@@ -1474,8 +1477,6 @@ void fn_1_2192C(void *self, void *arg) {
 /* fzgx:end fn_1_2192C */
 
 /* fzgx:begin fn_1_21950 */
-
-
 /* transform a vector by the current matrix, in place when src == dst */
 
 /* GX write-gather FIFO: the compiler is free to reorder these stores */
@@ -2351,7 +2352,6 @@ void fn_1_25870(Fn_1_25870 *self) {
 /* fzgx:end fn_1_25870 */
 
 /* fzgx:begin fn_1_28660 */
-
 void fn_1_28660(Fn_1_28660 *self) {
     int result;
     int mask;
@@ -2416,7 +2416,6 @@ void fn_1_28660(Fn_1_28660 *self) {
 /* fzgx:end fn_1_28660 */
 
 /* fzgx:begin fn_1_287E8 */
-
 /* Shared literal pool primer: retail's TU pool (lbl_1_rodata_840) in address order,
    so this function's 0.0f / 0.5f / 300.0f land at 0xc / 0x1c / 0x29c. */
 #pragma section code_type ".fzgxpool"
@@ -3944,7 +3943,6 @@ f32 fn_1_2A41C(Fn_1_2A41C *self, int arg) {
 /* fzgx:end fn_1_2A41C */
 
 /* fzgx:begin fn_1_2A638 */
-
 void fn_1_2A638(void *arg0, Fn_1_2A638 *self) {
     lbl_8006E1D8((char *)self + 0x14, self->field08,
         self->field0c + self->field44 - self->field48, self->field10);
@@ -3952,9 +3950,6 @@ void fn_1_2A638(void *arg0, Fn_1_2A638 *self) {
 /* fzgx:end fn_1_2A638 */
 
 /* fzgx:begin fn_1_2A678 */
-
-
-
 void fn_1_2A678(Fn_1_2A678_Source *self, Fn_1_2A678_Dest *dest) {
     dest->values = self->values;
 }
@@ -3994,7 +3989,6 @@ int fn_1_2A694(O *self, void *arg1, V *swap, u32 mask, V *out0, V *out1) {
 /* fzgx:end fn_1_2A694 */
 
 /* fzgx:begin fn_1_2A8D0 */
-
 /* Input to the collision query: a point at 0xc and a direction at 0x18. */
 typedef struct ColiQuery {
     u8 p[0xc];

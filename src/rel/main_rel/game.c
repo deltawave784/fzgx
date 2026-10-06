@@ -750,7 +750,6 @@ void fn_1_384E8(void) {
 /* fzgx:end fn_1_384E8 */
 
 /* fzgx:begin fn_1_3908C */
-
 void fn_1_3908C(void) {
     u8 inRange;
     s32 count;
@@ -1173,6 +1172,7 @@ void fn_1_3F4FC(void) {
 
 /* fzgx:begin fn_1_3F75C noprologue */
 #include "types.h"
+#include "font.h"
 
 extern void fn_1_451E4(void);
 extern void fn_1_D3214(void);
@@ -1415,8 +1415,6 @@ u32 fn_1_3FCF8(void) {
 /* fzgx:end fn_1_3FCF8 */
 
 /* fzgx:begin fn_1_3FDA8 */
-
-
 void fn_1_3FDA8(void *arg0, void *arg1) {
     s32 condition;
     void *value;
@@ -1714,10 +1712,6 @@ update_state:
 /* fzgx:end fn_1_40710 */
 
 /* fzgx:begin fn_1_408E8 */
-
-
-
-
 #pragma opt_common_subs off
 void fn_1_408E8(Fn408E8Obj *obj) {
     struct fn_1_408E8_lbl_1_rodata_BD8 *pool = &(*((struct fn_1_408E8_lbl_1_rodata_BD8 *)&lbl_1_rodata_BD8));
@@ -1870,7 +1864,6 @@ void fn_1_40D44(void) {
 /* fzgx:end fn_1_40D44 */
 
 /* fzgx:begin fn_1_40E08 */
-
 // Initializes the random-selection bounds and schedules the next callback.
 void fn_1_40E08(u32 arg0) {
     u32 value;
@@ -2025,8 +2018,6 @@ void fn_1_41104(u32 message_index) {
 /* fzgx:end fn_1_41104 */
 
 /* fzgx:begin fn_1_41134 */
-
-
 // Format the value with each registered template and publish both results.
 void fn_1_41134(void *unused, char *value) {
     char buffer[128];

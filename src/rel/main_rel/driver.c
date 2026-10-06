@@ -416,7 +416,6 @@ void fn_1_A7854(FnA7854Object *object, void *arg1) {
 /* fzgx:end fn_1_A7854 */
 
 /* fzgx:begin fn_1_A78CC */
-
 void fn_1_A78CC(void) {
     u32 **table;
     s32 offset;
@@ -516,8 +515,6 @@ void fn_1_A7B30(s32 index, FnA7B30Vector *out) {
 /* fzgx:end fn_1_A7B30 */
 
 /* fzgx:begin fn_1_A7F84 */
-
-
 void fn_1_A7F84(void *arg0, u32 arg1) {
     switch (arg1) {
     case 0:
@@ -646,9 +643,6 @@ void fn_1_A8528(void *arg0, void *arg1) {
 /* fzgx:end fn_1_A8528 */
 
 /* fzgx:begin fn_1_A861C */
-
-
-
 /* The TU's shared literal pool (lbl_1_rodata_4A28 .. +0x40) in retail order, so the
  * function's own literals dedupe onto retail's displacements. */
 #pragma section code_type ".fzgxpool"
@@ -724,9 +718,6 @@ void fn_1_A861C(FnA861CCamera *cam, FnA861CVehicle *veh)
 /* fzgx:end fn_1_A861C */
 
 /* fzgx:begin fn_1_A8834 */
-
-
-
 /* The TU's shared literal pool (lbl_1_rodata_4A28 .. +0x58) in retail order, so the
  * function's own literals dedupe onto retail's displacements. */
 #pragma section code_type ".fzgxpool"
@@ -825,7 +816,6 @@ u32 fn_1_A8DC4(void) {
 /* fzgx:end fn_1_A8DC4 */
 
 /* fzgx:begin fn_1_A8DD4 */
-
 void fn_1_A8DD4(const char *format, ...) {
     char buffer[0x200];
     Sig_parse_format_va_list args;
@@ -877,9 +867,6 @@ void fn_1_A8F78(void) {
 /* fzgx:end fn_1_A8F78 */
 
 /* fzgx:begin fn_1_A9250 */
-
-
-
 void fn_1_A9250(int arg) {
     int i;
 
@@ -911,7 +898,6 @@ void fn_1_A9250(int arg) {
 /* fzgx:end fn_1_A9250 */
 
 /* fzgx:begin fn_1_A93C4 */
-
 void fn_1_A93C4(u32 arg0) {
     u32 v0;
     u32 v1;
@@ -944,8 +930,6 @@ void fn_1_A942C(u8 value) {
 /* fzgx:end fn_1_A942C */
 
 /* fzgx:begin fn_1_A943C */
-
-
 struct fn_1_A943C_lbl_1_bss_6F648 {
     u8 pad_0[0x2];
     u8 unk_2;
@@ -1085,7 +1069,6 @@ void fn_1_A983C(void) {
 /* fzgx:end fn_1_A983C */
 
 /* fzgx:begin fn_1_A9868 */
-
 struct fn_1_A9868_lbl_1_bss_71690 {
     u32 unk_0;
 };

@@ -859,7 +859,6 @@ void fn_1_E174(f32 arg0) {
 /* fzgx:end fn_1_E174 */
 
 /* fzgx:begin fn_1_EBE4 */
-
 typedef struct {
     f32 x, y, z;
 } CamVec3;
@@ -1002,8 +1001,6 @@ void fn_1_EE04(Fn1EE04Context *context) {
 /* fzgx:end fn_1_EE04 */
 
 /* fzgx:begin fn_1_F6A8 */
-
-
 #define ALIGN32(n) (((n) + 0x1F) & ~0x1F)
 
 /* Retail rematerialises the __FILE__ string address (dat + 0x68) at each
@@ -1210,8 +1207,6 @@ void fn_1_FB50(LiveCam_FB50 *cam) {
 /* fzgx:end fn_1_FB50 */
 
 /* fzgx:begin fn_1_FCB0 */
-
-
 #define NEXT_RAND() (lbl_801A63C0 = lbl_801A63C0 * 0x676A4B6B + 13259)
 #define RAND15(v) ((s32)(((v) >> 16) & 0x7FFF))
 
@@ -1611,8 +1606,6 @@ void fn_1_103B0(LiveCamState *cam) {
 /* fzgx:end fn_1_103B0 */
 
 /* fzgx:begin fn_1_11544 */
-
-
 typedef struct {
     u8 unk_0;
     u8 pad_1[0x3];

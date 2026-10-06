@@ -88,7 +88,6 @@ extern u32 fn_1_A5594(u32, void *);
 extern void fn_1_714A8(struct Fn1_714A8Car *car, f32 *axis, u32 arg2, f32 size);
 
 /* fzgx:begin fn_1_680F8 */
-
 typedef struct Fn1_680F8Arg {
     u8 pad_00[0x18];
     s16 unk_18;
@@ -168,7 +167,6 @@ void fn_1_69BBC(fn_1_69BBC_EffectCar *car) {
 /* fzgx:end fn_1_69BBC */
 
 /* fzgx:begin fn_1_6D6A8 */
-
 struct Fn1_6D6A8Car {
     u8 pad_00[0x18];
     s16 field_18;
@@ -455,7 +453,6 @@ void fn_1_6D6A8(struct Fn1_6D6A8Car *car) {
 /* fzgx:end fn_1_6D6A8 */
 
 /* fzgx:begin fn_1_6F288 */
-
 struct fn_1_6F288_EffectCar {
     u8 pad_00[0x18];
     s16 field_18;
@@ -746,7 +743,6 @@ void fn_1_6F288(struct fn_1_6F288_EffectCar *arg0) {
 /* fzgx:end fn_1_6F288 */
 
 /* fzgx:begin fn_1_6F404 */
-
 void fn_1_6F404(void *arg0, void *arg1) {
     struct fn_1_6F404_lbl_1_rodata_2D70 *tbl;
     u32 sp[3];
@@ -874,9 +870,6 @@ void fn_1_6F8D0(void *arg0, void *arg1) {
 /* fzgx:end fn_1_6F8D0 */
 
 /* fzgx:begin fn_1_714A8 */
-
-
-
 struct Fn1_714A8Work {
     u8 pad_00[0xc];
     s16 field_0c;
@@ -1199,8 +1192,6 @@ void fn_1_71CA0(void *arg0, void *arg1, u16 arg2) {
 /* fzgx:end fn_1_71CA0 */
 
 /* fzgx:begin fn_1_72318 */
-
-
 struct EffectWorkData {
     u8 pad_00[0xc];
     s16 field_0c;

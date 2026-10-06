@@ -441,7 +441,6 @@ void fn_1_15C36C(void) {
 /* fzgx:end fn_1_15C36C */
 
 /* fzgx:begin fn_1_15DD7C */
-
 /* Literal-pool primer: this TU's shared pool (retail lbl_1_rodata_DD58) is laid out in
  * first-use order across the whole TU, so the words that precede this function's own
  * literals are referenced here, in retail order, from a section the link drops. */
@@ -688,7 +687,6 @@ void fn_1_15E260(s32 index) {
 /* fzgx:end fn_1_15E260 */
 
 /* fzgx:begin fn_1_15E330 */
-
 void fn_1_15E330(s32 index, u32 value, void *arg) {
     if (lbl_1_bss_3C30.unk_13F4 - (&lbl_1_bss_8FDA8.unk_8)[index * 0x34] < 4) {
         void *result;
@@ -737,7 +735,6 @@ void fn_1_15E540(s32 index, void *arg) {
 /* fzgx:end fn_1_15E540 */
 
 /* fzgx:begin fn_1_15E5E4 */
-
 // Initializes a background-window entry once, then marks it ready for reuse.
 void fn_1_15E5E4(s32 index, void *arg) {
     Obj_1_bss_8FDA8 *obj;
@@ -757,7 +754,6 @@ void fn_1_15E5E4(s32 index, void *arg) {
 /* fzgx:end fn_1_15E5E4 */
 
 /* fzgx:begin fn_1_15E688 */
-
 void fn_1_15E688(s32 index, u32 value, u8 state, void *arg) {
     void *obj;
     Obj_1_bss_8FDA8 *entry;
@@ -774,7 +770,6 @@ void fn_1_15E688(s32 index, u32 value, u8 state, void *arg) {
 /* fzgx:end fn_1_15E688 */
 
 /* fzgx:begin fn_1_15E764 */
-
 // Initializes the entry's 13-byte block, then marks it ready for reuse.
 void fn_1_15E764(s32 index, void *arg) {
     void *value = (void *)fn_1_435C( (u32)(void *)(arg));

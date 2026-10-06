@@ -147,9 +147,6 @@ u32 fn_1_1317B4(void) {
 /* fzgx:end fn_1_1317B4 */
 
 /* fzgx:begin fn_1_1317C4 */
-
-
-
 typedef struct {
     u8 unk_0;
     u8 pad_1[3];
@@ -277,8 +274,6 @@ void fn_1_132488(void *arg0) {
 /* fzgx:end fn_1_132488 */
 
 /* fzgx:begin fn_1_132FB4 */
-
-
 #pragma opt_common_subs off
 #pragma opt_propagation off
 void fn_1_132FB4(void) {

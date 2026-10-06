@@ -290,7 +290,6 @@ void fn_1_154FD8(void) {
 /* fzgx:end fn_1_154FD8 */
 
 /* fzgx:begin fn_1_15530C */
-
 u8 *fn_1_15530C(u8 *text) {
     Obj_1_bss_8EDF0 *obj = &lbl_1_bss_8EDF0;
 

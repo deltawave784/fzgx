@@ -21,7 +21,6 @@ extern void fn_1_495FC(void);
 extern void OSPanic(const char *file, int line, const char *msg, ...);
 
 /* fzgx:begin fn_1_7BCCC */
-
 typedef struct {
     u8 pad_0[0x2];
     u16 unk_2;

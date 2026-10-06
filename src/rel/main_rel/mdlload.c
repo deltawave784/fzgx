@@ -218,7 +218,6 @@ void fn_1_D38A4(void) {
 /* fzgx:end fn_1_D38A4 */
 
 /* fzgx:begin fn_1_D38C4 */
-
 typedef struct {
     u8 pad[0xc];
     u32 field_c;
@@ -276,7 +275,6 @@ void *fn_1_D38C4(void *arg) {
 /* fzgx:end fn_1_D38C4 */
 
 /* fzgx:begin fn_1_D3A4C */
-
 int fn_1_D3A4C(void *arg) {
     u8 buffer[96];
     u32 result;
@@ -315,10 +313,6 @@ int fn_1_D3A4C(void *arg) {
 /* fzgx:end fn_1_D3A4C */
 
 /* fzgx:begin fn_1_D3B6C */
-
-
-
-
 // Release the list's resources only when it resides above the arena high-water mark.
 void *fn_1_D3B6C(ModelReleaseList *list) {
     s32 index;
@@ -358,7 +352,6 @@ void fn_1_D3C04(void) {
 /* fzgx:end fn_1_D3C04 */
 
 /* fzgx:begin fn_1_D3C58 */
-
 // Initializes the model-loader state for every available entry.
 void fn_1_D3C58(void) {
     Obj_1_data_2A7E0_At3C *state;
@@ -739,15 +732,12 @@ void fn_1_D4370(u32 arg0) {
 /* fzgx:end fn_1_D4370 */
 
 /* fzgx:begin fn_1_D47D8 */
-
-
 void fn_1_D47D8(struct Base *base, s32 index) {
     base->entries[index].flag[0] = -1;
 }
 /* fzgx:end fn_1_D47D8 */
 
 /* fzgx:begin fn_1_D47F0 */
-
 #pragma section code_type ".fzgxpool"
 __declspec(section ".fzgxpool") static void fzgx_pool_prime1(void) {
     volatile f32 s; volatile f64 d;  /* fzgx-allow: S2 pool primer sinks */

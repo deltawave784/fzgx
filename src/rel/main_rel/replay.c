@@ -203,7 +203,6 @@ u8 fn_1_F2D30(u8 *value, u8 **cursor, u32 index) {
 /* fzgx:end fn_1_F2D30 */
 
 /* fzgx:begin fn_1_F2DDC */
-
 typedef struct lbl_1_bss_7EFD8_t {
     u8 pad_0[0x40];
     u32 fzgx_u32_48;
@@ -319,8 +318,6 @@ u32 fn_1_F2F58(void) {
 /* fzgx:end fn_1_F2F58 */
 
 /* fzgx:begin fn_1_F3574 */
-
-
 // One 0x80-byte event record in the replay buffer.
 
 
@@ -429,7 +426,6 @@ void fn_1_F37F4(void) {
 /* fzgx:end fn_1_F37F4 */
 
 /* fzgx:begin fn_1_F3AB0 */
-
 typedef struct {
     u16 unk_0;
     u8 pad_2[0xA];
@@ -506,7 +502,6 @@ void fn_1_F43F0(u8 *bits, u32 *position, u32 mask, u32 count, u32 limit) {
 /* fzgx:end fn_1_F43F0 */
 
 /* fzgx:begin fn_1_F444C */
-
 void fn_1_F444C(u8 *out, u32 *pos, u32 limit, f32 value) {
     u32 mask;
     f32 input;
@@ -674,7 +669,6 @@ u32 fn_1_F47AC(void) {
 /* fzgx:end fn_1_F47AC */
 
 /* fzgx:begin fn_1_F4E3C */
-
 f32 fn_1_F4E3C(s32 count, f32 *x, f32 *z, f32 *y, f32 value) {
     s32 lo;
     s32 hi;

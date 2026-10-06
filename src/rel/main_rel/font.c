@@ -272,7 +272,6 @@ extern f32 lbl_1_rodata_10D8;
 extern f64 lbl_1_rodata_10E0[3];
 
 /* fzgx:begin fn_1_48C28 */
-
 // Release every glyph texture owned by font slot `idx` that no other active
 // slot still references; shared ones are only unlinked from this slot.
 void fn_1_48C28(int idx) {
@@ -3256,8 +3255,6 @@ void fn_1_550E0(void) {
 /* fzgx:end fn_1_550E0 */
 
 /* fzgx:begin fn_1_553C4 */
-
-
 typedef struct {
     u8 pad_00[0x1a];
     u16 unk_1a;
@@ -3649,8 +3646,6 @@ void fn_1_55A84(FontCallback callback, FontInput *value, void *arg2, void *arg3)
 /* fzgx:end fn_1_55A84 */
 
 /* fzgx:begin fn_1_55EA0 */
-
-
 void fn_1_55EA0(Fn1_55EA0Object *object) {
     s32 i;
     s32 j;
@@ -3852,8 +3847,6 @@ void fn_1_563E4(fn_1_563E4_FontState *font) {
 /* fzgx:end fn_1_563E4 */
 
 /* fzgx:begin fn_1_56470 */
-
-
 void fn_1_56470(fn_1_56470_FontState *state) {
     u32 value;
 

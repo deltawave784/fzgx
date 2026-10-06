@@ -313,7 +313,6 @@ void fn_1_96AE8(void *base, void *arg1) {
 /* fzgx:end fn_1_96AE8 */
 
 /* fzgx:begin fn_1_97174 */
-
 s32 fn_1_97174(Fn197174Owner *owner, void *arg1, void *arg2) {
     Fn197174Root *root = fn_1_41BDC();
     s32 index = 0;
@@ -330,7 +329,6 @@ s32 fn_1_97174(Fn197174Owner *owner, void *arg1, void *arg2) {
 /* fzgx:end fn_1_97174 */
 
 /* fzgx:begin fn_1_97204 */
-
 void fn_1_97204(void *arg0, void *arg1) {
     fn_1_9724C(arg0, arg1);
     if ((u8)fn_1_97F80( (Fn197F80Object *)(void *)(arg0), (const char *)(void *)(arg1))) {
@@ -365,11 +363,6 @@ s16 fn_1_97F1C(Fn197F1CObject *object, s16 index) {
 /* fzgx:end fn_1_97F1C */
 
 /* fzgx:begin fn_1_97F80 */
-
-
-
-
-
 u32 fn_1_97F80(Fn197F80Object *rob, const char *name) {
     void *resource = 0;
     char path[0x40];
@@ -412,8 +405,6 @@ u32 fn_1_97F80(Fn197F80Object *rob, const char *name) {
 /* fzgx:end fn_1_97F80 */
 
 /* fzgx:begin fn_1_98104 */
-
-
 s32 fn_1_98104(obj)
 Fn198104Obj *obj;
 {
@@ -437,7 +428,6 @@ Fn198104Obj *obj;
 /* fzgx:end fn_1_98104 */
 
 /* fzgx:begin fn_1_9818C */
-
 s32 fn_1_9818C(u32 arg0) {
     s16 v0;
     s32 v1;

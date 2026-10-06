@@ -32,12 +32,6 @@ extern void fn_1_A5F44(void);
 extern s32 fn_1_A6480(void);
 
 /* fzgx:begin fn_1_A5C98 */
-
-
-
-
-
-
 typedef struct Fn1A5C98Object {
     void *unk0;
     void *unk4;
@@ -99,7 +93,6 @@ s32 fn_1_A5DC4(void) {
 /* fzgx:end fn_1_A5DC4 */
 
 /* fzgx:begin fn_1_A5DEC */
-
 extern u32 __OSBusClock : 0x800000F8; /* fzgx-allow: A1 OS globals block */
 void fn_1_A5DEC(void) {
     u32 temp_r28;
@@ -135,8 +128,6 @@ void fn_1_A5EFC(void) {
 /* fzgx:end fn_1_A5EFC */
 
 /* fzgx:begin fn_1_A6480 */
-
-
 s32 fn_1_A6480(void) {
     s32 var_r31;
     s32 var_r30;

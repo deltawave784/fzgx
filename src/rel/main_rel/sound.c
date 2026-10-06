@@ -978,7 +978,6 @@ void fn_1_A358C(u32 arg0) {
 /* fzgx:end fn_1_A358C */
 
 /* fzgx:begin fn_1_A3BD8 pool */
-
 /* file-scope objects of the retail TU, in retail order: MWCC addresses them off one section base */
 u32 fzgx_obj_lbl_1_bss_6EA98;
 u32 fzgx_obj_lbl_1_bss_6EA9C[2];

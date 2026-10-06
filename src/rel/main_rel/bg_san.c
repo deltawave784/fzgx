@@ -212,8 +212,6 @@ s32 fn_1_D8FC4(s32 arg0, s32 arg1) {
 /* fzgx:end fn_1_D8FC4 */
 
 /* fzgx:begin fn_1_DA6A8 */
-
-
 struct fn_1_DA6A8_Copy12 { u32 a[3]; };
 
 struct FzgxCopy_12 { u32 words[3]; };
@@ -256,7 +254,6 @@ void fn_1_DA6A8(void *arg0, struct Sig_fn_80077B64_fn_80077B64_Arg0 *arg1) {
 /* fzgx:end fn_1_DA6A8 */
 
 /* fzgx:begin fn_1_DA7B8 */
-
 // Forwards the active background state to the next processing stage.
 void fn_1_DA7B8(void) {
     fn_1_DAAFC(lbl_1_data_2A7E0.unk_3C);
@@ -308,7 +305,6 @@ void fn_1_DA7E4(void) {
 /* fzgx:end fn_1_DA7E4 */
 
 /* fzgx:begin fn_1_DA9F0 */
-
 // Applies the background transition after the scene reports readiness.
 void fn_1_DA9F0(void) {
     Obj_1_data_2A7E0_At3C *background_state = lbl_1_data_2A7E0.unk_3C;
@@ -327,7 +323,6 @@ void fn_1_DAA34(void) {
 /* fzgx:end fn_1_DAA34 */
 
 /* fzgx:begin fn_1_DAA58 */
-
 // Loads pending background resources before advancing the scene state.
 void fn_1_DAA58(void) {
     Obj_1_data_2A7E0_At3C *state = lbl_1_data_2A7E0.unk_3C;
@@ -410,7 +405,6 @@ s32 fn_1_DAB5C(s32 mode, Fn1DAB5C_Obj **arg) {
 /* fzgx:end fn_1_DAB5C */
 
 /* fzgx:begin fn_1_DABB4 */
-
 typedef struct {
     u32 flags;
     u8 pad_4[0x8];
@@ -502,7 +496,6 @@ void fn_1_DAD6C(void) {
 /* fzgx:end fn_1_DAD6C */
 
 /* fzgx:begin fn_1_DADA8 */
-
 struct fn_1_DADA8_lbl_1_data_2A7E0 {
     u8 pad_0[0x3C];
     u32 unk_3C;
@@ -570,7 +563,6 @@ void fn_1_DAEF8(void) {
 /* fzgx:end fn_1_DAEF8 */
 
 /* fzgx:begin fn_1_DAEFC */
-
 // Initializes the current background object and updates it for the active state.
 void fn_1_DAEFC(void) {
     s32 slot;
@@ -599,8 +591,6 @@ void fn_1_DAF90(void) {
 /* fzgx:end fn_1_DAF90 */
 
 /* fzgx:begin fn_1_DB138 */
-
-
 // Process each background-san entry when the object is in an eligible state.
 void fn_1_DB138(BgSanContext *context) {
     u8 *entry;
@@ -619,8 +609,6 @@ void fn_1_DB138(BgSanContext *context) {
 /* fzgx:end fn_1_DB138 */
 
 /* fzgx:begin fn_1_DB198 */
-
-
 typedef struct BgSanAllocation {
     u8 unk_00[0x4];
     void (*unk_04)(void);
@@ -689,7 +677,6 @@ void fn_1_DC204(void) {
 /* fzgx:end fn_1_DC204 */
 
 /* fzgx:begin fn_1_DC208 */
-
 void fn_1_DC208(void) {
     Obj_1_data_2A7E0_At3C *obj = lbl_1_data_2A7E0.unk_3C;
 
@@ -707,7 +694,6 @@ void fn_1_DC264(void) {
 /* fzgx:end fn_1_DC264 */
 
 /* fzgx:begin fn_1_DC268 */
-
 // Initializes scene data and updates each active scene entry.
 void fn_1_DC268(void) {
     Obj_1_data_2A7E0_At3C *scene_data;
@@ -730,7 +716,6 @@ void fn_1_DC268(void) {
 /* fzgx:end fn_1_DC268 */
 
 /* fzgx:begin fn_1_DC2F8 */
-
 void fn_1_DC2F8(void) {
     Obj_1_data_2A7E0_At3C *obj;
 
@@ -763,8 +748,6 @@ void fn_1_DC3A0(void) {
 /* fzgx:end fn_1_DC3A0 */
 
 /* fzgx:begin fn_1_DC3A4 */
-
-
 // Marks each entry as initialized and processes all entries in the container.
 void fn_1_DC3A4(fn_1_DC3A4_Container *container) {
     s32 count;
@@ -884,7 +867,6 @@ void fn_1_DC5E8(Obj_1_data_2A7E0_At3C *container, s32 arg) {
 /* fzgx:end fn_1_DC5E8 */
 
 /* fzgx:begin fn_1_DC648 */
-
 void fn_1_DC648(void *object) {
     u32 index;
     u32 direction;

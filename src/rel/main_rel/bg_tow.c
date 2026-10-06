@@ -386,9 +386,6 @@ void fn_1_1549B8(void) {
 /* fzgx:end fn_1_1549B8 */
 
 /* fzgx:begin fn_1_154C84 */
-
-
-
 s32 fn_1_154C84(void) {
     u32 v0;
     if ((s32)lbl_1_data_49AB0 == 4) {

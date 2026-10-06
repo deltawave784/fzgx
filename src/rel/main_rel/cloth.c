@@ -87,7 +87,6 @@ void fn_1_101AE8(u32 arg0, u32 arg1, u32 arg2, u32 arg3) {
 /* fzgx:end fn_1_101AE8 */
 
 /* fzgx:begin fn_1_10240C */
-
 void fn_1_10240C(u32 arg0, u32 arg1, s32 arg2) {
     u32 t0;
     t0 = fn_1_45D0(lbl_801A6410.unk_0, arg2, &lbl_1_data_3F17C, 561);

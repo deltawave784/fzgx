@@ -1121,11 +1121,6 @@ void fn_1_12D354(void *arg0, void *arg1, void *arg2) {
 /* fzgx:end fn_1_12D354 */
 
 /* fzgx:begin fn_1_12E0B8 */
-
-
-
-
-
 static inline s16 fn_1_12E0B8_kind(s16 id) {
     Fn12E0B8_Entry *entries;
     s16 j;

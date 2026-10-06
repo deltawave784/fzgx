@@ -732,7 +732,6 @@ void fn_1_134A4C(void) {
 /* fzgx:end fn_1_134A4C */
 
 /* fzgx:begin fn_1_134AD4 */
-
 void fn_1_134AD4(void) {
     FontDrawPacket packet;
     s16 height;
@@ -1319,7 +1318,6 @@ int fn_1_139A3C(int arg0) {
 /* fzgx:end fn_1_139A3C */
 
 /* fzgx:begin fn_1_139AEC */
-
 typedef struct {
     u8 pad0[0x20];
     void *unk_20;
@@ -5039,13 +5037,11 @@ s16 fn_1_14F090(s16 value, s16 occurrence) {
 
 /* fzgx:begin fn_1_14F118 noprologue */
 #include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/sel_static_disp.h"
 #include "font.h"
 
 typedef struct {
     u32 v[8];
-} Word8;
+} fn_1_14F118_Word8;
 
 typedef struct {
     u8 pad0[0x4];
@@ -5057,13 +5053,13 @@ typedef struct {
     u8 pad18[0x18];
     s32 unk_30;
     u8 pad34[0x24];
-} Sp8;
+} fn_1_14F118_Sp8;
 
 typedef struct {
     u32 value[22];
-} Fn139F18Data;
+} fn_1_14F118_Fn139F18Data;
 
-typedef struct StaticDispParams {
+typedef struct fn_1_14F118_StaticDispParams {
     s32 id;
     f32 x;
     f32 y;
@@ -5071,7 +5067,7 @@ typedef struct StaticDispParams {
     u32 unk1[8];
     s32 count;
     u32 unk2[9];
-} StaticDispParams;
+} fn_1_14F118_StaticDispParams;
 
 struct Struct_26F8 {
     u32 unk00;
@@ -5088,7 +5084,7 @@ struct Struct_26F8 {
 
 typedef struct {
     const char *p[9];
-} PtrTab;
+} fn_1_14F118_PtrTab;
 
 struct fn_1_13F8C4_lbl_801A6410 {
     u32 unk_0;
@@ -5106,7 +5102,7 @@ typedef struct {
     s16 indices[2];
     u8 pad8[4];
     u32 flags;
-} Source;
+} fn_1_14F118_Source;
 
 typedef struct {
     s16 index;
@@ -5114,7 +5110,7 @@ typedef struct {
     char text[0x320];
     void *object;
     void *handle[4];
-} Display;
+} fn_1_14F118_Display;
 
 struct Sig_fn_80071718_fn_80071718_Arg0 {
     u8 pad_0[0xC];
@@ -5139,77 +5135,77 @@ typedef struct {
     u8 data[4];
     f32 value;
     u8 tail[8];
-} Fn1_14E9E4Entry;
+} fn_1_14F118_Fn1_14E9E4Entry;
 
-typedef struct fn_1_150C8C_Entry {
+typedef struct fn_1_14F118_fn_1_150C8C_Entry {
     u8 pad[0x68];
     u32 active;
     u8 tail[0x40];
-} fn_1_150C8C_Entry;
+} fn_1_14F118_fn_1_150C8C_Entry;
 
-typedef struct fn_1_150C8C_Object {
+typedef struct fn_1_14F118_fn_1_150C8C_Object {
     u8 pad_84[0x84];
     s32 count;
-    fn_1_150C8C_Entry entries[1];
-} fn_1_150C8C_Object;
+    fn_1_14F118_fn_1_150C8C_Entry entries[1];
+} fn_1_14F118_fn_1_150C8C_Object;
 
-typedef struct fn_1_150F30_StaticDisp {
+typedef struct fn_1_14F118_fn_1_150F30_StaticDisp {
     u8 pad_2728[0x2728];
     s32 unk_2728;
     s32 unk_272c;
-} fn_1_150F30_StaticDisp;
+} fn_1_14F118_fn_1_150F30_StaticDisp;
 
-typedef struct Fn14E09CValue {
+typedef struct fn_1_14F118_Fn14E09CValue {
     void *value;
-} Fn14E09CValue;
+} fn_1_14F118_Fn14E09CValue;
 
-typedef struct Fn14E09CRef {
+typedef struct fn_1_14F118_Fn14E09CRef {
     u8 pad8[8];
-    Fn14E09CValue *value;
-} Fn14E09CRef;
+    fn_1_14F118_Fn14E09CValue *value;
+} fn_1_14F118_Fn14E09CRef;
 
-typedef struct Fn14E09CObj {
+typedef struct fn_1_14F118_Fn14E09CObj {
     u8 pad344[0x344];
-    Fn14E09CRef *ref;
-} Fn14E09CObj;
+    fn_1_14F118_Fn14E09CRef *ref;
+} fn_1_14F118_Fn14E09CObj;
 
-typedef struct DispNode {
+typedef struct fn_1_14F118_DispNode {
     u8 pad[4];
     f32 value;
-} DispNode;
+} fn_1_14F118_DispNode;
 
-typedef struct DispChildList {
-    DispNode *child[3];
-} DispChildList;
+typedef struct fn_1_14F118_DispChildList {
+    fn_1_14F118_DispNode *child[3];
+} fn_1_14F118_DispChildList;
 
-typedef struct DispObject {
+typedef struct fn_1_14F118_DispObject {
     u32 flags;
     u8 pad0[12];
     f32 value;
     u8 pad1[32];
-    DispChildList *children;
-} DispObject;
+    fn_1_14F118_DispChildList *children;
+} fn_1_14F118_DispObject;
 
-typedef struct fn_1_151668_StaticDispEntry {
+typedef struct fn_1_14F118_fn_1_151668_StaticDispEntry {
     f32 first;
     u8 pad0[0x18];
     f32 values[3];
-    DispObject *object;
+    fn_1_14F118_DispObject *object;
     u8 active;
     u8 scale_first;
     u8 scale_second;
     u8 clear_flag;
     u8 pad2[0x0c];
-} fn_1_151668_StaticDispEntry;
+} fn_1_14F118_fn_1_151668_StaticDispEntry;
 
-typedef struct fn_1_151668_StaticDisp {
+typedef struct fn_1_14F118_fn_1_151668_StaticDisp {
     u8 pad0[0x1830];
-    fn_1_151668_StaticDispEntry entries[63];
+    fn_1_14F118_fn_1_151668_StaticDispEntry entries[63];
     u8 pad1[0x30];
     s32 entry_count;
     s32 value_2728;
     s32 value_272c;
-} fn_1_151668_StaticDisp;
+} fn_1_14F118_fn_1_151668_StaticDisp;
 extern s16 fn_1_14F090(void *, s16);
 extern s16 fn_1_14F01C(void *);
 
@@ -5388,13 +5384,11 @@ s16 fn_1_14F19C(s16 wanted, s16 arg, u32 mask) {
 
 /* fzgx:begin fn_1_14F270 noprologue */
 #include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/sel_static_disp.h"
 #include "font.h"
 
 typedef struct {
     u32 v[8];
-} Word8;
+} fn_1_14F270_Word8;
 
 typedef struct {
     u8 pad0[0x4];
@@ -5406,13 +5400,13 @@ typedef struct {
     u8 pad18[0x18];
     s32 unk_30;
     u8 pad34[0x24];
-} Sp8;
+} fn_1_14F270_Sp8;
 
 typedef struct {
     u32 value[22];
-} Fn139F18Data;
+} fn_1_14F270_Fn139F18Data;
 
-typedef struct StaticDispParams {
+typedef struct fn_1_14F270_StaticDispParams {
     s32 id;
     f32 x;
     f32 y;
@@ -5420,7 +5414,7 @@ typedef struct StaticDispParams {
     u32 unk1[8];
     s32 count;
     u32 unk2[9];
-} StaticDispParams;
+} fn_1_14F270_StaticDispParams;
 
 struct Struct_26F8 {
     u32 unk00;
@@ -5437,7 +5431,7 @@ struct Struct_26F8 {
 
 typedef struct {
     const char *p[9];
-} PtrTab;
+} fn_1_14F270_PtrTab;
 
 struct fn_1_13F8C4_lbl_801A6410 {
     u32 unk_0;
@@ -5455,7 +5449,7 @@ typedef struct {
     s16 indices[2];
     u8 pad8[4];
     u32 flags;
-} Source;
+} fn_1_14F270_Source;
 
 typedef struct {
     s16 index;
@@ -5463,7 +5457,7 @@ typedef struct {
     char text[0x320];
     void *object;
     void *handle[4];
-} Display;
+} fn_1_14F270_Display;
 
 struct Sig_fn_80071718_fn_80071718_Arg0 {
     u8 pad_0[0xC];
@@ -5488,77 +5482,77 @@ typedef struct {
     u8 data[4];
     f32 value;
     u8 tail[8];
-} Fn1_14E9E4Entry;
+} fn_1_14F270_Fn1_14E9E4Entry;
 
-typedef struct fn_1_150C8C_Entry {
+typedef struct fn_1_14F270_fn_1_150C8C_Entry {
     u8 pad[0x68];
     u32 active;
     u8 tail[0x40];
-} fn_1_150C8C_Entry;
+} fn_1_14F270_fn_1_150C8C_Entry;
 
-typedef struct fn_1_150C8C_Object {
+typedef struct fn_1_14F270_fn_1_150C8C_Object {
     u8 pad_84[0x84];
     s32 count;
-    fn_1_150C8C_Entry entries[1];
-} fn_1_150C8C_Object;
+    fn_1_14F270_fn_1_150C8C_Entry entries[1];
+} fn_1_14F270_fn_1_150C8C_Object;
 
-typedef struct fn_1_150F30_StaticDisp {
+typedef struct fn_1_14F270_fn_1_150F30_StaticDisp {
     u8 pad_2728[0x2728];
     s32 unk_2728;
     s32 unk_272c;
-} fn_1_150F30_StaticDisp;
+} fn_1_14F270_fn_1_150F30_StaticDisp;
 
-typedef struct Fn14E09CValue {
+typedef struct fn_1_14F270_Fn14E09CValue {
     void *value;
-} Fn14E09CValue;
+} fn_1_14F270_Fn14E09CValue;
 
-typedef struct Fn14E09CRef {
+typedef struct fn_1_14F270_Fn14E09CRef {
     u8 pad8[8];
-    Fn14E09CValue *value;
-} Fn14E09CRef;
+    fn_1_14F270_Fn14E09CValue *value;
+} fn_1_14F270_Fn14E09CRef;
 
-typedef struct Fn14E09CObj {
+typedef struct fn_1_14F270_Fn14E09CObj {
     u8 pad344[0x344];
-    Fn14E09CRef *ref;
-} Fn14E09CObj;
+    fn_1_14F270_Fn14E09CRef *ref;
+} fn_1_14F270_Fn14E09CObj;
 
-typedef struct DispNode {
+typedef struct fn_1_14F270_DispNode {
     u8 pad[4];
     f32 value;
-} DispNode;
+} fn_1_14F270_DispNode;
 
-typedef struct DispChildList {
-    DispNode *child[3];
-} DispChildList;
+typedef struct fn_1_14F270_DispChildList {
+    fn_1_14F270_DispNode *child[3];
+} fn_1_14F270_DispChildList;
 
-typedef struct DispObject {
+typedef struct fn_1_14F270_DispObject {
     u32 flags;
     u8 pad0[12];
     f32 value;
     u8 pad1[32];
-    DispChildList *children;
-} DispObject;
+    fn_1_14F270_DispChildList *children;
+} fn_1_14F270_DispObject;
 
-typedef struct fn_1_151668_StaticDispEntry {
+typedef struct fn_1_14F270_fn_1_151668_StaticDispEntry {
     f32 first;
     u8 pad0[0x18];
     f32 values[3];
-    DispObject *object;
+    fn_1_14F270_DispObject *object;
     u8 active;
     u8 scale_first;
     u8 scale_second;
     u8 clear_flag;
     u8 pad2[0x0c];
-} fn_1_151668_StaticDispEntry;
+} fn_1_14F270_fn_1_151668_StaticDispEntry;
 
-typedef struct fn_1_151668_StaticDisp {
+typedef struct fn_1_14F270_fn_1_151668_StaticDisp {
     u8 pad0[0x1830];
-    fn_1_151668_StaticDispEntry entries[63];
+    fn_1_14F270_fn_1_151668_StaticDispEntry entries[63];
     u8 pad1[0x30];
     s32 entry_count;
     s32 value_2728;
     s32 value_272c;
-} fn_1_151668_StaticDisp;
+} fn_1_14F270_fn_1_151668_StaticDisp;
 extern s16 fn_1_14F090(void *, s16);
 extern s16 fn_1_14F01C(void *);
 extern u32 lbl_1_rodata_99D8[75];
@@ -6448,8 +6442,6 @@ void fn_1_150C8C(fn_1_150C8C_Object *obj) {
 /* fzgx:end fn_1_150C8C */
 
 /* fzgx:begin fn_1_150CEC */
-
-
 void fn_1_150CEC(fn_1_150CEC_Object *obj) {
     s32 count;
     fn_1_150CEC_Entry *entry;
@@ -6465,8 +6457,6 @@ void fn_1_150CEC(fn_1_150CEC_Object *obj) {
 /* fzgx:end fn_1_150CEC */
 
 /* fzgx:begin fn_1_150ED0 */
-
-
 void fn_1_150ED0(fn_1_150ED0_Object *obj, void *arg) {
     s32 count;
     fn_1_150ED0_Entry *entry;

@@ -198,9 +198,6 @@ void fn_1_DCED0(BgForObject *object) {
 /* fzgx:end fn_1_DCED0 */
 
 /* fzgx:begin fn_1_DCF54 */
-
-
-
 void fn_1_DCF54(fn_1_DCF54_Vec3 *a, fn_1_DCF54_Vec3 *b, fn_1_DCF54_Vec3 *c) {
     lbl_1_bss_7ADE8.a = *a;
     lbl_1_bss_7ADE8.b = *b;

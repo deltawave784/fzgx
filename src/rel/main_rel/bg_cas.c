@@ -1318,7 +1318,6 @@ void fn_1_FED34(void *arg0) {
 /* fzgx:end fn_1_FED34 */
 
 /* fzgx:begin fn_1_FF6B8 */
-
 /* Literal pool of the retail TU (lbl_1_rodata_76A8): MWCC pools literals in
  * first-use order across the TU, so the earlier functions' literals come first. */
 #pragma section code_type ".fzgxpool"

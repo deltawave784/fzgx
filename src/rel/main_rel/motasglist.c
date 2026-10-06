@@ -363,7 +363,6 @@ void *fn_1_41B18(Object *obj, s32 unused, s32 index) {
 /* fzgx:end fn_1_41B18 */
 
 /* fzgx:begin fn_1_41BDC */
-
 void *fn_1_41BDC(data, index)
 fn_1_41BDC_MotasglistData *data;
 s32 index;
@@ -578,12 +577,6 @@ void fn_1_426E4(Fn1426E4Object *object, void *value) {
 /* fzgx:end fn_1_426E4 */
 
 /* fzgx:begin fn_1_42AD0 */
-
-
-
-
-
-
 static inline void fn_1_42AD0_save_keys(Fn142AD0Entry *entry, s32 k) {
     entry->keys[0][1][k] = entry->keys[0][0][k];
     entry->keys[1][1][k] = entry->keys[1][0][k];
@@ -674,10 +667,6 @@ void fn_1_42AD0(Fn142AD0Object *object, void *arg1, u32 arg2, u16 arg3, u16 arg4
 /* fzgx:end fn_1_42AD0 */
 
 /* fzgx:begin fn_1_42E74 */
-
-
-
-
 void fn_1_42E74(Fn142E74Object *object) {
     s32 i;
     Fn142E74Entry *entry;
@@ -720,7 +709,6 @@ void fn_1_42E74(Fn142E74Object *object) {
 /* fzgx:end fn_1_42E74 */
 
 /* fzgx:begin fn_1_4300C */
-
 void fn_1_4300C(Fn14300CObject *object) {
     fn_1_43264((u8 *)object + 0x40, object->value);
     if (object->flags & 1) {
@@ -865,7 +853,6 @@ void fn_1_4322C(struct fn_1_4322C_Arg0 *arg0) {
 /* fzgx:end fn_1_4322C */
 
 /* fzgx:begin fn_1_433A4 */
-
 void fn_1_433A4(Fn1433A4Object *dst, Fn1433A4Object *src) {
     dst->value0 = src->value0;
     dst->value5 = src->value5;
@@ -878,13 +865,6 @@ void fn_1_433A4(Fn1433A4Object *dst, Fn1433A4Object *src) {
 /* fzgx:end fn_1_433A4 */
 
 /* fzgx:begin fn_1_433E0 */
-
-
-
-
-
-
-
 // Matrix A lives at the start of the locked-cache window.
 #define MTXA ((f32 *)(LC_BASE + 0x0))
 

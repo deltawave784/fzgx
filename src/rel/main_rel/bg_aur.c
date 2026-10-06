@@ -448,7 +448,6 @@ void fn_1_153AF8(u32 *entries) {
 /* fzgx:end fn_1_153AF8 */
 
 /* fzgx:begin fn_1_153B24 */
-
 void fn_1_153B24(data, lab_unused0, lab_unused1, lab_unused2)
 Fn153B24Data *data;
 u32 lab_unused0;
@@ -490,7 +489,6 @@ u32 lab_unused2;
 /* fzgx:end fn_1_153B24 */
 
 /* fzgx:begin fn_1_153C60 */
-
 void fn_1_153C60(u8 *base) {
     u8 *entry;
     u8 *slot;
@@ -539,7 +537,6 @@ void fn_1_153D48(void *background) {
 /* fzgx:end fn_1_153D48 */
 
 /* fzgx:begin fn_1_1540B0 */
-
 void fn_1_1540B0(u32 value) {
     u32 *table;
     s32 i;

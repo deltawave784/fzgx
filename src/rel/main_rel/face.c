@@ -140,7 +140,6 @@ void fn_1_D1848(void) {
 /* fzgx:end fn_1_D1848 */
 
 /* fzgx:begin fn_1_D1C94 */
-
 typedef struct {
     u32 unk_0;
     u32 unk_4;
@@ -422,7 +421,6 @@ u32 fn_1_D2FB0(void) {
 /* fzgx:end fn_1_D2FB0 */
 
 /* fzgx:begin fn_1_D2FC0 */
-
 #pragma section code_type ".fzgxpool"
 static void fzgx_string_layout(void) {
     /* fzgx-allow: S2 layout primer: MWCC emits string literals in first-use order; the section is dropped at integration */
@@ -446,8 +444,6 @@ void fn_1_D2FC0(void) {
 /* fzgx:end fn_1_D2FC0 */
 
 /* fzgx:begin fn_1_D3020 */
-
-
 typedef struct Allocated {
     u8 unk_0[0x20];
     u32 size;

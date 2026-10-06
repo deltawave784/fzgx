@@ -182,7 +182,6 @@ extern u32 lbl_1_bss_DAC;
 extern u32 fn_80008EC8(u32, u32, u32);
 
 /* fzgx:begin fn_1_634 */
-
 void * fn_1_634(void) {
     fn_8006FFC4(lbl_1_bss_54.unk_0);
     return &lbl_1_bss_54;
@@ -190,7 +189,6 @@ void * fn_1_634(void) {
 /* fzgx:end fn_1_634 */
 
 /* fzgx:begin fn_1_668 */
-
 void fn_1_668(void) {
     u32 arena_lo;
     u32 aligned_lo;
@@ -206,7 +204,6 @@ void fn_1_668(void) {
 /* fzgx:end fn_1_668 */
 
 /* fzgx:begin fn_1_6D4 */
-
 struct fn_1_6D4_Data {
     s16 unk_0;
     s16 unk_2;
@@ -275,8 +272,6 @@ void fn_1_6D4(struct fn_1_6D4_Data *data) {
 /* fzgx:end fn_1_6D4 */
 
 /* fzgx:begin fn_1_798 */
-
-
 void fn_1_798(void) {
     s32 value;
     s16 index;
@@ -291,11 +286,6 @@ void fn_1_798(void) {
 /* fzgx:end fn_1_798 */
 
 /* fzgx:begin fn_1_814 */
-
-
-
-
-
 struct fn_1_814_Arg0 {
     u8 unk_0;
     u8 unk_1;
@@ -389,14 +379,12 @@ void fn_1_8D4(void) {
 /* fzgx:end fn_1_8D4 */
 
 /* fzgx:begin fn_1_904 */
-
 u32 fn_1_904(void) {
     return lbl_1_bss_4.unk_0;
 }
 /* fzgx:end fn_1_904 */
 
 /* fzgx:begin fn_1_914 */
-
 u32 fn_1_914(void) {
     return lbl_1_bss_0.unk_0;
 }
@@ -441,7 +429,6 @@ void fn_1_E34(void) {
 /* fzgx:end fn_1_E34 */
 
 /* fzgx:begin fn_1_E78 */
-
 void fn_1_E78(void) {
     u32 t0;
     t0 = fn_1_A59AC();
@@ -643,7 +630,8 @@ void fn_1_1280(u32 arg0) {
 
 /* fzgx:begin fn_1_128C noprologue */
 #include "types.h"
-#include "rel/main_rel/globals.h"
+
+extern struct fn_1_ECC_Overlay lbl_1_data_7C0[];
 
 extern u32 camera_set_state_flag(u32);
 extern u32 fn_1_D31E0(u32);
@@ -664,8 +652,6 @@ u32 fn_1_128C(void) {
 /* fzgx:end fn_1_128C */
 
 /* fzgx:begin fn_1_12B4 */
-
-
 void fn_1_12B4(void) {
     s16 v0;
     v0 = lbl_1_bss_962.unk_0;
@@ -998,7 +984,6 @@ void fn_1_3920(void) {
 /* fzgx:end fn_1_3920 */
 
 /* fzgx:begin fn_1_3B34 */
-
 void fn_1_3B34(void) {
     u32 i;
 
@@ -1035,7 +1020,6 @@ void fn_1_3BDC(u32 arg0) {
 /* fzgx:end fn_1_3BDC */
 
 /* fzgx:begin fn_1_3C78 */
-
 void fn_1_3C78(void) {
     if (lbl_1_bss_D78 == 0) { return; }
     lbl_1_bss_DA4 = 0;
@@ -1043,8 +1027,6 @@ void fn_1_3C78(void) {
 /* fzgx:end fn_1_3C78 */
 
 /* fzgx:begin fn_1_3C98 */
-
-
 void fn_1_3C98(void) {
     if (lbl_1_bss_D78 == 0) { return; }
     if (lbl_1_bss_DA5.unk_0 != 0) { return; }
@@ -1448,8 +1430,6 @@ void fn_1_43F4(void) {
 /* fzgx:end fn_1_43F4 */
 
 /* fzgx:begin fn_1_4404 */
-
-
 void fn_1_4404(void) {
     u32 t0;
     t0 = fn_80008E84(lbl_1_bss_DC0.unk_0);
@@ -1458,8 +1438,6 @@ void fn_1_4404(void) {
 /* fzgx:end fn_1_4404 */
 
 /* fzgx:begin fn_1_4438 */
-
-
 void fn_1_4438(void) {
     u32 t0;
     t0 = fn_80008E84(lbl_1_bss_DC4.unk_0);
@@ -1485,8 +1463,6 @@ u32 fn_1_44A4(void) {
 /* fzgx:end fn_1_44A4 */
 
 /* fzgx:begin fn_1_44B4 */
-
-
 void fn_1_44B4(void) {
     struct fn_1_44B4_lbl_1_bss_DB8 *p_lbl_1_bss_DB8;
     u32 t0, t1, t2, t3;
@@ -1574,7 +1550,6 @@ u32 fn_1_451C(void) {
 /* fzgx:end fn_1_451C */
 
 /* fzgx:begin fn_1_45D0 */
-
 s32 fn_1_45D0(u32 arg0, u32 arg1) {
     u32 v0;
     u32 t0, t1, t2;
@@ -1599,7 +1574,6 @@ s32 fn_1_45D0(u32 arg0, u32 arg1) {
 /* fzgx:end fn_1_45D0 */
 
 /* fzgx:begin fn_1_4630 */
-
 u32 fn_1_4630(u32 arg0, u32 arg1) {
     u32 v0;
     u32 v1;
@@ -1632,7 +1606,6 @@ u32 fn_1_4630(u32 arg0, u32 arg1) {
 /* fzgx:end fn_1_4630 */
 
 /* fzgx:begin fn_1_46B4 */
-
 void fn_1_46B4(u32 arg0, u32 arg1, const char *arg2, int arg3) {
     if (arg1 == 0) {
         OSPanic(arg2, arg3, lbl_1_data_2C9C);
@@ -1642,8 +1615,6 @@ void fn_1_46B4(u32 arg0, u32 arg1, const char *arg2, int arg3) {
 /* fzgx:end fn_1_46B4 */
 
 /* fzgx:begin fn_1_4730 */
-
-
 void fn_1_4730(u32 value, u32 count, u32 size, const char *file, int line) {
     s32 remaining;
     Fn1_4730Entry *entry;
@@ -1677,7 +1648,6 @@ void fn_1_4730(u32 value, u32 count, u32 size, const char *file, int line) {
 /* fzgx:end fn_1_4730 */
 
 /* fzgx:begin fn_1_48B0 */
-
 s32 fn_1_48B0(u32 arg0, u32 arg1) {
     s32 v0;
     v0 = (arg1 * ((u32)(lbl_801A6CF8.unk_0 - arg0) / (u32)arg1));
@@ -1691,9 +1661,6 @@ s32 fn_1_48B0(u32 arg0, u32 arg1) {
 /* fzgx:end fn_1_48B0 */
 
 /* fzgx:begin fn_1_48E8 */
-
-
-
 #pragma opt_propagation off
 s32 fn_1_48E8(u32 arg0, u32 arg1) {
     u32 step;

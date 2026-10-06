@@ -273,7 +273,6 @@ void fn_1_C6F80(u8 value) {
 /* fzgx:end fn_1_C6F80 */
 
 /* fzgx:begin fn_1_C7224 */
-
 typedef struct {
     u8 padding[0x94];
     u32 flags;
@@ -304,8 +303,6 @@ void fn_1_C7224(void) {
 /* fzgx:end fn_1_C7224 */
 
 /* fzgx:begin fn_1_C72D4 */
-
-
 void fn_1_C72D4(void) {
     int mode;
     fn_1_C72D4_EnemyCtrl *enemy;
@@ -348,8 +345,6 @@ void fn_1_C72D4(void) {
 /* fzgx:end fn_1_C72D4 */
 
 /* fzgx:begin fn_1_C771C */
-
-
 void fn_1_C771C(void) {
     int mode;
     fn_1_C771C_EnemyCtrl *ctrl;
@@ -464,9 +459,6 @@ void fn_1_CA2A4(int self) {
 /* fzgx:end fn_1_CA2A4 */
 
 /* fzgx:begin fn_1_CA690 */
-
-
-
 typedef struct {
     u32 x[22];
 } fn_1_CA690_LocalData;
@@ -721,7 +713,6 @@ f32 arg4;
 /* fzgx:end fn_1_CC280 */
 
 /* fzgx:begin fn_1_CC8E4 */
-
 void fn_1_CC8E4(s32 arg0, s32 arg1, s32 arg2) {
     FontDrawPacket sp30;
     u32 sp8[10];
@@ -939,8 +930,6 @@ void fn_1_CD51C(void *object) {
 /* fzgx:end fn_1_CD51C */
 
 /* fzgx:begin fn_1_CD6C0 */
-
-
 typedef struct fn_1_CD6C0_target {
     u8 pad0[0x10c];
     s32 flags;
@@ -1083,7 +1072,6 @@ void fn_1_CD7BC(int arg0) {
 /* fzgx:end fn_1_CD7BC */
 
 /* fzgx:begin fn_1_CF5B0 */
-
 void fn_1_CF5B0(void *self) {
     FontDrawPacket loc_10;
     u32 spC;
@@ -1153,7 +1141,6 @@ void fn_1_CF5B0(void *self) {
 /* fzgx:end fn_1_CF5B0 */
 
 /* fzgx:begin fn_1_CFA0C */
-
 u32 fn_1_CFA0C(void) {
     u32 bit = (((u32 *)&lbl_1_data_3D544)[fn_1_5910()] >> 16) & 1;
     return bit ? 0 : 0;
@@ -1161,7 +1148,6 @@ u32 fn_1_CFA0C(void) {
 /* fzgx:end fn_1_CFA0C */
 
 /* fzgx:begin fn_1_CFA4C */
-
 struct fn_1_CFA4C_Copy88 { u32 a[22]; };
 
 
@@ -1261,7 +1247,6 @@ void fn_1_CFF94(u32 arg0, s16 arg1, f32 arg2) {
 /* fzgx:end fn_1_CFF94 */
 
 /* fzgx:begin fn_1_D01B0 */
-
 void fn_1_D01B0(f32 farg0) {
     FontDrawPacket loc_B8;
     u32 sp80[14];
@@ -1489,8 +1474,6 @@ u8* fn_1_D0E64(void) {
 /* fzgx:end fn_1_D0E64 */
 
 /* fzgx:begin fn_1_D0E74 */
-
-
 struct fn_1_D0E74_lbl_1_data_3D648 {
     u8 pad_0[0x4];
     u16 unk_4;

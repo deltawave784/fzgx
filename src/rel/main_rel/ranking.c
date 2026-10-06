@@ -223,7 +223,6 @@ void fn_1_15555C(void) {
 /* fzgx:end fn_1_15555C */
 
 /* fzgx:begin fn_1_1555B0 */
-
 s32 fn_1_1555B0(s32 value) {
     u32 state = (u32)&lbl_1_bss_8EF20;
     s16 index_0;
@@ -688,8 +687,6 @@ void fn_1_156754(s32 index) {
 /* fzgx:end fn_1_156754 */
 
 /* fzgx:begin fn_1_1567A8 */
-
-
 void fn_1_1567A8(s32 index) {
     Entry *entry;
     u32 value;
@@ -740,9 +737,6 @@ void fn_1_156884(s32 index) {
 /* fzgx:end fn_1_156884 */
 
 /* fzgx:begin fn_1_1568C4 */
-
-
-
 #pragma opt_propagation off
 void fn_1_1568C4(fn_1_1568C4_RankingState *state) {
     u32 value;
@@ -782,7 +776,6 @@ void fn_1_1568C4(fn_1_1568C4_RankingState *state) {
 /* fzgx:end fn_1_1568C4 */
 
 /* fzgx:begin fn_1_1569A0 */
-
 void fn_1_1569A0(fn_1_1569A0_State *state) {
     if (state->flags & 1) {
         fn_8006B7B4( (u32)(void *)(state->data));
@@ -847,7 +840,6 @@ void fn_1_1569E8(void *entry) {
 /* fzgx:end fn_1_1569E8 */
 
 /* fzgx:begin fn_1_156B18 */
-
 void fn_1_156B18(fn_1_156B18_State *state) {
     if (state->flags & 4) {
         fn_8006B7B4( (u32)(void *)(state->data1));
@@ -1014,9 +1006,6 @@ void fn_1_157070(fn_1_157070_RankingState *state) {
 /* fzgx:end fn_1_157070 */
 
 /* fzgx:begin fn_1_157200 */
-
-
-
 typedef struct {
     u8 kind;
     u8 _pad01[3];
@@ -1088,8 +1077,6 @@ void fn_1_157200(fn_1_157200_RankingState *state) {
 /* fzgx:end fn_1_157200 */
 
 /* fzgx:begin fn_1_157358 */
-
-
 typedef struct {
     u8 type;
     u8 _pad01[3];
@@ -1177,8 +1164,6 @@ void fn_1_157358(fn_1_157358_RankingState *state) {
 /* fzgx:end fn_1_157358 */
 
 /* fzgx:begin fn_1_1574E0 */
-
-
 typedef struct {
     u8 type;
     u8 _pad01[3];
@@ -1231,8 +1216,6 @@ void fn_1_1574E0(fn_1_1574E0_RankingState *state) {
 /* fzgx:end fn_1_1574E0 */
 
 /* fzgx:begin fn_1_157598 */
-
-
 typedef struct {
     u8 type;
     u8 _pad01[3];
@@ -1305,9 +1288,6 @@ void fn_1_157598(fn_1_157598_RankingState *state) {
 /* fzgx:end fn_1_157598 */
 
 /* fzgx:begin fn_1_1576B4 */
-
-
-
 #pragma opt_propagation off
 void fn_1_1576B4(Obj_fn_1_1576B4 *obj) {
     Param_fn_1_1576B4 param;
@@ -1443,7 +1423,6 @@ void fn_1_157820(void) {
 /* fzgx:end fn_1_157820 */
 
 /* fzgx:begin fn_1_1578C4 */
-
 void fn_1_1578C4(void) {
     s8 v0;
     u32 t2;
@@ -1687,7 +1666,6 @@ void fn_1_1596DC(int index) {
 /* fzgx:end fn_1_1596DC */
 
 /* fzgx:begin fn_1_159804 */
-
 s16 fn_1_159804(s16 value, fn_1_159804_RankingEntry *entry) {
     s16 head;
     s16 next;

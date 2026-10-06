@@ -50,8 +50,6 @@ extern void fn_1_3EF14(void *arg1);
 extern f32 lbl_1_rodata_16C;
 
 /* fzgx:begin fn_1_4928 */
-
-
 void fn_1_4928(void) {
     u32 value;
     u32 count;
@@ -88,7 +86,6 @@ void fn_1_49F0(u32 *value) {
 /* fzgx:end fn_1_49F0 */
 
 /* fzgx:begin fn_1_4A00 */
-
 void fn_1_4A00(s32 fadeIn, u8 steps, u32 arg) {
     u32 saved;
 
@@ -218,7 +215,6 @@ void fn_1_4CD8(void) {
 /* fzgx:end fn_1_4CD8 */
 
 /* fzgx:begin fn_1_4D14 pool */
-
 f32 fn_1_4D14(Fn14D14Data *data) {
     f32 value3;
     u8 value;

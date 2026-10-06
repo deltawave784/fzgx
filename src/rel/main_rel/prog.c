@@ -97,10 +97,6 @@ extern f32 fn_1_A6FE8(void);
 extern void fn_1_A714C(f32 *a, f32 *b, f32 *c, f32 *d);
 
 /* fzgx:begin fn_1_A6870 */
-
-
-
-
 void fn_1_A6870(u32 *arg0) {
     Sig_GXAdjustForOverscan_GXRenderModeObj *rmode;
     s32 tv;
@@ -346,7 +342,6 @@ f32 fn_1_A71BC(void) {
 /* fzgx:end fn_1_A71BC */
 
 /* fzgx:begin fn_1_A71CC */
-
 typedef struct {
     u32 unk_0;
     u32 unk_4;
@@ -365,7 +360,6 @@ void fn_1_A71CC(void) {
 /* fzgx:end fn_1_A71CC */
 
 /* fzgx:begin fn_1_A722C */
-
 typedef struct {
     u32 unk_0;
     u32 unk_4;

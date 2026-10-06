@@ -474,7 +474,6 @@ void fn_1_98640(Obj_1_data_27DE0 *obj) {
 /* fzgx:end fn_1_98640 */
 
 /* fzgx:begin fn_1_986A4 */
-
 void *fn_1_986A4(void) {
     u8 *q;
     s8 *p = (s8 *)(*((u32 *)&lbl_1_bss_6EA04)) + 8;
@@ -526,7 +525,6 @@ void fn_1_987D0(u32 address) {
 /* fzgx:end fn_1_987D0 */
 
 /* fzgx:begin fn_1_98804 */
-
 struct fn_1_98804_lbl_1_bss_6EA04 {
     u32 unk_0;
 };
@@ -544,7 +542,6 @@ void fn_1_98804(struct fn_1_98804_Arg0 *arg0) {
 /* fzgx:end fn_1_98804 */
 
 /* fzgx:begin fn_1_98840 */
-
 void fn_1_98840(Node *node) {
     Node *next = node->next;
     Node *prev = node->prev;
@@ -1125,8 +1122,6 @@ void fn_1_9CC6C(void *arg0, s32 arg1) {
 /* fzgx:end fn_1_9CC6C */
 
 /* fzgx:begin fn_1_9CCE8 */
-
-
 void fn_1_9CCE8(s32 arg0) {
     fn_1_9CCE8_Vec3 value;
     s32 result;
@@ -1302,9 +1297,6 @@ void fn_1_9D2EC(void) {
 /* fzgx:end fn_1_9D2EC */
 
 /* fzgx:begin fn_1_9D360 */
-
-
-
 // Builds the burner's entry pointers from its index list, then finalizes it.
 void fn_1_9D360(Burner *burner, fn_1_9D360_BurnerTable *table, u8 *indices) {
     void **out;
@@ -1323,8 +1315,6 @@ void fn_1_9D360(Burner *burner, fn_1_9D360_BurnerTable *table, u8 *indices) {
 
 /* fzgx:begin fn_1_9D3E8 noprologue */
 #include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/burner.h"
 
 extern void fn_1_55A84(void (*callback)(void), void *arg0, s32 arg1, s32 arg2);
 

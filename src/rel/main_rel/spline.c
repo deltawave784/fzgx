@@ -158,8 +158,6 @@ extern void fn_8001D3E4(u32 channel, u32 command);
 extern u32 lbl_801A66A0;
 
 /* fzgx:begin fn_1_F4F08 */
-
-
 /* Natural cubic spline setup: computes second derivatives y2[] for the
  * knots (x[], y[]) by tridiagonal elimination. */
 void fn_1_F4F08(u32 n, f32 *x, f32 *y, f32 *y2) {
@@ -1200,8 +1198,6 @@ void fn_1_F8D5C(u32 arg0, u32 arg1) {
 /* fzgx:end fn_1_F8D5C */
 
 /* fzgx:begin fn_1_F8DC4 */
-
-
 void fn_1_F8DC4(s16 index0, s16 index1, void *arg0) {
     struct fn_1_F8DC4_Table table;
 
@@ -1841,9 +1837,6 @@ void fn_1_FA898(void) {
 /* fzgx:end fn_1_FA898 */
 
 /* fzgx:begin fn_1_FA89C */
-
-
-
 void fn_1_FA89C(SplineViewportHolder *holder) {
     int count;
     u32 x, w, y, h;

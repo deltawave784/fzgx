@@ -312,7 +312,6 @@ void fn_1_ECF68(void) {
 /* fzgx:end fn_1_ECF68 */
 
 /* fzgx:begin fn_1_EE3F4 */
-
 void fn_1_EE3F4(void) {
     u8 *base;
     void *unk_38c4;
@@ -705,8 +704,6 @@ void fn_1_F0164(void) {
 /* fzgx:end fn_1_F0164 */
 
 /* fzgx:begin fn_1_F143C */
-
-
 #pragma opt_common_subs off
 void fn_1_F143C(FnObject *obj, s32 index, const f32 *a, const f32 *b, void *arg5) {
     u32 *entry;
@@ -886,7 +883,6 @@ void fn_1_F1950(void) {
 /* fzgx:end fn_1_F1950 */
 
 /* fzgx:begin fn_1_F1960 */
-
 void fn_1_F1960(void *arg0, void *arg1, u32 arg2) {
     u32 result;
     u8 temp[0x20];

@@ -1752,8 +1752,6 @@ u8 fn_1_7879C(u32 arg0) {
 /* fzgx:end fn_1_7879C */
 
 /* fzgx:begin fn_1_788B0 */
-
-
 /* Shared literal pool primer: screen_effect.c pools every literal of the TU
    behind one base (lbl_1_rodata_3180). These dummy functions, in a section
    the link ignores, reference the pooled literals in retail address order so

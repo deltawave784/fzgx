@@ -827,10 +827,6 @@ void fn_1_10C7B4(fn_1_10C7B4_AccessoryObject *self) {
 /* fzgx:end fn_1_10C7B4 */
 
 /* fzgx:begin fn_1_10D2F0 */
-
-
-
-
 /* The TU's literal pool, addressed through one base register. */
 
 
@@ -1269,7 +1265,6 @@ void fn_1_128884(void *arg0, void *arg1, s32 type) {
 /* fzgx:end fn_1_128884 */
 
 /* fzgx:begin fn_1_1289BC */
-
 f32 fn_1_1289BC(const Point1024C4 *a, const Point1024C4 *b) {
     f32 dz = a->v[2] - b->v[2];
     f32 dy = a->v[1] - b->v[1];

@@ -189,8 +189,6 @@ void fn_1_568EC(ShadowMap *map, u32 value0, u32 value1) {
 /* fzgx:end fn_1_568EC */
 
 /* fzgx:begin fn_1_568F8 */
-
-
 typedef struct fn_1_568F8_Mtx {
     f32 m[3][4];
 } fn_1_568F8_Mtx;

@@ -80,8 +80,6 @@ void fn_1_103F10(void *arg) {
 /* fzgx:end fn_1_103F10 */
 
 /* fzgx:begin fn_1_103F58 */
-
-
 void fn_1_103F58(void *arg0) {
     void *value;
     Fn1_103F58_Object *object;
@@ -129,8 +127,6 @@ void fn_1_105768(void) {
 
 /* fzgx:begin fn_1_1067A8 noprologue */
 #include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/bg_common.h"
 
 extern s32 fn_1_5910(void);
 extern f32 lbl_1_rodata_7960[43];

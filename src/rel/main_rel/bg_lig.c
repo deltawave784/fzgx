@@ -137,7 +137,6 @@ extern void OSPanic(const char *file, int line, const char *msg, ...);
 extern u32 lbl_1_rodata_6358;
 
 /* fzgx:begin fn_1_D5C70 */
-
 typedef struct {
     u32 unk0;
     void *data;
@@ -344,7 +343,6 @@ void fn_1_D720C(void) {
 /* fzgx:end fn_1_D720C */
 
 /* fzgx:begin fn_1_D7274 */
-
 #pragma opt_dead_assignments off
 #pragma opt_pointer_analysis on
 void fn_1_D7274(void) {
@@ -415,10 +413,6 @@ void fn_1_D7274(void) {
 /* fzgx:end fn_1_D7274 */
 
 /* fzgx:begin fn_1_D744C */
-
-
-
-
 // Initializes each available background-light entry.
 void fn_1_D744C(void) {
     Obj_1_data_2A7E0_At3C *obj;
@@ -515,7 +509,6 @@ void fn_1_D75CC(void) {
 /* fzgx:end fn_1_D75CC */
 
 /* fzgx:begin fn_1_D7688 */
-
 void fn_1_D7688(void) {
     Obj_1_data_2A7E0_At3C *obj = lbl_1_data_2A7E0.unk_3C;
     void *value = (void *)fn_1_9D260(&lbl_1_data_2A7E0);
@@ -650,12 +643,6 @@ void fn_1_D7A10(fn_1_D7A10_LigEntry *base) {
 /* fzgx:end fn_1_D7A10 */
 
 /* fzgx:begin fn_1_D7B7C */
-
-
-
-
-
-
 void fn_1_D7B7C(fn_1_D7B7C_LigEntry *base) {
     void *data;
     fn_1_D7B7C_LigEntry *entry;
@@ -681,7 +668,6 @@ void fn_1_D7B7C(fn_1_D7B7C_LigEntry *base) {
 /* fzgx:end fn_1_D7B7C */
 
 /* fzgx:begin fn_1_D8388 */
-
 // Initializes each lighting entry while the lighting system is available.
 void fn_1_D8388(void *obj) {
     u8 *entry = (u8 *)obj;
@@ -752,9 +738,6 @@ void fn_1_D8784(fn_1_D8784_LigObject *obj) {
 /* fzgx:end fn_1_D8784 */
 
 /* fzgx:begin fn_1_D8CA8 */
-
-
-
 void fn_1_D8CA8(fn_1_D8CA8_LigObject *obj) {
     s32 count = obj->count;
     fn_1_D8CA8_LigEntry *entry = obj->entries;
@@ -769,9 +752,6 @@ void fn_1_D8CA8(fn_1_D8CA8_LigObject *obj) {
 /* fzgx:end fn_1_D8CA8 */
 
 /* fzgx:begin fn_1_D8D08 */
-
-
-
 void fn_1_D8D08(LigContainer *container) {
     s32 count = container->count;
     fn_1_D8D08_LigEntry *entry = container->entries;
@@ -785,7 +765,6 @@ void fn_1_D8D08(LigContainer *container) {
 /* fzgx:end fn_1_D8D08 */
 
 /* fzgx:begin fn_1_D8D58 */
-
 #pragma section code_type ".fzgxpool"
 static const u32 fzgx_pool_table1[4] = {0x00000000, 0x0280012C, 0x00000000, 0x00000001};  /* fzgx-allow: A1 retail pool bytes */
 __declspec(section ".fzgxpool") static void fzgx_pool_keep1(void) { const u32 *volatile cp; cp = fzgx_pool_table1; }  /* fzgx-allow: S2 pool primer sink */
@@ -910,9 +889,6 @@ void fn_1_D8D58(LigObject *obj, void *arg) {
 /* fzgx:end fn_1_D8D58 */
 
 /* fzgx:begin fn_1_D8EEC */
-
-
-
 // Applies the operation to each entry in the object.
 void fn_1_D8EEC(fn_1_D8EEC_LigObject *obj, void *arg) {
     s32 count = obj->unk_6d4;

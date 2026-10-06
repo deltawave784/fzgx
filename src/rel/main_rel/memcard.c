@@ -58,15 +58,10 @@ typedef struct TimeParts {
 } TimeParts;
 extern void fn_1_A2DC4(u32 arg0);
 extern u32 fn_8002C0A0(u32 arg0);
-extern void CARDWriteAsync(void *dst, void *src, int size, int zero, int flags);
 extern s32 fn_1_45D0();
-extern void CARDMountAsync(u8, u32, void (*)(void), s32);
-extern void CARDCheckAsync(u8 byte_val, int value);
 extern u32 CARDFormatAsync(u32 arg0, u32 arg1);
 extern char *fn_80083DB0(char *dst, const char *src);
 extern char *strcat(char *dest, const char *src);
-extern void CARDFastDeleteAsync(u8 byte_val, void *arg, s32 zero);
-extern void CARDCreateAsync(u8 byte_val, void *arg1, void *arg2, void *arg3, u32 arg4);
 extern u16 fn_8002A74C(u32 arg0);
 extern void fn_80008BEC(void *dest, int value, u32 size);
 extern void fn_1_AA6D8(s32 arg0, u32 arg1, void *arg2);
@@ -109,7 +104,6 @@ extern void fn_1_49514(u32 *value);
 extern void fn_1_14FEAC(u8, u8, u8, u32 *, s16);
 extern void fn_1_4CF3C(const char *format, f32 x, ...);
 extern void *fn_1_7F49C(s16 arg0, s16 arg1, void *arg2);
-extern u64 OSGetTime(void);
 extern u64 __div2i(u64, u32, u32);
 extern u32 lbl_1_bss_7AB90[36];
 extern void fn_1_C062C(Fn1C0510Obj *, void *, void *);
@@ -120,10 +114,6 @@ extern void OSTicksToCalendarTime(u32 high, u32 low, TimeParts *parts);
 extern void fn_1_AB45C(int index);
 extern const f64 lbl_1_rodata_4CB0;
 extern const f32 lbl_1_rodata_4CAC;
-extern void CARDDeleteAsync(u8 byte, void *data, int arg);
-extern void CARDSetStatusAsync(u8 id, void *arg, void *data, int zero);
-extern void CARDRenameAsync(u8 id, void *data1, void *data2, int zero);
-extern void CARDReadAsync(void *arg0, void *arg1, void *arg2, int arg3, int arg4);
 extern const f64 lbl_1_rodata_4CC8;
 extern s32 fn_80030754(void *arg0, void *arg1, u8 arg2, void *arg3);
 extern u8 lbl_1_bss_71810[161];
@@ -253,7 +243,7 @@ void fn_1_AB598(fn_1_AB598_ArgStruct *arg) {
 }
 /* fzgx:end fn_1_AB598 */
 
-/* fzgx:begin fn_1_AB5CC noprologue */
+/* fzgx:begin fn_1_AB5CC */
 #include "types.h"
 #include "dolphin/card.h"
 #include "dolphin/card/CARDPriv.h"
@@ -289,7 +279,7 @@ void fn_1_AB5CC(fn_1_AB5CC_ArgStruct *arg) {
 }
 /* fzgx:end fn_1_AB5CC */
 
-/* fzgx:begin fn_1_AB61C noprologue */
+/* fzgx:begin fn_1_AB61C */
 #include "types.h"
 #include "dolphin/card.h"
 #include "dolphin/card/CARDPriv.h"
@@ -318,7 +308,7 @@ void fn_1_AB61C(fn_1_AB61C_MemcardArg *arg) {
 }
 /* fzgx:end fn_1_AB61C */
 
-/* fzgx:begin fn_1_AB64C noprologue */
+/* fzgx:begin fn_1_AB64C */
 #include "types.h"
 #include "rel/main_rel/globals.h"
 #include "rel/main_rel/memcard.h"
@@ -453,7 +443,7 @@ void fn_1_AB7C4(fn_1_AB7C4_ArgStruct *arg) {
 }
 /* fzgx:end fn_1_AB7C4 */
 
-/* fzgx:begin fn_1_AB870 noprologue */
+/* fzgx:begin fn_1_AB870 */
 #include "types.h"
 #include "dolphin/card.h"
 #include "dolphin/card/CARDPriv.h"
@@ -533,7 +523,7 @@ void fn_1_AB8D8(fn_1_AB8D8_ArgStruct *arg) {
 }
 /* fzgx:end fn_1_AB8D8 */
 
-/* fzgx:begin fn_1_AB93C noprologue */
+/* fzgx:begin fn_1_AB93C */
 #include "types.h"
 #include "dolphin/card.h"
 #include "dolphin/card/CARDPriv.h"
@@ -567,7 +557,7 @@ void fn_1_AB93C(fn_1_AB93C_ArgStruct *arg) {
 }
 /* fzgx:end fn_1_AB93C */
 
-/* fzgx:begin fn_1_AB98C noprologue */
+/* fzgx:begin fn_1_AB98C */
 #include "types.h"
 #include "dolphin/card.h"
 #include "dolphin/card/CARDPriv.h"
@@ -623,7 +613,7 @@ void fn_1_AB99C(fn_1_AB99C_ArgStruct *arg) {
 }
 /* fzgx:end fn_1_AB99C */
 
-/* fzgx:begin fn_1_ABA14 noprologue */
+/* fzgx:begin fn_1_ABA14 */
 #include "types.h"
 #include "dolphin/card.h"
 #include "dolphin/card/CARDPriv.h"
@@ -679,7 +669,7 @@ void fn_1_ABA24(fn_1_ABA24_ArgStruct *arg) {
 }
 /* fzgx:end fn_1_ABA24 */
 
-/* fzgx:begin fn_1_ABA9C noprologue */
+/* fzgx:begin fn_1_ABA9C */
 #include "types.h"
 #include "dolphin/card.h"
 #include "dolphin/card/CARDPriv.h"
@@ -735,7 +725,7 @@ void fn_1_ABAAC(fn_1_ABAAC_ArgStruct *arg) {
 }
 /* fzgx:end fn_1_ABAAC */
 
-/* fzgx:begin fn_1_ABB24 noprologue */
+/* fzgx:begin fn_1_ABB24 */
 #include "types.h"
 #include "dolphin/card.h"
 #include "dolphin/card/CARDPriv.h"
@@ -768,7 +758,7 @@ void fn_1_ABB24(fn_1_ABB24_MemcardArg *arg) {
 }
 /* fzgx:end fn_1_ABB24 */
 
-/* fzgx:begin fn_1_ABB4C noprologue */
+/* fzgx:begin fn_1_ABB4C */
 #include "types.h"
 #include "rel/main_rel/globals.h"
 #include "rel/main_rel/memcard.h"
@@ -873,7 +863,7 @@ void fn_1_ABC5C(fn_1_ABC5C_ArgStruct *arg) {
 }
 /* fzgx:end fn_1_ABC5C */
 
-/* fzgx:begin fn_1_ABC98 noprologue */
+/* fzgx:begin fn_1_ABC98 */
 #include "types.h"
 #include "dolphin/card.h"
 #include "dolphin/card/CARDPriv.h"
@@ -933,7 +923,7 @@ void fn_1_ABCE8(fn_1_ABCE8_ArgStruct *arg) {
 }
 /* fzgx:end fn_1_ABCE8 */
 
-/* fzgx:begin fn_1_ABD58 noprologue */
+/* fzgx:begin fn_1_ABD58 */
 #include "types.h"
 #include "dolphin/card.h"
 #include "dolphin/card/CARDPriv.h"
@@ -960,7 +950,7 @@ void fn_1_ABD58(fn_1_ABD58_ArgStruct *arg) {
 }
 /* fzgx:end fn_1_ABD58 */
 
-/* fzgx:begin fn_1_ABDA8 noprologue */
+/* fzgx:begin fn_1_ABDA8 */
 #include "types.h"
 #include "dolphin/card.h"
 #include "dolphin/card/CARDPriv.h"
@@ -1348,7 +1338,7 @@ void fn_1_AC294(Fn1AC294Target *target) {
 }
 /* fzgx:end fn_1_AC294 */
 
-/* fzgx:begin fn_1_AC2D8 noprologue */
+/* fzgx:begin fn_1_AC2D8 */
 #include "types.h"
 #include "dolphin/card.h"
 #include "dolphin/card/CARDPriv.h"
@@ -1405,7 +1395,7 @@ void fn_1_AC328(Fn1AC328Target *target) {
 }
 /* fzgx:end fn_1_AC328 */
 
-/* fzgx:begin fn_1_AC38C noprologue */
+/* fzgx:begin fn_1_AC38C */
 #include "types.h"
 #include "dolphin/card.h"
 #include "dolphin/card/CARDPriv.h"
@@ -1465,7 +1455,7 @@ void fn_1_AC3DC(Fn1AC3DCTarget *target) {
 }
 /* fzgx:end fn_1_AC3DC */
 
-/* fzgx:begin fn_1_AC464 noprologue */
+/* fzgx:begin fn_1_AC464 */
 #include "types.h"
 #include "dolphin/card.h"
 #include "dolphin/card/CARDPriv.h"
@@ -1492,7 +1482,7 @@ void fn_1_AC464(Fn1AC464Target *target) {
 }
 /* fzgx:end fn_1_AC464 */
 
-/* fzgx:begin fn_1_AC4B4 noprologue */
+/* fzgx:begin fn_1_AC4B4 */
 #include "types.h"
 #include "dolphin/card.h"
 #include "dolphin/card/CARDPriv.h"
@@ -1624,7 +1614,7 @@ void fn_1_AC53C(void *arg0) {
 }
 /* fzgx:end fn_1_AC53C */
 
-/* fzgx:begin fn_1_AC6A4 noprologue */
+/* fzgx:begin fn_1_AC6A4 */
 #include "types.h"
 #include "dolphin/card.h"
 #include "dolphin/card/CARDPriv.h"
@@ -1636,7 +1626,7 @@ void fn_1_AC6A4(void) {
 }
 /* fzgx:end fn_1_AC6A4 */
 
-/* fzgx:begin fn_1_AC6A8 noprologue */
+/* fzgx:begin fn_1_AC6A8 */
 #include "types.h"
 #include "dolphin/card.h"
 #include "dolphin/card/CARDPriv.h"
@@ -1658,7 +1648,7 @@ void fn_1_AC6A8(Fn1AC6A8Data *data) {
 }
 /* fzgx:end fn_1_AC6A8 */
 
-/* fzgx:begin fn_1_AC6C8 noprologue */
+/* fzgx:begin fn_1_AC6C8 */
 #include "types.h"
 #include "dolphin/card.h"
 #include "dolphin/card/CARDPriv.h"
@@ -1670,7 +1660,7 @@ void fn_1_AC6C8(void) {
 }
 /* fzgx:end fn_1_AC6C8 */
 
-/* fzgx:begin fn_1_AC6CC noprologue */
+/* fzgx:begin fn_1_AC6CC */
 #include "types.h"
 #include "dolphin/card.h"
 #include "dolphin/card/CARDPriv.h"
@@ -1687,7 +1677,7 @@ void fn_1_AC6CC(fn_1_AC6CC_MemCardState *self) {
 }
 /* fzgx:end fn_1_AC6CC */
 
-/* fzgx:begin fn_1_AC6DC noprologue */
+/* fzgx:begin fn_1_AC6DC */
 #include "types.h"
 #include "dolphin/card.h"
 #include "dolphin/card/CARDPriv.h"
@@ -1699,7 +1689,7 @@ void fn_1_AC6DC(void) {
 }
 /* fzgx:end fn_1_AC6DC */
 
-/* fzgx:begin fn_1_AC6E0 noprologue */
+/* fzgx:begin fn_1_AC6E0 */
 #include "types.h"
 #include "dolphin/card.h"
 #include "dolphin/card/CARDPriv.h"
@@ -1714,7 +1704,7 @@ void fn_1_AC6E0(void *r3) {
 }
 /* fzgx:end fn_1_AC6E0 */
 
-/* fzgx:begin fn_1_AC700 noprologue */
+/* fzgx:begin fn_1_AC700 */
 #include "types.h"
 #include "dolphin/card.h"
 #include "dolphin/card/CARDPriv.h"
@@ -1742,7 +1732,7 @@ void fn_1_AC704(void *r3) {
 }
 /* fzgx:end fn_1_AC704 */
 
-/* fzgx:begin fn_1_AC74C noprologue */
+/* fzgx:begin fn_1_AC74C */
 #include "types.h"
 #include "dolphin/card.h"
 #include "dolphin/card/CARDPriv.h"
@@ -1836,7 +1826,7 @@ void fn_1_AC79C(void *arg0) {
 }
 /* fzgx:end fn_1_AC79C */
 
-/* fzgx:begin fn_1_AC904 noprologue */
+/* fzgx:begin fn_1_AC904 */
 #include "types.h"
 #include "dolphin/card.h"
 #include "dolphin/card/CARDPriv.h"
@@ -1848,7 +1838,7 @@ void fn_1_AC904(void) {
 }
 /* fzgx:end fn_1_AC904 */
 
-/* fzgx:begin fn_1_AC908 noprologue */
+/* fzgx:begin fn_1_AC908 */
 #include "types.h"
 #include "dolphin/card.h"
 #include "dolphin/card/CARDPriv.h"
@@ -1870,7 +1860,7 @@ void fn_1_AC908(Fn1AC908State *state) {
 }
 /* fzgx:end fn_1_AC908 */
 
-/* fzgx:begin fn_1_AC928 noprologue */
+/* fzgx:begin fn_1_AC928 */
 #include "types.h"
 #include "dolphin/card.h"
 #include "dolphin/card/CARDPriv.h"
@@ -1882,7 +1872,7 @@ void fn_1_AC928(void) {
 }
 /* fzgx:end fn_1_AC928 */
 
-/* fzgx:begin fn_1_AC92C noprologue */
+/* fzgx:begin fn_1_AC92C */
 #include "types.h"
 #include "dolphin/card.h"
 #include "dolphin/card/CARDPriv.h"
@@ -1915,7 +1905,7 @@ u32 fn_1_AC92C(struct fn_1_AC92C_Arg0 *arg0) {
 }
 /* fzgx:end fn_1_AC92C */
 
-/* fzgx:begin fn_1_AC960 noprologue */
+/* fzgx:begin fn_1_AC960 */
 #include "types.h"
 #include "dolphin/card.h"
 #include "dolphin/card/CARDPriv.h"
@@ -1956,7 +1946,7 @@ void fn_1_AC960(struct MemcardObject *obj) {
 }
 /* fzgx:end fn_1_AC960 */
 
-/* fzgx:begin fn_1_ACA00 noprologue */
+/* fzgx:begin fn_1_ACA00 */
 #include "types.h"
 #include "dolphin/card.h"
 #include "dolphin/card/CARDPriv.h"
@@ -2143,7 +2133,7 @@ void fn_1_ACA78(void *arg0) {
 }
 /* fzgx:end fn_1_ACA78 */
 
-/* fzgx:begin fn_1_ACD00 noprologue */
+/* fzgx:begin fn_1_ACD00 */
 #include "types.h"
 #include "dolphin/card.h"
 #include "dolphin/card/CARDPriv.h"
@@ -2254,7 +2244,7 @@ void fn_1_ACD04(Fn1Acd04Obj *obj) {
 }
 /* fzgx:end fn_1_ACD04 */
 
-/* fzgx:begin fn_1_ACE7C noprologue */
+/* fzgx:begin fn_1_ACE7C */
 #include "types.h"
 #include "dolphin/card.h"
 #include "dolphin/card/CARDPriv.h"
@@ -2285,7 +2275,7 @@ void fn_1_ACE80(fn_1_ACE80_SomeObject* obj) {
 }
 /* fzgx:end fn_1_ACE80 */
 
-/* fzgx:begin fn_1_ACEBC noprologue */
+/* fzgx:begin fn_1_ACEBC */
 #include "types.h"
 #include "dolphin/card.h"
 #include "dolphin/card/CARDPriv.h"
@@ -2308,7 +2298,7 @@ void fn_1_ACEBC(fn_1_ACEBC_SomeObject* obj) {
 }
 /* fzgx:end fn_1_ACEBC */
 
-/* fzgx:begin fn_1_ACF0C noprologue */
+/* fzgx:begin fn_1_ACF0C */
 #include "types.h"
 #include "dolphin/card.h"
 #include "dolphin/card/CARDPriv.h"
@@ -2330,7 +2320,7 @@ void fn_1_ACF0C(Object* obj) {
 }
 /* fzgx:end fn_1_ACF0C */
 
-/* fzgx:begin fn_1_ACF2C noprologue */
+/* fzgx:begin fn_1_ACF2C */
 #include "types.h"
 #include "dolphin/card.h"
 #include "dolphin/card/CARDPriv.h"
@@ -2432,7 +2422,7 @@ void fn_1_ACF30(MemcardObject* obj) {
 }
 /* fzgx:end fn_1_ACF30 */
 
-/* fzgx:begin fn_1_AD098 noprologue */
+/* fzgx:begin fn_1_AD098 */
 #include "types.h"
 #include "dolphin/card.h"
 #include "dolphin/card/CARDPriv.h"
@@ -2444,7 +2434,7 @@ void fn_1_AD098(void) {
 }
 /* fzgx:end fn_1_AD098 */
 
-/* fzgx:begin fn_1_AD09C noprologue */
+/* fzgx:begin fn_1_AD09C */
 #include "types.h"
 #include "dolphin/card.h"
 #include "dolphin/card/CARDPriv.h"
@@ -2456,7 +2446,7 @@ void fn_1_AD09C(void) {
 }
 /* fzgx:end fn_1_AD09C */
 
-/* fzgx:begin fn_1_AD0A0 noprologue */
+/* fzgx:begin fn_1_AD0A0 */
 #include "types.h"
 #include "dolphin/card.h"
 #include "dolphin/card/CARDPriv.h"
@@ -2466,7 +2456,8 @@ struct fn_1_AD0A0_Arg0 {
     u8 unk_2C;
 };
 extern f32 lbl_1_rodata_4CD0;
-extern f64 lbl_1_rodata_4CB8;
+
+
 extern s32 CARDGetStatus(s32, s32, CARDStat *);
 
 
@@ -2500,7 +2491,7 @@ int fn_1_AD140(const u8 *status_byte) {
 }
 /* fzgx:end fn_1_AD140 */
 
-/* fzgx:begin fn_1_AD164 noprologue */
+/* fzgx:begin fn_1_AD164 */
 #include "types.h"
 #include "dolphin/card.h"
 #include "dolphin/card/CARDPriv.h"
@@ -5625,7 +5616,7 @@ void fn_1_AECCC(MemcardObj *arg0, u32 unused) {
 #pragma opt_common_subs reset
 /* fzgx:end fn_1_AECCC */
 
-/* fzgx:begin fn_1_B03A8 noprologue */
+/* fzgx:begin fn_1_B03A8 */
 #include "types.h"
 #include "dolphin/card.h"
 #include "dolphin/card/CARDPriv.h"
@@ -6449,7 +6440,7 @@ void fn_1_B03CC(B03CC_State *arg0) {
 }
 /* fzgx:end fn_1_B03CC */
 
-/* fzgx:begin fn_1_B1710 noprologue */
+/* fzgx:begin fn_1_B1710 */
 #include "types.h"
 #include "dolphin/card.h"
 #include "dolphin/card/CARDPriv.h"
@@ -6461,7 +6452,7 @@ void fn_1_B1710(int unused, void *ptr) {
 }
 /* fzgx:end fn_1_B1710 */
 
-/* fzgx:begin fn_1_B2770 noprologue */
+/* fzgx:begin fn_1_B2770 */
 #include "types.h"
 #include "dolphin/card.h"
 #include "dolphin/card/CARDPriv.h"
@@ -7272,7 +7263,7 @@ rec = record_address((u8 *)fzgx_live->unk_DC, off);
 #pragma opt_common_subs reset
 /* fzgx:end fn_1_B277C */
 
-/* fzgx:begin fn_1_B38F4 noprologue */
+/* fzgx:begin fn_1_B38F4 */
 #include "types.h"
 #include "dolphin/card.h"
 #include "dolphin/card/CARDPriv.h"
@@ -7284,12 +7275,12 @@ void fn_1_B38F4(int unused, void *ptr) {
 }
 /* fzgx:end fn_1_B38F4 */
 
-/* fzgx:begin fn_1_B3900 noprologue */
+/* fzgx:begin fn_1_B3900 */
 #include "types.h"
 #include "rel/main_rel/globals.h"
 #include "rel/main_rel/memcard.h"
 
-extern u32 lbl_801A6410;
+
 extern s32 lbl_801A66B4;
 extern const f32 lbl_1_rodata_4CA8;
 extern void OSReport(const char *fmt, ...);
@@ -7336,7 +7327,7 @@ void fn_1_B3900(u8 *arg0) {
             if (fn_1_B3900_array_read(arg0, 5) == 3 && *(u32 *)(arg0 + 0xC) != 0) {
                 while (CARDUnmount(fn_1_B3900_array_read(arg0, 0)) == -1) {
                 }
-                fn_1_46B4(lbl_801A6410, *(u32 *)(arg0 + 0xC), (const char *)(data + 0x6CF0), 0x1A52);
+                fn_1_46B4((*(u32 *)&lbl_801A6410), *(u32 *)(arg0 + 0xC), (const char *)(data + 0x6CF0), 0x1A52);
                 arg0[7] = 0;
                 *(u32 *)(arg0 + 0xC) = 0;
                 state = *(u8 **)(arg0 + 0x24);
@@ -7573,7 +7564,7 @@ void fn_1_B3900(u8 *arg0) {
     case 0x1D:
         if (((u16)lbl_1_bss_9F8.unk_8 >> 8) & 1) {
             *(u32 *)(bss + 0x1F4) = *(u32 *)(*(u8 **)(arg0 + 0x24) + 4);
-            fn_1_46B4(lbl_801A6410, *(u32 *)(arg0 + 0x24), (const char *)(data + 0x6CF0), 0x3EC);
+            fn_1_46B4((*(u32 *)&lbl_801A6410), *(u32 *)(arg0 + 0x24), (const char *)(data + 0x6CF0), 0x3EC);
             *(u32 *)(arg0 + 0x24) = 0;
             arg0[2] = 0xFF;
             arg0[3] = 0xFF;
@@ -7603,7 +7594,7 @@ void fn_1_B3900(u8 *arg0) {
 #pragma opt_dead_assignments reset
 /* fzgx:end fn_1_B3900 */
 
-/* fzgx:begin fn_1_B40B4 noprologue */
+/* fzgx:begin fn_1_B40B4 */
 #include "types.h"
 #include "dolphin/card.h"
 #include "dolphin/card/CARDPriv.h"
@@ -7653,7 +7644,7 @@ void fn_1_B5258(char *destination, void *unused, const char *source, const char 
 }
 /* fzgx:end fn_1_B5258 */
 
-/* fzgx:begin fn_1_B5F00 noprologue */
+/* fzgx:begin fn_1_B5F00 */
 #include "types.h"
 #include "dolphin/card.h"
 #include "dolphin/card/CARDPriv.h"
@@ -7682,7 +7673,7 @@ void fn_1_B5F00(B5F00Source *source, B5F00Dest *dest) {
 }
 /* fzgx:end fn_1_B5F00 */
 
-/* fzgx:begin fn_1_B7C00 noprologue */
+/* fzgx:begin fn_1_B7C00 */
 #include "types.h"
 #include "rel/main_rel/globals.h"
 #include "rel/main_rel/memcard.h"
@@ -7707,7 +7698,7 @@ u8 fn_1_B7C00(void) {
 }
 /* fzgx:end fn_1_B7C00 */
 
-/* fzgx:begin fn_1_B7C5C noprologue */
+/* fzgx:begin fn_1_B7C5C */
 #include "types.h"
 #include "rel/main_rel/globals.h"
 #include "rel/main_rel/memcard.h"
@@ -7744,7 +7735,7 @@ s32 fn_1_B7C6C(u32 arg0) {
 }
 /* fzgx:end fn_1_B7C6C */
 
-/* fzgx:begin fn_1_B7CD4 noprologue */
+/* fzgx:begin fn_1_B7CD4 */
 #include "types.h"
 #include "dolphin/card.h"
 #include "dolphin/card/CARDPriv.h"
@@ -7774,7 +7765,7 @@ void fn_1_B7E14(void *memory_card_state) {
 }
 /* fzgx:end fn_1_B7E14 */
 
-/* fzgx:begin fn_1_B7E48 noprologue */
+/* fzgx:begin fn_1_B7E48 */
 #include "types.h"
 #include "rel/main_rel/globals.h"
 #include "rel/main_rel/memcard.h"
@@ -7800,7 +7791,7 @@ int fn_1_B7E48(void) {
 }
 /* fzgx:end fn_1_B7E48 */
 
-/* fzgx:begin fn_1_B7E98 noprologue */
+/* fzgx:begin fn_1_B7E98 */
 #include "types.h"
 #include "rel/main_rel/globals.h"
 #include "rel/main_rel/memcard.h"
@@ -7814,7 +7805,7 @@ int fn_1_B7E98(int index) {
 }
 /* fzgx:end fn_1_B7E98 */
 
-/* fzgx:begin fn_1_B7EC4 noprologue */
+/* fzgx:begin fn_1_B7EC4 */
 #include "types.h"
 #include "rel/main_rel/globals.h"
 #include "rel/main_rel/memcard.h"
@@ -7830,7 +7821,7 @@ int fn_1_B7EC4(int index) {
 }
 /* fzgx:end fn_1_B7EC4 */
 
-/* fzgx:begin fn_1_B7EF8 noprologue */
+/* fzgx:begin fn_1_B7EF8 */
 #include "types.h"
 #include "dolphin/card.h"
 #include "dolphin/card/CARDPriv.h"
@@ -7845,7 +7836,7 @@ u8 fn_1_B7EF8(void) {
 }
 /* fzgx:end fn_1_B7EF8 */
 
-/* fzgx:begin fn_1_B7F08 noprologue */
+/* fzgx:begin fn_1_B7F08 */
 #include "types.h"
 #include "rel/main_rel/globals.h"
 #include "rel/main_rel/memcard.h"
@@ -7855,7 +7846,7 @@ u32 fn_1_B7F08(void) {
 }
 /* fzgx:end fn_1_B7F08 */
 
-/* fzgx:begin fn_1_B7F24 noprologue */
+/* fzgx:begin fn_1_B7F24 */
 #include "types.h"
 #include "rel/main_rel/globals.h"
 #include "rel/main_rel/memcard.h"
@@ -7885,7 +7876,7 @@ void fn_1_B7F24(void) {
 }
 /* fzgx:end fn_1_B7F24 */
 
-/* fzgx:begin fn_1_B7F58 noprologue */
+/* fzgx:begin fn_1_B7F58 */
 #include "types.h"
 #include "rel/main_rel/globals.h"
 #include "rel/main_rel/memcard.h"
@@ -7924,7 +7915,7 @@ int fn_1_B7F58(Result *result) {
 #pragma opt_propagation reset
 /* fzgx:end fn_1_B7F58 */
 
-/* fzgx:begin fn_1_B7FC8 noprologue */
+/* fzgx:begin fn_1_B7FC8 */
 #include "types.h"
 #include "rel/main_rel/globals.h"
 #include "rel/main_rel/memcard.h"
@@ -8101,7 +8092,7 @@ u32 fn_1_B8170(s32 card) {
 }
 /* fzgx:end fn_1_B8170 */
 
-/* fzgx:begin fn_1_B9BE0 noprologue */
+/* fzgx:begin fn_1_B9BE0 */
 #include "types.h"
 #include "dolphin/card.h"
 #include "dolphin/card/CARDPriv.h"
@@ -8116,7 +8107,7 @@ void fn_1_B9BE0(void) {
 }
 /* fzgx:end fn_1_B9BE0 */
 
-/* fzgx:begin fn_1_B9C0C noprologue */
+/* fzgx:begin fn_1_B9C0C */
 #include "types.h"
 #include "dolphin/card.h"
 #include "dolphin/card/CARDPriv.h"
@@ -8260,7 +8251,7 @@ void fn_1_BC29C(void) {
 }
 /* fzgx:end fn_1_BC29C */
 
-/* fzgx:begin fn_1_BED04 noprologue */
+/* fzgx:begin fn_1_BED04 */
 #include "types.h"
 #include "font.h"
 
@@ -8451,7 +8442,7 @@ __declspec(section ".fzgxpool") static void fzgx_pool_prime24(void) {
 }
 #pragma section code_type ".text"
 
-extern FontDrawPacket lbl_1_rodata_26F8;
+
 
 /* MWCC may commute a constant to the left of a product; routing the product
  * through a helper keeps retail's operand order. */
@@ -8475,7 +8466,7 @@ void fn_1_BED04(s32 x, s32 y, s32 width, s32 height, u32 *color, s32 flip) {
     if (inner_height < 0) {
         inner_height = 0;
     }
-    packet = lbl_1_rodata_26F8;
+    packet = (*(FontDrawPacket *)&lbl_1_rodata_26F8);
     packet.image = 0xC;
     *(u32 *)packet.color_add = *color;
     packet.z = 0.11f;
@@ -8568,6 +8559,8 @@ void fn_1_BED04(s32 x, s32 y, s32 width, s32 height, u32 *color, s32 flip) {
 #include "dolphin/dvd.h"
 #include "font.h"
 
+extern u32 lbl_1_rodata_26F8;
+
 struct fn_1_BF520_Arg4 {
     u32 unk_0;
 };
@@ -8579,7 +8572,6 @@ extern f32 lbl_1_rodata_4D18;
 extern f32 lbl_1_rodata_5080;
 
 
-extern u32 lbl_1_rodata_26F8;
 extern void fn_1_50164(f32, f32, f32, f32, void *);
 
 struct FzgxCopy_88 { u32 words[22]; };
@@ -8597,7 +8589,7 @@ void fn_1_BF520(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u32 *arg4) {
 }
 /* fzgx:end fn_1_BF520 */
 
-/* fzgx:begin fn_1_BF600 noprologue */
+/* fzgx:begin fn_1_BF600 */
 #include "types.h"
 #include "dolphin/card.h"
 #include "dolphin/card/CARDPriv.h"
@@ -8606,7 +8598,7 @@ void fn_1_BF520(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u32 *arg4) {
 
 struct fn_1_BF600_Copy88 { u32 words[22]; };
 
-extern u32 lbl_1_rodata_26F8;
+
 extern int fn_1_4F734(FontDrawPacket *);
 
 #pragma section code_type ".fzgxpool"
@@ -9952,7 +9944,7 @@ void fn_1_C132C(Fn1C132CObject *object, u8 *data) {
 }
 /* fzgx:end fn_1_C132C */
 
-/* fzgx:begin fn_1_C17CC noprologue */
+/* fzgx:begin fn_1_C17CC */
 #include "types.h"
 #include "dolphin/card.h"
 #include "dolphin/card/CARDPriv.h"
@@ -9994,7 +9986,7 @@ void fn_1_C23CC(void *base0, u32 stride0, u32 arg2, void *base1,
 }
 /* fzgx:end fn_1_C23CC */
 
-/* fzgx:begin fn_1_C2454 noprologue */
+/* fzgx:begin fn_1_C2454 */
 #include "types.h"
 #include "rel/main_rel/globals.h"
 #include "rel/main_rel/memcard.h"
@@ -10227,7 +10219,7 @@ void fn_1_C37A0(void) {
 }
 /* fzgx:end fn_1_C37A0 */
 
-/* fzgx:begin fn_1_C39FC noprologue */
+/* fzgx:begin fn_1_C39FC */
 #include "types.h"
 #include "rel/main_rel/globals.h"
 #include "rel/main_rel/memcard.h"

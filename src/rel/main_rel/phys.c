@@ -288,7 +288,6 @@ void fn_1_E1C10(void) {
 /* fzgx:end fn_1_E1C10 */
 
 /* fzgx:begin fn_1_E1E9C */
-
 typedef struct {
     u32 flags;
     void *name;
@@ -582,7 +581,6 @@ void fn_1_E35F0(void) {
 /* fzgx:end fn_1_E35F0 */
 
 /* fzgx:begin fn_1_E38D4 */
-
 typedef struct {
     u8 pad_0[0xA];
     s16 unk_A;
@@ -793,8 +791,6 @@ void fn_1_E39F0(void) {
 
 /* fzgx:begin fn_1_E49D4 noprologue */
 #include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/phys.h"
 
 extern u32 fn_1_E3C38(u32, u32);
 extern u32 fn_1_E5430(u32);
@@ -968,8 +964,6 @@ void fn_1_E4A38(u32 arg0, u16 arg1, u16 arg2, Cb arg3) {
 
 /* fzgx:begin fn_1_E50F0 noprologue */
 #include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/phys.h"
 
 extern void lbl_8006DCA4(void *base, void *arg);
 extern void fn_1_A71AC(void);
@@ -1060,7 +1054,6 @@ f32 fn_1_E5734(E5734Obj *self) {
 /* fzgx:end fn_1_E5734 */
 
 /* fzgx:begin fn_1_E573C */
-
 s16 fn_1_E573C(E573CObj *self) {
     return self->value;
 }
@@ -1585,8 +1578,6 @@ void fn_1_E87FC(fn_1_E87FC_PhysObj *obj) {
 /* fzgx:end fn_1_E87FC */
 
 /* fzgx:begin fn_1_E95B4 */
-
-
 void fn_1_E95B4(void) {
     f32 *table = lbl_1_rodata_6780;
     Obj_1_bss_7AEB8 *state;
@@ -1620,7 +1611,6 @@ void fn_1_E95B4(void) {
 /* fzgx:end fn_1_E95B4 */
 
 /* fzgx:begin fn_1_E9680 */
-
 void fn_1_E9680(void) {
     u8* base = (u8*)&lbl_1_bss_7B180;
     u32* p0;
@@ -1789,9 +1779,6 @@ s16 fn_1_F22E4(s32 arg) {
 /* fzgx:end fn_1_F22E4 */
 
 /* fzgx:begin fn_1_F2338 */
-
-
-
 u32 fn_1_F2338(s32 value, u32 target) {
     s16 group;
     s16 entry;

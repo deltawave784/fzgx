@@ -61,8 +61,6 @@ void fn_1_47E54(s32 index) {
 /* fzgx:end fn_1_47E54 */
 
 /* fzgx:begin fn_1_47EE4 */
-
-
 void fn_1_47EE4(s32 index) {
     Fn147EE4Entry *object;
     s32 valid;
@@ -83,8 +81,6 @@ void fn_1_47EE4(s32 index) {
 /* fzgx:end fn_1_47EE4 */
 
 /* fzgx:begin fn_1_47F74 */
-
-
 void fn_1_47F74(s32 index) {
     Fn147F74Entry *object;
     s32 valid;
@@ -105,8 +101,6 @@ void fn_1_47F74(s32 index) {
 /* fzgx:end fn_1_47F74 */
 
 /* fzgx:begin fn_1_48004 */
-
-
 void fn_1_48004(s32 index, s32 image) {
     BitmapEntry *entry;
     s32 valid;
