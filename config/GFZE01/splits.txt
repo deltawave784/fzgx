@@ -5537,3 +5537,6 @@ dol/fn_80073E8C.c:
 
 dol/longlong2str.c:
 	.text       start:0x80081D2C end:0x80082040 align:4
+
+dol/fn_80064A30.c:
+	.text       start:0x80064A30 end:0x80064D4C align:4
