@@ -28189,6 +28189,26 @@
   },
   {
     "module": "main_rel",
+    "source": "rel/main_rel/background/fn_1_9DDA8.c",
+    "symbols": [
+      "fn_1_9DDA8"
+    ],
+    "status": "matching",
+    "mw_version": null,
+    "extra_cflags": [],
+    "tu": "rel/main_rel/background.c",
+    "pool": {
+      "...rodata.0": "lbl_1_rodata_42A0",
+      "@41": "lbl_1_rodata_42A0",
+      "@42": "lbl_1_rodata_42A0+0x4",
+      "@43": "lbl_1_rodata_42A0+0x8",
+      "@44": "lbl_1_rodata_42A0+0xC",
+      "@45": "lbl_1_rodata_42A0+0x10",
+      "@46": "lbl_1_rodata_42A0+0x18"
+    }
+  },
+  {
+    "module": "main_rel",
     "source": "rel/main_rel/background/fn_1_9E14C.c",
     "symbols": [
       "fn_1_9E14C"
