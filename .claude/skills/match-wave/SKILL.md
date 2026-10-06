@@ -77,8 +77,10 @@ One batch = steps 1-5 above with these changes:
 - Pick: `uv run tools/fzgx.py route --fable --limit 8 --min-percent 98 --json` (best score first, never tried by
   Fable, one per clone family). Dispatch each row with `subagent_type: matcher-large` and `model: fable`, prompt
   `SYMBOL=<symbol> AGENT_ID=fable-<symbol>-<YYYYMMDD><batch letter>`; all 8 at once.
-- Close the batch: `reuse --max-size 2048`, then `fixup --min-percent 97 --apply --budget 1200 --output
-  .fzgx/fixup/<batch>`, then `verify`, then ninja/hash check, then `progress --note "fable batch <n>"` and `report`; append a line to
+- Close the batch: `reuse --max-size 2048`, then `fixup --min-percent 97 --apply --budget 300 --output
+  .fzgx/fixup/<batch>` (every 4th batch, and the last batch of a run, use `--budget 1200`: each agent already runs
+  the same engine on its own body at release, so the per-batch search mostly repeats it and a 20-minute close-out
+  was closing 0 functions in most batches), then `verify`, then ninja/hash check, then `progress --note "fable batch <n>"` and `report`; append a line to
   `.fzgx/reports/waves.md` that includes the code percentage; commit `state/progress.csv`.
 - If `route --fable` returns fewer than 4 rows, lower `--min-percent` to 95, then 90. Below 90 the match rate is
   unmeasured: stop and ask.
