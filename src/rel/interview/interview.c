@@ -1557,6 +1557,65 @@ void fn_17_72BC(void) {
 }
 /* fzgx:end fn_17_72BC */
 
+/* fzgx:begin fn_17_72C0 */
+#include "rel/interview/interview.h"
+
+struct fn_17_72C0_lbl_1_data_20D1C { u32 unk_0[1]; };
+extern struct fn_17_72C0_lbl_1_data_20D1C lbl_1_data_20D1C;
+extern int sprintf(char *, const char *, ...);
+extern u32 fn_1_12C930(u32);
+extern void fn_80006E10(void *);
+typedef struct { u32 flags; s32 unk_4; u32 unk_8; u32 unk_C; } Sig_fn_1_45730_LoadEntry;
+typedef struct { u32 unk_0; u8 pad_4[0x48]; Sig_fn_1_45730_LoadEntry entry; } Sig_fn_1_45730_LoadResult;
+extern int fn_1_45730(void *, Sig_fn_1_45730_LoadResult *);
+extern u32 fn_1_45B2C(Sig_fn_1_45730_LoadResult *);
+extern void *lbl_801A6410;
+extern void *fn_1_4630(void *, u32, void *, u32);
+extern void fn_1_458A0(Sig_fn_1_45730_LoadResult *, void *, u32, u32);
+extern void fn_1_45850(Sig_fn_1_45730_LoadResult *);
+typedef struct { u8 pad[0x134]; u32 unk_134; } RelEntry;
+
+void *fn_17_72C0(u32 arg0) {
+    u8 *v0;
+    u32 v1;
+    struct { u32 a[33]; } loc_64;
+    Sig_fn_1_45730_LoadResult loc_8;
+    u32 t1;
+    u32 name;
+    s32 size;
+    RelEntry *data;
+    s32 i;
+    v0 = (u8 *)&lbl_17_data_0 + 0x60000;
+    fn_80006E10(v0 + 0x4464);
+    t1 = fn_1_12C930((s16)arg0);
+    v1 = lbl_17_bss_54;
+    name = lbl_1_data_20D1C.unk_0[(s16)t1];
+    switch ((s32)v1) {
+    case 5: sprintf((char *)&loc_64, (char *)v0 + 0x4468, name); break;
+    case 0: sprintf((char *)&loc_64, (char *)v0 + 0x4474, name); break;
+    case 1: sprintf((char *)&loc_64, (char *)v0 + 0x4484, name); break;
+    case 2: sprintf((char *)&loc_64, (char *)v0 + 0x4494, name); break;
+    case 3: sprintf((char *)&loc_64, (char *)v0 + 0x44a4, name); break;
+    case 4: sprintf((char *)&loc_64, (char *)v0 + 0x44b4, name); break;
+    }
+    if (!fn_1_45730(&loc_64, &loc_8)) {
+        fn_1_45730(v0 + 0x44c4, &loc_8);
+    }
+    size = (fn_1_45B2C(&loc_8) + 31) & ~31;
+    data = fn_1_4630(lbl_801A6410, size, v0 + 0x3e50, 0x118f);
+    fn_1_458A0(&loc_8, data, size, 0);
+    fn_1_45850(&loc_8);
+    {
+        RelEntry *p = data;
+        for (i = 0; i < 16; i++, p++) {
+            p->unk_134 += (u32)data;
+        }
+    }
+    fn_80006E10(v0 + 0x4108);
+    return data;
+}
+/* fzgx:end fn_17_72C0 */
+
 /* fzgx:begin fn_17_74C0 */
 extern u8 lbl_17_bss_D8[34];
 extern void fn_17_7728(void *);
