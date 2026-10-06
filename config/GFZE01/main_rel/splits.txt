@@ -6767,3 +6767,6 @@ rel/main_rel/motasglist/fn_1_433E0.c:
 
 rel/main_rel/sel_static_disp/fn_1_150654.c:
 	.text       start:0x00150654 end:0x001507C4 align:4
+
+rel/main_rel/bg_tow/fn_1_154410.c:
+	.text       start:0x00154410 end:0x00154708 align:4
