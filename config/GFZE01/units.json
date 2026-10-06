@@ -1087,6 +1087,27 @@
   },
   {
     "module": "customize",
+    "source": "rel/customize/editor/fn_3_16E14.c",
+    "symbols": [
+      "fn_3_16E14"
+    ],
+    "status": "matching",
+    "mw_version": null,
+    "extra_cflags": [],
+    "tu": "rel/customize/editor.c",
+    "pool": {
+      "...rodata.0": "lbl_3_rodata_538",
+      "@61": "lbl_3_rodata_5BC+0x20",
+      "@36": "lbl_3_rodata_538+0x70",
+      "@10": "lbl_3_rodata_538+0x8",
+      "@62": "lbl_3_rodata_5BC+0x24",
+      "@63": "lbl_3_rodata_5BC+0x28",
+      "@9": "lbl_3_rodata_538+0x4",
+      "@64": "lbl_3_rodata_5BC+0x2C"
+    }
+  },
+  {
+    "module": "customize",
     "source": "rel/customize/editor/fn_3_170E0.c",
     "symbols": [
       "fn_3_170E0"
@@ -24070,6 +24091,16 @@
     "source": "dol/fn_80078D60.c",
     "symbols": [
       "fn_80078D60"
+    ],
+    "status": "matching",
+    "mw_version": "GC/1.3.2",
+    "extra_cflags": []
+  },
+  {
+    "module": "main",
+    "source": "dol/fn_80078DA8.c",
+    "symbols": [
+      "fn_80078DA8"
     ],
     "status": "matching",
     "mw_version": "GC/1.3.2",
