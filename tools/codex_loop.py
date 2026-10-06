@@ -5,15 +5,23 @@ Run from a clone with `uv run tools/codex_loop.py`. Each round picks functions w
 its own matches), then runs `fzgx gate`. Size bands go in order; a band is left when the
 router has nothing new in it. Functions the model already attempted are skipped.
 
-Stops on: `--max-batches`, `--hours`, `--zero-streak` batches in a row without a match,
-a failed gate, an empty pool, or the file `.fzgx/STOP` (create it to stop after the
-current batch). Never pushes. Log: `.fzgx/reports/codex_loop.log`.
+When the Codex account runs out of usage ("try again at 3:35 AM"), the loop marks the
+crashed sessions as crashes (they do not count as attempts), sleeps until the reset time
+plus a few minutes, and continues. Only completed batches count toward `--max-batches`.
+
+Stops on: `--max-batches`, `--hours` (wall clock, waits included), `--zero-streak` batches in
+a row without a match in the last band, a failed gate, an empty pool, or the file
+`.fzgx/STOP` (create it to stop after the current batch or wait). Never pushes.
+Log: `.fzgx/reports/codex_loop.log`.
 """
 
 from __future__ import annotations
 
 import argparse
+import datetime
 import json
+import re
+import sqlite3
 import subprocess
 import sys
 import time
@@ -53,6 +61,54 @@ def pick(model: str, lo: int, hi: int, per_module: int, count: int, max_attempts
     return out[:count]
 
 
+def usage_limit(batch: str):
+    """The reset time (datetime) when the batch's sessions hit the usage limit, else None.
+    Falls back to 30 minutes ahead when the message carries no time."""
+    folder = ROOT / ".fzgx" / "runs" / batch
+    hit, when = False, None
+    for path in folder.glob("*"):
+        if path.suffix not in (".log", ".jsonl", ".json"):
+            continue
+        text = path.read_text(encoding="utf-8", errors="replace")
+        if "usageLimitExceeded" not in text and "usage limit" not in text:
+            continue
+        hit = True
+        m = re.search(r"try again at (\d{1,2}):(\d{2}) ?([AP]M)", text)
+        if m:
+            hour = int(m.group(1)) % 12 + (12 if m.group(3) == "PM" else 0)
+            when = datetime.datetime.now().replace(hour=hour, minute=int(m.group(2)), second=0, microsecond=0)
+            if when <= datetime.datetime.now():
+                when += datetime.timedelta(days=1)
+            break
+    if not hit:
+        return None
+    return when or datetime.datetime.now() + datetime.timedelta(minutes=30)
+
+
+def forgive_crashes() -> int:
+    """Crashed sessions are not attempts: mark them and give the attempt back."""
+    db = sqlite3.connect(ROOT / ".fzgx" / "ledger.db")
+    rows = db.execute("SELECT symbol, COUNT(*) FROM attempts WHERE notes LIKE '%usageLimitExceeded%' "
+                      "AND COALESCE(outcome, '') != 'crash' GROUP BY symbol").fetchall()
+    for symbol, count in rows:
+        db.execute("UPDATE functions SET attempts = MAX(0, attempts - ?) WHERE symbol = ?", (count, symbol))
+    db.execute("UPDATE attempts SET outcome = 'crash' WHERE notes LIKE '%usageLimitExceeded%'")
+    db.commit()
+    db.close()
+    return sum(c for _, c in rows)
+
+
+def wait_until(when, stop_file: Path, deadline: float) -> bool:
+    """Sleep until `when` (plus a margin), polling the stop file. False if told to stop."""
+    when += datetime.timedelta(minutes=3)
+    log(f"usage limit: waiting until {when:%H:%M} (create .fzgx/STOP to stop)")
+    while datetime.datetime.now() < when:
+        if stop_file.exists() or time.time() > deadline:
+            return False
+        time.sleep(30)
+    return True
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--model", default="gpt-6.1-sol")
@@ -60,14 +116,16 @@ def main() -> int:
     ap.add_argument("--per-module", type=int, default=6)
     ap.add_argument("--max-attempts", type=int, default=6)
     ap.add_argument("--max-batches", type=int, default=6)
-    ap.add_argument("--hours", type=float, default=6.0)
+    ap.add_argument("--hours", type=float, default=24.0)
     ap.add_argument("--zero-streak", type=int, default=3)
     ap.add_argument("--parallel", type=int, default=12)
     a = ap.parse_args()
 
     stop_file = ROOT / ".fzgx" / "STOP"
-    started, streak, total, band = time.time(), 0, 0, 0
-    for n in range(1, a.max_batches + 1):
+    started, streak, total, band, n, waits = time.time(), 0, 0, 0, 0, 0
+    deadline = started + a.hours * 3600
+    while n < a.max_batches:
+        n += 1
         if stop_file.exists():
             log("stop file present"); break
         if time.time() - started > a.hours * 3600:
@@ -97,8 +155,18 @@ def main() -> int:
         total += matched
         log(f"{batch}: {matched} matched, {summary.get('released', '?')} released, "
             f"{summary.get('failed', '?')} failed, {summary.get('wall_s', '?')}s (total {total})")
-        if summary.get("failed", 0) >= len(symbols) and not matched:
-            log("every session crashed (usage limit or login?); stopping. Check .fzgx/runs/" + batch)
+        reset = usage_limit(batch)
+        if reset:
+            log(f"{forgive_crashes()} crashed sessions returned to the pool")
+            waits += 1
+            if summary.get("failed", 0) >= len(symbols) and not matched:
+                n -= 1  # a batch that never ran does not count
+            if waits > 8 or not wait_until(reset, stop_file, deadline):
+                log("stopping after usage limit"); break
+            if summary.get("failed", 0) >= len(symbols) and not matched:
+                continue
+        elif summary.get("failed", 0) >= len(symbols) and not matched:
+            log("every session crashed for another reason; stopping. Check .fzgx/runs/" + batch)
             break
         if res.returncode != 0 and not summary:
             log("orchestrate failed:\n" + (res.stderr or res.stdout)[-1500:]); break
