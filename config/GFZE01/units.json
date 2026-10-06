@@ -45363,17 +45363,6 @@
   },
   {
     "module": "main_rel",
-    "source": "rel/main_rel/phys/fn_1_E49D4.c",
-    "symbols": [
-      "fn_1_E49D4"
-    ],
-    "status": "matching",
-    "mw_version": null,
-    "extra_cflags": [],
-    "tu": "rel/main_rel/phys.c"
-  },
-  {
-    "module": "main_rel",
     "source": "rel/main_rel/phys/fn_1_E4A38.c",
     "symbols": [
       "fn_1_E4A38"
@@ -49472,17 +49461,6 @@
     "source": "rel/main_rel/sel_static_disp/fn_1_14A280.c",
     "symbols": [
       "fn_1_14A280"
-    ],
-    "status": "matching",
-    "mw_version": null,
-    "extra_cflags": [],
-    "tu": "rel/main_rel/sel_static_disp.c"
-  },
-  {
-    "module": "main_rel",
-    "source": "rel/main_rel/sel_static_disp/fn_1_14A284.c",
-    "symbols": [
-      "fn_1_14A284"
     ],
     "status": "matching",
     "mw_version": null,
