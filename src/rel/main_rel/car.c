@@ -1736,21 +1736,10 @@ u32 fn_1_864E8(int index) {
 }
 /* fzgx:end fn_1_864E8 */
 
-/* fzgx:begin fn_1_864FC noprologue */
-#include "types.h"
-#include "dolphin/hw_regs.h"
-#include "psvec.h"
-
-typedef struct {
-    u8 pad_0[0x58c];
-    u32 value;
-    u8 pad_590[0x90];
-} Fn864FCEntry;
-
-extern Fn864FCEntry *lbl_1_bss_6D838;
-
+/* fzgx:begin fn_1_864FC */
+// Returns the indexed car's stored value at offset 0x58C.
 u32 fn_1_864FC(u32 index) {
-    return lbl_1_bss_6D838[index].value;
+    return lbl_1_bss_6D838[index].unk_58C;
 }
 /* fzgx:end fn_1_864FC */
 

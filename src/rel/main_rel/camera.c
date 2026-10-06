@@ -252,70 +252,14 @@ u32 camera_get_flags(void) {
 }
 /* fzgx:end camera_get_flags */
 
-/* fzgx:begin camera_update noprologue */
-#include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/camera.h"
-
-struct fn_1_6400_lbl_801A6410 {
-    u32 unk_0;
-};
-
-typedef struct CameraTarget {
-    u8 pad_000[0x394];
-    void *data;
-} CameraTarget;
-
-struct fn_1_AA54_lbl_1_rodata_388 {
-    f64 unk_0;
-};
-
-typedef struct Vec3 {
-    f32 x;
-    f32 y;
-    f32 z;
-} Vec3;
-
-typedef struct camera_reset_transition_Camera {
-    u8 pad_00[0xA4];
-    s16 unk_A4;
-} camera_reset_transition_Camera;
-
-typedef struct camera_update_transition_Camera {
-    u8 pad_00[0x78];
-    s16 unk_78;
-    u8 pad_7A[0x2A];
-    s16 unk_A4;
-} camera_update_transition_Camera;
-
-typedef struct Transform {
-    u8 pad_08[0x8];
-    f32 unk_08;
-    u8 pad_0c[0xc];
-    f32 unk_18;
-    u8 pad_1c[0xc];
-    f32 unk_28;
-    u8 pad_2c[0x24];
-    u8 unk_50[0x2c];
-    u32 unk_7C;
-} Transform;
-
-typedef struct CameraStateLocal {
-    u8 pad_d4[0xd4];
-    f32 unk_D4;
-    f32 unk_D8;
-    f32 unk_DC;
-} CameraStateLocal;
-
-typedef struct { u8 pad_0[0x4]; f32 unk_4; u32 unk_8; f32 unk_C; } Bss_104C;
+/* fzgx:begin camera_update */
+extern CameraState *camera_get_state_object(void);
 extern void fn_1_BD54(void);
 extern void fn_1_B870(void);
 
-__typeof__(lbl_1_bss_F68) camera_get_state_object(void);
-
-// Dispatches to the camera update routine selected by the returned camera state.
+// Dispatches the camera update according to the camera state flag.
 void camera_update(void) {
-    __typeof__(lbl_1_bss_F68) state = camera_get_state_object();
+    CameraState *state = camera_get_state_object();
 
     if (((state->unk_0 >> 30) & 1) != 0) {
         fn_1_BD54();
