@@ -32,7 +32,7 @@ MODULES = ["main", "movie_module", "customize", "sel", "pilotpoint", "option", "
            "story", "profile", "movie", "winning", "replay", "car_colchg", "sample"]
 # (min bytes, max bytes, effort, checks per worker, stale checks) in the order they are worked
 BANDS = [(512, 1023, "medium", 24, 8), (1024, 2047, "high", 32, 10), (256, 511, "medium", 16, 5),
-         (2048, 4095, "high", 40, 12)]
+         (2048, 4095, "high", 40, 12), (0, 255, "medium", 12, 4), (4096, 100000, "high", 48, 14)]
 
 
 def run(cmd: list, capture: bool = False) -> subprocess.CompletedProcess:
