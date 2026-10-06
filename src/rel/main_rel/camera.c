@@ -536,6 +536,52 @@ s16 fn_1_6B48(s32 index) {
 }
 /* fzgx:end fn_1_6B48 */
 
+/* fzgx:begin fn_1_6BC0 */
+// lbl_1_bss_9F8.unk_8 read as a bitfield: retail keeps the halfword load and extracts the
+// two low bits with extrwi/clrlwi
+typedef struct {
+    u8 pad_0[0x8];
+    u16 unk_8_pad : 6;
+    u16 buttons : 10;
+} CameraSelectInput;
+
+#define CAMERA_SELECT_INPUT ((CameraSelectInput *)&lbl_1_bss_9F8)
+
+#pragma opt_common_subs off
+void fn_1_6BC0(void) {
+    s32 cur;
+    s16 next;
+
+    if (lbl_1_bss_F68 == NULL) {
+        return;
+    }
+    if (*(s8 *)&lbl_1_bss_F68->unk_48 != 0) {
+        return;
+    }
+
+    cur = game_camera_entries->unk_2;
+    next = cur;
+    if ((CAMERA_SELECT_INPUT->buttons >> 1) & 1) {
+        next++;
+        if (next == (s8)fn_1_86624()) {
+            next = 0;
+        }
+    } else if (CAMERA_SELECT_INPUT->buttons & 1) {
+        next--;
+        if (next < 0) {
+            next = (s8)fn_1_86624() - 1;
+        }
+    }
+
+    if (next != cur) {
+        game_camera_entries->unk_2 = next;
+        *(s8 *)((u8 *)fn_1_86254((void *)cur) + 0x475) = -1;
+        *(s8 *)((u8 *)fn_1_86254((void *)next) + 0x475) = 0;
+    }
+}
+#pragma opt_common_subs reset
+/* fzgx:end fn_1_6BC0 */
+
 /* fzgx:begin camera_set_result */
 void camera_set_result(s16 value) {
     // Update the camera result only while the camera state is active.

@@ -31661,6 +31661,17 @@
   },
   {
     "module": "main_rel",
+    "source": "rel/main_rel/camera/fn_1_6BC0.c",
+    "symbols": [
+      "fn_1_6BC0"
+    ],
+    "status": "matching",
+    "mw_version": "GC/1.3",
+    "extra_cflags": [],
+    "tu": "rel/main_rel/camera.c"
+  },
+  {
+    "module": "main_rel",
     "source": "rel/main_rel/camera/fn_1_6EC0.c",
     "symbols": [
       "fn_1_6EC0"
@@ -45110,6 +45121,18 @@
     "mw_version": null,
     "extra_cflags": [],
     "tu": "rel/main_rel/ranking.c"
+  },
+  {
+    "module": "main_rel",
+    "source": "rel/main_rel/ranking/fn_1_155FB4.c",
+    "symbols": [
+      "fn_1_155FB4"
+    ],
+    "status": "nonmatching",
+    "mw_version": null,
+    "extra_cflags": [],
+    "tu": "rel/main_rel/ranking.c",
+    "pool": true
   },
   {
     "module": "main_rel",
