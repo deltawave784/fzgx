@@ -501,7 +501,7 @@ def check(p: Project, symbol: str, max_diff_lines: int = 80, versions: Optional[
             # one probe is one check, scored at its best compiler: charging every version
             # spent half the check budget and tripped the plateau stop before any edit
             _record_check(p, key, src, result, count=False)
-            score = (result.percent_adjusted if result.pool_rows else result.percent) if result.ok else -2.0
+            score = check_score(result) if result.ok else -2.0
             out[ver] = score
             fully_matches = result.ok and oracle.unit_fully_matches(result) is None
             if result.ok and (best is None or score > best[0] or fully_matches):
@@ -548,6 +548,24 @@ def read_evidence(p: Project, symbol: str, section: str = 'diff', cursor: int = 
     return checkview.read(p, _key(p, symbol), section, cursor)
 
 
+def check_score(res: oracle.CheckResult) -> float:
+    """One scale for an attempt's progress: the better of objdiff's similarity and the
+    pool-adjusted row score. Choosing one or the other by `pool_rows` compared different
+    scales: a seed without pool rows (objdiff 86.6%) outranked every later body whose pool
+    rows switched it to the stricter row score (fn_1_5D91C: 94-95% objdiff, row score 70-82%),
+    so the plateau stop fired while the agent improved and the seed was saved as the best."""
+    return max(res.percent, res.percent_adjusted) if res.ok else 0.0
+
+
+def _differing_rows(res: oracle.CheckResult) -> Optional[int]:
+    """Rows still differing after accepted relocations; None when no row alignment exists."""
+    if not res.ok:
+        return None
+    if res.matched or res.matched_pool:
+        return 0
+    return res.differing_rows if res.instruction_rows else None
+
+
 def _record_check(p: Project, key: str, src: Optional[Path], res: oracle.CheckResult,
                   count: bool = True, archive: bool = True) -> dict:
     """Archive the body and compiler settings together, including version probes.
@@ -570,7 +588,7 @@ def _record_check(p: Project, key: str, src: Optional[Path], res: oracle.CheckRe
         except OSError:
             pass
     if src is not None and count:
-        stats = Ledger().bump_checks(key, (res.percent_adjusted if res.pool_rows else res.percent) if res.ok else 0.0)
+        stats = Ledger().bump_checks(key, check_score(res), _differing_rows(res))
         if stats.get("improved"):
             best = STATE_DIR / "attempts" / f"{key}.best.c"
             best.parent.mkdir(parents=True, exist_ok=True)
@@ -895,7 +913,7 @@ def release(p: Project, symbol: str, reason: str, harness: Optional[str] = None,
         dest.with_suffix('.json').write_text(json.dumps(dict(
             sha256=hashlib.sha256(dest.read_bytes()).hexdigest(), mw=base.mw_version if base else seed.get('mw'),
             flags=base.extra_cflags if base else seed.get('flags'),
-            percent=(base.percent_adjusted if base.pool_rows else base.percent) if base else seed.get('percent',
+            percent=check_score(base) if base else seed.get('percent',
                      dict(l.current_attempt(key) or {}).get('best_in_attempt', 0)))) + '\n')
         body_path = str(dest)
     best.unlink(missing_ok=True)

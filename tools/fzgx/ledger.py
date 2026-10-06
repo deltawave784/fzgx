@@ -52,7 +52,8 @@ class Ledger:
         self.db.execute("PRAGMA busy_timeout=30000")
         self.db.executescript(SCHEMA)
         cols = {r[1] for r in self.db.execute("PRAGMA table_info(attempts)")}
-        for col, decl in (("stale_checks", "INTEGER DEFAULT 0"), ("best_in_attempt", "REAL DEFAULT 0")):
+        for col, decl in (("stale_checks", "INTEGER DEFAULT 0"), ("best_in_attempt", "REAL DEFAULT 0"),
+                          ("best_rows", "INTEGER")):
             if col not in cols:
                 self.db.execute(f"ALTER TABLE attempts ADD COLUMN {col} {decl}")
         fcols = {r[1] for r in self.db.execute("PRAGMA table_info(functions)")}
@@ -160,21 +161,31 @@ class Ledger:
                 return row, path
         return None
 
-    def bump_checks(self, symbol: str, percent: float) -> Dict[str, float]:
-        """Record a check. Returns checks so far, consecutive non-improving checks, and bests."""
+    def bump_checks(self, symbol: str, percent: float, rows: Optional[int] = None) -> Dict[str, float]:
+        """Record a check. Returns checks so far, consecutive non-improving checks, and bests.
+
+        `percent` is one scale for the whole attempt (api.check_score: the better of objdiff's
+        similarity and the pool-adjusted row score). `rows` is the count of instruction rows
+        still differing after accepted pool/absolute relocations. Either a higher percent or
+        fewer differing rows resets the plateau counter; only a higher percent replaces the
+        attempt's best (`improved`, which also selects the saved best body)."""
         with self.db:
             att = self.current_attempt(symbol)
             improved = att is not None and percent > (att["best_in_attempt"] or 0.0)
+            fewer = (att is not None and rows is not None
+                     and (att["best_rows"] is None or rows < att["best_rows"]))
             self.db.execute(
                 "UPDATE attempts SET checks=checks+1, final_percent=?, "
                 "stale_checks=CASE WHEN ? THEN 0 ELSE stale_checks+1 END, "
+                "best_rows=CASE WHEN ? THEN ? ELSE best_rows END, "
                 "best_in_attempt=MAX(best_in_attempt, ?) WHERE symbol=? AND ended IS NULL",
-                (percent, improved, percent, symbol))
+                (percent, improved or fewer, fewer, rows, percent, symbol))
             self.db.execute(
                 "UPDATE functions SET best_percent=MAX(best_percent, ?) WHERE symbol=?", (percent, symbol))
             att = self.current_attempt(symbol)
         return {"checks": att["checks"] if att else 0, "stale": att["stale_checks"] if att else 0,
-                "best_in_attempt": att["best_in_attempt"] if att else percent, "improved": improved}
+                "best_in_attempt": att["best_in_attempt"] if att else percent, "improved": improved,
+                "progress": bool(improved or fewer)}
 
     def finish(self, symbol: str, outcome: str, status: str, notes: str = "",
                commit: Optional[str] = None, body_path: Optional[str] = None,
