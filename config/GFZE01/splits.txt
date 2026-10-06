@@ -5489,3 +5489,18 @@ dol/fn_80049728.c:
 
 dol/fn_80087C44.c:
 	.text       start:0x80087C44 end:0x80087E58 align:4
+
+dol/fn_800251F0.c:
+	.text       start:0x800251F0 end:0x800253F0 align:4
+
+dol/fn_8006AC44.c:
+	.text       start:0x8006AC44 end:0x8006AE90 align:4
+
+dol/fn_8008E770.c:
+	.text       start:0x8008E770 end:0x8008E9B4 align:4
+
+dol/fn_80007F70.c:
+	.text       start:0x80007F70 end:0x800081C8 align:4
+
+dol/InitMetroTRKCommTable.c:
+	.text       start:0x8008D4D8 end:0x8008D744 align:4

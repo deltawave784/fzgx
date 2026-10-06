@@ -867,6 +867,17 @@
   },
   {
     "module": "customize",
+    "source": "rel/customize/customize/fn_3_B6E4.c",
+    "symbols": [
+      "fn_3_B6E4"
+    ],
+    "status": "matching",
+    "mw_version": null,
+    "extra_cflags": [],
+    "tu": "rel/customize/customize.c"
+  },
+  {
+    "module": "customize",
     "source": "rel/customize/customize/fn_3_B984.c",
     "symbols": [
       "fn_3_B984"
@@ -6469,6 +6480,16 @@
     "mw_version": null,
     "extra_cflags": [],
     "asm": true
+  },
+  {
+    "module": "main",
+    "source": "dol/InitMetroTRKCommTable.c",
+    "symbols": [
+      "InitMetroTRKCommTable"
+    ],
+    "status": "matching",
+    "mw_version": "GC/1.3.2",
+    "extra_cflags": []
   },
   {
     "module": "main",
@@ -13052,6 +13073,20 @@
   },
   {
     "module": "main",
+    "source": "dol/fn_80007F70.c",
+    "symbols": [
+      "fn_80007F70"
+    ],
+    "status": "matching",
+    "mw_version": "GC/1.3.2",
+    "extra_cflags": [],
+    "pool": {
+      "@30": "lbl_801A6F20",
+      "@32": "lbl_801A6F28"
+    }
+  },
+  {
+    "module": "main",
     "source": "dol/fn_800087F4.c",
     "symbols": [
       "fn_800087F4"
@@ -15430,6 +15465,16 @@
     "mw_version": null,
     "extra_cflags": [],
     "asm": true
+  },
+  {
+    "module": "main",
+    "source": "dol/fn_800251F0.c",
+    "symbols": [
+      "fn_800251F0"
+    ],
+    "status": "matching",
+    "mw_version": "GC/1.2.5n",
+    "extra_cflags": []
   },
   {
     "module": "main",
@@ -21640,6 +21685,16 @@
   },
   {
     "module": "main",
+    "source": "dol/fn_8006AC44.c",
+    "symbols": [
+      "fn_8006AC44"
+    ],
+    "status": "matching",
+    "mw_version": "GC/1.3.2",
+    "extra_cflags": []
+  },
+  {
+    "module": "main",
     "source": "dol/fn_8006B294.c",
     "symbols": [
       "fn_8006B294"
@@ -25093,6 +25148,16 @@
     ],
     "status": "matching",
     "mw_version": null,
+    "extra_cflags": []
+  },
+  {
+    "module": "main",
+    "source": "dol/fn_8008E770.c",
+    "symbols": [
+      "fn_8008E770"
+    ],
+    "status": "matching",
+    "mw_version": "GC/1.2.5n",
     "extra_cflags": []
   },
   {
@@ -53741,6 +53806,16 @@
   },
   {
     "module": "movie_module",
+    "source": "rel/movie_module/fn_12_23410.c",
+    "symbols": [
+      "fn_12_23410"
+    ],
+    "status": "matching",
+    "mw_version": "GC/1.3.2",
+    "extra_cflags": []
+  },
+  {
+    "module": "movie_module",
     "source": "rel/movie_module/fn_12_23BFC.c",
     "symbols": [
       "fn_12_23BFC"
@@ -54756,6 +54831,16 @@
     "source": "rel/movie_module/fn_12_2BCF4.c",
     "symbols": [
       "fn_12_2BCF4"
+    ],
+    "status": "matching",
+    "mw_version": "GC/1.3.2",
+    "extra_cflags": []
+  },
+  {
+    "module": "movie_module",
+    "source": "rel/movie_module/fn_12_2BE3C.c",
+    "symbols": [
+      "fn_12_2BE3C"
     ],
     "status": "matching",
     "mw_version": "GC/1.3.2",
@@ -55784,6 +55869,16 @@
     "source": "rel/movie_module/fn_12_31224.c",
     "symbols": [
       "fn_12_31224"
+    ],
+    "status": "matching",
+    "mw_version": "GC/1.3.2",
+    "extra_cflags": []
+  },
+  {
+    "module": "movie_module",
+    "source": "rel/movie_module/fn_12_3148.c",
+    "symbols": [
+      "fn_12_3148"
     ],
     "status": "matching",
     "mw_version": "GC/1.3.2",
@@ -56868,6 +56963,19 @@
   },
   {
     "module": "movie_module",
+    "source": "rel/movie_module/fn_12_35B08.c",
+    "symbols": [
+      "fn_12_35B08"
+    ],
+    "status": "matching",
+    "mw_version": "GC/1.3.2",
+    "extra_cflags": [
+      "-use_lmw_stmw",
+      "on"
+    ]
+  },
+  {
+    "module": "movie_module",
     "source": "rel/movie_module/fn_12_35D74.c",
     "symbols": [
       "fn_12_35D74"
@@ -57148,6 +57256,19 @@
     "status": "matching",
     "mw_version": "GC/1.3.2",
     "extra_cflags": []
+  },
+  {
+    "module": "movie_module",
+    "source": "rel/movie_module/fn_12_393F0.c",
+    "symbols": [
+      "fn_12_393F0"
+    ],
+    "status": "matching",
+    "mw_version": "GC/1.3.2",
+    "extra_cflags": [
+      "-use_lmw_stmw",
+      "on"
+    ]
   },
   {
     "module": "movie_module",
