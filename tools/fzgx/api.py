@@ -130,21 +130,43 @@ def _prologue_conflict(p: Project, key: str, unit_src: str) -> Optional[str]:
 
 # ------------------------------------------------------------------ inventory
 def sync(p: Project) -> Dict[str, int]:
+    """Load every function into the ledger and bring its status in line with the tree.
+
+    The repository is the truth for what is matched: a unit with status `matching` owns its symbols
+    (`asm` units become status `asm`), and a pool match (`pool: true`, retail object still linked) is
+    matched with link state `pool`. Unit symbols are written bare while the ledger keys ambiguous names
+    as `module:name`, so each is resolved through the symbol table. A function that is claimed, blocked
+    or already matched keeps its status, and nothing is ever downgraded. Ledger rows for symbols that
+    are no longer in the symbol files are counted in `stale_rows`, never deleted."""
     l = Ledger()
     rows = []
     for module in p.modules:
         for s in p.functions(module):
             rows.append({"symbol": p.key(s), "module": module, "unit": p.unit_of(s), "addr": s.addr, "size": s.size})
     n = l.sync_functions(rows)
+    known = {r["symbol"] for r in rows}
     matched = 0
     for u in p.load_units():
-        if u["status"] == "matching":
-            for s in u.get("symbols", []):
-                row = l.get(s)
-                if row and row["status"] != "matched":
-                    l.db.execute("UPDATE functions SET status='matched', best_percent=100, link_state='verified' WHERE symbol=?", (s,))
-                    matched += 1
-    return {"functions": len(rows), "inserted": n, "marked_matched": matched}
+        owned = u["status"] == "matching" or u.get("pool") is True
+        if not owned:
+            continue
+        for s in u.get("symbols", []):
+            row = l.get(s)
+            if row is None:
+                sym = p.find_symbol(s, u["module"])
+                row = l.get(p.key(sym)) if sym is not None else None
+            if row is None or row["status"] in ("matched", "asm", "claimed", "blocked"):
+                continue
+            if u.get("asm"):
+                l.db.execute("UPDATE functions SET status='asm', link_state='verified' WHERE symbol=?", (row["symbol"],))
+            else:
+                link = "pool" if u.get("pool") is True and u["status"] != "matching" else "verified"
+                l.db.execute("UPDATE functions SET status='matched', best_percent=100, link_state=? WHERE symbol=?",
+                             (link, row["symbol"]))
+            matched += 1
+    l.db.commit()
+    stale = sum(1 for (s,) in l.db.execute("SELECT symbol FROM functions") if s not in known)
+    return {"functions": len(rows), "inserted": n, "marked_matched": matched, "stale_rows": stale}
 
 
 def inventory(p: Project, module: Optional[str] = None, status: Optional[str] = None,
