@@ -44222,6 +44222,17 @@
   },
   {
     "module": "main_rel",
+    "source": "rel/main_rel/phys/fn_1_E1E9C.c",
+    "symbols": [
+      "fn_1_E1E9C"
+    ],
+    "status": "matching",
+    "mw_version": null,
+    "extra_cflags": [],
+    "tu": "rel/main_rel/phys.c"
+  },
+  {
+    "module": "main_rel",
     "source": "rel/main_rel/phys/fn_1_E35F0.c",
     "symbols": [
       "fn_1_E35F0"
