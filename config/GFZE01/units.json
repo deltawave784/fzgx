@@ -25720,6 +25720,19 @@
   },
   {
     "module": "main",
+    "source": "dol/longlong2str.c",
+    "symbols": [
+      "longlong2str"
+    ],
+    "status": "matching",
+    "mw_version": "GC/1.3.2",
+    "extra_cflags": [],
+    "pool": {
+      "@63": "@1248"
+    }
+  },
+  {
+    "module": "main",
     "source": "dol/main.c",
     "symbols": [
       "main"
