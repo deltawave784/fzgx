@@ -3107,6 +3107,91 @@ void fn_10_FF08(void) {
 }
 /* fzgx:end fn_10_FF08 */
 
+/* fzgx:begin fn_10_FF54 */
+#include "rel/sel/sel.h"
+
+typedef struct {
+u8 pad0[0xe]; s16 value; u8 pad10[0x10];
+} SelEntry;
+typedef struct {
+SelEntry entries[4]; u8 pad80[0x14]; u32 flags; u8 pad98[6]; u8 index; u8 pad9f[5]; u8 *items;
+} SelState;
+extern SelState lbl_1_bss_8B3A0;
+extern s32 lbl_801A66B4;
+extern void *lbl_1_data_418D4[];
+extern const f32 lbl_10_rodata_158[19];
+extern void fn_1_13D02C(void);
+extern void fn_1_49410(void);
+extern void fn_10_12C14(void);
+extern void fn_10_19040(void);
+extern void fn_10_1973C(void);
+extern void fn_10_21C44(s32);
+extern void fn_10_12024(void);
+extern void fn_1_133DBC(s32);
+extern void fn_1_134AD4(void);
+extern void fn_1_13DA0C(void);
+extern void fn_1_13DC54(void);
+extern void fn_1_13DDB8(void);
+extern void fn_10_117D0(void);
+extern void fn_10_10DB0(void);
+extern void fn_10_18A50(void *, u32);
+extern void fn_10_21DA8(void);
+extern void *fn_10_21C20(s32, s16);
+extern void fn_1_1380F0(void *);
+extern void fn_1_13B328(u32, s32);
+extern void fn_1_134EE4(s32,s32,s32,f32);
+extern void fn_1_135894(s32,s16,s32,s32,s32,s32,s32,f32,f32);
+extern void fn_1_136174(s32,s32,s32,s32,s16,s32,s32,f32,f32);
+extern void fn_1_13EDDC(s32,s32,s32,s32,s32);
+extern void fn_1_1363F0(s32,s32,s32);
+extern void fn_1_1368A0(s32,s32,s32,f32,f32,f32,f32,f32);
+static inline const f32 fn_10_FF54_array_read(const f32 *array, s32 index) { return array[index]; }
+#pragma opt_common_subs off
+void fn_10_FF54(void) {
+const f32 *pool = lbl_10_rodata_158;
+s32 index = lbl_1_bss_8B3A0.index;
+s16 value = lbl_1_bss_8B3A0.entries[(s16)index].value;
+s32 offset;
+s32 x;
+fn_1_13D02C();
+fn_1_49410();
+if (!(lbl_1_bss_8B3A0.flags & 0x80000000)) {
+lbl_10_bss_55690.unk_4 = fn_10_FF54_array_read(pool, 17);
+lbl_10_bss_55690.unk_0 = fn_10_FF54_array_read(pool, 17);
+fn_10_12C14();
+fn_10_19040();
+fn_10_1973C();
+fn_10_21C44(value);
+}
+fn_10_12024();
+fn_1_133DBC(1);
+fn_1_134AD4();
+fn_1_13DA0C();
+fn_1_13DC54();
+fn_1_13DDB8();
+fn_10_117D0();
+fn_10_10DB0();
+fn_10_18A50(&lbl_1_bss_8B3A0,0xac);
+if (lbl_1_bss_8B3A0.items[0x19]) {
+fn_10_21DA8();
+fn_1_1380F0(lbl_1_data_418D4[lbl_801A66B4]);
+} else {
+fn_1_1380F0(fn_10_21C20(8,(s16)lbl_801A66B4));
+}
+fn_1_13B328(0x40800000,0);
+fn_1_134EE4(0,1,0,fn_10_FF54_array_read(pool, 19));
+x = 0xd5;
+if (lbl_801A66B4 == 5) offset = 0;
+else offset = value > 40 ? 4 : 7;
+fn_1_135894(x,(s16)(0x16e-offset),6,value,0,index,0,fn_10_FF54_array_read(pool, 17),fn_10_FF54_array_read(pool, 17));
+fn_1_136174(0xd5,0x163,1,value,(s16)lbl_801A66B4,index,0,fn_10_FF54_array_read(pool, 18),fn_10_FF54_array_read(pool, 18));
+fn_1_13EDDC(0x1f9,0x181,value,index,0);
+fn_1_1363F0(index,0,1);
+fn_1_1368A0(value,index,0,fn_10_FF54_array_read(pool, 157),fn_10_FF54_array_read(pool, 158),fn_10_FF54_array_read(pool, 159),fn_10_FF54_array_read(pool, 17),fn_10_FF54_array_read(pool, 17));
+}
+#pragma opt_common_subs reset
+/* fzgx:end fn_10_FF54 */
+
 /* fzgx:begin fn_10_107D4 */
 /* Shared literal pool primer: retail addresses sel.c's .rodata literal pool through one
  * base register (r30 = lbl_10_rodata_158). These dummy functions reproduce the TU pool

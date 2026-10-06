@@ -15895,6 +15895,20 @@
   },
   {
     "module": "main",
+    "source": "dol/fn_800285DC.c",
+    "symbols": [
+      "fn_800285DC"
+    ],
+    "status": "matching",
+    "mw_version": "GC/1.2.5n",
+    "extra_cflags": [],
+    "pool": {
+      "@23": "jumptable_80129598",
+      "@25": "lbl_801A7030"
+    }
+  },
+  {
+    "module": "main",
     "source": "dol/fn_800288B4.c",
     "symbols": [
       "fn_800288B4"
@@ -63175,6 +63189,17 @@
     ],
     "status": "matching",
     "mw_version": null,
+    "extra_cflags": [],
+    "tu": "rel/sel/sel.c"
+  },
+  {
+    "module": "sel",
+    "source": "rel/sel/sel/fn_10_FF54.c",
+    "symbols": [
+      "fn_10_FF54"
+    ],
+    "status": "matching",
+    "mw_version": "GC/1.3.2",
     "extra_cflags": [],
     "tu": "rel/sel/sel.c"
   },

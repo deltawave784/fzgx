@@ -599,3 +599,6 @@ rel/sel/sel/fn_10_A0E8.c:
 
 rel/sel/name_entry/fn_10_266AC.c:
 	.text       start:0x000266AC end:0x000269A4 align:4
+
+rel/sel/sel/fn_10_FF54.c:
+	.text       start:0x0000FF54 end:0x00010168 align:4
