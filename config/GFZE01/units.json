@@ -15433,6 +15433,16 @@
   },
   {
     "module": "main",
+    "source": "dol/fn_800251F0.c",
+    "symbols": [
+      "fn_800251F0"
+    ],
+    "status": "matching",
+    "mw_version": "GC/1.2.5n",
+    "extra_cflags": []
+  },
+  {
+    "module": "main",
     "source": "dol/fn_800253F0.c",
     "symbols": [
       "fn_800253F0"
