@@ -1013,6 +1013,111 @@ void fn_1_CD6C0(fn_1_CD6C0_object *object) {
 #pragma opt_propagation reset
 /* fzgx:end fn_1_CD6C0 */
 
+/* fzgx:begin fn_1_CD7BC noprologue */
+#include "types.h"
+#include "font.h"
+
+extern const f32 lbl_1_rodata_5C3C; /* 320.0f */
+extern const f32 lbl_1_rodata_5C40; /* 240.0f */
+extern const f32 lbl_1_rodata_5C48; /* 10.0f */
+extern const f32 lbl_1_rodata_5C7C; /* 13.0f */
+extern const f32 lbl_1_rodata_5CFC; /* 1.0f */
+extern const f32 lbl_1_rodata_5D90; /* 0.0f */
+extern const f32 lbl_1_rodata_5E0C; /* 0.8f */
+extern const f32 lbl_1_rodata_5F10; /* 20.0f */
+extern const f32 lbl_1_rodata_5F18; /* 999.0f */
+extern const f32 lbl_1_rodata_5F1C; /* 1/13 */
+extern u32 lbl_1_rodata_26F8[22];
+extern u32 fn_1_864E8(int);
+extern u16 fn_1_8664C(int);
+extern u32 fn_1_58C4(void);
+extern u16 fn_1_48690(u32);
+extern u16 fn_1_486C4(u32);
+extern f32 lbl_8006D0B4(f32);
+extern int fn_1_4F734(FontDrawPacket *);
+
+struct FzgxCopy_88 { u32 words[22]; };
+
+void fn_1_CD7BC(s32 arg0) {
+    s32 base;
+    s32 y;
+    s32 n;
+    s32 i;
+    struct FzgxCopy_88 pkt;
+    f32 scale;
+    f32 one;
+    f32 step;
+    f32 count;
+
+    if (!(fn_1_864E8(arg0) & 0x10010080)) {
+        n = fn_1_8664C(arg0);
+        if (n > 0x14 && n < 0xAA) {
+            pkt = *(const struct FzgxCopy_88 *)lbl_1_rodata_26F8;
+            pkt.words[0] = 0x940C;
+            *(f32 *)((u8 *)&pkt + 12) = lbl_1_rodata_5F18;
+            if (fn_1_58C4() == 1) {
+                scale = lbl_1_rodata_5CFC;
+            } else {
+                scale = lbl_1_rodata_5E0C;
+            }
+            *(f32 *)((u8 *)&pkt + 16) *= scale;
+            if (fn_1_58C4() == 1) {
+                scale = lbl_1_rodata_5CFC;
+            } else {
+                scale = lbl_1_rodata_5E0C;
+            }
+            *(f32 *)((u8 *)&pkt + 20) *= scale;
+            i = 0;
+            y = 0;
+            base = n - 0x14;
+            *(f32 *)((u8 *)&pkt + 44) = lbl_1_rodata_5D90;
+            one = lbl_1_rodata_5CFC;
+            do {
+                s32 d;
+                *(f32 *)((u8 *)&pkt + 20) = one;
+                d = base - i;
+                if (i < 6) {
+                    if (d > 0 && d < 0xA) {
+                        pkt.words[0xC] = 9;
+                        *(f32 *)((u8 *)&pkt + 4) = lbl_1_rodata_5C3C - (f32)((fn_1_48690(pkt.words[0]) >> 1U) & 0x7FFF);
+                    } else {
+                        pkt.words[0xC] = 0xB;
+                        *(f32 *)((u8 *)&pkt + 4) = lbl_1_rodata_5C3C + (f32)((fn_1_48690(pkt.words[0]) >> 1U) & 0x7FFF);
+                    }
+                } else if (d > 0 && d < 0xA) {
+                    pkt.words[0xC] = 0xB;
+                    *(f32 *)((u8 *)&pkt + 4) = lbl_1_rodata_5C3C + (f32)((fn_1_48690(pkt.words[0]) >> 1U) & 0x7FFF);
+                } else {
+                    pkt.words[0xC] = 9;
+                    *(f32 *)((u8 *)&pkt + 4) = lbl_1_rodata_5C3C - (f32)((fn_1_48690(pkt.words[0]) >> 1U) & 0x7FFF);
+                }
+                *(f32 *)((u8 *)&pkt + 8) = (f32)y + (lbl_1_rodata_5C40 - (f32)((fn_1_486C4(pkt.words[0]) >> 1U) & 0x7FFF));
+                if (d > 0 && d < 0xA) {
+                    *(f32 *)((u8 *)&pkt + 16) *= lbl_8006D0B4(lbl_1_rodata_5C48 / (f32)(d + 1));
+                    *(f32 *)((u8 *)&pkt + 44) = (f32)d / lbl_1_rodata_5C48;
+                } else if (d > 0x82 && d < 0x96) {
+                    *(f32 *)((u8 *)&pkt + 16) *= lbl_8006D0B4(lbl_1_rodata_5F10 / (f32)(0x97 - d));
+                    *(f32 *)((u8 *)&pkt + 44) = (f32)(0x96 - d) / lbl_1_rodata_5F10;
+                } else if (d >= 0xA && d <= 0x82) {
+                    *(f32 *)((u8 *)&pkt + 16) = lbl_1_rodata_5CFC;
+                    *(f32 *)((u8 *)&pkt + 44) = lbl_1_rodata_5CFC;
+                } else if (d <= 0 || d >= 0x96) {
+                    *(f32 *)((u8 *)&pkt + 44) = lbl_1_rodata_5D90;
+                }
+                count = lbl_1_rodata_5C7C;
+                step = lbl_1_rodata_5F1C;
+                *(f32 *)((u8 *)&pkt + 28) = (f32)i / count;
+                *(f32 *)((u8 *)&pkt + 36) = (f32)(i + 1) / count;
+                *(f32 *)((u8 *)&pkt + 20) *= step;
+                fn_1_4F734((FontDrawPacket *)&pkt);
+                i += 1;
+                y += 4;
+            } while (i < 0xD);
+        }
+    }
+}
+/* fzgx:end fn_1_CD7BC */
+
 /* fzgx:begin fn_1_CF5B0 noprologue */
 #include "types.h"
 #include "font.h"

@@ -6773,3 +6773,6 @@ rel/main_rel/bg_tow/fn_1_154410.c:
 
 rel/main_rel/background/fn_1_9DDA8.c:
 	.text       start:0x0009DDA8 end:0x0009DFB8 align:4
+
+rel/main_rel/enemy_ctrl/fn_1_CD7BC.c:
+	.text       start:0x000CD7BC end:0x000CDC8C align:4
