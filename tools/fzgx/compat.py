@@ -20,10 +20,13 @@ if WINDOWS:
     # The tooling hashes, diffs and content-addresses what it writes, assuming the bytes
     # on disk are the text it wrote. Windows text mode writes CRLF and breaks that, so
     # Path.write_text writes LF unless a caller asks otherwise, exactly as on POSIX.
-    _write_text = Path.write_text
-
+    # Path.write_text only takes `newline` from Python 3.10; open() always does, and
+    # ninja runs configure.py under whichever `python` is first on PATH (3.9 here).
     def _write_text_lf(self, data, encoding=None, errors=None, newline="\n"):
-        return _write_text(self, data, encoding=encoding, errors=errors, newline=newline)
+        if not isinstance(data, str):
+            raise TypeError(f"data must be str, not {type(data).__name__}")
+        with open(self, "w", encoding=encoding, errors=errors, newline=newline) as f:
+            return f.write(data)
 
     Path.write_text = _write_text_lf
 
