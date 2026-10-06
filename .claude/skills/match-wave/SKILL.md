@@ -41,9 +41,11 @@ The routing is deterministic; you only dispatch and report. Run from the reposit
 5. **Close the wave** (after every agent has reported; these touch the build).
    - `uv run tools/fzgx.py reuse --max-size 2048`: rebinds matched C onto retail clones
      (wave 4: fn_1_8CAF4 and a 612-byte fn_1_10B344 from one Sonnet match).
-   - `uv run tools/fzgx.py fixup --min-percent 95 --apply --budget 1500 --output .fzgx/fixup/<wave>`:
+   - `uv run tools/fzgx.py fixup --min-percent 95 --apply --budget 300 --output .fzgx/fixup/<wave>`:
      the deterministic engine over every saved body at 95%+ (register, pragma and pool
-     families; wave 3 closed 3 functions in 7 minutes that agents had released). It submits,
+     families; wave 3 closed 3 functions in 7 minutes that agents had released). Use
+     `--budget 1500` every 4th wave and on the last wave of a run: agents already run this engine on
+     their own body at release, so the per-wave search mostly repeats it. It submits,
      verifies and commits exact results itself; commit `state/repairs/fixup_imports.json` after.
    - `uv run tools/fzgx.py verify` drains anything still `pending` (a full match is submitted,
      relinked and committed by the check that reaches 100%; this catches the rest).
@@ -113,8 +115,8 @@ already failed on (checked 2026-10-05: 14 of its top 16 rows were Fable releases
 (smallest first, no bonus for a saved body; untouched functions are all large, the small ones were tried long ago), keeps one function per (module, size) retail-clone family, and drops
 `:_prolog` entries and compiler save/restore helpers. `--small 512` sends rows up to 512 B to Sonnet
 (`matcher-mid`) and larger ones to Opus (`matcher-large`); at most 2 Opus rows per batch unless the user says
-otherwise. Take 8 rows, 6 agents at a time. Close-out is unchanged: `reuse`, `fixup`, `verify`, hash check,
-`report`. Agent ids use the `sonnet-`/`opus-` prefixes so the next batch's `--escalate-from` finds them. When the
+otherwise. Take 8 rows, 6 agents at a time. Close-out is the Fable batch close-out: `reuse`, `fixup` (`--budget 300`, `--budget 1200` every 4th batch and on the
+last), `verify`, hash check, `report`. Agent ids use the `sonnet-`/`opus-` prefixes so the next batch's `--escalate-from` finds them. When the
 route returns fewer than 8 rows, raise `--max-attempts` to 5, then `--max-size` to 1024. Yield is lower than
 Fable's near-miss yield (about 25% of fresher functions, measured earlier), so two consecutive fallback batches
 matching nothing stops the run. While in fallback mode check usage before every batch; the 5-hour and weekly
