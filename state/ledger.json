@@ -1,5 +1,5 @@
 {
- "generated": 1791321337,
+ "generated": 1791321527,
  "functions": [
   {
    "symbol": "car_colchg:_prolog",
@@ -16753,8 +16753,8 @@
    "addr": 2147626660,
    "size": 508,
    "status": "unmatched",
-   "attempts": 3,
-   "best_percent": 44.02362,
+   "attempts": 4,
+   "best_percent": 99.88189,
    "claimed_by": null,
    "claimed_at": null,
    "claim_ttl": null,
@@ -29295,19 +29295,19 @@
   {
    "symbol": "fn_80053090",
    "module": "main",
-   "unit": null,
+   "unit": "dol/fn_80053090.c",
    "addr": 2147823760,
    "size": 352,
-   "status": "unmatched",
-   "attempts": 5,
-   "best_percent": 91.22727,
+   "status": "matched",
+   "attempts": 6,
+   "best_percent": 100.0,
    "claimed_by": null,
    "claimed_at": null,
    "claim_ttl": null,
-   "matched_commit": null,
+   "matched_commit": "ecdd28ea",
    "blocked_reason": null,
    "prev_status": null,
-   "link_state": null
+   "link_state": "verified"
   },
   {
    "symbol": "fn_800531F0",
@@ -483995,6 +483995,44 @@
    "best_body_path": "C:\\Users\\tyler\\Documents\\Git\\FZero-GX-Decomp-codex\\.fzgx\\attempts\\fn_800789D8.1791321276.c",
    "stale_checks": 8,
    "best_in_attempt": 99.6748
+  },
+  {
+   "id": 18932,
+   "symbol": "fn_80022EA4",
+   "agent": "codex-goal-20261006-1516-5-codex-2",
+   "harness": "codex",
+   "model": "gpt-6.1-sol",
+   "started": 1791321388,
+   "ended": 1791321520,
+   "checks": 21,
+   "final_percent": 99.84252,
+   "tokens_in": 543676,
+   "tokens_out": 4096,
+   "cost_usd": 0.0,
+   "outcome": "released",
+   "notes": "plateau: 8 consecutive checks without improvement (best 99.9%)",
+   "best_body_path": "C:\\Users\\tyler\\Documents\\Git\\FZero-GX-Decomp-codex\\.fzgx\\attempts\\fn_80022EA4.1791321520.c",
+   "stale_checks": 8,
+   "best_in_attempt": 99.88189
+  },
+  {
+   "id": 18933,
+   "symbol": "fn_80053090",
+   "agent": "codex-goal-20261006-1516-5-codex-1",
+   "harness": "codex",
+   "model": "gpt-6.1-sol",
+   "started": 1791321388,
+   "ended": 1791321470,
+   "checks": 2,
+   "final_percent": 100.0,
+   "tokens_in": 78650,
+   "tokens_out": 622,
+   "cost_usd": 0.0,
+   "outcome": "matched",
+   "notes": "oracle match accepted automatically",
+   "best_body_path": null,
+   "stale_checks": 0,
+   "best_in_attempt": 100.0
   }
  ],
  "names": [
