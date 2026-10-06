@@ -670,6 +670,104 @@ void fn_1_134A4C(void) {
 }
 /* fzgx:end fn_1_134A4C */
 
+/* fzgx:begin fn_1_134AD4 noprologue */
+#include "types.h"
+#include "font.h"
+
+extern f32 lbl_1_rodata_26F8[22];
+extern const f32 lbl_1_rodata_861C;
+extern const f32 lbl_1_rodata_85F4;
+extern const f32 lbl_1_rodata_8658;
+extern const f32 lbl_1_rodata_8838;
+extern const f32 lbl_1_rodata_883C;
+extern const f32 lbl_1_rodata_8840;
+extern const f32 lbl_1_rodata_8844;
+extern const f32 lbl_1_rodata_8848;
+extern const f32 lbl_1_rodata_884C;
+extern const f32 lbl_1_rodata_8850;
+extern const f32 lbl_1_rodata_8854;
+extern const f32 lbl_1_rodata_8858;
+extern const f32 lbl_1_rodata_885C;
+extern int fn_1_4F734(FontDrawPacket *);
+extern s32 fn_1_A5DC4(void);
+extern u16 fn_1_486C4(u32);
+extern u16 fn_1_48690(u32);
+extern void fn_1_51678(FontDrawPacket *, u32, s16, s16, s16, s16);
+
+void fn_1_134AD4(void) {
+    FontDrawPacket packet;
+    s16 height;
+    s16 width;
+
+    packet = *(FontDrawPacket *)lbl_1_rodata_26F8;
+    packet.image = 0x9A04;
+    packet.x = lbl_1_rodata_861C;
+    packet.y = lbl_1_rodata_861C;
+    packet.z = lbl_1_rodata_85F4;
+    fn_1_4F734(&packet);
+
+    packet = *(FontDrawPacket *)lbl_1_rodata_26F8;
+    packet.image = 0x9A05;
+    packet.x = lbl_1_rodata_8658;
+    packet.y = lbl_1_rodata_861C;
+    packet.z = lbl_1_rodata_8838;
+    fn_1_4F734(&packet);
+
+    packet = *(FontDrawPacket *)lbl_1_rodata_26F8;
+    packet.image = 0x9A01;
+    packet.x = lbl_1_rodata_861C;
+    packet.y = lbl_1_rodata_883C;
+    packet.z = lbl_1_rodata_8840;
+    fn_1_4F734(&packet);
+
+    if ((s8)fn_1_A5DC4() != 0) {
+        /* left half of the top strip, then the mirrored right half */
+        packet = *(FontDrawPacket *)lbl_1_rodata_26F8;
+        packet.image = 0x9A06;
+        height = fn_1_486C4(0x9A06);
+        fn_1_51678(&packet, packet.image, 0, 0, (fn_1_48690(packet.image) >> 1) & 0x7FFF, height);
+        packet.x = lbl_1_rodata_8844;
+        packet.y = lbl_1_rodata_861C;
+        packet.z = lbl_1_rodata_8848;
+        fn_1_4F734(&packet);
+
+        packet = *(FontDrawPacket *)lbl_1_rodata_26F8;
+        packet.image = 0x9A06;
+        height = fn_1_486C4(0x9A06);
+        width = (fn_1_48690(packet.image) >> 1) & 0x7FFF;
+        fn_1_51678(&packet, packet.image, (fn_1_48690(packet.image) >> 1) & 0x7FFF, 0, width, height);
+        packet.x = lbl_1_rodata_884C;
+        packet.y = lbl_1_rodata_861C;
+        packet.z = lbl_1_rodata_8850;
+        packet.flags = 7;
+        fn_1_4F734(&packet);
+
+        /* bottom strip, same split */
+        packet = *(FontDrawPacket *)lbl_1_rodata_26F8;
+        packet.image = 0x9A03;
+        width = fn_1_486C4(0x9A03);
+        fn_1_51678(&packet, packet.image, 0, 0, (fn_1_48690(packet.image) >> 1) & 0x7FFF, width);
+        packet.x = lbl_1_rodata_8844;
+        packet.y = lbl_1_rodata_8854;
+        packet.z = lbl_1_rodata_8858;
+        packet.scale_y *= lbl_1_rodata_885C;
+        fn_1_4F734(&packet);
+
+        packet = *(FontDrawPacket *)lbl_1_rodata_26F8;
+        packet.image = 0x9A03;
+        width = fn_1_486C4(0x9A03);
+        height = (fn_1_48690(packet.image) >> 1) & 0x7FFF;
+        fn_1_51678(&packet, packet.image, (fn_1_48690(packet.image) >> 1) & 0x7FFF, 0, height, width);
+        packet.x = lbl_1_rodata_884C;
+        packet.y = lbl_1_rodata_8854;
+        packet.z = lbl_1_rodata_8858;
+        packet.scale_y *= lbl_1_rodata_885C;
+        packet.flags = 7;
+        fn_1_4F734(&packet);
+    }
+}
+/* fzgx:end fn_1_134AD4 */
+
 /* fzgx:begin fn_1_134EE4 */
 #pragma opt_strength_reduction on
 void fn_1_134EE4(s32 arg0, s32 arg1, s32 arg2, f32 farg0) {

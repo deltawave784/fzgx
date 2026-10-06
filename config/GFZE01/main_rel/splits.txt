@@ -6701,3 +6701,6 @@ rel/main_rel/car_test/fn_1_8DD54.c:
 
 rel/main_rel/camera/fn_1_ABAC.c:
 	.text       start:0x0000ABAC end:0x0000AD94 align:4
+
+rel/main_rel/sel_static_disp/fn_1_134AD4.c:
+	.text       start:0x00134AD4 end:0x00134EE4 align:4
