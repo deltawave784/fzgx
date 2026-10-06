@@ -5540,3 +5540,6 @@ dol/longlong2str.c:
 
 dol/fn_80064A30.c:
 	.text       start:0x80064A30 end:0x80064D4C align:4
+
+dol/fn_8008596C.c:
+	.text       start:0x8008596C end:0x80085C7C align:4

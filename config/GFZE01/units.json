@@ -24408,6 +24408,36 @@
   },
   {
     "module": "main",
+    "source": "dol/fn_8008596C.c",
+    "symbols": [
+      "fn_8008596C"
+    ],
+    "status": "matching",
+    "mw_version": "GC/1.3.2",
+    "extra_cflags": [],
+    "pool": {
+      "@56": "lbl_801A7508",
+      "@57": "lbl_801A7510",
+      "@58": "lbl_801A7518",
+      "@65": "lbl_801A7550",
+      "@64": "lbl_801A7548",
+      "@63": "lbl_801A7540",
+      "@62": "lbl_801A7538",
+      "@70": "lbl_801A7578",
+      "@69": "lbl_801A7570",
+      "@61": "lbl_801A7530",
+      "@68": "lbl_801A7568",
+      "@60": "lbl_801A7528",
+      "@67": "lbl_801A7560",
+      "@66": "lbl_801A7558",
+      "@59": "lbl_801A7520",
+      "@71": "lbl_801A7580",
+      "@72": "lbl_801A7588",
+      "@73": "lbl_801A7590"
+    }
+  },
+  {
+    "module": "main",
     "source": "dol/fn_80087BA4.c",
     "symbols": [
       "fn_80087BA4"
@@ -62915,6 +62945,17 @@
     "source": "rel/sel/sel/fn_10_A7DC.c",
     "symbols": [
       "fn_10_A7DC"
+    ],
+    "status": "matching",
+    "mw_version": null,
+    "extra_cflags": [],
+    "tu": "rel/sel/sel.c"
+  },
+  {
+    "module": "sel",
+    "source": "rel/sel/sel/fn_10_A90C.c",
+    "symbols": [
+      "fn_10_A90C"
     ],
     "status": "matching",
     "mw_version": null,

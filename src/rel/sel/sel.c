@@ -2133,6 +2133,92 @@ int fn_10_A7DC(s16 mode) {
 }
 /* fzgx:end fn_10_A7DC */
 
+/* fzgx:begin fn_10_A90C */
+struct fn_10_A90C_lbl_1_bss_8B3A0 {
+    s16 value;
+    u8 pad_0[0x92];
+    u32 flags;
+    u32 unk_98;
+};
+extern struct fn_10_A90C_lbl_1_bss_8B3A0 lbl_1_bss_8B3A0;
+extern u8 lbl_1_bss_9C8[];
+extern u8 lbl_1_bss_9F8[];
+extern void fn_1_12F128(s16);
+extern int fn_1_FA070(void);
+extern int fn_1_FA0BC(s32);
+extern void fn_1_A2D84(u32);
+
+static inline int valid(s16 mode) {
+    if (lbl_1_bss_8B3A0.flags & 0x200) {
+        if (mode == 0) return 1;
+        if (mode >= 1 && mode <= 3) return 1;
+        if (mode == 4) {
+            if (fn_1_FA070() != 0) return 1;
+        }
+        if (mode == 5) {
+            if (fn_1_FA0BC(lbl_1_bss_8B3A0.value == 1) != 0) return 1;
+        }
+    } else {
+        if (mode >= 1 && mode <= 3) return 1;
+        if (mode == 4) {
+            if (fn_1_FA070() != 0) return 1;
+        }
+        if (mode == 5) {
+            if (fn_1_FA0BC(lbl_1_bss_8B3A0.value == 1) != 0) return 1;
+        }
+    }
+    return 0;
+}
+#pragma opt_common_subs off
+void fn_10_A90C(void *arg0) {
+    s16 delta = 0;
+    s16 i;
+    u16 b;
+    u16 a;
+    s32 v;
+    s32 sum;
+    for (i = 0; i < 4; i++) {
+        if ((s8)lbl_1_bss_9C8[i * 12 + 10] != -1 &&
+            __rlwnm(lbl_1_bss_8B3A0.unk_98, (i + 1) & 31, 31, 31)) {
+            if ((*(u16 *)(lbl_1_bss_9F8 + i * 20 + 16) & 1) ||
+                (*(u16 *)(lbl_1_bss_9F8 + i * 20 + 18) & 1)) delta--;
+            if (((*(u16 *)(lbl_1_bss_9F8 + i * 20 + 16) >> 1) & 1) ||
+                ((*(u16 *)(lbl_1_bss_9F8 + i * 20 + 18) >> 1) & 1)) delta++;
+            a = *(u16 *)(lbl_1_bss_9F8 + i * 20 + 16);
+            if (((a >> 1) & 1) || (((b = *(u16 *)(lbl_1_bss_9F8 + i * 20 + 18)) >> 1) & 1))
+                fn_1_12F128(i);
+            else if ((a & 1) || (b & 1)) fn_1_12F128(i);
+        }
+    }
+    if (delta != 0) {
+        if (*(u32 *)((u8 *)arg0 + 0x94) & 0x40000000) {
+            sum = *(s16 *)((u8 *)arg0 + 0x8c) + delta;
+            if (sum > 8) v = 6;
+            else {
+                v = 8;
+                if (sum >= 6) v = sum;
+            }
+            *(s16 *)((u8 *)arg0 + 0x8c) = v;
+        } else {
+            s32 v2;
+            s32 sum2;
+            do {
+                sum2 = *(s16 *)((u8 *)arg0 + 0x8c) + delta;
+                if (sum2 > 10) v2 = 0;
+                else {
+                    v2 = 10;
+                    if (sum2 >= 0) v2 = sum2;
+                }
+                *(s16 *)((u8 *)arg0 + 0x8c) = v2;
+            } while (!valid(*(s16 *)((u8 *)arg0 + 0x8c)));
+        }
+        *(s16 *)((u8 *)arg0 + 0x8e) = 0;
+        fn_1_A2D84(0xA9010000);
+    }
+}
+#pragma opt_common_subs reset
+/* fzgx:end fn_10_A90C */
+
 /* fzgx:begin fn_10_BD64 */
 #define SEL_MAX(x, y) ((x) > (y) ? (x) : (y))
 
