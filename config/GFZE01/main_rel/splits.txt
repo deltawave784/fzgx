@@ -6782,3 +6782,9 @@ rel/main_rel/live_camera/fn_1_F6A8.c:
 
 rel/main_rel/live_camera/fn_1_103B0.c:
 	.text       start:0x000103B0 end:0x000107B8 align:4
+
+rel/main_rel/camera/fn_1_C10C.c:
+	.text       start:0x0000C10C end:0x0000C178 align:4
+
+rel/main_rel/stcoli/fn_1_289B4.c:
+	.text       start:0x000289B4 end:0x00028F08 align:4
