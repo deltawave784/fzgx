@@ -201,6 +201,161 @@ void fn_1_E1C10(void) {
 #pragma opt_common_subs reset
 /* fzgx:end fn_1_E1C10 */
 
+/* fzgx:begin fn_1_E1E9C */
+extern s16 fn_1_7B054(void);
+extern u8 lbl_1_data_2B0D4[112];
+extern u32 lbl_1_bss_85288[2];
+extern char *fn_80083DB0(char *, const char *);
+extern size_t strlen(const char *);
+extern s32 fn_8006FC5C(void *, void *, size_t);
+
+typedef struct {
+    u32 flags;
+    void *name;
+} PhysEntryInfo;
+
+typedef struct {
+    u32 flags;
+    u8 pad_4[0x4];
+    PhysEntryInfo *info;
+} PhysEntry;
+
+typedef struct {
+    u8 pad_0[0xA];
+    s16 kind;
+    u8 pad_C[0x2];
+    s16 index;
+    s16 slots[4];
+    u8 pad_18[0x120];
+    u64 flags;
+} PhysObj;
+
+/* Linear search of the 0x40-byte entry table for an entry whose name starts with buf. */
+#define FIND_ENTRY(dst)                                                                        \
+    for (i = 0; i < (s32)lbl_1_bss_3BE0->unk_48; i++) {                                        \
+        if (fn_8006FC5C((*(PhysEntry **)(lbl_1_bss_3BE0->unk_54 + i * 0x40 + 8))->info->name,  \
+                        buf, strlen(buf))) {                                                   \
+            dst = i;                                                                           \
+            break;                                                                             \
+        }                                                                                      \
+    }
+
+void fn_1_E1E9C(PhysObj *obj) {
+    char buf[0x20];
+    struct { const char *value; } strtab;  /* string table kept in a register */
+    s16 result;
+    Obj_1_data_2A7E0_At3C *state;
+    s32 i;
+    PhysEntry *entry;
+    s16 j;
+
+    state = lbl_1_data_2A7E0.unk_3C;
+    strtab.value = (const char *)&lbl_1_data_3DC98;
+    if ((obj->flags & 0x2000000ULL) != 0) {
+        switch (lbl_1_data_2B0D4[fn_1_7B054()]) {
+        case 1:
+            switch (obj->kind) {
+            case 1:
+                result = (s16)state->unk_0;
+                break;
+            default:
+                result = -1;
+                break;
+            }
+            break;
+        case 13:
+            switch (obj->kind) {
+            case 4:
+                result = (s16)state->unk_0;
+                break;
+            default:
+                result = -1;
+                break;
+            }
+            break;
+        case 6:
+            switch (obj->kind) {
+            case 5:
+                result = (s16)*(u32 *)((u8 *)state + 0xFD64);
+                break;
+            default:
+                result = -1;
+                break;
+            }
+            break;
+        default:
+            result = -1;
+            break;
+        }
+
+        if (result == -1) {
+            switch (obj->kind) {
+            case 1:
+                result = (s16)lbl_1_bss_85288[0];
+                break;
+            case 5:
+                result = (s16)lbl_1_bss_85288[1];
+                break;
+            default:
+                result = -1;
+                break;
+            }
+        }
+
+        if (result == -1) {
+            obj->slots[0] = -1;
+            obj->slots[1] = -1;
+            obj->slots[2] = -1;
+            obj->slots[3] = -1;
+            switch (obj->kind) {
+            case 5:
+                fn_80083DB0(buf, strtab.value + 0x124);
+                FIND_ENTRY(result);
+                fn_80083DB0(buf, strtab.value + 0x134);
+                FIND_ENTRY(obj->slots[0]);
+                fn_80083DB0(buf, strtab.value + 0x14C);
+                FIND_ENTRY(obj->slots[1]);
+                fn_80083DB0(buf, strtab.value + 0x164);
+                FIND_ENTRY(obj->slots[2]);
+                break;
+            case 1:
+                fn_80083DB0(buf, strtab.value + 0x17C);
+                FIND_ENTRY(result);
+                fn_80083DB0(buf, strtab.value + 0x180);
+                FIND_ENTRY(obj->slots[0]);
+                fn_80083DB0(buf, strtab.value + 0x18C);
+                FIND_ENTRY(obj->slots[1]);
+                fn_80083DB0(buf, strtab.value + 0x198);
+                FIND_ENTRY(obj->slots[2]);
+                break;
+            case 4:
+                fn_80083DB0(buf, strtab.value + 0x20);
+                FIND_ENTRY(result);
+                break;
+            }
+        }
+
+        if (result == -1) {
+            obj->flags &= ~0x2000000ULL;
+        } else {
+            obj->index = result;
+            entry = (PhysEntry *)(lbl_1_bss_3BE0->unk_54 + (obj->index << 6));
+            switch (obj->kind) {
+            case 4:
+                entry->info->flags |= 0x20;
+                break;
+            }
+            entry->flags |= 0x80000000;
+            for (j = 0; j < 4; j++) {
+                if (obj->slots[j] != -1) {
+                    *(u32 *)(lbl_1_bss_3BE0->unk_54 + (obj->slots[j] << 6)) |= 0x80000000;
+                }
+            }
+        }
+    }
+}
+/* fzgx:end fn_1_E1E9C */
+
 /* fzgx:begin fn_1_E35F0 noprologue */
 #include "types.h"
 

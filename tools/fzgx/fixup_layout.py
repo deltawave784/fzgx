@@ -134,10 +134,25 @@ def field_decls(body):
             dims = re.findall(r"\[([^\]]+)\]", m.group(3) or '')
             out[m.group(2)] = (ttext, dims, line)
             continue
-        pm = re.match(r"([\w\s\*]+)\(\s*\*\s*(\w+)\s*\)\s*(\([^)]*\));$", line)
+        pm = re.match(r"([\w\s\*]+)\(\s*\*\s*(\w+)\s*((?:\[[^\]]+\])*)\s*\)\s*(\([^)]*\));$", line)
         if pm:
-            out[pm.group(2)] = (None, [], line)
+            # a function pointer or an array of them: `void (*funcs[5])(void);`
+            out[pm.group(2)] = (None, re.findall(r"\[([^\]]+)\]", pm.group(3) or ''), line)
     return out
+
+
+def pointer_typedef(tname, text):
+    """A typedef naming a pointer type: `typedef void (*Handler)(T *);` or `typedef T *P;`."""
+    if tname is None:
+        return True
+    if '*' in tname:
+        return True
+    for src in (text, include_text()):
+        if re.search(r"\btypedef\b[^;{}]*\(\s*\*\s*%s\s*\)\s*\(" % re.escape(tname), src):
+            return True
+        if re.search(r"\btypedef\s+(?:struct\s+)?\w+\s*\*\s*%s\s*;" % re.escape(tname), src):
+            return True
+    return False
 
 
 def probe_layout(p, module, prefix, tname, names, decls, tag):
@@ -194,7 +209,7 @@ def filler(prefix, pos, end):
 def fdef(decl, name):
     ttext, dims, raw = decl
     if ttext is None:
-        return re.sub(r"\(\s*\*\s*\w+\s*\)", f"(*{name})", raw)
+        return re.sub(r"\(\s*\*\s*\w+\s*((?:\[[^\]]+\])*)\s*\)", lambda m: f"(*{name}{m.group(1)})", raw, count=1)
     return f"{ttext}{'' if ttext.endswith('*') else ' '}{name}{''.join(f'[{d}]' for d in dims)};"
 
 
@@ -775,13 +790,24 @@ def initialized_data_views(p, symbol, text):
     function = re.search(r'\n[^\n;{}]*\b' + re.escape(sym.name) + r'\s*\([^;{}]*\)\s*\{', text)
     if not function:
         return
-    pattern = (r'(?:(?:struct\s+)?\w+\s*\*\s*)?(\w+)\s*=\s*'
-               r'\((?:struct\s+)?(\w+)\s*\*\)\s*&?(lbl_\w+)\s*;')
+    # `T *p = (T *)&lbl;`, or the uncast form `T *p = &lbl;` / `p = &lbl;` whose type comes
+    # from the pointer's or the object's own declaration (fn_1_154798, fn_1_58994)
+    pattern = (r'(?:(?:struct\s+)?(\w+)\s*\*\s*)?(\w+)\s*=\s*'
+               r'(?:\((?:struct\s+)?(\w+)\s*\*\)\s*)?&?(lbl_\w+)\s*;')
     for model in re.finditer(pattern, text[function.start():]):
-        var, tag, base = model.groups()
+        declared, var, tag, base = model.groups()
         known = p.symbols(sym.module).get(base)
         if not known or known.section != '.data':
             continue
+        if tag is None:
+            tag = declared
+            if tag is None:
+                pointer_decl = re.search(r'(?m)^[ \t]*(?:struct\s+)?(\w+)\s*\*\s*' + re.escape(var) + r'\s*;',
+                                         text[function.start():])
+                object_decl = re.search(r'\bextern\s+(?:struct\s+)?(\w+)\s+' + re.escape(base) + r'\s*;', text)
+                tag = (pointer_decl or object_decl or [None, None])[1]
+            if tag is None or tag in SCALAR:
+                continue
         members = struct_text(tag, text)
         if members is None:
             continue
@@ -796,8 +822,11 @@ def initialized_data_views(p, symbol, text):
             if error:
                 continue
             used = sorted(set(used) | {n for n, m in all_fields.items() if m[0] in byte_offsets})
-        if not used or any(n not in decls or decls[n][0] not in ('u32', 's32', 'f32', 'char', 'u8', 'char *', 'void *')
-                           or len(decls[n][1]) > 1 for n in used):
+        if not used or any(n not in decls or len(decls[n][1]) > 1 for n in used):
+            continue
+        # function-pointer tables (inline or through a typedef) are pointer words like `char *`
+        if any(decls[n][0] not in ('u32', 's32', 'f32', 'char', 'u8', 'char *', 'void *')
+               and not pointer_typedef(decls[n][0], text) for n in used):
             continue
         statement = model[0]
         rest = text[:function.start()] + text[function.start():].replace(statement, '', 1)
@@ -860,7 +889,8 @@ def initialized_data_views(p, symbol, text):
                                    (prefix, cursor, (lo - cursor) // 4, ', '.join(value(i) for i in range(cursor, lo, 4))))
             ty, dims, declaration = decls[name]
             native = prefix + '_' + name
-            if '*' in ty and any(i not in relocations and any(raw[i:i + 4]) for i in range(lo, hi, 4)):
+            pointer = ty is None or '*' in ty or pointer_typedef(ty, text)
+            if ty is None or (pointer and any(i not in relocations and any(raw[i:i + 4]) for i in range(lo, hi, 4))):
                 # Inferred pointer arrays sometimes extend into adjacent text.
                 # Keep their bounds, but store non-pointer words as words rather
                 # than manufacturing literal pointer casts from string bytes.
@@ -891,7 +921,7 @@ def initialized_data_views(p, symbol, text):
                     valid = False
                     break
             else:
-                values = ', '.join(('(' + ty + ')' if '*' in ty else '') + value(i) for i in range(lo, hi, 4))
+                values = ', '.join(('(' + ty + ')' if pointer else '') + value(i) for i in range(lo, hi, 4))
             if values is not None:
                 initializer = '{' + values + '}' if dims else values
                 definitions.append('static ' + fdef(decls[name], native).rstrip(';') + ' = ' + initializer + '; /* fzgx-allow: A1 measured pool bytes and bindings */')

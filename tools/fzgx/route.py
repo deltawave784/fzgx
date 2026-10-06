@@ -91,7 +91,8 @@ def plan(p: Project, limit: int = 8, small: int = 256, near: float = 80.0,
 def tried_by(prefix: str) -> set:
     """Symbols a tier already attempted, by agent-id prefix (`sonnet-...`, as the match-wave
     skill names agents) or by recorded model name."""
-    rows = Ledger().db.execute("SELECT DISTINCT symbol FROM attempts WHERE agent LIKE ? OR model LIKE ?",
+    rows = Ledger().db.execute("SELECT DISTINCT symbol FROM attempts WHERE (agent LIKE ? OR model LIKE ?) "
+                               "AND COALESCE(outcome, '') != 'crash' AND COALESCE(notes, '') NOT LIKE '%usageLimitExceeded%'",
                                (prefix + "%", prefix + "%")).fetchall()
     return {r["symbol"] for r in rows}
 

@@ -6728,3 +6728,75 @@ rel/main_rel/camera/fn_1_6BC0.c:
 
 rel/main_rel/bg_cas/fn_1_FF6B8.c:
 	.text       start:0x000FF6B8 end:0x000FFA0C align:4
+
+rel/main_rel/live_camera/fn_1_FCB0.c:
+	.text       start:0x0000FCB0 end:0x00010138 align:4
+
+rel/main_rel/spline/fn_1_F7A20.c:
+	.text       start:0x000F7A20 end:0x000F7B2C align:4
+
+rel/main_rel/sound/fn_1_A31E4.c:
+	.text       start:0x000A31E4 end:0x000A33F0 align:4
+
+rel/main_rel/bg_win/fn_1_15DD7C.c:
+	.text       start:0x0015DD7C end:0x0015DFD4 align:4
+
+rel/main_rel/spline/fn_1_F4F08.c:
+	.text       start:0x000F4F08 end:0x000F5458 align:4
+
+rel/main_rel/replay/fn_1_F3574.c:
+	.text       start:0x000F3574 end:0x000F37F4 align:4
+
+rel/main_rel/bg_cas/fn_1_FE014.c:
+	.text       start:0x000FE014 end:0x000FE5C4 align:4
+
+rel/main_rel/bg_tow/fn_1_154798.c:
+	.text       start:0x00154798 end:0x001547FC align:4
+
+rel/main_rel/phys/fn_1_E1E9C.c:
+	.text       start:0x000E1E9C end:0x000E252C align:4
+
+rel/main_rel/bg_cas/fn_1_FBC5C.c:
+	.text       start:0x000FBC5C end:0x000FBEA8 align:4
+
+rel/main_rel/memcard/fn_1_BED04.c:
+	.text       start:0x000BED04 end:0x000BF198 align:4
+
+rel/main_rel/motasglist/fn_1_433E0.c:
+	.text       start:0x000433E0 end:0x000438AC align:4
+
+rel/main_rel/sel_static_disp/fn_1_150654.c:
+	.text       start:0x00150654 end:0x001507C4 align:4
+
+rel/main_rel/bg_tow/fn_1_154410.c:
+	.text       start:0x00154410 end:0x00154708 align:4
+
+rel/main_rel/background/fn_1_9DDA8.c:
+	.text       start:0x0009DDA8 end:0x0009DFB8 align:4
+
+rel/main_rel/enemy_ctrl/fn_1_CD7BC.c:
+	.text       start:0x000CD7BC end:0x000CDC8C align:4
+
+rel/main_rel/live_camera/fn_1_F6A8.c:
+	.text       start:0x0000F6A8 end:0x0000FA84 align:4
+
+rel/main_rel/live_camera/fn_1_103B0.c:
+	.text       start:0x000103B0 end:0x000107B8 align:4
+
+rel/main_rel/camera/fn_1_C10C.c:
+	.text       start:0x0000C10C end:0x0000C178 align:4
+
+rel/main_rel/stcoli/fn_1_289B4.c:
+	.text       start:0x000289B4 end:0x00028F08 align:4
+
+rel/main_rel/bg_common/fn_1_1185B4.c:
+	.text       start:0x001185B4 end:0x001188CC align:4
+
+rel/main_rel/sound/fn_1_A24CC.c:
+	.text       start:0x000A24CC end:0x000A266C align:4
+
+rel/main_rel/archive/fn_1_12E0B8.c:
+	.text       start:0x0012E0B8 end:0x0012E424 align:4
+
+rel/main_rel/accessory/fn_1_10D2F0.c:
+	.text       start:0x0010D2F0 end:0x0010D7D4 align:4

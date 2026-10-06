@@ -685,6 +685,218 @@ void fn_1_10C7B4(fn_1_10C7B4_AccessoryObject *self) {
 }
 /* fzgx:end fn_1_10C7B4 */
 
+/* fzgx:begin fn_1_10D2F0 noprologue */
+#include "types.h"
+
+typedef struct fn_1_10D2F0_Vec3 {
+    f32 x, y, z;
+} fn_1_10D2F0_Vec3;
+
+typedef struct fn_1_10D2F0_Entry {
+    u8 unk_0;
+    u8 unk_1;
+    u8 pad_2[0xE];
+    fn_1_10D2F0_Vec3 unk_10;
+    fn_1_10D2F0_Vec3 unk_1C;
+    fn_1_10D2F0_Vec3 unk_28;
+    u8 pad_34[0xC];
+    f32 unk_40;
+} fn_1_10D2F0_Entry;
+
+typedef struct fn_1_10D2F0_Link {
+    fn_1_10D2F0_Entry *a;
+    fn_1_10D2F0_Entry *b;
+    f32 len;
+} fn_1_10D2F0_Link;
+
+typedef struct fn_1_10D2F0_Obj {
+    u8 pad_0[0x18];
+    u32 unk_18;
+    u32 unk_1C;
+    u8 pad_20[4];
+    fn_1_10D2F0_Entry *unk_24;
+    fn_1_10D2F0_Link *unk_28;
+} fn_1_10D2F0_Obj;
+
+/* The TU's literal pool, addressed through one base register. */
+struct fn_1_10D2F0_rodata {
+    u8 pad_0[0x64];
+    f32 unk_64;   /* -1.0f */
+    f32 unk_68;   /* 0.0f */
+    u8 pad_6C[0xFC];
+    f64 unk_168;  /* 0.015 */
+    f32 unk_170;  /* -0.5f */
+    u8 pad_174[0x4];
+    f64 unk_178;  /* 0.045 */
+};
+
+extern const struct fn_1_10D2F0_rodata lbl_1_rodata_7AB8;
+extern void *lbl_801A6410;
+extern char lbl_1_data_40530[];
+extern void fn_1_10846C(fn_1_10D2F0_Obj *);
+extern void fn_1_128884(void *, void *, s32);
+extern void *fn_1_4630(void *, u32, const char *, int);
+extern f32 fn_1_1289BC(fn_1_10D2F0_Entry *, fn_1_10D2F0_Entry *);
+
+/* Copy everything of an entry except its category (unk_1) and padding. */
+#define COPY_ENTRY(dst, src)          \
+    do {                              \
+        (dst)->unk_40 = (src)->unk_40; \
+        (dst)->unk_0 = (src)->unk_0;   \
+        (dst)->unk_28 = (src)->unk_28; \
+        (dst)->unk_10 = (src)->unk_10; \
+        (dst)->unk_1C = (src)->unk_1C; \
+    } while (0)
+
+/* Each loop steps its own entry pointer: one shared pointer would interfere
+   with every loop's temporaries and be coloured ahead of the counter. */
+void fn_1_10D2F0(fn_1_10D2F0_Obj *obj) {
+    struct { const struct fn_1_10D2F0_rodata *p; } pool;
+    fn_1_10D2F0_Entry *pa;
+    u32 jb;
+    u32 jc;
+    u32 i;
+    fn_1_10D2F0_Entry *e0;
+    fn_1_10D2F0_Entry *e1;
+    fn_1_10D2F0_Entry *e2;
+    fn_1_10D2F0_Entry *e3;
+    fn_1_10D2F0_Entry *e4;
+    fn_1_10D2F0_Entry *e5;
+    fn_1_10D2F0_Entry *e6;
+    u32 ja;
+    fn_1_10D2F0_Entry *pb;
+    fn_1_10D2F0_Entry *pc;
+    u32 count;
+    u32 n;
+    u32 quarter;
+    fn_1_10D2F0_Entry *p1;
+    fn_1_10D2F0_Entry *p2;
+    fn_1_10D2F0_Entry *p3;
+    fn_1_10D2F0_Entry *last;
+
+    pool.p = &lbl_1_rodata_7AB8;
+    if (obj == NULL) {
+        return;
+    }
+    fn_1_10846C(obj);
+
+    e0 = obj->unk_24;
+    for (i = 0; i < obj->unk_18; i++, e0++) {
+        if (e0->unk_0 & 1) {
+            e0->unk_0 = 0;
+            if (e0->unk_10.x > pool.p->unk_168) {
+                e0->unk_40 = pool.p->unk_170;
+                e0->unk_1 = 1;
+            } else {
+                e0->unk_40 = pool.p->unk_64;
+                e0->unk_1 = 2;
+            }
+        } else {
+            e0->unk_40 = pool.p->unk_68;
+            e0->unk_0 = 1;
+            if (e0->unk_10.x > pool.p->unk_178) {
+                e0->unk_1 = 0;
+            } else {
+                e0->unk_1 = 3;
+            }
+        }
+    }
+
+    /* Sort by category. */
+    e1 = obj->unk_24;
+    for (i = 0; i < obj->unk_18; i++, e1++) {
+        pa = &obj->unk_24[i] + 1;
+        for (ja = i + 1; ja < obj->unk_18; ja++, pa++) {
+            if (e1->unk_1 > pa->unk_1) {
+                fn_1_128884(e1, pa, sizeof(fn_1_10D2F0_Entry));
+            }
+        }
+    }
+
+    /* Within a category, descending z. */
+    e2 = obj->unk_24;
+    for (i = 0; i < obj->unk_18; i++, e2++) {
+        pb = &obj->unk_24[i] + 1;
+        for (jb = i + 1; jb < obj->unk_18; jb++, pb++) {
+            if (e2->unk_1 == pb->unk_1 && e2->unk_10.z < pb->unk_10.z) {
+                fn_1_128884(e2, pb, sizeof(fn_1_10D2F0_Entry));
+            }
+        }
+    }
+
+    /* Within a category and side, order by y. */
+    e3 = obj->unk_24;
+    for (i = 0; i < obj->unk_18; i++, e3++) {
+        pc = &obj->unk_24[i] + 1;
+        for (jc = i + 1; jc < obj->unk_18; jc++, pc++) {
+            if (e3->unk_1 == pc->unk_1) {
+                if (e3->unk_10.z > pool.p->unk_68 && pc->unk_10.z > pool.p->unk_68) {
+                    if (e3->unk_10.y > pc->unk_10.y) {
+                        fn_1_128884(e3, pc, sizeof(fn_1_10D2F0_Entry));
+                    }
+                } else if (e3->unk_10.z < *(const f32 *)((const u8 *)pool.p + 0x68) && pc->unk_10.z < *(const f32 *)((const u8 *)pool.p + 0x68)) {
+                    if (e3->unk_10.y < pc->unk_10.y) {
+                        fn_1_128884(e3, pc, sizeof(fn_1_10D2F0_Entry));
+                    }
+                }
+            }
+        }
+    }
+
+    n = obj->unk_18;
+    p3 = obj->unk_24;
+    p1 = p3;
+    for (i = 0; i < n; i++) {
+        if (p1->unk_1 == 1) {
+            break;
+        }
+        p1++;
+    }
+    for (i = 0; i < n; i++) {
+        if (p3->unk_1 == 3) {
+            break;
+        }
+        p3++;
+    }
+    COPY_ENTRY(p1, p3);
+
+    e4 = obj->unk_24;
+    n = obj->unk_18;
+    p2 = e4;
+    for (i = 0; i < n; i++) {
+        if (p2->unk_1 == 2) {
+            break;
+        }
+        p2++;
+    }
+    last = &e4[n - 1];
+    COPY_ENTRY(p2 - 1, last);
+
+    quarter = obj->unk_18 >> 2;
+    obj->unk_1C = quarter * 3 + (quarter - 1) * 4;
+    obj->unk_28 = fn_1_4630(lbl_801A6410, obj->unk_1C * 12, lbl_1_data_40530, 3568);
+
+    count = 0;
+    e5 = obj->unk_24;
+    for (i = 0; i < obj->unk_18 - 1; i++, e5++) {
+        if (e5->unk_1 == (e5 + 1)->unk_1) {
+            obj->unk_28[count].a = e5;
+            obj->unk_28[count].b = e5 + 1;
+            obj->unk_28[count].len = fn_1_1289BC(e5, e5 + 1);
+            count++;
+        }
+    }
+
+    e6 = obj->unk_24;
+    for (i = 0; i < obj->unk_18 - quarter; i++, e6++) {
+        obj->unk_28[count].a = e6;
+        obj->unk_28[count].b = e6 + quarter;
+        obj->unk_28[count].len = fn_1_1289BC(e6, e6 + quarter);
+        count++;
+    }
+}
+/* fzgx:end fn_1_10D2F0 */
+
 /* fzgx:begin fn_1_1154D0 */
 typedef struct {
     u8 active;

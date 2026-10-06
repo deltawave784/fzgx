@@ -818,6 +818,139 @@ void fn_1_EE04(Fn1EE04Context *context) {
 }
 /* fzgx:end fn_1_EE04 */
 
+/* fzgx:begin fn_1_F6A8 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/live_camera.h"
+
+typedef struct {
+    u32 flags;
+    s32 unk_4;
+    u32 unk_8;
+    u32 unk_C;
+} Sig_fn_1_45730_LoadEntry;
+typedef struct {
+    u32 unk_0;
+    u8 pad_4[0x48];
+    Sig_fn_1_45730_LoadEntry entry;
+} Sig_fn_1_45730_LoadResult;
+
+extern u8 fn_1_3F1F8(void);
+extern int fn_1_45730(char *, Sig_fn_1_45730_LoadResult *);
+extern u32 fn_1_45B2C(Sig_fn_1_45730_LoadResult *);
+extern void *fn_1_4630(u32 heap, u32 size, const char *file, int line);
+extern void fn_1_458A0(Sig_fn_1_45730_LoadResult *, void *, u32, u32);
+extern void fn_1_45850(Sig_fn_1_45730_LoadResult *);
+extern s16 fn_1_7B054(void);
+extern void fn_80006E10(const char *);
+extern int sprintf(char *s, const char *format, ...);
+extern u32 lbl_801A6410;
+
+#define ALIGN32(n) (((n) + 0x1F) & ~0x1F)
+
+/* Retail rematerialises the __FILE__ string address (dat + 0x68) at each
+ * allocation; keep MWCC from hoisting it into a saved register. */
+#pragma opt_common_subs off
+#pragma opt_propagation off
+/* Load the three live-camera data files into freshly allocated buffers. */
+void fn_1_F6A8(void) {
+    Obj_1_data_43B8 *dat = (Obj_1_data_43B8 *)&lbl_1_data_43B8;
+    Obj_1_bss_1148 *st = (Obj_1_bss_1148 *)&lbl_1_bss_1148;
+    u32 size;
+    s32 mode;
+    u32 n;
+    char path[128];
+    Sig_fn_1_45730_LoadResult file;
+
+    if ((s32)dat->unk_13C >= 0 && (s32)dat->unk_140 >= 0 && (s32)dat->unk_144 >= 0) {
+        return;
+    }
+
+    fn_80006E10((const char *)dat + 0x280);
+    dat->unk_13C = 0;
+    st->unk_67C = 0;
+    dat->unk_140 = 0;
+    st->unk_680 = 0;
+    dat->unk_144 = 0;
+    st->unk_684 = 0;
+
+    mode = (u32)&lbl_1_bss_960;
+    mode = *(s16 *)mode;
+    if (mode == 10) {
+        sprintf(path, (const char *)dat + 0x284, fn_1_3F1F8());
+        if (fn_1_45730(path, &file) == 0) {
+            sprintf(path, (const char *)dat + 0x2A0);
+            fn_1_45730(path, &file);
+        }
+    } else if (mode == 14) {
+        if (lbl_1_bss_525C.unk_191 & 2) {
+            switch (lbl_1_bss_525C.unk_192) {
+            case 4:
+                sprintf(path, (const char *)dat + 0x2BC);
+                break;
+            case 3:
+                sprintf(path, (const char *)dat + 0x2D4);
+                break;
+            case 2:
+                sprintf(path, (const char *)dat + 0x2EC);
+                break;
+            default:
+                sprintf(path, (const char *)dat + 0x2EC);
+                break;
+            }
+        } else {
+            sprintf(path, (const char *)dat + 0x304);
+        }
+        fn_1_45730(path, &file);
+    } else {
+        sprintf(path, (const char *)dat + 0x324, fn_1_3F1F8());
+        if (fn_1_45730(path, &file) == 0) {
+            sprintf(path, (const char *)dat + 0x33C);
+            fn_1_45730(path, &file);
+        }
+    }
+
+    dat->unk_13C = fn_1_45B2C(&file) / 84;
+    n = ALIGN32(fn_1_45B2C(&file));
+    size = n;
+    st->unk_67C = (u32)fn_1_4630(lbl_801A6410, n, (const char *)dat + 0x68, 0x58D);
+    fn_1_458A0(&file, (void *)st->unk_67C, size, 0);
+    fn_1_45850(&file);
+
+    if (fn_1_7B054() == 50) {
+        fn_80006E10((const char *)dat + 0x350);
+        return;
+    }
+
+    sprintf(path, (const char *)dat + 0x354, fn_1_3F1F8());
+    if (fn_1_45730(path, &file) == 0) {
+        sprintf(path, (const char *)dat + 0x364);
+        fn_1_45730(path, &file);
+    }
+    dat->unk_140 = fn_1_45B2C(&file) / 40;
+    mode = ALIGN32(fn_1_45B2C(&file));
+    size = mode;
+    st->unk_680 = (u32)fn_1_4630(lbl_801A6410, size, (const char *)dat + 0x68, 0x5A5);
+    fn_1_458A0(&file, (void *)st->unk_680, size, 0);
+    fn_1_45850(&file);
+
+    sprintf(path, (const char *)dat + 0x374, fn_1_3F1F8());
+    if (fn_1_45730(path, &file) == 0) {
+        sprintf(path, (const char *)dat + 0x388);
+        fn_1_45730(path, &file);
+    }
+    dat->unk_144 = fn_1_45B2C(&file) / 12;
+    n = ALIGN32(fn_1_45B2C(&file));
+    size = n;
+    st->unk_684 = (u32)fn_1_4630(lbl_801A6410, size, (const char *)dat + 0x68, 0x5B6);
+    fn_1_458A0(&file, (void *)st->unk_684, size, 0);
+    fn_1_45850(&file);
+
+    fn_80006E10((const char *)dat + 0x350);
+}
+#pragma opt_common_subs reset
+/* fzgx:end fn_1_F6A8 */
+
 /* fzgx:begin fn_1_FA84 */
 void fn_1_FA84(void) {
     Obj_1_data_43B8 *p_lbl_1_data_43B8;
@@ -921,6 +1054,137 @@ void fn_1_FB50(LiveCam_FB50 *cam) {
     }
 }
 /* fzgx:end fn_1_FB50 */
+
+/* fzgx:begin fn_1_FCB0 noprologue */
+#include "types.h"
+
+typedef struct {
+    u8 unk_0;
+    u8 pad_1;
+    s16 unk_2;
+    s16 unk_4;
+    s16 unk_6;
+    u16 unk_8;
+    u8 pad_A[0x2];
+    u32 unk_C;
+    u16 unk_10;
+    s16 unk_12;
+    s16 unk_14;
+    u8 pad_16[0x2];
+    u32 unk_18;
+    u8 pad_1C[0x48];
+    u16 unk_64;
+} Sig_fn_1_101D0_Fn_1_101D0_State;
+
+extern s32 camera_get_state(void);
+extern u32 lbl_801A63C0;
+extern u32 fn_1_107B8(Sig_fn_1_101D0_Fn_1_101D0_State *);
+extern u32 fn_1_864E8(int);
+extern u8 fn_1_86624(void);
+extern void camera_set_result(s16);
+extern void camera_set_selected_value(u8);
+extern void fn_1_5370(s8, u32);
+
+#define NEXT_RAND() (lbl_801A63C0 = lbl_801A63C0 * 0x676A4B6B + 13259)
+#define RAND15(v) ((s32)(((v) >> 16) & 0x7FFF))
+
+void fn_1_FCB0(Sig_fn_1_101D0_Fn_1_101D0_State * arg0, f32 arg1) {
+    s32 rnd;
+    s16 prev14;
+    u32 mask;
+    s32 start;
+    u8 kind;
+
+    kind = arg0->unk_0;
+    if (kind == 1 && (arg0->unk_C & 0x80000) != 0) {
+        arg0->unk_12 = 4;
+        if ((f64)(u32)arg0->unk_64 > 210.0) {
+            arg0->unk_64 = 0;
+        } else {
+            arg0->unk_64 = 210;
+        }
+        return;
+    }
+    if (kind == 0) {
+        if ((arg0->unk_C & 0x80000) == 0) {
+            arg0->unk_12 = (s16)(RAND15(NEXT_RAND()) % 4);
+            if ((s32)arg0->unk_12 == arg0->unk_2) {
+                arg0->unk_12 = (s16)((arg0->unk_2 + 1) % 4);
+            }
+        } else {
+            arg0->unk_12 = (s16)(RAND15(NEXT_RAND()) % 6);
+            if ((s32)arg0->unk_12 >= 5) {
+                arg0->unk_12 = 4;
+            }
+            if ((s32)arg0->unk_12 == arg0->unk_2) {
+                if ((s32)arg0->unk_12 == 4) {
+                    prev14 = arg0->unk_4;
+                    fn_1_107B8(arg0);
+                    if (prev14 == (s32)arg0->unk_14) {
+                        arg0->unk_12 = (s16)((arg0->unk_2 + 1) % 5);
+                    }
+                } else {
+                    arg0->unk_12 = (s16)((arg0->unk_2 + 1) % 5);
+                }
+            }
+        }
+    } else {
+        arg0->unk_12 = (s16)(RAND15(NEXT_RAND()) % 6);
+        if ((s32)arg0->unk_12 == arg0->unk_2) {
+            arg0->unk_12 = (s16)((arg0->unk_2 + 1) % 6);
+        }
+        if ((s32)arg0->unk_12 == 5) {
+            arg0->unk_12 = 4;
+        }
+        if ((s32)arg0->unk_12 == 4) {
+            if ((arg0->unk_C & 0x80000) == 0) {
+                arg0->unk_12 = 3;
+            }
+            if (arg0->unk_0 == 2) {
+                arg0->unk_12 = (s16)((arg0->unk_2 + 1) % 3);
+            }
+        }
+        if ((s8)camera_get_state() == 6) {
+            if ((s32)arg0->unk_12 == 2) {
+                arg0->unk_12 = (s16)(((s32)arg0->unk_12 + 1) % 3);
+            }
+        }
+    }
+    if ((f64)(u32)arg0->unk_64 > 210.0) {
+        arg0->unk_64 = 0;
+    } else {
+        arg0->unk_64 = 210;
+    }
+    if ((s8)camera_get_state() == 6) {
+        rnd = RAND15(NEXT_RAND());
+        arg0->unk_6 = (s16)(rnd % (s32)(s8)fn_1_86624());
+        if ((fn_1_864E8(arg0->unk_6) & 0x1) == 0) {
+            mask = 0x8000880;
+            if ((fn_1_864E8(arg0->unk_6) & mask) != 0) {
+                start = arg0->unk_6;
+                do {
+                    arg0->unk_6++;
+                    if ((s32)arg0->unk_6 >= (s32)(s8)fn_1_86624()) {
+                        arg0->unk_6 = 0;
+                    }
+                    if ((s32)arg0->unk_6 < 0) {
+                        arg0->unk_6 = (s8)fn_1_86624() - 1;
+                    }
+                } while ((fn_1_864E8(arg0->unk_6) & mask) != 0 && start != (s32)arg0->unk_6);
+                if (start == (s32)arg0->unk_6) {
+                    camera_set_selected_value(1);
+                    camera_set_result(arg0->unk_6);
+                    fn_1_5370(0, 0);
+                    camera_set_result(arg0->unk_6);
+                    camera_set_selected_value(0);
+                    return;
+                }
+            }
+        }
+        arg0->unk_8 = arg0->unk_6;
+    }
+}
+/* fzgx:end fn_1_FCB0 */
 
 /* fzgx:begin fn_1_10138 */
 void fn_1_10138(void) {
@@ -1057,6 +1321,173 @@ void fn_1_10268(Camera_1_10268 *arg) {
     arg->unk_58 = t.unk_1C;
 }
 /* fzgx:end fn_1_10268 */
+
+/* fzgx:begin fn_1_103B0 noprologue */
+#include "types.h"
+#include "rel/main_rel/live_camera.h"
+
+#pragma section code_type ".fzgxpool"
+__declspec(section ".fzgxpool") static void fzgx_pool_prime1(void) {
+    volatile f32 s; volatile f64 d;  /* fzgx-allow: S2 pool primer sinks */
+    s = 1.0f;
+    s = 300.0f;
+    s = 320.0f;
+    s = 234.0f;
+    s = 230.0f;
+    s = 0.0f;
+    s = 0.5f;
+    s = 2.0f;
+    s = 0.009999999776482582f;
+    s = 0.019999999552965164f;
+}
+static const u32 fzgx_pool_table2[4] = {0x0032FFFF, 0x000000FF, 0x000000FF, 0x00000000};  /* fzgx-allow: A1 retail pool bytes */
+__declspec(section ".fzgxpool") static void fzgx_pool_keep2(void) { const u32 *volatile cp; cp = fzgx_pool_table2; }  /* fzgx-allow: S2 pool primer sink */
+__declspec(section ".fzgxpool") static void fzgx_pool_prime3(void) {
+    volatile f32 s; volatile f64 d;  /* fzgx-allow: S2 pool primer sinks */
+    d = 0.2;
+    s = 0.6000000238418579f;
+    s = 62.0f;
+    s = 16.0f;
+    s = 0.20000000298023224f;
+    s = 3.0f;
+    s = 940.0f;
+    s = 650.0f;
+    s = 36.0f;
+    d = 4503601774854144.0;
+    d = 4503599627370496.0;
+    s = 9350.0f;
+    s = 1800.0f;
+    d = 210.0;
+    s = 32.0f;
+    s = 484.0f;
+    s = 424.0f;
+    s = 588.0f;
+    s = 443.0f;
+    s = 480.0f;
+    s = 430.0f;
+}
+static const u32 fzgx_pool_table4[1] = {0x00000000};  /* fzgx-allow: A1 retail pool bytes */
+__declspec(section ".fzgxpool") static void fzgx_pool_keep4(void) { const u32 *volatile cp; cp = fzgx_pool_table4; }  /* fzgx-allow: S2 pool primer sink */
+__declspec(section ".fzgxpool") static void fzgx_pool_prime5(void) {
+    volatile f32 s; volatile f64 d;  /* fzgx-allow: S2 pool primer sinks */
+    d = 0.75;
+    s = 1.8249999284744263f;
+}
+static const u32 fzgx_pool_table6[1] = {0x9999999A};  /* fzgx-allow: A1 retail pool bytes */
+__declspec(section ".fzgxpool") static void fzgx_pool_keep6(void) { const u32 *volatile cp; cp = fzgx_pool_table6; }  /* fzgx-allow: S2 pool primer sink */
+__declspec(section ".fzgxpool") static void fzgx_pool_prime7(void) {
+    volatile f32 s; volatile f64 d;  /* fzgx-allow: S2 pool primer sinks */
+    d = 1.0;
+}
+#pragma section code_type ".text"
+
+typedef struct {
+    f32 x, y, z;
+} LiveCamVec;
+
+/* one keyframe endpoint: position/target pair plus fov and roll */
+typedef struct {
+    u32 unk_0;
+    LiveCamVec pos;
+    LiveCamVec target;
+    f32 fov;
+    s16 roll;
+    s16 pad_22;
+} LiveCamFrame;
+
+/* lbl_1_bss_17C4.unk_0 element, 0x54 bytes */
+typedef struct {
+    u32 duration;
+    f32 rate;
+    LiveCamFrame from;
+    LiveCamFrame to;
+    s16 mode;
+    s16 pad_52;
+} LiveCamKey;
+
+typedef struct {
+    u8 unk_0;
+    u8 pad_1[0x3];
+    s16 unk_4;
+    u8 pad_6[0xE];
+    s16 unk_14;
+    u8 pad_16[0x6];
+    LiveCamVec pos;
+    u8 pad_28[0x24];
+    LiveCamVec target;
+    f32 fov;
+    s16 roll;
+    u8 pad_5E[0x6];
+    u16 unk_64;
+} LiveCamState;
+
+extern s32 fn_80008E30(u32);
+extern s32 fn_1_40BB4(void);
+extern void *lbl_8006D5A4(void *, void *, void *, f32);
+
+void fn_1_103B0(LiveCamState *cam) {
+    LiveCamKey *key;
+    s32 count;
+    s32 last;
+    u32 raw;
+    LiveCamFrame from;
+    LiveCamFrame to;
+    f32 t;
+
+    raw = lbl_1_data_44F4.unk_0;
+    key = &((LiveCamKey *)lbl_1_bss_17C4.unk_0)[cam->unk_4];
+    if (cam->unk_0 == 3) {
+        count = (s16)raw;
+        if (fn_1_40BB4() == 0) {
+            if ((lbl_1_bss_9F8.unk_A >> 1) & 1) {
+                cam->unk_14++;
+            }
+            if (lbl_1_bss_9F8.unk_A & 1) {
+                cam->unk_14--;
+            }
+            last = count - 1;
+            if (cam->unk_14 > last) {
+                cam->unk_14 = 0;
+            }
+            if (cam->unk_14 < 0) {
+                cam->unk_14 = last;
+            }
+        }
+    }
+    if (cam->unk_64 != 0) {
+        from = key->from;
+        to = key->to;
+        switch (key->mode) {
+        case 0:
+            t = 1.0 - (f32)cam->unk_64 / (f32)fn_80008E30(key->duration);
+            lbl_8006D5A4(&from.pos, &to.pos, &cam->pos, t);
+            lbl_8006D5A4(&from.target, &to.target, &cam->target, t);
+            cam->fov = from.fov + (f32)(t * (to.fov - from.fov));
+            cam->roll = from.roll + (s16)(s32)(t * (f32)(to.roll - from.roll));
+            break;
+        case 3:
+            lbl_1_bss_17D0.unk_8 -= 1.0f;
+            if (lbl_1_bss_17D0.unk_8 < lbl_1_bss_17D0.unk_C / 2.0f) {
+                lbl_1_bss_17D0.unk_10 -= lbl_1_bss_17D0.unk_14;
+            } else {
+                lbl_1_bss_17D0.unk_10 += lbl_1_bss_17D0.unk_14;
+            }
+            t = (lbl_1_bss_17D0.unk_0 += lbl_1_bss_17D0.unk_10);
+            lbl_8006D5A4(&from.pos, &to.pos, &cam->pos, t);
+            lbl_8006D5A4(&from.target, &to.target, &cam->target, t);
+            cam->fov = from.fov + (f32)(t * (to.fov - from.fov));
+            cam->roll = from.roll + (s16)(s32)(t * (f32)(to.roll - from.roll));
+            break;
+        case 2:
+            lbl_8006D5A4(&cam->pos, &to.pos, &cam->pos, key->rate);
+            lbl_8006D5A4(&cam->target, &to.target, &cam->target, key->rate);
+            cam->fov = cam->fov + (f32)(key->rate * (to.fov - cam->fov));
+            cam->roll = cam->roll + (s32)(key->rate * (f32)(to.roll - cam->roll));
+            break;
+        }
+    }
+}
+/* fzgx:end fn_1_103B0 */
 
 /* fzgx:begin fn_1_11544 noprologue */
 #include "types.h"

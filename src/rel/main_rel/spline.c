@@ -106,6 +106,53 @@ extern void fn_1_FB18C(void);
 extern void fn_8001D3E4(u32 channel, u32 command);
 extern u32 lbl_801A66A0;
 
+/* fzgx:begin fn_1_F4F08 */
+extern void *lbl_801A6410;
+extern u8 lbl_1_data_3E8E0[0x9];
+
+extern void *fn_1_4630(void *, u32, const char *, int);
+extern void fn_1_46B4(void *, void *, const char *, int);
+
+/* Natural cubic spline setup: computes second derivatives y2[] for the
+ * knots (x[], y[]) by tridiagonal elimination. */
+void fn_1_F4F08(u32 n, f32 *x, f32 *y, f32 *y2) {
+    f32 *u;
+    f32 *d;
+    s32 m;
+    u32 i;
+    s32 k;
+    f32 t;
+    s32 tmp_cse1;
+tmp_cse1 = n * 4;
+
+    u = fn_1_4630(lbl_801A6410, tmp_cse1, (const char *)lbl_1_data_3E8E0, 0x37);
+    d = fn_1_4630(lbl_801A6410, tmp_cse1, (const char *)lbl_1_data_3E8E0, 0x38);
+
+    y2[n - 1] = 0.0f;
+    y2[0] = 0.0f;
+    for (i = 0; i < n - 1; i++) {
+        u[i] = x[i + 1] - x[i];
+        d[i + 1] = (y[i + 1] - y[i]) / u[i];
+    }
+
+    y2[1] = (d[2] - d[1]) - (f32)(u[0] * y2[0]);
+    d[1] = 2.0f * (x[2] - x[0]);
+    for (i = 1; i < n - 2; i++) {
+        t = u[i] / d[i];
+        y2[i + 1] = (d[i + 2] - d[i + 1]) - (f32)(t * y2[i]);
+        d[i + 1] = (f32)(2.0f * (x[i + 2] - x[i])) - (f32)(t * u[i]);
+    }
+
+    y2[n - 2] -= (f32)(u[n - 2] * y2[n - 1]);
+    for (k = n - 2; k > 0; k--) {
+        y2[k] = (y2[k] - (f32)(u[k] * y2[k + 1])) / d[k];
+    }
+
+    fn_1_46B4(lbl_801A6410, u, (const char *)lbl_1_data_3E8E0, 0x4c);
+    fn_1_46B4(lbl_801A6410, d, (const char *)lbl_1_data_3E8E0, 0x4d);
+}
+/* fzgx:end fn_1_F4F08 */
+
 /* fzgx:begin fn_1_F55C4 */
 void fn_1_F55C4(f32 *out, f32 *arg1, f32 *in, f32 *arg3) {
     f32 temp[4];
@@ -546,6 +593,98 @@ void fn_1_F79C8(void) {
     lbl_1_data_414[0] = 0xffff;
 }
 /* fzgx:end fn_1_F79C8 */
+
+/* fzgx:begin fn_1_F7A20 pool noprologue */
+#include "types.h"
+
+typedef struct {
+    u8 data[0x180];
+} SplineEntry;
+
+typedef struct {
+    u8 kind;        // 0x00
+    u8 pad[7];
+    u8 flag;        // 0x08
+} SplineMarker;
+
+typedef struct {
+    u8 head[0xF4];
+    s32 count;                  // 0x0F4
+    SplineEntry entries[48];    // 0x0F8
+    s32 count2;                 // 0x48F8
+    u8 rest[0x260];             // 0x48FC
+    SplineMarker marker;        // 0x4B5C
+    u8 tail[0x5360 - 0x4B65];
+} SplineBuf;                    // 0x5360
+
+/* retail lays these objects out consecutively in the TU's .bss and
+ * addresses them off one section base */
+u32 lbl_1_bss_7F0A0;
+u32 lbl_1_bss_7F0A4;
+u8 lbl_1_bss_7F0A8[0x18];
+SplineBuf lbl_1_bss_7F0C0;
+SplineMarker *lbl_1_bss_84420;
+
+extern void fn_1_F7B2C(void);
+extern void fn_1_F7E88(void);
+extern void fn_1_F8048(void);
+extern void fn_1_F82E0(void);
+extern void fn_1_F8A18(void);
+extern void fn_1_F89C0(void);
+extern void fn_1_F8B24(void);
+extern void fn_1_F9C6C(void);
+extern void fn_1_F9E4C(void);
+extern void fn_1_F9D24(void);
+extern void fn_1_F9DA4(void);
+extern void fn_1_F9CD0(u8, u8);
+extern void fn_1_FA1D8(s32, s32, SplineEntry *);
+extern u32 fn_1_FA4D4(void);
+extern void fn_1_FA61C(void);
+extern u32 fn_800793D4(void *, u32, u32);
+
+/* MWCC emits .bss objects in first-access order: this primer (in a section the
+ * linker ignores) fixes the retail layout, including the untouched 0x18-byte gap */
+#pragma section ".fzgxpool"
+__declspec(section ".fzgxpool") void fzgx_primer_fn_1_F7A20(void)
+{
+    lbl_1_bss_7F0A0 = 0;
+    lbl_1_bss_7F0A4 = 0;
+    lbl_1_bss_7F0A8[0] = 0;
+    lbl_1_bss_7F0C0.count = 0;
+    lbl_1_bss_84420 = 0;
+}
+
+void fn_1_F7A20(void)
+{
+    s32 i;
+
+    lbl_1_bss_7F0A4 = 0;
+    lbl_1_bss_7F0A0 = 0;
+    fn_800793D4(&lbl_1_bss_7F0C0, 0, sizeof(SplineBuf));
+    lbl_1_bss_84420 = &lbl_1_bss_7F0C0.marker;
+    fn_1_F7B2C();
+    fn_1_F7E88();
+    fn_1_F8048();
+    fn_1_F82E0();
+    fn_1_F8A18();
+    fn_1_F89C0();
+    fn_1_F8B24();
+    fn_1_F9C6C();
+    fn_1_F9E4C();
+    fn_1_F9D24();
+    fn_1_F9DA4();
+    fn_1_F9CD0(0, 0);
+    lbl_1_bss_7F0C0.count = 0;
+    lbl_1_bss_7F0C0.count2 = 0;
+    for (i = 0; i < 48; i++) {
+        fn_1_FA1D8(i / 6, i % 6, &lbl_1_bss_7F0C0.entries[i]);
+    }
+    lbl_1_bss_84420->kind = 0x7C;
+    lbl_1_bss_84420->flag = 1;
+    fn_1_FA4D4();
+    fn_1_FA61C();
+}
+/* fzgx:end fn_1_F7A20 */
 
 /* fzgx:begin fn_1_F7B2C */
 void fn_1_F7B2C(void) {

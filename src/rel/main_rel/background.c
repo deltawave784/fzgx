@@ -225,6 +225,89 @@ void fn_1_9D9E4(void) {
 }
 /* fzgx:end fn_1_9D9E4 */
 
+/* fzgx:begin fn_1_9DDA8 noprologue */
+#include "types.h"
+
+typedef struct {
+    s32 type;     /* 0: constant, 1: linear, else: hermite */
+    f32 time;
+    f32 value;
+    f32 tanIn;
+    f32 tanOut;
+} CurveKey;
+
+/* Evaluate a keyframe curve at time t; derivative != 0 returns the slope. */
+f32 fn_1_9DDA8(s32 count, CurveKey *keys, s32 derivative, f32 t) {
+    CurveKey *p;
+    s32 i;
+    f32 a, dt, d, m0, m1, u, s, u2, u3, w, b, e;
+    f64 lin;
+
+    if (count < 2 || t <= keys[0].time) {
+        if (derivative) {
+            return keys[0].tanOut;
+        }
+        return keys[0].value;
+    }
+    if (t >= keys[count - 1].time) {
+        if (derivative) {
+            return keys[count - 1].tanIn;
+        }
+        return keys[count - 1].value;
+    }
+
+    count--;
+    keys++;
+    for (i = 1; i < count; i++) {
+        if (keys->time > t) {
+            break;
+        }
+        keys++;
+    }
+    p = keys - 1;
+
+    if (derivative) {
+        switch (p->type) {
+        case 0:
+            return 0.0f;
+        case 1:
+            return keys->value - p->value;
+        default:
+            a = t - p->time;
+            dt = keys->time - p->time;
+            d = p->value - keys->value;
+            m0 = (f32)(dt * p->tanOut);
+            u = a / dt;
+            s = m0 + (f32)(dt * keys->tanIn);
+            return m0 + ((f32)((f32)(u * u) * (((f32)(2.0f * d) + s) / 3.0f))
+                         - (f32)(u * ((m0 + ((f32)(3.0f * d) + s)) / 2.0f)));
+        }
+    } else {
+        switch (p->type) {
+        case 0:
+            return p->value;
+        case 1:
+            dt = keys->time - p->time;
+            a = t - p->time;
+            u = a / dt;
+            lin = p->value * (1.0 - u);
+            return lin + (f32)(keys->value * u);
+        default:
+            a = t - p->time;
+            dt = keys->time - p->time;
+            u = a / dt;
+            u2 = (f32)(u * u);
+            u3 = (f32)(u2 * u);
+            w = u3 - u2;
+            e = (f32)(2.0f * w) - u2;
+            b = u + (w - u2);
+            return ((f32)((1.0f + e) * p->value) - (f32)(e * keys->value))
+                   + (f32)(dt * ((f32)(p->tanOut * b) + (f32)(w * keys->tanIn)));
+        }
+    }
+}
+/* fzgx:end fn_1_9DDA8 */
+
 /* fzgx:begin fn_1_9E14C */
 void fn_1_9E14C(u32 arg0, u32 arg1) {
     fn_1_9DDA8(arg0, arg1, 0);

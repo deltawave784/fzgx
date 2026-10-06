@@ -246,6 +246,148 @@ void fn_1_FB9DC(int index) {
 }
 /* fzgx:end fn_1_FB9DC */
 
+/* fzgx:begin fn_1_FBC5C noprologue */
+#include "types.h"
+
+/* one 0x60-byte track element; six of them per 0x270-byte entry starting at 0xC */
+typedef struct {
+    u32 unk_0;
+    u8 unk_4;
+    u8 unk_5;
+    u8 pad_6[2];
+    u32 unk_8;
+    f32 pos[3];   /* 0xC */
+    f32 rate;     /* 0x18 */
+    f32 rate2;    /* 0x1C */
+    f32 unk_20;
+    f32 scale[3]; /* 0x24 */
+    u8 pad_30[0x30];
+} CasElem;
+
+typedef struct {
+    u8 pad_0[0xC];
+    CasElem elem[6];  /* 0xC .. 0x24C */
+    u32 unk_24C;
+    u8 unk_250[4];
+    u8 flags[4];      /* 0x254 */
+    f32 speed[3];     /* 0x258 */
+    f32 speed2[3];    /* 0x264 */
+} CasEntry;
+
+extern CasEntry lbl_1_bss_84454[];
+
+/* Literal pool of the retail TU (lbl_1_rodata_7590): MWCC pools literals in
+ * first-use order across the TU, so the earlier functions' data comes first.
+ * MWCC emits a function's aggregate data before its scalar literals, so each
+ * retail function with both gets its own primer. */
+static const u8 fzgx_pool_7590[5] = {0x49, 0x4A, 0x4B, 0x4C, 0x64};
+
+#pragma section code_type ".fzgxpool"
+static void fzgx_pool_layout(void) {
+    volatile f32 s; /* fzgx-allow: S2 pool primer sink: fixes the TU literal order */
+    volatile u32 w; /* fzgx-allow: S2 pool primer sink: fixes the TU literal order */
+    w = fzgx_pool_7590[0];
+    s = 0.0f;
+}
+
+/* file-scope tables are emitted where they are defined: after the first primer's literal */
+static const u32 fzgx_pool_759C[6] = {0x2D, 0x30, 0x2A, 0x27, 0x39, 0x36};
+
+static void fzgx_pool_layout_1(void) {
+    volatile u32 w; /* fzgx-allow: S2 pool primer sink: fixes the TU literal order */
+    w = fzgx_pool_759C[0];
+}
+#pragma section code_type ".text"
+
+void fn_1_FBC5C(u8 idx) {
+    CasEntry *ent = &lbl_1_bss_84454[idx];
+    s32 i;
+
+    for (i = 0; i < 3; i++) {
+        ent->elem[i].pos[0] = 0.0f;
+        ent->elem[i].pos[1] = 0.0f;
+        ent->elem[i].pos[2] = 0.0f;
+        ent->elem[i].scale[0] = 1.0f;
+        ent->elem[i].scale[1] = 1.0f;
+        ent->elem[i].scale[2] = 1.0f;
+        ent->elem[i + 3].pos[0] = (i == 1) ? 0.5f : 0.0f;
+        ent->elem[i + 3].pos[1] = 0.0f;
+        ent->elem[i + 3].pos[2] = 0.0f;
+        ent->elem[i + 3].rate = 0.0f;
+        ent->elem[i + 3].rate2 = 0.0f;
+        ent->elem[i + 3].unk_20 = 0.0f;
+        ent->speed[i] = 0.1f;
+        ent->speed2[i] = 0.2f;
+        ent->flags[i] = 0;
+    }
+
+    for (i = 0; i < 3; i++) {
+        switch (idx) {
+        case 0:
+            ent->elem[i].rate = 0.0033333334140479565f;
+            ent->elem[i].rate2 = 0.005000000353902578f;
+            ent->elem[i + 3].scale[0] = 0.25f;
+            ent->elem[i + 3].scale[1] = 0.25f;
+            break;
+        case 1:
+            ent->elem[i].rate = 0.0016666667070239782f;
+            ent->elem[i].rate2 = 0.002500000176951289f;
+            ent->elem[i + 3].scale[0] = 0.3f;
+            ent->elem[i + 3].scale[1] = 0.25f;
+            break;
+        case 2:
+            ent->elem[i + 3].scale[0] = 1.0f;
+            ent->elem[i + 3].scale[1] = 1.0f;
+            break;
+        case 3:
+            ent->elem[i + 3].scale[0] = 1.0f;
+            ent->elem[i + 3].scale[1] = 1.0f;
+            break;
+        case 4:
+            ent->elem[i + 3].scale[0] = 1.0f;
+            ent->elem[i + 3].scale[1] = 0.25f;
+            ent->speed[i] = 0.05f;
+            ent->speed2[i] = 0.03f;
+            break;
+        }
+        ent->elem[i + 3].rate = ent->elem[i].rate / 3.0f;
+        ent->elem[i + 3].rate2 = ent->elem[i].rate2 / 3.0f;
+    }
+
+    switch (idx) {
+    case 0:
+        break;
+    case 1:
+        ent->speed[0] = 0.3f;
+        ent->speed2[0] = 0.3f;
+        ent->elem[3].rate = 0.005f;
+        ent->elem[3].rate2 = 0.005f;
+        break;
+    case 2:
+        ent->elem[3].rate = 0.001f;
+        ent->elem[3].rate2 = 0.001f;
+        ent->speed[0] = 0.0f;
+        ent->speed2[0] = 0.3f;
+        ent->speed2[2] = 0.07f;
+        break;
+    case 3:
+        ent->elem[3].rate = 0.015f;
+        ent->elem[3].rate2 = 0.0f;
+        ent->speed[0] = 0.1f;
+        ent->speed2[0] = 0.2f;
+        ent->elem[5].rate = 0.01f;
+        ent->elem[5].rate2 = 0.0f;
+        ent->elem[5].scale[0] = 0.25f;
+        ent->elem[5].scale[1] = 0.25f;
+        ent->speed[2] = 0.05f;
+        ent->speed2[2] = 0.05f;
+        break;
+    case 4:
+        break;
+    }
+}
+/* fzgx:end fn_1_FBC5C */
+
 /* fzgx:begin fn_1_FBEA8 */
 void fn_1_FBEA8(void) {
     Obj_1_bss_84454 *base;
@@ -722,6 +864,181 @@ void fn_1_FE004(void) {
     lbl_1_bss_850C6.unk_0 = 0;
 }
 /* fzgx:end fn_1_FE004 */
+
+/* fzgx:begin fn_1_FE014 noprologue */
+#include "types.h"
+#include "rel/main_rel/bg_cas.h"
+
+typedef struct {
+    s16 unk_0;
+    u8 pad_2[0x360 - 2];
+} CasTableEntry;          /* 0x360 bytes */
+
+typedef struct {
+    u8 unk_0;
+    u8 pad_1[7];
+} CasSelEntry;            /* 8 bytes */
+
+typedef struct {
+    u8 pad_0[0x32C];
+    u32 unk_32C;
+    u8 pad_330[0x60];
+    u32 unk_390;
+    u8 pad_394[0xC];
+    CasTableEntry *unk_3A0;
+    u32 unk_3A4;
+    u8 pad_3A8[0x12];
+    s16 unk_3BA;
+} CasObject;
+
+typedef struct {
+    CasObject *value;
+} CasObjectRef;
+
+typedef struct {
+    u8 pad_0[0x40F0];
+    s16 *view;
+} CasContext;
+
+typedef struct {
+    u8 pad_0[0x4];
+    u8 unk_4;
+    u8 unk_5;
+    u8 pad_6[2];
+    CasSelEntry *unk_8;
+    u8 *unk_C;
+} CasBase;
+
+extern void *fn_1_563B8(void *);
+extern void fn_1_566EC(int, int);
+extern void fn_1_7EB8C(void *, f32);
+extern void fn_1_7F20C(void *, s32, f32);
+extern void fn_1_7F230(void *, s32, f32);
+extern void fn_1_7F1E8(void *, s32, f32);
+extern void *fn_1_14DD68(void *);
+extern void *fn_1_14DDF4(void *);
+extern void lbl_8006DB74(void *);
+extern void lbl_8006DBAC(void *);
+extern void lbl_8006E0A4(void *);
+extern void fn_80072558(void);
+extern int fn_1_FCF50(void);
+
+/* Draw the object with the current view; DRAW_FN is the multi-view variant. */
+#define CAS_DRAW(DRAW_FN)                                       \
+    obj = ref->value;                                           \
+    saved = obj->unk_3BA;                                       \
+    if (saved == 3) {                                           \
+        obj->unk_3BA = 2;                                       \
+    }                                                           \
+    if (ctx->view != NULL) {                                    \
+        mode = *ctx->view;                                      \
+        alpha = (obj->unk_32C == 0) ? 0.5f : 1.0f;              \
+        prev = fn_1_563B8((void *)fn_1_FCF50);                  \
+        fn_1_566EC(1, 0xff);                                    \
+        if (mode == 0) {                                        \
+            fn_1_7EB8C(obj, alpha);                             \
+        } else if (obj->unk_390 & 0x4000000) {                  \
+            DRAW_FN(obj, mode, alpha);                          \
+        } else {                                                \
+            fn_1_7F1E8(obj, mode, alpha);                       \
+        }                                                       \
+        fn_1_566EC(0, 0);                                       \
+        fn_1_563B8(prev);                                       \
+        obj->unk_3BA = saved;                                   \
+    }
+
+static inline void cas_draw_inner(CasObjectRef *ref, CasContext *ctx) {
+    u8 inner[0x30];
+    CasObject *obj;
+    void *prev;
+    s16 mode;
+    s16 saved;
+    f32 alpha;
+
+    lbl_8006DB74(inner);
+    CAS_DRAW(fn_1_7F20C);
+    lbl_8006DBAC(inner);
+}
+
+static inline void cas_draw_nested(CasObjectRef *ref, CasContext *ctx) {
+    u8 outer[0x30];
+
+    lbl_8006DB74(outer);
+    fn_80072558();
+    cas_draw_inner(ref, ctx);
+    fn_80072558();
+    lbl_8006DBAC(outer);
+}
+
+static inline void cas_draw_multi(CasObjectRef *ref, CasContext *ctx) {
+    CasObject *obj;
+    void *prev;
+    s16 mode;
+    s16 saved;
+    f32 alpha;
+
+    CAS_DRAW(fn_1_7F230);
+}
+
+static inline void cas_draw_single(CasObjectRef *ref, CasContext *ctx, CasBase *base) {
+    u8 buf[0x30];
+    void *res;
+    s16 kind;
+
+    res = NULL;
+    lbl_8006DB74(buf);
+    kind = *ctx->view;
+    if (kind != 0) {
+        if (kind == 1) {
+            res = fn_1_14DD68(base->unk_C + base->unk_8->unk_0 * 0xa20);
+        } else if (kind == 2) {
+            res = fn_1_14DDF4(base->unk_C + base->unk_8->unk_0 * 0xa20);
+        }
+        lbl_8006E0A4(res);
+    }
+    fn_80072558();
+    cas_draw_multi(ref, ctx);
+    lbl_8006DBAC(buf);
+}
+
+void fn_1_FE014(CasObjectRef *ref, CasContext *ctx) {
+    CasBase *base = (CasBase *)&lbl_1_bss_850C0;
+    CasObject *obj;
+    CasTableEntry *tbl;
+    CasSelEntry *sel;
+    s16 idx;
+    s32 b;
+    s32 a;
+
+    obj = ref->value;
+    if (obj == NULL || obj->unk_3A4 == 0 || (tbl = obj->unk_3A0) == NULL || base->unk_C == NULL ||
+        (sel = base->unk_8) == NULL) {
+        return;
+    }
+
+    a = tbl[0].unk_0;
+    b = sel[0].unk_0;
+    if (a == b && tbl[1].unk_0 == sel[1].unk_0 && tbl[2].unk_0 == sel[2].unk_0 && base->unk_4 == 0) {
+        if (base->unk_5 == *ctx->view) {
+            cas_draw_nested(ref, ctx);
+        }
+    } else if (base->unk_4 != 0) {
+        idx = *ctx->view;
+        if (tbl[idx].unk_0 == sel[idx].unk_0) {
+            cas_draw_single(ref, ctx, base);
+        }
+    } else {
+        idx = *ctx->view;
+        if (base->unk_5 == idx && tbl[idx].unk_0 == sel[idx].unk_0) {
+            if (a != b) {
+                cas_draw_single(ref, ctx, base);
+            } else {
+                cas_draw_nested(ref, ctx);
+            }
+        }
+    }
+}
+/* fzgx:end fn_1_FE014 */
 
 /* fzgx:begin fn_1_FE5C4 */
 void fn_1_FE5C4(u8 arg0, u32 arg1, u32 arg2, u8 arg3) {

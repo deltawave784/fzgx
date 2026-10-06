@@ -5569,6 +5569,41 @@ void fn_1_150650(void) {
 }
 /* fzgx:end fn_1_150650 */
 
+/* fzgx:begin fn_1_150654 */
+typedef struct { f32 x, y, z; } Vec3f;
+
+extern u32 lbl_801A63C0;
+extern s16 fn_1_3F0C8(void);
+extern u32 fn_1_1507C4(void *, void *);
+
+static inline s32 next_random(void) {
+    lbl_801A63C0 = lbl_801A63C0 * 0x676A4B6B + 0x33CB;
+    return (lbl_801A63C0 >> 16) & 0x7FFF;
+}
+
+void fn_1_150654(void) {
+    s32 *counts = (s32 *)lbl_1_data_2A7E0.unk_3C;
+    s32 i;
+    u8 *p;
+
+    if (fn_1_3F0C8() != 0x28) {
+        p = (u8 *)lbl_1_bss_3BE0->unk_A8;
+        for (i = 0; i < (s32)lbl_1_bss_3BE0->unk_A4; i++, p += 0x24) {
+            if (next_random() % 70 == 0) {
+                counts[i + 1] = (s16)(s32)(20.0f + (f32)(10.0f * (f32)((f32)next_random() / 32767.0f)));
+            }
+            if (counts[i + 1] != 0) {
+                counts[i + 1]--;
+                {
+                    Vec3f tmp = { 0.0f, -1.0f, 0.0f };
+                    fn_1_1507C4(p, &tmp);
+                }
+            }
+        }
+    }
+}
+/* fzgx:end fn_1_150654 */
+
 /* fzgx:begin fn_1_150C8C */
 // Marks each static display entry active before updating it.
 void fn_1_150C8C(fn_1_150C8C_Object *obj) {

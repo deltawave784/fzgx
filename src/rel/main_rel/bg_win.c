@@ -423,6 +423,119 @@ void fn_1_15C36C(void) {
 }
 /* fzgx:end fn_1_15C36C */
 
+/* fzgx:begin fn_1_15DD7C */
+#include "font.h"
+
+extern FontDrawPacket lbl_1_rodata_26F8;
+extern u32 fn_1_58C4(void);
+extern f32 fn_1_519FC(f32);
+extern f32 fn_1_51AC0(f32);
+
+/* Literal-pool primer: this TU's shared pool (retail lbl_1_rodata_DD58) is laid out in
+ * first-use order across the whole TU, so the words that precede this function's own
+ * literals are referenced here, in retail order, from a section the link drops. */
+#pragma section RX ".fzgxpool"
+
+__declspec(section ".fzgxpool") void fzgx_pool_primer_0(void) {
+    fn_1_519FC(1000000.0f);
+}
+
+__declspec(section ".fzgxpool") void fzgx_pool_primer_1(void) {
+    fn_1_519FC((f32)(s32)lbl_1_bss_3C30.unk_0);
+}
+
+static const u32 fzgx_pool_word_10[1] = { 0xFFFFFF00 };
+
+__declspec(section ".fzgxpool") void fzgx_pool_primer_2(void) {
+    fn_1_58C4();
+    fn_1_519FC(320.0f);
+    fn_1_519FC(240.0f);
+    fn_1_519FC(1.0f);
+    fn_1_519FC(0.8f);
+    fn_1_519FC(464.0f);
+    fn_1_519FC(5.0f);
+    fn_1_519FC(0.7f);
+    fn_1_519FC(255.0f);
+    fn_1_519FC(3.3f);
+    fn_1_519FC(20.0f);
+    fn_1_519FC(0.5f);
+    fn_1_519FC(0.0f);
+    fn_1_519FC(800.0f);
+    fn_1_519FC(42.0f);
+    fn_1_519FC(30.0f);
+    fn_1_519FC(16384.0f);
+    fn_1_519FC(32768.0f);
+    fn_1_519FC(0.001f);
+    fn_1_519FC(3.0f);
+    fn_1_519FC(8.0f);
+    fn_1_49728(fzgx_pool_word_10[0]);
+}
+
+static const u32 fzgx_pool_table_64[24] = {
+    0, 0, 75, 100, 76, 0, 35, 100, 152, 0, 75, 100,
+    76, 0, 35, 100, 228, 0, 75, 100, 304, 0, 75, 100,
+};
+
+__declspec(section ".fzgxpool") void fzgx_pool_primer_3(void) {
+    fn_1_519FC(120.0f);
+    fn_1_519FC(10.0f);
+    fn_1_519FC(2.0f);
+    fn_1_519FC(-10.0f);
+    fn_1_519FC(0.25f);
+    fn_1_519FC(100.0f);
+    fn_1_519FC(60.0f);
+    fn_1_49728(fzgx_pool_table_64[2]);
+}
+
+void fn_1_15DD7C(s32 timer) {
+    FontDrawPacket packet;
+    f32 fade;
+
+    packet = lbl_1_rodata_26F8;
+    if (lbl_1_bss_3C30.unk_0 & 0x8000) {
+        return;
+    }
+
+    packet.x = 320.0f;
+    packet.y = 240.0f;
+    packet.image = 0x942B;
+    packet.flags = 10;
+
+    if (fn_1_58C4() > 1 || lbl_1_bss_3C30.unk_13F6 == 0) {
+        if (240.0f < (f32)timer) {
+            packet.alpha = 2.0f * (((f32)timer - 240.0f) / 60.0f);
+            if (packet.alpha > 1.0f) {
+                packet.alpha = 1.0f;
+            }
+            packet.alpha = 1.0f - packet.alpha;
+        } else {
+            packet.alpha = 1.0f;
+        }
+    } else {
+        if (240.0f < (f32)timer) {
+            fade = ((f32)timer - 240.0f) / 60.0f;
+            if (fade > 1.0f) {
+                fade = 1.0f;
+            }
+            packet.alpha = 1.0f - fade;
+        } else if ((f32)timer < 60.0f) {
+            packet.alpha = (f32)timer / 60.0f;
+        } else {
+            packet.alpha = 1.0f;
+        }
+    }
+
+    packet.scale_y = 1.0f;
+    packet.scale_x = 1.0f;
+    packet.x = fn_1_519FC(packet.x);
+    packet.y = fn_1_51AC0(packet.y);
+    packet.z = 2.0f;
+    packet.scale_x *= (fn_1_58C4() == 1) ? 1.0f : 0.8f;
+    packet.scale_y *= (fn_1_58C4() == 1) ? 1.0f : 0.8f;
+    fn_1_4F734(&packet);
+}
+/* fzgx:end fn_1_15DD7C */
+
 /* fzgx:begin fn_1_15DFD4 noprologue */
 #include "types.h"
 
