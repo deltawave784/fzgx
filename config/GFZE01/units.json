@@ -62598,6 +62598,20 @@
   },
   {
     "module": "story",
+    "source": "rel/story/story_mode/fn_7_1DBC.c",
+    "symbols": [
+      "fn_7_1DBC"
+    ],
+    "status": "matching",
+    "mw_version": null,
+    "extra_cflags": [],
+    "tu": "rel/story/story_mode.c",
+    "pool": {
+      "@18": "lbl_7_rodata_5B4"
+    }
+  },
+  {
+    "module": "story",
     "source": "rel/story/story_mode/fn_7_20E4.c",
     "symbols": [
       "fn_7_20E4"
