@@ -43118,6 +43118,18 @@
   },
   {
     "module": "main_rel",
+    "source": "rel/main_rel/load/fn_1_46BA0.c",
+    "symbols": [
+      "fn_1_46BA0"
+    ],
+    "status": "nonmatching",
+    "mw_version": "GC/2.5",
+    "extra_cflags": [],
+    "tu": "rel/main_rel/load.c",
+    "pool": true
+  },
+  {
+    "module": "main_rel",
     "source": "rel/main_rel/load/fn_1_46C60.c",
     "symbols": [
       "fn_1_46C60"
@@ -49704,6 +49716,18 @@
     "mw_version": null,
     "extra_cflags": [],
     "tu": "rel/main_rel/sel_static_disp.c"
+  },
+  {
+    "module": "main_rel",
+    "source": "rel/main_rel/sel_static_disp/fn_1_14C6F8.c",
+    "symbols": [
+      "fn_1_14C6F8"
+    ],
+    "status": "nonmatching",
+    "mw_version": "GC/1.3.2",
+    "extra_cflags": [],
+    "tu": "rel/main_rel/sel_static_disp.c",
+    "pool": true
   },
   {
     "module": "main_rel",
