@@ -133,11 +133,7 @@ def _sig(decl: str) -> Optional[Tuple[str, str, List[str], bool]]:
     if not s:
         return None
     knr = bool(re.search(r"\b" + re.escape(s[1]) + r"\s*\(\s*\)", decl))
-    # tutruth drops a trailing identifier as the parameter name: a nameless typedef parameter
-    # (`CurveKey`) becomes empty there, so it keeps its own spelling here
-    raw = tutruth.PROTO_RE.match(decl.strip()).group(3).split(",")
-    params = [t if t or i >= len(raw) else re.sub(r"\s+", " ", raw[i]).strip() for i, t in enumerate(s[2])]
-    return s[0], s[1], params, knr
+    return s[0], s[1], s[2], knr
 
 
 def _adapts(body: str, n: str, old: str, truth: str) -> bool:
@@ -190,44 +186,24 @@ class Tree:
 
     def header_names(self, text: str) -> Set[str]:
         """Every name the text's includes declare, following `<...>` and `"..."` includes
-        (SDK headers declare prototypes without `extern`, which tutidy's reader skips)."""
-        incs = tuple(sorted(set(INCLUDE_RE.findall(text))))
+        (SDK headers declare prototypes without `extern`): tutidy's shared include walk."""
+        incs = tuple(sorted(set(tutidy.INCLUDE_RE.findall(text))))
         if incs not in self._hn:
-            seen: Set[str] = set()
             names: Set[str] = set()
-            stack = list(incs)
-            while stack:
-                rel = stack.pop()
-                if rel in seen or rel not in HEADERS:
-                    continue
-                seen.add(rel)
-                names |= HEADERS[rel][0]
-                stack += HEADERS[rel][1]
+            for h in tutidy.included_headers("\n".join(f'#include "{i}"' for i in incs)):
+                names |= h.names
             self._hn[incs] = (names, set())
         return self._hn[incs][0]
-
-
-INCLUDE_RE = re.compile(r'^\s*#\s*include\s+[<"]([^">]+)[">]', re.M)
-HEADERS: Dict[str, Tuple[Set[str], List[str]]] = {}   # include path -> (declared names, includes)
 
 
 def _header_decls(p: Project) -> Dict[str, List[Tuple[str, str, str]]]:
     """name -> [(scope module or '*', header path, line)] for every header declaration."""
     out: Dict[str, List[Tuple[str, str, str]]] = defaultdict(list)
-    for path in sorted((ROOT / "include").rglob("*.h")):
-        rel = path.relative_to(ROOT / "include").as_posix()
-        m = re.match(r"rel/([^/]+)/", rel)
+    for h in tutidy.all_headers():
+        m = re.match(r"rel/([^/]+)/", h.rel)
         scope = m.group(1) if m else "*"
-        text = tutruth.split_multi(tutruth.join_declarations(typesurvey.strip_comments(path.read_text(errors="replace"))))
-        names = set(re.findall(r"^\s*#\s*define\s+([A-Za-z_]\w*)", text, re.M))
-        for ln in text.splitlines():
-            if tutidy.DECL_LINE_RE.match(ln):
-                n = tutidy._decl_name(ln)
-                if n:
-                    out[n].append((scope, rel, ln.strip()))
-                    names.add(n)
-        names |= {m.group(2) for m in reconcile.DEF_RE.finditer(text)}  # static inline helpers
-        HEADERS[rel] = (names, INCLUDE_RE.findall(text))
+        for n, ln in h.decls:
+            out[n].append((scope, h.rel, ln))
     return out
 
 

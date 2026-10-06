@@ -22,33 +22,92 @@ TYPEDEF_START_RE = re.compile(r"^\s*typedef\s+struct\b")
 TYPEDEF_END_RE = re.compile(r"^\s*\}\s*([A-Za-z_]\w*)\s*;\s*$")
 
 
+INCLUDE_RE = re.compile(r'^\s*#\s*include\s+[<"]([^">]+)[">]', re.M)
+
+
+class Header:
+    """What one header under include/ declares: `decls` [(name, line)] (extern and SDK-style
+    prototypes without `extern`), `names` (those, `#define`s and static inline helpers),
+    `typedefs`, and its resolved `includes`."""
+
+    def __init__(self, rel: str, text: str):
+        from . import reconcile, tutruth, typesurvey
+        self.rel = rel
+        flat = tutruth.split_multi(tutruth.join_declarations(typesurvey.strip_comments(text)))
+        self.decls = [(n, ln.strip()) for ln in flat.splitlines() if DECL_LINE_RE.match(ln) and (n := _decl_name(ln))]
+        self.names: Set[str] = {n for n, _ in self.decls}
+        self.names |= set(re.findall(r"^\s*#\s*define\s+([A-Za-z_]\w*)", flat, re.M))
+        self.names |= {m.group(2) for m in reconcile.DEF_RE.finditer(flat)}
+        self.typedefs: Set[str] = set(re.findall(r"^\}\s*([A-Za-z_]\w*)\s*;", flat, re.M))
+        self.typedefs |= set(re.findall(r"^\s*typedef\s+[^{;()]*?\b([A-Za-z_]\w*)\s*;", flat, re.M))
+        self.typedefs |= set(re.findall(r"^\s*typedef\s+[^{;]*?\(\s*\*\s*([A-Za-z_]\w*)\s*\)\s*\(", flat, re.M))
+        base = rel.rsplit("/", 1)[0] if "/" in rel else ""
+        self.includes = [_resolve_include(inc, base) for inc in INCLUDE_RE.findall(flat)]
+
+
+_HEADERS: Dict[str, tuple] = {}   # include path -> (mtime, Header)
+
+
+def _resolve_include(inc: str, base: str = "") -> str:
+    """An include path relative to include/ (`<...>` and `"..."` alike), else to the
+    including header's directory."""
+    if (ROOT / "include" / inc).exists() or not base:
+        return inc
+    rel = f"{base}/{inc}"
+    return rel if (ROOT / "include" / rel).exists() else inc
+
+
+def header(rel: str) -> Optional[Header]:
+    """The parsed header include/<rel> (cached by mtime), or None when it does not exist."""
+    path = ROOT / "include" / rel
+    try:
+        mtime = path.stat().st_mtime_ns
+    except OSError:
+        return None
+    hit = _HEADERS.get(rel)
+    if hit and hit[0] == mtime:
+        return hit[1]
+    h = Header(rel, path.read_text(errors="replace"))
+    _HEADERS[rel] = (mtime, h)
+    return h
+
+
+def all_headers() -> List[Header]:
+    """Every header under include/, parsed."""
+    out = []
+    for path in sorted((ROOT / "include").rglob("*.h")):
+        h = header(path.relative_to(ROOT / "include").as_posix())
+        if h:
+            out.append(h)
+    return out
+
+
+def included_headers(text: str) -> List[Header]:
+    """The headers `text` includes, transitively, following `<...>` and `"..."` includes."""
+    seen: Set[str] = set()
+    out: List[Header] = []
+    stack = list(reversed(INCLUDE_RE.findall(text)))
+    while stack:
+        rel = stack.pop()
+        if rel in seen:
+            continue
+        seen.add(rel)
+        h = header(rel)
+        if h is None:
+            continue
+        out.append(h)
+        stack += reversed(h.includes)
+    return out
+
+
 def _header_names(p: Project, prologue: str) -> tuple:
-    """(extern/prototype names, typedef names) declared by the prologue's includes."""
+    """(declared names, typedef names) of the prologue's includes, transitively: externs,
+    prototypes written without `extern` (SDK headers), macros and static inline helpers."""
     names: Set[str] = set()
     typedefs: Set[str] = set()
-    seen: Set[str] = set()
-
-    def walk(rel: str) -> None:
-        if rel in seen:
-            return
-        seen.add(rel)
-        path = ROOT / "include" / rel
-        if not path.exists():
-            return
-        text = path.read_text()
-        for m in re.finditer(r'^\s*#\s*include\s+"([^"]+)"', text, re.M):
-            walk(m.group(1))
-        for m in re.finditer(r"^extern\s+[^;(]*?\b([A-Za-z_]\w*)\s*(?:\[[^\]]*\])*\s*;", text, re.M):
-            names.add(m.group(1))
-        for m in re.finditer(r"^extern\s+[^;]*?\b([A-Za-z_]\w*)\s*\(", text, re.M):
-            names.add(m.group(1))
-        for m in re.finditer(r"^\}\s*([A-Za-z_]\w*)\s*;", text, re.M):
-            typedefs.add(m.group(1))
-        for m in re.finditer(r"^typedef\s+[^{;]*?\b([A-Za-z_]\w*)\s*;", text, re.M):
-            typedefs.add(m.group(1))
-
-    for m in re.finditer(r'^\s*#\s*include\s+"([^"]+)"', prologue, re.M):
-        walk(m.group(1))
+    for h in included_headers(prologue):
+        names |= h.names
+        typedefs |= h.typedefs
     return names, typedefs
 
 
@@ -135,9 +194,15 @@ def tidy(p: Project, tu_source: str, dry_run: bool = False, check_fn=None) -> Di
 DECL_LINE_RE = re.compile(r"^\s*(?:extern\b[^{]*;|(?:const\s+)?[A-Za-z_]\w*[\w\s\*]*?\b[A-Za-z_]\w*\s*\([^;{}]*\)\s*;)\s*$")
 
 
+FNPTR_OBJECT_RE = re.compile(r"^\s*(?:extern\s+)?[A-Za-z_][\w\s\*]*\(\s*\*\s*([A-Za-z_]\w*)\s*\)\s*\(")
+
+
 def _decl_name(line: str) -> Optional[str]:
     if line.lstrip().startswith(("typedef", "static", "return", "if", "while", "for")):
         return None
+    fp = FNPTR_OBJECT_RE.match(line)
+    if fp:
+        return fp.group(1)  # a function-pointer object `void (*cb)(s32);`, not a function `void`
     m = PROTO_RE.match(line) if "(" in line else EXTERN_RE.match(line)
     return m.group(1) if m else None
 
