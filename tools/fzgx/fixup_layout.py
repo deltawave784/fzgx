@@ -273,7 +273,24 @@ def overlapping_field_views(p, symbol, text):
 def find_models(text):
     """(pvar, tname, base, stmt, kind) for pointer models and direct-global models."""
     models = []
-    for m in re.finditer(r"(?:(?:struct\s+)?(\w+)\s*\*\s*)?(\w+)\s*=\s*\((?:struct\s+)?(\w+)\s*\*\)\s*&(lbl_\d+_bss_[0-9A-F]+|lbl_[0-9A-F]{8})\s*;", text):
+    # the one-member carrier `struct { T *value; } w; w.value = (T *)&lbl;` (the lifter's
+    # constant-pointer wrapper; fn_1_2FAA0, fn_1_EEB44): the model pointer is `w.value`.
+    # Before this the plain form below read `value` alone as the pointer and every rewrite
+    # left `st.` in front of an object name.
+    for m in re.finditer(r"(?<![\w.>])(\w+)\.(\w+)\s*=\s*(?:\((?:struct\s+)?(\w+)\s*\*\)\s*)?&(lbl_\d+_bss_[0-9A-F]+|lbl_[0-9A-F]{8})\s*;", text):
+        carrier, member, cast, base = m.groups()
+        dm = re.search(r"\bstruct\s*\{\s*(?:struct\s+)?(\w+)\s*\*\s*%s\s*;\s*\}\s*%s\s*;" % (re.escape(member), re.escape(carrier)), text)
+        if not dm or base in {mm[2] for mm in models}:
+            continue
+        tname = cast or dm.group(1)
+        if cast and cast != dm.group(1) or tname in SCALAR:
+            continue
+        if not cast and not re.search(r"\bextern\s+(?:struct\s+)?%s\s+%s\s*;" % (re.escape(tname), re.escape(base)), text + include_text()):
+            continue
+        models.append((f'{carrier}.{member}', tname, base, m.group(0), 'ptr'))
+    for m in re.finditer(r"(?:(?:struct\s+)?(\w+)\s*\*\s*)?(?<![\w.>])(\w+)\s*=\s*\((?:struct\s+)?(\w+)\s*\*\)\s*&(lbl_\d+_bss_[0-9A-F]+|lbl_[0-9A-F]{8})\s*;", text):
+        if m.group(4) in {mm[2] for mm in models}:
+            continue
         models.append((m.group(2), m.group(3), m.group(4), m.group(0), 'ptr'))
     # the uncast spelling `T *p = &lbl;` (fn_1_B5F20, fn_1_E9CFC): the type is the pointer's,
     # accepted only when the object's own extern declares the same aggregate type
@@ -310,11 +327,15 @@ def find_models(text):
     return models
 
 
-def tu_objects(p, symbol, text, mode, cache, retail_bases=()):
+def tu_objects(p, symbol, text, mode, cache, retail_bases=(), only=None):
     sym = p.resolve(symbol)
     syms = p.symbols(sym.module)
     notes = []
     models = find_models(text)
+    if only is not None:
+        # one model alone: joining a cast and an uncast model in one layout regressed
+        # fn_1_EF5E0 (88.5% -> 75.9%) where one of them alone may be retail's shape
+        models = [m for m in models if m[2] in only]
     # Saved preprocessed bodies retain spaces around member access. The
     # layout parser below recognizes the pointer token, not that whitespace.
     for pvar, *_ in models:
@@ -370,7 +391,9 @@ def tu_objects(p, symbol, text, mode, cache, retail_bases=()):
         if byte_model:
             esz = SCALAR[tname]
             def _syn(ttext, n):
-                size = SCALAR.get(ttext.replace(' *', '').strip(), 4 if '*' in ttext else None)
+                # a pointer view is a word whatever it points to: `void *` took SCALAR['void'] = 1,
+                # so the fill after it shifted every later object by 4 (fn_1_384E8's 5100)
+                size = 4 if '*' in ttext else SCALAR.get(ttext.strip())
                 if size is None:
                     return None
                 fname = f"fzgx_{re.sub(r'[^A-Za-z0-9]', '_', ttext)}_{n:X}"
@@ -468,7 +491,7 @@ def tu_objects(p, symbol, text, mode, cache, retail_bases=()):
             inner = addr - obj.addr
             if addr + fsize > obj.end:
                 ttext, dims, _ = decls[fname]
-                if mode != 'split' or not dims or ttext is None or isinstance(obj, Gap):
+                if mode not in ('split', 'merge') or not dims or ttext is None or isinstance(obj, Gap):
                     notes.append(f'{fname}: crosses object {obj.name}'); return None, notes
                 # A recovered array view can span several retail objects. Keep
                 # its type and bounds, but allocate each proven object separately.
@@ -519,6 +542,7 @@ def tu_objects(p, symbol, text, mode, cache, retail_bases=()):
         if len(before) < 6 and beyond:
             last = beyond[min(len(beyond), 6 - len(before)) - 1].end
         defs, pos, access = [], b.addr, {}
+        addressed = {(r[1].name, r[2]) for r in rewrites if r[5] or r[3] in views}
         for s in cluster:
             if s.addr >= last:
                 break
@@ -532,6 +556,54 @@ def tu_objects(p, symbol, text, mode, cache, retail_bases=()):
                 pos = s.end
                 continue
             fl = rec['fields']
+            if mode == 'merge':
+                # split only where the body needs an address (`&field`, arrays): a scalar field
+                # stays in the object before it. Retail's object at fn_1_A96BC's 6F648 holds +0xC
+                # (`addi r3, r4, 0x0; stw r0, 0xc(r3)`) while +0x10 is its own object.
+                starts = [0] + [i for i in sorted(fl) if i and ((s.name, i) in addressed or decls[fl[i][0]][1])]
+                for gi, g in enumerate(starts):
+                    gend = starts[gi + 1] if gi + 1 < len(starts) else s.size
+                    members = [i for i in sorted(fl) if g <= i < gend]
+                    gname = s.name if g == 0 else f"{s.name}_{g:X}"
+                    if not members:
+                        parts = filler(f'{s.name}_fill', s.addr + g, s.addr + gend)
+                        first = f"{s.name}_fill_{s.addr + g:X}"
+                        defs += [(pa, d.replace(first, gname), acc.replace(first, gname)) if pa == s.addr + g else (pa, d, acc)
+                                 for pa, d, acc in parts]
+                        continue
+                    if members == [g]:
+                        fname, fsize, esize, ealign = fl[g]
+                        dims = decls[fname][1]
+                        if (s.addr + g) % max(ealign, 1) or (dims and (s.addr + g) % 4) or g + fsize > gend:
+                            notes.append(f'{s.name}: field {fname} misaligned or overlapping as an object'); return None, notes
+                        defs.append((s.addr + g, fdef(decls[fname], gname), gname))
+                        access[(s.name, g)] = gname
+                        if g + fsize < gend:
+                            defs += filler(f'{s.name}_fill', s.addr + g + fsize, s.addr + gend)
+                        continue
+                    body, off, align = [], 0, 1
+                    for i in members:
+                        fname, fsize, esize, ealign = fl[i]
+                        inner = i - g
+                        if inner % max(ealign, 1) or inner < off:
+                            notes.append(f'{s.name}: field {fname} misaligned or overlapping'); return None, notes
+                        if inner > off:
+                            body.append(f"    u8 pad_{off:X}[{inner - off:#x}];")
+                        body.append("    " + fdef(decls[fname], fname))
+                        access[(s.name, i)] = f"{gname}.{fname}"
+                        off = inner + fsize
+                        align = max(align, ealign)
+                    usable = (gend - g) // align * align
+                    if off > usable or (s.addr + g) % align:
+                        notes.append(f'{gname}: fields exceed aligned size'); return None, notes
+                    if off < usable:
+                        body.append(f"    u8 pad_{off:X}[{usable - off:#x}];")
+                    all_typedefs.append(f"typedef struct {gname}_t {{\n" + "\n".join(body) + f"\n}} {gname}_t;\n\n")
+                    defs.append((s.addr + g, f"{gname}_t {gname};", gname))
+                    if g + usable < gend:
+                        defs += filler(f'{gname}_tail', s.addr + g + usable, s.addr + gend)
+                pos = s.end
+                continue
             if mode == 'split':
                 q = s.addr
                 for inner in sorted(fl):
@@ -615,6 +687,11 @@ def tu_objects(p, symbol, text, mode, cache, retail_bases=()):
             out_text = out_text.replace(stmt_removed, '')
         if kind == 'ptr':
             out_text = re.sub(r"\n[ \t]*(?:struct\s+)?%s\s*\*\s*%s\s*;" % (re.escape(tname), re.escape(pvar)), '', out_text)
+            if '.' in pvar:
+                carrier = pvar.split('.')[0]
+                cdecl = re.compile(r"\n[ \t]*struct\s*\{[^{}]*\}\s*%s\s*;[^\n]*" % re.escape(carrier))
+                if not re.search(r"\b%s\b" % re.escape(carrier), cdecl.sub('', out_text)):
+                    out_text = cdecl.sub('', out_text)
         all_defs += defs
         notes.append(f'{base}: {len(per_obj)} objects referenced, {len(defs)} definitions')
     if not all_defs:
@@ -624,6 +701,8 @@ def tu_objects(p, symbol, text, mode, cache, retail_bases=()):
         dn = re.search(r"(\w+)(?:\[[^\]]*\])*;$", d.replace('(*', '').replace(')(', ''))
         if dn:
             out_text = re.sub(r"\n[^\n]*\bextern\b[^\n;]*\b%s\b[^\n;]*;" % re.escape(dn.group(1)), '', out_text)
+    fm = re.search(r"\n[^\n;{}]*\b%s\s*\([^;{}]*\)\s*\{" % re.escape(sym.name), out_text)
+    at = _first_use_point(out_text, fm.start() + 1, {re.split(r'\W', acc)[0] for _, _, acc in all_defs})
     # names a module header declares with its own layout are defined under an alias (the
     # oracle binds the section base through it); every use in this unit follows the alias
     renamed = {}
@@ -635,16 +714,35 @@ def tu_objects(p, symbol, text, mode, cache, retail_bases=()):
         pat = re.compile(r"\b(%s)\b" % "|".join(re.escape(k) for k in renamed))
         all_defs = [(a, pat.sub(lambda m: renamed[m.group(1)], d), pat.sub(lambda m: renamed[m.group(1)], acc)) for a, d, acc in all_defs]
         all_typedefs = [pat.sub(lambda m: renamed[m.group(1)], td) for td in all_typedefs]
-        body_start = out_text.rfind('\n', 0, re.search(r"\n[^\n;{}]*\b%s\s*\([^;{}]*\)\s*\{" % re.escape(sym.name), out_text).start() + 1)
-        out_text = out_text[:body_start] + pat.sub(lambda m: renamed[m.group(1)], out_text[body_start:])
+        out_text = out_text[:at] + pat.sub(lambda m: renamed[m.group(1)], out_text[at:])
     block = ''.join(all_typedefs) + "/* file-scope objects of the retail TU, in retail order: MWCC addresses them off one section base */\n"
     block += "\n".join(d for _, d, _ in all_defs) + "\n\n"
     block += '#pragma section code_type ".fzgxpool"\nstatic void fzgx_bss_layout(void) {\n    volatile u8 s;  /* fzgx-allow: S2 layout primer sink: MWCC emits .bss objects in first-access order */\n'
     block += "".join(f"    s = *(u8 *)&{acc};\n" for _, _, acc in all_defs)
     block += '}\n#pragma section code_type ".text"\n\n'
-    fm = re.search(r"\n[^\n;{}]*\b%s\s*\([^;{}]*\)\s*\{" % re.escape(sym.name), out_text)
-    out_text = out_text[:fm.start() + 1] + block + out_text[fm.start() + 1:]
+    out_text = out_text[:at] + block + out_text[at:]
     return out_text, notes
+
+
+def _first_use_point(text, limit, names):
+    """The top-level boundary before the first use of `names` above `limit`: a static inline
+    helper above the function that reads a model (fn_1_2FAA0's `pad_word`) must follow the
+    definitions, or the candidate does not compile (undefined identifier)."""
+    from .sdkimport import masked
+    scan = masked(text[:limit])
+    # externs and macros (expanded where they are used) do not need the definitions
+    code = re.sub(r"(?m)^[^\n]*\bextern\b[^\n;]*;|^[ \t]*#(?:[^\n]*\\\n)*[^\n]*", lambda m: re.sub(r'[^\n]', ' ', m[0]), scan)
+    uses = [m.start() for n in names if n for m in re.finditer(r"\b%s\b" % re.escape(n), code)]
+    if not uses:
+        return limit
+    first, depth, point, pos = min(uses), 0, 0, 0
+    # boundaries: ends of lines at brace depth 0 that close a declaration or are directives
+    for line in scan[:first].split('\n')[:-1]:
+        depth += line.count('{') - line.count('}')
+        pos += len(line) + 1
+        if depth == 0 and (line.rstrip().endswith((';', '}')) or line.lstrip().startswith('#')):
+            point = pos
+    return point
 
 
 def _diff_rows(r):
@@ -793,7 +891,47 @@ def native_string_views(p, symbol, text):
     return out
 
 
+def inline_accessor_calls(text, name):
+    """`h(p)` -> `(p->f)` inside function `name`, for every static inline one-parameter
+    helper whose body is a single `return EXPR;` reading through its parameter. A model
+    pointer passed to such a helper (fn_1_E7524's `phys_debug_table(strs)`) is only read
+    through `->`, which the layout families require of a model."""
+    helpers = {}
+    for m in re.finditer(r"\bstatic\s+inline\s+[^;{}()]*?\b(\w+)\s*\(\s*(?:const\s+)?(?:struct\s+)?\w+\s*\*\s*(\w+)\s*\)"
+                         r"\s*\{\s*return\s+([^;{}]+);\s*\}", text):
+        h, param, expr = m.groups()
+        if re.search(r"\b%s\b(?!\s*->)" % re.escape(param), expr):
+            continue
+        helpers[h] = (param, expr.strip())
+    function = re.search(r'\n[^\n;{}]*\b' + re.escape(name) + r'\s*\([^;{}]*\)\s*\{', text)
+    if not helpers or not function:
+        return text
+    pat = re.compile(r"\b(%s)\s*\(\s*(\w+)\s*\)" % '|'.join(re.escape(h) for h in helpers))
+    def _sub(m):
+        param, expr = helpers[m.group(1)]
+        return '(' + re.sub(r"\b%s\b" % re.escape(param), m.group(2), expr) + ')'
+    head, body = text[:function.start()], pat.sub(_sub, text[function.start():])
+    # a helper left without callers goes too: its body would read the model's fields
+    # before the layout's definitions
+    for h in helpers:
+        if not re.search(r"\b%s\s*\(" % re.escape(h), body):
+            head = re.sub(r"(?m)^[ \t]*static\s+inline\s+[^;{}()]*?\b%s\s*\([^;{}]*\)\s*\{[^{}]*\}[ \t]*\n?" % re.escape(h), '', head)
+    return head + body
+
+
 def initialized_data_views(p, symbol, text):
+    """Native data objects behind an extern aggregate view; also with trivial accessor
+    helpers inlined, so a model passed to one is still a model."""
+    seen = set()
+    inlined = inline_accessor_calls(text, p.resolve(symbol).name)
+    for source in [text] + ([inlined] if inlined != text else []):
+        for label, candidate in _initialized_data_views(p, symbol, source):
+            if candidate not in seen:
+                seen.add(candidate)
+                yield (label + (' (accessors inlined)' if source is not text else '')), candidate
+
+
+def _initialized_data_views(p, symbol, text):
     """Recover native data objects hidden behind an extern aggregate view.
 
     MWCC introduces its shared data base for separate initialized objects.
@@ -1160,10 +1298,18 @@ def string_run(p, symbol, text, cast=''):
         out = re.sub(r"\b%s\s*\+\s*(0x[0-9A-Fa-f]+|\d+)" % re.escape(pvar), lambda mm: f"{lbl} + {int(mm.group(1), 0)}", out)
         out = re.sub(r"\b%s\b" % re.escape(pvar), lbl, out)
     addrs = {}
+    # a label declared as an aggregate (`extern PhysStrings lbl;`) and used without a byte
+    # cast is a struct pointer (`PhysStrings *str = &lbl;`): a literal there does not compile
+    # (fn_1_E9CFC, fn_1_EF5E0, fn_1_EEB44), so only char-typed contexts become literals
+    declared = {}
+    for dm in re.finditer(r"\bextern\s+(?:const\s+)?(?:struct\s+)?(\w+)\s+(lbl_\d+_data_[0-9A-F]+|lbl_[0-9A-F]{8})\b", text + include_text()):
+        declared.setdefault(dm.group(2), dm.group(1))
     def repl_use(mm):
         lbl, off = mm.group(1), int(mm.group(2) or '0', 0)
         s = syms.get(lbl)
         if s is None or s.section != '.data':
+            return mm.group(0)
+        if not mm.group(0).lstrip().startswith('(') and declared.get(lbl, 'u8') not in SCALAR:
             return mm.group(0)
         a = s.addr + off
         st = string_at(raw, a - base_addr)
@@ -1213,7 +1359,8 @@ def string_run(p, symbol, text, cast=''):
         run.append(st[0])
         a += st[1]
     for lbl in set(re.findall(r"\b(lbl_\d+_data_[0-9A-F]+|lbl_[0-9A-F]{8})\b", text)):
-        if syms.get(lbl) and lo <= syms[lbl].addr <= hi:
+        still_used = re.search(r"\b%s\b" % re.escape(lbl), re.sub(r"(?m)^[^\n]*\bextern\b[^\n;]*;", '', out))
+        if syms.get(lbl) and lo <= syms[lbl].addr <= hi and not still_used:
             out = re.sub(r"\n[^\n]*\bextern\b[^\n;]*\b%s\b[^\n;]*;" % re.escape(lbl), '', out)
     if not re.search(r"\bOSReport\s*\(", out.split('{')[0]) and 'extern void OSReport' not in out:
         decl = "extern void OSReport(const char *, ...);\n"
@@ -1250,14 +1397,22 @@ def tu_section_layout(p, symbol, body, check):
         m = re.match(r"addi r\d+, r\d+, (lbl_\w+)@l$", (r.get('instruction') or {}).get('formatted') or '')
         if m:
             retail_bases.add(m.group(1))
-    for mode in ('dtk', 'split'):
-        try:
-            text, notes = tu_objects(p, symbol, body, mode, cache, retail_bases)
-        except (ValueError, KeyError, IndexError, AttributeError, OSError):
-            text = None
-        if text:
-            out.append((f'define retail TU bss objects ({mode})', text))
-            bases.append((mode, text))
+    syms = p.symbols(p.resolve(symbol).module)
+    same_module = sorted({m[2] for m in find_models(body) if syms.get(m[2]) and syms[m[2]].section == '.bss'})
+    # several models: the joint layout plus each model alone (at most four), so a model whose
+    # layout regresses the body cannot hide another's gain
+    selections = [None] + ([{b} for b in same_module[:4]] if len(same_module) > 1 else [])
+    for only in selections:
+        for mode in ('dtk', 'split', 'merge'):
+            try:
+                text, notes = tu_objects(p, symbol, body, mode, cache, retail_bases, only)
+            except (ValueError, KeyError, IndexError, AttributeError, OSError):
+                text = None
+            if text and text not in {t for _, t in out}:
+                label = mode if only is None else f'{mode}, {next(iter(only))} only'
+                out.append((f'define retail TU bss objects ({label})', text))
+                if only is None and mode != 'merge':
+                    bases.append((mode, text))
     for name, base in bases + [('body', body)]:
         for top in (False, True):
             try:
@@ -1273,4 +1428,10 @@ def tu_section_layout(p, symbol, body, check):
                 text = None
             if text:
                 out.append((f'reproduce retail string run ({name}{", cast" if cast else ""})', text))
+    # a section layout changes what the base register holds; a file-scope
+    # `opt_propagation off` written for the old extern view can then rematerialize
+    # `addis rX, rBase, N` at every far access (fn_1_2FAA0): offer each layout without it
+    pragma = re.compile(r"(?m)^[ \t]*#\s*pragma\s+opt_propagation\s+(?:off|reset)[ \t]*\n")
+    out += [(label + ' without opt_propagation pragma', pragma.sub('', text))
+            for label, text in list(out) if label.startswith('define retail') and pragma.search(text)]
     return out
