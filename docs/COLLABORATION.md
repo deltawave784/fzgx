@@ -39,7 +39,7 @@ Clone A's router takes `--module main_rel`; clone B's seed manifests list only i
 1. **One owner per tool and header.** Tooling rounds, the librarian, `tu-finish`, `tutruth` and any edit
    under `tools/`, `include/` or `config/` run in ONE clone (A). B pulls those changes; it does not make its own.
 2. **`state/ledger.json` belongs to clone A.** Only A runs `fzgx snapshot`. B never commits that file
-   (its `verify` commits only units, splits, symbols and sources, so this holds by default).
+   (its `verify` commits only units, splits, symbols and sources, so this holds by default). Clone B sets `git config fzgx.snapshot-ledger false` (`orchestrate.py` then neither writes nor commits the snapshot at the end of a batch, so merging A into B cannot conflict on it).
 3. **Merge only between batches**, with no claim and no running `fixup`/`verify`/`ninja`, and a clean tree.
 4. **After every merge:** `uv run ninja` must end with 16 files OK, then `uv run tools/fzgx.py gate`
    (and `uv run tools/fzgx.py sync` so the local ledger learns what the other side matched).

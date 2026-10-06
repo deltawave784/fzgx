@@ -48,6 +48,7 @@ extern void fn_1_9DFB8(u32, u32, u32, u32);
 extern void GXPeekZ(u32, u32, void *);
 extern void fn_80034200(u32 arg0);
 extern void fn_8003432C(u32, u32, u32 *);
+/* Pool literals, declared non-const: retail reloads them after every FIFO store. */
 extern f32 lbl_1_rodata_42D0;
 extern f32 lbl_1_rodata_42D4;
 
@@ -601,8 +602,6 @@ struct fn_1_9F4B4_Arg0 {
     u16 unk_12;
     u32 unk_14;
 };
-
-/* Pool literals, declared non-const: retail reloads them after every FIFO store. */
 
 /* write-gather FIFO */
 #define GX_WRITE_F32(v) (*(f32 *)GX_FIFO_BASE = (v))

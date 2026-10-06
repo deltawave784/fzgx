@@ -399,6 +399,15 @@ def finish_round(p: Project, a, model: str, module: str) -> Dict:
     return out
 
 
+def ledger_owner() -> bool:
+    """Only one clone commits state/ledger.json (docs/COLLABORATION.md rule 2): the other sets
+    `git config fzgx.snapshot-ledger false`, so its batches never write or commit the snapshot
+    and merging from the owner cannot conflict on it."""
+    res = subprocess.run(["git", "config", "--type=bool", "--get", "fzgx.snapshot-ledger"], cwd=ROOT,
+                         capture_output=True, text=True)
+    return res.stdout.strip() != "false"
+
+
 def main(argv: Optional[List[str]] = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("--harness", choices=["claude", "codex"], default="codex")
@@ -561,10 +570,11 @@ def main(argv: Optional[List[str]] = None) -> int:
                      f"{r['checks'] if r['checks'] is not None else ''} | {r['turns'] or ''} | {r['cost']:.3f} | {r['secs']} |")
     rep.parent.mkdir(parents=True, exist_ok=True)
     rep.write_text("\n".join(lines) + "\n")
-    api.snapshot(p)
-    subprocess.run(["git", "add", str(ROOT / "state" / "ledger.json")], cwd=ROOT, capture_output=True, check=True)
-    subprocess.run(["git", "commit", '--only', "-q", "-m", f"batch {a.batch}: {len(matched)}/{len(results)} matched ({a.harness}/{model})",
-                    '--', str(ROOT / 'state/ledger.json')], cwd=ROOT, capture_output=True, check=True)
+    if ledger_owner():
+        api.snapshot(p)
+        subprocess.run(["git", "add", str(ROOT / "state" / "ledger.json")], cwd=ROOT, capture_output=True, check=True)
+        subprocess.run(["git", "commit", '--only', "-q", "-m", f"batch {a.batch}: {len(matched)}/{len(results)} matched ({a.harness}/{model})",
+                        '--', str(ROOT / 'state/ledger.json')], cwd=ROOT, capture_output=True, check=True)
     print(json.dumps({k: v for k, v in summary.items() if k != "results"}))
     return 0 if ver.get("ok") and not other else 1
 
