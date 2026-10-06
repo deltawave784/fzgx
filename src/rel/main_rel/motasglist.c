@@ -400,6 +400,155 @@ void fn_1_426E4(Fn1426E4Object *object, void *value) {
 }
 /* fzgx:end fn_1_426E4 */
 
+/* fzgx:begin fn_1_42AD0 */
+extern void lbl_8006DBAC(void *value);
+extern void fn_8006E5FC(void *);
+
+typedef struct Fn142AD0Key {
+    u16 value0;
+    u16 value1;
+    u16 value2;
+    u16 value3;
+    f32 value4;
+    f32 value5;
+    f32 value6;
+} Fn142AD0Key;
+
+typedef struct Fn142AD0Pair {
+    u32 a;
+    u32 b;
+} Fn142AD0Pair;
+
+typedef struct Fn142AD0Entry {
+    u8 pad0[0x88];
+    u8 value88[0x0C];
+    f32 x;
+    u8 pad98[0x0C];
+    f32 y;
+    u8 padA8[0x0C];
+    f32 z;
+    Fn142AD0Pair sourceB8;
+    u32 sourceC0;
+    Fn142AD0Pair sourceC4;
+    u32 sourceCC;
+    u8 padD0[4];
+    u16 keys[6][2][3];
+    u32 keysF[3][2][3];
+    u8 quat[0x10];
+    Fn142AD0Pair value174;
+    u32 value17C;
+    Fn142AD0Pair value180;
+    u32 value188;
+} Fn142AD0Entry;
+
+typedef struct Fn142AD0Object {
+    u16 count;
+    u16 flags;
+    u8 pad4[4];
+    Fn142AD0Entry *entries;
+    u8 padC[0x20];
+    f32 value2C;
+    f32 value30;
+    f32 value34;
+    f32 value38;
+    u8 pad3C[4];
+    Fn142AD0Key cur;
+    u8 pad54[4];
+    Fn142AD0Key prev;
+} Fn142AD0Object;
+
+extern void fn_1_4270C(Fn142AD0Object *object, void *arg1, u32 arg2);
+extern void fn_1_433A4(Fn142AD0Key *dst, Fn142AD0Key *src);
+
+static inline void fn_1_42AD0_save_keys(Fn142AD0Entry *entry, s32 k) {
+    entry->keys[0][1][k] = entry->keys[0][0][k];
+    entry->keys[1][1][k] = entry->keys[1][0][k];
+    entry->keys[2][1][k] = entry->keys[2][0][k];
+    entry->keysF[0][1][k] = entry->keysF[0][0][k];
+    entry->keysF[1][1][k] = entry->keysF[1][0][k];
+    entry->keysF[2][1][k] = entry->keysF[2][0][k];
+    entry->keys[3][1][k] = entry->keys[3][0][k];
+    entry->keys[4][1][k] = entry->keys[4][0][k];
+    entry->keys[5][1][k] = entry->keys[5][0][k];
+}
+
+static inline void fn_1_42AD0_reset_entry(Fn142AD0Entry *entry) {
+    lbl_8006DBAC(entry->value88);
+    fn_8006E5FC(entry->quat);
+    entry->value174 = entry->sourceB8;
+    entry->value17C = entry->sourceC0;
+    entry->value180 = entry->sourceC4;
+    entry->value188 = entry->sourceCC;
+}
+
+void fn_1_42AD0(Fn142AD0Object *object, void *arg1, u32 arg2, u16 arg3, u16 arg4) {
+    f32 ratio;
+    f32 span;
+    s32 i;
+    u32 offset;
+    s32 j;
+    Fn142AD0Entry *entry;
+    f32 start;
+    f32 newSpan;
+
+    if (arg3 == 0 || (object->flags & 0x100)) {
+        fn_1_4270C(object, arg1, arg2);
+        return;
+    }
+
+    start = (f32)object->cur.value1;
+    span = (f32)object->cur.value2 - start;
+    ratio = (object->cur.value5 - start) / span;
+    fn_1_433A4(&object->prev, &object->cur);
+
+    if (arg4 & 2) {
+        for (i = 0; i < object->count; i++) {
+            entry = (Fn142AD0Entry *)((u8 *)object->entries + i * 0x18c);
+            fn_1_42AD0_save_keys(entry, 0);
+            fn_1_42AD0_save_keys(entry, 1);
+            fn_1_42AD0_save_keys(entry, 2);
+        }
+    } else {
+        for (i = 0; i < object->count; i++) {
+            entry = &object->entries[i];
+            fn_1_42AD0_reset_entry(entry);
+        }
+    }
+
+    fn_1_4270C(object, arg1, arg2);
+    newSpan = (f32)(object->cur.value2 - object->cur.value1);
+    if (arg4 & 2) {
+        object->flags |= 1;
+        object->prev.value4 = object->prev.value4 * (span / newSpan);
+    }
+    if (arg4 & 0x20) {
+        object->flags |= 0x400;
+    }
+    if (arg4 & 0x80) {
+        object->flags |= 0x800;
+    }
+    if (arg4 & 0x40) {
+        object->flags |= 0x200;
+    }
+    if (arg4 & 1) {
+        object->cur.value5 = (f32)object->cur.value1 + (f32)(newSpan * ratio);
+    }
+    if (arg4 & 4) {
+        object->flags |= 0x20;
+    }
+    if (arg4 & 8) {
+        object->flags |= 0x40;
+    }
+    if (arg4 & 0x10) {
+        object->flags |= 0x80;
+    }
+    object->value2C = (f32)arg3;
+    object->value30 = object->entries->x;
+    object->value34 = object->entries->y;
+    object->value38 = object->entries->z;
+}
+/* fzgx:end fn_1_42AD0 */
+
 /* fzgx:begin fn_1_42E74 */
 typedef struct Fn142E74Pair {
     u32 a;
