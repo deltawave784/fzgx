@@ -275,6 +275,15 @@ def find_models(text):
     models = []
     for m in re.finditer(r"(?:(?:struct\s+)?(\w+)\s*\*\s*)?(\w+)\s*=\s*\((?:struct\s+)?(\w+)\s*\*\)\s*&(lbl_\d+_bss_[0-9A-F]+|lbl_[0-9A-F]{8})\s*;", text):
         models.append((m.group(2), m.group(3), m.group(4), m.group(0), 'ptr'))
+    # the uncast spelling `T *p = &lbl;` (fn_1_B5F20, fn_1_E9CFC): the type is the pointer's,
+    # accepted only when the object's own extern declares the same aggregate type
+    for m in re.finditer(r"(?:struct\s+)?(\w+)\s*\*\s*(\w+)\s*=\s*&(lbl_\d+_bss_[0-9A-F]+|lbl_[0-9A-F]{8})\s*;", text):
+        tname, pvar, base = m.group(1), m.group(2), m.group(3)
+        if tname in SCALAR or tname == 'void' or base in {mm[2] for mm in models}:
+            continue
+        if not re.search(r"\bextern\s+(?:struct\s+)?%s\s+%s\s*;" % (re.escape(tname), re.escape(base)), text + include_text()):
+            continue
+        models.append((pvar, tname, base, m.group(0), 'ptr'))
     seen = {m[2] for m in models}
     for m in re.finditer(r"\nextern\s+(\w+)\s+(lbl_\d+_bss_[0-9A-F]+|lbl_[0-9A-F]{8})\s*((?:\[[^\]]*\])*)\s*;", text):
         tname, base = m.group(1), m.group(2)
@@ -487,9 +496,12 @@ def tu_objects(p, symbol, text, mode, cache, retail_bases=()):
                     notes.append(f'{fname}: conflicting field at {obj.name}+{inner:#x}'); return None, notes
             rec['fields'].setdefault(inner, (fname, fsize, esize, ealign))
             rewrites.append((um, obj, inner, fname, idx, amp))
+        late_removals = []
         for name, (decl_t, dims, stmt) in list(extra_objs.items()):
             s = syms[name]
-            if s.addr < start.addr or s.addr - start.addr > 0x10000:
+            # definitions start at the model's base, so a scalar below it would lose its
+            # extern without gaining a definition (fn_1_E9CFC's lbl_1_bss_6D82C)
+            if s.addr < max(start.addr, b.addr) or s.addr - start.addr > 0x10000:
                 continue
             obj = next((c for c in cluster if c.addr <= s.addr < c.end), None)
             if obj is None or obj.name != name or name in per_obj:
@@ -497,7 +509,9 @@ def tu_objects(p, symbol, text, mode, cache, retail_bases=()):
             fname = f'fzgx_scalar_{name}'
             decls[fname] = (decl_t, [d.strip('[]') for d in re.findall(r'\[[^\]]*\]', dims)], f'{decl_t} {fname}{dims};')
             per_obj[name] = {'sym': obj, 'fields': {0: (fname, obj.size, obj.size, 4 if not dims else 4)}}
-            out_text = out_text.replace(stmt, '')
+            # removed after the field rewrites below: their match offsets index the current text
+            # (removing a declaration here shifted every rewrite of fn_1_E9CFC into garbage)
+            late_removals.append(stmt)
             extra_objs.pop(name)
         last = max(view_end, max(r['sym'].end for r in per_obj.values()))
         before = [s for s in cluster if s.addr < last]
@@ -595,6 +609,8 @@ def tu_objects(p, symbol, text, mode, cache, retail_bases=()):
                 value = f"(*({ttext} (*){''.join(f'[{d}]' for d in dims)})&{value})"
             repl = f"{amp}{value}{idx}"
             out_text = out_text[:um.start()] + repl + out_text[um.end():]
+        for stmt_late in late_removals:
+            out_text = out_text.replace(stmt_late, '')
         if stmt_removed:
             out_text = out_text.replace(stmt_removed, '')
         if kind == 'ptr':

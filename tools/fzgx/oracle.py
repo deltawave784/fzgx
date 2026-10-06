@@ -345,7 +345,8 @@ def _diff(project: Project, module: str, symbol: str, unit: str, max_diff_lines:
                 ro_rows, ro_pairs = _data_pool_rows(project, module, base, left, right, lrows, rrows, ".rodata")
                 pool_rows |= ro_rows
                 res._pool_pairs += ro_pairs
-                bss_rows, bss_pairs = _bss_base_rows(project, module, base, left, right, lrows, rrows, symbol)
+                bss_rows, bss_pairs = _bss_base_rows(project, module, base, left, right, lrows, rrows, symbol,
+                                                       notes=res.pool_notes)
                 pool_rows |= bss_rows
                 res._pool_pairs += bss_pairs
             res.pool = [d for _, _, d in res._pool_pairs]
@@ -447,7 +448,7 @@ def _equivalent_reloc_rows(project, module, obj, left, right, lrows, rrows):
     return rows
 
 
-def _bss_base_rows(project, module, obj, left, right, lrows, rrows, function_name=None):
+def _bss_base_rows(project, module, obj, left, right, lrows, rrows, function_name=None, notes=None):
     """A compiler section base and its named BSS object denote the same storage."""
     elf = poolfix.Elf(obj.read_bytes())
     symbols = {s['name']: s for s in elf.symbols()}
@@ -519,9 +520,20 @@ def _bss_base_rows(project, module, obj, left, right, lrows, rrows, function_nam
         # The unit's copy is dropped at integration and every displacement off the base is
         # compared as code, so a section base only needs its retail symbol at the same start;
         # dtk's symbol size is a heuristic (a retail TU's first object is often smaller).
-        if not rname.startswith('...bss') or not owned or owned['size'] > retail.size:
+        if not rname.startswith('...bss'):
+            continue
+        # diagnostics only: say why a compiler section base stayed unbound
+        if not owned:
+            _note(notes, f"bss base {rname}: the unit defines no object named {retail.name} "
+                         f"(or fzgx_obj_{retail.name}) at the base, so it cannot be bound to {retail.name}")
+            continue
+        if owned['size'] > retail.size:
+            _note(notes, f"bss base {rname}: our {owned['name']} is {owned['size']:#x} bytes, "
+                         f"larger than retail {retail.name} ({retail.size:#x})")
             continue
         if anchor['shndx'] != section['index'] or owned['shndx'] != section['index'] or anchor['value'] != owned['value']:
+            _note(notes, f"bss base {rname}: {owned['name']} is not at the base's offset "
+                         f"({owned['value']:#x} vs {anchor['value']:#x}); define it first in the section")
             continue
         rows.add(i)
         for private in ((rname,) if owned_here else (rname, owned['name'])):
