@@ -21661,6 +21661,16 @@
   },
   {
     "module": "main",
+    "source": "dol/fn_8006AC44.c",
+    "symbols": [
+      "fn_8006AC44"
+    ],
+    "status": "matching",
+    "mw_version": "GC/1.3.2",
+    "extra_cflags": []
+  },
+  {
+    "module": "main",
     "source": "dol/fn_8006B294.c",
     "symbols": [
       "fn_8006B294"
@@ -25114,6 +25124,16 @@
     ],
     "status": "matching",
     "mw_version": null,
+    "extra_cflags": []
+  },
+  {
+    "module": "main",
+    "source": "dol/fn_8008E770.c",
+    "symbols": [
+      "fn_8008E770"
+    ],
+    "status": "matching",
+    "mw_version": "GC/1.2.5n",
     "extra_cflags": []
   },
   {
