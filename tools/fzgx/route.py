@@ -93,7 +93,8 @@ def tried_by(prefix: str) -> set:
     return {r["symbol"] for r in rows}
 
 
-def fable_plan(p: Project, limit: int = 8, min_percent: float = 98.0, max_attempts: int = 12) -> List[Dict]:
+def fable_plan(p: Project, limit: int = 8, min_percent: float = 98.0, max_attempts: int = 12,
+               module: Optional[str] = None) -> List[Dict]:
     """Next near misses for a Fable batch (agent type `matcher-large`, model fable).
 
     Unmatched, unclaimed functions whose best recorded score is at least `min_percent`, that no
@@ -106,7 +107,9 @@ def fable_plan(p: Project, limit: int = 8, min_percent: float = 98.0, max_attemp
         "SELECT f.symbol, f.module, f.size, f.attempts, MAX(COALESCE(a.best_in_attempt, a.final_percent, 0)) AS best "
         "FROM functions f LEFT JOIN attempts a ON a.symbol = f.symbol "
         "WHERE f.status = 'unmatched' AND f.claimed_by IS NULL AND f.attempts < ? AND f.symbol NOT LIKE '%:_prolog' "
-        "GROUP BY f.symbol HAVING best >= ? ORDER BY best DESC", (max_attempts, min_percent)).fetchall()
+        + ("AND f.module = ? " if module else "") +
+        "GROUP BY f.symbol HAVING best >= ? ORDER BY best DESC",
+        (max_attempts, *((module,) if module else ()), min_percent)).fetchall()
     sizes = {(r["module"], r["size"]) for r in db.execute(
         "SELECT module, size, symbol FROM functions").fetchall() if r["symbol"] in tried}
     out, seen = [], set()

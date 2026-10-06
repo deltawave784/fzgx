@@ -100,7 +100,7 @@ def cmd_stuck(a, p):
 def cmd_route(a, p):
     from . import route
     if a.fable:
-        rows = route.fable_plan(p, a.limit, a.min_percent)
+        rows = route.fable_plan(p, a.limit, a.min_percent, module=a.module)
         if a.json:
             print(json.dumps(rows, indent=1))
         else:

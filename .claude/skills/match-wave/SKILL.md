@@ -165,4 +165,11 @@ tokens). `round_interval` is 5 at first; two consecutive rounds with no kept cha
 (5 -> 10 -> 20, capped at 20); a kept change with a gain resets it to 5. A round that fails its gate is reverted
 by the agent; two failed gates in a row stop the rounds for the rest of the run and notify.
 
+## Two clones
+
+When a second clone (a Codex harness or another person) works in parallel, read `docs/COLLABORATION.md`: this
+clone works only its own modules (`route --fable --module <module>`), merges the other clone's branch only between
+batches (`git pull --no-rebase fork <branch>`, then ninja, `fzgx gate`, `fzgx sync`), and does not push. The user
+pushes, or allows that one command for the loop. Do not merge, pull or push from inside a batch.
+
 Never push. Never run the librarian concurrently with matchers.

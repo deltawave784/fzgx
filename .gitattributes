@@ -11,3 +11,7 @@
 
 # decomp-toolkit writes files with LF
 config/**/*.txt  text eol=lf
+
+# two clones merge these without hand-resolving (see docs/COLLABORATION.md)
+state/progress.csv merge=union
+state/repairs/fixup_imports.json merge=fzjson
