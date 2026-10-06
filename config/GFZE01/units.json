@@ -23545,6 +23545,19 @@
   },
   {
     "module": "main",
+    "source": "dol/fn_8007698C.c",
+    "symbols": [
+      "fn_8007698C"
+    ],
+    "status": "matching",
+    "mw_version": "GC/1.3",
+    "extra_cflags": [],
+    "pool": {
+      "@21": "lbl_801A7490"
+    }
+  },
+  {
+    "module": "main",
     "source": "dol/fn_80076CD4.c",
     "symbols": [
       "fn_80076CD4"
