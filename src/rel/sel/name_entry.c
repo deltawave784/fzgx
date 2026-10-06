@@ -273,3 +273,149 @@ int fn_10_26434(void) {
     return 0;
 }
 /* fzgx:end fn_10_26434 */
+
+/* fzgx:begin fn_10_266AC */
+#include "dolphin/hw_regs.h"
+
+typedef struct NameEntryPool {
+    u8 pad_0[0x38];
+    f32 unk_38;
+    f32 unk_3C;
+    f32 unk_40;
+    f32 unk_44;
+    f32 unk_48;
+    f32 unk_4C;
+    f32 unk_50;
+    f32 unk_54;
+    f32 unk_58;
+    f32 unk_5C;
+    f32 unk_60;
+    f32 unk_64;
+    f32 unk_68;
+    f32 unk_6C;
+    u8 pad_70[0x38];
+    u32 unk_A8;
+    f32 unk_AC;
+    f32 unk_B0;
+    f32 unk_B4;
+} NameEntryPool;
+
+typedef struct CameraDesc {
+    u32 mode;
+    f32 x;
+    f32 y;
+    f32 z;
+    u32 pad_10[8];
+    u32 unk_30;
+    u32 pad_34[9];
+} CameraDesc;
+
+extern NameEntryPool lbl_10_rodata_1D70;
+extern CameraDesc lbl_1_rodata_26F8;
+extern u32 lbl_801A66B4;
+#define NAME_TABLE ((const char **)lbl_10_data_6B2C)
+
+extern u32 fn_10_261E4(u32, u32);
+extern u32 fn_1_4AEC0(u32);
+extern u32 fn_800371F8(u32, void *);
+extern u8 fn_1_B7C00(void);
+extern void fn_1_49410(void);
+extern void fn_1_4954C(f32);
+extern void fn_1_4955C(f32, f32);
+extern void fn_1_49590(f32);
+extern void fn_1_495B0(u32);
+extern void fn_1_495C8(u8);
+extern void fn_1_4966C(f32, f32);
+extern void fn_1_496FC(f32, f32);
+extern void fn_1_4A0D8(const char *);
+extern void fn_1_4AEB4(f32);
+extern void fn_1_4FD64(void);
+extern void fn_1_50164(f32, f32, f32, f32, void *);
+extern void fn_8003462C(u32, u32, u32);
+extern void fn_8007245C(u32);
+extern void fn_80072864(u32);
+extern void fn_800728A8(s32, s32, s32, s32);
+extern void fn_80072AB0(s32, s32, s32);
+extern void fn_80072C24(s32, s32, s32, s32, s32);
+extern void fn_80072CC4(s32, s32, s32, s32, s32);
+extern void fn_80072D64(s32, s32, s32, s32, u8, s32);
+extern void fn_80072E20(s32, s32, s32, s32, u8, s32);
+extern void fn_800734A8(u32, s32, s32, s32);
+extern void fn_80073678(u32);
+extern void fn_80073C6C(s32);
+extern void fn_80074660(u32);
+extern void fn_80074788(u32);
+extern void fn_800747D0(u32, u32, s32, s32, u32, s32, s32);
+extern void fn_80074918(u8, s32, u8);
+
+/* volatile: every store must reach the GX write-gather FIFO; the hardware register must not be merged */
+#define GX_FIFO_F32 (*(volatile f32 *)GX_FIFO_BASE)
+
+void fn_10_266AC(void) {
+    NameEntryPool *pool = (NameEntryPool *)&lbl_10_rodata_1D70;
+    const char *name;
+    CameraDesc cam;
+    u32 tevStage;
+
+    if (fn_1_B7C00() != 0 || lbl_10_bss_55CE1 != 0) {
+        fn_1_4FD64();
+        fn_80074918(0, 7, 0);
+        fn_80074788(1);
+        fn_80074660(0);
+        fn_80073678(1);
+        fn_80073C6C(0);
+        fn_800747D0(4, 0, 0, 0, 0, 2, 2);
+        fn_80072AB0(0, 0, 0);
+        fn_800734A8(0, 255, 255, 4);
+        fn_80072C24(0, 15, 15, 15, 2);
+        fn_80072D64(0, 0, 0, 0, 1, 0);
+        fn_80072CC4(0, 7, 7, 7, 1);
+        fn_80072E20(0, 0, 0, 0, 1, 0);
+        fn_800728A8(1, 4, 5, 0);
+        fn_80072864(2);
+        fn_8007245C(0x200);
+        tevStage = pool->unk_A8;
+        fn_800371F8(1, &tevStage);
+        fn_8003462C(0x80, 7, 4);
+        /* full-screen quad through the write-gather pipe */
+        GX_FIFO_F32 = pool->unk_6C;
+        GX_FIFO_F32 = pool->unk_6C;
+        GX_FIFO_F32 = pool->unk_64;
+        GX_FIFO_F32 = pool->unk_AC;
+        GX_FIFO_F32 = pool->unk_6C;
+        GX_FIFO_F32 = pool->unk_64;
+        GX_FIFO_F32 = pool->unk_AC;
+        GX_FIFO_F32 = pool->unk_B0;
+        GX_FIFO_F32 = pool->unk_64;
+        GX_FIFO_F32 = pool->unk_6C;
+        GX_FIFO_F32 = pool->unk_B0;
+        GX_FIFO_F32 = pool->unk_64;
+    }
+
+    if (lbl_10_bss_55CE1 != 0) {
+        cam = lbl_1_rodata_26F8;
+        cam.mode = 2;
+        cam.x = pool->unk_38;
+        cam.y = pool->unk_3C;
+        cam.z = pool->unk_40;
+        cam.unk_30 = 10;
+        fn_1_50164(pool->unk_44, pool->unk_48, pool->unk_4C, pool->unk_50, &cam);
+
+        name = NAME_TABLE[lbl_801A66B4];
+        fn_1_4AEC0(1);
+        fn_1_4AEB4(pool->unk_54);
+        fn_1_49410();
+        fn_1_4955C(pool->unk_58, pool->unk_58);
+        fn_1_4954C(pool->unk_5C);
+        fn_1_495B0(0x80000000);
+        fn_1_49590(pool->unk_60);
+        fn_1_495C8(9);
+        fn_1_496FC(pool->unk_38, pool->unk_B4);
+        fn_1_4966C(pool->unk_64, pool->unk_68);
+        fn_1_4A0D8(name);
+        fn_1_4AEC0(0);
+        fn_1_4AEB4(pool->unk_6C);
+        fn_10_261E4(0x118, lbl_10_bss_55CE2);
+    }
+}
+/* fzgx:end fn_10_266AC */

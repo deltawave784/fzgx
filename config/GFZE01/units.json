@@ -61069,6 +61069,17 @@
   },
   {
     "module": "sel",
+    "source": "rel/sel/name_entry/fn_10_266AC.c",
+    "symbols": [
+      "fn_10_266AC"
+    ],
+    "status": "matching",
+    "mw_version": null,
+    "extra_cflags": [],
+    "tu": "rel/sel/name_entry.c"
+  },
+  {
+    "module": "sel",
     "source": "rel/sel/record/fn_10_26554.c",
     "symbols": [
       "fn_10_26554"
