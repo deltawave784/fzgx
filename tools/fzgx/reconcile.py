@@ -112,7 +112,7 @@ def object_views(p: Project, tf: tufile.TuFile) -> List[str]:
     repaired = []
     for b in tf.blocks:
         code = masked(b.body)
-        edits = []
+        edits, undefs = [], []
         for m in declarations(b.body):
             name, typ, dims = m[2], m[1].strip(), m[3].strip()
             if name not in conflicts or name not in canonical:
@@ -124,9 +124,28 @@ def object_views(p: Project, tf: tufile.TuFile) -> List[str]:
                 continue
             if re.search(r'^\s*#.*\b' + re.escape(name) + r'\b', code, re.M):
                 continue
-            edits.append((m.start(), m.end(), '\n'))
+            pointer = f'{typ} (*){dims}' if dims else f'{typ} *'
+            start = b.body.rfind('\n', 0, m.start(1)) + 1
+            end = b.body.find('\n', m.end())
+            end = len(b.body) if end < 0 else end
+            whole_line = not code[start:m.start(1)].replace('extern', '').strip() \
+                and not code[m.end():end].strip() \
+                and b.body.count('/*', m.end(), end) == b.body.count('*/', m.end(), end)
+            if (typ, dims) != canonical[name] and re.search(r'\bvolatile\b', typ) and whole_line:
+                # A volatile view is a codegen choice the declaration's comment justifies
+                # (lint S2). Keep it on one commented line, scoped to this block, instead
+                # of spreading an unjustified cast over every use.
+                comment = b.body[m.end():end].strip()
+                define = f'#define {name} (*({pointer})&{name})'
+                edits.append((start, end, define + (f' {comment}' if comment else '')))
+                undefs.append(f'#undef {name}')
+                repaired.append(name)
+                continue
+            if whole_line:  # the declaration's own trailing comment leaves with it
+                edits.append((start, min(end + 1, len(b.body)), ''))
+            else:
+                edits.append((m.start(), m.end(), '\n'))
             if (typ, dims) != canonical[name]:
-                pointer = f'{typ} (*){dims}' if dims else f'{typ} *'
                 for use in re.finditer(r'\b' + re.escape(name) + r'\b', tail):
                     at = m.end() + use.start()
                     if re.search(r'(?:\.|->)\s*$', code[:at]):
@@ -135,6 +154,8 @@ def object_views(p: Project, tf: tufile.TuFile) -> List[str]:
                 repaired.append(name)
         for start, end, replacement in sorted(edits, reverse=True):
             b.body = b.body[:start] + replacement + b.body[end:]
+        if undefs:
+            b.body = b.body.rstrip('\n') + '\n' + '\n'.join(undefs) + '\n'
     if additions:
         tf.prologue = tf.prologue.rstrip() + '\n' + '\n'.join(additions) + '\n'
     return sorted(set(repaired))
