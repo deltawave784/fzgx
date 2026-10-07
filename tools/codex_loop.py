@@ -86,12 +86,17 @@ def usage_limit(batch: str, failed: int = 1):
         if "usageLimitExceeded" not in text and "usage limit" not in text:
             continue
         hit = True
-        m = re.search(r"try again at (\d{1,2}):(\d{2}) ?([AP]M)", text)
+        m = re.search(r"try again at (?:([A-Z][a-z]{2}) (\d{1,2})(?:st|nd|rd|th)?, (\d{4}) )?(\d{1,2}):(\d{2}) ?([AP]M)", text)
         if m:
-            hour = int(m.group(1)) % 12 + (12 if m.group(3) == "PM" else 0)
-            when = datetime.datetime.now().replace(hour=hour, minute=int(m.group(2)), second=0, microsecond=0)
-            if when <= datetime.datetime.now():
-                when += datetime.timedelta(days=1)
+            hour = int(m.group(4)) % 12 + (12 if m.group(6) == "PM" else 0)
+            now = datetime.datetime.now()
+            if m.group(1):  # a weekly limit names the date: "try again at Oct 13th, 2026 9:28 PM"
+                day = datetime.datetime.strptime(f"{m.group(1)} {m.group(2)} {m.group(3)}", "%b %d %Y")
+                when = day.replace(hour=hour, minute=int(m.group(5)))
+            else:
+                when = now.replace(hour=hour, minute=int(m.group(5)), second=0, microsecond=0)
+                if when <= now:
+                    when += datetime.timedelta(days=1)
             break
     if not hit:
         return None
@@ -200,7 +205,7 @@ def main() -> int:
     ap.add_argument("--per-module", type=int, default=6)
     ap.add_argument("--max-attempts", type=int, default=12, help="attempts a function may have had and still be picked")
     ap.add_argument("--max-batches", type=int, default=6)
-    ap.add_argument("--hours", type=float, default=24.0)
+    ap.add_argument("--hours", type=float, default=168.0)
     ap.add_argument("--zero-streak", type=int, default=3)
     ap.add_argument("--parallel", type=int, default=12)
     ap.add_argument("--astra-model", default="gpt-6-astra")
