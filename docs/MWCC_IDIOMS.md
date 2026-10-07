@@ -348,3 +348,9 @@ without row alignment (`retail - ours` net rows):
   adding enums to a header shifts the `@N` names of a unit's jump tables/literals and breaks
   its recorded `pool` mapping in units.json (TRKDispatchMessage `@20` -> `@22`). Typedefs and
   struct declarations do not. Keep enums out of headers included by pool-mapped units.
+- A byte-field getter (`return obj->unk_4A;`, lbz) whose callers test or index r3 without
+  `clrlwi` returns `s32`, not `u8`: the callee's code is identical, the caller's is not
+  (fn_1_5910, fn_1_58C4, fn_1_D357C; bg_common fn_1_1067A8). A boolean `return a != b;`
+  tested with `cmpwi` in callers is `s32`/`int`, not `u32` (fn_1_467F4, fn_1_8D690).
+- `int` and `long` (`s32`) are distinct types to MWCC's redeclaration check even though the
+  code is the same: a whole-TU compile fails on `extern int f(void);` after `extern s32 f(void);`.

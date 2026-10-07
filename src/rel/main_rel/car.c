@@ -5152,7 +5152,7 @@ typedef struct {
 
 
 // Return whether the indexed flag remains enabled after the preliminary check.
-u32 fn_1_8D690(s16 arg0) {
+int fn_1_8D690(s16 arg0) {
     FnTable table;
     u32 valid;
 
@@ -5172,7 +5172,7 @@ typedef struct {
     u32 w[41];
 } Table164;
 
-u32 fn_1_8D72C(s16 index) {
+int fn_1_8D72C(s16 index) {
     Table164 table;
     s32 result;
 

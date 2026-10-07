@@ -1726,7 +1726,7 @@ u32 fn_1_12F78(void *arg0, u32 arg1) {
 /* fzgx:end fn_1_12F78 */
 
 /* fzgx:begin fn_1_13018 */
-u32 fn_1_13018(void) {
+s32 fn_1_13018(void) {
     fn_8000659C();
     return OSIsThreadTerminated(lbl_1_bss_1810) == 0;
 }

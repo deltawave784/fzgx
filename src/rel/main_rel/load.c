@@ -347,7 +347,7 @@ s32 fn_1_465D0(s32 arg0, s32 arg1) {
 /* fzgx:end fn_1_465D0 */
 
 /* fzgx:begin fn_1_467F4 */
-u32 fn_1_467F4(void) {
+s32 fn_1_467F4(void) {
     u32 value;
 
     fn_8000659C();

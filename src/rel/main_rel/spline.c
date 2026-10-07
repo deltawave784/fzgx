@@ -53,9 +53,10 @@ typedef struct {
     u32 unk_0;
     SplineViewport vp;
 } SplineViewportHolder;
-extern void *lbl_801A6410;
-extern void *fn_1_4630(void *, u32, const char *, int);
-extern void fn_1_46B4(u32 arg0, u32 arg1, const char *arg2, int arg3);
+
+typedef struct {
+    Element elements[44];
+} Table;
 extern void fn_1_F7B2C(void);
 extern void fn_1_F7E88(void);
 extern void fn_1_F8048(void);
@@ -67,18 +68,21 @@ extern void fn_1_F9C6C(void);
 extern void fn_1_F9E4C(void);
 extern void fn_1_F9D24(void);
 extern void fn_1_F9DA4(void);
-extern void fn_1_F9CD0(u8, u8);
+extern void fn_1_F9CD0(u8 index, u8 shift);
 extern void fn_1_FA1D8(s32, s32, SplineEntry *);
 extern u32 fn_1_FA4D4(void);
 extern void fn_1_FA61C(void);
 extern u32 fn_800793D4(u8 *arg0, u32 arg1, u32 arg2);
-extern struct fn_1_F8DC4_Table lbl_1_rodata_6FF0;
-extern char *fn_80083DB0(char *dst, const char *src);
 extern u32 lbl_1_rodata_6E38;
 extern void fn_80008BA8(u32 arg0, u32 arg1, u32 arg2);
 extern u32 fn_1_F9CA0(u32 arg0, u32 arg1);
 extern s32 fn_1_F21B8(s32 arg);
 extern u8 fn_1_FA69C(s32 index);
+extern void *lbl_801A6410;
+extern void *fn_1_4630(void *, u32, const char *, int);
+extern void fn_1_46B4(u32 arg0, u32 arg1, const char *arg2, int arg3);
+extern struct fn_1_F8DC4_Table lbl_1_rodata_6FF0;
+extern char *fn_80083DB0(char *dst, const char *src);
 extern s32 fn_1_58C4(void);
 extern void fn_1_5948(int);
 extern void fn_1_627C(int);

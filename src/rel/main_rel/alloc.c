@@ -408,7 +408,7 @@ u8 fn_1_5348(void) {
 /* fzgx:end fn_1_5348 */
 
 /* fzgx:begin fn_1_58C4 */
-u8 fn_1_58C4(void) {
+s32 fn_1_58C4(void) {
     Obj_1_bss_F68_Target *obj = lbl_1_bss_F68;
 
     if (obj == 0) {
@@ -425,7 +425,7 @@ u8 fn_1_58C4(void) {
 /* fzgx:end fn_1_58C4 */
 
 /* fzgx:begin fn_1_5910 */
-u8 fn_1_5910(void) {
+s32 fn_1_5910(void) {
     Obj_1_bss_F68_Target *obj;
 
     obj = lbl_1_bss_F68;

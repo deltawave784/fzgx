@@ -54,33 +54,46 @@ struct Sig_fn_8003432C_fn_8003432C_Arg2 {
 struct Sig_GXPeekZ_GXPeekZ_Arg2 {
     u32 unk_0;
 };
+extern s32 fn_1_5910();
+extern f32 lbl_1_rodata_26F8[22];
+extern void fn_1_51564(s16, s16, s16, s16, s16, s16);
+extern u32 fn_1_5158C(FontDrawPacket *, u32, s16, s16);
+extern const f32 lbl_1_rodata_5C3C;
+extern const f32 lbl_1_rodata_5CFC;
+extern const f32 lbl_1_rodata_5E0C;
+extern u32 fn_1_8627C(s32 index);
+extern void *fn_1_4DF60(void);
+extern const f32 lbl_1_rodata_5C40;
+extern const f32 lbl_1_rodata_5F18;
+extern u32 fn_1_58C4(void);
+extern u32 lbl_1_rodata_5F14;
+extern void fn_1_CD6C0(fn_1_CD6C0_object *object);
+extern f32 fn_1_519FC(f32 value);
+extern f32 fn_1_51AC0(f32 value);
 extern s16 fn_1_3F0C8(void);
 extern u32 fn_1_485A8(s32 index);
 extern void fn_1_C771C(void);
-extern u32 fn_1_58C4(void);
 extern void fn_1_C72D4(void);
 extern void fn_1_C742C(void);
 extern s16 camera_get_mode(void);
-extern u32 fn_1_8627C(s32 index);
 extern void fn_1_52070(u32 value);
 extern void fn_1_CA8FC();
 extern void fn_1_52088(void);
-extern void fn_1_CA2A4(int);
-extern void fn_1_CD51C(int);
+extern void fn_1_CA2A4(int self);
+extern void fn_1_CD51C(void *object);
 extern void fn_1_CDC8C(void);
 extern void fn_1_CEB38(void);
 extern void fn_1_C8DC0();
-extern void fn_1_CADC4(int);
+extern void fn_1_CADC4(int arg0);
 extern u32 fn_1_3F114(void);
 extern void fn_1_CC280();
 extern u32 fn_1_CFA0C();
 extern int fn_1_CBC24(int, int, u8, u8, u16);
-extern u32 fn_1_5910();
 extern void fn_1_CB424(int, int, int);
 extern void fn_1_CB028(int, int);
 extern void fn_1_CAB38(int, int, int);
-extern void fn_1_CA690(int, int, int);
-extern void fn_1_CD7BC(int);
+extern void fn_1_CA690(int self, int arg1, int arg2);
+extern void fn_1_CD7BC(int arg0);
 extern u8 fn_1_86810(int index);
 extern u32 fn_1_3F7E0(void);
 extern void fn_1_49410(void);
@@ -88,7 +101,6 @@ extern void fn_1_494DC(s16 index);
 extern void fn_1_496FC(f32 value1, f32 value2);
 extern void fn_1_49728(u8 value);
 extern void fn_1_51E60(void *);
-extern f32 lbl_1_rodata_26F8[22];
 extern const f32 lbl_1_rodata_5D18;
 extern const f32 lbl_1_rodata_5DBC;
 extern const f32 lbl_1_rodata_5DC8;
@@ -105,11 +117,9 @@ extern f32 lbl_1_rodata_5DE0;
 extern f32 lbl_1_rodata_5DE4;
 extern f32 fn_1_8652C(int index);
 extern void fn_1_4966C(f32 value1, f32 value2);
-extern const f32 lbl_1_rodata_5CFC;
 extern f32 lbl_1_rodata_5DE8;
 extern f32 lbl_1_rodata_5DEC;
 extern void fn_1_4955C(f32 value1, f32 value2);
-extern const f32 lbl_1_rodata_5E0C;
 extern struct fn_1_CC280_lbl_1_rodata_5EC0 lbl_1_rodata_5EC0;
 extern u32 lbl_1_rodata_5EE8[10];
 extern const f64 lbl_1_rodata_5CE8;
@@ -118,14 +128,6 @@ extern const f32 lbl_1_rodata_5C48;
 extern const f32 lbl_1_rodata_5F10;
 extern u16 fn_1_48690(u32 unused);
 extern u16 fn_1_486C4(u32 value);
-extern void *fn_1_4DF60(void);
-extern const f32 lbl_1_rodata_5C3C;
-extern const f32 lbl_1_rodata_5C40;
-extern const f32 lbl_1_rodata_5F18;
-extern u32 lbl_1_rodata_5F14;
-extern void fn_1_CD6C0(fn_1_CD6C0_object *object);
-extern f32 fn_1_519FC(f32 value);
-extern f32 fn_1_51AC0(f32 value);
 extern u16 fn_1_8664C(int index);
 extern u32 fn_1_864E8(int index);
 extern f32 lbl_8006D0B4(f32);
@@ -158,8 +160,6 @@ extern const f32 lbl_1_rodata_6060;
 extern const f32 lbl_1_rodata_6064;
 extern const f32 lbl_1_rodata_6068;
 extern s32 fn_1_156218(u32, void *, void *, void *);
-extern void fn_1_51564(s16, s16, s16, s16, s16, s16);
-extern u32 fn_1_5158C(FontDrawPacket *, u32, u32, u32);
 extern void fn_1_495B0(u32 value);
 extern void fn_1_495FC(void);
 extern f32 lbl_1_rodata_6078;
@@ -321,7 +321,7 @@ void fn_1_C72D4(void) {
         if (fn_1_58C4() == 1)
             fn_1_52070(0x140);
         fn_1_CA2A4(mode);
-        fn_1_CD51C(mode);
+        fn_1_CD51C( (void *)(int)(mode));
         fn_1_CDC8C();
         fn_1_CEB38();
         fn_1_52088();
@@ -366,7 +366,7 @@ void fn_1_C771C(void) {
     if (fn_1_58C4() == 1) {
         fn_1_52070( (int)(0x140));
     }
-    fn_1_CD51C(mode);
+    fn_1_CD51C( (void *)(int)(mode));
     fn_1_CD7BC(mode);
     fn_1_52088();
     if (fn_1_58C4() == 1) {
@@ -635,7 +635,7 @@ f32 arg4;
     s32 v;
 
     loc_8 = lbl_1_rodata_5EC0;
-    i = fn_1_5910();
+    i = (u32)fn_1_5910();
     if ((((*((struct fn_1_CC280_lbl_1_data_3D544 *)&lbl_1_data_3D544)).unk_0[i] >> 26) & 1) != 0) {
         if (arg3 < 10) {
             loc_30 = (*((FontDrawPacket *)&lbl_1_rodata_26F8));
@@ -816,6 +816,31 @@ void fn_1_CC8E4(s32 arg0, s32 arg1, s32 arg2) {
     }
 }
 /* fzgx:end fn_1_CC8E4 */
+
+/* fzgx:begin fn_1_CD36C */
+
+void fn_1_CD36C(void *unused, s32 a, s32 b) {
+    FontDrawPacket p;
+    s32 idx;
+
+    idx = fn_1_5910();
+    p = (*((FontDrawPacket *)&lbl_1_rodata_26F8));
+    p.image = 0x9421;
+    fn_1_51564(0, 0, 0x18, 0x14, 2, 2);
+    p.x = (f32)a;
+    p.y = (f32)b;
+    p.z = 10.0f;
+    fn_1_5158C(&p, p.image, idx % 2, idx / 2);
+    fn_1_4F734(&p);
+    p = (*((FontDrawPacket *)&lbl_1_rodata_26F8));
+    p.image = 0x9422;
+    p.x = (f32)(a + 0xc);
+    p.y = (f32)(b + 0xa);
+    p.z = 20.0f;
+    p.flags = 10;
+    fn_1_4F734(&p);
+}
+/* fzgx:end fn_1_CD36C */
 
 /* fzgx:begin fn_1_CD51C noprologue */
 #include "types.h"

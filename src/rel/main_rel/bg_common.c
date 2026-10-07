@@ -9,6 +9,14 @@ typedef struct Fn1_103F58_Object {
     Fn103FCC callback;
     void *context;
 } Fn1_103F58_Object;
+extern s32 fn_1_5910(void);
+extern f32 lbl_1_rodata_7960[43];
+extern f32 lbl_1_rodata_7A40[2];
+extern s32 fn_1_58C4(void);
+extern void lbl_8006DCA4(void);
+extern void fn_1_57714(s32 arg0);
+extern void fn_1_57720(u32 value_1, u32 value_2, u32 value_3, u32 value_4);
+extern void fn_1_57CD0(u32 value, void *arg);
 extern void * fn_1_548AC(u32 amount);
 extern void fn_1_5489C(void **arg0, void **arg1);
 extern u8 *fn_80083970(u8 *str, const u8 *needle);
@@ -23,14 +31,6 @@ extern void **fn_1_54448(s32 arg0);
 extern void fn_1_103FCC(void);
 extern void fn_1_10688C(void);
 extern void fn_1_106B68(void);
-extern u8 fn_1_5910(void);
-extern f32 lbl_1_rodata_7960[43];
-extern f32 lbl_1_rodata_7A40[2];
-extern u8 fn_1_58C4(void);
-extern void lbl_8006DCA4(void);
-extern void fn_1_57714(u8 value);
-extern void fn_1_57720(u32 value_1, u32 value_2, u32 value_3, u32 value_4);
-extern void fn_1_57CD0(s32 arg0, void *arg1);
 extern u8 lbl_1_bss_86EC4;
 extern void fn_80008BEC(void *dest, int value, u32 size);
 extern void fn_1_1088B8(void *arg);
@@ -125,17 +125,7 @@ void fn_1_105768(void) {
 }
 /* fzgx:end fn_1_105768 */
 
-/* fzgx:begin fn_1_1067A8 noprologue */
-#include "types.h"
-
-extern s32 fn_1_5910(void);
-extern f32 lbl_1_rodata_7960[43];
-extern f32 lbl_1_rodata_7A40[2];
-extern s32 fn_1_58C4(void);
-extern void lbl_8006DCA4(void);
-extern void fn_1_57714(s32 arg0);
-extern void fn_1_57720(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
-extern void fn_1_57CD0(s32 arg0, void *arg1);
+/* fzgx:begin fn_1_1067A8 */
 
 void fn_1_1067A8(void *arg0, f32 arg1, f32 arg2) {
     s32 result;

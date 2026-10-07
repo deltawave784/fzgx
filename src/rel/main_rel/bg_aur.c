@@ -18,9 +18,11 @@ typedef struct {
     f32 progress[64];
     f32 cooldown[64];
 } Fn153B24Data;
+extern int fn_1_8D690(s16 arg0);
+extern int fn_1_8D72C(s16 index);
 extern struct fn_1_151C9C_lbl_1_rodata_D4F8 lbl_1_rodata_D4F8;
 extern struct fn_1_151C9C_lbl_1_rodata_D500 lbl_1_rodata_D500;
-extern u32 fn_1_151BE8(s16, s16);
+extern u32 fn_1_151BE8(s16 arg0, s16 arg1);
 extern void fn_80008BA8(void *, void *, u32);
 extern void lbl_8006DFE8(void *);
 extern void lbl_8006E13C(void *);
@@ -56,8 +58,6 @@ extern void fn_1_1540B0(u32 value);
 extern void fn_1_9AD88(void);
 extern void fn_80008BEC(void *dest, int value, u32 size);
 extern u8 lbl_1_rodata_D048[1200];
-extern u32 fn_1_8D690(s16 arg0);
-extern u32 fn_1_8D72C(s16 index);
 
 /* fzgx:begin fn_1_151AF0 */
 int fn_1_151AF0(void *arg0, int mode, void *arg2, void *arg3, void *arg4, void *arg5) {

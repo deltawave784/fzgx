@@ -4786,36 +4786,140 @@
     "commit": "59245e8"
   },
   "fn_1_5F5C8": {
-    "seed_symbol": "fn_1_5F5C8",
+    "seed_symbol": "fn_1_64F2C",
     "generator": "fzgx fixup",
-    "transform": "prime shared-pool layout (lbl_1_rodata_2950, 0xc0 bytes)",
-    "seed": "#include \"types.h\"\n\nstruct fn_1_5F5C8_Arg0 {\n    u8 pad_0[0x10];\n    u32 unk_10;\n};\nstruct fn_1_5F5C8_lbl_1_data_1D628 {\n    u32 unk_0;\n};\nstruct fn_1_5F5C8_lbl_1_rodata_2950 {\n    f32 unk_0;\n    u8 pad_4[0x4];\n    f32 unk_8;\n    u8 pad_C[0x14];\n    f64 unk_20;\n    u8 pad_28[0x44];\n    f32 unk_6C;\n    u8 pad_70[0x48];\n    f32 unk_B8;\n};\n\nextern struct fn_1_5F5C8_lbl_1_data_1D628 lbl_1_data_1D628;\nconst f32 lbl_1_rodata_2950 = 60.0f;\nconst u8 lbl_1_rodata_2954[4] = {0x3D,0xCC,0xCC,0xCD};\nconst f32 lbl_1_rodata_2954__fzgx_offset_4 = 32767.0f;\nconst u8 lbl_1_rodata_295C[20] = {0x3D,0x4C,0xCC,0xCD,0x3F,0xB1,0xEB,0x85,0x1E,0xB8,0x51,0xEC,0x46,0x9C,0x40,0x00,0x00,0x00,0x00,0x00};\nconst f64 lbl_1_rodata_295C__fzgx_offset_14 = 4503599627370496.0;\nconst u8 lbl_1_rodata_2978[16] = {0x3F,0x80,0x00,0x00,0xBC,0xF5,0xC2,0x8F,0x40,0x2E,0x00,0x00,0x00,0x00,0x00,0x00};\nconst u8 lbl_1_rodata_2988[28] = {0x43,0x30,0x00,0x00,0x80,0x00,0x00,0x00,0x3F,0xF8,0x00,0x00,0x00,0x00,0x00,0x00,0x3F,0xE0,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00};\nconst u8 lbl_1_rodata_29A4[8] = {0x3F,0x00,0x00,0x00,0x41,0x00,0x00,0x00};\nconst u8 lbl_1_rodata_29AC[16] = {0x43,0x7F,0x00,0x00,0x41,0x70,0x00,0x00,0x3E,0x4C,0xCC,0xCD,0x3D,0xA3,0xD7,0x0A};\nconst f32 lbl_1_rodata_29AC__fzgx_offset_10 = 0.25f;\nconst u8 lbl_1_rodata_29C0[48] = {0x3F,0x7A,0xE1,0x48,0x3F,0x7D,0x70,0xA4,0x42,0x20,0x00,0x00,0x41,0xA0,0x00,0x00,0x3F,0xC0,0x00,0x00,0x3E,0xE6,0x66,0x66,0xC0,0x00,0x00,0x00,0x3D,0xAA,0xAA,0xAB,0x3E,0x19,0x99,0x9A,0x3E,0x00,0x00,0x00,0xBE,0xCC,0xCC,0xCD,0xBE,0x99,0x99,0x9A};\nconst u8 lbl_1_rodata_29F0[24] = {0x40,0x00,0x00,0x00,0x43,0x7A,0x00,0x00,0x3F,0xE3,0x33,0x33,0x33,0x33,0x33,0x33,0x3F,0xD9,0x99,0x99,0x99,0x99,0x99,0x9A};\nconst f32 lbl_1_rodata_29F0__fzgx_offset_18 = 0.300000012f;\nconst u8 lbl_1_rodata_29F0__fzgx_offset_1C[80] = {0xBB,0x83,0x12,0x6F,0x3C,0x88,0x88,0x89,0x47,0x80,0x00,0x00,0x45,0x80,0x00,0x00,0x3F,0x75,0xC2,0x8F,0x3E,0xCC,0xCC,0xCD,0x3D,0x4E,0xD9,0x17,0x3D,0x50,0xE5,0x60,0x3F,0x73,0x33,0x33,0x3F,0x66,0x66,0x66,0x00,0x00,0x00,0x00,0x40,0x62,0xC0,0x00,0x00,0x00,0x00,0x00,0x40,0x24,0x00,0x00,0x00,0x00,0x00,0x00,0x40,0x08,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x3D,0xCC,0xCC,0xCD,0xC0,0x19,0x99,0x9A};\n\n#pragma opt_dead_assignments off\nf32 fn_1_5F5C8(struct fn_1_5F5C8_Arg0 *arg0, f32 arg1) {\n    f32 v0;\n    u32 v1;\n    f32 v2;\n    f32 v3;\n    f32 v4;\n    f32 v5;\n    f32 v6;\n    v0 = arg1;\n    if ((s32)arg0->unk_10 == 0) {\n    v1 = (((12345) + ((lbl_1_data_1D628.unk_0 * (0x41C60000 + 20077)))));\n    v2 = (4503599627370496.0);\n    v4 = (0.25f);\n    v5 = (0.300000012f);\n    v6 = (60.0f);\n    lbl_1_data_1D628.unk_0 = v1;\n    v0 = (f32)(u32)((v1 >> 16) & 0x7FFF);\n    arg0->unk_10 = (s32)(f32)(v6 * (f32)(v5 + (f32)(v4 * (f32)(v0 / ((32767.0f))))));\n    }\n    return v0;\n}\n#pragma opt_dead_assignments reset\n\n",
-    "seed_sha256": "91e129e2477961c2a5e104c01707d7bc98533883f813658f470dfeeef02115ba",
-    "generated_sha256": "c3557710d6758efcaa76108b42883fc9ece108e206522decfa7c69c5882c13f4",
-    "generated_source": "#include \"types.h\"\n#pragma section code_type \".fzgxpool\"\n__declspec(section \".fzgxpool\") static void fzgx_pool_prime1(void) {\n    volatile f32 s; volatile f64 d;  /* fzgx-allow: S2 pool primer sinks */\n    s = 60.0f;\n    s = 0.10000000149011612f;\n    s = 32767.0f;\n    s = 0.05000000074505806f;\n    d = 0.07;\n    s = 20000.0f;\n    s = 0.0f;\n    d = 4503599627370496.0;\n    s = 1.0f;\n    s = -0.029999999329447746f;\n    d = 15.0;\n    d = 4503601774854144.0;\n    d = 1.5;\n    d = 0.5;\n}\nstatic const u32 fzgx_pool_table2[1] = {0x00000000};  /* fzgx-allow: A1 retail pool bytes */\n__declspec(section \".fzgxpool\") static void fzgx_pool_keep2(void) { const u32 *volatile cp; cp = fzgx_pool_table2; }  /* fzgx-allow: S2 pool primer sink */\n__declspec(section \".fzgxpool\") static void fzgx_pool_prime3(void) {\n    volatile f32 s; volatile f64 d;  /* fzgx-allow: S2 pool primer sinks */\n    s = 0.5f;\n    s = 8.0f;\n    s = 255.0f;\n    s = 15.0f;\n    s = 0.20000000298023224f;\n    s = 0.07999999821186066f;\n    s = 0.25f;\n    s = 0.9800000190734863f;\n    s = 0.9900000095367432f;\n    s = 40.0f;\n    s = 20.0f;\n    s = 1.5f;\n    s = 0.44999998807907104f;\n    s = -2.0f;\n    s = 0.0833333358168602f;\n    s = 0.15000000596046448f;\n    s = 0.125f;\n    s = -0.4000000059604645f;\n    s = -0.30000001192092896f;\n    s = 2.0f;\n    s = 250.0f;\n    d = 0.6;\n    d = 0.4;\n    s = 0.30000001192092896f;\n    s = -0.004000000189989805f;\n}\n#pragma section code_type \".text\"\n\nstruct fn_1_5F5C8_Arg0 {\n    u8 pad_0[0x10];\n    u32 unk_10;\n};\nstruct fn_1_5F5C8_lbl_1_data_1D628 {\n    u32 unk_0;\n};\nstruct fn_1_5F5C8_lbl_1_rodata_2950 {\n    f32 unk_0;\n    u8 pad_4[0x4];\n    f32 unk_8;\n    u8 pad_C[0x14];\n    f64 unk_20;\n    u8 pad_28[0x44];\n    f32 unk_6C;\n    u8 pad_70[0x48];\n    f32 unk_B8;\n};\n\nextern struct fn_1_5F5C8_lbl_1_data_1D628 lbl_1_data_1D628;\nconst f32 lbl_1_rodata_2950 = 60.0f;\nconst u8 lbl_1_rodata_2954[4] = {0x3D,0xCC,0xCC,0xCD};\nconst f32 lbl_1_rodata_2954__fzgx_offset_4 = 32767.0f;\nconst u8 lbl_1_rodata_295C[20] = {0x3D,0x4C,0xCC,0xCD,0x3F,0xB1,0xEB,0x85,0x1E,0xB8,0x51,0xEC,0x46,0x9C,0x40,0x00,0x00,0x00,0x00,0x00};\nconst f64 lbl_1_rodata_295C__fzgx_offset_14 = 4503599627370496.0;\nconst u8 lbl_1_rodata_2978[16] = {0x3F,0x80,0x00,0x00,0xBC,0xF5,0xC2,0x8F,0x40,0x2E,0x00,0x00,0x00,0x00,0x00,0x00};\nconst u8 lbl_1_rodata_2988[28] = {0x43,0x30,0x00,0x00,0x80,0x00,0x00,0x00,0x3F,0xF8,0x00,0x00,0x00,0x00,0x00,0x00,0x3F,0xE0,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00};\nconst u8 lbl_1_rodata_29A4[8] = {0x3F,0x00,0x00,0x00,0x41,0x00,0x00,0x00};\nconst u8 lbl_1_rodata_29AC[16] = {0x43,0x7F,0x00,0x00,0x41,0x70,0x00,0x00,0x3E,0x4C,0xCC,0xCD,0x3D,0xA3,0xD7,0x0A};\nconst f32 lbl_1_rodata_29AC__fzgx_offset_10 = 0.25f;\nconst u8 lbl_1_rodata_29C0[48] = {0x3F,0x7A,0xE1,0x48,0x3F,0x7D,0x70,0xA4,0x42,0x20,0x00,0x00,0x41,0xA0,0x00,0x00,0x3F,0xC0,0x00,0x00,0x3E,0xE6,0x66,0x66,0xC0,0x00,0x00,0x00,0x3D,0xAA,0xAA,0xAB,0x3E,0x19,0x99,0x9A,0x3E,0x00,0x00,0x00,0xBE,0xCC,0xCC,0xCD,0xBE,0x99,0x99,0x9A};\nconst u8 lbl_1_rodata_29F0[24] = {0x40,0x00,0x00,0x00,0x43,0x7A,0x00,0x00,0x3F,0xE3,0x33,0x33,0x33,0x33,0x33,0x33,0x3F,0xD9,0x99,0x99,0x99,0x99,0x99,0x9A};\nconst f32 lbl_1_rodata_29F0__fzgx_offset_18 = 0.300000012f;\nconst u8 lbl_1_rodata_29F0__fzgx_offset_1C[80] = {0xBB,0x83,0x12,0x6F,0x3C,0x88,0x88,0x89,0x47,0x80,0x00,0x00,0x45,0x80,0x00,0x00,0x3F,0x75,0xC2,0x8F,0x3E,0xCC,0xCC,0xCD,0x3D,0x4E,0xD9,0x17,0x3D,0x50,0xE5,0x60,0x3F,0x73,0x33,0x33,0x3F,0x66,0x66,0x66,0x00,0x00,0x00,0x00,0x40,0x62,0xC0,0x00,0x00,0x00,0x00,0x00,0x40,0x24,0x00,0x00,0x00,0x00,0x00,0x00,0x40,0x08,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x3D,0xCC,0xCC,0xCD,0xC0,0x19,0x99,0x9A};\n\n#pragma opt_dead_assignments off\nf32 fn_1_5F5C8(struct fn_1_5F5C8_Arg0 *arg0, f32 arg1) {\n    f32 v0;\n    u32 v1;\n    f32 v2;\n    f32 v3;\n    f32 v4;\n    f32 v5;\n    f32 v6;\n    v0 = arg1;\n    if ((s32)arg0->unk_10 == 0) {\n    v1 = (((12345) + ((lbl_1_data_1D628.unk_0 * (0x41C60000 + 20077)))));\n    v2 = (4503599627370496.0);\n    v4 = (0.25f);\n    v5 = (0.300000012f);\n    v6 = (60.0f);\n    lbl_1_data_1D628.unk_0 = v1;\n    v0 = (f32)(u32)((v1 >> 16) & 0x7FFF);\n    arg0->unk_10 = (s32)(f32)(v6 * (f32)(v5 + (f32)(v4 * (f32)(v0 / ((32767.0f))))));\n    }\n    return v0;\n}\n#pragma opt_dead_assignments reset\n\n",
+    "transform": "bind exact clone",
+    "seed": "#include \"types.h\"\n#include \"rel/main_rel/globals.h\"\n#include \"rel/main_rel/effect.h\"\n\ntypedef struct fn_1_58D38_EffectEntry {\n    s8 unk_00;\n    u8 pad_01[7];\n    u32 unk_08;\n    s16 unk_0C;\n    u8 pad_0E[0x0C];\n    u16 unk_1A;\n    u8 pad_1C[0xCC];\n} fn_1_58D38_EffectEntry;\n\nstruct fn_1_5BF70_lbl_1_rodata_2950 {\n    u8 pad_0[0x8];\n    f32 unk_8;\n    u8 pad_C[0x14];\n    f64 unk_20;\n    u8 pad_28[0xC8];\n    f64 unk_F0;\n    f64 unk_F8;\n    u8 pad_100[0x30];\n    f64 unk_130;\n};\n\ntypedef struct {\n    u8 unk00[0x18];\n    s16 value18;\n    u8 unk1A[2];\n    f32 value1C;\n    f32 value20;\n    f32 value24;\n    f32 value28;\n    u8 unk2C[8];\n    void *field34;\n    u8 unk38[0x1c];\n    s16 value54;\n    s16 value56;\n} fn_1_5FEBC_EffectData;\n\ntypedef struct {\n    u8 unk00[8];\n    fn_1_5FEBC_EffectData *data;\n} fn_1_5FEBC_EffectObject;\n\ntypedef struct {\n    u8 pad_0[0x10];\n    u32 unk_10;\n    u8 pad_14[0x20];\n    u32 unk_34;\n    void *unk_38;\n    u8 pad_3c[0x18];\n    s16 unk_54;\n    u8 pad_56[0x4];\n    u16 unk_5a;\n    u8 pad_5c[0x58];\n    f32 unk_b4;\n} fn_1_61D08_EffectObject;\n\ntypedef struct {\n    u8 pad_00[0x8];\n    void *unk_08;\n} fn_1_652F4_Effect;\n\ntypedef struct {\n    u8 pad20[0x20];\n    void *unk_20;\n} Fn1_61E60Node;\n\ntypedef struct {\n    u8 pad38[0x38];\n    Fn1_61E60Node *unk_38;\n} Fn1_61E60Object;\nextern void *lbl_801A6D00;\nextern void fn_1_8645C(int index, void *arg);\nextern void lbl_8006E1B0(void *src, void *dst);\nextern void fn_1_8636C();\nextern void fn_8006FA24(void *, void *, void *, f32);\nextern void lbl_8006DCA4();\nextern s32 fn_1_54E34(void *arg0, f32 arg1);\nextern void fn_1_5FEBC(fn_1_5FEBC_EffectObject *object);\nextern void *fn_1_5448C(void *);\nextern void fn_1_5489C(void **arg0, void **arg1);\nextern void fn_1_862D4(s16 value, void *result);\nextern void *fn_1_548AC(u32 size);\nextern void fn_1_652F4(fn_1_652F4_Effect *effect);\nextern void fn_1_62360(fn_1_58D38_EffectEntry *arg0);\nextern u32 fn_1_3FC58(void);\nextern void *memcpy(void *, const void *, u32);\nextern f32 lbl_8006D0B4(f32 value);\nextern void lbl_8006D7B0(void);\nextern void lbl_8006D9D8(void *);\nextern void mathutil_mtxA_rotate_z(int);\nextern const f32 lbl_1_rodata_2950;\nextern void fn_1_867CC(s16 value, void *out);\nextern void mathutil_mtxA_rotate_y(s16 value);\nextern void mathutil_mtxA_rotate_x(s16 value);\nextern void lbl_8006DB74(void *);\nextern int fn_1_9F914(const void *src0, const void *src1);\nextern const f32 lbl_1_rodata_2AA0[21];\nextern f32 lbl_1_rodata_29AC[5];\nextern void *memset(void *, int, u32);\nextern void fn_1_55FC4(f32 value);\nextern void fn_1_55FF0(f32 value);\nextern void fn_1_5557C(void *object);\nextern void fn_1_555D0(void *object);\nextern void lbl_8006E14C(f32);\nextern void *lbl_801A6410;\nextern s32 fn_1_45D0();\nextern u32 GXGetTexBufferSize(u16, u16, u32, u32, u8);\nextern void fn_1_46B4(u32 arg0, u32 arg1, const char *arg2, int arg3);\nextern void fn_1_4730(u32 value, u32 count, u32 size, const char *file, int line);\nextern void lbl_8006D7DC(void *obj);\nextern void *fn_1_868C0(s8 index);\nextern void *fn_1_86254(int index);\nextern void lbl_8006D95C(s32);\nextern void lbl_8006DFC4(void *);\nextern void fn_1_3BDC(u32 arg0);\nextern u32 fn_1_3C18(s32 arg0);\nextern void fn_80008BEC(void *dest, int value, u32 size);\nextern void fn_80008BA8(void *, void *, int);\nextern void fn_1_680F8(void);\nextern void fn_1_68284(void);\nextern void fn_1_68B68(void);\nextern void fn_1_68248(void);\nextern void fn_1_69BBC(void);\nextern void fn_1_69BCC(void);\nextern f32 lbl_1_rodata_2978[4];\nextern f32 lbl_1_rodata_2AF4[14];\nextern void fn_1_5EB98(void);\nextern f32 lbl_1_rodata_2A5C[5];\nextern int fn_1_61D08();\nextern void fn_1_61EF4(void);\nextern void fn_1_620C4(void);\nextern f32 lbl_1_rodata_2B2C[145];\nextern void fn_1_638E8(void);\nextern const f32 lbl_1_rodata_2A70[12];\nextern void fn_1_64388(void);\nextern void fn_1_65748(void);\nextern int fn_1_61E60();\nextern u32 fn_1_3FC8C(void);\nextern const f32 lbl_1_rodata_29A4;\nextern f64 lbl_1_rodata_2988;\nextern u32 fn_1_620C8(void *);\nextern f32 fn_1_8652C(int index);\nextern void fn_1_557C4(void *value);\nextern void fn_1_56000(u8 value0, u8 value1, u8 value2);\nextern void fn_1_5621C(f32 value0, f32 value1, f32 value2, f32 value3);\nextern const f32 lbl_1_rodata_29C0;\nextern const f32 lbl_1_rodata_29F0;\nextern u32 fn_1_58C4(void);\nextern const f64 lbl_1_rodata_2954;\n\n#pragma section code_type \".fzgxpool\"\n__declspec(section \".fzgxpool\") static void fzgx_pool_prime1(void) {\n    volatile f32 s; volatile f64 d;  /* fzgx-allow: S2 pool primer sinks */\n    s = 60.0f;\n    s = 0.10000000149011612f;\n    s = 32767.0f;\n    s = 0.05000000074505806f;\n    d = 0.07;\n    s = 20000.0f;\n    s = 0.0f;\n    d = 4503599627370496.0;\n    s = 1.0f;\n    s = -0.029999999329447746f;\n    d = 15.0;\n    d = 4503601774854144.0;\n    d = 1.5;\n    d = 0.5;\n}\nstatic const u32 fzgx_pool_table2[1] = {0x00000000};  /* fzgx-allow: A1 retail pool bytes */\n__declspec(section \".fzgxpool\") static void fzgx_pool_keep2(void) { const u32 *volatile cp; cp = fzgx_pool_table2; }  /* fzgx-allow: S2 pool primer sink */\n__declspec(section \".fzgxpool\") static void fzgx_pool_prime3(void) {\n    volatile f32 s; volatile f64 d;  /* fzgx-allow: S2 pool primer sinks */\n    s = 0.5f;\n    s = 8.0f;\n    s = 255.0f;\n    s = 15.0f;\n    s = 0.20000000298023224f;\n    s = 0.07999999821186066f;\n    s = 0.25f;\n    s = 0.9800000190734863f;\n    s = 0.9900000095367432f;\n    s = 40.0f;\n    s = 20.0f;\n    s = 1.5f;\n    s = 0.44999998807907104f;\n    s = -2.0f;\n    s = 0.0833333358168602f;\n    s = 0.15000000596046448f;\n    s = 0.125f;\n    s = -0.4000000059604645f;\n    s = -0.30000001192092896f;\n    s = 2.0f;\n    s = 250.0f;\n    d = 0.6;\n    d = 0.4;\n    s = 0.30000001192092896f;\n    s = -0.004000000189989805f;\n}\n#pragma section code_type \".text\"\n\ntypedef struct {\n    u8 pad_00[0x10];\n    s32 unk_10;\n} Fn_1_64F2C_Object;\n\n\nvoid fn_1_64F2C(Fn_1_64F2C_Object *obj) {\n    f32 random;\n    f32 scaled;\n    f32 offset;\n\n    if (obj->unk_10 == 0) {\n{\n    u32 value;\n        value = lbl_1_data_1D628 * 0x41c64e6d + 0x3039;\n        lbl_1_data_1D628 = value;\n        random = (f32)((value >> 16) & 0x7fff) / 32767.0f;\n}\n        scaled = 0.25f * random;\n        offset = 0.3f + scaled;\n        obj->unk_10 = (s32)(60.0f * offset);\n    }\n}\n",
+    "seed_sha256": "743aea566dcec75aade236a60ea0656c5f230f7c85724beb877c648c3a38bd55",
+    "generated_sha256": "36944f538e9e8f1f1b5ddb9f8b859620868bba36372abcbc4a0c32130565401b",
+    "generated_source": "\n\ntypedef signed long s32;\n\ntypedef unsigned char u8;\n\ntypedef unsigned long u32;\n\ntypedef float f32;\ntypedef double f64;\n\n/* lbl_1_data_1D628: .data size 0x4, referenced by 41 functions, shape {'object': 185} */\nextern u32 lbl_1_data_1D628;\n\n#pragma section code_type \".fzgxpool\"\n__declspec(section \".fzgxpool\") static void fzgx_pool_prime1(void) {\nvolatile f32 s; volatile f64 d; /* fzgx-allow: S2 pool primer sinks */\ns = 60.0f;\ns = 0.10000000149011612f;\ns = 32767.0f;\ns = 0.05000000074505806f;\nd = 0.07;\ns = 20000.0f;\ns = 0.0f;\nd = 4503599627370496.0;\ns = 1.0f;\ns = -0.029999999329447746f;\nd = 15.0;\nd = 4503601774854144.0;\nd = 1.5;\nd = 0.5;\n}\nstatic const u32 fzgx_pool_table2[1] = {0x00000000}; /* fzgx-allow: A1 retail pool bytes */\n__declspec(section \".fzgxpool\") static void fzgx_pool_keep2(void) { const u32 *volatile cp; cp = fzgx_pool_table2; } /* fzgx-allow: S2 pool primer sink */\n__declspec(section \".fzgxpool\") static void fzgx_pool_prime3(void) {\nvolatile f32 s; volatile f64 d; /* fzgx-allow: S2 pool primer sinks */\ns = 0.5f;\ns = 8.0f;\ns = 255.0f;\ns = 15.0f;\ns = 0.20000000298023224f;\ns = 0.07999999821186066f;\ns = 0.25f;\ns = 0.9800000190734863f;\ns = 0.9900000095367432f;\ns = 40.0f;\ns = 20.0f;\ns = 1.5f;\ns = 0.44999998807907104f;\ns = -2.0f;\ns = 0.0833333358168602f;\ns = 0.15000000596046448f;\ns = 0.125f;\ns = -0.4000000059604645f;\ns = -0.30000001192092896f;\ns = 2.0f;\ns = 250.0f;\nd = 0.6;\nd = 0.4;\ns = 0.30000001192092896f;\ns = -0.004000000189989805f;\n}\n#pragma section code_type \".text\"\ntypedef struct {\nu8 pad_00[0x10];\ns32 unk_10;\n} Fn_1_64F2C_Object;\nvoid fn_1_5F5C8(Fn_1_64F2C_Object *obj) {\nf32 random;\nf32 scaled;\nf32 offset;\nif (obj->unk_10 == 0) {\n{\nu32 value;\nvalue = lbl_1_data_1D628 * 0x41c64e6d + 0x3039;\nlbl_1_data_1D628 = value;\nrandom = (f32)((value >> 16) & 0x7fff) / 32767.0f;\n}\nscaled = 0.25f * random;\noffset = 0.3f + scaled;\nobj->unk_10 = (s32)(60.0f * offset);\n}\n}\n",
     "compiler": "GC/1.3.2",
     "flags": "",
     "source": "rel/main_rel/effect/fn_1_5F5C8.c",
     "bytes": 140,
-    "headers_sha256": "f9f5e84c1423bef39ec206906b9b67f385818e424c01f7582cef703630a3eba9",
-    "oracle_sha256": "871c3ab209ee9e59f98ee974f8dbecff3e9da3fc716288cd596f714e18864b09",
+    "headers_sha256": "73cf7422bff8955cde8d5ebf68ebefe0241675ac791653eb8a9749cb0d84419f",
+    "oracle_sha256": "ca197f0a12605d3f05c8d964147669b8debb231a26880aee4ab16caec0d261cf",
     "recipe": [
       {
-        "label": "prime shared-pool layout (lbl_1_rodata_2950, 0xc0 bytes)",
-        "input_sha256": "91e129e2477961c2a5e104c01707d7bc98533883f813658f470dfeeef02115ba",
-        "output_sha256": "c3557710d6758efcaa76108b42883fc9ece108e206522decfa7c69c5882c13f4",
-        "input_symbol": "fn_1_5F5C8",
+        "label": "expand owned clone declarations",
+        "input_sha256": "743aea566dcec75aade236a60ea0656c5f230f7c85724beb877c648c3a38bd55",
+        "output_sha256": "78299c7d5e387dc5b5aa4949a3fc42ca82ac62ff63dd0e6ae4c91c3af8ee7add",
+        "input_symbol": "fn_1_64F2C",
+        "output_symbol": "fn_1_64F2C",
+        "edits": [
+          [
+            0,
+            86,
+            ""
+          ],
+          [
+            87,
+            276,
+            ""
+          ],
+          [
+            277,
+            478,
+            "typedef signed long s32"
+          ],
+          [
+            489,
+            733,
+            "unsigned char u8"
+          ],
+          [
+            744,
+            828,
+            "unsigned long u32"
+          ],
+          [
+            839,
+            1074,
+            "float f32;\ntypedef double f64"
+          ],
+          [
+            1077,
+            4338,
+            "/* lbl_1_data_1D628: .data size 0x4, referenced by 41 functions, shape {'object': 185} */\nextern u32 lbl_1_data_1D628"
+          ],
+          [
+            4448,
+            4796,
+            "volatile f32 s; volatile f64 d; /* fzgx-allow: S2 pool primer sinks */\ns = 60.0f;\ns = 0.10000000149011612f;\ns = 32767.0f;\ns = 0.05000000074505806f;\nd = 0.07;\ns = 20000.0f;\ns = 0.0f;\nd = 4503599627370496.0;\ns = 1.0f;\ns = -0.029999999329447746f;\nd = 15.0;\nd = 4503601774854144.0;\nd = 1.5;\n"
+          ],
+          [
+            4860,
+            5017,
+            "/* fzgx-allow: A1 retail pool bytes */\n__declspec(section \".fzgxpool\") static void fzgx_pool_keep2(void) { const u32 *volatile cp; cp = fzgx_pool_table2; }"
+          ],
+          [
+            5125,
+            5708,
+            "volatile f32 s; volatile f64 d; /* fzgx-allow: S2 pool primer sinks */\ns = 0.5f;\ns = 8.0f;\ns = 255.0f;\ns = 15.0f;\ns = 0.20000000298023224f;\ns = 0.07999999821186066f;\ns = 0.25f;\ns = 0.9800000190734863f;\ns = 0.9900000095367432f;\ns = 40.0f;\ns = 20.0f;\ns = 1.5f;\ns = 0.44999998807907104f;\ns = -2.0f;\ns = 0.0833333358168602f;\ns = 0.15000000596046448f;\ns = 0.125f;\ns = -0.4000000059604645f;\ns = -0.30000001192092896f;\ns = 2.0f;\ns = 250.0f;\nd = 0.6;\nd = 0.4;\ns = 0.30000001192092896f;\n"
+          ],
+          [
+            5772,
+            5773,
+            ""
+          ],
+          [
+            5790,
+            5815,
+            "u8 pad_00[0x10];\n"
+          ],
+          [
+            5848,
+            5850,
+            ""
+          ],
+          [
+            5892,
+            5945,
+            "f32 random;\nf32 scaled;\nf32 offset;\n"
+          ],
+          [
+            5971,
+            6084,
+            "u32 value;\nvalue = lbl_1_data_1D628 * 0x41c64e6d + 0x3039;\nlbl_1_data_1D628 = value;\n"
+          ],
+          [
+            6137,
+            6252,
+            "scaled = 0.25f * random;\noffset = 0.3f + scaled;\nobj->unk_10 = (s32)(60.0f * offset);"
+          ],
+          [
+            6255,
+            6255,
+            "}\n"
+          ]
+        ]
+      },
+      {
+        "label": "bind exact clone",
+        "input_sha256": "78299c7d5e387dc5b5aa4949a3fc42ca82ac62ff63dd0e6ae4c91c3af8ee7add",
+        "output_sha256": "36944f538e9e8f1f1b5ddb9f8b859620868bba36372abcbc4a0c32130565401b",
+        "input_symbol": "fn_1_64F2C",
         "output_symbol": "fn_1_5F5C8",
         "edits": [
           [
-            19,
-            19,
-            "#pragma section code_type \".fzgxpool\"\n__declspec(section \".fzgxpool\") static void fzgx_pool_prime1(void) {\n    volatile f32 s; volatile f64 d;  /* fzgx-allow: S2 pool primer sinks */\n    s = 60.0f;\n    s = 0.10000000149011612f;\n    s = 32767.0f;\n    s = 0.05000000074505806f;\n    d = 0.07;\n    s = 20000.0f;\n    s = 0.0f;\n    d = 4503599627370496.0;\n    s = 1.0f;\n    s = -0.029999999329447746f;\n    d = 15.0;\n    d = 4503601774854144.0;\n    d = 1.5;\n    d = 0.5;\n}\nstatic const u32 fzgx_pool_table2[1] = {0x00000000};  /* fzgx-allow: A1 retail pool bytes */\n__declspec(section \".fzgxpool\") static void fzgx_pool_keep2(void) { const u32 *volatile cp; cp = fzgx_pool_table2; }  /* fzgx-allow: S2 pool primer sink */\n__declspec(section \".fzgxpool\") static void fzgx_pool_prime3(void) {\n    volatile f32 s; volatile f64 d;  /* fzgx-allow: S2 pool primer sinks */\n    s = 0.5f;\n    s = 8.0f;\n    s = 255.0f;\n    s = 15.0f;\n    s = 0.20000000298023224f;\n    s = 0.07999999821186066f;\n    s = 0.25f;\n    s = 0.9800000190734863f;\n    s = 0.9900000095367432f;\n    s = 40.0f;\n    s = 20.0f;\n    s = 1.5f;\n    s = 0.44999998807907104f;\n    s = -2.0f;\n    s = 0.0833333358168602f;\n    s = 0.15000000596046448f;\n    s = 0.125f;\n    s = -0.4000000059604645f;\n    s = -0.30000001192092896f;\n    s = 2.0f;\n    s = 250.0f;\n    d = 0.6;\n    d = 0.4;\n    s = 0.30000001192092896f;\n    s = -0.004000000189989805f;\n}\n#pragma section code_type \".text\"\n"
+            1583,
+            1588,
+            "5F5C8"
           ]
-        ]
+        ],
+        "clone": {
+          "donor": "fn_1_64F2C",
+          "recipient": "fn_1_5F5C8",
+          "bindings": {
+            "lbl_1_rodata_2950": "lbl_1_rodata_2950",
+            "lbl_1_data_1D628": "lbl_1_data_1D628",
+            "fn_1_64F2C": "fn_1_5F5C8"
+          }
+        }
       }
     ],
-    "link": "pending"
+    "link": "verified",
+    "commit": "100f5baf"
   },
   "fn_3_1A2EC": {
     "seed_symbol": "fn_3_1A2EC",

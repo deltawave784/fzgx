@@ -2,18 +2,14 @@
 #include "rel/main_rel/globals.h"
 #include "rel/main_rel/bg_win.h"
 #include "font.h"
-extern u8 fn_1_5910(void);
+extern s32 fn_1_5910(void);
 extern void fn_80038F10(f32* out);
 extern void fn_1_15EFEC(int);
-extern void fn_1_15DFD4(int, int);
+extern void fn_1_15DFD4(int index, int flags);
 extern u32 fn_1_485A8(s32 index);
 extern void fn_1_49410(void);
 extern void fn_1_49728(u8 value);
 extern void fn_1_1420A4(void);
-extern FontDrawPacket lbl_1_rodata_26F8;
-extern u32 fn_1_58C4(void);
-extern f32 fn_1_519FC(f32 value);
-extern f32 fn_1_51AC0(f32 value);
 extern f32 lbl_1_rodata_DD6C[11];
 extern f32 lbl_1_rodata_DE50[39];
 extern void fn_1_496FC(f32 value1, f32 value2);
@@ -23,6 +19,10 @@ extern void fn_1_15DD7C(s32 timer);
 extern void fn_1_15C6C0(u16, int);
 extern void fn_1_49614(void);
 extern void fn_1_A4C9C(s32 index, u8 value);
+extern FontDrawPacket lbl_1_rodata_26F8;
+extern u32 fn_1_58C4(void);
+extern f32 fn_1_519FC(f32 value);
+extern f32 fn_1_51AC0(f32 value);
 extern u32 fn_1_435C(u32 value);
 extern s32 fn_1_3F8C(u32 arg3, u32 arg0, u32 arg1, u32 index);
 extern void fn_1_15E220(u8 *value);
