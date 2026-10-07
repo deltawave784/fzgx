@@ -239,6 +239,8 @@ extern u32 lbl_1_bss_71670;
 extern void (*lbl_1_bss_71684)(void);
 extern void (*lbl_1_bss_71688)(void);
 extern u32 fn_1_A7024(f32, f32, f32, f32);
+extern f32 lbl_1_rodata_4AC4[4];
+extern void fn_8003462C(u32, u32, u32);
 
 /* fzgx:begin fn_1_A75DC noprologue */
 #include "dolphin/types.h"
@@ -1118,6 +1120,41 @@ void fn_1_A9868(u32 arg0, u32 arg1, u32 arg2, f32 arg3) {
     p_lbl_1_bss_71690->unk_0 = 1;
 }
 /* fzgx:end fn_1_A9868 */
+
+/* fzgx:begin fn_1_AA350 */
+#include "dolphin/hw_regs.h"
+#include "types.h"
+#include "rel/main_rel/driver.h"
+
+#define WG_F32 (*(volatile f32 *)(GX_FIFO_BASE + 0x0)) /* Hardware access must remain ordered. */
+#define WG_U8 (*(volatile u8 *)(GX_FIFO_BASE + 0x0)) /* Hardware access must remain ordered. */
+
+static inline void pos3(f32 x, f32 y) {
+    WG_F32 = x;
+    WG_F32 = y;
+    WG_F32 = lbl_1_rodata_4AC4[0];
+}
+
+static inline void col4(u8 r, u8 g, u8 b, u8 a) {
+    WG_U8 = r;
+    WG_U8 = g;
+    WG_U8 = b;
+    WG_U8 = a;
+}
+
+static inline u16 fn_1_AA350_array_read(s32 index, u8 *array) { return array[index]; }
+void fn_1_AA350(s16 *a, s16 *b, u8 *c, u32 n) {
+    u32 i;
+    if ((s32)lbl_1_bss_71690.unk_0 != 0) {
+        fn_8003462C(0x98, 0, (u16)n);
+        for (i = 0; i < n; i++) {
+            pos3((f32)*a++, (f32)*b++);
+            col4(fn_1_AA350_array_read(0, c), fn_1_AA350_array_read(1, c), fn_1_AA350_array_read(2, c), fn_1_AA350_array_read(3, c));
+            c += 4;
+        }
+    }
+}
+/* fzgx:end fn_1_AA350 */
 
 /* fzgx:begin fn_1_AA538 */
 // Initialize the shared rendering state and submit the associated configuration.

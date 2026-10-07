@@ -68,7 +68,7 @@ extern void fn_1_F9C6C(void);
 extern void fn_1_F9E4C(void);
 extern void fn_1_F9D24(void);
 extern void fn_1_F9DA4(void);
-extern void fn_1_F9CD0(u8 index, u8 shift);
+extern void fn_1_F9CD0(u8, u8);
 extern void fn_1_FA1D8(s32, s32, SplineEntry *);
 extern u32 fn_1_FA4D4(void);
 extern void fn_1_FA61C(void);
@@ -1600,6 +1600,14 @@ void fn_1_FA154(u32 byte_index, u32 bit_index) {
     *(u8 *)(3 + addr) |= 1 << bit;
 }
 /* fzgx:end fn_1_FA154 */
+
+/* fzgx:begin fn_1_FA180 */
+typedef struct { u8 pad[3]; u8 d[1]; } T;
+
+u32 fn_1_FA180(u8 a, u8 b) {
+    return (*(T * *)&lbl_1_bss_84420)->d[a] & (1 << b);
+}
+/* fzgx:end fn_1_FA180 */
 
 /* fzgx:begin fn_1_FA1A8 noprologue */
 #include "types.h"

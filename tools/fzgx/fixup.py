@@ -699,10 +699,17 @@ class Engine:
                         break
                     count=0
                     for label,text in proposals:
-                        row=self.record(symbol,text,seed['mw'],seed['flags'],label=label,parent=seed['id'],seed=seed.get('seed',seed['id']))
-                        if row['id'] in seen:
-                            continue
-                        seen.add(row['id']); pending.append(row);parents[seed['id']]=seed;count+=1
+                        rows=[self.record(symbol,text,seed['mw'],seed['flags'],label=label,parent=seed['id'],seed=seed.get('seed',seed['id']))]
+                        # a TU object layout changes which compiler fits: a seed tuned under another
+                        # version on its extern view (fn_1_45A58: GC/1.3 76% either way) reaches the
+                        # retail `addi; lwzx` shape only under the module's own compiler (89%)
+                        default=oracle.module_flags(self.project,self.project.resolve(symbol).module)[1]
+                        if label.startswith(('define retail TU', 'define indexed element')) and seed['mw']!=default:
+                            rows.append(self.record(symbol,text,default,seed['flags'],label=label+' (module compiler)',parent=seed['id'],seed=seed.get('seed',seed['id'])))
+                        for row in rows:
+                            if row['id'] in seen:
+                                continue
+                            seen.add(row['id']); pending.append(row);parents[seed['id']]=seed;count+=1
                         if count>=max_candidates:
                             break
                     if time.monotonic()-progress>=10:
@@ -1146,6 +1153,58 @@ def archive_sources(report, path):
         generator_sha256=report['generator_sha256'],environment=report['environment'],records=records)).encode(),mtime=0))
 
 
+def save_improved_attempts(p,engine,report,margin=0.05):
+    """Save each unmatched symbol's best objdiff-checked body as an attempt when it beats the
+    ledger's best saved attempt, so the next claim seeds from it.
+
+    The search ranks by masked word score, so a TU layout candidate that fixes the retail
+    `addi rX, rBase, off; lwzx` shape while perturbing registers stayed buried in report.json
+    (fn_1_45A58: layout 89.2% under the module compiler, saved body 77.2%, agents seeded
+    from 76.1%). Candidates: each symbol's best row, its layout rows and its five best words."""
+    from . import api
+    from .ledger import Ledger
+    ledger=Ledger();saved=[]
+    by_symbol=defaultdict(list)
+    for r in report['records']:
+        if r.get('object') and r.get('score',-1)>=0 and not r.get('matched'):
+            by_symbol[r['symbol']].append(r)
+    for symbol,rows in by_symbol.items():
+        if report['best'].get(symbol,{}).get('matched'):
+            continue
+        pick=sorted(rows,key=lambda r:-r['score'])[:5]
+        pick+=[r for r in rows if r.get('label','').startswith(('define retail TU','define indexed element'))]
+        best=None
+        for row in {r['id']:r for r in pick}.values():
+            result=engine.check(row)
+            if result.ok:
+                score=oracle.progress_score(result)
+                if best is None or score>best[0]:
+                    best=(score,row,result)
+        if best is None:
+            continue
+        key=api._key(p,symbol)
+        prior=ledger.db.execute('SELECT MAX(best_in_attempt) FROM attempts WHERE symbol=?',(key,)).fetchone()[0] or 0.0
+        score,row,result=best
+        if score<=prior+margin:
+            continue
+        agent='claude-fixup-attempt'
+        c=api.claim(p,symbol,agent,max_attempts=999,no_carve=True,local_seed=False)
+        if not c.get('ok'):
+            engine.emit(dict(stage='save-attempt-skipped',symbol=symbol,error=str(c.get('error'))[:200]));continue
+        body=Path(row['source']).read_text()
+        best_path=STATE_DIR/'attempts'/f'{key}.best.c'
+        best_path.parent.mkdir(parents=True,exist_ok=True)
+        best_path.write_text(body)
+        best_path.with_suffix('.json').write_text(json.dumps(dict(sha256=digest(best_path.read_bytes()),mw=row['mw'],
+            flags=row['flags'] or None,percent=score))+'\n')
+        ledger.bump_checks(key,score,result.instruction_rows)
+        rel=api.release(p,symbol,f"fixup: {row.get('label')}: {prior:.2f} -> {score:.2f}",agent=agent,save_only=True)
+        engine.emit(dict(stage='save-attempt',symbol=symbol,prior=prior,percent=score,label=row.get('label'),mw=row['mw'],ok=rel.get('ok'),saved=rel.get('saved')))
+        if rel.get('ok'):
+            saved.append(dict(symbol=symbol,prior=prior,percent=score,label=row.get('label'),mw=row['mw']))
+    return saved
+
+
 def command(p,args):
     if args.min_percent is None:
         args.min_percent = 0 if getattr(args, 'clones', False) else 95
@@ -1183,6 +1242,8 @@ def command(p,args):
         seeds={r['id']:r for r in [*best.values(),*(r for group in report['frontier'].values() for r in group)]}
         (output/'prepared.json').write_text(json.dumps({'records':list(seeds.values())}))
         (output/'results.json').write_text(json.dumps({s:{'baseline':{'object':r['object'],'pure':'unclassified'}} for s,r in best.items()}))
+        if not report.get('clones') and not getattr(args,'no_save_attempts',False):
+            report['saved_attempts']=save_improved_attempts(p,engine,report)
     if report.get('clones'):
         archive_sources(report,output/'sources.json.gz')
     if args.apply:
@@ -1213,5 +1274,6 @@ def command(p,args):
     targets={r['symbol'] for group in report.get('clones',[]) for r in group['members'] if r['status']=='unmatched'}
     reported={s:r for s,r in report['best'].items() if not report.get('clones') or s in targets}
     summary.update(functions=len(reported),variants=len(report['records']),
-                   matches=[s for s,r in reported.items() if r.get('matched')])
+                   matches=[s for s,r in reported.items() if r.get('matched')],
+                   saved_attempts=report.get('saved_attempts',[]))
     print(json.dumps(summary,indent=2));return summary

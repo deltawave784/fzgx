@@ -301,6 +301,17 @@ def find_models(text):
         if not re.search(r"\bextern\s+(?:struct\s+)?%s\s+%s\s*;" % (re.escape(tname), re.escape(base)), text + include_text()):
             continue
         models.append((pvar, tname, base, m.group(0), 'ptr'))
+    # an aggregate model at a constant offset into a byte view: `S *s = (S *)(lbl + 0x1600);`,
+    # `(S *)((u8 *)&lbl + N)` (fn_1_F0B5C). Every field address is model offset + N; the
+    # offset rides in the statement-free kind 'ptr+N' and is read back by `model_offset`.
+    for m in re.finditer(r"(?:(?:struct\s+)?(\w+)\s*\*\s*)?(?<![\w.>])(\w+)\s*=\s*\((?:struct\s+)?(\w+)\s*\*\)\s*"
+                         r"\(\s*(?:\(\s*(?:u8|s8|char)\s*\*\s*\)\s*&?\s*)?(lbl_\d+_bss_[0-9A-F]+|lbl_[0-9A-F]{8})\s*\+\s*(0x[0-9A-Fa-f]+|\d+)\s*\)\s*;", text):
+        declared, pvar, tname, base, off = m.groups()
+        if base in {mm[2] for mm in models} or tname in SCALAR or (declared and declared != tname):
+            continue
+        if len(re.findall(r"(?<![\w.>])%s\s*=(?!=)" % re.escape(pvar), text)) != 1:
+            continue
+        models.append((pvar, tname, base, m.group(0), 'ptr+%d' % int(off, 0)))
     seen = {m[2] for m in models}
     for m in re.finditer(r"\nextern\s+(\w+)\s+(lbl_\d+_bss_[0-9A-F]+|lbl_[0-9A-F]{8})\s*((?:\[[^\]]*\])*)\s*;", text):
         tname, base = m.group(1), m.group(2)
@@ -325,6 +336,127 @@ def find_models(text):
             models.append((None, hm.group(1), base, '', 'direct-header'))
             seen.add(base)
     return models
+
+
+def without_member_names(text):
+    """`text` without struct/union member declarations and member names after `->`/`.`: a model
+    pointer that shares its name with a field (`BS *b` beside `s8 b[4];` and `d->b[0]`,
+    fn_1_854D4) is not a use of the pointer."""
+    prev = None
+    while prev != text:
+        prev = text
+        text = re.sub(r"\b(?:struct|union)\s*\w*\s*\{[^{}]*\}", ' ', text)
+    return re.sub(r"(?:->|(?<![\d\s])\.)\s*[A-Za-z_]\w*", ' ', text)
+
+
+def data_struct_views(p, symbol, text):
+    """A struct model over a same-module `.data` object (`DS *d = (DS *)&lbl_1_data_1F1D8;`,
+    also at a constant offset) as the byte view `tu_data_objects` defines object by object.
+
+    Retail addresses the referenced `.data` objects off one section base (fn_1_854D4's three
+    `s8[4]` rows as `addi r6/r5/r4` pointers; fn_1_9A7BC's +0x720/+0x2810); a struct model
+    folds every field into a displacement off one pointer. Field offsets, sizes and element
+    sizes come from an MWCC probe of the body's own struct; each `d->f` becomes
+    `(*(T *)(d + off))` (arrays `((T *)(d + off))`), so the byte-view pass cuts objects at the
+    field starts and the oracle still proves the whole section before binding."""
+    sym = p.resolve(symbol)
+    syms = p.symbols(sym.module)
+    pat = (r"(?:(?:struct\s+)?(\w+)\s*\*\s*)?(?<![\w.>])(\w+)\s*=\s*\((?:struct\s+)?(\w+)\s*\*\)\s*"
+           r"(?:\(\s*(?:\(\s*(?:u8|s8|char)\s*\*\s*\)\s*)?&?\s*(lbl_\d+_data_[0-9A-F]+|lbl_[0-9A-F]{8})\s*\+\s*(0x[0-9A-Fa-f]+|\d+)\s*\)"
+           r"|&?\s*(lbl_\d+_data_[0-9A-F]+|lbl_[0-9A-F]{8}))\s*;")  # an array decays: `(BgData *)lbl` (fn_1_107F74)
+    fm = re.search(r"\n[^\n;{}]*\b%s\s*\([^;{}]*\)\s*\{" % re.escape(sym.name), text)
+    if not fm:
+        return None, ['function definition not found']
+    out, notes, cache = text, [], {}
+    for m in list(re.finditer(pat, text)):
+        declared, pvar, tname, base = m[1], m[2], m[3], m[4] or m[6]
+        offset = int(m[5], 0) if m[5] else 0
+        known = syms.get(base)
+        if not known or known.section != '.data' or known.kind != 'object' or tname in SCALAR or (declared and declared != tname):
+            continue
+        if len(re.findall(r"(?<![\w.>])%s\s*=(?!=)" % re.escape(pvar), out)) != 1 or m[0] not in out:
+            continue
+        st = struct_text(tname, out)
+        if st is None:
+            notes.append(f'{tname}: struct text not found'); continue
+        decls = field_decls(st)
+        access = re.compile(r"\b%s\s*->\s*(\w+)" % re.escape(pvar))
+        names = sorted({u[1] for u in access.finditer(out)})
+        if not names or any(n not in decls or decls[n][0] is None for n in names):
+            notes.append(f'{pvar}: fields without declaration text'); continue
+        rest = without_member_names(access.sub(' ', out.replace(m[0], ' ')))
+        rest = re.sub(r"(?:struct\s+)?%s\s*\*\s*%s\s*;" % (re.escape(tname), re.escape(pvar)), ' ', rest)
+        if re.search(r"\b%s\b" % re.escape(pvar), rest):
+            notes.append(f'{pvar}: used other than through ->'); continue
+        prefix = out[:re.search(r"\n[^\n;{}]*\b%s\s*\([^;{}]*\)\s*\{" % re.escape(sym.name), out).start() + 1]
+        is_alias = re.search(r"\}\s*%s\s*;|typedef\s+struct\s+\w+\s+%s\s*;" % (re.escape(tname), re.escape(tname)), prefix + include_text())
+        key = (tname, tuple(names))
+        if key not in cache:
+            cache[key] = probe_layout(p, sym.module, prefix, tname if is_alias else 'struct ' + tname, names, decls, symbol)
+        layout, err = cache[key]
+        if layout is None:
+            notes.append(f'{tname}: probe failed: {err}'); continue
+
+        def view(u):
+            ttext, dims, _ = decls[u[1]]
+            off = offset + layout[u[1]][0]
+            where = f"{pvar} + {off:#x}" if off else pvar
+            if dims:
+                inner = ''.join(f'[{d}]' for d in dims[1:])
+                return f"(({ttext} (*){inner})({where}))" if inner else f"(({ttext} *)({where}))"
+            return f"(*({ttext} *)({where}))"
+        out = access.sub(view, out)
+        if declared:
+            out = out.replace(m[0], f"u8 *{pvar} = (u8 *)&{base};", 1)
+        else:
+            out = out.replace(m[0], f"{pvar} = (u8 *)&{base};", 1)
+            dm = re.search(r"(?m)^([ \t]*)(?:struct\s+)?%s\s*\*\s*%s\s*;" % (re.escape(tname), re.escape(pvar)), out)
+            if not dm:
+                return None, notes + [f'{pvar}: declaration not found']
+            out = out[:dm.start()] + f"{dm[1]}u8 *{pvar};" + out[dm.end():]
+        notes.append(f'{base}: {len(names)} fields of {tname} as byte views')
+    return (out if out != text else None), notes
+
+
+def constant_rows(text):
+    """Split each multi-dimensional field of a body-local model struct that is only ever
+    indexed with a constant first subscript (`s->a[1][i]`) into one field per row.
+
+    Retail addresses every row as its own object (`addi r5, r30, 0x1614; lwzx`, then 0x1628,
+    0x163c: fn_1_F0B5C); one `a[3][5]` object folds the row offset into a displacement off
+    `base + i*4` (`add r7, r6, r29; lwz r5, 0x14(r7)`). With a field per row, the split layout
+    defines each row as a separate object."""
+    out = text
+    for pvar, tname, base, stmt, kind in find_models(text):
+        if not pvar or not kind.startswith('ptr'):
+            continue
+        sm = (re.search(r"(?:typedef\s+)?struct\s+%s\s*\{(.*?)\n\}" % re.escape(tname), out, re.S)
+              or re.search(r"typedef\s+struct\s*\w*\s*\{([^{}]*)\n\}\s*%s\s*;" % re.escape(tname), out, re.S))
+        if not sm:
+            continue
+        lo, hi = sm.span(1)
+        for fname, (ttext, dims, _) in field_decls(sm.group(1)).items():
+            if ttext is None or len(dims) < 2 or not re.fullmatch(r"\s*(0x[0-9A-Fa-f]+|\d+)\s*", dims[0]):
+                continue
+            access = r"\b%s\s*->\s*%s\b" % (re.escape(pvar), re.escape(fname))
+            total = len(re.findall(access, out))
+            rows = list(re.finditer(access + r"\s*\[\s*(0x[0-9A-Fa-f]+|\d+)\s*\]", out))
+            count = int(dims[0].strip(), 0)
+            if not rows or len(rows) != total or count > 16 or any(int(r[1], 0) >= count for r in rows):
+                continue
+            body = out[lo:hi]
+            dm = re.search(r"(?<![\w>.])%s\s*\[[^\]]+\]((?:\s*\[[^\]]+\])+)\s*;" % re.escape(fname), body)
+            if not dm:
+                continue
+            # the type text stays in front of the first row; every later row restates it
+            row_decls = f"{fname}_row0{dm.group(1).strip()}; " + ' '.join(f"{ttext} {fname}_row{k}{dm.group(1).strip()};" for k in range(1, count))
+            body = body[:dm.start()] + row_decls + body[dm.end():]
+            out = out[:lo] + body + out[hi:]
+            out = re.sub(access + r"\s*\[\s*(0x[0-9A-Fa-f]+|\d+)\s*\]", lambda r: f"{pvar}->{fname}_row{int(r[1], 0)}", out)
+            sm = (re.search(r"(?:typedef\s+)?struct\s+%s\s*\{(.*?)\n\}" % re.escape(tname), out, re.S)
+                  or re.search(r"typedef\s+struct\s*\w*\s*\{([^{}]*)\n\}\s*%s\s*;" % re.escape(tname), out, re.S))
+            lo, hi = sm.span(1)
+    return out if out != text else None
 
 
 def tu_objects(p, symbol, text, mode, cache, retail_bases=(), only=None):
@@ -357,6 +489,9 @@ def tu_objects(p, symbol, text, mode, cache, retail_bases=(), only=None):
     prefix = out_text[:fm.start() + 1]
     all_defs, all_typedefs = [], []
     for pvar, tname, base, stmt, kind in models:
+        model_offset = 0
+        if kind.startswith('ptr+'):
+            kind, model_offset = 'ptr', int(kind[4:])
         b = syms.get(base)
         if b is None or b.section != '.bss':
             # another module's object (or SDA data): retail addresses it by name, leave it alone
@@ -436,11 +571,13 @@ def tu_objects(p, symbol, text, mode, cache, retail_bases=(), only=None):
             synthetic[fname] = n
             return f"(u8 *)&{pvar}->{fname}"
         out_text = re.sub(r"\(u8 \*\)\s*(?:\(u32\)\s*)?\b%s\b\s*\+\s*(0x[0-9A-Fa-f]+|\d+)" % re.escape(pvar), _byteoff, out_text)
-        uses = list(re.finditer(r"(&?)\b%s->(\w+)((?:\[[^\]]*\])*)" % re.escape(pvar), out_text))
+        # an index holding another use (`s->k[i][s->c[i] - 1]`) ends the subscript run: the
+        # inner use is rewritten on its own (a `[^\]]*` subscript swallowed it, fn_1_F0B5C)
+        uses = list(re.finditer(r"(&?)\b%s->(\w+)((?:\[[^\[\]]*\])*)" % re.escape(pvar), out_text))
         other = re.sub(r"\b%s->" % re.escape(pvar), '', out_text).replace(stmt_removed, '')
         other = "\n".join(l for l in other.split("\n") if not l.lstrip().startswith('#'))
         other = re.sub(r"(?:struct\s+)?%s\s*\*\s*%s\s*;" % (re.escape(tname), re.escape(pvar)), '', other)
-        if re.search(r"\b%s\b" % re.escape(pvar), other):
+        if re.search(r"\b%s\b" % re.escape(pvar), other if '.' in pvar else without_member_names(other)):
             notes.append(f'{pvar}: used other than through ->'); return None, notes
         if not uses:
             notes.append(f'{pvar}: no uses'); return None, notes
@@ -484,7 +621,7 @@ def tu_objects(p, symbol, text, mode, cache, retail_bases=(), only=None):
         for um in uses:
             amp, fname, idx = um.group(1), um.group(2), um.group(3)
             foff, fsize, esize, ealign = layout[fname]
-            addr = b.addr + foff
+            addr = b.addr + model_offset + foff
             obj = next((s for s in cluster if s.addr <= addr < s.end), None)
             if obj is None:
                 notes.append(f'{fname}: offset {foff:#x} outside cluster'); return None, notes
@@ -722,6 +859,16 @@ def tu_objects(p, symbol, text, mode, cache, retail_bases=(), only=None):
     block += '}\n#pragma section code_type ".text"\n\n'
     out_text = out_text[:at] + block + out_text[at:]
     return out_text, notes
+
+
+def allow_address_words(line):
+    """A line of retail data words carries its own A1 allowance when a word looks like an
+    address: the lint reads allow comments per line, so the one on an array's first line left
+    every later line flagged and blocked an exact `.data` layout match (fn_1_854D4: 0x815B8374)."""
+    from .lint import RANGES
+    if any(lo <= int(w, 16) <= hi for w in re.findall(r"\b0x([0-9A-Fa-f]{8})\b", line) for lo, hi in RANGES):
+        return line + '  /* fzgx-allow: A1 retail data bytes */'
+    return line
 
 
 def _first_use_point(text, limit, names):
@@ -1227,7 +1374,9 @@ def tu_data_objects(p, symbol, text, top=False, limit=0x10000):
                 # retail object (MWCC pools a section base only over three referenced objects),
                 # and `(u8 *)obj + k` never folds into the base's `addi rX, rBase, off`
                 start = address
-            following = next((s.addr for s in objects if s.addr > start), None)
+            # dtk labels a byte store target inside a word array (fn_1_854D4's `s8[4]` rows:
+            # 0x2065C size 1, 0x2065D size 3); a retail array object ends on a word boundary
+            following = next((s.addr for s in objects if s.addr > start and s.addr % 4 == 0), None)
             end = owner.end if owner and owner.addr >= known.addr else address + 1
             end = (end + 3) & ~3
             if following is not None and following < end:
@@ -1267,7 +1416,8 @@ def tu_data_objects(p, symbol, text, top=False, limit=0x10000):
             name = f'fzgx_pool_data_{owner.name if owner else label + "_%X" % a}'
             names[a] = name
             words = [word(i) for i in range(a, b, 4)]
-            lines = ',\n'.join('    ' + ', '.join(words[i:i + 8]) for i in range(0, len(words), 8))
+            lines = '\n'.join(allow_address_words('    ' + ', '.join(words[i:i + 8]) + (',' if i + 8 < len(words) else ''))
+                              for i in range(0, len(words), 8))
             definitions.append(f'static u32 {name}[{len(words)}] = {{  /* fzgx-allow: A1 retail data bytes and bindings */\n{lines}\n}};')
         replacements = [(s, e, '') for s, e in edits]
         for s, e, off, kind, ptype in uses:
@@ -1372,7 +1522,7 @@ def string_run(p, symbol, text, cast=''):
             return None, [f'pad from {b0.name} to the string run is {lo - b0.addr:#x} bytes']
         pb = raw[b0.addr - base_addr:lo - base_addr]
         words = [int.from_bytes(pb[i:i + 4], 'big') for i in range(0, len(pb), 4)]
-        lines = ["    " + ", ".join(f"0x{w:08X}" for w in words[i:i + 8]) + "," for i in range(0, len(words), 8)]
+        lines = [allow_address_words("    " + ", ".join(f"0x{w:08X}" for w in words[i:i + 8]) + ",") for i in range(0, len(words), 8)]
         pad = f"static u32 fzgx_data_{b0.name}[{len(words):#x}] = {{  /* fzgx-allow: A1 retail data bytes: the TU's .data objects before its string literals; dropped at integration */\n" + "\n".join(lines) + "\n};\n\n"
     run, a = [], lo
     while a <= hi:
@@ -1406,6 +1556,165 @@ def _diff_rows_unused(r):
 
 
 
+_PTR_CAST = r"\(\s*(?:const\s+)?(?:struct\s+)?(\w+)\s*\*\s*\)"
+
+
+def _balanced(s):
+    depth = 0
+    for c in s:
+        depth += {'(': 1, ')': -1}.get(c, 0)
+        if depth < 0:
+            return False
+    return depth == 0
+
+
+def _strip_outer(s):
+    """Outer pointer casts and redundant parentheses of an initializer: (cast) and the cast type."""
+    s, casts = s.strip(), []
+    while True:
+        m = re.match(_PTR_CAST + r"\s*(.*)$", s, re.S)
+        rest = m.group(2).strip() if m else ''
+        # only a cast over a whole parenthesized operand: `(u8 *)p + i * K` keeps its byte cast
+        if m and rest.startswith('(') and rest.endswith(')') and _balanced(rest[1:-1]):
+            casts.append(m.group(1)); s = m.group(2).strip(); continue
+        if s.startswith('(') and s.endswith(')') and _balanced(s[1:-1]):
+            s = s[1:-1].strip(); continue
+        return s, casts
+
+
+def _index_operand(s):
+    """A side-effect-free index: one identifier/number or a fully parenthesized arithmetic group."""
+    s = s.strip()
+    if re.fullmatch(r"\w+", s):
+        return s
+    if s.startswith('(') and s.endswith(')') and _balanced(s[1:-1]) and re.fullmatch(r"[\w\s+\-*()]+", s) \
+            and not re.search(r"\w\s*\(", s) and '++' not in s and '--' not in s:
+        return s
+    return None
+
+
+def indexed_element_arrays(p, symbol, body):
+    """Retail indexes a TU-defined array of element structs (`tbl[i].f`): MWCC keeps the
+    array's address and the scaled index in separate registers (`addi rB, rB, tbl@l;
+    mulli rI, i, K; lwzx rX, rB, rI`, `add` + displacement only for non-zero fields, or one
+    `addi` per array before indexed accesses). Every pointer spelling of the same access,
+    `(u8 *)&sym + i * K` or `(T *)&sym + i`, folds into `add rP, rB, rI` plus displacements,
+    and so does a cast over a defined array (fn_1_12A734: only `tbl[idx].field` on a defined
+    array of a typed element matched). Proposal: an element pointer initialised from a
+    same-module .bss object plus a scaled side-effect-free index becomes direct indexing of
+    a `fzgx_obj_` array definition (the oracle binds the section base to the retail symbol);
+    byte views `*(T *)(e + off)` become typed fields of a generated element struct."""
+    sym = p.resolve(symbol)
+    if sym is None:
+        return
+    syms = p.symbols(sym.module)
+    fm = re.search(r"\n[^\n;{}]*\b%s\s*\([^;{}]*\)\s*\{" % re.escape(sym.name), body)
+    if not fm:
+        return
+    head, code = body[:fm.start() + 1], body[fm.start() + 1:]
+    stmts = list(re.finditer(r"(?:(?<=[;{}])|(?<=\n))[ \t]*(?:(?:const\s+)?(?:struct\s+)?(\w+)\s*\*\s*)?(\w+)\s*=\s*([^;{}=][^;{}]*);", code))
+    for st in stmts:
+        dtype, var, rhs = st.group(1), st.group(2), st.group(3)
+        inner, casts = _strip_outer(rhs)
+        stride = etype = None
+        m = re.fullmatch(r"\(\s*(?:u8|char|s8)\s*\*\s*\)\s*(&?\s*\w+)\s*\+\s*(.+?)\s*\*\s*(0x[0-9A-Fa-f]+|\d+)", inner, re.S)
+        if m:
+            base_text, idx, stride = m.group(1), m.group(2), int(m.group(3), 0)
+        else:
+            m = re.fullmatch(_PTR_CAST + r"\s*(&?\s*\w+)\s*\+\s*(.+)", inner, re.S) or \
+                re.fullmatch(r"&\s*\(\s*" + _PTR_CAST + r"\s*(&?\s*\w+)\s*\)\s*\[(.+)\]", inner, re.S)
+            if not m or m.group(1) in SCALAR:
+                continue
+            etype, base_text, idx = m.group(1), m.group(2), m.group(3)
+        idx = _index_operand(idx)
+        if idx is None or var == idx.strip('()'):
+            continue
+        # the pointer's base: the object itself or a local initialised once from its address
+        base_var, base = None, base_text.replace(' ', '').lstrip('&')
+        if not re.fullmatch(r"lbl_\d+_bss_[0-9A-F]+|lbl_[0-9A-F]{8}", base):
+            bm = re.search(r"\b%s\s*=\s*(?:%s\s*)?&\s*(lbl_\d+_bss_[0-9A-F]+|lbl_[0-9A-F]{8})\s*;" % (re.escape(base), _PTR_CAST.replace('(\\w+)', '\\w+')), code[:st.start()])
+            if not bm:
+                continue
+            base_var, base = base_text.replace(' ', ''), bm.group(1)
+        obj = syms.get(base)
+        if obj is None or obj.section != '.bss':
+            continue
+        rest = code[st.end():]
+        # the index and the element pointer keep their values over the uses
+        ids = set(re.findall(r"[A-Za-z_]\w*", idx))
+        # (`*(s32 *)e = 0` stores through the pointer: only a bare lvalue reassigns it)
+        if any(re.search(r"(?:\+\+|--)\s*%s\b|\b%s\s*(?:\+\+|--)|(?:^|[;{}(,]|\n)\s*%s\s*[-+*/|&^]?=(?!=)" % ((re.escape(n),) * 3), rest) for n in ids | {var}):
+            continue
+        ptype = dtype or next((c for c in casts), None)
+        dm = re.search(r"(?:struct\s+)?(\w+)\s*\*\s*%s\s*;" % re.escape(var), code[:st.start()])
+        if ptype is None and dm:
+            ptype = dm.group(1)
+        name = f'fzgx_obj_{base}'
+        ref = f'{name}[{idx}]'
+        typedefs, decl = [], None
+        new = rest
+        if etype is not None or (ptype and ptype not in SCALAR):
+            etype = etype or ptype
+            if etype in SCALAR:
+                continue
+            new = re.sub(r"\b%s\s*->\s*" % re.escape(var), ref + '.', new)
+            new = re.sub(r"(?<![\w.>])%s\b" % re.escape(var), f'(&{ref})', new)
+            tagged = re.search(r"struct\s+%s\b" % re.escape(etype), body) and not re.search(
+                r"\}\s*%s\s*;|typedef\s+struct\s+\w+\s+%s\s*;" % (re.escape(etype), re.escape(etype)), body + include_text())
+            et = ('struct ' if tagged else '') + etype
+            if stride is not None:
+                # a byte stride must be the element type's size: MWCC refuses the unit otherwise
+                typedefs.append(f"typedef char fzgx_stride_{base}[sizeof({et}) == {stride:#x} ? 1 : -1];")
+            decl = f"{et} {name}[{obj.size:#x} / sizeof({et})];"
+        else:
+            if stride is None or stride > obj.size:
+                continue
+            fields = {}
+            def field(mm):
+                t = mm.group(1).strip()
+                size = 4 if t.endswith('*') else SCALAR.get(t)
+                off = int(mm.group(2), 0) if mm.group(2) else 0
+                if not size or t == 'void' or off % size or off + size > stride or fields.get(off, (t,))[0] != t:
+                    raise ValueError(t)
+                fields[off] = (t, size)
+                return f"{ref}.f_{off:X}"
+            ty = r"((?:const\s+)?\w+(?:\s*\*)*)"
+            try:
+                new = re.sub(r"\*\s*\(\s*%s\s*\*\s*\)\s*\(\s*%s\s*\+\s*(0x[0-9A-Fa-f]+|\d+)\s*\)" % (ty, re.escape(var)), field, new)
+                new = re.sub(r"\*\s*\(\s*%s\s*\*\s*\)\s*()%s\b(?!\s*[+\[])" % (ty, re.escape(var)), field, new)
+            except ValueError:
+                continue
+            if not fields:
+                continue
+            ordered = sorted(fields.items())
+            if any(a + s > b for (a, (_, s)), (b, _) in zip(ordered, ordered[1:])):
+                continue
+            new = re.sub(r"(?<![\w.>])%s\b" % re.escape(var), f'((u8 *)&{ref})', new)
+            lines, pos = [], 0
+            for off, (t, size) in ordered:
+                if off > pos:
+                    lines.append(f"    u8 pad_{pos:X}[{off - pos:#x}];")
+                lines.append(f"    {t} f_{off:X};")
+                pos = off + size
+            if pos < stride:
+                lines.append(f"    u8 pad_{pos:X}[{stride - pos:#x}];")
+            et = f"fzgx_elem_{base}"
+            typedefs.append(f"typedef struct {et} {{\n" + "\n".join(lines) + f"\n}} {et};")
+            typedefs.append(f"typedef char fzgx_stride_{base}[sizeof({et}) == {stride:#x} ? 1 : -1];")
+            decl = f"{et} {name}[{obj.size // stride:#x}];"
+        before = code[:st.start()]
+        if dtype is None:
+            # a separate `T *var;` declaration loses its only definition
+            before = re.sub(r"\n[ \t]*(?:const\s+)?(?:struct\s+)?\w+\s*\*\s*%s\s*;[ \t]*(?=\n)" % re.escape(var), '', before)
+        out = before + new
+        if base_var and not re.search(r"(?<![\w.>])%s\b" % re.escape(base_var),
+                                      re.sub(r"[^;{}\n]*\b%s\s*=[^;]*;" % re.escape(base_var), '', out)):
+            out = re.sub(r"\n[ \t]*(?:(?:const\s+)?(?:struct\s+)?\w+\s*\*\s*)?%s\s*=[^;]*;" % re.escape(base_var), '', out)
+            out = re.sub(r"\n[ \t]*(?:const\s+)?(?:struct\s+)?\w+\s*\*\s*%s\s*;" % re.escape(base_var), '', out)
+        block = "\n".join(typedefs) + "\n/* the retail TU defines this array: MWCC indexes it off its own address */\n" + decl + "\n\n"
+        yield (f'define indexed element array {base}[{idx}]', head + block + out)
+
+
 def tu_section_layout(p, symbol, body, check):
     """Proposals: retail BSS objects defined in the unit (per dtk symbol / per referenced field),
     each also with the TU's string run reproduced, and the string run alone."""
@@ -1436,7 +1745,29 @@ def tu_section_layout(p, symbol, body, check):
                 out.append((f'define retail TU bss objects ({label})', text))
                 if only is None and mode != 'merge':
                     bases.append((mode, text))
+    try:
+        rows_body = constant_rows(body)
+    except (ValueError, KeyError, IndexError, AttributeError):
+        rows_body = None
+    if rows_body:
+        for mode in ('split', 'merge'):
+            try:
+                text, notes = tu_objects(p, symbol, rows_body, mode, cache, retail_bases)
+            except (ValueError, KeyError, IndexError, AttributeError, OSError):
+                text = None
+            if text and text not in {t for _, t in out}:
+                out.append((f'define retail TU bss objects ({mode}, one object per constant row)', text))
+    # `.data` struct models (fn_1_854D4, fn_1_107F74, fn_1_9A7BC) as byte views, beside the
+    # bss layouts and alone
+    viewed = []
     for name, base in bases + [('body', body)]:
+        try:
+            text, notes = data_struct_views(p, symbol, base)
+        except (ValueError, KeyError, IndexError, AttributeError, TypeError, OSError):
+            text = None
+        if text:
+            viewed.append((name + ', data struct views', text))
+    for name, base in bases + [('body', body)] + viewed:
         for top in (False, True):
             try:
                 text, notes = tu_data_objects(p, symbol, base, top)
@@ -1451,6 +1782,10 @@ def tu_section_layout(p, symbol, body, check):
                 text = None
             if text:
                 out.append((f'reproduce retail string run ({name}{", cast" if cast else ""})', text))
+    try:
+        out += [c for c in indexed_element_arrays(p, symbol, body) if c[1] not in {t for _, t in out}]
+    except (ValueError, KeyError, IndexError, AttributeError, OSError):
+        pass
     # a section layout changes what the base register holds; a file-scope
     # `opt_propagation off` written for the old extern view can then rematerialize
     # `addis rX, rBase, N` at every far access (fn_1_2FAA0): offer each layout without it

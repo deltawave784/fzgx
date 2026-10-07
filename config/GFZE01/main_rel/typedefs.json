@@ -1,5 +1,6 @@
 {
  "__char_strings__": [
+  "archive",
   "objput"
  ],
  "camera_state": {
@@ -132,5 +133,8 @@
    "    u32 unk_28;",
    "} Obj_1_bss_8CA40;"
   ]
+ },
+ "lbl_1_data_40798": {
+  "decl": "u8 lbl_1_data_40798[]"
  }
 }

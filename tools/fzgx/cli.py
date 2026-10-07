@@ -703,6 +703,7 @@ def build_parser() -> argparse.ArgumentParser:
     s.add_argument('--max-candidates', type=int, default=80, help='per frontier seed per round, shared by every repair family')
     s.add_argument('--budget', type=float, help='total search seconds, including compilation')
     s.add_argument('--drafts', action='store_true', help='include saved lifter bodies')
+    s.add_argument('--no-save-attempts', action='store_true', help='do not save bodies that beat the best saved attempt as attempts')
     s = sub.add_parser("route", help="next functions for a Claude Code wave, each with the subagent type to run it"); s.set_defaults(fn=cmd_route)
     s.add_argument("--limit", type=int, default=8); s.add_argument("--small", type=int, default=256, help="largest size (bytes) for the sonnet tier")
     s.add_argument("--module"); s.add_argument("--tier", choices=["sonnet", "opus"]); s.add_argument("--json", action="store_true")

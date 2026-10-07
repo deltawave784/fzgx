@@ -9,12 +9,11 @@ When the Codex account runs out of usage ("try again at 3:35 AM"), the loop mark
 crashed sessions as crashes (they do not count as attempts), sleeps until the reset time
 plus a few minutes, and continues. Only completed batches count toward `--max-batches`.
 
-After each batch the loop runs one GPT-6 Astra batch (`--astra-batch` hard functions in parallel at medium effort; the ones medium releases
-get one more try at high; `--astra-model`, `--astra-max` per run, 0 turns it off) on near misses and large
-functions Astra has not tried. When the easy size bands are used up Sol moves to the same hard pool, and when
-Sol has nothing left Astra keeps running alone. `--modules` picks the modules (default: every module except
-main_rel, which the Claude loop owns).
-`--max-attempts` (default 12) is how many attempts a function may already have and still be picked.
+The loop runs Sol (`--model`) only. When the easy size bands are used up Sol moves to a hard pool of saved near
+misses and large functions, routed like the Claude loop's Fable batches. GPT-6 Astra batches are opt-in
+(`--astra-max N`, `--astra-batch`, `--astra-model`): they burn the weekly limit several times faster.
+`--max-attempts` (default 12) is how many attempts a function may already have and still be picked, and
+`--modules` picks the modules (default: every module except main_rel, which the Claude loop owns).
 
 Stops on: `--max-batches`, `--hours` (wall clock, waits included), `--zero-streak` batches in
 a row without a match in the last band, a failed gate, an empty pool, or the file
@@ -86,12 +85,17 @@ def usage_limit(batch: str, failed: int = 1):
         if "usageLimitExceeded" not in text and "usage limit" not in text:
             continue
         hit = True
-        m = re.search(r"try again at (\d{1,2}):(\d{2}) ?([AP]M)", text)
+        m = re.search(r"try again at (?:([A-Z][a-z]{2}) (\d{1,2})(?:st|nd|rd|th)?, (\d{4}) )?(\d{1,2}):(\d{2}) ?([AP]M)", text)
         if m:
-            hour = int(m.group(1)) % 12 + (12 if m.group(3) == "PM" else 0)
-            when = datetime.datetime.now().replace(hour=hour, minute=int(m.group(2)), second=0, microsecond=0)
-            if when <= datetime.datetime.now():
-                when += datetime.timedelta(days=1)
+            hour = int(m.group(4)) % 12 + (12 if m.group(6) == "PM" else 0)
+            now = datetime.datetime.now()
+            if m.group(1):  # a weekly limit names the date: "try again at Oct 13th, 2026 9:28 PM"
+                day = datetime.datetime.strptime(f"{m.group(1)} {m.group(2)} {m.group(3)}", "%b %d %Y")
+                when = day.replace(hour=hour, minute=int(m.group(5)))
+            else:
+                when = now.replace(hour=hour, minute=int(m.group(5)), second=0, microsecond=0)
+                if when <= now:
+                    when += datetime.timedelta(days=1)
             break
     if not hit:
         return None
@@ -200,12 +204,13 @@ def main() -> int:
     ap.add_argument("--per-module", type=int, default=6)
     ap.add_argument("--max-attempts", type=int, default=12, help="attempts a function may have had and still be picked")
     ap.add_argument("--max-batches", type=int, default=6)
-    ap.add_argument("--hours", type=float, default=24.0)
+    ap.add_argument("--hours", type=float, default=168.0)
     ap.add_argument("--zero-streak", type=int, default=3)
     ap.add_argument("--parallel", type=int, default=12)
     ap.add_argument("--astra-model", default="gpt-6-astra")
     ap.add_argument("--astra-batch", type=int, default=8, help="hard functions per Astra batch, run in parallel")
-    ap.add_argument("--astra-max", type=int, default=400, help="Astra function attempts per loop run (0 disables it)")
+    ap.add_argument("--astra-max", type=int, default=0,
+                    help="Astra function attempts per loop run; 0 (default) is Sol only. Astra used the weekly limit up in hours")
     ap.add_argument("--modules", nargs="*", default=MODULES,
                     help="modules to pick from (clone A owns main_rel: adding it here collides with the Claude loop)")
     a = ap.parse_args()

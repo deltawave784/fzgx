@@ -210,13 +210,10 @@ void fn_1_151E74(u32 *value, s16 index, int byte) {
 }
 /* fzgx:end fn_1_151E74 */
 
-/* fzgx:begin fn_1_151EF8 noprologue */
+/* fzgx:begin fn_1_151EF8 */
 #include "types.h"
 #include "rel/main_rel/globals.h"
 #include "rel/main_rel/bg_aur.h"
-
-extern int fn_1_8D690(s16 value);
-extern int fn_1_8D72C(s16 value);
 
 typedef struct {
     s16 unk_0;

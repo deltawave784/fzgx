@@ -1731,3 +1731,33 @@ s32 fn_1_13018(void) {
     return OSIsThreadTerminated(lbl_1_bss_1810) == 0;
 }
 /* fzgx:end fn_1_13018 */
+
+/* fzgx:begin fn_1_1350C */
+#include "types.h"
+#include "rel/main_rel/live_camera.h"
+
+/* volatile: retail reloads these globals at every access (matches codegen) */
+#define V(x) (*(volatile u32 *)&(x))
+
+u8 fn_1_1350C(void *a, u8 *buf) {
+    s32 n;
+    if (V(lbl_1_bss_3B28) == 0) {
+        n = V(lbl_1_data_5180);
+        if (V(lbl_1_bss_3B2C) + V(lbl_1_data_5180) > (u32)fn_1_45B2C(a)) {
+            n = ((u32)fn_1_45B2C(a) - V(lbl_1_bss_3B2C) + 0x1f) & ~0x1f;
+        }
+        if (n > 0) {
+            fn_1_458A0(a, buf, n, V(lbl_1_bss_3B2C));
+        }
+        V(lbl_1_bss_3B2C) = V(lbl_1_bss_3B2C) + V(lbl_1_data_5180);
+    }
+    {
+        u8 r = buf[V(lbl_1_bss_3B28)];
+        V(lbl_1_bss_3B28) = V(lbl_1_bss_3B28) + 1;
+        if (V(lbl_1_bss_3B28) >= V(lbl_1_data_5180)) {
+            V(lbl_1_bss_3B28) = 0;
+        }
+        return r;
+    }
+}
+/* fzgx:end fn_1_1350C */

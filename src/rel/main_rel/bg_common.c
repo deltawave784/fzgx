@@ -126,7 +126,6 @@ void fn_1_105768(void) {
 /* fzgx:end fn_1_105768 */
 
 /* fzgx:begin fn_1_1067A8 */
-
 void fn_1_1067A8(void *arg0, f32 arg1, f32 arg2) {
     s32 result;
     s32 value;

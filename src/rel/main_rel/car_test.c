@@ -63,6 +63,13 @@ typedef struct {
     s16 state;
     u8 pad_3BC[0x84];
 } CarTestCar;
+extern void fn_1_3EF14(void *arg1);
+extern s32 fn_1_58C4(void);
+extern s16 fn_1_7B054(void);
+extern s16 fn_1_3F0C8(void);
+extern s32 fn_1_3FC18(void);
+extern s32 fn_1_84408(CarTestCar *);
+extern void fn_1_8E084(CarTestCar *, u32 *, s32);
 extern s8 fn_1_84124(Fn183D28Car *, s8, s8, u8 *);
 extern void lbl_8006DFE8(Fn183D28Vec3 *);
 extern s32 fn_1_54E34(void *arg0, f32 arg1);
@@ -73,13 +80,6 @@ extern s32 camera_get_values(f32 *value0, f32 *value1);
 extern s32 fn_1_A5DC4(void);
 extern u8 lbl_1_bss_6D980[32];
 extern u8 lbl_1_bss_6D9A0[188];
-extern void fn_1_3EF14(void *arg1);
-extern u8 fn_1_58C4(void);
-extern s16 fn_1_7B054(void);
-extern s16 fn_1_3F0C8(void);
-extern s32 fn_1_3FC18(void);
-extern s32 fn_1_84408(CarTestCar *);
-extern void fn_1_8E084(CarTestCar *, u32 *, s32);
 extern void fn_1_5634C(u8 value);
 extern void fn_1_7ECB8(u32 arg0, u32 arg1, u32 arg2);
 extern void *lbl_801A6410;
@@ -102,6 +102,8 @@ extern const f32 lbl_1_rodata_33A8;
 extern void fn_80071ED4(f32 arg0, f32 arg1, s32 arg2);
 extern void fn_80072014(void *arg0);
 extern void fn_800720B0(s32 arg0);
+extern const f32 lbl_1_rodata_3500;
+extern const f32 lbl_1_rodata_3504;
 
 /* fzgx:begin fn_1_7C13C */
 typedef struct {
@@ -213,6 +215,61 @@ void fn_1_7E7A4(Fn1_7E7A4Data *arg0) {
     fn_80074D78(1);
 }
 /* fzgx:end fn_1_7E7A4 */
+
+/* fzgx:begin fn_1_7E8F4 */
+static inline s32 chk(void) {
+    Obj_1_bss_6D620 *p = &lbl_1_bss_6D620;
+    s32 r = 0;
+    if ((s8)p->unk_F != 0 || (s32)p->unk_10 < 0x20) {
+        r = 1;
+    }
+    return r;
+}
+
+typedef struct lbl_1_bss_6D7F4_t {
+    u8 unk_0;
+    u8 pad_1[0x3];
+    f32 unk_4;
+    f32 unk_8;
+    u8 unk_C;
+    u8 unk_D;
+    u8 unk_E;
+    s8 unk_F;
+    u8 pad_10[0x1c];
+} lbl_1_bss_6D7F4_t;
+
+/* file-scope objects of the retail TU, in retail order: MWCC addresses them off one section base */
+lbl_1_bss_6D7F4_t fzgx_obj_lbl_1_bss_6D7F4;
+
+#pragma section code_type ".fzgxpool"
+static void fzgx_bss_layout(void) {
+    volatile u8 s;  /* fzgx-allow: S2 layout primer sink: MWCC emits .bss objects in first-access order */
+    s = *(u8 *)&fzgx_obj_lbl_1_bss_6D7F4;
+}
+#pragma section code_type ".text"
+
+void fn_1_7E8F4(void) {
+    lbl_1_bss_6D7F0 = 0;
+    if (lbl_1_bss_3BE0 != 0) {
+        s32 flag = chk();
+        fzgx_obj_lbl_1_bss_6D7F4.unk_F = (flag != 0);
+        fzgx_obj_lbl_1_bss_6D7F4.unk_0 = lbl_1_bss_6D620.unk_0;
+        fzgx_obj_lbl_1_bss_6D7F4.unk_4 = lbl_1_bss_6D620.unk_4;
+        fzgx_obj_lbl_1_bss_6D7F4.unk_8 = lbl_1_bss_6D620.unk_8;
+        fzgx_obj_lbl_1_bss_6D7F4.unk_C = lbl_1_bss_6D620.unk_C;
+        fzgx_obj_lbl_1_bss_6D7F4.unk_D = lbl_1_bss_6D620.unk_D;
+        fzgx_obj_lbl_1_bss_6D7F4.unk_E = lbl_1_bss_6D620.unk_E;
+    } else {
+        fzgx_obj_lbl_1_bss_6D7F4.unk_F = 0;
+        fzgx_obj_lbl_1_bss_6D7F4.unk_0 = 5;
+        fzgx_obj_lbl_1_bss_6D7F4.unk_4 = lbl_1_rodata_3500;
+        fzgx_obj_lbl_1_bss_6D7F4.unk_8 = lbl_1_rodata_3504;
+        fzgx_obj_lbl_1_bss_6D7F4.unk_C = 0;
+        fzgx_obj_lbl_1_bss_6D7F4.unk_D = 0;
+        fzgx_obj_lbl_1_bss_6D7F4.unk_E = 0;
+    }
+}
+/* fzgx:end fn_1_7E8F4 */
 
 /* fzgx:begin fn_1_7EAE8 */
 // fn_1_7EAE8: main_rel .text:0x0007EAE8 size 0x24
@@ -506,14 +563,7 @@ u32 *fn_1_8CA00(void) {
 }
 /* fzgx:end fn_1_8CA00 */
 
-/* fzgx:begin fn_1_8DD54 noprologue */
-#include "types.h"
-
-typedef struct {
-    u8 pad_0[0x3ba];
-    s16 state;
-    u8 pad_3BC[0x84];
-} CarTestCar;
+/* fzgx:begin fn_1_8DD54 */
 
 typedef struct {
     u8 pad_0[0x18];
@@ -528,23 +578,7 @@ typedef struct {
     u16 costs[0x20][5];
 } CarTestManager;
 
-typedef struct {
-    u32 flags;
-    u8 pad_4[0x5];
-    u8 count;
-    u8 pad_A[0x14AE];
-    f64 pad_14B8;
-} CarTestInfo;
 
-extern u8 lbl_1_bss_6D820;
-extern f32 lbl_1_data_1FFE0;
-extern void fn_1_3EF14(CarTestInfo *);
-extern s32 fn_1_58C4(void);
-extern s16 fn_1_7B054(void);
-extern s16 fn_1_3F0C8(void);
-extern s32 fn_1_3FC18(void);
-extern s32 fn_1_84408(CarTestCar *);
-extern void fn_1_8E084(CarTestCar *, u32 *, s32);
 
 static inline CarTestCar *get_car(CarTestManager *mgr, s32 index) {
     if ((s8)index < (s8)mgr->car_count && mgr->cars != NULL) {
@@ -565,7 +599,7 @@ void fn_1_8DD54(void) {
     u32 total;
 
     m.value = (CarTestManager *)&lbl_1_bss_6D820;
-    fn_1_3EF14(&info);
+    fn_1_3EF14( (void *)(CarTestInfo *)(&info));
     total = 0;
     switch (fn_1_58C4()) {
     case 1:
@@ -591,9 +625,9 @@ void fn_1_8DD54(void) {
     }
 
     if ((info.flags & 0x4000) && (fn_1_3F0C8() == 40 || fn_1_3FC18() > 0)) {
-        lbl_1_data_1FFE0 = 8.0f;
+        (*((f32 *)&lbl_1_data_1FFE0)) = 8.0f;
     } else {
-        lbl_1_data_1FFE0 = 5.0f;
+        (*((f32 *)&lbl_1_data_1FFE0)) = 5.0f;
     }
 
     m.costs = m.value->costs;

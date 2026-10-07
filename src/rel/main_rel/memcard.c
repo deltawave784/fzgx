@@ -61,48 +61,63 @@ extern void *lbl_801A6410;
 extern s32 fn_1_45D0();
 extern void fn_1_AB45C(int index);
 extern s32 CARDMountAsync(s32 chan, void *workArea, CARDCallback detachCallback, CARDCallback attachCallback);
-extern void fn_1_A2DC4(u32 arg0);
-extern u32 fn_8002C0A0(u32 arg0);
-extern u32 CARDFormatAsync(u32 arg0, u32 arg1);
-extern const f32 lbl_1_rodata_4CA8;
 extern const f32 lbl_1_rodata_4CAC;
-extern char *fn_80083DB0(char *dst, const char *src);
-extern char *strcat(char *dest, const char *src);
-extern const f32 lbl_1_rodata_4CC0;
-extern const f32 lbl_1_rodata_4CC4;
 extern void fn_1_46B4(u32 arg0, u32 arg1, const char *arg2, int arg3);
-extern const f64 lbl_1_rodata_4CC8;
 extern u8 fn_1_B7EF8(void);
-extern f32 lbl_1_rodata_4CD0;
 extern void fn_1_B7FDC(void);
-extern void fn_80030754(u8 value, void *data, int size, int mode);
 extern char *strncpy(char *dst, const char *src, size_t n);
 extern s32 lbl_801A66B4;
+extern const f32 lbl_1_rodata_4CA8;
 extern s32 DVDOpen(const char *, MemcardDvdFileInfo *);
 extern s32 DVDClose();
 extern s32 fn_80006354(MemcardDvdFileInfo *, void *, u32, u32);
 extern int fn_80083BCC(const char *s1, const char *s2);
+extern char *fn_80083DB0(char *dst, const char *src);
 extern u16 fn_1_1563E8(u8 *data, s32 len);
+extern char *strcat(char *dest, const char *src);
 extern void OSPanic(const char *file, int line, const char *msg, ...);
 extern void OSReport(const char *format, ...);
-extern u32 lbl_1_bss_77310[28];
-extern u32 lbl_1_bss_7730C;
-extern void fn_80008BA8(u32 arg0, u32 arg1, u32 arg2);
 extern f32 lbl_1_rodata_4AE0[114];
 extern u32 fn_1_4630();
 extern u32 fn_1_B22AC(void *ctx, u32 arg);
 extern u32 fn_1_F4810(void *a0, void *a1, void *a2, void *a3, void *a4, void *a5, void *a6, void *a7, void *a8);
+extern void fn_80008BA8(u32 arg0, u32 arg1, u32 arg2);
 extern void fn_80008BEC(void *dest, int value, u32 size);
+extern s32 fn_8002DFE0(u32 arg0, u32 arg1, u32 arg2);
+extern void fn_1_B9C38(s32 index);
+extern void fn_1_1596DC(int index);
+extern void fn_1_484CC(s32 index);
+extern void fn_1_49514(u32 *value);
+extern void fn_1_495C8(u8 value);
+extern void fn_1_496FC(f32 value1, f32 value2);
+extern void fn_1_4955C(f32 value1, f32 value2);
+extern void fn_1_4954C(f32 value);
+extern void fn_1_14FEAC(u8, u8, u8, u32 *, s16);
+extern void fn_1_4CF3C(const char *format, f32 x, ...);
+extern void *fn_1_7F49C(s16 arg0, s16 arg1, void *arg2);
+extern void fn_1_F755C(u8 value);
+extern void fn_1_A6840(u32 value);
+extern void fn_1_F79C8(void);
+extern void fn_1_C36EC(void);
+extern u8 lbl_1_bss_772C8[66];
+extern s32 fn_8002FC14(u32 arg0, void *arg1);
+extern s32 fn_80030338(s32 chan, void *oldName, void *newName);
+extern void fn_1_A2DC4(u32 arg0);
+extern u32 fn_8002C0A0(u32 arg0);
+extern u32 CARDFormatAsync(u32 arg0, u32 arg1);
+extern const f32 lbl_1_rodata_4CC0;
+extern const f32 lbl_1_rodata_4CC4;
+extern const f64 lbl_1_rodata_4CC8;
+extern f32 lbl_1_rodata_4CD0;
+extern void fn_80030754(u8 value, void *data, int size, int mode);
+extern u32 lbl_1_bss_77310[28];
+extern u32 lbl_1_bss_7730C;
 extern u8 lbl_1_bss_71810[161];
 extern u8 lbl_1_bss_718B8;
 extern u8 lbl_1_bss_718B9[7];
 extern u16 fn_8002A744(void);
 extern u16 fn_8002A74C(u32 arg0);
-extern s32 fn_8002DFE0(u32 arg0, u32 arg1, u32 arg2);
-extern void fn_1_B9C38(s32 index);
 extern void fn_1_AA6D8(s32 arg0, u32 arg1, void *arg2);
-extern void fn_1_1596DC(int index);
-extern void fn_1_484CC(s32 index);
 extern u32 lbl_1_rodata_26F8;
 extern f32 lbl_1_rodata_4D18;
 extern f32 lbl_1_rodata_5080;
@@ -117,14 +132,6 @@ extern void fn_1_5233C(void);
 extern void fn_1_49738(void (*)(void));
 extern void fn_1_49748(f32 value);
 extern void fn_1_4966C(f32 value1, f32 value2);
-extern void fn_1_495C8(u8 value);
-extern void fn_1_4955C(f32 value1, f32 value2);
-extern void fn_1_496FC(f32 value1, f32 value2);
-extern void fn_1_4954C(f32 value);
-extern void fn_1_49514(u32 *value);
-extern void fn_1_14FEAC(u8, u8, u8, u32 *, s16);
-extern void fn_1_4CF3C(const char *format, f32 x, ...);
-extern void *fn_1_7F49C(s16 arg0, s16 arg1, void *arg2);
 extern void fn_1_49614(void);
 extern u64 __div2i(u64, u32, u32);
 extern u32 lbl_1_bss_7AB90[36];
@@ -132,14 +139,7 @@ extern void fn_1_C062C(Fn1C0510Obj *, void *, void *);
 extern void fn_1_C0B0C(Fn1C0510Obj *, void *, void *);
 extern void fn_1_C0E00(Fn1C0510Obj *, void *, void *);
 extern void fn_1_C132C();
-extern void fn_1_C36EC(void);
-extern void fn_1_F755C(u8 value);
-extern void fn_1_A6840(u32 value);
-extern void fn_1_F79C8(void);
 extern void OSTicksToCalendarTime();
-extern u8 lbl_1_bss_772C8[66];
-extern s32 fn_8002FC14(u32 arg0, void *arg1);
-extern s32 fn_80030338(s32 chan, void *oldName, void *newName);
 extern const f64 lbl_1_rodata_4CB8;
 extern u8 *fn_80083970(u8 *str, const u8 *needle);
 extern size_t strlen(const char *str);
@@ -182,7 +182,6 @@ void fn_1_AB478(Fn1AB478Obj *obj) {
 /* fzgx:end fn_1_AB478 */
 
 /* fzgx:begin fn_1_AB4F4 */
-
 typedef struct {
     u8 pad[0x2];
     s16 field_0x2;
@@ -291,7 +290,6 @@ void fn_1_AB61C(fn_1_AB61C_MemcardArg *arg) {
 /* fzgx:end fn_1_AB61C */
 
 /* fzgx:begin fn_1_AB64C */
-
 typedef struct {
     u8 pad_0[0x24];
     void *unk_24;
@@ -347,7 +345,6 @@ void fn_1_AB64C(fn_1_AB64C_MemcardArg *arg) {
 /* fzgx:end fn_1_AB64C */
 
 /* fzgx:begin fn_1_AB75C */
-
 typedef struct {
     u8 pad[0x2];
     u16 field_0x2;
@@ -526,7 +523,6 @@ void fn_1_AB98C(fn_1_AB98C_ArgStruct *arg) {
 /* fzgx:end fn_1_AB98C */
 
 /* fzgx:begin fn_1_AB99C */
-
 typedef struct {
     u8 pad[0x2];
     u16 field_0x2;
@@ -618,7 +614,6 @@ void fn_1_ABA9C(fn_1_ABA9C_ArgStruct *arg) {
 /* fzgx:end fn_1_ABA9C */
 
 /* fzgx:begin fn_1_ABAAC */
-
 typedef struct {
     u8 pad_0[2];
     u16 unk_2;
@@ -879,7 +874,6 @@ void fn_1_ABDB8(fn_1_ABDB8_ArgStruct *arg) {
 /* fzgx:end fn_1_ABDB8 */
 
 /* fzgx:begin fn_1_ABE14 */
-
 typedef struct Fn1ABE14Sub {
     u8 pad_00[2];
     u16 value;
@@ -933,7 +927,6 @@ void fn_1_ABE88(void *arg0) {
 /* fzgx:end fn_1_ABE88 */
 
 /* fzgx:begin fn_1_ABF44 */
-
 typedef struct {
     u8 pad_00[0x44];
     s32 unk_44;
@@ -1293,7 +1286,6 @@ void fn_1_AC4C4(Fn1AC4C4Target *target) {
 /* fzgx:end fn_1_AC4C4 */
 
 /* fzgx:begin fn_1_AC53C */
-
 typedef struct MemcardCleanupState {
     u8 pad_0[8];
     u32 unk_8;
@@ -1435,7 +1427,6 @@ void fn_1_AC700(void) {
 /* fzgx:end fn_1_AC700 */
 
 /* fzgx:begin fn_1_AC704 */
-
 void fn_1_AC704(void *r3) {
     *(u16 *)((u8 *)*(void **)((u8 *)r3 + 0x24) + 0x2) = 0x12c;
     CARDReadAsync( (CARDFileInfo *)(void *)((u8 *)r3 + 0x10),
@@ -1457,8 +1448,6 @@ void fn_1_AC74C(void *r3) {
 /* fzgx:end fn_1_AC74C */
 
 /* fzgx:begin fn_1_AC79C */
-
-
 struct fn_1_AC79C_Arg0 {
     u8 pad_0[0xC];
     u32 unk_C;
@@ -1553,7 +1542,6 @@ void fn_1_AC928(void) {
 /* fzgx:end fn_1_AC928 */
 
 /* fzgx:begin fn_1_AC92C */
-
 struct fn_1_AC92C_Arg0 {
     u8 pad_0[0x24];
     u32 unk_24;
@@ -1579,7 +1567,6 @@ u32 fn_1_AC92C(struct fn_1_AC92C_Arg0 *arg0) {
 /* fzgx:end fn_1_AC92C */
 
 /* fzgx:begin fn_1_AC960 */
-
 struct MemcardData {
     u8 pad0[2];
     u16 status;
@@ -2113,7 +2100,6 @@ void fn_1_AD164(void) {
 /* fzgx:end fn_1_AD164 */
 
 /* fzgx:begin fn_1_AD168 */
-
 typedef struct Fn1AD168Obj {
     u8 field0;
     u8 _pad1[0x13];
@@ -5133,7 +5119,6 @@ void fn_1_B03A8(void *arg0, void *arg1) {
 /* fzgx:end fn_1_B03A8 */
 
 /* fzgx:begin fn_1_B03CC */
-
 typedef struct B03CC_File {
     u8 pad_0[0x3E];
     u8 unk_3E;
@@ -6743,7 +6728,6 @@ void fn_1_B38F4(int unused, void *ptr) {
 /* fzgx:end fn_1_B38F4 */
 
 /* fzgx:begin fn_1_B3900 */
-
 #pragma opt_dead_assignments off
 static inline u8 fn_1_B3900_array_read(u8 *array, s32 index) { return array[index]; }
 #pragma opt_dead_assignments reset
@@ -7107,8 +7091,6 @@ void fn_1_B5F00(B5F00Source *source, B5F00Dest *dest) {
 /* fzgx:end fn_1_B5F00 */
 
 /* fzgx:begin fn_1_B7C00 */
-
-
 u8 fn_1_B7C00(void) {
     u8 result = 0;
 
@@ -7161,15 +7143,12 @@ s32 fn_1_B7C6C(u32 arg0) {
 /* fzgx:end fn_1_B7C6C */
 
 /* fzgx:begin fn_1_B7CD4 */
-
 u8 fn_1_B7CD4(void) {
     return lbl_1_bss_718B8;
 }
 /* fzgx:end fn_1_B7CD4 */
 
 /* fzgx:begin fn_1_B7E14 */
-
-
 // Save the current memory-card state in the global work buffer.
 
 void fn_1_B7E14(void *memory_card_state) {
@@ -7216,7 +7195,6 @@ int fn_1_B7EC4(int index) {
 /* fzgx:end fn_1_B7EC4 */
 
 /* fzgx:begin fn_1_B7EF8 */
-
 // fn_1_B7EF8: Load and return first byte from lbl_1_bss_718B9
 u8 fn_1_B7EF8(void) {
     return lbl_1_bss_718B9[0];
@@ -7297,7 +7275,6 @@ u32 fn_1_B7FC8(void) {
 /* fzgx:end fn_1_B7FC8 */
 
 /* fzgx:begin fn_1_B7FDC */
-
 // Toggles the low 16-bit status value and stores the result.
 void fn_1_B7FDC(void) {
     u16 value = (u16)fn_8002A744();
@@ -7376,8 +7353,6 @@ void fn_1_B80F0(int index) {
 /* fzgx:end fn_1_B80F0 */
 
 /* fzgx:begin fn_1_B8170 */
-
-
 static inline s32 wait_card(s32 card, void *work, void *entry) {
     s32 result;
 
@@ -7444,7 +7419,6 @@ u32 fn_1_B8170(s32 card) {
 /* fzgx:end fn_1_B8170 */
 
 /* fzgx:begin fn_1_B9BE0 */
-
 void fn_1_B9BE0(void) {
     fn_1_B9C38(0);
     fn_1_B9C38(1);
@@ -7452,7 +7426,6 @@ void fn_1_B9BE0(void) {
 /* fzgx:end fn_1_B9BE0 */
 
 /* fzgx:begin fn_1_B9C0C */
-
 void fn_1_B9C0C(void) {
     fn_1_B9C38(0);
     fn_1_B9C38(1);
@@ -7493,7 +7466,6 @@ void fn_1_B9C38(s32 index) {
 /* fzgx:end fn_1_B9C38 */
 
 /* fzgx:begin fn_1_B9CCC */
-
 typedef struct {
     u8 pad_0[0x1];
     s8 unk_1;
@@ -7882,7 +7854,6 @@ void fn_1_BED04(s32 x, s32 y, s32 width, s32 height, u32 *color, s32 flip) {
 /* fzgx:end fn_1_BED04 */
 
 /* fzgx:begin fn_1_BF520 */
-
 struct fn_1_BF520_Arg4 {
     u32 unk_0;
 };
@@ -8114,7 +8085,6 @@ void fn_1_BF600(s32 a, s32 b, s32 c, s32 d, u32 *source, f32 initial) {
 /* fzgx:end fn_1_BF600 */
 
 /* fzgx:begin fn_1_BF9C4 */
-
 #pragma section code_type ".fzgxpool"
 static const u32 fzgx_pool_table1[114] = {0x665F7A65, 0x726F5F64, 0x65627567, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x7379735F, 0x652E6269, 0x6E000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000350, 0x00000004, 0xFFFFFFFF, 0xFFFFFFFF, 0x665F7A65, 0x726F0000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000001, 0x7379735F, 0x652E6269, 0x6E000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000B4F, 0x000059E0, 0xFFFFFFFF, 0xFFFFFFFF, 0x667A6700, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000002, 0x67686F5F, 0x652E6269, 0x6E000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000153, 0x00000000, 0xFFFFFFFF, 0xFFFFFFFF, 0x667A6300, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000003, 0x6761725F, 0x652E6269, 0x6E000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000154, 0x00020700, 0xFFFFFFFF, 0xFFFFFFFF, 0x667A6500, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000004, 0x656D625F, 0x652E6269, 0x6E000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000152, 0x00000000, 0xFFFFFFFF, 0xFFFFFFFF, 0x667A7200, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000005, 0x7265705F, 0x652E6269, 0x6E000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000451, 0x00000000, 0xFFFFFFFF, 0xFFFFFFFF};  /* fzgx-allow: A1 retail pool bytes */
 __declspec(section ".fzgxpool") static void fzgx_pool_keep1(void) { const u32 *volatile cp; cp = fzgx_pool_table1; }  /* fzgx-allow: S2 pool primer sink */
@@ -8367,7 +8337,6 @@ void fn_1_BF9C4(s32 arg0, s32 arg1, s32 arg2, f32 arg3, f32 arg4) {
 /* fzgx:end fn_1_BF9C4 */
 
 /* fzgx:begin fn_1_BFCF8 */
-
 #pragma section code_type ".fzgxpool"
 static const u32 fzgx_pool_table1[114] = {0x665f7a65, 0x726f5f64, 0x65627567, 0x0, 0x0, 0x0, 0x0, 0x0, 0x7379735f, 0x652e6269, 0x6e000000, 0x0, 0x0, 0x0, 0x0, 0x350, 0x4, 0xffffffff, 0xffffffff, 0x665f7a65, 0x726f0000, 0x0, 0x0, 0x0, 0x0, 0x0, 0x1, 0x7379735f, 0x652e6269, 0x6e000000, 0x0, 0x0, 0x0, 0x0, 0xb4f, 0x59e0, 0xffffffff, 0xffffffff, 0x667a6700, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x2, 0x67686f5f, 0x652e6269, 0x6e000000, 0x0, 0x0, 0x0, 0x0, 0x153, 0x0, 0xffffffff, 0xffffffff, 0x667a6300, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x3, 0x6761725f, 0x652e6269, 0x6e000000, 0x0, 0x0, 0x0, 0x0, 0x154, 0x20700, 0xffffffff, 0xffffffff, 0x667a6500, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x4, 0x656d625f, 0x652e6269, 0x6e000000, 0x0, 0x0, 0x0, 0x0, 0x152, 0x0, 0xffffffff, 0xffffffff, 0x667a7200, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x5, 0x7265705f, 0x652e6269, 0x6e000000, 0x0, 0x0, 0x0, 0x0, 0x451, 0x0, 0xffffffff, 0xffffffff}; /* fzgx-allow: A1 retail pool bytes */
 __declspec(section ".fzgxpool") static void fzgx_pool_keep1(void) { const u32 *volatile cp; cp = fzgx_pool_table1; } /* fzgx-allow: S2 pool primer sink */
@@ -8851,7 +8820,6 @@ void fn_1_C023C(s32 a, s32 b, s32 c, s32 d, s32 e, s32 f, s32 g, f32 value) {
 /* fzgx:end fn_1_C023C */
 
 /* fzgx:begin fn_1_C0374 */
-
 #pragma section code_type ".fzgxpool"
 static const u32 fzgx_pool_table1[114] = {0x665f7a65, 0x726f5f64, 0x65627567, 0x0, 0x0, 0x0, 0x0, 0x0, 0x7379735f, 0x652e6269, 0x6e000000, 0x0, 0x0, 0x0, 0x0, 0x350, 0x4, 0xffffffff, 0xffffffff, 0x665f7a65, 0x726f0000, 0x0, 0x0, 0x0, 0x0, 0x0, 0x1, 0x7379735f, 0x652e6269, 0x6e000000, 0x0, 0x0, 0x0, 0x0, 0xb4f, 0x59e0, 0xffffffff, 0xffffffff, 0x667a6700, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x2, 0x67686f5f, 0x652e6269, 0x6e000000, 0x0, 0x0, 0x0, 0x0, 0x153, 0x0, 0xffffffff, 0xffffffff, 0x667a6300, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x3, 0x6761725f, 0x652e6269, 0x6e000000, 0x0, 0x0, 0x0, 0x0, 0x154, 0x20700, 0xffffffff, 0xffffffff, 0x667a6500, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x4, 0x656d625f, 0x652e6269, 0x6e000000, 0x0, 0x0, 0x0, 0x0, 0x152, 0x0, 0xffffffff, 0xffffffff, 0x667a7200, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x5, 0x7265705f, 0x652e6269, 0x6e000000, 0x0, 0x0, 0x0, 0x0, 0x451, 0x0, 0xffffffff, 0xffffffff}; /* fzgx-allow: A1 retail pool bytes */
 __declspec(section ".fzgxpool") static void fzgx_pool_keep1(void) { const u32 *volatile cp; cp = fzgx_pool_table1; } /* fzgx-allow: S2 pool primer sink */
@@ -8965,10 +8933,6 @@ void fn_1_C0374(s32 arg0, s32 arg1, u32 arg2, u32 arg3, u32 arg4, u32 arg5, u32 
 /* fzgx:end fn_1_C0374 */
 
 /* fzgx:begin fn_1_C0510 */
-
-
-
-
 void fn_1_C0510(Fn1C0510Obj *obj) {
     u64 time;
     void *first;
@@ -9009,8 +8973,6 @@ void fn_1_C0510(Fn1C0510Obj *obj) {
 /* fzgx:end fn_1_C0510 */
 
 /* fzgx:begin fn_1_C132C */
-
-
 void fn_1_C132C(Fn1C132CObject *object, u8 *data) {
     u8 local[0x24];
 
@@ -9048,7 +9010,6 @@ void fn_1_C23CC(u32 destination, u32 destinationStride, u32 unused, u32 source, 
 /* fzgx:end fn_1_C23CC */
 
 /* fzgx:begin fn_1_C2454 */
-
 void fn_1_C2454(void) {
     u8 *state = (u8 *)&lbl_1_bss_716C0 + 0x10000;
 
@@ -9102,8 +9063,6 @@ void fn_1_C34F0(void) {
 /* fzgx:end fn_1_C34F0 */
 
 /* fzgx:begin fn_1_C3688 */
-
-
 u32 fn_1_C3688(void) {
     TimeParts parts;
     u64 time;
