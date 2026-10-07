@@ -220,144 +220,27 @@ s32 fn_1_12A6D8(void *arg0) {
 }
 /* fzgx:end fn_1_12A6D8 */
 
-/* fzgx:begin fn_1_12A734 noprologue */
-#include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/archive.h"
-
-struct fn_1_12B120_lbl_1_rodata_8178 {
-    f64 unk_0;
-};
-
-typedef struct {
-    u16 unk0;
-    u32 unk4;
-    u8 unk8;
-    u8 pad9[3];
-    u32 unkC;
-    u32 unk10;
-    u32 unk14;
-    u32 unk18;
-} fn_1_12C0EC_FnData;
-
-typedef struct Fn1_12F30CState {
-    s32 value;
-} Fn1_12F30CState;
-
-struct Ent {
-    u8 b;
-    u8 pad[3];
-    u32 v[1];
-};
-
-struct Blk {
-    u8 pad[0x81A4];
-    struct Ent e[3];
-    u8 pad2[4];
-};
-
-typedef struct {
-    u8 pad0[5];
-    u8 id;
-    u8 pad6[0x819a];
-    u8 value;
-    u8 pad_a1[0x1f];
-} fn_1_12C7B8_FnEntry;
-
-typedef struct {
-    u8 pad0[5];
-    u8 id;
-    u8 pad6[0x819a];
-    u8 value;
-    u8 pad_a1[0x1f];
-} fn_1_12CB04_FnEntry;
-
-typedef struct {
-    u8 pad0[5];
-    u8 id;
-    u8 pad6[0x819a];
-    u8 value;
-    u8 pad_a1[0x1f];
-} fn_1_12CCB0_FnEntry;
-
-typedef struct {
-    u8 pad0[5];
-    u8 id;
-    u8 pad6[0x819a];
-    u8 value;
-    u8 pad_a1[0x1f];
-} fn_1_12ECA8_FnEntry;
-
-typedef struct {
-    s16 values[6];
-} Entry;
-
-typedef struct {
-    Entry entries[11];
-} EntryTable;
-
-struct Table {
-    s16 values[66];
-};
-
-typedef struct ArchiveEntry {
-    u8 field_0[0x4c];
-    u8 data[0x20];
-} ArchiveEntry;
-
-typedef struct lbl_1_bss_897AC_t {
-    ArchiveEntry entries[1];
-    u8 pad_6C[0x1ac8];
-} lbl_1_bss_897AC_t;
-
-typedef struct Sig_fn_1_41488_Fn41488Data {
-    u32 count;
-    char *strings;
-} Sig_fn_1_41488_Fn41488Data;
-
-typedef struct {
-    u8 pad_0[0x24];
-    Sig_fn_1_41488_Fn41488Data *strings;
-} Fn12E0B8_Names;
-
-typedef struct {
-    u8 pad_0[0x18];
-    u32 flags;
-    u8 pad_1C[0x148 - 0x1C];
-    u8 event[0x8];
-    Fn12E0B8_Names *names;
-    u8 pad_154[0x4E0 - 0x154];
-} Fn12E0B8_Car;
-
-typedef struct {
-    u8 pad_0[0x5];
-    u8 id;
-    u8 pad_6[0x81A0 - 0x6];
-    u8 kind;
-    u8 pad_81A1[0x81C0 - 0x81A1];
-} Fn12E0B8_Entry;
-
-typedef struct { s32 v[41]; } Tbl;
+/* fzgx:begin fn_1_12A734 */
 extern void *lbl_801A6410;
 extern void fn_1_46B4(u32 arg0, u32 arg1, const char *arg2, int arg3);
-extern void OSPanic(const char *, int, const char *, ...);
+extern void OSPanic(char *arg0, s32 arg1, ...);
 
 typedef struct fzgx_elem_lbl_1_bss_897AC {
-    s32 f_0;
+    s32 state;
     u8 pad_4[0x64];
-    u32 f_68;
+    u32 handle;
 } fzgx_elem_lbl_1_bss_897AC;
 typedef char fzgx_stride_lbl_1_bss_897AC[sizeof(fzgx_elem_lbl_1_bss_897AC) == 0x6c ? 1 : -1];
 /* the retail TU defines this array: MWCC indexes it off its own address */
 fzgx_elem_lbl_1_bss_897AC fzgx_obj_lbl_1_bss_897AC[0x40];
 
+/* Releases archive slot idx if it is in use, otherwise panics. */
 void fn_1_12A734(s32 idx) {
-
-    if (fzgx_obj_lbl_1_bss_897AC[idx].f_0 == 1) {
-        fn_1_46B4((*((u32 *)&lbl_801A6410)), fzgx_obj_lbl_1_bss_897AC[idx].f_68, (const char *)lbl_1_data_40608, 0x145);
-        fzgx_obj_lbl_1_bss_897AC[idx].f_0 = 0;
+    if (fzgx_obj_lbl_1_bss_897AC[idx].state == 1) {
+        fn_1_46B4(*(u32 *)&lbl_801A6410, fzgx_obj_lbl_1_bss_897AC[idx].handle, (const char *)lbl_1_data_40608, 0x145);
+        fzgx_obj_lbl_1_bss_897AC[idx].state = 0;
     } else {
-        OSPanic((const char *)lbl_1_data_40608, 0x149, (const char *)lbl_1_data_40720);
+        OSPanic((char *)lbl_1_data_40608, 0x149, (char *)lbl_1_data_40720);
     }
 }
 /* fzgx:end fn_1_12A734 */
