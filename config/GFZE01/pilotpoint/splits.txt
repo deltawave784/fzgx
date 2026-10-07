@@ -131,3 +131,6 @@ rel/pilotpoint/pilotpoint/fn_14_C850.c:
 
 rel/pilotpoint/pilotpoint/fn_14_BCF8.c:
 	.text       start:0x0000BCF8 end:0x0000C4F4 align:4
+
+rel/pilotpoint/pilotpoint/fn_14_CC70.c:
+	.text       start:0x0000CC70 end:0x0000D2EC align:4
