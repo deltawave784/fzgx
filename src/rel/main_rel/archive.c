@@ -964,6 +964,57 @@ s16 fn_1_12C7B8(s16 arg) {
 }
 /* fzgx:end fn_1_12C7B8 */
 
+/* fzgx:begin fn_1_12C930 noprologue */
+#include "types.h"
+
+typedef struct { s32 v[41]; } Tbl;
+typedef struct { u8 pad0[5]; u8 key; u8 pad1[0x819A]; u8 val; u8 pad2[0x1F]; } Ent;
+typedef struct { Ent e[9]; } Mgr;
+
+extern Tbl lbl_1_rodata_8180;
+extern Mgr * fn_1_12F118(void);
+extern u8 * fn_1_36AD0(void);
+
+s16 fn_1_12C930(s16 arg0) {
+    Tbl tbl = lbl_1_rodata_8180;
+    s16 idx;
+    Mgr *m;
+    struct { s16 value; } i;
+    if (arg0 < 0) return 1;
+    if (arg0 < 41) {
+        idx = arg0;
+    } else {
+        m = fn_1_12F118();
+        if (m == 0) {
+            idx = 6;
+        } else if ((u8 *)m != fn_1_36AD0()) {
+            for (i.value = 0; i.value < 9; i.value++) {
+                if (arg0 == m->e[i.value].key) {
+                    idx = m->e[i.value].val;
+                    goto done; /* Keep the verified branch to done. */
+                }
+            }
+            goto none; /* shared miss tail */
+        } else if (arg0 >= 0x32 && arg0 <= 0x35) {
+            idx = m->e[arg0 - 0x32].val;
+        } else if (arg0 >= 0x36 && arg0 <= 0x39) {
+            idx = m->e[arg0 - 0x36].val;
+        } else {
+            for (i.value = 0; i.value < 4; i.value++) {
+                if (arg0 == m->e[i.value].key) {
+                    idx = m->e[i.value].val;
+                    goto done; /* Keep the verified branch to done. */
+                }
+            }
+none:
+            idx = 6;
+        }
+    }
+done:
+    return tbl.v[(s16)idx];
+}
+/* fzgx:end fn_1_12C930 */
+
 /* fzgx:begin fn_1_12CB04 */
 static inline s16 fn_1_12CB04_inline(s16 arg) {
     fn_1_12CB04_FnEntry *table;
