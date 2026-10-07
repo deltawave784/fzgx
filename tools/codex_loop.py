@@ -10,7 +10,8 @@ crashed sessions as crashes (they do not count as attempts), sleeps until the re
 plus a few minutes, and continues. Only completed batches count toward `--max-batches`.
 
 The loop runs Sol (`--model`) only. When the easy size bands are used up Sol moves to a hard pool of saved near
-misses and large functions, routed like the Claude loop's Fable batches. GPT-6 Astra batches are opt-in
+misses and large functions, routed like the Claude loop's Fable batches, and then to one retry of every function
+it already tried (near misses first). GPT-6 Astra batches are opt-in
 (`--astra-max N`, `--astra-batch`, `--astra-model`): they burn the weekly limit several times faster.
 `--max-attempts` (default 12) is how many attempts a function may already have and still be picked, and
 `--modules` picks the modules (default: every module except main_rel, which the Claude loop owns).
@@ -126,7 +127,7 @@ def wait_until(when, stop_file: Path, deadline: float) -> bool:
     return True
 
 
-def pick_hard(model: str, count: int, max_attempts: int, modules: list, tried_by: str = ""):
+def pick_hard(model: str, count: int, max_attempts: int, modules: list, tried_by: str = "", exclude=(), limit: int = 12):
     """Hard functions the model has not tried, the way the Claude loop routes Fable: saved near misses
     first (90-99.9%), then big functions with a partial body, then big ones, then anything left (a body
     that already scores 100% fails on the link, not the C, so it ranks after the near misses). No size
@@ -134,7 +135,7 @@ def pick_hard(model: str, count: int, max_attempts: int, modules: list, tried_by
     rows = []
     for module in modules:
         res = run(["tools/fzgx.py", "route", "--module", module, "--skip-tried-by", tried_by or model,
-                   "--max-attempts", str(max_attempts), "--limit", "12", "--json"], capture=True)
+                   "--max-attempts", str(max_attempts), "--limit", str(limit), "--json"], capture=True)
         try:
             rows += json.loads(res.stdout)
         except ValueError:
@@ -145,6 +146,7 @@ def pick_hard(model: str, count: int, max_attempts: int, modules: list, tried_by
         group = 0 if 90 <= best < 100 else 1 if best >= 50 and size >= 512 else 2 if size >= 1024 else 3
         return (group, -best, -size)
 
+    rows = [r for r in rows if r["symbol"] not in exclude]
     rows.sort(key=rank)
     return [r["symbol"] for r in rows[:count]]
 
@@ -215,6 +217,7 @@ def main() -> int:
                     help="modules to pick from (clone A owns main_rel: adding it here collides with the Claude loop)")
     a = ap.parse_args()
     astra_used = 0
+    retried: set = set()  # functions the retry pass has already handed out in this run
 
     stop_file = ROOT / ".fzgx" / "STOP"
     started, streak, total, band, n, waits = time.time(), 0, 0, 0, 0, 0
@@ -237,6 +240,11 @@ def main() -> int:
         if not symbols:  # the easy size bands are used up: hard functions, as the Claude loop routes Fable
             symbols = pick_hard(a.model, a.batch_size, a.max_attempts, a.modules)
             effort, checks, stale, label = "high", 40, 12, "near misses and large functions"
+        if not symbols:  # fresh functions are gone: one more try for each earlier Sol attempt, near misses first
+            symbols = pick_hard(a.model, a.batch_size, a.max_attempts, a.modules, tried_by="retry-pass-",
+                                exclude=retried, limit=40)
+            retried.update(symbols)
+            effort, checks, stale, label = "high", 40, 12, "retry of earlier attempts"
         if not symbols:
             if a.astra_max and astra_used < a.astra_max:
                 log("sol pool empty: astra only")
