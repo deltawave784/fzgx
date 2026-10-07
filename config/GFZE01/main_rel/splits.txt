@@ -6872,3 +6872,6 @@ rel/main_rel/live_camera/fn_1_1350C.c:
 
 rel/main_rel/screen_effect/fn_1_76DC0.c:
 	.text       start:0x00076DC0 end:0x00076EB8 align:4
+
+rel/main_rel/custom_memcard/fn_1_131390.c:
+	.text       start:0x00131390 end:0x001314A4 align:4
