@@ -2717,6 +2717,47 @@ void fn_1_141754(s32 arg0, s32 arg1) {
 }
 /* fzgx:end fn_1_141754 */
 
+/* fzgx:begin fn_1_1418EC noprologue */
+#include "types.h"
+#include "font.h"
+
+struct A7 { u16 v[7]; };
+struct B6 { u16 v[6]; };
+extern struct A7 lbl_1_rodata_922C;
+extern struct B6 lbl_1_rodata_923C;
+extern FontDrawPacket lbl_1_rodata_26F8;
+extern u16 fn_1_486C4(u32);
+extern void fn_1_51678(FontDrawPacket *, u32, s16, s16, s16, s16);
+extern int fn_1_4F734(FontDrawPacket *);
+
+void fn_1_1418EC(s32 arg0, s32 arg1) {
+    struct A7 a = lbl_1_rodata_922C;
+    struct B6 b = lbl_1_rodata_923C;
+    s32 sumB;
+    s32 sumA;
+    u32 i;
+    s32 xi;
+    struct { u32 v; } img;
+    FontDrawPacket pkt;
+
+    sumB = 0;
+    sumA = 0;
+    img.v = 0x10000 - 24305;
+    for (i = 0; i < 7; i++) {
+        pkt = lbl_1_rodata_26F8;
+        pkt.image = img.v;
+        fn_1_51678(&pkt, pkt.image, (s16)sumA, 0, (s16)a.v[i], (s16)fn_1_486C4(pkt.image));
+        pkt.x = (f32)(22 + arg0 + sumB);
+        pkt.y = (f32)(arg1 + 18);
+        pkt.z = 70.0f;
+        pkt.flags = 10;
+        fn_1_4F734(&pkt);
+        sumB += b.v[i];
+        sumA += a.v[i];
+    }
+}
+/* fzgx:end fn_1_1418EC */
+
 /* fzgx:begin fn_1_141F94 */
 typedef struct fn_1_141F94_Entry {
     u8 pad[0x0E];
@@ -7269,7 +7310,6 @@ s32 fn_1_14FD6C(s32 *arg0, s32 *arg1) {
 /* fzgx:end fn_1_14FD6C */
 
 /* fzgx:begin fn_1_14FD7C */
-
 // Sort the requested number of four-byte values using fn_1_14FD6C.
 void fn_1_14FD7C(u32 *data, u32 count) {
     s16 element_count = count;

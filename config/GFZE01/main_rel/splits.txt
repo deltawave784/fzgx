@@ -6824,3 +6824,6 @@ rel/main_rel/enemy_ctrl/fn_1_CD36C.c:
 
 rel/main_rel/effect/fn_1_5F5C8.c:
 	.text       start:0x0005F5C8 end:0x0005F654 align:4
+
+rel/main_rel/sel_static_disp/fn_1_1418EC.c:
+	.text       start:0x001418EC end:0x00141A80 align:4
