@@ -1406,6 +1406,86 @@ f32 fn_1_20258(Fn_1_20258 *self, f32 *out_ratio) {
 #pragma opt_strength_reduction reset
 /* fzgx:end fn_1_20258 */
 
+/* fzgx:begin fn_1_207DC noprologue */
+#include "types.h"
+
+struct A {
+    u8 pad_0[0x30];
+    f32 unk_30;
+    f32 unk_34;
+    u8 pad_38[4];
+    f32 unk_3C;
+    u8 pad_40[0x28];
+    f32 unk_68;
+    f32 unk_6C;
+    u8 pad_70[0xC];
+    u32 unk_7C;
+};
+
+struct P {
+    u8 pad_0[0x8];
+    f32 unk_8;
+    f32 unk_C;
+    u8 pad_10[0xB0];
+    f64 unk_C0;
+    f32 unk_C8;
+    u8 pad_CC[0x4];
+    f64 unk_D0;
+};
+
+extern struct P lbl_1_rodata_6C8;
+extern u8 lbl_1_data_5548[];
+extern u32 fn_1_203E4(void *, u32, void *, f32, f32, f32);
+extern void OSPanic(const char *, int, const char *, ...);
+extern void OSReport(const char *, ...);
+
+static inline void st(f32 *o, f32 v) {
+    if (o != 0) {
+        *o = v;
+    }
+}
+
+void fn_1_207DC(struct A *a, void *b, f32 t) {
+    f32 r;
+    f32 v;
+    f32 loc;
+    u32 fl;
+    f32 *pl;
+    u8 *d = (u8 *)&lbl_1_data_5548;
+    struct P *p = (struct P *)&lbl_1_rodata_6C8;
+
+    if (a->unk_7C & 0x1C00000) {
+        r = a->unk_34 / a->unk_30;
+        if (r < p->unk_C0) {
+            r = p->unk_8;
+        }
+    } else if (a->unk_7C & 0x2200000) {
+        r = p->unk_C;
+    } else {
+        OSReport((const char *)(d + 0x108), a->unk_7C);
+        OSPanic((const char *)(d + 0x12C), 0x1650, (const char *)(d + 0x134));
+    }
+    fl = a->unk_7C;
+    if ((fl & 0x2200000) || p->unk_8 == r) {
+        v = a->unk_68;
+    } else if (fl & 0x1800000) {
+        f32 m = p->unk_C8 * r;
+        v = (p->unk_C + m) * (a->unk_6C * a->unk_68);
+    } else if (fl & 0x400000) {
+        f32 m = p->unk_C8 * r;
+        f32 k = p->unk_C + m;
+        f32 q = a->unk_3C;
+        f64 h = p->unk_D0 * q;
+        v = h + (f32)(k * (a->unk_68 - q));
+    } else {
+        OSReport((const char *)(d + 0x138), fl);
+        OSPanic((const char *)(d + 0x12C), 0x1661, (const char *)(d + 0x15C));
+    }
+    st(&loc, r);
+    fn_1_203E4(a, 1, b, t, v, loc);
+}
+/* fzgx:end fn_1_207DC */
+
 /* fzgx:begin fn_1_20994 */
 typedef struct Fn_1_20994_Object {
     u32 unk_0;
