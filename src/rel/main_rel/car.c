@@ -5447,6 +5447,32 @@ void fn_1_8E480(void) {
 }
 /* fzgx:end fn_1_8E480 */
 
+/* fzgx:begin fn_1_8E728 noprologue */
+#include "types.h"
+
+extern void fn_800713E0(void *, void *);
+
+#pragma opt_common_subs off
+void fn_1_8E728(u8 *arg0, u8 arg1) {
+    s32 i;
+    u8 idx;
+    if (arg0 != 0) {
+        idx = arg1 % 4;
+        if (__rlwnm(*(u32 *)(arg0 + 0x9c), (idx + 1) & 31, 31, 31)) {
+            for (i = 0; i < 5; i++) {
+                void *a = *(void **)(arg0 + 0xe4 + i * 4);
+                void *b = *(void **)(arg0 + 0xf8 + idx * 4 + i * 16);
+                if (a != 0 && b != 0) {
+                    fn_800713E0(a, b);
+                }
+            }
+            arg0[0x98] = idx;
+        }
+    }
+}
+#pragma opt_common_subs reset
+/* fzgx:end fn_1_8E728 */
+
 /* fzgx:begin fn_1_8F45C */
 void fn_1_8F45C(Fn1_8F45C_Object *obj) {
     obj->field_4 = -1;
