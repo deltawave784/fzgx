@@ -24963,6 +24963,16 @@
   },
   {
     "module": "main",
+    "source": "dol/fn_80080518.c",
+    "symbols": [
+      "fn_80080518"
+    ],
+    "status": "matching",
+    "mw_version": "GC/2.0",
+    "extra_cflags": []
+  },
+  {
+    "module": "main",
     "source": "dol/fn_8008068C.c",
     "symbols": [
       "fn_8008068C"
