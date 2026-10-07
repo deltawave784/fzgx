@@ -699,10 +699,17 @@ class Engine:
                         break
                     count=0
                     for label,text in proposals:
-                        row=self.record(symbol,text,seed['mw'],seed['flags'],label=label,parent=seed['id'],seed=seed.get('seed',seed['id']))
-                        if row['id'] in seen:
-                            continue
-                        seen.add(row['id']); pending.append(row);parents[seed['id']]=seed;count+=1
+                        rows=[self.record(symbol,text,seed['mw'],seed['flags'],label=label,parent=seed['id'],seed=seed.get('seed',seed['id']))]
+                        # a TU object layout changes which compiler fits: a seed tuned under another
+                        # version on its extern view (fn_1_45A58: GC/1.3 76% either way) reaches the
+                        # retail `addi; lwzx` shape only under the module's own compiler (89%)
+                        default=oracle.module_flags(self.project,self.project.resolve(symbol).module)[1]
+                        if label.startswith(('define retail TU', 'define indexed element')) and seed['mw']!=default:
+                            rows.append(self.record(symbol,text,default,seed['flags'],label=label+' (module compiler)',parent=seed['id'],seed=seed.get('seed',seed['id'])))
+                        for row in rows:
+                            if row['id'] in seen:
+                                continue
+                            seen.add(row['id']); pending.append(row);parents[seed['id']]=seed;count+=1
                         if count>=max_candidates:
                             break
                     if time.monotonic()-progress>=10:

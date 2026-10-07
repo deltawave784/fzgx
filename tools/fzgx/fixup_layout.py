@@ -1406,6 +1406,165 @@ def _diff_rows_unused(r):
 
 
 
+_PTR_CAST = r"\(\s*(?:const\s+)?(?:struct\s+)?(\w+)\s*\*\s*\)"
+
+
+def _balanced(s):
+    depth = 0
+    for c in s:
+        depth += {'(': 1, ')': -1}.get(c, 0)
+        if depth < 0:
+            return False
+    return depth == 0
+
+
+def _strip_outer(s):
+    """Outer pointer casts and redundant parentheses of an initializer: (cast) and the cast type."""
+    s, casts = s.strip(), []
+    while True:
+        m = re.match(_PTR_CAST + r"\s*(.*)$", s, re.S)
+        rest = m.group(2).strip() if m else ''
+        # only a cast over a whole parenthesized operand: `(u8 *)p + i * K` keeps its byte cast
+        if m and rest.startswith('(') and rest.endswith(')') and _balanced(rest[1:-1]):
+            casts.append(m.group(1)); s = m.group(2).strip(); continue
+        if s.startswith('(') and s.endswith(')') and _balanced(s[1:-1]):
+            s = s[1:-1].strip(); continue
+        return s, casts
+
+
+def _index_operand(s):
+    """A side-effect-free index: one identifier/number or a fully parenthesized arithmetic group."""
+    s = s.strip()
+    if re.fullmatch(r"\w+", s):
+        return s
+    if s.startswith('(') and s.endswith(')') and _balanced(s[1:-1]) and re.fullmatch(r"[\w\s+\-*()]+", s) \
+            and not re.search(r"\w\s*\(", s) and '++' not in s and '--' not in s:
+        return s
+    return None
+
+
+def indexed_element_arrays(p, symbol, body):
+    """Retail indexes a TU-defined array of element structs (`tbl[i].f`): MWCC keeps the
+    array's address and the scaled index in separate registers (`addi rB, rB, tbl@l;
+    mulli rI, i, K; lwzx rX, rB, rI`, `add` + displacement only for non-zero fields, or one
+    `addi` per array before indexed accesses). Every pointer spelling of the same access,
+    `(u8 *)&sym + i * K` or `(T *)&sym + i`, folds into `add rP, rB, rI` plus displacements,
+    and so does a cast over a defined array (fn_1_12A734: only `tbl[idx].field` on a defined
+    array of a typed element matched). Proposal: an element pointer initialised from a
+    same-module .bss object plus a scaled side-effect-free index becomes direct indexing of
+    a `fzgx_obj_` array definition (the oracle binds the section base to the retail symbol);
+    byte views `*(T *)(e + off)` become typed fields of a generated element struct."""
+    sym = p.resolve(symbol)
+    if sym is None:
+        return
+    syms = p.symbols(sym.module)
+    fm = re.search(r"\n[^\n;{}]*\b%s\s*\([^;{}]*\)\s*\{" % re.escape(sym.name), body)
+    if not fm:
+        return
+    head, code = body[:fm.start() + 1], body[fm.start() + 1:]
+    stmts = list(re.finditer(r"(?:(?<=[;{}])|(?<=\n))[ \t]*(?:(?:const\s+)?(?:struct\s+)?(\w+)\s*\*\s*)?(\w+)\s*=\s*([^;{}=][^;{}]*);", code))
+    for st in stmts:
+        dtype, var, rhs = st.group(1), st.group(2), st.group(3)
+        inner, casts = _strip_outer(rhs)
+        stride = etype = None
+        m = re.fullmatch(r"\(\s*(?:u8|char|s8)\s*\*\s*\)\s*(&?\s*\w+)\s*\+\s*(.+?)\s*\*\s*(0x[0-9A-Fa-f]+|\d+)", inner, re.S)
+        if m:
+            base_text, idx, stride = m.group(1), m.group(2), int(m.group(3), 0)
+        else:
+            m = re.fullmatch(_PTR_CAST + r"\s*(&?\s*\w+)\s*\+\s*(.+)", inner, re.S) or \
+                re.fullmatch(r"&\s*\(\s*" + _PTR_CAST + r"\s*(&?\s*\w+)\s*\)\s*\[(.+)\]", inner, re.S)
+            if not m or m.group(1) in SCALAR:
+                continue
+            etype, base_text, idx = m.group(1), m.group(2), m.group(3)
+        idx = _index_operand(idx)
+        if idx is None or var == idx.strip('()'):
+            continue
+        # the pointer's base: the object itself or a local initialised once from its address
+        base_var, base = None, base_text.replace(' ', '').lstrip('&')
+        if not re.fullmatch(r"lbl_\d+_bss_[0-9A-F]+|lbl_[0-9A-F]{8}", base):
+            bm = re.search(r"\b%s\s*=\s*(?:%s\s*)?&\s*(lbl_\d+_bss_[0-9A-F]+|lbl_[0-9A-F]{8})\s*;" % (re.escape(base), _PTR_CAST.replace('(\\w+)', '\\w+')), code[:st.start()])
+            if not bm:
+                continue
+            base_var, base = base_text.replace(' ', ''), bm.group(1)
+        obj = syms.get(base)
+        if obj is None or obj.section != '.bss':
+            continue
+        rest = code[st.end():]
+        # the index and the element pointer keep their values over the uses
+        ids = set(re.findall(r"[A-Za-z_]\w*", idx))
+        # (`*(s32 *)e = 0` stores through the pointer: only a bare lvalue reassigns it)
+        if any(re.search(r"(?:\+\+|--)\s*%s\b|\b%s\s*(?:\+\+|--)|(?:^|[;{}(,]|\n)\s*%s\s*[-+*/|&^]?=(?!=)" % ((re.escape(n),) * 3), rest) for n in ids | {var}):
+            continue
+        ptype = dtype or next((c for c in casts), None)
+        dm = re.search(r"(?:struct\s+)?(\w+)\s*\*\s*%s\s*;" % re.escape(var), code[:st.start()])
+        if ptype is None and dm:
+            ptype = dm.group(1)
+        name = f'fzgx_obj_{base}'
+        ref = f'{name}[{idx}]'
+        typedefs, decl = [], None
+        new = rest
+        if etype is not None or (ptype and ptype not in SCALAR):
+            etype = etype or ptype
+            if etype in SCALAR:
+                continue
+            new = re.sub(r"\b%s\s*->\s*" % re.escape(var), ref + '.', new)
+            new = re.sub(r"(?<![\w.>])%s\b" % re.escape(var), f'(&{ref})', new)
+            tagged = re.search(r"struct\s+%s\b" % re.escape(etype), body) and not re.search(
+                r"\}\s*%s\s*;|typedef\s+struct\s+\w+\s+%s\s*;" % (re.escape(etype), re.escape(etype)), body + include_text())
+            et = ('struct ' if tagged else '') + etype
+            if stride is not None:
+                # a byte stride must be the element type's size: MWCC refuses the unit otherwise
+                typedefs.append(f"typedef char fzgx_stride_{base}[sizeof({et}) == {stride:#x} ? 1 : -1];")
+            decl = f"{et} {name}[{obj.size:#x} / sizeof({et})];"
+        else:
+            if stride is None or stride > obj.size:
+                continue
+            fields = {}
+            def field(mm):
+                t = mm.group(1).strip()
+                size = 4 if t.endswith('*') else SCALAR.get(t)
+                off = int(mm.group(2), 0) if mm.group(2) else 0
+                if not size or t == 'void' or off % size or off + size > stride or fields.get(off, (t,))[0] != t:
+                    raise ValueError(t)
+                fields[off] = (t, size)
+                return f"{ref}.f_{off:X}"
+            ty = r"((?:const\s+)?\w+(?:\s*\*)*)"
+            try:
+                new = re.sub(r"\*\s*\(\s*%s\s*\*\s*\)\s*\(\s*%s\s*\+\s*(0x[0-9A-Fa-f]+|\d+)\s*\)" % (ty, re.escape(var)), field, new)
+                new = re.sub(r"\*\s*\(\s*%s\s*\*\s*\)\s*()%s\b(?!\s*[+\[])" % (ty, re.escape(var)), field, new)
+            except ValueError:
+                continue
+            if not fields:
+                continue
+            ordered = sorted(fields.items())
+            if any(a + s > b for (a, (_, s)), (b, _) in zip(ordered, ordered[1:])):
+                continue
+            new = re.sub(r"(?<![\w.>])%s\b" % re.escape(var), f'((u8 *)&{ref})', new)
+            lines, pos = [], 0
+            for off, (t, size) in ordered:
+                if off > pos:
+                    lines.append(f"    u8 pad_{pos:X}[{off - pos:#x}];")
+                lines.append(f"    {t} f_{off:X};")
+                pos = off + size
+            if pos < stride:
+                lines.append(f"    u8 pad_{pos:X}[{stride - pos:#x}];")
+            et = f"fzgx_elem_{base}"
+            typedefs.append(f"typedef struct {et} {{\n" + "\n".join(lines) + f"\n}} {et};")
+            typedefs.append(f"typedef char fzgx_stride_{base}[sizeof({et}) == {stride:#x} ? 1 : -1];")
+            decl = f"{et} {name}[{obj.size // stride:#x}];"
+        before = code[:st.start()]
+        if dtype is None:
+            # a separate `T *var;` declaration loses its only definition
+            before = re.sub(r"\n[ \t]*(?:const\s+)?(?:struct\s+)?\w+\s*\*\s*%s\s*;[ \t]*(?=\n)" % re.escape(var), '', before)
+        out = before + new
+        if base_var and not re.search(r"(?<![\w.>])%s\b" % re.escape(base_var),
+                                      re.sub(r"[^;{}\n]*\b%s\s*=[^;]*;" % re.escape(base_var), '', out)):
+            out = re.sub(r"\n[ \t]*(?:(?:const\s+)?(?:struct\s+)?\w+\s*\*\s*)?%s\s*=[^;]*;" % re.escape(base_var), '', out)
+            out = re.sub(r"\n[ \t]*(?:const\s+)?(?:struct\s+)?\w+\s*\*\s*%s\s*;" % re.escape(base_var), '', out)
+        block = "\n".join(typedefs) + "\n/* the retail TU defines this array: MWCC indexes it off its own address */\n" + decl + "\n\n"
+        yield (f'define indexed element array {base}[{idx}]', head + block + out)
+
+
 def tu_section_layout(p, symbol, body, check):
     """Proposals: retail BSS objects defined in the unit (per dtk symbol / per referenced field),
     each also with the TU's string run reproduced, and the string run alone."""
@@ -1451,6 +1610,10 @@ def tu_section_layout(p, symbol, body, check):
                 text = None
             if text:
                 out.append((f'reproduce retail string run ({name}{", cast" if cast else ""})', text))
+    try:
+        out += [c for c in indexed_element_arrays(p, symbol, body) if c[1] not in {t for _, t in out}]
+    except (ValueError, KeyError, IndexError, AttributeError, OSError):
+        pass
     # a section layout changes what the base register holds; a file-scope
     # `opt_propagation off` written for the old extern view can then rematerialize
     # `addis rX, rBase, N` at every far access (fn_1_2FAA0): offer each layout without it
