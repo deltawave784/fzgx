@@ -5696,3 +5696,6 @@ dol/fn_8004AC04.c:
 
 dol/OSResetSystem.c:
 	.text       start:0x8000EFAC end:0x8000F234 align:4
+
+dol/fn_8003A3D4.c:
+	.text       start:0x8003A3D4 end:0x8003A4E8 align:4
