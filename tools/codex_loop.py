@@ -9,12 +9,11 @@ When the Codex account runs out of usage ("try again at 3:35 AM"), the loop mark
 crashed sessions as crashes (they do not count as attempts), sleeps until the reset time
 plus a few minutes, and continues. Only completed batches count toward `--max-batches`.
 
-After each batch the loop runs one GPT-6 Astra batch (`--astra-batch` hard functions in parallel at medium effort; the ones medium releases
-get one more try at high; `--astra-model`, `--astra-max` per run, 0 turns it off) on near misses and large
-functions Astra has not tried. When the easy size bands are used up Sol moves to the same hard pool, and when
-Sol has nothing left Astra keeps running alone. `--modules` picks the modules (default: every module except
-main_rel, which the Claude loop owns).
-`--max-attempts` (default 12) is how many attempts a function may already have and still be picked.
+The loop runs Sol (`--model`) only. When the easy size bands are used up Sol moves to a hard pool of saved near
+misses and large functions, routed like the Claude loop's Fable batches. GPT-6 Astra batches are opt-in
+(`--astra-max N`, `--astra-batch`, `--astra-model`): they burn the weekly limit several times faster.
+`--max-attempts` (default 12) is how many attempts a function may already have and still be picked, and
+`--modules` picks the modules (default: every module except main_rel, which the Claude loop owns).
 
 Stops on: `--max-batches`, `--hours` (wall clock, waits included), `--zero-streak` batches in
 a row without a match in the last band, a failed gate, an empty pool, or the file
@@ -210,7 +209,8 @@ def main() -> int:
     ap.add_argument("--parallel", type=int, default=12)
     ap.add_argument("--astra-model", default="gpt-6-astra")
     ap.add_argument("--astra-batch", type=int, default=8, help="hard functions per Astra batch, run in parallel")
-    ap.add_argument("--astra-max", type=int, default=400, help="Astra function attempts per loop run (0 disables it)")
+    ap.add_argument("--astra-max", type=int, default=0,
+                    help="Astra function attempts per loop run; 0 (default) is Sol only. Astra used the weekly limit up in hours")
     ap.add_argument("--modules", nargs="*", default=MODULES,
                     help="modules to pick from (clone A owns main_rel: adding it here collides with the Claude loop)")
     a = ap.parse_args()
