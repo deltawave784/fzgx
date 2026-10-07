@@ -5651,3 +5651,12 @@ dol/fn_80037BC0.c:
 
 dol/fn_8008A764.c:
 	.text       start:0x8008A764 end:0x8008A80C align:4
+
+dol/fn_8006F120.c:
+	.text       start:0x8006F120 end:0x8006F1F0 align:4
+
+dol/fn_80025E18.c:
+	.text       start:0x80025E18 end:0x80025EE0 align:4
+
+dol/fn_8006A8CC.c:
+	.text       start:0x8006A8CC end:0x8006A998 align:4
