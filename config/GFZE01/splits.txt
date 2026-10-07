@@ -5693,3 +5693,6 @@ dol/fn_8006FB20.c:
 
 dol/fn_8004AC04.c:
 	.text       start:0x8004AC04 end:0x8004AC4C align:4
+
+dol/OSResetSystem.c:
+	.text       start:0x8000EFAC end:0x8000F234 align:4

@@ -7514,6 +7514,16 @@
   },
   {
     "module": "main",
+    "source": "dol/OSResetSystem.c",
+    "symbols": [
+      "OSResetSystem"
+    ],
+    "status": "matching",
+    "mw_version": "GC/1.2.5n",
+    "extra_cflags": []
+  },
+  {
+    "module": "main",
     "source": "dol/OSRestoreInterrupts.c",
     "symbols": [
       "OSRestoreInterrupts"
