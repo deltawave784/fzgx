@@ -500,3 +500,6 @@ rel/customize/editor/fn_3_16E14.c:
 
 rel/customize/editor/fn_3_156D0.c:
 	.text       start:0x000156D0 end:0x00015F44 align:4
+
+rel/customize/toolkit/fn_3_1A0F4.c:
+	.text       start:0x0001A0F4 end:0x0001A1B8 align:4

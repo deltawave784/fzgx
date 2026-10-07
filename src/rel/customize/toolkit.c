@@ -314,6 +314,75 @@ void fn_3_1A068(void) {
 }
 /* fzgx:end fn_3_1A068 */
 
+/* fzgx:begin fn_3_1A0F4 noprologue */
+#include "types.h"
+#include "rel/customize/toolkit.h"
+
+extern void fn_3_BE10(void);
+extern void fn_3_BEF0(void);
+extern void fn_3_1445C(void);
+extern void fn_3_BE88(void);
+extern void fn_80008BA8(u32, u32, u32);
+extern s32 fn_8008023C(u32, u32, u32);
+
+typedef struct {
+    u8 pad[0x20];
+    u32 unk_20;
+} Arg;
+
+typedef struct lbl_3_bss_A2438_t {
+    u8 pad_0[0x4];
+    u32 unk_4;
+    u8 pad_8[0x6];
+    u8 unk_E;
+    u8 pad_F[0xd];
+} lbl_3_bss_A2438_t;
+
+typedef struct lbl_3_bss_A2454_t {
+    u8 fzgx_byte_1C;
+    u8 pad_1[0x3];
+} lbl_3_bss_A2454_t;
+
+typedef struct lbl_3_bss_A2458_t {
+    u8 fzgx_byte_20;
+    u8 pad_1[0x7];
+} lbl_3_bss_A2458_t;
+
+/* file-scope objects of the retail TU, in retail order: MWCC addresses them off one section base */
+lbl_3_bss_A2438_t fzgx_obj_lbl_3_bss_A2438;
+lbl_3_bss_A2454_t fzgx_obj_lbl_3_bss_A2454;
+lbl_3_bss_A2458_t lbl_3_bss_A2458;
+
+#pragma section code_type ".fzgxpool"
+static void fzgx_bss_layout(void) {
+    volatile u8 s;  /* fzgx-allow: S2 layout primer sink: MWCC emits .bss objects in first-access order */
+    s = *(u8 *)&fzgx_obj_lbl_3_bss_A2438;
+    s = *(u8 *)&fzgx_obj_lbl_3_bss_A2454;
+    s = *(u8 *)&lbl_3_bss_A2458;
+}
+#pragma section code_type ".text"
+
+void fn_3_1A0F4(Arg *arg) {
+    
+    if (*(u8 *)((u8 *)&lbl_3_bss_A2458.fzgx_byte_20) != 0) {
+        fn_80008BA8(*(u32 *)((u8 *)&fzgx_obj_lbl_3_bss_A2454.fzgx_byte_1C), arg->unk_20, 0x2000);
+        fn_3_BE10();
+        *(u8 *)((u8 *)&lbl_3_bss_A2458.fzgx_byte_20) = 0;
+    } else if ((s32)lbl_3_bss_A179C != 0) {
+        fn_3_BEF0();
+        *(u8 *)((u8 *)&lbl_3_bss_A2458.fzgx_byte_20) = 1;
+        fzgx_obj_lbl_3_bss_A2438.unk_4 = 0x40000000;
+        fzgx_obj_lbl_3_bss_A2438.unk_E = 0;
+        lbl_3_bss_A179C = 0;
+        if (fn_8008023C(*(u32 *)((u8 *)&fzgx_obj_lbl_3_bss_A2454.fzgx_byte_1C), arg->unk_20, 0x2000) != 0) {
+            fn_3_1445C();
+        }
+    } else {
+        fn_3_BE88();
+    }
+}
+/* fzgx:end fn_3_1A0F4 */
+
 /* fzgx:begin fn_3_1A1B8 */
 void fn_3_1A1B8(void) {
     fn_3_156A8();
