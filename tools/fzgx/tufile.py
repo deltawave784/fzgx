@@ -300,6 +300,32 @@ def remove(p: Project, unit: dict) -> Optional[str]:
     return b.body
 
 
+def block_state(p: Project, unit: dict) -> Optional[Dict[str, object]]:
+    """The unit's current block text and flags (None if it has none): what a revise replaces."""
+    path = tu_path(p, unit["tu"])
+    if not path.exists():
+        return None
+    b = parse(path.read_text()).get(unit["symbols"][0])
+    return None if b is None else {"body": b.body, "flags": list(b.flags)}
+
+
+def restore_block(p: Project, unit: dict, body: str, flags: List[str]) -> Path:
+    """Put back a block exactly as `block_state` saved it (body and flags verbatim)."""
+    path = tu_path(p, unit["tu"])
+    name = unit["symbols"][0]
+    lock = _lock(path)
+    try:
+        tf = parse(path.read_text()) if path.exists() else TuFile("", [])
+        tf.blocks = [b for b in tf.blocks if b.name != name]
+        tf.blocks.append(Block(name, body, list(flags)))
+        tf.blocks.sort(key=lambda b: _addr_of(p, unit["module"], b.name))
+        _write_atomic(path, tf.render())
+    finally:
+        lock.close()
+    write_gen(p, unit, tf)
+    return path
+
+
 def tu_check(p: Project, tu_source: str) -> Tuple[bool, str]:
     """Compile the whole TU file as one unit (the goal state). Returns (ok, compiler text)."""
     path = tu_path(p, tu_source)

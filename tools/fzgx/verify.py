@@ -89,7 +89,16 @@ def verify(p: Project, message: Optional[str] = None) -> Dict[str, object]:
                         "verified": [], "rejected": [], 'secs': round(time.time() - t0, 3)}
             good, bad = _bisect(p, list(units), units, known_failure=True)
             fast_path = False
-        # final state: good units Matching, bad units uncarved (no unit without matched code); relink once more if we bisected
+        # final state: good units Matching, bad units uncarved (no unit without matched code); relink once more if we bisected.
+        # A rejected revise is not uncarved: its previous, verified block and unit come back.
+        restored = []
+        if bad:
+            restored = restore_revised(p, l, bad, units)
+            _set_status(p, [units[k] for k in good], "matching")
+            if restored and not _relink(p):
+                # the previous text does not link either (the tree moved under it): uncarve as before
+                restored = []
+            bad = [k for k in bad if k not in restored]
         if bad:
             from .uncarve import uncarve
             for k in bad:
@@ -111,7 +120,7 @@ def verify(p: Project, message: Optional[str] = None) -> Dict[str, object]:
                 return {"ok": False, "error": "relink failed after removing rejected units; accepted units remain matching",
                         "rejected": bad, "verified": []}
         commit = None
-        if good or bad or dependencies:
+        if good or bad or restored or dependencies:
             files = [str(p.units_path)]
             # Rejection also changes existing TU files. Include those and tracked
             # deletions, but not removed candidates that were never committed.
@@ -137,9 +146,57 @@ def verify(p: Project, message: Optional[str] = None) -> Dict[str, object]:
                                     capture_output=True).stdout.strip()
             for k in good:
                 l.db.execute("UPDATE functions SET link_state='verified', matched_commit=? WHERE symbol=?", (commit, k))
+                (REVISE_PRIOR_DIR / f"{k}.json").unlink(missing_ok=True)  # the rewrite is the verified state now
             journal.unlink(missing_ok=True)
-    return {"ok": True, "verified": good, "rejected": bad, "commit": commit,
+    return {"ok": True, "verified": good, "rejected": bad, "revise_restored": restored, "commit": commit,
             "fast_path": fast_path, "secs": round(time.time() - t0, 3)}
+
+
+REVISE_PRIOR_DIR = STATE_DIR / "revise_prior"
+
+
+def restore_revised(p: Project, l: Ledger, bad: List[str], units: Dict[str, str]) -> List[str]:
+    """Rejected revises go back to the state `api._save_revise_prior` recorded before the
+    rewrite was installed: block text and flags, the unit record (pool map, compiler options,
+    flags), the ledger's matched status and link state. The rewrite is kept as a linkfail body
+    and the attempt is recorded as a revise rejection. Returns the restored keys (the caller relinks)."""
+    out = []
+    for k in bad:
+        path = REVISE_PRIOR_DIR / f"{k}.json"
+        if not path.exists():
+            continue
+        prior = json.loads(path.read_text())
+        rec, block = prior.get("unit"), prior.get("block")
+        if not rec or not block or rec.get("source") != units[k]:
+            continue
+        keep = STATE_DIR / "attempts" / f"{k}.revise-linkfail.{int(time.time())}.c"
+        keep.parent.mkdir(parents=True, exist_ok=True)
+        current = p.unit_record(units[k])
+        if rec.get("tu"):
+            state = tufile.block_state(p, current or rec)
+            keep.write_text((state or {}).get("body") or "")
+            tufile.restore_block(p, rec, block["body"], block.get("flags") or [])
+        else:
+            src = ROOT / "src" / units[k]
+            if src.exists():
+                keep.write_bytes(src.read_bytes())
+            src.parent.mkdir(parents=True, exist_ok=True)
+            src.write_text(block["file"])
+        with oracle.build_lock("units.lock"):
+            records = p.load_units()
+            records = [rec if u["source"] == rec["source"] else u for u in records]
+            if not any(u["source"] == rec["source"] for u in records):
+                records.append(rec)
+            p.save_units(records)
+        l.db.execute("UPDATE functions SET status='matched', link_state=?, matched_commit=COALESCE(?, matched_commit) "
+                     "WHERE symbol=?", (prior.get("link_state") or "verified", prior.get("matched_commit"), k))
+        l.db.execute("UPDATE attempts SET outcome='revise-link-rejected', notes=COALESCE(notes,'')||"
+                     "' [revise matched as an object but not in the link; previous block restored]' "
+                     "WHERE id=(SELECT id FROM attempts WHERE symbol=? ORDER BY id DESC LIMIT 1)", (k,))
+        l.db.commit()
+        path.unlink()
+        out.append(k)
+    return out
 
 
 def _bisect(p: Project, keys: List[str], units: Dict[str, str], known_failure=False) -> tuple[List[str], List[str]]:
