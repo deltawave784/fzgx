@@ -1601,6 +1601,17 @@ void fn_1_FA154(u32 byte_index, u32 bit_index) {
 }
 /* fzgx:end fn_1_FA154 */
 
+/* fzgx:begin fn_1_FA180 noprologue */
+#include "types.h"
+
+typedef struct { u8 pad[3]; u8 d[1]; } T;
+extern T *lbl_1_bss_84420;
+
+u32 fn_1_FA180(u8 a, u8 b) {
+    return lbl_1_bss_84420->d[a] & (1 << b);
+}
+/* fzgx:end fn_1_FA180 */
+
 /* fzgx:begin fn_1_FA1A8 noprologue */
 #include "types.h"
 
