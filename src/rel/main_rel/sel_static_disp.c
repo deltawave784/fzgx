@@ -4986,6 +4986,100 @@ void fn_1_14DEA4(void *arg0, void *arg1, void *arg2, void *arg3) {
 }
 /* fzgx:end fn_1_14DEA4 */
 
+/* fzgx:begin fn_1_14DEC8 noprologue */
+#include "types.h"
+
+typedef struct {
+    void *value;
+} Val;
+
+typedef struct {
+    u8 pad8[8];
+    Val *value;
+} Ref;
+
+typedef struct {
+    u8 pad344[0x344];
+    Ref *ref;
+} Obj;
+
+extern const f32 lbl_1_rodata_9C30;
+extern void fn_1_55FF0(f32);
+extern s16 fn_1_14F344(s16);
+extern void fn_80072558(void);
+extern void fn_1_151C3C(int, s16);
+extern void fn_1_556B8(void *);
+extern void fn_1_55210(void *);
+extern void fn_1_151C78(void);
+
+static inline void *find(void *base, int off) {
+    s16 *entry = (s16 *)base;
+    void *r = 0;
+    s16 i;
+    for (i = 0; (u32)(s32)i < 3; i++) {
+        if (fn_1_14F344(*entry) == 0) {
+            r = (u8 *)base + (s16)i * 0x360 + off;
+            break;
+        }
+        entry = (s16 *)((u8 *)entry + 0x360);
+    }
+    return r;
+}
+
+static inline void *find2(void *base, int off) {
+    void *r = 0;
+    s16 i;
+    s16 *entry;
+    i = 0;
+    entry = (s16 *)base;
+    for (; (u32)(s32)i < 3; i++) {
+        if (fn_1_14F344(*entry) == 0) {
+            r = (u8 *)base + (s16)i * 0x360 + off;
+            break;
+        }
+        entry = (s16 *)((u8 *)entry + 0x360);
+    }
+    return r;
+}
+
+void fn_1_14DEC8(void *arg0, void **arg1, void **arg2, s16 arg3, int arg4, f32 arg5) {
+    s16 *entry;
+    Obj *obj;
+    s16 i;
+    int same;
+    void *value;
+
+    same = lbl_1_rodata_9C30 == arg5;
+    if (!same) {
+        fn_1_55FF0(arg5);
+    }
+
+    i = 0;
+    entry = (s16 *)arg0;
+    obj = (Obj *)((u8 *)arg0 + ((s32)arg3 << 2));
+    for (; (u32)(s32)i < 3; i++) {
+        if (fn_1_14F344(*entry) == 0) {
+            value = obj->ref->value->value;
+            if (value != 0) {
+                fn_80072558();
+                fn_1_151C3C(0, *(s16 *)((u8 *)arg0 + (s16)i * 0x360));
+                if (same || arg4 != 0) {
+                    fn_1_556B8(value);
+                } else {
+                    fn_1_55210(value);
+                }
+                fn_1_151C78();
+                *arg1 = find(arg0, 0x23c);
+                *arg2 = find2(arg0, 0x228);
+                break;
+            }
+        }
+        entry = (s16 *)((u8 *)entry + 0x360);
+        obj = (Obj *)((u8 *)obj + 0x360);
+    }
+}
+/* fzgx:end fn_1_14DEC8 */
+
 /* fzgx:begin fn_1_14E054 */
 void fn_1_14E054(void *arg0, void *arg1, void *arg2) {
     fn_1_14E09C(arg0, arg1, arg2, 0);

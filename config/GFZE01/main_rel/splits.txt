@@ -6908,3 +6908,6 @@ rel/main_rel/effect/fn_1_5D378.c:
 
 rel/main_rel/bitmap/fn_1_48214.c:
 	.text       start:0x00048214 end:0x00048418 align:4
+
+rel/main_rel/sel_static_disp/fn_1_14DEC8.c:
+	.text       start:0x0014DEC8 end:0x0014E054 align:4
