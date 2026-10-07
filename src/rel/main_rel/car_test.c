@@ -214,6 +214,64 @@ void fn_1_7E7A4(Fn1_7E7A4Data *arg0) {
 }
 /* fzgx:end fn_1_7E7A4 */
 
+/* fzgx:begin fn_1_7E8F4 */
+extern const f32 lbl_1_rodata_3500;
+extern const f32 lbl_1_rodata_3504;
+
+static inline s32 chk(void) {
+    Obj_1_bss_6D620 *p = &lbl_1_bss_6D620;
+    s32 r = 0;
+    if ((s8)p->unk_F != 0 || (s32)p->unk_10 < 0x20) {
+        r = 1;
+    }
+    return r;
+}
+
+typedef struct lbl_1_bss_6D7F4_t {
+    u8 unk_0;
+    u8 pad_1[0x3];
+    f32 unk_4;
+    f32 unk_8;
+    u8 unk_C;
+    u8 unk_D;
+    u8 unk_E;
+    s8 unk_F;
+    u8 pad_10[0x1c];
+} lbl_1_bss_6D7F4_t;
+
+/* file-scope objects of the retail TU, in retail order: MWCC addresses them off one section base */
+lbl_1_bss_6D7F4_t fzgx_obj_lbl_1_bss_6D7F4;
+
+#pragma section code_type ".fzgxpool"
+static void fzgx_bss_layout(void) {
+    volatile u8 s;  /* fzgx-allow: S2 layout primer sink: MWCC emits .bss objects in first-access order */
+    s = *(u8 *)&fzgx_obj_lbl_1_bss_6D7F4;
+}
+#pragma section code_type ".text"
+
+void fn_1_7E8F4(void) {
+    lbl_1_bss_6D7F0 = 0;
+    if (lbl_1_bss_3BE0 != 0) {
+        s32 flag = chk();
+        fzgx_obj_lbl_1_bss_6D7F4.unk_F = (flag != 0);
+        fzgx_obj_lbl_1_bss_6D7F4.unk_0 = lbl_1_bss_6D620.unk_0;
+        fzgx_obj_lbl_1_bss_6D7F4.unk_4 = lbl_1_bss_6D620.unk_4;
+        fzgx_obj_lbl_1_bss_6D7F4.unk_8 = lbl_1_bss_6D620.unk_8;
+        fzgx_obj_lbl_1_bss_6D7F4.unk_C = lbl_1_bss_6D620.unk_C;
+        fzgx_obj_lbl_1_bss_6D7F4.unk_D = lbl_1_bss_6D620.unk_D;
+        fzgx_obj_lbl_1_bss_6D7F4.unk_E = lbl_1_bss_6D620.unk_E;
+    } else {
+        fzgx_obj_lbl_1_bss_6D7F4.unk_F = 0;
+        fzgx_obj_lbl_1_bss_6D7F4.unk_0 = 5;
+        fzgx_obj_lbl_1_bss_6D7F4.unk_4 = lbl_1_rodata_3500;
+        fzgx_obj_lbl_1_bss_6D7F4.unk_8 = lbl_1_rodata_3504;
+        fzgx_obj_lbl_1_bss_6D7F4.unk_C = 0;
+        fzgx_obj_lbl_1_bss_6D7F4.unk_D = 0;
+        fzgx_obj_lbl_1_bss_6D7F4.unk_E = 0;
+    }
+}
+/* fzgx:end fn_1_7E8F4 */
+
 /* fzgx:begin fn_1_7EAE8 */
 // fn_1_7EAE8: main_rel .text:0x0007EAE8 size 0x24
 // Wrapper that calls fn_1_5634C with argument 0.
