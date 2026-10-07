@@ -67305,6 +67305,35 @@
   },
   {
     "module": "title",
+    "source": "rel/title/title/fn_8_6C90.c",
+    "symbols": [
+      "fn_8_6C90"
+    ],
+    "status": "matching",
+    "mw_version": null,
+    "extra_cflags": [],
+    "tu": "rel/title/title.c",
+    "pool": {
+      "...rodata.0": "lbl_8_rodata_160",
+      "@13": "lbl_8_rodata_188",
+      "@5": "lbl_8_rodata_160",
+      "@8": "lbl_8_rodata_160+0x10",
+      "@7": "lbl_8_rodata_160+0xC",
+      "@6": "lbl_8_rodata_160+0x8",
+      "@33": "lbl_8_rodata_194",
+      "@34": "lbl_8_rodata_198",
+      "@35": "lbl_8_rodata_198+0x4",
+      "@9": "lbl_8_rodata_160+0x18",
+      "@36": "lbl_8_rodata_198+0x8",
+      "@12": "lbl_8_rodata_160+0x24",
+      "@37": "lbl_8_rodata_198+0xC",
+      "@38": "lbl_8_rodata_198+0x10",
+      "@28": "lbl_8_rodata_188+0x8",
+      "@11": "lbl_8_rodata_160+0x20"
+    }
+  },
+  {
+    "module": "title",
     "source": "rel/title/title/fn_8_6F1C.c",
     "symbols": [
       "fn_8_6F1C"

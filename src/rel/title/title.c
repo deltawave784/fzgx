@@ -3837,6 +3837,84 @@ void fn_8_67B0(void) {
 }
 /* fzgx:end fn_8_67B0 */
 
+/* fzgx:begin fn_8_6C90 */
+#include "rel/title/title.h"
+
+extern u32 lbl_801A66B4;
+extern void fn_1_A2D84(u32);
+extern void fn_1_49410(void);
+extern void fn_1_495B0(u32);
+extern void fn_1_49590(f32);
+extern void fn_1_495C8(u8);
+extern void fn_1_496FC(f32,f32);
+extern void fn_1_4954C(f32);
+extern void fn_1_4955C(f32,f32);
+extern void fn_1_495A0(f32);
+extern void fn_1_4D0A0(void);
+extern void fn_1_5233C(void);
+extern void fn_1_49738(u32);
+extern void fn_1_49748(f32);
+extern void fn_1_4AE0C(const char *,...);
+extern void fn_1_4D0D4(void *,f32);
+typedef struct { u8 r,g,b,a; } Color;
+extern void pool_double(f64);
+extern void pool_float(f32);
+#pragma push
+#pragma section code_type ".fzgxpool"
+void shared_pool_primer_a(void) {
+    pool_double(15.0);
+    pool_float(320.0f);
+    pool_float(640.0f);
+    pool_double(1.0);
+    pool_float(150.0f);
+    pool_float(0.1f);
+    pool_float(20.0f);
+    pool_float(0.8333333f);
+    pool_double(4503601774854144.0);
+}
+#pragma pop
+void fn_8_6C90(void) {
+    f32 t;
+    f32 alpha;
+    s32 x;
+    Color color;
+    if ((s32)lbl_8_bss_3CC == (s32)lbl_8_bss_3D0.unk_0 - 30)
+        fn_1_A2D84(0xA9120E00);
+    if ((s32)lbl_8_bss_3CC < 15.0) {
+        t = 1.0 - (f32)(s32)lbl_8_bss_3CC / 15.0;
+        x = 320.0f + (f32)(640.0f * t);
+    } else if ((s32)lbl_8_bss_3CC > (s32)lbl_8_bss_3D0.unk_0 - 15.0) {
+        t = 1.0 - (f32)((s32)lbl_8_bss_3D0.unk_0 - (s32)lbl_8_bss_3CC) / 15.0;
+        x = 320.0f - (f32)(640.0f * t);
+    } else {
+        t = 0.0f;
+        x = 320;
+    }
+    alpha = 1.0f - t;
+    alpha = alpha * alpha;
+    fn_1_49410();
+    fn_1_495B0(0x80000000);
+    fn_1_49590(0.5f);
+    fn_1_495C8(9);
+    fn_1_496FC((f32)x,150.0f);
+    fn_1_4954C(0.09f);
+    if ((s32)lbl_801A66B4 == 5) fn_1_4955C(1.0f,1.0f);
+    else fn_1_4955C(0.8333333f,0.8333333f);
+    fn_1_495A0(alpha);
+    fn_1_4D0A0();
+    fn_1_49738((u32)fn_1_5233C);
+    fn_1_49748(5.0f);
+    fn_1_4AE0C(((const char **)lbl_8_data_81BC)[lbl_801A66B4]);
+    fn_1_49738(0);
+    fn_1_4AE0C(((const char **)lbl_8_data_81F0)[lbl_801A66B4]);
+    { Color c = {255,255,255,0};
+    c.a = (s32)(255.0f * alpha);
+    color = c;
+    fn_1_4D0D4(&color,20.0f);
+    }
+}
+/* fzgx:end fn_8_6C90 */
+
 /* fzgx:begin fn_8_6F1C */
 #pragma section code_type ".fzgxpool"
 __declspec(section ".fzgxpool") static void fzgx_pool_prime1(void) {
