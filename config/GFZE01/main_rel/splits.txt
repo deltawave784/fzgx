@@ -3534,9 +3534,6 @@ rel/main_rel/spline/fn_1_FB180.c:
 rel/main_rel/bg_cas/fn_1_FB870.c:
 	.text       start:0x000FB870 end:0x000FB87C
 
-rel/main_rel/bg_cas/fn_1_FB96C.c:
-	.text       start:0x000FB96C end:0x000FB9C0
-
 rel/main_rel/bg_cas/fn_1_FB9C0.c:
 	.text       start:0x000FB9C0 end:0x000FB9DC
 
