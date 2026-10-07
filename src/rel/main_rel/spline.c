@@ -1597,6 +1597,18 @@ void fn_1_FA154(u32 byte_index, u32 bit_index) {
 }
 /* fzgx:end fn_1_FA154 */
 
+/* fzgx:begin fn_1_FA1A8 noprologue */
+#include "types.h"
+
+extern u32 fn_1_FA69C(u32);
+
+u32 fn_1_FA1A8(u32 arg0) {
+    u32 t0;
+    t0 = fn_1_FA69C((s16)arg0);
+    return ((u32)((-t0) | t0) >> 31);
+}
+/* fzgx:end fn_1_FA1A8 */
+
 /* fzgx:begin fn_1_FA450 */
 // Store the value when initialization permits the update.
 void fn_1_FA450(u8 value) {
