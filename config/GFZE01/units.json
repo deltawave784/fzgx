@@ -19533,6 +19533,19 @@
   },
   {
     "module": "main",
+    "source": "dol/fn_8004CD70.c",
+    "symbols": [
+      "fn_8004CD70"
+    ],
+    "status": "matching",
+    "mw_version": "GC/1.3",
+    "extra_cflags": [],
+    "pool": {
+      "@56": "lbl_80090A20"
+    }
+  },
+  {
+    "module": "main",
     "source": "dol/fn_8004D18C.c",
     "symbols": [
       "fn_8004D18C"
