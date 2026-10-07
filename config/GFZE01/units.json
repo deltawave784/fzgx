@@ -41599,6 +41599,17 @@
   },
   {
     "module": "main_rel",
+    "source": "rel/main_rel/game/fn_1_3F2A0.c",
+    "symbols": [
+      "fn_1_3F2A0"
+    ],
+    "status": "matching",
+    "mw_version": "GC/1.3",
+    "extra_cflags": [],
+    "tu": "rel/main_rel/game.c"
+  },
+  {
+    "module": "main_rel",
     "source": "rel/main_rel/game/fn_1_3F440.c",
     "symbols": [
       "fn_1_3F440"

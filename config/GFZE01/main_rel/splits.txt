@@ -6815,3 +6815,6 @@ rel/main_rel/spline/fn_1_FA1A8.c:
 
 rel/main_rel/sel_static_disp/fn_1_14A284.c:
 	.text       start:0x0014A284 end:0x0014A328 align:4
+
+rel/main_rel/game/fn_1_3F2A0.c:
+	.text       start:0x0003F2A0 end:0x0003F440 align:4

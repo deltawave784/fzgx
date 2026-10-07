@@ -1117,6 +1117,71 @@ u8 fn_1_3F264(u32 index) {
 }
 /* fzgx:end fn_1_3F264 */
 
+/* fzgx:begin fn_1_3F2A0 */
+#define B ((u8 *)&lbl_1_bss_3C30)
+
+void fn_1_3F2A0(void) {
+    s32 n;
+    s32 i;
+    s32 j;
+    s32 k;
+    s32 idx;
+    s32 cnt;
+    s32 mine;
+    s32 other;
+    s32 v;
+    u8 *e;
+
+    if (lbl_1_bss_3C30.unk_5 == 0) {
+        n = lbl_1_bss_3C30.unk_8;
+    } else {
+        n = lbl_1_bss_3C30.unk_9;
+    }
+    j = 0;
+    for (i = 0; i < n; i++) {
+        if (lbl_1_bss_3C30.unk_5 == 0) {
+            while (B[0xe + j] >= n) {
+                j++;
+            }
+        }
+        idx = B[0xe + j];
+        e = B + idx * 0xa0 + 0xd4;
+        cnt = 0;
+        if (lbl_1_bss_3C30.unk_5 == 0) {
+            mine = *(u32 *)(B + 0x1480 + idx * 4);
+            *(u16 *)(e + 4) = mine;
+            *(u16 *)(e + 0x9e) = *(u16 *)(B + 0x1478 + idx * 2);
+        } else {
+            mine = *(u16 *)(e + 4);
+        }
+        for (k = 0; k < lbl_1_bss_3C30.unk_9; k++) {
+            if (j != k) {
+                v = B[0xe + k];
+                if (lbl_1_bss_3C30.unk_5 == 0) {
+                    if (v >= n) {
+                        continue;
+                    }
+                    other = *(u32 *)(B + 0x1480 + v * 4);
+                } else {
+                    other = *(u16 *)(B + v * 0xa0 + 0xd8);
+                }
+                if (mine < other) {
+                    cnt++;
+                } else if (mine == other && j > k) {
+                    cnt++;
+                }
+            }
+        }
+        B[0x1394 + cnt] = idx;
+        e[8] = cnt;
+        if (lbl_1_bss_3C30.unk_A7 == 0 && lbl_1_bss_3C30.unk_5 != 0) {
+            e[0x83] = cnt;
+        }
+        j++;
+    }
+}
+/* fzgx:end fn_1_3F2A0 */
+
 /* fzgx:begin fn_1_3F440 */
 // Reports an out-of-range index and returns the corresponding limit when valid.
 s32 fn_1_3F440(u8 index) {
