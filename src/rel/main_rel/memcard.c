@@ -1001,6 +1001,33 @@ void fn_1_ABE14(Fn1ABE14Arg *arg) {
 }
 /* fzgx:end fn_1_ABE14 */
 
+/* fzgx:begin fn_1_ABE88 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/memcard.h"
+#include "types.h"
+
+struct fn_1_ABE88_Arg0 {
+    u8 unk_0;
+};
+
+
+
+
+extern u32 CARDGetResultCode(u32);
+extern u32 fn_8002C0A0(u32);
+
+
+void fn_1_ABE88(void *arg0) {
+    (*(u32 *)((u8 *)((*(void **)((u8 *)(arg0) + 36))) + 4)) = CARDGetResultCode((u32)((u32) (*(u8 *)((u8 *)(arg0) + 0))));
+    (*(f32 *)((u8 *)(arg0) + 56)) = (f32) (s32) (fn_8002C0A0((u32)((u32) (*(u8 *)((u8 *)(arg0) + 0)))) - (*(s32 *)((u8 *)(arg0) + 48))) / (f32) (u32) ((*(s32 *)((u8 *)((*(void **)((u8 *)(arg0) + 36))) + 12)) + 0x2000);
+    if ((s32) (*(u32 *)((u8 *)((*(void **)((u8 *)(arg0) + 36))) + 4)) != -1) {
+        (*(u8 *)((u8 *)(arg0) + 42)) = (u8) ((*(u8 *)((u8 *)(arg0) + 42)) & 0xFFFFFFFD);
+        (*(s16 *)((u8 *)((*(void **)((u8 *)(arg0) + 36))) + 2)) = 0;
+    }
+}
+/* fzgx:end fn_1_ABE88 */
+
 /* fzgx:begin fn_1_ABF44 */
 extern const f32 lbl_1_rodata_4CA8;
 extern char *fn_80083DB0(char *dst, const char *src);
