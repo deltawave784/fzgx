@@ -1,5 +1,5 @@
 {
- "generated": 1791332213,
+ "generated": 1791332354,
  "functions": [
   {
    "symbol": "car_colchg:_prolog",
@@ -43490,19 +43490,19 @@
   {
    "symbol": "gdev_cc_read",
    "module": "main",
-   "unit": null,
+   "unit": "dol/gdev_cc_read.c",
    "addr": 2148066584,
    "size": 244,
-   "status": "unmatched",
-   "attempts": 5,
-   "best_percent": 87.29508,
+   "status": "matched",
+   "attempts": 6,
+   "best_percent": 100.0,
    "claimed_by": null,
    "claimed_at": null,
    "claim_ttl": null,
-   "matched_commit": null,
+   "matched_commit": "db920db0",
    "blocked_reason": null,
    "prev_status": null,
-   "link_state": null
+   "link_state": "verified"
   },
   {
    "symbol": "gdev_cc_close",
@@ -506526,6 +506526,26 @@
    "stale_checks": 4,
    "best_in_attempt": 98.25397,
    "best_rows": 16
+  },
+  {
+   "id": 19112,
+   "symbol": "gdev_cc_read",
+   "agent": "codex-goal-20261006-1817-14-codex-1",
+   "harness": "codex",
+   "model": "gpt-6.1-sol",
+   "started": 1791332262,
+   "ended": 1791332305,
+   "checks": 12,
+   "final_percent": 100.0,
+   "tokens_in": 177251,
+   "tokens_out": 1424,
+   "cost_usd": 0.0,
+   "outcome": "matched",
+   "notes": "oracle match accepted automatically",
+   "best_body_path": null,
+   "stale_checks": 0,
+   "best_in_attempt": 100.0,
+   "best_rows": 0
   }
  ],
  "names": [
