@@ -227,6 +227,25 @@ void fn_1_FB87C(u32 *values, u8 count) {
 }
 /* fzgx:end fn_1_FB87C */
 
+/* fzgx:begin fn_1_FB96C noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/bg_cas.h"
+
+/* retail passes the full index register (no clrlwi): the stage takes an int */
+void fn_1_FBC5C(int index);
+
+// Initializes the selected background-cas state before running its setup stages.
+void fn_1_FB96C(int index) {
+    u32 *states = &lbl_1_bss_84454.unk_0;
+
+    states[(index & 0xff) * 0x9c] = 1;
+    fn_1_FB9DC(index);
+    fn_1_FBA88(index);
+    fn_1_FBC5C(index);
+}
+/* fzgx:end fn_1_FB96C */
+
 /* fzgx:begin fn_1_FB9C0 */
 // Clear the selected CAS state value.
 void fn_1_FB9C0(int index) {
