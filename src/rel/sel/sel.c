@@ -1389,6 +1389,83 @@ void fn_10_5780(struct Fn105780 *obj) {
 }
 /* fzgx:end fn_10_5780 */
 
+/* fzgx:begin fn_10_73AC */
+#include "rel/sel/sel.h"
+
+struct fn_10_73AC_lbl_1_bss_8B3A0 {
+    u8 pad_0[0x94];
+    u32 unk_94;
+    u32 unk_98;
+    u8 pad_9C[0x2];
+    u8 unk_9E;
+    u8 pad_9F[0xA1];
+    u32 unk_140;
+};
+struct S9F8 { u8 pad0[8]; u16 f8; u8 pad1[10]; };
+extern struct fn_10_73AC_lbl_1_bss_8B3A0 lbl_1_bss_8B3A0;
+/* Volatile preserves the two separate retail reads of the input flags. */
+extern volatile struct S9F8 lbl_1_bss_9F8[];
+struct S9C8 { u8 pad[10]; s8 status; u8 padB; };
+extern struct S9C8 lbl_1_bss_9C8[];
+extern u16 lbl_1_bss_96A;
+extern int fn_1_4C10(void);
+extern s32 fn_1_12F228(void);
+extern void fn_10_CF30(u32);
+extern void fn_1_12F150(s32, u32, u32);
+extern void fn_1_4A00(s32, u8, u32);
+
+void fn_10_73AC(void) {
+    struct { struct fn_10_73AC_lbl_1_bss_8B3A0 *value; } manager;
+    s16 v4 = 0;
+    s32 v3;
+    u32 v0;
+    int v1;
+    u32 *sentinel;
+    s32 v2;
+    s16 v7;
+    if ((s32)lbl_10_bss_14 == -1) {
+        fn_1_4C10();
+    }
+    v0 = lbl_1_bss_8B3A0.unk_140;
+    if ((v0 & 0x80000000) != 0 && (v0 & 0x40000000) == 0 &&
+        (lbl_1_bss_8B3A0.unk_94 & 8) == 0) {
+        v1 = 1;
+    } else {
+        if (fn_1_4C10() != 0) v1 = 1;
+        else v1 = 0;
+    }
+    if (v1 != 0) return;
+    sentinel = &lbl_10_bss_14;
+    if ((s32)*sentinel != -1) {
+        s32 value = *sentinel;
+        *sentinel = -1;
+        lbl_1_bss_96A = value;
+        return;
+    }
+    v3 = 0;
+    while ((s16)v3 < 4) {
+        struct S9C8 *entry = &lbl_1_bss_9C8[v3];
+        manager.value = &lbl_1_bss_8B3A0;
+        if (entry->status != -1) {
+            if (__rlwnm(manager.value->unk_98, ((s16)v3 + 1) & 31, 31, 31) != 0) {
+                if (((lbl_1_bss_9F8[manager.value->unk_9E].f8 >> 12) & 1) != 0)
+                    v4 = (s16)(v4 + 1);
+                if (((lbl_1_bss_9F8[manager.value->unk_9E].f8 >> 12) & 1) != 0)
+                    fn_1_12F150(v3, 2, 1);
+            }
+        }
+        v3++;
+    }
+    if ((s16)v4 != 0 || fn_1_12F228() != 0) {
+        fn_10_CF30(0);
+        v7 = lbl_10_bss_4938C;
+        lbl_10_bss_14 = 27;
+        fn_1_4A00(0, (u8)v7, lbl_10_bss_49388);
+        lbl_10_bss_51744 = 0;
+    }
+}
+/* fzgx:end fn_10_73AC */
+
 /* fzgx:begin fn_10_757C */
 // Volatile preserves the retail's repeated reads of the shared sentinel.
 extern volatile s32 lbl_10_bss_51740;
