@@ -2043,6 +2043,130 @@ void fn_15_4060(void) {
 }
 /* fzgx:end fn_15_4060 */
 
+/* fzgx:begin fn_15_435C */
+#include "rel/main_rel/camera.h"
+
+struct Colors { u32 a[3]; };
+struct Color { u32 value; };
+struct fn_15_435C_lbl_15_rodata_0 {
+    u8 pad_0[0x70];
+    f32 unk_70;
+    u8 pad_74[0xC];
+    f32 unk_80;
+    f32 unk_84;
+    u8 pad_88[0x90];
+    u32 unk_118;
+    u32 unk_11C;
+    u32 unk_120;
+    f32 unk_124;
+};
+extern CameraState *camera_get_state_object(void);
+extern struct fn_15_435C_lbl_15_rodata_0 lbl_15_rodata_0;
+extern u8 lbl_15_bss_0[];
+struct fn_15_435C_data {
+    u8 pad0[0x50];
+    char *names[4];
+    u8 pad60[0x274];
+    char fmt2D4[0x14];
+    char fmt2E8[0x10];
+    char fmt2F8[0x10];
+    char fmt308[0x10];
+    char fmt318[0x20];
+    char fmt338[0x2C];
+    char fmt364[1];
+};
+extern struct fn_15_435C_data lbl_15_data_0;
+extern char *lbl_1_data_20B14[];
+extern void fn_1_49410(void);
+extern void fn_1_4954C(f32);
+extern void fn_1_4955C(f32, f32);
+extern void fn_1_495FC(void);
+extern void fn_1_496FC(f32, f32);
+extern void fn_1_49514(u32 *);
+extern u32 fn_1_12C930(u32);
+extern s16 fn_1_12C710(int);
+extern void *fn_1_7F49C(s16, s16, void *);
+extern void fn_1_4AE0C(const char *, ...);
+extern void fn_1_4A0D8(const char *);
+
+#pragma opt_loop_invariants off
+#pragma opt_propagation off
+void fn_15_435C(u32 arg0) {
+    struct fn_15_435C_lbl_15_rodata_0 *p_lbl_15_rodata_0;
+    struct fn_15_435C_data *p_lbl_15_data_0;
+    u8 *p_lbl_15_bss_0;
+    u32 v0;
+    u32 v1;
+    f32 v2;
+    void *v3;
+    void *v5;
+    s32 v4;
+    struct Colors colors;
+    struct Color selected;
+    struct Color unselected;
+    struct Color loc_8;
+    CameraState *t0;
+    p_lbl_15_rodata_0 = (struct fn_15_435C_lbl_15_rodata_0 *)&lbl_15_rodata_0;
+    v0 = p_lbl_15_rodata_0->unk_118;
+    p_lbl_15_data_0 = (struct fn_15_435C_data *)&lbl_15_data_0;
+    v1 = p_lbl_15_rodata_0->unk_11C;
+    p_lbl_15_bss_0 = (u8 *)&lbl_15_bss_0;
+    colors = *(struct Colors *)&p_lbl_15_rodata_0->unk_118;
+    t0 = camera_get_state_object();
+    fn_1_49410();
+    fn_1_4954C(p_lbl_15_rodata_0->unk_70);
+    v2 = p_lbl_15_rodata_0->unk_84;
+    fn_1_4955C(v2, v2);
+    fn_1_495FC();
+    fn_1_496FC(p_lbl_15_rodata_0->unk_80, p_lbl_15_rodata_0->unk_124);
+    v3 = p_lbl_15_bss_0 + 156;
+    loc_8 = *(struct Color *)&colors.a[2];
+    v4 = 0;
+    v5 = p_lbl_15_bss_0 + 156;
+    while (v4 < *(s16 *)(p_lbl_15_bss_0 + 0x38) + 3) {
+        if (v4 == *(s32 *)(p_lbl_15_bss_0 + 0x6C)) {
+            selected = *(struct Color *)&colors.a[0];
+            fn_1_49514(&selected.value);
+        } else {
+            unselected = loc_8;
+            fn_1_49514(&unselected.value);
+        }
+        if (v4 < *(s16 *)(p_lbl_15_bss_0 + 0x38)) {
+            u8 *entry = *(u8 **)v5;
+            char *name;
+            char buffer[32];
+            name = lbl_1_data_20B14[(s16)fn_1_12C930((s16)*(u32 *)(entry + 0x88))];
+            fn_1_7F49C(fn_1_12C710(*(u32 *)(entry + 0x88)), 5, buffer);
+            fn_1_4AE0C(p_lbl_15_data_0->fmt2D4, v4 + 1, name, buffer);
+        } else {
+            switch (v4 - *(s16 *)(p_lbl_15_bss_0 + 0x38)) {
+            case 0: {
+                char **names = p_lbl_15_data_0->names;
+                u32 index = *(u32 *)(p_lbl_15_bss_0 + 0x70);
+                fn_1_4AE0C(p_lbl_15_data_0->fmt2E8, names[index]);
+                break;
+            }
+            case 1:
+                fn_1_4AE0C(p_lbl_15_data_0->fmt2F8, *(f32 *)((u8 *)t0 + 0x1C));
+                break;
+            case 2:
+                switch (*(s16 *)(p_lbl_15_bss_0 + 0x98) % 3) {
+                case 0: fn_1_4A0D8(p_lbl_15_data_0->fmt308); break;
+                case 1: fn_1_4A0D8(p_lbl_15_data_0->fmt318); break;
+                default: fn_1_4A0D8(p_lbl_15_data_0->fmt338); break;
+                }
+                break;
+            default:
+                fn_1_4AE0C(p_lbl_15_data_0->fmt364);
+                break;
+            }
+        }
+        v5 = (u8 *)v5 + 4;
+        v4++;
+    }
+}
+/* fzgx:end fn_15_435C */
+
 /* fzgx:begin fn_15_4568 */
 extern u16 lbl_15_bss_154;
 
