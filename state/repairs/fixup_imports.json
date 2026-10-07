@@ -12011,5 +12011,42 @@
     ],
     "link": "verified",
     "commit": "d8ab8e95"
+  },
+  "fn_1_12A734": {
+    "seed_symbol": "fn_1_12A734",
+    "generator": "fzgx fixup",
+    "transform": "define indexed element array lbl_1_bss_897AC[idx]",
+    "seed": "#include \"rel/main_rel/archive.h\"\n\nextern u32 lbl_801A6410;\nextern void fn_1_46B4(u32, u32, const char *, int);\nextern void OSPanic(const char *, int, const char *, ...);\n\nvoid fn_1_12A734(s32 idx) {\n    Obj_1_bss_897AC *p = (Obj_1_bss_897AC *)&lbl_1_bss_897AC;\n    u8 *o = (u8 *)p + idx * 0x6c;\n    if (*(s32 *)o == 1) {\n        fn_1_46B4(lbl_801A6410, *(u32 *)(o + 0x68), (const char *)lbl_1_data_40608, 0x145);\n        *(s32 *)o = 0;\n    } else {\n        OSPanic((const char *)lbl_1_data_40608, 0x149, (const char *)lbl_1_data_40720);\n    }\n}\n",
+    "seed_sha256": "bac500b78b396334fce3e3bbca621a16e8e7732946f6e40d1c53f3c7311b14ac",
+    "generated_sha256": "8551bb34301a52e7a2ba13b427ce23dd4e37842af1514b701eb3a264e63584e1",
+    "generated_source": "#include \"rel/main_rel/archive.h\"\n\nextern u32 lbl_801A6410;\nextern void fn_1_46B4(u32, u32, const char *, int);\nextern void OSPanic(const char *, int, const char *, ...);\n\ntypedef struct fzgx_elem_lbl_1_bss_897AC {\n    s32 f_0;\n    u8 pad_4[0x64];\n    u32 f_68;\n} fzgx_elem_lbl_1_bss_897AC;\ntypedef char fzgx_stride_lbl_1_bss_897AC[sizeof(fzgx_elem_lbl_1_bss_897AC) == 0x6c ? 1 : -1];\n/* the retail TU defines this array: MWCC indexes it off its own address */\nfzgx_elem_lbl_1_bss_897AC fzgx_obj_lbl_1_bss_897AC[0x40];\n\nvoid fn_1_12A734(s32 idx) {\n\n    if (fzgx_obj_lbl_1_bss_897AC[idx].f_0 == 1) {\n        fn_1_46B4(lbl_801A6410, fzgx_obj_lbl_1_bss_897AC[idx].f_68, (const char *)lbl_1_data_40608, 0x145);\n        fzgx_obj_lbl_1_bss_897AC[idx].f_0 = 0;\n    } else {\n        OSPanic((const char *)lbl_1_data_40608, 0x149, (const char *)lbl_1_data_40720);\n    }\n}\n",
+    "compiler": "GC/1.3.2",
+    "flags": "",
+    "source": "rel/main_rel/archive/fn_1_12A734.c",
+    "bytes": 144,
+    "headers_sha256": "73cf7422bff8955cde8d5ebf68ebefe0241675ac791653eb8a9749cb0d84419f",
+    "oracle_sha256": "ca197f0a12605d3f05c8d964147669b8debb231a26880aee4ab16caec0d261cf",
+    "recipe": [
+      {
+        "label": "define indexed element array lbl_1_bss_897AC[idx]",
+        "input_sha256": "bac500b78b396334fce3e3bbca621a16e8e7732946f6e40d1c53f3c7311b14ac",
+        "output_sha256": "8551bb34301a52e7a2ba13b427ce23dd4e37842af1514b701eb3a264e63584e1",
+        "input_symbol": "fn_1_12A734",
+        "output_symbol": "fn_1_12A734",
+        "edits": [
+          [
+            172,
+            172,
+            "typedef struct fzgx_elem_lbl_1_bss_897AC {\n    s32 f_0;\n    u8 pad_4[0x64];\n    u32 f_68;\n} fzgx_elem_lbl_1_bss_897AC;\ntypedef char fzgx_stride_lbl_1_bss_897AC[sizeof(fzgx_elem_lbl_1_bss_897AC) == 0x6c ? 1 : -1];\n/* the retail TU defines this array: MWCC indexes it off its own address */\nfzgx_elem_lbl_1_bss_897AC fzgx_obj_lbl_1_bss_897AC[0x40];\n\n"
+          ],
+          [
+            200,
+            431,
+            "\n    if (fzgx_obj_lbl_1_bss_897AC[idx].f_0 == 1) {\n        fn_1_46B4(lbl_801A6410, fzgx_obj_lbl_1_bss_897AC[idx].f_68, (const char *)lbl_1_data_40608, 0x145);\n        fzgx_obj_lbl_1_bss_897AC[idx].f_0"
+          ]
+        ]
+      }
+    ],
+    "link": "pending"
   }
 }

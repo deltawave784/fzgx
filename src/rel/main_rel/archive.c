@@ -217,6 +217,33 @@ s32 fn_1_12A6D8(void *arg0) {
 }
 /* fzgx:end fn_1_12A6D8 */
 
+/* fzgx:begin fn_1_12A734 noprologue */
+#include "rel/main_rel/archive.h"
+
+extern u32 lbl_801A6410;
+extern void fn_1_46B4(u32, u32, const char *, int);
+extern void OSPanic(const char *, int, const char *, ...);
+
+typedef struct fzgx_elem_lbl_1_bss_897AC {
+    s32 f_0;
+    u8 pad_4[0x64];
+    u32 f_68;
+} fzgx_elem_lbl_1_bss_897AC;
+typedef char fzgx_stride_lbl_1_bss_897AC[sizeof(fzgx_elem_lbl_1_bss_897AC) == 0x6c ? 1 : -1];
+/* the retail TU defines this array: MWCC indexes it off its own address */
+fzgx_elem_lbl_1_bss_897AC fzgx_obj_lbl_1_bss_897AC[0x40];
+
+void fn_1_12A734(s32 idx) {
+
+    if (fzgx_obj_lbl_1_bss_897AC[idx].f_0 == 1) {
+        fn_1_46B4(lbl_801A6410, fzgx_obj_lbl_1_bss_897AC[idx].f_68, (const char *)lbl_1_data_40608, 0x145);
+        fzgx_obj_lbl_1_bss_897AC[idx].f_0 = 0;
+    } else {
+        OSPanic((const char *)lbl_1_data_40608, 0x149, (const char *)lbl_1_data_40720);
+    }
+}
+/* fzgx:end fn_1_12A734 */
+
 /* fzgx:begin fn_1_12A7C4 */
 typedef struct fn_1_12A7C4_ArchiveState {
     s32 count;
