@@ -628,26 +628,11 @@ void fn_1_1280(u32 arg0) {
 }
 /* fzgx:end fn_1_1280 */
 
-/* fzgx:begin fn_1_128C noprologue */
-#include "types.h"
-
-extern struct fn_1_ECC_Overlay lbl_1_data_7C0[];
-
-extern u32 camera_set_state_flag(u32);
-extern u32 fn_1_D31E0(u32);
-/* lbl_1_data_7C0: 0x2c-byte overlay descriptors (callbacks at 0x20/0x24/0x28), indexed by the overlay id */
-typedef void (*fn_1_ECC_Callback)(void);
-struct fn_1_ECC_Overlay {
-    u8 pad_0[0x20];
-    fn_1_ECC_Callback init;
-    fn_1_ECC_Callback update;
-    fn_1_ECC_Callback exit;
-};
-
+/* fzgx:begin fn_1_128C */
+/* Clears the camera state flag and runs the follow-up setup. */
 u32 fn_1_128C(void) {
-    u32 t0;
-    t0 = camera_set_state_flag(0);
-    return fn_1_D31E0(t0);
+    camera_set_state_flag(0);
+    fn_1_D31E0();
 }
 /* fzgx:end fn_1_128C */
 
