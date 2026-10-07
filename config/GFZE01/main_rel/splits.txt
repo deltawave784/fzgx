@@ -6884,3 +6884,6 @@ rel/main_rel/phys/fn_1_EB29C.c:
 
 rel/main_rel/burner/fn_1_9A864.c:
 	.text       start:0x0009A864 end:0x0009A958 align:4
+
+rel/main_rel/screen_effect/fn_1_76A94.c:
+	.text       start:0x00076A94 end:0x00076BD0 align:4
