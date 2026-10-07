@@ -62072,6 +62072,16 @@
   },
   {
     "module": "profile",
+    "source": "rel/profile/fn_16_1A24.c",
+    "symbols": [
+      "fn_16_1A24"
+    ],
+    "status": "matching",
+    "mw_version": null,
+    "extra_cflags": []
+  },
+  {
+    "module": "profile",
     "source": "rel/profile/fn_16_1D18.c",
     "symbols": [
       "fn_16_1D18"
