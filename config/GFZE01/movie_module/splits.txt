@@ -2006,3 +2006,6 @@ rel/movie_module/fn_12_26534.c:
 
 rel/movie_module/fn_12_10200.c:
 	.text       start:0x00010200 end:0x000105BC align:4
+
+rel/movie_module/fn_12_27224.c:
+	.text       start:0x00027224 end:0x00027478 align:4
