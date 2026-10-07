@@ -818,7 +818,6 @@ void fn_1_CC8E4(s32 arg0, s32 arg1, s32 arg2) {
 /* fzgx:end fn_1_CC8E4 */
 
 /* fzgx:begin fn_1_CD36C */
-
 void fn_1_CD36C(void *unused, s32 a, s32 b) {
     FontDrawPacket p;
     s32 idx;

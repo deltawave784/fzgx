@@ -239,6 +239,8 @@ extern u32 lbl_1_bss_71670;
 extern void (*lbl_1_bss_71684)(void);
 extern void (*lbl_1_bss_71688)(void);
 extern u32 fn_1_A7024(f32, f32, f32, f32);
+extern f32 lbl_1_rodata_4AC4[4];
+extern void fn_8003462C(u32, u32, u32);
 
 /* fzgx:begin fn_1_A75DC noprologue */
 #include "dolphin/types.h"
@@ -1119,13 +1121,10 @@ void fn_1_A9868(u32 arg0, u32 arg1, u32 arg2, f32 arg3) {
 }
 /* fzgx:end fn_1_A9868 */
 
-/* fzgx:begin fn_1_AA350 noprologue */
+/* fzgx:begin fn_1_AA350 */
 #include "dolphin/hw_regs.h"
 #include "types.h"
 #include "rel/main_rel/driver.h"
-
-extern f32 lbl_1_rodata_4AC4[4];
-extern void fn_8003462C(u32, u32, u32);
 
 #define WG_F32 (*(volatile f32 *)(GX_FIFO_BASE + 0x0)) /* Hardware access must remain ordered. */
 #define WG_U8 (*(volatile u8 *)(GX_FIFO_BASE + 0x0)) /* Hardware access must remain ordered. */

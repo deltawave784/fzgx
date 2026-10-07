@@ -512,6 +512,21 @@ extern u32 fn_80008BEC(u32 arg0, int arg1, int arg2);
 extern void fn_1_7F3AC(void* object);
 extern void fn_1_150CEC(fn_1_150CEC_Object *obj);
 extern void fn_1_150ED0(fn_1_150ED0_Object *obj, void *arg);
+extern const f32 lbl_1_rodata_87B8;
+extern const f32 lbl_1_rodata_8BF0;
+extern const f32 lbl_1_rodata_8BF4;
+extern const f32 lbl_1_rodata_8BF8;
+extern const f32 lbl_1_rodata_880C;
+extern const f32 lbl_1_rodata_8BFC;
+extern const f32 lbl_1_rodata_8B28;
+extern const f32 lbl_1_rodata_8C00;
+extern const f32 lbl_1_rodata_8C04;
+extern const f32 lbl_1_rodata_8C08;
+extern const f32 lbl_1_rodata_864C;
+extern const f32 lbl_1_rodata_8C0C;
+extern u8 fn_1_141F94(u32 arg0);
+extern struct A7 lbl_1_rodata_922C;
+extern struct B6 lbl_1_rodata_923C;
 
 /* fzgx:begin fn_1_1332FC */
 typedef struct {
@@ -2937,15 +2952,12 @@ void fn_1_141754(s32 arg0, s32 arg1) {
 }
 /* fzgx:end fn_1_141754 */
 
-/* fzgx:begin fn_1_1418EC noprologue */
+/* fzgx:begin fn_1_1418EC */
 #include "types.h"
 #include "font.h"
 
 struct A7 { u16 v[7]; };
 struct B6 { u16 v[6]; };
-extern struct A7 lbl_1_rodata_922C;
-extern struct B6 lbl_1_rodata_923C;
-extern FontDrawPacket lbl_1_rodata_26F8;
 extern u16 fn_1_486C4(u32);
 extern void fn_1_51678(FontDrawPacket *, u32, s16, s16, s16, s16);
 extern int fn_1_4F734(FontDrawPacket *);
@@ -2964,7 +2976,7 @@ void fn_1_1418EC(s32 arg0, s32 arg1) {
     sumA = 0;
     img.v = 0x10000 - 24305;
     for (i = 0; i < 7; i++) {
-        pkt = lbl_1_rodata_26F8;
+        pkt = (*(FontDrawPacket *)&lbl_1_rodata_26F8);
         pkt.image = img.v;
         fn_1_51678(&pkt, pkt.image, (s16)sumA, 0, (s16)a.v[i], (s16)fn_1_486C4(pkt.image));
         pkt.x = (f32)(22 + arg0 + sumB);
@@ -2984,7 +2996,6 @@ typedef struct fn_1_141F94_Entry {
     s16 value;
     u8 tail[0x10];
 } fn_1_141F94_Entry;
-
 
 u8 fn_1_141F94(u32 arg0) {
     fn_1_141F94_Entry *entry;
@@ -5150,23 +5161,23 @@ extern void fn_1_556B8(void *);
 extern void fn_1_55210(void *);
 extern void fn_1_151C78(void);
 
-typedef struct fn_1_14E09C_Fn14E09CValue {
+typedef struct fn_1_14E09C_fn_1_14E09C_Fn14E09CValue {
     void *value;
-} fn_1_14E09C_Fn14E09CValue;
+} fn_1_14E09C_fn_1_14E09C_Fn14E09CValue;
 
-typedef struct fn_1_14E09C_Fn14E09CRef {
+typedef struct fn_1_14E09C_fn_1_14E09C_Fn14E09CRef {
     u8 pad8[8];
-    fn_1_14E09C_Fn14E09CValue *value;
-} fn_1_14E09C_Fn14E09CRef;
+    fn_1_14E09C_fn_1_14E09C_Fn14E09CValue *value;
+} fn_1_14E09C_fn_1_14E09C_Fn14E09CRef;
 
-typedef struct fn_1_14E09C_Fn14E09CObj {
+typedef struct fn_1_14E09C_fn_1_14E09C_Fn14E09CObj {
     u8 pad344[0x344];
-    fn_1_14E09C_Fn14E09CRef *ref;
-} fn_1_14E09C_Fn14E09CObj;
+    fn_1_14E09C_fn_1_14E09C_Fn14E09CRef *ref;
+} fn_1_14E09C_fn_1_14E09C_Fn14E09CObj;
 
-void fn_1_14E09C(fn_1_14E09C_Fn14E09CObj *arg0, void *arg1, s16 arg2, int arg3, f32 arg4) {
+void fn_1_14E09C(fn_1_14E09C_fn_1_14E09C_Fn14E09CObj *arg0, void *arg1, s16 arg2, int arg3, f32 arg4) {
     s16 *entry;
-    fn_1_14E09C_Fn14E09CObj *obj;
+    fn_1_14E09C_fn_1_14E09C_Fn14E09CObj *obj;
     s16 i;
     int same;
     void *value;
@@ -5178,7 +5189,7 @@ void fn_1_14E09C(fn_1_14E09C_Fn14E09CObj *arg0, void *arg1, s16 arg2, int arg3, 
         }
 
         entry = (s16 *)arg0;
-        obj = (fn_1_14E09C_Fn14E09CObj *)((u8 *)arg0 + ((s32)arg2 << 2));
+        obj = (fn_1_14E09C_fn_1_14E09C_Fn14E09CObj *)((u8 *)arg0 + ((s32)arg2 << 2));
         for (i = 0; (u32)(s32)i < 3; i++) {
             if (fn_1_14F344(*entry) == 1) {
                 value = obj->ref->value->value;
@@ -5195,7 +5206,7 @@ void fn_1_14E09C(fn_1_14E09C_Fn14E09CObj *arg0, void *arg1, s16 arg2, int arg3, 
                 }
             }
             entry = (s16 *)((u8 *)entry + 0x360);
-            obj = (fn_1_14E09C_Fn14E09CObj *)((u8 *)obj + 0x360);
+            obj = (fn_1_14E09C_fn_1_14E09C_Fn14E09CObj *)((u8 *)obj + 0x360);
         }
     }
 }
@@ -7921,6 +7932,8 @@ void fn_1_150CEC(fn_1_150CEC_Object *obj) {
 /* fzgx:end fn_1_150CEC */
 
 /* fzgx:begin fn_1_150D3C noprologue */
+#include "types.h"
+#include "font.h"
 #include "dolphin/types.h"
 
 #pragma section code_type ".fzgxpool"

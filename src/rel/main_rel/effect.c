@@ -1832,8 +1832,8 @@ s = -0.004000000189989805f;
 typedef struct {
 u8 pad_00[0x10];
 s32 unk_10;
-} Fn_1_64F2C_Object;
-void fn_1_5F5C8(Fn_1_64F2C_Object *obj) {
+} fn_1_5F5C8_Fn_1_64F2C_Object;
+void fn_1_5F5C8(fn_1_5F5C8_Fn_1_64F2C_Object *obj) {
 f32 random;
 f32 scaled;
 f32 offset;
@@ -3666,10 +3666,10 @@ __declspec(section ".fzgxpool") static void fzgx_pool_prime3(void) {
 typedef struct {
     u8 pad_00[0x10];
     s32 unk_10;
-} Fn_1_64F2C_Object;
+} fn_1_64F2C_Fn_1_64F2C_Object;
 
 
-void fn_1_64F2C(Fn_1_64F2C_Object *obj) {
+void fn_1_64F2C(fn_1_64F2C_Fn_1_64F2C_Object *obj) {
     f32 random;
     f32 scaled;
     f32 offset;

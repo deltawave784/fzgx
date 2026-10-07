@@ -258,6 +258,21 @@ extern s32 fn_1_46DC4(s32 value);
 extern u32 fn_8003526C(u32, u32);
 extern void fn_80074300();
 extern void fn_80074438(u32 arg0, u32 arg1, u32 arg2, u32 arg3);
+extern f32 lbl_1_rodata_31EC;
+extern u32 lbl_801A63C0;
+extern s32 camera_get_state(void);
+extern u8 fn_1_5348(void);
+extern u32 fn_1_58C4(void);
+extern void fn_1_550A8(void);
+extern u32 fn_1_7926C(u32);
+extern f64 fn_1_550E0(void);
+extern void lbl_8006DD14(void *, void *);
+extern void fn_80038F10(f32 *);
+extern void fn_80038FD8(s32 *, s32 *, s32 *, s32 *);
+extern void fn_80038BFC(f32 *);
+extern void fn_80072270(f32 *, f64);
+extern void fn_80074188(s32, s32, s32, s32);
+extern void fn_80038EEC(f32, f32, f32, f32, f32, f32);
 
 /* fzgx:begin fn_1_72648 */
 void fn_1_72648(void) {
@@ -1730,7 +1745,7 @@ void fn_1_76DBC(void) {
 }
 /* fzgx:end fn_1_76DBC */
 
-/* fzgx:begin fn_1_76DC0 noprologue */
+/* fzgx:begin fn_1_76DC0 */
 #include "types.h"
 
 struct S {
@@ -1740,12 +1755,6 @@ struct S {
     f32 unk_154;
     f32 unk_158;
 };
-
-extern f32 lbl_1_rodata_31AC;
-extern f32 lbl_1_rodata_31EC;
-extern struct S lbl_1_data_1D960;
-extern u32 lbl_801A63C0;
-
 
 static u32 fzgx_pool_native_lbl_1_data_1D960_gap_0[79] = {0x00000001, 0x00000011, 0x00000001, 0x00000039, 0x00000001, 0x0000003A, 0x00000003, 0x00000003, 0x00000001, 0x00000001, 0x00000003, 0x00000013, 0x00000005, 0x00000005, 0x00000000, 0x00000000, 0x00000003, 0x00000003, 0x00000006, 0x00000006, 0x00000001, 0x00000027, 0x00000000, 0x00000600, 0x00000001, 0x06000000, 0x00010600, 0x00000001, 0x06000000, 0x00010600, 0x00000001, 0x06000000, 0x00010600, 0x00000001, 0x06060000, 0x00020606, 0x00000002, 0x06060000, 0x00020606, 0x00000002, 0x00010600, 0x00030001, 0x06000003, 0x00010600, 0x00030001, 0x06030004, 0x00000000, 0x00010406, 0x00000002, 0x04060000, 0x00020406, 0x00000002, 0x04060000, 0x00020406, 0x00000002, 0x04060000, 0x00020406, 0x00000002, 0x04060000, 0x00020606, 0x00000002, 0x06030000, 0x00020603, 0x00000002, 0x05000000, 0x00010600, 0x00000001, 0x05040000, 0x00020900, 0x00000001, 0x04080000, 0x00020400, 0x00000001, 0x01010600, 0x00030600, 0x00000001, 0x00010700, 0x00030400, 0x00000001}; /* fzgx-allow: A1 measured pool bytes and bindings */
 static u32 fzgx_pool_native_lbl_1_data_1D960_unk_13C[5] = {0x30506020, 0x38623420, 0x60605040, 0x60505030, 0x70504020}; /* fzgx-allow: A1 measured pool bytes and bindings */
@@ -1769,8 +1778,8 @@ void fn_1_76DC0(s32 arg0) {
         arg0 = 23;
     }
     if (arg0 == 23) {
-        fzgx_pool_native_lbl_1_data_1D960_unk_154 = lbl_1_rodata_31AC;
-        fzgx_pool_native_lbl_1_data_1D960_unk_158 = lbl_1_rodata_31AC;
+        fzgx_pool_native_lbl_1_data_1D960_unk_154 = (*(f32 *)&lbl_1_rodata_31AC);
+        fzgx_pool_native_lbl_1_data_1D960_unk_158 = (*(f32 *)&lbl_1_rodata_31AC);
     }
     if (arg0 != 24) return;
     fzgx_pool_native_lbl_1_data_1D960_unk_150[0] = 48;
@@ -2170,28 +2179,10 @@ void fn_1_791B0(void) {
 #pragma opt_common_subs reset
 /* fzgx:end fn_1_791B0 */
 
-/* fzgx:begin fn_1_79654 noprologue */
+/* fzgx:begin fn_1_79654 */
 #include "types.h"
 
 typedef struct { u32 unk_0; } W32;
-
-extern s16 lbl_1_bss_960;
-extern u32 lbl_1_bss_6D778;
-extern W32 lbl_1_data_3D544[];
-extern W32 *lbl_801A6D00;
-extern s32 camera_get_state(void);
-extern u8 fn_1_5348(void);
-extern u32 fn_1_58C4(void);
-extern void fn_1_550A8(void);
-extern u32 fn_1_7926C(u32);
-extern f64 fn_1_550E0(void);
-extern void lbl_8006DD14(void *, void *);
-extern void fn_80038F10(f32 *);
-extern void fn_80038FD8(s32 *, s32 *, s32 *, s32 *);
-extern void fn_80038BFC(f32 *);
-extern void fn_80072270(f32 *, f64);
-extern void fn_80074188(s32, s32, s32, s32);
-extern void fn_80038EEC(f32, f32, f32, f32, f32, f32);
 
 void fn_1_79654(void) {
     struct { u32 value; } f;
@@ -2203,23 +2194,23 @@ void fn_1_79654(void) {
     f32 b[7];
     s32 c0, c1, c2, c3;
 
-    if (lbl_1_bss_960 == 2 || lbl_1_bss_960 == 9) {
-        if (lbl_1_bss_6D778 != 0) {
+    if ((*(s16 *)&lbl_1_bss_960) == 2 || (*(s16 *)&lbl_1_bss_960) == 9) {
+        if ((*(u32 *)&lbl_1_bss_6D778) != 0) {
             v = 0;
             st = camera_get_state();
             if ((s8)st == 0) {
-                if ((lbl_1_data_3D544[0].unk_0 >> 23) & 1) {
+                if (((*(W32 (*)[])&lbl_1_data_3D544)[0].unk_0 >> 23) & 1) {
                     v = 1;
                 }
             } else if ((s8)st == 7 || ((s8)st == 6 && fn_1_5348() == 4)) {
                 for (i = 0; i < fn_1_58C4(); i++) {
-                    if ((lbl_1_data_3D544[i].unk_0 >> 23) & 1) {
+                    if (((*(W32 (*)[])&lbl_1_data_3D544)[i].unk_0 >> 23) & 1) {
                         v = fn_1_58C4();
                     }
                 }
             }
             if (v == 1 || (u8)(v - 3) <= 1) {
-                lbl_8006DD14((u8 *)lbl_801A6D00 + 0x30, mtx);
+                lbl_8006DD14((u8 *)(*(W32 * *)&lbl_801A6D00) + 0x30, mtx);
                 fn_80038F10(a);
                 fn_80038FD8(&c0, &c1, &c2, &c3);
                 fn_80038BFC(b);
@@ -2234,7 +2225,7 @@ void fn_1_79654(void) {
                 fn_80072270(b, fn_1_550E0());
                 fn_80074188(c0, c1, c2, c3);
                 fn_80038EEC(a[0], a[1], a[2], a[3], a[4], a[5]);
-                lbl_8006DD14(mtx, (u8 *)lbl_801A6D00 + 0x30);
+                lbl_8006DD14(mtx, (u8 *)(*(W32 * *)&lbl_801A6D00) + 0x30);
             }
         }
     }

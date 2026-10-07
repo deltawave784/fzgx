@@ -102,6 +102,8 @@ extern const f32 lbl_1_rodata_33A8;
 extern void fn_80071ED4(f32 arg0, f32 arg1, s32 arg2);
 extern void fn_80072014(void *arg0);
 extern void fn_800720B0(s32 arg0);
+extern const f32 lbl_1_rodata_3500;
+extern const f32 lbl_1_rodata_3504;
 
 /* fzgx:begin fn_1_7C13C */
 typedef struct {
@@ -215,9 +217,6 @@ void fn_1_7E7A4(Fn1_7E7A4Data *arg0) {
 /* fzgx:end fn_1_7E7A4 */
 
 /* fzgx:begin fn_1_7E8F4 */
-extern const f32 lbl_1_rodata_3500;
-extern const f32 lbl_1_rodata_3504;
-
 static inline s32 chk(void) {
     Obj_1_bss_6D620 *p = &lbl_1_bss_6D620;
     s32 r = 0;

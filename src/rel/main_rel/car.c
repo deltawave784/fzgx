@@ -527,6 +527,7 @@ extern void fn_1_C487C();
 extern u8 lbl_1_bss_6E160[1740];
 extern u8 lbl_1_bss_6DA80[1740];
 extern void fn_1_8E1E8(void);
+extern void fn_800713E0(void *, void *);
 
 /* fzgx:begin fn_1_7F3AC */
 typedef struct CarFn_1_7F3AC {
@@ -6034,10 +6035,8 @@ void fn_1_8E480(void) {
 }
 /* fzgx:end fn_1_8E480 */
 
-/* fzgx:begin fn_1_8E728 noprologue */
+/* fzgx:begin fn_1_8E728 */
 #include "types.h"
-
-extern void fn_800713E0(void *, void *);
 
 #pragma opt_common_subs off
 void fn_1_8E728(u8 *arg0, u8 arg1) {

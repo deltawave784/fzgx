@@ -386,6 +386,9 @@ extern int fn_80083BCC(const char *s1, const char *s2);
 extern u8 lbl_1_A9011300;
 extern u8 lbl_1_A9011100;
 extern u8 lbl_1_A9011000;
+extern u16 lbl_1_bss_25B80;
+extern u8 lbl_1_bss_26B1D;
+extern void fn_1_15E260(s32);
 
 /* fzgx:begin fn_1_32600 */
 #pragma section code_type ".fzgxpool"
@@ -492,10 +495,6 @@ typedef struct {
     u8 pad_476[0x58C - 0x476];
     u32 x58c;
 } Fn32600Obj;
-
-extern u16 lbl_1_bss_25B80;
-extern u8 lbl_1_bss_26B1D;
-extern void fn_1_15E260(s32);
 
 s32 fn_1_32600(Fn32600Obj *p) {
     if (!(lbl_1_bss_3C30.unk_0 & 0x8000)) {
@@ -1409,7 +1408,7 @@ void fn_1_3F4FC(void) {
 }
 /* fzgx:end fn_1_3F4FC */
 
-/* fzgx:begin fn_1_3F75C noprologue */
+/* fzgx:begin fn_1_3F75C */
 #include "types.h"
 #include "font.h"
 

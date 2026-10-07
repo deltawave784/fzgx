@@ -1732,7 +1732,7 @@ s32 fn_1_13018(void) {
 }
 /* fzgx:end fn_1_13018 */
 
-/* fzgx:begin fn_1_1350C noprologue */
+/* fzgx:begin fn_1_1350C */
 #include "types.h"
 #include "rel/main_rel/live_camera.h"
 

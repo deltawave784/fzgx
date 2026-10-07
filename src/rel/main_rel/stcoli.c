@@ -402,6 +402,7 @@ extern f32 lbl_1_rodata_B74[25];
 extern struct fn_1_2B478_lbl_801A6D00 lbl_801A6D00;
 extern f32 lbl_8006D6FC(void *, void *);
 extern s16 lbl_1_bss_3C2A[3];
+extern u32 fn_1_203E4(void *, u32, void *, f32, f32, f32);
 
 /* fzgx:begin fn_1_14CB4 */
 void fn_1_14CB4(void) {
@@ -1406,7 +1407,7 @@ f32 fn_1_20258(Fn_1_20258 *self, f32 *out_ratio) {
 #pragma opt_strength_reduction reset
 /* fzgx:end fn_1_20258 */
 
-/* fzgx:begin fn_1_207DC noprologue */
+/* fzgx:begin fn_1_207DC */
 #include "types.h"
 
 struct A {
@@ -1433,9 +1434,6 @@ struct P {
     f64 unk_D0;
 };
 
-extern struct P lbl_1_rodata_6C8;
-extern u8 lbl_1_data_5548[];
-extern u32 fn_1_203E4(void *, u32, void *, f32, f32, f32);
 extern void OSPanic(const char *, int, const char *, ...);
 extern void OSReport(const char *, ...);
 
@@ -1451,8 +1449,8 @@ void fn_1_207DC(struct A *a, void *b, f32 t) {
     f32 loc;
     u32 fl;
     f32 *pl;
-    u8 *d = (u8 *)&lbl_1_data_5548;
-    struct P *p = (struct P *)&lbl_1_rodata_6C8;
+    u8 *d = (u8 *)&(*(u8 (*)[])&lbl_1_data_5548);
+    struct P *p = (struct P *)&(*(struct P *)&lbl_1_rodata_6C8);
 
     if (a->unk_7C & 0x1C00000) {
         r = a->unk_34 / a->unk_30;
