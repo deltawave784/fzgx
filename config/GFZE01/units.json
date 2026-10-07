@@ -61642,6 +61642,46 @@
   },
   {
     "module": "pilotpoint",
+    "source": "rel/pilotpoint/pilotpoint/fn_14_BCF8.c",
+    "symbols": [
+      "fn_14_BCF8"
+    ],
+    "status": "matching",
+    "mw_version": null,
+    "extra_cflags": [],
+    "tu": "rel/pilotpoint/pilotpoint.c",
+    "pool": {
+      "...rodata.0": "lbl_14_rodata_0",
+      "@35": "lbl_14_rodata_60",
+      "@330": "lbl_14_rodata_364+0xD4",
+      "@91": "lbl_14_rodata_118+0x8",
+      "@329": "lbl_14_rodata_364+0xD0",
+      "@339": "lbl_14_rodata_364+0xDC",
+      "@340": "lbl_14_rodata_364+0xE4",
+      "@341": "lbl_14_rodata_364+0xEC",
+      "@342": "lbl_14_rodata_364+0xF4",
+      "@38": "lbl_14_rodata_60+0x18",
+      "@343": "lbl_14_rodata_364+0xFC",
+      "@9": "lbl_14_rodata_0+0x10",
+      "@344": "lbl_14_rodata_364+0x100",
+      "@345": "lbl_14_rodata_364+0x104",
+      "@261": "lbl_14_rodata_364+0xC",
+      "@346": "lbl_14_rodata_364+0x10C",
+      "@92": "lbl_14_rodata_118+0xC",
+      "@347": "lbl_14_rodata_364+0x110",
+      "@81": "lbl_14_rodata_110",
+      "@348": "lbl_14_rodata_364+0x114",
+      "@16": "lbl_14_rodata_30",
+      "@5": "lbl_14_rodata_0",
+      "@349": "lbl_14_rodata_364+0x11C",
+      "@79": "lbl_14_rodata_60+0xA0",
+      "@256": "lbl_14_rodata_118+0x244",
+      "@350": "lbl_14_rodata_364+0x124",
+      "@15": "lbl_14_rodata_0+0x28"
+    }
+  },
+  {
+    "module": "pilotpoint",
     "source": "rel/pilotpoint/pilotpoint/fn_14_C4F8.c",
     "symbols": [
       "fn_14_C4F8"
