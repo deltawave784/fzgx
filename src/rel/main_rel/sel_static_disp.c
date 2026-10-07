@@ -1687,8 +1687,6 @@ void fn_1_13A038(SelObj *obj)
 /* fzgx:end fn_1_13A038 */
 
 /* fzgx:begin fn_1_13A460 */
-
-
 void fn_1_13A460(struct Arg *arg0) {
     s32 y;
     s32 off;
@@ -1732,8 +1730,6 @@ void fn_1_13A460(struct Arg *arg0) {
 /* fzgx:end fn_1_13A460 */
 
 /* fzgx:begin fn_1_13A654 */
-
-
 void fn_1_13A654(struct Arg *arg0) {
     s32 off;
     s32 i;
@@ -2970,7 +2966,6 @@ void fn_1_141754(s32 arg0, s32 arg1) {
 /* fzgx:end fn_1_141754 */
 
 /* fzgx:begin fn_1_1418EC */
-
 void fn_1_1418EC(s32 arg0, s32 arg1) {
     struct A7 a = lbl_1_rodata_922C;
     struct B6 b = lbl_1_rodata_923C;
@@ -3971,6 +3966,79 @@ void fn_1_14A00C(void) {
 }
 /* fzgx:end fn_1_14A00C */
 
+/* fzgx:begin fn_1_14A028 noprologue */
+#include "types.h"
+
+typedef struct {
+    u32 unk_0;
+    u8 pad_4[4];
+    u8 unk_8;
+} S3C30;
+typedef struct {
+    u8 pad_0[5];
+    u8 unk_5;
+    u8 pad_6[6];
+    u8 unk_C;
+    u8 pad_D[3];
+    u32 unk_10;
+    u8 unk_14;
+} S8E518;
+typedef struct {
+    void (*f0)(void);
+    void (*f4)(void);
+    void (*f8)(void);
+    u32 pad;
+} Ent;
+typedef struct {
+    u8 pad_0[8];
+    u16 unk_8;
+} S9F8;
+
+extern S3C30 lbl_1_bss_3C30;
+extern S8E518 lbl_1_bss_8E518;
+extern Ent lbl_1_data_42B94[];
+extern S9F8 lbl_1_bss_9F8;
+extern u8 lbl_1_bss_38200;
+extern u16 lbl_1_bss_50EC[10];
+extern u32 lbl_801A66A4;
+extern void fn_1_14A1AC(u8);
+
+void fn_1_14A028(void) {
+    S8E518 *p = (S8E518 *)&lbl_1_bss_8E518;
+    int ok = 1;
+    int i;
+    int s;
+    if (!(lbl_1_bss_3C30.unk_0 & 8) && (lbl_1_bss_3C30.unk_0 & 0x1000)) {
+        if (lbl_1_bss_38200) {
+            ok = 0;
+        } else {
+            for (i = 0; i < lbl_1_bss_3C30.unk_8; i++) {
+                if (lbl_1_bss_50EC[i]) {
+                    ok = 0;
+                    break;
+                }
+            }
+        }
+        if (p->unk_C != p->unk_5) {
+            if (p->unk_C != 0xff) {
+                lbl_1_data_42B94[p->unk_C].f8();
+            }
+            s = p->unk_5;
+            p->unk_C = s;
+            p->unk_10 = lbl_801A66A4;
+            lbl_1_data_42B94[(u8)s].f0();
+        }
+        fn_1_14A1AC(p->unk_5);
+        if (ok) {
+            lbl_1_data_42B94[p->unk_5].f4();
+            if ((lbl_1_bss_9F8.unk_8 >> 4) & 1) {
+                p->unk_14 ^= 1;
+            }
+        }
+    }
+}
+/* fzgx:end fn_1_14A028 */
+
 /* fzgx:begin fn_1_14A17C noprologue */
 #include "types.h"
 
@@ -4537,40 +4605,6 @@ void fn_1_14CA4C(void) {
 /* fzgx:end fn_1_14CA4C */
 
 /* fzgx:begin fn_1_14D5CC */
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 typedef struct {
     u32 v[8];
 } fn_1_14D5CC_Word8;
@@ -5373,40 +5407,6 @@ int fn_1_14F014(void) {
 /* fzgx:end fn_1_14F014 */
 
 /* fzgx:begin fn_1_14F01C */
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 typedef struct {
     u32 v[8];
 } fn_1_14F01C_Word8;
@@ -5568,40 +5568,6 @@ s16 fn_1_14F01C(s16 value) {
 /* fzgx:end fn_1_14F01C */
 
 /* fzgx:begin fn_1_14F090 */
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 typedef struct {
     u32 v[8];
 } fn_1_14F090_Word8;
@@ -6135,40 +6101,6 @@ s16 fn_1_14F118(s16 value, void *table) {
 /* fzgx:end fn_1_14F118 */
 
 /* fzgx:begin fn_1_14F19C */
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 typedef struct {
     u32 v[8];
 } fn_1_14F19C_Word8;
@@ -6733,40 +6665,6 @@ s16 fn_1_14F344(s16 index) {
 /* fzgx:end fn_1_14F344 */
 
 /* fzgx:begin fn_1_14F38C */
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 typedef struct {
     u32 v[8];
 } fn_1_14F38C_Word8;
