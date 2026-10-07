@@ -3053,6 +3053,77 @@ u8 fn_10_C694(void) {
 }
 /* fzgx:end fn_10_C694 */
 
+/* fzgx:begin fn_10_C6A4 */
+#include "rel/sel/sel.h"
+
+extern u32 lbl_10_bss_55664;
+
+extern u32 lbl_1_bss_7180C;
+extern u32 lbl_1_bss_718E0;
+extern u8 fn_1_B7C00(void);
+extern int fn_1_B7E98(int);
+extern s32 fn_1_B7C6C(u32);
+extern u32 fn_1_B7CD4(void);
+extern void fn_1_F79C8(void);
+extern u32 fn_1_B7C5C(void);
+extern void fn_1_B7F24(void);
+extern void fn_80008BEC(void *, int, u32);
+extern void fn_1_AA6D8(u32, u32, void *);
+struct Request { u8 kind; u8 pad[3]; u32 flags; u32 unk8; void *data; u32 rest[5]; };
+void fn_10_C6A4(void) {
+    struct Request loc_8;
+    u32 *state;
+#define v0 lbl_10_bss_55664
+    if (fn_1_B7C00()) return;
+    if ((s32)lbl_1_bss_7180C != 0 && fn_1_B7E98(1) != 0) {
+        state = &lbl_10_bss_55664;
+        v0 = *state;
+        if (__rlwnm(v0, 5, 31, 31)) return;
+        if (__rlwnm(v0, 6, 31, 31)) return;
+        if ((s32)v0 == 0) {
+            *state = v0 | 0x80000000;
+        } else {
+            switch ((s32)__cntlzw(v0)) {
+            case 0:
+                if (fn_1_B7C6C(1) != 0) return;
+                lbl_10_bss_5566C = 1;
+                fn_80008BEC(&loc_8, 0, 36);
+                loc_8.kind = 1;
+                loc_8.flags = 0xA004;
+                loc_8.data = &lbl_1_bss_718E0;
+                fn_1_AA6D8(2, 4, &loc_8);
+                lbl_10_bss_55664 &= 0x7FFFFFFF;
+                lbl_10_bss_55664 |= 0x20000000;
+                break;
+            case 2:
+                lbl_10_bss_55668 = fn_1_B7CD4();
+                fn_1_F79C8();
+                if ((s32)fn_1_B7C5C() != 0) return;
+                fn_80008BEC(&loc_8, 0, 36);
+                loc_8.kind = 3;
+                loc_8.flags = 0xA004;
+                loc_8.data = (u8 *)&lbl_10_bss_3C0 + 0x20700;
+                fn_1_AA6D8(2, 4, &loc_8);
+                lbl_10_bss_55664 &= 0xDFFFFFFF;
+                lbl_10_bss_55664 |= 0x10000000;
+                break;
+            case 3:
+                *state = v0 & 0xEFFFFFFF;
+                *state |= 0x08000000;
+                break;
+            }
+        }
+    } else {
+        lbl_10_bss_55664 = 0;
+        lbl_10_bss_5566C = 0;
+        lbl_10_bss_55664 |= 0x80000000;
+        fn_80008BEC(&lbl_10_bss_3C0, 0, 0x40E00);
+        lbl_10_bss_55668 = 0;
+        fn_1_B7F24();
+    }
+}
+/* fzgx:end fn_10_C6A4 */
+
 /* fzgx:begin fn_10_C8A8 */
 extern u32 lbl_10_bss_49388;
 extern void fn_1_4A00(u32, u32, u32);
