@@ -158,7 +158,7 @@ void fn_1_D3474(void) {
 /* fzgx:end fn_1_D3474 */
 
 /* fzgx:begin fn_1_D357C */
-u8 fn_1_D357C(void) {
+s32 fn_1_D357C(void) {
     return lbl_1_bss_7AD48.unk_0;
 }
 /* fzgx:end fn_1_D357C */
