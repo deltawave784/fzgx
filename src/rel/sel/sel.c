@@ -2488,6 +2488,104 @@ void fn_10_A25C(void *arg0) {
 #pragma opt_common_subs reset
 /* fzgx:end fn_10_A25C */
 
+/* fzgx:begin fn_10_A480 */
+#include "rel/sel/sel.h"
+
+struct fn_10_A480_Arg0 {
+    u8 pad_0[4];
+    s16 unk_4;
+    s16 unk_6;
+    u8 pad_8[0x8C];
+    u32 unk_94;
+};
+struct fn_10_A480_lbl_1_bss_8B3A0 {
+    u8 pad_0[0x98];
+    u32 unk_98;
+};
+struct E9C8 { u8 pad[10]; s8 id; u8 pad2; };
+struct E9F8 { u8 pad[0x10]; u16 a; u16 b; };
+extern struct fn_10_A480_lbl_1_bss_8B3A0 lbl_1_bss_8B3A0;
+extern u32 lbl_801A66A8;
+extern struct E9C8 lbl_1_bss_9C8[];
+extern struct E9F8 lbl_1_bss_9F8[];
+extern void fn_1_12F128(s16);
+extern void fn_1_A2D84(u32);
+
+#pragma opt_propagation off
+static inline s32 fn_10_A480_read(u8 *p) { return (s8)*p; }
+#pragma opt_propagation reset
+#pragma opt_common_subs off
+#pragma opt_dead_code off
+#pragma opt_dead_assignments off
+#pragma opt_empty_loops off
+void fn_10_A480(struct fn_10_A480_Arg0 *arg0) {
+    s16 v4 = 0;
+    struct { s32 value; } temp;
+#define v0 temp.value
+    s16 v1;
+    s16 v2;
+    s16 v3;
+    u16 v9;
+    u16 v8;
+    s32 v12;
+    s32 lower;
+    s32 v10;
+    s32 v5;
+
+    v0 = 30;
+    if ((arg0->unk_94 & 2) != 0) {
+        v0 = (*(s8 (*)[1])&lbl_10_bss_4938E)[0];
+    }
+    v1 = (s16)v0;
+    v2 = 0;
+    /* Explicit branches preserve the retail empty signed-short loop. */
+    goto loop_test; /* Retail loop enters at its condition. */
+loop_body:
+    v2++;
+loop_test:
+    if (v2 < 4) goto loop_body; /* Retail empty-loop back edge. */
+    for (v3 = 0; v3 < 4; v3++) {
+        if (lbl_1_bss_9C8[v3].id != -1 && __rlwnm(lbl_1_bss_8B3A0.unk_98, (v3 + 1) & 31, 31, 31)) {
+            if (((lbl_1_bss_9F8[v3].a >> 3) & 1) || ((lbl_1_bss_9F8[v3].b >> 3) & 1)) {
+                v4--;
+            }
+            if (((lbl_1_bss_9F8[v3].a >> 2) & 1) || ((lbl_1_bss_9F8[v3].b >> 2) & 1)) {
+                v4++;
+            }
+            v8 = lbl_1_bss_9F8[v3].a;
+            if (((v8 >> 2) & 1) || (((v9 = lbl_1_bss_9F8[v3].b) >> 2) & 1)) {
+                fn_1_12F128(v3);
+            } else if (((v8 >> 3) & 1) || ((v9 >> 3) & 1)) {
+                fn_1_12F128(v3);
+            }
+        }
+    }
+    v10 = arg0->unk_6 + v4;
+    v5 = v1;
+    if (v10 > v1) {
+        v10 = 1;
+        if (arg0->unk_4 > 1) {
+            v10 = arg0->unk_4;
+        }
+    } else {
+        lower = arg0->unk_4;
+        v12 = 1;
+        if (lower > 1) {
+            v12 = lower;
+        }
+        if (v10 < v12) {
+            v10 = v5;
+        }
+    }
+    arg0->unk_6 = v10;
+    if (v4 != 0) {
+        fn_1_A2D84(0xA9010000);
+        lbl_801A66A8 = 0;
+    }
+}
+#pragma opt_common_subs reset
+/* fzgx:end fn_10_A480 */
+
 /* fzgx:begin fn_10_A634 */
 struct fn_10_A634_lbl_1_bss_8B3A0 {
     u8 pad_0[0x98];
