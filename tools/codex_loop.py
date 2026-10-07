@@ -9,8 +9,8 @@ When the Codex account runs out of usage ("try again at 3:35 AM"), the loop mark
 crashed sessions as crashes (they do not count as attempts), sleeps until the reset time
 plus a few minutes, and continues. Only completed batches count toward `--max-batches`.
 
-After each batch the loop runs one GPT-6 Astra session (`--astra-model`, `--astra-max` per run, 0 turns it
-off) on the best near miss Astra has not tried; when the Sol pool is empty it keeps running Astra alone.
+After each batch the loop runs one GPT-6 Astra session (medium effort, high only on a retry after a miss; `--astra-model`,
+`--astra-max` per run, 0 turns it off) on the best near miss Astra has not tried; when the Sol pool is empty it keeps running Astra alone.
 `--max-attempts` (default 12) is how many attempts a function may already have and still be picked.
 
 Stops on: `--max-batches`, `--hours` (wall clock, waits included), `--zero-streak` batches in
@@ -136,27 +136,32 @@ def pick_astra(model: str, max_attempts: int):
 
 
 def astra_step(a, n: int):
-    """One Astra session on one function. Returns the number matched, or None when nothing is left."""
+    """One Astra session on one function: medium effort, then high on the same function only if medium
+    did not match it. Returns the number matched, or None when nothing is left."""
     symbol = pick_astra(a.astra_model, a.max_attempts + 6)
     if not symbol:
         return None
-    batch = f"codex-astra-{time.strftime('%Y%m%d-%H%M')}-{n}"
-    log(f"{batch}: {symbol} on {a.astra_model}")
-    res = run(["tools/orchestrate.py", "--harness", "codex", "--provider", "openai", "--model", a.astra_model,
-               "--effort", "high", "--parallel", "1", "--max-checks", "40", "--max-stale", "12",
-               "--max-attempts", str(a.max_attempts + 12), "--no-trivial", "--batch", batch,
-               "--symbols", symbol], capture=True)
-    summary = {}
-    for line in reversed(res.stdout.splitlines()):
-        if line.startswith("{") and '"matched"' in line:
-            summary = json.loads(line)
-            break
-    matched = summary.get("matched", 0)
-    log(f"{batch}: {matched} matched, {summary.get('released', '?')} released, {summary.get('failed', '?')} failed, "
-        f"{summary.get('wall_s', '?')}s")
-    if usage_limit(batch, summary.get("failed", 0)):
-        log(f"{forgive_crashes()} astra crashes returned to the pool (the next sol batch handles the wait)")
-    return matched
+    for effort in ("medium", "high"):
+        batch = f"codex-astra-{time.strftime('%Y%m%d-%H%M')}-{n}-{effort}"
+        log(f"{batch}: {symbol} on {a.astra_model}")
+        res = run(["tools/orchestrate.py", "--harness", "codex", "--provider", "openai", "--model", a.astra_model,
+                   "--effort", effort, "--parallel", "1", "--max-checks", "40", "--max-stale", "12",
+                   "--max-attempts", str(a.max_attempts + 12), "--no-trivial", "--batch", batch,
+                   "--symbols", symbol], capture=True)
+        summary = {}
+        for line in reversed(res.stdout.splitlines()):
+            if line.startswith("{") and '"matched"' in line:
+                summary = json.loads(line)
+                break
+        matched = summary.get("matched", 0)
+        log(f"{batch}: {matched} matched, {summary.get('released', '?')} released, {summary.get('failed', '?')} failed, "
+            f"{summary.get('wall_s', '?')}s")
+        if usage_limit(batch, summary.get("failed", 0)):
+            log(f"{forgive_crashes()} astra crashes returned to the pool (the next sol batch handles the wait)")
+            return matched
+        if matched or summary.get("failed", 0) or not summary.get("released", 0):
+            return matched  # a crash or an unreadable summary is not a miss worth a second, dearer try
+    return 0
 
 
 def main() -> int:
