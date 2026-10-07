@@ -399,6 +399,45 @@ void fn_3_BE10(void) {
 }
 /* fzgx:end fn_3_BE10 */
 
+/* fzgx:begin fn_3_BE88 */
+extern u8 lbl_3_data_1958[];
+extern s32 fn_1_4C10(void);
+
+struct fn_3_BE88_tbl {
+    void (*fn[47])(void);
+    s32 cur;
+    s32 next;
+};
+
+extern u8 fn_3_C128__fzgx_offset_0[];
+extern u8 fn_3_C188__fzgx_offset_0[];
+extern u8 fn_3_C234__fzgx_offset_0[];
+extern u8 fn_3_C28C__fzgx_offset_0[];
+extern u8 fn_3_C328__fzgx_offset_0[];
+extern u8 fn_3_C3B4__fzgx_offset_0[];
+extern u8 lbl_3_data_1970__fzgx_offset_0[];
+extern u8 lbl_3_data_1984__fzgx_offset_0[];
+extern u8 lbl_3_data_199C__fzgx_offset_0[];
+extern u8 lbl_3_data_19B4__fzgx_offset_0[];
+extern u8 lbl_3_data_19CC__fzgx_offset_0[];
+extern u8 lbl_3_data_19E4__fzgx_offset_0[];
+static union {u32 words[47]; void (*view[47])(void);} fzgx_pool_native_lbl_3_data_1958_fn = {{(u32)fn_3_C128__fzgx_offset_0, (u32)fn_3_C188__fzgx_offset_0, (u32)fn_3_C234__fzgx_offset_0, (u32)fn_3_C28C__fzgx_offset_0, (u32)fn_3_C328__fzgx_offset_0, (u32)fn_3_C3B4__fzgx_offset_0, 0x454D425F, 0x4D454D43, 0x4152445F, 0x57414954, 0x00000000, 0x454D425F, 0x4D454D43, 0x4152445F, 0x41435449, 0x4F4E5F49, 0x4E495400, 0x454D425F, 0x4D454D43, 0x4152445F, 0x53415645, 0x5F50524F, 0x43000000, 0x454D425F, 0x4D454D43, 0x4152445F, 0x4C4F4144, 0x5F50524F, 0x43000000, 0x454D425F, 0x4D454D43, 0x4152445F, 0x44454C5F, 0x50524F43, 0x00000000, 0x454D425F, 0x4D454D43, 0x4152445F, 0x46494E49, 0x53480000, (u32)lbl_3_data_1970__fzgx_offset_0, (u32)lbl_3_data_1984__fzgx_offset_0, (u32)lbl_3_data_199C__fzgx_offset_0, (u32)lbl_3_data_19B4__fzgx_offset_0, (u32)lbl_3_data_19CC__fzgx_offset_0, (u32)lbl_3_data_19E4__fzgx_offset_0, 0xFFFFFFFF}}; /* fzgx-allow: A1 measured pool bytes and bindings */
+static s32 fzgx_pool_native_lbl_3_data_1958_cur = 0xFFFFFFFF; /* fzgx-allow: A1 measured pool bytes and bindings */
+static s32 fzgx_pool_native_lbl_3_data_1958_next = 0xFFFFFFFF; /* fzgx-allow: A1 measured pool bytes and bindings */
+
+void fn_3_BE88(void) {
+    
+    if (fn_1_4C10() == 0) {
+        s32 n = fzgx_pool_native_lbl_3_data_1958_next;
+        if (n >= 0) {
+            fzgx_pool_native_lbl_3_data_1958_cur = n;
+            fzgx_pool_native_lbl_3_data_1958_next = -1;
+        }
+        fzgx_pool_native_lbl_3_data_1958_fn.view[fzgx_pool_native_lbl_3_data_1958_cur]();
+    }
+}
+/* fzgx:end fn_3_BE88 */
+
 /* fzgx:begin fn_3_BEF0 */
 extern u32 lbl_3_bss_7ED58[18];
 extern void fn_1_BC29C(u32 *);
