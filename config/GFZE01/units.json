@@ -64360,6 +64360,17 @@
   },
   {
     "module": "sel",
+    "source": "rel/sel/sel/fn_10_21E30.c",
+    "symbols": [
+      "fn_10_21E30"
+    ],
+    "status": "matching",
+    "mw_version": null,
+    "extra_cflags": [],
+    "tu": "rel/sel/sel.c"
+  },
+  {
+    "module": "sel",
     "source": "rel/sel/sel/fn_10_21EC.c",
     "symbols": [
       "fn_10_21EC"

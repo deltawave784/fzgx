@@ -8648,6 +8648,180 @@ void fn_10_21DA8(void) {
 }
 /* fzgx:end fn_10_21DA8 */
 
+/* fzgx:begin fn_10_21E30 */
+#include "font.h"
+
+struct fn_10_21E30_Copy88 { u32 a[22]; };
+struct fn_10_21E30_lbl_10_rodata_158 {
+    u8 pad_0[0x58]; f32 unk_58;
+    u8 pad_5C[0x1FC]; f32 unk_258;
+    u8 pad_25C[0xD00]; f32 unk_F5C;
+    u8 pad_F60[0x258]; f32 unk_11B8;
+    u8 pad_11BC[0x18C];
+    u32 unk_1348; u32 unk_134C; u32 unk_1350; u32 unk_1354; u32 unk_1358;
+    u16 unk_135C; u8 pad_135E[2];
+    u32 unk_1360; u32 unk_1364; u32 unk_1368; u32 unk_136C;
+    u8 pad_1370[0x2C]; f32 unk_139C;
+};
+struct fn_10_21E30_lbl_10_bss_55B3C { f32 unk_0; };
+struct fn_10_21E30_lbl_1_bss_8B3A0 {
+    u8 pad_0[8]; s16 unk_8; u8 pad_A[0x86]; s16 unk_90;
+};
+extern f32 lbl_10_rodata_158[];
+extern f32 lbl_10_bss_55B3C[];
+extern struct fn_10_21E30_lbl_1_bss_8B3A0 lbl_1_bss_8B3A0;
+extern u32 lbl_1_rodata_26F8;
+extern u32 lbl_801A66B4;
+extern u32 lbl_801A66C0;
+extern u8 lbl_10_data_D00[];
+extern void fn_1_12EF80(u32, void *, void *);
+extern s32 fn_1_A5DC4(void);
+extern void fn_1_52088(void);
+extern void fn_1_520A0(void);
+extern void fn_1_520CC(void);
+extern int fn_1_4F734(FontDrawPacket *);
+extern int sprintf(char *, const char *, ...);
+extern void fn_1_49410(void);
+extern void fn_1_494DC(s16);
+extern void fn_1_5233C(void);
+extern void fn_1_49738(void *);
+extern void fn_1_49748(f32);
+extern void fn_1_495B0(u32);
+extern void fn_1_49590(f32);
+extern void fn_1_4966C(f32,f32);
+extern void fn_1_4955C(f32,f32);
+extern void fn_1_496FC(f32,f32);
+extern void fn_1_4962C(void);
+extern void fn_1_495C8(u32);
+extern void fn_1_495A0(f32);
+extern void fn_1_4A0D8(const char *);
+extern void fn_1_50164(f32,f32,f32,f32,void *);
+extern void fn_1_141338(u32,u32,u32,u32,f32);
+struct TextRow { u8 bytes[24]; };
+struct TextData { u8 pad[0x1fdc]; char *strings[256][6]; };
+#define p_lbl_10_data_D00 data_base.value
+#define p_lbl_10_rodata_158 ((struct fn_10_21E30_lbl_10_rodata_158 *)constants)
+#define F(off) (*(f32 *)((u8 *)p_lbl_10_rodata_158 + (off)))
+
+#pragma opt_propagation off
+void fn_10_21E30(void) {
+    struct { u8 *value; } data_base;
+    f32 *constants;
+    u32 v0;
+    u32 v1;
+    u32 v2;
+    u32 v3;
+    u32 v4;
+    f32 v5;
+    f32 v6;
+    s16 v7;
+    s32 v8;
+    u32 v9;
+    f32 v10;
+    f32 v11;
+    u32 v12;
+    struct { u32 a[64]; } loc_B8;
+    FontDrawPacket loc_60;
+    struct Copy44 { u32 a[11]; } loc_34;
+    struct Copy22 { s16 a[11]; } loc_1C;
+    struct Copy16 { u32 a[4]; } loc_C;
+    s16 loc_A;
+    u16 loc_8;
+    s32 t1;
+    s32 t5;
+    p_lbl_10_data_D00 = (u8 *)&lbl_10_data_D00;
+    constants = lbl_10_rodata_158;
+    v3 = lbl_801A66B4 == 5 ? 0 : lbl_801A66B4;
+    loc_1C = *(struct Copy22 *)((u8 *)p_lbl_10_rodata_158 + 0x1348);
+    loc_C = *(struct Copy16 *)((u8 *)p_lbl_10_rodata_158 + 0x1360);
+    if (lbl_801A66C0 <= 1) {
+        lbl_10_bss_55B3C[0] = p_lbl_10_rodata_158->unk_F5C;
+    }
+    v5 = p_lbl_10_rodata_158->unk_139C;
+    v6 = lbl_10_bss_55B3C[0];
+    v7 = lbl_1_bss_8B3A0.unk_90;
+    lbl_10_bss_55B3C[0] = (f32)(v6 + (f32)(v5 * (-v6)));
+    fn_1_12EF80(v7, &loc_A, &loc_8);
+    v8 = lbl_1_bss_8B3A0.unk_8;
+    loc_A = loc_A < 0 ? 0 : (u32)loc_A > 10 ? 10 : loc_A;
+    if (v8 < 0) {
+        v9 = 0;
+    } else {
+        v9 = 7;
+        if ((u32)v8 <= 7) v9 = v8;
+    }
+    t1 = fn_1_A5DC4();
+    if ((s8)t1 != 0) {
+        fn_1_520A0();
+        fn_1_52088();
+    }
+    loc_60 = *(FontDrawPacket *)&lbl_1_rodata_26F8;
+    loc_60.image = (0x10000 - 29951);
+    loc_60.x = p_lbl_10_rodata_158->unk_58;
+    loc_60.y = p_lbl_10_rodata_158->unk_258;
+    loc_60.z = p_lbl_10_rodata_158->unk_11B8;
+    loc_60.flags = 10;
+    fn_1_4F734(&loc_60);
+    t5 = fn_1_A5DC4();
+    if ((s8)t5 != 0) fn_1_520CC();
+    v12 = (v3 << 2);
+    {
+        struct { u8 *value; } table;
+        u32 offset = loc_1C.a[loc_A] * 24;
+        offset += v12;
+        table.value = p_lbl_10_data_D00 + 0x1fdc;
+        sprintf((char *)&loc_B8, (char *)p_lbl_10_data_D00 + 0x5b68,
+            *(char **)(table.value + offset));
+    }
+    fn_1_49410();
+    fn_1_494DC(8);
+    fn_1_49738(fn_1_5233C);
+    fn_1_49748(F(0x4c));
+    fn_1_495B0(0x80000000);
+    fn_1_49590(F(0x48));
+    fn_1_4966C(F(0x254),F(0x4c));
+    fn_1_4955C(F(0x13a0),F(0x13a0));
+    fn_1_496FC(F(0x58) + lbl_10_bss_55B3C[0],F(0x13a4));
+    fn_1_4962C();
+    fn_1_495C8(9);
+    fn_1_495A0(F(0x44) - lbl_10_bss_55B3C[0] / F(0xf5c));
+    fn_1_4A0D8((char *)&loc_B8);
+    loc_34 = *(struct Copy44 *)((u8 *)p_lbl_10_rodata_158 + 0x1370);
+    loc_60 = *(FontDrawPacket *)&lbl_1_rodata_26F8;
+    loc_60.image = loc_34.a[loc_A];
+    loc_60.x = F(0x58);
+    loc_60.y = F(0x258);
+    loc_60.z = F(0x28c);
+    loc_60.flags = 10;
+    fn_1_4F734(&loc_60);
+    loc_60.image = 0xa109;
+    loc_60.z = F(0x7c);
+    fn_1_50164(F(0xb78),F(0x54c),F(0x65c),F(0x3c0),&loc_60);
+    fn_1_141338((u8)loc_A,320,240,45,F(0x44));
+    {
+        struct { u8 *value; } table;
+        u32 offset = ((s16 *)&loc_C)[v9] * 24;
+        offset += v12;
+        table.value = p_lbl_10_data_D00 + 0x1fdc;
+        sprintf((char *)&loc_B8, (char *)p_lbl_10_data_D00 + 0x5b70,
+            *(char **)(table.value + offset));
+    }
+    fn_1_49410();
+    fn_1_494DC(8);
+    fn_1_49738(fn_1_5233C);
+    fn_1_49748(F(0x4c));
+    fn_1_495B0(0x80000000);
+    fn_1_49590(F(0x48));
+    fn_1_4966C(F(0x254),F(0x4c));
+    fn_1_4955C(F(0x11c4),F(0x11c4));
+    fn_1_496FC(F(0x58) - lbl_10_bss_55B3C[0],F(0x278));
+    fn_1_4962C();
+    fn_1_495C8(9);
+    fn_1_495A0(F(0x44) - lbl_10_bss_55B3C[0] / F(0xf5c));
+    fn_1_4A0D8((char *)&loc_B8);
+}
+/* fzgx:end fn_10_21E30 */
+
 /* fzgx:begin fn_10_2228C */
 extern u8 lbl_10_bss_55CE0;
 

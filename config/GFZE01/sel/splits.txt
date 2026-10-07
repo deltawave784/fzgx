@@ -629,3 +629,6 @@ rel/sel/sel/fn_10_21978.c:
 
 rel/sel/sel/fn_10_18A50.c:
 	.text       start:0x00018A50 end:0x00018C54 align:4
+
+rel/sel/sel/fn_10_21E30.c:
+	.text       start:0x00021E30 end:0x0002228C align:4
