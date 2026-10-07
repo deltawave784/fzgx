@@ -4452,6 +4452,76 @@ void fn_10_1772C(void) {
 }
 /* fzgx:end fn_10_1772C */
 
+/* fzgx:begin fn_10_18A50 */
+struct fn_10_18A50_Arg0 {
+    u8 pad_0[0x8C];
+    s16 unk_8C;
+    u8 pad_8E[0x10];
+    u8 unk_9E;
+    u8 pad_9F[0x41];
+    u32 unk_E0[4];
+};
+extern const f32 lbl_10_rodata_1A4[15];
+extern const f32 lbl_10_rodata_588;
+extern f32 lbl_8006D188(u32);
+extern const f64 lbl_10_rodata_1E8;
+extern s16 fn_1_12F028(s16);
+extern s16 lbl_10_bss_55AE0;
+extern u32 fn_10_18C54(u32, u32, f32, u32);
+extern u8 lbl_1_bss_8B3A0[];
+extern u8 lbl_1_bss_9C8[];
+extern u8 lbl_1_bss_9F8[];
+extern u32 lbl_801A66A0;
+
+#pragma scheduling on
+void fn_10_18A50(struct fn_10_18A50_Arg0 *param0, u32 param1) {
+    struct fn_10_18A50_Arg0 *arg0 = param0;
+    s16 v10;
+    u32 v12;
+    u32 v11;
+    f32 v1;
+    f32 t1;
+    u32 v9;
+    u32 v8;
+    s32 v6;
+    s16 id = *(volatile s16 *)&arg0->unk_8C; /* Read the selection ID before polling. */
+    struct { u32 value; } saved;
+    saved.value = param1;
+#pragma opt_propagation on
+    if (fn_1_12F028(id) >= 2) {
+        v10 = arg0->unk_E0[arg0->unk_9E];
+        for (v6 = 0; v6 < 4; v6++) {
+            if ((s8)lbl_1_bss_9C8[v6 * 12 + 10] != -1 &&
+                (__rlwnm(*(u32 *)(lbl_1_bss_8B3A0 + 0x98), (v6 + 1) & 31, 31, 31))) {
+                /* Controller state is polled again for each decision. */
+                if ((((v8 = *(volatile u16 *)(lbl_1_bss_9F8 + v6 * 20 + 16)) >> 1) & 1) ||
+                    (((v9 = *(volatile u16 *)(lbl_1_bss_9F8 + v6 * 20 + 18)) >> 1) & 1) || /* Poll the second controller state. */
+                    (v8 & 1) || (v9 & 1)) {
+                    v10 = arg0->unk_E0[v6];
+                    /* Re-read controller state for this decision, as in retail. */
+                    if (((*(volatile u16 *)(lbl_1_bss_9F8 + v6 * 20 + 16) >> 1) & 1) || /* Fresh poll. */
+                        ((*(volatile u16 *)(lbl_1_bss_9F8 + v6 * 20 + 18) >> 1) & 1)) { /* Fresh second-state poll. */
+                        lbl_10_bss_55AE0 = 0;
+                    }
+                    if ((*(u16 *)(lbl_1_bss_9F8 + v6 * 20 + 16) & 1) ||
+                        (*(u16 *)(lbl_1_bss_9F8 + v6 * 20 + 18) & 1)) {
+                        lbl_10_bss_55AE0 = 1;
+                    }
+                }
+            }
+        }
+        v11 = (lbl_801A66A0 - (s16)v10) * 21;
+        v12 = 180;
+        if (v11 <= 180) v12 = v11;
+        v1 = lbl_8006D188((s32)(lbl_10_rodata_588 * (f32)v12));
+        t1 = lbl_10_bss_55AE0 == 1 ? v1 : lbl_10_rodata_1A4[0];
+        fn_10_18C54(38, saved.value, t1, 1);
+        t1 = lbl_10_bss_55AE0 == 0 ? v1 : lbl_10_rodata_1A4[0];
+        fn_10_18C54(38, saved.value, t1, 0);
+    }
+}
+/* fzgx:end fn_10_18A50 */
+
 /* fzgx:begin fn_10_19290 */
 extern void fn_800736C0(int, void *);
 extern void fn_80073620(int, int);
