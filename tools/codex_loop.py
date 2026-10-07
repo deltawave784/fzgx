@@ -9,6 +9,10 @@ When the Codex account runs out of usage ("try again at 3:35 AM"), the loop mark
 crashed sessions as crashes (they do not count as attempts), sleeps until the reset time
 plus a few minutes, and continues. Only completed batches count toward `--max-batches`.
 
+After each batch the loop runs one GPT-6 Astra session (`--astra-model`, `--astra-max` per run, 0 turns it
+off) on the best near miss Astra has not tried; when the Sol pool is empty it keeps running Astra alone.
+`--max-attempts` (default 12) is how many attempts a function may already have and still be picked.
+
 Stops on: `--max-batches`, `--hours` (wall clock, waits included), `--zero-streak` batches in
 a row without a match in the last band, a failed gate, an empty pool, or the file
 `.fzgx/STOP` (create it to stop after the current batch or wait). Never pushes.
@@ -115,17 +119,60 @@ def wait_until(when, stop_file: Path, deadline: float) -> bool:
     return True
 
 
+def pick_astra(model: str, max_attempts: int):
+    """The one near miss GPT-6 Astra has not tried: best recorded score first, preferring real near
+    misses (90-99.9%) over bodies that already score 100% (those fail on the link, not the C)."""
+    rows = []
+    for module in MODULES:
+        res = run(["tools/fzgx.py", "route", "--module", module, "--skip-tried-by", model,
+                   "--max-attempts", str(max_attempts), "--limit", "3", "--json"], capture=True)
+        try:
+            rows += json.loads(res.stdout)
+        except ValueError:
+            continue
+    rows = [r for r in rows if r.get("seed_best") is not None]
+    rows.sort(key=lambda r: (not 90 <= r["seed_best"] < 100, -r["seed_best"], r["size"]))
+    return rows[0]["symbol"] if rows else None
+
+
+def astra_step(a, n: int):
+    """One Astra session on one function. Returns the number matched, or None when nothing is left."""
+    symbol = pick_astra(a.astra_model, a.max_attempts + 6)
+    if not symbol:
+        return None
+    batch = f"codex-astra-{time.strftime('%Y%m%d-%H%M')}-{n}"
+    log(f"{batch}: {symbol} on {a.astra_model}")
+    res = run(["tools/orchestrate.py", "--harness", "codex", "--provider", "openai", "--model", a.astra_model,
+               "--effort", "high", "--parallel", "1", "--max-checks", "40", "--max-stale", "12",
+               "--max-attempts", str(a.max_attempts + 12), "--no-trivial", "--batch", batch,
+               "--symbols", symbol], capture=True)
+    summary = {}
+    for line in reversed(res.stdout.splitlines()):
+        if line.startswith("{") and '"matched"' in line:
+            summary = json.loads(line)
+            break
+    matched = summary.get("matched", 0)
+    log(f"{batch}: {matched} matched, {summary.get('released', '?')} released, {summary.get('failed', '?')} failed, "
+        f"{summary.get('wall_s', '?')}s")
+    if usage_limit(batch, summary.get("failed", 0)):
+        log(f"{forgive_crashes()} astra crashes returned to the pool (the next sol batch handles the wait)")
+    return matched
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--model", default="gpt-6.1-sol")
     ap.add_argument("--batch-size", type=int, default=16)
     ap.add_argument("--per-module", type=int, default=6)
-    ap.add_argument("--max-attempts", type=int, default=6)
+    ap.add_argument("--max-attempts", type=int, default=12, help="attempts a function may have had and still be picked")
     ap.add_argument("--max-batches", type=int, default=6)
     ap.add_argument("--hours", type=float, default=24.0)
     ap.add_argument("--zero-streak", type=int, default=3)
     ap.add_argument("--parallel", type=int, default=12)
+    ap.add_argument("--astra-model", default="gpt-6-astra")
+    ap.add_argument("--astra-max", type=int, default=40, help="Astra sessions per loop run (0 disables it)")
     a = ap.parse_args()
+    astra_used = 0
 
     stop_file = ROOT / ".fzgx" / "STOP"
     started, streak, total, band, n, waits = time.time(), 0, 0, 0, 0, 0
@@ -145,12 +192,20 @@ def main() -> int:
             log(f"band {lo}-{hi} B empty")
             band += 1
         if not symbols:
+            if a.astra_max and astra_used < a.astra_max:
+                log("sol pool empty: astra only")
+                astra_used += 1
+                got = astra_step(a, n)
+                if got is None:
+                    log("astra pool empty"); break
+                total += got
+                continue
             log("pool empty"); break
         batch = f"codex-goal-{time.strftime('%Y%m%d-%H%M')}-{n}"
         log(f"{batch}: {len(symbols)} functions, band {lo}-{hi} B, effort {effort}")
         res = run(["tools/orchestrate.py", "--harness", "codex", "--provider", "openai", "--model", a.model,
                    "--effort", effort, "--parallel", str(a.parallel), "--max-checks", str(checks),
-                   "--max-stale", str(stale), "--max-attempts", "12", "--no-trivial", "--batch", batch,
+                   "--max-stale", str(stale), "--max-attempts", str(a.max_attempts + 6), "--no-trivial", "--batch", batch,
                    "--symbols", *symbols], capture=True)
         summary = {}
         for line in reversed(res.stdout.splitlines()):
@@ -179,7 +234,13 @@ def main() -> int:
         gate = run(["tools/fzgx.py", "gate"], capture=True)
         if "GATE: PASS" not in gate.stdout:
             log("GATE FAILED, stopping:\n" + gate.stdout[-1500:]); return 1
-        if matched:
+        if a.astra_max and astra_used < a.astra_max and not stop_file.exists():
+            astra_used += 1
+            got = astra_step(a, n) or 0
+            total += got
+        else:
+            got = 0
+        if matched or got:
             run(["tools/fzgx.py", "progress", "--note", f"codex-goal {batch}"], capture=True)
         streak = 0 if matched else streak + 1
         if streak >= a.zero_streak:
