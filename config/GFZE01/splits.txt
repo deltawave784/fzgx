@@ -5678,3 +5678,6 @@ dol/fn_80037B94.c:
 
 dol/fn_800725DC.c:
 	.text       start:0x800725DC end:0x80072614 align:4
+
+dol/fn_80037B14.c:
+	.text       start:0x80037B14 end:0x80037B68 align:4

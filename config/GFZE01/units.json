@@ -17198,6 +17198,16 @@
   },
   {
     "module": "main",
+    "source": "dol/fn_80037B14.c",
+    "symbols": [
+      "fn_80037B14"
+    ],
+    "status": "matching",
+    "mw_version": "GC/1.2.5n",
+    "extra_cflags": []
+  },
+  {
+    "module": "main",
     "source": "dol/fn_80037B94.c",
     "symbols": [
       "fn_80037B94"
