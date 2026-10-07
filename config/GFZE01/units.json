@@ -60841,6 +60841,17 @@
   },
   {
     "module": "option",
+    "source": "rel/option/_prolog/fn_4_4834.c",
+    "symbols": [
+      "fn_4_4834"
+    ],
+    "status": "matching",
+    "mw_version": null,
+    "extra_cflags": [],
+    "tu": "rel/option/_prolog.c"
+  },
+  {
+    "module": "option",
     "source": "rel/option/_prolog/fn_4_4B10.c",
     "symbols": [
       "fn_4_4B10"

@@ -565,6 +565,131 @@ void fn_4_4784(void) {
 }
 /* fzgx:end fn_4_4784 */
 
+/* fzgx:begin fn_4_4834 noprologue */
+#include "types.h"
+
+struct fn_4_4834_lbl_4_bss_0 {
+    u8 pad_0[0x8];
+    u32 unk_8;
+    u8 pad_C[0x2];
+    u8 unk_E;
+    u8 pad_F[0x1];
+    u16 unk_10;
+    u8 pad_12[0xA6];
+    u16 unk_B8;
+    u8 unk_BA;
+    u8 unk_BB;
+    u8 unk_BC;
+    u8 unk_BD;
+    u8 unk_BE;
+};
+struct fn_4_4834_lbl_1_bss_718E0 {
+    u8 pad_0[0x2];
+    u8 unk_2;
+};
+extern int fn_1_4C10(void);
+extern struct fn_4_4834_lbl_1_bss_718E0 lbl_1_bss_718E0;
+extern struct fn_4_4834_lbl_4_bss_0 lbl_4_bss_0;
+extern u16 lbl_1_bss_96A;
+extern u32 fn_4_0(u32, u32, u32, u32, u32);
+extern u32 lbl_1_bss_9F8;
+extern void fn_1_1280(u32);
+extern void fn_1_156884(s32);
+extern void fn_1_4A00(s32, u8, u32);
+extern void fn_1_A2D84(u32);
+extern void fn_1_F73A8(int, void *, void *);
+extern void fn_1_F755C(u8);
+
+static inline u32 test_bit(u32 value, u32 bit) {
+    return (u32)__cntlzw(__rlwnm(value, (32 - bit) & 31, 31, 31)) >> 5;
+}
+
+void fn_4_4834(void) {
+    struct fn_4_4834_lbl_4_bss_0 *p_lbl_4_bss_0;
+    s32 v5;
+    u32 v0;
+    u16 v4;
+    u32 v3;
+    u32 v7;
+    u32 v8;
+    p_lbl_4_bss_0 = (struct fn_4_4834_lbl_4_bss_0 *)&lbl_4_bss_0;
+    v5 = 0;
+    if (p_lbl_4_bss_0->unk_10 != 0) {
+        if (fn_1_4C10() == 0) {
+            fn_1_1280(1);
+            lbl_1_bss_96A = p_lbl_4_bss_0->unk_10;
+            p_lbl_4_bss_0->unk_10 = 0;
+        }
+        return;
+    }
+    switch ((s32)p_lbl_4_bss_0->unk_BB) {
+    case 0:
+        p_lbl_4_bss_0->unk_BD = fn_4_0(p_lbl_4_bss_0->unk_BD, 0, 3, -1, 0);
+        v0 = *(u16 *)((u8 *)&lbl_1_bss_9F8 + 8);
+        if ((v0 >> 8) & 1) {
+            fn_1_A2D84(0xA9010100);
+            p_lbl_4_bss_0->unk_BB = 1;
+        } else if ((v0 >> 9) & 1) {
+            fn_1_A2D84(0xA9010200);
+            if (p_lbl_4_bss_0->unk_BA == lbl_1_bss_718E0.unk_2) {
+                fn_1_F755C(p_lbl_4_bss_0->unk_BE);
+                v3 = p_lbl_4_bss_0->unk_8;
+                p_lbl_4_bss_0->unk_10 = 77;
+                fn_1_4A00(0, 15, v3);
+            } else {
+                p_lbl_4_bss_0->unk_BB = 2;
+                p_lbl_4_bss_0->unk_BC = 0;
+            }
+        }
+        break;
+    case 1:
+        if ((*(u16 *)((u8 *)&lbl_1_bss_9F8 + 8) >> 9) & 1) {
+            fn_1_A2D84(0xA9010200);
+            p_lbl_4_bss_0->unk_BB = 0;
+            break;
+        }
+        v4 = *(u16 *)((u8 *)&lbl_1_bss_9F8 + 16);
+        if (((v4 >> 1) & 1) || (((v0 = *(u16 *)((u8 *)&lbl_1_bss_9F8 + 18)) >> 1) & 1)) {
+            p_lbl_4_bss_0->unk_BA &= ~(0x80000000u >> (31 - p_lbl_4_bss_0->unk_BD));
+            fn_1_A2D84(0xA9010000);
+        } else if ((v4 & 1) || (v0 & 1)) {
+            fn_1_A2D84(0xA9010000);
+            v7 = p_lbl_4_bss_0->unk_BD;
+            v8 = p_lbl_4_bss_0->unk_BA;
+            v5 = test_bit(v8, v7);
+            p_lbl_4_bss_0->unk_BA = v8 | (0x80000000u >> (31-v7));
+        }
+        fn_1_F755C(p_lbl_4_bss_0->unk_BA);
+        if (v5) {
+            fn_1_F73A8(p_lbl_4_bss_0->unk_BD, (void *)1, (void *)18);
+            fn_1_156884(p_lbl_4_bss_0->unk_BD);
+        }
+        break;
+    case 2:
+        p_lbl_4_bss_0->unk_BC = fn_4_0(p_lbl_4_bss_0->unk_BC, 0, 1, -1, 1);
+        v0 = *(u16 *)((u8 *)&lbl_1_bss_9F8 + 8);
+        if ((v0 >> 9) & 1) {
+            fn_1_A2D84(0xA9010200);
+            p_lbl_4_bss_0->unk_BB = 0;
+        } else if ((v0 >> 8) & 1) {
+            fn_1_A2D84(0xA9010100);
+            if (p_lbl_4_bss_0->unk_BC == 0) {
+                lbl_1_bss_718E0.unk_2 = p_lbl_4_bss_0->unk_BA;
+                p_lbl_4_bss_0->unk_E = 1;
+                p_lbl_4_bss_0->unk_B8 = 77;
+                p_lbl_4_bss_0->unk_10 = 76;
+            } else {
+                fn_1_F755C(p_lbl_4_bss_0->unk_BE);
+                v3 = p_lbl_4_bss_0->unk_8;
+                p_lbl_4_bss_0->unk_10 = 77;
+                fn_1_4A00(0, 15, v3);
+            }
+        }
+        break;
+    }
+}
+/* fzgx:end fn_4_4834 */
+
 /* fzgx:begin fn_4_4B10 */
 extern u32 fn_1_435C(u32);
 
