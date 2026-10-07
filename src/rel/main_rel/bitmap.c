@@ -174,6 +174,75 @@ void fn_1_481E8(int arg0) {
 }
 /* fzgx:end fn_1_481E8 */
 
+/* fzgx:begin fn_1_48214 */
+typedef struct {
+    s32 unk_0;
+    u8 pad_4[0x1C];
+    Obj_1_data_FCD4_At20 *unk_20;
+    u8 unk_24;
+    u8 pad_25[0x3];
+} TextureRecord;
+
+typedef struct {
+    u32 unk_0;
+    u32 unk_4;
+    u32 unk_8;
+} BitmapSlot;
+
+extern s32 lbl_801A6410;
+extern s32 fn_8006FDEC(void);
+extern void fn_1_46B4(u32 arg0, u32 arg1, const char *arg2, int arg3);
+extern void fn_1_484CC(s32);
+
+// Releases the texture records in [index] (or all of them for index 188).
+void fn_1_48214(int index, int enabled) {
+    s16 i;
+    TextureRecord *entry;
+    s16 end;
+    s32 found;
+    s32 j;
+    TextureRecord *other;
+    u8 bitmap;
+
+    fn_8006FDEC();
+    if (index == 0xbc) {
+        i = 1;
+        end = 0xbc;
+    } else {
+        i = index < 1 ? 1 : index;
+        end = index + 1;
+    }
+    for (entry = &((TextureRecord *)&lbl_1_data_FCD4)[i]; i < end; i++, entry++) {
+        if (entry->unk_0 != 0) {
+            bitmap = entry->unk_24;
+            if (bitmap == 0) {
+                fn_1_46B4(lbl_801A6410, entry->unk_20->unk_C, (char *)lbl_1_data_1A368, 0x21e);
+                fn_1_46B4(lbl_801A6410, (u32)entry->unk_20, (char *)lbl_1_data_1A368, 0x21f);
+                entry->unk_0 = 0;
+            } else {
+                fn_1_46B4(((BitmapSlot *)&lbl_1_data_6CA0)[bitmap].unk_0, entry->unk_20->unk_C,
+                          (char *)lbl_1_data_1A368, 0x223);
+                fn_1_46B4(((BitmapSlot *)&lbl_1_data_6CA0)[bitmap].unk_0, (u32)entry->unk_20,
+                          (char *)lbl_1_data_1A368, 0x224);
+                entry->unk_0 = 0;
+                if (enabled == 0) {
+                    found = 0;
+                    for (j = 0; j < 0xbc; j++) {
+                        other = &((TextureRecord *)&lbl_1_data_FCD4)[j];
+                        if (other->unk_0 != 0 && other->unk_24 == entry->unk_24) {
+                            found = 1;
+                        }
+                    }
+                    if (found == 0) {
+                        fn_1_484CC(entry->unk_24);
+                    }
+                }
+            }
+        }
+    }
+}
+/* fzgx:end fn_1_48214 */
+
 /* fzgx:begin fn_1_48418 */
 typedef struct {
     s32 unk_0;
