@@ -5669,3 +5669,6 @@ dol/fn_8006F4E0.c:
 
 dol/gdev_cc_read.c:
 	.text       start:0x8008E518 end:0x8008E60C align:4
+
+dol/fn_8003D588.c:
+	.text       start:0x8003D588 end:0x8003D690 align:4
