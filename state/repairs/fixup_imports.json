@@ -12065,7 +12065,8 @@
     "headers_sha256": "73cf7422bff8955cde8d5ebf68ebefe0241675ac791653eb8a9749cb0d84419f",
     "oracle_sha256": "ca197f0a12605d3f05c8d964147669b8debb231a26880aee4ab16caec0d261cf",
     "recipe": [],
-    "link": "pending"
+    "link": "verified",
+    "commit": "7c1c4b07"
   },
   "fn_1_79654": {
     "seed_symbol": "fn_1_79654",
@@ -12082,6 +12083,7 @@
     "headers_sha256": "73cf7422bff8955cde8d5ebf68ebefe0241675ac791653eb8a9749cb0d84419f",
     "oracle_sha256": "ca197f0a12605d3f05c8d964147669b8debb231a26880aee4ab16caec0d261cf",
     "recipe": [],
-    "link": "pending"
+    "link": "verified",
+    "commit": "7c1c4b07"
   }
 }
