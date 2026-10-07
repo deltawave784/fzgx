@@ -3603,14 +3603,16 @@ def shared_pool_primer(p, symbol, body, check):
                     segments[-1][1].append(use)
                 else:
                     segments.append(('lits', [use]))
+        # builtin types only: a saved body can carry just the typedefs it uses (no f64, or no
+        # types.h at all), and a primer naming a missing typedef never compiles (fn_1_29968)
         parts = ['#pragma section code_type ".fzgxpool"']
         for n, (k, v) in enumerate(segments, 1):
             if k == 'lits':
-                parts.append(f'__declspec(section ".fzgxpool") static void fzgx_pool_prime{n}(void) {{\n    volatile f32 s; volatile f64 d;  /* fzgx-allow: S2 pool primer sinks */\n    ' + '\n    '.join(v) + '\n}')
+                parts.append(f'__declspec(section ".fzgxpool") static void fzgx_pool_prime{n}(void) {{\n    volatile float s; volatile double d;  /* fzgx-allow: S2 pool primer sinks */\n    ' + '\n    '.join(v) + '\n}')
             else:
                 words = [_struct.unpack('>I', v[i:i + 4])[0] for i in range(0, len(v), 4)]
-                parts.append(f'static const u32 fzgx_pool_table{n}[{len(words)}] = {{' + ', '.join(f'0x{w:08X}' for w in words) + '};  /* fzgx-allow: A1 retail pool bytes */')
-                parts.append(f'__declspec(section ".fzgxpool") static void fzgx_pool_keep{n}(void) {{ const u32 *volatile cp; cp = fzgx_pool_table{n}; }}  /* fzgx-allow: S2 pool primer sink */')
+                parts.append(f'static const unsigned long fzgx_pool_table{n}[{len(words)}] = {{' + ', '.join(f'0x{w:08X}' for w in words) + '};  /* fzgx-allow: A1 retail pool bytes */')
+                parts.append(f'__declspec(section ".fzgxpool") static void fzgx_pool_keep{n}(void) {{ const unsigned long *volatile cp; cp = fzgx_pool_table{n}; }}  /* fzgx-allow: S2 pool primer sink */')
         parts.append('#pragma section code_type ".text"')
         primer = '\n'.join(parts) + '\n'
         m = re.search(r'^[\w \*]+?\b' + re.escape(sym.name) + r'\s*\([^;{]*\)\s*\{', body, re.M)
