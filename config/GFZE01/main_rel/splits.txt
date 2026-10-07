@@ -6875,3 +6875,6 @@ rel/main_rel/screen_effect/fn_1_76DC0.c:
 
 rel/main_rel/custom_memcard/fn_1_131390.c:
 	.text       start:0x00131390 end:0x001314A4 align:4
+
+rel/main_rel/car/fn_1_854D4.c:
+	.text       start:0x000854D4 end:0x00085688 align:4
