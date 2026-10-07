@@ -1,5 +1,5 @@
 {
- "generated": 1791334369,
+ "generated": 1791334606,
  "functions": [
   {
    "symbol": "car_colchg:_prolog",
@@ -93997,19 +93997,19 @@
   {
    "symbol": "fn_1_14A284",
    "module": "main_rel",
-   "unit": null,
+   "unit": "rel/main_rel/sel_static_disp/fn_1_14A284.c",
    "addr": 1352324,
    "size": 164,
    "status": "matched",
-   "attempts": 4,
+   "attempts": 1,
    "best_percent": 100.0,
    "claimed_by": null,
    "claimed_at": null,
    "claim_ttl": null,
-   "matched_commit": "ef6760a",
+   "matched_commit": "7c327d03",
    "blocked_reason": null,
    "prev_status": null,
-   "link_state": "pending"
+   "link_state": "verified"
   },
   {
    "symbol": "fn_1_14A328",
@@ -496236,6 +496236,26 @@
    "started": 1791333944,
    "ended": 1791333980,
    "checks": 1,
+   "final_percent": 100.0,
+   "tokens_in": 0,
+   "tokens_out": 0,
+   "cost_usd": 0.0,
+   "outcome": "matched",
+   "notes": "oracle match accepted automatically",
+   "best_body_path": null,
+   "stale_checks": 0,
+   "best_in_attempt": 100.0,
+   "best_rows": 0
+  },
+  {
+   "id": 18598,
+   "symbol": "fn_1_14A284",
+   "agent": "restore-fn_1_14A284-20261006",
+   "harness": null,
+   "model": null,
+   "started": 1791334456,
+   "ended": 1791334500,
+   "checks": 2,
    "final_percent": 100.0,
    "tokens_in": 0,
    "tokens_out": 0,
