@@ -1847,6 +1847,32 @@ void fn_15_3174(void * arg0) {
 #pragma opt_propagation reset
 /* fzgx:end fn_15_3174 */
 
+/* fzgx:begin fn_15_38FC */
+#include "rel/winning/winning.h"
+
+extern u32 lbl_15_bss_D4[32];
+extern u32 lbl_801A6410;
+extern void fn_1_469BC(void);
+typedef struct { s32 active; s32 entries[5]; } Sig_fn_1_8F494_Fn1_8F494_Object;
+extern void fn_1_8F494(Sig_fn_1_8F494_Fn1_8F494_Object *);
+extern void fn_1_46B4(u32, u32, const char *, int);
+
+void fn_15_38FC(void) {
+    u32 *manager;
+    const char *file;
+    u32 *p;
+    s16 i;
+    fn_1_469BC();
+    for (i = 0; i < 29; i++) {
+        if (lbl_15_bss_D4[i] != 0) {
+            fn_1_8F494((Sig_fn_1_8F494_Fn1_8F494_Object *)lbl_15_bss_D4[i]);
+            fn_1_46B4(lbl_801A6410, lbl_15_bss_D4[i], (const char *)lbl_15_data_A4, 0x9DA);
+            lbl_15_bss_D4[i] = 0;
+        }
+    }
+}
+/* fzgx:end fn_15_38FC */
+
 /* fzgx:begin fn_15_398C */
 struct fn_15_398C_entry {
     u8 pad_0[0x18];

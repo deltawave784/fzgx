@@ -5603,3 +5603,69 @@ dol/fn_80058498.c:
 
 dol/fn_800526F0.c:
 	.text       start:0x800526F0 end:0x80052850 align:4
+
+dol/fn_80052850.c:
+	.text       start:0x80052850 end:0x800529B0 align:4
+
+dol/fn_8006F1F0.c:
+	.text       start:0x8006F1F0 end:0x8006F394 align:4
+
+dol/fn_80053610.c:
+	.text       start:0x80053610 end:0x80053770 align:4
+
+dol/fn_80053770.c:
+	.text       start:0x80053770 end:0x800538D0 align:4
+
+dol/fn_8008A1CC.c:
+	.text       start:0x8008A1CC end:0x8008A3C0 align:4
+
+dol/fn_80052F30.c:
+	.text       start:0x80052F30 end:0x80053090 align:4
+
+dol/fn_80041EF8.c:
+	.text       start:0x80041EF8 end:0x800420F4 align:4
+
+dol/fn_80053090.c:
+	.text       start:0x80053090 end:0x800531F0 align:4
+
+dol/fn_80053350.c:
+	.text       start:0x80053350 end:0x800534B0 align:4
+
+dol/fn_800538D0.c:
+	.text       start:0x800538D0 end:0x80053A30 align:4
+
+dol/fn_800081C8.c:
+	.text       start:0x800081C8 end:0x80008204 align:4
+
+dol/fn_80037D40.c:
+	.text       start:0x80037D40 end:0x80037D7C align:4
+
+dol/fn_80037D14.c:
+	.text       start:0x80037D14 end:0x80037D40 align:4
+
+dol/fn_8006C788.c:
+	.text       start:0x8006C788 end:0x8006C7E8 align:4
+
+dol/fn_80037BC0.c:
+	.text       start:0x80037BC0 end:0x80037BF4 align:4
+
+dol/fn_8008A764.c:
+	.text       start:0x8008A764 end:0x8008A80C align:4
+
+dol/fn_8006F120.c:
+	.text       start:0x8006F120 end:0x8006F1F0 align:4
+
+dol/fn_80025E18.c:
+	.text       start:0x80025E18 end:0x80025EE0 align:4
+
+dol/fn_8006A8CC.c:
+	.text       start:0x8006A8CC end:0x8006A998 align:4
+
+dol/fn_8006A480.c:
+	.text       start:0x8006A480 end:0x8006A554 align:4
+
+dol/fn_8006F4E0.c:
+	.text       start:0x8006F4E0 end:0x8006F5C4 align:4
+
+dol/gdev_cc_read.c:
+	.text       start:0x8008E518 end:0x8008E60C align:4

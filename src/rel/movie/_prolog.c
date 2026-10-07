@@ -299,6 +299,23 @@ void fn_5_1404(struct fn_5_1404_entry *list) {
 }
 /* fzgx:end fn_5_1404 */
 
+/* fzgx:begin fn_5_2C54 noprologue */
+#include "types.h"
+#include "rel/movie/globals.h"
+#include "rel/movie/movie.h"
+
+s16 fn_5_2C54(u8 *arg0, s8 arg1, s8 arg2) {
+    s16 value;
+    s8 i;
+    value = 0;
+    for (i = 0; i < arg2; i++) {
+        value *= 10;
+        value += arg0[arg1 + i] - 0x30;
+    }
+    return value;
+}
+/* fzgx:end fn_5_2C54 */
+
 /* fzgx:begin fn_5_3BF8 */
 typedef u32 (*fn_5_3BF8_Fn0)(u32);
 struct fn_5_3BF8_lbl_5_bss_0 {
