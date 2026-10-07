@@ -397,6 +397,42 @@ void fn_1_AB75C(fn_1_AB75C_ArgStruct *arg) {
 }
 /* fzgx:end fn_1_AB75C */
 
+/* fzgx:begin fn_1_AB7C4 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/memcard.h"
+
+extern const f32 lbl_1_rodata_4CAC;
+
+typedef struct {
+    u8 pad[0x2];
+    u16 field_0x2;
+    s32 field_0x4;
+} fn_1_AB7C4_OffsetStruct;
+
+typedef struct {
+    u8 byte_0;
+    u8 pad_0x1[0x23];
+    fn_1_AB7C4_OffsetStruct *ptr_0x24;
+    u8 pad_0x28[0x2];
+    u8 flags_0x2a;
+    u8 pad_0x2b[0x5];
+    s32 field_0x30;
+    u8 pad_0x34[0x4];
+    f32 field_0x38;
+} fn_1_AB7C4_ArgStruct;
+
+void fn_1_AB7C4(fn_1_AB7C4_ArgStruct *arg) {
+    arg->ptr_0x24->field_0x4 = CARDGetResultCode(arg->byte_0);
+    arg->field_0x38 = (fn_8002C0A0(arg->byte_0) - arg->field_0x30) / lbl_1_rodata_4CAC;
+    if (arg->ptr_0x24->field_0x4 != -1) {
+        arg->flags_0x2a &= ~2;
+        arg->ptr_0x24->field_0x2 = 0;
+        arg->flags_0x2a &= ~16;
+    }
+}
+/* fzgx:end fn_1_AB7C4 */
+
 /* fzgx:begin fn_1_AB870 */
 #include "types.h"
 #include "dolphin/card.h"
