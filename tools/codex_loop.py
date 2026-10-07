@@ -119,7 +119,7 @@ def forgive_crashes() -> int:
 def wait_until(when, stop_file: Path, deadline: float) -> bool:
     """Sleep until `when` (plus a margin), polling the stop file. False if told to stop."""
     when += datetime.timedelta(minutes=3)
-    log(f"usage limit: waiting until {when:%H:%M} (create .fzgx/STOP to stop)")
+    log(f"usage limit: waiting until {when:%a %b %d %H:%M} (create .fzgx/STOP to stop)")
     while datetime.datetime.now() < when:
         if stop_file.exists() or time.time() > deadline:
             return False
