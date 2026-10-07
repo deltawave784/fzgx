@@ -1611,6 +1611,70 @@ void fn_3_7B94(void) {
 }
 /* fzgx:end fn_3_7B94 */
 
+/* fzgx:begin fn_3_7CF8 */
+#include "rel/customize/globals.h"
+
+extern s16 lbl_3_bss_6D8C0[600];
+extern u8 lbl_3_bss_7E240[1200];
+extern u32 lbl_1_bss_6D82C;
+extern u32 lbl_3_bss_20848;
+extern u8 lbl_3_bss_6DE20[64832];
+extern s16 fn_1_14F014(void);
+extern void fn_1_14E9E4(int, void *);
+extern void fn_80008BEC(s16 *, int, u32);
+extern void fn_80008BA8(u8 *, s16 *, s32);
+extern void fn_1_12AB38(void *);
+extern u32 fn_1_D3884(void *);
+extern u32 fn_1_12A32C(void *);
+extern void fn_1_12A2B8(u32);
+extern void fn_1_12A2C4(u32);
+extern void fn_1_14D994(void *, u32, u32);
+extern void fn_3_7A30(void);
+
+static inline s16 fn_3_7CF8_array_read(s32 index, s16 *array) { return array[index]; }
+
+void fn_3_7CF8(void) {
+    s16 loc_8[6];
+    struct { s16 *value; } p_lbl_3_bss_6D8C0;
+    u8 *p_lbl_3_data_0;
+    u8 *p_lbl_3_bss_7E240;
+    s16 *v0;
+    struct { s32 value; } counter1;
+    struct { s32 value; } counter2;
+#define v1 counter1.value
+#define v2 counter2.value
+    s16 v3;
+    s32 offset;
+
+    p_lbl_3_data_0 = (u8 *)&lbl_3_data_0;
+    v1 = 0;
+    while ((s16)v1 < fn_1_14F014()) {
+        fn_1_14E9E4(v1, lbl_3_bss_6D8C0 + v1 * 8);
+        v1++;
+    }
+    fn_80008BEC(loc_8, 0, 6);
+    v2 = 0;
+    while ((s16)v2 < fn_1_14F014()) {
+        v3 = fn_3_7CF8_array_read(1, lbl_3_bss_6D8C0 + v2 * 8);
+        fn_80008BA8((lbl_3_bss_7E240) + v3 * 0x190 + fn_3_7CF8_array_read(v3, loc_8) * 0x10, lbl_3_bss_6D8C0 + v2 * 8, 0x10);
+        loc_8[v3]++;
+        v2++;
+    }
+    if (lbl_1_bss_6D82C == 0) {
+        fn_1_12AB38(p_lbl_3_data_0 + 0x18a4);
+        lbl_1_bss_6D82C = fn_1_D3884(p_lbl_3_data_0 + 0x18b0);
+        fn_1_12AB38(p_lbl_3_data_0 + 0x18c0);
+    }
+    *(u32 *)(p_lbl_3_data_0 + 0x11d8) = fn_1_12A32C(p_lbl_3_data_0 + 0x1180);
+    fn_1_12A2B8(1);
+    fn_1_12A2C4(1);
+    fn_1_14D994(lbl_3_bss_6DE20, 1 << lbl_3_bss_20848, 1);
+    fn_1_12A2B8(0);
+    fn_1_12A2C4(0);
+    fn_3_7A30();
+}
+/* fzgx:end fn_3_7CF8 */
+
 /* fzgx:begin fn_3_837C */
 extern u32 lbl_3_bss_140;
 extern u32 lbl_3_bss_243C0;
