@@ -41241,6 +41241,24 @@
   },
   {
     "module": "main_rel",
+    "source": "rel/main_rel/game/fn_1_32600.c",
+    "symbols": [
+      "fn_1_32600"
+    ],
+    "status": "matching",
+    "mw_version": "GC/1.3.2",
+    "extra_cflags": [],
+    "tu": "rel/main_rel/game.c",
+    "pool": {
+      "...rodata.0": "lbl_1_rodata_BD8",
+      "@11": "lbl_1_rodata_BE4",
+      "@12": "lbl_1_rodata_BE4+0x4",
+      "@114": "lbl_1_rodata_D6C+0x50",
+      "@9": "lbl_1_rodata_BDC"
+    }
+  },
+  {
+    "module": "main_rel",
     "source": "rel/main_rel/game/fn_1_327F8.c",
     "symbols": [
       "fn_1_327F8"
