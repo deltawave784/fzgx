@@ -66805,6 +66805,35 @@
   },
   {
     "module": "title",
+    "source": "rel/title/operation/fn_8_8440.c",
+    "symbols": [
+      "fn_8_8440"
+    ],
+    "status": "matching",
+    "mw_version": "GC/1.3.2",
+    "extra_cflags": [],
+    "tu": "rel/title/operation.c",
+    "pool": {
+      "...rodata.0": "lbl_8_rodata_160",
+      "@13": "lbl_8_rodata_188",
+      "@5": "lbl_8_rodata_160",
+      "@8": "lbl_8_rodata_160+0x10",
+      "@7": "lbl_8_rodata_160+0xC",
+      "@6": "lbl_8_rodata_160+0x8",
+      "@19": "lbl_8_rodata_194",
+      "@20": "lbl_8_rodata_198",
+      "@21": "lbl_8_rodata_198+0x4",
+      "@9": "lbl_8_rodata_160+0x18",
+      "@22": "lbl_8_rodata_198+0x8",
+      "@12": "lbl_8_rodata_160+0x24",
+      "@23": "lbl_8_rodata_198+0xC",
+      "@24": "lbl_8_rodata_198+0x10",
+      "@44": "lbl_8_rodata_198+0x38",
+      "@11": "lbl_8_rodata_160+0x20"
+    }
+  },
+  {
+    "module": "title",
     "source": "rel/title/operation/fn_8_8C48.c",
     "symbols": [
       "fn_8_8C48"
