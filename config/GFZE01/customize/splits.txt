@@ -515,3 +515,6 @@ rel/customize/_prolog/fn_3_7CF8.c:
 
 rel/customize/editor/fn_3_16FD0.c:
 	.text       start:0x00016FD0 end:0x00017098 align:4
+
+rel/customize/toolkit/fn_3_23524.c:
+	.text       start:0x00023524 end:0x00023724 align:4
