@@ -6806,3 +6806,6 @@ rel/main_rel/game/fn_1_3F75C.c:
 
 rel/main_rel/memcard/fn_1_ABE88.c:
 	.text       start:0x000ABE88 end:0x000ABF44 align:4
+
+rel/main_rel/phys/fn_1_E49D4.c:
+	.text       start:0x000E49D4 end:0x000E4A38 align:4

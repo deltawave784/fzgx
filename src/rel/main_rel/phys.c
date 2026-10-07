@@ -789,6 +789,24 @@ void fn_1_E39F0(void) {
 }
 /* fzgx:end fn_1_E39F0 */
 
+/* fzgx:begin fn_1_E49D4 noprologue */
+#include "types.h"
+
+extern u32 fn_1_E3C38(u32, u32);
+extern u32 fn_1_E5430(u32);
+extern u32 fn_1_E54A8(u32, u32);
+
+void fn_1_E49D4(void) {
+    s32 v0;
+    u32 t0, t1;
+    v0 = 0;
+    while ((s16)v0 < 6) {
+    fn_1_E3C38((fn_1_E54A8(v0, 0)), (fn_1_E5430(v0)));
+    v0++;
+    }
+}
+/* fzgx:end fn_1_E49D4 */
+
 /* fzgx:begin fn_1_E4A38 */
 typedef struct {
     u8 unk0[0x100];

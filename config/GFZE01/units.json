@@ -45729,6 +45729,17 @@
   },
   {
     "module": "main_rel",
+    "source": "rel/main_rel/phys/fn_1_E49D4.c",
+    "symbols": [
+      "fn_1_E49D4"
+    ],
+    "status": "matching",
+    "mw_version": null,
+    "extra_cflags": [],
+    "tu": "rel/main_rel/phys.c"
+  },
+  {
+    "module": "main_rel",
     "source": "rel/main_rel/phys/fn_1_E4A38.c",
     "symbols": [
       "fn_1_E4A38"
