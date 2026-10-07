@@ -1389,6 +1389,166 @@ void fn_10_5780(struct Fn105780 *obj) {
 }
 /* fzgx:end fn_10_5780 */
 
+/* fzgx:begin fn_10_5E94 */
+#include "rel/sel/sel.h"
+
+struct fn_10_5E94_lbl_1_bss_8B3A0 {
+    u8 pad_0[0x98];
+    u32 unk_98;
+};
+extern struct fn_10_5E94_lbl_1_bss_8B3A0 lbl_1_bss_8B3A0;
+extern u32 fn_1_13FA88(s16);
+extern u32 lbl_801A66A8;
+extern u8 lbl_1_bss_9C8[];
+extern u8 lbl_1_bss_9F8[];
+extern void fn_1_12F128(s16);
+extern void fn_1_12F150(s16, u32, u32);
+extern void fn_1_A2D84(u32);
+
+#pragma opt_common_subs off
+#pragma opt_propagation off
+#define HALF(p, off) (*(u16 *)((u8 *)(p) + (off)))
+#define FIELD(off) (*(s16 *)((u8 *)arg0 + (off)))
+#define ACTIVE(i) (__rlwnm(p_lbl_1_bss_8B3A0->unk_98, ((s16)(i) + 1) & 31, 31, 31))
+#define CHANGE(off,lo,hi,prev,val) \
+    prev = FIELD(off); \
+    val = prev + (s16)v25.value; \
+    if ((s32)val > hi) val = lo; \
+    else val = (s32)val < lo ? hi : val; \
+    FIELD(off) = val; \
+    if (prev != FIELD(off)) { \
+        fn_1_A2D84(0xA9010000); \
+        lbl_801A66A8 = 0; \
+    }
+
+s16 fn_10_5E94(void *arg0) {
+#pragma opt_propagation off
+#pragma opt_common_subs off
+    struct { s16 value; } v29;
+    struct { s16 value; } v25;
+    s16 v7;
+    s32 v8;
+    s32 v9;
+    s16 v30, v32, v34, v36, v38, v40, v42;
+    s32 v31, v33, v35, v37, v39, v41, v43;
+    u32 v6;
+    u32 v4;
+
+    s16 v16;
+    s16 v0;
+    s16 v1;
+    struct { u8 *value; } v2;
+    struct { u8 *value; } v3;
+    union { u8 *value; } p_lbl_1_bss_9F8;
+    union { u8 *value; } p_lbl_1_bss_9C8;
+    struct { u8 *value; } v18;
+    struct { u8 *value; } v19;
+    struct fn_10_5E94_lbl_1_bss_8B3A0 *p_lbl_1_bss_8B3A0;
+    s16 v10;
+    s16 v22;
+    s16 v11;
+    v3.value = 0;
+    v2.value = 0;
+    p_lbl_1_bss_9C8.value = (u8 *)&lbl_1_bss_9C8;
+    p_lbl_1_bss_9F8.value = (u8 *)&lbl_1_bss_9F8;
+    v3.value = p_lbl_1_bss_9C8.value;
+    v1 = 0;
+    v2.value = p_lbl_1_bss_9F8.value;
+    p_lbl_1_bss_8B3A0 = (struct fn_10_5E94_lbl_1_bss_8B3A0 *)&lbl_1_bss_8B3A0;
+    v10 = 0;
+    for (v0 = 0; (s16)v0 < 4; v0++) {
+        if ((s8)*((u8 *)v3.value + 10) != -1 && ACTIVE(v0)) {
+            if ((((HALF(v2.value,16) >> 3) & 1)) || (((HALF(v2.value,18) >> 3) & 1))) v1--;
+            if ((((HALF(v2.value,16) >> 2) & 1)) || (((HALF(v2.value,18) >> 2) & 1))) v1++;
+            v4 = HALF(v2.value,16);
+            if (((v4 >> 2) & 1) || (((v6 = HALF(v2.value,18)) >> 2) & 1)) fn_1_12F128(v0);
+            else if (((v4 >> 3) & 1) || ((v6 >> 3) & 1)) fn_1_12F128(v0);
+        }
+        v3.value = (u8 *)v3.value + 12;
+        v2.value = (u8 *)v2.value + 20;
+    }
+    v7 = FIELD(146);
+    if ((s16)v1 != 0) {
+        v8 = (s16)v1;
+        do {
+            v9 = FIELD(146) + v8;
+            if (v9 > 8) v9 = 0;
+            else v9 = v9 < 0 ? 8 : v9;
+            FIELD(146) = v9;
+        } while ((s16)fn_1_13FA88(FIELD(146)) != 0);
+    }
+    if (v7 != FIELD(146)) {
+        fn_1_A2D84(0xA9010000);
+        lbl_801A66A8 = 0;
+    }
+    v1 = 0;
+    if (FIELD(146) == 8) {
+        for (v11 = 0; (s16)v11 < 4; v11++) {
+            if ((s8)*((u8 *)p_lbl_1_bss_9C8.value + 10) != -1 && ACTIVE(v11)) {
+                if (((HALF(p_lbl_1_bss_9F8.value,8) >> 9) & 1)) v1--;
+                if (((HALF(p_lbl_1_bss_9F8.value,8) >> 8) & 1)) v1 = (s16)(v1 + 1);
+                v4 = HALF(p_lbl_1_bss_9F8.value,8);
+                if ((v4 >> 8) & 1) fn_1_12F150(v11,9,1);
+                else if ((v4 >> 9) & 1) fn_1_12F150(v11,9,0);
+            }
+            p_lbl_1_bss_9C8.value = (u8 *)p_lbl_1_bss_9C8.value + 12;
+            p_lbl_1_bss_9F8.value = (u8 *)p_lbl_1_bss_9F8.value + 20;
+        }
+        if ((s16)v1 != 0) fn_1_A2D84(0xA9010100);
+        v10 = v1;
+    } else {
+        v18.value = p_lbl_1_bss_9C8.value;
+        v19.value = p_lbl_1_bss_9F8.value;
+        for (v16 = 0; (s16)v16 < 4; v16++) {
+            if ((s8)*((u8 *)v18.value + 10) != -1 && ACTIVE(v16)) {
+                if (((HALF(v19.value,8) >> 9) & 1)) v1--;
+                if (((HALF(v19.value,8) >> 8) & 1)) v1 = (s16)(v1 + 1);
+                v4 = HALF(v19.value,8);
+                if ((v4 >> 8) & 1) fn_1_12F150(v16,9,1);
+                else if ((v4 >> 9) & 1) fn_1_12F150(v16,9,0);
+            }
+            v18.value = (u8 *)v18.value + 12;
+            v19.value = (u8 *)v19.value + 20;
+        }
+        if ((s16)v1 < 0) {
+            v10 = -1;
+            fn_1_A2D84(0xA9010200);
+        } else if ((s16)v1 > 0) {
+            FIELD(146) = 8;
+            fn_1_A2D84(0xA9010100);
+        }
+        v25.value = 0;
+        for (v22 = 0; (s16)v22 < 4; v22++) {
+            if ((s8)*((u8 *)p_lbl_1_bss_9C8.value + 10) != -1 && ACTIVE(v22)) {
+                if ((HALF(p_lbl_1_bss_9F8.value,16) & 1) || (HALF(p_lbl_1_bss_9F8.value,18) & 1)) v25.value--;
+                if ((((HALF(p_lbl_1_bss_9F8.value,16) >> 1) & 1)) || (((HALF(p_lbl_1_bss_9F8.value,18) >> 1) & 1))) v25.value++;
+                v6 = HALF(p_lbl_1_bss_9F8.value,16);
+            if (((v6 >> 1) & 1) || (((v4 = HALF(p_lbl_1_bss_9F8.value,18)) >> 1) & 1)) fn_1_12F128(v22);
+            else if (((v6 >> 0) & 1) || ((v4 >> 0) & 1)) fn_1_12F128(v22);
+            }
+            p_lbl_1_bss_9C8.value = (u8 *)p_lbl_1_bss_9C8.value + 12;
+            p_lbl_1_bss_9F8.value = (u8 *)p_lbl_1_bss_9F8.value + 20;
+        }
+        v29.value = FIELD(146);
+        switch (v29.value) {
+        case 4: CHANGE(300,0,29,v30,v31); break;
+        case 6: CHANGE(302,0,1,v32,v33); break;
+        case 3: CHANGE(304,0,1,v34,v35); break;
+        case 1: CHANGE(306,0,1,v36,v37); break;
+        case 7: CHANGE(308,0,1,v38,v39); break;
+        case 2: CHANGE(312,0,1,v40,v41); break;
+        case 0: CHANGE(316,1,20,v42,v43); break;
+        case 5: break;
+        }
+        if (v29.value != FIELD(146)) {
+            fn_1_A2D84(0xA9010000);
+            lbl_801A66A8 = 0;
+        }
+    }
+    return v10;
+}
+/* fzgx:end fn_10_5E94 */
+
 /* fzgx:begin fn_10_73AC */
 #include "rel/sel/sel.h"
 
