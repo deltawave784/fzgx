@@ -57,6 +57,56 @@ extern s32 lbl_1_bss_970;
 extern u8 lbl_4_bss_2;
 extern u16 lbl_1_bss_968;
 
+/* fzgx:begin fn_4_0 */
+extern u32 lbl_1_bss_9F8;
+extern void fn_1_A2D84(u32);
+/* Input flags may change asynchronously. */
+struct Input { u8 pad[16]; volatile u16 flags; volatile u16 repeat; };
+#pragma opt_common_subs on
+u32 fn_4_0(u32 arg0, u32 arg1, u32 arg2, u32 arg3, u32 arg4) {
+    u32 v15 = arg0;
+    s32 v14 = 0;
+    u32 v1;
+    u32 v2;
+    if ((s32)arg3 == -1) {
+        if (arg4 == 0) {
+            v1 = ((((struct Input *)&lbl_1_bss_9F8)[0].flags >> 3 & 1) != 0 || (((struct Input *)&lbl_1_bss_9F8)[0].repeat >> 3 & 1) != 0);
+            v2 = ((((struct Input *)&lbl_1_bss_9F8)[0].flags >> 2 & 1) != 0 || (((struct Input *)&lbl_1_bss_9F8)[0].repeat >> 2 & 1) != 0);
+        } else {
+            v1 = ((((struct Input *)&lbl_1_bss_9F8)[0].flags & 1) != 0 || (((struct Input *)&lbl_1_bss_9F8)[0].repeat & 1) != 0);
+            v2 = ((((struct Input *)&lbl_1_bss_9F8)[0].flags >> 1 & 1) != 0 || (((struct Input *)&lbl_1_bss_9F8)[0].repeat >> 1 & 1) != 0);
+        }
+    } else {
+        if (arg4 == 0) {
+            s32 offset = arg3 * 20;
+            /* volatile: input flags may change asynchronously between reads. */
+            volatile u16 *v6 = (volatile u16 *)((u8 *)&lbl_1_bss_9F8 + (u32)offset);
+            v1 = ((*(v6 += 8) >> 3 & 1) != 0 || (*(volatile u16 *)((u8 *)&lbl_1_bss_9F8 + offset + 18) >> 3 & 1) != 0); /* volatile: asynchronous input */
+            v2 = ((*v6 >> 2 & 1) != 0 || (*(volatile u16 *)((u8 *)&lbl_1_bss_9F8 + offset + 18) >> 2 & 1) != 0); /* volatile: asynchronous input */
+        } else {
+            s32 offset = arg3 * 20;
+            /* volatile: input flags may change asynchronously between reads. */
+            volatile u16 *v6 = (volatile u16 *)((u8 *)&lbl_1_bss_9F8 + (u32)offset);
+            v1 = ((*(v6 += 8) & 1) != 0 || (*(volatile u16 *)((u8 *)&lbl_1_bss_9F8 + offset + 18) & 1) != 0); /* volatile: asynchronous input */
+            v2 = ((*v6 >> 1 & 1) != 0 || (*(volatile u16 *)((u8 *)&lbl_1_bss_9F8 + offset + 18) >> 1 & 1) != 0); /* volatile: asynchronous input */
+        }
+    }
+    if (v1 != 0) v14 = -1;
+    if (v2 != 0) v14++;
+    if (arg2 - arg1 == 1) {
+        if (v14 == -1) v15 = arg1;
+        else if (v14 == 1) v15 = arg2;
+    } else {
+        u32 v16 = arg0 + v14;
+        if ((s32)v16 < (s32)arg1) v15 = arg2;
+        else if (v16 > arg2) v15 = arg1;
+        else v15 = v16;
+    }
+    if (arg0 != v15) fn_1_A2D84(0xA9010000);
+    return v15;
+}
+/* fzgx:end fn_4_0 */
+
 /* fzgx:begin fn_4_250 */
 #include "font.h"
 
