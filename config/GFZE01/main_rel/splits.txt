@@ -6887,3 +6887,6 @@ rel/main_rel/burner/fn_1_9A864.c:
 
 rel/main_rel/screen_effect/fn_1_76A94.c:
 	.text       start:0x00076A94 end:0x00076BD0 align:4
+
+rel/main_rel/stcoli/fn_1_2E268.c:
+	.text       start:0x0002E268 end:0x0002E3B4 align:4

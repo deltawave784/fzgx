@@ -4961,6 +4961,47 @@ void fn_1_2D524(struct fn_1_2D524_Obj *o) {
 }
 /* fzgx:end fn_1_2D524 */
 
+/* fzgx:begin fn_1_2E268 noprologue */
+#include "rel/main_rel/stcoli.h"
+
+extern void fn_1_3F2A0(void);
+
+void fn_1_2E268(void) {
+    Obj_1_bss_3C30 *b = &lbl_1_bss_3C30;
+    s32 i;
+    s32 j;
+    u8 *e;
+
+    for (i = 0; i < b->unk_9; i++) {
+        e = (u8 *)b + 0xd4 + i * 0xa0;
+        *(u16 *)(e + 4) = 0;
+        *(u32 *)(e + 0x78) = 0;
+        *(u16 *)(e + 6) = 0;
+        if (b->unk_5 == 0) {
+            *(u16 *)(e + 4) = *(u32 *)((u8 *)b + 0x1480 + i * 4);
+            *(u16 *)(e + 0x9e) = *(u16 *)((u8 *)b + 0x1478 + i * 2);
+            e[0x83] = e[8];
+        } else {
+            for (j = 0; j < b->unk_A7; j++) {
+                *(u16 *)(e + 4) += e[9 + j];
+                *(u16 *)(e + 6) += e[0x13 + j];
+                *(u32 *)(e + 0x78) += *(u16 *)(e + 0x4c + j * 2);
+            }
+        }
+        e[b->unk_A7 + 0xe] = 0xff;
+    }
+    if (b->unk_A7 != 0) {
+        fn_1_3F2A0();
+    } else {
+        for (i = 0; i < b->unk_9; i++) {
+            u8 v = *(u8 *)(*(u32 *)((u8 *)b + 0x2c + i * 4) + 0x115);
+            ((Obj_1_bss_3C30 *)((u8 *)&lbl_1_bss_3C30 + v))->unk_1394 = i;
+            ((u8 *)b)[0xdc + i * 0xa0] = v;
+        }
+    }
+}
+/* fzgx:end fn_1_2E268 */
+
 /* fzgx:begin fn_1_3FCD4 */
 void fn_1_3FCD4(u32 mask) {
     if (mask == 0) {
