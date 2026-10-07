@@ -34,6 +34,7 @@ extern void fn_1_46B4(u32 arg0, u32 arg1, const char *arg2, int arg3);
 extern void *fn_1_48730(u32 value);
 extern f32 lbl_1_rodata_10C0[5];
 extern f32 lbl_1_bss_3E05C;
+extern void fn_1_484CC(s32 index);
 
 /* fzgx:begin fn_1_47E54 */
 typedef struct {
@@ -187,12 +188,11 @@ typedef struct {
     u32 unk_0;
     u32 unk_4;
     u32 unk_8;
-} BitmapSlot;
+} fn_1_48214_BitmapSlot;
 
 extern s32 lbl_801A6410;
 extern s32 fn_8006FDEC(void);
 extern void fn_1_46B4(u32 arg0, u32 arg1, const char *arg2, int arg3);
-extern void fn_1_484CC(s32);
 
 // Releases the texture records in [index] (or all of them for index 188).
 void fn_1_48214(int index, int enabled) {
@@ -220,9 +220,9 @@ void fn_1_48214(int index, int enabled) {
                 fn_1_46B4(lbl_801A6410, (u32)entry->unk_20, (char *)lbl_1_data_1A368, 0x21f);
                 entry->unk_0 = 0;
             } else {
-                fn_1_46B4(((BitmapSlot *)&lbl_1_data_6CA0)[bitmap].unk_0, entry->unk_20->unk_C,
+                fn_1_46B4(((fn_1_48214_BitmapSlot *)&lbl_1_data_6CA0)[bitmap].unk_0, entry->unk_20->unk_C,
                           (char *)lbl_1_data_1A368, 0x223);
-                fn_1_46B4(((BitmapSlot *)&lbl_1_data_6CA0)[bitmap].unk_0, (u32)entry->unk_20,
+                fn_1_46B4(((fn_1_48214_BitmapSlot *)&lbl_1_data_6CA0)[bitmap].unk_0, (u32)entry->unk_20,
                           (char *)lbl_1_data_1A368, 0x224);
                 entry->unk_0 = 0;
                 if (enabled == 0) {
@@ -248,10 +248,10 @@ typedef struct {
     s32 unk_0;
     s32 unk_4;
     s32 unk_8;
-} BitmapSlot;
+} fn_1_48418_BitmapSlot;
 
 void fn_1_48418(s32 index) {
-    BitmapSlot *obj = (BitmapSlot *)&lbl_1_data_6CA0 + index;
+    fn_1_48418_BitmapSlot *obj = (fn_1_48418_BitmapSlot *)&lbl_1_data_6CA0 + index;
     int valid;
     if (index > 2) {
         valid = 0;

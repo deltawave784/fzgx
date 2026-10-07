@@ -60,7 +60,6 @@ typedef struct TimeParts {
 extern void *lbl_801A6410;
 extern s32 fn_1_45D0();
 extern void fn_1_AB45C(int index);
-extern s32 CARDMountAsync(s32 chan, void *workArea, CARDCallback detachCallback, CARDCallback attachCallback);
 extern const f32 lbl_1_rodata_4CAC;
 extern void fn_1_46B4(u32 arg0, u32 arg1, const char *arg2, int arg3);
 extern u8 fn_1_B7EF8(void);

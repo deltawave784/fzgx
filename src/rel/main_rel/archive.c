@@ -190,24 +190,6 @@ extern u32 fn_1_F89E4(u8 value);
 extern u32 fn_1_151BE8(s16 arg0, s16 arg1);
 
 /* fzgx:begin fn_1_12A2D0 */
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // Store the selected entry when it is valid; otherwise report an invalid entry.
 void fn_1_12A2D0(s32 value) {
     Obj_1_bss_897AC *entry;
@@ -448,24 +430,6 @@ s32 fn_1_12A7C4(void *arg0, void *arg1, u32 arg2) {
 /* fzgx:end fn_1_12A7C4 */
 
 /* fzgx:begin fn_1_12A8A4 */
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 typedef struct fn_1_12A8A4_ArchiveState {
     s32 count;
     s32 loaded;
@@ -569,24 +533,6 @@ s32 fn_1_12A9BC(void *arg0, void *arg1) {
 /* fzgx:end fn_1_12A9BC */
 
 /* fzgx:begin fn_1_12AAC8 */
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 void fn_1_12AAC8(void *arg0) {
     u8 local_8[0x18];
     u8 *obj;

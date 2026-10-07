@@ -1046,6 +1046,7 @@ void fn_1_135894(void* arg0, void* arg1, void* arg2, void* arg3, void* arg4, voi
 
 /* fzgx:begin fn_1_136714 noprologue */
 #include "types.h"
+#include "dolphin/types.h"
 #include "font.h"
 
 extern u32 lbl_801A66B4;
@@ -1197,6 +1198,7 @@ void fn_1_1368A0(s32 arg0, s16 arg1, s32 arg2, f32 farg0, f32 farg1, f32 farg2, 
 
 /* fzgx:begin fn_1_137288 noprologue */
 #include "types.h"
+#include "dolphin/types.h"
 #include "font.h"
 
 extern void* fn_1_12F118(void);
@@ -2609,6 +2611,7 @@ int fn_1_13FB24(u32 arg0) {
 
 /* fzgx:begin fn_1_14108C noprologue */
 #include "types.h"
+#include "dolphin/types.h"
 #include "font.h"
 
 extern f32 lbl_1_rodata_26F8[22];
@@ -4988,6 +4991,8 @@ void fn_1_14DEA4(void *arg0, void *arg1, void *arg2, void *arg3) {
 
 /* fzgx:begin fn_1_14DEC8 noprologue */
 #include "types.h"
+#include "dolphin/types.h"
+#include "font.h"
 
 typedef struct {
     void *value;
@@ -5094,6 +5099,7 @@ void fn_1_14E078(void *arg0, void *arg1, void *arg2) {
 
 /* fzgx:begin fn_1_14E09C noprologue */
 #include "types.h"
+#include "dolphin/types.h"
 #include "font.h"
 
 extern const f32 lbl_1_rodata_9C30;
@@ -5171,6 +5177,7 @@ void fn_1_14E1BC(void *arg0, void *arg1, void *arg2) {
 
 /* fzgx:begin fn_1_14E1E0 noprologue */
 #include "types.h"
+#include "dolphin/types.h"
 #include "font.h"
 
 typedef struct {
@@ -7004,6 +7011,7 @@ void fn_1_14F46C(DisplayState *state) {
 
 /* fzgx:begin fn_1_14FC80 noprologue */
 #include "types.h"
+#include "dolphin/types.h"
 #include "font.h"
 
 extern void *fn_1_36AD0(s16 arg0, u32 arg1);

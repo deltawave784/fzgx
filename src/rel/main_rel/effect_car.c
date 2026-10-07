@@ -452,7 +452,7 @@ void fn_1_6D6A8(struct Fn1_6D6A8Car *car) {
 }
 /* fzgx:end fn_1_6D6A8 */
 
-/* fzgx:begin fn_1_6E140 noprologue */
+/* fzgx:begin fn_1_6E140 */
 #include "types.h"
 #include "rel/main_rel/effect_car.h"
 
@@ -649,11 +649,6 @@ __declspec(section ".fzgxpool") static void fzgx_pool_prime31(void) {
 #pragma section code_type ".text"
 
 typedef struct { f32 x, y, z; } V3;
-
-extern s32 fn_1_58C4(void);
-extern u32 fn_1_584AC(void);
-extern s16 fn_1_58F50(const void *);
-extern void *memset(void *, int, u32);
 
 void fn_1_6E140(V3 *a, V3 *b, f32 s) {
     u8 buf[0xe8];

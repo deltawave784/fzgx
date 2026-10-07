@@ -45,6 +45,9 @@ extern void fn_1_46B4(u32 arg0, u32 arg1, const char *arg2, int arg3);
 extern void fn_1_469BC(void);
 extern void fn_1_466B0(s32 arg0, s32 arg1);
 extern u32 lbl_1_bss_85288[2];
+extern void *memset(void *, int, u32);
+extern void lbl_8006D91C(s32);
+extern void lbl_8006E1F0(void *, f32, f32, f32);
 
 /* fzgx:begin fn_1_103AA8 */
 // Initializes the background-common state and its update callback.
@@ -110,10 +113,6 @@ __declspec(section ".fzgxpool") static void fzgx_pool_prime4(void) {
     s = 0.800000011920929f;
 }
 #pragma section code_type ".text"
-
-extern void *memset(void *, int, u32);
-extern void lbl_8006D91C(s32);
-extern void lbl_8006E1F0(void *, f32, f32, f32);
 
 void fn_1_103D28(u8 *base, f32 arg1, u8 count) {
     int i;

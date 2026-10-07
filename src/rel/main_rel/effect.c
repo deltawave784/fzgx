@@ -151,6 +151,9 @@ extern const f32 lbl_1_rodata_29C0;
 extern const f32 lbl_1_rodata_29F0;
 extern u32 fn_1_58C4(void);
 extern const f64 lbl_1_rodata_2954;
+extern s8 fn_1_86634(int);
+extern u32 fn_1_6EC0(u8);
+extern s16 camera_get_entry_field_0xa4(u32);
 
 /* fzgx:begin fn_1_58C6C */
 struct fn_1_58C6C_lbl_1_bss_6C848_T {
@@ -1786,10 +1789,6 @@ __declspec(section ".fzgxpool") static void fzgx_pool_prime11(void) {
     s = 85.0f;
 }
 #pragma section code_type ".text"
-
-extern s8 fn_1_86634(int);
-extern u32 fn_1_6EC0(u8);
-extern s16 camera_get_entry_field_0xa4(u32);
 
 typedef struct FxObj {
     u8 pad0[0x10];

@@ -403,6 +403,7 @@ extern struct fn_1_2B478_lbl_801A6D00 lbl_801A6D00;
 extern f32 lbl_8006D6FC(void *, void *);
 extern s16 lbl_1_bss_3C2A[3];
 extern u32 fn_1_203E4(void *, u32, void *, f32, f32, f32);
+extern void fn_1_3F2A0(void);
 
 /* fzgx:begin fn_1_14CB4 */
 void fn_1_14CB4(void) {
@@ -4961,10 +4962,8 @@ void fn_1_2D524(struct fn_1_2D524_Obj *o) {
 }
 /* fzgx:end fn_1_2D524 */
 
-/* fzgx:begin fn_1_2E268 noprologue */
+/* fzgx:begin fn_1_2E268 */
 #include "rel/main_rel/stcoli.h"
-
-extern void fn_1_3F2A0(void);
 
 void fn_1_2E268(void) {
     Obj_1_bss_3C30 *b = &lbl_1_bss_3C30;

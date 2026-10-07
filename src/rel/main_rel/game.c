@@ -1409,7 +1409,6 @@ void fn_1_3F4FC(void) {
 /* fzgx:end fn_1_3F4FC */
 
 /* fzgx:begin fn_1_3F75C */
-
 void fn_1_3F75C(void) {
     while (fn_1_467F4() || fn_1_13018()) {
         fn_1_451E4();

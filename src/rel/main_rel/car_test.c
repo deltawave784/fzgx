@@ -564,7 +564,6 @@ u32 *fn_1_8CA00(void) {
 /* fzgx:end fn_1_8CA00 */
 
 /* fzgx:begin fn_1_8DD54 */
-
 typedef struct {
     u8 pad_0[0x18];
     u32 unk_18;
