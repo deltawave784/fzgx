@@ -52,8 +52,10 @@ def plan(p: Project, limit: int = 8, small: int = 256, near: float = 80.0,
     for r in rows:
         if r["claimed_by"] or (exclude and r["symbol"] in exclude):
             continue
-        if easy and (r["symbol"].endswith(":_prolog") or r["symbol"].startswith(("__save_", "__restore_", "_savegpr", "_restgpr", "_savefpr", "_restfpr"))):
-            continue  # entry points and compiler FPR/GPR save helpers: not C a matcher can write
+        if r["symbol"].endswith(":_prolog") or r["symbol"].startswith(("__save_", "__restore_", "_savegpr", "_restgpr", "_savefpr", "_restfpr")):
+            continue  # entry points and compiler FPR/GPR save helpers: not C a matcher can write (every mode)
+        if p.resolve(r["symbol"]) is None:
+            continue  # a ledger row whose symbol left the symbol files (`sync` counts these as stale): claim would fail
         if max_size is not None and r["size"] > max_size:
             continue
         if min_size is not None and r["size"] < min_size:
