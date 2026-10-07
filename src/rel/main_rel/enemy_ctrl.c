@@ -817,6 +817,38 @@ void fn_1_CC8E4(s32 arg0, s32 arg1, s32 arg2) {
 }
 /* fzgx:end fn_1_CC8E4 */
 
+/* fzgx:begin fn_1_CD36C noprologue */
+#include "types.h"
+#include "font.h"
+
+extern s32 fn_1_5910(void);
+extern FontDrawPacket lbl_1_rodata_26F8;
+extern void fn_1_51564(u16, u16, u16, u16, u16, u16);
+extern u32 fn_1_5158C(FontDrawPacket *, u32, s16, s16);
+
+void fn_1_CD36C(void *unused, s32 a, s32 b) {
+    FontDrawPacket p;
+    s32 idx;
+
+    idx = fn_1_5910();
+    p = lbl_1_rodata_26F8;
+    p.image = 0x9421;
+    fn_1_51564(0, 0, 0x18, 0x14, 2, 2);
+    p.x = (f32)a;
+    p.y = (f32)b;
+    p.z = 10.0f;
+    fn_1_5158C(&p, p.image, idx % 2, idx / 2);
+    fn_1_4F734(&p);
+    p = lbl_1_rodata_26F8;
+    p.image = 0x9422;
+    p.x = (f32)(a + 0xc);
+    p.y = (f32)(b + 0xa);
+    p.z = 20.0f;
+    p.flags = 10;
+    fn_1_4F734(&p);
+}
+/* fzgx:end fn_1_CD36C */
+
 /* fzgx:begin fn_1_CD51C noprologue */
 #include "types.h"
 #include "rel/main_rel/globals.h"

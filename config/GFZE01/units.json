@@ -38587,6 +38587,22 @@
   },
   {
     "module": "main_rel",
+    "source": "rel/main_rel/enemy_ctrl/fn_1_CD36C.c",
+    "symbols": [
+      "fn_1_CD36C"
+    ],
+    "status": "matching",
+    "mw_version": "GC/1.3",
+    "extra_cflags": [],
+    "tu": "rel/main_rel/enemy_ctrl.c",
+    "pool": {
+      "@11": "lbl_1_rodata_5C00",
+      "@8": "lbl_1_rodata_5C48",
+      "@9": "lbl_1_rodata_5F10"
+    }
+  },
+  {
+    "module": "main_rel",
     "source": "rel/main_rel/enemy_ctrl/fn_1_CD51C.c",
     "symbols": [
       "fn_1_CD51C"
