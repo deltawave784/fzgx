@@ -6797,3 +6797,6 @@ rel/main_rel/memcard/fn_1_B7FDC.c:
 
 rel/main_rel/memcard/fn_1_AB7C4.c:
 	.text       start:0x000AB7C4 end:0x000AB870 align:4
+
+rel/main_rel/bg_aur/fn_1_151EF8.c:
+	.text       start:0x00151EF8 end:0x00152208 align:4
