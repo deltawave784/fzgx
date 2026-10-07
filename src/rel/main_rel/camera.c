@@ -573,70 +573,11 @@ s16 fn_1_6B48(s32 index) {
 }
 /* fzgx:end fn_1_6B48 */
 
-/* fzgx:begin fn_1_6BC0 noprologue */
-#include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/camera.h"
-
-struct fn_1_6400_lbl_801A6410 {
-    u32 unk_0;
-};
-
-typedef struct CameraTarget {
-    u8 pad_000[0x394];
-    void *data;
-} CameraTarget;
-
-struct fn_1_AA54_lbl_1_rodata_388 {
-    f64 unk_0;
-};
-
-typedef struct Vec3 {
-    f32 x;
-    f32 y;
-    f32 z;
-} Vec3;
-
-typedef struct camera_reset_transition_Camera {
-    u8 pad_00[0xA4];
-    s16 unk_A4;
-} camera_reset_transition_Camera;
-
-typedef struct camera_update_transition_Camera {
-    u8 pad_00[0x78];
-    s16 unk_78;
-    u8 pad_7A[0x2A];
-    s16 unk_A4;
-} camera_update_transition_Camera;
-
-typedef struct Transform {
-    u8 pad_08[0x8];
-    f32 unk_08;
-    u8 pad_0c[0xc];
-    f32 unk_18;
-    u8 pad_1c[0xc];
-    f32 unk_28;
-    u8 pad_2c[0x24];
-    u8 unk_50[0x2c];
-    u32 unk_7C;
-} Transform;
-
-typedef struct CameraStateLocal {
-    u8 pad_d4[0xd4];
-    f32 unk_D4;
-    f32 unk_D8;
-    f32 unk_DC;
-} CameraStateLocal;
-
-typedef struct { u8 pad_0[0x4]; f32 unk_4; u32 unk_8; f32 unk_C; } Bss_104C;
-extern s8 fn_1_86624();
-
-// lbl_1_bss_9F8.unk_8 read as a bitfield: retail keeps the halfword load and extracts the
-// two low bits with extrwi/clrlwi
+/* fzgx:begin fn_1_6BC0 */
+// lbl_1_bss_9F8.unk_8 read as a 16-bit button word; bits 0/1 select previous/next camera
 typedef struct {
     u8 pad_0[0x8];
-    u16 unk_8_pad : 6;
-    u16 buttons : 10;
+    u16 buttons : 16;
 } CameraSelectInput;
 
 #define CAMERA_SELECT_INPUT ((CameraSelectInput *)&lbl_1_bss_9F8)
@@ -669,8 +610,8 @@ void fn_1_6BC0(void) {
 
     if (next != cur) {
         game_camera_entries->unk_2 = next;
-        *(s8 *)((u8 *)fn_1_86254((void *)cur) + 0x475) = -1;
-        *(s8 *)((u8 *)fn_1_86254((void *)next) + 0x475) = 0;
+        *(s8 *)((u8 *)fn_1_86254(cur) + 0x475) = -1;
+        *(s8 *)((u8 *)fn_1_86254(next) + 0x475) = 0;
     }
 }
 #pragma opt_common_subs reset
