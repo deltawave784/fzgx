@@ -2028,6 +2028,92 @@ void fn_10_8AAC(void) {
 }
 /* fzgx:end fn_10_8AAC */
 
+/* fzgx:begin fn_10_8BB8 */
+struct fn_10_8BB8_lbl_1_bss_8B3A0 {
+    u8 pad_0[0x94];
+    u32 unk_94;
+    u32 unk_98;
+    u8 pad_9C[0x2];
+    /* Retail reloads the active index before each of the two flag checks. */
+    volatile u8 unk_9E;
+    u8 pad_9F[0xA1];
+    u32 unk_140;
+};
+struct S9F8 {
+    u8 pad0[8];
+    u16 f8;
+    u8 pad1[0x14 - 0xa];
+};
+extern s32 lbl_10_bss_14;
+extern s16 lbl_10_bss_4938C;
+extern struct fn_10_8BB8_lbl_1_bss_8B3A0 lbl_1_bss_8B3A0;
+extern u16 lbl_1_bss_96A;
+extern u32 lbl_10_bss_49388;
+extern u32 lbl_10_bss_51744;
+extern struct S9F8 lbl_1_bss_9F8[];
+extern u8 lbl_1_bss_9C8[];
+extern int fn_1_4C10(void);
+extern s32 fn_1_12F258(void);
+extern s32 fn_1_12F228(void);
+extern void fn_1_12F150(s32, u32, u32);
+extern void fn_1_12F1E8(s32);
+extern void fn_1_4A00(s32, u8, u32);
+
+void fn_10_8BB8(void) {
+    s16 v4 = 0;
+    s32 v3;
+    u32 v0;
+    int v1;
+    struct fn_10_8BB8_lbl_1_bss_8B3A0 *p_lbl_1_bss_8B3A0;
+
+    if (lbl_10_bss_14 == -1) {
+        fn_1_4C10();
+    }
+    v0 = lbl_1_bss_8B3A0.unk_140;
+    if ((v0 & 0x80000000) != 0 && (v0 & 0x40000000) == 0 && (lbl_1_bss_8B3A0.unk_94 & 8) == 0) {
+        v1 = 1;
+    } else {
+        if (fn_1_4C10() != 0) {
+            v1 = 1;
+        } else {
+            v1 = 0;
+        }
+    }
+    if (v1 == 0) {
+        if (lbl_10_bss_14 != -1) {
+            s32 value = lbl_10_bss_14;
+            lbl_10_bss_14 = -1;
+            lbl_1_bss_96A = value;
+        } else {
+            struct { u8 *value; } players;
+            players.value = lbl_1_bss_9C8;
+            v3 = 0;
+            p_lbl_1_bss_8B3A0 = (struct fn_10_8BB8_lbl_1_bss_8B3A0 *)&lbl_1_bss_8B3A0;
+            while ((s16)v3 < 4) {
+                if ((s8)players.value[10] != -1) {
+                    if (__rlwnm(p_lbl_1_bss_8B3A0->unk_98, ((s16)v3 + 1) & 31, 31, 31) != 0) {
+                        if (((lbl_1_bss_9F8[p_lbl_1_bss_8B3A0->unk_9E].f8 >> 8) & 1) != 0) {
+                            v4 = (s16)(v4 + 1);
+                        }
+                        if (((lbl_1_bss_9F8[p_lbl_1_bss_8B3A0->unk_9E].f8 >> 8) & 1) != 0) {
+                            fn_1_12F150(v3, 2, 1);
+                        }
+                    }
+                }
+                players.value += 12;
+                v3++;
+            }
+            if (((s16)v4 != 0 && (u32)fn_1_12F258() < 300) || fn_1_12F228() != 0) {
+                fn_1_12F1E8(0);
+                fn_1_4A00(0, (u8)lbl_10_bss_4938C, lbl_10_bss_49388);
+                lbl_10_bss_51744 = 0;
+                lbl_10_bss_14 = 31;
+            }
+        }
+    }
+}
+/* fzgx:end fn_10_8BB8 */
+
 /* fzgx:begin fn_10_8D90 */
 extern s32 lbl_10_bss_51740;
 extern u32 lbl_10_bss_49388;
