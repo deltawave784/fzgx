@@ -7678,6 +7678,24 @@ u32 fn_1_B7FC8(void) {
 }
 /* fzgx:end fn_1_B7FC8 */
 
+/* fzgx:begin fn_1_B7FDC noprologue */
+#include "types.h"
+#include "dolphin/card.h"
+#include "dolphin/card/CARDPriv.h"
+#include "dolphin/dvd.h"
+#include "font.h"
+
+extern int fn_8002A744(void);
+extern void fn_8002A74C(u16 value);
+
+// Toggles the low 16-bit status value and stores the result.
+void fn_1_B7FDC(void) {
+    u16 value = (u16)fn_8002A744();
+    value = (u16)(value ^ 1);
+    fn_8002A74C(value);
+}
+/* fzgx:end fn_1_B7FDC */
+
 /* fzgx:begin fn_1_B800C noprologue */
 #include "types.h"
 #include "rel/main_rel/globals.h"
