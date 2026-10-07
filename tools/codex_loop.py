@@ -9,8 +9,11 @@ When the Codex account runs out of usage ("try again at 3:35 AM"), the loop mark
 crashed sessions as crashes (they do not count as attempts), sleeps until the reset time
 plus a few minutes, and continues. Only completed batches count toward `--max-batches`.
 
-After each batch the loop runs one GPT-6 Astra session (medium effort, high only on a retry after a miss; `--astra-model`,
-`--astra-max` per run, 0 turns it off) on the best near miss Astra has not tried; when the Sol pool is empty it keeps running Astra alone.
+After each batch the loop runs one GPT-6 Astra batch (`--astra-batch` hard functions in parallel at medium effort; the ones medium releases
+get one more try at high; `--astra-model`, `--astra-max` per run, 0 turns it off) on near misses and large
+functions Astra has not tried. When the easy size bands are used up Sol moves to the same hard pool, and when
+Sol has nothing left Astra keeps running alone. `--modules` picks the modules (default: every module except
+main_rel, which the Claude loop owns).
 `--max-attempts` (default 12) is how many attempts a function may already have and still be picked.
 
 Stops on: `--max-batches`, `--hours` (wall clock, waits included), `--zero-streak` batches in
@@ -119,49 +122,75 @@ def wait_until(when, stop_file: Path, deadline: float) -> bool:
     return True
 
 
-def pick_astra(model: str, max_attempts: int):
-    """The one near miss GPT-6 Astra has not tried: best recorded score first, preferring real near
-    misses (90-99.9%) over bodies that already score 100% (those fail on the link, not the C)."""
+def pick_hard(model: str, count: int, max_attempts: int, modules: list, tried_by: str = ""):
+    """Hard functions the model has not tried, the way the Claude loop routes Fable: saved near misses
+    first (90-99.9%), then big functions with a partial body, then big ones, then anything left (a body
+    that already scores 100% fails on the link, not the C, so it ranks after the near misses). No size
+    band and no easy-first ordering."""
     rows = []
-    for module in MODULES:
-        res = run(["tools/fzgx.py", "route", "--module", module, "--skip-tried-by", model,
-                   "--max-attempts", str(max_attempts), "--limit", "3", "--json"], capture=True)
+    for module in modules:
+        res = run(["tools/fzgx.py", "route", "--module", module, "--skip-tried-by", tried_by or model,
+                   "--max-attempts", str(max_attempts), "--limit", "12", "--json"], capture=True)
         try:
             rows += json.loads(res.stdout)
         except ValueError:
             continue
-    rows = [r for r in rows if r.get("seed_best") is not None]
-    rows.sort(key=lambda r: (not 90 <= r["seed_best"] < 100, -r["seed_best"], r["size"]))
-    return rows[0]["symbol"] if rows else None
+
+    def rank(r):
+        best, size = r.get("seed_best") or 0.0, r.get("size", 0)
+        group = 0 if 90 <= best < 100 else 1 if best >= 50 and size >= 512 else 2 if size >= 1024 else 3
+        return (group, -best, -size)
+
+    rows.sort(key=rank)
+    return [r["symbol"] for r in rows[:count]]
 
 
-def astra_step(a, n: int):
-    """One Astra session on one function: medium effort, then high on the same function only if medium
-    did not match it. Returns the number matched, or None when nothing is left."""
-    symbol = pick_astra(a.astra_model, a.max_attempts + 6)
-    if not symbol:
-        return None
-    for effort in ("medium", "high"):
+def run_batch(a, model: str, effort: str, symbols: list, checks: int, stale: int, parallel: int, batch: str):
+    res = run(["tools/orchestrate.py", "--harness", "codex", "--provider", "openai", "--model", model,
+               "--effort", effort, "--parallel", str(parallel), "--max-checks", str(checks),
+               "--max-stale", str(stale), "--max-attempts", str(a.max_attempts + 12), "--no-trivial", "--batch", batch,
+               "--symbols", *symbols], capture=True)
+    summary = {}
+    for line in reversed(res.stdout.splitlines()):
+        if line.startswith("{") and '"matched"' in line:
+            summary = json.loads(line)
+            break
+    return res, summary
+
+
+def released_in(batch: str) -> list:
+    db = sqlite3.connect(ROOT / ".fzgx" / "ledger.db")
+    rows = db.execute("SELECT DISTINCT symbol FROM attempts WHERE agent LIKE ? AND outcome = 'released'",
+                      (batch + "-codex-%",)).fetchall()
+    db.close()
+    return [r[0] for r in rows]
+
+
+def astra_phase(a, n: int, stop_file: Path, deadline: float):
+    """One Astra batch on hard functions: medium effort for all, then high on the ones medium released.
+    Returns (matched, functions, stop); functions is 0 when nothing is left to try."""
+    symbols = pick_hard(a.astra_model, a.astra_batch, a.max_attempts + 12, a.modules)
+    if not symbols:
+        return 0, 0, False
+    attempted, matched, effort = len(symbols), 0, "medium"
+    while symbols:
         batch = f"codex-astra-{time.strftime('%Y%m%d-%H%M')}-{n}-{effort}"
-        log(f"{batch}: {symbol} on {a.astra_model}")
-        res = run(["tools/orchestrate.py", "--harness", "codex", "--provider", "openai", "--model", a.astra_model,
-                   "--effort", effort, "--parallel", "1", "--max-checks", "40", "--max-stale", "12",
-                   "--max-attempts", str(a.max_attempts + 12), "--no-trivial", "--batch", batch,
-                   "--symbols", symbol], capture=True)
-        summary = {}
-        for line in reversed(res.stdout.splitlines()):
-            if line.startswith("{") and '"matched"' in line:
-                summary = json.loads(line)
-                break
-        matched = summary.get("matched", 0)
-        log(f"{batch}: {matched} matched, {summary.get('released', '?')} released, {summary.get('failed', '?')} failed, "
+        log(f"{batch}: {len(symbols)} functions on {a.astra_model}, effort {effort}")
+        res, summary = run_batch(a, a.astra_model, effort, symbols, 40, 12, len(symbols), batch)
+        got = summary.get("matched", 0)
+        matched += got
+        log(f"{batch}: {got} matched, {summary.get('released', '?')} released, {summary.get('failed', '?')} failed, "
             f"{summary.get('wall_s', '?')}s")
-        if usage_limit(batch, summary.get("failed", 0)):
-            log(f"{forgive_crashes()} astra crashes returned to the pool (the next sol batch handles the wait)")
-            return matched
-        if matched or summary.get("failed", 0) or not summary.get("released", 0):
-            return matched  # a crash or an unreadable summary is not a miss worth a second, dearer try
-    return 0
+        reset = usage_limit(batch, summary.get("failed", 0))
+        if reset:
+            log(f"{forgive_crashes()} astra crashes returned to the pool")
+            if not wait_until(reset, stop_file, deadline):
+                return matched, attempted, True
+            continue  # same functions, same effort: the limit, not the model, ended them
+        if effort == "high" or not summary:
+            break
+        symbols, effort = released_in(batch), "high"  # only what medium could not match gets the dearer effort
+    return matched, attempted, False
 
 
 def main() -> int:
@@ -175,7 +204,10 @@ def main() -> int:
     ap.add_argument("--zero-streak", type=int, default=3)
     ap.add_argument("--parallel", type=int, default=12)
     ap.add_argument("--astra-model", default="gpt-6-astra")
-    ap.add_argument("--astra-max", type=int, default=40, help="Astra sessions per loop run (0 disables it)")
+    ap.add_argument("--astra-batch", type=int, default=8, help="hard functions per Astra batch, run in parallel")
+    ap.add_argument("--astra-max", type=int, default=400, help="Astra function attempts per loop run (0 disables it)")
+    ap.add_argument("--modules", nargs="*", default=MODULES,
+                    help="modules to pick from (clone A owns main_rel: adding it here collides with the Claude loop)")
     a = ap.parse_args()
     astra_used = 0
 
@@ -188,35 +220,35 @@ def main() -> int:
             log("stop file present"); break
         if time.time() - started > a.hours * 3600:
             log("time limit"); break
-        symbols = []
+        symbols, label = [], ""
         while band < len(BANDS):
             lo, hi, effort, checks, stale = BANDS[band]
             symbols = pick(a.model, lo, hi, a.per_module, a.batch_size, a.max_attempts)
             if symbols:
+                label = f"band {lo}-{hi} B"
                 break
             log(f"band {lo}-{hi} B empty")
             band += 1
+        if not symbols:  # the easy size bands are used up: hard functions, as the Claude loop routes Fable
+            symbols = pick_hard(a.model, a.batch_size, a.max_attempts, a.modules)
+            effort, checks, stale, label = "high", 40, 12, "near misses and large functions"
         if not symbols:
             if a.astra_max and astra_used < a.astra_max:
                 log("sol pool empty: astra only")
-                astra_used += 1
-                got = astra_step(a, n)
-                if got is None:
+                got, tried, stop = astra_phase(a, n, stop_file, deadline)
+                if not tried:
                     log("astra pool empty"); break
+                astra_used += tried
                 total += got
+                if got:
+                    run(["tools/fzgx.py", "progress", "--note", f"codex-astra {n}"], capture=True)
+                if stop:
+                    log("stopping after usage limit"); break
                 continue
             log("pool empty"); break
         batch = f"codex-goal-{time.strftime('%Y%m%d-%H%M')}-{n}"
-        log(f"{batch}: {len(symbols)} functions, band {lo}-{hi} B, effort {effort}")
-        res = run(["tools/orchestrate.py", "--harness", "codex", "--provider", "openai", "--model", a.model,
-                   "--effort", effort, "--parallel", str(a.parallel), "--max-checks", str(checks),
-                   "--max-stale", str(stale), "--max-attempts", str(a.max_attempts + 6), "--no-trivial", "--batch", batch,
-                   "--symbols", *symbols], capture=True)
-        summary = {}
-        for line in reversed(res.stdout.splitlines()):
-            if line.startswith("{") and '"matched"' in line:
-                summary = json.loads(line)
-                break
+        log(f"{batch}: {len(symbols)} functions, {label}, effort {effort}")
+        res, summary = run_batch(a, a.model, effort, symbols, checks, stale, a.parallel, batch)
         matched = summary.get("matched", 0)
         total += matched
         log(f"{batch}: {matched} matched, {summary.get('released', '?')} released, "
@@ -239,22 +271,31 @@ def main() -> int:
         gate = run(["tools/fzgx.py", "gate"], capture=True)
         if "GATE: PASS" not in gate.stdout:
             log("GATE FAILED, stopping:\n" + gate.stdout[-1500:]); return 1
+        got, stop = 0, False
         if a.astra_max and astra_used < a.astra_max and not stop_file.exists():
-            astra_used += 1
-            got = astra_step(a, n) or 0
+            got, tried, stop = astra_phase(a, n, stop_file, deadline)
+            astra_used += tried
             total += got
-        else:
-            got = 0
+            if got:
+                gate = run(["tools/fzgx.py", "gate"], capture=True)
+                if "GATE: PASS" not in gate.stdout:
+                    log("GATE FAILED after astra, stopping:\n" + gate.stdout[-1500:]); return 1
         if matched or got:
             run(["tools/fzgx.py", "progress", "--note", f"codex-goal {batch}"], capture=True)
+        if stop:
+            log("stopping after usage limit"); break
         streak = 0 if matched else streak + 1
         if streak >= a.zero_streak:
             if band + 1 < len(BANDS):
                 band += 1
                 streak = 0
                 log(f"{a.zero_streak} batches without a match: moving to band {BANDS[band][0]}-{BANDS[band][1]} B")
+            elif band < len(BANDS):
+                band = len(BANDS)  # the size bands gave nothing: go to the hard pool
+                streak = 0
+                log(f"{a.zero_streak} batches without a match in the last band: moving to the hard pool")
             else:
-                log(f"{a.zero_streak} batches without a match in the last band"); break
+                log(f"{a.zero_streak} batches without a match in the hard pool"); break
     log(f"done: {total} matched")
     return 0
 
