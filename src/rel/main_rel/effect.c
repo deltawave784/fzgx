@@ -1767,6 +1767,90 @@ void fn_1_5F5C4(void) {
 }
 /* fzgx:end fn_1_5F5C4 */
 
+/* fzgx:begin fn_1_5F5C8 */
+typedef signed long s32;
+
+typedef unsigned char u8;
+
+typedef unsigned long u32;
+
+typedef float f32;
+typedef double f64;
+
+/* lbl_1_data_1D628: .data size 0x4, referenced by 41 functions, shape {'object': 185} */
+extern u32 lbl_1_data_1D628;
+
+#pragma section code_type ".fzgxpool"
+__declspec(section ".fzgxpool") static void fzgx_pool_prime1(void) {
+volatile f32 s; volatile f64 d; /* fzgx-allow: S2 pool primer sinks */
+s = 60.0f;
+s = 0.10000000149011612f;
+s = 32767.0f;
+s = 0.05000000074505806f;
+d = 0.07;
+s = 20000.0f;
+s = 0.0f;
+d = 4503599627370496.0;
+s = 1.0f;
+s = -0.029999999329447746f;
+d = 15.0;
+d = 4503601774854144.0;
+d = 1.5;
+d = 0.5;
+}
+static const u32 fzgx_pool_table2[1] = {0x00000000}; /* fzgx-allow: A1 retail pool bytes */
+__declspec(section ".fzgxpool") static void fzgx_pool_keep2(void) { const u32 *volatile cp; cp = fzgx_pool_table2; } /* fzgx-allow: S2 pool primer sink */
+__declspec(section ".fzgxpool") static void fzgx_pool_prime3(void) {
+volatile f32 s; volatile f64 d; /* fzgx-allow: S2 pool primer sinks */
+s = 0.5f;
+s = 8.0f;
+s = 255.0f;
+s = 15.0f;
+s = 0.20000000298023224f;
+s = 0.07999999821186066f;
+s = 0.25f;
+s = 0.9800000190734863f;
+s = 0.9900000095367432f;
+s = 40.0f;
+s = 20.0f;
+s = 1.5f;
+s = 0.44999998807907104f;
+s = -2.0f;
+s = 0.0833333358168602f;
+s = 0.15000000596046448f;
+s = 0.125f;
+s = -0.4000000059604645f;
+s = -0.30000001192092896f;
+s = 2.0f;
+s = 250.0f;
+d = 0.6;
+d = 0.4;
+s = 0.30000001192092896f;
+s = -0.004000000189989805f;
+}
+#pragma section code_type ".text"
+typedef struct {
+u8 pad_00[0x10];
+s32 unk_10;
+} Fn_1_64F2C_Object;
+void fn_1_5F5C8(Fn_1_64F2C_Object *obj) {
+f32 random;
+f32 scaled;
+f32 offset;
+if (obj->unk_10 == 0) {
+{
+u32 value;
+value = lbl_1_data_1D628 * 0x41c64e6d + 0x3039;
+lbl_1_data_1D628 = value;
+random = (f32)((value >> 16) & 0x7fff) / 32767.0f;
+}
+scaled = 0.25f * random;
+offset = 0.3f + scaled;
+obj->unk_10 = (s32)(60.0f * offset);
+}
+}
+/* fzgx:end fn_1_5F5C8 */
+
 /* fzgx:begin fn_1_5FE24 */
 // fn_1_5FE24: empty in retail (single blr).
 void fn_1_5FE24(void) {
