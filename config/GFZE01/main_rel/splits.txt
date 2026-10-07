@@ -6845,3 +6845,6 @@ rel/main_rel/sel_static_disp/fn_1_13A038.c:
 
 rel/main_rel/game/fn_1_32600.c:
 	.text       start:0x00032600 end:0x000327F8 align:4
+
+rel/main_rel/sel_static_disp/fn_1_13A654.c:
+	.text       start:0x0013A654 end:0x0013A848 align:4

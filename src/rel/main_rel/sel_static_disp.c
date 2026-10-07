@@ -1678,6 +1678,67 @@ void fn_1_13A460(struct Arg *arg0) {
 }
 /* fzgx:end fn_1_13A460 */
 
+/* fzgx:begin fn_1_13A654 noprologue */
+#include "types.h"
+
+struct Elem { u8 pad_0[0xe]; s16 unk_E; u8 pad_10[0x10]; };
+struct Arg { s16 index; u8 pad_2[0x22]; u8 *unk_24; u8 pad_28[0x10]; f32 f[6]; };
+struct Copy88 { f32 a[22]; };
+
+extern const f32 lbl_1_rodata_8C00;
+extern const f32 lbl_1_rodata_8C04;
+extern const f32 lbl_1_rodata_8C08;
+extern const f32 lbl_1_rodata_864C;
+extern const f32 lbl_1_rodata_861C;
+extern struct Copy88 lbl_1_rodata_26F8;
+extern const f32 lbl_1_rodata_880C;
+extern const f32 lbl_1_rodata_8638;
+extern const f32 lbl_1_rodata_8C0C;
+extern const f32 lbl_1_rodata_87D0;
+extern struct Elem lbl_1_bss_8B3A0[];
+extern u8 lbl_1_bss_8CA28;
+extern u8 fn_1_141F94(u32);
+extern void fn_1_8CED0(void *, u16, u16);
+extern s32 fn_1_131B90(void *);
+extern u32 fn_1_8D3F8(void *, void *, void *, void *);
+
+void fn_1_13A654(struct Arg *arg0) {
+    s32 off;
+    s32 i;
+    struct Copy88 loc;
+    i = 0;
+    arg0->f[0] = lbl_1_rodata_861C;
+    arg0->f[1] = lbl_1_rodata_8C00;
+    arg0->f[2] = lbl_1_rodata_8C04;
+    arg0->f[3] = lbl_1_rodata_8C08;
+    arg0->f[4] = lbl_1_rodata_864C;
+    arg0->f[5] = lbl_1_rodata_861C;
+    off = 0;
+    for (; i < 4; i++) {
+        s16 v = lbl_1_bss_8B3A0[i].unk_E;
+        u8 k = fn_1_141F94((u8)i);
+        if (v != -1) {
+            arg0->index = i;
+            loc = lbl_1_rodata_26F8;
+            loc.a[1] = (f32)((k % 2) * 300 + 224);
+            loc.a[2] = (f32)(((k >> 1) & 0x7f) * 200 + 176);
+            loc.a[3] = lbl_1_rodata_880C;
+            ((s32 *)&loc)[12] = 10;
+            if (lbl_1_bss_8CA28 != 0) {
+                loc.a[4] = loc.a[4] * lbl_1_rodata_8638;
+                loc.a[5] = loc.a[5] * lbl_1_rodata_8638;
+            }
+            loc.a[4] = loc.a[4] * lbl_1_rodata_8C0C;
+            loc.a[5] = loc.a[5] * lbl_1_rodata_8C0C;
+            fn_1_8CED0(arg0->unk_24 + off, 0xa0, 0x8c);
+            *(f32 *)(arg0->unk_24 + off + 0x44) = lbl_1_rodata_87D0;
+            fn_1_8D3F8(arg0->unk_24 + off, &loc, fn_1_131B90, arg0);
+            off += 100;
+        }
+    }
+}
+/* fzgx:end fn_1_13A654 */
+
 /* fzgx:begin fn_1_13A848 noprologue */
 #include "types.h"
 #include "rel/main_rel/globals.h"
