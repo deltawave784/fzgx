@@ -1056,11 +1056,12 @@ def _attempt_text(p: Project, key: str) -> Optional[str]:
     best = STATE_DIR / "attempts" / f"{key}.best.c"
     if claimed and best.exists():
         return best.read_text()
-    row = l.db.execute(
-        "SELECT best_body_path FROM attempts WHERE symbol=? AND best_body_path IS NOT NULL "
-        "ORDER BY best_in_attempt DESC, final_percent DESC, id DESC LIMIT 1", (key,)).fetchone()
-    if row and row[0]:
-        path = Path(row[0])
+    # the best body whose file exists: attempts recorded on another machine keep their paths in
+    # the restored ledger without the files (fn_1_45A58's best row), which used to end the lookup
+    for (stored,) in l.db.execute(
+            "SELECT best_body_path FROM attempts WHERE symbol=? AND best_body_path IS NOT NULL "
+            "ORDER BY best_in_attempt DESC, final_percent DESC, id DESC", (key,)).fetchall():
+        path = Path(stored)
         if not path.exists():  # the repository moved; the store did not
             path = STATE_DIR / "attempts" / path.name
         if path.exists():
