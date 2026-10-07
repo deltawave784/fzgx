@@ -1824,107 +1824,9 @@ void fn_1_128E8C(u32 unused, FnData *data) {
 }
 /* fzgx:end fn_1_128E8C */
 
-/* fzgx:begin fn_1_128F10 noprologue */
-#include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/accessory.h"
-#include "rel/main_rel/cloth.h"
-
-
-typedef struct AccessoryEntry {
-    u8 unk_0;
-    u8 pad_1[0x13];
-    f32 unk_14;
-    f32 unk_18;
-    u8 pad_1C[0x24];
-    f32 unk_40;
-} AccessoryEntry;
-
-typedef struct AccessoryObject {
-    u8 pad_0[0x18];
-    u32 unk_18;
-    u8 pad_1C[8];
-    u8 *unk_24;
-} AccessoryObject;
-
-struct Sig_fn_80077B14_fn_80077B14_Arg0 {
-    u8 pad_0[0x4];
-    u32 unk_4;
-    u8 pad_8[0x18];
-    u32 unk_20;
-};
-
-struct fn_1_108920_lbl_801A6410 {
-    u32 unk_0;
-};
-
-struct Sig_fn_80077B64_fn_80077B64_Arg0 {
-    u8 pad_0[0x4];
-    u32 unk_4;
-};
-
-struct fn_1_129D9C_rodata {
-    f32 unk_0;
-    u8 pad_4[0xC];
-    f32 unk_10;
-    u8 pad_14[0x8C];
-    u32 unk_A0;
-    u32 unk_A4;
-    s32 unk_A8;
-    f32 unk_AC;
-    f32 unk_B0;
-    u8 pad_B4[0x4];
-    f64 unk_B8;
-    f32 unk_C0;
-    f32 unk_C4;
-    f32 unk_C8;
-    f32 unk_CC;
-    f32 unk_D0;
-    f32 unk_D4;
-    f32 unk_D8;
-    f32 unk_DC;
-    f32 unk_E0;
-};
-
-typedef struct Sig_fn_80015EE8_Fn80015EE8Out {
-    f32 f0;
-    f32 f1;
-    f32 f2;
-    f32 f3;
-    f32 f4;
-    f32 f5;
-    f32 f6;
-    f32 f7;
-    f32 f8;
-    f32 f9;
-    f32 f10;
-    f32 f11;
-    f32 f12;
-    f32 f13;
-    f32 f14;
-    f32 f15;
-} Sig_fn_80015EE8_Fn80015EE8Out;
-
-struct fn_1_129D9C_system {
-    u8 pad_0[0x2C];
-    f32 unk_2C;
-};
+/* fzgx:begin fn_1_128F10 pool */
+struct fn_1_129D9C_rodata;
 extern const struct fn_1_129D9C_rodata lbl_1_rodata_8068;
-extern u32 lbl_1_bss_897A4;
-extern u32 lbl_1_bss_897A8;
-
-typedef struct {
-    u32 unk_0;
-    u32 unk_4;
-    u32 unk_8;
-    u32 unk_C;
-    f32 unk_10;
-    f32 unk_14;
-    f32 unk_18;
-    f32 unk_1C;
-    u8 unk_20;
-} fn_1_128F10_Obj_1_bss_89760;
-
 
 typedef struct lbl_1_bss_89760_t {
     u32 unk_0;
@@ -1940,15 +1842,10 @@ typedef struct lbl_1_bss_89770_t {
     f32 unk_1C;
 } lbl_1_bss_89770_t;
 
-typedef struct lbl_1_bss_89780_t {
-    u8 unk_20;
-    u8 pad_1[0x1f];
-} lbl_1_bss_89780_t;
-
 /* file-scope objects of the retail TU, in retail order: MWCC addresses them off one section base */
 lbl_1_bss_89760_t fzgx_obj_lbl_1_bss_89760;
 lbl_1_bss_89770_t fzgx_obj_lbl_1_bss_89770;
-lbl_1_bss_89780_t lbl_1_bss_89780;
+u8 lbl_1_bss_89780;
 u32 fzgx_obj_lbl_1_bss_897A0;
 u32 lbl_1_bss_897A4;
 u32 lbl_1_bss_897A8;
@@ -1965,16 +1862,17 @@ static void fzgx_bss_layout(void) {
 }
 #pragma section code_type ".text"
 
+/* Clears the accessory state words and resets the float values to zero. */
 void fn_1_128F10(void) {
     fzgx_obj_lbl_1_bss_89760.unk_0 = 0;
-    fzgx_obj_lbl_1_bss_89770.unk_10 = (*((const f32 *)&lbl_1_rodata_8068));
+    fzgx_obj_lbl_1_bss_89770.unk_10 = *(const f32 *)&lbl_1_rodata_8068;
     fzgx_obj_lbl_1_bss_89760.unk_4 = 0;
-    fzgx_obj_lbl_1_bss_89770.unk_14 = (*((const f32 *)&lbl_1_rodata_8068));
+    fzgx_obj_lbl_1_bss_89770.unk_14 = *(const f32 *)&lbl_1_rodata_8068;
     fzgx_obj_lbl_1_bss_89760.unk_8 = 0;
-    fzgx_obj_lbl_1_bss_89770.unk_18 = (*((const f32 *)&lbl_1_rodata_8068));
+    fzgx_obj_lbl_1_bss_89770.unk_18 = *(const f32 *)&lbl_1_rodata_8068;
     fzgx_obj_lbl_1_bss_89760.unk_C = 0;
-    fzgx_obj_lbl_1_bss_89770.unk_1C = (*((const f32 *)&lbl_1_rodata_8068));
-    lbl_1_bss_89780.unk_20 = 0;
+    fzgx_obj_lbl_1_bss_89770.unk_1C = *(const f32 *)&lbl_1_rodata_8068;
+    lbl_1_bss_89780 = 0;
 }
 /* fzgx:end fn_1_128F10 */
 
