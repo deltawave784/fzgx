@@ -24067,6 +24067,16 @@
   },
   {
     "module": "main",
+    "source": "dol/fn_800744F8.c",
+    "symbols": [
+      "fn_800744F8"
+    ],
+    "status": "matching",
+    "mw_version": "GC/2.5",
+    "extra_cflags": []
+  },
+  {
+    "module": "main",
     "source": "dol/fn_800745A4.c",
     "symbols": [
       "fn_800745A4"
