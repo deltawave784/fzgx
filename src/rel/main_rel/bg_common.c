@@ -64,6 +64,86 @@ void fn_1_103AD4(void) {
 }
 /* fzgx:end fn_1_103AD4 */
 
+/* fzgx:begin fn_1_103D28 */
+#pragma section code_type ".fzgxpool"
+static const unsigned long fzgx_pool_table1[1] = {0x42700000};  /* fzgx-allow: A1 retail pool bytes */
+__declspec(section ".fzgxpool") static void fzgx_pool_keep1(void) { const unsigned long *volatile cp; cp = fzgx_pool_table1; }  /* fzgx-allow: S2 pool primer sink */
+__declspec(section ".fzgxpool") static void fzgx_pool_prime2(void) {
+    volatile float s; volatile double d;  /* fzgx-allow: S2 pool primer sinks */
+    s = 182.04444885253906f;
+    d = 4503601774854144.0;
+    s = 1.0f;
+    s = 0.5f;
+    s = 0.0f;
+    s = 5.0f;
+    s = 0.20000000298023224f;
+    s = -1.0f;
+    s = 32768.0f;
+    s = 16384.0f;
+    s = 2.0f;
+    s = 98304.0f;
+    s = 0.25f;
+    s = 3.0f;
+    s = 0.4000000059604645f;
+    s = -0.10000000149011612f;
+    s = 0.6000000238418579f;
+    s = 2.5f;
+    s = 20.0f;
+    s = 0.8500000238418579f;
+    s = 6.666666507720947f;
+    s = 1.5f;
+    s = 30.0f;
+    s = 0.009999999776482582f;
+    d = 0.0;
+    d = 3.0;
+    s = 32767.0f;
+}
+static const unsigned long fzgx_pool_table3[1] = {0x00000000};  /* fzgx-allow: A1 retail pool bytes */
+__declspec(section ".fzgxpool") static void fzgx_pool_keep3(void) { const unsigned long *volatile cp; cp = fzgx_pool_table3; }  /* fzgx-allow: S2 pool primer sink */
+__declspec(section ".fzgxpool") static void fzgx_pool_prime4(void) {
+    volatile float s; volatile double d;  /* fzgx-allow: S2 pool primer sinks */
+    d = 0.5;
+    d = 4503599627370496.0;
+    s = 4.0f;
+    s = 65536.0f;
+    s = 0.30000001192092896f;
+    s = 0.800000011920929f;
+}
+#pragma section code_type ".text"
+
+extern void *memset(void *, int, u32);
+extern void lbl_8006D91C(s32);
+extern void lbl_8006E1F0(void *, f32, f32, f32);
+
+void fn_1_103D28(u8 *base, f32 arg1, u8 count) {
+    int i;
+    if (*(u32 *)base != 0) {
+        for (i = 0; i < 4; i++) {
+            u8 *p = base + i * 4;
+            u8 *q = base + i * 0xfc;
+            s32 n;
+            s32 j;
+            u8 *ent;
+            u8 *o;
+            *(s32 *)(q + 0x8e8) = (s32)*(f32 *)(p + 0x514);
+            *(u8 **)(q + 0x8ec) = q + 0x8f0;
+            memset(base + i * 0x50 + 0x3c4, 0, (u32)(4.0f * *(f32 *)(p + 0x514)));
+            *(f32 *)(p + 0x504) = arg1;
+            n = 0x14;
+            if (count < 0x14) n = count;
+            *(f32 *)(p + 0x514) = (f32)n;
+            o = *(u8 **)(*(u8 **)(*(u8 **)(*(u8 **)base + 8) + 8) + 8);
+            ent = base + i * 0xf0 + 4;
+            for (j = (s32)*(f32 *)(p + 0x514); j > 0; ent += 12) {
+                lbl_8006D91C((s32)(65536.0f * (4.0f * (f32)j / *(f32 *)(p + 0x514))));
+                lbl_8006E1F0(ent, 0.3f * *(f32 *)(o + 0x14) * ((f32)j / *(f32 *)(p + 0x514)), 0.0f, 0.0f);
+                j--;
+            }
+        }
+    }
+}
+/* fzgx:end fn_1_103D28 */
+
 /* fzgx:begin fn_1_103F10 */
 void fn_1_103F10(void *arg) {
     int count;

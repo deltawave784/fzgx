@@ -6896,3 +6896,6 @@ rel/main_rel/effect_car/fn_1_6E140.c:
 
 rel/main_rel/accessory/fn_1_1286F4.c:
 	.text       start:0x001286F4 end:0x00128884 align:4
+
+rel/main_rel/bg_common/fn_1_103D28.c:
+	.text       start:0x00103D28 end:0x00103F10 align:4
