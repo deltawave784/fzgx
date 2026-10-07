@@ -62138,6 +62138,16 @@
     "extra_cflags": []
   },
   {
+    "module": "profile",
+    "source": "rel/profile/fn_16_E20.c",
+    "symbols": [
+      "fn_16_E20"
+    ],
+    "status": "matching",
+    "mw_version": "GC/1.3.2",
+    "extra_cflags": []
+  },
+  {
     "module": "replay",
     "source": "rel/replay/_epilog.c",
     "symbols": [
