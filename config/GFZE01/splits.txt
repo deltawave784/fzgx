@@ -5744,3 +5744,6 @@ dol/fn_8004CD70.c:
 
 dol/TRKInitializeNub.c:
 	.text       start:0x800889B4 end:0x80088B00 align:4
+
+dol/fn_800063AC.c:
+	.text       start:0x800063AC end:0x8000659C align:4
