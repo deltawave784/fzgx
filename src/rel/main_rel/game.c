@@ -364,7 +364,7 @@ extern u16 lbl_1_bss_26C68[35526];
 extern u32 lbl_1_bss_3C08[2];
 extern u32 fn_800075AC(u32, u32, u32);
 extern u32 fn_1_FA070(void);
-extern int fn_1_FA180(int, u8);
+extern u32 fn_1_FA180(u8 a, u8 b);
 extern u32 fn_1_F9FEC(void);
 extern void fn_1_A2DC4(u32 arg0);
 extern u8 lbl_1_bss_26B54[8];
@@ -388,7 +388,7 @@ extern u8 lbl_1_A9011100;
 extern u8 lbl_1_A9011000;
 extern u16 lbl_1_bss_25B80;
 extern u8 lbl_1_bss_26B1D;
-extern void fn_1_15E260(s32);
+extern void fn_1_15E260(s32 index);
 
 /* fzgx:begin fn_1_32600 */
 #pragma section code_type ".fzgxpool"
@@ -1409,14 +1409,6 @@ void fn_1_3F4FC(void) {
 /* fzgx:end fn_1_3F4FC */
 
 /* fzgx:begin fn_1_3F75C */
-#include "types.h"
-#include "font.h"
-
-extern void fn_1_451E4(void);
-extern void fn_1_D3214(void);
-extern void fn_8001AF64(void);
-extern s32 fn_1_467F4(void);
-extern s32 fn_1_13018(void);
 
 void fn_1_3F75C(void) {
     while (fn_1_467F4() || fn_1_13018()) {
@@ -1783,9 +1775,9 @@ int fn_1_4017C(void) {
         return 1;
     }
     for (i = 0; i < 3; i++) {
-        result1 = fn_1_FA180(1, i);
-        result2 = fn_1_FA180(2, i);
-        result3 = fn_1_FA180(3, i);
+        result1 = (int)fn_1_FA180(1, i);
+        result2 = (int)fn_1_FA180(2, i);
+        result3 = (int)fn_1_FA180(3, i);
         if (result1 == 0 && result2 == 0 && result3 == 0) {
             return 0;
         }
@@ -1801,13 +1793,13 @@ int fn_1_40224(void) {
     if ((int)fn_1_F9FEC() != 0) {
         return 1;
     }
-    if (fn_1_FA180(2, 0) == 0) {
+    if ((int)fn_1_FA180(2, 0) == 0) {
         return 0;
     }
-    if (fn_1_FA180(2, 1) == 0) {
+    if ((int)fn_1_FA180(2, 1) == 0) {
         return 0;
     }
-    result = fn_1_FA180(2, 2);
+    result = (int)fn_1_FA180(2, 2);
     return result != 0;
 }
 /* fzgx:end fn_1_40224 */
