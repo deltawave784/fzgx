@@ -67611,6 +67611,22 @@
   },
   {
     "module": "winning",
+    "source": "rel/winning/winning/fn_15_4124.c",
+    "symbols": [
+      "fn_15_4124"
+    ],
+    "status": "matching",
+    "mw_version": "GC/1.3",
+    "extra_cflags": [],
+    "tu": "rel/winning/winning.c",
+    "pool": {
+      "@50": "lbl_15_rodata_90",
+      "@47": "lbl_15_rodata_114",
+      "@48": "lbl_15_rodata_64"
+    }
+  },
+  {
+    "module": "winning",
     "source": "rel/winning/winning/fn_15_435C.c",
     "symbols": [
       "fn_15_435C"

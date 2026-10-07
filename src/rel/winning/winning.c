@@ -2043,6 +2043,90 @@ void fn_15_4060(void) {
 }
 /* fzgx:end fn_15_4060 */
 
+/* fzgx:begin fn_15_4124 */
+#include "rel/main_rel/camera.h"
+#include "sofdec/adxt.h"
+
+struct WinningState {
+    u8 pad_0[0x38];
+    s16 unk_38;
+    u8 pad_3A[0x2E];
+    s32 unk_68;
+    s32 unk_6C;
+    s32 unk_70;
+    u8 pad_74[0x24];
+    s16 unk_98;
+};
+struct InputState {
+    u16 unk_0;
+    u8 pad_2[0xE];
+    u16 unk_10;
+};
+struct SoundState { ADXTHandle **unk_0; };
+extern struct WinningState lbl_15_bss_0;
+
+extern struct SoundState lbl_1_bss_6EAD0;
+extern CameraState *camera_get_state_object(void);
+extern u32 fn_1_A1588(ADXTHandle *, u32);
+extern const f32 lbl_15_rodata_114[34];
+extern const f32 lbl_15_rodata_64[11];
+
+#pragma opt_propagation off
+void fn_15_4124(void) {
+    struct WinningState *p = (struct WinningState *)&lbl_15_bss_0;
+    CameraState *camera = camera_get_state_object();
+    s32 current;
+    s32 selected;
+    s32 delta;
+    s32 count;
+    s32 entries;
+    f32 limit;
+    if ((lbl_1_bss_D58.unk_10 >> 3) & 1) delta = -1;
+    else if ((lbl_1_bss_D58.unk_10 >> 2) & 1) delta = 1;
+    else delta = 0;
+    entries = p->unk_38;
+    current = p->unk_6C;
+    count = entries + 3;
+    delta += count;
+    current += delta;
+    p->unk_6C = current % count;
+    selected = p->unk_6C;
+    if (selected < 0) selected = 0;
+    else if (selected > p->unk_38 - 1) selected = p->unk_38 - 1;
+    p->unk_68 = selected;
+    if (!((lbl_1_bss_D58.unk_0 >> 11) & 1)) {
+        if (lbl_1_bss_D58.unk_10 & 1) delta = -1;
+        else if ((lbl_1_bss_D58.unk_10 >> 1) & 1) delta = 1;
+        else delta = 0;
+    } else delta = 0;
+    if (delta != 0) {
+        switch (p->unk_6C - p->unk_38) {
+        case 0:
+            selected = p->unk_70;
+            count = delta + 4;
+            selected += count;
+            p->unk_70 = selected % 4;
+            break;
+        case 1:
+            *(f32 *)((u8 *)camera + 0x1C) += (f32)delta;
+            if (*(f32 *)((u8 *)camera + 0x1C) > 55.0f)
+                *(f32 *)((u8 *)camera + 0x1C) = 55.0f;
+            if (*(f32 *)((u8 *)camera + 0x1C) < 30.0f)
+                *(f32 *)((u8 *)camera + 0x1C) = 30.0f;
+            break;
+        case 2:
+            p->unk_98 += delta;
+            switch (p->unk_98 % 3) {
+            case 0: fn_1_A1588(*lbl_1_bss_6EAD0.unk_0, 0x11); break;
+            case 1: fn_1_A1588(*lbl_1_bss_6EAD0.unk_0, 0x35); break;
+            default: fn_1_A1588(*lbl_1_bss_6EAD0.unk_0, 0x42); break;
+            }
+            break;
+        }
+    }
+}
+/* fzgx:end fn_15_4124 */
+
 /* fzgx:begin fn_15_435C */
 #include "rel/main_rel/camera.h"
 
