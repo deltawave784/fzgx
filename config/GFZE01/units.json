@@ -54529,6 +54529,16 @@
   },
   {
     "module": "movie_module",
+    "source": "rel/movie_module/fn_12_2013C.c",
+    "symbols": [
+      "fn_12_2013C"
+    ],
+    "status": "matching",
+    "mw_version": "GC/1.3.2",
+    "extra_cflags": []
+  },
+  {
+    "module": "movie_module",
     "source": "rel/movie_module/fn_12_20168.c",
     "symbols": [
       "fn_12_20168"
@@ -60844,6 +60854,16 @@
     ],
     "status": "matching",
     "mw_version": null,
+    "extra_cflags": []
+  },
+  {
+    "module": "movie_module",
+    "source": "rel/movie_module/fn_12_E0C8.c",
+    "symbols": [
+      "fn_12_E0C8"
+    ],
+    "status": "matching",
+    "mw_version": "GC/1.3.2",
     "extra_cflags": []
   },
   {
