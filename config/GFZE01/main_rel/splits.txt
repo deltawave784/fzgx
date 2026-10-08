@@ -6953,3 +6953,6 @@ rel/main_rel/archive/fn_1_12E468.c:
 
 rel/main_rel/sel_static_disp/fn_1_138144.c:
 	.text       start:0x00138144 end:0x00138A04 align:4
+
+rel/main_rel/memcard/fn_1_B171C.c:
+	.text       start:0x000B171C end:0x000B22AC align:4

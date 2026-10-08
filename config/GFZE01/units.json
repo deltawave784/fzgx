@@ -45755,6 +45755,20 @@
   },
   {
     "module": "main_rel",
+    "source": "rel/main_rel/memcard/fn_1_B171C.c",
+    "symbols": [
+      "fn_1_B171C"
+    ],
+    "status": "matching",
+    "mw_version": null,
+    "extra_cflags": [],
+    "tu": "rel/main_rel/memcard.c",
+    "pool": {
+      "@186": "jumptable_1_data_3CB68"
+    }
+  },
+  {
+    "module": "main_rel",
     "source": "rel/main_rel/memcard/fn_1_B2770.c",
     "symbols": [
       "fn_1_B2770"
