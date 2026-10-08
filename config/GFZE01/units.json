@@ -37836,6 +37836,25 @@
   },
   {
     "module": "main_rel",
+    "source": "rel/main_rel/effect/fn_1_611EC.c",
+    "symbols": [
+      "fn_1_611EC"
+    ],
+    "status": "matching",
+    "mw_version": "GC/1.3.2",
+    "extra_cflags": [],
+    "tu": "rel/main_rel/effect.c",
+    "pool": {
+      "...rodata.0": "lbl_1_rodata_2950",
+      "@19": "lbl_1_rodata_295C+0x14",
+      "@7": "lbl_1_rodata_2954+0x4",
+      "@193": "lbl_1_rodata_2B2C+0xCC",
+      "@26": "lbl_1_rodata_2988+0x18",
+      "@190": "lbl_1_rodata_2B2C+0xB4"
+    }
+  },
+  {
+    "module": "main_rel",
     "source": "rel/main_rel/effect/fn_1_61640.c",
     "symbols": [
       "fn_1_61640"

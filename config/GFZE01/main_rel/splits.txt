@@ -6911,3 +6911,6 @@ rel/main_rel/accessory/fn_1_1286F4.c:
 
 rel/main_rel/bg_cas/fn_1_FB96C.c:
 	.text       start:0x000FB96C end:0x000FB9C0 align:4
+
+rel/main_rel/effect/fn_1_611EC.c:
+	.text       start:0x000611EC end:0x00061370 align:4
