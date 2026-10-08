@@ -1389,6 +1389,216 @@ void fn_10_5780(struct Fn105780 *obj) {
 }
 /* fzgx:end fn_10_5780 */
 
+/* fzgx:begin fn_10_578C */
+struct fn_10_578C_lbl_1_bss_8B3A0 {
+    u8 pad_0[0x98];
+    u32 unk_98;
+};
+extern int fn_1_13FB24(u32);
+extern struct fn_10_578C_lbl_1_bss_8B3A0 lbl_1_bss_8B3A0;
+extern u32 fn_1_F9FEC(void);
+extern u32 lbl_801A66A8;
+extern u8 lbl_1_bss_9C8[];
+extern u8 lbl_1_bss_9F8[];
+extern void fn_1_12F128(s32);
+extern void fn_1_12F150(s32, u32, u32);
+extern void fn_1_A2D84(u32);
+
+s16 fn_10_578C(void *arg0) {
+    struct fn_10_578C_lbl_1_bss_8B3A0 *p_lbl_1_bss_8B3A0;
+    struct { s32 value; } v0;
+    struct { u8 *value; } p_lbl_1_bss_9C8;
+    struct { u8 *value; } p_lbl_1_bss_9F8;
+    struct { u8 *value; } v4;
+    struct { u8 *value; } v3;
+    u8 *v19;
+    u8 *v20;
+    s32 v26;
+    s16 v30;
+    s32 v2 = 0;
+    s32 v1;
+    s16 v8;
+    s32 v9;
+    s32 v10;
+    s16 v11 = 0;
+    s32 v12;
+    s32 v17;
+    s32 v23;
+    s16 old;
+    s32 next;
+    u32 v7;
+    u32 v5;
+    u32 t0;
+    s32 v46;
+    s16 v13;
+    u32 v29;
+    u32 v27;
+    s16 v45;
+
+    /* Controller state is sampled separately for each test. */
+    t0 = fn_1_F9FEC();
+    p_lbl_1_bss_9C8.value = lbl_1_bss_9C8;
+    v1 = 0;
+    v0.value = t0 != 0;
+    p_lbl_1_bss_9F8.value = lbl_1_bss_9F8;
+    p_lbl_1_bss_8B3A0 = &lbl_1_bss_8B3A0;
+    v4.value = p_lbl_1_bss_9C8.value;
+    v3.value = p_lbl_1_bss_9F8.value;
+    for (; (s16)v1 < 4; v4.value += 12, v3.value += 20, v1++) {
+        if ((s8)v4.value[10] != -1 && __rlwnm(p_lbl_1_bss_8B3A0->unk_98, ((s16)v1 + 1) & 31, 31, 31)) {
+            if (((*(volatile u16 *)(v3.value + 16) >> 3) & 1) || ((*(volatile u16 *)(v3.value + 18) >> 3) & 1)) v2--; /* volatile: controller flags are sampled independently for each test. */
+            if (((*(volatile u16 *)(v3.value + 16) >> 2) & 1) || ((*(volatile u16 *)(v3.value + 18) >> 2) & 1)) v2++; /* volatile: controller flags are sampled independently for each test. */
+            v5 = *(volatile u16 *)(v3.value + 16); /* volatile: controller flags are sampled independently for each test. */
+            if (((v5 >> 2) & 1) || (((v7 = *(volatile u16 *)(v3.value + 18)) >> 2) & 1)) fn_1_12F128(v1); /* volatile: controller flags are sampled independently for each test. */
+            else if (((v5 >> 3) & 1) || ((v7 >> 3) & 1)) fn_1_12F128(v1);
+        }
+    }
+    v8 = *(s16 *)((u8 *)arg0 + 146);
+    if ((s16)v2 != 0) {
+        v9 = (s16)v2;
+        do {
+            v10 = *(s16 *)((u8 *)arg0 + 146) + v9;
+            *(s16 *)((u8 *)arg0 + 146) = v10 > 8 ? 0 : v10 < 0 ? 8 : v10;
+        } while ((s16)fn_1_13FB24(*(s16 *)((u8 *)arg0 + 146)) != 0);
+    }
+    if (v8 != *(s16 *)((u8 *)arg0 + 146)) {
+        fn_1_A2D84(0xA9010000);
+        lbl_801A66A8 = 0;
+    }
+    v13 = 0;
+    if (*(s16 *)((u8 *)arg0 + 146) == 8) {
+        for (v12 = 0; (s16)v12 < 4; v12++) {
+            if ((s8)p_lbl_1_bss_9C8.value[v12 * 12 + 10] != -1 && __rlwnm(p_lbl_1_bss_8B3A0->unk_98, ((s16)v12 + 1) & 31, 31, 31)) {
+                if (((*(volatile u16 *)(p_lbl_1_bss_9F8.value + v12 * 20 + 8) >> 9) & 1)) v13--; /* volatile: controller flags are sampled independently for each test. */
+                if (((*(volatile u16 *)(p_lbl_1_bss_9F8.value + v12 * 20 + 8) >> 8) & 1)) v13 = (s16)(v13 + 1); /* volatile: controller flags are sampled independently for each test. */
+                v5 = *(volatile u16 *)(p_lbl_1_bss_9F8.value + v12 * 20 + 8); /* volatile: controller flags are sampled independently for each test. */
+                if ((v5 >> 8) & 1) fn_1_12F150(v12, 9, 1);
+                else if ((v5 >> 9) & 1) fn_1_12F150(v12, 9, 0);
+            }
+        }
+        if ((s16)v13 != 0) fn_1_A2D84(0xA9010100);
+        v11 = v13;
+    } else {
+        v19 = p_lbl_1_bss_9C8.value;
+        v20 = p_lbl_1_bss_9F8.value;
+        for (v17 = 0; (s16)v17 < 4; v19 += 12, v20 += 20, v17++) {
+            if ((s8)v19[10] != -1 && __rlwnm(p_lbl_1_bss_8B3A0->unk_98, ((s16)v17 + 1) & 31, 31, 31)) {
+                if (((*(volatile u16 *)(v20 + 8) >> 9) & 1)) v13--; /* volatile: controller flags are sampled independently for each test. */
+                if (((*(volatile u16 *)(v20 + 8) >> 8) & 1)) v13 = (s16)(v13 + 1); /* volatile: controller flags are sampled independently for each test. */
+                v5 = *(volatile u16 *)(v20 + 8); /* volatile: controller flags are sampled independently for each test. */
+                if ((v5 >> 8) & 1) fn_1_12F150(v17, 9, 1);
+                else if ((v5 >> 9) & 1) fn_1_12F150(v17, 9, 0);
+            }
+        }
+        if (v13 < 0) {
+            v11 = -1;
+            fn_1_A2D84(0xA9010200);
+        } else if ((s16)v13 > 0) {
+            *(s16 *)((u8 *)arg0 + 146) = 8;
+            fn_1_A2D84(0xA9010100);
+        }
+        v26 = 0;
+        for (v23 = 0; (s16)v23 < 4; v23++) {
+            if ((s8)p_lbl_1_bss_9C8.value[v23 * 12 + 10] != -1 && __rlwnm(p_lbl_1_bss_8B3A0->unk_98, ((s16)v23 + 1) & 31, 31, 31)) {
+                if (((*(volatile u16 *)(p_lbl_1_bss_9F8.value + v23 * 20 + 16) >> 0) & 1) || ((*(volatile u16 *)(p_lbl_1_bss_9F8.value + v23 * 20 + 18) >> 0) & 1)) v26--; /* volatile: controller flags are sampled independently for each test. */
+                if (((*(volatile u16 *)(p_lbl_1_bss_9F8.value + v23 * 20 + 16) >> 1) & 1) || ((*(volatile u16 *)(p_lbl_1_bss_9F8.value + v23 * 20 + 18) >> 1) & 1)) v26++; /* volatile: controller flags are sampled independently for each test. */
+                v27 = *(volatile u16 *)(p_lbl_1_bss_9F8.value + v23 * 20 + 16); /* volatile: controller flags are sampled independently for each test. */
+                if (((v27 >> 1) & 1) || (((v29 = *(volatile u16 *)(p_lbl_1_bss_9F8.value + v23 * 20 + 18)) >> 1) & 1)) fn_1_12F128(v23); /* volatile: controller flags are sampled independently for each test. */
+                else if ((v27 & 1) || (v29 & 1)) fn_1_12F128(v23);
+            }
+        }
+        v30 = *(s16 *)((u8 *)arg0 + 146);
+        switch (v30) {
+        case 4:
+            old = *(s16 *)((u8 *)arg0 + 300);
+            next = old + (s16)v26;
+            *(s16 *)((u8 *)arg0 + 300) = next > 29 ? 0 : next < 0 ? 29 : next;
+            if (old != *(s16 *)((u8 *)arg0 + 300)) {
+                fn_1_A2D84(0xA9010000);
+                lbl_801A66A8 = 0;
+            }
+            break;
+        case 6:
+            old = *(s16 *)((u8 *)arg0 + 302);
+            next = old + (s16)v26;
+            *(s16 *)((u8 *)arg0 + 302) = next > 1 ? 0 : next < 0 ? 1 : next;
+            if (old != *(s16 *)((u8 *)arg0 + 302)) {
+                fn_1_A2D84(0xA9010000);
+                lbl_801A66A8 = 0;
+            }
+            break;
+        case 3:
+            old = *(s16 *)((u8 *)arg0 + 304);
+            next = old + (s16)v26;
+            *(s16 *)((u8 *)arg0 + 304) = next > 1 ? 0 : next < 0 ? 1 : next;
+            if (old != *(s16 *)((u8 *)arg0 + 304)) {
+                fn_1_A2D84(0xA9010000);
+                lbl_801A66A8 = 0;
+            }
+            break;
+        case 1:
+            old = *(s16 *)((u8 *)arg0 + 306);
+            next = old + (s16)v26;
+            *(s16 *)((u8 *)arg0 + 306) = next > 1 ? 0 : next < 0 ? 1 : next;
+            if (old != *(s16 *)((u8 *)arg0 + 306)) {
+                fn_1_A2D84(0xA9010000);
+                lbl_801A66A8 = 0;
+            }
+            break;
+        case 7:
+            old = *(s16 *)((u8 *)arg0 + 308);
+            next = old + (s16)v26;
+            *(s16 *)((u8 *)arg0 + 308) = next > 1 ? 0 : next < 0 ? 1 : next;
+            if (old != *(s16 *)((u8 *)arg0 + 308)) {
+                fn_1_A2D84(0xA9010000);
+                lbl_801A66A8 = 0;
+            }
+            break;
+        case 2:
+            old = *(s16 *)((u8 *)arg0 + 310);
+            next = old + (s16)v26;
+            *(s16 *)((u8 *)arg0 + 310) = next > 1 ? 0 : next < 0 ? 1 : next;
+            if (old != *(s16 *)((u8 *)arg0 + 310)) {
+                fn_1_A2D84(0xA9010000);
+                lbl_801A66A8 = 0;
+            }
+            break;
+        case 0:
+            old = *(s16 *)((u8 *)arg0 + 314);
+            next = old + (s16)v26;
+            *(s16 *)((u8 *)arg0 + 314) = next > 20 ? 0 : next < 0 ? 20 : next;
+            if (old != *(s16 *)((u8 *)arg0 + 314)) {
+                fn_1_A2D84(0xA9010000);
+                lbl_801A66A8 = 0;
+            }
+            break;
+        case 5:
+            v45 = *(s16 *)((u8 *)arg0 + 8);
+            v46 = 2;
+            if (v0.value) v46 = 3;
+            next = v45 + (s16)v26;
+            if (next > v46) next = 0;
+            else if (next < 0) {
+                next = 2;
+                if (v0.value) next = 3;
+            }
+            *(s16 *)((u8 *)arg0 + 8) = next;
+            if (v45 != *(s16 *)((u8 *)arg0 + 8)) {
+                fn_1_A2D84(0xA9010000);
+                lbl_801A66A8 = 0;
+            }
+            *(s16 *)((u8 *)arg0 + 10) = *(s16 *)((u8 *)arg0 + 8);
+            break;
+        }
+        if (v30 != *(s16 *)((u8 *)arg0 + 146)) {
+            fn_1_A2D84(0xA9010000);
+            lbl_801A66A8 = 0;
+        }
+    }
+    return v11;
+}
+/* fzgx:end fn_10_578C */
+
 /* fzgx:begin fn_10_5E94 */
 #include "rel/sel/sel.h"
 

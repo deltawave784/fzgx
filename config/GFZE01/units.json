@@ -66150,6 +66150,20 @@
   },
   {
     "module": "sel",
+    "source": "rel/sel/sel/fn_10_578C.c",
+    "symbols": [
+      "fn_10_578C"
+    ],
+    "status": "matching",
+    "mw_version": null,
+    "extra_cflags": [],
+    "tu": "rel/sel/sel.c",
+    "pool": {
+      "@219": "jumptable_10_data_6B0"
+    }
+  },
+  {
+    "module": "sel",
     "source": "rel/sel/sel/fn_10_5E94.c",
     "symbols": [
       "fn_10_5E94"
