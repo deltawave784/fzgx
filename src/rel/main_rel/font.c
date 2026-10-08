@@ -3134,6 +3134,93 @@ void fn_1_550E0(void) {
 }
 /* fzgx:end fn_1_550E0 */
 
+/* fzgx:begin fn_1_55210 noprologue */
+#include "types.h"
+#include "rel/main_rel/font.h"
+
+typedef struct {
+    u8 pad_00[0x1a];
+    u16 count_b;
+    u16 count_c;
+} Fn55210Arg;
+
+typedef struct {
+    u8 pad_0[4];
+    void *cb;
+    void *owner;
+    u8 pad_c[0x30];
+    u16 id;
+    u8 pad_3e[2];
+    u8 copy[0x28];
+    void *slots[4];
+} Fn55210Obj;
+
+typedef struct { u8 b[0x28]; } Fn55210Copy;
+
+extern const f32 lbl_1_rodata_28A8;
+extern void fn_1_556B8(void *);
+extern void fn_1_563E4(void *);
+extern void *fn_1_5448C(void *);
+extern void *fn_1_548AC(u32);
+extern void fn_1_55EA0(void *);
+extern u16 fn_1_7BE94(void);
+extern void fn_1_5489C(void *, void *);
+extern void fn_1_56530(void);
+extern void fn_1_557C4(void *);
+extern void fn_800780A4(void *);
+extern void lbl_8006DB74(void *);
+extern void lbl_8006DD14(void *, void *);
+typedef struct { u8 pad[0xe0]; struct { u8 b[0x30]; } arr[4]; } Fn55210Tab;
+extern Fn55210Tab *lbl_801A66CC;
+
+void fn_1_55210(Fn55210Arg *arg0) {
+    Fn55210Obj *obj;
+    void *r28;
+    s32 ok;
+    s32 i;
+    if (lbl_1_rodata_28A8 == lbl_1_bss_6C7A4.unk_8) {
+        if (arg0->count_c == 0) {
+            fn_1_556B8(arg0);
+        } else {
+            if (arg0->count_b != 0) {
+                fn_1_563E4(&lbl_1_bss_6C7A4);
+                fn_800780A4(arg0);
+            }
+            r28 = fn_1_5448C((u8 *)arg0 + 8);
+            obj = fn_1_548AC(0x78);
+            if (obj != 0) {
+                ok = 1;
+                obj->cb = fn_1_55EA0;
+                obj->owner = arg0;
+                lbl_8006DB74(&obj->pad_c);
+                obj->id = fn_1_7BE94();
+                *(Fn55210Copy *)obj->copy = *(Fn55210Copy *)&lbl_1_bss_6C7A4;
+                for (i = 0; i < 4; i++) {
+                    s32 sh = (i + 1) & 31;
+                    u32 w = lbl_1_bss_6C7CC.unk_0;
+                    if (__rlwnm(w, sh, 31, 31)) {
+                        obj->slots[i] = fn_1_548AC(0x30);
+                        if (obj->slots[i] != 0) {
+                            lbl_8006DD14(&lbl_801A66CC->arr[i], obj->slots[i]);
+                        } else {
+                            ok = 0;
+                        }
+                    } else {
+                        obj->slots[i] = 0;
+                    }
+                }
+                if (ok != 0) {
+                    fn_1_5489C(r28, obj);
+                }
+            }
+            fn_1_56530();
+        }
+    } else {
+        fn_1_557C4(arg0);
+    }
+}
+/* fzgx:end fn_1_55210 */
+
 /* fzgx:begin fn_1_553C4 */
 typedef struct {
     u8 pad_00[0x1a];
