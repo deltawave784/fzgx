@@ -3,14 +3,8 @@
 #include "rel/main_rel/globals.h"
 #include "rel/main_rel/background.h"
 #include "dolphin/hw_regs.h"
+#include "game/main_rel/background_types.h"
 
-typedef struct {
-    s32 type;     /* 0: constant, 1: linear, else: hermite */
-    f32 time;
-    f32 value;
-    f32 tanIn;
-    f32 tanOut;
-} CurveKey;
 extern s32 fn_8006FC1C(const char *, const char *);
 extern s32 fn_8006FC5C(const char *, const char *, s32);
 extern size_t strlen(const char *str);

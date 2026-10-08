@@ -1,12 +1,9 @@
 #include "types.h"
 #include "rel/main_rel/globals.h"
 #include "rel/main_rel/ptclput.h"
+#include "game/main_rel/ptclput_types.h"
 
-struct fn_1_9F870_lbl_801A6410 {
-    u32 unk_0;
-};
 extern u16 lbl_1_bss_6EA94;
-extern struct fn_1_9F870_lbl_801A6410 lbl_801A6410;
 extern void fn_1_46B4(u32 arg0, u32 arg1, const char *arg2, int arg3);
 extern s32 fn_1_45D0();
 extern void fn_80008BA8(u32 arg0, u32 arg1, u32 arg2);

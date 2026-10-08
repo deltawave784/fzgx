@@ -1,62 +1,8 @@
 #include "types.h"
 #include "rel/main_rel/globals.h"
 #include "rel/main_rel/spline.h"
+#include "game/main_rel/spline_types.h"
 
-typedef struct Vec4 {
-    f32 x;
-    f32 y;
-    f32 z;
-    f32 w;
-} Vec4;
-
-typedef struct {
-    s16 unk_0;
-    s16 unk_2;
-    s16 unk_4;
-    s16 unk_6;
-    s16 unk_8;
-} Element;
-
-typedef struct {
-    Element elements[44];
-} fn_1_F9028_Table;
-
-struct fn_1_FA6C0_lbl_1_rodata_7480 {
-    u32 unk_0;
-    u32 unk_4;
-    u32 unk_8;
-    u32 unk_C;
-};
-
-typedef struct {
-    u8 data[0x180];
-} SplineEntry;
-
-struct fn_1_F8DC4_Table {
-    u32 values[4][6];
-};
-
-typedef struct {
-    u8 flag;          // 0x00
-    u8 pad[0x43];
-    f32 mtx[4][12];   // 0x44
-    u32 x[4];         // 0x104
-    u32 y[4];         // 0x114
-    u32 w[4];         // 0x124
-    u32 h[4];         // 0x134
-    u32 halfW[4];     // 0x144
-    u32 halfH[4];     // 0x154
-    f32 scale;        // 0x164
-} SplineViewport;
-
-typedef struct {
-    u32 unk_0;
-    SplineViewport vp;
-} SplineViewportHolder;
-
-typedef struct {
-    Element elements[44];
-} Table;
 extern void fn_1_F7B2C(void);
 extern void fn_1_F7E88(void);
 extern void fn_1_F8048(void);
@@ -69,7 +15,6 @@ extern void fn_1_F9E4C(void);
 extern void fn_1_F9D24(void);
 extern void fn_1_F9DA4(void);
 extern void fn_1_F9CD0(u8, u8);
-extern void fn_1_FA1D8(s32, s32, SplineEntry *);
 extern u32 fn_1_FA4D4(void);
 extern void fn_1_FA61C(void);
 extern u32 fn_800793D4(u8 *arg0, u32 arg1, u32 arg2);
@@ -81,7 +26,6 @@ extern u8 fn_1_FA69C(s32 index);
 extern void *lbl_801A6410;
 extern void *fn_1_4630(void *, u32, const char *, int);
 extern void fn_1_46B4(u32 arg0, u32 arg1, const char *arg2, int arg3);
-extern struct fn_1_F8DC4_Table lbl_1_rodata_6FF0;
 extern char *fn_80083DB0(char *dst, const char *src);
 extern s32 fn_1_58C4(void);
 extern void fn_1_5948(int);
@@ -94,20 +38,17 @@ extern const f32 lbl_1_rodata_6D80;
 extern const f32 lbl_1_rodata_6D74;
 extern f64 fn_80088538(f32);
 extern f64 fn_800883E8(f64 angle);
-extern void fn_1_F5A2C(Vec4 *dst, const Vec4 *a, const Vec4 *b, f32 t);
 extern u32 lbl_801A63C0;
 extern int fn_1_866B4(s8);
 extern u32 fn_1_864FC(u32 index);
 extern void fn_1_F73A8(int, void *, void *);
 extern u64 __shl2i(u32, u32, s32);
-extern struct fn_1_FA6C0_lbl_1_rodata_7480 lbl_1_rodata_7480;
 extern u32 fn_1_76504(s32, void *, s32);
 extern u32 lbl_801A63D0;
 extern void fn_1_7269C(u32 arg0, u32 arg1, void *arg2);
 extern void fn_1_72768(u32 arg0, u32 arg1);
 extern void fn_1_FAB40(void);
 extern void fn_80008BEC(void *dest, int value, u32 size);
-extern void fn_1_FA89C(SplineViewportHolder *holder);
 extern void fn_1_76BF8(void);
 extern void fn_1_72648(void);
 extern void fn_1_9A508();
@@ -122,7 +63,6 @@ extern void fn_1_F57A8(f32 *out, f32 *in);
 extern const f32 lbl_1_rodata_6D70;
 extern f32 lbl_8006D0B4(f32);
 extern f64 fn_80087E80(f64 value);
-extern void fn_8006E8DC(Vec4 *arg0);
 extern void fn_1_F5B88(Obj_1_data_2A7E0_At3C *arg0);
 extern void fn_1_9AD88(void);
 extern void fn_1_F65A0(Obj_1_data_2A7E0_At3C *);

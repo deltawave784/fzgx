@@ -1,78 +1,9 @@
 #include "types.h"
 #include "rel/main_rel/globals.h"
 #include "rel/main_rel/burner.h"
+#include "game/main_rel/burner_types.h"
 
-typedef struct Node {
-    struct Node *prev;
-    struct Node *next;
-} Node;
-
-typedef struct fn_1_984F0_BurnerNode fn_1_984F0_BurnerNode;
-
-struct fn_1_984F0_BurnerNode {
-    u8 pad_0[0x4];
-    fn_1_984F0_BurnerNode *next;
-    u32 index;
-    u8 pad_C[0x3C];
-    u32 key;
-};
-
-typedef struct {
-    u8 pad[0x60];
-} fn_1_9CD6C_GlobalState;
-
-typedef struct {
-    f32 x, y, z;
-} fn_1_98E18_Vec;
-
-typedef struct {
-    u8 pad0[0x4c];
-    fn_1_98E18_Vec dir;
-    fn_1_98E18_Vec pos;
-    u8 pad64[0x10];
-    f32 radius;
-} fn_1_98E18_Burner;
-
-typedef struct {
-    u8 pad0[0x4];
-    void (*callback)(void);
-    fn_1_98E18_Burner *entry;
-} fn_1_98E18_Event;
-
-typedef struct {
-    f32 x;
-    f32 y;
-    f32 z;
-} fn_1_9CCE8_Vec3;
-
-typedef struct {
-    u8 pad[0x1e];
-    u8 count;
-} Burner;
-
-struct FormatTable {
-    const char *fmt[44][6];
-};
-
-struct FormatEntry {
-    s16 f[5];
-};
-
-struct EntryTable {
-    struct FormatEntry e[44];
-};
-
-struct fn_1_98804_Arg0 {
-    u32 unk_0;
-    u32 unk_4;
-};
-
-typedef struct {
-    u8 pad[8];
-    u8 *entries;
-} fn_1_9D360_BurnerTable;
 extern void fn_1_98640(Obj_1_data_27DE0 *obj);
-extern void fn_1_98840(Node *node);
 extern void fn_1_987D0(u32 address);
 extern s16 camera_get_mode(void);
 extern u32 fn_1_58C4(void);
@@ -92,17 +23,12 @@ extern void lbl_8006DD14(void *arg0, void *arg1);
 extern u32 lbl_801A6D00;
 extern void lbl_8006DCA4(void);
 extern s32 fn_1_54E34(void *arg0, f32 arg1);
-extern void *fn_1_5448C(fn_1_98E18_Vec *pos);
 extern void * fn_1_548AC(u32 amount);
 extern void fn_1_98F28(void);
 extern void fn_1_5489C(void **arg0, void **arg1);
 extern int sprintf(char *s, const char *format, ...);
 extern s32 fn_1_46DC4(s32 value);
-extern void fn_8006E294(fn_1_9CCE8_Vec3 *);
 extern u32 fn_80077A18();
-extern void fn_80077F8C(Burner *);
-extern const struct FormatTable lbl_1_rodata_7050;
-extern const struct EntryTable lbl_1_rodata_6E38;
 extern void fn_80008BA8(u32 arg0, u32 arg1, u32 arg2);
 extern char *fn_80083DB0(char *, const char *);
 extern u8 lbl_1_rodata_EB4[124];
@@ -111,7 +37,6 @@ extern void fn_1_46B4(u32 arg0, u32 arg1, const char *arg2, int arg3);
 extern f32 lbl_1_rodata_4104[59];
 extern void * fn_1_986A4();
 extern void fn_800794F0(u8 *dst, u8 *src, s32 len);
-extern void fn_1_98804(struct fn_1_98804_Arg0 *arg0);
 extern void fn_1_9AF80(u32 arg0, u32 arg1, u32 arg2);
 extern u32 lbl_1_rodata_4210;
 extern void fn_80007AB4(u32 *arg0);
@@ -134,7 +59,6 @@ extern void fn_1_55A84(void (*callback)(void), void *arg0, s32 arg1, s32 arg2);
 extern void * fn_1_12F118(void);
 extern u8* fn_1_36AD0(void);
 extern void fn_1_14F6F8(u8 arg0, u8 arg1, u8 arg2, void *arg3);
-extern void fn_1_9D360(Burner *burner, fn_1_9D360_BurnerTable *table, u8 *indices);
 extern Obj_1_data_2A7E0_At3C * lbl_801A66CC;
 extern u32 fn_1_4630(u32, u32, u32, u32);
 extern const f32 lbl_1_rodata_4100;

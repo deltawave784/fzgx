@@ -1,125 +1,8 @@
 #include "types.h"
 #include "rel/main_rel/globals.h"
 #include "rel/main_rel/screen_effect.h"
+#include "game/main_rel/screen_effect_types.h"
 
-typedef struct fn_1_76650_ScreenEffect {
-    u8 pad_00[0xa0];
-    s32 field_a0;
-    s32 field_a4;
-    s32 field_a8;
-    s32 field_ac;
-    s32 field_b0;
-    u8 pad_b4[0x14];
-    s32 field_c8;
-    s32 field_cc;
-    s32 field_d0;
-    s32 field_d4;
-    s32 field_d8;
-    s32 field_dc;
-    s32 field_e0;
-    f32 field_e4;
-    s16 field_e8;
-    s16 field_ea;
-    s16 field_ec;
-    s16 field_ee;
-    s16 field_f0;
-    s16 field_f2;
-    s32 field_f4;
-    s16 field_f8;
-    s16 field_fa;
-    s16 field_fc;
-    s16 field_fe;
-    s16 field_100;
-    s16 field_102;
-    s32 field_104;
-    u8 field_108;
-} fn_1_76650_ScreenEffect;
-
-typedef struct {
-    u8 pad_0[0xdc];
-    u32 unk_dc;
-} Fn_1_72980_Obj;
-
-struct fn_1_729F8_Arg0 {
-    u8 pad_0[0xDC];
-    s32 unk_DC;
-    s32 unk_E0;
-    f32 unk_E4;
-    u16 unk_E8;
-    u16 unk_EA;
-    s16 unk_EC;
-    s16 unk_EE;
-    u16 unk_F0;
-    u16 unk_F2;
-    u32 unk_F4;
-    u16 unk_F8;
-    u16 unk_FA;
-    u16 unk_FC;
-    u16 unk_FE;
-    u16 unk_100;
-    u16 unk_102;
-    u32 unk_104;
-};
-
-typedef struct {
-    u8 unk00[0x2c];
-    f32 value;
-} GlobalData;
-
-struct fn_1_761B8_Arg0 {
-    u8 pad_0[0xE0];
-    u32 unk_E0;
-};
-
-typedef struct {
-    u8 pad_0[0xa0];
-    u32 unk_a0[5];
-    u32 unk_b4[5];
-    s32 unk_c8[5];
-    u32 unk_dc;
-    u32 unk_e0;
-    f32 unk_e4;
-    u16 unk_e8;
-    u16 unk_ea;
-    u16 unk_ec;
-    u16 unk_ee;
-    u16 unk_f0;
-    u16 unk_f2;
-    u32 unk_f4;
-    u16 unk_f8;
-    u16 unk_fa;
-    u16 unk_fc;
-    u16 unk_fe;
-    u16 unk_100;
-    u16 unk_102;
-    u32 unk_104;
-    u8 unk_108;
-} FnScreenEffect;
-
-struct Sig_fn_8004E278_fn_8004E278_Arg0 {
-    u32 unk_0;
-};
-
-struct fn_1_76448_Arg0 {
-    u8 pad_0[0xA0];
-    u32 unk_A0[1];
-    u8 pad_A4[0x38];
-    u32 unk_DC;
-    u8 pad_E0[0x18];
-    s16 unk_F8;
-};
-
-typedef u8 Sig_GXGetTexBufferSize_GXBool;
-
-typedef struct {
-    u32 flags;
-    s32 count;
-    void *nodes;
-} EffectManager;
-
-typedef struct {
-    f32 x, y, z;
-} Vec3f;
 extern u16 fn_1_A5DB0(void);
 extern void OSPanic(const char *file, int line, const char *msg, ...);
 extern void fn_80072864(u32 arg0);
@@ -136,7 +19,6 @@ extern void fn_1_5616C(s32 value, f32 value1, f32 value2);
 extern void fn_1_556F8(void *);
 extern u32 fn_1_56018(s32 value);
 extern void fn_1_55FC4(f32 value);
-extern s32 fn_1_79C88(EffectManager *manager, u32 *out, s32 reverse, f32 value);
 extern void fn_1_5575C(void *);
 extern void lbl_8006DFE8(void *);
 extern void lbl_8006DAEC(void);
@@ -146,13 +28,9 @@ extern void mathutil_mtxA_rotate_y(s32);
 extern void mathutil_mtxA_rotate_x(s32);
 extern void lbl_8006DC20(void);
 extern u32 fn_800793D4(u8 *arg0, u32 arg1, u32 arg2);
-extern void fn_1_76650(fn_1_76650_ScreenEffect *effect);
-extern void fn_1_72980(Fn_1_72980_Obj *arg0);
-extern void *fn_1_729F8(struct fn_1_729F8_Arg0 *arg0);
 extern f32 *lbl_801A6D00;
 extern u32 lbl_801A66A0;
 extern void fn_1_75D84(void *, void *, void *);
-extern void fn_1_761B8(struct fn_1_761B8_Arg0 *arg0, u32 arg1);
 extern void fn_1_76C60();
 extern void fn_1_76EB8(void);
 extern void fn_1_77200();
@@ -196,13 +74,10 @@ extern void GXLoadTexMtxImm(f32 *arg0, int arg1, int arg2);
 extern void GXSetAlphaCompare(s32, s32, s32, s32, s32);
 extern const f32 lbl_1_rodata_31A8;
 extern const f64 lbl_1_rodata_31D8;
-extern void DCInvalidateRange(struct Sig_fn_8004E278_fn_8004E278_Arg0 *, u32);
-extern void fn_1_76448(struct fn_1_76448_Arg0 *arg0, u32 arg1);
 extern u32 fn_1_7880C(void);
 extern u32 fn_1_788B0(void);
 extern void GXInvalidateTexAll(void);
 extern const f32 lbl_1_rodata_31E8;
-extern u32 GXGetTexBufferSize(u16, u16, u32, Sig_GXGetTexBufferSize_GXBool, u8);
 extern u32 lbl_1_bss_6D1A8[278];
 extern const f64 lbl_1_rodata_31A0;
 extern u32 fn_80036104(void);

@@ -1,14 +1,8 @@
 #include "types.h"
 #include "rel/main_rel/globals.h"
 #include "rel/main_rel/bg_common.h"
+#include "game/main_rel/bg_common_types.h"
 
-typedef void (*Fn103FCC)(void);
-
-typedef struct Fn1_103F58_Object {
-    u8 pad0[4];
-    Fn103FCC callback;
-    void *context;
-} Fn1_103F58_Object;
 extern s32 fn_1_5910(void);
 extern f32 lbl_1_rodata_7960[43];
 extern f32 lbl_1_rodata_7A40[2];

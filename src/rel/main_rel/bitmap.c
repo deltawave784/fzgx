@@ -1,25 +1,11 @@
 #include "types.h"
 #include "rel/main_rel/globals.h"
 #include "rel/main_rel/bitmap.h"
+#include "game/main_rel/bitmap_types.h"
 
-typedef struct {
-    s32 unk_0;
-    u8 pad_4[0x24];
-} BitmapEntry;
-
-typedef struct {
-    s32 unk_0;
-    u8 pad_4[0x24];
-} Fn147EE4Entry;
-
-typedef struct {
-    s32 unk_0;
-    u8 pad_4[0x24];
-} Fn147F74Entry;
 extern u32 lbl_801A66B4;
 extern void OSPanic(const unsigned char *, ...);
 extern s32 fn_1_465D0(s32 arg0, s32 arg1);
-extern void fn_1_47AD4(BitmapEntry *, s32, s32, s32);
 extern void fn_1_48418(s32);
 extern u32 lbl_1_bss_3E020;
 extern void fn_1_48214(int index, int enabled);

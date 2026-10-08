@@ -1,62 +1,15 @@
 #include "types.h"
 #include "rel/main_rel/globals.h"
 #include "rel/main_rel/rob.h"
+#include "game/main_rel/rob_types.h"
 
-struct fn_1_95EF0_lbl_801A6410 {
-    u32 unk_0;
-};
-
-typedef struct Fn197174Root Fn197174Root;
-
-struct Fn197174Root {
-    u8 unk_00[0x08];
-    u16 count;
-};
-
-typedef struct Fn197174Entry Fn197174Entry;
-
-struct Fn197174Entry {
-    u8 unk_00[0x1C];
-    u32 offset;
-};
-
-typedef struct Fn197174Owner Fn197174Owner;
-
-struct Fn197174Owner {
-    u8 unk_00[0x14];
-    u8 *base;
-};
-
-typedef struct Fn197F80Object Fn197F80Object;
-
-struct Fn197F80Object {
-    u8 unk_000[0x488];
-    u8 unk_488;
-    u8 unk_489;
-    u8 unk_48A[0x1A];
-    void *unk_4A4;
-    void *unk_4A8;
-    void *unk_4AC;
-    void *unk_4B0;
-    void *unk_4B4;
-};
-
-typedef struct Fn198104Obj {
-    u8 unk_00[0x1C];
-    u32 value_1C;
-    u8 unk_20[0x0C];
-    u32 value_2C;
-} Fn198104Obj;
 extern u32 lbl_801A6410;
 extern void fn_1_12ABB4(void *archive);
 extern void fn_1_46B4(u32 arg0, u32 arg1, const char *arg2, int arg3);
 extern void fn_1_12A2D0(s32 value);
 extern void fn_80071718(u32 arg0);
 extern void fn_800711A8(u32 arg0);
-extern Fn197174Root *fn_1_41BDC(void);
-extern Fn197174Entry *fn_1_41B18(Fn197174Owner *owner, void *arg1, s32 index);
 extern void fn_1_9724C();
-extern u32 fn_1_97F80(Fn197F80Object *rob, const char *name);
 extern u8 *fn_80083970(u8 *str, const u8 *needle);
 extern int sprintf(char *s, const char *format, ...);
 extern int fn_80083BCC(const char *s1, const char *s2);

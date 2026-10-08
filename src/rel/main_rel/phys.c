@@ -1,79 +1,23 @@
 #include "types.h"
 #include "rel/main_rel/globals.h"
 #include "rel/main_rel/phys.h"
+#include "game/main_rel/phys_types.h"
 
-
-
-
-typedef struct Sig_fn_1_8D168_Fn1_8D168State {
-    u8 pad[0x60];
-    u32 field_60;
-} Sig_fn_1_8D168_Fn1_8D168State;
-
-struct fn_1_E35F0_lbl_801A6410 {
-    u32 unk_0;
-};
-
-struct fn_1_E7E00_lbl_801A6410 {
-    u32 unk_0;
-};
-
-typedef struct LocalStruct {
-    u32 unk_0;
-    f32 unk_4;
-    f32 unk_8;
-    f32 unk_C;
-    f32 unk_10;
-    f32 unk_14;
-    u8 pad_18[0x14];
-    f32 unk_2C;
-    u32 unk_30;
-    u32 unk_34;
-    u32 unk_38;
-    u8 pad_3C[0x1C];
-} LocalStruct;
-
-typedef struct Obj_1A8 {
-    u8 pad_0[0xA];
-    s16 unk_A;
-    u8 pad_C[2];
-    s16 unk_E;
-    u8 pad_10[0x128];
-    u64 unk_138;
-    u8 pad_140[0x1A8 - 0x140];
-} Obj_1A8;
-
-typedef struct {
-    u8 unk0[0x100];
-    s32 value;
-} E573CObj;
-
-typedef struct {
-    u8 pad_0[0x8];
-    f32 unk_8;
-    f32 unk_C;
-} Camera;
-
-typedef void (*Cb)(void *, ...);
 extern u32 lbl_801A6410;
 extern void fn_1_46B4(u32 arg0, u32 arg1, const char *arg2, int arg3);
-extern void fn_1_8D168(Sig_fn_1_8D168_Fn1_8D168State *);
 extern u32 fn_1_E3C38(u32, u32);
 extern s16 fn_1_E5430(s16 index);
 extern void * fn_1_E54A8(s16 type, s16 index);
 extern void lbl_8006DCA4(void *base, void *arg);
 extern f32 fn_1_A71AC(void);
 extern void fn_8006F828(void *base, f32 *out);
-extern void fn_1_E4A38(u32 arg0, u16 arg1, u16 arg2, Cb arg3);
 extern s16 fn_1_7B054(void);
 extern u8 lbl_1_data_2B0D4[112];
 extern u32 lbl_1_bss_85288[2];
 extern char *fn_80083DB0(char *dst, const char *src);
 extern size_t strlen(const char *str);
 extern s32 fn_8006FC5C(void *, void *, size_t);
-extern const LocalStruct lbl_1_rodata_26F8;
 extern s32 fn_1_A5DC4(void);
-extern void fn_1_4E92C(LocalStruct *, u32, u16, u16, u32);
 extern void fn_1_9C724(void);
 extern void fn_1_DD890(void *);
 extern void fn_1_9CC40(void);
@@ -85,7 +29,6 @@ extern f32 lbl_1_rodata_69CC;
 extern f64 lbl_1_rodata_6800;
 extern s16 fn_1_E5724(void *base);
 extern s16 fn_1_E572C(void *base);
-extern s16 fn_1_E573C(E573CObj *self);
 extern u32 fn_1_E57C4(void *base);
 extern u8 *fn_1_E5748(u8 *self);
 extern u8 *fn_1_E5750(u8 *self);
@@ -106,7 +49,6 @@ extern void fn_1_496FC(f32 value1, f32 value2);
 extern void fn_1_4AE0C(const char* format, ...);
 extern void fn_1_A8DD4(const char *format, ...);
 extern void fn_1_A8EF8(u16 arg0, u16 arg1);
-extern Camera *game_camera_get(void);
 extern void fn_80008BEC(void *dest, int value, u32 size);
 extern void fn_1_12EF80(s16 arg, s16 *out_group, s16 *out_entry);
 extern void fn_80008BA8(u32 arg0, u32 arg1, u32 arg2);
