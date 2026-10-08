@@ -6992,3 +6992,6 @@ rel/main_rel/relocation/fn_1_A5F44.c:
 
 rel/main_rel/enemy_ctrl/fn_1_CB6D8.c:
 	.text       start:0x000CB6D8 end:0x000CBC24 align:4
+
+rel/main_rel/bg_for/fn_1_DCFA4.c:
+	.text       start:0x000DCFA4 end:0x000DD4DC align:4

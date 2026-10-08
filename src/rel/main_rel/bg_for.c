@@ -177,6 +177,171 @@ void fn_1_DCF54(fn_1_DCF54_Vec3 *a, fn_1_DCF54_Vec3 *b, fn_1_DCF54_Vec3 *c) {
 }
 /* fzgx:end fn_1_DCF54 */
 
+/* fzgx:begin fn_1_DCFA4 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/bg_for.h"
+#include "game/main_rel/bg_for_types.h"
+#include "psvec.h"
+
+#pragma fp_contract on
+
+extern u8 lbl_1_rodata_6780[];
+extern void fn_80008BA8(void *, const void *, u32);
+extern void fn_1_57714(u8);
+extern void lbl_8006D758(void);
+extern void lbl_8006E1B0(void *, void *);
+extern void lbl_8006DCA4(void);
+extern void fn_80072558(void);
+extern void fn_1_57810(u32, void *, void *);
+extern void lbl_8006D784(void *);
+extern void lbl_8006DBAC(void *);
+extern void lbl_8006DFE8(void *);
+extern void fn_1_DDF80(void *, void *, void *, void *, f32, f32);
+extern void lbl_8006DAEC(void);
+extern void lbl_8006DB30(void);
+extern void fn_1_56298(f32, f32, f32, f32);
+extern f32 lbl_8006D0B4(f32);
+extern void fn_8006EE70(const void *, s16 *);
+extern void mathutil_mtxA_rotate_z(s32);
+extern void mathutil_mtxA_rotate_y(s32);
+extern void mathutil_mtxA_rotate_x(s32);
+extern void lbl_8006E15C(f32, f32, f32);
+extern void fn_1_556B8(void *);
+extern f64 fabs(f64);
+
+typedef struct DCFA4Vec { f32 x,y,z; } DCFA4Vec;
+typedef struct DCFA4Mtx { f32 m[3][4]; } DCFA4Mtx;
+static inline void matrix_translation(DCFA4Mtx *m) {
+    f32 x, y, z;
+    u32 locked_cache_base = 0xE0000000;
+    x = *(volatile f32 *)(locked_cache_base + 0xC); /* volatile: locked-cache current matrix */
+    y = *(volatile f32 *)(locked_cache_base + 0x1C); /* volatile: locked-cache current matrix */
+    z = *(volatile f32 *)(locked_cache_base + 0x2C); /* volatile: locked-cache current matrix */
+    m->m[0][3] = x;
+    m->m[1][3] = y;
+    m->m[2][3] = z;
+}
+static inline void draw_color(u8 *p, u32 first) {
+    f32 a, b;
+    if (first) {
+        a = *(f32 *)(p+0x28);
+        b = *(f32 *)(p+0x20);
+        fn_1_56298(a,b,b,a);
+    } else {
+        a = *(f32 *)(p+0x20);
+        b = *(f32 *)(p+0x28);
+        fn_1_56298(a,b,a,b);
+    }
+}
+
+static inline void draw_vec(DCFA4Vec *v, s16 *angles, u8 *pool) {
+    f32 x;
+    f32 y;
+    f32 len;
+    f32 z;
+    f32 scale;
+    f32 max;
+    f32 min;
+    x = v->x;
+    y = v->y;
+    len = x*x;
+    z = v->z;
+    len = __fmadds(y, y, len);
+    len = __fmadds(z, z, len);
+    len = lbl_8006D0B4(len);
+    if (!(__fabs(len) < *(f64 *)(pool + 0x18))) {
+        fn_8006EE70(v, angles);
+        mathutil_mtxA_rotate_z(angles[2]);
+        mathutil_mtxA_rotate_y(angles[1]);
+        mathutil_mtxA_rotate_x(angles[0]);
+        max = *(f32 *)(pool+0x24);
+        min = *(f32 *)(pool+0x20);
+        scale = max * len;
+        scale = scale < min ? min : scale > max ? max : scale;
+        lbl_8006E15C(*(f32 *)(pool+0x28), *(f32 *)(pool+0x28), scale);
+        fn_80072558();
+        fn_1_556B8(*(void **)(lbl_1_bss_38454->unk_8 + 0x38));
+    }
+}
+
+void fn_1_DCFA4(u32 arg0, f32 arg1) {
+    u8 *p_lbl_1_rodata_6780;
+    u32 v1;
+    f32 v2;
+    u32 v3;
+    u32 v4;
+    u64 flags;
+    u32 v0;
+    DCFA4Mtx m1;
+    DCFA4Mtx m2;
+    DCFA4Vec screen2;
+    DCFA4Vec screen1;
+    DCFA4Vec loc_74;
+    DCFA4Vec delta1;
+    DCFA4Vec delta2;
+    DCFA4Vec out2;
+    DCFA4Vec out1;
+    DCFA4Vec out4;
+    DCFA4Vec out3;
+    s16 angles1[3];
+    s16 angles2[3];
+    s16 angles3[3];
+    s16 angles4[3];
+    u32 color;
+    p_lbl_1_rodata_6780 = (u8 *)&lbl_1_rodata_6780;
+    v2 = arg1;
+    if (*(u32 *)(arg0+324) != 0) {
+        flags = *(u64 *)((u8 *)arg0 + 312);
+        if ((flags & 0x20000000ULL) != 0) {
+            fn_80008BA8(&loc_74, (void *)(*(u32 *)(arg0+324) + 84), 12);
+        } else if ((flags & 0x80000000ULL) != 0) {
+            fn_80008BA8(&loc_74, (void *)(*(u32 *)(arg0+324) + 124), 12);
+        } else {
+            return;
+        }
+        fn_1_57714(20);
+        lbl_8006D758();
+        lbl_8006E1B0((void *)(arg0+0x54), &screen1);
+        lbl_8006E1B0(&loc_74, &screen2);
+        lbl_8006DCA4();
+        fn_80072558();
+        color = *(u32 *)(p_lbl_1_rodata_6780+0x2c);
+        fn_1_57810(2, &screen1, &color);
+        psvec_sub(&loc_74, (void *)(arg0+0x54), &delta1);
+        lbl_8006D784(&m1);
+        lbl_8006DBAC((void *)(arg0+0xc4));
+        matrix_translation(&m1);
+        lbl_8006DFE8(&m1);
+        fn_1_DDF80((void *)(arg0+0x44), &delta1, &out1, &out2,
+                   *(f32 *)(arg0+0x50), *(f32 *)(arg0+0x50));
+        lbl_8006DAEC();
+        draw_color(p_lbl_1_rodata_6780, 1);
+        draw_vec(&out1, angles1, p_lbl_1_rodata_6780);
+        lbl_8006DB30();
+        draw_color(p_lbl_1_rodata_6780, 0);
+        draw_vec(&out2, angles2, p_lbl_1_rodata_6780);
+        fn_1_56298(*(f32 *)(p_lbl_1_rodata_6780+0x20), *(f32 *)(p_lbl_1_rodata_6780+0x20), *(f32 *)(p_lbl_1_rodata_6780+0x20), *(f32 *)(p_lbl_1_rodata_6780+0x20));
+        if ((*(u64 *)((u8 *)arg0+312) & 0x80000000ULL) != 0) {
+            v0 = *(u32 *)(arg0+0x144);
+            psvec_sub(&loc_74, (void *)(arg0+0x54), &delta2);
+            lbl_8006D784(&m2);
+            lbl_8006DBAC((void *)(v0+0x14c));
+            matrix_translation(&m2);
+            lbl_8006DFE8(&m2);
+            fn_1_DDF80((void *)(v0+0x94), &delta2, &out3, &out4, *(f32 *)(v0+0x17c), *(f32 *)(v0+0x17c));
+            lbl_8006DAEC();
+            draw_color(p_lbl_1_rodata_6780, 1);
+            draw_vec(&out3, angles3, p_lbl_1_rodata_6780);
+            lbl_8006DB30();
+            draw_color(p_lbl_1_rodata_6780, 0);
+            draw_vec(&out4, angles4, p_lbl_1_rodata_6780);
+            fn_1_56298(*(f32 *)(p_lbl_1_rodata_6780+0x20), *(f32 *)(p_lbl_1_rodata_6780+0x20), *(f32 *)(p_lbl_1_rodata_6780+0x20), *(f32 *)(p_lbl_1_rodata_6780+0x20));
+        }
+    }
+}
+/* fzgx:end fn_1_DCFA4 */
+
 /* fzgx:begin fn_1_E1934 */
 typedef struct {
     u8 pad0[0x8];
