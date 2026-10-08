@@ -1316,6 +1316,154 @@ void fn_1_157940(void) {
 }
 /* fzgx:end fn_1_157940 */
 
+/* fzgx:begin fn_1_157950 */
+#include "font.h"
+
+struct fn_1_157950_Copy88 { u32 a[22]; };
+struct fn_1_157950_lbl_1_rodata_D920 {
+    f32 unk_0;
+    f32 unk_4;
+    u8 pad_8[0x28];
+    f64 unk_30;
+};
+extern struct fn_1_157950_Copy88 lbl_1_rodata_26F8;
+extern void fn_1_49410(void);
+extern void fn_1_495B0(u32);
+enum { FONT_DRAW_FLAGS = 3u << 30 };
+extern void fn_1_5233C(void);
+extern void fn_1_49738(void (*)(void));
+extern void fn_1_49748(f32);
+extern void fn_1_495C8(int);
+extern void fn_1_49590(f32);
+extern void fn_1_4955C(f32,f32);
+extern void fn_1_49514(u32*);
+extern void fn_1_494DC(s16);
+extern void fn_1_4965C(u8);
+extern void fn_1_51678(FontDrawPacket*,u32,s16,s16,s16,s16);
+extern int fn_1_4F734(FontDrawPacket*);
+extern void fn_1_496FC(f32,f32);
+extern void fn_1_495A0(f32);
+extern void fn_1_4CF3C(const char*,f32,...);
+extern void fn_1_4AE0C(const char*,...);
+
+void fn_1_157950(void) {
+    Obj_1_bss_8F568 *p_lbl_1_bss_8F568;
+    f32 v0;
+    Obj_1_bss_8F568_AtC *v1;
+    f32 v3;
+    f32 v2;
+    Obj_1_bss_8F568_AtC *v4;
+    f32 pos;
+    f32 alpha;
+    p_lbl_1_bss_8F568 = (Obj_1_bss_8F568*)&lbl_1_bss_8F568;
+    v0 = p_lbl_1_bss_8F568->unk_4;
+    v1 = p_lbl_1_bss_8F568->unk_C;
+    v4 = v1;
+    v3 = 0.0f;
+    v2 = (f32)(v0 - (f32)(448.0f / p_lbl_1_bss_8F568->unk_8));
+    while (*(s16 *)v4 != -2) {
+        v3 += (f32)*(s16*)v4 / p_lbl_1_bss_8F568->unk_8;
+        if (v3 >= v2 && v3 <= p_lbl_1_bss_8F568->unk_4) {
+            pos = p_lbl_1_bss_8F568->unk_8 * (v3-v2);
+            alpha = 1.0f;
+            fn_1_49410();
+            if (pos < v4->unk_E) alpha = pos / v4->unk_E;
+            else if (pos > 448.0f-v4->unk_E) alpha = (448.0f-pos) / v4->unk_E;
+            if (*(s32*)((u8*)p_lbl_1_bss_8F568+0x18) < 30)
+                alpha = (f32)*(s32*)((u8*)p_lbl_1_bss_8F568+0x18) / 30.0f;
+            switch (v4->unk_10) {
+            case 0: {
+                u32 color;
+                fn_1_495B0(FONT_DRAW_FLAGS);
+                fn_1_49738(fn_1_5233C);
+                fn_1_49748(5.0f);
+                fn_1_495C8((s8)v4->unk_8);
+                fn_1_49590(0.5f);
+                fn_1_4955C((f32)v4->unk_C/24.0f,(f32)v4->unk_E/24.0f);
+                color = v4->unk_14; fn_1_49514(&color);
+                break;
+            }
+            case 1: {
+                u32 color;
+                fn_1_494DC(5);
+                fn_1_495B0(FONT_DRAW_FLAGS);
+                fn_1_495C8((s8)v4->unk_8);
+                fn_1_49590(0.5f);
+                fn_1_4955C((f32)v4->unk_C/18.0f,(f32)v4->unk_E/18.0f);
+                color = v4->unk_14; fn_1_49514(&color);
+                break;
+            }
+            case 2: {
+                u32 color;
+                fn_1_495B0(FONT_DRAW_FLAGS);
+                fn_1_49738(fn_1_5233C);
+                fn_1_49748(3.0f);
+                fn_1_495C8((s8)v4->unk_8);
+                fn_1_49590(0.5f);
+                fn_1_4955C((f32)v4->unk_C/24.0f,(f32)v4->unk_E/24.0f);
+                color = v4->unk_14; fn_1_49514(&color);
+                break;
+            }
+            case 6: {
+                u32 color;
+                fn_1_495B0(FONT_DRAW_FLAGS);
+                fn_1_4965C(2);
+                fn_1_49738(fn_1_5233C);
+                fn_1_49748(1.0f);
+                fn_1_495C8((s8)v4->unk_8);
+                fn_1_49590(0.5f);
+                fn_1_4955C((f32)v4->unk_C/24.0f,(f32)v4->unk_E/24.0f);
+                color = v4->unk_14; fn_1_49514(&color);
+                break;
+            }
+            case 3: {
+                struct fn_1_157950_Copy88 packet = lbl_1_rodata_26F8;
+                *(f32*)&packet.a[1] = v4->unk_4;
+                *(f32*)&packet.a[2] = pos;
+                *(f32*)&packet.a[3] = 0.1f;
+                packet.a[12] = 5;
+                packet.a[0] = 0x100;
+                *(f32*)&packet.a[11] = alpha;
+                fn_1_51678((FontDrawPacket*)&packet,0x100,0,0,120,16);
+                fn_1_4F734((FontDrawPacket*)&packet);
+                break;
+            }
+            case 4: {
+                struct fn_1_157950_Copy88 packet = lbl_1_rodata_26F8;
+                *(f32*)&packet.a[1] = v4->unk_4;
+                *(f32*)&packet.a[2] = pos;
+                *(f32*)&packet.a[3] = 0.1f;
+                packet.a[12] = 5;
+                packet.a[0] = 0x100;
+                *(f32*)&packet.a[11] = alpha;
+                fn_1_51678((FontDrawPacket*)&packet,0x100,0,18,248,16);
+                fn_1_4F734((FontDrawPacket*)&packet);
+                break;
+            }
+            case 5: {
+                struct fn_1_157950_Copy88 packet = lbl_1_rodata_26F8;
+                *(f32*)&packet.a[1] = v4->unk_4;
+                *(f32*)&packet.a[2] = pos;
+                *(f32*)&packet.a[3] = 0.1f;
+                packet.a[12] = 5;
+                packet.a[0] = 0x8700;
+                *(f32*)&packet.a[11] = alpha;
+                fn_1_4F734((FontDrawPacket*)&packet);
+                break;
+            }
+            }
+            fn_1_496FC((f32)v4->unk_4,pos);
+            fn_1_495A0(alpha);
+            if ((s32)v4->unk_10 != 6) fn_1_4CF3C((const char*)v4->unk_18,284.0f-v4->unk_4);
+            else fn_1_4AE0C((const char*)v4->unk_18);
+        }
+        v4 = (Obj_1_bss_8F568_AtC*)((u8*)v4+0x1c);
+    }
+    if ((f32)v4->unk_2 < p_lbl_1_bss_8F568->unk_4)
+        *(s32*)((u8*)p_lbl_1_bss_8F568+0x14) = 1;
+}
+/* fzgx:end fn_1_157950 */
+
 /* fzgx:begin fn_1_1586A8 */
 // fn_1_1586A8: empty in retail (single blr).
 void fn_1_1586A8(void) {

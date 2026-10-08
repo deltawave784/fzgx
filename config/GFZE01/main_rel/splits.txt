@@ -6965,3 +6965,9 @@ rel/main_rel/ranking/fn_1_15AC10.c:
 
 rel/main_rel/effect_car/fn_1_702A0.c:
 	.text       start:0x000702A0 end:0x0007099C align:4
+
+rel/main_rel/ranking/fn_1_157950.c:
+	.text       start:0x00157950 end:0x00157FC8 align:4
+
+rel/main_rel/enemy_ctrl/fn_1_CBC24.c:
+	.text       start:0x000CBC24 end:0x000CC27C align:4
