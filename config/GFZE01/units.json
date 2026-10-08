@@ -30894,6 +30894,17 @@
   },
   {
     "module": "main_rel",
+    "source": "rel/main_rel/bg_common/fn_1_10576C.c",
+    "symbols": [
+      "fn_1_10576C"
+    ],
+    "status": "matching",
+    "mw_version": null,
+    "extra_cflags": [],
+    "tu": "rel/main_rel/bg_common.c"
+  },
+  {
+    "module": "main_rel",
     "source": "rel/main_rel/bg_common/fn_1_1067A8.c",
     "symbols": [
       "fn_1_1067A8"

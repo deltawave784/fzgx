@@ -198,6 +198,112 @@ void fn_1_105768(void) {
 }
 /* fzgx:end fn_1_105768 */
 
+/* fzgx:begin fn_1_10576C */
+struct Table10576C { u32 a[10]; };
+struct fn_1_10576C_lbl_1_rodata_78D0 {
+    u8 pad_0[0x38];
+    f32 unk_38;
+    u8 pad_3C[0xD4];
+    struct Table10576C table;
+    f32 unk_138;
+};
+extern s16 camera_get_mode(void);
+extern s16 fn_1_3F0C8(void);
+extern s32 fn_1_58C4(void);
+extern struct fn_1_10576C_lbl_1_rodata_78D0 lbl_1_rodata_78D0;
+extern u32 fn_1_86244(void);
+extern u32 lbl_1_bss_38460[21];
+extern u8 fn_1_3F114(void);
+extern void *fn_1_8627C(s32);
+
+void fn_1_10576C(void) {
+    Obj_1_bss_854B8_At8 *v22;
+    struct fn_1_10576C_lbl_1_rodata_78D0 *p_lbl_1_rodata_78D0;
+    Obj_1_bss_854B8 *p_lbl_1_bss_854B8;
+    Obj_1_bss_854B8_At4 *v1;
+    s32 v0;
+    void *v7;
+    u32 v8;
+    u32 v9;
+    s32 v5;
+    u32 v10;
+    s32 i;
+    u32 v4;
+    u32 v12;
+    u32 v13;
+    s32 v11;
+    u32 v21;
+    struct Table10576C loc_8;
+    f32 v2;
+    f32 v3;
+
+    p_lbl_1_rodata_78D0 = (struct fn_1_10576C_lbl_1_rodata_78D0 *)&lbl_1_rodata_78D0;
+    v0 = camera_get_mode();
+    p_lbl_1_bss_854B8 = (Obj_1_bss_854B8 *)&lbl_1_bss_854B8;
+    v1 = p_lbl_1_bss_854B8->unk_4;
+    if (v1 != 0) {
+        if (fn_1_3F0C8() == 39) {
+            v2 = p_lbl_1_rodata_78D0->unk_138;
+            *(f32 *)*(u32 *)((u8 *)v1->unk_34 + 4) = v2;
+            *(f32 *)((u8 *)*(u32 *)((u8 *)v1->unk_34 + 4) + 4) = v2;
+        } else {
+            v3 = p_lbl_1_rodata_78D0->unk_38;
+            *(f32 *)*(u32 *)((u8 *)v1->unk_34 + 4) = v3;
+            *(f32 *)((u8 *)*(u32 *)((u8 *)v1->unk_34 + 4) + 4) = v3;
+        }
+    }
+    if (fn_1_86244() != 0) {
+        if (v0 == -1 || v0 < 0) v0 = 0;
+        v7 = fn_1_8627C(v0);
+        if (v7 != 0) {
+            v1 = p_lbl_1_bss_854B8->unk_4;
+            if (v1 != 0) {
+                v8 = *(u32 *)((u8 *)*(u32 *)((u8 *)v1->unk_8 + 8) + 8);
+                v9 = v8 + 64;
+                if ((s32)fn_1_3F114() - 1 <= *(s32 *)((u8 *)v7 + 284) && fn_1_3F114() != 0)
+                    v10 = *(u32 *)((u8 *)*(u32 *)((u8 *)lbl_1_bss_38460[2] + 8) + 96);
+                else
+                    v10 = *(u32 *)((u8 *)*(u32 *)((u8 *)lbl_1_bss_38460[2] + 8) + 88);
+                v4 = *(u32 *)((u8 *)v10 + 36);
+                i = 0;
+                while (i < *(u16 *)((u8 *)v8 + 24)) {
+                    if (*(u8 *)((u8 *)v9 + 13) == 1) *(u32 *)((u8 *)v9 + 8) = v4;
+                    v9 += 32;
+                    i++;
+                }
+            }
+            v5 = lbl_1_bss_854B8.unk_0;
+            if ((u32)v5 != 0) {
+                v12 = *(u32 *)((u8 *)*(u32 *)((u8 *)*(u32 *)((u8 *)v5 + 8) + 8) + 8);
+                v13 = v12 + 64;
+                loc_8 = p_lbl_1_rodata_78D0->table;
+                if (fn_1_3F114() >= 1) {
+                    if ((s32)(fn_1_3F114() - *(s32 *)((u8 *)v7 + 284) - 1) < 0) v21 = 0;
+                    else if ((u32)(fn_1_3F114() - *(s32 *)((u8 *)v7 + 284) - 1) > 9) v21 = 9;
+                    else v21 = fn_1_3F114() - *(s32 *)((u8 *)v7 + 284) - 1;
+                    v21 = loc_8.a[v21];
+                } else v21 = loc_8.a[9];
+                v10 = *(u32 *)((u8 *)*(u32 *)((u8 *)lbl_1_bss_38460[2] + 8) + (v21 << 3));
+                v10 = *(u32 *)((u8 *)v10 + 36);
+                v11 = 0;
+                while (v11 < *(u16 *)((u8 *)v12 + 24)) {
+                    if (*(u8 *)((u8 *)v13 + 13) == 1) *(u32 *)((u8 *)v13 + 8) = v10;
+                    v13 += 32;
+                    v11++;
+                }
+            }
+            v22 = lbl_1_bss_854B8.unk_8;
+            if (v22 != 0 && (v22->unk_0 & 0x80000000) == 0) {
+                if (*(s32 *)((u8 *)v7 + 284) == 0 || (u32)fn_1_58C4() != 1) v22->unk_0 |= 0x80000000;
+                if (lbl_1_bss_854B8.unk_C <= 22) v22->unk_18 = 16384;
+                else if (lbl_1_bss_854B8.unk_C <= 60) v22->unk_18 = ((60 - lbl_1_bss_854B8.unk_C) << 14) / 38;
+                else v22->unk_18 = 0;
+            }
+        }
+    }
+}
+/* fzgx:end fn_1_10576C */
+
 /* fzgx:begin fn_1_1067A8 */
 void fn_1_1067A8(void *arg0, f32 arg1, f32 arg2) {
     s32 result;
