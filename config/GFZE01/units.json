@@ -29337,6 +29337,17 @@
   },
   {
     "module": "main_rel",
+    "source": "rel/main_rel/archive/fn_1_12E468.c",
+    "symbols": [
+      "fn_1_12E468"
+    ],
+    "status": "matching",
+    "mw_version": null,
+    "extra_cflags": [],
+    "tu": "rel/main_rel/archive.c"
+  },
+  {
+    "module": "main_rel",
     "source": "rel/main_rel/archive/fn_1_12ECA8.c",
     "symbols": [
       "fn_1_12ECA8"
