@@ -784,6 +784,115 @@ void fn_3_4BEC(u32 arg0) {
 }
 /* fzgx:end fn_3_4BEC */
 
+/* fzgx:begin fn_3_4C58 */
+#include "rel/customize/globals.h"
+
+typedef struct {
+    void *value;
+} Sig_fn_1_FD27C_fn_1_FD27C_Fn1FD27CArg0;
+typedef struct {
+    u8 pad[0x40f0];
+    void *value;
+} Sig_fn_1_FD27C_fn_1_FD27C_Fn1FD27CArg1;
+struct fn_3_4C58_Copy160 { u32 a[41]; };
+extern int fn_1_FD324(void *);
+extern s32 lbl_3_bss_2C70C[45];
+extern u32 fn_1_FD844(void *, void *);
+extern void fn_3_5D84(s16);
+extern u8 lbl_3_bss_20860[];
+extern u8 lbl_3_bss_21960[];
+extern u32 lbl_3_bss_2C7C0[66624];
+extern struct fn_3_4C58_Copy160 lbl_3_rodata_F8;
+extern void *fn_1_7F254(void *, void *);
+extern void fn_1_47F74(s32);
+extern void fn_1_FD27C(Sig_fn_1_FD27C_fn_1_FD27C_Fn1FD27CArg0 *, Sig_fn_1_FD27C_fn_1_FD27C_Fn1FD27CArg1 *);
+extern void fn_1_FDC00(void);
+extern void fn_80008BEC(void *, int, u32);
+void fn_3_4C58(void) {
+    s16 v0;
+    s32 v1;
+    struct { u8 *value; } first_selection;
+#define v2 first_selection.value
+    u32 v4;
+    u32 v5;
+    s16 v6;
+    struct { u8 *value; } current_selection;
+#define v7 current_selection.value
+    struct { u8 *value; } entry_storage, meta_storage;
+#define v8 meta_storage.value
+#define v9 entry_storage.value
+    struct { u8 *value; } render_storage;
+#define v10 render_storage.value
+    u8 v12;
+    struct { u8 *value; } selection, render_base, entry_base, meta_base;
+#define p_lbl_3_bss_140 selection.value
+    struct fn_3_4C58_Copy160 loc_8;
+    for (v0 = 0; v0 < 4; v0++) fn_3_5D84(v0);
+    fn_80008BEC(lbl_3_bss_2C70C, 0, 164);
+    p_lbl_3_bss_140 = (u8 *)&lbl_3_bss_140;
+    v6 = 0;
+    v2 = p_lbl_3_bss_140;
+    while (v6 < 4) {
+        loc_8 = lbl_3_rodata_F8;
+        v4 = ((Obj_3_bss_140 *)v2)->unk_0;
+        if ((v4 & 0x80000000) != 0 && (v4 & 0x40000000) == 0) {
+            v5 = *(u8 *)(v2 + 0x81a0);
+            if (lbl_3_bss_2C70C[v5] == 0) {
+                fn_1_47F74(loc_8.a[v5]);
+                lbl_3_bss_2C70C[*(u8 *)(v2 + 0x81a0)] = 1;
+            }
+        }
+        v2 += 0x10000;
+        v6++;
+        v2 -= 0x7e40;
+    }
+    fn_80008BEC(lbl_3_bss_2C7C0, 0, 0x41100);
+    v10 = (u8 *)lbl_3_bss_2C7C0;
+    v9 = lbl_3_bss_20860;
+    v8 = lbl_3_bss_21960;
+    v6 = 0;
+    v7 = p_lbl_3_bss_140;
+    while (v6 < 4) {
+        *(u32 *)(v10 + 12) = 0x80000000;
+        v12 = *(u8 *)(v7 + 5);
+        if (*(u8 *)(v7 + 7) != 0 && (*(u32 *)v7 & 0x80000000)) {
+            if (*(u32 *)v7 & 0x40000000) {
+                ((Obj_3_bss_140 *)v7)->unk_8 = 3;
+                *(u32 *)(v9 + 912) = 0x4000000;
+                *(void **)(v9 + 928) = v8;
+            } else {
+                *(u8 *)(v7 + 5) = *(u8 *)(v7 + 0x81a0);
+                if (*(u8 *)(v7 + 5) == 40) *(u8 *)(v7 + 8) = 3;
+                else if (*(u8 *)(v7 + 5) == 4) *(u8 *)(v7 + 8) = 2;
+                else *(u8 *)(v7 + 8) = 1;
+            }
+            if (*(u8 *)(v7 + 7) != 0 && *(u8 *)(v7 + 7) <= 4) {
+                if (*(void **)(v9 + 932) == 0)
+                    *(void **)(v9 + 932) = fn_1_7F254(v7, (void *)2);
+                *(u8 *)(v10 + 4) = 4;
+                *(void **)(v10 + 0) = v9;
+                *(s16 *)(v9 + 954) = 1;
+                *(void (**)(void))(v10 + 0x10428) = fn_1_FDC00;
+                *(void **)(v10 + 0x1042c) = (void *)fn_1_FD27C;
+                *(void **)(v10 + 0x10424) = (void *)fn_1_FD324;
+                *(void **)(v10 + 0x10420) = 0;
+                *(u32 *)(v10 + 12) = 0x20000000;
+                fn_1_FD844(v7, v10);
+                if (*(u32 *)v7 & 0x40000000) {
+                    *(u32 *)(v9 + 912) &= ~0x4000000;
+                    *(void **)(v9 + 928) = 0;
+                } else *(u8 *)(v7 + 5) = v12;
+            }
+        }
+        v7 += 0x81c0;
+        v10 += 0x10440;
+        v9 += 0x440;
+        v8 += 0xa20;
+        v6++;
+    }
+}
+/* fzgx:end fn_3_4C58 */
+
 /* fzgx:begin fn_3_5A50 */
 extern void fn_3_5E88(s16);
 extern void fn_1_48140(s32);
