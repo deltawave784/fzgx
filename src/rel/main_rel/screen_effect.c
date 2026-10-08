@@ -1488,6 +1488,10 @@ void fn_1_76964(Fn1_76964Obj *obj) {
 
 /* fzgx:begin fn_1_76A94 noprologue */
 #include "types.h"
+#include "game/main_rel/screen_effect_types.h"
+
+extern u8 lbl_1_data_1D960[0x58];  // typedefs.json decl override
+extern const f64 lbl_1_rodata_31A0;
 
 typedef struct { u32 fmt; u32 pad; } FmtEnt;
 struct Arg0 {
@@ -1501,8 +1505,6 @@ struct Arg0 {
 };
 
 extern u8 lbl_1_data_1D9B8[0xF8];
-extern FmtEnt lbl_1_data_1D960[];
-extern f32 lbl_1_rodata_31A0;
 extern void GXInitTexObj(void *, void *, u16, u16, u32, u32, u32, u8);
 extern void GXInitTexObjLOD(void *, u32, u32, f32, f32, f32, u8, u8, u32);
 
@@ -1511,7 +1513,7 @@ void fn_1_76A94(struct Arg0 *arg0, u32 arg1)
     u32 i = arg1 & 0xFF;
     u32 f = (lbl_1_data_1D9B8 + arg0->idx * 6)[i];
     s32 w, h;
-    FmtEnt *e = &lbl_1_data_1D960[f];
+    FmtEnt *e = &(*(FmtEnt (*)[])&lbl_1_data_1D960)[f];
     if (f == 3) {
         w = 0x40;
         h = 0x40;
@@ -1527,7 +1529,7 @@ void fn_1_76A94(struct Arg0 *arg0, u32 arg1)
     } else {
         GXInitTexObj((u8 *)arg0 + i * 32, (void *)arg0->img[i], w, h, e->fmt, 1, 1, 0);
     }
-    GXInitTexObjLOD((u8 *)arg0 + i * 32, 1, 1, lbl_1_rodata_31A0, lbl_1_rodata_31A0, lbl_1_rodata_31A0, 0, 0, 0);
+    GXInitTexObjLOD((u8 *)arg0 + i * 32, 1, 1, (*(f32 *)&lbl_1_rodata_31A0), (*(f32 *)&lbl_1_rodata_31A0), (*(f32 *)&lbl_1_rodata_31A0), 0, 0, 0);
 }
 /* fzgx:end fn_1_76A94 */
 

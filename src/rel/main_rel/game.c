@@ -1893,8 +1893,12 @@ void fn_1_40F54(void *arg0) {
 
 /* fzgx:begin fn_1_40F78 noprologue */
 #include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/game.h"
+#include "font.h"
+#include "game/main_rel/game_types.h"
+
+extern u32 lbl_1_bss_38450;
+extern u8 lbl_1_data_66C0[0x10];
+extern u8 lbl_1_data_66D0[0x10];
 
 extern u32 lbl_801A6CE0;
 extern u32 lbl_1_bss_38454;

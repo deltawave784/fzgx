@@ -1551,6 +1551,7 @@ u32 fn_1_FA180(u8 a, u8 b) {
 
 /* fzgx:begin fn_1_FA1A8 noprologue */
 #include "types.h"
+#include "game/main_rel/spline_types.h"
 
 extern u32 fn_1_FA69C(u32);
 

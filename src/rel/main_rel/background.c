@@ -251,6 +251,7 @@ void fn_1_9D9E4(void) {
 #include "types.h"
 #include "dolphin/types.h"
 #include "dolphin/hw_regs.h"
+#include "game/main_rel/background_types.h"
 
 typedef struct {
     s32 type;     /* 0: constant, 1: linear, else: hermite */
@@ -258,11 +259,11 @@ typedef struct {
     f32 value;
     f32 tanIn;
     f32 tanOut;
-} CurveKey;
+} fn_1_9DDA8_CurveKey;
 
 /* Evaluate a keyframe curve at time t; derivative != 0 returns the slope. */
-f32 fn_1_9DDA8(s32 count, CurveKey *keys, s32 derivative, f32 t) {
-    CurveKey *p;
+f32 fn_1_9DDA8(s32 count, fn_1_9DDA8_CurveKey *keys, s32 derivative, f32 t) {
+    fn_1_9DDA8_CurveKey *p;
     s32 i;
     f32 a, dt, d, m0, m1, u, s, u2, u3, w, b, e;
     f64 lin;

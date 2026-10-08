@@ -1617,7 +1617,6 @@ void fn_1_128E8C(u32 unused, FnData *data) {
 
 /* fzgx:begin fn_1_128F10 pool */
 struct fn_1_129D9C_rodata;
-extern const struct fn_1_129D9C_rodata lbl_1_rodata_8068;
 
 typedef struct lbl_1_bss_89760_t {
     u32 unk_0;

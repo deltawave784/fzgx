@@ -733,6 +733,7 @@ void fn_1_E39F0(void) {
 
 /* fzgx:begin fn_1_E49D4 noprologue */
 #include "types.h"
+#include "game/main_rel/phys_types.h"
 
 extern u32 fn_1_E3C38(u32, u32);
 extern u32 fn_1_E5430(u32);

@@ -441,8 +441,6 @@ extern s16 fn_1_3F0C8(void);
 extern f32 lbl_1_rodata_6638;
 extern const f32 lbl_1_rodata_663C;
 extern void fn_1_106084(void *target, s32 index, f32 x, f32 y, f32 z);
-void fn_1_5948(s32);
-void fn_1_627C(s32);
 
 /* Per-frame update of the san background: spawns effects for each active slot. */
 void fn_1_DAE24(void) {

@@ -635,15 +635,16 @@ void fn_1_181F0(int a, int b, int c) {
 #include "dolphin/types.h"
 #include "dolphin/hw_regs.h"
 #include "psvec.h"
+#include "game/main_rel/stcoli_types.h"
 
 typedef struct {
     u32 f00, f04, f08, f0c, f10, f14, f18, f1c, f20, f24;
     u32 f28, f2c, f30, f34, f38, f3c, f40, f44;
-} Cfg;
+} fn_1_18214_Cfg;
 
 typedef struct {
     u8 pad_0[0x4];
-    Cfg *cfg;
+    fn_1_18214_Cfg *cfg;
     u8 pad_8[0xc];
     f32 fx;
     f32 fy;
@@ -654,12 +655,12 @@ typedef struct {
     f32 sxv;
     f32 syv;
     f32 szv;
-} Entity;
+} fn_1_18214_Entity;
 
 typedef struct {
     u32 count;
     u32 entries[1];
-} Stack;
+} fn_1_18214_Stack;
 
 extern f32 fn_1_9E14C(u32, u32, f32);
 extern f32 fn_1_9E170(u32, u32, void *, f32);
@@ -671,8 +672,8 @@ extern u32 mathutil_mtxA_rotate_z(u32);
 extern void fn_80008BEC(void *, int, void *);
 extern void lbl_8006E0B4(f32, f32, f32);
 
-void fn_1_18214(Entity *arg0, f32 *arg1, Stack *arg2, f32 t) {
-    Cfg *v0 = arg0->cfg;
+void fn_1_18214(fn_1_18214_Entity *arg0, f32 *arg1, fn_1_18214_Stack *arg2, f32 t) {
+    fn_1_18214_Cfg *v0 = arg0->cfg;
     u8 *slot;
     s32 ang;
     f32 a;
