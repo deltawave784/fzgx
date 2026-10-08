@@ -31472,6 +31472,17 @@
   },
   {
     "module": "main_rel",
+    "source": "rel/main_rel/bg_san/fn_1_DA3A0.c",
+    "symbols": [
+      "fn_1_DA3A0"
+    ],
+    "status": "matching",
+    "mw_version": null,
+    "extra_cflags": [],
+    "tu": "rel/main_rel/bg_san.c"
+  },
+  {
+    "module": "main_rel",
     "source": "rel/main_rel/bg_san/fn_1_DA6A8.c",
     "symbols": [
       "fn_1_DA6A8"
