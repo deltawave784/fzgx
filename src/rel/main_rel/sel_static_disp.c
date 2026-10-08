@@ -1015,6 +1015,146 @@ void fn_1_1368A0(s32 arg0, s16 arg1, s32 arg2, f32 farg0, f32 farg1, f32 farg2, 
 #pragma opt_propagation reset
 /* fzgx:end fn_1_1368A0 */
 
+/* fzgx:begin fn_1_136CC4 noprologue */
+#include "types.h"
+#include "dolphin/types.h"
+#include "font.h"
+
+extern int fn_1_4F734(FontDrawPacket *);
+extern const f64 lbl_1_rodata_8600;
+extern const f32 lbl_1_rodata_87DC;
+extern const f32 lbl_1_rodata_8A4C;
+extern f32 lbl_1_rodata_26F8[22];
+struct ColorWord { u32 value; };
+extern struct ColorWord lbl_1_rodata_8A48;
+extern void fn_1_137288(s16, u8 *, u8 *, u8 *, s16);
+extern void fn_1_51564(u16, u16, u16, u16, u16, u16);
+extern void fn_1_5158C(FontDrawPacket *, u32, s16, s16);
+
+void fn_1_136CC4(u32 arg0, u32 arg1, u32 arg2, s16 arg3) {
+    f32 v0;
+    f32 v1;
+    f64 v2;
+    f32 v3;
+    f32 v4;
+    f32 v5;
+    u32 v6;
+    f32 v7;
+    f32 v8;
+    f64 v9;
+    f32 v10;
+    f32 v11;
+    f32 v12;
+    u32 v13;
+    f32 v14;
+    f32 v15;
+    f64 v16;
+    f32 v17;
+    f32 v18;
+    f32 v19;
+    u32 v20;
+    s32 v21;
+    s32 v22;
+    f32 v23;
+    f64 v24;
+    u32 v25;
+    f32 v26;
+    f32 v27;
+    f32 v28;
+    f32 v29;
+    s32 v30;
+    s32 v31;
+    f32 v32;
+    f64 v33;
+    u32 v34;
+    f32 v35;
+    f32 v36;
+    f32 v37;
+    f32 v38;
+    s32 v39;
+    s32 v40;
+    f32 v41;
+    f64 v42;
+    u32 v43;
+    f32 v44;
+    f32 v45;
+    f32 v46;
+    f32 v47;
+    FontDrawPacket loc_10;
+    struct ColorWord color;
+    u8 loc_A;
+    u8 loc_9;
+    u8 loc_8;
+    color = lbl_1_rodata_8A48;
+    fn_1_137288((s16)arg2, &loc_A, &loc_9, &loc_8, arg3);
+    fn_1_51564(0, 0, 64, 20, 1, 3);
+    loc_10 = *(FontDrawPacket *)&lbl_1_rodata_26F8;
+    loc_10.image = 0x9A20;
+    loc_10.x = (f32)(s32)(arg0 + 2);
+    loc_10.y = (f32)(s32)arg1;
+    loc_10.z = 6.0f;
+    loc_10.scale_x *= 0.8f;
+    loc_10.scale_y *= 0.8f;
+    loc_10.flags = 9;
+    fn_1_5158C(&loc_10, 0x9A20, 0, 0);
+    fn_1_4F734(&loc_10);
+    loc_10 = *(FontDrawPacket *)&lbl_1_rodata_26F8;
+    loc_10.image = 0x9A20;
+    loc_10.x = (f32)(s32)(arg0 + 91);
+    loc_10.y = (f32)(s32)arg1;
+    loc_10.z = 6.0f;
+    loc_10.scale_x *= 0.8f;
+    loc_10.scale_y *= 0.8f;
+    loc_10.flags = 9;
+    fn_1_5158C(&loc_10, 0x9A20, 0, 1);
+    fn_1_4F734(&loc_10);
+    loc_10 = *(FontDrawPacket *)&lbl_1_rodata_26F8;
+    loc_10.image = 0x9A20;
+    loc_10.x = (f32)(s32)(arg0 + 179);
+    loc_10.y = (f32)(s32)arg1;
+    loc_10.z = 6.0f;
+    loc_10.scale_x *= 0.8f;
+    loc_10.scale_y *= 0.8f;
+    loc_10.flags = 9;
+    fn_1_5158C(&loc_10, 0x9A20, 0, 2);
+    fn_1_4F734(&loc_10);
+    fn_1_51564(0, 0, 16, 16, 3, 2);
+    loc_10 = *(FontDrawPacket *)&lbl_1_rodata_26F8;
+    loc_10.image = 0x9A21;
+    loc_10.x = (f32)(s32)(arg0 + 74);
+    loc_10.y = (f32)(s32)arg1;
+    loc_10.z = 6.0f;
+    loc_10.scale_x *= 0.8f;
+    loc_10.scale_y *= 0.8f;
+    loc_10.flags = 10;
+    *(u32 *)((u8 *)&loc_10 + 56) = color.value;
+    fn_1_5158C(&loc_10, 0x9A21, (s16)((s32)loc_A % 3), (s16)((s32)loc_A / 3));
+    fn_1_4F734(&loc_10);
+    loc_10 = *(FontDrawPacket *)&lbl_1_rodata_26F8;
+    loc_10.image = 0x9A21;
+    loc_10.x = (f32)(s32)(arg0 + 162);
+    loc_10.y = (f32)(s32)arg1;
+    loc_10.z = 6.0f;
+    loc_10.scale_x *= 0.8f;
+    loc_10.scale_y *= 0.8f;
+    loc_10.flags = 10;
+    *(u32 *)((u8 *)&loc_10 + 56) = color.value;
+    fn_1_5158C(&loc_10, 0x9A21, (s16)((s32)loc_9 % 3), (s16)((s32)loc_9 / 3));
+    fn_1_4F734(&loc_10);
+    loc_10 = *(FontDrawPacket *)&lbl_1_rodata_26F8;
+    loc_10.image = 0x9A21;
+    loc_10.x = (f32)(s32)(arg0 + 250);
+    loc_10.y = (f32)(s32)arg1;
+    loc_10.z = 6.0f;
+    loc_10.scale_x *= 0.8f;
+    loc_10.scale_y *= 0.8f;
+    loc_10.flags = 10;
+    *(u32 *)((u8 *)&loc_10 + 56) = color.value;
+    fn_1_5158C(&loc_10, 0x9A21, (s16)((s32)loc_8 % 3), (s16)((s32)loc_8 / 3));
+    fn_1_4F734(&loc_10);
+}
+/* fzgx:end fn_1_136CC4 */
+
 /* fzgx:begin fn_1_137288 noprologue */
 #include "types.h"
 #include "dolphin/types.h"

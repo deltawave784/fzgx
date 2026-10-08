@@ -333,6 +333,168 @@ void fn_1_C771C(void) {
 }
 /* fzgx:end fn_1_C771C */
 
+/* fzgx:begin fn_1_C7CBC */
+extern const f32 lbl_1_rodata_5C88;
+extern const f32 lbl_1_rodata_5C8C;
+extern const f64 lbl_1_rodata_5C00;
+extern int fn_1_4F734(FontDrawPacket *);
+extern f32 lbl_1_rodata_26F8[22];
+extern u32 lbl_1_rodata_5C84;
+
+#pragma opt_common_subs off
+void fn_1_C7CBC(u32 arg0, u32 arg1, u32 arg2, u32 arg3, f32 arg4, f32 arg5) {
+    u32 v1;
+    u32 v0;
+    f32 v2;
+    f64 v3;
+    f32 v5;
+    f32 v6;
+    f32 v7;
+    f32 v8;
+    f32 v4;
+    s32 v9;
+    f64 v11;
+    f32 v12;
+    f32 v10;
+    f64 v13;
+    f32 v15;
+    f32 v16;
+    f32 v14;
+    f64 v18;
+    u32 v19;
+    f32 v20;
+    f32 v17;
+    f64 v21;
+    f32 v23;
+    f32 v24;
+    f32 v22;
+    f64 v26;
+    u32 v27;
+    f32 v28;
+    f32 v25;
+    f64 v30;
+    f32 v31;
+    f32 v29;
+    f64 v33;
+    u32 v34;
+    f32 v35;
+    f32 v32;
+    struct Color { u8 r, g, b, a; } loc_8;
+    FontDrawPacket loc_C;
+    loc_8 = *(struct Color *)&lbl_1_rodata_5C84;
+    v0 = (0x10000 - 26839);
+    if ((s32)arg3 != 0) {
+        v0 = (0x10000 - 27592);
+    }
+    v1 = (0x10000 - 26838);
+    if ((s32)arg3 != 0) {
+        v1 = (0x10000 - 27591);
+    }
+    v2 = (f32)(lbl_1_rodata_5C88 * (f32)(lbl_1_rodata_5C8C * arg4));
+    loc_C = *(FontDrawPacket *)&lbl_1_rodata_26F8;
+    v3 = lbl_1_rodata_5C00;
+    v5 = (f32)((f32)(s32)(s16)arg0 - v2);
+    v6 = (f32)(s32)(s16)arg1;
+    v7 = (f32)(v6 - v2);
+    loc_C.image = v0;
+    v8 = (f32)(s32)(s16)arg2;
+    loc_C.x = v5;
+    loc_C.y = v7;
+    loc_C.z = v8;
+    loc_C.scale_x = (f32)(loc_C.scale_x * arg4);
+    loc_C.scale_y = (f32)(loc_C.scale_y * arg5);
+    loc_C.flags = 15;
+    fn_1_4F734(&loc_C);
+    loc_C = *(FontDrawPacket *)&lbl_1_rodata_26F8;
+    v9 = ((s16)arg2 + 1);
+    v11 = lbl_1_rodata_5C00;
+    v12 = (f32)(s32)v9;
+    loc_C.image = v1;
+    loc_C.x = v5;
+    loc_C.y = v7;
+    loc_C.z = v12;
+    loc_C.scale_x = (f32)(loc_C.scale_x * arg4);
+    loc_C.scale_y = (f32)(loc_C.scale_y * arg5);
+    loc_C.flags = 15;
+    *(struct Color *)((u8 *)&loc_C + 56) = loc_8;
+    fn_1_4F734(&loc_C);
+    loc_C = *(FontDrawPacket *)&lbl_1_rodata_26F8;
+    v13 = lbl_1_rodata_5C00;
+    v15 = (f32)((f32)(s32)(s16)arg0 + v2);
+    loc_C.image = v0;
+    v16 = (f32)(s32)(s16)arg2;
+    loc_C.x = v15;
+    loc_C.y = v7;
+    loc_C.z = v16;
+    loc_C.scale_x = (f32)(loc_C.scale_x * arg4);
+    loc_C.scale_y = (f32)(loc_C.scale_y * arg5);
+    loc_C.flags = (0x80000 + 13);
+    fn_1_4F734(&loc_C);
+    loc_C = *(FontDrawPacket *)&lbl_1_rodata_26F8;
+    v18 = lbl_1_rodata_5C00;
+    v19 = (0x80000 + 13);
+    v20 = (f32)(s32)v9;
+    loc_C.image = v1;
+    loc_C.x = v15;
+    loc_C.y = v7;
+    loc_C.z = v20;
+    loc_C.scale_x = (f32)(loc_C.scale_x * arg4);
+    loc_C.scale_y = (f32)(loc_C.scale_y * arg5);
+    loc_C.flags = v19;
+    *(struct Color *)((u8 *)&loc_C + 56) = loc_8;
+    fn_1_4F734(&loc_C);
+    loc_C = *(FontDrawPacket *)&lbl_1_rodata_26F8;
+    v21 = lbl_1_rodata_5C00;
+    v23 = (f32)((f32)(s32)(s16)arg1 + v2);
+    loc_C.image = v0;
+    v24 = (f32)(s32)(s16)arg2;
+    loc_C.x = v5;
+    loc_C.y = v23;
+    loc_C.z = v24;
+    loc_C.scale_x = (f32)(loc_C.scale_x * arg4);
+    loc_C.scale_y = (f32)(loc_C.scale_y * arg5);
+    loc_C.flags = (0x100000 + 7);
+    fn_1_4F734(&loc_C);
+    loc_C = *(FontDrawPacket *)&lbl_1_rodata_26F8;
+    v26 = lbl_1_rodata_5C00;
+    v27 = (0x100000 + 7);
+    v28 = (f32)(s32)v9;
+    loc_C.image = v1;
+    loc_C.x = v5;
+    loc_C.y = v23;
+    loc_C.z = v28;
+    loc_C.scale_x = (f32)(loc_C.scale_x * arg4);
+    loc_C.scale_y = (f32)(loc_C.scale_y * arg5);
+    loc_C.flags = v27;
+    *(struct Color *)((u8 *)&loc_C + 56) = loc_8;
+    fn_1_4F734(&loc_C);
+    loc_C = *(FontDrawPacket *)&lbl_1_rodata_26F8;
+    v30 = lbl_1_rodata_5C00;
+    loc_C.image = v0;
+    v31 = (f32)(s32)(s16)arg2;
+    loc_C.x = v15;
+    loc_C.y = v23;
+    loc_C.z = v31;
+    loc_C.scale_x = (f32)(loc_C.scale_x * arg4);
+    loc_C.scale_y = (f32)(loc_C.scale_y * arg5);
+    loc_C.flags = (0x180000 + 5);
+    fn_1_4F734(&loc_C);
+    loc_C = *(FontDrawPacket *)&lbl_1_rodata_26F8;
+    v33 = lbl_1_rodata_5C00;
+    v34 = (0x180000 + 5);
+    v35 = (f32)(s32)v9;
+    loc_C.image = v1;
+    loc_C.x = v15;
+    loc_C.y = v23;
+    loc_C.z = v35;
+    loc_C.scale_x = (f32)(loc_C.scale_x * arg4);
+    loc_C.scale_y = (f32)(loc_C.scale_y * arg5);
+    loc_C.flags = v34;
+    *(struct Color *)((u8 *)&loc_C + 56) = loc_8;
+    fn_1_4F734(&loc_C);
+}
+/* fzgx:end fn_1_C7CBC */
+
 /* fzgx:begin fn_1_CA218 */
 typedef struct EnemyCtrl_CA218 {
     u32 value;

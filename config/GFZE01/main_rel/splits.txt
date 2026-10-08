@@ -6971,3 +6971,9 @@ rel/main_rel/ranking/fn_1_157950.c:
 
 rel/main_rel/enemy_ctrl/fn_1_CBC24.c:
 	.text       start:0x000CBC24 end:0x000CC27C align:4
+
+rel/main_rel/sel_static_disp/fn_1_136CC4.c:
+	.text       start:0x00136CC4 end:0x00137288 align:4
+
+rel/main_rel/enemy_ctrl/fn_1_C7CBC.c:
+	.text       start:0x000C7CBC end:0x000C8294 align:4

@@ -39320,6 +39320,20 @@
   },
   {
     "module": "main_rel",
+    "source": "rel/main_rel/enemy_ctrl/fn_1_C7CBC.c",
+    "symbols": [
+      "fn_1_C7CBC"
+    ],
+    "status": "matching",
+    "mw_version": null,
+    "extra_cflags": [],
+    "tu": "rel/main_rel/enemy_ctrl.c",
+    "pool": {
+      "@10": "lbl_1_rodata_5C00"
+    }
+  },
+  {
+    "module": "main_rel",
     "source": "rel/main_rel/enemy_ctrl/fn_1_CA218.c",
     "symbols": [
       "fn_1_CA218"
@@ -50072,6 +50086,22 @@
     "mw_version": "GC/1.3.2",
     "extra_cflags": [],
     "tu": "rel/main_rel/sel_static_disp.c"
+  },
+  {
+    "module": "main_rel",
+    "source": "rel/main_rel/sel_static_disp/fn_1_136CC4.c",
+    "symbols": [
+      "fn_1_136CC4"
+    ],
+    "status": "matching",
+    "mw_version": "GC/1.3",
+    "extra_cflags": [],
+    "tu": "rel/main_rel/sel_static_disp.c",
+    "pool": {
+      "@17": "lbl_1_rodata_8A4C",
+      "@19": "lbl_1_rodata_8600",
+      "@16": "lbl_1_rodata_87DC"
+    }
   },
   {
     "module": "main_rel",
