@@ -47678,6 +47678,20 @@
   },
   {
     "module": "main_rel",
+    "source": "rel/main_rel/ptclput/fn_1_A0D7C.c",
+    "symbols": [
+      "fn_1_A0D7C"
+    ],
+    "status": "matching",
+    "mw_version": null,
+    "extra_cflags": [],
+    "tu": "rel/main_rel/ptclput.c",
+    "pool": {
+      "@32": "jumptable_1_data_33F24"
+    }
+  },
+  {
+    "module": "main_rel",
     "source": "rel/main_rel/ranking/fn_1_1554D0.c",
     "symbols": [
       "fn_1_1554D0"
