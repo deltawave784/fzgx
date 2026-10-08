@@ -387,6 +387,153 @@ void fn_1_426E4(Fn1426E4Object *object, void *value) {
 }
 /* fzgx:end fn_1_426E4 */
 
+/* fzgx:begin fn_1_4270C */
+extern const f32 lbl_1_rodata_F54;
+extern const f64 lbl_1_rodata_F58;
+typedef struct Sig_fn_1_431B8_Fn1431B8Object {
+    u8 pad0[4];
+    u16 flags;
+    u16 index;
+    u8 pad8[0xD8];
+    u16 value0;
+    u16 value1;
+    u16 value2;
+} Sig_fn_1_431B8_Fn1431B8Object;
+extern s32 fn_1_431B8(Sig_fn_1_431B8_Fn1431B8Object *, Sig_fn_1_431B8_Fn1431B8Object *);
+
+typedef struct Fn14270CEntry {
+    u8 pad0[0xD4];
+    u16 countsD4[6];
+    u16 countsE0[6];
+    u16 countsEC[6];
+    u16 valuesF8[6];
+    u16 values104[6];
+    u16 values110[6];
+    u16 *ptrs11C[6];
+    u16 *ptrs134[6];
+    u16 *ptrs14C[6];
+    u8 pad164[0x28];
+} Fn14270CEntry;
+typedef struct Fn14270CData {
+    u8 pad0[8];
+    u16 *streams[1];
+} Fn14270CData;
+typedef struct Fn14270CObject {
+    u16 count;
+    u16 flags;
+    u8 pad4[4];
+    Fn14270CEntry *entries;
+    u8 padC[0x18];
+    Fn14270CData *data;
+    f32 value28, value2C, value30, value34, value38;
+    u8 pad3C[4];
+    u16 value40, value42, value44, value46;
+    u8 pad48[4];
+    f32 value4C, value50;
+    u16 value54;
+} Fn14270CObject;
+typedef struct Fn14270CParams {
+    u16 value0, value2, value4, value6;
+} Fn14270CParams;
+
+void fn_1_4270C(struct Fn142AD0Object *arg0, void *arg1, u32 index) {
+    Fn14270CObject *object = (Fn14270CObject *)arg0;
+    Fn14270CParams *params = (Fn14270CParams *)arg1;
+    u16 *data;
+    u32 count;
+    u32 i;
+    u32 offset;
+    u32 j;
+    u16 flags;
+    Sig_fn_1_431B8_Fn1431B8Object *entry;
+
+    data = object->data->streams[(u16)index];
+    object->value28 = lbl_1_rodata_F54;
+    object->value2C = lbl_1_rodata_F54;
+    object->flags &= 0x30A;
+    object->value30 = lbl_1_rodata_F54;
+    object->value34 = lbl_1_rodata_F54;
+    object->value38 = lbl_1_rodata_F54;
+    if (params != 0) {
+        if (object->value44 >= params->value4)
+            object->value44 = params->value4;
+        else
+            object->value44 = data[0];
+        object->value42 = params->value2;
+        object->value46 = params->value6;
+        object->value54 = 0;
+    } else {
+        object->value44 = data[0];
+        object->value42 = 0;
+        object->value46 = 0;
+        object->value54 = 0;
+    }
+    object->value40 = 0;
+    object->value50 = (f32)(u32)data[0];
+    object->value4C = (f32)(u32)object->value42;
+    count = data[1];
+    if (object->count < count)
+        count = object->count;
+    offset = 0;
+    data += 2;
+    for (i = 0; i < count; i++) {
+        flags = data[0];
+        data += 2;
+        for (j = 0; j < 3; j++) {
+            if (flags & 1) {
+                object->entries[i].countsD4[j] = *data++;
+                object->entries[i].ptrs11C[j] = data + 1;
+                data += object->entries[i].countsD4[j] * 8;
+                data++;
+            } else {
+                object->entries[i].countsD4[j] = 0;
+                object->entries[i].ptrs11C[j] = 0;
+            }
+            object->entries[i].valuesF8[j] = 0;
+            flags >>= 1;
+        }
+        for (j = 0; j < 3; j++) {
+            if (flags & 1) {
+                object->entries[i].countsE0[j] = *data++;
+                object->entries[i].ptrs134[j] = data + 1;
+                data += object->entries[i].countsE0[j] * 8;
+                data++;
+            } else {
+                object->entries[i].countsE0[j] = 0;
+                object->entries[i].ptrs134[j] = 0;
+            }
+            object->entries[i].values104[j] = 0;
+            flags >>= 1;
+        }
+        for (j = 0; j < 3; j++) {
+            if (flags & 1) {
+                object->entries[i].countsEC[j] = *data++;
+                object->entries[i].ptrs14C[j] = data + 1;
+                data += object->entries[i].countsEC[j] * 8;
+                data++;
+            } else {
+                object->entries[i].countsEC[j] = 0;
+                object->entries[i].ptrs14C[j] = 0;
+            }
+            object->entries[i].values110[j] = 0;
+            flags >>= 1;
+        }
+        offset += 0x18C;
+    }
+    i = 0;
+    offset = 0;
+    for (; i < object->count; i++) {
+        entry = (Sig_fn_1_431B8_Fn1431B8Object *)((u8 *)object->entries + offset);
+        if ((entry->flags & 1) && *(u16 *)((u8 *)entry + 0xEC) == 0
+            && *(u16 *)((u8 *)entry + 0xEE) == 0 && *(u16 *)((u8 *)entry + 0xF0) == 0) {
+            if (fn_1_431B8((Sig_fn_1_431B8_Fn1431B8Object *)object->entries, entry))
+                entry->flags |= 0x100;
+        }
+        offset += 0x18C;
+    }
+}
+/* fzgx:end fn_1_4270C */
+
 /* fzgx:begin fn_1_42AD0 */
 static inline void fn_1_42AD0_save_keys(Fn142AD0Entry *entry, s32 k) {
     entry->keys[0][1][k] = entry->keys[0][0][k];

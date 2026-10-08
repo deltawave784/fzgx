@@ -7004,3 +7004,6 @@ rel/main_rel/sel_static_disp/fn_1_14328C.c:
 
 rel/main_rel/ptclput/fn_1_A0D7C.c:
 	.text       start:0x000A0D7C end:0x000A116C align:4
+
+rel/main_rel/motasglist/fn_1_4270C.c:
+	.text       start:0x0004270C end:0x00042AD0 align:4
