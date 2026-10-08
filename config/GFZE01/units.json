@@ -30996,6 +30996,17 @@
   },
   {
     "module": "main_rel",
+    "source": "rel/main_rel/bg_common/fn_1_107930.c",
+    "symbols": [
+      "fn_1_107930"
+    ],
+    "status": "matching",
+    "mw_version": "GC/1.3",
+    "extra_cflags": [],
+    "tu": "rel/main_rel/bg_common.c"
+  },
+  {
+    "module": "main_rel",
     "source": "rel/main_rel/bg_common/fn_1_107C4C.c",
     "symbols": [
       "fn_1_107C4C"
