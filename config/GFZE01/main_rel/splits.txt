@@ -6944,3 +6944,6 @@ rel/main_rel/camera/fn_1_5370.c:
 
 rel/main_rel/font/fn_1_4FD64.c:
 	.text       start:0x0004FD64 end:0x00050164 align:4
+
+rel/main_rel/sel_static_disp/fn_1_13D02C.c:
+	.text       start:0x0013D02C end:0x0013D460 align:4
