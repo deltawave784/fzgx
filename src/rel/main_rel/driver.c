@@ -349,19 +349,17 @@ void fn_1_A7A70(void) {
 }
 /* fzgx:end fn_1_A7A70 */
 
-/* fzgx:begin fn_1_A7B30 noprologue */
-#include "types.h"
-
+/* fzgx:begin fn_1_A7B30 */
 typedef struct FnA7B30Vector {
     s32 x;
     s32 y;
     s32 z;
 } FnA7B30Vector;
 
-extern FnA7B30Vector lbl_1_data_35864[];
-
+// Copy the indexed 12-byte vector from the driver table to the output.
 void fn_1_A7B30(s32 index, FnA7B30Vector *out) {
-    *out = lbl_1_data_35864[index - 25];
+    FnA7B30Vector *table = (FnA7B30Vector *)(lbl_1_data_35864 + sizeof(lbl_1_data_35864));
+    *out = table[index - 50];
 }
 /* fzgx:end fn_1_A7B30 */
 
