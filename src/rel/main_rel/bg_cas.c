@@ -206,11 +206,9 @@ void fn_1_FB87C(u32 *values, u8 count) {
 #include "types.h"
 #include "rel/main_rel/globals.h"
 #include "rel/main_rel/bg_cas.h"
+#include "game/main_rel/bg_cas_types.h"
 
-/* retail passes the full index register (no clrlwi): the stage takes an int */
-void fn_1_FBC5C(int index);
-
-// Initializes the selected background-cas state before running its setup stages.
+// Activates the selected background-cas state and runs its setup stages.
 void fn_1_FB96C(int index) {
     u32 *states = &lbl_1_bss_84454.unk_0;
 
