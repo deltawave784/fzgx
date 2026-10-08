@@ -1265,6 +1265,77 @@ void fn_15_2620(struct fn_15_2620_Arg0 *arg0) {
 }
 /* fzgx:end fn_15_2620 */
 
+/* fzgx:begin fn_15_27D4 */
+#include "rel/winning/winning.h"
+
+struct V27 { f32 x,y,z; };
+struct W27 { u32 x,y; };
+struct A27 {
+ u8 pad0[0x18]; u32 unk_18;
+ u8 pad1[0x6c]; u32 unk_88;
+ u8 pad2[0x1c]; struct V27 unk_A8;
+ u8 pad3[4]; f32 unk_B8;
+ u8 pad4[0x408]; u8 unk_4C4;
+};
+struct N27 { u8 pad[0xc]; struct V27 pos; };
+struct T27 { u8 pad[0x1c]; struct V27 p0,p1,p2; u8 pad2[0xc]; struct N27 *nodes[3]; };
+struct G27 { u8 pad[0x3c]; struct T27 *unk_3C; };
+struct E27 { u8 pad[0x192]; u8 unk_192; };
+extern struct G27 lbl_1_data_2A7E0;
+extern struct E27 *lbl_15_bss_2C[];
+extern const f32 lbl_15_rodata_0[];
+extern void fn_15_2620(struct A27 *);
+static inline void add27(struct V27 *d, struct V27 *s, f32 x, f32 z, f32 y) {
+ d->x=x+s->x; d->y=y+s->y; d->z=z+s->z;
+}
+static inline void addxz27(struct V27 *d, struct V27 *s, f32 x, f32 z) {
+ d->x=x+s->x; d->y=s->y; d->z=z+s->z;
+}
+static inline void subxy27(struct V27 *d, f32 y, f32 x) {
+ d->x-=x; d->y-=y;
+}
+void fn_15_27D4(struct A27 *arg0) {
+ const f32 *p = lbl_15_rodata_0;
+ struct T27 *t = lbl_1_data_2A7E0.unk_3C;
+ f32 x, y, z;
+ switch ((s32)arg0->unk_4C4) {
+ case 0: arg0->unk_A8=t->p0; break;
+ case 1: arg0->unk_A8=t->p1; break;
+ case 2: arg0->unk_A8=t->p2; break;
+ default: arg0->unk_A8=t->p2; arg0->unk_A8.x-=p[23]; arg0->unk_A8.y-=p[33]; break;
+ }
+ if (lbl_15_bss_14 & 0x80) {
+ switch ((s32)lbl_15_bss_2C[0]->unk_192) {
+ case 4:
+ switch ((s32)arg0->unk_4C4) {
+ case 0: add27(&arg0->unk_A8,&t->p0,p[23],p[50],p[33]); break;
+ case 1: add27(&arg0->unk_A8,&t->p1,p[23],p[50],p[33]); break;
+ case 2: add27(&arg0->unk_A8,&t->p2,p[23],p[50],p[33]); break;
+ default: arg0->unk_A8.x=p[51]+t->p2.x; arg0->unk_A8.y=t->p2.y; arg0->unk_A8.z=p[50]+t->p2.z; break;
+ }
+ break;
+ case 3: arg0->unk_A8.z+=p[50]; break;
+ case 2:
+ switch ((s32)arg0->unk_4C4) {
+ case 0: arg0->unk_A8.x=p[23]+t->p0.x; arg0->unk_A8.y=t->p0.y; arg0->unk_A8.z=p[50]+t->p0.z; break;
+ case 1: arg0->unk_A8.x=p[23]+t->p2.x; arg0->unk_A8.y=t->p2.y; arg0->unk_A8.z=p[50]+t->p2.z; break;
+ }
+ {
+ /* Preserve the node lookup and component-copy access order. */
+ struct N27 *n = *(struct N27 *volatile *)&t->nodes[2];
+ /* Volatile preserves the ordered word loads and stores of this vector copy. */
+ *(volatile struct V27 *)&n->pos=*(const volatile struct V27 *)&p[47];
+ }
+ break;
+ }
+ t->nodes[arg0->unk_4C4]->pos=arg0->unk_A8;
+ }
+ arg0->unk_B8=p[23];
+ fn_15_2620(arg0);
+ if ((s32)arg0->unk_88==1) arg0->unk_18|=0x20000000;
+}
+/* fzgx:end fn_15_27D4 */
+
 /* fzgx:begin fn_15_2AE4 */
 struct WinningEntry {
     u8 *unk_0;

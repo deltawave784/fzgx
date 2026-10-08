@@ -68863,6 +68863,17 @@
   },
   {
     "module": "winning",
+    "source": "rel/winning/winning/fn_15_27D4.c",
+    "symbols": [
+      "fn_15_27D4"
+    ],
+    "status": "matching",
+    "mw_version": "GC/1.3.2",
+    "extra_cflags": [],
+    "tu": "rel/winning/winning.c"
+  },
+  {
+    "module": "winning",
     "source": "rel/winning/winning/fn_15_2AE4.c",
     "symbols": [
       "fn_15_2AE4"
