@@ -770,6 +770,52 @@ void fn_3_1AE40(void *data, u32 x1, u32 y1, s16 x2, s16 y2) {
 }
 /* fzgx:end fn_3_1AE40 */
 
+/* fzgx:begin fn_3_1AEE4 noprologue */
+#include "types.h"
+#include "rel/customize/globals.h"
+#include "rel/customize/toolkit.h"
+
+extern u32 fn_3_149AC(void *, u32, u32);
+extern void fn_3_14794(void *, u32, s16, u32 *);
+
+void fn_3_1AEE4(void *data, u32 x1, u32 y1, u32 x2, u32 y2) {
+    s16 width;
+    s16 height;
+    u32 copy_x;
+    u32 copy_y;
+    void *temp;
+    s32 last;
+    s16 end = y2;
+    u32 y = y1;
+    u32 x;
+    u32 value1;
+    u32 value2;
+
+    last = end - 1;
+
+    for (; (s16)y < end; y++) {
+        for (x = x1; (s16)x < (s16)x2; x++) {
+            value1 = fn_3_149AC(data, x, y);
+            fn_3_14794((void *)lbl_3_bss_A2454, y, (s16)(last - x), &value1);
+        }
+    }
+    temp = (void *)lbl_3_bss_A2454;
+    height = end - y1;
+    width = x2 - x1;
+    if (data != 0) {
+        for (copy_y = 0; (s16)copy_y < height; copy_y++) {
+            for (copy_x = 0; (s16)copy_x < width; copy_x++) {
+                value2 = fn_3_149AC(temp, copy_x, copy_y);
+                {
+                    extern void fn_3_14794(void *, u32, u32, u32 *);
+                    fn_3_14794(data, copy_x, copy_y, &value2);
+                }
+            }
+        }
+    }
+}
+/* fzgx:end fn_3_1AEE4 */
+
 /* fzgx:begin fn_3_1B008 noprologue */
 #include "types.h"
 #include "rel/customize/globals.h"

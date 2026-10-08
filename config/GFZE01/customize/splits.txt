@@ -533,3 +533,6 @@ rel/customize/toolkit/fn_3_28378.c:
 
 rel/customize/toolkit/fn_3_1B008.c:
 	.text       start:0x0001B008 end:0x0001B130 align:4
+
+rel/customize/toolkit/fn_3_1AEE4.c:
+	.text       start:0x0001AEE4 end:0x0001B008 align:4
