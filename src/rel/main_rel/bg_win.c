@@ -637,21 +637,10 @@ void fn_1_15DFD4(int index, int flags) {
 }
 /* fzgx:end fn_1_15DFD4 */
 
-/* fzgx:begin fn_1_15E1D0 noprologue */
-#include "types.h"
-
-struct fn_1_15E1D0_lbl_1_bss_8FDA8_0_E52 {
-    u8 pad_0[0x30];
-    f32 unk_30;
-};
-struct fn_1_15E1D0_lbl_1_bss_8FDA8 {
-    struct fn_1_15E1D0_lbl_1_bss_8FDA8_0_E52 unk_0[1];
-};
-
-extern struct fn_1_15E1D0_lbl_1_bss_8FDA8 lbl_1_bss_8FDA8;
-
-f32 fn_1_15E1D0(u32 arg0) {
-    return lbl_1_bss_8FDA8.unk_0[arg0].unk_30;
+/* fzgx:begin fn_1_15E1D0 */
+// Returns the float field of the indexed background-window entry.
+f32 fn_1_15E1D0(u32 index) {
+    return *(f32 *)((u8 *)(&lbl_1_bss_8FDA8.unk_30) + index * 0x34);
 }
 /* fzgx:end fn_1_15E1D0 */
 

@@ -1,13 +1,8 @@
 #include "types.h"
 #include "rel/main_rel/globals.h"
 #include "rel/main_rel/light.h"
+#include "game/main_rel/light_types.h"
 
-typedef struct {
-    u32 unk_0;
-    u32 unk_4;
-    u32 unk_8;
-} Triple_80074D28;
-extern void fn_80074D28(Triple_80074D28 *);
 extern u16 lbl_1_bss_6D7C0[20];
 extern void *lbl_801A6410;
 extern u32 fn_1_4630();

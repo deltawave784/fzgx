@@ -679,18 +679,80 @@ def _promote_referenced_locals(p: Project, key: str, unit_src: Optional[str], un
     return out
 
 
-def _install(p: Project, unit_src: str, text: str, pool: bool = False) -> None:
+def _code_signature(obj: Path, name: str) -> Optional[tuple]:
+    """The function's code as the link sees it: relocation-masked words, every relocation
+    (offset, kind, target symbol or section, addend) and the object's private literal symbols.
+    None if the object or symbol is missing."""
+    import struct
+    from .poolfix import Elf, SHT_RELA
+    try:
+        elf = Elf(obj.read_bytes())
+    except (OSError, ValueError):
+        return None
+    syms = elf.symbols()
+    code = {s["index"]: s for s in elf.sections if s["flags"] & 4}
+    sym = next((s for s in syms if s["name"] == name and s["shndx"] in code), None)
+    if sym is None:
+        return None
+    text = code[sym["shndx"]]
+    lo, hi = sym["value"], sym["value"] + sym["size"]
+    relocs = []
+    for sec in elf.sections:
+        if sec["type"] != SHT_RELA or sec["info"] != text["index"]:
+            continue
+        for pos in range(sec["offset"], sec["offset"] + sec["size"], 12):
+            offset, info, addend = struct.unpack_from(">IIi", elf.data, pos)
+            if lo <= offset < hi:
+                target = syms[info >> 8]
+                label = target["name"] or (elf.sections[target["shndx"]]["name"]
+                                           if target["shndx"] < len(elf.sections) else "?")
+                relocs.append((offset - lo, info & 255, label, addend))
+    # the private literals the unit's `pool` map retargets after every compile (ninja's
+    # mwcc_pool step fails when one is missing): a prologue can renumber or fold them
+    # without touching the function's own code (fn_1_1286F4's @75/@377)
+    private = sorted((s["name"], s["size"], elf.sections[s["shndx"]]["name"] if s["shndx"] < len(elf.sections) else "?")
+                     for s in syms if s["name"].startswith(("@", "...")))
+    from .poolfix import masked_code
+    return masked_code(elf, text, lo, hi - lo), tuple(sorted(relocs)), tuple(private)
+
+
+def _install(p: Project, unit_src: str, text: str, pool: bool = False, verify_code: bool = False) -> None:
     """Make `text` the canonical source of the unit: a block of its TU file, or its own file.
 
     A block's generated unit must compile: if it does not under the TU prologue (a private
-    declaration that disagrees with a header), the block keeps its own includes instead."""
+    declaration that disagrees with a header), the block keeps its own includes instead.
+    Compiling is not enough: the oracle accepted the self-contained text, and a prologue
+    declaration can change its code (`void fn_1_FBC5C(u8)` adds a `clrlwi` before the call:
+    fn_1_FB96C linked a different object and was uncarved). With `verify_code` the function's
+    code and relocations under the prologue must equal those of the accepted text compiled on
+    its own, else the block stays `noprologue` (exactly what the oracle checked)."""
     u = p.unit_record(unit_src)
     if u and u.get("tu"):
         flags = ["pool"] if pool else None
         tufile.splice(p, u, text, extra_flags=flags)
         unit = p.objdiff_unit_name(u["module"], unit_src)
-        if oracle.compile_unit(p, unit, unit_src).returncode != 0:
+        same = oracle.compile_unit(p, unit, unit_src).returncode == 0
+        if same and verify_code:
+            scratch = STATE_DIR / "install" / unit_src
+            scratch.parent.mkdir(parents=True, exist_ok=True)
+            own_src = scratch.with_suffix(".self.c")
+            own_obj = scratch.with_suffix(".self.o")
+            pro_obj = scratch.with_suffix(".prologue.o")
+            own_src.write_text(text)
+            try:
+                gen = tufile.gen_path(p, unit_src)
+                ok_own = oracle.compile_unit(p, unit, unit_src, own_src, output=own_obj).returncode == 0
+                ok_pro = oracle.compile_unit(p, unit, unit_src, gen, output=pro_obj).returncode == 0
+                name = u["symbols"][0]
+                a = _code_signature(own_obj, name) if ok_own else None
+                b = _code_signature(pro_obj, name) if ok_pro else None
+                same = a is not None and a == b
+            finally:
+                for f in (own_src, own_obj, pro_obj):
+                    f.unlink(missing_ok=True)
+        if not same:
             tufile.splice(p, u, text, noprologue=True, extra_flags=flags)
+            oracle.compile_unit(p, unit, unit_src)  # the link object is the text that was checked
     else:
         path = ROOT / "src" / unit_src
         path.parent.mkdir(parents=True, exist_ok=True)
@@ -703,6 +765,53 @@ def _install(p: Project, unit_src: str, text: str, pool: bool = False) -> None:
                  config / 'splits.txt', config / 'symbols.txt']
         with (STATE_DIR / 'verify_dependencies.jsonl').open('a') as out:
             out.write(json.dumps([path.relative_to(ROOT).as_posix() for path in paths]) + '\n')
+
+
+REVISE_PRIOR_DIR = STATE_DIR / "revise_prior"
+
+
+def _save_revise_prior(p: Project, key: str, unit_src: str, row) -> None:
+    """Record the installed, already verified state a revise is about to replace
+    (verify.restore_revised puts it back when the rewrite fails the link)."""
+    u = p.unit_record(unit_src)
+    if not u:
+        return
+    rec = json.loads(json.dumps(u))
+    if rec.get("tu"):
+        block = tufile.block_state(p, rec)
+    else:
+        path = ROOT / "src" / unit_src
+        block = {"file": path.read_text()} if path.exists() else None
+    if block is None:
+        return
+    path = REVISE_PRIOR_DIR / f"{key}.json"
+    keys = row.keys() if row is not None else []
+    if path.exists() and "link_state" in keys and row["link_state"] == "pending":
+        return  # an earlier revise is still pending verification: its prior is the verified one
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps({
+        "symbol": key, "unit": rec, "block": block, "time": int(time.time()),
+        "link_state": (row["link_state"] if "link_state" in keys else None) or "verified",
+        "matched_commit": row["matched_commit"] if "matched_commit" in keys else None}, indent=1) + "\n")
+
+
+def _set_unit_pool(p: Project, unit_src: str, pool_map: Optional[Dict[str, str]]) -> bool:
+    """Make the unit's literal-pool map the accepted check's (as a first submit does); True if it changed."""
+    with oracle.build_lock("units.lock"):
+        units = p.load_units()
+        for u in units:
+            if u["source"] != unit_src or u.get("pool") is True:
+                continue
+            want = dict(pool_map) if pool_map else None
+            if (u.get("pool") or None) == want:
+                return False
+            if want:
+                u["pool"] = want
+            else:
+                u.pop("pool", None)
+            p.save_units(units)
+            return True
+    return False
 
 
 def _discard_work(p: Project, key: str) -> None:
@@ -785,9 +894,17 @@ def submit(p: Project, symbol: str, agent: str = "unknown", message: str = "",
                      harness=harness, tokens_in=tokens_in, tokens_out=tokens_out, cost_usd=cost_usd, shadow=True)
             return {"ok": False, "error": reason, "percent": res.percent, "revise": True}
         if work.exists():
-            _install(p, unit_src, work.read_text(), pool=res.matched_pool)
+            # a revise must never cost a match: keep what is installed now (block text and
+            # flags, unit record with pool/compiler options, ledger link state) so that the
+            # batch verify can put it back if the rewrite matches as an object but not in the link
+            _save_revise_prior(p, key, unit_src, row)
+            _install(p, unit_src, work.read_text(), pool=res.matched_pool, verify_code=True)
+            if not res.matched_pool and _set_unit_pool(p, unit_src, res.pool_map):
+                _reconfigure_and_split(p)  # the rewrite's private literals carry other names
         _discard_work(p, key)
         link = "pool" if res.matched_pool else "pending"
+        if link != "pending":  # nothing for verify to decide
+            (REVISE_PRIOR_DIR / f"{key}.json").unlink(missing_ok=True)
         l.db.execute("UPDATE functions SET link_state=? WHERE symbol=?", (link, key))
         l.finish(key, "matched", "matched", notes=f"revised: {message}", model=model, harness=harness,
                  tokens_in=tokens_in, tokens_out=tokens_out, cost_usd=cost_usd, shadow=True)
@@ -814,7 +931,7 @@ def submit(p: Project, symbol: str, agent: str = "unknown", message: str = "",
     # A pool match is accepted but keeps linking the retail object: its private literal can
     # only become the TU's shared one when the whole TU is compiled as one unit.
     if work.exists():
-        _install(p, unit_src, work.read_text(), pool=res.matched_pool)
+        _install(p, unit_src, work.read_text(), pool=res.matched_pool, verify_code=True)
     _discard_work(p, key)
     with oracle.build_lock("units.lock"):
         units = p.load_units()

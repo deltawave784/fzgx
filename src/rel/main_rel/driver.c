@@ -2,151 +2,8 @@
 #include "dolphin/types.h"
 #include "rel/main_rel/globals.h"
 #include "rel/main_rel/driver.h"
+#include "game/main_rel/driver_types.h"
 
-typedef struct {
-    u8 pad_0[0x8];
-    u32 unk_8;
-} DriverAsset;
-
-struct fn_1_A7F84_lbl_1_rodata_4A28 {
-    f32 unk_0;
-};
-
-typedef struct FnA8528Config {
-    u8 pad_0c[0x0c];
-    f32 unk_0c;
-    u8 pad_10[0x0c];
-    f32 unk_1c;
-    u8 pad_20[0x0c];
-    f32 unk_2c;
-} FnA8528Config;
-
-struct fn_1_A7F84_lbl_801A6D00 {
-    u32 unk_0;
-};
-
-struct fn_1_A9868_lbl_801A6D00 {
-    u32 unk_0;
-};
-
-typedef struct FnA861CCamera {
-    u8 pad_0[0xdc];
-    f32 yaw;      /* 0xdc */
-    f32 roll;     /* 0xe0 */
-    f32 pitch;    /* 0xe4 */
-    u8 unk_e8;
-    u8 unk_e9;
-    u8 pad_ea[0x15c - 0xea];
-    u8 unk_15c[4];
-} FnA861CCamera;
-
-typedef struct {
-    signed char gpr;
-    signed char fpr;
-    unsigned short reserved;
-    char *input_arg_area;
-    char *reg_save_area;
-} Sig_parse_format_MkVaListState;
-
-typedef Sig_parse_format_MkVaListState Sig_parse_format_va_list;
-
-typedef struct {
-    u8 kind;
-    u8 callback;
-    u8 flags;
-    u8 pad3;
-    s16 x;
-    s16 y;
-    s16 z;
-    s16 padA;
-    void *data;
-} Fn1A9250Entry;
-
-struct fn_1_A9868_lbl_1_rodata_4AA0 {
-    u32 unk_0;
-    u32 unk_4;
-    u32 unk_8;
-    u32 unk_C;
-    u32 unk_10;
-    u32 unk_14;
-    u32 unk_18;
-    u32 unk_1C;
-    u32 unk_20;
-    f32 unk_24;
-    f32 unk_28;
-    f32 unk_2C;
-    f32 unk_30;
-};
-
-typedef struct Sig_fn_80015EE8_Fn80015EE8Out {
-    f32 f0;
-    f32 f1;
-    f32 f2;
-    f32 f3;
-    f32 f4;
-    f32 f5;
-    f32 f6;
-    f32 f7;
-    f32 f8;
-    f32 f9;
-    f32 f10;
-    f32 f11;
-    f32 f12;
-    f32 f13;
-    f32 f14;
-    f32 f15;
-} Sig_fn_80015EE8_Fn80015EE8Out;
-
-struct Sig_fn_800737E4_fn_800737E4_Arg0 {
-    f32 unk_0;
-    u8 pad_4[0x4];
-    f32 unk_8;
-    f32 unk_C;
-    u8 pad_10[0x4];
-    f32 unk_14;
-    f32 unk_18;
-    f32 unk_1C;
-    u8 pad_20[0x8];
-    f32 unk_28;
-    f32 unk_2C;
-};
-
-typedef struct FnA861CVehicle {
-    u8 pad_0[8];
-    f32 unk_8;
-    u8 pad_c[0xa4 - 0xc];
-    f32 unk_a4;
-    u8 pad_a8[0xb0 - 0xa8];
-    f32 unk_b0;
-    u8 pad_b4[0xb8 - 0xb4];
-    f32 unk_b8;
-    u8 pad_bc[0xc0 - 0xbc];
-    f32 unk_c0;
-} FnA861CVehicle;
-
-typedef struct FnA8834Camera {
-    u8 pad_0[0x90];
-    u8 unk_90[0x48];
-    f32 unk_d8;
-    f32 unk_dc;
-    u8 pad_e0[4];
-    f32 unk_e4;
-    u8 pad_e8[0x18c - 0xe8];
-    u8 unk_18c[4];
-} FnA8834Camera;
-
-typedef struct FnA8834Vehicle {
-    u8 pad_0[8];
-    f32 unk_8;
-    u8 pad_c[0xa4 - 0xc];
-    f32 unk_a4;
-    u8 pad_a8[0xb0 - 0xa8];
-    f32 unk_b0;
-    u8 pad_b4[0xc0 - 0xb4];
-    f32 unk_c0;
-    u8 pad_c4[0x1fc - 0xc4];
-    f32 unk_1fc;
-} FnA8834Vehicle;
 extern void fn_80006E10(u32 arg0);
 extern s32 fn_1_12C930(s8);
 extern s16 fn_1_12CCB0(s16 arg0, s16 arg1);
@@ -160,8 +17,6 @@ extern void fn_1_A8270(void *, void *);
 extern void *lbl_801A6410;
 extern u32 fn_1_4630();
 extern void fn_1_A8528(void *, void *);
-extern struct fn_1_A7F84_lbl_1_rodata_4A28 lbl_1_rodata_4A28;
-extern FnA8528Config *lbl_801A6D00;
 extern u32 lbl_8006D91C(u32);
 extern u32 mathutil_mtxA_rotate_y(u32);
 extern void mathutil_mtxA_rotate_x(u32);
@@ -186,15 +41,12 @@ extern void fn_1_49680(f32 value1, f32 value2);
 extern void fn_1_A93C4(u32 arg0);
 extern void fn_1_4A0D8(void *);
 extern void fn_1_520CC(void);
-extern Fn1A9250Entry lbl_1_bss_70658[];
 extern void fn_1_49514(u32 *value);
 extern void (*lbl_1_bss_7168C)(void);
-extern struct fn_1_A9868_lbl_1_rodata_4AA0 lbl_1_rodata_4AA0;
 extern u32 GXLoadPosMtxImm(u32, u32);
 extern u32 fn_800720B0(u32);
 extern void fn_80072EDC(s32 arg0, s32 arg1);
 extern void fn_1_A714C(f32 *a, f32 *b, f32 *c, f32 *d);
-extern f32 fn_80015EE8(Sig_fn_80015EE8_Fn80015EE8Out *, f32, f32, f32, f32, f32, f32);
 extern void fn_80038CFC(u32 value);
 extern void fn_8006F1F0(void *, void *, void *);
 extern void fn_8007245C(u32 value);
@@ -209,7 +61,6 @@ extern void fn_80074718(u8 value, s32 arg);
 extern void fn_80074788(u32 arg0);
 extern void fn_800747D0(u32 arg0, u32 arg1, s32 arg2, s32 arg3, u32 arg4, s32 arg5, s32 arg6);
 extern void fn_80074918(u8 arg0, s32 arg1, u8 arg2);
-extern void fn_800737E4(struct Sig_fn_800737E4_fn_800737E4_Arg0 *, s32, f32);
 extern void OSPanic(const char *file, int line, const char *msg, ...);
 extern void OSReport(const char *format, ...);
 extern void fn_800711A8(void *value);
@@ -217,8 +68,6 @@ extern void fn_1_46B4(u32 arg0, u32 arg1, const char *arg2, int arg3);
 extern void fn_1_A7E60(s32 arg0, s8 arg1, s32 arg2, s32 arg3, s32 arg4);
 extern void lbl_8006E0A4(void *arg0);
 extern void fn_8006F6A8(void *arg0);
-extern void fn_1_A861C(FnA861CCamera *cam, FnA861CVehicle *veh);
-extern void fn_1_A8834(FnA8834Camera *cam, FnA8834Vehicle *veh);
 extern void fn_1_A89B0(void *arg0, void *arg1, s32 arg2);
 extern void fn_1_3920(void);
 extern void fn_1_A8D4C(void);
@@ -500,19 +349,17 @@ void fn_1_A7A70(void) {
 }
 /* fzgx:end fn_1_A7A70 */
 
-/* fzgx:begin fn_1_A7B30 noprologue */
-#include "types.h"
-
+/* fzgx:begin fn_1_A7B30 */
 typedef struct FnA7B30Vector {
     s32 x;
     s32 y;
     s32 z;
 } FnA7B30Vector;
 
-extern FnA7B30Vector lbl_1_data_35864[];
-
+// Copy the indexed 12-byte vector from the driver table to the output.
 void fn_1_A7B30(s32 index, FnA7B30Vector *out) {
-    *out = lbl_1_data_35864[index - 25];
+    FnA7B30Vector *table = (FnA7B30Vector *)(lbl_1_data_35864 + sizeof(lbl_1_data_35864));
+    *out = table[index - 50];
 }
 /* fzgx:end fn_1_A7B30 */
 

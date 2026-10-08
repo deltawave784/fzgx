@@ -3534,9 +3534,6 @@ rel/main_rel/spline/fn_1_FB180.c:
 rel/main_rel/bg_cas/fn_1_FB870.c:
 	.text       start:0x000FB870 end:0x000FB87C
 
-rel/main_rel/bg_cas/fn_1_FB96C.c:
-	.text       start:0x000FB96C end:0x000FB9C0
-
 rel/main_rel/bg_cas/fn_1_FB9C0.c:
 	.text       start:0x000FB9C0 end:0x000FB9DC
 
@@ -6887,3 +6884,36 @@ rel/main_rel/burner/fn_1_9A864.c:
 
 rel/main_rel/screen_effect/fn_1_76A94.c:
 	.text       start:0x00076A94 end:0x00076BD0 align:4
+
+rel/main_rel/stcoli/fn_1_2E268.c:
+	.text       start:0x0002E268 end:0x0002E3B4 align:4
+
+rel/main_rel/effect_car/fn_1_6E140.c:
+	.text       start:0x0006E140 end:0x0006E320 align:4
+
+rel/main_rel/bg_common/fn_1_103D28.c:
+	.text       start:0x00103D28 end:0x00103F10 align:4
+
+rel/main_rel/sel_static_disp/fn_1_14A028.c:
+	.text       start:0x0014A028 end:0x0014A17C align:4
+
+rel/main_rel/effect/fn_1_5D378.c:
+	.text       start:0x0005D378 end:0x0005D4FC align:4
+
+rel/main_rel/bitmap/fn_1_48214.c:
+	.text       start:0x00048214 end:0x00048418 align:4
+
+rel/main_rel/sel_static_disp/fn_1_14DEC8.c:
+	.text       start:0x0014DEC8 end:0x0014E054 align:4
+
+rel/main_rel/accessory/fn_1_1286F4.c:
+	.text       start:0x001286F4 end:0x00128884 align:4
+
+rel/main_rel/bg_cas/fn_1_FB96C.c:
+	.text       start:0x000FB96C end:0x000FB9C0 align:4
+
+rel/main_rel/effect/fn_1_611EC.c:
+	.text       start:0x000611EC end:0x00061370 align:4
+
+rel/main_rel/font/fn_1_55210.c:
+	.text       start:0x00055210 end:0x000553C4 align:4

@@ -2,17 +2,8 @@
 #include "rel/main_rel/globals.h"
 #include "rel/main_rel/avline.h"
 #include "dolphin/hw_regs.h"
+#include "game/main_rel/avline_types.h"
 
-typedef struct AvLineDrawState {
-    u8 unk_0;
-    u8 pad_1[3];
-    u32 unk_4;
-    u32 unk_8;
-    u32 unk_C;
-    u32 unk_10;
-    u32 unk_14;
-} AvLineDrawState;
-extern AvLineDrawState lbl_1_data_1C670;
 extern u32 lbl_801A6D00;
 extern void GXLoadPosMtxImm(u32, u32);
 extern void fn_800720B0(u32);

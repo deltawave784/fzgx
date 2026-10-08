@@ -1,67 +1,9 @@
 #include "types.h"
 #include "rel/main_rel/globals.h"
 #include "rel/main_rel/prog.h"
+#include "game/main_rel/prog_types.h"
 
-typedef enum {
-    Sig_GXAdjustForOverscan_VI_TVMODE_NTSC_INT = ((((0)) << 2) + ((0))),
-    Sig_GXAdjustForOverscan_VI_TVMODE_NTSC_DS = ((((0)) << 2) + ((1))),
-    Sig_GXAdjustForOverscan_VI_TVMODE_NTSC_PROG = ((((0)) << 2) + ((2))),
-    Sig_GXAdjustForOverscan_VI_TVMODE_NTSC_3D = ((((0)) << 2) + ((3))),
-    Sig_GXAdjustForOverscan_VI_TVMODE_PAL_INT = ((((1)) << 2) + ((0))),
-    Sig_GXAdjustForOverscan_VI_TVMODE_PAL_DS = ((((1)) << 2) + ((1))),
-    Sig_GXAdjustForOverscan_VI_TVMODE_MPAL_INT = ((((2)) << 2) + ((0))),
-    Sig_GXAdjustForOverscan_VI_TVMODE_MPAL_DS = ((((2)) << 2) + ((1))),
-    Sig_GXAdjustForOverscan_VI_TVMODE_DEBUG_INT = ((((3)) << 2) + ((0))),
-    Sig_GXAdjustForOverscan_VI_TVMODE_DEBUG_PAL_INT = ((((4)) << 2) + ((0))),
-    Sig_GXAdjustForOverscan_VI_TVMODE_DEBUG_PAL_DS = ((((4)) << 2) + ((1))),
-    Sig_GXAdjustForOverscan_VI_TVMODE_EURGB60_INT = ((((5)) << 2) + ((0))),
-    Sig_GXAdjustForOverscan_VI_TVMODE_EURGB60_DS = ((((5)) << 2) + ((1))),
-    Sig_GXAdjustForOverscan_VI_TVMODE_GCA_INT = ((((6)) << 2) + ((0))),
-    Sig_GXAdjustForOverscan_VI_TVMODE_GCA_DS = ((((6)) << 2) + ((1))),
-    Sig_GXAdjustForOverscan_VI_TVMODE_GCA_PROG = ((((6)) << 2) + ((2))),
-} Sig_GXAdjustForOverscan_VITVMode;
-
-typedef enum {
-    Sig_GXAdjustForOverscan_VI_XFBMODE_SF = 0,
-    Sig_GXAdjustForOverscan_VI_XFBMODE_DF = 1,
-} Sig_GXAdjustForOverscan_VIXFBMode;
-
-typedef struct Sig_GXAdjustForOverscan__GXRenderModeObj {
-    Sig_GXAdjustForOverscan_VITVMode viTVmode;
-    u16 fbWidth;
-    u16 efbHeight;
-    u16 xfbHeight;
-    u16 viXOrigin;
-    u16 viYOrigin;
-    u16 viWidth;
-    u16 viHeight;
-    Sig_GXAdjustForOverscan_VIXFBMode xFBmode;
-    u8 field_rendering;
-    u8 aa;
-    u8 sample_pattern[12][2];
-    u8 vfilter[7];
-} Sig_GXAdjustForOverscan_GXRenderModeObj;
-
-struct fn_1_A6870_lbl_801A6D30_obj {
-    u32 unk_0;
-    u32 unk_4;
-    u32 unk_8;
-};
-
-struct fn_1_A6870_lbl_801A6D30 {
-    struct fn_1_A6870_lbl_801A6D30_obj *unk_0;
-};
-
-typedef u8 Sig_fn_80035110_GXBool;
-
-typedef u8 Sig_fn_80034ECC_GXBool;
 extern u32 lbl_801A6CF4;
-extern Sig_GXAdjustForOverscan_GXRenderModeObj lbl_8012B030;
-extern Sig_GXAdjustForOverscan_GXRenderModeObj lbl_8012AFB8;
-extern Sig_GXAdjustForOverscan_GXRenderModeObj lbl_8012B0A8;
-extern Sig_GXAdjustForOverscan_GXRenderModeObj lbl_8012B06C;
-extern Sig_GXAdjustForOverscan_GXRenderModeObj lbl_8019E150;
-extern struct fn_1_A6870_lbl_801A6D30 lbl_801A6D30;
 extern const f32 lbl_1_rodata_49D8;
 extern const f32 lbl_1_rodata_49DC;
 extern const f64 lbl_1_rodata_49E0;
@@ -71,16 +13,13 @@ extern void fn_1_A7024(f32, f32, f32, f32);
 extern u32 VIGetTvFormat(void);
 extern u32 OSGetProgressiveMode(void);
 extern void OSPanic(const char *file, int line, const char *msg, ...);
-extern void GXAdjustForOverscan(Sig_GXAdjustForOverscan_GXRenderModeObj *, Sig_GXAdjustForOverscan_GXRenderModeObj *, u16, u16);
 extern s32 fn_8001B42C(u32);
 extern void fn_8001AF64(void);
 extern void fn_8001BC54(void);
 extern void fn_8007423C(u32 arg0, u32 arg1, u32 arg2, u32 arg3);
 extern void fn_800743C4(s32 a, u32 b);
-extern void fn_80035110(void *, Sig_fn_80035110_GXBool);
 extern u32 fn_80038EEC(f32, f32, f32, f32, f32, f32);
 extern u32 fn_80074188(u32 arg0, u32 arg1, u32 arg2, u32 arg3);
-extern void fn_80034ECC(Sig_fn_80034ECC_GXBool, void *, Sig_fn_80034ECC_GXBool, void *);
 extern u8 lbl_801A66B0[];
 extern u8 lbl_1_rodata_48C8[];
 extern void fn_1_A9868();

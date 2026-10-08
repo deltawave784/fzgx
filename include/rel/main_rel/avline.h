@@ -10,14 +10,12 @@
 // lbl_1_bss_6C840: .bss size 0x4, 4 refs from avline.c
 extern u32 lbl_1_bss_6C840;
 
-// lbl_1_bss_6C844: .bss size 0x2, 3 refs from avline.c
-extern u16 lbl_1_bss_6C844;
-
 // lbl_1_bss_6C848: .bss size 0x2, 3 refs from avline.c
 extern u8 lbl_1_bss_6C848;
 
 // lbl_1_data_1D514: .data size 0x114, 3 refs from avline.c (own data block)
-extern u8 lbl_1_data_1D514[0x114];
+// avline handler table, indexed by an s16 kind (fn_1_58694)
+extern void (*lbl_1_data_1D514[0x45])(void *);  // typedefs.json decl override
 
 // lbl_1_data_1CC74: .data size 0x4, 3 refs from avline.c (own data block)
 typedef struct {
@@ -27,8 +25,8 @@ typedef struct {
 } Obj_1_data_1CC74_Target;
 extern Obj_1_data_1CC74_Target *lbl_1_data_1CC74;
 
-// lbl_1_data_1C68C: .data size 0x9, 2 refs from avline.c (own data block)
-extern u8 lbl_1_data_1C68C[0x9];
+// lbl_1_bss_6C844: .bss size 0x2, 3 refs from avline.c
+extern u16 lbl_1_bss_6C844;
 
 // lbl_1_bss_6C84C: .bss size 0x4, 2 refs from avline.c
 typedef struct {
@@ -49,7 +47,11 @@ typedef struct {
 } Obj_1_bss_6C84C_Target;
 extern Obj_1_bss_6C84C_Target *lbl_1_bss_6C84C;  // array of 0xE8-byte records
 
+// lbl_1_data_1C68C: .data size 0x9, 2 refs from avline.c (own data block)
+extern u8 lbl_1_data_1C68C[0x9];
+
 // lbl_1_data_1D2EC: .data size 0x228, 1 refs from avline.c (own data block)
-extern u8 lbl_1_data_1D2EC[0x228];
+// avline handler table, indexed by an s16 kind (fn_1_58694)
+extern void (*lbl_1_data_1D2EC[0x8A])(void *);  // typedefs.json decl override
 
 #endif  // REL_MAIN_REL_AVLINE_H

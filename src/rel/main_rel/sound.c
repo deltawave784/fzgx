@@ -2,12 +2,8 @@
 #include "rel/main_rel/globals.h"
 #include "rel/main_rel/sound.h"
 #include "sofdec/adxt.h"
+#include "game/main_rel/sound_types.h"
 
-
-typedef struct {
-    u8 unk_0[0x3A0];
-    void *unk_3A0;
-} SoundObject;
 extern const f32 lbl_1_rodata_42E0;
 extern int OSGetSoundMode(void);
 extern u32 fn_1_44A4(void);
@@ -58,7 +54,6 @@ extern void fn_8002361C(u32 value0, u32 value1);
 extern void fn_8002805C(void);
 extern void fn_800411F4(void);
 extern s8 fn_1_86690(s8 index);
-extern SoundObject *fn_1_86854(s8 arg0);
 extern void fn_1_14E9E4(int arg0, void *arg1);
 extern u32 lbl_1_rodata_451C[5];
 extern u32 lbl_1_rodata_4478[41];

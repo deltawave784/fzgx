@@ -1,15 +1,8 @@
 #include "types.h"
 #include "rel/main_rel/globals.h"
 #include "rel/main_rel/cloth.h"
+#include "game/main_rel/cloth_types.h"
 
-struct fn_1_10240C_lbl_801A6410 {
-    u32 unk_0;
-};
-
-struct fn_1_101AE8_lbl_801A6410 {
-    u32 unk_0;
-};
-extern struct fn_1_10240C_lbl_801A6410 lbl_801A6410;
 extern u32 fn_1_435C(u32 value);
 extern u32 fn_1_46B4(u32, u32, void *, u32);
 extern void fn_1_41A8(void);

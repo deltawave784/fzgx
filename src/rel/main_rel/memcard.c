@@ -6,61 +6,11 @@
 #include "dolphin/dvd.h"
 #include "dolphin/os/OSTime.h"
 #include "font.h"
+#include "game/main_rel/memcard_types.h"
 
-typedef struct MgrRoot {
-    u32 unk_0;
-} MgrRoot;
-
-typedef struct MemcardDvdFileInfo {
-    u8 pad_0[0x3C];
-} MemcardDvdFileInfo;
-
-typedef struct Sig_DVDOpen_DVDFileInfo Sig_DVDOpen_DVDFileInfo;
-
-typedef void (*Sig_DVDOpen_DVDCallback)(s32 result, Sig_DVDOpen_DVDFileInfo *fileInfo);
-
-struct Sig_DVDOpen_DVDFileInfo {
-    DVDCommandBlock cb;
-    u32 startAddr;
-    u32 length;
-    Sig_DVDOpen_DVDCallback callback;
-};
-
-typedef struct Sig_fn_800174D0_Fn800174D0Object {
-    u8 pad30[0x30];
-    u32 field30;
-    u32 field34;
-    void *field38;
-} Sig_fn_800174D0_Fn800174D0Object;
-
-typedef struct {
-    u8 pad_0[0x14];
-    s8 type;
-    s16 first;
-    s16 second;
-    s16 third;
-    s16 fourth;
-} Fn1C0510Obj;
-
-typedef struct {
-    u8 unk0[0x16];
-    s16 unk16;
-} Fn1C132CObject;
-
-typedef struct TimeParts {
-    u32 unused;
-    u32 field_4;
-    u32 field_8;
-    u32 field_C;
-    u32 field_10;
-    u32 field_14;
-    u32 spare_18;
-    u32 spare_1C;
-} TimeParts;
 extern void *lbl_801A6410;
 extern s32 fn_1_45D0();
 extern void fn_1_AB45C(int index);
-extern s32 CARDMountAsync(s32 chan, void *workArea, CARDCallback detachCallback, CARDCallback attachCallback);
 extern const f32 lbl_1_rodata_4CAC;
 extern void fn_1_46B4(u32 arg0, u32 arg1, const char *arg2, int arg3);
 extern u8 fn_1_B7EF8(void);
@@ -68,9 +18,7 @@ extern void fn_1_B7FDC(void);
 extern char *strncpy(char *dst, const char *src, size_t n);
 extern s32 lbl_801A66B4;
 extern const f32 lbl_1_rodata_4CA8;
-extern s32 DVDOpen(const char *, MemcardDvdFileInfo *);
 extern s32 DVDClose();
-extern s32 fn_80006354(MemcardDvdFileInfo *, void *, u32, u32);
 extern int fn_80083BCC(const char *s1, const char *s2);
 extern char *fn_80083DB0(char *dst, const char *src);
 extern u16 fn_1_1563E8(u8 *data, s32 len);
@@ -135,9 +83,6 @@ extern void fn_1_4966C(f32 value1, f32 value2);
 extern void fn_1_49614(void);
 extern u64 __div2i(u64, u32, u32);
 extern u32 lbl_1_bss_7AB90[36];
-extern void fn_1_C062C(Fn1C0510Obj *, void *, void *);
-extern void fn_1_C0B0C(Fn1C0510Obj *, void *, void *);
-extern void fn_1_C0E00(Fn1C0510Obj *, void *, void *);
 extern void fn_1_C132C();
 extern void OSTicksToCalendarTime();
 extern const f64 lbl_1_rodata_4CB8;
@@ -2084,6 +2029,7 @@ void fn_1_AD0A0(void *arg0) {
 #include "dolphin/dvd.h"
 #include "dolphin/os/OSTime.h"
 #include "font.h"
+#include "game/main_rel/memcard_types.h"
 
 extern int fn_1_B7FDC(u8 value);
 
@@ -8560,6 +8506,7 @@ void fn_1_BFCF8(void *arg0, void *arg1, void *arg2, s32 x, s32 y, f32 scale, f32
 #include "dolphin/dvd.h"
 #include "dolphin/os/OSTime.h"
 #include "font.h"
+#include "game/main_rel/memcard_types.h"
 
 #pragma section code_type ".fzgxpool"
 static const u32 fzgx_pool_table1[114] = {0x665F7A65, 0x726F5F64, 0x65627567, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x7379735F, 0x652E6269, 0x6E000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000350, 0x00000004, 0xFFFFFFFF, 0xFFFFFFFF, 0x665F7A65, 0x726F0000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000001, 0x7379735F, 0x652E6269, 0x6E000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000B4F, 0x000059E0, 0xFFFFFFFF, 0xFFFFFFFF, 0x667A6700, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000002, 0x67686F5F, 0x652E6269, 0x6E000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000153, 0x00000000, 0xFFFFFFFF, 0xFFFFFFFF, 0x667A6300, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000003, 0x6761725F, 0x652E6269, 0x6E000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000154, 0x00020700, 0xFFFFFFFF, 0xFFFFFFFF, 0x667A6500, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000004, 0x656D625F, 0x652E6269, 0x6E000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000152, 0x00000000, 0xFFFFFFFF, 0xFFFFFFFF, 0x667A7200, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000005, 0x7265705F, 0x652E6269, 0x6E000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000451, 0x00000000, 0xFFFFFFFF, 0xFFFFFFFF};  /* fzgx-allow: A1 retail pool bytes */

@@ -1,26 +1,8 @@
 #include "types.h"
 #include "rel/main_rel/globals.h"
 #include "rel/main_rel/mdlload.h"
+#include "game/main_rel/mdlload_types.h"
 
-typedef struct {
-    u32 unk_00;
-    void *resource;
-} ModelReleaseEntry;
-
-typedef struct {
-    s32 entry_count;
-    u8 unk_04[4];
-    ModelReleaseEntry *entry_table;
-} ModelReleaseList;
-
-struct Entry {
-    s8 flag[0x18];
-};
-
-struct Base {
-    char pad[0xe780];
-    struct Entry entries[1];
-};
 extern int fn_1_45730(void *owner, void *buffer);
 extern int fn_1_458A0(void *buffer, void *work, int size, int mode);
 extern u32 lbl_801A6410;
@@ -29,7 +11,6 @@ extern int fn_1_45850(void *buffer);
 extern u32 fn_1_12860(u32 arg0, u32 arg1);
 extern void fn_1_46B4(u32 arg0, u32 arg1, const char *arg2, int arg3);
 extern u32 fn_80071100(u32 arg0, u32 arg1, u32 arg2);
-extern void *fn_1_D3B6C(ModelReleaseList *list);
 extern void DCFlushRange(void *address, u32 length);
 extern void * fn_80071678();
 extern u32 fn_1_12F78(void *arg0, u32 arg1);
@@ -38,7 +19,6 @@ extern void fn_1_D3BE8();
 extern s32 fn_1_58C4(void);
 extern void fn_1_5948(int);
 extern void fn_1_105AB8(void *base, s32 index);
-extern void fn_1_D47D8(struct Base *base, s32 index);
 extern void fn_1_627C(s32 index);
 extern void fn_1_D5958(void *);
 extern void fn_1_D4360(void *);

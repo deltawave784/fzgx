@@ -3,271 +3,8 @@
 #include "rel/main_rel/globals.h"
 #include "rel/main_rel/sel_static_disp.h"
 #include "font.h"
+#include "game/main_rel/sel_static_disp_types.h"
 
-
-typedef struct {
-    u32 v[8];
-} Word8;
-
-typedef struct {
-    u8 pad0[0x4];
-    f32 unk_4;
-    f32 unk_8;
-    f32 unk_C;
-    f32 unk_10;
-    f32 unk_14;
-    u8 pad18[0x18];
-    s32 unk_30;
-    u8 pad34[0x24];
-} Sp8;
-
-typedef struct {
-    u32 value[22];
-} Fn139F18Data;
-
-typedef struct StaticDispParams {
-    s32 id;
-    f32 x;
-    f32 y;
-    f32 z;
-    u32 unk1[8];
-    s32 count;
-    u32 unk2[9];
-} StaticDispParams;
-
-struct Struct_26F8 {
-    u32 unk00;
-    f32 unk04;
-    f32 unk08;
-    f32 unk0C;
-    u8 pad10[0x1C];
-    f32 unk2C;
-    u32 unk30;
-    u8 pad34[4];
-    u32 unk38;
-    u8 pad3C[0x1C];
-};
-
-typedef struct {
-    const char *p[9];
-} PtrTab;
-
-struct fn_1_13F8C4_lbl_801A6410 {
-    u32 unk_0;
-};
-
-struct fn_1_149C64_lbl_1_bss_8E43C {
-    u32 unk_0;
-};
-
-struct fn_1_149C64_lbl_1_bss_8E440 {
-    u32 unk_0;
-};
-
-typedef struct {
-    s16 indices[2];
-    u8 pad8[4];
-    u32 flags;
-} Source;
-
-typedef struct {
-    s16 index;
-    u8 pad2[0x1e];
-    char text[0x320];
-    void *object;
-    void *handle[4];
-} Display;
-
-struct Sig_fn_80071718_fn_80071718_Arg0 {
-    u8 pad_0[0xC];
-    u32 unk_C;
-};
-
-struct Sig_fn_800711A8_fn_800711A8_Entry {
-    u8 pad_00[0x24];
-    void *field_24;
-};
-
-struct Sig_fn_800711A8_fn_800711A8_Arg0 {
-    s32 count;
-    u8 pad_04[4];
-    struct Sig_fn_800711A8_fn_800711A8_Entry **entries;
-    u8 pad_0C[4];
-    u32 field_10;
-    void *field_14;
-};
-
-typedef struct {
-    u8 data[4];
-    f32 value;
-    u8 tail[8];
-} Fn1_14E9E4Entry;
-
-typedef struct fn_1_150C8C_Entry {
-    u8 pad[0x68];
-    u32 active;
-    u8 tail[0x40];
-} fn_1_150C8C_Entry;
-
-typedef struct fn_1_150C8C_Object {
-    u8 pad_84[0x84];
-    s32 count;
-    fn_1_150C8C_Entry entries[1];
-} fn_1_150C8C_Object;
-
-typedef struct fn_1_150F30_StaticDisp {
-    u8 pad_2728[0x2728];
-    s32 unk_2728;
-    s32 unk_272c;
-} fn_1_150F30_StaticDisp;
-
-typedef struct Fn14E09CValue {
-    void *value;
-} Fn14E09CValue;
-
-typedef struct Fn14E09CRef {
-    u8 pad8[8];
-    Fn14E09CValue *value;
-} Fn14E09CRef;
-
-typedef struct Fn14E09CObj {
-    u8 pad344[0x344];
-    Fn14E09CRef *ref;
-} Fn14E09CObj;
-
-typedef struct DispNode {
-    u8 pad[4];
-    f32 value;
-} DispNode;
-
-typedef struct DispChildList {
-    DispNode *child[3];
-} DispChildList;
-
-typedef struct DispObject {
-    u32 flags;
-    u8 pad0[12];
-    f32 value;
-    u8 pad1[32];
-    DispChildList *children;
-} DispObject;
-
-typedef struct fn_1_151668_StaticDispEntry {
-    f32 first;
-    u8 pad0[0x18];
-    f32 values[3];
-    DispObject *object;
-    u8 active;
-    u8 scale_first;
-    u8 scale_second;
-    u8 clear_flag;
-    u8 pad2[0x0c];
-} fn_1_151668_StaticDispEntry;
-
-typedef struct fn_1_151668_StaticDisp {
-    u8 pad0[0x1830];
-    fn_1_151668_StaticDispEntry entries[63];
-    u8 pad1[0x30];
-    s32 entry_count;
-    s32 value_2728;
-    s32 value_272c;
-} fn_1_151668_StaticDisp;
-
-struct fn_1_142BDC_lbl_1_rodata_92C0 {
-    u8 pad_0[0x108];
-    f32 unk_108;
-    u8 pad_10C[0x1C];
-    f64 unk_128;
-    u8 pad_130[0x68];
-    f32 unk_198;
-    f32 unk_19C;
-    f32 unk_1A0;
-    f32 unk_1A4;
-    f32 unk_1A8;
-    f32 unk_1AC;
-    f32 unk_1B0;
-};
-
-typedef struct fn_1_14E09C_Fn14E09CValue {
-    void *value;
-} fn_1_14E09C_Fn14E09CValue;
-
-typedef struct fn_1_14E09C_Fn14E09CRef {
-    u8 pad8[8];
-    fn_1_14E09C_Fn14E09CValue *value;
-} fn_1_14E09C_Fn14E09CRef;
-
-typedef struct fn_1_14E09C_Fn14E09CObj {
-    u8 pad344[0x344];
-    fn_1_14E09C_Fn14E09CRef *ref;
-} fn_1_14E09C_Fn14E09CObj;
-
-typedef struct fn_1_150CEC_Entry {
-    u8 data[0xac];
-} fn_1_150CEC_Entry;
-
-typedef struct fn_1_150CEC_Object {
-    u8 pad_84[0x84];
-    s32 count;
-    fn_1_150CEC_Entry entries[1];
-} fn_1_150CEC_Object;
-
-typedef struct fn_1_150ED0_Entry {
-    u8 data[0xac];
-} fn_1_150ED0_Entry;
-
-typedef struct fn_1_150ED0_Object {
-    u8 pad_84[0x84];
-    s32 count;
-    fn_1_150ED0_Entry entries[1];
-} fn_1_150ED0_Object;
-
-struct Elem { u8 pad_0[0xe]; s16 unk_E; u8 pad_10[0x10]; };
-
-struct Arg { s16 index; u8 pad_2[0x22]; u8 *unk_24; u8 pad_28[0x10]; f32 f[6]; };
-
-typedef struct {
-    f32 a0, a1, a2, a3, a4, a5;
-    f32 pad[6];
-    s32 i30;
-    f32 rest[9];
-} SelLocal;
-
-struct fn_1_13A460_Copy88 { f32 a[22]; };
-
-struct fn_1_13A654_Copy88 { f32 a[22]; };
-
-typedef struct fn_1_14E09C_fn_1_14E09C_Fn14E09CValue {
-    void *value;
-} fn_1_14E09C_fn_1_14E09C_Fn14E09CValue;
-
-typedef struct fn_1_14E09C_fn_1_14E09C_Fn14E09CRef {
-    u8 pad8[8];
-    fn_1_14E09C_fn_1_14E09C_Fn14E09CValue *value;
-} fn_1_14E09C_fn_1_14E09C_Fn14E09CRef;
-
-typedef struct fn_1_14E09C_fn_1_14E09C_Fn14E09CObj {
-    u8 pad344[0x344];
-    fn_1_14E09C_fn_1_14E09C_Fn14E09CRef *ref;
-} fn_1_14E09C_fn_1_14E09C_Fn14E09CObj;
-
-typedef struct E {
-    u8 pad0[8];
-    u32 flags;
-    u8 pad1[0x2c - 0xc];
-    f32 x, y, z;
-    u8 pad2[0xac - 0x38];
-} E;
-
-typedef struct H {
-    u8 pad[0x84];
-    s32 count;
-    E e[1];
-} H;
-
-struct A7 { u16 v[7]; };
-
-struct B6 { u16 v[6]; };
 extern u32 lbl_801A66B4;
 extern void fn_1_49410(void);
 extern void fn_1_495FC(void);
@@ -425,7 +162,6 @@ extern void *fn_1_14FDAC(void *arg0, void *arg1, s16 arg2, void *arg3);
 extern void fn_1_14FD7C(u32 *data, u32 count);
 extern s16 fn_1_3F0C8(void);
 extern u32 fn_1_1507C4(void *, void *);
-extern Word8 lbl_1_rodata_86D8;
 extern const f32 lbl_1_rodata_86F8;
 extern void OSPanic(const char *file, int line, const char *msg, ...);
 extern u32 lbl_1_rodata_8700[16];
@@ -463,7 +199,6 @@ extern const f32 lbl_1_rodata_8C44;
 extern const f32 lbl_1_rodata_8C48;
 extern const f32 lbl_1_rodata_8C70;
 extern const f32 lbl_1_rodata_8C74;
-extern PtrTab lbl_1_rodata_8C4C;
 extern s32 fn_1_13B548(s32, s32, s32, u8);
 extern const f32 lbl_1_rodata_87AC;
 extern const f32 lbl_1_rodata_882C;
@@ -518,8 +253,6 @@ extern const f64 lbl_1_rodata_93E8;
 extern f32 lbl_1_rodata_93F0[15];
 extern f32 lbl_1_rodata_970C[71];
 extern const f32 lbl_1_rodata_946C;
-extern struct fn_1_149C64_lbl_1_bss_8E43C lbl_1_bss_8E43C;
-extern struct fn_1_149C64_lbl_1_bss_8E440 lbl_1_bss_8E440;
 extern void fn_1_520A0(void);
 extern f64 lbl_1_rodata_9480[80];
 extern f32 lbl_1_rodata_942C[16];
@@ -539,11 +272,9 @@ extern u8 lbl_8015B200[];
 extern size_t strlen(const char *str);
 extern void fn_1_12AB38(void *arg0);
 extern void *fn_1_D3884(void *arg0);
-extern void fn_1_14D728(Source *source, Display *displays);
 extern void fn_80071718(void *arg0);
 extern void fn_800711A8(void *arg0);
 extern u8 lbl_1_rodata_9CDC[1200];
-extern Fn1_14E9E4Entry *fn_1_14F608(int arg0);
 extern void fn_80008BA8(u32 arg0, u32 arg1, u32 arg2);
 extern u8 lbl_1_rodata_A18C[1800];
 extern const u8 lbl_1_rodata_AF9C[2040];
@@ -552,8 +283,6 @@ extern const f64 lbl_1_rodata_B8D0;
 extern u8 lbl_1_rodata_CB98[324];
 extern void fn_1_465D0(char *, int);
 extern char *fn_800839D8(char *string, const char *delimiters);
-extern void fn_1_150C8C(fn_1_150C8C_Object *obj);
-extern void fn_1_150F30(fn_1_150F30_StaticDisp *self);
 extern f32 lbl_1_rodata_CF70[54];
 extern void fn_1_1375C0(int arg0, void* arg1, void* arg2, void* arg3, void* arg4);
 extern const f32 lbl_1_rodata_8BB8;
@@ -571,23 +300,17 @@ extern u8 lbl_1_rodata_C6E8[1200];
 extern u8 lbl_1_rodata_CCDC[308];
 extern void fn_1_9A508(Obj_1_data_2A7E0 *state);
 extern void fn_1_9AD54(void);
-extern void fn_1_150D3C(H *h, void *arg);
 extern void fn_1_150654(void);
 extern void fn_1_151054(Obj_1_data_2A7E0_At3C *arg);
 extern void fn_1_103090(void *entry);
 extern void fn_1_1030A4(void *entry);
 extern void fn_1_103264(void *entry, void *arg);
-extern void fn_1_151668(fn_1_151668_StaticDisp *self);
 extern const f32 lbl_1_rodata_CF40[];
 extern void fn_1_150F74(void *self);
 extern s32 fn_1_45D0();
 extern void fn_1_FC414(void *arg0, void *arg1);
 extern u32 fn_80008BEC(u32 arg0, int arg1, int arg2);
 extern void fn_1_7F3AC(void* object);
-extern void fn_1_150CEC(fn_1_150CEC_Object *obj);
-extern void fn_1_150ED0(fn_1_150ED0_Object *obj, void *arg);
-extern struct A7 lbl_1_rodata_922C;
-extern struct B6 lbl_1_rodata_923C;
 
 /* fzgx:begin fn_1_1332FC */
 typedef struct {
@@ -1046,7 +769,9 @@ void fn_1_135894(void* arg0, void* arg1, void* arg2, void* arg3, void* arg4, voi
 
 /* fzgx:begin fn_1_136714 noprologue */
 #include "types.h"
+#include "dolphin/types.h"
 #include "font.h"
+#include "game/main_rel/sel_static_disp_types.h"
 
 extern u32 lbl_801A66B4;
 
@@ -1197,7 +922,9 @@ void fn_1_1368A0(s32 arg0, s16 arg1, s32 arg2, f32 farg0, f32 farg1, f32 farg2, 
 
 /* fzgx:begin fn_1_137288 noprologue */
 #include "types.h"
+#include "dolphin/types.h"
 #include "font.h"
+#include "game/main_rel/sel_static_disp_types.h"
 
 extern void* fn_1_12F118(void);
 extern void* fn_1_36AD0(void);
@@ -1687,8 +1414,6 @@ void fn_1_13A038(SelObj *obj)
 /* fzgx:end fn_1_13A038 */
 
 /* fzgx:begin fn_1_13A460 */
-
-
 void fn_1_13A460(struct Arg *arg0) {
     s32 y;
     s32 off;
@@ -1732,8 +1457,6 @@ void fn_1_13A460(struct Arg *arg0) {
 /* fzgx:end fn_1_13A460 */
 
 /* fzgx:begin fn_1_13A654 */
-
-
 void fn_1_13A654(struct Arg *arg0) {
     s32 off;
     s32 i;
@@ -2613,7 +2336,9 @@ int fn_1_13FB24(u32 arg0) {
 
 /* fzgx:begin fn_1_14108C noprologue */
 #include "types.h"
+#include "dolphin/types.h"
 #include "font.h"
+#include "game/main_rel/sel_static_disp_types.h"
 
 extern f32 lbl_1_rodata_26F8[22];
 
@@ -2970,7 +2695,6 @@ void fn_1_141754(s32 arg0, s32 arg1) {
 /* fzgx:end fn_1_141754 */
 
 /* fzgx:begin fn_1_1418EC */
-
 void fn_1_1418EC(s32 arg0, s32 arg1) {
     struct A7 a = lbl_1_rodata_922C;
     struct B6 b = lbl_1_rodata_923C;
@@ -3971,6 +3695,79 @@ void fn_1_14A00C(void) {
 }
 /* fzgx:end fn_1_14A00C */
 
+/* fzgx:begin fn_1_14A028 noprologue */
+#include "types.h"
+
+typedef struct {
+    u32 unk_0;
+    u8 pad_4[4];
+    u8 unk_8;
+} S3C30;
+typedef struct {
+    u8 pad_0[5];
+    u8 unk_5;
+    u8 pad_6[6];
+    u8 unk_C;
+    u8 pad_D[3];
+    u32 unk_10;
+    u8 unk_14;
+} S8E518;
+typedef struct {
+    void (*f0)(void);
+    void (*f4)(void);
+    void (*f8)(void);
+    u32 pad;
+} Ent;
+typedef struct {
+    u8 pad_0[8];
+    u16 unk_8;
+} S9F8;
+
+extern S3C30 lbl_1_bss_3C30;
+extern S8E518 lbl_1_bss_8E518;
+extern Ent lbl_1_data_42B94[];
+extern S9F8 lbl_1_bss_9F8;
+extern u8 lbl_1_bss_38200;
+extern u16 lbl_1_bss_50EC[10];
+extern u32 lbl_801A66A4;
+extern void fn_1_14A1AC(u8);
+
+void fn_1_14A028(void) {
+    S8E518 *p = (S8E518 *)&lbl_1_bss_8E518;
+    int ok = 1;
+    int i;
+    int s;
+    if (!(lbl_1_bss_3C30.unk_0 & 8) && (lbl_1_bss_3C30.unk_0 & 0x1000)) {
+        if (lbl_1_bss_38200) {
+            ok = 0;
+        } else {
+            for (i = 0; i < lbl_1_bss_3C30.unk_8; i++) {
+                if (lbl_1_bss_50EC[i]) {
+                    ok = 0;
+                    break;
+                }
+            }
+        }
+        if (p->unk_C != p->unk_5) {
+            if (p->unk_C != 0xff) {
+                lbl_1_data_42B94[p->unk_C].f8();
+            }
+            s = p->unk_5;
+            p->unk_C = s;
+            p->unk_10 = lbl_801A66A4;
+            lbl_1_data_42B94[(u8)s].f0();
+        }
+        fn_1_14A1AC(p->unk_5);
+        if (ok) {
+            lbl_1_data_42B94[p->unk_5].f4();
+            if ((lbl_1_bss_9F8.unk_8 >> 4) & 1) {
+                p->unk_14 ^= 1;
+            }
+        }
+    }
+}
+/* fzgx:end fn_1_14A028 */
+
 /* fzgx:begin fn_1_14A17C noprologue */
 #include "types.h"
 
@@ -4537,40 +4334,6 @@ void fn_1_14CA4C(void) {
 /* fzgx:end fn_1_14CA4C */
 
 /* fzgx:begin fn_1_14D5CC */
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 typedef struct {
     u32 v[8];
 } fn_1_14D5CC_Word8;
@@ -4952,6 +4715,103 @@ void fn_1_14DEA4(void *arg0, void *arg1, void *arg2, void *arg3) {
 }
 /* fzgx:end fn_1_14DEA4 */
 
+/* fzgx:begin fn_1_14DEC8 noprologue */
+#include "types.h"
+#include "dolphin/types.h"
+#include "font.h"
+#include "game/main_rel/sel_static_disp_types.h"
+
+typedef struct {
+    void *value;
+} Val;
+
+typedef struct {
+    u8 pad8[8];
+    Val *value;
+} Ref;
+
+typedef struct {
+    u8 pad344[0x344];
+    Ref *ref;
+} Obj;
+
+extern const f32 lbl_1_rodata_9C30;
+extern void fn_1_55FF0(f32);
+extern s16 fn_1_14F344(s16);
+extern void fn_80072558(void);
+extern void fn_1_151C3C(int, s16);
+extern void fn_1_556B8(void *);
+extern void fn_1_55210(void *);
+extern void fn_1_151C78(void);
+
+static inline void *find(void *base, int off) {
+    s16 *entry = (s16 *)base;
+    void *r = 0;
+    s16 i;
+    for (i = 0; (u32)(s32)i < 3; i++) {
+        if (fn_1_14F344(*entry) == 0) {
+            r = (u8 *)base + (s16)i * 0x360 + off;
+            break;
+        }
+        entry = (s16 *)((u8 *)entry + 0x360);
+    }
+    return r;
+}
+
+static inline void *find2(void *base, int off) {
+    void *r = 0;
+    s16 i;
+    s16 *entry;
+    i = 0;
+    entry = (s16 *)base;
+    for (; (u32)(s32)i < 3; i++) {
+        if (fn_1_14F344(*entry) == 0) {
+            r = (u8 *)base + (s16)i * 0x360 + off;
+            break;
+        }
+        entry = (s16 *)((u8 *)entry + 0x360);
+    }
+    return r;
+}
+
+void fn_1_14DEC8(void *arg0, void **arg1, void **arg2, s16 arg3, int arg4, f32 arg5) {
+    s16 *entry;
+    Obj *obj;
+    s16 i;
+    int same;
+    void *value;
+
+    same = lbl_1_rodata_9C30 == arg5;
+    if (!same) {
+        fn_1_55FF0(arg5);
+    }
+
+    i = 0;
+    entry = (s16 *)arg0;
+    obj = (Obj *)((u8 *)arg0 + ((s32)arg3 << 2));
+    for (; (u32)(s32)i < 3; i++) {
+        if (fn_1_14F344(*entry) == 0) {
+            value = obj->ref->value->value;
+            if (value != 0) {
+                fn_80072558();
+                fn_1_151C3C(0, *(s16 *)((u8 *)arg0 + (s16)i * 0x360));
+                if (same || arg4 != 0) {
+                    fn_1_556B8(value);
+                } else {
+                    fn_1_55210(value);
+                }
+                fn_1_151C78();
+                *arg1 = find(arg0, 0x23c);
+                *arg2 = find2(arg0, 0x228);
+                break;
+            }
+        }
+        entry = (s16 *)((u8 *)entry + 0x360);
+        obj = (Obj *)((u8 *)obj + 0x360);
+    }
+}
+/* fzgx:end fn_1_14DEC8 */
+
 /* fzgx:begin fn_1_14E054 */
 void fn_1_14E054(void *arg0, void *arg1, void *arg2) {
     fn_1_14E09C(arg0, arg1, arg2, 0);
@@ -4966,7 +4826,9 @@ void fn_1_14E078(void *arg0, void *arg1, void *arg2) {
 
 /* fzgx:begin fn_1_14E09C noprologue */
 #include "types.h"
+#include "dolphin/types.h"
 #include "font.h"
+#include "game/main_rel/sel_static_disp_types.h"
 
 extern const f32 lbl_1_rodata_9C30;
 extern void fn_1_55FF0(void);
@@ -4978,23 +4840,23 @@ extern void fn_1_556B8(void *);
 extern void fn_1_55210(void *);
 extern void fn_1_151C78(void);
 
-typedef struct fn_1_14E09C_fn_1_14E09C_Fn14E09CValue {
+typedef struct fn_1_14E09C_fn_1_14E09C_fn_1_14E09C_Fn14E09CValue {
     void *value;
-} fn_1_14E09C_fn_1_14E09C_Fn14E09CValue;
+} fn_1_14E09C_fn_1_14E09C_fn_1_14E09C_Fn14E09CValue;
 
-typedef struct fn_1_14E09C_fn_1_14E09C_Fn14E09CRef {
+typedef struct fn_1_14E09C_fn_1_14E09C_fn_1_14E09C_Fn14E09CRef {
     u8 pad8[8];
-    fn_1_14E09C_fn_1_14E09C_Fn14E09CValue *value;
-} fn_1_14E09C_fn_1_14E09C_Fn14E09CRef;
+    fn_1_14E09C_fn_1_14E09C_fn_1_14E09C_Fn14E09CValue *value;
+} fn_1_14E09C_fn_1_14E09C_fn_1_14E09C_Fn14E09CRef;
 
-typedef struct fn_1_14E09C_fn_1_14E09C_Fn14E09CObj {
+typedef struct fn_1_14E09C_fn_1_14E09C_fn_1_14E09C_Fn14E09CObj {
     u8 pad344[0x344];
-    fn_1_14E09C_fn_1_14E09C_Fn14E09CRef *ref;
-} fn_1_14E09C_fn_1_14E09C_Fn14E09CObj;
+    fn_1_14E09C_fn_1_14E09C_fn_1_14E09C_Fn14E09CRef *ref;
+} fn_1_14E09C_fn_1_14E09C_fn_1_14E09C_Fn14E09CObj;
 
-void fn_1_14E09C(fn_1_14E09C_fn_1_14E09C_Fn14E09CObj *arg0, void *arg1, s16 arg2, int arg3, f32 arg4) {
+void fn_1_14E09C(fn_1_14E09C_fn_1_14E09C_fn_1_14E09C_Fn14E09CObj *arg0, void *arg1, s16 arg2, int arg3, f32 arg4) {
     s16 *entry;
-    fn_1_14E09C_fn_1_14E09C_Fn14E09CObj *obj;
+    fn_1_14E09C_fn_1_14E09C_fn_1_14E09C_Fn14E09CObj *obj;
     s16 i;
     int same;
     void *value;
@@ -5006,7 +4868,7 @@ void fn_1_14E09C(fn_1_14E09C_fn_1_14E09C_Fn14E09CObj *arg0, void *arg1, s16 arg2
         }
 
         entry = (s16 *)arg0;
-        obj = (fn_1_14E09C_fn_1_14E09C_Fn14E09CObj *)((u8 *)arg0 + ((s32)arg2 << 2));
+        obj = (fn_1_14E09C_fn_1_14E09C_fn_1_14E09C_Fn14E09CObj *)((u8 *)arg0 + ((s32)arg2 << 2));
         for (i = 0; (u32)(s32)i < 3; i++) {
             if (fn_1_14F344(*entry) == 1) {
                 value = obj->ref->value->value;
@@ -5023,7 +4885,7 @@ void fn_1_14E09C(fn_1_14E09C_fn_1_14E09C_Fn14E09CObj *arg0, void *arg1, s16 arg2
                 }
             }
             entry = (s16 *)((u8 *)entry + 0x360);
-            obj = (fn_1_14E09C_fn_1_14E09C_Fn14E09CObj *)((u8 *)obj + 0x360);
+            obj = (fn_1_14E09C_fn_1_14E09C_fn_1_14E09C_Fn14E09CObj *)((u8 *)obj + 0x360);
         }
     }
 }
@@ -5043,7 +4905,9 @@ void fn_1_14E1BC(void *arg0, void *arg1, void *arg2) {
 
 /* fzgx:begin fn_1_14E1E0 noprologue */
 #include "types.h"
+#include "dolphin/types.h"
 #include "font.h"
+#include "game/main_rel/sel_static_disp_types.h"
 
 typedef struct {
     unsigned char pad[8];
@@ -5373,40 +5237,6 @@ int fn_1_14F014(void) {
 /* fzgx:end fn_1_14F014 */
 
 /* fzgx:begin fn_1_14F01C */
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 typedef struct {
     u32 v[8];
 } fn_1_14F01C_Word8;
@@ -5568,40 +5398,6 @@ s16 fn_1_14F01C(s16 value) {
 /* fzgx:end fn_1_14F01C */
 
 /* fzgx:begin fn_1_14F090 */
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 typedef struct {
     u32 v[8];
 } fn_1_14F090_Word8;
@@ -6135,40 +5931,6 @@ s16 fn_1_14F118(s16 value, void *table) {
 /* fzgx:end fn_1_14F118 */
 
 /* fzgx:begin fn_1_14F19C */
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 typedef struct {
     u32 v[8];
 } fn_1_14F19C_Word8;
@@ -6733,40 +6495,6 @@ s16 fn_1_14F344(s16 index) {
 /* fzgx:end fn_1_14F344 */
 
 /* fzgx:begin fn_1_14F38C */
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 typedef struct {
     u32 v[8];
 } fn_1_14F38C_Word8;
@@ -7012,7 +6740,9 @@ void fn_1_14F46C(DisplayState *state) {
 
 /* fzgx:begin fn_1_14FC80 noprologue */
 #include "types.h"
+#include "dolphin/types.h"
 #include "font.h"
+#include "game/main_rel/sel_static_disp_types.h"
 
 extern void *fn_1_36AD0(s16 arg0, u32 arg1);
 extern void fn_1_14F6F8(u8 arg0, u8 arg1, u8 arg2, u32 arg3);

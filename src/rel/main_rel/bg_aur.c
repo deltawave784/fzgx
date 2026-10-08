@@ -1,27 +1,10 @@
 #include "types.h"
 #include "rel/main_rel/globals.h"
 #include "rel/main_rel/bg_aur.h"
+#include "game/main_rel/bg_aur_types.h"
 
-struct fn_1_151C9C_lbl_1_rodata_D4F8 {
-    f32 unk_0;
-};
-
-struct fn_1_151C9C_lbl_1_rodata_D500 {
-    f64 unk_0;
-};
-
-typedef struct {
-    s32 count;
-    u8 pad_004[0x100];
-    s32 counter[64];
-    f32 timer[64];
-    f32 progress[64];
-    f32 cooldown[64];
-} Fn153B24Data;
 extern int fn_1_8D690(s16 arg0);
 extern int fn_1_8D72C(s16 index);
-extern struct fn_1_151C9C_lbl_1_rodata_D4F8 lbl_1_rodata_D4F8;
-extern struct fn_1_151C9C_lbl_1_rodata_D500 lbl_1_rodata_D500;
 extern u32 fn_1_151BE8(s16 arg0, s16 arg1);
 extern void fn_80008BA8(void *, void *, u32);
 extern void lbl_8006DFE8(void *);

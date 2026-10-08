@@ -1,20 +1,9 @@
 #include "types.h"
 #include "rel/main_rel/globals.h"
 #include "rel/main_rel/face.h"
+#include "game/main_rel/face_types.h"
 
-typedef struct { u32 a, b, c; } V3;
-
-typedef struct Output {
-    void* data;
-    void* aux;
-} Output;
-
-typedef struct LocalData {
-    u8 unk_0[0x34];
-    u32 size;
-} LocalData;
 extern u32 lbl_801A6410;
-extern V3 lbl_1_rodata_60A0;
 extern void fn_1_D2F50(void);
 extern void fn_1_D2F84(void);
 extern u32 fn_1_4630();
@@ -30,12 +19,10 @@ extern s32 fn_1_D123C(u32);
 extern s32 fn_1_3F440(u32);
 extern void fn_80071718(u32);
 extern void fn_800711A8(u32);
-extern void fn_1_D3020(void* unused, Output* output);
 extern u8 lbl_1_bss_7ACF8[8];
 extern char *fn_80083DB0(char *dst, const char *src);
 extern char *strcat(char *dest, const char *src);
 extern void OSReport(const char *format, ...);
-extern int DVDOpen(void*, LocalData*);
 extern u32 fn_80006354(u32 arg0, u32 arg1, u32 arg2, u32 arg3);
 extern s32 DVDClose();
 extern u32 lbl_1_bss_7ACEC;

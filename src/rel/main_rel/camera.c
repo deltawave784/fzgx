@@ -1,71 +1,8 @@
 #include "types.h"
 #include "rel/main_rel/globals.h"
 #include "rel/main_rel/camera.h"
+#include "game/main_rel/camera_types.h"
 
-struct fn_1_6400_lbl_801A6410 {
-    u32 unk_0;
-};
-
-typedef struct CameraTarget {
-    u8 pad_000[0x394];
-    void *data;
-} CameraTarget;
-
-struct fn_1_AA54_lbl_1_rodata_388 {
-    f64 unk_0;
-};
-
-typedef struct Vec3 {
-    f32 x;
-    f32 y;
-    f32 z;
-} Vec3;
-
-typedef struct camera_reset_transition_Camera {
-    u8 pad_00[0xA4];
-    s16 unk_A4;
-} camera_reset_transition_Camera;
-
-typedef struct camera_update_transition_Camera {
-    u8 pad_00[0x78];
-    s16 unk_78;
-    u8 pad_7A[0x2A];
-    s16 unk_A4;
-} camera_update_transition_Camera;
-
-typedef struct Transform {
-    u8 pad_08[0x8];
-    f32 unk_08;
-    u8 pad_0c[0xc];
-    f32 unk_18;
-    u8 pad_1c[0xc];
-    f32 unk_28;
-    u8 pad_2c[0x24];
-    u8 unk_50[0x2c];
-    u32 unk_7C;
-} Transform;
-
-typedef struct CameraStateLocal {
-    u8 pad_d4[0xd4];
-    f32 unk_D4;
-    f32 unk_D8;
-    f32 unk_DC;
-} CameraStateLocal;
-
-typedef struct { u8 pad_0[0x4]; f32 unk_4; u32 unk_8; f32 unk_C; } Bss_104C;
-
-typedef struct fn_1_ABAC_Target {
-    u8 pad_0[0x214];
-    u16 unk_214;
-} fn_1_ABAC_Target;
-
-typedef struct { u8 pad_0[0x20]; u32 unk_20; } Inner;
-
-typedef struct { u8 pad_0[0x8]; Inner *unk_8; } Outer;
-
-typedef struct {
-    u8 data[0x10];
-} CamEntry;
 extern u8 lbl_1_bss_6F244[128];
 extern u8 lbl_1_bss_6EAC6[10];
 extern s8 fn_1_86624();
@@ -85,13 +22,10 @@ extern u8 lbl_1_bss_CC0[152];
 extern u32 fn_1_CC5C(void);
 extern void fn_1_55FC4(f32 value);
 extern void fn_1_55FF0(f32 value);
-extern Outer *lbl_1_bss_38454;
 extern u32 fn_1_55210(u32);
-extern void lbl_8006D9D8(CamEntry *);
 extern void lbl_8006E14C(f32);
 extern void fn_80072558(void);
 extern u32 lbl_801A6CE0;
-extern struct fn_1_6400_lbl_801A6410 lbl_801A6410;
 extern void fn_1_46B4(u32 arg0, u32 arg1, const char *arg2, int arg3);
 extern u8 lbl_1_bss_F74;
 extern u8 lbl_1_bss_F75;
@@ -110,17 +44,9 @@ extern s32 fn_1_A5DC4(void);
 extern const f32 lbl_1_rodata_200;
 extern const f32 lbl_1_rodata_204;
 extern f64 lbl_1_rodata_360;
-extern struct fn_1_AA54_lbl_1_rodata_388 lbl_1_rodata_388;
 extern s16 camera_get_entry_field_0xa8(u32 index);
 extern void camera_set_entry_field_0xa8(u8 index, s16 value);
 extern u16 fn_1_8664C(int index);
-extern void fn_1_862D4(u8 index, Vec3 *out);
-extern void fn_1_8658C(u8 index, Vec3 *out);
-extern void fn_1_AEB8(camera_reset_transition_Camera *);
-extern void fn_1_AFC8(camera_update_transition_Camera *);
-extern Transform *lbl_801A6D00;
-extern CameraStateLocal *lbl_801A66CC;
-extern Bss_104C lbl_1_bss_104C;
 extern void OSReport(const char *format, ...);
 extern f64 lbl_1_rodata_4A8[7];
 extern u8 lbl_1_bss_108C[52];
@@ -128,7 +54,6 @@ extern void fn_1_BD54(void);
 extern void fn_1_B870(void);
 extern u8* camera_get_extended_state_storage();
 extern void lbl_8006DBAC(void);
-extern void fn_8006F038(Vec3 *arg0, Vec3 *arg1, s16 arg2);
 extern void lbl_8006DCDC(void);
 extern s16 fn_1_6B48(s32 index);
 extern void fn_1_6D2C(u32);
@@ -573,70 +498,11 @@ s16 fn_1_6B48(s32 index) {
 }
 /* fzgx:end fn_1_6B48 */
 
-/* fzgx:begin fn_1_6BC0 noprologue */
-#include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/camera.h"
-
-struct fn_1_6400_lbl_801A6410 {
-    u32 unk_0;
-};
-
-typedef struct CameraTarget {
-    u8 pad_000[0x394];
-    void *data;
-} CameraTarget;
-
-struct fn_1_AA54_lbl_1_rodata_388 {
-    f64 unk_0;
-};
-
-typedef struct Vec3 {
-    f32 x;
-    f32 y;
-    f32 z;
-} Vec3;
-
-typedef struct camera_reset_transition_Camera {
-    u8 pad_00[0xA4];
-    s16 unk_A4;
-} camera_reset_transition_Camera;
-
-typedef struct camera_update_transition_Camera {
-    u8 pad_00[0x78];
-    s16 unk_78;
-    u8 pad_7A[0x2A];
-    s16 unk_A4;
-} camera_update_transition_Camera;
-
-typedef struct Transform {
-    u8 pad_08[0x8];
-    f32 unk_08;
-    u8 pad_0c[0xc];
-    f32 unk_18;
-    u8 pad_1c[0xc];
-    f32 unk_28;
-    u8 pad_2c[0x24];
-    u8 unk_50[0x2c];
-    u32 unk_7C;
-} Transform;
-
-typedef struct CameraStateLocal {
-    u8 pad_d4[0xd4];
-    f32 unk_D4;
-    f32 unk_D8;
-    f32 unk_DC;
-} CameraStateLocal;
-
-typedef struct { u8 pad_0[0x4]; f32 unk_4; u32 unk_8; f32 unk_C; } Bss_104C;
-extern s8 fn_1_86624();
-
-// lbl_1_bss_9F8.unk_8 read as a bitfield: retail keeps the halfword load and extracts the
-// two low bits with extrwi/clrlwi
+/* fzgx:begin fn_1_6BC0 */
+// lbl_1_bss_9F8.unk_8 read as a 16-bit button word; bits 0/1 select previous/next camera
 typedef struct {
     u8 pad_0[0x8];
-    u16 unk_8_pad : 6;
-    u16 buttons : 10;
+    u16 buttons : 16;
 } CameraSelectInput;
 
 #define CAMERA_SELECT_INPUT ((CameraSelectInput *)&lbl_1_bss_9F8)
@@ -669,8 +535,8 @@ void fn_1_6BC0(void) {
 
     if (next != cur) {
         game_camera_entries->unk_2 = next;
-        *(s8 *)((u8 *)fn_1_86254((void *)cur) + 0x475) = -1;
-        *(s8 *)((u8 *)fn_1_86254((void *)next) + 0x475) = 0;
+        *(s8 *)((u8 *)fn_1_86254(cur) + 0x475) = -1;
+        *(s8 *)((u8 *)fn_1_86254(next) + 0x475) = 0;
     }
 }
 #pragma opt_common_subs reset
@@ -1656,33 +1522,10 @@ void camera_save_parameters(f32 first_parameter, f32 second_parameter) {
 }
 /* fzgx:end camera_save_parameters */
 
-/* fzgx:begin fn_1_BFA0 pool noprologue */
-#include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/camera.h"
-
-typedef struct {
-    u8 data[0x10];
-} CamEntry;
-
-typedef struct {
-    u8 pad_0[0x4];
-    u8 unk_4;
-    u8 pad_5[0x3];
-    CamEntry entries[2];   /* 0x08: retail takes &entries[1] */
-    u8 pad_28[0x8];
-    f32 unk_30;
-    f32 unk_34;
-    u8 unk_38;
-} CamBlock;
-
-typedef struct { u8 pad_0[0x20]; u32 unk_20; } Inner;
-typedef struct { u8 pad_0[0x8]; Inner *unk_8; } Outer;
-
+/* fzgx:begin fn_1_BFA0 pool */
 extern u32 fn_1_CC5C(void);
 extern void fn_1_55FC4(f32);
 extern void fn_1_55FF0(f32);
-extern Outer *lbl_1_bss_38454;
 extern u32 fn_1_55210(u32);
 extern void lbl_8006D9D8(CamEntry *);
 extern void lbl_8006E14C(f32);
@@ -1696,7 +1539,7 @@ u8 lbl_1_bss_1010_gap_1015;
 u16 lbl_1_bss_1010_gap_1015_fill_1016;
 CamEntry fzgx_obj_camera_state[2];
 u32 camera_state_fill_1038;
-u32 lbl_1_bss_103C;
+u8 lbl_1_bss_103C[4];
 f32 lbl_1_bss_1040;
 f32 lbl_1_bss_1044;
 u8 fzgx_obj_camera_flag_0;
@@ -1717,9 +1560,8 @@ static void fzgx_bss_layout(void) {
 }
 #pragma section code_type ".text"
 
+/* Per-frame camera update: runs the pending callback and refreshes the camera state. */
 void fn_1_BFA0(void) {
-    
-
     if (lbl_1_bss_1014 != 0) {
         fn_1_CC5C();
     }

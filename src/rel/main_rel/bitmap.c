@@ -1,25 +1,11 @@
 #include "types.h"
 #include "rel/main_rel/globals.h"
 #include "rel/main_rel/bitmap.h"
+#include "game/main_rel/bitmap_types.h"
 
-typedef struct {
-    s32 unk_0;
-    u8 pad_4[0x24];
-} BitmapEntry;
-
-typedef struct {
-    s32 unk_0;
-    u8 pad_4[0x24];
-} Fn147EE4Entry;
-
-typedef struct {
-    s32 unk_0;
-    u8 pad_4[0x24];
-} Fn147F74Entry;
 extern u32 lbl_801A66B4;
 extern void OSPanic(const unsigned char *, ...);
 extern s32 fn_1_465D0(s32 arg0, s32 arg1);
-extern void fn_1_47AD4(BitmapEntry *, s32, s32, s32);
 extern void fn_1_48418(s32);
 extern u32 lbl_1_bss_3E020;
 extern void fn_1_48214(int index, int enabled);
@@ -34,6 +20,7 @@ extern void fn_1_46B4(u32 arg0, u32 arg1, const char *arg2, int arg3);
 extern void *fn_1_48730(u32 value);
 extern f32 lbl_1_rodata_10C0[5];
 extern f32 lbl_1_bss_3E05C;
+extern void fn_1_484CC(s32 index);
 
 /* fzgx:begin fn_1_47E54 */
 typedef struct {
@@ -174,15 +161,83 @@ void fn_1_481E8(int arg0) {
 }
 /* fzgx:end fn_1_481E8 */
 
+/* fzgx:begin fn_1_48214 */
+typedef struct {
+    s32 unk_0;
+    u8 pad_4[0x1C];
+    Obj_1_data_FCD4_At20 *unk_20;
+    u8 unk_24;
+    u8 pad_25[0x3];
+} TextureRecord;
+
+typedef struct {
+    u32 unk_0;
+    u32 unk_4;
+    u32 unk_8;
+} fn_1_48214_BitmapSlot;
+
+extern s32 lbl_801A6410;
+extern s32 fn_8006FDEC(void);
+extern void fn_1_46B4(u32 arg0, u32 arg1, const char *arg2, int arg3);
+
+// Releases the texture records in [index] (or all of them for index 188).
+void fn_1_48214(int index, int enabled) {
+    s16 i;
+    TextureRecord *entry;
+    s16 end;
+    s32 found;
+    s32 j;
+    TextureRecord *other;
+    u8 bitmap;
+
+    fn_8006FDEC();
+    if (index == 0xbc) {
+        i = 1;
+        end = 0xbc;
+    } else {
+        i = index < 1 ? 1 : index;
+        end = index + 1;
+    }
+    for (entry = &((TextureRecord *)&lbl_1_data_FCD4)[i]; i < end; i++, entry++) {
+        if (entry->unk_0 != 0) {
+            bitmap = entry->unk_24;
+            if (bitmap == 0) {
+                fn_1_46B4(lbl_801A6410, entry->unk_20->unk_C, (char *)lbl_1_data_1A368, 0x21e);
+                fn_1_46B4(lbl_801A6410, (u32)entry->unk_20, (char *)lbl_1_data_1A368, 0x21f);
+                entry->unk_0 = 0;
+            } else {
+                fn_1_46B4(((fn_1_48214_BitmapSlot *)&lbl_1_data_6CA0)[bitmap].unk_0, entry->unk_20->unk_C,
+                          (char *)lbl_1_data_1A368, 0x223);
+                fn_1_46B4(((fn_1_48214_BitmapSlot *)&lbl_1_data_6CA0)[bitmap].unk_0, (u32)entry->unk_20,
+                          (char *)lbl_1_data_1A368, 0x224);
+                entry->unk_0 = 0;
+                if (enabled == 0) {
+                    found = 0;
+                    for (j = 0; j < 0xbc; j++) {
+                        other = &((TextureRecord *)&lbl_1_data_FCD4)[j];
+                        if (other->unk_0 != 0 && other->unk_24 == entry->unk_24) {
+                            found = 1;
+                        }
+                    }
+                    if (found == 0) {
+                        fn_1_484CC(entry->unk_24);
+                    }
+                }
+            }
+        }
+    }
+}
+/* fzgx:end fn_1_48214 */
+
 /* fzgx:begin fn_1_48418 */
 typedef struct {
     s32 unk_0;
     s32 unk_4;
     s32 unk_8;
-} BitmapSlot;
+} fn_1_48418_BitmapSlot;
 
 void fn_1_48418(s32 index) {
-    BitmapSlot *obj = (BitmapSlot *)&lbl_1_data_6CA0 + index;
+    fn_1_48418_BitmapSlot *obj = (fn_1_48418_BitmapSlot *)&lbl_1_data_6CA0 + index;
     int valid;
     if (index > 2) {
         valid = 0;
@@ -235,23 +290,12 @@ u32 fn_1_485A8(s32 index) {
 }
 /* fzgx:end fn_1_485A8 */
 
-/* fzgx:begin fn_1_485C8 noprologue */
-#include "types.h"
-
-extern struct fn_1_485C8_lbl_1_data_FCD4 lbl_1_data_FCD4;
+/* fzgx:begin fn_1_485C8 */
 extern u32 lbl_1_bss_3E020;
 
-struct fn_1_485C8_lbl_1_data_FCD4_0_E40 {
-    u8 pad_0[0x20];
-    u32 unk_20;
-    u8 pad_24[0x4];
-};
-struct fn_1_485C8_lbl_1_data_FCD4 {
-    struct fn_1_485C8_lbl_1_data_FCD4_0_E40 unk_0[1];
-};
-
+// Latch the pointer at offset 0x20 of the selected bitmap record.
 void fn_1_485C8(u32 arg0) {
-    lbl_1_bss_3E020 = lbl_1_data_FCD4.unk_0[arg0].unk_20;
+    lbl_1_bss_3E020 = (u32)lbl_1_data_FCD4[arg0].unk_20;
 }
 /* fzgx:end fn_1_485C8 */
 

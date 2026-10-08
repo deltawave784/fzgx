@@ -2,12 +2,8 @@
 #include "rel/main_rel/globals.h"
 #include "rel/main_rel/relocation.h"
 #include "dolphin/os/OSTime.h"
+#include "game/main_rel/relocation_types.h"
 
-struct fn_1_A6480_d58 {
-    u8 pad[8];
-    u16 unk_8;
-    u16 unk_A;
-};
 extern u32 lbl_1_bss_6F5C0;
 extern u8 lbl_1_bss_6F5C4[44];
 extern u8 *lbl_801A6410;
@@ -18,7 +14,6 @@ extern u32 VIGetDTVStatus(void);
 extern void fn_1_3308(void);
 extern u32 OSGetProgressiveMode(void);
 extern f32 lbl_1_rodata_49D8;
-extern struct fn_1_A6480_d58 lbl_1_bss_D58;
 extern void fn_8006CE1C(f32 arg0);
 extern u32 OSGetResetCode(void);
 extern void OSSetProgressiveMode(u32 mode);

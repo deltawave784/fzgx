@@ -1,82 +1,8 @@
 #include "types.h"
 #include "rel/main_rel/globals.h"
 #include "rel/main_rel/bg_san.h"
+#include "game/main_rel/bg_san_types.h"
 
-typedef struct {
-    u8 unk_00[0x10];
-    s32 unk_10;
-} BgSanContext;
-
-typedef struct {
-    f32 x, y, z;
-} Fn1DABB4_Vec;
-
-typedef struct BgSanObject {
-    u8 unk_00[0x10];
-    s32 unk_10;
-    void *unk_14;
-    u8 unk_18[0x80c];
-    f32 unk_824;
-    f32 unk_828;
-    f32 unk_82c;
-} BgSanObject;
-
-typedef struct BgSanPosition {
-    f32 unk_00;
-    f32 unk_04;
-    f32 unk_08;
-} BgSanPosition;
-
-typedef struct fn_1_DC3A4_Entry {
-    u8 unk00[0x68];
-    s32 initialized;
-    u8 unk6c[0x40];
-} fn_1_DC3A4_Entry;
-
-typedef struct fn_1_DC3A4_Container {
-    s32 count;
-    fn_1_DC3A4_Entry entries[1];
-} fn_1_DC3A4_Container;
-
-typedef struct SanEntry {
-    u8 unk00[0x08];
-    u32 unk08;
-    u8 unk0c[0x20];
-    f32 value2c;
-    f32 value30;
-    f32 value34;
-    u8 unk38[0x74];
-} SanEntry;
-
-typedef struct SanContainer {
-    s32 count;
-    SanEntry entries[1];
-} SanContainer;
-
-typedef struct fn_1_DC404_Entry {
-    u8 data[0xac];
-} fn_1_DC404_Entry;
-
-typedef struct fn_1_DC404_Container {
-    s32 count;
-    fn_1_DC404_Entry entries[1];
-} fn_1_DC404_Container;
-
-struct fn_1_DA6A8_lbl_801A6410 {
-    u32 unk_0;
-};
-
-struct Sig_fn_80077B64_fn_80077B64_Arg0 {
-    u8 pad_0[0x4];
-    u32 unk_4;
-};
-
-struct Sig_fn_80077B14_fn_80077B14_Arg0 {
-    u8 pad_0[0x4];
-    u32 unk_4;
-    u8 pad_8[0x18];
-    u32 unk_20;
-};
 extern void fn_1_DAAFC();
 extern f32 lbl_1_rodata_6628;
 extern void fn_1_FB87C(u32 *values, u8 count);
@@ -89,7 +15,6 @@ extern void fn_1_DAB1C();
 extern void fn_1_FB9C0(int index);
 extern void fn_1_103F10(void *arg);
 extern void fn_1_DAB3C();
-extern const Fn1DABB4_Vec lbl_1_rodata_662C;
 extern void lbl_8006D91C(s32);
 extern void mathutil_mtxA_rotate_x(s32);
 extern void mathutil_mtxA_rotate_y(s32);
@@ -106,16 +31,10 @@ extern s16 fn_1_3F0C8(void);
 extern f32 lbl_1_rodata_6638;
 extern const f32 lbl_1_rodata_663C;
 extern void fn_1_106084(void *target, s32 index, f32 x, f32 y, f32 z);
-extern void fn_1_DB138(BgSanContext *context);
-extern void fn_1_DB198(BgSanObject *object, void *arg1);
 extern void fn_1_DB268(void *entry);
-extern void *fn_1_5448C(BgSanPosition *position);
-extern void fn_1_DC3A4(fn_1_DC3A4_Container *container);
 extern u32 fn_1_9D260();
 extern void fn_1_DCB10(void);
-extern void fn_1_DC454(SanContainer *container, void *arg);
 extern void fn_1_DC648(void *object);
-extern void fn_1_DC404(fn_1_DC404_Container *container);
 extern u32 lbl_801A66A0;
 extern f32 lbl_8006D188(s32);
 extern void fn_1_1030D4(void *entry, void *arg);
@@ -144,9 +63,6 @@ extern void lbl_8006DCA4(void *data);
 extern void fn_1_DB53C(void);
 extern void fn_1_103264(void *, void *);
 extern void OSPanic(const char *file, int line, const char *msg, ...);
-extern struct fn_1_DA6A8_lbl_801A6410 lbl_801A6410;
-extern void * fn_80077B64(struct Sig_fn_80077B64_fn_80077B64_Arg0 *);
-extern s32 fn_80077B14(struct Sig_fn_80077B14_fn_80077B14_Arg0 *);
 extern void fn_1_46B4(u32 arg0, u32 arg1, const char *arg2, int arg3);
 extern u32 fn_1_105AB8(u32, u32);
 
@@ -517,36 +433,31 @@ void fn_1_DADA8(void) {
 }
 /* fzgx:end fn_1_DADA8 */
 
-/* fzgx:begin fn_1_DAE24 noprologue */
-#include "types.h"
-
-extern u32 lbl_1_data_2A7E0[62];
+/* fzgx:begin fn_1_DAE24 */
 extern void fn_1_9AD54(void);
-extern s32 fn_1_58C4(void);
-extern s16 fn_1_5948(s32 index);
-extern s16 fn_1_7B054(s16 value);
+extern s32 fn_1_58C4();
+extern s16 fn_1_7B054();
 extern s16 fn_1_3F0C8(void);
 extern f32 lbl_1_rodata_6638;
-extern f32 lbl_1_rodata_663C;
+extern const f32 lbl_1_rodata_663C;
 extern void fn_1_106084(void *target, s32 index, f32 x, f32 y, f32 z);
-extern void fn_1_627C(s32 index);
-extern void fn_1_DB138(void *object);
 
+/* Per-frame update of the san background: spawns effects for each active slot. */
 void fn_1_DAE24(void) {
     s32 count;
     f32 *value;
     s32 index;
     u32 object;
 
-    object = lbl_1_data_2A7E0[15];
+    object = (u32)lbl_1_data_2A7E0.unk_3C;
     fn_1_9AD54();
     count = fn_1_58C4();
     value = (f32 *)object;
     for (index = 0; index < count; index++) {
-        if (fn_1_7B054(fn_1_5948(index)) == 42) {
+        fn_1_5948(index);
+        if (fn_1_7B054() == 42) {
             if (fn_1_3F0C8() != 39) {
-                fn_1_106084((void *)(object + 0x142a0), index,
-                    lbl_1_rodata_6638, *value, lbl_1_rodata_663C);
+                fn_1_106084((void *)(object + 0x142a0), index, lbl_1_rodata_6638, *value, lbl_1_rodata_663C);
             }
         }
         fn_1_627C(index);

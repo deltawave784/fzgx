@@ -1,32 +1,8 @@
 #include "types.h"
 #include "rel/main_rel/globals.h"
 #include "rel/main_rel/bg_cas.h"
+#include "game/main_rel/bg_cas_types.h"
 
-typedef struct {
-    f32 x, y, z;
-} fn_1_FF6B8_CasVec;
-
-typedef struct {
-    s32 life;        /* 0x00 */
-    fn_1_FF6B8_CasVec pos;      /* 0x04 */
-    fn_1_FF6B8_CasVec prev;     /* 0x10 */
-    fn_1_FF6B8_CasVec vel;      /* 0x1C */
-    s16 rot;         /* 0x28 */
-    s16 rotVel;      /* 0x2A */
-    f32 scale;       /* 0x2C */
-    f32 size;        /* 0x30 */
-} CasParticle;
-
-typedef struct {
-    u8 pad_0[0x4];
-    s32 active;      /* 0x04 */
-    fn_1_FF6B8_CasVec pos;      /* 0x08 */
-    u8 pad_14[0xC];
-    fn_1_FF6B8_CasVec vel;      /* 0x20 */
-    u8 pad_2C[0xC];
-    f32 size;        /* 0x38 */
-    CasParticle particles[20]; /* 0x3C */
-} CasEmitter;
 extern const f32 lbl_1_rodata_7600;
 extern const f32 lbl_1_rodata_7604;
 extern u32 GXGetTexBufferSize(u16, u16, u32, u8, u8);
@@ -98,7 +74,6 @@ extern u32 fn_1_904(void);
 extern u32 fn_1_914(void);
 extern void fn_1_681C(u32 index, u32 *output);
 extern u32 fn_1_1FB80(void *, u32);
-extern void fn_1_FF6B8(CasEmitter *em);
 extern void fn_1_FC60C(void);
 extern void DCFlushRange(void *, u32);
 extern void GXInitTexObj(void *, void *, u32, u32, u32, u32, u32, u32);
@@ -231,8 +206,9 @@ void fn_1_FB87C(u32 *values, u8 count) {
 #include "types.h"
 #include "rel/main_rel/globals.h"
 #include "rel/main_rel/bg_cas.h"
+#include "game/main_rel/bg_cas_types.h"
 
-// Initializes the selected background-cas state before running its setup stages.
+// Activates the selected background-cas state and runs its setup stages.
 void fn_1_FB96C(int index) {
     u32 *states = &lbl_1_bss_84454.unk_0;
 

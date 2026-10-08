@@ -1,23 +1,9 @@
 #include "types.h"
 #include "rel/main_rel/globals.h"
 #include "rel/main_rel/alloc.h"
+#include "game/main_rel/alloc_types.h"
 
-typedef struct {
-    u32 unk_00;
-    u32 unk_04;
-    u32 unk_08;
-} Fn1_4928Entry;
-
-typedef struct Fn14D14Data {
-    u8 value0;
-    u8 value1;
-    u8 unk2;
-    u8 flags;
-    u16 value4;
-} Fn14D14Data;
-extern Fn1_4928Entry lbl_1_bss_DCC[32];
 extern void fn_1_4BB0(void);
-extern f32 fn_1_4D14(Fn14D14Data *data);
 extern void fn_1_4CD8(void);
 extern void fn_8006CE1C(f32 arg0);
 extern u32 fn_1_435C(u32 value);

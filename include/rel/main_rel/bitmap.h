@@ -8,21 +8,22 @@
 // functions or living in its .data block), layouts recovered from every access in the module.
 
 // lbl_1_data_FCD4: .data size 0x1D60, 11 refs from bitmap.c
+// 0xBC texture records of 0x28 bytes (fn_1_485A8/fn_1_485C8 index them by index*0x28)
 typedef struct {
     u8 pad_0[0x4];
-    u32 unk_4;  // 3 loads, 0 stores
+    u32 unk_4;
     u8 pad_8[0x4];
-    u32 unk_C;  // 6 loads, 0 stores
+    u32 unk_C;
 } Obj_1_data_FCD4_At20;
 typedef struct {
-    u32 unk_0;  // 14 loads, 2 stores
-    u32 unk_4;  // 2 loads, 0 stores
+    u32 unk_0;
+    u32 unk_4;
     u8 pad_8[0x18];
-    Obj_1_data_FCD4_At20 *unk_20;  // 10 loads, 0 stores
-    u8 unk_24;  // 13 loads, 0 stores
-    u8 pad_25[0x1D3B];
+    Obj_1_data_FCD4_At20 *unk_20;
+    u8 unk_24;
+    u8 pad_25[0x3];
 } Obj_1_data_FCD4;
-extern Obj_1_data_FCD4 lbl_1_data_FCD4;
+extern Obj_1_data_FCD4 lbl_1_data_FCD4[0xBC];  // typedefs.json decl override
 
 // lbl_1_data_1A368: .data size 0x9, 7 refs from bitmap.c (own data block)
 extern u8 lbl_1_data_1A368[0x9];
@@ -32,12 +33,19 @@ extern u8 lbl_1_data_1A374[0x19];
 
 // lbl_1_data_6CA0: .data size 0x24, 3 refs from bitmap.c
 typedef struct {
-    u32 unk_0;  // 3 loads, 2 stores
+    u32 unk_0;  // 3 loads, 3 stores
     u32 unk_4;  // 2 loads, 1 stores
     u32 unk_8;  // 2 loads, 0 stores
     u8 pad_C[0x18];
 } Obj_1_data_6CA0;
 extern Obj_1_data_6CA0 lbl_1_data_6CA0;
+
+// lbl_1_data_1A3B8: .data size 0xAD8, 2 refs from bitmap.c (own data block)
+typedef struct {
+    u16 unk_0;  // 2 loads, 0 stores
+    u8 pad_2[0xAD6];
+} Obj_1_data_1A3B8;
+extern Obj_1_data_1A3B8 lbl_1_data_1A3B8;
 
 // lbl_1_bss_3E058: .bss size 0x4, 2 refs from bitmap.c
 extern u32 lbl_1_bss_3E058;
@@ -62,13 +70,6 @@ typedef struct {
     u8 pad_38[0x968];
 } Obj_1_data_1AEA8;
 extern Obj_1_data_1AEA8 lbl_1_data_1AEA8;
-
-// lbl_1_data_1A3B8: .data size 0xAD8, 2 refs from bitmap.c (own data block)
-typedef struct {
-    u16 unk_0;  // 2 loads, 0 stores
-    u8 pad_2[0xAD6];
-} Obj_1_data_1A3B8;
-extern Obj_1_data_1A3B8 lbl_1_data_1A3B8;
 
 // lbl_1_data_1BCC4: .data size 0x4, 2 refs from bitmap.c (own data block)
 extern u32 lbl_1_data_1BCC4;

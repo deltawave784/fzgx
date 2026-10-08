@@ -3,36 +3,8 @@
 #include "rel/main_rel/globals.h"
 #include "rel/main_rel/ghost.h"
 #include "dolphin/ar.h"
+#include "game/main_rel/ghost_types.h"
 
-typedef struct {
-    f32 x;
-    f32 y;
-    f32 z;
-} Vec3;
-
-typedef struct {
-    u32 field_0;
-    s16 field_4;
-    s16 field_6;
-    u8 _pad8[0x74];
-    Vec3 field_7c;
-    u8 _pad88[0x64];
-    u8 _pad_ec[0x60];
-    u8 field_14c[0xb4];
-    f32 field_200;
-    u8 _pad204[0x20];
-    f32 field_224;
-    u8 _pad228[0x24d];
-    u8 field_475;
-} FnObject;
-
-typedef struct {
-    u32 unk_0;
-    u8 unk_4;
-    u8 pad_5[0xF];
-    u8 unk_14;
-    u8 pad_15[0x33];
-} fn_1_EF4F8_Obj_1_bss_7ECB4;
 extern u32 lbl_801A6410[];
 extern void fn_1_46B4(u32 arg0, u32 arg1, const char *arg2, int arg3);
 extern int fn_1_B7E98(int index);
@@ -41,9 +13,6 @@ extern void fn_1_B9BE0(void);
 extern void fn_1_AA6D8(s32, s32, void *);
 extern void fn_1_F1D70(void);
 extern void fn_80008BEC(void *dest, int value, u32 size);
-extern void fn_1_F143C(FnObject *obj, s32 index, const f32 *a, const f32 *b, void *arg5);
-extern s32 fn_1_BA144(fn_1_EF4F8_Obj_1_bss_7ECB4 *);
-extern void fn_1_BC310(fn_1_EF4F8_Obj_1_bss_7ECB4 *);
 extern void fn_1_BC29C();
 extern void fn_1_EE530(void);
 extern u32 fn_1_4630();

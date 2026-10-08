@@ -4,119 +4,8 @@
 #include "rel/main_rel/font.h"
 #include "runtime/va_list.h"
 #include "font.h"
+#include "game/main_rel/font_types.h"
 
-typedef struct FontParams {
-    u8 unk_00[0x30];
-    u32 unk_30;
-    f32 unk_34;
-    u8 unk_38[0x58 - 0x38];
-} FontParams;
-
-typedef struct fn_1_4EB74_FontObject {
-    u32 unk_0;
-    u8 pad_4[0x2c];
-    u32 unk_30;
-} fn_1_4EB74_FontObject;
-
-typedef struct fn_1_54668_node {
-    struct fn_1_54668_node *next;
-    void *data;
-} fn_1_54668_node;
-
-typedef struct {
-    f32 x;
-    f32 y;
-    f32 z;
-} Vec3;
-
-typedef struct fn_1_547F8_node {
-    struct fn_1_547F8_node *next;
-    void (*callback)(struct fn_1_547F8_node *);
-} fn_1_547F8_node;
-
-typedef struct fn_1_563E4_FontState {
-    u8 pad_00[8];
-    f32 scale;
-    u8 pad_0C[6];
-    u8 enabled;
-    u8 color;
-    u32 value;
-    f32 x;
-    f32 y;
-    u8 pad_20[4];
-    u32 state;
-} fn_1_563E4_FontState;
-
-typedef struct State {
-    FontDrawPacket *current;
-    s32 warned;
-    u8 unk_8[0x2028];
-    s32 override_enabled, override_value;
-    u32 texture[8];
-} State;
-
-typedef struct Config {
-    u32 capacity;
-    FontDrawPacket *packets;
-    u8 unk_8[0x44];
-    char warning[1];
-} Config;
-
-typedef struct ImageInfo {
-    u8 unk_0[8];
-    u16 width, height;
-    u32 unk_C;
-} ImageInfo;
-
-typedef struct Images {
-    u32 unk_0;
-    ImageInfo *info;
-    u32 unk_8;
-    u32 (*textures)[8];
-} Images;
-
-typedef struct Resource {
-    s32 loaded;
-    u8 unk_4[0x1c];
-    Images *images;
-    u32 unk_24;
-} Resource;
-
-struct fn_1_530C8_lbl_1_rodata_282C {
-    f32 unk_0;
-};
-
-struct FzgxCopy_88 { u32 words[22]; };
-
-typedef struct {
-    u8 pad_00[4];
-    u32 unk_04;
-    void *unk_08;
-    u8 unk_0C[0x30];
-    u16 unk_3C;
-    u8 pad_3E[2];
-    Obj_1_bss_6C7A4 unk_40;
-    void *unk_68[4];
-} Fn1_55EA0Object;
-
-typedef struct fn_1_56470_FontState {
-    u8 unk_00[4];
-    void *unk_04;
-    f32 unk_08;
-    s8 unk_0C;
-    u8 unk_0D;
-    s8 unk_0E;
-    u8 unk_0F;
-    u8 unk_10;
-    u8 unk_11;
-    u8 unk_12;
-    u8 unk_13;
-    u32 unk_14;
-    f32 unk_18;
-    f32 unk_1C;
-    u32 unk_20;
-    u32 unk_24;
-} fn_1_56470_FontState;
 extern s32 lbl_801A6410;
 extern u32 lbl_1_bss_3E060[1387];
 extern void fn_1_46B4(u32 arg0, u32 arg1, const char *arg2, int arg3);
@@ -167,18 +56,15 @@ extern f32 fn_1_542B8(void);
 extern const f32 lbl_1_rodata_28A8;
 extern u8 *lbl_801A66CC;
 extern void fn_1_556B8(void *value);
-extern void fn_1_563E4(fn_1_563E4_FontState *font);
 extern void **fn_1_54448(s32 arg0);
 extern void * fn_1_548AC(u32);
 extern u16 fn_1_7BE94(void);
 extern void fn_1_5489C(void **arg0, void **arg1);
 extern void fn_1_56530(void);
 extern void lbl_8006DD14(void *value, void *object);
-extern void fn_1_55EA0(Fn1_55EA0Object *object);
 extern void fn_1_55924(void *value, void *arg);
 extern void fn_800780A4(void *value);
 extern void lbl_8006DBAC(void *);
-extern void fn_1_56470(fn_1_56470_FontState *state);
 extern void fn_1_7BEAC(u16);
 extern void fn_800749B0(s32 arg0, void *arg1);
 extern void fn_800781B8(void *);
@@ -195,10 +81,7 @@ extern void fn_1_55C48(void);
 extern void fn_1_4E500(void);
 extern void fn_1_48D80(void *value);
 extern void fn_1_4E6F4(void);
-extern s32 fn_1_4E724(FontParams *arg);
 extern s32 fn_1_4B16C(s32 value);
-extern s32 fn_1_4EC74(FontParams *);
-extern s32 fn_1_4EB74(fn_1_4EB74_FontObject *self);
 extern f64 lbl_1_rodata_2778[2];
 extern u16 fn_1_48690(u32 unused);
 extern u16 fn_1_486C4(u32 value);
@@ -208,10 +91,7 @@ extern u16 fn_1_A5DB0(void);
 extern const f32 lbl_1_rodata_2770;
 extern const f32 lbl_1_rodata_276C;
 extern f32 lbl_8006D188(s16);
-extern struct fn_1_530C8_lbl_1_rodata_282C lbl_1_rodata_282C;
 extern u32 fn_1_54320(void);
-extern void fn_1_54668(fn_1_54668_node *node, s32 count, u32 reverse);
-extern void fn_1_547F8(fn_1_547F8_node *node);
 extern u32 fn_1_5448C();
 extern void fn_80074B40(u8 *arg0);
 extern void fn_80077B04(f32 value);
@@ -3253,6 +3133,93 @@ void fn_1_550E0(void) {
     fn_800794F0((u8 *)lbl_801A66CC + 0x50, (u8 *)(void *)(lbl_1_bss_6C710), 0x84);
 }
 /* fzgx:end fn_1_550E0 */
+
+/* fzgx:begin fn_1_55210 noprologue */
+#include "types.h"
+#include "rel/main_rel/font.h"
+
+typedef struct {
+    u8 pad_00[0x1a];
+    u16 count_b;
+    u16 count_c;
+} Fn55210Arg;
+
+typedef struct {
+    u8 pad_0[4];
+    void *cb;
+    void *owner;
+    u8 pad_c[0x30];
+    u16 id;
+    u8 pad_3e[2];
+    u8 copy[0x28];
+    void *slots[4];
+} Fn55210Obj;
+
+typedef struct { u8 b[0x28]; } Fn55210Copy;
+
+extern const f32 lbl_1_rodata_28A8;
+extern void fn_1_556B8(void *);
+extern void fn_1_563E4(void *);
+extern void *fn_1_5448C(void *);
+extern void *fn_1_548AC(u32);
+extern void fn_1_55EA0(void *);
+extern u16 fn_1_7BE94(void);
+extern void fn_1_5489C(void *, void *);
+extern void fn_1_56530(void);
+extern void fn_1_557C4(void *);
+extern void fn_800780A4(void *);
+extern void lbl_8006DB74(void *);
+extern void lbl_8006DD14(void *, void *);
+typedef struct { u8 pad[0xe0]; struct { u8 b[0x30]; } arr[4]; } Fn55210Tab;
+extern Fn55210Tab *lbl_801A66CC;
+
+void fn_1_55210(Fn55210Arg *arg0) {
+    Fn55210Obj *obj;
+    void *r28;
+    s32 ok;
+    s32 i;
+    if (lbl_1_rodata_28A8 == lbl_1_bss_6C7A4.unk_8) {
+        if (arg0->count_c == 0) {
+            fn_1_556B8(arg0);
+        } else {
+            if (arg0->count_b != 0) {
+                fn_1_563E4(&lbl_1_bss_6C7A4);
+                fn_800780A4(arg0);
+            }
+            r28 = fn_1_5448C((u8 *)arg0 + 8);
+            obj = fn_1_548AC(0x78);
+            if (obj != 0) {
+                ok = 1;
+                obj->cb = fn_1_55EA0;
+                obj->owner = arg0;
+                lbl_8006DB74(&obj->pad_c);
+                obj->id = fn_1_7BE94();
+                *(Fn55210Copy *)obj->copy = *(Fn55210Copy *)&lbl_1_bss_6C7A4;
+                for (i = 0; i < 4; i++) {
+                    s32 sh = (i + 1) & 31;
+                    u32 w = lbl_1_bss_6C7CC.unk_0;
+                    if (__rlwnm(w, sh, 31, 31)) {
+                        obj->slots[i] = fn_1_548AC(0x30);
+                        if (obj->slots[i] != 0) {
+                            lbl_8006DD14(&lbl_801A66CC->arr[i], obj->slots[i]);
+                        } else {
+                            ok = 0;
+                        }
+                    } else {
+                        obj->slots[i] = 0;
+                    }
+                }
+                if (ok != 0) {
+                    fn_1_5489C(r28, obj);
+                }
+            }
+            fn_1_56530();
+        }
+    } else {
+        fn_1_557C4(arg0);
+    }
+}
+/* fzgx:end fn_1_55210 */
 
 /* fzgx:begin fn_1_553C4 */
 typedef struct {

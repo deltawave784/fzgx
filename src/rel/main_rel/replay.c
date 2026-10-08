@@ -1,53 +1,8 @@
 #include "types.h"
 #include "rel/main_rel/globals.h"
 #include "rel/main_rel/replay.h"
+#include "game/main_rel/replay_types.h"
 
-typedef struct Object {
-    u8 pad0[0xa0];
-    u16 halfa0;
-} Object;
-
-typedef struct {
-    u32 x;
-    u32 y;
-    u32 z;
-} ReplayTriple_F3574;
-
-typedef struct {
-    u32 start0 : 15;   // 0x0 copy of start
-    u32 kind : 3;
-    u32 index : 5;
-    u32 value : 5;
-    u32 pad0 : 4;
-    u32 start : 15;    // 0x4 frame the event began
-    u32 count : 5;
-    u32 result : 5;
-    u32 stage : 5;
-    u32 pad1 : 2;
-    ReplayTriple_F3574 begin[4];  // 0x8
-    ReplayTriple_F3574 end[4];    // 0x38
-    ReplayTriple_F3574 begin1;    // 0x68
-    ReplayTriple_F3574 end1;      // 0x74
-} ReplayEvent_F3574;
-
-typedef struct {
-    u8 pad0[0xFEF0];
-    u16 eventCount;               // 0xFEF0
-    u8 pad1[0x1E];
-    u16 slots[30];                // 0xFF10
-    ReplayEvent_F3574 events[1];  // 0xFF4C
-} ReplayBuffer_F3574;
-
-typedef struct {
-    u32 unk_0;
-    u32 frame;                    // 0x4
-    u8 pad0[0x10];
-    u8 playerCount;               // 0x18
-    u8 pad1[0x27];
-    ReplayBuffer_F3574 *buffer;   // 0x40
-} ReplayState_F3574;
-
-typedef struct { u8 raw[0x84]; } ReplayOutput;
 extern u32 lbl_801A6410;
 extern u32 fn_1_4630();
 extern void fn_1_46B4(u32 arg0, u32 arg1, const char *arg2, int arg3);
@@ -56,8 +11,6 @@ extern u8 fn_1_8682C(int index);
 extern u8 fn_1_86678(int index);
 extern u32 fn_1_864E8(int index);
 extern u32 fn_1_86810(s32 index);
-extern void fn_1_F3574(ReplayState_F3574 *state, u8 index, u8 value, u8 kind, u8 result);
-extern s32 fn_1_F45CC(u32 key, ReplayOutput *out);
 extern void fn_80008BA8();
 extern const f32 lbl_1_rodata_6D6C;
 extern const f32 lbl_1_rodata_6D68;
