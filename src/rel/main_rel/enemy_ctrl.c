@@ -1565,6 +1565,157 @@ void fn_1_D07C4(u32 arg0, u32 arg1) {
 }
 /* fzgx:end fn_1_D07C4 */
 
+/* fzgx:begin fn_1_D07E0 noprologue */
+#include "types.h"
+#include "font.h"
+#include "game/main_rel/car_test_types.h"
+#include "rel/main_rel/enemy_ctrl.h"
+
+typedef struct {
+    f32 value0;
+    f32 value1;
+    f32 value2;
+} Sig_fn_8006F78C_Fn8006F78CData;
+struct fn_1_D07E0_Copy88 { u32 a[22]; };
+extern const f32 lbl_1_rodata_5CB0;
+extern const f32 lbl_1_rodata_5CD8;
+extern const f32 lbl_1_rodata_5DC8;
+extern const f32 lbl_1_rodata_5E10;
+extern const f32 lbl_1_rodata_5F50;
+extern const f32 lbl_1_rodata_606C;
+extern const f32 lbl_1_rodata_5CFC;
+extern const f32 lbl_1_rodata_5DCC;
+extern const f64 lbl_1_rodata_5CE8;
+extern const f64 lbl_1_rodata_6070;
+extern f32 lbl_8006D21C(u32);
+extern const f64 lbl_1_rodata_5C00;
+extern int fn_1_4F734(FontDrawPacket *);
+struct fn_1_D07E0_lbl_1_bss_7ACD0 { s32 unk_0; u32 unk_4; };
+extern struct fn_1_D07E0_lbl_1_bss_7ACD0 lbl_1_bss_7ACD0;
+extern FontDrawPacket lbl_1_rodata_26F8;
+extern u32 fn_1_5158C(FontDrawPacket *, u32, s16, s16);
+extern u32 lbl_801A66A0;
+extern void fn_1_51564(u16, u16, u16, u16, u16, u16);
+extern void fn_8006F78C(Fn183D28Vec3 *, Sig_fn_8006F78C_Fn8006F78CData *, f32);
+extern Fn183D28Vec3 *fn_1_EB0D8(u32);
+extern u32 fn_1_EB0B0(void);
+
+void fn_1_D07E0(f32 arg0, f32 arg1, f32 arg2) {
+    struct { f32 *value; } p_lbl_1_rodata_26F8;
+    Obj_1_bss_3C30 *p_lbl_1_bss_3C30;
+    u8 v0;
+    s32 v1;
+    s32 v2;
+    u32 v3;
+    u32 v4;
+    s32 v7;
+    u32 v6;
+    u32 v5;
+    Fn183D28Vec3 *v8;
+    u32 v9;
+    f32 v10;
+    u32 v11;
+    u32 v12;
+    f32 v13;
+    s32 v14;
+    s32 v15;
+    f32 v16;
+    u32 v17;
+    u32 v18;
+    u32 v19;
+    int v20;
+    FontDrawPacket loc_20;
+    Sig_fn_8006F78C_Fn8006F78CData loc_14;
+    Sig_fn_8006F78C_Fn8006F78CData loc_8;
+    Fn183D28Vec3 *point;
+    f32 phase;
+    f32 t0;
+    int t5;
+    t0 = lbl_8006D21C((s32)(f32)(lbl_1_rodata_606C * (f32)(lbl_1_rodata_5CB0 * arg0)));
+    loc_20 = *(FontDrawPacket *)&lbl_1_rodata_26F8;
+    loc_20.image = (0x10000 - 27611);
+    fn_1_51564(0, 0, 16, 14, 2, 5);
+    p_lbl_1_bss_3C30 = &lbl_1_bss_3C30;
+    v0 = p_lbl_1_bss_3C30->unk_1405;
+    v5 = 0;
+    for (v1 = 0; v1 < 5; v1++) {
+        if (v0 & (1 << v1)) v5++;
+    }
+    if ((s32)v5 == 0) {
+        lbl_1_bss_7ACD0.unk_0 = 0;
+    } else {
+        if (lbl_1_bss_7ACD0.unk_0 < 60) {
+            lbl_1_bss_7ACD0.unk_0++;
+        }
+    }
+    v7 = 0;
+    v8 = (Fn183D28Vec3 *)&lbl_1_bss_3C30;
+    do {
+        if ((p_lbl_1_bss_3C30->unk_1405 & (1 << v7)) != 0) {
+            loc_20 = *(FontDrawPacket *)&lbl_1_rodata_26F8;
+            v9 = lbl_801A66A0 >> 5;
+            v12 = v7 + (v5 - v9 % v5);
+            loc_20.image = 0x9425;
+            v16 = lbl_1_rodata_5CFC - (f32)lbl_1_bss_7ACD0.unk_0 / lbl_1_rodata_5E10;
+            loc_20.color_add[0] = 255.0f * v16;
+            loc_20.color_add[1] = 255.0f * v16;
+            loc_20.color_add[2] = 255.0f * v16;
+            loc_20.color_add[3] = 0;
+            loc_20.z = (lbl_1_rodata_26F8.z - lbl_1_rodata_5F50) + (f32)(lbl_1_rodata_5DC8 * (f32)(s32)(v12 % v5));
+            fn_8006F78C((Fn183D28Vec3 *)((u8 *)&lbl_1_bss_3C30 + v7 * 12 + 5128), &loc_14, t0);
+            v16 = (f32)(arg1 + loc_14.value0);
+            loc_20.flags = 10;
+            loc_20.x = v16;
+            loc_20.y = (f32)(arg2 + loc_14.value1);
+            if (v7 == 4) {
+                fn_1_5158C(&loc_20, loc_20.image, 1, 4);
+            } else {
+                v17 = ((u32)v7 >> 31);
+                fn_1_5158C(&loc_20, loc_20.image, (s16)(v7 % 2), (s16)(v7 / 2));
+            }
+            t5 = fn_1_4F734(&loc_20);
+        }
+        v7++;
+        v8 = (Fn183D28Vec3 *)v8 + 1;
+    } while ((s32)v7 < 5);
+    v18 = 0;
+    v19 = 0;
+    v20 = t5;
+    while (v18 < fn_1_EB0B0()) {
+        point = fn_1_EB0D8(v18);
+        if (point) {
+            phase = (f32)((lbl_801A66A0 - ((v18 * 60U) >> 1)) % ((fn_1_EB0B0() * 60U) >> 1));
+            phase /= (f32)((fn_1_EB0B0() * 60U) >> 1);
+            phase = phase * lbl_1_rodata_6070;
+            fn_1_51564(0, 0, 8, 14, 4, 5);
+            loc_20 = *(FontDrawPacket *)&lbl_1_rodata_26F8;
+            loc_20.image = (0x10000 - 27611);
+            fn_1_5158C(&loc_20, loc_20.image, 2, 2);
+            loc_20.z = lbl_1_rodata_26F8.z - phase;
+            fn_8006F78C(point, &loc_8, t0);
+            loc_20.x = (arg1 + loc_8.value0) - lbl_1_rodata_5DCC;
+            loc_20.y = arg2 + loc_8.value1;
+            loc_20.flags = 10;
+            fn_1_4F734(&loc_20);
+            loc_20 = *(FontDrawPacket *)&lbl_1_rodata_26F8;
+            v11 = v18 + 3;
+            loc_20.image = (0x10000 - 27611);
+            v14 = v11 & 3;
+            v15 = (v11 >> 2) + 2;
+            fn_1_5158C(&loc_20, loc_20.image, v14, (s16)v15);
+            loc_20.z = lbl_1_rodata_26F8.z - phase;
+            fn_8006F78C(point, &loc_8, t0);
+            loc_20.x = lbl_1_rodata_5DCC + (arg1 + loc_8.value0);
+            loc_20.y = arg2 + loc_8.value1;
+            loc_20.flags = 10;
+            fn_1_4F734(&loc_20);
+        }
+        v19 += 60;
+        v18++;
+    }
+}
+/* fzgx:end fn_1_D07E0 */
+
 /* fzgx:begin fn_1_D0D68 */
 void fn_1_D0D68(void) {
     fn_1_C8DC0();
