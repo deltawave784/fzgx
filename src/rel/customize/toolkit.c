@@ -770,6 +770,53 @@ void fn_3_1AE40(void *data, u32 x1, u32 y1, s16 x2, s16 y2) {
 }
 /* fzgx:end fn_3_1AE40 */
 
+/* fzgx:begin fn_3_1B008 noprologue */
+#include "types.h"
+#include "rel/customize/globals.h"
+#include "rel/customize/toolkit.h"
+
+extern u32 fn_3_149AC(void *, u32, u32);
+extern void fn_3_14794(void *, s16, u32, u32 *);
+
+void fn_3_1B008(void *data, u32 x1, u32 y1, u32 x2, u32 y2) {
+    u32 copy_y;
+    s16 width;
+    s16 height;
+    u32 copy_x;
+    u32 buffer;
+    u32 value;
+    u32 copy_value;
+    s32 destination_x;
+    s16 right = x2;
+    u32 y;
+    u32 x;
+    void *target = data;
+    u32 first_x = x1;
+
+    for (y = y1; (s16)y < (s16)y2; y++) {
+        destination_x = right - 1 - (s16)y;
+        for (x = first_x; (s16)x < right; x++) {
+            value = fn_3_149AC(data, x, y);
+            fn_3_14794((void *)lbl_3_bss_A2454, (s16)destination_x, x, &value);
+        }
+    }
+    buffer = lbl_3_bss_A2454;
+    height = y2 - y1;
+    width = right - x1;
+    if (data != 0) {
+        for (copy_y = 0; (s16)copy_y < height; copy_y++) {
+            for (copy_x = 0; (s16)copy_x < width; copy_x++) {
+                copy_value = fn_3_149AC((void *)buffer, copy_x, copy_y);
+                {
+                    extern void fn_3_14794(void *, u32, u32, u32 *);
+                    fn_3_14794(target, copy_x, copy_y, &copy_value);
+                }
+            }
+        }
+    }
+}
+/* fzgx:end fn_3_1B008 */
+
 /* fzgx:begin fn_3_1D338 noprologue */
 #include "types.h"
 
