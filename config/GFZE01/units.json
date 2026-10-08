@@ -48693,6 +48693,17 @@
   },
   {
     "module": "main_rel",
+    "source": "rel/main_rel/relocation/fn_1_A5F44.c",
+    "symbols": [
+      "fn_1_A5F44"
+    ],
+    "status": "matching",
+    "mw_version": null,
+    "extra_cflags": [],
+    "tu": "rel/main_rel/relocation.c"
+  },
+  {
+    "module": "main_rel",
     "source": "rel/main_rel/relocation/fn_1_A6480.c",
     "symbols": [
       "fn_1_A6480"
