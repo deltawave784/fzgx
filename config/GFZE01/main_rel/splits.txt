@@ -7007,3 +7007,6 @@ rel/main_rel/ptclput/fn_1_A0D7C.c:
 
 rel/main_rel/motasglist/fn_1_4270C.c:
 	.text       start:0x0004270C end:0x00042AD0 align:4
+
+rel/main_rel/font/fn_1_549F4.c:
+	.text       start:0x000549F4 end:0x00054DCC align:4
