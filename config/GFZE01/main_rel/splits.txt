@@ -6920,3 +6920,6 @@ rel/main_rel/font/fn_1_55210.c:
 
 rel/main_rel/effect/fn_1_61EF4.c:
 	.text       start:0x00061EF4 end:0x000620C4 align:4
+
+rel/main_rel/sel_static_disp/fn_1_1421D8.c:
+	.text       start:0x001421D8 end:0x001424E8 align:4
