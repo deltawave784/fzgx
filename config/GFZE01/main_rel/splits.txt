@@ -6917,3 +6917,6 @@ rel/main_rel/effect/fn_1_611EC.c:
 
 rel/main_rel/font/fn_1_55210.c:
 	.text       start:0x00055210 end:0x000553C4 align:4
+
+rel/main_rel/effect/fn_1_61EF4.c:
+	.text       start:0x00061EF4 end:0x000620C4 align:4

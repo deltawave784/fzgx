@@ -14,7 +14,8 @@ misses and large functions, routed like the Claude loop's Fable batches, and the
 it already tried (near misses first). GPT-6 Astra batches are opt-in
 (`--astra-max N`, `--astra-batch`, `--astra-model`): they burn the weekly limit several times faster.
 `--max-attempts` (default 12) is how many attempts a function may already have and still be picked, and
-`--modules` picks the modules (default: every module except main_rel, which the Claude loop owns).
+`--modules` picks the modules (default: all of them; in main_rel only the slice the Claude loop does not
+route: over 768 B, best score under 85%, never attempted by Fable/Opus/Sonnet).
 
 Stops on: `--max-batches`, `--hours` (wall clock, waits included), `--zero-streak` batches in
 a row without a match in the last band, a failed gate, an empty pool, or the file
@@ -36,7 +37,12 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 MODULES = ["main", "movie_module", "customize", "sel", "pilotpoint", "option", "title", "interview",
-           "story", "profile", "movie", "winning", "replay", "car_colchg", "sample"]
+           "story", "profile", "movie", "winning", "replay", "car_colchg", "sample", "main_rel"]
+# main_rel belongs to the Claude loop (clone A); this loop only takes the slice that loop does not route: functions
+# above CLAUDE_SMALL bytes (its Opus/Sonnet fallback stops at 768) whose best score is below CLAUDE_FLOOR percent
+# (its Fable floor is 85), minus anything a Claude tier already attempted (read from state/ledger.json).
+SHARED_MODULE, CLAUDE_SMALL, CLAUDE_FLOOR = "main_rel", 768, 85.0
+_claude_tried: set = set()
 # (min bytes, max bytes, effort, checks per worker, stale checks) in the order they are worked
 BANDS = [(512, 1023, "medium", 24, 8), (1024, 2047, "high", 32, 10), (256, 511, "medium", 16, 5),
          (2048, 4095, "high", 40, 12), (0, 255, "medium", 12, 4), (4096, 100000, "high", 48, 14)]
@@ -55,14 +61,37 @@ def log(msg: str) -> None:
         f.write(line + "\n")
 
 
+def claude_tried() -> set:
+    """Symbols a Claude tier (fable-/opus-/sonnet-/haiku- agent ids) attempted, from clone A's committed ledger."""
+    if not _claude_tried:
+        try:
+            data = json.loads((ROOT / "state" / "ledger.json").read_text(encoding="utf-8"))
+            _claude_tried.update(a["symbol"] for a in data["attempts"]
+                                 if str(a.get("agent", "")).startswith(("fable-", "opus-", "sonnet-", "haiku-")))
+        except (OSError, ValueError, KeyError):
+            pass
+        _claude_tried.add("")  # also stops an unreadable ledger from re-reading it on every call
+    return _claude_tried
+
+
+def allowed(row: dict) -> bool:
+    """False for a main_rel function the Claude loop owns."""
+    if row.get("module") != SHARED_MODULE:
+        return True
+    best = max(row.get("seed_best") or 0.0, row.get("best") or 0.0)
+    return row.get("size", 0) > CLAUDE_SMALL and best < CLAUDE_FLOOR and row["symbol"] not in claude_tried()
+
+
 def pick(model: str, lo: int, hi: int, per_module: int, count: int, max_attempts: int) -> list:
     out = []
     for module in MODULES:
-        res = run(["tools/fzgx.py", "route", "--easy", "--module", module, "--min-size", str(lo),
+        shared = module == SHARED_MODULE
+        res = run(["tools/fzgx.py", "route", "--easy", "--module", module,
+                   "--min-size", str(max(lo, CLAUDE_SMALL + 1) if shared else lo),
                    "--max-size", str(hi), "--max-attempts", str(max_attempts), "--skip-tried-by", model,
-                   "--limit", str(per_module), "--json"], capture=True)
+                   "--limit", str(per_module * 8 if shared else per_module), "--json"], capture=True)
         try:
-            out += [r["symbol"] for r in json.loads(res.stdout)]
+            out += [r["symbol"] for r in json.loads(res.stdout) if allowed(r)][:per_module]
         except (ValueError, KeyError):
             continue
     return out[:count]
@@ -135,7 +164,8 @@ def pick_hard(model: str, count: int, max_attempts: int, modules: list, tried_by
     rows = []
     for module in modules:
         res = run(["tools/fzgx.py", "route", "--module", module, "--skip-tried-by", tried_by or model,
-                   "--max-attempts", str(max_attempts), "--limit", str(limit), "--json"], capture=True)
+                   "--max-attempts", str(max_attempts), "--limit", str(1000 if module == SHARED_MODULE else limit),
+                   "--json"], capture=True)
         try:
             rows += json.loads(res.stdout)
         except ValueError:
@@ -146,7 +176,7 @@ def pick_hard(model: str, count: int, max_attempts: int, modules: list, tried_by
         group = 0 if 90 <= best < 100 else 1 if best >= 50 and size >= 512 else 2 if size >= 1024 else 3
         return (group, -best, -size)
 
-    rows = [r for r in rows if r["symbol"] not in exclude]
+    rows = [r for r in rows if r["symbol"] not in exclude and allowed(r)]
     rows.sort(key=rank)
     return [r["symbol"] for r in rows[:count]]
 
@@ -214,7 +244,7 @@ def main() -> int:
     ap.add_argument("--astra-max", type=int, default=0,
                     help="Astra function attempts per loop run; 0 (default) is Sol only. Astra used the weekly limit up in hours")
     ap.add_argument("--modules", nargs="*", default=MODULES,
-                    help="modules to pick from (clone A owns main_rel: adding it here collides with the Claude loop)")
+                    help="modules to pick from (main_rel is limited to the slice the Claude loop does not route)")
     a = ap.parse_args()
     astra_used = 0
     retried: set = set()  # functions the retry pass has already handed out in this run

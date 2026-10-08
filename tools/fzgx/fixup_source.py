@@ -599,6 +599,78 @@ def condition_embedded_assignments(body: str, name: str) -> List[Tuple[str, str]
     return out
 
 
+_LOCKED_CACHE_STORE = (r'\*\s*\(\s*(?:volatile\s+)?f32\s*\*\s*\)\s*\(\s*0[xX][eE]'
+                       r'(?:0+{k}|0{7}\s*\+\s*0[xX]0*{k})\s*\)')
+
+
+def locked_cache_columns(body: str, name: str) -> List[Tuple[str, str]]:
+    """The translation column of the locked-cache current matrix (stores to 0xE000000C, 1C, 2C).
+    Retail loads all three values first, in address order, into temporaries the allocator
+    numbers x lowest (x takes the highest FPR: f3/f2/f0 around a live f1); the matched
+    spelling (fn_1_61640, fn_1_61EF4) declares the temporaries in reverse order under
+    `#pragma opt_propagation off`. Agents write direct stores, initialized block locals or
+    member reads, which interleave the loads with the stores or reverse the colors. Every
+    site is rewritten into the matched shape, with and without the pragma."""
+    span = _function_body_span(body, name)
+    if not span:
+        return []
+    inner = body[span[1]:span[2]]
+    store = lambda k: _LOCKED_CACHE_STORE.replace('{k}', k)
+    triple = re.compile(r'(?m)^([ \t]*)' + store('[cC]') + r'\s*=\s*([^;]+);[ \t]*\n'
+                        r'[ \t]*' + store('1[cC]') + r'\s*=\s*([^;]+);[ \t]*\n'
+                        r'[ \t]*' + store('2[cC]') + r'\s*=\s*([^;]+);[ \t]*\n')
+    sites = list(triple.finditer(inner))
+    if not sites:
+        return []
+
+    def balanced(text):
+        return text.count('(') == text.count(')') and text.count('[') == text.count(']')
+
+    edits = []
+    for n, site in enumerate(sites):
+        a, b, indent = site.start(), site.end(), site[1]
+        values = [v.strip() for v in (site[2], site[3], site[4])]
+        # an enclosing `{ f32 decls; triple }` block holds only the copy's own temporaries:
+        # replace it whole, reading each temporary's initializer directly
+        opener = inner.rfind('{', 0, a)
+        closer = re.match(r'[ \t]*\}[ \t]*\n', inner[b:])
+        line0 = inner.rfind('\n', 0, opener) + 1 if opener >= 0 else 0
+        prefix = inner[opener + 1:a] if opener >= 0 else ''
+        if (closer and opener >= 0 and not inner[line0:opener].strip() and prefix.strip()
+                and re.fullmatch(r'\s*(?:(?:const\s+)?f32\s+[^;{}]*;\s*)+', prefix)):
+            resolved = []
+            for v in values:
+                found = None
+                if re.fullmatch(r'\w+', v):
+                    for m in re.finditer(r'\b' + re.escape(v) + r'\s*=\s*([^;,]+)[;,]', prefix):
+                        found = m[1].strip()
+                resolved.append(found if found and balanced(found) else None)
+            if all(resolved):
+                values = resolved
+                a, b, indent = line0, b + closer.end(), inner[line0:opener]
+        x, y, z = (f'fzgx_lc{n}_{c}' for c in 'xyz')
+        i2 = indent + '    '
+        edits.append((span[1] + a, span[1] + b,
+                      f'{indent}{{\n{i2}f32 {z};\n{i2}f32 {y};\n{i2}f32 {x};\n'
+                      f'{i2}{x} = {values[0]};\n{i2}{y} = {values[1]};\n{i2}{z} = {values[2]};\n'
+                      f'{i2}*(f32 *)(0xE0000000 + 0x0C) = {x};\n'
+                      f'{i2}*(f32 *)(0xE0000000 + 0x1C) = {y};\n'
+                      f'{i2}*(f32 *)(0xE0000000 + 0x2C) = {z};\n{indent}}}\n'))
+    text = body
+    for a, b, new in sorted(edits, reverse=True):
+        text = text[:a] + new + text[b:]
+    out = [('locked-cache column copy in reverse-declared temporaries', text)]
+    head = re.search(r'(?m)^[^\n;{}]*\b' + re.escape(name) + r'\s*\([^;{]*\)\s*\{', text)
+    fn = _function_body_span(text, name)
+    if head and fn and not re.search(r'#\s*pragma\s+opt_propagation\s+off', text):
+        end = text.find('\n', fn[2])
+        end = len(text) if end < 0 else end + 1
+        out.append(('locked-cache column copy in reverse-declared temporaries under opt_propagation off',
+                    text[:head.start()] + '#pragma opt_propagation off\n' + text[head.start():end]
+                    + '#pragma opt_propagation reset\n' + text[end:]))
+    return out
+
+
 def rewrites(body: str, name: str) -> List[Tuple[str, str]]:
     """Every single second-stage rewrite of a body."""
     out: List[Tuple[str, str]] = []

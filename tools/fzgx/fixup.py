@@ -423,6 +423,7 @@ class Engine:
             yield from layout.bss_member_bindings(self.project, row['symbol'], body, row.get('object'), check)
             yield from layout.private_data_objects(body, row.get('object'), check)
         yield from source.split_declaration_groups(body, name)
+        yield from source.locked_cache_columns(body, name)
         yield from source.accessor_lifetimes(body, name)
         if row.get('score') == 100:
             if row.get('source_lint') and (check.matched or check.matched_pool):
@@ -665,6 +666,12 @@ class Engine:
     def run(self, rows, rounds=2, beam=3, max_candidates=80, budget_s=None, captures=None):
         start=time.monotonic(); history=list(rows); seen={r['id'] for r in rows}; initial={}
         self.evaluate(rows)
+        # one objdiff process per saved variant: serially, a module run (15,633 variants in
+        # batch 64, ~70 ms each) spent its whole budget here and never reached round 1.
+        # Run them 16 wide like the round checks; results are identical.
+        from concurrent.futures import ThreadPoolExecutor
+        with ThreadPoolExecutor(max_workers=16) as ex:
+            list(ex.map(self.check, [row for row in rows if row.get('object') and row['id'] not in self.checks]))
         for row in rows:
             if row.get('object'):
                 self.check(row)

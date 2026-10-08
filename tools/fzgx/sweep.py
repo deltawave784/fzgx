@@ -104,6 +104,7 @@ def generate(p: Project, s: str, sym, path: Path, body: str, check, outdir: Path
     add('constptr', lambda: fixup_source.wrap_constant_pointers(body, sym.name))
     add('decse', lambda: fixup_source.decse_repeated_expressions(body, sym.name))
     add('decl', lambda: decl_moves(body, sym.name))
+    add('lockedcache', lambda: fixup_source.locked_cache_columns(body, sym.name))
     add('pragmas', lambda: fixup_evidence.optimizer_pragmas(body, sym.name))
     add('layout', lambda: fixup_layout.tu_section_layout(p, s, body, check))
     if not families or 'attr' in families:
