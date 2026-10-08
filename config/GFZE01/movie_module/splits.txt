@@ -2012,3 +2012,6 @@ rel/movie_module/fn_12_27224.c:
 
 rel/movie_module/fn_12_8BD8.c:
 	.text       start:0x00008BD8 end:0x00008F80 align:4
+
+rel/movie_module/fn_12_29524.c:
+	.text       start:0x00029524 end:0x000298AC align:4
