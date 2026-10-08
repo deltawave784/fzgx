@@ -372,28 +372,7 @@ void fn_1_E9C(void) {
 #pragma peephole reset
 /* fzgx:end fn_1_E9C */
 
-/* fzgx:begin fn_1_ECC noprologue */
-#include "types.h"
-#include "rel/main_rel/globals.h"
-
-typedef void (*fn_1_ECC_Callback)(void);
-/* Overlay (lbl_1_data_7C0, 0x2c bytes) and scene (lbl_1_data_460, 0x30 bytes) descriptors. */
-struct fn_1_ECC_Overlay {
-    u8 pad_0[0x20];
-    fn_1_ECC_Callback init;
-    fn_1_ECC_Callback update;
-    fn_1_ECC_Callback exit;
-};
-struct fn_1_ECC_Scene {
-    u8 pad_0[0x20];
-    fn_1_ECC_Callback init;
-    fn_1_ECC_Callback update;
-    fn_1_ECC_Callback suspend;
-    fn_1_ECC_Callback exit;
-};
-
-extern struct fn_1_ECC_Overlay lbl_1_data_7C0[];
-extern struct fn_1_ECC_Scene lbl_1_data_460[];
+/* fzgx:begin fn_1_ECC */
 extern u32 fn_1_128C(void);
 extern void fn_1_12F194(void);
 extern void fn_1_3C98(void);
@@ -406,16 +385,16 @@ s16 fzgx_obj_lbl_1_bss_962;   /* overlay */
 u16 lbl_1_bss_964;            /* prev_scene */
 u16 lbl_1_bss_966;            /* prev_overlay */
 s16 lbl_1_bss_968;            /* next_scene */
-s16 lbl_1_bss_96A;            /* next_overlay */
-s32 lbl_1_bss_96C;            /* keep */
+u16 lbl_1_bss_96A;            /* next_overlay */
+u32 lbl_1_bss_96C;            /* keep */
 
 #define scene fzgx_obj_lbl_1_bss_960
 #define overlay fzgx_obj_lbl_1_bss_962
 #define prev_scene lbl_1_bss_964
 #define prev_overlay lbl_1_bss_966
 #define next_scene lbl_1_bss_968
-#define next_overlay lbl_1_bss_96A
-#define keep lbl_1_bss_96C
+#define next_overlay (*(s16 *)&lbl_1_bss_96A)
+#define keep (*(s32 *)&lbl_1_bss_96C)
 
 #pragma section code_type ".fzgxpool"
 static void fzgx_bss_layout(void) {
@@ -425,11 +404,12 @@ static void fzgx_bss_layout(void) {
     s = *(u8 *)&prev_scene;
     s = *(u8 *)&prev_overlay;
     s = *(u8 *)&next_scene;
-    s = *(u8 *)&next_overlay;
-    s = *(u8 *)&keep;
+    s = *(u8 *)&lbl_1_bss_96A;
+    s = *(u8 *)&lbl_1_bss_96C;
 }
 #pragma section code_type ".text"
 
+/* Per-frame scene/overlay state machine: runs pending transitions, then update callbacks. */
 void fn_1_ECC(void) {
     s16 next;
 

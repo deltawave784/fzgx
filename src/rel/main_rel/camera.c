@@ -1522,33 +1522,10 @@ void camera_save_parameters(f32 first_parameter, f32 second_parameter) {
 }
 /* fzgx:end camera_save_parameters */
 
-/* fzgx:begin fn_1_BFA0 pool noprologue */
-#include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/camera.h"
-
-typedef struct {
-    u8 data[0x10];
-} CamEntry;
-
-typedef struct {
-    u8 pad_0[0x4];
-    u8 unk_4;
-    u8 pad_5[0x3];
-    CamEntry entries[2];   /* 0x08: retail takes &entries[1] */
-    u8 pad_28[0x8];
-    f32 unk_30;
-    f32 unk_34;
-    u8 unk_38;
-} CamBlock;
-
-typedef struct { u8 pad_0[0x20]; u32 unk_20; } Inner;
-typedef struct { u8 pad_0[0x8]; Inner *unk_8; } Outer;
-
+/* fzgx:begin fn_1_BFA0 pool */
 extern u32 fn_1_CC5C(void);
 extern void fn_1_55FC4(f32);
 extern void fn_1_55FF0(f32);
-extern Outer *lbl_1_bss_38454;
 extern u32 fn_1_55210(u32);
 extern void lbl_8006D9D8(CamEntry *);
 extern void lbl_8006E14C(f32);
@@ -1562,7 +1539,7 @@ u8 lbl_1_bss_1010_gap_1015;
 u16 lbl_1_bss_1010_gap_1015_fill_1016;
 CamEntry fzgx_obj_camera_state[2];
 u32 camera_state_fill_1038;
-u32 lbl_1_bss_103C;
+u8 lbl_1_bss_103C[4];
 f32 lbl_1_bss_1040;
 f32 lbl_1_bss_1044;
 u8 fzgx_obj_camera_flag_0;
@@ -1583,9 +1560,8 @@ static void fzgx_bss_layout(void) {
 }
 #pragma section code_type ".text"
 
+/* Per-frame camera update: runs the pending callback and refreshes the camera state. */
 void fn_1_BFA0(void) {
-    
-
     if (lbl_1_bss_1014 != 0) {
         fn_1_CC5C();
     }
