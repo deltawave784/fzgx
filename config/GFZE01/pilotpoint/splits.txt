@@ -128,3 +128,12 @@ rel/pilotpoint/pilotpoint/fn_14_7EAC.c:
 
 rel/pilotpoint/pilotpoint/fn_14_C850.c:
 	.text       start:0x0000C850 end:0x0000CC70 align:4
+
+rel/pilotpoint/pilotpoint/fn_14_BCF8.c:
+	.text       start:0x0000BCF8 end:0x0000C4F4 align:4
+
+rel/pilotpoint/pilotpoint/fn_14_CC70.c:
+	.text       start:0x0000CC70 end:0x0000D2EC align:4
+
+rel/pilotpoint/pilotpoint/fn_14_D600.c:
+	.text       start:0x0000D600 end:0x0000D914 align:4

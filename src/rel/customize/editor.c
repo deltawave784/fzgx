@@ -428,6 +428,37 @@ void fn_3_16E14(void) {
 }
 /* fzgx:end fn_3_16E14 */
 
+/* fzgx:begin fn_3_16FD0 */
+typedef struct { u32 c; } Col4;
+extern Col4 lbl_3_rodata_5EC;
+extern u32 fn_3_14794(u32, s16, s16, void *);
+
+void fn_3_16FD0(u32 arg0) {
+    u32 i = 0;
+    Col4 col = lbl_3_rodata_5EC;
+    for (; i < 64; i++) {
+        {
+            Col4 t = col;
+            fn_3_14794(arg0, i, 0, &t);
+        }
+        {
+            Col4 t = col;
+            fn_3_14794(arg0, i, 63, &t);
+        }
+    }
+    for (i = 0; i < 64; i++) {
+        {
+            Col4 t = col;
+            fn_3_14794(arg0, 0, i, &t);
+        }
+        {
+            Col4 t = col;
+            fn_3_14794(arg0, 63, i, &t);
+        }
+    }
+}
+/* fzgx:end fn_3_16FD0 */
+
 /* fzgx:begin fn_3_170E0 */
 void fn_3_170E0(void) {
     fn_3_17100();

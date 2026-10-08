@@ -6956,3 +6956,99 @@ rel/main_rel/phys/fn_1_ECE04.c:
 
 rel/main_rel/bg_win/fn_1_15BB34.c:
 	.text       start:0x0015BB34 end:0x0015BBC4 align:4
+
+rel/main_rel/sel_static_disp/fn_1_1421D8.c:
+	.text       start:0x001421D8 end:0x001424E8 align:4
+
+rel/main_rel/bg_san/fn_1_DA3A0.c:
+	.text       start:0x000DA3A0 end:0x000DA6A8 align:4
+
+rel/main_rel/bg_aur/fn_1_153D74.c:
+	.text       start:0x00153D74 end:0x001540B0 align:4
+
+rel/main_rel/sel_static_disp/fn_1_1363F0.c:
+	.text       start:0x001363F0 end:0x00136714 align:4
+
+rel/main_rel/bg_common/fn_1_10576C.c:
+	.text       start:0x0010576C end:0x00105AB8 align:4
+
+rel/main_rel/font/fn_1_5233C.c:
+	.text       start:0x0005233C end:0x00052690 align:4
+
+rel/main_rel/camera/fn_1_5370.c:
+	.text       start:0x00005370 end:0x000056B8 align:4
+
+rel/main_rel/font/fn_1_4FD64.c:
+	.text       start:0x0004FD64 end:0x00050164 align:4
+
+rel/main_rel/sel_static_disp/fn_1_13D02C.c:
+	.text       start:0x0013D02C end:0x0013D460 align:4
+
+rel/main_rel/archive/fn_1_12E468.c:
+	.text       start:0x0012E468 end:0x0012ECA8 align:4
+
+rel/main_rel/sel_static_disp/fn_1_138144.c:
+	.text       start:0x00138144 end:0x00138A04 align:4
+
+rel/main_rel/memcard/fn_1_B171C.c:
+	.text       start:0x000B171C end:0x000B22AC align:4
+
+rel/main_rel/sel_static_disp/fn_1_13B548.c:
+	.text       start:0x0013B548 end:0x0013C134 align:4
+
+rel/main_rel/ranking/fn_1_15AC10.c:
+	.text       start:0x0015AC10 end:0x0015B3E8 align:4
+
+rel/main_rel/effect_car/fn_1_702A0.c:
+	.text       start:0x000702A0 end:0x0007099C align:4
+
+rel/main_rel/ranking/fn_1_157950.c:
+	.text       start:0x00157950 end:0x00157FC8 align:4
+
+rel/main_rel/enemy_ctrl/fn_1_CBC24.c:
+	.text       start:0x000CBC24 end:0x000CC27C align:4
+
+rel/main_rel/sel_static_disp/fn_1_136CC4.c:
+	.text       start:0x00136CC4 end:0x00137288 align:4
+
+rel/main_rel/enemy_ctrl/fn_1_C7CBC.c:
+	.text       start:0x000C7CBC end:0x000C8294 align:4
+
+rel/main_rel/car/fn_1_95950.c:
+	.text       start:0x00095950 end:0x00095EF0 align:4
+
+rel/main_rel/live_camera/fn_1_EE44.c:
+	.text       start:0x0000EE44 end:0x0000F3D0 align:4
+
+rel/main_rel/enemy_ctrl/fn_1_D07E0.c:
+	.text       start:0x000D07E0 end:0x000D0D68 align:4
+
+rel/main_rel/relocation/fn_1_A5F44.c:
+	.text       start:0x000A5F44 end:0x000A6480 align:4
+
+rel/main_rel/enemy_ctrl/fn_1_CB6D8.c:
+	.text       start:0x000CB6D8 end:0x000CBC24 align:4
+
+rel/main_rel/bg_for/fn_1_DCFA4.c:
+	.text       start:0x000DCFA4 end:0x000DD4DC align:4
+
+rel/main_rel/stcoli/fn_1_278B8.c:
+	.text       start:0x000278B8 end:0x00027DE4 align:4
+
+rel/main_rel/sel_static_disp/fn_1_14328C.c:
+	.text       start:0x0014328C end:0x00143780 align:4
+
+rel/main_rel/ptclput/fn_1_A0D7C.c:
+	.text       start:0x000A0D7C end:0x000A116C align:4
+
+rel/main_rel/motasglist/fn_1_4270C.c:
+	.text       start:0x0004270C end:0x00042AD0 align:4
+
+rel/main_rel/font/fn_1_549F4.c:
+	.text       start:0x000549F4 end:0x00054DCC align:4
+
+rel/main_rel/bg_for/fn_1_DD4DC.c:
+	.text       start:0x000DD4DC end:0x000DD890 align:4
+
+rel/main_rel/bg_common/fn_1_107930.c:
+	.text       start:0x00107930 end:0x00107C4C align:4

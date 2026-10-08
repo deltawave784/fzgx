@@ -1180,6 +1180,126 @@ u8 fn_1_12E424(void *arg0, u8 *arg1) {
 }
 /* fzgx:end fn_1_12E424 */
 
+/* fzgx:begin fn_1_12E468 noprologue */
+#include "types.h"
+#include "rel/main_rel/archive.h"
+
+struct fn_1_12E468_Arg0 { u16 unk_0; };
+struct fn_1_12E468_Copy160 { u32 a[40]; };
+struct fn_1_12E468_Table { s32 a[41]; };
+typedef struct CarData { u8 pad0[0x24]; void *unk_24; } CarData;
+typedef struct Car {
+    u8 pad0[0x18]; u32 unk_18;
+    u8 pad1c[0x6c]; s32 unk_88;
+    u8 pad8c[0xbc]; u8 unk_148[8];
+    CarData *unk_150; u8 pad154[0x38c];
+} Car;
+typedef struct Cars { Car *first; Car *extra; } Cars;
+
+extern u8 lbl_1_rodata_8180[164];
+extern void *fn_1_12F118(void);
+extern u8 *fn_1_36AD0(void);
+typedef struct Sig_fn_1_41488_Fn41488Data {
+    u32 count; char *strings;
+} Sig_fn_1_41488_Fn41488Data;
+extern int fn_1_41488(Sig_fn_1_41488_Fn41488Data *, const char *);
+typedef struct {
+    u8 pad0[0x12]; u16 field_12; u8 pad14[0x12]; u8 field_26;
+    void *field_28; u8 pad2c[8]; void *field_34; u8 pad38[0x14]; u8 field_4c;
+} Sig_fn_1_933D8_Fn933D8Node;
+typedef struct { u8 pad0[0x1c]; Sig_fn_1_933D8_Fn933D8Node *field_1c; } Sig_fn_1_933D8_Fn933D8Car;
+typedef struct { u8 pad0[0x24]; void *field_24; } Sig_fn_1_933D8_Fn933D8Data;
+typedef struct { u8 pad0[8]; Sig_fn_1_933D8_Fn933D8Data *field_8; void *field_c; } Sig_fn_1_933D8_Fn933D8Slot;
+extern void fn_1_933D8(Sig_fn_1_933D8_Fn933D8Car *, Sig_fn_1_933D8_Fn933D8Slot *, u16);
+
+typedef struct TypeRecord {
+    u8 pad0[5]; u8 id;
+    u8 pad6[0x819a]; u8 type; u8 pad81a1[0x1f];
+} TypeRecord;
+static inline s16 resolve(s16 id) {
+    TypeRecord *data;
+    s16 i;
+    if (id < 41) return id;
+    data = fn_1_12F118();
+    if (!data) return 6;
+    if (data != (TypeRecord *)fn_1_36AD0()) {
+        for (i=0; i<9; i++) {
+            if (id == data[i].id) return data[i].type;
+        }
+    } else {
+        if (id >= 50 && id <= 53) return data[id-50].type;
+        if (id >= 54 && id <= 57) return data[id-54].type;
+        for (i=0; i<4; i++) {
+            if (id == data[i].id) return data[i].type;
+        }
+    }
+    return 6;
+}
+static inline s16 map_type(s16 id) {
+    struct fn_1_12E468_Table table = *(struct fn_1_12E468_Table *)lbl_1_rodata_8180;
+    if (id < 0) return 1;
+    return table.a[resolve(id)];
+}
+static inline s16 reverse_type(s32 type) {
+    s16 i;
+    switch (type) {
+    case 21: case 41: return 21;
+    case 33: case 42: case 43: return 33;
+    default:
+        for (i=0; i<41; i++) {
+            if (type == map_type(i)) return i;
+        }
+        return -1;
+    }
+}
+static inline s16 count_extra(s32 type) {
+    switch (resolve(reverse_type(type))) {
+    case 21: return 1;
+    case 33: return 2;
+    default: return 0;
+    }
+}
+int fn_1_12E468(struct fn_1_12E468_Arg0 *arg0, void *arg1) {
+    u32 v0;
+    s32 v1;
+    s32 v2;
+    u32 v3;
+    u32 v4;
+    u32 v5;
+    u32 v6;
+    u32 v7;
+    Cars *cars = arg1;
+    s16 i;
+    int name;
+    if ((lbl_1_bss_8B3A0.unk_94 & ~0x7FFFFFFF) == 0) {
+        arg0->unk_0 = 2;
+        if (*(s16 *)&lbl_1_bss_960 == 2) {
+            v0 = (u32)cars->first;
+            *(u32 *)((u8 *)v0 + 24) = (*(u32 *)((u8 *)v0 + 24) | 0x80000000);
+            v1 = 0;
+            v2 = 0;
+            v3 = 0;
+            v4 = 0;
+            v5 = 0;
+            v6 = v0;
+            v7 = 0;
+            for (i=0; i<count_extra(cars->first->unk_88); i++) {
+                cars->extra[i].unk_18 |= 0x80000000;
+            }
+        } else {
+            name = fn_1_41488(cars->first->unk_150->unk_24, (const char *)&lbl_1_data_40BB0);
+            fn_1_933D8((Sig_fn_1_933D8_Fn933D8Car *)cars->first,
+                (Sig_fn_1_933D8_Fn933D8Slot *)&cars->first->unk_148, (u16)name);
+            for (i=0; i<count_extra(cars->first->unk_88); i++) {
+                fn_1_933D8((Sig_fn_1_933D8_Fn933D8Car *)&cars->extra[i],
+                    (Sig_fn_1_933D8_Fn933D8Slot *)&cars->extra[i].unk_148, (u16)name);
+            }
+        }
+    } else arg0->unk_0 = 2;
+    return 0;
+}
+/* fzgx:end fn_1_12E468 */
+
 /* fzgx:begin fn_1_12ECA8 */
 #pragma opt_common_subs off
 static inline s16 fn_1_12ECA8_lookup(s16 arg) {
