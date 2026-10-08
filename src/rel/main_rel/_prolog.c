@@ -13,7 +13,7 @@ extern u32 lbl_1_data_2B68[4];
 extern u8 lbl_1_data_2B64;
 extern s32 fn_1_D357C(void);
 extern void fn_8001CF80(void *);
-extern void SIProbe();
+extern u32 SIProbe(u32);
 extern void fn_8006B470(void *);
 extern void fn_1_D332C(u16 *data);
 extern u32 OSGetArenaHi(void);
