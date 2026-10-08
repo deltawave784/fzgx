@@ -1367,9 +1367,7 @@ void fn_1_5C780(void) {
 }
 /* fzgx:end fn_1_5C780 */
 
-/* fzgx:begin fn_1_5C784 noprologue */
-#include "types.h"
-
+/* fzgx:begin fn_1_5C784 */
 #pragma section code_type ".fzgxpool"
 __declspec(section ".fzgxpool") static void fzgx_pool_prime1(void) {
     volatile f32 s; volatile f64 d;  /* fzgx-allow: S2 pool primer sinks */
@@ -1384,20 +1382,11 @@ __declspec(section ".fzgxpool") static void fzgx_pool_prime1(void) {
 }
 #pragma section code_type ".text"
 
-extern const struct fn_1_5C784_lbl_1_rodata_2950_pool {
-    f32 unk_0;
-    f32 unk_4;
-    f32 unk_8;
-} lbl_1_rodata_2950;
-
-extern u32 lbl_1_data_1D628;
-extern void fn_1_8636C(s16, void *);
-
-typedef struct Vec3 {
+typedef struct EffectVec3 {
     u32 x;
     u32 y;
     u32 z;
-} Vec3;
+} EffectVec3;
 
 typedef struct EffectWork {
     u8 pad_00[0x10];
@@ -1405,21 +1394,21 @@ typedef struct EffectWork {
     u8 pad_14[0x4];
     s16 unk_18;
     u8 pad_1a[0x22];
-    Vec3 unk_3c;
+    EffectVec3 unk_3c;
     u8 pad_48[0x4c];
-    Vec3 unk_94;
+    EffectVec3 unk_94;
     u8 pad_a0[0x18];
     u8 unk_b8;
 } EffectWork;
 
 #pragma opt_loop_invariants off
+// Rolls a random lifetime if unset, then copies the saved position and updates the transform.
 void fn_1_5C784(EffectWork *self) {
-    struct fn_1_5C784_lbl_1_rodata_2950_pool *pool_lbl_1_rodata_2950 = (struct fn_1_5C784_lbl_1_rodata_2950_pool *)&lbl_1_rodata_2950;
     if (self->unk_10 == 0) {
         u32 value = lbl_1_data_1D628 * 0x41C64E6D + 0x3039;
         lbl_1_data_1D628 = value;
         value = (value >> 16) & 0x7FFF;
-        self->unk_10 = (s32)((60.0f) * ((0.100000001f) + (f32)value / (32767.0f)));
+        self->unk_10 = (s32)(60.0f * (0.1f + (f32)value / 32767.0f));
     }
     self->unk_3c = self->unk_94;
     fn_1_8636C(self->unk_18, &self->unk_b8);
