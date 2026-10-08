@@ -1861,6 +1861,161 @@ s32 fn_1_4FC50(InputObject *obj, u32 arg1, u16 arg2, u16 arg3, u32 arg4) {
 }
 /* fzgx:end fn_1_4FC50 */
 
+/* fzgx:begin fn_1_4FD64 noprologue */
+#include "types.h"
+#include "rel/main_rel/font.h"
+
+typedef enum { Sig_GXInitTexObj_GX_TF_I4=0, Sig_GXInitTexObj_GX_TF_I8=1, Sig_GXInitTexObj_GX_TF_IA4=2, Sig_GXInitTexObj_GX_TF_IA8=3, Sig_GXInitTexObj_GX_TF_RGB565=4, Sig_GXInitTexObj_GX_TF_RGB5A3=5, Sig_GXInitTexObj_GX_TF_RGBA8=6, Sig_GXInitTexObj_GX_TF_CMPR=14 } Sig_GXInitTexObj_GXTexFmt;
+typedef struct { u32 dummy[8]; } Sig_GXInitTexObj_GXTexObj;
+typedef enum { Sig_GXInitTexObj_GX_CLAMP, Sig_GXInitTexObj_GX_REPEAT, Sig_GXInitTexObj_GX_MIRROR, Sig_GXInitTexObj_GX_MAX_TEXWRAPMODE } Sig_GXInitTexObj_GXTexWrapMode;
+typedef enum { Sig_GXInitTexObjLOD_GX_ANISO_1, Sig_GXInitTexObjLOD_GX_ANISO_2, Sig_GXInitTexObjLOD_GX_ANISO_4, Sig_GXInitTexObjLOD_GX_MAX_ANISOTROPY } Sig_GXInitTexObjLOD_GXAnisotropy;
+typedef u8 Sig_GXInitTexObjLOD_GXBool;
+typedef enum { Sig_GXInitTexObjLOD_GX_NEAR, Sig_GXInitTexObjLOD_GX_LINEAR, Sig_GXInitTexObjLOD_GX_NEAR_MIP_NEAR, Sig_GXInitTexObjLOD_GX_LIN_MIP_NEAR, Sig_GXInitTexObjLOD_GX_NEAR_MIP_LIN, Sig_GXInitTexObjLOD_GX_LIN_MIP_LIN } Sig_GXInitTexObjLOD_GXTexFilter;
+typedef struct { u32 texture_filter; u32 texture_lod; u32 texture_size; u32 texture_address; u32 user_data; u32 texture_format; u32 tlut_name; u16 texture_time_count; u8 texture_tile_type; u8 texture_flags; } Sig_GXInitTexObjLOD_GXTexObj;
+struct fn_1_4FD64_lbl_801A66CC { u32 unk_0; };
+struct fn_1_4FD64_lbl_801A6D00 { u32 unk_0; };
+extern struct fn_1_4FD64_lbl_801A66CC lbl_801A66CC;
+extern u8 *lbl_801A6D00[1];
+extern const f32 lbl_1_rodata_2750;
+extern const f64 lbl_1_rodata_2758;
+extern f32 fn_1_519AC(u32);
+extern int fn_1_4E0A4(u16 *,u16 *);
+extern u32 fn_800720B0(u32);
+extern void DCFlushRange(void *,u32);
+extern void GXInitTexObj(Sig_GXInitTexObj_GXTexObj *,void *,u16,u16,Sig_GXInitTexObj_GXTexFmt,Sig_GXInitTexObj_GXTexWrapMode,Sig_GXInitTexObj_GXTexWrapMode,u8);
+extern void GXInitTexObjLOD(Sig_GXInitTexObjLOD_GXTexObj *,Sig_GXInitTexObjLOD_GXTexFilter,Sig_GXInitTexObjLOD_GXTexFilter,f32,f32,f32,Sig_GXInitTexObjLOD_GXBool,Sig_GXInitTexObjLOD_GXBool,Sig_GXInitTexObjLOD_GXAnisotropy);
+extern void fn_1_48D80(u32);
+typedef struct FontDrawPacket FontDrawPacket;
+extern void fn_1_4EDAC(FontDrawPacket *,f32,f32);
+extern int fn_1_159588(int);
+extern void fn_1_A71CC(void);
+extern void fn_1_A722C(void);
+extern void fn_8007245C(u32);
+extern void fn_800724C8(void);
+extern void fn_80072558(void);
+extern void fn_80072864(u32);
+extern void fn_800728A8(s32,s32,s32,s32);
+extern void fn_80072AB0(s32,s32,s32);
+extern void fn_80072C24(s32,s32,s32,s32,s32);
+extern void fn_80072CC4(s32,s32,s32,s32,s32);
+extern void fn_80072D64(s32,s32,s32,s32,u8,s32);
+extern void fn_80072E20(s32,s32,s32,s32,u8,s32);
+extern void fn_800734A8(u32,s32,s32,s32);
+extern void fn_80073678(u32);
+extern void fn_80073778(void *,s32);
+extern void fn_80073898(u32);
+extern void fn_80073C6C(s32);
+extern void fn_800745A4(u32,s32,s32,u32,u32,u32);
+extern void fn_80074660(u32);
+extern void fn_80074788(u32);
+extern void fn_80074918(u8,s32,u8);
+extern void lbl_8006D758(void);
+extern void qsort(void *,size_t,size_t,int (*)(const void *,const void *));
+
+#pragma opt_propagation off
+void fn_1_4FD64(f32 arg0) {
+    Obj_1_data_1C504_Target **p_lbl_1_data_1C504;
+    u16 *v7;
+    s32 v6;
+    Obj_1_data_1C504_Target *v8;
+    Obj_1_bss_646D2 *p_lbl_1_bss_646D2;
+    u16 *v0;
+    u16 *v2;
+    s32 v3;
+    u32 v4;
+    f32 v5;
+    u32 v9;
+    f32 height;
+    f32 width;
+    Obj_1_data_FCD4 *entry;
+    Obj_1_data_FCD4_At20 *data;
+    u8 *image;
+    v0 = (u16 *)(lbl_801A66CC.unk_0 + 2232);
+    v2 = v0;
+    v3 = 0;
+    while (v3 < (s32)lbl_1_bss_646D2.unk_0) {
+        *v2 = v3;
+        v2++;
+        v3++;
+    }
+    qsort(v0, lbl_1_bss_646D2.unk_0, 2, (int (*)(const void *,const void *))fn_1_4E0A4);
+    fn_1_A71CC();
+    fn_800724C8();
+    fn_8007245C(8704);
+    fn_80074788(0);
+    fn_80074660(1);
+    fn_80073678(1);
+    fn_80073898(0);
+    fn_80073C6C(0);
+    fn_800745A4(0,1,4,60,0,125);
+    fn_800734A8(0,0,0,255);
+    fn_80072AB0(0,0,0);
+    fn_80072C24(0,15,2,8,4);
+    fn_80072D64(0,0,0,0,1,0);
+    fn_80072CC4(0,7,1,4,2);
+    fn_80072E20(0,0,0,0,1,0);
+    fn_80074918(1,7,0);
+    fn_800728A8(1,4,5,0);
+    fn_800720B0(0);
+    fn_80072864(2);
+    lbl_8006D758();
+    fn_80072558();
+    p_lbl_1_data_1C504 = &lbl_1_data_1C504;
+    lbl_801A6D00[0][407] = 255;
+    p_lbl_1_bss_646D2 = &lbl_1_bss_646D2;
+    v6 = 0;
+    v7 = v0;
+    while (v6 < (s32)lbl_1_bss_646D2.unk_0) {
+        v8 = (Obj_1_data_1C504_Target *)((u8 *)lbl_1_data_1C504 + *v7 * 88);
+        v9 = v8->unk_30;
+        if ((v9 & 0x2000000) == 0) {
+            if ((v9 & 0x400000) != 0) {
+                fn_1_48D80((u32)v8);
+            } else {
+                if ((v9 & 0x800000) != 0) {
+                    /* Volatile preserves the retail flag reload at drawing-path entry. */
+                    if ((((volatile Obj_1_data_1C504_Target *)v8)->unk_30 & 0x2000000) == 0) {
+                        v5 = fn_1_519AC(v8->unk_40);
+                        v5 = (f32)(u32)v8->unk_44 * v5;
+                        v5 = (f32)(u32)v8->unk_46 * v5;
+                        DCFlushRange((void *)v8->unk_48, (u32)v5);
+                        {
+                            u16 texWidth = v8->unk_44;
+                            u16 texHeight = v8->unk_46;
+                            GXInitTexObj((Sig_GXInitTexObj_GXTexObj *)lbl_1_bss_4E6B0,(void *)v8->unk_48,texWidth,texHeight,v8->unk_40,0,0,0);
+                        }
+                        v5 = 0.0f;
+                        GXInitTexObjLOD((Sig_GXInitTexObjLOD_GXTexObj *)lbl_1_bss_4E6B0,0,0,0.0f,0.0f,0.0f,0,0,0);
+                        fn_80073778(lbl_1_bss_4E6B0,0);
+                        fn_1_4EDAC((FontDrawPacket *)v8,(f32)(u32)v8->unk_44,(f32)(u32)v8->unk_46);
+                    }
+                } else {
+                    /* Volatile preserves the retail flag reload at drawing-path entry. */
+                    if ((((volatile Obj_1_data_1C504_Target *)v8)->unk_30 & 0x2000000) == 0) {
+                        fn_1_159588(v8->unk_0);
+                        v9 = v8->unk_0;
+                        entry = &lbl_1_data_FCD4[(v9 >> 8) & 0xFFFF];
+                        if ((s32)entry->unk_0 != 0) {
+                            data = entry->unk_20;
+                            image = (u8 *)data->unk_4 + (v9 & 255)*16;
+                            width = (f32)(u32)*(u16 *)(image+8);
+                            height = (f32)(u32)*(u16 *)(image+10);
+                            fn_80073778((void *)(data->unk_C + (v9 & 255)*32),0);
+                            fn_1_4EDAC((FontDrawPacket *)v8,width,height);
+                        }
+                    }
+                }
+            }
+        }
+        v7++;
+        v6++;
+    }
+    fn_1_A722C();
+    fn_80074918(1,3,1);
+    lbl_1_bss_646D2.unk_0 = 0;
+}
+/* fzgx:end fn_1_4FD64 */
+
 /* fzgx:begin fn_1_50164 */
 void fn_1_50164(f32 a, f32 b, f32 c, f32 d) {
     fn_1_50190(a, b, c, c, d, d);
