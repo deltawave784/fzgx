@@ -849,6 +849,187 @@ void fn_1_FD388(void) {
 }
 /* fzgx:end fn_1_FD388 */
 
+/* fzgx:begin fn_1_FD844 */
+extern void lbl_8006DB74(void *);
+extern void GXInitTexObj(void *, void *, u32, u32, u32, u32, u32, u32);
+extern void GXInitTexObjLOD(void *, u32, u32, f32, f32, f32, u8, u8, u32);
+
+typedef struct {
+    f32 x;
+    f32 y;
+    f32 z;
+} FD844_Vec;
+
+typedef struct {
+    u32 unk_0;
+    u8 pad_4[8];
+} FD844_Elem12;
+
+/* the loaded cas object referenced by the context */
+typedef struct {
+    u8 pad_0[0x338];
+    FD844_Elem12 elems[7];  /* 0x338 */
+    u8 pad_38C[4];
+    u32 unk_390;
+    u8 pad_394[0xC];
+    u32 unk_3A0;            /* table base, 0x360-byte entries */
+    u8 pad_3A4[0x16];
+    s16 unk_3BA;
+} FD844_Obj;
+
+/* texture descriptor at +0x20 of every 0x2060-byte source entry */
+typedef struct {
+    s16 unk_0;
+    u8 pad_2[2];
+    u32 flags;              /* 0x4 */
+    s16 rot_x;              /* 0x8 */
+    s16 rot_y;              /* 0xA */
+    u8 pad_C[0x1C];
+    FD844_Vec eye;          /* 0x28 */
+    FD844_Vec target;       /* 0x34 */
+    f32 unk_40;
+    f32 unk_44;
+    u8 pad_48[0x18];
+    u8 image[0x1FE0];       /* 0x60 */
+} FD844_Tex;
+
+typedef struct {
+    u8 pad_0[0x20];
+    FD844_Tex tex;          /* 0x20 */
+} FD844_Src;                /* 0x2060 bytes */
+
+typedef struct {
+    u8 pad_0[0x40];
+    u8 texobj[0x20];        /* 0x40 */
+    u8 pad_60[0x60];
+    u8 mtx[0x30];           /* 0xC0 */
+    u8 pad_F0[0x4104 - 0xF0];
+    f32 unk_4104;
+    f32 unk_4108;
+    FD844_Obj *obj;         /* 0x410C */
+    FD844_Tex *tex;         /* 0x4110 */
+    void *sel;              /* 0x4114 */
+} FD844_Slot;
+
+typedef struct {
+    FD844_Obj *obj;         /* 0x0 */
+    u8 count;               /* 0x4 */
+    u8 pad_5[0x10428 - 0x5];
+    u32 unk_10428;
+} FD844_Ctx;
+
+/* slot i of the context: 0x4100 bytes apart, the trailing fields overlap the next slot */
+#define FD844_SLOT(ctx, i) ((FD844_Slot *)((u8 *)(ctx) + (i) * 0x4100))
+
+extern void fn_1_FC760(void *, void *);
+extern void fn_8006F1F0(FD844_Vec *, FD844_Vec *, FD844_Vec *);
+extern void mathutil_mtxA_rotate_x(s16);
+extern void mathutil_mtxA_rotate_y(s16);
+
+/* Literal pool of the retail TU (lbl_1_rodata_7600): MWCC pools literals in
+ * first-use order across the TU, so the earlier functions' literals come first. */
+#pragma section code_type ".fzgxpool"
+__declspec(section ".fzgxpool") static void fzgx_pool_prime1(void) {
+    volatile f32 s;  /* fzgx-allow: S2 pool primer sink */
+    s = 2.0f;
+    s = 8.0f;
+}
+static const u32 fzgx_pool_table2[1] = {0xFFFFFFFF};  /* fzgx-allow: A1 retail pool bytes */
+__declspec(section ".fzgxpool") static void fzgx_pool_keep2(void) { const u32 *volatile cp; cp = fzgx_pool_table2; }  /* fzgx-allow: S2 pool primer sink */
+__declspec(section ".fzgxpool") static void fzgx_pool_prime3(void) {
+    volatile f32 s;  /* fzgx-allow: S2 pool primer sink */
+    s = 0.0f;
+}
+static const u32 fzgx_pool_table4[11] = {0x00000000, 0x3F000000, 0x41800000, 0x3F800000, 0x43000000,
+                                         0xFFFFFFFF, 0x00000000, 0x00000000, 0x00000000, 0xBF800000,
+                                         0xFFFFFFFF};  /* fzgx-allow: A1 retail pool bytes */
+__declspec(section ".fzgxpool") static void fzgx_pool_keep4(void) { const u32 *volatile cp; cp = fzgx_pool_table4; }  /* fzgx-allow: S2 pool primer sink */
+#pragma section code_type ".text"
+
+int fn_1_FD844(FD844_Src *src, FD844_Ctx *ctx) {
+    u8 i;
+    u32 table;
+    u8 j;
+    FD844_Obj *obj;
+    u32 off;
+    u8 *texobj;
+    FD844_Vec target;
+    FD844_Vec eye;
+
+    obj = ctx->obj;
+    if (src == NULL) {
+        return 0;
+    }
+    if (ctx == NULL) {
+        return 0;
+    }
+    if (obj == NULL) {
+        return 0;
+    }
+    if (obj->unk_390 & 0x4000000) {
+        for (j = 0; j < 3; j++) {
+            table = obj->unk_3A0;
+            if (table == 0) {
+                return 0;
+            }
+            off = obj->unk_3BA << 2;
+            off += j * 0x360;
+            if (*(u32 *)(table + off + 0x344) == 0) {
+                return 0;
+            }
+        }
+    } else {
+        if (obj->elems[obj->unk_3BA].unk_0 == 0) {
+            return 0;
+        }
+    }
+
+    for (i = 0; i < ctx->count; i++) {
+        if (!(src[i].tex.flags & 0x80000000)) {
+            *(u32 *)((u32)ctx + i * 0x4100 + 0x4110) = 0;
+        } else {
+            FD844_Vec up;
+            FD844_SLOT(ctx, i)->obj = ctx->obj;
+            {
+                FD844_Vec up_init = {0.0f, 1.0f, 0.0f};
+                up = up_init;
+            }
+            eye = src[i].tex.eye;
+            target = src[i].tex.target;
+            lbl_1_bss_850D4 = 2.0f;
+            lbl_1_bss_850D8 = 8.0f;
+            FD844_SLOT(ctx, i)->tex = &src[i].tex;
+            FD844_SLOT(ctx, i)->sel = (void *)((u32)src + (src[i].tex.unk_0 << 3) + 0x81A4);
+            FD844_SLOT(ctx, i)->unk_4104 = FD844_SLOT(ctx, i)->tex->unk_40;
+            FD844_SLOT(ctx, i)->unk_4108 = FD844_SLOT(ctx, i)->tex->unk_44;
+            fn_8006F1F0(&eye, &up, &target);
+            mathutil_mtxA_rotate_x(FD844_SLOT(ctx, i)->tex->rot_x);
+            mathutil_mtxA_rotate_y(FD844_SLOT(ctx, i)->tex->rot_y);
+            lbl_8006DB74(FD844_SLOT(ctx, i)->mtx);
+            texobj = FD844_SLOT(ctx, i)->texobj;
+            GXInitTexObj(texobj, FD844_SLOT(ctx, i)->tex->image, 0x40, 0x40, 5, 0, 0, 0);
+            GXInitTexObjLOD(texobj, 1, 1, 0.0f, 0.0f, 0.0f, 0, 0, 0);
+        }
+    }
+
+    for (i = 0; i < ctx->count; i++) {
+        FD844_Tex *tex;
+        if (ctx->unk_10428 == 0) {
+            break;
+        }
+        tex = FD844_SLOT(ctx, i)->tex;
+        if (tex != NULL && (tex->flags & 0x80000000)) {
+            if (0.0f == tex->unk_40 || 0.0f == tex->unk_44) {
+                tex->flags &= 0x7FFFFFFF;
+            } else {
+                fn_1_FC760(ctx, &FD844_SLOT(ctx, i)->pad_0[0x20]);
+            }
+        }
+    }
+    return 1;
+}
+/* fzgx:end fn_1_FD844 */
+
 /* fzgx:begin fn_1_FDFF4 */
 // Mark the background-collision object as active.
 void fn_1_FDFF4(void) {
