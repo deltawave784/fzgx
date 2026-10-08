@@ -2344,6 +2344,239 @@ void fn_10_96F8(void *first, void *second) {
 }
 /* fzgx:end fn_10_96F8 */
 
+/* fzgx:begin fn_10_9788 */
+#include "rel/sel/sel.h"
+
+struct fn_10_9788_lbl_1_bss_962 {
+    s16 unk_0;
+};
+extern struct fn_10_9788_lbl_1_bss_962 lbl_1_bss_962;
+struct NavigationTable { s16 entry[12][8]; };
+extern struct NavigationTable lbl_10_rodata_94;
+struct PadState {
+    u16 unk_0, unk_2;
+    u8 pad_4[4];
+    volatile u16 unk_8; /* input registers are reread at each test */
+    u8 pad_A[6];
+    volatile u16 unk_10, unk_12; /* input registers are reread at each test */
+};
+extern struct PadState lbl_1_bss_9F8[];
+extern u32 lbl_1_bss_980[];
+struct ControllerState { u8 pad_0[10]; s8 unk_A; u8 pad_B; };
+extern struct ControllerState lbl_1_bss_9C8[];
+extern u8 lbl_1_bss_8B3A0[];
+extern u32 lbl_801A66A8;
+extern u32 lbl_1_bss_6EAB4;
+extern void fn_1_12F128(s16);
+extern void fn_1_A2D84(u32);
+extern s32 fn_1_12F228(void);
+extern void fn_1_12F150(s16, u32, u32);
+extern void fn_1_12F1E8(s32);
+extern void fn_1_12F17C(void);
+extern void fn_1_4BB0(void);
+extern void fn_1_4A00(s32, u8, u32);
+extern u32 fn_1_A2A70(u32, u32);
+extern int fn_1_D6680(void);
+extern void fn_1_D66F4(void);
+extern void fn_10_CFAC(u32, u32, u32, u32);
+
+static inline int connected(u32 device) {
+    return device == 0x09000000 || device == 0x88000000 ||
+           device == 0x8B100000 || device == 0x08000000;
+}
+static inline s16 countControllers(void) {
+    s16 i;
+    s16 count = 0;
+    for (i = 0; i < 4; i++) {
+        if (lbl_1_bss_980[i] == 0x09000000 || lbl_1_bss_980[i] == 0x88000000 ||
+            lbl_1_bss_980[i] == 0x8B100000 || lbl_1_bss_980[i] == 0x08000000) count++;
+    }
+    return count;
+}
+void fn_10_9788(void *argInput) {
+    u32 v0;
+    s16 v1;
+    u32 v2;
+    u32 v3;
+    u32 v5;
+    u32 v6;
+    struct NavigationTable loc_4;
+    struct { u32 value; } v4;
+#define v4 v4.value
+    s16 movement;
+    s16 i;
+    s16 j;
+    u32 *devices;
+    struct PadState *pads;
+    u8 *state;
+    s16 direction;
+    s16 *selection;
+    u32 offset;
+    void *arg0 = argInput;
+
+    v0 = *(u32 *)((u8 *)arg0 + 164);
+    v1 = (s16)(lbl_1_bss_962.unk_0 - 14);
+    v3 = v0 + v1 * 148;
+    v4 = *(s16 *)((u8 *)v3 + 20) << 2;
+    loc_4 = lbl_10_rodata_94;
+
+    for (i = 0; i < 4; i++) {
+        direction = -1;
+        if ((lbl_1_bss_980[i] == 0x09000000 || lbl_1_bss_980[i] == 0x88000000 ||
+             lbl_1_bss_980[i] == 0x8B100000 || lbl_1_bss_980[i] == 0x08000000) &&
+            __rlwnm(*(u32 *)(lbl_1_bss_8B3A0 + 0x98), (i + 1) & 31, 31, 31)) {
+            if (((lbl_1_bss_9F8[i].unk_10 >> 3) & 1) || ((lbl_1_bss_9F8[i].unk_12 >> 3) & 1)) direction = 0;
+            if (((lbl_1_bss_9F8[i].unk_10 >> 2) & 1) || ((lbl_1_bss_9F8[i].unk_12 >> 2) & 1)) direction = 1;
+            if ((lbl_1_bss_9F8[i].unk_10 & 1) || (lbl_1_bss_9F8[i].unk_12 & 1)) direction = 2;
+            if (((lbl_1_bss_9F8[i].unk_10 >> 1) & 1) || ((lbl_1_bss_9F8[i].unk_12 >> 1) & 1)) direction = 3;
+            if (((lbl_1_bss_9F8[i].unk_10 & 1) || (lbl_1_bss_9F8[i].unk_12 & 1)) &&
+                (((lbl_1_bss_9F8[i].unk_10 >> 3) & 1) || ((lbl_1_bss_9F8[i].unk_12 >> 3) & 1))) direction = 4;
+            if (((lbl_1_bss_9F8[i].unk_10 & 1) || (lbl_1_bss_9F8[i].unk_12 & 1)) &&
+                (((lbl_1_bss_9F8[i].unk_10 >> 2) & 1) || ((lbl_1_bss_9F8[i].unk_12 >> 2) & 1))) direction = 5;
+            if ((((lbl_1_bss_9F8[i].unk_10 >> 1) & 1) || ((lbl_1_bss_9F8[i].unk_12 >> 1) & 1)) &&
+                (((lbl_1_bss_9F8[i].unk_10 >> 3) & 1) || ((lbl_1_bss_9F8[i].unk_12 >> 3) & 1))) direction = 6;
+            if ((((lbl_1_bss_9F8[i].unk_10 >> 1) & 1) || ((lbl_1_bss_9F8[i].unk_12 >> 1) & 1)) &&
+                (((lbl_1_bss_9F8[i].unk_10 >> 2) & 1) || ((lbl_1_bss_9F8[i].unk_12 >> 2) & 1))) direction = 7;
+            if (direction != -1) {
+                s16 next = loc_4.entry[*(s16 *)(v3 + v4)][direction];
+                if (next != -1) {
+                    *(s16 *)(v3 + v4) = next;
+                    fn_1_12F128(i);
+                    fn_1_A2D84(0xA9010000);
+                    lbl_801A66A8 = 0;
+                }
+            }
+        }
+    }
+    movement = 0;
+#define i j
+    for (i = 0; i < 4; i++) {
+        if (lbl_1_bss_9C8[i].unk_A != -1 &&
+            __rlwnm(*(u32 *)(lbl_1_bss_8B3A0 + 0x98), (i + 1) & 31, 31, 31)) {
+            if ((lbl_1_bss_9F8[i].unk_8 >> 9) & 1) movement--;
+            if (((lbl_1_bss_9F8[i].unk_8 >> 8) & 1) || fn_1_12F228()) movement++;
+            if (((lbl_1_bss_9F8[i].unk_8 >> 8) & 1) || fn_1_12F228()) {
+                fn_1_12F150(i, 1, 1);
+            } else if ((lbl_1_bss_9F8[i].unk_8 >> 9) & 1) {
+                fn_1_12F150(i, 1, 0);
+            }
+        }
+    }
+    state = lbl_1_bss_8B3A0;
+    if (*(u32 *)(state + 0x94) & 0x200) {
+        if (movement > 0) {
+            *(s16 *)arg0 = *(s16 *)(v3 + v4);
+            fn_1_A2D84(0xA9010100);
+            switch (*(s16 *)arg0) {
+            case 10: fn_1_A2D84(0xA9100300); break;
+            case 9: fn_1_A2D84(0xA9100200); break;
+            }
+            fn_1_12F1E8(0);
+        }
+    } else if (movement > 0) {
+        s16 value = *(s16 *)(v3 + v4);
+        if (value != 0 || countControllers() >= 2) {
+            *(s16 *)arg0 = value;
+            fn_1_A2D84(0xA9010100);
+            switch (*(s16 *)arg0) {
+            case 10: fn_1_A2D84(0xA9100300); break;
+            case 9: fn_1_A2D84(0xA9100200); break;
+            }
+            fn_1_12F1E8(0);
+        }
+    }
+    if (movement < 0 &&
+        ((*(u32 *)(state + 0x94) & 0x40000000) == 0 ||
+         (*(u32 *)(state + 0x94) & 0x4000) != 0)) {
+        fn_1_12F17C();
+        *(u32 *)(state + 0x94) |= 0x04000000;
+        fn_1_4BB0();
+        fn_1_4A00(0, (u8)lbl_10_bss_4938C, lbl_10_bss_49388);
+        lbl_10_bss_51744 = 0;
+        fn_1_A2D84(0xA9010200);
+        lbl_1_bss_6EAB4 |= 0x24;
+    }
+    switch (*(s16 *)arg0) {
+    case 3:
+        lbl_10_bss_14 = 15;
+        fn_1_4A00(0, (u8)lbl_10_bss_4938C, lbl_10_bss_49388);
+        lbl_10_bss_51744 = 0;
+        break;
+    case 4:
+        *(u32 *)(state + 0x94) |= 0x08000000;
+        *(u32 *)(state + 0x94) |= 0x00200000;
+        fn_1_4A00(0, 60, lbl_10_bss_49388);
+        lbl_10_bss_51744 = 0;
+        lbl_1_bss_6EAB4 |= 0x2C;
+        fn_1_A2A70(44, 60);
+        break;
+    case 6:
+        *(u32 *)(state + 0x94) |= 0x08000000;
+        *(u32 *)(state + 0x94) |= 0x00100000;
+        fn_1_4A00(0, 60, lbl_10_bss_49388);
+        lbl_10_bss_51744 = 0;
+        lbl_1_bss_6EAB4 |= 0x2C;
+        fn_1_A2A70(44, 60);
+        break;
+    case 5:
+        *(u32 *)(state + 0x94) |= 0x08000000;
+        *(u32 *)(state + 0x94) |= 0x00080000;
+        fn_1_4A00(0, 60, lbl_10_bss_49388);
+        lbl_10_bss_51744 = 0;
+        lbl_1_bss_6EAB4 |= 0x2C;
+        fn_1_A2A70(44, 60);
+        break;
+    case 7:
+        *(u32 *)(state + 0x94) |= 0x08000000;
+        *(u32 *)(state + 0x94) |= 0x80;
+        fn_1_4A00(0, 60, lbl_10_bss_49388);
+        lbl_10_bss_51744 = 0;
+        lbl_1_bss_6EAB4 |= 0x2C;
+        fn_1_A2A70(44, 60);
+        break;
+    case 8:
+        *(u32 *)(state + 0x94) |= 0x08000000;
+        *(u32 *)(state + 0x94) |= 0x40;
+        fn_1_4A00(0, 60, lbl_10_bss_49388);
+        lbl_10_bss_51744 = 0;
+        lbl_1_bss_6EAB4 |= 0x2C;
+        fn_1_A2A70(44, 60);
+        break;
+    case 9:
+        if (((lbl_1_bss_9F8[lbl_1_bss_8B3A0[0x9E]].unk_2 >> 8) & 1) || !(u8)fn_1_D6680()) {
+            fn_1_D66F4();
+            lbl_10_bss_14 = 15;
+        } else {
+            lbl_10_bss_14 = 21;
+        }
+        fn_1_4A00(0, (u8)lbl_10_bss_4938C, lbl_10_bss_49388);
+        lbl_10_bss_51744 = 0;
+        break;
+    case 10:
+        lbl_10_bss_14 = 15;
+        fn_1_4A00(0, (u8)lbl_10_bss_4938C, lbl_10_bss_49388);
+        lbl_10_bss_51744 = 0;
+        break;
+    default:
+        switch (*(s16 *)arg0) {
+        case 0:
+            fn_10_CFAC(1, 0, 30, 10);
+            *(s16 *)((u8 *)arg0 + 4) = *(s16 *)((u8 *)arg0 + 4) < 2 ? 2 :
+                (*(s16 *)((u8 *)arg0 + 4) > countControllers() ? countControllers() : *(s16 *)((u8 *)arg0 + 4));
+            break;
+        case 1:
+        case 11:
+            fn_10_CFAC(1, 0, 30, 6);
+            break;
+        case 2:
+            fn_10_CFAC(1, 0, 30, 18);
+            break;
+        }
+        break;
+    }
+}
+/* fzgx:end fn_10_9788 */
+
 /* fzgx:begin fn_10_A0E8 */
 struct SelG {
     u8 pad[0x98];
