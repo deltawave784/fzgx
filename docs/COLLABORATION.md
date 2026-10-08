@@ -32,6 +32,14 @@ merges stay mechanical. Record the split here and keep to it:
 | B (Codex, branch `codex`) | `main`, `movie_module`, `customize`, `sel`, and every smaller module |
 
 (1,070 of the 2,121 unmatched functions are in `main_rel`; the rest is spread across the other modules.)
+
+**Shared slice of `main_rel` (2026-10-07).** Once B's own modules were used up, B's Sol loop also takes the part of
+`main_rel` the Claude loop does not route: functions over 768 B (A's Opus/Sonnet fallback stops at 768 B) whose best
+score is under 85% (A's Fable floor), and never attempted by a Claude tier (read from the committed
+`state/ledger.json`). `tools/codex_loop.py` enforces it (`SHARED_MODULE`, `CLAUDE_SMALL`, `CLAUDE_FLOOR`). If A lowers
+its `route --fable --min-percent` below 85, or its `--max-size` above 768, change these constants too, or the clones
+will work on the same functions. Both clones now write `main_rel`'s `splits.txt`, `units.json` and `symbols.txt`:
+a merge conflict at the end of those files is two sets of appended entries, so keep both sides.
 Clone A's router takes `--module main_rel`; clone B's seed manifests list only its modules.
 
 ## Rules that keep the clones from colliding
