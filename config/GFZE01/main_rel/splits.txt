@@ -6995,3 +6995,6 @@ rel/main_rel/enemy_ctrl/fn_1_CB6D8.c:
 
 rel/main_rel/bg_for/fn_1_DCFA4.c:
 	.text       start:0x000DCFA4 end:0x000DD4DC align:4
+
+rel/main_rel/stcoli/fn_1_278B8.c:
+	.text       start:0x000278B8 end:0x00027DE4 align:4
