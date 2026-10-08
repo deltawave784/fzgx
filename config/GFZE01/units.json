@@ -2306,6 +2306,20 @@
   },
   {
     "module": "customize",
+    "source": "rel/customize/toolkit/fn_3_28378.c",
+    "symbols": [
+      "fn_3_28378"
+    ],
+    "status": "matching",
+    "mw_version": null,
+    "extra_cflags": [],
+    "tu": "rel/customize/toolkit.c",
+    "pool": {
+      "@30": "lbl_3_rodata_800"
+    }
+  },
+  {
+    "module": "customize",
     "source": "rel/customize/toolkit/fn_3_2A2F8.c",
     "symbols": [
       "fn_3_2A2F8"

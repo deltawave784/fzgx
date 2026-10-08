@@ -2134,6 +2134,41 @@ void fn_3_268D0(fn_3_268D0_CustomizeObject *self) {
 }
 /* fzgx:end fn_3_268D0 */
 
+/* fzgx:begin fn_3_28378 */
+#include "font.h"
+
+struct fn_3_28378_Copy88 { u32 a[22]; };
+extern u32 lbl_1_rodata_26F8;
+extern void fn_3_2406C(void);
+extern const f32 lbl_3_rodata_8F0;
+extern int fn_1_4F734(FontDrawPacket *);
+
+static inline void draw(struct fn_3_28378_Copy88 *p, s32 x, s32 y, s16 z, u32 value, u32 flags, void (*callback)(void)) {
+#define packet (*p)
+    packet = *(struct fn_3_28378_Copy88 *)&lbl_1_rodata_26F8;
+    packet.a[0] = value;
+    *(f32 *)&packet.a[1] = (f32)x;
+    *(f32 *)&packet.a[2] = (f32)y;
+    *(f32 *)&packet.a[3] = (f32)z;
+    packet.a[12] = flags;
+    if (callback) {
+        packet.a[20] = (u32)callback;
+        packet.a[12] |= 0x4000000;
+    }
+    *(f32 *)&packet.a[11] = lbl_3_rodata_8F0;
+    fn_1_4F734((FontDrawPacket *)&packet);
+}
+
+void fn_3_28378(s16 arg0, s16 arg1, u32 arg2, u32 arg3) {
+    struct fn_3_28378_Copy88 pkt;
+    void (*callback)(void) = fn_3_2406C;
+    draw(&pkt, arg0 - 8, arg1 - 1, (s16)arg2, arg3, 0xf, callback);
+    draw(&pkt, arg0 + 8, arg1 - 1, (s16)arg2, arg3, 0x8000d, callback);
+    draw(&pkt, arg0 - 8, arg1 + 1, (s16)arg2, arg3, 0x100007, callback);
+    draw(&pkt, arg0 + 8, arg1 + 1, (s16)arg2, arg3, 0x180005, callback);
+}
+/* fzgx:end fn_3_28378 */
+
 /* fzgx:begin fn_3_2A2F8 */
 #include "font.h"
 
