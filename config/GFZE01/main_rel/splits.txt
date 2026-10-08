@@ -6926,3 +6926,6 @@ rel/main_rel/motasglist/fn_1_43264.c:
 
 rel/main_rel/effect/fn_1_6313C.c:
 	.text       start:0x0006313C end:0x000632D4 align:4
+
+rel/main_rel/font/fn_1_50190.c:
+	.text       start:0x00050190 end:0x000508C4 align:4
