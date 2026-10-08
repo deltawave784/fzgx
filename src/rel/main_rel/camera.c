@@ -74,6 +74,121 @@ extern f32 lbl_1_rodata_49C;
 extern f32 lbl_1_bss_10C0[6];
 extern CameraState* camera_get_state_object(void);
 
+/* fzgx:begin fn_1_5370 noprologue */
+#include "types.h"
+#include "rel/main_rel/camera.h"
+
+extern u32 fn_1_434C(void);
+extern u8 fn_1_86624(void);
+extern u32 fn_1_435C(u32);
+extern void fn_1_426C(u32);
+extern void fn_1_8298(s8);
+extern void fn_1_847C(s8);
+extern void fn_1_857C(s8);
+extern void fn_1_90E0(void);
+extern void fn_1_EE44(void);
+extern f32 fn_1_A6FE8(void);
+extern const f64 lbl_1_rodata_178;
+extern const f64 lbl_1_rodata_180;
+extern void fn_1_8D08(void *, f32);
+extern u16 fn_1_3F8C(u8 *, void (*)(void), void *, u32);
+extern void fn_1_EBE4(LiveCamera *, s16, s32, f32);
+
+s8 fn_1_5370(s8 arg0, s16 arg1) {
+    Obj_1_bss_F68_Target **base = &lbl_1_bss_F68;
+    u32 i;
+    s8 old;
+    u32 count = 0;
+    u32 extra = 0;
+    u32 saved;
+    u8 *obj;
+    s16 id;
+    u32 j;
+    f32 value;
+    if (*base == 0) return -1;
+    saved = fn_1_434C();
+    fn_1_86624();
+    old = (s8)(*base)->unk_4D;
+    (*base)->unk_4D = arg0;
+    fn_1_435C((*base)->unk_50);
+    {
+        Obj_1_bss_F68_Target *state;
+        for (j = 0; j < (u32)(state = *base)->unk_22; j++)
+            fn_1_426C(*(s16 *)((u8 *)state + 4 + j * 2));
+        state->unk_22 = 0;
+    }
+    fn_1_435C((*base)->unk_54);
+    {
+        Obj_1_bss_F68_Target *state;
+        for (j = 0; j < (u32)(state = *base)->unk_44; j++)
+            fn_1_426C(*(s16 *)((u8 *)state + 0x26 + j * 2));
+        state->unk_44 = 0;
+    }
+    switch (arg0) {
+    case 0: fn_1_8298(arg0); break;
+    case 1: case 2: case 4: fn_1_847C(arg0); break;
+    case 3: fn_1_857C(arg0); break;
+    }
+    {
+    Obj_1_bss_F68_Target *state = *base;
+    switch ((s8)state->unk_48) {
+    case 0: count = 1; break;
+    case 1: case 2: count = 2; break;
+    case 3: case 4: case 5: case 7: count = 3; break;
+    case 6: count = 3; extra = 1; break;
+    case 8: count = 4; break;
+    case 9: extra = 1; break;
+    case 10: count = 1; extra = 1; break;
+    case 11: count = 0; extra = 0; break;
+    }
+    state->unk_49 = count + extra;
+    }
+    obj = *(u8 **)((u8 *)base + 4);
+#pragma opt_common_subs off
+    for (i = 0; i < count; i++) {
+        u8 mode;
+
+        value = fn_1_A6FE8();
+        mode = (*base)->unk_48;
+        if ((s8)mode == 1 ||
+            (i == 0 && (s8)mode == 3) ||
+            (i == 1 && (s8)mode == 4) ||
+            (i == 2 && (s8)mode == 5))
+            value *= lbl_1_rodata_178;
+        if ((s8)mode == 2) value *= lbl_1_rodata_180;
+        if ((s8)mode == 0) *(s16 *)(obj + 2) = arg1;
+        fn_1_8D08(obj, value);
+        fn_1_435C((*base)->unk_50);
+        id = fn_1_3F8C(lbl_1_data_33CC, fn_1_90E0, obj, 0x14);
+        obj += 0x1FC;
+        {
+            Obj_1_bss_F68_Target *state = *base;
+            j = state->unk_22;
+            state->unk_22 = j + 1;
+            *(s16 *)((u8 *)state + 4 + j * 2) = id;
+        }
+    }
+    if (extra != 0) {
+        value = fn_1_A6FE8();
+        if (arg0 == 4)
+            fn_1_EBE4(*(LiveCamera **)((u8 *)base + 8), -1, 1, value);
+        else
+            fn_1_EBE4(*(LiveCamera **)((u8 *)base + 8), arg1, 0, value);
+        fn_1_435C((*base)->unk_50);
+        id = fn_1_3F8C(lbl_1_data_33DC, fn_1_EE44, *(void **)((u8 *)base + 8), 0x14);
+        {
+            s16 index;
+            Obj_1_bss_F68_Target *state = *base;
+            index = state->unk_22;
+            state->unk_22 = index + 1;
+            ((s16 *)&state->unk_4)[index] = id;
+        }
+    }
+    fn_1_435C(saved);
+    return old;
+}
+/* fzgx:end fn_1_5370 */
+
 /* fzgx:begin fn_1_6400 */
 typedef struct {
     u32 unk_0;
