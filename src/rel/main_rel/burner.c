@@ -1346,7 +1346,7 @@ void fn_1_9A7A8(u32 *value) {
 }
 /* fzgx:end fn_1_9A7A8 */
 
-/* fzgx:begin fn_1_9A864 noprologue */
+/* fzgx:begin fn_1_9A864 */
 #include "types.h"
 #include "game/main_rel/burner_types.h"
 
