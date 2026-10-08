@@ -5625,31 +5625,23 @@ s16 fn_1_8D640(s16 index) {
 }
 /* fzgx:end fn_1_8D640 */
 
-/* fzgx:begin fn_1_8D690 noprologue */
-#include "types.h"
-#include "dolphin/hw_regs.h"
-#include "psvec.h"
-#include "game/main_rel/car_types.h"
-
+/* fzgx:begin fn_1_8D690 */
 extern u8 lbl_1_rodata_3D34[164];
-
-extern int fn_1_F7BE4(s16 arg0);
+extern int fn_1_F7BE4();
 
 typedef struct {
     u32 entries[41];
 } fn_1_8D690_FnTable;
 
-
-
 // Return whether the indexed flag remains enabled after the preliminary check.
-int fn_1_8D690(s16 arg0) {
+int fn_1_8D690(int arg0) {
     fn_1_8D690_FnTable table;
     u32 valid;
 
     valid = 1;
     if (!fn_1_F7BE4(arg0)) {
         table = (*(const fn_1_8D690_FnTable *)&lbl_1_rodata_3D34);
-        if ((table.entries[(s32)arg0] & ~0x7fffffff) == 0) {
+        if ((table.entries[(s16)arg0] & ~0x7fffffff) == 0) {
             valid = 0;
         }
     }
