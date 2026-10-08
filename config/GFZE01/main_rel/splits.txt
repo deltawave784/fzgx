@@ -6923,3 +6923,6 @@ rel/main_rel/effect/fn_1_61EF4.c:
 
 rel/main_rel/motasglist/fn_1_43264.c:
 	.text       start:0x00043264 end:0x000433A4 align:4
+
+rel/main_rel/effect/fn_1_6313C.c:
+	.text       start:0x0006313C end:0x000632D4 align:4
