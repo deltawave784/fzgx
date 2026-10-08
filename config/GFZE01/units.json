@@ -41243,6 +41243,20 @@
   },
   {
     "module": "main_rel",
+    "source": "rel/main_rel/font/fn_1_5233C.c",
+    "symbols": [
+      "fn_1_5233C"
+    ],
+    "status": "matching",
+    "mw_version": "GC/2.5",
+    "extra_cflags": [],
+    "tu": "rel/main_rel/font.c",
+    "pool": {
+      "@61": "lbl_1_rodata_2764"
+    }
+  },
+  {
+    "module": "main_rel",
     "source": "rel/main_rel/font/fn_1_527B4.c",
     "symbols": [
       "fn_1_527B4"

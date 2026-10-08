@@ -2298,6 +2298,72 @@ void fn_1_52250(struct fn_1_52250_Arg0 *arg0, struct fn_1_52250_Arg1 *arg1) {
 }
 /* fzgx:end fn_1_52250 */
 
+/* fzgx:begin fn_1_5233C noprologue */
+#include "sdk_addresses.h"
+#include "types.h"
+
+struct fn_1_5233C_Copy88 { u32 a[22]; };
+struct ShadowEntry { u32 color; f32 x, y; };
+struct ShadowTable { struct ShadowEntry e[9]; };
+struct Color { u8 r,g,b,a; };
+extern u32 lbl_1_rodata_27B0;
+extern f32 lbl_1_rodata_2764[2];
+extern u32 fn_800371F8(u32, void *);
+extern void fn_8003462C(u32, u32, u32);
+#define FIFO (*(volatile f32 *)FZGX_ADDR___GXFifo) /* GX write-gather FIFO */
+static inline void pos(f32 x, f32 y, f32 z) { FIFO=x; FIFO=y; FIFO=z; }
+static inline f32 xy(f32 x, f32 y, f32 bias) { FIFO=x; FIFO=y; return bias; }
+#define VERT(X,Y,U,V) pos((X),(Y),z); FIFO=(U); FIFO=(V)
+void fn_1_5233C(void *arg0, void *arg1) {
+    struct ShadowTable table;
+    struct fn_1_5233C_Copy88 copy;
+    struct Color color;
+    u32 c0;
+    struct Color c1;
+    struct ShadowEntry *entry;
+    f32 dx,dy,z,v0,u1,u0,v1;
+    f32 bias;
+    f32 *p = (f32 *)arg1;
+    table = *(struct ShadowTable *)&lbl_1_rodata_27B0;
+    entry = &table.e[(u32)*(f32 *)((u8 *)arg0+0x54)];
+    if (!(*(u32 *)((u8 *)arg0+0x30) & 0x10000000)) {
+        copy = *(struct fn_1_5233C_Copy88 *)arg0;
+        c0 = entry->color;
+        dx = entry->x;
+        dy = entry->y;
+        fn_800371F8(2, &c0);
+        fn_8003462C(0x80,7,16);
+        xy(p[0],p[1]-dy,0.0f);
+        z = -(0.1f+*(f32 *)((u8 *)&copy+0xc)); FIFO=z;
+        u0=*(f32 *)((u8 *)&copy+0x18); FIFO=u0;
+        v0=*(f32 *)((u8 *)&copy+0x1c); FIFO=v0;
+        pos(p[3],p[4]-dy,z);
+        u1=*(f32 *)((u8 *)&copy+0x20); FIFO=u1; FIFO=v0;
+        pos(p[9],p[10]-dy,z); FIFO=u1;
+        v1=*(f32 *)((u8 *)&copy+0x24); FIFO=v1;
+        VERT(p[6],p[7]-dy,u0,v1);
+        VERT(p[0],p[1]+dy,u0,v0);
+        VERT(p[3],p[4]+dy,u1,v0);
+        VERT(p[9],p[10]+dy,u1,v1);
+        VERT(p[6],p[7]+dy,u0,v1);
+        color.a=0;
+        VERT(p[0]-dx,p[1],u0,v0);
+        VERT(p[3]-dx,p[4],u1,v0);
+        VERT(p[9]-dx,p[10],u1,v1);
+        VERT(p[6]-dx,p[7],u0,v1);
+        VERT(p[0]+dx,p[1],u0,v0);
+        VERT(p[3]+dx,p[4],u1,v0);
+        VERT(p[9]+dx,p[10],u1,v1);
+        VERT(p[6]+dx,p[7],u0,v1);
+        color.r=*((u8 *)&copy+0x38);
+        color.g=*((u8 *)&copy+0x39);
+        color.b=*((u8 *)&copy+0x3a);
+        c1=color;
+        fn_800371F8(2,&c1);
+    }
+}
+/* fzgx:end fn_1_5233C */
+
 /* fzgx:begin fn_1_527B4 */
 typedef struct {
     u32 unk_0;

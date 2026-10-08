@@ -6935,3 +6935,6 @@ rel/main_rel/sel_static_disp/fn_1_1363F0.c:
 
 rel/main_rel/bg_common/fn_1_10576C.c:
 	.text       start:0x0010576C end:0x00105AB8 align:4
+
+rel/main_rel/font/fn_1_5233C.c:
+	.text       start:0x0005233C end:0x00052690 align:4
