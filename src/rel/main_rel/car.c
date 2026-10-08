@@ -5669,28 +5669,18 @@ int fn_1_8D72C(s16 index) {
 }
 /* fzgx:end fn_1_8D72C */
 
-/* fzgx:begin fn_1_8D7C8 noprologue */
-#include "types.h"
-#include "dolphin/hw_regs.h"
-#include "psvec.h"
-#include "game/main_rel/car_types.h"
-
+/* fzgx:begin fn_1_8D7C8 */
 extern u8 lbl_1_rodata_3D34[164];
-
-extern int fn_1_F7BE4(s16 arg0);
 
 typedef struct {
     u32 values[41];
 } Fn1_8D7C8Data;
 
-extern int fn_1_F7BE4(s16 index);
-
-
-
+/* Counts the entries that are either enabled by the preliminary check or flagged in the default table. */
 s16 fn_1_8D7C8(void) {
     int enabled;
     u32 *value;
-    s16 index;
+    int index;
     s16 count;
     Fn1_8D7C8Data data;
 
