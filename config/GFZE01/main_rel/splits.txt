@@ -6980,3 +6980,6 @@ rel/main_rel/enemy_ctrl/fn_1_C7CBC.c:
 
 rel/main_rel/car/fn_1_95950.c:
 	.text       start:0x00095950 end:0x00095EF0 align:4
+
+rel/main_rel/live_camera/fn_1_EE44.c:
+	.text       start:0x0000EE44 end:0x0000F3D0 align:4

@@ -703,6 +703,213 @@ void fn_1_EE04(Fn1EE04Context *context) {
 }
 /* fzgx:end fn_1_EE04 */
 
+/* fzgx:begin fn_1_EE44 noprologue */
+#include "types.h"
+#include "rel/main_rel/live_camera.h"
+#include "game/main_rel/live_camera_types.h"
+
+struct fn_1_EE44_Arg0 {
+    u8 unk_0;
+    u8 pad_1;
+    s16 unk_2, unk_4, unk_6, unk_8;
+    u8 pad_A[2];
+    u32 unk_C;
+    u8 pad_10[2];
+    s16 unk_12, unk_14;
+    u8 pad_16[6];
+    u32 unk_1C, unk_20, unk_24;
+    u32 unk_28, unk_2C, unk_30;
+    u8 pad_34[0x18];
+    f32 unk_4C[3];
+    f32 unk_58;
+    s16 unk_5C;
+    u8 pad_5E[2];
+    f32 unk_60;
+    u16 unk_64;
+    u8 pad_66[4];
+    u16 unk_6A;
+    u8 pad_6C[4];
+    f32 unk_70[3];
+    u8 pad_7C[0x80];
+    u8 unk_FC[0x30];
+    u8 unk_12C[0x30];
+    u8 unk_15C[4];
+};
+struct fn_1_EE44_Object {
+    u8 pad_0[0x7C];
+    u32 unk_7C;
+    u8 pad_80[0x80];
+    f32 unk_100;
+};
+extern u8 fn_1_A5848(void);
+extern s32 fn_1_40BB4(void);
+extern f32 lbl_1_rodata_4E0[];
+extern u8 lbl_1_bss_17C0;
+extern void fn_1_101D0(Sig_fn_1_101D0_Fn_1_101D0_State *);
+extern void fn_1_FCB0(Sig_fn_1_101D0_Fn_1_101D0_State *);
+extern void fn_1_A5858(u8);
+extern s32 camera_get_state(void);
+extern void *fn_1_8627C(s32);
+extern s16 fn_1_7B054(void);
+extern u32 fn_1_584AC(void);
+extern void fn_1_6DD0(void *);
+extern void fn_1_FB50(void *);
+extern void lbl_8006DD14(void *, void *);
+extern void fn_8006F1F0(void *, void *, void *);
+extern void fn_8006F038(void *, void *, s16);
+extern void lbl_8006DB74(void *);
+extern void fn_8006F4E0(s16 *);
+extern void fn_1_549F4(void *, void *, f32, f32, f32, f32);
+extern void fn_1_54DCC(u8 *);
+typedef void (*Fn1EE44Handler)(struct fn_1_EE44_Arg0 *, void *);
+
+static inline void update_mode(struct fn_1_EE44_Arg0 *arg0, u8 *pool) {
+    struct fn_1_EE44_Object *obj;
+    if (arg0->unk_6 != 255 && arg0->unk_6 >= 0 &&
+        arg0->unk_2 != 5 && arg0->unk_2 != -1) {
+        obj = fn_1_8627C(arg0->unk_6);
+        if (obj != 0) {
+            if (obj->unk_7C & 0x01000000) {
+                if ((obj->unk_7C & 1) && fn_1_7B054() != 35)
+                    return;
+                if ((u16)fn_1_584AC() % 2)
+                    arg0->unk_12 = 1;
+                else
+                    arg0->unk_12 = 3;
+                arg0->unk_C &= 0xFFDFFFFF;
+            }
+            if (fn_1_7B054() != 11)
+                return;
+            if (*(f32 *)(pool + 0x70) < obj->unk_100)
+                return;
+            if (obj->unk_100 < *(f32 *)(pool + 0x74))
+                return;
+            {
+                if ((u16)fn_1_584AC() % 2)
+                    arg0->unk_12 = 1;
+                else
+                    arg0->unk_12 = 3;
+                arg0->unk_C &= 0xFFDFFFFF;
+            }
+        }
+    }
+}
+
+#pragma opt_propagation off
+void fn_1_EE44(struct fn_1_EE44_Arg0 *arg0, f32 arg1) {
+    Obj_1_data_43B8 *p_lbl_1_data_43B8;
+    u8 *p_lbl_1_rodata_4E0;
+    u32 v0;
+    u16 v1;
+    u8 v2;
+    u16 v3;
+    f64 value;
+    s16 rotation;
+    union { f64 d; struct { u32 hi, lo; } w; } conversion;
+    p_lbl_1_data_43B8 = (Obj_1_data_43B8 *)&lbl_1_data_43B8;
+    p_lbl_1_rodata_4E0 = (u8 *)&lbl_1_rodata_4E0;
+    arg0->unk_C &= 0x7FFFFFFF;
+    {
+        typedef struct { u32 x, y, z; } Copy3;
+        *(Copy3 *)&arg0->unk_28 = *(Copy3 *)&arg0->unk_1C;
+    }
+    v1 = arg0->unk_64;
+    if (v1 != 0)
+        arg0->unk_64 = v1 - *(s16 *)((u8 *)p_lbl_1_data_43B8 + 0xCC);
+    v2 = arg0->unk_0;
+    switch (v2) {
+    case 3:
+        if (fn_1_40BB4() == 0) {
+            if ((lbl_1_bss_9F8.unk_A >> 2) & 1) {
+                arg0->unk_12++;
+                arg0->unk_14 = 0;
+            }
+            if ((lbl_1_bss_9F8.unk_A >> 3) & 1) {
+                arg0->unk_12--;
+                arg0->unk_14 = 0;
+            }
+            if (arg0->unk_12 >= 4)
+                arg0->unk_12 = 0;
+            if (arg0->unk_12 < 0)
+                arg0->unk_12 = 3;
+        }
+        break;
+    case 6:
+        fn_1_101D0((Sig_fn_1_101D0_Fn_1_101D0_State *)arg0);
+        break;
+    case 0:
+    case 1:
+    case 2:
+    case 5:
+        if (v2 == 0) {
+            v3 = arg0->unk_6A;
+            arg0->unk_6A = v3 + 1;
+            arg0->unk_C &= 0xFFDFFFFF;
+            if (fn_1_A5848()) {
+                if (lbl_1_bss_17C0)
+                    lbl_1_bss_17C0--;
+                else {
+                    fn_1_FCB0((Sig_fn_1_101D0_Fn_1_101D0_State *)arg0);
+                    fn_1_A5858(0);
+                    arg0->unk_6A = 0;
+                }
+            }
+            if (arg0->unk_6A > 240) {
+                arg0->unk_6A = 0;
+                fn_1_FCB0((Sig_fn_1_101D0_Fn_1_101D0_State *)arg0);
+                fn_1_A5858(0);
+            }
+        } else {
+            if (arg0->unk_64 != 0) {
+                f64 bias = *(f64 *)(p_lbl_1_rodata_4E0 + 0x68);
+                conversion.w.lo = arg0->unk_64;
+                conversion.w.hi = 0x43300000;
+                {
+                    value = conversion.d;
+                    if (!(value - bias >
+                        *(f64 *)(p_lbl_1_rodata_4E0 + 0x78)))
+                        goto mode_done; /* Join the common per-frame update. */
+                }
+            }
+            if (!(arg0->unk_C & 0x00200000))
+                fn_1_FCB0((Sig_fn_1_101D0_Fn_1_101D0_State *)arg0);
+        }
+        break;
+    }
+mode_done:
+    if ((s8)camera_get_state() == 6 && arg0->unk_12 == 2)
+        arg0->unk_12 = (arg0->unk_12 + 1) % 3;
+    if (arg0->unk_2 != arg0->unk_12) {
+        update_mode(arg0, p_lbl_1_rodata_4E0);
+        arg0->unk_2 = arg0->unk_12;
+        ((Fn1EE44Handler *)((u8 *)p_lbl_1_data_43B8 + 0x88))[arg0->unk_2](arg0, (u8 *)p_lbl_1_data_43B8 + 0x88);
+        fn_1_6DD0(0);
+    }
+    if (arg0->unk_4 != arg0->unk_14) {
+        update_mode(arg0, p_lbl_1_rodata_4E0);
+        arg0->unk_4 = arg0->unk_14;
+        ((Fn1EE44Handler *)((u8 *)p_lbl_1_data_43B8 + 0x88))[arg0->unk_2](arg0, (u8 *)p_lbl_1_data_43B8 + 0x88);
+        fn_1_6DD0(0);
+    }
+    if (arg0->unk_2 == 5 || arg0->unk_2 == -1)
+        arg0->unk_6 = -1;
+    else
+        arg0->unk_6 = arg0->unk_8;
+    ((Fn1EE44Handler *)((u8 *)p_lbl_1_data_43B8 + 0xA4))[arg0->unk_2](arg0, (u8 *)p_lbl_1_data_43B8 + 0xA4);
+    fn_1_FB50(arg0);
+    lbl_8006DD14(arg0->unk_12C, arg0->unk_FC);
+    if (arg0->unk_2 == 1 || arg0->unk_2 == 2)
+        fn_8006F1F0(&arg0->unk_1C, arg0->unk_70, arg0->unk_4C);
+    else
+        fn_8006F038(&arg0->unk_1C, arg0->unk_4C, arg0->unk_5C);
+    lbl_8006DB74(arg0->unk_12C);
+    fn_8006F4E0(&rotation);
+    fn_1_549F4(&arg0->unk_1C, &rotation, arg0->unk_58, arg0->unk_60,
+        *(f32 *)(p_lbl_1_rodata_4E0 + 0x14), *(f32 *)(p_lbl_1_rodata_4E0 + 0x14));
+    fn_1_54DCC(arg0->unk_15C);
+}
+/* fzgx:end fn_1_EE44 */
+
 /* fzgx:begin fn_1_F6A8 */
 #define ALIGN32(n) (((n) + 0x1F) & ~0x1F)
 
