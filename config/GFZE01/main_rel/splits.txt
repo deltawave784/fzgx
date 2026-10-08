@@ -6944,3 +6944,15 @@ rel/main_rel/car/fn_1_7FD7C.c:
 
 rel/main_rel/bg_cas/fn_1_FD844.c:
 	.text       start:0x000FD844 end:0x000FDB40 align:4
+
+rel/main_rel/ghost/fn_1_F1C54.c:
+	.text       start:0x000F1C54 end:0x000F1D60 align:4
+
+rel/main_rel/custom_memcard/fn_1_131620.c:
+	.text       start:0x00131620 end:0x001317B4 align:4
+
+rel/main_rel/phys/fn_1_ECE04.c:
+	.text       start:0x000ECE04 end:0x000ECF68 align:4
+
+rel/main_rel/bg_win/fn_1_15BB34.c:
+	.text       start:0x0015BB34 end:0x0015BBC4 align:4

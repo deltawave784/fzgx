@@ -121,6 +121,73 @@ char *fn_1_15BA78(char *name) {
 #pragma opt_common_subs reset
 /* fzgx:end fn_1_15BA78 */
 
+/* fzgx:begin fn_1_15BB34 pool noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/bg_win.h"
+
+extern void fn_80008BEC(void *, int, u32);
+
+typedef struct {
+    u8 pad_0[0x20];
+    u8 a[0x20];
+    u8 pad_40[0x60];
+    u8 b[0x20];
+    u8 c[0x3C0];
+    u32 unk_480;
+    u16 unk_484;
+    u16 unk_486;
+} WinState;
+
+#pragma opt_lifetimes off
+/* file-scope objects of the retail TU, in retail order: MWCC addresses them off one section base */
+u32 fzgx_obj_lbl_1_bss_8F8E0[8];
+u8 lbl_1_bss_8F8E0_20[0x20];
+u32 lbl_1_bss_8F8E0_fill_8F920[24];
+u8 lbl_1_bss_8F980[0x20];
+u8 lbl_1_bss_8F9A0[0x3C0];
+u32 lbl_1_bss_8FD60;
+u16 lbl_1_bss_8FD60_4;
+u16 lbl_1_bss_8FD60_6;
+u32 fzgx_obj_lbl_1_bss_8FD68[16];
+u32 fzgx_obj_lbl_1_bss_8FDA8[53];
+
+#pragma section code_type ".fzgxpool"
+static void fzgx_bss_layout(void) {
+    volatile u8 s;  /* fzgx-allow: S2 layout primer sink: MWCC emits .bss objects in first-access order */
+    s = *(u8 *)&fzgx_obj_lbl_1_bss_8F8E0;
+    s = *(u8 *)&lbl_1_bss_8F8E0_20;
+    s = *(u8 *)&lbl_1_bss_8F8E0_fill_8F920;
+    s = *(u8 *)&lbl_1_bss_8F980;
+    s = *(u8 *)&lbl_1_bss_8F9A0;
+    s = *(u8 *)&lbl_1_bss_8FD60;
+    s = *(u8 *)&lbl_1_bss_8FD60_4;
+    s = *(u8 *)&lbl_1_bss_8FD60_6;
+    s = *(u8 *)&fzgx_obj_lbl_1_bss_8FD68;
+    s = *(u8 *)&fzgx_obj_lbl_1_bss_8FDA8;
+}
+#pragma section code_type ".text"
+
+void fn_1_15BB34(u32 arg0) {
+    u8 * fzgx_live;
+    
+    u32 lab_t2;
+    lab_t2 = 0x20;
+    fn_80008BEC(&fzgx_obj_lbl_1_bss_8F8E0, 0, lab_t2);
+    lab_t2 = 0x20;
+    fn_80008BEC(lbl_1_bss_8F8E0_20, 0, lab_t2);
+    lab_t2 = 0x20;
+    fn_80008BEC(lbl_1_bss_8F980, 0, lab_t2);
+    fzgx_live = lbl_1_bss_8F9A0;
+    lab_t2 = 0x3C0;
+    fn_80008BEC(fzgx_live, 0, lab_t2);
+    lbl_1_bss_8FD60_4 = 0xFFFF;
+    lbl_1_bss_8FD60 = arg0;
+    lbl_1_bss_8FD60_6 = 0;
+}
+#pragma opt_lifetimes reset
+/* fzgx:end fn_1_15BB34 */
+
 /* fzgx:begin fn_1_15BE38 */
 typedef struct {
     u32 count;
