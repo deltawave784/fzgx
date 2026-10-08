@@ -786,35 +786,19 @@ void fn_1_CD36C(void *unused, s32 a, s32 b) {
 }
 /* fzgx:end fn_1_CD36C */
 
-/* fzgx:begin fn_1_CD51C noprologue */
-#include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/enemy_ctrl.h"
-
-extern u32 fn_1_5910(void *);
-extern const f32 lbl_1_rodata_5C3C;
-extern const f32 lbl_1_rodata_5CFC;
-extern const f32 lbl_1_rodata_5E0C;
-
-extern u32 fn_1_5910(void *object);
-extern void *fn_1_8627C(void *object);
+/* fzgx:begin fn_1_CD51C */
+extern s32 fn_1_5910();
+extern u32 fn_1_8627C(s32 index);
 extern void *fn_1_4DF60(void);
+extern u32 fn_1_58C4(void);
 extern const f32 lbl_1_rodata_5C3C;
 extern const f32 lbl_1_rodata_5C40;
 extern const f32 lbl_1_rodata_5F18;
-extern u32 fn_1_58C4(void);
-
-
-
-
+extern const f32 lbl_1_rodata_5CFC;
+extern const f32 lbl_1_rodata_5E0C;
 extern u32 lbl_1_rodata_5F14;
-
-
-extern void fn_1_CD6C0(void);
 extern f32 fn_1_519FC(f32 value);
 extern f32 fn_1_51AC0(f32 value);
-
-
 
 typedef struct {
     u8 pad_0[0x6];
@@ -832,12 +816,13 @@ typedef struct {
     u8 pad_44[0x1c];
     void *unk_60;
     u8 pad_64[0x14];
-    void (*unk_78)(void);
+    void (*unk_78)(fn_1_CD6C0_object *);
 } Fn1Cd51cObject;
 
+// Spawn the display object for an active controller and initialize its layout and update callback.
 void fn_1_CD51C(void *object) {
     u32 index;
-    void *actor;
+    u8 *actor;
     Fn1Cd51cObject *state;
     f32 factor;
 
@@ -846,14 +831,14 @@ void fn_1_CD51C(void *object) {
         return;
     }
 
-    actor = fn_1_8627C(object);
+    actor = (u8 *)fn_1_8627C((s32)object);
     if (actor == 0) {
         return;
     }
-    if (*(s32 *)((u8 *)actor + 0x10c) == 0) {
+    if (*(s32 *)(actor + 0x10c) == 0) {
         return;
     }
-    if (*(s32 *)((u8 *)actor + 0x110) == 0) {
+    if (*(s32 *)(actor + 0x110) == 0) {
         return;
     }
 
@@ -1315,22 +1300,18 @@ void fn_1_D07AC(u32 index, u32 value) {
 }
 /* fzgx:end fn_1_D07AC */
 
-/* fzgx:begin fn_1_D07C4 noprologue */
-#include "types.h"
-
-struct fn_1_D07C4_lbl_1_bss_7ACA0_0_E12 {
-    u8 pad_0[0x4];
+/* fzgx:begin fn_1_D07C4 */
+typedef struct {
+    u32 unk_0;
     u32 unk_4;
-    u8 pad_8[0x4];
-};
-struct fn_1_D07C4_lbl_1_bss_7ACA0 {
-    struct fn_1_D07C4_lbl_1_bss_7ACA0_0_E12 unk_0[1];
-};
+    u32 unk_8;
+} EnemyCtrlEntry_D07C4;
 
-extern struct fn_1_D07C4_lbl_1_bss_7ACA0 lbl_1_bss_7ACA0;
-
+// Store a value into field 4 of the indexed 0xC-byte entry.
 void fn_1_D07C4(u32 arg0, u32 arg1) {
-    lbl_1_bss_7ACA0.unk_0[(arg0 & 0xFF)].unk_4 = arg1;
+    EnemyCtrlEntry_D07C4 *entry = (EnemyCtrlEntry_D07C4 *)&lbl_1_bss_7ACA0;
+    entry += arg0 & 0xFF;
+    entry->unk_4 = arg1;
 }
 /* fzgx:end fn_1_D07C4 */
 
