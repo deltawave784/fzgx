@@ -2605,15 +2605,12 @@ void fn_1_9D360(Burner *burner, fn_1_9D360_BurnerTable *table, u8 *indices) {
 }
 /* fzgx:end fn_1_9D360 */
 
-/* fzgx:begin fn_1_9D3E8 noprologue */
-#include "types.h"
-
+/* fzgx:begin fn_1_9D3E8 */
 extern void fn_1_55A84(void (*callback)(void), void *arg0, s32 arg1, s32 arg2);
 
-extern void fn_1_9D360(void);
-
+/* Registers the burner callback fn_1_9D360 with its three arguments. */
 void fn_1_9D3E8(void *arg0, s32 arg1, s32 arg2) {
-    fn_1_55A84(fn_1_9D360, arg0, arg1, arg2);
+    fn_1_55A84((void (*)(void))fn_1_9D360, arg0, arg1, arg2);
 }
 /* fzgx:end fn_1_9D3E8 */
 
