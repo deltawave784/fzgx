@@ -9,83 +9,9 @@
  "game_camera_entries": {
   "target": "GameCameraEntry"
  },
- "lbl_1_bss_10D8": {
-  "self": "CameraParameters"
- },
- "live_camera": {
-  "target": "LiveCamera"
- },
- "lbl_1_bss_384C0": {
-  "decl": "u32 lbl_1_bss_384C0[]"
- },
- "lbl_1_bss_1148": {
-  "self": "Obj_1_bss_1148",
-  "decl": "Obj_1_bss_1148 lbl_1_bss_1148",
-  "typedef": [
-   "// one view of the TU's .bss run from 0x1148: fn_1_E174 and fn_1_FA84 address it off one base",
-   "typedef struct {",
-   "    u8 unk_0;",
-   "    u8 pad_1[0x7];",
-   "    f32 unk_8;",
-   "    f32 unk_C;",
-   "    f32 unk_10;",
-   "    u8 unk_14;",
-   "    u8 pad_15[0xF];",
-   "    f32 unk_24;",
-   "    u8 pad_28[0x4];",
-   "    s16 unk_2C;",
-   "    s16 unk_2E;",
-   "    u8 pad_30[0x5D8];",
-   "    s16 unk_608;",
-   "    u8 pad_60A[0x5A];",
-   "    u8 unk_664;",
-   "    u8 pad_665[0x17];",
-   "    u32 unk_67C;",
-   "    u32 unk_680;",
-   "    u32 unk_684;",
-   "} Obj_1_bss_1148;"
-  ]
- },
- "lbl_1_data_43B8": {
-  "self": "Obj_1_data_43B8",
-  "decl": "Obj_1_data_43B8 lbl_1_data_43B8",
-  "typedef": [
-   "// one view of the TU's .data run from 0x43B8 (strings follow at +0x68 and +0x280..)",
-   "typedef struct {",
-   "    u8 pad_0[0x13C];",
-   "    u32 unk_13C;",
-   "    u32 unk_140;",
-   "    u32 unk_144;",
-   "    s16 unk_148;",
-   "    s16 unk_14A;",
-   "    s16 unk_14C;",
-   "} Obj_1_data_43B8;"
-  ]
- },
- "lbl_1_data_1D960": {
-  "decl": "u8 lbl_1_data_1D960[0x58]"
- },
- "lbl_1_data_1D9B8": {
-  "decl": "u8 lbl_1_data_1D9B8[0xF8]"
- },
- "lbl_1_bss_6C8D8": {
-  "self": "Obj_1_bss_6C8D8",
-  "decl": "Obj_1_bss_6C8D8 lbl_1_bss_6C8D8",
-  "typedef": [
-   "// the TU's .bss run from 0x6C8D8 as fn_1_729F8 addresses it (one base register)",
-   "typedef struct {",
-   "    u8 pad_0[0x8D0];",
-   "    u32 unk_8D0;",
-   "    u16 unk_8D4;",
-   "    u16 unk_8D6;",
-   "    u16 unk_8D8;",
-   "    u8 unk_8DA;",
-   "} Obj_1_bss_6C8D8;"
-  ]
- },
  "lbl_1_bss_1010": {
-  "self": "Obj_1_bss_1010",
   "decl": "Obj_1_bss_1010 lbl_1_bss_1010",
+  "self": "Obj_1_bss_1010",
   "typedef": [
    "// the camera's .bss run from 0x1010 as camera_snapshot addresses it (dtk sizes it 4)",
    "typedef struct {",
@@ -114,9 +40,58 @@
    "} Obj_1_bss_1010;"
   ]
  },
+ "lbl_1_bss_10D8": {
+  "self": "CameraParameters"
+ },
+ "lbl_1_bss_1148": {
+  "decl": "Obj_1_bss_1148 lbl_1_bss_1148",
+  "self": "Obj_1_bss_1148",
+  "typedef": [
+   "// one view of the TU's .bss run from 0x1148: fn_1_E174 and fn_1_FA84 address it off one base",
+   "typedef struct {",
+   "    u8 unk_0;",
+   "    u8 pad_1[0x7];",
+   "    f32 unk_8;",
+   "    f32 unk_C;",
+   "    f32 unk_10;",
+   "    u8 unk_14;",
+   "    u8 pad_15[0xF];",
+   "    f32 unk_24;",
+   "    u8 pad_28[0x4];",
+   "    s16 unk_2C;",
+   "    s16 unk_2E;",
+   "    u8 pad_30[0x5D8];",
+   "    s16 unk_608;",
+   "    u8 pad_60A[0x5A];",
+   "    u8 unk_664;",
+   "    u8 pad_665[0x17];",
+   "    u32 unk_67C;",
+   "    u32 unk_680;",
+   "    u32 unk_684;",
+   "} Obj_1_bss_1148;"
+  ]
+ },
+ "lbl_1_bss_384C0": {
+  "decl": "u32 lbl_1_bss_384C0[]"
+ },
+ "lbl_1_bss_6C8D8": {
+  "decl": "Obj_1_bss_6C8D8 lbl_1_bss_6C8D8",
+  "self": "Obj_1_bss_6C8D8",
+  "typedef": [
+   "// the TU's .bss run from 0x6C8D8 as fn_1_729F8 addresses it (one base register)",
+   "typedef struct {",
+   "    u8 pad_0[0x8D0];",
+   "    u32 unk_8D0;",
+   "    u16 unk_8D4;",
+   "    u16 unk_8D6;",
+   "    u16 unk_8D8;",
+   "    u8 unk_8DA;",
+   "} Obj_1_bss_6C8D8;"
+  ]
+ },
  "lbl_1_bss_8CA40": {
-  "self": "Obj_1_bss_8CA40",
   "decl": "Obj_1_bss_8CA40 lbl_1_bss_8CA40",
+  "self": "Obj_1_bss_8CA40",
   "typedef": [
    "// fn_1_130EE8 initialises 0x2C bytes from here (dtk size 4)",
    "typedef struct {",
@@ -134,7 +109,83 @@
    "} Obj_1_bss_8CA40;"
   ]
  },
+ "lbl_1_bss_8E3E4": {
+  "decl": "u8 lbl_1_bss_8E3E4[0x20]",
+  "typedef": [
+   "// matched sel_static_disp blocks cast the array to u32 * (fn_1_13F848, fn_1_13F948)"
+  ]
+ },
+ "lbl_1_bss_8E404": {
+  "decl": "u8 lbl_1_bss_8E404[0x20]",
+  "typedef": [
+   "// matched sel_static_disp blocks cast the array to u32 * (fn_1_13F848, fn_1_13F948)"
+  ]
+ },
+ "lbl_1_data_1D2EC": {
+  "decl": "void (*lbl_1_data_1D2EC[0x8A])(void *)",
+  "typedef": [
+   "// avline handler table, indexed by an s16 kind (fn_1_58694)"
+  ]
+ },
+ "lbl_1_data_1D514": {
+  "decl": "void (*lbl_1_data_1D514[0x45])(void *)",
+  "typedef": [
+   "// avline handler table, indexed by an s16 kind (fn_1_58694)"
+  ]
+ },
+ "lbl_1_data_1D960": {
+  "decl": "u8 lbl_1_data_1D960[0x58]"
+ },
+ "lbl_1_data_1D9B8": {
+  "decl": "u8 lbl_1_data_1D9B8[0xF8]"
+ },
+ "lbl_1_data_2AB54": {
+  "decl": "const char *lbl_1_data_2AB54[22]",
+  "typedef": [
+   "// 22 string pointers (fn_1_F8E30)"
+  ]
+ },
  "lbl_1_data_40798": {
   "decl": "u8 lbl_1_data_40798[]"
+ },
+ "lbl_1_data_43B8": {
+  "decl": "Obj_1_data_43B8 lbl_1_data_43B8",
+  "self": "Obj_1_data_43B8",
+  "typedef": [
+   "// one view of the TU's .data run from 0x43B8 (strings follow at +0x68 and +0x280..)",
+   "typedef struct {",
+   "    u8 pad_0[0x13C];",
+   "    u32 unk_13C;",
+   "    u32 unk_140;",
+   "    u32 unk_144;",
+   "    s16 unk_148;",
+   "    s16 unk_14A;",
+   "    s16 unk_14C;",
+   "} Obj_1_data_43B8;"
+  ]
+ },
+ "lbl_1_data_FCD4": {
+  "decl": "Obj_1_data_FCD4 lbl_1_data_FCD4[0xBC]",
+  "self": "Obj_1_data_FCD4",
+  "typedef": [
+   "// 0xBC texture records of 0x28 bytes (fn_1_485A8/fn_1_485C8 index them by index*0x28)",
+   "typedef struct {",
+   "    u8 pad_0[0x4];",
+   "    u32 unk_4;",
+   "    u8 pad_8[0x4];",
+   "    u32 unk_C;",
+   "} Obj_1_data_FCD4_At20;",
+   "typedef struct {",
+   "    u32 unk_0;",
+   "    u32 unk_4;",
+   "    u8 pad_8[0x18];",
+   "    Obj_1_data_FCD4_At20 *unk_20;",
+   "    u8 unk_24;",
+   "    u8 pad_25[0x3];",
+   "} Obj_1_data_FCD4;"
+  ]
+ },
+ "live_camera": {
+  "target": "LiveCamera"
  }
 }

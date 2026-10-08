@@ -39,17 +39,20 @@ typedef struct {
 } Obj_1_data_2B0D4;
 extern Obj_1_data_2B0D4 lbl_1_data_2B0D4;
 
-// lbl_1_bss_6EA08: .bss size 0x4, 3 refs from burner.c
-extern u32 lbl_1_bss_6EA08;
-
 // lbl_1_bss_6EA00: .bss size 0x4, 3 refs from burner.c
 extern f32 lbl_1_bss_6EA00;
+
+// lbl_1_bss_6EA08: .bss size 0x4, 3 refs from burner.c
+extern u32 lbl_1_bss_6EA08;
 
 // lbl_1_bss_384B8: .bss size 0x8, 3 refs from burner.c
 extern u32 lbl_1_bss_384B8;
 
 // lbl_1_data_27E08: .data size 0x9, 2 refs from burner.c (own data block)
 extern u8 lbl_1_data_27E08[0x9];
+
+// lbl_1_data_2A8D8: .data size 0x54, 2 refs from burner.c (own data block)
+extern u8 lbl_1_data_2A8D8[0x54];
 
 // lbl_1_bss_84: .bss size 0x18, 2 refs from burner.c
 typedef struct {
@@ -65,9 +68,6 @@ typedef struct {
 } Obj_1_bss_84;
 extern Obj_1_bss_84 lbl_1_bss_84;
 
-// lbl_1_data_2B144: .data size 0x18, 2 refs from burner.c (own data block)
-extern u8 lbl_1_data_2B144[0x18];
-
 // lbl_1_data_28060: .data size 0x2060, 2 refs from burner.c (own data block)
 typedef struct {
     u8 pad_0[0x4];
@@ -76,8 +76,8 @@ typedef struct {
 } Obj_1_data_28060;
 extern Obj_1_data_28060 lbl_1_data_28060;
 
-// lbl_1_data_2A8D8: .data size 0x54, 2 refs from burner.c (own data block)
-extern u8 lbl_1_data_2A8D8[0x54];
+// lbl_1_data_2B144: .data size 0x18, 2 refs from burner.c (own data block)
+extern u8 lbl_1_data_2B144[0x18];
 
 // lbl_1_data_2ABAC: .data size 0x318, 1 refs from burner.c (own data block)
 typedef struct {
@@ -87,16 +87,17 @@ typedef struct {
 } Obj_1_data_2ABAC;
 extern Obj_1_data_2ABAC lbl_1_data_2ABAC;
 
-// lbl_1_data_2A92C: .data size 0x54, 1 refs from burner.c (own data block)
-extern u8 lbl_1_data_2A92C[0x54];
-
 // lbl_1_data_2AB54: .data size 0x58, 1 refs from burner.c (own data block)
-extern u8 lbl_1_data_2AB54[0x58];
+// 22 string pointers (fn_1_F8E30)
+extern const char *lbl_1_data_2AB54[22];  // typedefs.json decl override
 
 // lbl_1_data_2AA24: .data size 0x58, 1 refs from burner.c (own data block)
 extern u8 lbl_1_data_2AA24[0x58];
 
 // lbl_1_data_2BD54: .data size 0xA68, 1 refs from burner.c (own data block)
 extern u8 lbl_1_data_2BD54[0xA68];
+
+// lbl_1_data_2A92C: .data size 0x54, 1 refs from burner.c (own data block)
+extern u8 lbl_1_data_2A92C[0x54];
 
 #endif  // REL_MAIN_REL_BURNER_H
