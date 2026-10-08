@@ -1023,9 +1023,7 @@ void fn_1_127FB8(Fn127FB8Object *obj) {
 }
 /* fzgx:end fn_1_127FB8 */
 
-/* fzgx:begin fn_1_1286F4 noprologue */
-typedef float f32;
-typedef unsigned int u32;
+/* fzgx:begin fn_1_1286F4 */
 #pragma section code_type ".fzgxpool"
 static const unsigned long fzgx_pool_table1[4] = {0x00000000, 0x00000000, 0x00000000, 0x00000000};  /* fzgx-allow: A1 retail pool bytes */
 __declspec(section ".fzgxpool") static void fzgx_pool_keep1(void) { const unsigned long *volatile cp; cp = fzgx_pool_table1; }  /* fzgx-allow: S2 pool primer sink */
@@ -1404,7 +1402,6 @@ __declspec(section ".fzgxpool") static void fzgx_pool_prime46(void) {
 }
 #pragma section code_type ".text"
 
-typedef int s32;
 typedef struct { f32 x, y, z; } Vec3f;
 extern u32 lbl_801A66A0;
 extern u32 lbl_801A63C0;

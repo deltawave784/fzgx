@@ -27958,14 +27958,14 @@
     "tu": "rel/main_rel/accessory.c",
     "pool": {
       "...rodata.0": "lbl_1_rodata_7AB8",
-      "@217": "lbl_1_rodata_7BF8+0x100",
-      "@197": "lbl_1_rodata_7BF8+0xCC",
-      "@75": "lbl_1_rodata_7B58+0x4",
-      "@441": "lbl_1_rodata_7BF8+0x450",
-      "@443": "lbl_1_rodata_7BF8+0x458",
-      "@442": "lbl_1_rodata_7BF8+0x454",
-      "@444": "lbl_1_rodata_7BF8+0x45C",
-      "@377": "lbl_1_rodata_7BF8+0x344"
+      "@235": "lbl_1_rodata_7BF8+0x100",
+      "@215": "lbl_1_rodata_7BF8+0xCC",
+      "@93": "lbl_1_rodata_7B58+0x4",
+      "@459": "lbl_1_rodata_7BF8+0x450",
+      "@461": "lbl_1_rodata_7BF8+0x458",
+      "@460": "lbl_1_rodata_7BF8+0x454",
+      "@462": "lbl_1_rodata_7BF8+0x45C",
+      "@395": "lbl_1_rodata_7BF8+0x344"
     }
   },
   {
