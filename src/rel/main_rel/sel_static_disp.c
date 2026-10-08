@@ -767,6 +767,101 @@ void fn_1_135894(void* arg0, void* arg1, void* arg2, void* arg3, void* arg4, voi
 }
 /* fzgx:end fn_1_135894 */
 
+/* fzgx:begin fn_1_1363F0 noprologue */
+#include "types.h"
+#include "dolphin/types.h"
+#include "font.h"
+#include "rel/main_rel/sel_static_disp.h"
+
+struct fn_1_1363F0_Copy88 { u32 a[22]; };
+struct Record { u8 bytes[0x81C0]; };
+extern f32 lbl_1_rodata_26F8[22];
+extern const f32 lbl_1_rodata_8A10, lbl_1_rodata_8A14, lbl_1_rodata_8A18, lbl_1_rodata_8A1C;
+extern const f32 lbl_1_rodata_8A20, lbl_1_rodata_861C, lbl_1_rodata_8A24, lbl_1_rodata_8A28;
+extern const f32 lbl_1_rodata_8668, lbl_1_rodata_85E8, lbl_1_rodata_87AC, lbl_1_rodata_8A2C, lbl_1_rodata_863C;
+extern const f64 lbl_1_rodata_8600;
+struct Color { u32 rgba; };
+extern struct Color lbl_1_rodata_8A0C;
+struct Stat { u32 unk_0; f32 value; u8 pad[0xAC]; };
+extern struct Stat lbl_1_data_28060[46];
+extern int fn_1_4F734(FontDrawPacket *);
+extern void fn_1_49410(void);
+extern void fn_1_494DC(s16);
+extern void fn_1_496FC(f32, f32);
+extern void *fn_1_12F118(void);
+extern u8 *fn_1_36AD0(void);
+extern void fn_1_14E9E4(u8, void *);
+extern void fn_1_4966C(f32,f32);
+extern void fn_1_49514(u32 *);
+extern void fn_1_4955C(f32,f32);
+extern void fn_1_4954C(f32);
+extern void fn_1_4AE0C(const char *,...);
+extern void fn_1_136714(f32,f32,f32,s32,s32,s32,s32,void *);
+
+void fn_1_1363F0(s16 arg0, s32 arg1, s32 arg2) {
+    struct fn_1_1363F0_Copy88 packet;
+    f32 metrics[4];
+    struct Color color;
+    struct Color color2;
+    s16 value;
+    s16 index;
+    u8 *base;
+    u8 *record;
+    s16 i;
+    packet = *(struct fn_1_1363F0_Copy88 *)lbl_1_rodata_26F8;
+    packet.a[0] = 0x9A24;
+    *(f32 *)&packet.a[1] = lbl_1_rodata_8A10;
+    *(f32 *)&packet.a[2] = lbl_1_rodata_8A14;
+    fn_1_4F734((FontDrawPacket *)&packet);
+    packet = *(struct fn_1_1363F0_Copy88 *)lbl_1_rodata_26F8;
+    packet.a[0] = 0x9A25;
+    *(f32 *)&packet.a[1] = lbl_1_rodata_8A18;
+    *(f32 *)&packet.a[2] = lbl_1_rodata_8A14;
+    fn_1_4F734((FontDrawPacket *)&packet);
+    fn_1_49410();
+    fn_1_494DC(0x22);
+    fn_1_496FC(lbl_1_rodata_8A1C, lbl_1_rodata_8A14);
+    index = ((Obj_1_bss_8B3A0 *)((u8 *)&lbl_1_bss_8B3A0 + (s16)lbl_1_bss_8B3A0.unk_9E * 0x20))->unk_E;
+    if (index >= 41) {
+        base = fn_1_12F118();
+        if (base == fn_1_36AD0()) {
+            s32 stride = 0x81C0;
+            s32 slot = arg0;
+            record = base + slot * stride;
+        } else {
+            record = base + (index - 41) * 0x81C0;
+        }
+        if (*(u32 *)record & 0x40000000) {
+            value = 0;
+            for (i = 0; (u32)i < 3; i++) {
+                fn_1_14E9E4(record[0x81A4 + i * 8], metrics);
+                value = value + metrics[1];
+            }
+        } else {
+            value = lbl_1_data_28060[record[0x81A0]].value;
+        }
+    } else {
+        value = lbl_1_data_28060[index].value;
+    }
+    color = lbl_1_rodata_8A0C;
+    fn_1_4966C(lbl_1_rodata_8A20, lbl_1_rodata_861C);
+    color2 = color;
+    fn_1_49514(&color2.rgba);
+    if (arg1) {
+        fn_1_49410();
+        fn_1_4955C(lbl_1_rodata_8A24, lbl_1_rodata_8A28);
+        fn_1_4966C(lbl_1_rodata_8668, lbl_1_rodata_861C);
+        fn_1_4954C(lbl_1_rodata_85E8);
+        fn_1_4AE0C((char *)&lbl_1_data_41AC0);
+    } else {
+        fn_1_4AE0C((char *)&lbl_1_data_41AC8, value);
+    }
+    if (arg2) {
+        fn_1_136714(lbl_1_rodata_87AC, lbl_1_rodata_8A2C, lbl_1_rodata_863C, value, 0x8F, 0x197, 9, 0);
+    }
+}
+/* fzgx:end fn_1_1363F0 */
+
 /* fzgx:begin fn_1_136714 noprologue */
 #include "types.h"
 #include "dolphin/types.h"

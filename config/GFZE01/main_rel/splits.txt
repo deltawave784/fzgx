@@ -6926,3 +6926,9 @@ rel/main_rel/sel_static_disp/fn_1_1421D8.c:
 
 rel/main_rel/bg_san/fn_1_DA3A0.c:
 	.text       start:0x000DA3A0 end:0x000DA6A8 align:4
+
+rel/main_rel/bg_aur/fn_1_153D74.c:
+	.text       start:0x00153D74 end:0x001540B0 align:4
+
+rel/main_rel/sel_static_disp/fn_1_1363F0.c:
+	.text       start:0x001363F0 end:0x00136714 align:4

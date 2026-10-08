@@ -515,6 +515,104 @@ void fn_1_153D48(void *background) {
 }
 /* fzgx:end fn_1_153D48 */
 
+/* fzgx:begin fn_1_153D74 noprologue */
+#include "types.h"
+#include "psvec.h"
+
+#pragma fp_contract on
+typedef struct V { f32 x,y,z; } V;
+extern f32 lbl_1_rodata_D508[29];
+extern f32 *lbl_801A6D00;
+extern int fn_1_58C4(void);
+extern void fn_1_5948(int);
+extern s16 camera_get_mode(void);
+extern void fn_1_862D4(int, V *);
+extern void fn_1_8636C(int, void *);
+extern void fn_1_869B0(int, void *);
+extern void lbl_8006D784(void *);
+extern void lbl_8006DAEC(void);
+extern void lbl_8006DB74(void *);
+extern void fn_8006F1F0(void *, void *, void *);
+extern void lbl_8006DD7C(void);
+extern void lbl_8006DB30(void);
+extern f32 lbl_8006D0B4(f32);
+#define VP(off) ((V *)(base + (off) + i*12))
+void fn_1_153D74(void *arg) {
+    int count;
+    f32 *pool = lbl_1_rodata_D508;
+    int i;
+    u8 *base = (u8 *)arg + 0x1108;
+    int mode;
+    V pos;
+    V delta;
+    f32 len;
+    u32 lockedCache = 0xe0000000;
+    f32 c,b,a,d;
+    if (*(u32 *)(base+8) == 0) return;
+    count=fn_1_58C4();
+    a=pool[25]; b=pool[26]; c=pool[27]; d=pool[28];
+    for(i=0;i<count;i++) {
+        fn_1_5948(i);
+        mode=camera_get_mode();
+        if(mode == -1) {
+            pos=*(V *)(pool+10);
+            *VP(0xbc)=*(V *)(pool+13);
+            *VP(0xec)=*(V *)(pool+16);
+            *VP(0x20c)=*(V *)(pool+19);
+            *VP(0x1dc)=*(V *)(pool+22);
+            lbl_8006D784(base+0x11c+i*48);
+            lbl_8006D784(base+0x23c+i*48);
+        } else {
+            lbl_8006DAEC();
+            fn_1_862D4(mode,&pos);
+            fn_1_8636C(mode,lbl_801A6D00);
+            { f32 zero=pool[7];
+            *(f32 *)(lockedCache+0xc)=zero;
+            *(f32 *)(lockedCache+0x1c)=zero;
+            *(f32 *)(lockedCache+0x2c)=zero; }
+            VP(0xbc)->x=-lbl_801A6D00[2];
+            VP(0xbc)->y=-lbl_801A6D00[6];
+            VP(0xbc)->z=-lbl_801A6D00[10];
+            VP(0xec)->x=lbl_801A6D00[1];
+            VP(0xec)->y=lbl_801A6D00[5];
+            VP(0xec)->z=lbl_801A6D00[9];
+            lbl_8006DB74(base+0x11c+i*48);
+            fn_1_869B0(mode,VP(0x20c));
+            fn_8006F1F0(&pos,VP(0xec),VP(0x8c));
+            { f32 zero=pool[7];
+            *(f32 *)(lockedCache+0xc)=zero;
+            *(f32 *)(lockedCache+0x1c)=zero;
+            *(f32 *)(lockedCache+0x2c)=zero; }
+            lbl_8006DD7C();
+            lbl_8006DB74(base+0x23c+i*48);
+            lbl_8006DB30();
+        }
+        VP(0x1dc)->x=(pos.x+(f32)(VP(0x20c)->x*a))+(f32)(VP(0xec)->x*b);
+        VP(0x1dc)->y=(pos.y+(f32)(VP(0x20c)->y*a))+(f32)(VP(0xec)->y*b);
+        VP(0x1dc)->z=(pos.z+(f32)(VP(0x20c)->z*a))+(f32)(VP(0xec)->z*b);
+        {
+            f32 z;
+            f32 x;
+            f32 y;
+            f32 sum;
+            x=c*(VP(0x1dc)->x-VP(0x8c)->x);
+            y=c*(VP(0x1dc)->y-VP(0x8c)->y);
+            sum=x*x;
+            z=c*(VP(0x1dc)->z-VP(0x8c)->z);
+            sum=sum+y*y;
+            sum=sum+z*z;
+            delta.x=x; delta.y=y; delta.z=z;
+            len=lbl_8006D0B4(sum);
+        }
+        if(len>d) {
+            f32 scale=d/len;
+            delta.x*=scale; delta.y*=scale; delta.z*=scale;
+        }
+        psvec_add(VP(0x8c),&delta,VP(0x8c));
+    }
+}
+/* fzgx:end fn_1_153D74 */
+
 /* fzgx:begin fn_1_1540B0 */
 void fn_1_1540B0(u32 value) {
     u32 *table;

@@ -30153,6 +30153,17 @@
   },
   {
     "module": "main_rel",
+    "source": "rel/main_rel/bg_aur/fn_1_153D74.c",
+    "symbols": [
+      "fn_1_153D74"
+    ],
+    "status": "matching",
+    "mw_version": null,
+    "extra_cflags": [],
+    "tu": "rel/main_rel/bg_aur.c"
+  },
+  {
+    "module": "main_rel",
     "source": "rel/main_rel/bg_aur/fn_1_1540B0.c",
     "symbols": [
       "fn_1_1540B0"
@@ -49859,6 +49870,20 @@
     "mw_version": null,
     "extra_cflags": [],
     "tu": "rel/main_rel/sel_static_disp.c"
+  },
+  {
+    "module": "main_rel",
+    "source": "rel/main_rel/sel_static_disp/fn_1_1363F0.c",
+    "symbols": [
+      "fn_1_1363F0"
+    ],
+    "status": "matching",
+    "mw_version": null,
+    "extra_cflags": [],
+    "tu": "rel/main_rel/sel_static_disp.c",
+    "pool": {
+      "@29": "lbl_1_rodata_8600"
+    }
   },
   {
     "module": "main_rel",
