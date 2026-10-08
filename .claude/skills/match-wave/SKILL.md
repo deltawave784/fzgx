@@ -76,23 +76,23 @@ Measured 2026-10-04: Fable agents matched 14 of 30 near misses (47%, 6.8 KB) tha
 released at 98-99.9%; Sonnet/Opus waves matched about 25% of fresher functions. Use Fable batches.
 
 One batch = steps 1-5 above with these changes:
-- Pick: `uv run tools/fzgx.py route --fable --limit 4 --min-percent 98 --json` (best score first, never tried by
+- Pick: `uv run tools/fzgx.py route --fable --limit 2 --min-percent 98 --json` (best score first, never tried by
   Fable, one per clone family). Dispatch each row with `subagent_type: matcher-large` and `model: fable`, prompt
-  `SYMBOL=<symbol> AGENT_ID=fable-<symbol>-<YYYYMMDD><batch letter>`; all 4 at once (changed 2026-10-06 at the user's request: Fable was being spent too fast, so a batch is
-  4 agents, half the cost per batch at the same wall time).
+  `SYMBOL=<symbol> AGENT_ID=fable-<symbol>-<YYYYMMDD><batch letter>`; both at once (changed 2026-10-06 at the user's request from 8 to 4, and 2026-10-08 from 4 to 2: Fable was being spent too fast, so a batch is
+  2 agents, a quarter of the original cost per batch at the same wall time).
 - Close the batch: `reuse --max-size 2048`, then `fixup --min-percent 97 --apply --budget 300 --output
   .fzgx/fixup/<batch>` (every 4th batch, and the last batch of a run, use `--budget 1200`: each agent already runs
   the same engine on its own body at release, so the per-batch search mostly repeats it and a 20-minute close-out
   was closing 0 functions in most batches), then `verify`, then ninja/hash check, then `progress --note "fable batch <n>"` and `report`; append a line to
   `.fzgx/reports/waves.md` that includes the code percentage; commit `state/progress.csv`.
-- If `route --fable` returns fewer than 2 rows, lower `--min-percent` to 95, then 90. Below 90 the match rate is
+- If `route --fable` returns fewer than 1 row, lower `--min-percent` to 95, then 90. Below 90 the match rate is
   unmeasured: stop and ask.
 
 Before EVERY batch check usage with the `mcp__ccd_session_mgmt__get_usage` tool (load it with ToolSearch). Changed
 2026-10-05 at the user's request: the user does not use Fable for anything else, so the **weekly Fable window may be
 run to its limit**; the 95% cap now applies only to the **5-hour window and the weekly all-models window** (shared
 with Opus/Sonnet and the user's other projects). A Fable batch of 8 cost 3-7% of the weekly Fable window (7 on
-2026-10-05 when agents ran long); a batch of 4 should cost about half. Pick the mode for the next batch from the usage reading:
+2026-10-05 when agents ran long); a batch of 2 should cost about a quarter. Pick the mode for the next batch from the usage reading:
 - weekly Fable below 92% (lowered from 94% on 2026-10-06 at the user's request): run a Fable batch (the batch may end at or just over 100%; an agent that dies on the limit
   commits nothing, so close the batch as usual and let `verify` drain whatever was submitted).
 - weekly Fable at 92% or more, or a Fable batch ended because the limit was hit: switch to **fallback mode** (below)
