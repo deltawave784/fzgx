@@ -243,6 +243,7 @@ def main() -> int:
     ap.add_argument("--astra-batch", type=int, default=8, help="hard functions per Astra batch, run in parallel")
     ap.add_argument("--astra-max", type=int, default=0,
                     help="Astra function attempts per loop run; 0 (default) is Sol only. Astra used the weekly limit up in hours")
+    ap.add_argument("--no-sol", action="store_true", help="skip the Sol batches: Astra only (use with --astra-max)")
     ap.add_argument("--modules", nargs="*", default=MODULES,
                     help="modules to pick from (main_rel is limited to the slice the Claude loop does not route)")
     a = ap.parse_args()
@@ -259,7 +260,7 @@ def main() -> int:
         if time.time() - started > a.hours * 3600:
             log("time limit"); break
         symbols, label = [], ""
-        while band < len(BANDS):
+        while band < len(BANDS) and not a.no_sol:
             lo, hi, effort, checks, stale = BANDS[band]
             symbols = pick(a.model, lo, hi, a.per_module, a.batch_size, a.max_attempts)
             if symbols:
@@ -267,17 +268,17 @@ def main() -> int:
                 break
             log(f"band {lo}-{hi} B empty")
             band += 1
-        if not symbols:  # the easy size bands are used up: hard functions, as the Claude loop routes Fable
+        if not symbols and not a.no_sol:  # the easy size bands are used up: hard functions, as the Claude loop routes Fable
             symbols = pick_hard(a.model, a.batch_size, a.max_attempts, a.modules)
             effort, checks, stale, label = "high", 40, 12, "near misses and large functions"
-        if not symbols:  # fresh functions are gone: one more try for each earlier Sol attempt, near misses first
+        if not symbols and not a.no_sol:  # fresh functions are gone: one more try for each earlier Sol attempt, near misses first
             symbols = pick_hard(a.model, a.batch_size, a.max_attempts, a.modules, tried_by="retry-pass-",
                                 exclude=retried, limit=40)
             retried.update(symbols)
             effort, checks, stale, label = "high", 40, 12, "retry of earlier attempts"
         if not symbols:
             if a.astra_max and astra_used < a.astra_max:
-                log("sol pool empty: astra only")
+                log("astra only" if a.no_sol else "sol pool empty: astra only")
                 got, tried, stop = astra_phase(a, n, stop_file, deadline)
                 if not tried:
                     log("astra pool empty"); break
