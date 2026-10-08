@@ -3662,6 +3662,94 @@ void fn_8_55CC(void) {
 }
 /* fzgx:end fn_8_55CC */
 
+/* fzgx:begin fn_8_5608 */
+#include "font.h"
+#include "rel/title/title.h"
+
+extern f32 lbl_8_rodata_0[];
+extern const FontDrawPacket lbl_1_rodata_26F8;
+extern u16 lbl_1_bss_96A;
+extern u32 lbl_801A66A0;
+extern int fn_1_3F038(void);
+extern f32 fn_1_52070(u32);
+extern void fn_1_51678(FontDrawPacket *, u32, s16, s16, s16, s16);
+extern int fn_1_4F734(FontDrawPacket *);
+extern u32 fn_1_52088(void);
+extern u16 fn_1_486C4(u32);
+extern u16 fn_1_48690(u32);
+extern u32 fn_8_D034(void);
+
+typedef struct TitleDrawState {
+    u8 active, pending, prompt;
+    u8 pad[0x21d];
+    f32 timer;
+    u8 pad2[0x19];
+    u8 disabled;
+    u8 pad3[4];
+    u8 exiting;
+} TitleDrawState;
+typedef struct PacketView {
+    u32 id;
+    f32 x,y,z;
+    u8 pad[0x20];
+    u32 flags;
+    u8 tail[0x24];
+} PacketView;
+
+void fn_8_5608(void) {
+    TitleDrawState *state = (TitleDrawState *)&lbl_8_bss_0;
+    f32 *pool = lbl_8_rodata_0;
+    FontDrawPacket first;
+    FontDrawPacket second;
+    s32 width;
+    s32 height;
+    if (state->disabled) {
+        fn_1_3F038();
+        return;
+    }
+    if (state->exiting) {
+        if (fn_1_3F038()) {
+            if (state->active) {
+                state->pending = 1;
+                state->active = 0;
+            } else {
+                lbl_1_bss_96A = 0x9e;
+            }
+        }
+    } else {
+        fn_1_52070(0x60);
+        first = lbl_1_rodata_26F8;
+        ((PacketView *)&first)->id = 0x100;
+        ((PacketView *)&first)->x = pool[11];
+        ((PacketView *)&first)->y = pool[12];
+        ((PacketView *)&first)->z = pool[13];
+        ((PacketView *)&first)->flags = 13;
+        fn_1_51678(&first, 0x100, 0, 0, 250, 34);
+        fn_1_4F734(&first);
+        fn_1_52088();
+        fn_1_52070(0x220);
+        state->timer = pool[2];
+        fn_1_52088();
+        fn_1_52070(0x140);
+        if (state->prompt && (lbl_801A66A0 & 0x18)) {
+            second = lbl_1_rodata_26F8;
+            ((PacketView *)&second)->id = 0x102;
+            height = (s16)((fn_1_486C4(0x102) >> 2) & 0x3fff);
+            width = (s16)fn_1_48690(((PacketView *)&second)->id);
+            fn_1_51678(&second, ((PacketView *)&second)->id, 0,
+                (s16)(((fn_1_486C4(((PacketView *)&second)->id) >> 2) & 0x3fff) * 3), width, height);
+            ((PacketView *)&second)->x = pool[0];
+            ((PacketView *)&second)->y = pool[1];
+            ((PacketView *)&second)->z = pool[2];
+            ((PacketView *)&second)->flags = 6;
+            fn_1_4F734(&second);
+        }
+        fn_1_52088();
+        fn_8_D034();
+    }
+}
+/* fzgx:end fn_8_5608 */
+
 /* fzgx:begin fn_8_5810 */
 extern u32 fn_8_D5F4(void);
 extern u8 lbl_8_bss_23D;
