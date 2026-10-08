@@ -663,6 +663,59 @@ void fn_1_4322C(struct fn_1_4322C_Arg0 *arg0) {
 }
 /* fzgx:end fn_1_4322C */
 
+/* fzgx:begin fn_1_43264 noprologue */
+typedef unsigned short u16;
+typedef float f32;
+typedef struct S {
+    u16 flags;
+    u16 a;
+    u16 b;
+    u16 c;
+    f32 d;
+    f32 e;
+    u16 pad;
+    u16 pad2;
+    u16 cnt;
+} S;
+
+#pragma opt_propagation off
+void fn_1_43264(S *p, f32 scale)
+{
+    f32 fzgx_live;
+    f32 e, lo, hi, step;
+    if (p->flags & 2) return;
+    step = scale * p->d;
+    lo = (f32)p->a;
+    hi = (f32)p->b;
+    p->flags &= ~4;
+    if ((p->e = p->e + step) > hi) {
+        if (p->flags & 1) {
+            p->e = hi;
+            p->flags |= 2;
+        } else {
+            f32 t = (f32)p->c;
+            p->a = (u16)t;
+            fzgx_live = p->e;
+            p->e = fzgx_live - ((hi + step) - t);
+            p->cnt++;
+            p->flags |= 4;
+        }
+    } else if (p->e < lo) {
+        if (p->flags & 1) {
+            p->e = lo;
+            p->flags |= 2;
+        } else {
+            fzgx_live = p->e;
+            p->e = fzgx_live + ((hi - step) - lo);
+            p->a = p->c;
+            p->cnt++;
+            p->flags |= 4;
+        }
+    }
+}
+#pragma opt_propagation reset
+/* fzgx:end fn_1_43264 */
+
 /* fzgx:begin fn_1_433A4 */
 void fn_1_433A4(Fn1433A4Object *dst, Fn1433A4Object *src) {
     dst->value0 = src->value0;
