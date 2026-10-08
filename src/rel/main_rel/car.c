@@ -6099,24 +6099,18 @@ void fn_1_92530(void *arg0) {
 
 /* fzgx:begin fn_1_933D8 noprologue */
 #include "types.h"
-#include "dolphin/hw_regs.h"
-#include "psvec.h"
+#include "game/main_rel/car_types.h"
 
 typedef struct {
     u8 pad0[0x24];
     void *field_24;
-} EventData;
-
-typedef struct {
-    u8 pad0[0x1c];
-    void *field_1c;
-} CarObject;
+} Fn933D8Data;
 
 typedef struct {
     u8 pad0[0x8];
-    EventData *field_8;
+    Fn933D8Data *field_8;
     void *field_c;
-} EventObject;
+} Fn933D8Slot;
 
 typedef struct {
     u8 pad0[0x12];
@@ -6128,24 +6122,24 @@ typedef struct {
     void *field_34;
     u8 pad38[0x14];
     u8 field_4c;
-} EventNode;
+} Fn933D8Node;
 
-extern void fn_1_95158(CarObject *arg0);
-extern void *fn_1_41418(void *arg0, u32 arg1);
-extern s32 fn_1_97174(EventNode *arg0, s32 arg1, void *arg2);
-extern void fn_1_93734(CarObject *arg0, void *arg1);
-extern void fn_1_4270C(void *arg0, s32 arg1, u32 arg2);
+typedef struct {
+    u8 pad0[0x1c];
+    Fn933D8Node *field_1c;
+} Fn933D8Car;
 
-void fn_1_933D8(CarObject *arg0, EventObject *arg1, u32 arg2) {
-    EventNode *node;
+// Sets an event slot's id on a car, updating its node and callbacks when it is the car's own slot.
+void fn_1_933D8(Fn933D8Car *arg0, Fn933D8Slot *arg1, u32 arg2) {
+    Fn933D8Node *node;
     s32 value;
     void *target;
 
-    if (arg1 == (EventObject *)((u8 *)arg0 + 0x148)) {
-        node = (EventNode *)arg0->field_1c;
-        fn_1_95158(arg0);
+    if ((void *)arg1 == (void *)((u8 *)arg0 + 0x148)) {
+        node = arg0->field_1c;
+        fn_1_95158((void *)arg0);
         if (node != 0) {
-            value = (s32)fn_1_97174(node, 0, fn_1_41418(arg1->field_8->field_24, arg2 & 0xffff));
+            value = fn_1_97174((void *)node, 0, (void *)fn_1_41418(arg1->field_8->field_24, arg2 & 0xffff));
             if (value < 0) {
                 value = 0;
             }
@@ -6157,7 +6151,7 @@ void fn_1_933D8(CarObject *arg0, EventObject *arg1, u32 arg2) {
             }
             *(u16 *)((u8 *)target + 0xa) = (u16)value;
         }
-        fn_1_93734(arg0, fn_1_41418(arg1->field_c, arg2 & 0xffff));
+        fn_1_93734((void *)arg0, (void *)fn_1_41418(arg1->field_c, arg2 & 0xffff));
     }
     fn_1_4270C(arg1->field_8, 0, arg2);
     *(u16 *)arg1 = (u16)arg2;
