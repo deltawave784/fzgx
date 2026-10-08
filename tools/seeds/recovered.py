@@ -49,6 +49,7 @@ class LazyRecord(dict):
         return dict.get(self, key, default)
 
 
+ROOT_STR = str(ROOT)
 CACHE_PICKLE = STATE_DIR / 'saved_candidates.pickle'
 SHA_CACHE = STATE_DIR / 'saved_candidates_sha.json'
 
@@ -100,6 +101,7 @@ class SavedCandidates:
         except ValueError:
             self._sha = {}
         self._sha_dirty = False
+        self._seen = set()
 
     def _file_sha(self, path):
         """sha256 of a saved C file; saved files are content-addressed or append-only, so the
@@ -116,39 +118,49 @@ class SavedCandidates:
         if symbol not in self.rows:
             return
         score = percent(record)
-        if score > self.threshold:
-            self.evidence[symbol].append(dict(origin=origin, percent=score))
         body = record.get('text') or record.get('body') or record.get('best_body')
         path = record.get('path')
+        mw = record.get('mw') or record.get('mw_version')
+        flags = record.get('flags') or record.get('extra_cflags')
+        # fixup reports record every compiled variant above the threshold: one module run
+        # replayed 723,000 records for 17,000 distinct (symbol, body, compiler) candidates,
+        # and a stat per record cost 165 us on Windows. Duplicates leave before any file access.
+        if score > self.threshold and record.get('sha256') and (symbol, record['sha256'], mw, flags) in self._seen:
+            return
         lazy = None
         if not body and isinstance(path, str) and path.endswith('.c'):
-            path = Path(path)
-            if not path.is_absolute():
-                path = ROOT / path
-            if str(path) in self._sha or path.is_file():
+            # strings, not Path objects: 770,000 Path conversions cost 135 s on Windows
+            if not os.path.isabs(path):
+                path = os.path.join(ROOT_STR, path)
+            if path in self._sha or os.path.isfile(path):
                 lazy = path
         if lazy is not None:
             try:
-                sha = record['sha256'] if record.get('sha256') else self._file_sha(lazy)
+                sha = record['sha256'] if record.get('sha256') else self._file_sha(Path(lazy))
             except OSError:
                 lazy = None
         if lazy is None and (not isinstance(body, str) or not body.strip()):
             if score > self.threshold:
+                self.evidence[symbol].append(dict(origin=origin, percent=score))
                 self.missing.append(dict(symbol=symbol, origin=origin, percent=score))
             return
         if lazy is None:
             sha = digest(body)
             if record.get('sha256') and record['sha256'] != sha:
                 raise ValueError(f'{origin}: saved candidate hash changed')
-        self.inputs[sha[:24]][symbol] = LazyRecord(body=body, original_path=str(lazy) if lazy else None)
+        self.inputs[sha[:24]][symbol] = LazyRecord(body=body, original_path=lazy)
         if score <= self.threshold:
             return
+        key = (symbol, sha, mw, flags)
+        if key in self._seen:
+            return
+        self._seen.add(key)
+        self.evidence[symbol].append(dict(origin=origin, percent=score))
         self.candidates[symbol].append(LazyRecord(
             body=body, percent=score, sha256=sha, origin=origin,
             **{k:record[k] for k in ('raw_percent','percent_adjusted','aligned_word_percent','word_errors','differing_rows','instruction_rows') if k in record},
-            original_path=str(path) if path else None,
-            mw=record.get('mw') or record.get('mw_version'),
-            flags=record.get('flags') or record.get('extra_cflags'),
+            original_path=path if path else None,
+            mw=mw, flags=flags,
             settings_recorded=any(k in record for k in ('mw', 'mw_version', 'flags', 'extra_cflags'))))
 
     def walk(self, data, origin, symbol=None):
@@ -186,6 +198,7 @@ class SavedCandidates:
             self.candidates, self.evidence, self.missing, self.inputs, self.unreadable = (
                 defaultdict(list, cached['candidates']), defaultdict(list, cached['evidence']), list(cached['missing']),
                 defaultdict(dict, cached['inputs']), list(cached['unreadable']))
+            self._seen = {(symbol, r['sha256'], r.get('mw'), r.get('flags')) for symbol, rows in self.candidates.items() for r in rows}
         else:
             self._collect()
             tmp = CACHE_PICKLE.with_suffix('.tmp')
@@ -200,6 +213,7 @@ class SavedCandidates:
         changed = False
         for path in sorted(reports):
             st = os.stat(path)
+            origin = os.path.relpath(path, ROOT_STR).replace(os.sep, '/')
             entry = memo.get(str(path))
             if not entry or entry[0] != (st.st_mtime_ns, st.st_size):
                 data = json.loads(path.read_text())
@@ -215,7 +229,7 @@ class SavedCandidates:
                 # only candidates above the threshold matter here; replaying every low
                 # variant of every report cost 11 s per engine start
                 if percent(record) > self.threshold:
-                    self.add(record['symbol'], {**record, 'path': record['source']}, path.relative_to(ROOT).as_posix())
+                    self.add(record['symbol'], {**record, 'path': record['source']}, origin)
         if self._sha_dirty:
             SHA_CACHE.write_text(json.dumps(self._sha))
         if changed:

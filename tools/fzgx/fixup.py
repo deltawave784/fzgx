@@ -49,8 +49,17 @@ def _generate_in_worker(task):
         return _ENGINE.prioritise(seed, out)[:limit] if out else []
 
 
+def _init_spawned_worker(output, environment):
+    """Spawned (no fork: Windows) generation worker: rebuild the engine over the same output
+    directory; the seed's check result, target words and own words arrive with each task."""
+    global _ENGINE
+    _ENGINE = Engine(Project(), Path(output), load_cache=False)
+    if _ENGINE.environment != environment:
+        raise RuntimeError('spawned generation worker computed a different environment fingerprint')
+
+
 class Engine:
-    def __init__(self, project, output, verbose=False):
+    def __init__(self, project, output, verbose=False, load_cache=True):
         self.project, self.output, self.verbose = project, output, verbose
         self.generator_sha256 = digest(Path(__file__).read_bytes() + Path(source.__file__).read_bytes() + Path(evidence.__file__).read_bytes() + Path(layout.__file__).read_bytes() + Path(mwgraph.__file__).read_bytes() + b''.join((ROOT/'tools/fzgx'/name).read_bytes() for name in ('signatures.py','evidence.py','dataimport.py','lift.py','reuse.py','sdkimport.py')))
         output.mkdir(parents=True, exist_ok=True)
@@ -59,7 +68,7 @@ class Engine:
             ('oracle.py', 'poolfix.py', 'project.py', 'regflow.py', 'evidence.py')) +
             digest((ROOT/'config'/project.version/'ldscript.tpl').read_bytes())).encode())
         self.cache_path = output / 'cache.json'
-        self.cache = json.loads(self.cache_path.read_text()) if self.cache_path.exists() else {}
+        self.cache = json.loads(self.cache_path.read_text()) if load_cache and self.cache_path.exists() else {}
         self.targets, self.words, self.checks, self.compilers = {}, {}, {}, {}
         provenance = ROOT/'state/repairs/fixup_imports.json'
         self.rejected = json.loads(provenance.read_text()) if provenance.exists() else {}
@@ -117,15 +126,26 @@ class Engine:
         for _, seed, cap in tasks:
             self.check(seed)
         jobs=[(seed, cap, self.checks[seed['id']], self.targets[seed['symbol']], self.words.get(seed['id']), limit) for _, seed, cap in tasks]
+        import multiprocessing
+        from concurrent.futures import ProcessPoolExecutor
+        workers = min(oracle.COMPILE_WORKERS, len(jobs))
         try:
-            import multiprocessing
-            from concurrent.futures import ProcessPoolExecutor
             _ENGINE = self
-            with ProcessPoolExecutor(max_workers=min(oracle.COMPILE_WORKERS, len(jobs)), mp_context=multiprocessing.get_context('fork')) as ex:
+            with ProcessPoolExecutor(max_workers=workers, mp_context=multiprocessing.get_context('fork')) as ex:
                 return list(ex.map(_generate_in_worker, jobs, chunksize=1))
-        except (OSError, RuntimeError, ValueError, TypeError, ImportError, AttributeError) as error:
+        except ValueError:
+            # no fork context (Windows): spawned workers rebuild the engine from the output
+            # directory. Serial generation of a module round (800 seeds) took longer than the
+            # whole search budget there.
+            try:
+                with ProcessPoolExecutor(max_workers=workers, mp_context=multiprocessing.get_context('spawn'),
+                                         initializer=_init_spawned_worker, initargs=(str(self.output), self.environment)) as ex:
+                    return list(ex.map(_generate_in_worker, jobs, chunksize=1))
+            except (OSError, RuntimeError, ValueError, TypeError, ImportError, AttributeError) as error:
+                self.emit({'stage': 'generate-serial', 'reason': str(error)[:200]})
+        except (OSError, RuntimeError, TypeError, ImportError, AttributeError) as error:
             self.emit({'stage': 'generate-serial', 'reason': str(error)[:200]})
-            return [self.prioritise(seed, list(itertools.islice(self.proposals(seed, cap), limit * 10)))[:limit] for _, seed, cap in tasks]
+        return [self.prioritise(seed, list(itertools.islice(self.proposals(seed, cap), limit * 10)))[:limit] for _, seed, cap in tasks]
 
     def row_lines(self, seed):
         """{differing row index: source line} for the seed (MWCC's `.line` table from a
@@ -261,6 +281,7 @@ class Engine:
         self.cache_path.write_text(json.dumps(self.cache))
         self.timing['cache-write'] = self.timing.get('cache-write', 0) + time.monotonic() - cache_tick
         self.emit({'stage': 'evaluate-timing', **{k: (round(v, 2) if isinstance(v, float) else v) for k, v in self.timing.items()}, 'jobs': len(jobs), 'pending': total})
+        post_tick = time.monotonic()
         for row in rows:
             row.update({k:v for k,v in unique[row['id']].items() if k in ('object','score','bit_errors','matched','binding_score','word_errors','shape_errors','aligned_word_percent','response_sha256')})
             row.pop('frame_layout_only',None)
@@ -307,6 +328,7 @@ class Engine:
                     and failed.get('headers_sha256') == self.headers
                     and failed.get('oracle_sha256') == digest(Path(oracle.__file__).read_bytes())):
                 row.update(matched=False, link_rejected=True)
+        self.timing['post-evaluate'] = self.timing.get('post-evaluate', 0) + time.monotonic() - post_tick
 
     def check(self, row):
         if row['id'] not in self.checks:
@@ -670,13 +692,20 @@ class Engine:
         # batch 64, ~70 ms each) spent its whole budget here and never reached round 1.
         # Run them 16 wide like the round checks; results are identical.
         from concurrent.futures import ThreadPoolExecutor
+        check_tick=time.monotonic()
         with ThreadPoolExecutor(max_workers=16) as ex:
             list(ex.map(self.check, [row for row in rows if row.get('object') and row['id'] not in self.checks]))
         for row in rows:
             if row.get('object'):
                 self.check(row)
+        baseline_seconds=time.monotonic()-start
         self.emit({'stage': 'baseline', 'functions': len({r['symbol'] for r in rows}),
-                   'variants': len(rows), 'compiled': self.compiled, 'cached': self.cached})
+                   'variants': len(rows), 'compiled': self.compiled, 'cached': self.cached,
+                   'seconds': round(baseline_seconds, 1), 'check_seconds': round(time.monotonic()-check_tick, 1),
+                   'post_evaluate_seconds': round(self.timing.get('post-evaluate', 0), 1)})
+        # the search budget starts once the baseline exists: a module run's baseline (2,442
+        # saved variants, 9 min on Windows) used to consume the whole budget before round 0
+        start=time.monotonic()
         for r in rows:
             initial[r['symbol']]=max(initial.get(r['symbol'],-1),r['score'])
         if self.clones:
@@ -699,7 +728,14 @@ class Engine:
             # candidate generation is pure Python per seed (about a third of a round): every
             # seed runs in a forked worker, the parent only records the results
             tasks=[(symbol, seed, (captures or {}).get((symbol,seed['sha256'],seed['mw'],seed['flags']))) for symbol, seeds in frontier.items() for seed in seeds]
-            generated_lists=self.generate_parallel(tasks, max_candidates*2)
+            # generate in chunks so the budget is consulted between them: a module round's
+            # whole frontier (800 seeds) used to be generated before the first budget check
+            generated_lists=[]
+            chunk=max(oracle.COMPILE_WORKERS*4, 1)
+            for i in range(0, len(tasks), chunk):
+                if budget_s is not None and time.monotonic()-start >= budget_s:
+                    break
+                generated_lists.extend(self.generate_parallel(tasks[i:i+chunk], max_candidates*2))
             for (symbol, seed, cap), proposals in zip(tasks, generated_lists):
                 if True:
                     if budget_s is not None and time.monotonic()-start >= budget_s:
@@ -1058,14 +1094,33 @@ def load_records(engine,args):
                      and any(args.min_percent-0.000001<r['percent']<=args.max_percent for r in saved.candidates[s])]
             if args.limit:
                 symbols=symbols[:args.limit]
+        # a module run used to take every saved variant of every function into the baseline
+        # (batch 64: 15,633 compiles and objdiff runs before round 1, the whole budget): keep
+        # the best-scoring bodies per function, plus the best body under each compiler setting
+        max_variants=getattr(args,'max_variants',8) or 0
         for symbol in symbols:
             choices=saved.candidates[symbol]
             options={r['sha256']:r for r in choices if r['settings_recorded']}
+            picked=[]
             for r in choices:
                 if r['percent']>args.max_percent:
                     continue
                 chosen=r if r['settings_recorded'] else options.get(r['sha256'],r)
-                add(symbol,r['body'],chosen['mw'],chosen['flags'],label='saved-body',origin=r['origin'])
+                picked.append((r,chosen))
+            if max_variants and len(picked)>max_variants:
+                picked.sort(key=lambda pair:-(pair[0].get('raw_percent') if isinstance(pair[0].get('raw_percent'),(int,float)) else pair[0]['percent']))
+                keep=picked[:max_variants]
+                kept_settings={(c['mw'],c['flags']) for _,c in keep}
+                for pair in picked[max_variants:]:
+                    if (pair[1]['mw'],pair[1]['flags']) not in kept_settings:
+                        keep.append(pair);kept_settings.add((pair[1]['mw'],pair[1]['flags']))
+                picked=keep
+            for r,chosen in picked:
+                try:
+                    body=r['body']
+                except OSError:
+                    continue  # a report's source file removed since the candidate index was built
+                add(symbol,body,chosen['mw'],chosen['flags'],label='saved-body',origin=r['origin'])
         if args.drafts:
             for symbol,r in json.loads((STATE_DIR/'lift/scores.json').read_text()).items():
                 if r.get('text') and args.min_percent<=r.get('percent',0)<=args.max_percent:
