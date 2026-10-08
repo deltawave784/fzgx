@@ -428,6 +428,104 @@ void fn_1_12ADA0(void *arg0, void *arg1) {
 }
 /* fzgx:end fn_1_12ADA0 */
 
+/* fzgx:begin fn_1_12ADC8 noprologue */
+#include "types.h"
+
+typedef struct Sig_fn_8006A9B4_Fn8006A9B4Entry {
+    u32 flags;
+    u32 b;
+    u32 c;
+} Sig_fn_8006A9B4_Fn8006A9B4Entry;
+typedef struct Sig_fn_8006A9B4_Fn8006A9B4Data {
+    u8 _pad0[4];
+    Sig_fn_8006A9B4_Fn8006A9B4Entry *entries;
+    u8 _pad8[0x10];
+    s32 index;
+} Sig_fn_8006A9B4_Fn8006A9B4Data;
+struct Sig_fn_8006A998_fn_8006A998_Arg0 {
+    u32 unk_0;
+    u32 unk_4;
+};
+typedef struct Sig_fn_8006A9AC_Fn8006A9ACData {
+    u8 _pad[8];
+    u32 value;
+} Sig_fn_8006A9AC_Fn8006A9ACData;
+
+typedef struct fn_1_12ADC8_ArchiveState {
+    s32 count;
+    s32 loaded;
+    s32 unk_8;
+    u8 entries[1];
+} fn_1_12ADC8_ArchiveState;
+struct fn_1_12ADC8_lbl_801A6410 {
+    u32 unk_0;
+};
+
+extern s32 fn_8006A480(void *, u32, void *);
+extern u32 lbl_1_bss_897A0;
+extern struct fn_1_12ADC8_lbl_801A6410 lbl_801A6410;
+extern u32 fn_1_4630(u32, u32, void *, int);
+extern u32 fn_8006A998(void *);
+extern u32 fn_8006A9AC(void *);
+extern u8 lbl_1_data_40608[0xA];
+extern u8 lbl_1_data_4076C[0x28];
+extern void OSPanic(const char *, int, const char *, ...);
+extern u32 fn_1_D35B0(u32, u32, u32);
+extern u32 fn_1_D358C(u32, u32);
+extern void fn_80008BA8(u32, u32, u32);
+
+/* the entry-array base is held in a local at each site so the constant is not
+ * folded onto the section base (retail keeps addi r0, r28, 0xc separate) */
+#pragma opt_propagation off
+u32 fn_1_12ADC8(u32 arg0, u32 arg1, u32 *arg2, u32 *arg3) {
+    fn_1_12ADC8_ArchiveState *state;
+    u8 *entries;
+    u32 v;
+    u32 w;
+
+    state = (fn_1_12ADC8_ArchiveState *)&lbl_1_bss_897A0;
+    if (state->loaded != 0) {
+        s32 count = state->count;
+        u32 work[3];
+        entries = state->entries;
+        if (fn_8006A480(entries + count * 0x6C + 0x4C, arg0, work) != 0) {
+            v = fn_8006A998(work);
+        } else {
+            v = 0;
+        }
+        w = v;
+        if (v != 0) {
+            if (arg2 != 0 && arg3 != 0) {
+                u8 *entries2 = state->entries;
+                s32 count2 = state->count;
+{
+    u32 info[3];
+                if (fn_8006A480(entries2 + count2 * 0x6C + 0x4C, arg0, info) == 0) {
+                    OSPanic((const char *)lbl_1_data_40608, 0x1BE, (const char *)lbl_1_data_4076C);
+                }
+                *arg3 = fn_8006A9AC(info);
+}
+                if (*arg3 != 0) {
+                    *arg2 = fn_1_4630(lbl_801A6410.unk_0, *arg3, lbl_1_data_40608, 0x22A);
+                    fn_80008BA8(*arg2, v, *arg3);
+                    w = *arg2;
+                }
+                return fn_1_D35B0(w, 0, arg1);
+            } else {
+                return fn_1_D35B0(v, 0, arg1);
+            }
+        } else {
+            if (state->unk_8 != 0) {
+                return fn_1_D358C(arg0, arg1);
+            }
+            return 0;
+        }
+    }
+    return fn_1_D358C(arg0, arg1);
+}
+#pragma opt_propagation reset
+/* fzgx:end fn_1_12ADC8 */
+
 /* fzgx:begin fn_1_12AF50 */
 u32 fn_1_12AF50(u32 value) {
     u32 old_value = lbl_1_data_40600;

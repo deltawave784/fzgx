@@ -6932,3 +6932,12 @@ rel/main_rel/font/fn_1_50190.c:
 
 rel/main_rel/load/fn_1_45A58.c:
 	.text       start:0x00045A58 end:0x00045AD4 align:4
+
+rel/main_rel/stcoli/fn_1_2A214.c:
+	.text       start:0x0002A214 end:0x0002A2A4 align:4
+
+rel/main_rel/archive/fn_1_12ADC8.c:
+	.text       start:0x0012ADC8 end:0x0012AF50 align:4
+
+rel/main_rel/car/fn_1_7FD7C.c:
+	.text       start:0x0007FD7C end:0x0007FFF0 align:4
