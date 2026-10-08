@@ -3483,6 +3483,33 @@ def frame_padding(p, symbol, body, check):
     return out
 
 
+def _initializer_words(body, name):
+    """Big-endian bytes of every local aggregate initializer of `name` whose elements are all
+    4-byte literals (f32 when spelled with a point, exponent or `f` suffix, else a word)."""
+    import struct as _struct
+    from .sdkimport import masked
+    code = masked(body)
+    span = _function_span(code, name)
+    if not span:
+        return []
+    out = []
+    for m in re.finditer(r'(?m)^[ \t]*(?:const\s+)?\w[\w \t]*?\s+\w+\s*(?:\[[^\]\n]*\])?\s*=\s*\{([^{};]*)\}\s*;',
+                         code[span[0]:span[1]]):
+        data = b''
+        for element in (e.strip() for e in m[1].split(',')):
+            if re.fullmatch(r'[-+]?(?:\d+\.\d*|\.\d+|\d+)(?:[eE][-+]?\d+)?[fF]', element) or \
+                    re.fullmatch(r'[-+]?(?:\d+\.\d*|\.\d+|\d+[eE][-+]?\d+)(?:[eE][-+]?\d+)?', element):
+                data += _struct.pack('>f', float(element.rstrip('fF')))
+            elif re.fullmatch(r'[-+]?(?:0[xX][0-9A-Fa-f]+|\d+)[uUlL]*', element):
+                data += _struct.pack('>I', int(element.rstrip('uUlL'), 0) & 0xFFFFFFFF)
+            else:
+                data = b''
+                break
+        if len(data) >= 8:
+            out.append(data)
+    return out
+
+
 def shared_pool_primer(p, symbol, body, check):
     """Retail addresses a translation unit's literal pool through one base register: the pool
     is laid out in first-use order across the whole TU, so a per-function unit's own pool never
@@ -3540,6 +3567,18 @@ def shared_pool_primer(p, symbol, body, check):
             raw = sec[pool.addr - base:pool.addr - base + end] if sec is not None else None
         if not raw or len(raw) < end:
             continue
+        # a local aggregate initializer (`V3 rnd = {0.0f, 0.0f, 0.0f};`) is the function's own
+        # anonymous rodata object, copied word by word through the base: when retail's last
+        # words read that way hold its bytes, the primer stops before them so the
+        # initializer lands there (fn_1_645D4 read 0x338 for retail's 0x32c)
+        for words in _initializer_words(body, sym.name):
+            hit = next((x for x in sorted(o for o, (k, w) in own.items() if k == 'i')
+                        if bytes(raw[x:x + len(words)]) == words
+                        and all(own.get(x + i) == ('i', 4) for i in range(0, len(words), 4))
+                        and all(o + w <= x for o, (k, w) in own.items() if not x <= o < x + len(words))), None)
+            if hit is not None:
+                end = hit
+                break
         def cls(off):
             kw = widths.get(off)
             if kw and kw[0] == 'i':
