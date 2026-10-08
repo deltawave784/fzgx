@@ -716,6 +716,117 @@ void fn_1_CB404(u8 value) {
 }
 /* fzgx:end fn_1_CB404 */
 
+/* fzgx:begin fn_1_CB6D8 noprologue */
+#include "types.h"
+#include "font.h"
+#include "rel/main_rel/enemy_ctrl.h"
+
+struct fn_1_CB6D8_lbl_1_rodata_5E50 {
+    u32 unk_0; u32 unk_4; u32 unk_8; u32 unk_C;
+    u32 unk_10; u32 unk_14; u32 unk_18; u32 unk_1C;
+    u32 unk_20; u32 unk_24; u32 unk_28; u32 unk_2C;
+};
+struct fn_1_CB6D8_lbl_1_rodata_5E28 {
+    u32 unk_0; u32 unk_4; u32 unk_8; u32 unk_C;
+    u32 unk_10; u32 unk_14; u32 unk_18; u32 unk_1C;
+    u32 unk_20; u32 unk_24;
+};
+struct CB6D8Color { u8 r, g, b, a; };
+struct CB6D8Packet {
+    s32 glyph;
+    f32 x, y, z, width, height;
+    u32 unk18, unk1C, unk20, unk24, unk28;
+    f32 scale;
+    u32 mode, unk34;
+    struct CB6D8Color color;
+    u32 flags;
+    u32 unk40, unk44, unk48, unk4C, unk50, unk54;
+};
+struct CB6D8Input {
+    f32 x, y, width, height, scale;
+    u32 time;
+    s32 rank;
+    u32 flags;
+    struct CB6D8Color color;
+};
+extern struct fn_1_CB6D8_lbl_1_rodata_5E28 lbl_1_rodata_5E28;
+extern struct fn_1_CB6D8_lbl_1_rodata_5E50 lbl_1_rodata_5E50;
+extern struct CB6D8Packet lbl_1_rodata_26F8;
+extern f32 fn_1_519FC(f32);
+extern f32 fn_1_51AC0(f32);
+extern s32 fn_1_58C4(void);
+extern s32 fn_1_5910(void);
+extern int fn_1_4F734(FontDrawPacket *);
+extern void fn_1_51E60(FontDrawPacket *);
+extern const f32 lbl_1_rodata_5CFC, lbl_1_rodata_5E0C;
+extern const f32 lbl_1_rodata_5E90, lbl_1_rodata_5E94;
+extern const f32 lbl_1_rodata_5DC8, lbl_1_rodata_5CD8;
+extern const f64 lbl_1_rodata_5CE8;
+extern struct CB6D8Color lbl_1_rodata_5E80, lbl_1_rodata_5E84;
+extern struct CB6D8Color lbl_1_rodata_5E88, lbl_1_rodata_5E8C;
+static inline f32 CB6D8Alpha(u8 a) {
+    return lbl_1_rodata_5CFC - (f32)(u32)a / lbl_1_rodata_5CD8;
+}
+void fn_1_CB6D8(void *arg0) {
+    struct CB6D8Packet packet;
+    struct fn_1_CB6D8_lbl_1_rodata_5E28 loc_38 = lbl_1_rodata_5E28;
+    struct fn_1_CB6D8_lbl_1_rodata_5E50 loc_8 = lbl_1_rodata_5E50;
+    s32 i;
+    s32 rank = ((struct CB6D8Input *)arg0)->rank;
+    u32 time = ((struct CB6D8Input *)arg0)->time;
+    s32 first = 0;
+    packet = lbl_1_rodata_26F8;
+    packet.x = fn_1_519FC(((struct CB6D8Input *)arg0)->x);
+    packet.y = fn_1_51AC0(((struct CB6D8Input *)arg0)->y);
+    packet.width = ((struct CB6D8Input *)arg0)->scale * ((struct CB6D8Input *)arg0)->width * ((u32)fn_1_58C4() == 1 ? lbl_1_rodata_5CFC : lbl_1_rodata_5E0C);
+    packet.height = ((struct CB6D8Input *)arg0)->height * ((u32)fn_1_58C4() == 1 ? lbl_1_rodata_5CFC : lbl_1_rodata_5E0C);
+    packet.mode = 5;
+    packet.scale = ((struct CB6D8Input *)arg0)->scale;
+    packet.flags = ((struct CB6D8Input *)arg0)->flags;
+    if ((u32)fn_1_58C4() > 1) {
+        if (fn_1_5910() & 1) packet.x -= lbl_1_rodata_5E90;
+        else packet.x += lbl_1_rodata_5E94;
+    }
+    if (rank == -1) first = 3;
+    else if (rank < 9) first = 1;
+    for (i = 11; i >= first; i--) {
+        packet.x -= (f32)(((struct CB6D8Input *)arg0)->width * (((struct CB6D8Input *)arg0)->scale * ((f32 *)&loc_8)[i]) * ((u32)fn_1_58C4() == 1 ? lbl_1_rodata_5CFC : lbl_1_rodata_5E0C));
+        if (i != 2) {
+            packet.color = ((struct CB6D8Input *)arg0)->color;
+            switch (i) {
+            case 0: packet.glyph = ((u32 *)&loc_38)[((rank + 1) / 10) % 10]; packet.color = lbl_1_rodata_5E80; break;
+            case 1: packet.glyph = ((u32 *)&loc_38)[(rank + 1) % 10]; packet.color = lbl_1_rodata_5E84; break;
+            case 3: packet.glyph = ((u32 *)&loc_38)[((time >> 20) & 255) / 10]; break;
+            case 4: packet.glyph = ((u32 *)&loc_38)[((time >> 20) & 255) % 10]; break;
+            case 6: packet.glyph = ((u32 *)&loc_38)[((time >> 12) & 255) / 10]; break;
+            case 7: packet.glyph = ((u32 *)&loc_38)[((time >> 12) & 255) % 10]; break;
+            case 9: packet.glyph = ((u32 *)&loc_38)[(time & 4095) / 100]; break;
+            case 10: packet.glyph = ((u32 *)&loc_38)[((time & 4095) / 10) % 10]; break;
+            case 11: packet.glyph = ((u32 *)&loc_38)[(time & 4095) % 10]; break;
+            case 5: packet.glyph = 0x943E; break;
+            case 8: packet.glyph = 0x943F; break;
+            default: packet.glyph = 0x9440; break;
+            }
+            packet.scale = ((struct CB6D8Input *)arg0)->scale;
+            fn_1_4F734((FontDrawPacket *)&packet);
+            if (packet.glyph == 0x943E || packet.glyph == 0x943F) {
+                packet.glyph = 0x942F;
+                packet.z += lbl_1_rodata_5DC8;
+                packet.color = lbl_1_rodata_5E88;
+                packet.scale = CB6D8Alpha(*((u8 *)arg0 + 0x23));
+                fn_1_51E60((FontDrawPacket *)&packet);
+            } else {
+                packet.glyph = 0x9430;
+                packet.z += lbl_1_rodata_5DC8;
+                packet.color = lbl_1_rodata_5E8C;
+                packet.scale = CB6D8Alpha(*((u8 *)arg0 + 0x23));
+                fn_1_51E60((FontDrawPacket *)&packet);
+            }
+        }
+    }
+}
+/* fzgx:end fn_1_CB6D8 */
+
 /* fzgx:begin fn_1_CBC24 noprologue */
 #include "types.h"
 #include "rel/main_rel/enemy_ctrl.h"

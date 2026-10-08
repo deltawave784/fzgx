@@ -6989,3 +6989,6 @@ rel/main_rel/enemy_ctrl/fn_1_D07E0.c:
 
 rel/main_rel/relocation/fn_1_A5F44.c:
 	.text       start:0x000A5F44 end:0x000A6480 align:4
+
+rel/main_rel/enemy_ctrl/fn_1_CB6D8.c:
+	.text       start:0x000CB6D8 end:0x000CBC24 align:4

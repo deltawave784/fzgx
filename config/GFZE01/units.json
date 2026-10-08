@@ -39431,6 +39431,21 @@
   },
   {
     "module": "main_rel",
+    "source": "rel/main_rel/enemy_ctrl/fn_1_CB6D8.c",
+    "symbols": [
+      "fn_1_CB6D8"
+    ],
+    "status": "matching",
+    "mw_version": "GC/1.3",
+    "extra_cflags": [],
+    "tu": "rel/main_rel/enemy_ctrl.c",
+    "pool": {
+      "@83": "jumptable_1_data_3D580",
+      "@85": "lbl_1_rodata_5CE8"
+    }
+  },
+  {
+    "module": "main_rel",
     "source": "rel/main_rel/enemy_ctrl/fn_1_CBC24.c",
     "symbols": [
       "fn_1_CBC24"
