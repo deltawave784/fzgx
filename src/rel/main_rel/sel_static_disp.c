@@ -4154,6 +4154,75 @@ void fn_1_142BDC(u32 arg0, u32 arg1, u32 arg2) {
 }
 /* fzgx:end fn_1_142BDC */
 
+/* fzgx:begin fn_1_14328C noprologue */
+#include "types.h"
+#include "font.h"
+
+struct fn_1_14328C_Copy88 { u32 a[22]; };
+struct fn_1_14328C_lbl_1_bss_26B04 {
+    u8 unk_0[1];
+};
+
+extern u8 lbl_1_bss_26B04[20];
+extern f32 lbl_1_rodata_26F8[22];
+extern const f32 lbl_1_rodata_9474;
+extern const f32 lbl_1_rodata_9478;
+extern u16 fn_1_48690(u32);
+extern int fn_1_4F734(FontDrawPacket *);
+
+void fn_1_14328C(u32 arg0, u32 arg1, u32 arg2) {
+    s32 v0;
+    s32 v5;
+    s32 j;
+    s32 i;
+    s32 v6;
+    struct fn_1_14328C_Copy88 packet;
+    v0 = lbl_1_bss_26B04[arg2];
+    v6 = v0 % 10;
+    v5 = v0 / 10;
+    packet = *(struct fn_1_14328C_Copy88 *)lbl_1_rodata_26F8;
+    *(f32 *)&packet.a[2] = (f32)(s32)arg1;
+    if (v6 >= 6) {
+        for (i = 6; i <= v6; i++) {
+            packet = *(struct fn_1_14328C_Copy88 *)lbl_1_rodata_26F8;
+            packet.a[0] = 0x9713;
+            *(f32 *)&packet.a[1] = (f32)(s32)arg0 - (f32)((f32)((i - 1) % 5) * lbl_1_rodata_9474);
+            *(f32 *)&packet.a[2] = (f32)(s32)arg1;
+            packet.a[12] = 15;
+            *(f32 *)&packet.a[4] *= lbl_1_rodata_9474 / (f32)fn_1_48690(packet.a[0]);
+            *(f32 *)&packet.a[5] *= lbl_1_rodata_9474 / (f32)fn_1_48690(packet.a[0]);
+            fn_1_4F734((FontDrawPacket *)&packet);
+        }
+        arg1 = (s32)((f32)(s32)arg1 - lbl_1_rodata_9478);
+    }
+    if (v6 >= 1) {
+        for (j = 1; j <= v6; j++) {
+            packet = *(struct fn_1_14328C_Copy88 *)lbl_1_rodata_26F8;
+            packet.a[0] = 0x9713;
+            *(f32 *)&packet.a[1] = (f32)(s32)arg0 - (f32)((f32)((j - 1) % 5) * lbl_1_rodata_9474);
+            *(f32 *)&packet.a[2] = (f32)(s32)arg1;
+            packet.a[12] = 15;
+            *(f32 *)&packet.a[4] *= lbl_1_rodata_9474 / (f32)fn_1_48690(packet.a[0]);
+            *(f32 *)&packet.a[5] *= lbl_1_rodata_9474 / (f32)fn_1_48690(packet.a[0]);
+            fn_1_4F734((FontDrawPacket *)&packet);
+        }
+        arg1 = (s32)((f32)(s32)arg1 - lbl_1_rodata_9478);
+    }
+    if (v5 >= 1) {
+        for (i = 0; i < v5; i++) {
+            packet = *(struct fn_1_14328C_Copy88 *)lbl_1_rodata_26F8;
+            packet.a[0] = 0x9712;
+            *(f32 *)&packet.a[1] = (f32)((s32)arg0 - i * 12);
+            *(f32 *)&packet.a[2] = (f32)(s32)arg1;
+            packet.a[12] = 15;
+            *(f32 *)&packet.a[4] *= lbl_1_rodata_9474 / (f32)fn_1_48690(packet.a[0]);
+            *(f32 *)&packet.a[5] *= lbl_1_rodata_9474 / (f32)fn_1_48690(packet.a[0]);
+            fn_1_4F734((FontDrawPacket *)&packet);
+        }
+    }
+}
+/* fzgx:end fn_1_14328C */
+
 /* fzgx:begin fn_1_143E7C */
 #pragma section code_type ".fzgxpool"
 static const u32 fzgx_pool_table1[3] = {0x00000000, 0x00000000, 0x00000000};  /* fzgx-allow: A1 retail pool bytes */
