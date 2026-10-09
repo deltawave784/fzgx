@@ -659,3 +659,6 @@ rel/sel/sel/fn_10_4D78.c:
 
 rel/sel/sel/fn_10_1BFC4.c:
 	.text       start:0x0001BFC4 end:0x0001C2D8 align:4
+
+rel/sel/sel/fn_10_E034.c:
+	.text       start:0x0000E034 end:0x0000E294 align:4

@@ -4203,6 +4203,69 @@ void fn_10_CFDC(void) {
 }
 /* fzgx:end fn_10_CFDC */
 
+/* fzgx:begin fn_10_E034 */
+#include "rel/sel/sel.h"
+
+typedef struct { s16 values[8]; } Options;
+typedef u32 Color;
+typedef struct { s16 unk_0; u8 pad_2[0x92]; u32 flags; } State;
+typedef struct { u8 pad_0[4]; s16 unk_4,unk_6,unk_8; u8 pad_A[0x9A]; u8 *items; } Panel;
+extern const f32 lbl_10_rodata_158[19];
+extern s16 lbl_1_bss_962;
+extern State lbl_1_bss_8B3A0;
+extern s32 lbl_801A66B4;
+extern u32 fn_1_535A0(void *, f32,f32,f32,f32,f32,f32);
+extern void fn_1_49514(void *);
+extern void fn_1_4AE0C(const char *, ...);
+extern int sprintf(char *, const char *, ...);
+void fn_10_E034(Panel *arg) {
+    const u8 *pool = (const u8 *)lbl_10_rodata_158;
+    char buf[32];
+    Options options;
+    s16 i;
+    s16 page;
+    page = *(s16 *)(arg->items + (s16)(lbl_1_bss_962 - 14) * 0x94 + 0x14);
+    options = *(const Options *)(pool + 0xD0);
+    if (!(lbl_1_bss_8B3A0.flags & 0x200)) return;
+    switch (lbl_1_bss_8B3A0.unk_0) { case 0: break; default: return; }
+    switch(page) {
+    case 0: {
+        f32 scale = lbl_10_rodata_158[17];
+        const Color c = *(const Color *)(pool + 0xE0);
+        fn_1_535A0((void *)&c, *(const f32 *)(pool+0x4C), *(const f32 *)(pool+0xF8), scale, *(const f32 *)(pool+0xFC), *(const f32 *)(pool+0x100), scale);
+        for(i=0; i<4; i++) {
+            Color c1 = *(const Color *)(pool+0xE4);
+            fn_1_49514(&c1);
+            if (i == arg->unk_8) {
+                Color c2 = *(const Color *)(pool+0xE8);
+                fn_1_49514(&c2);
+            }
+            fn_1_4AE0C((const char *)&lbl_10_data_5E2C, *(const char **)((u8 *)&lbl_10_data_2CDC + options.values[i]*24 + lbl_801A66B4*4));
+            {
+                Color c3 = *(const Color *)(pool+0xEC);
+                fn_1_49514(&c3);
+            }
+        }
+        break;
+    }
+    case 1: {
+        const Color c = *(const Color *)(pool+0xF0);
+        fn_1_535A0((void *)&c, *(const f32 *)(pool+0x4C), *(const f32 *)(pool+0xF8), *(const f32 *)(pool+0x44), *(const f32 *)(pool+0x104), *(const f32 *)(pool+0x108), *(const f32 *)(pool+0x44));
+        sprintf(buf, ((const char **)(lbl_10_data_2CDC.pad_4 + 0x164))[lbl_801A66B4], arg->unk_4);
+        fn_1_4AE0C((const char *)&lbl_10_data_5E2C, buf);
+        break;
+    }
+    case 2: {
+        const Color c = *(const Color *)(pool+0xF4);
+        fn_1_535A0((void *)&c, *(const f32 *)(pool+0x4C), *(const f32 *)(pool+0xF8), *(const f32 *)(pool+0x44), *(const f32 *)(pool+0x10C), *(const f32 *)(pool+0x108), *(const f32 *)(pool+0x44));
+        sprintf(buf, ((const char **)(lbl_10_data_2CDC.pad_4 + 0x17C))[lbl_801A66B4], arg->unk_6);
+        fn_1_4AE0C((const char *)&lbl_10_data_5E2C, buf);
+        break;
+    }
+    }
+}
+/* fzgx:end fn_10_E034 */
+
 /* fzgx:begin fn_10_E294 */
 extern const f32 lbl_10_rodata_158[70];
 
