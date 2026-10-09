@@ -1329,6 +1329,140 @@ void fn_10_4A84(void) {
 }
 /* fzgx:end fn_10_4A84 */
 
+/* fzgx:begin fn_10_4D78 */
+#include "rel/sel/sel.h"
+
+typedef struct Sig_fn_1_152840_Entry { s16 id; u8 pad[2]; u32 flags; } Sig_fn_1_152840_Entry;
+typedef struct { s16 key; u16 pad; u32 mask; } Sig_fn_1_152970_Fn152970Entry;
+struct fn_10_4D78_lbl_10_bss_0 { u8 pad[0x18]; s16 unk_18; s16 unk_1A; Sig_fn_1_152840_Entry unk_1C[1]; };
+struct fn_10_4D78_lbl_1_bss_8B3A0 {
+ u8 pad_0[4]; s16 unk_4; u8 pad_6[8]; s16 unk_E;
+ u8 pad_10[0x1E]; s16 unk_2E; u8 pad_30[0x1E]; s16 unk_4E;
+ u8 pad_50[0x1E]; s16 unk_6E; u8 pad_70[0x24]; u32 unk_94;
+ u8 pad_98[6]; u8 unk_9E;
+};
+extern struct fn_10_4D78_lbl_1_bss_8B3A0 lbl_1_bss_8B3A0;
+extern s16 lbl_1_bss_966;
+extern int fn_1_152840(s16, Sig_fn_1_152840_Entry *, s16, s16);
+extern s32 fn_1_152970(s16 *, s16 *, s16, u32, Sig_fn_1_152970_Fn152970Entry *, s16, s16);
+extern u32 fn_10_4AE0(u32, u32);
+extern void fn_1_A5330(u32, s32);
+extern void fn_80008BEC(void *, int, u32);
+extern void fn_80008BA8(void *, void *, u32);
+void fn_10_4D78(void) {
+ struct fn_10_4D78_lbl_10_bss_0 *p_lbl_10_bss_0;
+ struct { struct fn_10_4D78_lbl_1_bss_8B3A0 *value; } main_storage;
+#define p_lbl_1_bss_8B3A0 main_storage.value
+ struct {u8 *value;} v4_storage;
+#define v4 v4_storage.value
+ s32 v0;
+ u8 *final_ptr;
+ u8 *v5;
+ u8 *v6;
+ u8 *v18;
+ s32 final_index;
+ s16 *v13;
+ s32 v7;
+ s32 v16;
+ s32 v8;
+ s32 v11;
+ s32 v15;
+ u32 v17;
+ s32 v19;
+ struct {u8 *value;} v2_storage;
+ struct {u8 *value;} v3_storage;
+#define v2 v2_storage.value
+#define v3 v3_storage.value
+ p_lbl_10_bss_0 = (struct fn_10_4D78_lbl_10_bss_0 *)&lbl_10_bss_0;
+ p_lbl_1_bss_8B3A0 = &lbl_1_bss_8B3A0;
+ v0 = p_lbl_1_bss_8B3A0->unk_9E;
+ if (p_lbl_1_bss_8B3A0->unk_94 & 0x30) {
+  struct {s16 *value;} defaults;
+  struct {u8 *value;} flags;
+  defaults.value = &lbl_10_data_554;
+  flags.value = (u8 *)p_lbl_1_bss_8B3A0;
+  for(v8=0; (s16)v8<4; p_lbl_1_bss_8B3A0=(struct fn_10_4D78_lbl_1_bss_8B3A0 *)((u8 *)p_lbl_1_bss_8B3A0+32), defaults.value++, flags.value++, v8++) {
+   s16 v1 = p_lbl_1_bss_8B3A0->unk_E;
+   if(v1 != -1 && (v1 > 40 || (s16)fn_1_152840(v1, p_lbl_10_bss_0->unk_1C, *(s16 *)((u8 *)p_lbl_10_bss_0+26), *(s16 *)((u8 *)p_lbl_10_bss_0+24)) == 0)) {
+    p_lbl_1_bss_8B3A0->unk_E = *defaults.value;
+    *(flags.value+159) = 50;
+    fn_1_A5330(50,v8);
+   }
+  }
+ } else {
+  if(p_lbl_1_bss_8B3A0->unk_4 == 0) {
+   v13=&p_lbl_1_bss_8B3A0->unk_E;
+   v13[0]=-1;
+   v13[16]=-1;
+   v13[32]=-1;
+   v13[48]=-1;
+   v13[(s16)v0 * 16]=6;
+  }
+  v4 = (u8 *)&lbl_1_bss_8B3A0;
+  v3=v4;
+  v2=v4;
+  for(v11=0;(s16)v11<4;v3+=32,v2++,v11++) {
+   if((s16)fn_1_152840(*(s16 *)(v3+14), p_lbl_10_bss_0->unk_1C, *(s16 *)((u8 *)p_lbl_10_bss_0+26), *(s16 *)((u8 *)p_lbl_10_bss_0+24))==0) {
+    if((lbl_1_bss_966 == 20 || lbl_1_bss_966 == 16) && *(s16 *)(v3+14)>=54 && *(s16 *)(v3+14)<=57) continue;
+    *(s16 *)(v3+14)=-1;
+    *(v2+159)=50;
+    fn_1_A5330(50,v11);
+   } else fn_1_A5330(*(v2+159),v11);
+  }
+  { s32 selected = (s16)v0;
+  v13=(s16 *)&lbl_1_bss_8B3A0;
+  v13 += selected * 16;
+  if(*(v13 += 7) == -1) {
+   if(p_lbl_1_bss_8B3A0->unk_94 & 0x40000000) *v13=((s16 *)&lbl_10_data_55C)[(s16)v0];
+   else *v13=(&lbl_10_data_554)[(s16)v0];
+   *((u8 *)&lbl_1_bss_8B3A0+selected+159)=50;
+   fn_1_A5330(50,v0);
+  }
+  }
+  v3=v4;
+  v2=v4;
+  v15=1;
+  for(v16=0;(s16)v16<4;v3+=32,v2++,v16++) {
+   if((s16)v16 != (s16)v0 && *(s16 *)(v3+14) != -1) {
+    if(p_lbl_1_bss_8B3A0->unk_4 <= (s16)v15) {
+     *(s16 *)(v3+14)=-1;
+     *(v2+159)=50;
+     fn_1_A5330(50,v16);
+    }
+    v15++;
+   }
+  }
+  v17=fn_10_4AE0(v0,0);
+  for(v7=0;(s16)v7<4;v7++) {
+   if((s16)v7 != (s16)v0) v17=fn_10_4AE0(v7,v17);
+  }
+  while((s16)v17 < p_lbl_1_bss_8B3A0->unk_4) {
+   for(v19=0;(s16)v19<4;v19++) {
+    if(*(s16 *)(v4+v19*32+14)==-1) {
+     *(s16 *)((u8 *)&lbl_1_bss_8B3A0+((s16)v19<<5)+14)=(&lbl_10_data_554)[(s16)v19];
+     v17++;
+     break;
+    }
+   }
+  }
+  if(p_lbl_1_bss_8B3A0->unk_94 & 0x18000) {
+   v5=(u8 *)&lbl_1_bss_8B3A0+192;
+   v6=(u8 *)&lbl_1_bss_8B3A0+176;
+   v18=(u8 *)&lbl_1_bss_8B3A0+208;
+   final_ptr=v4;
+   for(final_index=0;(s16)final_index<4;v4+=32,final_ptr+=4,final_index++) {
+    s16 v21=*(s16 *)(v4+14);
+    if(v21 != -1) {
+     fn_1_152970((s16 *)(final_ptr+176),(s16 *)(final_ptr+178),v21,(3u << 30),(Sig_fn_1_152970_Fn152970Entry *)p_lbl_10_bss_0->unk_1C,*(s16 *)((u8 *)p_lbl_10_bss_0+26),*(s16 *)((u8 *)p_lbl_10_bss_0+24));
+     fn_80008BEC(v5,0,16);
+     fn_80008BA8(v18,v6,16);
+    }
+   }
+  }
+ }
+}
+/* fzgx:end fn_10_4D78 */
+
 /* fzgx:begin fn_10_5148 */
 extern u8 lbl_10_bss_0[];
 extern char lbl_10_data_6A4[11];

@@ -66334,6 +66334,17 @@
   },
   {
     "module": "sel",
+    "source": "rel/sel/sel/fn_10_4D78.c",
+    "symbols": [
+      "fn_10_4D78"
+    ],
+    "status": "matching",
+    "mw_version": null,
+    "extra_cflags": [],
+    "tu": "rel/sel/sel.c"
+  },
+  {
+    "module": "sel",
     "source": "rel/sel/sel/fn_10_5148.c",
     "symbols": [
       "fn_10_5148"
