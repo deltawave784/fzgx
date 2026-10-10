@@ -149,3 +149,6 @@ rel/option/_prolog/fn_4_0.c:
 
 rel/option/_prolog/fn_4_D420.c:
 	.text       start:0x0000D420 end:0x0000D760 align:4
+
+rel/option/_prolog/fn_4_2700.c:
+	.text       start:0x00002700 end:0x000028FC align:4
