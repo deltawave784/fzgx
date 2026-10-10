@@ -82,7 +82,9 @@ One batch = steps 1-5 above with these changes:
   `model: fable`, prompt `SYMBOL=<symbol> AGENT_ID=fable-<symbol>-<YYYYMMDD><batch letter>` (2 Fable agents: changed
   2026-10-06 from 8 to 4 and 2026-10-08 from 4 to 2 because Fable was spent too fast).
 - Alongside them, in the same batch, run **6 Opus agents** (2026-10-10, user request): pick with
-  `uv run tools/fzgx.py route --easy --tier opus --max-attempts 3 --json --limit 8` (every module), drop the Fable
+  `uv run tools/fzgx.py route --easy --tier opus --max-size 768 --max-attempts 3 --json --limit 8` (every module;
+  `--max-size 768` keeps off clone B's slice: functions over 768 B scoring under 85% that no Claude tier tried,
+  see docs/COLLABORATION.md), drop the Fable
   rows and any second row of the same clone family, take 6, dispatch with `subagent_type: matcher-large` and
   `model: opus`, ids `opus-<symbol>-<YYYYMMDD><batch letter>`. All 8 agents run at once.
 - Close the batch: `reuse --max-size 2048`, then for each module that had a release in the batch
@@ -92,7 +94,8 @@ One batch = steps 1-5 above with these changes:
   the agent's id), `lint`, `gate` and `report`; append a line to `.fzgx/reports/waves.md` that includes the code
   percentage; commit `state/progress.csv`.
 - If `route --fable --min-percent 85` returns no row in any module, stop and ask (below 85 the match rate is
-  unmeasured). If `route --easy` runs short of 6 Opus rows, raise `--max-attempts` to 5, then run with fewer.
+  unmeasured). If `route --easy` runs short of 6 Opus rows, raise `--max-attempts` to 5, then run with fewer;
+  never raise the Opus `--max-size` above 768 while clone B works its slice.
 
 Before EVERY batch check usage with the `mcp__ccd_session_mgmt__get_usage` tool (load it with ToolSearch). Changed
 2026-10-05 at the user's request: the user does not use Fable for anything else, so the **weekly Fable window may be
