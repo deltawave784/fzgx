@@ -23,7 +23,6 @@ extern void fn_1_7BD6C(int);
 extern void fn_80074CF4(f32 arg0, f32 arg1, f32 arg2);
 
 /* fzgx:begin fn_3_C328 */
-
 void fn_3_C328(void) {
     u32 *state;
 

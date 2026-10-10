@@ -480,7 +480,6 @@ void fn_3_16E14(void) {
 /* fzgx:end fn_3_16E14 */
 
 /* fzgx:begin fn_3_16FD0 */
-
 void fn_3_16FD0(u32 arg0) {
     u32 i = 0;
     Col4 col = lbl_3_rodata_5EC;

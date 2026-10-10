@@ -181,8 +181,6 @@ void fn_3_1180C(void) {
 /* fzgx:end fn_3_1180C */
 
 /* fzgx:begin fn_3_118BC */
-
-
 #pragma opt_dead_assignments off
 void fn_3_118BC(void) {
     u16 flags;
@@ -230,7 +228,6 @@ void fn_3_11974(void) {
 /* fzgx:end fn_3_11974 */
 
 /* fzgx:begin fn_3_11994 */
-
 void fn_3_11994(s16 arg0, s16 arg1, s32 arg2, s32 arg3, s32 arg_sp0) {
     s32 temp_r5;
     u8 var_r30;

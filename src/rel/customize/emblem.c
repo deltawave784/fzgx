@@ -1,6 +1,8 @@
 #include "types.h"
+#include "rel/customize/globals.h"
 #include "font.h"
 #include "rel/customize/emblem.h"
+
 
 struct fn_3_137AC_lbl_3_bss_A17D0 { u8 unk_0; u8 unk_1; };
 extern void fn_1_4CC0(void);
@@ -42,7 +44,6 @@ extern void fn_3_14BBC(void *, s16, s16, s16, u32 *);
 extern void fn_3_14E18(void *, s16, void *, s16, void *);
 
 /* fzgx:begin fn_3_1349C */
-
 void fn_3_1349C(void) {
     fn_1_4CC0();
     if (((*((u32 *)&lbl_3_bss_A17A0)) & 0x20000000) != 0) {
@@ -129,8 +130,6 @@ void fn_3_137AC(void) {
 /* fzgx:end fn_3_137AC */
 
 /* fzgx:begin fn_3_13D98 */
-
-
 u32 fn_3_13D98(void *arg) {
     u8 header[0x60];
     u8 buffer[0x2000] __attribute__((aligned(32)));
@@ -161,7 +160,6 @@ u32 fn_3_13D98(void *arg) {
 /* fzgx:end fn_3_13D98 */
 
 /* fzgx:begin fn_3_13EA4 */
-
 u32 fn_3_13EA4(void *arg, u32 *output) {
     u8 header[0x60];
     u8 buffer[0x2000] __attribute__((aligned(32)));
@@ -577,7 +575,6 @@ void fn_3_146BC(void) {
 /* fzgx:end fn_3_146BC */
 
 /* fzgx:begin fn_3_146C0 */
-
 void fn_3_146C0(void *arg0, s16 x, s16 y, s16 delta, u32 *arg4) {
     s32 offset;
     u32 value;
@@ -625,7 +622,6 @@ void fn_3_14778(u16 width, u16 height, u8 format, u32 data) {
 /* fzgx:end fn_3_14778 */
 
 /* fzgx:begin fn_3_15240 */
-
 void fn_3_15240(void *arg0, s16 arg1, void *arg2, u16 arg3, s16 arg4, void *arg5) {
     s32 i;
     s32 j;

@@ -320,28 +320,24 @@ void fn_3_19C50(void) {
 /* fzgx:end fn_3_19C50 */
 
 /* fzgx:begin fn_3_19C94 */
-
 u8 fn_3_19C94(void) {
     return (((u8 *)&lbl_3_bss_A2438))[0xe];
 }
 /* fzgx:end fn_3_19C94 */
 
 /* fzgx:begin fn_3_19CA4 */
-
 void fn_3_19CA4(void) {
     *(u32 *)((((u8 *)&lbl_3_bss_A2438)) + 4) = (u32)-2147483648;
 }
 /* fzgx:end fn_3_19CA4 */
 
 /* fzgx:begin fn_3_19CB8 */
-
 void fn_3_19CB8(void) {
     *(u32 *)((((u8 *)&lbl_3_bss_A2438)) + 4) = 0x20000000;
 }
 /* fzgx:end fn_3_19CB8 */
 
 /* fzgx:begin fn_3_19CCC */
-
 void fn_3_19CCC(void) {
     *(u32 *)((((u8 *)&lbl_3_bss_A2438)) + 4) = 0x40000000;
 }
@@ -380,7 +376,6 @@ void fn_3_19D14(fn_3_19D14_CustomizeData *data) {
 /* fzgx:end fn_3_19D14 */
 
 /* fzgx:begin fn_3_19D50 */
-
 void fn_3_19D50(void) {
     (((u8 *)&lbl_3_bss_A2438))[12] = ((((u8 *)&lbl_3_bss_A2438))[12] + 1) % 5;
 }
@@ -410,7 +405,6 @@ void fn_3_19D88(Fn319D88Object *object) {
 /* fzgx:end fn_3_19D88 */
 
 /* fzgx:begin fn_3_19DC8 */
-
 typedef struct Fn319DC8Object {
     u8 pad_00[0x04];
     u32 flags_04;
@@ -430,8 +424,6 @@ void fn_3_19DC8(Fn319DC8Object *object) {
 /* fzgx:end fn_3_19DC8 */
 
 /* fzgx:begin fn_3_19E40 */
-
-
 void fn_3_19E40(CustomizeData *self) {
     self->unk_08 = fn_3_17820(self);
     if (self->unk_00[1] & 0x20000000) {
@@ -561,7 +553,6 @@ void fn_3_1A024(Fn3_1A024Data *data) {
 /* fzgx:end fn_3_1A024 */
 
 /* fzgx:begin fn_3_1A068 */
-
 void fn_3_1A068(void) {
     if (lbl_3_bss_A2458[0] != 0) {
         fn_3_BD98();
@@ -654,7 +645,6 @@ void fn_3_1A1B8(void) {
 /* fzgx:end fn_3_1A1B8 */
 
 /* fzgx:begin fn_3_1A1D8 */
-
 struct fn_3_1A1D8_lbl_3_bss_A2438 {
     u8 unk_0;
     u8 pad_1[0x3];
@@ -866,7 +856,6 @@ after_disable:
 /* fzgx:end fn_3_1A488 */
 
 /* fzgx:begin fn_3_1AB34 */
-
 void fn_3_1AB34(void *obj, s16 start, s16 base, u32 *items) {
     s32 x;
     s16 width;
@@ -893,7 +882,6 @@ void fn_3_1AB34(void *obj, s16 start, s16 base, u32 *items) {
 /* fzgx:end fn_3_1AB34 */
 
 /* fzgx:begin fn_3_1ABD8 */
-
 void fn_3_1ABD8(void *arg0, s16 x1, s16 y1, s16 x2, s16 y2, u32 *value) {
     u32 result1;
     u32 result2;
@@ -925,8 +913,7 @@ void fn_3_1ABD8(void *arg0, s16 x1, s16 y1, s16 x2, s16 y2, u32 *value) {
 
 /* fzgx:begin fn_3_1ACE4 noprologue */
 #include "types.h"
-#include "rel/customize/globals.h"
-#include "rel/customize/toolkit.h"
+#include "font.h"
 
 extern void fn_3_1B4BC(void *, s32, s32, s32, s32, u32 *);
 
@@ -961,7 +948,6 @@ void fn_3_1ACE4(void *data, s32 first_a, s32 second_a, s32 first_b, s32 second_b
 /* fzgx:end fn_3_1ACE4 */
 
 /* fzgx:begin fn_3_1AE40 */
-
 /* Mirror the left half of a region onto its right half, row by row. */
 void fn_3_1AE40(void *data, u32 x1, u32 y1, s16 x2, s16 y2) {
     s16 y_end;
@@ -1535,12 +1521,6 @@ f30 = clamped;
 /* fzgx:end fn_3_1D338 */
 
 /* fzgx:begin fn_3_1F81C */
-
-
-
-
-
-
 void fn_3_1F81C(void) {
     s16 i;
     CustomizeObject *obj;
@@ -2000,8 +1980,9 @@ void fn_3_23524(void) {
 
 /* fzgx:begin fn_3_23724 noprologue */
 #include "types.h"
-#include "rel/customize/globals.h"
-#include "rel/customize/toolkit.h"
+#include "font.h"
+
+extern u32 lbl_1_rodata_26F8;
 
 #pragma section code_type ".fzgxpool"
 __declspec(section ".fzgxpool") static void fzgx_pool_prime1(void) {
@@ -2214,8 +2195,6 @@ struct fn_3_23724_lbl_3_rodata_768 {
     f32 unk_3AC;
     f32 five;
 };
-extern struct fn_3_23724_lbl_3_rodata_768 lbl_3_rodata_768;
-extern struct fn_3_23724_Copy88 lbl_1_rodata_26F8;
 extern u32 fn_1_50190(void *, f32, f32, f32, f32, f32, f32);
 extern void fn_1_50164(void *, f32, f32, f32, f32);
 #define CLAMP(x) ((x) < 0.0f ? 0.0f : ((x) > 1.0f ? 1.0f : (x)))
@@ -2229,7 +2208,7 @@ void fn_3_23724(u32 arg0, u32 arg1, u32 arg2, f32 arg3, f32 arg4, f32 arg5, f32 
     struct fn_3_23724_Copy88 loc;
     v0 = arg4 - 4.0f;
     v1 = v0 - 24.0f;
-    loc = lbl_1_rodata_26F8;
+    loc = (*(struct fn_3_23724_Copy88 *)&lbl_1_rodata_26F8);
     loc.flags = 0x8921;
     loc.x = (s16)arg0;
     loc.y = (s16)arg1;
@@ -2237,7 +2216,7 @@ void fn_3_23724(u32 arg0, u32 arg1, u32 arg2, f32 arg3, f32 arg4, f32 arg5, f32 
     loc.mode = 6;
     fn_1_50190(&loc, arg3, arg4, 7.0f, 7.0f, 23.0f, 7.0f);
     width = v1 * CLAMP(arg6);
-    loc = lbl_1_rodata_26F8;
+    loc = (*(struct fn_3_23724_Copy88 *)&lbl_1_rodata_26F8);
     loc.flags = 0x8902;
     loc.x = (s16)arg0;
     pos = (24.0f + (f32)(v1 * CLAMP(arg5)) < 24.0f + (f32)(((width) / 2.0f))) ? 24.0f + (f32)(((width) / 2.0f)) :
@@ -2251,7 +2230,6 @@ void fn_3_23724(u32 arg0, u32 arg1, u32 arg2, f32 arg3, f32 arg4, f32 arg5, f32 
 /* fzgx:end fn_3_23724 */
 
 /* fzgx:begin fn_3_2406C */
-
 void fn_3_2406C(void) {
     fn_80074188((((s16 *)&lbl_3_bss_A2460))[0], (((s16 *)&lbl_3_bss_A2460))[1],
                 (((s16 *)&lbl_3_bss_A2460))[2], (((s16 *)&lbl_3_bss_A2460))[3]);
@@ -2259,7 +2237,6 @@ void fn_3_2406C(void) {
 /* fzgx:end fn_3_2406C */
 
 /* fzgx:begin fn_3_240A4 */
-
 void fn_3_240A4(void) {
     fn_80074188((((s16 *)&lbl_3_bss_A248C))[0], (((s16 *)&lbl_3_bss_A248C))[1],
                 (((s16 *)&lbl_3_bss_A248C))[2], (((s16 *)&lbl_3_bss_A248C))[3]);
@@ -2267,7 +2244,6 @@ void fn_3_240A4(void) {
 /* fzgx:end fn_3_240A4 */
 
 /* fzgx:begin fn_3_240DC */
-
 void fn_3_240DC(void *arg0, void *arg1) {
     fn_80074188((((s16 *)&lbl_3_bss_A2460))[0],
                 (((s16 *)&lbl_3_bss_A2460))[1],
@@ -2278,7 +2254,6 @@ void fn_3_240DC(void *arg0, void *arg1) {
 /* fzgx:end fn_3_240DC */
 
 /* fzgx:begin fn_3_268D0 */
-
 typedef struct fn_3_268D0_CustomizeObject {
     u8 pad000[4];
     f32 x;
@@ -3025,7 +3000,6 @@ void fn_3_2B268(void) {
 /* fzgx:end fn_3_2B268 */
 
 /* fzgx:begin fn_3_2B750 */
-
 u32 fn_3_2B750(s16 arg0, s16 arg1) {
     return *(u32 *)((((u8 *)&lbl_3_data_4648)) + arg0 * 0x18 + arg1 * 4);
 }
