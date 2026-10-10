@@ -28,19 +28,36 @@ merges stay mechanical. Record the split here and keep to it:
 
 | Clone | Modules |
 |---|---|
-| A (Claude loop, branch `windows-and-types`) | `main_rel` |
-| B (Codex, branch `codex`) | `main`, `movie_module`, `customize`, `sel`, and every smaller module |
+| A (Claude loop, branch `windows-and-types`) | every module (since 2026-10-10) |
+| B (Codex, branch `codex`) | the function slice below in every module (confirmed by clone A 2026-10-10; its Opus route carries `--max-size 768` since c51fb885) |
+
+**2026-10-10:** at the user's request clone A's Fable batches route every module (`route --fable --min-percent 85`,
+no `--module`) and its Opus agents take `route --easy --max-size 768` rows from every module. Clone B works only
+the function slice below; anything outside it belongs to clone A.
+
+Before 2026-10-10: A owned `main_rel`; B owned `main`, `movie_module`, `customize`, `sel` and every smaller module.
 
 (1,070 of the 2,121 unmatched functions are in `main_rel`; the rest is spread across the other modules.)
 
-**Shared slice of `main_rel` (2026-10-07).** Once B's own modules were used up, B's Sol loop also takes the part of
-`main_rel` the Claude loop does not route: functions over 768 B (A's Opus/Sonnet fallback stops at 768 B) whose best
-score is under 85% (A's Fable floor), and never attempted by a Claude tier (read from the committed
-`state/ledger.json`). `tools/codex_loop.py` enforces it (`SHARED_MODULE`, `CLAUDE_SMALL`, `CLAUDE_FLOOR`). If A lowers
-its `route --fable --min-percent` below 85, or its `--max-size` above 768, change these constants too, or the clones
-will work on the same functions. Both clones now write `main_rel`'s `splits.txt`, `units.json` and `symbols.txt`:
-a merge conflict at the end of those files is two sets of appended entries, so keep both sides.
-Clone A's router takes `--module main_rel`; clone B's seed manifests list only its modules.
+**Split by function, not module (2026-10-10, proposed from the Codex side, confirmed by clone A).** Clone A routes every
+module, so a module split cannot keep the clones apart; a split by function can. Clone B (Sol, or Astra one agent at a
+time) takes only functions that are **over 768 B, have a best recorded score under 85%, and were never attempted by a
+Claude tier** (an `opus-`, `sonnet-`, `fable-` or `haiku-` agent id in the committed `state/ledger.json`), in every
+module. Clone A keeps everything else: Fable on best >= 85% near misses, Opus on `route --easy` rows. Today that slice
+is 607 unmatched functions (1.12 MB), 357 of them in `main_rel`.
+
+What each side must hold to for this to work:
+- Clone A: add `--max-size 768` to the Opus route in the match-wave skill (`route --easy --tier opus ... --max-size 768`).
+  Without it `--easy` reaches functions over 768 B once the small ones run out, and the clones collide there.
+  Keep `route --fable --min-percent` at 85 or above.
+- Clone B: `tools/codex_loop.py` enforces the slice in every module (`CLAUDE_SMALL`, `CLAUDE_FLOOR`) and reads clone A's
+  Claude attempts from the committed ledger, so B needs a merge of A before each run (rule 3 below) to stay current.
+- If either constant changes (the Fable floor, the Opus size ceiling), change the other side in the same commit.
+- Both clones append units to every module's `splits.txt`, `units.json` and `symbols.txt`. A conflict at the end of one
+  of those files is two sets of appended entries: keep both sides, then `ninja`, hashes and `gate`.
+- Clone B stays paused until the user confirms this section and clone A's skill has the `--max-size 768` line.
+
+Until 2026-10-10 clone A's router took `--module main_rel` and clone B's seed manifests listed only its modules.
 
 ## Rules that keep the clones from colliding
 

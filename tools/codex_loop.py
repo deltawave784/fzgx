@@ -14,8 +14,8 @@ misses and large functions, routed like the Claude loop's Fable batches, and the
 it already tried (near misses first). GPT-6 Astra batches are opt-in
 (`--astra-max N`, `--astra-batch`, `--astra-model`): they burn the weekly limit several times faster.
 `--max-attempts` (default 12) is how many attempts a function may already have and still be picked, and
-`--modules` picks the modules (default: all of them; in main_rel only the slice the Claude loop does not
-route: over 768 B, best score under 85%, never attempted by Fable/Opus/Sonnet).
+`--modules` picks the modules (default: all of them, but only the slice the Claude loop does not route:
+over 768 B, best score under 85%, never attempted by Fable/Opus/Sonnet; see docs/COLLABORATION.md).
 
 Stops on: `--max-batches`, `--hours` (wall clock, waits included), `--zero-streak` batches in
 a row without a match in the last band, a failed gate, an empty pool, or the file
@@ -38,10 +38,11 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 MODULES = ["main", "movie_module", "customize", "sel", "pilotpoint", "option", "title", "interview",
            "story", "profile", "movie", "winning", "replay", "car_colchg", "sample", "main_rel"]
-# main_rel belongs to the Claude loop (clone A); this loop only takes the slice that loop does not route: functions
-# above CLAUDE_SMALL bytes (its Opus/Sonnet fallback stops at 768) whose best score is below CLAUDE_FLOOR percent
-# (its Fable floor is 85), minus anything a Claude tier already attempted (read from state/ledger.json).
-SHARED_MODULE, CLAUDE_SMALL, CLAUDE_FLOOR = "main_rel", 768, 85.0
+# The Claude loop (clone A) routes every module: Fable on best >= 85% near misses and Opus on `route --easy` rows, which
+# are small first. This loop takes only the slice it does not route, in every module: functions above CLAUDE_SMALL
+# bytes whose best score is below CLAUDE_FLOOR percent and that no Claude tier ever attempted (read from the committed
+# state/ledger.json). docs/COLLABORATION.md records the agreement; change these constants only together with it.
+CLAUDE_SMALL, CLAUDE_FLOOR = 768, 85.0
 _claude_tried: set = set()
 # (min bytes, max bytes, effort, checks per worker, stale checks) in the order they are worked
 BANDS = [(512, 1023, "medium", 24, 8), (1024, 2047, "high", 32, 10), (256, 511, "medium", 16, 5),
@@ -75,9 +76,7 @@ def claude_tried() -> set:
 
 
 def allowed(row: dict) -> bool:
-    """False for a main_rel function the Claude loop owns."""
-    if row.get("module") != SHARED_MODULE:
-        return True
+    """False for a function the Claude loop routes (small, a near miss, or one a Claude tier already attempted)."""
     best = max(row.get("seed_best") or 0.0, row.get("best") or 0.0)
     return row.get("size", 0) > CLAUDE_SMALL and best < CLAUDE_FLOOR and row["symbol"] not in claude_tried()
 
@@ -85,11 +84,10 @@ def allowed(row: dict) -> bool:
 def pick(model: str, lo: int, hi: int, per_module: int, count: int, max_attempts: int) -> list:
     out = []
     for module in MODULES:
-        shared = module == SHARED_MODULE
         res = run(["tools/fzgx.py", "route", "--easy", "--module", module,
-                   "--min-size", str(max(lo, CLAUDE_SMALL + 1) if shared else lo),
+                   "--min-size", str(max(lo, CLAUDE_SMALL + 1)),
                    "--max-size", str(hi), "--max-attempts", str(max_attempts), "--skip-tried-by", model,
-                   "--limit", str(per_module * 8 if shared else per_module), "--json"], capture=True)
+                   "--limit", str(per_module * 8), "--json"], capture=True)
         try:
             out += [r["symbol"] for r in json.loads(res.stdout) if allowed(r)][:per_module]
         except (ValueError, KeyError):
@@ -164,8 +162,7 @@ def pick_hard(model: str, count: int, max_attempts: int, modules: list, tried_by
     rows = []
     for module in modules:
         res = run(["tools/fzgx.py", "route", "--module", module, "--skip-tried-by", tried_by or model,
-                   "--max-attempts", str(max_attempts), "--limit", str(1000 if module == SHARED_MODULE else limit),
-                   "--json"], capture=True)
+                   "--max-attempts", str(max_attempts), "--limit", "1000", "--json"], capture=True)
         try:
             rows += json.loads(res.stdout)
         except ValueError:
@@ -245,7 +242,7 @@ def main() -> int:
                     help="Astra function attempts per loop run; 0 (default) is Sol only. Astra used the weekly limit up in hours")
     ap.add_argument("--no-sol", action="store_true", help="skip the Sol batches: Astra only (use with --astra-max)")
     ap.add_argument("--modules", nargs="*", default=MODULES,
-                    help="modules to pick from (main_rel is limited to the slice the Claude loop does not route)")
+                    help="modules to pick from (every module is limited to the slice the Claude loop does not route)")
     a = ap.parse_args()
     astra_used = 0
     retried: set = set()  # functions the retry pass has already handed out in this run
