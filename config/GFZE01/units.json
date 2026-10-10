@@ -44605,6 +44605,17 @@
   },
   {
     "module": "main_rel",
+    "source": "rel/main_rel/live_camera/fn_1_1189C.c",
+    "symbols": [
+      "fn_1_1189C"
+    ],
+    "status": "matching",
+    "mw_version": "GC/2.0",
+    "extra_cflags": [],
+    "tu": "rel/main_rel/live_camera.c"
+  },
+  {
+    "module": "main_rel",
     "source": "rel/main_rel/live_camera/fn_1_11ABC.c",
     "symbols": [
       "fn_1_11ABC"
@@ -47085,6 +47096,17 @@
     ],
     "status": "matching",
     "mw_version": null,
+    "extra_cflags": [],
+    "tu": "rel/main_rel/motasglist.c"
+  },
+  {
+    "module": "main_rel",
+    "source": "rel/main_rel/motasglist/fn_1_42044.c",
+    "symbols": [
+      "fn_1_42044"
+    ],
+    "status": "matching",
+    "mw_version": "GC/2.0",
     "extra_cflags": [],
     "tu": "rel/main_rel/motasglist.c"
   },

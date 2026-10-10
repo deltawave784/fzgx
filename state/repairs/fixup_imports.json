@@ -13951,5 +13951,84 @@
       }
     ],
     "link": "pool"
+  },
+  "fn_1_1189C": {
+    "seed_symbol": "fn_1_1189C",
+    "generator": "fzgx fixup",
+    "transform": "lifetime accessor pos.z at every site with opt_propagation off",
+    "seed": "#include \"types.h\"\n\ntypedef struct {\n    f32 x, y, z;\n} LcVec;\n\ntypedef struct {\n    f32 m[3][4];\n} LcMtx;\n\ntypedef struct {\n    u8 mode;\n    u8 pad_1[3];\n    s16 unk_4;\n    s16 unk_6;\n    u8 pad_8[0xC];\n    s16 unk_14;\n    u8 pad_16[6];\n    LcVec unk_1C;\n    u8 pad_28[0x24];\n    LcVec unk_4C;\n    u8 pad_58[4];\n    s16 unk_5C;\n    u8 pad_5E[0x12];\n    f32 unk_70;\n    f32 unk_74;\n    u8 pad_78[4];\n    LcMtx unk_7C;\n} LcState;\n\ntypedef struct {\n    LcVec a;\n    LcVec b;\n    s16 unk_18;\n    u8 pad_1A[2];\n    s32 unk_1C;\n} LcEntry;\n\ntypedef struct {\n    u8 pad_0[0xA];\n    u16 unk_A;\n} LcInput;\n\ntypedef struct {\n    f32 unk_0;\n    u8 pad_4[0x10];\n    f32 unk_14;\n    u8 pad_18[0x34];\n    f32 unk_4C;\n} LcPool;\n\nextern LcPool lbl_1_rodata_4E0;\nextern LcInput lbl_1_bss_9F8;\nextern LcEntry lbl_1_data_47B4[];\n\nextern s32 fn_1_40BB4(void);\nextern void fn_1_862D4(int, LcVec *);\nextern void fn_1_8645C(int, void *);\nextern void fn_1_8636C(int, void *);\nextern u32 fn_1_20A5C(void *, void *);\nextern void fn_1_15578(void *, LcVec *, void *, void *, u32, void *, u32, u32, u32, u32);\nextern void lbl_8006DBAC(void *);\nextern void lbl_8006DB74(LcMtx *);\nextern void fn_8006FA24(LcMtx *, void *, LcMtx *, f32);\nextern void lbl_8006DC6C(LcMtx *);\nextern void lbl_8006E1B0(LcVec *, LcVec *);\nextern void lbl_8006E1F0(f32 *, f32, f32, f32);\nextern s32 lbl_8006D24C(f32, f32);\nextern void lbl_8006DAEC(void);\nextern void lbl_8006DB30(void);\n\nvoid fn_1_1189C(LcState *state) {\n    LcPool *pool;\n    LcMtx mtx;\n    LcVec pos;\n    LcVec target;\n    u32 buf18[3];\n    u32 id;\n    u32 buf10;\n    f32 v;\n    f32 y, z, x;\n\n    pool = &lbl_1_rodata_4E0;\n    if (state->mode == 3 && fn_1_40BB4() == 0) {\n        if ((lbl_1_bss_9F8.unk_A >> 1) & 1) {\n            state->unk_14++;\n        }\n        if (lbl_1_bss_9F8.unk_A & 1) {\n            state->unk_14--;\n        }\n        if (state->unk_14 > 19) {\n            state->unk_14 = 0;\n        }\n        if (state->unk_14 < 0) {\n            state->unk_14 = 19;\n        }\n    }\n    fn_1_862D4(state->unk_6, &pos);\n    if (lbl_1_data_47B4[state->unk_4].unk_1C != 0) {\n        fn_1_8645C(state->unk_6, &mtx);\n        lbl_8006DBAC(&mtx);\n        lbl_8006DB74(&state->unk_7C);\n    } else {\n        fn_1_8636C(state->unk_6, &mtx);\n        fn_8006FA24(&state->unk_7C, &mtx, &state->unk_7C, pool->unk_4C);\n        lbl_8006DC6C(&state->unk_7C);\n        x = pos.x;\n        y = pos.y;\n        z = pos.z;\n        *(f32 *)(0xE0000000 + 0x0C) = x;\n        *(f32 *)(0xE0000000 + 0x1C) = y;\n        *(f32 *)(0xE0000000 + 0x2C) = z;\n    }\n    lbl_8006E1B0(&lbl_1_data_47B4[state->unk_4].a, &state->unk_1C);\n    lbl_8006E1B0(&lbl_1_data_47B4[state->unk_4].b, &state->unk_4C);\n    v = pool->unk_14;\n    lbl_8006E1F0(&state->unk_70, v, pool->unk_0, v);\n    state->unk_5C = lbl_1_data_47B4[state->unk_4].unk_18 - lbl_8006D24C(state->unk_70, state->unk_74);\n    lbl_8006DAEC();\n    id = fn_1_20A5C(&state->unk_1C, &buf10);\n    target = state->unk_4C;\n    fn_1_15578(&state->unk_1C, &target, &buf10, buf18, 0x40005, &id, 1, 0, 0, 0);\n    lbl_8006DB30();\n}\n",
+    "seed_sha256": "e879e510bc55e71e45c9d9f1938faaa298eca2c4f4e79aaf3ae2125dd38ec175",
+    "generated_sha256": "a90a231516c8d03d91e17a56187ee2292f35eec4b1922305a13a43b68f888a83",
+    "generated_source": "#include \"types.h\"\n\ntypedef struct {\n    f32 x, y, z;\n} LcVec;\n\ntypedef struct {\n    f32 m[3][4];\n} LcMtx;\n\ntypedef struct {\n    u8 mode;\n    u8 pad_1[3];\n    s16 unk_4;\n    s16 unk_6;\n    u8 pad_8[0xC];\n    s16 unk_14;\n    u8 pad_16[6];\n    LcVec unk_1C;\n    u8 pad_28[0x24];\n    LcVec unk_4C;\n    u8 pad_58[4];\n    s16 unk_5C;\n    u8 pad_5E[0x12];\n    f32 unk_70;\n    f32 unk_74;\n    u8 pad_78[4];\n    LcMtx unk_7C;\n} LcState;\n\ntypedef struct {\n    LcVec a;\n    LcVec b;\n    s16 unk_18;\n    u8 pad_1A[2];\n    s32 unk_1C;\n} LcEntry;\n\ntypedef struct {\n    u8 pad_0[0xA];\n    u16 unk_A;\n} LcInput;\n\ntypedef struct {\n    f32 unk_0;\n    u8 pad_4[0x10];\n    f32 unk_14;\n    u8 pad_18[0x34];\n    f32 unk_4C;\n} LcPool;\n\nextern LcPool lbl_1_rodata_4E0;\nextern LcInput lbl_1_bss_9F8;\nextern LcEntry lbl_1_data_47B4[];\n\nextern s32 fn_1_40BB4(void);\nextern void fn_1_862D4(int, LcVec *);\nextern void fn_1_8645C(int, void *);\nextern void fn_1_8636C(int, void *);\nextern u32 fn_1_20A5C(void *, void *);\nextern void fn_1_15578(void *, LcVec *, void *, void *, u32, void *, u32, u32, u32, u32);\nextern void lbl_8006DBAC(void *);\nextern void lbl_8006DB74(LcMtx *);\nextern void fn_8006FA24(LcMtx *, void *, LcMtx *, f32);\nextern void lbl_8006DC6C(LcMtx *);\nextern void lbl_8006E1B0(LcVec *, LcVec *);\nextern void lbl_8006E1F0(f32 *, f32, f32, f32);\nextern s32 lbl_8006D24C(f32, f32);\nextern void lbl_8006DAEC(void);\nextern void lbl_8006DB30(void);\n\nstatic inline f32 fn_1_1189C_read_pointer(LcVec * owner) { return owner->z; }\n#pragma opt_propagation off\nvoid fn_1_1189C(LcState *state) {\n    LcPool *pool;\n    LcMtx mtx;\n    LcVec pos;\n    LcVec target;\n    u32 buf18[3];\n    u32 id;\n    u32 buf10;\n    f32 v;\n    f32 y, z, x;\n\n    pool = &lbl_1_rodata_4E0;\n    if (state->mode == 3 && fn_1_40BB4() == 0) {\n        if ((lbl_1_bss_9F8.unk_A >> 1) & 1) {\n            state->unk_14++;\n        }\n        if (lbl_1_bss_9F8.unk_A & 1) {\n            state->unk_14--;\n        }\n        if (state->unk_14 > 19) {\n            state->unk_14 = 0;\n        }\n        if (state->unk_14 < 0) {\n            state->unk_14 = 19;\n        }\n    }\n    fn_1_862D4(state->unk_6, &pos);\n    if (lbl_1_data_47B4[state->unk_4].unk_1C != 0) {\n        fn_1_8645C(state->unk_6, &mtx);\n        lbl_8006DBAC(&mtx);\n        lbl_8006DB74(&state->unk_7C);\n    } else {\n        fn_1_8636C(state->unk_6, &mtx);\n        fn_8006FA24(&state->unk_7C, &mtx, &state->unk_7C, pool->unk_4C);\n        lbl_8006DC6C(&state->unk_7C);\n        x = pos.x;\n        y = pos.y;\n        z = fn_1_1189C_read_pointer(&pos);\n        *(f32 *)(0xE0000000 + 0x0C) = x;\n        *(f32 *)(0xE0000000 + 0x1C) = y;\n        *(f32 *)(0xE0000000 + 0x2C) = z;\n    }\n    lbl_8006E1B0(&lbl_1_data_47B4[state->unk_4].a, &state->unk_1C);\n    lbl_8006E1B0(&lbl_1_data_47B4[state->unk_4].b, &state->unk_4C);\n    v = pool->unk_14;\n    lbl_8006E1F0(&state->unk_70, v, pool->unk_0, v);\n    state->unk_5C = lbl_1_data_47B4[state->unk_4].unk_18 - lbl_8006D24C(state->unk_70, state->unk_74);\n    lbl_8006DAEC();\n    id = fn_1_20A5C(&state->unk_1C, &buf10);\n    target = state->unk_4C;\n    fn_1_15578(&state->unk_1C, &target, &buf10, buf18, 0x40005, &id, 1, 0, 0, 0);\n    lbl_8006DB30();\n}\n#pragma opt_propagation reset\n\n",
+    "compiler": "GC/2.0",
+    "flags": "",
+    "source": "rel/main_rel/live_camera/fn_1_1189C.c",
+    "bytes": 544,
+    "headers_sha256": "002c1c32ec6f5ad7fbf24c78631b2a09240e7ad79bf949da23f3c18bb513f3b3",
+    "oracle_sha256": "ca197f0a12605d3f05c8d964147669b8debb231a26880aee4ab16caec0d261cf",
+    "recipe": [
+      {
+        "label": "lifetime accessor pos.z at every site with opt_propagation off",
+        "input_sha256": "e879e510bc55e71e45c9d9f1938faaa298eca2c4f4e79aaf3ae2125dd38ec175",
+        "output_sha256": "a90a231516c8d03d91e17a56187ee2292f35eec4b1922305a13a43b68f888a83",
+        "input_symbol": "fn_1_1189C",
+        "output_symbol": "fn_1_1189C",
+        "edits": [
+          [
+            1433,
+            1433,
+            "static inline f32 fn_1_1189C_read_pointer(LcVec * owner) { return owner->z; }\n#pragma opt_propagation off\n"
+          ],
+          [
+            2414,
+            2419,
+            "fn_1_1189C_read_pointer(&pos)"
+          ],
+          [
+            3061,
+            3061,
+            "#pragma opt_propagation reset\n\n"
+          ]
+        ]
+      }
+    ],
+    "link": "pending"
+  },
+  "fn_1_42044": {
+    "seed_symbol": "fn_1_42044",
+    "generator": "fzgx fixup",
+    "transform": "regalloc: one-field carrier i",
+    "seed": "#include \"types.h\"\n\ntypedef struct Fn42044Key {\n    u16 unk_0;\n    u16 frame;\n    u8 pad4[8];\n    u16 left;\n    u16 right;\n} Fn42044Key;\n\ntypedef struct Fn42044Track {\n    u8 unk_0;\n    u8 count;\n    u16 start;\n} Fn42044Track;\n\ntypedef struct Fn42044Node {\n    u8 pad0[0x28];\n    Fn42044Track *tracks;\n    u8 pad2C[4];\n    struct Fn42044Node *next;\n} Fn42044Node;\n\ntypedef struct Fn42044Entry {\n    u32 unk_0;\n    Fn42044Node *nodes;\n    u8 pad8[2];\n    u16 count;\n} Fn42044Entry;\n\ntypedef struct Fn42044Timer {\n    u8 pad0[0x4C];\n    f32 time;\n} Fn42044Timer;\n\ntypedef struct Fn42044Data {\n    u8 pad0[0x2];\n    u16 flags;\n    u8 pad4[0x4];\n    Fn42044Timer *timer;\n    u8 padC[0x6];\n    u16 index;\n    u8 pad14[0xC];\n    Fn42044Key *keys;\n    u8 pad24[0x2];\n    u8 entryCount;\n    u8 pad27[0x1];\n    Fn42044Entry *entries;\n    u8 pad2C[0x8];\n    Fn42044Entry *extEntries;\n    u8 pad38[0x4];\n    Fn42044Key *extKeys;\n    u8 pad40[0xC];\n    u8 extBase;\n} Fn42044Data;\n\nFn42044Key *fn_1_42044(Fn42044Data *data, s32 track) {\n    u16 index = data->index;\n    u8 count = data->entryCount;\n    Fn42044Entry *entry;\n    u16 flags;\n    s32 i;\n    Fn42044Node *node;\n    Fn42044Track *t;\n    u8 n;\n    Fn42044Key *keys;\n    s32 frame;\n\n    if (index < count) {\n        entry = &data->entries[index];\n    } else if (data->extEntries != NULL) {\n        entry = &data->extEntries[index - data->extBase];\n    }\n\n    flags = data->flags;\n    if (flags & 1) {\n        node = (Fn42044Node *)((u8 *)entry->nodes + entry->count * 0x34);\n    } else {\n        node = entry->nodes;\n        for (i = 0; i < entry->count; i++) {\n            node = node->next;\n        }\n    }\n\n    t = &node->tracks[track];\n    frame = (s32)data->timer->time;\n    if (data->index >= data->entryCount) {\n        keys = data->extKeys;\n    } else {\n        keys = data->keys;\n    }\n\n    n = t->count;\n    if (n != 0 || keys != NULL) {\n        if (data->flags & 4) {\n            Fn42044Key *k;\n            Fn42044Key *base;\n            s32 j;\n\n            if (n == 0) {\n                return NULL;\n            }\n            base = &keys[t->start];\n            k = base;\n            for (j = 0; j < n; j++) {\n                if ((u16)frame < k->frame) {\n                    break;\n                }\n                k++;\n            }\n            if (j == n) {\n                j = 0;\n            }\n            return &base[j];\n        } else {\n            u16 start = t->start;\n            u16 cur;\n            Fn42044Key *k;\n            u16 best = 0xFFFF;\n\n            cur = start;\n\n            do {\n                k = &keys[cur];\n                if ((u16)frame < k->frame) {\n                    best = cur;\n                    cur = k->left;\n                } else {\n                    cur = k->right;\n                }\n            } while (cur != 0xFFFF);\n\n            if (best == 0xFFFF) {\n                best = start;\n                while (keys[best].left != 0xFFFF) {\n                    best = keys[best].left;\n                }\n            }\n            return &keys[best];\n        }\n    }\n    return NULL;\n}\n",
+    "seed_sha256": "2b9170ceff07654789521b44bb31e6a8f994c22ba92bce21caa9cd72695eb086",
+    "generated_sha256": "5c77c7ee9ee2df9dc8fa1f2952b14a20bfced3a2722a8d0b92f124957f9495ce",
+    "generated_source": "#include \"types.h\"\n\ntypedef struct Fn42044Key {\n    u16 unk_0;\n    u16 frame;\n    u8 pad4[8];\n    u16 left;\n    u16 right;\n} Fn42044Key;\n\ntypedef struct Fn42044Track {\n    u8 unk_0;\n    u8 count;\n    u16 start;\n} Fn42044Track;\n\ntypedef struct Fn42044Node {\n    u8 pad0[0x28];\n    Fn42044Track *tracks;\n    u8 pad2C[4];\n    struct Fn42044Node *next;\n} Fn42044Node;\n\ntypedef struct Fn42044Entry {\n    u32 unk_0;\n    Fn42044Node *nodes;\n    u8 pad8[2];\n    u16 count;\n} Fn42044Entry;\n\ntypedef struct Fn42044Timer {\n    u8 pad0[0x4C];\n    f32 time;\n} Fn42044Timer;\n\ntypedef struct Fn42044Data {\n    u8 pad0[0x2];\n    u16 flags;\n    u8 pad4[0x4];\n    Fn42044Timer *timer;\n    u8 padC[0x6];\n    u16 index;\n    u8 pad14[0xC];\n    Fn42044Key *keys;\n    u8 pad24[0x2];\n    u8 entryCount;\n    u8 pad27[0x1];\n    Fn42044Entry *entries;\n    u8 pad2C[0x8];\n    Fn42044Entry *extEntries;\n    u8 pad38[0x4];\n    Fn42044Key *extKeys;\n    u8 pad40[0xC];\n    u8 extBase;\n} Fn42044Data;\n\nFn42044Key *fn_1_42044(Fn42044Data *data, s32 track) {\n    u16 index = data->index;\n    u8 count = data->entryCount;\n    Fn42044Entry *entry;\n    u16 flags;\n    struct { s32 value; } i;\n    Fn42044Node *node;\n    Fn42044Track *t;\n    u8 n;\n    Fn42044Key *keys;\n    s32 frame;\n\n    if (index < count) {\n        entry = &data->entries[index];\n    } else if (data->extEntries != NULL) {\n        entry = &data->extEntries[index - data->extBase];\n    }\n\n    flags = data->flags;\n    if (flags & 1) {\n        node = (Fn42044Node *)((u8 *)entry->nodes + entry->count * 0x34);\n    } else {\n        node = entry->nodes;\n        for (i.value = 0; i.value < entry->count; i.value++) {\n            node = node->next;\n        }\n    }\n\n    t = &node->tracks[track];\n    frame = (s32)data->timer->time;\n    if (data->index >= data->entryCount) {\n        keys = data->extKeys;\n    } else {\n        keys = data->keys;\n    }\n\n    n = t->count;\n    if (n != 0 || keys != NULL) {\n        if (data->flags & 4) {\n            Fn42044Key *k;\n            Fn42044Key *base;\n            s32 j;\n\n            if (n == 0) {\n                return NULL;\n            }\n            base = &keys[t->start];\n            k = base;\n            for (j = 0; j < n; j++) {\n                if ((u16)frame < k->frame) {\n                    break;\n                }\n                k++;\n            }\n            if (j == n) {\n                j = 0;\n            }\n            return &base[j];\n        } else {\n            u16 start = t->start;\n            u16 cur;\n            Fn42044Key *k;\n            u16 best = 0xFFFF;\n\n            cur = start;\n\n            do {\n                k = &keys[cur];\n                if ((u16)frame < k->frame) {\n                    best = cur;\n                    cur = k->left;\n                } else {\n                    cur = k->right;\n                }\n            } while (cur != 0xFFFF);\n\n            if (best == 0xFFFF) {\n                best = start;\n                while (keys[best].left != 0xFFFF) {\n                    best = keys[best].left;\n                }\n            }\n            return &keys[best];\n        }\n    }\n    return NULL;\n}\n",
+    "compiler": "GC/2.0",
+    "flags": "",
+    "source": "rel/main_rel/motasglist/fn_1_42044.c",
+    "bytes": 528,
+    "headers_sha256": "002c1c32ec6f5ad7fbf24c78631b2a09240e7ad79bf949da23f3c18bb513f3b3",
+    "oracle_sha256": "ca197f0a12605d3f05c8d964147669b8debb231a26880aee4ab16caec0d261cf",
+    "recipe": [
+      {
+        "label": "regalloc: one-field carrier i",
+        "input_sha256": "2b9170ceff07654789521b44bb31e6a8f994c22ba92bce21caa9cd72695eb086",
+        "output_sha256": "5c77c7ee9ee2df9dc8fa1f2952b14a20bfced3a2722a8d0b92f124957f9495ce",
+        "input_symbol": "fn_1_42044",
+        "output_symbol": "fn_1_42044",
+        "edits": [
+          [
+            1131,
+            1133,
+            "truct { s32 value; }"
+          ],
+          [
+            1577,
+            1602,
+            ".value = 0; i.value < entry->count; i.value"
+          ]
+        ]
+      }
+    ],
+    "link": "pending"
   }
 }
