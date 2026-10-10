@@ -1,10 +1,11 @@
 # Sourced by capture.sh and capture132.sh: host paths, guest paths and the guest runner.
 # Two guests are supported: the `fzgx-capture` Lima VM on macOS (fzgx-capture.yaml, the repo and
 # the recovery project mounted at their host paths) and a WSL distribution on Windows
-# (setup-wsl.sh; the guest sees C: under /mnt/c). The recovery project's checkout defaults to a
-# sibling of this repository; override with FZGX_MWCC_ROOT (host path).
+# (setup-wsl.sh; the guest sees C: under /mnt/c). The recovery tools default to the rebuilt copies
+# in tools/capture/recovery; FZGX_MWCC_ROOT (host path) names a recovery-project checkout whose
+# tools/, tools/gdb/ and tools/replay/ take precedence.
 ROOT=$(cd "$(dirname "$0")/../.." && pwd)
-MWCC_HOST=${FZGX_MWCC_ROOT:-$(cd "$ROOT/.." && pwd)/mwcc}
+MWCC_HOST=${FZGX_MWCC_ROOT:-$ROOT/tools/capture/recovery}
 CAPTURE_HOST=${FZGX_CAPTURE_DIR:-$ROOT/.fzgx/capture}
 if command -v wsl.exe >/dev/null 2>&1; then
   DISTRO=${FZGX_WSL_DISTRO:-Debian}

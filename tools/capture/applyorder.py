@@ -6,15 +6,15 @@ from fzgx.project import Project
 from fzgx import oracle, fixup_source as fs
 S=paths.CAPTURE
 sym,body,mw,fl,order=sys.argv[1:6]; fl=fl or None
-cap=f'{S}/{sym}'
-vm=subprocess.run(paths.mwcc_tool(str(paths.MWCC/'tools'/'vreg_map.py'),cap,'0001'),capture_output=True,text=True,cwd=paths.MWCC).stdout
+cap=f'{S}/{sym}'; idx=paths.capture_index(cap,sym)
+vm=subprocess.run(paths.run_tool(paths.tool('vreg_map.py'),cap,idx),capture_output=True,text=True).stdout
 names={}
 for ln in vm.split('\n'):
     f=ln.split()
     if len(f)>=5 and f[2]=='fn-scope' and f[1]!='?': names[int(f[0])]=f[1]
 if not names:
     import json as _json
-    _b=_json.load(open(f'{cap}/coloring-0001-gpr-01-before.json'))
+    _b=_json.load(open(f'{cap}/coloring-{idx}-gpr-01-before.json'))
     names={n['virtual_register']:n['name'] for n in _b['nodes'] if n.get('name')}
 ranks=[int(v.strip().lstrip('v')) for v in order.split(',')]
 wanted=[names[v] for v in ranks if v in names][::-1]   # highest rank first = first declared

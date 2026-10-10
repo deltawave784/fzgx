@@ -11,6 +11,12 @@
 set -eu
 SYM=$1; BODY=$2; MODULE=$3; MW=${4:-GC/1.2.5n}; IDX=${5:-1}
 . "$(dirname "$0")/env.sh"
+if [ ! -f "$MWCC_HOST/tools/gdb/allocator_snapshot.py" ]; then
+  echo "capture.sh (GC/1.2.5, 1.2.5n) needs the recovery project's own tools/gdb/allocator_snapshot.py" >&2
+  echo "(its 1.2.5 addresses and mwcc-auto-capture command); set FZGX_MWCC_ROOT to that checkout." >&2
+  echo "GC/1.3.2 captures use capture132.sh with the rebuilt tools in tools/capture/recovery." >&2
+  exit 2
+fi
 OUT=$CAPTURE_HOST/$SYM
 mkdir -p "$OUT"
 cp "$BODY" "$OUT/$SYM.c"

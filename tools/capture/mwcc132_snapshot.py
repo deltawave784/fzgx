@@ -16,6 +16,8 @@ import allocator_snapshot as base
 
 TARGET_132 = "GC/1.3.2"
 CLASS_GPR, CLASS_FPR, CLASS_VR = 4, 3, 2
+CLASS_NAMES = {CLASS_GPR: "gpr", CLASS_FPR: "fpr"}   # coordinator class byte -> snapshot class
+CLASS_ARGS = {"gpr": 0, "fpr": 1}                     # the recovered backend's RegClass numbers
 COUNTS = 0x5E8A7C
 COALESCE_FIRST, COALESCE_LAST = 0x5E7FC8, 0x5E86A8
 base.SUPPORTED_TARGETS["132"] = TARGET_132
@@ -77,26 +79,25 @@ class Reader132(base.SnapshotReader):
             raise base.SnapshotError(f"invalid neighbor count {count} at 0x{address:08x}")
         nd = self._read(address + 0x1A, count * 2)
         return {"address": f"0x{address:08x}", "next": struct.unpack_from("<I", header, 0)[0],
-                "object": f"0x{struct.unpack_from('<I', header, 4)[0]:08x}", "spill_cost": struct.unpack_from("<i", header, 8)[0],
+                "object": f"0x{struct.unpack_from('<I', header, 4)[0]:08x}", "unknown_08": f"0x{struct.unpack_from('<I', header, 8)[0]:08x}", "spill_cost": struct.unpack_from("<i", header, 0x0C)[0],
                 "virtual_register": struct.unpack_from("<h", header, 0x10)[0], "degree": struct.unpack_from("<h", header, 0x12)[0],
                 "physical_register": struct.unpack_from("<h", header, 0x14)[0], "flags": struct.unpack_from("<H", header, 0x16)[0],
-                "neighbors": [struct.unpack_from("<h", nd, i * 2)[0] for i in range(count)]}
+                "neighbors": [struct.unpack_from("<h", nd, i * 2)[0] for i in range(count)], "raw": header.hex()}
 
     def reaching_definitions(self, blocks):
         return None
 
     def object_name(self, address):
-        """The C name of a compiler object (named local or parameter), or '' for a temp."""
+        """The C name of a compiler object (named local or parameter), or '' for a temp:
+        Object +0x0A points to its HashNameNode, whose NUL-terminated name starts at +0x0A."""
         if not address:
             return ""
         try:
-            data = self.u32(address + 0x0A)
-            raw = self._read(data, 64) if data else b""
+            node = self.u32(address + 0x0A)
+            name = self.c_string(node + 0x0A, 128) if node else ""
         except Exception:
             return ""
-        import re as _re
-        m = _re.search(rb"[ -~]{2,}", raw[10:])
-        return m.group(0).decode() if m else ""
+        return name if name and all(32 < ord(c) < 127 for c in name) else ""
 
     def coloring_snapshot(self, reg_class, simplify_stack, program_counter=0):
         snap = super().coloring_snapshot(reg_class, simplify_stack, program_counter)
@@ -116,34 +117,45 @@ def _write(path, data):
 class Session:
     def __init__(self, output):
         self.output = Path(output); self.output.mkdir(parents=True, exist_ok=True)
-        self.index = 0; self.attempt = 0; self.stack = 0
+        self.index = 0; self.attempt = {}; self.stack = 0; self.pending = None; self.returns = {}; self.functions = {}
         inf = gdb.selected_inferior()
         self.reader = Reader132(lambda a, n: bytes(inf.read_memory(a, n)))
 
     def allocate(self):
-        self.index += 1; self.attempt = 0
+        self.index += 1; self.attempt = {}; self.pending = None
         pc = int(gdb.parse_and_eval("$pc"))
         snap = self.reader.snapshot(0, pc)
+        # Coloring_AllocateRegisters(Object *function): name each index so tools can find a symbol
+        snap["function"] = self.reader.object_name(self.reader.u32(int(gdb.parse_and_eval("$esp")) + 4))
+        self.functions[f"{self.index:04d}"] = snap["function"]
+        _write(self.output / "functions.json", self.functions)
         _write(self.output / f"allocator-{self.index:04d}.json", snap)
         _write(self.output / f"pcode-{self.index:04d}-scheduled.json", self.reader.pcode_stage("scheduled", pc))
         print(f"captured allocator {self.index}: {sum(len(b['instructions']) for b in snap['blocks'])} instructions, {snap['virtual_register_counts']} vregs")
 
     def select(self):
         cls = self.reader.u8(0x5E931F)
-        if cls != CLASS_GPR:
+        name = CLASS_NAMES.get(cls)
+        if name is None:
             return
-        self.attempt += 1
+        self.attempt[name] = self.attempt.get(name, 0) + 1
         esp = int(gdb.parse_and_eval("$esp"))
         self.stack = self.reader.u32(esp + 4)
-        snap = self.reader.coloring_snapshot(0, self.stack, int(gdb.parse_and_eval("$pc")))
-        _write(self.output / f"coloring-{self.index:04d}-gpr-{self.attempt:02d}-before.json", snap)
+        self.pending = (name, self.attempt[name])
+        snap = self.reader.coloring_snapshot(CLASS_ARGS[name], self.stack, int(gdb.parse_and_eval("$pc")))
+        _write(self.output / f"coloring-{self.index:04d}-{name}-{self.attempt[name]:02d}-before.json", snap)
         ret = self.reader.u32(esp)
-        ReturnBreakpoint(ret, self)
-        print(f"captured coloring {self.index} attempt {self.attempt} before: {len(snap['nodes'])} nodes, {len(snap['simplify_order'])} in simplify order")
+        if ret not in self.returns:          # one permanent breakpoint per return site: gdb keeps a
+            self.returns[ret] = ReturnBreakpoint(ret, self)   # temporary one whose stop() returns False
+        print(f"captured coloring {self.index} {name} attempt {self.attempt[name]} before: {len(snap['nodes'])} nodes, {len(snap['simplify_order'])} in simplify order")
 
     def select_done(self):
-        snap = self.reader.coloring_snapshot(0, self.stack, int(gdb.parse_and_eval("$pc")))
-        _write(self.output / f"coloring-{self.index:04d}-gpr-{self.attempt:02d}-after.json", snap)
+        if self.pending is None:
+            return
+        name, attempt = self.pending
+        self.pending = None
+        snap = self.reader.coloring_snapshot(CLASS_ARGS[name], self.stack, int(gdb.parse_and_eval("$pc")))
+        _write(self.output / f"coloring-{self.index:04d}-{name}-{attempt:02d}-after.json", snap)
 
     def final(self):
         _write(self.output / f"pcode-{self.index:04d}-final.json", self.reader.pcode_stage("final", int(gdb.parse_and_eval("$pc"))))
@@ -152,9 +164,13 @@ class Session:
 
 class ReturnBreakpoint(gdb.Breakpoint):
     def __init__(self, address, session):
-        super().__init__(f"*{address:#x}", temporary=True, internal=True); self.session = session
+        super().__init__(f"*{address:#x}", internal=True); self.session = session
     def stop(self):
-        self.session.select_done(); return False
+        try:
+            self.session.select_done()
+        except Exception as e:
+            print(f"capture error in select_done: {e}")
+        return False
 
 
 class HookBreakpoint(gdb.Breakpoint):

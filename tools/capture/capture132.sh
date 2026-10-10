@@ -20,6 +20,7 @@ import sys
 sys.path.append('$MWCC_G/tools')
 sys.path.append('$MWCC_G/tools/gdb')
 sys.path.append('$ROOT_G/tools/capture')
+sys.path.append('$ROOT_G/tools/capture/recovery')
 end
 target remote :1234
 source $ROOT_G/tools/capture/mwcc132_snapshot.py

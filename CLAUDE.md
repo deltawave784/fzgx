@@ -439,12 +439,23 @@ Rules that hold for everyone:
   fn_8003043C) and answers hypothesis questions.
   Windows (2026-10-10): `wsl -d Debian -u root -- sh tools/capture/setup-wsl.sh` provisions the
   guest (qemu-user, gdb-multiarch, wibo 1.2.0 i686); `tools/capture/env.sh` picks WSL or Lima and
-  translates paths, so the same scripts run from Git Bash. The recovery project's tools
-  (`allocator_snapshot.py`, `vreg_map.py`, `replay/`, `source_rank_solver.py`) are not in the
-  public rayanht/mwcc repository; put a checkout that has them at `../mwcc` or set
-  `FZGX_MWCC_ROOT`. Verified on this setup: WSL compiles are byte-identical to the Windows build
-  (.text/.rela.text), and gdb stops at the 1.3.2 coordinator 0x5077b0 and SelectColors 0x507a30
-  with class byte 0x5e931f = 4 (GPR). Only the 1.2.5/1.2.5n address set is known to
+  translates paths, so the same scripts run from Git Bash. The recovery project's tools are not
+  public; `tools/capture/recovery/` rebuilds them for GC/1.3.2 (2026-10-10): `allocator_snapshot.py`
+  (walks and schemas; `mwcc132_snapshot.py` keeps the layouts), `simplify_replay.py` (the recovered
+  Coloring.c simplify/select, GPR and FPR via `--class fpr`), `vreg_map.py`, `source_rank_solver.py`
+  (declaration-order search: swaps and 3-cycles first). `FZGX_MWCC_ROOT` still selects an original
+  checkout, and `capture.sh` (1.2.5/1.2.5n) needs one. Layout facts found while rebuilding: blocks keep
+  their first instruction at +0x14 (+0x18 is the last), the 1.3.2 node's spill cost is the int at
+  +0x0C (+0x08 is a pointer), object names are the C string at (*(object+0x0A))+0x0A, the
+  coordinator's first argument is the function object (`functions.json` maps capture index to symbol;
+  helper and primer functions compile first), and gdb never deletes a temporary breakpoint whose
+  `stop()` returns False (one stale return breakpoint per select corrupted later snapshots).
+  Validation: the replay reproduces every capture exactly (17 functions, GPR and FPR, up to 663
+  vregs, coalesced nodes and a spill-cost push; fn_1_ECC 143/143 rows, 175/175 colors), and relabeling
+  a capture for a declaration swap gives the recompiled function's graph and colors exactly. On
+  fn_1_7F658, fn_1_E2DCC and fn_1_BB974 the residual targets are a parameter, shadow webs and a
+  temporary: no declaration order closes them. WSL compiles are byte-identical to the Windows build
+  (.text/.rela.text); a capture takes ~10 s. Only the 1.2.5/1.2.5n address set is known to
   the scripts; 1.3.2 needs its own addresses. First validated loop: fn_8003043C's residual was the
   reassigned `result` becoming a copy-region web (vr42) numbered above `base` (vr40), so it claimed
   r27 before base claimed r26; a second local declared right after `base` put it in the named
