@@ -26846,6 +26846,16 @@
   },
   {
     "module": "main",
+    "source": "dol/fn_8008EFE0.c",
+    "symbols": [
+      "fn_8008EFE0"
+    ],
+    "status": "matching",
+    "mw_version": "GC/1.2.5n",
+    "extra_cflags": []
+  },
+  {
+    "module": "main",
     "source": "dol/fn_8008F29C.c",
     "symbols": [
       "fn_8008F29C"
