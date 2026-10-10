@@ -1990,8 +1990,9 @@ s32 fn_3_837C(s16 arg0) {
 /* fzgx:begin fn_3_968C noprologue */
 #include "types.h"
 
-extern s32 lbl_3_data_11D8;
 extern u32 lbl_3_bss_6DE20;
+
+extern s32 lbl_3_data_11D8;
 
 struct fn_3_968C_lbl_3_data_11D8 {
     u32 unk_0;
