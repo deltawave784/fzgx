@@ -76,17 +76,23 @@ Measured 2026-10-04: Fable agents matched 14 of 30 near misses (47%, 6.8 KB) tha
 released at 98-99.9%; Sonnet/Opus waves matched about 25% of fresher functions. Use Fable batches.
 
 One batch = steps 1-5 above with these changes:
-- Pick: `uv run tools/fzgx.py route --fable --limit 2 --min-percent 98 --json` (best score first, never tried by
-  Fable, one per clone family). Dispatch each row with `subagent_type: matcher-large` and `model: fable`, prompt
-  `SYMBOL=<symbol> AGENT_ID=fable-<symbol>-<YYYYMMDD><batch letter>`; both at once (changed 2026-10-06 at the user's request from 8 to 4, and 2026-10-08 from 4 to 2: Fable was being spent too fast, so a batch is
-  2 agents, a quarter of the original cost per batch at the same wall time).
-- Close the batch: `reuse --max-size 2048`, then `fixup --min-percent 97 --apply --budget 300 --output
-  .fzgx/fixup/<batch>` (every 4th batch, and the last batch of a run, use `--budget 1200`: each agent already runs
-  the same engine on its own body at release, so the per-batch search mostly repeats it and a 20-minute close-out
-  was closing 0 functions in most batches), then `verify`, then ninja/hash check, then `progress --note "fable batch <n>"` and `report`; append a line to
-  `.fzgx/reports/waves.md` that includes the code percentage; commit `state/progress.csv`.
-- If `route --fable` returns fewer than 1 row, lower `--min-percent` to 95, then 90. Below 90 the match rate is
-  unmeasured: stop and ask.
+- Pick: `uv run tools/fzgx.py route --fable --limit 2 --min-percent 85 --json` across **every module** (no `--module`;
+  changed 2026-10-10 at the user's request: main_rel's 85% rows ran dry, the other modules had 160 more; best score
+  first, never tried by Fable, one per clone family). Dispatch each row with `subagent_type: matcher-large` and
+  `model: fable`, prompt `SYMBOL=<symbol> AGENT_ID=fable-<symbol>-<YYYYMMDD><batch letter>` (2 Fable agents: changed
+  2026-10-06 from 8 to 4 and 2026-10-08 from 4 to 2 because Fable was spent too fast).
+- Alongside them, in the same batch, run **6 Opus agents** (2026-10-10, user request): pick with
+  `uv run tools/fzgx.py route --easy --tier opus --max-attempts 3 --json --limit 8` (every module), drop the Fable
+  rows and any second row of the same clone family, take 6, dispatch with `subagent_type: matcher-large` and
+  `model: opus`, ids `opus-<symbol>-<YYYYMMDD><batch letter>`. All 8 agents run at once.
+- Close the batch: `reuse --max-size 2048`, then for each module that had a release in the batch
+  `fixup --module <module> --min-percent 90 --apply --budget 700 --output .fzgx/fixup/<batch>-<module>` (1-hour shell
+  timeout each; if one times out, fall back to `fixup <symbol> --apply` on that batch's 90%+ releases), then `verify`,
+  `uv run ninja`/hash check, `progress --note "fable batch <n>"`, `inventory --status claimed` (release leftovers under
+  the agent's id), `lint`, `gate` and `report`; append a line to `.fzgx/reports/waves.md` that includes the code
+  percentage; commit `state/progress.csv`.
+- If `route --fable --min-percent 85` returns no row in any module, stop and ask (below 85 the match rate is
+  unmeasured). If `route --easy` runs short of 6 Opus rows, raise `--max-attempts` to 5, then run with fewer.
 
 Before EVERY batch check usage with the `mcp__ccd_session_mgmt__get_usage` tool (load it with ToolSearch). Changed
 2026-10-05 at the user's request: the user does not use Fable for anything else, so the **weekly Fable window may be

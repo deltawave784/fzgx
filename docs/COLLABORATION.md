@@ -28,8 +28,15 @@ merges stay mechanical. Record the split here and keep to it:
 
 | Clone | Modules |
 |---|---|
-| A (Claude loop, branch `windows-and-types`) | `main_rel` |
-| B (Codex, branch `codex`) | `main`, `movie_module`, `customize`, `sel`, and every smaller module |
+| A (Claude loop, branch `windows-and-types`) | every module (since 2026-10-10) |
+| B (Codex, branch `codex`) | paused; before it resumes, agree a new split here |
+
+**2026-10-10:** at the user's request clone A's Fable batches route every module (`route --fable --min-percent 85`,
+no `--module`) and its Opus agents take `route --easy` rows from every module. The split below is historical: until
+the user re-scopes clone B, B must not run batches, or both clones will claim the same functions and append
+conflicting entries to every module's `splits.txt`, `units.json` and `symbols.txt`.
+
+Before 2026-10-10: A owned `main_rel`; B owned `main`, `movie_module`, `customize`, `sel` and every smaller module.
 
 (1,070 of the 2,121 unmatched functions are in `main_rel`; the rest is spread across the other modules.)
 
@@ -40,7 +47,7 @@ score is under 85% (A's Fable floor), and never attempted by a Claude tier (read
 its `route --fable --min-percent` below 85, or its `--max-size` above 768, change these constants too, or the clones
 will work on the same functions. Both clones now write `main_rel`'s `splits.txt`, `units.json` and `symbols.txt`:
 a merge conflict at the end of those files is two sets of appended entries, so keep both sides.
-Clone A's router takes `--module main_rel`; clone B's seed manifests list only its modules.
+Until 2026-10-10 clone A's router took `--module main_rel` and clone B's seed manifests listed only its modules.
 
 ## Rules that keep the clones from colliding
 
