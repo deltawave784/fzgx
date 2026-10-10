@@ -17564,6 +17564,26 @@
   },
   {
     "module": "main",
+    "source": "dol/fn_800377F8.c",
+    "symbols": [
+      "fn_800377F8"
+    ],
+    "status": "matching",
+    "mw_version": "GC/1.2.5n",
+    "extra_cflags": [],
+    "pool": {
+      "@57": "lbl_801A70F8",
+      "@58": "lbl_801A70FC",
+      "@59": "lbl_801A7100",
+      "@60": "lbl_801A7108",
+      "@62": "lbl_801A7118",
+      "@61": "lbl_801A7110",
+      "@63": "lbl_801A7120",
+      "@65": "lbl_801A7128"
+    }
+  },
+  {
+    "module": "main",
     "source": "dol/fn_80037B14.c",
     "symbols": [
       "fn_80037B14"
