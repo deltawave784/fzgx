@@ -7061,3 +7061,6 @@ rel/main_rel/game/fn_1_3DB9C.c:
 
 rel/main_rel/effect/fn_1_5D500.c:
 	.text       start:0x0005D500 end:0x0005D718 align:4
+
+rel/main_rel/font/fn_1_51E60.c:
+	.text       start:0x00051E60 end:0x00052070 align:4

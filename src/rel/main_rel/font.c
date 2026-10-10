@@ -2518,6 +2518,58 @@ void fn_1_51C74(fn_1_51C74_FontData *obj) {
 #pragma opt_common_subs reset
 /* fzgx:end fn_1_51C74 */
 
+/* fzgx:begin fn_1_51E60 noprologue */
+#include "font.h"
+
+extern u16 fn_1_A5D88(void);
+extern u16 fn_1_A5DB0(void);
+extern void fn_80038F10(f32 *);
+
+/* Draws a copy of the packet scaled from 640x480 virtual space to the
+   current screen size. */
+void fn_1_51E60(FontDrawPacket *src) {
+    FontDrawPacket pkt;
+    f32 v0[6];
+    f32 v1[6];
+    f32 v2[6];
+    f32 v3[6];
+    f32 x_off, x_scale, x;
+    f32 y_scale, y_off, y;
+    f32 w_scale, w;
+    f32 h_scale, h;
+
+    pkt = *src;
+
+    x = pkt.x;
+    fn_80038F10(v0);
+    x_off = v0[0];
+    x_scale = v0[2];
+    x_off = 640.0f * x_off / (f32)fn_1_A5D88();
+    x = x * x_scale / (f32)fn_1_A5D88();
+    pkt.x = x + x_off;
+
+    y = pkt.y;
+    fn_80038F10(v1);
+    y_off = v1[1];
+    y_scale = v1[3];
+    y_off = 480.0f * y_off / (f32)fn_1_A5DB0();
+    y = y * y_scale / (f32)fn_1_A5DB0();
+    pkt.y = y + y_off;
+
+    w = pkt.scale_x;
+    fn_80038F10(v2);
+    w_scale = v2[2];
+    pkt.scale_x = w * w_scale / (f32)fn_1_A5D88();
+
+    h = pkt.scale_y;
+    fn_80038F10(v3);
+    h_scale = v3[3];
+    pkt.scale_y = h * h_scale / (f32)fn_1_A5DB0();
+
+    fn_1_4F734(&pkt);
+}
+/* fzgx:end fn_1_51E60 */
+
 /* fzgx:begin fn_1_52070 */
 void fn_1_52070(u32 value) {
     lbl_1_bss_4E6A8 = 1;
