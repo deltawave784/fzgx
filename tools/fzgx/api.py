@@ -461,6 +461,23 @@ def _finish_check(p: Project, symbol: str, result: dict, checked: Optional[oracl
 
 
 # --------------------------------------------------------------------- oracle
+def _probe_flag_variants(p: Project, symbol: str, flags: Optional[str]) -> List[Optional[str]]:
+    """Extra-flag sets a version probe compiles under each version: the recorded flags first,
+    then those flags plus every extra flag the module's builds are known to use (main and
+    movie_module: `-use_lmw_stmw on`). A plain check of a function without a recorded compiler
+    already tries those pairs (`oracle.version_candidates`); a probe that tried only the recorded
+    flags (usually none) chose a flagless version and saved it, so every later check lost the
+    stmw/lmw prologue it had been matching with (fn_80065390, fn_800557CC, batch 75)."""
+    sym = p.resolve(symbol)
+    out: List[Optional[str]] = [flags]
+    for _, extra in (oracle.version_candidates(p, sym.module) if sym else []):
+        if extra and extra not in (flags or ''):
+            joined = oracle._join_flags(flags, extra)
+            if joined not in out:
+                out.append(joined)
+    return out
+
+
 def check(p: Project, symbol: str, max_diff_lines: int = 80, versions: Optional[str] = None) -> Dict[str, Any]:
     """Compile and diff the work copy if one exists, else the canonical unit."""
     key = _key(p, symbol)
@@ -490,22 +507,27 @@ def check(p: Project, symbol: str, max_diff_lines: int = 80, versions: Optional[
             vers.remove(options['mw'])
             vers.insert(0, options['mw'])
         out, best = {}, None
+        variants = _probe_flag_variants(p, symbol, options.get('flags'))
         for ver in vers:
             if row and row["status"] == "claimed" and _budget_stop(l.current_attempt(key)):
                 break
             if not (ROOT / 'build' / 'compilers' / ver / 'mwcceppc.exe').exists():
                 out[ver] = -1.0
                 continue
-            result = oracle.check(p, symbol, max_diff_lines, source=src,
-                                  mw_version=ver, extra_cflags=options.get('flags'))
-            # one probe is one check, scored at its best compiler: charging every version
-            # spent half the check budget and tripped the plateau stop before any edit
-            _record_check(p, key, src, result, count=False)
-            score = check_score(result) if result.ok else -2.0
-            out[ver] = score
-            fully_matches = result.ok and oracle.unit_fully_matches(result) is None
-            if result.ok and (best is None or score > best[0] or fully_matches):
-                best = score, result
+            fully_matches = False
+            for flags in variants:
+                result = oracle.check(p, symbol, max_diff_lines, source=src,
+                                      mw_version=ver, extra_cflags=flags)
+                # one probe is one check, scored at its best compiler: charging every version
+                # spent half the check budget and tripped the plateau stop before any edit
+                _record_check(p, key, src, result, count=False)
+                score = check_score(result) if result.ok else -2.0
+                out[ver if flags == variants[0] else f'{ver} [{flags}]'] = score
+                fully_matches = result.ok and oracle.unit_fully_matches(result) is None
+                if result.ok and (best is None or score > best[0] or fully_matches):
+                    best = score, result
+                if fully_matches:
+                    break
             if fully_matches:
                 break
         selected = None
