@@ -17649,6 +17649,21 @@
   },
   {
     "module": "main",
+    "source": "dol/fn_80038DE8.c",
+    "symbols": [
+      "fn_80038DE8"
+    ],
+    "status": "matching",
+    "mw_version": "GC/1.2.5n",
+    "extra_cflags": [],
+    "pool": {
+      "@9": "lbl_801A7160",
+      "@11": "lbl_801A7174",
+      "@10": "lbl_801A7170"
+    }
+  },
+  {
+    "module": "main",
     "source": "dol/fn_80038EEC.c",
     "symbols": [
       "fn_80038EEC"
@@ -69289,6 +69304,18 @@
     "mw_version": null,
     "extra_cflags": [],
     "tu": "rel/winning/winning.c"
+  },
+  {
+    "module": "winning",
+    "source": "rel/winning/winning/fn_15_2458.c",
+    "symbols": [
+      "fn_15_2458"
+    ],
+    "status": "nonmatching",
+    "mw_version": "GC/1.3.2",
+    "extra_cflags": [],
+    "tu": "rel/winning/winning.c",
+    "pool": true
   },
   {
     "module": "winning",

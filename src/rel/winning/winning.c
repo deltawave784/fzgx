@@ -1165,6 +1165,218 @@ void fn_15_236C(u32 arg0, u32 arg1, u32 arg2, u32 arg3) {
 }
 /* fzgx:end fn_15_236C */
 
+/* fzgx:begin fn_15_2458 pool */
+typedef struct fn_15_2458_Entry {
+    u8 pad_0[0x6];
+    u8 unk_6;
+    u8 pad_7;
+} fn_15_2458_Entry;
+
+struct fn_15_2458_lbl_15_bss_0 {
+    u8 pad_0[0x14];
+    u32 unk_14;
+    u8 pad_18[0x14];
+    fn_15_2458_Entry *unk_2C;
+    u8 pad_30[0x44];
+    void *unk_74;
+    void *unk_78;
+    u8 pad_7C[0x20];
+    u8 *unk_9C[4];
+};
+
+struct fn_15_2458_lbl_15_data_0 {
+    u8 pad_0[0x20];
+    char *unk_20[0x21];
+    char unk_A4[0x114];
+    char unk_1B8[0x8];
+    char unk_1C0[0x10];
+    char unk_1D0[0x8];
+};
+
+extern u32 lbl_801A6410;
+
+extern u8 *fn_1_4630(u32, u32, const char *, u32);
+extern void fn_1_8F45C(u8 *, s32, u32, u32);
+extern void fn_1_8F198(u8 *, s32, u32, u32);
+extern void fn_1_934CC(u8 *, u8 *, char *);
+extern void fn_1_435C(void *);
+extern void fn_1_3F8C(char *, void (*)(void *), void *, u32);
+extern void fn_1_8F62C(void *);
+extern void fn_15_27D4(void *);
+extern void fn_1_92530(void *);
+
+/* file-scope objects of the retail TU, in retail order: MWCC addresses them off one section base */
+u16 fzgx_obj_lbl_15_bss_0;
+u16 lbl_15_bss_0_gap_2;
+u32 lbl_15_bss_4[2];
+u32 lbl_15_bss_C;
+u32 lbl_15_bss_10;
+u32 fzgx_obj_lbl_15_bss_14;
+u32 lbl_15_bss_14_fill_18;
+u32 lbl_15_bss_1C;
+u8 lbl_15_bss_1C_fill_20;
+u8 lbl_15_bss_21;
+u16 lbl_15_bss_21_fill_22;
+u32 lbl_15_bss_21_fill_24[2];
+fn_15_2458_Entry *lbl_15_bss_2C;
+u32 lbl_15_bss_2C_fill_30;
+u8 lbl_15_bss_2C_fill_34;
+u8 lbl_15_bss_35;
+u16 lbl_15_bss_35_fill_36;
+u32 lbl_15_bss_35_fill_38[15];
+void *lbl_15_bss_74;
+void *lbl_15_bss_78;
+u32 lbl_15_bss_78_fill_7C[3];
+u32 lbl_15_bss_88[5];
+u8 *lbl_15_bss_9C[4];
+u32 lbl_15_bss_9C_fill_AC[9];
+
+#pragma section code_type ".fzgxpool"
+static void fzgx_bss_layout(void) {
+    volatile u8 s;  /* fzgx-allow: S2 layout primer sink: MWCC emits .bss objects in first-access order */
+    s = *(u8 *)&fzgx_obj_lbl_15_bss_0;
+    s = *(u8 *)&lbl_15_bss_0_gap_2;
+    s = *(u8 *)&lbl_15_bss_4;
+    s = *(u8 *)&lbl_15_bss_C;
+    s = *(u8 *)&lbl_15_bss_10;
+    s = *(u8 *)&fzgx_obj_lbl_15_bss_14;
+    s = *(u8 *)&lbl_15_bss_14_fill_18;
+    s = *(u8 *)&lbl_15_bss_1C;
+    s = *(u8 *)&lbl_15_bss_1C_fill_20;
+    s = *(u8 *)&lbl_15_bss_21;
+    s = *(u8 *)&lbl_15_bss_21_fill_22;
+    s = *(u8 *)&lbl_15_bss_21_fill_24;
+    s = *(u8 *)&lbl_15_bss_2C;
+    s = *(u8 *)&lbl_15_bss_2C_fill_30;
+    s = *(u8 *)&lbl_15_bss_2C_fill_34;
+    s = *(u8 *)&lbl_15_bss_35;
+    s = *(u8 *)&lbl_15_bss_35_fill_36;
+    s = *(u8 *)&lbl_15_bss_35_fill_38;
+    s = *(u8 *)&lbl_15_bss_74;
+    s = *(u8 *)&lbl_15_bss_78;
+    s = *(u8 *)&lbl_15_bss_78_fill_7C;
+    s = *(u8 *)&lbl_15_bss_88;
+    s = *(u8 *)&lbl_15_bss_9C;
+    s = *(u8 *)&lbl_15_bss_9C_fill_AC;
+}
+#pragma section code_type ".text"
+
+extern u8 fn_15_1D7C__fzgx_offset_0[];
+extern u8 fn_15_1DF4__fzgx_offset_0[];
+extern u8 fn_15_1EE0__fzgx_offset_0[];
+extern u8 fn_15_3AC__fzgx_offset_0[];
+extern u8 fn_15_644__fzgx_offset_0[];
+extern u8 fn_15_B8C__fzgx_offset_0[];
+extern u8 lbl_15_data_0__fzgx_offset_0[];
+extern u8 lbl_15_data_10__fzgx_offset_0[];
+extern u8 lbl_15_data_18__fzgx_offset_0[];
+extern u8 lbl_15_data_30__fzgx_offset_0[];
+extern u8 lbl_15_data_38__fzgx_offset_0[];
+extern u8 lbl_15_data_40__fzgx_offset_0[];
+extern u8 lbl_15_data_48__fzgx_offset_0[];
+extern u8 lbl_15_data_60__fzgx_offset_0[];
+extern u8 lbl_15_data_68__fzgx_offset_0[];
+extern u8 lbl_15_data_8__fzgx_offset_0[];
+static u32 fzgx_pool_data_lbl_15_data_0[8] = {  /* fzgx-allow: A1 retail data bytes and bindings */
+    0x57494E5F, 0x31535400, 0x57494E5F, 0x324E4400, 0x57494E5F, 0x33524400, 0x57494E5F, 0x34544800
+};
+static u32 fzgx_pool_data_lbl_15_data_0_20[1] = {  /* fzgx-allow: A1 retail data bytes and bindings */
+    (u32)lbl_15_data_0__fzgx_offset_0
+};
+static u32 fzgx_pool_data_lbl_15_data_0_24[32] = {  /* fzgx-allow: A1 retail data bytes and bindings */
+    (u32)lbl_15_data_8__fzgx_offset_0, (u32)lbl_15_data_10__fzgx_offset_0, (u32)lbl_15_data_18__fzgx_offset_0, 0x424C4143, 0x4B000000, 0x47524159, 0x0, 0x424C5545,
+    0x0, 0x57484954, 0x453F0000, (u32)lbl_15_data_30__fzgx_offset_0, (u32)lbl_15_data_38__fzgx_offset_0, (u32)lbl_15_data_40__fzgx_offset_0, (u32)lbl_15_data_48__fzgx_offset_0, 0x6D656E75,
+    0x0, 0x77696E6E, 0x696E6700, (u32)lbl_15_data_60__fzgx_offset_0, (u32)fn_15_3AC__fzgx_offset_0, (u32)fn_15_644__fzgx_offset_0, (u32)fn_15_B8C__fzgx_offset_0, (u32)lbl_15_data_68__fzgx_offset_0,
+    (u32)fn_15_1D7C__fzgx_offset_0, (u32)fn_15_1DF4__fzgx_offset_0, (u32)fn_15_1EE0__fzgx_offset_0, 0x0, 0x1248, 0x12FC, 0x137E, 0x19C8
+};
+static u32 fzgx_pool_data_lbl_15_data_A4[44] = {  /* fzgx-allow: A1 retail data bytes and bindings */
+    0x77696E6E, 0x696E672E, 0x63000000, 0x50757368, 0x203C413E, 0x20746F20, 0x77696E6E, 0x696E6720,
+    0x72756E20, 0x6D6F6465, 0x210A0000, 0x4341523A, 0x2532642C, 0x20545950, 0x453A2532, 0x64200000,
+    0x20257328, 0x25732920, 0xA000000, 0x53454C3A, 0x204F4E0A, 0x0, 0x53454C3A, 0x204F4646,
+    0xA000000, 0x5345513A, 0x20474320, 0x57494E4E, 0x494E4720, 0x52554E0A, 0x0, 0x5345513A,
+    0x20474320, 0x5653203A, 0x20253164, 0xA000000, 0x5345513A, 0x20414320, 0x3173740A, 0x0,
+    0x5345513A, 0x20414320, 0x454E440A, 0x0
+};
+static u32 fzgx_pool_data_lbl_15_data_154[25] = {  /* fzgx-allow: A1 retail data bytes and bindings */
+    0x53746166, 0x66526F6C, 0x6C4D6169, 0x6E000000, 0x53746166, 0x66526F6C, 0x6C446973, 0x70000000,
+    0x57696E6E, 0x696E6743, 0x616C6300, 0x4C696768, 0x744D6169, 0x6E000000, 0x6D6F745F, 0x6C696768,
+    0x745F6361, 0x6C630000, 0x57696E6E, 0x696E6744, 0x69737000, 0x6D6F745F, 0x6C696768, 0x745F6469,
+    0x73700000
+};
+static u32 fzgx_pool_data_lbl_15_data_0_1B8[2] = {  /* fzgx-allow: A1 retail data bytes and bindings */
+    0x526F6245, 0x78656300
+};
+static u32 fzgx_pool_data_lbl_15_data_0_1C0[4] = {  /* fzgx-allow: A1 retail data bytes and bindings */
+    0x7365745F, 0x77696E6E, 0x65725F72, 0x616E6B00
+};
+static u32 fzgx_pool_data_lbl_15_data_0_1D0[3] = {  /* fzgx-allow: A1 retail data bytes and bindings */
+    0x526F6244, 0x69737043, 0x6C697000
+};
+#pragma section code_type ".fzgxpool"
+static void fzgx_data_layout_lbl_15_data_0(void) {
+    volatile u8 s;  /* fzgx-allow: S2 layout primer sink: keeps the retail .data objects in retail order */
+    s = *(u8 *)fzgx_pool_data_lbl_15_data_0;
+    s = *(u8 *)fzgx_pool_data_lbl_15_data_0_20;
+    s = *(u8 *)fzgx_pool_data_lbl_15_data_0_24;
+    s = *(u8 *)fzgx_pool_data_lbl_15_data_A4;
+    s = *(u8 *)fzgx_pool_data_lbl_15_data_154;
+    s = *(u8 *)fzgx_pool_data_lbl_15_data_0_1B8;
+    s = *(u8 *)fzgx_pool_data_lbl_15_data_0_1C0;
+    s = *(u8 *)fzgx_pool_data_lbl_15_data_0_1D0;
+}
+#pragma section code_type ".text"
+
+void fn_15_2458(s16 arg0, s16 arg1, s16 arg2, u32 arg3) {
+    u32 mask;
+    u8 *obj;
+
+    
+    
+
+    switch ((31 - __cntlzw(lbl_15_bss_2C[arg2].unk_6)) & 3) {
+    case 0:
+        mask = 0x80000000;
+        break;
+    case 1:
+        mask = 0x40000000;
+        break;
+    case 2:
+        mask = 0x20000000;
+        break;
+    case 3:
+        mask = 0x10000000;
+        break;
+    default:
+        mask = 0x80000000;
+        break;
+    }
+
+    lbl_15_bss_9C[arg1] = fn_1_4630(lbl_801A6410, 0x4e0, ((char *)(((u8 *)fzgx_pool_data_lbl_15_data_A4))), 0x719);
+    obj = lbl_15_bss_9C[arg1];
+
+    /* retail tests the same value twice (beq; bne on one compare): two
+     * equal mode constants in an `||` chain */
+    if (arg3 == 0x30000000 || arg3 == 0x30000000) {
+        if (fzgx_obj_lbl_15_bss_14 & 0x80) {
+            fn_1_8F45C(obj, arg0, arg3, mask);
+        } else {
+            fn_1_8F198(obj, arg0, arg3, mask);
+        }
+    } else {
+        fn_1_8F198(obj, arg0, arg3, mask);
+    }
+
+    fn_1_934CC(obj, obj + 0x148, ((char * *)(((u8 *)fzgx_pool_data_lbl_15_data_0_20)))[arg2]);
+    *(u32 *)(obj + 0x18) |= (1u << 31) | (1u << 30);
+    *(u8 *)(obj + 0x4c4) = arg2;
+    fn_1_435C(lbl_15_bss_74);
+    fn_1_3F8C(((char *)(((u8 *)fzgx_pool_data_lbl_15_data_0_1B8))), fn_1_8F62C, obj, 10);
+    fn_1_3F8C(((char *)(((u8 *)fzgx_pool_data_lbl_15_data_0_1C0))), fn_15_27D4, obj, 11);
+    fn_1_435C(lbl_15_bss_78);
+    fn_1_3F8C(((char *)(((u8 *)fzgx_pool_data_lbl_15_data_0_1D0))), fn_1_92530, obj, 10);
+}
+/* fzgx:end fn_15_2458 */
+
 /* fzgx:begin fn_15_2620 */
 struct fn_15_2620_Arg0 {
     u8 pad_0[0x18];
