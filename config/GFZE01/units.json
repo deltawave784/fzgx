@@ -22345,6 +22345,22 @@
   },
   {
     "module": "main",
+    "source": "dol/fn_8005C5C8.c",
+    "symbols": [
+      "fn_8005C5C8"
+    ],
+    "status": "matching",
+    "mw_version": "GC/1.3.2",
+    "extra_cflags": [],
+    "pool": {
+      "@35": "lbl_801A7248",
+      "@33": "lbl_801A7240",
+      "@32": "lbl_801A7238",
+      "@31": "lbl_801A7230"
+    }
+  },
+  {
+    "module": "main",
     "source": "dol/fn_8005CBF4.c",
     "symbols": [
       "fn_8005CBF4"
