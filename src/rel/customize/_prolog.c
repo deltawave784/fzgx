@@ -824,6 +824,114 @@ void fn_3_4218(void) {
 }
 /* fzgx:end fn_3_4218 */
 
+/* fzgx:begin fn_3_4380 pool noprologue */
+#include "types.h"
+
+typedef struct {
+    u8 pad_0[0x9E];
+    u8 unk_9E;
+} Fn3_4380_Bss8B3A0;
+
+typedef struct {
+    u8 pad_0[0xC4];
+    s16 unk_C4;
+    u8 pad_C6[0xA];
+} Fn3_4380_State20;
+
+typedef struct {
+    u8 pad_0[0x6];
+    s16 unk_6;
+    s16 unk_8;
+    u8 pad_A[0x26];
+} Fn3_4380_StateF0;
+
+typedef struct {
+    u32 flags;
+    u8 pad_4[0x81BC];
+} Fn3_4380_Slot;
+
+extern s16 lbl_1_bss_966;
+extern Fn3_4380_Bss8B3A0 lbl_1_bss_8B3A0;
+extern u8 lbl_3_data_0[];
+
+/* this TU's .bss, in retail order (addressed off one section base) */
+u32 lbl_3_bss_0[2];
+u32 lbl_3_bss_0_gap_8[6];
+Fn3_4380_State20 lbl_3_bss_20;
+Fn3_4380_StateF0 lbl_3_bss_F0;
+s32 lbl_3_bss_120[8];
+Fn3_4380_Slot lbl_3_bss_140[4];
+u32 lbl_3_bss_140_gap_20840;
+u32 lbl_3_bss_20844[3];
+u32 lbl_3_bss_20850[0xED6];
+u32 lbl_3_bss_243A8[0x2077];
+u32 lbl_3_bss_2C584[98];
+
+#pragma section code_type ".fzgxpool"
+static void fzgx_bss_layout(void) {
+    volatile u8 s;  /* fzgx-allow: S2 layout primer sink: MWCC emits .bss objects in first-access order */
+    s = *(u8 *)&lbl_3_bss_0;
+    s = *(u8 *)&lbl_3_bss_0_gap_8;
+    s = *(u8 *)&lbl_3_bss_20;
+    s = *(u8 *)&lbl_3_bss_F0;
+    s = *(u8 *)&lbl_3_bss_120;
+    s = *(u8 *)&lbl_3_bss_140;
+    s = *(u8 *)&lbl_3_bss_140_gap_20840;
+    s = *(u8 *)&lbl_3_bss_20844;
+    s = *(u8 *)&lbl_3_bss_20850;
+    s = *(u8 *)&lbl_3_bss_243A8;
+    s = *(u8 *)&lbl_3_bss_2C584;
+}
+#pragma section code_type ".text"
+
+extern s32 fn_1_3F8C(void *, void (*)(void), u32, u32);
+extern s32 fn_8006FDEC(void);
+extern void fn_1_152208(void *, s32, void *, s32, s32);
+extern s32 fn_1_152970(s16 *, s16 *, s16, u32, void *, s16, s16);
+extern void fn_1_4A00(s32, u8, u32);
+extern void fn_3_29508(void);
+extern void fn_3_4218(void);
+extern void fn_3_7A08(s16 *, s16 *, int);
+
+void fn_3_4380(void) {
+    u8 *data;
+    s16 v;
+    s16 a;
+    s16 b;
+    s16 lo;
+    s16 hiv;
+
+    data = lbl_3_data_0;
+    v = lbl_3_bss_F0.unk_6;
+    if (lbl_1_bss_966 != 0x5d) {
+        fn_1_4A00(1, 15, lbl_3_bss_20850[0]);
+        lbl_3_bss_243A8[0] = 0;
+        if (*(s32 *)(data + 0xb8) == -1) {
+            fn_8006FDEC();
+            *(s32 *)(data + 0xb8) = fn_1_3F8C(data + 0x1688, fn_3_29508, 0, 8);
+        }
+        fn_3_4218();
+        lbl_3_bss_20.unk_C4 = 0;
+    }
+    lbl_3_bss_140[lbl_3_bss_F0.unk_8].flags |= 0x80000000;
+    lbl_3_bss_140[lbl_3_bss_F0.unk_8].flags &= ~0x40000000;
+    fn_1_152208(data + 0x54, 0x2a, lbl_3_bss_2C584, 7, 7);
+    lbl_1_bss_8B3A0.unk_9E = v;
+    if (*(s16 *)(data + 0xc4) == -1) {
+        *(s16 *)(data + 0xc4) = 6;
+    } else {
+        do {
+            fn_1_152970(&a, &b, *(s16 *)(data + 0xc4), 0, lbl_3_bss_2C584, 7, 7);
+            fn_3_7A08(&lo, &hiv, 3);
+            if (a < lo || a > hiv) {
+                lbl_3_bss_20.unk_C4--;
+            }
+        } while (a < lo || a > hiv);
+    }
+    lbl_3_bss_120[0] = -1;
+}
+/* fzgx:end fn_3_4380 */
+
 /* fzgx:begin fn_3_4538 noprologue */
 #include "types.h"
 

@@ -542,3 +542,6 @@ rel/customize/_prolog/fn_3_5F28.c:
 
 rel/customize/_prolog/fn_3_48E0.c:
 	.text       start:0x000048E0 end:0x00004A84 align:4
+
+rel/customize/_prolog/fn_3_4380.c:
+	.text       start:0x00004380 end:0x00004538 align:4
