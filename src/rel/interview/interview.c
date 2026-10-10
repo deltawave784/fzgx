@@ -120,6 +120,114 @@ void fn_17_394(void) {
 }
 /* fzgx:end fn_17_394 */
 
+/* fzgx:begin fn_17_3F0 */
+typedef struct InterviewState {
+    u8 pad_0[0x5];
+    u8 index;
+} InterviewState;
+
+typedef struct TextPacket {
+    u8 unk_0;
+    u8 unk_1;
+    u8 unk_2;
+    u8 unk_3;
+    u16 unk_4;
+    u16 unk_6;
+    u16 unk_8;
+    u16 unk_A;
+    f32 unk_C;
+    f32 unk_10;
+    u8 unk_14;
+    u8 unk_15;
+    u8 unk_16;
+    s8 unk_17;
+    s16 unk_18;
+    u32 unk_1C;
+} TextPacket;
+
+extern u8 lbl_17_data_0[];
+extern InterviewState *lbl_17_bss_10;
+extern char lbl_1_bss_198[][0x40];
+extern char *lbl_1_data_370[];
+extern TextPacket lbl_1_bss_58;
+extern u32 lbl_801A66B4;
+extern u16 lbl_1_bss_968;
+
+extern char *fn_80083DB0(char *, const char *);
+extern int sprintf(char *, const char *, ...);
+
+void fn_17_3F0(void) {
+    const char *strs = (const char *)lbl_17_data_0 + 0x60000;
+    InterviewState *state = lbl_17_bss_10;
+    u32 v;
+    u32 n;
+
+    fn_80083DB0(lbl_1_bss_198[0], strs + 0x3e5c);
+    fn_80083DB0(lbl_1_bss_198[1], strs + 0x3e64);
+    v = state->index;
+    if (v == 30) {
+        n = 0;
+    } else {
+        n = v + 1;
+        if (v > 30) {
+            n = v;
+        }
+    }
+    sprintf(lbl_1_bss_198[2], strs + 0x3e70, n);
+    fn_80083DB0(lbl_1_bss_198[3], strs + 0x3e80);
+    v = state->index;
+    if (v == 30) {
+        n = 0;
+    } else {
+        n = v + 1;
+        if (v > 30) {
+            n = v;
+        }
+    }
+    sprintf(lbl_1_bss_198[4], strs + 0x3e90, lbl_1_data_370[n]);
+    fn_80083DB0(lbl_1_bss_198[5], strs + 0x3e64);
+    fn_80083DB0(lbl_1_bss_198[6], strs + 0x3ea0);
+    fn_80083DB0(lbl_1_bss_198[7], strs + 0x3e64);
+    fn_80083DB0(lbl_1_bss_198[8], strs + 0x3eac);
+    fn_80083DB0(lbl_1_bss_198[9], strs + 0x3e64);
+    fn_80083DB0(lbl_1_bss_198[10], strs + 0x3eb8);
+    fn_80083DB0(lbl_1_bss_198[11], strs + 0x3e64);
+    fn_80083DB0(lbl_1_bss_198[12], strs + 0x3ec4);
+    fn_80083DB0(lbl_1_bss_198[13], strs + 0x3e64);
+    fn_80083DB0(lbl_1_bss_198[14], strs + 0x3ed0);
+    fn_80083DB0(lbl_1_bss_198[15], strs + 0x3e64);
+    fn_80083DB0(lbl_1_bss_198[16], strs + 0x3edc);
+    fn_80083DB0(lbl_1_bss_198[17], strs + 0x3ee8);
+    fn_80083DB0(lbl_1_bss_198[18], strs + 0x3ef4);
+    fn_80083DB0(lbl_1_bss_198[19], strs + 0x3f04);
+    fn_80083DB0(lbl_1_bss_198[20], strs + 0x3f10);
+
+    lbl_1_bss_58.unk_0 = lbl_801A66B4;
+    lbl_1_bss_58.unk_1 = 1;
+    lbl_1_bss_58.unk_2 = 0;
+    lbl_1_bss_58.unk_3 = 0;
+    lbl_1_bss_58.unk_4 = 0x280;
+    lbl_1_bss_58.unk_6 = 0x150;
+    lbl_1_bss_58.unk_8 = 0;
+    lbl_1_bss_58.unk_A = 0;
+    lbl_1_bss_58.unk_C = 1.0f;
+    lbl_1_bss_58.unk_10 = 1.0f;
+    lbl_1_bss_58.unk_14 = 7;
+    lbl_1_bss_58.unk_16 = 0;
+    lbl_1_bss_58.unk_17 = -1;
+    lbl_1_bss_58.unk_18 = -1;
+    lbl_1_bss_58.unk_1C = 0;
+
+    lbl_1_bss_58.unk_4 = 0x140;
+    lbl_1_bss_58.unk_6 = 0xf0;
+    lbl_1_bss_58.unk_8 = 0x88;
+    lbl_1_bss_58.unk_14 = 4;
+    lbl_1_bss_58.unk_2 = 0;
+    lbl_1_bss_58.unk_3 = 1;
+    lbl_1_bss_968 = 8;
+}
+/* fzgx:end fn_17_3F0 */
+
 /* fzgx:begin fn_17_9F8 */
 #include "sofdec/adxt.h"
 #include "rel/interview/interview.h"

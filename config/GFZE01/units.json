@@ -2724,6 +2724,20 @@
   },
   {
     "module": "interview",
+    "source": "rel/interview/interview/fn_17_3F0.c",
+    "symbols": [
+      "fn_17_3F0"
+    ],
+    "status": "matching",
+    "mw_version": null,
+    "extra_cflags": [],
+    "tu": "rel/interview/interview.c",
+    "pool": {
+      "@23": "lbl_17_rodata_18"
+    }
+  },
+  {
+    "module": "interview",
     "source": "rel/interview/interview/fn_17_416C.c",
     "symbols": [
       "fn_17_416C"
