@@ -1047,6 +1047,60 @@ void fn_3_5E88(s16 arg0) {
 }
 /* fzgx:end fn_3_5E88 */
 
+/* fzgx:begin fn_3_5F28 */
+typedef struct {
+    u8 pad_0[0x1164];
+    u8 unk_1164[0x6C];
+    s16 unk_11D0;
+    u8 pad_11D2[0x2];
+    u32 unk_11D4;
+} CustomizeData;
+
+typedef struct {
+    s16 id;
+    u8 pad_2[0x2];
+    u32 mask;
+    u8 flags;
+    u8 pad_9[0x17];
+} CustomizeSlot;
+
+typedef struct {
+    u8 pad[0x324];
+    u32 value;
+    u8 tail[0x118];
+} CustomizeEntry;
+
+extern CustomizeData lbl_3_data_0;
+extern CustomizeSlot lbl_3_bss_7DB60[41];
+extern CustomizeEntry *lbl_3_bss_20854;
+
+extern void fn_1_80058(s8, CustomizeSlot *);
+extern u32 fn_1_12A32C(void *);
+extern void fn_1_12A2B8(u32);
+extern void fn_1_80C18(CustomizeEntry *, CustomizeSlot *, s8);
+
+void fn_3_5F28(void) {
+    CustomizeData *data;
+    s16 i;
+
+    data = &lbl_3_data_0;
+    for (i = 0; i < 41; i++) {
+        fn_1_80058(i, &lbl_3_bss_7DB60[i]);
+        lbl_3_bss_7DB60[i].id = i;
+        lbl_3_bss_7DB60[i].flags = 0;
+        lbl_3_bss_7DB60[i].flags |= 0x10;
+        lbl_3_bss_7DB60[i].mask = 1 << data->unk_11D0;
+    }
+    data->unk_11D4 = fn_1_12A32C(data->unk_1164);
+    fn_1_12A2B8(1);
+    fn_1_80C18(lbl_3_bss_20854, lbl_3_bss_7DB60, 41);
+    fn_1_12A2B8(0);
+    for (i = 0; i < 41; i++) {
+        lbl_3_bss_20854[i].value = data->unk_11D4;
+    }
+}
+/* fzgx:end fn_3_5F28 */
+
 /* fzgx:begin fn_3_60C8 */
 struct fn_3_60C8_lbl_3_data_11D4 {
     u32 unk_0;
