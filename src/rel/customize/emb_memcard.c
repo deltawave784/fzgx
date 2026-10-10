@@ -2,17 +2,17 @@
 #include "rel/customize/globals.h"
 #include "rel/customize/emb_memcard.h"
 
-
+struct GXLightObj {
+    u32 dummy[16];
+};
 extern u32 lbl_3_bss_7ED58[18];
 extern u32 lbl_801A6410;
 extern u32 lbl_3_data_1A18;
 extern u8 fn_1_B7C00(void);
 extern void fn_1_C1394(u32 *arg0);
-extern void fn_1_46B4(u32 arg0, u32 arg1, char *arg2, u32 arg3);
+extern void fn_1_46B4(u32 arg0, u32 arg1, const char *arg2, int arg3);
 extern u32 lbl_3_rodata_288[60];
 extern void lbl_8006DCA4(void);
-extern void lbl_8006E1D8(struct Vec3 *, f32, f32, f32);
-extern void fn_1_7BCCC(struct Vec3 *);
 extern void fn_80035680(struct GXLightObj *, f32, f32, f32);
 extern void fn_80035690(struct GXLightObj *, f32, f32, f32);
 extern void fn_80035420(struct GXLightObj *, f32, int);
@@ -20,18 +20,9 @@ extern void fn_800356AC(struct GXLightObj *, u32 *);
 extern void GXInitLightDistAttn(struct GXLightObj *, f32, f32, int);
 extern void fn_1_7BB80(struct GXLightObj *, int);
 extern void fn_1_7BD6C(int);
-extern void fn_80074CF4(f32, f32, f32);
+extern void fn_80074CF4(f32 arg0, f32 arg1, f32 arg2);
 
-/* fzgx:begin fn_3_C328 noprologue */
-#include "types.h"
-
-extern u32 lbl_3_bss_7ED58[18];
-extern u32 lbl_801A6410;
-extern char lbl_3_data_1A30[14];
-extern u32 lbl_3_data_1A18;
-extern u8 fn_1_B7C00(void);
-extern void fn_1_C1394(u32 *arg0);
-extern void fn_1_46B4(u32 arg0, u32 arg1, char *arg2, u32 arg3);
+/* fzgx:begin fn_3_C328 */
 
 void fn_3_C328(void) {
     u32 *state;
@@ -40,7 +31,7 @@ void fn_3_C328(void) {
         state = lbl_3_bss_7ED58;
         fn_1_C1394(state);
         if (state[2] != 0) {
-            fn_1_46B4(lbl_801A6410, state[2], lbl_3_data_1A30, 0x154);
+            fn_1_46B4(lbl_801A6410, state[2], (((char *)&lbl_3_data_1A30)), 0x154);
             state[2] = 0;
             state[3] = 0;
         }
@@ -50,15 +41,12 @@ void fn_3_C328(void) {
 /* fzgx:end fn_3_C328 */
 
 /* fzgx:begin fn_3_F878 */
-struct Vec3 {
+struct fn_3_F878_Vec3 {
     f32 x;
     f32 y;
     f32 z;
 };
 
-struct GXLightObj {
-    u32 dummy[16];
-};
 
 struct CustomizeData {
     u8 pad34[0x34];
@@ -72,7 +60,7 @@ struct CustomizeData {
 
 void fn_3_F878(void) {
     struct GXLightObj second;
-    struct Vec3 first;
+    struct fn_3_F878_Vec3 first;
     u32 value;
     f32 scale;
     struct CustomizeData *data;
@@ -124,9 +112,7 @@ u32 fn_3_11FD0(u32 index, u32 value) {
 }
 /* fzgx:end fn_3_11FD0 */
 
-/* fzgx:begin fn_3_12910 noprologue */
-#include "types.h"
-
+/* fzgx:begin fn_3_12910 */
 struct fn_3_12910_tbl_ent {
     u8 pad_0[0x8];
     u32 unk_8;
@@ -140,8 +126,6 @@ struct fn_3_12910_glb {
     s16 unk_24;
 };
 
-extern u8 lbl_3_bss_7EDD8[52];
-extern u8 lbl_3_data_3234[168];
 
 #pragma opt_dead_assignments off
 void fn_3_12910(void) {
@@ -150,46 +134,46 @@ void fn_3_12910(void) {
     u32 f;
     u32 idx;
 
-    t = (struct fn_3_12910_tbl_ent *)lbl_3_data_3234;
-    p = (struct fn_3_12910_glb *)lbl_3_bss_7EDD8;
+    t = (struct fn_3_12910_tbl_ent *)(((u8 *)&lbl_3_data_3234));
+    p = (struct fn_3_12910_glb *)(((u8 *)&lbl_3_bss_7EDD8));
     idx = __cntlzw(p->unk_C);
-    ((void (*)(void))(*(u32 *)((u8 *)lbl_3_data_3234 + idx * 12 + 8)))();
+    ((void (*)(void))(*(u32 *)((u8 *)(((u8 *)&lbl_3_data_3234)) + idx * 12 + 8)))();
 
     f = p->unk_C;
     if (!(f & 0x80000000)) {
         if (f & 0x2000000) {
-            s32 v = ((struct fn_3_12910_glb *)lbl_3_bss_7EDD8)->unk_24 - 1;
+            s32 v = ((struct fn_3_12910_glb *)(((u8 *)&lbl_3_bss_7EDD8)))->unk_24 - 1;
 
-            ((struct fn_3_12910_glb *)lbl_3_bss_7EDD8)->unk_24 = (v < -15) ? -15 : ((v > 30) ? 30 : v);
+            ((struct fn_3_12910_glb *)(((u8 *)&lbl_3_bss_7EDD8)))->unk_24 = (v < -15) ? -15 : ((v > 30) ? 30 : v);
         } else if (f & 0x1000000) {
-            if (((struct fn_3_12910_glb *)lbl_3_bss_7EDD8)->unk_10 & 0x2000000) {
-                s32 v = ((struct fn_3_12910_glb *)lbl_3_bss_7EDD8)->unk_24 + 1;
+            if (((struct fn_3_12910_glb *)(((u8 *)&lbl_3_bss_7EDD8)))->unk_10 & 0x2000000) {
+                s32 v = ((struct fn_3_12910_glb *)(((u8 *)&lbl_3_bss_7EDD8)))->unk_24 + 1;
 
-                ((struct fn_3_12910_glb *)lbl_3_bss_7EDD8)->unk_24 = (v < -15) ? -15 : ((v > 0) ? 0 : v);
+                ((struct fn_3_12910_glb *)(((u8 *)&lbl_3_bss_7EDD8)))->unk_24 = (v < -15) ? -15 : ((v > 0) ? 0 : v);
             } else {
-                s32 v = ((struct fn_3_12910_glb *)lbl_3_bss_7EDD8)->unk_24 - 1;
+                s32 v = ((struct fn_3_12910_glb *)(((u8 *)&lbl_3_bss_7EDD8)))->unk_24 - 1;
 
-                ((struct fn_3_12910_glb *)lbl_3_bss_7EDD8)->unk_24 = (v < 0) ? 0 : ((v > 30) ? 30 : v);
+                ((struct fn_3_12910_glb *)(((u8 *)&lbl_3_bss_7EDD8)))->unk_24 = (v < 0) ? 0 : ((v > 30) ? 30 : v);
             }
         } else if (f & 0x400000) {
-            s32 v = ((struct fn_3_12910_glb *)lbl_3_bss_7EDD8)->unk_24 - 1;
+            s32 v = ((struct fn_3_12910_glb *)(((u8 *)&lbl_3_bss_7EDD8)))->unk_24 - 1;
 
-            ((struct fn_3_12910_glb *)lbl_3_bss_7EDD8)->unk_24 = (v < 0) ? 0 : ((v > 30) ? 30 : v);
+            ((struct fn_3_12910_glb *)(((u8 *)&lbl_3_bss_7EDD8)))->unk_24 = (v < 0) ? 0 : ((v > 30) ? 30 : v);
         } else if (!(f & 0x800000)) {
-            s32 v = ((struct fn_3_12910_glb *)lbl_3_bss_7EDD8)->unk_24 + 1;
+            s32 v = ((struct fn_3_12910_glb *)(((u8 *)&lbl_3_bss_7EDD8)))->unk_24 + 1;
 
-            ((struct fn_3_12910_glb *)lbl_3_bss_7EDD8)->unk_24 = (v < -15) ? -15 : ((v > 30) ? 30 : v);
+            ((struct fn_3_12910_glb *)(((u8 *)&lbl_3_bss_7EDD8)))->unk_24 = (v < -15) ? -15 : ((v > 30) ? 30 : v);
         }
 
         f = p->unk_C;
         if (f & 0x40000000) {
-            s32 v = ((struct fn_3_12910_glb *)lbl_3_bss_7EDD8)->unk_22 - 1;
+            s32 v = ((struct fn_3_12910_glb *)(((u8 *)&lbl_3_bss_7EDD8)))->unk_22 - 1;
 
-            ((struct fn_3_12910_glb *)lbl_3_bss_7EDD8)->unk_22 = (v < 0) ? 0 : ((v > 10) ? 10 : v);
+            ((struct fn_3_12910_glb *)(((u8 *)&lbl_3_bss_7EDD8)))->unk_22 = (v < 0) ? 0 : ((v > 10) ? 10 : v);
         } else if (f & 0x20000000) {
-            s32 v = ((struct fn_3_12910_glb *)lbl_3_bss_7EDD8)->unk_22 + 1;
+            s32 v = ((struct fn_3_12910_glb *)(((u8 *)&lbl_3_bss_7EDD8)))->unk_22 + 1;
 
-            ((struct fn_3_12910_glb *)lbl_3_bss_7EDD8)->unk_22 = (v < 0) ? 0 : ((v > 10) ? 10 : v);
+            ((struct fn_3_12910_glb *)(((u8 *)&lbl_3_bss_7EDD8)))->unk_22 = (v < 0) ? 0 : ((v > 10) ? 10 : v);
         }
     }
 }
@@ -197,9 +181,9 @@ void fn_3_12910(void) {
 /* fzgx:end fn_3_12910 */
 
 /* fzgx:begin fn_3_12E4C */
-typedef struct { u32 x; u32 y; u32 z; } Vec3;
-typedef struct { u32 unused0; u32 unused1; Vec3 first; Vec3 second; } Data;
-typedef struct { u8 pad_000[0x508]; Vec3 first; Vec3 second; } SpecialData;
+typedef struct { u32 x; u32 y; u32 z; } fn_3_12E4C_Vec3;
+typedef struct { u32 unused0; u32 unused1; fn_3_12E4C_Vec3 first; fn_3_12E4C_Vec3 second; } Data;
+typedef struct { u8 pad_000[0x508]; fn_3_12E4C_Vec3 first; fn_3_12E4C_Vec3 second; } SpecialData;
 typedef struct {
     u8 pad_000[0x328];
     s8 state;
@@ -211,7 +195,7 @@ typedef struct {
 
 #pragma opt_strength_reduction off
 #pragma opt_common_subs off
-void fn_3_12E4C(Customize *self, u8 index, Vec3 *first, Vec3 *second) {
+void fn_3_12E4C(Customize *self, u8 index, fn_3_12E4C_Vec3 *first, fn_3_12E4C_Vec3 *second) {
     Data *data;
     SpecialData *special;
     u8 state;

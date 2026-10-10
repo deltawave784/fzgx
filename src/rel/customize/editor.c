@@ -1,18 +1,87 @@
 #include "types.h"
 #include "rel/customize/globals.h"
 #include "rel/customize/editor.h"
+#include "font.h"
+
+
+
+
+typedef struct { u32 c; } Col4;
+
+struct fn_3_156D0_Obj {
+    u32 unk_0;
+    u32 unk_4;
+    u32 unk_8;
+    s16 unk_C;
+    s16 unk_E;
+    s16 unk_10;
+    s16 unk_12;
+    u8 pad_14[8];
+    u8 unk_1C;
+    u8 pad_1D[3];
+    void *unk_20;
+};
+
+typedef struct {
+    u32 type;
+    f32 x;
+    f32 y;
+    f32 z;
+    f32 a;
+    f32 b;
+    u8 pad18[0x18];
+    u32 mode;
+    u8 pad34[8];
+    u32 color;
+    u8 pad40[0x18];
+} Packet16E14;
+extern u8 *fn_3_14074(void);
+extern u8 fn_3_19C94(void);
+extern void fn_3_169B8(void);
+extern u32 fn_3_17820(void);
+extern void fn_3_1445C(void);
+extern s32 fn_3_14600(void);
+extern void fn_3_19F7C();
+extern void fn_3_17830(void);
+extern void fn_3_177AC(void *);
+extern void fn_3_16FD0(u32 arg0);
+extern void fn_3_19CA4(void);
+extern void fn_3_19CCC(void);
+extern void fn_80008BEC(void *dest, int value, u32 size);
+extern void DCInvalidateRange(void *, u32);
+extern void DCStoreRange(void *, u32);
+extern void fn_1_A2D84(u32 arg0);
+extern u8 lbl_1_bss_9F8[];
+extern const Col4 lbl_3_rodata_5B8;
+extern const Col4 lbl_3_rodata_5BC;
+extern s32 fn_1_A5DC4(void);
+extern void fn_1_A9868();
+extern u32 fn_1_A9FFC(s16, s16, s16, s16, void *);
+extern void fn_1_AA538(void);
+extern void fn_1_4E0F4(void);
+extern const Packet16E14 lbl_1_rodata_26F8;
+extern u8 lbl_3_rodata_538[];
+extern Col4 lbl_3_rodata_5EC;
+extern u32 fn_3_14794(u32, s16, s16, void *);
+extern u8 lbl_3_bss_A2408[8];
+extern s32 fn_1_45D0();
+extern void fn_3_17100(void);
+extern u32 lbl_801A6410;
+extern void fn_1_46B4(u32 arg0, u32 arg1, const char *arg2, int arg3);
+extern const f32 lbl_3_rodata_5FC[3];
+
+/* fzgx:begin fn_3_1552C noprologue */
+#include "types.h"
+#include "rel/customize/globals.h"
+#include "rel/customize/editor.h"
 
 
 extern struct Obj *fn_3_14074(void);
 extern u8 lbl_3_bss_A2408[8];
 extern void *fn_1_45D0(void *, u32, char *, u32);
 extern void fn_80008BEC(void *, u32, u32);
-extern void fn_3_17100(void);
 extern u32 lbl_801A6410;
-extern void fn_1_46B4(u32, u32, char *, int);
-extern const f32 lbl_3_rodata_5FC[3];
 
-/* fzgx:begin fn_3_1552C */
 struct Obj {
     u8 pad[0x10];
     u16 width;
@@ -71,7 +140,15 @@ void fn_3_156A8(void) {
 }
 /* fzgx:end fn_3_156A8 */
 
-/* fzgx:begin fn_3_156D0 */
+/* fzgx:begin fn_3_156D0 noprologue */
+#include "types.h"
+#include "rel/customize/globals.h"
+#include "rel/customize/editor.h"
+
+
+extern struct Obj *fn_3_14074(void);
+extern void fn_80008BEC(void *, u32, u32);
+
 struct Obj {
     u32 unk_0;
     u32 unk_4;
@@ -259,20 +336,12 @@ void fn_3_156D0(void) {
 /* fzgx:end fn_3_156D0 */
 
 /* fzgx:begin fn_3_1683C */
-typedef struct { u32 c; } Col4;
 struct Arg0 {
     u8 pad_0[4];
     f32 unk_4;
     f32 unk_8;
 };
 
-extern const Col4 lbl_3_rodata_5B8;
-extern const Col4 lbl_3_rodata_5BC;
-extern s8 fn_1_A5DC4(void);
-extern void fn_1_A9868(void);
-extern u32 fn_1_A9FFC(s16, s16, s16, s16, void *);
-extern void fn_1_AA538(void);
-extern void fn_1_4E0F4(void);
 
 void fn_3_1683C(struct Arg0 *arg0, s16 off, s16 size) {
     s16 x;
@@ -288,7 +357,7 @@ void fn_3_1683C(struct Arg0 *arg0, s16 off, s16 size) {
     size = p->unk_11 << 3;
     colA = lbl_3_rodata_5B8;
     colB = lbl_3_rodata_5BC;
-    if (fn_1_A5DC4()) {
+    if ((s8)fn_1_A5DC4()) {
         off = 4 / p->unk_11;
     }
     fn_1_A9868();
@@ -309,8 +378,6 @@ void fn_3_1683C(struct Arg0 *arg0, s16 off, s16 size) {
 /* fzgx:end fn_3_1683C */
 
 /* fzgx:begin fn_3_16E14 */
-#include "font.h"
-
 #pragma section code_type ".fzgxpool"
 static const u32 fzgx_pool_table1[1] = {0xFFFFFFFF};  /* fzgx-allow: A1 retail pool bytes */
 __declspec(section ".fzgxpool") static void fzgx_pool_keep1(void) { const u32 *volatile cp; cp = fzgx_pool_table1; }  /* fzgx-allow: S2 pool primer sink */
@@ -371,22 +438,6 @@ static const u32 fzgx_pool_table7[1] = {0x00000000};  /* fzgx-allow: A1 retail p
 __declspec(section ".fzgxpool") static void fzgx_pool_keep7(void) { const u32 *volatile cp; cp = fzgx_pool_table7; }  /* fzgx-allow: S2 pool primer sink */
 #pragma section code_type ".text"
 
-typedef struct {
-    u32 type;
-    f32 x;
-    f32 y;
-    f32 z;
-    f32 a;
-    f32 b;
-    u8 pad18[0x18];
-    u32 mode;
-    u8 pad34[8];
-    u32 color;
-    u8 pad40[0x18];
-} Packet16E14;
-extern const Packet16E14 lbl_1_rodata_26F8;
-extern u8 lbl_3_rodata_538[];
-extern int fn_1_4F734(FontDrawPacket *);
 
 void fn_3_16E14(void) {
     u16 v2;
@@ -429,9 +480,6 @@ void fn_3_16E14(void) {
 /* fzgx:end fn_3_16E14 */
 
 /* fzgx:begin fn_3_16FD0 */
-typedef struct { u32 c; } Col4;
-extern Col4 lbl_3_rodata_5EC;
-extern u32 fn_3_14794(u32, s16, s16, void *);
 
 void fn_3_16FD0(u32 arg0) {
     u32 i = 0;
