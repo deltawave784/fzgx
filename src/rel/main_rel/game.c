@@ -730,6 +730,187 @@ void fn_1_3A2C4(void) {
 }
 /* fzgx:end fn_1_3A2C4 */
 
+/* fzgx:begin fn_1_3DB9C pool noprologue */
+#include "types.h"
+
+typedef struct {
+    u8 pad_0[0xe];
+    u8 a[5];
+    u8 b[5];
+    u8 pad_18[0x88];
+} Entry3DB9C;
+
+typedef struct {
+    u32 flags;               /* 0x00 */
+    u8 pad_4[5];
+    u8 count;                /* 0x09 */
+    u8 pad_a[0x9d];
+    u8 sel;                  /* 0xa7 */
+    u8 pad_a8[0x2c];
+    Entry3DB9C entries[31];  /* 0xd4 */
+    u8 pad_1434[0x30];
+    u32 unk_1464;
+    u8 pad_1468[4];
+    u8 unk_146c;
+    u8 unk_146d;
+    u16 unk_146e;
+    u8 unk_1470;
+} Sub3DB9C;
+
+/* game.c .bss objects, in retail address order (addressed off one section base) */
+u32 lbl_1_bss_3C00;
+u8 lbl_1_bss_3C04[0x10];
+u32 lbl_1_bss_3C14;
+u32 lbl_1_bss_3C18;
+u8 lbl_1_bss_3C1C[0x14];
+Sub3DB9C lbl_1_bss_3C30;
+u8 lbl_1_bss_50A4[0x25B88 - 0x50A4];
+u32 lbl_1_bss_25B88;
+u8 lbl_1_bss_25B8C[0x1c];
+u8 lbl_1_bss_25BA8[0x20];
+u8 lbl_1_bss_25BC8[0xdc];
+u32 lbl_1_bss_25CA4;
+u32 lbl_1_bss_25CA8;
+u32 lbl_1_bss_25CAC;
+u32 lbl_1_bss_25CB0;
+u32 lbl_1_bss_25CB4;
+u32 lbl_1_bss_25CB8;
+u32 lbl_1_bss_25CBC;
+u32 lbl_1_bss_25CC0;
+u32 lbl_1_bss_25CC4;
+u32 lbl_1_bss_25CC8;
+u32 lbl_1_bss_25CCC;
+u8 lbl_1_bss_25CD0[0x184];
+u32 lbl_1_bss_25E54;
+u32 lbl_1_bss_25E58;
+u32 lbl_1_bss_25E5C;
+u32 lbl_1_bss_25E60;
+u32 lbl_1_bss_25E64;
+u32 lbl_1_bss_25E68;
+s32 lbl_1_bss_25E6C;
+s32 lbl_1_bss_25E70;
+
+extern void fn_1_156754(s32);
+extern void fn_1_F7578(void);
+extern void fn_1_A8F78(void);
+extern void fn_1_1547FC(void);
+extern void fn_1_C47B4(void);
+extern u32 fn_1_435C(u32);
+extern void fn_1_426C(u32);
+extern void fn_1_C6F80(u8);
+extern void fn_1_79100(void);
+extern void fn_1_412A0(u32);
+extern void fn_1_E35F0(void);
+extern u32 fn_80008E84(u32);
+
+/* primer: fixes the .bss layout to retail address order (section dropped at integration) */
+#pragma section code_type ".fzgxpool"
+void fzgx_primer_fn_1_3DB9C(void) {
+    fn_1_426C((u32)&lbl_1_bss_3C00);
+    fn_1_426C((u32)lbl_1_bss_3C04);
+    fn_1_426C((u32)&lbl_1_bss_3C14);
+    fn_1_426C((u32)&lbl_1_bss_3C18);
+    fn_1_426C((u32)lbl_1_bss_3C1C);
+    fn_1_426C((u32)&lbl_1_bss_3C30);
+    fn_1_426C((u32)lbl_1_bss_50A4);
+    fn_1_426C((u32)&lbl_1_bss_25B88);
+    fn_1_426C((u32)lbl_1_bss_25B8C);
+    fn_1_426C((u32)lbl_1_bss_25BA8);
+    fn_1_426C((u32)lbl_1_bss_25BC8);
+    fn_1_426C((u32)&lbl_1_bss_25CA4);
+    fn_1_426C((u32)&lbl_1_bss_25CA8);
+    fn_1_426C((u32)&lbl_1_bss_25CAC);
+    fn_1_426C((u32)&lbl_1_bss_25CB0);
+    fn_1_426C((u32)&lbl_1_bss_25CB4);
+    fn_1_426C((u32)&lbl_1_bss_25CB8);
+    fn_1_426C((u32)&lbl_1_bss_25CBC);
+    fn_1_426C((u32)&lbl_1_bss_25CC0);
+    fn_1_426C((u32)&lbl_1_bss_25CC4);
+    fn_1_426C((u32)&lbl_1_bss_25CC8);
+    fn_1_426C((u32)&lbl_1_bss_25CCC);
+    fn_1_426C((u32)lbl_1_bss_25CD0);
+    fn_1_426C((u32)&lbl_1_bss_25E54);
+    fn_1_426C((u32)&lbl_1_bss_25E58);
+    fn_1_426C((u32)&lbl_1_bss_25E5C);
+    fn_1_426C((u32)&lbl_1_bss_25E60);
+    fn_1_426C((u32)&lbl_1_bss_25E64);
+    fn_1_426C((u32)&lbl_1_bss_25E68);
+    fn_1_426C((u32)&lbl_1_bss_25E6C);
+    fn_1_426C((u32)&lbl_1_bss_25E70);
+}
+#pragma section code_type ".text"
+
+static inline void fn_1_3DB9C_copy(void) {
+    s32 i;
+    Entry3DB9C *e;
+
+    for (i = 0; i < lbl_1_bss_3C30.count; i++) {
+        e = &lbl_1_bss_3C30.entries[i];
+        e->a[lbl_1_bss_3C30.sel] = lbl_1_bss_25BA8[i];
+        e->b[lbl_1_bss_3C30.sel] = lbl_1_bss_25BC8[i];
+    }
+}
+
+void fn_1_3DB9C(void) {
+    s32 i;
+    u32 saved;
+
+    for (i = 0; i < 4; i++) {
+        fn_1_156754(i);
+    }
+    fn_1_F7578();
+    lbl_1_bss_3C30.flags &= ~0x2000;
+    fn_1_A8F78();
+    if (lbl_1_bss_25E6C != 0) {
+        lbl_1_bss_25E70 = 1;
+    }
+    if (lbl_1_bss_25E70 != 0) {
+        fn_1_3DB9C_copy();
+        lbl_1_bss_3C30.unk_1464 = 0;
+        lbl_1_bss_3C30.unk_146c = 0;
+        lbl_1_bss_3C30.unk_146d = 0;
+        lbl_1_bss_3C30.unk_1470 = 0;
+        lbl_1_bss_3C30.unk_146e = 1500;
+        fn_1_1547FC();
+        fn_1_C47B4();
+        fn_1_435C(lbl_1_bss_25B88);
+        if (lbl_1_bss_3C14 != 0) {
+            fn_1_426C(lbl_1_bss_3C14);
+            lbl_1_bss_3C14 = 0;
+        }
+        fn_1_435C(lbl_1_bss_25CA4);
+        if (lbl_1_bss_3C18 != 0) {
+            fn_1_426C(lbl_1_bss_3C18);
+            lbl_1_bss_3C18 = 0;
+        }
+        fn_1_C6F80(0);
+        saved = fn_80008E84(lbl_1_bss_25CCC);
+        fn_1_79100();
+        fn_80008E84(saved);
+        fn_1_412A0(2);
+        fn_1_E35F0();
+        fn_1_435C(lbl_1_bss_25B88);
+        fn_1_426C(lbl_1_bss_25CB4);
+        fn_1_426C(lbl_1_bss_25CB8);
+        fn_1_426C(lbl_1_bss_25E64);
+        fn_1_435C(lbl_1_bss_25CA4);
+        fn_1_426C(lbl_1_bss_25CA8);
+        fn_1_426C(lbl_1_bss_25CAC);
+        fn_1_426C(lbl_1_bss_25CB0);
+        fn_1_426C(lbl_1_bss_25CBC);
+        fn_1_426C(lbl_1_bss_25CC0);
+        fn_1_426C(lbl_1_bss_25CC4);
+        fn_1_426C(lbl_1_bss_25E58);
+        fn_1_426C(lbl_1_bss_25E5C);
+        fn_1_426C(lbl_1_bss_25E60);
+        fn_1_426C(lbl_1_bss_25E54);
+    }
+    if (lbl_1_bss_25E6C != 0) {
+        lbl_1_bss_3C30.sel++;
+    }
+}
+/* fzgx:end fn_1_3DB9C */
+
 /* fzgx:begin fn_1_3DDAC */
 // Initializes global game state and configures startup resources.
 void fn_1_3DDAC(void) {
