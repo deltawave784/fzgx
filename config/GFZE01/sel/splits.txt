@@ -665,3 +665,6 @@ rel/sel/sel/fn_10_25888.c:
 
 rel/sel/sel/fn_10_1973C.c:
 	.text       start:0x0001973C end:0x00019924 align:4
+
+rel/sel/sel/fn_10_12C14.c:
+	.text       start:0x00012C14 end:0x00012E34 align:4
