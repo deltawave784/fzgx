@@ -354,3 +354,11 @@ without row alignment (`retail - ours` net rows):
   tested with `cmpwi` in callers is `s32`/`int`, not `u32` (fn_1_467F4, fn_1_8D690).
 - `int` and `long` (`s32`) are distinct types to MWCC's redeclaration check even though the
   code is the same: a whole-TU compile fails on `extern int f(void);` after `extern s32 f(void);`.
+- A block that reads a TU's first data symbol at offsets far past its dtk size (fn_3_5F28:
+  `lbl_3_data_0` +0x1164/+0x11D0/+0x11D4 = `lbl_3_data_1134`+0x30/+0x9C and `lbl_3_data_11D4`;
+  fn_3_368C up to +0x18C0, across strings) is MWCC's TU section base, not an under-sized object.
+  Do not grow the header type (`Obj_3_data_0` stays 0xA8); a whole-TU compile needs the TU's own
+  `.data`/`.bss` objects defined in retail order (fn_3_48E0 does this for `lbl_3_bss_0..243C0`).
+- A lifter body that assigns a call's result and overwrites it at once (`t5 = fn_3_4218(); v3 = t5;
+  v3 = ...;`) is no evidence of a return value: retail's `void` definition is the truth
+  (fn_3_368C, fn_3_4BEC, toolkit fn_3_1A1D8 calling fn_3_141A8).
