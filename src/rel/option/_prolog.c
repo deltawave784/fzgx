@@ -1869,3 +1869,182 @@ p->unk_1--;
 }
 #pragma opt_common_subs reset
 /* fzgx:end fn_4_ADF4 */
+
+/* fzgx:begin fn_4_D420 noprologue */
+typedef signed long s32;
+
+typedef unsigned char u8;
+typedef unsigned short u16;
+typedef unsigned long u32;
+
+typedef signed long s32;
+
+typedef unsigned char u8;
+typedef unsigned short u16;
+typedef unsigned long u32;
+
+/* lbl_4_bss_5680: .bss size 0x4, referenced by 8 functions, shape {'object': 112, 'pointer': 28} */
+typedef struct {
+u32 unk_0; /* 11 loads, 6 stores */
+u32 unk_4; /* 1 loads, 1 stores */
+u32 unk_8; /* 4 loads, 1 stores */
+u8 unk_C; /* 8 loads, 1 stores */
+u8 unk_D; /* 5 loads, 4 stores */
+u8 unk_E; /* 10 loads, 3 stores */
+u8 unk_F; /* 3 loads, 12 stores */
+u8 unk_10; /* 1 loads, 0 stores */
+u8 unk_11; /* 2 loads, 1 stores */
+u16 unk_12; /* 3 loads, 3 stores */
+u8 unk_14; /* 2 loads, 2 stores */
+u8 unk_15; /* 2 loads, 2 stores */
+u8 unk_16; /* 2 loads, 2 stores */
+u8 unk_17; /* 2 loads, 2 stores */
+u32 unk_18; /* 1 loads, 1 stores */
+u32 unk_1C; /* 1 loads, 1 stores */
+u32 unk_20; /* 3 loads, 2 stores */
+u8 pad_24[0x4];
+u8 unk_28; /* 1 loads, 0 stores */
+u8 pad_29[0xD];
+u8 unk_36; /* 2 loads, 1 stores */
+u8 unk_37; /* 0 loads, 1 stores */
+u8 pad_38[0x2];
+u8 unk_3A; /* 2 loads, 2 stores */
+u8 unk_3B; /* 5 loads, 2 stores */
+u32 unk_3C; /* 4 loads, 2 stores */
+} Obj_4_bss_5680_Target;
+extern Obj_4_bss_5680_Target *lbl_4_bss_5680;
+
+/* lbl_4_data_2F78: .data size 0xA0, referenced by 5 functions, shape {} */
+extern u8 lbl_4_data_2F78[0xA0];
+
+typedef struct { u32 value; } EntryColor;
+extern EntryColor lbl_4_rodata_C2C;
+extern EntryColor lbl_4_rodata_C30;
+extern s32 lbl_801A66B4;
+extern struct fn_4_D420_lbl_801A6410 lbl_801A6410;
+extern u32 fn_1_435C(u32);
+extern s32 fn_1_45D0(u32, u32, u8 *, u32);
+extern s32 fn_1_3F8C(u8 *, u32, u32, u32);
+extern void fn_1_A2D84(u32);
+extern s32 fn_1_14CEB8(u32);
+extern void fn_80083DB0(void *, void *);
+extern void fn_4_ADF4(void);
+struct fn_4_D420_lbl_801A6410 {
+u32 unk_0;
+};
+/* scratch record built for each populated entry */
+typedef struct {
+u8 unk_0;
+u8 unk_1;
+u8 unk_2;
+u8 unk_3;
+u16 unk_4;
+u16 unk_6;
+u16 unk_8;
+u16 unk_A;
+u8 unk_C;
+u8 pad_D[0x3];
+u32 unk_10;
+} Entry_4_D420;
+static inline u8 fn_4_D420_array_read(u8 *array, s32 index) { return array[index]; }
+static inline u8 entry_at(s32 index, u8 *array) { return array[index]; }
+static inline u32 widen_entry(u8 value) { return value; }
+#pragma opt_loop_invariants off
+#pragma opt_dead_assignments off
+#pragma opt_propagation off
+s32 fn_4_D420(void) {
+u16 fzgx_value;
+u8 *data;
+EntryColor c;
+EntryColor c2;
+u8 *src2;
+s32 res;
+u32 offset;
+u32 n2;
+u8 *src;
+s32 i;
+u8 n;
+s32 k;
+Entry_4_D420 *t;
+Obj_4_bss_5680_Target *obj;
+res = 0;
+data = lbl_4_data_2F78;
+if ((lbl_4_bss_5680->unk_0 >> 30) & 1) {
+c = lbl_4_rodata_C30;
+fn_1_435C(lbl_4_bss_5680->unk_8);
+n = 0;
+i = 0;
+/* Volatile reload preserves the global pointer lookup on each loop test. */
+while ((obj = *(Obj_4_bss_5680_Target * volatile *)&lbl_4_bss_5680, src = (u8 *)obj + 0x28 + i), fn_4_D420_array_read(src, 0) != 0) {
+t = (Entry_4_D420 *)fn_1_45D0(lbl_801A6410.unk_0, 0x12, data + 0xA0, 0xD4);
+t->unk_8 = n * 0x38 + 0x7E;
+t->unk_A = 0x17A;
+t->unk_0 = 2;
+t->unk_1 = 0;
+t->unk_4 = t->unk_8;
+t->unk_6 = t->unk_A;
+t->unk_2 = fn_4_D420_array_read(src, 0);
+t->unk_3 = fn_4_D420_array_read(src, 1);
+*(EntryColor *)((u8 *)t + 0xD) = c;
+t->unk_C = n;
+fn_1_3F8C(data + 0xC8, (u32)&fn_4_ADF4, (u32)t, 0xB);
+i += 2;
+n += 1;
+}
+lbl_4_bss_5680->unk_0 = obj->unk_0 & ~0x40000000;
+}
+if (lbl_4_bss_5680->unk_0 >> 31) {
+return 1;
+}
+if (((lbl_4_bss_5680->unk_0 >> 29) & 1) || ((lbl_4_bss_5680->unk_0 >> 28) & 1)) {
+fn_1_A2D84(0xA9010100);
+lbl_4_bss_5680->unk_0 &= ~0x20000000;
+lbl_4_bss_5680->unk_0 &= ~0x10000000;
+lbl_4_bss_5680->unk_0 |= 0x80000000;
+if (fn_1_14CEB8((u32)lbl_4_bss_5680 + 0x28) != 0) {
+k = 0;
+i = 0;
+lbl_4_bss_5680->unk_0 |= 0x40000000;
+while ((obj = lbl_4_bss_5680, offset = 0x28 + i, ((u8 *)obj)[offset]) != 0) {
+obj->unk_20 |= 0x80000000 >> k;
+i += 2;
+k += 1;
+}
+}
+if (((u8 *)lbl_4_bss_5680)[0x28] == 0) {
+if (lbl_801A66B4 == 5) {
+fn_80083DB0((u8 *)lbl_4_bss_5680 + 0x28, data + 0x114);
+} else {
+fn_80083DB0((u8 *)lbl_4_bss_5680 + 0x28, data + 0x120);
+}
+c2 = lbl_4_rodata_C2C;
+fn_1_435C(lbl_4_bss_5680->unk_8);
+n = 0;
+offset = 0;
+while ((src2 = (u8 *)lbl_4_bss_5680 + 0x28 + offset), src2[0] != 0) {
+i = n;
+t = (Entry_4_D420 *)fn_1_45D0(lbl_801A6410.unk_0, 0x12, data + 0xA0, 0xD4);
+t->unk_8 = i * 0x38 + 0x7E;
+t->unk_A = 0x17A;
+t->unk_0 = 2;
+t->unk_1 = 0;
+fzgx_value = t->unk_8;
+t->unk_4 = fzgx_value;
+t->unk_6 = t->unk_A;
+t->unk_2 = fn_4_D420_array_read(src2, 0);
+t->unk_3 = fn_4_D420_array_read(src2, 1);
+*(EntryColor *)((u8 *)t + 0xD) = c2;
+t->unk_C = i;
+fn_1_3F8C(data + 0xC8, (u32)&fn_4_ADF4, (u32)t, 0xB);
+offset += 2;
+n += 1;
+}
+lbl_4_bss_5680->unk_E = n;
+}
+res = 1;
+}
+return res;
+}
+#pragma opt_dead_assignments reset
+#pragma opt_loop_invariants reset
+/* fzgx:end fn_4_D420 */
