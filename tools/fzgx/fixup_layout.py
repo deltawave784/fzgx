@@ -459,11 +459,58 @@ def constant_rows(text):
     return out if out != text else None
 
 
-def tu_objects(p, symbol, text, mode, cache, retail_bases=(), only=None):
+def derived_models(text, syms):
+    """A view derived from a model at a constant byte offset, `T *hi = (T *)((u8 *)work + 0x20000);`
+    with `work = (W *)&lbl_3_bss_0`, re-spelled off the retail object that holds its address:
+    `(T *)((u8 *)&lbl_3_bss_140 + 0x1FEC0)`, a model of its own (fn_3_381C). Left alone, the base
+    model's byte-offset rewrite turned the view into one byte object split out of the array and
+    its fields never reached the retail objects (`addis r31, r30, 0x2` became a named `lis/addi`)."""
+    for _ in range(4):
+        changed = False
+        for pvar, tname, base, stmt, kind in find_models(text):
+            if not pvar or '.' in pvar or not (kind == 'ptr' or kind.startswith('ptr+')):
+                continue
+            b = syms.get(base)
+            if b is None or b.section != '.bss':
+                continue
+            off0 = int(kind[4:]) if kind.startswith('ptr+') else 0
+            pat = re.compile(r"(?:(?:struct\s+)?(\w+)\s*\*\s*)?(?<![\w.>])(\w+)\s*=\s*\((?:struct\s+)?(\w+)\s*\*\)\s*"
+                             r"\(\s*\(\s*(?:u8|s8|char)\s*\*\s*\)\s*%s\s*\+\s*(0x[0-9A-Fa-f]+|\d+)\s*\)\s*;" % re.escape(pvar))
+            for m in pat.finditer(text):
+                declared, qvar, qtype, k = m.groups()
+                if qtype in SCALAR or (declared and declared != qtype) or qvar == pvar:
+                    continue
+                if len(re.findall(r"(?<![\w.>])%s\s*=(?!=)" % re.escape(qvar), text)) != 1:
+                    continue
+                addr = b.addr + off0 + int(k, 0)
+                owner = next((s for s in syms.values() if s.section == b.section and s.kind == 'object'
+                              and s.addr <= addr < s.end), None)
+                if owner is None or owner.name == base:
+                    continue
+                repl = (f"{declared + ' *' if declared else ''}{qvar} = ({qtype} *)((u8 *)&{owner.name}"
+                        f" + 0x{addr - owner.addr:X});")
+                text = text[:m.start()] + repl + text[m.end():]
+                changed = True
+                break
+            if changed:
+                break
+        if not changed:
+            break
+    return text
+
+
+def tu_objects(p, symbol, text, mode, cache, retail_bases=(), only=None, derive=False):
     sym = p.resolve(symbol)
     syms = p.symbols(sym.module)
     notes = []
+    if derive:
+        derived = derived_models(text, syms)
+        if derived == text:
+            return None, ['no derived model']
+        text = derived
     models = find_models(text)
+    # derived views lay out their own clusters: each model stops where the next one starts
+    starts = sorted({syms[m[2]].addr for m in models if syms.get(m[2]) and syms[m[2]].section == '.bss'}) if derive else []
     if only is not None:
         # one model alone: joining a cast and an uncast model in one layout regressed
         # fn_1_EF5E0 (88.5% -> 75.9%) where one of them alone may be retail's shape
@@ -678,6 +725,9 @@ def tu_objects(p, symbol, text, mode, cache, retail_bases=(), only=None):
         beyond = [s for s in cluster if s.addr >= last]
         if len(before) < 6 and beyond:
             last = beyond[min(len(beyond), 6 - len(before)) - 1].end
+        later = [a for a in starts if a > b.addr]
+        if later:
+            last = min(last, later[0])
         defs, pos, access = [], b.addr, {}
         addressed = {(r[1].name, r[2]) for r in rewrites if r[5] or r[3] in views}
         for s in cluster:
@@ -834,6 +884,10 @@ def tu_objects(p, symbol, text, mode, cache, retail_bases=(), only=None):
     if not all_defs:
         return None, notes
     all_defs.sort(key=lambda x: x[0])
+    # two models (a base view and a view derived from it) each lay out their own cluster; an
+    # address both define would be two definitions of one retail byte
+    if derive and any(a == b for (a, _, _), (b, _, _) in zip(all_defs, all_defs[1:])):
+        notes.append('models define overlapping objects'); return None, notes
     for _, d, _ in all_defs:
         dn = re.search(r"(\w+)(?:\[[^\]]*\])*;$", d.replace('(*', '').replace(')(', ''))
         if dn:
@@ -1745,6 +1799,15 @@ def tu_section_layout(p, symbol, body, check):
                 out.append((f'define retail TU bss objects ({label})', text))
                 if only is None and mode != 'merge':
                     bases.append((mode, text))
+    # views derived from a model at a constant offset, as models of the retail object holding
+    # them (fn_3_381C: 80.7% -> pool match); an addition, the plain layouts above stay
+    for mode in ('dtk', 'split', 'merge'):
+        try:
+            text, notes = tu_objects(p, symbol, body, mode, cache, retail_bases, derive=True)
+        except (ValueError, KeyError, IndexError, AttributeError, OSError):
+            text = None
+        if text and text not in {t for _, t in out}:
+            out.append((f'define retail TU bss objects ({mode}, derived views)', text))
     try:
         rows_body = constant_rows(body)
     except (ValueError, KeyError, IndexError, AttributeError):
