@@ -29,18 +29,17 @@ merges stay mechanical. Record the split here and keep to it:
 | Clone | Modules |
 |---|---|
 | A (Claude loop, branch `windows-and-types`) | every module (since 2026-10-10) |
-| B (Codex, branch `codex`) | paused; resumes only on the slice below, once clone A's skill carries the matching `--max-size 768` |
+| B (Codex, branch `codex`) | the function slice below in every module (confirmed by clone A 2026-10-10; its Opus route carries `--max-size 768` since c51fb885) |
 
 **2026-10-10:** at the user's request clone A's Fable batches route every module (`route --fable --min-percent 85`,
-no `--module`) and its Opus agents take `route --easy` rows from every module. The split below is historical: until
-the user re-scopes clone B, B must not run batches, or both clones will claim the same functions and append
-conflicting entries to every module's `splits.txt`, `units.json` and `symbols.txt`.
+no `--module`) and its Opus agents take `route --easy --max-size 768` rows from every module. Clone B works only
+the function slice below; anything outside it belongs to clone A.
 
 Before 2026-10-10: A owned `main_rel`; B owned `main`, `movie_module`, `customize`, `sel` and every smaller module.
 
 (1,070 of the 2,121 unmatched functions are in `main_rel`; the rest is spread across the other modules.)
 
-**Proposed split by function, not module (2026-10-10, from the Codex side; clone A to confirm).** Clone A routes every
+**Split by function, not module (2026-10-10, proposed from the Codex side, confirmed by clone A).** Clone A routes every
 module, so a module split cannot keep the clones apart; a split by function can. Clone B (Sol, or Astra one agent at a
 time) takes only functions that are **over 768 B, have a best recorded score under 85%, and were never attempted by a
 Claude tier** (an `opus-`, `sonnet-`, `fable-` or `haiku-` agent id in the committed `state/ledger.json`), in every
