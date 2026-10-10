@@ -548,3 +548,6 @@ rel/customize/_prolog/fn_3_4380.c:
 
 rel/customize/customize/fn_3_BA74.c:
 	.text       start:0x0000BA74 end:0x0000BC60 align:4
+
+rel/customize/_prolog/fn_3_381C.c:
+	.text       start:0x0000381C end:0x000039F0 align:4
