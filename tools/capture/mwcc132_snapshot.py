@@ -1,11 +1,11 @@
 """GDB-side capture for GC/1.3.2 mwcceppc.exe: a coloring-only port of the recovery project's
 allocator_snapshot reader. Layouts and addresses were derived from the 1.3.2 binary (capstone)
-and from live memory in the fzgx-capture VM (CLAUDE.md, 2026-09-13). Writes the same file
+and from live memory in the capture guest (CLAUDE.md, 2026-09-13). Writes the same file
 names/schemas as the 1.2.5 capture so simplify_replay.py, autotarget.py and the solver work.
 
-Usage (inside gdb-multiarch attached to the qemu-i386 stub):
-  python import sys; sys.path.append('/Users/rayan/mwcc/tools'); sys.path.append('/Users/rayan/fzgx/tools/capture')
-  source /Users/rayan/fzgx/tools/capture/mwcc132_snapshot.py
+Usage (inside gdb-multiarch attached to the qemu-i386 stub; capture132.sh writes this script):
+  python import sys; sys.path.append('MWCC/tools'); sys.path.append('REPO/tools/capture')
+  source REPO/tools/capture/mwcc132_snapshot.py
   mwcc132-capture OUTPUT_DIR
   continue
 """

@@ -436,7 +436,15 @@ Rules that hold for everyone:
   PCode stage, the coloring graph before/after selection, creation events and the stack-frame
   home list to `.fzgx/capture/SYMBOL/`. `vreg_map.py DIR 0001` prints vreg -> name/cluster/color;
   `replay/simplify_replay.py DIR 0001` reproduces the compiler's colors exactly (38/38 on
-  fn_8003043C) and answers hypothesis questions. Only the 1.2.5/1.2.5n address set is known to
+  fn_8003043C) and answers hypothesis questions.
+  Windows (2026-10-10): `wsl -d Debian -u root -- sh tools/capture/setup-wsl.sh` provisions the
+  guest (qemu-user, gdb-multiarch, wibo 1.2.0 i686); `tools/capture/env.sh` picks WSL or Lima and
+  translates paths, so the same scripts run from Git Bash. The recovery project's tools
+  (`allocator_snapshot.py`, `vreg_map.py`, `replay/`, `source_rank_solver.py`) are not in the
+  public rayanht/mwcc repository; put a checkout that has them at `../mwcc` or set
+  `FZGX_MWCC_ROOT`. Verified on this setup: WSL compiles are byte-identical to the Windows build
+  (.text/.rela.text), and gdb stops at the 1.3.2 coordinator 0x5077b0 and SelectColors 0x507a30
+  with class byte 0x5e931f = 4 (GPR). Only the 1.2.5/1.2.5n address set is known to
   the scripts; 1.3.2 needs its own addresses. First validated loop: fn_8003043C's residual was the
   reassigned `result` becoming a copy-region web (vr42) numbered above `base` (vr40), so it claimed
   r27 before base claimed r26; a second local declared right after `base` put it in the named

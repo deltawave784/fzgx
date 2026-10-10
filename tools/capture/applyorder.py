@@ -1,13 +1,13 @@
 """applyorder.py SYM BODY MW FLAGS 'v46, v34, ...': reorder the leading local declarations so the named webs follow the solver's rank (first declared = highest rank) and check."""
 import sys, re, subprocess
-sys.path.insert(0,'/Users/rayan/fzgx/tools')
+import paths
 from pathlib import Path
 from fzgx.project import Project
 from fzgx import oracle, fixup_source as fs
-S=__import__('os').environ.get('FZGX_CAPTURE_DIR','/Users/rayan/fzgx/.fzgx/capture')
+S=paths.CAPTURE
 sym,body,mw,fl,order=sys.argv[1:6]; fl=fl or None
 cap=f'{S}/{sym}'
-vm=subprocess.run(['python3','/Users/rayan/mwcc/tools/vreg_map.py',cap,'0001'],capture_output=True,text=True,cwd='/Users/rayan/mwcc').stdout
+vm=subprocess.run(paths.mwcc_tool(str(paths.MWCC/'tools'/'vreg_map.py'),cap,'0001'),capture_output=True,text=True,cwd=paths.MWCC).stdout
 names={}
 for ln in vm.split('\n'):
     f=ln.split()

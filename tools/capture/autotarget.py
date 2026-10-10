@@ -1,10 +1,10 @@
 """autotarget.py SYM BODY MW [FLAGS]: map residual register rows to captured webs and print solver targets."""
 import sys, json, re, subprocess
-sys.path.insert(0,'/Users/rayan/fzgx/tools')
+import paths
 from pathlib import Path
 from fzgx.project import Project
 from fzgx import oracle, stuck
-S=__import__('os').environ.get('FZGX_CAPTURE_DIR','/Users/rayan/fzgx/.fzgx/capture')
+S=paths.CAPTURE
 sym,body,mw=sys.argv[1:4]; fl=sys.argv[4] if len(sys.argv)>4 else None
 cap=f'{S}/{sym}'
 p=Project(); res=oracle.check(p,sym,0,source=Path(body),mw_version=mw,extra_cflags=fl)
@@ -44,7 +44,7 @@ bad={v for v,_,_ in conflicts}
 if targets:
   try:
     t=','.join(f'v{v}:r{c}' for v,c in sorted(targets.items()) if v not in bad)
-    out=subprocess.run(['python3','-c',"import sys; sys.path.insert(0,'/Users/rayan/mwcc/tools'); import allocator_snapshot as a; a.SUPPORTED_TARGETS['132']='GC/1.3.2'; import source_rank_solver as s; sys.argv=['solver']+sys.argv[1:]; s.main()",cap,str(int(idx)),'--target',t,'--samples','1500','--max-permutations','20000'],capture_output=True,text=True,cwd='/Users/rayan/mwcc',timeout=240)
+    out=subprocess.run(paths.mwcc_tool('-c',"import sys; sys.path.insert(0,'tools'); import allocator_snapshot as a; a.SUPPORTED_TARGETS['132']='GC/1.3.2'; import source_rank_solver as s; sys.argv=['solver']+sys.argv[1:]; s.main()",cap,str(int(idx)),'--target',t,'--samples','1500','--max-permutations','20000'),capture_output=True,text=True,cwd=paths.MWCC,timeout=240)
     print(out.stdout[-2500:]); print(out.stderr[-600:])
   except subprocess.TimeoutExpired:
     print('status=timeout')
