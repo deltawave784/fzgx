@@ -7064,3 +7064,6 @@ rel/main_rel/effect/fn_1_5D500.c:
 
 rel/main_rel/font/fn_1_51E60.c:
 	.text       start:0x00051E60 end:0x00052070 align:4
+
+rel/main_rel/bg_cas/fn_1_FFC60.c:
+	.text       start:0x000FFC60 end:0x000FFE7C align:4
