@@ -531,3 +531,151 @@ void fn_3_17830(void) {
     (*(CustomizeState *)&lbl_3_bss_A2410).flags |= 0x20000000u;
 }
 /* fzgx:end fn_3_17830 */
+
+/* fzgx:begin fn_3_18614 noprologue */
+#include "types.h"
+
+typedef struct {
+    u32 flags;
+    u8 pad_4[0x18];
+    u8 unk_1C;
+} EditorObj;
+
+typedef struct {
+    u8 unk_0;
+    u8 pad_1[0x3];
+    u32 unk_4;
+    u32 unk_8;
+    u8 unk_C;
+    u8 unk_D;
+    u8 unk_E;
+    u8 unk_F;
+    u8 unk_10;
+} EditorState;
+
+typedef struct {
+    u8 pad_0[0x8];
+    u16 unk_8;
+    u8 pad_A[0x6];
+    u16 unk_10;
+    u16 unk_12;
+} PadInput;
+
+typedef struct {
+    u16 unk_0;
+    u8 pad_2[0xE];
+} MenuEntry;
+
+typedef void (*EditorHandler)(EditorObj *);
+
+extern EditorState lbl_3_bss_A2438;
+extern EditorHandler lbl_3_data_3738[];
+extern MenuEntry lbl_3_data_3618[];
+extern PadInput lbl_1_bss_9F8[];
+extern u8 *fn_3_14074(void);
+extern u8 fn_3_19C94(void);
+extern void fn_3_19CB8(void);
+extern void fn_3_15620(void);
+extern void fn_3_1560C(void);
+extern void fn_3_19CCC(void);
+extern void fn_1_A2D84(u32);
+
+/* pressed / repeat button words of the current pad slot (0x14-byte rows) */
+#define PAD_PRESS() ((&lbl_1_bss_9F8[0].unk_10)[lbl_3_bss_A2438.unk_0 * 10])
+#define PAD_REPEAT() (lbl_1_bss_9F8[lbl_3_bss_A2438.unk_0].unk_12)
+#define BIT(word, n) (((word) >> (n)) & 1)
+
+/* entry is within [lo, hi] (unsigned byte range test) */
+#define ENTRY_IN(e, lo, hi) ((u8)((e) - (lo)) <= (hi) - (lo))
+
+#pragma opt_propagation off
+
+void fn_3_18614(void) {
+    EditorObj *obj;
+    EditorState *st;
+    s32 mode;
+    u8 entry;
+    u16 buttons;
+    u16 *trig;
+
+    obj = (EditorObj *)fn_3_14074();
+    mode = fn_3_19C94();
+    obj->unk_1C = mode;
+    if (lbl_3_bss_A2438.unk_4 & 0x20000000) {
+        return;
+    }
+    switch (mode) {
+    case 11:
+    case 12:
+    case 13:
+    case 14:
+    case 15:
+    case 16:
+    case 17:
+        lbl_3_data_3738[mode](obj);
+        return;
+    default:
+        break;
+    }
+
+    trig = &lbl_1_bss_9F8[0].unk_8;
+    buttons = trig[lbl_3_bss_A2438.unk_0 * 10];
+    if (BIT(buttons, 8)) {
+        fn_1_A2D84(0xA9150400);
+        entry = lbl_3_data_3618[lbl_3_bss_A2438.unk_F].unk_0;
+        lbl_3_bss_A2438.unk_E = entry;
+        if (entry == 6) {
+            lbl_3_data_3738[lbl_3_bss_A2438.unk_F](obj);
+            return;
+        }
+        if (ENTRY_IN(entry, 11, 12) || ENTRY_IN(entry, 14, 17) || entry == 13) {
+            return;
+        }
+        if (entry == 0 || entry == 1) {
+            fn_3_19CB8();
+            fn_3_15620();
+        } else {
+            fn_3_19CB8();
+            fn_3_1560C();
+        }
+    } else if (BIT(buttons, 9)) {
+        fn_1_A2D84(0xA9150500);
+        fn_3_19CCC();
+        lbl_3_bss_A2438.unk_8 |= 0x40000000;
+        obj->flags |= 0x10000000;
+        lbl_3_bss_A2438.unk_10 = 0;
+        lbl_3_bss_A2438.unk_E = 0x11;
+        return;
+    }
+
+    if ((PAD_PRESS() & 1) || (PAD_REPEAT() & 1)) {
+        if (lbl_3_bss_A2438.unk_F % 3 != 0) {
+            lbl_3_bss_A2438.unk_F--;
+            fn_1_A2D84(0xA9150600);
+        }
+    }
+    if (BIT(PAD_PRESS(), 1) || BIT(PAD_REPEAT(), 1)) {
+        st = &lbl_3_bss_A2438;
+        if (st->unk_F % 3 < 2) {
+            fn_1_A2D84(0xA9150600);
+            st->unk_F++;
+        }
+    }
+    if (BIT(PAD_PRESS(), 3) || BIT(PAD_REPEAT(), 3)) {
+        st = &lbl_3_bss_A2438;
+        if (st->unk_F - 3 >= 0) {
+            fn_1_A2D84(0xA9150600);
+            st->unk_F -= 3;
+        }
+    }
+    if (BIT(PAD_PRESS(), 2) || BIT(PAD_REPEAT(), 2)) {
+        st = &lbl_3_bss_A2438;
+        if (st->unk_F + 3 < 18) {
+            fn_1_A2D84(0xA9150600);
+            st->unk_F += 3;
+        }
+    }
+}
+
+#pragma opt_propagation reset
+/* fzgx:end fn_3_18614 */
