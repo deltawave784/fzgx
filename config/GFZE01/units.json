@@ -66941,6 +66941,20 @@
   },
   {
     "module": "sel",
+    "source": "rel/sel/sel/fn_10_12D8.c",
+    "symbols": [
+      "fn_10_12D8"
+    ],
+    "status": "matching",
+    "mw_version": "GC/1.3.2",
+    "extra_cflags": [],
+    "tu": "rel/sel/sel.c",
+    "pool": {
+      "@37": "jumptable_10_data_628"
+    }
+  },
+  {
+    "module": "sel",
     "source": "rel/sel/sel/fn_10_139E4.c",
     "symbols": [
       "fn_10_139E4"

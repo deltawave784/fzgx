@@ -104,6 +104,129 @@ void _epilog(void) {
 }
 /* fzgx:end _epilog */
 
+/* fzgx:begin fn_10_12D8 */
+#include "sofdec/adxt.h"
+
+typedef struct {
+    ADXTHandle *unk_0;
+    ADXTHandle *unk_4;
+    u8 pad_8[0x8];
+    u8 unk_10[0x4A248];
+    u8 unk_4A258[1];
+} SelSound;
+
+typedef struct {
+    s16 unk_0;
+    u8 pad_2[0x92];
+} SelEntry;
+
+typedef struct {
+    s16 unk_0;
+    s16 unk_2;
+    u8 pad_4[0x90];
+    u32 unk_94;
+    u8 pad_98[0xC];
+    SelEntry *unk_A4;
+    u8 pad_A8[0x81];
+    u8 unk_129;
+} SelState;
+
+extern u8 lbl_10_bss_0[];
+extern u8 lbl_10_data_61C[];
+extern SelSound *lbl_1_bss_6EAD0;
+extern SelState lbl_1_bss_8B3A0;
+extern s16 lbl_1_bss_962;
+extern s16 lbl_1_bss_964;
+
+extern void fn_10_E294(void);
+extern void fn_1_435C(void *);
+extern s32 fn_1_3F8C(void *, void (*)(void), s32, s32);
+extern void fn_1_4A00(s32, u8, void *);
+extern ADXTHandle *fn_8004CD70(s32, void *, s32);
+extern u32 fn_1_A176C(ADXTHandle *, u32);
+extern void fn_1_12F1E8(s32);
+
+void fn_10_12D8(void) {
+    u8 *base;
+    u8 *mgr;
+    SelState *state;
+    SelEntry *entries;
+    s16 r;
+    s16 v;
+    s32 idx;
+
+    base = lbl_10_bss_0;
+    mgr = base + 0x50000;
+    fn_1_435C(*(void **)(mgr - 0x6c78));
+    *(s32 *)(mgr + 0x1740) = fn_1_3F8C(lbl_10_data_61C, fn_10_E294, 0, 8);
+    fn_1_4A00(1, *(s16 *)(mgr - 0x6c74), *(void **)(mgr - 0x6c78));
+    *(s32 *)(mgr + 0x1744) = 0;
+    if (lbl_1_bss_6EAD0 != NULL) {
+        if (lbl_1_bss_6EAD0->unk_0 == NULL) {
+            lbl_1_bss_6EAD0->unk_0 = fn_8004CD70(2, lbl_1_bss_6EAD0->unk_10, 0x25124);
+        }
+        if (lbl_1_bss_6EAD0->unk_4 == NULL) {
+            lbl_1_bss_6EAD0->unk_4 = fn_8004CD70(2, lbl_1_bss_6EAD0->unk_4A258, 0x25124);
+        }
+        fn_1_A176C(lbl_1_bss_6EAD0->unk_0, 45);
+    }
+
+    state = &lbl_1_bss_8B3A0;
+    {
+        u32 flags = state->unk_94;
+        state->unk_94 = flags & ~0x00400000;
+        if (flags & 0x40000000) {
+            entries = state->unk_A4;
+            idx = lbl_1_bss_962 - 14;
+            v = entries[idx].unk_0;
+            if (v < 9) {
+                r = 9;
+            } else {
+                r = 10;
+                if (v <= 10) {
+                    r = v;
+                }
+            }
+            entries[idx].unk_0 = r;
+        } else {
+            entries = state->unk_A4;
+            idx = lbl_1_bss_962 - 14;
+            v = entries[idx].unk_0;
+            if (v < 0 || v > 8) {
+                entries[idx].unk_0 = 1;
+                switch (lbl_1_bss_964) {
+                case 12:
+                    entries[idx].unk_0 = 7;
+                    break;
+                case 15:
+                    entries[idx].unk_0 = 8;
+                    break;
+                case 3:
+                    entries[idx].unk_0 = 6;
+                    break;
+                case 5:
+                    entries[idx].unk_0 = 5;
+                    break;
+                case 9:
+                    entries[idx].unk_0 = 4;
+                    break;
+                }
+            }
+        }
+    }
+
+    *(s32 *)(base + 0x14) = -1;
+    lbl_1_bss_8B3A0.unk_0 = -1;
+    lbl_1_bss_8B3A0.unk_129 = 1;
+    fn_1_12F1E8(0x168);
+    state->unk_94 &= ~0x4;
+    v = lbl_1_bss_8B3A0.unk_2;
+    if (v != -1) {
+        lbl_1_bss_8B3A0.unk_A4[lbl_1_bss_962 - 14].unk_0 = v;
+    }
+}
+/* fzgx:end fn_10_12D8 */
+
 /* fzgx:begin fn_10_1F28 */
 extern s32 lbl_10_bss_51740;
 extern s32 lbl_10_bss_49388;
