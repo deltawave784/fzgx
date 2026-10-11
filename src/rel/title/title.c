@@ -71,6 +71,119 @@ void _prolog(void) {
 }
 /* fzgx:end _prolog */
 
+/* fzgx:begin fn_8_954 pool */
+#include "rel/title/title.h"
+
+extern s16 lbl_1_bss_968;
+extern s16 lbl_1_bss_96A;
+extern u8 lbl_801A66B8;
+extern u8 lbl_801A66BA;
+struct title_state { u8 unk_0; u8 unk_1; u8 unk_2; u8 pad_3[0x235]; void *unk_238; u8 unk_23C; u8 unk_23D; };
+struct input_state { u8 pad[10]; s8 unk_A; };
+struct button_state { u8 pad[8]; u16 unk_8; };
+struct game_state { u8 pad[0x94]; u32 unk_94; u8 pad_98[6]; u8 unk_9E; };
+extern struct input_state lbl_1_bss_9C8;
+extern struct button_state lbl_1_bss_9F8;
+extern struct game_state lbl_1_bss_8B3A0;
+extern int fn_1_4C10(void);
+extern s32 fn_1_4CAC(void);
+extern void fn_1_4A00(s32, u8, void *);
+extern void fn_1_A5EFC(void);
+#pragma opt_dead_assignments off
+#pragma opt_propagation off
+static inline int check_pressed(void) {
+    struct input_state *input = &lbl_1_bss_9C8;
+    struct button_state *buttons = &lbl_1_bss_9F8;
+    int zero = 0;
+    if (!input->unk_A && (buttons->unk_8 & 0x1000)) {
+        lbl_1_bss_8B3A0.unk_9E = zero;
+        return 1;
+    }
+    return 0;
+}
+#pragma opt_dead_assignments off
+typedef struct lbl_8_bss_238_t {
+    void *unk_238;
+} lbl_8_bss_238_t;
+
+/* file-scope objects of the retail TU, in retail order: MWCC addresses them off one section base */
+u8 fzgx_obj_lbl_8_bss_0;
+u8 lbl_8_bss_0_gap_1;
+u8 fzgx_obj_lbl_8_bss_2;
+u8 lbl_8_bss_0_gap_3;
+u32 lbl_8_bss_4[2];
+u32 lbl_8_bss_C[5];
+u32 lbl_8_bss_20[129];
+u16 lbl_8_bss_224;
+u16 lbl_8_bss_0_gap_226;
+u32 lbl_8_bss_228;
+u32 lbl_8_bss_22C;
+u8 lbl_8_bss_230;
+u8 lbl_8_bss_0_gap_231;
+u16 lbl_8_bss_0_gap_231_fill_232;
+u32 fzgx_obj_lbl_8_bss_234;
+lbl_8_bss_238_t fzgx_obj_lbl_8_bss_238;
+u8 lbl_8_bss_238_tail_23C;
+u8 fzgx_obj_lbl_8_bss_23D;
+
+#pragma section code_type ".fzgxpool"
+static void fzgx_bss_layout(void) {
+    volatile u8 s;  /* fzgx-allow: S2 layout primer sink: MWCC emits .bss objects in first-access order */
+    s = *(u8 *)&fzgx_obj_lbl_8_bss_0;
+    s = *(u8 *)&lbl_8_bss_0_gap_1;
+    s = *(u8 *)&fzgx_obj_lbl_8_bss_2;
+    s = *(u8 *)&lbl_8_bss_0_gap_3;
+    s = *(u8 *)&lbl_8_bss_4;
+    s = *(u8 *)&lbl_8_bss_C;
+    s = *(u8 *)&lbl_8_bss_20;
+    s = *(u8 *)&lbl_8_bss_224;
+    s = *(u8 *)&lbl_8_bss_0_gap_226;
+    s = *(u8 *)&lbl_8_bss_228;
+    s = *(u8 *)&lbl_8_bss_22C;
+    s = *(u8 *)&lbl_8_bss_230;
+    s = *(u8 *)&lbl_8_bss_0_gap_231;
+    s = *(u8 *)&lbl_8_bss_0_gap_231_fill_232;
+    s = *(u8 *)&fzgx_obj_lbl_8_bss_234;
+    s = *(u8 *)&fzgx_obj_lbl_8_bss_238;
+    s = *(u8 *)&lbl_8_bss_238_tail_23C;
+    s = *(u8 *)&fzgx_obj_lbl_8_bss_23D;
+}
+#pragma section code_type ".text"
+
+void fn_8_954(void) {
+    
+    int pressed;
+    if (lbl_1_bss_968 != -1 || lbl_1_bss_96A != -1) return;
+    if (fzgx_obj_lbl_8_bss_2 && lbl_8_bss_0_gap_1) goto finish; /* Keep the verified branch to finish. */
+    if (!fzgx_obj_lbl_8_bss_23D) {
+        if (!fzgx_obj_lbl_8_bss_2) return;
+        pressed = check_pressed();
+        if (!pressed) return;
+        if (!fn_1_4C10() || (s32)fn_1_4CAC()) {
+            void *sound = fzgx_obj_lbl_8_bss_238.unk_238;
+            fn_1_4A00(0, 15, sound);
+        }
+        fzgx_obj_lbl_8_bss_23D = 1;
+        return;
+    }
+    if (fn_1_4C10()) return;
+finish:
+    if (!lbl_801A66B8) {
+        fn_1_A5EFC();
+        lbl_801A66B8 = 1;
+    }
+    {
+        struct game_state *game = &lbl_1_bss_8B3A0;
+        int zero = 0;
+        game->unk_94 = zero;
+        lbl_1_bss_968 = 1;
+        fzgx_obj_lbl_8_bss_23D = zero;
+        lbl_8_bss_0_gap_1 = zero;
+        lbl_801A66BA = zero;
+    }
+}
+/* fzgx:end fn_8_954 */
+
 /* fzgx:begin fn_8_AA8 */
 extern struct fn_8_AA8_lbl_8_bss_234 lbl_8_bss_234;
 extern struct fn_8_AA8_lbl_8_bss_238 lbl_8_bss_238;
