@@ -51296,6 +51296,20 @@
   },
   {
     "module": "main_rel",
+    "source": "rel/main_rel/sel_static_disp/fn_1_13A21C.c",
+    "symbols": [
+      "fn_1_13A21C"
+    ],
+    "status": "matching",
+    "mw_version": null,
+    "extra_cflags": [],
+    "tu": "rel/main_rel/sel_static_disp.c",
+    "pool": {
+      "@31": "lbl_1_rodata_8600"
+    }
+  },
+  {
+    "module": "main_rel",
     "source": "rel/main_rel/sel_static_disp/fn_1_13A460.c",
     "symbols": [
       "fn_1_13A460"

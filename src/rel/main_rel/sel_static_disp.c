@@ -1933,6 +1933,99 @@ void fn_1_13A038(SelObj *obj)
 }
 /* fzgx:end fn_1_13A038 */
 
+/* fzgx:begin fn_1_13A21C noprologue */
+typedef signed short s16;
+typedef signed int s32;
+typedef unsigned char u8;
+typedef unsigned int u32;
+typedef float f32;
+typedef struct {
+    s16 idx;
+    u8 pad_2[0x1E];
+    u8 *buf;
+    u8 pad_24[0x14];
+    f32 f38;
+    f32 f3c;
+    f32 f40;
+    f32 f44;
+    f32 f48;
+    f32 f4c;
+} SelObj;
+typedef struct {
+    f32 a0, a1, a2, a3, a4, a5;
+    f32 pad[6];
+    s32 i30;
+    f32 rest[9];
+} SelLocal;
+typedef struct {
+    u8 pad[0xE];
+    s16 e;
+    u8 pad2[0x10];
+} SelEntry;
+extern const f32 lbl_1_rodata_8664;
+extern const f32 lbl_1_rodata_8BDC;
+extern const f32 lbl_1_rodata_8BE0;
+extern const f32 lbl_1_rodata_87B8;
+extern const f32 lbl_1_rodata_861C;
+extern const f32 lbl_1_rodata_8BE4;
+extern const f32 lbl_1_rodata_8BE8;
+extern const f32 lbl_1_rodata_8BD4;
+extern const f32 lbl_1_rodata_8638;
+extern const f32 lbl_1_rodata_8BEC;
+extern const f32 lbl_1_rodata_87D0;
+extern SelLocal lbl_1_rodata_26F8;
+extern SelEntry lbl_1_bss_8B3A0[];
+extern u8 lbl_1_bss_8CA28;
+extern u8 fn_1_141F94(u32);
+extern void fn_1_8CED0(void *, int, int);
+extern void fn_1_131C08(void);
+extern int fn_1_8D3F8(void *, void *, void (*)(void), void *);
+
+void fn_1_13A21C(SelObj *obj)
+{
+    int off;
+    int i;
+    obj->f38 = lbl_1_rodata_8664;
+    obj->f3c = lbl_1_rodata_8BDC;
+    obj->f40 = lbl_1_rodata_8BE0;
+    obj->f44 = lbl_1_rodata_87B8;
+    obj->f4c = lbl_1_rodata_861C;
+    i = 0;
+    off = 0;
+    for (; i < 4; i++) {
+        SelLocal l;
+        int t = lbl_1_bss_8B3A0[i].e;
+        u8 c = fn_1_141F94((u8)i);
+        if (t == -1)
+            continue;
+        obj->idx = i;
+        if (t == 0x20)
+            obj->f48 = lbl_1_rodata_8BE4;
+        else if (t == 0x27)
+            obj->f48 = lbl_1_rodata_8664;
+        else if (t == 0x1d)
+            obj->f48 = lbl_1_rodata_8BE8;
+        else
+            obj->f48 = lbl_1_rodata_861C;
+        l = lbl_1_rodata_26F8;
+        l.a1 = (f32)((c % 2) * 301 + 227);
+        l.a2 = (f32)((c / 2) * 202 + 176);
+        l.a3 = lbl_1_rodata_8BD4;
+        l.i30 = 10;
+        if (lbl_1_bss_8CA28 != 0) {
+            l.a4 *= lbl_1_rodata_8638;
+            l.a5 *= lbl_1_rodata_8638;
+        }
+        l.a4 *= lbl_1_rodata_8BEC;
+        l.a5 *= lbl_1_rodata_8BEC;
+        fn_1_8CED0(obj->buf + off, 0xa0, 0x78);
+        *(f32 *)(obj->buf + off + 0x44) = lbl_1_rodata_87D0;
+        fn_1_8D3F8(obj->buf + off, &l, fn_1_131C08, obj);
+        off += 0x64;
+    }
+}
+/* fzgx:end fn_1_13A21C */
+
 /* fzgx:begin fn_1_13A460 */
 void fn_1_13A460(struct Arg *arg0) {
     s32 y;
