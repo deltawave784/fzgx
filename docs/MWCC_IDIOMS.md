@@ -362,3 +362,7 @@ without row alignment (`retail - ours` net rows):
 - A lifter body that assigns a call's result and overwrites it at once (`t5 = fn_3_4218(); v3 = t5;
   v3 = ...;`) is no evidence of a return value: retail's `void` definition is the truth
   (fn_3_368C, fn_3_4BEC, toolkit fn_3_1A1D8 calling fn_3_141A8).
+- An MWCC absolute object (`u32 __OSBusClock : 0x800000F8;`, `volatile PPCWGPipe GXWGFifo : 0xCC008000;`)
+  emits no symbol or relocation and compiles to the same `lis/lwz` as a literal pointer read; MWCC
+  accepts an identical redeclaration, so the shared ones in `dolphin/hw_regs.h` and `dolphin/gx.h`
+  coexist with local copies (fn_800557CC, fn_80055EC0, fn_80022EA4; fn_80038DE8, fn_800377F8).

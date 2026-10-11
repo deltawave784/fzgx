@@ -1,21 +1,10 @@
 #include "types.h"
+#include "dolphin/gx.h"
 
-#define GX_FIFO_ADDR ((volatile void*)0xCC008000) // fzgx-allow: A1 hardware FIFO register  /* fzgx-allow: A2 unnamed OS/hardware memory */
 
 /* GXSetFog */
 
-typedef union PPCWGPipe {
-    u8 u8;
-    u16 u16;
-    u32 u32;
-    s8 s8;
-    s16 s16;
-    s32 s32;
-    f32 f32;
-    f64 f64;
-} PPCWGPipe;
 
-volatile PPCWGPipe GXWGFifo : 0xCC008000; /* fzgx-allow: A1,A2,S2 write-gather pipe */
 
 typedef struct GXContext {
     u8 pad_0[2];
@@ -35,11 +24,6 @@ extern u32 __cvt_fp2unsigned(f32);
 #define SET_REG_FIELD(reg, size, shift, val) \
     ((reg) = ((u32)(reg) & ~(((1 << (size)) - 1) << (shift))) | ((u32)(val) << (shift)))
 
-#define GX_WRITE_RAS_REG(value)                                                    \
-    do {                                                                           \
-        GXWGFifo.u8 = 0x61; \
-        GXWGFifo.u32 = (value); \
-    } while (0)
 
 void fn_800377F8(u32 type, GXColor color, f32 startz, f32 endz, f32 nearz, f32 farz) {
     u32 fogclr;
