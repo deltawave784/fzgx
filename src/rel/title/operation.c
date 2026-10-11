@@ -1131,6 +1131,168 @@ void fn_8_ABBC(void) {
 }
 /* fzgx:end fn_8_ABBC */
 
+/* fzgx:begin fn_8_B138 pool */
+typedef struct fn_8_B138_Color {
+    u8 r, g, b, a;
+} fn_8_B138_Color;
+
+typedef struct fn_8_B138_Sub {
+    f32 unk_0;
+    f32 unk_4;
+    f32 unk_8;
+    f32 unk_C;
+    f32 unk_10;
+    u8 pad_14[0x28];
+} fn_8_B138_Sub;
+
+/* The TU's own .bss objects, addressed off one section base (lbl_8_bss_2A8). */
+s16 fzgx_obj_lbl_8_bss_2A8;
+s32 fzgx_obj_lbl_8_bss_2AC;
+s32 fzgx_obj_lbl_8_bss_2B0;
+s32 fzgx_obj_lbl_8_bss_2B4;
+s32 fzgx_obj_lbl_8_bss_2B8;
+s32 fzgx_obj_lbl_8_bss_2BC;
+u8 fzgx_obj_lbl_8_bss_2C0[0xC];
+fn_8_B138_Sub fzgx_obj_lbl_8_bss_2CC[4];
+u8 fzgx_obj_lbl_8_bss_3BC[0x10];
+s32 fzgx_obj_lbl_8_bss_3CC;
+s32 fzgx_obj_lbl_8_bss_3D0;
+
+extern char *lbl_8_data_9B8C[6];
+extern u32 lbl_801A66B4;
+extern void fn_8_C9A8(s32, s32, f32);
+extern void fn_1_49410(void);
+extern void fn_1_495B0(u32);
+extern void fn_1_49590(f32);
+extern void fn_1_495C8(u8);
+extern void fn_1_496FC(f32, f32);
+extern void fn_1_4954C(f32);
+extern void fn_1_4955C(f32, f32);
+extern void fn_1_495A0(f32);
+extern void fn_1_4D0A0(void);
+extern void fn_1_49738(u32);
+extern void fn_1_49748(f32);
+extern void fn_1_4AE0C(const char *, ...);
+extern void fn_1_4D0D4(fn_8_B138_Color *, f32);
+extern void fn_1_5233C(void);
+
+#pragma section RX ".fzgxpool" ".fzgxpool"
+__declspec(section ".fzgxpool") void fzgx_primer_fn_8_B138(void) {
+    volatile u32 sink; /* primer: fixes the .bss first-access order */
+    sink = fzgx_obj_lbl_8_bss_2A8;
+    sink = fzgx_obj_lbl_8_bss_2AC;
+    sink = fzgx_obj_lbl_8_bss_2B0;
+    sink = fzgx_obj_lbl_8_bss_2B4;
+    sink = fzgx_obj_lbl_8_bss_2B8;
+    sink = fzgx_obj_lbl_8_bss_2BC;
+    sink = fzgx_obj_lbl_8_bss_2C0[0];
+    sink = fzgx_obj_lbl_8_bss_2CC[0].unk_4;
+    sink = fzgx_obj_lbl_8_bss_3BC[0];
+    sink = fzgx_obj_lbl_8_bss_3CC;
+    sink = fzgx_obj_lbl_8_bss_3D0;
+}
+
+/* The retail TU's literal pool (lbl_8_rodata_160) in retail order, up to this function's
+ * own color initializer at +0x15C. Dropped at integration. */
+#pragma section code_type ".fzgxpool"
+static void fzgx_pool_layout_00(void) {
+    volatile f64 d;  /* fzgx-allow: S2 layout primer sink: MWCC pools literals in first-use order */
+    volatile f32 s;  /* fzgx-allow: S2 layout primer sink */
+    volatile s32 n;  /* fzgx-allow: S2 layout primer source */
+    d = 15.0;
+    s = 320.0f;
+    s = 640.0f;
+    d = 1.0;
+    s = 150.0f;
+    s = 0.1f;
+    s = 20.0f;
+    s = 0.8333333f;
+    s = (f32)n;
+}
+static const u32 fzgx_pool_30[1] = {0xFFFFFF00};
+static void fzgx_pool_layout_34(void) {
+    volatile f32 s;  /* fzgx-allow: S2 layout primer sink */
+    s = 0.0f;
+    s = 1.0f;
+    s = 0.5f;
+    s = 0.09f;
+    s = 5.0f;
+    s = 255.0f;
+}
+static const u32 fzgx_pool_4C[6] = {0xFFFFFF00, 0xFFFFFF00, 0xFFFFFF00, 0xFFFFFF00, 0xFFFFFF00, 0xFFFFFF00};
+static const f32 fzgx_pool_64[1] = {0.3f};
+static const u32 fzgx_pool_68[5] = {0xFFFFFF00, 0xFFFFFF00, 0xFFFFFF00, 0xFFFFFF00, 0xFFFFFF00};
+static const f32 fzgx_pool_7C[36] = {
+    0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.01f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.01f,
+    60.0f, 0.7f, 0.01f, 240.0f, 45.0f, 0.001f, 100.0f, -200.0f, 120.0f, 200.0f, -120.0f, -0.01f,
+    10.0f, -10240.0f, 1.8f, -1.8f, -20.0f, -4096.0f, -2048.0f, 1.1f, -0.51f, 4096.0f, -1.1f, 0.8f,
+};
+static const u32 fzgx_pool_10C[1] = {0xFFFFFF00};
+static void fzgx_pool_layout_110(void) {
+    volatile f32 s;  /* fzgx-allow: S2 layout primer sink */
+    s = 345.0f;
+    s = 2.0f;
+}
+static const f32 fzgx_pool_118[3] = {1.8375f, 0.00000004172325f, -160.0f};
+static void fzgx_pool_layout_124(void) {
+    volatile f32 s;  /* fzgx-allow: S2 layout primer sink */
+    s = 90.0f;
+}
+static const u32 fzgx_pool_128[1] = {0xFFFFFF00};
+static const f32 fzgx_pool_12C[4] = {112.0f, 272.0f, 30.0f, 70.0f};
+static const u32 fzgx_pool_13C[2] = {0xFFFFFF00, 0xFF4040FF};
+static const f32 fzgx_pool_144[2] = {1.1111112f, 160.0f};
+static const u32 fzgx_pool_14C[1] = {0xFFFFFF00};
+static const u32 fzgx_pool_150[2] = {0xFFFFFF00, 0xFFFFFF00};
+static const f32 fzgx_pool_158[1] = {-100.0f};
+#pragma section code_type ".text"
+
+void fn_8_B138(void) {
+    s32 x;
+    f32 t;
+    f32 alpha;
+    fn_8_B138_Sub *sub;
+
+    if (fzgx_obj_lbl_8_bss_3CC < 15.0) {
+        t = 1.0 - (f32)fzgx_obj_lbl_8_bss_3CC / 15.0;
+        x = 320.0f + (f32)(640.0f * t);
+    } else if (fzgx_obj_lbl_8_bss_3CC > fzgx_obj_lbl_8_bss_3D0 - 15.0) {
+        t = 1.0 - (f32)(fzgx_obj_lbl_8_bss_3D0 - fzgx_obj_lbl_8_bss_3CC) / 15.0;
+        x = 320.0f - (f32)(640.0f * t);
+    } else {
+        t = 0.0f;
+        x = 320;
+    }
+    alpha = (1.0f - t) * (1.0f - t);
+
+    fn_1_49410();
+    fn_1_495B0(0x80000000);
+    fn_1_49590(0.5f);
+    fn_1_495C8(9);
+    fn_1_496FC(x, 345.0f);
+    fn_1_4954C(0.09f);
+    fn_1_4955C(0.8333333f, 0.8333333f);
+    fn_1_495A0(alpha);
+    fn_1_4D0A0();
+    fn_1_49738((u32)fn_1_5233C);
+    fn_1_49748(5.0f);
+    fn_1_4AE0C(lbl_8_data_9B8C[lbl_801A66B4]);
+    fn_1_49738(0);
+    {
+        fn_8_B138_Color arg;
+        fn_8_B138_Color color = { 255, 255, 255, 0 };
+        color.a = 255.0f * alpha;
+        arg = color;
+        fn_1_4D0D4(&arg, 20.0f);
+    }
+    sub = &fzgx_obj_lbl_8_bss_2CC[0];
+    sub->unk_4 = 1.0f;
+    sub->unk_C = 0.0f;
+    sub->unk_10 = 90.0f;
+    fn_8_C9A8(0, 0, 1.0f);
+}
+/* fzgx:end fn_8_B138 */
+
 /* fzgx:begin fn_8_BAEC noprologue */
 #include "types.h"
 

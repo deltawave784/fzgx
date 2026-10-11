@@ -39394,6 +39394,18 @@
   },
   {
     "module": "main_rel",
+    "source": "rel/main_rel/effect/fn_1_640A4.c",
+    "symbols": [
+      "fn_1_640A4"
+    ],
+    "status": "nonmatching",
+    "mw_version": "GC/1.3.2",
+    "extra_cflags": [],
+    "tu": "rel/main_rel/effect.c",
+    "pool": true
+  },
+  {
+    "module": "main_rel",
     "source": "rel/main_rel/effect/fn_1_642E8.c",
     "symbols": [
       "fn_1_642E8"
@@ -63383,6 +63395,20 @@
   },
   {
     "module": "option",
+    "source": "rel/option/_prolog/fn_4_4CB8.c",
+    "symbols": [
+      "fn_4_4CB8"
+    ],
+    "status": "matching",
+    "mw_version": "GC/1.3.2",
+    "extra_cflags": [],
+    "tu": "rel/option/_prolog.c",
+    "pool": {
+      "@23": "jumptable_4_data_2998"
+    }
+  },
+  {
+    "module": "option",
     "source": "rel/option/_prolog/fn_4_6678.c",
     "symbols": [
       "fn_4_6678"
@@ -69300,6 +69326,18 @@
       "@40": "lbl_8_rodata_198+0x118",
       "@11": "lbl_8_rodata_160+0x20"
     }
+  },
+  {
+    "module": "title",
+    "source": "rel/title/operation/fn_8_B138.c",
+    "symbols": [
+      "fn_8_B138"
+    ],
+    "status": "nonmatching",
+    "mw_version": "GC/1.3.2",
+    "extra_cflags": [],
+    "tu": "rel/title/operation.c",
+    "pool": true
   },
   {
     "module": "title",
