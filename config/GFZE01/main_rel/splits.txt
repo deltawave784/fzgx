@@ -7106,3 +7106,6 @@ rel/main_rel/spline/fn_1_F965C.c:
 
 rel/main_rel/memcard/fn_1_C1ACC.c:
 	.text       start:0x000C1ACC end:0x000C1CFC align:4
+
+rel/main_rel/bg_common/fn_1_103B00.c:
+	.text       start:0x00103B00 end:0x00103D28 align:4
