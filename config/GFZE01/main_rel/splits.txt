@@ -7109,3 +7109,6 @@ rel/main_rel/memcard/fn_1_C1ACC.c:
 
 rel/main_rel/bg_common/fn_1_103B00.c:
 	.text       start:0x00103B00 end:0x00103D28 align:4
+
+rel/main_rel/bitmap/fn_1_48A0C.c:
+	.text       start:0x00048A0C end:0x00048C28 align:4
