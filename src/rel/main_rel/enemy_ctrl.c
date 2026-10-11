@@ -655,6 +655,71 @@ void fn_1_CA2A4(int self) {
 }
 /* fzgx:end fn_1_CA2A4 */
 
+/* fzgx:begin fn_1_CA440 noprologue */
+#include "types.h"
+#include "font.h"
+#include "rel/main_rel/enemy_ctrl.h"
+
+typedef struct { u32 a[4]; } fn_1_CA440_Colors;
+
+extern s32 fn_1_5910(void);
+extern u8 fn_1_86810(int);
+extern const fn_1_CA440_Colors lbl_1_rodata_5D70;
+extern void fn_1_49410(void);
+extern void fn_1_494DC(s16);
+extern const f32 lbl_1_rodata_5D80;
+extern const f32 lbl_1_rodata_5D84;
+extern void fn_1_4955C(f32, f32);
+extern void fn_1_496FC(f32, f32);
+extern void fn_1_4AE0C(const char *, ...);
+extern const FontDrawPacket lbl_1_rodata_26F8;
+extern int fn_1_4F734(FontDrawPacket *);
+
+void fn_1_CA440(int arg0, s32 x, s32 y) {
+    fn_1_CA440_Colors colors;
+    FontDrawPacket pkt;
+    s32 rank;
+    s32 idx;
+    int th;
+    int teen;
+    s32 rem;
+
+    if ((((u32 *)&lbl_1_data_3D544)[fn_1_5910()] >> 29) & 1) {
+        rank = fn_1_86810(arg0) + 1;
+        colors = lbl_1_rodata_5D70;
+        fn_1_49410();
+        fn_1_494DC(12);
+        fn_1_4955C(lbl_1_rodata_5D80, lbl_1_rodata_5D84);
+        fn_1_496FC((f32)x, (f32)y);
+        fn_1_4AE0C((const char *)&lbl_1_data_3D570, rank);
+        pkt = lbl_1_rodata_26F8;
+
+        teen = 0;
+        rem = rank % 100;
+        if (rem >= 10 && rank % 100 <= 20) {
+            teen = 1;
+        }
+        if (teen) {
+            idx = 3;
+        } else {
+            th = 0;
+            if (rem % 10 >= 4 || rem % 10 == 0) {
+                th = 1;
+            }
+            if (th) {
+                idx = 3;
+            } else {
+                idx = rem % 10 - 1;
+            }
+        }
+        pkt.image = colors.a[idx];
+        pkt.x = (f32)(x + 34);
+        pkt.y = (f32)(y + 29);
+        fn_1_4F734(&pkt);
+    }
+}
+/* fzgx:end fn_1_CA440 */
+
 /* fzgx:begin fn_1_CA690 */
 typedef struct {
     u32 x[22];
