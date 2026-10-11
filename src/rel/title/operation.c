@@ -1000,6 +1000,137 @@ void fn_8_9B40(void) {
 }
 /* fzgx:end fn_8_9B40 */
 
+/* fzgx:begin fn_8_ABBC */
+typedef struct {
+    u8 r, g, b, a;
+} fn_8_ABBC_Color;
+
+struct fn_8_ABBC_lbl_8_bss_2A8 {
+    u8 pad_0[0x24];
+    s16 unk_24;
+    u8 pad_26[0x76];
+    s16 unk_9C;
+    u8 pad_9E[0x86];
+    s32 unk_124;
+    s32 unk_128;
+};
+
+extern struct fn_8_ABBC_lbl_8_bss_2A8 lbl_8_bss_2A8;
+extern char *lbl_8_data_99BC[];
+extern u32 lbl_801A66B4;
+extern u32 lbl_801A66A0;
+extern void fn_1_5233C(void);
+extern void fn_1_49410(void);
+extern void fn_1_495B0(u32);
+extern void fn_1_49590(f32);
+extern void fn_1_495C8(u8);
+extern void fn_1_496FC(f32, f32);
+extern void fn_1_4954C(f32);
+extern void fn_1_4955C(f32, f32);
+extern void fn_1_495A0(f32);
+extern void fn_1_4D0A0(void);
+extern void fn_1_49738(u32);
+extern void fn_1_49748(f32);
+extern void fn_1_4AE0C(const char *, ...);
+extern void fn_1_4D0D4(fn_8_ABBC_Color *, f32);
+
+/* The retail TU's literal pool (lbl_8_rodata_160) in retail order, up to this function's
+ * own color initializer at +0x150. Dropped at integration. */
+#pragma section code_type ".fzgxpool"
+static void fzgx_pool_layout_00(void) {
+    volatile f64 d;  /* fzgx-allow: S2 layout primer sink: MWCC pools literals in first-use order */
+    volatile f32 s;  /* fzgx-allow: S2 layout primer sink */
+    volatile s32 n;  /* fzgx-allow: S2 layout primer source */
+    d = 15.0;
+    s = 320.0f;
+    s = 640.0f;
+    d = 1.0;
+    s = 150.0f;
+    s = 0.1f;
+    s = 20.0f;
+    s = 0.8333333f;
+    s = (f32)n;
+}
+static const u32 fzgx_pool_30[1] = {0xFFFFFF00};
+static void fzgx_pool_layout_34(void) {
+    volatile f32 s;  /* fzgx-allow: S2 layout primer sink */
+    s = 0.0f;
+    s = 1.0f;
+    s = 0.5f;
+    s = 0.09f;
+    s = 5.0f;
+    s = 255.0f;
+}
+static const u32 fzgx_pool_4C[6] = {0xFFFFFF00, 0xFFFFFF00, 0xFFFFFF00, 0xFFFFFF00, 0xFFFFFF00, 0xFFFFFF00};
+static const f32 fzgx_pool_64[1] = {0.3f};
+static const u32 fzgx_pool_68[5] = {0xFFFFFF00, 0xFFFFFF00, 0xFFFFFF00, 0xFFFFFF00, 0xFFFFFF00};
+static const f32 fzgx_pool_7C[36] = {
+    0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.01f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.01f,
+    60.0f, 0.7f, 0.01f, 240.0f, 45.0f, 0.001f, 100.0f, -200.0f, 120.0f, 200.0f, -120.0f, -0.01f,
+    10.0f, -10240.0f, 1.8f, -1.8f, -20.0f, -4096.0f, -2048.0f, 1.1f, -0.51f, 4096.0f, -1.1f, 0.8f,
+};
+static const u32 fzgx_pool_10C[1] = {0xFFFFFF00};
+static void fzgx_pool_layout_110(void) {
+    volatile f32 s;  /* fzgx-allow: S2 layout primer sink */
+    s = 345.0f;
+    s = 2.0f;
+}
+static const f32 fzgx_pool_118[4] = {1.8375f, 0.00000004172325f, -160.0f, 90.0f};
+static const u32 fzgx_pool_128[1] = {0xFFFFFF00};
+static const f32 fzgx_pool_12C[4] = {112.0f, 272.0f, 30.0f, 70.0f};
+static const u32 fzgx_pool_13C[2] = {0xFFFFFF00, 0xFF4040FF};
+static const f32 fzgx_pool_144[2] = {1.1111112f, 160.0f};
+static const u32 fzgx_pool_14C[1] = {0xFFFFFF00};
+#pragma section code_type ".text"
+
+void fn_8_ABBC(void) {
+    struct fn_8_ABBC_lbl_8_bss_2A8 *base;
+    s32 x;
+    f32 t;
+    f32 alpha;
+    f32 scale;
+    fn_8_ABBC_Color copy;
+    fn_8_ABBC_Color color;
+
+    base = &lbl_8_bss_2A8;
+    if (base->unk_124 < 15.0) {
+        t = 1.0 - (f32)base->unk_124 / 15.0;
+        x = 320.0f + (f32)(640.0f * t);
+    } else if (base->unk_124 > base->unk_128 - 15.0) {
+        t = 1.0 - (f32)(base->unk_128 - base->unk_124) / 15.0;
+        x = 320.0f - (f32)(640.0f * t);
+    } else {
+        t = 0.0f;
+        x = 320;
+    }
+    alpha = (1.0f - t) * (1.0f - t);
+
+    fn_1_49410();
+    fn_1_495B0(0x80000000);
+    fn_1_49590(0.5f);
+    fn_1_495C8(9);
+    fn_1_496FC(x, 345.0f);
+    fn_1_4954C(0.09f);
+    scale = 0.8333333f;
+    fn_1_4955C(scale, scale);
+    fn_1_495A0(alpha);
+    fn_1_4D0A0();
+    fn_1_49738((u32)fn_1_5233C);
+    fn_1_49748(5.0f);
+    fn_1_4AE0C(lbl_8_data_99BC[lbl_801A66B4]);
+    fn_1_49738(0);
+    {
+        fn_8_ABBC_Color white = {255, 255, 255, 0};
+        color = white;
+    }
+    color.a = 255.0f * alpha;
+    copy = color;
+    fn_1_4D0D4(&copy, 20.0f);
+    base->unk_24 = 0;
+    base->unk_9C = lbl_801A66A0 * 512;
+}
+/* fzgx:end fn_8_ABBC */
+
 /* fzgx:begin fn_8_BAEC noprologue */
 #include "types.h"
 

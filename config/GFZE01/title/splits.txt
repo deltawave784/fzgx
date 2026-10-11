@@ -269,3 +269,6 @@ rel/title/_prolog/fn_8_4D8.c:
 
 rel/title/title/fn_8_954.c:
 	.text       start:0x00000954 end:0x00000AA8 align:4
+
+rel/title/operation/fn_8_ABBC.c:
+	.text       start:0x0000ABBC end:0x0000ADF4 align:4
