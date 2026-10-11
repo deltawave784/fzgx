@@ -26112,6 +26112,23 @@
   },
   {
     "module": "main",
+    "source": "dol/fn_8008983C.c",
+    "symbols": [
+      "fn_8008983C"
+    ],
+    "status": "matching",
+    "mw_version": "GC/1.3.2",
+    "extra_cflags": [
+      "-sdata2",
+      "0"
+    ],
+    "pool": {
+      "...rodata.0": "lbl_80095890",
+      "fzgx_pool_rodata_lbl_80095890": "lbl_80095890"
+    }
+  },
+  {
+    "module": "main",
     "source": "dol/fn_800898E4.c",
     "symbols": [
       "fn_800898E4"
