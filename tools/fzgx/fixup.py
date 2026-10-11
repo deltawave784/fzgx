@@ -115,6 +115,62 @@ class Engine:
 
     timing = {}
 
+    def layout_versions(self, symbol):
+        """Compilers a TU-layout candidate is scored under: the module default plus every
+        version the module's uncarved functions are tried with (main: 1.2.5n and 1.3.2)."""
+        module = self.project.resolve(symbol).module
+        out = [oracle.module_flags(self.project, module)[1]]
+        for version, _ in oracle.version_candidates(self.project, module):
+            if version not in out:
+                out.append(version)
+        return out
+
+    SMALL_DATA2 = ('.sdata2', '.sbss2')
+
+    def retail_avoids_sdata2(self, symbol):
+        """True when the retail function addresses no .sdata2/.sbss2 object although its
+        module's flags put small constants there: its TU was built with `-sdata2 0` (DOL game
+        code reading the 2^52 bias and float literals from .rodata, fn_8004A068)."""
+        memo = self.__dict__.setdefault('_sdata2_evidence', {})
+        if symbol in memo:
+            return memo[symbol]
+        sym = self.project.resolve(symbol)
+        verdict = False
+        if '-sdata2 0' not in oracle.module_flags(self.project, sym.module)[0]:
+            from .sdkimport import relocations
+            try:
+                relocs = relocations(self.targets[symbol][0], sym.name)
+            except (KeyError, StopIteration, OSError, ValueError):
+                relocs = None
+            if relocs:
+                sections = [getattr(self.project.find_symbol(name, sym.module), 'section', None) for name, _, _ in relocs.values()]
+                # every target known, none small-data-2, and some read-only data addressed
+                verdict = (None not in sections and not any(s in self.SMALL_DATA2 for s in sections)
+                           and '.rodata' in sections)
+        memo[symbol] = verdict
+        return verdict
+
+    def sdata2_responses(self, rows):
+        """Siblings of compiled candidates under `-sdata2 0` where the evidence asks for it:
+        the retail function avoids small-data-2 and the candidate's object fills .sdata2
+        (native literals or int-to-float conversions). One extra compile per such candidate."""
+        from .poolfix import Elf
+        out = []
+        for row in rows:
+            if not row.get('object') or '-sdata2' in (row.get('flags') or '') or not self.retail_avoids_sdata2(row['symbol']):
+                continue
+            try:
+                elf = Elf(Path(row['object']).read_bytes())
+            except (OSError, ValueError):
+                continue
+            if not any(s['name'] == '.sdata2' and s['size'] for s in elf.sections):
+                continue
+            out.append(self.record(row['symbol'], Path(row['source']).read_text(), row['mw'],
+                                   oracle._join_flags(row.get('flags'), '-sdata2 0'),
+                                   label=(row.get('label') or 'saved-body') + ' (-sdata2 0)',
+                                   parent=row.get('parent') or row['id'], seed=row.get('seed', row.get('parent') or row['id'])))
+        return out
+
     def generate_parallel(self, tasks, limit):
         """[(label, text)...] per task, generated 16 wide in forked workers; serial when a pool
         cannot be used (the generator is identical either way)."""
@@ -688,6 +744,10 @@ class Engine:
     def run(self, rows, rounds=2, beam=3, max_candidates=80, budget_s=None, captures=None):
         start=time.monotonic(); history=list(rows); seen={r['id'] for r in rows}; initial={}
         self.evaluate(rows)
+        siblings=[r for r in self.sdata2_responses(rows) if r['id'] not in seen]
+        if siblings:
+            self.evaluate(siblings); seen.update(r['id'] for r in siblings)
+            rows=list(rows)+siblings; history+=siblings
         # one objdiff process per saved variant: serially, a module run (15,633 variants in
         # batch 64, ~70 ms each) spent its whole budget here and never reached round 1.
         # Run them 16 wide like the round checks; results are identical.
@@ -707,7 +767,8 @@ class Engine:
         # saved variants, 9 min on Windows) used to consume the whole budget before round 0
         start=time.monotonic()
         for r in rows:
-            initial[r['symbol']]=max(initial.get(r['symbol'],-1),r['score'])
+            if '(-sdata2 0)' not in (r.get('label') or ''):
+                initial[r['symbol']]=max(initial.get(r['symbol'],-1),r['score'])
         if self.clones:
             self.share_clones(history, seen, beam, initial=True)
         self.save(history, stats=[], start=start)
@@ -746,9 +807,13 @@ class Engine:
                         # a TU object layout changes which compiler fits: a seed tuned under another
                         # version on its extern view (fn_1_45A58: GC/1.3 76% either way) reaches the
                         # retail `addi; lwzx` shape only under the module's own compiler (89%)
-                        default=oracle.module_flags(self.project,self.project.resolve(symbol).module)[1]
-                        if label.startswith(('define retail TU', 'define indexed element')) and seed['mw']!=default:
-                            rows.append(self.record(symbol,text,default,seed['flags'],label=label+' (module compiler)',parent=seed['id'],seed=seed.get('seed',seed['id'])))
+                        # (and in the DOL, whose game code is 1.3.2 next to 1.2.5n SDK code, the
+                        # defined-table `addi base,off; lXzx` shape needs GC/1.3.2: fn_8005C9D8,
+                        # seeded under GC/1.3, 81.2 -> 89.5): score them under every candidate version
+                        if label.startswith(('define retail TU', 'define indexed element')):
+                            for version in self.layout_versions(symbol):
+                                if version!=seed['mw']:
+                                    rows.append(self.record(symbol,text,version,seed['flags'],label=label+f' ({version})',parent=seed['id'],seed=seed.get('seed',seed['id'])))
                         for row in rows:
                             if row['id'] in seen:
                                 continue
@@ -762,6 +827,9 @@ class Engine:
                 break
             generation_seconds=time.monotonic()-generated
             self.evaluate(pending)
+            siblings=[r for r in self.sdata2_responses(pending) if r['id'] not in seen]
+            if siblings:
+                self.evaluate(siblings); seen.update(r['id'] for r in siblings); pending+=siblings
             progress=time.monotonic()
             def wants_check(row):
                 return bool(row.get('object') and (row['label'].startswith(('retail conversion','retail floating','retail loop','retail double','retail call result','retail aggregate','recover native shared-pool objects','recover native BSS','region '))
@@ -1069,7 +1137,23 @@ def load_records(engine,args):
         if body is None:
             raise ValueError('no saved C for '+args.symbol)
         sym=p.resolve(args.symbol)
-        mw,flags=oracle.version_for(p,sym,Path(args.body) if args.body else p.work_path(args.symbol))
+        source_path=Path(args.body) if args.body else None
+        if source_path is None:
+            # the attempt's own text, not the (often absent or stale) work copy: probing a
+            # missing work copy picked the module default, so a DOL body tuned under GC/1.3
+            # was searched under 1.2.5n (fn_8005C9D8: 81.2% saved, 43.7% seed)
+            source_path=engine.output/'seed'/(p.key(sym).replace(':','__')+'.c')
+            source_path.parent.mkdir(parents=True,exist_ok=True)
+            source_path.write_text(body)
+            for meta in sorted(STATE_DIR.glob('attempts/'+p.key(sym).replace(':','__')+'.*.json'),reverse=True):
+                try:
+                    recorded=json.loads(meta.read_text())
+                except (OSError,ValueError):
+                    continue
+                if recorded.get('sha256')==digest(body.encode()) and recorded.get('mw'):
+                    add(args.symbol,body,recorded['mw'],recorded.get('flags'),label='saved-body')
+                    break
+        mw,flags=oracle.version_for(p,sym,source_path)
         add(args.symbol,body,mw,flags,label='saved-body')
     elif args.corpus:
         prepared=args.corpus/'prepared.json'
