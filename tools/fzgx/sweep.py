@@ -136,7 +136,17 @@ def climb(p: Project, selection: Dict[str, str], outdir: Path, rounds: int = 4,
     """Hill-climb every selected body: the best candidate by word score replaces the body when
     objdiff confirms the gain. Returns {symbol: {base, percent, file, matched, history}}."""
     outdir.mkdir(parents=True, exist_ok=True)
-    cur = {s: Path(f) for s, f in selection.items()}
+    cur = {}
+    for s, f in selection.items():
+        f = Path(f)
+        if ':' in f.name:
+            # attempts of `module:name` symbols (REL `_prolog`/`_epilog`) carry a colon: on
+            # Windows that is an NTFS stream, and compile_many's chunk directory cannot be made
+            safe = outdir / 'seed' / f.name.replace(':', '__')
+            safe.parent.mkdir(parents=True, exist_ok=True)
+            safe.write_text(f.read_text())
+            f = safe
+        cur[s] = f
     checks = oracle.check_many(p, list(cur.items()))
     state: Dict[str, dict] = {}
     for s, f in cur.items():
@@ -154,7 +164,8 @@ def climb(p: Project, selection: Dict[str, str], outdir: Path, rounds: int = 4,
             path = Path(state[s]['file'])
             body = path.read_text()
             for k, (label, text) in enumerate(generate(p, s, sym, path, body, state[s]['check'], outdir, families)):
-                f = outdir / f'r{rnd}' / f'{s}__{k}.c'
+                # `module:name` keys: a colon in a Windows file name opens an NTFS stream
+                f = outdir / f'r{rnd}' / f"{s.replace(':', '__')}__{k}.c"
                 f.parent.mkdir(exist_ok=True)
                 f.write_text(text)
                 gen[sym.module].append((s, f, label))
