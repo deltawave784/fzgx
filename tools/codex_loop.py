@@ -280,8 +280,8 @@ def merge_appended(path: str, text: str):
 def sync_from_a() -> str:
     """Pull clone A's commits (its tooling fixes, its matches, its Claude attempts). Returns 'current', 'merged',
     'dirty' (this tree has uncommitted work), 'conflict' (needs a person) or 'failed' (the merged tree did not pass)."""
-    git("add", "state/progress.csv")
-    git("commit", "-q", "-m", "progress: codex loop rows")
+    git("add", "state/progress.csv", "state/repairs/fixup_imports.json")
+    git("commit", "-q", "-m", "progress and fixup imports: codex loop rows")
     dirty = git("status", "--short").stdout.strip()
     if dirty:
         log("sync with clone A skipped, tree not clean:\n" + dirty[:400])
