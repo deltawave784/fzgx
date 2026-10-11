@@ -20290,6 +20290,22 @@
   },
   {
     "module": "main",
+    "source": "dol/fn_8004EC34.c",
+    "symbols": [
+      "fn_8004EC34"
+    ],
+    "status": "matching",
+    "mw_version": "GC/1.3.2",
+    "extra_cflags": [
+      "-sdata2",
+      "0"
+    ],
+    "pool": {
+      "...rodata.0": "lbl_80091198"
+    }
+  },
+  {
+    "module": "main",
     "source": "dol/fn_8004ECF4.c",
     "symbols": [
       "fn_8004ECF4"
