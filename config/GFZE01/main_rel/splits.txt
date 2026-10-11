@@ -7079,3 +7079,6 @@ rel/main_rel/bg_for/fn_1_E1A00.c:
 
 rel/main_rel/spline/fn_1_F9244.c:
 	.text       start:0x000F9244 end:0x000F946C align:4
+
+rel/main_rel/effect/fn_1_5B188.c:
+	.text       start:0x0005B188 end:0x0005B30C align:4
