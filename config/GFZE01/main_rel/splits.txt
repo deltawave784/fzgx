@@ -7088,3 +7088,9 @@ rel/main_rel/sel_static_disp/fn_1_133748.c:
 
 rel/main_rel/accessory/fn_1_108EEC.c:
 	.text       start:0x00108EEC end:0x00109114 align:4
+
+rel/main_rel/sound/fn_1_A2FC8.c:
+	.text       start:0x000A2FC8 end:0x000A31E4 align:4
+
+rel/main_rel/enemy_ctrl/fn_1_C7874.c:
+	.text       start:0x000C7874 end:0x000C7AA0 align:4

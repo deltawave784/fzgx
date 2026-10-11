@@ -333,6 +333,52 @@ void fn_1_C771C(void) {
 }
 /* fzgx:end fn_1_C771C */
 
+/* fzgx:begin fn_1_C7874 noprologue */
+#include "types.h"
+#include "font.h"
+
+typedef struct fn_1_C7874_Values {
+    s32 a[12];
+} fn_1_C7874_Values;
+
+extern const fn_1_C7874_Values lbl_1_rodata_5C08;
+extern const FontDrawPacket lbl_1_rodata_26F8;
+extern const f32 lbl_1_rodata_5C38; /* 120.0f */
+extern const f32 lbl_1_rodata_5C3C; /* 320.0f */
+extern const f32 lbl_1_rodata_5C40; /* 240.0f */
+extern const f32 lbl_1_rodata_5C44; /* 11.0f */
+extern const f32 lbl_1_rodata_5C48; /* 10.0f */
+
+void fn_1_C7874(void) {
+    fn_1_C7874_Values vals = lbl_1_rodata_5C08;
+    FontDrawPacket pkt;
+    u32 i;
+
+    pkt = lbl_1_rodata_26F8;
+    pkt.image = 0x9457;
+    fn_1_51678(&pkt, pkt.image, 0, 0, 4, 8);
+    pkt.scale_x *= lbl_1_rodata_5C38;
+    pkt.x = lbl_1_rodata_5C3C;
+    pkt.y = lbl_1_rodata_5C40;
+    pkt.z = lbl_1_rodata_5C44;
+    pkt.rotation_z = 0x4000;
+    pkt.flags = 10;
+    fn_1_4F734(&pkt);
+
+    for (i = 0; i < 12; i++) {
+        pkt = lbl_1_rodata_26F8;
+        pkt.image = 0x9457;
+        fn_1_51678(&pkt, pkt.image, 4, 0, 4, 8);
+        pkt.x = lbl_1_rodata_5C3C;
+        pkt.y = (f32)vals.a[i];
+        pkt.z = lbl_1_rodata_5C48;
+        pkt.rotation_z = 0x4000;
+        pkt.flags = 10;
+        fn_1_4F734(&pkt);
+    }
+}
+/* fzgx:end fn_1_C7874 */
+
 /* fzgx:begin fn_1_C7CBC */
 extern const f32 lbl_1_rodata_5C88;
 extern const f32 lbl_1_rodata_5C8C;
