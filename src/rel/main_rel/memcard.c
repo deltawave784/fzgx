@@ -9201,6 +9201,53 @@ void fn_1_C17CC(void) {
 }
 /* fzgx:end fn_1_C17CC */
 
+/* fzgx:begin fn_1_C1ACC noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/memcard.h"
+
+extern void *lbl_801A6410;
+
+/* One 0x30-byte slot entry; each bank holds 0x80 of them (0x1800 bytes). */
+typedef struct {
+    u32 w[11];
+    u32 unk_2C;
+} MemcardSlot;
+
+// Frees an entry's buffer, removes it from its bank and clears the last slot.
+void fn_1_C1ACC(u32 arg0, MemcardSlot *entry) {
+    MemcardSlot *bank;
+    s32 index;
+    s32 bankIndex;
+    s32 i;
+
+    if (entry->unk_2C != 0) {
+        fn_1_46B4((u32)lbl_801A6410, entry->unk_2C, (const char *)&lbl_1_data_3C7B8, 0x32f8);
+        entry->unk_2C = 0;
+    }
+
+    for (i = 0; i < 0x7f; i++) {
+        bank = (MemcardSlot *)&lbl_1_bss_77380 + i;
+        if (bank == entry) {
+            index = i;
+            bankIndex = 0;
+            break;
+        }
+        if (bank + 0x80 == entry) {
+            index = i;
+            bankIndex = 1;
+            break;
+        }
+    }
+
+    bank = (MemcardSlot *)((u8 *)&lbl_1_bss_77380 + bankIndex * 0x1800);
+    for (i = index; i < 0x7e; i++) {
+        bank[i] = bank[i + 1];
+    }
+    fn_80008BEC(&bank[0x7e], 0, sizeof(MemcardSlot));
+}
+/* fzgx:end fn_1_C1ACC */
+
 /* fzgx:begin fn_1_C23CC */
 // Copy rows of eight-byte elements over the requested four-unit range.
 void fn_1_C23CC(u32 destination, u32 destinationStride, u32 unused, u32 source, u32 sourceStride, u32 rangeLength, u32 destinationOffset, u32 rangeStart) { s32 row;
