@@ -36,6 +36,85 @@ extern size_t strlen(const char *str);
 extern s32 fn_8006FC1C(const char *a, const char *b);
 extern void fn_1_15E1E8(u8 *value);
 
+/* fzgx:begin fn_1_15B70C */
+typedef struct {
+    u32 x, y, z;
+} BgWinVec;
+
+typedef struct {
+    u8 pad_0[0xC];
+    BgWinVec pos;
+    u8 pad_18[0x24];
+    u32 unk_3C;
+} BgWinItem;
+
+extern void OSPanic(const char *, int, const char *, ...);
+
+#define BGWIN_ADD(obj, count, max, base, item) \
+    do {                                       \
+        if ((obj)->count < (max)) {            \
+            (&(obj)->base)[(obj)->count] = (u32)(item); \
+        }                                      \
+        (obj)->count++;                        \
+    } while (0)
+
+s32 fn_1_15B70C(u32 kind, BgWinItem *item) {
+    /* held in a struct so the string base stays one materialization */
+    Obj_1_data_2A7E0_At3C *obj;
+
+    obj = lbl_1_data_2A7E0.unk_3C;
+
+    switch (kind) {
+    case 0:
+        *(BgWinVec *)&obj->unk_4 = item->pos;
+        break;
+    case 1:
+        *(BgWinVec *)&obj->unk_10 = item->pos;
+        break;
+    case 2:
+        item->unk_3C = 0;
+        *(BgWinVec *)&obj->unk_1C = item->pos;
+        obj->unk_4C = (u32)item;
+        BGWIN_ADD(obj, unk_5D, 20, unk_74, item);
+        break;
+    case 3:
+        item->unk_3C = 0;
+        *(BgWinVec *)&obj->unk_28 = item->pos;
+        obj->unk_50 = (u32)item;
+        BGWIN_ADD(obj, unk_5D, 20, unk_74, item);
+        break;
+    case 4:
+        item->unk_3C = 0;
+        *(BgWinVec *)&obj->unk_34 = item->pos;
+        obj->unk_54 = (u32)item;
+        BGWIN_ADD(obj, unk_5D, 20, unk_74, item);
+        break;
+    case 5:
+        item->unk_3C = 0;
+        *(u32 *)&obj->unk_58 = (u32)item;
+        BGWIN_ADD(obj, unk_5D, 20, unk_74, item);
+        break;
+    case 6:
+        BGWIN_ADD(obj, unk_5C, 5, unk_60, item);
+    case 7:
+        BGWIN_ADD(obj, unk_5D, 20, unk_74, item);
+        break;
+    case 8:
+    case 9:
+    case 10:
+        BGWIN_ADD(obj, unk_5E, 20, unk_C4, item);
+        break;
+    }
+    if (obj->unk_5E >= 20) {
+        OSPanic("bg_win.c", 0x163, "win gr over");
+    }
+    if (obj->unk_5D >= 20) {
+        OSPanic("bg_win.c", 0x164, "win bg over");
+    }
+    return 1;
+}
+/* fzgx:end fn_1_15B70C */
+
 /* fzgx:begin fn_1_15B970 */
 typedef struct {
     u8 pad_0[0x8];
