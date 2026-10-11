@@ -1061,6 +1061,147 @@ void fn_3_1B008(void *data, u32 x1, u32 y1, u32 x2, u32 y2) {
 }
 /* fzgx:end fn_3_1B008 */
 
+/* fzgx:begin fn_3_1BA20 */
+#pragma section code_type ".fzgxpool"
+__declspec(section ".fzgxpool") static void fzgx_pool_prime1(void) {
+    volatile float s; volatile double d;  /* fzgx-allow: S2 pool primer sinks */
+    s = 24.0f;
+    s = 86.0f;
+    s = 100.0f;
+    s = 385.0f;
+    s = 170.0f;
+    s = 104.0f;
+    s = 40.0f;
+    s = 96.0f;
+    s = 90.0f;
+    s = 0.5f;
+    s = 20.0f;
+    s = 60.0f;
+    s = 80.0f;
+    s = 15.0f;
+    s = 30.0f;
+    s = 320.0f;
+    s = 372.0f;
+    s = 0.10000000149011612f;
+    s = 0.6000000238418579f;
+    s = 375.0f;
+    s = 0.75f;
+    s = 248.0f;
+    s = 1.0f;
+    s = 0.800000011920929f;
+    s = 240.0f;
+    s = 25.0f;
+    s = 1.0199999809265137f;
+    s = 1.0099999904632568f;
+    s = 0.4000000059604645f;
+    s = 32768.0f;
+    s = 10.0f;
+    s = 81.0f;
+    s = 399.0f;
+    s = 18.0f;
+    s = 12.0f;
+    s = 0.0f;
+    d = 4503601774854144.0;
+    d = 4503599627370496.0;
+}
+static const unsigned long fzgx_pool_table2[3] = {0x00000000, 0x00000000, 0x00000000};  /* fzgx-allow: A1 retail pool bytes */
+__declspec(section ".fzgxpool") static void fzgx_pool_keep2(void) { const unsigned long *volatile cp; cp = fzgx_pool_table2; }  /* fzgx-allow: S2 pool primer sink */
+__declspec(section ".fzgxpool") static void fzgx_pool_prime3(void) {
+    volatile float s; volatile double d;  /* fzgx-allow: S2 pool primer sinks */
+    s = -1.0f;
+    d = 0.5;
+    s = 2.0f;
+    s = -2.0f;
+    s = -4.0f;
+    s = 4.0f;
+}
+#pragma section code_type ".text"
+
+extern f32 lbl_8006D118(f32 *, f32);
+extern void fn_3_146C0(void *, s16, s16, s16, u32 *);
+static inline int abs(int x) {
+    return __abs(x);
+}
+
+typedef struct { u32 value; } DrawColor;
+static inline void draw(void *obj, s16 start, s16 base, DrawColor *items) {
+    s32 half;
+    s32 y;
+    s16 width;
+    s32 x;
+    s16 i;
+    u16 size;
+    u32 item;
+
+    size = lbl_3_bss_A2438.unk_C * 2 + 1;
+    half = size >> 1;
+    i = -half;
+    x = base + i;
+    y = start - half;
+    width = size;
+    while (i <= half) {
+        item = items->value;
+        fn_3_146C0(obj, y, x, width, &item);
+        x++;
+        i++;
+    }
+}
+extern void fn_3_146C0(void *, s16, s16, s16, u32 *);
+
+#pragma opt_propagation off
+void fn_3_1BA20(void *arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4, s32 *arg5) {
+    s32 v7, v1, v4, v3, v5;
+    s16 v10;
+    f32 loc_28;
+    f32 t0;
+    s16 v24, v22;
+    s32 v21, v20, v19, v18;
+    s16 v27, v28, v36, v44;
+    s32 v26, v35, v43, v51;
+    u16 v25, v34, v42, v50;
+    s16 v32, v39, v47, v55;
+    s32 v31, v40, v48, v54;
+    u32 v23, v33, v41, v49;
+    DrawColor loc_14, loc_10, loc_C, loc_8;
+    f32 v59, v62, v68;
+
+    v1 = arg3 - arg1;
+    v4 = arg4 - arg2;
+    v10 = __abs(v1) > __abs(v4) ? __abs(v1) : __abs(v4);
+    t0 = lbl_8006D118(&loc_28, 1.0f);
+    v21 = (s32)((f32)v10 * t0);
+    v19 = (s32)(2.0f + (1.0f + (f32)((f32)(-2.0f * loc_28) * (f32)v10)));
+    v18 = (s32)(1.0f + (2.0f + (f32)((f32)(-4.0f * loc_28) * (f32)v10)));
+    v20 = 0;
+    while ((s16)v21 >= 0) {
+        v22 = (s16)v20;
+        v24 = (s16)v21;
+        loc_14 = *(DrawColor *)arg5;
+        draw(arg0, arg1 + v24, arg2 + v22, &loc_14);
+        loc_10 = *(DrawColor *)arg5;
+        draw(arg0, arg1 - v24, arg2 + v22, &loc_10);
+        loc_C = *(DrawColor *)arg5;
+        draw(arg0, arg1 + v24, arg2 - v22, &loc_C);
+        loc_8 = *(DrawColor *)arg5;
+        draw(arg0, arg1 - v24, arg2 - v22, &loc_8);
+        if ((s16)v19 < 0) {
+            v20++;
+            v19 = (s32)((f32)(s16)v19 + (2.0f + (f32)(4.0f * (f32)(s16)v20)));
+            v18 = (s32)((f32)(s16)v18 + (f32)(4.0f * (f32)(s16)v20));
+        } else if ((s16)v18 >= 0) {
+            v21--;
+            v19 = (s32)((f32)(s16)v19 - (f32)(4.0f * (f32)(s16)v21));
+            v18 = (s32)((f32)(s16)v18 - ((f32)(4.0f * (f32)(s16)v21) - 2.0f));
+        } else {
+            v20++;
+            v21--;
+            v19 = (s32)((f32)(s16)v19 + (2.0f + ((f32)(4.0f * (f32)(s16)v20) - (f32)(4.0f * (f32)(s16)v21))));
+            v18 = (s32)((f32)(s16)v18 + (2.0f + ((f32)(4.0f * (f32)(s16)v20) - (f32)(4.0f * (f32)(s16)v21))));
+        }
+    }
+}
+/* fzgx:end fn_3_1BA20 */
+
 /* fzgx:begin fn_3_1D338 noprologue */
 #include "types.h"
 
