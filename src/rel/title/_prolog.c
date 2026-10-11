@@ -1,50 +1,26 @@
 #include "types.h"
 #include "rel/title/globals.h"
-extern u32 fn_1_D0790(void);
-extern u8 lbl_8_bss_230;
-extern struct fn_8_784_lbl_1_bss_6EAD0 lbl_1_bss_6EAD0;
-extern struct fn_8_784_lbl_8_bss_22C lbl_8_bss_22C;
-extern u32 fn_1_5370(u32, u32);
-extern u32 fn_1_A1588(u32, u32);
+
+struct fn_8_784_lbl_8_bss_22C {
+    u32 unk_0;
+};
+
+struct fn_8_784_lbl_1_bss_6EAD0 {
+    u32 unk_0;
+};
 extern u32 lbl_8_bss_228;
-extern void fn_8_4D8(void);
-extern int fn_8_6FC(void);
-extern void fn_8_704(void);
-extern s32 fn_8_754(void);
-
-/* fzgx:begin fn_8_4D8 noprologue */
-#include "types.h"
-
-typedef struct {
-    s16 wait;
-    s16 cmd;
-} TitleStep;
-
-typedef struct {
-    u8 pad_0[0x3d8];
-    TitleStep steps[2];
-    char text1[12];     /* 0x3e0 */
-    char text2[20];     /* 0x3ec */
-    char text3[16];     /* 0x400 */
-    char text4[12];     /* 0x410 */
-    char text5[12];     /* 0x41c */
-} TitleData;
-
-extern s32 lbl_8_bss_228;
-extern s32 lbl_8_bss_22C;
+extern struct fn_8_784_lbl_8_bss_22C lbl_8_bss_22C;
 extern f32 lbl_8_rodata_0[];
 extern u8 lbl_1_bss_9C8[];
 extern u8 lbl_1_bss_9F8[];
 extern u8 lbl_1_bss_8B3A0[];
 extern void fn_1_49410(void);
-extern void fn_1_495C8(u8);
+extern void fn_1_495C8(u8 value);
 extern void fn_1_495FC(void);
-extern void fn_1_4954C(f32);
-extern void fn_1_496FC(f32, f32);
+extern void fn_1_4954C(f32 value);
+extern void fn_1_496FC(f32 value1, f32 value2);
 extern void fn_1_4A0D8(const char *);
 extern void fn_1_49614(void);
-
-#pragma opt_propagation off
 extern u8 fn_8_1304__fzgx_offset_0[];
 extern u8 fn_8_1344__fzgx_offset_0[];
 extern u8 fn_8_1394__fzgx_offset_0[];
@@ -138,6 +114,34 @@ extern u8 lbl_8_data_D8__fzgx_offset_0[];
 extern u8 lbl_8_data_E8__fzgx_offset_0[];
 extern u8 lbl_8_data_F0__fzgx_offset_0[];
 extern u8 lbl_8_data_FC__fzgx_offset_0[];
+extern void fn_1_D0790(void);
+extern u8 lbl_8_bss_230;
+extern struct fn_8_784_lbl_1_bss_6EAD0 lbl_1_bss_6EAD0;
+extern s8 fn_1_5370(s8 arg0, s16 arg1);
+extern u32 fn_1_A1588(u32, u32);
+extern int fn_8_4D8(u32 *obj);
+extern int fn_8_6FC(void);
+extern void fn_8_704(void);
+extern s32 fn_8_754(void);
+
+/* fzgx:begin fn_8_4D8 */
+typedef struct {
+    s16 wait;
+    s16 cmd;
+} TitleStep;
+
+typedef struct {
+    u8 pad_0[0x3d8];
+    TitleStep steps[2];
+    char text1[12];     /* 0x3e0 */
+    char text2[20];     /* 0x3ec */
+    char text3[16];     /* 0x400 */
+    char text4[12];     /* 0x410 */
+    char text5[12];     /* 0x41c */
+} TitleData;
+
+
+#pragma opt_propagation off
 static u32 fzgx_pool_data_lbl_8_data_0[246] = {  /* fzgx-allow: A1 retail data bytes and bindings */
     0x4E4F4E00, 0x4D415354, 0x45522052, 0x45435600, 0x4D415354, 0x45522053, 0x454E4400, 0x534C4156,
     0x45205345, 0x4E440000, 0x534C4156, 0x45205245, 0x43560000, 0x494E4954, 0x0, 0x54455354,
@@ -209,15 +213,15 @@ int fn_8_4D8(u32 *obj) {
     s16 *cmds;
     s16 cmd;
 
-    if (lbl_8_bss_228 != 0) {
-        lbl_8_bss_228--;
+    if ((*((s32 *)&lbl_8_bss_228)) != 0) {
+        (*((s32 *)&lbl_8_bss_228))--;
     } else {
-        lbl_8_bss_22C++;
-        lbl_8_bss_228 = steps[lbl_8_bss_22C * 2];
+        (*((s32 *)&lbl_8_bss_22C))++;
+        (*((s32 *)&lbl_8_bss_228)) = steps[(*((s32 *)&lbl_8_bss_22C)) * 2];
     }
 
     cmds = &steps[1];
-    cmd = cmds[lbl_8_bss_22C * 2];
+    cmd = cmds[(*((s32 *)&lbl_8_bss_22C)) * 2];
     if (cmd == 6) {
         *obj &= ~4;
         return 2;
@@ -230,7 +234,7 @@ int fn_8_4D8(u32 *obj) {
         fn_1_495C8(9);
         fn_1_495FC();
         fn_1_4954C(pool[14]);
-        switch (cmds[lbl_8_bss_22C * 2]) {
+        switch (cmds[(*((s32 *)&lbl_8_bss_22C)) * 2]) {
         case 1:
             fn_1_496FC(pool[0], pool[7]);
             fn_1_4A0D8(((char *)(((u8 *)fzgx_pool_data_lbl_8_data_0_3E0))));
@@ -290,12 +294,6 @@ s32 fn_8_754(void) {
 /* fzgx:end fn_8_754 */
 
 /* fzgx:begin fn_8_784 */
-struct fn_8_784_lbl_8_bss_22C {
-    u32 unk_0;
-};
-struct fn_8_784_lbl_1_bss_6EAD0 {
-    u32 unk_0;
-};
 
 void fn_8_784(u32 arg0) {
     *(u32 *)((u8 *)arg0 + 168) = (u32)fn_8_4D8;

@@ -91,6 +91,86 @@ void fn_1_12A32C(void *arg0) {
 }
 /* fzgx:end fn_1_12A32C */
 
+/* fzgx:begin fn_1_12A4B0 pool noprologue */
+#include "types.h"
+#include "rel/main_rel/archive.h"
+
+extern void OSPanic(char *arg0, s32 arg1, ...);
+extern void *lbl_801A6410;
+extern s32 fn_1_458A0(void *arg0, void *arg1, u32 arg2, u32 arg3);
+extern s32 fn_1_45850(void *arg0);
+extern s32 fn_1_45B2C(void *arg0);
+extern void *fn_1_45D0(u32 arg0, u32 arg1, void *arg2, u32 arg3);
+extern void fn_1_46B4(u32 arg0, void *arg1, void *arg2, u32 arg3);
+extern void fn_1_12FD4(void *arg0, void *arg1);
+extern void DCFlushRange(void *addr, u32 size);
+
+typedef struct fn_1_12A4B0_Entry {
+    s32 state;
+    u8 pad_4[0x64];
+    void *data;
+} fn_1_12A4B0_Entry;
+
+/* file-scope objects of the retail TU, in retail order: MWCC addresses them off one section base */
+s32 fzgx_obj_lbl_1_bss_897A0;
+s32 fzgx_obj_lbl_1_bss_897A4;
+s32 fzgx_obj_lbl_1_bss_897A8;
+fn_1_12A4B0_Entry fzgx_obj_lbl_1_bss_897AC[0x40];
+u8 fzgx_obj_lbl_1_bss_8B2AC[0x14];
+u8 fzgx_obj_lbl_1_bss_8B2C0[0x20];
+
+#pragma section code_type ".fzgxpool"
+static void fzgx_bss_layout_12A4B0(void) {
+    volatile u8 s;  /* fzgx-allow: S2 layout primer sink: MWCC emits .bss objects in first-access order */
+    s = *(u8 *)&fzgx_obj_lbl_1_bss_897A0;
+    s = *(u8 *)&fzgx_obj_lbl_1_bss_897A4;
+    s = *(u8 *)&fzgx_obj_lbl_1_bss_897A8;
+    s = *(u8 *)&fzgx_obj_lbl_1_bss_897AC;
+    s = *(u8 *)&fzgx_obj_lbl_1_bss_8B2AC;
+    s = *(u8 *)&fzgx_obj_lbl_1_bss_8B2C0;
+}
+#pragma section code_type ".text"
+
+void *fn_1_12A4B0(void *info, s32 readHeader, s32 temp) {
+    u8 *data;
+    u32 size;
+
+    data = (u8 *)&lbl_1_data_40600;
+    if (readHeader != 0) {
+        void *buf;
+
+        if (fn_1_458A0(info, fzgx_obj_lbl_1_bss_8B2C0, 0x20, 0) < 0) {
+            OSPanic((char *)(data + 8), 0xb9, data + 0xa8);
+        }
+        (void)__lwbrx(fzgx_obj_lbl_1_bss_8B2C0, 0);
+        size = (__lwbrx(fzgx_obj_lbl_1_bss_8B2C0, 4) + 0x1f) & ~0x1f;
+        if (temp != 0) {
+            buf = fn_1_45D0(*(u32 *)&lbl_801A6410, size, data + 8, 0xc1);
+            fzgx_obj_lbl_1_bss_897AC[fzgx_obj_lbl_1_bss_897A0].data = fn_1_45D0(*(u32 *)&lbl_801A6410, size, data + 8, 0xc2);
+            fn_1_46B4(*(u32 *)&lbl_801A6410, buf, data + 8, 0xc3);
+        } else {
+            fzgx_obj_lbl_1_bss_897AC[fzgx_obj_lbl_1_bss_897A0].data = fn_1_45D0(*(u32 *)&lbl_801A6410, size, data + 8, 0xc5);
+        }
+        if (fn_1_45850(info) == 0) {
+            OSPanic((char *)(data + 8), 0xd2, data + 0xd0);
+            return 0;
+        }
+        fn_1_12FD4(info, fzgx_obj_lbl_1_bss_897AC[fzgx_obj_lbl_1_bss_897A0].data);
+        DCFlushRange(fzgx_obj_lbl_1_bss_897AC[fzgx_obj_lbl_1_bss_897A0].data, size);
+    } else {
+        u32 length;
+
+        length = (fn_1_45B2C(info) + 0x1f) & ~0x1f;
+        fzgx_obj_lbl_1_bss_897AC[fzgx_obj_lbl_1_bss_897A0].data = fn_1_45D0(*(u32 *)&lbl_801A6410, (length + 0x1f) & ~0x1f, data + 8, 0xf2);
+        if (fn_1_458A0(info, fzgx_obj_lbl_1_bss_897AC[fzgx_obj_lbl_1_bss_897A0].data, length, 0) < 0) {
+            OSPanic((char *)(data + 8), 0xf5, data + 0xf8);
+        }
+        fn_1_45850(info);
+    }
+    return fzgx_obj_lbl_1_bss_897AC[fzgx_obj_lbl_1_bss_897A0].data;
+}
+/* fzgx:end fn_1_12A4B0 */
+
 /* fzgx:begin fn_1_12A6D8 */
 s32 fn_1_12A6D8(void *arg0) {
     u8 local[0x10];

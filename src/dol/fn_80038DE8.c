@@ -1,17 +1,6 @@
 #include "types.h"
-#include "dolphin/hw_regs.h"
+#include "dolphin/gx.h"
 
-typedef union WGPipe {
-    u8 u8;
-    u16 u16;
-    u32 u32;
-    f32 f32;
-} WGPipe;
-
-/* volatile: the write-gather FIFO is a memory-mapped hardware port; every store must be emitted
-   in order. The MWCC absolute-address declaration keeps it a named object (so the compiler knows
-   it cannot alias gx) while addressing it by literal like retail. */
-volatile WGPipe GXWGFifo : GX_FIFO_BASE; /* volatile: hardware port */
 #define WGPIPE GXWGFifo
 
 typedef struct GXContext {

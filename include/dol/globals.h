@@ -8,7 +8,29 @@
 // offsets and widths are facts, names are not. Regenerate rather than hand-edit padding.
 
 // lbl_801A6C80: .sbss size 0x8, referenced by 61 functions, shape {}
-extern u32 lbl_801A6C80;
+// the audio sequencer state lbl_801A6C80 points to: fn_80068BFC stores lbl_80193B48 (.bss, 0x5B28) in it.
+// dtk's .sbss slot is a pointer read through @sda21; the access analysis does not follow r13 bases yet.
+// Record arrays are offset facts from the matched views (fn_80065390, fn_8005C5C8, fn_8005FCD8, fn_80065528);
+// their element fields stay in those units until a librarian merges them.
+typedef struct {
+    u8 unk_0[0x10][0x10];  // 16 x 0x10 track slots; +0x8 header pointer
+    u8 pad_100[0x344];
+    u32 unk_444;  // current track
+    u8 pad_448[0x44];
+    u8 unk_48C[0xF][0x10];  // 15 x 0x10 track cursors
+    u8 pad_57C[0xC];
+    u8 unk_588[0x40][0x20];  // 64 x 0x20 voices
+    u8 unk_D88[0x10][0x10][0x4];  // voice map
+    u8 pad_1188[0x280];
+    u8 unk_1408[0x40][0x118];  // 64 x 0x118 players
+    u8 pad_5A08[0x114];
+    u32 unk_5B1C;
+    u8 pad_5B20[0x8];
+} Obj_801A6C80_Target;
+extern Obj_801A6C80_Target *lbl_801A6C80;  // typedefs.json decl override
+
+// lbl_801A6D38: .sbss size 0x8, referenced by 49 functions, shape {}
+extern u32 lbl_801A6D38;
 
 // lbl_80177960: .bss size 0x220, referenced by 49 functions, shape {'object': 326}
 // object reached through lbl_80177960.unk_88
@@ -97,9 +119,6 @@ typedef struct {
     u8 pad_110[0x110];
 } Obj_80177960;
 extern Obj_80177960 lbl_80177960;
-
-// lbl_801A6D38: .sbss size 0x8, referenced by 49 functions, shape {}
-extern u32 lbl_801A6D38;
 
 // lbl_8018FEB0: .bss size 0x30, referenced by 22 functions, shape {'object': 227}
 typedef struct {

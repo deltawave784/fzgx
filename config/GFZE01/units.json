@@ -29309,6 +29309,18 @@
   },
   {
     "module": "main_rel",
+    "source": "rel/main_rel/archive/fn_1_12A4B0.c",
+    "symbols": [
+      "fn_1_12A4B0"
+    ],
+    "status": "nonmatching",
+    "mw_version": null,
+    "extra_cflags": [],
+    "tu": "rel/main_rel/archive.c",
+    "pool": true
+  },
+  {
+    "module": "main_rel",
     "source": "rel/main_rel/archive/fn_1_12A6D8.c",
     "symbols": [
       "fn_1_12A6D8"
@@ -39908,6 +39920,20 @@
     "tu": "rel/main_rel/enemy_ctrl.c",
     "pool": {
       "@22": "lbl_1_rodata_5C00"
+    }
+  },
+  {
+    "module": "main_rel",
+    "source": "rel/main_rel/enemy_ctrl/fn_1_C7AA0.c",
+    "symbols": [
+      "fn_1_C7AA0"
+    ],
+    "status": "matching",
+    "mw_version": null,
+    "extra_cflags": [],
+    "tu": "rel/main_rel/enemy_ctrl.c",
+    "pool": {
+      "@20": "lbl_1_rodata_5C00"
     }
   },
   {

@@ -44,7 +44,7 @@ s32 fn_80068BFC(u32 arg0,u32 arg1,u32 arg2,u32 arg3,u32 arg4,u32 arg5) {
     arg5 = lbl_801A7328;
     lbl_801A6C78 = 0;
     lbl_801A6C7C = 0;
-    lbl_801A6C80 = (u32)lbl_80193B48;
+    lbl_801A6C80 = (Obj_801A6C80_Target *)lbl_80193B48;
     fn_80067F68(arg0,arg1,arg2,arg3,arg4,arg5);
     fn_800631EC();
     if (arg1 == 0) return -1;
