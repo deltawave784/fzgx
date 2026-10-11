@@ -15,7 +15,30 @@ from .project import ROOT, Project
 
 
 def stubs(p: Project) -> List[dict]:
-    return [u for u in p.load_units() if u.get("status") == "nonmatching"]
+    """Units with no matched code: nonmatching, not a pool match, and no function matched in the ledger.
+
+    A pool match keeps `status: nonmatching` with `pool: true` in units.json (the retail object
+    still links), so the units.json status alone would select committed matches.
+    """
+    l = Ledger()
+    matched = {r[0] for r in l.db.execute("SELECT symbol FROM functions WHERE status='matched'")}
+    out = []
+    for u in p.load_units():
+        if u.get("status") != "nonmatching" or u.get("pool"):
+            continue
+        keys = set()
+        for s in u.get("symbols", []):
+            keys.add(s)
+            r = p.resolve(s)
+            if r:
+                keys.add(p.key(r))
+        if keys & matched:
+            continue
+        rows = l.db.execute("SELECT 1 FROM functions WHERE unit=? AND status='matched' LIMIT 1", (u["source"],))
+        if rows.fetchone():
+            continue
+        out.append(u)
+    return out
 
 
 def uncarve(p: Project, sources: List[str], split: bool = True) -> Dict[str, object]:

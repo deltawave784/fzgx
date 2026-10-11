@@ -67,3 +67,21 @@ index b4158ca2..438ed439 100644
      found = []
      symbols = elf.symbols()
      for rsec in elf.sections:
+diff --git a/tools/fzgx/poolfix.py b/tools/fzgx/poolfix.py
+index 199877a2..4126ff32 100644
+--- a/tools/fzgx/poolfix.py
++++ b/tools/fzgx/poolfix.py
+@@ -250,6 +250,13 @@ class Elf:
+         ro["addralign"] = 1
+         ro["flags"] = 0
+         self._write_shdr(ro)
++        # relocations applied to the emptied bytes (a pointer-bearing pool's function addresses,
++        # bound to retail by oracle._relocated_pool_matches) go with them: left in place they
++        # point into a size-0 section and mwld aborts (internal linker error ELF_linker.c:1179)
++        for rs in self.sections:
++            if rs["type"] == SHT_RELA and rs["info"] == ro["index"] and rs["size"]:
++                rs["size"] = 0
++                self._write_shdr(rs)
+         return True
+ 
+ 
