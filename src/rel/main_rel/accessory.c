@@ -1640,6 +1640,40 @@ s32 fn_1_128B00(s16 value) {
 }
 /* fzgx:end fn_1_128B00 */
 
+/* fzgx:begin fn_1_128B60 noprologue */
+#include "types.h"
+
+extern u32 lbl_801A63C0;
+
+/* Local linear congruential generator over the shared seed. */
+static inline s32 fn_1_128B60_rand(void) {
+    lbl_801A63C0 = lbl_801A63C0 * 0x676A4B6B + 0x33CB;
+    return (lbl_801A63C0 >> 16) & 0x7FFF;
+}
+
+void fn_1_128B60(u8 *a0, u8 *a1, u8 *a2, u8 *b0, u8 *b1, u8 *b2, u8 *c0, u8 *c1, u8 *c2, u8 *d) {
+    *a0 = fn_1_128B60_rand() % 10;
+    *a1 = (*a0 + 1) % 10;
+    *a2 = (*a0 + 2) % 10;
+    *b0 = fn_1_128B60_rand() % 10;
+    *b1 = (*b0 + 1) % 10;
+    *b2 = (*b0 + 2) % 10;
+    *c0 = fn_1_128B60_rand() % 10;
+    *c1 = (*c0 + 1) % 10;
+    *c2 = (*c0 + 2) % 10;
+    if (fn_1_128B60_rand() & 1) {
+        *a2 = 15;
+    }
+    if (fn_1_128B60_rand() & 1) {
+        *b2 = 15;
+    }
+    if (fn_1_128B60_rand() & 1) {
+        *c2 = 15;
+    }
+    *d = fn_1_128B60_rand() % 20;
+}
+/* fzgx:end fn_1_128B60 */
+
 /* fzgx:begin fn_1_128DD8 */
 // Return the table index for a matching accessory value, or the first unused index.
 u8 fn_1_128DD8(u8 value) {

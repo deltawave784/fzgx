@@ -28960,6 +28960,17 @@
   },
   {
     "module": "main_rel",
+    "source": "rel/main_rel/accessory/fn_1_128B60.c",
+    "symbols": [
+      "fn_1_128B60"
+    ],
+    "status": "matching",
+    "mw_version": null,
+    "extra_cflags": [],
+    "tu": "rel/main_rel/accessory.c"
+  },
+  {
+    "module": "main_rel",
     "source": "rel/main_rel/accessory/fn_1_128DD8.c",
     "symbols": [
       "fn_1_128DD8"
