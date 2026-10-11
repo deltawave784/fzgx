@@ -2024,3 +2024,6 @@ rel/movie_module/fn_12_328CC.c:
 
 rel/movie_module/fn_12_A5C.c:
 	.text       start:0x00000A5C end:0x00000C60 align:4
+
+rel/movie_module/fn_12_5FA0.c:
+	.text       start:0x00005FA0 end:0x000062F8 align:4
