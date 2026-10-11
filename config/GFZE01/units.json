@@ -29986,6 +29986,37 @@
   },
   {
     "module": "main_rel",
+    "source": "rel/main_rel/archive/fn_1_130C84.c",
+    "symbols": [
+      "fn_1_130C84"
+    ],
+    "status": "matching",
+    "mw_version": "GC/1.3.2",
+    "extra_cflags": [],
+    "tu": "rel/main_rel/archive.c",
+    "pool": {
+      "...rodata.0": "lbl_1_rodata_83C0",
+      "@6": "lbl_1_rodata_83C0+0x4",
+      "@77": "lbl_1_rodata_83C0+0x188",
+      "@7": "lbl_1_rodata_83C0+0x8",
+      "@78": "lbl_1_rodata_83C0+0x18C",
+      "@59": "lbl_1_rodata_83C0+0x100",
+      "@79": "lbl_1_rodata_83C0+0x190",
+      "@44": "lbl_1_rodata_83C0+0xB8",
+      "@37": "lbl_1_rodata_83C0+0x98",
+      "@31": "lbl_1_rodata_83C0+0x80",
+      "@45": "lbl_1_rodata_83C0+0xBC",
+      "@19": "lbl_1_rodata_83C0+0x40",
+      "@73": "lbl_1_rodata_83C0+0x170",
+      "@5": "lbl_1_rodata_83C0",
+      "@76": "lbl_1_rodata_83C0+0x180",
+      "@74": "lbl_1_rodata_83C0+0x174",
+      "@72": "lbl_1_rodata_83C0+0x168",
+      "@75": "lbl_1_rodata_83C0+0x178"
+    }
+  },
+  {
+    "module": "main_rel",
     "source": "rel/main_rel/archive/fn_1_130EE8.c",
     "symbols": [
       "fn_1_130EE8"

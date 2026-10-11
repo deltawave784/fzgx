@@ -1636,6 +1636,196 @@ void fn_1_12F30C(void *arg0, Fn1_12F30CState *state) {
 }
 /* fzgx:end fn_1_12F30C */
 
+/* fzgx:begin fn_1_130C84 noprologue */
+#include "dolphin/types.h"
+
+typedef struct Fn130C84Ref {
+    u8 pad0[0x68];
+    f32 x68;
+    u8 pad6C[0x84 - 0x6C];
+    f32 x84;
+    u8 pad88[0xF8 - 0x88];
+    f32 xF8;
+    u8 padFC[0x104 - 0xFC];
+    u16 x104;
+    u8 pad106[0x108 - 0x106];
+    f32 x108;
+} Fn130C84Ref;
+
+typedef struct Fn130C84State {
+    u32 flags;
+    f32 x4;
+    u8 pad8[0xC - 0x8];
+    f32 xC;
+    f32 x10;
+    f32 x14;
+    u8 pad18[0x1C - 0x18];
+    f32 x1C;
+    u8 pad20[0x32 - 0x20];
+    u8 mode;
+} Fn130C84State;
+
+typedef struct Fn130C84Obj {
+    u8 pad0[4];
+    s16 id;
+    u8 pad6[0xDC - 0x6];
+    f32 xDC;
+    u8 padE0[0x484 - 0xE0];
+    Fn130C84State *state;
+} Fn130C84Obj;
+
+extern void *fn_1_8627C(s32);
+
+/* Primes the TU literal pool (lbl_1_rodata_83C0) in retail first-use order;
+ * the section is dropped at integration. */
+#pragma section code_type ".fzgxpool"
+static void fzgx_pool_primer_130C84(volatile f32 *f, volatile f64 *d) /* fzgx-allow: S2 pool primer sinks keep every literal load */
+{
+    *f = 1.0f;
+    *f = 0.0f;
+    *f = 0.5f;
+    *d = 40.0;
+    *f = 0.3f;
+    *f = -0.42f;
+    *f = 0.84f;
+    *f = -0.225f;
+    *f = 0.15f;
+    *f = 0.35f;
+    *f = 0.023148147f;
+    *f = -0.1f;
+    *f = 2.0f;
+    *f = 0.00001f;
+    *f = 10.0f;
+    *f = 0.05f;
+    *f = 1000.0f;
+    *f = 50.0f;
+    *f = 3000.0f;
+    *d = (f64)0.15f;
+    *f = 20.0f;
+    *f = 5.0f;
+    *f = 0.8f;
+    *d = (f64)0.4f;
+    *f = 600.0f;
+    *f = 0.6f;
+    *f = 1.3f;
+    *f = -0.48f;
+    *f = 0.48f;
+    *f = 1.5f;
+    *f = 1.75f;
+    *f = 1.2f;
+    *d = 1.3;
+    *f = 0.016666668f;
+    *f = -0.125f;
+    *f = 0.125f;
+    *f = 0.1f;
+    *f = 2.5f;
+    *f = -0.45f;
+    *f = 0.45f;
+    *f = 100.0f;
+    *f = -0.05f;
+    *f = 800.0f;
+    *f = 0.95f;
+    *f = 500.0f;
+    *d = 10.0;
+    *f = -0.4f;
+    *f = 0.4f;
+    *f = 120.0f;
+    *f = 40.0f;
+    *d = 1000.0;
+    *f = -0.38f;
+    *f = 0.76f;
+    *d = (f64)0.35f;
+    *f = 0.25f;
+    *d = 1.0;
+    *d = 0.02;
+    *d = (f64)1.01f;
+    *d = (f64)1.02f;
+    *f = 1.05f;
+    *d = (f64)1.03f;
+    *d = 50.0;
+    *d = 25.0;
+    *d = (f64)1.1f;
+    *d = 0.05;
+    *d = -2.0;
+    *d = 5.0;
+    *d = 4503601774854144.0;
+    *f = -1.0f;
+    *f = 2048.0f;
+    *f = 0.2f;
+    *d = 4503599627370496.0;
+    *f = 4.0f;
+    *f = 3.0f;
+    *f = 0.52f;
+}
+#pragma section code_type ".text"
+
+void fn_1_130C84(Fn130C84Obj *obj)
+{
+    u16 h;
+    Fn130C84Ref *ref;
+    Fn130C84Ref *base;
+    Fn130C84State *st;
+    f32 step;
+    f32 t;
+    f32 angle;
+    f32 speed = 4.0f;
+
+    ref = fn_1_8627C(obj->id);
+    base = fn_1_8627C(0);
+    st = obj->state;
+    st->x1C = 0.0f;
+    switch (st->mode) {
+    case 0x22:
+        step = 0.0f;
+        break;
+    case 0x23:
+        step = 4.0f / ref->x84;
+        break;
+    case 0x24:
+        step = -speed / ref->x84;
+        break;
+    }
+    st->x1C = st->x1C + step;
+    st->x10 = 0.0f;
+    st->xC = 0.5f;
+    obj->xDC = 0.0f;
+    switch (st->mode) {
+    case 0x23:
+    case 0x24:
+        st->xC = ((base->xF8 - 3.0f) - ref->xF8) / 4.0f;
+        if (st->xC > 0.52f) {
+            st->xC = 0.52f;
+        }
+        if (st->xC < 0.45f) {
+            st->xC = 0.45f;
+        }
+        break;
+    }
+    t = st->xC;
+    if (t > 1.3) {
+        st->xC = 1.3f;
+    } else if (t < 0.0f) {
+        st->xC = 0.0f;
+        st->x10 = 100.0f * -st->xC;
+    }
+    st->x14 = 10.0f * (st->x1C - ref->x108 / ref->x68);
+    st->x14 = (st->x14 < -1.0f) ? -1.0f : ((st->x14 > 1.0f) ? 1.0f : st->x14);
+    h = ref->x104;
+    if (h <= 0x8000) {
+        angle = (f32)h / 2048.0f;
+    } else if (h > 0x8000) {
+        angle = -(f32)(s32)(0x10000 - h) / 2048.0f;
+    } else {
+        angle = 0.0f;
+    }
+    if ((st->flags >> 1) & 1) {
+        st->x4 = st->x4 + (f32)(0.2f * (angle - st->x4));
+    } else {
+        st->x4 = angle;
+    }
+}
+/* fzgx:end fn_1_130C84 */
+
 /* fzgx:begin fn_1_130EE8 */
 void fn_1_130EE8(u32 arg0, u32 arg1) {
     Obj_1_bss_8CA40 *p_lbl_1_bss_8CA40;
