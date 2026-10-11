@@ -7076,3 +7076,6 @@ rel/main_rel/motasglist/fn_1_42044.c:
 
 rel/main_rel/bg_for/fn_1_E1A00.c:
 	.text       start:0x000E1A00 end:0x000E1C10 align:4
+
+rel/main_rel/spline/fn_1_F9244.c:
+	.text       start:0x000F9244 end:0x000F946C align:4
