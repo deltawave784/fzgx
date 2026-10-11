@@ -7151,3 +7151,6 @@ rel/main_rel/effect_car/fn_1_723E0.c:
 
 rel/main_rel/archive/fn_1_130C84.c:
 	.text       start:0x00130C84 end:0x00130EE8 align:4
+
+rel/main_rel/stcoli/fn_1_2277C.c:
+	.text       start:0x0002277C end:0x000229EC align:4
