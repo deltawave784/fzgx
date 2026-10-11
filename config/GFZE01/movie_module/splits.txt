@@ -2033,3 +2033,6 @@ rel/movie_module/fn_12_32EAC.c:
 
 rel/movie_module/fn_12_39A68.c:
 	.text       start:0x00039A68 end:0x00039CA4 align:4
+
+rel/movie_module/fn_12_11CE0.c:
+	.text       start:0x00011CE0 end:0x00011F5C align:4
