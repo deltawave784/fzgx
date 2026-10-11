@@ -1,0 +1,52 @@
+{
+ "lbl_8_bss_3D0": {
+  "decl": "Obj_8_bss_3D0 lbl_8_bss_3D0",
+  "typedef": [
+   "#ifndef FZGX_TYPES_LBL_8_BSS_3D0",
+   "#define FZGX_TYPES_LBL_8_BSS_3D0",
+   "// one layout for every TU header that declares this symbol (librarian, typedefs.json)",
+   "typedef struct {",
+   "    u32 unk_0;  // 25 loads, 0 stores",
+   "    u8 pad_4[0x16C];",
+   "} Obj_8_bss_3D0;",
+   "#endif"
+  ]
+ },
+ "lbl_8_bss_550": {
+  "decl": "Obj_8_bss_550_Target *lbl_8_bss_550",
+  "typedef": [
+   "#ifndef FZGX_TYPES_LBL_8_BSS_550",
+   "#define FZGX_TYPES_LBL_8_BSS_550",
+   "// one layout for every TU header that declares this symbol (librarian, typedefs.json)",
+   "typedef struct {",
+   "    u32 unk_0;  // 12 loads, 7 stores",
+   "    u32 unk_4;  // 1 loads, 1 stores",
+   "    u32 unk_8;  // 4 loads, 1 stores",
+   "    u8 unk_C;  // 10 loads, 1 stores",
+   "    u8 unk_D;  // 6 loads, 4 stores",
+   "    u8 unk_E;  // 10 loads, 3 stores",
+   "    u8 unk_F;  // 3 loads, 13 stores",
+   "    u8 unk_10;  // 2 loads, 1 stores",
+   "    u8 unk_11;  // 2 loads, 1 stores",
+   "    u16 unk_12;  // 3 loads, 3 stores",
+   "    u8 unk_14;  // 2 loads, 2 stores",
+   "    u8 unk_15;  // 2 loads, 2 stores",
+   "    u8 unk_16;  // 2 loads, 2 stores",
+   "    u8 unk_17;  // 2 loads, 2 stores",
+   "    u32 unk_18;  // 1 loads, 1 stores",
+   "    u32 unk_1C;  // 1 loads, 1 stores",
+   "    u32 unk_20;  // 3 loads, 2 stores",
+   "    u8 pad_24[0x4];",
+   "    u8 unk_28;  // 1 loads, 0 stores",
+   "    u8 pad_29[0xD];",
+   "    u8 unk_36;  // 2 loads, 1 stores",
+   "    u8 unk_37;  // 0 loads, 1 stores",
+   "    u8 pad_38[0x2];",
+   "    u8 unk_3A;  // 2 loads, 2 stores",
+   "    u8 unk_3B;  // 5 loads, 2 stores",
+   "    u32 unk_3C;  // 5 loads, 2 stores",
+   "} Obj_8_bss_550_Target;",
+   "#endif"
+  ]
+ }
+}

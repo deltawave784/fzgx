@@ -11,6 +11,9 @@
 extern u32 lbl_1_bss_897A0;
 
 // lbl_1_bss_8CA40: .bss size 0x4, 10 refs from archive.c
+#ifndef FZGX_TYPES_LBL_1_BSS_8CA40
+#define FZGX_TYPES_LBL_1_BSS_8CA40
+// one layout for every TU header that declares this symbol (librarian, typedefs.json)
 // fn_1_130EE8 initialises 0x2C bytes from here (dtk size 4)
 typedef struct {
     u32 unk_0;
@@ -25,6 +28,7 @@ typedef struct {
     u32 unk_24;
     u32 unk_28;
 } Obj_1_bss_8CA40;
+#endif
 extern Obj_1_bss_8CA40 lbl_1_bss_8CA40;  // typedefs.json decl override
 
 // lbl_1_data_40608: .data size 0xA, 8 refs from archive.c (own data block)
@@ -63,14 +67,38 @@ extern Obj_1_bss_8B56C lbl_1_bss_8B56C;
 // lbl_1_data_4076C: .data size 0x28, 3 refs from archive.c (own data block)
 extern char lbl_1_data_4076C[0x28];  // "archive_open_start_addr: Can't ARCOpen."
 
-// lbl_1_data_407BC: .data size 0xC, 2 refs from archive.c (own data block)
-extern u8 lbl_1_data_407BC[0xC];
+// lbl_1_bss_8B5EC: .bss size 0x4, 2 refs from archive.c
+extern u32 lbl_1_bss_8B5EC;
 
 // lbl_1_data_40D50: .data size 0x20, 2 refs from archive.c (own data block)
 extern u8 lbl_1_data_40D50[0x20];
 
-// lbl_1_bss_8B5EC: .bss size 0x4, 2 refs from archive.c
-extern u32 lbl_1_bss_8B5EC;
+// lbl_1_data_407BC: .data size 0xC, 2 refs from archive.c (own data block)
+extern u8 lbl_1_data_407BC[0xC];
+
+// lbl_1_data_40720: .data size 0x30, 1 refs from archive.c (own data block)
+extern char lbl_1_data_40720[0x30];  // 'ArchiveFreeARC: Current work is already freed.\n'
+
+// lbl_1_data_40A7C: .data size 0x124, 1 refs from archive.c (own data block)
+extern char lbl_1_data_40A7C[0x124];  // 'SelS_MachineConfigDisp'
+
+// lbl_1_data_40BC0: .data size 0x13, 1 refs from archive.c (own data block)
+extern char lbl_1_data_40BC0[0x13];  // 'SelS_MiniStageDisp'
+
+// lbl_1_data_40BB8: .data size 0x8, 1 refs from archive.c (own data block)
+extern u32 lbl_1_data_40BB8;
+
+// lbl_1_data_40BB0: .data size 0x8, 1 refs from archive.c (own data block)
+extern u32 lbl_1_data_40BB0;
+
+// lbl_1_data_40750: .data size 0x1A, 1 refs from archive.c (own data block)
+extern char lbl_1_data_40750[0x1A];  // "alloc_read : Can't open3."
+
+// lbl_1_data_40E7C: .data size 0x12, 1 refs from archive.c (own data block)
+extern char lbl_1_data_40E7C[0x12];  // 'CustomMemcardMain'
+
+// lbl_1_data_40E90: .data size 0x12, 1 refs from archive.c (own data block)
+extern char lbl_1_data_40E90[0x12];  // 'CustomMemcardDisp'
 
 // jumptable_1_data_40CC8: .data size 0x88, 1 refs from archive.c (own data block)
 extern u8 jumptable_1_data_40CC8[0x88];
@@ -83,34 +111,10 @@ typedef struct {
 } Obj_1_data_40BD8;
 extern Obj_1_data_40BD8 lbl_1_data_40BD8;
 
-// lbl_1_data_40A7C: .data size 0x124, 1 refs from archive.c (own data block)
-extern char lbl_1_data_40A7C[0x124];  // 'SelS_MachineConfigDisp'
-
-// lbl_1_data_40BB0: .data size 0x8, 1 refs from archive.c (own data block)
-extern u32 lbl_1_data_40BB0;
-
-// lbl_1_data_40614: .data size 0x10C, 1 refs from archive.c (own data block)
-extern char lbl_1_data_40614[0x10C];  // 'ArchiveSetCurrent: id is not used.\n'
-
-// lbl_1_data_40720: .data size 0x30, 1 refs from archive.c (own data block)
-extern char lbl_1_data_40720[0x30];  // 'ArchiveFreeARC: Current work is already freed.\n'
-
-// lbl_1_data_40BB8: .data size 0x8, 1 refs from archive.c (own data block)
-extern u32 lbl_1_data_40BB8;
-
-// lbl_1_data_40750: .data size 0x1A, 1 refs from archive.c (own data block)
-extern char lbl_1_data_40750[0x1A];  // "alloc_read : Can't open3."
-
 // lbl_1_data_40BA0: .data size 0x10, 1 refs from archive.c (own data block)
 extern u8 lbl_1_data_40BA0[0x10];
 
-// lbl_1_data_40BC0: .data size 0x13, 1 refs from archive.c (own data block)
-extern char lbl_1_data_40BC0[0x13];  // 'SelS_MiniStageDisp'
-
-// lbl_1_data_40E7C: .data size 0x12, 1 refs from archive.c (own data block)
-extern char lbl_1_data_40E7C[0x12];  // 'CustomMemcardMain'
-
-// lbl_1_data_40E90: .data size 0x12, 1 refs from archive.c (own data block)
-extern char lbl_1_data_40E90[0x12];  // 'CustomMemcardDisp'
+// lbl_1_data_40614: .data size 0x10C, 1 refs from archive.c (own data block)
+extern char lbl_1_data_40614[0x10C];  // 'ArchiveSetCurrent: id is not used.\n'
 
 #endif  // REL_MAIN_REL_ARCHIVE_H

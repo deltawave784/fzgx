@@ -27,11 +27,15 @@ extern Obj_1_bss_6D83C lbl_1_bss_6D83C;
 extern u8 lbl_1_bss_6D84A;
 
 // lbl_1_bss_6D82C: .bss size 0xC, 6 refs from car.c
+#ifndef FZGX_TYPES_LBL_1_BSS_6D82C
+#define FZGX_TYPES_LBL_1_BSS_6D82C
+// one layout for every TU header that declares this symbol (librarian, typedefs.json)
 typedef struct {
     u32 unk_0;  // 13 loads, 10 stores
     u8 pad_4[0x8];
 } Obj_1_bss_6D82C;
-extern Obj_1_bss_6D82C lbl_1_bss_6D82C;
+#endif
+extern Obj_1_bss_6D82C lbl_1_bss_6D82C;  // typedefs.json decl override
 
 // lbl_1_bss_6E960: .bss size 0x18, 3 refs from car.c
 typedef struct {
@@ -45,8 +49,11 @@ typedef struct {
 extern Obj_1_bss_6E960 lbl_1_bss_6E960;
 
 // lbl_1_bss_D58: .bss size 0x18, 3 refs from car.c
+#ifndef FZGX_TYPES_LBL_1_BSS_D58
+#define FZGX_TYPES_LBL_1_BSS_D58
+// one layout for every TU header that declares this symbol (librarian, typedefs.json)
 typedef struct {
-    u16 unk_0;  // 4 loads, 0 stores
+    u16 unk_0;  // 5 loads, 0 stores
     u16 unk_2;  // 1 loads, 0 stores
     u8 pad_4[0x4];
     u16 unk_8;  // 24 loads, 0 stores
@@ -56,7 +63,8 @@ typedef struct {
     u16 unk_12;  // 4 loads, 0 stores
     u8 pad_14[0x4];
 } Obj_1_bss_D58;
-extern Obj_1_bss_D58 lbl_1_bss_D58;
+#endif
+extern Obj_1_bss_D58 lbl_1_bss_D58;  // typedefs.json decl override
 
 // lbl_1_bss_6E958: .bss size 0x8, 3 refs from car.c
 typedef struct {
@@ -70,18 +78,6 @@ extern u8 lbl_1_data_27BA4[0x5C];
 
 // lbl_1_data_278AC: .data size 0x3, 3 refs from car.c (own data block)
 extern u32 lbl_1_data_278AC;
-
-// lbl_1_data_20700: .data size 0x11, 2 refs from car.c (own data block)
-extern u8 lbl_1_data_20700[0x11];
-
-// lbl_1_bss_6D868: .bss size 0x1, 2 refs from car.c
-extern u8 lbl_1_bss_6D868;
-
-// lbl_1_data_2065C: .data size 0x1, 2 refs from car.c (own data block)
-extern u8 lbl_1_data_2065C;
-
-// lbl_1_bss_6D824: .bss size 0x4, 2 refs from car.c
-extern u32 lbl_1_bss_6D824;
 
 // lbl_1_bss_C70: .bss size 0x50, 2 refs from car.c
 typedef struct {
@@ -101,7 +97,19 @@ typedef struct {
 } Obj_1_bss_A88;
 extern Obj_1_bss_A88 lbl_1_bss_A88;
 
+// lbl_1_bss_6D824: .bss size 0x4, 2 refs from car.c
+extern u32 lbl_1_bss_6D824;
+
+// lbl_1_bss_6D864: .bss size 0x4, 2 refs from car.c
+extern u32 lbl_1_bss_6D864;
+
+// lbl_1_bss_6D868: .bss size 0x1, 2 refs from car.c
+extern u8 lbl_1_bss_6D868;
+
 // lbl_1_bss_525C: .bss size 0x198, 2 refs from car.c
+#ifndef FZGX_TYPES_LBL_1_BSS_525C
+#define FZGX_TYPES_LBL_1_BSS_525C
+// one layout for every TU header that declares this symbol (librarian, typedefs.json)
 typedef struct {
     u32 unk_0;  // 1 loads, 0 stores
     u8 pad_4[0x1];
@@ -115,13 +123,37 @@ typedef struct {
     u8 unk_192;  // 2 loads, 0 stores
     u8 pad_193[0x5];
 } Obj_1_bss_525C;
-extern Obj_1_bss_525C lbl_1_bss_525C;
+#endif
+extern Obj_1_bss_525C lbl_1_bss_525C;  // typedefs.json decl override
+
+// lbl_1_data_2065C: .data size 0x1, 2 refs from car.c (own data block)
+extern u8 lbl_1_data_2065C;
+
+// lbl_1_data_20700: .data size 0x11, 2 refs from car.c (own data block)
+extern u8 lbl_1_data_20700[0x11];
 
 // lbl_1_bss_6D9A0: .bss size 0xBC, 2 refs from car.c
 extern u8 lbl_1_bss_6D9A0[0xBC];
 
-// lbl_1_bss_6D864: .bss size 0x4, 2 refs from car.c
-extern u32 lbl_1_bss_6D864;
+// jumptable_1_data_27A2C: .data size 0x38, 1 refs from car.c (own data block)
+extern u8 jumptable_1_data_27A2C[0x38];
+
+// lbl_1_data_2786C: .data size 0x4, 1 refs from car.c (own data block)
+extern u32 lbl_1_data_2786C;
+
+// lbl_1_data_20664: .data size 0x74, 1 refs from car.c (own data block)
+typedef struct {
+    u8 unk_0;  // 2 loads, 0 stores
+    u8 unk_1;  // 2 loads, 0 stores
+    u8 pad_2[0x72];
+} Obj_1_data_20664;
+extern Obj_1_data_20664 lbl_1_data_20664;
+
+// lbl_1_data_20714: .data size 0xA, 1 refs from car.c (own data block)
+extern u8 lbl_1_data_20714[0xA];
+
+// lbl_1_data_208A8: .data size 0x64, 1 refs from car.c (own data block)
+extern u8 lbl_1_data_208A8[0x64];
 
 // lbl_1_data_27920: .data size 0x4, 1 refs from car.c (own data block)
 extern u32 lbl_1_data_27920;
@@ -133,17 +165,35 @@ typedef struct {
 } Obj_1_data_27924;
 extern Obj_1_data_27924 lbl_1_data_27924;
 
-// lbl_1_data_22A24: .data size 0x5, 1 refs from car.c (own data block)
-extern u32 lbl_1_data_22A24;
+// lbl_1_data_2785C: .data size 0x10, 1 refs from car.c (own data block)
+extern u8 lbl_1_data_2785C[0x10];
 
-// lbl_1_data_22A1C: .data size 0x5, 1 refs from car.c (own data block)
-extern u32 lbl_1_data_22A1C;
+// lbl_1_data_27870: .data size 0x4, 1 refs from car.c (own data block)
+extern u32 lbl_1_data_27870;
 
-// lbl_1_data_24EF0: .data size 0x7, 1 refs from car.c (own data block)
-extern u32 lbl_1_data_24EF0;
+// lbl_1_data_2057C: .data size 0x16, 1 refs from car.c (own data block)
+extern u8 lbl_1_data_2057C[0x16];
 
 // lbl_1_data_2090C: .data size 0x88, 1 refs from car.c (own data block)
 extern u8 lbl_1_data_2090C[0x88];
+
+// lbl_1_data_27874: .data size 0x38, 1 refs from car.c (own data block)
+extern u8 lbl_1_data_27874[0x38];
+
+// lbl_1_data_20594: .data size 0x12, 1 refs from car.c (own data block)
+extern u8 lbl_1_data_20594[0x12];
+
+// lbl_1_data_205A8: .data size 0xB4, 1 refs from car.c (own data block)
+extern u8 lbl_1_data_205A8[0xB4];
+
+// lbl_1_data_20994: .data size 0x12, 1 refs from car.c (own data block)
+extern u8 lbl_1_data_20994[0x12];
+
+// lbl_1_data_209A8: .data size 0x12, 1 refs from car.c (own data block)
+extern u8 lbl_1_data_209A8[0x12];
+
+// lbl_1_data_22A24: .data size 0x5, 1 refs from car.c (own data block)
+extern u32 lbl_1_data_22A24;
 
 // jumptable_1_data_207F0: .data size 0xA4, 1 refs from car.c (own data block)
 extern u8 jumptable_1_data_207F0[0xA4];
@@ -157,57 +207,19 @@ extern u8 lbl_1_data_26C14[0x13C];
 // lbl_1_data_20D1C: .data size 0xB4, 1 refs from car.c (own data block)
 extern u8 lbl_1_data_20D1C[0xB4];
 
-// lbl_1_data_2057C: .data size 0x16, 1 refs from car.c (own data block)
-extern u8 lbl_1_data_2057C[0x16];
-
-// lbl_1_data_20714: .data size 0xA, 1 refs from car.c (own data block)
-extern u8 lbl_1_data_20714[0xA];
-
-// lbl_1_data_278B0: .data size 0x70, 1 refs from car.c (own data block)
-extern u8 lbl_1_data_278B0[0x70];
-
 // lbl_1_data_20660: .data size 0x1, 1 refs from car.c (own data block)
 extern u8 lbl_1_data_20660;
 
-// lbl_1_data_20994: .data size 0x12, 1 refs from car.c (own data block)
-extern u8 lbl_1_data_20994[0x12];
+// lbl_1_data_22A1C: .data size 0x5, 1 refs from car.c (own data block)
+extern u32 lbl_1_data_22A1C;
 
-// lbl_1_data_209A8: .data size 0x12, 1 refs from car.c (own data block)
-extern u8 lbl_1_data_209A8[0x12];
-
-// lbl_1_data_20664: .data size 0x74, 1 refs from car.c (own data block)
-typedef struct {
-    u8 unk_0;  // 2 loads, 0 stores
-    u8 unk_1;  // 2 loads, 0 stores
-    u8 pad_2[0x72];
-} Obj_1_data_20664;
-extern Obj_1_data_20664 lbl_1_data_20664;
-
-// lbl_1_data_208A8: .data size 0x64, 1 refs from car.c (own data block)
-extern u8 lbl_1_data_208A8[0x64];
-
-// jumptable_1_data_27A2C: .data size 0x38, 1 refs from car.c (own data block)
-extern u8 jumptable_1_data_27A2C[0x38];
-
-// lbl_1_data_20594: .data size 0x12, 1 refs from car.c (own data block)
-extern u8 lbl_1_data_20594[0x12];
-
-// lbl_1_data_205A8: .data size 0xB4, 1 refs from car.c (own data block)
-extern u8 lbl_1_data_205A8[0xB4];
+// lbl_1_data_24EF0: .data size 0x7, 1 refs from car.c (own data block)
+extern u32 lbl_1_data_24EF0;
 
 // lbl_1_data_206D8: .data size 0x28, 1 refs from car.c (own data block)
 extern u8 lbl_1_data_206D8[0x28];
 
-// lbl_1_data_2785C: .data size 0x10, 1 refs from car.c (own data block)
-extern u8 lbl_1_data_2785C[0x10];
-
-// lbl_1_data_27870: .data size 0x4, 1 refs from car.c (own data block)
-extern u32 lbl_1_data_27870;
-
-// lbl_1_data_27874: .data size 0x38, 1 refs from car.c (own data block)
-extern u8 lbl_1_data_27874[0x38];
-
-// lbl_1_data_2786C: .data size 0x4, 1 refs from car.c (own data block)
-extern u32 lbl_1_data_2786C;
+// lbl_1_data_278B0: .data size 0x70, 1 refs from car.c (own data block)
+extern u8 lbl_1_data_278B0[0x70];
 
 #endif  // REL_MAIN_REL_CAR_H

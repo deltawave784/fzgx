@@ -8,6 +8,9 @@
 // functions or living in its .data block), layouts recovered from every access in the module.
 
 // lbl_3_bss_A2438: .bss size 0x1C, 17 refs from toolkit.c
+#ifndef FZGX_TYPES_LBL_3_BSS_A2438
+#define FZGX_TYPES_LBL_3_BSS_A2438
+// one layout for every TU header that declares this symbol (librarian, typedefs.json)
 typedef struct {
     u8 unk_0;  // 23 loads, 1 stores
     u8 pad_1[0x3];
@@ -26,7 +29,8 @@ typedef struct {
     s16 unk_18;  // 2 loads, 4 stores
     s16 unk_1A;  // 2 loads, 4 stores
 } Obj_3_bss_A2438;
-extern Obj_3_bss_A2438 lbl_3_bss_A2438;
+#endif
+extern Obj_3_bss_A2438 lbl_3_bss_A2438;  // typedefs.json decl override
 
 // lbl_3_bss_20: .bss size 0xD0, 12 refs from toolkit.c
 typedef struct {
@@ -90,6 +94,25 @@ extern Obj_3_bss_A2468 lbl_3_bss_A2468;
 // lbl_3_data_4B70: .data size 0x4, 4 refs from toolkit.c (own data block)
 extern u32 lbl_3_data_4B70;
 
+// lbl_3_bss_20848: .bss size 0x4, 4 refs from toolkit.c
+extern u32 lbl_3_bss_20848;
+
+// lbl_3_bss_2C584: .bss size 0x188, 4 refs from toolkit.c
+#ifndef FZGX_TYPES_LBL_3_BSS_2C584
+#define FZGX_TYPES_LBL_3_BSS_2C584
+// one layout for every TU header that declares this symbol (librarian, typedefs.json)
+typedef struct {
+    s16 unk_0;  // 4 loads, 0 stores
+    u8 pad_2[0x2];
+    u32 unk_4;  // 6 loads, 1 stores
+    u8 pad_8[0x180];
+} Obj_3_bss_2C584;
+#endif
+extern Obj_3_bss_2C584 lbl_3_bss_2C584;  // typedefs.json decl override
+
+// lbl_3_data_C4: .data size 0x2, 4 refs from toolkit.c
+extern s16 lbl_3_data_C4;
+
 // lbl_3_bss_6D8C0: .bss size 0x4B0, 4 refs from toolkit.c
 typedef struct {
     u8 pad_0[0x2];
@@ -100,48 +123,16 @@ typedef struct {
 } Obj_3_bss_6D8C0;
 extern Obj_3_bss_6D8C0 lbl_3_bss_6D8C0;
 
-// lbl_3_bss_2C584: .bss size 0x188, 4 refs from toolkit.c
-typedef struct {
-    s16 unk_0;  // 4 loads, 0 stores
-    u8 pad_2[0x2];
-    u32 unk_4;  // 6 loads, 1 stores
-    u8 pad_8[0x180];
-} Obj_3_bss_2C584;
-extern Obj_3_bss_2C584 lbl_3_bss_2C584;
-
-// lbl_3_data_C4: .data size 0x2, 4 refs from toolkit.c
-extern s16 lbl_3_data_C4;
-
-// lbl_3_bss_20848: .bss size 0x4, 4 refs from toolkit.c
-extern u32 lbl_3_bss_20848;
-
 // lbl_3_bss_7E23C: .bss size 0x2, 3 refs from toolkit.c
 extern s16 lbl_3_bss_7E23C;
-
-// lbl_3_bss_20854: .bss size 0xC, 3 refs from toolkit.c
-typedef struct {
-    u32 unk_0;  // 15 loads, 0 stores
-    u8 pad_4[0x8];
-} Obj_3_bss_20854;
-extern Obj_3_bss_20854 lbl_3_bss_20854;
 
 // lbl_3_bss_18: .bss size 0x8, 3 refs from toolkit.c
 extern s16 lbl_3_bss_18;
 
-// lbl_3_data_4648: .data size 0x528, 3 refs from toolkit.c (own data block)
-typedef struct {
-    u32 unk_0;  // 5 loads, 0 stores
-    u8 pad_4[0x524];
-} Obj_3_data_4648;
-extern Obj_3_data_4648 lbl_3_data_4648;
-
-// lbl_3_data_4B84: .data size 0x14, 3 refs from toolkit.c (own data block)
-extern u8 lbl_3_data_4B84[0x14];
-
-// lbl_3_bss_A2454: .bss size 0x4, 3 refs from toolkit.c
-extern u32 lbl_3_bss_A2454;
-
 // lbl_3_bss_2C7C0: .bss size 0x41100, 3 refs from toolkit.c
+#ifndef FZGX_TYPES_LBL_3_BSS_2C7C0
+#define FZGX_TYPES_LBL_3_BSS_2C7C0
+// one layout for every TU header that declares this symbol (librarian, typedefs.json)
 typedef struct {
     u8 pad_0[0x390];
     u32 unk_390;  // 2 loads, 2 stores
@@ -156,7 +147,28 @@ typedef struct {
     u32 unk_C;  // 0 loads, 2 stores
     u8 pad_10[0x410F0];
 } Obj_3_bss_2C7C0;
-extern Obj_3_bss_2C7C0 lbl_3_bss_2C7C0;
+#endif
+extern Obj_3_bss_2C7C0 lbl_3_bss_2C7C0;  // typedefs.json decl override
+
+// lbl_3_bss_20854: .bss size 0xC, 3 refs from toolkit.c
+typedef struct {
+    u32 unk_0;  // 15 loads, 0 stores
+    u8 pad_4[0x8];
+} Obj_3_bss_20854;
+extern Obj_3_bss_20854 lbl_3_bss_20854;
+
+// lbl_3_data_4648: .data size 0x528, 3 refs from toolkit.c (own data block)
+typedef struct {
+    u32 unk_0;  // 5 loads, 0 stores
+    u8 pad_4[0x524];
+} Obj_3_data_4648;
+extern Obj_3_data_4648 lbl_3_data_4648;
+
+// lbl_3_data_4B84: .data size 0x14, 3 refs from toolkit.c (own data block)
+extern u8 lbl_3_data_4B84[0x14];
+
+// lbl_3_bss_A2454: .bss size 0x4, 3 refs from toolkit.c
+extern u32 lbl_3_bss_A2454;
 
 // lbl_3_bss_7E084: .bss size 0x1B8, 2 refs from toolkit.c
 typedef struct {
@@ -170,8 +182,11 @@ extern Obj_3_bss_7E084 lbl_3_bss_7E084;
 // lbl_3_data_4B74: .data size 0xE, 2 refs from toolkit.c (own data block)
 extern u8 lbl_3_data_4B74[0xE];
 
-// lbl_3_bss_7EBA0: .bss size 0x2, 2 refs from toolkit.c
-extern s16 lbl_3_bss_7EBA0;
+// lbl_3_bss_6DE20: .bss size 0xFD40, 2 refs from toolkit.c
+extern u8 lbl_3_bss_6DE20[0xFD40];
+
+// lbl_3_data_4B98: .data size 0x7, 2 refs from toolkit.c (own data block)
+extern u32 lbl_3_data_4B98;
 
 // lbl_3_bss_A248C: .bss size 0x2A, 2 refs from toolkit.c
 typedef struct {
@@ -183,6 +198,12 @@ typedef struct {
 } Obj_3_bss_A248C;
 extern Obj_3_bss_A248C lbl_3_bss_A248C;
 
+// lbl_3_data_3D50: .data size 0x9, 2 refs from toolkit.c (own data block)
+extern u8 lbl_3_data_3D50[0x9];
+
+// lbl_3_bss_7EBA0: .bss size 0x2, 2 refs from toolkit.c
+extern s16 lbl_3_bss_7EBA0;
+
 // lbl_3_bss_7E6F0: .bss size 0x4B0, 2 refs from toolkit.c
 typedef struct {
     s16 unk_0;  // 4 loads, 0 stores
@@ -193,15 +214,6 @@ typedef struct {
     u8 pad_C[0x4A4];
 } Obj_3_bss_7E6F0;
 extern Obj_3_bss_7E6F0 lbl_3_bss_7E6F0;
-
-// lbl_3_bss_6DE20: .bss size 0xFD40, 2 refs from toolkit.c
-extern u8 lbl_3_bss_6DE20[0xFD40];
-
-// lbl_3_data_3D50: .data size 0x9, 2 refs from toolkit.c (own data block)
-extern u8 lbl_3_data_3D50[0x9];
-
-// lbl_3_data_4B98: .data size 0x7, 2 refs from toolkit.c (own data block)
-extern u32 lbl_3_data_4B98;
 
 // lbl_3_bss_A179C: .bss size 0x4, 2 refs from toolkit.c
 extern u32 lbl_3_bss_A179C;

@@ -32,12 +32,19 @@ extern Obj_1_data_27DE0 lbl_1_data_27DE0;
 extern u32 lbl_1_bss_384B4;
 
 // lbl_1_data_2B0D4: .data size 0x70, 4 refs from burner.c (own data block)
+#ifndef FZGX_TYPES_LBL_1_DATA_2B0D4
+#define FZGX_TYPES_LBL_1_DATA_2B0D4
+// one layout for every TU header that declares this symbol (librarian, typedefs.json)
 typedef struct {
     u8 pad_0[0xA];
     s16 unk_A;  // 1 loads, 0 stores
     u8 pad_C[0x64];
 } Obj_1_data_2B0D4;
-extern Obj_1_data_2B0D4 lbl_1_data_2B0D4;
+#endif
+extern Obj_1_data_2B0D4 lbl_1_data_2B0D4;  // typedefs.json decl override
+
+// lbl_1_bss_384B8: .bss size 0x8, 3 refs from burner.c
+extern u32 lbl_1_bss_384B8;
 
 // lbl_1_bss_6EA00: .bss size 0x4, 3 refs from burner.c
 extern f32 lbl_1_bss_6EA00;
@@ -45,28 +52,8 @@ extern f32 lbl_1_bss_6EA00;
 // lbl_1_bss_6EA08: .bss size 0x4, 3 refs from burner.c
 extern u32 lbl_1_bss_6EA08;
 
-// lbl_1_bss_384B8: .bss size 0x8, 3 refs from burner.c
-extern u32 lbl_1_bss_384B8;
-
 // lbl_1_data_27E08: .data size 0x9, 2 refs from burner.c (own data block)
 extern u8 lbl_1_data_27E08[0x9];
-
-// lbl_1_data_2A8D8: .data size 0x54, 2 refs from burner.c (own data block)
-extern u8 lbl_1_data_2A8D8[0x54];
-
-// lbl_1_bss_84: .bss size 0x18, 2 refs from burner.c
-typedef struct {
-    u32 unk_0;  // 5 loads, 0 stores
-} Obj_1_bss_84_At0;
-typedef struct {
-    Obj_1_bss_84_At0 *unk_0;  // 6 loads, 0 stores
-    u32 unk_4;  // 1 loads, 0 stores
-    u32 unk_8;  // 1 loads, 0 stores
-    u32 unk_C;  // 1 loads, 0 stores
-    u32 unk_10;  // 2 loads, 0 stores
-    u32 unk_14;  // 2 loads, 2 stores
-} Obj_1_bss_84;
-extern Obj_1_bss_84 lbl_1_bss_84;
 
 // lbl_1_data_28060: .data size 0x2060, 2 refs from burner.c (own data block)
 typedef struct {
@@ -79,13 +66,26 @@ extern Obj_1_data_28060 lbl_1_data_28060;
 // lbl_1_data_2B144: .data size 0x18, 2 refs from burner.c (own data block)
 extern u8 lbl_1_data_2B144[0x18];
 
-// lbl_1_data_2ABAC: .data size 0x318, 1 refs from burner.c (own data block)
+// lbl_1_bss_84: .bss size 0x18, 2 refs from burner.c
+#ifndef FZGX_TYPES_LBL_1_BSS_84
+#define FZGX_TYPES_LBL_1_BSS_84
+// one layout for every TU header that declares this symbol (librarian, typedefs.json)
 typedef struct {
-    u8 pad_0[0x8];
+    u32 unk_0;  // 5 loads, 0 stores
+} Obj_1_bss_84_At0;
+typedef struct {
+    Obj_1_bss_84_At0 *unk_0;  // 6 loads, 0 stores
+    u32 unk_4;  // 1 loads, 0 stores
     u32 unk_8;  // 1 loads, 0 stores
-    u8 pad_C[0x30C];
-} Obj_1_data_2ABAC;
-extern Obj_1_data_2ABAC lbl_1_data_2ABAC;
+    u32 unk_C;  // 1 loads, 0 stores
+    u32 unk_10;  // 2 loads, 0 stores
+    u32 unk_14;  // 2 loads, 2 stores
+} Obj_1_bss_84;
+#endif
+extern Obj_1_bss_84 lbl_1_bss_84;  // typedefs.json decl override
+
+// lbl_1_data_2A8D8: .data size 0x54, 2 refs from burner.c (own data block)
+extern u8 lbl_1_data_2A8D8[0x54];
 
 // lbl_1_data_2AB54: .data size 0x58, 1 refs from burner.c (own data block)
 // 22 string pointers (fn_1_F8E30)
@@ -96,6 +96,14 @@ extern u8 lbl_1_data_2AA24[0x58];
 
 // lbl_1_data_2BD54: .data size 0xA68, 1 refs from burner.c (own data block)
 extern u8 lbl_1_data_2BD54[0xA68];
+
+// lbl_1_data_2ABAC: .data size 0x318, 1 refs from burner.c (own data block)
+typedef struct {
+    u8 pad_0[0x8];
+    u32 unk_8;  // 1 loads, 0 stores
+    u8 pad_C[0x30C];
+} Obj_1_data_2ABAC;
+extern Obj_1_data_2ABAC lbl_1_data_2ABAC;
 
 // lbl_1_data_2A92C: .data size 0x54, 1 refs from burner.c (own data block)
 extern u8 lbl_1_data_2A92C[0x54];

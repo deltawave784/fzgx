@@ -9,7 +9,7 @@
 #include "rel/main_rel/enemy_ctrl.h"
 #include "font.h"
 
-struct FzgxCopy_88 { u32 words[22]; };
+#include "game/main_rel/shared_types.h"
 
 typedef struct fn_1_C771C_EnemyCtrl {
     u8 pad_000[0x118];

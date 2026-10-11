@@ -123,9 +123,7 @@ typedef struct {
     void *nodes;
 } EffectManager;
 
-typedef struct {
-    f32 x, y, z;
-} Vec3f;
+#include "game/vec3.h"
 
 extern s32 fn_1_79C88(EffectManager *manager, u32 *out, s32 reverse, f32 value);
 extern void fn_1_76650(fn_1_76650_ScreenEffect *effect);

@@ -57,11 +57,7 @@ typedef struct {
     u32 z;
 } RawVec3;
 
-typedef struct {
-    f32 x;
-    f32 y;
-    f32 z;
-} Vec3;
+#include "game/vec3.h"
 
 typedef struct {
     u8 _pad_000[0x7c];
@@ -268,9 +264,7 @@ typedef struct CarR29 {
     f32 unk_14;
 } CarR29;
 
-typedef struct Vec3f {
-    f32 x, y, z;
-} Vec3f;
+#include "game/vec3.h"
 
 typedef struct fn_1_8D210_car {
     f32 position[6];

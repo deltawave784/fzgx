@@ -72,17 +72,9 @@ struct fn_1_DA6A8_lbl_801A6410 {
     u32 unk_0;
 };
 
-struct Sig_fn_80077B64_fn_80077B64_Arg0 {
-    u8 pad_0[0x4];
-    u32 unk_4;
-};
+#include "game/main_rel/shared_types.h"
 
-struct Sig_fn_80077B14_fn_80077B14_Arg0 {
-    u8 pad_0[0x4];
-    u32 unk_4;
-    u8 pad_8[0x18];
-    u32 unk_20;
-};
+#include "game/main_rel/shared_types.h"
 
 extern const Fn1DABB4_Vec lbl_1_rodata_662C;
 extern void fn_1_DB138(BgSanContext *context);

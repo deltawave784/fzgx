@@ -10,11 +10,7 @@
 #include "rel/main_rel/ghost.h"
 #include "dolphin/ar.h"
 
-typedef struct {
-    f32 x;
-    f32 y;
-    f32 z;
-} Vec3;
+#include "game/vec3.h"
 
 typedef struct {
     u32 field_0;

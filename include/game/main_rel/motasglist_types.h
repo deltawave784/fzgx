@@ -20,10 +20,7 @@ typedef struct fn_1_41BDC_MotasglistData {
     u8 fallback_base;
 } fn_1_41BDC_MotasglistData;
 
-typedef struct Sig_fn_1_41488_Fn41488Data {
-    u32 count;
-    char *strings;
-} Sig_fn_1_41488_Fn41488Data;
+#include "game/main_rel/shared_types.h"
 
 typedef struct Sig_fn_1_41328_RelocData {
     u32 count;

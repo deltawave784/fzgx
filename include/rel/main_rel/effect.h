@@ -27,6 +27,9 @@ extern u8 lbl_1_data_1D62C[0x94];
 extern u8 lbl_1_data_1C698[0x5D0];
 
 // lbl_1_bss_6C84C: .bss size 0x4, 4 refs from effect.c
+#ifndef FZGX_TYPES_LBL_1_BSS_6C84C
+#define FZGX_TYPES_LBL_1_BSS_6C84C
+// one layout for every TU header that declares this symbol (librarian, typedefs.json)
 typedef struct {
     u8 unk_0;  // 14 loads, 5 stores
     u8 pad_1[0x1];
@@ -43,7 +46,8 @@ typedef struct {
     u32 unk_38;  // 1 loads, 0 stores
     u8 pad_3C[0xAC];
 } Obj_1_bss_6C84C_Target;
-extern Obj_1_bss_6C84C_Target *lbl_1_bss_6C84C;  // array of 0xE8-byte records
+#endif
+extern Obj_1_bss_6C84C_Target *lbl_1_bss_6C84C;  // typedefs.json decl override
 
 // lbl_1_bss_6C860: .bss size 0x4, 3 refs from effect.c
 extern u32 lbl_1_bss_6C860;
@@ -60,6 +64,9 @@ typedef struct {
 } Obj_1_data_1D730;
 extern Obj_1_data_1D730 lbl_1_data_1D730;
 
+// lbl_1_data_1D8A4: .data size 0x4, 1 refs from effect.c (own data block)
+extern f32 lbl_1_data_1D8A4;
+
 // lbl_1_data_1D6C0: .data size 0x70, 1 refs from effect.c (own data block)
 typedef struct {
     u8 pad_0[0x8];
@@ -68,8 +75,5 @@ typedef struct {
     u8 pad_10[0x60];
 } Obj_1_data_1D6C0;
 extern Obj_1_data_1D6C0 lbl_1_data_1D6C0;
-
-// lbl_1_data_1D8A4: .data size 0x4, 1 refs from effect.c (own data block)
-extern f32 lbl_1_data_1D8A4;
 
 #endif  // REL_MAIN_REL_EFFECT_H

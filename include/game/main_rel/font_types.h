@@ -29,11 +29,7 @@ typedef struct fn_1_54668_node {
     void *data;
 } fn_1_54668_node;
 
-typedef struct {
-    f32 x;
-    f32 y;
-    f32 z;
-} Vec3;
+#include "game/vec3.h"
 
 typedef struct fn_1_547F8_node {
     struct fn_1_547F8_node *next;
@@ -92,7 +88,7 @@ struct fn_1_530C8_lbl_1_rodata_282C {
     f32 unk_0;
 };
 
-struct FzgxCopy_88 { u32 words[22]; };
+#include "game/main_rel/shared_types.h"
 
 typedef struct {
     u8 pad_00[4];

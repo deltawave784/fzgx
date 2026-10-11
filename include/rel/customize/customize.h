@@ -30,8 +30,8 @@ typedef struct {
 } Obj_3_bss_7EDA0;
 extern Obj_3_bss_7EDA0 lbl_3_bss_7EDA0;
 
-// lbl_3_data_1A10: .data size 0x4, 3 refs from customize.c (own data block)
-extern u32 lbl_3_data_1A10;
+// lbl_3_data_11DC: .data size 0x54, 3 refs from customize.c (own data block)
+extern u8 lbl_3_data_11DC[0x54];
 
 // lbl_3_bss_7EBA4: .bss size 0x4, 3 refs from customize.c
 typedef struct {
@@ -45,41 +45,35 @@ typedef struct {
 } Obj_3_bss_7EBA4_Target;
 extern Obj_3_bss_7EBA4_Target *lbl_3_bss_7EBA4;
 
-// lbl_3_data_11DC: .data size 0x54, 3 refs from customize.c (own data block)
-extern u8 lbl_3_data_11DC[0x54];
-
 // lbl_3_bss_7EBA8: .bss size 0x4, 3 refs from customize.c
 extern u32 lbl_3_bss_7EBA8;
 
-// lbl_3_bss_A1784: .bss size 0x14, 2 refs from customize.c
-typedef struct {
-    u32 unk_0;  // 2 loads, 0 stores
-    u8 pad_4[0x10];
-} Obj_3_bss_A1784;
-extern Obj_3_bss_A1784 lbl_3_bss_A1784;
-
-// lbl_3_bss_A179C: .bss size 0x4, 2 refs from customize.c
-extern u32 lbl_3_bss_A179C;
-
-// lbl_3_data_1A14: .data size 0x4, 2 refs from customize.c (own data block)
-extern u32 lbl_3_data_1A14;
+// lbl_3_data_1A10: .data size 0x4, 3 refs from customize.c (own data block)
+extern u32 lbl_3_data_1A10;
 
 // lbl_3_data_1958: .data size 0x18, 2 refs from customize.c (own data block)
 extern u8 lbl_3_data_1958[0x18];
 
-// lbl_3_data_B8: .data size 0x4, 2 refs from customize.c
-extern u32 lbl_3_data_B8;
-
 // lbl_3_bss_2C584: .bss size 0x188, 2 refs from customize.c
+#ifndef FZGX_TYPES_LBL_3_BSS_2C584
+#define FZGX_TYPES_LBL_3_BSS_2C584
+// one layout for every TU header that declares this symbol (librarian, typedefs.json)
 typedef struct {
     s16 unk_0;  // 4 loads, 0 stores
     u8 pad_2[0x2];
     u32 unk_4;  // 6 loads, 1 stores
     u8 pad_8[0x180];
 } Obj_3_bss_2C584;
-extern Obj_3_bss_2C584 lbl_3_bss_2C584;
+#endif
+extern Obj_3_bss_2C584 lbl_3_bss_2C584;  // typedefs.json decl override
+
+// lbl_3_data_B8: .data size 0x4, 2 refs from customize.c
+extern u32 lbl_3_data_B8;
 
 // lbl_3_bss_2C7C0: .bss size 0x41100, 2 refs from customize.c
+#ifndef FZGX_TYPES_LBL_3_BSS_2C7C0
+#define FZGX_TYPES_LBL_3_BSS_2C7C0
+// one layout for every TU header that declares this symbol (librarian, typedefs.json)
 typedef struct {
     u8 pad_0[0x390];
     u32 unk_390;  // 2 loads, 2 stores
@@ -94,7 +88,21 @@ typedef struct {
     u32 unk_C;  // 0 loads, 2 stores
     u8 pad_10[0x410F0];
 } Obj_3_bss_2C7C0;
-extern Obj_3_bss_2C7C0 lbl_3_bss_2C7C0;
+#endif
+extern Obj_3_bss_2C7C0 lbl_3_bss_2C7C0;  // typedefs.json decl override
+
+// lbl_3_bss_A1784: .bss size 0x14, 2 refs from customize.c
+typedef struct {
+    u32 unk_0;  // 2 loads, 0 stores
+    u8 pad_4[0x10];
+} Obj_3_bss_A1784;
+extern Obj_3_bss_A1784 lbl_3_bss_A1784;
+
+// lbl_3_data_1A14: .data size 0x4, 2 refs from customize.c (own data block)
+extern u32 lbl_3_data_1A14;
+
+// lbl_3_bss_A179C: .bss size 0x4, 2 refs from customize.c
+extern u32 lbl_3_bss_A179C;
 
 // lbl_3_data_1A1C: .data size 0x11, 1 refs from customize.c (own data block)
 extern u8 lbl_3_data_1A1C[0x11];
