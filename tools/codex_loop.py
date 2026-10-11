@@ -58,6 +58,24 @@ def run(cmd: list, capture: bool = False) -> subprocess.CompletedProcess:
     return subprocess.run([sys.executable, *cmd], cwd=ROOT, text=True, capture_output=capture)
 
 
+def run_step(name: str, cmd: list, timeout: int) -> bool:
+    """Run one maintenance step with a time limit, logging when it starts and how it ends. On timeout the whole
+    process tree is killed (subprocess.run would leave the compiler children running). True when it finished."""
+    started = time.time()
+    log(f"  step {name}: start (limit {timeout // 60} min)")
+    proc = subprocess.Popen([sys.executable, *cmd], cwd=ROOT, text=True, stdout=subprocess.PIPE,
+                            stderr=subprocess.STDOUT)
+    try:
+        proc.communicate(timeout=timeout)
+        log(f"  step {name}: done in {int(time.time() - started)} s (rc {proc.returncode})")
+        return True
+    except subprocess.TimeoutExpired:
+        subprocess.run(["taskkill", "/T", "/F", "/PID", str(proc.pid)], capture_output=True)
+        proc.communicate()
+        log(f"  step {name}: TIMED OUT after {timeout // 60} min, process tree killed")
+        return False
+
+
 def log(msg: str) -> None:
     line = f"{time.strftime('%Y-%m-%d %H:%M:%S')} {msg}"
     print(line, flush=True)
@@ -355,13 +373,13 @@ def maintenance(a, n: int, why: str):
     if result in ("conflict", "failed"):
         return 0, result, True
     if result == "merged" and tooling_changed():
-        log("clone A changed the engine: reuse, fixup and sweep over this clone's saved bodies")
-        run(["tools/fzgx.py", "reuse", "--max-size", "2048"], capture=True)
-        run(["tools/fzgx.py", "fixup", "--min-percent", "85", "--apply", "--budget", "700",
-             "--output", f".fzgx/fixup/codex-maint-{n}"], capture=True)
-        run(["tools/fzgx.py", "sweep", "--min-percent", "60", "--max-percent", "95", "--rounds", "2", "--land",
-             "--output", f".fzgx/sweep/codex-maint-{n}"], capture=True)
-        run(["tools/fzgx.py", "verify"], capture=True)
+        log("clone A changed the engine: reuse, fixup and one sweep round over this clone's saved bodies")
+        run_step("reuse", ["tools/fzgx.py", "reuse", "--max-size", "2048"], 900)
+        run_step("fixup", ["tools/fzgx.py", "fixup", "--min-percent", "85", "--apply", "--budget", "400",
+                           "--output", f".fzgx/fixup/codex-maint-{n}"], 1800)
+        run_step("sweep", ["tools/fzgx.py", "sweep", "--min-percent", "75", "--max-percent", "95", "--rounds", "1",
+                           "--land", "--output", f".fzgx/sweep/codex-maint-{n}"], 2400)
+        run_step("verify", ["tools/fzgx.py", "verify"], 1200)
         if not gate_ok():
             return 0, "failed", True
     gained = matched_count() - before
