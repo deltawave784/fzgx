@@ -28,7 +28,7 @@ extern Obj_3_bss_A23EC lbl_3_bss_A23EC;
 
 // lbl_3_bss_A2410: .bss size 0x28, 6 refs from editor.c
 typedef struct {
-    u8 unk_0;  // 1 loads, 7 stores
+    u8 unk_0;  // 2 loads, 7 stores
     u8 unk_1;  // 1 loads, 1 stores
     u8 unk_2;  // 1 loads, 1 stores
     u8 pad_3[0x1];
@@ -62,6 +62,9 @@ typedef struct {
 extern Obj_3_data_35C0 lbl_3_data_35C0;
 
 // lbl_3_bss_A2438: .bss size 0x1C, 2 refs from editor.c
+#ifndef FZGX_TYPES_LBL_3_BSS_A2438
+#define FZGX_TYPES_LBL_3_BSS_A2438
+// one layout for every TU header that declares this symbol (librarian, typedefs.json)
 typedef struct {
     u8 unk_0;  // 23 loads, 1 stores
     u8 pad_1[0x3];
@@ -80,17 +83,8 @@ typedef struct {
     s16 unk_18;  // 2 loads, 4 stores
     s16 unk_1A;  // 2 loads, 4 stores
 } Obj_3_bss_A2438;
-extern Obj_3_bss_A2438 lbl_3_bss_A2438;
-
-// lbl_3_data_3738: .data size 0x48, 2 refs from editor.c (own data block)
-typedef struct {
-    u32 unk_0;  // 3 loads, 0 stores
-    u8 pad_4[0xC];
-    u32 unk_10;  // 1 loads, 0 stores
-    u32 unk_14;  // 1 loads, 0 stores
-    u8 pad_18[0x30];
-} Obj_3_data_3738;
-extern Obj_3_data_3738 lbl_3_data_3738;
+#endif
+extern Obj_3_bss_A2438 lbl_3_bss_A2438;  // typedefs.json decl override
 
 // lbl_3_data_3618: .data size 0x120, 2 refs from editor.c (own data block)
 typedef struct {
@@ -101,6 +95,16 @@ typedef struct {
     u8 pad_E[0x112];
 } Obj_3_data_3618;
 extern Obj_3_data_3618 lbl_3_data_3618;
+
+// lbl_3_data_3738: .data size 0x48, 2 refs from editor.c (own data block)
+typedef struct {
+    u32 unk_0;  // 3 loads, 0 stores
+    u8 pad_4[0xC];
+    u32 unk_10;  // 1 loads, 0 stores
+    u32 unk_14;  // 1 loads, 0 stores
+    u8 pad_18[0x30];
+} Obj_3_data_3738;
+extern Obj_3_data_3738 lbl_3_data_3738;
 
 // lbl_3_data_35B0: .data size 0x9, 2 refs from editor.c (own data block)
 extern u8 lbl_3_data_35B0[0x9];

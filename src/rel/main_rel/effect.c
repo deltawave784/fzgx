@@ -4612,6 +4612,130 @@ void fn_1_64098(Fn164098Object *object) {
 }
 /* fzgx:end fn_1_64098 */
 
+/* fzgx:begin fn_1_640A4 pool */
+typedef struct {
+    u8 state;
+    u8 pad_1[0x7];
+    u32 flags;
+    u8 pad_C[0x4];
+    s32 timer;
+    u8 pad_14[0x8];
+    f32 scale[3];
+    f32 alpha;
+    f32 alphaTarget;
+    u8 pad_30[0xC];
+    f32 pos[3];
+    f32 vel[3];
+    u8 pad_54[0x34];
+    f32 drag;
+    f32 dragTarget;
+    u8 pad_90[0x1C];
+    s16 spin;
+    s16 angle;
+} SmokeParticle;
+
+extern s32 fn_1_66B8(void *, f32);
+
+/* Shared literal pool primer (retail lbl_1_rodata_2950 layout); dropped at integration. */
+#pragma section RX ".fzgxpool"
+static const f32 pool_a[3] = { 60.0f, 0.1f, 32767.0f };
+__declspec(section ".fzgxpool") void fzgx_pool_p0(const void **o, f32 *f) { *o = pool_a; *f = 0.05f; }
+static const f32 pool_b[6] = { 1.39f, 1.951564e-20f, 20000.0f, 0.0f, 176.0f, 0.0f };
+__declspec(section ".fzgxpool") void fzgx_pool_p1(const void **o, f32 *f) { *o = pool_b; *f = 1.0f; }
+static const f32 pool_c[3] = { -0.03f, 2.71875f, 0.0f };
+__declspec(section ".fzgxpool") void fzgx_pool_p2(const void **o, f32 *f, s32 x) { *o = pool_c; *f = (f32)x; }
+static const u32 pool_d0[5] = { 0x3FF80000, 0, 0x3FE00000, 0, 0 };
+static const f32 pool_d1[71] = {
+    0.5f, 8.0f, 255.0f, 15.0f, 0.2f, 0.08f, 0.25f,
+    0.98f, 0.99f, 40.0f, 20.0f, 1.5f, 0.45f, -2.0f, 0.083333336f, 0.15f, 0.125f, -0.4f, -0.3f,
+    2.0f, 250.0f, 1.775f, 4.172325e-8f, 1.6999999f, -1.5881868e-23f, 0.3f, -0.004f, 0.016666668f,
+    65536.0f, 4096.0f, 0.96f, 0.4f, 0.0505f, 0.051f, 0.95f, 0.9f, 0.0f, 3.5429688f, 0.0f, 2.5625f,
+    0.0f, 2.125f, 0.0f, 0.0f, 0.1f, -2.4f,
+    5.0f, 1.9f, 4.172325e-8f, 1.4499999f, -1.5881868e-23f,
+    10.0f, 18.0f, 1.8f, 2.720083e23f, 3.140625f, 0.0f, 0.0f, 0.1f, -2.4f, 19.0f, 2.875f, 0.0f,
+    0.70710677f, 0.0f, 0.0f, 0.0f, 3.7480469f, 0.0f, 1.8499999f, -107374184.0f
+};
+__declspec(section ".fzgxpool") void fzgx_pool_p3(const void **o, f32 *f) {
+    o[0] = pool_d0; o[1] = pool_d1; f[0] = 0.004f; f[1] = 0.001f; f[2] = 0.01f;
+}
+static const f32 pool_e[38] = {
+    -1.1920929e-07f, 240.0f, 100.0f, 300.0f, 200.0f, 10000.0f, 5000.0f, 204.0f, 85.0f, -0.05f,
+    4.0f, -0.06f, -0.5f, -1.0f, 0.0f, 1.5749999f, -1.5881868e-23f, 512.0f, 0.03f, 51.0f, 88.0f,
+    -2.125f, 0.0f, 4.5f,
+    6.0f, 1.1f, 0.0f, 0.9f, -1.1f, 0.0f, 0.9f, 0.0f, 0.0f, -0.7f, 0.0f, 0.0f, 0.0f, 1.2f
+};
+__declspec(section ".fzgxpool") void fzgx_pool_p4(const void **o, f32 *f) { *o = pool_e; *f = 50.0f; }
+static const f32 pool_f1[48] = {
+    0.025f, 0.8f, 0.0625f, 2.5f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, -3.0f, 0.0f,
+    1.035f, 89128.96f, 1.86f, 0.0f, 3.6601563f, 0.0f, 1.16f, 89128.96f,
+    0.90849996f, -0.0143125f, -1.8f, 3.689349e19f, -1.2399999f, -3.689349e19f, 1.5159999f,
+    -0.0008476562f, 1.8f, 3.689349e19f, 1.875f, 0.0f,
+    1.65f, 4.172325e-8f, 1.8249999f, -1.0842022e-19f, 2.625f, 0.0f,
+    -0.9f, 0.07f, 0.6f, 30.0f, 1.06f, 28.0f, 2.3125f, 0.0f, 3.5f, 180.0f
+};
+static const u32 pool_nan[2] = { 0xFFFFFFFF, 0xFFFFFFFF };
+static const f32 pool_f2[13] = {
+    2.96875f, 0.0f, 1.2399999f, -3.218644e26f, 0.94f, -0.08f,
+    0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 136.0f
+};
+__declspec(section ".fzgxpool") void fzgx_pool_p5(const void **o, f32 *f) {
+    o[0] = pool_f1; o[1] = pool_nan; o[2] = pool_f2;
+    f[0] = 0.008f; f[1] = 0.0045454544f; f[2] = 0.014285714f;
+}
+
+void fn_1_640A4(SmokeParticle *p)
+{
+    f32 keep;
+    f32 fade;
+
+    p->state = 2;
+    if ((s32)++lbl_1_bss_6C860 > 150) {
+        p->state = 3;
+    }
+    if (fn_1_66B8(p->pos, p->alpha) == 0) {
+        p->state = 3;
+    }
+
+    keep = 1.0f - p->drag;
+    p->vel[0] *= keep;
+    p->vel[1] *= keep;
+    p->vel[2] *= keep;
+    p->spin = (f32)p->spin * keep;
+
+    if (!((p->flags >> 17) & 1)) {
+        p->vel[1] += 0.008f;
+    } else {
+        p->vel[1] += 0.004f;
+    }
+    p->vel[0] += 0.001f;
+
+    p->pos[0] += p->vel[0];
+    p->pos[1] += p->vel[1];
+    p->pos[2] += p->vel[2];
+    p->angle += p->spin;
+
+    p->drag = p->drag + (f32)(0.05f * (p->dragTarget - p->drag));
+    p->alpha = p->alpha + (f32)(0.01f * (p->alphaTarget - p->alpha));
+
+    if (p->alphaTarget > 50.0f) {
+        if (p->timer < 220) {
+            fade = 0.0045454544f * (f32)p->timer;
+        } else {
+            fade = 1.0f;
+        }
+    } else {
+        if (p->timer < 70) {
+            fade = 0.014285714f * (f32)p->timer;
+        } else {
+            fade = 1.0f;
+        }
+    }
+    p->scale[0] *= fade;
+    p->scale[1] *= fade;
+    p->scale[2] *= fade;
+}
+/* fzgx:end fn_1_640A4 */
+
 /* fzgx:begin fn_1_642E8 */
 typedef struct fn_1_642E8_EffectState {
     char bytes[0x14];

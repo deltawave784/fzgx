@@ -8,15 +8,18 @@
 // functions or living in its .data block), layouts recovered from every access in the module.
 
 // lbl_10_bss_55CD8: .bss size 0x4, 3 refs from name_entry.c
+#ifndef FZGX_TYPES_LBL_10_BSS_55CD8
+#define FZGX_TYPES_LBL_10_BSS_55CD8
+// one layout for every TU header that declares this symbol (librarian, typedefs.json)
 typedef struct {
-    u32 unk_0;  // 12 loads, 7 stores
+    u32 unk_0;  // 13 loads, 8 stores
     u32 unk_4;  // 1 loads, 1 stores
     u32 unk_8;  // 5 loads, 1 stores
-    u8 unk_C;  // 8 loads, 1 stores
-    u8 unk_D;  // 5 loads, 4 stores
+    u8 unk_C;  // 10 loads, 1 stores
+    u8 unk_D;  // 6 loads, 4 stores
     u8 unk_E;  // 10 loads, 4 stores
-    u8 unk_F;  // 3 loads, 12 stores
-    u8 unk_10;  // 1 loads, 0 stores
+    u8 unk_F;  // 3 loads, 13 stores
+    u8 unk_10;  // 2 loads, 1 stores
     u8 unk_11;  // 2 loads, 1 stores
     u16 unk_12;  // 3 loads, 3 stores
     u8 unk_14;  // 2 loads, 2 stores
@@ -34,24 +37,25 @@ typedef struct {
     u8 pad_38[0x2];
     u8 unk_3A;  // 2 loads, 2 stores
     u8 unk_3B;  // 5 loads, 2 stores
-    u32 unk_3C;  // 4 loads, 2 stores
+    u32 unk_3C;  // 5 loads, 2 stores
 } Obj_10_bss_55CD8_Target;
-extern Obj_10_bss_55CD8_Target *lbl_10_bss_55CD8;
-
-// lbl_10_bss_55CE1: .bss size 0x1, 3 refs from name_entry.c
-extern u8 lbl_10_bss_55CE1;
+#endif
+extern Obj_10_bss_55CD8_Target *lbl_10_bss_55CD8;  // typedefs.json decl override
 
 // lbl_10_bss_55CE2: .bss size 0x1, 3 refs from name_entry.c
 extern u8 lbl_10_bss_55CE2;
 
+// lbl_10_bss_55CE1: .bss size 0x1, 3 refs from name_entry.c
+extern u8 lbl_10_bss_55CE1;
+
 // lbl_10_bss_55CE0: .bss size 0x1, 2 refs from name_entry.c
 extern u8 lbl_10_bss_55CE0;
 
+// lbl_10_data_6A48: .data size 0x20, 1 refs from name_entry.c (own data block)
+extern u8 lbl_10_data_6A48[0x20];
+
 // lbl_10_data_6980: .data size 0x40, 1 refs from name_entry.c (own data block)
 extern u8 lbl_10_data_6980[0x40];
-
-// lbl_10_data_6B2C: .data size 0x18, 1 refs from name_entry.c (own data block)
-extern u8 lbl_10_data_6B2C[0x18];
 
 // lbl_10_data_69C0: .data size 0x18, 1 refs from name_entry.c (own data block)
 extern u8 lbl_10_data_69C0[0x18];
@@ -59,7 +63,7 @@ extern u8 lbl_10_data_69C0[0x18];
 // lbl_10_data_69D8: .data size 0x70, 1 refs from name_entry.c (own data block)
 extern u8 lbl_10_data_69D8[0x70];
 
-// lbl_10_data_6A48: .data size 0x20, 1 refs from name_entry.c (own data block)
-extern u8 lbl_10_data_6A48[0x20];
+// lbl_10_data_6B2C: .data size 0x18, 1 refs from name_entry.c (own data block)
+extern u8 lbl_10_data_6B2C[0x18];
 
 #endif  // REL_SEL_NAME_ENTRY_H

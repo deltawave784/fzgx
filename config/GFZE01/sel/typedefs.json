@@ -1,0 +1,39 @@
+{
+ "lbl_10_bss_55CD8": {
+  "decl": "Obj_10_bss_55CD8_Target *lbl_10_bss_55CD8",
+  "typedef": [
+   "#ifndef FZGX_TYPES_LBL_10_BSS_55CD8",
+   "#define FZGX_TYPES_LBL_10_BSS_55CD8",
+   "// one layout for every TU header that declares this symbol (librarian, typedefs.json)",
+   "typedef struct {",
+   "    u32 unk_0;  // 13 loads, 8 stores",
+   "    u32 unk_4;  // 1 loads, 1 stores",
+   "    u32 unk_8;  // 5 loads, 1 stores",
+   "    u8 unk_C;  // 10 loads, 1 stores",
+   "    u8 unk_D;  // 6 loads, 4 stores",
+   "    u8 unk_E;  // 10 loads, 4 stores",
+   "    u8 unk_F;  // 3 loads, 13 stores",
+   "    u8 unk_10;  // 2 loads, 1 stores",
+   "    u8 unk_11;  // 2 loads, 1 stores",
+   "    u16 unk_12;  // 3 loads, 3 stores",
+   "    u8 unk_14;  // 2 loads, 2 stores",
+   "    u8 unk_15;  // 2 loads, 2 stores",
+   "    u8 unk_16;  // 2 loads, 2 stores",
+   "    u8 unk_17;  // 2 loads, 2 stores",
+   "    u32 unk_18;  // 1 loads, 1 stores",
+   "    u32 unk_1C;  // 1 loads, 1 stores",
+   "    u32 unk_20;  // 3 loads, 2 stores",
+   "    u8 pad_24[0x4];",
+   "    u8 unk_28;  // 2 loads, 0 stores",
+   "    u8 pad_29[0xD];",
+   "    u8 unk_36;  // 2 loads, 1 stores",
+   "    u8 unk_37;  // 0 loads, 1 stores",
+   "    u8 pad_38[0x2];",
+   "    u8 unk_3A;  // 2 loads, 2 stores",
+   "    u8 unk_3B;  // 5 loads, 2 stores",
+   "    u32 unk_3C;  // 5 loads, 2 stores",
+   "} Obj_10_bss_55CD8_Target;",
+   "#endif"
+  ]
+ }
+}

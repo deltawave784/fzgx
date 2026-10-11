@@ -730,6 +730,203 @@ void fn_1_3A2C4(void) {
 }
 /* fzgx:end fn_1_3A2C4 */
 
+/* fzgx:begin fn_1_3AEC4 pool */
+extern u32 fn_1_435C(u32 value);
+extern void fn_1_426C(u32 idx);
+extern void fn_1_105724(void);
+extern void fn_1_F2EDC(void);
+extern void fn_1_A8F78(void);
+extern void fn_1_1547FC(void);
+extern void fn_1_C47B4(void);
+extern void fn_1_C6F80(u8);
+extern void fn_1_79100(void);
+extern void fn_1_412A0(u32);
+extern void fn_1_E35F0(void);
+extern u32 fn_80008E84(u32);
+extern void fzgx_touch(void *);
+
+typedef struct {
+    u8 b[0xa0];
+} GameRacerSlot;
+
+typedef struct {
+    u32 flags;               /* 0x00 */
+    u8 pad04[0x5];
+    u8 count;                /* 0x09 */
+    u8 pad0A[0xa7 - 0xa];
+    u8 slot;                 /* 0xa7 */
+    u8 padA8[0xd4 - 0xa8];
+    GameRacerSlot ents[31];  /* 0xd4 */
+    u8 pad1434[0x1464 - 0x1434];
+    s32 unk_1464;
+    u8 pad1468[4];
+    u8 unk_146c;
+    u8 unk_146d;
+    s16 unk_146e;
+    u8 unk_1470;
+    u8 pad1471[0x14b8 - 0x1471];
+} GameRaceState;
+
+/* game.c .bss, laid out from 0x3C00 in retail order */
+static u32 fzgx_obj_lbl_1_bss_3C00;
+static u8 bss_0004[0x10];
+static u32 bss_0014;
+static u32 bss_0018;
+static u8 bss_001C[0x14];
+static GameRaceState bss_0030;
+static s16 bss_14E8;
+static u8 bss_14EC[0x21f88 - 0x14ec];
+static u32 bss_21F88;
+static u8 bss_21F8C[0x1c];
+static u8 bss_21FA8[0x20];
+static u8 bss_21FC8[0x220a4 - 0x21fc8];
+static u32 bss_220A4;
+static u32 bss_220A8;
+static u32 bss_220AC;
+static u32 bss_220B0;
+static u32 bss_220B4;
+static u32 bss_220B8;
+static u32 bss_220BC;
+static u32 bss_220C0;
+static u32 bss_220C4;
+static u32 bss_220C8;
+static u32 bss_220CC;
+static u8 bss_220D0[0x22254 - 0x220d0];
+static u32 bss_22254;
+static u32 bss_22258;
+static u32 bss_2225C;
+static u32 bss_22260;
+static u32 bss_22264;
+static u32 bss_22268;
+static s32 bss_2226C;
+static s32 bss_22270;
+static u8 bss_22274[8];
+static s32 bss_2227C;
+static s32 bss_22280;
+static s32 bss_22284;
+
+void fzgx_primer(void) {
+    fzgx_touch(&fzgx_obj_lbl_1_bss_3C00);
+    fzgx_touch(&bss_0004);
+    fzgx_touch(&bss_0014);
+    fzgx_touch(&bss_0018);
+    fzgx_touch(&bss_001C);
+    fzgx_touch(&bss_0030);
+    fzgx_touch(&bss_14E8);
+    fzgx_touch(&bss_14EC);
+    fzgx_touch(&bss_21F88);
+    fzgx_touch(&bss_21F8C);
+    fzgx_touch(&bss_21FA8);
+    fzgx_touch(&bss_21FC8);
+    fzgx_touch(&bss_220A4);
+    fzgx_touch(&bss_220A8);
+    fzgx_touch(&bss_220AC);
+    fzgx_touch(&bss_220B0);
+    fzgx_touch(&bss_220B4);
+    fzgx_touch(&bss_220B8);
+    fzgx_touch(&bss_220BC);
+    fzgx_touch(&bss_220C0);
+    fzgx_touch(&bss_220C4);
+    fzgx_touch(&bss_220C8);
+    fzgx_touch(&bss_220CC);
+    fzgx_touch(&bss_220D0);
+    fzgx_touch(&bss_22254);
+    fzgx_touch(&bss_22258);
+    fzgx_touch(&bss_2225C);
+    fzgx_touch(&bss_22260);
+    fzgx_touch(&bss_22264);
+    fzgx_touch(&bss_22268);
+    fzgx_touch(&bss_2226C);
+    fzgx_touch(&bss_22270);
+    fzgx_touch(&bss_22274);
+    fzgx_touch(&bss_2227C);
+    fzgx_touch(&bss_22280);
+    fzgx_touch(&bss_22284);
+}
+
+static inline void fn_1_3AEC4_copy_slots(void) {
+    s32 i;
+
+    for (i = 0; i < bss_0030.count; i++) {
+        u8 *e = bss_0030.ents[i].b;
+        e[bss_0030.slot + 0xe] = bss_21FA8[i];
+        e[bss_0030.slot + 0x13] = bss_21FC8[i];
+    }
+}
+
+void fn_1_3AEC4(void) {
+    s32 i;
+    u32 saved;
+
+    fn_1_435C(bss_21F88);
+    if (bss_2227C != -1) {
+        fn_1_426C(bss_2227C);
+    }
+    if (bss_22280 != -1) {
+        fn_1_426C(bss_22280);
+        fn_1_105724();
+    }
+    fn_1_435C(bss_220A4);
+    if (bss_22284 != -1) {
+        fn_1_426C(bss_22284);
+    }
+    bss_2227C = -1;
+    bss_22280 = -1;
+    bss_22284 = -1;
+    if ((bss_0030.flags & 0x800000) && bss_14E8 != 0x2a) {
+        fn_1_F2EDC();
+    }
+    fn_1_A8F78();
+    if (bss_2226C != 0) {
+        bss_22270 = 1;
+    }
+    if (bss_22270 != 0) {
+        fn_1_3AEC4_copy_slots();
+        bss_0030.unk_1464 = 0;
+        bss_0030.unk_146c = 0;
+        bss_0030.unk_146d = 0;
+        bss_0030.unk_1470 = 0;
+        bss_0030.unk_146e = 1500;
+        fn_1_1547FC();
+        fn_1_C47B4();
+        fn_1_435C(bss_21F88);
+        if (bss_0014 != 0) {
+            fn_1_426C(bss_0014);
+            bss_0014 = 0;
+        }
+        fn_1_435C(bss_220A4);
+        if (bss_0018 != 0) {
+            fn_1_426C(bss_0018);
+            bss_0018 = 0;
+        }
+        fn_1_C6F80(0);
+        saved = fn_80008E84(bss_220CC);
+        fn_1_79100();
+        fn_80008E84(saved);
+        fn_1_412A0(2);
+        fn_1_E35F0();
+        fn_1_435C(bss_21F88);
+        fn_1_426C(bss_220B4);
+        fn_1_426C(bss_220B8);
+        fn_1_426C(bss_22264);
+        fn_1_435C(bss_220A4);
+        fn_1_426C(bss_220A8);
+        fn_1_426C(bss_220AC);
+        fn_1_426C(bss_220B0);
+        fn_1_426C(bss_220BC);
+        fn_1_426C(bss_220C0);
+        fn_1_426C(bss_220C4);
+        fn_1_426C(bss_22258);
+        fn_1_426C(bss_2225C);
+        fn_1_426C(bss_22260);
+        fn_1_426C(bss_22254);
+    }
+    if (bss_2226C != 0) {
+        bss_0030.slot++;
+    }
+}
+/* fzgx:end fn_1_3AEC4 */
+
 /* fzgx:begin fn_1_3DB9C pool noprologue */
 #include "types.h"
 

@@ -8,15 +8,18 @@
 // functions or living in its .data block), layouts recovered from every access in the module.
 
 // lbl_8_bss_550: .bss size 0x4, 3 refs from name_entry.c
+#ifndef FZGX_TYPES_LBL_8_BSS_550
+#define FZGX_TYPES_LBL_8_BSS_550
+// one layout for every TU header that declares this symbol (librarian, typedefs.json)
 typedef struct {
-    u32 unk_0;  // 11 loads, 6 stores
+    u32 unk_0;  // 12 loads, 7 stores
     u32 unk_4;  // 1 loads, 1 stores
     u32 unk_8;  // 4 loads, 1 stores
-    u8 unk_C;  // 8 loads, 1 stores
-    u8 unk_D;  // 5 loads, 4 stores
+    u8 unk_C;  // 10 loads, 1 stores
+    u8 unk_D;  // 6 loads, 4 stores
     u8 unk_E;  // 10 loads, 3 stores
-    u8 unk_F;  // 3 loads, 12 stores
-    u8 unk_10;  // 1 loads, 0 stores
+    u8 unk_F;  // 3 loads, 13 stores
+    u8 unk_10;  // 2 loads, 1 stores
     u8 unk_11;  // 2 loads, 1 stores
     u16 unk_12;  // 3 loads, 3 stores
     u8 unk_14;  // 2 loads, 2 stores
@@ -34,17 +37,18 @@ typedef struct {
     u8 pad_38[0x2];
     u8 unk_3A;  // 2 loads, 2 stores
     u8 unk_3B;  // 5 loads, 2 stores
-    u32 unk_3C;  // 4 loads, 2 stores
+    u32 unk_3C;  // 5 loads, 2 stores
 } Obj_8_bss_550_Target;
-extern Obj_8_bss_550_Target *lbl_8_bss_550;
-
-// lbl_8_data_A288: .data size 0x40, 1 refs from name_entry.c (own data block)
-extern u8 lbl_8_data_A288[0x40];
+#endif
+extern Obj_8_bss_550_Target *lbl_8_bss_550;  // typedefs.json decl override
 
 // lbl_8_data_A2C8: .data size 0x18, 1 refs from name_entry.c (own data block)
 extern u8 lbl_8_data_A2C8[0x18];
 
 // lbl_8_data_A2E0: .data size 0x70, 1 refs from name_entry.c (own data block)
 extern u8 lbl_8_data_A2E0[0x70];
+
+// lbl_8_data_A288: .data size 0x40, 1 refs from name_entry.c (own data block)
+extern u8 lbl_8_data_A288[0x40];
 
 #endif  // REL_TITLE_NAME_ENTRY_H

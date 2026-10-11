@@ -10,10 +10,10 @@
 // lbl_1_data_209C0: .data size 0x8, 4 refs from rob.c
 extern u32 lbl_1_data_209C0;
 
-// lbl_1_data_27C00: .data size 0xE0, 2 refs from rob.c (own data block)
-extern u8 lbl_1_data_27C00[0xE0];
-
 // lbl_1_bss_6EAD0: .bss size 0x708, 2 refs from rob.c
+#ifndef FZGX_TYPES_LBL_1_BSS_6EAD0
+#define FZGX_TYPES_LBL_1_BSS_6EAD0
+// one layout for every TU header that declares this symbol (librarian, typedefs.json)
 typedef struct {
     u32 unk_0;  // 23 loads, 0 stores
     u32 unk_4;  // 9 loads, 0 stores
@@ -22,7 +22,11 @@ typedef struct {
     Obj_1_bss_6EAD0_At0 *unk_0;  // 34 loads, 0 stores
     u8 pad_4[0x704];
 } Obj_1_bss_6EAD0;
-extern Obj_1_bss_6EAD0 lbl_1_bss_6EAD0;
+#endif
+extern Obj_1_bss_6EAD0 lbl_1_bss_6EAD0;  // typedefs.json decl override
+
+// lbl_1_data_27C00: .data size 0xE0, 2 refs from rob.c (own data block)
+extern u8 lbl_1_data_27C00[0xE0];
 
 // lbl_1_data_27D90: .data size 0x50, 1 refs from rob.c (own data block)
 extern u8 lbl_1_data_27D90[0x50];

@@ -8,6 +8,9 @@
 // functions or living in its .data block), layouts recovered from every access in the module.
 
 // lbl_3_bss_7EE40: .bss size 0x81C0, 5 refs from emb_memcard.c
+#ifndef FZGX_TYPES_LBL_3_BSS_7EE40
+#define FZGX_TYPES_LBL_3_BSS_7EE40
+// one layout for every TU header that declares this symbol (librarian, typedefs.json)
 typedef struct {
     u32 unk_0;  // 1 loads, 0 stores
     u8 pad_4[0x3];
@@ -27,11 +30,15 @@ typedef struct {
     f32 unk_64;  // 0 loads, 1 stores
     u8 pad_68[0x8158];
 } Obj_3_bss_7EE40;
-extern Obj_3_bss_7EE40 lbl_3_bss_7EE40;
+#endif
+extern Obj_3_bss_7EE40 lbl_3_bss_7EE40;  // typedefs.json decl override
 
 // lbl_3_bss_7EDD8: .bss size 0x68, 5 refs from emb_memcard.c
+#ifndef FZGX_TYPES_LBL_3_BSS_7EDD8
+#define FZGX_TYPES_LBL_3_BSS_7EDD8
+// one layout for every TU header that declares this symbol (librarian, typedefs.json)
 typedef struct {
-    u32 unk_0;  // 0 loads, 1 stores
+    u32 unk_0;  // 0 loads, 2 stores
     u32 unk_4;  // 2 loads, 1 stores
     u8 pad_8[0x2];
     s16 unk_A;  // 1 loads, 1 stores
@@ -67,9 +74,13 @@ typedef struct {
     u8 unk_51;  // 1 loads, 2 stores
     u8 pad_52[0x16];
 } Obj_3_bss_7EDD8;
-extern Obj_3_bss_7EDD8 lbl_3_bss_7EDD8;
+#endif
+extern Obj_3_bss_7EDD8 lbl_3_bss_7EDD8;  // typedefs.json decl override
 
 // lbl_3_bss_7EDC0: .bss size 0xC, 3 refs from emb_memcard.c
+#ifndef FZGX_TYPES_LBL_3_BSS_7EDC0
+#define FZGX_TYPES_LBL_3_BSS_7EDC0
+// one layout for every TU header that declares this symbol (librarian, typedefs.json)
 typedef struct {
     u8 pad_0[0x5];
     u8 unk_5;  // 1 loads, 0 stores
@@ -82,10 +93,8 @@ typedef struct {
     u8 pad_4[0x4];
     u32 unk_8;  // 4 loads, 2 stores
 } Obj_3_bss_7EDC0;
-extern Obj_3_bss_7EDC0 lbl_3_bss_7EDC0;
-
-// lbl_3_data_1A40: .data size 0x2, 2 refs from emb_memcard.c (own data block)
-extern u16 lbl_3_data_1A40;
+#endif
+extern Obj_3_bss_7EDC0 lbl_3_bss_7EDC0;  // typedefs.json decl override
 
 // lbl_3_data_246C: .data size 0x960, 2 refs from emb_memcard.c (own data block)
 typedef struct {
@@ -112,18 +121,9 @@ typedef struct {
 } Obj_3_data_1EEC;
 extern Obj_3_data_1EEC lbl_3_data_1EEC;
 
-// lbl_3_data_318C: .data size 0xA8, 1 refs from emb_memcard.c (own data block)
-typedef struct {
-    u32 unk_0;  // 12 loads, 0 stores
-    u8 pad_4[0xA4];
-} Obj_3_data_318C;
-extern Obj_3_data_318C lbl_3_data_318C;
-
-// lbl_3_data_1A30: .data size 0xE, 1 refs from emb_memcard.c (own data block)
-extern u8 lbl_3_data_1A30[0xE];
-
-// lbl_3_data_2F78: .data size 0xF0, 1 refs from emb_memcard.c (own data block)
-extern u8 lbl_3_data_2F78[0xF0];
+// lbl_3_data_1A40: .data size 0x2, 2 refs from emb_memcard.c (own data block)
+// pinned (librarian 2026-10-11): matched blocks compile under this declaration; the analyzer now infers s16. Change it through tutruth.
+extern u16 lbl_3_data_1A40;  // typedefs.json decl override
 
 // lbl_3_data_3234: .data size 0xA8, 1 refs from emb_memcard.c (own data block)
 typedef struct {
@@ -132,5 +132,18 @@ typedef struct {
     u8 pad_C[0x9C];
 } Obj_3_data_3234;
 extern Obj_3_data_3234 lbl_3_data_3234;
+
+// lbl_3_data_1A30: .data size 0xE, 1 refs from emb_memcard.c (own data block)
+extern u8 lbl_3_data_1A30[0xE];
+
+// lbl_3_data_2F78: .data size 0xF0, 1 refs from emb_memcard.c (own data block)
+extern u8 lbl_3_data_2F78[0xF0];
+
+// lbl_3_data_318C: .data size 0xA8, 1 refs from emb_memcard.c (own data block)
+typedef struct {
+    u32 unk_0;  // 12 loads, 0 stores
+    u8 pad_4[0xA4];
+} Obj_3_data_318C;
+extern Obj_3_data_318C lbl_3_data_318C;
 
 #endif  // REL_CUSTOMIZE_EMB_MEMCARD_H

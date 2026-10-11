@@ -11,7 +11,25 @@
 extern u8 lbl_1_data_40EA4[0x54];
 
 // lbl_1_bss_8CA40: .bss size 0x4, 5 refs from custom_memcard.c
-extern u32 lbl_1_bss_8CA40;
+#ifndef FZGX_TYPES_LBL_1_BSS_8CA40
+#define FZGX_TYPES_LBL_1_BSS_8CA40
+// one layout for every TU header that declares this symbol (librarian, typedefs.json)
+// fn_1_130EE8 initialises 0x2C bytes from here (dtk size 4)
+typedef struct {
+    u32 unk_0;
+    u32 unk_4;
+    u32 unk_8;
+    u32 unk_C;
+    u32 unk_10;
+    u32 unk_14;
+    u32 unk_18;
+    u32 unk_1C;
+    u32 unk_20;
+    u32 unk_24;
+    u32 unk_28;
+} Obj_1_bss_8CA40;
+#endif
+extern Obj_1_bss_8CA40 lbl_1_bss_8CA40;  // typedefs.json decl override
 
 // lbl_1_data_40EF8: .data size 0x11, 4 refs from custom_memcard.c (own data block)
 extern u8 lbl_1_data_40EF8[0x11];
@@ -19,7 +37,17 @@ extern u8 lbl_1_data_40EF8[0x11];
 // lbl_1_bss_8E380: .bss size 0x1, 3 refs from custom_memcard.c
 extern u8 lbl_1_bss_8E380;
 
+// lbl_1_bss_8E384: .bss size 0x44, 2 refs from custom_memcard.c
+typedef struct {
+    u32 unk_0;  // 2 loads, 2 stores
+    u8 pad_4[0x40];
+} Obj_1_bss_8E384;
+extern Obj_1_bss_8E384 lbl_1_bss_8E384;
+
 // lbl_1_data_1E5C0: .data size 0x34, 2 refs from custom_memcard.c
+#ifndef FZGX_TYPES_LBL_1_DATA_1E5C0
+#define FZGX_TYPES_LBL_1_DATA_1E5C0
+// one layout for every TU header that declares this symbol (librarian, typedefs.json)
 typedef struct {
     u32 unk_0;  // 1 loads, 0 stores
     u32 unk_4;  // 1 loads, 0 stores
@@ -35,32 +63,11 @@ typedef struct {
     u32 unk_2C;  // 1 loads, 0 stores
     u32 unk_30;  // 1 loads, 0 stores
 } Obj_1_data_1E5C0;
-extern Obj_1_data_1E5C0 lbl_1_data_1E5C0;
-
-// lbl_1_bss_8E384: .bss size 0x44, 2 refs from custom_memcard.c
-typedef struct {
-    u32 unk_0;  // 2 loads, 2 stores
-    u8 pad_4[0x40];
-} Obj_1_bss_8E384;
-extern Obj_1_bss_8E384 lbl_1_bss_8E384;
+#endif
+extern Obj_1_data_1E5C0 lbl_1_data_1E5C0;  // typedefs.json decl override
 
 // lbl_1_bss_962: .bss size 0x2, 2 refs from custom_memcard.c
 extern s16 lbl_1_bss_962;
-
-// lbl_1_data_416B8: .data size 0x1EC, 1 refs from custom_memcard.c (own data block)
-typedef struct {
-    u8 pad_0[0x4];
-    u32 unk_4;  // 1 loads, 0 stores
-    u32 unk_8;  // 1 loads, 0 stores
-    u8 pad_C[0x1E0];
-} Obj_1_data_416B8;
-extern Obj_1_data_416B8 lbl_1_data_416B8;
-
-// lbl_1_data_418D4: .data size 0x54, 1 refs from custom_memcard.c (own data block)
-extern u8 lbl_1_data_418D4[0x54];
-
-// lbl_1_data_40F30: .data size 0x22, 1 refs from custom_memcard.c (own data block)
-extern u8 lbl_1_data_40F30[0x22];
 
 // lbl_1_data_41928: .data size 0x6, 1 refs from custom_memcard.c (own data block)
 extern u32 lbl_1_data_41928;
@@ -72,10 +79,25 @@ typedef struct {
 } Obj_1_data_414D8;
 extern Obj_1_data_414D8 lbl_1_data_414D8;
 
+// lbl_1_data_40F0C: .data size 0x22, 1 refs from custom_memcard.c (own data block)
+extern u8 lbl_1_data_40F0C[0x22];
+
 // lbl_1_data_41930: .data size 0x10, 1 refs from custom_memcard.c (own data block)
 extern u8 lbl_1_data_41930[0x10];
 
-// lbl_1_data_40F0C: .data size 0x22, 1 refs from custom_memcard.c (own data block)
-extern u8 lbl_1_data_40F0C[0x22];
+// lbl_1_data_416B8: .data size 0x1EC, 1 refs from custom_memcard.c (own data block)
+typedef struct {
+    u8 pad_0[0x4];
+    u32 unk_4;  // 1 loads, 0 stores
+    u32 unk_8;  // 1 loads, 0 stores
+    u8 pad_C[0x1E0];
+} Obj_1_data_416B8;
+extern Obj_1_data_416B8 lbl_1_data_416B8;
+
+// lbl_1_data_40F30: .data size 0x22, 1 refs from custom_memcard.c (own data block)
+extern u8 lbl_1_data_40F30[0x22];
+
+// lbl_1_data_418D4: .data size 0x54, 1 refs from custom_memcard.c (own data block)
+extern u8 lbl_1_data_418D4[0x54];
 
 #endif  // REL_MAIN_REL_CUSTOM_MEMCARD_H

@@ -23,23 +23,6 @@ typedef struct {
 } Obj_1_bss_84428;
 extern Obj_1_bss_84428 lbl_1_bss_84428;
 
-// lbl_1_bss_718E0: .bss size 0x59E8, 3 refs from spline.c
-typedef struct {
-    u16 unk_0;  // 0 loads, 1 stores
-    u8 unk_2;  // 2 loads, 1 stores
-    u8 unk_3;  // 1 loads, 1 stores
-    u8 pad_4[0x2];
-    u16 unk_6;  // 0 loads, 1 stores
-    u8 pad_8[0x198];
-    u16 unk_1A0;  // 0 loads, 1 stores
-    u8 pad_1A2[0x537E];
-    u16 unk_5520;  // 0 loads, 1 stores
-    u8 pad_5522[0x1];
-    u8 unk_5523;  // 1 loads, 0 stores
-    u8 pad_5524[0x4C4];
-} Obj_1_bss_718E0;
-extern Obj_1_bss_718E0 lbl_1_bss_718E0;
-
 // lbl_1_bss_7F028: .bss size 0x1, 3 refs from spline.c
 extern u8 lbl_1_bss_7F028;
 
@@ -55,6 +38,27 @@ typedef struct {
 } Obj_1_bss_7F02C;
 extern Obj_1_bss_7F02C lbl_1_bss_7F02C;
 
+// lbl_1_bss_718E0: .bss size 0x59E8, 3 refs from spline.c
+#ifndef FZGX_TYPES_LBL_1_BSS_718E0
+#define FZGX_TYPES_LBL_1_BSS_718E0
+// one layout for every TU header that declares this symbol (librarian, typedefs.json)
+typedef struct {
+    u16 unk_0;  // 0 loads, 1 stores
+    u8 unk_2;  // 2 loads, 1 stores
+    u8 unk_3;  // 1 loads, 1 stores
+    u8 pad_4[0x2];
+    u16 unk_6;  // 0 loads, 1 stores
+    u8 pad_8[0x198];
+    u16 unk_1A0;  // 0 loads, 1 stores
+    u8 pad_1A2[0x537E];
+    u16 unk_5520;  // 0 loads, 1 stores
+    u8 pad_5522[0x1];
+    u8 unk_5523;  // 1 loads, 0 stores
+    u8 pad_5524[0x4C4];
+} Obj_1_bss_718E0;
+#endif
+extern Obj_1_bss_718E0 lbl_1_bss_718E0;  // typedefs.json decl override
+
 // lbl_1_bss_7F03C: .bss size 0x10, 2 refs from spline.c
 typedef struct {
     u8 unk_0;  // 3 loads, 4 stores
@@ -63,15 +67,6 @@ typedef struct {
     u8 pad_4[0xC];
 } Obj_1_bss_7F03C;
 extern Obj_1_bss_7F03C lbl_1_bss_7F03C;
-
-// lbl_1_data_3E8E0: .data size 0x9, 1 refs from spline.c (own data block)
-extern u8 lbl_1_data_3E8E0[0x9];
-
-// lbl_1_data_3E910: .data size 0xA0, 1 refs from spline.c (own data block)
-extern u8 lbl_1_data_3E910[0xA0];
-
-// jumptable_1_data_3E8F4: .data size 0x1C, 1 refs from spline.c (own data block)
-extern u8 jumptable_1_data_3E8F4[0x1C];
 
 // lbl_1_data_3EED0: .data size 0x60, 1 refs from spline.c (own data block)
 typedef struct {
@@ -91,5 +86,14 @@ typedef struct {
     u8 pad_C[0x54];
 } Obj_1_data_3EF30;
 extern Obj_1_data_3EF30 lbl_1_data_3EF30;
+
+// jumptable_1_data_3E8F4: .data size 0x1C, 1 refs from spline.c (own data block)
+extern u8 jumptable_1_data_3E8F4[0x1C];
+
+// lbl_1_data_3E910: .data size 0xA0, 1 refs from spline.c (own data block)
+extern u8 lbl_1_data_3E910[0xA0];
+
+// lbl_1_data_3E8E0: .data size 0x9, 1 refs from spline.c (own data block)
+extern u8 lbl_1_data_3E8E0[0x9];
 
 #endif  // REL_MAIN_REL_SPLINE_H

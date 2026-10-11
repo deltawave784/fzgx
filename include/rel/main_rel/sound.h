@@ -35,6 +35,13 @@ extern u32 lbl_1_data_33F1C;
 // lbl_1_bss_6F1E0: .bss size 0x1, 3 refs from sound.c
 extern u8 lbl_1_bss_6F1E0;
 
+// lbl_1_bss_6EAC6: .bss size 0xA, 3 refs from sound.c
+typedef struct {
+    u8 unk_0;  // 6 loads, 0 stores
+    u8 pad_1[0x9];
+} Obj_1_bss_6EAC6;
+extern Obj_1_bss_6EAC6 lbl_1_bss_6EAC6;
+
 // lbl_1_bss_8CA24: .bss size 0x1, 3 refs from sound.c
 extern u8 lbl_1_bss_8CA24;
 
@@ -47,17 +54,13 @@ extern u8 lbl_1_bss_8B5F1;
 // lbl_1_bss_962: .bss size 0x2, 3 refs from sound.c
 extern s16 lbl_1_bss_962;
 
-// lbl_1_bss_6EAC6: .bss size 0xA, 3 refs from sound.c
-typedef struct {
-    u8 unk_0;  // 6 loads, 0 stores
-    u8 pad_1[0x9];
-} Obj_1_bss_6EAC6;
-extern Obj_1_bss_6EAC6 lbl_1_bss_6EAC6;
-
 // lbl_1_bss_6EA9C: .bss size 0x8, 2 refs from sound.c
 extern u32 lbl_1_bss_6EA9C;
 
 // lbl_1_bss_6EAD0: .bss size 0x708, 2 refs from sound.c
+#ifndef FZGX_TYPES_LBL_1_BSS_6EAD0
+#define FZGX_TYPES_LBL_1_BSS_6EAD0
+// one layout for every TU header that declares this symbol (librarian, typedefs.json)
 typedef struct {
     u32 unk_0;  // 23 loads, 0 stores
     u32 unk_4;  // 9 loads, 0 stores
@@ -66,15 +69,16 @@ typedef struct {
     Obj_1_bss_6EAD0_At0 *unk_0;  // 34 loads, 0 stores
     u8 pad_4[0x704];
 } Obj_1_bss_6EAD0;
-extern Obj_1_bss_6EAD0 lbl_1_bss_6EAD0;
+#endif
+extern Obj_1_bss_6EAD0 lbl_1_bss_6EAD0;  // typedefs.json decl override
+
+// lbl_1_data_33FF0: .data size 0x150, 1 refs from sound.c (own data block)
+extern u8 lbl_1_data_33FF0[0x150];
 
 // jumptable_1_data_33FAC: .data size 0x44, 1 refs from sound.c (own data block)
 extern u8 jumptable_1_data_33FAC[0x44];
 
 // jumptable_1_data_33F68: .data size 0x44, 1 refs from sound.c (own data block)
 extern u8 jumptable_1_data_33F68[0x44];
-
-// lbl_1_data_33FF0: .data size 0x150, 1 refs from sound.c (own data block)
-extern u8 lbl_1_data_33FF0[0x150];
 
 #endif  // REL_MAIN_REL_SOUND_H

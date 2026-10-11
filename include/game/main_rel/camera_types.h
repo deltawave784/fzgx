@@ -21,11 +21,7 @@ struct fn_1_AA54_lbl_1_rodata_388 {
     f64 unk_0;
 };
 
-typedef struct Vec3 {
-    f32 x;
-    f32 y;
-    f32 z;
-} Vec3;
+#include "game/vec3.h"
 
 typedef struct camera_reset_transition_Camera {
     u8 pad_00[0xA4];

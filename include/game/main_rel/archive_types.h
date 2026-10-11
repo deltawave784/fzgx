@@ -93,10 +93,7 @@ typedef struct lbl_1_bss_897AC_t {
     u8 pad_6C[0x1ac8];
 } lbl_1_bss_897AC_t;
 
-typedef struct Sig_fn_1_41488_Fn41488Data {
-    u32 count;
-    char *strings;
-} Sig_fn_1_41488_Fn41488Data;
+#include "game/main_rel/shared_types.h"
 
 typedef struct {
     u8 pad_0[0x24];

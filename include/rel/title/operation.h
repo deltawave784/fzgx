@@ -10,29 +10,33 @@
 // lbl_8_data_7E50: .data size 0x4, 13 refs from operation.c
 extern u32 lbl_8_data_7E50;
 
-// lbl_8_bss_3CC: .bss size 0x4, 8 refs from operation.c
-extern u32 lbl_8_bss_3CC;
-
 // lbl_8_bss_3D0: .bss size 0x170, 8 refs from operation.c
+#ifndef FZGX_TYPES_LBL_8_BSS_3D0
+#define FZGX_TYPES_LBL_8_BSS_3D0
+// one layout for every TU header that declares this symbol (librarian, typedefs.json)
 typedef struct {
     u32 unk_0;  // 25 loads, 0 stores
     u8 pad_4[0x16C];
 } Obj_8_bss_3D0;
-extern Obj_8_bss_3D0 lbl_8_bss_3D0;
+#endif
+extern Obj_8_bss_3D0 lbl_8_bss_3D0;  // typedefs.json decl override
 
-// lbl_8_data_A1E8: .data size 0xA0, 5 refs from operation.c (own data block)
-extern u8 lbl_8_data_A1E8[0xA0];
+// lbl_8_bss_3CC: .bss size 0x4, 8 refs from operation.c
+extern u32 lbl_8_bss_3CC;
 
 // lbl_8_bss_550: .bss size 0x4, 5 refs from operation.c
+#ifndef FZGX_TYPES_LBL_8_BSS_550
+#define FZGX_TYPES_LBL_8_BSS_550
+// one layout for every TU header that declares this symbol (librarian, typedefs.json)
 typedef struct {
-    u32 unk_0;  // 11 loads, 6 stores
+    u32 unk_0;  // 12 loads, 7 stores
     u32 unk_4;  // 1 loads, 1 stores
     u32 unk_8;  // 4 loads, 1 stores
-    u8 unk_C;  // 8 loads, 1 stores
-    u8 unk_D;  // 5 loads, 4 stores
+    u8 unk_C;  // 10 loads, 1 stores
+    u8 unk_D;  // 6 loads, 4 stores
     u8 unk_E;  // 10 loads, 3 stores
-    u8 unk_F;  // 3 loads, 12 stores
-    u8 unk_10;  // 1 loads, 0 stores
+    u8 unk_F;  // 3 loads, 13 stores
+    u8 unk_10;  // 2 loads, 1 stores
     u8 unk_11;  // 2 loads, 1 stores
     u16 unk_12;  // 3 loads, 3 stores
     u8 unk_14;  // 2 loads, 2 stores
@@ -50,12 +54,19 @@ typedef struct {
     u8 pad_38[0x2];
     u8 unk_3A;  // 2 loads, 2 stores
     u8 unk_3B;  // 5 loads, 2 stores
-    u32 unk_3C;  // 4 loads, 2 stores
+    u32 unk_3C;  // 5 loads, 2 stores
 } Obj_8_bss_550_Target;
-extern Obj_8_bss_550_Target *lbl_8_bss_550;
+#endif
+extern Obj_8_bss_550_Target *lbl_8_bss_550;  // typedefs.json decl override
+
+// lbl_8_data_A1E8: .data size 0xA0, 5 refs from operation.c (own data block)
+extern u8 lbl_8_data_A1E8[0xA0];
 
 // lbl_8_data_8AD4: .data size 0x124, 4 refs from operation.c (own data block)
 extern u8 lbl_8_data_8AD4[0x124];
+
+// lbl_8_bss_554: .bss size 0x1, 2 refs from operation.c
+extern u8 lbl_8_bss_554;
 
 // lbl_8_bss_2C0: .bss size 0x10C, 2 refs from operation.c
 typedef struct {
@@ -64,20 +75,17 @@ typedef struct {
 } Obj_8_bss_2C0;
 extern Obj_8_bss_2C0 lbl_8_bss_2C0;
 
-// lbl_8_bss_554: .bss size 0x1, 2 refs from operation.c
-extern u8 lbl_8_bss_554;
-
 // lbl_8_bss_2B0: .bss size 0x4, 2 refs from operation.c
 extern u32 lbl_8_bss_2B0;
+
+// lbl_8_data_990C: .data size 0x18, 1 refs from operation.c (own data block)
+extern u8 lbl_8_data_990C[0x18];
 
 // lbl_8_data_9B8C: .data size 0x18, 1 refs from operation.c (own data block)
 extern u8 lbl_8_data_9B8C[0x18];
 
-// lbl_8_data_9AB8: .data size 0x18, 1 refs from operation.c (own data block)
-extern u8 lbl_8_data_9AB8[0x18];
-
-// lbl_8_data_99BC: .data size 0x18, 1 refs from operation.c (own data block)
-extern u8 lbl_8_data_99BC[0x18];
+// lbl_8_data_A0C0: .data size 0x1, 1 refs from operation.c (own data block)
+extern u8 lbl_8_data_A0C0;
 
 // lbl_8_data_96AC: .data size 0x18, 1 refs from operation.c (own data block)
 extern u8 lbl_8_data_96AC[0x18];
@@ -102,11 +110,8 @@ extern u8 lbl_8_data_9E04[0x18];
 // lbl_8_data_A01C: .data size 0xA4, 1 refs from operation.c (own data block)
 extern u8 lbl_8_data_A01C[0xA4];
 
-// lbl_8_data_A0C0: .data size 0x1, 1 refs from operation.c (own data block)
-extern u8 lbl_8_data_A0C0;
-
-// lbl_8_data_990C: .data size 0x18, 1 refs from operation.c (own data block)
-extern u8 lbl_8_data_990C[0x18];
+// lbl_8_data_99BC: .data size 0x18, 1 refs from operation.c (own data block)
+extern u8 lbl_8_data_99BC[0x18];
 
 // lbl_8_data_9778: .data size 0x18, 1 refs from operation.c (own data block)
 extern u8 lbl_8_data_9778[0x18];
@@ -124,5 +129,8 @@ typedef struct {
     u8 pad_20[0x8];
 } Obj_8_data_9270;
 extern Obj_8_data_9270 lbl_8_data_9270;
+
+// lbl_8_data_9AB8: .data size 0x18, 1 refs from operation.c (own data block)
+extern u8 lbl_8_data_9AB8[0x18];
 
 #endif  // REL_TITLE_OPERATION_H

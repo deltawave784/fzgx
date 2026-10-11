@@ -1043,6 +1043,81 @@ s32 fn_4_4B74(u32 arg0, u32 arg1) {
 }
 /* fzgx:end fn_4_4B74 */
 
+/* fzgx:begin fn_4_4CB8 noprologue */
+#include "types.h"
+
+extern u8 jumptable_4_data_2998[36];
+
+struct fn_4_4CB8_obj {
+    u16 unk_0;
+    u16 unk_2;
+    u16 unk_4;
+    u16 unk_6;
+    u32 unk_8;
+    u32 unk_C;
+    u32 unk_10;
+    u32 unk_14;
+    u32 unk_18;
+};
+
+extern struct fn_4_4CB8_obj lbl_4_bss_C4[];
+
+/* Set bit `bit` of the selected option record field (setter twin of fn_4_4B74). */
+void fn_4_4CB8(u32 arg0, u32 arg1, u32 bit) {
+    struct { u32 value; } idx;
+    u32 v;
+
+    v = 1 << bit;
+
+    switch (arg0) {
+    case 0:
+    case 4:
+    default:
+        idx.value = 0;
+        break;
+    case 1:
+        idx.value = 0;
+        break;
+    case 2:
+        idx.value = 1;
+        break;
+    case 3:
+        idx.value = 2;
+        break;
+    }
+
+    switch (arg1) {
+    case 0:
+        lbl_4_bss_C4[idx.value].unk_0 = v;
+        break;
+    case 1:
+        lbl_4_bss_C4[idx.value].unk_2 = v;
+        break;
+    case 2:
+        lbl_4_bss_C4[idx.value].unk_4 = v;
+        break;
+    case 3:
+        lbl_4_bss_C4[idx.value].unk_6 = v;
+        break;
+    case 4:
+        lbl_4_bss_C4[idx.value].unk_8 = v;
+        break;
+    case 5:
+        lbl_4_bss_C4[idx.value].unk_C = v;
+        break;
+    case 6:
+        lbl_4_bss_C4[idx.value].unk_10 = v;
+        break;
+    case 7:
+        lbl_4_bss_C4[idx.value].unk_14 = v;
+        break;
+    case 8:
+        lbl_4_bss_C4[idx.value].unk_18 = v;
+        break;
+    }
+}
+/* fzgx:end fn_4_4CB8 */
+
 /* fzgx:begin fn_4_6678 noprologue */
 #include "types.h"
 
@@ -1742,6 +1817,60 @@ void fn_4_AB90(void) {
     fn_1_B9C0C();
 }
 /* fzgx:end fn_4_AB90 */
+
+/* fzgx:begin fn_4_ABB0 noprologue */
+#include "types.h"
+
+typedef void (*OptionHandler)(void);
+
+/* retail addresses the whole bss cluster 0x5628..0x5678 off one base */
+typedef struct {
+    u32 count;      /* 0x00 */
+    u32 pending;    /* 0x04 */
+    u8 pad_8[0x48];
+    u32 result;     /* 0x50 */
+} OptionState;
+
+/* retail addresses the handler table, current and next slots off one base */
+typedef struct {
+    OptionHandler handlers[6];  /* 0x00 */
+    s32 current;                /* 0x18 */
+    s32 next;                   /* 0x1C */
+} OptionTable;
+
+extern OptionTable lbl_4_data_2F00;
+extern OptionState lbl_4_bss_5628;
+
+extern u8 fn_4_ACF0__fzgx_offset_0[];
+extern u8 fn_4_AD44__fzgx_offset_0[];
+extern u8 fn_4_AD78__fzgx_offset_0[];
+extern u8 fn_4_ADAC__fzgx_offset_0[];
+extern u8 fn_4_ADB0__fzgx_offset_0[];
+extern u8 fn_4_ADF0__fzgx_offset_0[];
+static OptionHandler fzgx_pool_native_lbl_4_data_2F00_handlers[6] = {(OptionHandler)(u32)fn_4_ACF0__fzgx_offset_0, (OptionHandler)(u32)fn_4_AD78__fzgx_offset_0, (OptionHandler)(u32)fn_4_ADB0__fzgx_offset_0, (OptionHandler)(u32)fn_4_AD44__fzgx_offset_0, (OptionHandler)(u32)fn_4_ADAC__fzgx_offset_0, (OptionHandler)(u32)fn_4_ADF0__fzgx_offset_0}; /* fzgx-allow: A1 measured pool bytes and bindings */
+static s32 fzgx_pool_native_lbl_4_data_2F00_current = 0xFFFFFFFF; /* fzgx-allow: A1 measured pool bytes and bindings */
+static s32 fzgx_pool_native_lbl_4_data_2F00_next = 0xFFFFFFFF; /* fzgx-allow: A1 measured pool bytes and bindings */
+
+u32 fn_4_ABB0(void) {
+    
+    OptionState *st = &lbl_4_bss_5628;
+
+    st->result = 0;
+    if (fzgx_pool_native_lbl_4_data_2F00_next >= 0 && st->count == 0) {
+        fzgx_pool_native_lbl_4_data_2F00_current = fzgx_pool_native_lbl_4_data_2F00_next;
+        fzgx_pool_native_lbl_4_data_2F00_next = -1;
+        st->count = st->pending;
+        st->pending = 0;
+    }
+    if (fzgx_pool_native_lbl_4_data_2F00_current >= 0) {
+        if (st->count != 0) {
+            st->count--;
+        }
+        fzgx_pool_native_lbl_4_data_2F00_handlers[fzgx_pool_native_lbl_4_data_2F00_current]();
+    }
+    return st->result;
+}
+/* fzgx:end fn_4_ABB0 */
 
 /* fzgx:begin fn_4_AC58 */
 extern s32 lbl_801A66B4;

@@ -42,6 +42,9 @@ typedef struct {
 extern Obj_1_bss_716C8 lbl_1_bss_716C8;
 
 // lbl_1_bss_77380: .bss size 0x3000, 6 refs from memcard.c
+#ifndef FZGX_TYPES_LBL_1_BSS_77380
+#define FZGX_TYPES_LBL_1_BSS_77380
+// one layout for every TU header that declares this symbol (librarian, typedefs.json)
 typedef struct {
     u32 unk_0;  // 10 loads, 11 stores
     u32 unk_4;  // 10 loads, 11 stores
@@ -93,10 +96,17 @@ typedef struct {
     u32 unk_BC;  // 1 loads, 0 stores
     u8 pad_C0[0x2F40];
 } Obj_1_bss_77380;
-extern Obj_1_bss_77380 lbl_1_bss_77380;
+#endif
+extern Obj_1_bss_77380 lbl_1_bss_77380;  // typedefs.json decl override
 
 // lbl_1_data_3C7C4: .data size 0xD8, 5 refs from memcard.c (own data block)
 extern u8 lbl_1_data_3C7C4[0xD8];
+
+// lbl_1_data_3C89C: .data size 0x44, 4 refs from memcard.c (own data block)
+extern u8 lbl_1_data_3C89C[0x44];
+
+// lbl_1_bss_962: .bss size 0x2, 4 refs from memcard.c
+extern s16 lbl_1_bss_962;
 
 // lbl_1_bss_718C0: .bss size 0x20, 4 refs from memcard.c
 typedef struct {
@@ -128,14 +138,11 @@ typedef struct {
 } Obj_1_bss_718C0;
 extern Obj_1_bss_718C0 lbl_1_bss_718C0;
 
-// lbl_1_data_3C89C: .data size 0x44, 4 refs from memcard.c (own data block)
-extern u8 lbl_1_data_3C89C[0x44];
-
-// lbl_1_bss_962: .bss size 0x2, 4 refs from memcard.c
-extern s16 lbl_1_bss_962;
-
 // lbl_1_data_3D230: .data size 0x4, 3 refs from memcard.c (own data block)
 extern u32 lbl_1_data_3D230;
+
+// lbl_1_bss_7730A: .bss size 0x1, 3 refs from memcard.c
+extern u8 lbl_1_bss_7730A;
 
 // lbl_1_bss_7AC48: .bss size 0x8, 3 refs from memcard.c
 typedef struct {
@@ -150,25 +157,25 @@ typedef struct {
 } Obj_1_bss_7AC48;
 extern Obj_1_bss_7AC48 lbl_1_bss_7AC48;
 
-// lbl_1_bss_7730A: .bss size 0x1, 3 refs from memcard.c
-extern u8 lbl_1_bss_7730A;
+// lbl_1_bss_718B4: .bss size 0x4, 2 refs from memcard.c
+extern u32 lbl_1_bss_718B4;
 
 // lbl_1_bss_71808: .bss size 0x4, 2 refs from memcard.c
 extern u32 lbl_1_bss_71808;
 
-// lbl_1_bss_718B1: .bss size 0x1, 2 refs from memcard.c
-extern u8 lbl_1_bss_718B1;
+// lbl_1_bss_7A380: .bss size 0x8, 2 refs from memcard.c
+extern u32 lbl_1_bss_7A380;
 
 // lbl_1_data_2BD54: .data size 0xA68, 2 refs from memcard.c
 extern u8 lbl_1_data_2BD54[0xA68];
 
-// lbl_1_bss_7A380: .bss size 0x8, 2 refs from memcard.c
-extern u32 lbl_1_bss_7A380;
-
-// lbl_1_bss_718B4: .bss size 0x4, 2 refs from memcard.c
-extern u32 lbl_1_bss_718B4;
+// lbl_1_bss_718B1: .bss size 0x1, 2 refs from memcard.c
+extern u8 lbl_1_bss_718B1;
 
 // lbl_1_bss_718E0: .bss size 0x59E8, 2 refs from memcard.c
+#ifndef FZGX_TYPES_LBL_1_BSS_718E0
+#define FZGX_TYPES_LBL_1_BSS_718E0
+// one layout for every TU header that declares this symbol (librarian, typedefs.json)
 typedef struct {
     u16 unk_0;  // 0 loads, 1 stores
     u8 unk_2;  // 2 loads, 1 stores
@@ -183,7 +190,8 @@ typedef struct {
     u8 unk_5523;  // 1 loads, 0 stores
     u8 pad_5524[0x4C4];
 } Obj_1_bss_718E0;
-extern Obj_1_bss_718E0 lbl_1_bss_718E0;
+#endif
+extern Obj_1_bss_718E0 lbl_1_bss_718E0;  // typedefs.json decl override
 
 // lbl_1_data_2AC0: .data size 0x80, 2 refs from memcard.c
 extern u8 lbl_1_data_2AC0[0x80];
@@ -209,8 +217,23 @@ extern u8 lbl_1_data_3D138[0xC];
 // lbl_1_data_3D124: .data size 0x13, 2 refs from memcard.c (own data block)
 extern u8 lbl_1_data_3D124[0x13];
 
+// jumptable_1_data_3CD44: .data size 0x9C, 1 refs from memcard.c (own data block)
+extern u8 jumptable_1_data_3CD44[0x9C];
+
+// jumptable_1_data_3CEF4: .data size 0x24, 1 refs from memcard.c (own data block)
+extern u8 jumptable_1_data_3CEF4[0x24];
+
+// jumptable_1_data_3CB68: .data size 0x9C, 1 refs from memcard.c (own data block)
+extern u8 jumptable_1_data_3CB68[0x9C];
+
 // jumptable_1_data_3CC0C: .data size 0x9C, 1 refs from memcard.c (own data block)
 extern u8 jumptable_1_data_3CC0C[0x9C];
+
+// jumptable_1_data_3CAB4: .data size 0x9C, 1 refs from memcard.c (own data block)
+extern u8 jumptable_1_data_3CAB4[0x9C];
+
+// lbl_1_data_3D108: .data size 0x11, 1 refs from memcard.c (own data block)
+extern u8 lbl_1_data_3D108[0x11];
 
 // lbl_1_data_3D11C: .data size 0x8, 1 refs from memcard.c (own data block)
 typedef struct {
@@ -221,32 +244,17 @@ typedef struct {
 } Obj_1_data_3D11C;
 extern Obj_1_data_3D11C lbl_1_data_3D11C;
 
-// jumptable_1_data_3CEF4: .data size 0x24, 1 refs from memcard.c (own data block)
-extern u8 jumptable_1_data_3CEF4[0x24];
-
-// jumptable_1_data_3CAB4: .data size 0x9C, 1 refs from memcard.c (own data block)
-extern u8 jumptable_1_data_3CAB4[0x9C];
+// jumptable_1_data_3C8E0: .data size 0xA0, 1 refs from memcard.c (own data block)
+extern u8 jumptable_1_data_3C8E0[0xA0];
 
 // jumptable_1_data_3CCA8: .data size 0x9C, 1 refs from memcard.c (own data block)
 extern u8 jumptable_1_data_3CCA8[0x9C];
-
-// jumptable_1_data_3CD44: .data size 0x9C, 1 refs from memcard.c (own data block)
-extern u8 jumptable_1_data_3CD44[0x9C];
-
-// jumptable_1_data_3CB68: .data size 0x9C, 1 refs from memcard.c (own data block)
-extern u8 jumptable_1_data_3CB68[0x9C];
 
 // jumptable_1_data_3CA18: .data size 0x9C, 1 refs from memcard.c (own data block)
 extern u8 jumptable_1_data_3CA18[0x9C];
 
 // jumptable_1_data_3C980: .data size 0x98, 1 refs from memcard.c (own data block)
 extern u8 jumptable_1_data_3C980[0x98];
-
-// jumptable_1_data_3C8E0: .data size 0xA0, 1 refs from memcard.c (own data block)
-extern u8 jumptable_1_data_3C8E0[0xA0];
-
-// lbl_1_data_3D108: .data size 0x11, 1 refs from memcard.c (own data block)
-extern u8 lbl_1_data_3D108[0x11];
 
 // lbl_1_data_3CF40: .data size 0xF, 1 refs from memcard.c (own data block)
 extern u8 lbl_1_data_3CF40[0xF];

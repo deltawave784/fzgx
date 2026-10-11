@@ -366,6 +366,105 @@ s32 fn_1_1318D4(void) {
 }
 /* fzgx:end fn_1_1318D4 */
 
+/* fzgx:begin fn_1_13198C noprologue */
+#include "types.h"
+#include "rel/main_rel/custom_memcard.h"
+#include "game/main_rel/car_test_types.h"
+
+typedef struct Sig_fn_8006F038_Vec3 {
+    f32 x;
+    f32 y;
+    f32 z;
+} Sig_fn_8006F038_Vec3;
+
+typedef struct {
+    u32 w[3];
+} Fn13198CTriple;
+
+extern const Fn13198CTriple lbl_1_rodata_8610;
+extern const f32 lbl_1_rodata_861C;
+
+extern void OSReport(const char *, ...);
+extern void fn_8006F038(Sig_fn_8006F038_Vec3 *, Sig_fn_8006F038_Vec3 *, s16);
+extern void lbl_8006DCDC(void);
+extern void fn_1_F7870(void *);
+extern void lbl_8006D7DC(Fn13198CTriple *);
+extern void lbl_8006DB74(void *);
+extern void fn_1_8E728(u8 *, u8);
+extern void fn_1_13C134(void);
+extern void fn_1_9250C(void *);
+extern void fn_1_13C16C(void);
+extern s32 fn_1_12CB04(s16);
+
+void fn_1_13198C(s16 id, Sig_fn_8006F038_Vec3 *a, Sig_fn_8006F038_Vec3 *b, u8 *objs, u8 *others, s32 mode) {
+    s32 off;
+    s16 slot;
+    u8 *obj;
+    s16 bit;
+    s16 j;
+    u8 *p;
+    Fn13198CTriple tri;
+    f32 mtx[3][4];
+
+    off = id * 32;
+    slot = *(s16 *)((u8 *)&lbl_1_bss_8B3A0 + off + 0xE);
+    if ((lbl_1_bss_8B3A0.unk_94 & 0x80000000) != 0) {
+        return;
+    }
+    if (slot == -1) {
+        return;
+    }
+    obj = objs + id * 0x4E0;
+    if (obj == NULL) {
+        OSReport((const char *)&lbl_1_data_41928);
+        return;
+    }
+    fn_8006F038(a, b, 0);
+    lbl_8006DCDC();
+    fn_1_F7870(&lbl_1_data_1E5C0);
+    tri = lbl_1_rodata_8610;
+    lbl_8006D7DC(&tri);
+    lbl_8006DB74(mtx);
+    for (bit = 0; bit < 8; bit++) {
+        if (*((((0x14) + ((u8 *)&lbl_1_bss_8B3A0)) + (off))) & (1 << bit)) {
+            break;
+        }
+    }
+    bit %= 4;
+    lbl_8006DFE8((Fn183D28Vec3 *)mtx);
+    *(f32 *)(obj + 0xA8) = lbl_1_rodata_861C;
+    *(f32 *)(obj + 0xAC) = lbl_1_rodata_861C;
+    *(f32 *)(obj + 0xB0) = lbl_1_rodata_861C;
+    fn_1_8E728(obj, bit);
+    if (mode == 1) {
+        fn_1_13C134();
+    }
+    fn_1_9250C(obj);
+    if (mode == 1) {
+        fn_1_13C16C();
+    }
+    for (j = 0; j < (s16)fn_1_12CB04(slot); j++) {
+        p = others + (s16)id * 0x9C0 + j * 0x4E0;
+        if (p != NULL) {
+            *(f32 *)(p + 0xA8) = lbl_1_rodata_861C;
+            *(f32 *)(p + 0xAC) = lbl_1_rodata_861C;
+            *(f32 *)(p + 0xB0) = lbl_1_rodata_861C;
+            if (p[0x98] != bit) {
+                fn_1_8E728(p, bit);
+            }
+            if (mode == 1) {
+                fn_1_13C134();
+            }
+            fn_1_9250C(p);
+            if (mode == 1) {
+                fn_1_13C16C();
+            }
+        }
+        p += 0x4E0;
+    }
+}
+/* fzgx:end fn_1_13198C */
+
 /* fzgx:begin fn_1_131B90 */
 typedef struct Obj Obj;
 

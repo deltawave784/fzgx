@@ -7118,3 +7118,27 @@ rel/main_rel/car/fn_1_8FE74.c:
 
 rel/main_rel/mdlload/fn_1_D4FFC.c:
 	.text       start:0x000D4FFC end:0x000D523C align:4
+
+rel/main_rel/effect/fn_1_640A4.c:
+	.text       start:0x000640A4 end:0x000642E8 align:4
+
+rel/main_rel/sel_static_disp/fn_1_13A21C.c:
+	.text       start:0x0013A21C end:0x0013A460 align:4
+
+rel/main_rel/effect_car/fn_1_6FD58.c:
+	.text       start:0x0006FD58 end:0x0006FFA0 align:4
+
+rel/main_rel/enemy_ctrl/fn_1_CA440.c:
+	.text       start:0x000CA440 end:0x000CA690 align:4
+
+rel/main_rel/camera/fn_1_B4D4.c:
+	.text       start:0x0000B4D4 end:0x0000B724 align:4
+
+rel/main_rel/game/fn_1_3AEC4.c:
+	.text       start:0x0003AEC4 end:0x0003B11C align:4
+
+rel/main_rel/car/fn_1_80CC4.c:
+	.text       start:0x00080CC4 end:0x00080F1C align:4
+
+rel/main_rel/custom_memcard/fn_1_13198C.c:
+	.text       start:0x0013198C end:0x00131B90 align:4

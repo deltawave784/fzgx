@@ -1619,6 +1619,103 @@ f32 camera_get_target_orientation(camera_get_target_orientation_CameraObject *ca
 }
 /* fzgx:end camera_get_target_orientation */
 
+/* fzgx:begin fn_1_B4D4 pool noprologue */
+#include "types.h"
+#include "psvec.h"
+
+typedef struct {
+    f32 x, y, z;
+} fn_1_B4D4_Vec;
+
+struct fn_1_B4D4_Camera {
+    u8 pad_0[0x10];
+    fn_1_B4D4_Vec pos;           /* 0x10 */
+    u8 pad_1C[0xC];
+    fn_1_B4D4_Vec target;        /* 0x28 */
+    u8 pad_34[0x74];
+    s16 unk_A8;
+    u8 pad_AA[0x62];
+    s32 unk_10C;
+    s32 unk_110;
+    fn_1_B4D4_Vec posBase;       /* 0x114 */
+    fn_1_B4D4_Vec posOfs;        /* 0x120 */
+    fn_1_B4D4_Vec posVel;        /* 0x12C */
+    fn_1_B4D4_Vec targetBase;    /* 0x138 */
+    fn_1_B4D4_Vec targetOfs;     /* 0x144 */
+    fn_1_B4D4_Vec targetVel;     /* 0x150 */
+};
+
+extern u32 lbl_1_bss_F5C;
+extern void fn_1_8840(void);
+
+/* stands in for the camera TU's literal pool ahead of this function's constants */
+const struct {
+    f32 f[88];
+    f64 d[17];
+} fn_1_B4D4_pool_head = {
+    {
+        0.3f,
+        1.1f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, -1.0f, 55.0f,
+        0.0f, -10.0f, 1.75f, 0.0f, 176.0f, -0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f,
+        0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 3.0f, 0.0f,
+        1500.0f, 53.0f, 3.0f, 0.01f, 1.3249999f, -0.000000000000000000000015881868f,
+        0.00004f, 80.0f, 108.0f, 1.35f, 90.0f, 1.2f, 0.2f, 0.0f, 1.035f, 89128.96f,
+        0.05f, 0.1f, 1.525f, 0.00000004172325f,
+        1.0f, 182.04445f, 0.4f, 0.0f, 1.4899999f, -321864400000000000000000000.0f,
+        5000.0f, 0.0f, 1.9f, 0.00000004172325f, 1.925f, 272008300000000000000000.0f,
+        1.9625f, 0.00000004172325f, 1.41f, 89128.96f, 1.5749999f,
+        -0.000000000000000000000015881868f, 1.285f, 89128.96f, 0.5f, 0.0f, 1.4499999f,
+        -0.000000000000000000000015881868f, 1.5f, 2.3f, 0.7f, 0.0f, 1.65f,
+        0.00000004172325f, 3.1796875f, 0.0f,
+    },
+    {
+        150.0, 2473901633285.8774, 1099511863578.169, 7.19, 2048.000490074158,
+        4503599627370496.0, -4194307.025390625, 4194304.0, 0.0, 3.0, 0.02,
+        2199023255552.0, 135.0, 0.0, 0.0, 0.0, 1.0,
+    },
+};
+
+#pragma fp_contract off
+void fn_1_B4D4(struct fn_1_B4D4_Camera *cam) {
+    if (cam->unk_10C == 0) {
+        cam->posBase = cam->pos;
+        cam->targetBase = cam->target;
+        return;
+    }
+    if (!(lbl_1_bss_F5C & 0x50000000)) {
+        cam->posVel.x = cam->posVel.x - 0.75 * cam->posOfs.x;
+        cam->posVel.y = cam->posVel.y - 0.75 * cam->posOfs.y;
+        cam->posVel.z = cam->posVel.z - 0.75 * cam->posOfs.z;
+        cam->posVel.x *= 0.8;
+        cam->posVel.y *= 0.8;
+        cam->posVel.z *= 0.8;
+        cam->posOfs.x = cam->posOfs.x + cam->posVel.x;
+        cam->posOfs.y = cam->posOfs.y + cam->posVel.y;
+        cam->posOfs.z = cam->posOfs.z + cam->posVel.z;
+        cam->targetVel.x = cam->targetVel.x - 0.72 * cam->targetOfs.x;
+        cam->targetVel.y = cam->targetVel.y - 0.72 * cam->targetOfs.y;
+        cam->targetVel.z = cam->targetVel.z - 0.72 * cam->targetOfs.z;
+        cam->targetVel.x *= 0.75;
+        cam->targetVel.y *= 0.75;
+        cam->targetVel.z *= 0.75;
+        cam->targetOfs.x = cam->targetOfs.x + cam->targetVel.x;
+        cam->targetOfs.y = cam->targetOfs.y + cam->targetVel.y;
+        cam->targetOfs.z = cam->targetOfs.z + cam->targetVel.z;
+    }
+    psvec_add(&cam->posBase, &cam->posOfs, &cam->pos);
+    if (cam->unk_A8 == 0) {
+        psvec_add(&cam->targetBase, &cam->targetOfs, &cam->target);
+    }
+    if (!(lbl_1_bss_F5C & 0x50000000) && cam->unk_110 > 0) {
+        cam->unk_110--;
+        if (cam->unk_110 == 0) {
+            fn_1_8840();
+        }
+    }
+}
+#pragma fp_contract reset
+/* fzgx:end fn_1_B4D4 */
+
 /* fzgx:begin fn_1_B81C */
 struct fn_1_B81C_Copy12 { u32 a[3]; };
 

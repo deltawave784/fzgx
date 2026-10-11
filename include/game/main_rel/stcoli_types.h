@@ -81,7 +81,7 @@ struct fn_1_2B478_lbl_801A6D00 {
     u32 unk_0;
 };
 
-typedef struct { f32 x, y, z; } Vec3f;
+#include "game/vec3.h"
 
 typedef struct Fn_1_21950Constants {
     u8 pad_0[8];
