@@ -68338,6 +68338,20 @@
   },
   {
     "module": "title",
+    "source": "rel/title/_prolog/fn_8_4D8.c",
+    "symbols": [
+      "fn_8_4D8"
+    ],
+    "status": "matching",
+    "mw_version": "GC/2.7",
+    "extra_cflags": [],
+    "tu": "rel/title/_prolog.c",
+    "pool": {
+      "...data.0": "lbl_8_data_0"
+    }
+  },
+  {
+    "module": "title",
     "source": "rel/title/_prolog/fn_8_754.c",
     "symbols": [
       "fn_8_754"
