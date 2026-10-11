@@ -50716,6 +50716,22 @@
   },
   {
     "module": "main_rel",
+    "source": "rel/main_rel/sel_static_disp/fn_1_133748.c",
+    "symbols": [
+      "fn_1_133748"
+    ],
+    "status": "matching",
+    "mw_version": "GC/1.3",
+    "extra_cflags": [],
+    "tu": "rel/main_rel/sel_static_disp.c",
+    "pool": {
+      "@36": "lbl_1_rodata_8600",
+      "@33": "lbl_1_rodata_86F8",
+      "@34": "lbl_1_rodata_86FC"
+    }
+  },
+  {
+    "module": "main_rel",
     "source": "rel/main_rel/sel_static_disp/fn_1_133968.c",
     "symbols": [
       "fn_1_133968"

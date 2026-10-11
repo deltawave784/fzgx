@@ -405,6 +405,46 @@ void fn_1_13354C(s32 arg0, s32 arg1, u32 arg2) {
 }
 /* fzgx:end fn_1_13354C */
 
+/* fzgx:begin fn_1_133748 noprologue */
+#include "types.h"
+#include "font.h"
+
+typedef struct { s32 a[4]; } fn_1_133748_Offsets;
+
+extern u32 lbl_1_rodata_8744[4];
+extern f32 lbl_1_rodata_26F8[22];
+
+void fn_1_133748(s32 x, s32 y) {
+    fn_1_133748_Offsets offs;
+    FontDrawPacket pkt;
+    s32 i;
+
+    offs = *(fn_1_133748_Offsets *)lbl_1_rodata_8744;
+    for (i = 0; i < 6; i++) {
+        pkt = *(FontDrawPacket *)lbl_1_rodata_26F8;
+        pkt.image = 0x9D03;
+        fn_1_51678(&pkt, pkt.image, 0, 0, 8, 96);
+        pkt.x = (f32)(x + i * 96);
+        pkt.y = (f32)y;
+        pkt.z = 200.0f;
+        pkt.rotation_z = -0x4000;
+        pkt.flags = 0x100000;
+        fn_1_4F734(&pkt);
+    }
+    for (i = 0; i < 4; i++) {
+        pkt = *(FontDrawPacket *)lbl_1_rodata_26F8;
+        pkt.image = 0x9D03;
+        fn_1_51678(&pkt, pkt.image, 0, 96, 8, 12);
+        pkt.x = (f32)(x + offs.a[i] - 85);
+        pkt.y = (f32)y;
+        pkt.z = 180.0f;
+        pkt.rotation_z = -0x4000;
+        pkt.flags = 0x100000;
+        fn_1_4F734(&pkt);
+    }
+}
+/* fzgx:end fn_1_133748 */
+
 /* fzgx:begin fn_1_133968 */
 typedef struct {
     s16 v[9];
