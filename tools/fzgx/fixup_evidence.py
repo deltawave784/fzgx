@@ -3483,9 +3483,12 @@ def frame_padding(p, symbol, body, check):
     return out
 
 
-def _initializer_words(body, name):
+def _initializer_words(body, name, spans=False):
     """Big-endian bytes of every local aggregate initializer of `name` whose elements are all
-    4-byte literals (f32 when spelled with a point, exponent or `f` suffix, else a word)."""
+    4-byte literals (f32 when spelled with a point, exponent or `f` suffix, else a word).
+    With `spans`, (bytes, [(start, end, kind)] per element in `body`) instead, where kind is
+    True for a float, False for a word and None for an address (`fn_1_52B68`, `&obj`: a
+    relocated pool word, its bytes are zero placeholders; fn_1_52968's callback table)."""
     import struct as _struct
     from .sdkimport import masked
     code = masked(body)
@@ -3493,20 +3496,33 @@ def _initializer_words(body, name):
     if not span:
         return []
     out = []
-    for m in re.finditer(r'(?m)^[ \t]*(?:const\s+)?\w[\w \t]*?\s+\w+\s*(?:\[[^\]\n]*\])?\s*=\s*\{([^{};]*)\}\s*;',
+    # plain (`f32 v[3]`) and function-pointer array (`void (*cb[4])(void *)`) declarators
+    for m in re.finditer(r'(?m)^[ \t]*(?:const\s+)?\w[\w \t]*?(?:\s+\w+\s*(?:\[[^\]\n]*\])?'
+                         r'|\s*\(\s*\*\s*\w+\s*(?:\[[^\]\n]*\])?\s*\)\s*\([^()\n]*\))\s*=\s*\{([^{};]*)\}\s*;',
                          code[span[0]:span[1]]):
         data = b''
-        for element in (e.strip() for e in m[1].split(',')):
+        elements = []
+        at = span[0] + m.start(1)
+        for raw_element in m[1].split(','):
+            element = raw_element.strip()
+            lead = len(raw_element) - len(raw_element.lstrip())
+            where = (at + lead, at + lead + len(element))
+            at += len(raw_element) + 1
             if re.fullmatch(r'[-+]?(?:\d+\.\d*|\.\d+|\d+)(?:[eE][-+]?\d+)?[fF]', element) or \
                     re.fullmatch(r'[-+]?(?:\d+\.\d*|\.\d+|\d+[eE][-+]?\d+)(?:[eE][-+]?\d+)?', element):
                 data += _struct.pack('>f', float(element.rstrip('fF')))
+                elements.append(where + (True,))
             elif re.fullmatch(r'[-+]?(?:0[xX][0-9A-Fa-f]+|\d+)[uUlL]*', element):
                 data += _struct.pack('>I', int(element.rstrip('uUlL'), 0) & 0xFFFFFFFF)
+                elements.append(where + (False,))
+            elif spans and re.fullmatch(r'&?\s*[A-Za-z_]\w*', element):
+                data += b'\0\0\0\0'
+                elements.append(where + (None,))
             else:
                 data = b''
                 break
         if len(data) >= 8:
-            out.append(data)
+            out.append((data, elements) if spans else data)
     return out
 
 
@@ -3568,14 +3584,46 @@ def shared_pool_primer(p, symbol, body, check):
         if not raw or len(raw) < end:
             continue
         # a local aggregate initializer (`V3 rnd = {0.0f, 0.0f, 0.0f};`) is the function's own
-        # anonymous rodata object, copied word by word through the base: when retail's last
-        # words read that way hold its bytes, the primer stops before them so the
-        # initializer lands there (fn_1_645D4 read 0x338 for retail's 0x32c)
-        for words in _initializer_words(body, sym.name):
-            hit = next((x for x in sorted(o for o, (k, w) in own.items() if k == 'i')
-                        if bytes(raw[x:x + len(words)]) == words
+        # anonymous rodata object, copied word by word through the base: when retail's words
+        # read that way hold its bytes, the primer stops before them so the initializer lands
+        # there as ONE object (fn_1_645D4 read 0x338 for retail's 0x32c). The function's own
+        # new literals may follow it (fn_10_12C14: {0, -20, 0} at 0x444, then 343.0f at 0x450)
+        # when every word from the initializer to the last one it reads is its own; a body
+        # whose initializer copies a run of retail words with other values takes retail's
+        # values (the copy proves them; the saved body had {0, 0, 0})
+        def tail_is_own(x, n):
+            later = [o + w for o, (k, w) in own.items() if o >= x + n]
+            if any(o + w > x for o, (k, w) in own.items() if o < x):
+                return False
+            covered = set()
+            for o, (k, w) in own.items():
+                covered.update(range(o, o + w, 4))
+            return all(o in covered for o in range(x + n, max(later, default=x + n), 4))
+        own_ints = sorted(o for o, (k, w) in own.items() if k == 'i')
+        def copy_runs(n):
+            return [x for x in own_ints if all(own.get(x + i) == ('i', 4) for i in range(0, n, 4))
+                    and own.get(x - 4) != ('i', 4) and own.get(x + n) != ('i', 4)]
+        for words, elements in _initializer_words(body, sym.name, spans=True):
+            literal = [4 * i for i, e in enumerate(elements) if e[2] is not None]
+            hit = next((x for x in own_ints
+                        if literal and all(raw[x + i:x + i + 4] == words[i:i + 4] for i in literal)
                         and all(own.get(x + i) == ('i', 4) for i in range(0, len(words), 4))
-                        and all(o + w <= x for o, (k, w) in own.items() if not x <= o < x + len(words))), None)
+                        and tail_is_own(x, len(words))), None)
+            if hit is None:
+                runs = [x for x in copy_runs(len(words)) if tail_is_own(x, len(words))]
+                if len(runs) == 1 and len(elements) * 4 == len(words):
+                    hit = runs[0]
+                    for i, (a, b, is_float) in reversed(list(enumerate(elements))):
+                        if is_float is None:
+                            continue  # an address: retail's word is a relocation
+                        w = bytes(raw[hit + 4 * i:hit + 4 * i + 4])
+                        v = _struct.unpack('>f', w)[0]
+                        if is_float and _math.isfinite(v):
+                            t = repr(v)
+                            value = (t if ('.' in t or 'e' in t) else t + '.0') + 'f'
+                        else:
+                            value = '0x%08X' % _struct.unpack('>I', w)[0]
+                        body = body[:a] + value + body[b:]
             if hit is not None:
                 end = hit
                 break
