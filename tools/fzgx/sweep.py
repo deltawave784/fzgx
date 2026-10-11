@@ -261,11 +261,47 @@ def land(p: Project, rep: Dict[str, dict], label: str) -> Dict[str, list]:
     return dict(submitted=submitted, saved=saved, failed=failed)
 
 
+def lift_drafts(min_percent: float, max_percent: float, outdir: Path, have) -> Dict[str, str]:
+    """Saved lifter drafts (`.fzgx/lift/scores.json`, written by `fzgx lift`) for unmatched
+    functions whose ledger best lies in the band but whose saved body is gone: the ledger was
+    restored from another machine's history, so 718 of 754 bodies at 50-85% (471 of 478 over
+    768 bytes) pointed at files that do not exist here and the sweep never saw them. A full-size
+    lift is a compilable seed at a comparable score (fn_1_E7F88 82.2 against a recorded 74.9)."""
+    import sqlite3
+    path = STATE_DIR / 'lift' / 'scores.json'
+    if not path.exists():
+        return {}
+    try:
+        drafts = json.loads(path.read_text())
+    except ValueError:
+        return {}
+    db = sqlite3.connect(str(STATE_DIR / 'ledger.db'))
+    band = {s for (s,) in db.execute("select symbol from functions where status='unmatched' and best_percent>=? "
+                                       "and best_percent<=?", (min_percent, max_percent))}
+    out: Dict[str, str] = {}
+    for s, d in drafts.items():
+        t = d.get('text') if isinstance(d, dict) else None
+        # the stored percent is a positional word score (5% for an 80% draft of a large
+        # function): only compilation is required here, the objdiff check ranks them
+        if s not in band or s in have or not t or d.get('percent', -1) is None or d.get('percent', -1) < 0:
+            continue
+        f = outdir / 'seed' / (s.replace(':', '__') + '.c')
+        f.parent.mkdir(parents=True, exist_ok=True)
+        f.write_text(t)
+        out[s] = str(f)
+    return out
+
+
 def run(p: Project, min_percent: float, max_percent: float, outdir: Optional[Path], rounds: int,
         families: Optional[List[str]], do_land: bool, symbols: Optional[List[str]] = None) -> Dict[str, dict]:
     bodies = stuck.best_bodies(p, min_percent)
     sel = {s: r[0] for s, r in bodies.items() if r[1] <= max_percent and (not symbols or s in symbols)}
     outdir = outdir or (STATE_DIR / 'work' / f'sweep-{int(min_percent)}')
+    drafts = {s: f for s, f in lift_drafts(min_percent, max_percent, outdir, bodies).items()
+              if not symbols or s in symbols}
+    if drafts:
+        print('lifter drafts for functions without a saved body', len(drafts))
+    sel.update(drafts)
     rep = climb(p, sel, outdir, rounds, families)
     if do_land:
         land(p, rep, 'sweep')

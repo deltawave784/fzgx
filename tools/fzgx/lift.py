@@ -3111,7 +3111,56 @@ def _lift(p: Project, module: str, name: str, ins, layout: str = "reverse", site
     text += ["", f"{decl_sec}{rtype_c} {name}({', '.join(decl_params) or 'void'}) {{"]
     text += [f"    {b}" for b in body]
     text += ["}", ""]
-    return "\n".join(text)
+    return header_views("\n".join(text))
+
+
+def header_views(text: str) -> str:
+    """The draft's own `extern` of a name its included headers already declare: dropped when
+    the header line is the same declaration, else a self-referential macro view
+    (`#define lbl (*(struct T *)&lbl)`), which the preprocessor expands once. Prototypes are
+    kept: a call through a cast function pointer compiles to an indirect call. Callee signatures pull module headers in, and the draft's private struct
+    type for the same global was a redeclaration error: 47 of 80 sampled drafts of large
+    functions (2026-10-10) never compiled for that reason alone."""
+    if '#include' not in text:
+        return text
+    from . import tutidy
+    decls: Dict[str, str] = {}
+    typedefs: set = set()
+    for h in tutidy.included_headers(text):
+        for n, ln in h.decls:
+            decls.setdefault(n, ln)
+        typedefs |= h.typedefs
+    if typedefs:
+        # a signature's type closure repeats a struct typedef a header already defines
+        text = tutidy.tidy_block(text, set(), typedefs)[0]
+
+    def norm(s: str) -> str:
+        s = re.sub(r'\s*([*(),\[\];])\s*', r'\1', s.strip())
+        return re.sub(r'^extern\s+', '', re.sub(r'\s+', ' ', s))
+
+    out = []
+    for ln in text.splitlines():
+        m = tutidy.EXTERN_RE.match(ln) or (tutidy.PROTO_RE.match(ln) if ln.startswith('extern ') else None)
+        n = m.group(1) if m else None
+        if not n or n not in decls or not ln.startswith('extern '):
+            out.append(ln)
+            continue
+        if norm(decls[n]) == norm(ln):
+            continue
+        q = re.escape(n)
+        f = re.match(rf'^extern\s+(.+?)\s*\b{q}\s*\((.*)\)\s*;\s*$', ln)
+        a = re.match(rf'^extern\s+(.+?)\s*\b{q}\s*((?:\[[^\]]*\])+)\s*;\s*$', ln)
+        v = re.match(rf'^extern\s+(.+?)\s*\b{q}\s*;\s*$', ln)
+        if f:
+            # a call through a cast function pointer is an indirect call: prototypes stay
+            out.append(ln)
+        elif a:
+            out.append(f'#define {n} (*({a.group(1)} (*){a.group(2)})&{n})')
+        elif v:
+            out.append(f'#define {n} (*({v.group(1)} *)&{n})')
+        else:
+            out.append(ln)
+    return "\n".join(out) + ("\n" if text.endswith("\n") else "")
 
 
 def apply(p: Project, modules: Optional[List[str]] = None, max_size: int = 160, limit: int = 2000,
@@ -3249,7 +3298,9 @@ def apply(p: Project, modules: Optional[List[str]] = None, max_size: int = 160, 
                     elif error:
                         errors[s] = error
                         break
-            elif tu or callees or max_size > 640:
+            elif tu or callees or symbols or max_size > 640:
+                # `--symbol` promises no size cap: the straight-line lifter returned nothing
+                # for every function above 640 bytes, silently (0 lifted, no error)
                 draft = lift_total(p, m, name, max_ins=max(1200, size // 4))
                 variants = [draft] if draft else []
             else:
