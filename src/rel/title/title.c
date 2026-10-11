@@ -71,6 +71,98 @@ void _prolog(void) {
 }
 /* fzgx:end _prolog */
 
+/* fzgx:begin fn_8_954 */
+struct fn_8_954_bss0 {
+    u8 pad_0[1];
+    u8 unk_1;
+    u8 unk_2;
+    u8 pad_3[0x235];
+    u32 unk_238;
+    u8 pad_23C;
+    u8 unk_23D;
+};
+struct fn_8_954_9C8 {
+    u8 pad_0[0xA];
+    s8 unk_A;
+};
+struct fn_8_954_9F8 {
+    u8 pad_0[8];
+    u16 unk_8;
+};
+struct fn_8_954_8B3A0 {
+    u8 pad_0[0x94];
+    u32 unk_94;
+    u8 pad_98[6];
+    u8 unk_9E;
+};
+
+extern struct fn_8_954_bss0 lbl_8_bss_0;
+extern s16 lbl_1_bss_968;
+extern s16 lbl_1_bss_96A;
+extern struct fn_8_954_9C8 lbl_1_bss_9C8;
+extern struct fn_8_954_9F8 lbl_1_bss_9F8;
+extern struct fn_8_954_8B3A0 lbl_1_bss_8B3A0;
+extern u8 lbl_801A66B8;
+extern u8 lbl_801A66BA;
+
+extern int fn_1_4C10(void);
+extern int fn_1_4CAC(void);
+extern void fn_1_4A00(s32, u8, void *);
+extern void fn_1_A5EFC(void);
+
+/* Pad start-button poll: with propagation off the argument copies stay
+ * live in volatile registers above the test, as retail schedules them. */
+#pragma opt_propagation off
+static inline int fn_8_954_check(struct fn_8_954_9C8 *ap, struct fn_8_954_9F8 *bp, u8 val) {
+    struct { struct fn_8_954_9F8 *value; } b;
+    struct { struct fn_8_954_9C8 *value; } a;
+    struct { s32 value; } v;
+    a.value = ap;
+    b.value = bp;
+    v.value = val;
+    if (a.value->unk_A == 0 && (b.value->unk_8 & 0x1000)) {
+        lbl_1_bss_8B3A0.unk_9E = v.value;
+        return 1;
+    }
+    return 0;
+}
+
+void fn_8_954(void) {
+    struct fn_8_954_bss0 *p = (struct fn_8_954_bss0 *)&lbl_8_bss_0;
+    if (lbl_1_bss_968 == -1) {
+        switch (lbl_1_bss_96A) {
+        case -1:
+            if (!(p->unk_2 && p->unk_1)) {
+                if (!p->unk_23D) {
+                    if (p->unk_2) {
+                        if (fn_8_954_check(&lbl_1_bss_9C8, &lbl_1_bss_9F8, 0)) {
+                            if (fn_1_4C10() == 0 || fn_1_4CAC() != 0) {
+                                fn_1_4A00(0, 0xf, (void *)p->unk_238);
+                            }
+                            p->unk_23D = 1;
+                        }
+                    }
+                    break;
+                }
+                if (fn_1_4C10() != 0) {
+                    break;
+                }
+            }
+            if (!lbl_801A66B8) {
+                fn_1_A5EFC();
+                lbl_801A66B8 = 1;
+            }
+            lbl_1_bss_8B3A0.unk_94 = 0;
+            lbl_1_bss_968 = 1;
+            p->unk_23D = 0;
+            p->unk_1 = 0;
+            lbl_801A66BA = 0;
+            break;
+        }
+    }
+}
+/* fzgx:end fn_8_954 */
+
 /* fzgx:begin fn_8_AA8 */
 extern struct fn_8_AA8_lbl_8_bss_234 lbl_8_bss_234;
 extern struct fn_8_AA8_lbl_8_bss_238 lbl_8_bss_238;
