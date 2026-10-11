@@ -3537,7 +3537,17 @@ def shared_pool_primer(p, symbol, body, check):
     primer section and the private pool at integration; the link places nothing extra."""
     import struct as _struct, math as _math
     sym = p.resolve(symbol)
-    if sym is None or 'fzgx_pool_prime' in body or '__declspec(section' in body or not getattr(check, '_rows', None):
+    if sym is not None and 'fzgx_pool_prime' in body:
+        # a saved body primed by an older layout rule is primed again from retail: its primer
+        # never reaches a corrected layout otherwise (fn_10_12C14's saved bodies, fn_16_69B8).
+        # Only a self-contained primer is replaced; a body reading its tables keeps it.
+        old = re.search(r'#pragma section code_type "\.fzgxpool"\n.*?#pragma section code_type "\.text"\n', body, re.S)
+        rest = body[:old.start()] + body[old.end():] if old else body
+        if not old or 'fzgx_pool_' in rest or '__declspec(section' in rest:
+            return []
+        return [(label.replace('prime ', 're-prime ', 1), text)
+                for label, text in shared_pool_primer(p, symbol, rest, check) if text != body]
+    if sym is None or '__declspec(section' in body or not getattr(check, '_rows', None):
         return []
     lrows, rrows = check._rows
     lfmt = [((r.get('instruction') or {}).get('formatted') or '') for r in lrows]
