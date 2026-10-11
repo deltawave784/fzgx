@@ -1,5 +1,5 @@
 {
- "generated": 1791739514,
+ "generated": 1791739533,
  "functions": [
   {
    "symbol": "car_colchg:_prolog",
@@ -516430,9 +516430,9 @@
    "detail": "Correct lbl_1_data_FCD4 to an array of 0x28-byte entries with unk_20 at offset 0x20 (pointer field); current Obj_1_data_FCD4 size is 0x1D60, incorrectly absorbing the array into padding.",
    "source": "agent:revise-revise-main-rel-1-revise-codex-22",
    "created_at": 1791324680,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1791739528
   },
   {
    "id": 22,
