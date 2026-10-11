@@ -14493,5 +14493,37 @@
     ],
     "link": "verified",
     "commit": "8e560138"
+  },
+  "fn_1_13198C": {
+    "seed_symbol": "fn_1_13198C",
+    "generator": "fzgx fixup",
+    "transform": "expression-tree + at 1508",
+    "seed": "#include \"types.h\"\n#include \"rel/main_rel/custom_memcard.h\"\n#include \"game/main_rel/car_test_types.h\"\n\ntypedef struct Sig_fn_8006F038_Vec3 {\n    f32 x;\n    f32 y;\n    f32 z;\n} Sig_fn_8006F038_Vec3;\n\ntypedef struct {\n    u32 w[3];\n} Fn13198CTriple;\n\nextern const Fn13198CTriple lbl_1_rodata_8610;\nextern const f32 lbl_1_rodata_861C;\n\nextern void OSReport(const char *, ...);\nextern void fn_8006F038(Sig_fn_8006F038_Vec3 *, Sig_fn_8006F038_Vec3 *, s16);\nextern void lbl_8006DCDC(void);\nextern void fn_1_F7870(void *);\nextern void lbl_8006D7DC(Fn13198CTriple *);\nextern void lbl_8006DB74(void *);\nextern void fn_1_8E728(u8 *, u8);\nextern void fn_1_13C134(void);\nextern void fn_1_9250C(void *);\nextern void fn_1_13C16C(void);\nextern s32 fn_1_12CB04(s16);\n\nvoid fn_1_13198C(s16 id, Sig_fn_8006F038_Vec3 *a, Sig_fn_8006F038_Vec3 *b, u8 *objs, u8 *others, s32 mode) {\n    s32 off;\n    s16 slot;\n    u8 *obj;\n    s16 bit;\n    s16 j;\n    u8 *p;\n    Fn13198CTriple tri;\n    f32 mtx[3][4];\n\n    off = id * 32;\n    slot = *(s16 *)((u8 *)&lbl_1_bss_8B3A0 + off + 0xE);\n    if ((lbl_1_bss_8B3A0.unk_94 & 0x80000000) != 0) {\n        return;\n    }\n    if (slot == -1) {\n        return;\n    }\n    obj = objs + id * 0x4E0;\n    if (obj == NULL) {\n        OSReport((const char *)&lbl_1_data_41928);\n        return;\n    }\n    fn_8006F038(a, b, 0);\n    lbl_8006DCDC();\n    fn_1_F7870(&lbl_1_data_1E5C0);\n    tri = lbl_1_rodata_8610;\n    lbl_8006D7DC(&tri);\n    lbl_8006DB74(mtx);\n    for (bit = 0; bit < 8; bit++) {\n        if (*((u8 *)&lbl_1_bss_8B3A0 + off + 0x14) & (1 << bit)) {\n            break;\n        }\n    }\n    bit %= 4;\n    lbl_8006DFE8((Fn183D28Vec3 *)mtx);\n    *(f32 *)(obj + 0xA8) = lbl_1_rodata_861C;\n    *(f32 *)(obj + 0xAC) = lbl_1_rodata_861C;\n    *(f32 *)(obj + 0xB0) = lbl_1_rodata_861C;\n    fn_1_8E728(obj, bit);\n    if (mode == 1) {\n        fn_1_13C134();\n    }\n    fn_1_9250C(obj);\n    if (mode == 1) {\n        fn_1_13C16C();\n    }\n    for (j = 0; j < (s16)fn_1_12CB04(slot); j++) {\n        p = others + (s16)id * 0x9C0 + j * 0x4E0;\n        if (p != NULL) {\n            *(f32 *)(p + 0xA8) = lbl_1_rodata_861C;\n            *(f32 *)(p + 0xAC) = lbl_1_rodata_861C;\n            *(f32 *)(p + 0xB0) = lbl_1_rodata_861C;\n            if (p[0x98] != bit) {\n                fn_1_8E728(p, bit);\n            }\n            if (mode == 1) {\n                fn_1_13C134();\n            }\n            fn_1_9250C(p);\n            if (mode == 1) {\n                fn_1_13C16C();\n            }\n        }\n        p += 0x4E0;\n    }\n}\n",
+    "seed_sha256": "098a9b2f2d41a53dfc7789642c1024665a4ec6ae6271dcdb68bccf67401fcb37",
+    "generated_sha256": "4522b5616ed717a1830bec47e53266ff18c924daf6e4d5bea4ffdf02fa8054ce",
+    "generated_source": "#include \"types.h\"\n#include \"rel/main_rel/custom_memcard.h\"\n#include \"game/main_rel/car_test_types.h\"\n\ntypedef struct Sig_fn_8006F038_Vec3 {\n    f32 x;\n    f32 y;\n    f32 z;\n} Sig_fn_8006F038_Vec3;\n\ntypedef struct {\n    u32 w[3];\n} Fn13198CTriple;\n\nextern const Fn13198CTriple lbl_1_rodata_8610;\nextern const f32 lbl_1_rodata_861C;\n\nextern void OSReport(const char *, ...);\nextern void fn_8006F038(Sig_fn_8006F038_Vec3 *, Sig_fn_8006F038_Vec3 *, s16);\nextern void lbl_8006DCDC(void);\nextern void fn_1_F7870(void *);\nextern void lbl_8006D7DC(Fn13198CTriple *);\nextern void lbl_8006DB74(void *);\nextern void fn_1_8E728(u8 *, u8);\nextern void fn_1_13C134(void);\nextern void fn_1_9250C(void *);\nextern void fn_1_13C16C(void);\nextern s32 fn_1_12CB04(s16);\n\nvoid fn_1_13198C(s16 id, Sig_fn_8006F038_Vec3 *a, Sig_fn_8006F038_Vec3 *b, u8 *objs, u8 *others, s32 mode) {\n    s32 off;\n    s16 slot;\n    u8 *obj;\n    s16 bit;\n    s16 j;\n    u8 *p;\n    Fn13198CTriple tri;\n    f32 mtx[3][4];\n\n    off = id * 32;\n    slot = *(s16 *)((u8 *)&lbl_1_bss_8B3A0 + off + 0xE);\n    if ((lbl_1_bss_8B3A0.unk_94 & 0x80000000) != 0) {\n        return;\n    }\n    if (slot == -1) {\n        return;\n    }\n    obj = objs + id * 0x4E0;\n    if (obj == NULL) {\n        OSReport((const char *)&lbl_1_data_41928);\n        return;\n    }\n    fn_8006F038(a, b, 0);\n    lbl_8006DCDC();\n    fn_1_F7870(&lbl_1_data_1E5C0);\n    tri = lbl_1_rodata_8610;\n    lbl_8006D7DC(&tri);\n    lbl_8006DB74(mtx);\n    for (bit = 0; bit < 8; bit++) {\n        if (*((((0x14) + ((u8 *)&lbl_1_bss_8B3A0)) + (off))) & (1 << bit)) {\n            break;\n        }\n    }\n    bit %= 4;\n    lbl_8006DFE8((Fn183D28Vec3 *)mtx);\n    *(f32 *)(obj + 0xA8) = lbl_1_rodata_861C;\n    *(f32 *)(obj + 0xAC) = lbl_1_rodata_861C;\n    *(f32 *)(obj + 0xB0) = lbl_1_rodata_861C;\n    fn_1_8E728(obj, bit);\n    if (mode == 1) {\n        fn_1_13C134();\n    }\n    fn_1_9250C(obj);\n    if (mode == 1) {\n        fn_1_13C16C();\n    }\n    for (j = 0; j < (s16)fn_1_12CB04(slot); j++) {\n        p = others + (s16)id * 0x9C0 + j * 0x4E0;\n        if (p != NULL) {\n            *(f32 *)(p + 0xA8) = lbl_1_rodata_861C;\n            *(f32 *)(p + 0xAC) = lbl_1_rodata_861C;\n            *(f32 *)(p + 0xB0) = lbl_1_rodata_861C;\n            if (p[0x98] != bit) {\n                fn_1_8E728(p, bit);\n            }\n            if (mode == 1) {\n                fn_1_13C134();\n            }\n            fn_1_9250C(p);\n            if (mode == 1) {\n                fn_1_13C16C();\n            }\n        }\n        p += 0x4E0;\n    }\n}\n",
+    "compiler": "GC/1.3",
+    "flags": "",
+    "source": "rel/main_rel/custom_memcard/fn_1_13198C.c",
+    "bytes": 516,
+    "headers_sha256": "ef98b3675cca0c5b631400c3d664ece492ca1026d9fbcdac7da595e8183d5afe",
+    "oracle_sha256": "ca197f0a12605d3f05c8d964147669b8debb231a26880aee4ab16caec0d261cf",
+    "recipe": [
+      {
+        "label": "expression-tree + at 1508",
+        "input_sha256": "098a9b2f2d41a53dfc7789642c1024665a4ec6ae6271dcdb68bccf67401fcb37",
+        "output_sha256": "4522b5616ed717a1830bec47e53266ff18c924daf6e4d5bea4ffdf02fa8054ce",
+        "input_symbol": "fn_1_13198C",
+        "output_symbol": "fn_1_13198C",
+        "edits": [
+          [
+            1509,
+            1543,
+            "((0x14) + ((u8 *)&lbl_1_bss_8B3A0)) + (off))"
+          ]
+        ]
+      }
+    ],
+    "link": "pending"
   }
 }

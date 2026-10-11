@@ -7139,3 +7139,6 @@ rel/main_rel/game/fn_1_3AEC4.c:
 
 rel/main_rel/car/fn_1_80CC4.c:
 	.text       start:0x00080CC4 end:0x00080F1C align:4
+
+rel/main_rel/custom_memcard/fn_1_13198C.c:
+	.text       start:0x0013198C end:0x00131B90 align:4
