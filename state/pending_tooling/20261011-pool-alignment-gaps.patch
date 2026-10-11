@@ -1,0 +1,69 @@
+diff --git a/tools/fzgx/oracle.py b/tools/fzgx/oracle.py
+index b4158ca2..438ed439 100644
+--- a/tools/fzgx/oracle.py
++++ b/tools/fzgx/oracle.py
+@@ -561,6 +561,38 @@ def _bss_base_rows(project, module, obj, left, right, lrows, rrows, function_nam
+     return rows, pairs
+ 
+ 
++def _retail_gap(project, module, objs, start, end):
++    """Retail bytes of an unlabelled range [start, end) of a pool, read from the retail split
++    object holding the closest preceding pool object. None when that object does not cover the
++    range contiguously, another symbol of it claims the bytes, or a relocation touches them."""
++    from .dataimport import objects
++    prev = max((s for s in objs if s.end <= start), key=lambda s: s.end, default=None)
++    if prev is None:
++        return None
++    index = objects(project, module)
++    pair = index.get(prev.name) or index.get(f'{prev.name}_{prev.addr:08X}')
++    if not pair:
++        return None
++    relf, es = pair
++    shndx = es['shndx']
++    sec = relf.sections[shndx]
++    lo = es['value'] + (start - prev.addr)
++    hi = lo + (end - start)
++    if sec['type'] != 1 or lo < es['value'] + es['size'] or hi > sec['size']:
++        return None
++    if any(s['shndx'] == shndx and s['size'] and s['value'] < hi and s['value'] + s['size'] > lo
++           for s in relf.symbols()):
++        return None
++    for rsec in relf.sections:
++        if rsec['type'] != 4 or rsec['info'] != shndx:
++            continue
++        for pos in range(rsec['offset'], rsec['offset'] + rsec['size'], 12):
++            offset = struct.unpack_from('>I', relf.data, pos)[0]
++            if offset < hi and offset + 4 > lo:
++                return None
++    return bytes(relf.data[sec['offset'] + lo:sec['offset'] + hi])
++
++
+ def _relocated_pool_matches(project, module, elf, section, address, extent):
+     """Compare initialized bytes and symbolic pointer bindings across a shared pool."""
+     from .dataimport import payload, pool_objects, resolve_target
+@@ -588,7 +620,24 @@ def _relocated_pool_matches(project, module, elf, section, address, extent):
+     except (ValueError, KeyError):
+         return False
+     if not all(covered):
+-        return False
++        # dtk names no object for alignment padding inside a pool (font.c's lbl_1_rodata_2770
++        # is 4 bytes, the next object 8-aligned): read such a range from the retail split
++        # object that holds the preceding object, and only when nothing there relocates it
++        objs = pool_objects(project, module, section['name'], address, extent)
++        start = 0
++        while start < extent:
++            if covered[start]:
++                start += 1
++                continue
++            end = start
++            while end < extent and not covered[end]:
++                end += 1
++            gap = _retail_gap(project, module, objs, address + start, address + end)
++            if gap is None:
++                return False
++            expected[start:end] = gap
++            covered[start:end] = b'\1' * (end - start)
++            start = end
+     found = []
+     symbols = elf.symbols()
+     for rsec in elf.sections:
