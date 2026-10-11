@@ -248,6 +248,22 @@ Each line is a family that turned a 60–99% body into a match; the count is how
   `fn_1_B5F20`'s data r29/pool r30 into retail's pool r29/data r30.
   `fixup_layout.tu_data_objects` emits this layout (whole block, pointer words as
   `__fzgx_offset_` initializers, `.fzgxpool` primer in retail order).
+- Indexed table reads `addi rX, rBase, off; lbzx/lhzx/lwzx rD, rX, rI` (probe compiles,
+  2026-10-11): the shape belongs to an array object the TU *defines*, indexed by a variable,
+  and only under GC/1.3.2. Every extern spelling folds into `add rY, rBase, rI; lbz off(rY)`
+  under every compiler (struct of arrays, `tbl->f[i]`, `tbl[K + i]`, 2-D arrays, held
+  base and offset locals); GC/1.2.5n and GC/1.3 fold even the defined arrays (1.3 keeps
+  `add; lbz`, 1.2.5n CSEs the sum). A defined object at offset 0 still gets `addi rX, rBase, 0`.
+  The same law covers address values: `(u8 *)obj + (i * K + c)` folds (`add rI, rI, rBase`),
+  the row-array view `((u8 (*)[K])obj)[i] + c` materializes `addi r0, rBase, 0` first
+  (fn_1_1018BC 96.5 -> 97.7); loads compile identically either way. `tu_data_objects` now
+  covers `.rodata` blocks (const definitions; DOL tables such as lbl_800929D8 + 0x20/0x40/0x60),
+  index expressions `x[K + i]`, the one-member pointer carrier, and static inline helpers that
+  receive the view as an argument; `row_array_views` rewrites the byte rows. A `.rodata`
+  struct model as TU objects also fixed fn_1_107C74's base-register order (rodata r28, data r29).
+  Not reachable this way: fn_1_2C97C's `addi r3, r6, 0x10; lhzx r4, r3, r5` over an extern
+  array of 0x14-byte structs addressed by name (held field pointers `u16 *p = &arr[0].f; p[o]`
+  give `addi; lhzx` for every pointer but the first used).
 
 ## Shared SDK state (2026-09-15)
 
