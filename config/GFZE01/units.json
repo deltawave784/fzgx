@@ -54470,6 +54470,17 @@
   },
   {
     "module": "main_rel",
+    "source": "rel/main_rel/spline/fn_1_F965C.c",
+    "symbols": [
+      "fn_1_F965C"
+    ],
+    "status": "matching",
+    "mw_version": null,
+    "extra_cflags": [],
+    "tu": "rel/main_rel/spline.c"
+  },
+  {
+    "module": "main_rel",
     "source": "rel/main_rel/spline/fn_1_F9C6C.c",
     "symbols": [
       "fn_1_F9C6C"
