@@ -7094,3 +7094,6 @@ rel/main_rel/sound/fn_1_A2FC8.c:
 
 rel/main_rel/enemy_ctrl/fn_1_C7874.c:
 	.text       start:0x000C7874 end:0x000C7AA0 align:4
+
+rel/main_rel/enemy_ctrl/fn_1_C7AA0.c:
+	.text       start:0x000C7AA0 end:0x000C7CBC align:4
