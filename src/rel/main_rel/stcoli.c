@@ -1428,6 +1428,146 @@ void fn_1_21CA0(Fn_1_21CA0 *self, void *arg) {
 }
 /* fzgx:end fn_1_21CA0 */
 
+/* fzgx:begin fn_1_2277C noprologue */
+#include "dolphin/types.h"
+
+#pragma fp_contract on
+
+typedef struct StcoliVec {
+    f32 x, y, z;
+} StcoliVec;
+
+typedef struct StcoliWheel {
+    s32 state;          /* 0x00 */
+    f32 f04;            /* 0x04 */
+    StcoliVec pos;      /* 0x08 */
+    StcoliVec vel;      /* 0x14 */
+    u8 pad20[0x24];
+    f32 f44;            /* 0x44 */
+    f32 f48;            /* 0x48 */
+    u8 pad4C[0x10];
+} StcoliWheel; /* 0x5c */
+
+typedef struct StcoliPoint {
+    StcoliVec pos;      /* 0x00 */
+    u8 pad0C[0x18];
+    StcoliVec vel;      /* 0x24 */
+} StcoliPoint; /* 0x30 */
+
+typedef struct StcoliObj {
+    u32 flags;              /* 0x000 */
+    s16 s04;                /* 0x004 */
+    s16 s06;                /* 0x006 */
+    f32 size;               /* 0x008 */
+    u8 pad00C[0x30];
+    char name[32];          /* 0x03C */
+    u8 pad05C[0x50];
+    f32 fAC;                /* 0x0AC */
+    f32 fB0;                /* 0x0B0 */
+    f32 fB4;                /* 0x0B4 */
+    u8 pad0B8[0x170];
+    f32 f228;               /* 0x228 */
+    u8 pad22C[0x18];
+    StcoliWheel wheels[4];  /* 0x244 */
+    StcoliPoint points[4];  /* 0x3B4 */
+    s8 s474;                /* 0x474 */
+    s8 s475;                /* 0x475 */
+    u8 pad476[0x10E];
+    f32 maxLen;             /* 0x584 */
+    f32 maxX;               /* 0x588 */
+    u8 pad58C[4];
+    u8 b590;                /* 0x590 */
+    u8 pad591[0x49];
+    s16 s5DA;               /* 0x5DA */
+} StcoliObj;
+
+typedef struct StcoliDesc {
+    char *name;             /* 0x00 */
+    u8 pad04[0x50];
+    StcoliVec wheelPos[4];  /* 0x54 */
+    StcoliVec pointPos[4];  /* 0x84 */
+} StcoliDesc;
+
+extern char *strncpy(char *, const char *, unsigned long);
+extern void fn_1_22E8C(void *, void *);
+extern void fn_1_22F90(void *, int);
+extern f32 lbl_8006D0B4(f32);
+extern void lbl_8006DAEC(void);
+extern void lbl_8006D758(void);
+extern void lbl_8006DB30(void);
+
+static inline f32 stcoli_mag(StcoliVec *v)
+{
+    f32 *c = &v->x;
+    f32 sq;
+
+    /* distinct operand spellings: MWCC never fuses a literal square a*a */
+    sq = v->x * v->x;
+    sq += c[1] * v->y;
+    sq += c[2] * v->z;
+    return lbl_8006D0B4(sq);
+}
+
+void fn_1_2277C(StcoliObj *obj, StcoliDesc *desc)
+{
+    s32 i;
+    f32 len;
+    f32 ax;
+    StcoliPoint *pt;
+
+    obj->flags = 0;
+    obj->s04 = 0;
+    obj->s06 = 0;
+    strncpy(obj->name, desc->name, 31);
+    obj->name[31] = 0;
+    fn_1_22E8C(obj, desc);
+
+    obj->fAC = 52.0f * obj->size / 16.0f;
+    obj->fB0 = 45.0f * obj->size / 16.0f;
+    obj->fB4 = 52.0f * obj->size / 16.0f;
+
+    obj->f228 = 0.0f;
+    for (i = 0; i < 4; i++) {
+        obj->wheels[i].f44 = 0.0f;
+        obj->wheels[i].pos = desc->wheelPos[i];
+        obj->wheels[i].vel.x = 0.0f;
+        obj->wheels[i].vel.y = 0.0f;
+        obj->wheels[i].vel.z = 0.0f;
+        obj->wheels[i].state = 0;
+        obj->wheels[i].f04 = 0.0f;
+        obj->wheels[i].f48 = 1.7f;
+    }
+
+    obj->maxLen = 0.0f;
+    obj->maxX = 1.0f;
+    for (i = 0; i < 4; i++) {
+        pt = &obj->points[i];
+        pt->pos = desc->pointPos[i];
+        pt->vel.x = 0.0f;
+        pt->vel.y = 0.0f;
+        pt->vel.z = 0.0f;
+        len = stcoli_mag(&pt->pos);
+        if (obj->maxLen < len) {
+            obj->maxLen = len;
+        }
+        ax = __fabs(pt->pos.x);
+        if (obj->maxX < ax) {
+            obj->maxX = ax;
+        }
+    }
+
+    obj->maxLen += 0.1f;
+    obj->s474 = -1;
+    obj->s475 = -1;
+    obj->b590 = 0;
+    obj->s5DA = 100;
+    lbl_8006DAEC();
+    lbl_8006D758();
+    fn_1_22F90(obj, 1);
+    lbl_8006DB30();
+}
+/* fzgx:end fn_1_2277C */
+
 /* fzgx:begin fn_1_22E8C */
 typedef struct Fn_1_22E8CInput {
     unsigned char pad00[0x04];

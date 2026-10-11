@@ -104,6 +104,129 @@ void _epilog(void) {
 }
 /* fzgx:end _epilog */
 
+/* fzgx:begin fn_10_12D8 */
+#include "sofdec/adxt.h"
+
+typedef struct {
+    ADXTHandle *unk_0;
+    ADXTHandle *unk_4;
+    u8 pad_8[0x8];
+    u8 unk_10[0x4A248];
+    u8 unk_4A258[1];
+} SelSound;
+
+typedef struct {
+    s16 unk_0;
+    u8 pad_2[0x92];
+} SelEntry;
+
+typedef struct {
+    s16 unk_0;
+    s16 unk_2;
+    u8 pad_4[0x90];
+    u32 unk_94;
+    u8 pad_98[0xC];
+    SelEntry *unk_A4;
+    u8 pad_A8[0x81];
+    u8 unk_129;
+} SelState;
+
+extern u8 lbl_10_bss_0[];
+extern u8 lbl_10_data_61C[];
+extern SelSound *lbl_1_bss_6EAD0;
+extern SelState lbl_1_bss_8B3A0;
+extern s16 lbl_1_bss_962;
+extern s16 lbl_1_bss_964;
+
+extern void fn_10_E294(void);
+extern void fn_1_435C(void *);
+extern s32 fn_1_3F8C(void *, void (*)(void), s32, s32);
+extern void fn_1_4A00(s32, u8, void *);
+extern ADXTHandle *fn_8004CD70(s32, void *, s32);
+extern u32 fn_1_A176C(ADXTHandle *, u32);
+extern void fn_1_12F1E8(s32);
+
+void fn_10_12D8(void) {
+    u8 *base;
+    u8 *mgr;
+    SelState *state;
+    SelEntry *entries;
+    s16 r;
+    s16 v;
+    s32 idx;
+
+    base = lbl_10_bss_0;
+    mgr = base + 0x50000;
+    fn_1_435C(*(void **)(mgr - 0x6c78));
+    *(s32 *)(mgr + 0x1740) = fn_1_3F8C(lbl_10_data_61C, fn_10_E294, 0, 8);
+    fn_1_4A00(1, *(s16 *)(mgr - 0x6c74), *(void **)(mgr - 0x6c78));
+    *(s32 *)(mgr + 0x1744) = 0;
+    if (lbl_1_bss_6EAD0 != NULL) {
+        if (lbl_1_bss_6EAD0->unk_0 == NULL) {
+            lbl_1_bss_6EAD0->unk_0 = fn_8004CD70(2, lbl_1_bss_6EAD0->unk_10, 0x25124);
+        }
+        if (lbl_1_bss_6EAD0->unk_4 == NULL) {
+            lbl_1_bss_6EAD0->unk_4 = fn_8004CD70(2, lbl_1_bss_6EAD0->unk_4A258, 0x25124);
+        }
+        fn_1_A176C(lbl_1_bss_6EAD0->unk_0, 45);
+    }
+
+    state = &lbl_1_bss_8B3A0;
+    {
+        u32 flags = state->unk_94;
+        state->unk_94 = flags & ~0x00400000;
+        if (flags & 0x40000000) {
+            entries = state->unk_A4;
+            idx = lbl_1_bss_962 - 14;
+            v = entries[idx].unk_0;
+            if (v < 9) {
+                r = 9;
+            } else {
+                r = 10;
+                if (v <= 10) {
+                    r = v;
+                }
+            }
+            entries[idx].unk_0 = r;
+        } else {
+            entries = state->unk_A4;
+            idx = lbl_1_bss_962 - 14;
+            v = entries[idx].unk_0;
+            if (v < 0 || v > 8) {
+                entries[idx].unk_0 = 1;
+                switch (lbl_1_bss_964) {
+                case 12:
+                    entries[idx].unk_0 = 7;
+                    break;
+                case 15:
+                    entries[idx].unk_0 = 8;
+                    break;
+                case 3:
+                    entries[idx].unk_0 = 6;
+                    break;
+                case 5:
+                    entries[idx].unk_0 = 5;
+                    break;
+                case 9:
+                    entries[idx].unk_0 = 4;
+                    break;
+                }
+            }
+        }
+    }
+
+    *(s32 *)(base + 0x14) = -1;
+    lbl_1_bss_8B3A0.unk_0 = -1;
+    lbl_1_bss_8B3A0.unk_129 = 1;
+    fn_1_12F1E8(0x168);
+    state->unk_94 &= ~0x4;
+    v = lbl_1_bss_8B3A0.unk_2;
+    if (v != -1) {
+        lbl_1_bss_8B3A0.unk_A4[lbl_1_bss_962 - 14].unk_0 = v;
+    }
+}
+/* fzgx:end fn_10_12D8 */
+
 /* fzgx:begin fn_10_1F28 */
 extern s32 lbl_10_bss_51740;
 extern s32 lbl_10_bss_49388;
@@ -4329,6 +4452,158 @@ void fn_10_CFDC(void) {
     state->flags = 0;
 }
 /* fzgx:end fn_10_CFDC */
+
+/* fzgx:begin fn_10_D5D4 pool */
+#include "font.h"
+
+#pragma section code_type ".fzgxpool"
+static const u32 fzgx_pool_table1[17] = {0x00000000, 0x0000B500, 0x0000B600, 0x0000AD00, 0x0000B300, 0x0000B800, 0x0000B200, 0x0000B100, 0x0000AE00, 0x0000B400, 0x0000B900, 0x0000B000, 0x0000AF00, 0x0000B700, 0x00000000, 0x00000000, 0x00F0F0FF};  /* fzgx-allow: A1 retail pool bytes */
+__declspec(section ".fzgxpool") static void fzgx_pool_keep1(void) { const u32 *volatile cp; cp = fzgx_pool_table1; }  /* fzgx-allow: S2 pool primer sink */
+__declspec(section ".fzgxpool") static void fzgx_pool_prime2(void) {
+    volatile f32 s; volatile f64 d;  /* fzgx-allow: S2 pool primer sinks */
+    s = 1.0f;
+    s = 0.5f;
+    s = 0.0f;
+    s = 0.20000000298023224f;
+    s = 0.4000000059604645f;
+    s = 320.0f;
+    s = 3.0f;
+    s = 323.0f;
+    s = 4.0f;
+    s = 5.0f;
+    s = 6.0f;
+    s = 0.25f;
+    s = 16384.0f;
+    s = 65536.0f;
+    s = 60.0f;
+    s = 1.875f;
+    s = 0.5555555820465088f;
+    d = 4503601774854144.0;
+    d = 4503599627370496.0;
+}
+static const u32 fzgx_pool_table3[4] = {0x00110012, 0x00130014, 0x00150012, 0x00130014};  /* fzgx-allow: A1 retail pool bytes */
+__declspec(section ".fzgxpool") static void fzgx_pool_keep3(void) { const u32 *volatile cp; cp = fzgx_pool_table3; }  /* fzgx-allow: S2 pool primer sink */
+#pragma section code_type ".text"
+
+typedef struct SelColor {
+    u8 r, g, b, a;
+} SelColor;
+
+/* the two colour constants sit in the TU's rodata right after the primer tables */
+static const SelColor sColorClear = {0x00, 0x00, 0x00, 0x00};
+static const SelColor sColorCyan = {0x00, 0xF0, 0xF0, 0xFF};
+
+typedef struct SelState {
+    s16 unk_0;
+    u8 pad_2[6];
+    s16 unk_8;
+    u8 pad_a[0x136];
+    u32 flags;
+    s16 step;
+    s16 value;
+    s16 limit;
+} SelState;
+
+#define MAX(a, b) ((a) > (b) ? (a) : (b))
+#define CLAMP(v, lo, hi) ((v) < (lo) ? (lo) : ((v) > (hi) ? (hi) : (v)))
+
+extern SelState lbl_1_bss_8B3A0;
+extern const FontDrawPacket lbl_1_rodata_26F8;
+extern u32 lbl_801A66A8;
+
+extern u32 fn_1_F9FEC(void);
+extern u16 fn_1_48690(u32);
+extern f32 lbl_8006D188(u32);
+
+static inline s32 SelLastRowVisible(void) {
+    return fn_1_F9FEC() != 0;
+}
+
+#pragma fp_contract off
+void fn_10_D5D4(void) {
+    FontDrawPacket packet;
+    f32 alpha_small;
+    f32 alpha_half;
+    f32 alpha;
+    f32 half;
+    f32 clamped;
+    u32 flags;
+    s32 show_last;
+    s16 i;
+
+    show_last = SelLastRowVisible();
+    flags = lbl_1_bss_8B3A0.flags;
+    alpha = 1.0f;
+    if ((flags & 0x80000000u) && (flags & 4)) {
+        half = (f32)lbl_1_bss_8B3A0.limit / 2.0f;
+        if (flags & 2) {
+            alpha = CLAMP(MAX((f32)lbl_1_bss_8B3A0.value - half, 0.0f) / half, 0.0f, 1.0f);
+        } else if (flags & 1) {
+            clamped = CLAMP((f32)lbl_1_bss_8B3A0.value / half, 0.0f, alpha);
+            alpha = 1.0f - clamped;
+        }
+    } else if (lbl_1_bss_8B3A0.unk_0 == -1) {
+        return;
+    }
+
+    alpha_small = 0.4f * alpha;
+    alpha_half = 0.5f * alpha;
+    for (i = 0; i < 4; i++) {
+        if (show_last == 0 && i == 3) {
+            continue;
+        }
+
+        packet = lbl_1_rodata_26F8;
+        packet.image = 0xA113;
+        packet.flags = 0xA;
+        packet.x = 320.0f;
+        packet.y = (f32)(0xC6 + i * 0x28);
+        packet.z = 3.0f;
+        packet.alpha = alpha;
+        fn_1_51678(&packet, packet.image, 0, i * 0x18, fn_1_48690(0xA113), 0x18);
+        fn_1_4F734(&packet);
+
+        packet = lbl_1_rodata_26F8;
+        packet.image = 0xA113;
+        packet.flags = 0xA;
+        packet.x = 323.0f;
+        packet.y = (f32)(0xC9 + i * 0x28);
+        packet.z = 4.0f;
+        packet.alpha = alpha_small;
+        *(SelColor *)packet.color = sColorClear;
+        fn_1_51678(&packet, packet.image, 0, i * 0x18, fn_1_48690(0xA113), 0x18);
+        fn_1_4F734(&packet);
+
+        packet = lbl_1_rodata_26F8;
+        packet.image = 0xA114;
+        packet.flags = 0xA;
+        packet.x = 320.0f;
+        packet.y = (f32)(0xC6 + i * 0x28);
+        packet.z = 5.0f;
+        packet.alpha = alpha_half;
+        *(SelColor *)packet.color = sColorCyan;
+        fn_1_51678(&packet, packet.image, 0, i * 0x28, fn_1_48690(0xA114), 0x28);
+        fn_1_4F734(&packet);
+
+        if (i == lbl_1_bss_8B3A0.unk_8) {
+            packet = lbl_1_rodata_26F8;
+            packet.image = 0xA127;
+            packet.flags = 0xA;
+            packet.x = 320.0f;
+            packet.y = (f32)(0xC6 + i * 0x28);
+            packet.z = 6.0f;
+            packet.color[0] = 0x50;
+            packet.color[1] = 0xA0;
+            packet.color[2] = 0xA0;
+            packet.alpha = alpha * (0.25f + 0.25f * lbl_8006D188((u32)(s32)(16384.0f + (65536.0f * (f32)(lbl_801A66A8 % 60)) / 60.0f)));
+            packet.scale_x *= 1.875f;
+            packet.scale_y *= 0.5555555820465088f;
+            fn_1_4F734(&packet);
+        }
+    }
+}
+#pragma fp_contract reset
+/* fzgx:end fn_10_D5D4 */
 
 /* fzgx:begin fn_10_E034 */
 #include "rel/sel/sel.h"
