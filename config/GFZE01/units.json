@@ -28632,6 +28632,17 @@
   },
   {
     "module": "main_rel",
+    "source": "rel/main_rel/accessory/fn_1_108EEC.c",
+    "symbols": [
+      "fn_1_108EEC"
+    ],
+    "status": "matching",
+    "mw_version": null,
+    "extra_cflags": [],
+    "tu": "rel/main_rel/accessory.c"
+  },
+  {
+    "module": "main_rel",
     "source": "rel/main_rel/accessory/fn_1_109114.c",
     "symbols": [
       "fn_1_109114"

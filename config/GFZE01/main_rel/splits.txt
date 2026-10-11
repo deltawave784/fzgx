@@ -7085,3 +7085,6 @@ rel/main_rel/effect/fn_1_5B188.c:
 
 rel/main_rel/sel_static_disp/fn_1_133748.c:
 	.text       start:0x00133748 end:0x00133968 align:4
+
+rel/main_rel/accessory/fn_1_108EEC.c:
+	.text       start:0x00108EEC end:0x00109114 align:4

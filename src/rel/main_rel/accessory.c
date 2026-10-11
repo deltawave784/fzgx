@@ -190,6 +190,122 @@ void fn_1_108920(void *accessory) {
 }
 /* fzgx:end fn_1_108920 */
 
+/* fzgx:begin fn_1_108EEC noprologue */
+#include "dolphin/types.h"
+
+typedef struct {
+    f32 x;
+    f32 y;
+    f32 z;
+} V3;
+
+typedef struct {
+    u8 flags;
+    u8 pad_1[0xF];
+    V3 pos;
+    u8 pad_1C[0x28];
+} Fn108EECPoint; /* 0x44 */
+
+typedef struct {
+    u8 pad_0[0x88];
+    u8 mtx[0x18C - 0x88];
+} Fn108EECElem; /* 0x18C */
+
+typedef struct {
+    u8 pad_0[0x8];
+    Fn108EECElem *elems;
+} Fn108EECList;
+
+typedef struct {
+    u8 pad_0[0x150];
+    Fn108EECList *list;
+} Fn108EECOwner;
+
+typedef struct {
+    u8 pad_0[0xC];
+    Fn108EECOwner *owner;
+    u8 pad_10[0x8];
+    u32 count;
+    u8 pad_1C[0x8];
+    Fn108EECPoint *points;
+} Fn108EECObj;
+
+extern void lbl_8006DBAC(void *);
+extern void lbl_8006E1B0(void *, void *);
+extern f32 lbl_8006D0B4(f32);
+extern void fn_8006E250(void *, void *);
+extern f32 lbl_8006D668(void *);
+extern void fn_8006E978(void *, void *, void *);
+extern void mathutil_mtxA_from_quat(void *);
+extern void lbl_8006DB74(void *);
+extern void lbl_8006DFC4(void *);
+
+void fn_1_108EEC(Fn108EECObj *obj, s32 from, s32 to, f32 radius, f32 x, f32 y, f32 z)
+{
+    u8 mtx[0x30];
+    V3 center;
+    V3 delta;
+    V3 orig;
+    f32 quat[4];
+    f32 radiusSq;
+    f32 lenSq;
+    f32 scale;
+    Fn108EECElem *elem;
+    u32 i;
+    Fn108EECPoint *p;
+    u32 j;
+    Fn108EECPoint *q;
+    f32 dz;
+    f32 dy;
+    f32 dx;
+
+    elem = &obj->owner->list->elems[from];
+    radiusSq = radius * radius;
+    center.x = x;
+    center.y = y;
+    center.z = z;
+    lbl_8006DBAC(elem->mtx);
+    lbl_8006E1B0(&center, &center);
+    elem = &obj->owner->list->elems[to];
+    p = obj->points;
+    for (i = 0; i < obj->count; i++, p++) {
+        if (p->flags & 1) {
+            continue;
+        }
+        orig = p->pos;
+        delta.x = dx = p->pos.x - center.x;
+        delta.y = dy = p->pos.y - center.y;
+        delta.z = dz = p->pos.z - center.z;
+        lenSq = dx * dx;
+        lenSq += dy * dy;
+        lenSq += dz * dz;
+        if (lenSq < radiusSq) {
+            scale = radius / lbl_8006D0B4(lenSq);
+            delta.x = center.x + (f32)(delta.x * scale);
+            delta.y = center.y + (f32)(delta.y * scale);
+            delta.z = center.z + (f32)(delta.z * scale);
+            lbl_8006DBAC(elem->mtx);
+            fn_8006E250(&delta, &delta);
+            fn_8006E250(&orig, &orig);
+            lbl_8006D668(&delta);
+            lbl_8006D668(&orig);
+            fn_8006E978(quat, &orig, &delta);
+            mathutil_mtxA_from_quat(quat);
+            lbl_8006DB74(mtx);
+            q = obj->points;
+            for (j = 0; j < obj->count; j++, q++) {
+                delta = q->pos;
+                lbl_8006DBAC(elem->mtx);
+                fn_8006E250(&delta, &delta);
+                lbl_8006DBAC(elem->mtx);
+                lbl_8006DFC4(mtx);
+                lbl_8006E1B0(&delta, &q->pos);
+            }
+        }
+    }
+}
+/* fzgx:end fn_1_108EEC */
+
 /* fzgx:begin fn_1_109114 */
 typedef struct {
     u8 pad_0[0x150];
