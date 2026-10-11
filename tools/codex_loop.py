@@ -13,6 +13,10 @@ The loop runs Sol (`--model`) only. When the easy size bands are used up Sol mov
 misses and large functions, routed like the Claude loop's Fable batches, and then to one retry of every function
 it already tried (near misses first). GPT-6 Astra batches are opt-in
 (`--astra-max N`, `--astra-batch`, `--astra-model`): they burn the weekly limit several times faster.
+Every `--maintain-every` batches (default 6), and before it gives up, the loop runs a maintenance step: it pulls
+clone A's commits (appended-only conflicts in splits.txt/symbols.txt are resolved by keeping both sides), re-runs
+reuse/fixup/sweep over its saved bodies when the pull changed the engine, writes `.fzgx/reports/codex_census.md`, and
+leaves `.fzgx/TOOLING_DUE` when it stalls. Tooling rounds and the librarian stay in clone A.
 `--max-attempts` (default 12) is how many attempts a function may already have and still be picked, and
 `--modules` picks the modules (default: all of them, but only the slice the Claude loop does not route:
 over 768 B, best score under 85%, never attempted by Fable/Opus/Sonnet; see docs/COLLABORATION.md).
@@ -28,6 +32,7 @@ from __future__ import annotations
 import argparse
 import datetime
 import json
+import os
 import re
 import sqlite3
 import subprocess
@@ -226,6 +231,146 @@ def astra_phase(a, n: int, stop_file: Path, deadline: float):
     return matched, attempted, False
 
 
+def git(*args: str) -> subprocess.CompletedProcess:
+    env = {**os.environ, "GIT_EDITOR": "true"}
+    return subprocess.run(["git", *args], cwd=ROOT, text=True, capture_output=True, env=env)
+
+
+def matched_count() -> int:
+    db = sqlite3.connect(ROOT / ".fzgx" / "ledger.db")
+    n = db.execute("SELECT COUNT(*) FROM functions WHERE status = 'matched'").fetchone()[0]
+    db.close()
+    return n
+
+
+def gate_ok() -> bool:
+    out = run(["tools/fzgx.py", "gate"], capture=True).stdout
+    if "GATE: PASS" in out:
+        return True
+    log("GATE FAILED:\n" + out[-1500:])
+    return False
+
+
+def merge_appended(path: str, text: str):
+    """Resolve the conflict hunks of a splits.txt or symbols.txt where both sides only appended entries: keep
+    both. None when a hunk is not a pure append of disjoint entries."""
+    lines = text.replace("\r\n", "\n").split("\n")
+    out, ours, theirs, side = [], set(), set(), 0
+    for line in lines:
+        if line.startswith("<<<<<<< "):
+            side = 1
+            continue
+        if line == "=======" and side == 1:
+            side = 2
+            out.append("")
+            continue
+        if line.startswith(">>>>>>> ") and side == 2:
+            side = 0
+            continue
+        if side:
+            key = line.split(" = ")[0] if path.endswith("symbols.txt") else (line if line.startswith("rel/") else "")
+            if key:
+                (ours if side == 1 else theirs).add(key)
+        out.append(line)
+    if side or (ours & theirs):
+        return None
+    return "\n".join(out)
+
+
+def sync_from_a() -> str:
+    """Pull clone A's commits (its tooling fixes, its matches, its Claude attempts). Returns 'current', 'merged',
+    'dirty' (this tree has uncommitted work), 'conflict' (needs a person) or 'failed' (the merged tree did not pass)."""
+    git("add", "state/progress.csv")
+    git("commit", "-q", "-m", "progress: codex loop rows")
+    dirty = git("status", "--short").stdout.strip()
+    if dirty:
+        log("sync with clone A skipped, tree not clean:\n" + dirty[:400])
+        return "dirty"
+    res = git("pull", "--no-rebase", "--no-edit", "a-local", "windows-and-types")
+    if res.returncode != 0:
+        files = git("diff", "--name-only", "--diff-filter=U").stdout.split()
+        fixed = {}
+        for f in files:
+            ok = f.startswith("config/GFZE01/") and f.endswith(("splits.txt", "symbols.txt"))
+            merged = merge_appended(f, (ROOT / f).read_text(encoding="utf-8")) if ok else None
+            if merged is None:
+                log(f"sync with clone A: {f} conflicts and is not a pure append; the merge is left for a person")
+                return "conflict"
+            fixed[f] = merged
+        for f, text in fixed.items():
+            (ROOT / f).write_text(text, encoding="utf-8", newline="\n")
+        git("add", *fixed)
+        git("commit", "-q", "--no-edit")
+        git("commit", "--amend", "-q", "-m", "Merge branch 'windows-and-types' into codex (appended entries of both sides kept)")
+        log(f"sync with clone A: kept both sides of {', '.join(fixed)}")
+    elif "Already up to date" in res.stdout:
+        return "current"
+    _claude_tried.clear()  # the committed ledger changed: reread which functions a Claude tier attempted
+    if not gate_ok():
+        return "failed"
+    run(["tools/fzgx.py", "sync"], capture=True)
+    return "merged"
+
+
+def tooling_changed() -> bool:
+    """True when the last merge brought in changes to the fixup/oracle engine."""
+    res = git("diff", "--name-only", "HEAD^1", "HEAD", "--", "tools/fzgx")
+    return bool(res.stdout.strip())
+
+
+def census(n: int) -> str:
+    """Why this loop's sessions released, by class, into .fzgx/reports/codex_census.md (clone A's tooling rounds read it)."""
+    db = sqlite3.connect(ROOT / ".fzgx" / "ledger.db")
+    rows = db.execute("SELECT symbol, agent, notes FROM attempts WHERE outcome = 'released' AND notes IS NOT NULL "
+                      "AND (agent LIKE 'codex-goal-%' OR agent LIKE 'codex-astra-%') ORDER BY id DESC LIMIT 400").fetchall()
+    db.close()
+    classes = {"register allocation": r"regist|callee-saved|r3[01]|allocat|swap", "prologue/frame": r"prologue|frame|stack",
+               "literal pool": r"pool|literal|rodata", "section/bss layout": r"section|\.bss|\.data|layout",
+               "scheduling/order": r"sched|order", "loop/unroll": r"loop|unroll|induction",
+               "switch/jump table": r"switch|jump ?table", "types/casts": r"struct|signed|cast",
+               "budget/stale": r"budget|stale|check limit"}
+    hits, example = {}, {}
+    for symbol, _agent, note in rows:
+        for name, rx in classes.items():
+            if re.search(rx, note.lower()):
+                hits[name] = hits.get(name, 0) + 1
+                example.setdefault(name, []).append(symbol)
+    lines = [f"# Codex loop census after batch {n} ({time.strftime('%Y-%m-%d %H:%M')})", "",
+             f"Latest {len(rows)} releases of codex-goal-*/codex-astra-* sessions, by the class named in their note.", ""]
+    for name, count in sorted(hits.items(), key=lambda kv: -kv[1]):
+        lines.append(f"- {name}: {count} (e.g. {', '.join(dict.fromkeys(example[name]))[:120]})")
+    path = ROOT / ".fzgx" / "reports" / "codex_census.md"
+    path.write_text("\n".join(lines) + "\n", encoding="utf-8")
+    return ", ".join(f"{k} {v}" for k, v in sorted(hits.items(), key=lambda kv: -kv[1])[:3])
+
+
+def maintenance(a, n: int, why: str):
+    """Everything between batches that keeps the loop efficient and is safe in this clone. Tooling rounds and the
+    librarian run only in clone A (docs/COLLABORATION.md): here the loop pulls A's fixes, re-runs the deterministic
+    engine over its own saved bodies when those fixes touch it, writes the census A's rounds read, and leaves a
+    TOOLING_DUE marker when the loop stalls. Returns (functions gained, sync result, stop)."""
+    log(f"maintenance after batch {n} ({why})")
+    before = matched_count()
+    result = sync_from_a()
+    if result in ("conflict", "failed"):
+        return 0, result, True
+    if result == "merged" and tooling_changed():
+        log("clone A changed the engine: reuse, fixup and sweep over this clone's saved bodies")
+        run(["tools/fzgx.py", "reuse", "--max-size", "2048"], capture=True)
+        run(["tools/fzgx.py", "fixup", "--min-percent", "85", "--apply", "--budget", "700",
+             "--output", f".fzgx/fixup/codex-maint-{n}"], capture=True)
+        run(["tools/fzgx.py", "sweep", "--min-percent", "60", "--max-percent", "95", "--rounds", "2", "--land",
+             "--output", f".fzgx/sweep/codex-maint-{n}"], capture=True)
+        run(["tools/fzgx.py", "verify"], capture=True)
+        if not gate_ok():
+            return 0, "failed", True
+    gained = matched_count() - before
+    log(f"maintenance: sync {result}, {gained} functions gained; releases: {census(n) or 'none recorded'}")
+    if gained:
+        run(["tools/fzgx.py", "progress", "--note", f"codex maintenance {n}"], capture=True)
+    return gained, result, False
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--model", default="gpt-6.1-sol")
@@ -240,12 +385,16 @@ def main() -> int:
     ap.add_argument("--astra-batch", type=int, default=8, help="hard functions per Astra batch, run in parallel")
     ap.add_argument("--astra-max", type=int, default=0,
                     help="Astra function attempts per loop run; 0 (default) is Sol only. Astra used the weekly limit up in hours")
+    ap.add_argument("--maintain-every", type=int, default=6,
+                    help="batches between maintenance steps (pull clone A, deterministic passes, census); 0 disables")
+    ap.add_argument("--max-cycles", type=int, default=6, help="maintenance cycles that may restart a stalled loop")
     ap.add_argument("--no-sol", action="store_true", help="skip the Sol batches: Astra only (use with --astra-max)")
     ap.add_argument("--modules", nargs="*", default=MODULES,
                     help="modules to pick from (every module is limited to the slice the Claude loop does not route)")
     a = ap.parse_args()
     astra_used = 0
     retried: set = set()  # functions the retry pass has already handed out in this run
+    cycles = 0
 
     stop_file = ROOT / ".fzgx" / "STOP"
     started, streak, total, band, n, waits = time.time(), 0, 0, 0, 0, 0
@@ -326,6 +475,13 @@ def main() -> int:
         if stop:
             log("stopping after usage limit"); break
         streak = 0 if matched else streak + 1
+        if a.maintain_every and n % a.maintain_every == 0:
+            gained, sync_result, halt = maintenance(a, n, "scheduled")
+            if halt:
+                log(f"stopping: sync with clone A {sync_result}"); break
+            total += gained
+            if sync_result == "merged":
+                retried.clear()
         if streak >= a.zero_streak:
             if band + 1 < len(BANDS):
                 band += 1
@@ -335,8 +491,20 @@ def main() -> int:
                 band = len(BANDS)  # the size bands gave nothing: go to the hard pool
                 streak = 0
                 log(f"{a.zero_streak} batches without a match in the last band: moving to the hard pool")
-            else:
-                log(f"{a.zero_streak} batches without a match in the hard pool"); break
+            else:  # the last pool is dry: pull clone A and re-run the engine before giving up
+                gained, sync_result, halt = maintenance(a, n, f"{a.zero_streak} batches without a match")
+                total += gained
+                cycles += 1
+                if halt or cycles > a.max_cycles or not (gained or sync_result == "merged"):
+                    if not halt:
+                        (ROOT / ".fzgx" / "TOOLING_DUE").write_text(
+                            f"{time.strftime('%Y-%m-%d %H:%M')} codex loop stalled after batch {n}: "
+                            "see .fzgx/reports/codex_census.md for the release classes\n", encoding="utf-8")
+                        log("tooling due: wrote .fzgx/TOOLING_DUE (a tooling round in clone A reads the census)")
+                    log(f"{a.zero_streak} batches without a match in the hard pool"); break
+                retried.clear()
+                streak = 0
+                log("maintenance gave the loop new work: continuing")
     log(f"done: {total} matched")
     return 0
 
