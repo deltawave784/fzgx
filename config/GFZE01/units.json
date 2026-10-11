@@ -63658,6 +63658,21 @@
   },
   {
     "module": "option",
+    "source": "rel/option/_prolog/fn_4_ABB0.c",
+    "symbols": [
+      "fn_4_ABB0"
+    ],
+    "status": "matching",
+    "mw_version": null,
+    "extra_cflags": [],
+    "tu": "rel/option/_prolog.c",
+    "pool": {
+      "...data.0": "lbl_4_data_2F00",
+      "fzgx_pool_native_lbl_4_data_2F00_handlers": "lbl_4_data_2F00"
+    }
+  },
+  {
+    "module": "option",
     "source": "rel/option/_prolog/fn_4_AC58.c",
     "symbols": [
       "fn_4_AC58"
