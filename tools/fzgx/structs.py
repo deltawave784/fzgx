@@ -461,7 +461,7 @@ def tu_header(p: Project, module: str, tu: str, min_refs: int = 2) -> str:
     tus = json.loads((p.module_config_dir(module) / "tus.json").read_text())["tus"]
     tu_info = next(t for t in tus if t["file"] == tu)
     stem = tu.rsplit(".", 1)[0]
-    fns = set(tu_info["functions"])
+    fns = list(dict.fromkeys(tu_info["functions"]))  # retail order: Counter ties (most_common) follow it
     d_lo, d_hi = tu_info["data"]
     syms = p.symbols(module)
     idx = p.function_asm(module)
