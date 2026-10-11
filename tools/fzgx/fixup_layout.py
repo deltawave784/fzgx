@@ -362,8 +362,8 @@ def data_struct_views(p, symbol, text):
     sym = p.resolve(symbol)
     syms = p.symbols(sym.module)
     pat = (r"(?:(?:struct\s+)?(\w+)\s*\*\s*)?(?<![\w.>])(\w+)\s*=\s*\((?:struct\s+)?(\w+)\s*\*\)\s*"
-           r"(?:\(\s*(?:\(\s*(?:u8|s8|char)\s*\*\s*\)\s*)?&?\s*(lbl_\d+_data_[0-9A-F]+|lbl_[0-9A-F]{8})\s*\+\s*(0x[0-9A-Fa-f]+|\d+)\s*\)"
-           r"|&?\s*(lbl_\d+_data_[0-9A-F]+|lbl_[0-9A-F]{8}))\s*;")  # an array decays: `(BgData *)lbl` (fn_1_107F74)
+           r"(?:\(\s*(?:\(\s*(?:u8|s8|char)\s*\*\s*\)\s*)?&?\s*(lbl_\d+_(?:ro)?data_[0-9A-F]+|lbl_[0-9A-F]{8})\s*\+\s*(0x[0-9A-Fa-f]+|\d+)\s*\)"
+           r"|&?\s*(lbl_\d+_(?:ro)?data_[0-9A-F]+|lbl_[0-9A-F]{8}))\s*;")  # an array decays: `(BgData *)lbl` (fn_1_107F74)
     fm = re.search(r"\n[^\n;{}]*\b%s\s*\([^;{}]*\)\s*\{" % re.escape(sym.name), text)
     if not fm:
         return None, ['function definition not found']
@@ -372,7 +372,7 @@ def data_struct_views(p, symbol, text):
         declared, pvar, tname, base = m[1], m[2], m[3], m[4] or m[6]
         offset = int(m[5], 0) if m[5] else 0
         known = syms.get(base)
-        if not known or known.section != '.data' or known.kind != 'object' or tname in SCALAR or (declared and declared != tname):
+        if not known or known.section not in DATA_SECTIONS or known.kind != 'object' or tname in SCALAR or (declared and declared != tname):
             continue
         if len(re.findall(r"(?<![\w.>])%s\s*=(?!=)" % re.escape(pvar), out)) != 1 or m[0] not in out:
             continue
@@ -1290,6 +1290,60 @@ def _initialized_data_views(p, symbol, text):
 
 
 BYTE_TYPES = r'(?:const\s+)?(?:u8|s8|char|unsigned\s+char|signed\s+char)'
+# initialized sections whose objects a TU defines and MWCC addresses off one section base
+# (DOL lookup tables live in .rodata: fn_8005C7C0/fn_8005C9D8 read lbl_800929D8 + 0x20/0x40/0x60)
+DATA_SECTIONS = ('.data', '.rodata')
+
+
+def _call_arguments(code, start):
+    """Top-level argument texts of the call whose '(' is at `start`, or None."""
+    depth, args, cur = 0, [], start + 1
+    for i in range(start, len(code)):
+        c = code[i]
+        if c in '([{':
+            depth += 1
+        elif c in ')]}':
+            depth -= 1
+            if depth == 0:
+                args.append(code[cur:i].strip())
+                return args
+        elif c == ',' and depth == 1:
+            args.append(code[cur:i].strip())
+            cur = i + 1
+    return None
+
+
+def _helper_aliases(code, lo, hi, tokens):
+    """((argument token, parameter), (body start, body end), helper) for every static inline helper that
+    the function body [lo, hi) calls and that receives one of `tokens` at the same position in
+    every call of the file; the parameter is never reassigned in the helper."""
+    from .fixup_source import _function_body_span
+    out = []
+    for d in re.finditer(r'\bstatic\s+inline\b[^;{}()]*?\b(\w+)\s*\(([^;{}()]*)\)\s*\{', code):
+        name, params = d[1], [x.strip() for x in d[2].split(',')]
+        names = [re.search(r'(\w+)\s*(?:\[[^\]]*\])?$', x) for x in params]
+        if not params or any(n is None for n in names):
+            continue
+        span = _function_body_span(code, name)
+        if not span or span[0] != d.start(1):
+            continue
+        calls = [m for m in re.finditer(r'(?<![\w.>])%s\s*\(' % re.escape(name), code) if m.start() != d.start(1)]
+        if not calls or not any(lo <= m.start() < hi for m in calls):
+            continue
+        argsets = [_call_arguments(code, m.end() - 1) for m in calls]
+        if any(a is None or len(a) != len(params) for a in argsets):
+            continue
+        for k, n in enumerate(names):
+            first = argsets[0][k]
+            param = n[1]
+            if first not in tokens or any(a[k] != first for a in argsets):
+                continue
+            body = code[span[1]:span[2]]
+            if re.search(r'(?<![\w.>])%s\s*(?:[-+*/|&^]?=(?!=)|\+\+|--)|(?:\+\+|--)\s*%s\b|&\s*%s\b'
+                         % ((re.escape(param),) * 3), body):
+                continue
+            out.append(((first, param), (span[1], span[2]), name))
+    return out
 
 
 def _after_type_definitions(code, limit):
@@ -1344,17 +1398,27 @@ def tu_data_objects(p, symbol, text, top=False, limit=0x10000):
     def collect(code, head, lo, hi):
         """label -> ([(token, pointee type)], edits removing the byte-pointer models)"""
         found = {}
-        for m in re.finditer(r'(?:\b(%s)\s*\*\s*)?\b(\w+)\s*=\s*(?:\(\s*(?:%s|void)\s*\*\s*\)\s*)?(&\s*)?\b(lbl_\w+)\s*;'
+        # `(?<![\w.>])`: a carrier member `w.value = lbl;` is not a plain local `value`
+        for m in re.finditer(r'(?:\b(%s)\s*\*\s*)?(?<![\w.>])(\w+(?:\.\w+)?)\s*=\s*(?:\(\s*(?:%s|void)\s*\*\s*\)\s*)?(&\s*)?\b(lbl_\w+)\s*;'
                              % (BYTE_TYPES, BYTE_TYPES), code[lo:hi]):
             declared, var, amp, label = m.groups()
             known = syms.get(label)
-            if not known or known.section != '.data' or known.kind != 'object':
+            if not known or known.section not in DATA_SECTIONS or known.kind != 'object':
                 continue
-            if len(re.findall(r'\b%s\s*=(?!=)' % re.escape(var), code[lo:hi])) != 1:
+            if len(re.findall(r'(?<![\w.>])%s\s*=(?!=)' % re.escape(var), code[lo:hi])) != 1:
                 continue
             edits = [(lo + m.start(), lo + m.end())]
             ptype = declared
-            if ptype is None:
+            if '.' in var:
+                # the lifter's one-member constant-pointer carrier `struct { u8 *value; } w;`
+                carrier, member = var.split('.')
+                d = re.search(r'(?m)^[ \t]*struct\s*\{\s*(%s)\s*\*\s*%s\s*;\s*\}\s*%s\s*;[ \t]*\n?'
+                              % (BYTE_TYPES, re.escape(member), re.escape(carrier)), code[lo:hi])
+                if declared or not d:
+                    continue
+                ptype = d[1]
+                edits.append((lo + d.start(), lo + d.end()))
+            elif ptype is None:
                 d = re.search(r'(?m)^[ \t]*(%s)\s*\*\s*%s\s*;[ \t]*\n?' % (BYTE_TYPES, re.escape(var)), code[lo:hi])
                 if not d:
                     continue
@@ -1370,7 +1434,7 @@ def tu_data_objects(p, symbol, text, top=False, limit=0x10000):
         # a byte array label used directly, also beside a model: `lbl + N`, `(T *)(lbl + N)`
         for label in sorted(set(re.findall(r'\b(lbl_\w+)\s*\+\s*\(?\s*(?:0x[\da-fA-F]+|\d+)\b', code[lo:hi]))):
             known = syms.get(label)
-            if not known or known.section != '.data' or known.kind != 'object':
+            if not known or known.section not in DATA_SECTIONS or known.kind != 'object':
                 continue
             decl = re.search(r'\bextern\s+((?:const\s+)?\w+(?:\s+char)?)\s+%s\s*\[' % re.escape(label), code[:head] + include_text())
             if decl and re.fullmatch(BYTE_TYPES, decl[1]):
@@ -1379,7 +1443,7 @@ def tu_data_objects(p, symbol, text, top=False, limit=0x10000):
 
     labels = sorted(collect(code, head, lo, hi))
     if not labels:
-        return None, ['no byte view of a same-module .data object']
+        return None, ['no byte view of a same-module .data/.rodata object']
     notes, out = [], text
     for label in labels:
         # positions move with every rewrite: collect each label on the current text
@@ -1392,17 +1456,31 @@ def tu_data_objects(p, symbol, text, top=False, limit=0x10000):
         token = '(?:%s)' % '|'.join(re.escape(name) for name in types)
         # every use: `x + N`, `x + (N)`, `x[N]`, or the bare pointer (offset 0); the scan covers
         # the body and the file-scope macros that spell the view
-        regions = [(lo, hi)] + [(m.start(), m.end()) for m in re.finditer(r'(?m)^[ \t]*#\s*define\b.*$', code[:head])]
+        regions = [(lo, hi, token)] + [(m.start(), m.end(), token) for m in re.finditer(r'(?m)^[ \t]*#\s*define\b.*$', code[:head])]
+        # a static inline helper that receives the view as an argument at every call indexes the
+        # same object through its parameter (fn_8005C9D8's `levels(tbl.value, ...)`): the
+        # parameter is a token inside the helper's body
+        helpers = set()
+        for (arg, param), (a, b), helper in _helper_aliases(code, lo, hi, set(types)):
+            types[param] = types[arg]
+            regions.append((a, b, re.escape(param)))
+            helpers.add(helper)
         uses = []
-        for a, b in regions:
+        for a, b, tok in regions:
+            # `x[K + e]` / `x[e + K]`: an index expression into the object at K
             for m in re.finditer(r'(?<![\w.>])(%s)\b(?!\s*=[^=])(?:\s*\+\s*(\()?\s*(0x[\da-fA-F]+|\d+)\b(?(2)\s*\))'
-                                 r'|\s*\[\s*(0x[\da-fA-F]+|\d+)\s*\])?' % token, code[a:b]):
+                                 r'|\s*\[\s*(0x[\da-fA-F]+|\d+)\s*\]'
+                                 r'|\s*\[\s*(0x[\da-fA-F]+|\d+)\s*\+\s*(\w+)\s*\]'
+                                 r'|\s*\[\s*(\w+)\s*\+\s*(0x[\da-fA-F]+|\d+)\s*\])?' % tok, code[a:b]):
                 s, e = a + m.start(), a + m.end()
                 if any(x <= s < y for x, y in edits):
                     continue
                 if re.search(r'&\s*$', code[max(0, s - 4):s]):
                     break
                 off, index = m[3], m[4]
+                if m[5] or m[8]:
+                    uses.append((s, e, int(m[5] or m[8], 0), ('xindex', m[6] or m[7]), types[m[1]]))
+                    continue
                 if off and not m[2] and re.match(r'\s*[*/%\[]', code[e:]):
                     # `x + 4 * i`: only the pointer itself is a constant address
                     e, off = s + len(m[1]), None
@@ -1413,10 +1491,10 @@ def tu_data_objects(p, symbol, text, top=False, limit=0x10000):
             break
         if not uses:
             notes.append(f'{label}: no usable references'); continue
-        objects = sorted((s for s in syms.values() if s.section == '.data' and s.kind == 'object'), key=lambda s: s.addr)
-        section = section_bytes(p, sym.module, '.data', known.addr)
+        objects = sorted((s for s in syms.values() if s.section == known.section and s.kind == 'object'), key=lambda s: s.addr)
+        section = section_bytes(p, sym.module, known.section, known.addr)
         if section is None:
-            notes.append(f'{label}: no retail .data bytes'); continue
+            notes.append(f'{label}: no retail {known.section} bytes'); continue
         origin, whole = section
         cuts, refs = {0}, {}
         for _, _, off, _, _ in uses:
@@ -1447,7 +1525,7 @@ def tu_data_objects(p, symbol, text, top=False, limit=0x10000):
             notes.append(f'{label}: block runs past the section'); continue
         relocations = {}
         try:
-            for obj in pool_objects(p, sym.module, '.data', known.addr, extent):
+            for obj in pool_objects(p, sym.module, known.section, known.addr, extent):
                 for rel in payload(p, obj)[1]:
                     offset = obj.addr + rel['offset'] - known.addr
                     if 0 <= offset < extent:
@@ -1467,18 +1545,21 @@ def tu_data_objects(p, symbol, text, top=False, limit=0x10000):
         bounds = sorted(cuts)
         for a, b in zip(bounds, bounds[1:]):
             owner = next((s for s in objects if s.addr == known.addr + a), None)
-            name = f'fzgx_pool_data_{owner.name if owner else label + "_%X" % a}'
+            name = f'fzgx_pool_{known.section[1:]}_{owner.name if owner else label + "_%X" % a}'
             names[a] = name
             words = [word(i) for i in range(a, b, 4)]
             lines = '\n'.join(allow_address_words('    ' + ', '.join(words[i:i + 8]) + (',' if i + 8 < len(words) else ''))
                               for i in range(0, len(words), 8))
-            definitions.append(f'static u32 {name}[{len(words)}] = {{  /* fzgx-allow: A1 retail data bytes and bindings */\n{lines}\n}};')
+            definitions.append(f'static {"const " if known.section == ".rodata" else ""}u32 {name}[{len(words)}] = {{  /* fzgx-allow: A1 retail data bytes and bindings */\n{lines}\n}};')
         replacements = [(s, e, '') for s, e in edits]
         for s, e, off, kind, ptype in uses:
             start = refs[off]
             inner = off - start
             value = f'(({ptype} *){names[start]} + {inner:#x})' if inner else f'(({ptype} *){names[start]})'
-            replacements.append((s, e, f'(*{value})' if kind == 'index' else value))
+            if isinstance(kind, tuple):
+                replacements.append((s, e, f'{value}[{kind[1]}]'))
+            else:
+                replacements.append((s, e, f'(*{value})' if kind == 'index' else value))
         for s, e, value in sorted(replacements, reverse=True):
             out = out[:s] + value + out[e:]
             code = code[:s] + value + code[e:]
@@ -1492,6 +1573,11 @@ def tu_data_objects(p, symbol, text, top=False, limit=0x10000):
         code = masked(out)
         span = _function_body_span(code, sym.name)
         at = code.rfind('\n', 0, span[0]) + 1
+        for helper in helpers:
+            # the definitions precede every helper that now names them
+            hm = re.search(r'(?m)^[^\n;{}]*\bstatic\s+inline\b[^;{}()]*?\b%s\s*\(' % re.escape(helper), code)
+            if hm:
+                at = min(at, hm.start())
         if top:
             directives = list(re.finditer(r'(?m)^[ \t]*#\s*include\b[^\n]*\n', code[:at]))
             # a self-contained body spells its own typedefs (fn_4_ADF4, fn_8_D630): the block
@@ -1769,10 +1855,39 @@ def indexed_element_arrays(p, symbol, body):
         yield (f'define indexed element array {base}[{idx}]', head + block + out)
 
 
+_ROW_INDEX = r"(?:\w+(?:(?:\.|->)\w+)*|\([^()]*\))"
+_ROW_VIEW = re.compile(
+    r"(?<=[(,=;{?:\s])(?P<base>\(\s*\(\s*(?:const\s+)?u8\s*\*\s*\)\s*(?P<o1>fzgx_(?:pool|obj)_\w+)\s*\)"
+    r"|\(\s*(?:const\s+)?u8\s*\*\s*\)\s*(?P<o2>fzgx_(?:pool|obj)_\w+))"
+    r"\s*\+\s*(?:\(\s*(?P<i1>%s)\s*\*\s*(?P<k1>0x[0-9A-Fa-f]+|\d+)\s*(?:\+\s*(?P<c1>0x[0-9A-Fa-f]+|\d+)\s*)?\)"
+    r"|(?P<i2>%s)\s*\*\s*(?P<k2>0x[0-9A-Fa-f]+|\d+)\b(?!\s*[\[(.*/%%]))" % (_ROW_INDEX, _ROW_INDEX))
+
+
+def row_array_views(text):
+    """A row of a TU-defined object addressed as bytes, `(u8 *)obj + (i * K + c)`, as row-array
+    indexing `((u8 (*)[K])obj)[i] + c`.
+
+    Probe compiles under GC/1.3.2 (2026-10-11): byte arithmetic folds the object's section base
+    straight into the sum (`mulli; addi rI, rI, c; add rI, rI, rBase`), while indexing an
+    array view materializes the object's address first (`addi r0, rBase, off; mulli; addi;
+    add rI, r0, rI`), the retail shape of fn_1_1018BC's 0x104-byte rows off lbl_1_data_3EFB8.
+    Loads through either spelling compile identically, so only address values change."""
+    def sub(m):
+        lead = text[:m.start()].rstrip()
+        if lead and lead[-1] not in '(,=;{?:' and not lead.endswith('return'):
+            return m.group(0)
+        obj = m['o1'] or m['o2']
+        idx, k, c = (m['i1'], m['k1'], m['c1']) if m['i1'] else (m['i2'], m['k2'], None)
+        row = f"((u8 (*)[{k}]){obj})[{idx}]"
+        return f"({row} + {c})" if c else f"({row})"
+    out = _ROW_VIEW.sub(sub, text)
+    return out if out != text else None
+
+
 def tu_section_layout(p, symbol, body, check):
     """Proposals: retail BSS objects defined in the unit (per dtk symbol / per referenced field),
     each also with the TU's string run reproduced, and the string run alone."""
-    if not re.search(r"\blbl_(?:\d+_(?:bss|data)_[0-9A-F]+|[0-9A-F]{8})\b", body):
+    if not re.search(r"\blbl_(?:\d+_(?:bss|data|rodata)_[0-9A-F]+|[0-9A-F]{8})\b|\bfzgx_(?:pool|obj)_\w+", body):
         return []
     out = []
     cache = {}
@@ -1849,6 +1964,13 @@ def tu_section_layout(p, symbol, body, check):
         out += [c for c in indexed_element_arrays(p, symbol, body) if c[1] not in {t for _, t in out}]
     except (ValueError, KeyError, IndexError, AttributeError, OSError):
         pass
+    # rows of TU-defined objects, in the body as saved (an earlier layout) and in every layout
+    rows = []
+    for label, text in [('index TU object rows as arrays', body)] + [(l + ', rows as arrays', t) for l, t in out]:
+        viewed = row_array_views(text)
+        if viewed and viewed not in {t for _, t in out + rows}:
+            rows.append((label, viewed))
+    out += rows
     # a section layout changes what the base register holds; a file-scope
     # `opt_propagation off` written for the old extern view can then rematerialize
     # `addis rX, rBase, N` at every far access (fn_1_2FAA0): offer each layout without it
