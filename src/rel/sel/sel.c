@@ -2482,6 +2482,133 @@ void fn_10_8D90(void) {
 }
 /* fzgx:end fn_10_8D90 */
 
+/* fzgx:begin fn_10_8F0C */
+extern s32 lbl_10_bss_14;
+extern s16 lbl_10_bss_4938C;
+extern u32 lbl_10_bss_49388;
+extern u32 lbl_10_bss_51744;
+extern u16 lbl_1_bss_96A;
+
+typedef struct {
+    u8 pad0[0x16];
+    u8 unk_16;
+    u8 unk_17;
+    u8 pad18[0x20 - 0x18];
+    u16 unk_20;
+} SelState;
+
+typedef struct {
+    u8 pad0[0x94];
+    u32 unk_94;
+    u32 unk_98;
+    u8 pad9C[2];
+    u8 unk_9E;
+    u8 pad9F[5];
+    SelState *unk_A4;
+    u8 padA8[0x140 - 0xA8];
+    u32 unk_140;
+} SelGlobal;
+
+extern SelGlobal lbl_1_bss_8B3A0;
+
+struct S9F8 {
+    u8 pad0[8];
+    u16 f8;
+    u8 pad1[0x14 - 0xa];
+};
+extern struct S9F8 lbl_1_bss_9F8[];
+
+struct S9C8 {
+    u8 pad0[0xa];
+    s8 unk_A;
+    u8 pad1[1];
+};
+extern struct S9C8 lbl_1_bss_9C8[];
+
+extern void fn_1_A2D84(u32);
+extern s32 fn_1_4C10(void);
+extern void fn_1_12F150(s16, u32, u32);
+extern s32 fn_1_12F228(void);
+extern void fn_1_12F1E8(s32);
+extern void fn_1_4A00(s32, u8, u32);
+
+void fn_10_8F0C(void) {
+    SelState * fzgx_live;
+    struct { SelGlobal *value; } g;
+    s16 count;
+    s16 i;
+    s32 ready;
+    u32 flags;
+    u8 v;
+
+    lbl_1_bss_96A = 14;
+    g.value = &lbl_1_bss_8B3A0;
+    count = 0;
+    if (g.value->unk_A4->unk_20 != 0) {
+        fzgx_live = g.value->unk_A4;
+        fzgx_live->unk_20--;
+        if (g.value->unk_A4->unk_20 == 0) {
+            fn_1_A2D84(0xA9121E00);
+        }
+    }
+
+    if (lbl_10_bss_14 == -1) {
+        fn_1_4C10();
+    }
+
+    flags = lbl_1_bss_8B3A0.unk_140;
+    if ((flags & 0x80000000) != 0 &&
+        (flags & 0x40000000) == 0 &&
+        (lbl_1_bss_8B3A0.unk_94 & 8) == 0) {
+        ready = 1;
+    } else {
+        if (fn_1_4C10() != 0) {
+            ready = 1;
+        } else {
+            ready = 0;
+        }
+    }
+
+    if (ready != 0) {
+        return;
+    }
+
+    if (lbl_10_bss_14 != -1) {
+        s32 value = lbl_10_bss_14;
+        lbl_10_bss_14 = -1;
+        lbl_1_bss_96A = (u16)value;
+        return;
+    }
+
+    for (i = 0; i < 4; i++) {
+        if (lbl_1_bss_9C8[i].unk_A != -1 &&
+            __rlwnm(lbl_1_bss_8B3A0.unk_98, (i + 1) & 31, 31, 31) != 0) {
+            if ((lbl_1_bss_9F8[lbl_1_bss_8B3A0.unk_9E].f8 >> 12) & 1) {
+                count++;
+            }
+            if ((lbl_1_bss_9F8[*((u8 *)&lbl_1_bss_8B3A0 + 0x9E)].f8 >> 12) & 1) {
+                fn_1_12F150(i, 0, 1);
+            }
+        }
+    }
+
+    if (count != 0 || fn_1_12F228() != 0) {
+        fzgx_live = g.value->unk_A4;
+        fzgx_live->unk_16 = 1;
+        fn_1_12F1E8(0);
+    }
+
+    if (count != 0 || fn_1_12F228() != 0) {
+        fn_1_12F1E8(0);
+        fzgx_live = g.value->unk_A4;
+        v = fzgx_live->unk_17;
+        lbl_10_bss_14 = ((s32)(-v | v) >> 31) + 25;
+        fn_1_4A00(0, (u8)lbl_10_bss_4938C, lbl_10_bss_49388);
+        lbl_10_bss_51744 = 0;
+    }
+}
+/* fzgx:end fn_10_8F0C */
+
 /* fzgx:begin fn_10_9154 */
 extern s32 lbl_10_bss_51740;
 extern s32 lbl_10_bss_49388;
