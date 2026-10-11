@@ -107,6 +107,79 @@ f32 fn_1_1024C4(const Point1024C4 *a, const Point1024C4 *b) {
 }
 /* fzgx:end fn_1_1024C4 */
 
+/* fzgx:begin fn_1_1024F8 */
+struct Sig_fn_80077B14_fn_80077B14_Arg0 {
+    u8 pad_0[0x4];
+    u32 unk_4;
+    u8 pad_8[0x18];
+    u32 unk_20;
+};
+
+typedef struct ClothVec {
+    f32 x, y, z;
+} ClothVec;
+
+typedef struct ClothPoint {
+    u8 flags;
+    u8 type;
+    u8 count;
+    u8 pad_3;
+    u16 idx[6];
+    ClothVec pos;
+    u8 pad_1C[0xC];
+    ClothVec rest;
+    u8 pad_34[0x10];
+} ClothPoint;
+
+typedef struct ClothMeshEntry {
+    struct Sig_fn_80077B14_fn_80077B14_Arg0 *mesh;
+    u32 unk_4;
+} ClothMeshEntry;
+
+extern f32 lbl_8006D188(s16);
+extern s32 fn_80077B14(struct Sig_fn_80077B14_fn_80077B14_Arg0 *);
+extern s32 lbl_801A66A0;
+
+void fn_1_1024F8(void) {
+    Obj_1_bss_85250 *p = &lbl_1_bss_85250;
+    struct Sig_fn_80077B14_fn_80077B14_Arg0 *mesh;
+    u8 *verts;
+    s32 sq;
+    u32 i;
+    u32 j;
+    f64 d;
+
+    mesh = ((ClothMeshEntry *)p->unk_10->unk_8)[p->unk_4].mesh;
+    if (mesh == NULL) {
+        return;
+    }
+    verts = (u8 *)fn_80077B14(mesh);
+    if (mesh->unk_4 & 0x10) {
+        for (i = 0; i < p->unk_1C; i++) {
+            ((ClothPoint *)p->unk_18)[i].pos = ((ClothPoint *)p->unk_18)[i].rest;
+            for (j = 0; j < ((ClothPoint *)p->unk_18)[i].count; j++) {
+                *(ClothVec *)(verts + (((ClothPoint *)p->unk_18)[i].idx[j] << 6)) =
+                    ((ClothPoint *)p->unk_18)[i].pos;
+            }
+        }
+    }
+    for (i = 0; i < p->unk_1C; i++) {
+        if (((ClothPoint *)p->unk_18)[i].type == 1 && !(((ClothPoint *)p->unk_18)[i].flags & 1)) {
+            d = 0.01 * lbl_8006D188((lbl_801A66A0 + i * i) << 8);
+            ((ClothPoint *)p->unk_18)[i].pos.x += d;
+            d = 0.01 * lbl_8006D188(((lbl_801A66A0 + i * i + i) << 7) + 0x4000);
+            ((ClothPoint *)p->unk_18)[i].pos.y += d;
+            d = 0.01 * lbl_8006D188((lbl_801A66A0 + i * (i * i)) << 9);
+            ((ClothPoint *)p->unk_18)[i].pos.z += d;
+            for (j = 0; j < ((ClothPoint *)p->unk_18)[i].count; j++) {
+                *(ClothVec *)(verts + (((ClothPoint *)p->unk_18)[i].idx[j] << 6)) =
+                    ((ClothPoint *)p->unk_18)[i].pos;
+            }
+        }
+    }
+}
+/* fzgx:end fn_1_1024F8 */
+
 /* fzgx:begin fn_1_102FD0 */
 // Initialize the cloth subsystem and reset its shared state.
 void fn_1_102FD0(void) {
