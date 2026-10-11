@@ -544,3 +544,140 @@ void fn_1_E1934(Fn1E1934Object *obj, Fn1E1934Object *base, s16 limit) {
     }
 }
 /* fzgx:end fn_1_E1934 */
+
+/* fzgx:begin fn_1_E1A00 pool */
+extern void fn_1_E5970(void *, f32);
+extern void fn_1_E5978(void *, f32);
+extern void fn_1_E5980(void *, f32);
+extern void fn_1_E5AD8(void *, f32);
+extern void fn_1_E5A0C(void *, void *);
+extern void fn_1_E5A50(void *, void *);
+extern void fn_1_E57FC(void *, void *);
+extern void fn_1_E5988(void *, void *);
+extern void fn_1_E5A94(void *, void *);
+extern void fn_1_E5840(void *, const void *);
+extern void fn_1_E58CC(void *, const void *);
+extern void fn_1_E5884(void *, void *);
+extern void fn_1_E57F4(void *, f32);
+extern void fn_80008BA8(void *, void *, u32);
+
+typedef struct {
+    u8 pad0[0x8];
+    s16 field8;
+    s16 fieldA;
+    u8 padC[0x48];
+    f32 field54;
+    f32 field58;
+    f32 field5C;
+    u8 field60[0xD8];
+    u64 field138;
+    u8 pad140[0x14];
+    u32 field154;
+    u32 field158;
+    u32 field15C;
+} Fn1E1A00Object;
+
+/*
+ * The literal pool lbl_1_rodata_6780 is shared by the whole retail TU; the
+ * tables and primers below lay it out so this function's literals land on
+ * retail's offsets.
+ */
+extern void fzgx_pool_sink(const void *, f32);
+
+#pragma section RX ".fzgxpool"
+
+static const u32 pool_6780[10] = {
+    0xBF800000, 0x3F7FFFFE, 0x3F800001, 0xBF800001, 0xBF7FFFFE,
+    0x00000000, 0x3E800000, 0x00000000, 0x00000000, 0x40A00000,
+};
+__declspec(section ".fzgxpool") void fzgx_pool_primer0(void) {
+    fzgx_pool_sink(pool_6780, 1.0f);
+}
+static const u32 pool_67AC[2] = { 0x00FF00FF, 0x3DCCCCCD };
+__declspec(section ".fzgxpool") void fzgx_pool_primer1(void) {
+    fzgx_pool_sink(pool_67AC, 0.5f);
+    fzgx_pool_sink(pool_67AC, 10.0f);
+}
+static const f32 pool_67BC[17] = {
+    182.04445f, 176.0f, 0.0f, -0.0027222224f, 0.0f,
+    1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
+    1.0f, 0.0f, 0.0f, 0.0000958738f, 1.5f,
+    -0.00000011920929f, 0.00000011920929f,
+};
+__declspec(section ".fzgxpool") void fzgx_pool_primer2(s16 x) {
+    fzgx_pool_sink(pool_67BC, (f32)x);
+}
+static const f32 pool_6808[31] = {
+    60.0f, 1000000.0f, 250000.0f, 20.0f, 0.0f,
+    1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
+    -0.01f, 0.01f, -1.01f, 0.0001f, 0.0f,
+    1.0f, 0.0f, 0.99f, 2.0f, -0.0f,
+    3.671875f, 0.0f, 2.142699f, 36893490000000000000.0f, 2.25f,
+    0.0f, 3.21875f, 0.0f, 1.01f, 0.05f,
+    1.001f,
+};
+__declspec(section ".fzgxpool") void fzgx_pool_primer3(void) {
+    fzgx_pool_sink(pool_6808, 0.9f);
+    fzgx_pool_sink(pool_6808, 3.0f);
+}
+
+void fn_1_E1A00(Fn1E1A00Object *obj, const u8 *cmd) {
+    for (; *cmd != 0; cmd++) {
+        switch (*cmd) {
+        case 'e':
+            fn_1_E5970(obj, 0.9f);
+            break;
+        case 'm':
+            fn_1_E5978(obj, 1.0f);
+            break;
+        case 'u':
+            fn_1_E5980(obj, 0.5f);
+            break;
+        case 'k':
+            fn_1_E5AD8(obj, 1.0f);
+            break;
+        case 'F':
+            fn_1_E5A0C(obj, NULL);
+            break;
+        case 'a':
+            fn_1_E5A50(obj, NULL);
+            break;
+        case 'v':
+            fn_1_E57FC(obj, NULL);
+            break;
+        case 'p':
+            fn_1_E5988(obj, NULL);
+            if ((obj->field138 & 0x800) == 0 && (obj->field138 & 3) == 0) {
+                obj->field58 = 10.0f;
+                obj->field5C = 10.0f * (f32)obj->field8;
+                obj->field54 = 3.0f * (f32)obj->fieldA;
+                fn_80008BA8(obj->field60, &obj->field54, 12);
+            }
+            break;
+        case 'w':
+            fn_1_E5A94(obj, NULL);
+            break;
+        case 'r':
+            fn_1_E5840(obj, NULL);
+            break;
+        case 'n':
+            fn_1_E58CC(obj, NULL);
+            break;
+        case 'f':
+            obj->field138 = 0;
+            break;
+        case 's':
+            fn_1_E5884(obj, NULL);
+            break;
+        case 't':
+            fn_1_E57F4(obj, 1.0f);
+            break;
+        case 'T':
+            obj->field154 = 0;
+            obj->field158 = 0;
+            obj->field15C = 0;
+            break;
+        }
+    }
+}
+/* fzgx:end fn_1_E1A00 */
