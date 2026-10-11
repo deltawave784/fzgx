@@ -1461,6 +1461,74 @@ u32 fn_7_4094(u32 arg0, u32 arg1, u32 arg2, u32 arg3) {
 }
 /* fzgx:end fn_7_4094 */
 
+/* fzgx:begin fn_7_44DC */
+#include "font.h"
+
+extern FontDrawPacket lbl_1_rodata_26F8;
+extern u16 fn_1_48690(u32);
+
+/* file-scope objects of the retail TU, in retail order: MWCC addresses them off one
+   section base (lbl_7_bss_1960) and materializes each object's address where used */
+typedef struct {
+    u8 unk_0;
+    u8 pad_1[3];
+    void *unk_4;
+    u8 unk_8;
+    u8 pad_9[3];
+    u32 unk_C;
+} fzgx_obj_lbl_7_bss_1960_t;
+fzgx_obj_lbl_7_bss_1960_t fzgx_obj_lbl_7_bss_1960;
+u32 lbl_7_bss_1960__fzgx_offset_10[2];
+u8 lbl_7_bss_1960__fzgx_offset_18[2];
+f32 lbl_7_bss_1960__fzgx_offset_1C[2];
+
+#pragma section code_type ".fzgxpool"
+static void fzgx_bss_layout(void) {
+    volatile u8 s;  /* fzgx-allow: S2 layout primer sink: MWCC emits .bss objects in first-access order */
+    s = *(u8 *)&fzgx_obj_lbl_7_bss_1960;
+    s = *(u8 *)&lbl_7_bss_1960__fzgx_offset_10;
+    s = *(u8 *)&lbl_7_bss_1960__fzgx_offset_18;
+    s = *(u8 *)&lbl_7_bss_1960__fzgx_offset_1C;
+}
+#pragma section code_type ".text"
+
+/* literal-pool primer: the retail TU pool (lbl_7_rodata_780) holds the literals in this
+   order; MWCC lays a unit's literals out in first-use order, so these fix the offsets */
+static const u32 fzgx_pool_word_780[1] = {0};
+#pragma section code_type ".fzgxpool"
+static void fzgx_pool_primer(volatile f32 *p, volatile u32 *w, u32 n) { /* fzgx-allow: S2 pool primer sink */
+    w[0] = fzgx_pool_word_780[0];
+    p[0] = 0.0f;
+    p[1] = 1.0f;
+    p[2] = 300.0f;
+    p[3] = 640.0f;
+    p[4] = 480.0f;
+    p[5] = (f32)n;
+}
+#pragma section code_type ".text"
+
+void fn_7_44DC(void) {
+    u8 idx;
+    u8 i;
+    for (i = 0; i < 2; i++) {
+        idx = i;
+        if (lbl_7_bss_1960__fzgx_offset_18[idx] != 0) {
+            FontDrawPacket pkt = lbl_1_rodata_26F8;
+            pkt.image = 0x12;
+            pkt.x = 0.0f;
+            pkt.y = 0.0f;
+            pkt.z = 300.0f - (f32)i;
+            pkt.flags = 5;
+            pkt.scale_x = pkt.scale_x * (640.0f / (f32)fn_1_48690(0x12));
+            pkt.scale_y = pkt.scale_y * (480.0f / (f32)fn_1_48690(0x12));
+            *(u32 *)&pkt.color = lbl_7_bss_1960__fzgx_offset_10[idx];
+            pkt.alpha = lbl_7_bss_1960__fzgx_offset_1C[idx];
+            fn_1_4F734(&pkt);
+        }
+    }
+}
+/* fzgx:end fn_7_44DC */
+
 /* fzgx:begin fn_7_4E28 */
 extern char lbl_7_data_13FFC[15];
 extern void OSReport(char *, ...);

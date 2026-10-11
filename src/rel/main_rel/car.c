@@ -6579,6 +6579,84 @@ void fn_1_8F5A4(Fn1_8F5A4_Object *obj) {
 }
 /* fzgx:end fn_1_8F5A4 */
 
+/* fzgx:begin fn_1_8FE74 noprologue */
+#include "types.h"
+#include "rel/main_rel/car.h"
+
+typedef struct Sig_fn_1_41418_Fn41418Data {
+    u32 count;
+    char *strings;
+} Sig_fn_1_41418_Fn41418Data;
+
+extern void fn_1_A8DD4(const char *, ...);
+extern void fn_1_A8F40(u8);
+extern char *fn_1_41418(Sig_fn_1_41418_Fn41418Data *, u32);
+
+typedef struct CarDebugObj {
+    u8 pad[0x4C];
+    f32 unk_4C;
+    f32 unk_50;
+} CarDebugObj;
+
+typedef struct CarDebugSlot {
+    u16 unk_0;
+    u8 pad2[6];
+    CarDebugObj *unk_8;
+    Sig_fn_1_41418_Fn41418Data *unk_C;
+    u8 pad10[0x10];
+} CarDebugSlot;
+
+typedef struct CarDebugOwner {
+    u8 pad[0x148];
+    CarDebugSlot slots[6];
+    CarDebugSlot extra[20];
+} CarDebugOwner;
+
+void fn_1_8FE74(CarDebugOwner *owner, CarDebugSlot *slot, s32 flag) {
+    char *base = (char *)&lbl_1_data_209C0;
+    char *name;
+    char *title;
+    s32 i;
+
+    if (slot->unk_8 == NULL || slot->unk_C == NULL) {
+        return;
+    }
+    if (slot == &owner->slots[0]) {
+        name = base + 0x6efc;
+    } else if (slot == &owner->slots[1]) {
+        name = base + 0x6f04;
+    } else if (slot == &owner->slots[2]) {
+        name = base + 0x6f0c;
+    } else if (slot == &owner->slots[3]) {
+        name = base + 0x6f14;
+    } else if (slot == &owner->slots[4]) {
+        name = base + 0x6f1c;
+    } else if (slot == &owner->slots[5]) {
+        name = base + 0x6f24;
+    } else {
+        for (i = 0; i < 20; i++) {
+            if (slot == &owner->extra[i]) {
+                name = base + 0x6f2c;
+                break;
+            }
+        }
+    }
+    title = base + 0x6f38;
+    if (flag != 0) {
+        title = base + 0x6f34;
+    }
+    fn_1_A8DD4(title);
+    fn_1_A8F40(0x33);
+    fn_1_A8DD4(base + 0x6f3c, name);
+    fn_1_A8F40(0xff);
+    fn_1_A8DD4(base + 0x6f40, slot->unk_0);
+    fn_1_A8F40(0xf3);
+    fn_1_A8DD4(base + 0x6f48, slot->unk_8->unk_4C, slot->unk_8->unk_50);
+    fn_1_A8F40(0xff);
+    fn_1_A8DD4(base + 0x6f58, fn_1_41418(slot->unk_C, slot->unk_0));
+}
+/* fzgx:end fn_1_8FE74 */
+
 /* fzgx:begin fn_1_900B4 */
 u32 fn_1_900B4(void) {
     return lbl_1_bss_6E978[0];
