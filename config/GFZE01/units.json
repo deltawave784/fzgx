@@ -45711,6 +45711,24 @@
   },
   {
     "module": "main_rel",
+    "source": "rel/main_rel/mdlload/fn_1_D4FFC.c",
+    "symbols": [
+      "fn_1_D4FFC"
+    ],
+    "status": "matching",
+    "mw_version": null,
+    "extra_cflags": [],
+    "tu": "rel/main_rel/mdlload.c",
+    "pool": {
+      "...rodata.0": "lbl_1_rodata_6168",
+      "@31": "lbl_1_rodata_6168+0x148",
+      "@56": "lbl_1_rodata_6168+0x154",
+      "@59": "lbl_1_rodata_6168+0x160",
+      "@57": "lbl_1_rodata_6168+0x158"
+    }
+  },
+  {
+    "module": "main_rel",
     "source": "rel/main_rel/mdlload/fn_1_D5958.c",
     "symbols": [
       "fn_1_D5958"
