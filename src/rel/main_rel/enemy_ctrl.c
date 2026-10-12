@@ -289,6 +289,112 @@ void fn_1_C72D4(void) {
 }
 /* fzgx:end fn_1_C72D4 */
 
+/* fzgx:begin fn_1_C742C */
+typedef void (*fn_1_C742C_DrawFunc)(s32, s32, s32);
+
+typedef struct fn_1_C742C_Vec {
+    f32 x;
+    f32 y;
+    f32 z;
+} fn_1_C742C_Vec;
+
+typedef struct fn_1_C742C_Funcs { fn_1_C742C_DrawFunc f[6]; } fn_1_C742C_Funcs;
+typedef struct fn_1_C742C_Offsets { fn_1_C742C_Vec v[3][4]; } fn_1_C742C_Offsets;
+typedef struct fn_1_C742C_Positions { fn_1_C742C_Vec v[3][6]; } fn_1_C742C_Positions;
+typedef struct fn_1_C742C_Values { s32 v[6]; } fn_1_C742C_Values;
+
+extern const fn_1_C742C_Funcs lbl_1_rodata_5A68;
+extern const fn_1_C742C_Offsets lbl_1_rodata_5A80;
+extern const fn_1_C742C_Positions lbl_1_rodata_5B10;
+extern const fn_1_C742C_Values lbl_1_rodata_5BE8;
+
+extern s16 camera_get_mode(void);
+extern s32 fn_1_5910(void);
+extern u8 fn_1_5348(void);
+extern void fn_1_CFA4C(u32, u32);
+extern s32 camera_get_state(void);
+extern f32 fn_1_519FC(f32);
+extern void fn_1_52070(u32);
+extern void fn_1_52088(void);
+extern void fn_1_CD51C(void *);
+extern void fn_1_C7AA0(void);
+extern void fn_1_C7874(void);
+
+void fn_1_C742C(void) {
+    fn_1_C742C_Funcs funcs = lbl_1_rodata_5A68;
+    fn_1_C742C_Offsets offsets = lbl_1_rodata_5A80;
+    fn_1_C742C_Positions positions = lbl_1_rodata_5B10;
+    fn_1_C742C_Values values = lbl_1_rodata_5BE8;
+    s32 idx;
+    fn_1_C742C_Vec *pos;
+    s32 *val;
+    fn_1_C742C_DrawFunc *fn;
+    fn_1_C742C_Vec *off;
+    s32 row;
+    s32 i;
+    f32 x;
+    f32 y;
+    s32 mode;
+
+    mode = camera_get_mode();
+    idx = fn_1_5910();
+    if (mode == -1 || mode < 0) {
+        fn_1_C742C_Vec *v = &offsets.v[2][idx];
+        if (fn_1_5348() == 3) {
+            fn_1_CFA4C((s32)v->x, (s32)v->y);
+        }
+        return;
+    }
+
+    switch ((s8)camera_get_state()) {
+    case 1:
+        row = 0;
+        break;
+    case 2:
+        row = 1;
+        break;
+    case 6:
+    case 7:
+    case 8:
+        row = 2;
+        break;
+    default:
+        return;
+    }
+
+    pos = positions.v[row];
+    val = values.v;
+    fn = funcs.f;
+    off = &offsets.v[row][idx];
+    for (i = 0; i < 6; i++) {
+        x = pos->x + off->x;
+        y = pos->y + off->y;
+        fn_1_52070((s32)fn_1_519FC((f32)*val));
+        (*fn)(mode, (s32)x, (s32)y);
+        fn_1_52088();
+        pos++;
+        val++;
+        fn++;
+    }
+    fn_1_CD51C((void *)mode);
+
+    switch ((s8)camera_get_state()) {
+    case 1:
+        fn_1_C7AA0();
+        break;
+    case 2:
+        fn_1_C7874();
+        break;
+    case 6:
+    case 7:
+    case 8:
+        fn_1_C7AA0();
+        fn_1_C7874();
+        break;
+    }
+}
+/* fzgx:end fn_1_C742C */
+
 /* fzgx:begin fn_1_C771C */
 void fn_1_C771C(void) {
     int mode;

@@ -7280,3 +7280,6 @@ rel/main_rel/replay/fn_1_F2F84.c:
 
 rel/main_rel/rob/fn_1_96C40.c:
 	.text       start:0x00096C40 end:0x00096F20 align:4
+
+rel/main_rel/enemy_ctrl/fn_1_C742C.c:
+	.text       start:0x000C742C end:0x000C771C align:4
