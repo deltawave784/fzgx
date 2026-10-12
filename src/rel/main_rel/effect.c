@@ -879,6 +879,176 @@ void fn_1_5ABCC(Fn1_5ABCCOutput *out) {
 #pragma opt_loop_invariants reset
 /* fzgx:end fn_1_5ABCC */
 
+/* fzgx:begin fn_1_5AC48 */
+#pragma section code_type ".fzgxpool"
+__declspec(section ".fzgxpool") static void fzgx_pool_prime1(void) {
+    volatile f32 s; volatile f64 d;  /* fzgx-allow: S2 pool primer sinks */
+    s = 60.0f;
+    s = 0.10000000149011612f;
+    s = 32767.0f;
+    s = 0.05000000074505806f;
+    d = 0.07;
+    s = 20000.0f;
+    s = 0.0f;
+    d = 4503599627370496.0;
+    s = 1.0f;
+    s = -0.029999999329447746f;
+    d = 15.0;
+    d = 4503601774854144.0;
+    d = 1.5;
+    d = 0.5;
+}
+static const u32 fzgx_pool_table2[1] = {0x00000000};  /* fzgx-allow: A1 retail pool bytes */
+__declspec(section ".fzgxpool") static void fzgx_pool_keep2(void) { const u32 *volatile cp; cp = fzgx_pool_table2; }  /* fzgx-allow: S2 pool primer sink */
+__declspec(section ".fzgxpool") static void fzgx_pool_prime3(void) {
+    volatile f32 s; volatile f64 d;  /* fzgx-allow: S2 pool primer sinks */
+    s = 0.5f;
+    s = 8.0f;
+    s = 255.0f;
+    s = 15.0f;
+    s = 0.20000000298023224f;
+    s = 0.07999999821186066f;
+    s = 0.25f;
+    s = 0.9800000190734863f;
+    s = 0.9900000095367432f;
+    s = 40.0f;
+    s = 20.0f;
+    s = 1.5f;
+    s = 0.44999998807907104f;
+    s = -2.0f;
+    s = 0.0833333358168602f;
+    s = 0.15000000596046448f;
+    s = 0.125f;
+    s = -0.4000000059604645f;
+    s = -0.30000001192092896f;
+    s = 2.0f;
+    s = 250.0f;
+    d = 0.6;
+    d = 0.4;
+    s = 0.30000001192092896f;
+    s = -0.004000000189989805f;
+    s = 0.01666666753590107f;
+}
+#pragma section code_type ".text"
+
+extern u32 fn_1_3FC58(void);
+extern void *memset(void *, int, u32);
+extern void *memcpy(void *, const void *, u32);
+
+typedef struct {
+    f32 x, y, z;
+} fn_1_5AC48_Vec;
+
+typedef struct {
+    s8 unk_0;
+    u8 pad_1;
+    s16 unk_2;
+    s16 unk_4;
+    u8 pad_6[6];
+    s16 unk_C;
+    u8 pad_E[2];
+    s32 unk_10;
+    u8 pad_14[4];
+    s16 unk_18;
+    u16 unk_1A;
+    fn_1_5AC48_Vec unk_1C;
+    f32 unk_28;
+    f32 unk_2C;
+    u8 pad_30[4];
+    u32 unk_34;
+    u8 pad_38[4];
+    fn_1_5AC48_Vec pos;
+    fn_1_5AC48_Vec vel;
+    u8 pad_54[0xE8 - 0x54];
+} fn_1_5AC48_Effect;
+
+typedef struct {
+    u8 pad_0[0x70];
+    u32 unk_70;
+} fn_1_5AC48_Inner;
+
+typedef struct {
+    u8 pad_0[0x8];
+    fn_1_5AC48_Inner *unk_8;
+} fn_1_5AC48_Owner;
+
+static inline s16 fn_1_5AC48_spawn(void *source) {
+    s32 i;
+
+    if ((s32)fn_1_3FC58() != 0) {
+        return -1;
+    }
+
+    {
+        fn_1_5AC48_Effect *scan;
+        scan = *(fn_1_5AC48_Effect **)&lbl_1_bss_6C848;
+        i = 0;
+        for (; i < 0xbe; i++, scan++) {
+            if (!scan->unk_0) {
+                scan->unk_0 = 1;
+                /* Skip the exhaustion path when a free slot is found. */
+                goto slot_found;
+            }
+        }
+        i = -1;
+    }
+slot_found:
+    if (i < 0) {
+        return -1;
+    }
+    {
+        fn_1_5AC48_Effect *entry;
+        entry = *(fn_1_5AC48_Effect **)&lbl_1_bss_6C848 + i;
+        memcpy(entry, source, 0xe8);
+        entry->unk_0 = 1;
+        entry->unk_2 = i;
+        ((void (**)(void *))lbl_1_data_1D1D8)[entry->unk_C](entry);
+        entry->unk_4 = lbl_1_bss_6C850.unk_0;
+        lbl_1_bss_6C850.unk_0++;
+        if (lbl_1_bss_6C850.unk_0 < 0) {
+            lbl_1_bss_6C850.unk_0 = 0;
+        }
+        return entry->unk_4;
+    }
+}
+
+/* Linear congruential random value in [0, 1]. */
+static inline f32 fn_1_5AC48_rand(void) {
+    lbl_1_data_1D628 = lbl_1_data_1D628 * 0x41c64e6d + 0x3039;
+    return (f32)((lbl_1_data_1D628 >> 16) & 0x7fff) / 32767.0f;
+}
+
+void fn_1_5AC48(fn_1_5AC48_Effect *effect) {
+    fn_1_5AC48_Effect spawn;
+
+    effect->vel.y += -0.004f;
+    effect->vel.x *= 0.98f;
+    effect->vel.y *= 0.98f;
+    effect->vel.z *= 0.98f;
+    effect->pos.x += effect->vel.x;
+    effect->pos.y += effect->vel.y;
+    effect->pos.z += effect->vel.z;
+
+    memset(&spawn, 0, 0xe8);
+    spawn.unk_18 = effect->unk_18;
+    spawn.unk_C = 8;
+    spawn.unk_1A = 0xffff;
+    spawn.unk_34 = ((fn_1_5AC48_Owner *)lbl_1_bss_38458)->unk_8->unk_70;
+    spawn.pos = effect->pos;
+    spawn.vel.x = 0.5f * effect->vel.x;
+    spawn.vel.y = 0.5f * effect->vel.y;
+    spawn.vel.z = 0.5f * effect->vel.z;
+    spawn.unk_28 = 0.25f * effect->unk_28;
+    spawn.unk_2C = effect->unk_2C * (0.016666668f * fn_1_5AC48_rand());
+    spawn.unk_1C = effect->unk_1C;
+    fn_1_5AC48_spawn(&spawn);
+
+    if ((f32)effect->unk_10 < 15.0f) {
+        effect->unk_28 *= 1.0f - 1.0f / (f32)(effect->unk_10 + 1);
+    }
+}
+/* fzgx:end fn_1_5AC48 */
+
 /* fzgx:begin fn_1_5B074 */
 // fn_1_5B074: empty in retail (single blr).
 void fn_1_5B074(void) {
