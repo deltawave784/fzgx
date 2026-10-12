@@ -3620,6 +3620,102 @@ void fn_10_A90C(void *arg0) {
 #pragma opt_common_subs reset
 /* fzgx:end fn_10_A90C */
 
+/* fzgx:begin fn_10_AB98 */
+typedef struct SelCursor {
+    u8 pad_0[0x8C];
+    s16 unk_8C;
+    s16 unk_8E;
+    s16 unk_90;
+    u8 pad_92[2];
+    u32 unk_94;
+} SelCursor;
+
+struct SelState {
+    s16 value;
+};
+
+extern struct SelState lbl_1_bss_8B3A0;
+extern u8 lbl_10_data_2B4[0x1A0];
+
+extern void fn_10_C594(void);
+extern s16 fn_1_12EF24(s16, s16);
+extern s32 fn_1_F89E4(u8);
+extern void fn_1_7B2E8(u32);
+
+static inline s16 sel_sign(s16 x) {
+    return x < 0 ? -1 : (x > 0);
+}
+
+/* Inlined into fn_10_AB98 with step == 0: the parameter stays a register
+ * copy (mr) where a literal local would fold to an immediate. */
+static inline void sel_move_cursor(SelCursor *cursor, s32 step) {
+    s8 i;
+    s32 blocked;
+    s32 pos;
+    s32 next;
+    struct { s16 value; } count;
+    s16 dir;
+    s32 tmp_ra6;
+
+    if (cursor->unk_8C == 0) {
+        pos = cursor->unk_90;
+        pos = pos < 0 ? step : (pos > 110 ? 110 : pos);
+        if ((cursor->unk_94 & 2) != 0 && (s8)lbl_10_data_2B4[pos] == 0) {
+            step = 1;
+        }
+        count.value = __abs((s16)step);
+        dir = sel_sign(step);
+        while (count.value-- > 0) {
+            next = pos + dir;
+            pos = next > 110 ? 0 : (next < 0 ? 110 : next);
+            if ((cursor->unk_94 & 2) != 0) {
+                while ((s8)lbl_10_data_2B4[pos] == 0) {
+                    next = pos + dir;
+                    pos = next > 110 ? 0 : (next < 0 ? 110 : next);
+                }
+            }
+        }
+        cursor->unk_8E = pos;
+        cursor->unk_90 = cursor->unk_8E;
+    } else {
+        i = step;
+        do {
+            blocked = 0;
+            next = cursor->unk_8E + step;
+            cursor->unk_8E = next > 5 ? blocked : (next < 0 ? 5 : next);
+            cursor->unk_90 = fn_1_12EF24(cursor->unk_8C, cursor->unk_8E);
+            if (cursor->unk_90 == -1 && step == 0) {
+                step = 1;
+            }
+            if (cursor->unk_8C == 5) {
+                tmp_ra6 = cursor->unk_8E;
+                if ((tmp_ra6 == 5 && fn_1_F89E4(0) == 0) ||
+                    (cursor->unk_8E != 5 && fn_1_F89E4(cursor->unk_8E + 1) == 0)) {
+                    blocked = 1;
+                    if (step == 0) {
+                        step = blocked;
+                    }
+                }
+            }
+            i++;
+            if (cursor->unk_90 != -1 && (s8)lbl_10_data_2B4[cursor->unk_90] != 0 && blocked == 0) {
+                break;
+            }
+        } while (i < 6);
+    }
+    if (lbl_1_bss_8B3A0.value != 1) {
+        fn_10_C594();
+    }
+    if (lbl_1_bss_8B3A0.value != 1 && (cursor->unk_94 & 0x80000000) == 0) {
+        fn_1_7B2E8(cursor->unk_90);
+    }
+}
+
+void fn_10_AB98(SelCursor *cursor) {
+    sel_move_cursor(cursor, 0);
+}
+/* fzgx:end fn_10_AB98 */
+
 /* fzgx:begin fn_10_BD64 */
 #define SEL_MAX(x, y) ((x) > (y) ? (x) : (y))
 

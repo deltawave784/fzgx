@@ -733,6 +733,125 @@ void fn_1_10C7B4(fn_1_10C7B4_AccessoryObject *self) {
 }
 /* fzgx:end fn_1_10C7B4 */
 
+/* fzgx:begin fn_1_10C9B0 noprologue */
+#include "types.h"
+
+#pragma section code_type ".fzgxpool"
+static const unsigned long fzgx_pool_table1[6] = {0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000};  /* fzgx-allow: A1 retail pool bytes */
+__declspec(section ".fzgxpool") static void fzgx_pool_keep1(void) { const unsigned long *volatile cp; cp = fzgx_pool_table1; }  /* fzgx-allow: S2 pool primer sink */
+__declspec(section ".fzgxpool") static void fzgx_pool_prime2(void) {
+    volatile float s; volatile double d;  /* fzgx-allow: S2 pool primer sinks */
+    d = 1.1920928955078125e-07;
+    s = 0.009999999776482582f;
+}
+static const unsigned long fzgx_pool_table3[3] = {0x00000000, 0x00000000, 0x00000000};  /* fzgx-allow: A1 retail pool bytes */
+__declspec(section ".fzgxpool") static void fzgx_pool_keep3(void) { const unsigned long *volatile cp; cp = fzgx_pool_table3; }  /* fzgx-allow: S2 pool primer sink */
+__declspec(section ".fzgxpool") static void fzgx_pool_prime4(void) {
+    volatile float s; volatile double d;  /* fzgx-allow: S2 pool primer sinks */
+    d = 1e-07;
+}
+static const unsigned long fzgx_pool_table5[3] = {0x00000000, 0x00000000, 0x00000000};  /* fzgx-allow: A1 retail pool bytes */
+__declspec(section ".fzgxpool") static void fzgx_pool_keep5(void) { const unsigned long *volatile cp; cp = fzgx_pool_table5; }  /* fzgx-allow: S2 pool primer sink */
+__declspec(section ".fzgxpool") static void fzgx_pool_prime6(void) {
+    volatile float s; volatile double d;  /* fzgx-allow: S2 pool primer sinks */
+    s = 0.5f;
+    s = 0.25f;
+}
+static const unsigned long fzgx_pool_table7[1] = {0x00000000};  /* fzgx-allow: A1 retail pool bytes */
+__declspec(section ".fzgxpool") static void fzgx_pool_keep7(void) { const unsigned long *volatile cp; cp = fzgx_pool_table7; }  /* fzgx-allow: S2 pool primer sink */
+__declspec(section ".fzgxpool") static void fzgx_pool_prime8(void) {
+    volatile float s; volatile double d;  /* fzgx-allow: S2 pool primer sinks */
+    d = 4503599627370496.0;
+    d = 0.0013611111376020642;
+    s = 0.0027222223579883575f;
+    s = -1.0f;
+    s = 0.0f;
+    s = -2.0f;
+    s = 2.0f;
+    s = 1.1920928955078125e-07f;
+}
+#pragma section code_type ".text"
+
+typedef struct Fn10C9B0Entry {
+    u8 flags;
+    u8 pad_01[0x17];
+    f32 unk_18;
+    u8 pad_1C[0x24];
+    f32 unk_40;
+} Fn10C9B0Entry;
+
+typedef struct Fn10C9B0List {
+    u8 pad_00[0x18];
+    u32 count;
+    u8 pad_1C[0x8];
+    Fn10C9B0Entry *entries;
+} Fn10C9B0List;
+
+extern void fn_1_10846C();
+extern void fn_1_128884(void *arg0, void *arg1, s32 type);
+
+void fn_1_10C9B0(Fn10C9B0List *list) {
+    u32 i;
+    Fn10C9B0Entry *a;
+    Fn10C9B0Entry *p;
+    u32 groups;
+    u32 n;
+    f32 neg;
+
+    if (list == NULL) {
+        return;
+    }
+    fn_1_10846C(list);
+
+    a = list->entries;
+    for (i = 0; i < list->count; i++, a++) {
+        if (a->flags & 1) {
+            a->unk_40 = -1.0f;
+            a->flags = 0;
+        } else {
+            a->unk_40 = 0.0f;
+            a->flags = 1;
+        }
+    }
+
+    /* move entries with bit 0 set to the front */
+    p = list->entries;
+    for (i = 0; i < list->count; i++, p++) {
+        Fn10C9B0Entry *b = list->entries + i + 1;
+        u32 j;
+        for (j = i + 1; j < list->count; j++, b++) {
+            if (!(p->flags & 1) && (b->flags & 1)) {
+                fn_1_128884(p, b, sizeof(Fn10C9B0Entry));
+            }
+        }
+    }
+
+    /* within equal flags, sort by unk_18 descending */
+    p = list->entries;
+    for (i = 0; i < list->count; i++, p++) {
+        Fn10C9B0Entry *c = list->entries + i + 1;
+        u32 m;
+        for (m = i + 1; m < list->count; m++, c++) {
+            if (p->flags == c->flags && p->unk_18 < c->unk_18) {
+                fn_1_128884(p, c, sizeof(Fn10C9B0Entry));
+            }
+        }
+    }
+
+    /* spread the unset values of each group of three over (-1, 0] */
+    groups = (list->count - 1) / 3;
+    for (i = 0; i < groups; i++) {
+        neg = -(f32)i;
+        for (n = 0; n < 3; n++) {
+            if (1.1920929e-07f + list->entries[i * 3 + n].unk_40 < 0.0f) {
+                list->entries[i * 3 + n].unk_40 = neg / (f32)groups;
+            }
+        }
+    }
+    list->entries[groups * 3].unk_40 = -1.0f;
+}
+/* fzgx:end fn_1_10C9B0 */
+
 /* fzgx:begin fn_1_10D2F0 */
 /* The TU's literal pool, addressed through one base register. */
 

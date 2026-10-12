@@ -2049,6 +2049,102 @@ void fn_1_5D500(EffectGlow *e) {
 }
 /* fzgx:end fn_1_5D500 */
 
+/* fzgx:begin fn_1_5D718 noprologue */
+#include "psvec.h"
+
+extern const f32 lbl_1_rodata_2950[];
+extern void lbl_8006D9D8(void *);
+extern void lbl_8006D7B0(void);
+extern f32 lbl_8006D0B4(f32);
+extern void lbl_8006DB74(void *);
+extern void lbl_8006D848(f32);
+extern void lbl_8006DFC4(void *);
+extern void fn_1_9F914(void *, u32);
+extern void *memset(void *, int, u32);
+
+struct Fn15D718 {
+    u8 _pad00[0x1c];
+    f32 value1c;
+    f32 value20;
+    f32 value24;
+    f32 value28;
+    u8 _pad2c[0x08];
+    u32 object34;
+    u8 _pad38[0x04];
+    f32 value3c;
+};
+struct Fn15D718Tmp {
+    u8 data[0x30];
+};
+struct Fn15D718Sub {
+    u8 data[0x34];
+};
+struct Fn15D718Work {
+    f32 alpha;
+    f32 alpha2;
+    struct Fn15D718Sub sub;
+    u8 red;
+    u8 green;
+    u8 blue;
+    u8 alphaByte;
+};
+
+#pragma opt_propagation off
+#pragma opt_common_subs on
+static inline f32 *fn_1_5D718_array_read(f32 *array) { return array; }
+static inline f32 fn_1_5D718_array_read_(s32 index, f32 *array) { return array[index]; }
+#pragma opt_strength_reduction off
+void fn_1_5D718(struct Fn15D718 *self) {
+    struct Fn15D718Work work;
+    struct Fn15D718Tmp tmp;
+    u32 object;
+    f32 radius;
+    f32 distance;
+    f32 alpha;
+    const f32 *pool;
+    f32 v[3];
+    f32 x;
+    f32 y;
+    f32 z;
+    f32 sq;
+    f32 vy;
+
+    object = self->object34;
+    pool = lbl_1_rodata_2950;
+    radius = self->value28;
+    lbl_8006D9D8(&self->value3c);
+    lbl_8006D7B0();
+    /* translation column of the current matrix in the locked cache */
+    x = (*(f32 *)(0xE0000000 + 0xC));
+    y = (*(f32 *)(0xE0000000 + 0x1C));
+    (void) y;  /* fzgx: keeps the web at its definition */
+    psvec_set(v, (z = (*(f32 *)(0xE0000000 + 0x2C))), y, x);
+    sq = (f32)(fn_1_5D718_array_read_(0, v) * (*((0) + (v))));
+    sq += fn_1_5D718_array_read_(1, v) * fn_1_5D718_array_read_(1, v);
+    sq += fn_1_5D718_array_read_(2, v) * fn_1_5D718_array_read_(2, v);
+    distance = lbl_8006D0B4(sq);
+    if (distance > pool[1] + radius) {
+        lbl_8006DB74(&tmp);
+        lbl_8006D848((distance - radius) / distance);
+        lbl_8006DFC4(&tmp);
+    }
+    memset(&work, 0, 0x40);
+    lbl_8006DB74(&work.sub);
+    alpha = pool[0x150 / 4] * self->value28;
+    work.alpha = alpha;
+    work.red = (u8)(pool[0x5c / 4] * self->value1c);
+    work.green = (u8)(pool[0x5c / 4] * self->value20);
+    work.blue = (u8)(pool[0x5c / 4] * self->value24);
+    work.alphaByte = 0xff;
+    work.alpha2 = alpha;
+    fn_1_9F914(&work, object);
+}
+#pragma opt_strength_reduction reset
+
+#pragma opt_common_subs reset
+#pragma opt_propagation reset
+/* fzgx:end fn_1_5D718 */
+
 /* fzgx:begin fn_1_5D88C */
 struct Fn15D88C {
     u8 _pad08[0x08];

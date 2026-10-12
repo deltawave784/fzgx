@@ -1591,6 +1591,234 @@ def tu_data_objects(p, symbol, text, top=False, limit=0x10000):
     return (out if out != text else None), notes
 
 
+
+def _top_statements(code):
+    """(start, end) of every file-scope statement of masked `code`: up to its `;`, or up to the
+    closing `}` of a function definition. Preprocessor lines are skipped."""
+    out, depth, start, brace, i, n = [], 0, None, None, 0, len(code)
+    while i < n:
+        c = code[i]
+        if depth == 0 and start is None:
+            if c.isspace():
+                i += 1
+                continue
+            if c == '#':
+                while i < n and code[i] != '\n':
+                    i += 2 if code[i] == '\\' else 1
+                continue
+            start, brace = i, None
+        if c in '{([':
+            if c == '{' and depth == 0 and brace is None:
+                brace = i
+            depth += 1
+        elif c in '})]':
+            depth -= 1
+            if depth == 0 and c == '}' and brace is not None and code[start:brace].rstrip().endswith(')'):
+                out.append((start, i + 1))
+                start = None
+        elif c == ';' and depth == 0:
+            out.append((start, i + 1))
+            start = None
+        i += 1
+    return out
+
+
+def _reloc_map(elf, section):
+    """{instruction offset: (symbol, addend)} of the relocations against `section`."""
+    import struct
+    symbols = elf.symbols()
+    out = {}
+    for rsec in elf.sections:
+        if rsec['type'] != 4 or rsec['info'] != section['index']:
+            continue
+        for pos in range(rsec['offset'], rsec['offset'] + rsec['size'], 12):
+            offset, info, addend = struct.unpack_from('>IIi', elf.data, pos)
+            out[poolfix.code_reloc_offset(offset, info & 255)] = (symbols[info >> 8], addend)
+    return out
+
+
+def defined_data_initializers(p, symbol, body, check):
+    """Retail initializers for the TU data objects a body already defines.
+
+    A body that defines the retail TU's `.data`/`.rodata` objects itself (so MWCC addresses
+    them off one section base, `addi rX, rBase, off; lwzx`, as retail does) but cannot read
+    retail's bytes carries placeholder initializers (`{ 1 }`, invented strings): the code
+    matches while the oracle reports the unit's `...data.0` differing from retail in most
+    words (fn_1_956EC: 2785 of 7052, fn_1_9AABC: 248 of 457). The byte-view families
+    (`tu_data_objects`, `initialized_data_views`) only rewrite extern labels and models, so
+    they never fire on such a body. This compiles the body, anchors each initialized section
+    at the retail address its paired code relocations resolve to (all must agree), and
+    redefines every named object of the section in place, same declarator, as a
+    `fzgx_pool_init_` union whose first member carries retail's words (pointer words as
+    symbolic `__fzgx_offset_` initializers) or bytes; uses become `.v`. Code and layout stay
+    as written; the oracle still proves the whole section before binding its base."""
+    import hashlib
+    import struct
+    from .sdkimport import masked
+    from .dataimport import payload, pool_objects
+    if check is None or not check.ok or not check._rows:
+        return []
+    sym = p.resolve(symbol)
+    target = p.target_object_for(sym)
+    if target is None or not target.exists():
+        return []
+    # the checked object is this body under its own compiler response (the engine's checks
+    # carry no compiler version); compile only when the check kept no object
+    checked = getattr(check, '_object', None)
+    if checked is not None and Path(checked).exists():
+        ours = poolfix.Elf(Path(checked).read_bytes())
+    else:
+        d = STATE_DIR / 'fixup' / 'probe'
+        d.mkdir(parents=True, exist_ok=True)
+        src = d / f"datainit_{sym.name}_{hashlib.sha1(body.encode()).hexdigest()[:10]}.c"
+        src.write_text(body)
+        obj = src.with_suffix('.o')
+        cp = oracle.compile_source(p, sym.module, src, obj, check.mw_version, check.extra_cflags)
+        if cp.returncode != 0 or not obj.exists():
+            return []
+        ours = poolfix.Elf(obj.read_bytes())
+        src.unlink(missing_ok=True)
+        obj.unlink(missing_ok=True)
+    retail = poolfix.Elf(target.read_bytes())
+    ofn = next((s for s in ours.symbols() if s['name'] == sym.name and s['shndx']), None)
+    rfn = next((s for s in retail.symbols() if s['name'] == sym.name and s['shndx']), None)
+    if not ofn or not rfn:
+        return []
+    orel = _reloc_map(ours, ours.sections[ofn['shndx']])
+    rrel = _reloc_map(retail, retail.sections[rfn['shndx']])
+    syms = p.symbols(sym.module)
+    anchors = {}
+    for l, r in zip(*check._rows):
+        li, ri = l.get('instruction') or {}, r.get('instruction') or {}
+        if not li.get('relocation') or not ri.get('relocation'):
+            continue
+        # objdiff JSON addresses are function-relative decimal strings
+        lr = rrel.get(rfn['value'] + int(li['address']))
+        rr = orel.get(ofn['value'] + int(ri['address']))
+        if not lr or not rr:
+            continue
+        (rs, radd), (os_, oadd) = lr, rr
+        known = syms.get(rs['name'])
+        if not known or known.kind != 'object' or not 0 < os_['shndx'] < len(ours.sections):
+            continue
+        section = ours.sections[os_['shndx']]
+        if section['name'] not in DATA_SECTIONS or known.section != section['name']:
+            continue
+        anchors.setdefault(section['index'], set()).add(known.addr + radd - os_['value'] - oadd)
+    code = masked(body)
+    statements = _top_statements(code)
+    edits, declarations = [], set()
+    for index, values in sorted(anchors.items()):
+        if len(values) != 1:
+            continue
+        section = ours.sections[index]
+        anchor = next(iter(values))
+        extent = section['size']
+        expected, covered, relocs = bytearray(extent), bytearray(extent), {}
+        try:
+            for owner in pool_objects(p, sym.module, section['name'], anchor, extent):
+                raw, rels = payload(p, owner)
+                lo, hi = max(anchor, owner.addr), min(anchor + extent, owner.end)
+                expected[lo - anchor:hi - anchor] = raw[lo - owner.addr:hi - owner.addr]
+                covered[lo - anchor:hi - anchor] = b'\1' * (hi - lo)
+                for rel in rels:
+                    offset = owner.addr + rel['offset'] - anchor
+                    if 0 <= offset < extent:
+                        if (rel['kind'] != 1 or offset % 4 or offset + 4 > extent or rel['addend'] < 0
+                                or not re.fullmatch(r'[A-Za-z_]\w*', rel['symbol'])):
+                            raise ValueError('unsupported initialized pointer')
+                        relocs[offset] = rel
+        except (ValueError, KeyError):
+            continue
+        actual = bytes(ours.data[section['offset']:section['offset'] + extent])
+        own_relocs = set(_reloc_map(ours, section))
+        for own in sorted(ours.symbols(), key=lambda s: s['value']):
+            name, lo, size = own['name'], own['value'], own['size']
+            if (own['shndx'] != index or not size or own['info'] & 15 != 1 or lo + size > extent
+                    or not re.fullmatch(r'[A-Za-z_]\w*', name) or name.startswith('fzgx_pool_init_')):
+                continue
+            if not all(covered[lo:lo + size]):
+                continue
+            inside = [o for o in range(lo, lo + size, 4) if o in relocs or o in own_relocs]
+            if actual[lo:lo + size] == expected[lo:lo + size] and not inside:
+                continue
+            owner = re.compile(r'(?<![\w.])(?<!->)\b%s\b' % re.escape(name))
+            found = [(a, b) for a, b in statements if owner.search(code[a:b])
+                     and not re.match(r'\s*(?:extern|typedef)\b', code[a:b])]
+            definitions = [(a, b) for a, b in found if not re.search(r'\)\s*\{', code[a:b])]
+            if len(definitions) != 1:
+                continue
+            a, b = definitions[0]
+            text = code[a:b]
+            eq = text.find('=')
+            decl = text[:eq] if eq >= 0 else text[:-1]
+            if len(owner.findall(decl)) != 1:
+                continue
+            depth, comma = 0, False
+            for c in decl:
+                depth += c in '([{'
+                depth -= c in ')]}'
+                comma |= c == ',' and depth == 0
+            if comma:
+                continue
+            member = re.sub(r'\b(?:static|extern)\b\s*', '', body[a:a + len(decl)])
+            member = owner.sub('v', member, count=1).strip()
+            if re.search(r'\[\s*\]', member):
+                if not re.fullmatch(r'(?:const\s+)?(?:u8|s8|char|unsigned\s+char|signed\s+char)\s+v\s*\[\s*\]', member):
+                    continue
+                member = re.sub(r'\[\s*\]', '[%d]' % size, member)
+            if lo % 4 == 0 and size % 4 == 0:
+                items = []
+                for i in range(lo, lo + size, 4):
+                    rel = relocs.get(i)
+                    if rel:
+                        alias = rel['symbol'] + '__fzgx_offset_%X' % rel['addend']
+                        declarations.add('extern u8 ' + alias + '[];')
+                        items.append('(u32)' + alias)
+                    else:
+                        items.append('0x%X' % struct.unpack_from('>I', expected, i)[0])
+                first = 'u32 w[%d]' % (size // 4)
+            elif any(lo <= o < lo + size for o in relocs):
+                continue
+            else:
+                first, items = 'u8 w[%d]' % size, ['0x%X' % x for x in expected[lo:lo + size]]
+            lines = '\n'.join(allow_address_words('    ' + ', '.join(items[i:i + 8]) + (',' if i + 8 < len(items) else ''))
+                              for i in range(0, len(items), 8))
+            native = 'fzgx_pool_init_' + name
+            storage = 'static const' if section['name'] == '.rodata' else 'static'
+            definition = (f'{storage} union {{ {first}; {member}; }} {native} = {{{{  '
+                          f'/* fzgx-allow: A1 retail data bytes and bindings */\n{lines}\n}}}};')
+            edits.append((a, b, definition, owner, native))
+    if not edits:
+        return []
+    replacements = []
+    for a, b, definition, owner, native in edits:
+        replacements.append((a, b, definition))
+        for m in owner.finditer(code):
+            if any(x <= m.start() < y for x, y, *_ in edits):
+                continue
+            st = next(((x, y) for x, y in statements if x <= m.start() < y), None)
+            if st and re.match(r'\s*extern\b', code[st[0]:st[1]]):
+                # a redundant extern declaration of the object: only when it declares nothing else
+                if ',' in code[st[0]:st[1]]:
+                    return []
+                end = st[1] + 1 if code[st[1]:st[1] + 1] == '\n' else st[1]
+                replacements.append((st[0], end, ''))
+                continue
+            replacements.append((m.start(), m.end(), native + '.v'))
+    text = body
+    for s, e, value in sorted(set(replacements), reverse=True):
+        text = text[:s] + value + text[e:]
+    if declarations:
+        first = min(a for a, *_ in edits)
+        # the definitions keep their place: the aliases go on the line before the first one,
+        # shifted by the removals above it
+        shift = sum(len(v) - (e - s) for s, e, v in set(replacements) if e <= first)
+        at = text.rfind('\n', 0, first + shift) + 1
+        text = text[:at] + '\n'.join(sorted(declarations)) + '\n' + text[at:]
+    return [(f'retail initializers for defined data objects ({len(edits)} objects)', text)]
+
+
 def string_run(p, symbol, text, cast=''):
     sym = p.resolve(symbol)
     syms = p.symbols(sym.module)
