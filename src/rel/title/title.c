@@ -4647,3 +4647,131 @@ void fn_8_79C0(void) {
     fn_1_4D0D4(fn_8_79C0_white((u8)(s32)(255.0f * sq)), 20.0f);
 }
 /* fzgx:end fn_8_79C0 */
+
+/* fzgx:begin fn_8_81AC */
+#include "rel/title/title.h"
+
+typedef struct {
+    u8 r, g, b, a;
+} TitleColor;
+
+extern s32 lbl_801A66B4;
+extern void fn_8_CC4C(u32, u32);
+extern void fn_1_A2D84(u32);
+extern void fn_1_49410(void);
+extern void fn_1_495B0(u32);
+extern void fn_1_49590(f32);
+extern void fn_1_495C8(u8);
+extern void fn_1_496FC(f32, f32);
+extern void fn_1_4954C(f32);
+extern void fn_1_4955C(f32, f32);
+extern void fn_1_495A0(f32);
+extern void fn_1_4D0A0(void);
+extern void fn_1_4AE0C(const char *, ...);
+extern void fn_1_4D0D4(u32 *, f32);
+
+extern void fzgx_pool_d(f64);
+extern void fzgx_pool_f(f32);
+extern void fzgx_pool_p(void *);
+
+/* literal-pool primer: fixes retail's first-use order of the TU's shared pool */
+#pragma section RX ".fzgxpool"
+__declspec(section ".fzgxpool") void fzgx_pool_primer_fn_8_81AC(s32 k) {
+    fzgx_pool_d(15.0);
+    fzgx_pool_f(320.0f);
+    fzgx_pool_f(640.0f);
+    fzgx_pool_d(1.0);
+    fzgx_pool_f(150.0f);
+    fzgx_pool_f(0.1f);
+    fzgx_pool_f(20.0f);
+    fzgx_pool_f(0.8333333f);
+}
+
+__declspec(section ".fzgxpool") void fzgx_pool_primer2_fn_8_81AC(s32 k) {
+    fzgx_pool_f((f32)k);
+}
+
+__declspec(section ".fzgxpool") void fzgx_pool_primer3_fn_8_81AC(void) {
+    TitleColor c = { 0xFF, 0xFF, 0xFF, 0x00 };
+
+    fzgx_pool_p(&c);
+    fzgx_pool_f(0.0f);
+    fzgx_pool_f(1.0f);
+    fzgx_pool_f(0.5f);
+    fzgx_pool_f(0.09f);
+    fzgx_pool_f(5.0f);
+    fzgx_pool_f(255.0f);
+}
+
+__declspec(section ".fzgxpool") void fzgx_pool_primer4_fn_8_81AC(void) {
+    TitleColor c0 = { 0xFF, 0xFF, 0xFF, 0x00 };
+    TitleColor c1 = { 0xFF, 0xFF, 0xFF, 0x00 };
+    TitleColor c2 = { 0xFF, 0xFF, 0xFF, 0x00 };
+    TitleColor c3 = { 0xFF, 0xFF, 0xFF, 0x00 };
+    TitleColor c4 = { 0xFF, 0xFF, 0xFF, 0x00 };
+    TitleColor c5 = { 0xFF, 0xFF, 0xFF, 0x00 };
+
+    fzgx_pool_p(&c0);
+    fzgx_pool_p(&c1);
+    fzgx_pool_p(&c2);
+    fzgx_pool_p(&c3);
+    fzgx_pool_p(&c4);
+    fzgx_pool_p(&c5);
+}
+
+__declspec(section ".fzgxpool") void fzgx_pool_primer5_fn_8_81AC(void) {
+    fzgx_pool_f(0.3f);
+}
+
+__declspec(section ".fzgxpool") void fzgx_pool_primer6_fn_8_81AC(void) {
+    TitleColor c = { 0xFF, 0xFF, 0xFF, 0x00 };
+
+    fzgx_pool_p(&c);
+}
+
+void fn_8_81AC(void) {
+    s32 x;
+    f32 t;
+    f32 fade;
+    TitleColor arg;
+    TitleColor color;
+
+    if ((s32)lbl_8_bss_3CC == (s32)lbl_8_bss_3D0.unk_0 - 1) {
+        fn_1_A2D84(0xA9120C00);
+    }
+    if ((s32)lbl_8_bss_3CC < 15.0) {
+        t = 1.0 - (f32)(s32)lbl_8_bss_3CC / 15.0;
+        x = 320.0f + (f32)(640.0f * t);
+    } else if ((s32)lbl_8_bss_3CC > (s32)lbl_8_bss_3D0.unk_0 - 15.0) {
+        t = 1.0 - (f32)(s32)(lbl_8_bss_3D0.unk_0 - lbl_8_bss_3CC) / 15.0;
+        x = 320.0f - (f32)(640.0f * t);
+    } else {
+        t = 0.0f;
+        x = 320;
+    }
+    fade = (1.0f - t) * (1.0f - t);
+
+    fn_1_49410();
+    fn_1_495B0(0x80000000);
+    fn_1_49590(0.5f);
+    fn_1_495C8(9);
+    fn_1_496FC((f32)x, 150.0f);
+    fn_1_4954C(0.09f);
+    if (lbl_801A66B4 == 5) {
+        fn_1_4955C(1.0f, 1.0f);
+    } else {
+        fn_1_4955C(0.8333333f, 0.8333333f);
+    }
+    fn_1_495A0(fade);
+    fn_1_4D0A0();
+    fn_1_4AE0C(((const char **)lbl_8_data_87DC)[lbl_801A66B4]);
+    fn_1_4AE0C(((const char **)lbl_8_data_8840)[lbl_801A66B4]);
+    color = (TitleColor){ 0xFF, 0xFF, 0xFF, 0x00 };
+    color.a = 255.0f * fade;
+    arg = color;
+    fn_1_4D0D4((u32 *)&arg, 20.0f);
+    if ((s32)lbl_8_bss_3CC < 240 && (s32)lbl_8_bss_3CC > 0) {
+        fn_8_CC4C(505, 394);
+    }
+}
+/* fzgx:end fn_8_81AC */

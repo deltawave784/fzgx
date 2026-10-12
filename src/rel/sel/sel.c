@@ -1452,6 +1452,99 @@ void fn_10_4A84(void) {
 }
 /* fzgx:end fn_10_4A84 */
 
+/* fzgx:begin fn_10_4AE0 */
+typedef struct Sig_fn_1_152840_Entry {
+    s16 id;
+    u8 pad[2];
+    u32 flags;
+} Sig_fn_1_152840_Entry;
+extern int fn_1_152840(s16, Sig_fn_1_152840_Entry *, s16, s16);
+extern void fn_1_12C0EC(void *);
+
+typedef struct {
+    u8 pad0[0x4];
+    s16 unk4;
+    u8 pad6[0x8];
+    s16 unkE;
+    u8 pad10[0x10];
+} SelEntry;
+
+typedef struct {
+    SelEntry e[4];
+    u8 pad80[0x14];
+    u32 unk94;
+    u8 pad98[0x6];
+    u8 unk9E;
+    u8 pad9F[0x5];
+    u8 *unkA4;
+} SelState;
+
+typedef struct {
+    u8 pad0[0x18];
+    s16 unk18;
+    s16 unk1A;
+    Sig_fn_1_152840_Entry unk1C[1];
+} SelCursor;
+
+extern SelState lbl_1_bss_8B3A0;
+extern SelCursor lbl_10_bss_0;
+extern s16 lbl_10_data_55C[];
+extern s16 lbl_10_data_554[];
+extern u32 lbl_1_bss_980[];
+extern s16 lbl_1_bss_962;
+
+s16 fn_10_4AE0(s16 player, s16 count) {
+    u64 masks[4];
+    SelCursor *cur;
+    s32 idx;
+    s16 i;
+    s16 sel;
+    u32 v;
+
+    idx = player;
+    cur = &lbl_10_bss_0;
+    sel = lbl_1_bss_8B3A0.e[player].unkE;
+    if (sel == -1) {
+        if (lbl_1_bss_8B3A0.unk94 & 0x40000000) {
+            sel = lbl_10_data_55C[player];
+        } else {
+            sel = lbl_10_data_554[player];
+        }
+    }
+
+    masks[player] = 0;
+    for (i = 0; i < 4; i++) {
+        if (player != i) {
+            if ((s16)fn_1_152840(lbl_1_bss_8B3A0.e[i].unkE, cur->unk1C, cur->unk1A, cur->unk18) == 1) {
+                masks[player] |= 1 << lbl_1_bss_8B3A0.e[i].unkE;
+            }
+        }
+    }
+
+    v = lbl_1_bss_980[player];
+    if (v == 0x9000000 || v == 0x88000000 || v == 0x8B100000 || v == 0x8000000 ||
+        player == lbl_1_bss_8B3A0.unk9E) {
+        if (lbl_1_bss_8B3A0.e[0].unk4 > count) {
+            if (lbl_1_bss_8B3A0.unk94 & 0x10000000) {
+                while (!(s16)fn_1_152840(sel, cur->unk1C, cur->unk1A, cur->unk18) ||
+                       ((1 << sel) & masks[player])) {
+                    sel = (sel + 1) % 41;
+                }
+            }
+            lbl_1_bss_8B3A0.e[player].unkE = sel;
+            count++;
+        } else {
+            lbl_1_bss_8B3A0.e[player].unkE = -1;
+            fn_1_12C0EC(lbl_1_bss_8B3A0.unkA4 + (lbl_1_bss_962 - 14) * 0x94 + idx * 0x1c + 0x24);
+        }
+    } else {
+        lbl_1_bss_8B3A0.e[player].unkE = -1;
+        fn_1_12C0EC(lbl_1_bss_8B3A0.unkA4 + (lbl_1_bss_962 - 14) * 0x94 + idx * 0x1c + 0x24);
+    }
+    return count;
+}
+/* fzgx:end fn_10_4AE0 */
+
 /* fzgx:begin fn_10_4D78 */
 #include "rel/sel/sel.h"
 
