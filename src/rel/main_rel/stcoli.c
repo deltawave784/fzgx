@@ -5563,6 +5563,99 @@ void fn_1_2D888(fn_1_2D888_Box *box) {
 }
 /* fzgx:end fn_1_2D888 */
 
+/* fzgx:begin fn_1_2E1B8 pool noprologue */
+#include "types.h"
+
+struct fn_1_2E1B8_t {
+    u8 pad_0[0xC0];
+    u32 (*unk_C0)(void);
+};
+
+struct fn_1_2E1B8_s {
+    u8 pad_0[0xC];
+    s32 unk_C;
+    u8 pad_10[0x20];
+    struct fn_1_2E1B8_t t;
+    u8 pad_F4[0x13F4];
+    u16 unk_14E8;
+};
+
+extern int fn_1_4C10(void);
+extern u32 lbl_1_bss_25B9C;
+extern u32 fn_1_304A8(void);
+extern u32 fn_1_4060(void);
+
+/* file-scope objects of the retail TU, in retail order: MWCC addresses them off one section base */
+u32 fzgx_obj_lbl_1_bss_3C00;
+u32 fzgx_obj_lbl_1_bss_3C04;
+u32 lbl_1_bss_3C08;
+s32 lbl_1_bss_3C08_4;
+u8 lbl_1_bss_3C10;
+u8 fzgx_obj_lbl_1_bss_3C11;
+u16 fzgx_obj_lbl_1_bss_3C12;
+u32 lbl_1_bss_3C12_fill_3C14[2];
+u32 fzgx_obj_lbl_1_bss_3C1C[3];
+u16 lbl_1_bss_3C1C_fill_3C28;
+u16 fzgx_obj_lbl_1_bss_3C2A;
+u32 lbl_1_bss_3C2A_fill_3C2C;
+struct fn_1_2E1B8_t fzgx_obj_lbl_1_bss_3C30;
+u32 lbl_1_bss_3C30_fill_3CF4[1277];
+u16 lbl_1_bss_3C30_14B8;
+u16 lbl_1_bss_3C30_fill_50EA;
+
+#pragma section code_type ".fzgxpool"
+static void fzgx_bss_layout(void) {
+    volatile u8 s;  /* fzgx-allow: S2 layout primer sink: MWCC emits .bss objects in first-access order */
+    s = *(u8 *)&fzgx_obj_lbl_1_bss_3C00;
+    s = *(u8 *)&fzgx_obj_lbl_1_bss_3C04;
+    s = *(u8 *)&lbl_1_bss_3C08;
+    s = *(u8 *)&lbl_1_bss_3C08_4;
+    s = *(u8 *)&lbl_1_bss_3C10;
+    s = *(u8 *)&fzgx_obj_lbl_1_bss_3C11;
+    s = *(u8 *)&fzgx_obj_lbl_1_bss_3C12;
+    s = *(u8 *)&lbl_1_bss_3C12_fill_3C14;
+    s = *(u8 *)&fzgx_obj_lbl_1_bss_3C1C;
+    s = *(u8 *)&lbl_1_bss_3C1C_fill_3C28;
+    s = *(u8 *)&fzgx_obj_lbl_1_bss_3C2A;
+    s = *(u8 *)&lbl_1_bss_3C2A_fill_3C2C;
+    s = *(u8 *)&fzgx_obj_lbl_1_bss_3C30;
+    s = *(u8 *)&lbl_1_bss_3C30_fill_3CF4;
+    s = *(u8 *)&lbl_1_bss_3C30_14B8;
+    s = *(u8 *)&lbl_1_bss_3C30_fill_50EA;
+}
+#pragma section code_type ".text"
+
+#pragma opt_lifetimes off
+void fn_1_2E1B8(void) {
+    u32 (* fzgx_live)(void);
+    
+    struct fn_1_2E1B8_t *q;
+    u32 v;
+    if (fn_1_4C10() == 0) {
+        lbl_1_bss_3C30_14B8 = 45;
+        if (lbl_1_bss_3C08_4 != 0) {
+            q = &fzgx_obj_lbl_1_bss_3C30;
+            lbl_1_bss_25B9C = 0;
+            if ((fzgx_live = q->unk_C0) != 0) {
+                v = fzgx_live();
+                if (v & 4) {
+                    lbl_1_bss_25B9C = 1;
+                }
+                if (v & 2) {
+                    fn_1_304A8();
+                }
+                if (v & 1) {
+                    return;
+                }
+            }
+            lbl_1_bss_3C08_4 = 0;
+        }
+        fn_1_4060();
+    }
+}
+#pragma opt_lifetimes reset
+/* fzgx:end fn_1_2E1B8 */
+
 /* fzgx:begin fn_1_2E268 */
 #include "rel/main_rel/stcoli.h"
 
