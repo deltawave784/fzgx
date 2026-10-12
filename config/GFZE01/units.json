@@ -59971,6 +59971,16 @@
   },
   {
     "module": "movie_module",
+    "source": "rel/movie_module/fn_12_2F730.c",
+    "symbols": [
+      "fn_12_2F730"
+    ],
+    "status": "matching",
+    "mw_version": "GC/1.3.2",
+    "extra_cflags": []
+  },
+  {
+    "module": "movie_module",
     "source": "rel/movie_module/fn_12_2F7AC.c",
     "symbols": [
       "fn_12_2F7AC"
@@ -62043,6 +62053,22 @@
       "-use_lmw_stmw",
       "on"
     ]
+  },
+  {
+    "module": "movie_module",
+    "source": "rel/movie_module/fn_12_39678.c",
+    "symbols": [
+      "fn_12_39678"
+    ],
+    "status": "matching",
+    "mw_version": "GC/1.3.2",
+    "extra_cflags": [
+      "-use_lmw_stmw",
+      "on"
+    ],
+    "pool": {
+      "...rodata.0": "lbl_12_rodata_2480"
+    }
   },
   {
     "module": "movie_module",
