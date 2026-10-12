@@ -7286,3 +7286,9 @@ rel/main_rel/enemy_ctrl/fn_1_C742C.c:
 
 rel/main_rel/enemy_ctrl/fn_1_CFCA4.c:
 	.text       start:0x000CFCA4 end:0x000CFF94 align:4
+
+rel/main_rel/memcard/fn_1_C17D0.c:
+	.text       start:0x000C17D0 end:0x000C1ACC align:4
+
+rel/main_rel/memcard/fn_1_C0B0C.c:
+	.text       start:0x000C0B0C end:0x000C0E00 align:4

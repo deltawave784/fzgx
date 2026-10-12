@@ -9691,6 +9691,77 @@ void fn_1_C0510(Fn1C0510Obj *obj) {
 }
 /* fzgx:end fn_1_C0510 */
 
+/* fzgx:begin fn_1_C0B0C noprologue */
+#include "types.h"
+#include "rel/main_rel/memcard.h"
+
+extern void *lbl_801A6410;
+extern void fn_80008BA8(u32, u32, u32);
+
+typedef struct {
+    u32 unk_0;
+    u32 unk_4;
+    u32 unk_8;
+    u32 unk_C;
+    u8 pad_10[0xA];
+    s16 unk_1A;
+    s16 unk_1C;
+} MemcardRequest;
+
+typedef struct {
+    u8 unk_0;
+    u8 state;
+    u8 text[0x2A];
+    u32 unk_2C;
+} MemcardEntry;
+
+// Reads `len` uppercase hexadecimal digits, most significant first.
+static inline u32 parse_hex(u8 *text, s32 len) {
+    s32 i;
+    u32 c;
+    u32 value;
+
+    value = 0;
+    for (i = 0; i < len; i++, text++) {
+        c = *text;
+        if (c >= 'A' && c <= 'F') {
+            c -= 'A' - 10;
+        } else {
+            c -= '0';
+        }
+        value += c << ((len - 1 - i) << 2);
+    }
+    return value;
+}
+
+// Parses the entry's hexadecimal size field and reallocates the request buffer.
+void fn_1_C0B0C(MemcardRequest *req) {
+    MemcardEntry *entry;
+    u32 value;
+    s32 i;
+
+    entry = (MemcardEntry *)((u8 *)&lbl_1_bss_77380 + req->unk_1A * 0x1800 + req->unk_1C * 0x30);
+    if (entry->state == 2) {
+        req->unk_C = 0x3ea8;
+    } else if (entry->state == 4) {
+        req->unk_C = parse_hex(entry->text, 5);
+    } else if (entry->state == 5) {
+        req->unk_C = parse_hex(entry->text, 8);
+    }
+
+    if (req->unk_8 != 0) {
+        fn_1_46B4((u32)lbl_801A6410, req->unk_8, (const char *)&lbl_1_data_3C7B8, 0x31ea);
+        req->unk_8 = 0;
+    }
+    if (entry->unk_2C != 0) {
+        req->unk_8 = fn_1_4630((u32)lbl_801A6410, req->unk_C, (const char *)&lbl_1_data_3C7B8, 0x31ef);
+        fn_80008BA8(req->unk_8, entry->unk_2C, req->unk_C);
+    } else {
+        req->unk_8 = 0;
+    }
+}
+/* fzgx:end fn_1_C0B0C */
+
 /* fzgx:begin fn_1_C132C */
 void fn_1_C132C(Fn1C132CObject *object, u8 *data) {
     u8 local[0x24];
@@ -9707,6 +9778,73 @@ void fn_1_C132C(Fn1C132CObject *object, u8 *data) {
 void fn_1_C17CC(void) {
 }
 /* fzgx:end fn_1_C17CC */
+
+/* fzgx:begin fn_1_C17D0 noprologue */
+#include "rel/main_rel/memcard.h"
+
+extern u8 lbl_1_bss_716C0;
+extern u32 lbl_801A6410;
+extern void fn_1_46B4(u32, u32, const char *, int);
+extern u32 fn_1_4630(u32, u32, const char *, int);
+extern char *strncpy(char *, const char *, size_t);
+extern void fn_80008BA8(u32, u32, u32);
+
+typedef struct {
+    u8 unk_0;
+    u8 unk_1;
+    char unk_2[0x22];
+    u32 unk_24;
+    u32 unk_28;
+    u32 unk_2C;
+} McFile;
+
+/* Parses n hexadecimal digits (upper case) into a value. */
+static inline u32 hex_to_u32(u8 *s, s32 n)
+{
+    s32 i;
+    u32 c;
+    u32 v = 0;
+
+    for (i = 0; i < n; i++, s++) {
+        c = *s;
+        if (c >= 'A' && c <= 'F') {
+            c -= 0x37;
+        } else {
+            c -= 0x30;
+        }
+        v += c << ((n - 1 - i) * 4);
+    }
+    return v;
+}
+
+void fn_1_C17D0(u32 arg0, McFile *file, McFile *src)
+{
+    u32 size;
+    u8 *base = &lbl_1_bss_716C0 + 0x10000;
+
+    file->unk_1 = *(u32 *)(base - 0x6B0C);
+    file->unk_24 = *(u32 *)(base - 0x6B08);
+    file->unk_28 = *(u32 *)(base - 0x6B30);
+    strncpy(file->unk_2, (const char *)(base - 0x6B2C), 0x20);
+
+    if (file->unk_1 == 2) {
+        size = 0x3EA8;
+    } else if (file->unk_1 == 4) {
+        size = hex_to_u32((u8 *)file->unk_2, 5);
+    } else if (file->unk_1 == 5) {
+        size = hex_to_u32((u8 *)file->unk_2, 8);
+    }
+
+    if (file->unk_2C != 0) {
+        fn_1_46B4(lbl_801A6410, file->unk_2C, (const char *)&lbl_1_data_3C7B8, 0x32E5);
+        file->unk_2C = 0;
+    }
+    file->unk_2C = fn_1_4630(lbl_801A6410, size, (const char *)&lbl_1_data_3C7B8, 0x32E8);
+    if (src->unk_2C != 0) {
+        fn_80008BA8(file->unk_2C, src->unk_2C, size);
+    }
+}
+/* fzgx:end fn_1_C17D0 */
 
 /* fzgx:begin fn_1_C1ACC noprologue */
 #include "types.h"
