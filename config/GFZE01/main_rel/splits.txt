@@ -7292,3 +7292,9 @@ rel/main_rel/memcard/fn_1_C17D0.c:
 
 rel/main_rel/memcard/fn_1_C0B0C.c:
 	.text       start:0x000C0B0C end:0x000C0E00 align:4
+
+rel/main_rel/_prolog/fn_1_17C8.c:
+	.text       start:0x000017C8 end:0x00001ACC align:4
+
+rel/main_rel/sel_static_disp/fn_1_143F5C.c:
+	.text       start:0x00143F5C end:0x00144254 align:4

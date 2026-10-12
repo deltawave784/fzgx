@@ -537,6 +537,70 @@ void fn_1_1300(void) {
 }
 /* fzgx:end fn_1_1300 */
 
+/* fzgx:begin fn_1_17C8 pool noprologue */
+#include "types.h"
+
+typedef struct {
+    s8 x;
+    s8 y;
+} StickPoint;
+
+/* Ideal octagonal gate of the control stick. */
+static const StickPoint lbl_1_rodata_70[8] = {
+    { 108, 0 }, { 108, 108 }, { 0, 108 }, { -108, 108 },
+    { -108, 0 }, { -108, -108 }, { 0, -108 }, { 108, -108 },
+};
+const u8 fzgx_rodata_80[0x28] = {
+    0x00, 0x10, 0x00, 0x04, 0x00, 0x20, 0x80, 0x00,
+    0x00, 0x20, 0x00, 0x00, 0x00, 0x10, 0x00, 0x00,
+    0x80, 0x00, 0x00, 0x00, 0x80, 0x00, 0x00, 0x00,
+    0x00, 0x00, 0x08, 0x00, 0x3e, 0xc8, 0xc8, 0xc9,
+    0x43, 0x30, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+};
+
+void fn_1_17C8(s8 *outX, s8 *outY, StickPoint *gate, u8 *dz) {
+    s32 i;
+    for (i = 0; i < 8; i++) {
+        f32 inv;
+        f32 s;
+        f32 t;
+        s32 j = (i == 7) ? 0 : i + 1;
+        f32 x0 = gate[i].x;
+        f32 y0 = gate[i].y;
+        f32 x1 = gate[j].x;
+        f32 y1 = gate[j].y;
+        f32 det = (f32)(x0 * y1) - (f32)(x1 * y0);
+        s32 n;
+        s32 neg;
+        s32 q;
+        s32 c;
+        s32 sign;
+        if (__fabs(det) < 1.1920928955078125e-07) {
+            continue;
+        }
+        inv = 1.0f / det;
+        s = inv * ((f32)(y1 * *outX) - (f32)(x1 * *outY));
+        t = inv * ((f32)(-y0 * *outX) + (f32)(x0 * *outY));
+        if (s < 0.0f || t < 0.0f) {
+            continue;
+        }
+        n = (f32)(s * lbl_1_rodata_70[i].x) + (f32)(t * lbl_1_rodata_70[j].x);
+        neg = (u32)n >> 31;
+        q = ((__abs(n) - dz[0]) * 100) / (100 - dz[0]);
+        c = q < 0 ? 0 : (q > 100 ? 100 : q);
+        sign = neg ? -1 : 1;
+        *outX = sign * c;
+        n = (f32)(s * lbl_1_rodata_70[i].y) + (f32)(t * lbl_1_rodata_70[j].y);
+        neg = (u32)n >> 31;
+        q = ((__abs(n) - dz[1]) * 100) / (100 - dz[1]);
+        c = q < 0 ? 0 : (q > 100 ? 100 : q);
+        sign = neg ? -1 : 1;
+        *outY = sign * c;
+        return;
+    }
+}
+/* fzgx:end fn_1_17C8 */
+
 /* fzgx:begin fn_1_1C00 */
 void fn_1_1C00(const u8 *values, u32 flags, u16 *result) {
     u8 value0;
