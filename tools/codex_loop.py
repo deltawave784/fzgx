@@ -303,6 +303,36 @@ def merge_appended(path: str, text: str):
     return "\n".join(out)
 
 
+def merge_units(text: str):
+    """Resolve units.json conflict hunks where each side added one complete unit object and git folded the shared
+    trailing fields (`"pool": true`) into the hunk. Each hunk becomes two complete objects. None unless the result
+    parses and no (module, symbols) pair is repeated, which also rejects anything that is not a plain two-sided add."""
+    lines = text.replace("\r\n", "\n").split("\n")
+    out, i = [], 0
+    while i < len(lines):
+        if not lines[i].startswith("<<<<<<< "):
+            out.append(lines[i])
+            i += 1
+            continue
+        mid = next((j for j in range(i, len(lines)) if lines[j] == "======="), None)
+        end = next((j for j in range(mid or i, len(lines)) if lines[j].startswith(">>>>>>> ")), None)
+        if mid is None or end is None or end + 1 >= len(lines) or not out:
+            return None
+        header, tail = out[-1], lines[end + 1]
+        if not header.strip().startswith('"module":') or not tail.strip().startswith('"pool":'):
+            return None
+        out += lines[i + 1:mid] + [tail, "  },", "  {", header] + lines[mid + 1:end]
+        i = end + 1
+    merged = "\n".join(out)
+    try:
+        data = json.loads(merged)
+    except ValueError:
+        return None
+    units = data if isinstance(data, list) else data.get("units", data)
+    keys = [(u.get("module"), tuple(u.get("symbols", []))) for u in units]
+    return merged if len(keys) == len(set(keys)) else None
+
+
 def sync_from_a() -> str:
     """Pull clone A's commits (its tooling fixes, its matches, its Claude attempts). Returns 'current', 'merged',
     'dirty' (this tree has uncommitted work), 'conflict' (needs a person) or 'failed' (the merged tree did not pass)."""
@@ -320,8 +350,13 @@ def sync_from_a() -> str:
             return "failed"
         fixed = {}
         for f in files:
-            ok = f.startswith("config/GFZE01/") and f.endswith(("splits.txt", "symbols.txt"))
-            merged = merge_appended(f, (ROOT / f).read_text(encoding="utf-8")) if ok else None
+            text = (ROOT / f).read_text(encoding="utf-8") if f.startswith("config/GFZE01/") else ""
+            if f == "config/GFZE01/units.json":
+                merged = merge_units(text)
+            elif f.endswith(("splits.txt", "symbols.txt")):
+                merged = merge_appended(f, text)
+            else:
+                merged = None
             if merged is None:
                 log(f"sync with clone A: {f} conflicts and is not a pure append; the merge is left for a person")
                 return "conflict"
