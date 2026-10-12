@@ -39,7 +39,13 @@ Before 2026-10-10: A owned `main_rel`; B owned `main`, `movie_module`, `customiz
 
 (1,070 of the 2,121 unmatched functions are in `main_rel`; the rest is spread across the other modules.)
 
-**Split by function, not module (2026-10-10, proposed from the Codex side, confirmed by clone A).** Clone A routes every
+**2026-10-12: the function split below is LIFTED.** Clone B (Codex) is stopped (its Sol and Astra pools were empty and the
+yield was about 1 to 2 matches a day) and `.fzgx/STOP` is left in the Codex clone so it cannot start by accident. Clone A
+routes every function again: the `--max-size 768` ceiling is gone from its Opus route. Do not restart `tools/codex_loop.py`
+without agreeing a new split here first, or both clones will claim the same functions and append conflicting entries to
+`splits.txt`, `units.json` and `symbols.txt`.
+
+**Split by function, not module (2026-10-10, proposed from the Codex side, confirmed by clone A; in force until 2026-10-12).** Clone A routes every
 module, so a module split cannot keep the clones apart; a split by function can. Clone B (Sol, or Astra one agent at a
 time) takes only functions that are **over 768 B, have a best recorded score under 85%, and were never attempted by a
 Claude tier** (an `opus-`, `sonnet-`, `fable-` or `haiku-` agent id in the committed `state/ledger.json`), in every

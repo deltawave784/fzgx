@@ -82,9 +82,10 @@ One batch = steps 1-5 above with these changes:
   `model: fable`, prompt `SYMBOL=<symbol> AGENT_ID=fable-<symbol>-<YYYYMMDD><batch letter>` (2 Fable agents: changed
   2026-10-06 from 8 to 4 and 2026-10-08 from 4 to 2 because Fable was spent too fast).
 - Alongside them, in the same batch, run **6 Opus agents** (2026-10-10, user request): pick with
-  `uv run tools/fzgx.py route --easy --tier opus --max-size 768 --max-attempts 3 --json --limit 8` (every module;
-  `--max-size 768` keeps off clone B's slice: functions over 768 B scoring under 85% that no Claude tier tried,
-  see docs/COLLABORATION.md), drop the Fable
+  `uv run tools/fzgx.py route --easy --tier opus --max-attempts 3 --json --limit 8` (every module, any size: clone B
+  (Codex) stopped on 2026-10-12 and its slice, functions over 768 B scoring under 85% that no Claude tier tried,
+  is open to this loop again; `--easy` still takes the smallest first, so big ones come up last; see
+  docs/COLLABORATION.md), drop the Fable
   rows and any second row of the same clone family, take 6, dispatch with `subagent_type: matcher-large` and
   `model: opus`, ids `opus-<symbol>-<YYYYMMDD><batch letter>`. All 8 agents run at once.
 - Close the batch: `reuse --max-size 2048`, then for each module that had a release in the batch
