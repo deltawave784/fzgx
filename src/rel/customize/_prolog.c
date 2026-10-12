@@ -947,6 +947,128 @@ u32 fn_3_3E58(u32 arg0, u32 arg1, u32 arg2, u32 arg3) {
 }
 /* fzgx:end fn_3_3E58 */
 
+/* fzgx:begin fn_3_3F20 noprologue */
+#include "types.h"
+
+struct fn_3_3F20_lbl_3_bss_F0 {
+    u32 unk_0;
+    s16 unk_4;
+    s16 unk_6;
+    u8 pad_8[0x1C];
+    u32 unk_24;
+};
+
+/* 20-byte input record */
+struct fn_3_3F20_pad {
+    u8 pad_0[0x8];
+    u16 unk_8;
+    u8 pad_A[0x6];
+    u16 unk_10;
+    u16 unk_12;
+};
+
+extern int fn_1_4C10(void);
+extern void fn_1_4A00(s32, u8, u32);
+extern void fn_1_A2D84(u32);
+extern s32 lbl_3_bss_120;
+extern u32 lbl_3_bss_20850;
+extern struct fn_3_3F20_lbl_3_bss_F0 lbl_3_bss_F0;
+extern s16 lbl_1_bss_96A;
+extern struct fn_3_3F20_pad lbl_1_bss_9F8[];
+extern u32 lbl_3_bss_243A8;
+extern u32 lbl_801A66A8;
+
+static inline int fn_3_3F20_busy(void) {
+    u32 flags = lbl_3_bss_F0.unk_24;
+    if ((flags & 0x80000000) && !(flags & 1) && !(lbl_3_bss_F0.unk_0 & 2)) {
+        return 1;
+    }
+    if (fn_1_4C10() != 0) {
+        return 1;
+    }
+    return 0;
+}
+
+/* volatile: the hardware-fed button word is re-read for every test (retail reloads it) */
+static inline int fn_3_3F20_bit(volatile u16 *word, int bit) {
+    return (*word >> bit) & 1;
+}
+
+static inline void fn_3_3F20_input(s16 init) {
+    struct fn_3_3F20_lbl_3_bss_F0 *state;
+    s16 dir;
+    s16 delta;
+    s32 idx;
+    s32 next;
+
+    dir = init;
+    delta = dir;
+    idx = lbl_3_bss_F0.unk_6;
+    if ((lbl_1_bss_9F8[idx].unk_10 & 1) || (lbl_1_bss_9F8[idx].unk_12 & 1)) {
+        delta--;
+        fn_1_A2D84(0xA9010000);
+        lbl_801A66A8 = 0;
+    }
+    if ((lbl_1_bss_9F8[idx].unk_10 >> 1 & 1) || (lbl_1_bss_9F8[idx].unk_12 >> 1 & 1)) {
+        delta++;
+        fn_1_A2D84(0xA9010000);
+        lbl_801A66A8 = 0;
+    }
+
+    state = &lbl_3_bss_F0;
+    next = state->unk_4 + delta;
+    state->unk_4 = (next > 2) ? 0 : (next < 0) ? 2 : next;
+
+    if (fn_3_3F20_bit(&lbl_1_bss_9F8[idx].unk_8, 8)) {
+        dir = 1;
+        fn_1_A2D84(0xA9010100);
+    } else if (fn_3_3F20_bit(&lbl_1_bss_9F8[idx].unk_8, 9)) {
+        fn_1_A2D84(0xA9010200);
+        dir = -1;
+    }
+
+    if (dir != 0) {
+        fn_1_4A00(0, 15, lbl_3_bss_20850);
+        lbl_3_bss_243A8 = 0;
+    }
+    if (dir == -1) {
+        lbl_3_bss_120 = 0x5E;
+    } else if (dir == 1) {
+        switch (state->unk_4) {
+        case 0:
+            lbl_3_bss_120 = 0x5E;
+            break;
+        case 1:
+            lbl_3_bss_120 = 100;
+            break;
+        case 2:
+            lbl_3_bss_120 = 110;
+            break;
+        default:
+            lbl_3_bss_120 = 0x5E;
+            break;
+        }
+    }
+}
+
+void fn_3_3F20(void) {
+
+    if (lbl_3_bss_120 == -1) {
+        fn_1_4C10();
+    }
+    if (fn_3_3F20_busy()) {
+        return;
+    }
+    if (lbl_3_bss_120 != -1) {
+        lbl_1_bss_96A = lbl_3_bss_120;
+        lbl_3_bss_120 = -1;
+        return;
+    }
+
+    fn_3_3F20_input(0);
+}
+/* fzgx:end fn_3_3F20 */
+
 /* fzgx:begin fn_3_41B0 */
 void fn_3_41B0(void) {
     if (lbl_3_data_B8 != -1) {

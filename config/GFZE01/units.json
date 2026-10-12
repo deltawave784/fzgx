@@ -454,6 +454,17 @@
   },
   {
     "module": "customize",
+    "source": "rel/customize/_prolog/fn_3_3F20.c",
+    "symbols": [
+      "fn_3_3F20"
+    ],
+    "status": "matching",
+    "mw_version": "GC/1.3",
+    "extra_cflags": [],
+    "tu": "rel/customize/_prolog.c"
+  },
+  {
+    "module": "customize",
     "source": "rel/customize/_prolog/fn_3_41B0.c",
     "symbols": [
       "fn_3_41B0"
