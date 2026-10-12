@@ -645,6 +645,138 @@ void fn_1_9E5B8(Obj_1_bss_6EA80_Target *node) {
 }
 /* fzgx:end fn_1_9E5B8 */
 
+/* fzgx:begin fn_1_9EA94 noprologue */
+#include "types.h"
+#include "dolphin/types.h"
+#include "dolphin/hw_regs.h"
+#include "dolphin/gx.h"
+
+/* FIFO writes use the canonical hardware FIFO definition. */
+#define WGPIPE GXWGFifo
+struct fn_1_9EA94_Arg0 { u8 pad_0[0xC]; f32 unk_C; };
+/* Reload shared pool operands at each hardware FIFO write. */
+extern volatile f32 lbl_1_rodata_42D0;
+extern volatile f32 lbl_1_rodata_42D4; /* Reload after each hardware FIFO store. */
+extern s32 fn_1_54E34(void *, f32);
+extern u32 GXLoadPosMtxImm(u32, u32);
+extern u32 lbl_801A6D00;
+extern void fn_8003462C(u32,u32,u32);
+extern void fn_8007245C(u32);
+extern void fn_800724C8(void);
+extern void fn_800736C0(u32,void *);
+extern void lbl_8006D758(void);
+extern void lbl_8006DAEC(void);
+extern void lbl_8006DB30(void);
+extern void lbl_8006E0A4(void *);
+extern void lbl_8006E1D8(u32,f32,f32,f32);
+extern void mathutil_mtxA_rotate_z(s32);
+void fn_1_9EA94(struct fn_1_9EA94_Arg0 *arg0) {
+    s32 v0;
+    f32 v1;
+    f32 v3;
+    f32 v2;
+    /* Vertex reads are sequenced with hardware FIFO writes. */
+    volatile f32 loc_30[3]; /* Sequence vertex reads with hardware FIFO writes. */
+    volatile f32 loc_24[3]; /* Sequence vertex reads with hardware FIFO writes. */
+    volatile f32 loc_18[3]; /* Sequence vertex reads with hardware FIFO writes. */
+    volatile f32 loc_C[3]; /* Sequence vertex reads with hardware FIFO writes. */
+    u32 loc_8;
+    if (fn_1_54E34(arg0, arg0->unk_C) == 0) {
+        *(u16 *)((u8 *)arg0 + 18) |= 1;
+    } else {
+        *(u16 *)((u8 *)arg0 + 18) &= 0xFFFE;
+        fn_800724C8();
+        fn_8007245C(8704);
+        lbl_8006DAEC();
+        lbl_8006D758();
+        GXLoadPosMtxImm(lbl_801A6D00,0);
+        lbl_8006DB30();
+        loc_8 = *(u32 *)((u8 *)arg0 + 20);
+        fn_800736C0(0,&loc_8);
+        fn_8003462C(144,0,8);
+        WGPIPE.f32 = lbl_1_rodata_42D0;
+        WGPIPE.f32 = lbl_1_rodata_42D0;
+        WGPIPE.f32 = lbl_1_rodata_42D0;
+        WGPIPE.f32 = lbl_1_rodata_42D0;
+        WGPIPE.f32 = lbl_1_rodata_42D0;
+        WGPIPE.f32 = lbl_1_rodata_42D0;
+        WGPIPE.f32 = lbl_1_rodata_42D0;
+        WGPIPE.f32 = lbl_1_rodata_42D0;
+        WGPIPE.f32 = lbl_1_rodata_42D0;
+        WGPIPE.f32 = lbl_1_rodata_42D0;
+        WGPIPE.f32 = lbl_1_rodata_42D0;
+        WGPIPE.f32 = lbl_1_rodata_42D0;
+        WGPIPE.f32 = lbl_1_rodata_42D0;
+        WGPIPE.f32 = lbl_1_rodata_42D0;
+        WGPIPE.f32 = lbl_1_rodata_42D0;
+        WGPIPE.f32 = lbl_1_rodata_42D0;
+        WGPIPE.f32 = lbl_1_rodata_42D0;
+        WGPIPE.f32 = lbl_1_rodata_42D0;
+        WGPIPE.f32 = lbl_1_rodata_42D0;
+        WGPIPE.f32 = lbl_1_rodata_42D0;
+        WGPIPE.f32 = lbl_1_rodata_42D0;
+        WGPIPE.f32 = lbl_1_rodata_42D0;
+        WGPIPE.f32 = lbl_1_rodata_42D0;
+        WGPIPE.f32 = lbl_1_rodata_42D0;
+        WGPIPE.f32 = lbl_1_rodata_42D0;
+        WGPIPE.f32 = lbl_1_rodata_42D0;
+        WGPIPE.f32 = lbl_1_rodata_42D0;
+        WGPIPE.f32 = lbl_1_rodata_42D0;
+        WGPIPE.f32 = lbl_1_rodata_42D0;
+        WGPIPE.f32 = lbl_1_rodata_42D0;
+        WGPIPE.f32 = lbl_1_rodata_42D0;
+        WGPIPE.f32 = lbl_1_rodata_42D0;
+        WGPIPE.f32 = lbl_1_rodata_42D0;
+        WGPIPE.f32 = lbl_1_rodata_42D0;
+        WGPIPE.f32 = lbl_1_rodata_42D0;
+        WGPIPE.f32 = lbl_1_rodata_42D0;
+        WGPIPE.f32 = lbl_1_rodata_42D0;
+        WGPIPE.f32 = lbl_1_rodata_42D0;
+        WGPIPE.f32 = lbl_1_rodata_42D0;
+        WGPIPE.f32 = lbl_1_rodata_42D0;
+        fn_8003462C(128,0,4);
+        v2 = arg0->unk_C;
+        v3 = -v2;
+        lbl_8006DAEC();
+        lbl_8006E0A4(arg0);
+        v0 = *(s16 *)((u8 *)arg0 + 16);
+        if ((s16)v0 != 0) mathutil_mtxA_rotate_z(v0);
+        lbl_8006E1D8((u32)loc_C,v3,v3,lbl_1_rodata_42D0);
+        v1 = v2;
+        v0 = (u32)loc_18;
+        lbl_8006E1D8(v0,v1,v3,lbl_1_rodata_42D0);
+        v1 = v2;
+        v0 = (u32)loc_24;
+        lbl_8006E1D8(v0,v1,v2,lbl_1_rodata_42D0);
+        v1 = v3;
+        v0 = (u32)loc_30;
+        lbl_8006E1D8(v0,v1,v2,lbl_1_rodata_42D0);
+        lbl_8006DB30();
+        WGPIPE.f32 = loc_C[0];
+        WGPIPE.f32 = loc_C[1];
+        WGPIPE.f32 = loc_C[2];
+        WGPIPE.f32 = lbl_1_rodata_42D0;
+        WGPIPE.f32 = lbl_1_rodata_42D0;
+        WGPIPE.f32 = loc_18[0];
+        WGPIPE.f32 = loc_18[1];
+        WGPIPE.f32 = loc_18[2];
+        v0 = (u32)&lbl_1_rodata_42D4;
+        WGPIPE.f32 = *(volatile f32 *)v0; /* Reload pool operand for the hardware FIFO write. */
+        WGPIPE.f32 = lbl_1_rodata_42D0;
+        WGPIPE.f32 = loc_24[0];
+        WGPIPE.f32 = loc_24[1];
+        WGPIPE.f32 = loc_24[2];
+        WGPIPE.f32 = lbl_1_rodata_42D4;
+        WGPIPE.f32 = lbl_1_rodata_42D4;
+        WGPIPE.f32 = loc_30[0];
+        WGPIPE.f32 = loc_30[1];
+        WGPIPE.f32 = loc_30[2];
+        WGPIPE.f32 = lbl_1_rodata_42D0;
+        WGPIPE.f32 = lbl_1_rodata_42D4;
+    }
+}
+/* fzgx:end fn_1_9EA94 */
+
 /* fzgx:begin fn_1_9EDE8 */
 #define lbl_1_rodata_42D0 (*(volatile const f32 *)&lbl_1_rodata_42D0) /* Reload before each ordered FIFO write. */
 #define lbl_1_rodata_42D4 (*(volatile const f32 *)&lbl_1_rodata_42D4) /* Reload before each ordered FIFO write. */

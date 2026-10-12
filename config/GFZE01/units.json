@@ -1531,6 +1531,18 @@
   },
   {
     "module": "customize",
+    "source": "rel/customize/emblem/fn_3_1338C.c",
+    "symbols": [
+      "fn_3_1338C"
+    ],
+    "status": "nonmatching",
+    "mw_version": "GC/1.3.2",
+    "extra_cflags": [],
+    "tu": "rel/customize/emblem.c",
+    "pool": true
+  },
+  {
+    "module": "customize",
     "source": "rel/customize/emb_paste_editor/fn_3_130C8.c",
     "symbols": [
       "fn_3_130C8"
@@ -13694,6 +13706,16 @@
   },
   {
     "module": "main",
+    "source": "dol/fn_800084E8.c",
+    "symbols": [
+      "fn_800084E8"
+    ],
+    "status": "matching",
+    "mw_version": "GC/1.3.2",
+    "extra_cflags": []
+  },
+  {
+    "module": "main",
     "source": "dol/fn_800087F4.c",
     "symbols": [
       "fn_800087F4"
@@ -17919,6 +17941,21 @@
     "status": "matching",
     "mw_version": "GC/1.2.5n",
     "extra_cflags": []
+  },
+  {
+    "module": "main",
+    "source": "dol/fn_80039E48.c",
+    "symbols": [
+      "fn_80039E48"
+    ],
+    "status": "matching",
+    "mw_version": "GC/1.2.5n",
+    "extra_cflags": [],
+    "pool": {
+      "...rodata.0": "lbl_8008FF50",
+      "@42": "lbl_801A7178",
+      "fzgx_pool_rodata_lbl_8008FF50": "lbl_8008FF50"
+    }
   },
   {
     "module": "main",
@@ -30554,6 +30591,17 @@
     "source": "rel/main_rel/background/fn_1_9E5B8.c",
     "symbols": [
       "fn_1_9E5B8"
+    ],
+    "status": "matching",
+    "mw_version": null,
+    "extra_cflags": [],
+    "tu": "rel/main_rel/background.c"
+  },
+  {
+    "module": "main_rel",
+    "source": "rel/main_rel/background/fn_1_9EA94.c",
+    "symbols": [
+      "fn_1_9EA94"
     ],
     "status": "matching",
     "mw_version": null,
