@@ -34,6 +34,7 @@ import datetime
 import json
 import os
 import re
+import shutil
 import sqlite3
 import subprocess
 import sys
@@ -62,6 +63,9 @@ def run_step(name: str, cmd: list, timeout: int) -> bool:
     """Run one maintenance step with a time limit, logging when it starts and how it ends. On timeout the whole
     process tree is killed (subprocess.run would leave the compiler children running). True when it finished."""
     started = time.time()
+    if disk_free_gb() < 10:
+        log(f"  step {name}: skipped, only {disk_free_gb():.1f} GB free")
+        return False
     log(f"  step {name}: start (limit {timeout // 60} min)")
     proc = subprocess.Popen([sys.executable, *cmd], cwd=ROOT, text=True, stdout=subprocess.PIPE,
                             stderr=subprocess.STDOUT)
@@ -74,6 +78,10 @@ def run_step(name: str, cmd: list, timeout: int) -> bool:
         proc.communicate()
         log(f"  step {name}: TIMED OUT after {timeout // 60} min, process tree killed")
         return False
+
+
+def disk_free_gb() -> float:
+    return shutil.disk_usage(ROOT).free / 2 ** 30
 
 
 def log(msg: str) -> None:
@@ -307,6 +315,9 @@ def sync_from_a() -> str:
     res = git("pull", "--no-rebase", "--no-edit", "a-local", "windows-and-types")
     if res.returncode != 0:
         files = git("diff", "--name-only", "--diff-filter=U").stdout.split()
+        if not files:  # git itself failed (full disk, merge driver, lock): nothing to resolve, nothing to commit
+            log("sync with clone A: git pull failed without a conflict: " + (res.stderr or res.stdout).strip()[-300:])
+            return "failed"
         fixed = {}
         for f in files:
             ok = f.startswith("config/GFZE01/") and f.endswith(("splits.txt", "symbols.txt"))
@@ -406,6 +417,8 @@ def main() -> int:
     ap.add_argument("--maintain-every", type=int, default=6,
                     help="batches between maintenance steps (pull clone A, deterministic passes, census); 0 disables")
     ap.add_argument("--max-cycles", type=int, default=6, help="maintenance cycles that may restart a stalled loop")
+    ap.add_argument("--min-free-gb", type=float, default=15.0,
+                    help="stop when the drive has less free space (sweeps and fixups write many GB of candidates)")
     ap.add_argument("--no-sol", action="store_true", help="skip the Sol batches: Astra only (use with --astra-max)")
     ap.add_argument("--modules", nargs="*", default=MODULES,
                     help="modules to pick from (every module is limited to the slice the Claude loop does not route)")
@@ -423,6 +436,9 @@ def main() -> int:
             log("stop file present"); break
         if time.time() - started > a.hours * 3600:
             log("time limit"); break
+        if disk_free_gb() < a.min_free_gb:
+            log(f"stopping: only {disk_free_gb():.1f} GB free on the drive (limit {a.min_free_gb:.0f} GB); "
+                "free space, then restart"); break
         symbols, label = [], ""
         while band < len(BANDS) and not a.no_sol:
             lo, hi, effort, checks, stale = BANDS[band]
