@@ -7193,3 +7193,6 @@ rel/main_rel/stcoli/fn_1_2E928.c:
 
 rel/main_rel/enemy_ctrl/fn_1_CAB38.c:
 	.text       start:0x000CAB38 end:0x000CADC4 align:4
+
+rel/main_rel/car/fn_1_8E4A4.c:
+	.text       start:0x0008E4A4 end:0x0008E728 align:4
