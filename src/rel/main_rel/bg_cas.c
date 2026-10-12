@@ -2253,3 +2253,122 @@ done:
     return 1;
 }
 /* fzgx:end fn_1_101454 */
+
+/* fzgx:begin fn_1_10161C noprologue */
+#include "types.h"
+
+typedef struct {
+    f32 x, y, z;
+} CasVec;
+
+typedef struct {
+    u32 unk_0;
+    u32 unk_4;
+} CasObj;
+
+typedef struct {
+    u8 pad_0[0x8];
+    CasObj **unk_8;
+} CasTable;
+
+typedef struct {
+    u8 unk_0;
+    u8 unk_1;
+    u8 unk_2;
+    u8 pad_3;
+    u16 unk_4[6];
+    CasVec unk_10;
+    u8 pad_1C[0xC];
+    CasVec unk_28;
+    CasVec unk_34;
+    u8 pad_40[0x4];
+} CasEntry;
+
+typedef struct {
+    CasVec v;
+    u8 pad_C[0x34];
+} CasMtx;
+
+typedef struct {
+    u32 unk_0;
+    u32 unk_4;
+    u32 unk_8;
+    u32 unk_C;
+    CasTable *unk_10;
+    s32 unk_14;
+    CasEntry *unk_18;
+    u32 unk_1C;
+} CasState;
+
+typedef struct {
+    u8 pad_0[0x8];
+    u16 unk_8;
+} CasInput;
+
+extern CasState lbl_1_bss_85250;
+extern CasInput lbl_1_bss_D58;
+extern CasVec lbl_1_rodata_77F8;
+extern CasVec lbl_1_rodata_7804;
+extern CasMtx *fn_80077B14(CasObj *);
+extern void fn_1_1024F8(void);
+extern void fn_1_102750(void);
+extern void fn_1_102C08(void);
+
+void fn_1_10161C(void) {
+    CasState *st = &lbl_1_bss_85250;
+    CasObj *obj;
+    CasMtx *mtx;
+
+    obj = st->unk_10->unk_8[st->unk_4 * 2];
+    if (obj == NULL) {
+        return;
+    }
+    mtx = fn_80077B14(obj);
+    if ((lbl_1_bss_D58.unk_8 >> 4) & 1) {
+        st->unk_0 ^= 1;
+    }
+    if ((lbl_1_bss_D58.unk_8 >> 3) & 1) {
+        st->unk_14 = ((u32)st->unk_14 + 4) % 3;
+        if (obj->unk_4 & 0x10) {
+            u32 i;
+            u32 j;
+
+            for (i = 0; i < st->unk_1C; i++) {
+                st->unk_18[i].unk_10 = st->unk_18[i].unk_28;
+                for (j = 0; j < st->unk_18[i].unk_2; j++) {
+                    mtx[st->unk_18[i].unk_4[j]].v = st->unk_18[i].unk_10;
+                }
+                st->unk_18[i].unk_34 = lbl_1_rodata_77F8;
+            }
+        }
+    } else if ((lbl_1_bss_D58.unk_8 >> 2) & 1) {
+        st->unk_14 = ((u32)st->unk_14 + 2) % 3;
+        if (obj->unk_4 & 0x10) {
+            u32 i;
+            u32 j;
+
+            for (i = 0; i < st->unk_1C; i++) {
+                st->unk_18[i].unk_10 = st->unk_18[i].unk_28;
+                for (j = 0; j < st->unk_18[i].unk_2; j++) {
+                    mtx[st->unk_18[i].unk_4[j]].v = st->unk_18[i].unk_10;
+                }
+                st->unk_18[i].unk_34 = lbl_1_rodata_7804;
+            }
+        }
+    }
+    if (obj->unk_4 & 0x10) {
+        switch (st->unk_14) {
+        case 0:
+        default:
+            fn_1_1024F8();
+            break;
+        case 1:
+            fn_1_102750();
+            break;
+        case 2:
+            fn_1_102C08();
+            break;
+        }
+    }
+}
+/* fzgx:end fn_1_10161C */
