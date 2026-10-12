@@ -95,7 +95,7 @@ extern const f64 lbl_1_rodata_4CB0;
 #include "rel/main_rel/globals.h"
 #include "rel/main_rel/memcard.h"
 extern void* lbl_801A6410;
-extern int fn_1_45D0(void *arg0, int arg1, Obj_1_data_3C7B8 *arg2, int arg3);
+extern int fn_1_45D0(void *arg0, int arg1, void *arg2, int arg3);
 extern void fn_1_AB45C(void);
 extern void CARDMountAsync(u8, u32, void (*)(void), s32);
 extern void *lbl_801A6410;
@@ -7499,7 +7499,7 @@ void fn_1_B7FDC(void) {
 #include "rel/main_rel/globals.h"
 #include "rel/main_rel/memcard.h"
 extern void* lbl_801A6410;
-extern int fn_1_45D0(void *arg0, int arg1, Obj_1_data_3C7B8 *arg2, int arg3);
+extern int fn_1_45D0(void *arg0, int arg1, void *arg2, int arg3);
 extern int fn_8002DFE0(int arg0, u32 arg1, int arg2);
 extern int CARDCheck(int arg0);
 extern void *lbl_801A6410;

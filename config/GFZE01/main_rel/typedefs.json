@@ -554,6 +554,9 @@
    "// matched sel_static_disp blocks cast the array to u32 * (fn_1_13F848, fn_1_13F948)"
   ]
  },
+ "lbl_1_bss_960": {
+  "decl": "s16 lbl_1_bss_960"
+ },
  "lbl_1_bss_D58": {
   "decl": "Obj_1_bss_D58 lbl_1_bss_D58",
   "typedef": [
