@@ -1470,6 +1470,61 @@ void fn_1_1586A8(void) {
 }
 /* fzgx:end fn_1_1586A8 */
 
+/* fzgx:begin fn_1_1586AC */
+extern void fn_1_9A508(void);
+extern u32 lbl_1_rodata_D978[3];
+extern u32 lbl_1_rodata_D984[39];
+
+typedef struct { u32 v[3]; } fn_1_1586AC_Vec;
+
+typedef struct {
+    u32 unk_0;
+    u32 unk_4;
+    u32 data[20];
+    u8 pad_58[0x48];
+} fn_1_1586AC_Cell; /* 0xA0 */
+
+typedef struct {
+    u32 unk_0;
+    u32 unk_4;
+    fn_1_1586AC_Vec unk_8;
+    fn_1_1586AC_Vec unk_14;
+    u8 pad_20[0x1C];
+} fn_1_1586AC_Entry; /* 0x3C */
+
+typedef struct {
+    u32 unk_0;
+    fn_1_1586AC_Cell cells[20][20];
+    u8 pad_FA04[0x8];
+    fn_1_1586AC_Entry entries[400];
+} fn_1_1586AC_Work;
+
+void fn_1_1586AC(void) {
+    fn_1_1586AC_Work *work = (fn_1_1586AC_Work *)lbl_1_data_2A7E0.unk_3C;
+    fn_1_1586AC_Entry *entry;
+    s32 i;
+    s32 j;
+    s32 k;
+
+    work->unk_0 = 0;
+    entry = work->entries;
+    for (i = 400; i != 0; i--) {
+        entry->unk_0 = 0;
+        entry->unk_8 = *(fn_1_1586AC_Vec *)lbl_1_rodata_D978;
+        entry->unk_14 = *(fn_1_1586AC_Vec *)lbl_1_rodata_D984;
+        entry++;
+    }
+    for (i = 0; i < 20; i++) {
+        for (j = 0; j < 20; j++) {
+            for (k = 0; k < 20; k++) {
+                work->cells[i][j].data[k] = 0;
+            }
+        }
+    }
+    fn_1_9A508();
+}
+/* fzgx:end fn_1_1586AC */
+
 /* fzgx:begin fn_1_158980 */
 // fn_1_158980: empty in retail (single blr).
 void fn_1_158980(void) {
