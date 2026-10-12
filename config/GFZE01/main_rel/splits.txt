@@ -7223,3 +7223,6 @@ rel/main_rel/background/fn_1_9DB04.c:
 
 rel/main_rel/effect/fn_1_620C8.c:
 	.text       start:0x000620C8 end:0x00062360 align:4
+
+rel/main_rel/car/fn_1_8901C.c:
+	.text       start:0x0008901C end:0x000892CC align:4
