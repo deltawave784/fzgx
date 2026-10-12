@@ -68058,6 +68058,17 @@
   },
   {
     "module": "sel",
+    "source": "rel/sel/sel/fn_10_AB98.c",
+    "symbols": [
+      "fn_10_AB98"
+    ],
+    "status": "matching",
+    "mw_version": "GC/1.3",
+    "extra_cflags": [],
+    "tu": "rel/sel/sel.c"
+  },
+  {
+    "module": "sel",
     "source": "rel/sel/sel/fn_10_BD64.c",
     "symbols": [
       "fn_10_BD64"
