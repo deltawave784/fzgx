@@ -1742,6 +1742,112 @@ void fn_1_FED34(void *arg0) {
 }
 /* fzgx:end fn_1_FED34 */
 
+/* fzgx:begin fn_1_FF420 noprologue */
+#include "types.h"
+#include "game/main_rel/bg_cas_types.h"
+
+extern u32 fn_1_584AC(void);
+extern void *memset(void *, int, u32);
+
+/* Literal pool of the retail TU (lbl_1_rodata_76A8): MWCC pools literals in
+ * first-use order across the TU, so the earlier functions' literals come first. */
+#pragma section code_type ".fzgxpool"
+__declspec(section ".fzgxpool") static void fzgx_pool_prime1(void) {
+    volatile f32 s; volatile f64 d;  /* fzgx-allow: S2 pool primer sinks */
+    s = 0.0f;
+}
+static const u32 fzgx_pool_table2[1] = {0x00000000};  /* fzgx-allow: A1 retail pool bytes */
+__declspec(section ".fzgxpool") static void fzgx_pool_keep2(void) { const u32 *volatile cp; cp = fzgx_pool_table2; }  /* fzgx-allow: S2 pool primer sink */
+__declspec(section ".fzgxpool") static void fzgx_pool_prime3(void) {
+    volatile f32 s; volatile f64 d;  /* fzgx-allow: S2 pool primer sinks */
+    s = 1.0f;
+    s = 6600.0f;
+    s = 110.0f;
+    s = 60.0f;
+    s = 15.0f;
+}
+static const u32 fzgx_pool_table4[1] = {0x00000000};  /* fzgx-allow: A1 retail pool bytes */
+__declspec(section ".fzgxpool") static void fzgx_pool_keep4(void) { const u32 *volatile cp; cp = fzgx_pool_table4; }  /* fzgx-allow: S2 pool primer sink */
+__declspec(section ".fzgxpool") static void fzgx_pool_prime5(void) {
+    volatile f32 s; volatile f64 d;  /* fzgx-allow: S2 pool primer sinks */
+    d = 4503601774854144.0;
+}
+static const u32 fzgx_pool_table6[3] = {0x00000000, 0x00000000, 0xBF800000};  /* fzgx-allow: A1 retail pool bytes */
+__declspec(section ".fzgxpool") static void fzgx_pool_keep6(void) { const u32 *volatile cp; cp = fzgx_pool_table6; }  /* fzgx-allow: S2 pool primer sink */
+__declspec(section ".fzgxpool") static void fzgx_pool_prime7(void) {
+    volatile f32 s; volatile f64 d;  /* fzgx-allow: S2 pool primer sinks */
+    s = 100.0f;
+    s = 300.0f;
+    s = 32767.0f;
+    s = 4.0f;
+    s = 10.0f;
+    s = 2.0f;
+    s = 200.0f;
+    s = 400.0f;
+    s = 2500.0f;
+    s = 1000.0f;
+    s = 1400.0f;
+    d = 0.5;
+    d = 5.0;
+    s = 7.0f;
+    s = 2.5f;
+    s = 768.0f;
+}
+static const u32 fzgx_pool_table8[1] = {0x00000000};  /* fzgx-allow: A1 retail pool bytes */
+__declspec(section ".fzgxpool") static void fzgx_pool_keep8(void) { const u32 *volatile cp; cp = fzgx_pool_table8; }  /* fzgx-allow: S2 pool primer sink */
+__declspec(section ".fzgxpool") static void fzgx_pool_prime9(void) {
+    volatile f32 s; volatile f64 d;  /* fzgx-allow: S2 pool primer sinks */
+    d = 4503599627370496.0;
+    s = 0.10000000149011612f;
+    s = 0.5f;
+    s = 0.25f;
+    s = 0.05000000074505806f;
+    s = -2000.0f;
+    s = 1.0199999809265137f;
+    s = 30.0f;
+    s = 22.0f;
+    d = 0.9;
+}
+static const u32 fzgx_pool_table10[8] = {0x3F19999A, 0x3ECCCCCD, 0x437F0000, 0x3F4CCCCD, 0x3E99999A, 0x3FA66666, 0x3F3504F3, 0};  /* fzgx-allow: A1 retail pool bytes */
+__declspec(section ".fzgxpool") static void fzgx_pool_keep10(void) { const u32 *volatile cp; cp = fzgx_pool_table10; }  /* fzgx-allow: S2 pool primer sink */
+__declspec(section ".fzgxpool") static void fzgx_pool_prime11(void) {
+    volatile f32 s; volatile f64 d;  /* fzgx-allow: S2 pool primer sinks */
+    d = 0.1;
+    d = 1280.0;
+}
+#pragma section code_type ".text"
+
+/* random fraction in [0, 1] */
+#define RAND_FRAC() ((f32)(u16)fn_1_584AC() / 32767.0f)
+
+/* velocity jittered by up to 10%; the casts keep retail's separate fmul/fadd */
+#define JITTER(v) ((f64)(0.9 * (v)) + (f64)(0.1 * (v) * RAND_FRAC()))
+
+void fn_1_FF420(CasEmitter *em) {
+    s32 i;
+    CasParticle *p;
+    f32 v;
+
+    p = em->particles;
+    memset(p, 0, sizeof(em->particles));
+    for (i = 0; i < 20; i++, p++) {
+        p->life = (s32)(30.0f + (f32)(10.0f * RAND_FRAC()));
+        p->pos = em->pos;
+        p->prev = em->pos;
+        v = em->vel.x;
+        p->vel.x = JITTER(v);
+        v = em->vel.y;
+        p->vel.y = JITTER(v);
+        v = em->vel.z;
+        p->vel.z = JITTER(v);
+        p->rot = fn_1_584AC();
+        p->rotVel = (s32)(1280.0 * (RAND_FRAC() - 0.5)) + 512;
+        p->scale = 1.0f;
+        p->size = 22.0f * em->size;
+    }
+}
+/* fzgx:end fn_1_FF420 */
+
 /* fzgx:begin fn_1_FF6B8 */
 /* Literal pool of the retail TU (lbl_1_rodata_76A8): MWCC pools literals in
  * first-use order across the TU, so the earlier functions' literals come first. */
