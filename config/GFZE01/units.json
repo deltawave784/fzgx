@@ -14120,6 +14120,16 @@
   },
   {
     "module": "main",
+    "source": "dol/fn_8000D1F0.c",
+    "symbols": [
+      "fn_8000D1F0"
+    ],
+    "status": "matching",
+    "mw_version": "GC/1.2.5n",
+    "extra_cflags": []
+  },
+  {
+    "module": "main",
     "source": "dol/fn_8000D55C.c",
     "symbols": [
       "fn_8000D55C"

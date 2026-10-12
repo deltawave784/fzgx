@@ -5861,3 +5861,6 @@ dol/fn_8003DD48.c:
 
 dol/fn_8007A440.c:
 	.text       start:0x8007A440 end:0x8007A710 align:4
+
+dol/fn_8000D1F0.c:
+	.text       start:0x8000D1F0 end:0x8000D4F4 align:4
