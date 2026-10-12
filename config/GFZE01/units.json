@@ -25564,6 +25564,19 @@
   },
   {
     "module": "main",
+    "source": "dol/fn_8007E69C.c",
+    "symbols": [
+      "fn_8007E69C"
+    ],
+    "status": "matching",
+    "mw_version": "GC/2.5",
+    "extra_cflags": [
+      "-use_lmw_stmw",
+      "on"
+    ]
+  },
+  {
+    "module": "main",
     "source": "dol/fn_8007E914.c",
     "symbols": [
       "fn_8007E914"
