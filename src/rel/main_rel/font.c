@@ -2978,6 +2978,64 @@ void fn_1_530C8(void * arg0) {
 #pragma opt_propagation reset
 /* fzgx:end fn_1_530C8 */
 
+/* fzgx:begin fn_1_535A0 noprologue */
+#include "types.h"
+#include "font.h"
+
+extern f32 lbl_1_rodata_26F8[22];
+
+typedef struct FrameColor {
+    u8 r, g, b, a;
+} FrameColor;
+
+/* Draws a rectangular frame: four edge strips of image 0x12 (8 texels per unit). */
+void fn_1_535A0(FrameColor color, f32 x, f32 y, f32 z, f32 width, f32 height, f32 thickness) {
+    FontDrawPacket packet;
+
+    packet = *(FontDrawPacket *)lbl_1_rodata_26F8;
+    packet.image = 0x12;
+    packet.x = x;
+    packet.y = y;
+    packet.z = z;
+    packet.scale_x *= width / 8.0f;
+    packet.scale_y *= thickness / 8.0f;
+    *(FrameColor *)packet.color = color;
+    fn_1_4F734(&packet);
+
+    packet = *(FontDrawPacket *)lbl_1_rodata_26F8;
+    packet.image = 0x12;
+    packet.x = x;
+    packet.y = y;
+    packet.z = z;
+    packet.scale_x *= thickness / 8.0f;
+    packet.scale_y *= height / 8.0f;
+    *(FrameColor *)packet.color = color;
+    fn_1_4F734(&packet);
+
+    packet = *(FontDrawPacket *)lbl_1_rodata_26F8;
+    packet.image = 0x12;
+    packet.x = x;
+    packet.y = y + height;
+    packet.z = z;
+    packet.scale_x *= width / 8.0f;
+    packet.scale_y *= thickness / 8.0f;
+    packet.flags = 0xd;
+    *(FrameColor *)packet.color = color;
+    fn_1_4F734(&packet);
+
+    packet = *(FontDrawPacket *)lbl_1_rodata_26F8;
+    packet.image = 0x12;
+    packet.x = x + width;
+    packet.y = y;
+    packet.z = z;
+    packet.scale_x *= thickness / 8.0f;
+    packet.scale_y *= height / 8.0f;
+    packet.flags = 7;
+    *(FrameColor *)packet.color = color;
+    fn_1_4F734(&packet);
+}
+/* fzgx:end fn_1_535A0 */
+
 /* fzgx:begin fn_1_5415C */
 void fn_1_5415C(void *arg, s32 value) {
     fn_1_541A8(arg, value);
