@@ -70192,6 +70192,37 @@
   },
   {
     "module": "title",
+    "source": "rel/title/title/fn_8_2124.c",
+    "symbols": [
+      "fn_8_2124"
+    ],
+    "status": "matching",
+    "mw_version": null,
+    "extra_cflags": [],
+    "tu": "rel/title/title.c",
+    "pool": {
+      "...rodata.0": "lbl_8_rodata_0",
+      "@81": "lbl_8_rodata_C+0xE8",
+      "@79": "lbl_8_rodata_C+0xE4",
+      "@7": "lbl_8_rodata_8",
+      "@14": "lbl_8_rodata_C+0x18",
+      "@69": "lbl_8_rodata_C+0xCC",
+      "@8": "lbl_8_rodata_C",
+      "@70": "lbl_8_rodata_C+0xD0",
+      "@33": "lbl_8_rodata_C+0x8C",
+      "@149": "lbl_8_rodata_C+0x104",
+      "@89": "lbl_8_rodata_C+0xEC",
+      "@150": "lbl_8_rodata_C+0x108",
+      "@94": "lbl_8_rodata_C+0xF0",
+      "@97": "lbl_8_rodata_C+0xF4",
+      "@151": "lbl_8_rodata_C+0x10C",
+      "@102": "lbl_8_rodata_C+0xF8",
+      "@105": "lbl_8_rodata_C+0xFC",
+      "@109": "lbl_8_rodata_C+0x100"
+    }
+  },
+  {
+    "module": "title",
     "source": "rel/title/title/fn_8_23AC.c",
     "symbols": [
       "fn_8_23AC"
