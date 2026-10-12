@@ -1662,17 +1662,24 @@ def defined_data_initializers(p, symbol, body, check):
     target = p.target_object_for(sym)
     if target is None or not target.exists():
         return []
-    d = STATE_DIR / 'fixup' / 'probe'
-    d.mkdir(parents=True, exist_ok=True)
-    src = d / f"datainit_{sym.name}_{hashlib.sha1(body.encode()).hexdigest()[:10]}.c"
-    src.write_text(body)
-    obj = src.with_suffix('.o')
-    cp = oracle.compile_source(p, sym.module, src, obj, check.mw_version, check.extra_cflags)
-    if cp.returncode != 0 or not obj.exists():
-        return []
-    ours, retail = poolfix.Elf(obj.read_bytes()), poolfix.Elf(target.read_bytes())
-    src.unlink(missing_ok=True)
-    obj.unlink(missing_ok=True)
+    # the checked object is this body under its own compiler response (the engine's checks
+    # carry no compiler version); compile only when the check kept no object
+    checked = getattr(check, '_object', None)
+    if checked is not None and Path(checked).exists():
+        ours = poolfix.Elf(Path(checked).read_bytes())
+    else:
+        d = STATE_DIR / 'fixup' / 'probe'
+        d.mkdir(parents=True, exist_ok=True)
+        src = d / f"datainit_{sym.name}_{hashlib.sha1(body.encode()).hexdigest()[:10]}.c"
+        src.write_text(body)
+        obj = src.with_suffix('.o')
+        cp = oracle.compile_source(p, sym.module, src, obj, check.mw_version, check.extra_cflags)
+        if cp.returncode != 0 or not obj.exists():
+            return []
+        ours = poolfix.Elf(obj.read_bytes())
+        src.unlink(missing_ok=True)
+        obj.unlink(missing_ok=True)
+    retail = poolfix.Elf(target.read_bytes())
     ofn = next((s for s in ours.symbols() if s['name'] == sym.name and s['shndx']), None)
     rfn = next((s for s in retail.symbols() if s['name'] == sym.name and s['shndx']), None)
     if not ofn or not rfn:

@@ -265,7 +265,10 @@ class Engine:
             for tag, i1, i2, j1, j2 in difflib.SequenceMatcher(None, body, new, autojunk=False).get_opcodes():
                 if tag != 'equal':
                     changed.update(range(i1 + 1, max(i2, i1 + 1) + 1))
-            if not changed or changed & lines or (first_stmt and all(c < first_stmt for c in changed)):
+            # retail data initializers rename the objects' uses everywhere; their gain is in data
+            # that no implicated code line shows
+            if (not changed or changed & lines or (first_stmt and all(c < first_stmt for c in changed))
+                    or label.startswith('retail initializers for defined data objects')):
                 relevant.append((label, text))
             else:
                 rest.append((label, text))
@@ -493,6 +496,9 @@ class Engine:
         captured_operators = []
         check = self.check(row)
         if check.ok:
+            # a body that defines the TU's data objects itself with placeholder contents: one
+            # candidate, first, since its whole gain is in data the word score cannot see
+            yield from layout.defined_data_initializers(self.project, row['symbol'], body, check)
             yield from evidence.range_switches(body, name, check)
             yield from layout.native_string_views(self.project, row['symbol'], body)
             yield from evidence.swapped_call_arguments(self.project, row['symbol'], body, check)
@@ -532,8 +538,6 @@ class Engine:
             yield from evidence.frame_padding(self.project, row['symbol'], body, check)
             yield from layout.initialized_data_views(self.project, row['symbol'], body)
             yield from layout.tu_section_layout(self.project, row['symbol'], body, check)
-            # a body that defines the TU's data objects itself, with placeholder contents
-            yield from layout.defined_data_initializers(self.project, row['symbol'], body, check)
             if re.search(r'(?m)^\s*#define\b', body):
                 # Pool fields passed through macro parameters only have a
                 # concrete type and offset after the selected compiler expands them.

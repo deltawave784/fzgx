@@ -175,6 +175,8 @@ def climb(p: Project, selection: Dict[str, str], outdir: Path, rounds: int = 4,
         if not nc:
             break
         best: Dict[str, tuple] = {}
+        # retail data initializers change no code word: they compete on a tie with the body
+        data: Dict[str, tuple] = {}
         targets: Dict[str, Optional[List[int]]] = {}
         for module, lst in gen.items():
             objs = oracle.compile_many(p, module, [f for _, f, _ in lst], outdir / f'r{rnd}' / 'obj' / module)
@@ -193,6 +195,8 @@ def climb(p: Project, selection: Dict[str, str], outdir: Path, rounds: int = 4,
                 aligned, pos = fixup_source.fitness(targets[s], ow)
                 if s not in best or (aligned, pos) > (best[s][0], best[s][1]):
                     best[s] = (aligned, pos, f, label)
+                if label.startswith('datainit') and (s not in data or (aligned, pos) > (data[s][0], data[s][1])):
+                    data[s] = (aligned, pos, f, label)
         # the current body's word score, per module in one compile
         basew: Dict[str, float] = {}
         by_module: Dict[str, list] = collections.defaultdict(list)
@@ -207,6 +211,10 @@ def climb(p: Project, selection: Dict[str, str], outdir: Path, rounds: int = 4,
                 tw = targets.get(s) or oracle.words(p.target_object_for(sym), sym.name)
                 basew[s] = fixup_source.fitness(tw, ow) if ow and tw else (-1.0, -1.0)
         winners = [(s, b[2]) for s, b in best.items() if (b[0], b[1]) > basew.get(s, (-1.0, -1.0))]
+        for s, b in data.items():
+            if s not in {w for w, _ in winners} and (b[0], b[1]) >= basew.get(s, (-1.0, -1.0)):
+                best[s] = b
+                winners.append((s, b[2]))
         res = oracle.check_many(p, winners)
         gained = 0
         for s, f in winners:
