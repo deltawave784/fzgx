@@ -4807,6 +4807,109 @@ void fn_1_146B5C(u32 unused, u8 *arg1) {
 #pragma opt_propagation reset
 /* fzgx:end fn_1_146B5C */
 
+/* fzgx:begin fn_1_148444 noprologue */
+#include "types.h"
+#include "font.h"
+#include "rel/main_rel/sel_static_disp.h"
+
+extern void fn_1_49410(void);
+extern void fn_1_494DC(s16);
+extern void fn_1_149C2C(void);
+extern void fn_1_49738(void *);
+extern void fn_1_496FC(f32, f32);
+extern void fn_1_4954C(f32);
+extern void fn_1_495C8(s32);
+extern f32 fn_1_4B068(char *);
+extern u8 lbl_1_rodata_9318[208];
+extern int sprintf(char *, const char *, ...);
+
+typedef struct {
+    u8 pad_0[0x56];
+    u8 unk_56[6];
+    s32 unk_5C;
+    u8 pad_60[0x4];
+    s32 unk_64;
+    s32 unk_68;
+    u8 pad_6C[0x8];
+    s32 unk_74;
+} fn_1_148444_Obj;
+
+static inline BOOL fn_1_148444_isA(s32 mode) {
+    BOOL r = FALSE;
+    if (mode == 8 || mode == 2 || mode == 3) {
+        r = TRUE;
+    }
+    return r;
+}
+
+static inline BOOL fn_1_148444_isB(s32 mode) {
+    BOOL r = TRUE;
+    if (!((u32)mode <= 1)) {
+        r = FALSE;
+    }
+    return r;
+}
+
+static inline BOOL fn_1_148444_isC(s32 mode) {
+    BOOL r = FALSE;
+    if (mode == 1 || mode == 3) {
+        r = TRUE;
+    }
+    return r;
+}
+
+void fn_1_148444(s32 mode, fn_1_148444_Obj *obj) {
+    s32 x;
+    s32 y;
+    s32 value;
+    s32 width;
+    FontDrawPacket packet;
+    char buf[0x100];
+
+    if (!fn_1_148444_isA(mode) && !fn_1_148444_isB(mode)) {
+        return;
+    }
+    if (!fn_1_148444_isC(mode)) {
+        return;
+    }
+    if (obj->unk_5C == 0xFF) {
+        return;
+    }
+    x = obj->unk_68 + obj->unk_74;
+    y = obj->unk_64 + 14;
+    x += 0x1A7;
+    if (mode == 3) {
+        x -= 10;
+    }
+    fn_1_49410();
+    fn_1_494DC(0x1B);
+    fn_1_49738(fn_1_149C2C);
+    fn_1_496FC((f32)x, (f32)y);
+    fn_1_4954C(47.0f);
+    fn_1_495C8(2);
+    if (fn_1_148444_isB(mode)) {
+        value = obj->unk_56[lbl_1_bss_3C30.unk_A7];
+    } else {
+        value = obj->unk_56[0];
+    }
+    if (fn_1_148444_isA(mode)) {
+        sprintf(buf, (const char *)&lbl_1_data_42808, value < 0 ? 0 : (value > 99 ? 99 : value));
+    } else {
+        sprintf(buf, (const char *)lbl_1_data_42810, value < 0 ? 0 : (value > 999 ? 999 : value));
+    }
+    fn_1_4A0D8(buf);
+    width = fn_1_4B068(buf);
+    packet = *(FontDrawPacket *)lbl_1_rodata_9318;
+    packet.image = 0x9905;
+    fn_1_51678(&packet, 0x9905, 100, 0, 10, 16);
+    packet.x = (f32)(x - width);
+    packet.y = (f32)y;
+    packet.z = 47.0f;
+    packet.flags |= 7;
+    fn_1_4F734(&packet);
+}
+/* fzgx:end fn_1_148444 */
+
 /* fzgx:begin fn_1_1498B8 noprologue */
 #include "types.h"
 #include "font.h"

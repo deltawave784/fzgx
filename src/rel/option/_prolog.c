@@ -1799,6 +1799,50 @@ void fn_4_A78C(u32 arg0) {
 }
 /* fzgx:end fn_4_A78C */
 
+/* fzgx:begin fn_4_A82C pool */
+/* Stand-in for the TU's data that precedes the kana tables (retail begins
+ * with the string "Cont..."), so the tables land at their retail offsets. */
+static u8 fzgx_pad[0x2dcc] = { 'C', 'o', 'n', 't' };
+static u8 wideA[56] = { 1 };
+static u8 wideB[56] = { 1 };
+static u8 wideC[64] = { 1 };
+static u8 wideD[24] = { 1 };
+static u8 narrowA[28] = { 1 };
+static u8 narrowB[28] = { 1 };
+static u8 narrowC[36] = { 1 };
+static u8 narrowD[12] = { 1 };
+
+/* Maps a two-byte (SJIS) character to its one-byte equivalent. */
+u8 *fn_4_A82C(u8 *s) {
+    s32 i;
+
+    for (i = 0; i < 54; i += 2) {
+        if (s[0] == wideA[i] && s[1] == wideA[i + 1]) {
+            return &narrowA[i / 2];
+        }
+    }
+    for (i = 0; i < 54; i += 2) {
+        if (s[0] == wideB[i] && s[1] == wideB[i + 1]) {
+            return &narrowB[i / 2];
+        }
+    }
+    for (i = 0; i < 64; i += 2) {
+        if (s[0] == wideC[i] && s[1] == wideC[i + 1]) {
+            return &narrowC[i / 2];
+        }
+    }
+    for (i = 0; i < 22; i += 2) {
+        if (s[0] == wideD[i] && s[1] == wideD[i + 1]) {
+            return &narrowD[i / 2];
+        }
+    }
+    return 0;
+}
+
+#pragma section ".fzgxpool"
+__declspec(section ".fzgxpool") u8 *fzgx_primer(void) { return fzgx_pad; }
+/* fzgx:end fn_4_A82C */
+
 /* fzgx:begin fn_4_AB30 */
 // Initialize the option state and reset its associated data value.
 void fn_4_AB30(void) {
