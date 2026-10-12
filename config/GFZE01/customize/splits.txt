@@ -566,3 +566,6 @@ rel/customize/emblem/fn_3_13508.c:
 
 rel/customize/emb_paste_editor/fn_3_130C8.c:
 	.text       start:0x000130C8 end:0x0001338C align:4
+
+rel/customize/_prolog/fn_3_6270.c:
+	.text       start:0x00006270 end:0x00006540 align:4
