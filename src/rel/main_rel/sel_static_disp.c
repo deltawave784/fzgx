@@ -3208,6 +3208,70 @@ void fn_1_13DC54(void) {
 }
 /* fzgx:end fn_1_13DC54 */
 
+/* fzgx:begin fn_1_13DDB8 noprologue */
+#include "types.h"
+#include "font.h"
+
+extern u8 lbl_1_rodata_26F8[0x58];
+extern const f64 lbl_1_rodata_8608;
+extern const f32 lbl_1_rodata_8B2C;
+extern const f32 lbl_1_rodata_8838;
+extern const f32 lbl_1_rodata_8DF0;
+extern const f32 lbl_1_rodata_8DF4;
+extern const f32 lbl_1_rodata_8684;
+extern const f32 lbl_1_rodata_86D0;
+extern const f32 lbl_1_rodata_87B4;
+extern const f32 lbl_1_rodata_863C;
+extern const f32 lbl_1_rodata_880C;
+extern const f32 lbl_1_rodata_85F0;
+extern u32 lbl_1_rodata_8DE8;
+extern u32 lbl_1_rodata_8DEC;
+extern u32 lbl_801A66A0;
+extern int fn_1_B7E98(int);
+extern f32 lbl_8006D188(s32);
+
+void fn_1_13DDB8(void) {
+    FontDrawPacket packet;
+    s32 shade;
+
+    packet = *(FontDrawPacket *)lbl_1_rodata_26F8;
+    packet.image = 0x9E21;
+    packet.x = lbl_1_rodata_8DF0;
+    packet.y = lbl_1_rodata_8684;
+    packet.z = lbl_1_rodata_86D0;
+    packet.alpha = lbl_1_rodata_87B4;
+    packet.flags = 10;
+    *(u32 *)packet.color = lbl_1_rodata_8DE8;
+    /* pulse between 0 and the peak brightness with a two-second period */
+    shade = (s32)((lbl_1_rodata_880C *
+                   (lbl_1_rodata_863C + lbl_8006D188((s32)(lbl_1_rodata_8B2C * (f32)(lbl_801A66A0 % 120) / lbl_1_rodata_8838)))) /
+                  2.0f);
+    packet.alpha = lbl_1_rodata_87B4;
+    packet.color_add[2] = shade;
+    packet.color_add[1] = shade;
+    packet.color_add[0] = shade;
+    fn_1_4F734(&packet);
+
+    if (fn_1_B7E98(1) != 0) {
+        packet = *(FontDrawPacket *)lbl_1_rodata_26F8;
+        packet.image = 0x9E21;
+        packet.x = lbl_1_rodata_8DF4;
+        packet.y = lbl_1_rodata_8684;
+        packet.z = lbl_1_rodata_86D0;
+        packet.flags = 0x8000A;
+        *(u32 *)packet.color = lbl_1_rodata_8DEC;
+        shade = (s32)((lbl_1_rodata_86D0 *
+                       (lbl_1_rodata_863C + lbl_8006D188((s32)(lbl_1_rodata_8B2C * (f32)(lbl_801A66A0 % 120) / lbl_1_rodata_8838)))) /
+                      2.0f);
+        packet.alpha = lbl_1_rodata_87B4;
+        packet.color_add[2] = shade;
+        packet.color_add[1] = shade;
+        packet.color_add[0] = shade;
+        fn_1_4F734(&packet);
+    }
+}
+/* fzgx:end fn_1_13DDB8 */
+
 /* fzgx:begin fn_1_13E054 */
 void fn_1_13E054(void* arg0, void* arg1, void* arg2, int arg3) {
     u8* fixed = (u8*)0;
