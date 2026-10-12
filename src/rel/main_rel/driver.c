@@ -715,6 +715,96 @@ void fn_1_A8F78(void) {
 }
 /* fzgx:end fn_1_A8F78 */
 
+/* fzgx:begin fn_1_A8FA0 pool noprologue */
+#include "types.h"
+
+typedef struct {
+    u8 unk_0;
+    u8 unk_1;
+    u8 unk_2;
+    u8 pad_3;
+    s16 unk_4;
+    s16 unk_6;
+    s16 unk_8;
+    u8 pad_A[2];
+    char *name;
+} fn_1_A8FA0_Entry;
+
+typedef struct {
+    u8 pad_0[0xC];
+    char *strPtr;
+} fn_1_A8FA0_Header;
+
+extern char *fn_80083DB0(char *, const char *);
+extern size_t strlen(const char *);
+
+/* lbl_1_bss_6F648 heads a cluster of this TU's .bss objects addressed off one base */
+static fn_1_A8FA0_Header lbl_1_bss_6F648;
+static char sNameBuf[0x1000];
+static fn_1_A8FA0_Entry sEntries[0x100];
+static s32 sEntryCount;
+
+void fn_1_A8FA0(void) {
+    s32 dup[0x100];
+    s32 i;
+    s32 n;
+    size_t len;
+    char *name;
+    s32 j;
+
+    lbl_1_bss_6F648.strPtr = sNameBuf;
+    n = 0;
+    for (i = 0; i < sEntryCount; i++) {
+        if (sEntries[i].unk_2 & 1) {
+            name = sEntries[i].name;
+            len = strlen(name);
+            if (i != 0) {
+                sEntries[n] = sEntries[i];
+                fn_80083DB0(lbl_1_bss_6F648.strPtr, name);
+            }
+            sEntries[n].name = lbl_1_bss_6F648.strPtr;
+            n++;
+            lbl_1_bss_6F648.strPtr += len + 1;
+        }
+    }
+    sEntryCount = n;
+
+    for (i = n - 1; i >= 0; i--) {
+        dup[i] = 0;
+    }
+
+    for (i = n - 1; i >= 1; i--) {
+        if (dup[i] == 0) {
+            for (j = i - 1; j >= 0; j--) {
+                if (sEntries[i].unk_4 == sEntries[j].unk_4 &&
+                    sEntries[i].unk_6 == sEntries[j].unk_6 &&
+                    sEntries[i].unk_2 == sEntries[j].unk_2 &&
+                    sEntries[i].unk_0 == sEntries[j].unk_0) {
+                    dup[j] = 1;
+                }
+            }
+        }
+    }
+
+    lbl_1_bss_6F648.strPtr = sNameBuf;
+    n = 0;
+    for (i = 0; i < sEntryCount; i++) {
+        if (dup[i] == 0) {
+            len = strlen(sEntries[i].name);
+            name = sEntries[i].name;
+            if (i != 0) {
+                sEntries[n] = sEntries[i];
+                fn_80083DB0(lbl_1_bss_6F648.strPtr, name);
+            }
+            sEntries[n].name = lbl_1_bss_6F648.strPtr;
+            n++;
+            lbl_1_bss_6F648.strPtr += len + 1;
+        }
+    }
+    sEntryCount = n;
+}
+/* fzgx:end fn_1_A8FA0 */
+
 /* fzgx:begin fn_1_A9250 */
 void fn_1_A9250(int arg) {
     int i;
