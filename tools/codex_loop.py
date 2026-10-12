@@ -418,6 +418,8 @@ def maintenance(a, n: int, why: str):
     result = sync_from_a()
     if result in ("conflict", "failed"):
         return 0, result, True
+    merged_in = matched_count() - before  # clone A's matches that the pull just brought in: not this loop's work
+    before = matched_count()
     if result == "merged" and tooling_changed():
         log("clone A changed the engine: reuse, fixup and one sweep round over this clone's saved bodies")
         run_step("reuse", ["tools/fzgx.py", "reuse", "--max-size", "2048"], 900)
@@ -429,7 +431,8 @@ def maintenance(a, n: int, why: str):
         if not gate_ok():
             return 0, "failed", True
     gained = matched_count() - before
-    log(f"maintenance: sync {result}, {gained} functions gained; releases: {census(n) or 'none recorded'}")
+    log(f"maintenance: sync {result} (+{merged_in} functions merged in from clone A), "
+        f"{gained} gained by this clone's own passes; releases: {census(n) or 'none recorded'}")
     if gained:
         run(["tools/fzgx.py", "progress", "--note", f"codex maintenance {n}"], capture=True)
     return gained, result, False
