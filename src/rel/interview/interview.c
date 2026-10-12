@@ -1172,6 +1172,208 @@ void fn_17_4540(void) {
 }
 /* fzgx:end fn_17_4540 */
 
+/* fzgx:begin fn_17_456C pool */
+typedef struct {
+    f32 x, y, z;
+} Vec3;
+
+typedef struct {
+    u8 pad_0[0x88];
+    s32 mode;
+    s32 index;
+    u8 pad_90[0xe4 - 0x90];
+    void *entries[1];
+} InterviewState;
+
+typedef struct {
+    s32 timer;
+    u8 pad_4[8];
+    s16 phase;
+    u8 pad_E[0x74 - 0xe];
+} InterviewData;
+
+typedef struct {
+    u8 pad_0[0xa0];
+    s16 unk_A0;
+    u8 pad_A2[6];
+    Vec3 pos;
+} InterviewObj;
+
+/* file-scope objects of the retail TU, in retail order: MWCC addresses them off one section base */
+u8 lbl_17_bss_0;
+u8 lbl_17_bss_1;
+u8 lbl_17_bss_2;
+u8 lbl_17_bss_3;
+u32 lbl_17_bss_3_fill_4[2];
+u32 lbl_17_bss_C;
+u32 lbl_17_bss_10;
+u32 lbl_17_bss_14;
+u32 lbl_17_bss_18[2];
+u32 lbl_17_bss_20;
+u32 lbl_17_bss_24[4];
+u32 lbl_17_bss_34[8];
+u32 lbl_17_bss_54;
+u32 lbl_17_bss_58[2];
+InterviewData lbl_17_bss_60;
+s16 lbl_17_bss_60_74;
+s16 lbl_17_bss_D6;
+InterviewState *lbl_17_bss_D8[8];
+u16 lbl_17_bss_D8_fill_F8;
+u16 lbl_17_bss_FA;
+u32 lbl_17_bss_FA_fill_FC[20];
+u32 lbl_17_bss_14C;
+u32 lbl_17_bss_150[4];
+u32 lbl_17_bss_160[4];
+u32 lbl_17_bss_170[10];
+InterviewObj *lbl_17_bss_198;
+
+/* the TU's literal pool ahead of this function's constants (retail .rodata 0x0-0x1C4) */
+typedef struct {
+    f32 f0[6];
+    f32 f18[5];
+    u32 c34[4];
+    f32 f3c;
+    f32 f40[10];
+} fzgx_pool_head;
+
+typedef struct {
+    u32 w70[25];
+    u32 wd4[3];
+    f32 fe0;
+    u32 we4;
+    f32 fe8[52];
+    u32 w1b8[3];
+} fzgx_pool_mid;
+
+extern void fzgx_sink(void *);
+extern void fzgx_sink_f(f32);
+
+#pragma section code_type ".fzgxpool"
+static void fzgx_bss_layout(void) {
+    fzgx_sink(&lbl_17_bss_0);
+    fzgx_sink(&lbl_17_bss_1);
+    fzgx_sink(&lbl_17_bss_2);
+    fzgx_sink(&lbl_17_bss_3);
+    fzgx_sink(lbl_17_bss_3_fill_4);
+    fzgx_sink(&lbl_17_bss_C);
+    fzgx_sink(&lbl_17_bss_10);
+    fzgx_sink(&lbl_17_bss_14);
+    fzgx_sink(lbl_17_bss_18);
+    fzgx_sink(&lbl_17_bss_20);
+    fzgx_sink(lbl_17_bss_24);
+    fzgx_sink(lbl_17_bss_34);
+    fzgx_sink(&lbl_17_bss_54);
+    fzgx_sink(lbl_17_bss_58);
+    fzgx_sink(&lbl_17_bss_60);
+    fzgx_sink(&lbl_17_bss_60_74);
+    fzgx_sink(&lbl_17_bss_D6);
+    fzgx_sink(lbl_17_bss_D8);
+    fzgx_sink(&lbl_17_bss_D8_fill_F8);
+    fzgx_sink(&lbl_17_bss_FA);
+    fzgx_sink(lbl_17_bss_FA_fill_FC);
+    fzgx_sink(&lbl_17_bss_14C);
+    fzgx_sink(lbl_17_bss_150);
+    fzgx_sink(lbl_17_bss_160);
+    fzgx_sink(lbl_17_bss_170);
+    fzgx_sink(&lbl_17_bss_198);
+}
+
+static void fzgx_pool_primer_0(s32 n) {
+    fzgx_pool_head head = {
+        {0.0f, 0.0f, 0.0f, 0.0f, 0.0f, -10.0f},
+        {1.0f, 30.0f, 0.0f, 0.1f, 90000.0f},
+        {0x00FF00FF, ~0x7F7F7F00u, 0xFFFFFFFF, ~0x7F7F7FFFu},
+        0.5f,
+        {0.2f, -3.7468882e-37f, -3.2964854e38f, 0.0f, 1.16f, 89128.96f, 1.4499999f,
+         -1.5881868e-23f, 176.0f, 0.0f},
+    };
+    fzgx_sink(&head);
+    fzgx_sink_f((f32)n);
+}
+
+static void fzgx_pool_primer_1(void) {
+    fzgx_pool_mid mid = {
+        {0xFFFFFF00, 0x00000000, 0x00000000, 0x00000000, 0x3FF00000, 0x00000000, 0x40240000,
+         0x00000000, 0x3FECCCCC, 0xCCCCCCCD, 0x3A1D4952, 0x40000000, 0x43A00000, 0x434D0000,
+         0x40A00000, 0x00000000, 0x3FE99999, 0x9999999A, 0x437A0000, 0x43340000, 0x41200000,
+         0x43480000, 0x42400000, 0x42480000, 0x42960000},
+        {0x00000000, 0x00000000, 0x43480000},
+        0.6f,
+        0x000000FF,
+        {3.003967f, 3.0083616f, -3.031672e-13f, -1.7014636e38f, -0.5f, 0.0f, -1.765f,
+         1.951564e-20f, 0.0f, 0.0f, -0.01f, 0.01f, 240.0f, 650.0f, -200.0f, 0.00021f, 0.0f,
+         0.0f, -0.01f, 0.0f, 0.0f, -0.01f, 1.0669999f, -0.0143125f, 1.1149999f, -3.218644e26f,
+         -0.01f, 0.0f, 1.083f, 2.0353803e33f, 0.56604797f, -9.302455e-22f, 32768.0f, 65536.0f,
+         1620.0f, 4096.0f, 900.0f, 600.0f, 174.0f, 90.0f, 125.0f, 0.000012f, 0.001f, 100.0f,
+         0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 3.0f, 32767.0f},
+        {0x3F666666, 0x00000000, 0x00000000},
+    };
+    fzgx_sink(&mid);
+}
+#pragma section code_type ".text"
+
+extern u8 lbl_17_data_640A0[0xB0];
+
+extern void *fn_80071268(void *, void *);
+extern void lbl_8006D9D8(Vec3 *);
+extern void fn_80072558(void);
+extern void *fn_1_5448C(void *);
+extern s32 fn_1_548EC(void *);
+extern void fn_1_556B8(void *);
+extern void fn_1_92530(void *);
+
+void fn_17_456C(void) {
+    Vec3 arg;
+    InterviewState *state = lbl_17_bss_D8[0];
+    s32 mode = state->mode;
+    InterviewData *data = &lbl_17_bss_60;
+    InterviewObj * obj;
+
+    if (!((mode == 8 && data->phase == 15) || (mode == 7 && data->phase == 8) ||
+          (mode == 35 && data->phase == 7))) {
+        return;
+    }
+    if (mode == 7) {
+        s32 i;
+        u8 *model = fn_80071268(state->entries[state->index], lbl_17_data_640A0);
+        if (model != NULL) {
+            for (i = 0; i < 30; i++) {
+                s32 row = (s16)(i / 10);
+                Vec3 pos = {0.0f, 0.16f, 0.0f};
+                pos.x = 1.5f - (f32)(0.3f * (i - row * 10));
+                pos.z = -0.15f + (f32)(0.3f * row);
+                arg = pos;
+                lbl_8006D9D8(&arg);
+                fn_80072558();
+                fn_1_548EC(fn_1_5448C(model + 8));
+                fn_1_556B8(model);
+            }
+        }
+    } else if (lbl_17_bss_58[0] & 0x400000) {
+        obj = lbl_17_bss_198;
+        if (mode == 8) {
+            s16 i;
+            obj->unk_A0 = -0x8000;
+            for (i = 0; i < 144; i++) {
+                s32 row = (s16)(i / 18);
+                Vec3 pos = {0.0f, -1.8f, 0.0f};
+                pos.x = 7.2000003f - (f32)(0.8f * (i - row * 18));
+                pos.z = -21.0f - (f32)(0.8f * row);
+                obj->pos = pos;
+                fn_1_92530(obj);
+            }
+            {
+                Vec3 end = {0.0f, -0.32f, -24.0f};
+                obj->pos = end;
+            }
+            fn_1_92530(obj);
+        } else if (data->timer > 250) {
+            fn_1_92530(obj);
+        }
+    }
+}
+/* fzgx:end fn_17_456C */
+
 /* fzgx:begin fn_17_4858 */
 extern u32 lbl_17_bss_58[2];
 extern u32 lbl_17_bss_198[95];
