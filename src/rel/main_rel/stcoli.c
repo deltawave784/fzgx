@@ -5428,6 +5428,141 @@ void fn_1_2D524(struct fn_1_2D524_Obj *o) {
 }
 /* fzgx:end fn_1_2D524 */
 
+/* fzgx:begin fn_1_2D888 pool noprologue */
+#include "types.h"
+#include "rel/main_rel/stcoli.h"
+
+typedef struct {
+    u8 pad_0[0x10];
+    u16 x;      /* 0x10 */
+    u16 y;      /* 0x12 */
+    f32 w;      /* 0x14 */
+    f32 h;      /* 0x18 */
+    f32 t;      /* 0x1C */
+    u8 unk_20[0xC2];
+    u8 active;  /* 0xE2 */
+} fn_1_2D888_Box;
+
+typedef struct {
+    s32 mode;       /* 0x00 */
+    f32 x;          /* 0x04 */
+    f32 y;          /* 0x08 */
+    f32 z;          /* 0x0C */
+    u8 pad_10[0x1C];
+    f32 alpha;      /* 0x2C */
+    s32 count;      /* 0x30 */
+    u8 pad_34[0x24];
+} fn_1_2D888_Text;
+
+extern u32 fn_1_4060(void);
+extern void fn_1_49410(void);
+extern void fn_1_495FC(void);
+extern void fn_1_4954C(f32 value);
+extern void fn_1_495C8(u8 value);
+extern void fn_1_495B0(u32 value);
+extern void fn_1_49590(f32 value);
+extern void fn_1_495A0(f32 value);
+extern void fn_1_4955C(f32 value1, f32 value2);
+extern void fn_1_496FC(f32 value1, f32 value2);
+extern u32 fn_1_4AEE8(u32);
+extern void fn_1_4AF10(void *);
+extern void fn_1_4A0D8(const char *);
+extern void fn_1_50A90(void *, u32, u32, u32, u32);
+extern fn_1_2D888_Text lbl_1_rodata_26F8;
+
+static const u32 fn_1_2D888_pool0[1] = { 0xFFFFFF00 };
+
+/* Primes the shared literal pool in retail order; not linked. */
+#pragma section RX ".fzgxpool"
+__declspec(section ".fzgxpool") void fzgx_primer_fn_1_2D888(f32 *o, f64 *d) {
+    o[0] = *(f32 *)fn_1_2D888_pool0;
+    o[1] = 0.0f;
+    o[2] = 15.0f;
+    o[3] = 1.0f;
+    o[4] = 10.0f;
+    o[5] = 1.25f;
+    o[6] = 0.1f;
+    o[7] = 0.9f;
+    o[8] = 0.0006f;
+    o[9] = 0.4f;
+    o[10] = 0.75f;
+    o[11] = 70.0f;
+    o[12] = 0.5f;
+    o[13] = 36.0f;
+    o[14] = 16.0f;
+    o[15] = 45.0f;
+    o[16] = 0.0008f;
+    o[17] = 18.0f;
+    o[18] = 50.0f;
+    d[0] = 4503599627370496.0;
+}
+
+static const u32 fn_1_2D888_pool58[52] = { 0 };
+
+__declspec(section ".fzgxpool") void fzgx_primer2_fn_1_2D888(f32 *o, f64 *d) {
+    o[0] = fn_1_2D888_pool58[0];
+    o[1] = 0.8f;
+    o[2] = 80.0f;
+    o[3] = 60.0f;
+    d[0] = 4503601774854144.0;
+}
+
+void fn_1_2D888(fn_1_2D888_Box *box) {
+    f32 fade;
+    f32 scale;
+    f32 alpha;
+    u32 saved;
+    u32 w;
+    u32 h;
+    fn_1_2D888_Text text;
+
+    if (box->active == 0) {
+        fn_1_4060();
+        return;
+    }
+
+    fade = 10.0f * box->t;
+    if (fade > 1.0f) {
+        fade = 1.0f;
+    }
+    scale = 1.25f * (box->t - 0.1f);
+    if (scale < 0.0f) {
+        scale = 0.0f;
+    }
+    alpha = 10.0f * (box->t - 0.9f);
+    if (alpha < 0.0f) {
+        alpha = 0.0f;
+    }
+
+    fn_1_49410();
+    fn_1_495FC();
+    fn_1_4954C(0.0006f);
+    fn_1_495C8(1);
+    fn_1_495B0(0x80000000);
+    fn_1_49590(0.4f);
+    fn_1_495A0(alpha);
+    fn_1_4955C(0.8f, 0.8f);
+    fn_1_496FC(box->x, box->y);
+    saved = fn_1_4AEE8(0);
+    fn_1_4AF10(box->unk_20);
+    fn_1_4AEE8(saved);
+    fn_1_496FC(box->x, box->y + box->h - 45.0f);
+    fn_1_4955C(1.0f, 1.0f);
+    fn_1_4A0D8((const char *)lbl_1_data_61D4);
+
+    w = box->w * scale;
+    h = box->h * scale;
+    text = lbl_1_rodata_26F8;
+    text.x = box->x;
+    text.y = (s32)(box->y - 10) + (f32)(0.5f * box->h);
+    text.z = 0.0008f;
+    text.count = 10;
+    text.alpha = box->t;
+    text.mode = 2;
+    fn_1_50A90(&text, 18.0f * fade, 45.0f * fade, w, h);
+}
+/* fzgx:end fn_1_2D888 */
+
 /* fzgx:begin fn_1_2E268 */
 #include "rel/main_rel/stcoli.h"
 
