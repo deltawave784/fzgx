@@ -532,6 +532,8 @@ class Engine:
             yield from evidence.frame_padding(self.project, row['symbol'], body, check)
             yield from layout.initialized_data_views(self.project, row['symbol'], body)
             yield from layout.tu_section_layout(self.project, row['symbol'], body, check)
+            # a body that defines the TU's data objects itself, with placeholder contents
+            yield from layout.defined_data_initializers(self.project, row['symbol'], body, check)
             if re.search(r'(?m)^\s*#define\b', body):
                 # Pool fields passed through macro parameters only have a
                 # concrete type and offset after the selected compiler expands them.

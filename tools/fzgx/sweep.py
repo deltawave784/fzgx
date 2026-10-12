@@ -107,6 +107,7 @@ def generate(p: Project, s: str, sym, path: Path, body: str, check, outdir: Path
     add('lockedcache', lambda: fixup_source.locked_cache_columns(body, sym.name))
     add('pragmas', lambda: fixup_evidence.optimizer_pragmas(body, sym.name))
     add('layout', lambda: fixup_layout.tu_section_layout(p, s, body, check))
+    add('datainit', lambda: fixup_layout.defined_data_initializers(p, s, body, check))
     if not families or 'attr' in families:
         try:
             rl = row_lines(p, sym, path, check, outdir)
