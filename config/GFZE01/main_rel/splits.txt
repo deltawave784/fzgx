@@ -7187,3 +7187,6 @@ rel/main_rel/bg_cas/fn_1_FD3A8.c:
 
 rel/main_rel/spline/fn_1_FA1D8.c:
 	.text       start:0x000FA1D8 end:0x000FA450 align:4
+
+rel/main_rel/stcoli/fn_1_2E928.c:
+	.text       start:0x0002E928 end:0x0002EBB8 align:4

@@ -5373,6 +5373,126 @@ void fn_1_2E268(void) {
 }
 /* fzgx:end fn_1_2E268 */
 
+/* fzgx:begin fn_1_2E928 noprologue */
+#include "types.h"
+
+typedef struct {
+    u8 pad_0[0x4];
+    u16 unk_4;
+    u8 pad_6[0x3];
+    u8 unk_9[5];
+    u8 unk_E[5];
+    u8 unk_13[5];
+    s16 unk_18[6];
+    u32 unk_24[5];
+    u32 unk_38[5];
+    u16 unk_4C[22];
+    u32 unk_78;
+    u8 pad_7C[0x24];
+} StEntry;
+
+typedef struct {
+    u8 pad_0[0x5];
+    u8 unk_5;
+    u8 pad_6[0x3];
+    u8 unk_9;
+    u8 pad_A[0x4];
+    u8 unk_E[0x99];
+    u8 unk_A7;
+    u8 pad_A8[0x2C];
+    StEntry entries[1];
+} StState;
+
+typedef struct {
+    u8 pad_0[0x1D4];
+    u8 unk_1D4;
+    u8 unk_1D5;
+    u16 unk_1D6;
+    u8 pad_1D8[0x8];
+    u8 unk_1E0;
+    u8 unk_1E1;
+    u16 unk_1E2;
+} StInfo;
+
+typedef struct {
+    u32 unk_0;
+    s16 unk_4;
+    u8 pad_6[0xD2];
+    f32 unk_D8;
+    u8 pad_DC[0x134];
+    u16 unk_210;
+    u8 pad_212[0x270];
+    u8 unk_482;
+    u8 pad_483[0x19];
+    StInfo *unk_49C;
+} StRacer;
+
+extern StState lbl_1_bss_3C30;
+extern const f32 lbl_1_rodata_D48[9];
+extern const u8 lbl_1_rodata_DB38[32];
+extern void fn_1_2E3B4(StEntry *entry, StRacer *racer);
+
+void fn_1_2E928(StRacer *racer) {
+    StState *st = &lbl_1_bss_3C30;
+    StInfo *info = racer->unk_49C;
+    StEntry *e = &st->entries[racer->unk_4];
+    s32 i;
+    s32 mult;
+
+    u8 k = st->unk_A7;
+
+    if (e->unk_E[k] != 0xFE && e->unk_E[k] != 0xFF) {
+        return;
+    }
+    e->unk_24[k] = (info->unk_1E0 << 20) | (info->unk_1E1 << 12) | info->unk_1E2;
+    e->unk_38[st->unk_A7] = (info->unk_1D4 << 20) | (info->unk_1D5 << 12) | info->unk_1D6;
+    if (racer->unk_D8 > lbl_1_rodata_D48[0]) {
+        e->unk_18[st->unk_A7] = 9999;
+    } else {
+        e->unk_18[st->unk_A7] = racer->unk_D8;
+    }
+    if (racer->unk_482 > 30) {
+        e->unk_13[st->unk_A7] = 30;
+    } else {
+        e->unk_13[st->unk_A7] = racer->unk_482;
+    }
+    if (!(racer->unk_0 & 0x10000)) {
+        e->unk_E[st->unk_A7] = 0xFE;
+        if (lbl_1_bss_3C30.unk_5 != 0) {
+            e->unk_9[st->unk_A7] = 0;
+            e->unk_4C[st->unk_A7] = 0;
+        }
+    } else {
+        s16 id = racer->unk_4;
+
+        for (i = 0; i < lbl_1_bss_3C30.unk_9; i++) {
+            if (id == lbl_1_bss_3C30.unk_E[i]) {
+                break;
+            }
+        }
+        e->unk_E[st->unk_A7] = i;
+        e->unk_4C[st->unk_A7] = 0;
+        if (lbl_1_bss_3C30.unk_5 != 0) {
+            if (i < 30) {
+                e->unk_9[st->unk_A7] = lbl_1_rodata_DB38[i];
+            } else {
+                e->unk_9[st->unk_A7] = 0;
+            }
+        }
+        e->unk_4 += e->unk_9[st->unk_A7];
+        mult = 4 - e->unk_E[st->unk_A7];
+        if (mult < 1) {
+            mult = 1;
+        } else if (mult == 4) {
+            mult++;
+        }
+        e->unk_4C[st->unk_A7] = mult * (racer->unk_210 + e->unk_9[st->unk_A7] * 2);
+        e->unk_78 += e->unk_4C[st->unk_A7];
+    }
+    fn_1_2E3B4(e, racer);
+}
+/* fzgx:end fn_1_2E928 */
+
 /* fzgx:begin fn_1_3FCD4 */
 void fn_1_3FCD4(u32 mask) {
     if (mask == 0) {
