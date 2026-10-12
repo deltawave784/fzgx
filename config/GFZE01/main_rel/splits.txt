@@ -7187,3 +7187,18 @@ rel/main_rel/effect/fn_1_5D718.c:
 
 rel/main_rel/bg_cas/fn_1_FD3A8.c:
 	.text       start:0x000FD3A8 end:0x000FD844 align:4
+
+rel/main_rel/spline/fn_1_FA1D8.c:
+	.text       start:0x000FA1D8 end:0x000FA450 align:4
+
+rel/main_rel/stcoli/fn_1_2E928.c:
+	.text       start:0x0002E928 end:0x0002EBB8 align:4
+
+rel/main_rel/enemy_ctrl/fn_1_CAB38.c:
+	.text       start:0x000CAB38 end:0x000CADC4 align:4
+
+rel/main_rel/car/fn_1_8E4A4.c:
+	.text       start:0x0008E4A4 end:0x0008E728 align:4
+
+rel/main_rel/bg_aur/fn_1_154164.c:
+	.text       start:0x00154164 end:0x001543E8 align:4
