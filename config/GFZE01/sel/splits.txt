@@ -698,3 +698,6 @@ rel/sel/sel/fn_10_AB98.c:
 
 rel/sel/sel/fn_10_4AE0.c:
 	.text       start:0x00004AE0 end:0x00004D78 align:4
+
+rel/sel/sel/fn_10_1F3B8.c:
+	.text       start:0x0001F3B8 end:0x0001F688 align:4
