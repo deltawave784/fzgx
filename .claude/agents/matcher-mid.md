@@ -24,6 +24,10 @@ check. A body that already matches under another compiler is submitted on the sp
 Continue the work copy with `patch_unit(symbol, agent, old, new)`: replace a unique
 text span, compile, and see the new diff. Use `write_unit(symbol, agent, source)`
 for a complete replacement when necessary. A full match is submitted automatically.
+A pool/layout primer goes in `.fzgxpool` and is named `fzgx_*`; check renames a
+misnamed primer itself and prints `NOT SUBMITTED: ...` when anything else blocks
+a match. `SUBMIT QUEUED` means the match is saved for the next verify: stop there,
+do not edit, retry or release.
 When a tool result says STOP (attempt or plateau limit), call
 `release(symbol, agent, reason)` once with a one-line diagnosis of what still
 differs, then end. Use `release` earlier only for a concrete technical obstacle.

@@ -61,6 +61,9 @@ class CheckResult:
     # why a pool relocation could not be bound to retail's pool: where our private pool's bytes
     # differ from retail's (otherwise the rows just stay unbound, with no hint)
     pool_notes: List[str] = field(default_factory=list)
+    # functions our object defines in `.fzgxpool` (pool/layout primers): diagnostics and the
+    # primer-rename repair only; the extras rule above does not read this
+    primer_functions: Tuple[str, ...] = ()
 
     def to_json(self) -> dict:
         return {k: v for k, v in self.__dict__.items() if not k.startswith("_")}
@@ -87,6 +90,14 @@ def run(cmd: List[str], cwd: Path = ROOT, timeout: int = 600) -> subprocess.Comp
     return subprocess.run(cmd, cwd=cwd, text=True, capture_output=True, timeout=timeout)
 
 
+class LockTimeout(TimeoutError):
+    """`build_lock` gave up waiting; `lock` names the lock file (submit.lock, build.lock...)."""
+
+    def __init__(self, message: str, lock: str):
+        super().__init__(message)
+        self.lock = lock
+
+
 @contextmanager
 def build_lock(name: str = "build.lock", timeout_s: float = 120.0):
     """The build lock. Never waits silently: after `timeout_s` it raises and names the lock,
@@ -102,7 +113,7 @@ def build_lock(name: str = "build.lock", timeout_s: float = 120.0):
                 break
             except BlockingIOError:
                 if _time.time() - t0 > timeout_s:
-                    raise TimeoutError(f"{path.name}: held by another process for over {int(timeout_s)} s (an interrupted run's child? see `pgrep -fl 'dtk|ninja|mwld'`)")
+                    raise LockTimeout(f"{path.name}: held by another process for over {int(timeout_s)} s (an interrupted run's child? see `pgrep -fl 'dtk|ninja|mwld'`)", name)
                 if not warned and _time.time() - t0 > 5:
                     print(f"  waiting for {path.name} (held by another process)...", file=sys.stderr, flush=True); warned = True
                 _time.sleep(0.2)
@@ -279,6 +290,19 @@ def check(project: Project, symbol: str, max_diff_lines: int = 80, source: Optio
     return res
 
 
+def _primer_functions(obj: Optional[Path]) -> Tuple[str, ...]:
+    """Function symbols an object defines in `.fzgxpool` (the primer section mwld ignores)."""
+    try:
+        elf = poolfix.Elf(obj.read_bytes())
+        sec = elf.section('.fzgxpool')
+        if sec is None:
+            return ()
+        return tuple(sorted(s['name'] for s in elf.symbols()
+                            if s['shndx'] == sec['index'] and (s['info'] & 0xF) == 2 and s['name']))
+    except Exception:
+        return ()
+
+
 def _diff(project: Project, module: str, symbol: str, unit: str, max_diff_lines: int,
           target: Optional[Path] = None, base: Optional[Path] = None) -> CheckResult:
     if target is not None:
@@ -316,6 +340,7 @@ def _diff(project: Project, module: str, symbol: str, unit: str, max_diff_lines:
     if target is not None:  # the retail auto object holds many functions; only ours is in question
         left_syms = {k: v for k, v in left_syms.items() if k == symbol}
         right_syms = {k: v for k, v in right_syms.items() if k == symbol}
+    res.primer_functions = _primer_functions(base)
     for name, s in left_syms.items():
         res.symbols[name] = float(s.get("match_percent", 0.0))
     res.missing_in_base = sorted(set(left_syms) - set(right_syms))

@@ -25,7 +25,12 @@ check. A body that already matches under another compiler is submitted on the sp
 Edit with `patch_unit(symbol, agent, old, new)` (one unique span, then compile and
 diff) or `write_unit(symbol, agent, source)` for a full replacement. Page through a
 long diff with `read_evidence(symbol, section, cursor)`; it does not use a check.
-A full match is submitted automatically. When a tool result says STOP, call
+A full match is submitted automatically.
+A pool/layout primer goes in `.fzgxpool` and is named `fzgx_*`; check renames a
+misnamed primer itself and prints `NOT SUBMITTED: ...` when anything else blocks
+a match. `SUBMIT QUEUED` means the match is saved for the next verify: stop there,
+do not edit, retry or release.
+When a tool result says STOP, call
 `release(symbol, agent, reason)` once with a precise diagnosis of what still
 differs (which rows, which idiom you suspect), then end; the next agent starts
 from your best attempt and your note.

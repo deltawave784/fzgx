@@ -447,14 +447,14 @@ def _finish_check(p: Project, symbol: str, result: dict, checked: Optional[oracl
     if not runner:
         if automatic:
             result['automatic'] = automatic
-            result['terminal'] = bool(automatic.get('ok'))
+            result['terminal'] = bool(automatic.get('ok') or automatic.get('queued'))
         return result
-    if not (automatic and automatic.get('ok')) and result.get('stop'):
+    if not (automatic and (automatic.get('ok') or automatic.get('queued'))) and result.get('stop'):
         automatic = release(p, symbol, reason=result['stop'], agent=agent,
                             harness=os.environ.get('FZGX_HARNESS'), model=os.environ.get('FZGX_MODEL'))
     if automatic:
         result['automatic'] = automatic
-        result['terminal'] = Ledger().current_attempt(_key(p, symbol)) is None
+        result['terminal'] = Ledger().current_attempt(_key(p, symbol)) is None or bool(automatic.get('queued'))
         if result['terminal']:
             result.pop('stop', None)
     return result
@@ -476,6 +476,70 @@ def _probe_flag_variants(p: Project, symbol: str, flags: Optional[str]) -> List[
             if joined not in out:
                 out.append(joined)
     return out
+
+
+def _primer_renames(res: oracle.CheckResult, text: str) -> Dict[str, str]:
+    """Primer functions that alone keep an oracle match from submitting: every extra function
+    is defined in `.fzgxpool` but is not named `fzgx_*` (the extras rule's primer spelling).
+    Returns old name -> `fzgx_<old>`; empty when anything else blocks."""
+    extras = list(res.extra_in_base or [])
+    primers = set(getattr(res, 'primer_functions', ()) or ())
+    if not extras or not set(extras) <= primers:
+        return {}
+    out: Dict[str, str] = {}
+    for name in extras:
+        new = 'fzgx_' + name
+        while re.search(r'\b' + re.escape(new) + r'\b', text) or new in out.values():
+            new += '_'
+        out[name] = new
+    return out
+
+
+def _check_work(p: Project, symbol: str, key: str, src: Optional[Path], max_diff_lines: int,
+                mw_version: Optional[str], extra_cflags: Optional[str]) -> oracle.CheckResult:
+    """oracle.check, plus one deterministic repair of the agent's work copy: a match blocked only
+    by `.fzgxpool` primers whose names lack the `fzgx_` prefix is re-checked with the primers
+    renamed (whole-token rename, nothing else changes). The work copy keeps the rename only if
+    the oracle then accepts the unit outright; the oracle's rules are unchanged."""
+    res = oracle.check(p, symbol, max_diff_lines, source=src, mw_version=mw_version, extra_cflags=extra_cflags)
+    if (src is None or src != p.work_path(key) or not res.ok or not (res.matched or res.matched_pool)
+            or oracle.unit_fully_matches(res) is None):
+        return res
+    text = src.read_text()
+    renames = _primer_renames(res, text)
+    if not renames:
+        return res
+    pattern = re.compile(r'\b(' + '|'.join(re.escape(n) for n in sorted(renames, key=len, reverse=True)) + r')\b')
+    src.write_text(pattern.sub(lambda m: renames[m.group(1)], text))
+    again = oracle.check(p, symbol, max_diff_lines, source=src, mw_version=mw_version, extra_cflags=extra_cflags)
+    if again.ok and oracle.unit_fully_matches(again) is None:
+        again.primer_renamed = renames
+        return again
+    src.write_text(text)
+    return res
+
+
+def _submit_blocker(res: oracle.CheckResult) -> Optional[str]:
+    """Why an oracle match will not be submitted, spelled for the agent; None if nothing blocks."""
+    if not (res.ok and (res.matched or res.matched_pool)):
+        return None
+    reason = oracle.unit_fully_matches(res)
+    if reason is None:
+        return None
+    primers = set(getattr(res, 'primer_functions', ()) or ())
+    extras = list(res.extra_in_base or [])
+    if not extras:
+        return "NOT SUBMITTED: " + reason
+    named = [n for n in extras if n in primers]
+    stray = [n for n in extras if n not in primers]
+    parts = []
+    if named:
+        parts.append("pool/layout primer(s) " + ", ".join(named) + " are in `.fzgxpool` but a primer must be "
+                     "named `fzgx_*` (e.g. `fzgx_pool_prime_" + res.symbol + "`): rename them")
+    if stray:
+        parts.append("function(s) " + ", ".join(stray) + " would be linked as extra code retail does not have: "
+                     "inline them or make them macros; a primer belongs in `.fzgxpool` and is named `fzgx_*`")
+    return "NOT SUBMITTED: " + "; ".join(parts) + "."
 
 
 def check(p: Project, symbol: str, max_diff_lines: int = 80, versions: Optional[str] = None) -> Dict[str, Any]:
@@ -516,8 +580,7 @@ def check(p: Project, symbol: str, max_diff_lines: int = 80, versions: Optional[
                 continue
             fully_matches = False
             for flags in variants:
-                result = oracle.check(p, symbol, max_diff_lines, source=src,
-                                      mw_version=ver, extra_cflags=flags)
+                result = _check_work(p, symbol, key, src, max_diff_lines, ver, flags)
                 # one probe is one check, scored at its best compiler: charging every version
                 # spent half the check budget and tripped the plateau stop before any edit
                 _record_check(p, key, src, result, count=False)
@@ -541,16 +604,21 @@ def check(p: Project, symbol: str, max_diff_lines: int = 80, versions: Optional[
             checkview.save(p, key, best[1])
         else:
             p.work_path(key).with_suffix('.diff.json').unlink(missing_ok=True)
+        out_check = best[1].to_json() if best else None
+        if best and _submit_blocker(best[1]):
+            out_check['submit_blocked'] = _submit_blocker(best[1])
         response = {"ok": True, "symbol": symbol, "versions": out,
-                "selected": selected, "selected_check": best[1].to_json() if best else None,
+                "selected": selected, "selected_check": out_check,
                 "stop": _budget_stop(l.current_attempt(key)),
                 "note": "The best tested compiler is retained for subsequent edits and submit. "
                         "-1 compiler missing, -2 check failed; the whole probe counts as one check"}
         return _finish_check(p, symbol, response, best[1] if best else None)
-    res = oracle.check(p, symbol, max_diff_lines, source=src,
-                       mw_version=options.get('mw'), extra_cflags=options.get('flags'))
+    res = _check_work(p, symbol, key, src, max_diff_lines, options.get('mw'), options.get('flags'))
     checkview.save(p, key, res)
     out = res.to_json()
+    blocker = _submit_blocker(res)
+    if blocker:
+        out['submit_blocked'] = blocker
     stats = _record_check(p, key, src, res)
     if src is not None:
         conflict = _prologue_conflict(p, key, unit) if res.ok and unit else None
@@ -633,6 +701,11 @@ def format_check(res: Dict[str, Any]) -> str:
     lines = [f"{res['symbol']}: {res['percent']:.1f}%  unit={res['unit']}  {verdict}"]
     if res.get('automatic'):
         lines.append('Automatic submission rejected: ' + json.dumps(res['automatic']))
+    if res.get('submit_blocked'):
+        lines.append(res['submit_blocked'])
+    if res.get('primer_renamed'):
+        lines.append('primer functions renamed in your work copy so the match can submit: '
+                     + ', '.join(f'{a} -> {b}' for a, b in res['primer_renamed'].items()))
     if res.get('mw_version'):
         lines.append(f"compiler: {res['mw_version']}" + (f" extra: {res['extra_cflags']}" if res.get('extra_cflags') else ''))
     if res.get('instruction_rows') and not res['matched']:
@@ -845,14 +918,115 @@ def _discard_work(p: Project, key: str) -> None:
     best.with_suffix('.json').unlink(missing_ok=True)
 
 
-# Different functions can share splits, symbol tables and TU files. Their work
-# copies compile independently, but installing accepted C must be serial.
-@oracle.build_lock("submit.lock")
+PENDING_SUBMITS = STATE_DIR / "pending_submits"
+
+
+def _queue_submit(p: Project, symbol: str, record: Dict[str, Any], error: str) -> Dict[str, Any]:
+    """submit.lock stayed busy (another unit's verify): keep the exact body and compiler settings
+    so `drain_pending_submits` (run by every `fzgx verify`) submits them; nothing is installed now."""
+    sym = p.resolve(symbol)
+    key = p.key(sym) if sym else symbol
+    work = p.work_path(key)
+    if not work.exists():
+        return {"ok": False, "error": error}
+    body = work.read_text()
+    record = dict(record, symbol=key, body=body, sha256=hashlib.sha256(body.encode()).hexdigest(),
+                  queued_at=int(time.time()), lock_error=error)
+    PENDING_SUBMITS.mkdir(parents=True, exist_ok=True)
+    path = PENDING_SUBMITS / (key.replace(":", "__") + ".json")
+    tmp = path.with_suffix(".tmp")
+    tmp.write_text(json.dumps(record, indent=1) + "\n")
+    tmp.replace(path)
+    return {"ok": False, "queued": True, "symbol": symbol, "pending": path.relative_to(ROOT).as_posix(),
+            "error": "submit.lock is busy (another submit or verify is running)",
+            "note": "MATCH RECORDED, SUBMIT QUEUED: the exact body and compiler settings are saved; the next "
+                    "`fzgx verify` (every batch close-out and the periodic verifier run it) submits them "
+                    "through the oracle. Your work is done: do not edit, retry or release."}
+
+
 def submit(p: Project, symbol: str, agent: str = "unknown", message: str = "",
            harness: Optional[str] = None, model: Optional[str] = None,
            mw_version: Optional[str] = None, extra_cflags: Optional[str] = None,
            names: Optional[List[Dict[str, str]]] = None, tokens_in: int = 0,
-           tokens_out: int = 0, cost_usd: float = 0.0, max_diff_lines: int = 40) -> Dict[str, Any]:
+           tokens_out: int = 0, cost_usd: float = 0.0, max_diff_lines: int = 40,
+           queue: bool = True) -> Dict[str, Any]:
+    """`_submit` under submit.lock. A lock timeout no longer loses an oracle match: with `queue`
+    the work copy is recorded as a pending submission (`_queue_submit`)."""
+    try:
+        return _submit(p, symbol, agent, message, harness, model, mw_version, extra_cflags, names,
+                       tokens_in, tokens_out, cost_usd, max_diff_lines)
+    except oracle.LockTimeout as e:
+        if e.lock != "submit.lock" or not queue:
+            raise
+        return _queue_submit(p, symbol, dict(agent=agent, message=message, harness=harness, model=model,
+                                             mw_version=mw_version, extra_cflags=extra_cflags, names=names,
+                                             tokens_in=tokens_in, tokens_out=tokens_out, cost_usd=cost_usd),
+                             str(e))
+
+
+def drain_pending_submits(p: Project) -> List[Dict[str, Any]]:
+    """Submit every queued match (`_queue_submit`) through the normal submit path: the oracle
+    re-checks the saved body. Already-matched functions drop their record; a function another
+    agent has claimed meanwhile stays queued; a rejected body moves to `pending_submits/failed/`."""
+    out: List[Dict[str, Any]] = []
+    if not PENDING_SUBMITS.exists():
+        return out
+    for path in sorted(PENDING_SUBMITS.glob("*.json")):
+        try:
+            rec = json.loads(path.read_text())
+        except (OSError, ValueError):
+            continue
+        key = rec.get("symbol")
+        row = Ledger().get(key) if key else None
+        if row is None:
+            out.append({"symbol": key, "ok": False, "error": "unknown symbol: kept queued"})
+            continue
+        if row["status"] == "matched":
+            path.unlink(missing_ok=True)
+            out.append({"symbol": key, "ok": True, "note": "already matched"})
+            continue
+        if row["status"] == "claimed" and row["claimed_by"] != rec.get("agent"):
+            out.append({"symbol": key, "ok": False, "note": f"claimed by {row['claimed_by']}: kept queued"})
+            continue
+        work = p.work_path(key)
+        prior = work.read_text() if work.exists() else None
+        work.parent.mkdir(parents=True, exist_ok=True)
+        work.write_text(rec["body"])
+        busy = False
+        try:
+            r = submit(p, key, agent=rec.get("agent") or "unknown",
+                       message=((rec.get("message") or "") + " [queued submit]").strip(),
+                       harness=rec.get("harness"), model=rec.get("model"), mw_version=rec.get("mw_version"),
+                       extra_cflags=rec.get("extra_cflags"), names=rec.get("names"),
+                       tokens_in=rec.get("tokens_in") or 0, tokens_out=rec.get("tokens_out") or 0,
+                       cost_usd=rec.get("cost_usd") or 0.0, queue=False)
+        except oracle.LockTimeout as e:
+            busy, r = True, {"ok": False, "error": str(e), "note": "submit.lock busy: kept queued"}
+        if r.get("ok"):
+            path.unlink(missing_ok=True)
+        else:
+            if prior is not None:
+                work.write_text(prior)
+            elif work.exists():
+                work.unlink()
+            if not busy:
+                failed = PENDING_SUBMITS / "failed"
+                failed.mkdir(exist_ok=True)
+                rec["submit_error"] = r.get("error")
+                (failed / path.name).write_text(json.dumps(rec, indent=1) + "\n")
+                path.unlink(missing_ok=True)
+        out.append({"symbol": key, **{k: r.get(k) for k in ("ok", "error", "link", "note") if k in r}})
+    return out
+
+
+# Different functions can share splits, symbol tables and TU files. Their work
+# copies compile independently, but installing accepted C must be serial.
+@oracle.build_lock("submit.lock")
+def _submit(p: Project, symbol: str, agent: str = "unknown", message: str = "",
+            harness: Optional[str] = None, model: Optional[str] = None,
+            mw_version: Optional[str] = None, extra_cflags: Optional[str] = None,
+            names: Optional[List[Dict[str, str]]] = None, tokens_in: int = 0,
+            tokens_out: int = 0, cost_usd: float = 0.0, max_diff_lines: int = 40) -> Dict[str, Any]:
     l = Ledger()
     sym = p.resolve(symbol)
     if sym is None:
@@ -985,8 +1159,13 @@ def submit(p: Project, symbol: str, agent: str = "unknown", message: str = "",
 
 
 def verify_links(p: Project, message: Optional[str] = None) -> Dict[str, Any]:
-    """Relink once for every accepted-but-unverified unit; commit; bisect on failure."""
-    return verify.verify(p, message)
+    """Relink once for every accepted-but-unverified unit; commit; bisect on failure.
+    Matches queued by a submit.lock timeout are submitted first, outside the lock."""
+    drained = drain_pending_submits(p)
+    r = verify.verify(p, message)
+    if drained and isinstance(r, dict):
+        r["queued_submits"] = drained
+    return r
 
 
 def _set_unit_opts(p: Project, unit_src: str, mw_version: Optional[str], extra_cflags: Optional[str]) -> None:
