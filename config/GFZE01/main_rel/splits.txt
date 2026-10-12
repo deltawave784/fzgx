@@ -7205,3 +7205,6 @@ rel/main_rel/stcoli/fn_1_1B010.c:
 
 rel/main_rel/font/fn_1_535A0.c:
 	.text       start:0x000535A0 end:0x00053830 align:4
+
+rel/main_rel/spline/fn_1_F75D8.c:
+	.text       start:0x000F75D8 end:0x000F7870 align:4
