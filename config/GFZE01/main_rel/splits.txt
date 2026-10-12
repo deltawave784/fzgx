@@ -7271,3 +7271,9 @@ rel/main_rel/bg_lig/fn_1_D7C44.c:
 
 rel/main_rel/ranking/fn_1_1586AC.c:
 	.text       start:0x001586AC end:0x00158980 align:4
+
+rel/main_rel/memcard/fn_1_B9904.c:
+	.text       start:0x000B9904 end:0x000B9BE0 align:4
+
+rel/main_rel/replay/fn_1_F2F84.c:
+	.text       start:0x000F2F84 end:0x000F326C align:4

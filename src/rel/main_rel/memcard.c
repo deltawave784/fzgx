@@ -7629,6 +7629,154 @@ u32 fn_1_B8170(s32 card) {
 }
 /* fzgx:end fn_1_B8170 */
 
+/* fzgx:begin fn_1_B9904 pool noprologue */
+#include "types.h"
+
+typedef struct {
+    u8 type;
+    u8 pad_1[3];
+    u32 unk_4;
+    u32 flags;
+    u8 pad_C[4];
+    s32 unk_10;
+    u32 unk_14;
+    u32 unk_18;
+    u32 unk_1C;
+    u8 pad_20[0x6C];
+    void *unk_8C;
+    u8 pad_90[4];
+    void *unk_94;
+    u8 pad_98[0x44];
+    void *unk_DC;
+} MemcardWork;
+
+typedef struct {
+    u8 chan;
+    u8 pad_1;
+    u8 state;
+    u8 unk_3;
+    u8 unk_4;
+    u8 unk_5;
+    u8 unk_6;
+    u8 unk_7;
+    s16 unk_8;
+    s16 unk_A;
+    void *unk_C;
+    u8 pad_10[0x14];
+    MemcardWork *work;
+    u8 pad_28[2];
+    u8 unk_2A;
+    u8 pad_2B[5];
+    u32 unk_30;
+    f32 unk_34;
+    f32 unk_38;
+    s32 unk_3C;
+    u32 unk_40;
+    u8 pad_44[0x5C];
+} MemcardSlot;
+
+/* file-scope objects of the retail TU, in retail order: MWCC addresses them off one section base */
+u8 fzgx_obj_lbl_1_bss_716C0;
+u8 lbl_1_bss_716C0_fill_716C1;
+u16 lbl_1_bss_716C0_fill_716C2;
+u32 lbl_1_bss_716C0_fill_716C4;
+MemcardSlot fzgx_obj_lbl_1_bss_716C8[2];
+u32 lbl_1_bss_716C0_gap_71808[0x16B0];
+u8 fzgx_obj_lbl_1_bss_772C8;
+
+#pragma section code_type ".fzgxpool"
+static void fzgx_bss_layout(void) {
+    volatile u8 s;  /* fzgx-allow: S2 layout primer sink: MWCC emits .bss objects in first-access order */
+    s = *(u8 *)&fzgx_obj_lbl_1_bss_716C0;
+    s = *(u8 *)&lbl_1_bss_716C0_fill_716C1;
+    s = *(u8 *)&lbl_1_bss_716C0_fill_716C2;
+    s = *(u8 *)&lbl_1_bss_716C0_fill_716C4;
+    s = *(u8 *)&fzgx_obj_lbl_1_bss_716C8;
+    s = *(u8 *)&lbl_1_bss_716C0_gap_71808;
+    s = *(u8 *)&fzgx_obj_lbl_1_bss_772C8;
+}
+#pragma section code_type ".text"
+
+extern u32 lbl_801A6410;
+extern char lbl_1_data_3C7B8[];
+extern u8 lbl_1_rodata_4AE0[];
+
+extern void *fn_1_4630(u32 heap, u32 size, const char *file, int line);
+extern void fn_1_46B4(u32 heap, void *ptr, const char *file, int line);
+extern void fn_1_AAF1C(MemcardSlot *slot);
+extern void fn_1_B6B28(void);
+extern s32 CARDUnmount(s32 chan);
+
+#define SLOT fzgx_obj_lbl_1_bss_716C8[idx]
+
+void fn_1_B9904(s32 idx, u8 state, s32 type, u32 arg3) {
+    MemcardWork *work;
+
+    SLOT.work = fn_1_4630(lbl_801A6410, 0xF0, lbl_1_data_3C7B8, 0x2744);
+    SLOT.state = state;
+    SLOT.work->unk_4 = arg3;
+    SLOT.work->type = type;
+    SLOT.work->unk_8C = lbl_1_rodata_4AE0 + type * 0x4C;
+    SLOT.work->unk_94 = fn_1_4630(lbl_801A6410, 0xF0, lbl_1_data_3C7B8, 0x2749);
+    SLOT.work->flags = 4;
+    fn_1_AAF1C(&SLOT);
+    SLOT.unk_A = -1;
+    fn_1_B6B28();
+
+    if (SLOT.unk_C != 0) {
+        while (CARDUnmount(SLOT.chan) == -1) {
+        }
+        fn_1_46B4(lbl_801A6410, SLOT.unk_C, lbl_1_data_3C7B8, 0x3C8);
+        SLOT.unk_7 = 0;
+        SLOT.unk_C = 0;
+        work = SLOT.work;
+        work->unk_1C = 0;
+        work->unk_18 = 0;
+    }
+    if (SLOT.work->flags & 0x80) {
+        SLOT.unk_3C = SLOT.work->unk_10 / 8192;
+        SLOT.unk_40 = SLOT.work->unk_14;
+    }
+    if (!(SLOT.work->flags & 0x20)) {
+        fn_1_46B4(lbl_801A6410, SLOT.work->unk_94, lbl_1_data_3C7B8, 0x3D4);
+    }
+    if (SLOT.state == 4) {
+        if (fzgx_obj_lbl_1_bss_716C0 != 0) {
+            void *tmp;
+            MemcardWork *w = SLOT.work;
+            tmp = w->unk_94;
+            w->unk_94 = w->unk_DC;
+            w->unk_DC = tmp;
+            fzgx_obj_lbl_1_bss_716C0 = 0;
+        }
+        if (SLOT.work->unk_DC != 0) {
+            fn_1_46B4(lbl_801A6410, SLOT.work->unk_DC, lbl_1_data_3C7B8, 0x3DE);
+            SLOT.work->unk_DC = 0;
+        }
+    }
+    fn_1_46B4(lbl_801A6410, SLOT.work, lbl_1_data_3C7B8, 0x3EC);
+    SLOT.work = 0;
+    SLOT.state = 0xFF;
+    SLOT.unk_3 = 0xFF;
+    SLOT.unk_4 = 0xFF;
+    SLOT.unk_5 = 0xFF;
+    SLOT.unk_6 = 0xFF;
+    SLOT.unk_7 = 0;
+    SLOT.unk_8 = -1;
+    SLOT.unk_A = -1;
+    SLOT.unk_30 = 0;
+    SLOT.unk_34 = 0.0f;
+    SLOT.unk_38 = 0.0f;
+    fzgx_obj_lbl_1_bss_772C8 = 0;
+    SLOT.unk_2A &= ~4;
+
+    if (SLOT.work != 0) {
+        fn_1_46B4(lbl_801A6410, SLOT.work, lbl_1_data_3C7B8, 0x2750);
+        SLOT.work = 0;
+    }
+}
+/* fzgx:end fn_1_B9904 */
+
 /* fzgx:begin fn_1_B9BE0 */
 void fn_1_B9BE0(void) {
     fn_1_B9C38(0);

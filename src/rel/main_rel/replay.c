@@ -270,6 +270,90 @@ u32 fn_1_F2F58(void) {
 }
 /* fzgx:end fn_1_F2F58 */
 
+/* fzgx:begin fn_1_F2F84 */
+extern void fn_1_3EF14(void *);
+extern u32 fn_1_86810(s32 index);
+extern s8 fn_1_86624(void);
+extern u32 fn_1_C39FC(void);
+extern u8 fn_1_3F23C(u8);
+extern u8 fn_1_3F250(u8);
+extern u8 fn_1_3F264(u8);
+extern void fn_80008BEC(void *, int, u32);
+extern u32 lbl_801A63C0;
+
+/* tail of the replay buffer pointed to by lbl_1_bss_7EFD8.unk_40 */
+typedef struct {
+    u8 pad_0[0xfef2];
+    struct { u8 v; } ids[0x1e];
+    u16 slots[4];
+} ReplayTail;
+
+void fn_1_F2F84(void) {
+    u8 buf[0x14ac];
+    Obj_1_bss_7EFD8 *p;
+    u8 *dst;
+    s32 i;
+    s32 j;
+    u8 *e;
+
+    p = &lbl_1_bss_7EFD8;
+    dst = (u8 *)p->unk_40 + 0xa4;
+    fn_1_3EF14(buf);
+    *(u16 *)((u8 *)p->unk_40 + 0xfef0) = 0;
+    for (i = 0; i < fn_1_86624(); i++) {
+        ((u8 *)p->unk_40)[i * 5 + 4] = buf[i + 0xe];
+        ((u8 *)p->unk_40)[(u32)i + 0xfef2] = fn_1_86810(i);
+        ((ReplayTail *)p->unk_40)->slots[i] = 0xffff;
+    }
+    lbl_1_bss_7EFD8.unk_18 = buf[8];
+    lbl_1_bss_7EFD8.unk_10 = 0x2454;
+    lbl_1_bss_7EFD8.unk_14 = 0xd9f8;
+    fn_80008BEC(dst, 0, 0xd9f8);
+    lbl_1_bss_7F01C = 0;
+    p->unk_40->unk_A0 = 0;
+    lbl_1_bss_7EFD8.unk_8 = 0;
+    lbl_1_bss_7EFD8.unk_4 = 0;
+    lbl_1_bss_7EFD8.unk_19 = 0;
+    lbl_1_bss_7EFD8.unk_1A = 1;
+    lbl_1_bss_7EFD8.unk_1C = 0;
+    lbl_1_bss_7EFD8.unk_20 = 0;
+    lbl_1_bss_7EFD8.unk_24 = 0;
+    lbl_1_bss_7EFD8.unk_1D = 0;
+    lbl_1_bss_7EFD8.unk_21 = 0;
+    lbl_1_bss_7EFD8.unk_25 = 0;
+    lbl_1_bss_7EFD8.unk_1E = 0;
+    lbl_1_bss_7EFD8.unk_22 = 0;
+    lbl_1_bss_7EFD8.unk_26 = 0;
+    lbl_1_bss_7EFD8.unk_1F = 0;
+    lbl_1_bss_7EFD8.unk_23 = 0;
+    lbl_1_bss_7EFD8.unk_27 = 0;
+    p->unk_40->unk_98 = fn_1_C39FC();
+    p->unk_40->unk_9C = lbl_801A63C0;
+    for (i = 0; i < buf[9]; i++) {
+        e = (u8 *)p->unk_40 + i * 5;
+        if (i < buf[8]) {
+            e[0] = 1;
+        } else {
+            e[0] = 0;
+        }
+        e[1] = fn_1_3F23C(i);
+        if (e[0] != 0) {
+            e[2] = fn_1_3F250(i);
+            for (j = 0; j < 8; j++) {
+                if ((u8)(1 << j) == e[2]) {
+                    e[2] = j;
+                    break;
+                }
+            }
+            e[3] = fn_1_3F264(i);
+        } else {
+            e[3] = 50;
+        }
+    }
+    lbl_1_bss_7EFD8.unk_1B = 0;
+}
+/* fzgx:end fn_1_F2F84 */
+
 /* fzgx:begin fn_1_F3574 */
 // One 0x80-byte event record in the replay buffer.
 
