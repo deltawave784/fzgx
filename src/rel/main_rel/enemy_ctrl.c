@@ -1896,6 +1896,125 @@ void fn_1_CFA4C(u32 arg0, u32 arg1) {
 }
 /* fzgx:end fn_1_CFA4C */
 
+/* fzgx:begin fn_1_CFCA4 noprologue */
+#include "types.h"
+
+typedef struct { f32 value; } fzgx_f32_box;
+
+typedef struct {
+    u8 r, g, b, a;
+} RGBA8;
+
+typedef struct {
+    s32 kind;
+    u32 unk_04;
+    f32 scale;
+    u32 unk_0C[7];
+    s16 angle;
+    u16 unk_2A;
+    u32 unk_2C[11];
+} TextBoxState;
+
+extern fzgx_f32_box lbl_1_rodata_5FD8;
+extern fzgx_f32_box lbl_1_rodata_603C;
+extern fzgx_f32_box lbl_1_rodata_5C88;
+extern RGBA8 lbl_1_rodata_602C;
+extern RGBA8 lbl_1_rodata_6030;
+extern RGBA8 lbl_1_rodata_6034;
+extern RGBA8 lbl_1_rodata_6038;
+extern fzgx_f32_box lbl_1_rodata_6050;
+extern fzgx_f32_box lbl_1_rodata_5CD4;
+extern const f32 lbl_1_rodata_6040;
+extern const f32 lbl_1_rodata_6044;
+extern const f32 lbl_1_rodata_5D90;
+extern const f32 lbl_1_rodata_6048;
+extern const f32 lbl_1_rodata_604C;
+extern const f32 lbl_1_rodata_6054;
+extern const f32 lbl_1_rodata_5DCC;
+extern const f32 lbl_1_rodata_5CFC;
+extern TextBoxState lbl_1_rodata_26F8;
+extern s32 lbl_801A66B4;
+
+extern void fn_1_49410(void);
+extern void fn_1_495C8(u8);
+extern void fn_1_495B0(u32);
+extern void fn_1_4955C(f32, f32);
+extern void fn_1_4966C(f32, f32);
+extern void fn_1_49514(RGBA8);
+extern void fn_1_49748(f32);
+extern void fn_1_495A0(f32);
+extern u32 fn_1_52968(s32, s32, const char *, f32, ...);
+extern void fn_1_51914(TextBoxState *);
+extern void fn_1_496FC(f32, f32);
+extern void fn_1_527B4(void);
+extern void fn_1_49738(void (*)(void));
+extern void fn_1_4954C(f32);
+extern void fn_1_4AE0C(const char *, ...);
+
+void fn_1_CFCA4(const char *text, f32 x, f32 y, f32 scale) {
+    TextBoxState state;
+    RGBA8 color0;
+    RGBA8 color1;
+    RGBA8 color2;
+    RGBA8 color3;
+    f32 size0;
+    f32 size1;
+    f32 size2;
+    s32 iy;
+    s32 ix;
+
+    size0 = lbl_1_rodata_5FD8.value * scale;
+    color0 = lbl_1_rodata_602C;
+    size1 = lbl_1_rodata_603C.value * scale;
+    color1 = lbl_1_rodata_6030;
+    size2 = lbl_1_rodata_5C88.value * scale;
+    color2 = lbl_1_rodata_6034;
+
+    fn_1_49410();
+    fn_1_495C8(1);
+    fn_1_495B0(0x10000);
+    fn_1_4955C(lbl_1_rodata_6040, lbl_1_rodata_6040);
+    if (lbl_801A66B4 == 5) {
+        fn_1_4966C(lbl_1_rodata_6044, lbl_1_rodata_5D90);
+    } else {
+        fn_1_495B0(0x80000000);
+    }
+
+    fn_1_49514(color0);
+    fn_1_49748(lbl_1_rodata_6048);
+    fn_1_495A0(size0);
+    ix = (s32)x;
+    iy = (s32)y;
+    fn_1_52968(ix, iy, text, lbl_1_rodata_5DCC);
+
+    fn_1_49514(color1);
+    fn_1_49748(lbl_1_rodata_604C);
+    fn_1_495A0(size1);
+    fn_1_52968(ix, iy, text, lbl_1_rodata_6050.value);
+
+    fn_1_49514(color2);
+    fn_1_49748(lbl_1_rodata_6054);
+    fn_1_495A0(size2);
+    fn_1_52968(ix, iy, text, lbl_1_rodata_5CD4.value);
+
+    color3 = lbl_1_rodata_6038;
+    state = lbl_1_rodata_26F8;
+    state.kind = 5;
+    state.angle = -0x4000;
+    state.scale = lbl_1_rodata_5CFC;
+    fn_1_51914(&state);
+
+    fn_1_49514(color3);
+    fn_1_49748(lbl_1_rodata_5D90);
+    fn_1_495A0(scale);
+    fn_1_495B0(0x80000000);
+    fn_1_496FC(x, y);
+    fn_1_49738(fn_1_527B4);
+    fn_1_4954C(lbl_1_rodata_5CFC);
+    fn_1_4AE0C(text);
+}
+/* fzgx:end fn_1_CFCA4 */
+
 /* fzgx:begin fn_1_CFF94 */
 struct fn_1_CFF94_Copy88 { u32 a[22]; };
 
