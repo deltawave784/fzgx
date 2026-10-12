@@ -7265,3 +7265,6 @@ rel/main_rel/stcoli/fn_1_2E1B8.c:
 
 rel/main_rel/effect/fn_1_5AC48.c:
 	.text       start:0x0005AC48 end:0x0005AF28 align:4
+
+rel/main_rel/bg_lig/fn_1_D7C44.c:
+	.text       start:0x000D7C44 end:0x000D7EF4 align:4

@@ -576,6 +576,165 @@ void fn_1_D7B7C(fn_1_D7B7C_LigEntry *base) {
 }
 /* fzgx:end fn_1_D7B7C */
 
+/* fzgx:begin fn_1_D7C44 noprologue */
+#include "types.h"
+#include "rel/main_rel/bg_lig.h"
+#include "game/main_rel/car_test_types.h"
+
+typedef struct {
+    u8 pad_00[0x18];
+    f32 r;
+    f32 g;
+    f32 b;
+    f32 scale;
+    s16 rot_z;
+} LigDrawObj;
+
+typedef struct {
+    u8 pad_00[0x8];
+    LigDrawObj *obj;
+} LigDrawEvent;
+
+typedef struct {
+    f32 scale;
+    f32 scale2;
+    f32 mtx[3][4];
+    u32 flags;
+    u8 r;
+    u8 g;
+    u8 b;
+    u8 a;
+} LigDrawParams;
+
+typedef struct {
+    u8 pad_00[0x24];
+    void *tex;
+} LigModel;
+
+#pragma section code_type ".fzgxpool"
+static const u32 fzgx_pool_table1[4] = {0x00000000, 0x0280012C, 0x00000000, 0x00000001};  /* fzgx-allow: A1 retail pool bytes */
+__declspec(section ".fzgxpool") static void fzgx_pool_keep1(void) { const u32 *volatile cp; cp = fzgx_pool_table1; }  /* fzgx-allow: S2 pool primer sink */
+__declspec(section ".fzgxpool") static void fzgx_pool_prime2(void) {
+    volatile f32 s; volatile f64 d;  /* fzgx-allow: S2 pool primer sinks */
+    s = 0.0f;
+    s = 100.0f;
+    s = 3.0f;
+}
+static const u32 fzgx_pool_table3[1] = {0x00000000};  /* fzgx-allow: A1 retail pool bytes */
+__declspec(section ".fzgxpool") static void fzgx_pool_keep3(void) { const u32 *volatile cp; cp = fzgx_pool_table3; }  /* fzgx-allow: S2 pool primer sink */
+__declspec(section ".fzgxpool") static void fzgx_pool_prime4(void) {
+    volatile f32 s; volatile f64 d;  /* fzgx-allow: S2 pool primer sinks */
+    d = 0.7;
+    d = 0.3;
+    s = 32767.0f;
+    s = 235.0f;
+    s = 80.0f;
+    s = 30.0f;
+    d = 512.0;
+    d = 0.5;
+    d = 300.0;
+    d = 17.0;
+    s = 3276.800048828125f;
+}
+static const u32 fzgx_pool_table5[1] = {0x00000000};  /* fzgx-allow: A1 retail pool bytes */
+__declspec(section ".fzgxpool") static void fzgx_pool_keep5(void) { const u32 *volatile cp; cp = fzgx_pool_table5; }  /* fzgx-allow: S2 pool primer sink */
+__declspec(section ".fzgxpool") static void fzgx_pool_prime6(void) {
+    volatile f32 s; volatile f64 d;  /* fzgx-allow: S2 pool primer sinks */
+    d = 4503601774854144.0;
+    d = 0.98;
+    s = 0.07999999821186066f;
+}
+static const u32 fzgx_pool_table7[1] = {0x00000000};  /* fzgx-allow: A1 retail pool bytes */
+__declspec(section ".fzgxpool") static void fzgx_pool_keep7(void) { const u32 *volatile cp; cp = fzgx_pool_table7; }  /* fzgx-allow: S2 pool primer sink */
+__declspec(section ".fzgxpool") static void fzgx_pool_prime8(void) {
+    volatile f32 s; volatile f64 d;  /* fzgx-allow: S2 pool primer sinks */
+    d = 0.99;
+    d = 0.02;
+    s = 400.0f;
+    s = 0.7071067690849304f;
+    s = 1.0f;
+    d = 2.0;
+    d = 4503599627370496.0;
+}
+#pragma section code_type ".text"
+
+extern void fn_1_9EDE8(LigDrawParams *);
+extern void lbl_8006DCA4(void);
+extern void lbl_8006D7DC(Fn183D28Vec3 *);
+extern void mathutil_mtxA_rotate_z(s16);
+extern void *memset(void *, int, u32);
+extern void lbl_8006DB74(f32 (*)[4]);
+extern void fn_80074788(u32);
+extern void fn_80072864(u32);
+extern void fn_80073778(void *, s32);
+extern void fn_800745A4(u32, s32, s32, u32, u32, u32);
+extern void fn_800734A8(u32, s32, s32, s32);
+extern void fn_80072AB0(s32, s32, s32);
+extern void fn_800735C8(s32, s32);
+extern void fn_80073620(s32, s32);
+extern void fn_80073C6C(s32);
+extern void fn_80072C24(s32, s32, s32, s32, s32);
+extern void fn_80072D64(s32, s32, s32, s32, u8, s32);
+extern void fn_80072CC4(s32, s32, s32, s32, s32);
+extern void fn_80072E20(s32, s32, s32, s32, u8, s32);
+extern void fn_80073678(u32);
+extern void fn_80074660(u32);
+extern void fn_80074918(u8, s32, u8);
+extern u32 fn_800720B0(u32);
+extern void fn_800728A8(s32, s32, s32, s32);
+extern void lbl_8006D758(void);
+
+static inline void set_color(LigDrawParams *params, LigDrawObj *obj, f32 brightness) {
+    params->r = (u8)(s32)obj->r * brightness;
+    params->g = (u8)(s32)obj->g * brightness;
+    params->b = (u8)(s32)obj->b * brightness;
+    params->a = 0xff;
+}
+
+void fn_1_D7C44(LigDrawEvent *event) {
+    void *tex;
+    LigDrawObj *obj;
+    LigModel *model;
+    Fn183D28Vec3 pos;
+    LigDrawParams params;
+
+    obj = event->obj;
+    model = *(LigModel **)((u8 *)lbl_1_bss_38458->unk_8 + 0x170);
+    lbl_8006DCA4();
+    lbl_8006E1B0((Fn183D28Vec3 *)obj, &pos);
+    lbl_8006D7DC(&pos);
+    mathutil_mtxA_rotate_z(obj->rot_z);
+    memset(&params, 0, sizeof(params));
+    lbl_8006DB74(params.mtx);
+    params.scale = 0.70710677f * obj->scale;
+    set_color(&params, obj, 1.0f);
+    params.flags |= 2;
+    params.scale2 = 2.0 * params.scale;
+    tex = model->tex;
+    fn_80074788(0);
+    fn_80072864(1);
+    fn_80073778(tex, 0);
+    fn_800745A4(0, 1, 4, 60, 0, 125);
+    fn_800734A8(0, 0, 0, 255);
+    fn_80072AB0(0, 0, 0);
+    fn_800735C8(0, 12);
+    fn_80073620(0, 28);
+    fn_80073C6C(0);
+    fn_80072C24(0, 15, 14, 8, 15);
+    fn_80072D64(0, 0, 0, 0, 1, 0);
+    fn_80072CC4(0, 7, 6, 4, 7);
+    fn_80072E20(0, 0, 0, 0, 1, 0);
+    fn_80073678(1);
+    fn_80074660(1);
+    fn_80074918(1, 7, 0);
+    fn_800720B0(0);
+    fn_800728A8(1, 3, 1, 7);
+    fn_80074918(1, 3, 0);
+    lbl_8006D758();
+    fn_1_9EDE8(&params);
+}
+/* fzgx:end fn_1_D7C44 */
+
 /* fzgx:begin fn_1_D8388 */
 // Initializes each lighting entry while the lighting system is available.
 void fn_1_D8388(void *obj) {
