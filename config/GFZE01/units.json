@@ -37272,6 +37272,20 @@
   },
   {
     "module": "main_rel",
+    "source": "rel/main_rel/car/fn_1_95238.c",
+    "symbols": [
+      "fn_1_95238"
+    ],
+    "status": "matching",
+    "mw_version": "GC/1.3",
+    "extra_cflags": [],
+    "tu": "rel/main_rel/car.c",
+    "pool": {
+      "@69": "lbl_1_rodata_3F6C"
+    }
+  },
+  {
+    "module": "main_rel",
     "source": "rel/main_rel/car/fn_1_9550C.c",
     "symbols": [
       "fn_1_9550C"

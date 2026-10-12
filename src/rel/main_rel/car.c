@@ -10623,6 +10623,127 @@ void fn_1_95210(void *arg0) {
 }
 /* fzgx:end fn_1_95210 */
 
+/* fzgx:begin fn_1_95238 noprologue */
+#include "types.h"
+#include "game/main_rel/car_types.h"
+#include "game/main_rel/motasglist_types.h"
+
+typedef struct Sig_fn_1_41418_Fn41418Data {
+    u32 count;
+    char *strings;
+} Sig_fn_1_41418_Fn41418Data;
+extern char *fn_1_41418(Sig_fn_1_41418_Fn41418Data *, u32);
+extern void fn_1_4270C(struct Fn142AD0Object *, void *, u32);
+extern void lbl_8006DAEC(void);
+extern void lbl_8006D758(void);
+extern void lbl_8006E0B4(f32, f32, f32);
+extern u32 mathutil_mtxA_rotate_z(u32);
+extern u32 mathutil_mtxA_rotate_y(u32);
+extern void mathutil_mtxA_rotate_x(u32);
+extern void lbl_8006E14C(f32);
+extern void lbl_8006DFC4(u32);
+extern void lbl_8006DB30(void);
+extern Fn195158Object *lbl_801A6D00;
+
+typedef struct {
+    u8 pad0[0x8];
+    Fn195158Object *field_8;
+    u8 pad_c[0x18];
+    void *field_24;
+    u8 pad_28[0x28];
+    f32 field_50;
+} Fn95238Data;
+
+typedef struct {
+    u8 pad0[0x1c];
+    EventNode *field_1c;
+    u8 pad20[0x80];
+    s16 rot_y;
+    s16 rot_x;
+    s16 rot_z;
+    u8 pad_a6[2];
+    f32 x;
+    f32 y;
+    f32 z;
+    f32 y_ofs;
+    f32 scale;
+    u8 pad_bc[0x8c];
+    u16 id;
+    u8 pad_14a[6];
+    Fn95238Data *data;
+    void *names;
+} Fn95238Car;
+
+typedef struct {
+    u8 count;
+    u8 field_1;
+    u16 ids[0x1f];
+    f32 values[10];
+    f32 field_68;
+    f32 total;
+} Fn95238List;
+
+// Rebuilds the car's matrix from its position and rotation, keeping only x/z from the result.
+static inline void fn_1_95238_place(Fn95238Car *car) {
+    f32 z;
+    f32 x;
+
+    lbl_8006DAEC();
+    lbl_8006D758();
+    lbl_8006E0B4(car->x, car->y + car->y_ofs, car->z);
+    mathutil_mtxA_rotate_z(car->rot_z);
+    mathutil_mtxA_rotate_y(car->rot_y);
+    mathutil_mtxA_rotate_x(car->rot_x);
+    lbl_8006E14C(car->scale);
+    lbl_8006DFC4((u32)car->data->field_8 + 0x88);
+    x = lbl_801A6D00->unk_0C;
+    z = lbl_801A6D00->unk_2C;
+    lbl_8006DB30();
+    car->x = x;
+    car->z = z;
+}
+
+// Selects event id on the car, updating its node and callbacks.
+static inline void fn_1_95238_set(Fn95238Car *car, u32 id) {
+    EventNode *node;
+    s32 value;
+    void *target;
+
+    node = car->field_1c;
+    fn_1_95238_place(car);
+    if (node != 0) {
+        value = fn_1_97174(node, 0, fn_1_41418(car->data->field_24, id & 0xffff));
+        if (value < 0) {
+            value = 0;
+        }
+        node->field_12 = 0;
+        if ((s32)node->field_26 > 0) {
+            target = node->field_28;
+        } else {
+            target = (void *)((u8 *)node->field_34 + -(s32)node->field_4c * 0xc);
+        }
+        *(u16 *)((u8 *)target + 0xa) = (u16)value;
+    }
+    fn_1_93734((CarObject *)car, fn_1_41418(car->names, id & 0xffff));
+    fn_1_4270C((struct Fn142AD0Object *)car->data, 0, id);
+    car->id = (u16)id;
+}
+
+void fn_1_95238(Fn95238Car *car, Fn95238List *list) {
+    u32 i;
+
+    list->field_1 = 0;
+    list->field_68 = 0.0f;
+    list->total = 0.0f;
+    for (i = 0; i < list->count; i++) {
+        fn_1_95238_set(car, list->ids[i]);
+        list->total += car->data->field_50;
+        list->values[i] = car->data->field_50;
+    }
+    fn_1_95238_set(car, list->ids[0]);
+}
+/* fzgx:end fn_1_95238 */
+
 /* fzgx:begin fn_1_9550C */
 typedef struct {
     u8 count;
