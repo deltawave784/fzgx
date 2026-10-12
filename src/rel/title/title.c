@@ -4422,6 +4422,124 @@ void fn_8_6F1C(void) {
 }
 /* fzgx:end fn_8_6F1C */
 
+/* fzgx:begin fn_8_7734 */
+#include "rel/title/title.h"
+
+typedef struct {
+    u8 r, g, b, a;
+} Color8;
+
+extern s32 lbl_801A66B4;
+extern void fn_1_5233C(void);
+extern void fn_1_A2D84(u32);
+extern void fn_1_49410(void);
+extern void fn_1_495B0(u32);
+extern void fn_1_49590(f32);
+extern void fn_1_495C8(u8);
+extern void fn_1_496FC(f32, f32);
+extern void fn_1_4954C(f32);
+extern void fn_1_4955C(f32, f32);
+extern void fn_1_495A0(f32);
+extern void fn_1_4D0A0(void);
+extern void fn_1_49738(u32);
+extern void fn_1_49748(f32);
+extern void fn_1_4AE0C(const char *, ...);
+extern void fn_1_4D0D4(Color8 *, f32);
+extern void fzgx_pool_sink(Color8 *);
+
+/* Primes the TU literal pool in retail order (dropped at integration). */
+#pragma section code_type ".fzgxpool"
+/* volatile: keeps every literal store so each constant is emitted in order */
+void fzgx_pool_primer_fn_8_7734_a(volatile f32 *f, volatile f64 *d, s32 i) {
+    *d = 15.0;
+    *f = 320.0f;
+    *f = 640.0f;
+    *d = 1.0;
+    *f = 150.0f;
+    *f = 0.1f;
+    *f = 20.0f;
+    *f = 0.8333333f;
+    *d = (f64)i;
+}
+
+/* volatile: keeps every literal store so each constant is emitted in order */
+void fzgx_pool_primer_fn_8_7734_b(volatile f32 *f) {
+    Color8 c = { 0xFF, 0xFF, 0xFF, 0x00 };
+    fzgx_pool_sink(&c);
+    *f = 0.0f;
+    *f = 1.0f;
+    *f = 0.5f;
+    *f = 0.09f;
+    *f = 5.0f;
+    *f = 255.0f;
+}
+
+void fzgx_pool_primer_fn_8_7734_c(void) {
+    Color8 c2 = { 0xFF, 0xFF, 0xFF, 0x00 };
+    fzgx_pool_sink(&c2);
+}
+
+void fzgx_pool_primer_fn_8_7734_d(void) {
+    Color8 c3 = { 0xFF, 0xFF, 0xFF, 0x00 };
+    fzgx_pool_sink(&c3);
+}
+
+void fzgx_pool_primer_fn_8_7734_e(void) {
+    Color8 c4 = { 0xFF, 0xFF, 0xFF, 0x00 };
+    fzgx_pool_sink(&c4);
+}
+#pragma section code_type ".text"
+
+void fn_8_7734(void) {
+    f32 t;
+    f32 fade;
+    s32 x;
+
+    if ((s32)lbl_8_bss_3CC == (s32)lbl_8_bss_3D0.unk_0 - 1) {
+        fn_1_A2D84(0xA9120600);
+    }
+    if ((s32)lbl_8_bss_3CC < 15.0) {
+        t = 1.0 - (f32)(s32)lbl_8_bss_3CC / 15.0;
+        x = 320.0f + (f32)(640.0f * t);
+    } else if ((s32)lbl_8_bss_3CC > (s32)lbl_8_bss_3D0.unk_0 - 15.0) {
+        t = 1.0 - (f32)(s32)(lbl_8_bss_3D0.unk_0 - lbl_8_bss_3CC) / 15.0;
+        x = 320.0f - (f32)(640.0f * t);
+    } else {
+        t = 0.0f;
+        x = 320;
+    }
+    fade = 1.0f - t;
+    fade = fade * fade;
+
+    fn_1_49410();
+    fn_1_495B0(0x80000000);
+    fn_1_49590(0.5f);
+    fn_1_495C8(9);
+    fn_1_496FC((f32)x, 150.0f);
+    fn_1_4954C(0.09f);
+    if (lbl_801A66B4 == 5) {
+        fn_1_4955C(1.0f, 1.0f);
+    } else {
+        fn_1_4955C(0.8333333f, 0.8333333f);
+    }
+    fn_1_495A0(fade);
+    fn_1_4D0A0();
+    fn_1_49738((u32)fn_1_5233C);
+    fn_1_49748(5.0f);
+    fn_1_4AE0C(((const char **)lbl_8_data_8458)[lbl_801A66B4]);
+    fn_1_49738(0);
+    fn_1_4AE0C(((const char **)lbl_8_data_84B8)[lbl_801A66B4]);
+    {
+        Color8 arg;
+        Color8 color = { 0xFF, 0xFF, 0xFF, 0x00 };
+
+        color.a = 255.0f * fade;
+        arg = color;
+        fn_1_4D0D4(&arg, 20.0f);
+    }
+}
+/* fzgx:end fn_8_7734 */
+
 /* fzgx:begin fn_8_79C0 */
 #include "rel/title/title.h"
 
