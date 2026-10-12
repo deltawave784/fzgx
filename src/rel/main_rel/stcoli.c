@@ -1055,6 +1055,100 @@ void fn_1_1902C(StcoliNode *root, StcoliVec *vec, void *arg3, f32 value) {
 }
 /* fzgx:end fn_1_1902C */
 
+/* fzgx:begin fn_1_1B010 noprologue */
+#include "types.h"
+#include "game/vec3.h"
+#include "rel/main_rel/stcoli.h"
+
+typedef struct {
+    u32 off[9];
+} OffsetTable;
+
+typedef struct {
+    u8 pad_0[0x8];
+    f32 zero;
+    u8 pad_C[0x4];
+    f32 minY;
+    f32 maxY;
+    u8 pad_18[0x8];
+    f32 scale;
+    f32 bias;
+    u8 pad_28[0x24];
+    OffsetTable shapes;
+    OffsetTable counts;
+} StcoliPool6C8;
+
+typedef struct {
+    u32 flags;
+    u8 *cfg;
+} StcoliEntity;
+
+typedef struct {
+    u8 pad_0[0x1D4];
+    u32 flags;
+} StcoliGlobal;
+
+extern f32 lbl_1_rodata_6C8[2];
+extern StcoliGlobal *lbl_801A66CC;
+extern void fn_1_18214(StcoliEntity *, f32 *, void *);
+extern void fn_8006E250(void *, Vec3f *);
+
+void fn_1_1B010(u32 arg0, void *pos, u32 mode, StcoliEntity *entity, f32 *out, u32 arg5, void *work, f32 value) {
+    StcoliPool6C8 *pool;
+    OffsetTable shapes;
+    OffsetTable counts;
+    Vec3f local;
+    u8 *cfg;
+    s32 i;
+    u8 *shape;
+    f32 minV;
+    f32 maxV;
+    f32 t;
+    f32 width;
+    u32 n;
+    s32 empty;
+
+    pool = (StcoliPool6C8 *)&lbl_1_rodata_6C8;
+    shapes = pool->shapes;
+    counts = pool->counts;
+    if ((mode & 0x200000) != 0) {
+        empty = 1;
+        minV = lbl_1_data_4;
+        maxV = pool->zero;
+        cfg = entity->cfg;
+        for (i = 0; i < 9; i++) {
+            shape = *(u8 **)(cfg + shapes.off[i]);
+            if (shape != NULL) {
+                t = *(f32 *)(shape + 4);
+                n = *(u32 *)(cfg + counts.off[i]);
+                if (minV > t) {
+                    minV = t;
+                }
+                t = *(f32 *)(shape + n * 20 - 16);
+                if (maxV < t) {
+                    maxV = t;
+                }
+                empty = 0;
+            }
+        }
+        if (empty || (minV < value && value < maxV)) {
+            fn_1_18214(entity, out, work);
+            t = *out;
+            if (t < pool->zero) {
+                t = -t;
+            }
+            width = pool->bias + (f32)(pool->scale * t);
+            fn_8006E250(pos, &local);
+            if (pool->minY < local.y && local.y < pool->maxY) {
+                if (-width < local.x && local.x < width) {
+                    lbl_801A66CC->flags |= entity->flags & 0x1E0000;
+                }
+            }
+        }
+    }
+}
+/* fzgx:end fn_1_1B010 */
+
 /* fzgx:begin fn_1_20258 */
 typedef struct Fn_1_20258 {
     unsigned char pad00[0x30];
