@@ -849,6 +849,274 @@ void fn_1_FD388(void) {
 }
 /* fzgx:end fn_1_FD388 */
 
+/* fzgx:begin fn_1_FD3A8 noprologue */
+#include "types.h"
+
+typedef enum Sig_GXInitTexObj__GXTexFmt {
+    Sig_GXInitTexObj_GX_TF_I4 = 0x0,
+    Sig_GXInitTexObj_GX_TF_I8 = 0x1,
+    Sig_GXInitTexObj_GX_TF_IA4 = 0x2,
+    Sig_GXInitTexObj_GX_TF_IA8 = 0x3,
+    Sig_GXInitTexObj_GX_TF_RGB565 = 0x4,
+    Sig_GXInitTexObj_GX_TF_RGB5A3 = 0x5,
+    Sig_GXInitTexObj_GX_TF_RGBA8 = 0x6,
+    Sig_GXInitTexObj_GX_TF_CMPR = 0xE,
+    Sig_GXInitTexObj_GX_CTF_R4 = 0x0 | 0x20,
+    Sig_GXInitTexObj_GX_CTF_RA4 = 0x2 | 0x20,
+    Sig_GXInitTexObj_GX_CTF_RA8 = 0x3 | 0x20,
+    Sig_GXInitTexObj_GX_CTF_YUVA8 = 0x6 | 0x20,
+    Sig_GXInitTexObj_GX_CTF_A8 = 0x7 | 0x20,
+    Sig_GXInitTexObj_GX_CTF_R8 = 0x8 | 0x20,
+    Sig_GXInitTexObj_GX_CTF_G8 = 0x9 | 0x20,
+    Sig_GXInitTexObj_GX_CTF_B8 = 0xA | 0x20,
+    Sig_GXInitTexObj_GX_CTF_RG8 = 0xB | 0x20,
+    Sig_GXInitTexObj_GX_CTF_GB8 = 0xC | 0x20,
+    Sig_GXInitTexObj_GX_TF_Z8 = 0x1 | 0x10,
+    Sig_GXInitTexObj_GX_TF_Z16 = 0x3 | 0x10,
+    Sig_GXInitTexObj_GX_TF_Z24X8 = 0x6 | 0x10,
+    Sig_GXInitTexObj_GX_CTF_Z4 = 0x0 | 0x10 | 0x20,
+    Sig_GXInitTexObj_GX_CTF_Z8M = 0x9 | 0x10 | 0x20,
+    Sig_GXInitTexObj_GX_CTF_Z8L = 0xA | 0x10 | 0x20,
+    Sig_GXInitTexObj_GX_CTF_Z16L = 0xC | 0x10 | 0x20,
+    Sig_GXInitTexObj_GX_TF_A8 = Sig_GXInitTexObj_GX_CTF_A8,
+} Sig_GXInitTexObj_GXTexFmt;
+typedef struct Sig_GXInitTexObj__GXTexObj {
+    u32 dummy[8];
+} Sig_GXInitTexObj_GXTexObj;
+typedef enum Sig_GXInitTexObj__GXTexWrapMode {
+    Sig_GXInitTexObj_GX_CLAMP,
+    Sig_GXInitTexObj_GX_REPEAT,
+    Sig_GXInitTexObj_GX_MIRROR,
+    Sig_GXInitTexObj_GX_MAX_TEXWRAPMODE,
+} Sig_GXInitTexObj_GXTexWrapMode;
+typedef enum Sig_GXInitTexObjLOD__GXAnisotropy {
+    Sig_GXInitTexObjLOD_GX_ANISO_1,
+    Sig_GXInitTexObjLOD_GX_ANISO_2,
+    Sig_GXInitTexObjLOD_GX_ANISO_4,
+    Sig_GXInitTexObjLOD_GX_MAX_ANISOTROPY,
+} Sig_GXInitTexObjLOD_GXAnisotropy;
+typedef u8 Sig_GXInitTexObjLOD_GXBool;
+typedef enum Sig_GXInitTexObjLOD__GXTexFilter {
+    Sig_GXInitTexObjLOD_GX_NEAR,
+    Sig_GXInitTexObjLOD_GX_LINEAR,
+    Sig_GXInitTexObjLOD_GX_NEAR_MIP_NEAR,
+    Sig_GXInitTexObjLOD_GX_LIN_MIP_NEAR,
+    Sig_GXInitTexObjLOD_GX_NEAR_MIP_LIN,
+    Sig_GXInitTexObjLOD_GX_LIN_MIP_LIN,
+} Sig_GXInitTexObjLOD_GXTexFilter;
+typedef struct Sig_GXInitTexObjLOD__GXTexObj {
+    u32 texture_filter;
+    u32 texture_lod;
+    u32 texture_size;
+    u32 texture_address;
+    u32 user_data;
+    u32 texture_format;
+    u32 tlut_name;
+    u16 texture_time_count;
+    u8 texture_tile_type;
+    u8 texture_flags;
+} Sig_GXInitTexObjLOD_GXTexObj;
+
+extern void GXInitTexObj(Sig_GXInitTexObj_GXTexObj *, void *, u16, u16, Sig_GXInitTexObj_GXTexFmt, Sig_GXInitTexObj_GXTexWrapMode, Sig_GXInitTexObj_GXTexWrapMode, u8);
+extern void GXInitTexObjLOD(Sig_GXInitTexObjLOD_GXTexObj *, Sig_GXInitTexObjLOD_GXTexFilter, Sig_GXInitTexObjLOD_GXTexFilter, f32, f32, f32, Sig_GXInitTexObjLOD_GXBool, Sig_GXInitTexObjLOD_GXBool, Sig_GXInitTexObjLOD_GXAnisotropy);
+extern u32 GXLoadTexMtxImm(u32, u32, u32);
+
+struct fn_1_FD3A8_lbl_1_rodata_7600 {
+    u8 pad_0[0xC];
+    f32 unk_C;
+    u8 pad_10[0x4];
+    f32 unk_14;
+    u8 pad_18[0x4];
+    f32 unk_1C;
+    u8 pad_20[0x28];
+    u32 unk_48;
+    f32 unk_4C;
+};
+struct fn_1_FD3A8_lbl_801A6D00 {
+    u32 unk_0;
+};
+struct fn_1_FD3A8_lbl_1_bss_850D4 {
+    f32 unk_0;
+};
+struct fn_1_FD3A8_lbl_1_data_3EFA8 {
+    u32 unk_0;
+};
+
+extern f32 lbl_1_bss_850D8;
+extern struct fn_1_FD3A8_lbl_1_bss_850D4 lbl_1_bss_850D4;
+extern struct fn_1_FD3A8_lbl_1_data_3EFA8 lbl_1_data_3EFA8;
+extern struct fn_1_FD3A8_lbl_1_rodata_7600 lbl_1_rodata_7600;
+extern struct fn_1_FD3A8_lbl_801A6D00 lbl_801A6D00;
+
+extern u32 fn_800371F8(u32, void *);
+extern u32 lbl_8006DCA4(void);
+extern void fn_1_57720(u32, u32, u32, u32);
+extern void fn_80015C1C(void *, f32, f32, f32, f32, f32, f32, f32, f32, f32);
+extern void fn_8003462C(u32, u32, u32);
+extern void fn_800720B0(u32);
+extern void fn_8007245C(u32);
+extern void fn_800724C8(void);
+extern void fn_80072558(void);
+extern void fn_80072864(u32);
+extern void fn_800728A8(s32, s32, s32, s32);
+extern void fn_80072AB0(s32, s32, s32);
+extern void fn_80072C24(s32, s32, s32, s32, s32);
+extern void fn_80072CC4(s32, s32, s32, s32, s32);
+extern void fn_80072D64(s32, s32, s32, s32, u8, s32);
+extern void fn_80072E20(s32, s32, s32, s32, u8, s32);
+extern void fn_800734A8(u32, s32, s32, s32);
+extern void fn_80073678(u32);
+extern void fn_80073778(void *, s32);
+extern void fn_80073898(u32);
+extern void fn_80073C6C(s32);
+extern void fn_800745A4(u32, s32, s32, u32, u32, u32);
+extern void fn_80074660(u32);
+extern void fn_80074788(u32);
+extern void fn_800747D0(u32, u32, s32, s32, u32, s32, s32);
+extern void fn_80074918(u8, s32, u8);
+extern void lbl_8006DB74(void *);
+extern void lbl_8006DBAC(void *);
+extern void lbl_8006DD7C(void);
+extern void lbl_8006DFC4(void *);
+
+/* Translate the locked-cache matrix accumulator along its z column. */
+static inline void mtxa_translate_z(f32 z) {
+    f32 *m = (f32 *)(0xE0000000 + 0x0);
+    f32 m02 = m[2];
+    f32 m03 = m[3];
+    f32 m12 = m[6];
+    f32 m13 = m[7];
+    f32 m22 = m[10];
+    f32 m23 = m[11];
+    m02 = m03 + m02 * z;
+    m12 = m13 + m12 * z;
+    m22 = m23 + m22 * z;
+    m[3] = m02;
+    m[7] = m12;
+    m[11] = m22;
+}
+
+#pragma opt_lifetimes off
+void fn_1_FD3A8(void *arg0, f32 arg1) {
+    f32 fzgx_live;
+    struct fn_1_FD3A8_lbl_1_rodata_7600 *p_pool;
+    f32 v9;
+    f32 v0;
+    f32 v1;
+    f32 v4;
+    f32 v9_2;
+    f32 v3;
+    f32 v5;
+    f32 v6;
+    struct { u32 a[12]; } loc_78;
+    struct { u32 a[12]; } loc_48;
+    struct { u32 a[12]; } loc_18;
+    u32 loc_10[2];
+    f32 z;
+
+    v0 = *(f32 *)((u8 *)arg0 + 64);
+    p_pool = (struct fn_1_FD3A8_lbl_1_rodata_7600 *)&lbl_1_rodata_7600;
+    v1 = *(f32 *)(((68) + ((u8 *)arg0)));
+    v3 = (v0 * arg1);
+    v4 = ((-v0) * arg1);
+    v5 = ((-v1) * arg1);
+    v6 = (v1 * arg1);
+    fn_80072558();
+    lbl_8006DB74((void *)(lbl_801A6D00.unk_0 + 96));
+    lbl_8006DD7C();
+    lbl_8006DB74(&loc_78);
+    lbl_8006DCA4();
+    lbl_8006DFC4(&loc_78);
+    fn_80072558();
+    fn_1_57720(1, 1, 1, 0);
+    {
+        f32 d = (lbl_1_bss_850D8 - lbl_1_bss_850D4.unk_0);
+        f32 m = (p_pool->unk_C * d);
+        v9 = (lbl_1_bss_850D4.unk_0 + m);
+        (void) v9;  /* fzgx: keeps the web at its definition */
+    }
+    lbl_8006DBAC(&loc_78);
+    {
+        mtxa_translate_z(-v9);
+    }
+    lbl_8006DB74(&loc_48);
+    lbl_8006DCA4();
+    lbl_8006DFC4(&loc_48);
+    fn_80072558();
+    {
+        f32 h = p_pool->unk_14;
+        fn_80015C1C(&loc_18, v5, v6, v4, v3, lbl_1_bss_850D4.unk_0, h, h, h, h);
+    }
+    lbl_8006DBAC(&loc_18);
+    lbl_8006DFC4((void *)(lbl_801A6D00.unk_0 + 96));
+    fzgx_live = p_pool->unk_4C;
+    mtxa_translate_z(fzgx_live - v9);
+    GXInitTexObj((Sig_GXInitTexObj_GXTexObj *)((u8 *)lbl_1_data_3EFA8.unk_0 + 0x20), (void *)((u8 *)arg0 + 0x60), 0x40, 0x40, 5, 0, 0, 0);
+    {
+        z = p_pool->unk_C;
+        GXInitTexObjLOD((Sig_GXInitTexObjLOD_GXTexObj *)((u8 *)lbl_1_data_3EFA8.unk_0 + 0x20), 1, 1, z, z, z, 0, 0, 0);
+    }
+    fn_800724C8();
+    fn_8007245C(0x2200);
+    loc_10[0] = p_pool->unk_48;
+    fn_80074788(1);
+    fn_800747D0(4, 0, 0, 0, 0, 2, 2);
+    loc_10[1] = loc_10[0];
+    fn_800371F8(1, &loc_10[1]);
+    fn_80074918(1, 7, 0);
+    fn_800728A8(1, 4, 5, 0);
+    fn_800720B0(0);
+    fn_80072864(2);
+    fn_80073778((void *)((u8 *)lbl_1_data_3EFA8.unk_0 + 0x20), 0);
+    GXLoadTexMtxImm(lbl_801A6D00.unk_0, 30, 0);
+    fn_80074660(1);
+    fn_800745A4(0, 0, 0, 30, 0, 125);
+    fn_80073678(1);
+    fn_80073898(0);
+    fn_80073C6C(0);
+    fn_80072AB0(0, 0, 0);
+    fn_800734A8(0, 0, 0, 4);
+    fn_80072C24(0, 2, 8, 3, 15);
+    fn_80072D64(0, 0, 0, 0, 1, 0);
+    fn_80072CC4(0, 7, 4, 1, 7);
+    fn_80072E20(0, 0, 0, 0, 1, 0);
+    {
+        f32 d = (lbl_1_bss_850D8 - lbl_1_bss_850D4.unk_0);
+        f32 m = (v9 * d);
+        f32 n = (lbl_1_bss_850D4.unk_0 + m);
+        v9_2 = (n / lbl_1_bss_850D4.unk_0);
+    }
+    fn_8003462C(128, 0, 4);
+    {
+        f32 a = v9_2 * v4;
+        f32 c = v9_2 * v6;
+        f32 d = v9_2 * v3;
+        f32 b = v9_2 * v5;
+        *(volatile f32 *)(((-32768) + ((u8 *)0xCC010000))) = a; /* fzgx-allow: A1,A2 GX FIFO write port 0xCC008000 */
+        *(volatile f32 *)(((-32768) + ((u8 *)0xCC010000))) = b; /* fzgx-allow: A1,A2 GX FIFO write port 0xCC008000 */
+        *(volatile f32 *)(((-32768) + ((u8 *)0xCC010000))) = p_pool->unk_C; /* fzgx-allow: A1,A2 GX FIFO write port 0xCC008000 */
+        *(volatile f32 *)(((-32768) + ((u8 *)0xCC010000))) = p_pool->unk_C; /* fzgx-allow: A1,A2 GX FIFO write port 0xCC008000 */
+        *(volatile f32 *)(((-32768) + ((u8 *)0xCC010000))) = p_pool->unk_C; /* fzgx-allow: A1,A2 GX FIFO write port 0xCC008000 */
+        *(volatile f32 *)(((-32768) + ((u8 *)0xCC010000))) = a; /* fzgx-allow: A1,A2 GX FIFO write port 0xCC008000 */
+        *(volatile f32 *)(((-32768) + ((u8 *)0xCC010000))) = c; /* fzgx-allow: A1,A2 GX FIFO write port 0xCC008000 */
+        *(volatile f32 *)(((-32768) + ((u8 *)0xCC010000))) = p_pool->unk_C; /* fzgx-allow: A1,A2 GX FIFO write port 0xCC008000 */
+        *(volatile f32 *)(((-32768) + ((u8 *)0xCC010000))) = p_pool->unk_C; /* fzgx-allow: A1,A2 GX FIFO write port 0xCC008000 */
+        *(volatile f32 *)(((-32768) + ((u8 *)0xCC010000))) = p_pool->unk_1C; /* fzgx-allow: A1,A2 GX FIFO write port 0xCC008000 */
+        *(volatile f32 *)(((-32768) + ((u8 *)0xCC010000))) = d; /* fzgx-allow: A1,A2 GX FIFO write port 0xCC008000 */
+        *(volatile f32 *)(((-32768) + ((u8 *)0xCC010000))) = c; /* fzgx-allow: A1,A2 GX FIFO write port 0xCC008000 */
+        *(volatile f32 *)(((-32768) + ((u8 *)0xCC010000))) = p_pool->unk_C; /* fzgx-allow: A1,A2 GX FIFO write port 0xCC008000 */
+        *(volatile f32 *)(((-32768) + ((u8 *)0xCC010000))) = p_pool->unk_1C; /* fzgx-allow: A1,A2 GX FIFO write port 0xCC008000 */
+        *(volatile f32 *)(((-32768) + ((u8 *)0xCC010000))) = p_pool->unk_1C; /* fzgx-allow: A1,A2 GX FIFO write port 0xCC008000 */
+        *(volatile f32 *)(((-32768) + ((u8 *)0xCC010000))) = d; /* fzgx-allow: A1,A2 GX FIFO write port 0xCC008000 */
+        *(volatile f32 *)(((-32768) + ((u8 *)0xCC010000))) = b; /* fzgx-allow: A1,A2 GX FIFO write port 0xCC008000 */
+        *(volatile f32 *)(((-32768) + ((u8 *)0xCC010000))) = p_pool->unk_C; /* fzgx-allow: A1,A2 GX FIFO write port 0xCC008000 */
+        *(volatile f32 *)(((-32768) + ((u8 *)0xCC010000))) = p_pool->unk_1C; /* fzgx-allow: A1,A2 GX FIFO write port 0xCC008000 */
+        *(volatile f32 *)(((-32768) + ((u8 *)0xCC010000))) = p_pool->unk_C; /* fzgx-allow: A1,A2 GX FIFO write port 0xCC008000 */
+    }
+}
+#pragma opt_lifetimes reset
+/* fzgx:end fn_1_FD3A8 */
+
 /* fzgx:begin fn_1_FD844 */
 extern void lbl_8006DB74(void *);
 extern void GXInitTexObj(void *, void *, u32, u32, u32, u32, u32, u32);
