@@ -17908,6 +17908,21 @@
   },
   {
     "module": "main",
+    "source": "dol/fn_80039E48.c",
+    "symbols": [
+      "fn_80039E48"
+    ],
+    "status": "matching",
+    "mw_version": "GC/1.2.5n",
+    "extra_cflags": [],
+    "pool": {
+      "...rodata.0": "lbl_8008FF50",
+      "@42": "lbl_801A7178",
+      "fzgx_pool_rodata_lbl_8008FF50": "lbl_8008FF50"
+    }
+  },
+  {
+    "module": "main",
     "source": "dol/fn_8003A1CC.c",
     "symbols": [
       "fn_8003A1CC"
