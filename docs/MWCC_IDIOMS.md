@@ -94,6 +94,16 @@ file from what actually unblocked functions; keep each item one or two lines.
   The key compared in the loop moved r3 -> r9 only with the outer parameter declared `u8` and
   the inline helper still casting `(u8)key`; then declaration order `i, e, found, base` matched.
   `fixup_source.rerolled_loops` (with `narrowed_parameters` and the reordered locals) emits it.
+- Reversed `fmuls` operands on a multiply by 2^-n (retail: variable first) are a division in the
+  source: MWCC strength-reduces `x / 2.0f` to `x * 0.5f` keeping x first, while `0.5f * x` keeps the
+  constant first (fn_16_2EEC, fn_1_535A0 `/ 8.0f`, fn_1_130C84 `/ 4.0f`, fn_1_13DDB8, fn_10_D5D4).
+  `fixup_source.reciprocal_divisions` (sweep family `recipdiv`) proposes each site and all sites.
+- `li rA, K; mr rB, rA` (a constant copied between locals) is an inlined static helper's
+  parameter: MWCC propagates a constant local into a `li` per use but keeps a helper parameter a
+  variable (fn_10_AB98 `step`, fn_3_3F20 `dir`, fn_12_2F7AC `result`). An identity helper
+  `static inline s32 k(s32 v) { return v; }` folds and changes nothing (measured).
+  `fixup_source.constant_inline_parameters` (sweep family `inlineparam`) wraps the body, or the
+  code from the constant assignment on, in `NAME_fzgx_inl` taking the constant.
 
 ## Selection panel evidence (2026-09-15)
 

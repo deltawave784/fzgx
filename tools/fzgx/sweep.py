@@ -104,7 +104,11 @@ def generate(p: Project, s: str, sym, path: Path, body: str, check, outdir: Path
     add('constptr', lambda: fixup_source.wrap_constant_pointers(body, sym.name))
     add('decse', lambda: fixup_source.decse_repeated_expressions(body, sym.name))
     add('decl', lambda: decl_moves(body, sym.name))
+    # a helper made by the inline-parameter family holds the moved locals
+    add('decl', lambda: decl_moves(body, sym.name + '_fzgx_inl') if sym.name + '_fzgx_inl(' in body else [])
     add('lockedcache', lambda: fixup_source.locked_cache_columns(body, sym.name))
+    add('recipdiv', lambda: fixup_source.reciprocal_divisions(body, sym.name))
+    add('inlineparam', lambda: fixup_source.constant_inline_parameters(body, sym.name))
     add('pragmas', lambda: fixup_evidence.optimizer_pragmas(body, sym.name))
     add('layout', lambda: fixup_layout.tu_section_layout(p, s, body, check))
     add('datainit', lambda: fixup_layout.defined_data_initializers(p, s, body, check))

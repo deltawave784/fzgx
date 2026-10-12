@@ -549,6 +549,246 @@ def float_precision(body: str, name: str) -> List[Tuple[str, str]]:
     return out
 
 
+_FLOAT_LIT = re.compile(r'(?<![\w.])(\d+\.\d*(?:[eE][+-]?\d+)?|\.\d+(?:[eE][+-]?\d+)?|\d+[eE][+-]?\d+)([fF]?)(?![\w.])')
+_CAST_RE = re.compile(r'\(\s*(?:const\s+)?(?:[us](?:8|16|32|64)|f32|f64|float|double|int|unsigned(?:\s+int)?|long|short|char)\s*\)\s*')
+
+
+def _reciprocal_power(token: str) -> Optional[int]:
+    """n when the literal is exactly 2^-n (n >= 1), else None."""
+    try:
+        v = float(token)
+    except ValueError:
+        return None
+    if not 0.0 < v < 1.0:
+        return None
+    mant, exp = math.frexp(v)
+    return 1 - exp if mant == 0.5 and 1 - exp <= 40 else None
+
+
+def _unary_end(code: str, i: int, stop: int) -> Optional[int]:
+    """End of the unary (cast) expression starting at i, or None when it cannot be delimited."""
+    n = stop
+    while i < n and code[i].isspace():
+        i += 1
+    while True:
+        m = _CAST_RE.match(code, i, n)
+        if m:
+            i = m.end(); continue
+        if i < n and code[i] in '-+!~' and code[i:i + 2] not in ('--', '++'):
+            i += 1
+            while i < n and code[i].isspace():
+                i += 1
+            continue
+        break
+    if i >= n:
+        return None
+    if code[i] == '(':
+        j = _close(code, i, n)
+        if j is None:
+            return None
+        i = j
+    else:
+        m = re.compile(r'[A-Za-z_]\w*|\d+\.\d*(?:[eE][+-]?\d+)?[fF]?|\.\d+(?:[eE][+-]?\d+)?[fF]?|0[xX][0-9a-fA-F]+[uUlL]*|\d+[uUlL]*').match(code, i, n)
+        if not m:
+            return None
+        i = m.end()
+    while i < n:
+        m = re.compile(r'\s*(?:\.|->)\s*[A-Za-z_]\w*').match(code, i, n)
+        if m:
+            i = m.end(); continue
+        m = re.compile(r'\s*[\[(]').match(code, i, n)
+        if m:
+            j = _close(code, m.end() - 1, n)
+            if j is None:
+                return None
+            i = j; continue
+        break
+    return i
+
+
+def _close(code: str, i: int, n: int) -> Optional[int]:
+    """Index after the bracket matching code[i]."""
+    pairs = {'(': ')', '[': ']'}
+    want = [pairs[code[i]]]
+    j = i + 1
+    while j < n and want:
+        c = code[j]
+        if c in pairs:
+            want.append(pairs[c])
+        elif c in ')]':
+            if c != want.pop():
+                return None
+        j += 1
+    return j if not want else None
+
+
+def reciprocal_divisions(body: str, name: str) -> List[Tuple[str, str]]:
+    """A multiply by an exact power-of-two reciprocal written as the division retail used.
+
+    MWCC strength-reduces `x / 2.0f` to a multiply by 0.5f with the variable as the FIRST
+    `fmuls` operand; `0.5f * x` (and, after operand canonicalisation, often `x * 0.5f`) puts the
+    constant first. Measured in fn_16_2EEC, fn_1_535A0 (`/ 8.0f`), fn_1_130C84 (`/ 4.0f`),
+    fn_1_13DDB8 and fn_10_D5D4 (2026-10-12). One candidate per site and one with every site."""
+    out: List[Tuple[str, str]] = []
+    span = _function_body_span(body, name)
+    if not span:
+        return out
+    from .sdkimport import masked
+    code = masked(body)
+    lo, hi = span[1], span[2]
+    edits_: List[Tuple[int, int, str, str]] = []
+    for m in _FLOAT_LIT.finditer(code, lo, hi):
+        n = _reciprocal_power(m.group(1))
+        if n is None:
+            continue
+        divisor = f"{2 ** n}.0{m.group(2)}"
+        # e * c / e *= c: `*` and `/` share precedence and associativity, so only the
+        # operator and the literal change (`*=` only when the literal is the whole operand)
+        pm = re.search(r'\*(=?)\s*$', code[lo:m.start()])
+        whole_rhs = re.match(r'\s*[;,)]', code[m.end():hi])
+        if pm and (not pm.group(1) or whole_rhs) and not re.search(r'[*/%(,=?:&|^<>!~+-]\s*\*=?\s*$', code[lo:m.start()]):
+            a = lo + pm.start()
+            edits_.append((a, m.end(), f"/{pm.group(1)} {divisor}", f"{m.group(0)} -> / {divisor}"))
+            continue
+        # c * e at the head of its multiplicative chain
+        nm = re.compile(r'\s*\*(?!=)').match(code, m.end(), hi)
+        before = code[lo:m.start()].rstrip()
+        if not nm or not before or before[-1] in '*/%)' or before.endswith(('++', '--')):
+            continue
+        end = _unary_end(code, nm.end(), hi)
+        if end is None:
+            continue
+        operand = body[nm.end():end].strip()
+        if not operand:
+            continue
+        edits_.append((m.start(), end, f"{operand} / {divisor}", f"{m.group(0)} * {operand[:24]} -> / {divisor}"))
+    if not edits_:
+        return out
+    for a, b, new, label in edits_[:16]:
+        out.append((f"reciprocal divide {label}", body[:a] + new + body[b:]))
+    if len(edits_) > 1:
+        text, last = body, None
+        for a, b, new, _ in sorted(edits_, reverse=True):
+            if last is not None and b > last:
+                continue
+            text, last = text[:a] + new + text[b:], a
+        out.append(("reciprocal divide at every site", text))
+    return out
+
+
+_CONST_RE = r'-?\s*(?:0[xX][0-9a-fA-F]+[uUlL]*|\d+\.\d*(?:[eE][+-]?\d+)?[fF]?|\.\d+(?:[eE][+-]?\d+)?[fF]?|\d+[uUlL]*)'
+
+
+def constant_inline_parameters(body: str, name: str) -> List[Tuple[str, str]]:
+    """A local set to a constant turned into an inlined helper's parameter.
+
+    MWCC propagates a constant local into every use (`li` per consumer), but an inlined
+    static helper's parameter stays a variable: retail's `li rA, K; mr rB, rA` (and constant
+    copies into callee-saved locals) come from `helper(K)`. Measured: fn_10_AB98 (`step = 0`
+    became `sel_move_cursor(cursor, 0)`), fn_3_3F20 (`dir = init; delta = dir;` inside a helper
+    called with 0), fn_80057494. Variants: the local itself is the parameter, or the local is
+    assigned from it; the helper holds the whole body, or only the code from the constant
+    assignment on (statements before it stay in the caller when they use no local)."""
+    out: List[Tuple[str, str]] = []
+    span = _function_body_span(body, name)
+    if not span:
+        return out
+    from .sdkimport import masked
+    code = masked(body)
+    head_start = max(code.rfind('\n', 0, span[0]), code.rfind(';', 0, span[0]), code.rfind('}', 0, span[0])) + 1
+    ret = code[head_start:span[0]].strip()
+    ret = re.sub(r'\b(?:static|inline|extern|__inline)\b\s*', '', ret).strip()
+    if not ret or not re.fullmatch(TYPE, ret) or '#' in ret:
+        return out
+    void = ret == 'void'
+    popen = code.index('(', span[0])
+    pclose = code.rfind(')', popen, span[1])
+    params = body[popen + 1:pclose].strip()
+    if '(' in params or '...' in params or '/*' in params:
+        return out
+    pnames: List[str] = []
+    if params and params != 'void':
+        for prm in params.split(','):
+            pm = re.search(r'([A-Za-z_]\w*)\s*(?:\[[^\]]*\]\s*)*$', prm.strip())
+            if not pm:
+                return out
+            pnames.append(pm.group(1))
+    locs = _locals(body, span)
+    top = locs[-1][1] if locs else span[1]
+    stmts = _top_statements(code[top:span[2]])
+    if not stmts:
+        return out
+    stmts = [(top + a, top + b) for a, b in stmts]
+    lnames = [nm for _, _, _, nm, _ in locs]
+    helper = f"{name}_fzgx_inl"
+    if re.search(rf'\b{helper}\b', body):
+        return out
+    indent = '    '
+    tried = 0
+    for li, (s0, e0, typ, k, dims) in enumerate(locs):
+        if tried >= 4:
+            break
+        if dims or not re.fullmatch(r'(?:[us](?:8|16|32)|f32|f64|int|char|short|long|float|double|BOOL|bool)', typ.strip()):
+            continue
+        dm = DECL_RE.match(body[s0:e0].rstrip('\n'))
+        init = dm.group(4).strip() if dm and dm.group(4) else None
+        first = re.search(rf'\b{re.escape(k)}\b', code[top:span[2]])
+        if init is not None:
+            if not re.fullmatch(_CONST_RE, init):
+                continue
+            const, at = init, None
+        else:
+            if not first:
+                continue
+            pos = top + first.start()
+            at = next((i for i, (a, b) in enumerate(stmts) if a == pos), None)
+            if at is None:
+                continue
+            am = re.fullmatch(rf'{re.escape(k)}\s*=\s*({_CONST_RE})\s*;', code[stmts[at][0]:stmts[at][1]])
+            if not am:
+                continue
+            const = am.group(1)
+        tried += 1
+        const = re.sub(r'\s+', '', const)
+        decls_wo = ''.join(body[a:b] for j, (a, b, *_r) in enumerate(locs) if j != li)
+        decls_all = ''.join(body[a:b] for a, b, *_r in locs)
+        if init is not None:
+            decls_all = decls_all.replace(body[s0:e0], f"{indent}{typ} {k};\n", 1)
+        split = 0 if at is None else at
+        prefix = code[stmts[0][0]:stmts[split][0]] if stmts and split else ''
+        placements = [('whole body', 0)]
+        if split and not any(re.search(rf'\b{re.escape(v)}\b', prefix) for v in lnames):
+            placements.append(('from the assignment', split))
+        for variant in ('parameter is the local', 'parameter assigns the local'):
+            for place, cut in placements:
+                rest_start = stmts[cut][0]
+                rest = body[rest_start:span[2]]
+                if variant == 'parameter is the local':
+                    pdecl, decls = f"{typ.strip()} {k}", decls_wo
+                    if at is not None:
+                        a, b = stmts[at]
+                        lead = body.rfind('\n', 0, a) + 1
+                        cut_end = b + 1 if body[b:b + 1] == '\n' else b
+                        rest = body[rest_start:lead] + body[cut_end:span[2]] if lead >= rest_start else body[rest_start:a] + body[b:span[2]]
+                else:
+                    pdecl, decls = f"{typ.strip()} fzgx_init", decls_all
+                    if at is not None:
+                        a, b = stmts[at]
+                        rest = body[rest_start:a] + f"{k} = fzgx_init;" + body[b:span[2]]
+                    else:
+                        rest = f"{k} = fzgx_init;\n{indent}" + rest
+                hparams = ', '.join(([params] if pnames else []) + [pdecl])
+                hdef = (f"static inline {ret} {helper}({hparams}) {{\n" + decls
+                        + ('\n' if decls else '') + indent + rest.lstrip() + "}\n\n")
+                call = f"{'' if void else 'return '}{helper}({', '.join(pnames + [const])});"
+                keep = body[stmts[0][0]:rest_start].rstrip() if cut else ''
+                outer = "\n" + (indent + keep + "\n" if keep else '') + indent + call + "\n"
+                text = body[:head_start] + ('\n' if head_start and body[head_start - 1] != '\n' else '') + hdef \
+                    + body[head_start:span[1]] + outer + body[span[2]:]
+                out.append((f"{k} = {const}: {variant}, {place}", text))
+    return out
+
+
 
 def embedded_call_assignments(body: str, name: str) -> List[Tuple[str, str]]:
     """`x = expr; f(.., x, ..)` -> `f(.., (x = expr), ..)`: the load lowers straight into the
@@ -1407,6 +1647,10 @@ def extra_families(body: str, name: str) -> List[Tuple[str, str, str]]:
         if len(re.findall(rf"\b{tn}\b", rest)) == 1:
             new_inner = inner[:m.start()] + re.sub(rf"\b{tn}\b", call, rest, count=1)
             out.append(("inline-call", f"inline {tn}", body[:span[1]] + new_inner + body[span[2]:]))
+    # 10. measured idioms: a power-of-two division strength-reduced to a multiply with the
+    #     variable first; a constant local turned into an inlined helper's parameter
+    out += [("recipdiv", l, t) for l, t in reciprocal_divisions(body, name)]
+    out += [("inlineparam", l, t) for l, t in constant_inline_parameters(body, name)]
     return out
 
 
@@ -1952,7 +2196,7 @@ def all_rewrites(body: str, name: str) -> List[Tuple[str, str, str]]:
     # every edit of a family applied together (the same fix at every site): the composition of
     # the per-site texts when their edits do not overlap
     for fam, texts in by_fam.items():
-        if len(texts) < 2 or fam in ("decl-order", "regalloc", "param-count", "struct-pad"):
+        if len(texts) < 2 or fam in ("decl-order", "regalloc", "param-count", "struct-pad", "inlineparam"):
             continue
         changes=[]
         for t in texts[:24]:
