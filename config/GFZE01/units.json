@@ -1519,6 +1519,18 @@
   },
   {
     "module": "customize",
+    "source": "rel/customize/emb_paste_editor/fn_3_130C8.c",
+    "symbols": [
+      "fn_3_130C8"
+    ],
+    "status": "nonmatching",
+    "mw_version": null,
+    "extra_cflags": [],
+    "tu": "rel/customize/emb_paste_editor.c",
+    "pool": true
+  },
+  {
+    "module": "customize",
     "source": "rel/customize/emblem/fn_3_1349C.c",
     "symbols": [
       "fn_3_1349C"
