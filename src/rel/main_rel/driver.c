@@ -443,6 +443,124 @@ void fn_1_A7F84(void *arg0, u32 arg1) {
 }
 /* fzgx:end fn_1_A7F84 */
 
+/* fzgx:begin fn_1_A8270 noprologue */
+#include "types.h"
+
+extern u8 lbl_1_data_35654[0x210];
+extern u8 lbl_1_data_355A4[0xB0];
+extern s8 lbl_1_data_34348[0xC];
+
+typedef struct {
+    u8 pad_0[4];
+    void *unk_4;
+    s8 *unk_8;
+    u8 pad_C[0x18];
+} DrvPartEntry;
+
+typedef struct {
+    u8 pad_0[4];
+    u32 flags;
+    u8 pad_8[0x16];
+    u8 count;
+} DrvModel;
+
+typedef struct {
+    u8 pad_0[0xE8];
+    u8 unk_E8;
+    u8 unk_E9;
+    s16 unk_EA;
+    s16 unk_EC;
+    s16 unk_EE;
+    u8 unk_F0[0xC];
+    DrvPartEntry *entries;
+    s32 count;
+    void *unk_104;
+    u8 pad_108[0x24];
+    u8 parts[1][0x30];
+} DrvObj;
+
+extern f32 lbl_1_rodata_4A34[25];
+extern void fn_1_55FC4(f32);
+extern void fn_1_556B8(void *);
+extern void **fn_80077A18(void);
+extern void lbl_8006DAEC(void);
+extern DrvModel *fn_80071268(void *, void *);
+extern void lbl_8006D9D8(void *);
+extern void mathutil_mtxA_rotate_z(s16);
+extern void mathutil_mtxA_rotate_y(s16);
+extern void mathutil_mtxA_rotate_x(s16);
+extern void lbl_8006E0A4(void *);
+extern void lbl_8006E14C(f32);
+extern void fn_80077A20(DrvModel *, void **);
+extern void fn_80072558(void);
+extern void lbl_8006DB30(void);
+
+static inline s8 fn_1_A8270_find(s8 c)
+{
+    s32 i;
+    for (i = 0; i < 10; i++) {
+        if (c == ((s8 *)&lbl_1_data_34348)[i]) {
+            return i;
+        }
+    }
+    return 0;
+}
+
+void fn_1_A8270(DrvObj *obj, s32 arg1)
+{
+    s32 i;
+    void **buf;
+    void *res;
+    DrvPartEntry *entry;
+    DrvModel *model;
+    s32 ok;
+    void **p;
+    s32 j;
+    u32 flags;
+
+    res = obj->unk_104;
+    buf = fn_80077A18();
+    lbl_8006DAEC();
+    for (i = 0; i < obj->count; i++) {
+        entry = &obj->entries[i];
+        model = fn_80071268(res, entry->unk_4);
+        if (model != NULL) {
+            lbl_8006D9D8(obj->unk_F0);
+            mathutil_mtxA_rotate_z(obj->unk_EE);
+            mathutil_mtxA_rotate_y(obj->unk_EA);
+            mathutil_mtxA_rotate_x(obj->unk_EC);
+            if (obj->unk_E9) {
+                lbl_8006E0A4(&lbl_1_data_35654[obj->unk_E8 * 12]);
+            }
+            if (obj->unk_E9) {
+                lbl_8006E14C(((f32 *)lbl_1_data_355A4)[obj->unk_E8]);
+            }
+            ok = 1;
+            flags = model->flags & 0xC;
+            if (flags && entry->unk_8 != NULL) {
+                p = buf;
+                for (j = 0; j < model->count; j++) {
+                    *p++ = obj->parts[fn_1_A8270_find(entry->unk_8[j])];
+                }
+            } else if (flags) {
+                fn_80077A20(model, NULL);
+            } else {
+                ok = 0;
+            }
+            if (ok) {
+                if (arg1) {
+                    lbl_8006E14C(5.0f);
+                    fn_1_55FC4(5.0f);
+                }
+                fn_80072558();
+                fn_1_556B8(model);
+            }
+        }
+    }
+    lbl_8006DB30();
+}
+/* fzgx:end fn_1_A8270 */
+
 /* fzgx:begin fn_1_A8528 */
 typedef struct FnA8528Object {
     u8 pad_ea[0xea];
@@ -714,6 +832,96 @@ void fn_1_A8F78(void) {
     fn_1_A96BC();
 }
 /* fzgx:end fn_1_A8F78 */
+
+/* fzgx:begin fn_1_A8FA0 pool noprologue */
+#include "types.h"
+
+typedef struct {
+    u8 unk_0;
+    u8 unk_1;
+    u8 unk_2;
+    u8 pad_3;
+    s16 unk_4;
+    s16 unk_6;
+    s16 unk_8;
+    u8 pad_A[2];
+    char *name;
+} fn_1_A8FA0_Entry;
+
+typedef struct {
+    u8 pad_0[0xC];
+    char *strPtr;
+} fn_1_A8FA0_Header;
+
+extern char *fn_80083DB0(char *, const char *);
+extern size_t strlen(const char *);
+
+/* lbl_1_bss_6F648 heads a cluster of this TU's .bss objects addressed off one base */
+static fn_1_A8FA0_Header lbl_1_bss_6F648;
+static char sNameBuf[0x1000];
+static fn_1_A8FA0_Entry sEntries[0x100];
+static s32 sEntryCount;
+
+void fn_1_A8FA0(void) {
+    s32 dup[0x100];
+    s32 i;
+    s32 n;
+    size_t len;
+    char *name;
+    s32 j;
+
+    lbl_1_bss_6F648.strPtr = sNameBuf;
+    n = 0;
+    for (i = 0; i < sEntryCount; i++) {
+        if (sEntries[i].unk_2 & 1) {
+            name = sEntries[i].name;
+            len = strlen(name);
+            if (i != 0) {
+                sEntries[n] = sEntries[i];
+                fn_80083DB0(lbl_1_bss_6F648.strPtr, name);
+            }
+            sEntries[n].name = lbl_1_bss_6F648.strPtr;
+            n++;
+            lbl_1_bss_6F648.strPtr += len + 1;
+        }
+    }
+    sEntryCount = n;
+
+    for (i = n - 1; i >= 0; i--) {
+        dup[i] = 0;
+    }
+
+    for (i = n - 1; i >= 1; i--) {
+        if (dup[i] == 0) {
+            for (j = i - 1; j >= 0; j--) {
+                if (sEntries[i].unk_4 == sEntries[j].unk_4 &&
+                    sEntries[i].unk_6 == sEntries[j].unk_6 &&
+                    sEntries[i].unk_2 == sEntries[j].unk_2 &&
+                    sEntries[i].unk_0 == sEntries[j].unk_0) {
+                    dup[j] = 1;
+                }
+            }
+        }
+    }
+
+    lbl_1_bss_6F648.strPtr = sNameBuf;
+    n = 0;
+    for (i = 0; i < sEntryCount; i++) {
+        if (dup[i] == 0) {
+            len = strlen(sEntries[i].name);
+            name = sEntries[i].name;
+            if (i != 0) {
+                sEntries[n] = sEntries[i];
+                fn_80083DB0(lbl_1_bss_6F648.strPtr, name);
+            }
+            sEntries[n].name = lbl_1_bss_6F648.strPtr;
+            n++;
+            lbl_1_bss_6F648.strPtr += len + 1;
+        }
+    }
+    sEntryCount = n;
+}
+/* fzgx:end fn_1_A8FA0 */
 
 /* fzgx:begin fn_1_A9250 */
 void fn_1_A9250(int arg) {

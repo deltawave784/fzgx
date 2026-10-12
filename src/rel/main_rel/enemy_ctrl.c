@@ -930,6 +930,90 @@ void fn_1_CB404(u8 value) {
 }
 /* fzgx:end fn_1_CB404 */
 
+/* fzgx:begin fn_1_CB424 noprologue */
+#include "types.h"
+#include "font.h"
+#include "rel/main_rel/enemy_ctrl.h"
+
+typedef struct {
+    u32 unk_0;
+    u32 unk_4;
+    u8 pad_8[4];
+} CB424Entry;
+
+typedef struct {
+    f32 x;
+    f32 y;
+    f32 scaleX;
+    f32 scaleY;
+    f32 unk_10;
+    u32 unk_14;
+    s32 unk_18;
+    u8 color[4];
+    u8 color2[4];
+} CB424Sprite;
+
+extern s32 fn_1_5910(void);
+extern f32 lbl_1_rodata_26F8[22];
+extern const f32 lbl_1_rodata_5E1C;
+extern const f32 lbl_1_rodata_5E20;
+extern const f32 lbl_1_rodata_5E08;
+extern const f32 lbl_1_rodata_5E0C;
+extern const f32 lbl_1_rodata_5CFC;
+extern const f32 lbl_1_rodata_5E24;
+extern const f32 lbl_1_rodata_5CD8;
+extern const f32 lbl_1_rodata_5CD4;
+extern u32 lbl_1_rodata_5E14;
+extern u32 lbl_1_rodata_5E18;
+extern void fn_1_51E60(FontDrawPacket *);
+extern void fn_1_CB6D8(void *);
+
+void fn_1_CB424(s32 x, s32 y, s32 idx) {
+    CB424Entry *entry = &((CB424Entry *)&lbl_1_bss_7ACA0)[idx];
+    CB424Sprite sprite;
+    FontDrawPacket pkt;
+    f32 t;
+    f32 a;
+    f32 c;
+
+    if ((((u32 *)&lbl_1_data_3D544)[fn_1_5910()] >> 24) & 1) {
+        pkt = *(FontDrawPacket *)lbl_1_rodata_26F8;
+        pkt.image = 0x9402;
+        pkt.x = lbl_1_rodata_5E1C;
+        pkt.y = (f32)y;
+        fn_1_51E60(&pkt);
+        pkt = *(FontDrawPacket *)lbl_1_rodata_26F8;
+        pkt.image = 0x940A;
+        pkt.x = lbl_1_rodata_5E20;
+        pkt.y = (f32)y;
+        fn_1_51E60(&pkt);
+
+        sprite.x = (f32)x;
+        sprite.y = (f32)(y + 14);
+        sprite.scaleX = lbl_1_rodata_5E08;
+        sprite.scaleY = lbl_1_rodata_5E0C;
+        sprite.unk_10 = lbl_1_rodata_5CFC;
+        sprite.unk_18 = -1;
+        *(u32 *)sprite.color = lbl_1_rodata_5E14;
+        *(u32 *)sprite.color2 = lbl_1_rodata_5E18;
+        sprite.unk_14 = entry->unk_0;
+        if (entry->unk_4 != 0 && (sprite.unk_14 & ~0xFFF) == 0) {
+            t = (f32)(sprite.unk_14 & 0xFFF) / lbl_1_rodata_5E24;
+            a = lbl_1_rodata_5CD4 * t;
+            c = lbl_1_rodata_5CD8 * (sprite.unk_10 - t);
+            *(u8 *)((u8 *)&sprite + 0x1C) = c;
+            *(u8 *)((u8 *)&sprite + 0x1D) = c;
+            *(u8 *)((u8 *)&sprite + 0x1E) = c;
+            if (a > sprite.unk_10) {
+                a = sprite.unk_10;
+            }
+            sprite.color2[3] = lbl_1_rodata_5CD8 * (lbl_1_rodata_5CFC - a);
+        }
+        fn_1_CB6D8(&sprite);
+    }
+}
+/* fzgx:end fn_1_CB424 */
+
 /* fzgx:begin fn_1_CB6D8 noprologue */
 #include "types.h"
 #include "font.h"
