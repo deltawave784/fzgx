@@ -7196,3 +7196,6 @@ rel/main_rel/enemy_ctrl/fn_1_CAB38.c:
 
 rel/main_rel/car/fn_1_8E4A4.c:
 	.text       start:0x0008E4A4 end:0x0008E728 align:4
+
+rel/main_rel/bg_aur/fn_1_154164.c:
+	.text       start:0x00154164 end:0x001543E8 align:4

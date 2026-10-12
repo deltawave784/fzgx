@@ -643,6 +643,90 @@ void fn_1_1540B0(u32 value) {
 }
 /* fzgx:end fn_1_1540B0 */
 
+/* fzgx:begin fn_1_154164 noprologue */
+#include "types.h"
+#include "psvec.h"
+
+typedef struct BgAurPart {
+    u32 flags;
+    u32 unk_4;
+    u32 unk_8;
+    f32 pos[3];
+    s16 rot_x;
+    s16 rot_y;
+    s16 rot_z;
+    s16 unk_1e;
+    f32 scale[3];
+    u8 pad_2c[0x40 - 0x2c];
+} BgAurPart;
+
+typedef struct BgAurParts {
+    s32 count;
+    u32 unk_4;
+    BgAurPart *parts[17];
+    s32 hidden[17];
+} BgAurParts;
+
+extern u32 fn_1_9BBE4(void *, u32, u32, void *);
+extern void lbl_8006D7DC(void *);
+extern void lbl_8006DFC4(void *);
+extern void lbl_8006E13C(void *);
+extern void lbl_8006DB74(void *);
+extern void lbl_8006E0C8(void *);
+extern void lbl_8006E0A4(void *);
+extern void mathutil_mtxA_rotate_z(s16);
+extern void mathutil_mtxA_rotate_y(s16);
+extern void mathutil_mtxA_rotate_x(s16);
+
+typedef struct BgAurVec {
+    f32 x, y, z;
+} BgAurVec;
+
+void fn_1_154164(u8 *value, const BgAurVec *offset, void *rotation, s32 all) {
+    f32 *pos;
+    BgAurPart *part;
+    s32 i;
+    BgAurParts *list;
+    f32 mtx[12];
+    BgAurPart parts[17];
+
+    list = (BgAurParts *)(value + 0x1108);
+    if (list->parts[0] == NULL) {
+        return;
+    }
+
+    parts[0] = *list->parts[0];
+    parts[0].flags &= 0x7FFFFFFF;
+    psvec_add(parts[0].pos, offset, parts[0].pos);
+    lbl_8006D7DC(parts[0].pos);
+    lbl_8006DFC4(rotation);
+    lbl_8006E13C(parts[0].scale);
+    lbl_8006DB74(mtx);
+    fn_1_9BBE4(&parts[0], 0, 0, mtx);
+
+    for (i = 0; i < list->count; i++) {
+        if (all == 0 && list->hidden[i] != 0) {
+            continue;
+        }
+        part = &parts[i + 1];
+        pos = part->pos;
+        parts[i + 1] = *list->parts[i + 1];
+        parts[i + 1].flags &= 0x7FFFFFFF;
+        psvec_add(pos, offset, pos);
+        lbl_8006D7DC(parts[0].pos);
+        lbl_8006DFC4(rotation);
+        lbl_8006E0C8(parts[0].pos);
+        lbl_8006E0A4(pos);
+        mathutil_mtxA_rotate_z(parts[i + 1].rot_z);
+        mathutil_mtxA_rotate_y(parts[i + 1].rot_y);
+        mathutil_mtxA_rotate_x(parts[i + 1].rot_x);
+        lbl_8006E13C(part->scale);
+        lbl_8006DB74(mtx);
+        fn_1_9BBE4(part, 0, 0, mtx);
+    }
+}
+/* fzgx:end fn_1_154164 */
+
 /* fzgx:begin fn_1_1543E8 */
 u32 fn_1_1543E8(s32 value, u32 *source) {
     Obj_1_data_2A7E0_At3C *obj = lbl_1_data_2A7E0.unk_3C;
