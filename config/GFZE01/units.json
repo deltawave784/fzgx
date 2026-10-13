@@ -66490,6 +66490,39 @@
   },
   {
     "module": "profile",
+    "source": "rel/profile/fn_16_2B68.c",
+    "symbols": [
+      "fn_16_2B68"
+    ],
+    "status": "matching",
+    "mw_version": "GC/1.3.2",
+    "extra_cflags": [],
+    "pool": {
+      "...rodata.0": "lbl_16_rodata_58",
+      "@33": "lbl_16_rodata_58+0x48",
+      "@19": "lbl_16_rodata_58+0x2C",
+      "@42": "lbl_16_rodata_AC",
+      "@16": "lbl_16_rodata_58+0x20",
+      "@44": "lbl_16_rodata_AC+0x8",
+      "@43": "lbl_16_rodata_AC+0x4",
+      "@14": "lbl_16_rodata_58+0x18",
+      "@45": "lbl_16_rodata_AC+0xC",
+      "@46": "lbl_16_rodata_AC+0x10",
+      "@10": "lbl_16_rodata_58+0x8",
+      "@11": "lbl_16_rodata_58+0xC",
+      "@47": "lbl_16_rodata_AC+0x14",
+      "@48": "lbl_16_rodata_AC+0x18",
+      "@49": "lbl_16_rodata_AC+0x1C",
+      "@50": "lbl_16_rodata_AC+0x20",
+      "@51": "lbl_16_rodata_AC+0x24",
+      "@52": "lbl_16_rodata_AC+0x28",
+      "@53": "lbl_16_rodata_AC+0x2C",
+      "@15": "lbl_16_rodata_58+0x1C",
+      "@54": "lbl_16_rodata_AC+0x30"
+    }
+  },
+  {
+    "module": "profile",
     "source": "rel/profile/fn_16_2EEC.c",
     "symbols": [
       "fn_16_2EEC"
