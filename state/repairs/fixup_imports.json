@@ -15790,5 +15790,37 @@
     ],
     "link": "verified",
     "commit": "c7ec3c57"
+  },
+  "fn_1_112F40": {
+    "seed_symbol": "fn_1_112F40",
+    "generator": "fzgx fixup",
+    "transform": "shift product (n - 1) * 2",
+    "seed": "#include \"types.h\"\n#include \"game/main_rel/accessory_types.h\"\n\nextern void fn_1_10846C(fn_1_10D2F0_Obj *);\nextern void fn_1_128884(void *, void *, s32);\nextern void *fn_1_4630(u32, u32, const char *, s32);\nextern u32 lbl_801A6410;\n\nvoid fn_1_112F40(fn_1_10D2F0_Obj *obj) {\n    u32 i;\n    u32 j;\n    u32 n;\n    u32 count;\n    fn_1_10D2F0_Entry *a;\n    fn_1_10D2F0_Entry *b;\n    fn_1_10D2F0_Entry *p;\n    fn_1_10D2F0_Entry *next;\n\n    if (obj == NULL) {\n        return;\n    }\n    fn_1_10846C(obj);\n\n    for (i = 0, a = obj->unk_24; i < obj->unk_18; i++, a++) {\n        if (a->unk_0 & 1) {\n            a->unk_40 = -1.0f;\n            a->unk_0 = 0;\n        } else {\n            a->unk_40 = 0.0f;\n            a->unk_0 = 1;\n        }\n    }\n\n    for (i = 0, a = obj->unk_24; i < obj->unk_18; i++, a++) {\n        for (j = i + 1, b = obj->unk_24 + i + 1; j < obj->unk_18; j++, b++) {\n            if ((a->unk_0 & 1) && !(b->unk_0 & 1)) {\n                fn_1_128884(a, b, sizeof(fn_1_10D2F0_Entry));\n            }\n        }\n    }\n\n    for (i = 0, a = obj->unk_24; i < obj->unk_18; i++, a++) {\n        for (j = i + 1, b = obj->unk_24 + i + 1; j < obj->unk_18; j++, b++) {\n            if (a->unk_0 == b->unk_0 && a->unk_10.z > b->unk_10.z) {\n                fn_1_128884(a, b, sizeof(fn_1_10D2F0_Entry));\n            }\n        }\n    }\n\n    for (i = 0, a = obj->unk_24; i < obj->unk_18; i++, a++) {\n        for (j = i + 1, b = obj->unk_24 + i + 1; j < obj->unk_18; j++, b++) {\n            if (a->unk_0 == b->unk_0) {\n                if (a->unk_10.y < b->unk_10.y && a->unk_10.z > 0.0f && b->unk_10.z > 0.0f) {\n                    fn_1_128884(a, b, sizeof(fn_1_10D2F0_Entry));\n                } else if (a->unk_10.y > b->unk_10.y && a->unk_10.z < 0.0f && b->unk_10.z < 0.0f) {\n                    fn_1_128884(a, b, sizeof(fn_1_10D2F0_Entry));\n                }\n            }\n        }\n    }\n\n    n = obj->unk_18 / 2;\n    obj->unk_1C = (n - 1) * 2 + n;\n    obj->unk_28 = fn_1_4630(lbl_801A6410, obj->unk_1C * sizeof(fn_1_10D2F0_Link), lbl_1_data_40530, 0x1330);\n\n    count = 0;\n    for (i = 0, a = obj->unk_24; i < obj->unk_18 - 1; i++, a++) {\n        if (a->unk_0 == a[1].unk_0) {\n            obj->unk_28[count].a = a;\n            obj->unk_28[count].b = a + 1;\n            obj->unk_28[count].len = fn_1_1289BC((const Point1024C4 *)a, (const Point1024C4 *)(a + 1));\n            count++;\n        }\n    }\n\n    a = obj->unk_24;\n    for (i = 0, p = a; i < obj->unk_18; i++, p++) {\n        if (p->unk_0 != p[1].unk_0) {\n            next = p + 1;\n            break;\n        }\n    }\n\n    for (i = 0; i < obj->unk_18; i++, a++, next++) {\n        obj->unk_28[count].a = a;\n        obj->unk_28[count].b = next;\n        obj->unk_28[count].len = fn_1_1289BC((const Point1024C4 *)a, (const Point1024C4 *)next);\n        count++;\n        if (a->unk_0 != a[1].unk_0) {\n            return;\n        }\n    }\n}\n",
+    "seed_sha256": "20266247434162eeadcd6d1ac24d5863f4daf6a4cd41c15c423bc01f57140b82",
+    "generated_sha256": "bf1674e77689518c2df0a5dd177d01378b9e00e7d6c7ae30571d2821faba88c8",
+    "generated_source": "#include \"types.h\"\n#include \"game/main_rel/accessory_types.h\"\n\nextern void fn_1_10846C(fn_1_10D2F0_Obj *);\nextern void fn_1_128884(void *, void *, s32);\nextern void *fn_1_4630(u32, u32, const char *, s32);\nextern u32 lbl_801A6410;\n\nvoid fn_1_112F40(fn_1_10D2F0_Obj *obj) {\n    u32 i;\n    u32 j;\n    u32 n;\n    u32 count;\n    fn_1_10D2F0_Entry *a;\n    fn_1_10D2F0_Entry *b;\n    fn_1_10D2F0_Entry *p;\n    fn_1_10D2F0_Entry *next;\n\n    if (obj == NULL) {\n        return;\n    }\n    fn_1_10846C(obj);\n\n    for (i = 0, a = obj->unk_24; i < obj->unk_18; i++, a++) {\n        if (a->unk_0 & 1) {\n            a->unk_40 = -1.0f;\n            a->unk_0 = 0;\n        } else {\n            a->unk_40 = 0.0f;\n            a->unk_0 = 1;\n        }\n    }\n\n    for (i = 0, a = obj->unk_24; i < obj->unk_18; i++, a++) {\n        for (j = i + 1, b = obj->unk_24 + i + 1; j < obj->unk_18; j++, b++) {\n            if ((a->unk_0 & 1) && !(b->unk_0 & 1)) {\n                fn_1_128884(a, b, sizeof(fn_1_10D2F0_Entry));\n            }\n        }\n    }\n\n    for (i = 0, a = obj->unk_24; i < obj->unk_18; i++, a++) {\n        for (j = i + 1, b = obj->unk_24 + i + 1; j < obj->unk_18; j++, b++) {\n            if (a->unk_0 == b->unk_0 && a->unk_10.z > b->unk_10.z) {\n                fn_1_128884(a, b, sizeof(fn_1_10D2F0_Entry));\n            }\n        }\n    }\n\n    for (i = 0, a = obj->unk_24; i < obj->unk_18; i++, a++) {\n        for (j = i + 1, b = obj->unk_24 + i + 1; j < obj->unk_18; j++, b++) {\n            if (a->unk_0 == b->unk_0) {\n                if (a->unk_10.y < b->unk_10.y && a->unk_10.z > 0.0f && b->unk_10.z > 0.0f) {\n                    fn_1_128884(a, b, sizeof(fn_1_10D2F0_Entry));\n                } else if (a->unk_10.y > b->unk_10.y && a->unk_10.z < 0.0f && b->unk_10.z < 0.0f) {\n                    fn_1_128884(a, b, sizeof(fn_1_10D2F0_Entry));\n                }\n            }\n        }\n    }\n\n    n = obj->unk_18 / 2;\n    obj->unk_1C = (((n - 1)) << 1) + n;\n    obj->unk_28 = fn_1_4630(lbl_801A6410, obj->unk_1C * sizeof(fn_1_10D2F0_Link), lbl_1_data_40530, 0x1330);\n\n    count = 0;\n    for (i = 0, a = obj->unk_24; i < obj->unk_18 - 1; i++, a++) {\n        if (a->unk_0 == a[1].unk_0) {\n            obj->unk_28[count].a = a;\n            obj->unk_28[count].b = a + 1;\n            obj->unk_28[count].len = fn_1_1289BC((const Point1024C4 *)a, (const Point1024C4 *)(a + 1));\n            count++;\n        }\n    }\n\n    a = obj->unk_24;\n    for (i = 0, p = a; i < obj->unk_18; i++, p++) {\n        if (p->unk_0 != p[1].unk_0) {\n            next = p + 1;\n            break;\n        }\n    }\n\n    for (i = 0; i < obj->unk_18; i++, a++, next++) {\n        obj->unk_28[count].a = a;\n        obj->unk_28[count].b = next;\n        obj->unk_28[count].len = fn_1_1289BC((const Point1024C4 *)a, (const Point1024C4 *)next);\n        count++;\n        if (a->unk_0 != a[1].unk_0) {\n            return;\n        }\n    }\n}\n",
+    "compiler": "GC/1.3.2",
+    "flags": "",
+    "source": "rel/main_rel/accessory/fn_1_112F40.c",
+    "bytes": 932,
+    "headers_sha256": "667f8b57c26cd294be8fe2f50f29de45364461c71a44a2333ea041478ab8f580",
+    "oracle_sha256": "bb89059bffb6e40a89365c2dfbf09b448adc9e51c0b6e1c3546f33a47d665de3",
+    "recipe": [
+      {
+        "label": "shift product (n - 1) * 2",
+        "input_sha256": "20266247434162eeadcd6d1ac24d5863f4daf6a4cd41c15c423bc01f57140b82",
+        "output_sha256": "bf1674e77689518c2df0a5dd177d01378b9e00e7d6c7ae30571d2821faba88c8",
+        "input_symbol": "fn_1_112F40",
+        "output_symbol": "fn_1_112F40",
+        "edits": [
+          [
+            1920,
+            1930,
+            "((n - 1)) << 1)"
+          ]
+        ]
+      }
+    ],
+    "link": "pending"
   }
 }

@@ -1015,6 +1015,102 @@ void fn_1_10D2F0(fn_1_10D2F0_Obj *obj) {
 }
 /* fzgx:end fn_1_10D2F0 */
 
+/* fzgx:begin fn_1_112F40 noprologue */
+#include "types.h"
+#include "game/main_rel/accessory_types.h"
+
+extern void fn_1_10846C(fn_1_10D2F0_Obj *);
+extern void fn_1_128884(void *, void *, s32);
+extern void *fn_1_4630(u32, u32, const char *, s32);
+extern u32 lbl_801A6410;
+
+void fn_1_112F40(fn_1_10D2F0_Obj *obj) {
+    u32 i;
+    u32 j;
+    u32 n;
+    u32 count;
+    fn_1_10D2F0_Entry *a;
+    fn_1_10D2F0_Entry *b;
+    fn_1_10D2F0_Entry *p;
+    fn_1_10D2F0_Entry *next;
+
+    if (obj == NULL) {
+        return;
+    }
+    fn_1_10846C(obj);
+
+    for (i = 0, a = obj->unk_24; i < obj->unk_18; i++, a++) {
+        if (a->unk_0 & 1) {
+            a->unk_40 = -1.0f;
+            a->unk_0 = 0;
+        } else {
+            a->unk_40 = 0.0f;
+            a->unk_0 = 1;
+        }
+    }
+
+    for (i = 0, a = obj->unk_24; i < obj->unk_18; i++, a++) {
+        for (j = i + 1, b = obj->unk_24 + i + 1; j < obj->unk_18; j++, b++) {
+            if ((a->unk_0 & 1) && !(b->unk_0 & 1)) {
+                fn_1_128884(a, b, sizeof(fn_1_10D2F0_Entry));
+            }
+        }
+    }
+
+    for (i = 0, a = obj->unk_24; i < obj->unk_18; i++, a++) {
+        for (j = i + 1, b = obj->unk_24 + i + 1; j < obj->unk_18; j++, b++) {
+            if (a->unk_0 == b->unk_0 && a->unk_10.z > b->unk_10.z) {
+                fn_1_128884(a, b, sizeof(fn_1_10D2F0_Entry));
+            }
+        }
+    }
+
+    for (i = 0, a = obj->unk_24; i < obj->unk_18; i++, a++) {
+        for (j = i + 1, b = obj->unk_24 + i + 1; j < obj->unk_18; j++, b++) {
+            if (a->unk_0 == b->unk_0) {
+                if (a->unk_10.y < b->unk_10.y && a->unk_10.z > 0.0f && b->unk_10.z > 0.0f) {
+                    fn_1_128884(a, b, sizeof(fn_1_10D2F0_Entry));
+                } else if (a->unk_10.y > b->unk_10.y && a->unk_10.z < 0.0f && b->unk_10.z < 0.0f) {
+                    fn_1_128884(a, b, sizeof(fn_1_10D2F0_Entry));
+                }
+            }
+        }
+    }
+
+    n = obj->unk_18 / 2;
+    obj->unk_1C = (((n - 1)) << 1) + n;
+    obj->unk_28 = fn_1_4630(lbl_801A6410, obj->unk_1C * sizeof(fn_1_10D2F0_Link), lbl_1_data_40530, 0x1330);
+
+    count = 0;
+    for (i = 0, a = obj->unk_24; i < obj->unk_18 - 1; i++, a++) {
+        if (a->unk_0 == a[1].unk_0) {
+            obj->unk_28[count].a = a;
+            obj->unk_28[count].b = a + 1;
+            obj->unk_28[count].len = fn_1_1289BC((const Point1024C4 *)a, (const Point1024C4 *)(a + 1));
+            count++;
+        }
+    }
+
+    a = obj->unk_24;
+    for (i = 0, p = a; i < obj->unk_18; i++, p++) {
+        if (p->unk_0 != p[1].unk_0) {
+            next = p + 1;
+            break;
+        }
+    }
+
+    for (i = 0; i < obj->unk_18; i++, a++, next++) {
+        obj->unk_28[count].a = a;
+        obj->unk_28[count].b = next;
+        obj->unk_28[count].len = fn_1_1289BC((const Point1024C4 *)a, (const Point1024C4 *)next);
+        count++;
+        if (a->unk_0 != a[1].unk_0) {
+            return;
+        }
+    }
+}
+/* fzgx:end fn_1_112F40 */
+
 /* fzgx:begin fn_1_1154D0 */
 typedef struct {
     u8 active;
