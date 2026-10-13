@@ -33,6 +33,204 @@ extern void lbl_8006E1B0(void *, void *);
 extern void mathutil_mtxA_from_quat(void *);
 extern void lbl_8006E15C(f32, f32, f32);
 
+/* fzgx:begin fn_1_41518 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/motasglist.h"
+#include "game/main_rel/motasglist_types.h"
+
+extern void *fn_1_45D0(u32 heap, u32 size, const char *file, s32 line);
+extern u8 lbl_1_data_6710[16];
+
+/* 0x10-byte track slot; fn_1_42458 copies its first 0xC bytes */
+typedef struct MotTrack {
+    u16 value0;
+    u16 value2;
+    s16 value4;
+    u16 pad6;
+    u32 value8;
+    u32 padC;
+} MotTrack;
+extern void fn_1_42458(MotTrack *dst, const MotTrack *src);
+
+typedef struct MotSrcNode {
+    u16 id;
+    u8 pad2[2];
+    u8 b4;
+    u8 b5;
+    u16 h6;
+    u16 h8;
+    u16 hA;
+    u16 hC;
+    u16 hE;
+    f32 f10;
+    f32 f14;
+    u32 w18;
+    u32 w1C;
+    u32 w20;
+} MotSrcNode;
+
+typedef struct MotSrcLink {
+    u16 node;
+    u16 value;
+    u32 offset;
+} MotSrcLink;
+
+typedef struct MotSrc {
+    u8 pad0[4];
+    u16 nodeCount;
+    u8 linkCount;
+    u8 pad7;
+    u32 nodeOffset;
+    u32 tableOffset;
+    u16 h10;
+    u8 pad12[2];
+    u32 offset14;
+    u32 w18;
+    u32 offset1C;
+    u8 b20;
+    u8 trackCount;
+    u16 flags;
+    u32 linkOffset;
+} MotSrc;
+
+typedef struct MotNode {
+    u16 id;
+    u8 pad2[2];
+    u8 b4;
+    u8 b5;
+    u16 h6;
+    u16 h8;
+    u16 hA;
+    u16 hC;
+    u16 hE;
+    u16 h10;
+    u8 pad12[2];
+    f32 f14;
+    f32 f18;
+    u32 w1C;
+    u32 w20;
+    u32 w24;
+    u32 *table;
+    u32 w2C;
+    u32 w30;
+} MotNode;
+
+typedef struct MotLink {
+    u32 data;
+    MotNode *node;
+    u16 value;
+    u16 zero;
+} MotLink;
+
+typedef struct MotList {
+    u8 b0;
+    u8 trackCount;
+    u16 flags;
+    u32 w4;
+    u32 w8;
+    MotNode *nodes;
+    u16 nodeCount;
+    u16 h12;
+    u32 base14;
+    u32 w18;
+    u32 w1C;
+    u32 base20;
+    u16 h24;
+    u8 linkCount;
+    u8 b27;
+    MotLink *links;
+    MotTrack *tracksA;
+    MotTrack *tracksB;
+    u32 w34;
+    u32 w38;
+    u32 w3C;
+    u32 w40;
+    u32 w44;
+    u16 h48;
+    u16 h4A;
+    u8 b4C;
+} MotList;
+
+MotList *fn_1_41518(MotSrc *src) {
+    MotList *list;
+    s32 i;
+    s32 offset;
+    MotSrcNode *srcNodes;
+    u32 *table;
+    MotSrcLink *srcLinks;
+
+    list = fn_1_45D0(lbl_801A6410.unk_0, 0x60, (const char *)lbl_1_data_6720, 0x63);
+    list->b0 = src->b20;
+    list->flags = src->flags | 4;
+    list->nodes = fn_1_45D0(lbl_801A6410.unk_0, (src->nodeCount * 0x34 + 0x1f) & ~0x1f, (const char *)lbl_1_data_6720, 0x67);
+    list->nodeCount = src->nodeCount;
+    list->h12 = 0;
+    list->w4 = 0;
+    list->trackCount = src->trackCount;
+    list->h24 = src->h10;
+    list->w18 = src->w18;
+    list->linkCount = src->linkCount;
+    list->links = fn_1_45D0(lbl_801A6410.unk_0, (src->linkCount * 0xc + 0x1f) & ~0x1f, (const char *)lbl_1_data_6720, 0x70);
+    list->base14 = (u32)src + src->offset1C;
+    list->w1C = 0;
+    list->w8 = 0;
+    list->w34 = 0;
+    list->b27 = 0;
+    list->w38 = 0;
+    list->w3C = 0;
+    list->w40 = 0;
+    list->h48 = 0;
+    list->b4C = 0;
+    list->w44 = 0;
+    list->h4A = 0;
+    if (list->h24 != 0) {
+        list->base20 = (u32)src + src->offset14;
+    } else {
+        list->base20 = 0;
+    }
+    list->tracksA = fn_1_45D0(lbl_801A6410.unk_0, (src->trackCount * 0x10 + 0x1f) & ~0x1f, (const char *)lbl_1_data_6720, 0x82);
+    list->tracksB = fn_1_45D0(lbl_801A6410.unk_0, (src->trackCount * 0x10 + 0x1f) & ~0x1f, (const char *)lbl_1_data_6720, 0x83);
+    for (i = 0; i < src->trackCount; i++) {
+        fn_1_42458(&list->tracksA[i], (const MotTrack *)lbl_1_data_6710);
+        fn_1_42458(&list->tracksB[i], (const MotTrack *)lbl_1_data_6710);
+    }
+
+    srcNodes = (MotSrcNode *)((u8 *)src + src->nodeOffset);
+    table = (u32 *)((u8 *)src + src->tableOffset);
+    srcLinks = (MotSrcLink *)((u8 *)src + src->linkOffset);
+    for (i = 0; i < src->linkCount; i++) {
+        MotLink *link = &list->links[i];
+        link->data = list->base14 + srcLinks[i].offset;
+        link->node = &list->nodes[srcLinks[i].node];
+        link->value = srcLinks[i].value;
+        link->zero = 0;
+    }
+
+    for (i = 0; i < src->nodeCount; i++) {
+        MotNode *node = &list->nodes[i];
+        node->id = srcNodes[i].id;
+        node->b4 = srcNodes[i].b4;
+        node->b5 = srcNodes[i].b5;
+        node->h6 = srcNodes[i].h6;
+        node->h8 = srcNodes[i].h8;
+        node->hA = srcNodes[i].hA;
+        node->hC = srcNodes[i].hC;
+        node->hE = srcNodes[i].hE;
+        node->f14 = srcNodes[i].f10;
+        node->f18 = srcNodes[i].f14;
+        node->w1C = srcNodes[i].w1C;
+        node->w20 = srcNodes[i].w18;
+        node->w24 = srcNodes[i].w20;
+        node->h10 = 0;
+        node->w30 = 0;
+        node->w2C = 0;
+        node->table = &table[i * src->trackCount];
+    }
+    return list;
+}
+/* fzgx:end fn_1_41518 */
+
 /* fzgx:begin fn_1_41850 */
 struct fn_1_41850_Arg0 {
     u8 pad_0[0x2];

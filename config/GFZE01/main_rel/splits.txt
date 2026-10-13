@@ -7316,3 +7316,6 @@ rel/main_rel/sound/fn_1_A2A70.c:
 
 rel/main_rel/stcoli/fn_1_294D0.c:
 	.text       start:0x000294D0 end:0x00029800 align:4
+
+rel/main_rel/motasglist/fn_1_41518.c:
+	.text       start:0x00041518 end:0x00041850 align:4
