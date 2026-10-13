@@ -76,10 +76,10 @@ Measured 2026-10-04: Fable agents matched 14 of 30 near misses (47%, 6.8 KB) tha
 released at 98-99.9%; Sonnet/Opus waves matched about 25% of fresher functions. Use Fable batches.
 
 One batch = steps 1-5 above with these changes:
-- Pick: `uv run tools/fzgx.py route --fable --limit 2 --min-percent 85 --json` across **every module** (no `--module`;
+- Pick: `uv run tools/fzgx.py route --fable --limit 1 --min-percent 85 --json` across **every module** (no `--module`;
   changed 2026-10-10 at the user's request: main_rel's 85% rows ran dry, the other modules had 160 more; best score
   first, never tried by Fable, one per clone family). Dispatch each row with `subagent_type: matcher-large` and
-  `model: fable`, prompt `SYMBOL=<symbol> AGENT_ID=fable-<symbol>-<YYYYMMDD><batch letter>` (2 Fable agents: changed
+  `model: fable`, prompt `SYMBOL=<symbol> AGENT_ID=fable-<symbol>-<YYYYMMDD><batch letter>` (1 Fable agent: changed 2026-10-12 from 2 to 1 at the user's request;
   2026-10-06 from 8 to 4 and 2026-10-08 from 4 to 2 because Fable was spent too fast).
 - Alongside them, in the same batch, run **6 Opus agents** (2026-10-10, user request): pick with
   `uv run tools/fzgx.py route --easy --tier opus --max-attempts 3 --json --limit 8` (every module, any size: clone B
@@ -87,7 +87,7 @@ One batch = steps 1-5 above with these changes:
   is open to this loop again; `--easy` still takes the smallest first, so big ones come up last; see
   docs/COLLABORATION.md), drop the Fable
   rows and any second row of the same clone family, take 6, dispatch with `subagent_type: matcher-large` and
-  `model: opus`, ids `opus-<symbol>-<YYYYMMDD><batch letter>`. All 8 agents run at once.
+  `model: opus`, ids `opus-<symbol>-<YYYYMMDD><batch letter>`. All 7 agents run at once.
 - Close the batch: `reuse --max-size 2048`, then for each module that had a release in the batch
   `fixup --module <module> --min-percent 90 --apply --budget 700 --output .fzgx/fixup/<batch>-<module>` (1-hour shell
   timeout each; if one times out, fall back to `fixup <symbol> --apply` on that batch's 90%+ releases), then `verify`,
