@@ -1,21 +1,48 @@
 #include "types.h"
+#include "game/main_rel/bg_aur_types.h"
 #include "rel/main_rel/globals.h"
 #include "rel/main_rel/bg_aur.h"
-#include "game/main_rel/bg_aur_types.h"
+#include "psvec.h"
 
-extern int fn_1_8D690(s16 arg0);
+typedef struct V { f32 x,y,z; } V;
+
+typedef struct BgAurVec {
+    f32 x, y, z;
+} BgAurVec;
+extern f32 lbl_1_rodata_D508[29];
+extern f32 *lbl_801A6D00;
+extern s32 fn_1_58C4(void);
+extern void fn_1_5948(int);
+extern s16 camera_get_mode(void);
+extern void fn_1_862D4(int, V *);
+extern void fn_1_8636C(int index, void *arg);
+extern void fn_1_869B0(int index, u32 *out);
+extern void lbl_8006D784(void *);
+extern void lbl_8006DAEC(void);
+extern void lbl_8006DB74(void *);
+extern void fn_8006F1F0(void *, void *, void *);
+extern void lbl_8006DD7C(void);
+extern void lbl_8006DB30(void);
+extern f32 lbl_8006D0B4(f32);
+extern u32 fn_1_9BBE4(void *, u32, u32, void *);
+extern void lbl_8006D7DC(void *);
+extern void lbl_8006DFC4(void *);
+extern void lbl_8006E13C(void *);
+extern void lbl_8006E0C8(void *);
+extern void lbl_8006E0A4(void *);
+extern void mathutil_mtxA_rotate_z(s16);
+extern void mathutil_mtxA_rotate_y(s16);
+extern void mathutil_mtxA_rotate_x(s16);
+extern int fn_1_8D690(int arg0);
 extern int fn_1_8D72C(s16 index);
 extern u32 fn_1_151BE8(s16 arg0, s16 arg1);
 extern void fn_80008BA8(void *, void *, u32);
 extern void lbl_8006DFE8(void *);
-extern void lbl_8006E13C(void *);
-extern void lbl_8006E0A4(void *);
 extern void fn_80072558(void);
-extern void lbl_8006D784(void *);
 extern void fn_1_560F0(s32 index, void *arg);
 extern void fn_1_55210(void *);
 extern s32 fn_1_5910(void);
-extern void fn_1_154164(u32 value, u32 *arg1, u32 *arg2, u32 arg3);
+extern void fn_1_154164(u8 *value, const BgAurVec *offset, void *rotation, s32 all);
 extern u32 lbl_1_rodata_D57C[7];
 extern int fn_8003BE1C(void *arg0, void *arg1);
 extern int fn_8003C1A4(void *arg0, void *arg1, void *arg2, void *arg3, void *arg4);
@@ -29,12 +56,10 @@ extern u32 fn_80074A7C(u32 arg0);
 extern void fn_1_153AF8(u32 *entries);
 extern void fn_1_153D48(void *background);
 extern void fn_1_9A508(void);
-extern int fn_1_58C4(void);
-extern void fn_1_5948(int);
 extern void fn_1_627C(int);
 extern u32 fn_1_9D260(void);
 extern void fn_1_9AD54(void);
-extern void fn_1_153D74(void *);
+extern void fn_1_153D74(void *arg);
 extern void fn_1_153B24();
 extern void fn_1_153C60(u8 *base);
 extern void fn_1_1540B0(u32 value);
@@ -194,19 +219,13 @@ void fn_1_151E74(u32 *value, s16 index, int byte) {
 /* fzgx:end fn_1_151E74 */
 
 /* fzgx:begin fn_1_151EF8 */
-#include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/bg_aur.h"
-
 typedef struct {
     s16 unk_0;
     u8 pad_2[0x2];
     u32 unk_4;
 } Entry_151EF8;
 
-void fn_1_151EF8(s16 *values, s16 value_count, Entry_151EF8 *entries,
-                 s16 group_count, s16 group_size) {
-    s16 i;
+void fn_1_151EF8(s16 *values, s16 value_count, Entry_151EF8 *entries, s16 group_count, s16 group_size) { s16 i;
     s16 j;
     s16 group_index;
     s16 local_index;
@@ -618,27 +637,8 @@ void fn_1_153D48(void *background) {
 }
 /* fzgx:end fn_1_153D48 */
 
-/* fzgx:begin fn_1_153D74 noprologue */
-#include "types.h"
-#include "psvec.h"
-
+/* fzgx:begin fn_1_153D74 */
 #pragma fp_contract on
-typedef struct V { f32 x,y,z; } V;
-extern f32 lbl_1_rodata_D508[29];
-extern f32 *lbl_801A6D00;
-extern int fn_1_58C4(void);
-extern void fn_1_5948(int);
-extern s16 camera_get_mode(void);
-extern void fn_1_862D4(int, V *);
-extern void fn_1_8636C(int, void *);
-extern void fn_1_869B0(int, void *);
-extern void lbl_8006D784(void *);
-extern void lbl_8006DAEC(void);
-extern void lbl_8006DB74(void *);
-extern void fn_8006F1F0(void *, void *, void *);
-extern void lbl_8006DD7C(void);
-extern void lbl_8006DB30(void);
-extern f32 lbl_8006D0B4(f32);
 #define VP(off) ((V *)(base + (off) + i*12))
 void fn_1_153D74(void *arg) {
     int count;
@@ -680,7 +680,7 @@ void fn_1_153D74(void *arg) {
             VP(0xec)->y=lbl_801A6D00[5];
             VP(0xec)->z=lbl_801A6D00[9];
             lbl_8006DB74(base+0x11c+i*48);
-            fn_1_869B0(mode,VP(0x20c));
+            fn_1_869B0(mode, (u32 *)(void *)(VP(0x20c)));
             fn_8006F1F0(&pos,VP(0xec),VP(0x8c));
             { f32 zero=pool[7];
             *(f32 *)(lockedCache+0xc)=zero;
@@ -716,7 +716,17 @@ void fn_1_153D74(void *arg) {
 }
 /* fzgx:end fn_1_153D74 */
 
-/* fzgx:begin fn_1_1540B0 */
+/* fzgx:begin fn_1_1540B0 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/bg_aur.h"
+#include "game/main_rel/bg_aur_types.h"
+
+extern s32 fn_1_5910(void);
+extern void fn_1_154164(u32 value, u32 *arg1, u32 *arg2, u32 arg3);
+extern u32 lbl_1_rodata_D57C[7];
+extern void fn_1_1540B0(u32 value);
+
 void fn_1_1540B0(u32 value) {
     u32 *table;
     s32 i;
@@ -746,10 +756,7 @@ void fn_1_1540B0(u32 value) {
 }
 /* fzgx:end fn_1_1540B0 */
 
-/* fzgx:begin fn_1_154164 noprologue */
-#include "types.h"
-#include "psvec.h"
-
+/* fzgx:begin fn_1_154164 */
 typedef struct BgAurPart {
     u32 flags;
     u32 unk_4;
@@ -770,20 +777,7 @@ typedef struct BgAurParts {
     s32 hidden[17];
 } BgAurParts;
 
-extern u32 fn_1_9BBE4(void *, u32, u32, void *);
-extern void lbl_8006D7DC(void *);
-extern void lbl_8006DFC4(void *);
-extern void lbl_8006E13C(void *);
-extern void lbl_8006DB74(void *);
-extern void lbl_8006E0C8(void *);
-extern void lbl_8006E0A4(void *);
-extern void mathutil_mtxA_rotate_z(s16);
-extern void mathutil_mtxA_rotate_y(s16);
-extern void mathutil_mtxA_rotate_x(s16);
 
-typedef struct BgAurVec {
-    f32 x, y, z;
-} BgAurVec;
 
 void fn_1_154164(u8 *value, const BgAurVec *offset, void *rotation, s32 all) {
     f32 *pos;

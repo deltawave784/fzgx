@@ -3,32 +3,196 @@
 #include "rel/main_rel/bg_cas.h"
 #include "game/main_rel/bg_cas_types.h"
 
+struct fn_1_FD3A8_lbl_1_rodata_7600 {
+    u8 pad_0[0xC];
+    f32 unk_C;
+    u8 pad_10[0x4];
+    f32 unk_14;
+    u8 pad_18[0x4];
+    f32 unk_1C;
+    u8 pad_20[0x28];
+    u32 unk_48;
+    f32 unk_4C;
+};
+
+struct fn_1_FD3A8_lbl_801A6D00 {
+    u32 unk_0;
+};
+
+typedef struct Sig_GXInitTexObj__GXTexObj {
+    u32 dummy[8];
+} Sig_GXInitTexObj_GXTexObj;
+
+typedef enum Sig_GXInitTexObj__GXTexFmt {
+    Sig_GXInitTexObj_GX_TF_I4 = 0x0,
+    Sig_GXInitTexObj_GX_TF_I8 = 0x1,
+    Sig_GXInitTexObj_GX_TF_IA4 = 0x2,
+    Sig_GXInitTexObj_GX_TF_IA8 = 0x3,
+    Sig_GXInitTexObj_GX_TF_RGB565 = 0x4,
+    Sig_GXInitTexObj_GX_TF_RGB5A3 = 0x5,
+    Sig_GXInitTexObj_GX_TF_RGBA8 = 0x6,
+    Sig_GXInitTexObj_GX_TF_CMPR = 0xE,
+    Sig_GXInitTexObj_GX_CTF_R4 = 0x0 | 0x20,
+    Sig_GXInitTexObj_GX_CTF_RA4 = 0x2 | 0x20,
+    Sig_GXInitTexObj_GX_CTF_RA8 = 0x3 | 0x20,
+    Sig_GXInitTexObj_GX_CTF_YUVA8 = 0x6 | 0x20,
+    Sig_GXInitTexObj_GX_CTF_A8 = 0x7 | 0x20,
+    Sig_GXInitTexObj_GX_CTF_R8 = 0x8 | 0x20,
+    Sig_GXInitTexObj_GX_CTF_G8 = 0x9 | 0x20,
+    Sig_GXInitTexObj_GX_CTF_B8 = 0xA | 0x20,
+    Sig_GXInitTexObj_GX_CTF_RG8 = 0xB | 0x20,
+    Sig_GXInitTexObj_GX_CTF_GB8 = 0xC | 0x20,
+    Sig_GXInitTexObj_GX_TF_Z8 = 0x1 | 0x10,
+    Sig_GXInitTexObj_GX_TF_Z16 = 0x3 | 0x10,
+    Sig_GXInitTexObj_GX_TF_Z24X8 = 0x6 | 0x10,
+    Sig_GXInitTexObj_GX_CTF_Z4 = 0x0 | 0x10 | 0x20,
+    Sig_GXInitTexObj_GX_CTF_Z8M = 0x9 | 0x10 | 0x20,
+    Sig_GXInitTexObj_GX_CTF_Z8L = 0xA | 0x10 | 0x20,
+    Sig_GXInitTexObj_GX_CTF_Z16L = 0xC | 0x10 | 0x20,
+    Sig_GXInitTexObj_GX_TF_A8 = Sig_GXInitTexObj_GX_CTF_A8,
+} Sig_GXInitTexObj_GXTexFmt;
+
+typedef enum Sig_GXInitTexObj__GXTexWrapMode {
+    Sig_GXInitTexObj_GX_CLAMP,
+    Sig_GXInitTexObj_GX_REPEAT,
+    Sig_GXInitTexObj_GX_MIRROR,
+    Sig_GXInitTexObj_GX_MAX_TEXWRAPMODE,
+} Sig_GXInitTexObj_GXTexWrapMode;
+
+typedef struct Sig_GXInitTexObjLOD__GXTexObj {
+    u32 texture_filter;
+    u32 texture_lod;
+    u32 texture_size;
+    u32 texture_address;
+    u32 user_data;
+    u32 texture_format;
+    u32 tlut_name;
+    u16 texture_time_count;
+    u8 texture_tile_type;
+    u8 texture_flags;
+} Sig_GXInitTexObjLOD_GXTexObj;
+
+typedef enum Sig_GXInitTexObjLOD__GXTexFilter {
+    Sig_GXInitTexObjLOD_GX_NEAR,
+    Sig_GXInitTexObjLOD_GX_LINEAR,
+    Sig_GXInitTexObjLOD_GX_NEAR_MIP_NEAR,
+    Sig_GXInitTexObjLOD_GX_LIN_MIP_NEAR,
+    Sig_GXInitTexObjLOD_GX_NEAR_MIP_LIN,
+    Sig_GXInitTexObjLOD_GX_LIN_MIP_LIN,
+} Sig_GXInitTexObjLOD_GXTexFilter;
+
+typedef u8 Sig_GXInitTexObjLOD_GXBool;
+
+typedef enum Sig_GXInitTexObjLOD__GXAnisotropy {
+    Sig_GXInitTexObjLOD_GX_ANISO_1,
+    Sig_GXInitTexObjLOD_GX_ANISO_2,
+    Sig_GXInitTexObjLOD_GX_ANISO_4,
+    Sig_GXInitTexObjLOD_GX_MAX_ANISOTROPY,
+} Sig_GXInitTexObjLOD_GXAnisotropy;
+
+typedef struct {
+    f32 x;
+    f32 y;
+    f32 z;
+} FD844_Vec;
+
+typedef struct {
+    f32 x, y, z;
+} CasVec;
+
+typedef struct {
+    CasVec v;
+    u8 pad_C[0x34];
+} CasMtx;
+
+typedef struct {
+    u32 unk_0;
+    u32 unk_4;
+} CasObj;
+
+typedef struct {
+    f32 x, y, z;
+} CasSparkVec;
+
+typedef struct {
+    CasSparkVec pos;
+    CasSparkVec base;
+    f32 unk_18;
+    f32 unk_1C;
+    f32 unk_20;
+    f32 unk_24;
+    f32 unk_28;
+    f32 unk_2C;
+    s32 unk_30;
+} CasSpark;
+
+typedef struct {
+    u32 unk_0;
+    u32 unk_4;
+    u32 unk_8;
+    f32 unk_C;
+    u32 unk_10;
+    CasSpark sparks[20];
+} CasSparkSet;
 extern const f32 lbl_1_rodata_7600;
 extern const f32 lbl_1_rodata_7604;
 extern u32 GXGetTexBufferSize(u16, u16, u32, u8, u8);
 extern void fn_80008BEC(void *dest, int value, u32 size);
 extern void fn_1_FC4E0(void *arg0, int arg1);
 extern void fn_1_FC51C(void);
+extern struct fn_1_FD3A8_lbl_801A6D00 lbl_801A6D00;
+extern void GXInitTexObj(void *, void *, u32, u32, u32, u32, u32, u32);
+extern void GXInitTexObjLOD(void *, u32, u32, f32, f32, f32, u8, u8, u32);
 extern void GXLoadTexMtxImm(void *, u32, u32);
-extern void fn_800736C0(u32, void *);
+extern u32 fn_800371F8(u32, void *);
+extern u32 lbl_8006DCA4(void);
+extern void fn_1_57720(u32 value_1, u32 value_2, u32 value_3, u32 value_4);
+extern void fn_80015C1C(f32 *out, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, f32 arg6, f32 arg7, f32 arg8, f32 arg9);
+extern void fn_8003462C(u32 arg0, u32 arg1, u32 arg2);
+extern void fn_800720B0(int);
+extern void fn_8007245C(u32 value);
+extern void fn_800724C8(void);
+extern void fn_80072558(void);
+extern void fn_80072864(u32 arg0);
+extern void fn_800728A8(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
 extern void fn_80072AB0(s32 arg0, s32 arg1, s32 arg2);
 extern void fn_80072C24(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
 extern void fn_80072CC4(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
 extern void fn_80072D64(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u8 arg4, s32 arg5);
 extern void fn_80072E20(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u8 arg4, s32 arg5);
 extern void fn_800734A8(u32 arg0, s32 arg1, s32 arg2, s32 arg3);
-extern void fn_800735C8(s32 index, s32 value);
-extern void fn_80073620(s32 index, s32 value);
 extern void fn_80073678(u32 arg0);
 extern void fn_80073778(void *obj, s32 index);
 extern void fn_80073898(u32 arg0);
 extern void fn_80073C6C(s32 index);
 extern void fn_800745A4(u32 arg0, s32 arg1, s32 arg2, u32 arg3, u32 arg4, u32 arg5);
 extern void fn_80074660(u32 arg0);
+extern void fn_80074788(u32 arg0);
+extern void fn_800747D0(u32 arg0, u32 arg1, s32 arg2, s32 arg3, u32 arg4, s32 arg5, s32 arg6);
+extern void fn_80074918(u8 arg0, s32 arg1, u8 arg2);
+extern void lbl_8006DB74(void *);
+extern void lbl_8006DBAC(void *);
+extern void lbl_8006DD7C(void);
+extern void lbl_8006DFC4(void *);
+extern void fn_1_FC760(void *, void *);
+extern void fn_8006F1F0(FD844_Vec *, FD844_Vec *, FD844_Vec *);
+extern void mathutil_mtxA_rotate_x(s16);
+extern void mathutil_mtxA_rotate_y(s16);
+extern u32 fn_1_584AC(void);
+extern void *memset(void *, int, u32);
+extern s32 fn_1_58C4(void);
+extern CasVec lbl_1_rodata_77F8;
+extern CasVec lbl_1_rodata_7804;
+extern CasMtx *fn_80077B14(CasObj *);
+extern void fn_1_1024F8(void);
+extern void fn_1_102750(void);
+extern void fn_1_102C08(void);
+extern void fn_800736C0(u32, void *);
+extern void fn_800735C8(s32 index, s32 value);
+extern void fn_80073620(s32 index, s32 value);
 extern void lbl_8006D758(void);
 extern void lbl_8006DAEC(void);
 extern void lbl_8006DB30(void);
-extern void lbl_8006DBAC(void *);
 extern void lbl_8006E14C(f32);
 extern void *fn_1_563B8(void *);
 extern void fn_1_566EC(int arg0, int arg1);
@@ -38,21 +202,13 @@ extern void fn_1_7F230();
 extern void fn_1_7F1E8();
 extern void *fn_1_14DD68(void *);
 extern void *fn_1_14DDF4(void *);
-extern void lbl_8006DB74(void *);
 extern void lbl_8006E0A4(void *);
-extern void fn_80072558(void);
 extern int fn_1_FCF50(void);
-extern u32 fn_1_584AC(void);
 extern void fn_1_FCA10(void);
 extern f32 lbl_1_rodata_761C[13];
-extern void fn_1_FD3A8(void);
-extern void *memset(void *, int, u32);
+extern void fn_1_FD3A8();
 extern void fn_1_FE7D8(u8 *, s32);
-extern void fn_1_FF420(u8 *);
-extern void fn_80074788(u32 arg0);
-extern void fn_80072864(u32 arg0);
-extern void fn_80074918(u8 arg0, s32 arg1, u8 arg2);
-extern void fn_800720B0(int);
+extern void fn_1_FF420(CasEmitter *em);
 extern void fn_1_9A508(Obj_1_data_2A7E0 *arg0);
 extern void fn_1_9AD54(void);
 extern void fn_1_9AD88(void);
@@ -63,11 +219,10 @@ extern void OSPanic(const char *file, int line, const char *msg, ...);
 extern void lbl_8006E13C(void *);
 extern void fn_80008BA8(u32 arg0, u32 arg1, u32 arg2);
 extern u8 lbl_1_bss_851E0[36];
-extern void fn_1_FFC60(Obj_1_data_2A7E0_At3C *arg0);
+extern void fn_1_FFC60(CasSparkSet *state);
 extern void fn_1_FEC7C(void *object);
 extern f32 lbl_1_rodata_7590[2];
 extern const f32 lbl_1_rodata_7598;
-extern void GXInitTexObjLOD(void *, u32, u32, f32, f32, f32, u8, u8, u32);
 extern u8 lbl_1_bss_850E0[256];
 extern const f32 lbl_1_rodata_76A8;
 extern u32 fn_1_904(void);
@@ -76,7 +231,6 @@ extern void fn_1_681C(u32 index, u32 *output);
 extern u32 fn_1_1FB80(void *, u32);
 extern void fn_1_FC60C(void);
 extern void DCFlushRange(void *, u32);
-extern void GXInitTexObj(void *, void *, u32, u32, u32, u32, u32, u32);
 extern void fn_1_FB9DC(int index);
 extern void fn_1_FBC5C(u8 idx);
 
@@ -291,7 +445,7 @@ typedef struct {
     u8 flags[4];      /* 0x254 */
     f32 speed[3];     /* 0x258 */
     f32 speed2[3];    /* 0x264 */
-} CasEntry;
+} fn_1_FBC5C_CasEntry;
 
 
 /* Literal pool of the retail TU (lbl_1_rodata_7590): MWCC pools literals in
@@ -318,7 +472,7 @@ static void fzgx_pool_layout_1(void) {
 #pragma section code_type ".text"
 
 void fn_1_FBC5C(u8 idx) {
-    CasEntry *ent = &(((CasEntry *)&lbl_1_bss_84454))[idx];
+    fn_1_FBC5C_CasEntry *ent = &(((fn_1_FBC5C_CasEntry *)&lbl_1_bss_84454))[idx];
     s32 i;
 
     for (i = 0; i < 3; i++) {
@@ -605,7 +759,6 @@ typedef struct {
     u8 a;
 } CasColor;
 
-extern Mtx34 *lbl_801A6D00;
 
 
 #define CAS_VIEW(field) (*(f32 *)(*(u32 *)(lbl_1_data_3EFA8 + 0x40F0) + (field)))
@@ -681,10 +834,10 @@ void fn_1_FCA10(void) {
         *(f32 *)(0xE0000000 + 0x2C) = trans.z;
     }
 
-    GXLoadTexMtxImm(lbl_801A6D00, 0x24, 0);
+    GXLoadTexMtxImm((*((Mtx34 * *)&lbl_801A6D00)), 0x24, 0);
     lbl_8006D758();
 
-    (*lbl_801A6D00)[0][0] = 0.0f;
+    (*(*((Mtx34 * *)&lbl_801A6D00)))[0][0] = 0.0f;
     obj = *(u32 *)(lbl_1_data_3EFA8 + 0x40F0);
     if (*(f32 *)(obj + 0x10) < 0.5f || *(f32 *)(obj + 0x10) >= 1.0f) {
         *(f32 *)(obj + 0x10) = 0.5f;
@@ -694,13 +847,13 @@ void fn_1_FCA10(void) {
         *(f32 *)(obj + 0x14) = 0.5f;
     }
 
-    (*lbl_801A6D00)[0][2] = CAS_VIEW(0x10);
-    (*lbl_801A6D00)[0][3] = CAS_VIEW(0x14);
-    (*lbl_801A6D00)[1][1] = 0.0f;
-    (*lbl_801A6D00)[2][2] = 0.0f;
-    (*lbl_801A6D00)[2][3] = 1.0f;
+    (*(*((Mtx34 * *)&lbl_801A6D00)))[0][2] = CAS_VIEW(0x10);
+    (*(*((Mtx34 * *)&lbl_801A6D00)))[0][3] = CAS_VIEW(0x14);
+    (*(*((Mtx34 * *)&lbl_801A6D00)))[1][1] = 0.0f;
+    (*(*((Mtx34 * *)&lbl_801A6D00)))[2][2] = 0.0f;
+    (*(*((Mtx34 * *)&lbl_801A6D00)))[2][3] = 1.0f;
 
-    GXLoadTexMtxImm(lbl_801A6D00, 0x46, 0);
+    GXLoadTexMtxImm((*((Mtx34 * *)&lbl_801A6D00)), 0x46, 0);
     lbl_8006DB30();
 
     fn_80074660(4);
@@ -1118,15 +1271,7 @@ void fn_1_FD3A8(void *arg0, f32 arg1) {
 /* fzgx:end fn_1_FD3A8 */
 
 /* fzgx:begin fn_1_FD844 */
-extern void lbl_8006DB74(void *);
-extern void GXInitTexObj(void *, void *, u32, u32, u32, u32, u32, u32);
-extern void GXInitTexObjLOD(void *, u32, u32, f32, f32, f32, u8, u8, u32);
 
-typedef struct {
-    f32 x;
-    f32 y;
-    f32 z;
-} FD844_Vec;
 
 typedef struct {
     u32 unk_0;
@@ -1189,10 +1334,6 @@ typedef struct {
 /* slot i of the context: 0x4100 bytes apart, the trailing fields overlap the next slot */
 #define FD844_SLOT(ctx, i) ((FD844_Slot *)((u8 *)(ctx) + (i) * 0x4100))
 
-extern void fn_1_FC760(void *, void *);
-extern void fn_8006F1F0(FD844_Vec *, FD844_Vec *, FD844_Vec *);
-extern void mathutil_mtxA_rotate_x(s16);
-extern void mathutil_mtxA_rotate_y(s16);
 
 /* Literal pool of the retail TU (lbl_1_rodata_7600): MWCC pools literals in
  * first-use order across the TU, so the earlier functions' literals come first. */
@@ -1497,7 +1638,7 @@ void fn_1_FE5E4(void) {
 
     obj = lbl_1_data_2A7E0.unk_3C;
     fn_1_9A508(&lbl_1_data_2A7E0);
-    fn_1_FFC60(obj);
+    fn_1_FFC60( (CasSparkSet *)(Obj_1_data_2A7E0_At3C *)(obj));
     fn_1_FEC7C(obj);
     ((Obj_1_data_2A7E0_At3C_Ext *)obj)->unk_1B1E4 = 0;
     obj->unk_430 = lbl_1_rodata_76A8;
@@ -1546,13 +1687,13 @@ void fn_1_FEC7C(void *object) {
     index = 0;
     while (index < (count = (s32)lbl_1_bss_3BE0->unk_A4)) {
         fn_1_FE7D8(entry, 1);
-        fn_1_FF420(entry);
+        fn_1_FF420( (CasEmitter *)(u8 *)(entry));
         index++;
         entry += 0x44C;
     }
     while (count < 0x64) {
         fn_1_FE7D8(entry, 0);
-        fn_1_FF420(entry);
+        fn_1_FF420( (CasEmitter *)(u8 *)(entry));
         count++;
         entry += 0x44C;
     }
@@ -1742,12 +1883,7 @@ void fn_1_FED34(void *arg0) {
 }
 /* fzgx:end fn_1_FED34 */
 
-/* fzgx:begin fn_1_FF420 noprologue */
-#include "types.h"
-#include "game/main_rel/bg_cas_types.h"
-
-extern u32 fn_1_584AC(void);
-extern void *memset(void *, int, u32);
+/* fzgx:begin fn_1_FF420 */
 
 /* Literal pool of the retail TU (lbl_1_rodata_76A8): MWCC pools literals in
  * first-use order across the TU, so the earlier functions' literals come first. */
@@ -1971,10 +2107,7 @@ void fn_1_FF6B8(CasEmitter *em) {
 }
 /* fzgx:end fn_1_FF6B8 */
 
-/* fzgx:begin fn_1_FFC60 noprologue */
-#include "types.h"
-#include "rel/main_rel/bg_cas.h"
-
+/* fzgx:begin fn_1_FFC60 */
 /* Literal pool of the retail TU (lbl_1_rodata_76A8): MWCC pools literals in
  * first-use order across the TU, so the earlier functions' literals come first. */
 #pragma section code_type ".fzgxpool"
@@ -2049,33 +2182,10 @@ __declspec(section ".fzgxpool") static void fzgx_pool_prime11(void) {
 }
 #pragma section code_type ".text"
 
-typedef struct {
-    f32 x, y, z;
-} CasSparkVec;
 
-typedef struct {
-    CasSparkVec pos;
-    CasSparkVec base;
-    f32 unk_18;
-    f32 unk_1C;
-    f32 unk_20;
-    f32 unk_24;
-    f32 unk_28;
-    f32 unk_2C;
-    s32 unk_30;
-} CasSpark; /* 0x34 */
+ /* 0x34 */
 
-typedef struct {
-    u32 unk_0;
-    u32 unk_4;
-    u32 unk_8;
-    f32 unk_C;
-    u32 unk_10;
-    CasSpark sparks[20];
-} CasSparkSet;
 
-extern s32 fn_1_58C4(void);
-extern u32 fn_1_584AC(void);
 
 /* random fraction in [0, 1] */
 #define RAND01() ((f32)(u16)fn_1_584AC() / 32767.0f)
@@ -2254,17 +2364,8 @@ done:
 }
 /* fzgx:end fn_1_101454 */
 
-/* fzgx:begin fn_1_10161C noprologue */
-#include "types.h"
+/* fzgx:begin fn_1_10161C */
 
-typedef struct {
-    f32 x, y, z;
-} CasVec;
-
-typedef struct {
-    u32 unk_0;
-    u32 unk_4;
-} CasObj;
 
 typedef struct {
     u8 pad_0[0x8];
@@ -2282,12 +2383,8 @@ typedef struct {
     CasVec unk_28;
     CasVec unk_34;
     u8 pad_40[0x4];
-} CasEntry;
+} fn_1_10161C_CasEntry;
 
-typedef struct {
-    CasVec v;
-    u8 pad_C[0x34];
-} CasMtx;
 
 typedef struct {
     u32 unk_0;
@@ -2296,7 +2393,7 @@ typedef struct {
     u32 unk_C;
     CasTable *unk_10;
     s32 unk_14;
-    CasEntry *unk_18;
+    fn_1_10161C_CasEntry *unk_18;
     u32 unk_1C;
 } CasState;
 
@@ -2305,17 +2402,9 @@ typedef struct {
     u16 unk_8;
 } CasInput;
 
-extern CasState lbl_1_bss_85250;
-extern CasInput lbl_1_bss_D58;
-extern CasVec lbl_1_rodata_77F8;
-extern CasVec lbl_1_rodata_7804;
-extern CasMtx *fn_80077B14(CasObj *);
-extern void fn_1_1024F8(void);
-extern void fn_1_102750(void);
-extern void fn_1_102C08(void);
 
 void fn_1_10161C(void) {
-    CasState *st = &lbl_1_bss_85250;
+    CasState *st = &(*((CasState *)&lbl_1_bss_85250));
     CasObj *obj;
     CasMtx *mtx;
 
@@ -2324,10 +2413,10 @@ void fn_1_10161C(void) {
         return;
     }
     mtx = fn_80077B14(obj);
-    if ((lbl_1_bss_D58.unk_8 >> 4) & 1) {
+    if (((*((CasInput *)&lbl_1_bss_D58)).unk_8 >> 4) & 1) {
         st->unk_0 ^= 1;
     }
-    if ((lbl_1_bss_D58.unk_8 >> 3) & 1) {
+    if (((*((CasInput *)&lbl_1_bss_D58)).unk_8 >> 3) & 1) {
         st->unk_14 = ((u32)st->unk_14 + 4) % 3;
         if (obj->unk_4 & 0x10) {
             u32 i;
@@ -2341,7 +2430,7 @@ void fn_1_10161C(void) {
                 st->unk_18[i].unk_34 = lbl_1_rodata_77F8;
             }
         }
-    } else if ((lbl_1_bss_D58.unk_8 >> 2) & 1) {
+    } else if (((*((CasInput *)&lbl_1_bss_D58)).unk_8 >> 2) & 1) {
         st->unk_14 = ((u32)st->unk_14 + 2) % 3;
         if (obj->unk_4 & 0x10) {
             u32 i;

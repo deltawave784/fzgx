@@ -394,6 +394,7 @@ void fn_1_104730(int index, int use_matrix) {
     entry->far_.z = pos.z + (f32)(entry->basis.dir.z * c->far_dir) + (f32)(entry->basis.up.z * c->far_up);
     fn_1_627C(id);
 }
+#pragma opt_propagation reset
 /* fzgx:end fn_1_104730 */
 
 /* fzgx:begin fn_1_105724 */
@@ -804,6 +805,9 @@ void fn_1_107930(fn_1_107930_Object *arg) {
     *(struct fn_1_107930_lbl_1_rodata_7AB8 *)lbl_1_bss_88B40 =
         *(struct fn_1_107930_lbl_1_rodata_7AB8 *)lbl_1_rodata_7AB8;
 }
+#pragma opt_lifetimes reset
+#pragma opt_propagation reset
+#pragma opt_loop_invariants reset
 /* fzgx:end fn_1_107930 */
 
 /* fzgx:begin fn_1_107C4C */

@@ -679,6 +679,12 @@
    "#endif"
   ]
  },
+ "lbl_1_data_2D7B8": {
+  "decl": "const char *lbl_1_data_2D7B8[0x61]"
+ },
+ "lbl_1_data_2D93C": {
+  "decl": "s16 lbl_1_data_2D93C[0x62]"
+ },
  "lbl_1_data_341B8": {
   "decl": "Obj_1_data_341B8_Target *lbl_1_data_341B8",
   "typedef": [

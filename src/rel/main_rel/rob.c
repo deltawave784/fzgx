@@ -411,6 +411,7 @@ static inline void fn_1_96C40_grid(s32 cx, s32 cz) {
         }
     }
 }
+#pragma defer_codegen reset
 /* fzgx:end fn_1_96C40 */
 
 /* fzgx:begin fn_1_97174 */

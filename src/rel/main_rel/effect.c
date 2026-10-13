@@ -1,41 +1,141 @@
 #include "types.h"
+#include "game/main_rel/effect_types.h"
+#include "dolphin/types.h"
+#include "game/main_rel/car_test_types.h"
 #include "rel/main_rel/globals.h"
 #include "rel/main_rel/effect.h"
-#include "game/main_rel/effect_types.h"
+#include "psvec.h"
 
-extern void *lbl_801A6D00;
-extern void fn_1_8645C(int index, void *arg);
-extern void lbl_8006E1B0(void *src, void *dst);
-extern void fn_1_8636C();
-extern void fn_8006FA24(void *, void *, void *, f32);
+struct P {
+    u8 pad_0[0xC];
+    f32 unk_C;
+    u8 pad_10[0x18];
+    f32 unk_28;
+    u8 pad_2C[0xC];
+    f64 unk_38;
+    u8 pad_40[0x20];
+    f32 unk_60;
+    f32 unk_64;
+    u8 pad_68[0xC];
+    f32 unk_74;
+    u8 pad_78[0x54];
+    f32 unk_CC;
+    f32 unk_D0;
+    f32 unk_D4;
+    f32 unk_D8;
+    f32 unk_DC;
+};
+
+typedef struct Fn620C8Viewport {
+    f32 x;
+    f32 y;
+    f32 w;
+    f32 h;
+    f32 near;
+    f32 far;
+} Fn620C8Viewport;
+
+typedef struct Obj {
+    u8 b0;
+    u8 pad1[0xF];
+    s32 n10;
+    u8 pad14[4];
+    s16 id18;
+    u8 pad1a[0x0E];
+    f32 f28;
+    f32 f2c;
+    u8 pad30[0x0C];
+    f32 m3c[3];
+    f32 f48;
+    f32 f4c;
+    f32 f50;
+    s16 s54;
+    u8 pad56[4];
+    s16 s5a;
+    u8 pad5c[0x38];
+    f32 p94[3];
+    u8 pada0[0x14];
+    f32 fb4;
+} Obj;
+
+typedef struct Fn620C8Model {
+    u8 pad_0[0x8];
+    u8 data[0xC];
+    f32 scale;
+} Fn620C8Model;
+
+typedef struct Fn620C8TexObj {
+    u32 dummy[8];
+    void *image;
+} Fn620C8TexObj;
+
+typedef struct Fn620C8Obj {
+    u8 pad_0[0x28];
+    f32 time;
+    u8 pad_2C[0x8];
+    Fn620C8Model *model;
+    Fn620C8TexObj *tex;
+    u8 rot[0x78];
+    f32 brightness;
+    Fn183D28Vec3 pos;
+} Fn620C8Obj;
+extern u32 fn_1_3FC58(void);
+extern void *memset(void *, int, u32);
+extern void *memcpy(void *, const void *, u32);
+extern const f32 lbl_1_rodata_2950;
+extern u32 fn_1_86514(int index);
+extern void fn_1_867CC(s16 value, void *out);
+extern u8 fn_1_86634(int index);
+extern u32 fn_1_6EC0(u8 index);
+extern s16 camera_get_entry_field_0xa4(u32 index);
+extern void lbl_8006D9D8(void *);
+extern void lbl_8006D7B0(void);
+extern f32 lbl_8006D0B4(f32 value);
+extern void lbl_8006DB74(void *);
+extern void lbl_8006D848(f32);
+extern void lbl_8006DFC4(void *);
+extern int fn_1_9F914(const void *src0, const void *src1);
 extern void lbl_8006DCA4();
 extern s32 fn_1_54E34(void *arg0, f32 arg1);
 extern void *fn_1_5448C(void *);
 extern void fn_1_5489C(void **arg0, void **arg1);
 extern void fn_1_862D4(s16 value, void *result);
 extern void *fn_1_548AC(u32 size);
-extern u32 fn_1_3FC58(void);
-extern void *memcpy(void *, const void *, u32);
-extern f32 lbl_8006D0B4(f32 value);
-extern void lbl_8006D7B0(void);
-extern void lbl_8006D9D8(void *);
-extern void mathutil_mtxA_rotate_z(int);
-extern const f32 lbl_1_rodata_2950;
-extern void fn_1_867CC(s16 value, void *out);
-extern void mathutil_mtxA_rotate_y(s16 value);
+extern void *lbl_801A6410;
+extern s32 fn_1_45D0();
+extern u32 lbl_1_bss_6C864;
+extern void fn_1_8636C();
+extern void *lbl_8006DC6C(void *);
+extern void lbl_8006DBAC(void *);
+extern u32 lbl_8006DA50(void);
+extern void lbl_8006DF44(void);
+extern void fn_1_56000(u8 value0, u8 value1, u8 value2);
+extern void fn_1_5621C(f32 value0, f32 value1, f32 value2, f32 value3);
+extern void fn_1_556B8(void *value);
+extern void fn_80038F10(f32* out);
+extern u32 fn_80038EEC();
+extern u32 fn_80074188(u32 arg0, u32 arg1, u32 arg2, u32 arg3);
+extern void lbl_8006E0A4(void *);
+extern void lbl_8006E14C(f32);
 extern void mathutil_mtxA_rotate_x(s16 value);
-extern void lbl_8006DB74(void *);
-extern int fn_1_9F914(const void *src0, const void *src1);
+extern void fn_80072558(void);
+extern void fn_80074918(u8 arg0, s32 arg1, u8 arg2);
+extern void fn_80074300();
+extern void fn_80074438(u32 arg0, u32 arg1, u32 arg2, u32 arg3);
+extern void fn_8003526C(void *, u8);
+extern void GXInitTexObj(void *, void *, u16, u16, s32, s32, s32, u8);
+extern s32 fn_1_66B8(void *, f32);
+extern void *lbl_801A6D00;
+extern void fn_1_8645C(int index, void *arg);
+extern void fn_8006FA24(void *, void *, void *, f32);
+extern void mathutil_mtxA_rotate_z(int);
+extern void mathutil_mtxA_rotate_y(s16 value);
 extern const f32 lbl_1_rodata_2AA0[21];
 extern f32 lbl_1_rodata_29AC[5];
-extern void *memset(void *, int, u32);
 extern void fn_1_55FC4(f32 value);
 extern void fn_1_55FF0(f32 value);
 extern void fn_1_5557C(void *object);
 extern void fn_1_555D0(void *object);
-extern void lbl_8006E14C(f32);
-extern void *lbl_801A6410;
-extern s32 fn_1_45D0();
 extern u32 GXGetTexBufferSize(u16, u16, u32, u32, u8);
 extern void fn_1_46B4(u32 arg0, u32 arg1, const char *arg2, int arg3);
 extern void fn_1_4730(u32 value, u32 count, u32 size, const char *file, int line);
@@ -43,7 +143,6 @@ extern void lbl_8006D7DC(void *obj);
 extern void *fn_1_868C0(s8 index);
 extern void *fn_1_86254(int index);
 extern void lbl_8006D95C(s32);
-extern void lbl_8006DFC4(void *);
 extern void fn_1_3BDC(u32 arg0);
 extern u32 fn_1_3C18(s32 arg0);
 extern void fn_80008BEC(void *dest, int value, u32 size);
@@ -59,7 +158,7 @@ extern f32 lbl_1_rodata_2AF4[14];
 extern void fn_1_5EB98(void);
 extern f32 lbl_1_rodata_2A5C[5];
 extern int fn_1_61D08();
-extern void fn_1_61EF4(void);
+extern int fn_1_61EF4();
 extern void fn_1_620C4(void);
 extern f32 lbl_1_rodata_2B2C[145];
 extern void fn_1_638E8(void);
@@ -70,18 +169,13 @@ extern int fn_1_61E60();
 extern u32 fn_1_3FC8C(void);
 extern const f32 lbl_1_rodata_29A4;
 extern f64 lbl_1_rodata_2988;
-extern u32 fn_1_620C8(void *);
+extern void fn_1_620C8(Fn620C8Obj *obj);
 extern f32 fn_1_8652C(int index);
 extern void fn_1_557C4(void *value);
-extern void fn_1_56000(u8 value0, u8 value1, u8 value2);
-extern void fn_1_5621C(f32 value0, f32 value1, f32 value2, f32 value3);
 extern const f32 lbl_1_rodata_29C0;
 extern const f32 lbl_1_rodata_29F0;
-extern u32 fn_1_58C4(void);
+extern s32 fn_1_58C4(void);
 extern const f64 lbl_1_rodata_2954;
-extern s8 fn_1_86634(int);
-extern u32 fn_1_6EC0(u8);
-extern s16 camera_get_entry_field_0xa4(u32);
 
 /* fzgx:begin fn_1_58C6C */
 struct fn_1_58C6C_lbl_1_bss_6C848_T {
@@ -111,7 +205,7 @@ void fn_1_58C6C(void) {
     var_r31 = (struct fn_1_58C6C_lbl_1_bss_6C848_T *)(*(struct fn_1_58C6C_lbl_1_bss_6C848_T **)((u8 *)(&(*(struct fn_1_58C6C_lbl_1_bss_6C848_T * *)&lbl_1_bss_6C848)) + 0));
     do {
         if (((s16) var_r31->unk_C == 0x19) && ((s8) var_r31->unk_0 != 0) && ((s32) var_r31->unk_1A != 0) && !(var_r31->unk_8 & 0x80000000)) {
-            fn_1_620C8((void *)(var_r31));
+            fn_1_620C8( (Fn620C8Obj *)((void *)(var_r31)));
         }
         var_r30 -= 1;
         var_r31 = (struct fn_1_58C6C_lbl_1_bss_6C848_T *)((u8 *)(var_r31) + 0xE8);
@@ -120,7 +214,7 @@ void fn_1_58C6C(void) {
     var_r31_2 = (struct fn_1_58C6C_lbl_1_bss_6C84C_T *)(*(struct fn_1_58C6C_lbl_1_bss_6C84C_T **)((u8 *)(&(*(struct fn_1_58C6C_lbl_1_bss_6C84C_T * *)&lbl_1_bss_6C84C)) + 0));
     do {
         if (((s16) var_r31_2->unk_C == 0x19) && ((s8) var_r31_2->unk_0 != 0) && ((s32) var_r31_2->unk_1A != 0) && !(var_r31_2->unk_8 & 0x80000000)) {
-            fn_1_620C8((void *)(var_r31_2));
+            fn_1_620C8( (Fn620C8Obj *)((void *)(var_r31_2)));
         }
         var_r30_2 -= 1;
         var_r31_2 = (struct fn_1_58C6C_lbl_1_bss_6C84C_T *)((u8 *)(var_r31_2) + 0xE8);
@@ -931,9 +1025,6 @@ __declspec(section ".fzgxpool") static void fzgx_pool_prime3(void) {
 }
 #pragma section code_type ".text"
 
-extern u32 fn_1_3FC58(void);
-extern void *memset(void *, int, u32);
-extern void *memcpy(void *, const void *, u32);
 
 typedef struct {
     f32 x, y, z;
@@ -1055,9 +1146,7 @@ void fn_1_5B074(void) {
 }
 /* fzgx:end fn_1_5B074 */
 
-/* fzgx:begin fn_1_5B188 noprologue */
-#include "types.h"
-
+/* fzgx:begin fn_1_5B188 */
 #pragma section code_type ".fzgxpool"
 __declspec(section ".fzgxpool") static void fzgx_pool_prime1(void) {
     volatile float s; volatile double d;  /* fzgx-allow: S2 pool primer sinks */
@@ -1139,27 +1228,7 @@ struct A {
     u8 pad_60[0x54];
     f32 unk_B4;
 };
-struct P {
-    u8 pad_0[0xC];
-    f32 unk_C;
-    u8 pad_10[0x18];
-    f32 unk_28;
-    u8 pad_2C[0xC];
-    f64 unk_38;
-    u8 pad_40[0x20];
-    f32 unk_60;
-    f32 unk_64;
-    u8 pad_68[0xC];
-    f32 unk_74;
-    u8 pad_78[0x54];
-    f32 unk_CC;
-    f32 unk_D0;
-    f32 unk_D4;
-    f32 unk_D8;
-    f32 unk_DC;
-};
 
-extern struct P lbl_1_rodata_2950;
 
 #pragma opt_common_subs off
 static inline f32 fn_1_5B188_operand(f32 left, f32 right) { return left * right; }
@@ -1406,7 +1475,7 @@ void fn_1_5B450(Effect_5B450 *e) {
 
     fn_1_8645C(e->unk_18, lbl_801A6D00);
     fzgx_live = e->unk_94;
-    lbl_8006E1B0(fzgx_live, e->unk_3C);
+    lbl_8006E1B0( (Fn183D28Vec3 *)(void *)(fzgx_live), (Fn183D28Vec3 *)(void *)(e->unk_3C));
     e->unk_58 += effect_rand();
     e->unk_2C *= 0.95f;
     e->unk_28 += e->unk_2C;
@@ -2030,7 +2099,7 @@ void fn_1_5D378(FxObj *obj)
         r = (f32)((lbl_1_data_1D628 >> 16) & 0x7FFF) / 32767.0f;
         obj->unk_10 = (s32)(60.0f * (0.4f + (f32)(0.1f * r)));
     }
-    cam = fn_1_86634(obj->unk_18);
+    cam = (s8)fn_1_86634(obj->unk_18);
     if ((s32)fn_1_6EC0(cam) != 0 && camera_get_entry_field_0xa4((u8)cam) == 0) {
         obj->unk_1C = 0.0f;
         obj->unk_20 = 0.0f;
@@ -2053,11 +2122,6 @@ void fn_1_5D4FC(void) {
 /* fzgx:end fn_1_5D4FC */
 
 /* fzgx:begin fn_1_5D500 */
-extern u32 fn_1_86514(int);
-extern void fn_1_867CC(s16 value, void *out);
-extern s8 fn_1_86634(int);
-extern u32 fn_1_6EC0(u8);
-extern s16 camera_get_entry_field_0xa4(u32);
 
 #pragma section code_type ".fzgxpool"
 __declspec(section ".fzgxpool") static void fzgx_pool_prime1(void) {
@@ -2193,7 +2257,7 @@ void fn_1_5D500(EffectGlow *e) {
         e->flags &= ~0x40000;
     }
     fn_1_867CC(e->id, e->unk_3C);
-    cam = fn_1_86634(e->id);
+    cam = (s8)fn_1_86634(e->id);
     if ((s32)fn_1_6EC0(cam) != 0 && camera_get_entry_field_0xa4((u8)cam) == 0) {
         e->r += (f32)(0.05f * -e->r);
         e->g += (f32)(0.05f * -e->g);
@@ -2408,7 +2472,6 @@ typedef float f32;
 typedef double f64;
 
 /* lbl_1_data_1D628: .data size 0x4, referenced by 41 functions, shape {'object': 185} */
-extern u32 lbl_1_data_1D628;
 
 #pragma section code_type ".fzgxpool"
 __declspec(section ".fzgxpool") static void fzgx_pool_prime1(void) {
@@ -2500,13 +2563,6 @@ void fn_1_5FE2C(void) {
 /* fzgx:end fn_1_5FE2C */
 
 /* fzgx:begin fn_1_5FE30 */
-extern void lbl_8006DCA4(void);
-extern s32 fn_1_54E34(void *object, f32 value);
-extern void fn_1_5FEBC();
-extern void *fn_1_5448C(void *);
-extern void fn_1_5489C(void **, void **);
-extern void fn_1_862D4(s16 value, void *result);
-extern void *fn_1_548AC(u32 size);
 
 typedef struct {
     u8 unk[0x18];
@@ -3047,9 +3103,7 @@ void fn_1_60F84(fn_1_60F84_Effect *obj)
 }
 /* fzgx:end fn_1_60F84 */
 
-/* fzgx:begin fn_1_611EC noprologue */
-#include "dolphin/types.h"
-
+/* fzgx:begin fn_1_611EC */
 #pragma section code_type ".fzgxpool"
 __declspec(section ".fzgxpool") static void fzgx_pool_prime1(void) {
     volatile float s; volatile double d;  /* fzgx-allow: S2 pool primer sinks */
@@ -3228,10 +3282,6 @@ typedef struct {
     s16 unk_58;
 } EffObj611EC;
 
-extern u32 lbl_1_data_1D628;
-extern u8 lbl_1_data_1D62C[0x94];
-extern u32 lbl_801A6410;
-extern s32 fn_1_45D0(u32, u32, void *, u32);
 
 #define RND() (lbl_1_data_1D628 = lbl_1_data_1D628 * 0x41C64E6D + 0x3039, (lbl_1_data_1D628 >> 16) & 0x7FFF)
 
@@ -3247,7 +3297,7 @@ void fn_1_611EC(EffObj611EC *p)
     p->unk_54 = RND();
     p->unk_56 = RND();
     p->unk_58 = RND();
-    p->unk_38 = fn_1_45D0(lbl_801A6410, 0xF0, lbl_1_data_1D62C, 0x1573);
+    p->unk_38 = fn_1_45D0((*((u32 *)&lbl_801A6410)), 0xF0, lbl_1_data_1D62C, 0x1573);
 }
 /* fzgx:end fn_1_611EC */
 
@@ -3462,7 +3512,7 @@ void fn_1_61640(struct Fn1_61640Object *object) {
     *(f32 *)(0xE0000000 + 0x1c) = py;
     *(f32 *)(0xE0000000 + 0x2c) = pz;
 
-    lbl_8006E1B0(object->field_3c, temp);
+    lbl_8006E1B0( (Fn183D28Vec3 *)(void *)(object->field_3c), (Fn183D28Vec3 *)(void *)(temp));
     lbl_8006D9D8(temp);
     mathutil_mtxA_rotate_y(object->field_56);
     mathutil_mtxA_rotate_x(object->field_54);
@@ -3978,9 +4028,7 @@ Fn1_61E60Object *object;
 }
 /* fzgx:end fn_1_61E60 */
 
-/* fzgx:begin fn_1_61EF4 noprologue */
-#include "dolphin/types.h"
-
+/* fzgx:begin fn_1_61EF4 */
 #pragma section code_type ".fzgxpool"
 __declspec(section ".fzgxpool") static void fzgx_pool_prime1(void) {
     volatile float s; volatile double d;  /* fzgx-allow: S2 pool primer sinks */
@@ -4151,40 +4199,11 @@ __declspec(section ".fzgxpool") static void fzgx_pool_prime21(void) {
     s = 28.0f;
 }
 #pragma section code_type ".text"
-extern u32 lbl_1_bss_6C864;
-extern void fn_1_862D4(int, void *);
-extern void fn_1_8636C(int, void *);
-extern void *lbl_8006DC6C(void *);
-extern void lbl_8006E1B0(void *, void *);
-extern void lbl_8006DBAC(void *);
-extern u32 lbl_8006DA50(void);
-extern void lbl_8006DF44(void);
 
-typedef struct Obj {
-    u8 b0;
-    u8 pad1[0xF];
-    s32 n10;
-    u8 pad14[4];
-    s16 id18;
-    u8 pad1a[0x0E];
-    f32 f28;
-    f32 f2c;
-    u8 pad30[0x0C];
-    f32 m3c[3];
-    f32 f48;
-    f32 f4c;
-    f32 f50;
-    s16 s54;
-    u8 pad56[4];
-    s16 s5a;
-    u8 pad5c[0x38];
-    f32 p94[3];
-    u8 pada0[0x14];
-    f32 fb4;
-} Obj;
 
 #pragma opt_propagation off
-int fn_1_61EF4(Obj *self)
+int fn_1_61EF4(self)
+Obj *self;
 {
     f32 b[13];
     f32 a[3];
@@ -4213,11 +4232,11 @@ int fn_1_61EF4(Obj *self)
     self->p94[0] += self->f48;
     self->p94[1] += self->f4c;
     self->p94[2] += self->f50;
-    lbl_8006E1B0(self->p94, self->m3c);
+    lbl_8006E1B0( (Fn183D28Vec3 *)(void *)(self->p94), (Fn183D28Vec3 *)(void *)(self->m3c));
     lbl_8006DBAC((u8 *)self + 0xb8);
     lbl_8006DA50();
     lbl_8006DF44();
-    lbl_8006E1B0(self->m3c, self->m3c);
+    lbl_8006E1B0( (Fn183D28Vec3 *)(void *)(self->m3c), (Fn183D28Vec3 *)(void *)(self->m3c));
     self->s5a = 0.98f * (f32)self->s5a;
     self->s54 += self->s5a;
     self->f2c *= 1.06f;
@@ -5025,7 +5044,7 @@ void fn_1_632D4(struct fn_1_632D4_obj *obj) {
 
     id = obj->unk_34;
     lbl_8006DCA4(obj);
-    lbl_8006E1B0(&obj->unk_3C, &value);
+    lbl_8006E1B0( (Fn183D28Vec3 *)(void *)(&obj->unk_3C), (Fn183D28Vec3 *)(void *)(&value));
     lbl_8006D7DC(&value);
     mathutil_mtxA_rotate_z(obj->unk_AE);
     memset(&data, 0, 0x40);
@@ -5170,7 +5189,6 @@ typedef struct {
     s16 angle;
 } SmokeParticle;
 
-extern s32 fn_1_66B8(void *, f32);
 
 /* Shared literal pool primer (retail lbl_1_rodata_2950 layout); dropped at integration. */
 #pragma section RX ".fzgxpool"
