@@ -1843,6 +1843,98 @@ def defined_data_initializers(p, symbol, body, check):
     return [(f'retail initializers for defined data objects ({len(edits)} objects)', text)]
 
 
+_POOL_NOTE = re.compile(r'^pool (\S+) differs from retail (\S+) in \d+ of (\d+) words: (.*)$')
+_POOL_TABLE = re.compile(r'(static\s+const\s+(?:u32|s32)\s+fzgx_pool_(?:table|word)_([0-9A-Fa-f]+)\s*\[\s*(\d+|0x[0-9A-Fa-f]+)\s*\]\s*=\s*)\{([^{}]*)\}')
+
+
+def retail_pool_anchors(p, symbol, check, merged_only=False):
+    """(retail pool symbol, words to show) for every pool the check reports as differing from
+    retail's bytes; the span covers the dtk symbol, the private pool's word count and every
+    offset the note lists."""
+    sym = p.resolve(symbol)
+    out = {}
+    for note in getattr(check, 'pool_notes', None) or ():
+        m = _POOL_NOTE.match(note)
+        if not m or merged_only and not m.group(1).startswith('...'):
+            continue  # (the primer's tables live in the merged anonymous pool, not an `@N` literal)
+        anchor = p.find_symbol(m.group(2), sym.module)
+        if anchor is None or anchor.section in ('.bss', '.sbss', '.sbss2'):
+            continue
+        offsets = [int(o, 16) for o in re.findall(r'\+0x([0-9A-Fa-f]+) ours', m.group(4))]
+        span = max([anchor.size, 4 * int(m.group(3))] + [o + 4 for o in offsets])
+        out[anchor.name] = max(out.get(anchor.name, 0), span)
+    return out
+
+
+def retail_words(p, module, name, span):
+    """Retail words of `name` (a data/rodata symbol) over `span` bytes, or None."""
+    anchor = p.find_symbol(name, module)
+    if anchor is None:
+        return None
+    got = section_bytes(p, module, anchor.section, anchor.addr)
+    if got is None:
+        return None
+    base, raw = got
+    lo = anchor.addr - base
+    data = bytes(raw[lo:lo + span])
+    return [int.from_bytes(data[i:i + 4], 'big') for i in range(0, len(data) - 3, 4)]
+
+
+def retail_pool_tables(p, symbol, body, check):
+    """Primer tables (`static const u32 fzgx_pool_table_HEX[N]`, `fzgx_pool_word_HEX[1]`, the
+    shared-pool primer's raw words at pool offset HEX) refilled with retail's words. A matcher
+    who wrote placeholders (fn_1_15EC40: 0x110..0x174 of lbl_1_rodata_DD58) could only learn
+    five differing words per check from the pool note."""
+    anchors = retail_pool_anchors(p, symbol, check, merged_only=True)
+    if not anchors or not _POOL_TABLE.search(body):
+        return []
+    module = p.resolve(symbol).module
+    out = []
+    for name in anchors:
+        tables = list(_POOL_TABLE.finditer(body))
+        if not tables:
+            continue
+        span = max([anchors[name]] + [int(t.group(2), 16) + 4 * int(t.group(3), 0) for t in tables])
+        words = retail_words(p, module, name, span)
+        if not words:
+            continue
+        text, changed = body, 0
+        for t in reversed(tables):
+            off, n = int(t.group(2), 16), int(t.group(3), 0)
+            if off % 4 or off // 4 + n > len(words):
+                continue
+            want = words[off // 4:off // 4 + n]
+            have = [w.strip() for w in t.group(4).replace('\n', ' ').split(',') if w.strip()]
+            try:
+                current = [int(w.rstrip('uUlL'), 0) & 0xFFFFFFFF for w in have]
+            except ValueError:
+                continue  # symbolic contents: not a placeholder
+            if current == want:
+                continue
+            rows = [', '.join(f'0x{w:08X}' for w in want[i:i + 6]) for i in range(0, n, 6)]
+            init = '{\n    ' + ',\n    '.join(rows) + ',\n}' if n > 6 else '{ ' + ', '.join(f'0x{w:08X}' for w in want) + ' }'
+            text = text[:t.start()] + t.group(1) + init + text[t.end():]
+            changed += 1
+        if changed:
+            out.append((f'retail pool words ({name}, {changed} primer tables)', text))
+    return out
+
+
+def retail_pool_dump(p, symbol, check):
+    """Every retail word of each pool the check reports as differing, four per line, offsets
+    relative to the retail symbol (what the primer's `fzgx_pool_table_HEX` names count from)."""
+    module = p.resolve(symbol).module
+    lines = []
+    for name, span in retail_pool_anchors(p, symbol, check).items():
+        words = retail_words(p, module, name, span)
+        if not words:
+            continue
+        lines.append(f'retail {name}: {len(words)} words; `fzgx_pool_table_HEX[N]` holds the words at +0xHEX')
+        for i in range(0, len(words), 4):
+            lines.append(f'  +0x{4 * i:03X}: ' + ' '.join(f'0x{w:08X}' for w in words[i:i + 4]))
+    return lines
+
+
 _PRIMER_REGION = re.compile(r'(?m)^[ \t]*#pragma section code_type "\.fzgxpool"[ \t]*\n.*?^[ \t]*#pragma section code_type "\.text"[ \t]*\n', re.S)
 _SECTION_BASE = re.compile(r'addi (r\d+), r\d+, (\S+?)(?:\+0x[0-9A-Fa-f]+)?@l$')
 

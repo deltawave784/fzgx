@@ -114,6 +114,7 @@ def generate(p: Project, s: str, sym, path: Path, body: str, check, outdir: Path
     add('layout', lambda: fixup_layout.tu_section_layout(p, s, body, check))
     add('sibling', lambda: fixup_sibling.sibling_section_layouts(p, s, body, check))
     add('datainit', lambda: fixup_layout.defined_data_initializers(p, s, body, check))
+    add('pooltables', lambda: fixup_layout.retail_pool_tables(p, s, body, check))
     add('baseorder', lambda: fixup_layout.section_base_order(p, s, body, check))
     if not families or 'attr' in families:
         try:
@@ -202,7 +203,7 @@ def climb(p: Project, selection: Dict[str, str], outdir: Path, rounds: int = 4,
                 aligned, pos = fixup_source.fitness(targets[s], ow)
                 if s not in best or (aligned, pos) > (best[s][0], best[s][1]):
                     best[s] = (aligned, pos, f, label)
-                if label.startswith('datainit') and (s not in data or (aligned, pos) > (data[s][0], data[s][1])):
+                if label.startswith(('datainit', 'pooltables')) and (s not in data or (aligned, pos) > (data[s][0], data[s][1])):
                     data[s] = (aligned, pos, f, label)
         # the current body's word score, per module in one compile
         basew: Dict[str, float] = {}

@@ -506,6 +506,8 @@ class Engine:
             # a body that defines the TU's data objects itself with placeholder contents: one
             # candidate, first, since its whole gain is in data the word score cannot see
             yield from layout.defined_data_initializers(self.project, row['symbol'], body, check)
+            # placeholder words in the shared-pool primer's tables (fn_1_15EC40): retail's words
+            yield from layout.retail_pool_tables(self.project, row['symbol'], body, check)
             # `...data.0`/`...rodata.0` holding each other's registers: the TU's first reference
             # to each section numbers its base, so the primers are reordered
             yield from layout.section_base_order(self.project, row['symbol'], body, check, row.get('object'))

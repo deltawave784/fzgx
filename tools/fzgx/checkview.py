@@ -52,7 +52,8 @@ def _data_initializers(project, key, result):
     which the oracle rejects (fn_3_990C: 1182 of 1588 words, fn_1_7ACDC: 98 of 104).
     `fixup_layout.defined_data_initializers` rewrites each defined object in place with
     retail's words and symbolic pointers; this offers that rewrite. Only when the check
-    reports a pool whose bytes differ from retail."""
+    reports a pool whose bytes differ from retail. Pool primers' placeholder tables get the same
+    offer, followed by every retail word of each differing pool."""
     if not getattr(result, 'ok', False) or not any('differs from retail' in n for n in result.pool_notes or ()):
         return []
     try:
@@ -62,17 +63,37 @@ def _data_initializers(project, key, result):
         if not work.exists():
             return []
         body = work.read_text()
-        candidates = fixup_layout.defined_data_initializers(project, key, body, result)
     except Exception:  # evidence only: a failure here must never fail the check
         return []
-    if not candidates:
-        return []
-    label, text = candidates[0]
-    head = [f'{label}: apply this patch to your work copy (patch_unit/write_unit). Each defined object '
-            'becomes a union whose first member carries retail words; uses become `.v`. Pointer '
-            'words are `__fzgx_offset_` aliases the oracle binds to retail targets. Do not edit the words.']
-    return head + [line.rstrip(chr(10)) for line in difflib.unified_diff(
-        body.splitlines(True), text.splitlines(True), 'work copy', 'with retail initializers', n=1)]
+    out = []
+    try:
+        candidates = fixup_layout.defined_data_initializers(project, key, body, result)
+    except Exception:
+        candidates = []
+    if candidates:
+        label, text = candidates[0]
+        out += [f'{label}: apply this patch to your work copy (patch_unit/write_unit). Each defined object '
+                'becomes a union whose first member carries retail words; uses become `.v`. Pointer '
+                'words are `__fzgx_offset_` aliases the oracle binds to retail targets. Do not edit the words.']
+        out += [line.rstrip(chr(10)) for line in difflib.unified_diff(
+            body.splitlines(True), text.splitlines(True), 'work copy', 'with retail initializers', n=1)]
+        body = text
+    # literal-pool primers: placeholder words in `fzgx_pool_table_HEX` tables, and the full retail
+    # pool (a pool note lists only five differing words; fn_1_15EC40 had 24)
+    try:
+        tables = fixup_layout.retail_pool_tables(project, key, body, result)
+    except Exception:
+        tables = []
+    if tables:
+        label, text = tables[0]
+        out += [f'{label}: apply this patch to your work copy; the words are retail bytes.']
+        out += [line.rstrip(chr(10)) for line in difflib.unified_diff(
+            body.splitlines(True), text.splitlines(True), 'work copy', 'with retail pool words', n=1)]
+    try:
+        out += fixup_layout.retail_pool_dump(project, key, result)
+    except Exception:
+        pass
+    return out
 
 
 def _page(payload, section, cursor):
@@ -93,7 +114,7 @@ def _page(payload, section, cursor):
         result['diff'].append('Decoded retail data is available: read_evidence(section="data", cursor="0"); '
                               'existing sessions: check(versions="data:0").')
     if section == 'diff' and payload.get('datainit'):
-        result['diff'].append('Your defined data objects differ from retail bytes: the retail initializers are '
+        result['diff'].append('Your defined data objects or pool primer differ from retail bytes: the retail initializers and pool words are '
                               'read_evidence(section="datainit", cursor="0"); existing sessions: check(versions="datainit:0").')
     return result
 
