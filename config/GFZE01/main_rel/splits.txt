@@ -7361,3 +7361,6 @@ rel/main_rel/archive/fn_1_12CEA8.c:
 
 rel/main_rel/accessory/fn_1_112F40.c:
 	.text       start:0x00112F40 end:0x001132E4 align:4
+
+rel/main_rel/stcoli/fn_1_38CF4.c:
+	.text       start:0x00038CF4 end:0x0003908C align:4
