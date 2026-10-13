@@ -354,7 +354,8 @@ extern void fn_1_8E3A4(fn_1_8E3A4_Object *obj);
 extern f32 lbl_8006D534(Vec3 *a, Vec3 *b);
 extern Triple lbl_1_rodata_3BE8;
 extern void fn_1_55210(struct Model *);
-extern void fn_1_8E7D0(Fn1_8F45C_Object *obj);
+/* retail takes (obj, idx, mask, mask2) (fn_1_8F198 passes all four); non-prototype until fn_1_8F45C passes its own four through */
+extern void fn_1_8E7D0();
 extern void fn_1_966A0(Fn1_8F494_Object *obj);
 extern void fn_1_8F5A4(Fn1_8F5A4_Object *obj);
 extern void fn_1_968FC(Fn1_8F5A4_Object *obj);
