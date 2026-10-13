@@ -51661,6 +51661,26 @@
   },
   {
     "module": "main_rel",
+    "source": "rel/main_rel/screen_effect/fn_1_76EB8.c",
+    "symbols": [
+      "fn_1_76EB8"
+    ],
+    "status": "matching",
+    "mw_version": null,
+    "extra_cflags": [],
+    "tu": "rel/main_rel/screen_effect.c",
+    "pool": {
+      "...rodata.0": "lbl_1_rodata_3180",
+      "@16": "lbl_1_rodata_31B0",
+      "@12": "lbl_1_rodata_31A0",
+      "@33": "lbl_1_rodata_31D8+0x8",
+      "@40": "lbl_1_rodata_31EC+0x4",
+      "@15": "lbl_1_rodata_31AC",
+      "@38": "lbl_1_rodata_31E8"
+    }
+  },
+  {
+    "module": "main_rel",
     "source": "rel/main_rel/screen_effect/fn_1_77200.c",
     "symbols": [
       "fn_1_77200"

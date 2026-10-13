@@ -1668,6 +1668,190 @@ void fn_1_76DC0(s32 arg0) {
 }
 /* fzgx:end fn_1_76DC0 */
 
+/* fzgx:begin fn_1_76EB8 noprologue */
+#include "types.h"
+#include "dolphin/hw_regs.h"
+
+/* GX write-gather pipe: every store is a FIFO write, hence volatile. */
+typedef union {
+    f32 f;
+    u32 u;
+} fn_1_76EB8_WGPipe;
+
+#define GX_WG_PIPE (*(volatile fn_1_76EB8_WGPipe *)GX_FIFO_BASE) /* volatile: hardware FIFO, each store is a write */
+
+struct fn_1_76EB8_Data {
+    u8 pad_0[0x150];
+    u32 unk_150;
+    f32 unk_154;
+    f32 unk_158;
+};
+
+extern struct fn_1_76EB8_Data lbl_1_data_1D960;
+extern u16 fn_1_A5D9C(void);
+extern void fn_80038EEC(f32, f32, f32, f32, f32, f32);
+extern void fn_8003462C(u32, u32, u32);
+extern void fn_80038F10(f32 *);
+extern void fn_800720B0(u32);
+extern void fn_8007245C(u32);
+extern void fn_800724C8(void);
+extern void fn_80072864(u32);
+extern void fn_800728A8(s32, s32, s32, s32);
+extern void fn_80072AB0(s32, s32, s32);
+extern void fn_80072C24(s32, s32, s32, s32, s32);
+extern void fn_80072CC4(s32, s32, s32, s32, s32);
+extern void fn_80072D64(s32, s32, s32, s32, u8, s32);
+extern void fn_80072E20(s32, s32, s32, s32, u8, s32);
+extern void fn_800734A8(u32, s32, s32, s32);
+extern void fn_800735C8(s32, s32);
+extern void fn_80073620(s32, s32);
+extern void fn_80073678(u32);
+extern void fn_800736C0(u32, void *);
+extern void fn_80073898(u32);
+extern void fn_80073C6C(s32);
+extern void fn_800745A4(u32, s32, s32, u32, u32, u32);
+extern void fn_80074660(u32);
+extern void fn_80074788(u32);
+extern void fzgx_pool_sink_p(void *);
+extern void fzgx_pool_sink_f(f32);
+
+/* Shared literal pool primer: screen_effect.c pools every literal of the TU
+   behind one base (lbl_1_rodata_3180). These dummy functions, in a section
+   the link ignores, reference the pooled literals in retail address order. */
+#pragma section ".fzgxpool"
+
+union fzgx_pool_Color { struct { u8 r, g, b, a; } bytes; u32 word; };
+
+__declspec(section ".fzgxpool") void fzgx_pool_primer_0(void) {
+    union fzgx_pool_Color c0 = {{0xFF, 0xFF, 0xFF, 0xFF}};
+    union fzgx_pool_Color c1 = {{0xFF, 0xFF, 0xFF, 0xFF}};
+    union fzgx_pool_Color c2[2] = {{{0xFF, 0x91, 0x00, 0x00}}, {{0xFF, 0x76, 0x00, 0x44}}};
+    union fzgx_pool_Color c3 = {{0x66, 0x00, 0xFF, 0x32}};
+    union fzgx_pool_Color c4 = {{0x94, 0x00, 0x94, 0x94}};
+    union fzgx_pool_Color c5 = {{0xCB, 0x00, 0x05, 0xCF}};
+    union fzgx_pool_Color c6 = {{0x00, 0xFF, 0x00, 0x00}};
+    fzgx_pool_sink_p(&c0);
+    fzgx_pool_sink_p(&c1);
+    fzgx_pool_sink_p(c2);
+    fzgx_pool_sink_p(&c3);
+    fzgx_pool_sink_p(&c4);
+    fzgx_pool_sink_p(&c5);
+    fzgx_pool_sink_p(&c6);
+    fzgx_pool_sink_f(0.0f);
+    fzgx_pool_sink_f(255.0f);
+    fzgx_pool_sink_f(40.0f);
+    fzgx_pool_sink_f(1.0f);
+    fzgx_pool_sink_f(0.5f);
+    fzgx_pool_sink_f(0.025f);
+    fzgx_pool_sink_f(40.96f);
+    fzgx_pool_sink_f(409.6f);
+    fzgx_pool_sink_f(2.0f);
+    fzgx_pool_sink_f(-2.0f);
+    fzgx_pool_sink_f(0.01f);
+    fzgx_pool_sink_f(0.003f);
+    fzgx_pool_sink_f(5.0f);
+    fzgx_pool_sink_f(15.0f);
+}
+
+__declspec(section ".fzgxpool") void fzgx_pool_primer_1(s32 a, u32 b) {
+    fzgx_pool_sink_f((f32)a);
+    fzgx_pool_sink_f((f32)b);
+}
+
+__declspec(section ".fzgxpool") void fzgx_pool_primer_2(void) {
+    fzgx_pool_sink_f(480.0f);
+    fzgx_pool_sink_f(0.95f);
+    fzgx_pool_sink_f(640.0f);
+}
+
+void fn_1_76EB8(void) {
+    struct fn_1_76EB8_Data *data;
+    f32 x0;
+    f32 y0;
+    f32 x1;
+    f32 y1;
+    f32 half;
+    f32 left;
+    f32 right;
+    f32 top;
+    f32 bottom;
+    f32 ortho[6];
+    u32 color;
+
+    data = (struct fn_1_76EB8_Data *)&lbl_1_data_1D960;
+    color = data->unk_150;
+    fn_800736C0(0, &color);
+    fn_800724C8();
+    fn_8007245C(0x2200);
+    fn_80074788(0);
+    fn_80074660(1);
+    fn_80073678(2);
+    fn_80073898(0);
+    fn_80073C6C(0);
+    fn_800745A4(0, 1, 4, 60, 0, 125);
+    fn_80072AB0(0, 0, 0);
+    fn_800734A8(0, 0, 0, 255);
+    fn_800735C8(0, 12);
+    fn_80073620(0, 28);
+    fn_80072C24(0, 14, 15, 15, 8);
+    fn_80072D64(0, 1, 0, 0, 1, 0);
+    fn_80072CC4(0, 4, 7, 7, 6);
+    fn_80072E20(0, 0, 0, 1, 1, 0);
+    fn_80073C6C(1);
+    fn_80072AB0(1, 0, 0);
+    fn_800734A8(1, 0, 1, 255);
+    fn_80073620(1, 0);
+    fn_80072C24(1, 15, 0, 8, 15);
+    fn_80072D64(1, 0, 0, 0, 1, 0);
+    fn_80072CC4(1, 6, 7, 0, 7);
+    fn_80072E20(1, 0, 0, 0, 1, 0);
+    fn_800720B0(0);
+    fn_800728A8(1, 1, 5, 0);
+    fn_80072864(2);
+
+    half = 0.5f;
+    x0 = half - half * data->unk_154;
+    y0 = half - half * data->unk_158;
+    x1 = half + half * data->unk_154;
+    y1 = half + half * data->unk_158;
+
+    fn_80038F10(ortho);
+    fn_80038EEC(0.0f, 0.0f, 640.0f, (f32)fn_1_A5D9C(), 0.0f, 1.0f);
+    fn_8003462C(0x80, 7, 4);
+
+    left = 0.0f;
+    top = 0.0f;
+    right = 640.0f;
+    bottom = 480.0f;
+
+    GX_WG_PIPE.f = left;
+    GX_WG_PIPE.f = top;
+    GX_WG_PIPE.f = 0.0f;
+    GX_WG_PIPE.f = x0;
+    GX_WG_PIPE.f = y0;
+
+    GX_WG_PIPE.f = right;
+    GX_WG_PIPE.f = top;
+    GX_WG_PIPE.f = 0.0f;
+    GX_WG_PIPE.f = x1;
+    GX_WG_PIPE.f = y0;
+
+    GX_WG_PIPE.f = right;
+    GX_WG_PIPE.f = bottom;
+    GX_WG_PIPE.f = 0.0f;
+    GX_WG_PIPE.f = x1;
+    GX_WG_PIPE.f = y1;
+
+    GX_WG_PIPE.f = left;
+    GX_WG_PIPE.f = bottom;
+    GX_WG_PIPE.f = 0.0f;
+    GX_WG_PIPE.f = x0;
+    GX_WG_PIPE.f = y1;
+
+    fn_80038EEC(ortho[0], ortho[1], ortho[2], ortho[3], ortho[4], ortho[5]);
+}
+/* fzgx:end fn_1_76EB8 */
+
 /* fzgx:begin fn_1_77200 */
 void fn_1_77200(arg)
 void *arg;

@@ -7325,3 +7325,6 @@ rel/main_rel/screen_effect/fn_1_7BB80.c:
 
 rel/main_rel/background/fn_1_9F164.c:
 	.text       start:0x0009F164 end:0x0009F4B4 align:4
+
+rel/main_rel/screen_effect/fn_1_76EB8.c:
+	.text       start:0x00076EB8 end:0x00077200 align:4
