@@ -1,32 +1,102 @@
 #include "types.h"
+#include "game/main_rel/screen_effect_types.h"
 #include "rel/main_rel/globals.h"
 #include "rel/main_rel/screen_effect.h"
-#include "game/main_rel/screen_effect_types.h"
+#include "dolphin/hw_regs.h"
 
-extern u16 fn_1_A5DB0(void);
-extern void OSPanic(const char *file, int line, const char *msg, ...);
+struct Arg0 {
+    u8 pad_0[0xA0];
+    u32 img[1];
+    u8 pad_A4[0x38];
+    u32 idx;
+    u8 pad_E0[0x20];
+    s16 w;
+    s16 h;
+};
+extern const f64 lbl_1_rodata_31A0;
+extern void GXInitTexObj(u32 arg0, u32 arg1, u32 arg2, u32 arg3, u32 arg4, int arg5, int arg6, int arg7);
+extern void GXInitTexObjLOD(u32 arg0, int arg1, int arg2, int arg3, int arg4, int arg5, f32 arg6, f32 arg7, f32 arg8);
+extern u16 fn_1_A5D9C(void);
+extern void fn_80038EEC(f32, f32, f32, f32, f32, f32);
+extern void fn_8003462C(u32 arg0, u32 arg1, u32 arg2);
+extern void fn_80038F10(f32* out);
+extern void fn_800720B0(u32);
+extern void fn_8007245C(u32 value);
+extern void fn_800724C8(void);
 extern void fn_80072864(u32 arg0);
-extern void lbl_8006DCA4(void);
-extern void lbl_8006E0A4(void *);
-extern void lbl_8006E13C(void *);
-extern void fn_80072558(void);
-extern u32 fn_800384FC(u32, u32);
+extern void fn_800728A8(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
+extern void fn_80072AB0(s32 arg0, s32 arg1, s32 arg2);
+extern void fn_80072C24(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
+extern void fn_80072CC4(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
+extern void fn_80072D64(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u8 arg4, s32 arg5);
+extern void fn_80072E20(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u8 arg4, s32 arg5);
+extern void fn_800734A8(u32 arg0, s32 arg1, s32 arg2, s32 arg3);
+extern void fn_800735C8(s32 index, s32 value);
+extern void fn_80073620(s32 index, s32 value);
+extern void fn_80073678(u32 arg0);
+extern void fn_800736C0(u32, void *);
+extern void fn_80073898(u32 arg0);
+extern void fn_80073C6C(s32 index);
+extern void fn_800745A4(u32 arg0, s32 arg1, s32 arg2, u32 arg3, u32 arg4, u32 arg5);
+extern void fn_80074660(u32 arg0);
+extern void fn_80074788(u32 arg0);
 extern void fzgx_pool_sink_p(void *);
 extern void fzgx_pool_sink_f(f32);
-extern void fzgx_pool_sink_d(f64);
 extern void fn_1_7A648(void *arg0);
 extern void fn_1_5616C(s32 value, f32 value1, f32 value2);
 extern void fn_1_556F8(void *);
 extern u32 fn_1_56018(s32 value);
 extern void fn_1_55FC4(f32 value);
 extern void fn_1_5575C(void *);
+extern void lbl_8006DCA4(void);
 extern void lbl_8006DFE8(void *);
+extern void fn_80072558(void);
 extern void lbl_8006DAEC(void);
 extern void lbl_8006DBE4(void);
+extern void lbl_8006E0A4(void *);
 extern void mathutil_mtxA_rotate_z(s32);
 extern void mathutil_mtxA_rotate_y(s32);
 extern void mathutil_mtxA_rotate_x(s32);
+extern void lbl_8006E13C(void *);
 extern void lbl_8006DC20(void);
+extern void OSPanic(const char *file, int line, const char *msg, ...);
+extern u32 fn_800356B8(void *, u32);
+extern u8 lbl_1_data_1E558__fzgx_offset_0[];
+extern u8 lbl_1_data_1E58C__fzgx_offset_0[];
+extern u8 lbl_1_data_1E5F4__fzgx_offset_0[];
+extern u8 lbl_1_data_1E628__fzgx_offset_0[];
+extern u8 lbl_1_data_1E65C__fzgx_offset_0[];
+extern u8 lbl_1_data_1E690__fzgx_offset_0[];
+extern u8 lbl_1_data_1E6C4__fzgx_offset_0[];
+extern u8 lbl_1_data_1E6F8__fzgx_offset_0[];
+extern u8 lbl_1_data_1E72C__fzgx_offset_0[];
+extern u8 lbl_1_data_1E760__fzgx_offset_0[];
+extern u8 lbl_1_data_1E794__fzgx_offset_0[];
+extern u8 lbl_1_data_1E7C8__fzgx_offset_0[];
+extern u8 lbl_1_data_1E7FC__fzgx_offset_0[];
+extern u8 lbl_1_data_1E830__fzgx_offset_0[];
+extern u8 lbl_1_data_1E864__fzgx_offset_0[];
+extern u8 lbl_1_data_1E898__fzgx_offset_0[];
+extern u8 lbl_1_data_1E8CC__fzgx_offset_0[];
+extern u8 lbl_1_data_1E900__fzgx_offset_0[];
+extern u8 lbl_1_data_1E934__fzgx_offset_0[];
+extern u8 lbl_1_data_1EA70__fzgx_offset_0[];
+extern u8 lbl_1_data_1EAA4__fzgx_offset_0[];
+extern u8 lbl_1_data_1EAD8__fzgx_offset_0[];
+extern u8 lbl_1_data_1EB0C__fzgx_offset_0[];
+extern u8 lbl_1_data_1EB40__fzgx_offset_0[];
+extern u8 lbl_1_data_1EB74__fzgx_offset_0[];
+extern u8 lbl_1_data_1EBA8__fzgx_offset_0[];
+extern u8 lbl_1_data_1EBDC__fzgx_offset_0[];
+extern u8 lbl_1_data_1EC10__fzgx_offset_0[];
+extern u8 lbl_1_data_1EC44__fzgx_offset_0[];
+extern u8 lbl_1_data_1EC78__fzgx_offset_0[];
+extern u8 lbl_1_data_1ECAC__fzgx_offset_0[];
+extern u8 lbl_1_data_1ECE0__fzgx_offset_0[];
+extern u8 lbl_1_data_1ED14__fzgx_offset_0[];
+extern u16 fn_1_A5DB0(void);
+extern u32 fn_800384FC(u32, u32);
+extern void fzgx_pool_sink_d(f64);
 extern u32 fn_800793D4(u8 *arg0, u32 arg1, u32 arg2);
 extern f32 *lbl_801A6D00;
 extern u32 lbl_801A66A0;
@@ -41,33 +111,14 @@ extern void lbl_8006D784(f32 *arg);
 extern void lbl_8006E1B0(void *arg0, void *arg1);
 extern void fn_800371F8(u32, void *);
 extern void fn_8003726C(u32, void *);
-extern void fn_800720B0(u32);
-extern void fn_8007245C(u32 value);
-extern void fn_800724C8(void);
 extern void fn_80072808(void);
-extern void fn_800728A8(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
 extern void fn_800729B0(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
-extern void fn_80072AB0(s32 arg0, s32 arg1, s32 arg2);
-extern void fn_80072C24(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
-extern void fn_80072CC4(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
-extern void fn_80072D64(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u8 arg4, s32 arg5);
-extern void fn_80072E20(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u8 arg4, s32 arg5);
 extern void fn_80072EDC(s32 arg0, s32 arg1);
-extern void fn_800734A8(u32 arg0, s32 arg1, s32 arg2, s32 arg3);
-extern void fn_800735C8(s32 index, s32 value);
-extern void fn_80073620(s32 index, s32 value);
-extern void fn_80073678(u32 arg0);
-extern void fn_800736C0(u32, void *);
 extern void fn_80073778(void *obj, s32 index);
-extern void fn_80073898(u32 arg0);
 extern void fn_800738E0(s32 arg0, s32 arg1, s32 arg2);
 extern void fn_800739E0(s32 index, s32 arg1, s32 arg2);
 extern void fn_80073A58(int index, void *arg, s8 value);
-extern void fn_80073C6C(s32 index);
 extern void fn_80073D60(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
-extern void fn_800745A4(u32 arg0, s32 arg1, s32 arg2, u32 arg3, u32 arg4, u32 arg5);
-extern void fn_80074660(u32 arg0);
-extern void fn_80074788(u32 arg0);
 extern void fn_800747D0(u32 arg0, u32 arg1, s32 arg2, s32 arg3, u32 arg4, s32 arg5, s32 arg6);
 extern void fn_80074918(u8 arg0, s32 arg1, u8 arg2);
 extern void GXLoadTexMtxImm(f32 *arg0, int arg1, int arg2);
@@ -79,13 +130,10 @@ extern u32 fn_1_788B0(void);
 extern void GXInvalidateTexAll(void);
 extern const f32 lbl_1_rodata_31E8;
 extern u32 lbl_1_bss_6D1A8[278];
-extern const f64 lbl_1_rodata_31A0;
 extern u32 fn_80036104(void);
 extern u32 GXGetTexObjHeight(u32 arg0);
 extern u32 GXGetTexObjWidth(u32 arg0);
 extern u32 fn_800360D8(u32 arg0);
-extern void GXInitTexObj(u32 arg0, u32 arg1, u32 arg2, u32 arg3, u32 arg4, int arg5, int arg6, int arg7);
-extern void GXInitTexObjLOD(u32 arg0, int arg1, int arg2, int arg3, int arg4, int arg5, f32 arg6, f32 arg7, f32 arg8);
 extern const f32 lbl_1_rodata_323C;
 extern void fn_80008BEC(void *dest, int value, u32 size);
 extern void lbl_8006DB74(void *arg);
@@ -99,12 +147,11 @@ extern u32 lbl_1_bss_6C8DC[2];
 extern u32 lbl_801A6410;
 extern void fn_1_46B4(u32 arg0, u32 arg1, const char *arg2, int arg3);
 extern void fn_1_727BC();
-extern void fn_1_76A94(void *arg0, u32 arg1);
+extern void fn_1_76A94(struct Arg0 *arg0, u32 arg1);
 extern void fn_1_76DBC(void);
 extern void fn_1_4E500(void);
 extern void fn_1_4E638(s32 arg);
 extern void fn_1_4E6F4(void);
-extern u16 fn_1_A5D9C(void);
 extern const f32 lbl_1_rodata_31AC;
 extern u32 fn_80008E84(u32 arg0);
 extern void fn_1_77238(void);
@@ -137,17 +184,15 @@ extern f32 lbl_1_rodata_31EC;
 extern u32 lbl_801A63C0;
 extern s32 camera_get_state(void);
 extern u8 fn_1_5348(void);
-extern u32 fn_1_58C4(void);
+extern s32 fn_1_58C4(void);
 extern void fn_1_550A8(void);
 extern u32 fn_1_7926C(u32);
 extern f64 fn_1_550E0(void);
 extern void lbl_8006DD14(void *, void *);
-extern void fn_80038F10(f32 *);
 extern void fn_80038FD8(s32 *, s32 *, s32 *, s32 *);
-extern void fn_80038BFC(f32 *);
+extern void fn_80038BFC(f32* out);
 extern void fn_80072270(f32 *, f64);
-extern void fn_80074188(s32, s32, s32, s32);
-extern void fn_80038EEC(f32, f32, f32, f32, f32, f32);
+extern u32 fn_80074188(u32 arg0, u32 arg1, u32 arg2, u32 arg3);
 
 /* fzgx:begin fn_1_72648 */
 void fn_1_72648(void) {
@@ -173,7 +218,7 @@ void fn_1_7269C(u32 arg0, u32 arg1, void *arg2) {
     fn_1_727BC(arg0, arg1, arg2);
     ((fn_1_7269C_ScreenEffectEntry *)((u8 *)object + (arg1 & 0xff) * 4))->unk_A0 = (u32)arg2;
     ((fn_1_7269C_ScreenEffectEntry *)((u8 *)object + (arg1 & 0xff) * 4))->unk_C8 = 1;
-    fn_1_76A94(object, arg1);
+    fn_1_76A94( (struct Arg0 *)(void *)(object), arg1);
     fn_1_76DBC();
 }
 /* fzgx:end fn_1_7269C */
@@ -1623,8 +1668,6 @@ void fn_1_76DBC(void) {
 /* fzgx:end fn_1_76DBC */
 
 /* fzgx:begin fn_1_76DC0 */
-#include "types.h"
-
 struct S {
     u8 pad_0[0x13C];
     u32 unk_13C[5];
@@ -1668,10 +1711,7 @@ void fn_1_76DC0(s32 arg0) {
 }
 /* fzgx:end fn_1_76DC0 */
 
-/* fzgx:begin fn_1_76EB8 noprologue */
-#include "types.h"
-#include "dolphin/hw_regs.h"
-
+/* fzgx:begin fn_1_76EB8 */
 /* GX write-gather pipe: every store is a FIFO write, hence volatile. */
 typedef union {
     f32 f;
@@ -1687,33 +1727,6 @@ struct fn_1_76EB8_Data {
     f32 unk_158;
 };
 
-extern struct fn_1_76EB8_Data lbl_1_data_1D960;
-extern u16 fn_1_A5D9C(void);
-extern void fn_80038EEC(f32, f32, f32, f32, f32, f32);
-extern void fn_8003462C(u32, u32, u32);
-extern void fn_80038F10(f32 *);
-extern void fn_800720B0(u32);
-extern void fn_8007245C(u32);
-extern void fn_800724C8(void);
-extern void fn_80072864(u32);
-extern void fn_800728A8(s32, s32, s32, s32);
-extern void fn_80072AB0(s32, s32, s32);
-extern void fn_80072C24(s32, s32, s32, s32, s32);
-extern void fn_80072CC4(s32, s32, s32, s32, s32);
-extern void fn_80072D64(s32, s32, s32, s32, u8, s32);
-extern void fn_80072E20(s32, s32, s32, s32, u8, s32);
-extern void fn_800734A8(u32, s32, s32, s32);
-extern void fn_800735C8(s32, s32);
-extern void fn_80073620(s32, s32);
-extern void fn_80073678(u32);
-extern void fn_800736C0(u32, void *);
-extern void fn_80073898(u32);
-extern void fn_80073C6C(s32);
-extern void fn_800745A4(u32, s32, s32, u32, u32, u32);
-extern void fn_80074660(u32);
-extern void fn_80074788(u32);
-extern void fzgx_pool_sink_p(void *);
-extern void fzgx_pool_sink_f(f32);
 
 /* Shared literal pool primer: screen_effect.c pools every literal of the TU
    behind one base (lbl_1_rodata_3180). These dummy functions, in a section
@@ -1778,7 +1791,7 @@ void fn_1_76EB8(void) {
     f32 ortho[6];
     u32 color;
 
-    data = (struct fn_1_76EB8_Data *)&lbl_1_data_1D960;
+    data = (struct fn_1_76EB8_Data *)&(*((struct fn_1_76EB8_Data *)&lbl_1_data_1D960));
     color = data->unk_150;
     fn_800736C0(0, &color);
     fn_800724C8();
@@ -2241,8 +2254,6 @@ void fn_1_791B0(void) {
 /* fzgx:end fn_1_791B0 */
 
 /* fzgx:begin fn_1_79654 */
-#include "types.h"
-
 typedef struct { u32 unk_0; } W32;
 
 void fn_1_79654(void) {
@@ -2266,7 +2277,7 @@ void fn_1_79654(void) {
             } else if ((s8)st == 7 || ((s8)st == 6 && fn_1_5348() == 4)) {
                 for (i = 0; i < fn_1_58C4(); i++) {
                     if (((*(W32 (*)[])&lbl_1_data_3D544)[i].unk_0 >> 23) & 1) {
-                        v = fn_1_58C4();
+                        v = (u32)fn_1_58C4();
                     }
                 }
             }
@@ -2723,8 +2734,6 @@ typedef struct {
     u16 unk_28[8];
 } St_7BB80;
 
-extern void OSPanic(const char *file, int line, const char *msg, ...);
-extern u32 fn_800356B8(void *, u32);
 
 /* file-scope objects of the retail TU (from a matched sibling), in retail order: MWCC addresses them off one section base */
 u32 fzgx_obj_lbl_1_bss_6D7A8[2];
@@ -2771,39 +2780,6 @@ static void fzgx_bss_layout(void) {
 
 static inline u16 * fn_1_7BB80_read_pointer(St_7BB80 * owner) { return lbl_1_bss_6D7C0_10; }
 #pragma opt_propagation off
-extern u8 lbl_1_data_1E558__fzgx_offset_0[];
-extern u8 lbl_1_data_1E58C__fzgx_offset_0[];
-extern u8 lbl_1_data_1E5F4__fzgx_offset_0[];
-extern u8 lbl_1_data_1E628__fzgx_offset_0[];
-extern u8 lbl_1_data_1E65C__fzgx_offset_0[];
-extern u8 lbl_1_data_1E690__fzgx_offset_0[];
-extern u8 lbl_1_data_1E6C4__fzgx_offset_0[];
-extern u8 lbl_1_data_1E6F8__fzgx_offset_0[];
-extern u8 lbl_1_data_1E72C__fzgx_offset_0[];
-extern u8 lbl_1_data_1E760__fzgx_offset_0[];
-extern u8 lbl_1_data_1E794__fzgx_offset_0[];
-extern u8 lbl_1_data_1E7C8__fzgx_offset_0[];
-extern u8 lbl_1_data_1E7FC__fzgx_offset_0[];
-extern u8 lbl_1_data_1E830__fzgx_offset_0[];
-extern u8 lbl_1_data_1E864__fzgx_offset_0[];
-extern u8 lbl_1_data_1E898__fzgx_offset_0[];
-extern u8 lbl_1_data_1E8CC__fzgx_offset_0[];
-extern u8 lbl_1_data_1E900__fzgx_offset_0[];
-extern u8 lbl_1_data_1E934__fzgx_offset_0[];
-extern u8 lbl_1_data_1EA70__fzgx_offset_0[];
-extern u8 lbl_1_data_1EAA4__fzgx_offset_0[];
-extern u8 lbl_1_data_1EAD8__fzgx_offset_0[];
-extern u8 lbl_1_data_1EB0C__fzgx_offset_0[];
-extern u8 lbl_1_data_1EB40__fzgx_offset_0[];
-extern u8 lbl_1_data_1EB74__fzgx_offset_0[];
-extern u8 lbl_1_data_1EBA8__fzgx_offset_0[];
-extern u8 lbl_1_data_1EBDC__fzgx_offset_0[];
-extern u8 lbl_1_data_1EC10__fzgx_offset_0[];
-extern u8 lbl_1_data_1EC44__fzgx_offset_0[];
-extern u8 lbl_1_data_1EC78__fzgx_offset_0[];
-extern u8 lbl_1_data_1ECAC__fzgx_offset_0[];
-extern u8 lbl_1_data_1ECE0__fzgx_offset_0[];
-extern u8 lbl_1_data_1ED14__fzgx_offset_0[];
 static u32 fzgx_pool_data_lbl_1_data_1E558[571] = {  /* fzgx-allow: A1 retail data bytes and bindings */
     0x0, 0x0, 0x0, 0xBF800000, 0xBF800000, 0xBF800000, 0x646464FF, 0xFFFFFFFF,
     0x0, 0x0, 0x3F733333, 0x0, 0x42B40000, 0x0, 0x0, 0x0,

@@ -392,3 +392,6 @@ without row alignment (`retail - ours` net rows):
   emits no symbol or relocation and compiles to the same `lis/lwz` as a literal pointer read; MWCC
   accepts an identical redeclaration, so the shared ones in `dolphin/hw_regs.h` and `dolphin/gx.h`
   coexist with local copies (fn_800557CC, fn_80055EC0, fn_80022EA4; fn_80038DE8, fn_800377F8).
+- OSFastCast (`include/dolphin/os/OSFastCast.h`): retail's `psq_st fN, off(r1), 1, qr2; lbz rX, off(r1)` per colour
+  byte is the SDK's `__OSf32tou8`. Inline asm must take `0(ptr)` with `register u8 *ptr = &x;` (MWCC folds it into
+  the r1 displacement); `x` alone as the operand is rejected. Needed by fn_1_60D54 and fn_1_A5594 (probe, 1.3.2).

@@ -1,0 +1,95 @@
+#ifndef DOLPHIN_OS_OSFASTCAST_H
+#define DOLPHIN_OS_OSFASTCAST_H
+
+#include "dolphin/types.h"
+
+/* Dolphin SDK fast float/integer casts through the paired-single quantizers (OSFastCast.h).
+ * OSInitFastCast loads GQR2..GQR5 with the u8/u16/s8/s16 formats; a cast is one quantized
+ * psq_st (or psq_l) of a single lane through a stack temporary, then an integer load.
+ * Retail fn_1_60D54 (main_rel effect.c): `psq_st f31, 0x10(r1), 1, qr2; lbz r0, 0x10(r1)` per
+ * colour byte, one stack slot per site.
+ * The pointer form is the SDK's: MWCC folds `0(ptr)` with ptr = &x into an r1 displacement
+ * (probe, GC/1.3.2 -O4,p: `psq_st f0, 0xa(r1), 1, qr2; lbz r0, 0xa(r1)`); `x` alone as the
+ * operand is rejected (illegal object reference). Units cannot carry inline assembly: include this header.
+ * Hand-owned (librarian). */
+
+#define OS_GQR_F32 0x0000
+#define OS_GQR_U8 0x0004
+#define OS_GQR_U16 0x0005
+#define OS_GQR_S8 0x0006
+#define OS_GQR_S16 0x0007
+
+#define OS_FASTCAST_U8 2
+#define OS_FASTCAST_U16 3
+#define OS_FASTCAST_S8 4
+#define OS_FASTCAST_S16 5
+
+static inline u8 __OSf32tou8(register f32 inF) {
+    u8 x;
+    register u8 *ptr = &x;
+    asm {
+        psq_st inF, 0(ptr), 1, OS_FASTCAST_U8
+    }
+    return x;
+}
+
+static inline u16 __OSf32tou16(register f32 inF) {
+    u16 x;
+    register u16 *ptr = &x;
+    asm {
+        psq_st inF, 0(ptr), 1, OS_FASTCAST_U16
+    }
+    return x;
+}
+
+static inline s8 __OSf32tos8(register f32 inF) {
+    s8 x;
+    register s8 *ptr = &x;
+    asm {
+        psq_st inF, 0(ptr), 1, OS_FASTCAST_S8
+    }
+    return x;
+}
+
+static inline s16 __OSf32tos16(register f32 inF) {
+    s16 x;
+    register s16 *ptr = &x;
+    asm {
+        psq_st inF, 0(ptr), 1, OS_FASTCAST_S16
+    }
+    return x;
+}
+
+static inline f32 __OSu8tof32(register u8 *in) {
+    register f32 r;
+    asm {
+        psq_l r, 0(in), 1, OS_FASTCAST_U8
+    }
+    return r;
+}
+
+static inline f32 __OSu16tof32(register u16 *in) {
+    register f32 r;
+    asm {
+        psq_l r, 0(in), 1, OS_FASTCAST_U16
+    }
+    return r;
+}
+
+static inline f32 __OSs8tof32(register s8 *in) {
+    register f32 r;
+    asm {
+        psq_l r, 0(in), 1, OS_FASTCAST_S8
+    }
+    return r;
+}
+
+static inline f32 __OSs16tof32(register s16 *in) {
+    register f32 r;
+    asm {
+        psq_l r, 0(in), 1, OS_FASTCAST_S16
+    }
+    return r;
+}
+
+#endif  // DOLPHIN_OS_OSFASTCAST_H
