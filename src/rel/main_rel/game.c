@@ -467,6 +467,80 @@ fallback:
 }
 /* fzgx:end fn_1_33890 */
 
+/* fzgx:begin fn_1_34AC0 noprologue */
+#include "types.h"
+#include "rel/main_rel/game.h"
+
+extern s16 fn_1_8D7C8(void);
+extern s16 fn_1_12C7B8(s16);
+extern u32 fn_1_8D5F0(s16);
+extern int fn_1_8D72C(s16);
+extern u32 lbl_801A63C0;
+extern u8 lbl_1_bss_2627C[120];
+
+static inline s32 fn_1_34AC0_rand(void) {
+    lbl_801A63C0 = lbl_801A63C0 * 0x676A4B6B + 0x33CB;
+    return (lbl_801A63C0 >> 16) & 0x7FFF;
+}
+
+void fn_1_34AC0(s8 *arr, s8 start, s8 total, s32 mode) {
+    u64 mask = 0;
+    s32 flag = 0;
+    s16 r;
+    s16 k;
+    s16 j;
+    s16 m;
+    s16 i;
+    s16 a;
+    s16 b;
+    s32 t;
+
+    if (total > fn_1_8D7C8()) {
+        flag = 1;
+    }
+    if (start == 0) {
+        start = 1;
+    }
+    for (i = 0; i < start; i++) {
+        mask |= 1ULL << fn_1_12C7B8(arr[i]);
+    }
+
+    if ((mode == 0 && lbl_1_bss_3C30.unk_5 == 1 && lbl_1_bss_3C30.unk_A6 == 5) ||
+        (mode == 1 && lbl_1_bss_8B3A0.unk_0 == 1 && lbl_1_bss_8B3A0.unk_8C == 5)) {
+        k = start;
+        for (j = 0; j < 41; j++) {
+            if ((fn_1_8D5F0(j) & 0x10000000) && k < total) {
+                if (flag ? 1 : (mask & (1ULL << j)) == 0) {
+                    ((u32 *)lbl_1_bss_2627C)[k] = 0;
+                    arr[k] = j;
+                    mask |= 1ULL << j;
+                    k++;
+                }
+            }
+        }
+        for (m = 0; m < 30; m++) {
+            a = fn_1_34AC0_rand() % k;
+            b = fn_1_34AC0_rand() % k;
+            if (a >= start && b >= start && a != b) {
+                t = arr[a];
+                arr[a] = arr[b];
+                arr[b] = t;
+            }
+        }
+        start = k;
+    }
+
+    for (k = start; k < total; k++) {
+        do {
+            r = fn_1_34AC0_rand() % 41;
+        } while ((flag ? 0 : (mask & (1ULL << r))) != 0 || fn_1_8D72C(r) == 0);
+        ((u32 *)lbl_1_bss_2627C)[k] = 0;
+        arr[k] = r;
+        mask |= 1ULL << r;
+    }
+}
+/* fzgx:end fn_1_34AC0 */
+
 /* fzgx:begin fn_1_34E08 */
 typedef struct {
     u32 flags;
