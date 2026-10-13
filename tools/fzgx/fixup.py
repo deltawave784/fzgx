@@ -16,7 +16,7 @@ import shlex
 import struct
 import time
 
-from . import fixup_evidence as evidence, fixup_layout as layout, fixup_source as source, mwgraph, oracle, reuse
+from . import fixup_evidence as evidence, fixup_layout as layout, fixup_sibling as sibling, fixup_source as source, mwgraph, oracle, reuse
 from .project import ROOT, STATE_DIR, Project
 
 
@@ -463,7 +463,7 @@ class Engine:
                     benefits[winner['id']]+=1
             preferred.extend(sorted((r for r in measured_regions if r['id'] in benefits),
                                     key=lambda r:(-benefits[r['id']],r['shape_errors'],r['word_errors']))[:max(1,beam-2)])
-            bridges = [r for r in rows if any(r.get(k) for k in ('value_flow_fixed','argument_flow_fixed','pool_layout_fixed','frame_layout_only'))]
+            bridges = [r for r in rows if any(r.get(k) for k in ('value_flow_fixed','argument_flow_fixed','pool_layout_fixed','frame_layout_only','layout_transplanted'))]
             if bridges:
                 preferred.append(min(bridges, key=lambda r:(-r.get('pool_coverage',0), r['word_errors'], -r['score'])))
             preferred.append(by_words[0])
@@ -541,6 +541,8 @@ class Engine:
             yield from evidence.frame_padding(self.project, row['symbol'], body, check)
             yield from layout.initialized_data_views(self.project, row['symbol'], body)
             yield from layout.tu_section_layout(self.project, row['symbol'], body, check)
+            # a matched sibling of the TU already defines the cluster: its whole layout and primer
+            yield from sibling.sibling_section_layouts(self.project, row['symbol'], body, check)
             if re.search(r'(?m)^\s*#define\b', body):
                 # Pool fields passed through macro parameters only have a
                 # concrete type and offset after the selected compiler expands them.
@@ -841,7 +843,7 @@ class Engine:
                 self.evaluate(siblings); seen.update(r['id'] for r in siblings); pending+=siblings
             progress=time.monotonic()
             def wants_check(row):
-                return bool(row.get('object') and (row['label'].startswith(('retail conversion','retail floating','retail loop','retail double','retail call result','retail aggregate','recover native shared-pool objects','recover native BSS','region '))
+                return bool(row.get('object') and (row['label'].startswith(('retail conversion','retail floating','retail loop','retail double','retail call result','retail aggregate','recover native shared-pool objects','recover native BSS','region ','transplant sibling'))
                         or row['shape_errors']<parents[row['parent']]['shape_errors']
                         or source.closes_region(self.targets[row['symbol']][1],self.words[row['parent']],
                                                 self.words[row['id']],parents[row['parent']].get('regions',{}))))
@@ -862,6 +864,10 @@ class Engine:
             # discarding it in favor of the semantically wrong high-score seed.
             from . import regflow
             for row in pending:
+                # a sibling's section layout fixes addressing the word score cannot see (objects
+                # become pointer values off the section base): kept when objdiff confirms it
+                if row['label'].startswith('transplant sibling') and row.get('object'):
+                    row['layout_transplanted']=self.check(row).percent>self.check(parents[row['parent']]).percent
                 if row['label'].startswith('retail call argument') and row.get('object'):
                     before=evidence.missing_call_copies(self.check(parents[row['parent']]))
                     after=evidence.missing_call_copies(self.check(row))
