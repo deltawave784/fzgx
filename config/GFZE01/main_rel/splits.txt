@@ -7340,3 +7340,6 @@ rel/main_rel/game/fn_1_34AC0.c:
 
 rel/main_rel/effect/fn_1_62794.c:
 	.text       start:0x00062794 end:0x00062AF8 align:4
+
+rel/main_rel/ghost/fn_1_F23E8.c:
+	.text       start:0x000F23E8 end:0x000F2740 align:4

@@ -1293,3 +1293,224 @@ void fn_1_F23D8(void) {
     lbl_1_bss_7ED58[0] = 0;
 }
 /* fzgx:end fn_1_F23D8 */
+
+/* fzgx:begin fn_1_F23E8 pool noprologue */
+#include "types.h"
+
+typedef struct {
+    f32 x;
+    f32 y;
+    f32 z;
+} GhostVec;
+
+typedef struct {
+    u8 unk_00[0x328];
+    s8 unk_328;
+    u8 unk_329[0x0B];
+    void ***unk_334;
+} GhostEntry;
+
+/* One per-player camera record, 0x620 bytes (stride used by fn_1_EE3F4). */
+typedef struct {
+    u32 unk_0;
+    s16 unk_4;
+    s16 unk_6;
+    u8 pad_8[0x7C - 0x8];
+    GhostVec unk_7C;
+    u8 pad_88[0xEC - 0x88];
+    u8 unk_EC[0x14C - 0xEC];
+    u8 unk_14C[0x200 - 0x14C];
+    f32 unk_200;
+    u8 pad_204[0x224 - 0x204];
+    f32 unk_224;
+    u8 pad_228[0x475 - 0x228];
+    u8 unk_475;
+    u8 pad_476[0x620 - 0x476];
+} GhostCamera;
+
+typedef struct {
+    f32 m[3][4];
+} GhostMtx;
+
+typedef struct {
+    f32 x, y, z, w;
+} GhostQuat;
+
+extern s16 lbl_1_bss_960;
+
+/* file-scope objects of the retail TU, in retail order: MWCC addresses them off one section base */
+u32 fzgx_obj_lbl_1_bss_7B180[2];
+u8 lbl_1_bss_7B180__fzgx_offset_8[0x1600 - 0x8];
+u32 lbl_1_bss_7B180__fzgx_offset_1600;
+u8 lbl_1_bss_7B180__fzgx_offset_1604[0x10];
+u32 lbl_1_bss_7B180__fzgx_offset_1614;
+u8 lbl_1_bss_7B180__fzgx_offset_1618[0x10];
+u32 lbl_1_bss_7B180__fzgx_offset_1628;
+u8 lbl_1_bss_7B180__fzgx_offset_162C[0x10];
+u32 lbl_1_bss_7B180__fzgx_offset_163C;
+u8 lbl_1_bss_7B180__fzgx_offset_1640[0x88];
+s32 lbl_1_bss_7B180__fzgx_offset_16C8;
+u8 lbl_1_bss_7B180__fzgx_offset_16CC[0x20];
+u32 lbl_1_bss_7B180__fzgx_offset_16EC;
+u8 lbl_1_bss_7B180__fzgx_offset_16F0[0x10];
+u32 lbl_1_bss_7B180__fzgx_offset_1700;
+u8 lbl_1_bss_7B180__fzgx_offset_1704[0x10];
+u32 lbl_1_bss_7B180__fzgx_offset_1714;
+u8 lbl_1_bss_7B180__fzgx_offset_1718[0x10];
+u32 lbl_1_bss_7B180__fzgx_offset_1728;
+u8 lbl_1_bss_7B180__fzgx_offset_172C[0x68];
+GhostEntry *lbl_1_bss_7B180__fzgx_offset_1794;
+u8 lbl_1_bss_7B180__fzgx_offset_1798[0x8C];
+s32 lbl_1_bss_7B180__fzgx_offset_1824;
+u8 lbl_1_bss_7B180__fzgx_offset_1828[0x19C8 - 0x1828];
+GhostCamera lbl_1_bss_7B180__fzgx_offset_19C8[4];
+u8 lbl_1_bss_7B180__fzgx_offset_3248[0x3BD8 - 0x3248];
+s32 lbl_1_bss_7B180__fzgx_offset_3BD8;
+
+#pragma section code_type ".fzgxpool"
+static void fzgx_bss_layout(void) {
+    volatile u8 s;  /* fzgx-allow: S2 layout primer sink: MWCC emits .bss objects in first-access order */
+    s = *(u8 *)&fzgx_obj_lbl_1_bss_7B180;
+    s = *(u8 *)&lbl_1_bss_7B180__fzgx_offset_8;
+    s = *(u8 *)&lbl_1_bss_7B180__fzgx_offset_1600;
+    s = *(u8 *)&lbl_1_bss_7B180__fzgx_offset_1604;
+    s = *(u8 *)&lbl_1_bss_7B180__fzgx_offset_1614;
+    s = *(u8 *)&lbl_1_bss_7B180__fzgx_offset_1618;
+    s = *(u8 *)&lbl_1_bss_7B180__fzgx_offset_1628;
+    s = *(u8 *)&lbl_1_bss_7B180__fzgx_offset_162C;
+    s = *(u8 *)&lbl_1_bss_7B180__fzgx_offset_163C;
+    s = *(u8 *)&lbl_1_bss_7B180__fzgx_offset_1640;
+    s = *(u8 *)&lbl_1_bss_7B180__fzgx_offset_16C8;
+    s = *(u8 *)&lbl_1_bss_7B180__fzgx_offset_16CC;
+    s = *(u8 *)&lbl_1_bss_7B180__fzgx_offset_16EC;
+    s = *(u8 *)&lbl_1_bss_7B180__fzgx_offset_16F0;
+    s = *(u8 *)&lbl_1_bss_7B180__fzgx_offset_1700;
+    s = *(u8 *)&lbl_1_bss_7B180__fzgx_offset_1704;
+    s = *(u8 *)&lbl_1_bss_7B180__fzgx_offset_1714;
+    s = *(u8 *)&lbl_1_bss_7B180__fzgx_offset_1718;
+    s = *(u8 *)&lbl_1_bss_7B180__fzgx_offset_1728;
+    s = *(u8 *)&lbl_1_bss_7B180__fzgx_offset_172C;
+    s = *(u8 *)&lbl_1_bss_7B180__fzgx_offset_1794;
+    s = *(u8 *)&lbl_1_bss_7B180__fzgx_offset_1798;
+    s = *(u8 *)&lbl_1_bss_7B180__fzgx_offset_1824;
+    s = *(u8 *)&lbl_1_bss_7B180__fzgx_offset_1828;
+    s = *(u8 *)&lbl_1_bss_7B180__fzgx_offset_19C8;
+    s = *(u8 *)&lbl_1_bss_7B180__fzgx_offset_3248;
+    s = *(u8 *)&lbl_1_bss_7B180__fzgx_offset_3BD8;
+}
+#pragma section code_type ".text"
+
+#define ghostCameras lbl_1_bss_7B180__fzgx_offset_19C8
+#define ghostEntry lbl_1_bss_7B180__fzgx_offset_1794
+#define ghostFrame lbl_1_bss_7B180__fzgx_offset_1824
+#define ghostTimer lbl_1_bss_7B180__fzgx_offset_3BD8
+
+extern const f32 lbl_1_rodata_6B60;  /* 0.0f */
+extern const f32 lbl_1_rodata_6BBC;  /* 0.5f */
+extern const f32 lbl_1_rodata_6BD0;  /* 1.0f */
+extern const f64 lbl_1_rodata_6C88;  /* 2^52 + 2^31 */
+extern const f32 lbl_1_rodata_6C90;  /* 0.3f */
+extern const f32 lbl_1_rodata_6D3C;  /* 5.0f */
+extern const f32 lbl_1_rodata_6D40;  /* 2.5f */
+extern const f32 lbl_1_rodata_6D54;  /* 120.0f */
+extern const f32 lbl_1_rodata_6D58;  /* 0.34f */
+
+extern u32 fn_1_F5458(GhostQuat *, s32, u32, u32, f32);
+extern f32 fn_1_F4E3C(s32, u32, u32, u32, f32);
+extern void fn_1_556B8(void *);
+extern void fn_1_55FF0(f32);
+extern void fn_1_5621C(f32, f32, f32, f32);
+extern void fn_1_56298(f32, f32, f32, f32);
+extern void fn_1_983CC(void *, GhostEntry *);
+extern void fn_1_98634(f32);
+extern void fn_80072558(void);
+extern void fn_80074A60(u32, u32);
+extern void fn_80074A6C(void);
+extern void lbl_8006D758(void);
+extern void lbl_8006D7DC(GhostVec *);
+extern void lbl_8006DB74(void *);
+extern u32 lbl_8006DCA4(void);
+extern void lbl_8006DFC4(void *);
+extern void lbl_8006E0A4(GhostVec *);
+extern void lbl_8006E0B4(f32, f32, f32);
+extern void mathutil_mtxA_from_quat(GhostQuat *);
+
+#pragma opt_dead_assignments off
+void fn_1_F23E8(void) {
+    GhostMtx mtx;
+    GhostQuat quat;
+    GhostVec pos;
+    f32 height;
+    f32 scale;
+    f32 t;
+    f32 lab_t4;
+    f32 lab_t4_;
+
+    if (lbl_1_bss_960 == 9 && lbl_1_bss_7B180__fzgx_offset_16C8 != -1) {
+        lab_t4_ = lbl_1_rodata_6B60;
+        fn_1_F5458(&quat, ghostFrame, lbl_1_bss_7B180__fzgx_offset_1600, lbl_1_bss_7B180__fzgx_offset_1728, lab_t4_);
+        lab_t4 = lbl_1_rodata_6B60;
+        pos.x = fn_1_F4E3C(ghostFrame, lbl_1_bss_7B180__fzgx_offset_1600, lbl_1_bss_7B180__fzgx_offset_1614, lbl_1_bss_7B180__fzgx_offset_16EC, lab_t4);
+        lab_t4 = lbl_1_rodata_6B60;
+        pos.y = fn_1_F4E3C(ghostFrame, lbl_1_bss_7B180__fzgx_offset_1600, lbl_1_bss_7B180__fzgx_offset_1628, lbl_1_bss_7B180__fzgx_offset_1700, lab_t4);
+        lab_t4 = lbl_1_rodata_6B60;
+        pos.z = fn_1_F4E3C(ghostFrame, lbl_1_bss_7B180__fzgx_offset_1600, lbl_1_bss_7B180__fzgx_offset_163C, lbl_1_bss_7B180__fzgx_offset_1714, lab_t4);
+
+        if (ghostTimer > 180 && ghostTimer < 300) {
+            height = ghostTimer - 180;
+            height /= lbl_1_rodata_6D54;
+            scale = height * height;
+            height = height * lbl_1_rodata_6D58;
+        } else if (ghostTimer >= 300) {
+            height = lbl_1_rodata_6D58;
+            scale = lbl_1_rodata_6BD0;
+        } else {
+            height = lbl_1_rodata_6B60;
+            scale = height;
+        }
+
+        fn_1_56298(lbl_1_rodata_6B60, lbl_1_rodata_6B60, lbl_1_rodata_6B60, lbl_1_rodata_6B60);
+        fn_1_5621C(lbl_1_rodata_6BD0, lbl_1_rodata_6BD0, lbl_1_rodata_6BD0, lbl_1_rodata_6BD0);
+        fn_80074A60(4, 1);
+        mathutil_mtxA_from_quat(&quat);
+        lbl_8006DB74(&mtx);
+
+        ghostCameras[1].unk_7C = pos;
+        ghostCameras[1].unk_7C.y += height;
+        lbl_8006D7DC(&ghostCameras[1].unk_7C);
+        lbl_8006DB74(ghostCameras[1].unk_14C);
+        ghostCameras[1].unk_224 = lbl_1_rodata_6D3C * scale;
+        ghostCameras[1].unk_200 = lbl_1_rodata_6D40 * scale;
+        lbl_8006DCA4();
+        lbl_8006E0A4(&pos);
+        lbl_8006E0B4(lbl_1_rodata_6B60, height, lbl_1_rodata_6B60);
+        lbl_8006DFC4(&mtx);
+        fn_80072558();
+        fn_1_55FF0(lbl_1_rodata_6BBC * scale);
+        fn_1_556B8(*ghostEntry->unk_334);
+        fn_1_55FF0(lbl_1_rodata_6BD0);
+        fn_80074A6C();
+
+        if (ghostTimer == 0) {
+            ghostCameras[1].unk_4 = -2;
+            if (ghostEntry != NULL) {
+                ghostCameras[1].unk_6 = ghostEntry->unk_328;
+            }
+            ghostCameras[1].unk_7C = pos;
+            ghostCameras[1].unk_0 = 0x400;
+            lbl_8006D758();
+            lbl_8006DB74(ghostCameras[1].unk_EC);
+            ghostCameras[1].unk_475 = 0;
+            ghostCameras[1].unk_224 = lbl_1_rodata_6D3C;
+            ghostCameras[1].unk_200 = lbl_1_rodata_6D40;
+            lbl_8006D7DC(&pos);
+            lbl_8006DB74(ghostCameras[1].unk_14C);
+            fn_1_98634(lbl_1_rodata_6C90);
+            fn_1_983CC(&ghostCameras[1], ghostEntry);
+            fn_1_98634(lbl_1_rodata_6B60);
+        }
+        ghostTimer++;
+    }
+}
+#pragma opt_dead_assignments reset
+/* fzgx:end fn_1_F23E8 */

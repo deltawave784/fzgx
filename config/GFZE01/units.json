@@ -45679,6 +45679,18 @@
   },
   {
     "module": "main_rel",
+    "source": "rel/main_rel/ghost/fn_1_F23E8.c",
+    "symbols": [
+      "fn_1_F23E8"
+    ],
+    "status": "nonmatching",
+    "mw_version": "GC/1.3.2",
+    "extra_cflags": [],
+    "tu": "rel/main_rel/ghost.c",
+    "pool": true
+  },
+  {
+    "module": "main_rel",
     "source": "rel/main_rel/ghost/ghost_pack_bits.c",
     "symbols": [
       "ghost_pack_bits"
