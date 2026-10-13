@@ -7376,3 +7376,6 @@ rel/main_rel/ghost/fn_1_EB4BC.c:
 
 rel/main_rel/sound/fn_1_A3654.c:
 	.text       start:0x000A3654 end:0x000A3A1C align:4
+
+rel/main_rel/_prolog/fn_1_2F04.c:
+	.text       start:0x00002F04 end:0x00003238 align:4

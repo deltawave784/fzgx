@@ -768,6 +768,233 @@ u32 fn_1_1DF0(u16 *state, s8 *values, u32 flags) {
 }
 /* fzgx:end fn_1_1DF0 */
 
+/* fzgx:begin fn_1_2F04 pool noprologue */
+typedef signed char s8;
+
+typedef signed long s32;
+
+typedef unsigned char u8;
+typedef unsigned short u16;
+typedef unsigned long u32;
+
+extern u8 lbl_1_data_2B78[];
+extern void fn_80008BEC(void *, int, u32);
+typedef struct {
+u8 pad0[10];
+s8 state;
+u8 padB;
+} Fn1_2F04_Slot;
+typedef struct {
+u16 enable0;
+u16 enable1;
+u16 pad4;
+u16 pad6;
+u16 held0;
+u16 held1;
+u16 padC;
+u16 padE;
+u16 out0;
+u16 out1;
+} Fn1_2F04_Bits;
+/* bit n of a mask word, as a rotate-and-mask */
+/* file-scope objects of the retail TU, in retail order: MWCC addresses them off one section base */
+u32 lbl_1_bss_978[2];
+u32 lbl_1_bss_980[4];
+u32 lbl_1_bss_990[14];
+u8 lbl_1_bss_9C8;
+u8 lbl_1_bss_9C8_fill_9C9;
+u16 lbl_1_bss_9C8_fill_9CA;
+u32 lbl_1_bss_9C8_fill_9CC[11];
+u8 fzgx_obj_lbl_1_bss_9F8;
+u8 lbl_1_bss_9F8_fill_9F9;
+u16 lbl_1_bss_9F8_fill_9FA;
+u32 lbl_1_bss_9F8_fill_9FC[19];
+u8 fzgx_obj_lbl_1_bss_A48;
+u8 lbl_1_bss_A48_fill_A49;
+u16 lbl_1_bss_A48_fill_A4A;
+u32 lbl_1_bss_A48_fill_A4C[15];
+u32 fzgx_obj_lbl_1_bss_A88[6];
+u32 fzgx_obj_lbl_1_bss_AA0[84];
+u32 lbl_1_bss_BF0[32];
+u32 fzgx_obj_lbl_1_bss_C70[20];
+u32 lbl_1_bss_CC0;
+u8 lbl_1_bss_CC0_4;
+u8 lbl_1_bss_CC0_fill_CC5;
+u16 lbl_1_bss_CC0_fill_CC6;
+u32 lbl_1_bss_CC0_fill_CC8[12];
+u8 lbl_1_bss_CC0_38;
+u8 lbl_1_bss_CC0_fill_CF9;
+u16 lbl_1_bss_CC0_fill_CFA;
+u32 lbl_1_bss_CC0_fill_CFC[11];
+u8 lbl_1_bss_CC0_68;
+u8 lbl_1_bss_CC0_fill_D29;
+u16 lbl_1_bss_CC0_fill_D2A;
+u32 lbl_1_bss_CC0_fill_D2C[11];
+
+#pragma section code_type ".fzgxpool"
+static void fzgx_bss_layout(void) {
+    volatile u8 s;  /* fzgx-allow: S2 layout primer sink: MWCC emits .bss objects in first-access order */
+    s = *(u8 *)&lbl_1_bss_978;
+    s = *(u8 *)&lbl_1_bss_980;
+    s = *(u8 *)&lbl_1_bss_990;
+    s = *(u8 *)&lbl_1_bss_9C8;
+    s = *(u8 *)&lbl_1_bss_9C8_fill_9C9;
+    s = *(u8 *)&lbl_1_bss_9C8_fill_9CA;
+    s = *(u8 *)&lbl_1_bss_9C8_fill_9CC;
+    s = *(u8 *)&fzgx_obj_lbl_1_bss_9F8;
+    s = *(u8 *)&lbl_1_bss_9F8_fill_9F9;
+    s = *(u8 *)&lbl_1_bss_9F8_fill_9FA;
+    s = *(u8 *)&lbl_1_bss_9F8_fill_9FC;
+    s = *(u8 *)&fzgx_obj_lbl_1_bss_A48;
+    s = *(u8 *)&lbl_1_bss_A48_fill_A49;
+    s = *(u8 *)&lbl_1_bss_A48_fill_A4A;
+    s = *(u8 *)&lbl_1_bss_A48_fill_A4C;
+    s = *(u8 *)&fzgx_obj_lbl_1_bss_A88;
+    s = *(u8 *)&fzgx_obj_lbl_1_bss_AA0;
+    s = *(u8 *)&lbl_1_bss_BF0;
+    s = *(u8 *)&fzgx_obj_lbl_1_bss_C70;
+    s = *(u8 *)&lbl_1_bss_CC0;
+    s = *(u8 *)&lbl_1_bss_CC0_4;
+    s = *(u8 *)&lbl_1_bss_CC0_fill_CC5;
+    s = *(u8 *)&lbl_1_bss_CC0_fill_CC6;
+    s = *(u8 *)&lbl_1_bss_CC0_fill_CC8;
+    s = *(u8 *)&lbl_1_bss_CC0_38;
+    s = *(u8 *)&lbl_1_bss_CC0_fill_CF9;
+    s = *(u8 *)&lbl_1_bss_CC0_fill_CFA;
+    s = *(u8 *)&lbl_1_bss_CC0_fill_CFC;
+    s = *(u8 *)&lbl_1_bss_CC0_68;
+    s = *(u8 *)&lbl_1_bss_CC0_fill_D29;
+    s = *(u8 *)&lbl_1_bss_CC0_fill_D2A;
+    s = *(u8 *)&lbl_1_bss_CC0_fill_D2C;
+}
+#pragma section code_type ".text"
+
+void fn_1_2F04(void) {
+/* one-member carriers: each address is a single CSE'd materialisation */
+struct { Fn1_2F04_Slot *value; } slot;
+struct { u8 *value; } timer0;
+struct { u8 *value; } timer1;
+struct { u8 *value; } level_p;
+struct { u8 *value; } mode;
+Fn1_2F04_Bits *bits;
+s8 *axes;
+u32 i;
+u8 *t;
+s32 j;
+u32 sh;
+s32 held;
+u8 *t2;
+u8 *lv;
+u32 mask;
+s32 k;
+s32 held2;
+struct { u8 value; } cur;
+s32 sh2;
+u8 old;
+u8 level;
+bits = (Fn1_2F04_Bits *)((u8 *)&fzgx_obj_lbl_1_bss_9F8);
+axes = (s8 *)((u8 *)&fzgx_obj_lbl_1_bss_A48);
+slot.value = (Fn1_2F04_Slot *)((u8 *)&lbl_1_bss_9C8);
+timer0.value = (u8 *)&lbl_1_bss_CC0_4;
+timer1.value = (u8 *)&lbl_1_bss_CC0_38;
+level_p.value = (u8 *)&lbl_1_bss_CC0_68;
+mode.value = lbl_1_data_2B78;
+for (i = 0; i < 4; i++) {
+if (slot.value->state == -1) {
+fn_80008BEC(bits, 0, 20);
+} else {
+t = timer0.value;
+for (j = 0; j < 13; t++, j++) {
+sh = 31 - j;
+if (sh == 24) {
+continue;
+}
+if (__rlwnm((bits->held0), (32 - (j)) & 31, 31, 31) ) {
+*t = 0;
+held = 1;
+} else {
+held = 0;
+if (*t != 0) {
+(*t)--;
+}
+}
+if (*t != 0 || !__rlwnm((bits->enable0), (32 - (j)) & 31, 31, 31) ) {
+bits->out0 &= ~(0x80000000 >> sh);
+} else {
+if (held) {
+*t = 20;
+} else {
+*t = 4;
+}
+bits->out0 |= 0x80000000 >> sh;
+}
+}
+t2 = timer1.value;
+lv = level_p.value;
+for (k = 0; k < 12; t2++, lv++, k++) {
+if (__rlwnm((bits->held1), (32 - (k)) & 31, 31, 31) ) {
+*t2 = 0;
+held2 = 1;
+} else {
+held2 = 0;
+if (*t2 != 0) {
+(*t2)--;
+}
+}
+sh2 = 31 - k;
+mask = 0x80000000 >> sh2;
+bits->out1 &= ~mask;
+cur.value = *t2;
+if (cur.value == 0 && __rlwnm((bits->enable1), (32 - (k)) & 31, 31, 31) ) {
+old = *lv;
+switch (sh2) {
+case 31:
+case 30:
+level = __abs(axes[0]);
+break;
+case 29:
+case 28:
+level = __abs(axes[1]);
+break;
+case 27:
+case 26:
+level = __abs(axes[2]);
+break;
+case 25:
+case 24:
+level = __abs(axes[3]);
+break;
+default:
+level = 72;
+break;
+}
+*lv = level;
+if (held2) {
+*t2 = 20;
+} else if (level >= 30 && level >= old) {
+if (*mode.value == 1) {
+*t2 = (level * -4 + 340) / 13;
+} else {
+*t2 = (level * -17 + 1350) / 42;
+}
+} else {
+continue;
+}
+bits->out1 |= mask;
+}
+}
+}
+slot.value++;
+timer0.value += 13;
+timer1.value += 12;
+level_p.value += 12;
+mode.value++;
+bits++;
+axes += 16;
+}
+}
+/* fzgx:end fn_1_2F04 */
+
 /* fzgx:begin fn_1_3238 */
 void fn_1_3238(void) {
     u8 *p_lbl_1_bss_978;
