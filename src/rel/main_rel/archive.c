@@ -1102,6 +1102,104 @@ s16 fn_1_12CCB0(s16 arg0, s16 arg1) {
 }
 /* fzgx:end fn_1_12CCB0 */
 
+/* fzgx:begin fn_1_12CEA8 */
+extern void *fn_1_12F118(void);
+extern u8 *fn_1_36AD0(void);
+extern void fn_1_12D354(s32, void *, void *);
+extern void fn_1_8F198(void *, s32, void *, u32);
+extern void fn_1_8F45C(void *, s32, void *, u32);
+
+typedef struct {
+    u8 pad_0[0x5];
+    u8 id;
+    u8 pad_6[0x81A0 - 0x6];
+    u8 kind;
+    u8 pad_81A1[0x81C0 - 0x81A1];
+} Fn1_12CEA8_Entry;
+
+static inline s16 fn_1_12CEA8_kind(s16 id) {
+    Fn1_12CEA8_Entry *entries;
+    s16 i;
+
+    if (id < 0x29) {
+        return id;
+    }
+    entries = fn_1_12F118();
+    if (entries == NULL) {
+        return 6;
+    }
+    if (entries != (Fn1_12CEA8_Entry *)fn_1_36AD0()) {
+        for (i = 0; i < 9; i++) {
+            if (id == entries[i].id) {
+                return entries[i].kind;
+            }
+        }
+    } else if (id >= 0x32 && id <= 0x35) {
+        return entries[id - 0x32].kind;
+    } else if (id >= 0x36 && id <= 0x39) {
+        return entries[id - 0x36].kind;
+    } else {
+        for (i = 0; i < 4; i++) {
+            if (id == entries[i].id) {
+                return entries[i].kind;
+            }
+        }
+    }
+    return 6;
+}
+
+static inline s16 fn_1_12CEA8_count(s16 kind) {
+    switch (kind) {
+    case 0x15:
+        return 1;
+    case 0x21:
+        return 2;
+    default:
+        return 0;
+    }
+}
+
+static inline s16 fn_1_12CEA8_part(s16 kind, s16 i) {
+    switch (kind) {
+    case 0x15:
+        switch (i) {
+        case 0:
+            return 0x29;
+        default:
+            return -1;
+        }
+    case 0x21:
+        switch (i) {
+        case 0:
+            return 0x2a;
+        case 1:
+            return 0x2b;
+        default:
+            return -1;
+        }
+    default:
+        return -1;
+    }
+}
+
+void fn_1_12CEA8(s16 id, u8 *car, void *arg2, u32 arg3, s32 arg4) {
+    s16 i;
+    s16 part;
+
+    for (i = 0; i < fn_1_12CEA8_count(fn_1_12CEA8_kind(id)); i++) {
+        part = fn_1_12CEA8_part(fn_1_12CEA8_kind(id), i);
+        if (part != -1) {
+            if (arg4 != 0) {
+                fn_1_12D354(part, arg2, car + i * 0x4e0);
+                fn_1_8F198(car + i * 0x4e0, part, arg2, arg3);
+            } else {
+                fn_1_8F45C(car + i * 0x4e0, part, arg2, arg3);
+            }
+        }
+    }
+}
+/* fzgx:end fn_1_12CEA8 */
+
 /* fzgx:begin fn_1_12D254 */
 #pragma opt_propagation off
 u8 *fn_1_12D254(s32 arg0, s32 arg1) {
