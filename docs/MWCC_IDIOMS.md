@@ -25,6 +25,9 @@ file from what actually unblocked functions; keep each item one or two lines.
 - **Evaluation order at a call**: a value produced by a call and consumed in an expression
   is evaluated first when written inline; holding it in a local moves the call and can
   swap `mullw`/`add` operands (fn_1_76704).
+- **Power-of-two products in an add**: `(n - 1) * 2 + n` gives `add rD, n, shifted` under
+  every operand order; `((n - 1) << 1) + n` (or a held `m = (n - 1) * 2; m + n`) follows
+  source order, `add rD, shifted, n` (fn_1_112F40). `fzgx fixup` tries it (`shift_products`).
 
 - **Loop pointers**: a pointer initialised straight into its callee-saved register
   (`addi r30, r3, sym@l`, no copy) and stepped by a constant is a strength-reduced
