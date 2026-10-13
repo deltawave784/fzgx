@@ -1,0 +1,43 @@
+diff --git a/tools/fzgx/api.py b/tools/fzgx/api.py
+index 91726153..f2db6d89 100644
+--- a/tools/fzgx/api.py
++++ b/tools/fzgx/api.py
+@@ -1048,7 +1048,10 @@ def _submit(p: Project, symbol: str, agent: str = "unknown", message: str = "",
+     findings = lint_paths([src or oracle.unit_source_path(p, unit_src)])
+     if findings:
+         return {"ok": False, "error": "lint", "findings": findings}
+-    if unit_src and (mw_version or extra_cflags) and not _is_shadow(agent):
++    installed = row is not None and row["status"] in ("matched", "asm")
++    if unit_src and (mw_version or extra_cflags) and not _is_shadow(agent) and not installed:
++        # an installed unit keeps its options until this submit is accepted (a rejected
++        # re-submit used to leave units.json rewritten); the check compiles under them anyway
+         _set_unit_opts(p, unit_src, mw_version, extra_cflags)
+         _reconfigure_and_split(p)
+     res = oracle.check(p, symbol, max_diff_lines, source=src, mw_version=mw_version, extra_cflags=extra_cflags)
+@@ -1128,6 +1131,9 @@ def _submit(p: Project, symbol: str, agent: str = "unknown", message: str = "",
+             out["note"] = (f"{key} is already {row['status']} (link_state={row['link_state']}); the installed block was not "
+                            f"replaced (a carved pool unit re-checks with its primer counted). Use a revise- agent to replace installed C.")
+         return out
++    if installed and unit_src and (mw_version or extra_cflags):
++        _set_unit_opts(p, unit_src, mw_version, extra_cflags)  # accepted: now the options change
++        _reconfigure_and_split(p)
+ 
+     # Accept on the per-object oracle; the batch relink (`fzgx verify`) checks every hash
+     # once for all accepted units and bisects the rare object that matches but does not link.
+diff --git a/tools/fzgx/oracle.py b/tools/fzgx/oracle.py
+index 5929b224..b460072f 100644
+--- a/tools/fzgx/oracle.py
++++ b/tools/fzgx/oracle.py
+@@ -356,7 +356,11 @@ def _diff(project: Project, module: str, symbol: str, unit: str, max_diff_lines:
+     for name, s in left_syms.items():
+         res.symbols[name] = float(s.get("match_percent", 0.0))
+     res.missing_in_base = sorted(set(left_syms) - set(right_syms))
+-    res.extra_in_base = sorted(set(right_syms) - set(left_syms))
++    # a carved unit's primers (`fzgx_*` functions in `.fzgxpool`, dropped at integration) are not
++    # extra code either: the uncarved rule above already ignores them, and every landed pool unit
++    # with a layout primer (fn_1_46144, fn_1_C3B8, fn_1_A3654, fn_1_EB4BC) re-checked as unfit
++    primers = {n for n in res.primer_functions if n.startswith("fzgx_")}
++    res.extra_in_base = sorted(set(right_syms) - set(left_syms) - primers)
+     if target is not None:
+         # only RELs keep it: the DOL link dead-strips an unreferenced static helper (fn_8006A768's
+         # myStrncpy, fn_80022028's update), a REL link does not (fn_17_750C's GetLine grew the module)
