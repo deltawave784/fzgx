@@ -906,6 +906,110 @@ void fn_1_9EDE8(Obj_1_9EDE8 *arg0) {
 #undef lbl_1_rodata_42D4
 /* fzgx:end fn_1_9EDE8 */
 
+/* fzgx:begin fn_1_9F164 noprologue */
+#include "types.h"
+#include "dolphin/hw_regs.h"
+
+typedef struct fn_1_9F164_Vec {
+    f32 x, y, z;
+} fn_1_9F164_Vec;
+
+struct fn_1_9F164_Arg0 {
+    f32 unk_0;
+    f32 unk_4;
+    u8 unk_8[0xC];
+    f32 unk_14;
+    u8 pad_18[0xC];
+    f32 unk_24;
+    u8 pad_28[0xC];
+    f32 unk_34;
+    u32 unk_38;
+    u32 unk_3C;
+};
+
+extern f32 lbl_1_rodata_42D0;
+extern f32 lbl_1_rodata_42D4;
+extern s32 fn_1_54E34(void *, f32);
+extern void fn_8003462C(u32, u32, u32);
+extern void fn_800736C0(u32, void *);
+extern void lbl_8006DAEC(void);
+extern void lbl_8006DB30(void);
+extern void lbl_8006DFC4(void *);
+extern void lbl_8006E1D8(void *, f32, f32, f32);
+
+/* GX write-gather FIFO */
+#define GXFIFO_F32 (*(volatile f32 *)GX_FIFO_BASE)
+/* one degenerate vertex: position and texcoord all zero */
+#define ZERO_VTX()                          \
+    do {                                    \
+        GXFIFO_F32 = lbl_1_rodata_42D0;     \
+        GXFIFO_F32 = lbl_1_rodata_42D0;     \
+        GXFIFO_F32 = lbl_1_rodata_42D0;     \
+        GXFIFO_F32 = lbl_1_rodata_42D0;     \
+        GXFIFO_F32 = lbl_1_rodata_42D0;     \
+    } while (0)
+
+void fn_1_9F164(struct fn_1_9F164_Arg0 *arg0) {
+    fn_1_9F164_Vec quad[4];
+    fn_1_9F164_Vec pos;
+    u32 color;
+    u32 flags;
+    f32 neg;
+    f32 size;
+    f32 r;
+
+    pos.x = arg0->unk_14;
+    pos.y = arg0->unk_24;
+    pos.z = arg0->unk_34;
+    flags = arg0->unk_38;
+    if (flags & 2) {
+        r = arg0->unk_4;
+    } else {
+        r = arg0->unk_0;
+    }
+    if (!(flags & 4) && fn_1_54E34(&pos, r) == 0) {
+        arg0->unk_38 |= 1;
+        return;
+    }
+    arg0->unk_38 &= ~1;
+    color = arg0->unk_3C;
+    fn_800736C0(0, &color);
+    fn_8003462C(0x90, 0, 8);
+    ZERO_VTX(); ZERO_VTX(); ZERO_VTX(); ZERO_VTX();
+    ZERO_VTX(); ZERO_VTX(); ZERO_VTX(); ZERO_VTX();
+    fn_8003462C(0x80, 0, 4);
+    size = arg0->unk_0;
+    neg = -size;
+    lbl_8006DAEC();
+    lbl_8006DFC4(arg0->unk_8);
+    lbl_8006E1D8(&quad[0], neg, neg, lbl_1_rodata_42D0);
+    lbl_8006E1D8(&quad[1], size, neg, lbl_1_rodata_42D0);
+    lbl_8006E1D8(&quad[2], size, size, lbl_1_rodata_42D0);
+    lbl_8006E1D8(&quad[3], neg, size, lbl_1_rodata_42D0);
+    lbl_8006DB30();
+    GXFIFO_F32 = quad[0].x;
+    GXFIFO_F32 = quad[0].y;
+    GXFIFO_F32 = quad[0].z;
+    GXFIFO_F32 = lbl_1_rodata_42D0;
+    GXFIFO_F32 = lbl_1_rodata_42D0;
+    GXFIFO_F32 = quad[1].x;
+    GXFIFO_F32 = quad[1].y;
+    GXFIFO_F32 = quad[1].z;
+    GXFIFO_F32 = lbl_1_rodata_42D4;
+    GXFIFO_F32 = lbl_1_rodata_42D0;
+    GXFIFO_F32 = quad[2].x;
+    GXFIFO_F32 = quad[2].y;
+    GXFIFO_F32 = quad[2].z;
+    GXFIFO_F32 = lbl_1_rodata_42D4;
+    GXFIFO_F32 = lbl_1_rodata_42D4;
+    GXFIFO_F32 = quad[3].x;
+    GXFIFO_F32 = quad[3].y;
+    GXFIFO_F32 = quad[3].z;
+    GXFIFO_F32 = lbl_1_rodata_42D0;
+    GXFIFO_F32 = lbl_1_rodata_42D4;
+}
+/* fzgx:end fn_1_9F164 */
+
 /* fzgx:begin fn_1_9F4B4 */
 struct fn_1_9F4B4_Arg0 {
     u8 pad_0[0xC];
