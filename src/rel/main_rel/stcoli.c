@@ -1662,6 +1662,189 @@ void fn_1_2277C(StcoliObj *obj, StcoliDesc *desc)
 }
 /* fzgx:end fn_1_2277C */
 
+/* fzgx:begin fn_1_22B10 noprologue */
+#include "types.h"
+
+struct fn_1_22B10_Arg0 {
+    u8 pad_0[0x4];
+    f32 unk_4;
+    f32 unk_8;
+    f32 unk_C;
+    f32 unk_10;
+    f32 unk_14;
+    u8 pad_18[0x4];
+    f32 unk_1C;
+    f32 unk_20;
+    u8 pad_24[0x10];
+    f32 unk_34;
+    u8 pad_38[0x4];
+    f32 unk_3C;
+};
+
+extern f64 __fabs(f64);
+
+/* Primes the literal pool so it lines up with retail's lbl_1_rodata_840. */
+#pragma section RX ".fzgxpool"
+__declspec(section ".fzgxpool") void fzgx_pool_fn_1_22B10(s32 fzgx_int_fn_1_22B10) {
+    volatile f32 s;  /* volatile: keeps each literal use alive for the primer */
+    volatile f64 sd; /* volatile: as above */
+    s = 52.0f;
+    s = 0.0625f;
+    s = 45.0f;
+    s = 0.0f;
+    s = 1.7f;
+    s = 1.0f;
+    s = 0.1f;
+    s = 0.5f;
+    sd = 4503599627370496.0; /* 2^52: retail's int-to-float bias */
+    s = 40.0f;
+    s = 348.0f;
+    s = 36.0f;
+    s = 4.0f;
+    s = 0.6f;
+    s = 5.0f;
+    s = 0.05f;
+    s = 1000.0f;
+    sd = 131072.0;
+    sd = 216.0;
+    sd = 2.0;
+    s = 0.25f;
+    s = 0.07f;
+    s = 0.2f;
+    sd = 0.84;
+    s = 2.0f;
+    s = 1.8f;
+    s = 1.4f;
+    s = 1.5f;
+    s = 1.2f;
+    s = 2.3f;
+    s = 0.4f;
+    s = 3.2f;
+    s = 0.15f;
+    s = -0.25f;
+    s = 0.16f;
+    s = 0.12f;
+    s = 0.08f;
+    s = 0.45f;
+    s = 0.7f;
+    sd = (f64)0.6f;
+    s = 0.31f;
+    s = 0.03f;
+    s = 0.01f;
+    s = 700.0f;
+}
+
+#pragma fp_contract off
+void fn_1_22B10(struct fn_1_22B10_Arg0 *p, f32 speed) {
+    f32 a;
+    f32 b;
+    f32 d;
+    f32 t;
+    f32 k;
+    f32 r;
+    f32 m;
+    f32 y;
+    f32 x;
+    s32 flag;
+    f32 scale;
+
+    flag = 1;
+    d = speed - 0.5f;
+    if (d > 0.0f) {
+        b = 0.0f;
+        a = 1.0f;
+        x = p->unk_1C;
+        if (x > 1.0f) {
+            p->unk_1C = x - 1.8f * (x * d);
+        }
+    } else {
+        x = p->unk_1C;
+        a = 0.0f;
+        b = 1.4f;
+        if (x < 1.0f) {
+            p->unk_1C = x - 2.0f * ((2.0f - x) * d);
+        } else if (x < 1.5f) {
+            p->unk_1C = x - 1.2f * (x * d);
+        } else {
+            p->unk_1C = x - (1.2f - (x - 1.5f)) * (x * d);
+        }
+        if (p->unk_1C > 2.3f) {
+            p->unk_1C = 2.3f;
+        }
+    }
+
+    if (d < 0.0f && p->unk_8 >= 0.5f && p->unk_C <= 0.2f) {
+        flag = 0;
+    }
+
+    t = d * __fabs(a - p->unk_C);
+    if (d > 0.0f) {
+        k = 1.0f;
+        if (p->unk_8 < 0.4f) {
+            k = 3.2f;
+        } else if (p->unk_8 >= 0.5f) {
+            if (p->unk_C < 0.15f) {
+                k = 0.0f;
+            } else {
+                k = -0.25f;
+            }
+        }
+        t *= 0.16f * k;
+    } else {
+        r = (p->unk_C - 0.12f) / 0.08f;
+        if (r > 1.0f) {
+            r = 1.0f;
+        }
+        t *= 0.45f * (0.4f + 0.2f * r);
+    }
+
+    x = p->unk_8;
+    if (x > 0.6f && d < 0.0f) {
+        p->unk_8 = x + (2.0f * d) * __fabs(0.7f - x);
+    } else {
+        p->unk_8 += 0.6f * (-d * __fabs(b - x));
+    }
+
+    if (p->unk_8 < 0.4f) {
+        m = 1.0f;
+        if (p->unk_8 < 0.31f) {
+            t *= 1.5f;
+            m = 1.5f;
+        }
+        if (p->unk_3C > 0.03f) {
+            m *= 1.5f;
+        }
+        if (d < 0.0f) {
+            m *= 2.0f;
+        }
+        p->unk_3C -= __fabs(0.7f * (m * (p->unk_3C * d)));
+        if (p->unk_3C < 0.01f) {
+            p->unk_3C = 0.01f;
+        }
+    }
+
+    if (p->unk_4 < 700.0f && p->unk_8 > 0.7f) {
+        p->unk_8 = 0.7f;
+    }
+
+    p->unk_C += t;
+    if (d > 0.0f) {
+        p->unk_20 *= 1.0f - 0.6f * d;
+    } else {
+        p->unk_20 *= 1.0f - 0.2f * d;
+    }
+
+    scale = 1.0f;
+    p->unk_10 = p->unk_10 * (scale + 0.25f * d);
+    p->unk_14 = p->unk_14 * (scale + 0.25f * d);
+
+    if (flag) {
+        p->unk_34 *= scale + 0.1f * d;
+    }
+}
+#pragma fp_contract reset
+/* fzgx:end fn_1_22B10 */
+
 /* fzgx:begin fn_1_22E8C */
 typedef struct Fn_1_22E8CInput {
     unsigned char pad00[0x04];
