@@ -64924,6 +64924,17 @@
   },
   {
     "module": "movie_module",
+    "source": "rel/movie_module/fn_12_D55C.c",
+    "symbols": [
+      "fn_12_D55C"
+    ],
+    "status": "matching",
+    "mw_version": null,
+    "extra_cflags": [],
+    "asm": true
+  },
+  {
+    "module": "movie_module",
     "source": "rel/movie_module/fn_12_D60.c",
     "symbols": [
       "fn_12_D60"
