@@ -1461,6 +1461,166 @@ u32 fn_7_4094(u32 arg0, u32 arg1, u32 arg2, u32 arg3) {
 }
 /* fzgx:end fn_7_4094 */
 
+/* fzgx:begin fn_7_41FC pool */
+extern const struct fn_7_41FC_lbl_7_rodata_784_pool {
+    f32 unk_0;
+} lbl_7_rodata_784;
+
+extern const struct fn_7_41FC_lbl_7_rodata_788_pool {
+    f32 unk_0;
+} lbl_7_rodata_788;
+
+typedef struct {
+    u16 type;
+    u8 pad_2[0x16];
+} StoryEvent;
+
+typedef struct {
+    u32 flags[0x80];
+    s32 timers[8];
+} StoryState;
+
+typedef struct {
+    u8 pad_0[0xC];
+    u32 unk_C;
+    u8 pad_10[0x8];
+    u8 fadeActive[2];
+    u8 pad_1A[0x2];
+    f32 fade_row0[2]; f32 fade_row1[2]; /* [0]: level, [1]: per-frame step */
+    u8 pad_2C[0x4];
+    StoryEvent *events;
+} StoryGlobals;
+
+extern s32 fn_7_4648(StoryState *, StoryEvent *);
+extern u32 fn_7_4FD0(StoryState *, StoryEvent *);
+extern char lbl_7_data_13FE0[];
+extern void OSReport(const char *, ...);
+
+/* Test bit n counted from the most significant bit. */
+#define TESTBIT(x, n) (__rlwnm((x), ((n) + 1) & 31, 31, 31))
+#define BIT(n) (0x80000000 >> ((n) & 31))
+
+static inline void stepFade(f32 *fade, f32 *step, u8 m) {
+    f32 v;
+    fade[m] += step[m];
+    v = fade[m];
+    fade[m] = v < lbl_7_rodata_784.unk_0 ? lbl_7_rodata_784.unk_0 : (v > lbl_7_rodata_788.unk_0 ? lbl_7_rodata_788.unk_0 : v);
+}
+
+/* file-scope objects of the retail TU, in retail order: MWCC addresses them off one section base */
+u32 fzgx_obj_lbl_7_bss_1960[3];
+u32 lbl_7_bss_1960_C;
+u32 lbl_7_bss_1960_fill_1970[2];
+u8 lbl_7_bss_1960_18[2];
+u16 lbl_7_bss_1960_fill_197A;
+f32 lbl_7_bss_1960_1C[2];
+f32 lbl_7_bss_1960_24[2];
+u32 lbl_7_bss_1960_fill_198C;
+StoryEvent *lbl_7_bss_1960_30;
+u32 lbl_7_bss_1960_fill_1994[55];
+u8 lbl_7_bss_1960_fill_1A70;
+
+#pragma section code_type ".fzgxpool"
+static void fzgx_bss_layout(void) {
+    volatile u8 s;  /* fzgx-allow: S2 layout primer sink: MWCC emits .bss objects in first-access order */
+    s = *(u8 *)&fzgx_obj_lbl_7_bss_1960;
+    s = *(u8 *)&lbl_7_bss_1960_C;
+    s = *(u8 *)&lbl_7_bss_1960_fill_1970;
+    s = *(u8 *)&lbl_7_bss_1960_18;
+    s = *(u8 *)&lbl_7_bss_1960_fill_197A;
+    s = *(u8 *)&lbl_7_bss_1960_1C;
+    s = *(u8 *)&lbl_7_bss_1960_24;
+    s = *(u8 *)&lbl_7_bss_1960_fill_198C;
+    s = *(u8 *)&lbl_7_bss_1960_30;
+    s = *(u8 *)&lbl_7_bss_1960_fill_1994;
+    s = *(u8 *)&lbl_7_bss_1960_fill_1A70;
+}
+#pragma section code_type ".text"
+
+#pragma opt_loop_invariants off
+void fn_7_41FC(StoryState *state) {
+    
+    StoryEvent *e = lbl_7_bss_1960_30;
+    StoryEvent *p;
+    u32 i;
+    u32 j;
+    s32 ok;
+    s32 *t;
+    s32 k;
+    u8 m;
+
+    t = state->timers;
+    for (k = 0; k < 8; k++, t++) {
+        if (!TESTBIT(lbl_7_bss_1960_C, k)) {
+            if (*t >= 0) {
+                (*t)--;
+            }
+        }
+    }
+
+    i = 0;
+    while (e->type != 5) {
+        ok = 1;
+        while (e->type <= 3) {
+            if (i >= 0x1000) {
+                OSReport(lbl_7_data_13FE0);
+                return;
+            }
+            if (TESTBIT(state->flags[i >> 5], i & 31)) {
+                ok = 0;
+                break;
+            }
+            if (e->type == 2 || e->type == 3) {
+                if (fn_7_4648(state, e) != 0) {
+                    ok = 0;
+                    break;
+                }
+            } else {
+                if (fn_7_4648(state, e) == 0) {
+                    ok = 0;
+                    break;
+                }
+            }
+            e++;
+            i++;
+        }
+        if (ok) {
+            p = e - 1;
+            j = i - 1;
+            while (p->type <= 3 && j != 0xFFFFFFFF) {
+                if (p->type == 0 || p->type == 2) {
+                    state->flags[j >> 5] |= BIT(j);
+                }
+                p--;
+                j--;
+            }
+            while (e->type == 4) {
+                fn_7_4FD0(state, e);
+                e++;
+            }
+        } else {
+            while (e->type <= 3) {
+                e++;
+                i++;
+            }
+            while (e->type == 4) {
+                e++;
+            }
+        }
+    }
+
+    for (m = 0; m < 2; m++) {
+        if ((lbl_7_bss_1960_18)[m]) {
+            f32 v;
+            lbl_7_bss_1960_1C[m] += lbl_7_bss_1960_24[m];
+            v = lbl_7_bss_1960_1C[m];
+            lbl_7_bss_1960_1C[m] = v < lbl_7_rodata_784.unk_0 ? lbl_7_rodata_784.unk_0 : (v > lbl_7_rodata_788.unk_0 ? lbl_7_rodata_788.unk_0 : v);
+        }
+    }
+}
+#pragma opt_loop_invariants reset
+/* fzgx:end fn_7_41FC */
+
 /* fzgx:begin fn_7_44DC */
 #include "font.h"
 
