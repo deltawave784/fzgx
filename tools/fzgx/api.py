@@ -193,10 +193,10 @@ def _seed_record(key: str) -> dict:
     return json.loads(Path(manifest).read_text()).get(key, {}) if manifest else {}
 
 
-def _local_seed(l: Ledger, key: str) -> dict:
+def _local_seed(l: Ledger, key: str, p: Optional[Project] = None) -> dict:
     """Without a batch manifest, a claim starts from the best saved attempt on this machine,
-    with the compiler settings recorded beside it."""
-    found = l.best_local_attempt(key)
+    with the compiler settings recorded beside it (ranked by `seedrank` when a project is given)."""
+    found = l.ranked_local_attempt(p, key) if p is not None else l.best_local_attempt(key)
     if not found:
         return {}
     row, path = found
@@ -248,7 +248,7 @@ def claim(p: Project, symbol: str, agent: str, ttl: int = DEFAULT_TTL,
     if os.environ.get('FZGX_SEEDS') and not seed:
         return {'ok': False, 'error': 'seeded batch has no candidate for this function'}
     if local_seed and not os.environ.get('FZGX_SEEDS') and not _is_revise(agent):
-        seed = _local_seed(l, key)
+        seed = _local_seed(l, key, p)
     if seed:
         seed_body = Path(seed['path']).read_text()
         if hashlib.sha256(seed_body.encode()).hexdigest() != seed['sha256']:
@@ -1374,6 +1374,10 @@ def _attempt_text(p: Project, key: str) -> Optional[str]:
     best = STATE_DIR / "attempts" / f"{key}.best.c"
     if claimed and best.exists():
         return best.read_text()
+    # among near-top saved bodies, one omitting a retail store/addend ranks down (seedrank)
+    ranked = l.ranked_local_attempt(p, key)
+    if ranked:
+        return ranked[1].read_text()
     # the best body whose file exists: attempts recorded on another machine keep their paths in
     # the restored ledger without the files (fn_1_45A58's best row), which used to end the lookup
     for (stored,) in l.db.execute(

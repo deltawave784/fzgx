@@ -12,7 +12,7 @@ from collections import defaultdict
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
-from fzgx import oracle
+from fzgx import oracle, seedrank
 from fzgx.ledger import Ledger
 from fzgx.project import ROOT, STATE_DIR, Project
 
@@ -326,16 +326,25 @@ class SavedCandidates:
                              'ledger:function/best-body-fallback')
 
 
+def _ranked(score, dropped):
+    """Selection score: objdiff's percent less seedrank's penalty for omitted retail stores or
+    immediate addends (equal row weights let such bodies outscore correct ones)."""
+    return score - seedrank.penalty(dropped)
+
+
 def refine(saved, output, manifest, threshold):
     pending = defaultdict(list)
     for symbol, seed in manifest.items():
-        if seed['current_percent'] > threshold:
+        dropped = bool(seed.get('dropped_rows'))
+        if seed['current_percent'] > threshold and not dropped:
             continue
         seen = {(seed['sha256'], seed['mw'], seed['flags'])}
         for record in saved.candidates[symbol]:
             key = (record['sha256'], record['mw'], record['flags'])
             if key in seen:
                 continue
+            if seed['current_percent'] > threshold and record['percent'] < seed['current_percent'] - seedrank.WINDOW:
+                continue  # a complete body far below an above-threshold seed is no better seed
             seen.add(key)
             pending[symbol].append(record)
     trials = []
@@ -354,13 +363,15 @@ def refine(saved, output, manifest, threshold):
         for (mw, flags), items in groups.items():
             for symbol, result in oracle.check_many(saved.project, items, 0, mw, flags).items():
                 score = max(result.percent, result.percent_adjusted) if result.ok else 0
+                dropped = (seedrank.dropped_for(result) or []) if result.ok else []
                 record = candidates[symbol]
                 trials.append(dict(symbol=symbol, sha256=record['sha256'], origin=record['origin'],
-                                   percent=score, mw=result.mw_version, flags=result.extra_cflags))
-                if score <= manifest[symbol]['current_percent']:
+                                   percent=score, dropped_rows=dropped, mw=result.mw_version, flags=result.extra_cflags))
+                current = manifest[symbol]
+                if _ranked(score, dropped) <= _ranked(current['current_percent'], current.get('dropped_rows')):
                     continue
                 manifest[symbol].update({k: v for k, v in record.items() if k != 'body'})
-                manifest[symbol].update(current_percent=score, current_error=None,
+                manifest[symbol].update(current_percent=score, current_error=None, dropped_rows=dropped,
                                         mw=result.mw_version or mw, flags=result.extra_cflags or flags)
                 Path(manifest[symbol]['path']).write_text(record['body'])
         print(f'checked {len(trials)} alternate saved candidates', flush=True)
@@ -415,6 +426,7 @@ def prepare(output: Path, threshold: float):
             record = manifest[symbol]
             record['current_percent'] = max(result.percent, result.percent_adjusted) if result.ok else 0
             record['current_error'] = result.error if not result.ok else None
+            record['dropped_rows'] = (seedrank.dropped_for(result) or []) if result.ok else []
             record['mw'] = result.mw_version or mw
             record['flags'] = result.extra_cflags or flags
         checked += len(items)

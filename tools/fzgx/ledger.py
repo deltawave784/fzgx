@@ -171,6 +171,38 @@ class Ledger:
                 return row, path
         return None
 
+    def ranked_local_attempt(self, project, symbol: str) -> Optional[tuple]:
+        """best_local_attempt, re-ranked by `seedrank`: among the saved bodies near the top
+        score, one that omits a retail store or immediate addend ranks below a complete body
+        (objdiff's equal row weights put fn_17_7728's store-less 95.2% body above correct ones).
+        Selection only; compiles each candidate once (cached)."""
+        from . import seedrank
+        rows = self.db.execute(
+            "SELECT * FROM attempts WHERE symbol=? AND ended IS NOT NULL AND best_body_path IS NOT NULL "
+            "ORDER BY COALESCE(best_in_attempt, final_percent) DESC, id DESC", (symbol,)).fetchall()
+        found = []
+        for row in rows:
+            path = Path(row["best_body_path"])
+            if not path.exists():
+                path = STATE_DIR / "attempts" / path.name.replace("\\", "/").rsplit("/", 1)[-1]
+            if path.exists():
+                found.append((row, path))
+        if len(found) < 2:
+            return found[0] if found else None
+        candidates = []
+        for row, path in found:
+            mw = flags = None
+            try:
+                meta = json.loads(path.with_suffix(".json").read_text())
+                mw, flags = meta.get("mw"), meta.get("flags")
+            except (OSError, ValueError):
+                pass
+            candidates.append((row["best_in_attempt"] or row["final_percent"] or 0.0, path, mw, flags))
+        try:
+            return found[seedrank.pick(project, symbol, candidates) or 0]
+        except Exception:
+            return found[0]  # ranking is advisory: never lose the seed over it
+
     def bump_checks(self, symbol: str, percent: float, rows: Optional[int] = None) -> Dict[str, float]:
         """Record a check. Returns checks so far, consecutive non-improving checks, and bests.
 

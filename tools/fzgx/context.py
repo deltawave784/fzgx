@@ -318,7 +318,7 @@ def build_context(project: Project, ledger: Optional[Ledger], symbol: str,
             parts.append(f"\n## Current unit\n```c\n{cur}\n```")
 
     if ledger and not supplied_source and not (row and (row["claimed_by"] or "").startswith("shadow-")):
-        found = ledger.best_local_attempt(symbol)
+        found = ledger.ranked_local_attempt(project, symbol)
         att, best_path = found if found else (None, None)
         if att:
             body = best_path.read_text()
