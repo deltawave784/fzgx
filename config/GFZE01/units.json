@@ -16194,6 +16194,17 @@
   },
   {
     "module": "main",
+    "source": "dol/fn_800248D4.c",
+    "symbols": [
+      "fn_800248D4"
+    ],
+    "status": "matching",
+    "mw_version": null,
+    "extra_cflags": [],
+    "asm": true
+  },
+  {
+    "module": "main",
     "source": "dol/fn_80024C88.c",
     "symbols": [
       "fn_80024C88"
