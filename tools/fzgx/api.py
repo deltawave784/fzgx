@@ -548,7 +548,7 @@ def check(p: Project, symbol: str, max_diff_lines: int = 80, versions: Optional[
     from . import checkview
     # Already-running app-server threads retain their original tool schema.
     # Their existing check argument can address the new read-only surface too.
-    if versions and re.fullmatch(r'(diff|data):\d+', versions):
+    if versions and re.fullmatch(r'(diff|data|datainit):\d+', versions):
         section, cursor = versions.split(':')
         return read_evidence(p, symbol, section, int(cursor))
     l = Ledger()

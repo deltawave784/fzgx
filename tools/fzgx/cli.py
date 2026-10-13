@@ -599,7 +599,7 @@ def build_parser() -> argparse.ArgumentParser:
     s.add_argument("symbol"); s.add_argument("--budget-tokens", type=int, default=6000)
     s = sub.add_parser("read-unit", help="print a carved unit's source"); s.set_defaults(fn=cmd_read_unit); s.add_argument("symbol")
     s = sub.add_parser('read-evidence', help='read a cached diff or decoded retail data without compiling'); s.set_defaults(fn=cmd_read_evidence)
-    s.add_argument('symbol'); s.add_argument('--section', choices=('diff', 'data'), default='diff')
+    s.add_argument('symbol'); s.add_argument('--section', choices=('diff', 'data', 'datainit'), default='diff')
     s.add_argument('--cursor', type=int, default=0)
     s = sub.add_parser("write-unit", help="replace a claimed unit's source from a file"); s.set_defaults(fn=cmd_write_unit)
     s.add_argument("symbol"); s.add_argument("--agent", required=True); s.add_argument("--file", required=True)

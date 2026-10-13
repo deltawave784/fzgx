@@ -33,7 +33,8 @@ def save(project, key, result):
     sym = project.resolve(key)
     fn = project.function_asm(sym.module).get(sym.name)
     payload = dict(identity=_identity(project, key), result=result.to_json(), diff=lines,
-                   data=data_context(project, fn, full=True) if fn else [])
+                   data=data_context(project, fn, full=True) if fn else [],
+                   datainit=_data_initializers(project, key, result))
     path = _path(project, key)
     path.parent.mkdir(parents=True, exist_ok=True)
     temporary = path.with_suffix('.tmp')
@@ -43,8 +44,39 @@ def save(project, key, result):
         result.diff = _page(payload, 'diff', 0)['diff']
 
 
+def _data_initializers(project, key, result):
+    """Retail initializers for the data objects the work copy defines, as a unified diff.
+
+    A matcher that defines the TU's `.data` cluster itself (so MWCC addresses it off one
+    section base, as retail does) cannot read retail's bytes from a session and writes filler,
+    which the oracle rejects (fn_3_990C: 1182 of 1588 words, fn_1_7ACDC: 98 of 104).
+    `fixup_layout.defined_data_initializers` rewrites each defined object in place with
+    retail's words and symbolic pointers; this offers that rewrite. Only when the check
+    reports a pool whose bytes differ from retail."""
+    if not getattr(result, 'ok', False) or not any('differs from retail' in n for n in result.pool_notes or ()):
+        return []
+    try:
+        import difflib
+        from . import fixup_layout
+        work = project.work_path(key)
+        if not work.exists():
+            return []
+        body = work.read_text()
+        candidates = fixup_layout.defined_data_initializers(project, key, body, result)
+    except Exception:  # evidence only: a failure here must never fail the check
+        return []
+    if not candidates:
+        return []
+    label, text = candidates[0]
+    head = [f'{label}: apply this patch to your work copy (patch_unit/write_unit). Each defined object '
+            'becomes a union whose first member carries retail words; uses become `.v`. Pointer '
+            'words are `__fzgx_offset_` aliases the oracle binds to retail targets. Do not edit the words.']
+    return head + [line.rstrip(chr(10)) for line in difflib.unified_diff(
+        body.splitlines(True), text.splitlines(True), 'work copy', 'with retail initializers', n=1)]
+
+
 def _page(payload, section, cursor):
-    lines = payload[section]
+    lines = payload.get(section, [])
     end = min(cursor + PAGE_LINES, len(lines))
     result = dict(payload['result'])
     result.pop('budget', None)
@@ -60,12 +92,15 @@ def _page(payload, section, cursor):
     if section == 'diff' and payload['data']:
         result['diff'].append('Decoded retail data is available: read_evidence(section="data", cursor="0"); '
                               'existing sessions: check(versions="data:0").')
+    if section == 'diff' and payload.get('datainit'):
+        result['diff'].append('Your defined data objects differ from retail bytes: the retail initializers are '
+                              'read_evidence(section="datainit", cursor="0"); existing sessions: check(versions="datainit:0").')
     return result
 
 
 def read(project, key, section='diff', cursor=0):
-    if section not in ('diff', 'data') or cursor < 0:
-        return dict(ok=False, error='section must be diff or data; cursor must be nonnegative')
+    if section not in ('diff', 'data', 'datainit') or cursor < 0:
+        return dict(ok=False, error='section must be diff, data or datainit; cursor must be nonnegative')
     path = _path(project, key)
     if not path.exists():
         return dict(ok=False, error='No cached check. Write or check the current source first.')
@@ -75,8 +110,8 @@ def read(project, key, section='diff', cursor=0):
         return dict(ok=False, error='Cached check belongs to different source, compiler or attempt. Check the current source first.')
     if not payload['result']['ok']:
         return payload['result']
-    if cursor > len(payload[section]):
-        return dict(ok=False, error=f'cursor exceeds {len(payload[section])} available lines')
+    if cursor > len(payload.get(section, [])):
+        return dict(ok=False, error=f'cursor exceeds {len(payload.get(section, []))} available lines')
     result = _page(payload, section, cursor)
     result['diff'][0] += ' Reading this page did not compile or spend a check.'
     return result

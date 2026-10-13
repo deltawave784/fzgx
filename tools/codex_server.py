@@ -36,7 +36,7 @@ MATCHER_TOOLS = [
     tool('check', 'Probe compiler versions and retain the best compiler for subsequent edits.',
          versions='all, a comma-separated compiler list, or empty to check the current compiler'),
     tool('read_evidence', 'Read cached object diff or retail data: owned layouts, strings, constants and symbolic table bindings. No compilation or check charged.',
-         section='diff or data', cursor='Line cursor from the previous result, or 0 for the first page'),
+         section='diff, data, or datainit (retail initializers for data objects your C defines)', cursor='Line cursor from the previous result, or 0 for the first page'),
     tool('release', 'Stop working on this function, saving your best candidate.', reason='Precise remaining technical obstacle'),
 ]
 # Optional librarian notes on release (a JSON string; the CLI bounds it to 5 x 300 characters).

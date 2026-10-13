@@ -70,7 +70,8 @@ class CheckResult:
 
 
 def row_address(row: dict) -> Optional[int]:
-    """Function-relative address of an objdiff row's instruction, None for a gap row.
+    """Section offset of an objdiff row's instruction (the symbol value plus the offset in the
+    function, not function-relative), None for a gap row.
 
     objdiff JSON omits zero-valued protobuf fields, so the first instruction carries no
     `address` key: reading `['address']` raises and `.get('address') is not None` skips it."""

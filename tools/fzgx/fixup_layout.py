@@ -1407,6 +1407,11 @@ def tu_data_objects(p, symbol, text, top=False, limit=0x10000):
                 continue
             if len(re.findall(r'(?<![\w.>])%s\s*=(?!=)' % re.escape(var), code[lo:hi])) != 1:
                 continue
+            # a cursor (`mode.value++`, fn_1_2F04) is not a constant view: replacing it by the
+            # object's address left `(u8 *)obj++`, which never compiles
+            if re.search(r'(?<![\w.>])%s\s*(?:\+\+|--|[-+*/|&^]=)|(?:\+\+|--)\s*%s\b' % (re.escape(var), re.escape(var)),
+                         code[lo:hi]):
+                continue
             edits = [(lo + m.start(), lo + m.end())]
             ptype = declared
             if '.' in var:
@@ -1692,12 +1697,14 @@ def defined_data_initializers(p, symbol, body, check):
         li, ri = l.get('instruction') or {}, r.get('instruction') or {}
         if not li.get('relocation') or not ri.get('relocation'):
             continue
-        # objdiff JSON addresses are function-relative decimal strings
+        # objdiff JSON addresses are section offsets (decimal strings): the function's first
+        # row carries its symbol value (fn_1_7ACDC's retail rows start at 0x28c). Adding the
+        # value again resolved every anchor to a later instruction's relocation in a multi-
+        # function retail object, so the family never fired outside a section's first function
         la, ra = oracle.row_address(l), oracle.row_address(r)
         if la is None or ra is None:
             continue
-        lr = rrel.get(rfn['value'] + la)
-        rr = orel.get(ofn['value'] + ra)
+        lr, rr = rrel.get(la), orel.get(ra)
         if not lr or not rr:
             continue
         (rs, radd), (os_, oadd) = lr, rr
@@ -1743,8 +1750,12 @@ def defined_data_initializers(p, symbol, body, check):
             if not all(covered[lo:lo + size]):
                 continue
             inside = [o for o in range(lo, lo + size, 4) if o in relocs or o in own_relocs]
-            if actual[lo:lo + size] == expected[lo:lo + size] and not inside:
+            if actual[lo:lo + size] == expected[lo:lo + size] and not inside and name in syms:
                 continue
+            # an object whose bytes already agree still needs the `fzgx_pool_init_` name when
+            # retail has no symbol of that name: the pool binding names every defined object
+            # after a retail one (fn_1_7ACDC's `sScene {0, 0, -1, 0}` kept the whole
+            # cluster unbound while its filler neighbours took retail's bytes)
             owner = re.compile(r'(?<![\w.])(?<!->)\b%s\b' % re.escape(name))
             found = [(a, b) for a, b in statements if owner.search(code[a:b])
                      and not re.match(r'\s*(?:extern|typedef)\b', code[a:b])]
