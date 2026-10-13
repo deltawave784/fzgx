@@ -762,6 +762,184 @@ u32 fn_14_34A8(void) {
 }
 /* fzgx:end fn_14_34A8 */
 
+/* fzgx:begin fn_14_3AE8 */
+#include "rel/pilotpoint/pilotpoint.h"
+
+typedef struct {
+    f32 x;
+    f32 y;
+    f32 z;
+} PPVec3;
+
+typedef struct {
+    u32 unk_0;
+    u32 unk_4;
+    u32 unk_8;
+    f32 unk_C;
+    f32 unk_10;
+    f32 unk_14;
+    u32 unk_18;
+    u32 unk_1C;
+    u32 unk_20;
+    u32 unk_24;
+    u32 unk_28;
+    u32 unk_2C;
+    u32 unk_30;
+} PPCamera;
+
+extern PPCamera lbl_1_data_1E5C0;
+extern u32 lbl_801A66A0;
+extern u32 lbl_14_bss_8344;
+
+extern void fn_80008BEC(void *, int, u32);
+extern void fn_80008BA8(void *, void *, u32);
+extern void fn_8006F038(PPVec3 *, PPVec3 *, s16);
+extern void lbl_8006DCDC(void);
+extern void lbl_8006DCA4(void);
+extern void fn_1_F7870(PPCamera *);
+extern void fn_1_151BDC(void *);
+extern void mathutil_mtxA_rotate_x(s32);
+extern void mathutil_mtxA_rotate_y(s32);
+extern void fn_1_14DE80(void *, s32 *, s32 *, s32, f32);
+extern void fn_1_14E054(void *, PPVec3 *, s32, f32);
+extern void fn_1_14E198(void *, PPVec3 *, s32, f32);
+
+/* Literal-pool primer: reproduces the retail TU's .rodata layout ahead of this function. */
+extern void fzgx_sink_f(f32);
+extern void fzgx_sink_d(f64);
+extern void fzgx_sink_p(void *);
+extern s32 fzgx_sink_i;
+extern u32 fzgx_sink_u;
+
+#pragma section RX ".fzgxpool"
+__declspec(section ".fzgxpool") void fzgx_pool_0(void) {
+    f32 t[12] = { 0.0f, 167.0f, 38.0f, 90.0f, 320.0f, 216.0f, 8.0f, 96.0f, 336.0f, 380.0f, 2.625f, 0.0f };
+    fzgx_sink_p(t);
+}
+__declspec(section ".fzgxpool") void fzgx_pool_1(void) {
+    fzgx_sink_f(1.0f);
+    fzgx_sink_f(99.0f);
+    fzgx_sink_f(30.0f);
+    fzgx_sink_f(140.0f);
+    fzgx_sink_f(178.0f);
+    fzgx_sink_f(254.0f);
+    fzgx_sink_f(292.0f);
+    fzgx_sink_f(541.0f);
+    fzgx_sink_f(575.0f);
+    fzgx_sink_f(98.0f);
+    fzgx_sink_f(42.0f);
+    fzgx_sink_f(0.0f);
+}
+__declspec(section ".fzgxpool") void fzgx_pool_2(void) {
+    fzgx_sink_d((f64)fzgx_sink_i);
+}
+__declspec(section ".fzgxpool") void fzgx_pool_2b(void) {
+    fzgx_sink_d(60.0);
+    fzgx_sink_d(25.0);
+    fzgx_sink_d(29.0);
+}
+__declspec(section ".fzgxpool") void fzgx_pool_3(void) {
+    f64 t[6] = { -9.471496061365489e-150, -9.471496061365489e-150, -9.471496061365489e-150,
+                 -9.471496052297188e-150, -9.471496061365489e-150, 3170534715274821600.0 };
+    fzgx_sink_p(t);
+}
+__declspec(section ".fzgxpool") void fzgx_pool_4(void) {
+    fzgx_sink_d(0.000030517578125);
+    fzgx_sink_d(0.0);
+    fzgx_sink_d(1.0);
+    fzgx_sink_d(18.0);
+}
+__declspec(section ".fzgxpool") void fzgx_pool_5(void) {
+    f64 t[5] = { 844425062357401.6, 105553133983744.0, 8796095243264.0, 2594073958810648600.0,
+                 2.046363295829523e-13 };
+    fzgx_sink_p(t);
+}
+__declspec(section ".fzgxpool") void fzgx_pool_6(void) {
+    fzgx_sink_d(90.0);
+    fzgx_sink_d(30.0);
+    fzgx_sink_d(2.0);
+    fzgx_sink_d((f64)fzgx_sink_u);
+}
+__declspec(section ".fzgxpool") void fzgx_pool_7(void) {
+    char name[8] = "CAR_SEL";
+    fzgx_sink_p(name);
+}
+__declspec(section ".fzgxpool") void fzgx_pool_7b(void) {
+    fzgx_sink_f(10.0f);
+    fzgx_sink_f(20.0f);
+}
+
+s32 fn_14_3AE8(s16 *arg0) {
+    PPCamera cam;
+    PPVec3 target;
+    PPVec3 eyeA;
+    PPVec3 eyeB;
+    PPVec3 up;
+    s32 a;
+    s32 b;
+    PPCamera *src;
+    PPVec3 *eye;
+    PPVec3 *at;
+    s16 idx;
+    s16 group;
+    f32 t;
+    f32 s;
+
+    group = *arg0 / lbl_14_bss_160.unk_0;
+    idx = *arg0 % lbl_14_bss_160.unk_0 + 1;
+    eye = (PPVec3 *)&lbl_14_bss_92C4.unk_4;
+    fn_80008BEC(eye, 0, 12);
+    at = (PPVec3 *)&lbl_14_bss_92C4.unk_10;
+    fn_80008BEC(at, 0, 12);
+    if (group == 0) {
+        PPVec3 v = { 0.0f, 5.4117647f, -3.2470588f };
+        fn_80008BA8(eye, &v, 12);
+    } else {
+        PPVec3 v = { 0.0f, 5.0f, -3.0f };
+        fn_80008BA8(eye, &v, 12);
+    }
+    {
+        PPVec3 v = { 0.0f, 0.0f, 0.0f };
+        fn_80008BA8(at, &v, 12);
+    }
+    fn_8006F038(eye, at, 0);
+    lbl_8006DCDC();
+
+    src = &lbl_1_data_1E5C0;
+    cam = *src;
+    s = 0.7f;
+    t = src->unk_C * s;
+    s = src->unk_10 * s;
+    cam.unk_C = t - s;
+    cam.unk_10 = t + s;
+    cam.unk_14 = src->unk_14;
+    fn_1_F7870(&cam);
+    fn_1_151BDC(lbl_14_bss_180);
+    lbl_8006DCA4();
+    mathutil_mtxA_rotate_x(0x2000);
+    mathutil_mtxA_rotate_y((s32)(182.04445f * (f32)(lbl_801A66A0 % 360)));
+
+    a = 0;
+    b = 0;
+    {
+        PPVec3 v = { 0.0f, 0.0f, 0.0f };
+        target = v;
+    }
+    switch (group) {
+    case 0:
+        fn_1_14DE80((void *)(lbl_14_bss_8344 + idx * 0xA20), &a, &b, lbl_14_data_2F36.unk_0, 1.0f);
+        break;
+    case 1:
+        fn_1_14E054((void *)(lbl_14_bss_8344 + idx * 0xA20), &target, lbl_14_data_2F36.unk_0, 1.0f);
+        break;
+    case 2:
+        fn_1_14E198((void *)(lbl_14_bss_8344 + idx * 0xA20), &target, lbl_14_data_2F36.unk_0, 1.0f);
+        break;
+    }
+    return 0;
+}
+/* fzgx:end fn_14_3AE8 */
+
 /* fzgx:begin fn_14_3DF0 */
 typedef struct Sig_fn_8006F038_Vec3 {
     f32 x;
