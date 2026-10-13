@@ -325,6 +325,82 @@ void fn_1_D1F88(void) {
 }
 /* fzgx:end fn_1_D1F88 */
 
+/* fzgx:begin fn_1_D2110 */
+typedef struct {
+    f32 x;
+    f32 y;
+    f32 z;
+} FaceVec;
+
+typedef struct {
+    u8 pad_0[0x20];
+    FaceVec prev;  /* 0x20 */
+    FaceVec pos;   /* 0x2C */
+    u32 timer;     /* 0x38 */
+    u32 state;     /* 0x3C */
+} FaceObj;
+
+extern u32 fn_1_584AC(void);
+
+#pragma section code_type ".fzgxpool"
+/* layout primer: fn_1_D1848's initializer precedes this function's in the TU pool */
+static void fzgx_pool_layout(FaceVec *out) {
+    FaceVec v = { 0.0f, 0.0f, 1.8f };
+    *out = v;
+}
+#pragma section code_type ".text"
+
+#pragma fp_contract off
+#pragma opt_common_subs off
+void fn_1_D2110(FaceObj *o) {
+    f32 fzgx_live;
+    FaceVec d = { 0.0f, 0.0f, 0.0f };
+    f32 tz;
+    f32 tx;
+    f32 ty;
+    f32 s;
+    u32 lab_v;
+
+    lab_v = o->state;
+    if (lab_v != 0) {
+        if (lab_v > 35 && lab_v < 40) {
+            d.y = 0.08f;
+        }
+        if (lab_v > 25 && lab_v < 30) {
+            d.y = 0.08f;
+        }
+        if (lab_v < 20) {
+            d.y = 0.08f;
+        }
+    }
+    o->pos.x += d.x;
+    o->pos.y -= d.y;
+    o->pos.z -= d.z;
+    if (o->state != 0) {
+        o->pos.x = o->pos.x + 0.1 * -o->pos.x;
+        o->pos.y = o->pos.y + 0.1 * -o->pos.y;
+        fzgx_live = o->pos.z;
+        o->pos.z = fzgx_live + 0.1 * (1.8f - fzgx_live);
+    } else if (o->timer != 0) {
+        s = (f32)o->timer / 10.0f;
+        tx = 0.5 * (s * ((f32)(u16)fn_1_584AC() / 32767.0f - 0.5));
+        ty = s * ((f32)(u16)fn_1_584AC() / 32767.0f - 0.5);
+        tz = 1.8f + s * ((f32)(u16)fn_1_584AC() / 32767.0f - 0.5);
+        o->pos.x = o->pos.x + 0.2 * (tx - o->pos.x);
+        o->pos.y = o->pos.y + 0.2 * (ty - o->pos.y);
+        fzgx_live = o->pos.z;
+        o->pos.z = fzgx_live + 0.2 * (tz - fzgx_live);
+    } else {
+        o->pos.x = o->pos.x + 0.1 * -o->pos.x;
+        o->pos.y = o->pos.y + 0.1 * -o->pos.y;
+        fzgx_live = o->pos.z;
+        o->pos.z = fzgx_live + 0.1 * (1.8f - fzgx_live);
+    }
+    o->prev = o->pos;
+}
+#pragma opt_common_subs reset
+/* fzgx:end fn_1_D2110 */
+
 /* fzgx:begin fn_1_D2D24 */
 Obj_1_bss_7ACD8_Target *fn_1_D2D24(s32 index) {
     return &lbl_1_bss_7ACD8[index];
