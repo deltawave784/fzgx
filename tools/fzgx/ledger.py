@@ -203,6 +203,30 @@ class Ledger:
         except Exception:
             return found[0]  # ranking is advisory: never lose the seed over it
 
+    def rescore(self, symbol: str, scores: Dict[int, float]) -> Dict[str, float]:
+        """Replace recorded bests with re-checked scores of the attempts' saved bodies.
+
+        `scores` maps attempt ids whose saved body exists on this machine to the score the
+        current oracle gives it. A best recorded under an older rule can be unreachable: the
+        round-31 rule scores a body whose function sits in `.fzgxpool` 0, yet fn_12_3710 kept
+        best 99.07 in two attempts and in `functions`, so the router ranked a 97% body as a
+        99% near miss. Attempts without a local body keep their record (nothing to recheck).
+        Returns the old and new function best."""
+        with self.db:
+            old = self.get(symbol)
+            for attempt, percent in scores.items():
+                # final_percent falls with it: readers take `best_in_attempt or final_percent`, so a
+                # re-scored 0 would otherwise fall back to the last check of a body never saved
+                self.db.execute("UPDATE attempts SET best_in_attempt=?, final_percent=MIN(COALESCE(final_percent, ?), ?) "
+                                "WHERE id=? AND symbol=? AND ended IS NOT NULL", (percent, percent, percent, attempt, symbol))
+            rows = self.db.execute("SELECT id, best_in_attempt, final_percent FROM attempts WHERE symbol=?",
+                                   (symbol,)).fetchall()
+            values = [scores[r['id']] if r['id'] in scores else (r['best_in_attempt'] or r['final_percent'] or 0.0)
+                      for r in rows]
+            best = max(values, default=0.0)
+            self.db.execute("UPDATE functions SET best_percent=? WHERE symbol=? AND status='unmatched'", (best, symbol))
+        return {'old': old['best_percent'] if old else None, 'new': best}
+
     def bump_checks(self, symbol: str, percent: float, rows: Optional[int] = None) -> Dict[str, float]:
         """Record a check. Returns checks so far, consecutive non-improving checks, and bests.
 

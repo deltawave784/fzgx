@@ -231,6 +231,59 @@ def cmd_check(a, p):
     return 0 if r["ok"] and r["matched"] else 1
 
 
+def cmd_rescore(a, p):
+    """Re-check every locally saved attempt body of unmatched functions and record those
+    scores as the attempts' and functions' bests (dry run without --apply)."""
+    from . import oracle
+    from .ledger import Ledger
+    from .project import STATE_DIR
+    l = Ledger()
+    if a.symbols:
+        symbols = [api._key(p, s) for s in a.symbols]
+    else:
+        symbols = [r['symbol'] for r in l.db.execute(
+            "SELECT symbol FROM functions WHERE status='unmatched' AND best_percent>=? ORDER BY best_percent DESC",
+            (a.min_percent,)).fetchall()]
+    changed = 0
+    for key in symbols:
+        row = l.get(key)
+        if not row or row['status'] != 'unmatched':
+            continue
+        if row['claimed_by']:
+            print(f'{key}: claimed by {row["claimed_by"]}, skipped')  # its work object is in use
+            continue
+        scores = {}
+        for att in l.db.execute("SELECT * FROM attempts WHERE symbol=? AND ended IS NOT NULL "
+                                "AND best_body_path IS NOT NULL", (key,)).fetchall():
+            path = Path(att['best_body_path'])
+            if not path.exists():
+                path = STATE_DIR / 'attempts' / path.name.replace(chr(92), '/').rsplit('/', 1)[-1]
+            if not path.exists():
+                continue
+            try:
+                meta = json.loads(path.with_suffix('.json').read_text())
+            except (OSError, ValueError):
+                meta = {}
+            res = oracle.check(p, key, source=path, mw_version=meta.get('mw'), extra_cflags=meta.get('flags'))
+            scores[att['id']] = round(oracle.progress_score(res), 5)
+        if not scores:
+            continue
+        rows = {r['id']: (r['best_in_attempt'], r['final_percent']) for r in l.db.execute(
+            "SELECT id, best_in_attempt, final_percent FROM attempts WHERE symbol=?", (key,)).fetchall()}
+        moved = {i: (rows[i][0], s) for i, s in scores.items()
+                 if abs((rows[i][0] or 0) - s) >= 0.01 or (rows[i][1] or 0) > s + 0.01}
+        if not moved:
+            continue
+        changed += 1
+        if a.apply:
+            r = l.rescore(key, scores)
+            print(f'{key}: best {r["old"]} -> {r["new"]}; attempts ' + ', '.join(f'{i}: {o} -> {n}' for i, (o, n) in moved.items()))
+        else:
+            print(f'{key}: attempts ' + ', '.join(f'{i}: {o} -> {n}' for i, (o, n) in moved.items()) + ' (dry run)')
+    print(f'{changed} function(s) re-scored' + ('' if a.apply else ' (dry run: --apply records them)'))
+    return 0
+
+
 def cmd_read_evidence(a, p):
     r = api.read_evidence(p, a.symbol, a.section, a.cursor)
     _print(r if a.json else api.format_check(r), a.json)
@@ -598,6 +651,9 @@ def build_parser() -> argparse.ArgumentParser:
     s = sub.add_parser("context", help="print the context bundle"); s.set_defaults(fn=cmd_context)
     s.add_argument("symbol"); s.add_argument("--budget-tokens", type=int, default=6000)
     s = sub.add_parser("read-unit", help="print a carved unit's source"); s.set_defaults(fn=cmd_read_unit); s.add_argument("symbol")
+    s = sub.add_parser('rescore', help='re-check saved attempt bodies and record their current scores as the ledger bests')
+    s.set_defaults(fn=cmd_rescore); s.add_argument('symbols', nargs='*')
+    s.add_argument('--min-percent', type=float, default=95.0); s.add_argument('--apply', action='store_true')
     s = sub.add_parser('read-evidence', help='read a cached diff or decoded retail data without compiling'); s.set_defaults(fn=cmd_read_evidence)
     s.add_argument('symbol'); s.add_argument('--section', choices=('diff', 'data', 'datainit'), default='diff')
     s.add_argument('--cursor', type=int, default=0)
