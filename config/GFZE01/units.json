@@ -64823,6 +64823,34 @@
   },
   {
     "module": "option",
+    "source": "rel/option/_prolog/fn_4_2394.c",
+    "symbols": [
+      "fn_4_2394"
+    ],
+    "status": "matching",
+    "mw_version": "GC/1.3.2",
+    "extra_cflags": [],
+    "tu": "rel/option/_prolog.c",
+    "pool": {
+      "...rodata.0": "lbl_4_rodata_0",
+      "@40": "lbl_4_rodata_0+0x48",
+      "@92": "lbl_4_rodata_4C+0x78",
+      "@136": "lbl_4_rodata_100+0x7C",
+      "@137": "lbl_4_rodata_100+0x80",
+      "@138": "lbl_4_rodata_100+0x84",
+      "@113": "lbl_4_rodata_100+0x28",
+      "@71": "lbl_4_rodata_4C+0x2C",
+      "@7": "lbl_4_rodata_0+0x8",
+      "@109": "lbl_4_rodata_100+0x18",
+      "@139": "lbl_4_rodata_100+0x88",
+      "@49": "lbl_4_rodata_4C+0x4",
+      "@140": "lbl_4_rodata_100+0x8C",
+      "@141": "lbl_4_rodata_100+0x90",
+      "...data.0": "lbl_4_data_0"
+    }
+  },
+  {
+    "module": "option",
     "source": "rel/option/_prolog/fn_4_250.c",
     "symbols": [
       "fn_4_250"
