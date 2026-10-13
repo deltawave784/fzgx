@@ -326,9 +326,13 @@ def hoist_private_types(tf: tufile.TuFile, truths: Dict[str, str], report: Dict[
             private.setdefault(t, []).append(b.name)
     hoisted: List[Tuple[str, str]] = []
     done: set = set()
+    # a type an included owned header defines is already visible: copying a block's private
+    # copy into the prologue redefined it and broke every block at tu-check (face.c `V3` from
+    # face_types.h, bg_san.c `Sig_fn_80077B14_fn_80077B14_Arg0` from shared_types.h)
+    header = tutidy.header_types(tf.prologue)
 
     def in_prologue(t: str) -> bool:
-        return bool(re.search(r'\}\s*' + re.escape(t) + r'\s*;', tf.prologue, re.M)
+        return bool(t in header or re.search(r'\}\s*' + re.escape(t) + r'\s*;', tf.prologue, re.M)
                     or re.search(r'^(?:typedef\s+)?struct\s+' + re.escape(t) + r'\s*\{', tf.prologue, re.M))
 
     def hoist(t: str, stack: Tuple[str, ...] = ()) -> None:

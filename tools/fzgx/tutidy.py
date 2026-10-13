@@ -41,6 +41,11 @@ class Header:
         self.typedefs: Set[str] = set(re.findall(r"^\}\s*([A-Za-z_]\w*)\s*;", flat, re.M))
         self.typedefs |= set(re.findall(r"^\s*typedef\s+[^{;()]*?\b([A-Za-z_]\w*)\s*;", flat, re.M))
         self.typedefs |= set(re.findall(r"^\s*typedef\s+[^{;]*?\(\s*\*\s*([A-Za-z_]\w*)\s*\)\s*\(", flat, re.M))
+        # types defined here beyond `typedefs` (which tidy_block reads): struct/union tags
+        # (`struct Sig_fn_80077B14_fn_80077B14_Arg0 {`, shared_types.h) and one-line aggregates
+        # (`typedef struct { u32 a, b, c; } V3;`, face_types.h); a second definition is an error
+        self.tags: Set[str] = set(re.findall(r"^\s*(?:typedef\s+)?(?:struct|union)\s+([A-Za-z_]\w*)\s*\{", flat, re.M))
+        self.tags |= set(re.findall(r"^\s*typedef\s+(?:struct|union|enum)\b[^{};]*\{[^{}]*\}\s*([A-Za-z_]\w*)\s*;", flat, re.M))
         base = rel.rsplit("/", 1)[0] if "/" in rel else ""
         self.includes = [_resolve_include(inc, base) for inc in INCLUDE_RE.findall(flat)]
 
@@ -109,6 +114,14 @@ def _header_names(p: Project, prologue: str) -> tuple:
         names |= h.names
         typedefs |= h.typedefs
     return names, typedefs
+
+
+def header_types(prologue: str) -> Set[str]:
+    """Typedef names and struct/union tags the prologue's includes define, transitively."""
+    out: Set[str] = set()
+    for h in included_headers(prologue):
+        out |= h.typedefs | getattr(h, 'tags', set())
+    return out
 
 
 def tidy_block(body: str, names: Set[str], typedefs: Set[str]) -> tuple:
