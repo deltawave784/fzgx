@@ -2495,6 +2495,59 @@ def commutations(body, name, operations=None):
     return list(dict.fromkeys(grouped + proposals))
 
 
+def shift_products(body, name):
+    """Integer products by a power of two spelled as shifts, alone and with the enclosing
+    addition's operands swapped.
+
+    MWCC orders the operands of an integer `add` differently for `E * 2 + n` and
+    `(E << 1) + n` although both lower to `slwi`: the product form emits `add rD, n, shifted`
+    under every operand order of the source, the shift form follows source order
+    (fn_1_112F40: `(n - 1) * 2 + n` gave `add r0, r5, r0`, six spellings stayed there;
+    `((n - 1) << 1) + n` gives retail's `add r0, r0, r5` and matches). Commuting the
+    product's own operands never reaches it. Floating operands are left alone."""
+    operations = []
+    commutations(body, name, operations)
+    span = _function_body_span(body, name)
+    if not span:
+        return []
+    floats = set(re.findall(r'\b(?:f32|f64|float|double)\s+\**\s*(\w+)', body[:span[2]]))
+    parents = [o for o in operations if o['op'] in ('+', '-')]
+    out, edits = [], []
+    for o in operations:
+        if o['op'] != '*':
+            continue
+        for side, other in (('right', 'left'), ('left', 'right')):
+            literal = body[o[side][0]:o[side][1]].strip()
+            if not re.fullmatch(r'(?:0x[0-9A-Fa-f]+|\d+)[uU]?', literal):
+                continue
+            value = int(literal.rstrip('uU'), 0)
+            if value < 2 or value & (value - 1) or value > 1 << 30:
+                continue
+            operand = body[o[other][0]:o[other][1]]
+            if (re.search(r'\((?:f32|f64|float|double)\s*\*?\)|\d\.\d*f?\b|\.\d+f?\b', operand)
+                    or any(w in floats for w in re.findall(r'[A-Za-z_]\w*', operand))):
+                continue
+            # the product's full extent, parentheses around a leading operand included
+            a, b = o['start'], o['end']
+            replacement = f'(({operand}) << {value.bit_length() - 1})'
+            edits.append((a, b, replacement))
+            out.append((f'shift product {body[a:b]}', body[:a] + replacement + body[b:]))
+            parent = next((q for q in parents if q['op'] == '+' and (q['left'] == (a, b) or q['right'] == (a, b))), None)
+            if parent:
+                (la, lb), (ra, rb) = parent['left'], parent['right']
+                left = replacement if (la, lb) == (a, b) else body[la:lb]
+                right = replacement if (ra, rb) == (a, b) else body[ra:rb]
+                out.append((f'shift product {body[a:b]}, operands swapped',
+                            body[:la] + f'({right}) + ({left})' + body[rb:]))
+            break
+    if len(edits) > 1 and all(b <= c for (_, b, _), (c, _, _) in zip(sorted(edits), sorted(edits)[1:])):
+        text = body
+        for a, b, value in sorted(edits, reverse=True):
+            text = text[:a] + value + text[b:]
+        out.append(('shift every product', text))
+    return list(dict.fromkeys(out))
+
+
 def probes(body, name, limit=32):
     """Linear probes, not permutations; each observed response is reusable."""
     choices = commutations(body, name)

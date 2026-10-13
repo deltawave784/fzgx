@@ -623,6 +623,8 @@ class Engine:
             if check.operand_order or captured_operators:
                 commuted=source.commutations(body,name)
                 commuted.sort(key=lambda c:not c[0].startswith('coupled scalar operands'))
+                # `E * 2 + n` orders the add's inputs by the product, `(E << 1) + n` by source
+                commuted=source.shift_products(body,name)+commuted
                 # An optimizer can canonicalize both source spellings to the
                 # same object. Such zero-response edits disappear from the beam
                 # and from linear composition; probe their policy interaction.
@@ -633,7 +635,7 @@ class Engine:
                             yield label+' with '+policy,combined
         families.extend(deferred_graph)
         families.extend([source.missing_values(body,name), source.expression_trees(body,name),
-                         source.commutations(body,name), source.probes(body,name,64),
+                         source.commutations(body,name), source.shift_products(body,name), source.probes(body,name,64),
                          [(family+': '+label,text) for family,label,text in source.all_rewrites(body,name)]])
         # Inlined helpers contribute instructions and stack lifetimes to this
         # function. Restricting rewrites to the outer body leaves those regions
