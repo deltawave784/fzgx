@@ -17,5 +17,11 @@
 u32 __OSBusClock : FZGX_ADDR___OSBusClock; /* 0x800000F8, the 162 MHz bus clock */
 #define OS_BUS_CLOCK __OSBusClock
 #define OS_TIMER_CLOCK (OS_BUS_CLOCK / 4)
+u32 __OSTVMode : FZGX_ADDR___OSTVMode; /* 0x800000CC, VI_NTSC / VI_PAL / VI_MPAL / ... */
+
+/* A VI register read at a folded literal address (`lis rX, 0xCC00; lhz rY, off(rX)`, no relocation),
+   where retail did not go through the linker-defined __VIRegs. Indices are the SDK's u16 slots. */
+#define VI_DTV_STAT 0x37
+#define VI_REG_LITERAL(index) (*(vu16 *)(FZGX_ADDR___VIRegs + 2 * (index)))
 
 #endif

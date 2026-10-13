@@ -1,4 +1,5 @@
 #include "types.h"
+#include "dolphin/gx.h"
 
 typedef struct {
     u32 attr;
@@ -35,14 +36,6 @@ extern void GXSetVtxDescv(GXVtxDescList *list);
 extern void GXSetVtxAttrFmtv(u32 fmt, GXVtxAttrFmtList *list);
 extern void fn_8003462C(u32 prim, u32 fmt, u16 nverts); /* GXBegin */
 
-typedef union {
-    u8 u8;
-    u16 u16;
-    u32 u32;
-    f32 f32;
-} PPCWGPipe;
-
-volatile PPCWGPipe GXWGFifo : 0xCC008000; /* fzgx-allow: A1,A2 GX write-gather pipe */
 #define GXWGFifo_f32 GXWGFifo.f32
 
 #define PI 3.14159265358979323846F

@@ -1,4 +1,5 @@
 #include "dolphin/types.h"
+#include "dolphin/hw_regs.h"
 
 /* OSFontHeader (Dolphin OS font) */
 typedef struct OSFontHeader {
@@ -39,9 +40,9 @@ static u16 OSGetFontEncode(void)
     if (lbl_801A6438 <= 1) {
         return lbl_801A6438;
     }
-    switch (*(u32 *)0x800000CC) { /* fzgx-allow: A1,A2 OS low memory TV mode */
+    switch (__OSTVMode) {
     case 0:
-        lbl_801A6438 = (*(vu16 *)0xCC00206E & 2) /* fzgx-allow: A1,A2 VI DTV status, folded by retail */ ? 1 : 0;
+        lbl_801A6438 = (VI_REG_LITERAL(VI_DTV_STAT) & 2) ? 1 : 0;
         break;
     case 1:
     case 2:
