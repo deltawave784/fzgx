@@ -399,3 +399,7 @@ without row alignment (`retail - ours` net rows):
   byte is the SDK's `__OSf32tou8`. Inline asm must take `0(ptr)` with `register f32 *ptr = &tmp;` (MWCC folds it into
   the r1 displacement); `tmp` alone as the operand is rejected. The temporary is `f32` for every width, read back as
   `*(u8 *)ptr`: each site owns a 4-byte slot (fn_1_65748's three sites at 0x10/0xc/0x8); a `u8` temp packs 1-byte slots. Needed by fn_1_60D54 and fn_1_A5594 (probe, 1.3.2).
+- TU .bss base views (librarian, 2026-10-13): when retail addresses a whole TU's .bss off its first symbol
+  (`lbl_1_bss_3C00` to +0x34600, `lbl_1_bss_7B180` to +0x3BDC), the header declares that symbol as a struct view sized
+  from every base-relative access (typedefs.json `decl` override) instead of dtk's 1- to 8-byte object; casts of an
+  under-sized declared object let MWCC treat distinct offsets as one location (fn_1_304A8, fn_1_3E6D8, fn_1_EF768).
