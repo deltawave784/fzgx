@@ -34,7 +34,7 @@ from pathlib import Path
 from typing import Dict, List, Optional, Tuple
 
 from . import compat
-from .project import ROOT, STATE_DIR, Project, Symbol
+from .project import ROOT, STATE_DIR, Project, Symbol, write_atomic
 
 BEGIN_RE = re.compile(r"^/\* fzgx:begin (?P<name>[A-Za-z_]\w*)(?P<flags>(?: [a-z]+)*) \*/\s*$")
 END_RE = re.compile(r"^/\* fzgx:end (?P<name>[A-Za-z_]\w*) \*/\s*$")
@@ -146,10 +146,7 @@ def _lock(path: Path):
 
 
 def _write_atomic(path: Path, text: str) -> None:
-    path.parent.mkdir(parents=True, exist_ok=True)
-    tmp = path.with_suffix(path.suffix + ".tmp")
-    tmp.write_text(text)
-    compat.replace(tmp, path)
+    write_atomic(path, text)
 
 
 def unit_text(p: Project, unit: dict) -> str:

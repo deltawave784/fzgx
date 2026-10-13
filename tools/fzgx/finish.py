@@ -192,6 +192,30 @@ def _all_matched(p: Project, tu_source: str) -> bool:
 
 
 def finish_tu(p: Project, tu_source: str, do_collapse: bool = True, v: Optional[Verifier] = None) -> Dict[str, object]:
+    """One TU's pass, all or nothing: an exception restores the TU file, its generated
+    units and its units.json records, so a crash never leaves a half-rewritten TU behind
+    (a main_rel pass once died after 45 minutes with 30 TUs changed, two uncompilable)."""
+    path = tufile.tu_path(p, tu_source)
+    before = path.read_text() if path.exists() else None
+    records = {u["source"]: u for u in p.load_units() if u.get("tu") == tu_source}
+    try:
+        return _finish_tu(p, tu_source, do_collapse, v)
+    except Exception as e:
+        if before is not None:
+            tufile._write_atomic(path, before)
+        with oracle.build_lock("units.lock"):
+            units = p.load_units()
+            if any(u["source"] in records and u != records[u["source"]] for u in units):
+                p.save_units([records.get(u["source"], u) for u in units])
+        if before is not None:
+            tf = tufile.load(p, tu_source)
+            for u in records.values():
+                tufile.write_gen(p, u, tf)
+        return {"tu": tu_source, "renamed": 0, "hoisted": 0, "contested": 0, "queue": [],
+                "included": [], "error": f"{type(e).__name__}: {e}", "rolled_back": True}
+
+
+def _finish_tu(p: Project, tu_source: str, do_collapse: bool = True, v: Optional[Verifier] = None) -> Dict[str, object]:
     v = v or Verifier(p)
     r = reconcile.reconcile_tu(p, tu_source, v)
     out: Dict[str, object] = {"tu": tu_source, "renamed": r["renamed"], "hoisted": len(r["hoisted"]),
@@ -310,6 +334,7 @@ def finish(p: Project, module: str, workers: int = 12) -> Dict[str, object]:
             "restored": restored, "diag": diag,
             "trials": {r["tu"]: r.get("trial") for r in results if r.get("trial")},
             "collapse_errors": {r["tu"]: r["collapse_error"] for r in results if r.get("collapse_error")},
+            "errors": {r["tu"]: r["error"] for r in results if r.get("error")},
             "hoisted": sum(r["hoisted"] for r in results), "renamed": sum(r["renamed"] for r in results),
             "contested": sum(r["contested"] for r in results),
             "results": results}

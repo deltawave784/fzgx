@@ -30,7 +30,7 @@ from pathlib import Path
 from typing import Dict, List, Optional, Tuple
 
 from . import oracle, poolfix, tufile, tutrial
-from .project import ROOT, STATE_DIR, Project
+from .project import ROOT, STATE_DIR, Project, write_atomic
 
 SECTION_TYPE = {".text": "code", ".rodata": "rodata", ".data": "data", ".bss": "bss",
                 ".sdata": "data", ".sbss": "bss", ".sdata2": "rodata", ".sbss2": "bss"}
@@ -209,8 +209,8 @@ def collapse(p: Project, tu_source: str, keep_on_failure: bool = False) -> Dict[
         cp = oracle.configure(p)
         ok = cp.returncode == 0 and oracle.relink(p).returncode == 0
         if not ok and not keep_on_failure:
-            shutil.copy(backup / "splits.txt", spath)
-            shutil.copy(backup / "units.json", upath)
+            write_atomic(spath, (backup / "splits.txt").read_bytes())
+            write_atomic(upath, (backup / "units.json").read_bytes())
             tufile.regenerate(p)
             oracle.configure(p)
             oracle.relink(p)

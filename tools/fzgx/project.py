@@ -90,6 +90,29 @@ def load_json_retry(path: Path, tries: int = 20, delay: float = 0.1):
                 raise
             time.sleep(delay)
 
+_WRITE_LOCK = threading.Lock()
+
+
+def write_atomic(path: Path, text) -> None:
+    """Replace `path` with `text` (str or bytes) so no reader ever sees a partial file.
+
+    The temporary name is unique per process and thread: a shared `<name>.tmp` let two
+    threads truncate the same temporary, and the first replace published a file the
+    second was still writing. In-process writers are serialized as well."""
+    path.parent.mkdir(parents=True, exist_ok=True)
+    tmp = path.with_name(f"{path.name}.{os.getpid()}.{threading.get_ident()}.tmp")
+    with _WRITE_LOCK:
+        if isinstance(text, bytes):
+            tmp.write_bytes(text)
+        else:
+            tmp.write_text(text)
+        try:
+            compat.replace(tmp, path)
+        except BaseException:
+            tmp.unlink(missing_ok=True)
+            raise
+
+
 class Project:
     def __init__(self, version: str = DEFAULT_VERSION) -> None:
         self.version = version
@@ -622,13 +645,24 @@ class Project:
         """units.json, parsed once per file version (every check used to re-read it)."""
         if not self.units_path.exists():
             return []
-        stamp = self.units_path.stat().st_mtime_ns
-        cache = self.__dict__.setdefault("_units_cache", None)
-        if cache and cache[0] == stamp:
-            return json.loads(cache[1])  # a fresh copy: callers mutate and save the list
-        text = self.units_path.read_text()
-        self.__dict__["_units_cache"] = (stamp, text)
-        return json.loads(text)
+        for attempt in range(20):
+            stamp = self.units_path.stat().st_mtime_ns
+            cache = self.__dict__.setdefault("_units_cache", None)
+            if cache and cache[0] == stamp:
+                return json.loads(cache[1])  # a fresh copy: callers mutate and save the list
+            text = self.units_path.read_text()
+            try:
+                units = json.loads(text)
+            except json.JSONDecodeError:
+                # a writer outside save_units is mid-write: never cache or act on a
+                # half-written file (tu-finish main_rel died on one in a worker thread)
+                if attempt == 19:
+                    raise
+                time.sleep(0.1)
+                continue
+            self.__dict__["_units_cache"] = (stamp, text)
+            return units
+        return []
 
     def unit_record(self, unit_source: str) -> Optional[dict]:
         """units.json entry for a split unit name (the `source` field), if configured."""
@@ -661,32 +695,9 @@ class Project:
         """An agent's private working copy of a function's unit (never the tree)."""
         return STATE_DIR / "work" / (key.replace(":", "__") + ".c")
 
-    def load_units(self) -> List[dict]:
-        """units.json, parsed once per file version (every check used to re-read it)."""
-        if not self.units_path.exists():
-            return []
-        stamp = self.units_path.stat().st_mtime_ns
-        cache = self.__dict__.setdefault("_units_cache", None)
-        if cache and cache[0] == stamp:
-            return json.loads(cache[1])  # a fresh copy: callers mutate and save the list
-        text = self.units_path.read_text()
-        self.__dict__["_units_cache"] = (stamp, text)
-        return json.loads(text)
-
-    def unit_record(self, unit_source: str) -> Optional[dict]:
-        """units.json entry for a split unit name (the `source` field), if configured."""
-        stamp = self.units_path.stat().st_mtime_ns if self.units_path.exists() else None
-        idx = self.__dict__.get("_units_index")
-        if not idx or idx[0] != stamp:
-            idx = (stamp, {u["source"]: u for u in self.load_units()})
-            self.__dict__["_units_index"] = idx
-        return idx[1].get(unit_source)
-
     def save_units(self, units: List[dict]) -> None:
         units.sort(key=lambda u: (u["module"], u["source"]))
-        tmp = self.units_path.with_suffix(".json.tmp")
-        tmp.write_text(json.dumps(units, indent=2) + "\n")
-        compat.replace(tmp, self.units_path)  # readers in other processes never see a partial file
+        write_atomic(self.units_path, json.dumps(units, indent=2) + "\n")
 
     def objdiff_unit_name(self, module: str, source: str) -> str:
         return f"{module}/{source.rsplit('.', 1)[0]}"
