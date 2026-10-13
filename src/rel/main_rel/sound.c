@@ -658,6 +658,90 @@ void fn_1_A24CC(void) {
 }
 /* fzgx:end fn_1_A24CC */
 
+/* fzgx:begin fn_1_A2A70 noprologue */
+#include "types.h"
+
+struct fn_1_A2A70_state {
+    u8 pad_0[0x1C];
+    u32 unk_1C;
+    u8 pad_20[0x4];
+    f32 unk_24;
+    f32 unk_28;
+    u8 pad_2C[0xC];
+    void **unk_38;
+    u8 pad_3C[0x7B0 - 0x3C];
+    u8 unk_7B0[4];
+    u8 pad_7B4[0x888 - 0x7B4];
+    f32 unk_888;
+    f32 unk_88C;
+};
+
+extern const f32 lbl_1_rodata_446C;
+extern const f32 lbl_1_rodata_4470;
+extern const f32 lbl_1_rodata_4474;
+extern struct fn_1_A2A70_state lbl_1_bss_6EA98;
+extern s32 fn_8004BED0(void *);
+extern s32 fn_800672E4(s32, u32);
+
+static inline s32 fn_1_A2A70_trunc(f32 x) {
+    volatile s32 r = (s32)x; /* volatile: forces the fctiwz stack round trip retail emits */
+    return r;
+}
+
+#pragma opt_common_subs off
+void fn_1_A2A70(u32 flags, s32 n) {
+    f32 fzgx_live;
+    struct fn_1_A2A70_state *s = &lbl_1_bss_6EA98;
+    s32 i;
+    s32 v;
+    u8 *p;
+
+    if (n > 0) {
+        if (flags & 1) {
+            s->unk_1C &= ~4;
+            s->unk_24 = lbl_1_rodata_446C / (f32)n;
+        }
+        if (flags & 2) {
+            s->unk_1C &= ~8;
+            s->unk_28 = lbl_1_rodata_446C / (f32)n;
+        }
+        if (flags & 4) {
+            s->unk_888 = (f32)fn_8004BED0(s->unk_38[0]);
+            s->unk_24 = (lbl_1_rodata_446C + (f32)fn_8004BED0(s->unk_38[0])) / (f32)n;
+            s->unk_1C &= ~1;
+        }
+        if (flags & 8) {
+            s->unk_88C = (f32)fn_8004BED0(s->unk_38[1]);
+            s->unk_28 = (lbl_1_rodata_446C + (f32)fn_8004BED0(s->unk_38[1])) / (f32)n;
+            if (flags & 0x40) {
+                s->unk_28 = (f32)((fn_8004BED0(s->unk_38[1]) + 600) / n);
+                fzgx_live = s->unk_28;
+                s->unk_28 = (f32)fn_1_A2A70_trunc(fzgx_live);
+                if (s->unk_28 < lbl_1_rodata_4470) {
+                    s->unk_28 = lbl_1_rodata_4470;
+                }
+            }
+            s->unk_1C &= ~2;
+        }
+        p = s->unk_7B0;
+        for (i = 0; i < 4; i++) {
+            v = fn_800672E4(i, 0xA0100000) / n;
+            if (v <= 0) {
+                v = 0;
+            }
+            p[i] = v + 1;
+        }
+        if (s->unk_24 < lbl_1_rodata_4474) {
+            s->unk_24 = lbl_1_rodata_4470;
+        }
+        if (s->unk_28 < lbl_1_rodata_4474) {
+            s->unk_28 = lbl_1_rodata_4470;
+        }
+    }
+}
+#pragma opt_common_subs reset
+/* fzgx:end fn_1_A2A70 */
+
 /* fzgx:begin fn_1_A2D84 */
 void fn_1_A2D84(u32 arg0) {
     if (lbl_1_bss_6F1D8 == 0 && lbl_1_bss_6F1DC <= 0x2D) {
