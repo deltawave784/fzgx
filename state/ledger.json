@@ -1,5 +1,5 @@
 {
- "generated": 1791924199,
+ "generated": 1791924506,
  "functions": [
   {
    "symbol": "car_colchg:_prolog",
@@ -529762,9 +529762,9 @@
    "detail": "Prologue extern s32 fn_1_5233C incorrectly declares a called symbol as data. Replace with the verified function prototype taking two pointer arguments.",
    "source": "agent:revise-revise-main-rel-1-revise-codex-147",
    "created_at": 1791326358,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1791924504
   },
   {
    "id": 133,
@@ -529882,9 +529882,9 @@
    "detail": "The supplied prologue declares fn_1_5233C as extern s32, but write_unit reports it undefined. Resolve the compilation-context discrepancy and callback/address prototype before retrying.",
    "source": "agent:revise-revise-main-rel-1-revise-codex-145",
    "created_at": 1791326421,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1791924505
   },
   {
    "id": 143,
@@ -531466,9 +531466,9 @@
    "detail": "bg_san.c prologue declares `extern void fn_1_DC764(void);` but retail fn_1_DC764 reads its first argument (lwz r27, 0x8(r3)). It is a handler callback whose context comes from fn_1_DC6FC (handler->unk_08). The real signature is void fn_1_DC764(T *ctx), with ctx->unk_8 at +0x8.",
    "source": "agent:opus-fn_1_DC764-20261013r",
    "created_at": 1791918742,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1791924504
   }
  ]
 }

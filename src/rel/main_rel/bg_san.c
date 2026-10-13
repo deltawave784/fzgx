@@ -54,7 +54,7 @@ extern void fn_1_103090(void *);
 extern void fn_1_1030A4(void *);
 extern void **fn_1_54448(s32 arg0);
 extern void * fn_1_548AC(u32 amount);
-extern void fn_1_DC764(void);
+extern void fn_1_DC764();  /* takes the handler (reads handler->unk_08); non-prototype so Handler.unk_04 accepts it */
 extern void fn_1_5489C(void **arg0, void **arg1);
 extern const f64 lbl_1_rodata_6748;
 extern void fn_1_D6C10(void *, f32);

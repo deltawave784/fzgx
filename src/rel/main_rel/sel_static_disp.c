@@ -59,7 +59,7 @@ extern u8 fn_1_141F94(u32);
 extern const f32 lbl_1_rodata_863C;
 extern const f32 lbl_1_rodata_87DC;
 extern void fn_1_49748(f32 value);
-extern s32 fn_1_5233C;
+extern void fn_1_5233C(void *arg0, void *arg1);
 extern s16 fn_1_12C930(s16 arg0);
 extern void fn_1_494DC(s16 index);
 extern void fn_1_4966C(f32 value1, f32 value2);
