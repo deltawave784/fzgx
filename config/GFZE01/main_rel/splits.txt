@@ -7373,3 +7373,6 @@ rel/main_rel/camera/fn_1_C3B8.c:
 
 rel/main_rel/ghost/fn_1_EB4BC.c:
 	.text       start:0x000EB4BC end:0x000EB85C align:4
+
+rel/main_rel/sound/fn_1_A3654.c:
+	.text       start:0x000A3654 end:0x000A3A1C align:4
