@@ -12984,6 +12984,19 @@
   },
   {
     "module": "main",
+    "source": "dol/double2hex.c",
+    "symbols": [
+      "double2hex"
+    ],
+    "status": "matching",
+    "mw_version": "GC/2.5",
+    "extra_cflags": [],
+    "pool": {
+      "@stringBase0": "@stringBase0_80094FC0"
+    }
+  },
+  {
+    "module": "main",
     "source": "dol/dvdidutils.c",
     "symbols": [
       "DVDCompareDiskID"

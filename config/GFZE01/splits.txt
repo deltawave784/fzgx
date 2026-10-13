@@ -5873,3 +5873,6 @@ dol/fn_80008204.c:
 
 dol/fn_80042D24.c:
 	.text       start:0x80042D24 end:0x80043050 align:4
+
+dol/double2hex.c:
+	.text       start:0x800819F4 end:0x80081D2C align:4
