@@ -69,6 +69,17 @@ class CheckResult:
         return {k: v for k, v in self.__dict__.items() if not k.startswith("_")}
 
 
+def row_address(row: dict) -> Optional[int]:
+    """Function-relative address of an objdiff row's instruction, None for a gap row.
+
+    objdiff JSON omits zero-valued protobuf fields, so the first instruction carries no
+    `address` key: reading `['address']` raises and `.get('address') is not None` skips it."""
+    ins = row.get('instruction') or {}
+    if not ins.get('formatted'):
+        return None
+    return int(ins.get('address') or 0)
+
+
 def progress_score(res: CheckResult) -> float:
     """The one progress scale (ranking and best-body selection only, never acceptance): the
     better of objdiff's similarity and the pool-adjusted row score. Choosing one by `pool_rows`
@@ -169,8 +180,8 @@ def _render_diff(left_rows: List[dict], right_rows: List[dict], max_lines: int,
             where = f'{i * 4:04X}'
             if addresses:
                 def addr(row):
-                    value = row.get('instruction', {}).get('address')
-                    return f'{int(value):08X}' if value is not None else '--------'
+                    value = row_address(row)
+                    return f'{value:08X}' if value is not None else '--------'
                 where += f' T:{addr(l)} C:{addr(r)}'
             out.append(f"{mark} {where}  {lf:<34} | {rf}")
     if len(out) > max_lines:

@@ -1019,7 +1019,7 @@ def scalar_lifetimes(p, symbol, body, check):
     constants = set()
     target = check._rows[0]
     for i, values in typed.get('comparisons', {}).items():
-        address = int(target[i]['instruction']['address'])
+        address = oracle.row_address(target[i]) or 0
         if any(r.get('instruction', {}).get('branch_dest') is not None and int(r['instruction']['branch_dest']) < address
                for r in target[i + 1:i + 4]):
             constants.update(v[1] for v in values if v and v[0] == 'literal')

@@ -58,8 +58,8 @@ def region_scores(left, right, accepted=()):
 def analyse_rows(left, right, tables=None):
     boundaries = set()
     for rows in (left, right):
-        addresses = {int(r['instruction']['address']): i for i, r in enumerate(rows)
-                     if r.get('instruction', {}).get('address') is not None}
+        addresses = {int((r['instruction'].get('address') or 0)): i for i, r in enumerate(rows)
+                     if r.get('instruction', {}).get('formatted')}
         boundaries.update(addresses[int(r['instruction']['branch_dest'])] for r in rows
                           if r.get('instruction', {}).get('branch_dest') is not None
                           and int(r['instruction']['branch_dest']) in addresses)

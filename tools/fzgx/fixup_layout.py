@@ -1693,8 +1693,11 @@ def defined_data_initializers(p, symbol, body, check):
         if not li.get('relocation') or not ri.get('relocation'):
             continue
         # objdiff JSON addresses are function-relative decimal strings
-        lr = rrel.get(rfn['value'] + int(li['address']))
-        rr = orel.get(ofn['value'] + int(ri['address']))
+        la, ra = oracle.row_address(l), oracle.row_address(r)
+        if la is None or ra is None:
+            continue
+        lr = rrel.get(rfn['value'] + la)
+        rr = orel.get(ofn['value'] + ra)
         if not lr or not rr:
             continue
         (rs, radd), (os_, oadd) = lr, rr

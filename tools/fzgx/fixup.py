@@ -230,8 +230,8 @@ class Engine:
                     for j in (k, k - 1, k + 1):
                         if 0 <= j < len(rrows):
                             ins = rrows[j].get('instruction') or {}
-                            if ins.get('address') is not None:
-                                ln = linemap.line_of(table, int(ins['address']))
+                            if ins.get('formatted'):
+                                ln = linemap.line_of(table, int(ins.get('address') or 0))
                                 if ln:
                                     out[k] = ln
                                     break
