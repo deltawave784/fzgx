@@ -1,5 +1,5 @@
 {
- "generated": 1791924617,
+ "generated": 1791924783,
  "functions": [
   {
    "symbol": "car_colchg:_prolog",
@@ -530986,9 +530986,9 @@
    "detail": "car_test_types.h declares extern s32 fn_1_84408(CarTestCar *), but retail returns s8: no extsb before blr, and the return paths leave an unextended r3. Under the s32 prototype, an extra extsb r3,r3 appears. It should be s8 fn_1_84408(CarTestCar *).",
    "source": "agent:opus-fn_1_84408-20261011f",
    "created_at": 1791721766,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1791924783
   },
   {
    "id": 235,

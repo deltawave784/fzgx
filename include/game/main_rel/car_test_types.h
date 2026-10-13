@@ -70,7 +70,7 @@ typedef struct {
     u8 pad_3BC[0x84];
 } CarTestCar;
 
-extern s32 fn_1_84408(CarTestCar *);
+extern s8 fn_1_84408(CarTestCar *);
 extern void fn_1_8E084(CarTestCar *, u32 *, s32);
 extern s8 fn_1_84124(Fn183D28Car *, s8, s8, u8 *);
 extern void lbl_8006DFE8(Fn183D28Vec3 *);
