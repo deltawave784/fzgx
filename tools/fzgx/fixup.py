@@ -515,6 +515,7 @@ class Engine:
         if row.get('score') == 100:
             if row.get('source_lint') and (check.matched or check.matched_pool):
                 yield from source.annotate_verified_branches(body, row['source_lint'])
+                yield from source.hardware_literal_names(body, row['source_lint'])
             yield from source.inline_helpers(body,name)
             for helper in row.get('extra_helpers', []):
                 if self.project.find_symbol(helper, self.project.resolve(row['symbol']).module):

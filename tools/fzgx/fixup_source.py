@@ -3846,3 +3846,108 @@ def inline_helpers(body, name):
     for match in pattern.finditer(body):
         if match[1] != name:
             yield 'internal inline helper '+match[1], body[:match.start()]+'static inline '+body[match.start():]
+
+
+_FIFO_MEMBERS = {'u8': 'u8', 'unsigned char': 'u8', 'u16': 'u16', 'unsigned short': 'u16',
+                 'u32': 'u32', 'unsigned int': 'u32', 'unsigned long': 'u32', 's8': 's8',
+                 'signed char': 's8', 'char': 's8', 's16': 's16', 'short': 's16', 's32': 's32',
+                 'int': 's32', 'long': 's32', 'f32': 'f32', 'float': 'f32', 'f64': 'f64', 'double': 'f64'}
+_HW_OWNED = {'__OSBusClock': 'dolphin/hw_regs.h', '__OSTVMode': 'dolphin/hw_regs.h', 'GXWGFifo': 'dolphin/gx.h'}
+_HW_LITERAL = re.compile(r'\b0[xX]([0-9A-Fa-f]{8})[uUlL]*\b')
+
+
+def _hw_name(address, table):
+    """FZGX_ADDR_ spelling of a hardware/low-memory address: the exact link-script symbol, else
+    the nearest register block below it (within 0x400) plus an offset (same folded constant)."""
+    exact = sorted(n for n, a in table.items() if a == address)
+    if exact:
+        return 'FZGX_ADDR_' + exact[0]
+    bases = sorted(((address - a, n) for n, a in table.items() if 0 < address - a < 0x400 and a >= 0xCC000000))
+    if bases:
+        off, name = bases[0]
+        return f'(FZGX_ADDR_{name} + 0x{off:X})'
+    return None
+
+
+def _add_include(text, header):
+    if re.search(r'#include\s*[<"]' + re.escape(header) + r'[>"]', text):
+        return text
+    return f'#include "{header}"\n' + text
+
+
+def hardware_literal_names(body, findings):
+    """Lint-clean spellings of an exact match's hardware literals (A1/A2), proposed only after a
+    full stock-object match so the oracle rechecks them: GX FIFO stores
+    `(*(volatile T *)0xCC008000u) = v` become `GXWGFifo.<member> = v` (dolphin/gx.h, or a local
+    absolute declaration when the body defines PPCWGPipe itself); absolute declarations of
+    hw_regs.h/gx.h objects (`u32 __OSBusClock : 0x800000F8;`) defer to the header; every other
+    address becomes its link-script `FZGX_ADDR_*` name (sdk_addresses.h, the same constant).
+    fn_4_2394 matched 100% and was dropped for lint until respelled by hand this way."""
+    if not any(rule in ('A1', 'A2') for rule, _, _ in findings):
+        return []
+    table = oracle.abs_symbols()
+    fifo = table.get('__GXFifo', 0xCC008000)
+    own_pipe = bool(re.search(r'\}\s*PPCWGPipe\s*;', body))
+    out = []
+    for use_headers in (True, False):
+        text, includes = body, set()
+        # GX FIFO stores through a literal pointer
+        def fifo_sub(m):
+            member = _FIFO_MEMBERS.get(' '.join(m['type'].split()))
+            if member is None or int(m['addr'], 16) != fifo:
+                return m[0]
+            return f'GXWGFifo.{member}'
+        cast = r'\*\s*\(\s*volatile\s+(?P<type>(?:unsigned\s+|signed\s+)?\w+)\s*\*\s*\)\s*0[xX](?P<addr>[0-9A-Fa-f]{8})[uUlL]*'
+        text = re.sub(r'\(\s*' + cast + r'\s*\)', fifo_sub, text)
+        text = re.sub(cast, fifo_sub, text)
+        uses_fifo = 'GXWGFifo.' in text and 'GXWGFifo.' not in body
+        # absolute object declarations `T name : 0xADDR;`
+        def decl_sub(m):
+            name, address = m['name'], int(m['addr'], 16)
+            if use_headers and name in _HW_OWNED and not (name == 'GXWGFifo' and own_pipe):
+                includes.add(_HW_OWNED[name])
+                return ''
+            spelled = _hw_name(address, table)
+            if spelled is None:
+                return m[0]
+            includes.add('sdk_addresses.h')
+            return f"{m['head']}{name} : {spelled};"
+        text = re.sub(r'^(?P<head>[ \t]*(?:volatile\s+)?[\w \t*]*?)\b(?P<name>\w+)\s*:\s*0[xX](?P<addr>[0-9A-Fa-f]{8})[uUlL]*\s*;[^\n]*$',
+                      decl_sub, text, flags=re.M)
+        if uses_fifo and 'GXWGFifo' not in re.sub(r'GXWGFifo\.', '', text):
+            if own_pipe or not use_headers:
+                if own_pipe:
+                    decl = 'volatile PPCWGPipe GXWGFifo : FZGX_ADDR___GXFifo; /* GX write-gather pipe: volatile hardware port */\n'
+                    at = re.search(r'\}\s*PPCWGPipe\s*;[^\n]*\n', text)
+                    text = text[:at.end()] + decl + text[at.end():]
+                    includes.add('sdk_addresses.h')
+                else:
+                    includes.add('dolphin/gx.h')
+            else:
+                includes.add('dolphin/gx.h')
+        # remaining literals in code and comments
+        def lit_sub(m):
+            address = int(m[1], 16)
+            if address == 0x80000000 or not any(lo <= address <= hi for lo, hi in
+                                                ((0x80000000, 0x817FFFFF), (0xC0000000, 0xC17FFFFF), (0xCC000000, 0xCC00FFFF))):
+                return m[0]
+            spelled = _hw_name(address, table)
+            if spelled is None:
+                return m[0]
+            includes.add('sdk_addresses.h')
+            return spelled
+        lines = []
+        for line in text.split('\n'):
+            code, sep, comment = line.partition('/*')
+            code = _HW_LITERAL.sub(lit_sub, code)
+            if sep:
+                comment = _HW_LITERAL.sub(lambda m: m[0] if not any(lo <= int(m[1], 16) <= hi for lo, hi in
+                                          ((0x80000001, 0x817FFFFF), (0xC0000000, 0xC17FFFFF), (0xCC000000, 0xCC00FFFF)))
+                                          else 'its fixed address', comment)
+            lines.append(code + sep + comment)
+        text = '\n'.join(lines)
+        for header in sorted(includes, reverse=True):
+            text = _add_include(text, header)
+        if text != body and text not in (t for _, t in out):
+            out.append(('hardware literals by name' + (' (headers)' if use_headers else ' (sdk addresses)'), text))
+    return out
