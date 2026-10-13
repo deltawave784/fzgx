@@ -1,0 +1,16 @@
+diff --git a/tools/fzgx/oracle.py b/tools/fzgx/oracle.py
+index ebff0cbb..be393484 100644
+--- a/tools/fzgx/oracle.py
++++ b/tools/fzgx/oracle.py
+@@ -424,7 +424,10 @@ def _diff(project: Project, module: str, symbol: str, unit: str, max_diff_lines:
+                 # only linker-defined absolute symbols differ (ours a relocation, retail the
+                 # resolved literal): the link produces retail's bytes; verify's hash is the guard
+                 res.matched = True
+-    if symbol in res.primer_functions and not res.matched and not res.matched_pool:
++    if symbol in res.primer_functions:
++        # refused even at 100%: poolfix.apply drops `.fzgxpool` at integration, so an accepted
++        # body would vanish from the link (verify's hashes would catch it, one batch later)
++        res.matched = res.matched_pool = False
+         # the function itself was emitted in `.fzgxpool` (a primer's `#pragma section code_type`
+         # never reset): integration drops that section, so the body links nothing. Score it 0
+         # so it never becomes a recorded best or a seed (fn_12_3710 was saved at 99.1%).
