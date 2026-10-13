@@ -1202,6 +1202,117 @@ void fn_3_1BA20(void *arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4, s32 *arg5) {
 }
 /* fzgx:end fn_3_1BA20 */
 
+/* fzgx:begin fn_3_1BF08 */
+extern f32 lbl_8006D118(f32, f32 *);
+extern void fn_3_1B4BC(void *, s16, s16, s16, s16, u32 *);
+
+extern void fzgx_usef(f32);
+extern void fzgx_used(f64);
+extern void fzgx_usep(void *);
+extern s32 fzgx_sink_s;
+extern u32 fzgx_sink_u;
+
+/* Primes the TU literal pool (lbl_3_rodata_6A0..) in retail order. */
+#pragma section RX ".fzgxpool"
+__declspec(section ".fzgxpool") void fzgx_pool_primer(void) {
+    fzgx_usef(24.0f);
+    fzgx_usef(86.0f);
+    fzgx_usef(100.0f);
+    fzgx_usef(385.0f);
+    fzgx_usef(170.0f);
+    fzgx_usef(104.0f);
+    fzgx_usef(40.0f);
+    fzgx_usef(96.0f);
+    fzgx_usef(90.0f);
+    fzgx_usef(0.5f);
+    fzgx_usef(20.0f);
+    fzgx_usef(60.0f);
+    fzgx_usef(80.0f);
+    fzgx_usef(15.0f);
+    fzgx_usef(30.0f);
+    fzgx_usef(320.0f);
+    fzgx_usef(372.0f);
+    fzgx_usef(0.1f);
+    fzgx_usef(0.6f);
+    fzgx_usef(375.0f);
+    fzgx_usef(0.75f);
+    fzgx_usef(248.0f);
+    fzgx_usef(1.0f);
+    fzgx_usef(0.8f);
+    fzgx_usef(240.0f);
+    fzgx_usef(25.0f);
+    fzgx_usef(1.02f);
+    fzgx_usef(1.01f);
+    fzgx_usef(0.4f);
+    fzgx_usef(32768.0f);
+    fzgx_usef(10.0f);
+    fzgx_usef(81.0f);
+    fzgx_usef(399.0f);
+    fzgx_usef(18.0f);
+    fzgx_usef(12.0f);
+    fzgx_usef(0.0f);
+}
+
+__declspec(section ".fzgxpool") void fzgx_pool_primer2(void) {
+    fzgx_usef((f32)fzgx_sink_s);
+    fzgx_usef((f32)fzgx_sink_u);
+}
+
+__declspec(section ".fzgxpool") void fzgx_pool_primer3(void) {
+    {
+        u32 pair[4] = { 0, 0, 0, 0xBF800000 };
+        fzgx_usep(pair);
+    }
+    fzgx_used(0.5);
+}
+#pragma section RX ".text"
+
+#define ABS(v) ((v) < 0 ? -(v) : (v))
+
+/* Midpoint circle: draws horizontal spans between mirrored octant points. */
+void fn_3_1BF08(void *data, s16 x1, s16 y1, s16 x2, s16 y2, u32 *color) {
+    s32 dx = x2 - x1;
+    s32 dy = y2 - y1;
+    s16 radius;
+    f32 scale;
+    f32 step;
+    f32 k;
+    s16 x;
+    s16 y;
+    s16 d1;
+    s16 d2;
+    u32 c0;
+    u32 c1;
+
+    radius = __abs(dx) > __abs(dy) ? __abs(dx) : __abs(dy);
+    k = lbl_8006D118(1.0f, &scale);
+    x = radius * k;
+    d1 = 2.0f + (1.0f + (f32)((f32)(-2.0f * scale) * radius));
+    d2 = 1.0f + (2.0f + (f32)((f32)(-4.0f * scale) * radius));
+    y = 0;
+    while (x >= 0) {
+        c0 = *color;
+        fn_3_1B4BC(data, x1 - x, y1 - y, x1 + x, y1 - y, &c0);
+        c1 = *color;
+        fn_3_1B4BC(data, x1 - x, y1 + y, x1 + x, y1 + y, &c1);
+        if (d1 < 0) {
+            y++;
+            d1 = d1 + (2.0f + 4.0f * y);
+            d2 = d2 + 4.0f * y;
+        } else if (d2 >= 0) {
+            x--;
+            d1 = d1 - 4.0f * x;
+            d2 = d2 - (4.0f * x - 2.0f);
+        } else {
+            y++;
+            x--;
+            d1 = d1 + (2.0f + ((f32)(4.0f * y) - (f32)(4.0f * x)));
+            d2 = d2 + (2.0f + ((f32)(4.0f * y) - (f32)(4.0f * x)));
+        }
+    }
+}
+/* fzgx:end fn_3_1BF08 */
+
 /* fzgx:begin fn_3_1D338 noprologue */
 #include "types.h"
 
