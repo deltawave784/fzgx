@@ -424,6 +424,14 @@ def _diff(project: Project, module: str, symbol: str, unit: str, max_diff_lines:
                 # only linker-defined absolute symbols differ (ours a relocation, retail the
                 # resolved literal): the link produces retail's bytes; verify's hash is the guard
                 res.matched = True
+    if symbol in res.primer_functions and not res.matched and not res.matched_pool:
+        # the function itself was emitted in `.fzgxpool` (a primer's `#pragma section code_type`
+        # never reset): integration drops that section, so the body links nothing. Score it 0
+        # so it never becomes a recorded best or a seed (fn_12_3710 was saved at 99.1%).
+        res.percent = res.percent_adjusted = 0.0
+        res.differing_rows = max(res.instruction_rows, res.differing_rows, 1)
+        res.diff = [f"({symbol} is emitted in .fzgxpool, not .text: reset the section after the primer, "
+                    f"`#pragma section code_type \".text\"` after it; scored 0)"] + list(res.diff or [])
     return res
 
 
@@ -1294,7 +1302,8 @@ def words(obj: Path, name: str) -> Optional[List[int]]:
         return None
     # the symbol's own code section: .text for almost everything, .init for the boot and
     # cache code (dtk keeps retail's section; our objects carry the declspec'd section)
-    exec_idx = {sec["index"]: sec for sec in elf.sections if sec["flags"] & 4}
+    # (never `.fzgxpool`: a body left in the primer section is dropped at integration)
+    exec_idx = {sec["index"]: sec for sec in elf.sections if sec["flags"] & 4 and sec["name"] != ".fzgxpool"}
     sym = next((s_ for s_ in elf.symbols() if s_["name"] == name and s_["shndx"] in exec_idx), None)
     if sym is None:
         return None
