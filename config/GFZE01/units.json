@@ -1510,6 +1510,18 @@
   },
   {
     "module": "customize",
+    "source": "rel/customize/emb_paste_editor/fn_3_12B14.c",
+    "symbols": [
+      "fn_3_12B14"
+    ],
+    "status": "nonmatching",
+    "mw_version": "GC/1.3.2",
+    "extra_cflags": [],
+    "tu": "rel/customize/emb_paste_editor.c",
+    "pool": true
+  },
+  {
+    "module": "customize",
     "source": "rel/customize/emb_paste_editor/fn_3_1307C.c",
     "symbols": [
       "fn_3_1307C"
