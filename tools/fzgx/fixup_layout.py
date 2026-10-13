@@ -311,13 +311,21 @@ def find_models(text):
             continue
         if len(re.findall(r"(?<![\w.>])%s\s*=(?!=)" % re.escape(pvar), text)) != 1:
             continue
+        # a pointer that walks (`bits++`, `p += 0x14`) is no model at a constant offset: leave
+        # the base to the byte-array model below (fn_1_2F04)
+        if re.search(r"(?:\+\+|--)\s*%s\b|(?<![\w.>])%s\s*(?:\+\+|--|[+-]=)" % (re.escape(pvar), re.escape(pvar)), text):
+            continue
         models.append((pvar, tname, base, m.group(0), 'ptr+%d' % int(off, 0)))
     seen = {m[2] for m in models}
     for m in re.finditer(r"\nextern\s+(\w+)\s+(lbl_\d+_bss_[0-9A-F]+|lbl_[0-9A-F]{8})\s*((?:\[[^\]]*\])*)\s*;", text):
         tname, base = m.group(1), m.group(2)
         if base in seen or tname not in SCALAR:
             continue
-        if re.search(r"&\s*%s\b" % re.escape(base), text) and not re.search(r"\b%s\s*=\s*\(" % re.escape(base), text):
+        # `&lbl[N]`, or byte arithmetic `lbl + N` on the array itself (fn_1_2F04's
+        # `(Bits *)(lbl_1_bss_978 + 0x80)`): each offset is a member of the retail cluster
+        if ((re.search(r"&\s*%s\b" % re.escape(base), text)
+                or re.search(r"(?<![\w&.>])%s\s*\+\s*(?:0x[0-9A-Fa-f]+|\d+)\b" % re.escape(base), text))
+                and not re.search(r"\b%s\s*=\s*\(" % re.escape(base), text)):
             models.append((None, tname, base, m.group(0), 'bare'))
             seen.add(base)
     for m in re.finditer(r"\nextern\s+(?:struct\s+)?(\w+)\s+(lbl_\d+_bss_[0-9A-F]+|lbl_[0-9A-F]{8})\s*;", text):
@@ -565,6 +573,8 @@ def tu_objects(p, symbol, text, mode, cache, retail_bases=(), only=None, derive=
             out_text = re.sub(r"&\s*%s\s*\[\s*(0x[0-9A-Fa-f]+|\d+)\s*\]" % re.escape(base), lambda mm: f"({tname} *)({pvar} + {int(mm.group(1), 0)})", out_text)
             out_text = re.sub(r"(?<![\w&])%s\s*\[\s*(0x[0-9A-Fa-f]+|\d+)\s*\]" % re.escape(base), lambda mm: f"{pvar}[{int(mm.group(1), 0)}]", out_text)
             out_text = re.sub(r"&\s*%s\b(?![\.\[\w])" % re.escape(base), f"({tname} *)({pvar} + 0)", out_text)
+            out_text = re.sub(r"(?<![\w&.>])%s\s*\+\s*(0x[0-9A-Fa-f]+|\d+)\b" % re.escape(base),
+                              lambda mm: f"({tname} *)({pvar} + {int(mm.group(1), 0)})", out_text)
             body_only = "\n".join(l for l in out_text.replace(stmt, '').split("\n") if not l.lstrip().startswith('#'))
             if re.search(r"(?<![\w>])%s\b" % re.escape(base), body_only):
                 notes.append(f'{base}: bare symbol used as a value'); return None, notes
