@@ -843,6 +843,110 @@ _LOCKED_CACHE_STORE = (r'\*\s*\(\s*(?:volatile\s+)?f32\s*\*\s*\)\s*\(\s*0[xX][eE
                        r'(?:0+{k}|0{7}\s*\+\s*0[xX]0*{k})\s*\)')
 
 
+_LC_ADDR = r'(?:LC_BASE|0[xX][eE]0{7}[uU]?)'
+_LC_ARG_UNSAFE = re.compile(r'\+\+|--|[^=!<>]=(?!=)|\b(?!sizeof\b)[A-Za-z_]\w*\s*\(')
+
+
+def _lc_store(offset: int) -> str:
+    return f'*(f32 *)(0xE0000000 + 0x{offset:02X})'
+
+
+def _lc_block_end(text: str, i: int) -> int:
+    """Index of the brace closing the block that contains position `i` (len(text) if none)."""
+    depth = 0
+    while i < len(text):
+        if text[i] == '{':
+            depth += 1
+        elif text[i] == '}':
+            if depth == 0:
+                return i
+            depth -= 1
+        i += 1
+    return len(text)
+
+
+def _lc_split_args(text: str) -> Optional[List[str]]:
+    out, depth, cur = [], 0, ''
+    for ch in text:
+        if ch in '([':
+            depth += 1
+        elif ch in ')]':
+            depth -= 1
+        if ch == ',' and depth == 0:
+            out.append(cur.strip()); cur = ''
+        else:
+            cur += ch
+    out.append(cur.strip())
+    return out if all(out) and depth == 0 else None
+
+
+def _lc_normalize(text: str) -> str:
+    """Spell every locked-cache translation-column store as `*(f32 *)(0xE0000000 + 0xK)`:
+    indexed float views of LC_BASE, bare `*(f32 *)0xE000000C` addresses and a block-local
+    `f32 (*m)[4]` matrix pointer over the locked cache. Same addresses, one spelling the
+    triple rewrite recognises."""
+    text = re.sub(r'\(\s*\(\s*(?:volatile\s+)?f32\s*\*\s*\)\s*' + _LC_ADDR + r'\s*\)\s*\[\s*(3|7|11)\s*\]',
+                  lambda m: _lc_store(4 * int(m[1])), text)
+    text = re.sub(r'\*\s*\(\s*(?:volatile\s+)?f32\s*\*\s*\)\s*0[xX][eE]0{5}([0-2][cC])\b(?!\s*\+)',
+                  lambda m: _lc_store(int(m[1], 16)), text)
+    text = re.sub(r'\*\s*\(\s*(?:volatile\s+)?f32\s*\*\s*\)\s*\(\s*LC_BASE\s*\+\s*0[xX]0*([0-2][cC])\s*\)',
+                  lambda m: _lc_store(int(m[1], 16)), text)
+    decl = re.compile(r'(?m)^[ \t]*f32\s*\(\s*\*\s*(\w+)\s*\)\s*\[\s*4\s*\]\s*=\s*'
+                      r'\(\s*f32\s*\(\s*\*\s*\)\s*\[\s*4\s*\]\s*\)\s*' + _LC_ADDR + r'\s*;[ \t]*\n')
+    while True:
+        for m in decl.finditer(text):
+            end = _lc_block_end(text, m.end())
+            scope = re.sub(r'\b' + m[1] + r'\s*\[\s*([0-2])\s*\]\s*\[\s*3\s*\]',
+                           lambda r: _lc_store(16 * int(r[1]) + 12), text[m.end():end])
+            if not re.search(r'\b' + m[1] + r'\b', scope):
+                text = text[:m.start()] + scope + text[end:]
+                break
+        else:
+            return text
+
+
+def _lc_expand_helpers(text: str, name: str) -> str:
+    """Expand the target function's statement calls of a static inline helper whose body is
+    only float declarations, simple assignments and the locked-cache translation triple. The
+    matched shape needs the three loads in the caller's own block; parameters are replaced by
+    their (side-effect-free) arguments, so the expansion evaluates the same values."""
+    store = lambda k: _LOCKED_CACHE_STORE.replace('{k}', k)
+    triple = (r'[ \t]*' + store('[cC]') + r'\s*=\s*[^;]+;\s*' + store('1[cC]') + r'\s*=\s*[^;]+;\s*'
+              + store('2[cC]') + r'\s*=\s*[^;]+;\s*')
+    shape = re.compile(r'\s*(?:(?:(?:const\s+)?f32\s+[^;{}()]*|\w+\s*=\s*[^;{}]+);\s*)*' + triple)
+    helpers = {}
+    for m in re.finditer(r'(?m)^static\s+inline\s+void\s+(\w+)\s*\(([^)]*)\)\s*\{', text):
+        end = _lc_block_end(text, m.end())
+        inner = re.sub(r'/\*.*?\*/|//[^\n]*', '', text[m.end():end], flags=re.S)
+        if m[2].strip() in ('', 'void'):
+            continue
+        params = [re.search(r'(\w+)\s*$', q.strip()) for q in m[2].split(',')]
+        if all(params) and shape.fullmatch(inner):
+            helpers[m[1]] = ([q[1] for q in params], inner)
+    if not helpers:
+        return text
+    span = _function_body_span(text, name)
+    if not span:
+        return text
+    body = text[span[1]:span[2]]
+    call = re.compile(r'(?m)^([ \t]*)(' + '|'.join(map(re.escape, helpers)) + r')\s*\((.*)\)\s*;[ \t]*\n')
+
+    def expand(m):
+        params, inner = helpers[m[2]]
+        args = _lc_split_args(m[3])
+        if not args or len(args) != len(params) or any(_LC_ARG_UNSAFE.search(' ' + a) for a in args):
+            return m[0]
+        out = inner
+        for prm, arg in zip(params, args):
+            out = re.sub(r'(?<!\.)(?<!->)\b' + re.escape(prm) + r'\b', lambda _r: '(' + arg + ')', out)
+        ind, i2 = m[1], m[1] + '    '
+        lines = [ln.strip() for ln in re.split(r'(?<=;)', out) if ln.strip()]
+        return f'{ind}{{\n' + ''.join(f'{i2}{ln}\n' for ln in lines) + f'{ind}}}\n'
+
+    new = call.sub(expand, body)
+    return text if new == body else text[:span[1]] + new + text[span[2]:]
+
+
 def locked_cache_columns(body: str, name: str) -> List[Tuple[str, str]]:
     """The translation column of the locked-cache current matrix (stores to 0xE000000C, 1C, 2C).
     Retail loads all three values first, in address order, into temporaries the allocator
@@ -850,7 +954,22 @@ def locked_cache_columns(body: str, name: str) -> List[Tuple[str, str]]:
     spelling (fn_1_61640, fn_1_61EF4) declares the temporaries in reverse order under
     `#pragma opt_propagation off`. Agents write direct stores, initialized block locals or
     member reads, which interleave the loads with the stores or reverse the colors. Every
-    site is rewritten into the matched shape, with and without the pragma."""
+    site is rewritten into the matched shape, with and without the pragma.
+    Without the pragma MWCC forward-substitutes whichever value is stored first (a window
+    temporary that takes f0), so no declaration order or helper parameter order reaches retail
+    (captures of fn_1_11E98/fn_1_1189C, 2026-10-13). Sites written through an inline helper,
+    another store spelling or a run of named-local assignments are first normalised into the
+    direct triple (`_lc_normalize`, `_lc_expand_helpers`, the assignment-run fold)."""
+    out = _locked_cache_core(body, name)
+    prepared = _lc_expand_helpers(_lc_normalize(body), name)
+    if prepared != body:
+        seen = {t for _, t in out}
+        out += [(label + ' (helper/spelling normalised)', t) for label, t in _locked_cache_core(prepared, name)
+                if t not in seen]
+    return out
+
+
+def _locked_cache_core(body: str, name: str) -> List[Tuple[str, str]]:
     span = _function_body_span(body, name)
     if not span:
         return []
@@ -876,8 +995,13 @@ def locked_cache_columns(body: str, name: str) -> List[Tuple[str, str]]:
         closer = re.match(r'[ \t]*\}[ \t]*\n', inner[b:])
         line0 = inner.rfind('\n', 0, opener) + 1 if opener >= 0 else 0
         prefix = inner[opener + 1:a] if opener >= 0 else ''
+        own = set()
+        for d in re.finditer(r'(?:const\s+)?f32\s+([^;{}]*);', prefix):
+            own |= {re.match(r'\s*(\w+)', v)[1] for v in d[1].split(',') if re.match(r'\s*\w+', v)}
+        assigned = re.findall(r'(?:^|;)\s*(\w+)\s*=(?!=)', re.sub(r'(?:const\s+)?f32\s+[^;{}]*;', ';', prefix))
         if (closer and opener >= 0 and not inner[line0:opener].strip() and prefix.strip()
-                and re.fullmatch(r'\s*(?:(?:const\s+)?f32\s+[^;{}]*;\s*)+', prefix)):
+                and re.fullmatch(r'\s*(?:(?:(?:const\s+)?f32\s+[^;{}]*|\w+\s*=\s*[^;{}]+);\s*)+', prefix)
+                and set(assigned) <= own):
             resolved = []
             for v in values:
                 found = None
@@ -888,6 +1012,22 @@ def locked_cache_columns(body: str, name: str) -> List[Tuple[str, str]]:
             if all(resolved):
                 values = resolved
                 a, b, indent = line0, b + closer.end(), inner[line0:opener]
+        if all(re.fullmatch(r'\w+', v) for v in values) and len(set(values)) == 3:
+            # a run of `name = expr;` lines right before the triple defines its named locals:
+            # fold each single-use local into the copy (it must not appear anywhere else)
+            run, k = {}, a
+            while True:
+                ln = re.search(r'(?m)^([ \t]*)(\w+)\s*=\s*([^;{}=][^;{}]*);[ \t]*\n\Z', inner[:k])
+                if not ln or ln[2] not in values or ln[2] in run:
+                    break
+                run[ln[2]] = ln[3].strip(); k = ln.start()
+            if set(run) == set(values) and all(balanced(e) for e in run.values()):
+                rest = re.sub(r'(?m)^[ \t]*(?:const\s+)?f32\s+[^;{}()=]*;[ \t]*$', '', inner[:k] + inner[b:])
+                exprs = ' '.join(run.values())
+                if not any(re.search(r'(?<!\.)(?<!->)\b' + v + r'\b', exprs) for v in values) and not any(
+                        re.search(r'(?<!\.)(?<!->)\b' + v + r'\b', rest) for v in values):
+                    values = [run[v] for v in values]
+                    a = k
         x, y, z = (f'fzgx_lc{n}_{c}' for c in 'xyz')
         i2 = indent + '    '
         edits.append((span[1] + a, span[1] + b,
