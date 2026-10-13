@@ -1811,6 +1811,129 @@ void fn_1_11ABC(fn_1_11ABC_LiveCamera *camera) {
 #pragma opt_propagation reset
 /* fzgx:end fn_1_11ABC */
 
+/* fzgx:begin fn_1_11E98 noprologue */
+#include "types.h"
+#include "rel/main_rel/live_camera.h"
+#include "dolphin/hw_regs.h"
+
+typedef struct {
+    f32 x, y, z;
+} Cam11E98Vec;
+
+typedef struct {
+    u8 state;          /* 0x00 */
+    u8 pad_1[3];
+    s16 unk_4;         /* 0x04 */
+    s16 unk_6;         /* 0x06 */
+    u8 pad_8[0xA];
+    s16 unk_12;        /* 0x12 */
+    s16 unk_14;        /* 0x14 */
+    u8 pad_16[2];
+    u32 unk_18;        /* 0x18 */
+    Cam11E98Vec pos;   /* 0x1C */
+    u8 pad_28[0x24];
+    Cam11E98Vec unk_4C; /* 0x4C */
+    u8 pad_58[0x24];
+    u8 unk_7C[4];      /* 0x7C */
+} Cam11E98;
+
+typedef void (*Cam11E98Handler)(Cam11E98 *, void *);
+
+extern u8 fn_1_86624(void);
+extern void fn_1_FCB0(Cam11E98 *);
+extern void fn_1_862D4(int, Cam11E98Vec *);
+extern void fn_1_8636C(int, void *);
+extern void lbl_8006DD14(void *, void *);
+extern void lbl_8006DC6C(void *);
+extern void lbl_8006E1B0(Cam11E98Vec *, Cam11E98Vec *);
+extern u32 lbl_801A63C0;
+extern Cam11E98Vec lbl_1_rodata_63C;
+
+static inline f32 fn_1_11E98_dist2(Cam11E98Vec *a, Cam11E98Vec *b) {
+    f32 x = a->x;
+    f32 y = a->y;
+    f32 z = a->z;
+    x -= b->x;
+    y -= b->y;
+    z -= b->z;
+    x *= x;
+    x += y * y;
+    x += z * z;
+    return x;
+}
+
+// Write a translation into the current (locked-cache) matrix.
+static inline void fn_1_11E98_set_trans(f32 x, f32 y, f32 z) {
+    *(f32 *)(0xE0000000 + 0x0C) = x;
+    *(f32 *)(0xE0000000 + 0x1C) = y;
+    *(f32 *)(0xE0000000 + 0x2C) = z;
+}
+
+// Pick the camera point nearest to the current target point and aim the camera from it.
+#pragma opt_propagation off
+void fn_1_11E98(Cam11E98 *cam) {
+    u8 mtx[0x30];
+    Cam11E98Vec target;
+    Cam11E98Vec point;
+    Cam11E98Vec up;
+    f32 best;
+    f32 dist;
+    f32 dx, dy, dz;
+    u32 i;
+
+    if ((s8)fn_1_86624() == 1) {
+        fn_1_FCB0(cam);
+    }
+    if (cam->state == 5 || cam->state <= 1 || cam->state == 2) {
+        lbl_801A63C0 = lbl_801A63C0 * 0x676A4B6B + 0x33CB;
+        cam->unk_4 = cam->unk_14 = (s32)((lbl_801A63C0 >> 16) & 0x7FFF) % 2;
+    }
+    fn_1_862D4(cam->unk_6, &target);
+    if (cam->unk_6 == (s32)lbl_1_bss_17F8) {
+        lbl_1_bss_17F8 = (s32)(lbl_1_bss_17F8 + 1) % (s8)fn_1_86624();
+    }
+    fn_1_862D4(lbl_1_bss_17F8, &point);
+    best = fn_1_11E98_dist2(&point, &target);
+    for (i = 0; i < (s8)fn_1_86624(); i++) {
+        if (i != cam->unk_6) {
+            fn_1_862D4(i, &point);
+            dist = fn_1_11E98_dist2(&point, &target);
+            if (!(best < dist)) {
+                best = dist;
+                lbl_1_bss_17F8 = i;
+            }
+        }
+    }
+    if (best > 5000.0f) {
+        cam->unk_12 = 0;
+        cam->unk_18 = 1;
+        ((Cam11E98Handler *)lbl_1_data_4440)[cam->unk_12](cam, lbl_1_data_4440);
+        return;
+    }
+    fn_1_8636C(lbl_1_bss_17F8, mtx);
+    lbl_8006DD14(mtx, cam->unk_7C);
+    fn_1_862D4(lbl_1_bss_17F8, &point);
+    lbl_8006DC6C(mtx);
+    {
+        {
+            f32 fzgx_lc0_z;
+            f32 fzgx_lc0_y;
+            f32 fzgx_lc0_x;
+            fzgx_lc0_x = (point.x);
+            fzgx_lc0_y = (point.y);
+            fzgx_lc0_z = (point.z);
+            *(f32 *)(0xE0000000 + 0x0C) = fzgx_lc0_x;
+            *(f32 *)(0xE0000000 + 0x1C) = fzgx_lc0_y;
+            *(f32 *)(0xE0000000 + 0x2C) = fzgx_lc0_z;
+        }
+    }
+    up = lbl_1_rodata_63C;
+    lbl_8006E1B0(&up, &cam->pos);
+    cam->unk_4C = target;
+}
+#pragma opt_propagation reset
+/* fzgx:end fn_1_11E98 */
+
 /* fzgx:begin fn_1_12620 */
 // Prints the live-camera status text for the current camera event.
 #pragma opt_common_subs off

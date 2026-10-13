@@ -15619,5 +15619,52 @@
       }
     ],
     "link": "pool"
+  },
+  "fn_1_11E98": {
+    "seed_symbol": "fn_1_11E98",
+    "generator": "fzgx fixup",
+    "transform": "locked-cache column copy in reverse-declared temporaries under opt_propagation off (helper/spelling normalised)",
+    "seed": "#include \"types.h\"\n#include \"rel/main_rel/live_camera.h\"\n#include \"dolphin/hw_regs.h\"\n\ntypedef struct {\n    f32 x, y, z;\n} Cam11E98Vec;\n\ntypedef struct {\n    u8 state;          /* 0x00 */\n    u8 pad_1[3];\n    s16 unk_4;         /* 0x04 */\n    s16 unk_6;         /* 0x06 */\n    u8 pad_8[0xA];\n    s16 unk_12;        /* 0x12 */\n    s16 unk_14;        /* 0x14 */\n    u8 pad_16[2];\n    u32 unk_18;        /* 0x18 */\n    Cam11E98Vec pos;   /* 0x1C */\n    u8 pad_28[0x24];\n    Cam11E98Vec unk_4C; /* 0x4C */\n    u8 pad_58[0x24];\n    u8 unk_7C[4];      /* 0x7C */\n} Cam11E98;\n\ntypedef void (*Cam11E98Handler)(Cam11E98 *, void *);\n\nextern u8 fn_1_86624(void);\nextern void fn_1_FCB0(Cam11E98 *);\nextern void fn_1_862D4(int, Cam11E98Vec *);\nextern void fn_1_8636C(int, void *);\nextern void lbl_8006DD14(void *, void *);\nextern void lbl_8006DC6C(void *);\nextern void lbl_8006E1B0(Cam11E98Vec *, Cam11E98Vec *);\nextern u32 lbl_801A63C0;\nextern Cam11E98Vec lbl_1_rodata_63C;\n\nstatic inline f32 fn_1_11E98_dist2(Cam11E98Vec *a, Cam11E98Vec *b) {\n    f32 x = a->x;\n    f32 y = a->y;\n    f32 z = a->z;\n    x -= b->x;\n    y -= b->y;\n    z -= b->z;\n    x *= x;\n    x += y * y;\n    x += z * z;\n    return x;\n}\n\n// Write a translation into the current (locked-cache) matrix.\nstatic inline void fn_1_11E98_set_trans(f32 x, f32 y, f32 z) {\n    f32 (*m)[4] = (f32 (*)[4])LC_BASE;\n    m[0][3] = x;\n    m[1][3] = y;\n    m[2][3] = z;\n}\n\n// Pick the camera point nearest to the current target point and aim the camera from it.\nvoid fn_1_11E98(Cam11E98 *cam) {\n    u8 mtx[0x30];\n    Cam11E98Vec target;\n    Cam11E98Vec point;\n    Cam11E98Vec up;\n    f32 best;\n    f32 dist;\n    f32 dx, dy, dz;\n    u32 i;\n\n    if ((s8)fn_1_86624() == 1) {\n        fn_1_FCB0(cam);\n    }\n    if (cam->state == 5 || cam->state <= 1 || cam->state == 2) {\n        lbl_801A63C0 = lbl_801A63C0 * 0x676A4B6B + 0x33CB;\n        cam->unk_4 = cam->unk_14 = (s32)((lbl_801A63C0 >> 16) & 0x7FFF) % 2;\n    }\n    fn_1_862D4(cam->unk_6, &target);\n    if (cam->unk_6 == (s32)lbl_1_bss_17F8) {\n        lbl_1_bss_17F8 = (s32)(lbl_1_bss_17F8 + 1) % (s8)fn_1_86624();\n    }\n    fn_1_862D4(lbl_1_bss_17F8, &point);\n    best = fn_1_11E98_dist2(&point, &target);\n    for (i = 0; i < (s8)fn_1_86624(); i++) {\n        if (i != cam->unk_6) {\n            fn_1_862D4(i, &point);\n            dist = fn_1_11E98_dist2(&point, &target);\n            if (!(best < dist)) {\n                best = dist;\n                lbl_1_bss_17F8 = i;\n            }\n        }\n    }\n    if (best > 5000.0f) {\n        cam->unk_12 = 0;\n        cam->unk_18 = 1;\n        ((Cam11E98Handler *)lbl_1_data_4440)[cam->unk_12](cam, lbl_1_data_4440);\n        return;\n    }\n    fn_1_8636C(lbl_1_bss_17F8, mtx);\n    lbl_8006DD14(mtx, cam->unk_7C);\n    fn_1_862D4(lbl_1_bss_17F8, &point);\n    lbl_8006DC6C(mtx);\n    fn_1_11E98_set_trans(point.x, point.y, point.z);\n    up = lbl_1_rodata_63C;\n    lbl_8006E1B0(&up, &cam->pos);\n    cam->unk_4C = target;\n}\n",
+    "seed_sha256": "0345fd3a4067be54f4e1c18f8cee54e0700a9a8fd81a9c2f8e7c81f0626fce31",
+    "generated_sha256": "2e08d8da42e39b7be4177eab77603a084e17632eacf8c2a03275489d6a106ad1",
+    "generated_source": "#include \"types.h\"\n#include \"rel/main_rel/live_camera.h\"\n#include \"dolphin/hw_regs.h\"\n\ntypedef struct {\n    f32 x, y, z;\n} Cam11E98Vec;\n\ntypedef struct {\n    u8 state;          /* 0x00 */\n    u8 pad_1[3];\n    s16 unk_4;         /* 0x04 */\n    s16 unk_6;         /* 0x06 */\n    u8 pad_8[0xA];\n    s16 unk_12;        /* 0x12 */\n    s16 unk_14;        /* 0x14 */\n    u8 pad_16[2];\n    u32 unk_18;        /* 0x18 */\n    Cam11E98Vec pos;   /* 0x1C */\n    u8 pad_28[0x24];\n    Cam11E98Vec unk_4C; /* 0x4C */\n    u8 pad_58[0x24];\n    u8 unk_7C[4];      /* 0x7C */\n} Cam11E98;\n\ntypedef void (*Cam11E98Handler)(Cam11E98 *, void *);\n\nextern u8 fn_1_86624(void);\nextern void fn_1_FCB0(Cam11E98 *);\nextern void fn_1_862D4(int, Cam11E98Vec *);\nextern void fn_1_8636C(int, void *);\nextern void lbl_8006DD14(void *, void *);\nextern void lbl_8006DC6C(void *);\nextern void lbl_8006E1B0(Cam11E98Vec *, Cam11E98Vec *);\nextern u32 lbl_801A63C0;\nextern Cam11E98Vec lbl_1_rodata_63C;\n\nstatic inline f32 fn_1_11E98_dist2(Cam11E98Vec *a, Cam11E98Vec *b) {\n    f32 x = a->x;\n    f32 y = a->y;\n    f32 z = a->z;\n    x -= b->x;\n    y -= b->y;\n    z -= b->z;\n    x *= x;\n    x += y * y;\n    x += z * z;\n    return x;\n}\n\n// Write a translation into the current (locked-cache) matrix.\nstatic inline void fn_1_11E98_set_trans(f32 x, f32 y, f32 z) {\n    *(f32 *)(0xE0000000 + 0x0C) = x;\n    *(f32 *)(0xE0000000 + 0x1C) = y;\n    *(f32 *)(0xE0000000 + 0x2C) = z;\n}\n\n// Pick the camera point nearest to the current target point and aim the camera from it.\n#pragma opt_propagation off\nvoid fn_1_11E98(Cam11E98 *cam) {\n    u8 mtx[0x30];\n    Cam11E98Vec target;\n    Cam11E98Vec point;\n    Cam11E98Vec up;\n    f32 best;\n    f32 dist;\n    f32 dx, dy, dz;\n    u32 i;\n\n    if ((s8)fn_1_86624() == 1) {\n        fn_1_FCB0(cam);\n    }\n    if (cam->state == 5 || cam->state <= 1 || cam->state == 2) {\n        lbl_801A63C0 = lbl_801A63C0 * 0x676A4B6B + 0x33CB;\n        cam->unk_4 = cam->unk_14 = (s32)((lbl_801A63C0 >> 16) & 0x7FFF) % 2;\n    }\n    fn_1_862D4(cam->unk_6, &target);\n    if (cam->unk_6 == (s32)lbl_1_bss_17F8) {\n        lbl_1_bss_17F8 = (s32)(lbl_1_bss_17F8 + 1) % (s8)fn_1_86624();\n    }\n    fn_1_862D4(lbl_1_bss_17F8, &point);\n    best = fn_1_11E98_dist2(&point, &target);\n    for (i = 0; i < (s8)fn_1_86624(); i++) {\n        if (i != cam->unk_6) {\n            fn_1_862D4(i, &point);\n            dist = fn_1_11E98_dist2(&point, &target);\n            if (!(best < dist)) {\n                best = dist;\n                lbl_1_bss_17F8 = i;\n            }\n        }\n    }\n    if (best > 5000.0f) {\n        cam->unk_12 = 0;\n        cam->unk_18 = 1;\n        ((Cam11E98Handler *)lbl_1_data_4440)[cam->unk_12](cam, lbl_1_data_4440);\n        return;\n    }\n    fn_1_8636C(lbl_1_bss_17F8, mtx);\n    lbl_8006DD14(mtx, cam->unk_7C);\n    fn_1_862D4(lbl_1_bss_17F8, &point);\n    lbl_8006DC6C(mtx);\n    {\n        {\n            f32 fzgx_lc0_z;\n            f32 fzgx_lc0_y;\n            f32 fzgx_lc0_x;\n            fzgx_lc0_x = (point.x);\n            fzgx_lc0_y = (point.y);\n            fzgx_lc0_z = (point.z);\n            *(f32 *)(0xE0000000 + 0x0C) = fzgx_lc0_x;\n            *(f32 *)(0xE0000000 + 0x1C) = fzgx_lc0_y;\n            *(f32 *)(0xE0000000 + 0x2C) = fzgx_lc0_z;\n        }\n    }\n    up = lbl_1_rodata_63C;\n    lbl_8006E1B0(&up, &cam->pos);\n    cam->unk_4C = target;\n}\n#pragma opt_propagation reset\n",
+    "compiler": "GC/1.3.2",
+    "flags": "",
+    "source": "rel/main_rel/live_camera/fn_1_11E98.c",
+    "bytes": 660,
+    "headers_sha256": "498cd6d9cda4c0e43009a1e132fc95e479ab76f0887894a440dd0a8ed69bfded",
+    "oracle_sha256": "bd95fa3f971ca64f9e0c49ae4fd3f72f7b41a2a60a9717ae72bac6849fd6ae19",
+    "recipe": [
+      {
+        "label": "locked-cache column copy in reverse-declared temporaries under opt_propagation off (helper/spelling normalised)",
+        "input_sha256": "0345fd3a4067be54f4e1c18f8cee54e0700a9a8fd81a9c2f8e7c81f0626fce31",
+        "output_sha256": "2e08d8da42e39b7be4177eab77603a084e17632eacf8c2a03275489d6a106ad1",
+        "input_symbol": "fn_1_11E98",
+        "output_symbol": "fn_1_11E98",
+        "edits": [
+          [
+            1322,
+            1402,
+            "*(f32 *)(0xE0000000 + 0x0C) = x;\n    *(f32 *)(0xE0000000 + 0x1C) = y;\n    *(f32 *)(0xE0000000 + 0x2C)"
+          ],
+          [
+            1500,
+            1500,
+            "#pragma opt_propagation off\n"
+          ],
+          [
+            2806,
+            2854,
+            "{\n        {\n            f32 fzgx_lc0_z;\n            f32 fzgx_lc0_y;\n            f32 fzgx_lc0_x;\n            fzgx_lc0_x = (point.x);\n            fzgx_lc0_y = (point.y);\n            fzgx_lc0_z = (point.z);\n            *(f32 *)(0xE0000000 + 0x0C) = fzgx_lc0_x;\n            *(f32 *)(0xE0000000 + 0x1C) = fzgx_lc0_y;\n            *(f32 *)(0xE0000000 + 0x2C) = fzgx_lc0_z;\n        }\n    }"
+          ],
+          [
+            2944,
+            2944,
+            "#pragma opt_propagation reset\n"
+          ]
+        ]
+      }
+    ],
+    "link": "pending"
   }
 }
