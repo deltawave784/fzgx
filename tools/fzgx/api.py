@@ -1120,7 +1120,14 @@ def _submit(p: Project, symbol: str, agent: str = "unknown", message: str = "",
         return {"ok": True, "symbol": symbol, "commit": None, "unit": unit_src, "shadow": True, "saved": str(dest),
                 "note": "shadow trial: match recorded, nothing installed, relinked or committed"}
     if reason:
-        return {"ok": False, "error": reason, "percent": res.percent, "diff": res.diff}
+        out = {"ok": False, "error": reason, "percent": res.percent, "diff": res.diff}
+        if row is not None and row["status"] in ("matched", "asm"):
+            # a repeated submit of an installed unit is checked as a carved object (fn_1_EB4BC,
+            # batch 138: the first submit had already accepted and carved it, the second printed
+            # this error); nothing of the installed state was replaced
+            out["note"] = (f"{key} is already {row['status']} (link_state={row['link_state']}); the installed block was not "
+                           f"replaced (a carved pool unit re-checks with its primer counted). Use a revise- agent to replace installed C.")
+        return out
 
     # Accept on the per-object oracle; the batch relink (`fzgx verify`) checks every hash
     # once for all accepted units and bisects the rare object that matches but does not link.

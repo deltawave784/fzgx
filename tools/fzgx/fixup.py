@@ -360,7 +360,14 @@ class Engine:
                           and not (0 < s['shndx'] < len(elf.sections) and elf.sections[s['shndx']]['name'] == '.fzgxpool')]
                 if extras:
                     row.update(matched=False, object_matched=True, extra_helpers=extras)
+            pool_only = False
             if row.get('matched') and row.get('object'):
+                check = self.check(row)
+                # a pool match keeps linking the retail object (`link_state=pool`): the unit's own
+                # .bss definitions (section-layout fillers such as fn_1_EB4BC's 7B188[0x24]) never
+                # reach the link, so they cannot duplicate a symbol. Only exact units link ours.
+                pool_only = bool(check.ok and check.matched_pool and not check.matched)
+            if row.get('matched') and row.get('object') and not pool_only:
                 from .poolfix import Elf
                 from .carve import exclusive_data
                 elf = Elf(Path(row['object']).read_bytes())
