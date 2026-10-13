@@ -7313,3 +7313,6 @@ rel/main_rel/sel_static_disp/fn_1_14B1FC.c:
 
 rel/main_rel/sound/fn_1_A2A70.c:
 	.text       start:0x000A2A70 end:0x000A2D84 align:4
+
+rel/main_rel/stcoli/fn_1_294D0.c:
+	.text       start:0x000294D0 end:0x00029800 align:4

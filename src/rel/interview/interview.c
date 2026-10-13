@@ -228,6 +228,234 @@ void fn_17_3F0(void) {
 }
 /* fzgx:end fn_17_3F0 */
 
+/* fzgx:begin fn_17_6C8 pool */
+typedef struct Vec3f {
+    f32 x;
+    f32 y;
+    f32 z;
+} Vec3f;
+
+typedef struct CamParams {
+    u32 unk_0;
+    Vec3f eye;
+    Vec3f target;
+    f32 unk_1C;
+    s16 unk_20;
+    u8 pad_22[2];
+} CamParams;
+
+typedef struct CamState {
+    u32 unk_0;
+    Vec3f eye;
+    Vec3f target;
+    f32 unk_1C;
+    s16 unk_20;
+    u8 pad_22[2];
+} CamState;
+
+typedef struct IvCam {
+    f32 unk_0;
+    u8 pad_4[0x1C];
+    s16 unk_20;
+    u8 pad_22[2];
+    s16 unk_24;
+    u8 pad_26[2];
+    Vec3f eye;
+    Vec3f target;
+    s16 unk_40;
+    u8 pad_42[2];
+} IvCam;
+
+typedef struct IvEntry {
+    u8 pad_0[0x18];
+    IvCam cam;
+    u8 pad_5C[0x18];
+} IvEntry;
+
+typedef struct IvActor {
+    u8 pad_0[0xA8];
+    f32 unk_A8;
+    f32 unk_AC;
+    f32 unk_B0;
+} IvActor;
+
+typedef struct IvPair {
+    u32 unk_0;
+    IvActor *unk_4;
+    u8 pad_8[0x18];
+} IvPair;
+
+typedef struct IvInfo {
+    u8 pad_0[0x190];
+    u8 unk_190;
+} IvInfo;
+
+typedef struct IvData63BD0 {
+    u8 pad_0[0xB0];
+    CamParams cam;
+} IvData63BD0;
+
+typedef struct IvData63D20 {
+    u8 pad_0[0x80];
+    CamParams cam;
+} IvData63D20;
+
+typedef struct IvData63058 {
+    u8 pad_0[0x10];
+    u32 unk_10;
+    u8 pad_14[0x1C];
+    u32 unk_30;
+} IvData63058;
+
+typedef struct IvSound {
+    u32 first;
+    u32 second;
+} IvSound;
+
+typedef struct IvBss5138 {
+    u8 pad[0xE2];
+    u8 unk_E2;
+} IvBss5138;
+
+extern IvData63BD0 lbl_17_data_63BD0;
+extern IvData63D20 lbl_17_data_63D20;
+extern IvData63058 lbl_17_data_63058;
+extern IvSound *lbl_1_bss_6EAD0;
+extern u32 lbl_1_bss_6EAB4;
+extern IvBss5138 lbl_1_bss_5138;
+extern u16 lbl_1_bss_968;
+extern u16 lbl_1_bss_96A;
+
+extern void fn_17_71C0(IvEntry *);
+extern void fn_17_3F0(void);
+extern void fn_1_9724C(u32);
+extern CamState *camera_get_state_object(void);
+extern void fn_8004BF0C(u32, s16);
+extern void fn_1_4A00(s32, u8, void *);
+
+/* interview.c file-scope objects, in retail order: MWCC addresses them off one section base. */
+u8 lbl_17_bss_0;
+u8 lbl_17_bss_1;
+u8 lbl_17_bss_2;
+u8 lbl_17_bss_3;
+u32 lbl_17_bss_4;
+u32 lbl_17_bss_8;
+u32 lbl_17_bss_C;
+IvInfo *lbl_17_bss_10;
+u32 lbl_17_bss_14;
+u32 lbl_17_bss_18;
+u32 lbl_17_bss_1C;
+u32 lbl_17_bss_20;
+u32 lbl_17_bss_24[4];
+u32 lbl_17_bss_34[8];
+s32 lbl_17_bss_54;
+u32 lbl_17_bss_58;
+u16 lbl_17_bss_5C;
+IvEntry lbl_17_bss_60;
+s16 lbl_17_bss_D4;
+s16 lbl_17_bss_D6;
+IvPair lbl_17_bss_D8;
+u8 lbl_17_bss_F8;
+
+#pragma section code_type ".fzgxpool"
+static void fzgx_bss_layout(void) {
+    volatile u32 s;  /* fzgx-allow: S2 layout primer sink: MWCC emits .bss objects in first-access order */
+    s = lbl_17_bss_0;
+    s = lbl_17_bss_1;
+    s = lbl_17_bss_2;
+    s = lbl_17_bss_3;
+    s = lbl_17_bss_4;
+    s = lbl_17_bss_8;
+    s = lbl_17_bss_C;
+    s = (u32)lbl_17_bss_10;
+    s = lbl_17_bss_14;
+    s = lbl_17_bss_18;
+    s = lbl_17_bss_1C;
+    s = lbl_17_bss_20;
+    s = lbl_17_bss_24[0];
+    s = lbl_17_bss_34[0];
+    s = lbl_17_bss_54;
+    s = lbl_17_bss_58;
+    s = lbl_17_bss_5C;
+    s = lbl_17_bss_60.cam.unk_40;
+    s = lbl_17_bss_D4;
+    s = lbl_17_bss_D6;
+    s = lbl_17_bss_D8.unk_0;
+    s = lbl_17_bss_F8;
+}
+#pragma section code_type ".text"
+
+void fn_17_6C8(void) {
+    CamParams params;
+    CamState *cam;
+    IvCam *sub;
+    IvActor *actor;
+    u32 flags;
+    u16 state;
+
+    flags = lbl_17_bss_58;
+    if (flags & 0x200000) {
+        lbl_1_bss_968 = 10;
+        return;
+    }
+    if ((flags & 1) && ((state = lbl_17_bss_5C) < 4 || (state > 5 && state < 12))) {
+        if (state < 4) {
+            params = lbl_17_data_63BD0.cam;
+            lbl_17_bss_5C = 4;
+            lbl_17_bss_1C = lbl_17_data_63058.unk_10;
+            sub = &lbl_17_bss_60.cam;
+            sub->unk_40 = 2;
+            lbl_17_bss_D4 = -95;
+            lbl_17_bss_D6 = -20;
+            fn_1_9724C(lbl_17_bss_D8.unk_0);
+            fn_1_9724C((u32)lbl_17_bss_D8.unk_4);
+        } else {
+            params = lbl_17_data_63D20.cam;
+            sub = &lbl_17_bss_60.cam;
+            sub->unk_20 = params.unk_20;
+            lbl_17_bss_5C = 12;
+            lbl_17_bss_20 = lbl_17_data_63058.unk_30;
+            sub->unk_40 = 1;
+            sub->unk_24 = 0;
+            sub->eye = params.eye;
+            sub->target = params.target;
+            sub->unk_0 = params.unk_1C;
+            sub->unk_20 = params.unk_20;
+            lbl_17_bss_D4 = -999;
+            lbl_17_bss_D6 = -999;
+            fn_17_71C0(&lbl_17_bss_60);
+            fn_1_9724C(lbl_17_bss_D8.unk_0);
+            fn_1_9724C((u32)lbl_17_bss_D8.unk_4);
+        }
+        cam = camera_get_state_object();
+        cam->eye = params.eye;
+        cam->target = params.target;
+        cam->unk_20 = params.unk_20;
+        cam->unk_1C = params.unk_1C;
+        if ((lbl_17_bss_58 & 1) && lbl_17_bss_5C < 5 && sub->unk_40 >= 2) {
+            actor = lbl_17_bss_D8.unk_4;
+            cam->eye.x = actor->unk_A8;
+            cam->eye.z = actor->unk_B0 - 1.0f;
+            cam->target.x = actor->unk_A8;
+        }
+        lbl_1_bss_6EAB4 &= ~0x2C;
+        fn_8004BF0C(lbl_1_bss_6EAD0->first, lbl_17_bss_D4);
+        fn_8004BF0C(lbl_1_bss_6EAD0->second, lbl_17_bss_D6);
+        fn_1_4A00(1, 30, (void *)lbl_17_bss_18);
+        return;
+    }
+    if (!(flags & 0x20000000)) {
+        if (lbl_17_bss_F8 == 3) {
+            fn_17_3F0();
+        } else if ((s32)lbl_1_bss_5138.unk_E2 == 0) {
+            lbl_1_bss_968 = lbl_17_bss_10->unk_190;
+        }
+    } else {
+        lbl_1_bss_96A = 0xC5;
+    }
+}
+/* fzgx:end fn_17_6C8 */
+
 /* fzgx:begin fn_17_9F8 */
 #include "sofdec/adxt.h"
 #include "rel/interview/interview.h"
