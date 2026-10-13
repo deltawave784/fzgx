@@ -4751,6 +4751,229 @@ void fn_1_620C8(Fn620C8Obj *obj) {
 }
 /* fzgx:end fn_1_620C8 */
 
+/* fzgx:begin fn_1_62794 noprologue */
+#include "types.h"
+
+typedef struct GXTexObj {
+    u32 dummy[8];
+} GXTexObj;
+
+/* Shared literal pool primer: lays out lbl_1_rodata_2950 in retail order so the
+   function's own literals dedupe onto retail's offsets (0x50, 0x54, 0x1ac). */
+#pragma section code_type ".fzgxpool"
+__declspec(section ".fzgxpool") static void fzgx_pool_prime1(void) {
+    volatile f32 s; volatile f64 d;  /* fzgx-allow: S2 pool primer sinks */
+    s = 60.0f;
+    s = 0.10000000149011612f;
+    s = 32767.0f;
+    s = 0.05000000074505806f;
+    d = 0.07;
+    s = 20000.0f;
+}
+static const u32 fzgx_pool_table2[1] = {0x00000000};  /* fzgx-allow: A1 retail pool bytes */
+__declspec(section ".fzgxpool") static void fzgx_pool_keep2(void) { const u32 *volatile cp; cp = fzgx_pool_table2; }  /* fzgx-allow: S2 pool primer sink */
+__declspec(section ".fzgxpool") static void fzgx_pool_prime3(void) {
+    volatile f32 s; volatile f64 d;  /* fzgx-allow: S2 pool primer sinks */
+    d = 4503599627370496.0;
+    s = 1.0f;
+    s = -0.029999999329447746f;
+    d = 15.0;
+    d = 4503601774854144.0;
+    d = 1.5;
+    d = 0.5;
+    s = 0.0f;
+    s = 0.5f;
+    s = 8.0f;
+    s = 255.0f;
+    s = 15.0f;
+    s = 0.20000000298023224f;
+    s = 0.07999999821186066f;
+    s = 0.25f;
+    s = 0.9800000190734863f;
+    s = 0.9900000095367432f;
+    s = 40.0f;
+    s = 20.0f;
+    s = 1.5f;
+    s = 0.44999998807907104f;
+    s = -2.0f;
+    s = 0.0833333358168602f;
+    s = 0.15000000596046448f;
+    s = 0.125f;
+    s = -0.4000000059604645f;
+    s = -0.30000001192092896f;
+    s = 2.0f;
+    s = 250.0f;
+    d = 0.6;
+    d = 0.4;
+    s = 0.30000001192092896f;
+    s = -0.004000000189989805f;
+    s = 0.01666666753590107f;
+    s = 65536.0f;
+    s = 4096.0f;
+    s = 0.9599999785423279f;
+    s = 0.4000000059604645f;
+    s = 0.05050000175833702f;
+    s = 0.050999999046325684f;
+    s = 0.949999988079071f;
+    s = 0.8999999761581421f;
+}
+static const u32 fzgx_pool_table4[1] = {0x00000000};  /* fzgx-allow: A1 retail pool bytes */
+__declspec(section ".fzgxpool") static void fzgx_pool_keep4(void) { const u32 *volatile cp; cp = fzgx_pool_table4; }  /* fzgx-allow: S2 pool primer sink */
+__declspec(section ".fzgxpool") static void fzgx_pool_prime5(void) {
+    volatile f32 s; volatile f64 d;  /* fzgx-allow: S2 pool primer sinks */
+    d = 150.0;
+    d = 10.0;
+    d = 3.0;
+}
+static const u32 fzgx_pool_table6[3] = {0x00000000, 0x3DCCCCCD, 0xC019999A};  /* fzgx-allow: A1 retail pool bytes */
+__declspec(section ".fzgxpool") static void fzgx_pool_keep6(void) { const u32 *volatile cp; cp = fzgx_pool_table6; }  /* fzgx-allow: S2 pool primer sink */
+__declspec(section ".fzgxpool") static void fzgx_pool_prime7(void) {
+    volatile f32 s; volatile f64 d;  /* fzgx-allow: S2 pool primer sinks */
+    s = 5.0f;
+    d = 1.2;
+    d = 0.1;
+    s = 10.0f;
+    s = 18.0f;
+    d = 0.7;
+    d = 50.0;
+}
+static const u32 fzgx_pool_table8[3] = {0x00000000, 0x3DCCCCCD, 0xC019999A};  /* fzgx-allow: A1 retail pool bytes */
+__declspec(section ".fzgxpool") static void fzgx_pool_keep8(void) { const u32 *volatile cp; cp = fzgx_pool_table8; }  /* fzgx-allow: S2 pool primer sink */
+__declspec(section ".fzgxpool") static void fzgx_pool_prime9(void) {
+    volatile f32 s; volatile f64 d;  /* fzgx-allow: S2 pool primer sinks */
+    s = 19.0f;
+    d = 24.0;
+    s = 0.7071067690849304f;
+}
+static const u32 fzgx_pool_table10[1] = {0x00000000};  /* fzgx-allow: A1 retail pool bytes */
+__declspec(section ".fzgxpool") static void fzgx_pool_keep10(void) { const u32 *volatile cp; cp = fzgx_pool_table10; }  /* fzgx-allow: S2 pool primer sink */
+__declspec(section ".fzgxpool") static void fzgx_pool_prime11(void) {
+    volatile f32 s; volatile f64 d;  /* fzgx-allow: S2 pool primer sinks */
+    d = 0.0;
+    d = 255.0;
+    d = 0.9;
+    s = 0.004000000189989805f;
+    s = 0.0010000000474974513f;
+    s = 0.009999999776482582f;
+    s = -1.1920928955078125e-07f;
+    s = 240.0f;
+    s = 100.0f;
+    s = 300.0f;
+    s = 200.0f;
+    s = 10000.0f;
+    s = 5000.0f;
+    s = 204.0f;
+    s = 85.0f;
+    s = -0.05000000074505806f;
+    s = 4.0f;
+    s = -0.05999999865889549f;
+    s = -0.5f;
+}
+#pragma section code_type ".text"
+
+extern void *lbl_801A63D0;
+extern f32 *lbl_801A6D00;
+
+extern void fn_80038F10(f32 *);
+extern void fn_80074300(u16, u16, u16, u16);
+extern void fn_80074438(u16, u16, u32, u32);
+extern void fn_8003526C(void *, u8);
+extern void GXInitTexObj(GXTexObj *, void *, u16, u16, s32, s32, s32, u8);
+extern void fn_80072864(u32);
+extern void fn_80038BFC(f32 *);
+extern void lbl_8006DAEC(void);
+extern void lbl_8006D758(void);
+extern void lbl_8006DB74(void *);
+extern void lbl_8006DB30(void);
+extern void lbl_8006DFD8(void *);
+extern void GXLoadTexMtxImm(f32 *, u32, u32);
+extern void fn_80073A58(int, void *, s8);
+extern void fn_80074788(u32);
+extern void fn_800747D0(u32, u32, s32, s32, u32, s32, s32);
+extern void fn_80073778(void *, s32);
+extern void fn_800745A4(u32, s32, s32, u32, u32, u32);
+extern void fn_800734A8(u32, s32, s32, s32);
+extern void fn_80072AB0(s32, s32, s32);
+extern void fn_80072C24(s32, s32, s32, s32, s32);
+extern void fn_80072D64(s32, s32, s32, s32, u8, s32);
+extern void fn_80072CC4(s32, s32, s32, s32, s32);
+extern void fn_80072E20(s32, s32, s32, s32, u8, s32);
+extern void fn_80074918(u8, s32, u8);
+extern void fn_800720B0(u32);
+extern void fn_800728A8(s32, s32, s32, s32);
+extern void fn_800738E0(s32, s32, s32);
+extern void fn_80073B50(u32, s32, s32, s32, s32, s32, s32, u8, u8, s32);
+extern void fn_80073678(u32);
+extern void fn_80074660(u32);
+extern void fn_80073898(u32);
+
+void fn_1_62794(void *tex) {
+    s32 halfW;
+    s32 halfH;
+    void *image;
+    s32 w;
+    s32 h;
+    u8 mtx[0x34];
+    GXTexObj texObj;
+    f32 viewport[6];
+    f32 proj[7];
+    f32 ind[6];
+
+    image = lbl_801A63D0;
+    fn_80038F10(viewport);
+    w = (s32)viewport[2];
+    halfW = w >> 1;
+    h = (s32)viewport[3];
+    halfH = h >> 1;
+    fn_80074300((s32)viewport[0], (s32)viewport[1], w, h);
+    fn_80074438(halfW, halfH, 4, 1);
+    fn_8003526C(image, 0);
+    GXInitTexObj(&texObj, image, halfW, halfH, 4, 0, 0, 0);
+    fn_80072864(0);
+    fn_80038BFC(proj);
+    lbl_8006DAEC();
+    lbl_8006DAEC();
+    lbl_8006D758();
+    lbl_801A6D00[0] = -0.5f * proj[1];
+    lbl_801A6D00[2] = 0.5f + (f32)(0.5f * proj[2]);
+    lbl_801A6D00[5] = 0.5f * proj[3];
+    lbl_801A6D00[6] = 0.5f + (f32)(0.5f * proj[4]);
+    lbl_8006DB74(mtx);
+    lbl_8006DB30();
+    lbl_8006DFD8(mtx);
+    GXLoadTexMtxImm(lbl_801A6D00, 30, 0);
+    lbl_8006DB30();
+    ind[0] = 0.0f;
+    ind[1] = 0.5f;
+    ind[2] = 0.0f;
+    ind[3] = 0.5f;
+    ind[4] = 0.0f;
+    ind[5] = 0.0f;
+    fn_80073A58(1, ind, 0);
+    fn_80074788(1);
+    fn_800747D0(0, 0, 0, 0, 0, 0, 2);
+    fn_800747D0(2, 0, 0, 1, 0, 0, 2);
+    fn_80073778(&texObj, 0);
+    fn_80073778(tex, 1);
+    fn_800745A4(0, 0, 0, 30, 0, 125);
+    fn_800734A8(0, 0, 0, 4);
+    fn_80072AB0(0, 0, 0);
+    fn_80072C24(0, 15, 15, 15, 8);
+    fn_80072D64(0, 0, 0, 0, 1, 0);
+    fn_80072CC4(0, 7, 7, 7, 5);
+    fn_80072E20(0, 0, 0, 0, 1, 0);
+    fn_80074918(1, 7, 0);
+    fn_800720B0(0);
+    fn_800728A8(1, 4, 1, 0);
+    fn_800745A4(1, 0, 0, 30, 0, 125);
+    fn_800738E0(0, 1, 1);
+    fn_80073B50(0, 0, 0, 0, 1, 0, 0, 0, 0, 0);
+    fn_80073678(1);
+    fn_80074660(2);
+    fn_80073898(1);
+}
+/* fzgx:end fn_1_62794 */
+
 /* fzgx:begin fn_1_62AF8 */
 #pragma section code_type ".fzgxpool"
 __declspec(section ".fzgxpool") static void fzgx_pool_prime1(void) {
