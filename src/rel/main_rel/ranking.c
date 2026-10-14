@@ -1556,6 +1556,153 @@ int fn_1_159064(void) {
 }
 /* fzgx:end fn_1_159064 */
 
+/* fzgx:begin fn_1_15906C pool */
+typedef struct {
+    f32 x, y, z;
+} RankVec;
+
+typedef struct {
+    u8 pad_0[0xC];
+    RankVec pos;
+    u8 pad_18[0x24];
+    u32 unk_3C;
+} RankItem;
+
+typedef struct {
+    s32 state;
+    s32 timer;
+    RankVec vel;
+    u8 pad_14[0xC];
+    RankVec pos;
+    s32 gx;
+    s32 gy;
+    s32 gz;
+    RankItem *item;
+} RankEntry;
+
+typedef struct {
+    s32 count;
+    s32 unk_4;
+    s32 unk_8;
+    s32 grid[20][20][40];
+    RankEntry entries[1];
+} RankMgr;
+
+extern u32 lbl_801A63C0;
+
+typedef struct {
+    u32 a[22];
+} fzgx_PoolTable;
+
+/* Primes the TU literal pool with the constants earlier functions placed
+ * before this function's own (lbl_1_rodata_D958 + 0x0 .. 0x78). */
+#pragma section code_type ".fzgxpool"
+__declspec(section ".fzgxpool") static void fzgx_pool_prime0(void) {
+    volatile f32 s; /* fzgx-allow: S2 pool primer sinks */
+    volatile s32 i; /* fzgx-allow: S2 pool primer sinks */
+
+    s = 10.0f;
+    s = 100.0f;
+    s = 20.0f;
+    s = 1000.0f;
+    s = 2000.0f;
+    s = (f32)i;
+}
+
+__declspec(section ".fzgxpool") static void fzgx_pool_prime1(void) {
+    volatile fzgx_PoolTable t; /* fzgx-allow: S2 pool primer sinks */
+    fzgx_PoolTable init = {
+        0, 0, 0, 0, 0, 0, 0x64646400, 0x47800000, 0x43960000, 0x44160000, 0x44610000,
+        0x43800000, 0x44400000, 0x44A00000, 0x3F847AE1, 0x47AE147B,
+        0x44480000, 0x43FA0000, 0x471C4000, 0, 0x43300000, 0,
+    };
+
+    t = init;
+}
+#pragma section code_type ".text"
+
+static inline s32 rank_rand(void) {
+    lbl_801A63C0 = lbl_801A63C0 * 0x676A4B6B + 0x33CB;
+    return (lbl_801A63C0 >> 16) & 0x7FFF;
+}
+
+/* Lives in .rodata next to the literals but is not const-qualified, so its
+ * loads stay ordered after the preceding stores (retail's schedule). */
+__declspec(section ".rodata") static RankVec origin = {0.0f, 0.0f, 0.0f};
+
+#define CLAMP(v, lo, hi) ((v) < (lo) ? (lo) : ((v) > (hi) ? (hi) : (v)))
+
+int fn_1_15906C(s32 arg0, RankItem *item) {
+    RankMgr *mgr = (RankMgr *)lbl_1_data_2A7E0.unk_3C;
+    RankEntry *e;
+    RankItem *it;
+    f64 jitter;
+    f32 speed;
+    s32 gx;
+    s32 gy;
+    s32 gz;
+
+    switch (arg0) {
+    case 0:
+        if (item != NULL) {
+            item->unk_3C = 0;
+            e = &mgr->entries[mgr->count];
+            e->item = item;
+            e->pos = origin;
+            if (mgr->count < 50) {
+                e->state = 1;
+                e->timer = 60;
+            } else {
+                e->state = 0;
+            }
+            jitter = 0.2 * ((f32)rank_rand() / 32767.0f);
+            speed = 10.0 * (0.8 + jitter);
+            switch (rank_rand() % 3) {
+            case 0: {
+                RankVec v = {0.0f, 0.0f, 0.0f};
+                v.x = speed;
+                e->vel = v;
+                break;
+            }
+            case 1: {
+                RankVec v = {0.0f, 0.0f, 0.0f};
+                v.y = speed;
+                e->vel = v;
+                break;
+            }
+            case 2: {
+                RankVec v = {0.0f, 0.0f, 0.0f};
+                v.z = speed;
+                e->vel = v;
+                break;
+            }
+            }
+            if (rank_rand() % 2) {
+                e->vel.x *= -1.0f;
+                e->vel.y *= -1.0f;
+                e->vel.z *= -1.0f;
+            }
+            it = e->item;
+            e->gx = CLAMP((s32)(it->pos.x / 100.0f + 10.0f), 0, 19);
+            e->gy = CLAMP((s32)(it->pos.y / 100.0f + 10.0f), 0, 19);
+            e->gz = CLAMP((s32)(it->pos.z / 100.0f + 20.0f), 0, 39);
+            gx = e->gx;
+            gy = e->gy;
+            gz = e->gz;
+            it = e->item;
+            it->pos.x = (f32)(100.0f * gx) - 1000.0f;
+            it->pos.y = (f32)(100.0f * gy) - 1000.0f;
+            it->pos.z = (f32)(100.0f * gz) - 2000.0f;
+            mgr->grid[e->gx][e->gy][e->gz] = 1;
+            mgr->count++;
+            mgr->unk_8 = 50;
+        }
+        break;
+    }
+    return 1;
+}
+/* fzgx:end fn_1_15906C */
+
 /* fzgx:begin fn_1_159440 */
 typedef struct {
     u8 pad_0[0x30];

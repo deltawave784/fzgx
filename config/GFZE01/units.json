@@ -44332,6 +44332,18 @@
   },
   {
     "module": "main_rel",
+    "source": "rel/main_rel/game/fn_1_31C3C.c",
+    "symbols": [
+      "fn_1_31C3C"
+    ],
+    "status": "nonmatching",
+    "mw_version": "GC/1.3.2",
+    "extra_cflags": [],
+    "tu": "rel/main_rel/game.c",
+    "pool": true
+  },
+  {
+    "module": "main_rel",
     "source": "rel/main_rel/game/fn_1_32600.c",
     "symbols": [
       "fn_1_32600"
@@ -50175,6 +50187,21 @@
   },
   {
     "module": "main_rel",
+    "source": "rel/main_rel/ptclput/fn_1_9FA18.c",
+    "symbols": [
+      "fn_1_9FA18"
+    ],
+    "status": "matching",
+    "mw_version": "GC/1.3.2",
+    "extra_cflags": [],
+    "tu": "rel/main_rel/ptclput.c",
+    "pool": {
+      "@57": "lbl_1_rodata_42D8",
+      "@58": "lbl_1_rodata_42DC"
+    }
+  },
+  {
+    "module": "main_rel",
     "source": "rel/main_rel/ptclput/fn_1_A0D7C.c",
     "symbols": [
       "fn_1_A0D7C"
@@ -50872,6 +50899,18 @@
     "mw_version": null,
     "extra_cflags": [],
     "tu": "rel/main_rel/ranking.c"
+  },
+  {
+    "module": "main_rel",
+    "source": "rel/main_rel/ranking/fn_1_15906C.c",
+    "symbols": [
+      "fn_1_15906C"
+    ],
+    "status": "nonmatching",
+    "mw_version": "GC/1.3.2",
+    "extra_cflags": [],
+    "tu": "rel/main_rel/ranking.c",
+    "pool": true
   },
   {
     "module": "main_rel",
