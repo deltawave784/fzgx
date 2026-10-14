@@ -1,4 +1,7 @@
 #include "types.h"
+#include "sofdec/adxt.h"
+
+extern void ADXT_Stop(ADXTHandle *handle);
 
 /* fzgx:begin _epilog */
 #include "rel/sel/sel.h"

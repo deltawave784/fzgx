@@ -42,26 +42,26 @@ typedef struct {
 #endif
 extern Obj_10_bss_55CD8_Target *lbl_10_bss_55CD8;  // typedefs.json decl override
 
-// lbl_10_bss_55CE2: .bss size 0x1, 3 refs from name_entry.c
-extern u8 lbl_10_bss_55CE2;
-
 // lbl_10_bss_55CE1: .bss size 0x1, 3 refs from name_entry.c
 extern u8 lbl_10_bss_55CE1;
 
+// lbl_10_bss_55CE2: .bss size 0x1, 3 refs from name_entry.c
+extern u8 lbl_10_bss_55CE2;
+
 // lbl_10_bss_55CE0: .bss size 0x1, 2 refs from name_entry.c
 extern u8 lbl_10_bss_55CE0;
-
-// lbl_10_data_6A48: .data size 0x20, 1 refs from name_entry.c (own data block)
-extern u8 lbl_10_data_6A48[0x20];
-
-// lbl_10_data_6980: .data size 0x40, 1 refs from name_entry.c (own data block)
-extern u8 lbl_10_data_6980[0x40];
 
 // lbl_10_data_69C0: .data size 0x18, 1 refs from name_entry.c (own data block)
 extern u8 lbl_10_data_69C0[0x18];
 
 // lbl_10_data_69D8: .data size 0x70, 1 refs from name_entry.c (own data block)
 extern u8 lbl_10_data_69D8[0x70];
+
+// lbl_10_data_6980: .data size 0x40, 1 refs from name_entry.c (own data block)
+extern u8 lbl_10_data_6980[0x40];
+
+// lbl_10_data_6A48: .data size 0x20, 1 refs from name_entry.c (own data block)
+extern u8 lbl_10_data_6A48[0x20];
 
 // lbl_10_data_6B2C: .data size 0x18, 1 refs from name_entry.c (own data block)
 extern u8 lbl_10_data_6B2C[0x18];

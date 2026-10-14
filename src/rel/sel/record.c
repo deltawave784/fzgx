@@ -10,6 +10,7 @@ extern void fn_80008BA8(u32 arg0, u32 arg1, u32 arg2);
 extern void OSPanic(const char *file, int line, const char *msg, ...);
 extern void fn_1_B7CE4(int, void *);
 extern void fn_1_AA6D8(int, int, void *);
+extern void *memset(void *, int, u32);
 extern u8 lbl_1_bss_7F0C0[];
 extern u32 lbl_1_bss_718C0;
 extern u8 lbl_1_bss_8B3A0[];

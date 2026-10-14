@@ -35,5 +35,8 @@
    "} Obj_10_bss_55CD8_Target;",
    "#endif"
   ]
+ },
+ "lbl_10_bss_5565C": {
+  "decl": "u32 lbl_10_bss_5565C[2]"
  }
 }
