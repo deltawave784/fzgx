@@ -7436,3 +7436,6 @@ rel/main_rel/font/fn_1_53FE4.c:
 
 rel/main_rel/bg_san/fn_1_DB53C.c:
 	.text       start:0x000DB53C end:0x000DB9B0 align:4
+
+rel/main_rel/effect_car/fn_1_71024.c:
+	.text       start:0x00071024 end:0x000714A8 align:4
