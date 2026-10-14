@@ -515,6 +515,202 @@ void fn_1_DD4DC(DDObj *obj) {
 }
 /* fzgx:end fn_1_DD4DC */
 
+/* fzgx:begin fn_1_DE9C4 pool noprologue */
+#include "types.h"
+#include "psvec.h"
+
+typedef struct {
+    s32 type;
+    f32 time;
+    f32 value;
+    f32 tanIn;
+    f32 tanOut;
+} Sig_fn_1_9DDA8_fn_1_9DDA8_CurveKey;
+
+typedef struct Sig_fn_8006F6A8_Fn8006F6A8 {
+    s16 angle_y;
+    s16 angle_x;
+    s16 angle_z;
+} Sig_fn_8006F6A8_Fn8006F6A8;
+
+typedef struct {
+    u32 count;
+    Sig_fn_1_9DDA8_fn_1_9DDA8_CurveKey *keys;
+} fn_1_DE9C4_Curve;
+
+typedef struct {
+    u8 pad_0[0x7C];
+    f32 x;
+    f32 y;
+    f32 z;
+} fn_1_DE9C4_Target;
+
+typedef struct {
+    u8 pad_0[0xA];
+    s16 unk_A;
+    u8 pad_C[0x54 - 0xC];
+    f32 pos[3];
+    u8 pad_60[0x78 - 0x60];
+    f32 rot[3];
+    u8 pad_84[0xF4 - 0x84];
+    f32 unk_F4;
+    u8 pad_F8[0x138 - 0xF8];
+    u64 flags;
+    u8 pad_140[0x15C - 0x140];
+    s32 frame;
+    fn_1_DE9C4_Curve *curves;
+    u32 unk_164;
+    f32 *baseRot;
+    u32 unk_16C;
+} fn_1_DE9C4_Obj;
+
+extern f32 fn_1_9E14C(u32, Sig_fn_1_9DDA8_fn_1_9DDA8_CurveKey *, f32);
+extern f32 fn_1_9E194(u32, Sig_fn_1_9DDA8_fn_1_9DDA8_CurveKey *, f32);
+extern s16 lbl_1_bss_960;
+extern u32 fn_1_A5594(u32, u32);
+extern u32 mathutil_mtxA_rotate_x(u32);
+extern u32 mathutil_mtxA_rotate_y(u32);
+extern u32 mathutil_mtxA_rotate_z(u32);
+extern void *fn_1_86254(int);
+extern void fn_8006F6A8(Sig_fn_8006F6A8_Fn8006F6A8 *);
+extern void lbl_8006D7DC(u32);
+extern void lbl_8006DAEC(void);
+extern void lbl_8006DB30(void);
+extern void lbl_8006E0B4(f32, f32, f32);
+
+/*
+ * The literal pool lbl_1_rodata_6780 is shared by the whole retail TU; the
+ * tables and primers below lay it out so this function's literals land on
+ * retail's offsets.
+ */
+extern void fzgx_pool_sink(const void *, f32);
+
+#pragma section RX ".fzgxpool"
+
+static const u32 pool_6780[8] = {
+    0xBF800000, 0x3F7FFFFE, 0x3F800001, 0xBF800001, 0xBF7FFFFE,
+    0x00000000, 0x3E800000, 0x00000000,
+};
+__declspec(section ".fzgxpool") void fzgx_pool_primer0(void) {
+    fzgx_pool_sink(pool_6780, 0.0f);
+    fzgx_pool_sink(pool_6780, 5.0f);
+    fzgx_pool_sink(pool_6780, 1.0f);
+}
+static const u32 pool_67AC[2] = { 0x00FF00FF, 0x3DCCCCCD };
+__declspec(section ".fzgxpool") void fzgx_pool_primer1(void) {
+    fzgx_pool_sink(pool_67AC, 0.5f);
+    fzgx_pool_sink(pool_67AC, 10.0f);
+    fzgx_pool_sink(pool_67AC, 182.04445f);
+}
+static const f32 pool_67C0[12] = {
+    176.0f, 0.0f, -0.0027222224f, 0.0f,
+    1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
+    1.0f, 0.0f, 0.0f,
+};
+__declspec(section ".fzgxpool") void fzgx_pool_primer2(void) {
+    fzgx_pool_sink(pool_67C0, 9.58738e-05f);
+}
+static const f32 pool_67F4[3] = {
+    1.5f, -0.00000011920929f, 0.00000011920929f,
+};
+__declspec(section ".fzgxpool") void fzgx_pool_primer3(s16 x) {
+    fzgx_pool_sink(pool_67F4, (f32)x);
+}
+__declspec(section ".fzgxpool") void fzgx_pool_primer5(void) {
+    fzgx_pool_sink(pool_67F4, 60.0f);
+    fzgx_pool_sink(pool_67F4, 1000000.0f);
+    fzgx_pool_sink(pool_67F4, 250000.0f);
+    fzgx_pool_sink(pool_67F4, 20.0f);
+}
+static const f32 pool_6818[27] = {
+    0.0f,
+    1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
+    -0.01f, 0.01f, -1.01f, 0.0001f, 0.0f,
+    1.0f, 0.0f, 0.99f, 2.0f, -0.0f,
+    3.671875f, 0.0f, 2.142699f, 36893490000000000000.0f, 2.25f,
+    0.0f, 3.21875f, 0.0f, 1.01f, 0.05f,
+    1.001f,
+};
+__declspec(section ".fzgxpool") void fzgx_pool_primer4(void) {
+    fzgx_pool_sink(pool_6818, 0.9f);
+    fzgx_pool_sink(pool_6818, 3.0f);
+}
+
+#pragma section RX ".text"
+
+void fn_1_DE9C4(fn_1_DE9C4_Obj *obj) {
+    fn_1_DE9C4_Curve *curves;
+    f32 t;
+    f32 z;
+    f32 y;
+    s32 frame;
+    Sig_fn_8006F6A8_Fn8006F6A8 angles;
+
+    t = obj->frame / 60.0f;
+    curves = obj->curves;
+    if (obj->frame < 0) {
+        t = 0.0f;
+    }
+    lbl_8006DAEC();
+    lbl_8006D7DC(obj->unk_16C);
+    mathutil_mtxA_rotate_z((s32)(182.04445f * obj->baseRot[2]));
+    mathutil_mtxA_rotate_y((s32)(182.04445f * obj->baseRot[1]));
+    mathutil_mtxA_rotate_x((s32)(182.04445f * obj->baseRot[0]));
+    lbl_8006E0B4(fn_1_9E14C(curves[3].count, curves[3].keys, t),
+                 fn_1_9E14C(curves[4].count, curves[4].keys, t),
+                 fn_1_9E14C(curves[5].count, curves[5].keys, t));
+    mathutil_mtxA_rotate_z((s32)(182.04445f * fn_1_9E14C(curves[2].count, curves[2].keys, t)));
+    mathutil_mtxA_rotate_y((s32)(182.04445f * fn_1_9E14C(curves[1].count, curves[1].keys, t)));
+    mathutil_mtxA_rotate_x((s32)(182.04445f * fn_1_9E14C(curves[0].count, curves[0].keys, t)));
+    psvec_set(obj->pos, *(f32 *)(0xE0000000 + 0x2C), *(f32 *)(0xE0000000 + 0x1C),
+              *(f32 *)(0xE0000000 + 0x0C));
+    fn_8006F6A8(&angles);
+    obj->rot[0] = 9.58738e-05f * angles.angle_y;
+    obj->rot[1] = 9.58738e-05f * angles.angle_x;
+    obj->rot[2] = 9.58738e-05f * angles.angle_z;
+    lbl_8006DB30();
+    if ((obj->flags & 0x2000) == 0) {
+        obj->frame++;
+    }
+    if (lbl_1_bss_960 == 9 && obj->unk_A == 2) {
+        f32 prev;
+        f32 cur;
+        f32 next = obj->frame / 60.0f;
+        prev = fn_1_9E194(curves[4].count, curves[4].keys, t);
+        cur = fn_1_9E194(curves[4].count, curves[4].keys, next);
+        if (prev < cur) {
+            fn_1_DE9C4_Target *target = fn_1_86254(0);
+            f32 diff;
+            f32 dz;
+            f32 dy;
+            f32 dx;
+            f32 dist;
+            dx = target->x;
+            dx = dx - obj->pos[0];
+            dy = target->y - obj->pos[1];
+            dz = target->z - obj->pos[2];
+            dist = dx * dx;
+            dist = dy * dy + dist;
+            dist = dz * dz + dist;
+            if (dist < 1000000.0f) {
+                diff = cur - prev;
+                if (diff > 5.0f && dist < 250000.0f) {
+                    if (obj->unk_F4 > 20.0f) {
+                        fn_1_A5594(0xA90A0300, (u32)obj->pos);
+                    } else {
+                        fn_1_A5594(0xA90A0100, (u32)obj->pos);
+                    }
+                } else if (diff > 5.0f && obj->unk_F4 > 20.0f) {
+                    fn_1_A5594(0xA90A0200, (u32)obj->pos);
+                } else {
+                    fn_1_A5594(0xA90A0000, (u32)obj->pos);
+                }
+            }
+        }
+    }
+}
+/* fzgx:end fn_1_DE9C4 */
+
 /* fzgx:begin fn_1_E1934 */
 typedef struct {
     u8 pad0[0x8];
