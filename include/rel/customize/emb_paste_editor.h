@@ -51,6 +51,25 @@ typedef struct {
 #endif
 extern Obj_3_bss_7EDD8 lbl_3_bss_7EDD8;  // typedefs.json decl override
 
+// lbl_3_bss_7EDC0: .bss size 0xC, 7 refs from emb_paste_editor.c
+#ifndef FZGX_TYPES_LBL_3_BSS_7EDC0
+#define FZGX_TYPES_LBL_3_BSS_7EDC0
+// one layout for every TU header that declares this symbol (librarian, typedefs.json)
+typedef struct {
+    u8 pad_0[0x5];
+    u8 unk_5;  // 1 loads, 0 stores
+    u8 pad_6[0x1];
+    u8 unk_7;  // 0 loads, 1 stores
+    u8 unk_8;  // 1 loads, 0 stores
+} Obj_3_bss_7EDC0_At0;
+typedef struct {
+    Obj_3_bss_7EDC0_At0 *unk_0;  // 20 loads, 1 stores
+    u8 pad_4[0x4];
+    u32 unk_8;  // 4 loads, 2 stores
+} Obj_3_bss_7EDC0;
+#endif
+extern Obj_3_bss_7EDC0 lbl_3_bss_7EDC0;  // typedefs.json decl override
+
 // lbl_3_bss_7EE40: .bss size 0x81C0, 7 refs from emb_paste_editor.c
 #ifndef FZGX_TYPES_LBL_3_BSS_7EE40
 #define FZGX_TYPES_LBL_3_BSS_7EE40
@@ -76,25 +95,6 @@ typedef struct {
 } Obj_3_bss_7EE40;
 #endif
 extern Obj_3_bss_7EE40 lbl_3_bss_7EE40;  // typedefs.json decl override
-
-// lbl_3_bss_7EDC0: .bss size 0xC, 7 refs from emb_paste_editor.c
-#ifndef FZGX_TYPES_LBL_3_BSS_7EDC0
-#define FZGX_TYPES_LBL_3_BSS_7EDC0
-// one layout for every TU header that declares this symbol (librarian, typedefs.json)
-typedef struct {
-    u8 pad_0[0x5];
-    u8 unk_5;  // 1 loads, 0 stores
-    u8 pad_6[0x1];
-    u8 unk_7;  // 0 loads, 1 stores
-    u8 unk_8;  // 1 loads, 0 stores
-} Obj_3_bss_7EDC0_At0;
-typedef struct {
-    Obj_3_bss_7EDC0_At0 *unk_0;  // 20 loads, 1 stores
-    u8 pad_4[0x4];
-    u32 unk_8;  // 4 loads, 2 stores
-} Obj_3_bss_7EDC0;
-#endif
-extern Obj_3_bss_7EDC0 lbl_3_bss_7EDC0;  // typedefs.json decl override
 
 // lbl_3_bss_87040: .bss size 0x81C0, 5 refs from emb_paste_editor.c
 typedef struct {
@@ -125,14 +125,27 @@ extern u16 lbl_3_data_1A40;  // typedefs.json decl override
 extern u32 lbl_3_bss_A1768;
 
 // lbl_3_bss_87000: .bss size 0x40, 2 refs from emb_paste_editor.c
+#ifndef FZGX_TYPES_LBL_3_BSS_87000
+#define FZGX_TYPES_LBL_3_BSS_87000
+// librarian 2026-10-14: two 0xC-byte banks lead the object (fn_3_F984 indexes them; emb_paste_editor.c's Pool/Entry agree)
 typedef struct {
-    u16 unk_0;  // 0 loads, 4 stores
+    u16 count;
     u8 pad_2[0x2];
-    u32 unk_4;  // 4 loads, 0 stores
-    u32 unk_8;  // 7 loads, 0 stores
-    u8 pad_C[0x34];
+    void *data;
+    void **items;
+} Obj_3_bss_87000_Bank;
+typedef struct {
+    Obj_3_bss_87000_Bank banks[2];
+    u8 pad_18[0x4];
+    u8 *flags;
+    void **items;
+    u8 pad_24[0x1C];
 } Obj_3_bss_87000;
-extern Obj_3_bss_87000 lbl_3_bss_87000;
+#endif
+extern Obj_3_bss_87000 lbl_3_bss_87000;  // typedefs.json decl override
+
+// lbl_3_data_32DC: .data size 0x13, 2 refs from emb_paste_editor.c (own data block)
+extern u8 lbl_3_data_32DC[0x13];
 
 // lbl_3_bss_9F640: .bss size 0x24, 2 refs from emb_paste_editor.c
 typedef struct {
@@ -163,10 +176,8 @@ extern Obj_3_bss_9F690 lbl_3_bss_9F690;
 // lbl_3_data_3360: .data size 0xC, 2 refs from emb_paste_editor.c (own data block)
 extern u8 lbl_3_data_3360[0xC];
 
-// lbl_3_data_32DC: .data size 0x13, 2 refs from emb_paste_editor.c (own data block)
-extern u8 lbl_3_data_32DC[0x13];
-
-// lbl_3_data_32F0: .data size 0x1, 1 refs from emb_paste_editor.c (own data block)
-extern u8 lbl_3_data_32F0;
+// lbl_3_data_32F0: .data size 0x2, 1 refs from emb_paste_editor.c (own data block)
+// librarian 2026-10-14: fn_3_F984 reads and writes offsets 0 and 1 (dtk sized it 0x1)
+extern u8 lbl_3_data_32F0[2];  // typedefs.json decl override
 
 #endif  // REL_CUSTOMIZE_EMB_PASTE_EDITOR_H

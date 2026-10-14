@@ -164,5 +164,33 @@
   "typedef": [
    "// pinned (librarian 2026-10-11): matched blocks compile under this declaration; the analyzer now infers s16. Change it through tutruth."
   ]
+ },
+ "lbl_3_bss_87000": {
+  "decl": "Obj_3_bss_87000 lbl_3_bss_87000",
+  "typedef": [
+   "#ifndef FZGX_TYPES_LBL_3_BSS_87000",
+   "#define FZGX_TYPES_LBL_3_BSS_87000",
+   "// librarian 2026-10-14: two 0xC-byte banks lead the object (fn_3_F984 indexes them; emb_paste_editor.c's Pool/Entry agree)",
+   "typedef struct {",
+   "    u16 count;",
+   "    u8 pad_2[0x2];",
+   "    void *data;",
+   "    void **items;",
+   "} Obj_3_bss_87000_Bank;",
+   "typedef struct {",
+   "    Obj_3_bss_87000_Bank banks[2];",
+   "    u8 pad_18[0x4];",
+   "    u8 *flags;",
+   "    void **items;",
+   "    u8 pad_24[0x1C];",
+   "} Obj_3_bss_87000;",
+   "#endif"
+  ]
+ },
+ "lbl_3_data_32F0": {
+  "decl": "u8 lbl_3_data_32F0[2]",
+  "typedef": [
+   "// librarian 2026-10-14: fn_3_F984 reads and writes offsets 0 and 1 (dtk sized it 0x1)"
+  ]
  }
 }
