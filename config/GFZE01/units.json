@@ -71258,6 +71258,24 @@
   },
   {
     "module": "story",
+    "source": "rel/story/story_mode/fn_7_1710.c",
+    "symbols": [
+      "fn_7_1710"
+    ],
+    "status": "matching",
+    "mw_version": "GC/1.3",
+    "extra_cflags": [],
+    "tu": "rel/story/story_mode.c",
+    "pool": {
+      "...rodata.0": "lbl_7_rodata_0",
+      "@11": "lbl_7_rodata_52C+0x3C",
+      "@12": "lbl_7_rodata_52C+0x74",
+      "@10": "lbl_7_rodata_52C+0x4",
+      "@5": "lbl_7_rodata_528"
+    }
+  },
+  {
+    "module": "story",
     "source": "rel/story/story_mode/fn_7_1BA8.c",
     "symbols": [
       "fn_7_1BA8"
