@@ -1048,7 +1048,10 @@ def _submit(p: Project, symbol: str, agent: str = "unknown", message: str = "",
     findings = lint_paths([src or oracle.unit_source_path(p, unit_src)])
     if findings:
         return {"ok": False, "error": "lint", "findings": findings}
-    if unit_src and (mw_version or extra_cflags) and not _is_shadow(agent):
+    installed = row is not None and row["status"] in ("matched", "asm")
+    if unit_src and (mw_version or extra_cflags) and not _is_shadow(agent) and not installed:
+        # an installed unit keeps its options until this submit is accepted (a rejected
+        # re-submit used to leave units.json rewritten); the check compiles under them anyway
         _set_unit_opts(p, unit_src, mw_version, extra_cflags)
         _reconfigure_and_split(p)
     res = oracle.check(p, symbol, max_diff_lines, source=src, mw_version=mw_version, extra_cflags=extra_cflags)
@@ -1136,6 +1139,9 @@ def _submit(p: Project, symbol: str, agent: str = "unknown", message: str = "",
             out["note"] = (f"{key} is already {row['status']} (link_state={row['link_state']}); the installed block was not "
                            f"replaced (a carved pool unit re-checks with its primer counted). Use a revise- agent to replace installed C.")
         return out
+    if installed and unit_src and (mw_version or extra_cflags):
+        _set_unit_opts(p, unit_src, mw_version, extra_cflags)  # accepted: now the options change
+        _reconfigure_and_split(p)
 
     # Accept on the per-object oracle; the batch relink (`fzgx verify`) checks every hash
     # once for all accepted units and bisects the rare object that matches but does not link.

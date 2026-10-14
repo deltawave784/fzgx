@@ -356,7 +356,11 @@ def _diff(project: Project, module: str, symbol: str, unit: str, max_diff_lines:
     for name, s in left_syms.items():
         res.symbols[name] = float(s.get("match_percent", 0.0))
     res.missing_in_base = sorted(set(left_syms) - set(right_syms))
-    res.extra_in_base = sorted(set(right_syms) - set(left_syms))
+    # a carved unit's primers (`fzgx_*` functions in `.fzgxpool`, dropped at integration) are not
+    # extra code either: the uncarved rule above already ignores them, and every landed pool unit
+    # with a layout primer (fn_1_46144, fn_1_C3B8, fn_1_A3654, fn_1_EB4BC) re-checked as unfit
+    primers = {n for n in res.primer_functions if n.startswith("fzgx_")}
+    res.extra_in_base = sorted(set(right_syms) - set(left_syms) - primers)
     if target is not None:
         # only RELs keep it: the DOL link dead-strips an unreferenced static helper (fn_8006A768's
         # myStrncpy, fn_80022028's update), a REL link does not (fn_17_750C's GetLine grew the module)
@@ -425,7 +429,10 @@ def _diff(project: Project, module: str, symbol: str, unit: str, max_diff_lines:
                 # only linker-defined absolute symbols differ (ours a relocation, retail the
                 # resolved literal): the link produces retail's bytes; verify's hash is the guard
                 res.matched = True
-    if symbol in res.primer_functions and not res.matched and not res.matched_pool:
+    if symbol in res.primer_functions:
+        # refused even at 100%: poolfix.apply drops `.fzgxpool` at integration, so an accepted
+        # body would vanish from the link (verify's hashes would catch it, one batch later)
+        res.matched = res.matched_pool = False
         # the function itself was emitted in `.fzgxpool` (a primer's `#pragma section code_type`
         # never reset): integration drops that section, so the body links nothing. Score it 0
         # so it never becomes a recorded best or a seed (fn_12_3710 was saved at 99.1%).
