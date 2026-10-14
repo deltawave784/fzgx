@@ -412,3 +412,6 @@ without row alignment (`retail - ours` net rows):
 - Retail's `li rA, 0; mr rB, rA` for two counters starting equal comes from an inline helper whose parameter seeds both
   (`static inline void h(s16 init) { dir = init; delta = dir; ... }` called as `h(0)`); decrementing (`delta--`) before
   the matching increment keeps retail's schedule (fn_3_3F20, note #252).
+- Caller-proven narrow return (librarian, 2026-10-14): a callee that only returns small constants (`li r3, N`) compiles
+  identically as `int` or `u8`; its caller decides (a `u8` result kept in a callee-saved register is `clrlwi r31, r3, 24`,
+  an `int` one is `clrlwi r0` plus `mr`), so the truth is the caller's type (fn_10_26434 for fn_10_26000).
