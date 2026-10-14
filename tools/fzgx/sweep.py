@@ -117,9 +117,18 @@ def generate(p: Project, s: str, sym, path: Path, body: str, check, outdir: Path
     add('pooltables', lambda: fixup_layout.retail_pool_tables(p, s, body, check))
     add('baseorder', lambda: fixup_layout.section_base_order(p, s, body, check))
     add('sections', lambda: fixup_sections.repairs(p, s, body, check))
-    if not families or 'attr' in families:
+    rl: Dict[int, int] = {}
+    if not families or 'attr' in families or 'regorder' in families:
         try:
             rl = row_lines(p, sym, path, check, outdir)
+        except Exception:
+            rl = {}
+    # register-only residuals: every order of the implicated class's function-scope locals
+    # (bounded above six), block-scoped locals of that class hoisted; the line attribution
+    # names the locals whose moves are tried when the class is large
+    add('regorder', lambda: fixup_evidence.register_class_orders(p, s, body, check, rl))
+    if not families or 'attr' in families:
+        try:
             if rl:
                 c.extend(('attrflip: ' + l, t) for l, t in fixup_evidence.attributed_type_flips(p, s, body, check, rl))
                 c.extend(('attrinline: ' + l, t) for l, t in fixup_evidence.attributed_inlines(p, s, body, check, rl))

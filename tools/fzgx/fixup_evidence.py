@@ -1497,6 +1497,202 @@ def attributed_declaration_swaps(p, symbol, body, check, row_lines):
     return out[:40]
 
 
+FLOAT_LOCAL_TYPES = {'f32', 'f64', 'float', 'double'}
+INT_LOCAL_TYPES = {'s8', 'u8', 's16', 'u16', 's32', 'u32', 'int', 'long', 'short', 'char', 'unsigned',
+                   'unsigned int', 'unsigned long', 'unsigned short', 'unsigned char', 'BOOL', 'size_t'}
+REGISTER_ORDER_LIMIT = 720
+
+
+def _register_residual(check):
+    """([(row, left text, right text)], {'r', 'f'} classes whose registers differ) when every
+    remaining diff row differs only by register numbers; (None, set()) otherwise. Accepted
+    rows (bound pool/absolute relocations) and rows whose text is equal do not count."""
+    lrows, rrows = getattr(check, '_rows', ([], []))
+    accepted = getattr(check, '_accepted_rows', set()) or set()
+    reg = re.compile(r'\b([rf])(\d+)\b')
+    residual, classes = [], set()
+    for k, (a, b) in enumerate(zip(lrows, rrows)):
+        if k in accepted or ((a.get('diff_kind') or 'DIFF_NONE') == 'DIFF_NONE'
+                             and (b.get('diff_kind') or 'DIFF_NONE') == 'DIFF_NONE'):
+            continue
+        lf, of = stuck._fmt(a), stuck._fmt(b)
+        if lf == of:
+            continue
+        if not lf or not of or reg.sub('R', lf) != reg.sub('R', of):
+            return None, set()
+        for x, y in zip(reg.findall(lf), reg.findall(of)):
+            if x != y:
+                classes.add(x[0])
+        residual.append((k, lf, of))
+    return (residual if residual else None), classes
+
+
+def _local_class(typ: str, dims: str) -> Optional[str]:
+    """'f' for a floating scalar local, 'r' for an integer or pointer one, None for aggregates
+    and arrays (they live in the frame, not in a register web)."""
+    if dims:
+        return None
+    t = re.sub(r'\b(?:register|const|volatile)\b', '', typ).strip()
+    t = re.sub(r'\s+', ' ', t)
+    if '*' in t:
+        return 'r'
+    if t in FLOAT_LOCAL_TYPES:
+        return 'f'
+    if t in INT_LOCAL_TYPES or t.startswith(('unsigned ', 'signed ', 'long', 'short')):
+        return 'r'
+    return None
+
+
+def _ranked_class_orders(n: int, involved: List[int], limit: int) -> List[Tuple[int, ...]]:
+    """Orders of `n` class slots (identity excluded), fewest displaced slots first. Every order
+    when n <= 6 (719 at most); otherwise pairwise swaps, 3-cycles touching an implicated slot
+    and moves of an implicated slot to every position, within `limit`."""
+    ident = tuple(range(n))
+    seen = {ident}
+    out: List[Tuple[int, ...]] = []
+
+    def emit(order):
+        order = tuple(order)
+        if order not in seen:
+            seen.add(order)
+            out.append(order)
+
+    if n <= 6:
+        for perm in itertools.permutations(range(n)):
+            emit(perm)
+        out.sort(key=lambda o: (sum(1 for i, v in enumerate(o) if i != v), o))
+        return out[:limit]
+    for a, b in itertools.combinations(range(n), 2):
+        o = list(ident); o[a], o[b] = o[b], o[a]
+        emit(o)
+    for a in involved:
+        for b, c in itertools.combinations([i for i in range(n) if i != a], 2):
+            for cyc in ((b, c, a), (c, a, b)):
+                o = list(ident)
+                o[a], o[b], o[c] = cyc
+                emit(o)
+        for j in range(n):
+            if j != a:
+                o = [i for i in ident if i != a]
+                o.insert(j, a)
+                emit(o)
+    return out[:limit]
+
+
+def _block_scoped_locals(body: str, span, names: List[str]) -> List[Tuple[int, int, str, str, str, Optional[str]]]:
+    """Declarations on their own line inside an inner block of the function (after the leading
+    declarations), declared exactly once and not shadowing a function-scope local:
+    (line start, line end, type, name, dims, initializer)."""
+    from .fixup_source import DECL_RE, _locals
+    from .sdkimport import masked
+    locs = _locals(body, span)
+    start = locs[-1][1] if locs else span[1] + 1
+    code = masked(body)
+    found: Dict[str, list] = {}
+    for m in re.finditer(r'[^\n]*\n', code[start:span[2]]):
+        line = m.group(0)
+        dm = DECL_RE.match(line.rstrip('\n'))
+        if not dm or re.match(r'\s*(?:return|goto|static|extern|typedef)\b', line):
+            continue
+        s0 = start + m.start()
+        found.setdefault(dm.group(2), []).append((s0, s0 + len(line), dm.group(1), dm.group(2), dm.group(3),
+                                                   dm.group(4).strip() if dm.group(4) else None))
+    out = []
+    for nm, decls in found.items():
+        if len(decls) == 1 and nm not in names and not re.search(r'\b(?:struct|union)\b', decls[0][2]):
+            out.append(decls[0])
+    return out
+
+
+def _hoisted(body: str, locs, decl) -> Optional[str]:
+    """`decl` (a block-scoped declaration) moved to the end of the leading declarations; an
+    initializer stays behind as an assignment at the original site."""
+    s, e, typ, nm, dims, init = decl
+    if not locs:
+        return None
+    indent = re.match(r'[ \t]*', body[s:e]).group(0)
+    stay = f'{indent}{nm} = {init};\n' if init else ''
+    decl_indent = re.match(r'[ \t]*', body[locs[-1][0]:locs[-1][1]]).group(0)
+    typ = typ.strip()
+    sep = '' if typ.endswith('*') else ' '
+    text = body[:s] + stay + body[e:]
+    at = locs[-1][1]
+    return text[:at] + f'{decl_indent}{typ}{sep}{nm}{dims};\n' + text[at:]
+
+
+def register_class_orders(p, symbol, body, check, row_lines=None, limit: int = REGISTER_ORDER_LIMIT):
+    """Register-only residuals searched over the declaration order of the implicated class.
+
+    The allocator numbers locals in declaration order and colours them highest number first,
+    so a GPR or FPR permutation between named locals is a question of the declaration list
+    alone; but only the locals of the differing register class take part (fn_4_1444: five
+    f32 locals among ten, one FPR swap; 5 of the 119 other orders of those five matched,
+    where the leading-declaration family stops at adjacent swaps above five locals and the
+    attributed family at forty candidates). Every order when the class has at most six
+    locals, otherwise swaps, 3-cycles and moves of the locals the differing rows attribute
+    to. A block-scoped local of the class is also hoisted to function scope (at every
+    position): an inner declaration numbers below every outer one."""
+    from . import fixup_source as source
+    residual, classes = _register_residual(check)
+    if not residual or not classes:
+        return []
+    name = p.resolve(symbol).name
+    span = source._function_body_span(body, name)
+    if not span:
+        return []
+    locs = source._locals(body, span)
+    lines_text = body.split('\n')
+    names = [l[3] for l in locs]
+    involved_names: List[str] = []
+    for k, ln in (row_lines or {}).items():
+        for d in (-1, 0, 1):
+            if 0 < ln + d <= len(lines_text):
+                for ident in re.findall(r'(?<![\w.>])([A-Za-z_]\w*)(?![\w(])', lines_text[ln + d - 1]):
+                    if ident not in involved_names:
+                        involved_names.append(ident)
+    out: List[Tuple[str, str]] = []
+    seen = set()
+
+    def emit(label, text):
+        if text != body and text not in seen:
+            seen.add(text)
+            out.append((label, text))
+
+    lines = [body[s:e] for s, e, *_ in locs]
+    for cls in sorted(classes):
+        slots = [i for i, l in enumerate(locs) if _local_class(l[2], l[4]) == cls]
+        if len(slots) >= 2:
+            involved = [j for j, i in enumerate(slots) if locs[i][3] in involved_names]
+            for order in _ranked_class_orders(len(slots), involved, limit):
+                perm = list(range(len(locs)))
+                for slot, value in zip(slots, order):
+                    perm[slot] = slots[value]
+                if not source._order_ok(locs, lines, tuple(perm)):
+                    continue
+                emit(f'{"FPR" if cls == "f" else "GPR"} declaration order '
+                     + ','.join(locs[slots[v]][3] for v in order), source.reorder(body, locs, tuple(perm)))
+        # block-scoped locals of the class: hoisted to function scope at every position
+        for decl in _block_scoped_locals(body, span, names):
+            if _local_class(decl[2], decl[4]) != cls:
+                continue
+            hoisted = _hoisted(body, locs, decl)
+            if not hoisted:
+                continue
+            emit(f'hoist {decl[3]} to function scope', hoisted)
+            hspan = source._function_body_span(hoisted, name)
+            hlocs = source._locals(hoisted, hspan) if hspan else []
+            if len(hlocs) != len(locs) + 1:
+                continue
+            last = len(hlocs) - 1
+            for j in range(last):
+                order = [i for i in range(last)]
+                order.insert(j, last)
+                hl = [hoisted[s:e] for s, e, *_ in hlocs]
+                if source._order_ok(hlocs, hl, tuple(order)):
+                    emit(f'hoist {decl[3]} to function scope at {j}', source.reorder(hoisted, hlocs, tuple(order)))
+    return out[:limit]
+
+
 def induction_indexing(p, symbol, body, check, row_lines=None):
     """A loop pointer initialised straight into its callee-saved register (`addi r30, r3,
     sym@l`) with no copy is a strength-reduced induction shadow of an indexed access, not

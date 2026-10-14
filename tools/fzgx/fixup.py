@@ -574,6 +574,9 @@ class Engine:
             yield from evidence.attributed_type_flips(self.project, row['symbol'], body, check, self.row_lines(row))
             yield from evidence.attributed_inlines(self.project, row['symbol'], body, check, self.row_lines(row))
             yield from evidence.attributed_declaration_swaps(self.project, row['symbol'], body, check, self.row_lines(row))
+            # a register-only residual: every order of the implicated register class's locals
+            # (fn_4_1444: five f32 among ten locals, reachable by neither family above)
+            yield from evidence.register_class_orders(self.project, row['symbol'], body, check, self.row_lines(row))
             yield from evidence.induction_indexing(self.project, row['symbol'], body, check)
             # a hand-unrolled counted loop (two steps per trip) folds back to MWCC's own 2x
             # unroll, which keeps the dead counter retail carries; covers inline helpers too
