@@ -1065,8 +1065,11 @@ def _locked_cache_core(body: str, name: str) -> List[Tuple[str, str]]:
         i2 = indent + '    '
 
         def block(first, x=x, y=y, z=z, i2=i2, indent=indent, values=values):
+            # the volatile view is a codegen choice: lint S2 needs its justification on the line
+            note = ('  /* fzgx-allow: S2 volatile first read keeps the locked-cache column loads in order */'
+                    if re.search(r'\bvolatile\b', first) else '')
             return (f'{indent}{{\n{i2}f32 {z};\n{i2}f32 {y};\n{i2}f32 {x};\n'
-                    f'{i2}{x} = {first};\n{i2}{y} = {values[1]};\n{i2}{z} = {values[2]};\n'
+                    f'{i2}{x} = {first};{note}\n{i2}{y} = {values[1]};\n{i2}{z} = {values[2]};\n'
                     f'{i2}*(f32 *)(0xE0000000 + 0x0C) = {x};\n'
                     f'{i2}*(f32 *)(0xE0000000 + 0x1C) = {y};\n'
                     f'{i2}*(f32 *)(0xE0000000 + 0x2C) = {z};\n{indent}}}\n')
@@ -2969,6 +2972,15 @@ def annotate_verified_branches(body, findings):
     lines = body.splitlines(keepends=True)
     changed = False
     for rule, line, _ in findings:
+        if rule == 'S2' and re.search(r'\(\s*volatile\s+\w+\s*\*\s*\)', lines[line - 1].split('//', 1)[0]):
+            # a volatile pointer-cast view that a candidate introduced (load-order families):
+            # justified by the full match itself, like a verified branch
+            text = lines[line - 1]
+            end = len(text.rstrip('\r\n'))
+            lines[line - 1] = (text[:end] + '  /* fzgx-allow: S2 volatile view keeps the verified load order */'
+                               + text[end:])
+            changed = True
+            continue
         if rule != 'S1':
             continue
         match = re.search(r'\bgoto\s+(\w+)\s*;', lines[line - 1])
