@@ -7403,3 +7403,6 @@ rel/main_rel/stcoli/fn_1_25480.c:
 
 rel/main_rel/accessory/fn_1_10BA00.c:
 	.text       start:0x0010BA00 end:0x0010BE3C align:4
+
+rel/main_rel/game/fn_1_34924.c:
+	.text       start:0x00034924 end:0x00034AC0 align:4
