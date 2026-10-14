@@ -16064,5 +16064,57 @@
       }
     ],
     "link": "pool"
+  },
+  "fn_80059914": {
+    "seed_symbol": "fn_80059914",
+    "generator": "fzgx fixup",
+    "transform": "define retail TU bss objects (split) (GC/1.3.2)",
+    "seed": "#include \"types.h\"\n\ntypedef struct {\n    void (*fn)(u32);\n    u32 arg;\n} Cb;\n\ntypedef struct {\n    u32 unk_0;\n    s32 unk_4;\n    u32 unk_8;\n    u8 pad_C[0xB4];\n    Cb cb;\n} Obj_8018FEB0;\nextern Obj_8018FEB0 lbl_8018FEB0;\n\n#pragma opt_strength_reduction off\nvoid fn_80059914(void) {\n    Obj_8018FEB0 *p = &lbl_8018FEB0;\n    if (p->cb.fn) {\n        Cb *c = &p->cb;\n        c->fn(c->arg);\n        if (!(p->unk_4)) {\n            p->unk_8 = 5;\n        }\n        p->unk_4 = p->unk_4 + 1;\n    }\n}\n#pragma opt_strength_reduction reset\n\n",
+    "seed_sha256": "683221d9de18c650973a34b1fdd1b661ffae9fb8f237f96a78db5841b15e8943",
+    "generated_sha256": "882a3063534572d7fcd35341cccecc5239106a72ce6043c9ed450665763f5f5c",
+    "generated_source": "#include \"types.h\"\n\ntypedef struct {\n    void (*fn)(u32);\n    u32 arg;\n} Cb;\n\ntypedef struct {\n    u32 unk_0;\n    s32 unk_4;\n    u32 unk_8;\n    u8 pad_C[0xB4];\n    Cb cb;\n} Obj_8018FEB0;\n\n#pragma opt_strength_reduction off\n/* file-scope objects of the retail TU, in retail order: MWCC addresses them off one section base */\n__declspec(section \".data\") u32 fzgx_obj_lbl_8018FEB0;\n__declspec(section \".data\") s32 lbl_8018FEB0_4;\n__declspec(section \".data\") u32 lbl_8018FEB0_8;\n__declspec(section \".data\") u32 lbl_8018FEB0_fill_8018FEBC[9];\n__declspec(section \".data\") u32 lbl_8018FEE0[32];\n__declspec(section \".data\") u32 lbl_8018FF60[2];\n__declspec(section \".data\") u32 lbl_8018FF68[2];\n__declspec(section \".data\") Cb lbl_8018FF70;\n__declspec(section \".data\") u32 lbl_8018FF78[128];\n\n#pragma section code_type \".fzgxpool\"\nstatic void fzgx_bss_layout(void) {\n    volatile u8 s;  /* fzgx-allow: S2 layout primer sink: MWCC emits .bss objects in first-access order */\n    s = *(u8 *)&fzgx_obj_lbl_8018FEB0;\n    s = *(u8 *)&lbl_8018FEB0_4;\n    s = *(u8 *)&lbl_8018FEB0_8;\n    s = *(u8 *)&lbl_8018FEB0_fill_8018FEBC;\n    s = *(u8 *)&lbl_8018FEE0;\n    s = *(u8 *)&lbl_8018FF60;\n    s = *(u8 *)&lbl_8018FF68;\n    s = *(u8 *)&lbl_8018FF70;\n    s = *(u8 *)&lbl_8018FF78;\n}\n#pragma section code_type \".text\"\n\nvoid fn_80059914(void) {\n    \n    if (lbl_8018FF70.fn) {\n        Cb *c = &lbl_8018FF70;\n        c->fn(c->arg);\n        if (!(lbl_8018FEB0_4)) {\n            lbl_8018FEB0_8 = 5;\n        }\n        lbl_8018FEB0_4 = lbl_8018FEB0_4 + 1;\n    }\n}\n#pragma opt_strength_reduction reset\n\n",
+    "compiler": "GC/1.3.2",
+    "flags": "",
+    "source": "dol/fn_80059914.c",
+    "bytes": 104,
+    "headers_sha256": "22c7868f6d709d9d5d0bb758283a7fb3927b6bd028859a650cecb579700331f9",
+    "oracle_sha256": "6ba33e56fa67debd8707b4d3865d77126f31f235eb67d7c9268c08735731559a",
+    "recipe": [
+      {
+        "label": "define retail TU bss objects (split) (GC/1.3.2)",
+        "input_sha256": "683221d9de18c650973a34b1fdd1b661ffae9fb8f237f96a78db5841b15e8943",
+        "output_sha256": "882a3063534572d7fcd35341cccecc5239106a72ce6043c9ed450665763f5f5c",
+        "input_symbol": "fn_80059914",
+        "output_symbol": "fn_80059914",
+        "edits": [
+          [
+            187,
+            221,
+            ""
+          ],
+          [
+            257,
+            257,
+            "/* file-scope objects of the retail TU, in retail order: MWCC addresses them off one section base */\n__declspec(section \".data\") u32 fzgx_obj_lbl_8018FEB0;\n__declspec(section \".data\") s32 lbl_8018FEB0_4;\n__declspec(section \".data\") u32 lbl_8018FEB0_8;\n__declspec(section \".data\") u32 lbl_8018FEB0_fill_8018FEBC[9];\n__declspec(section \".data\") u32 lbl_8018FEE0[32];\n__declspec(section \".data\") u32 lbl_8018FF60[2];\n__declspec(section \".data\") u32 lbl_8018FF68[2];\n__declspec(section \".data\") Cb lbl_8018FF70;\n__declspec(section \".data\") u32 lbl_8018FF78[128];\n\n#pragma section code_type \".fzgxpool\"\nstatic void fzgx_bss_layout(void) {\n    volatile u8 s;  /* fzgx-allow: S2 layout primer sink: MWCC emits .bss objects in first-access order */\n    s = *(u8 *)&fzgx_obj_lbl_8018FEB0;\n    s = *(u8 *)&lbl_8018FEB0_4;\n    s = *(u8 *)&lbl_8018FEB0_8;\n    s = *(u8 *)&lbl_8018FEB0_fill_8018FEBC;\n    s = *(u8 *)&lbl_8018FEE0;\n    s = *(u8 *)&lbl_8018FF60;\n    s = *(u8 *)&lbl_8018FF68;\n    s = *(u8 *)&lbl_8018FF70;\n    s = *(u8 *)&lbl_8018FF78;\n}\n#pragma section code_type \".text\"\n\n"
+          ],
+          [
+            286,
+            361,
+            "\n    if (lbl_8018FF70.fn) {\n        Cb *c = &lbl_8018FF70"
+          ],
+          [
+            400,
+            431,
+            "lbl_8018FEB0_4)) {\n            lbl_8018FEB0"
+          ],
+          [
+            457,
+            474,
+            "lbl_8018FEB0_4 = lbl_8018FEB0"
+          ]
+        ]
+      }
+    ],
+    "link": "pool"
   }
 }
