@@ -95,6 +95,172 @@ extern void *fn_1_5448C(void *);
 extern void fn_1_5489C(void **arg0, void **arg1);
 extern void fn_1_12A0E0(u8 *p);
 
+/* fzgx:begin fn_1_10846C noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/accessory.h"
+#include "game/main_rel/accessory_types.h"
+
+typedef struct {
+    f32 x, y, z;
+} Vec10846C;
+
+typedef struct {
+    u32 w[3];
+} Word3_10846C;
+
+/* model vertex, 0x40 bytes */
+typedef struct {
+    Vec10846C pos;        /* 0x00 */
+    Word3_10846C attr;    /* 0x0C */
+    u8 pad_18[0x1D];
+    u8 flags;             /* 0x35 */
+    u8 pad_36[0xA];
+} Vert10846C;
+
+/* welded vertex group, 0x44 bytes */
+typedef struct {
+    u8 flags;             /* 0x00 */
+    u8 unk_1;             /* 0x01 */
+    u8 count;             /* 0x02 */
+    u8 pad_3;
+    u16 idx[4];           /* 0x04 */
+    u8 pad_C[4];
+    Vec10846C p10;        /* 0x10 */
+    Vec10846C p1C;        /* 0x1C */
+    Vec10846C p28;        /* 0x28 */
+    Word3_10846C c34;     /* 0x34 */
+    u8 pad_40[4];
+} Group10846C;
+
+typedef struct {
+    u8 pad_0[0x10];
+    void *model;          /* 0x10 */
+    u8 pad_14[4];
+    u32 groupCount;       /* 0x18 */
+    u32 unk_1C;           /* 0x1C */
+    u8 pad_20[4];
+    Group10846C *groups;  /* 0x24 */
+    void *unk_28;         /* 0x28 */
+    u8 pad_2C[4];
+    void *srcModel;       /* 0x30 */
+    u8 pad_34[0x30];
+    Vec10846C *positions; /* 0x64 */
+} Obj10846C;
+
+static inline f32 distSq10846C(Vec10846C *a, Vec10846C *b) {
+    f32 dx = a->x;
+    f32 dy = a->y;
+    f32 dz = a->z;
+    dx -= b->x;
+    dy -= b->y;
+    dz -= b->z;
+    dx = dx * dx;
+    dx += dy * dy;
+    dx += dz * dz;
+    return dx;
+}
+
+extern void *lbl_801A6410;
+extern u32 fn_1_4630();
+extern void *fn_80077B14(void *);
+extern void fn_1_46B4(u32 arg0, u32 arg1, const char *arg2, int arg3);
+extern void fn_80008BEC(void *dest, int value, u32 size);
+extern const f64 lbl_1_rodata_7AE8;
+extern Word3_10846C lbl_1_rodata_7ADC;
+
+void fn_1_10846C(Obj10846C *obj) {
+    void *model = obj->model;
+    u32 *count;
+    Vert10846C *verts;
+    u32 i;
+
+    if (model == NULL) {
+        return;
+    }
+
+    if (obj->model != NULL && obj->srcModel != NULL) {
+        Vert10846C *dst = fn_80077B14(obj->model);
+        u32 *dstCount = fn_80077B64(obj->model);
+        Vert10846C *src = fn_80077B14(obj->srcModel);
+        u32 *srcCount = fn_80077B64(obj->srcModel);
+        u32 j;
+
+        Vert10846C *d;
+        Vert10846C *s = src;
+        for (i = 0; i < *srcCount; i++, s++) {
+            if (s->flags & 1) {
+                d = dst;
+                for (j = 0; j < *dstCount; j++, d++) {
+                    if (distSq10846C(&s->pos, &d->pos) < lbl_1_rodata_7AE8) {
+                        d->attr = s->attr;
+                    }
+                }
+            }
+        }
+    }
+
+    obj->groupCount = 0;
+    obj->unk_1C = 0;
+    if (obj->groups != NULL) {
+        fn_1_46B4((u32)lbl_801A6410, (u32)obj->groups, lbl_1_data_40530, 988);
+        obj->groups = NULL;
+    }
+    if (obj->unk_28 != NULL) {
+        fn_1_46B4((u32)lbl_801A6410, (u32)obj->unk_28, lbl_1_data_40530, 989);
+        obj->unk_28 = NULL;
+    }
+    if (obj->positions != NULL) {
+        fn_1_46B4((u32)lbl_801A6410, (u32)obj->positions, lbl_1_data_40530, 991);
+        obj->positions = NULL;
+    }
+
+    count = fn_80077B64(model);
+    verts = fn_80077B14(model);
+    obj->groups = (Group10846C *)fn_1_4630(lbl_801A6410, *count * sizeof(Group10846C), lbl_1_data_40530, 998);
+    obj->positions = (Vec10846C *)fn_1_4630(lbl_801A6410, *count * sizeof(Vec10846C), lbl_1_data_40530, 999);
+    for (i = 0; i < *count; i++) {
+        obj->positions[i] = verts->pos;
+        verts++;
+    }
+
+    verts = fn_80077B14(model);
+    obj->groupCount = 0;
+    for (i = 0; i < *count; i++, verts++) {
+        Group10846C *groups = obj->groups;
+        u32 k;
+        u32 found = -1;
+        u32 n = obj->groupCount;
+        Group10846C *g = groups;
+
+        for (k = 0; k < n; k++, g++) {
+            if (distSq10846C(&g->p10, &verts->pos) < lbl_1_rodata_7AE8) {
+                found = k;
+                break;
+            }
+        }
+
+        if (found != -1) {
+            g = &groups[found];
+            g->idx[g->count] = i;
+            obj->groups[found].count++;
+        } else {
+            g = &groups[obj->groupCount];
+            g->p28 = verts->pos;
+            g->p1C = g->p28;
+            g->p10 = g->p1C;
+            g->c34 = lbl_1_rodata_7ADC;
+            g->flags = verts->flags;
+            fn_80008BEC(g->idx, 0xFF, sizeof(g->idx));
+            g->count = 1;
+            g->idx[0] = i;
+            g->unk_1 = 0;
+            obj->groupCount++;
+        }
+    }
+}
+/* fzgx:end fn_1_10846C */
+
 /* fzgx:begin fn_1_108870 */
 typedef struct {
     u8 pad_0[0xc];
