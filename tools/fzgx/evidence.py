@@ -340,6 +340,9 @@ def data_context(project, fn, full=False):
                      f'{len(sites)} load(s), first at {sites[0]:08X}')
     from .datacontext import evidence
     lines.extend(evidence(project, fn, loads, full))
+    if full:  # address computations off a section base (addi rX, rBase, 0x2D4) reach objects too
+        addresses = memory_loads(assembly_rows(fn), jump_tables(project, fn), addresses=True)
+        loads = {**{k: v for k, v in addresses.items() if not v['width']}, **loads}
     lines.extend(pool_words(project, fn, loads, full))
     return lines
 
@@ -368,6 +371,49 @@ def _retail_objects(project, module):
     return cache[module]
 
 
+_SYMBOLIC_WORD = re.compile(r'[A-Za-z_.$@][\w.$@]*(?:[+-](?:0x[0-9a-fA-F]+|\d+))?')
+_DIRECTIVE_WIDTH = {'.4byte': 4, '.float': 4, '.long': 4, '.2byte': 2, '.short': 2, '.byte': 1,
+                    '.double': 8, '.8byte': 8}
+
+
+def object_pointer_words(body, raw=None):
+    """{byte offset: symbolic value} of the relocated `.4byte` words of one dtk `.obj` body.
+
+    Offsets are counted over every directive, not only `.4byte` lines: a mixed object
+    (sel's lbl_10_rodata_5D0 is floats, then a pointer table) placed its pointers 0x18 bytes
+    early when only `.4byte` lines were counted (fn_10_19308 saw `&lbl_10_data_*` where its
+    lfs read 85.0/30.0). A `.string` spans to its NUL in the retail bytes `raw` when given.
+    Walking stops at the first directive whose size is unknown, so no later word is guessed."""
+    words, at = {}, 0
+    for line in body.splitlines():
+        m = re.match(r'\s*(\.[a-z0-9]+)\b\s*(.*?)\s*$', line)
+        if not m:
+            continue
+        op, args = m[1], m[2]
+        if op in _DIRECTIVE_WIDTH:
+            values = [v.strip() for v in args.split(',')] if args else []
+            if op == '.4byte':
+                for k, value in enumerate(values):
+                    if _SYMBOLIC_WORD.fullmatch(value):
+                        words[at + 4 * k] = value
+            at += _DIRECTIVE_WIDTH[op] * max(len(values), 1)
+        elif op == '.skip':
+            try:
+                at += int(args.split(',')[0], 0)
+            except ValueError:
+                break
+        elif op in ('.string', '.asciz') and raw is not None:
+            end = raw.find(b'\0', at)
+            if end < 0:
+                break
+            at = end + 1
+        elif op in ('.global', '.local', '.sym', '.hidden', '.weak'):
+            continue
+        else:
+            break
+    return words
+
+
 def pool_words(project, fn, loads, full=False):
     """Every retail word of a `.rodata`/`.data` object this function addresses, when the
     session cannot otherwise see it: loads through the object's base that reach past dtk's
@@ -380,7 +426,18 @@ def pool_words(project, fn, loads, full=False):
     module = fn.symbol.module
     reach = {}
     for load in loads.values():
-        reach[load['symbol']] = max(reach.get(load['symbol'], 0), load['offset'] + load['width'])
+        end = load['offset'] + load['width']
+        if not load['width']:
+            # an address formed off the object's base (a section-base cluster: fn_1_E9770's
+            # strings at lbl_1_data_3E358+0x2D4..+0x31C): the span covers the dtk object there
+            base = project.find_symbol(load['symbol'], module)
+            if not base or base.kind != 'object' or base.section not in ('.rodata', '.data', '.sdata', '.sdata2'):
+                continue
+            ordered = _section_objects(project, module, base.section)
+            k = bisect.bisect_right(ordered, (base.addr + load['offset'], '￿')) - 1
+            inner = project.find_symbol(ordered[k][1], module) if k >= 0 else None
+            end = max(load['offset'] + 1, (inner.addr + inner.size - base.addr) if inner else 0)
+        reach[load['symbol']] = max(reach.get(load['symbol'], 0), end)
     objects = None
     lines = []
     for name in sorted(set(fn.refs) | set(reach)):
@@ -403,11 +460,12 @@ def pool_words(project, fn, loads, full=False):
                 continue
             if other.addr != sym.addr:
                 starts[other.addr - sym.addr] = other.name
-            values = re.findall(r'^\s*\.4byte\s+([^\n]+)', objects.get(other.name, ''), re.M)
-            for k, value in enumerate(values):
-                value = value.strip()
-                if re.fullmatch(r'[A-Za-z_.$@][\w.$@]*(?:[+-](?:0x[0-9a-fA-F]+|\d+))?', value):
-                    pointers[other.addr - sym.addr + 4 * k] = value
+            body = objects.get(other.name, '')
+            if '.4byte' not in body:
+                continue
+            raw_other = retail_bytes(project, module, other.name, 0, other.size) if other.size else None
+            for at, value in object_pointer_words(body, raw_other).items():
+                pointers[other.addr - sym.addr + at] = value
         own_pointers = any(o < sym.size for o in pointers)
         if span <= sym.size and not own_pointers:
             continue
