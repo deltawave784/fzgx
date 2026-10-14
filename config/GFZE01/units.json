@@ -22490,6 +22490,17 @@
   },
   {
     "module": "main",
+    "source": "dol/fn_80058BFC.c",
+    "symbols": [
+      "fn_80058BFC"
+    ],
+    "status": "nonmatching",
+    "mw_version": "GC/1.3.2",
+    "extra_cflags": [],
+    "pool": true
+  },
+  {
+    "module": "main",
     "source": "dol/fn_80058ED4.c",
     "symbols": [
       "fn_80058ED4"
