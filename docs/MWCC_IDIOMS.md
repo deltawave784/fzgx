@@ -409,3 +409,6 @@ without row alignment (`retail - ours` net rows):
   (`lbl_1_bss_3C00` to +0x34600, `lbl_1_bss_7B180` to +0x3BDC), the header declares that symbol as a struct view sized
   from every base-relative access (typedefs.json `decl` override) instead of dtk's 1- to 8-byte object; casts of an
   under-sized declared object let MWCC treat distinct offsets as one location (fn_1_304A8, fn_1_3E6D8, fn_1_EF768).
+- Retail's `li rA, 0; mr rB, rA` for two counters starting equal comes from an inline helper whose parameter seeds both
+  (`static inline void h(s16 init) { dir = init; delta = dir; ... }` called as `h(0)`); decrementing (`delta--`) before
+  the matching increment keeps retail's schedule (fn_3_3F20, note #252).
