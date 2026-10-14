@@ -56,10 +56,17 @@ typedef struct CameraDesc {
     u32 unk_30;
     u32 pad_34[9];
 } CameraDesc;
-extern void fn_1_46B4(u32 arg0, u32 arg1, const char *arg2, int arg3);
-extern NameEntryPool lbl_10_rodata_1D70;
-extern fn_10_260D4_SndTable lbl_10_rodata_1D8C;
-extern void fn_1_48140(int index);
+
+typedef Sig_fn_800081C8_Color Color;
+extern u8 fn_1_B7C00(void);
+extern u8 fn_10_26434(void);
+extern void fn_10_26554(void);
+extern void fn_1_14BD94(void *);
+extern void fn_10_26424(void);
+extern u16 lbl_1_bss_9F8[5];
+extern u8 lbl_1_bss_8B3A0[0x9f];
+extern void fn_1_A2D84(u32 arg0);
+extern void fn_1_14BCBC(u32 arg0, u32 arg1);
 extern u32 lbl_801A66B4;
 extern u32 fn_800081C8(Color arg0, Color arg1, f32 arg2);
 extern void fn_1_49410(void);
@@ -75,13 +82,14 @@ extern void fn_1_4AE0C(const char* format, ...);
 extern u32 fn_1_4D4C8(Color, f32, f32);
 extern void fn_1_49528(Color);
 extern void fzgx_pool_use(void *);
-extern u16 lbl_1_bss_9F8[5];
-extern void fn_1_A2D84(u32 arg0);
+extern void fn_1_46B4(u32 arg0, u32 arg1, const char *arg2, int arg3);
+extern NameEntryPool lbl_10_rodata_1D70;
+extern fn_10_260D4_SndTable lbl_10_rodata_1D8C;
+extern void fn_1_48140(int index);
 extern CameraDesc lbl_1_rodata_26F8;
 extern void fn_10_261E4(s32 arg0, u8 arg1);
 extern u32 fn_1_4AEC0(u32 value);
 extern u32 fn_800371F8(u32, void *);
-extern u8 fn_1_B7C00(void);
 extern void fn_1_4966C(f32 value1, f32 value2);
 extern void fn_1_4A0D8(const char *);
 extern void fn_1_4AEB4(f32 value);
@@ -110,12 +118,6 @@ extern u32 fn_1_435C(u32 value);
 extern void fn_1_426C(u32 idx);
 extern void fn_1_A8F78(void);
 extern void fn_1_412A0(u32 index);
-extern int fn_10_26434(void);
-extern void fn_10_26554(void);
-extern void fn_1_14BD94(void *);
-extern void fn_10_26424(void);
-extern u8 lbl_1_bss_8B3A0[0x9f];
-extern void fn_1_14BCBC(u32 arg0, u32 arg1);
 extern u8 lbl_1_bss_8E51D;
 extern u8 lbl_1_data_2B0D4[];
 extern u8 lbl_1_data_2B144[];
@@ -130,8 +132,6 @@ extern void fn_1_15555C(void);
 extern void fn_1_14BD74(void);
 
 /* fzgx:begin fn_10_25BC8 */
-
-
 void fn_10_25BC8(void) {
     lbl_10_bss_55CDC = 1;
     fn_1_435C(((fn_10_25BC8_NameEntryState *)lbl_10_bss_55CD8)->unk04);
@@ -220,21 +220,7 @@ void fn_10_25E1C(void) {
 }
 /* fzgx:end fn_10_25E1C */
 
-/* fzgx:begin fn_10_26000 noprologue */
-#include "types.h"
-#include "rel/sel/globals.h"
-#include "rel/sel/name_entry.h"
-
-
-extern u8 fn_1_B7C00(void);
-extern u8 fn_10_26434(void);
-extern void fn_10_26554(void);
-extern void fn_1_14BD94(void *);
-extern void fn_10_26424(void);
-extern u16 lbl_1_bss_9F8[5];
-extern u8 lbl_1_bss_8B3A0[0x9f];
-extern void fn_1_A2D84(void *);
-extern void fn_1_14BCBC(void *, u8);
+/* fzgx:begin fn_10_26000 */
 
 u8 fn_10_26000(void) {
     u8 result;
@@ -259,11 +245,11 @@ u8 fn_10_26000(void) {
     flags = lbl_1_bss_9F8[4];
     if (((flags >> 11) & 1) != 0) {
         // fzgx-allow: A1 target hardware address
-        fn_1_A2D84((void *)0xA9011100); // fzgx-allow: A2 target hardware address
+        fn_1_A2D84( (u32)((void *)0xA9011100)); // fzgx-allow: A2 target hardware address
         fn_10_26424();
         lbl_10_bss_55CE1 = 1;
     }
-    fn_1_14BCBC(&lbl_10_bss_55CE0, lbl_1_bss_8B3A0[0x9e]);
+    fn_1_14BCBC( (u32)(void *)(&lbl_10_bss_55CE0), lbl_1_bss_8B3A0[0x9e]);
     return 0;
 }
 /* fzgx:end fn_10_26000 */
@@ -419,7 +405,6 @@ void fn_10_26424(void) {
 /* fzgx:end fn_10_26424 */
 
 /* fzgx:begin fn_10_26434 */
-
 typedef struct SelState {
     u8 pad0[8];
     u16 flags8;
@@ -430,7 +415,7 @@ typedef struct SelState {
 
 
 
-int fn_10_26434(void) {
+u8 fn_10_26434(void) {
     if (((*(SelState *)&lbl_1_bss_9F8).flags10 & 1) ||
         ((*(SelState *)&lbl_1_bss_9F8).flags12 & 1)) {
         if (lbl_10_bss_55CE2 == 1) {
@@ -467,8 +452,6 @@ int fn_10_26434(void) {
 /* fzgx:end fn_10_26434 */
 
 /* fzgx:begin fn_10_266AC */
-
-
 #define NAME_TABLE ((const char **)lbl_10_data_6B2C)
 
 
