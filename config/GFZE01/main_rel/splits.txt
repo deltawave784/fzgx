@@ -7433,3 +7433,6 @@ rel/main_rel/accessory/fn_1_110008.c:
 
 rel/main_rel/font/fn_1_53FE4.c:
 	.text       start:0x00053FE4 end:0x0005415C align:4
+
+rel/main_rel/bg_san/fn_1_DB53C.c:
+	.text       start:0x000DB53C end:0x000DB9B0 align:4
