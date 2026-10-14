@@ -294,6 +294,108 @@ extern void fn_1_FE5C4(u8 arg0, u32 arg1, u32 arg2, u8 arg3);
 extern void fn_3_BC60(void);
 extern void fn_3_5A50(void);
 
+/* fzgx:begin fn_3_0 noprologue */
+#include "types.h"
+#include "rel/customize/globals.h"
+
+extern u16 lbl_3_bss_20[104];
+extern void fn_80008BA8(u32, u32, u32);
+extern s16 fn_1_14F118(s16, s16);
+extern s32 fn_1_F809C(s32);
+extern s16 fn_1_14F090(s16, s16);
+extern s16 fn_1_14F01C(s16);
+extern u32 fn_1_151BE8(s16, s32);
+extern int fn_1_8D690(int);
+
+typedef struct {
+    u8 id;
+    u8 pad_1[3];
+    u32 data[1];
+} SelSlot;
+
+typedef struct {
+    SelSlot slot[3];
+    u8 pad_18[2];
+    s16 sel[3];
+    u8 pad_20[0xAE];
+    s16 mode;
+} SelState;
+
+#define SEL ((SelState *)lbl_3_bss_20)
+
+/* lbl_3_bss_140 holds 0x81C0-byte save entries; the macros take the entry's byte offset. */
+#define ENTRY_SIZE 0x81C0
+#define ENTRY_FLAGS(o) (*(u32 *)((u8 *)&lbl_3_bss_140 + (o)))
+#define ENTRY_SLOTS(o) ((u8 *)&lbl_3_bss_140 + (o) + 0x81A4)
+#define ENTRY_MODE(o) (*(u8 *)((u32)&lbl_3_bss_140 + 0x81A0 + (o)))
+
+/* Pick the first available item in each of the three slots. */
+static inline void fn_3_0_reset(void) {
+    s16 i;
+    s16 j;
+
+    for (i = 0; i < 3; i++) {
+        SEL->sel[i] = 0;
+        SEL->slot[i].id = fn_1_14F090(i, SEL->sel[i]);
+        while (fn_1_F809C(SEL->slot[i].id) == 0) {
+            s32 n;
+            s32 max;
+            max = fn_1_14F01C(i) - 1;
+            n = SEL->sel[i] + 1;
+            if (n > max) {
+                n = 0;
+            } else if (n < 0) {
+                n = fn_1_14F01C(i) - 1;
+            }
+            SEL->sel[i] = n;
+            SEL->slot[i].id = fn_1_14F090(i, SEL->sel[i]);
+        }
+        for (j = 0; j < 1; j++) {
+            SEL->slot[i].data[j] = fn_1_151BE8(SEL->slot[i].id, j);
+        }
+    }
+}
+
+void fn_3_0(s16 idx, s32 check) {
+    s32 off = idx * ENTRY_SIZE;
+    s16 i;
+    s32 bad;
+
+    if (ENTRY_FLAGS(off) & 0x80000000) {
+        if (ENTRY_FLAGS(off) & 0x40000000) {
+            bad = 0;
+            fn_80008BA8((u32)lbl_3_bss_20, (u32)ENTRY_SLOTS(off), 0x18);
+            for (i = 0; i < 3; i++) {
+                SEL->sel[i] = fn_1_14F118(SEL->slot[i].id, i);
+                if (SEL->sel[i] == -1) {
+                    bad = 1;
+                }
+                if (check != 0 && fn_1_F809C(SEL->slot[i].id) == 0) {
+                    bad = 1;
+                }
+                if (bad == 1) {
+                    fn_3_0_reset();
+                    SEL->mode = 6;
+                    return;
+                }
+            }
+            if (check != 0 && fn_1_8D690(ENTRY_MODE(off)) == 0) {
+                SEL->mode = 6;
+                return;
+            }
+            SEL->mode = ENTRY_MODE(off);
+        } else {
+            fn_3_0_reset();
+            SEL->mode = 6;
+            SEL->mode = ENTRY_MODE(off);
+        }
+    } else {
+        fn_3_0_reset();
+        SEL->mode = 6;
+    }
+}
+/* fzgx:end fn_3_0 */
+
 /* fzgx:begin fn_3_844 noprologue */
 #include "types.h"
 
