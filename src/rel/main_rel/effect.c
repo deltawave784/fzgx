@@ -2543,6 +2543,284 @@ obj->unk_10 = (s32)(60.0f * offset);
 }
 /* fzgx:end fn_1_5F5C8 */
 
+/* fzgx:begin fn_1_5F9B8 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/effect.h"
+#include "dolphin/os/OSFastCast.h"
+#include "dolphin/hw_regs.h"
+#include "psvec.h"
+
+typedef struct {
+    f32 x;
+    f32 y;
+    f32 z;
+} fn_1_5F9B8_Vec;
+
+typedef struct {
+    u8 pad_0[0x18];
+    s16 id;
+    u8 pad_1A[0x2];
+    f32 red;
+    f32 green;
+    f32 blue;
+    f32 size;
+    u8 pad_2C[0x10];
+    fn_1_5F9B8_Vec pos;
+    u8 pad_48[0xC];
+    s16 rot_x;
+    s16 rot_y;
+    u8 pad_58[0x5C];
+    f32 scale;
+} fn_1_5F9B8_Effect;
+
+typedef struct {
+    fn_1_5F9B8_Vec pos;
+    f32 radius;
+    s16 flags;
+    u8 pad_12[0x2];
+    u8 color[4];
+} fn_1_5F9B8_Light;
+
+typedef struct {
+    u8 pad_0[0x8];
+    fn_1_5F9B8_Vec pos;
+    u8 pad_14[0x10];
+    void *tex;
+} fn_1_5F9B8_Model;
+
+typedef struct {
+    u8 pad_0[0xA0];
+    fn_1_5F9B8_Model *glow;
+    u8 pad_A4[0x7C];
+    void *model;
+} fn_1_5F9B8_Assets;
+
+extern void fn_1_867CC(s16 value, void *out);
+extern void *fn_1_868C0(s8 index);
+extern void *fn_1_86254(int index);
+extern int fn_1_9F914(const void *src0, const void *src1);
+extern s32 fn_1_54E34(void *arg0, f32 arg1);
+extern void fn_1_9EA94(void *light);
+extern void lbl_8006D9D8(void *);
+extern void lbl_8006D95C(s32);
+extern void mathutil_mtxA_rotate_x(s16 value);
+extern void *memset(void *, int, u32);
+extern void lbl_8006DB74(void *);
+extern void lbl_8006D7B0(void);
+extern f32 lbl_8006D0B4(f32 value);
+extern void lbl_8006D848(f32);
+extern void lbl_8006DFC4(void *);
+extern void fn_80074788(u32);
+extern void fn_80072864(u32);
+extern void fn_800745A4(u32, s32, s32, u32, u32, u32);
+extern void fn_800734A8(u32, s32, s32, s32);
+extern void fn_80072AB0(s32, s32, s32);
+extern void fn_800735C8(s32, s32);
+extern void fn_80073620(s32, s32);
+extern void fn_80073C6C(s32);
+extern void fn_80072C24(s32, s32, s32, s32, s32);
+extern void fn_80072D64(s32, s32, s32, s32, u8, s32);
+extern void fn_80072CC4(s32, s32, s32, s32, s32);
+extern void fn_80072E20(s32, s32, s32, s32, u8, s32);
+extern void fn_80073678(u32);
+extern void fn_80074660(u32);
+extern void fn_80074918(u8 arg0, s32 arg1, u8 arg2);
+extern void fn_800720B0(u32);
+extern void fn_800728A8(s32, s32, s32, s32);
+extern void fn_80073778(void *, s32);
+
+#pragma section code_type ".fzgxpool"
+__declspec(section ".fzgxpool") static void fzgx_pool_prime1(void) {
+    volatile f32 s; volatile f64 d;  /* fzgx-allow: S2 pool primer sinks */
+    s = 60.0f;
+    s = 0.10000000149011612f;
+    s = 32767.0f;
+    s = 0.05000000074505806f;
+    d = 0.07;
+    s = 20000.0f;
+}
+static const u32 fzgx_pool_table2[1] = {0x00000000};  /* fzgx-allow: A1 retail pool bytes */
+__declspec(section ".fzgxpool") static void fzgx_pool_keep2(void) { const u32 *volatile cp; cp = fzgx_pool_table2; }  /* fzgx-allow: S2 pool primer sink */
+__declspec(section ".fzgxpool") static void fzgx_pool_prime3(void) {
+    volatile f32 s; volatile f64 d;  /* fzgx-allow: S2 pool primer sinks */
+    d = 4503599627370496.0;
+    s = 1.0f;
+    s = -0.029999999329447746f;
+    d = 15.0;
+    d = 4503601774854144.0;
+    d = 1.5;
+    d = 0.5;
+    s = 0.0f;
+    s = 0.5f;
+    s = 8.0f;
+    s = 255.0f;
+    s = 15.0f;
+    s = 0.20000000298023224f;
+    s = 0.07999999821186066f;
+    s = 0.25f;
+    s = 0.9800000190734863f;
+    s = 0.9900000095367432f;
+    s = 40.0f;
+    s = 20.0f;
+    s = 1.5f;
+    s = 0.44999998807907104f;
+    s = -2.0f;
+    s = 0.0833333358168602f;
+    s = 0.15000000596046448f;
+    s = 0.125f;
+    s = -0.4000000059604645f;
+    s = -0.30000001192092896f;
+    s = 2.0f;
+    s = 250.0f;
+    d = 0.6;
+    d = 0.4;
+    s = 0.30000001192092896f;
+    s = -0.004000000189989805f;
+    s = 0.01666666753590107f;
+    s = 65536.0f;
+    s = 4096.0f;
+    s = 0.9599999785423279f;
+    s = 0.4000000059604645f;
+    s = 0.05050000175833702f;
+    s = 0.050999999046325684f;
+    s = 0.949999988079071f;
+    s = 0.8999999761581421f;
+}
+static const u32 fzgx_pool_table4[1] = {0x00000000};  /* fzgx-allow: A1 retail pool bytes */
+__declspec(section ".fzgxpool") static void fzgx_pool_keep4(void) { const u32 *volatile cp; cp = fzgx_pool_table4; }  /* fzgx-allow: S2 pool primer sink */
+__declspec(section ".fzgxpool") static void fzgx_pool_prime5(void) {
+    volatile f32 s; volatile f64 d;  /* fzgx-allow: S2 pool primer sinks */
+    d = 150.0;
+    d = 10.0;
+    d = 3.0;
+}
+static const u32 fzgx_pool_table6[2] = {0x00000000, 0x3DCCCCCD};  /* fzgx-allow: A1 retail pool bytes */
+__declspec(section ".fzgxpool") static void fzgx_pool_keep6(void) { const u32 *volatile cp; cp = fzgx_pool_table6; }  /* fzgx-allow: S2 pool primer sink */
+__declspec(section ".fzgxpool") static void fzgx_pool_prime7(void) {
+    volatile f32 s; volatile f64 d;  /* fzgx-allow: S2 pool primer sinks */
+    s = -2.4000000953674316f;
+    s = 5.0f;
+    d = 1.2;
+    d = 0.1;
+    s = 10.0f;
+    s = 18.0f;
+    d = 0.7;
+    d = 50.0;
+}
+static const u32 fzgx_pool_table8[3] = {0x00000000, 0x3DCCCCCD, 0xC019999A};  /* fzgx-allow: A1 retail pool bytes */
+__declspec(section ".fzgxpool") static void fzgx_pool_keep8(void) { const u32 *volatile cp; cp = fzgx_pool_table8; }  /* fzgx-allow: S2 pool primer sink */
+__declspec(section ".fzgxpool") static void fzgx_pool_prime9(void) {
+    volatile f32 s; volatile f64 d;  /* fzgx-allow: S2 pool primer sinks */
+    s = 19.0f;
+    d = 24.0;
+    s = 0.7071067690849304f;
+}
+#pragma section code_type ".text"
+#pragma fp_contract on
+
+void fn_1_5F9B8(fn_1_5F9B8_Effect *effect) {
+    u8 camera[12];
+    fn_1_5F9B8_Vec pos;
+    u8 data[64];
+    u8 mtx[0x30];
+    fn_1_5F9B8_Light light;
+    fn_1_5F9B8_Vec axis;
+    fn_1_5F9B8_Model *glow;
+    void *model;
+    s32 players;
+    void *player;
+    u32 seed;
+    f32 red;
+    f32 green;
+    f32 blue;
+    f32 radius;
+    f32 brightness;
+    f32 size;
+    f32 color_scale;
+    f32 base;
+    f32 half;
+    f32 dist;
+
+    fn_1_867CC(effect->id, camera);
+    players = *(s16 *)((u8 *)fn_1_868C0((s8)effect->id) + 0x3ba);
+    player = fn_1_86254(effect->id);
+    if (players >= 3 && *(s8 *)((u8 *)player + 0x475) == -1) {
+        return;
+    }
+
+    pos = effect->pos;
+    model = ((fn_1_5F9B8_Assets *)lbl_1_bss_38458->unk_8)->model;
+    lbl_8006D9D8(camera);
+    lbl_8006D95C(effect->rot_y);
+    mathutil_mtxA_rotate_x(effect->rot_x);
+    memset(data, 0, 64);
+    lbl_8006DB74(data + 8);
+    size = 0.70710677f * effect->size;
+    *(f32 *)(data + 0) = size;
+    color_scale = 255.0f;
+    data[60] = (u8)(s32)(color_scale * effect->red);
+    data[61] = (u8)(s32)(color_scale * effect->green);
+    data[62] = (u8)(s32)(color_scale * effect->blue);
+    data[63] = 0xff;
+    *(f32 *)(data + 4) = size;
+    fn_1_9F914(data, model);
+
+    glow = ((fn_1_5F9B8_Assets *)lbl_1_bss_38458->unk_8)->glow;
+    base = 0.1f * effect->scale;
+    radius = 1.0f + base;
+    half = 0.5f * base;
+    brightness = 255.0f * ((0.125f + half) * (1.0f + (f32)(((lbl_1_data_1D628 = lbl_1_data_1D628 * 0x41c64e6d + 0x3039) >> 16) & 0x7fff) / 32767.0f));
+
+    fn_80074788(0);
+    fn_80072864(0);
+    fn_800745A4(0, 1, 4, 60, 0, 125);
+    fn_800734A8(0, 0, 0, 255);
+    fn_80072AB0(0, 0, 0);
+    fn_800735C8(0, 12);
+    fn_80073620(0, 28);
+    fn_80073C6C(0);
+    fn_80072C24(0, 15, 15, 15, 14);
+    fn_80072D64(0, 0, 0, 0, 1, 0);
+    fn_80072CC4(0, 7, 6, 4, 7);
+    fn_80072E20(0, 0, 0, 0, 1, 0);
+    fn_80073678(1);
+    fn_80074660(1);
+    fn_80074918(1, 3, 0);
+    fn_800720B0(0);
+    fn_800728A8(1, 4, 1, 0);
+    fn_80073778(glow->tex, 0);
+
+    memset(&light, 0, sizeof(light));
+    red = brightness * effect->red;
+    green = brightness * effect->green;
+    blue = brightness * effect->blue;
+    light.color[0] = __OSf32tou8(red);
+    light.color[1] = __OSf32tou8(green);
+    light.color[2] = __OSf32tou8(blue);
+    light.color[3] = 0xff;
+    lbl_8006D9D8(&pos);
+    lbl_8006D7B0();
+    if (fn_1_54E34(&glow->pos, radius) != 0) {
+        /* translation column of the locked-cache matrix */
+        psvec_set(&axis, *(f32 *)(LC_BASE + 0x2C), *(f32 *)(LC_BASE + 0x1C), *(f32 *)(LC_BASE + 0x0C));
+        /* squared length; the asm block above blocks fp contraction, so fuse explicitly */
+        dist = axis.x * axis.x;
+        dist = __fmadds(axis.y, axis.y, dist);
+        dist = lbl_8006D0B4(__fmadds(axis.z, axis.z, dist));
+        if (dist > 0.1f + radius) {
+            lbl_8006DB74(mtx);
+            lbl_8006D848((dist - radius) / dist);
+            lbl_8006DFC4(mtx);
+        }
+        light.pos = glow->pos;
+        light.radius = 0.70710677f * radius;
+        light.flags = 0;
+        fn_1_9EA94(&light);
+    }
+}
+/* fzgx:end fn_1_5F9B8 */
+
 /* fzgx:begin fn_1_5FE24 */
 // fn_1_5FE24: empty in retail (single blr).
 void fn_1_5FE24(void) {
