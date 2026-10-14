@@ -773,6 +773,178 @@ void fn_1_12B4EC(s16 arg0, s16 arg1) {
 }
 /* fzgx:end fn_1_12B4EC */
 
+/* fzgx:begin fn_1_12BB18 noprologue */
+#include "types.h"
+#include "game/main_rel/archive_types.h"
+
+typedef struct {
+    u8 pad_0[0x9C0];
+} fn_1_12BB18_Car2;
+
+/* data is an array of 0x20-byte slots; the header fields live in slot 0 */
+typedef struct {
+    u8 pad_0[0x4];
+    s16 needed;
+    u8 pad_6[0x8];
+    s16 id;
+    u8 pad_10[0x10];
+} fn_1_12BB18_Slot;
+
+typedef struct {
+    fn_1_12BB18_Slot slots[4];
+    u8 pad_80[0x18];
+    u32 mask;
+    u8 pad_9C[0x3];
+    u8 level[4];
+} fn_1_12BB18_Data;
+
+typedef struct {
+    s16 state;
+    u8 pad_2[0x1A];
+} fn_1_12BB18_State;
+
+typedef struct {
+    u8 pad_0[0x8];
+    /* re-read at every test: the pad state is refreshed asynchronously */
+    volatile u16 held;
+    u8 pad_A[0x6];
+    u16 repeat;
+    u16 trigger;
+} fn_1_12BB18_Input;
+
+typedef struct {
+    s8 x;
+    u8 pad_1[0xF];
+} fn_1_12BB18_Stick;
+
+extern u8 lbl_1_bss_A48[64];
+extern int fn_1_4C10(void);
+extern void fn_1_A2D84(u32);
+extern void fn_1_12E0B8(s16, s16, Fn12E0B8_Car *, Fn12E0B8_Car *, s32, const char **, u32);
+extern void fn_1_12F150(s16, u32, u32);
+extern s32 fn_1_467F4(void);
+extern void fn_1_A5344(u8, s16);
+extern u32 fn_1_12B664(s16, void *, void *);
+extern s32 fn_1_12F228(void);
+extern void fn_1_12F1E8(s32);
+extern void fn_1_12ECA8(s16, s16, void *, void *, void *);
+extern u8 fn_1_D6698(void);
+extern u8 fn_1_D6690(void);
+extern void fn_1_12F17C(void);
+
+#define FN_1_12BB18_INPUT ((fn_1_12BB18_Input *)&lbl_1_bss_9F8)
+#define FN_1_12BB18_STICK ((fn_1_12BB18_Stick *)lbl_1_bss_A48)
+#define FN_1_12BB18_BIT(v, n) (((v) >> (n)) & 1)
+
+s32 fn_1_12BB18(Fn12E0B8_Car *cars, fn_1_12BB18_Car2 *cars2, fn_1_12BB18_Data *data,
+                fn_1_12BB18_State *states, s32 force) {
+    s16 i;
+    s16 id;
+    s8 delta;
+    s32 level;
+    s8 x;
+    fn_1_12BB18_State *st;
+    Fn12E0B8_Car *car;
+    fn_1_12BB18_Car2 *car2;
+    s16 count;
+
+    count = 0;
+    if (fn_1_4C10() != 0) {
+        return 0;
+    }
+    for (i = 0; i < 4; i++) {
+        st = &states[i];
+        car = &cars[i];
+        car2 = &cars2[i];
+        id = data->slots[i].id;
+        if (id == -1) {
+            continue;
+        }
+        if (st->state == 0) {
+            if (__rlwnm(data->mask, (i + 1) & 31, 31, 31) &&
+                FN_1_12BB18_BIT(FN_1_12BB18_INPUT[i].held, 9) &&
+                (!(lbl_1_bss_8B3A0.unk_94 & 0x40000000) || (lbl_1_bss_8B3A0.unk_94 & 0x4000))) {
+                if (lbl_1_bss_960 == 1) {
+                    fn_1_A2D84(0xA9010200);
+                }
+                return -1;
+            }
+            fn_1_12E0B8(i, id, car, (Fn12E0B8_Car *)car2, 1, (const char **)lbl_1_data_407BC, 3);
+        } else {
+            lbl_1_bss_8B3A0.unk_129 = 0;
+            if (FN_1_12BB18_BIT(FN_1_12BB18_INPUT[i].held, 9) &&
+                (!(lbl_1_bss_8B3A0.unk_94 & 0x40000000) || (lbl_1_bss_8B3A0.unk_94 & 0x4000))) {
+                fn_1_12E0B8(i, id, car, (Fn12E0B8_Car *)car2, 0, (const char **)lbl_1_data_407BC, 3);
+                fn_1_12C0EC((fn_1_12C0EC_FnData *)st);
+                fn_1_A2D84(0xA9010200);
+                fn_1_12F150(i, 8, 0);
+            } else if (st->state == 2) {
+                if (force != 0 || fn_1_467F4() == 0) {
+                    count++;
+                }
+                continue;
+            } else if (st->state == 1) {
+                if (!(lbl_1_bss_8B3A0.unk_94 & 0x80000000)) {
+                    if (FN_1_12BB18_BIT(FN_1_12BB18_INPUT[i].held, 8) &&
+                        (force != 0 || fn_1_467F4() == 0)) {
+                        st->state = 2;
+                    }
+                } else if (FN_1_12BB18_BIT(FN_1_12BB18_INPUT[i].held, 8)) {
+                    st->state = 2;
+                }
+                if (st->state == 2) {
+                    count++;
+                }
+                continue;
+            }
+        }
+
+        x = FN_1_12BB18_STICK[i].x;
+        if (__abs(x) == 72) {
+            delta = (x < 0) ? -3 : 3;
+        } else if (__abs(x) > 60) {
+            delta = (x < 0) ? -2 : 2;
+        } else if (__abs(x) > 40) {
+            delta = (x < 0) ? -1 : 1;
+        } else if (FN_1_12BB18_BIT(FN_1_12BB18_INPUT[i].trigger, 0)) {
+            delta = -1;
+        } else if (FN_1_12BB18_BIT(FN_1_12BB18_INPUT[i].trigger, 1)) {
+            delta = 1;
+        } else {
+            delta = 0;
+        }
+        level = data->level[i] + delta;
+        (&lbl_1_bss_8B3A0.unk_9F)[i] = (level < 0) ? 0 : ((level > 100) ? 100 : level);
+        if (FN_1_12BB18_BIT(FN_1_12BB18_INPUT[i].repeat, 0)) {
+            level = (&lbl_1_bss_8B3A0.unk_9F)[i] - 1;
+            (&lbl_1_bss_8B3A0.unk_9F)[i] = (level < 0) ? 0 : ((level > 100) ? 100 : level);
+        }
+        if (FN_1_12BB18_BIT(FN_1_12BB18_INPUT[i].repeat, 1)) {
+            level = (&lbl_1_bss_8B3A0.unk_9F)[i] + 1;
+            (&lbl_1_bss_8B3A0.unk_9F)[i] = (level < 0) ? 0 : ((level > 100) ? 100 : level);
+        }
+        fn_1_A5344((&lbl_1_bss_8B3A0.unk_9F)[i], i);
+        fn_1_12B664(i, data, st);
+        if (FN_1_12BB18_BIT(FN_1_12BB18_INPUT[i].held, 8) || fn_1_12F228() != 0) {
+            if (st->state == 0) {
+                fn_1_12F1E8(0);
+                st->state = 1;
+                fn_1_12ECA8(i, id, car, car2, st);
+                fn_1_12F150(i, 7, 1);
+                if (fn_1_D6698() || !fn_1_D6690()) {
+                    fn_1_A2D84(0xA9010100);
+                }
+            }
+        }
+    }
+    if (count >= data->slots[0].needed) {
+        fn_1_12F17C();
+        return 1;
+    }
+    return 0;
+}
+/* fzgx:end fn_1_12BB18 */
+
 /* fzgx:begin fn_1_12BF7C */
 typedef struct {
     u8 pad[0x94];
