@@ -1122,6 +1122,195 @@ void fn_17_334C(void) {
 }
 /* fzgx:end fn_17_334C */
 
+/* fzgx:begin fn_17_3410 pool */
+typedef struct {
+    f32 x, y, z;
+} Vec3;
+
+typedef struct {
+    u8 active;
+    u8 pad_1[3];
+    s32 count;
+    Vec3 pos;
+    f32 scale;
+    f32 unk_18;
+    s16 unk_1C;
+    s16 unk_1E;
+    s16 unk_20;
+    s16 unk_22;
+    s16 unk_24;
+    s16 unk_26;
+} InterviewCam;
+
+/* interview.c file-scope objects, in retail order: MWCC addresses them off one section base. */
+u8 lbl_17_bss_0;
+u8 lbl_17_bss_1;
+u8 lbl_17_bss_2;
+u8 lbl_17_bss_3;
+u32 lbl_17_bss_3_fill_4[2];
+u32 lbl_17_bss_C;
+u32 lbl_17_bss_10;
+u32 lbl_17_bss_14;
+u32 lbl_17_bss_18[2];
+u32 lbl_17_bss_20;
+u32 lbl_17_bss_24[4];
+u32 lbl_17_bss_34[8];
+u32 lbl_17_bss_54;
+u32 lbl_17_bss_58;
+u16 lbl_17_bss_5C;
+u8 lbl_17_bss_60[0x110];
+InterviewCam lbl_17_bss_170;
+
+/* the TU's literal pool ahead of this function's constants (retail .rodata 0x0-0x128) */
+typedef struct {
+    f32 f0[6];
+} fzgx_pool_0;
+
+typedef struct {
+    f32 f1c[4];
+    u32 c2c[4];
+    f32 f3c;
+    f32 f40[8];
+} fzgx_pool_1c;
+
+typedef struct {
+    u32 w70[25];
+    u32 wd4[3];
+    f32 fe0;
+    u32 we4;
+    f32 fe8[11];
+} fzgx_pool_70;
+
+extern void fzgx_sink(void *);
+extern void fzgx_sink_f(f32);
+
+#pragma section code_type ".fzgxpool"
+static void fzgx_bss_layout(void) {
+    fzgx_sink(&lbl_17_bss_0);
+    fzgx_sink(&lbl_17_bss_1);
+    fzgx_sink(&lbl_17_bss_2);
+    fzgx_sink(&lbl_17_bss_3);
+    fzgx_sink(lbl_17_bss_3_fill_4);
+    fzgx_sink(&lbl_17_bss_C);
+    fzgx_sink(&lbl_17_bss_10);
+    fzgx_sink(&lbl_17_bss_14);
+    fzgx_sink(lbl_17_bss_18);
+    fzgx_sink(&lbl_17_bss_20);
+    fzgx_sink(lbl_17_bss_24);
+    fzgx_sink(lbl_17_bss_34);
+    fzgx_sink(&lbl_17_bss_54);
+    fzgx_sink(&lbl_17_bss_58);
+    fzgx_sink(&lbl_17_bss_5C);
+    fzgx_sink(lbl_17_bss_60);
+    fzgx_sink(&lbl_17_bss_170);
+}
+
+static void fzgx_pool_primer_0(void) {
+    fzgx_pool_0 head = {{0.0f, 0.0f, 0.0f, 0.0f, 0.0f, -10.0f}};
+    fzgx_sink(&head);
+    fzgx_sink_f(1.0f);
+}
+
+static void fzgx_pool_primer_1(s32 n, u32 u) {
+    fzgx_pool_1c head = {
+        {30.0f, 0.0f, 0.1f, 90000.0f},
+        {0x00FF00FF, ~0x7F7F7F00u, 0xFFFFFFFF, ~0x7F7F7FFFu},
+        0.5f,
+        {0.2f, -3.7468882e-37f, -3.2964854e38f, 0.0f, 1.16f, 89128.96f, 1.4499999f,
+         -1.5881868e-23f},
+    };
+    fzgx_sink(&head);
+    fzgx_sink_f((f32)u);
+    fzgx_sink_f((f32)n);
+}
+
+static void fzgx_pool_primer_2(void) {
+    fzgx_pool_70 mid = {
+        {0xFFFFFF00, 0x00000000, 0x00000000, 0x00000000, 0x3FF00000, 0x00000000, 0x40240000,
+         0x00000000, 0x3FECCCCC, 0xCCCCCCCD, 0x3A1D4952, 0x40000000, 0x43A00000, 0x434D0000,
+         0x40A00000, 0x00000000, 0x3FE99999, 0x9999999A, 0x437A0000, 0x43340000, 0x41200000,
+         0x43480000, 0x42400000, 0x42480000, 0x42960000},
+        {0x00000000, 0x00000000, 0x43480000},
+        0.6f,
+        0x000000FF,
+        {3.003967f, 3.0083616f, -3.031672e-13f, -1.7014636e38f, -0.5f, 0.0f, -1.765f,
+         1.951564e-20f, 0.0f, 0.0f, -0.01f},
+    };
+    fzgx_sink(&mid);
+    fzgx_sink_f(0.01f);
+    fzgx_sink_f(240.0f);
+    fzgx_sink_f(650.0f);
+    fzgx_sink_f(-200.0f);
+    fzgx_sink_f(0.00021f);
+}
+#pragma section code_type ".text"
+
+extern void *memset(void *, int, u32);
+extern f32 lbl_8006D21C(u32);
+extern f32 lbl_8006D188(s32);
+extern s8 fn_1_A5DC4(void);
+extern u32 lbl_801A66A0;
+
+#pragma fp_contract off
+void fn_17_3410(void) {
+    f32 scale;
+    f32 value;
+    Vec3 pos;
+
+    if (!(lbl_17_bss_58 & 0x04000000)) {
+        memset(&lbl_17_bss_170, 0, sizeof(InterviewCam));
+        return;
+    }
+    lbl_17_bss_170.active = 1;
+    if (lbl_17_bss_5C == 0 && (lbl_17_bss_58 & 1)) {
+        InterviewCam *cam;
+
+        lbl_8006D21C(0x71c);
+        cam = &lbl_17_bss_170;
+        cam->pos.x += 0.012 * -cam->pos.x;
+        cam->pos.y += 0.015 * -cam->pos.y;
+        cam->pos.z = -0.01f;
+        cam->scale += 0.013 * (6.450000286102295e-05 - cam->scale);
+        if (cam->unk_1E != 0) {
+            cam->unk_1E = 32768.0f * -lbl_8006D188(65536.0f * (f32)(cam->count % 1620) / 1620.0f) - 32768.0f;
+        }
+        lbl_17_bss_170.active = 1;
+        lbl_17_bss_170.unk_18 = 1.0f;
+        lbl_17_bss_170.unk_1C = lbl_801A66A0 << 5;
+        lbl_17_bss_170.unk_20 = lbl_801A66A0 << 9;
+        lbl_17_bss_170.unk_22 = (s32)(4096.0f * lbl_8006D188(65536.0f * (f32)(lbl_801A66A0 % 900) / 900.0f)) - 0x1000;
+        lbl_17_bss_170.unk_24 = -(lbl_801A66A0 << 8);
+        lbl_17_bss_170.unk_26 = 4096.0f * lbl_8006D188(65536.0f * (f32)(lbl_801A66A0 % 600) / 600.0f);
+        lbl_17_bss_170.count++;
+    } else {
+        scale = 240.0f / lbl_8006D21C(0x71c);
+        value = 0.01f / scale;
+        if (fn_1_A5DC4()) {
+            Vec3 a = {0.0f, 0.0f, -0.01f};
+            a.x = 174.0f * value;
+            a.y = 90.0f * value;
+            pos = a;
+        } else {
+            Vec3 b = {0.0f, 0.0f, -0.01f};
+            b.x = 125.0f * value;
+            b.y = 90.0f * value;
+            pos = b;
+        }
+        lbl_17_bss_170.active = 1;
+        lbl_17_bss_170.count = 0;
+        lbl_17_bss_170.pos = pos;
+        lbl_17_bss_170.scale = 1.2e-05f;
+        lbl_17_bss_170.unk_18 = 1.0f;
+        lbl_17_bss_170.unk_1C = lbl_801A66A0 << 4;
+        lbl_17_bss_170.unk_1E = -(lbl_801A66A0 << 8);
+        lbl_17_bss_170.unk_20 = lbl_801A66A0 << 10;
+        lbl_17_bss_170.unk_22 = (s32)(4096.0f * lbl_8006D188(65536.0f * (f32)(lbl_801A66A0 % 900) / 900.0f)) - 0x1000;
+        lbl_17_bss_170.unk_24 = -(lbl_801A66A0 << 9);
+        lbl_17_bss_170.unk_26 = 4096.0f * lbl_8006D188(65536.0f * (f32)(lbl_801A66A0 % 600) / 600.0f);
+    }
+}
+/* fzgx:end fn_17_3410 */
+
 /* fzgx:begin fn_17_38C4 */
 typedef struct {
     u8 initialized;
