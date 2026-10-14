@@ -427,11 +427,22 @@ def view_rewrite(body: str, name: str, decl: str, truth_is_pointer: bool = False
     else:
         view = f'(*(({t} *)&{name}))'
     ident = re.compile(r'(?<![\w.>])' + re.escape(name) + r'\b')
+    # `&name` of the whole object keeps its address and type: wrapping the view in `&` is not an
+    # lvalue (`&(((u32 *)&lbl_3_bss_F0))`, fn_3_BD00/BD30); `&name[i]` / `&name.f` still go
+    # through the view (postfix binds first). A pointer truth's `&name` is the pointer itself.
+    whole = re.compile(r'&\s*' + re.escape(name) + r'\b(?!\s*(?:\[|\.|->))')
+    if m.group(2):
+        address = f'(({t} (*){m.group(2)})&{name})'
+    elif t.endswith('*') and truth_is_pointer:
+        address = f'&{name}'
+    else:
+        address = f'(({t} *)&{name})'
     out_lines = []
     for ln in body.splitlines():
         if tutidy.DECL_LINE_RE.match(ln) and tutidy._decl_name(ln) == name:
             continue
-        out_lines.append(ident.sub(view, ln))
+        parts = whole.split(ln)
+        out_lines.append((address).join(ident.sub(view, part) for part in parts))
     return '\n'.join(out_lines) + ('\n' if body.endswith('\n') else '')
 
 
