@@ -88,8 +88,6 @@ extern void fn_1_46B4(u32 arg0, u32 arg1, const char *arg2, int arg3);
 extern const f32 lbl_3_rodata_5FC[3];
 
 /* fzgx:begin fn_3_1552C */
-
-
 void fn_3_1552C(void) {
     struct fn_3_1552C_Obj *ptr;
 

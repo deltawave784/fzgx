@@ -518,12 +518,8 @@ void fn_3_19EFC(fn_3_19EFC_CustomizeTool *self) {
 
 /* fzgx:begin fn_3_19F40 noprologue */
 #include "types.h"
-#include "rel/customize/globals.h"
-#include "rel/customize/toolkit.h"
 #include "font.h"
-
-
-
+#include "game/vec3.h"
 
 struct QView {
     u8 unk_0;
@@ -679,7 +675,7 @@ struct fn_3_2B268_lbl_1_bss_7F0C0 {
     u32 unk_48F8;
 };
 
-typedef struct Sig_fn_1_8D210_fn_1_8D210_car {
+typedef struct fn_3_19F40_Sig_fn_1_8D210_fn_1_8D210_car {
     f32 position[6];
     f32 scale_z;
     f32 scale_y;
@@ -708,7 +704,7 @@ typedef struct Sig_fn_1_8D210_fn_1_8D210_car {
     s32 field_58;
     u8 field_5c[4];
     u32 field_60;
-} Sig_fn_1_8D210_fn_1_8D210_car;
+} fn_3_19F40_Sig_fn_1_8D210_fn_1_8D210_car;
 
 typedef s32 (*Sig_fn_1_8D210_fn_1_8D210_callback)(u32);
 
@@ -1160,6 +1156,7 @@ void fn_3_1ABD8(void *arg0, s16 x1, s16 y1, s16 x2, s16 y2, u32 *value) {
 /* fzgx:begin fn_3_1ACE4 noprologue */
 #include "types.h"
 #include "font.h"
+#include "game/vec3.h"
 
 extern void fn_3_1B4BC(void *, s32, s32, s32, s32, u32 *);
 
@@ -1309,6 +1306,8 @@ void fn_3_1B008(void *data, u32 x1, u32 y1, u32 x2, u32 y2) {
 
 /* fzgx:begin fn_3_1B130 noprologue */
 #include "types.h"
+#include "font.h"
+#include "game/vec3.h"
 
 typedef struct Rgba {
     u8 r, g, b, a;
@@ -1536,8 +1535,6 @@ void fn_3_1BA20(void *arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4, s32 *arg5) {
 /* fzgx:end fn_3_1BA20 */
 
 /* fzgx:begin fn_3_1BF08 */
-
-
 /* Primes the TU literal pool (lbl_3_rodata_6A0..) in retail order. */
 #pragma section RX ".fzgxpool"
 __declspec(section ".fzgxpool") void fzgx_pool_primer(void) {
@@ -2805,6 +2802,7 @@ void fn_3_23524(void) {
 /* fzgx:begin fn_3_23724 noprologue */
 #include "types.h"
 #include "font.h"
+#include "game/vec3.h"
 
 extern u32 lbl_1_rodata_26F8;
 

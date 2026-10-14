@@ -293,6 +293,7 @@ extern void fn_1_151BDC(u32 value);
 extern void fn_1_FE5C4(u8 arg0, u32 arg1, u32 arg2, u8 arg3);
 extern void fn_3_BC60(void);
 extern void fn_3_5A50(void);
+extern void fn_1_496FC(f32, f32);
 
 /* fzgx:begin fn_3_0 noprologue */
 #include "types.h"
@@ -530,7 +531,7 @@ void fn_3_BFC(char *destination, void *unused, const char *source, const char *s
 }
 /* fzgx:end fn_3_BFC */
 
-/* fzgx:begin fn_3_E64 pool noprologue */
+/* fzgx:begin fn_3_E64 pool */
 #include "types.h"
 
 typedef struct { u8 r, g, b, a; } Color;
@@ -554,8 +555,6 @@ char *probe_tblA[9] = {0};
 char *probe_tblB[9] = {0};
 u8 probe_pad1[0x15D4 - 0xE64] = {1};
 
-extern s32 lbl_801A66B4;
-
 extern Color fn_800081C8(Color, Color, f32);
 extern void fn_1_49410(void);
 extern void fn_1_4955C(f32, f32);
@@ -563,7 +562,6 @@ extern void fn_1_495C8(u8);
 extern void fn_1_495B0(u32);
 extern void fn_1_49590(f32);
 extern void fn_1_4966C(f32, f32);
-extern void fn_1_496FC(f32, f32);
 extern void fn_1_4D494(void);
 extern void fn_1_49514(Color);
 extern void fn_1_49528(Color);
@@ -572,7 +570,6 @@ extern void fn_1_4AE0C(const char *, ...);
 extern u32 fn_1_4D4C8(Color, f32, f32);
 
 /* Retail literal pool (lbl_3_rodata_0 onward), primed in first-use order. */
-
 
 #pragma section code_type ".fzgxpool"
 static void fzgx_base_order_data(void) {
@@ -742,9 +739,6 @@ __declspec(section ".fzgxpool") static void fzgx_pool_prime8(void) {
     d = 4503601774854144.0;
 }
 #pragma section code_type ".text"
-
-
-
 
 void fn_3_131C(s32 y, void *source) {
     char buffer[0x400];

@@ -313,7 +313,6 @@ void fn_3_11FB4(u8 value_47, u8 value_46, u32 value_7EDC0) {
 /* fzgx:end fn_3_11FB4 */
 
 /* fzgx:begin fn_3_12B14 pool */
-
 typedef struct {
     u8 pad_0[0x390];
     u32 flags;
