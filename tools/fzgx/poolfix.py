@@ -35,6 +35,7 @@ SHN_UNDEF = 0
 STB_GLOBAL = 1
 STT_NOTYPE = 0
 STT_OBJECT = 1
+STT_SECTION = 3
 SHT_SYMTAB = 2
 SHT_RELA = 4
 SHT_STRTAB = 3
@@ -175,6 +176,20 @@ class Elf:
             done.append(f"{private}->{retail}")
         return done, skipped
 
+    def _relocated_indices(self) -> set:
+        return {struct.unpack_from('>I', self.data, off + 4)[0] >> 8
+                for rs in self.sections if rs['type'] == SHT_RELA
+                for off in range(rs['offset'], rs['offset'] + rs['size'], 12)}
+
+    def _undefine_leftovers(self, sec: dict) -> None:
+        """Before a section is emptied (flags 0: mwld ignores it), undefine the labels still
+        defined in it that no relocation reaches (MWCC's `...bss.0` section base). mwldeppc
+        1.3.2 crashes (c0000005 at 0043d600) on a symbol defined in an ignored section."""
+        used = self._relocated_indices()
+        for s in self.symbols():
+            if s['shndx'] == sec['index'] and (s['info'] & 0xF) != STT_SECTION and s['index'] not in used:
+                self.data[s['off'] + 4:s['off'] + 16] = struct.pack('>IIBBH', 0, 0, 0, 0, SHN_UNDEF)
+
     def drop_private_data(self, private_names: List[str]) -> bool:
         """Empty .data when every object symbol in it was retargeted (a switch jump table the
         retail data unit already holds); else leave it."""
@@ -194,6 +209,7 @@ class Elf:
                 others = []
         if others:
             return False
+        self._undefine_leftovers(dsec)
         dsec["size"] = 0
         dsec["addralign"] = 1
         dsec["flags"] = 0
@@ -244,6 +260,7 @@ class Elf:
             return False
         for s in others:
             self.data[s['off'] + 4:s['off'] + 16] = struct.pack('>IIBBH', 0, 0, 0, 0, SHN_UNDEF)
+        self._undefine_leftovers(ro)
         # an empty but allocatable section still makes the linker align before placing it;
         # strip ALLOC so it is not placed at all
         ro["size"] = 0
