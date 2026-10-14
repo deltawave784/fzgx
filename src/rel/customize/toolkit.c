@@ -2,6 +2,8 @@
 #include "rel/customize/globals.h"
 #include "rel/customize/toolkit.h"
 #include "font.h"
+#include "game/vec3.h"
+
 
 
 
@@ -196,34 +198,59 @@ typedef s32 (*Sig_fn_1_8D210_fn_1_8D210_callback)(u32);
 struct fn_3_2BFB4_lbl_801A66B4 {
     u32 unk_0;
 };
-extern void fn_3_1AB34(void *, s16, s16, u32 *);
-extern u32 fn_3_17820();
-extern void fn_3_1ADA4(void *, int, int, int, int);
-extern void fn_3_1AE40(void *data, u32 x1, u32 y1, s16 x2, s16 y2);
-extern void fn_3_1AEE4(void *, u32, u32, u32, u32);
-extern void fn_3_1B008(void *, u32, u32, u32, u32);
-extern u8 lbl_3_bss_A2458[8];
-extern void fn_3_BD98(void);
-extern void fn_3_BEF0(void);
-extern void fn_3_BE88(void);
+
+typedef struct Rgba {
+    u8 r, g, b, a;
+} Rgba;
+
+typedef struct {
+    u32 unk_0;
+    u32 unk_4;
+    u32 unk_8;
+    Vec3 pos;
+    u32 unk_18[7];
+} Fn3_1FF7C_Camera;
+
+typedef struct {
+    u8 pad_0[0x60];
+    Vec3 pos;
+    f32 unk_6C;
+} Fn3_1FF7C_Mtx;
+
+typedef struct {
+    u32 flags;
+    u8 pad_4[0x1C];
+} Fn3_1FF7C_Entry;
+
+typedef struct {
+    u8 pad_0[0x18];
+    u16 count;
+    u8 pad_1A[0x26];
+    Fn3_1FF7C_Entry entries[1];
+} Fn3_1FF7C_Model;
+
+typedef s32 (*Sig_fn_1_8D210_fn_1_8D210_callback)(u32);
+extern const f32 lbl_3_rodata_740;
 extern void fn_3_BE10(void);
+extern void fn_3_BEF0(void);
 extern void fn_3_1445C(void);
+extern void fn_3_BE88(void);
 extern void fn_80008BA8(u32 *, void *, s32);
 extern s32 fn_8008023C(u32 arg0, u32 arg1, u32 arg2);
-extern u32 fn_3_141A8(u32);
-extern u8 fn_3_1441C(void);
 extern struct fn_3_1A1D8_lbl_1_bss_9F8 lbl_1_bss_9F8;
+extern u32 fn_3_141A8(u32);
 extern u8 fn_3_1443C(void);
-extern void fn_1_A2D84(u32 arg0);
-extern void fn_3_14008(void);
-extern const QColor lbl_3_rodata_744[9];
-extern u32 fn_3_1401C(void);
-extern void fn_3_152BC(u32, s32, s32, s32, s32, QColor);
-extern void fn_3_146C0(void *arg0, s16 x, s16 y, s16 delta, u32 *arg4);
 extern void fn_3_1B4BC(void *, s16, s16, s16, s16, u32 *);
-extern void fn_3_14E18(void *arg0, u32 arg1, u32 arg2, s16 arg3, u32 arg4);
 extern void fn_3_149AC();
 extern void fn_3_14794(void *, u32, u32, u32 *);
+extern void fn_3_146C0(void *arg0, s16 x, s16 y, s16 delta, u32 *arg4);
+extern void fn_80008BEC(void *dest, int value, u32 size);
+extern f32 lbl_8006D118(f32 *, f32);
+extern void fzgx_usef(f32);
+extern void fzgx_used(f64);
+extern void fzgx_usep(void *);
+extern s32 fzgx_sink_s;
+extern u32 fzgx_sink_u;
 extern u32 lbl_1_rodata_26F8;
 extern u32 lbl_801A66A8;
 extern u16 fn_1_A5DB0(void);
@@ -239,46 +266,77 @@ extern void fn_1_495C8(u8 value);
 extern void fn_1_4966C(f32 value1, f32 value2);
 extern void fn_1_496FC(f32 value1, f32 value2);
 extern void fn_1_49738(u32 value);
-extern u32 fn_3_2B750(s16, s16);
+extern u32 fn_3_2B750(s16 arg0, s16 arg1);
 extern void fn_3_2406C(void);
-extern void fn_3_240DC(void *, void *);
+extern void fn_3_240DC(void *arg0, void *arg1);
 extern void fn_1_5233C(void *arg0, void *arg1);
-extern const f32 lbl_3_rodata_8F0;
-extern const f32 lbl_3_rodata_990[297];
+extern struct fn_3_20374_lbl_1_data_1E5C0 lbl_1_data_1E5C0;
 extern u32 lbl_801A66A0;
-extern CustomizeRoot lbl_1_bss_38460;
 extern CustomizeObject *lbl_801A6D00;
+extern void fn_8006F038(Vec3 *arg0, Vec3 *arg1, s16 arg2);
+extern void lbl_8006DCDC(void);
+extern void fn_1_F7870(u32 value);
+extern void lbl_8006DCA4(void);
+extern void lbl_8006E0B4(f32, f32, f32);
+extern void mathutil_mtxA_rotate_x(s32);
+extern void mathutil_mtxA_rotate_y(s32);
 extern u32 fn_1_56018(s32 value);
 extern void lbl_8006D784(void *);
 extern void fn_1_560F0(s32 index, void *arg);
 extern void fn_80072558(void);
 extern void fn_1_55210(CustomizeObject *);
-extern struct fn_3_20374_lbl_1_data_1E5C0 lbl_1_data_1E5C0;
-extern f32 lbl_3_rodata_768[];
-extern u32 fn_1_870BC(u32,u32,Sig_fn_1_87610_Fn187610Data*,u32,u32,f32);
 extern void lbl_8006DB74(void*);
-extern void mathutil_mtxA_rotate_x(s32);
-extern void mathutil_mtxA_rotate_y(s32);
-extern void fn_1_5621C(f32 value0, f32 value1, f32 value2, f32 value3);
-extern void fn_1_F7870(u32 value);
-extern void fn_80008BEC(void *dest, int value, u32 size);
-extern void fn_8006F038(Sig_fn_8006F038_Vec3*,Sig_fn_8006F038_Vec3*,s16);
-extern void lbl_8006D7DC(void*);
-extern void lbl_8006DCDC(void);
-extern void lbl_8006DFE8(void*);
-extern void lbl_8006E14C(f32);
-extern u8 lbl_1_bss_7F0C0[];
-extern void fn_1_133DBC(void* arg0);
+extern void fn_1_151BDC(u32 value);
+extern void fn_1_14E2DC(void *, s16, f32);
+extern void lbl_8006DBAC(Vec3 *);
+extern void fn_1_FCFA4(void *);
+extern void fn_1_50190(void *arg0, f32 farg0, f32 farg1, f32 farg2, f32 farg3, f32 farg4, f32 farg5);
 extern f32 fn_1_A6FE8(void);
-extern s32 fn_3_1EC2C(u32);
+extern u8 lbl_1_bss_7F0C0[];
+extern u32 fn_3_1EFE4(void);
+extern u32 lbl_801A66C0[1];
+extern void fn_1_133DBC(void* arg0);
 extern void fn_1_8D1EC(void *, s32 (*)(u32), void *);
-extern void fn_3_2A2F8(s16, s16, s16, s16, s32);
+extern void fn_3_2A2F8(s16 arg0, s16 arg1, s16 arg2, s16 arg3, s32 arg4);
 extern void fn_3_7A08(s16 *arg0, s16 *arg1, int arg2);
-extern void fn_3_23724(u32 arg0, u32 arg1, u32 arg2, f32 arg3, f32 arg4, f32 arg5, f32 arg6);
-extern u32 fn_3_21300(u32,u32,u32);
+extern u32 fn_3_225F8(u32, u32, u32);
 extern void fn_1_134AD4(void);
 extern u32 fn_1_13ABA8(u32);
-extern void fn_1_50190(void *arg0, f32 farg0, f32 farg1, f32 farg2, f32 farg3, f32 farg4, f32 farg5);
+extern void fn_1_54278(u32 arg0, u32 arg1);
+extern void fn_1_5428C(f32 value);
+extern void fn_1_53BD8(void *, f32, f32, f32, f32, f32);
+extern void fn_1_495FC(void);
+extern void fn_1_495B0(u32 value);
+extern void fn_1_4965C(u8 value);
+extern f32 lbl_3_rodata_768[];
+extern u32 fn_3_2B778(s16, u32, u32, u32, u32);
+extern void fn_1_138120(void *);
+extern void fn_3_1AB34(void *obj, s16 start, s16 base, u32 *items);
+extern u32 fn_3_17820();
+extern void fn_3_1ADA4(void *, int, int, int, int);
+extern void fn_3_1AE40(void *data, u32 x1, u32 y1, s16 x2, s16 y2);
+extern void fn_3_1AEE4(void *data, u32 x1, u32 y1, u32 x2, u32 y2);
+extern void fn_3_1B008(void *data, u32 x1, u32 y1, u32 x2, u32 y2);
+extern u8 lbl_3_bss_A2458[8];
+extern void fn_3_BD98(void);
+extern u8 fn_3_1441C(void);
+extern void fn_1_A2D84(u32 arg0);
+extern void fn_3_14008(void);
+extern const QColor lbl_3_rodata_744[9];
+extern u32 fn_3_1401C(void);
+extern void fn_3_152BC(u32, s32, s32, s32, s32, QColor);
+extern void fn_3_14E18(void *arg0, u32 arg1, u32 arg2, s16 arg3, u32 arg4);
+extern const f32 lbl_3_rodata_8F0;
+extern const f32 lbl_3_rodata_990[297];
+extern CustomizeRoot lbl_1_bss_38460;
+extern u32 fn_1_870BC(u32,u32,Sig_fn_1_87610_Fn187610Data*,u32,u32,f32);
+extern void fn_1_5621C(f32 value0, f32 value1, f32 value2, f32 value3);
+extern void lbl_8006D7DC(void*);
+extern void lbl_8006DFE8(void*);
+extern void lbl_8006E14C(f32);
+extern s32 fn_3_1EC2C(u32);
+extern void fn_3_23724(u32 arg0, u32 arg1, u32 arg2, f32 arg3, f32 arg4, f32 arg5, f32 arg6);
+extern u32 fn_3_21300(u32,u32,u32);
 extern u32 fn_80074188(u32 arg0, u32 arg1, u32 arg2, u32 arg3);
 extern u32 fn_1_151E20(u32 value, s16 index);
 extern void fn_1_A9868();
@@ -289,27 +347,15 @@ extern s32 lbl_3_bss_24370;
 extern f64 lbl_3_rodata_800;
 extern void fn_1_51564(u16 first, u16 second, u16 third, u16 fourth, u16 fifth, u16 sixth);
 extern void fn_1_5158C(FontDrawPacket *, u32, s16, s16);
-extern u32 fn_3_1EFE4(void);
-extern u32 lbl_801A66C0[1];
-extern u32 fn_3_225F8(u32, u32, u32);
-extern void fn_1_54278(u32 arg0, u32 arg1);
-extern void fn_1_5428C(f32 value);
-extern void fn_1_53BD8(void *, f32, f32, f32, f32, f32);
-extern void fn_1_495FC(void);
-extern void fn_1_495B0(u32 value);
-extern void fn_1_4965C(u8 value);
 extern int sprintf(char *s, const char *format, ...);
 extern struct fn_3_2BFB4_lbl_801A66B4 lbl_801A66B4;
 extern u8 fn_1_B7C00(void);
-extern void fn_1_138120(void *);
-extern u32 fn_3_2B778(s16, u32, u32, u32, u32);
 extern u32 lbl_801A6410;
 extern void fn_1_46B4(u32 arg0, u32 arg1, const char *arg2, int arg3);
-extern const f32 lbl_3_rodata_740;
 extern void fn_3_1ABD8(void *arg0, s16 x1, s16 y1, s16 x2, s16 y2, u32 *value);
-extern void fn_3_1B130(void *, s16, s16, u32 *);
-extern void fn_3_1BA20(void *target, s16 x, s16 y, s16 z, s16 w, s32 *value);
-extern void fn_3_1BF08(void *, s16, s16, s16, s16, u32 *);
+extern void fn_3_1B130(void *data, s16 x, s16 y, Rgba color);
+extern void fn_3_1BA20(void *arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4, s32 *arg5);
+extern void fn_3_1BF08(void *data, s16 x1, s16 y1, s16 x2, s16 y2, u32 *color);
 extern void fn_3_156A8(void);
 extern void fn_3_1ACE4(void *data, s32 first_a, s32 second_a, s32 first_b, s32 second_b, u32 *values);
 
@@ -470,7 +516,207 @@ void fn_3_19EFC(fn_3_19EFC_CustomizeTool *self) {
 }
 /* fzgx:end fn_3_19EFC */
 
-/* fzgx:begin fn_3_19F40 */
+/* fzgx:begin fn_3_19F40 noprologue */
+#include "types.h"
+#include "rel/customize/globals.h"
+#include "rel/customize/toolkit.h"
+#include "font.h"
+
+
+
+
+struct QView {
+    u8 unk_0;
+    u8 pad_1[0x3];
+    u32 unk_4;
+    u32 unk_8;
+    u8 pad_C[0x2];
+    u8 unk_E;
+    u8 pad_F[0x1];
+    u8 unk_10;
+};
+
+typedef struct CustomizeData {
+    u32 unk_00[2];
+    u32 unk_08;
+    u8 pad_0c[0x14];
+    void *unk_20;
+} CustomizeData;
+
+struct fn_3_1A1D8_lbl_1_bss_9F8_0_E20 {
+    u8 pad_0[0x10];
+    u16 unk_10;
+    u8 pad_12[0x2];
+};
+
+struct fn_3_1A1D8_lbl_1_bss_9F8 {
+    struct fn_3_1A1D8_lbl_1_bss_9F8_0_E20 unk_0[1];
+};
+
+struct fn_3_1A264_lbl_1_bss_9F8_10_E20 {
+    u16 unk_0;
+    u8 pad_2[0x12];
+};
+
+struct fn_3_1A264_lbl_1_bss_9F8 {
+    u8 pad_0[0x10];
+    struct fn_3_1A264_lbl_1_bss_9F8_10_E20 unk_10[1];
+};
+
+typedef struct {
+    u8 r, g, b, a;
+} QColor;
+
+typedef struct { u32 id; f32 x,y,z; u32 rest[18]; } Packet23524;
+
+struct fn_3_1D338_sprite {
+    u32 unk0;
+    f32 x;
+    f32 y;
+    f32 z;
+    u8 pad10[0x1C];
+    f32 unk2C;
+    u32 unk30;
+    u8 pad34[4];
+    u8 color[4];
+    u8 pad3C[0x14];
+    void (*draw)(void *, void *);
+    u8 pad54[4];
+};
+
+struct fn_3_23724_Copy88 {
+    u32 flags;
+    f32 x, y, z;
+    u32 pad[8];
+    u32 mode;
+    u32 tail[9];
+};
+
+typedef struct {
+    u32 flags;
+    u8 pad[0x1c];
+} fn_3_1F81C_CustomizeEntry;
+
+typedef struct CustomizeObject CustomizeObject;
+
+struct CustomizeObject {
+    u8 pad0[0x18];
+    u16 count;
+    u8 pad1[0x26];
+    fn_3_1F81C_CustomizeEntry entries[1];
+    u8 pad2[0xc];
+    f32 value;
+};
+
+typedef struct {
+    CustomizeObject *object;
+} CustomizeSlot;
+
+typedef struct {
+    u8 pad0[8];
+    CustomizeSlot *slot;
+} CustomizeManager;
+
+typedef struct {
+    u8 pad0[0xc];
+    CustomizeManager *manager;
+} CustomizeRoot;
+
+struct fn_3_20374_lbl_1_data_1E5C0 {
+u32 unk_0,unk_4,unk_8; f32 unk_C,unk_10,unk_14; u32 unk_18,unk_1C,unk_20,unk_24,unk_28,unk_2C,unk_30;
+};
+
+struct fn_3_23724_lbl_3_rodata_768 {
+    u8 pad_0[0x78];
+    f32 seven;
+    u8 pad_7C[0x10C];
+    f32 one;
+    f32 half;
+    u8 pad_190[0x40];
+    f32 zero;
+    u8 pad_1D4[0x180];
+    f32 twentythree;
+    u8 pad_358[0xC];
+    f32 twelve;
+    u8 pad_368[0x40];
+    f32 unk_3A8;
+    f32 unk_3AC;
+    f32 five;
+};
+
+struct fn_3_2BFB4_lbl_3_rodata_768 {
+    u8 pad_0[0x22C];
+    f32 unk_22C;
+    u8 pad_230[0x1E8];
+    f32 unk_418;
+    u8 pad_41C[0x25C];
+    f32 unk_678;
+};
+
+struct fn_3_2C164_lbl_3_rodata_768 {
+    u8 pad_0[0x22C];
+    f32 unk_22C;
+    u8 pad_230[0x1E8];
+    f32 unk_418;
+    u8 pad_41C[0x25C];
+    f32 unk_678;
+};
+
+struct fn_3_20374_lbl_3_rodata_768 {
+f32 unk_0; u8 pad_4[0x94]; f64 unk_98; u8 pad_A0[0xE8]; f32 unk_188;
+u8 pad_18C[0x6C]; f64 unk_1F8; u8 pad_200[0x28]; f32 unk_228;
+u8 pad_22C[0x5C]; f32 unk_288,unk_28C,unk_290,unk_294,unk_298,unk_29C,unk_2A0,unk_2A4,unk_2A8;
+};
+
+typedef struct Sig_fn_1_87610_Fn187610Data {
+u8 pad_000[2]; s8 field_002; u8 pad_003[0x205]; u8 field_208[0x120];
+} Sig_fn_1_87610_Fn187610Data;
+
+typedef struct Sig_fn_8006F038_Vec3 { f32 x,y,z; } Sig_fn_8006F038_Vec3;
+
+struct fn_3_2B268_lbl_1_bss_7F0C0 {
+    u8 pad_0[0x48F8];
+    u32 unk_48F8;
+};
+
+typedef struct Sig_fn_1_8D210_fn_1_8D210_car {
+    f32 position[6];
+    f32 scale_z;
+    f32 scale_y;
+    f32 scale_x;
+    f32 field_24;
+    u16 field_28;
+    u16 field_2a;
+    u16 field_2c;
+    u16 field_2e;
+    u16 field_30;
+    u16 field_32;
+    u32 field_34;
+    u8 field_38;
+    u8 field_39;
+    u8 field_3a;
+    u8 pad_3b;
+    u32 field_3c;
+    u8 field_40;
+    u8 pad_41[3];
+    f32 field_44;
+    f32 field_48;
+    f32 field_4c;
+    f32 field_50;
+    s16 field_54;
+    u8 pad_56[2];
+    s32 field_58;
+    u8 field_5c[4];
+    u32 field_60;
+} Sig_fn_1_8D210_fn_1_8D210_car;
+
+typedef s32 (*Sig_fn_1_8D210_fn_1_8D210_callback)(u32);
+
+struct fn_3_2BFB4_lbl_801A66B4 {
+    u32 unk_0;
+};
+extern void fn_3_1B130(void *, s16, s16, u32 *);
+
 typedef struct fn_3_19F40_CustomizeObject {
     u8 pad08[8];
     u32 value08;
@@ -1207,8 +1453,6 @@ __declspec(section ".fzgxpool") static void fzgx_pool_prime3(void) {
 }
 #pragma section code_type ".text"
 
-extern f32 lbl_8006D118(f32 *, f32);
-extern void fn_3_146C0(void *, s16, s16, s16, u32 *);
 static inline int abs(int x) {
     return __abs(x);
 }
@@ -1236,7 +1480,6 @@ static inline void draw(void *obj, s16 start, s16 base, DrawColor *items) {
         i++;
     }
 }
-extern void fn_3_146C0(void *, s16, s16, s16, u32 *);
 
 #pragma opt_propagation off
 void fn_3_1BA20(void *arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4, s32 *arg5) {
@@ -1293,14 +1536,7 @@ void fn_3_1BA20(void *arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4, s32 *arg5) {
 /* fzgx:end fn_3_1BA20 */
 
 /* fzgx:begin fn_3_1BF08 */
-extern f32 lbl_8006D118(f32, f32 *);
-extern void fn_3_1B4BC(void *, s16, s16, s16, s16, u32 *);
 
-extern void fzgx_usef(f32);
-extern void fzgx_used(f64);
-extern void fzgx_usep(void *);
-extern s32 fzgx_sink_s;
-extern u32 fzgx_sink_u;
 
 /* Primes the TU literal pool (lbl_3_rodata_6A0..) in retail order. */
 #pragma section RX ".fzgxpool"
@@ -1375,7 +1611,7 @@ void fn_3_1BF08(void *data, s16 x1, s16 y1, s16 x2, s16 y2, u32 *color) {
     u32 c1;
 
     radius = __abs(dx) > __abs(dy) ? __abs(dx) : __abs(dy);
-    k = lbl_8006D118(1.0f, &scale);
+    k = lbl_8006D118(&scale, 1.0f);
     x = radius * k;
     d1 = 2.0f + (1.0f + (f32)((f32)(-2.0f * scale) * radius));
     d2 = 1.0f + (2.0f + (f32)((f32)(-4.0f * scale) * radius));
@@ -2286,7 +2522,7 @@ p_lbl_3_rodata_768=&(*((const struct fn_3_20374_lbl_3_rodata_768 *)&lbl_3_rodata
 fn_80008BEC(&lbl_3_bss_A2468.pad_0[4],0,12);
 fn_80008BEC(&lbl_3_bss_A2468.pad_0[16],0,12);
 lbl_3_bss_A2468.unk_14=*(f32*)&loc_14.unk_4;
-fn_8006F038((Sig_fn_8006F038_Vec3*)&lbl_3_bss_A2468.pad_0[4],(Sig_fn_8006F038_Vec3*)&lbl_3_bss_A2468.pad_0[16],0);
+fn_8006F038( (Vec3 *)((Sig_fn_8006F038_Vec3*)&lbl_3_bss_A2468.pad_0[4]), (Vec3 *)((Sig_fn_8006F038_Vec3*)&lbl_3_bss_A2468.pad_0[16]),0);
 lbl_8006DCDC();
 v1=0.7f;
 p_lbl_1_data_1E5C0=&lbl_1_data_1E5C0;
