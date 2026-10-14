@@ -1509,6 +1509,121 @@ void fn_1_110008(fn_1_10D2F0_Obj *obj) {
 }
 /* fzgx:end fn_1_110008 */
 
+/* fzgx:begin fn_1_111510 noprologue */
+#include "types.h"
+#include "game/main_rel/accessory_types.h"
+
+extern void fn_1_10846C(fn_1_10D2F0_Obj *);
+extern const f32 lbl_1_rodata_7B1C;
+extern const f32 lbl_1_rodata_7B20;
+extern void fn_1_128884(void *, void *, s32);
+extern void *fn_1_4630(u32, u32, const char *, s32);
+extern u32 lbl_801A6410;
+
+void fn_1_111510(fn_1_10D2F0_Obj *obj) {
+    u32 i;
+    u32 j;
+    u32 m;
+    fn_1_10D2F0_Entry *b;
+    fn_1_10D2F0_Entry *a;
+    fn_1_10D2F0_Entry *e;
+    u32 n;
+    u32 rows;
+    u32 k;
+    u32 c;
+    fn_1_10D2F0_Entry *p;
+
+    if (obj != NULL) {
+        fn_1_10846C(obj);
+
+        p = obj->unk_24;
+        for (i = 0; i < obj->unk_18; i++, p++) {
+            if (p->unk_0 & 1) {
+                p->unk_0 = 0;
+                p->unk_40 = lbl_1_rodata_7B1C;
+            } else {
+                p->unk_0 = 1;
+                p->unk_40 = lbl_1_rodata_7B20;
+            }
+        }
+
+        a = obj->unk_24;
+        for (i = 0; i < obj->unk_18; i++, a++) {
+            b = &obj->unk_24[i] + 1;
+            for (j = i + 1; j < obj->unk_18; j++, b++) {
+                if (a->unk_0 == 0 && b->unk_0 != 0) {
+                    fn_1_128884(a, b, sizeof(fn_1_10D2F0_Entry));
+                }
+            }
+        }
+
+        a = obj->unk_24;
+        for (i = 0; i < obj->unk_18; i++, a++) {
+            b = &obj->unk_24[i] + 1;
+            for (j = i + 1; j < obj->unk_18; j++, b++) {
+                if (a->unk_0 == b->unk_0 && a->unk_10.x < b->unk_10.x) {
+                    fn_1_128884(a, b, sizeof(fn_1_10D2F0_Entry));
+                }
+            }
+        }
+
+        for (i = 0, a = obj->unk_24; i < 9; i++, a++) {
+            for (j = i + 1, b = a + 1; j < 9; j++, b++) {
+                if (a->unk_10.z > b->unk_10.z) {
+                    fn_1_128884(a, b, sizeof(fn_1_10D2F0_Entry));
+                }
+            }
+        }
+
+        a = obj->unk_24;
+        n = obj->unk_18;
+        for (i = 0; i < n; i++, a++) {
+            if (a->unk_0 != 0 && a[1].unk_0 == 0) {
+                break;
+            }
+        }
+        a++;
+        rows = (n - (a - obj->unk_24)) / 9;
+
+        for (k = 0; k < rows; k++, a += 9) {
+            for (i = 0; i < 9; i++) {
+                a[i].unk_40 = -(f32)(k + 1) / (f32)(rows + 1);
+            }
+            b = a;
+            for (i = 0; i < 9; i++, b++) {
+                for (m = i + 1, e = b + 1; m < 9; m++, e++) {
+                    if (b->unk_10.z > e->unk_10.z) {
+                        fn_1_128884(b, e, sizeof(fn_1_10D2F0_Entry));
+                    }
+                }
+            }
+        }
+
+        obj->unk_1C = (obj->unk_18 / 9) * 8 + (obj->unk_18 / 9 - 1) * 9;
+        obj->unk_28 = fn_1_4630(lbl_801A6410, obj->unk_1C * sizeof(fn_1_10D2F0_Link), lbl_1_data_40530, 4596);
+
+        c = 0;
+        a = obj->unk_24;
+        for (i = 0; i < obj->unk_18 - 1; i++, a++) {
+            if ((i + 1) % 9 != 0) {
+                obj->unk_28[c].a = a;
+                obj->unk_28[c].b = a + 1;
+                obj->unk_28[c].len = fn_1_1289BC((const Point1024C4 *)a, (const Point1024C4 *)(a + 1));
+                c++;
+            }
+        }
+
+        a = obj->unk_24;
+        for (i = 0; i < obj->unk_18 - 9; i++, a++) {
+            obj->unk_28[c].a = a;
+            obj->unk_28[c].b = a + 9;
+            obj->unk_28[c].len = fn_1_1289BC((const Point1024C4 *)a, (const Point1024C4 *)(a + 9));
+            c++;
+        }
+    }
+}
+/* fzgx:end fn_1_111510 */
+
 /* fzgx:begin fn_1_112F40 noprologue */
 #include "types.h"
 #include "game/main_rel/accessory_types.h"

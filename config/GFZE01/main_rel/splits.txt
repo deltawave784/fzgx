@@ -7439,3 +7439,6 @@ rel/main_rel/bg_san/fn_1_DB53C.c:
 
 rel/main_rel/effect_car/fn_1_71024.c:
 	.text       start:0x00071024 end:0x000714A8 align:4
+
+rel/main_rel/accessory/fn_1_111510.c:
+	.text       start:0x00111510 end:0x00111980 align:4
