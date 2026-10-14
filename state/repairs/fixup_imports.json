@@ -16200,5 +16200,52 @@
       }
     ],
     "link": "pool"
+  },
+  "fn_1_53FE4": {
+    "seed_symbol": "fn_1_53FE4",
+    "generator": "fzgx fixup",
+    "transform": "GPR declaration order p,h,w,x,y,obj",
+    "seed": "#include \"font.h\"\n\nextern const struct fn_1_53FE4_lbl_1_rodata_2754_pool {\n    f32 unk_0;\n} lbl_1_rodata_2754;\n\nextern const struct fn_1_53FE4_lbl_1_rodata_2868_pool {\n    f32 unk_0;\n} lbl_1_rodata_2868;\nextern u16 fn_1_486C4(u32);\nextern u16 fn_1_48690(u32);\nextern int fn_1_4F734(FontDrawPacket *);\n\ntypedef struct {\n    u32 p;\n    u8 pad[0xC];\n    f32 f10, f14, f18, f1c, f20, f24;\n} Fn53Obj;\n\n#pragma opt_propagation off\nvoid fn_1_53FE4(Fn53Obj *arg, u8 idx) {\n    s16 y;\n    s16 x;\n    u32 p;\n    f32 iw;\n    f32 ih;\n    s16 h;\n    Fn53Obj *obj;\n    s16 w;\n    obj = arg;\n    p = obj->p;\n    x = (idx % 10) * 20;\n    y = (idx / 10) * 20;\n    w = fn_1_486C4(p);\n    h = fn_1_48690(p);\n    ih = lbl_1_rodata_2754.unk_0 / (f32)h;\n    iw = lbl_1_rodata_2754.unk_0 / (f32)w;\n    obj->f10 = obj->f10 * (lbl_1_rodata_2868.unk_0 * ih);\n    obj->f14 = obj->f14 * (lbl_1_rodata_2868.unk_0 * iw);\n    obj->f18 = (f32)x * ih;\n    obj->f1c = (f32)y * iw;\n    obj->f20 = ih * (f32)(x + 20);\n    obj->f24 = iw * (f32)(y + 20);\n    fn_1_4F734((FontDrawPacket *)obj);\n}\n#pragma opt_propagation reset\n",
+    "seed_sha256": "31d803bf8576edfd8160e0e6483cc77b15f16cb5bb25c6b10a9ada4f135fb2fd",
+    "generated_sha256": "1ef6b99b7456df14eea8cb599524fbecf7bdc1f5a9bb32491de1d0b83333e299",
+    "generated_source": "#include \"font.h\"\n\nextern const struct fn_1_53FE4_lbl_1_rodata_2754_pool {\n    f32 unk_0;\n} lbl_1_rodata_2754;\n\nextern const struct fn_1_53FE4_lbl_1_rodata_2868_pool {\n    f32 unk_0;\n} lbl_1_rodata_2868;\nextern u16 fn_1_486C4(u32);\nextern u16 fn_1_48690(u32);\nextern int fn_1_4F734(FontDrawPacket *);\n\ntypedef struct {\n    u32 p;\n    u8 pad[0xC];\n    f32 f10, f14, f18, f1c, f20, f24;\n} Fn53Obj;\n\n#pragma opt_propagation off\nvoid fn_1_53FE4(Fn53Obj *arg, u8 idx) {\n    u32 p;\n    s16 h;\n    s16 w;\n    f32 iw;\n    f32 ih;\n    s16 x;\n    s16 y;\n    Fn53Obj *obj;\n    obj = arg;\n    p = obj->p;\n    x = (idx % 10) * 20;\n    y = (idx / 10) * 20;\n    w = fn_1_486C4(p);\n    h = fn_1_48690(p);\n    ih = lbl_1_rodata_2754.unk_0 / (f32)h;\n    iw = lbl_1_rodata_2754.unk_0 / (f32)w;\n    obj->f10 = obj->f10 * (lbl_1_rodata_2868.unk_0 * ih);\n    obj->f14 = obj->f14 * (lbl_1_rodata_2868.unk_0 * iw);\n    obj->f18 = (f32)x * ih;\n    obj->f1c = (f32)y * iw;\n    obj->f20 = ih * (f32)(x + 20);\n    obj->f24 = iw * (f32)(y + 20);\n    fn_1_4F734((FontDrawPacket *)obj);\n}\n#pragma opt_propagation reset\n",
+    "compiler": "GC/1.3",
+    "flags": "",
+    "source": "rel/main_rel/font/fn_1_53FE4.c",
+    "bytes": 376,
+    "headers_sha256": "22c7868f6d709d9d5d0bb758283a7fb3927b6bd028859a650cecb579700331f9",
+    "oracle_sha256": "6ba33e56fa67debd8707b4d3865d77126f31f235eb67d7c9268c08735731559a",
+    "recipe": [
+      {
+        "label": "GPR declaration order p,h,w,x,y,obj",
+        "input_sha256": "31d803bf8576edfd8160e0e6483cc77b15f16cb5bb25c6b10a9ada4f135fb2fd",
+        "output_sha256": "1ef6b99b7456df14eea8cb599524fbecf7bdc1f5a9bb32491de1d0b83333e299",
+        "input_symbol": "fn_1_53FE4",
+        "output_symbol": "fn_1_53FE4",
+        "edits": [
+          [
+            465,
+            487,
+            ""
+          ],
+          [
+            498,
+            498,
+            "    s16 h;\n    s16 w;\n"
+          ],
+          [
+            530,
+            531,
+            "x;\n    s16 y"
+          ],
+          [
+            551,
+            562,
+            ""
+          ]
+        ]
+      }
+    ],
+    "link": "pending"
   }
 }

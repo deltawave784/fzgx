@@ -3234,6 +3234,55 @@ void fn_1_535A0(FrameColor color, f32 x, f32 y, f32 z, f32 width, f32 height, f3
 }
 /* fzgx:end fn_1_535A0 */
 
+/* fzgx:begin fn_1_53FE4 noprologue */
+#include "font.h"
+
+extern const struct fn_1_53FE4_lbl_1_rodata_2754_pool {
+    f32 unk_0;
+} lbl_1_rodata_2754;
+
+extern const struct fn_1_53FE4_lbl_1_rodata_2868_pool {
+    f32 unk_0;
+} lbl_1_rodata_2868;
+extern u16 fn_1_486C4(u32);
+extern u16 fn_1_48690(u32);
+extern int fn_1_4F734(FontDrawPacket *);
+
+typedef struct {
+    u32 p;
+    u8 pad[0xC];
+    f32 f10, f14, f18, f1c, f20, f24;
+} Fn53Obj;
+
+#pragma opt_propagation off
+void fn_1_53FE4(Fn53Obj *arg, u8 idx) {
+    u32 p;
+    s16 h;
+    s16 w;
+    f32 iw;
+    f32 ih;
+    s16 x;
+    s16 y;
+    Fn53Obj *obj;
+    obj = arg;
+    p = obj->p;
+    x = (idx % 10) * 20;
+    y = (idx / 10) * 20;
+    w = fn_1_486C4(p);
+    h = fn_1_48690(p);
+    ih = lbl_1_rodata_2754.unk_0 / (f32)h;
+    iw = lbl_1_rodata_2754.unk_0 / (f32)w;
+    obj->f10 = obj->f10 * (lbl_1_rodata_2868.unk_0 * ih);
+    obj->f14 = obj->f14 * (lbl_1_rodata_2868.unk_0 * iw);
+    obj->f18 = (f32)x * ih;
+    obj->f1c = (f32)y * iw;
+    obj->f20 = ih * (f32)(x + 20);
+    obj->f24 = iw * (f32)(y + 20);
+    fn_1_4F734((FontDrawPacket *)obj);
+}
+#pragma opt_propagation reset
+/* fzgx:end fn_1_53FE4 */
+
 /* fzgx:begin fn_1_5415C */
 void fn_1_5415C(void *arg, s32 value) {
     fn_1_541A8(arg, value);
