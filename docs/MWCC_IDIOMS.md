@@ -21,7 +21,13 @@ file from what actually unblocked functions; keep each item one or two lines.
   declaration), `cmplwi`/`lhz`/`clrlwi`/`srwi` an unsigned one; flip the operand of that
   statement, not unrelated locals.
 - **Locked cache**: `lis rX, 0xe000` + `lfs f, 0xc(rX)` is `*(f32 *)(0xE0000000 + 0x0C)`
-  (the current matrix); do not invent a symbol for it.
+  (the current matrix); do not invent a symbol for it. Translation-column writes
+  (stores to +0x0C/+0x1C/+0x2C) where retail loads x, y, z first into f2/f1/f0: copy
+  propagation sinks the first-stored value's load to its store (x loaded last, f0). Read
+  that one value through a volatile view (`x = *(volatile f32 *)&v->x;`) instead of a
+  function-wide `opt_propagation off`; for computed columns (`m[i][0] * s + m[i][3]`)
+  also declare the three temporaries first in the function, z first, so the scale keeps
+  the higher FPR (fn_1_8D08, fn_1_1ACC0; `fixup` family `locked_cache_columns`).
 - **Evaluation order at a call**: a value produced by a call and consumed in an expression
   is evaluated first when written inline; holding it in a local moves the call and can
   swap `mullw`/`add` operands (fn_1_76704).

@@ -891,6 +891,10 @@ def _lc_normalize(text: str) -> str:
                   lambda m: _lc_store(int(m[1], 16)), text)
     text = re.sub(r'\*\s*\(\s*(?:volatile\s+)?f32\s*\*\s*\)\s*\(\s*LC_BASE\s*\+\s*0[xX]0*([0-2][cC])\s*\)',
                   lambda m: _lc_store(int(m[1], 16)), text)
+    # a word-index macro over the locked cache: #define M(i) (*(f32 *)(0xE0000000 + (i) * 4))
+    for m in re.finditer(r'(?m)^[ \t]*#\s*define\s+(\w+)\s*\(\s*(\w+)\s*\)\s*\(\s*\*\s*\(\s*f32\s*\*\s*\)\s*\(\s*'
+                         + _LC_ADDR + r'\s*\+\s*\(\s*\2\s*\)\s*\*\s*4\s*\)\s*\)[ \t]*$', text):
+        text = re.sub(r'(?<![\w#])' + m[1] + r'\s*\(\s*(\d+)\s*\)', lambda r: _lc_store(4 * int(r[1])), text)
     decl = re.compile(r'(?m)^[ \t]*f32\s*\(\s*\*\s*(\w+)\s*\)\s*\[\s*4\s*\]\s*=\s*'
                       r'\(\s*f32\s*\(\s*\*\s*\)\s*\[\s*4\s*\]\s*\)\s*' + _LC_ADDR + r'\s*;[ \t]*\n')
     while True:
@@ -969,6 +973,35 @@ def locked_cache_columns(body: str, name: str) -> List[Tuple[str, str]]:
     return out
 
 
+_LC_DEREF = re.compile(r'\*\s*\(\s*(?:const\s+)?f32\s*\*\s*\)\s*\(\s*0[xX][eE]0{7}\s*\+\s*0[xX][0-9a-fA-F]+\s*\)')
+_LC_MEMBER = re.compile(r'(?<![\w.>&])(?:\(\s*&?\s*[A-Za-z_][\w.>\- ]*\)|[A-Za-z_]\w*)'
+                        r'(?:\s*(?:->|\.)\s*[A-Za-z_]\w*|\s*\[[^\[\];]*\])+(?![\w(\[])')
+
+
+def _lc_volatile_read(expr: str) -> Optional[str]:
+    """The first memory read of a translation value spelled through a volatile f32 view, so
+    copy propagation cannot sink it to the store: a whole lvalue value as one read, else the
+    first locked-cache read or member access of the expression. None when there is no read."""
+    e = expr.strip()
+    while e.startswith('(') and e.endswith(')'):
+        depth = 0
+        for i, ch in enumerate(e):
+            depth += {'(': 1, ')': -1}.get(ch, 0)
+            if depth == 0 and i < len(e) - 1:
+                break
+        else:
+            e = e[1:-1].strip()
+            continue
+        break
+    m = _LC_DEREF.fullmatch(e) or _LC_DEREF.search(e)
+    if m:
+        return e[:m.start()] + '*(volatile f32 *)' + m[0][m[0].index(')') + 1:].strip() + e[m.end():]
+    m = _LC_MEMBER.search(e)
+    if m and not re.match(r'\s*\(', e[m.end():]):
+        return e[:m.start()] + f'*(volatile f32 *)&({m[0].strip()})' + e[m.end():]
+    return None
+
+
 def _locked_cache_core(body: str, name: str) -> List[Tuple[str, str]]:
     span = _function_body_span(body, name)
     if not span:
@@ -1030,16 +1063,40 @@ def _locked_cache_core(body: str, name: str) -> List[Tuple[str, str]]:
                     a = k
         x, y, z = (f'fzgx_lc{n}_{c}' for c in 'xyz')
         i2 = indent + '    '
-        edits.append((span[1] + a, span[1] + b,
-                      f'{indent}{{\n{i2}f32 {z};\n{i2}f32 {y};\n{i2}f32 {x};\n'
-                      f'{i2}{x} = {values[0]};\n{i2}{y} = {values[1]};\n{i2}{z} = {values[2]};\n'
-                      f'{i2}*(f32 *)(0xE0000000 + 0x0C) = {x};\n'
-                      f'{i2}*(f32 *)(0xE0000000 + 0x1C) = {y};\n'
-                      f'{i2}*(f32 *)(0xE0000000 + 0x2C) = {z};\n{indent}}}\n'))
+
+        def block(first, x=x, y=y, z=z, i2=i2, indent=indent, values=values):
+            return (f'{indent}{{\n{i2}f32 {z};\n{i2}f32 {y};\n{i2}f32 {x};\n'
+                    f'{i2}{x} = {first};\n{i2}{y} = {values[1]};\n{i2}{z} = {values[2]};\n'
+                    f'{i2}*(f32 *)(0xE0000000 + 0x0C) = {x};\n'
+                    f'{i2}*(f32 *)(0xE0000000 + 0x1C) = {y};\n'
+                    f'{i2}*(f32 *)(0xE0000000 + 0x2C) = {z};\n{indent}}}\n')
+        held = _lc_volatile_read(values[0])
+        edits.append((span[1] + a, span[1] + b, block(values[0]), block(held) if held else None))
     text = body
-    for a, b, new in sorted(edits, reverse=True):
+    for a, b, new, _ in sorted(edits, reverse=True):
         text = text[:a] + new + text[b:]
     out = [('locked-cache column copy in reverse-declared temporaries', text)]
+    if any(e[3] for e in edits):
+        # without opt_propagation off MWCC forward-substitutes the first-stored value's load
+        # into its store (a window temporary: f0, loaded last). A volatile read of that one
+        # value cannot move, so the loads stay in address order and colour f2/f1/f0 like
+        # retail, with no function-wide pragma (fn_1_8D08: 15 -> 0 translation rows)
+        held_text = body
+        for a, b, new, held in sorted(edits, reverse=True):
+            held_text = held_text[:a] + (held or new) + held_text[b:]
+        out.append(('locked-cache column copy with the first-stored value read through a volatile view',
+                    held_text))
+        # computed columns (m[i][3] = m[i][0] * s + m[i][3]): retail's scale outlives the three
+        # values but takes the higher FPR (f5 over x f4, y f3, z f2), so the values must number
+        # above it: declared first at function scope, z first (fn_1_1ACC0, capture 2026-10-13)
+        hoisted = re.sub(r'\{\n[ \t]*f32 (fzgx_lc\d+_z);\n[ \t]*f32 (fzgx_lc\d+_y);\n[ \t]*f32 (fzgx_lc\d+_x);\n',
+                         '{\n', held_text)
+        names = re.findall(r'\b(fzgx_lc\d+)_x = ', held_text)
+        top = _function_body_span(hoisted, name)
+        if names and top:
+            decl = ''.join(f'    f32 {n}_z;\n    f32 {n}_y;\n    f32 {n}_x;\n' for n in names)
+            out.append(('locked-cache column copy, volatile first read, temporaries declared first',
+                        hoisted[:top[1]] + '\n' + decl + hoisted[top[1]:].lstrip('\n')))
     head = re.search(r'(?m)^[^\n;{}]*\b' + re.escape(name) + r'\s*\([^;{]*\)\s*\{', text)
     fn = _function_body_span(text, name)
     if head and fn and not re.search(r'#\s*pragma\s+opt_propagation\s+off', text):
