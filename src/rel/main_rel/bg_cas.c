@@ -1271,8 +1271,6 @@ void fn_1_FD3A8(void *arg0, f32 arg1) {
 /* fzgx:end fn_1_FD3A8 */
 
 /* fzgx:begin fn_1_FD844 */
-
-
 typedef struct {
     u32 unk_0;
     u8 pad_4[8];
@@ -1676,6 +1674,111 @@ void fn_1_FE7D4(void) {
 }
 /* fzgx:end fn_1_FE7D4 */
 
+/* fzgx:begin fn_1_FE7D8 */
+typedef struct {
+    f32 x, y, z;
+} FE7D8_Vec;
+
+/* one 0x24-byte spawn point of the background table */
+typedef struct {
+    FE7D8_Vec from;  /* 0x00 */
+    s16 unk_C;
+    s16 unk_E;
+    u8 pad_10[4];
+    FE7D8_Vec to;    /* 0x14 */
+    u8 pad_20[4];
+} FE7D8_Spawn;
+
+typedef struct {
+    s32 active;      /* 0x00 */
+    s32 life;        /* 0x04 */
+    FE7D8_Vec pos;   /* 0x08 */
+    FE7D8_Vec prev;  /* 0x14 */
+    FE7D8_Vec vel;   /* 0x20 */
+    u16 rot_x;       /* 0x2C */
+    u16 rot_y;       /* 0x2E */
+    s16 spin_x;      /* 0x30 */
+    s16 spin_y;      /* 0x32 */
+    f32 unk_34;
+    f32 size;        /* 0x38 */
+} FE7D8_Particle;
+
+extern u32 fn_1_584AC(void);
+extern void lbl_8006D5F0(FE7D8_Vec *src, FE7D8_Vec *dst, f32 scale);
+extern void lbl_8006D8D8(s16 angle);
+extern void lbl_8006E1C0(FE7D8_Vec *src, FE7D8_Vec *dst);
+
+/* uniform random value in [0, 1] */
+#define RANDF() ((f32)(u16)fn_1_584AC() / 32767.0f)
+
+/* Literal pool of the retail TU (lbl_1_rodata_76A8): MWCC pools literals in
+ * first-use order across the TU, so the earlier functions' literals come first. */
+#pragma section code_type ".fzgxpool"
+static void fzgx_pool_layout(void) {
+    volatile f32 s; /* fzgx-allow: S2 pool primer sink: fixes the TU literal order */
+    s = 0.0f;
+}
+
+static const u32 fzgx_pool_table_4[1] = {0x00000000};
+
+static void fzgx_pool_layout_1(void) {
+    volatile f32 s; /* fzgx-allow: S2 pool primer sink: fixes the TU literal order */
+    volatile s32 i; /* fzgx-allow: S2 pool primer sink: fixes the TU literal order */
+    volatile u32 w; /* fzgx-allow: S2 pool primer sink: fixes the TU literal order */
+    w = fzgx_pool_table_4[0];
+    s = 1.0f;
+    s = 6600.0f;
+    s = 110.0f;
+    s = 60.0f;
+    s = 15.0f;
+    s = (f32)i;
+}
+#pragma section code_type ".text"
+
+#pragma fp_contract off
+void fn_1_FE7D8(u8 *arg0, s32 arg1) {
+    FE7D8_Particle *p = (FE7D8_Particle *)arg0;
+    FE7D8_Spawn *e;
+    FE7D8_Vec d;
+
+    e = (FE7D8_Spawn *)lbl_1_bss_3BE0->unk_A8;
+    e += (u16)fn_1_584AC() % (s32)lbl_1_bss_3BE0->unk_A4;
+    p->active = arg1;
+    if (arg1 != 0) {
+        p->life = 100.0f + 300.0f * RANDF();
+        p->pos = e->from;
+        p->prev = p->pos;
+        d.x = e->to.x - e->from.x;
+        d.y = e->to.y - e->from.y;
+        d.z = e->to.z - e->from.z;
+        lbl_8006D5F0(&d, &p->vel, (f32)(e->unk_E >> 7) * (15.0f + 4.0f * RANDF()) / 10.0f);
+        p->size = 2.0f + 2.0f * RANDF();
+        p->size *= (f32)(e->unk_C >> 7) / 10.0f;
+    } else {
+        p->life = 200.0f + 400.0f * RANDF();
+        {
+            FE7D8_Vec dir = {0.0f, 0.0f, -1.0f};
+
+            d = dir;
+        }
+        lbl_8006D8D8(fn_1_584AC());
+        lbl_8006E1C0(&d, &d);
+        lbl_8006D5F0(&d, &p->pos, 2500.0f + 1000.0f * RANDF());
+        p->pos.y = 1400.0f + 300.0f * RANDF();
+        p->vel.x = RANDF() - 0.5 - 5.0;
+        p->vel.y = -(4.0f + 7.0f * RANDF());
+        p->vel.z = RANDF() - 0.5;
+        p->size = 2.0f + 2.5f * RANDF();
+    }
+    p->rot_x = fn_1_584AC();
+    p->rot_y = fn_1_584AC();
+    p->spin_x = (s32)(768.0f * RANDF()) + 256;
+    p->spin_y = (s32)(768.0f * RANDF()) + 256;
+    p->unk_34 = 0.0f;
+}
+#pragma fp_contract reset
+/* fzgx:end fn_1_FE7D8 */
+
 /* fzgx:begin fn_1_FEC7C */
 void fn_1_FEC7C(void *object) {
     s32 count;
@@ -1884,7 +1987,6 @@ void fn_1_FED34(void *arg0) {
 /* fzgx:end fn_1_FED34 */
 
 /* fzgx:begin fn_1_FF420 */
-
 /* Literal pool of the retail TU (lbl_1_rodata_76A8): MWCC pools literals in
  * first-use order across the TU, so the earlier functions' literals come first. */
 #pragma section code_type ".fzgxpool"
@@ -2365,8 +2467,6 @@ done:
 /* fzgx:end fn_1_101454 */
 
 /* fzgx:begin fn_1_10161C */
-
-
 typedef struct {
     u8 pad_0[0x8];
     CasObj **unk_8;
