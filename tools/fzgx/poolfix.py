@@ -253,6 +253,25 @@ class Elf:
         return True
 
 
+def link_hazards(obj: Path) -> List[str]:
+    """Symbols the linker cannot place: defined in a section `apply` emptied (no ALLOC flag,
+    mwld warns "Section ... is unknown" and ignores it). mwldeppc 1.3.2 crashes on them
+    (c0000005 at 0043d600): fn_1_138E44's tu_section_layout left MWCC's `...bss.0` base in
+    the emptied .bss. Read-only; an empty list means the object is safe to link."""
+    try:
+        elf = Elf(obj.read_bytes())
+    except (OSError, ValueError):
+        return []
+    out = []
+    for s in elf.symbols():
+        if not 0 < s['shndx'] < len(elf.sections) or (s['info'] & 0xF) in (3, 4):
+            continue  # undefined/absolute, section and file symbols
+        sec = elf.sections[s['shndx']]
+        if sec['type'] in (1, 8) and not sec['flags'] & 2 and sec['name'] != '.comment':
+            out.append(f"{s['name'] or '(unnamed)'} in emptied {sec['name']}")
+    return out
+
+
 def apply(obj: Path, mapping: Dict[str, str]) -> Dict[str, object]:
     """Rewrite `obj` in place. mapping: private literal symbol -> pooled retail symbol."""
     elf = Elf(obj.read_bytes())

@@ -23,7 +23,7 @@ import time
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
-from . import oracle, tufile, verify
+from . import oracle, poolfix, tufile, verify
 from .carve import carve
 from .context import build_context
 from .ledger import Ledger
@@ -1062,6 +1062,14 @@ def _submit(p: Project, symbol: str, agent: str = "unknown", message: str = "",
             res = oracle.check(p, symbol, max_diff_lines, source=src,
                                mw_version=mw_version, extra_cflags=extra_cflags)
     reason = oracle.unit_fully_matches(res)
+    if not reason and getattr(res, 'pool_map', None) and src is not None:
+        # the pool-retargeted object must be linkable: a label left in a section poolfix
+        # emptied crashes mwldeppc, and verify would spend a full relink rejecting it
+        hazards = poolfix.link_hazards(STATE_DIR / 'work' / (key.replace(':', '__') + '.o'))
+        if hazards:
+            reason = ('POOL OBJECT CRASHES THE LINKER (mwldeppc c0000005): ' + ', '.join(hazards[:4]) +
+                      '. Drop the file-scope definitions or layout primer that only define these '
+                      '(e.g. a .bss layout whose objects all bind by name), then submit again.')
     if not reason and not unit_src and not _is_shadow(agent):
         # accepted: now it gets a unit (split range + entry); the batch verify does the one split+relink
         try:
