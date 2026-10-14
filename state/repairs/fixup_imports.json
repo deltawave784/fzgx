@@ -15931,5 +15931,51 @@
       }
     ],
     "link": "pool"
+  },
+  "fn_1_12B88": {
+    "seed_symbol": "fn_1_12B88",
+    "generator": "fzgx fixup",
+    "transform": "attributed signed i at line 57",
+    "seed": "#include \"types.h\"\n#include \"rel/main_rel/live_camera.h\"\n#include \"game/main_rel/live_camera_types.h\"\n\nextern u8 fn_1_1350C(Sig_fn_1_45730_LoadResult *, u8 *);\n\nstatic inline void lz_clear(u8 *buf, int n) {\n    int i;\n\n    for (i = 0; i < n; i++) {\n        buf[i] = 0;\n    }\n}\n\n// Loads an LZSS-compressed file (Okumura layout: N = 4096 ring window, F = 18,\n// start position N - F): an 8-byte header (compressed size, decompressed size)\n// followed by flag-byte coded literals and 12/4-bit back references.\n// Returns the decompressed size, or 0 on failure.\nu32 fn_1_12B88(char *path, u8 *out, u8 *ctx) {\n    Sig_fn_1_45730_LoadResult file;\n    u32 hdr[2];\n    u8 window[0x1000 + 18 - 1];\n    u32 offset;\n    u32 r;\n    u32 pos;\n    u8 *dst;\n    u32 flags;\n    u32 end;\n    u32 size;\n    int len;\n    int k;\n    int i;\n    int n = 0x1000 - 18;\n    u8 c;\n\n    lbl_1_bss_3B28 = 0;\n    lbl_1_bss_3B2C = 0;\n    if (fn_1_45730(path, &file) == 0) {\n        return 0;\n    }\n    // Header words are stored big-endian in the stream and read back little-endian.\n    hdr[0] = fn_1_1350C(&file, ctx) << 24;\n    hdr[0] |= (u32)fn_1_1350C(&file, ctx) << 16;\n    hdr[0] |= (u32)fn_1_1350C(&file, ctx) << 8;\n    hdr[0] |= (u32)fn_1_1350C(&file, ctx);\n    hdr[1] = fn_1_1350C(&file, ctx) << 24;\n    hdr[1] |= (u32)fn_1_1350C(&file, ctx) << 16;\n    hdr[1] |= (u32)fn_1_1350C(&file, ctx) << 8;\n    hdr[1] |= (u32)fn_1_1350C(&file, ctx);\n    end = __lwbrx(hdr, 0) + 8;\n    size = __lwbrx(hdr, 4);\n    if (end == 0 || size == 0) {\n        return 0;\n    }\n    dst = out;\n    pos = 8;\n    for (i = 0; i < n; i++) {\n        window[i] = 0;\n    }\n    r = n;\n    flags = 0;\n    for (;;) {\n        flags >>= 1;\n        if (!(flags & 0x100)) {\n            if (pos >= end) {\n                break;\n            }\n            flags = fn_1_1350C(&file, ctx) | 0xFF00;\n            pos++;\n        }\n        if (flags & 1) {\n            if (pos >= end) {\n                break;\n            }\n            c = fn_1_1350C(&file, ctx);\n            *dst++ = c;\n            pos++;\n            window[r++] = c;\n            r &= 0xFFF;\n        } else {\n            if (pos >= end) {\n                break;\n            }\n            offset = fn_1_1350C(&file, ctx);\n            if (pos + 1 >= end) {\n                break;\n            }\n            c = fn_1_1350C(&file, ctx);\n            offset |= (c & 0xF0) << 4;\n            len = (c & 0x0F) + 2;\n            pos += 2;\n            for (k = 0; k <= len; k++) {\n                c = window[(offset + k) & 0xFFF];\n                *dst++ = c;\n                window[r++] = c;\n                r &= 0xFFF;\n            }\n        }\n    }\n    fn_1_45850(&file);\n    return size;\n}\n",
+    "seed_sha256": "4fd5d385f71f4b12ee8812ebdd943e6289d8533b36f476919b217913077911c4",
+    "generated_sha256": "ecc2ac4fadb1100ffe18de3862e0714fa516e8738093923b14cf89cdbc55d146",
+    "generated_source": "#include \"types.h\"\n#include \"rel/main_rel/live_camera.h\"\n#include \"game/main_rel/live_camera_types.h\"\n\nextern u8 fn_1_1350C(Sig_fn_1_45730_LoadResult *, u8 *);\n\nstatic inline void lz_clear(u8 *buf, int n) {\n    int i;\n\n    for (i = 0; i < n; i++) {\n        buf[i] = 0;\n    }\n}\n\n// Loads an LZSS-compressed file (Okumura layout: N = 4096 ring window, F = 18,\n// start position N - F): an 8-byte header (compressed size, decompressed size)\n// followed by flag-byte coded literals and 12/4-bit back references.\n// Returns the decompressed size, or 0 on failure.\nu32 fn_1_12B88(char *path, u8 *out, u8 *ctx) {\n    Sig_fn_1_45730_LoadResult file;\n    u32 hdr[2];\n    u8 window[0x1000 + 18 - 1];\n    u32 offset;\n    u32 r;\n    u32 pos;\n    u8 *dst;\n    u32 flags;\n    u32 end;\n    u32 size;\n    int len;\n    int k;\n    s32 i;\n    int n = 0x1000 - 18;\n    u8 c;\n\n    lbl_1_bss_3B28 = 0;\n    lbl_1_bss_3B2C = 0;\n    if (fn_1_45730(path, &file) == 0) {\n        return 0;\n    }\n    // Header words are stored big-endian in the stream and read back little-endian.\n    hdr[0] = fn_1_1350C(&file, ctx) << 24;\n    hdr[0] |= (u32)fn_1_1350C(&file, ctx) << 16;\n    hdr[0] |= (u32)fn_1_1350C(&file, ctx) << 8;\n    hdr[0] |= (u32)fn_1_1350C(&file, ctx);\n    hdr[1] = fn_1_1350C(&file, ctx) << 24;\n    hdr[1] |= (u32)fn_1_1350C(&file, ctx) << 16;\n    hdr[1] |= (u32)fn_1_1350C(&file, ctx) << 8;\n    hdr[1] |= (u32)fn_1_1350C(&file, ctx);\n    end = __lwbrx(hdr, 0) + 8;\n    size = __lwbrx(hdr, 4);\n    if (end == 0 || size == 0) {\n        return 0;\n    }\n    dst = out;\n    pos = 8;\n    for (i = 0; i < n; i++) {\n        window[i] = 0;\n    }\n    r = n;\n    flags = 0;\n    for (;;) {\n        flags >>= 1;\n        if (!(flags & 0x100)) {\n            if (pos >= end) {\n                break;\n            }\n            flags = fn_1_1350C(&file, ctx) | 0xFF00;\n            pos++;\n        }\n        if (flags & 1) {\n            if (pos >= end) {\n                break;\n            }\n            c = fn_1_1350C(&file, ctx);\n            *dst++ = c;\n            pos++;\n            window[r++] = c;\n            r &= 0xFFF;\n        } else {\n            if (pos >= end) {\n                break;\n            }\n            offset = fn_1_1350C(&file, ctx);\n            if (pos + 1 >= end) {\n                break;\n            }\n            c = fn_1_1350C(&file, ctx);\n            offset |= (c & 0xF0) << 4;\n            len = (c & 0x0F) + 2;\n            pos += 2;\n            for (k = 0; k <= len; k++) {\n                c = window[(offset + k) & 0xFFF];\n                *dst++ = c;\n                window[r++] = c;\n                r &= 0xFFF;\n            }\n        }\n    }\n    fn_1_45850(&file);\n    return size;\n}\n",
+    "compiler": "GC/1.3.2",
+    "flags": "",
+    "source": "rel/main_rel/live_camera/fn_1_12B88.c",
+    "bytes": 1008,
+    "headers_sha256": "358e02b839d578288bf968683aedd2dbb6f8d0d380b344c9f1e3c1dabaed2841",
+    "oracle_sha256": "bb89059bffb6e40a89365c2dfbf09b448adc9e51c0b6e1c3546f33a47d665de3",
+    "recipe": [
+      {
+        "label": "regalloc: i: int -> u32",
+        "input_sha256": "4fd5d385f71f4b12ee8812ebdd943e6289d8533b36f476919b217913077911c4",
+        "output_sha256": "1122a069677e7376accbdeb0b5e1d024c26748390ead370559470ffe8c5efdbf",
+        "input_symbol": "fn_1_12B88",
+        "output_symbol": "fn_1_12B88",
+        "edits": [
+          [
+            813,
+            816,
+            "u32"
+          ]
+        ]
+      },
+      {
+        "label": "attributed signed i at line 57",
+        "input_sha256": "1122a069677e7376accbdeb0b5e1d024c26748390ead370559470ffe8c5efdbf",
+        "output_sha256": "ecc2ac4fadb1100ffe18de3862e0714fa516e8738093923b14cf89cdbc55d146",
+        "input_symbol": "fn_1_12B88",
+        "output_symbol": "fn_1_12B88",
+        "edits": [
+          [
+            813,
+            814,
+            "s"
+          ]
+        ]
+      }
+    ],
+    "link": "pending"
   }
 }

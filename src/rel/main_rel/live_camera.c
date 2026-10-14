@@ -2012,6 +2012,111 @@ u32 fn_1_12860(u32 arg0, u32 arg1) {
 }
 /* fzgx:end fn_1_12860 */
 
+/* fzgx:begin fn_1_12B88 noprologue */
+#include "types.h"
+#include "rel/main_rel/live_camera.h"
+#include "game/main_rel/live_camera_types.h"
+
+extern u8 fn_1_1350C(Sig_fn_1_45730_LoadResult *, u8 *);
+
+static inline void lz_clear(u8 *buf, int n) {
+    int i;
+
+    for (i = 0; i < n; i++) {
+        buf[i] = 0;
+    }
+}
+
+// Loads an LZSS-compressed file (Okumura layout: N = 4096 ring window, F = 18,
+// start position N - F): an 8-byte header (compressed size, decompressed size)
+// followed by flag-byte coded literals and 12/4-bit back references.
+// Returns the decompressed size, or 0 on failure.
+u32 fn_1_12B88(char *path, u8 *out, u8 *ctx) {
+    Sig_fn_1_45730_LoadResult file;
+    u32 hdr[2];
+    u8 window[0x1000 + 18 - 1];
+    u32 offset;
+    u32 r;
+    u32 pos;
+    u8 *dst;
+    u32 flags;
+    u32 end;
+    u32 size;
+    int len;
+    int k;
+    s32 i;
+    int n = 0x1000 - 18;
+    u8 c;
+
+    lbl_1_bss_3B28 = 0;
+    lbl_1_bss_3B2C = 0;
+    if (fn_1_45730(path, &file) == 0) {
+        return 0;
+    }
+    // Header words are stored big-endian in the stream and read back little-endian.
+    hdr[0] = fn_1_1350C(&file, ctx) << 24;
+    hdr[0] |= (u32)fn_1_1350C(&file, ctx) << 16;
+    hdr[0] |= (u32)fn_1_1350C(&file, ctx) << 8;
+    hdr[0] |= (u32)fn_1_1350C(&file, ctx);
+    hdr[1] = fn_1_1350C(&file, ctx) << 24;
+    hdr[1] |= (u32)fn_1_1350C(&file, ctx) << 16;
+    hdr[1] |= (u32)fn_1_1350C(&file, ctx) << 8;
+    hdr[1] |= (u32)fn_1_1350C(&file, ctx);
+    end = __lwbrx(hdr, 0) + 8;
+    size = __lwbrx(hdr, 4);
+    if (end == 0 || size == 0) {
+        return 0;
+    }
+    dst = out;
+    pos = 8;
+    for (i = 0; i < n; i++) {
+        window[i] = 0;
+    }
+    r = n;
+    flags = 0;
+    for (;;) {
+        flags >>= 1;
+        if (!(flags & 0x100)) {
+            if (pos >= end) {
+                break;
+            }
+            flags = fn_1_1350C(&file, ctx) | 0xFF00;
+            pos++;
+        }
+        if (flags & 1) {
+            if (pos >= end) {
+                break;
+            }
+            c = fn_1_1350C(&file, ctx);
+            *dst++ = c;
+            pos++;
+            window[r++] = c;
+            r &= 0xFFF;
+        } else {
+            if (pos >= end) {
+                break;
+            }
+            offset = fn_1_1350C(&file, ctx);
+            if (pos + 1 >= end) {
+                break;
+            }
+            c = fn_1_1350C(&file, ctx);
+            offset |= (c & 0xF0) << 4;
+            len = (c & 0x0F) + 2;
+            pos += 2;
+            for (k = 0; k <= len; k++) {
+                c = window[(offset + k) & 0xFFF];
+                *dst++ = c;
+                window[r++] = c;
+                r &= 0xFFF;
+            }
+        }
+    }
+    fn_1_45850(&file);
+    return size;
+}
+/* fzgx:end fn_1_12B88 */
+
 /* fzgx:begin fn_1_12F78 */
 u32 fn_1_12F78(void *arg0, u32 arg1) {
     fn_80083DB0( (char *)(Obj_1_bss_3B30 *)(&lbl_1_bss_3B30), (const char *)(void *)(arg0));

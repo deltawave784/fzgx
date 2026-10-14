@@ -7379,3 +7379,6 @@ rel/main_rel/sound/fn_1_A3654.c:
 
 rel/main_rel/_prolog/fn_1_2F04.c:
 	.text       start:0x00002F04 end:0x00003238 align:4
+
+rel/main_rel/live_camera/fn_1_12B88.c:
+	.text       start:0x00012B88 end:0x00012F78 align:4
