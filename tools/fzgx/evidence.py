@@ -1,6 +1,7 @@
 """Retail data evidence shared by the lifter and matcher context."""
 from __future__ import annotations
 
+import bisect
 import re
 import struct
 from collections import deque
@@ -339,4 +340,87 @@ def data_context(project, fn, full=False):
                      f'{len(sites)} load(s), first at {sites[0]:08X}')
     from .datacontext import evidence
     lines.extend(evidence(project, fn, loads, full))
+    lines.extend(pool_words(project, fn, loads, full))
+    return lines
+
+
+_POOL_WORDS_CAP = 0x200
+
+
+def _section_objects(project, module, section):
+    """(address, name) of the module's objects in `section`, sorted (cached per project)."""
+    cache = project.__dict__.setdefault('_section_objects', {})
+    key = (module, section)
+    if key not in cache:
+        cache[key] = sorted((s.addr, s.name) for s in project.symbols(module).values()
+                            if s.kind == 'object' and s.section == section)
+    return cache[key]
+
+
+def _retail_objects(project, module):
+    cache = project.__dict__.setdefault('_retail_data_objects', {})
+    if module not in cache:
+        objects = {}
+        for path in project._asm_files(module):
+            for match in re.finditer(r'(?ms)^\.obj\s+(\S+),[^\n]*\n(.*?)^\.endobj', path.read_text()):
+                objects[match[1]] = match[2]
+        cache[module] = objects
+    return cache[module]
+
+
+def pool_words(project, fn, loads, full=False):
+    """Every retail word of a `.rodata`/`.data` object this function addresses, when the
+    session cannot otherwise see it: loads through the object's base that reach past dtk's
+    symbol size (a struct view or shared pool: fn_1_79E54 reads lbl_1_rodata_3278 at
+    +0x54..+0xB0, past its 0x50 bytes), or relocated pointer words (string-pointer tables:
+    fn_1_96230's lbl_1_rodata_3E48). Pointer words are shown as `&symbol`; offsets count from
+    the named symbol; a later dtk symbol inside the span is marked where it starts."""
+    if not full:  # claim context stays compact; the paged `data` evidence carries the words
+        return []
+    module = fn.symbol.module
+    reach = {}
+    for load in loads.values():
+        reach[load['symbol']] = max(reach.get(load['symbol'], 0), load['offset'] + load['width'])
+    objects = None
+    lines = []
+    for name in sorted(set(fn.refs) | set(reach)):
+        sym = project.find_symbol(name, module)
+        if not sym or sym.kind != 'object' or sym.section not in ('.rodata', '.data', '.sdata', '.sdata2'):
+            continue
+        if objects is None:
+            objects = _retail_objects(project, module)
+        span = max(sym.size, reach.get(name, 0))
+        if span <= 0:
+            continue
+        span = min((span + 3) & ~3, _POOL_WORDS_CAP if not full else 4 * _POOL_WORDS_CAP)
+        # symbolic words of every whole-`.4byte` object inside the span
+        pointers, starts = {}, {}
+        ordered = _section_objects(project, module, sym.section)
+        lo = bisect.bisect_left(ordered, (sym.addr, ''))
+        for _, other_name in ordered[lo:bisect.bisect_left(ordered, (sym.addr + span, ''))]:
+            other = project.find_symbol(other_name, module)
+            if other is None:
+                continue
+            if other.addr != sym.addr:
+                starts[other.addr - sym.addr] = other.name
+            values = re.findall(r'^\s*\.4byte\s+([^\n]+)', objects.get(other.name, ''), re.M)
+            for k, value in enumerate(values):
+                value = value.strip()
+                if re.fullmatch(r'[A-Za-z_.$@][\w.$@]*(?:[+-](?:0x[0-9a-fA-F]+|\d+))?', value):
+                    pointers[other.addr - sym.addr + 4 * k] = value
+        own_pointers = any(o < sym.size for o in pointers)
+        if span <= sym.size and not own_pointers:
+            continue
+        raw = retail_bytes(project, module, name, 0, span)
+        if raw is None:
+            continue
+        why = (f'this function reads to +0x{reach[name]:X}' if reach.get(name, 0) > sym.size
+               else 'relocated pointer words')
+        lines.append(f'Retail words of {name} ({sym.section}, dtk size 0x{sym.size:X}; {why}); '
+                     'offsets from the symbol, `&name` = relocated pointer:')
+        for at in range(0, len(raw) - 3, 16):
+            marks = [f'[{starts[o]} at +0x{o:X}]' for o in range(at, at + 16) if o in starts]
+            words = [('&' + pointers[o]) if o in pointers else f'0x{int.from_bytes(raw[o:o + 4], "big"):08X}'
+                     for o in range(at, min(at + 16, len(raw) - 3), 4)]
+            lines.append(f'  +0x{at:03X}: ' + ' '.join(words) + ('  ' + ' '.join(marks) if marks else ''))
     return lines
