@@ -917,7 +917,10 @@ def tu_objects(p, symbol, text, mode, cache, retail_bases=(), only=None, derive=
         all_typedefs = [pat.sub(lambda m: renamed[m.group(1)], td) for td in all_typedefs]
         out_text = out_text[:at] + pat.sub(lambda m: renamed[m.group(1)], out_text[at:])
     block = ''.join(all_typedefs) + "/* file-scope objects of the retail TU, in retail order: MWCC addresses them off one section base */\n"
-    block += "\n".join(d for _, d, _ in all_defs) + "\n\n"
+    # DOL units compile with -sdata 8: a defined object of 8 bytes or less would go to .sbss and be
+    # addressed off r13 (fn_8005596C); `section ".data"` keeps an uninitialized one in .bss
+    spec = '__declspec(section ".data") ' if sym.module == 'main' else ''
+    block += "\n".join(spec + d for _, d, _ in all_defs) + "\n\n"
     block += '#pragma section code_type ".fzgxpool"\nstatic void fzgx_bss_layout(void) {\n    volatile u8 s;  /* fzgx-allow: S2 layout primer sink: MWCC emits .bss objects in first-access order */\n'
     block += "".join(f"    s = *(u8 *)&{acc};\n" for _, _, acc in all_defs)
     block += '}\n#pragma section code_type ".text"\n\n'

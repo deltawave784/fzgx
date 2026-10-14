@@ -16,7 +16,7 @@ import shlex
 import struct
 import time
 
-from . import fixup_evidence as evidence, fixup_layout as layout, fixup_sibling as sibling, fixup_source as source, mwgraph, oracle, reuse
+from . import fixup_evidence as evidence, fixup_layout as layout, fixup_sections as sections, fixup_sibling as sibling, fixup_source as source, mwgraph, oracle, reuse
 from .project import ROOT, STATE_DIR, Project
 
 
@@ -511,6 +511,8 @@ class Engine:
             # `...data.0`/`...rodata.0` holding each other's registers: the TU's first reference
             # to each section numbers its base, so the primers are reordered
             yield from layout.section_base_order(self.project, row['symbol'], body, check, row.get('object'))
+            # defined TU section objects off their retail offsets / in DOL small data / unprimed
+            yield from sections.repairs(self.project, row['symbol'], body, check)
             yield from evidence.range_switches(body, name, check)
             yield from layout.native_string_views(self.project, row['symbol'], body)
             yield from evidence.swapped_call_arguments(self.project, row['symbol'], body, check)

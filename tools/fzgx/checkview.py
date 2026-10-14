@@ -54,18 +54,25 @@ def _data_initializers(project, key, result):
     retail's words and symbolic pointers; this offers that rewrite. Only when the check
     reports a pool whose bytes differ from retail. Pool primers' placeholder tables get the same
     offer, followed by every retail word of each differing pool."""
-    if not getattr(result, 'ok', False) or not any('differs from retail' in n for n in result.pool_notes or ()):
+    if not getattr(result, 'ok', False):
         return []
     try:
         import difflib
-        from . import fixup_layout
+        from . import fixup_layout, fixup_sections
         work = project.work_path(key)
         if not work.exists():
             return []
         body = work.read_text()
     except Exception:  # evidence only: a failure here must never fail the check
         return []
-    out = []
+    # where the work copy's defined TU section objects landed against retail (gap offsets,
+    # DOL small data): shown whether or not their bytes differ
+    try:
+        out = fixup_sections.report(project, key, body, result)
+    except Exception:
+        out = []
+    if not any('differs from retail' in n for n in result.pool_notes or ()):
+        return out
     try:
         candidates = fixup_layout.defined_data_initializers(project, key, body, result)
     except Exception:
@@ -114,7 +121,7 @@ def _page(payload, section, cursor):
         result['diff'].append('Decoded retail data is available: read_evidence(section="data", cursor="0"); '
                               'existing sessions: check(versions="data:0").')
     if section == 'diff' and payload.get('datainit'):
-        result['diff'].append('Your defined data objects or pool primer differ from retail bytes: the retail initializers and pool words are '
+        result['diff'].append('Your defined data objects, their section layout or the pool primer differ from retail: the layout check, retail initializers and pool words are '
                               'read_evidence(section="datainit", cursor="0"); existing sessions: check(versions="datainit:0").')
     return result
 

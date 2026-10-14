@@ -14,7 +14,7 @@ import json
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple
 
-from . import api, fixup_evidence, fixup_layout, fixup_sibling, fixup_source, linemap, oracle, stuck
+from . import api, fixup_evidence, fixup_layout, fixup_sections, fixup_sibling, fixup_source, linemap, oracle, stuck
 from .ledger import Ledger
 from .project import Project, STATE_DIR
 
@@ -116,6 +116,7 @@ def generate(p: Project, s: str, sym, path: Path, body: str, check, outdir: Path
     add('datainit', lambda: fixup_layout.defined_data_initializers(p, s, body, check))
     add('pooltables', lambda: fixup_layout.retail_pool_tables(p, s, body, check))
     add('baseorder', lambda: fixup_layout.section_base_order(p, s, body, check))
+    add('sections', lambda: fixup_sections.repairs(p, s, body, check))
     if not families or 'attr' in families:
         try:
             rl = row_lines(p, sym, path, check, outdir)
