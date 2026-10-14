@@ -7382,3 +7382,6 @@ rel/main_rel/_prolog/fn_1_2F04.c:
 
 rel/main_rel/live_camera/fn_1_12B88.c:
 	.text       start:0x00012B88 end:0x00012F78 align:4
+
+rel/main_rel/sel_static_disp/fn_1_138E44.c:
+	.text       start:0x00138E44 end:0x0013923C align:4
