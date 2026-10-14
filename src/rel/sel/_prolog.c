@@ -1,43 +1,12 @@
 #include "types.h"
 #include "rel/sel/globals.h"
 
-extern int fn_1_152970(int, int, int, int, struct Fn10Data *, int, int);
-extern u32 lbl_10_bss_49384;
-extern void fn_1_435C(u32);
-extern void fn_1_407C(void);
-extern void fn_1_3CC4(void);
-extern int fn_1_4C10(void);
-extern struct Fn10834State lbl_1_bss_8B3A0;
-extern struct Fn10834Status lbl_1_bss_962;
-extern u16 lbl_1_bss_968;
-extern void fn_10_CFDC(void);
-extern void fn_1_12C060(void *);
-extern void fn_1_A266C(void);
-extern u32 lbl_10_bss_14;
-extern struct Fn10834Event lbl_1_bss_9C;
-extern u8 lbl_1_bss_8CA28;
-extern void fn_1_A2D84(u32);
-
-/* fzgx:begin fn_10_0 noprologue */
-#include "types.h"
-
-extern struct Fn10Data lbl_10_bss_0;
-extern int fn_1_152970(int, int, int, int, struct Fn10Data *, int, int);
-
 struct Fn10Data {
     u8 pad[0x18];
     s16 value_18;
     s16 value_1a;
 };
 
-s16 fn_10_0(int first, int second, int third, int fourth) {
-    return (s16)fn_1_152970(second, first, third, fourth,
-        (struct Fn10Data *)((u8 *)&lbl_10_bss_0 + 0x1c),
-        lbl_10_bss_0.value_1a, lbl_10_bss_0.value_18);
-}
-/* fzgx:end fn_10_0 */
-
-/* fzgx:begin fn_10_834 */
 struct Fn10834State {
     u8 pad_0[0x94];
     u32 flags;
@@ -49,7 +18,9 @@ struct Fn10834State {
     u8 pad_129[0x17];
     u32 mode;
 };
+
 struct Fn10834Status { s16 value; };
+
 struct Fn10834Event {
     u8 pad_0[2];
     u8 value_2;
@@ -58,6 +29,34 @@ struct Fn10834Event {
     u8 pad_6[2];
     u32 value_8;
 };
+extern int fn_1_152970(int, int, int, int, struct Fn10Data *, int, int);
+extern u32 lbl_10_bss_49384;
+extern u32 fn_1_435C(u32 value);
+extern void fn_1_407C();
+extern void fn_1_3CC4(void);
+extern int fn_1_4C10(void);
+extern struct Fn10834State lbl_1_bss_8B3A0;
+extern struct Fn10834Status lbl_1_bss_962;
+extern u16 lbl_1_bss_968;
+extern void fn_10_CFDC(void);
+extern void fn_1_12C060(void *);
+extern void fn_1_A266C(void);
+extern u32 lbl_10_bss_14;
+extern struct Fn10834Event lbl_1_bss_9C;
+extern u8 lbl_1_bss_8CA28;
+extern void fn_1_A2D84(u32 arg0);
+
+/* fzgx:begin fn_10_0 */
+
+
+s16 fn_10_0(int first, int second, int third, int fourth) {
+    return (s16)fn_1_152970(second, first, third, fourth,
+        (struct Fn10Data *)((u8 *)((struct Fn10Data *)&lbl_10_bss_0) + 0x1c),
+        (*((struct Fn10Data *)&lbl_10_bss_0)).value_1a, (*((struct Fn10Data *)&lbl_10_bss_0)).value_18);
+}
+/* fzgx:end fn_10_0 */
+
+/* fzgx:begin fn_10_834 */
 
 void fn_10_834(void) {
     struct Fn10834State *state;

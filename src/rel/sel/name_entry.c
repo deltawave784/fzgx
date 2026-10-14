@@ -1,39 +1,8 @@
 #include "types.h"
 #include "rel/sel/globals.h"
 #include "rel/sel/name_entry.h"
+#include "dolphin/hw_regs.h"
 
-
-extern u8 lbl_10_bss_55CDC;
-extern s16 lbl_1_bss_960;
-extern u32 lbl_801A6410;
-extern void fn_1_435C(u32 value);
-extern void fn_1_426C(u32 value);
-extern void fn_1_A8F78(void);
-extern void fn_1_48140(int value);
-extern void fn_1_412A0(int value);
-extern u8 fn_1_B7C00(void);
-extern u8 fn_10_26434(void);
-extern void fn_10_26554(void);
-extern void fn_1_14BD94(void *);
-extern void fn_10_26424(void);
-extern u16 lbl_1_bss_9F8[5];
-extern u8 lbl_1_bss_8B3A0[0x9f];
-extern void fn_1_A2D84(void *);
-extern void fn_1_14BCBC(void *, u8);
-extern u8 lbl_1_bss_8E51D;
-extern u8 lbl_1_data_2B0D4[];
-extern u8 lbl_1_data_2B144[];
-extern s16 fn_1_12EF24(s16, s16);
-extern s32 fn_1_F89E4(u8);
-extern void fn_1_14A1AC(u8);
-extern void fn_1_14BC40(void);
-extern void fn_1_1554D0(void);
-extern void fn_1_1555B0(u8);
-extern void fn_1_47F74(s32);
-extern void fn_1_15555C(void);
-extern void fn_1_14BD74(void);
-
-/* fzgx:begin fn_10_25BC8 */
 typedef struct fn_10_25BC8_NameEntryState {
     u32 unk00;
     u32 unk04;
@@ -43,7 +12,125 @@ typedef struct fn_10_25BC8_NameEntryState {
     u32 unk1c;
 } fn_10_25BC8_NameEntryState;
 
-extern void fn_1_46B4(u32 arg0, fn_10_25BC8_NameEntryState *arg1, u8 *arg2, int arg3);
+typedef struct NameEntryPool {
+    u8 pad_0[0x38];
+    f32 unk_38;
+    f32 unk_3C;
+    f32 unk_40;
+    f32 unk_44;
+    f32 unk_48;
+    f32 unk_4C;
+    f32 unk_50;
+    f32 unk_54;
+    f32 unk_58;
+    f32 unk_5C;
+    f32 unk_60;
+    f32 unk_64;
+    f32 unk_68;
+    f32 unk_6C;
+    u8 pad_70[0x38];
+    u32 unk_A8;
+    f32 unk_AC;
+    f32 unk_B0;
+    f32 unk_B4;
+} NameEntryPool;
+
+typedef struct {
+    s16 v[14];
+} fn_10_25E1C_SndTable;
+
+typedef struct {
+    s16 v[14];
+} fn_10_260D4_SndTable;
+
+typedef struct { u8 r, g, b, a; } Sig_fn_800081C8_Color;
+
+typedef Sig_fn_800081C8_Color Color;
+
+typedef struct CameraDesc {
+    u32 mode;
+    f32 x;
+    f32 y;
+    f32 z;
+    u32 pad_10[8];
+    u32 unk_30;
+    u32 pad_34[9];
+} CameraDesc;
+extern void fn_1_46B4(u32 arg0, u32 arg1, const char *arg2, int arg3);
+extern NameEntryPool lbl_10_rodata_1D70;
+extern fn_10_260D4_SndTable lbl_10_rodata_1D8C;
+extern void fn_1_48140(int index);
+extern u32 lbl_801A66B4;
+extern u32 fn_800081C8(Color arg0, Color arg1, f32 arg2);
+extern void fn_1_49410(void);
+extern void fn_1_4955C(f32 value1, f32 value2);
+extern void fn_1_4954C(f32 value);
+extern void fn_1_495C8(u8 value);
+extern void fn_1_495B0(u32 value);
+extern void fn_1_49590(f32 value);
+extern void fn_1_496FC(f32 value1, f32 value2);
+extern void fn_1_4D494(void);
+extern void fn_1_49514(u32 *value);
+extern void fn_1_4AE0C(const char* format, ...);
+extern u32 fn_1_4D4C8(Color, f32, f32);
+extern void fn_1_49528(Color);
+extern void fzgx_pool_use(void *);
+extern u16 lbl_1_bss_9F8[5];
+extern void fn_1_A2D84(u32 arg0);
+extern CameraDesc lbl_1_rodata_26F8;
+extern void fn_10_261E4(s32 arg0, u8 arg1);
+extern u32 fn_1_4AEC0(u32 value);
+extern u32 fn_800371F8(u32, void *);
+extern u8 fn_1_B7C00(void);
+extern void fn_1_4966C(f32 value1, f32 value2);
+extern void fn_1_4A0D8(const char *);
+extern void fn_1_4AEB4(f32 value);
+extern void fn_1_4FD64();
+extern void fn_1_50164();
+extern void fn_8003462C(u32 arg0, u32 arg1, u32 arg2);
+extern void fn_8007245C(u32 value);
+extern void fn_80072864(u32 arg0);
+extern void fn_800728A8(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
+extern void fn_80072AB0(s32 arg0, s32 arg1, s32 arg2);
+extern void fn_80072C24(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
+extern void fn_80072CC4(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
+extern void fn_80072D64(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u8 arg4, s32 arg5);
+extern void fn_80072E20(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u8 arg4, s32 arg5);
+extern void fn_800734A8(u32 arg0, s32 arg1, s32 arg2, s32 arg3);
+extern void fn_80073678(u32 arg0);
+extern void fn_80073C6C(s32 index);
+extern void fn_80074660(u32 arg0);
+extern void fn_80074788(u32 arg0);
+extern void fn_800747D0(u32 arg0, u32 arg1, s32 arg2, s32 arg3, u32 arg4, s32 arg5, s32 arg6);
+extern void fn_80074918(u8 arg0, s32 arg1, u8 arg2);
+extern u8 lbl_10_bss_55CDC;
+extern s16 lbl_1_bss_960;
+extern u32 lbl_801A6410;
+extern u32 fn_1_435C(u32 value);
+extern void fn_1_426C(u32 idx);
+extern void fn_1_A8F78(void);
+extern void fn_1_412A0(u32 index);
+extern int fn_10_26434(void);
+extern void fn_10_26554(void);
+extern void fn_1_14BD94(void *);
+extern void fn_10_26424(void);
+extern u8 lbl_1_bss_8B3A0[0x9f];
+extern void fn_1_14BCBC(u32 arg0, u32 arg1);
+extern u8 lbl_1_bss_8E51D;
+extern u8 lbl_1_data_2B0D4[];
+extern u8 lbl_1_data_2B144[];
+extern s16 fn_1_12EF24(s16 row, s16 column);
+extern u32 fn_1_F89E4(u8 value);
+extern void fn_1_14A1AC(u8 arg);
+extern void fn_1_14BC40(void);
+extern void fn_1_1554D0(void);
+extern s32 fn_1_1555B0(s32 value);
+extern void fn_1_47F74(s32 index);
+extern void fn_1_15555C(void);
+extern void fn_1_14BD74(void);
+
+/* fzgx:begin fn_10_25BC8 */
+
 
 void fn_10_25BC8(void) {
     lbl_10_bss_55CDC = 1;
@@ -62,27 +149,18 @@ void fn_10_25BC8(void) {
 
     fn_1_435C(((fn_10_25BC8_NameEntryState *)lbl_10_bss_55CD8)->unk08);
     fn_1_426C(((fn_10_25BC8_NameEntryState *)lbl_10_bss_55CD8)->unk1c);
-    fn_1_46B4(lbl_801A6410, (fn_10_25BC8_NameEntryState *)lbl_10_bss_55CD8,
-              lbl_10_data_6980, 0x562);
+    fn_1_46B4(lbl_801A6410, (u32)((fn_10_25BC8_NameEntryState *)lbl_10_bss_55CD8), (const char *)(u8 *)(lbl_10_data_6980), 0x562);
     lbl_10_bss_55CD8 = 0;
 }
 /* fzgx:end fn_10_25BC8 */
 
 /* fzgx:begin fn_10_25E1C */
-#include "types.h"
-
 typedef struct {
     u8 pad[0x8c];
     s16 value;
 } fn_10_25E1C_NameEntryState;
 
-typedef struct {
-    s16 v[14];
-} fn_10_25E1C_SndTable;
 
-extern fn_10_25E1C_SndTable lbl_10_rodata_1D70;
-extern u8 lbl_10_bss_55CE0;
-extern u8 lbl_10_bss_55CE1;
 
 void fn_10_25E1C(void) {
     fn_10_25E1C_NameEntryState *state = &(*(fn_10_25E1C_NameEntryState *)&lbl_1_bss_8B3A0);
@@ -93,12 +171,12 @@ void fn_10_25E1C(void) {
         result = fn_1_12EF24(state->value, i);
         if (state->value == 5) {
             if (i == 5) {
-                if (fn_1_F89E4(0) == 0) {
+                if ((s32)fn_1_F89E4(0) == 0) {
                     goto set_neg; // shared tail: retail merges both -1 arms
                 }
             }
             if (i != 5) {
-                if (fn_1_F89E4((u8)(i + 1)) == 0) {
+                if ((s32)fn_1_F89E4((u8)(i + 1)) == 0) {
                     goto set_neg; // shared tail: retail merges both -1 arms
                 }
             }
@@ -130,7 +208,7 @@ void fn_10_25E1C(void) {
         result = fn_1_12EF24(state->value, i);
         if (result != -1) {
             u8 key = lbl_1_data_2B0D4[result];
-            fn_10_25E1C_SndTable table = lbl_10_rodata_1D70;
+            fn_10_25E1C_SndTable table = (*((fn_10_25E1C_SndTable *)&lbl_10_rodata_1D70));
             s16 index = lbl_1_data_2B144[key] - 1;
 
             if ((((u32)index > 13) ? 0 : (index >= 0)) && table.v[index] != -1) {
@@ -142,7 +220,22 @@ void fn_10_25E1C(void) {
 }
 /* fzgx:end fn_10_25E1C */
 
-/* fzgx:begin fn_10_26000 */
+/* fzgx:begin fn_10_26000 noprologue */
+#include "types.h"
+#include "rel/sel/globals.h"
+#include "rel/sel/name_entry.h"
+
+
+extern u8 fn_1_B7C00(void);
+extern u8 fn_10_26434(void);
+extern void fn_10_26554(void);
+extern void fn_1_14BD94(void *);
+extern void fn_10_26424(void);
+extern u16 lbl_1_bss_9F8[5];
+extern u8 lbl_1_bss_8B3A0[0x9f];
+extern void fn_1_A2D84(void *);
+extern void fn_1_14BCBC(void *, u8);
+
 u8 fn_10_26000(void) {
     u8 result;
     u16 flags;
@@ -176,20 +269,13 @@ u8 fn_10_26000(void) {
 /* fzgx:end fn_10_26000 */
 
 /* fzgx:begin fn_10_260D4 */
-#include "types.h"
-
 typedef struct {
     u8 pad[0x8c];
     s16 value;
 } fn_10_260D4_NameEntryState;
 
-typedef struct {
-    s16 v[14];
-} fn_10_260D4_SndTable;
 
-extern fn_10_260D4_SndTable lbl_10_rodata_1D8C;
 
-extern void fn_1_48140(int);
 
 void fn_10_260D4(void) {
     fn_10_260D4_NameEntryState *state = &(*(fn_10_260D4_NameEntryState *)&lbl_1_bss_8B3A0);
@@ -215,7 +301,11 @@ void fn_10_260D4(void) {
 }
 /* fzgx:end fn_10_260D4 */
 
-/* fzgx:begin fn_10_261E4 pool */
+/* fzgx:begin fn_10_261E4 pool noprologue */
+#include "types.h"
+#include "rel/sel/globals.h"
+#include "rel/sel/name_entry.h"
+
 typedef struct { u8 r, g, b, a; } Sig_fn_800081C8_Color;
 typedef Sig_fn_800081C8_Color Color;
 
@@ -328,10 +418,7 @@ void fn_10_26424(void) {
 }
 /* fzgx:end fn_10_26424 */
 
-/* fzgx:begin fn_10_26434 noprologue */
-#include "types.h"
-
-extern u16 lbl_1_bss_9F8[5];
+/* fzgx:begin fn_10_26434 */
 
 typedef struct SelState {
     u8 pad0[8];
@@ -342,8 +429,6 @@ typedef struct SelState {
 } SelState;
 
 
-extern u8 lbl_10_bss_55CE2;
-extern void fn_1_A2D84(int arg);
 
 int fn_10_26434(void) {
     if (((*(SelState *)&lbl_1_bss_9F8).flags10 & 1) ||
@@ -382,78 +467,10 @@ int fn_10_26434(void) {
 /* fzgx:end fn_10_26434 */
 
 /* fzgx:begin fn_10_266AC */
-#include "dolphin/hw_regs.h"
 
-typedef struct NameEntryPool {
-    u8 pad_0[0x38];
-    f32 unk_38;
-    f32 unk_3C;
-    f32 unk_40;
-    f32 unk_44;
-    f32 unk_48;
-    f32 unk_4C;
-    f32 unk_50;
-    f32 unk_54;
-    f32 unk_58;
-    f32 unk_5C;
-    f32 unk_60;
-    f32 unk_64;
-    f32 unk_68;
-    f32 unk_6C;
-    u8 pad_70[0x38];
-    u32 unk_A8;
-    f32 unk_AC;
-    f32 unk_B0;
-    f32 unk_B4;
-} NameEntryPool;
 
-typedef struct CameraDesc {
-    u32 mode;
-    f32 x;
-    f32 y;
-    f32 z;
-    u32 pad_10[8];
-    u32 unk_30;
-    u32 pad_34[9];
-} CameraDesc;
-
-extern NameEntryPool lbl_10_rodata_1D70;
-extern CameraDesc lbl_1_rodata_26F8;
-extern u32 lbl_801A66B4;
 #define NAME_TABLE ((const char **)lbl_10_data_6B2C)
 
-extern u32 fn_10_261E4(u32, u32);
-extern u32 fn_1_4AEC0(u32);
-extern u32 fn_800371F8(u32, void *);
-extern u8 fn_1_B7C00(void);
-extern void fn_1_49410(void);
-extern void fn_1_4954C(f32);
-extern void fn_1_4955C(f32, f32);
-extern void fn_1_49590(f32);
-extern void fn_1_495B0(u32);
-extern void fn_1_495C8(u8);
-extern void fn_1_4966C(f32, f32);
-extern void fn_1_496FC(f32, f32);
-extern void fn_1_4A0D8(const char *);
-extern void fn_1_4AEB4(f32);
-extern void fn_1_4FD64(void);
-extern void fn_1_50164(f32, f32, f32, f32, void *);
-extern void fn_8003462C(u32, u32, u32);
-extern void fn_8007245C(u32);
-extern void fn_80072864(u32);
-extern void fn_800728A8(s32, s32, s32, s32);
-extern void fn_80072AB0(s32, s32, s32);
-extern void fn_80072C24(s32, s32, s32, s32, s32);
-extern void fn_80072CC4(s32, s32, s32, s32, s32);
-extern void fn_80072D64(s32, s32, s32, s32, u8, s32);
-extern void fn_80072E20(s32, s32, s32, s32, u8, s32);
-extern void fn_800734A8(u32, s32, s32, s32);
-extern void fn_80073678(u32);
-extern void fn_80073C6C(s32);
-extern void fn_80074660(u32);
-extern void fn_80074788(u32);
-extern void fn_800747D0(u32, u32, s32, s32, u32, s32, s32);
-extern void fn_80074918(u8, s32, u8);
 
 /* volatile: every store must reach the GX write-gather FIFO; the hardware register must not be merged */
 #define GX_FIFO_F32 (*(volatile f32 *)GX_FIFO_BASE)
