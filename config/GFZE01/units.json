@@ -911,6 +911,26 @@
   },
   {
     "module": "customize",
+    "source": "rel/customize/_prolog/fn_3_9CA8.c",
+    "symbols": [
+      "fn_3_9CA8"
+    ],
+    "status": "matching",
+    "mw_version": "GC/1.3.2",
+    "extra_cflags": [],
+    "tu": "rel/customize/_prolog.c",
+    "pool": {
+      "...bss.0": "lbl_3_bss_0",
+      "lbl_3_bss_0": "lbl_3_bss_0",
+      "lbl_3_bss_8": "lbl_3_bss_8",
+      "lbl_3_bss_C": "lbl_3_bss_C",
+      "lbl_3_bss_18": "lbl_3_bss_18",
+      "lbl_3_bss_20": "lbl_3_bss_20",
+      "lbl_3_bss_F0": "lbl_3_bss_F0"
+    }
+  },
+  {
+    "module": "customize",
     "source": "rel/customize/_prolog/fn_3_AF8.c",
     "symbols": [
       "fn_3_AF8"
