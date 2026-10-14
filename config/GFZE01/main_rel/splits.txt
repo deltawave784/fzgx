@@ -7406,3 +7406,6 @@ rel/main_rel/accessory/fn_1_10BA00.c:
 
 rel/main_rel/game/fn_1_34924.c:
 	.text       start:0x00034924 end:0x00034AC0 align:4
+
+rel/main_rel/effect_car/fn_1_6F90C.c:
+	.text       start:0x0006F90C end:0x0006FD58 align:4
