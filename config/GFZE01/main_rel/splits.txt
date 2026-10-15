@@ -7457,3 +7457,6 @@ rel/main_rel/motasglist/fn_1_43E08.c:
 
 rel/main_rel/sel_static_disp/fn_1_14AED4.c:
 	.text       start:0x0014AED4 end:0x0014B1B8 align:4
+
+rel/main_rel/live_camera/fn_1_1212C.c:
+	.text       start:0x0001212C end:0x00012620 align:4
