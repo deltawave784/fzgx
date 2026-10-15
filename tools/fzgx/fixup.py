@@ -16,7 +16,7 @@ import shlex
 import struct
 import time
 
-from . import fixup_evidence as evidence, fixup_layout as layout, fixup_sections as sections, fixup_sibling as sibling, fixup_source as source, mwgraph, oracle, reuse
+from . import fixup_capture as capture_family, fixup_evidence as evidence, fixup_layout as layout, fixup_sections as sections, fixup_sibling as sibling, fixup_source as source, mwgraph, oracle, reuse
 from .project import ROOT, STATE_DIR, Project
 
 
@@ -577,6 +577,11 @@ class Engine:
             # a register-only residual: every order of the implicated register class's locals
             # (fn_4_1444: five f32 among ten locals, reachable by neither family above)
             yield from evidence.register_class_orders(self.project, row['symbol'], body, check, self.row_lines(row))
+            # a register-only residual at 99%+ under GC/1.3.2: the allocator capture names the web
+            # behind every residual row and the web blocking its retail register; the verdict is
+            # emitted (`capture-verdict`) and the blocker's class selects the structural family
+            yield from capture_family.proposals(self.project, row['symbol'], body, check, row['mw'], row.get('flags'),
+                                                run_capture=True, emit=self.emit)
             yield from evidence.induction_indexing(self.project, row['symbol'], body, check)
             # a hand-unrolled counted loop (two steps per trip) folds back to MWCC's own 2x
             # unroll, which keeps the dead counter retail carries; covers inline helpers too

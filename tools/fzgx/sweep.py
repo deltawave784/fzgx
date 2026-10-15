@@ -14,7 +14,7 @@ import json
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple
 
-from . import api, fixup_evidence, fixup_layout, fixup_sections, fixup_sibling, fixup_source, linemap, oracle, stuck
+from . import api, fixup_capture, fixup_evidence, fixup_layout, fixup_sections, fixup_sibling, fixup_source, linemap, oracle, stuck
 from .ledger import Ledger
 from .project import Project, STATE_DIR
 
@@ -127,6 +127,9 @@ def generate(p: Project, s: str, sym, path: Path, body: str, check, outdir: Path
     # (bounded above six), block-scoped locals of that class hoisted; the line attribution
     # names the locals whose moves are tried when the class is large
     add('regorder', lambda: fixup_evidence.register_class_orders(p, s, body, check, rl))
+    # an allocator capture of this exact body under .fzgx/capture/SYMBOL: its verdict selects the
+    # structural family (the sweep never runs a capture; `fzgx fixup SYMBOL` does)
+    add('capture', lambda: fixup_capture.proposals(p, s, body, check, oracle.module_flags(p, sym.module)[1], None, run_capture=False))
     if not families or 'attr' in families:
         try:
             if rl:
