@@ -23,6 +23,10 @@ SCALAR = {'void', 'int', 'char', 'short', 'long', 'unsigned', 'signed', 'float',
 # parameter lists may hold function-pointer parameters: two levels of nested parentheses
 PROTO_RE = re.compile(r'^\s*(?:extern\s+)?(.*?)\b([A-Za-z_]\w*)\s*\(((?:[^()]|\((?:[^()]|\([^()]*\))*\))*)\)\s*(?:,|;)')
 QUALIFIERS = {'const', 'volatile', 'register'}
+# a typedef name may carry array dimensions (`} Sig_parse_format___va_list[1];`, MWCC's va_list)
+ARR = r'(?:\s*\[[^\]]*\])*'
+TYPE_TAIL_RE = re.compile(r'\}\s*([A-Za-z_]\w*)' + ARR + r'\s*;', re.M)
+ALIAS_RE_TEXT = r'^typedef\s+(?!struct\b|union\b|enum\b)[^;{}()\[\]]*?\b([A-Za-z_]\w*)' + ARR + r'\s*;'
 
 
 def split_params(inner: str) -> List[str]:
@@ -219,10 +223,10 @@ def split_multi(body: str) -> str:
 def private_type_names(body: str) -> set:
     """Names of the types a block defines: struct/union typedefs and tags, function-pointer
     typedefs and plain aliases."""
-    names = set(re.findall(r'\}\s*([A-Za-z_]\w*)\s*;', body, re.M))
+    names = set(TYPE_TAIL_RE.findall(body))
     names |= set(re.findall(r'^(?:typedef\s+)?(?:struct|union)\s+([A-Za-z_]\w*)\s*\{', body, re.M))
     names |= set(re.findall(r'^typedef\s+[^;{}]*?\(\s*\*\s*([A-Za-z_]\w*)\s*\)\s*\([^;]*\)\s*;', body, re.M))
-    names |= set(re.findall(r'^typedef\s+(?!struct\b|union\b|enum\b)[^;{}()]*?\b([A-Za-z_]\w*)\s*;', body, re.M))
+    names |= set(re.findall(ALIAS_RE_TEXT, body, re.M))
     return names - {'u8', 'u16', 'u32', 's8', 's16', 's32', 'f32', 'f64'}
 
 
@@ -232,7 +236,7 @@ def type_definition_span(body: str, tname: str) -> Optional[Tuple[int, int]]:
     m1 = re.search(r'^typedef\s+[^;{}]*?\(\s*\*\s*' + re.escape(tname) + r'\s*\)\s*\([^;]*\)\s*;\s*\n?', body, re.M)
     if m1:
         return m1.start(), m1.end()
-    m2 = re.search(r'^typedef\s+(?!struct\b|union\b|enum\b)[^;{}()]*?\b' + re.escape(tname) + r'\s*;\s*\n?', body, re.M)
+    m2 = re.search(r'^typedef\s+(?!struct\b|union\b|enum\b)[^;{}()\[\]]*?\b' + re.escape(tname) + ARR + r'\s*;\s*\n?', body, re.M)
     if m2:
         return m2.start(), m2.end()
     for m in re.finditer(r'^(?:typedef\s+)?(?:struct|union|enum)\s*(?:[A-Za-z_]\w*\s*)?\{', body, re.M):
@@ -244,18 +248,34 @@ def type_definition_span(body: str, tname: str) -> Optional[Tuple[int, int]]:
             elif body[i] == '}':
                 depth -= 1
                 if depth == 0:
-                    tail = re.match(r'\s*([A-Za-z_]\w*)?\s*;', body[i + 1:])
+                    tail = re.match(r'\s*([A-Za-z_]\w*)?' + ARR + r'\s*;', body[i + 1:])
                     if not tail:
                         break
                     end = i + 1 + tail.end()
                     head = body[m.start():m.end()]
-                    name = tail.group(1) if m.group(0).startswith('typedef') else re.search(r'(?:struct|union|enum)\s*([A-Za-z_]\w*)', head)
-                    name = name if isinstance(name, str) or name is None else name.group(1)
-                    if name == tname:
+                    tagm = re.search(r'(?:struct|union|enum)\s*([A-Za-z_]\w*)', head)
+                    name = tail.group(1) if m.group(0).startswith('typedef') else (tagm.group(1) if tagm else None)
+                    # the tag of a `typedef struct Tag { ... } Name;` names the same definition
+                    if name == tname or (tagm and tagm.group(1) == tname):
                         return m.start(), end + (1 if body[end:end + 1] == '\n' else 0)
                     break
             i += 1
     return None
+
+
+def dedupe_typedef_lines(prologue: str) -> str:
+    """One copy of each identical one-line typedef (name_entry.c carried
+    `typedef Sig_fn_800081C8_Color Color;` twice; every hoist appended another)."""
+    seen: set = set()
+    out = []
+    for ln in prologue.splitlines():
+        key = re.sub(r'\s+', ' ', ln).strip()
+        if re.match(r'^typedef\s+[^;{}]*;$', key):
+            if key in seen:
+                continue
+            seen.add(key)
+        out.append(ln)
+    return '\n'.join(out) + ('\n' if prologue.endswith('\n') else '')
 
 
 def order_prologue_types(prologue: str) -> str:
@@ -267,7 +287,10 @@ def order_prologue_types(prologue: str) -> str:
         for m in re.finditer(r'^typedef\s+[^;{}]*;\s*\n?', prologue, re.M):
             text = m.group(0)
             fp = re.search(r'\(\s*\*\s*([A-Za-z_]\w*)\s*\)', text)
-            name = fp.group(1) if fp else re.findall(r'([A-Za-z_]\w*)\s*;', text)[-1]
+            tailn = re.findall(r'([A-Za-z_]\w*)' + ARR + r'\s*;', text)
+            if not fp and not tailn:
+                continue
+            name = fp.group(1) if fp else tailn[-1]
             defs.append((m.start(), m.end(), {name}))
         for m in re.finditer(r'^(?:typedef\s+)?(?:struct|union|enum)\b[^;{]*\{', prologue, re.M):
             # find the end of this definition
@@ -279,7 +302,7 @@ def order_prologue_types(prologue: str) -> str:
                 elif prologue[i] == '}':
                     depth -= 1
                     if depth == 0:
-                        tail = re.match(r'\s*([A-Za-z_]\w*)?\s*;\s*\n?', prologue[i + 1:])
+                        tail = re.match(r'\s*([A-Za-z_]\w*)?' + ARR + r'\s*;\s*\n?', prologue[i + 1:])
                         if tail:
                             head = prologue[m.start():m.end()]
                             tagm = re.search(r'(?:struct|union|enum)\s+([A-Za-z_]\w*)', head)
@@ -332,7 +355,7 @@ def hoist_private_types(tf: tufile.TuFile, truths: Dict[str, str], report: Dict[
     header = tutidy.header_types(tf.prologue)
 
     def in_prologue(t: str) -> bool:
-        return bool(t in header or re.search(r'\}\s*' + re.escape(t) + r'\s*;', tf.prologue, re.M)
+        return bool(t in header or type_definition_span(tf.prologue, t)
                     or re.search(r'^(?:typedef\s+)?struct\s+' + re.escape(t) + r'\s*\{', tf.prologue, re.M))
 
     def hoist(t: str, stack: Tuple[str, ...] = ()) -> None:
@@ -352,6 +375,8 @@ def hoist_private_types(tf: tufile.TuFile, truths: Dict[str, str], report: Dict[
         text = b.body[span[0]:span[1]]
         for inner in dict.fromkeys(re.findall(r'[A-Za-z_]\w*', text)):
             if inner != t and inner in private:
+                if private[inner] == owners and type_definition_span(b.body, inner) == span:
+                    continue  # the tag (or alias) of this same definition, not a dependency
                 hoist(inner, stack + (t,))
             elif inner != t:
                 # a forward typedef (`typedef struct X X;`) the definition relies on
@@ -360,6 +385,13 @@ def hoist_private_types(tf: tufile.TuFile, truths: Dict[str, str], report: Dict[
                     tf.prologue = tf.prologue.rstrip('\n') + '\n\n' + fwd_.group(0).strip() + '\n'
                     b.body = b.body[:fwd_.start()] + b.body[fwd_.end():]
         span = type_definition_span(b.body, t)  # offsets may have moved with an inner hoist
+        if span is None:
+            if in_prologue(t):
+                done.add(t)  # an inner hoist carried this very definition (tag and name)
+                return
+            report.setdefault('unhoistable', []).append(f'{t}: definition vanished from {b.name} during inner hoists')
+            done.add(t)
+            return
         text = b.body[span[0]:span[1]]
         b.body = b.body[:span[0]] + b.body[span[1]:]
         # a forward typedef of the tag (`typedef struct X X;`, self-referential structs) goes first
@@ -380,7 +412,11 @@ def hoist_private_types(tf: tufile.TuFile, truths: Dict[str, str], report: Dict[
 
 
 def cast_results(body: str, name: str, old_ret: str) -> str:
-    """`x = f(...)` under a truth with another return type: cast the call to the old type."""
+    """`x = f(...)` under a truth with another return type: cast the call to the old type.
+    A struct/union return (a typedef that is neither scalar nor pointer) has no cast from a
+    scalar: the block keeps its own form (`Unmodelled`)."""
+    if '*' not in old_ret and old_ret.split()[-1] not in SCALAR:
+        raise Unmodelled(f'{name}: aggregate return type {old_ret!r} cannot be cast from the truth')
     out = body
     for m in reversed(list(re.finditer(r'\b' + re.escape(name) + r'\s*\(', body))):
         line_start = body.rfind('\n', 0, m.start()) + 1
@@ -420,7 +456,11 @@ def view_rewrite(body: str, name: str, decl: str, truth_is_pointer: bool = False
     if not m:
         return None
     t = re.sub(r'\s+', ' ', m.group(1)).strip()
-    if m.group(2):
+    dims = re.findall(r'\[[^\]]*\]', m.group(2) or '')
+    if len(dims) > 1:
+        # a multi-dimensional array keeps its inner dimensions (`SelCell lbl[R][C]` -> `(SelCell (*)[C])`)
+        view = f'((({t} (*){"".join(dims[1:])})&{name}))'
+    elif m.group(2):
         view = f'((({t} *)&{name}))'
     elif t.endswith('*') and truth_is_pointer:
         view = f'(({t}){name})'
@@ -430,6 +470,8 @@ def view_rewrite(body: str, name: str, decl: str, truth_is_pointer: bool = False
     # `&name` of the whole object keeps its address and type: wrapping the view in `&` is not an
     # lvalue (`&(((u32 *)&lbl_3_bss_F0))`, fn_3_BD00/BD30); `&name[i]` / `&name.f` still go
     # through the view (postfix binds first). A pointer truth's `&name` is the pointer itself.
+    # Only a unary `&` is an address-of: the second `&` of `&&` (`== 0 && lbl_1_bss_96A != 0x14`,
+    # fn_10_436C) and a bitwise `a & name` are binary operators and the name itself is a use.
     whole = re.compile(r'&\s*' + re.escape(name) + r'\b(?!\s*(?:\[|\.|->))')
     if m.group(2):
         address = f'(({t} (*){m.group(2)})&{name})'
@@ -437,12 +479,45 @@ def view_rewrite(body: str, name: str, decl: str, truth_is_pointer: bool = False
         address = f'&{name}'
     else:
         address = f'(({t} *)&{name})'
+
+    def unary(ln: str, i: int) -> bool:
+        j = i - 1
+        while j >= 0 and ln[j] in ' \t':
+            j -= 1
+        if j < 0:
+            return True
+        c = ln[j]
+        if c == ')':
+            # `(u8 *)&x` / `(Color)&x` is a cast of an address-of; `(a + b) & x` is binary
+            o = ln.rfind('(', 0, j)
+            inner = ln[o + 1:j] if o >= 0 else ''
+            words = re.findall(r'[A-Za-z_]\w*', inner)
+            if words and re.fullmatch(r'[\w\s\*]+', inner) and ('*' in inner or words[-1] in SCALAR
+                                                                 or re.search(r'[A-Z]|_t$', words[-1])):
+                return True
+            return False
+        if c in '&]':
+            return False
+        if c.isalnum() or c == '_':
+            k = j
+            while k >= 0 and (ln[k].isalnum() or ln[k] == '_'):
+                k -= 1
+            return ln[k + 1:j + 1] in ('return', 'case', 'else', 'sizeof')
+        return True
+
     out_lines = []
     for ln in body.splitlines():
         if tutidy.DECL_LINE_RE.match(ln) and tutidy._decl_name(ln) == name:
             continue
-        parts = whole.split(ln)
-        out_lines.append((address).join(ident.sub(view, part) for part in parts))
+        pieces, last = [], 0
+        for am in whole.finditer(ln):
+            if not unary(ln, am.start()):
+                continue
+            pieces.append(ident.sub(view, ln[last:am.start()]))
+            pieces.append(address)
+            last = am.end()
+        pieces.append(ident.sub(view, ln[last:]))
+        out_lines.append(''.join(pieces))
     return '\n'.join(out_lines) + ('\n' if body.endswith('\n') else '')
 
 
@@ -581,21 +656,19 @@ def resolve(p: Project, tu_source: str, v, apply: bool = True,
         tf.prologue = tufile.merge_prologue(tf.prologue, block_includes)
         report['promoted_includes'] = block_includes
     header_names, header_typedefs = tutidy._header_names(p, tf.prologue)
+    # header declarations are collected transitively: sel.c includes rel/sel/sel.h, which
+    # includes rel/sel/globals.h (`extern Obj_10_bss_0 lbl_10_bss_0;`); reading only the
+    # direct includes let a block variant (`extern u8 lbl_10_bss_0[];`) become the truth and
+    # the prologue redeclared the symbol
     hdecl: Dict[str, str] = {}
-    for ln in tf.prologue.splitlines():
-        m = re.search(r'#include\s+"([^"]+)"', ln)
-        if m and (ROOT / 'include' / m.group(1)).exists():
-            for hl in (ROOT / 'include' / m.group(1)).read_text().splitlines():
-                hl = re.sub(r'\s*//.*$', '', hl)  # generated headers annotate declarations
-                if tutidy.DECL_LINE_RE.match(hl):
-                    n = tutidy._decl_name(hl)
-                    if n:
-                        hdecl.setdefault(n, hl.strip())
+    for h in tutidy.included_headers(tf.prologue):
+        for n, hl in h.decls:
+            hdecl.setdefault(n, hl)
     # block typedefs that collide with a header or prologue typedef: an identical definition
     # is dropped (the prologue carries it), a different one gets the block's prefix
-    prologue_typedefs = set(re.findall(r'\}\s*([A-Za-z_]\w*)\s*;', tf.prologue, re.M)) | set(re.findall(r'^(?:typedef\s+)?struct\s+([A-Za-z_]\w*)\s*\{', tf.prologue, re.M))
+    prologue_typedefs = set(TYPE_TAIL_RE.findall(tf.prologue)) | set(re.findall(r'^(?:typedef\s+)?struct\s+([A-Za-z_]\w*)\s*\{', tf.prologue, re.M))
     for b in tf.blocks:
-        for t in sorted((set(re.findall(r'\}\s*([A-Za-z_]\w*)\s*;', b.body, re.M)) | set(re.findall(r'^(?:typedef\s+)?struct\s+([A-Za-z_]\w*)\s*\{', b.body, re.M))) & (set(header_typedefs) | prologue_typedefs)):
+        for t in sorted((set(TYPE_TAIL_RE.findall(b.body)) | set(re.findall(r'^(?:typedef\s+)?struct\s+([A-Za-z_]\w*)\s*\{', b.body, re.M))) & (set(header_typedefs) | prologue_typedefs)):
             span = type_definition_span(b.body, t)
             pspan = type_definition_span(tf.prologue, t)
             if span and pspan and re.sub(r'\s+', ' ', b.body[span[0]:span[1]]).strip() == re.sub(r'\s+', ' ', tf.prologue[pspan[0]:pspan[1]]).strip():
@@ -608,7 +681,7 @@ def resolve(p: Project, tu_source: str, v, apply: bool = True,
     # dropped from the blocks, differing definitions get each block's prefix
     defs_by_type: Dict[str, List[Tuple[str, str]]] = {}
     for b in tf.blocks:
-        for t in set(re.findall(r'\}\s*([A-Za-z_]\w*)\s*;', b.body, re.M)) | set(re.findall(r'^(?:typedef\s+)?(?:struct|union)\s+([A-Za-z_]\w*)\s*\{', b.body, re.M)):
+        for t in set(TYPE_TAIL_RE.findall(b.body)) | set(re.findall(r'^(?:typedef\s+)?(?:struct|union)\s+([A-Za-z_]\w*)\s*\{', b.body, re.M)):
             span = type_definition_span(b.body, t)
             if span:
                 defs_by_type.setdefault(t, []).append((b.name, re.sub(r'\s+', ' ', b.body[span[0]:span[1]]).strip()))
@@ -828,7 +901,7 @@ def resolve(p: Project, tu_source: str, v, apply: bool = True,
             else:
                 lines.append(truth)
         report['knr'] = sorted(knr)
-        return order_prologue_types(base_prologue.rstrip('\n') + '\n' + '\n'.join(dict.fromkeys(lines)) + '\n')
+        return order_prologue_types(dedupe_typedef_lines(base_prologue).rstrip('\n') + '\n' + '\n'.join(dict.fromkeys(lines)) + '\n')
 
     before_hoist = tf.prologue
     hoist_private_types(tf, {f'{n}#{k}': t for n in symbols for k, (_, t) in enumerate(candidates[n])}, report)
