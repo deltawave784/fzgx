@@ -1,4 +1,26 @@
 #include "types.h"
+#include "rel/sel/globals.h"
+#include "rel/sel/record.h"
+
+
+extern u8 lbl_10_bss_55CE0;
+extern void fn_1_12EF80(u8, s16 *, s16 *);
+extern void fn_1_FA1D8(s16, s16, void *);
+extern int fn_1_B7E98(int index);
+extern s32 fn_1_F7954(void);
+extern void fn_80008BA8(u32 arg0, u32 arg1, u32 arg2);
+extern void OSPanic(const char *file, int line, const char *msg, ...);
+extern void fn_1_B7CE4(int, void *);
+extern void fn_1_AA6D8(int, int, void *);
+extern void *memset(void *, int, u32);
+extern u8 lbl_1_bss_7F0C0[];
+extern u32 lbl_1_bss_718C0;
+extern u8 lbl_1_bss_8B3A0[];
+extern u8 lbl_1_bss_718E0;
+
+/* fzgx:begin fn_10_26554 noprologue */
+#include "types.h"
+
 extern u8 lbl_10_bss_55CE0;
 extern char lbl_10_data_6BD0[9];
 extern char lbl_10_data_6BDC[19];
@@ -15,10 +37,6 @@ extern u8 lbl_1_bss_7F0C0[];
 extern u32 lbl_1_bss_718C0;
 extern u8 lbl_1_bss_8B3A0[];
 extern u8 lbl_1_bss_718E0;
-
-/* fzgx:begin fn_10_26554 */
-
-
 
 static inline void fn_10_26554_call_fn_1_AA6D8(void * a3, void * a2, int a1, int a0) { fn_1_AA6D8(a0, a1, a2); }
 void fn_10_26554(void) {

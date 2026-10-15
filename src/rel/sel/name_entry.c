@@ -56,17 +56,6 @@ typedef struct CameraDesc {
     u32 unk_30;
     u32 pad_34[9];
 } CameraDesc;
-
-typedef Sig_fn_800081C8_Color Color;
-extern u8 fn_1_B7C00(void);
-extern u8 fn_10_26434(void);
-extern void fn_10_26554(void);
-extern void fn_1_14BD94(void *);
-extern void fn_10_26424(void);
-extern u16 lbl_1_bss_9F8[5];
-extern u8 lbl_1_bss_8B3A0[0x9f];
-extern void fn_1_A2D84(u32 arg0);
-extern void fn_1_14BCBC(u32 arg0, u32 arg1);
 extern u32 lbl_801A66B4;
 extern u32 fn_800081C8(Color arg0, Color arg1, f32 arg2);
 extern void fn_1_49410(void);
@@ -82,6 +71,15 @@ extern void fn_1_4AE0C(const char* format, ...);
 extern u32 fn_1_4D4C8(Color, f32, f32);
 extern void fn_1_49528(Color);
 extern void fzgx_pool_use(void *);
+extern u8 fn_1_B7C00(void);
+extern u8 fn_10_26434(void);
+extern void fn_10_26554(void);
+extern void fn_1_14BD94(void *);
+extern void fn_10_26424(void);
+extern u16 lbl_1_bss_9F8[5];
+extern u8 lbl_1_bss_8B3A0[0x9f];
+extern void fn_1_A2D84(u32 arg0);
+extern void fn_1_14BCBC(u32 arg0, u32 arg1);
 extern void fn_1_46B4(u32 arg0, u32 arg1, const char *arg2, int arg3);
 extern NameEntryPool lbl_10_rodata_1D70;
 extern fn_10_260D4_SndTable lbl_10_rodata_1D8C;
@@ -221,7 +219,6 @@ void fn_10_25E1C(void) {
 /* fzgx:end fn_10_25E1C */
 
 /* fzgx:begin fn_10_26000 */
-
 u8 fn_10_26000(void) {
     u8 result;
     u16 flags;
@@ -289,8 +286,7 @@ void fn_10_260D4(void) {
 
 /* fzgx:begin fn_10_261E4 pool noprologue */
 #include "types.h"
-#include "rel/sel/globals.h"
-#include "rel/sel/name_entry.h"
+#include "dolphin/hw_regs.h"
 
 typedef struct { u8 r, g, b, a; } Sig_fn_800081C8_Color;
 typedef Sig_fn_800081C8_Color Color;

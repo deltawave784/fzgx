@@ -47,8 +47,6 @@ extern u8 lbl_1_bss_8CA28;
 extern void fn_1_A2D84(u32 arg0);
 
 /* fzgx:begin fn_10_0 */
-
-
 s16 fn_10_0(int first, int second, int third, int fourth) {
     return (s16)fn_1_152970(second, first, third, fourth,
         (struct Fn10Data *)((u8 *)((struct Fn10Data *)&lbl_10_bss_0) + 0x1c),
@@ -57,7 +55,6 @@ s16 fn_10_0(int first, int second, int third, int fourth) {
 /* fzgx:end fn_10_0 */
 
 /* fzgx:begin fn_10_834 */
-
 void fn_10_834(void) {
     struct Fn10834State *state;
     u8 *entry;
