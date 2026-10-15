@@ -2650,6 +2650,35 @@ def probes(body, name, limit=32):
     return out
 
 
+def line_opcodes(left, right, area=4_000_000):
+    """difflib opcodes over two line lists, computed on the lines between the shared prefix
+    and suffix only. `SequenceMatcher(autojunk=False)` is quadratic per longest-match on
+    repeated lines: a body carrying a retail data initializer (fn_16_1038's far block, 15,273
+    identical `0x0, ...` lines) kept one alignment running for minutes and a generation round
+    for hours. A trimmed middle whose product of lengths still exceeds `area` is reported
+    as one replace: coarser spans, never a stall."""
+    n = min(len(left), len(right))
+    pre = 0
+    while pre < n and left[pre] == right[pre]:
+        pre += 1
+    suf = 0
+    while suf < n - pre and left[-suf - 1] == right[-suf - 1]:
+        suf += 1
+    a, b = left[pre:len(left) - suf], right[pre:len(right) - suf]
+    if not a and not b:
+        return [('equal', 0, len(left), 0, len(right))] if left else []
+    if len(a) * len(b) > area:
+        ops = [('replace', 0, len(a), 0, len(b))]
+    else:
+        ops = difflib.SequenceMatcher(None, a, b, autojunk=False).get_opcodes()
+    out = [(tag, i1 + pre, i2 + pre, j1 + pre, j2 + pre) for tag, i1, i2, j1, j2 in ops]
+    if pre:
+        out.insert(0, ('equal', 0, pre, 0, pre))
+    if suf:
+        out.append(('equal', len(left) - suf, len(left), len(right) - suf, len(right)))
+    return out
+
+
 def edits(before, after):
     """Align lines, then trim changed spans; never quadratic whole-body character LCS."""
     left, right = before.splitlines(keepends=True), after.splitlines(keepends=True)
@@ -2657,7 +2686,7 @@ def edits(before, after):
     for line in left:
         offsets.append(offsets[-1] + len(line))
     changes = []
-    for tag, a, b, c, d in difflib.SequenceMatcher(None, left, right, autojunk=False).get_opcodes():
+    for tag, a, b, c, d in line_opcodes(left, right):
         if tag == 'equal':
             continue
         old, new = ''.join(left[a:b]), ''.join(right[c:d])

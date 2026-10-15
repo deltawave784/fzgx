@@ -10,6 +10,7 @@ import gzip
 import hashlib
 import itertools
 import json
+import os
 import re
 from pathlib import Path
 import shlex
@@ -249,7 +250,6 @@ class Engine:
         lines = self.implicated_lines(seed)
         if not lines:
             return proposals
-        import difflib
         text0 = Path(seed['source']).read_text()
         body = text0.splitlines()
         name = self.project.resolve(seed['symbol']).name
@@ -262,7 +262,7 @@ class Engine:
         for label, text in proposals:
             changed = set()
             new = text.splitlines()
-            for tag, i1, i2, j1, j2 in difflib.SequenceMatcher(None, body, new, autojunk=False).get_opcodes():
+            for tag, i1, i2, j1, j2 in source.line_opcodes(body, new):
                 if tag != 'equal':
                     changed.update(range(i1 + 1, max(i2, i1 + 1) + 1))
             # retail data initializers rename the objects' uses everywhere; their gain is in data
@@ -494,6 +494,58 @@ class Engine:
                     break
         return result
 
+    FAMILY_SECONDS = float(os.environ.get('FZGX_FIXUP_FAMILY_SECONDS', '60'))
+    SEED_SECONDS = float(os.environ.get('FZGX_FIXUP_SEED_SECONDS', '600'))
+
+    class FamilyTimeout(BaseException):
+        """Raised asynchronously in the generating thread when one family overruns its budget;
+        a BaseException so the families' own `except Exception` handlers cannot swallow it."""
+
+    def _family(self, row, family, fn):
+        """`list(fn())` under a wall-clock budget: a watchdog thread raises FamilyTimeout in the
+        generating thread after FAMILY_SECONDS (pure-Python loops stop at the next bytecode; a
+        C-level call returns first). Once a seed's generation exceeds SEED_SECONDS the remaining
+        families are skipped. Either case emits `family-timeout` and returns [] so one family
+        can never stall a fixup round (fn_16_1038: two workers spun for two hours)."""
+        import ctypes, threading
+        clock = self.__dict__.setdefault('_family_clock', {})
+        started = clock.setdefault(row['id'], time.monotonic())
+        if time.monotonic() - started >= self.SEED_SECONDS:
+            self._family_timeout(row, family, 0.0, 'seed budget')
+            return []
+        tid = threading.get_ident()
+        done, fired = threading.Event(), []
+        def watchdog():
+            if not done.wait(self.FAMILY_SECONDS):
+                fired.append(True)
+                ctypes.pythonapi.PyThreadState_SetAsyncExc(ctypes.c_ulong(tid), ctypes.py_object(Engine.FamilyTimeout))
+        thread = threading.Thread(target=watchdog, daemon=True)
+        begin = time.monotonic()
+        out = []
+        try:
+            thread.start()
+            try:
+                out = list(fn() or [])
+            finally:
+                done.set()
+                thread.join()
+                if fired:
+                    # cancel a raise that is still pending (the family returned at the same time)
+                    ctypes.pythonapi.PyThreadState_SetAsyncExc(ctypes.c_ulong(tid), None)
+        except Engine.FamilyTimeout:
+            self._family_timeout(row, family, time.monotonic() - begin, 'family budget')
+            return []
+        return out
+
+    def _family_timeout(self, row, family, seconds, reason):
+        event = {'stage': 'family-timeout', 'symbol': row['symbol'], 'seed': row['id'][:12], 'family': family,
+                 'seconds': round(seconds, 1), 'reason': reason}
+        self.emit(event)
+        try:
+            (self.output / 'family_timeouts.log').open('a').write(json.dumps(event) + '\n')
+        except OSError:
+            pass
+
     def proposals(self, row, capture=None, max_orders=50000):
         body = Path(row['source']).read_text()
         name = self.project.resolve(row['symbol']).name
@@ -505,56 +557,56 @@ class Engine:
         if check.ok:
             # a body that defines the TU's data objects itself with placeholder contents: one
             # candidate, first, since its whole gain is in data the word score cannot see
-            yield from layout.defined_data_initializers(self.project, row['symbol'], body, check)
+            yield from self._family(row, 'layout.defined_data_initializers', lambda: layout.defined_data_initializers(self.project, row['symbol'], body, check))
             # placeholder words in the shared-pool primer's tables (fn_1_15EC40): retail's words
-            yield from layout.retail_pool_tables(self.project, row['symbol'], body, check)
+            yield from self._family(row, 'layout.retail_pool_tables', lambda: layout.retail_pool_tables(self.project, row['symbol'], body, check))
             # `...data.0`/`...rodata.0` holding each other's registers: the TU's first reference
             # to each section numbers its base, so the primers are reordered
-            yield from layout.section_base_order(self.project, row['symbol'], body, check, row.get('object'))
+            yield from self._family(row, 'layout.section_base_order', lambda: layout.section_base_order(self.project, row['symbol'], body, check, row.get('object')))
             # defined TU section objects off their retail offsets / in DOL small data / unprimed
-            yield from sections.repairs(self.project, row['symbol'], body, check)
-            yield from evidence.range_switches(body, name, check)
-            yield from layout.native_string_views(self.project, row['symbol'], body)
-            yield from evidence.swapped_call_arguments(self.project, row['symbol'], body, check)
-            yield from layout.overlapping_field_views(self.project, row['symbol'], body)
-            yield from evidence.relocation_bindings(body, check)
-            yield from layout.bss_member_bindings(self.project, row['symbol'], body, row.get('object'), check)
-            yield from layout.private_data_objects(body, row.get('object'), check)
-        yield from source.split_declaration_groups(body, name)
-        yield from source.locked_cache_columns(body, name)
-        yield from source.accessor_lifetimes(body, name)
+            yield from self._family(row, 'sections.repairs', lambda: sections.repairs(self.project, row['symbol'], body, check))
+            yield from self._family(row, 'evidence.range_switches', lambda: evidence.range_switches(body, name, check))
+            yield from self._family(row, 'layout.native_string_views', lambda: layout.native_string_views(self.project, row['symbol'], body))
+            yield from self._family(row, 'evidence.swapped_call_arguments', lambda: evidence.swapped_call_arguments(self.project, row['symbol'], body, check))
+            yield from self._family(row, 'layout.overlapping_field_views', lambda: layout.overlapping_field_views(self.project, row['symbol'], body))
+            yield from self._family(row, 'evidence.relocation_bindings', lambda: evidence.relocation_bindings(body, check))
+            yield from self._family(row, 'layout.bss_member_bindings', lambda: layout.bss_member_bindings(self.project, row['symbol'], body, row.get('object'), check))
+            yield from self._family(row, 'layout.private_data_objects', lambda: layout.private_data_objects(body, row.get('object'), check))
+        yield from self._family(row, 'source.split_declaration_groups', lambda: source.split_declaration_groups(body, name))
+        yield from self._family(row, 'source.locked_cache_columns', lambda: source.locked_cache_columns(body, name))
+        yield from self._family(row, 'source.accessor_lifetimes', lambda: source.accessor_lifetimes(body, name))
         if row.get('score') == 100:
             if row.get('source_lint') and (check.matched or check.matched_pool):
-                yield from source.annotate_verified_branches(body, row['source_lint'])
-                yield from source.hardware_literal_names(body, row['source_lint'])
-            yield from source.inline_helpers(body,name)
+                yield from self._family(row, 'source.annotate_verified_branches', lambda: source.annotate_verified_branches(body, row['source_lint']))
+                yield from self._family(row, 'source.hardware_literal_names', lambda: source.hardware_literal_names(body, row['source_lint']))
+            yield from self._family(row, 'source.inline_helpers', lambda: source.inline_helpers(body,name))
             for helper in row.get('extra_helpers', []):
                 if self.project.find_symbol(helper, self.project.resolve(row['symbol']).module):
-                    yield from source.external_helper(body,helper)
-                    yield from source.split_helper_calls(body,helper)
+                    yield from self._family(row, 'source.external_helper', lambda: source.external_helper(body,helper))
+                    yield from self._family(row, 'source.split_helper_calls', lambda: source.split_helper_calls(body,helper))
         if capture:
             constraints = source.web_constraints(capture, self.targets[row['symbol']][1], self.words[row['id']],check)
             decoded = source.decode(self.words[row['id']])
             captured_operators = [decoded[index][0] for index in constraints.get('operand_order_rows', [])]
-            decls, _ = source.declaration_candidates(body, name, capture, constraints, max_orders)
+            decls = self._family(row, 'source.declaration_candidates', lambda: source.declaration_candidates(body, name, capture, constraints, max_orders)[0])
             graph = [('graph declaration-order',t) for t in decls]
-            carriers = source.carrier_candidates(body,name,capture,constraints)
-            scoped = source.scoped_carrier_candidates(body,name,capture,constraints)
+            carriers = self._family(row, 'source.carrier_candidates', lambda: source.carrier_candidates(body,name,capture,constraints))
+            scoped = self._family(row, 'source.scoped_carrier_candidates', lambda: source.scoped_carrier_candidates(body,name,capture,constraints))
             # Large declaration graphs must not consume the entire budget
             # before semantic, ABI and lifetime repairs get a compiler check.
-            yield from graph[:32]
-            yield from carriers[:32]
-            yield from scoped[:32]
+            yield from self._family(row, 'list', lambda: graph[:32])
+            yield from self._family(row, 'list', lambda: carriers[:32])
+            yield from self._family(row, 'list', lambda: scoped[:32])
             deferred_graph.extend((graph[32:],carriers[32:],scoped[32:]))
         if check.ok:
-            yield from evidence.aggregate_initializers(self.project, row['symbol'], body, check)
-            yield from evidence.native_pool_objects(self.project, row['symbol'], body, check)
-            yield from evidence.shared_pool_primer(self.project, row['symbol'], body, check)
-            yield from evidence.frame_padding(self.project, row['symbol'], body, check)
-            yield from layout.initialized_data_views(self.project, row['symbol'], body)
-            yield from layout.tu_section_layout(self.project, row['symbol'], body, check)
+            yield from self._family(row, 'evidence.aggregate_initializers', lambda: evidence.aggregate_initializers(self.project, row['symbol'], body, check))
+            yield from self._family(row, 'evidence.native_pool_objects', lambda: evidence.native_pool_objects(self.project, row['symbol'], body, check))
+            yield from self._family(row, 'evidence.shared_pool_primer', lambda: evidence.shared_pool_primer(self.project, row['symbol'], body, check))
+            yield from self._family(row, 'evidence.frame_padding', lambda: evidence.frame_padding(self.project, row['symbol'], body, check))
+            yield from self._family(row, 'layout.initialized_data_views', lambda: layout.initialized_data_views(self.project, row['symbol'], body))
+            yield from self._family(row, 'layout.tu_section_layout', lambda: layout.tu_section_layout(self.project, row['symbol'], body, check))
             # a matched sibling of the TU already defines the cluster: its whole layout and primer
-            yield from sibling.sibling_section_layouts(self.project, row['symbol'], body, check)
+            yield from self._family(row, 'sibling.sibling_section_layouts', lambda: sibling.sibling_section_layouts(self.project, row['symbol'], body, check))
             if re.search(r'(?m)^\s*#define\b', body):
                 # Pool fields passed through macro parameters only have a
                 # concrete type and offset after the selected compiler expands them.
@@ -563,47 +615,48 @@ class Engine:
                 except (ValueError, OSError) as error:
                     self.emit(dict(stage='pool-expansion-rejected',symbol=row['symbol'],error=str(error)))
                 else:
-                    yield from evidence.native_pool_objects(self.project, row['symbol'], expanded, check)
-                    yield from layout.initialized_data_views(self.project, row['symbol'], expanded)
-                    yield from layout.tu_section_layout(self.project, row['symbol'], expanded, check)
-            yield from evidence.conversion_arguments(self.project, row['symbol'], body, check)
-            yield from evidence.rotate_bit_tests(body, name, check)
-            yield from evidence.call_result_types(self.project, row['symbol'], body, check)
-            yield from evidence.floating_expressions(self.project, row['symbol'], body, check)
-            yield from evidence.paired_vector_kernels(self.project, row['symbol'], body, check)
-            yield from evidence.attributed_type_flips(self.project, row['symbol'], body, check, self.row_lines(row))
-            yield from evidence.attributed_inlines(self.project, row['symbol'], body, check, self.row_lines(row))
-            yield from evidence.attributed_declaration_swaps(self.project, row['symbol'], body, check, self.row_lines(row))
+                    yield from self._family(row, 'evidence.native_pool_objects', lambda: evidence.native_pool_objects(self.project, row['symbol'], expanded, check))
+                    yield from self._family(row, 'layout.initialized_data_views', lambda: layout.initialized_data_views(self.project, row['symbol'], expanded))
+                    yield from self._family(row, 'layout.tu_section_layout', lambda: layout.tu_section_layout(self.project, row['symbol'], expanded, check))
+            yield from self._family(row, 'evidence.conversion_arguments', lambda: evidence.conversion_arguments(self.project, row['symbol'], body, check))
+            yield from self._family(row, 'evidence.rotate_bit_tests', lambda: evidence.rotate_bit_tests(body, name, check))
+            yield from self._family(row, 'evidence.call_result_types', lambda: evidence.call_result_types(self.project, row['symbol'], body, check))
+            yield from self._family(row, 'evidence.floating_expressions', lambda: evidence.floating_expressions(self.project, row['symbol'], body, check))
+            yield from self._family(row, 'evidence.paired_vector_kernels', lambda: evidence.paired_vector_kernels(self.project, row['symbol'], body, check))
+            yield from self._family(row, 'evidence.attributed_type_flips', lambda: evidence.attributed_type_flips(self.project, row['symbol'], body, check, self.row_lines(row)))
+            yield from self._family(row, 'evidence.attributed_inlines', lambda: evidence.attributed_inlines(self.project, row['symbol'], body, check, self.row_lines(row)))
+            yield from self._family(row, 'evidence.attributed_declaration_swaps', lambda: evidence.attributed_declaration_swaps(self.project, row['symbol'], body, check, self.row_lines(row)))
             # a register-only residual: every order of the implicated register class's locals
             # (fn_4_1444: five f32 among ten locals, reachable by neither family above)
-            yield from evidence.register_class_orders(self.project, row['symbol'], body, check, self.row_lines(row))
+            yield from self._family(row, 'evidence.register_class_orders', lambda: evidence.register_class_orders(self.project, row['symbol'], body, check, self.row_lines(row)))
             # a register-only residual at 99%+ under GC/1.3.2: the allocator capture names the web
             # behind every residual row and the web blocking its retail register; the verdict is
             # emitted (`capture-verdict`) and the blocker's class selects the structural family
-            yield from capture_family.proposals(self.project, row['symbol'], body, check, row['mw'], row.get('flags'),
-                                                run_capture=True, emit=self.emit)
-            yield from evidence.induction_indexing(self.project, row['symbol'], body, check)
+            yield from self._family(row, 'capture_family.proposals', lambda: capture_family.proposals(
+                self.project, row['symbol'], body, check, row['mw'], row.get('flags'), run_capture=True, emit=self.emit))
+            yield from self._family(row, 'evidence.induction_indexing', lambda: evidence.induction_indexing(self.project, row['symbol'], body, check))
             # a hand-unrolled counted loop (two steps per trip) folds back to MWCC's own 2x
             # unroll, which keeps the dead counter retail carries; covers inline helpers too
-            yield from source.rerolled_loops(body, name)
+            yield from self._family(row, 'source.rerolled_loops', lambda: source.rerolled_loops(body, name))
             # structural spellings that change a web's numbering class (carriers, de-CSE,
             # held call results, splits) go before any declaration permutation: order within
             # a class is only worth searching once the class is right
-            yield from [('regalloc: ' + l, t) for l, t in source.rewrites(body, name)]
-            yield from evidence.fusion_control(self.project, row['symbol'], body, check)
-            yield from evidence.encoded_conversions(self.project, row['symbol'], body, check)
-            yield from evidence.scalar_lifetimes(self.project, row['symbol'], body, check)
-            yield from evidence.stack_object_boundaries(self.project, row['symbol'], body, check)
-            yield from source.comparison_lifetimes(body, name)
-            yield from source.scalar_square_lifetimes(body, name)
-            yield from evidence.optimizer_pragmas(body, name)
-            families.append(evidence.candidates(self.project, row['symbol'], body, check))
+            yield from self._family(row, 'source.rewrites', lambda: [('regalloc: ' + l, t) for l, t in source.rewrites(body, name)])
+            yield from self._family(row, 'evidence.fusion_control', lambda: evidence.fusion_control(self.project, row['symbol'], body, check))
+            yield from self._family(row, 'evidence.encoded_conversions', lambda: evidence.encoded_conversions(self.project, row['symbol'], body, check))
+            yield from self._family(row, 'evidence.scalar_lifetimes', lambda: evidence.scalar_lifetimes(self.project, row['symbol'], body, check))
+            yield from self._family(row, 'evidence.stack_object_boundaries', lambda: evidence.stack_object_boundaries(self.project, row['symbol'], body, check))
+            yield from self._family(row, 'source.comparison_lifetimes', lambda: source.comparison_lifetimes(body, name))
+            yield from self._family(row, 'source.scalar_square_lifetimes', lambda: source.scalar_square_lifetimes(body, name))
+            yield from self._family(row, 'evidence.optimizer_pragmas', lambda: evidence.optimizer_pragmas(body, name))
+            families.append(self._family(row, 'evidence.candidates', lambda: evidence.candidates(self.project, row['symbol'], body, check)))
             # 'retain recovered shared-pool bases' and 'lifetime shared-pool read' never improved a
             # candidate over twelve corpus reports (0 of 1,141 and 0 of 594): they no longer take
             # candidate-cap slots ahead of the productive families
             targeted = [[c for c in families[0] if c[0].startswith(('retail parameter copy', 'retail scalar flag masks', 'retail format argument', 'retail call argument', 'retail call parameter', 'retail argument order:', 'retail float branch', 'retail zero comparison', 'bind recovered shared-pool', 'recover native shared-pool', 'lifetime reload', 'lifetime ordered'))],
-                        source.address_expressions(body, name), source.pointer_lifetimes(body, name), source.through_local(body, name),
-                        source.wide_member_values(body,name),source.promoted_locals(body,name),source.returned_regions(body,name),source.reuse_temporaries(body,name),source.initialization_orders(body,name),source.flag_stores(body,name),source.loop_lifetimes(body,name)]
+                        *(self._family(row, 'source.' + fn, lambda: getattr(source, fn)(body, name)) for fn in
+                          ('address_expressions', 'pointer_lifetimes', 'through_local', 'wide_member_values', 'promoted_locals',
+                           'returned_regions', 'reuse_temporaries', 'initialization_orders', 'flag_stores', 'loop_lifetimes'))]
             operand_types = {'and':('&',('u32','s32')), 'or':('|',('u32','s32')),
                              'xor':('^',('u32','s32')), 'mullw':('*',('u32','s32')),
                              'fadd':('+',('f64',)), 'fadds':('+',('f32',)),
@@ -614,15 +667,13 @@ class Engine:
                     types = operators.setdefault(kind[0],[])
                     types.extend(ty for ty in kind[1] if ty not in types)
             if operators:
-                targeted.append(source.operand_lifetimes(body,name,operators))
+                targeted.append(self._family(row, 'source.operand_lifetimes', lambda: source.operand_lifetimes(body,name,operators)))
             if any(word.startswith(('fmul', 'fdiv')) for word in captured_operators) or any(
                     order['target'].startswith(('fmul', 'fdiv')) for order in check.operand_order):
-                targeted.append(source.reciprocal_products(body, name))
-            policies = []
-            for family in targeted:
-                for label, text in family:
-                    if 'every site' in label or 'shared-pool' in label or label.startswith('lifetime operands'):
-                        policies.extend((label+' with '+policy,combined) for policy,combined in evidence.optimizer_pragmas(text,name))
+                targeted.append(self._family(row, 'source.reciprocal_products', lambda: source.reciprocal_products(body, name)))
+            policies = self._family(row, 'evidence.optimizer_pragmas (targeted)', lambda: [(label+' with '+policy,combined) for family in targeted for label, text in family
+                                    if 'every site' in label or 'shared-pool' in label or label.startswith('lifetime operands')
+                                    for policy,combined in evidence.optimizer_pragmas(text,name)])
             targeted.append(policies)
             for i in range(max(map(len, targeted), default=0)):
                 for family in targeted:
@@ -630,47 +681,46 @@ class Engine:
                         yield family[i]
             # Concrete stores/frame fixes precede generic declaration and flag
             # probes. They used to be buried beyond a session's candidate cap.
-            yield from [c for c in families[0] if c[0].startswith(('retail store-value', 'retail format argument', 'retail call argument', 'pack stack', 'imm ', 'swap fields', 'recover aggregate', 'recover member', 'interior ', 'bind hardware'))]
+            yield from self._family(row, 'evidence.candidates (filtered)', lambda: [c for c in families[0] if c[0].startswith(('retail store-value', 'retail format argument', 'retail call argument', 'pack stack', 'imm ', 'swap fields', 'recover aggregate', 'recover member', 'interior ', 'bind hardware'))])
             # Layout/type repairs can increase register differences while fixing
             # the actual memory access or extension. Probe their optimizer
             # interactions before the word-score frontier discards them.
             has_extensions = evidence._kinds(check).get('ins:ext')
-            for label, text in families[0]:
-                if label.startswith('recover member') or (has_extensions and ':' in label and '->' in label and ' at ' not in label):
-                    for policy, combined in evidence.optimizer_pragmas(text, name):
-                        yield label + ' with ' + policy, combined
+            yield from self._family(row, 'evidence.optimizer_pragmas (members)', lambda: [(label + ' with ' + policy, combined) for label, text in families[0]
+                                     if label.startswith('recover member') or (has_extensions and ':' in label and '->' in label and ' at ' not in label)
+                                     for policy, combined in evidence.optimizer_pragmas(text, name)])
             if check.operand_order or captured_operators:
-                commuted=source.commutations(body,name)
+                commuted=self._family(row, 'source.commutations', lambda: source.commutations(body,name))
                 commuted.sort(key=lambda c:not c[0].startswith('coupled scalar operands'))
                 # `E * 2 + n` orders the add's inputs by the product, `(E << 1) + n` by source
-                commuted=source.shift_products(body,name)+commuted
+                commuted=self._family(row, 'source.shift_products', lambda: source.shift_products(body,name))+commuted
                 # An optimizer can canonicalize both source spellings to the
                 # same object. Such zero-response edits disappear from the beam
                 # and from linear composition; probe their policy interaction.
                 for i,(label,text) in enumerate(commuted):
                     yield label,text
                     if i<8:
-                        for policy,combined in evidence.optimizer_pragmas(text,name):
-                            yield label+' with '+policy,combined
+                        yield from self._family(row, 'evidence.optimizer_pragmas (commuted)', lambda: [(label+' with '+policy,combined) for policy,combined in evidence.optimizer_pragmas(text,name)])
         families.extend(deferred_graph)
-        families.extend([source.missing_values(body,name), source.expression_trees(body,name),
-                         source.commutations(body,name), source.shift_products(body,name), source.probes(body,name,64),
-                         [(family+': '+label,text) for family,label,text in source.all_rewrites(body,name)]])
+        families.extend([self._family(row, 'source.' + fn, lambda: getattr(source, fn)(body, name)) for fn in
+                         ('missing_values', 'expression_trees', 'commutations', 'shift_products')])
+        families.append(self._family(row, 'source.probes', lambda: source.probes(body,name,64)))
+        families.append(self._family(row, 'source.all_rewrites', lambda: [(family+': '+label,text) for family,label,text in source.all_rewrites(body,name)]))
         # Inlined helpers contribute instructions and stack lifetimes to this
         # function. Restricting rewrites to the outer body leaves those regions
         # unreachable even though the same existing generators can repair them.
         for helper in re.findall(r'\bstatic\s+inline\s+[\w *]+?\b(\w+)\s*\([^;{}]*\)\s*\{', body):
             if helper == name:
                 continue
-            variants = (source.pointer_lifetimes(body,helper) + source.loop_lifetimes(body,helper)
+            variants = self._family(row, 'inline ' + helper, lambda: source.pointer_lifetimes(body,helper) + source.loop_lifetimes(body,helper)
                         + source.initialization_orders(body,helper) + source.reuse_temporaries(body,helper)
                         + source.commutations(body,helper) + source.probes(body,helper,64))
             if capture:
-                helper_decls, _ = source.declaration_candidates(body,helper,capture,constraints,max_orders)
-                variants = source.carrier_candidates(body,helper,capture,constraints) + [('graph declaration-order',text) for text in helper_decls] + variants
+                variants = self._family(row, 'inline ' + helper + ' graph', lambda: source.carrier_candidates(body,helper,capture,constraints)
+                        + [('graph declaration-order',text) for text in source.declaration_candidates(body,helper,capture,constraints,max_orders)[0]]) + variants
             if operators:
-                variants = source.operand_lifetimes(body,helper,operators) + variants
-            variants += [(family+': '+label,text) for family,label,text in source.all_rewrites(body,helper)]
+                variants = self._family(row, 'inline ' + helper + ' operands', lambda: source.operand_lifetimes(body,helper,operators)) + variants
+            variants += self._family(row, 'inline ' + helper + ' all_rewrites', lambda: [(family+': '+label,text) for family,label,text in source.all_rewrites(body,helper)])
             families.insert(0, [('inline '+helper+': '+label,text) for label,text in variants])
         # Round-robin preserves access to each family within the shared budget.
         for i in range(max(map(len,families),default=0)):
