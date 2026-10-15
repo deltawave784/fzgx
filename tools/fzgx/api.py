@@ -314,6 +314,13 @@ def claim(p: Project, symbol: str, agent: str, ttl: int = DEFAULT_TTL,
                                        if seed.get('kind') == 'lift_total' else
                                        'Your work copy already contains this C. Start with check(symbol, versions="all") (one check; '
                                        'it keeps the best compiler), then patch it; do not restart from a stub.')}
+        if seed.get('kind') == 'best_attempt':
+            pct = seed.get('percent')
+            out['seed']['instruction'] += (
+                f" This seed is the best-scoring checked body of the previous attempt"
+                f"{f' ({pct:.1f}%)' if isinstance(pct, (int, float)) else ''} with its compiler settings, "
+                "not that attempt's final work copy: release notes that describe an unsaved or broken "
+                "last edit do not apply to it, so do not spend checks restoring an earlier body.")
     else:
         out['next'] = ('Write the complete function with write_unit, then call check(symbol, versions="all") once '
                        '(one check; it keeps the best compiler) before further edits.')
@@ -685,6 +692,21 @@ def _record_check(p: Project, key: str, src: Optional[Path], res: oracle.CheckRe
                 mw=res.mw_version, flags=res.extra_cflags, percent=stats['best_in_attempt'])) + '\n')
         return stats
     return {}
+
+
+def _archived_check_numbers(key: str, sha256: str, limit: int = 64) -> List[int]:
+    """Check-archive numbers (`.fzgx/checks/<key>/NNN.c`) whose body has this hash: tells a
+    reader which check(s) of the attempt produced the saved body. Scans the newest `limit`."""
+    hdir = STATE_DIR / "checks" / key.replace(":", "__")
+    out: List[int] = []
+    try:
+        files = sorted(hdir.glob("[0-9][0-9][0-9].c"), key=lambda f: int(f.stem))[-limit:]
+        for f in files:
+            if hashlib.sha256(f.read_bytes()).hexdigest() == sha256:
+                out.append(int(f.stem))
+    except (OSError, ValueError):
+        pass
+    return out
 
 
 def format_check(res: Dict[str, Any]) -> str:
@@ -1246,18 +1268,36 @@ def release(p: Project, symbol: str, reason: str, harness: Optional[str] = None,
         dest = STATE_DIR / "attempts" / f"{key}.{'shadow.' if shadow else ''}{int(time.time())}.c"
         dest.parent.mkdir(parents=True, exist_ok=True)
         shutil.copy(src, dest)  # the best-scoring body, not necessarily the last one written
+        saved_sha = hashlib.sha256(dest.read_bytes()).hexdigest()
+        saved_percent = (check_score(base) if base else seed.get(
+            'percent', dict(l.current_attempt(key) or {}).get('best_in_attempt', 0)))
+        # provenance: the saved body is the attempt's best checked body (.best.c), not the final
+        # work copy; release notes describing an unsaved mid-edit work copy misled readers into
+        # believing the seed was broken or worse (round 42)
+        saved_from = 'best checked body' if src == best else 'work copy'
         dest.with_suffix('.json').write_text(json.dumps(dict(
-            sha256=hashlib.sha256(dest.read_bytes()).hexdigest(), mw=base.mw_version if base else seed.get('mw'),
+            sha256=saved_sha, mw=base.mw_version if base else seed.get('mw'),
             flags=base.extra_cflags if base else seed.get('flags'),
-            percent=check_score(base) if base else seed.get('percent',
-                     dict(l.current_attempt(key) or {}).get('best_in_attempt', 0)))) + '\n')
+            percent=saved_percent, saved_from=saved_from,
+            checks=_archived_check_numbers(key, saved_sha))) + '\n')
         body_path = str(dest)
     best.unlink(missing_ok=True)
     best.with_suffix('.json').unlink(missing_ok=True)
     _discard_work(p, key)
+    attempt_row = dict(l.current_attempt(key) or {})
     l.finish(key, "released", "unmatched", notes=reason, body_path=body_path, model=model,
              harness=harness, tokens_in=tokens_in, tokens_out=tokens_out, cost_usd=cost_usd, shadow=shadow)
     out = {"ok": True, "symbol": symbol, "saved": body_path}
+    if body_path:
+        out['saved_from'] = saved_from
+        out['saved_percent'] = round(saved_percent or 0.0, 2)
+        out['saved_checks'] = _archived_check_numbers(key, saved_sha)
+        if attempt_row.get('final_percent') is not None:
+            out['last_check_percent'] = round(attempt_row['final_percent'], 2)
+        out['note'] = ('The saved attempt is the best-scoring checked body of this attempt with its compiler '
+                       'settings; the final work copy was discarded' + (
+                           ' (it scored lower or did not compile)' if attempt_row.get('final_percent') is not None
+                           and (saved_percent or 0) > (attempt_row['final_percent'] or 0) + 1e-6 else '') + '.')
     if shadow:
         out["shadow"] = True
     else:
