@@ -1097,6 +1097,155 @@ after_disable:
 }
 /* fzgx:end fn_3_1A488 */
 
+/* fzgx:begin fn_3_1A648 noprologue */
+#include "types.h"
+#include "rel/customize/toolkit.h"
+
+extern u32 fn_3_14064(void);
+extern u32 fn_3_1401C(void);
+extern u32 fn_3_1402C(u8);
+extern void fn_3_1445C(void);
+extern void fn_1_A2D84(u32);
+extern void fn_80008BA8(u32, u32, u32);
+extern void fn_80008BEC(void *, int, u32);
+
+/* per-controller input state, 0x14 bytes each */
+typedef struct {
+    u8 pad_0[0x8];
+    u16 unk_8;
+    u8 pad_A[0x6];
+    u16 unk_10;
+    u16 unk_12;
+} fn_3_1A648_Pad;
+
+extern fn_3_1A648_Pad lbl_1_bss_9F8[];
+
+/* bit 30 of the state flags, read with a variable rotate in retail */
+#define FLAG_30(v) __rlwnm((v), 2, 31, 31)
+#define PAD_BIT(f, n) ((lbl_1_bss_9F8[lbl_3_bss_A2438.unk_0].f >> (n)) & 1)
+/* the unk_10 test addresses the array through a hoisted base+0x10 pointer */
+#define PAD_HI(n) ((*(u16 *)((u8 *)&lbl_1_bss_9F8[0].unk_10 + lbl_3_bss_A2438.unk_0 * 0x14) >> (n)) & 1)
+#define PAD_ANY(n) (PAD_HI(n) || PAD_BIT(unk_12, n))
+
+void fn_3_1A648(void) {
+    Obj_3_bss_A2438 *p;
+    u32 a;
+    u32 b;
+    u32 v;
+    u8 n;
+    u8 c;
+
+    if (PAD_ANY(0)) {
+        p = &lbl_3_bss_A2438;
+        if (FLAG_30(p->unk_8)) {
+            if (p->unk_10 == 0) {
+                fn_1_A2D84(0xA9010000);
+            }
+            p->unk_10 = 1;
+        } else if (p->unk_14 != 0) {
+            fn_1_A2D84(0xA9150600);
+            p->unk_14--;
+        }
+    }
+
+    if (PAD_ANY(1)) {
+        p = &lbl_3_bss_A2438;
+        if (FLAG_30(p->unk_8)) {
+            if (p->unk_10 != 0) {
+                fn_1_A2D84(0xA9010000);
+            }
+            p->unk_10 = 0;
+        } else if (p->unk_14 < 4) {
+            n = fn_3_14064();
+            if (lbl_3_bss_A2438.unk_12 + lbl_3_bss_A2438.unk_15 * 5 + p->unk_14 + 1 < n) {
+                fn_1_A2D84(0xA9150600);
+                p->unk_14++;
+            }
+        }
+    }
+
+    if (PAD_ANY(3)) {
+        p = &lbl_3_bss_A2438;
+        if (!FLAG_30(p->unk_8)) {
+            if (p->unk_15 != 0) {
+                fn_1_A2D84(0xA9150600);
+                p->unk_15--;
+            } else if (p->unk_12 - 5 >= 0) {
+                fn_1_A2D84(0xA9150600);
+                lbl_3_bss_A2438.unk_1A = 10;
+                lbl_3_bss_A2438.unk_18 = 0;
+                p->unk_12 -= 5;
+            }
+        }
+    }
+
+    if (PAD_ANY(2)) {
+        if (!FLAG_30(lbl_3_bss_A2438.unk_8)) {
+            n = fn_3_14064();
+            p = &lbl_3_bss_A2438;
+            if (p->unk_12 + 20 < n) {
+                if (p->unk_15 < 3) {
+                    fn_1_A2D84(0xA9150600);
+                    p->unk_15++;
+                } else {
+                    fn_1_A2D84(0xA9150600);
+                    lbl_3_bss_A2438.unk_18 = 10;
+                    lbl_3_bss_A2438.unk_1A = 0;
+                    p->unk_12 += 5;
+                    n = fn_3_14064();
+                    if (lbl_3_bss_A2438.unk_14 + p->unk_15 * 5 + p->unk_12 >= n) {
+                        p->unk_15--;
+                    }
+                }
+            } else if (p->unk_15 < 3) {
+                n = fn_3_14064();
+                if (lbl_3_bss_A2438.unk_14 + (p->unk_15 + 1) * 5 + p->unk_12 < n) {
+                    fn_1_A2D84(0xA9150600);
+                    p->unk_15++;
+                }
+            }
+        }
+    }
+
+    if (PAD_BIT(unk_8, 8)) {
+        a = fn_3_1401C();
+        b = fn_3_1402C(lbl_3_bss_A2438.unk_12 + lbl_3_bss_A2438.unk_14 + lbl_3_bss_A2438.unk_15 * 5);
+        p = &lbl_3_bss_A2438;
+        v = p->unk_8;
+        if (!FLAG_30(v)) {
+            p->unk_8 = v | 0x40000000;
+        } else if (p->unk_10 != 0) {
+            if (b != 0) {
+                fn_80008BA8(a, b, 0x2000);
+            } else {
+                fn_80008BEC((void *)a, 0, 1);
+            }
+            p->unk_8 &= ~0x40000000;
+            lbl_3_bss_A2438.unk_4 = 0x40000000;
+            lbl_3_bss_A2438.unk_E = 0;
+            p->unk_10 = 0;
+            fn_3_1445C();
+            fn_1_A2D84(0xA9150400);
+        } else {
+            p->unk_8 = v & ~0x40000000;
+            p->unk_10 = 0;
+        }
+    }
+
+    if (PAD_BIT(unk_8, 9)) {
+        if (FLAG_30(lbl_3_bss_A2438.unk_8)) {
+            lbl_3_bss_A2438.unk_8 &= ~0x40000000;
+            lbl_3_bss_A2438.unk_10 = 0;
+        } else {
+            lbl_3_bss_A2438.unk_10 = 0;
+            fn_1_A2D84(0xA9150500);
+            lbl_3_bss_A2438.unk_4 = 0x40000000;
+            lbl_3_bss_A2438.unk_E = 0;
+        }
+    }
+}
+/* fzgx:end fn_3_1A648 */
+
 /* fzgx:begin fn_3_1AB34 */
 void fn_3_1AB34(void *obj, s16 start, s16 base, u32 *items) {
     s32 x;
