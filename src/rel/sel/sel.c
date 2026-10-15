@@ -3527,10 +3527,10 @@ void fn_10_73AC(void) {
 // Volatile preserves the retail's repeated reads of the shared sentinel.
 
 void fn_10_757C(void) {
-    if ((*((volatile s32 *)&lbl_10_bss_51740)) != -1) {
+    if ((*((volatile s32 *)&lbl_10_bss_51740)) != -1) { /* volatile: retail rereads the shared sound sentinel */
         fn_1_435C(lbl_10_bss_49388);
-        fn_1_426C((*((volatile s32 *)&lbl_10_bss_51740)));
-        (*((volatile s32 *)&lbl_10_bss_51740)) = -1;
+        fn_1_426C((*((volatile s32 *)&lbl_10_bss_51740))); /* volatile: retail rereads the shared sound sentinel */
+        (*((volatile s32 *)&lbl_10_bss_51740)) = -1; /* volatile: retail rereads the shared sound sentinel */
     }
 }
 /* fzgx:end fn_10_757C */
@@ -5678,10 +5678,10 @@ void fn_10_CE5C(void) {
 // Volatile preserves the retail's repeated sentinel accesses across calls.
 
 void fn_10_CE6C(void) {
-    if ((*((volatile s32 *)&lbl_10_bss_51740)) != -1) {
+    if ((*((volatile s32 *)&lbl_10_bss_51740)) != -1) { /* volatile: retail rereads the shared sound sentinel */
         fn_1_435C(lbl_10_bss_49388);
-        fn_1_426C((*((volatile s32 *)&lbl_10_bss_51740)));
-        (*((volatile s32 *)&lbl_10_bss_51740)) = -1;
+        fn_1_426C((*((volatile s32 *)&lbl_10_bss_51740))); /* volatile: retail rereads the shared sound sentinel */
+        (*((volatile s32 *)&lbl_10_bss_51740)) = -1; /* volatile: retail rereads the shared sound sentinel */
     }
 }
 /* fzgx:end fn_10_CE6C */
