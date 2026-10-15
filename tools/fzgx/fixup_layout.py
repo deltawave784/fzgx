@@ -1380,7 +1380,7 @@ def _after_type_definitions(code, limit):
     return end
 
 
-def tu_data_objects(p, symbol, text, top=False, limit=0x10000):
+def tu_data_objects(p, symbol, text, top=False, limit=0x100000):
     """Retail `.data` as separate objects addressed off the TU's data section base.
 
     A byte view of a retail `.data` block (`u8 *s = lbl;`, `lbl + N`) keeps one object, so
@@ -1395,7 +1395,15 @@ def tu_data_objects(p, symbol, text, top=False, limit=0x10000):
     section base only when a function references three or more of them (two are addressed by
     name), and numbers the section-base temporaries by where their sections' first definitions
     sit in the file (fn_1_B5F20: the block above the literal pool gives retail's pool r29,
-    data r30), so `top` places the block before every other file-scope definition."""
+    data r30), so `top` places the block before every other file-scope definition.
+
+    A view of the far part of a block (`table = lbl + 0x60000;`, `(u8 *)&lbl + 0x80000`) is the
+    same model with every use that much further in: retail addresses objects beyond 32 KB of
+    a section through one `addis rX, rBase, N` web, and only a unit whose `.data` reaches
+    those offsets reproduces it, so the block runs from the section's first object (`limit`
+    allows 1 MB: fn_17_5C24's 0x64378-byte block with 937 pointers compiles in about a
+    second and gives retail's `addis r31, r3, 0x6` over the `.bss` base r30; a pool match,
+    since a pool carrying relocations is not proven byte-equal)."""
     import struct
     from .sdkimport import masked
     from .fixup_source import _function_body_span
@@ -1412,9 +1420,14 @@ def tu_data_objects(p, symbol, text, top=False, limit=0x10000):
         """label -> ([(token, pointee type)], edits removing the byte-pointer models)"""
         found = {}
         # `(?<![\w.>])`: a carrier member `w.value = lbl;` is not a plain local `value`
-        for m in re.finditer(r'(?:\b(%s)\s*\*\s*)?(?<![\w.>])(\w+(?:\.\w+)?)\s*=\s*(?:\(\s*(?:%s|void)\s*\*\s*\)\s*)?(&\s*)?\b(lbl_\w+)\s*;'
+        for m in re.finditer(r'(?:\b(%s)\s*\*\s*)?(?<![\w.>])(\w+(?:\.\w+)?)\s*=\s*(?:\(\s*(?:%s|void)\s*\*\s*\)\s*)?(&\s*)?\b(lbl_\w+)\s*(?:\+\s*(0x[\da-fA-F]+|\d+)\s*)?;'
                              % (BYTE_TYPES, BYTE_TYPES), code[lo:hi]):
-            declared, var, amp, label = m.groups()
+            declared, var, amp, label, base = m.groups()
+            # `table = lbl + 0x60000;`: a view of the far part of a large block (retail
+            # addresses objects beyond 32 KB of the section base through one `addis` web,
+            # fn_17_5C24, fn_16_1038); every use of the view is that much further in
+            if base and amp and not re.search(r'\*\s*\)\s*&', m[0]):
+                continue  # `&lbl + N` without a byte cast scales by the object's size
             known = syms.get(label)
             if not known or known.section not in DATA_SECTIONS or known.kind != 'object':
                 continue
@@ -1446,8 +1459,9 @@ def tu_data_objects(p, symbol, text, top=False, limit=0x10000):
                 decl = re.search(r'\bextern\s+(?:const\s+)?(\w+(?:\s+char)?)\s+%s\s*\[' % re.escape(label), code[:head] + include_text())
                 if not decl or not re.fullmatch(BYTE_TYPES, decl[1]):
                     continue
-            tokens, all_edits = found.setdefault(label, ([], []))
+            tokens, all_edits, origins = found.setdefault(label, ([], [], {}))
             tokens.append((var, re.sub(r'\s+', ' ', ptype)))
+            origins[var] = int(base, 0) if base else 0
             all_edits.extend(edits)
         # a byte array label used directly, also beside a model: `lbl + N`, `(T *)(lbl + N)`
         for label in sorted(set(re.findall(r'\b(lbl_\w+)\s*\+\s*\(?\s*(?:0x[\da-fA-F]+|\d+)\b', code[lo:hi]))):
@@ -1456,7 +1470,7 @@ def tu_data_objects(p, symbol, text, top=False, limit=0x10000):
                 continue
             decl = re.search(r'\bextern\s+((?:const\s+)?\w+(?:\s+char)?)\s+%s\s*\[' % re.escape(label), code[:head] + include_text())
             if decl and re.fullmatch(BYTE_TYPES, decl[1]):
-                found.setdefault(label, ([], []))[0].append((label, re.sub(r'\s+', ' ', decl[1])))
+                found.setdefault(label, ([], [], {}))[0].append((label, re.sub(r'\s+', ' ', decl[1])))
         return found
 
     labels = sorted(collect(code, head, lo, hi))
@@ -1468,7 +1482,7 @@ def tu_data_objects(p, symbol, text, top=False, limit=0x10000):
         models = collect(code, head, lo, hi)
         if label not in models:
             continue
-        tokens, edits = models[label]
+        tokens, edits, origins = models[label]
         types = dict(tokens)
         known = syms[label]
         token = '(?:%s)' % '|'.join(re.escape(name) for name in types)
@@ -1481,6 +1495,8 @@ def tu_data_objects(p, symbol, text, top=False, limit=0x10000):
         helpers = set()
         for (arg, param), (a, b), helper in _helper_aliases(code, lo, hi, set(types)):
             types[param] = types[arg]
+            if origins.get(arg):
+                origins[param] = origins[arg]
             regions.append((a, b, re.escape(param)))
             helpers.add(helper)
         uses = []
@@ -1497,12 +1513,12 @@ def tu_data_objects(p, symbol, text, top=False, limit=0x10000):
                     break
                 off, index = m[3], m[4]
                 if m[5] or m[8]:
-                    uses.append((s, e, int(m[5] or m[8], 0), ('xindex', m[6] or m[7]), types[m[1]]))
+                    uses.append((s, e, origins.get(m[1], 0) + int(m[5] or m[8], 0), ('xindex', m[6] or m[7]), types[m[1]]))
                     continue
                 if off and not m[2] and re.match(r'\s*[*/%\[]', code[e:]):
                     # `x + 4 * i`: only the pointer itself is a constant address
                     e, off = s + len(m[1]), None
-                uses.append((s, e, int(off or index or '0', 0), 'index' if index else 'ptr', types[m[1]]))
+                uses.append((s, e, origins.get(m[1], 0) + int(off or index or '0', 0), 'index' if index else 'ptr', types[m[1]]))
             else:
                 continue
             uses = None
@@ -1960,6 +1976,26 @@ def _base_registers(rows, syms, anonymous_only=False):
     return {s: next(iter(r)) for s, r in out.items() if len(r) == 1}
 
 
+def _touched_sections(region, before, syms):
+    """Sections of the unit-defined retail objects a primer region names (`lbl_*` symbols and
+    the `fzgx_obj_`/`fzgx_pool_<section>_`/filler aliases through `fixup_sections.retail_address`,
+    the lifter's `fzgx_bss_N`/`fzgx_data_N` statics by name); an extern reference counts for
+    nothing (a named global's address is the function's own CSE, not a section base)."""
+    from .fixup_sections import retail_address
+    out = set()
+    for name in sorted(set(re.findall(r'\b(?:lbl_|fzgx_)\w+', region))):
+        if not re.search(r'(?m)^(?![ \t]*extern\b)[^\n;(){}]*\b%s\b\s*(?:\[[^\]\n]*\]\s*)*(?:=|;)' % re.escape(name), before):
+            continue
+        where = retail_address(name, syms)
+        if where:
+            out.add(where[1])
+            continue
+        m = re.match(r'fzgx_(bss|data)_[0-9A-Fa-f]+$', name)
+        if m:
+            out.add('.' + m[1])
+    return out
+
+
 def section_base_order(p, symbol, body, check, obj=None):
     """The order of a unit's section-base registers is the order in which the translation unit
     first references each section, not where the objects are defined (measured on fn_8_7484
@@ -2007,10 +2043,17 @@ def section_base_order(p, symbol, body, check, obj=None):
             kinds.add('.' + section)
         if 'fzgx_data_layout' in text and not re.search(r'\bfzgx_pool_(?:data|rodata)_', text):
             kinds.add('.data')
+        if not kinds:
+            # a primer named otherwise (`fzgx_bss_order`, `fzgx_base_order_data`): the section
+            # of the defined objects it touches
+            kinds = _touched_sections(text, code[:at], syms)
         if len(kinds) == 1:
             regions.setdefault(kinds.pop(), []).append((m.start(), m.end()))
     # a hand-written pool primer: `#pragma section RX ".fzgxpool"` and the `__declspec`
-    # functions after it, as long as they spell literals and touch no defined data
+    # functions after it: a pool primer when they spell literals, else the primer of the one
+    # section whose defined objects they touch (fn_1_1304's `fzgx_primer` storing to its
+    # `.bss` objects was invisible here, so the added `.data` primer landed below it and the
+    # `.data` base stayed r30)
     statements = _top_statements(code)
     for m in re.finditer(r'(?m)^[ \t]*#pragma section RX "\.fzgxpool"[^\n]*\n', body[:at]):
         end = m.end()
@@ -2025,8 +2068,13 @@ def section_base_order(p, symbol, body, check, obj=None):
         if end > m.end():
             nl = body.find('\n', end)
             end = len(body[:at]) if nl < 0 or nl >= at else nl + 1
-        if end > m.end() and re.search(r'\b\d+\.\d*f?\b', body[m.end():end]):
-            regions.setdefault('.rodata', []).append((m.start(), end))
+        if end > m.end():
+            if re.search(r'\b\d+\.\d*f?\b', body[m.end():end]):
+                regions.setdefault('.rodata', []).append((m.start(), end))
+            else:
+                kinds = _touched_sections(body[m.end():end], code[:at], syms)
+                if len(kinds) == 1:
+                    regions.setdefault(kinds.pop(), []).append((m.start(), end))
     # the first section keeps its primer where it is when it has one (other `.rodata` objects
     # between the pool primer and the function must not move ahead of the pool); the later
     # sections' primers move below it, just above the function, in retail's order
