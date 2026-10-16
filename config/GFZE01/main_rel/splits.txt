@@ -7481,3 +7481,6 @@ rel/main_rel/car_test/fn_1_7C2A0.c:
 
 rel/main_rel/sel_static_disp/fn_1_14B62C.c:
 	.text       start:0x0014B62C end:0x0014B8F8 align:4
+
+rel/main_rel/replay/fn_1_F2820.c:
+	.text       start:0x000F2820 end:0x000F2CD8 align:4

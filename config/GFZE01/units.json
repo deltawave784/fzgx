@@ -52076,6 +52076,24 @@
   },
   {
     "module": "main_rel",
+    "source": "rel/main_rel/replay/fn_1_F2820.c",
+    "symbols": [
+      "fn_1_F2820"
+    ],
+    "status": "matching",
+    "mw_version": "GC/1.3.2",
+    "extra_cflags": [],
+    "tu": "rel/main_rel/replay.c",
+    "pool": {
+      "...bss.0": "lbl_1_bss_7EFD0",
+      "fzgx_obj_lbl_1_bss_7EFD0": "lbl_1_bss_7EFD0",
+      "fzgx_obj_lbl_1_bss_7EFD4": "lbl_1_bss_7EFD4",
+      "fzgx_obj_lbl_1_bss_7EFD8": "lbl_1_bss_7EFD8",
+      "fzgx_obj_lbl_1_bss_7F01C": "lbl_1_bss_7F01C"
+    }
+  },
+  {
+    "module": "main_rel",
     "source": "rel/main_rel/replay/fn_1_F2CD8.c",
     "symbols": [
       "fn_1_F2CD8"
