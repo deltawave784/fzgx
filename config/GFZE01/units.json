@@ -18391,6 +18391,17 @@
   },
   {
     "module": "main",
+    "source": "dol/fn_8003AB08.c",
+    "symbols": [
+      "fn_8003AB08"
+    ],
+    "status": "matching",
+    "mw_version": null,
+    "extra_cflags": [],
+    "asm": true
+  },
+  {
+    "module": "main",
     "source": "dol/fn_8003B798.c",
     "symbols": [
       "fn_8003B798"
@@ -64701,6 +64712,17 @@
     "status": "matching",
     "mw_version": null,
     "extra_cflags": []
+  },
+  {
+    "module": "movie_module",
+    "source": "rel/movie_module/fn_12_4F3C.c",
+    "symbols": [
+      "fn_12_4F3C"
+    ],
+    "status": "matching",
+    "mw_version": null,
+    "extra_cflags": [],
+    "asm": true
   },
   {
     "module": "movie_module",
