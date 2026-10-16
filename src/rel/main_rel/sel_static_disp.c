@@ -6845,6 +6845,188 @@ void fn_1_14B4FC(void) {
 }
 /* fzgx:end fn_1_14B4FC */
 
+/* fzgx:begin fn_1_14B62C pool noprologue */
+#include "types.h"
+#include "rel/main_rel/sel_static_disp.h"
+
+typedef struct {
+    u8 pad_0[0x4];
+    u8 unk_4;
+    u8 unk_5;
+    u8 pad_6[0xA];
+    u32 unk_10;
+    u8 pad_14[0x8];
+    f32 unk_1C;
+    u8 pad_20[0x4];
+    s32 unk_24;
+    u8 pad_28[0x4];
+    s32 unk_2C;
+    u8 unk_30;
+} SelState_8E518;
+
+extern u32 lbl_801A66A4;
+extern u32 fn_1_14A9D0(u8, u32, u32, u32, u32, u32);
+extern void fn_1_3F2A0(void);
+extern int fn_1_8623C(void);
+extern void fn_1_A2D84(u32);
+extern void fn_1_14CA4C(void);
+
+/* file-scope objects of the retail TU (from a matched sibling), in retail order: MWCC addresses them off one section base */
+u32 fzgx_obj_lbl_1_bss_8E518;
+u8 lbl_1_bss_8E518_fill_8E51C;
+u8 fzgx_obj_lbl_1_bss_8E51D;
+u16 lbl_1_bss_8E518_gap_8E51E;
+u32 fzgx_obj_lbl_1_bss_8E520;
+u8 fzgx_obj_lbl_1_bss_8E524;
+u8 lbl_1_bss_8E518_gap_8E525;
+u16 lbl_1_bss_8E518_gap_8E525_fill_8E526;
+u32 fzgx_obj_lbl_1_bss_8E528;
+u8 fzgx_obj_lbl_1_bss_8E52C;
+u8 lbl_1_bss_8E518_gap_8E52D;
+u16 lbl_1_bss_8E518_gap_8E52D_fill_8E52E;
+f32 lbl_1_bss_8E530;
+u32 lbl_1_bss_8E534;
+s32 lbl_1_bss_8E538;
+u32 lbl_1_bss_8E53C;
+s32 fzgx_obj_lbl_1_bss_8E540;
+u32 fzgx_obj_lbl_1_bss_8E544;
+u8 fzgx_obj_lbl_1_bss_8E548;
+u8 lbl_1_bss_8E548_fill_8E549;
+u16 lbl_1_bss_8E548_fill_8E54A;
+u32 lbl_1_bss_8E548_fill_8E54C;
+u8 lbl_1_bss_8E550;
+u8 lbl_1_bss_8E518_gap_8E551;
+u16 lbl_1_bss_8E518_gap_8E551_fill_8E552;
+u32 lbl_1_bss_8E554;
+u8 lbl_1_bss_8E554_fill_8E558;
+u8 fzgx_obj_lbl_1_bss_8E559;
+u16 lbl_1_bss_8E518_gap_8E55A;
+u32 lbl_1_bss_8E55C;
+u32 lbl_1_bss_8E560[4];
+u32 lbl_1_bss_8E570[7];
+s32 lbl_1_bss_8E570_1C;
+u32 lbl_1_bss_8E570_fill_8E590;
+
+#pragma section code_type ".fzgxpool"
+static void fzgx_bss_layout(void) {
+    volatile u8 s;  /* fzgx-allow: S2 layout primer sink: MWCC emits .bss objects in first-access order */
+    s = *(u8 *)&fzgx_obj_lbl_1_bss_8E518;
+    s = *(u8 *)&lbl_1_bss_8E518_fill_8E51C;
+    s = *(u8 *)&fzgx_obj_lbl_1_bss_8E51D;
+    s = *(u8 *)&lbl_1_bss_8E518_gap_8E51E;
+    s = *(u8 *)&fzgx_obj_lbl_1_bss_8E520;
+    s = *(u8 *)&fzgx_obj_lbl_1_bss_8E524;
+    s = *(u8 *)&lbl_1_bss_8E518_gap_8E525;
+    s = *(u8 *)&lbl_1_bss_8E518_gap_8E525_fill_8E526;
+    s = *(u8 *)&fzgx_obj_lbl_1_bss_8E528;
+    s = *(u8 *)&fzgx_obj_lbl_1_bss_8E52C;
+    s = *(u8 *)&lbl_1_bss_8E518_gap_8E52D;
+    s = *(u8 *)&lbl_1_bss_8E518_gap_8E52D_fill_8E52E;
+    s = *(u8 *)&lbl_1_bss_8E530;
+    s = *(u8 *)&lbl_1_bss_8E534;
+    s = *(u8 *)&lbl_1_bss_8E538;
+    s = *(u8 *)&lbl_1_bss_8E53C;
+    s = *(u8 *)&fzgx_obj_lbl_1_bss_8E540;
+    s = *(u8 *)&fzgx_obj_lbl_1_bss_8E544;
+    s = *(u8 *)&fzgx_obj_lbl_1_bss_8E548;
+    s = *(u8 *)&lbl_1_bss_8E548_fill_8E549;
+    s = *(u8 *)&lbl_1_bss_8E548_fill_8E54A;
+    s = *(u8 *)&lbl_1_bss_8E548_fill_8E54C;
+    s = *(u8 *)&lbl_1_bss_8E550;
+    s = *(u8 *)&lbl_1_bss_8E518_gap_8E551;
+    s = *(u8 *)&lbl_1_bss_8E518_gap_8E551_fill_8E552;
+    s = *(u8 *)&lbl_1_bss_8E554;
+    s = *(u8 *)&lbl_1_bss_8E554_fill_8E558;
+    s = *(u8 *)&fzgx_obj_lbl_1_bss_8E559;
+    s = *(u8 *)&lbl_1_bss_8E518_gap_8E55A;
+    s = *(u8 *)&lbl_1_bss_8E55C;
+    s = *(u8 *)&lbl_1_bss_8E560;
+    s = *(u8 *)&lbl_1_bss_8E570;
+    s = *(u8 *)&lbl_1_bss_8E570_1C;
+    s = *(u8 *)&lbl_1_bss_8E570_fill_8E590;
+}
+#pragma section code_type ".text"
+
+
+static inline u8 sel_count(SelState_8E518 *p) {
+    return fzgx_obj_lbl_1_bss_8E51D == 4 ? lbl_1_bss_3C30.unk_8 : lbl_1_bss_3C30.unk_9;
+}
+
+/* centre the visible window (n rows) on the current entry; the raw index and the
+   centred index are distinct values so the raw store can sink below the subtract */
+static inline void sel_scroll_a(SelState_8E518 *p, f32 *pos, s32 *top) {
+    u8 n;
+    s32 raw;
+    s32 t;
+    fn_1_3F2A0();
+    raw = ((u8 *)&lbl_1_bss_3C30)[fn_1_8623C() * 0xA0 + 0xDC];
+    n = fzgx_obj_lbl_1_bss_8E548;
+    (*(s32 *)&lbl_1_bss_8E53C) = raw;
+    t = raw - ((u8)(n >> 1) - 1);
+    (*(s32 *)&lbl_1_bss_8E53C) = t;
+    if (t < 0) {
+        *top = 0;
+    } else if (t >= lbl_1_bss_3C30.unk_9 - n) {
+        *top = lbl_1_bss_3C30.unk_9 - n;
+    }
+    *pos = *top;
+}
+
+static inline void sel_scroll_b(SelState_8E518 *p, f32 *pos, s32 *top) {
+    u8 n;
+    s32 raw;
+    s32 t;
+    fn_1_3F2A0();
+    raw = ((u8 *)&lbl_1_bss_3C30)[fn_1_8623C() * 0xA0 + 0xDC];
+    n = fzgx_obj_lbl_1_bss_8E548;
+    (*(s32 *)&lbl_1_bss_8E53C) = raw;
+    t = raw - ((u8)(n >> 1) - 1);
+    (*(s32 *)&lbl_1_bss_8E53C) = t;
+    if (t < 0) {
+        *top = 0;
+    } else if (*top >= sel_count(p) - n) {
+        *top = sel_count(p) - n;
+    }
+    *pos = (f32)sel_count(p) - (f32)fzgx_obj_lbl_1_bss_8E548;
+}
+
+void fn_1_14B62C(void) {
+    SelState_8E518 *p = (SelState_8E518 *)((void *)&fzgx_obj_lbl_1_bss_8E518);
+
+    if ((s32)lbl_1_bss_25BA0.unk_0 != 0) {
+        return;
+    }
+    fn_1_14A9D0(sel_count(p), 1, 30, 180, 1, 0);
+    if ((lbl_1_bss_9F8.unk_8 >> 8) & 1) {
+        if (!((lbl_1_bss_D58.unk_8 >> 12) & 1)) {
+            if (lbl_801A66A4 - fzgx_obj_lbl_1_bss_8E528 >= 195) {
+                fzgx_obj_lbl_1_bss_8E51D = 4;
+                lbl_1_bss_8E518_fill_8E51C = 0;
+                if (*(s16 *)&lbl_1_bss_960 == 1) {
+                    fzgx_obj_lbl_1_bss_8E548 = 4;
+                } else {
+                    fzgx_obj_lbl_1_bss_8E548 = lbl_1_bss_3C30.unk_8 < 6 ? lbl_1_bss_3C30.unk_8 : 6;
+                }
+                if ((*(s32 *)&fzgx_obj_lbl_1_bss_8E544) != 0) {
+                    f32 *pos = (f32 *)&lbl_1_bss_8E534;
+                    s32 *top = (s32 *)&lbl_1_bss_8E53C;
+                    sel_scroll_a(p, pos, top);
+                } else {
+                    s32 *top;
+                    f32 *pos;
+                    pos = (f32 *)&lbl_1_bss_8E534;
+                    top = (s32 *)&lbl_1_bss_8E53C;
+                    sel_scroll_b(p, pos, top);
+                }
+                fn_1_A2D84(0xA9010400);
+            } else {
+                fn_1_14CA4C();
+            }
+        }
+    }
+}
+/* fzgx:end fn_1_14B62C */
+
 /* fzgx:begin fn_1_14B8F8 */
 // fn_1_14B8F8: empty in retail (single blr).
 void fn_1_14B8F8(void) {
