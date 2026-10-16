@@ -267,6 +267,14 @@ class Elf:
         ro["addralign"] = 1
         ro["flags"] = 0
         self._write_shdr(ro)
+        # the relocations applied to the dropped bytes go with them (an initializer table of
+        # function pointers or `__fzgx_offset_` words): a relocation section still applied to
+        # an ignored section aborts every mwldeppc partial link (ELF_linker.c:1179). Nothing
+        # reaches this section (checked above), so no relocation here resolves anything.
+        for rs in self.sections:
+            if rs["type"] == SHT_RELA and rs["info"] == ro["index"]:
+                rs["size"] = 0
+                self._write_shdr(rs)
         return True
 
 
