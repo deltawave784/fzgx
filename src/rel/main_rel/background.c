@@ -645,6 +645,167 @@ void fn_1_9E5B8(Obj_1_bss_6EA80_Target *node) {
 }
 /* fzgx:end fn_1_9E5B8 */
 
+/* fzgx:begin fn_1_9E608 noprologue */
+#include "types.h"
+#include "dolphin/types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/background.h"
+#include "dolphin/hw_regs.h"
+#include "game/main_rel/background_types.h"
+
+typedef struct {
+    u8 r, g, b, a;
+} BgColor;
+
+typedef struct {
+    u8 unk_0[0xC];
+    f32 size;
+    s16 rotZ;
+    u16 flags;
+    BgColor color;
+} BgSprite;
+
+extern u32 lbl_801A6D00;
+extern s32 fn_1_54E34(void *arg0, f32 arg1);
+extern void fn_800724C8(void);
+extern void fn_8007245C(u32 value);
+extern void lbl_8006DAEC(void);
+extern void lbl_8006D758(void);
+extern u32 GXLoadPosMtxImm(u32, u32);
+extern void lbl_8006DB30(void);
+/* The color is passed by value: MWCC copies it to the stack and passes the copy's address. */
+extern void fn_800736C0(u32, BgColor);
+extern void fn_8003462C(u32 arg0, u32 arg1, u32 arg2);
+extern void lbl_8006E1D8(f32 *, f32, f32, f32);
+extern void mathutil_mtxA_rotate_z(s32);
+extern void lbl_8006E0A4(void *);
+extern u32 lbl_8006D7B0(void);
+
+/* GX write-gather FIFO: every store is a hardware write, so it must not be merged or dropped. */
+#define BG_FIFO (*(volatile f32 *)GX_FIFO_BASE)
+
+void fn_1_9E608(s32 count, BgSprite *list) {
+    BgSprite *sprites;
+    s32 remaining;
+    f32 v[4][3];
+    BgColor col;
+    s32 i;
+    BgSprite *start;
+    BgSprite *last;
+    BgSprite *s;
+    s32 visible;
+    s32 n;
+    f32 neg;
+    f32 size;
+
+    s = list;
+    visible = 0;
+    for (i = count; i > 0; i--, s++) {
+        if (fn_1_54E34(s, s->size) != 0) {
+            visible++;
+            s->flags &= ~1;
+        } else {
+            s->flags |= 1;
+        }
+    }
+    if (visible == 0) {
+        return;
+    }
+
+    fn_800724C8();
+    fn_8007245C(0x2200);
+    lbl_8006DAEC();
+    lbl_8006D758();
+    GXLoadPosMtxImm(lbl_801A6D00, 0);
+    lbl_8006DB30();
+
+    sprites = list;
+    remaining = count;
+    while (remaining > 0) {
+        while (remaining > 0) {
+            if (!(sprites->flags & 1)) {
+                break;
+            }
+            remaining--;
+            sprites++;
+        }
+        if (remaining == 0) {
+            return;
+        }
+        col = sprites->color;
+        fn_800736C0(0, col);
+        fn_8003462C(0x90, 0, 8);
+        start = sprites;
+        remaining--;
+        sprites++;
+        for (i = 0; i < 8; i++) {
+            BG_FIFO = 0.0f;
+            BG_FIFO = 0.0f;
+            BG_FIFO = 0.0f;
+            BG_FIFO = 0.0f;
+            BG_FIFO = 0.0f;
+        }
+        n = 1;
+        while (remaining > 0) {
+            if (!(sprites->flags & 1)) {
+                if (col.r != sprites->color.r || col.g != sprites->color.g ||
+                    col.b != sprites->color.b || col.a != sprites->color.a) {
+                    remaining++;
+                    last = sprites - 1;
+                    break;
+                }
+                n++;
+            }
+            remaining--;
+            sprites++;
+        }
+        fn_8003462C(0x80, 0, (u16)(n * 4));
+        sprites = start;
+        while (n > 0) {
+            if (!(sprites->flags & 1)) {
+                size = sprites->size;
+                neg = -size;
+                lbl_8006DAEC();
+                lbl_8006E0A4(sprites);
+                lbl_8006D7B0();
+                if (sprites->rotZ != 0) {
+                    mathutil_mtxA_rotate_z(sprites->rotZ);
+                }
+                lbl_8006E1D8(v[0], neg, neg, 0.0f);
+                lbl_8006E1D8(v[1], size, neg, 0.0f);
+                lbl_8006E1D8(v[2], size, size, 0.0f);
+                lbl_8006E1D8(v[3], neg, size, 0.0f);
+                lbl_8006DB30();
+                n--;
+                BG_FIFO = v[0][0];
+                BG_FIFO = v[0][1];
+                BG_FIFO = v[0][2];
+                BG_FIFO = 0.0f;
+                BG_FIFO = 0.0f;
+                BG_FIFO = v[1][0];
+                BG_FIFO = v[1][1];
+                BG_FIFO = v[1][2];
+                BG_FIFO = 1.0f;
+                BG_FIFO = 0.0f;
+                BG_FIFO = v[2][0];
+                BG_FIFO = v[2][1];
+                BG_FIFO = v[2][2];
+                BG_FIFO = 1.0f;
+                BG_FIFO = 1.0f;
+                BG_FIFO = v[3][0];
+                BG_FIFO = v[3][1];
+                BG_FIFO = v[3][2];
+                BG_FIFO = 0.0f;
+                BG_FIFO = 1.0f;
+            }
+            sprites++;
+        }
+        remaining--;
+        sprites = last + 1;
+    }
+}
+/* fzgx:end fn_1_9E608 */
+
 /* fzgx:begin fn_1_9EA94 noprologue */
 #include "types.h"
 #include "dolphin/types.h"

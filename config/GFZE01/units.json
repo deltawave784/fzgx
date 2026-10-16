@@ -31294,6 +31294,21 @@
   },
   {
     "module": "main_rel",
+    "source": "rel/main_rel/background/fn_1_9E608.c",
+    "symbols": [
+      "fn_1_9E608"
+    ],
+    "status": "matching",
+    "mw_version": "GC/1.3",
+    "extra_cflags": [],
+    "tu": "rel/main_rel/background.c",
+    "pool": {
+      "@90": "lbl_1_rodata_42D0",
+      "@91": "lbl_1_rodata_42D4"
+    }
+  },
+  {
+    "module": "main_rel",
     "source": "rel/main_rel/background/fn_1_9EA94.c",
     "symbols": [
       "fn_1_9EA94"

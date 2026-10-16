@@ -7484,3 +7484,6 @@ rel/main_rel/sel_static_disp/fn_1_14B62C.c:
 
 rel/main_rel/replay/fn_1_F2820.c:
 	.text       start:0x000F2820 end:0x000F2CD8 align:4
+
+rel/main_rel/background/fn_1_9E608.c:
+	.text       start:0x0009E608 end:0x0009EA94 align:4
