@@ -69788,6 +69788,33 @@
   },
   {
     "module": "sel",
+    "source": "rel/sel/sel/fn_10_10E34.c",
+    "symbols": [
+      "fn_10_10E34"
+    ],
+    "status": "matching",
+    "mw_version": "GC/1.3.2",
+    "extra_cflags": [],
+    "tu": "rel/sel/sel.c",
+    "pool": {
+      "...rodata.0": "lbl_10_rodata_158",
+      "@26": "lbl_10_rodata_1E0",
+      "@153": "lbl_10_rodata_3AC+0x50",
+      "@244": "lbl_10_rodata_3AC+0xB0",
+      "@248": "lbl_10_rodata_3AC+0xC0",
+      "@27": "lbl_10_rodata_1E8",
+      "@23": "lbl_10_rodata_1A4+0x30",
+      "@245": "lbl_10_rodata_3AC+0xB4",
+      "@10": "lbl_10_rodata_158+0x48",
+      "@73": "lbl_10_rodata_1E8+0xE4",
+      "@246": "lbl_10_rodata_3AC+0xB8",
+      "@247": "lbl_10_rodata_3AC+0xBC",
+      "@192": "lbl_10_rodata_3AC+0xAC",
+      "@11": "lbl_10_rodata_1A4"
+    }
+  },
+  {
+    "module": "sel",
     "source": "rel/sel/sel/fn_10_12C14.c",
     "symbols": [
       "fn_10_12C14"
