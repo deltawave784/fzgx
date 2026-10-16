@@ -2364,6 +2364,178 @@ void fn_1_79810(void) {
 }
 /* fzgx:end fn_1_79810 */
 
+/* fzgx:begin fn_1_79948 pool noprologue */
+#include "types.h"
+#include "rel/main_rel/screen_effect.h"
+
+typedef struct ScreenFx {
+    s8 type;
+    u8 pad_1[3];
+    f32 unk_4;
+    f32 unk_8;
+    u8 unk_C;
+    u8 unk_D;
+    u8 unk_E;
+    u8 active;
+    u32 unk_10;
+    void *unk_14;
+} ScreenFx;
+
+typedef struct ScreenFxEntry {
+    s8 key;
+    s8 type;
+    u8 pad_2[2];
+    f32 unk_4;
+    f32 unk_8;
+    u8 unk_C;
+    u8 unk_D;
+    u8 unk_E;
+    u8 pad_F;
+} ScreenFxEntry;
+
+extern u32 fn_1_7AA50(f32);
+extern void fn_1_7E8F4(void);
+
+/* file-scope objects of the retail TU, in retail order: MWCC addresses them off one section base */
+Obj_1_bss_6D600 lbl_1_bss_6D600;
+ScreenFx lbl_1_bss_6D620[4];
+ScreenFx lbl_1_bss_6D680[4];
+ScreenFx lbl_1_bss_6D6E0[4];
+ScreenFx lbl_1_bss_6D740;
+ScreenFx lbl_1_bss_6D758;
+
+const ScreenFxEntry lbl_1_rodata_3278[5] = {
+    { 4, 5, { 0, 0 }, -200.0f, 1000.0f, 0x00, 0x6E, 0x96, 0 },
+    { 8, 5, { 0, 0 }, -200.0f, 2000.0f, 0x0A, 0x0A, 0x28, 0 },
+    { 7, 4, { 0, 0 }, 0.0f, 3000.0f, 0x17, 0x1A, 0x1D, 0 },
+    { 12, 2, { 0, 0 }, 0.0f, 820.0f, 0x6E, 0x78, 0x79, 0 },
+    { -1, 4, { 0, 0 }, 0.0f, 100.0f, 0, 0, 0, 0 },
+};
+
+#pragma section code_type ".fzgxpool"
+static void fzgx_bss_layout(void) {
+    volatile u8 s;  /* fzgx-allow: S2 layout primer sink: MWCC emits .bss objects in first-access order */
+    s = *(u8 *)&lbl_1_bss_6D600;
+    s = *(u8 *)&lbl_1_bss_6D620;
+    s = *(u8 *)&lbl_1_bss_6D680;
+    s = *(u8 *)&lbl_1_bss_6D6E0;
+    s = *(u8 *)&lbl_1_bss_6D740;
+    s = *(u8 *)&lbl_1_bss_6D758;
+}
+
+extern void fzgx_pool_sink_p(const void *);
+extern void fzgx_pool_sink_f(f32);
+extern void fzgx_pool_sink_d(f64);
+static const f32 fzgx_pool_word_50[1] = { 0.03125f };
+static const f32 fzgx_pool_word_54[1] = { 1.0f };
+static const f64 fzgx_pool_dword_58[1] = { 4503601774854144.0 };
+static const f64 fzgx_pool_dword_60[1] = { 4503599627370496.0 };
+static const f32 fzgx_pool_word_68[1] = { 0.016666668f };
+static const u32 fzgx_pool_word_6C[1] = { 0xFFFFFFFF };
+
+/* primes the TU literal pool in retail order behind the table */
+static void fzgx_pool_primer(void) {
+    fzgx_pool_sink_p(lbl_1_rodata_3278);
+    fzgx_pool_sink_p(fzgx_pool_word_50);
+    fzgx_pool_sink_p(fzgx_pool_word_54);
+    fzgx_pool_sink_p(fzgx_pool_dword_58);
+    fzgx_pool_sink_p(fzgx_pool_dword_60);
+    fzgx_pool_sink_p(fzgx_pool_word_68);
+    fzgx_pool_sink_p(fzgx_pool_word_6C);
+    fzgx_pool_sink_f(0.0f);
+    fzgx_pool_sink_f(640.0f);
+    fzgx_pool_sink_f(480.0f);
+    fzgx_pool_sink_f(320.0f);
+    fzgx_pool_sink_f(240.0f);
+    fzgx_pool_sink_f(0.03f);
+    fzgx_pool_sink_f(0.75f);
+    fzgx_pool_sink_f(0.02f);
+    fzgx_pool_sink_f(1.5f);
+    fzgx_pool_sink_f(360.0f);
+    fzgx_pool_sink_f(128.0f);
+    fzgx_pool_sink_f(0.5f);
+    fzgx_pool_sink_f(8.0f);
+    fzgx_pool_sink_f(408.0f);
+    fzgx_pool_sink_f(100.0f);
+}
+#pragma section code_type ".text"
+
+static inline void fx_reset(ScreenFx *e) {
+    e->active = 0;
+    e->type = 5;
+    e->unk_4 = 0.0f;
+    e->unk_8 = 100.0f;
+    e->unk_C = 0;
+    e->unk_D = 0;
+    e->unk_E = 0;
+}
+
+static inline void fx_lookup(ScreenFx *e, s32 key) {
+    const ScreenFxEntry *ent;
+
+    fx_reset(e);
+    for (ent = lbl_1_rodata_3278; ent->key != -1; ent++) {
+        if (ent->key == lbl_1_data_2A7E0.unk_0) {
+            e->active = 1;
+            e->type = ent->type;
+            e->unk_4 = ent->unk_4;
+            e->unk_8 = ent->unk_8;
+            e->unk_C = ent->unk_C;
+            e->unk_D = ent->unk_D;
+            e->unk_E = ent->unk_E;
+        }
+    }
+}
+
+static inline void fx_set(ScreenFx *e, const ScreenFxEntry *ent) {
+    e->active = 1;
+    e->type = ent->type;
+    e->unk_4 = ent->unk_4;
+    e->unk_8 = ent->unk_8;
+    e->unk_C = ent->unk_C;
+    e->unk_D = ent->unk_D;
+    e->unk_E = ent->unk_E;
+}
+
+void fn_1_79948(void) {
+    ScreenFx *e;
+    const ScreenFxEntry *ent;
+    s32 i;
+    ScreenFx tmp;
+
+    if (lbl_1_bss_3BE0 != NULL && lbl_1_bss_3BE0->unk_80 != 0) {
+        lbl_1_bss_6D758.active = 1;
+        lbl_1_bss_6D758.type = lbl_1_bss_3BE0->unk_84 != 0 ? *(s8 *)lbl_1_bss_3BE0->unk_84 : 4;
+        fn_1_7AA50(0.0f);
+    } else {
+        fx_reset(&lbl_1_bss_6D758);
+    }
+
+    e = &lbl_1_bss_6D740;
+    fx_reset(e);
+    for (ent = lbl_1_rodata_3278; ent->key != -1; ent++) {
+        if (ent->key == lbl_1_data_2A7E0.unk_0) {
+            e->active = 1;
+            lbl_1_bss_6D740.type = ent->type;
+            e->unk_4 = ent->unk_4;
+            e->unk_8 = ent->unk_8;
+            e->unk_C = ent->unk_C;
+            e->unk_D = ent->unk_D;
+            e->unk_E = ent->unk_E;
+        }
+    }
+
+    for (i = 0; i < 4; i++) {
+        lbl_1_bss_6D620[i] = lbl_1_bss_6D758;
+        lbl_1_bss_6D620[i].unk_14 = &lbl_1_bss_6D758;
+        lbl_1_bss_6D620[i].unk_10 = 0x20;
+        lbl_1_bss_6D680[i] = lbl_1_bss_6D620[i];
+        lbl_1_bss_6D6E0[i] = lbl_1_bss_6D620[i];
+    }
+    fn_1_7E8F4();
+}
+/* fzgx:end fn_1_79948 */
+
 /* fzgx:begin fn_1_79C88 */
 typedef struct {
     u32 type;
