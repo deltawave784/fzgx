@@ -77,6 +77,10 @@ class Engine:
         self.compile_seconds = 0.0
         self.clones, self.clone_skips, self.clone_shared, self.clone_independent = [], [], set(), set()
         self.declarations = reuse.Declarations(self)
+        # scratch this run created (candidate sources, their objects, compile chunk
+        # directories): `prune` removes what the report does not retain. Files that were
+        # already in the output directory (an earlier run's) are never touched.
+        self.created_sources, self.created_objects, self.created_dirs = set(), set(), set()
 
     def emit(self, value):
         if self.verbose:
@@ -109,6 +113,7 @@ class Engine:
         path.parent.mkdir(exist_ok=True)
         if not path.exists():
             path.write_bytes(body.encode())
+            self.created_sources.add(str(path))
         elif digest(path.read_bytes()) != sha:
             raise ValueError(f'changed content-addressed source: {path}')
         return dict(metadata, symbol=symbol, source=str(path), sha256=sha, mw=mw, flags=flags,
@@ -222,6 +227,7 @@ class Engine:
                 if not obj.exists():
                     flags = ' '.join(x for x in [seed.get('flags') or '', '-sym on'] if x)
                     oracle.compile_source(self.project, sym.module, Path(seed['source']), obj, seed.get('mw'), flags)
+                    self.created_objects.add(str(obj))
                 table = linemap.tables(obj).get(sym.name, []) if obj.exists() else []
                 lrows, rrows = check._rows
                 accepted = getattr(check, '_accepted_rows', set())
@@ -310,6 +316,8 @@ class Engine:
                     objects.update(result)
         elif jobs:
             objects.update(oracle.compile_chunk(*jobs[0]))
+        self.created_objects.update(str(o) for o in objects.values())
+        self.created_dirs.update(str(out / chunk[0].stem) for _, chunk, out in jobs)
         self.timing['compile-pool'] = self.timing.get('compile-pool', 0) + time.monotonic() - pool_tick
         score_tick = time.monotonic()
         for (module, mw, flags), pending in groups.items():
@@ -1001,6 +1009,87 @@ class Engine:
         (self.output/'report.json').write_text(json.dumps(report))
         return report
 
+    def retained_ids(self, report, extra=()):
+        """Rows a later pass reads back from this output directory: every symbol's best, the
+        word frontier, the best raw objdiff percent, matched rows and the named extras, each
+        with its whole repair chain (`repair_recipe` walks parents back to the seed)."""
+        by_id = {r['id']: r for r in report['records']}
+        wanted = {r['id'] for r in report['best'].values()}
+        wanted.update(r['id'] for group in report.get('frontier', {}).values() for r in group)
+        wanted.update(r['id'] for r in report['records'] if r.get('matched'))
+        wanted.update(extra)
+        raw_best = {}
+        for row in report['records']:
+            if row.get('object') and 'raw_percent' in row and row['raw_percent'] > raw_best.get(row['symbol'], {}).get('raw_percent', -1):
+                raw_best[row['symbol']] = row
+        wanted.update(r['id'] for r in raw_best.values())
+        keep, stack = set(), list(wanted)
+        while stack:
+            i = stack.pop()
+            if i in keep or i not in by_id:
+                continue
+            keep.add(i)
+            if by_id[i].get('parent'):
+                stack.append(by_id[i]['parent'])
+        return keep
+
+    def prune(self, report, extra=()):
+        """Remove this run's scratch that the report does not retain: every candidate source
+        and object outside `retained_ids`, the emptied compile chunk directories, their cache
+        entries and their full report rows (a module run wrote 131,000 files / 1 GB per
+        output directory and ~150 such directories filled the drive). Only files this run
+        created are deleted; the pruned rows stay in the report as a label census."""
+        keep = self.retained_ids(report, extra)
+        by_id = {r['id']: r for r in report['records']}
+        kept_files = set()
+        for i in keep:
+            row = by_id[i]
+            kept_files.add(row['source'])
+            if row.get('object'):
+                kept_files.add(row['object'])
+                kept_files.add(str(Path(row['object']).with_suffix('.sym.o')))
+        removed = remove_scratch((self.created_sources | self.created_objects) - kept_files, self.created_dirs)
+        dropped_rows = [r for r in report['records'] if r['id'] not in keep]
+        labels = defaultdict(int)
+        for r in dropped_rows:
+            labels[(r.get('label') or 'input').split(':')[0].split(' (')[0]] += 1
+            if r.get('object') and r['object'] in self.created_objects and r['object'] not in kept_files:
+                self.cache.pop(r['id'], None)
+        report['records'] = [r for r in report['records'] if r['id'] in keep]
+        report['pruned'] = dict(records=len(dropped_rows), retained=len(keep), files=removed['files'],
+                                bytes=removed['bytes'], directories=removed['directories'], labels=dict(labels))
+        self.cache_path.write_text(json.dumps(self.cache))
+        (self.output/'report.json').write_text(json.dumps(report))
+        self.emit({'stage': 'prune', **{k: v for k, v in report['pruned'].items() if k != 'labels'}})
+        return report['pruned']
+
+
+def remove_scratch(files, directories=()):
+    """Delete the given scratch files, then the given directories when nothing but a
+    compiler log remains in them. Returns counts and bytes freed."""
+    removed, freed, dirs = 0, 0, 0
+    for name in files:
+        try:
+            freed += os.path.getsize(name)
+            os.unlink(name)
+            removed += 1
+        except OSError:
+            pass
+    for name in directories:
+        try:
+            left = os.listdir(name)
+        except OSError:
+            continue
+        if all(f == 'compile.log' for f in left):
+            try:
+                for f in left:
+                    os.unlink(os.path.join(name, f))
+                os.rmdir(name)
+                dirs += 1
+            except OSError:
+                pass
+    return dict(files=removed, bytes=freed, directories=dirs)
+
 
 def try_fix(p, symbol, body, budget_s=30.0, max_candidates=80, base=None):
     """Session/lifter adapter; same engine and transformations as corpus repair."""
@@ -1018,11 +1107,14 @@ def try_fix(p, symbol, body, budget_s=30.0, max_candidates=80, base=None):
     report=engine.run([row],rounds=2,beam=2,max_candidates=max_candidates,budget_s=budget_s)
     best=report['best'][p.key(sym)]; matched=best.get('matched',False)
     check=engine.check(best) if best['score']>=0 else None
-    return dict(matched=matched,body=Path(best['source']).read_text() if matched else None,
+    result=dict(matched=matched,body=Path(best['source']).read_text() if matched else None,
                 best_body=Path(best['source']).read_text(),label=best.get('label'),
                 best=max(check.percent,check.percent_adjusted) if check and check.ok else 0,
                 base=base.percent if base else row['score'],tried=report['compiled'],secs=time.monotonic()-start,
                 mw_version=best['mw'],extra_cflags=best['flags'])
+    # the session directory is scratch for one function: keep its best chain only
+    engine.prune(report)
+    return result
 
 
 def integrate(project, report, inputs, output):
@@ -1514,4 +1606,8 @@ def command(p,args):
     summary.update(functions=len(reported),variants=len(report['records']),
                    matches=[s for s,r in reported.items() if r.get('matched')],
                    saved_attempts=report.get('saved_attempts',[]))
+    if not args.saved:
+        # this run's scratch: candidate sources/objects outside the retained rows go now
+        # (`--saved` re-reads an existing directory and must not touch it)
+        summary['pruned']={k:v for k,v in engine.prune(report).items() if k!='labels'}
     print(json.dumps(summary,indent=2));return summary

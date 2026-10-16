@@ -216,7 +216,13 @@ class SavedCandidates:
             origin = os.path.relpath(path, ROOT_STR).replace(os.sep, '/')
             entry = memo.get(str(path))
             if not entry or entry[0] != (st.st_mtime_ns, st.st_size):
-                data = json.loads(path.read_text())
+                try:
+                    data = json.loads(path.read_text())
+                except (OSError, ValueError) as error:
+                    # a run that died mid-write (the drive filled during batch 175) leaves an
+                    # empty report: skip it instead of failing every later engine start
+                    self.unreadable.append(dict(path=origin, error=str(error)[:200]))
+                    continue
                 records = [dict(record, symbol=symbol) for symbol, record in data.get('best', {}).items()]
                 records.extend(data.get('records', []))
                 keep = ('symbol', 'percent', 'raw_percent', 'percent_adjusted', 'adjusted', 'best', 'score', 'source', 'sha256',

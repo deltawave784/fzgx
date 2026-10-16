@@ -177,6 +177,9 @@ def climb(p: Project, selection: Dict[str, str], outdir: Path, rounds: int = 4,
             state[s] = dict(base=_score(r), percent=_score(r), rows=oracle.progress_rows(r), file=str(f),
                             matched=r.matched, history=[], check=r)
     print('functions', len(state))
+    # scratch this run writes (candidate C, their objects, compile chunk directories):
+    # everything outside the final per-function files is removed before returning
+    created, created_objects, created_dirs = set(), set(), set()
     for rnd in range(rounds):
         active = [s for s, x in state.items() if not x['matched']]
         gen: Dict[str, list] = collections.defaultdict(list)
@@ -190,6 +193,7 @@ def climb(p: Project, selection: Dict[str, str], outdir: Path, rounds: int = 4,
                 f = outdir / f'r{rnd}' / f"{s.replace(':', '__')}__{k}.c"
                 f.parent.mkdir(exist_ok=True)
                 f.write_text(text)
+                created.add(str(f))
                 gen[sym.module].append((s, f, label))
                 nc += 1
         print(f'round {rnd}: {len(active)} functions, {nc} candidates')
@@ -201,6 +205,8 @@ def climb(p: Project, selection: Dict[str, str], outdir: Path, rounds: int = 4,
         targets: Dict[str, Optional[List[int]]] = {}
         for module, lst in gen.items():
             objs = oracle.compile_many(p, module, [f for _, f, _ in lst], outdir / f'r{rnd}' / 'obj' / module)
+            created_objects.update(str(o) for o in objs.values())
+            created_dirs.update(str(Path(o).parent) for o in objs.values())
             for s, f, label in lst:
                 o = objs.get(f)
                 if not o:
@@ -225,6 +231,8 @@ def climb(p: Project, selection: Dict[str, str], outdir: Path, rounds: int = 4,
             by_module[p.resolve(s).module].append(s)
         for module, syms in by_module.items():
             objs = oracle.compile_many(p, module, [Path(state[s]['file']) for s in syms], outdir / f'r{rnd}' / 'base' / module)
+            created_objects.update(str(o) for o in objs.values())
+            created_dirs.update(str(Path(o).parent) for o in objs.values())
             for s in syms:
                 sym = p.resolve(s)
                 o = objs.get(Path(state[s]['file']))
@@ -252,6 +260,10 @@ def climb(p: Project, selection: Dict[str, str], outdir: Path, rounds: int = 4,
         if not gained:
             break
     rep = {s: {k: v for k, v in x.items() if k != 'check'} for s, x in state.items()}
+    kept = {x['file'] for x in state.values()}
+    from .fixup import remove_scratch
+    rep_pruned = remove_scratch((created | created_objects) - kept, created_dirs)
+    print('pruned scratch', rep_pruned)
     (outdir / 'report.json').write_text(json.dumps(rep, indent=1))
     matched = [s for s, x in rep.items() if x['matched']]
     improved = [s for s, x in rep.items() if x['percent'] > x['base'] + 0.05]
