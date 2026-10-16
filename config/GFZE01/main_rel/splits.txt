@@ -7466,3 +7466,9 @@ rel/main_rel/sound/fn_1_A3D5C.c:
 
 rel/main_rel/memcard/fn_1_C1394.c:
 	.text       start:0x000C1394 end:0x000C17CC align:4
+
+rel/main_rel/sound/fn_1_A2210.c:
+	.text       start:0x000A2210 end:0x000A24CC align:4
+
+rel/main_rel/driver/fn_1_AAF1C.c:
+	.text       start:0x000AAF1C end:0x000AB434 align:4
