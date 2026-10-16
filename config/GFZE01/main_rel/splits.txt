@@ -7475,3 +7475,6 @@ rel/main_rel/driver/fn_1_AAF1C.c:
 
 rel/main_rel/screen_effect/fn_1_79948.c:
 	.text       start:0x00079948 end:0x00079C88 align:4
+
+rel/main_rel/car_test/fn_1_7C2A0.c:
+	.text       start:0x0007C2A0 end:0x0007C7CC align:4
