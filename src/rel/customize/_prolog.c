@@ -173,7 +173,7 @@ extern s16 lbl_3_data_C4;
 extern u32 fn_1_152CB4(s16, s32, s32, void *, s16, s16);
 extern u32 fn_1_8D5F0(s16 index);
 extern s32 fn_1_F7BE4(s32);
-extern u8 lbl_1_bss_9F8[];
+extern Controller lbl_1_bss_9F8[];
 extern u32 lbl_3_bss_2C584[98];
 extern s32 fn_1_152970(s16 *, s16 *, s16, u32, void *, s16, s16);
 extern void fn_3_7A08(s16 *, s16 *, int);
@@ -2555,7 +2555,7 @@ void fn_3_7770(void) {
 
 /* fzgx:begin fn_3_77B0 */
 void fn_3_77B0(void) {
-    if (((*(u16 *)(lbl_1_bss_9F8 + 8) >> 9) & 1) != 0 && fn_1_4C10() == 0) {
+    if (((lbl_1_bss_9F8[0].unk_8 >> 9) & 1) != 0 && fn_1_4C10() == 0) {
         fn_1_4A00(0, 15, lbl_3_bss_20850);
         lbl_3_data_A8[0] = 0x10;
     }
