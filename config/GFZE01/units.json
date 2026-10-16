@@ -2660,6 +2660,17 @@
   },
   {
     "module": "customize",
+    "source": "rel/customize/toolkit/fn_3_273F4.c",
+    "symbols": [
+      "fn_3_273F4"
+    ],
+    "status": "matching",
+    "mw_version": "GC/1.3.2",
+    "extra_cflags": [],
+    "tu": "rel/customize/toolkit.c"
+  },
+  {
+    "module": "customize",
     "source": "rel/customize/toolkit/fn_3_28378.c",
     "symbols": [
       "fn_3_28378"
