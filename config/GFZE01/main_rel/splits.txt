@@ -7463,3 +7463,6 @@ rel/main_rel/live_camera/fn_1_1212C.c:
 
 rel/main_rel/sound/fn_1_A3D5C.c:
 	.text       start:0x000A3D5C end:0x000A4268 align:4
+
+rel/main_rel/memcard/fn_1_C1394.c:
+	.text       start:0x000C1394 end:0x000C17CC align:4
