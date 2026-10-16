@@ -14,6 +14,13 @@ struct fn_3_13508_Table {
         struct { u8 pad_0[0x8]; u16 flags; u8 pad_A[0xA]; } e[1];
     };
 };
+
+struct fn_3_13508_fn_3_13508_Table {
+    union {
+        struct { u8 pad_8[0x8]; struct fn_3_13508_Entry unk_8[1]; };
+        struct { u8 pad_0[0x8]; u16 flags; u8 pad_A[0xA]; } fn_3_13508_e[1];
+    };
+};
 extern u32 lbl_801A6410;
 extern u32 fn_1_435C(u32 value);
 extern void fn_1_426C(u32 idx);
@@ -319,12 +326,7 @@ void fn_3_13508(void) {
 }
 /* fzgx:end fn_3_13508 */
 
-/* fzgx:begin fn_3_137AC noprologue */
-#include "types.h"
-#include "font.h"
-#include "rel/customize/emblem.h"
-
-struct fn_3_137AC_lbl_3_bss_A17D0 { u8 unk_0; u8 unk_1; };
+/* fzgx:begin fn_3_137AC */
 extern struct fn_3_137AC_lbl_3_bss_A17D0 lbl_3_bss_A17D0;
 extern f32 lbl_3_rodata_4E0[22];
 extern FontDrawPacket lbl_1_rodata_26F8;

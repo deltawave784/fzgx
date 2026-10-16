@@ -49,11 +49,22 @@ typedef struct {
     u16 unk_10;
     u16 unk_12;
 } PadInput;
+
+struct Obj {
+    u32 unk_0;
+    u32 unk_4;
+    u32 unk_8;
+    s16 unk_C;
+    s16 unk_E;
+    s16 unk_10;
+    s16 unk_12;
+    u8 pad_14[8];
+    u8 unk_1C;
+    u8 pad_1D[3];
+    void *unk_20;
+};
 extern u8 *fn_3_14074(void);
-extern u8 lbl_3_bss_A2408[8];
-extern s32 fn_1_45D0();
 extern void fn_80008BEC(void *dest, int value, u32 size);
-extern u32 lbl_801A6410;
 extern u8 fn_3_19C94(void);
 extern void fn_3_169B8(void);
 extern u32 fn_3_17820(void);
@@ -69,6 +80,9 @@ extern void DCInvalidateRange(void *, u32);
 extern void DCStoreRange(void *, u32);
 extern void fn_1_A2D84(u32 arg0);
 extern PadInput lbl_1_bss_9F8[];
+extern u8 lbl_3_bss_A2408[8];
+extern s32 fn_1_45D0();
+extern u32 lbl_801A6410;
 extern void fn_3_19CB8(void);
 extern void fn_3_15620(void);
 extern void fn_3_1560C(void);

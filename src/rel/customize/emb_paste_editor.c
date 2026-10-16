@@ -38,9 +38,51 @@ typedef struct {
     u32 y;
     u32 z;
 } Vec3u;
+
+typedef struct {
+    u16 unk_0;
+    u8 pad_2[0x6];
+    u16 unk_8;
+    u8 pad_A[0x6];
+    u16 unk_10;
+    u16 unk_12;
+} PadInput;
+
+typedef struct {
+    u8 pad_0[0x4];
+    u32 unk_4;
+    u8 pad_8[0x2058];
+} fn_3_113AC_PasteEntry;
+
+typedef struct {
+    u8 pad_0[0x7];
+    u8 unk_7;
+    u8 pad_8[0x18];
+    fn_3_113AC_PasteEntry unk_20[4];
+    u8 pad_81A0[0x20];
+} PasteSlot;
 extern struct fn_3_10B68_lbl_1_bss_9F8 lbl_1_bss_9F8;
 extern void fn_1_A2D84(u32 arg0);
-extern void fn_80008BEC(void *, int, u32);
+extern void fn_80008BEC(void *dest, int value, u32 size);
+extern u32 lbl_801A66B4;
+extern s32 fn_1_1310E0(void);
+extern u32 fn_1_B7F08(void);
+extern u32 fn_3_12D4(void);
+extern void fn_1_130EE8(u32 arg0, u32 arg1);
+extern void fn_1_130F98(void);
+extern void fn_1_131004(void);
+extern void fn_1_131050(u32 value, u32 state);
+extern void fn_3_11974(void);
+extern void fn_3_131C(s32 y, void *source);
+extern void fn_3_14C4();
+extern void fn_80008BA8(void *, void *, u32);
+extern u8 lbl_3_data_1A44__fzgx_offset_0[];
+extern u8 lbl_3_data_1A6C__fzgx_offset_0[];
+extern u8 lbl_3_data_1A70__fzgx_offset_0[];
+extern u8 lbl_3_data_1ACC__fzgx_offset_0[];
+extern u8 lbl_3_data_1B24__fzgx_offset_0[];
+extern u8 lbl_3_data_1BB4__fzgx_offset_0[];
+extern u8 lbl_3_data_1C04__fzgx_offset_0[];
 extern const Vec3u lbl_3_rodata_4C8;
 extern const Vec3u lbl_3_rodata_4D4;
 extern u32 lbl_801A6410[];
@@ -77,7 +119,6 @@ extern u8 lbl_3_bss_8F200[];
 extern u8 lbl_3_bss_A1778[12];
 extern s16 lbl_1_bss_96A;
 extern void fn_1_4A00(s32 fadeIn, u8 steps, u32 arg);
-extern void fn_80008BA8(u32 arg0, u32 arg1, u32 arg2);
 
 /* fzgx:begin fn_3_104C4 noprologue */
 #include "types.h"
@@ -481,7 +522,7 @@ void fn_3_118BC(void) {
 /* fzgx:end fn_3_118BC */
 
 /* fzgx:begin fn_3_11930 */
-struct PasteEntry {
+struct fn_3_11930_PasteEntry {
     u8 pad[0x2c];
     int active;
 };
@@ -491,7 +532,7 @@ int fn_3_11930(void) {
     u8 * base;
 
     for (i = 0; i < 4; i++) {
-        struct PasteEntry *entry = (struct PasteEntry *)(((u8 *)(*(u16 (*)[52])&lbl_3_bss_7EDD8)) + i * 4);
+        struct fn_3_11930_PasteEntry *entry = (struct fn_3_11930_PasteEntry *)(((u8 *)(*(u16 (*)[52])&lbl_3_bss_7EDD8)) + i * 4);
         if (entry->active != 0) {
             return 1;
         }
@@ -523,7 +564,7 @@ void fn_3_11994(s16 arg0, s16 arg1, s32 arg2, s32 arg3, s32 arg_sp0) {
             temp_r4 = (void *)(arg2 + temp_r5);
             if (arg1 == (s16) (*(s16 *)((u8 *)(temp_r4) + 0))) {
                 if ((*(s32 *)((u8 *)(temp_r4) + 4)) & 0x80000000) {
-                    fn_80008BA8( (u32)((struct Sig_fn_8004E278_fn_8004E278_Arg0 *)(arg3 + temp_r5)), (u32)(temp_r4), 0x2060U);
+                    fn_80008BA8( (void *)((u32)((struct Sig_fn_8004E278_fn_8004E278_Arg0 *)(arg3 + temp_r5))), (void *)((u32)(temp_r4)), 0x2060U);
                 }
             } else {
                 fn_80008BEC( (void *)((struct Sig_fn_8004E278_fn_8004E278_Arg0 *)(arg3 + temp_r5)), 0, 0x2060U);
