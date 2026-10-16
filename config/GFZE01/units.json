@@ -65840,6 +65840,23 @@
   },
   {
     "module": "movie_module",
+    "source": "rel/movie_module/fn_12_B598.c",
+    "symbols": [
+      "fn_12_B598"
+    ],
+    "status": "matching",
+    "mw_version": "GC/1.3.2",
+    "extra_cflags": [
+      "-use_lmw_stmw",
+      "on"
+    ],
+    "pool": {
+      "...rodata.0": "lbl_12_rodata_768",
+      "fzgx_pool_init_lbl_12_rodata_768": "lbl_12_rodata_768"
+    }
+  },
+  {
+    "module": "movie_module",
     "source": "rel/movie_module/fn_12_B9E8.c",
     "symbols": [
       "fn_12_B9E8"
