@@ -1090,11 +1090,14 @@ def _submit(p: Project, symbol: str, agent: str = "unknown", message: str = "",
     if not reason and getattr(res, 'pool_map', None) and src is not None:
         # the pool-retargeted object must be linkable: a label left in a section poolfix
         # emptied crashes mwldeppc, and verify would spend a full relink rejecting it
-        hazards = poolfix.link_hazards(STATE_DIR / 'work' / (key.replace(':', '__') + '.o'))
+        hazards = poolfix.link_hazards(STATE_DIR / 'work' / (key.replace(':', '__') + '.o'),
+                                       partial=sym.module != 'main')
         if hazards:
-            reason = ('POOL OBJECT CRASHES THE LINKER (mwldeppc c0000005): ' + ', '.join(hazards[:4]) +
+            reason = ('POOL OBJECT CRASHES THE LINKER (mwldeppc c0000005 / ELF_linker.c:1179): ' +
+                      ', '.join(hazards[:4]) +
                       '. Drop the file-scope definitions or layout primer that only define these '
-                      '(e.g. a .bss layout whose objects all bind by name), then submit again.')
+                      '(e.g. a .bss layout whose objects all bind by name, or initialized tables of '
+                      'function pointers that bind by name), then submit again.')
     if not reason and not unit_src and not _is_shadow(agent):
         # accepted: now it gets a unit (split range + entry); the batch verify does the one split+relink
         try:

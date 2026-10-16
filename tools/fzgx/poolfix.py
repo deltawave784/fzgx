@@ -270,11 +270,13 @@ class Elf:
         return True
 
 
-def link_hazards(obj: Path) -> List[str]:
+def link_hazards(obj: Path, partial: bool = True) -> List[str]:
     """Symbols the linker cannot place: defined in a section `apply` emptied (no ALLOC flag,
     mwld warns "Section ... is unknown" and ignores it). mwldeppc 1.3.2 crashes on them
     (c0000005 at 0043d600): fn_1_138E44's tu_section_layout left MWCC's `...bss.0` base in
-    the emptied .bss. Read-only; an empty list means the object is safe to link."""
+    the emptied .bss. Read-only; an empty list means the object is safe to link.
+    `partial`: the object goes through a relocatable link (`-r`/`-r1`: every REL module);
+    the DOL's final link tolerates relocations applied to an ignored section."""
     try:
         elf = Elf(obj.read_bytes())
     except (OSError, ValueError):
@@ -286,6 +288,16 @@ def link_hazards(obj: Path) -> List[str]:
         sec = elf.sections[s['shndx']]
         if sec['type'] in (1, 8) and not sec['flags'] & 2 and sec['name'] != '.comment':
             out.append(f"{s['name'] or '(unnamed)'} in emptied {sec['name']}")
+    # a relocation section still applied to an emptied section (an initializer table of
+    # function pointers, a `__fzgx_offset_` word table) is the second crash shape: mwldeppc
+    # 1.3.2 reports "internal linker error: File: 'ELF_linker.c' Line: 1179" in every `-r`
+    # module link (fn_7_3AB0, fn_12_B598; reproduced on the object alone, 2026-10-16)
+    for rs in elf.sections if partial else ():
+        if rs['type'] != SHT_RELA or not rs['size'] or not 0 < rs['info'] < len(elf.sections):
+            continue
+        target = elf.sections[rs['info']]
+        if target['type'] in (1, 8) and not target['flags'] & 2 and target['name'] != '.comment':
+            out.append(f"{rs['size'] // 12} relocations in {rs['name']} applied to emptied {target['name']}")
     return out
 
 
