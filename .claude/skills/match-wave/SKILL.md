@@ -64,7 +64,7 @@ The routing is deterministic; you only dispatch and report. Run from the reposit
 Repeat steps 1-5; each wave starts only after the previous one closed. Stop, report and
 wait for the user when:
 - the hash check fails, or `verify`/`fixup` reports a rejected or failed link;
-- two consecutive waves match nothing (agents, reuse, fixup and asm units together);
+- three consecutive waves match nothing (relaxed from two on 2026-10-15 at the user's request: batches now run only 6 agents) (agents, reuse, fixup and asm units together);
 - `route --skip-tried` returns no rows (escalation is the user's decision);
 - a tool call is refused for permissions, or the same tooling error repeats.
 Do not edit tooling, agent definitions or headers in an unattended run, and never start a
@@ -129,12 +129,12 @@ already failed on (checked 2026-10-05: 14 of its top 16 rows were Fable releases
 otherwise. Take 8 rows, 6 agents at a time. Close-out is the Fable batch close-out: `reuse`, `fixup` (`--budget 300`, `--budget 1200` every 4th batch and on the
 last), `verify`, hash check, `report`. Agent ids use the `sonnet-`/`opus-` prefixes so the next batch's `--escalate-from` finds them. When the
 route returns fewer than 8 rows, raise `--max-attempts` to 5, then `--max-size` to 1024. Yield is lower than
-Fable's near-miss yield (about 25% of fresher functions, measured earlier), so two consecutive fallback batches
+Fable's near-miss yield (about 25% of fresher functions, measured earlier), so three consecutive fallback batches
 matching nothing stops the run. While in fallback mode check usage before every batch; the 5-hour and weekly
 all-models caps above apply. When the Fable window resets, go back to Fable batches (they retry what Opus and
 Sonnet released).
 
-Stop conditions (in addition to those under Unattended runs): hash check fails; two consecutive batches match
+Stop conditions (in addition to those under Unattended runs): hash check fails; three consecutive batches match
 nothing (agents + reuse + fixup); the same tooling error twice; a permission refusal; `git status` not clean after a
 close-out. On every stop, call PushNotification (load via ToolSearch) with one line that leads with the reason, e.g.
 `decomp stopped: hash check failed after batch 7 (fn_xxx); tree restored`. Also push once every 5 batches with the
