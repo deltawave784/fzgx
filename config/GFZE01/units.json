@@ -23915,6 +23915,19 @@
   },
   {
     "module": "main",
+    "source": "dol/fn_8006C92C.c",
+    "symbols": [
+      "fn_8006C92C"
+    ],
+    "status": "matching",
+    "mw_version": "GC/1.3",
+    "extra_cflags": [
+      "-use_lmw_stmw",
+      "on"
+    ]
+  },
+  {
+    "module": "main",
     "source": "dol/fn_8006CCC8.c",
     "symbols": [
       "fn_8006CCC8"
@@ -66554,6 +66567,18 @@
     "mw_version": null,
     "extra_cflags": [],
     "tu": "rel/option/_prolog.c"
+  },
+  {
+    "module": "option",
+    "source": "rel/option/_prolog/fn_4_8B3C.c",
+    "symbols": [
+      "fn_4_8B3C"
+    ],
+    "status": "nonmatching",
+    "mw_version": "GC/1.3.2",
+    "extra_cflags": [],
+    "tu": "rel/option/_prolog.c",
+    "pool": true
   },
   {
     "module": "option",
