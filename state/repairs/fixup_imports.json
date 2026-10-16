@@ -16417,5 +16417,66 @@
       }
     ],
     "link": "rejected"
+  },
+  "fn_8003C1A4": {
+    "seed_symbol": "fn_8003C1A4",
+    "generator": "fzgx fixup",
+    "transform": "document verified control flow",
+    "seed": "#include \"types.h\"\n\nextern void *memset(void *, int, u32);\n\ntypedef struct JpegDec {\n    u8 pad_0[0x400];\n    u8 *ptr;            /* 0x400 */\n    u8 *scan;           /* 0x404 */\n    u8 pad_408[0x4];\n    u16 unk_40C;\n    u16 unk_40E;\n    u8 pad_410[0x4];\n    u32 unk_414;\n    u8 unk_418;\n    u8 unk_419;\n    u8 pad_41A[0x3];\n    u8 unk_41D;\n    u8 unk_41E;\n    u8 format;          /* 0x41F */\n    u8 pad_420[0x330];\n    u8 *blocks[16];     /* 0x750 */\n    u8 pad_790[0x16];\n    u16 unk_7A6;\n    u8 pad_7A8[0x2];\n    u16 unk_7AA;\n    u16 unk_7AC;\n    u16 restart;        /* 0x7AE */\n    u16 restartLeft;    /* 0x7B0 */\n    u8 pad_7B2[0x2];\n    u8 *heap;           /* 0x7B4 */\n    u8 pad_7B8[0x10];\n} JpegDec;\n\ntypedef struct JpegCtx {\n    u8 *data;\n    JpegDec *dec;\n} JpegCtx;\n\ntypedef struct JpegInfo {\n    u16 width;\n    u16 height;\n    u32 format;\n} JpegInfo;\n\nextern u8 fn_8003A1CC(JpegDec *);\nextern u8 fn_80039C40(JpegDec *);\nextern u8 fn_80039E48(JpegDec *);\nextern u8 fn_8003A3D4(JpegDec *);\n\n/* Reset the decoder work area and carve the 16 block buffers out of its heap. */\nstatic inline void JpegDecInit(JpegDec *dec) {\n    u8 i;\n    u8 *buf;\n\n    memset(dec, 0, sizeof(JpegDec));\n    dec->heap = (u8 *)dec;\n    dec->heap += 0x7E0;\n    dec->ptr = dec->scan;\n    dec->unk_414 = 0x21;\n    dec->unk_7AA = 0;\n    dec->unk_7AC = 0;\n    dec->unk_7A6 = 0;\n    dec->unk_41D = 0;\n    dec->unk_40C = 0;\n    dec->unk_40E = 0;\n    dec->unk_418 = 0;\n    dec->unk_419 = 0;\n    buf = (u8 *)(((u32)dec->heap + 0x1F) & ~0x1F);\n    dec->heap = buf + 0x800;\n    for (i = 0; i < 16; i++) {\n        dec->blocks[i] = buf + i * 0x80;\n    }\n}\n\n/* Set up a JPEG decoder over `data` and parse its markers up to the first\n * scan. The error exits share one tail, as in the retail layout. */\nint fn_8003C1A4(JpegCtx *ctx, u8 *status, JpegDec *work, u8 *data, JpegInfo *info) {\n    u16 len;\n    u8 found;\n    u8 marker;\n    u8 r;\n\n    u32 bad;\n    u32 seglen;\n    u32 k;\n    JpegDec *dec = work;\n    struct { u32 value; } j;\n\n    bad = 0;\n    switch (info->format) {\n    case 1:\n        bad = info->width % 8u;\n        bad |= info->height % 8u;\n        break;\n    case 2:\n        bad = info->width % 16u;\n        bad |= info->height % 8u;\n        break;\n    case 4:\n        bad = info->width % 16u;\n        bad |= info->height % 16u;\n        break;\n    }\n    if (bad != 0 || info->width > 0x400 || info->height > 0x400) {\n        goto bad_size; /* shared error tail */\n    }\n    ctx->data = data;\n    ctx->dec = dec;\n    if (dec == NULL) {\n        goto no_buffer; /* shared error tail */\n    }\n    JpegDecInit(dec);\n    dec->ptr = ctx->data;\n    found = 0;\n    do {\n        if (*dec->ptr++ != 0xFF) {\n            goto bad_marker; /* shared error tail */\n        }\n        while (*dec->ptr == 0xFF) {\n            dec->ptr++;\n        }\n        marker = *dec->ptr++;\n        if (marker <= 0xD7) {\n            if (marker == 0xC4) {\n                r = fn_8003A1CC(dec);\n                if (r != 0) {\n                    goto failed; /* shared error tail */\n                }\n            } else if (marker == 0xC0) {\n                r = fn_80039C40(dec);\n                dec->format = info->format;\n                if (r != 0) {\n                    goto failed; /* shared error tail */\n                }\n            } else {\n                *status = 5;\n                return 0;\n            }\n        } else if (marker >= 0xD8 && marker <= 0xDF) {\n            if (marker == 0xDD) {\n                dec->unk_41E = 1;\n                dec->ptr += 2;\n                dec->restart = (dec->ptr[0] << 8) | dec->ptr[1];\n                dec->ptr += 2;\n                dec->restartLeft = dec->restart;\n            } else if (marker == 0xDB) {\n                r = fn_80039E48(dec);\n                if (r != 0) {\n                    goto failed; /* shared error tail */\n                }\n            } else if (marker == 0xDA) {\n                r = fn_8003A3D4(dec);\n                if (r != 0) {\n                    goto failed; /* shared error tail */\n                }\n                found = 1;\n                dec->scan = dec->ptr;\n            } else if (marker != 0xD8) {\n                *status = 5;\n                return 0;\n            }\n        } else if (marker < 0xE0) {\n        } else if (marker >= 0xE0 && marker <= 0xEF) {\n            len = (dec->ptr[0] << 8) | dec->ptr[1];\n            for (j.value = 0; j.value < len; j.value++) {\n                dec->ptr++;\n            }\n        } else if (marker == 0xFE) {\n            seglen = (dec->ptr[0] << 8) | dec->ptr[1];\n            dec->ptr += 2;\n            for (k = 0; k < seglen - 2; k++) {\n                dec->ptr++;\n            }\n        } else {\n            *status = 5;\n            return 0;\n        }\n    } while (!found);\n    *status = 0;\n    return 1;\n\nno_buffer:\n    *status = 2;\n    goto fail;\nbad_marker:\n    *status = 1;\n    goto fail;\nfailed:\n    *status = r;\n    goto fail;\nbad_size:\n    *status = 13;\nfail:\n    return 0;\n}\n",
+    "seed_sha256": "a0d8839051dcef0c75423342ffc11788dc2f4a6600bd5166cbb29ef6219663f3",
+    "generated_sha256": "1dcb94fa1c2c74a788c2a1eaaec4838214dcfd494e3b64c84e65976926698e8b",
+    "generated_source": "#include \"types.h\"\n\nextern void *memset(void *, int, u32);\n\ntypedef struct JpegDec {\n    u8 pad_0[0x400];\n    u8 *ptr;            /* 0x400 */\n    u8 *scan;           /* 0x404 */\n    u8 pad_408[0x4];\n    u16 unk_40C;\n    u16 unk_40E;\n    u8 pad_410[0x4];\n    u32 unk_414;\n    u8 unk_418;\n    u8 unk_419;\n    u8 pad_41A[0x3];\n    u8 unk_41D;\n    u8 unk_41E;\n    u8 format;          /* 0x41F */\n    u8 pad_420[0x330];\n    u8 *blocks[16];     /* 0x750 */\n    u8 pad_790[0x16];\n    u16 unk_7A6;\n    u8 pad_7A8[0x2];\n    u16 unk_7AA;\n    u16 unk_7AC;\n    u16 restart;        /* 0x7AE */\n    u16 restartLeft;    /* 0x7B0 */\n    u8 pad_7B2[0x2];\n    u8 *heap;           /* 0x7B4 */\n    u8 pad_7B8[0x10];\n} JpegDec;\n\ntypedef struct JpegCtx {\n    u8 *data;\n    JpegDec *dec;\n} JpegCtx;\n\ntypedef struct JpegInfo {\n    u16 width;\n    u16 height;\n    u32 format;\n} JpegInfo;\n\nextern u8 fn_8003A1CC(JpegDec *);\nextern u8 fn_80039C40(JpegDec *);\nextern u8 fn_80039E48(JpegDec *);\nextern u8 fn_8003A3D4(JpegDec *);\n\n/* Reset the decoder work area and carve the 16 block buffers out of its heap. */\nstatic inline void JpegDecInit(JpegDec *dec) {\n    u8 i;\n    u8 *buf;\n\n    memset(dec, 0, sizeof(JpegDec));\n    dec->heap = (u8 *)dec;\n    dec->heap += 0x7E0;\n    dec->ptr = dec->scan;\n    dec->unk_414 = 0x21;\n    dec->unk_7AA = 0;\n    dec->unk_7AC = 0;\n    dec->unk_7A6 = 0;\n    dec->unk_41D = 0;\n    dec->unk_40C = 0;\n    dec->unk_40E = 0;\n    dec->unk_418 = 0;\n    dec->unk_419 = 0;\n    buf = (u8 *)(((u32)dec->heap + 0x1F) & ~0x1F);\n    dec->heap = buf + 0x800;\n    for (i = 0; i < 16; i++) {\n        dec->blocks[i] = buf + i * 0x80;\n    }\n}\n\n/* Set up a JPEG decoder over `data` and parse its markers up to the first\n * scan. The error exits share one tail, as in the retail layout. */\nint fn_8003C1A4(JpegCtx *ctx, u8 *status, JpegDec *work, u8 *data, JpegInfo *info) {\n    struct { u16 value; } len;\n    u8 found;\n    u8 marker;\n    u8 r;\n\n    u32 bad;\n    u32 seglen;\n    u32 k;\n    JpegDec *dec = work;\n    struct { u32 value; } j;\n\n    bad = 0;\n    switch (info->format) {\n    case 1:\n        bad = info->width % 8u;\n        bad |= info->height % 8u;\n        break;\n    case 2:\n        bad = info->width % 16u;\n        bad |= info->height % 8u;\n        break;\n    case 4:\n        bad = info->width % 16u;\n        bad |= info->height % 16u;\n        break;\n    }\n    if (bad != 0 || info->width > 0x400 || info->height > 0x400) {\n        goto bad_size; /* shared error tail */\n    }\n    ctx->data = data;\n    ctx->dec = dec;\n    if (dec == NULL) {\n        goto no_buffer; /* shared error tail */\n    }\n    JpegDecInit(dec);\n    dec->ptr = ctx->data;\n    found = 0;\n    do {\n        if (*dec->ptr++ != 0xFF) {\n            goto bad_marker; /* shared error tail */\n        }\n        while (*dec->ptr == 0xFF) {\n            dec->ptr++;\n        }\n        marker = *dec->ptr++;\n        if (marker <= 0xD7) {\n            if (marker == 0xC4) {\n                r = fn_8003A1CC(dec);\n                if (r != 0) {\n                    goto failed; /* shared error tail */\n                }\n            } else if (marker == 0xC0) {\n                r = fn_80039C40(dec);\n                dec->format = info->format;\n                if (r != 0) {\n                    goto failed; /* shared error tail */\n                }\n            } else {\n                *status = 5;\n                return 0;\n            }\n        } else if (marker >= 0xD8 && marker <= 0xDF) {\n            if (marker == 0xDD) {\n                dec->unk_41E = 1;\n                dec->ptr += 2;\n                dec->restart = (dec->ptr[0] << 8) | dec->ptr[1];\n                dec->ptr += 2;\n                dec->restartLeft = dec->restart;\n            } else if (marker == 0xDB) {\n                r = fn_80039E48(dec);\n                if (r != 0) {\n                    goto failed; /* shared error tail */\n                }\n            } else if (marker == 0xDA) {\n                r = fn_8003A3D4(dec);\n                if (r != 0) {\n                    goto failed; /* shared error tail */\n                }\n                found = 1;\n                dec->scan = dec->ptr;\n            } else if (marker != 0xD8) {\n                *status = 5;\n                return 0;\n            }\n        } else if (marker < 0xE0) {\n        } else if (marker >= 0xE0 && marker <= 0xEF) {\n            len.value = (dec->ptr[0] << 8) | dec->ptr[1];\n            for (j.value = 0; j.value < len.value; j.value++) {\n                dec->ptr++;\n            }\n        } else if (marker == 0xFE) {\n            seglen = (dec->ptr[0] << 8) | dec->ptr[1];\n            dec->ptr += 2;\n            for (k = 0; k < seglen - 2; k++) {\n                dec->ptr++;\n            }\n        } else {\n            *status = 5;\n            return 0;\n        }\n    } while (!found);\n    *status = 0;\n    return 1;\n\nno_buffer:\n    *status = 2;\n    goto fail; /* Keep the verified branch to fail. */\nbad_marker:\n    *status = 1;\n    goto fail; /* Keep the verified branch to fail. */\nfailed:\n    *status = r;\n    goto fail; /* Keep the verified branch to fail. */\nbad_size:\n    *status = 13;\nfail:\n    return 0;\n}\n",
+    "compiler": "GC/1.2.5n",
+    "flags": "",
+    "source": "dol/fn_8003C1A4.c",
+    "bytes": 1324,
+    "headers_sha256": "fae2435a8fa7d9aa315a83bba41165189d6b656b9f748898f189942fa2f550a4",
+    "oracle_sha256": "6ba33e56fa67debd8707b4d3865d77126f31f235eb67d7c9268c08735731559a",
+    "recipe": [
+      {
+        "label": "regalloc: one-field carrier len",
+        "input_sha256": "a0d8839051dcef0c75423342ffc11788dc2f4a6600bd5166cbb29ef6219663f3",
+        "output_sha256": "ee18f6161936f06562ae6d1f4562cb5f47f21b07654f63a5521a351575823677",
+        "input_symbol": "fn_8003C1A4",
+        "output_symbol": "fn_8003C1A4",
+        "edits": [
+          [
+            1862,
+            1865,
+            "struct { u16 value; }"
+          ],
+          [
+            4317,
+            4397,
+            ".value = (dec->ptr[0] << 8) | dec->ptr[1];\n            for (j.value = 0; j.value < len.value"
+          ]
+        ]
+      },
+      {
+        "label": "document verified control flow",
+        "input_sha256": "ee18f6161936f06562ae6d1f4562cb5f47f21b07654f63a5521a351575823677",
+        "output_sha256": "1dcb94fa1c2c74a788c2a1eaaec4838214dcfd494e3b64c84e65976926698e8b",
+        "input_symbol": "fn_8003C1A4",
+        "output_symbol": "fn_8003C1A4",
+        "edits": [
+          [
+            4862,
+            4862,
+            " /* Keep the verified branch to fail. */"
+          ],
+          [
+            4906,
+            4906,
+            " /* Keep the verified branch to fail. */"
+          ],
+          [
+            4946,
+            4946,
+            " /* Keep the verified branch to fail. */"
+          ]
+        ]
+      }
+    ],
+    "link": "pending"
   }
 }
