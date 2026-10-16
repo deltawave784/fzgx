@@ -3350,7 +3350,6 @@ void fn_3_268D0(fn_3_268D0_CustomizeObject *self) {
 /* fzgx:end fn_3_268D0 */
 
 /* fzgx:begin fn_3_273F4 */
-
 struct Sig_fn_1_8D1EC_fn_1_8D210_car;
 
 /* common text setup before every line of the panel */

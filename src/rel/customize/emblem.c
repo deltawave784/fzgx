@@ -328,7 +328,6 @@ void fn_3_13508(void) {
 
 /* fzgx:begin fn_3_137AC */
 extern struct fn_3_137AC_lbl_3_bss_A17D0 lbl_3_bss_A17D0;
-extern f32 lbl_3_rodata_4E0[22];
 extern FontDrawPacket lbl_1_rodata_26F8;
 extern void fn_1_133DBC(void *);
 extern void fn_1_134AD4(void);

@@ -1,5 +1,7 @@
 #include "types.h"
+#include "rel/customize/globals.h"
 #include "rel/customize/customize.h"
+
 
 
 typedef struct {
