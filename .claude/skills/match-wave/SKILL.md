@@ -90,13 +90,13 @@ One batch = steps 1-5 above with these changes:
   first, never tried by Fable, one per clone family). Dispatch each row with `subagent_type: matcher-large` and
   `model: fable`, prompt `SYMBOL=<symbol> AGENT_ID=fable-<symbol>-<YYYYMMDD><batch letter>` (3 Fable agents: raised 2026-10-15 from 2 to 3 from batch 166 at the user's request; 2026-10-14 from 1 to 2; 2026-10-13 back from 2 to 1 at the user's request (2 for batches 135-138); 2026-10-12 from 2 to 1;
   2026-10-06 from 8 to 4 and 2026-10-08 from 4 to 2 because Fable was spent too fast).
-- Alongside them, in the same batch, run **3 Opus agents** (2026-10-10, user request; cut from 6 to 5 on 2026-10-13, to 4 on 2026-10-15, to 3 from batch 169): pick with
+- Alongside them, in the same batch, run **1 Opus agent** (2026-10-10, user request; cut from 6 to 5 on 2026-10-13, to 4 on 2026-10-15, to 3 from batch 169, to 1 from batch 176): pick with
   `uv run tools/fzgx.py route --easy --tier opus --max-attempts 3 --json --limit 8` (every module, any size: clone B
   (Codex) stopped on 2026-10-12 and its slice, functions over 768 B scoring under 85% that no Claude tier tried,
   is open to this loop again; `--easy` still takes the smallest first, so big ones come up last; see
   docs/COLLABORATION.md), drop the Fable
-  rows and any second row of the same clone family, take 3, dispatch with `subagent_type: matcher-large` and
-  `model: opus`, ids `opus-<symbol>-<YYYYMMDD><batch letter>`. All 6 agents run at once (3 Fable + 3 Opus).
+  rows and any second row of the same clone family, take 1, dispatch with `subagent_type: matcher-large` and
+  `model: opus`, ids `opus-<symbol>-<YYYYMMDD><batch letter>`. All 4 agents run at once (3 Fable + 1 Opus).
 - Close the batch: `reuse --max-size 2048`, then for each module that had a release in the batch
   `fixup --module <module> --min-percent 90 --apply --budget 700 --output .fzgx/fixup/<batch>-<module>` (1-hour shell
   timeout each; if one times out, fall back to `fixup <symbol> --apply` on that batch's 90%+ releases), then `verify`,
@@ -104,7 +104,7 @@ One batch = steps 1-5 above with these changes:
   the agent's id), `lint`, `gate` and `report`; append a line to `.fzgx/reports/waves.md` that includes the code
   percentage; commit `state/progress.csv`.
 - If `route --fable --min-percent 85` returns no row in any module, stop and ask (below 85 the match rate is
-  unmeasured). If `route --easy` runs short of 3 Opus rows, raise `--max-attempts` to 5, then run with fewer;
+  unmeasured). If `route --easy` runs short of 1 Opus row, raise `--max-attempts` to 5, then run with fewer;
   never raise the Opus `--max-size` above 768 while clone B works its slice.
 
 Before EVERY batch check usage with the `mcp__ccd_session_mgmt__get_usage` tool (load it with ToolSearch). Changed
