@@ -294,7 +294,14 @@ def verdict_text(a: dict) -> str:
     if kinds <= {'local', 'order'}:
         hint = 'declaration order (solver)'
     elif 'shadow' in kinds:
-        hint = 'structural: declared pointer/de-CSE for the shadow web'
+        # measured 2026-10-15 (fn_1_1188CC, fn_1_11B4E4, fn_1_7B558, fn_3_20748 captures): compiler
+        # objects are numbered above every local in reverse creation order (loop order), split
+        # regions of a reused counter are created after every induction shadow, and a declared
+        # pointer removes the shadow but shifts the degree phase of K-boundary webs; a local can
+        # only pass a shadow when the shadow's access is spelled through a declared pointer local
+        hint = ('structural: shadow webs are numbered above every local in reverse creation order; '
+                'declaration order, counter reuse and fresh counters cannot pass one (only a declared '
+                'pointer local replacing the indexed access, at the cost of the neighbours\' degree phase)')
     elif 'temp' in kinds:
         hint = 'expression/statement order (lowering temporary)'
     elif 'parameter' in kinds:
@@ -387,7 +394,9 @@ def pointer_locals(body: str, name: str, positions: int = 3) -> List[Tuple[str, 
         lbody = inner[b0:b1]
         # element accesses by the counter: base[counter] (member or whole element)
         shapes = {}
-        for am in re.finditer(rf'\b(\w+)\s*\[\s*{re.escape(counter)}\s*\]', lbody):
+        # a bare local base only: `obj->nodes[c]` names the member, not the local `nodes`
+        # (fn_1_1262A4: rewriting it gave `obj->(*nodes_p)`, three uncompilable candidates)
+        for am in re.finditer(rf'(?<![\w.>])(\w+)\s*\[\s*{re.escape(counter)}\s*\]', lbody):
             shapes.setdefault(am.group(1), []).append(am)
         for am in re.finditer(rf'\b(\w+)->(\w+)\s*\[\s*{re.escape(counter)}\s*\]', lbody):
             shapes.setdefault(am.group(1) + '->' + am.group(2), []).append(am)

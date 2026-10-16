@@ -113,6 +113,25 @@ file from what actually unblocked functions; keep each item one or two lines.
   `static inline s32 k(s32 v) { return v; }` folds and changes nothing (measured).
   `fixup_source.constant_inline_parameters` (sweep family `inlineparam`) wraps the body, or the
   code from the constant assignment on, in `NAME_fzgx_inl` taking the constant.
+- **Induction shadows and loop counters** (GC/1.3.2 captures, 2026-10-15: fn_1_1188CC,
+  fn_1_11B4E4, fn_1_7B558, fn_3_20748). Compiler objects (`@N`: strength-reduced pointers and
+  byte offsets, CSE recomputes, promoted one-member struct wrappers, split regions) are numbered
+  above every declared local in *reverse creation order*: loop 5's shadow sits above loop 7's,
+  and the split regions of one counter reused across loops (`i` for loops 1, 3, 5) are created
+  after every induction shadow, so they land just above the locals (v50-51 under shadows at
+  v55-60) and compile identically to fresh per-loop counters. Consequences, each measured:
+  declaration order, counter reuse and fresh counters cannot make a counter claim a callee-saved
+  register before a shadow of a *later* loop (fn_1_1188CC: retail i1=r29/i3=r30 before the
+  loop-5/7 shadows take r26; no single or paired renumbering of the captured graph reproduces
+  it); a declared pointer local stepped in the latch removes the shadow (loop 5's inner loop
+  matched) but changes the first-scan degree of its K-boundary neighbours (`i`/`node`/`model` at
+  degree 30-35 with K=29), which moves the whole spill-phase order (`rope` r27 -> r28); a
+  declared `u16 *` over `n->links[k]` lowers as `addi rP, rN, 4; lhz 0(rP)` where retail keeps
+  the base copy `mr rP, rN; lhz 4(rP)` (so retail's is the shadow); unwrapping a struct-wrapped
+  counter loses the `mr rOff, rI` shadow initialisation (fn_1_7B558); replacing a declared
+  `s32 iy = i` by `(s32)i` turns it into a CSE object coloured before the pool base
+  (fn_3_20748, 99.5 -> 99.1). The capture verdict now reports this law for shadow blockers;
+  `fixup_capture.pointer_locals` is the only lever and it is already tried at three positions.
 
 ## Selection panel evidence (2026-09-15)
 
