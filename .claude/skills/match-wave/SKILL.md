@@ -67,6 +67,15 @@ wait for the user when:
 - three consecutive waves match nothing (relaxed from two on 2026-10-15 at the user's request: batches now run only 6 agents) (agents, reuse, fixup and asm units together);
 - `route --skip-tried` returns no rows (escalation is the user's decision);
 - a tool call is refused for permissions, or the same tooling error repeats.
+
+**Automatic tooling rounds before stopping** (2026-10-16, user request): when the stop is tooling-fixable,
+run a tooling round on it first (Tooling rounds below) instead of stopping. Tooling-fixable means: a
+rejected/failed link reported by `verify`/`fixup` with the tree restored and the 16 hashes passing; the same
+tooling error repeating; a tool hang or crash; three consecutive zero-match batches (the round targets the
+most common blocker of those batches' releases). Up to **2 automatic rounds per stop cause**; if the second
+round keeps no change, or the cause recurs after a kept change, or a round fails its gate, stop and notify.
+A failing hash check with the tree NOT restored, a permission refusal, or `git status` not clean always stops
+immediately. Log every automatic round like a scheduled one; it does not reset `round_interval`.
 Do not edit tooling, agent definitions or headers in an unattended run, and never start a
 type-recovery pass or the librarian except as the scheduled pass in 'Librarian passes' below. Commit only what the steps above commit.
 
@@ -134,7 +143,8 @@ matching nothing stops the run. While in fallback mode check usage before every 
 all-models caps above apply. When the Fable window resets, go back to Fable batches (they retry what Opus and
 Sonnet released).
 
-Stop conditions (in addition to those under Unattended runs): hash check fails; three consecutive batches match
+Stop conditions (in addition to those under Unattended runs; tooling-fixable ones first get up to 2 automatic
+tooling rounds, see 'Automatic tooling rounds before stopping'): hash check fails; three consecutive batches match
 nothing (agents + reuse + fixup); the same tooling error twice; a permission refusal; `git status` not clean after a
 close-out. On every stop, call PushNotification (load via ToolSearch) with one line that leads with the reason, e.g.
 `decomp stopped: hash check failed after batch 7 (fn_xxx); tree restored`. Also push once every 5 batches with the
