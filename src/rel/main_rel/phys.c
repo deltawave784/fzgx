@@ -1095,6 +1095,48 @@ void * fn_1_E54A8(s16 type, s16 index) {
 }
 /* fzgx:end fn_1_E54A8 */
 
+/* fzgx:begin fn_1_E5568 */
+typedef struct { u8 pad[0x138]; u64 flags; u8 tail[0x68]; } E5568Entry;
+static inline s16 E5568Count(s16 id, Obj_1_bss_7AE88 *p) {
+ switch(id) {
+ case 0: return p->unk_4;
+ case 1: return p->unk_C;
+ case 2: return p->unk_14;
+ case 3: return p->unk_1C;
+ case 4: return p->unk_24;
+ case 5: return p->unk_2C;
+ default: return -1;
+ }
+}
+static inline E5568Entry *E5568Base(s16 id, Obj_1_bss_7AE88 *p) {
+ switch(id) {
+ case 0: return (E5568Entry *)p->unk_0;
+ case 1: return (E5568Entry *)p->unk_8;
+ case 2: return (E5568Entry *)p->unk_10;
+ case 3: return (E5568Entry *)p->unk_18;
+ case 4: return (E5568Entry *)p->unk_20;
+ case 5: return (E5568Entry *)p->unk_28;
+ default: return 0;
+ }
+}
+static inline s16 E5568FlagCount(s16 id, Obj_1_bss_7AE88 *p, u64 mask, u64 zero) {
+ s32 i;
+ s16 count = 0;
+ s16 n = E5568Count(id, p);
+ E5568Entry *base = E5568Base(id, p);
+ for(i = 0; (s16)i < n; i++, base++) {
+  if((base->flags & mask) != zero) count++;
+ }
+ return count;
+}
+s16 fn_1_E5568(s16 id) {
+ Obj_1_bss_7AE88 *p = &lbl_1_bss_7AE88;
+ s16 total = E5568Count(id, p);
+ s16 count = E5568FlagCount(id, p, 0x800000000ULL, 0);
+ return count == -1 ? count : (s16)(total - count);
+}
+/* fzgx:end fn_1_E5568 */
+
 /* fzgx:begin fn_1_E5724 */
 s16 fn_1_E5724(void *base) {
     return *(s16 *)((char *)base + 0x8);

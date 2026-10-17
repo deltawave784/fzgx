@@ -7553,3 +7553,6 @@ rel/main_rel/ghost/fn_1_EC910.c:
 
 rel/main_rel/replay/fn_1_F2E50.c:
 	.text       start:0x000F2E50 end:0x000F2EB8 align:4
+
+rel/main_rel/phys/fn_1_E5568.c:
+	.text       start:0x000E5568 end:0x000E5724 align:4
