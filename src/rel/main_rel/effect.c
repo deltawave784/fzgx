@@ -1282,6 +1282,71 @@ void fn_1_5AC48(fn_1_5AC48_Effect *effect) {
 }
 /* fzgx:end fn_1_5AC48 */
 
+/* fzgx:begin fn_1_5AF28 noprologue */
+#include "dolphin/types.h"
+#include "game/main_rel/camera_types.h"
+#include "psvec.h"
+
+#pragma fp_contract on
+
+typedef struct DrawModel {
+    u8 pad0[0x14];
+    f32 scale;
+} DrawModel;
+typedef struct DrawObject {
+    u8 pad0[0x1C];
+    f32 x, y, z;
+    f32 radius;
+    u8 pad2C[8];
+    DrawModel *model;
+} DrawObject;
+typedef struct DrawVector { f32 x, y, z; } DrawVector;
+typedef struct DrawMatrix { f32 m[3][4]; } DrawMatrix;
+
+extern s32 fn_1_54E34(void *, f32);
+extern f32 lbl_1_rodata_2954[2];
+extern f32 lbl_1_rodata_2978[4];
+extern void fn_1_5621C(f32, f32, f32, f32);
+extern void fn_1_56000(u8, u8, u8);
+extern void fn_1_557C4(void *);
+extern void lbl_8006D9D8(CamEntry *);
+extern void lbl_8006D7B0(void);
+extern void lbl_8006E14C(f32);
+extern f32 lbl_8006D0B4(f32);
+extern void lbl_8006DB74(void *);
+extern void lbl_8006D848(f32);
+extern void lbl_8006DFC4(void *);
+
+void fn_1_5AF28(DrawObject *object) {
+    DrawModel *model = object->model;
+    DrawVector position;
+    DrawMatrix matrix;
+    f32 distance;
+    f32 one;
+    lbl_8006D9D8((CamEntry *)((u8 *)object + 0x3C));
+    lbl_8006D7B0();
+    lbl_8006E14C(object->radius / model->scale);
+    if (fn_1_54E34((u8 *)model + 8, object->radius)) {
+        psvec_set(&position, *(f32 *)(0xE0000000 + 0x2C), *(f32 *)(0xE0000000 + 0x1C), *(f32 *)(0xE0000000 + 0x0C));
+        distance = position.x * position.x;
+        distance = __fmadds(position.y, position.y, distance);
+        distance = __fmadds(position.z, position.z, distance);
+        distance = lbl_8006D0B4(distance);
+        if (distance > lbl_1_rodata_2954[0] + object->radius) {
+            lbl_8006DB74(&matrix);
+            lbl_8006D848((distance - object->radius) / distance);
+            lbl_8006DFC4(&matrix);
+        }
+        fn_1_5621C(object->x, object->y, object->z, lbl_1_rodata_2978[0]);
+        fn_1_56000(1, 3, 0);
+        fn_1_557C4(model);
+        one = lbl_1_rodata_2978[0];
+        fn_1_5621C(one, one, one, one);
+        fn_1_56000(1, 3, 1);
+    }
+}
+/* fzgx:end fn_1_5AF28 */
+
 /* fzgx:begin fn_1_5B074 */
 // fn_1_5B074: empty in retail (single blr).
 void fn_1_5B074(void) {
@@ -8427,6 +8492,102 @@ void fn_1_65E8C(Effect65E8C *eff) {
     lbl_8006DB74(eff->unk_B8);
 }
 /* fzgx:end fn_1_65E8C */
+
+/* fzgx:begin fn_1_660EC noprologue */
+#include "dolphin/types.h"
+#include "game/main_rel/camera_types.h"
+#include "rel/main_rel/effect.h"
+
+typedef struct {
+    u8 pad_0[0xec];
+    f32 matrix[3][4];
+} Fn660ECModel;
+typedef struct {
+    u8 pad_0[0x10];
+    s32 timer;
+    u8 pad_14[0x24];
+    Fn660ECModel *model;
+    CamEntry position;
+} Fn660ECObject;
+typedef struct {
+    u8 pad_0[0x1f0];
+    void *model;
+} Fn660ECManager;
+typedef struct { f32 m[3][4]; } Fn660ECMatrix;
+
+extern u32 lbl_801A66A0;
+extern void lbl_8006D7F4(f32, f32, f32);
+extern void lbl_8006DB74(void *);
+extern void lbl_8006D9D8(CamEntry *);
+extern void lbl_8006DFC4(void *);
+extern void mathutil_mtxA_rotate_y(s32);
+extern void mathutil_mtxA_rotate_x(s32);
+extern void mathutil_mtxA_rotate_z(s32);
+extern void lbl_8006E14C(f32);
+extern void fn_1_55FC4(f32);
+extern void fn_80072558(void);
+extern void fn_1_55FF0(f32);
+extern u32 fn_1_56018(s32);
+extern void fn_1_560F0(s32, void *);
+extern void fn_1_55210(void *);
+
+extern void fzgx_pool_f32(f32);
+extern void fzgx_pool_f64(f64);
+#pragma section code_type ".fzgxpool"
+void fzgx_pool_primer(void)
+{
+    fzgx_pool_f32(60.0f);
+    fzgx_pool_f32(0.1f);
+    fzgx_pool_f32(32767.0f);
+    fzgx_pool_f32(0.05f);
+    fzgx_pool_f64(0.07);
+    fzgx_pool_f32(20000.0f);
+    fzgx_pool_f64(4503599627370496.0);
+    fzgx_pool_f32(1.0f);
+    fzgx_pool_f32(-0.03f);
+    fzgx_pool_f64(15.0);
+    fzgx_pool_f64(4503601774854144.0);
+    fzgx_pool_f64(1.5);
+    fzgx_pool_f64(0.5);
+    fzgx_pool_f32(0.0f);
+    fzgx_pool_f32(0.5f);
+}
+#pragma section code_type ".text"
+
+const u32 fzgx_pool_table_58[218] = {
+0x41000000, 0x437F0000, 0x41700000, 0x3E4CCCCD, 0x3DA3D70A, 0x3E800000, 0x3F7AE148, 0x3F7D70A4, 0x42200000, 0x41A00000, 0x3FC00000, 0x3EE66666, 3221225472U /* -2.0f */, 0x3DAAAAAB, 0x3E19999A, 0x3E000000, 0xBECCCCCD, 0xBE99999A, 0x40000000, 0x437A0000, 0x3FE33333, 0x33333333, 0x3FD99999, 0x9999999A, 0x3E99999A, 0xBB83126F, 0x3C888889, 0x47800000, 0x45800000, 0x3F75C28F, 0x3ECCCCCD, 0x3D4ED917, 0x3D50E560, 0x3F733333, 0x3F666666, 0x00000000, 0x4062C000, 0x00000000, 0x40240000, 0x00000000, 0x40080000, 0x00000000, 0x00000000, 0x3DCCCCCD, 3222903194U /* -2.4f */, 0x40A00000, 0x3FF33333, 0x33333333, 0x3FB99999, 0x9999999A, 0x41200000, 0x41900000, 0x3FE66666, 0x66666666, 0x40490000, 0x00000000, 0x00000000, 0x3DCCCCCD, 3222903194U /* -2.4f */, 0x41980000, 0x40380000, 0x00000000, 0x3F3504F3, 0x00000000, 0x00000000, 0x00000000, 0x406FE000, 0x00000000, 0x3FECCCCC, 0xCCCCCCCD, 0x3B83126F, 0x3A83126F, 0x3C23D70A, 0xB4000000, 0x43700000, 0x42C80000, 0x43960000, 0x43480000, 0x461C4000, 0x459C4000, 0x434C0000, 0x42AA0000, 0xBD4CCCCD, 0x40800000, 0xBD75C28F, 0xBF000000, 0xBF800000, 0x00000000, 0x3FC99999, 0x9999999A, 0x44000000, 0x3CF5C28F, 0x424C0000, 0x42B00000, 3221749760U /* -3.0 double, high word */, 0x00000000, 0x40900000, 0x40C00000, 0x3F8CCCCD, 0x00000000, 0x3F666666, 0xBF8CCCCD, 0x00000000, 0x3F666666, 0x00000000, 0x00000000, 0xBF333333, 0x00000000, 0x00000000, 0x00000000, 0x3F99999A, 0x42480000, 0x3CCCCCCD, 0x3F4CCCCD, 0x3D800000, 0x40200000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 3225419776U /* -3.0f */, 0x00000000, 0x3F847AE1, 0x47AE147B, 0x3FEE147B, 0x00000000, 0x406A4000, 0x00000000, 0x3F947AE1, 0x47AE147B, 0x3F689374, 0xBC6A7EFA, 0xBFE66666, 0x60000000, 0xBF9EB851, 0xE0000000, 0x3FC20C49, 0xBA5E353F, 0x3FE66666, 0x60000000, 0x3FF00000, 0x00000000, 0x3FD33333, 0x33333333, 0x3FE99999, 0xA0000000, 0x40280000, 0x00000000, 0xBF666666, 0x3D8F5C29, 0x3F19999A, 0x41F00000, 0x3F87AE14, 0x41E00000, 0x40140000, 0x00000000, 0x40600000, 0x43340000, 0xFFFFFFFF, 0xFFFFFFFF, 0x403E0000, 0x00000000, 0x3F9EB851, 0xEB851EB8, 0x3F70A3D7, 0xBDA3D70A, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x43080000, 0x3C03126F, 0x3B94F209, 0x3C6A0EA1, 0x44FA0000, 0x447A0000, 0x40066666, 0x00000000, 0x00000000, 0x00000000, 0x3FA47AE1, 0x47AE147B, 0x3FEF5C28, 0xF5C28F5C, 0x3FEEB851, 0xEB851EB8, 0x3F999999, 0x9999999A, 0xBFF00000, 0x00000000, 0x3FE99999, 0x9999999A, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0xBD23D70A, 0x00000000, 0x40000000, 0x00000000, 0x40E00000, 0x00000000, 0x3FED70A3, 0xDE666666, 0xBF947AE1, 0x47AE147B, 0xBCCCCCCD, 0x00000000, 0x00000000, 0x00000000, 0x43360B61, 0x44400000
+};
+
+void fn_1_660EC(Fn660ECObject *obj)
+{
+    Fn660ECMatrix mtx;
+    f32 alpha;
+    Fn660ECModel *model = obj->model;
+    void *drawModel;
+
+    if (obj->timer < 20) {
+        alpha = 0.05f * (f32)obj->timer;
+    } else {
+        alpha = 1.0f;
+    }
+    lbl_8006D7F4((f32)(lbl_801A66A0 % 30) / 29.0f, 0.0f, 0.0f);
+    lbl_8006DB74(&mtx);
+    drawModel = ((Fn660ECManager *)lbl_1_bss_38458->unk_8)->model;
+    lbl_8006D9D8(&obj->position);
+    lbl_8006DFC4(&model->matrix);
+    mathutil_mtxA_rotate_y(*(s16 *)((u8 *)obj + 0x56));
+    mathutil_mtxA_rotate_x(*(s16 *)((u8 *)obj + 0x54));
+    mathutil_mtxA_rotate_z(*(s16 *)((u8 *)obj + 0x58));
+    lbl_8006E14C(0.5f);
+    fn_1_55FC4(0.5f);
+    fn_80072558();
+    fn_1_55FF0(alpha);
+    fn_1_56018(1);
+    fn_1_560F0(0, &mtx);
+    fn_1_55210(drawModel);
+    fn_1_56018(0);
+}
+/* fzgx:end fn_1_660EC */
 
 /* fzgx:begin fn_1_66254 */
 typedef struct {
