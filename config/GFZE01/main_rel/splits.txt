@@ -7718,3 +7718,6 @@ rel/main_rel/sel_static_disp/fn_1_141360.c:
 
 rel/main_rel/font/fn_1_4B8DC.c:
 	.text       start:0x0004B8DC end:0x0004BA24 align:4
+
+rel/main_rel/font/fn_1_53E40.c:
+	.text       start:0x00053E40 end:0x00053FE4 align:4

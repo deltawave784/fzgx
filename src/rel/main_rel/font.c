@@ -3533,6 +3533,124 @@ void fn_1_535A0(FrameColor color, f32 x, f32 y, f32 z, f32 width, f32 height, f3
 }
 /* fzgx:end fn_1_535A0 */
 
+/* fzgx:begin fn_1_53E40 noprologue */
+#include "types.h"
+#include "font.h"
+
+typedef struct FontColor {
+    u8 r, g, b, a;
+} FontColor;
+
+extern void fn_1_496FC(f32, f32);
+extern void fn_1_4954C(f32);
+extern void fn_1_4955C(f32, f32);
+extern void fn_1_495C8(u8);
+extern f32 fn_1_4B068(const char *);
+extern f32 fn_1_4B090(const char *);
+extern void fn_1_50190(void *, f32, f32, f32, f32, f32, f32);
+
+#pragma pool_data on
+const FontDrawPacket lbl_1_rodata_26F8 = {
+    0, 0.0f, 0.0f, 0.1f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0, 0, 1.0f, 5, 0.0f,
+    { 0xff, 0xff, 0xff, 0xff }, { 0, 0, 0, 0 }, 0, 0, 0, 0, 0, 0, 0
+};
+
+#pragma section code_type ".fzgxpool"
+/* Volatile sinks preserve the shared translation unit's literal-pool order. */
+void fzgx_shared_pool_primer_a(volatile f32 *f, volatile f64 *d) {
+    f[0] = 0.0f;
+    f[1] = 1.0f;
+    d[0] = 4503599627370496.0;
+    f[2] = 55.0f;
+    f[3] = 0.1f;
+    f[4] = 90000.0f;
+    f[5] = 480.0f;
+    f[6] = 640.0f;
+    d[1] = 4503601774854144.0;
+    d[2] = 0.5;
+    f[7] = 0.75f;
+    d[3] = 0.002405626;
+    f[8] = 320.0f;
+    f[9] = 240.0f;
+    f[10] = 255.0f;
+    f[11] = 0.5f;
+    f[12] = 2.0f;
+    f[13] = 4.0f;
+}
+
+const struct {
+    u32 words[27];
+    u32 callback_relocation_slots[4];
+} fzgx_pool_table_B8 = {
+    {
+        0x00000000, 0x40000000, 0x40000000,
+        0x00000000, 0x3F800000, 0x3F800000,
+        0x9B000000, 0x40000000, 0x40000000,
+        0x9B000000, 0x3F800000, 0x3F800000,
+        0x0000FF00, 0x40000000, 0x40000000,
+        0x0000FF00, 0x3F800000, 0x3F800000,
+        0xFFF20000, 0x3F800000, 0x3F800000,
+        0xFF800000, 0x3F800000, 0x3F800000,
+        0x00008000, 0x40000000, 0x40000000
+    },
+    /* The shared REL's callback relocations occupy these zero-valued slots. */
+    { 0, 0, 0, 0 }
+};
+
+/* Volatile sink preserves the shared literal-pool slot. */
+void fzgx_shared_pool_primer_b(volatile f32 *f) {
+    *f = 0.125f;
+}
+
+const u32 fzgx_pool_table_138[2] = { 0xFFFFFF00, 0 };
+
+/* Volatile sinks preserve the remaining native literal-pool order. */
+void fzgx_shared_pool_primer_c(volatile f32 *f, volatile f64 *d) {
+    f[0] = 65536.0f;
+    f[1] = 80.0f;
+    f[2] = 60.0f;
+    d[0] = 255.0;
+    f[3] = 8.0f;
+    f[4] = 13.0f;
+    f[5] = 26.0f;
+    f[6] = 0.01f;
+    d[1] = 0.0005;
+}
+
+#pragma section code_type ".text"
+void fn_1_53E40(FontColor *color, const char *text, f32 x, f32 y, f32 z, f32 scale, f32 spacing) {
+    f32 width;
+    f32 height;
+    f32 pad;
+    f32 w;
+
+    if (z < 0.01f) {
+        z = 0.01f;
+    }
+    fn_1_496FC(x, y);
+    fn_1_4954C(z - 0.0005);
+    fn_1_4955C(spacing, spacing);
+    fn_1_495C8(9);
+    fn_1_4A0D8(text);
+    width = scale * spacing + fn_1_4B068(text);
+    height = scale * spacing + fn_1_4B090(text);
+
+    {
+        FontDrawPacket packet = lbl_1_rodata_26F8;
+        packet.image = 2;
+        packet.x = x;
+        packet.y = y;
+        packet.z = z;
+        if (color != 0) {
+            packet.alpha = color->a / 255.0;
+            *(u32 *)packet.color = *(u32 *)color;
+        }
+        packet.flags = 10;
+        fn_1_50190(&packet, width, height, 13.0f, 13.0f, 26.0f, 26.0f);
+    }
+}
+/* fzgx:end fn_1_53E40 */
+
 /* fzgx:begin fn_1_53FE4 noprologue */
 #include "font.h"
 

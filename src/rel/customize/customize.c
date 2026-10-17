@@ -778,6 +778,100 @@ void fn_3_BEF0(void) {
 }
 /* fzgx:end fn_3_BEF0 */
 
+/* fzgx:begin fn_3_BF1C noprologue */
+#include "types.h"
+#include "dolphin/hw_regs.h"
+#include "rel/customize/customize.h"
+
+extern s32 lbl_3_bss_A1798;
+extern void fn_1_4FD64(void);
+extern void fn_80074918(u8, s32, u8);
+extern void fn_80074788(u32);
+extern void fn_80074660(u32);
+extern void fn_80073678(u32);
+extern void fn_80073C6C(s32);
+extern void fn_800747D0(u32, u32, s32, s32, u32, s32, s32);
+extern void fn_80072AB0(s32, s32, s32);
+extern void fn_800734A8(u32, s32, s32, s32);
+extern void fn_80072C24(s32, s32, s32, s32, s32);
+extern void fn_80072D64(s32, s32, s32, s32, u8, s32);
+extern void fn_80072CC4(s32, s32, s32, s32, s32);
+extern void fn_80072E20(s32, s32, s32, s32, u8, s32);
+extern void fn_800728A8(s32, s32, s32, s32);
+extern void fn_80072864(u32);
+extern void fn_8007245C(u32);
+extern void fn_800371F8(u32, void *);
+extern void fn_8003462C(u32, u32, u32);
+extern u8 fn_1_B7C00(void);
+extern void fn_1_BC310(void *);
+
+typedef struct {
+    u8 r, g, b, a;
+} fn_3_BF1C_Color;
+
+/* GX write-gather FIFO: every store must reach the hardware. */
+#define GX_WRITE_F32(v) (*(volatile f32 *)GX_FIFO_BASE = (v))
+
+#pragma opt_dead_assignments off
+void fn_3_BF1C(u32 lab_unused0) {
+    struct { u32 value; } lab_t0;
+    if (lbl_3_bss_A1798 != 0) {
+        fn_1_4FD64();
+        fn_80074918(0, 7, 0);
+        fn_80074788(1);
+        fn_80074660(0);
+        fn_80073678(1);
+        fn_80073C6C(0);
+{
+    s32 lab_t2;
+        lab_t2 = 0;
+        fn_800747D0(4, 0, lab_t2, 0, 0, 2, 2);
+}
+        fn_80072AB0(0, 0, 0);
+        lab_t0.value = 0;
+        fn_800734A8(lab_t0.value, 0xFF, 0xFF, 4);
+        fn_80072C24(0, 15, 15, 15, 2);
+        fn_80072D64(0, 0, 0, 0, 1, 0);
+        fn_80072CC4(0, 7, 7, 7, 1);
+        fn_80072E20(0, 0, 0, 0, 1, 0);
+        fn_800728A8(1, 4, 5, 0);
+        fn_80072864(2);
+        fn_8007245C(0x200);
+        {
+            fn_3_BF1C_Color color = { 0, 0, 0, 0xA0 };
+            fn_800371F8(1, &color);
+        }
+        fn_8003462C(0x80, 7, 4);
+
+        /* full-screen quad, four position vertices */
+        GX_WRITE_F32(0.0f);
+        GX_WRITE_F32(0.0f);
+        GX_WRITE_F32(-1.0f);
+        GX_WRITE_F32(640.0f);
+        GX_WRITE_F32(0.0f);
+        GX_WRITE_F32(-1.0f);
+        GX_WRITE_F32(640.0f);
+        GX_WRITE_F32(480.0f);
+        GX_WRITE_F32(-1.0f);
+        GX_WRITE_F32(0.0f);
+        GX_WRITE_F32(480.0f);
+        GX_WRITE_F32(-1.0f);
+
+        if (!fn_1_B7C00()) {
+            s32 mode = *(s32 *)&lbl_3_data_1A14;
+            if (mode == 5 || mode == 2 || mode == 3) {
+                /* these modes keep the current state */
+            } else if (mode == 4) {
+                mode = 0; /* dead store: keeps the retail bne/b branch pair */
+            } else {
+                fn_1_BC310(&lbl_3_bss_7ED58);
+            }
+        }
+    }
+}
+#pragma opt_dead_assignments reset
+/* fzgx:end fn_3_BF1C */
+
 /* fzgx:begin fn_3_C128 */
 void fn_3_C128(void) {
     s16 result;
