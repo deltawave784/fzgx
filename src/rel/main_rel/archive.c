@@ -1099,6 +1099,52 @@ void fn_1_12C47C(void *arg0, void *arg1, s32 arg2) {
 }
 /* fzgx:end fn_1_12C47C */
 
+/* fzgx:begin fn_1_12C524 noprologue */
+#include "dolphin/types.h"
+
+struct Sig_fn_80071718_fn_80071718_Arg0 {
+    u8 pad_0[0xC];
+    u32 unk_C;
+};
+extern void fn_80071718(struct Sig_fn_80071718_fn_80071718_Arg0 *);
+
+struct Entry_12C524 {
+    u8 pad_0[0x328];
+    s8 unk_328;
+    u8 pad_329[0x53];
+    struct Sig_fn_80071718_fn_80071718_Arg0 *unk_37C[4];
+    u8 pad_38C[0x2C];
+    s16 unk_3B8;
+    u8 pad_3BA[0x86];
+};
+
+#pragma opt_propagation off
+static inline void fn_1_12C524_impl(struct Entry_12C524 *arg0)
+{
+    u32 *p;
+    s16 j;
+    s32 zero;
+    s16 i;
+    for (i = 0; i < 41; arg0++, i++) {
+        if (arg0->unk_328 >= 0 && arg0->unk_328 <= 40) {
+            j = 0;
+            zero = j;
+            for (p = (u32 *)arg0; j < 4; p++, j++) {
+                if (arg0->unk_3B8 % 4 != j && ((struct Entry_12C524 *)p)->unk_37C[0] != 0) {
+                    fn_80071718(((struct Entry_12C524 *)p)->unk_37C[0]);
+                    ((struct Entry_12C524 *)p)->unk_37C[0] = (struct Sig_fn_80071718_fn_80071718_Arg0 *)zero;
+                }
+            }
+        }
+    }
+}
+
+void fn_1_12C524(struct Entry_12C524 *arg0)
+{
+    fn_1_12C524_impl(arg0);
+}
+/* fzgx:end fn_1_12C524 */
+
 /* fzgx:begin fn_1_12C6BC */
 void fn_1_12C6BC(void *arg) {
     u8 *p;

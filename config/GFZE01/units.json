@@ -31240,6 +31240,17 @@
   },
   {
     "module": "main_rel",
+    "source": "rel/main_rel/archive/fn_1_12C524.c",
+    "symbols": [
+      "fn_1_12C524"
+    ],
+    "status": "matching",
+    "mw_version": null,
+    "extra_cflags": [],
+    "tu": "rel/main_rel/archive.c"
+  },
+  {
+    "module": "main_rel",
     "source": "rel/main_rel/archive/fn_1_12C6BC.c",
     "symbols": [
       "fn_1_12C6BC"
