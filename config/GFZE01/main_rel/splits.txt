@@ -7820,3 +7820,6 @@ rel/main_rel/archive/fn_1_130B8C.c:
 
 rel/main_rel/ghost/fn_1_F0B5C.c:
 	.text       start:0x000F0B5C end:0x000F0D10 align:4
+
+rel/main_rel/car/fn_1_87448.c:
+	.text       start:0x00087448 end:0x000875B4 align:4

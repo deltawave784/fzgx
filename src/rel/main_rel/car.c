@@ -5073,6 +5073,94 @@ void fn_1_87238(struct fn_1_87238_Car *car, s8 index, f32 f1) {
 }
 /* fzgx:end fn_1_87238 */
 
+/* fzgx:begin fn_1_87448 noprologue */
+#include "types.h"
+#include "rel/main_rel/car.h"
+
+typedef struct {
+    u8 pad_00[0x1C];
+    u16 unk_1C;
+} Sig_fn_1_55628_Fn1_55628Object;
+
+struct fn_1_87448_Arg1 {
+    u8 pad_0[0x2];
+    s8 unk_2;
+};
+
+struct fn_1_87448_Hdr {
+    s32 count;
+    u8 pad[4];
+    u8 *tbl;
+};
+
+struct fn_1_87448_Ent {
+    void **items;
+    struct fn_1_87448_Hdr *hdr;
+    int c;
+};
+
+struct fn_1_87448_Obj {
+    u8 pad[0x330];
+    u32 base;
+    struct fn_1_87448_Ent ent[1];
+};
+
+extern const f32 lbl_1_rodata_3518;
+extern const f32 lbl_1_rodata_3530;
+extern u32 lbl_8006DBE4(void);
+extern u8 * fn_80083970(u8 *, const u8 *);
+extern void fn_1_55628(Sig_fn_1_55628_Fn1_55628Object *);
+extern void fn_1_556B8(void *);
+extern void fn_1_55FF0(f32);
+extern void fn_80072558(void);
+extern void lbl_8006DFC4(u32);
+
+void fn_1_87448(struct fn_1_87448_Obj *arg0, struct fn_1_87448_Arg1 *arg1, s8 arg2, int arg3, f32 arg4) {
+    int j;
+    int i;
+    struct fn_1_87448_Hdr *hdr;
+    int flag;
+    void *item;
+    int t;
+
+    t = 0;
+    hdr = arg0->ent[arg2].hdr;
+    if (arg4 <= lbl_1_rodata_3518) {
+        return;
+    }
+    flag = arg4 < lbl_1_rodata_3530;
+    if (arg1 != 0) {
+        t = arg1->unk_2;
+    }
+    j = 1;
+    i = 0;
+    for (; j < hdr->count; j++) {
+        if (i > ((s16)t - 1)) {
+            return;
+        }
+        if (fn_80083970(*(u8 **)(hdr->tbl + j * 8 + 4), lbl_1_data_208A8) != *(u8 **)(hdr->tbl + j * 8 + 4)) {
+            item = *(void **)((u8 *)arg0->ent[arg2].items + j * 4);
+            if (item == 0) {
+                i++;
+            } else {
+                if (flag) {
+                    fn_1_55FF0(arg4);
+                }
+                lbl_8006DBE4();
+                lbl_8006DFC4(arg0->base + i * 0x30);
+                fn_80072558();
+                if (arg3) {
+                    fn_1_556B8(item);
+                } else {
+                    fn_1_55628(item);
+                }
+                i++;
+            }
+        }
+    }
+}
+/* fzgx:end fn_1_87448 */
+
 /* fzgx:begin fn_1_875B4 */
 void fn_1_875B4(void *arg, int value_1, int value_2, f32 value) {
     fn_1_87448(arg, value_1, value_2, value >= 1.0f, value);
