@@ -1302,6 +1302,18 @@
   },
   {
     "module": "customize",
+    "source": "rel/customize/editor/fn_3_169B8.c",
+    "symbols": [
+      "fn_3_169B8"
+    ],
+    "status": "nonmatching",
+    "mw_version": "GC/2.0",
+    "extra_cflags": [],
+    "tu": "rel/customize/editor.c",
+    "pool": true
+  },
+  {
+    "module": "customize",
     "source": "rel/customize/editor/fn_3_16E14.c",
     "symbols": [
       "fn_3_16E14"

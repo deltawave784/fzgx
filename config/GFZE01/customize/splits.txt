@@ -614,3 +614,6 @@ rel/customize/emb_paste_editor/fn_3_106FC.c:
 
 rel/customize/emb_paste_editor/fn_3_139F0.c:
 	.text       start:0x000139F0 end:0x00013D98 align:4
+
+rel/customize/editor/fn_3_169B8.c:
+	.text       start:0x000169B8 end:0x00016E14 align:4
