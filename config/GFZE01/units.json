@@ -23575,6 +23575,19 @@
   },
   {
     "module": "main",
+    "source": "dol/fn_8006331C.c",
+    "symbols": [
+      "fn_8006331C"
+    ],
+    "status": "matching",
+    "mw_version": "GC/1.3.2",
+    "extra_cflags": [],
+    "pool": {
+      "@137": "lbl_801A7320"
+    }
+  },
+  {
+    "module": "main",
     "source": "dol/fn_80063EF4.c",
     "symbols": [
       "fn_80063EF4"
