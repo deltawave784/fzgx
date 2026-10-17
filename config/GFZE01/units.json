@@ -33283,6 +33283,27 @@
   },
   {
     "module": "main_rel",
+    "source": "rel/main_rel/bg_for/fn_1_DD890.c",
+    "symbols": [
+      "fn_1_DD890"
+    ],
+    "status": "matching",
+    "mw_version": null,
+    "extra_cflags": [],
+    "tu": "rel/main_rel/bg_for.c",
+    "pool": {
+      "...rodata.0": "lbl_1_rodata_6780",
+      "@11": "lbl_1_rodata_6780+0x20",
+      "@13": "lbl_1_rodata_67A8",
+      "@19": "lbl_1_rodata_67B4+0xC",
+      "@18": "lbl_1_rodata_67B4+0x8",
+      "@16": "lbl_1_rodata_67B4",
+      "@10": "lbl_1_rodata_6780+0x18",
+      "@12": "lbl_1_rodata_6780+0x24"
+    }
+  },
+  {
+    "module": "main_rel",
     "source": "rel/main_rel/bg_for/fn_1_DE9C4.c",
     "symbols": [
       "fn_1_DE9C4"
