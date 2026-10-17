@@ -2487,6 +2487,57 @@ void fn_1_9A864(void)
 }
 /* fzgx:end fn_1_9A864 */
 
+/* fzgx:begin fn_1_9A958 noprologue */
+#include "types.h"
+
+struct fn_1_9A958_data {
+    u8 pad0[0x720];
+    s16 current;
+    u8 pad1[0x792];
+    void *entries[0x58];
+    u8 indices[1];
+    u8 pad2[0x1A9B];
+    char string_a[0xC];
+    char string_b[0x4];
+    char string_c[0x4];
+};
+
+extern struct fn_1_9A958_data lbl_1_data_2A0C0;
+extern int sprintf(char *, const char *, ...);
+extern s32 fn_1_465D0(char *, s32);
+
+#pragma opt_dead_assignments off
+#pragma opt_propagation off
+static inline void * fn_1_9A958_read_entry(struct fn_1_9A958_data * owner, int i) { return owner->entries[i]; }
+void fn_1_9A958(int index, int flag) {
+    struct fn_1_9A958_data *data = &lbl_1_data_2A0C0;
+    u8 *indices = data->indices;
+    u8 buffer_a[0x20];
+    u8 buffer_b[0x20];
+    int idx = indices[index];
+    void *entry;
+    struct { void **value; } table;
+
+    if (data->current != idx) {
+        int offset = idx * 4;
+        table.value = data->entries;
+        entry = *(void **)((u8 *)table.value + offset);
+        if (entry != 0) {
+            sprintf((char *)buffer_a, data->string_a, data->string_b, entry);
+            sprintf((char *)buffer_b, data->string_c, data->string_b, entry);
+            if (flag != 0) {
+                fn_1_465D0((char *)buffer_a, 2);
+                fn_1_465D0((char *)buffer_b, 2);
+            } else {
+                fn_1_465D0((char *)buffer_a, 1);
+                fn_1_465D0((char *)buffer_b, 1);
+            }
+        }
+    }
+}
+#pragma opt_dead_assignments reset
+/* fzgx:end fn_1_9A958 */
+
 /* fzgx:begin fn_1_9AA2C noprologue */
 #include "types.h"
 

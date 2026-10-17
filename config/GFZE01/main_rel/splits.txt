@@ -7781,3 +7781,15 @@ rel/main_rel/car_test/fn_1_870BC.c:
 
 rel/main_rel/shadowmap/fn_1_57A70.c:
 	.text       start:0x00057A70 end:0x00057BBC align:4
+
+rel/main_rel/effect/fn_1_645D4.c:
+	.text       start:0x000645D4 end:0x00064760 align:4
+
+rel/main_rel/burner/fn_1_9A958.c:
+	.text       start:0x0009A958 end:0x0009AA2C align:4
+
+rel/main_rel/bg_win/fn_1_15BCDC.c:
+	.text       start:0x0015BCDC end:0x0015BE38 align:4
+
+rel/main_rel/light/fn_1_7BEAC.c:
+	.text       start:0x0007BEAC end:0x0007BF9C align:4

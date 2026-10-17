@@ -267,6 +267,66 @@ void fn_1_15BB34(u32 arg0) {
 #pragma opt_lifetimes reset
 /* fzgx:end fn_1_15BB34 */
 
+/* fzgx:begin fn_1_15BCDC noprologue */
+#include "types.h"
+
+extern u16 lbl_1_bss_8F980[16];
+extern u16 lbl_1_bss_8F9A0[480];
+
+s32 fn_1_15BCDC(u32 *p) {
+    s32 j;
+    s32 base;
+    u32 *q;
+    s32 n;
+    u16 a;
+    u16 *row;
+    struct { s32 value; } i;
+    u16 b;
+    u32 v;
+
+    a = 0;
+    q = p;
+    b = 0;
+    n = 0;
+
+    while (*q != 0xFFFFFFFF) {
+        v = *q;
+        if (a == 0) {
+            a = v & 0xF;
+        }
+        if ((v >> 24) == 2) {
+            b = b | ((v >> 4) & 0xFFFF);
+        }
+        q++;
+        n++;
+    }
+    if (n == 0) {
+        return 0;
+    }
+    base = lbl_1_bss_8F980[a];
+    row = lbl_1_bss_8F9A0 + (a - 1) * 32;
+    base = base + 0x20;
+    j = 0;
+    for (i.value = 0; i.value < n; i.value++) {
+        s32 k = (base - j) % 32;
+        u32 v = p[(u16)(n - i.value - 1)];
+        u32 f = (v >> 4) & 0xFFFF;
+        u16 cur = row[(u16)k];
+        if ((v >> 24) != 2) {
+            if (b != 0 && cur == b) {
+                j++;
+                cur = row[(u16)((base - j) % 32)];
+            }
+            if ((s32)cur != (s32)(f | b)) {
+                return 0;
+            }
+            j++;
+        }
+    }
+    return 1;
+}
+/* fzgx:end fn_1_15BCDC */
+
 /* fzgx:begin fn_1_15BE38 */
 typedef struct {
     u32 count;
