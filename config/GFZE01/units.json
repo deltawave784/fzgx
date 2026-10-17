@@ -2861,6 +2861,53 @@
   },
   {
     "module": "customize",
+    "source": "rel/customize/toolkit/fn_3_2AAF4.c",
+    "symbols": [
+      "fn_3_2AAF4"
+    ],
+    "status": "matching",
+    "mw_version": null,
+    "extra_cflags": [],
+    "tu": "rel/customize/toolkit.c",
+    "pool": {
+      "...rodata.0": "lbl_3_rodata_768",
+      "@70": "lbl_3_rodata_990+0x17C",
+      "@147": "lbl_3_rodata_990+0x43C",
+      "@65": "lbl_3_rodata_990+0x4",
+      "@80": "lbl_3_rodata_990+0x2F0",
+      "@10": "lbl_3_rodata_800",
+      "@5": "lbl_3_rodata_768+0x60",
+      "@90": "lbl_3_rodata_990+0x40C",
+      "@95": "lbl_3_rodata_990+0x410",
+      "@20": "lbl_3_rodata_8F0+0x4",
+      "@85": "lbl_3_rodata_990+0x390",
+      "@148": "lbl_3_rodata_990+0x440",
+      "@149": "lbl_3_rodata_990+0x444",
+      "@152": "lbl_3_rodata_990+0x450",
+      "@25": "lbl_3_rodata_8F0+0x10",
+      "@153": "lbl_3_rodata_990+0x454",
+      "@154": "lbl_3_rodata_990+0x458",
+      "@102": "lbl_3_rodata_990+0x414",
+      "@104": "lbl_3_rodata_990+0x42C",
+      "@103": "lbl_3_rodata_990+0x420",
+      "@60": "lbl_3_rodata_960",
+      "@40": "lbl_3_rodata_8F0+0x2C",
+      "@45": "lbl_3_rodata_8F0+0x30",
+      "@35": "lbl_3_rodata_8F0+0x28",
+      "@30": "lbl_3_rodata_8F0+0x24",
+      "@50": "lbl_3_rodata_8F0+0x34",
+      "@15": "lbl_3_rodata_800+0xE8",
+      "@150": "lbl_3_rodata_990+0x448",
+      "@151": "lbl_3_rodata_990+0x44C",
+      "@108": "lbl_3_rodata_990+0x438",
+      "@75": "lbl_3_rodata_990+0x1A4",
+      "@55": "lbl_3_rodata_8F0+0x48",
+      "@155": "lbl_3_rodata_990+0x45C",
+      "@156": "lbl_3_rodata_990+0x460"
+    }
+  },
+  {
+    "module": "customize",
     "source": "rel/customize/toolkit/fn_3_2B268.c",
     "symbols": [
       "fn_3_2B268"
