@@ -7955,3 +7955,6 @@ rel/main_rel/effect/fn_1_5A8DC.c:
 
 rel/main_rel/stcoli/fn_1_229EC.c:
 	.text       start:0x000229EC end:0x00022B10 align:4
+
+rel/main_rel/screen_effect/fn_1_727BC.c:
+	.text       start:0x000727BC end:0x00072848 align:4

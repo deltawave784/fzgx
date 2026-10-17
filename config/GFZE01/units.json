@@ -395,6 +395,26 @@
   },
   {
     "module": "customize",
+    "source": "rel/customize/_prolog/fn_3_12D4.c",
+    "symbols": [
+      "fn_3_12D4"
+    ],
+    "status": "matching",
+    "mw_version": null,
+    "extra_cflags": [],
+    "tu": "rel/customize/_prolog.c",
+    "pool": {
+      "...rodata.0": "lbl_3_rodata_0",
+      "@6": "lbl_3_rodata_0+0x4",
+      "@28": "lbl_3_rodata_44+0x4",
+      "@7": "lbl_3_rodata_0+0x8",
+      "@30": "lbl_3_rodata_44+0x8",
+      "@31": "lbl_3_rodata_44+0xC",
+      "@32": "lbl_3_rodata_44+0x10"
+    }
+  },
+  {
+    "module": "customize",
     "source": "rel/customize/_prolog/fn_3_131C.c",
     "symbols": [
       "fn_3_131C"
@@ -23800,6 +23820,16 @@
     "source": "dol/fn_80065528.c",
     "symbols": [
       "fn_80065528"
+    ],
+    "status": "matching",
+    "mw_version": "GC/1.3.2",
+    "extra_cflags": []
+  },
+  {
+    "module": "main",
+    "source": "dol/fn_800657F4.c",
+    "symbols": [
+      "fn_800657F4"
     ],
     "status": "matching",
     "mw_version": "GC/1.3.2",
@@ -55031,6 +55061,17 @@
   },
   {
     "module": "main_rel",
+    "source": "rel/main_rel/screen_effect/fn_1_727BC.c",
+    "symbols": [
+      "fn_1_727BC"
+    ],
+    "status": "matching",
+    "mw_version": null,
+    "extra_cflags": [],
+    "tu": "rel/main_rel/screen_effect.c"
+  },
+  {
+    "module": "main_rel",
     "source": "rel/main_rel/screen_effect/fn_1_72848.c",
     "symbols": [
       "fn_1_72848"
@@ -74293,6 +74334,18 @@
     "mw_version": null,
     "extra_cflags": [],
     "tu": "rel/sel/sel.c"
+  },
+  {
+    "module": "sel",
+    "source": "rel/sel/sel/fn_10_8B0C.c",
+    "symbols": [
+      "fn_10_8B0C"
+    ],
+    "status": "nonmatching",
+    "mw_version": null,
+    "extra_cflags": [],
+    "tu": "rel/sel/sel.c",
+    "pool": true
   },
   {
     "module": "sel",

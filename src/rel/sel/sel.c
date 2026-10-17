@@ -3917,6 +3917,56 @@ void fn_10_8AAC(void) {
 }
 /* fzgx:end fn_10_8AAC */
 
+/* fzgx:begin fn_10_8B0C pool noprologue */
+#include "rel/sel/sel.h"
+
+typedef struct SelState {
+    s16 state;
+    u8 pad2[0x92];
+    u32 flags;
+} SelState;
+
+Obj_10_bss_0 lbl_10_bss_0;
+u32 lbl_10_bss_14;
+static u8 pad_18[0x49370];
+u32 lbl_10_bss_49388;
+s16 lbl_10_bss_4938C;
+static u8 pad_4938E[0x83B0];
+u32 lbl_10_bss_51740;
+u32 lbl_10_bss_51744;
+extern SelState lbl_1_bss_8B3A0;
+extern void fn_10_1B2F4(void);
+extern void *fn_1_435C(void *);
+extern s32 fn_1_3F8C(void *, void (*)(void), u32, u32);
+extern void fn_1_4A00(s32, u8, void *);
+extern void fn_1_12F1E8(s32);
+extern void fn_1_A2D84(u32);
+
+#pragma section code_type ".fzgxpool"
+void fzgx___fzgxpool_fn_10_8B0C(void) {
+    (void)*(volatile u8 *)&lbl_10_bss_0; /* Volatile preserves BSS allocation order in this layout primer. */
+    (void)*(volatile u8 *)&lbl_10_bss_14; /* Volatile preserves BSS allocation order in this layout primer. */
+    (void)*(volatile u8 *)pad_18; /* Volatile preserves BSS allocation order in this layout primer. */
+    (void)*(volatile u8 *)&lbl_10_bss_49388; /* Volatile preserves BSS allocation order in this layout primer. */
+    (void)*(volatile u8 *)&lbl_10_bss_4938C; /* Volatile preserves BSS allocation order in this layout primer. */
+    (void)*(volatile u8 *)pad_4938E; /* Volatile preserves BSS allocation order in this layout primer. */
+    (void)*(volatile u8 *)&lbl_10_bss_51740; /* Volatile preserves BSS allocation order in this layout primer. */
+    (void)*(volatile u8 *)&lbl_10_bss_51744; /* Volatile preserves BSS allocation order in this layout primer. */
+}
+#pragma section code_type ".text"
+
+void fn_10_8B0C(void) {
+    fn_1_435C((void *)lbl_10_bss_49388);
+    lbl_10_bss_51740 = fn_1_3F8C(lbl_10_data_7A0, fn_10_1B2F4, 0, 8);
+    fn_1_4A00(1, (u8)lbl_10_bss_4938C, (void *)lbl_10_bss_49388);
+    lbl_10_bss_51744 = 0;
+    lbl_10_bss_14 = -1;
+    fn_1_12F1E8(0x1e0);
+    lbl_1_bss_8B3A0.flags |= 0x800;
+    fn_1_A2D84(0xa9121500);
+}
+/* fzgx:end fn_10_8B0C */
+
 /* fzgx:begin fn_10_8BB8 noprologue */
 #include "types.h"
 #include "sofdec/adxt.h"

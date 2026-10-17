@@ -249,6 +249,38 @@ void fn_1_72768(u32 arg0, u32 arg1) {
 }
 /* fzgx:end fn_1_72768 */
 
+/* fzgx:begin fn_1_727BC noprologue */
+#include "types.h"
+#include "rel/main_rel/screen_effect.h"
+
+struct fn_1_727BC_lbl_1_data_1D960_58_E6 {
+    u8 pad_0[0x5];
+    u8 unk_5;
+};
+extern void OSPanic(const char *, int, const char *, ...);
+
+#pragma opt_propagation off
+void fn_1_727BC(u32 arg0, u32 arg1, u32 arg2, u32 arg3, u32 arg4) {
+    u32 v0;
+    s32 v2;
+    u32 v1;
+    s32 v3;
+    u8 *data;
+    Obj_1_bss_6C8EC *obj;
+    struct fn_1_727BC_lbl_1_data_1D960_58_E6 *table;
+    v0 = (arg0 & 0xFF);
+    data = lbl_1_data_1D960;
+    obj = (Obj_1_bss_6C8EC *)((u8 *)&lbl_1_bss_6C8EC + v0 * 0x10C);
+    if (v0 > 7 ||
+        (v1 = obj->unk_DC, v2 = (arg1 & 0xFF),
+         table = (struct fn_1_727BC_lbl_1_data_1D960_58_E6 *)(data + 0x58),
+         v3 = table[v1].unk_5 - 1,
+         !(v2 <= v3)) || (s32)v1 == 0) {
+        OSPanic((const char *)(data + 0x160), 394, (const char *)(data + 0x18C));
+    }
+}
+/* fzgx:end fn_1_727BC */
+
 /* fzgx:begin fn_1_72848 */
 void fn_1_72848(void) {
     u8 i;
