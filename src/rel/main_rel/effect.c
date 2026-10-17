@@ -1353,6 +1353,85 @@ void fn_1_5B074(void) {
 }
 /* fzgx:end fn_1_5B074 */
 
+/* fzgx:begin fn_1_5B078 noprologue */
+#include "rel/main_rel/effect.h"
+
+#pragma push
+#pragma force_active on
+#pragma section code_type ".fzgxpool"
+static void fn_1_5B078_pool_primer(void) {
+    /* Volatile stores retain the shared retail literal-pool order. */
+    volatile f32 f;
+    volatile f64 d; /* Retain double entries and alignment in the shared literal pool. */
+    f = 60.0f;
+    f = 0.1f;
+    f = 32767.0f;
+    f = 0.05f;
+    d = 0.07;
+    f = 20000.0f;
+    d = 4503599627370496.0;
+    f = 1.0f;
+    f = -0.03f;
+    d = 15.0;
+    d = 4503601774854144.0;
+    d = 1.5;
+    d = 0.5;
+    f = 0.0f;
+    f = 0.5f;
+    f = 8.0f;
+    f = 255.0f;
+    f = 15.0f;
+    f = 0.2f;
+    f = 0.08f;
+    f = 0.25f;
+    f = 0.98f;
+    f = 0.99f;
+    f = 40.0f;
+    f = 20.0f;
+    f = 1.5f;
+    f = 0.45f;
+    f = -2.0f;
+    f = 0.0833333358168602f;
+    f = 0.15f;
+    f = 0.125f;
+    f = -0.4f;
+    f = -0.3f;
+    f = 2.0f;
+    f = 250.0f;
+    d = 0.6;
+    d = 0.4;
+    f = 0.3f;
+    f = -0.004f;
+    f = 0.01666666753590107f;
+    f = 65536.0f;
+    f = 4096.0f;
+}
+#pragma pop
+
+typedef struct Fn1_5B078Object {
+    u8 pad_00[0x10];
+    s32 unk_10;
+    u8 pad_14[0x44];
+    s16 unk_58;
+    u8 pad_5A[4];
+    s16 unk_5E;
+    u8 pad_60[0x54];
+    f32 unk_B4;
+} Fn1_5B078Object;
+
+static inline f32 random_float(void) {
+    lbl_1_data_1D628 = lbl_1_data_1D628 * 0x41C64E6D + 12345;
+    return (f32)((lbl_1_data_1D628 >> 16) & 0x7FFF) / 32767.0f;
+}
+
+void fn_1_5B078(Fn1_5B078Object* arg0) {
+    arg0->unk_10 = (s32)(60.0f * (0.125f + (f32)(0.1f * random_float())));
+    arg0->unk_58 = (s16)(65536.0f * (random_float() - 0.5f));
+    arg0->unk_5E = (s16)(4096.0f * (random_float() - 0.5f));
+    arg0->unk_B4 = 0.5f;
+}
+/* fzgx:end fn_1_5B078 */
+
 /* fzgx:begin fn_1_5B188 */
 #pragma section code_type ".fzgxpool"
 __declspec(section ".fzgxpool") static void fzgx_pool_prime1(void) {

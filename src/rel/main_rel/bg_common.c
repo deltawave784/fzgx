@@ -876,6 +876,69 @@ void fn_1_10576C(void) {
 }
 /* fzgx:end fn_1_10576C */
 
+/* fzgx:begin fn_1_105AB8 */
+struct fn_1_105AB8_lbl_1_rodata_7A0C {
+    u32 unk_0;
+};
+
+extern s32 fn_1_58C4(void);
+extern struct fn_1_105AB8_lbl_1_rodata_7A0C lbl_1_rodata_7A0C;
+extern u32 *fn_1_105BD8(u32, u32 *, u32 *, u32 *, void *);
+extern u32 fn_1_105CC8(void *, void *, void *, void *, void *, void *, void *, void *);
+extern u32 lbl_1_rodata_7A10;
+
+void fn_1_105AB8(u32 arg0, u32 arg1) {
+    u32 v2;
+    u32 v1;
+    u32 v0;
+    s32 v3;
+    u32 v4;
+    u32 v5;
+    u32 v7;
+    s32 v6;
+    u32 v8;
+    struct { u32 a[3]; } loc_34;
+    u32 loc_28[3];
+    u32 loc_1C[3];
+    u32 loc_10[3];
+    u32 loc_C;
+    u32 loc_8;
+    s32 t1;
+    s32 t2;
+    s32 t3;
+    s32 t4;
+    u32 count;
+    fn_1_58C4();
+    v0 = 1024U / (u32)fn_1_58C4();
+    if ((512U / (u32)fn_1_58C4()) > v0) {
+        t3 = fn_1_58C4();
+        count = 1024U / (u32)t3;
+    } else {
+        t4 = fn_1_58C4();
+        count = 512U / (u32)t4;
+    }
+    v1 = arg0 + 0x10000;
+    *(u32 *)((u8 *)v1 - 16384) = count;
+    v2 = arg1 + 1;
+    *(u32 *)((u8 *)v1 - 16380) = lbl_1_rodata_7A0C.unk_0;
+    *(u32 *)((u8 *)v1 - 16376) = lbl_1_rodata_7A10;
+    v6 = arg1 * *(u32 *)((u8 *)v1 - 16384);
+    v4 = arg0 + (v6 << 5);
+    v5 = arg0 + (v6 << 4);
+    v7 = v4;
+    v8 = v5;
+    while (v6 < (s32)(v2 * *(u32 *)((u8 *)v1 - 16384))) {
+        fn_1_105BD8(arg1, (u32 *)&loc_34, loc_28, loc_1C, loc_10);
+        loc_8 = *(u32 *)((u8 *)v1 - 16376);
+        loc_C = *(u32 *)((u8 *)v1 - 16380);
+        fn_1_105CC8((void *)v8, (void *)(v7 + 16384), &loc_C, &loc_8, &loc_34, loc_28, loc_1C, loc_10);
+        v7 += 32;
+        v8 += 16;
+        v6++;
+    }
+}
+/* fzgx:end fn_1_105AB8 */
+
 /* fzgx:begin fn_1_1067A8 */
 void fn_1_1067A8(void *arg0, f32 arg1, f32 arg2) {
     s32 result;
