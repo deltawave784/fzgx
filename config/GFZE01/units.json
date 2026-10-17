@@ -59369,6 +59369,18 @@
   },
   {
     "module": "movie",
+    "source": "rel/movie/_prolog/fn_5_4C8.c",
+    "symbols": [
+      "fn_5_4C8"
+    ],
+    "status": "nonmatching",
+    "mw_version": null,
+    "extra_cflags": [],
+    "tu": "rel/movie/_prolog.c",
+    "pool": true
+  },
+  {
+    "module": "movie",
     "source": "rel/movie/_prolog/fn_5_684.c",
     "symbols": [
       "fn_5_684"
