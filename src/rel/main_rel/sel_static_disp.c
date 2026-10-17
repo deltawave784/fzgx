@@ -807,6 +807,77 @@ void fn_1_135894(void* arg0, void* arg1, void* arg2, void* arg3, void* arg4, voi
 }
 /* fzgx:end fn_1_135894 */
 
+/* fzgx:begin fn_1_1358BC noprologue */
+#include "types.h"
+#include "font.h"
+#include "rel/main_rel/sel_static_disp.h"
+
+typedef struct fn_1_1358BC_Table { u32 image[41]; } fn_1_1358BC_Table;
+
+extern fn_1_1358BC_Table lbl_1_rodata_88BC;
+extern FontDrawPacket lbl_1_rodata_26F8;
+extern const f32 lbl_1_rodata_8960;
+extern void fn_1_49410(void);
+extern void fn_1_495C8(int);
+extern void fn_1_494DC(int);
+extern void fn_1_496FC(f32, f32);
+extern void fn_1_4954C(f32);
+extern void fn_1_4955C(f32, f32);
+extern void fn_1_4962C(void);
+extern char* fn_1_14FEAC(void*, void*, void*, void*, int);
+extern void fn_1_4CF3C(f32, void*, ...);
+
+void fn_1_1358BC(s16 arg0, s16 arg1, int arg2, s16 arg3, int unused, void* arg5,
+                 void* arg6, void* arg7, f32 arg8, f32 arg9, f32 arg10) {
+    u32 buf[8];
+    FontDrawPacket packet;
+    fn_1_1358BC_Table table;
+    u32 index;
+
+    table = lbl_1_rodata_88BC;
+
+    if (arg3 >= 41 || arg3 < 0) {
+        fn_1_49410();
+        switch (arg2) {
+        case 5: fn_1_495C8(0); break;
+        case 9: fn_1_495C8(8); break;
+        case 13: fn_1_495C8(0x10); break;
+        case 6: fn_1_495C8(1); break;
+        case 10: fn_1_495C8(9); break;
+        case 14: fn_1_495C8(0x11); break;
+        case 7: fn_1_495C8(2); break;
+        case 11: fn_1_495C8(0xa); break;
+        case 15: fn_1_495C8(0x12); break;
+        }
+        fn_1_494DC(0x23);
+        fn_1_496FC((f32)arg0, (f32)arg1);
+        fn_1_4954C(arg10);
+        fn_1_4955C(arg8, arg9);
+        fn_1_4962C();
+        {
+            const f32* scale = &lbl_1_rodata_8960;
+            fn_1_4CF3C(*scale * arg8, &lbl_1_data_41A30,
+                       fn_1_14FEAC(arg5, arg6, arg7, buf, 0));
+        }
+    } else {
+        packet = lbl_1_rodata_26F8;
+        if (arg3 < 0) {
+            index = 0;
+        } else {
+            index = ((u32)arg3 > 40) ? 40 : arg3;
+        }
+        packet.image = table.image[index];
+        packet.x = (f32)arg0;
+        packet.y = (f32)arg1;
+        packet.z = arg10;
+        packet.scale_x = packet.scale_x * arg8;
+        packet.scale_y = packet.scale_y * arg9;
+        packet.flags = arg2;
+        fn_1_4F734(&packet);
+    }
+}
+/* fzgx:end fn_1_1358BC */
+
 /* fzgx:begin fn_1_1363F0 noprologue */
 #include "types.h"
 #include "dolphin/types.h"
