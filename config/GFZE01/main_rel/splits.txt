@@ -7676,3 +7676,6 @@ rel/main_rel/accessory/fn_1_113C58.c:
 
 rel/main_rel/ghost/fn_1_ECF88.c:
 	.text       start:0x000ECF88 end:0x000ED540 align:4
+
+rel/main_rel/sel_static_disp/fn_1_151054.c:
+	.text       start:0x00151054 end:0x00151668 align:4
