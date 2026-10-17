@@ -495,6 +495,63 @@ void fn_1_D3F88(void *base) {
 }
 /* fzgx:end fn_1_D3F88 */
 
+/* fzgx:begin fn_1_D3FDC noprologue */
+#include "dolphin/types.h"
+
+#pragma section code_type ".fzgxpool"
+__declspec(section ".fzgxpool") static void fzgx_pool_prime1(void) {
+    volatile f32 s; volatile f64 d;  /* fzgx-allow: S2 pool primer sinks */
+    s = 30.0f;
+    s = 0.6499999761581421f;
+    s = 0.75f;
+    s = 1.0f;
+    s = 0.0f;
+    s = 182.04444885253906f;
+    d = 0.5;
+    d = 2.0;
+    d = 4503599627370496.0;
+}
+#pragma section code_type ".text"
+extern u32 lbl_801A66A0;
+extern f32 lbl_8006D188(s32);
+extern void fn_1_1030D4(void *, void *);
+extern double __fabs(double);
+
+typedef struct Ent {
+    u8 pad0[8];
+    u32 flags;
+    u8 pad1[0x2c - 0xc];
+    f32 x;
+    f32 y;
+    f32 z;
+    u8 pad2[0xac - 0x38];
+} Ent;
+
+void fn_1_D3FDC(u8 *a, void *b) {
+    s32 n;
+{
+    Ent *e = (Ent *)(a + 0xe7e4);
+    n = *((s32 *)e - 1);
+    for (; n > 0; n--, e++) {
+        if ((e->flags >> 28) & 1) {
+            e->x = 0.65f;
+            e->y = 0.75f;
+            e->z = 1.0f;
+        } else if ((e->flags >> 29) & 1) {
+            e->x = 1.0f;
+            e->y = 0.0f;
+            e->z = 0.0f;
+        } else {
+            e->x = __fabs(lbl_8006D188((s32)(182.04444885253906f * (f32)lbl_801A66A0)));
+            e->y = __fabs(lbl_8006D188((s32)(0.5 * (182.04444885253906f * (f32)lbl_801A66A0))));
+            e->z = __fabs(lbl_8006D188((s32)(2.0 * (182.04444885253906f * (f32)lbl_801A66A0))));
+        }
+        fn_1_1030D4(e, b);
+}
+    }
+}
+/* fzgx:end fn_1_D3FDC */
+
 /* fzgx:begin fn_1_D4174 */
 // Process each model-load entry in the caller-provided table.
 void fn_1_D4174(void *base, void *arg) {
