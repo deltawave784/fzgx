@@ -7874,3 +7874,9 @@ rel/main_rel/car/fn_1_892E8.c:
 
 rel/main_rel/sel_static_disp/fn_1_14DDF4.c:
 	.text       start:0x0014DDF4 end:0x0014DE80 align:4
+
+rel/main_rel/load/fn_1_4706C.c:
+	.text       start:0x0004706C end:0x00047184 align:4
+
+rel/main_rel/driver/fn_1_A744C.c:
+	.text       start:0x000A744C end:0x000A75DC align:4

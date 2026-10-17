@@ -863,6 +863,53 @@ u32 fn_1_46ED8(void) {
 }
 /* fzgx:end fn_1_46ED8 */
 
+/* fzgx:begin fn_1_4706C */
+extern void fn_8000659C(void);
+
+typedef struct E { s32 a, b, c, d; } E;
+typedef struct B {
+    s32 x0, x1;
+    s32 pad[4];
+    E e[0x400];
+    s32 tail[2];
+} B;
+
+static inline E * fn_1_4706C_read_pointer(B * owner) { return owner->e; }
+#pragma opt_dead_assignments off
+static inline void fn_1_4706C_scan(s32 start, B *b) {
+    s32 i;
+    s32 z;
+    struct { E *value; } p;
+    i = start;
+    z = i;
+    p.value = b->e;
+    for (; i < 0x400; i++, p.value++) {
+        if (p.value->a == (s32)0x80000000) {
+            p.value->a = z;
+            *(s32 *)((u8 *)b + 0x5818) = p.value->c;
+        }
+    }
+}
+void fn_1_4706C(void) {
+    B *b = (B *)lbl_1_bss_384C0;
+    s32 z;
+    s32 i;
+    E *p;
+    fn_8000659C();
+    if (b->x0 != b->x1) {
+        fn_1_4706C_scan(0, b);
+        b->x1 = b->x0;
+    }
+    z = 0;
+    p = b->e;
+    for (i = 0; i < 0x400; i++, p++) {
+        p->a = z;
+    }
+    *(s32 *)((u8 *)b + 0x5820) = 0;
+}
+#pragma opt_dead_assignments reset
+/* fzgx:end fn_1_4706C */
+
 /* fzgx:begin fn_1_47184 */
 u32 fn_1_47184(void) {
     return lbl_1_bss_3DFF4.unk_0 - lbl_1_bss_3DCDC;

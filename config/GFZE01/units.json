@@ -40025,6 +40025,17 @@
   },
   {
     "module": "main_rel",
+    "source": "rel/main_rel/driver/fn_1_A744C.c",
+    "symbols": [
+      "fn_1_A744C"
+    ],
+    "status": "matching",
+    "mw_version": null,
+    "extra_cflags": [],
+    "tu": "rel/main_rel/driver.c"
+  },
+  {
+    "module": "main_rel",
     "source": "rel/main_rel/driver/fn_1_A75DC.c",
     "symbols": [
       "fn_1_A75DC"
@@ -49249,6 +49260,17 @@
     ],
     "status": "matching",
     "mw_version": null,
+    "extra_cflags": [],
+    "tu": "rel/main_rel/load.c"
+  },
+  {
+    "module": "main_rel",
+    "source": "rel/main_rel/load/fn_1_4706C.c",
+    "symbols": [
+      "fn_1_4706C"
+    ],
+    "status": "matching",
+    "mw_version": "GC/1.3",
     "extra_cflags": [],
     "tu": "rel/main_rel/load.c"
   },

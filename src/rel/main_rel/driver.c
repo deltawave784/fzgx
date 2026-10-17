@@ -91,6 +91,106 @@ extern u32 fn_1_A7024(f32, f32, f32, f32);
 extern f32 lbl_1_rodata_4AC4[4];
 extern void fn_8003462C(u32, u32, u32);
 
+/* fzgx:begin fn_1_A744C noprologue */
+#include "dolphin/types.h"
+
+typedef struct {
+    u8 pad_0[0x18];
+    char fmt_plain[0xC];
+    char fmt_named[0x10];
+    char msg_begin[0x8];
+    char msg_end[0x8];
+} DriverStrings;
+
+extern u8 lbl_1_data_34348[];
+extern char *lbl_1_data_20D1C[0x2D];
+
+typedef struct {
+    u8 pad_0[0x8];
+    u32 unk_8;
+} DriverAsset;
+
+typedef struct {
+    u8 pad_0[0x108];
+    DriverAsset *unk_108;
+} DriverSlot;
+
+typedef struct {
+    u8 pad_0[0x328];
+    s8 unk_328;
+    u8 pad_329[0x394 - 0x329];
+    DriverSlot *unk_394[3];
+    u8 pad_3A0[0x3B8 - 0x3A0];
+    s16 unk_3B8;
+    u8 pad_3BA[0x440 - 0x3BA];
+} Driver;
+
+extern void fn_80006E10(char *);
+extern s32 fn_1_12C930(s8);
+extern s32 fn_1_12CCB0(s8, s16);
+extern int sprintf(char *, const char *, ...);
+extern DriverAsset *fn_1_D3884(char *);
+extern u32 fn_80077D40(void);
+extern u32 fn_80071470(u32, u32);
+extern void fn_80008BA8(u32, u32, u32);
+extern void fn_80071718(DriverAsset *);
+
+static inline void DriverLoadAssets(Driver *driver, s32 variant, s32 v2, DriverStrings *str)
+{
+    s32 id;
+    Driver *dd;
+    s32 i;
+    DriverSlot *slot;
+    DriverAsset *asset;
+    s8 index;
+    char buf[128];
+
+    id = driver->unk_328;
+    dd = driver;
+    for (i = 0; i < 3; i++, dd = (Driver *)((u8 *)dd + 4)) {
+        slot = dd->unk_394[0];
+        if (slot == NULL) {
+            continue;
+        }
+        if (i == 0) {
+            index = fn_1_12C930(id);
+        } else {
+            index = fn_1_12CCB0(id, (s16)(i - 1));
+        }
+        if (index < 0) {
+            continue;
+        }
+        if (variant == 0) {
+            sprintf(buf, str->fmt_plain, lbl_1_data_20D1C[index]);
+        } else {
+            sprintf(buf, str->fmt_named, lbl_1_data_20D1C[index], v2);
+        }
+        asset = fn_1_D3884(buf);
+        fn_80008BA8(fn_80071470(slot->unk_108->unk_8, 0), fn_80071470(asset->unk_8, 0), fn_80077D40());
+        fn_80071718(asset);
+    }
+}
+
+void fn_1_A744C(Driver *driver, u32 count)
+{
+    DriverStrings *str = (DriverStrings *)lbl_1_data_34348;
+    u32 n;
+    s16 variant;
+    Driver *d;
+
+    fn_80006E10(str->msg_begin);
+    d = driver;
+    for (n = 0; n < count; n++, d++) {
+        variant = d->unk_3B8 % 4;
+        if (variant == 0) {
+            continue;
+        }
+        DriverLoadAssets(d, variant, variant, str);
+    }
+    fn_80006E10(str->msg_end);
+}
+/* fzgx:end fn_1_A744C */
+
 /* fzgx:begin fn_1_A75DC noprologue */
 #include "dolphin/types.h"
 
