@@ -4033,6 +4033,62 @@ void fn_1_141338(u32 arg0, u32 arg1, u32 arg2, u32 arg3, f32 arg4) {
 }
 /* fzgx:end fn_1_141338 */
 
+/* fzgx:begin fn_1_141360 noprologue */
+#include "types.h"
+#include "font.h"
+
+typedef struct {
+    u8 rgb[5][4];
+} RankColors;
+
+extern RankColors lbl_1_rodata_91F4;
+extern f32 lbl_1_rodata_26F8[22];
+extern u32 lbl_801A66A0;
+extern const f32 lbl_1_rodata_8B2C;
+extern const f32 lbl_1_rodata_863C;
+extern const f32 lbl_1_rodata_87AC;
+extern const f32 lbl_1_rodata_85F0;
+extern const f32 lbl_1_rodata_8A24;
+extern f32 lbl_8006D188(s32 angle);
+extern void fn_1_52718(FontDrawPacket *packet, FontVertex *vertices);
+extern int fn_1_4F734(FontDrawPacket *packet);
+
+void fn_1_141360(u8 rank, s32 x, s32 y, s32 z, f32 scale, f32 brightness) {
+    FontDrawPacket packet;
+    RankColors colors;
+    s32 idx;
+    s32 v;
+    f32 level;
+
+    colors = lbl_1_rodata_91F4;
+    v = rank - 1;
+    if (v < 0) {
+        idx = 0;
+    } else {
+        idx = 4;
+        if ((u32)v <= 4) {
+            idx = v;
+        }
+    }
+
+    level = brightness * (*(f32 *)((u8 *)&lbl_1_rodata_8A24 + 0) + (f32)((lbl_1_rodata_87AC * (*(f32 *)((u8 *)&lbl_1_rodata_863C + 0) + (lbl_8006D188((s32)((lbl_1_rodata_8B2C * (f32)(u32)(lbl_801A66A0 & 3)) / 4.0f))))) / 2.0f));
+
+    packet = *(FontDrawPacket *)lbl_1_rodata_26F8;
+    packet.image = 0x10000 - 0x5EEE;
+    packet.x = (f32)x;
+    packet.y = (f32)y;
+    packet.z = (f32)z;
+    packet.scale_x *= scale;
+    packet.scale_y *= scale;
+    packet.color[0] = (u8)(s32)((f32)colors.rgb[(u8)idx][0] * level);
+    packet.color[1] = (u8)(s32)((f32)colors.rgb[(u8)idx][1] * level);
+    packet.color[2] = (u8)(s32)((f32)colors.rgb[(u8)idx][2] * level);
+    packet.flags = 0x0400000A;
+    packet.vertex_callback = fn_1_52718;
+    fn_1_4F734(&packet);
+}
+/* fzgx:end fn_1_141360 */
+
 /* fzgx:begin fn_1_141614 noprologue */
 #include "types.h"
 #include "rel/main_rel/globals.h"

@@ -7709,3 +7709,9 @@ rel/main_rel/car/fn_1_8D988.c:
 
 rel/main_rel/archive/fn_1_12DAEC.c:
 	.text       start:0x0012DAEC end:0x0012E0B8 align:4
+
+rel/main_rel/spline/fn_1_F7F48.c:
+	.text       start:0x000F7F48 end:0x000F8030 align:4
+
+rel/main_rel/sel_static_disp/fn_1_141360.c:
+	.text       start:0x00141360 end:0x00141614 align:4

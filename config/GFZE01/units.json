@@ -55510,6 +55510,23 @@
   },
   {
     "module": "main_rel",
+    "source": "rel/main_rel/sel_static_disp/fn_1_141360.c",
+    "symbols": [
+      "fn_1_141360"
+    ],
+    "status": "matching",
+    "mw_version": "GC/1.3.2",
+    "extra_cflags": [],
+    "tu": "rel/main_rel/sel_static_disp.c",
+    "pool": {
+      "@14": "lbl_1_rodata_8608",
+      "@11": "lbl_1_rodata_87E8",
+      "@12": "lbl_1_rodata_85F0",
+      "@17": "lbl_1_rodata_8600"
+    }
+  },
+  {
+    "module": "main_rel",
     "source": "rel/main_rel/sel_static_disp/fn_1_141614.c",
     "symbols": [
       "fn_1_141614"
@@ -58322,6 +58339,17 @@
     ],
     "status": "matching",
     "mw_version": null,
+    "extra_cflags": [],
+    "tu": "rel/main_rel/spline.c"
+  },
+  {
+    "module": "main_rel",
+    "source": "rel/main_rel/spline/fn_1_F7F48.c",
+    "symbols": [
+      "fn_1_F7F48"
+    ],
+    "status": "matching",
+    "mw_version": "GC/1.3.2",
     "extra_cflags": [],
     "tu": "rel/main_rel/spline.c"
   },

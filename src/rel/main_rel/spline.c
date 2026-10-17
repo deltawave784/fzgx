@@ -930,6 +930,47 @@ s32 fn_1_F7EDC(s16 value) {
 }
 /* fzgx:end fn_1_F7EDC */
 
+/* fzgx:begin fn_1_F7F48 noprologue */
+#include "types.h"
+
+/* 64-bit flag words of the spline state block (u32 pairs in the generated header). */
+struct fn_1_F7F48_lbl_1_bss_7F0C0 {
+    u64 unk_0;
+    u8 pad_8[0x10];
+    u64 unk_18;
+    u8 pad_20[0x28];
+    u64 unk_48;
+};
+
+extern struct fn_1_F7F48_lbl_1_bss_7F0C0 lbl_1_bss_7F0C0;
+extern u32 fn_1_8D5F0(s16);
+
+#pragma opt_loop_invariants off
+#pragma opt_common_subs off
+void fn_1_F7F48(s16 id) {
+    struct fn_1_F7F48_lbl_1_bss_7F0C0 *p;
+    u64 bit = (u64)1 << id;
+    struct { u32 value; } already;
+    u64 used;
+
+    p = &lbl_1_bss_7F0C0;
+    used = p->unk_0 | p->unk_18;
+    already.value = 0;
+    if (((used & bit) ^ (u64)already.value) != 0) {
+        already.value = 1;
+    }
+    if (((0) == ((s32)already.value))) {
+        if (!(fn_1_8D5F0(id) & 0x20000000)) {
+            lbl_1_bss_7F0C0.unk_48 |= bit;
+        }
+    }
+    p->unk_18 |= bit;
+}
+#pragma opt_common_subs reset
+
+#pragma opt_loop_invariants reset
+/* fzgx:end fn_1_F7F48 */
+
 /* fzgx:begin fn_1_F8030 */
 // Clears the spline state counters.
 void fn_1_F8030(void) {
