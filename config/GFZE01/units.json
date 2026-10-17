@@ -30783,6 +30783,20 @@
   },
   {
     "module": "main_rel",
+    "source": "rel/main_rel/alloc/fn_1_627C.c",
+    "symbols": [
+      "fn_1_627C"
+    ],
+    "status": "matching",
+    "mw_version": null,
+    "extra_cflags": [],
+    "tu": "rel/main_rel/alloc.c",
+    "pool": {
+      "@11": "lbl_1_rodata_1E0"
+    }
+  },
+  {
+    "module": "main_rel",
     "source": "rel/main_rel/alloc/fn_1_6394.c",
     "symbols": [
       "fn_1_6394"

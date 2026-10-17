@@ -7685,3 +7685,6 @@ rel/main_rel/ranking/fn_1_158984.c:
 
 rel/main_rel/effect_car/fn_1_6A7A4.c:
 	.text       start:0x0006A7A4 end:0x0006AF70 align:4
+
+rel/main_rel/alloc/fn_1_627C.c:
+	.text       start:0x0000627C end:0x00006394 align:4

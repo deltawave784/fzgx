@@ -492,6 +492,34 @@ s32 fn_1_5910(void) {
 }
 /* fzgx:end fn_1_5910 */
 
+/* fzgx:begin fn_1_627C */
+extern u16 fn_1_A5D88(void);
+extern u16 fn_1_A5DB0(void);
+extern const f64 lbl_1_rodata_1E0;
+extern const f32 lbl_1_rodata_188;
+extern const f32 lbl_1_rodata_194;
+extern u32 fn_80038EEC(f32, f32, f32, f32, f32, f32);
+extern u32 fn_80074188(u32, u32, u32, u32);
+
+#pragma opt_propagation off
+#pragma opt_common_subs off
+void fn_1_627C(void) {
+    f32 width;
+    f32 height;
+    s8 signedMode;
+    Obj_1_bss_F68_Target *obj = lbl_1_bss_F68;
+    u8 mode = obj->unk_48;
+    signedMode = (s8)mode;
+    if (signedMode == 11 || (obj->unk_0 & 0x80000000) || (s8)mode == 0 || signedMode == 9) {
+        return;
+    }
+    width = fn_1_A5D88();
+    height = fn_1_A5DB0();
+    fn_80038EEC(lbl_1_rodata_188, lbl_1_rodata_188, width, height, lbl_1_rodata_188, lbl_1_rodata_194);
+    fn_80074188(0, 0, (u32)width, (u32)height);
+}
+/* fzgx:end fn_1_627C */
+
 /* fzgx:begin fn_1_6394 */
 void fn_1_6394(void) {
     fn_1_DA6C(live_camera);
