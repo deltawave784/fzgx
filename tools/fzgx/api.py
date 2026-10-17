@@ -514,16 +514,41 @@ def _check_work(p: Project, symbol: str, key: str, src: Optional[Path], max_diff
         return res
     text = src.read_text()
     renames = _primer_renames(res, text)
-    if not renames:
+    moved = _primer_sections(res, text) if not renames else None
+    if not renames and not moved:
         return res
-    pattern = re.compile(r'\b(' + '|'.join(re.escape(n) for n in sorted(renames, key=len, reverse=True)) + r')\b')
-    src.write_text(pattern.sub(lambda m: renames[m.group(1)], text))
+    if renames:
+        pattern = re.compile(r'\b(' + '|'.join(re.escape(n) for n in sorted(renames, key=len, reverse=True)) + r')\b')
+        src.write_text(pattern.sub(lambda m: renames[m.group(1)], text))
+    else:
+        src.write_text(moved)
     again = oracle.check(p, symbol, max_diff_lines, source=src, mw_version=mw_version, extra_cflags=extra_cflags)
     if again.ok and oracle.unit_fully_matches(again) is None:
-        again.primer_renamed = renames
+        if renames:
+            again.primer_renamed = renames
+        else:
+            again.primer_moved = sorted(res.extra_in_base or [])
         return again
     src.write_text(text)
     return res
+
+
+def _primer_sections(res: oracle.CheckResult, text: str) -> Optional[str]:
+    """The work copy with its stray primers moved into `.fzgxpool`, when `fzgx_*` functions
+    defined in `.text` are all that keeps an oracle match from submitting (the link-mismatch
+    class of batches codex-20261016d/e: four 100% objects grew their module's .text). None
+    when anything else blocks or the text has no such definition."""
+    extras = list(res.extra_in_base or [])
+    if not extras or not all(n.startswith('fzgx_') for n in extras):
+        return None
+    primers = set(getattr(res, 'primer_functions', ()) or ())
+    if set(extras) & primers:
+        return None  # in `.fzgxpool` already: a naming problem, not a section one
+    from . import fixup_layout
+    stray = {name for name, _, _ in fixup_layout.stray_primer_functions(text, set(extras))}
+    if stray != set(extras):
+        return None
+    return fixup_layout.primer_sections(text, set(extras))
 
 
 def _submit_blocker(res: oracle.CheckResult) -> Optional[str]:
@@ -538,11 +563,16 @@ def _submit_blocker(res: oracle.CheckResult) -> Optional[str]:
     if not extras:
         return "NOT SUBMITTED: " + reason
     named = [n for n in extras if n in primers]
-    stray = [n for n in extras if n not in primers]
+    misplaced = [n for n in extras if n not in primers and n.startswith('fzgx_')]
+    stray = [n for n in extras if n not in primers and not n.startswith('fzgx_')]
     parts = []
     if named:
         parts.append("pool/layout primer(s) " + ", ".join(named) + " are in `.fzgxpool` but a primer must be "
                      "named `fzgx_*` (e.g. `fzgx_pool_prime_" + res.symbol + "`): rename them")
+    if misplaced:
+        parts.append("primer(s) " + ", ".join(misplaced) + " are compiled into `.text` and would be linked as "
+                     "code retail does not have (the module grows, every hash fails): put "
+                     '`#pragma section code_type ".fzgxpool"` before them and `#pragma section code_type ".text"` after')
     if stray:
         parts.append("function(s) " + ", ".join(stray) + " would be linked as extra code retail does not have: "
                      "inline them or make them macros; a primer belongs in `.fzgxpool` and is named `fzgx_*`")
@@ -728,6 +758,9 @@ def format_check(res: Dict[str, Any]) -> str:
     if res.get('primer_renamed'):
         lines.append('primer functions renamed in your work copy so the match can submit: '
                      + ', '.join(f'{a} -> {b}' for a, b in res['primer_renamed'].items()))
+    if res.get('primer_moved'):
+        lines.append('primer functions moved into `.fzgxpool` in your work copy (a `#pragma section code_type` '
+                     'pair around each) so the match can link: ' + ', '.join(res['primer_moved']))
     if res.get('mw_version'):
         lines.append(f"compiler: {res['mw_version']}" + (f" extra: {res['extra_cflags']}" if res.get('extra_cflags') else ''))
     if res.get('instruction_rows') and not res['matched']:

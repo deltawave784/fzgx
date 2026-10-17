@@ -347,19 +347,21 @@ def _diff(project: Project, module: str, symbol: str, unit: str, max_diff_lines:
     # a function our object defines next to the target (a static helper retail inlines away, say) is
     # code the retail unit does not have: it grows .text and the module and fails the link hash while the
     # per-symbol comparison still reads 100%. Layout/pool primers (`fzgx_*`) live in `.fzgxpool`, which
-    # the link ignores.
-    stray = sorted(n for n in right_syms if n != symbol and not n.startswith("fzgx_"))
+    # the link ignores. The name alone proves nothing: a `fzgx_pool_primer_N` defined in `.text` (no
+    # `#pragma section code_type ".fzgxpool"`) is linked as code (fn_1_E252C, fn_1_115560, fn_1_147508,
+    # fn_10_17814: 100% at the object, main_rel's .text 396 bytes long, 12 modules failed the hash).
+    res.primer_functions = _primer_functions(base)
+    # a primer is a `fzgx_*` function in `.fzgxpool` (both: the name keeps carved re-checks and the
+    # rename repair honest, the section is what the link ignores); every landed pool unit with a
+    # layout primer (fn_1_46144, fn_1_C3B8, fn_1_A3654, fn_1_EB4BC) re-checked as unfit without this
+    primers = {n for n in res.primer_functions if n.startswith("fzgx_")}
+    stray = sorted(n for n in right_syms if n != symbol and n not in primers)
     if target is not None:  # the retail auto object holds many functions; only ours is in question
         left_syms = {k: v for k, v in left_syms.items() if k == symbol}
         right_syms = {k: v for k, v in right_syms.items() if k == symbol}
-    res.primer_functions = _primer_functions(base)
     for name, s in left_syms.items():
         res.symbols[name] = float(s.get("match_percent", 0.0))
     res.missing_in_base = sorted(set(left_syms) - set(right_syms))
-    # a carved unit's primers (`fzgx_*` functions in `.fzgxpool`, dropped at integration) are not
-    # extra code either: the uncarved rule above already ignores them, and every landed pool unit
-    # with a layout primer (fn_1_46144, fn_1_C3B8, fn_1_A3654, fn_1_EB4BC) re-checked as unfit
-    primers = {n for n in res.primer_functions if n.startswith("fzgx_")}
     res.extra_in_base = sorted(set(right_syms) - set(left_syms) - primers)
     if target is not None:
         # only RELs keep it: the DOL link dead-strips an unreferenced static helper (fn_8006A768's

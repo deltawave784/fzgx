@@ -1955,6 +1955,60 @@ def retail_pool_dump(p, symbol, check):
 
 
 _PRIMER_REGION = re.compile(r'(?m)^[ \t]*#pragma section code_type "\.fzgxpool"[ \t]*\n.*?^[ \t]*#pragma section code_type "\.text"[ \t]*\n', re.S)
+_CODE_TYPE = re.compile(r'(?m)^[ \t]*#pragma[ \t]+section[ \t]+code_type[ \t]+"([^"]*)"[ \t]*$')
+_PRIMER_DEF = re.compile(r'(?m)^(?![ \t]*#)[^;{}\n]*?\b(fzgx_\w+)[ \t]*\([^;{}]*\)[ \t]*\{')
+
+
+def stray_primer_functions(body: str, names=None) -> List[Tuple[str, int, int]]:
+    """`fzgx_*` function definitions placed in `.text` (outside every `code_type ".fzgxpool"`
+    region): (name, start, end) spans, `end` just past the closing brace. `names` restricts the
+    search to the functions an object check reported as extra. Such a primer is dropped by
+    nothing at integration: it links as code retail does not have, the module grows and every
+    hash fails (fn_1_E252C, fn_1_115560, fn_1_147508, fn_10_17814, batches codex-20261016d/e)."""
+    from .sdkimport import masked
+    code = masked(body)  # same offsets; the pragma's string literal is read from `body`
+    sections = sorted((m.start(), m.group(1)) for m in _CODE_TYPE.finditer(body))
+    out = []
+    for m in _PRIMER_DEF.finditer(code):
+        if names is not None and m.group(1) not in names:
+            continue
+        current = '.text'
+        for at, section in sections:
+            if at < m.start():
+                current = section
+        line_start = code.rfind('\n', 0, m.start()) + 1
+        if current == '.fzgxpool' or '__declspec(section ".fzgxpool")' in body[line_start:m.end()]:
+            continue
+        depth, i = 0, m.end() - 1
+        while i < len(code):
+            if code[i] == '{':
+                depth += 1
+            elif code[i] == '}':
+                depth -= 1
+                if depth == 0:
+                    break
+            i += 1
+        else:
+            return []
+        out.append((m.group(1), code.rfind('\n', 0, m.start()) + 1, i + 1))
+    return out
+
+
+def primer_sections(body: str, names=None) -> Optional[str]:
+    """The body with every stray `fzgx_*` function moved into `.fzgxpool` by a
+    `#pragma section code_type` pair around each definition (the landed primer form; nothing
+    else changes, so the pooled literals keep their first-use order). None when nothing moves."""
+    spans = stray_primer_functions(body, names)
+    if not spans:
+        return None
+    text = body
+    for _, start, end in sorted(spans, key=lambda s: s[1], reverse=True):
+        tail = text[end:]
+        nl = tail.find('\n')
+        cut = end + (nl + 1 if nl >= 0 else len(tail))
+        text = (text[:start] + '#pragma section code_type ".fzgxpool"\n' + text[start:cut].rstrip('\n') + '\n'
+                + '#pragma section code_type ".text"\n' + text[cut:])
+    return text
 _SECTION_BASE = re.compile(r'addi (r\d+), r\d+, (\S+?)(?:\+0x[0-9A-Fa-f]+)?@l$')
 
 

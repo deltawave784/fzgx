@@ -1114,7 +1114,7 @@ def _locked_cache_core(body: str, name: str) -> List[Tuple[str, str]]:
 def rewrites(body: str, name: str) -> List[Tuple[str, str]]:
     """Every single second-stage rewrite of a body."""
     out: List[Tuple[str, str]] = []
-    for fn in (scope_moves, split_inits, hoists, through_local, return_values,
+    for fn in (primer_sections, scope_moves, split_inits, hoists, through_local, return_values,
                call_results_to_locals, wrap_constant_pointers, decse_repeated_expressions,
                scalar_carriers, dead_uses, variable_splits, signedness_flips, float_precision,
                embedded_call_assignments, condition_embedded_assignments):
@@ -1123,6 +1123,15 @@ def rewrites(body: str, name: str) -> List[Tuple[str, str]]:
         except Exception:
             continue
     return out
+
+
+def primer_sections(body: str, name: str) -> List[Tuple[str, str]]:
+    """A matcher's `fzgx_*` primer functions defined in `.text` moved into `.fzgxpool`: the
+    object matched at 100% and the link rejected it (main_rel grew by the primers' code;
+    fn_1_E252C, fn_1_115560, fn_1_147508, fn_10_17814). The pool order is unchanged."""
+    from . import fixup_layout
+    text = fixup_layout.primer_sections(body)
+    return [('primer section .fzgxpool', text)] if text else []
 
 
 def _top_statements(text: str) -> Optional[List[Tuple[int, int]]]:

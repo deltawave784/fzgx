@@ -26,9 +26,11 @@ Edit with `patch_unit(symbol, agent, old, new)` (one unique span, then compile a
 diff) or `write_unit(symbol, agent, source)` for a full replacement. Page through a
 long diff with `read_evidence(symbol, section, cursor)`; it does not use a check.
 A full match is submitted automatically.
-A pool/layout primer goes in `.fzgxpool` and is named `fzgx_*`; check renames a
-misnamed primer itself and prints `NOT SUBMITTED: ...` when anything else blocks
-a match. `SUBMIT QUEUED` means the match is saved for the next verify: stop there,
+A pool/layout primer goes in `.fzgxpool` (`#pragma section code_type ".fzgxpool"`
+before it, `#pragma section code_type ".text"` after) and is named `fzgx_*`; a
+`fzgx_*` function left in `.text` links as extra code and fails every hash. check
+renames a misnamed primer and moves a misplaced one itself, and prints
+`NOT SUBMITTED: ...` when anything else blocks a match. `SUBMIT QUEUED` means the match is saved for the next verify: stop there,
 do not edit, retry or release.
 When a tool result says STOP, call
 `release(symbol, agent, reason)` once with a precise diagnosis of what still
