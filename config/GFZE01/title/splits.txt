@@ -323,3 +323,6 @@ rel/title/title/fn_8_EC4.c:
 
 rel/title/operation/fn_8_BD08.c:
 	.text       start:0x0000BD08 end:0x0000C038 align:4
+
+rel/title/operation/fn_8_9FB4.c:
+	.text       start:0x00009FB4 end:0x0000A3A4 align:4
