@@ -7745,3 +7745,9 @@ rel/main_rel/sound/fn_1_A5AA0.c:
 
 rel/main_rel/game/fn_1_41CB8.c:
 	.text       start:0x00041CB8 end:0x00041E34 align:4
+
+rel/main_rel/som/fn_1_1384C.c:
+	.text       start:0x0001384C end:0x00013A28 align:4
+
+rel/main_rel/stcoli/fn_1_1FB80.c:
+	.text       start:0x0001FB80 end:0x0001FC98 align:4

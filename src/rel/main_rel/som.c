@@ -11,6 +11,72 @@ void fn_1_1383C(void) {
 }
 /* fzgx:end fn_1_1383C */
 
+/* fzgx:begin fn_1_1384C */
+typedef struct { void *obj; char *name; } NEnt;
+typedef struct { s32 count; u32 pad; NEnt *ents; } NTab;
+typedef struct { NTab *tab; } NHold;
+typedef struct { u32 flags; char *name; void *res; u32 pad; } SItem;
+typedef struct { u32 pad; s32 count; SItem *items; u32 pad2; } SGrp;
+typedef struct { u8 pad[0x1a]; u16 a; u16 b; u8 pad2[2]; u32 off; } Res;
+extern int fn_80083BCC(const char *, const char *);
+
+static inline Res *find_resource(NHold **arg0, char *name) {
+    NHold **p;
+    s32 k;
+    u8 *s;
+    int mv;
+
+    for (p = arg0; *p != NULL; p++) {
+        if ((*p)->tab != NULL) {
+            for (k = 0; k < (*p)->tab->count; k++) {
+                s = (u8 *)(*p)->tab->ents[k].name;
+                mv = 0;
+                if (s[0] == 'M' && s[1] == 'V' && s[2] == '_') {
+                    mv = 1;
+                }
+                if ((mv && fn_80083BCC((char *)s + 3, name) == 0) || (!mv && fn_80083BCC((char *)s, name) == 0)) {
+                    return (Res *)(*p)->tab->ents[k].obj;
+                }
+            }
+        }
+    }
+    return NULL;
+}
+
+void fn_1_1384C(NHold **arg0) {
+    s32 i;
+    SGrp *grp;
+    SItem *item;
+    s32 j;
+    u8 *base;
+    Res *r;
+    s32 n;
+
+    grp = (SGrp *)lbl_1_bss_3BE0->unk_68;
+    for (i = 0; i < (s32)lbl_1_bss_3BE0->unk_64; i++, grp++) {
+        item = grp->items;
+        for (j = 0; j < grp->count; j++, item++) {
+            r = find_resource(arg0, item->name);
+            item->res = r;
+            if (r != NULL && r->a == 1 && r->b == 0) {
+                u16 *ip;
+                base = (u8 *)r + 0x40;
+                r = (Res *)((u8 *)r + r->off);
+                ip = (u16 *)((u8 *)r + 0x16);
+                for (n = ((u8 *)r)[0x12]; n > 0; n--) {
+                    if ((*(u32 *)(base + (*ip << 5)) & 1) != 0) {
+                        item->flags |= 0x10;
+                    } else {
+                        item->flags |= 8;
+                    }
+                    ip++;
+                }
+            }
+        }
+    }
+}
+/* fzgx:end fn_1_1384C */
+
 /* fzgx:begin fn_1_13A28 */
 typedef struct Fn1_13A28 Fn1_13A28;
 
