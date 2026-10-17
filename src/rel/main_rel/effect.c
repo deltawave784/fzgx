@@ -5009,6 +5009,145 @@ void fn_1_618B8(Particle *p)
 }
 /* fzgx:end fn_1_618B8 */
 
+/* fzgx:begin fn_1_619E4 noprologue */
+#include "types.h"
+#include "game/vec3.h"
+
+struct fn_1_619E4_pool {
+    u8 pad_0[0x28];
+    f32 one;        /* 0x28 */
+    u8 pad_2C[0x24];
+    f32 zero;       /* 0x50 */
+    f32 half;       /* 0x54 */
+    u8 pad_58[0x4];
+    f32 c255;       /* 0x5C */
+    u8 pad_60[0x40];
+    f32 two;        /* 0xA0 */
+    u8 pad_A4[0x214];
+    f32 widthScale; /* 0x2B8 */
+};
+
+typedef struct fn_1_619E4_Obj {
+    u8 pad_0[0x1C];
+    f32 red;     /* 0x1C */
+    f32 green;   /* 0x20 */
+    f32 blue;    /* 0x24 */
+    f32 radius;  /* 0x28 */
+    u8 pad_2C[0x8];
+    void *model; /* 0x34 */
+    u8 pad_38[0x4];
+    Vec3 end;    /* 0x3C */
+    u8 pad_48[0x18];
+    Vec3 start;  /* 0x60 */
+} fn_1_619E4_Obj;
+
+typedef struct fn_1_619E4_DrawParam {
+    f32 scale;
+    f32 unk4;
+    f32 mtx[3][4];
+    f32 unk38;
+    u8 r, g, b, a;
+} fn_1_619E4_DrawParam;
+
+extern struct fn_1_619E4_pool lbl_1_rodata_2950;
+extern void *lbl_801A66CC;
+extern s32 fn_1_54E34(void *, f32);
+extern int fn_1_9F914(const void *, const void *);
+extern void *memset(void *, int, u32);
+extern void lbl_8006DBAC(void *);
+extern void lbl_8006E1B0(Vec3 *, Vec3 *);
+extern void lbl_8006DCA4(void);
+extern void lbl_8006E0A4(Vec3 *);
+extern void lbl_8006D7B0(void);
+extern void lbl_8006D668(Vec3 *);
+extern f32 lbl_8006D0B4(f32);
+extern void fn_8006EDBC(Vec3 *, Vec3 *, s16 *, s16 *);
+extern void lbl_8006D7DC(Vec3 *);
+extern void mathutil_mtxA_rotate_y(s32);
+extern void mathutil_mtxA_rotate_x(s32);
+extern void lbl_8006E15C(f32, f32, f32);
+extern void fn_8006E294(Vec3 *);
+extern s32 lbl_8006D24C(f32, f32);
+extern void lbl_8006DB74(void *);
+
+#pragma opt_common_subs off
+void fn_1_619E4(fn_1_619E4_Obj *obj) {
+    struct fn_1_619E4_pool *pool;
+    void *model;
+    f32 size;
+    f32 radius;
+    f32 len;
+    f32 s;
+    f32 dx, dz, dy;
+    f32 ox, oy;
+    fn_1_619E4_DrawParam param;
+    Vec3 end;
+    Vec3 start;
+    Vec3 mid;
+    Vec3 dir;
+    s16 rotX;
+    s16 rotY;
+
+    model = obj->model;
+    pool = &lbl_1_rodata_2950;
+    memset(&param, 0, sizeof(param));
+    radius = obj->radius;
+    lbl_8006DBAC(lbl_801A66CC);
+    lbl_8006E1B0(&obj->start, &start);
+    lbl_8006DCA4();
+    if (fn_1_54E34(&obj->end, obj->radius)) {
+        lbl_8006E1B0(&obj->end, &end);
+        if (end.z < pool->zero && start.z < pool->zero) {
+            dx = end.x - start.x;
+            dy = end.y - start.y;
+            size = obj->radius;
+            dir.x = dx;
+            dir.y = dy;
+            if (pool->zero == dx && pool->zero == dy) {
+                lbl_8006E0A4(&obj->end);
+                lbl_8006D7B0();
+            } else {
+                dir.z = pool->zero;
+                lbl_8006D668(&dir);
+                s = radius * pool->widthScale;
+                ox = dir.x * s;
+                oy = dir.y * s;
+                end.x = end.x + ox;
+                end.y = end.y + oy;
+                start.x = start.x - ox;
+                start.y = start.y - oy;
+                mid.x = pool->half * (end.x + start.x);
+                mid.y = pool->half * (end.y + start.y);
+                mid.z = pool->half * (end.z + start.z);
+                dx = end.x - start.x;
+                oy = end.y - start.y;
+                ox = end.z - start.z;
+                len = dx * dx;
+                len = oy * oy + len;
+                len = ox * ox + len;
+                len = lbl_8006D0B4(len);
+                fn_8006EDBC(&end, &start, &rotX, &rotY);
+                lbl_8006D7DC(&mid);
+                mathutil_mtxA_rotate_y(rotY);
+                mathutil_mtxA_rotate_x(rotX);
+                lbl_8006E15C(pool->one, pool->one, len / radius);
+                mathutil_mtxA_rotate_x(0x4000);
+                fn_8006E294(&dir);
+                mathutil_mtxA_rotate_y(lbl_8006D24C(dir.x, dir.z));
+            }
+            lbl_8006DB74(param.mtx);
+            param.scale = pool->two * size;
+            param.r = pool->c255 * obj->red;
+            param.g = pool->c255 * obj->green;
+            param.b = pool->c255 * obj->blue;
+            param.a = 0xFF;
+            fn_1_9F914(&param, model);
+        }
+    }
+}
+#pragma opt_common_subs reset
+/* fzgx:end fn_1_619E4 */
+
 /* fzgx:begin fn_1_61C84 */
 // fn_1_61C84: empty in retail (single blr).
 void fn_1_61C84(void) {

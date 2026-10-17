@@ -7697,3 +7697,6 @@ rel/main_rel/car_test/fn_1_7EB8C.c:
 
 rel/main_rel/effect/fn_1_67F20.c:
 	.text       start:0x00067F20 end:0x00068054 align:4
+
+rel/main_rel/effect/fn_1_619E4.c:
+	.text       start:0x000619E4 end:0x00061C84 align:4
