@@ -3455,6 +3455,95 @@ void fn_1_7B558(s32 arg0, s32 arg1, u32 x, u32 y, u32 w, u32 h, f32 scale) {
 #pragma opt_strength_reduction reset
 /* fzgx:end fn_1_7B558 */
 
+/* fzgx:begin fn_1_7BA48 pool noprologue */
+#include "types.h"
+
+extern u32 fn_800793D4(u8 *, u32, u32);
+
+typedef struct {
+    u8 pad_0[0x8];
+    u32 unk_8;
+    u32 unk_C;
+    u32 unk_10;
+    u16 unk_14;
+    u16 unk_16;
+    u16 unk_18;
+    u8 pad_1A[0x2];
+    u32 unk_1C;
+    u32 unk_20;
+    u32 unk_24;
+    u16 unk_28[8];
+    u32 unk_38;
+} Fn17BA48State;
+
+
+/* file-scope objects of the retail TU, in retail order: MWCC addresses them off one section base */
+u32 fzgx_obj_lbl_1_bss_6D7A8[2];
+u32 lbl_1_bss_6D7A8_8;
+u32 lbl_1_bss_6D7A8_C;
+u32 lbl_1_bss_6D7A8_10;
+u16 lbl_1_bss_6D7A8_14;
+u16 lbl_1_bss_6D7A8_16;
+u16 lbl_1_bss_6D7C0;
+u16 lbl_1_bss_6D7C0_fill_6D7C2;
+u32 lbl_1_bss_6D7C0_4;
+u32 lbl_1_bss_6D7C0_8;
+u32 lbl_1_bss_6D7C0_C;
+u16 lbl_1_bss_6D7C0_10[8];
+u32 lbl_1_bss_6D7C0_20;
+u32 lbl_1_bss_6D7C0_fill_6D7E4;
+u32 fzgx_obj_lbl_1_bss_6D7E8[2];
+u8 fzgx_obj_lbl_1_bss_6D7F0;
+u8 lbl_1_bss_6D7A8_gap_6D7F1;
+u16 lbl_1_bss_6D7A8_gap_6D7F1_fill_6D7F2;
+u32 fzgx_obj_lbl_1_bss_6D7F4[11];
+
+#pragma section code_type ".fzgxpool"
+static void fzgx_bss_layout(void) {
+    volatile u8 s;  /* fzgx-allow: S2 layout primer sink: MWCC emits .bss objects in first-access order */
+    s = *(u8 *)&fzgx_obj_lbl_1_bss_6D7A8;
+    s = *(u8 *)&lbl_1_bss_6D7A8_8;
+    s = *(u8 *)&lbl_1_bss_6D7A8_C;
+    s = *(u8 *)&lbl_1_bss_6D7A8_10;
+    s = *(u8 *)&lbl_1_bss_6D7A8_14;
+    s = *(u8 *)&lbl_1_bss_6D7A8_16;
+    s = *(u8 *)&lbl_1_bss_6D7C0;
+    s = *(u8 *)&lbl_1_bss_6D7C0_fill_6D7C2;
+    s = *(u8 *)&lbl_1_bss_6D7C0_4;
+    s = *(u8 *)&lbl_1_bss_6D7C0_8;
+    s = *(u8 *)&lbl_1_bss_6D7C0_C;
+    s = *(u8 *)&lbl_1_bss_6D7C0_10;
+    s = *(u8 *)&lbl_1_bss_6D7C0_20;
+    s = *(u8 *)&lbl_1_bss_6D7C0_fill_6D7E4;
+    s = *(u8 *)&fzgx_obj_lbl_1_bss_6D7E8;
+    s = *(u8 *)&fzgx_obj_lbl_1_bss_6D7F0;
+    s = *(u8 *)&lbl_1_bss_6D7A8_gap_6D7F1;
+    s = *(u8 *)&lbl_1_bss_6D7A8_gap_6D7F1_fill_6D7F2;
+    s = *(u8 *)&fzgx_obj_lbl_1_bss_6D7F4;
+}
+#pragma section code_type ".text"
+
+void fn_1_7BA48(u8 *arg0) {
+    
+    fn_800793D4(arg0, 0, ((lbl_1_bss_6D7A8_10) + ((lbl_1_bss_6D7A8_8) + (lbl_1_bss_6D7A8_C))));
+    lbl_1_bss_6D7C0 = 0;
+    lbl_1_bss_6D7A8_16 = 0;
+    lbl_1_bss_6D7A8_14 = 0;
+    lbl_1_bss_6D7C0_4 = (u32)arg0;
+    lbl_1_bss_6D7C0_8 = (u32)arg0 + lbl_1_bss_6D7A8_8;
+    lbl_1_bss_6D7C0_C = lbl_1_bss_6D7C0_8 + lbl_1_bss_6D7A8_C;
+    lbl_1_bss_6D7C0_10[0] = 0xFFFF;
+    lbl_1_bss_6D7C0_10[1] = 0xFFFF;
+    lbl_1_bss_6D7C0_10[2] = 0xFFFF;
+    lbl_1_bss_6D7C0_10[3] = 0xFFFF;
+    lbl_1_bss_6D7C0_10[4] = 0xFFFF;
+    lbl_1_bss_6D7C0_10[5] = 0xFFFF;
+    lbl_1_bss_6D7C0_10[6] = 0xFFFF;
+    lbl_1_bss_6D7C0_10[7] = 0xFFFF;
+    lbl_1_bss_6D7C0_20 = 0;
+}
+/* fzgx:end fn_1_7BA48 */
+
 /* fzgx:begin fn_1_7BAF8 pool */
 typedef struct {
     u8 pad_0[0x8];
