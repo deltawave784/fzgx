@@ -7538,3 +7538,6 @@ rel/main_rel/_prolog/fn_1_1304.c:
 
 rel/main_rel/stcoli/fn_1_24A4C.c:
 	.text       start:0x00024A4C end:0x00024F10 align:4
+
+rel/main_rel/bg_common/fn_1_107C74.c:
+	.text       start:0x00107C74 end:0x00107E90 align:4
