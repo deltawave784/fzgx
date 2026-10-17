@@ -3638,6 +3638,112 @@ void fn_1_13E054(void* arg0, void* arg1, void* arg2, int arg3) {
 }
 /* fzgx:end fn_1_13E054 */
 
+/* fzgx:begin fn_1_13EA9C noprologue */
+#include "types.h"
+#include "font.h"
+#include "rel/main_rel/globals.h"
+
+typedef struct {
+    char s[17]; } fn_1_13EA9C_Str17;
+typedef struct { char s[29]; } fn_1_13EA9C_Str29;
+typedef struct { FontDrawPacket p; } fn_1_13EA9C_Pkt;
+
+extern const fn_1_13EA9C_Str17 lbl_1_rodata_8E38;
+extern const fn_1_13EA9C_Str29 lbl_1_rodata_8E4C;
+extern f32 lbl_1_rodata_26F8[22];
+extern const f32 lbl_1_rodata_85EC;
+extern const f32 lbl_1_rodata_85F0;
+extern const f32 lbl_1_rodata_8648;
+extern const f32 lbl_1_rodata_8670;
+extern const f32 lbl_1_rodata_86C4;
+extern const f32 lbl_1_rodata_87D0;
+extern const f32 lbl_1_rodata_8820;
+extern const f32 lbl_1_rodata_8C70;
+extern const f32 lbl_1_rodata_8E04;
+extern const f32 lbl_1_rodata_8E6C;
+extern const f32 lbl_1_rodata_8E70;
+extern const f32 lbl_1_rodata_8E74;
+extern const f32 lbl_1_rodata_8E78;
+extern const f32 lbl_1_rodata_8E7C;
+extern const f32 lbl_1_rodata_8E80;
+extern const f32 lbl_1_rodata_8E84;
+extern const f32 lbl_1_rodata_8E88;
+
+extern int fn_1_8623C(void);
+extern void fn_1_50164(f32, f32, f32, f32, FontDrawPacket *);
+extern void fn_1_51564(u16, u16, u16, u16, u16, u16);
+extern void fn_1_5158C(FontDrawPacket *, u32, s16, s16);
+extern u32 fn_1_53FE4(FontDrawPacket *, u32);
+extern void fn_1_49410(void);
+extern void fn_1_496FC(f32, f32);
+extern void fn_1_495C8(u8);
+extern void fn_1_4955C(f32, f32);
+extern void fn_1_4965C(u8);
+extern void fn_1_495B0(u32);
+extern void fn_1_49590(f32);
+extern void fn_1_4CE48(char *, f32);
+
+#pragma opt_common_subs off
+#pragma opt_propagation off
+void fn_1_13EA9C(void) {
+    fn_1_13EA9C_Str17 name = lbl_1_rodata_8E38;
+    fn_1_13EA9C_Str29 text = lbl_1_rodata_8E4C;
+    FontDrawPacket packet;
+    int n;
+    char *namep = name.s;
+    char *textp = text.s;
+
+    n = fn_1_8623C();
+
+    packet = *(FontDrawPacket *)lbl_1_rodata_26F8;
+    packet.image = 12;
+    packet.flags = 5;
+    packet.x = lbl_1_rodata_8E6C;
+    packet.y = lbl_1_rodata_8648;
+    packet.z = lbl_1_rodata_8E04;
+    fn_1_50164(lbl_1_rodata_8670, lbl_1_rodata_87D0, lbl_1_rodata_86C4, lbl_1_rodata_86C4, &packet);
+
+    packet = *(FontDrawPacket *)lbl_1_rodata_26F8;
+    packet.image = 0x9E14;
+    fn_1_51564(0, 0, 24, 20, 2, 2);
+    fn_1_5158C(&packet, packet.image, n % 2, n / 2);
+    packet.x = lbl_1_rodata_8E70;
+    packet.y = lbl_1_rodata_8E74;
+    packet.z = lbl_1_rodata_8E78;
+    packet.scale_x *= lbl_1_rodata_85EC;
+    packet.scale_y *= lbl_1_rodata_85EC;
+    packet.flags = 9;
+    fn_1_4F734(&packet);
+
+    fn_1_49410();
+    fn_1_496FC(lbl_1_rodata_8820, lbl_1_rodata_8E74);
+    fn_1_495C8(8);
+    fn_1_4955C(lbl_1_rodata_8C70, lbl_1_rodata_8C70);
+    fn_1_4965C(2);
+    fn_1_495B0(0x40000000);
+    fn_1_49590(lbl_1_rodata_85F0);
+    fn_1_4CE48(namep, lbl_1_rodata_8E7C);
+
+    packet = *(FontDrawPacket *)lbl_1_rodata_26F8;
+    packet.x = lbl_1_rodata_8E80;
+    packet.y = lbl_1_rodata_8E74;
+    packet.z = lbl_1_rodata_8E78;
+    packet.flags = 10;
+    packet.image = 0x9500;
+    fn_1_53FE4(&packet, 0);
+
+    fn_1_49410();
+    fn_1_496FC(lbl_1_rodata_8E84, lbl_1_rodata_8E74);
+    fn_1_495C8(8);
+    fn_1_4955C(lbl_1_rodata_8C70, lbl_1_rodata_8C70);
+    fn_1_4965C(2);
+    fn_1_495B0(0x40000000);
+    fn_1_49590(lbl_1_rodata_85F0);
+    fn_1_4CE48(textp, lbl_1_rodata_8E88);
+}
+#pragma opt_common_subs reset
+/* fzgx:end fn_1_13EA9C */
+
 /* fzgx:begin fn_1_13EDDC */
 // Build the selected display data unless the caller requested the cached path.
 void fn_1_13EDDC(u32 arg0, u32 arg1, u32 arg2, u32 arg3, s32 arg4) {

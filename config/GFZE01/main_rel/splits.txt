@@ -7541,3 +7541,6 @@ rel/main_rel/stcoli/fn_1_24A4C.c:
 
 rel/main_rel/bg_common/fn_1_107C74.c:
 	.text       start:0x00107C74 end:0x00107E90 align:4
+
+rel/main_rel/sel_static_disp/fn_1_13EA9C.c:
+	.text       start:0x0013EA9C end:0x0013EDDC align:4
