@@ -7565,3 +7565,6 @@ rel/main_rel/car/fn_1_84408.c:
 
 rel/main_rel/avline/fn_1_61370.c:
 	.text       start:0x00061370 end:0x00061640 align:4
+
+rel/main_rel/stcoli/fn_1_14F18.c:
+	.text       start:0x00014F18 end:0x00015248 align:4

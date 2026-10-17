@@ -225,6 +225,119 @@ u8 *fn_1_14F04(void) {
 }
 /* fzgx:end fn_1_14F04 */
 
+/* fzgx:begin fn_1_14F18 noprologue */
+#include "types.h"
+#include "psvec.h"
+
+typedef struct {
+    f32 x, y, z;
+} fn_1_14F18_Vec;
+
+/* Plane d, normal, then `count` vertices followed by `count` edge normals. */
+typedef struct {
+    f32 d;
+    fn_1_14F18_Vec n;
+    fn_1_14F18_Vec verts[1];
+} fn_1_14F18_Poly;
+
+extern f32 fn_1_1FFA0(void *, void *, void *, void *, void *, void *);
+extern u8 *lbl_801A66CC;
+
+static inline s32 FZGX_NONFINITE(f32 f) {
+    return (*(u32 *)&f & 0x7F800000) == 0x7F800000;
+}
+
+#pragma opt_propagation off
+static inline f32 fn_1_14F18_dot(fn_1_14F18_Vec *a, fn_1_14F18_Vec *b) {
+    f32 r;
+    f32 y;
+    f32 z;
+    r = a->x * b->x;
+    y = a->y;
+    z = a->z;
+    r = y * b->y + r;
+    r = z * b->z + r;
+    return r;
+}
+#pragma opt_common_subs off
+#pragma opt_lifetimes off
+s32 fn_1_14F18(fn_1_14F18_Vec *pos, void *arg1, fn_1_14F18_Vec *dir, f32 *outT,
+               fn_1_14F18_Poly *poly, s32 count, u32 flags, f32 radius) {
+    fn_1_14F18_Vec *edges[5];
+    fn_1_14F18_Vec hit;
+    fn_1_14F18_Vec out0;
+    fn_1_14F18_Vec out1;
+    fn_1_14F18_Vec **e;
+    s32 i;
+    fn_1_14F18_Vec *v;
+    fn_1_14F18_Vec **initE;
+    fn_1_14F18_Vec *n;
+    fn_1_14F18_Vec *d;
+    f32 tIn;
+    f32 tOut;
+    f32 denom;
+    f32 dist;
+    f32 planeDot;
+    s32 j;
+    fn_1_14F18_Vec *verts;
+
+    denom = poly->n.x * dir->x;
+    denom = poly->n.y * dir->y + denom;
+    denom = poly->n.z * dir->z + denom;
+    if (denom > 0.0f && !(flags & 0x400000)) {
+        return 0;
+    }
+    planeDot = poly->n.x * pos->x;
+    planeDot = poly->n.y * pos->y + planeDot;
+    planeDot = poly->n.z * pos->z + planeDot;
+    dist = planeDot + poly->d;
+    tIn = dist / denom;
+    if (1.0f < tIn || FZGX_NONFINITE(tIn)) {
+        return 0;
+    }
+    tOut = (dist - radius) / denom;
+    if (tOut < 0.0f || FZGX_NONFINITE(tOut)) {
+        return 0;
+    }
+    if (tIn < 0.0f) {
+        tIn = 0.0f;
+    }
+    psvec_scale_add(pos, dir, -tIn, &hit);
+
+    v = poly->verts;
+    initE = &edges[1];
+    for (j = count; j > 1; j--) {
+        *initE++ = v++;
+    }
+
+    verts = poly->verts;
+    e = edges;
+    e[count] = verts;
+    n = verts + count;
+    v = verts;
+    for (i = 0; i < count;) {
+        psvec_sub(&hit, v, lbl_801A66CC + 0xD4);
+        d = (fn_1_14F18_Vec *)(lbl_801A66CC + 0xD4);
+        if (fn_1_14F18_dot(d, n) < 0.0f) {
+            if (fn_1_1FFA0(pos, arg1, v, e[1], &out0, &out1) > radius * radius) {
+                return 0;
+            }
+        }
+        e++;
+        i++;
+        v++;
+        n++;
+    }
+
+    if (tOut > 1.0f) {
+        tOut = 1.0f;
+    }
+    psvec_scale_add(pos, dir, -tOut, pos);
+    *outT = 1.0f - tOut;
+    return 1;
+}
+/* fzgx:end fn_1_14F18 */
+
 /* fzgx:begin fn_1_17B5C */
 typedef struct {
     u8 pad_0[0x40];
