@@ -7721,3 +7721,15 @@ rel/main_rel/font/fn_1_4B8DC.c:
 
 rel/main_rel/font/fn_1_53E40.c:
 	.text       start:0x00053E40 end:0x00053FE4 align:4
+
+rel/main_rel/bg_san/fn_1_DC084.c:
+	.text       start:0x000DC084 end:0x000DC1B8 align:4
+
+rel/main_rel/car/fn_1_7F658.c:
+	.text       start:0x0007F658 end:0x0007F934 align:4
+
+rel/main_rel/screen_effect/fn_1_7926C.c:
+	.text       start:0x0007926C end:0x00079654 align:4
+
+rel/main_rel/archive/fn_1_12A350.c:
+	.text       start:0x0012A350 end:0x0012A4B0 align:4

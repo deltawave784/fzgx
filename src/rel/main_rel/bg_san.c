@@ -885,6 +885,55 @@ void fn_1_DB53C(void *arg0, f32 arg1) {
 }
 /* fzgx:end fn_1_DB53C */
 
+/* fzgx:begin fn_1_DC084 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/bg_san.h"
+
+typedef struct {
+    f32 x, y, z;
+} BgSanVec3;
+
+extern u32 fn_1_58C4(void);
+extern void fn_1_681C(u8 index, BgSanVec3 *out);
+extern f32 lbl_8006D0B4(f32);
+
+#define BGSAN_MIN(a, b) ((a) < (b) ? (a) : (b))
+
+static inline f32 bgsan_distance(BgSanVec3 *p, BgSanVec3 *q) {
+    f32 dx = p->x;
+    f32 dy;
+    f32 dz;
+    dx -= q->x;
+    dy = p->y;
+    dy -= q->y;
+    dz = p->z;
+    dz -= q->z;
+    dx = (f32)(dx * dx);
+    dx += dy * dy;
+    dx += dz * dz;
+    return lbl_8006D0B4(dx);
+}
+
+// Smallest distance from pos to any of the fn_1_681C positions.
+f32 fn_1_DC084(BgSanVec3 *pos) {
+    BgSanVec3 other;
+    u32 count;
+    u32 i;
+    f32 best;
+
+    count = fn_1_58C4();
+    fn_1_681C(0, &other);
+    best = bgsan_distance(pos, &other);
+    for (i = 1; i < count; i++) {
+        fn_1_681C((u8)i, &other);
+        // MIN evaluates its operand twice, so the distance is recomputed on the smaller path.
+        best = BGSAN_MIN(best, bgsan_distance(pos, &other));
+    }
+    return best;
+}
+/* fzgx:end fn_1_DC084 */
+
 /* fzgx:begin fn_1_DC1B8 */
 // fn_1_DC1B8: returns a constant.
 int fn_1_DC1B8(void) {

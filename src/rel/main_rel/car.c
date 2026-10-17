@@ -497,6 +497,169 @@ void *fn_1_7F49C(s16 arg0, s16 arg1, void *arg2) {
 }
 /* fzgx:end fn_1_7F49C */
 
+/* fzgx:begin fn_1_7F658 noprologue */
+#include "types.h"
+#include "rel/main_rel/car.h"
+
+typedef struct Sig_fn_1_A7728_FnA7728Resource {
+    u8 pad_104[0x104];
+    void *field_104;
+    void *field_108;
+} Sig_fn_1_A7728_FnA7728Resource;
+typedef struct Sig_fn_1_A7728_FnA7728Object {
+    u8 pad_394[0x394];
+    Sig_fn_1_A7728_FnA7728Resource *field_394;
+} Sig_fn_1_A7728_FnA7728Object;
+struct Sig_fn_80071718_fn_80071718_Arg0 {
+    u8 pad_0[0xC];
+    u32 unk_C;
+};
+struct Sig_fn_800711A8_fn_800711A8_Entry {
+    u8 pad_00[0x24];
+    void *field_24;
+};
+struct Sig_fn_800711A8_fn_800711A8_Arg0 {
+    s32 count;
+    u8 pad_04[4];
+    struct Sig_fn_800711A8_fn_800711A8_Entry **entries;
+    u8 pad_0C[4];
+    u32 field_10;
+    void *field_14;
+};
+typedef struct {
+    u8 pad[0x340];
+    void *field_340;
+    void *fields_344[4];
+    u8 tail[0xc];
+} Sig_fn_1_14DBCC_Fn1_14DBCC_Item;
+
+typedef struct CarSlot {
+    void *unk_0;
+    struct Sig_fn_800711A8_fn_800711A8_Arg0 *unk_4;
+    u32 unk_8;
+} CarSlot;
+
+typedef struct Car {
+    u8 pad_0[0x32C];
+    u32 unk_32C;
+    void *unk_330;
+    CarSlot unk_334[5];
+    u8 pad_370[0xC];
+    struct Sig_fn_80071718_fn_80071718_Arg0 *unk_37C[4];
+    u8 pad_38C[4];
+    u32 flags;
+    u8 unk_394[0xC];
+    Sig_fn_1_14DBCC_Fn1_14DBCC_Item *unk_3A0;
+    u32 unk_3A4;
+    u8 pad_3A8[0x18];
+    void *unk_3C0[8];
+    u32 unk_3E0[8];
+    void *unk_400[5];
+    u32 unk_414[5];
+} Car;
+
+extern u32 lbl_801A6410;
+extern void fn_1_14DBCC(Sig_fn_1_14DBCC_Fn1_14DBCC_Item *);
+extern void fn_1_150464(u32);
+extern void fn_1_46B4(u32, u32, const char *, int);
+extern void fn_1_810E4(u32);
+extern void fn_1_A7728(Sig_fn_1_A7728_FnA7728Object *);
+extern void fn_800711A8(struct Sig_fn_800711A8_fn_800711A8_Arg0 *);
+extern void fn_80071718(struct Sig_fn_80071718_fn_80071718_Arg0 *);
+
+// `const` scalars fold to `li` in the backend, after the frontend's constant folding:
+// retail keeps them as registers (`addi r4, r31, 8`, `li r0, 6; rlwnm.`).
+static const s32 car_second_pair = 2;
+static const s32 car_3A4_bit = 6;
+
+static inline s8 car_has_resources(Car *car) {
+    s8 result;
+    s32 i;
+
+    if (car == NULL) {
+        return 0;
+    }
+    if ((car->flags & 0x04000000) && car->unk_3A0->field_340 != NULL) {
+        return 1;
+    }
+    result = 0;
+    for (i = 0; i < 4; i++) {
+        if (car->unk_37C[i] != NULL) {
+            result = 1;
+            break;
+        }
+    }
+    return result;
+}
+
+static inline void car_free_3A4(Car *car) {
+    if (car == NULL) {
+        return;
+    }
+    if (car->unk_3A4 != 0) {
+        if (__rlwnm(car->flags, car_3A4_bit, 31, 31)) {
+            fn_1_150464(car->unk_3A4);
+        } else {
+            fn_1_810E4(car->unk_3A4);
+        }
+        fn_1_46B4(lbl_801A6410, car->unk_3A4, (const char *)lbl_1_data_1FFF0, 0x1F7);
+        car->unk_3A4 = 0;
+    }
+}
+
+void fn_1_7F658(Car *car) {
+    s16 i;
+
+    if (car != NULL && car_has_resources(car)) {
+        for (i = 0; i < 8; i++) {
+            if (car->unk_3C0[i] != NULL) {
+                fn_1_46B4(lbl_801A6410, (u32)car->unk_3C0[i], (const char *)lbl_1_data_1FFF0, 0x27D);
+                car->unk_3C0[i] = NULL;
+                car->unk_3E0[i] = 0;
+            }
+        }
+        for (i = 0; i < 5; i++) {
+            if (car->unk_400[i] != NULL) {
+                fn_1_46B4(lbl_801A6410, (u32)car->unk_400[i], (const char *)lbl_1_data_1FFF0, 0x284);
+                car->unk_400[i] = NULL;
+                car->unk_414[i] = 0;
+            }
+        }
+        car->unk_32C = 0;
+        for (i = 0; i < 4; i++) {
+            if (car->unk_37C[i] != NULL) {
+                fn_80071718(car->unk_37C[i]);
+                car->unk_37C[i] = NULL;
+            }
+        }
+        for (i = 0; i < 5; i++) {
+            if (car->unk_334[i].unk_4 != NULL) {
+                fn_800711A8(car->unk_334[i].unk_4);
+                car->unk_334[i].unk_4 = NULL;
+            }
+            if (car->unk_334[i].unk_0 != NULL) {
+                fn_1_46B4(lbl_801A6410, (u32)car->unk_334[i].unk_0, (const char *)lbl_1_data_1FFF0, 0x290);
+                car->unk_334[i].unk_0 = NULL;
+            }
+        }
+        if (car->unk_330 != NULL) {
+            fn_1_46B4(lbl_801A6410, (u32)car->unk_330, (const char *)lbl_1_data_1FFF0, 0x292);
+            car->unk_330 = NULL;
+        }
+        if (&car->unk_394 != NULL) {
+            fn_1_A7728((Sig_fn_1_A7728_FnA7728Object *)car);
+        }
+        if ((car->flags & 0x04000000) && car->unk_3A0 != NULL) {
+            fn_1_14DBCC(car->unk_3A0);
+        }
+        if (car != NULL) {
+            car_free_3A4(car);
+        }
+        car->flags &= ~0x00400000;
+    }
+}
+/* fzgx:end fn_1_7F658 */
+
 /* fzgx:begin fn_1_7F934 */
 // Forwards the caller's context to the common car initialization routine.
 void fn_1_7F934(void *arg0) {
