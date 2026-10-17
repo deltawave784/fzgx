@@ -7652,3 +7652,6 @@ rel/main_rel/effect/fn_1_618B8.c:
 
 rel/main_rel/bg_for/fn_1_DD890.c:
 	.text       start:0x000DD890 end:0x000DDF80 align:4
+
+rel/main_rel/bg_common/fn_1_103FCC.c:
+	.text       start:0x00103FCC end:0x00104710 align:4
