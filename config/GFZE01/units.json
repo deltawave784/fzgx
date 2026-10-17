@@ -879,6 +879,18 @@
   },
   {
     "module": "customize",
+    "source": "rel/customize/_prolog/fn_3_83CC.c",
+    "symbols": [
+      "fn_3_83CC"
+    ],
+    "status": "nonmatching",
+    "mw_version": null,
+    "extra_cflags": [],
+    "tu": "rel/customize/_prolog.c",
+    "pool": true
+  },
+  {
+    "module": "customize",
     "source": "rel/customize/_prolog/fn_3_844.c",
     "symbols": [
       "fn_3_844"

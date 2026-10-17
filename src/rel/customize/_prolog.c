@@ -3019,6 +3019,278 @@ s32 fn_3_837C(s16 arg0) {
 }
 /* fzgx:end fn_3_837C */
 
+/* fzgx:begin fn_3_83CC pool noprologue */
+#include "types.h"
+#include "rel/customize/globals.h"
+
+typedef struct {
+    u8 id;
+    u8 pad_1[3];
+    u32 object[1];
+} CustomizePart;
+typedef struct {
+    s16 count;
+    s16 items[26];
+} CustomizeChoices;
+typedef struct {
+    CustomizePart parts[3];
+    s16 category;
+    s16 variants[3];
+    CustomizeChoices choices[3];
+    s16 index;
+    s16 scroll;
+    u8 pad_C6[8];
+    s16 machine;
+} CustomizePanel;
+typedef struct {
+    u8 pad_0[6];
+    s16 controller;
+    s16 slot;
+} CustomizeMode;
+
+Obj_3_bss_0 lbl_3_bss_0;
+u8 lbl_3_bss_8[0x10];
+s16 lbl_3_bss_18;
+u8 lbl_3_bss_1A[2];
+CustomizePanel lbl_3_bss_20;
+Obj_3_bss_F0 lbl_3_bss_F0;
+typedef struct {
+    u16 bit15:1;
+    u16 bit14:1;
+    u16 bit13:1;
+    u16 bit12:1;
+    u16 bit11:1;
+    u16 bit10:1;
+    u16 bit9:1;
+    u16 bit8:1;
+    u16 bit7:1;
+    u16 bit6:1;
+    u16 bit5:1;
+    u16 bit4:1;
+    u16 bit3:1;
+    u16 bit2:1;
+    u16 bit1:1;
+    u16 bit0:1;
+} CustomizeButtons;
+typedef struct {
+    u8 pad_0[8];
+    u16 pressed;
+    u8 pad_A[6];
+    volatile u16 repeat; /* Re-read the input button word at each test. */
+    volatile u16 held; /* Re-read the input button word at each test. */
+} CustomizeInput;
+
+extern CustomizeInput lbl_1_bss_9F8[];
+extern u32 lbl_801A66A8;
+extern u32 lbl_3_bss_243C0[8304];
+extern s16 lbl_3_bss_7EBB0[41];
+extern s16 lbl_3_bss_7EC02;
+extern void fn_3_BD00(s16, u32, u32, u32);
+extern void fn_1_A2D84(u32);
+extern s16 fn_1_14F118(s16, s16);
+extern u32 fn_1_151BE8(s16, s32);
+extern void fn_80008BA8(void *, const void *, u32);
+extern s32 fn_1_F7BE4(s16);
+extern s32 fn_8008023C(const void *, const void *, u32);
+
+#pragma section code_type ".fzgxpool"
+/* Volatile reads in the discarded primer establish the native BSS object order. */
+__declspec(section ".fzgxpool") static void fzgx___fzgx_pool_primer(void)
+{
+    /* Native section-order primer. */ (void)*(volatile u32 *)&lbl_3_bss_0.unk_0;
+    /* Native section-order primer. */ (void)*(volatile u8 *)lbl_3_bss_8;
+    /* Native section-order primer. */ (void)*(volatile s16 *)&lbl_3_bss_18;
+    /* Native section-order primer. */ (void)*(volatile u8 *)lbl_3_bss_1A;
+    /* Native section-order primer. */ (void)*(volatile u8 *)&lbl_3_bss_20;
+    /* Native section-order primer. */ (void)*(volatile s16 *)&lbl_3_bss_F0.unk_6;
+}
+#pragma section code_type ".text"
+
+static inline void reset_scroll(s16 i, CustomizePanel *panel)
+{
+    s32 count;
+    panel->scroll = i;
+    /* The scrolling selection is observed anew after each adjustment. */
+    for (; i < (count = *(volatile s16 *)&panel->index); i++) {
+        if (count > (s16)((s16)-panel->scroll + 5))
+            panel->scroll--;
+    }
+}
+
+static inline s16 find_part(CustomizePanel *panel)
+{
+    s16 i;
+    for (i = 0; i < panel->choices[panel->category].count; i++) {
+        if (panel->choices[panel->category].items[i] == panel->parts[panel->category].id)
+            break;
+    }
+    return i;
+}
+
+s32 fn_3_83CC(void)
+{
+    s32 result;
+    s16 controller;
+    s16 slot;
+    s16 step;
+    s16 newIndex;
+    s16 oldIndex;
+    s16 tabStep;
+    s16 i;
+    s16 j;
+
+    result = 0;
+    controller = lbl_3_bss_F0.unk_6;
+    tabStep = 0;
+    slot = lbl_3_bss_F0.unk_8;
+    step = 0;
+
+    if ((((lbl_1_bss_9F8[controller].held) >> 8) & 1))
+        tabStep = -1;
+    if ((((lbl_1_bss_9F8[controller].held) >> 9) & 1))
+        tabStep++;
+    if (tabStep) {
+        s32 category;
+        lbl_801A66A8 = 0;
+        fn_1_A2D84(0xA9010000);
+        category = lbl_3_bss_20.category + tabStep;
+        lbl_3_bss_20.category = category > 3 ? 0 : category < 0 ? 3 : category;
+    }
+    /* Observe the current UI mode separately from the following list scan. */
+    if (*(volatile s16 *)&lbl_3_bss_20.category != 3) {
+        s32 next;
+        if (((((lbl_1_bss_9F8[controller].repeat) >> 3) & 1)) ||
+            ((((lbl_1_bss_9F8[controller].held) >> 3) & 1)))
+            step = -1;
+        if (((((lbl_1_bss_9F8[controller].repeat) >> 2) & 1)) ||
+            ((((lbl_1_bss_9F8[controller].held) >> 2) & 1)))
+            step++;
+        for (oldIndex = 0; oldIndex < lbl_3_bss_20.choices[lbl_3_bss_20.category].count; oldIndex++) {
+            if (lbl_3_bss_20.choices[lbl_3_bss_20.category].items[oldIndex] ==
+                lbl_3_bss_20.parts[lbl_3_bss_20.category].id)
+                break;
+        }
+        next = oldIndex + step;
+        if (next < 0)
+            next = 0;
+        else if (next > lbl_3_bss_20.choices[lbl_3_bss_20.category].count - 1)
+            next = lbl_3_bss_20.choices[lbl_3_bss_20.category].count - 1;
+        newIndex = next;
+        lbl_3_bss_20.parts[lbl_3_bss_20.category].id =
+            lbl_3_bss_20.choices[lbl_3_bss_20.category].items[newIndex];
+        lbl_3_bss_20.variants[lbl_3_bss_20.category] =
+            fn_1_14F118(lbl_3_bss_20.parts[lbl_3_bss_20.category].id, lbl_3_bss_20.category);
+        lbl_3_bss_18 = lbl_3_bss_18 + 1 < 10 ? lbl_3_bss_18 + 1 : 10;
+        if (oldIndex != newIndex || tabStep) {
+            lbl_3_bss_18 = 0;
+            fn_1_A2D84(0xA9010000);
+            lbl_801A66A8 = 0;
+            if (tabStep) {
+                s32 count;
+                lbl_3_bss_20.index = find_part(&lbl_3_bss_20);
+                /* Re-observe the index when advancing the scroll window. */
+                for (lbl_3_bss_20.scroll = i = 0;
+                     i < (count = *(volatile s16 *)&lbl_3_bss_20.index); i++) { /* Reload shared UI selection. */
+                    if (count > (s16)((s16)-lbl_3_bss_20.scroll + 5))
+                        lbl_3_bss_20.scroll--;
+                }
+            }
+            if (oldIndex != newIndex) {
+                s16 selected;
+                s32 selectedValue;
+                s16 top;
+                s16 bottom;
+                for (selected = 0; selected < lbl_3_bss_20.choices[lbl_3_bss_20.category].count; selected++) {
+                    if (lbl_3_bss_20.choices[lbl_3_bss_20.category].items[selected] ==
+                        lbl_3_bss_20.parts[lbl_3_bss_20.category].id)
+                        break;
+                }
+                selectedValue = selected;
+                top = -lbl_3_bss_20.scroll;
+                lbl_3_bss_20.index = selected;
+                bottom = top + 5;
+                if (selectedValue < top || selectedValue > bottom) {
+                    fn_3_BD00(step, 0, (s16)(step * 10), 0x08000001);
+                    lbl_3_bss_20.scroll -= step;
+                }
+            }
+        }
+        for (i = 0; i < 3; i++) {
+            for (j = 0; j < 1; j++)
+                lbl_3_bss_20.parts[i].object[j] = fn_1_151BE8(lbl_3_bss_20.parts[i].id, j);
+        }
+        if ((lbl_3_bss_243C0[0] & 0x80000000) && (lbl_3_bss_243C0[0] & 0x40000000)) {
+            for (i = 0; i < 3; i++) {
+                if (((u8 *)lbl_3_bss_243C0)[0x81A4 + i * 8] == lbl_3_bss_20.parts[i].id)
+                    fn_80008BA8(lbl_3_bss_20.parts[i].object,
+                        (u8 *)lbl_3_bss_243C0 + 0x81A8 + i * 8, 4);
+            }
+        }
+    } else {
+        s16 selected;
+        if (tabStep) {
+            fn_3_BD00(1, 0, 10, 0x01000000);
+            return 0;
+        }
+        if (((((lbl_1_bss_9F8[controller].repeat) >> 0) & 1)) ||
+            ((((lbl_1_bss_9F8[controller].held) >> 0) & 1)))
+            step = -1;
+        if (((((lbl_1_bss_9F8[controller].repeat) >> 1) & 1)) ||
+            ((((lbl_1_bss_9F8[controller].held) >> 1) & 1)))
+            step++;
+        if (step) {
+            fn_1_A2D84(0xA9010000);
+            if (step < 0)
+                fn_3_BD00(step, 0, (s16)(step * 5), 0x02000001);
+            else
+                fn_3_BD00(step, 0, (s16)(step * 5), 0x04000001);
+        }
+        for (i = 0; i < 41; i++) {
+            if (lbl_3_bss_20.machine == (s16)lbl_3_bss_7EBB0[i]) {
+                selected = i;
+                break;
+            }
+        }
+        do {
+            s32 next = selected + step;
+            s32 last = lbl_3_bss_7EC02 - 1;
+            if (next > last)
+                next = 0;
+            else if (next < 0)
+                next = last;
+            selected = next;
+        } while (!fn_1_F7BE4(lbl_3_bss_7EBB0[selected]));
+        lbl_3_bss_20.machine = lbl_3_bss_7EBB0[selected];
+    }
+    {
+        s32 recordOffset = slot * 0x81C0;
+        fn_80008BA8((u8 *)&lbl_3_bss_140 + recordOffset + 0x81A4, &lbl_3_bss_20, 0x18);
+        ((u8 (*)[1])((u8 *)&lbl_3_bss_140 + 0x10000))[recordOffset][-0x7E60] = lbl_3_bss_20.machine;
+        if ((((lbl_1_bss_9F8[controller].pressed) >> 11) & 1)) {
+            result = 12;
+            if (!!fn_8008023C(lbl_3_bss_243C0, (u8 *)&lbl_3_bss_140 + recordOffset, 0x81C0) == 1)
+                fn_1_A2D84(0xA9010100);
+            lbl_3_bss_18 = 10;
+        }
+        if (((((lbl_1_bss_9F8[controller].pressed) >> 12) & 1)) ||
+            ((((lbl_1_bss_9F8[controller].pressed) >> 8) & 1))) {
+            result = 11;
+            if (!!fn_8008023C(lbl_3_bss_243C0, (u8 *)&lbl_3_bss_140 + recordOffset, 0x81C0) == 1)
+                fn_1_A2D84(0xA9010100);
+            else
+                fn_1_A2D84(0xA9010200);
+            lbl_3_bss_18 = 10;
+        }
+        if ((((lbl_1_bss_9F8[controller].pressed) >> 9) & 1)) {
+            result = 13;
+            fn_1_A2D84(0xA9010200);
+            lbl_3_bss_18 = 10;
+        }
+    }
+    return result;
+}
+/* fzgx:end fn_3_83CC */
+
 /* fzgx:begin fn_3_968C noprologue */
 #include "types.h"
 
