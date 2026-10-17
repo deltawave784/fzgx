@@ -2628,6 +2628,18 @@
   },
   {
     "module": "customize",
+    "source": "rel/customize/toolkit/fn_3_1F958.c",
+    "symbols": [
+      "fn_3_1F958"
+    ],
+    "status": "nonmatching",
+    "mw_version": null,
+    "extra_cflags": [],
+    "tu": "rel/customize/toolkit.c",
+    "pool": true
+  },
+  {
+    "module": "customize",
     "source": "rel/customize/toolkit/fn_3_1FF7C.c",
     "symbols": [
       "fn_3_1FF7C"
