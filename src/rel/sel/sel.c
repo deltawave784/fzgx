@@ -7512,6 +7512,321 @@ void fn_10_10E34(void) {
 #pragma opt_dead_assignments reset
 /* fzgx:end fn_10_10E34 */
 
+/* fzgx:begin fn_10_117D0 noprologue */
+#include "types.h"
+#include "font.h"
+#include "rel/sel/sel.h"
+
+typedef struct {
+    u32 unk_0;
+    u32 unk_4;
+} Sig_fn_1_B7F58_Result;
+
+struct fn_10_117D0_Copy88 { u32 a[22]; };
+typedef union {
+    struct fn_10_117D0_Copy88 copy;
+    struct {
+        u32 id;
+        f32 x, y, z, sx, sy;
+        u8 pad18[0x14];
+        f32 alpha;
+        u32 flags;
+        u8 pad34[4];
+        u32 color;
+        u8 r, g, b, a;
+        u8 pad40[0x18];
+    } f;
+} DrawPacket117D0;
+
+extern int fn_1_B7F58(Sig_fn_1_B7F58_Result *);
+extern struct fn_10_117D0_Copy88 lbl_1_rodata_26F8;
+extern u32 lbl_801A66A0;
+extern u32 lbl_801A66B4;
+extern f32 lbl_8006D188(u32);
+extern void fn_1_49410(void);
+extern void fn_1_495B0(u32);
+extern void fn_1_495C8(void *);
+extern void fn_1_494DC(s16);
+extern void fn_1_4955C(f32, f32);
+extern void fn_1_496FC(f32, f32);
+extern void fn_1_4954C(f32);
+extern void fn_1_4AE0C(const char *, ...);
+extern u16 fn_1_48690(u32);
+extern u16 fn_1_486C4(u32);
+extern u32 fn_10_21C20(s16, s16);
+
+/* The discarded primer preserves the shared retail literal-pool order. */
+#pragma section code_type ".fzgxpool"
+const u32 fzgx_pool_table_0[17] = {
+    0x00000000, 0x0000B500, 0x0000B600, 0x0000AD00, 0x0000B300, 0x0000B800, 0x0000B200, 0x0000B100,
+    0x0000AE00, 0x0000B400, 0x0000B900, 0x0000B000, 0x0000AF00, 0x0000B700, 0x00000000, 0x00000000,
+    0x00F0F0FF
+};
+/* volatile: discarded primer sinks preserve the shared literal-pool order. */
+void fzgx_pool_primer_44(volatile f32 *p) {
+    /* Volatile sinks retain the native literal constants. */
+    p[0] = 1.0f;
+    p[1] = 0.5f;
+}
+const u32 fzgx_pool_table_4C[11] = {
+    0x00000000, 0x3E4CCCCD, 0x3ECCCCCD, 0x43A00000, 0x40400000, 0x43A18000, 0x40800000, 0x40A00000,
+    0x40C00000, 0x3E800000, 0x46800000
+};
+/* volatile: discarded primer sinks preserve the shared literal-pool order. */
+void fzgx_pool_primer_78(volatile f32 *p) {
+    /* Volatile sinks retain the native literal constants. */
+    p[0] = 65536.0f;
+}
+const u32 fzgx_pool_table_7C[3] = {
+    0x42700000, 0x3FF00000, 0x3F0E38E4
+};
+/* volatile: discarded primer sinks preserve the shared literal-pool order. */
+void fzgx_pool_primer_88(volatile f32 *p, u32 x) {
+    /* Volatile sinks retain the native conversion constants. */
+    p[0] = (f32)(s32)x;
+    p[1] = (f32)x;
+}
+const u32 fzgx_pool_table_98[37] = {
+    0x00110012, 0x00130014, 0x00150012, 0x00130014, 0x00000000, 0x00F0F0FF, 0x00000000, 0x00F0F0FF,
+    0x00010002, 0x00030004, 0x00050006, 0x00070008, 0x0009000A, 0x000B000C, 0x00110012, 0x00130014,
+    0x00150012, 0x00130014, 0x00FF0000, 0xFFFFFF00, 0x00FF0000, 0xFFFFFF00, 0x00FF0000, 0x00FF0000,
+    0x426C0000, 0x42A40000, 0x429A0000, 0x42C40000, 0x41C80000, 0x42E60000, 0x3F333333, 0x41100000,
+    0x3F2AAAAB, 0x43D78000, 0x00000000, 0x00000000, 0x42740000
+};
+/* volatile: discarded primer sinks preserve the shared literal-pool order. */
+void fzgx_pool_primer_12c(volatile f32 *p) {
+    /* Volatile sinks retain the native literal constants. */
+    p[0] = 81.0f;
+}
+const u32 fzgx_pool_table_130[2] = {
+    0x42DC0000, 0x42200000
+};
+/* volatile: discarded primer sinks preserve the shared literal-pool order. */
+void fzgx_pool_primer_138(volatile f32 *p) {
+    /* Volatile sinks retain the native literal constants. */
+    p[0] = 80.0f;
+}
+const u32 fzgx_pool_table_13C[5] = {
+    0x43520000, 0x43660000, 0x43B78000, 0x425C0000, 0x42980000
+};
+/* volatile: discarded primer sinks preserve the shared literal-pool order. */
+void fzgx_pool_primer_150(volatile f32 *p) {
+    /* Volatile sinks retain the native literal constants. */
+    p[0] = 100.0f;
+}
+const u32 fzgx_pool_table_154[64] = {
+    0x43B68000, 0x42960000, 0x42EA0000, 0x3EEAAAAB, 0x43250000, 0x431B0000, 0x42AE0000, 0x43380000,
+    0x42B40000, 0x43BE8000, 0x43ED8000, 0x432E0000, 0x43D38000, 0x43420000, 0x46000000, 0x41A00000,
+    0xC6000000, 0x43B50000, 0x44030000, 0x42900000, 0x41300000, 0x3F666666, 0x3F0AAAAB, 3229614080u /* raw retail initializer bits, not an address */,
+    0x43A70000, 0x43AA8000, 3233808384u /* raw retail initializer bits, not an address */, 0x3F200000, 0x43AD0000, 0x43530000, 0x43210000, 0x43400000,
+    0x3D8F5C29, 0x00170018, 0x0019001A, 0x001B001C, 0x001D001E, 0x001F0021, 0x00220000, 0x00FF0000,
+    0xFFFFFF00, 0x00FF0000, 0xFFFFFF00, 0x00FF0000, 0xFFFFFF00, 0x00FF0000, 0xFFFFFF00, 0x00FF0000,
+    0x42EE0000, 0x430D0000, 0x43200000, 0x43230000, 0x422C0000, 0x43020000, 0x00000000, 0x40568000,
+    0x00000000, 0x4050E000, 0x00000000, 0x40368000, 0x00000000, 0x41B40000, 0x3C23D70A, 0x3F6AAAAB
+};
+/* volatile: discarded primer sinks preserve the shared literal-pool order. */
+void fzgx_pool_primer_254(volatile f32 *p) {
+    /* Volatile sinks retain the native literal constants. */
+    p[0] = 2.0f;
+}
+const u32 fzgx_pool_table_258[13] = {
+    0x43700000, 0x38D1B717, 0x438B0000, 0x439E0000, 0xFFFFFFFF, 0x3F400000, 0x437A0000, 0x43BA8000,
+    0x43B10000, 0x42880000, 0x3F5DDDDE, 0xBF800000, 0x430C0000
+};
+/* volatile: discarded primer sinks preserve the shared literal-pool order. */
+void fzgx_pool_primer_28c(volatile f32 *p) {
+    /* Volatile sinks retain the native literal constants. */
+    p[0] = 50.0f;
+}
+const u32 fzgx_pool_table_290[5] = {
+    0x3DCCCCCD, 0x441B0000, 0x41C00000, 0x41200000, 0x43C00000
+};
+/* volatile: discarded primer sinks preserve the shared literal-pool order. */
+void fzgx_pool_primer_2a4(volatile f32 *p) {
+    /* Volatile sinks retain the native literal constants. */
+    p[0] = 640.0f;
+}
+const u32 fzgx_pool_table_2A8[6] = {
+    0x3F155555, 0x3F19999A, 0x000000FF, 0x000000FF, 0x41880000, 0x43A90000
+};
+/* volatile: discarded primer sinks preserve the shared literal-pool order. */
+void fzgx_pool_primer_2c0(volatile f32 *p) {
+    /* Volatile sinks retain the native literal constants. */
+    p[0] = 150.0f;
+}
+const u32 fzgx_pool_table_2C4[16] = {
+    0x41700000, 0x439E8000, 0xC2D40000, 0x439F0000, 0x42D40000, 0x43A68000, 0xC2AE0000, 0x3DB851EC,
+    3241148416u /* raw retail initializer bits, not an address */, 0x44214000, 0x44344000, 0x43A50000, 0x3F7D70A4, 0x43270000, 0x42180000, 0x000000FF
+};
+/* volatile: discarded primer sinks preserve the shared literal-pool order. */
+void fzgx_pool_primer_304(volatile f32 *p) {
+    /* Volatile sinks retain the native literal constants. */
+    p[0] = 8.0f;
+}
+const u32 fzgx_pool_table_308[2] = {
+    0x43B70000, 0x41400000
+};
+/* volatile: discarded primer sinks preserve the shared literal-pool order. */
+void fzgx_pool_primer_310(volatile f32 *p) {
+    /* Volatile sinks retain the native literal constants. */
+    p[0] = 14.0f;
+}
+const u32 fzgx_pool_table_314[18] = {
+    0x3F428F5C, 0x000000FF, 0x4270A3D7, 0x438C0000, 0x40B66666, 0x40900000, 0x3F34FDF4, 0xFF9CFF9C,
+    0xFF9CFF9C, 0x00310069, 0x009F00D5, 0x010B0141, 0x017701AD, 0x01E30219, 0x025203E8, 0x03E803E8,
+    0x03E80000, 2155905024u /* raw retail initializer bits, not an address */
+};
+/* volatile: discarded primer sinks preserve the shared literal-pool order. */
+void fzgx_pool_primer_35c(volatile f32 *p) {
+    /* Volatile sinks retain the native literal constants. */
+    p[0] = 99.0f;
+}
+const u32 fzgx_pool_table_360[8] = {
+    0x423C0000, 0x42860000, 0x42800000, 0x435B0000, 0x44148000, 0x44144000, 0x42400000, 0x3EC7AE14
+};
+/* volatile: discarded primer sinks preserve the shared literal-pool order. */
+void fzgx_pool_primer_380(volatile f32 *p) {
+    /* Volatile sinks retain the native literal constants. */
+    p[0] = 0.4274509847164154f;
+}
+const u32 fzgx_pool_table_384[1] = {
+    0x00000000
+};
+/* volatile: discarded primer sinks preserve the shared literal-pool order. */
+void fzgx_pool_primer_388(volatile f32 *p) {
+    /* Volatile sinks retain the native literal constants. */
+    p[0] = 46.0f;
+    p[1] = 246.0f;
+    p[2] = 120.0f;
+    p[3] = 470.0f;
+    p[4] = 247.0f;
+    p[5] = 45.0f;
+    p[6] = 34.0f;
+    p[7] = 258.0f;
+    p[8] = 0.3f;
+    p[9] = 328.0f;
+    p[10] = 266.0f;
+    p[11] = 296.0f;
+    p[12] = 326.0f;
+    p[13] = 268.0f;
+    p[14] = 28.0f;
+    p[15] = 298.0f;
+}
+#pragma section code_type ".text"
+
+void fn_10_117D0(void) {
+    Sig_fn_1_B7F58_Result loc_10;
+    Sig_fn_1_B7F58_Result loc_8;
+    DrawPacket117D0 packet;
+    f32 width;
+    s16 row;
+    s16 col;
+    s16 startX;
+    s16 spacing;
+    Obj_10_bss_1C *entry;
+    Obj_10_bss_55690 *scale;
+    Obj_10_bss_55698 *trans;
+
+    if (fn_1_B7F58(&loc_10) == 1) {
+        width = 46.0f;
+        startX = 50;
+        spacing = 30;
+        packet.copy = lbl_1_rodata_26F8;
+        packet.f.id = 0x9E0F;
+        packet.f.x = 14.0f;
+        packet.f.y = 246.0f;
+        packet.f.z = 81.0f;
+        packet.f.r = packet.f.g = packet.f.b = (s32)((80.0f * (1.0f + lbl_8006D188((u32)(s32)(65536.0f * (f32)(lbl_801A66A0 % 120) / 120.0f)))) / 2.0f);
+        fn_1_4F734((FontDrawPacket *)&packet);
+        packet.copy = lbl_1_rodata_26F8;
+        packet.f.id = 0x9E0D;
+        packet.f.x = 470.0f;
+        packet.f.y = 247.0f;
+        packet.f.z = 81.0f;
+        if (fn_1_B7F58(&loc_10) == 1) {
+            packet.f.r = packet.f.g = packet.f.b = (s32)((80.0f * (1.0f + lbl_8006D188((u32)(s32)(65536.0f * (f32)(lbl_801A66A0 % 120) / 120.0f)))) / 2.0f);
+        }
+        fn_1_4F734((FontDrawPacket *)&packet);
+    } else {
+        width = 50.0f;
+        startX = 81;
+        spacing = 35;
+        packet.copy = lbl_1_rodata_26F8;
+        packet.f.id = 0x9E0E;
+        packet.f.x = 45.0f;
+        packet.f.y = 246.0f;
+        packet.f.z = 81.0f;
+        packet.f.r = packet.f.g = packet.f.b = (s32)((80.0f * (1.0f + lbl_8006D188((u32)(s32)(65536.0f * (f32)(lbl_801A66A0 % 120) / 120.0f)))) / 2.0f);
+        fn_1_4F734((FontDrawPacket *)&packet);
+    }
+    scale = &lbl_10_bss_55690;
+    trans = &lbl_10_bss_55698;
+    for (row = 0; row < 2; row++) {
+        for (col = 0; col < 19; col++) {
+            entry = (Obj_10_bss_1C *)((u8 *)&lbl_10_bss_1C + row * 0x98 + col * 8);
+            if (fn_1_B7F58(&loc_8) == 1 && (entry->unk_4 & 0x20000000) && (entry->unk_4 & 0x40000000) && entry->unk_0 != 49) {
+                fn_1_49410();
+                fn_1_495B0(0x80000000);
+                fn_1_495C8((void *)9);
+                fn_1_494DC(5);
+                {
+                    f32 v = 0.4274509847164154f;
+                    fn_1_4955C(v, v);
+                }
+                fn_1_496FC(lbl_10_bss_55698.unk_0 + (f32)(lbl_10_bss_55690.unk_0 * (f32)(startX + col * spacing)), trans->unk_4 + (f32)(scale->unk_4 * (f32)(277 + row * 40)));
+                fn_1_4954C(99.0f);
+                fn_1_4AE0C((const char *)fn_10_21C20(23, (s16)lbl_801A66B4));
+            } else if (entry->unk_0 == -1 || (entry->unk_4 & 0x40000000)) {
+                continue;
+            }
+            packet.copy = lbl_1_rodata_26F8;
+            packet.f.id = 0x9A22;
+            packet.f.x = lbl_10_bss_55698.unk_0 + (f32)(lbl_10_bss_55690.unk_0 * (f32)(startX + col * spacing));
+            packet.f.y = trans->unk_4 + (f32)(scale->unk_4 * (f32)(277 + row * 40));
+            packet.f.sx *= width / (f32)fn_1_48690(packet.f.id);
+            packet.f.sy *= 34.0f / (f32)fn_1_486C4(packet.f.id);
+            packet.f.z = 100.0f;
+            packet.f.flags = 10;
+            fn_1_4F734((FontDrawPacket *)&packet);
+        }
+    }
+    packet.copy = lbl_1_rodata_26F8;
+    packet.f.id = 0x9A1A;
+    packet.f.y = 258.0f;
+    packet.f.z = 150.0f;
+    packet.f.sx *= 640.0f / (f32)fn_1_48690(packet.f.id);
+    packet.f.sy *= 8.0f / (f32)fn_1_486C4(packet.f.id);
+    packet.f.alpha = 0.3f;
+    fn_1_4F734((FontDrawPacket *)&packet);
+    packet.f.y = 328.0f;
+    packet.f.flags |= 0x100000;
+    fn_1_4F734((FontDrawPacket *)&packet);
+    packet.copy = lbl_1_rodata_26F8;
+    packet.f.id = 18;
+    packet.f.y = 266.0f;
+    packet.f.z = 150.0f;
+    packet.f.sx *= 640.0f / (f32)fn_1_48690(packet.f.id);
+    packet.f.sy *= 2.0f / (f32)fn_1_486C4(packet.f.id);
+    packet.f.alpha = 0.5f;
+    fn_1_4F734((FontDrawPacket *)&packet);
+    packet.f.y = 296.0f;
+    fn_1_4F734((FontDrawPacket *)&packet);
+    packet.f.y = 326.0f;
+    fn_1_4F734((FontDrawPacket *)&packet);
+    packet.copy = lbl_1_rodata_26F8;
+    packet.f.id = 18;
+    packet.f.y = 268.0f;
+    packet.f.z = 150.0f;
+    packet.f.sx *= 640.0f / (f32)fn_1_48690(packet.f.id);
+    packet.f.sy *= 28.0f / (f32)fn_1_486C4(packet.f.id);
+    packet.f.color = fzgx_pool_table_384[0];
+    packet.f.alpha = 0.5f;
+    fn_1_4F734((FontDrawPacket *)&packet);
+    packet.f.y = 298.0f;
+    fn_1_4F734((FontDrawPacket *)&packet);
+}
+/* fzgx:end fn_10_117D0 */
+
 /* fzgx:begin fn_10_12C14 */
 #pragma section code_type ".fzgxpool"
 static const unsigned long fzgx_pool_table1[17] = {0x00000000, 0x0000B500, 0x0000B600, 0x0000AD00, 0x0000B300, 0x0000B800, 0x0000B200, 0x0000B100, 0x0000AE00, 0x0000B400, 0x0000B900, 0x0000B000, 0x0000AF00, 0x0000B700, 0x00000000, 0x00000000, 0x00F0F0FF};  /* fzgx-allow: A1 retail pool bytes */

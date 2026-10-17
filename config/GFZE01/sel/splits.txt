@@ -722,3 +722,6 @@ rel/sel/sel/fn_10_18DD0.c:
 
 rel/sel/sel/fn_10_17814.c:
 	.text       start:0x00017814 end:0x00017E44 align:4
+
+rel/sel/sel/fn_10_117D0.c:
+	.text       start:0x000117D0 end:0x00012024 align:4
