@@ -949,6 +949,171 @@ void fn_1_47A60(s16 index) {
 }
 /* fzgx:end fn_1_47A60 */
 
+/* fzgx:begin fn_1_47AD4 */
+typedef struct {
+    u32 unk_0;
+    u8 pad_4[0x48];
+    u8 entry[0x10];
+} LoadResult_47AD4;
+
+typedef struct {
+    u32 flags;
+    u32 offset;
+    u16 width;
+    u16 height;
+    u32 unk_C;
+} TexEntry_47AD4;
+
+typedef struct {
+    u32 dummy[8];
+} TexObj_47AD4;
+
+typedef struct {
+    u32 count;
+    TexEntry_47AD4 *entries;
+    u32 unk_8;
+    TexObj_47AD4 *texobjs;
+} TexHeader_47AD4;
+
+typedef struct {
+    u32 unk_0;
+    char *names[7];
+    u32 unk_20;
+    u8 unk_24;
+} LoadState_47AD4;
+
+extern s32 lbl_801A66B4;
+extern u32 lbl_801A6410;
+extern char lbl_1_data_1A368[9];
+extern u8 lbl_1_bss_3E000[32];
+
+extern s32 fn_8006FDEC(void);
+extern int fn_1_45730(char *, LoadResult_47AD4 *);
+extern size_t strlen(const char *);
+extern s32 strncmp(const char *, const char *, size_t);
+extern s32 fn_1_458A0(LoadResult_47AD4 *, void *, u32, u32);
+extern int fn_1_45850(LoadResult_47AD4 *);
+extern u32 fn_1_45B2C(LoadResult_47AD4 *);
+extern u32 OSGetArenaHi(void);
+extern void OSSetArenaHi(u32);
+extern u32 fn_8000B334(u32, u32);
+extern u32 fn_8000B360(u32, u32);
+extern u32 fn_1_45D0(u32, u32, const char *, int);
+extern void fn_1_12860(u32, u32);
+extern u32 fn_1_12F78(char *, u32);
+extern void DCFlushRange(void *, u32);
+extern void GXInitTexObj(TexObj_47AD4 *, void *, u16, u16, u32, u32, u32, u8);
+extern void GXInvalidateTexAll(void);
+extern void fn_1_4877C(void);
+
+typedef struct {
+    u32 end;
+} NameEnd_47AD4;
+
+static inline char *nameSuffix_47AD4(u32 end) {
+    NameEnd_47AD4 result;
+    result.end = end;
+    return (char *)result.end - 3;
+}
+
+// Load the archive selected by the current index into the slot's heap and build its texture objects.
+s32 fn_1_47AD4(LoadState_47AD4 *state, s32 slot, s32 useArena, s32 allocate) {
+    TexHeader_47AD4 *hdr;
+    u32 data;
+    u32 arenaHi;
+    char *name;
+    u32 compSize;
+    u32 fullSize;
+    u32 compBuf;
+    s32 len;
+    u32 i;
+    LoadResult_47AD4 res;
+    u32 heap;
+
+    fn_8006FDEC();
+    name = state->names[lbl_801A66B4];
+    if (!fn_1_45730(name, &res)) {
+        return 0;
+    }
+    if (slot == 0) {
+        (&lbl_1_data_6CA0.unk_0)[slot * 3] = lbl_801A6410;
+    }
+    heap = (&lbl_1_data_6CA0.unk_0)[slot * 3];
+    len = strlen(name);
+    if (len >= 3 && (len += (u32)name, len -= 3, strncmp((char *)len, (char *)&lbl_1_data_1A364, 3)) == 0) {
+        if (fn_1_458A0(&res, lbl_1_bss_3E000, 0x20, 0) < 0) {
+            return 0;
+        }
+        compSize = (__lwbrx(lbl_1_bss_3E000, 0) + 0x27) & ~0x1f;
+        fullSize = (__lwbrx(lbl_1_bss_3E000, 4) + 0x1f) & ~0x1f;
+        if (allocate != 0) {
+            if (useArena != 0) {
+                arenaHi = OSGetArenaHi();
+                hdr = (TexHeader_47AD4 *)fn_8000B334(fullSize + 0x10, 0x20);
+                compBuf = fn_8000B360(compSize, 0x20);
+            } else {
+                hdr = (TexHeader_47AD4 *)fn_1_45D0(heap, fullSize + 0x10, lbl_1_data_1A368, 0x12f);
+            }
+        } else {
+            hdr = (TexHeader_47AD4 *)state->unk_20;
+        }
+        data = ((u32)hdr + 0x2f) & ~0x1f;
+        if (useArena != 0) {
+            if (fn_1_458A0(&res, (void *)compBuf, compSize, 0) < 0) {
+                return 0;
+            }
+            if (!fn_1_45850(&res)) {
+                return 0;
+            }
+            fn_1_12860(compBuf, data);
+        } else {
+            if (fn_1_12F78(name, data) == 0) {
+                return 0;
+            }
+        }
+        DCFlushRange((void *)data, fullSize);
+        if (useArena != 0) {
+            OSSetArenaHi(arenaHi);
+        }
+    } else {
+        fullSize = (fn_1_45B2C(&res) + 0x1f) & ~0x1f;
+        if (allocate != 0) {
+            if (useArena != 0) {
+                hdr = (TexHeader_47AD4 *)fn_8000B334(fullSize + 0x20, 0x20);
+            } else {
+                hdr = (TexHeader_47AD4 *)fn_1_45D0(heap, fullSize + 0x20, lbl_1_data_1A368, 0x156);
+            }
+        } else {
+            hdr = (TexHeader_47AD4 *)state->unk_20;
+        }
+        data = ((u32)hdr + 0x2f) & ~0x1f;
+        fn_1_458A0(&res, (void *)data, fullSize, 0);
+        fn_1_45850(&res);
+    }
+    hdr->count = *(u32 *)data;
+    hdr->entries = (TexEntry_47AD4 *)(data + 4);
+    if (useArena != 0) {
+        hdr->texobjs = (TexObj_47AD4 *)fn_8000B334(hdr->count << 5, 0x20);
+    } else {
+        hdr->texobjs = (TexObj_47AD4 *)fn_1_45D0(heap, hdr->count << 5, lbl_1_data_1A368, 0x168);
+    }
+    for (i = 0; i < hdr->count; i++) {
+        TexEntry_47AD4 *entry = &hdr->entries[i];
+        u32 flags = entry->flags;
+        void *image = (void *)(data + entry->offset);
+        if (!(flags & 0x100) && entry->width != 0 && entry->height != 0) {
+            GXInitTexObj(&hdr->texobjs[i], image, entry->width, entry->height, flags & 0x1f, 0, 0, 0);
+        }
+    }
+    GXInvalidateTexAll();
+    state->unk_24 = slot;
+    state->unk_0 = 1;
+    state->unk_20 = (u32)hdr;
+    fn_1_4877C();
+    return 1;
+}
+/* fzgx:end fn_1_47AD4 */
+
 /* fzgx:begin fn_1_485E8 */
 // Find the resource matching value, load its data, and return the destination buffer.
 void *fn_1_485E8(s32 index, s32 value) {

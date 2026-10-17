@@ -7799,3 +7799,6 @@ rel/main_rel/camera/fn_1_6DD0.c:
 
 rel/main_rel/bg_lig/fn_1_D8878.c:
 	.text       start:0x000D8878 end:0x000D8CA8 align:4
+
+rel/main_rel/load/fn_1_47AD4.c:
+	.text       start:0x00047AD4 end:0x00047E54 align:4

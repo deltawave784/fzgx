@@ -49102,6 +49102,17 @@
   },
   {
     "module": "main_rel",
+    "source": "rel/main_rel/load/fn_1_47AD4.c",
+    "symbols": [
+      "fn_1_47AD4"
+    ],
+    "status": "matching",
+    "mw_version": null,
+    "extra_cflags": [],
+    "tu": "rel/main_rel/load.c"
+  },
+  {
+    "module": "main_rel",
     "source": "rel/main_rel/load/fn_1_485E8.c",
     "symbols": [
       "fn_1_485E8"
