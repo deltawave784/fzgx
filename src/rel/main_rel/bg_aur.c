@@ -466,6 +466,68 @@ void fn_1_152208(s16 *ids, s16 count, GridEntry *entries, s16 rows, s16 cols) {
 }
 /* fzgx:end fn_1_152208 */
 
+/* fzgx:begin fn_1_152510 noprologue */
+#include "types.h"
+
+typedef struct GridCell {
+    s16 id;
+    u32 flags;
+} GridCell;
+
+extern u32 fn_1_8D5F0(s16);
+extern s32 fn_1_F7EDC(s16);
+extern s32 fn_1_F7BE4(s16);
+
+void fn_1_152510(s16 *ids, s16 count, GridCell *grid, s16 rows, s16 cols) {
+    s16 i;
+    struct { s16 value; } row;
+    s16 col;
+    GridCell *e;
+    s16 k;
+    s32 found;
+    s32 base;
+
+    found = 0;
+    for (row.value = 0; row.value < 41; row.value++) {
+        if ((fn_1_8D5F0(row.value) & 0x10000000) && fn_1_F7EDC(row.value) != 0) {
+            found = 1;
+            break;
+        }
+    }
+
+    for (row.value = 0; row.value < rows; row.value++) {
+        for (col = 0; col < cols; col++) {
+            grid[row.value * cols + col].flags |= 0x40000000;
+            grid[row.value * cols + col].id = -1;
+        }
+    }
+
+    for (k = 0; k < count; k++) {
+        if (ids[k] != -1) {
+            row.value = k / cols;
+            col = k % cols;
+            e = &grid[col + row.value * cols];
+            e->id = ids[k];
+            e->flags = 0;
+            if (found == 1) {
+                e->flags |= 0x80000000;
+            } else if (fn_1_8D5F0(e->id) & 0x10000000) {
+                e->flags |= 0x40000000;
+            } else {
+                e->flags |= 0x80000000;
+            }
+            if (fn_1_F7EDC(e->id) != 0) {
+                e->flags &= 0x3FFFFFFF;
+            }
+            if (fn_1_F7BE4(e->id) != 0) {
+                e->flags &= 0x3FFFFFFF;
+                e->flags |= 0x08000000;
+            }
+        }
+    }
+}
+/* fzgx:end fn_1_152510 */
+
 /* fzgx:begin fn_1_152840 */
 typedef struct Entry {
     s16 id;

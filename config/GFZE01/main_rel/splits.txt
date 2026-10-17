@@ -7964,3 +7964,6 @@ rel/main_rel/motasglist/fn_1_449A8.c:
 
 rel/main_rel/cloth/fn_1_106CAC.c:
 	.text       start:0x00106CAC end:0x00106D30 align:4
+
+rel/main_rel/bg_aur/fn_1_152510.c:
+	.text       start:0x00152510 end:0x00152840 align:4
