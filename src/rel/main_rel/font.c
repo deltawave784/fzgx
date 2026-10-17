@@ -3533,6 +3533,86 @@ void fn_1_535A0(FrameColor color, f32 x, f32 y, f32 z, f32 width, f32 height, f3
 }
 /* fzgx:end fn_1_535A0 */
 
+/* fzgx:begin fn_1_53B14 noprologue */
+#include "types.h"
+#include "font.h"
+
+extern void fn_1_50190(FontDrawPacket *packet, f32 a, f32 b, f32 c, f32 d, f32 e, f32 f);
+
+/* Default draw packet: image 0, origin, depth 0.1, unit scale, full uv range,
+   opaque white, flags 5. First object of the font TU's literal pool. */
+static const FontDrawPacket lbl_1_rodata_26F8 = {
+    0, 0.0f, 0.0f, 0.1f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0, 0, 1.0f, 5, 0.0f,
+    { 0xff, 0xff, 0xff, 0xff }, { 0, 0, 0, 0 }, 0, 0, 0, NULL, NULL, NULL, 0 };
+
+/* ---- literal-pool primer (section .fzgxpool is dropped at integration) ----
+   This function's own literals (2^52, 255.0, 8.0f) live at +0x60, +0x150 and +0x158
+   of the template's address. Static objects are emitted at their definition point and
+   a function's plain literals before its conversion constants, so the retail pool
+   contents are reproduced in address order by interleaving tables and primer functions. */
+extern void fzgx_pool_sink_f(f32);
+extern void fzgx_pool_sink_d(f64);
+extern void fzgx_pool_sink_p(const void *);
+extern u32 fzgx_pool_u32;
+extern s32 fzgx_pool_s32;
+extern void fn_1_52B68(void *, void *);
+extern void fn_1_52B8C(void *, void *);
+extern void fn_1_52BB0(void *, void *);
+extern void fn_1_52BD4(void *, void *);
+
+#pragma section ".fzgxpool"
+
+static const u32 fzgx_pool_w58[2] = { 0x00000000, 0x3F800000 };
+__declspec(section ".fzgxpool") void fzgx_pool_primer_60(void) {
+    fzgx_pool_sink_f((f32)fzgx_pool_u32);   /* 2^52 at +0x60 */
+}
+static const u32 fzgx_pool_w68[5] = { 0x425C0000, 0x3DCCCCCD, 0x47AFC800, 0x43F00000, 0x44200000 };
+__declspec(section ".fzgxpool") void fzgx_pool_primer_80(void) {
+    fzgx_pool_sink_f((f32)fzgx_pool_s32);   /* 2^52 + 2^31 at +0x80 */
+}
+__declspec(section ".fzgxpool") void fzgx_pool_primer_88(void) {
+    fzgx_pool_sink_d(0.5);
+}
+static const f32 fzgx_pool_w90[10] = { 0.75f, 0.0f, 0.88948f, -9.595552e-20f, 320.0f, 240.0f,
+                                       255.0f, 0.5f, 2.0f, 4.0f };
+static const u32 fzgx_pool_wB8[27] = {
+    0x00000000, 0x40000000, 0x40000000, 0x00000000, 0x3F800000, 0x3F800000,
+    0x9B000000, 0x40000000, 0x40000000, 0x9B000000, 0x3F800000, 0x3F800000,
+    0x0000FF00, 0x40000000, 0x40000000, 0x0000FF00, 0x3F800000, 0x3F800000,
+    0xFFF20000, 0x3F800000, 0x3F800000, 0xFF800000, 0x3F800000, 0x3F800000,
+    0x00008000, 0x40000000, 0x40000000 };
+static const u32 fzgx_pool_w124[4] = { 0, 0, 0, 0 };
+static const u32 fzgx_pool_w134[7] = { 0x3E000000, 0xFFFFFF00, 0x00000000, 0x47800000,
+                                       0x42A00000, 0x42700000, 0x00000000 };
+__declspec(section ".fzgxpool") void fzgx_pool_primer_150(void) {
+    fzgx_pool_sink_d(255.0);
+    fzgx_pool_sink_f(8.0f);
+}
+__declspec(section ".fzgxpool") void fzgx_pool_primer_tables(void) {
+    fzgx_pool_sink_p(fzgx_pool_w58);
+    fzgx_pool_sink_p(fzgx_pool_w68);
+    fzgx_pool_sink_p(fzgx_pool_w90);
+    fzgx_pool_sink_p(fzgx_pool_wB8);
+    fzgx_pool_sink_p(fzgx_pool_w124);
+    fzgx_pool_sink_p(fzgx_pool_w134);
+}
+
+void fn_1_53B14(u8 *color, f32 x, f32 y, f32 a, f32 b, f32 z) {
+    FontDrawPacket pkt = lbl_1_rodata_26F8;
+
+    pkt.image = 0xc;
+    pkt.x = x;
+    pkt.y = y;
+    pkt.z = z;
+    if (color != NULL) {
+        pkt.alpha = (f32)(color[3] / 255.0);
+        *(u32 *)pkt.color = *(u32 *)color;
+    }
+    pkt.flags = 0xa;
+    fn_1_50190(&pkt, a, b, 8.0f, 8.0f, 8.0f, 8.0f);
+}
+/* fzgx:end fn_1_53B14 */
+
 /* fzgx:begin fn_1_53E40 noprologue */
 #include "types.h"
 #include "font.h"
