@@ -7868,3 +7868,9 @@ rel/main_rel/sel_static_disp/fn_1_1358BC.c:
 
 rel/main_rel/camera/fn_1_A888.c:
 	.text       start:0x0000A888 end:0x0000AA54 align:4
+
+rel/main_rel/car/fn_1_892E8.c:
+	.text       start:0x000892E8 end:0x000892FC align:4
+
+rel/main_rel/sel_static_disp/fn_1_14DDF4.c:
+	.text       start:0x0014DDF4 end:0x0014DE80 align:4

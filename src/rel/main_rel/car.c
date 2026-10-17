@@ -7134,6 +7134,21 @@ void fn_1_8901C(Fn8901CCar *car) {
 }
 /* fzgx:end fn_1_8901C */
 
+/* fzgx:begin fn_1_892E8 noprologue */
+typedef struct { int x, y, z; } V3;
+#pragma optimization_level 2
+#pragma opt_propagation off
+void fn_1_892E8(V3 *p, int a)
+{
+    int d;
+    d = a;
+    a -= d;
+    p->x = a;
+    p->y = a;
+    p->z = a;
+}
+/* fzgx:end fn_1_892E8 */
+
 /* fzgx:begin fn_1_8A168 */
 void fn_1_8A168(void *arg0) {
     fn_1_892FC(arg0, 0, 0);
