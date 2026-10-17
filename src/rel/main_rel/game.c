@@ -3303,3 +3303,79 @@ int fn_1_41488(Fn41488Data *data, const char *value) {
     return -1;
 }
 /* fzgx:end fn_1_41488 */
+
+/* fzgx:begin fn_1_41CB8 */
+typedef struct F41Node { u8 pad[0x30]; struct F41Node *next; } F41Node;
+typedef struct F41Ent { u8 pad0[4]; F41Node *head; u8 pad8[2]; u16 cnt; } F41Ent;
+typedef struct F41D { u16 f0; u16 f2; s16 f4; u16 p6; u32 f8; } F41D;
+typedef struct F41Obj {
+    u8 pad0;
+    u8 count;
+    u16 flags;
+    u8 pad4[4];
+    void *obj8;
+    u8 padC[6];
+    u16 idx;
+    u8 pad14[0x12];
+    u8 n26;
+    u8 pad27;
+    F41Ent *tab28;
+    F41D *tab2C;
+    F41D *tab30;
+    F41Ent *tab34;
+    u8 pad38[0x14];
+    u8 base4C;
+} F41Obj;
+
+extern void fn_1_42E74(void *);
+extern F41D *fn_1_42044(F41Obj *, s32);
+extern F41D *fn_1_42254(F41Obj *, s32);
+extern void fn_1_42458(F41D *, const F41D *);
+
+#pragma opt_lifetimes on
+void fn_1_41CB8(F41Obj *o) {
+    struct F41Node * fzgx_live;
+    F41Ent *e;
+    s32 off;
+    s32 i;
+    F41D *p;
+    F41D *a;
+    F41D *b;
+    F41D *src;
+    fn_1_42E74(o->obj8);
+    if (o->idx < o->n26) {
+        e = (F41Ent *)((u8 *)o->tab28 + o->idx * 12);
+    } else if (o->tab34 != 0) {
+        e = (F41Ent *)((u8 *)o->tab34 + (o->idx - o->base4C) * 12);
+    }
+    if ((o->flags & 1) == 0) {
+        struct { s32 value; } k;
+        /* Preserve the node traversal loads. */
+        volatile F41Node *q;
+        u16 n = e->cnt;
+        q = e->head;
+        for (k.value = 0; k.value < n; k.value++) {
+            q = q->next;
+        }
+    }
+    i = 0;
+    off = 0;
+    for (; i < o->count; i++) {
+        p = fn_1_42044(o, i);
+        a = (F41D *)((u8 *)o->tab2C + off);
+        b = (F41D *)((u8 *)o->tab30 + off);
+        if (p != 0) {
+            src = fn_1_42254(o, i);
+        } else {
+            p = (F41D *)lbl_1_data_6710;
+            src = p;
+        }
+        if ((a->f0 & 4) == 0) {
+            fn_1_42458(a, src);
+        }
+        fn_1_42458(b, p);
+        off += 0x10;
+    }
+}
+#pragma opt_lifetimes reset
+/* fzgx:end fn_1_41CB8 */
