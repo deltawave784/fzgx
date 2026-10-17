@@ -2106,6 +2106,91 @@ void fn_1_A5590(void) {
 }
 /* fzgx:end fn_1_A5590 */
 
+/* fzgx:begin fn_1_A5594 noprologue */
+#include "types.h"
+#include "dolphin/os/OSFastCast.h"
+#include "game/main_rel/car_test_types.h"
+#include "rel/main_rel/sound.h"
+
+extern s32 fn_1_5910(void);
+extern void fn_1_681C(u32, u32 *);
+extern u32 lbl_8006DCA4(void);
+extern void lbl_8006E1B0(Fn183D28Vec3 *, Fn183D28Vec3 *);
+extern void fn_8006EF10(void *, s16 *, s16 *);
+extern u32 OSGetSoundMode(void);
+extern s32 fn_80067344(u32, u32, u32, u32);
+extern s32 fn_80067898(u32);
+
+extern const f32 lbl_1_rodata_48C4; /* 250000.0f */
+extern const f32 lbl_1_rodata_4470; /* 1.0f */
+extern const f32 lbl_1_rodata_4474; /* 0.0f */
+extern const f32 lbl_1_rodata_4564; /* 127.0f */
+extern const f32 lbl_1_rodata_4578; /* 0.0039f */
+
+static inline f32 clamp_value(f32 x, f32 hi, f32 lo)
+{
+    return x < lo ? lo : (x > hi ? hi : x);
+}
+
+void fn_1_A5594(u32 arg0, Fn183D28Vec3 *pos)
+{
+    Fn183D28Vec3 rel;
+    f32 listener[3];
+    s16 dist;
+    s16 angle;
+    f32 dx;
+    f32 dy;
+    f32 dz;
+    f32 scaled;
+    struct { f32 value; } distance;
+    f32 t;
+    u8 vol;
+    s8 raw;
+    s8 pan;
+
+    fn_1_681C((u8)fn_1_5910(), (u32 *)listener);
+    dx = listener[0];
+    dx = dx - pos->x;
+    dy = listener[1] - pos->y;
+    dz = listener[2] - pos->z;
+    distance.value = dx * dx;
+    distance.value = dy * dy + distance.value;
+    distance.value = dz * dz + distance.value;
+    if (distance.value > lbl_1_rodata_48C4) {
+        return;
+    }
+    lbl_8006DCA4();
+    lbl_8006E1B0(pos, &rel);
+    fn_8006EF10(&rel, &dist, &angle);
+    {
+        struct { f32 value; } hi;
+        hi.value = lbl_1_rodata_4470;
+        t = hi.value - distance.value / lbl_1_rodata_48C4;
+        t = clamp_value(t, hi.value, lbl_1_rodata_4474);
+    }
+    /* retail: OSFastCast __OSf32tou8 (psq_st ..., 1, qr2; lbz) */
+    scaled = lbl_1_rodata_4564 * t;
+    vol = __OSf32tou8(scaled);
+    if (__abs(angle) < 0x4000) {
+        raw = lbl_1_rodata_4578 * -angle;
+    } else if (angle > 0) {
+        raw = lbl_1_rodata_4578 * -(0x8000 - angle);
+    } else {
+        raw = lbl_1_rodata_4578 * -(-0x8000 - angle);
+    }
+    pan = raw < -64 ? -64 : (raw > 63 ? 63 : raw);
+    if (OSGetSoundMode() == 0) {
+        pan = 0;
+    }
+    fn_80067344(1, 16, 0xB0270000, vol);
+    fn_80067344(1, 16, 0xB02A0000, pan);
+    if (lbl_1_bss_6F1D8 == 0 && lbl_1_bss_6F1DC <= 45) {
+        fn_80067898(arg0);
+    }
+    fn_80067344(1, 16, 0xB02A0000, 0);
+}
+/* fzgx:end fn_1_A5594 */
+
 /* fzgx:begin fn_1_A5848 */
 u8 fn_1_A5848(void) {
     return lbl_1_bss_6F1E0;
