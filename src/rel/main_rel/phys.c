@@ -377,6 +377,129 @@ void fn_1_E1E9C(fn_1_E1E9C_PhysObj *obj) {
 }
 /* fzgx:end fn_1_E1E9C */
 
+/* fzgx:begin fn_1_E2AE8 noprologue */
+#include "types.h"
+#include "psvec.h"
+
+typedef struct {
+    f32 x, y, z;
+} E2AE8Vec;
+
+typedef struct {
+    u8 pad0[0x54];
+    E2AE8Vec pos;      /* 0x54 */
+    E2AE8Vec pos2;     /* 0x60 */
+    u8 pad6C[0x84 - 0x6C];
+    f32 speed;         /* 0x84 */
+    u8 pad88[0xA0 - 0x88];
+    E2AE8Vec dirA0;    /* 0xA0 */
+    s32 valAC;         /* 0xAC */
+    s32 valB0;
+    s32 valB4;
+    s32 valB8;
+    u8 padBC[0x100 - 0xBC];
+    s32 val100;        /* 0x100 */
+    s32 val104;
+    s32 val108;
+    s32 val10C;
+    u8 pad110[0x11C - 0x110];
+    E2AE8Vec prevVel;  /* 0x11C */
+    E2AE8Vec vel;      /* 0x128 */
+    u8 pad134[0x138 - 0x134];
+    u64 flags;         /* 0x138 */
+    s32 mode;          /* 0x140 */
+    u8 pad144[0x1A8 - 0x144];
+} E2AE8Obj;
+
+typedef struct {
+    s16 a[80];
+} E2AE8Values;
+
+typedef struct {
+    f32 negOne;        /* 0x00 */
+    u8 pad4[0x34 - 0x4];
+    f32 half;          /* 0x34 */
+    u8 pad38[0x140 - 0x38];
+    E2AE8Vec dir;      /* 0x140 */
+    E2AE8Values values; /* 0x14C */
+} E2AE8Rodata;
+
+extern E2AE8Rodata lbl_1_rodata_6780;
+extern s16 fn_1_E5430(s16);
+extern E2AE8Obj *fn_1_E54A8(s16, s16);
+extern u8 *fn_1_14F04(void);
+extern s32 fn_1_20A5C(void *, f32 *);
+extern void fn_1_17920(s32, void *, f32);
+extern s16 fn_1_7B054(void);
+extern void fn_80008BA8(void *, void *, u32);
+extern void lbl_8006D668(void *);
+
+#pragma opt_dead_assignments off
+void fn_1_E2AE8(void) {
+    s16 count;
+    E2AE8Rodata *rd;
+    E2AE8Obj *o;
+    s16 j;
+    u8 *src;
+    E2AE8Obj *objs;
+    s16 i;
+    f32 f;
+    E2AE8Vec dir;
+    E2AE8Values values;
+    E2AE8Vec tmp;
+    register f32 s;
+    f32 neg;
+    E2AE8Obj *p;
+    s16 *vp;
+    s16 k;
+    f32 lab_t2;
+
+    rd = &lbl_1_rodata_6780;
+    for (i = 0; i < 6; i++) {
+        count = fn_1_E5430(i);
+        objs = fn_1_E54A8(i, 0);
+        src = fn_1_14F04() + 0x45C;
+        for (j = 0, o = objs; j < count; j++, o++) {
+            o->valAC = o->val100 = fn_1_20A5C(&o->pos, &f);
+            o->valB0 = o->valB4 = o->valB8 = o->valAC;
+            o->val104 = o->val108 = o->val10C = (*(s32 volatile *)&(o->val100)) /* Retail reloads this field. */;
+            if (o->flags & 0x10000) {
+                lab_t2 = f;
+                fn_1_17920((*(s32 volatile *)&(o->val100)) /* Retail reloads this field. */, NULL, lab_t2);
+                fn_80008BA8(&o->vel, src, 12);
+                lbl_8006D668(&o->vel);
+                fn_80008BA8(&o->dirA0, &o->vel, 12);
+            }
+        }
+        if (i == 0 && fn_1_7B054() == 6) {
+            dir = rd->dir;
+            values = rd->values;
+            for (k = 0, p = objs, vp = values.a; k < count; p++, vp++, k++) {
+                p->val100 = *vp;
+                p->val104 = p->val108 = p->val10C = p->val100;
+                if (p->val100 > 80 && p->val100 < 200) {
+                    neg = rd->negOne;
+                    psvec_scale(&dir, neg, &p->vel);
+                    p->mode = 1;
+                } else {
+                    fn_80008BA8(&p->vel, &dir, 12);
+                    p->mode = 2;
+                }
+            }
+        }
+        for (j = 0; j < count; j++) {
+            if (!(objs[j].flags & 8)) {
+                psvec_scale(&objs[j].vel, rd->half * objs[j].speed, &tmp);
+                psvec_add(&objs[j].pos, &tmp, &objs[j].pos);
+                psvec_add(&objs[j].pos2, &tmp, &objs[j].pos2);
+            }
+            fn_80008BA8(&objs[j].prevVel, &objs[j].vel, 12);
+        }
+    }
+}
+#pragma opt_dead_assignments reset
+/* fzgx:end fn_1_E2AE8 */
+
 /* fzgx:begin fn_1_E35F0 noprologue */
 #include "types.h"
 
