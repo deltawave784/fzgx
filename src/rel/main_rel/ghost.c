@@ -693,6 +693,230 @@ void fn_1_ECF68(void) {
 }
 /* fzgx:end fn_1_ECF68 */
 
+/* fzgx:begin fn_1_ECF88 noprologue */
+#include "types.h"
+#include "rel/main_rel/ghost.h"
+#include "game/main_rel/ghost_types.h"
+#include "game/vec3.h"
+
+#pragma fp_contract on
+
+extern const f32 lbl_1_rodata_6C94;
+extern const f32 lbl_1_rodata_6BD0;
+extern const f64 lbl_1_rodata_6C98;
+extern const f64 lbl_1_rodata_6CA0;
+/* Volatile: retail reloads the shared lap threshold in the second branch. */
+extern const volatile f64 lbl_1_rodata_6CA8;
+extern const f64 lbl_1_rodata_6CB0;
+extern const f32 lbl_1_rodata_6CB8;
+extern f32 lbl_8006D0B4(f32);
+extern f32 __fmadds(f32, f32, f32);
+extern s32 fn_1_3F164(void);
+extern s32 fn_1_F17B4(const void *);
+extern u32 fn_1_F1588(void);
+extern void *fn_1_86254(int);
+extern void fn_1_8645C(int, void *);
+extern void fn_1_F0B5C(u32, void *);
+extern void fn_1_F0D10(u32, u32);
+extern void fn_1_F0E00(u32, void *);
+extern void fn_1_F143C(FnObject *, s32, const f32 *, const f32 *, void *);
+extern void fn_80008BEC(void *, int, u32);
+extern void fn_8006F5C4(s16 *, s16 *, s16 *);
+extern void ghost_pack_bits(u32 *, const u32 *, const u32 *, const u32 *);
+extern void lbl_8006DBAC(Vec3 *);
+
+#pragma fp_contract on
+void fn_1_ECF88(void) {
+    Obj_1_bss_7B180 *p_lbl_1_bss_7B180;
+    u32 v0;
+    u32 v1;
+    void *v3;
+    u32 v8;
+    f32 v9;
+    f32 v14;
+    void *v37;
+    void *v36;
+    u32 *v35;
+    u32 *v34;
+    u32 *v33;
+    u16 *v32;
+    void *v31;
+    void *v30;
+    void *v29;
+    u32 v28;
+    void *v19;
+    u32 v38;
+    u16 v39;
+    u8 v42;
+    s32 v46;
+    u32 v44;
+    f32 loc_1C[3][4];
+    u32 loc_18;
+    u32 loc_14;
+    u32 loc_10;
+    s16 loc_C;
+    s16 loc_A;
+    s16 loc_8;
+
+    p_lbl_1_bss_7B180 = &lbl_1_bss_7B180;
+    v0 = p_lbl_1_bss_7B180->unk_1820;
+    v1 = ((v0 / 40 + p_lbl_1_bss_7B180->unk_38B4) << 4) + 40;
+    if (v0 >= 28800 || v1 > 16000) {
+        p_lbl_1_bss_7B180->unk_10 = 1;
+    } else {
+        p_lbl_1_bss_7B180->unk_38BC = lbl_1_rodata_6BD0 - (f32)v1 / lbl_1_rodata_6C94;
+        v3 = fn_1_86254(0);
+        {
+            /* These flag reads are separate snapshots in the retail code. */
+            u32 mask = -((*(volatile u32 *)v3 >> 2) & 1);
+            p_lbl_1_bss_7B180->unk_38C0 = (p_lbl_1_bss_7B180->unk_38C0 + 1) & mask;
+        }
+        /* Volatile: this flag read is a separate snapshot after the counter update. */
+        if ((*(volatile u32 *)v3 & 8) != 0) {
+            p_lbl_1_bss_7B180->unk_38B8++;
+        } else if (p_lbl_1_bss_7B180->unk_38B8 != 0) {
+            p_lbl_1_bss_7B180->unk_38B8 = 0;
+        }
+        if ((s32)fn_1_F1588() != 0) {
+            *(u8 *)p_lbl_1_bss_7B180->unk_38B0 = 1;
+        } else {
+            v1 = *(u32 *)v3;
+            if ((v1 & 4) != 0 && (s32)p_lbl_1_bss_7B180->unk_38C0 < 3) {
+                for (v8 = p_lbl_1_bss_7B180->unk_0 - 14; v8 < p_lbl_1_bss_7B180->unk_0 - 10; v8++) {
+                    if ((s32)v8 > 0) {
+                        *(u8 *)(p_lbl_1_bss_7B180->unk_16E8 + v8) = 1;
+                    }
+                }
+                p_lbl_1_bss_7B180->unk_14 = 1;
+                *(u8 *)p_lbl_1_bss_7B180->unk_38B0 = 1;
+            } else {
+                if ((v1 & 0x800000) != 0 || (v1 & 0x10) != 0) {
+                    f32 y = *(f32 *)((u8 *)v3 + 152);
+                    v9 = *(f32 *)((u8 *)v3 + 148) * *(f32 *)((u8 *)v3 + 148);
+                    v9 = __fmadds(y, y, v9);
+                    v9 = __fmadds(*(f32 *)((u8 *)v3 + 156), *(f32 *)((u8 *)v3 + 156), v9);
+                    v9 = lbl_8006D0B4(v9);
+                    {
+                    f64 speed = v9 / *(f32 *)((u8 *)v3 + 8);
+                    if (lbl_1_rodata_6C98 * speed > lbl_1_rodata_6CA0) {
+                        p_lbl_1_bss_7B180->unk_14 = 1;
+                        *(u8 *)p_lbl_1_bss_7B180->unk_38B0 = 1;
+                        /* Goto: this successful speed test skips the remaining flag tests. */
+                        goto packed_flag;
+                    }
+                    }
+                }
+                if (*(u16 *)((u8 *)v3 + 532) == 60) {
+                    p_lbl_1_bss_7B180->unk_14 = 1;
+                    *(u8 *)p_lbl_1_bss_7B180->unk_38B0 = 1;
+                } else if ((s32)p_lbl_1_bss_7B180->unk_14 != 0) {
+                    p_lbl_1_bss_7B180->unk_14 = 0;
+                    *(u8 *)p_lbl_1_bss_7B180->unk_38B0 = 1;
+                } else {
+                    *(u8 *)p_lbl_1_bss_7B180->unk_38B0 = 0;
+                }
+            }
+        }
+packed_flag:
+        if (*(u8 *)p_lbl_1_bss_7B180->unk_38B0 != 0) {
+            p_lbl_1_bss_7B180->unk_38B4++;
+        }
+        fn_1_8645C(0, loc_1C);
+        lbl_8006DBAC((Vec3 *)loc_1C);
+        fn_8006F5C4(&loc_8, &loc_A, &loc_C);
+        *(u8 *)(p_lbl_1_bss_7B180->unk_38AC + 2) = loc_C >> 8;
+        *(u16 *)(p_lbl_1_bss_7B180->unk_38AC + 4) = loc_A;
+        *(u8 *)(p_lbl_1_bss_7B180->unk_38AC + 3) = loc_8 >> 8;
+        *(u8 *)p_lbl_1_bss_7B180->unk_38AC = p_lbl_1_bss_7B180->unk_0 - p_lbl_1_bss_7B180->unk_4;
+        loc_18 = fn_1_F17B4(&loc_1C[0][3]);
+        loc_14 = fn_1_F17B4(&loc_1C[1][3]);
+        loc_10 = fn_1_F17B4(&loc_1C[2][3]);
+        ghost_pack_bits((u32 *)(p_lbl_1_bss_7B180->unk_38AC + 8), &loc_18, &loc_14, &loc_10);
+
+        v14 = *(f32 *)(p_lbl_1_bss_7B180->unk_3898 + 256) / *(f32 *)(p_lbl_1_bss_7B180->unk_3898 + 252);
+        p_lbl_1_bss_7B180->unk_38A0 = v14;
+        if (lbl_1_rodata_6CA8 < v14 && p_lbl_1_bss_7B180->unk_389C < lbl_1_rodata_6CB0) {
+            p_lbl_1_bss_7B180->unk_38A4--;
+        } else if (lbl_1_rodata_6CA8 < p_lbl_1_bss_7B180->unk_389C && v14 < lbl_1_rodata_6CB0) {
+            p_lbl_1_bss_7B180->unk_38A4++;
+        }
+        p_lbl_1_bss_7B180->unk_389C = v14;
+        *(u8 *)(p_lbl_1_bss_7B180->unk_38AC + 1) = p_lbl_1_bss_7B180->unk_38A4;
+        *(u16 *)(p_lbl_1_bss_7B180->unk_38AC + 6) = (s32)(lbl_1_rodata_6CB8 * p_lbl_1_bss_7B180->unk_38A0);
+        p_lbl_1_bss_7B180->unk_38AC += 16;
+        p_lbl_1_bss_7B180->unk_38B0++;
+        p_lbl_1_bss_7B180->unk_1820++;
+        p_lbl_1_bss_7B180->unk_4 = p_lbl_1_bss_7B180->unk_0;
+        p_lbl_1_bss_7B180->unk_0++;
+
+        if ((s32)lbl_1_data_3E52C == 2) {
+            v19 = &p_lbl_1_bss_7B180->unk_39F0;
+            v37 = p_lbl_1_bss_7B180->arr_38C4;
+            v36 = &p_lbl_1_bss_7B180->unk_39B4;
+            v35 = v19;
+            v34 = &p_lbl_1_bss_7B180->unk_1600;
+            v33 = &p_lbl_1_bss_7B180->unk_1824;
+            v32 = &p_lbl_1_bss_7B180->unk_1800;
+            v31 = p_lbl_1_bss_7B180->arr_3A04;
+            v30 = p_lbl_1_bss_7B180->arr_3AF4;
+            v29 = p_lbl_1_bss_7B180->arr_19C8;
+            for (v28 = 0; (u32)v28 < p_lbl_1_bss_7B180->unk_174E; v28++) {
+                fn_1_F0D10(v28, (u32)v37);
+                fn_1_F0B5C(v28, v36);
+                fn_1_F0E00(v28, v35);
+                if (fn_1_3F164() == 0) {
+                    v39 = *v32;
+                    if ((f32)v39 < ((f32 *)*v34)[*v33 - 1]) {
+                        *v32 = v39 + 1;
+                    }
+                }
+                fn_1_F0D10(v28, (u32)v31);
+                fn_1_F0B5C(v28, v30);
+                if ((s32)p_lbl_1_bss_7B180->unk_17C8 != 0) {
+                    fn_1_F143C((FnObject *)v29, v28, (const f32 *)v30, (const f32 *)v36, v31);
+                } else {
+                    fn_80008BEC(v29, 0, 1568);
+                }
+                v37 = (u8 *)v37 + 48;
+                v36 = (u8 *)v36 + 12;
+                v35++;
+                v34++;
+                v33++;
+                v32++;
+                v31 = (u8 *)v31 + 48;
+                v30 = (u8 *)v30 + 12;
+                v29 = (u8 *)v29 + 1568;
+            }
+            if ((*(u32 *)v3 & 0x40000) != 0) {
+                /* Keep the current-lap snapshot for the following comparisons. */
+                s32 currentLap;
+                /* Volatile: retain this lap snapshot for both comparisons below. */
+                if ((s8)p_lbl_1_bss_7B180->unk_38A5 != (currentLap = *(volatile s8 *)&p_lbl_1_bss_7B180->unk_38A4)) {
+                    v42 = p_lbl_1_bss_7B180->unk_38A6;
+                    if (currentLap > (s8)v42 && (s8)v42 < 3) {
+                        p_lbl_1_bss_7B180->unk_38A6 = v42 + 1;
+                        p_lbl_1_bss_7B180->unk_38A8 = 120;
+                        v46 = 0xF0000001;
+                        p_lbl_1_bss_7B180->unk_3B30 = v46;
+                        for (v44 = 0; v44 < p_lbl_1_bss_7B180->unk_174E; v44++) {
+                            if (v46 < *(s32 *)v19) {
+                                v46 = *(s32 *)v19;
+                            }
+                            v19 = (u8 *)v19 + 4;
+                        }
+                        p_lbl_1_bss_7B180->unk_3B30 = v46;
+                        if ((s32)p_lbl_1_bss_7B180->unk_16D4 != 0) {
+                            p_lbl_1_bss_7B180->unk_3B30 = v46 + p_lbl_1_bss_7B180->unk_16D4;
+                        }
+                    }
+                }
+            }
+            p_lbl_1_bss_7B180->unk_38A5 = p_lbl_1_bss_7B180->unk_38A4;
+        }
+    }
+}
+/* fzgx:end fn_1_ECF88 */
+
 /* fzgx:begin fn_1_EE3F4 */
 void fn_1_EE3F4(void) {
     u8 *base;
