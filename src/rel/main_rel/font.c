@@ -1014,6 +1014,70 @@ void fn_1_4B8CC(void) {
 }
 /* fzgx:end fn_1_4B8CC */
 
+/* fzgx:begin fn_1_4B8DC noprologue */
+#include "types.h"
+#include "dolphin/ar.h"
+#include "rel/main_rel/font.h"
+
+typedef struct {
+    u8 pad[0x4C];
+} FzgxDVDFileInfo;
+
+extern void fn_1_4B8BC(u32);
+extern u32 OSGetArenaHi(void);
+extern void OSSetArenaHi(u32);
+extern s32 fn_80006B70(const char *, FzgxDVDFileInfo *);
+extern void OSReport(const char *, ...);
+extern void OSPanic(const char *, int, const char *, ...);
+extern u32 fn_80006DE8(FzgxDVDFileInfo *);
+extern void *fn_8000B360(u32, u32);
+extern s32 fn_80006D1C(FzgxDVDFileInfo *, void *, u32, s32);
+extern u32 fn_8002071C(void);
+extern u32 ARGetDMAStatus(void);
+extern u32 fn_800206FC(u32);
+extern void DCFlushRange(void *, u32);
+extern void ARQPostRequest(ARQRequest *, u32, u32, u32, u32, u32, u32, ARQCallback);
+
+void fn_1_4B8DC(void)
+{
+    FzgxDVDFileInfo file;
+    u32 arenaHi;
+    struct { const char *value; } name;
+    void *buf;
+    u32 size;
+    u32 base;
+    s32 wait;
+
+    u32 hi;
+    u8 *data = (u8 *)&lbl_1_data_1A3B8;
+
+    name.value = (const char *)(data + 0x2014);
+    hi = OSGetArenaHi();
+    arenaHi = hi;
+    if (fn_80006B70(name.value, &file) == 0) {
+        OSReport((const char *)(data + 0x2030), name.value);
+        OSPanic((const char *)(data + 0x1910), 0xa77,
+                (const char *)(data + 0x2040));
+    }
+    size = (fn_80006DE8(&file) + 0x1f) & ~0x1f;
+    buf = fn_8000B360(size, 0x20);
+    fn_80006D1C(&file, buf, size, 0);
+    wait = 1;
+    base = fn_8002071C();
+    while (ARGetDMAStatus() != 0) {
+    }
+    fn_800206FC(size);
+    lbl_1_bss_4BA58 = 1;
+    DCFlushRange(buf, size);
+    ARQPostRequest((ARQRequest *)lbl_1_bss_4BA60, 1, 0, 1, (u32)buf, 0xf96000, size, fn_1_4B8BC);
+    /* the ARQ callback clears the flag asynchronously: re-read it every trip */
+    while (wait == 1 && *(volatile s32 *)&lbl_1_bss_4BA58 != 0) {
+    }
+    fn_800206FC(base);
+    OSSetArenaHi(arenaHi);
+}
+/* fzgx:end fn_1_4B8DC */
+
 /* fzgx:begin fn_1_4BA24 noprologue */
 #include "dolphin/types.h"
 #include "dolphin/ar.h"
