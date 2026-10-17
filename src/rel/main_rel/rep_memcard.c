@@ -289,6 +289,79 @@ void fn_1_154FD8(void) {
 }
 /* fzgx:end fn_1_154FD8 */
 
+/* fzgx:begin fn_1_155120 */
+extern u8 *fn_1_15530C(u8 *);
+extern void fn_1_A8EB0(int, int);
+
+void fn_1_155120(void) {
+    Obj_1_bss_8EDF0 *obj;
+    u8 *body;
+    u8 ch;
+    u8 next;
+    u8 inner;
+    u8 *ptr;
+    u8 *input;
+    u32 count;
+    obj = &lbl_1_bss_8EDF0;
+    input = (u8 *)obj->unk_10;
+    ch = *input;
+    if (ch != 0) {
+        switch ((s32)ch) {
+        case 92:
+            obj->unk_10 = (Obj_1_bss_8EDF0_At10 *)fn_1_15530C(input + 1);
+            break;
+        case 91:
+            fn_1_A8EB0(20, 20);
+            while ((ptr = (u8 *)obj->unk_10, ch = *ptr) != 93) {
+                /* The character copy reloads the active input pointer. */
+                body = (u8 *)((volatile Obj_1_bss_8EDF0 *)obj)->unk_10;
+                inner = *body;
+                if (!(inner & 0x80)) {
+                    obj->unk_10 = (Obj_1_bss_8EDF0_At10 *)(body + 1);
+                    obj->unk_14++;
+                    ((u8 *)obj)[obj->unk_1C + 0x34] = inner;
+                } else {
+                    next = ptr[1];
+                    obj->unk_10 = (Obj_1_bss_8EDF0_At10 *)(body + 2);
+                    obj->unk_14 += 2;
+                    ((u8 *)obj)[obj->unk_1C + 0x34] = inner;
+                    ((u8 *)obj)[obj->unk_1C + 0x35] = next;
+                }
+                obj->unk_1C = obj->unk_14 + obj->unk_18 * 30;
+            }
+            obj->unk_10 = (Obj_1_bss_8EDF0_At10 *)((u8 *)obj->unk_10 + 1);
+            obj->unk_14++;
+            (&obj->unk_34)[obj->unk_1C] = ch;
+            obj->unk_1C = obj->unk_14 + obj->unk_18 * 30;
+            break;
+        case 10:
+            count = obj->unk_14;
+            input++;
+            obj->unk_10 = (Obj_1_bss_8EDF0_At10 *)input;
+            obj->unk_14 = count + 1;
+            (&obj->unk_34)[obj->unk_1C] = 10;
+            break;
+        case 0:
+            break;
+        default:
+            if (!(ch & 0x80)) {
+                obj->unk_10 = (Obj_1_bss_8EDF0_At10 *)((u8 *)obj->unk_10 + 1);
+                obj->unk_14++;
+                (&obj->unk_34)[obj->unk_1C] = ch;
+            } else {
+                next = obj->unk_10->unk_1;
+                obj->unk_10 = (Obj_1_bss_8EDF0_At10 *)((u8 *)obj->unk_10 + 2);
+                obj->unk_14 += 2;
+                (&obj->unk_34)[obj->unk_1C] = ch;
+                (&obj->unk_35)[obj->unk_1C] = next;
+            }
+            break;
+        }
+        obj->unk_1C = obj->unk_14 + obj->unk_18 * 30;
+    }
+}
+/* fzgx:end fn_1_155120 */
+
 /* fzgx:begin fn_1_15530C */
 u8 *fn_1_15530C(u8 *text) {
     Obj_1_bss_8EDF0 *obj = &lbl_1_bss_8EDF0;
