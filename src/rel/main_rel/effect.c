@@ -9284,6 +9284,109 @@ void fn_1_67E94(u8 *object) {
 }
 /* fzgx:end fn_1_67E94 */
 
+/* fzgx:begin fn_1_67F20 pool noprologue */
+#include "dolphin/types.h"
+
+/* Shared literal-pool primer. Volatile stores preserve literal emission order;
+ * hexadecimal initializers below are IEEE-754 data words, not addresses. */
+#pragma section code_type ".fzgxpool"
+const u32 fzgx_fn_1_67F20_pool_prefix[] = {
+    0x42700000, 0x3DCCCCCD, 0x46FFFE00
+};
+/* Volatile writes preserve shared literal-pool emission order. */
+void fzgx_fn_1_67F20_pool_prime0(volatile f32 *p) { *p = 0.05f; }
+const u32 fzgx_fn_1_67F20_pool_gap0[] = {
+    0x3FB1EB85, 0x1EB851EC, 0x469C4000, 0x00000000,
+    0x43300000, 0x00000000, 0x3F800000, 0xBCF5C28F,
+    0x402E0000, 0x00000000
+};
+/* Volatile writes preserve shared literal-pool emission order. */
+void fzgx_fn_1_67F20_pool_prime1(volatile f64 *p) { *p = 4503601774854144.0; }
+const u32 fzgx_fn_1_67F20_pool_gap1[] = {
+    0x3FF80000, 0x00000000, 0x3FE00000, 0x00000000,
+    0x00000000, 0x3F000000, 0x41000000, 0x437F0000,
+    0x41700000, 0x3E4CCCCD, 0x3DA3D70A, 0x3E800000,
+    0x3F7AE148, 0x3F7D70A4, 0x42200000, 0x41A00000,
+    0x3FC00000, 0x3EE66666, 3221225472U, 0x3DAAAAAB,
+    0x3E19999A, 0x3E000000, 0xBECCCCCD, 0xBE99999A,
+    0x40000000, 0x437A0000, 0x3FE33333, 0x33333333,
+    0x3FD99999, 0x9999999A, 0x3E99999A, 0xBB83126F,
+    0x3C888889, 0x47800000, 0x45800000, 0x3F75C28F,
+    0x3ECCCCCD, 0x3D4ED917, 0x3D50E560, 0x3F733333
+};
+/* Volatile writes preserve shared literal-pool emission order. */
+void fzgx_fn_1_67F20_pool_prime2(volatile f32 *p) { *p = 0.9f; }
+const u32 fzgx_fn_1_67F20_pool_gap2[] = {
+    0x00000000, 0x4062C000, 0x00000000,
+    0x40240000, 0x00000000, 0x40080000, 0x00000000,
+    0x00000000, 0x3DCCCCCD, 3222903194U, 0x40A00000,
+    0x3FF33333, 0x33333333, 0x3FB99999, 0x9999999A,
+    0x41200000, 0x41900000, 0x3FE66666, 0x66666666,
+    0x40490000, 0x00000000, 0x00000000, 0x3DCCCCCD,
+    3222903194U, 0x41980000, 0x40380000, 0x00000000,
+    0x3F3504F3, 0x00000000, 0x00000000, 0x00000000,
+    0x406FE000, 0x00000000, 0x3FECCCCC, 0xCCCCCCCD,
+    0x3B83126F
+};
+/* Volatile writes preserve shared literal-pool emission order. */
+void fzgx_fn_1_67F20_pool_prime3(volatile f32 *p)
+{
+    *p = 0.001f;
+    *p = 0.01f;
+}
+
+#pragma section code_type ".text"
+
+typedef struct Fn167F20State {
+    u8 pad00[0x10];
+    s32 age;
+    u8 pad14[0x8];
+    f32 scaleX;
+    f32 scaleY;
+    f32 scaleZ;
+    f32 value;
+    f32 targetValue;
+    u8 pad30[0xC];
+    f32 x;
+    f32 y;
+    f32 z;
+    f32 vx;
+    f32 vy;
+    f32 vz;
+    u8 pad54[0x34];
+    f32 blend;
+    f32 targetBlend;
+    u8 pad90[0x1C];
+    s16 angularVelocity;
+    s16 angle;
+} Fn167F20State;
+
+static inline f32 fn_1_67F20_scale(f32 x, f32 factor)
+{
+    return x * factor;
+}
+
+void fn_1_67F20(Fn167F20State *p)
+{
+    p->vx *= 0.9f;
+    p->vy *= 0.9f;
+    p->vz *= 0.9f;
+    p->angularVelocity *= 0.9f;
+    p->vx += 0.001f;
+    p->x += p->vx;
+    p->y += p->vy;
+    p->z += p->vz;
+    p->angle += p->angularVelocity;
+    p->blend += (f32)(0.05f * (p->targetBlend - p->blend));
+    p->value += (f32)(0.01f * (p->targetValue - p->value));
+    if (p->age < 30) {
+        p->scaleX = fn_1_67F20_scale(-p->scaleX, 0.01f);
+        p->scaleY = fn_1_67F20_scale(-p->scaleY, 0.01f);
+        p->scaleZ = fn_1_67F20_scale(-p->scaleZ, 0.01f);
+    }
+}
+/* fzgx:end fn_1_67F20 */
+
 /* fzgx:begin fn_1_68054 */
 typedef struct fn_1_68054_EffectObject {
     u8 pad0[0x28];

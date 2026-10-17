@@ -42367,6 +42367,18 @@
   },
   {
     "module": "main_rel",
+    "source": "rel/main_rel/effect/fn_1_67F20.c",
+    "symbols": [
+      "fn_1_67F20"
+    ],
+    "status": "nonmatching",
+    "mw_version": null,
+    "extra_cflags": [],
+    "tu": "rel/main_rel/effect.c",
+    "pool": true
+  },
+  {
+    "module": "main_rel",
     "source": "rel/main_rel/effect/fn_1_68054.c",
     "symbols": [
       "fn_1_68054"
