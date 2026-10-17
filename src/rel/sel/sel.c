@@ -2560,6 +2560,51 @@ void fn_10_436C(void) {
 }
 /* fzgx:end fn_10_436C */
 
+/* fzgx:begin fn_10_4568 pool noprologue */
+#include "rel/sel/sel.h"
+
+Obj_10_bss_0 lbl_10_bss_0;
+u32 lbl_10_bss_14;
+u8 sel_bss_gap_18[0x49370];
+u32 lbl_10_bss_49388;
+s16 lbl_10_bss_4938C;
+u8 sel_bss_gap_4938E[0x83B0];
+u32 lbl_10_bss_51740;
+u32 lbl_10_bss_51744;
+
+extern void fn_10_21E30(void);
+extern void *fn_1_435C(void *);
+extern s32 fn_1_3F8C(void *, void (*)(void), u32, u32);
+extern void fn_1_4A00(s32, u8, u32);
+extern void fn_1_47F74(s32);
+extern void fn_1_34E08(void);
+
+#pragma push
+#pragma section code_type ".fzgxpool"
+static void fzgx_sel_bss_primer(void) {
+    (void)*(volatile u8 *)&lbl_10_bss_0; /* Volatile: preserve BSS layout primer order. */
+    (void)*(volatile u8 *)&lbl_10_bss_14; /* Volatile: preserve BSS layout primer order. */
+    (void)*(volatile u8 *)sel_bss_gap_18; /* Volatile: preserve BSS layout primer order. */
+    (void)*(volatile u8 *)&lbl_10_bss_49388; /* Volatile: preserve BSS layout primer order. */
+    (void)*(volatile u8 *)&lbl_10_bss_4938C; /* Volatile: preserve BSS layout primer order. */
+    (void)*(volatile u8 *)sel_bss_gap_4938E; /* Volatile: preserve BSS layout primer order. */
+    (void)*(volatile u8 *)&lbl_10_bss_51740; /* Volatile: preserve BSS layout primer order. */
+    (void)*(volatile u8 *)&lbl_10_bss_51744; /* Volatile: preserve BSS layout primer order. */
+}
+#pragma pop
+
+void fn_10_4568(void) {
+    fn_1_435C((void *)lbl_10_bss_49388);
+    lbl_10_bss_51740 = fn_1_3F8C(lbl_10_data_67C, fn_10_21E30, 0, 8);
+    fn_1_4A00(1, (u8)lbl_10_bss_4938C, lbl_10_bss_49388);
+    lbl_10_bss_51744 = 0;
+    lbl_10_bss_14 = -1;
+    fn_1_47F74(0x8B);
+    fn_1_47F74(0xA1);
+    fn_1_34E08();
+}
+/* fzgx:end fn_10_4568 */
+
 /* fzgx:begin fn_10_4600 noprologue */
 #include "types.h"
 #include "sofdec/adxt.h"
