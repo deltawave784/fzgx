@@ -593,6 +593,51 @@ s32 fn_1_465D0(s32 arg0, s32 arg1) {
 }
 /* fzgx:end fn_1_465D0 */
 
+/* fzgx:begin fn_1_466B0 */
+extern s32 fn_1_467F4(void);
+extern void fn_1_469BC(void);
+
+typedef struct Fn466B0Entry {
+    u32 flags;
+    u32 unk_4;
+    u32 start;
+    u32 size;
+} Fn466B0Entry;
+
+static inline u32 fn466B0Scan(u32 arg0, s32 arg1, u32 result, s32 i, Fn466B0Entry *tbl) {
+    for (i = 0; i < 0x400; i++, tbl++) {
+        Fn466B0Entry *e = tbl;
+        if (e->flags != 0 && e->start < arg0 + 1 && e->start + e->size > arg0) {
+            if (arg1 == 0 && (e->flags & 0x10000000)) {
+                result = 0;
+                break;
+            }
+            e->flags = 0;
+            if (result == -1) {
+                result = 0;
+            }
+            result += e->size;
+        }
+    }
+    return result;
+}
+
+u32 fn_1_466B0(u32 arg0, s32 arg1) {
+    u32 ret;
+    struct { u32 value; } result;
+
+    if (fn_1_467F4() != 0) {
+        fn_1_469BC();
+    }
+    result.value = fn466B0Scan(arg0, arg1, -1, 0, (Fn466B0Entry *)&lbl_1_bss_384D8);
+    ret = result.value;
+    if (result.value == -1) {
+        ret = 0;
+    }
+    return ret;
+}
+/* fzgx:end fn_1_466B0 */
+
 /* fzgx:begin fn_1_467F4 */
 s32 fn_1_467F4(void) {
     u32 value;

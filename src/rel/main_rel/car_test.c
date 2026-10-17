@@ -787,6 +787,76 @@ s8 fn_1_83D28(Fn183D28Car *car, f32 speed) {
 }
 /* fzgx:end fn_1_83D28 */
 
+/* fzgx:begin fn_1_870BC */
+typedef struct { u8 b[0xE8]; } Blob870BC;
+extern Blob870BC lbl_1_rodata_3968;
+extern u32 lbl_1_bss_6D82C[3];
+extern void fn_1_14E2DC(u32, s32, f32);
+extern void fn_1_8E450(void *);
+extern void fn_1_87610(void *, s32);
+extern void fn_1_875B4(void *, s32, s32, f32);
+extern void fn_1_87238(void *, s32, f32);
+extern void fn_1_8E480(void);
+extern void fn_800713E0(u32, u32);
+extern void fn_800712E4(u32, u32, void *);
+extern u32 lbl_8006DAEC(void);
+extern u32 lbl_8006DBE4(void);
+extern void lbl_8006DB30(void);
+
+typedef struct {
+    u8 pad0[0x328];
+    s8 f328;
+    u8 pad1[0x338 - 0x329];
+    struct { u32 a, b, c; } slot[2];
+    u8 pad2[0x37c - 0x350];
+    u32 tab[4];
+    u8 pad3[0x390 - 0x38c];
+    u32 flags;
+    u8 pad4[0x3a0 - 0x394];
+    u32 f3a0;
+    u8 pad5[0x3b8 - 0x3a4];
+    s16 f3b8;
+    s16 f3ba;
+} Car870BC;
+
+void fn_1_870BC(Car870BC *car, s32 a, s32 b, s16 c, u8 d, f32 x)
+{
+    Blob870BC tbl;
+    s32 i;
+    s8 signed_a = (s8)a;
+    car->f3ba = signed_a;
+    if (car->flags & 0x04000000) {
+        fn_1_14E2DC(car->f3a0, signed_a, x);
+        return;
+    }
+    i = d;
+    if (car->f3b8 != i) {
+        u32 v = car->tab[i % 4];
+        if (v != 0) {
+            Car870BC *q = (Car870BC *)((u8 *)car + signed_a * 12);
+            u32 s;
+            fn_800713E0(q->slot[0].a, v);
+            s = q->slot[0].a;
+            tbl = lbl_1_rodata_3968;
+            fn_800712E4(s, lbl_1_bss_6D82C[0], &tbl);
+        }
+        car->f3b8 = d;
+    }
+    lbl_8006DAEC();
+    fn_1_8E450(car);
+    if (c != 0) {
+        ((void (**)(void *))lbl_1_data_1F5A0)[car->f328](car);
+    } else {
+        fn_1_87610(car, b);
+    }
+    fn_1_875B4(car, b, a, x);
+    lbl_8006DBE4();
+    fn_1_87238(car, a, x);
+    fn_1_8E480();
+    lbl_8006DB30();
+}
+/* fzgx:end fn_1_870BC */
+
 /* fzgx:begin fn_1_8CA00 */
 u32 *fn_1_8CA00(void) {
     return &lbl_1_data_1FFDC;

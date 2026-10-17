@@ -470,6 +470,51 @@ void fn_1_5773C(fn_1_5773C_Vec3 *arg0, fn_1_5773C_Vec3 *arg1, u8 *arg2) {
 }
 /* fzgx:end fn_1_5773C */
 
+/* fzgx:begin fn_1_57A70 noprologue */
+#include "types.h"
+#include "dolphin/gx.h"
+
+extern u32 lbl_801A6D00;
+extern void GXLoadPosMtxImm(u32, u32);
+extern void fn_1_57DC0(u32);
+extern void fn_8003462C(u32, u32, u32);
+
+typedef struct { f32 x, y, z; s8 a, b, c, d; } V16;
+
+static inline void pos3(f32 x, f32 y, f32 z) {
+    GXWGFifo.f32 = x;
+    GXWGFifo.f32 = y;
+    GXWGFifo.f32 = z;
+}
+static inline void col4(u8 a, u8 b, u8 c, u8 d) {
+    GXWGFifo.u8 = a;
+    GXWGFifo.u8 = b;
+    GXWGFifo.u8 = c;
+    GXWGFifo.u8 = d;
+}
+
+static inline f32 fn_1_57A70_read_pointer(V16 * owner) { return owner->x; }
+#pragma opt_loop_invariants off
+void fn_1_57A70(u32 n, V16 *v) {
+    s32 i;
+    u16 count;
+    V16 *p;
+    if ((u16)n >= 2) {
+        fn_1_57DC0(n);
+        GXLoadPosMtxImm(lbl_801A6D00, 0);
+        fn_8003462C(0xB0, 0, n);
+        p = v;
+        count = n;
+        for (i = 0; i < count; i++) {
+            pos3(fn_1_57A70_read_pointer(p), p->y, p->z);
+            col4(p->a, p->b, p->c, p->d);
+            p++;
+        }
+    }
+}
+#pragma opt_loop_invariants reset
+/* fzgx:end fn_1_57A70 */
+
 /* fzgx:begin fn_1_57BBC */
 typedef struct {
     u32 unk_0;
