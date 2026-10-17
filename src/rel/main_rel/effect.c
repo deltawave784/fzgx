@@ -4831,6 +4831,105 @@ void fn_1_617A4(struct Fn1_617A4Object *object) {
 }
 /* fzgx:end fn_1_617A4 */
 
+/* fzgx:begin fn_1_618B8 noprologue */
+#include "dolphin/types.h"
+
+/* Volatile sink preserves literal first-use order in the discarded pool primer. */
+extern volatile f32 __fzgx_pool_f;
+/* Volatile sink preserves double literal first-use order in the pool primer. */
+extern volatile f64 __fzgx_pool_d;
+
+#pragma section code_type ".fzgxpool"
+void fzgx_pool_primer(void)
+{
+    __fzgx_pool_f = 60.0f;
+    __fzgx_pool_f = 0.1f;
+    __fzgx_pool_f = 32767.0f;
+    __fzgx_pool_f = 0.05f;
+    __fzgx_pool_d = 0.07;
+    __fzgx_pool_f = 20000.0f;
+    __fzgx_pool_d = 4503599627370496.0;
+    __fzgx_pool_f = 1.0f;
+    __fzgx_pool_f = -0.03f;
+    __fzgx_pool_d = 15.0;
+    __fzgx_pool_d = 4503601774854144.0;
+    __fzgx_pool_d = 1.5;
+    __fzgx_pool_d = 0.5;
+    __fzgx_pool_f = 0.0f;
+    __fzgx_pool_f = 0.5f;
+    __fzgx_pool_f = 8.0f;
+    __fzgx_pool_f = 255.0f;
+    __fzgx_pool_f = 15.0f;
+    __fzgx_pool_f = 0.2f;
+    __fzgx_pool_f = 0.08f;
+    __fzgx_pool_f = 0.25f;
+    __fzgx_pool_f = 0.98f;
+    __fzgx_pool_f = 0.99f;
+    __fzgx_pool_f = 40.0f;
+    __fzgx_pool_f = 20.0f;
+    __fzgx_pool_f = 1.5f;
+    __fzgx_pool_f = 0.45f;
+    __fzgx_pool_f = -2.0f;
+    __fzgx_pool_f = 0.083333336f;
+    __fzgx_pool_f = 0.15f;
+    __fzgx_pool_f = 0.125f;
+    __fzgx_pool_f = -0.4f;
+    __fzgx_pool_f = -0.3f;
+    __fzgx_pool_f = 2.0f;
+    __fzgx_pool_f = 250.0f;
+    __fzgx_pool_d = 0.6;
+    __fzgx_pool_d = 0.4;
+    __fzgx_pool_f = 0.3f;
+    __fzgx_pool_f = -0.004f;
+}
+#pragma section code_type ".text"
+
+typedef struct {
+    u8 pad00[0x10];
+    s32 age;
+    u8 pad14[8];
+    f32 xScale;
+    f32 yScale;
+    f32 zScale;
+    f32 value;
+    f32 targetValue;
+    u8 pad30[0xC];
+    f32 x;
+    f32 y;
+    f32 z;
+    f32 vx;
+    f32 vy;
+    f32 vz;
+    u8 pad54[0x40];
+    f32 damping;
+    f32 targetDamping;
+} Particle;
+
+void fn_1_618B8(Particle *p)
+{
+    f32 drag;
+    register f32 factor;
+    drag = 1.0f - p->damping;
+    p->vy += -0.004f;
+    p->vx *= drag;
+    p->vy *= drag;
+    p->vz *= drag;
+    p->x += p->vx;
+    p->y += p->vy;
+    p->z += p->vz;
+    p->damping += (f32)(0.05f * (p->targetDamping - p->damping));
+    p->value += (f32)(0.2f * (p->targetValue - p->value));
+    if (p->age < 15.0) {
+        /* Keep the first scale load independent of the conversion. */
+        f32 scale = *(volatile f32 *)&p->xScale;
+        factor = 1.0f - 1.0f / (p->age + 1);
+        p->xScale = scale * factor;
+        p->yScale *= factor;
+        p->zScale *= factor;
+    }
+}
+/* fzgx:end fn_1_618B8 */
+
 /* fzgx:begin fn_1_61C84 */
 // fn_1_61C84: empty in retail (single blr).
 void fn_1_61C84(void) {

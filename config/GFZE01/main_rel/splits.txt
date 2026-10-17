@@ -7643,3 +7643,9 @@ rel/main_rel/cloth/fn_1_1050D0.c:
 
 rel/main_rel/ranking/fn_1_157FC8.c:
 	.text       start:0x00157FC8 end:0x001586A8 align:4
+
+rel/main_rel/driver/fn_1_A7B5C.c:
+	.text       start:0x000A7B5C end:0x000A7E60 align:4
+
+rel/main_rel/effect/fn_1_618B8.c:
+	.text       start:0x000618B8 end:0x000619E4 align:4
