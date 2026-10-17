@@ -356,6 +356,55 @@ void fn_1_108920(void *accessory) {
 }
 /* fzgx:end fn_1_108920 */
 
+/* fzgx:begin fn_1_108A90 noprologue */
+#include "psvec.h"
+
+typedef struct { f32 x, y, z; } Vec3;
+typedef struct { u8 flags; u8 pad[0xF]; Vec3 pos; f32 w; u8 rest[0x44 - 0x20]; } Ent;
+typedef struct { u8 p0[8]; u8 *base; } Inner;
+typedef struct { u8 p0[0xC]; struct { u8 p[0x150]; Inner *in; } *c; u8 p1[0x8]; u32 count; u8 p2[0x8]; Ent *ents; } Obj;
+
+extern void lbl_8006DBAC(void *);
+extern void lbl_8006E1B0(void *, void *);
+extern f32 lbl_8006D0E8(f32);
+
+#pragma opt_propagation off
+void fn_1_108A90(Obj *o, s32 idx, f32 r, f32 x, f32 y, f32 z)
+{
+    Vec3 c;
+    Vec3 d;
+    u32 i;
+    Ent *e;
+    f32 r2 = r * r;
+    c.x = x;
+    c.y = y;
+    c.z = z;
+    lbl_8006DBAC(o->c->in->base + idx * 0x18C + 0x88);
+    lbl_8006E1B0(&c, &c);
+    e = o->ents;
+    for (i = 0; i < o->count; i++, e++) {
+        if (!(e->flags & 1)) {
+            f32 dz;
+            f32 dy;
+            f32 dx;
+            dx = e->pos.x;
+            dx = dx - c.x;
+            dy = e->pos.y;
+            dy = dy - c.y;
+            dx = (f32)(dx * dx);
+            dz = e->pos.z;
+            dz = dz - c.z;
+            dx = dy * dy + dx;
+            dx = dz * dz + dx;
+            if (dx < r2) {
+                psvec_sub_scale_add(&e->pos.x, &c.x, r * lbl_8006D0E8(dx), &d.x, &e->pos.x);
+            }
+        }
+    }
+}
+#pragma opt_propagation on
+/* fzgx:end fn_1_108A90 */
+
 /* fzgx:begin fn_1_108EEC noprologue */
 #include "dolphin/types.h"
 

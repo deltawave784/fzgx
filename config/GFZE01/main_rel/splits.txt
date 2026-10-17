@@ -7802,3 +7802,6 @@ rel/main_rel/bg_lig/fn_1_D8878.c:
 
 rel/main_rel/load/fn_1_47AD4.c:
 	.text       start:0x00047AD4 end:0x00047E54 align:4
+
+rel/main_rel/accessory/fn_1_108A90.c:
+	.text       start:0x00108A90 end:0x00108BD0 align:4
