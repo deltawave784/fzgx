@@ -18963,6 +18963,19 @@
   },
   {
     "module": "main",
+    "source": "dol/fn_8003F834.c",
+    "symbols": [
+      "fn_8003F834"
+    ],
+    "status": "matching",
+    "mw_version": "GC/1.2.5n",
+    "extra_cflags": [],
+    "pool": {
+      "@67": "lbl_801A71D0"
+    }
+  },
+  {
+    "module": "main",
     "source": "dol/fn_800410A4.c",
     "symbols": [
       "fn_800410A4"
