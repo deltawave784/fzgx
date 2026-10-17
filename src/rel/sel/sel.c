@@ -18031,6 +18031,326 @@ p->unk_1--;
 #pragma opt_common_subs reset
 /* fzgx:end fn_10_2325C */
 
+/* fzgx:begin fn_10_2406C noprologue */
+#include "rel/sel/sel.h"
+#include "rel/sel/data/lbl_10_rodata_1C40.h"
+
+typedef Obj_10_bss_55CD8_Target Obj_4_bss_5680_Target;
+extern u8 lbl_10_bss_55CDD;
+extern char *strncpy(char *, const char *, size_t);
+extern s32 strncmp(const char *, const char *, size_t);
+extern const f64 lbl_10_rodata_1C38;
+extern const f64 lbl_10_rodata_1CA8;
+extern const u32 lbl_10_rodata_1CA0;
+extern void *fn_1_45D0(u32, u32, u8 *, u32);
+extern void fn_1_435C(u32);
+extern s32 fn_1_3F8C(u32, u32, u32, u32);
+extern void fn_10_2325C(void);
+extern u8 lbl_1_bss_9F8[];
+extern u8 lbl_1_bss_A48[];
+extern u32 lbl_801A6410;
+extern void fn_1_A2D84(u32);
+typedef struct { u8 r, g, b, a; } MenuColor;
+typedef struct {
+u16 cur;
+u16 max;
+u8 *p4;
+u8 *p8;
+u8 *pC;
+u32 pad;
+} MenuEntry;
+#pragma opt_common_subs off
+void fn_10_2406C(void) {
+u8 *p;
+void *rp;
+u8 *q;
+u32 cnt;
+s32 flA;
+s32 flB;
+s32 flC;
+u8 buf[2];
+s32 i;
+u16 *repeat;
+u16 *held;
+Obj_10_bss_55CD8_Target *state;
+u8 *t8;
+MenuEntry *e;
+s32 inputIndex;
+Obj_10_bss_55CD8_Target *active;
+Obj_10_bss_55CD8_Target **inputRef;
+s32 prev;
+u8 *alternate;
+MenuColor v68;
+p = lbl_10_data_68E0;
+flA = 0;
+flB = 0;
+flC = 0;
+if (lbl_10_bss_55CD8->unk_0 >> 31) {
+if (lbl_10_bss_55CDD == 0) {
+goto end; /* matches retail's single early-exit block */
+}
+}
+state = lbl_10_bss_55CD8;
+e = (MenuEntry *)state->unk_3C + state->unk_D;
+t8 = lbl_1_bss_9F8 + 8;
+if ((((u16 *)t8)[state->unk_C * 10] >> 12) & 1) {
+if (e->cur == e->max - 1) {
+lbl_10_bss_55CD8->unk_0 |= 0x20000000;
+fn_1_A2D84(0xA9010F00);
+} else {
+MenuEntry *z;
+lbl_10_bss_55CD8->unk_F = 0;
+z = (MenuEntry *)lbl_10_bss_55CD8->unk_3C;
+for (i = 0; i < lbl_10_bss_55CD8->unk_3B; i++) {
+z->cur = z->max - 1;
+z++;
+}
+fn_1_A2D84(0xA9010F00);
+}
+} else if (((((u16 *)t8)[state->unk_C * 10] >> 8) & 1) && lbl_10_bss_55CDD == 0) {
+s32 cur = e->cur;
+if (cur == e->max - 1) {
+lbl_10_bss_55CD8->unk_0 |= 0x20000000;
+fn_1_A2D84(0xA9010F00);
+} else {
+cnt = (u8)(state->unk_E);
+flA = 1;
+if (cnt == 7 && state->unk_36 != 0) {
+flB = 1;
+}
+{
+switch (state->unk_F) {
+case 0: q = e->p4 + cur * 2; break;
+case 1: q = e->p8 + cur * 2; break;
+case 2: q = e->pC + cur * 2; break;
+}
+}
+strncpy((char *)buf, (char *)q, 2);
+if (strncmp((char *)q, (char *)(p + 0xb4), 2) == 0) {
+strncpy((char *)((u8 *)lbl_10_bss_55CD8 + lbl_10_bss_55CD8->unk_E * 2 + 0x28), (char *)(p + 0xb0), 2);
+} else {
+strncpy((char *)((u8 *)lbl_10_bss_55CD8 + lbl_10_bss_55CD8->unk_E * 2 + 0x28), (char *)q, 2);
+}
+{
+Obj_10_bss_55CD8_Target **advanceRef = &lbl_10_bss_55CD8;
+Obj_10_bss_55CD8_Target *advance = *advanceRef;
+if (advance->unk_E < 7) {
+advance->unk_E = advance->unk_E + 1;
+} else {
+MenuEntry *z;
+s32 j;
+z = (MenuEntry *)advance->unk_3C;
+for (j = 0; j < (*advanceRef)->unk_3B; j++) {
+z->cur = z->max - 1;
+z++;
+}
+}
+}
+lbl_10_bss_55CD8->unk_F = 0;
+}
+} else if (((((u16 *)t8) [lbl_10_bss_55CD8->unk_C * 10] >> 9) & 1) && lbl_10_bss_55CDD == 0) {
+u32 pos;
+state = lbl_10_bss_55CD8;
+pos = state->unk_E;
+flB = pos != 0;
+if (pos == 7 && state->unk_36 != 0) {
+lbl_10_bss_55CD8->unk_36 = 0;
+lbl_10_bss_55CD8->unk_37 = 0;
+} else {
+if (pos != 0) {
+state->unk_E = state->unk_E - 1;
+}
+for (i = lbl_10_bss_55CD8->unk_E; i <= 7; i++) {
+if (i < 7) {
+u8 *shift = (u8 *)lbl_10_bss_55CD8 + i * 2;
+shift[0x28] = shift[0x2a];
+shift = (u8 *)lbl_10_bss_55CD8 + i * 2;
+shift[0x29] = shift[0x2b];
+} else {
+*((u8 *)lbl_10_bss_55CD8 + i * 2 + 0x28) = 0;
+*((u8 *)lbl_10_bss_55CD8 + i * 2 + 0x29) = 0;
+}
+}
+}
+lbl_10_bss_55CD8->unk_F = 0;
+cnt = (u8)(lbl_10_bss_55CD8->unk_E);
+} else {
+held = (u16 *)(lbl_1_bss_9F8 + 0x10);
+if (((held[lbl_10_bss_55CD8->unk_C * 10] >> 3) & 1) || (((repeat = (u16 *)(lbl_1_bss_9F8 + 0x12), repeat[lbl_10_bss_55CD8->unk_C * 10]) >> 3) & 1)) {
+if (lbl_10_bss_55CD8->unk_D == 0) {
+lbl_10_bss_55CD8->unk_D = lbl_10_bss_55CD8->unk_3B - 1;
+} else {
+lbl_10_bss_55CD8->unk_D = lbl_10_bss_55CD8->unk_D - 1;
+}
+lbl_10_bss_55CD8->unk_F = 0;
+} else if (((held[lbl_10_bss_55CD8->unk_C * 10] >> 2) & 1) || ((repeat[lbl_10_bss_55CD8->unk_C * 10] >> 2) & 1)) {
+if (lbl_10_bss_55CD8->unk_D == lbl_10_bss_55CD8->unk_3B - 1) {
+lbl_10_bss_55CD8->unk_D = 0;
+} else {
+lbl_10_bss_55CD8->unk_D = lbl_10_bss_55CD8->unk_D + 1;
+}
+lbl_10_bss_55CD8->unk_F = 0;
+} else if ((held[lbl_10_bss_55CD8->unk_C * 10] & 1) || (repeat[lbl_10_bss_55CD8->unk_C * 10] & 1) || ((repeat[lbl_10_bss_55CD8->unk_C * 10] >> 8) & 1)) {
+if (e->cur == 0) {
+e->cur = e->max - 1;
+} else {
+e->cur = e->cur - 1;
+}
+lbl_10_bss_55CD8->unk_F = 0;
+} else if (((held[lbl_10_bss_55CD8->unk_C * 10] >> 1) & 1) || ((repeat[lbl_10_bss_55CD8->unk_C * 10] >> 1) & 1) || ((repeat[lbl_10_bss_55CD8->unk_C * 10] >> 9) & 1)) {
+if (e->cur == e->max - 1) {
+e->cur = 0;
+} else {
+e->cur = e->cur + 1;
+}
+lbl_10_bss_55CD8->unk_F = 0;
+} else if ((((u16 *)t8)[lbl_10_bss_55CD8->unk_C * 10] >> 11) & 1) {
+flC = 1;
+lbl_10_bss_55CD8->unk_F = lbl_10_bss_55CD8->unk_F + 1;
+if (lbl_10_bss_55CD8->unk_F > 2) {
+lbl_10_bss_55CD8->unk_F = 0;
+} else if (lbl_10_bss_55CD8->unk_F == 1) {
+alternate = e->p8;
+if (alternate == 0) {
+flC = 0;
+lbl_10_bss_55CD8->unk_F = 0;
+} else if (strncmp((char *)(alternate + e->cur * 2), (char *)(p + 0xb0), 2) == 0) {
+flC = 0;
+lbl_10_bss_55CD8->unk_F = 0;
+}
+} else if (lbl_10_bss_55CD8->unk_F == 2) {
+alternate = e->pC;
+if (alternate == 0) {
+lbl_10_bss_55CD8->unk_F = 0;
+} else if (strncmp((char *)(alternate + e->cur * 2), (char *)(p + 0xb0), 2) == 0) {
+lbl_10_bss_55CD8->unk_F = 0;
+}
+}
+}
+}
+{
+register Obj_10_bss_55CD8_Target **ref = &lbl_10_bss_55CD8;
+/* Observe the shared state pointer independently before this update stage. */
+Obj_10_bss_55CD8_Target *before = *(Obj_10_bss_55CD8_Target *volatile *)ref;
+Obj_10_bss_55CD8_Target *after;
+s32 prev;
+prev = *(s8 *)&before->unk_10;
+before->unk_10 = ((s8 *)lbl_1_bss_A48)[before->unk_C << 4] >> 2;
+after = *ref;
+if (*(s8 *)&after->unk_10 == 0) {
+u8 t = lbl_1_bss_A48[after->unk_C << 4];
+if ((s8)t > 0) {
+after->unk_10 = 1;
+} else if ((s8)t < 0) {
+*(s8 *)&after->unk_10 = -1;
+} else {
+*(s8 *)&after->unk_10 = prev < 0 ? -1 : 1;
+}
+}
+}
+{
+register Obj_10_bss_55CD8_Target **smoothRef = &lbl_10_bss_55CD8;
+/* Observe the shared state pointer again for the animation update. */
+Obj_10_bss_55CD8_Target *phase = *(Obj_10_bss_55CD8_Target *volatile *)smoothRef;
+u32 old12;
+s32 x;
+f64 d;
+Obj_10_bss_55CD8_Target *smooth;
+phase->unk_11 = phase->unk_11 - phase->unk_10;
+smooth = *smoothRef;
+old12 = smooth->unk_12;
+x = smooth->unk_E * 56 + 98 - old12;
+d = lbl_10_rodata_1CA8 * (f64)x;
+if ((s32)d != 0) {
+smooth->unk_12 = (s32)((f64)old12 + d);
+} else {
+s32 step;
+if (x < 0) {
+step = -1;
+} else {
+step = x > 0;
+}
+smooth->unk_12 += step;
+}
+}
+if (lbl_10_bss_55CD8->unk_14 != 0) {
+lbl_10_bss_55CD8->unk_14 = lbl_10_bss_55CD8->unk_14 - 1;
+}
+if (lbl_10_bss_55CD8->unk_15 != 0) {
+lbl_10_bss_55CD8->unk_15 = lbl_10_bss_55CD8->unk_15 - 1;
+}
+if (lbl_10_bss_55CD8->unk_16 != 0) {
+lbl_10_bss_55CD8->unk_16 = lbl_10_bss_55CD8->unk_16 - 1;
+}
+if (lbl_10_bss_55CD8->unk_17 != 0) {
+lbl_10_bss_55CD8->unk_17 = lbl_10_bss_55CD8->unk_17 - 1;
+}
+q = lbl_1_bss_9F8 + 0x10;
+if (((*(u16 *)(q + lbl_10_bss_55CD8->unk_C * 20) >> 3) & 1) || ((*(u16 *)((u32)(lbl_1_bss_9F8 + 0x12) + lbl_10_bss_55CD8->unk_C * 20) >> 3) & 1)) {
+lbl_10_bss_55CD8->unk_14 = 8;
+}
+if (((*(u16 *)(q + lbl_10_bss_55CD8->unk_C * 20) >> 2) & 1) || ((*(u16 *)((u32)(lbl_1_bss_9F8 + 0x12) + lbl_10_bss_55CD8->unk_C * 20) >> 2) & 1)) {
+lbl_10_bss_55CD8->unk_15 = 8;
+}
+if ((*(u16 *)(q + lbl_10_bss_55CD8->unk_C * 20) & 1) || ((repeat = (u16 *)(lbl_1_bss_9F8 + 0x12), repeat[lbl_10_bss_55CD8->unk_C * 10]) & 1) ||
+((repeat[lbl_10_bss_55CD8->unk_C * 10] >> 8) & 1)) {
+lbl_10_bss_55CD8->unk_16 = 8;
+}
+if (((*(u16 *)(q + lbl_10_bss_55CD8->unk_C * 20) >> 1) & 1) || (((repeat = (u16 *)(lbl_1_bss_9F8 + 0x12), repeat[lbl_10_bss_55CD8->unk_C * 10]) >> 1) & 1) ||
+((repeat[lbl_10_bss_55CD8->unk_C * 10] >> 9) & 1)) {
+lbl_10_bss_55CD8->unk_17 = 8;
+}
+if (flA != 0) {
+v68 = *(const MenuColor *)&lbl_10_rodata_1CA0;
+rp = fn_1_45D0 (*(u32 *)&lbl_801A6410, 0x12, p + 0xa0, 0xd4);
+*(u16 *)((u8 *)rp + 8) = (u16)((u32)(cnt & 0xFF) * 56 + 0x7e);
+*(u16 *)((u8 *)rp + 10) = 0x17a;
+*(u8 *)((u8 *)rp + 0) = 1;
+*(u8 *)((u8 *)rp + 1) = 0x18;
+*(u16 *)((u8 *)rp + 4) = 0x140;
+*(u16 *)((u8 *)rp + 6) = 0xb2;
+*(u8 *)((u8 *)rp + 2) = buf[0];
+*(u8 *)((u8 *)rp + 3) = buf[1];
+*(MenuColor *)((u8 *)rp + 0xd) = v68;
+*(u8 *)((u8 *)rp + 0xc) = cnt;
+fn_1_435C(lbl_10_bss_55CD8->unk_8);
+fn_1_3F8C((u32)(p + 0xc8), (u32)fn_10_2325C, (u32)rp, 0xb);
+}
+if (flB != 0) {
+lbl_10_bss_55CD8->unk_20 |= ((u32)0x80000000 >> cnt);
+}
+if (flA != 0) {
+lbl_10_bss_55CD8->unk_3A = 12;
+}
+if (flA != 0) {
+fn_1_A2D84(0xA9010F00);
+}
+if (flB != 0) {
+fn_1_A2D84(0xA9010200);
+}
+if (flC != 0) {
+fn_1_A2D84(0xA9010000);
+}
+if (((*(u16 *)(q + lbl_10_bss_55CD8->unk_C * 20) >> 3) & 1) || (((repeat = (u16 *)(lbl_1_bss_9F8 + 0x12), repeat[lbl_10_bss_55CD8->unk_C * 10]) >> 3) & 1) ||
+((*(u16 *)(q + lbl_10_bss_55CD8->unk_C * 20) >> 2) & 1) || ((repeat[lbl_10_bss_55CD8->unk_C * 10] >> 2) & 1)) {
+fn_1_A2D84(0xA9010000);
+}
+if ((*(u16 *)(q + lbl_10_bss_55CD8->unk_C * 20) & 1) || ((repeat = (u16 *)(lbl_1_bss_9F8 + 0x12), repeat[lbl_10_bss_55CD8->unk_C * 10]) & 1) || ((repeat[lbl_10_bss_55CD8->unk_C * 10] >> 8) & 1) ||
+((*(u16 *)(q + lbl_10_bss_55CD8->unk_C * 20) >> 1) & 1) || ((repeat[lbl_10_bss_55CD8->unk_C * 10] >> 1) & 1) || ((repeat[lbl_10_bss_55CD8->unk_C * 10] >> 9) & 1)) {
+fn_1_A2D84(0xA9010000);
+}
+
+if (lbl_10_bss_55CDD != 0) {
+fn_1_A2D84(0xA9010200);
+lbl_10_bss_55CD8->unk_0 &= ~0x80000000u;
+}
+lbl_10_bss_55CDD = 0;
+end:
+return;
+}
+#pragma opt_common_subs reset
+/* fzgx:end fn_10_2406C */
+
 /* fzgx:begin fn_10_25888 */
 typedef signed long s32;
 
