@@ -7835,3 +7835,6 @@ rel/main_rel/mdlload/fn_1_D3FDC.c:
 
 rel/main_rel/replay/fn_1_F38C0.c:
 	.text       start:0x000F38C0 end:0x000F3AB0 align:4
+
+rel/main_rel/sound/fn_1_A0978.c:
+	.text       start:0x000A0978 end:0x000A0AA4 align:4

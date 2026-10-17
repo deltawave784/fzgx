@@ -425,6 +425,157 @@ void fn_1_A04C4(void) {
 }
 /* fzgx:end fn_1_A04C4 */
 
+/* fzgx:begin fn_1_A0978 pool noprologue */
+#include "dolphin/types.h"
+#include "rel/main_rel/sound.h"
+
+extern s32 fn_1_3F864(void);
+extern u32 fn_1_A3A1C(void);
+extern void fn_1_A31E4(void);
+extern u32 fn_1_864E8(u32);
+extern void fn_1_A54FC(void);
+extern void fn_1_A5590(void);
+extern u32 fn_1_A24CC(void);
+
+typedef struct A0978Entry {
+    u8 unk_00;
+    u8 unk_01;
+    u8 unk_02[0x12];
+} A0978Entry;
+
+typedef struct A0978State {
+    u8 unk_00[0xD];
+    u8 unk_0D;
+    u8 unk_0E[0x73E];
+    A0978Entry unk_74C[5];
+    u8 unk_7B0[4];
+    s8 unk_7B4[30][2];
+    s8 unk_7F0[30][2];
+    s8 unk_82C;
+} A0978State;
+
+static inline void A0978_tick(s8 counters[][2], u32 id, s32 maximum) {
+    counters[id][1]++;
+    if (counters[id][1] > maximum) {
+        counters[id][0] = 0;
+        counters[id][1] = maximum;
+    }
+}
+#pragma opt_propagation on
+
+/* file-scope objects of the retail TU, in retail order: MWCC addresses them off one section base */
+u32 fzgx_obj_lbl_1_bss_6EA98;
+u32 fzgx_obj_lbl_1_bss_6EA9C[2];
+u8 lbl_1_bss_6EAA4;
+u8 lbl_1_bss_6EA98_gap_6EAA5;
+u8 lbl_1_bss_6EAA6;
+u8 lbl_1_bss_6EA98_gap_6EAA7;
+u32 lbl_1_bss_6EAA8[2];
+u8 lbl_1_bss_6EAB0;
+u8 lbl_1_bss_6EA98_gap_6EAB1;
+u16 lbl_1_bss_6EA98_gap_6EAB1_fill_6EAB2;
+u32 fzgx_obj_lbl_1_bss_6EAB4[4];
+u16 lbl_1_bss_6EAB4_fill_6EAC4;
+u16 fzgx_obj_lbl_1_bss_6EAC6;
+u32 lbl_1_bss_6EAC6_fill_6EAC8[2];
+u32 fzgx_obj_lbl_1_bss_6EAD0[450];
+u8 fzgx_obj_lbl_1_bss_6F1D8;
+u8 lbl_1_bss_6EA98_gap_6F1D9;
+u16 lbl_1_bss_6EA98_gap_6F1D9_fill_6F1DA;
+u32 fzgx_obj_lbl_1_bss_6F1DC;
+u8 fzgx_obj_lbl_1_bss_6F1E0;
+u8 lbl_1_bss_6F1E1;
+u16 lbl_1_bss_6EA98_gap_6F1E2;
+u8 fzgx_obj_lbl_1_bss_6F1E4;
+u8 lbl_1_bss_6F1E4_fill_6F1E5;
+u16 lbl_1_bss_6F1E4_fill_6F1E6;
+u32 lbl_1_bss_6F1E4_fill_6F1E8[20];
+u8 lbl_1_bss_6F1E4_fill_6F238;
+u8 lbl_1_bss_6F239;
+u16 lbl_1_bss_6EA98_gap_6F23A;
+u32 lbl_1_bss_6F23C;
+u16 lbl_1_bss_6F23C_fill_6F240;
+u8 lbl_1_bss_6F23C_fill_6F242;
+u8 fzgx_obj_lbl_1_bss_6F243;
+u32 lbl_1_bss_6F244[2];
+s8 lbl_1_bss_6F244_8[30][2];
+s8 lbl_1_bss_6F244_44[30][2];
+s8 lbl_1_bss_6F2C4;
+
+#pragma section code_type ".fzgxpool"
+static void fzgx_bss_layout(void) {
+    volatile u8 s;  /* fzgx-allow: S2 layout primer sink: MWCC emits .bss objects in first-access order */
+    s = *(u8 *)&fzgx_obj_lbl_1_bss_6EA98;
+    s = *(u8 *)&fzgx_obj_lbl_1_bss_6EA9C;
+    s = *(u8 *)&lbl_1_bss_6EAA4;
+    s = *(u8 *)&lbl_1_bss_6EA98_gap_6EAA5;
+    s = *(u8 *)&lbl_1_bss_6EAA6;
+    s = *(u8 *)&lbl_1_bss_6EA98_gap_6EAA7;
+    s = *(u8 *)&lbl_1_bss_6EAA8;
+    s = *(u8 *)&lbl_1_bss_6EAB0;
+    s = *(u8 *)&lbl_1_bss_6EA98_gap_6EAB1;
+    s = *(u8 *)&lbl_1_bss_6EA98_gap_6EAB1_fill_6EAB2;
+    s = *(u8 *)&fzgx_obj_lbl_1_bss_6EAB4;
+    s = *(u8 *)&lbl_1_bss_6EAB4_fill_6EAC4;
+    s = *(u8 *)&fzgx_obj_lbl_1_bss_6EAC6;
+    s = *(u8 *)&lbl_1_bss_6EAC6_fill_6EAC8;
+    s = *(u8 *)&fzgx_obj_lbl_1_bss_6EAD0;
+    s = *(u8 *)&fzgx_obj_lbl_1_bss_6F1D8;
+    s = *(u8 *)&lbl_1_bss_6EA98_gap_6F1D9;
+    s = *(u8 *)&lbl_1_bss_6EA98_gap_6F1D9_fill_6F1DA;
+    s = *(u8 *)&fzgx_obj_lbl_1_bss_6F1DC;
+    s = *(u8 *)&fzgx_obj_lbl_1_bss_6F1E0;
+    s = *(u8 *)&lbl_1_bss_6F1E1;
+    s = *(u8 *)&lbl_1_bss_6EA98_gap_6F1E2;
+    s = *(u8 *)&fzgx_obj_lbl_1_bss_6F1E4;
+    s = *(u8 *)&lbl_1_bss_6F1E4_fill_6F1E5;
+    s = *(u8 *)&lbl_1_bss_6F1E4_fill_6F1E6;
+    s = *(u8 *)&lbl_1_bss_6F1E4_fill_6F1E8;
+    s = *(u8 *)&lbl_1_bss_6F1E4_fill_6F238;
+    s = *(u8 *)&lbl_1_bss_6F239;
+    s = *(u8 *)&lbl_1_bss_6EA98_gap_6F23A;
+    s = *(u8 *)&lbl_1_bss_6F23C;
+    s = *(u8 *)&lbl_1_bss_6F23C_fill_6F240;
+    s = *(u8 *)&lbl_1_bss_6F23C_fill_6F242;
+    s = *(u8 *)&fzgx_obj_lbl_1_bss_6F243;
+    s = *(u8 *)&lbl_1_bss_6F244;
+    s = *(u8 *)&lbl_1_bss_6F244_8;
+    s = *(u8 *)&lbl_1_bss_6F244_44;
+    s = *(u8 *)&lbl_1_bss_6F2C4;
+}
+#pragma section code_type ".text"
+
+void fn_1_A0978(void) {
+    s32 i;
+    u8 id;
+    u32 flags;
+    struct { A0978Entry *value; } entry;
+
+    
+    if (fn_1_3F864() == 0 || lbl_1_bss_6EA98_gap_6EAA5 != 0) {
+        return;
+    }
+    {
+        fn_1_A3A1C();
+        fn_1_A31E4();
+        entry.value = (*(A0978Entry (*)[5])&fzgx_obj_lbl_1_bss_6F1E4);
+        for (i = 0; i < lbl_1_bss_6F2C4; entry.value++, i++) {
+            id = entry.value->unk_01;
+            flags = fn_1_864E8(id);
+            if (!(flags & 0x800000)) {
+                A0978_tick(lbl_1_bss_6F244_8, id, 10);
+            }
+            if (!(flags & 0x2000000)) {
+                A0978_tick(lbl_1_bss_6F244_44, id, 30);
+            }
+        }
+        fn_1_A54FC();
+        fn_1_A5590();
+        fn_1_A24CC();
+    }
+}
+/* fzgx:end fn_1_A0978 */
+
 /* fzgx:begin fn_1_A0C68 */
 enum {
     ADDR_A6000000 = 0xA6000000,
