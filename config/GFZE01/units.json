@@ -52292,6 +52292,31 @@
   },
   {
     "module": "main_rel",
+    "source": "rel/main_rel/ranking/fn_1_157FC8.c",
+    "symbols": [
+      "fn_1_157FC8"
+    ],
+    "status": "matching",
+    "mw_version": null,
+    "extra_cflags": [],
+    "tu": "rel/main_rel/ranking.c",
+    "pool": {
+      "...rodata.0": "lbl_1_rodata_D920",
+      "@80": "lbl_1_rodata_D920+0x30",
+      "@8": "lbl_1_rodata_D920+0xC",
+      "@7": "lbl_1_rodata_D920+0x8",
+      "@5": "lbl_1_rodata_D920",
+      "@82": "jumptable_1_data_4C7B0",
+      "@9": "lbl_1_rodata_D920+0x10",
+      "@10": "lbl_1_rodata_D920+0x14",
+      "@11": "lbl_1_rodata_D920+0x18",
+      "@12": "lbl_1_rodata_D920+0x1C",
+      "@13": "lbl_1_rodata_D920+0x20",
+      "@14": "lbl_1_rodata_D920+0x24"
+    }
+  },
+  {
+    "module": "main_rel",
     "source": "rel/main_rel/ranking/fn_1_1586A8.c",
     "symbols": [
       "fn_1_1586A8"

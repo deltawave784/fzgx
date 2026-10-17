@@ -7640,3 +7640,6 @@ rel/main_rel/alloc/fn_1_4E60.c:
 
 rel/main_rel/cloth/fn_1_1050D0.c:
 	.text       start:0x001050D0 end:0x00105724 align:4
+
+rel/main_rel/ranking/fn_1_157FC8.c:
+	.text       start:0x00157FC8 end:0x001586A8 align:4
