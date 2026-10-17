@@ -7973,3 +7973,6 @@ rel/main_rel/game/fn_1_3EB78.c:
 
 rel/main_rel/live_camera/fn_1_12FD4.c:
 	.text       start:0x00012FD4 end:0x00013018 align:4
+
+rel/main_rel/burner/fn_1_9A508.c:
+	.text       start:0x0009A508 end:0x0009A578 align:4
