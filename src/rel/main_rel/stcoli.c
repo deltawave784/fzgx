@@ -1522,6 +1522,78 @@ void fn_1_21CA0(Fn_1_21CA0 *self, void *arg) {
 }
 /* fzgx:end fn_1_21CA0 */
 
+/* fzgx:begin fn_1_21CFC noprologue */
+#include "dolphin/types.h"
+#include "dolphin/hw_regs.h"
+#include "game/main_rel/car_test_types.h"
+
+extern const struct fn_1_21CFC_lbl_1_rodata_6D0_pool {
+    f32 unk_0;
+} lbl_1_rodata_6D0;
+
+extern const struct fn_1_21CFC_lbl_1_rodata_6E8_pool {
+    f32 unk_0;
+} lbl_1_rodata_6E8;
+
+extern void fn_1_18214(void *, f32 *, u32);
+extern f32 lbl_8006D188(s16);
+extern void lbl_8006E1B0(Fn183D28Vec3 *, Fn183D28Vec3 *);
+extern void lbl_8006DAEC(void);
+extern u32 lbl_8006DCA4(void);
+extern void fn_80072558(void);
+extern void fn_8003462C(u32, u32, u32);
+extern void lbl_8006DB30(void);
+
+/* GX write-gather pipe: volatile because every store is a FIFO write. */
+#define GX_FIFO_F32 (*(volatile f32 *)GX_FIFO_BASE)
+
+static inline void GXPosition3f32(f32 x, f32 y, f32 z)
+{
+    GX_FIFO_F32 = x;
+    GX_FIFO_F32 = y;
+    GX_FIFO_F32 = z;
+}
+
+void fn_1_21CFC(void *obj, f32 *scale)
+{
+    Fn183D28Vec3 pts[16];
+    Fn183D28Vec3 *v;
+    s32 i;
+    s32 angle;
+    f32 radius;
+    f32 y;
+    f32 z;
+
+    fn_1_18214(obj, scale, 0);
+    z = lbl_1_rodata_6D0.unk_0;
+    radius = lbl_1_rodata_6E8.unk_0;
+    v = pts;
+    for (i = 0, angle = 0; i < 16; i++, angle += 0x1000) {
+        y = radius * lbl_8006D188((s16)(angle + 0x4000));
+        v->x = radius * lbl_8006D188((s16)angle);
+        v->y = y;
+        v->z = z;
+        v->x *= scale[0];
+        v->y *= scale[1];
+        lbl_8006E1B0(v, v);
+        v++;
+    }
+    lbl_8006DAEC();
+    lbl_8006DCA4();
+    fn_80072558();
+    v = pts;
+    fn_8003462C(0xb0, 0, 0x11);
+    for (i = 0; i < 16; i++) {
+        GXPosition3f32(v->x, v->y, v->z);
+        v++;
+    }
+    GX_FIFO_F32 = pts[0].x;
+    GX_FIFO_F32 = pts[0].y;
+    GX_FIFO_F32 = pts[0].z;
+    lbl_8006DB30();
+}
+/* fzgx:end fn_1_21CFC */
+
 /* fzgx:begin fn_1_2277C noprologue */
 #include "dolphin/types.h"
 
