@@ -7961,3 +7961,6 @@ rel/main_rel/screen_effect/fn_1_727BC.c:
 
 rel/main_rel/motasglist/fn_1_449A8.c:
 	.text       start:0x000449A8 end:0x00044A74 align:4
+
+rel/main_rel/cloth/fn_1_106CAC.c:
+	.text       start:0x00106CAC end:0x00106D30 align:4

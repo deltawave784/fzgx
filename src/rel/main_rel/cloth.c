@@ -446,3 +446,28 @@ loop_test:
     }
 }
 /* fzgx:end fn_1_1050D0 */
+
+/* fzgx:begin fn_1_106CAC */
+typedef struct Sig_fn_8003C1A4_JpegDec Sig_fn_8003C1A4_JpegDec;
+typedef struct {
+    Obj_1_bss_85280 base;
+    u8 pad_8[0x240];
+    s32 unk_248;
+    u8 pad_24C[0x6BC];
+    u8 unk_908;
+} BgJpegState;
+extern int fn_1_151AF0(u8 *, int, void *, void *, void *, Sig_fn_8003C1A4_JpegDec *);
+
+s32 fn_1_106CAC(void) {
+    BgJpegState *p = (BgJpegState *)&lbl_1_bss_85280;
+    if ((s32)p->unk_248 == 2) {
+        return 0;
+    }
+    fn_1_151AF0((u8 *)p->base.unk_4, 0,
+        (void *)(&lbl_1_data_3F284.unk_0)[p->unk_908], 0, 0,
+        (Sig_fn_8003C1A4_JpegDec *)p->base.unk_0);
+    p->unk_908 = 1 - p->unk_908;
+    p->unk_248 = 1;
+    return 0;
+}
+/* fzgx:end fn_1_106CAC */
