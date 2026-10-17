@@ -8427,6 +8427,86 @@ void fn_1_8D894(Obj_1_bss_6D838_Target *car) {
 }
 /* fzgx:end fn_1_8D894 */
 
+/* fzgx:begin fn_1_8D988 noprologue */
+#include "dolphin/types.h"
+#include "rel/main_rel/car.h"
+
+typedef struct EnemyResource {
+    u8 pad_00[0x40];
+    u32 unk_40;
+} EnemyResource;
+
+typedef struct EnemyCar {
+    u32 unk_00;
+    s16 unk_04;
+    u8 pad_06[0x46E];
+    s8 unk_474;
+    u8 pad_475[0xF];
+    EnemyResource *unk_484;
+    u8 pad_488[0x86];
+    u8 unk_50E;
+    u8 pad_50F[0x111];
+} EnemyCar;
+
+typedef struct EnemyState {
+    u8 pad_00[0x18];
+    EnemyCar *unk_18;
+    u8 pad_1C[0xE];
+    s8 unk_2A;
+    u8 pad_2B[0x1D];
+    s8 unk_48[4];
+    void *unk_4C[4];
+} EnemyState;
+
+extern u32 lbl_801A6410;
+extern EnemyResource *fn_1_45D0(u32, u32, void *, u32);
+extern void fn_1_C487C(EnemyCar *);
+extern void fn_1_43E8(u32);
+extern void fn_1_C4ABC(void);
+extern void *fn_1_3F8C(void *, void (*)(void), void *, u32);
+extern void fn_1_43F4(void);
+
+#pragma opt_propagation off
+void fn_1_8D988(void)
+{
+    u32 i;
+    EnemyCar *car;
+    EnemyState *state = (EnemyState *)&lbl_1_bss_6D820;
+
+    car = state->unk_18;
+    for (i = 0; i < (u32)state->unk_2A; i++, car++) {
+        if (!(car->unk_00 & 0x04000000)) {
+            car->unk_00 |= 0x04000000;
+            car->unk_484 = fn_1_45D0(lbl_801A6410, 0x88, lbl_1_data_1FFF0, 0x1CB0);
+            if (car->unk_484 == 0) {
+                car->unk_00 &= ~0x04000000;
+            } else {
+                car->unk_484->unk_40 = lbl_801A6410;
+                car->unk_50E = 1;
+                fn_1_C487C(car);
+                fn_1_43E8(1);
+                {
+                    void *task = fn_1_3F8C(lbl_1_data_20700, fn_1_C4ABC, car, 3);
+                    void **tasks = state->unk_4C;
+                    tasks[car->unk_474] = task;
+                }
+                fn_1_43F4();
+                {
+                    s8 *ids;
+                    s32 slot;
+                    s16 id;
+                    slot = car->unk_474;
+                    ids = state->unk_48;
+                    id = car->unk_04;
+                    ids[slot] = id;
+                }
+                car->unk_474 = -1;
+            }
+        }
+    }
+}
+/* fzgx:end fn_1_8D988 */
+
 /* fzgx:begin fn_1_8DAB4 */
 typedef struct {
     u8 pad0[0x18];
