@@ -7520,3 +7520,9 @@ rel/main_rel/effect_car/fn_1_6FFA0.c:
 
 rel/main_rel/accessory/fn_1_1145C8.c:
 	.text       start:0x001145C8 end:0x0011492C align:4
+
+rel/main_rel/effect/fn_1_5F654.c:
+	.text       start:0x0005F654 end:0x0005F9B8 align:4
+
+rel/main_rel/effect_car/fn_1_6DD68.c:
+	.text       start:0x0006DD68 end:0x0006E140 align:4
