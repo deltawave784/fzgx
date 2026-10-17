@@ -7883,3 +7883,12 @@ rel/main_rel/driver/fn_1_A744C.c:
 
 rel/main_rel/archive/fn_1_12C524.c:
 	.text       start:0x0012C524 end:0x0012C5E4 align:4
+
+rel/main_rel/ranking/fn_1_156218.c:
+	.text       start:0x00156218 end:0x001563E8 align:4
+
+rel/main_rel/font/fn_1_53830.c:
+	.text       start:0x00053830 end:0x000539CC align:4
+
+rel/main_rel/spline/fn_1_F946C.c:
+	.text       start:0x000F946C end:0x000F965C align:4

@@ -268,6 +268,38 @@ u32 *fn_1_156198(u32 arg0) {
 }
 /* fzgx:end fn_1_156198 */
 
+/* fzgx:begin fn_1_156218 noprologue */
+#include "rel/main_rel/ranking.h"
+
+typedef struct { u32 w[8]; } Blk32;
+typedef struct { u8 pad[0x18]; u16 v; } Blk3;
+
+extern void fn_1_12EF80(s16, s16 *, s16 *);
+
+int fn_1_156218(s32 a, Blk32 *dst1, Blk3 *dst3, Blk32 *dst2) {
+    s16 x;
+    s16 y;
+    Obj_1_bss_7F0C0 *cell;
+    int offset;
+    int i;
+    fn_1_12EF80(a, &x, &y);
+    offset = (y + x * 6) * 0x180;
+    for (i = 0; i < 10; i++) {
+        cell = (Obj_1_bss_7F0C0 *)((u8 *)&lbl_1_bss_7F0C0 + offset + i * 0x20);
+        if (*(u16 *)&cell->unk_110 != 0) {
+            *dst1 = *(Blk32 *)((u8 *)&lbl_1_bss_7F0C0.unk_F8 + offset + i * 0x20);
+            *dst2 = *(Blk32 *)((u8 *)&lbl_1_bss_7F0C0.unk_238 + offset);
+            dst3->v = *(u16 *)((u8 *)&lbl_1_bss_7F0C0.unk_258 + offset);
+            return 1;
+        }
+    }
+    *dst1 = *(Blk32 *)((u8 *)&lbl_1_bss_7F0C0.unk_F8 + offset);
+    *dst2 = *(Blk32 *)((u8 *)&lbl_1_bss_7F0C0.unk_238 + offset);
+    dst3->v = *(u16 *)((u8 *)&lbl_1_bss_7F0C0.unk_258 + offset);
+    return 0;
+}
+/* fzgx:end fn_1_156218 */
+
 /* fzgx:begin fn_1_1563E8 */
 u16 fn_1_1563E8(u8 *data, s32 len) {
     u16 table[256];
