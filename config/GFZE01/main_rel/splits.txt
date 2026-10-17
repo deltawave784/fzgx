@@ -7598,3 +7598,6 @@ rel/main_rel/accessory/fn_1_115560.c:
 
 rel/main_rel/phys/fn_1_E252C.c:
 	.text       start:0x000E252C end:0x000E2AE8 align:4
+
+rel/main_rel/sel_static_disp/fn_1_147508.c:
+	.text       start:0x00147508 end:0x00147A04 align:4
