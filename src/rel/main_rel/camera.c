@@ -684,6 +684,64 @@ void camera_forward_status(void) {
 }
 /* fzgx:end camera_forward_status */
 
+/* fzgx:begin fn_1_6DD0 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/camera.h"
+
+extern void lbl_8006DD14(u32, void *);
+extern void OSPanic(u8 *file, int line, u8 *message, ...);
+extern u32 *lbl_801A6D00;
+extern void *lbl_801A66CC;
+
+typedef struct {
+    u32 unk_0;
+    u8 unk_4;
+} F6DD0Entry;
+
+typedef struct {
+    u32 unk_0;
+    u8 pad[8];
+    u32 unk_C;
+} F6DD0Other;
+
+typedef struct {
+    Obj_1_bss_F68_Target *state;
+    u8 *entries;
+    F6DD0Other *other;
+} F6DD0Bss;
+
+/* volatile: retail preserves the flag-byte read and write even with a zero mask. */
+static inline void F6DD0SetFlag(volatile F6DD0Entry *e, u8 flag) {
+    e->unk_4 = e->unk_4 | flag;
+}
+
+void fn_1_6DD0(u8 index) {
+    F6DD0Bss *bss = (F6DD0Bss *)&lbl_1_bss_F68;
+    s8 mode;
+
+    lbl_8006DD14((u32)((u8 *)lbl_801A6D00 + 0x30), lbl_801A66CC);
+    if (bss->state == 0) {
+        OSPanic((u8 *)lbl_1_data_3318, 0x564, (u8 *)&lbl_1_data_35B0);
+    }
+    if ((bss->state->unk_0 & ((u32)1 << 31)) != 0) {
+        *(u32 *)camera_get_state_object() |= ((u32)1 << 31);
+    }
+    mode = (s8)bss->state->unk_48;
+    switch (mode) {
+    case 9:
+    case 10:
+        bss->other->unk_C |= ((u32)1 << 31);
+        break;
+    default: {
+        /* volatile: retail preserves this byte read/modify/write for a zero mask. */
+        F6DD0SetFlag((volatile F6DD0Entry *)(bss->entries + index * 0x1FC), 0);
+        break;
+    }
+    }
+}
+/* fzgx:end fn_1_6DD0 */
+
 /* fzgx:begin fn_1_6EC0 */
 u32 fn_1_6EC0(u8 index) {
     Obj_1_bss_F68_Target *state = lbl_1_bss_F68;
