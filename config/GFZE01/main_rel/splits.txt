@@ -7892,3 +7892,24 @@ rel/main_rel/font/fn_1_53830.c:
 
 rel/main_rel/spline/fn_1_F946C.c:
 	.text       start:0x000F946C end:0x000F965C align:4
+
+rel/main_rel/driver/fn_1_AA590.c:
+	.text       start:0x000AA590 end:0x000AA6D8 align:4
+
+rel/main_rel/car/fn_1_8421C.c:
+	.text       start:0x0008421C end:0x000843BC align:4
+
+rel/main_rel/phys/fn_1_E5164.c:
+	.text       start:0x000E5164 end:0x000E52F8 align:4
+
+rel/main_rel/car/fn_1_866B4.c:
+	.text       start:0x000866B4 end:0x0008677C align:4
+
+rel/main_rel/sel_static_disp/fn_1_14DD68.c:
+	.text       start:0x0014DD68 end:0x0014DDF4 align:4
+
+rel/main_rel/memcard/fn_1_BFBF4.c:
+	.text       start:0x000BFBF4 end:0x000BFCF8 align:4
+
+rel/main_rel/car/fn_1_86900.c:
+	.text       start:0x00086900 end:0x000869B0 align:4

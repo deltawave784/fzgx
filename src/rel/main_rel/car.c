@@ -2940,6 +2940,106 @@ s8 fn_1_84124(Fn184124Object *obj, s8 direction, s8 index, u8 *count) {
 }
 /* fzgx:end fn_1_84124 */
 
+/* fzgx:begin fn_1_8421C noprologue */
+#include "types.h"
+#include "rel/main_rel/car.h"
+
+struct fn_1_8421C_Arg0 {
+    u8 pad_0[0x320];
+    s16 unk_320;
+    u8 pad_322[0x38C - 0x322];
+    u8 unk_38C;
+};
+
+static inline s8 fn_1_8421C_up(struct fn_1_8421C_Arg0 *arg0, s8 arg1, s8 *up) {
+    s8 a;
+    s32 t;
+    *up = 0;
+    if (arg1 == 5) {
+        return arg1;
+    } else if (arg1 < 0 || arg1 > 5) {
+        if (arg1 < 0) {
+            a = 0;
+        } else {
+            t = (s8)arg1;
+            a = 5;
+            if (t <= 5) {
+                a = t;
+            }
+        }
+        return (s8)a;
+    } else {
+        a = arg1;
+        while (a < 5) {
+            if ((arg0->unk_38C & (1 << a)) != 0) {
+                return a;
+            }
+            a++;
+            (*up)++;
+        }
+        return -1;
+    }
+}
+
+static inline s8 fn_1_8421C_down(struct fn_1_8421C_Arg0 *arg0, s8 arg1, s8 *down) {
+    s32 t;
+    *down = 0;
+    if (arg1 == 5) {
+        return arg1;
+    } else if (arg1 < 0 || arg1 > 5) {
+        if (arg1 < 0) {
+            arg1 = 0;
+        } else {
+            t = (s8)arg1;
+            arg1 = 5;
+            if (t <= 5) {
+                arg1 = t;
+            }
+        }
+        return (s8)arg1;
+    } else {
+        while (arg1 > -1) {
+            if ((arg0->unk_38C & (1 << arg1)) != 0) {
+                return arg1;
+            }
+            arg1--;
+            (*down)++;
+        }
+        return -1;
+    }
+}
+
+static inline s8 fn_1_8421C_select(struct fn_1_8421C_Arg0 *arg0, s8 a, s8 arg1, s8 up, s8 down) {
+    if (a == -1) {
+        return arg1;
+    } else if (arg1 == -1) {
+        return a;
+    } else if (up > down) {
+        return a;
+    } else if (up < down) {
+        return arg1;
+    } else {
+        if (lbl_1_bss_6D9A0[arg0->unk_320] == 1) {
+            arg1 = a;
+        }
+    }
+    return arg1;
+}
+
+s8 fn_1_8421C(struct fn_1_8421C_Arg0 *arg0, s8 arg1) {
+    s8 a;
+    s8 up;
+    s8 down;
+    a = fn_1_8421C_up(arg0, arg1, &up);
+    arg1 = fn_1_8421C_down(arg0, arg1, &down);
+    if (a == -1 && arg1 == -1) {
+        return 3;
+    }
+    arg1 = fn_1_8421C_select(arg0, a, arg1, up, down);
+    return arg1;
+}
+/* fzgx:end fn_1_8421C */
+
 /* fzgx:begin fn_1_843BC */
 typedef struct {
     u8 _pad[0x32c];
@@ -4454,6 +4554,70 @@ s8 fn_1_86690(s8 index) {
 }
 /* fzgx:end fn_1_86690 */
 
+/* fzgx:begin fn_1_866B4 noprologue */
+#include "types.h"
+
+struct fn_1_866B4_CarInfo {
+    u8 pad_0[0x4];
+    s16 unk_4;
+    u8 pad_6[0x474 - 0x6];
+    u8 unk_474;
+};
+
+struct fn_1_866B4_Entry {
+    u8 pad_0[0x32C];
+    struct fn_1_866B4_CarInfo *info;
+    u8 pad_330[0x440 - 0x330];
+};
+
+struct fn_1_866B4_lbl_1_bss_6D820 {
+    u8 pad_0[0x1C];
+    struct fn_1_866B4_Entry *entries;
+    u8 pad_20[0xA];
+    s8 count;
+    u8 pad_2B[0x1D];
+    u8 slot_ids[1];
+};
+
+extern struct fn_1_866B4_lbl_1_bss_6D820 lbl_1_bss_6D820;
+
+#pragma opt_strength_reduction off
+#pragma opt_lifetimes off
+static inline struct fn_1_866B4_Entry *fn_1_866B4_array_read(struct fn_1_866B4_Entry *array) { return array; }
+#pragma opt_lifetimes reset
+
+#pragma opt_strength_reduction reset
+
+#pragma opt_loop_invariants off
+s32 fn_1_866B4(s32 id) {
+    struct fn_1_866B4_lbl_1_bss_6D820 *p = &lbl_1_bss_6D820;
+    struct fn_1_866B4_Entry *entries = p->entries;
+    s32 count = p->count;
+    s32 c;
+    u8 *ids;
+    s16 i;
+
+    {
+    s16 fzgx_loop_i_681;
+for (fzgx_loop_i_681 = 0; fzgx_loop_i_681 < count; fzgx_loop_i_681++) {
+        if ((s8)id == (s8)fn_1_866B4_array_read(entries)[fzgx_loop_i_681].info->unk_474) {
+            return (s8)fn_1_866B4_array_read(entries)[fzgx_loop_i_681].info->unk_4;
+        }
+    }
+    i = fzgx_loop_i_681;
+}
+    c = (s8)id;
+    ids = p->slot_ids;
+    for (i = 0; i < count; i++) {
+        if (ids[c] == fn_1_866B4_array_read(entries)[i].info->unk_4) {
+            return (s8)fn_1_866B4_array_read(entries)[i].info->unk_4;
+        }
+    }
+    return -1;
+}
+#pragma opt_loop_invariants reset
+/* fzgx:end fn_1_866B4 */
+
 /* fzgx:begin fn_1_8677C */
 u32 fn_1_8677C(u32 arg0) {
     u32 v0;
@@ -4557,6 +4721,65 @@ void *fn_1_868C0(s8 index) {
     return 0;
 }
 /* fzgx:end fn_1_868C0 */
+
+/* fzgx:begin fn_1_86900 noprologue */
+#include "types.h"
+
+typedef struct {
+    u8 pad_0[0x4];
+    s16 unk_4;
+    u8 pad_6[0x46E];
+    s8 unk_474;
+} CarInfo_86900;
+
+typedef struct {
+    u8 pad_0[0x32C];
+    CarInfo_86900 *info;
+    u8 pad_330[0x110];
+} Car_86900;
+
+typedef struct {
+    u8 pad_0[0x1C];
+    Car_86900 *cars;
+    u8 pad_20[0xA];
+    s8 count;
+    u8 pad_2B[0x1D];
+    u8 ids[1];
+} CarManager_86900;
+
+extern CarManager_86900 lbl_1_bss_6D820;
+
+#pragma opt_lifetimes off
+static inline Car_86900 *fn_1_86900_array_read(Car_86900 *array) { return array; }
+static inline u8 fn_1_86900_id_read(CarManager_86900 *mgr, s8 id) { return mgr->ids[id]; }
+#pragma opt_loop_invariants on
+Car_86900 *fn_1_86900(s32 id) {
+    CarManager_86900 *mgr = &lbl_1_bss_6D820;
+    Car_86900 *cars = mgr->cars;
+    s32 count = mgr->count;
+    s16 i;
+
+    for (i = 0; i < count; i++) {
+        if (fn_1_86900_array_read(cars)[i].info->unk_474 == (s8)id) {
+            return &cars[i];
+        }
+    }
+#pragma opt_loop_invariants off
+    {
+        s32 index = (s8)id;
+        u8 *ids = mgr->ids;
+        for (i = 0; i < count; i++) {
+            if (ids[index] == fn_1_86900_array_read(cars)[i].info->unk_4) {
+                return &cars[i];
+            }
+        }
+    }
+    return NULL;
+}
+#pragma opt_loop_invariants reset
+
+#pragma opt_lifetimes reset
+/* fzgx:end fn_1_86900 */
 
 /* fzgx:begin fn_1_869B0 */
 typedef struct {

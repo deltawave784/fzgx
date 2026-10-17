@@ -8724,6 +8724,37 @@ void fn_1_14DC68(fn_1_14DC68_StaticDispEntry *arg0, s16 arg1) {
 }
 /* fzgx:end fn_1_14DC68 */
 
+/* fzgx:begin fn_1_14DD68 noprologue */
+#include "types.h"
+
+extern s16 fn_1_14F344(s16);
+
+typedef struct {
+    s16 key;
+    u8 pad[0x23A];
+    u8 field[0x124];
+} Entry_14DD68;
+
+static inline void *find_14DD68(Entry_14DD68 *base, u8 *result, Entry_14DD68 *p) {
+    s16 i;
+
+    i = 0;
+    while ((u32)i < 3) {
+        if (fn_1_14F344(p->key) == 0) {
+            result = base[i].field;
+            break;
+        }
+        p++;
+        i++;
+    }
+    return result;
+}
+
+void *fn_1_14DD68(Entry_14DD68 *base) {
+    return find_14DD68(base, NULL, base);
+}
+/* fzgx:end fn_1_14DD68 */
+
 /* fzgx:begin fn_1_14DDF4 noprologue */
 #include "types.h"
 

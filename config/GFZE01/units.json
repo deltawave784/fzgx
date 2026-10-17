@@ -37108,6 +37108,17 @@
   },
   {
     "module": "main_rel",
+    "source": "rel/main_rel/car/fn_1_8421C.c",
+    "symbols": [
+      "fn_1_8421C"
+    ],
+    "status": "matching",
+    "mw_version": "GC/1.3",
+    "extra_cflags": [],
+    "tu": "rel/main_rel/car.c"
+  },
+  {
+    "module": "main_rel",
     "source": "rel/main_rel/car/fn_1_843BC.c",
     "symbols": [
       "fn_1_843BC"
@@ -37545,6 +37556,17 @@
   },
   {
     "module": "main_rel",
+    "source": "rel/main_rel/car/fn_1_866B4.c",
+    "symbols": [
+      "fn_1_866B4"
+    ],
+    "status": "matching",
+    "mw_version": "GC/1.3.2",
+    "extra_cflags": [],
+    "tu": "rel/main_rel/car.c"
+  },
+  {
+    "module": "main_rel",
     "source": "rel/main_rel/car/fn_1_8677C.c",
     "symbols": [
       "fn_1_8677C"
@@ -37628,6 +37650,17 @@
     ],
     "status": "matching",
     "mw_version": null,
+    "extra_cflags": [],
+    "tu": "rel/main_rel/car.c"
+  },
+  {
+    "module": "main_rel",
+    "source": "rel/main_rel/car/fn_1_86900.c",
+    "symbols": [
+      "fn_1_86900"
+    ],
+    "status": "matching",
+    "mw_version": "GC/1.3.2",
     "extra_cflags": [],
     "tu": "rel/main_rel/car.c"
   },
@@ -40601,6 +40634,18 @@
     "mw_version": null,
     "extra_cflags": [],
     "tu": "rel/main_rel/driver.c"
+  },
+  {
+    "module": "main_rel",
+    "source": "rel/main_rel/driver/fn_1_AA590.c",
+    "symbols": [
+      "fn_1_AA590"
+    ],
+    "status": "nonmatching",
+    "mw_version": "GC/1.3.2",
+    "extra_cflags": [],
+    "tu": "rel/main_rel/driver.c",
+    "pool": true
   },
   {
     "module": "main_rel",
@@ -51167,6 +51212,24 @@
   },
   {
     "module": "main_rel",
+    "source": "rel/main_rel/memcard/fn_1_BFBF4.c",
+    "symbols": [
+      "fn_1_BFBF4"
+    ],
+    "status": "matching",
+    "mw_version": null,
+    "extra_cflags": [],
+    "tu": "rel/main_rel/memcard.c",
+    "pool": {
+      "...rodata.0": "lbl_1_rodata_4AE0",
+      "@190": "lbl_1_rodata_4D1C+0x304",
+      "@222": "lbl_1_rodata_5080+0x38",
+      "@11": "lbl_1_rodata_4CB0",
+      "@137": "lbl_1_rodata_4D1C+0x1A8"
+    }
+  },
+  {
+    "module": "main_rel",
     "source": "rel/main_rel/memcard/fn_1_BFCF8.c",
     "symbols": [
       "fn_1_BFCF8"
@@ -51876,6 +51939,20 @@
     "mw_version": null,
     "extra_cflags": [],
     "tu": "rel/main_rel/phys.c"
+  },
+  {
+    "module": "main_rel",
+    "source": "rel/main_rel/phys/fn_1_E5164.c",
+    "symbols": [
+      "fn_1_E5164"
+    ],
+    "status": "matching",
+    "mw_version": "GC/1.3",
+    "extra_cflags": [],
+    "tu": "rel/main_rel/phys.c",
+    "pool": {
+      "@23": "lbl_1_rodata_6800"
+    }
   },
   {
     "module": "main_rel",
@@ -57266,6 +57343,17 @@
     "pool": {
       "@30": "lbl_1_data_45204"
     }
+  },
+  {
+    "module": "main_rel",
+    "source": "rel/main_rel/sel_static_disp/fn_1_14DD68.c",
+    "symbols": [
+      "fn_1_14DD68"
+    ],
+    "status": "matching",
+    "mw_version": null,
+    "extra_cflags": [],
+    "tu": "rel/main_rel/sel_static_disp.c"
   },
   {
     "module": "main_rel",

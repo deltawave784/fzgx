@@ -1408,6 +1408,55 @@ void fn_1_E50F0(void *base, void *arg) {
 }
 /* fzgx:end fn_1_E50F0 */
 
+/* fzgx:begin fn_1_E5164 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/phys.h"
+
+extern const struct fn_1_E5164_lbl_1_rodata_69CC_pool {
+    f32 unk_0;
+} lbl_1_rodata_69CC;
+
+typedef struct {
+    u32 w[47];
+} E5164Tbl;
+
+extern void lbl_8006DCA4(void *, void *);
+extern f32 fn_1_A71AC(void);
+extern void fn_8006F828(void *, f32 *);
+extern E5164Tbl lbl_1_rodata_69D0;
+extern void fn_1_4AE0C(const char *, ...);
+extern void fn_1_496FC(f32, f32);
+extern void fn_1_4955C(f32, f32);
+extern void fn_1_A8DD4(const char *, ...);
+extern void fn_1_A8EF8(s32, s32);
+
+void fn_1_E5164(void *base, void (*cb)(const char *, ...)) {
+    struct { s16 value; } i;
+    E5164Tbl tbl;
+    f32 pos[3];
+    s32 y, x;
+
+    lbl_8006DCA4(base, cb);
+    fn_1_A71AC();
+    fn_8006F828((char *)base + 0x54, pos);
+    y = (s32)pos[1];
+    x = (s32)pos[0];
+    tbl = lbl_1_rodata_69D0;
+    if (cb == fn_1_4AE0C) {
+        fn_1_496FC((f32)(s16)x, (f32)(s16)y);
+        fn_1_4955C(lbl_1_rodata_69CC.unk_0, lbl_1_rodata_69CC.unk_0);
+    } else if (cb == fn_1_A8DD4) {
+        fn_1_A8EF8(x, y);
+    }
+    for (i.value = 0; i.value < 64; i.value++) {
+        if ((*(s64 *)((char *)base + 0x138) & (s64)(1 << i.value)) != 0) {
+            cb((const char *)&lbl_1_data_3E150, tbl.w[i.value]);
+        }
+    }
+}
+/* fzgx:end fn_1_E5164 */
+
 /* fzgx:begin fn_1_E52F8 noprologue */
 #include "rel/main_rel/phys.h"
 
