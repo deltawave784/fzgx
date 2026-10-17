@@ -1466,6 +1466,23 @@
   },
   {
     "module": "customize",
+    "source": "rel/customize/emb_paste_editor/fn_3_106FC.c",
+    "symbols": [
+      "fn_3_106FC"
+    ],
+    "status": "matching",
+    "mw_version": "GC/1.3.2",
+    "extra_cflags": [],
+    "tu": "rel/customize/emb_paste_editor.c",
+    "pool": {
+      "...rodata.0": "lbl_3_rodata_288",
+      "@18": "lbl_3_rodata_288+0x34",
+      "@50": "lbl_3_rodata_288+0xA8",
+      "@112": "lbl_3_rodata_378+0xD8"
+    }
+  },
+  {
+    "module": "customize",
     "source": "rel/customize/emb_paste_editor/fn_3_10B68.c",
     "symbols": [
       "fn_3_10B68"
@@ -55628,6 +55645,20 @@
     "mw_version": null,
     "extra_cflags": [],
     "tu": "rel/main_rel/sel_static_disp.c"
+  },
+  {
+    "module": "main_rel",
+    "source": "rel/main_rel/sel_static_disp/fn_1_14FEAC.c",
+    "symbols": [
+      "fn_1_14FEAC"
+    ],
+    "status": "matching",
+    "mw_version": "GC/1.3.2",
+    "extra_cflags": [],
+    "tu": "rel/main_rel/sel_static_disp.c",
+    "pool": {
+      "...data.0": "lbl_1_data_43E78"
+    }
   },
   {
     "module": "main_rel",

@@ -7526,3 +7526,6 @@ rel/main_rel/effect/fn_1_5F654.c:
 
 rel/main_rel/effect_car/fn_1_6DD68.c:
 	.text       start:0x0006DD68 end:0x0006E140 align:4
+
+rel/main_rel/sel_static_disp/fn_1_14FEAC.c:
+	.text       start:0x0014FEAC end:0x001502BC align:4
