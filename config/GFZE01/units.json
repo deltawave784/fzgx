@@ -74163,6 +74163,18 @@
   },
   {
     "module": "sel",
+    "source": "rel/sel/sel/fn_10_7320.c",
+    "symbols": [
+      "fn_10_7320"
+    ],
+    "status": "nonmatching",
+    "mw_version": null,
+    "extra_cflags": [],
+    "tu": "rel/sel/sel.c",
+    "pool": true
+  },
+  {
+    "module": "sel",
     "source": "rel/sel/sel/fn_10_73AC.c",
     "symbols": [
       "fn_10_73AC"

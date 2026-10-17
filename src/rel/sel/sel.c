@@ -3430,6 +3430,51 @@ s16 fn_10_5E94(void *arg0) {
 }
 /* fzgx:end fn_10_5E94 */
 
+/* fzgx:begin fn_10_7320 pool noprologue */
+#include "types.h"
+#include "rel/sel/sel.h"
+
+Obj_10_bss_0 lbl_10_bss_0;
+u32 lbl_10_bss_14;
+u8 fn_10_7320_bss_pad_18[0x49370];
+u32 lbl_10_bss_49388;
+s16 lbl_10_bss_4938C;
+u8 fn_10_7320_bss_pad_4938E[0x83B0];
+u32 lbl_10_bss_51740;
+u32 lbl_10_bss_51744;
+
+extern void fn_10_1B658(void);
+extern void fn_1_4A00(s32, u8, u32);
+extern void *fn_1_435C(u32);
+extern s32 fn_1_3F8C(void *, void (*)(void), u32, u32);
+extern void fn_1_12F1E8(s32);
+
+extern void fn_10_7320_pool_touch(void *);
+#pragma push
+#pragma section code_type ".fzgxpool"
+void fzgx_fn_10_7320_pool_primer(void) {
+    fn_10_7320_pool_touch(&lbl_10_bss_0);
+    fn_10_7320_pool_touch(&lbl_10_bss_14);
+    fn_10_7320_pool_touch(fn_10_7320_bss_pad_18);
+    fn_10_7320_pool_touch(&lbl_10_bss_49388);
+    fn_10_7320_pool_touch(&lbl_10_bss_4938C);
+    fn_10_7320_pool_touch(fn_10_7320_bss_pad_4938E);
+    fn_10_7320_pool_touch(&lbl_10_bss_51740);
+    fn_10_7320_pool_touch(&lbl_10_bss_51744);
+}
+#pragma pop
+
+void fn_10_7320(void) {
+    s16 v = lbl_10_bss_4938C;
+    fn_1_4A00(1, (u8)v, lbl_10_bss_49388);
+    lbl_10_bss_51744 = 0;
+    fn_1_435C(lbl_10_bss_49388);
+    lbl_10_bss_51740 = fn_1_3F8C(lbl_10_data_6FC, fn_10_1B658, 0, 8);
+    fn_1_12F1E8(480);
+    lbl_10_bss_14 = -1;
+}
+/* fzgx:end fn_10_7320 */
+
 /* fzgx:begin fn_10_73AC noprologue */
 #include "types.h"
 #include "sofdec/adxt.h"
