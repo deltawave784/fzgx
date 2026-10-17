@@ -44197,6 +44197,17 @@
   },
   {
     "module": "main_rel",
+    "source": "rel/main_rel/font/fn_1_4BA24.c",
+    "symbols": [
+      "fn_1_4BA24"
+    ],
+    "status": "matching",
+    "mw_version": null,
+    "extra_cflags": [],
+    "tu": "rel/main_rel/font.c"
+  },
+  {
+    "module": "main_rel",
     "source": "rel/main_rel/font/fn_1_4BD48.c",
     "symbols": [
       "fn_1_4BD48"
@@ -45588,6 +45599,17 @@
     "source": "rel/main_rel/font/fn_1_55C48.c",
     "symbols": [
       "fn_1_55C48"
+    ],
+    "status": "matching",
+    "mw_version": null,
+    "extra_cflags": [],
+    "tu": "rel/main_rel/font.c"
+  },
+  {
+    "module": "main_rel",
+    "source": "rel/main_rel/font/fn_1_55D6C.c",
+    "symbols": [
+      "fn_1_55D6C"
     ],
     "status": "matching",
     "mw_version": null,

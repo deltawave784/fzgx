@@ -1014,6 +1014,57 @@ void fn_1_4B8CC(void) {
 }
 /* fzgx:end fn_1_4B8CC */
 
+/* fzgx:begin fn_1_4BA24 noprologue */
+#include "dolphin/types.h"
+#include "dolphin/ar.h"
+#include "rel/main_rel/font.h"
+
+extern u8 lbl_1_bss_4BA80[176];
+extern void fn_1_4B8CC(void);
+extern void OSReport(const char *, ...);
+extern void OSPanic(const char *, int, const char *, ...);
+extern u32 fn_8002071C(void);
+extern u32 fn_800206FC(u32);
+extern u32 ARGetDMAStatus(void);
+extern void DCInvalidateRange(void *, u32);
+extern void ARQPostRequest(ARQRequest *, u32, u32, u32, u32, u32, u32, ARQCallback);
+
+typedef struct {
+    u8 pad_0[0x28];
+    u16 unk_28;
+    u8 pad_2A[0xE];
+} FontEntry;
+
+#pragma opt_propagation off
+void fn_1_4BA24(u8 font, u32 index, void *dst)
+{
+    u32 priority;
+    u32 source;
+    u32 size;
+    u8 *data = (u8 *)&lbl_1_data_1A3B8;
+
+    if (font >= 0x2C) {
+        OSReport((char *)(data + 0x204C), font, 0x2C);
+        OSPanic((char *)(data + 0x1910), 0xAB4, (char *)(data + 0x2060));
+    }
+    {
+        struct { FontEntry *value; } entries;
+        entries.value = (FontEntry *)(data + 0xAF0);
+        size = entries.value[font].unk_28;
+    }
+    source = ((u32 *)lbl_1_bss_4BA80)[font] + 0xF96000 + size * index;
+    priority = fn_8002071C();
+    fn_800206FC(0x20);
+    lbl_1_bss_4BA5C = 1;
+    while (ARGetDMAStatus() != 0) {}
+    DCInvalidateRange(dst, size);
+    ARQPostRequest((ARQRequest *)lbl_1_bss_4BA60, 1, 1, 1, source, (u32)dst, size, (ARQCallback)fn_1_4B8CC);
+    /* Volatile: the ARQ completion callback clears this flag asynchronously. */
+    while (*(volatile s32 *)&lbl_1_bss_4BA5C != 0) {}
+    fn_800206FC(priority);
+}
+/* fzgx:end fn_1_4BA24 */
+
 /* fzgx:begin fn_1_4BD48 */
 // fn_1_4BD48: empty in retail (single blr).
 void fn_1_4BD48(void) {
@@ -4740,6 +4791,80 @@ void fn_1_55C48(void *arg0) {
     } while (v4 < 4);
 }
 /* fzgx:end fn_1_55C48 */
+
+/* fzgx:begin fn_1_55D6C noprologue */
+#include "types.h"
+#include "game/main_rel/font_types.h"
+#include "game/vec3.h"
+#include "rel/main_rel/font.h"
+
+typedef u32 (*fn_1_55D6C_Fn0)(u32, u32, u32);
+struct fn_1_55D6C_Chunk { u8 data[48]; };
+struct fn_1_55D6C_Data {
+    u8 pad_00[224];
+    struct fn_1_55D6C_Chunk chunks[4];
+};
+struct fn_1_55D6C_lbl_801A66CC {
+    struct fn_1_55D6C_Data *unk_0;
+};
+
+extern struct fn_1_55D6C_lbl_801A66CC lbl_801A66CC;
+extern void fn_1_7BEAC(u32);
+extern void fn_1_56470(fn_1_56470_FontState *);
+extern void fn_1_56554(void);
+extern void fn_80072558(void);
+extern void fn_800749B0(s32, void *);
+extern void lbl_8006DBAC(Vec3 *);
+
+void fn_1_55D6C(void *arg0) {
+    Obj_1_bss_6C7CC *p_lbl_1_bss_6C7CC;
+    struct fn_1_55D6C_lbl_801A66CC *p_lbl_801A66CC;
+    void *v1;
+    u32 v2;
+    void *v5;
+    s32 v0;
+    s32 v4;
+    s32 v6;
+    u32 v8;
+    lbl_8006DBAC((Vec3 *)((u8 *)arg0 + 12));
+    fn_80072558();
+    fn_1_56470((fn_1_56470_FontState *)((u8 *)arg0 + 64));
+    fn_1_7BEAC(*(u16 *)((u8 *)arg0 + 60));
+    p_lbl_1_bss_6C7CC = &lbl_1_bss_6C7CC;
+    v0 = 0;
+    v1 = arg0;
+    do {
+        v2 = *(u32 *)((u8 *)arg0 + v0 * 4 + 104);
+        if (v2 != 0) {
+            fn_800749B0(v0, (void *)v2);
+        } else {
+            if (__rlwnm(p_lbl_1_bss_6C7CC->unk_0, (v0 + 1) & 31, 31, 31)) {
+                fn_800749B0(v0, (void *)0);
+            }
+        }
+        v0++;
+    } while (v0 < 4);
+    ((fn_1_55D6C_Fn0)*(u32 *)((u8 *)arg0 + 128))(*(u32 *)((u8 *)arg0 + 8), *(u32 *)((u8 *)arg0 + 120), *(u32 *)((u8 *)arg0 + 124));
+    fn_1_56554();
+    p_lbl_1_bss_6C7CC = &lbl_1_bss_6C7CC;
+    p_lbl_801A66CC = &lbl_801A66CC;
+    v4 = 0;
+    v5 = arg0;
+    v6 = 0;
+    do {
+        v8 = p_lbl_1_bss_6C7CC->unk_0;
+        if (__rlwnm(v8, (v4 + 1) & 31, 31, 31)) {
+            fn_800749B0(v4, &p_lbl_801A66CC->unk_0->chunks[v4]);
+        } else {
+            if (*(u32 *)((u8 *)v5 + 104) != 0) {
+                fn_800749B0(v4, (void *)0);
+            }
+        }
+        v4++;
+        v5 = (void *)((u8 *)v5 + 4);
+    } while (v4 < 4);
+}
+/* fzgx:end fn_1_55D6C */
 
 /* fzgx:begin fn_1_55EA0 */
 void fn_1_55EA0(Fn1_55EA0Object *object) {
