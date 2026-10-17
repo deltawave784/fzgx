@@ -7511,6 +7511,144 @@ void fn_1_633BC(void) {
 }
 /* fzgx:end fn_1_633BC */
 
+/* fzgx:begin fn_1_633C0 noprologue */
+#include "rel/main_rel/effect.h"
+
+typedef struct { f32 x, y, z; } FxVec;
+typedef struct {
+    u8 pad0[0x10];
+    s32 unk10;
+    u8 pad14[4];
+    s16 unk18;
+    u8 pad1A[0x3c - 0x1a];
+    FxVec unk3c;
+    u8 pad48[0x60 - 0x48];
+    FxVec unk60;
+    u8 pad6c[0x94 - 0x6c];
+    FxVec unk94;
+} FxObj633C0;
+
+extern void fn_1_862D4(int, void *);
+extern void fn_1_8645C(int, void *);
+extern void *lbl_8006DC6C(void *);
+extern void lbl_8006E1B0(void *, void *);
+
+
+/* Establish the native shared literal pool in retail order. */
+#pragma section code_type ".fzgxpool"
+/* Volatile output preserves the native shared literal-pool priming stores. */
+void fzgx_pool_primer_fn_1_633C0(volatile f32 *f, volatile f64 *d) {
+    f[0] = 60.0f;
+    f[1] = 0.1f;
+    f[2] = 32767.0f;
+    f[3] = 0.05f;
+    d[0] = 0.07;
+    f[4] = 20000.0f;
+    d[1] = 4503599627370496.0;
+    f[5] = 1.0f;
+    f[6] = -0.03f;
+    d[2] = 15.0;
+    d[3] = 4503601774854144.0;
+    d[4] = 1.5;
+    d[5] = 0.5;
+    f[7] = 0.0f;
+    f[8] = 0.5f;
+    f[9] = 8.0f;
+    f[10] = 255.0f;
+    f[11] = 15.0f;
+    f[12] = 0.2f;
+}
+#pragma section code_type ".text"
+
+#pragma section code_type ".fzgxpool"
+void fzgx_pool_tail_fn_1_633C0(void (*use)(void *)) {
+    /* Raw IEEE-754 pool words, including padding, not pointer addresses. */
+    u32 words[] = {
+        1034147594U, 1048576000U, 1065017672U, 1065185444U,
+        1109393408U, 1101004800U, 1069547520U, 1055286886U,
+        3221225472U, 1034594987U, 1041865114U, 1040187392U,
+        3201092813U, 3197737370U, 1073741824U, 1132068864U,
+        1071854387U, 858993459U, 1071225241U, 2576980378U,
+        1050253722U, 3145929327U, 1015580809U, 1199570944U,
+        1166016512U, 1064682127U, 1053609165U, 1028577559U,
+        1028711776U, 1064514355U, 1063675494U, 0U,
+        1080213504U, 0U, 1076101120U, 0U,
+        1074266112U, 0U, 0U, 1036831949U,
+        3222903194U, 1084227584U, 1072902963U, 858993459U,
+        1069128089U, 2576980378U, 1092616192U, 1099956224U,
+        1072064102U, 1717986918U, 1078525952U, 0U,
+        0U, 1036831949U, 3222903194U, 1100480512U,
+        1077411840U, 0U, 1060439283U, 0U,
+        0U, 0U, 1081073664U, 0U,
+        1072483532U, 3435973837U, 998445679U, 981668463U,
+        1008981770U, 3019898880U, 1131413504U, 1120403456U,
+        1133903872U, 1128792064U, 1176256512U, 1167867904U,
+        1129054208U, 1118437376U, 3175926989U, 1082130432U,
+        3178611343U, 3204448256U, 3212836864U, 0U,
+        1070176665U, 2576980378U, 1140850688U, 1022739087U,
+        1112276992U, 1118830592U, 3221749760U, 0U,
+        1083179008U, 1086324736U, 1066192077U, 0U,
+        1063675494U, 3213675725U, 0U, 1063675494U,
+        0U, 0U, 3207803699U, 0U,
+        0U, 0U, 1067030938U, 1112014848U,
+        1020054733U, 1061997773U, 1031798784U, 1075838976U,
+        0U, 0U, 0U, 0U,
+        0U, 0U, 3225419776U, 0U,
+        1065646817U, 1202590843U, 1072567419U, 0U,
+        1080705024U, 0U, 1066695393U, 1202590843U,
+        1063818100U, 3161095930U, 3219547750U, 1610612736U,
+        3214850129U, 3758096384U, 1069681737U, 3126736191U,
+        1072064102U, 1610612736U, 1072693248U, 0U,
+        1070805811U, 858993459U, 1072273817U, 2684354560U,
+        1076363264U, 0U, 3211159142U, 1032805417U,
+        1058642330U, 1106247680U, 1065856532U, 1105199104U,
+        1075052544U, 0U, 1080033280U, 1127481344U,
+        4294967295U, 4294967295U, 1077805056U, 0U,
+        1067366481U, 3951369912U, 1064346583U, 3181631242U,
+    };
+    use(words);
+}
+#pragma section code_type ".text"
+
+#pragma opt_propagation off
+void fn_1_633C0(FxObj633C0 *obj) {
+    FxVec b[4];
+    FxVec a;
+    FxVec d;
+
+    if (obj->unk10 == 0) {
+        u32 r;
+        r = lbl_1_data_1D628 * 0x41C64E6D + 0x3039;
+        lbl_1_data_1D628 = r;
+        obj->unk10 = (s32)(60.0f * (0.2f + (f32)((0.2f * ((f32)((r >> 16) & 0x7FFF) / 32767.0f)))));
+    }
+    fn_1_862D4(obj->unk18, &a);
+    fn_1_8645C(obj->unk18, &b);
+    lbl_8006DC6C(&b);
+    {
+        f32 fzgx_lc0_z;
+        f32 fzgx_lc0_y;
+        f32 fzgx_lc0_x;
+        fzgx_lc0_x = a.x;
+        fzgx_lc0_y = a.y;
+        fzgx_lc0_z = a.z;
+        *(f32 *)(0xE0000000 + 0x0C) = fzgx_lc0_x;
+        *(f32 *)(0xE0000000 + 0x1C) = fzgx_lc0_y;
+        *(f32 *)(0xE0000000 + 0x2C) = fzgx_lc0_z;
+    }
+    {
+    FxVec c = {0.0f, 0.0f, 0.0f};
+    c.x = obj->unk94.x;
+    c.y = obj->unk94.y;
+    c.z = obj->unk94.z;
+    d = c;
+    }
+    lbl_8006E1B0(&d, &obj->unk3c);
+    obj->unk60 = obj->unk3c;
+}
+#pragma opt_propagation reset
+/* fzgx:end fn_1_633C0 */
+
 /* fzgx:begin fn_1_63514 */
 // fn_1_63514: empty in retail (single blr).
 void fn_1_63514(void) {
