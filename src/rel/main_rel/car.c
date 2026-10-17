@@ -2288,6 +2288,104 @@ f32 fn_1_843BC(Fn1843BCObject *obj) {
 }
 /* fzgx:end fn_1_843BC */
 
+/* fzgx:begin fn_1_84408 noprologue */
+#include "types.h"
+#include "game/main_rel/car_test_types.h"
+#include "rel/main_rel/car.h"
+
+#define fn_1_84408 fn_1_84408_header_decl
+#undef fn_1_84408
+
+extern f32 lbl_1_rodata_3AB0[28];
+extern s8 fn_1_83D28(Fn183D28Car *, f32);
+
+#define CAR_LANE_BITS(car) ((car)->pad_378[0x14])
+
+static inline s8 fn_1_84408_findUp(Fn183D28Car *car, s8 start, s8 *result)
+{
+    s8 i;
+    s8 count;
+
+    count = 0;
+    if (start == 5) {
+        i = start;
+        /* Share the result assignment with the exhausted-search path. */
+        goto done;
+    }
+    if (start < 0 || start > 5) {
+        i = start < 0 ? 0 : (start > 5 ? 5 : start);
+        /* Share the result assignment with the exhausted-search path. */
+        goto done;
+    }
+    for (i = start; i < 5; i++, count++) {
+        if (CAR_LANE_BITS(car) & (1 << i)) {
+            *result = i;
+            return count;
+        }
+    }
+    i = -1;
+done:
+    *result = i;
+    return count;
+}
+
+static inline s8 fn_1_84408_findDown(Fn183D28Car *car, s8 start, s8 *count)
+{
+    s8 i;
+
+    *count = 0;
+    if (start == 5) {
+        return start;
+    }
+    if (start < 0 || start > 5) {
+        return start < 0 ? 0 : (start > 5 ? 5 : start);
+    }
+    for (i = start; i > -1; i--, (*count)++) {
+        if (CAR_LANE_BITS(car) & (1 << i)) {
+            return i;
+        }
+    }
+    return -1;
+}
+
+s8 fn_1_84408(CarTestCar *arg0)
+{
+    Fn183D28Car *car = (Fn183D28Car *)arg0;
+    s8 cur;
+    s8 upCount;
+    s8 down;
+    struct { s8 value; } up;
+    s8 downCount;
+
+    if (car->body == NULL) {
+        fn_1_84408_findUp(car, 3, &up.value);
+        fn_1_84408_findDown(car, 3, &downCount);
+    }
+    cur = fn_1_83D28(car, lbl_1_rodata_3AB0[0]);
+    upCount = fn_1_84408_findUp(car, cur, &up.value);
+    down = fn_1_84408_findDown(car, cur, &downCount);
+    if (up.value == -1 && down == -1) {
+        return 3;
+    }
+    if (up.value == -1) {
+        return down;
+    }
+    if (down == -1) {
+        return up.value;
+    }
+    if (upCount > downCount) {
+        return up.value;
+    }
+    if (upCount < downCount) {
+        return down;
+    }
+    if (lbl_1_bss_6D9A0[car->index] == 1) {
+        return up.value;
+    }
+    return down;
+}
+/* fzgx:end fn_1_84408 */
+
 /* fzgx:begin fn_1_84644 */
 s8 fn_1_84644(Fn184644Object *obj) {
     Vec3 v0;
