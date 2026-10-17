@@ -34699,6 +34699,18 @@
   },
   {
     "module": "main_rel",
+    "source": "rel/main_rel/burner/fn_1_30054.c",
+    "symbols": [
+      "fn_1_30054"
+    ],
+    "status": "nonmatching",
+    "mw_version": "GC/1.3.2",
+    "extra_cflags": [],
+    "tu": "rel/main_rel/burner.c",
+    "pool": true
+  },
+  {
+    "module": "main_rel",
     "source": "rel/main_rel/burner/fn_1_402A4.c",
     "symbols": [
       "fn_1_402A4"
@@ -36499,6 +36511,20 @@
     "tu": "rel/main_rel/car.c",
     "pool": {
       "@65": "jumptable_1_data_207F0"
+    }
+  },
+  {
+    "module": "main_rel",
+    "source": "rel/main_rel/car/fn_1_850C4.c",
+    "symbols": [
+      "fn_1_850C4"
+    ],
+    "status": "matching",
+    "mw_version": "GC/1.3.2",
+    "extra_cflags": [],
+    "tu": "rel/main_rel/car.c",
+    "pool": {
+      "@141": "lbl_1_rodata_3A50"
     }
   },
   {

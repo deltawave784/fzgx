@@ -554,6 +554,252 @@ extern u8 lbl_1_data_2C890__fzgx_offset_0[];
 extern u8 lbl_1_data_2C8B0__fzgx_offset_0[];
 extern u8 lbl_1_data_2C8D0__fzgx_offset_0[];
 
+/* fzgx:begin fn_1_30054 pool noprologue */
+#include "rel/main_rel/burner.h"
+
+extern u32 fn_1_435C(u32);
+extern u8 lbl_1_data_1EA28[12];
+extern void fn_1_F78AC(void *);
+extern s32 fn_1_3F8C(void *, void *, void *, u32);
+extern void fn_1_F78D8(void *);
+extern void fn_1_789E8(void);
+extern void fn_1_9A5CC(void);
+extern void fn_1_7E9C4(void);
+extern void fn_1_78EBC(void);
+extern void fn_1_9A7BC(void);
+typedef struct {
+    u32 unk_0;
+    u32 unk_4;
+    u32 unk_8;
+    u32 unk_C;
+    u32 unk_10;
+    u32 unk_14;
+    u32 unk_18;
+    u32 unk_1C;
+} BurnerWork;
+extern BurnerWork lbl_1_bss_8B5F4;
+extern u32 fn_1_46A8C(u32);
+extern void fn_1_3F75C(void);
+extern void fn_1_D19B8(void *);
+extern void fn_1_3F7A0(u32 *);
+extern u32 fn_1_46B44(void *, void *);
+extern void fn_1_411A4(u32);
+extern u32 fn_1_7ACDC(u8);
+extern u32 fn_1_12EF80(u8, s16 *, s16 *);
+extern void fn_1_3F8D0(void);
+extern void fn_1_3F8EC(void);
+extern u32 fn_1_E3324(void);
+extern void fn_1_E38D4(void);
+extern void fn_1_E39F0(void);
+extern void fn_1_E95B4(void);
+extern void fn_1_E49D4(void);
+extern void fn_1_154708(u32);
+extern void *fn_1_86254(int);
+extern u32 fn_1_C3A0C(void);
+extern void fn_1_43E8(u32);
+extern void fn_1_C42F4(void);
+extern void fn_1_43F4(void);
+extern u32 fn_80008E84(u32);
+/* read for its side effect only: retail loads it and discards the value */
+extern volatile u32 lbl_801A6410;
+extern u32 lbl_801A63C0;
+
+/* lbl_1_bss_3C00 + 0x30 */
+typedef struct {
+    u32 flags;
+    u8 pad_4[2];
+    u8 id;
+    u8 pad_7[0x1605];
+} BurnerSub;
+
+typedef struct {
+    u8 pad_0[0x163];
+    u8 unk_163;
+    u8 pad_164[0x1C];
+} BurnerSlot;
+
+/* burner.c .bss, retail lbl_1_bss_3C00.. in address order */
+static u32 fzgx_obj_lbl_1_bss_3C00;
+static u8 fzgx_bss_4[0x10];
+static s32 fzgx_bss_14;
+static u8 fzgx_bss_18[0x18];
+static BurnerSub fzgx_bss_30;
+static u8 fzgx_bss_163C[0x1000];
+static u8 fzgx_bss_263C[0x1F94C];
+static u32 fzgx_bss_21F88;
+static u8 fzgx_bss_21F8C[0x118];
+static u32 fzgx_bss_220A4;
+static s32 fzgx_bss_220A8;
+static s32 fzgx_bss_220AC;
+static s32 fzgx_bss_220B0;
+static s32 fzgx_bss_220B4;
+static s32 fzgx_bss_220B8;
+static s32 fzgx_bss_220BC;
+static s32 fzgx_bss_220C0;
+static s32 fzgx_bss_220C4;
+static s32 fzgx_bss_220C8;
+static u32 fzgx_bss_220CC;
+static BurnerSlot *fzgx_bss_220D0;
+static BurnerSlot fzgx_bss_220D4;
+static s32 fzgx_bss_22254;
+static s32 fzgx_bss_22258;
+static s32 fzgx_bss_2225C;
+static s32 fzgx_bss_22260;
+static s32 fzgx_bss_22264;
+static u32 fzgx_bss_22268;
+static u32 fzgx_bss_2226C;
+static u32 fzgx_bss_22270;
+static void (*fzgx_bss_22274)(void *);
+
+extern void fzgx_touch(void *);
+
+/* layout primer: fixes the .bss emission order to retail's address order */
+#pragma section RX ".fzgxpool"
+__declspec(section ".fzgxpool") void fzgx_bss_primer(void)
+{
+    fzgx_touch(&fzgx_obj_lbl_1_bss_3C00);
+    fzgx_touch(fzgx_bss_4);
+    fzgx_touch(&fzgx_bss_14);
+    fzgx_touch(fzgx_bss_18);
+    fzgx_touch(&fzgx_bss_30);
+    fzgx_touch(fzgx_bss_163C);
+    fzgx_touch(fzgx_bss_263C);
+    fzgx_touch(&fzgx_bss_21F88);
+    fzgx_touch(fzgx_bss_21F8C);
+    fzgx_touch(&fzgx_bss_220A4);
+    fzgx_touch(&fzgx_bss_220A8);
+    fzgx_touch(&fzgx_bss_220AC);
+    fzgx_touch(&fzgx_bss_220B0);
+    fzgx_touch(&fzgx_bss_220B4);
+    fzgx_touch(&fzgx_bss_220B8);
+    fzgx_touch(&fzgx_bss_220BC);
+    fzgx_touch(&fzgx_bss_220C0);
+    fzgx_touch(&fzgx_bss_220C4);
+    fzgx_touch(&fzgx_bss_220C8);
+    fzgx_touch(&fzgx_bss_220CC);
+    fzgx_touch(&fzgx_bss_220D0);
+    fzgx_touch(&fzgx_bss_220D4);
+    fzgx_touch(&fzgx_bss_22254);
+    fzgx_touch(&fzgx_bss_22258);
+    fzgx_touch(&fzgx_bss_2225C);
+    fzgx_touch(&fzgx_bss_22260);
+    fzgx_touch(&fzgx_bss_22264);
+    fzgx_touch(&fzgx_bss_22268);
+    fzgx_touch(&fzgx_bss_2226C);
+    fzgx_touch(&fzgx_bss_22270);
+    fzgx_touch(&fzgx_bss_22274);
+}
+
+static inline void *fn_1_30054_name(u8 id)
+{
+    BOOL special = FALSE;
+    if (id == 5 || id == 0x15) {
+        special = TRUE;
+    }
+    if (special) {
+        return lbl_1_data_1EA28;
+    }
+    return ((void **)lbl_1_data_2A8D8)[((u8 *)&lbl_1_data_2B0D4)[id]];
+}
+
+static inline u32 fn_1_30054_tick(u32 x)
+{
+    lbl_801A6410;
+    return fn_80008E84(x);
+}
+
+static inline u32 fn_1_30054_rand(void)
+{
+    lbl_801A6410;
+    lbl_801A63C0 = lbl_801A63C0 * 0x676A4B6B + 0x33CB;
+    return (lbl_801A63C0 >> 16) & 0x7fff;
+}
+
+static inline void fn_1_30054_prepare(void)
+{
+    /* Volatile view keeps the pre-call state read separate from the post-call access. */
+    fn_1_46A8C(((volatile BurnerWork *)&lbl_1_bss_8B5F4)->unk_4);
+}
+
+void fn_1_30054(void)
+{
+    s16 a;
+    s16 b;
+    char *str;
+    u32 t;
+    void *name;
+
+    str = (char *)lbl_1_data_5730;
+
+    fn_1_435C(fzgx_bss_220A4);
+    name = fn_1_30054_name(fzgx_bss_30.id);
+    fzgx_bss_220A8 = fn_1_3F8C(str + 0xbe0, fn_1_F78AC, name, 5);
+    name = fn_1_30054_name(fzgx_bss_30.id);
+    fzgx_bss_220AC = fn_1_3F8C(str + 0xbe0, fn_1_F78AC, name, 0x18);
+    fzgx_bss_220B0 = fn_1_3F8C(str + 0xbf0, fn_1_F78D8,
+                               ((void **)lbl_1_data_2A92C)[((u8 *)&lbl_1_data_2B0D4)[fzgx_bss_30.id]], 0x10);
+    fn_1_435C(fzgx_bss_21F88);
+    fzgx_bss_220B4 = fn_1_3F8C(str + 0xc00, fn_1_789E8, NULL, 0x15);
+    fzgx_bss_220B8 = fn_1_3F8C(str + 0xc0c, fn_1_9A5CC, NULL, 0x17);
+    fn_1_435C(fzgx_bss_220A4);
+    fzgx_bss_220BC = fn_1_3F8C(str + 0xc1c, fn_1_7E9C4, NULL, 4);
+    fzgx_bss_220C0 = fn_1_3F8C(str + 0xc24, fn_1_78EBC, NULL, 7);
+    fzgx_bss_220C4 = fn_1_3F8C(str + 0xc30, fn_1_9A7BC, NULL, 0xa);
+
+    if (lbl_1_bss_960 != 10 && lbl_1_bss_960 != 12) {
+        fn_1_30054_prepare();
+        lbl_1_bss_8B5F4.unk_10 = lbl_1_bss_8B5F4.unk_4;
+        fn_1_3F75C();
+        if (fzgx_bss_220C8 != 0 && (u8)str[0x44c] != 2) {
+            fn_1_D19B8(fzgx_bss_163C);
+        }
+        fn_1_46B44(fn_1_3F7A0, &lbl_1_bss_8B5F4.unk_14);
+    }
+
+    fn_1_411A4(2);
+    lbl_801A6410;
+    t = fn_80008E84(fzgx_bss_220CC);
+    fn_1_7ACDC(fzgx_bss_30.id);
+    fn_1_30054_tick(t);
+
+    fn_1_12EF80(fzgx_bss_30.id, &a, &b);
+    if (a != -1) {
+        fzgx_bss_220D0 = (BurnerSlot *)((u8 *)&lbl_1_bss_7F0C0 + a * 0x900 + b * 0x180 + 0xf8);
+    } else {
+        fzgx_bss_220D0 = &fzgx_bss_220D4;
+        fzgx_bss_220D0->unk_163 = 0;
+    }
+
+    fn_1_3F8D0();
+    fn_1_435C(fzgx_bss_220A4);
+    fzgx_bss_22254 = fn_1_3F8C(str + 0xc40, fn_1_3F8EC, NULL, 0x1c);
+    fn_1_E3324();
+    fn_1_435C(fzgx_bss_220A4);
+    fzgx_bss_22258 = fn_1_3F8C(str + 0xc50, fn_1_E38D4, NULL, 9);
+    fzgx_bss_2225C = fn_1_3F8C(str + 0xc5c, fn_1_E39F0, NULL, 0xb);
+    fzgx_bss_22260 = fn_1_3F8C(str + 0xc6c, fn_1_E95B4, NULL, 0);
+    fn_1_435C(fzgx_bss_21F88);
+    fzgx_bss_22264 = fn_1_3F8C(str + 0xc80, fn_1_E49D4, NULL, 8);
+    lbl_801A6410;
+    fn_1_154708(fzgx_bss_220A4);
+    lbl_801A6410;
+    fn_1_86254(0);
+    fn_1_C3A0C();
+    fn_1_435C(fzgx_bss_21F88);
+    fn_1_43E8(0x101);
+    fzgx_bss_14 = fn_1_3F8C(str + 0xc8c, fn_1_C42F4, fn_1_86254(0), 2);
+    fn_1_43F4();
+
+    fzgx_bss_22268 = fn_1_30054_rand();
+    fzgx_bss_2226C = 0;
+    fzgx_bss_22270 = 0;
+    fzgx_bss_30.flags &= ~0x4000;
+    if (fzgx_bss_22274 != NULL) {
+        fzgx_bss_22274(&fzgx_bss_30);
+    }
+}
+/* fzgx:end fn_1_30054 */
+
 /* fzgx:begin fn_1_402A4 */
 s16 fn_1_402A4(u32 index) {
     u8 *table0;

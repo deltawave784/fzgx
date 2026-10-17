@@ -7571,3 +7571,9 @@ rel/main_rel/stcoli/fn_1_14F18.c:
 
 rel/main_rel/enemy_ctrl/fn_1_CB028.c:
 	.text       start:0x000CB028 end:0x000CB404 align:4
+
+rel/main_rel/car/fn_1_850C4.c:
+	.text       start:0x000850C4 end:0x000854D4 align:4
+
+rel/main_rel/burner/fn_1_30054.c:
+	.text       start:0x00030054 end:0x000304A8 align:4
