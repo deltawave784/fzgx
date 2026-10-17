@@ -537,6 +537,250 @@ void fn_1_1300(void) {
 }
 /* fzgx:end fn_1_1300 */
 
+/* fzgx:begin fn_1_1304 pool noprologue */
+#include "types.h"
+
+extern const struct fn_1_1304_lbl_1_rodata_9C_pool {
+    f32 unk_0;
+} lbl_1_rodata_9C;
+
+typedef struct Sig_fn_8001CF80_PADStatus {
+    u16 button;
+    s8 stickX;
+    s8 stickY;
+    s8 substickX;
+    s8 substickY;
+    u8 triggerLeft;
+    u8 triggerRight;
+    u8 analogA;
+    u8 analogB;
+    s8 err;
+} Sig_fn_8001CF80_PADStatus;
+
+typedef struct PadSrc {
+    u16 button;
+    u8 flags;
+    u8 b3;
+    u8 b4;
+    u8 b5;
+    u8 b6;
+    u8 b7;
+    u8 b8;
+    s8 err;
+} PadSrc;
+
+
+/* TU .data, in retail order (addressed off one section base) */
+char lbl_1_data_2A40[] = "OVERTAKE";
+char lbl_1_data_2A4C[] = "JUMP";
+char lbl_1_data_2A54[] = "ENEMYHIT";
+char lbl_1_data_2A60[] = "WALLHIT";
+char lbl_1_data_2A68[] = "SIDEBYSIDE";
+char lbl_1_data_2A74[] = "START";
+char lbl_1_data_2A7C[] = "GOAL";
+char lbl_1_data_2A84[0x3C] = "LAP";
+u8 lbl_1_data_2AC0[0x80] = {
+    0x4B, 0x00, 0x35, 0x35, 0x00, 0x4B, 0xCB, 0x35, 0xB5, 0x00, 0xCB, 0xCB, 0x00, 0xB5, 0x35, 0xCB,
+    0x4B, 0x00, 0x35, 0x35, 0x00, 0x4B, 0xCB, 0x35, 0xB5, 0x00, 0xCB, 0xCB, 0x00, 0xB5, 0x35, 0xCB,
+    0x4B, 0x00, 0x35, 0x35, 0x00, 0x4B, 0xCB, 0x35, 0xB5, 0x00, 0xCB, 0xCB, 0x00, 0xB5, 0x35, 0xCB,
+    0x4B, 0x00, 0x35, 0x35, 0x00, 0x4B, 0xCB, 0x35, 0xB5, 0x00, 0xCB, 0xCB, 0x00, 0xB5, 0x35, 0xCB,
+    0x4B, 0x00, 0x35, 0x35, 0x00, 0x4B, 0xCB, 0x35, 0xB5, 0x00, 0xCB, 0xCB, 0x00, 0xB5, 0x35, 0xCB,
+    0x4B, 0x00, 0x35, 0x35, 0x00, 0x4B, 0xCB, 0x35, 0xB5, 0x00, 0xCB, 0xCB, 0x00, 0xB5, 0x35, 0xCB,
+    0x4B, 0x00, 0x35, 0x35, 0x00, 0x4B, 0xCB, 0x35, 0xB5, 0x00, 0xCB, 0xCB, 0x00, 0xB5, 0x35, 0xCB,
+    0x4B, 0x00, 0x35, 0x35, 0x00, 0x4B, 0xCB, 0x35, 0xB5, 0x00, 0xCB, 0xCB, 0x00, 0xB5, 0x35, 0xCB,
+};
+u8 lbl_1_data_2B40[0x10] = { 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8 };
+u8 lbl_1_data_2B50[8] = { 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78, 0x78 };
+u8 lbl_1_data_2B58[8] = { 6, 6, 6, 6, 6, 6, 6, 6 };
+u8 lbl_1_data_2B60[4] = { 1, 1, 1, 1 };
+u8 lbl_1_data_2B64 = 1;
+u32 lbl_1_data_2B68[4] = { 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF };
+u8 lbl_1_data_2B78[4] = { 1, 1, 1, 1 };
+
+/* TU .bss: reset/recalibrate masks, SI types, held buttons */
+u32 lbl_1_bss_978;
+u32 lbl_1_bss_97C;
+u32 lbl_1_bss_980[4];
+u16 lbl_1_bss_990[4];
+
+extern void fn_1_15665C(u32, s32);
+extern void fn_1_156730(s32);
+extern void fn_1_D332C(Sig_fn_8001CF80_PADStatus *);
+extern void fn_80008BA8(void *, void *, u32);
+extern u32 fn_8001CF80(Sig_fn_8001CF80_PADStatus *);
+extern u32 SIProbe(s32);
+extern s32 fn_8006B294(s32, u32 *);
+extern void fn_8006B470(void *);
+extern void fn_80008BEC(void *, int, u32);
+extern BOOL fn_8001CC64(u32);
+extern int fn_8001CB64(u32);
+
+#define resetBits lbl_1_bss_978
+#define recalBits lbl_1_bss_97C
+#define siType lbl_1_bss_980
+#define heldButtons lbl_1_bss_990
+#define padReady lbl_1_data_2B64
+#define gbaIds lbl_1_data_2B68
+#define gbaStates lbl_1_data_2B78
+
+/* layout primer: touches the .bss objects in retail order */
+
+#pragma opt_loop_invariants off
+
+#pragma section code_type ".fzgxpool"
+static void fzgx_base_order_data(void) {
+    volatile u8 s;  /* fzgx-allow: S2 layout primer sink: the TU references .data before its other sections */
+    s = *(u8 *)&lbl_1_data_2A40;
+    s = *(u8 *)&lbl_1_data_2A4C;
+    s = *(u8 *)&lbl_1_data_2A54;
+    s = *(u8 *)&lbl_1_data_2A60;
+    s = *(u8 *)&lbl_1_data_2A68;
+    s = *(u8 *)&lbl_1_data_2A74;
+    s = *(u8 *)&lbl_1_data_2A7C;
+    s = *(u8 *)&lbl_1_data_2A84;
+    s = *(u8 *)&lbl_1_data_2AC0;
+    s = *(u8 *)&lbl_1_data_2B40;
+    s = *(u8 *)&lbl_1_data_2B50;
+    s = *(u8 *)&lbl_1_data_2B58;
+    s = *(u8 *)&lbl_1_data_2B60;
+    s = *(u8 *)&lbl_1_data_2B64;
+    s = *(u8 *)&lbl_1_data_2B68;
+    s = *(u8 *)&lbl_1_data_2B78;
+}
+#pragma section code_type ".text"
+
+#pragma section RX ".fzgxpool"
+__declspec(section ".fzgxpool") void fzgx_primer(void) {
+    lbl_1_bss_978 = 0;
+    lbl_1_bss_97C = 0;
+    lbl_1_bss_980[0] = 0;
+    lbl_1_bss_990[0] = 0;
+}
+
+void fn_1_1304(Sig_fn_8001CF80_PADStatus *pads) {
+    s32 i;
+    u32 r;
+    u32 chan;
+    u32 bits;
+    u32 t;
+    Sig_fn_8001CF80_PADStatus old[4];
+    PadSrc src[4];
+    u32 lab_t2;
+
+    fn_80008BA8(old, pads, sizeof(old));
+    fn_8001CF80(pads);
+
+    for (i = 0; i < 4; i++) {
+        siType[i] = SIProbe(i);
+        switch (siType[i]) {
+        case 0x08000000:
+            if (gbaIds[i] == -1) {
+                fn_8006B294(i, &gbaIds[i]);
+                fn_1_15665C(gbaIds[i], i);
+                gbaStates[i] = 0;
+            }
+            break;
+        case 0x09000000:
+        case 0x88000000:
+        case 0x8B100000:
+            if (gbaStates[i] != 1) {
+                gbaStates[i] = 1;
+            }
+            break;
+        case 0x80:
+        case 0x8:
+        default:
+            if (gbaStates[i] != 0) {
+                if (gbaIds[i] != -1) {
+                    fn_1_156730(i);
+                    gbaIds[i] = -1;
+                }
+                gbaStates[i] = 0;
+            }
+            break;
+        }
+    }
+
+    if (gbaIds[0] != -1 || gbaIds[1] != -1 || gbaIds[2] != -1 || gbaIds[3] != -1) {
+        fn_8006B470(src);
+        for (i = 0; i < 4; i++) {
+            if (src[i].err != -1) {
+                if (src[i].flags & 8) {
+                    gbaStates[i] = 3;
+                } else {
+                    gbaStates[i] = 2;
+                }
+                pads[i].button = src[i].button;
+                pads[i].stickX = src[i].b3;
+                pads[i].stickY = 0;
+                pads[i].substickX = 0;
+                pads[i].substickY = 0;
+                pads[i].triggerLeft = src[i].b7;
+                pads[i].triggerRight = src[i].b8;
+                if (src[i].flags & 8) {
+                    pads[i].analogA = lbl_1_rodata_9C.unk_0 * src[i].b4;
+                    pads[i].analogB = lbl_1_rodata_9C.unk_0 * src[i].b5;
+                } else {
+                    pads[i].analogA = 0;
+                    pads[i].analogB = 0;
+                }
+                pads[i].err = 0;
+            }
+        }
+    }
+
+    for (i = 0; i < 4; i++) {
+        if (pads[i].err == -3) {
+            if (old[i].err) {
+                fn_80008BEC(&pads[i], 0, 12);
+            } else {
+                lab_t2 = 12;
+                fn_80008BA8(&pads[i], &old[i], lab_t2);
+            }
+        }
+    }
+
+    padReady = 1;
+    for (i = 0; i < 4; i++) {
+        pads[i].button |= heldButtons[i];
+        heldButtons[i] = 0;
+    }
+    for (i = 0; i < 4; i++) {
+        if (pads[i].err == -1) {
+            resetBits |= 0x80000000 >> i;
+        }
+    }
+
+    if (recalBits != 0) {
+        bits = recalBits;
+        while (bits != 0) {
+            chan = __cntlzw(bits);
+            if (pads[chan].err) {
+                recalBits &= ~(0x80000000 >> chan);
+            }
+            bits &= ~(0x80000000 >> chan);
+        }
+        if (recalBits != 0) {
+            r = fn_8001CC64(recalBits);
+            t = (s32)(-r | r) >> 31;
+            r = resetBits | recalBits;
+            recalBits = 0;
+            resetBits = r & ~t;
+        }
+    }
+
+    if (resetBits != 0) {
+        if (fn_8001CB64(resetBits)) {
+            recalBits = resetBits;
+        }
+        resetBits = 0;
+    }
+
+    fn_1_D332C(pads);
+}
+#pragma opt_loop_invariants reset
+/* fzgx:end fn_1_1304 */
+
 /* fzgx:begin fn_1_17C8 pool noprologue */
 #include "types.h"
 

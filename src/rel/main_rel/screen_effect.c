@@ -2057,6 +2057,175 @@ void fn_1_789AC(void) {
 }
 /* fzgx:end fn_1_789AC */
 
+/* fzgx:begin fn_1_789E8 pool noprologue */
+#include "types.h"
+#include "game/main_rel/car_types.h"
+#include "game/vec3.h"
+#include "rel/main_rel/screen_effect.h"
+
+/* Colour/intensity key of one fade channel. */
+typedef struct {
+    s8 unk_0;
+    f32 unk_4;
+    f32 unk_8;
+    u8 unk_C;
+    u8 unk_D;
+    u8 unk_E;
+    s8 unk_F;
+    s32 unk_10;
+} ScreenFadeKey;
+
+/* A key plus the preset it is heading to, interpolated over 32 frames. */
+typedef struct ScreenFadeChannel {
+    ScreenFadeKey key;
+    struct ScreenFadeChannel *src;
+} ScreenFadeChannel;
+
+/* file-scope objects of the retail TU, in retail order: MWCC addresses them off one section base */
+Obj_1_bss_6D600 fzgx_obj_lbl_1_bss_6D600;
+static ScreenFadeChannel sFadeCur[4];
+static ScreenFadeChannel sFadePrev[4];
+static ScreenFadeChannel sFadeNext[4];
+static ScreenFadeChannel sFadeOn;
+static ScreenFadeChannel sFadeOff;
+
+#pragma section code_type ".fzgxpool"
+static void fzgx_bss_layout(void) {
+    volatile u8 s;  /* fzgx-allow: S2 layout primer sink: MWCC emits .bss objects in first-access order */
+    s = *(u8 *)&fzgx_obj_lbl_1_bss_6D600;
+    s = *(u8 *)&sFadeCur;
+    s = *(u8 *)&sFadePrev;
+    s = *(u8 *)&sFadeNext;
+    s = *(u8 *)&sFadeOn;
+    s = *(u8 *)&sFadeOff;
+}
+#pragma section code_type ".text"
+
+extern s16 fn_1_6B48(s32);
+extern s32 fn_1_58C4(void);
+extern s32 fn_1_6F84(void);
+extern u32 fn_1_1FB80(Vec3f *, u32);
+extern u32 fn_1_7A6B4(void);
+extern u32 fn_1_7AA50(f32);
+extern void fn_1_681C(u32, u32 *);
+extern void fn_1_7A9B8(void);
+extern void fn_1_862D4(int, Triple *);
+
+#pragma push
+#pragma opt_propagation off
+static inline int fade_more(u32 channel, s32 *arg) {
+    u32 count = fn_1_58C4();
+    *arg = channel;
+    return channel < count;
+}
+#pragma pop
+
+void fn_1_789E8(void) {
+    ScreenFadeChannel *cur;
+    ScreenFadeChannel *prev;
+    ScreenFadeChannel *next;
+    u32 i;
+    s32 idx;
+    ScreenFadeChannel *src;
+    f32 t;
+    f32 s;
+    Vec3f pos;
+
+    if (lbl_1_data_1DFA4.unk_8 != -1) {
+        lbl_1_data_1DFA4.unk_0 = (s32)lbl_1_data_1DFA4.unk_4;
+        fn_1_7A6B4();
+        fn_1_7A9B8();
+        if (lbl_1_bss_3BE0 != NULL) {
+            if (lbl_1_bss_3BE0->unk_80 != 0) {
+                fn_1_7AA50(lbl_1_data_1DFA4.unk_0);
+            }
+            cur = sFadeCur;
+            prev = sFadePrev;
+            next = sFadeNext;
+            for (i = 0; fade_more(i, &idx); cur++, prev++, next++, i++) {
+                idx = fn_1_6B48(idx);
+                if (idx >= 0) {
+                    if (fn_1_6F84() != 0) {
+                        fn_1_681C((u8)i, (u32 *)&pos);
+                    } else {
+                        fn_1_862D4(idx, (Triple *)&pos);
+                    }
+                    if (fn_1_1FB80(&pos, 0x4000) & 0x4000) {
+                        src = &sFadeOn;
+                    } else {
+                        src = &sFadeOff;
+                    }
+                } else {
+                    src = &sFadeOff;
+                }
+                if (src != cur->src) {
+                    prev->key = cur->key;
+                    prev->src = cur->src;
+                    *cur = *src;
+                    *next = *src;
+                    if (prev->key.unk_F == 0) {
+                        prev->key.unk_0 = next->key.unk_0;
+                        prev->key.unk_4 = next->key.unk_8;
+                        prev->key.unk_8 = next->key.unk_8 + (next->key.unk_8 - next->key.unk_4);
+                        prev->key.unk_C = next->key.unk_C;
+                        prev->key.unk_D = next->key.unk_D;
+                        prev->key.unk_E = next->key.unk_E;
+                    }
+                    if (next->key.unk_F == 0) {
+                        next->key.unk_0 = prev->key.unk_0;
+                        cur->key.unk_F = prev->key.unk_F;
+                        next->key.unk_4 = prev->key.unk_8;
+                        next->key.unk_8 = prev->key.unk_8 + (prev->key.unk_8 - prev->key.unk_4);
+                        next->key.unk_C = prev->key.unk_C;
+                        next->key.unk_D = prev->key.unk_D;
+                        next->key.unk_E = prev->key.unk_E;
+                    }
+                    cur->src = src;
+                    cur->key.unk_10 = (next->key.unk_0 == prev->key.unk_0) ? 0 : 32;
+                }
+                if (next->key.unk_F != 0) {
+                    *next = *src;
+                }
+                src = cur->src;
+                if (cur->key.unk_10 < 32) {
+                    cur->key.unk_10++;
+                } else {
+                    cur->key.unk_F = src->key.unk_F;
+                }
+                t = cur->key.unk_10 / 32.0f;
+                s = 1.0f - t;
+                if (prev->key.unk_4 != next->key.unk_4) {
+                    cur->key.unk_4 = (f32)(s * prev->key.unk_4) + (f32)(t * next->key.unk_4);
+                } else {
+                    cur->key.unk_4 = next->key.unk_4;
+                }
+                if (prev->key.unk_8 != next->key.unk_8) {
+                    cur->key.unk_8 = (f32)(s * prev->key.unk_8) + (f32)(t * next->key.unk_8);
+                } else {
+                    cur->key.unk_8 = next->key.unk_8;
+                }
+                if (prev->key.unk_C != next->key.unk_C) {
+                    cur->key.unk_C = (f32)(s * prev->key.unk_C) + (f32)(t * next->key.unk_C);
+                } else {
+                    cur->key.unk_C = next->key.unk_C;
+                }
+                if (prev->key.unk_D != next->key.unk_D) {
+                    cur->key.unk_D = (f32)(s * prev->key.unk_D) + (f32)(t * next->key.unk_D);
+                } else {
+                    cur->key.unk_D = next->key.unk_D;
+                }
+                if (prev->key.unk_E != next->key.unk_E) {
+                    cur->key.unk_E = (f32)(s * prev->key.unk_E) + (f32)(t * next->key.unk_E);
+                } else {
+                    cur->key.unk_E = next->key.unk_E;
+                }
+            }
+        }
+        lbl_1_data_1DFA4.unk_4++;
+    }
+}
+/* fzgx:end fn_1_789E8 */
+
 /* fzgx:begin fn_1_78EBC noprologue */
 #include "types.h"
 #include "rel/main_rel/screen_effect.h"
