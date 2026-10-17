@@ -1666,6 +1666,60 @@ void fn_1_43E08(Obj *object, Entry *entry, u16 frameA, u16 frameB, f32 value) {
 #pragma opt_propagation reset
 /* fzgx:end fn_1_43E08 */
 
+/* fzgx:begin fn_1_449A8 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/motasglist.h"
+#include "dolphin/hw_regs.h"
+#include "game/main_rel/motasglist_types.h"
+#include "psvec.h"
+
+typedef struct {
+    f32 x;
+    f32 y;
+    f32 z;
+} Sig_fn_8006E978_Vec3;
+
+typedef struct {
+    f32 m[3][4];
+} Fn449A8Mtx;
+
+typedef struct {
+    f32 x, y, z, w;
+} Fn449A8Quat;
+
+/* The current matrix is held in the Gekko locked cache. */
+enum { FN449A8_LOCKED_CACHE_BASE = 0xE0000000 };
+
+extern void lbl_8006DB74(void *);
+extern void fn_8006E978(f32 *, Sig_fn_8006E978_Vec3 *, Sig_fn_8006E978_Vec3 *);
+extern void mathutil_mtxA_from_quat(void *);
+extern void lbl_8006DFC4(void *);
+extern Fn449A8Mtx *lbl_801A6D00[];
+
+void fn_1_449A8(void *vector) {
+    Fn449A8Mtx mtx;
+    Sig_fn_8006E978_Vec3 scale;
+    Sig_fn_8006E978_Vec3 translation;
+    Fn449A8Quat quat;
+
+    scale.x = lbl_801A6D00[0]->m[0][0];
+    scale.y = lbl_801A6D00[0]->m[1][0];
+    scale.z = lbl_801A6D00[0]->m[2][0];
+    lbl_8006DB74(&mtx);
+    psvec_set(&translation,
+        *(f32 *)(FN449A8_LOCKED_CACHE_BASE + 0x2C),
+        *(f32 *)(FN449A8_LOCKED_CACHE_BASE + 0x1C),
+        *(f32 *)(FN449A8_LOCKED_CACHE_BASE + 0x0C));
+    fn_8006E978(&quat.x, &scale, vector);
+    mathutil_mtxA_from_quat(&quat);
+    lbl_8006DFC4(&mtx);
+    *(f32 *)(FN449A8_LOCKED_CACHE_BASE + 0x0C) = translation.x;
+    *(f32 *)(FN449A8_LOCKED_CACHE_BASE + 0x1C) = translation.y;
+    *(f32 *)(FN449A8_LOCKED_CACHE_BASE + 0x2C) = translation.z;
+}
+/* fzgx:end fn_1_449A8 */
+
 /* fzgx:begin fn_1_451D4 */
 void fn_1_451D4(void) {
     lbl_1_bss_384CC = 0;
