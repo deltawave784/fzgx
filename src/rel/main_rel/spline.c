@@ -499,6 +499,95 @@ void fn_1_F7338(int arg0, void *arg1, void *arg2) {
 }
 /* fzgx:end fn_1_F7338 */
 
+/* fzgx:begin fn_1_F73A8 noprologue */
+#include "types.h"
+#include "rel/main_rel/spline.h"
+
+void fn_1_F73A8(s32 idx, s32 kind, s32 val) {
+    Obj_1_bss_7F02C *p;
+    if ((lbl_1_bss_7F028 & 1) == 0) return;
+    if (kind == 0) return;
+    if (idx < 0 || idx >= 4) return;
+    {
+        if (val > 180) return;
+        if ((lbl_1_data_3E8F0 & (1 << idx)) == 0) return;
+        if (kind == 6 || kind == 5) val = 0;
+        p = (Obj_1_bss_7F02C *)((u8 *)&lbl_1_bss_7F02C + (idx << 2));
+        switch (p->unk_0) {
+        case 6:
+            if (kind == 5) p->unk_0 = kind;
+            break;
+        case 1:
+            switch (kind) {
+            case 5:
+            case 6:
+                p->unk_0 = kind;
+                break;
+            case 1:
+                if (p->unk_2 < val) {
+                    p->unk_0 = kind;
+                    p->unk_2 = val;
+                }
+                break;
+            }
+            break;
+        case 2:
+            switch (kind) {
+            case 5:
+            case 6:
+                p->unk_0 = kind;
+                break;
+            case 2:
+            case 3:
+            case 4:
+                if (p->unk_2 < val) break;
+            case 1:
+                p->unk_0 = kind;
+                p->unk_2 = val;
+                break;
+            }
+            break;
+        case 3:
+            switch (kind) {
+            case 5:
+            case 6:
+                p->unk_0 = kind;
+                break;
+            case 3:
+            case 4:
+                if (p->unk_2 < val) break;
+            case 1:
+            case 2:
+                p->unk_0 = kind;
+                p->unk_2 = val;
+                break;
+            }
+            break;
+        case 4:
+            switch (kind) {
+            case 5:
+            case 6:
+                p->unk_0 = kind;
+                break;
+            case 4:
+                if (p->unk_2 < val) break;
+            case 1:
+            case 2:
+            case 3:
+                p->unk_0 = kind;
+                p->unk_2 = val;
+                break;
+            }
+            break;
+        case 0:
+            p->unk_0 = kind;
+            p->unk_2 = val;
+            break;
+        }
+    }
+}
+/* fzgx:end fn_1_F73A8 */
+
 /* fzgx:begin fn_1_F755C */
 void fn_1_F755C(u8 value) {
     lbl_1_data_3E8F0 = value;

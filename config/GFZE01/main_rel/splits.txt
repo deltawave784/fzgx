@@ -7976,3 +7976,6 @@ rel/main_rel/live_camera/fn_1_12FD4.c:
 
 rel/main_rel/burner/fn_1_9A508.c:
 	.text       start:0x0009A508 end:0x0009A578 align:4
+
+rel/main_rel/spline/fn_1_F73A8.c:
+	.text       start:0x000F73A8 end:0x000F755C align:4
