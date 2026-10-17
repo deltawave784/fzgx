@@ -7613,3 +7613,9 @@ rel/main_rel/camera/fn_1_AEB8.c:
 
 rel/main_rel/ranking/fn_1_156F54.c:
 	.text       start:0x00156F54 end:0x00157070 align:4
+
+rel/main_rel/font/fn_1_492F0.c:
+	.text       start:0x000492F0 end:0x00049410 align:4
+
+rel/main_rel/font/fn_1_55C48.c:
+	.text       start:0x00055C48 end:0x00055D6C align:4

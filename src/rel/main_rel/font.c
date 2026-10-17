@@ -196,6 +196,57 @@ void fn_1_48C28(int idx) {
 }
 /* fzgx:end fn_1_48C28 */
 
+/* fzgx:begin fn_1_492F0 noprologue */
+#include "dolphin/types.h"
+
+const f32 lbl_1_rodata_FD0[60] = {
+    0.0f,0.0f,0.0f,0.0f,0.0f,0.0f,0.0f,0.0f,
+    0.0f,0.0f,0.0f,0.0f,0.0f,0.0f,0.0f,0.0f,
+    -1.0f,-1.0f,1.0f,-1.0f,-1.0f,1.0f,1.0f,1.0f,
+    2.6f,0.0f,2.6f,0.0f,0.0f,0.0f,0.0f,0.0f,
+    1.6f,-1.0f,3.6f,-1.0f,-1.0f,1.0f,1.0f,1.0f,
+    -1.4f,3.7f,1.3f,0.0f,1.6f,0.5f,-0.9f,-0.8f,
+    0.0f,0.0f,0.0f,0.0f,0.0f,0.0f,0.0f,0.0f,
+    0.0f,0.0f,0.0f,0.0f
+};
+const f32 lbl_1_rodata_10C0[2] = {0.0f, 0.0f};
+typedef struct ShapeParams {
+    u32 flags;
+    u8 pad[12];
+    f32 width;
+    f32 height;
+} ShapeParams;
+
+#pragma push
+#pragma section code_type ".fzgxpool"
+void fzgx_fn_1_492F0_pool_primer(f64 *p, f32 *q)
+{
+    p[0] = 0.5;
+    q[0] = 0.75f;
+    q[1] = 1.0f;
+}
+#pragma pop
+
+#pragma fp_contract off
+void fn_1_492F0(ShapeParams *arg, f32 out[4][3])
+{
+    f32 width = 1.0f + arg->width;
+    f32 height = 1.0f + arg->height;
+    s32 index = (s8)(arg->flags >> 24);
+    if (index) {
+        const f32 *row = &lbl_1_rodata_FD0[index * 8];
+        out[0][0] += 0.5 * row[0] * width;
+        out[0][1] += 0.5 * row[1] * height;
+        out[1][0] += 0.5 * row[2] * width;
+        out[1][1] += 0.5 * row[3] * height;
+        out[2][0] += 0.5 * row[4] * width;
+        out[2][1] += 0.5 * row[5] * height;
+        out[3][0] += 0.5 * row[6] * width;
+        out[3][1] += 0.5 * row[7] * height;
+    }
+}
+/* fzgx:end fn_1_492F0 */
+
 /* fzgx:begin fn_1_49410 */
 struct fn_1_49410_lbl_1_rodata_FD0 {
     u8 pad_0[0xF0];
@@ -4609,6 +4660,86 @@ void fn_1_55A84(FontCallback callback, FontInput *value, void *arg2, void *arg3)
     }
 }
 /* fzgx:end fn_1_55A84 */
+
+/* fzgx:begin fn_1_55C48 noprologue */
+#include "types.h"
+#include "game/main_rel/font_types.h"
+#include "game/vec3.h"
+#include "rel/main_rel/font.h"
+
+typedef struct {
+    u8 pad_00[0x1a];
+    u16 count_a;
+    u16 count_b;
+} Sig_fn_80077F8C_Sig_fn_800786B0_Fn800786B0Arg0;
+
+struct fn_1_55C48_Chunk { u8 data[48]; };
+struct fn_1_55C48_Data {
+    u8 pad_00[224];
+    struct fn_1_55C48_Chunk chunks[4];
+};
+struct fn_1_55C48_lbl_801A66CC {
+    struct fn_1_55C48_Data *unk_0;
+};
+extern struct fn_1_55C48_lbl_801A66CC lbl_801A66CC;
+extern void fn_1_56470(fn_1_56470_FontState *);
+extern void fn_1_56554(void);
+extern void fn_1_7BEAC(u32);
+extern void fn_80072558(void);
+extern void fn_800749B0(s32, void *);
+extern void fn_80077F8C(Sig_fn_80077F8C_Sig_fn_800786B0_Fn800786B0Arg0 *);
+extern void lbl_8006DBAC(Vec3 *);
+
+void fn_1_55C48(void *arg0) {
+    Obj_1_bss_6C7CC *p_lbl_1_bss_6C7CC;
+    struct fn_1_55C48_lbl_801A66CC *p_lbl_801A66CC;
+    void *v1;
+    u32 v2;
+    void *v5;
+    s32 v0;
+    s32 v4;
+    s32 v6;
+    u32 v8;
+    lbl_8006DBAC((Vec3 *)((u8 *)arg0 + 12));
+    fn_80072558();
+    fn_1_56470((fn_1_56470_FontState *)((u8 *)arg0 + 64));
+    fn_1_7BEAC(*(u16 *)((u8 *)arg0 + 60));
+    p_lbl_1_bss_6C7CC = &lbl_1_bss_6C7CC;
+    v0 = 0;
+    v1 = arg0;
+    do {
+        v2 = *(u32 *)((u8 *)arg0 + v0 * 4 + 104);
+        if (v2 != 0) {
+            fn_800749B0(v0, (void *)v2);
+        } else {
+            if (__rlwnm(p_lbl_1_bss_6C7CC->unk_0, (v0 + 1) & 31, 31, 31)) {
+                fn_800749B0(v0, (void *)0);
+            }
+        }
+        v0++;
+        
+    } while (v0 < 4);
+    fn_80077F8C((Sig_fn_80077F8C_Sig_fn_800786B0_Fn800786B0Arg0 *)*(u32 *)((u8 *)arg0 + 8));
+    fn_1_56554();
+    p_lbl_1_bss_6C7CC = &lbl_1_bss_6C7CC;
+    p_lbl_801A66CC = &lbl_801A66CC;
+    v4 = 0;
+    v5 = arg0;
+    v6 = 0;
+    do {
+        v8 = p_lbl_1_bss_6C7CC->unk_0;
+        if (__rlwnm(v8, (v4 + 1) & 31, 31, 31)) {
+            fn_800749B0(v4, &p_lbl_801A66CC->unk_0->chunks[v4]);
+        } else {
+            if (*(u32 *)((u8 *)v5 + 104) != 0) {
+                fn_800749B0(v4, (void *)0);
+            }
+        }
+        v4++;
+        v5 = (void *)((u8 *)v5 + 4);
+    } while (v4 < 4);
+}
+/* fzgx:end fn_1_55C48 */
 
 /* fzgx:begin fn_1_55EA0 */
 void fn_1_55EA0(Fn1_55EA0Object *object) {
