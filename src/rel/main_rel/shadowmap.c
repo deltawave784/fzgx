@@ -470,6 +470,55 @@ void fn_1_5773C(fn_1_5773C_Vec3 *arg0, fn_1_5773C_Vec3 *arg1, u8 *arg2) {
 }
 /* fzgx:end fn_1_5773C */
 
+/* fzgx:begin fn_1_579A0 noprologue */
+#include "types.h"
+#include "dolphin/hw_regs.h"
+
+typedef struct ShadowVtx {
+    f32 x, y, z;
+    u8 c0, c1, c2, c3;
+} ShadowVtx;
+
+extern void fn_1_57DC0(void);
+extern void GXLoadPosMtxImm(void *arg0, int arg1);
+extern void fn_8003462C(u32 size, u32 heap, u32 alignment);
+extern void *lbl_801A6D00;
+
+/* GX write-gather FIFO port */
+#define FIFO_F32 (*(volatile f32 *)GX_FIFO_BASE) /* fzgx-allow: S2 memory-mapped GX FIFO writes */
+#define FIFO_U8 (*(volatile u8 *)GX_FIFO_BASE) /* fzgx-allow: S2 memory-mapped GX FIFO writes */
+
+static inline void Pos3(f32 x, f32 y, f32 z) {
+    FIFO_F32 = x;
+    FIFO_F32 = y;
+    FIFO_F32 = z;
+}
+
+static inline void Col4(u8 r, u8 g, u8 b, u8 a) {
+    FIFO_U8 = r;
+    FIFO_U8 = g;
+    FIFO_U8 = b;
+    FIFO_U8 = a;
+}
+
+#pragma opt_strength_reduction off
+void fn_1_579A0(ShadowVtx *a, ShadowVtx *b) {
+    f32 fzgx_live;
+    u32 lab_t1;
+    u32 lab_t2;
+    u32 lab_t3;
+    fn_1_57DC0();
+    GXLoadPosMtxImm(lbl_801A6D00, 0);
+    fn_8003462C(0xA8, 0, 2);
+    Pos3(a->x, a->y, a->z);
+    Col4(a->c0, (lab_t1 = a->c1), (lab_t2 = a->c2), (lab_t3 = a->c3));
+    fzgx_live = b->z;
+    Pos3(b->x, b->y, fzgx_live);
+    Col4(b->c0, b->c1, b->c2, a->c3);
+}
+#pragma opt_strength_reduction reset
+/* fzgx:end fn_1_579A0 */
+
 /* fzgx:begin fn_1_57A70 noprologue */
 #include "types.h"
 #include "dolphin/gx.h"

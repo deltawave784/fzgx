@@ -7811,3 +7811,6 @@ rel/main_rel/car/fn_1_80F80.c:
 
 rel/main_rel/bg_aur/fn_1_152208.c:
 	.text       start:0x00152208 end:0x00152510 align:4
+
+rel/main_rel/shadowmap/fn_1_579A0.c:
+	.text       start:0x000579A0 end:0x00057A70 align:4
