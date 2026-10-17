@@ -7814,3 +7814,9 @@ rel/main_rel/bg_aur/fn_1_152208.c:
 
 rel/main_rel/shadowmap/fn_1_579A0.c:
 	.text       start:0x000579A0 end:0x00057A70 align:4
+
+rel/main_rel/archive/fn_1_130B8C.c:
+	.text       start:0x00130B8C end:0x00130C84 align:4
+
+rel/main_rel/ghost/fn_1_F0B5C.c:
+	.text       start:0x000F0B5C end:0x000F0D10 align:4
