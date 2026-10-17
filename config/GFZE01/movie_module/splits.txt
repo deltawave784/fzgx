@@ -2105,3 +2105,6 @@ rel/movie_module/fn_12_3E688.c:
 
 rel/movie_module/fn_12_33A44.c:
 	.text       start:0x00033A44 end:0x00033C78 align:4
+
+rel/movie_module/fn_12_20B90.c:
+	.text       start:0x00020B90 end:0x00020CE8 align:4
