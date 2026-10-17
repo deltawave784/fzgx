@@ -9014,6 +9014,75 @@ void fn_1_6742C(void) {
 }
 /* fzgx:end fn_1_6742C */
 
+/* fzgx:begin fn_1_67430 noprologue */
+#include "dolphin/types.h"
+#include "game/main_rel/car_types.h"
+#include "game/main_rel/car_test_types.h"
+#include "psvec.h"
+
+extern const f64 lbl_1_rodata_2950[];
+extern u32 fn_1_86514(int);
+extern void fn_1_862D4(int, Triple *);
+extern void fn_1_8636C(int, void *);
+extern void *lbl_8006DC6C(void *);
+extern void lbl_8006E1B0(Fn183D28Vec3 *, Fn183D28Vec3 *);
+
+typedef struct Fn167430 {
+    u8 pad00[0x10];
+    s32 state;
+    u8 pad14[4];
+    s16 id;
+    u8 pad1A[0xE];
+    f32 value;
+    f32 target;
+    u8 pad30[0xC];
+    Fn183D28Vec3 position;
+    Fn183D28Vec3 velocity;
+    u8 pad54[0x40];
+    Fn183D28Vec3 offset;
+    u8 padA0[0x14];
+    f32 alpha;
+} Fn167430;
+
+void fn_1_67430(Fn167430 *arg0) {
+    const f64 *pool = (const f64 *)&lbl_1_rodata_2950;
+    f32 matrix[3][4];
+    Fn183D28Vec3 position;
+    f32 z, y, x;
+    f64 one, rate;
+    f64 delta, damping;
+    f32 value;
+
+    if (!((fn_1_86514(arg0->id) >> 29) & 1)) {
+        arg0->state = 1;
+    }
+    fn_1_862D4(arg0->id, (Triple *)&position);
+    fn_1_8636C(arg0->id, matrix);
+    z = arg0->velocity.x;
+    damping = pool[0x340 / 8];
+    arg0->velocity.x = z * damping;
+    arg0->velocity.y *= damping;
+    arg0->velocity.z *= damping;
+    psvec_add(&arg0->offset, &arg0->velocity, &arg0->offset);
+    lbl_8006DC6C(matrix);
+    /* Volatile preserves the locked-cache translation-column load order. */
+    x = *(volatile f32 *)&position.x;
+    y = position.y;
+    z = position.z;
+    /* The current matrix occupies the hardware locked cache at 0xE0000000. */
+    *(f32 *)(0xE0000000 + 0x0C) = x;
+    *(f32 *)(0xE0000000 + 0x1C) = y;
+    *(f32 *)(0xE0000000 + 0x2C) = z;
+    lbl_8006E1B0(&arg0->offset, &arg0->position);
+    value = arg0->value;
+    delta = pool[0x260 / 8] * (arg0->target - value);
+    arg0->value = value + delta;
+    value = arg0->alpha;
+    delta = pool[0x408 / 8] * (pool[0x290 / 8] - value);
+    arg0->alpha = value + delta;
+}
+/* fzgx:end fn_1_67430 */
+
 /* fzgx:begin fn_1_6755C */
 typedef struct {
     u8 pad_0[0x18];
