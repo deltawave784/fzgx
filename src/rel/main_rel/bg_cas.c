@@ -908,6 +908,127 @@ void fn_1_FCF74(void) {
 }
 /* fzgx:end fn_1_FCF74 */
 
+/* fzgx:begin fn_1_FCFA4 noprologue */
+#include "rel/main_rel/bg_cas.h"
+
+typedef struct {
+    u32 rgba;
+} CasColor;
+
+extern u32 camera_get_status(void);
+extern s32 camera_get_state(void);
+extern u8 fn_1_3F854(void);
+extern s16 camera_get_output(void);
+extern CasColor lbl_1_rodata_7608;
+extern void fn_800724C8(void);
+extern void fn_8007245C(u32);
+extern void fn_80074788(u32);
+extern void fn_800747D0(u32, u32, s32, s32, u32, s32, s32);
+extern u32 fn_800371F8(u32, const CasColor *);
+extern void fn_80074918(u8, s32, u8);
+extern void fn_800720B0(u32);
+extern void fn_80072864(u32);
+
+typedef struct {
+    u8 pad_0[0x320];
+    s16 unk_320;
+} CasTarget;
+
+typedef struct {
+    u8 unk_0[0x40F0];
+    u32 unk_40F0;
+    u8 pad_40F4[0xC];
+} CasEntry;
+
+typedef struct CasObj {
+    CasTarget *unk_0;
+    u8 unk_4;
+    u8 pad_5[7];
+    u32 unk_C;
+    u8 pad_10[0x10];
+    CasEntry entries[4];
+    s32 (*unk_10420)(void);
+    s32 (*unk_10424)(struct CasObj *);
+    u8 pad_10428[4];
+    void (*unk_1042C)(struct CasObj *, CasEntry *);
+} CasObj;
+
+static inline u8 fn_1_FCFA4_check(CasObj *obj)
+{
+    u32 flags = obj->unk_C;
+
+    if (flags & 0x40000000) {
+        CasTarget *target = obj->unk_0;
+        u32 status = camera_get_status();
+        u8 state = camera_get_state();
+        u32 limit = fn_1_3F854();
+        u8 *table;
+        u8 cur;
+
+        if (target == NULL) {
+            return 0;
+        }
+        table = (u8 *)&lbl_1_data_3EFB0;
+        cur = table[target->unk_320];
+        if ((s16)status == 2 && state == 6) {
+            s16 output = camera_get_output();
+            if (output != target->unk_320) {
+                return 0;
+            }
+        } else if ((s16)status != 2) {
+            if (++table[target->unk_320] >= limit) {
+                ((u8 *)&lbl_1_data_3EFB0)[target->unk_320] = 0;
+            }
+            if (cur != target->unk_320) {
+                return 0;
+            }
+        }
+    } else if (flags & 0x80000000) {
+        return 0;
+    }
+    return 1;
+}
+
+void fn_1_FCFA4(CasObj *obj)
+{
+    struct { CasColor color; CasColor argument; } colors;
+    s16 i;
+
+    if (obj == NULL) {
+        return;
+    }
+    if (obj->unk_10420 != NULL && obj->unk_10420() != 0) {
+        return;
+    }
+    if (lbl_1_bss_850C6.unk_0 != 0) {
+        return;
+    }
+    if (!fn_1_FCFA4_check(obj)) {
+        return;
+    }
+    if (obj->unk_10424 != NULL && obj->unk_10424(obj) == 0) {
+        return;
+    }
+    fn_800724C8();
+    fn_8007245C(0x2200);
+    colors.color = lbl_1_rodata_7608;
+    fn_80074788(1);
+    fn_800747D0(4, 0, 0, 0, 0, 2, 2);
+    colors.argument = colors.color;
+    fn_800371F8(0, &colors.argument);
+    fn_80074918(1, 7, 0);
+    fn_800720B0(0);
+    fn_80072864(2);
+    for (i = 0; i < obj->unk_4; i++) {
+        if (obj->entries[i].unk_40F0 != 0) {
+            CasEntry *entry = &obj->entries[i];
+            lbl_1_data_3EFA8 = (u32)entry;
+            obj->unk_1042C(obj, entry);
+        }
+    }
+}
+/* fzgx:end fn_1_FCFA4 */
+
 /* fzgx:begin fn_1_FD1D4 */
 typedef struct {
     void *value;

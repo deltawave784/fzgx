@@ -693,6 +693,159 @@ void fn_1_42458(Fn142458Data *dst, const Fn142458Data *src) {
 }
 /* fzgx:end fn_1_42458 */
 
+/* fzgx:begin fn_1_4247C noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/motasglist.h"
+#include "dolphin/hw_regs.h"
+#include "game/main_rel/motasglist_types.h"
+
+extern const f32 lbl_1_rodata_F50;
+extern const f32 lbl_1_rodata_F54;
+
+struct fn_1_4322C_Arg0 {
+    u16 unk_0;
+    u16 unk_2;
+    u16 unk_4;
+    u16 unk_6;
+    f32 unk_8;
+    f32 unk_C;
+    f32 unk_10;
+};
+extern void fn_1_4322C(struct fn_1_4322C_Arg0 *);
+extern void mathutil_mtxA_from_quat(void *);
+extern void lbl_8006DB74(void *value);
+extern f32 lbl_8006D0B4(f32);
+extern void lbl_8006D784(void *);
+extern size_t strlen(const char *);
+
+typedef struct Fn14247CVec {
+    f32 x;
+    f32 y;
+    f32 z;
+} Fn14247CVec;
+
+typedef struct Fn14247CEntry {
+    char *name;
+    u16 parent;
+    u16 id;
+    Fn14247CVec offset;
+    f32 length;
+    Fn14247CVec base;
+    f32 weight;
+    u8 mtx28[0x30];
+    u8 mtx58[0x30];
+    u8 mtx88[0x30];
+    Fn14247CVec scale;
+    u8 padC4[0xC];
+    u32 flagsD0;
+    u8 padD4[0x18C - 0xD4];
+} Fn14247CEntry;
+
+typedef struct Fn14247CObject {
+    u16 count;
+    u16 flags;
+    f32 speed;
+    Fn14247CEntry *entries;
+    Fn14247CVec scale;
+    Fn14247CVec offset;
+    u32 unk24;
+    f32 frame;
+    f32 duration;
+    Fn14247CVec prev;
+    u8 pad3C[4];
+    struct fn_1_4322C_Arg0 cur;
+    u8 pad54[4];
+    struct fn_1_4322C_Arg0 next;
+} Fn14247CObject;
+
+#define ENTRY(off) ((Fn14247CEntry *)((u8 *)obj->entries + (off)))
+
+#pragma opt_propagation off
+void fn_1_4247C(Fn14247CObject *obj, Fn14247CEntry *entries, u16 *data) {
+    u32 off;
+    u8 *src;
+    u32 i;
+    f32 one;
+
+    obj->speed = lbl_1_rodata_F50;
+    obj->count = data[0];
+    obj->entries = entries;
+    obj->scale.x = lbl_1_rodata_F50;
+    obj->scale.y = lbl_1_rodata_F50;
+    obj->scale.z = lbl_1_rodata_F50;
+    obj->unk24 = 0;
+    obj->flags = 0x100;
+    obj->frame = lbl_1_rodata_F54;
+    obj->duration = lbl_1_rodata_F54;
+    obj->offset.x = lbl_1_rodata_F54;
+    obj->offset.y = lbl_1_rodata_F54;
+    obj->offset.z = lbl_1_rodata_F54;
+    obj->prev.x = lbl_1_rodata_F54;
+    obj->prev.y = lbl_1_rodata_F54;
+    obj->prev.z = lbl_1_rodata_F54;
+    fn_1_4322C(&obj->cur);
+    fn_1_4322C(&obj->next);
+
+    src = (u8 *)(data + 2);
+    one = lbl_1_rodata_F50;
+    for (i = 0, off = 0; i < obj->count; off += sizeof(Fn14247CEntry), i++) {
+        size_t len;
+        Fn14247CVec *v;
+
+        ENTRY(off)->id = ((u16 *)src)[0];
+        ENTRY(off)->parent = ((u16 *)src)[1];
+        src += 4;
+        {
+            void *quat = src;
+            src += 0x10;
+            mathutil_mtxA_from_quat(quat);
+        }
+        lbl_8006DB74(ENTRY(off)->mtx28);
+        mathutil_mtxA_from_quat(src);
+        lbl_8006DB74(ENTRY(off)->mtx58);
+        ENTRY(off)->offset.x = ((f32 *)src)[4];
+        ENTRY(off)->offset.y = ((f32 *)src)[5];
+        ENTRY(off)->offset.z = ((f32 *)src)[6];
+        src += 0x1C;
+        v = &ENTRY(off)->offset;
+        {
+            f32 z;
+            f32 y;
+            f32 x;
+            f32 sum;
+            x = v->x;
+            y = v->y;
+            sum = x * x;
+            z = v->z;
+            sum = sum + y * y;
+            sum = sum + z * z;
+            ENTRY(off)->length = lbl_8006D0B4(sum);
+        }
+        {
+            Fn14247CEntry *entry = ENTRY(off);
+            entry->base = entry->offset;
+        }
+        ENTRY(off)->weight = one;
+        ENTRY(off)->name = (char *)src;
+        ENTRY(off)->flagsD0 = 0;
+        v = &ENTRY(off)->scale;
+        v->x = one;
+        v->y = one;
+        v->z = one;
+        lbl_8006D784(ENTRY(off)->mtx88);
+        len = strlen((char *)src);
+        /* skip the name and its padding to the next word */
+        len += 3 - (len & 3);
+        {
+            u32 skip = len + 1;
+            src += skip;
+        }
+    }
+}
+#pragma opt_propagation reset
+/* fzgx:end fn_1_4247C */
+
 /* fzgx:begin fn_1_426AC */
 typedef struct Fn1426ACObject {
     u16 count;
