@@ -421,6 +421,65 @@ void fn_1_FB9DC(int index) {
 }
 /* fzgx:end fn_1_FB9DC */
 
+/* fzgx:begin fn_1_FBA88 */
+typedef struct {
+    s32 flag;
+    u8 pad_4[0x54];
+    u32 val;
+    u8 b0, b1, b2, b3;
+} Slot_FBA88;
+
+typedef struct {
+    u8 pad_0[0x14];
+    Slot_FBA88 s[6];
+    u8 pad[0x270 - 0x14 - 6 * 0x60];
+} Obj_FBA88;
+
+extern u32 lbl_1_rodata_759C[25];
+
+void fn_1_FBA88(int index) {
+    u32 tbl[6];
+    u32 *p = tbl;
+    Obj_FBA88 *o = (Obj_FBA88 *)&lbl_1_bss_84454 + (index & 0xff);
+    int i;
+    u32 *q;
+    s8 n = 0;
+    s8 c0 = 0, c1 = 0, c2 = 0, c3 = 0;
+
+    tbl[0] = lbl_1_rodata_759C[0];
+    tbl[1] = lbl_1_rodata_759C[1];
+    tbl[2] = lbl_1_rodata_759C[2];
+    tbl[3] = lbl_1_rodata_759C[3];
+    tbl[4] = lbl_1_rodata_759C[4];
+    tbl[5] = lbl_1_rodata_759C[5];
+
+    for (i = 0; i < 3; i++) {
+        Slot_FBA88 *slot = (Slot_FBA88 *)((u8 *)o + i * 0x60 + 0x134);
+        if (slot->flag != 0) {
+            slot->val = *p++;
+            n++;
+            slot->b0 = c0++;
+            slot->b1 = c1++;
+            slot->b2 = c2++;
+            slot->b3 = c3++;
+        }
+    }
+    q = tbl + n;
+    {
+    int fzgx_loop_i_1025;
+for (fzgx_loop_i_1025 = 0; fzgx_loop_i_1025 < 3; fzgx_loop_i_1025++) {
+        Slot_FBA88 *slot = &o->s[fzgx_loop_i_1025];
+        if (slot->flag != 0) {
+            slot->val = *q++;
+            slot->b0 = c0++;
+            slot->b1 = -1 - fzgx_loop_i_1025;
+        }
+    }
+    i = fzgx_loop_i_1025;
+}
+}
+/* fzgx:end fn_1_FBA88 */
+
 /* fzgx:begin fn_1_FBC5C */
 /* one 0x60-byte track element; six of them per 0x270-byte entry starting at 0xC */
 typedef struct {

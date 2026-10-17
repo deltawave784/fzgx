@@ -4854,6 +4854,103 @@ void fn_1_550E0(void) {
 }
 /* fzgx:end fn_1_550E0 */
 
+/* fzgx:begin fn_1_55118 noprologue */
+#include "types.h"
+#include "rel/main_rel/font.h"
+
+typedef struct {
+    u8 color[4];
+    u8 shadow_color[4];
+    f32 scale;
+    u8 mode;
+    u8 align;
+    u8 enabled;
+    u8 flags;
+    u8 unk10;
+    u8 unk11;
+    u8 pad12[0x16];
+} Fn55118Style;
+
+typedef struct {
+    u32 unk0;
+    u32 unk4;
+    f32 unk8;
+    Fn55118Style style;
+    u32 unk34;
+} Fn55118State;
+
+extern u32 lbl_801A6410;
+extern const f32 lbl_1_rodata_28A8;
+extern void fn_1_565F8(void);
+extern void fn_1_56664(void *);
+extern void fn_1_566A0(void *);
+extern void fn_1_566EC(int, int);
+extern void fn_800777D4(void);
+extern void fn_80072808(void);
+extern u32 fn_80070DE0(u32);
+extern u32 fn_80070DF0(u32);
+extern void *memset(void *, int, u32);
+extern void fn_800749B0(s32, void *);
+
+typedef struct lbl_1_bss_6C7CC_t {
+    u32 unk34;
+    u8 pad_4[0xc];
+} lbl_1_bss_6C7CC_t;
+
+/* file-scope objects of the retail TU, in retail order: MWCC addresses them off one section base */
+u32 lbl_1_bss_6C798;
+u32 lbl_1_bss_6C79C;
+f32 fzgx_obj_lbl_1_bss_6C7A0;
+Fn55118Style fzgx_obj_lbl_1_bss_6C7A4;
+lbl_1_bss_6C7CC_t fzgx_obj_lbl_1_bss_6C7CC;
+u32 lbl_1_bss_6C7DC[25];
+
+#pragma section code_type ".fzgxpool"
+static void fzgx_bss_layout(void) {
+    volatile u8 s;  /* fzgx-allow: S2 layout primer sink: MWCC emits .bss objects in first-access order */
+    s = *(u8 *)&lbl_1_bss_6C798;
+    s = *(u8 *)&lbl_1_bss_6C79C;
+    s = *(u8 *)&fzgx_obj_lbl_1_bss_6C7A0;
+    s = *(u8 *)&fzgx_obj_lbl_1_bss_6C7A4;
+    s = *(u8 *)&fzgx_obj_lbl_1_bss_6C7CC;
+    s = *(u8 *)&lbl_1_bss_6C7DC;
+}
+#pragma section code_type ".text"
+
+void fn_1_55118(void) {
+    
+    Fn55118Style *style;
+    lbl_1_bss_6C798 = lbl_801A6410;
+    fn_800777D4();
+    fn_1_565F8();
+    fn_80072808();
+    fn_80070DE0((u32)fn_1_56664);
+    fn_80070DF0((u32)fn_1_566A0);
+    lbl_1_bss_6C79C = 0x60;
+    fzgx_obj_lbl_1_bss_6C7A0 = lbl_1_rodata_28A8;
+    memset(&fzgx_obj_lbl_1_bss_6C7A4, 0, 0x28);
+    style = &fzgx_obj_lbl_1_bss_6C7A4;
+    style->color[0] = 0xFF;
+    style->color[1] = 0xFF;
+    style->color[2] = 0xFF;
+    style->color[3] = 0xFF;
+    style->shadow_color[0] = 0;
+    style->shadow_color[1] = 0;
+    style->shadow_color[2] = 0;
+    style->shadow_color[3] = 0;
+    style->scale = lbl_1_rodata_28A8;
+    style->mode = 1;
+    style->align = 3;
+    style->enabled = 1;
+    style->flags = 0;
+    style->unk10 = 0;
+    style->unk11 = 0;
+    fn_1_566EC(0, 0);
+    fn_800749B0(0, 0);
+    fzgx_obj_lbl_1_bss_6C7CC.unk34 = 0;
+}
+/* fzgx:end fn_1_55118 */
+
 /* fzgx:begin fn_1_55210 noprologue */
 #include "types.h"
 #include "rel/main_rel/font.h"
