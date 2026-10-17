@@ -7679,3 +7679,6 @@ rel/main_rel/ghost/fn_1_ECF88.c:
 
 rel/main_rel/sel_static_disp/fn_1_151054.c:
 	.text       start:0x00151054 end:0x00151668 align:4
+
+rel/main_rel/ranking/fn_1_158984.c:
+	.text       start:0x00158984 end:0x0015903C align:4

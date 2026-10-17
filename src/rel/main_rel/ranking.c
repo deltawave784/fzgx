@@ -1797,6 +1797,234 @@ void fn_1_158980(void) {
 }
 /* fzgx:end fn_1_158980 */
 
+/* fzgx:begin fn_1_158984 noprologue */
+#include "types.h"
+#include "psvec.h"
+#include "rel/main_rel/ranking.h"
+
+struct fn_1_158984_Arg0 {
+    u8 pad_0[0x118];
+    u32 unk_118;
+};
+struct fn_1_158984_lbl_1_rodata_D958 {
+    u8 pad_0[0x18];
+    f64 unk_18;
+    u8 pad_20[0x18];
+    u32 unk_38;
+    f32 unk_3C;
+    f32 unk_40;
+    f32 unk_44;
+    f32 unk_48;
+    f32 unk_4C;
+    f32 unk_50;
+    f32 unk_54;
+    f64 unk_58;
+    f32 unk_60;
+    f32 unk_64;
+    f32 unk_68;
+    u8 pad_6C[0x4];
+    f64 unk_70;
+};
+typedef struct { f32 x, y, z; } RankingVector;
+typedef struct {
+    u32 flags;
+    u8 pad_4[8];
+    RankingVector position;
+    s16 angle_x, angle_y, angle_z;
+} RankingModel;
+typedef struct {
+    s32 active;
+    s32 cooldown;
+    RankingVector velocity;
+    RankingVector spin;
+    u8 pad_20[0x18];
+    RankingModel *model;
+} RankingSlot;
+struct fn_1_158984_lbl_801A66A0 { u32 unk_0; };
+typedef struct {
+    u8 pad_0[0xD4];
+    RankingVector vector;
+} RankingScratch;
+
+extern f32 lbl_8006D188(u32);
+extern s16 camera_get_mode(void);
+extern s32 fn_1_58C4(void);
+extern struct fn_1_158984_lbl_1_rodata_D958 lbl_1_rodata_D958;
+extern struct fn_1_158984_lbl_801A66A0 lbl_801A66A0;
+extern RankingScratch *lbl_801A66CC;
+extern u32 fn_1_5948(u32);
+extern u32 fn_1_627C(u32);
+extern void *fn_1_8627C(s32);
+extern void fn_1_681C(u32, u32 *);
+extern void fn_1_9AD54(void);
+extern void fn_1_9A7A8(u32 *);
+
+#pragma section code_type ".fzgxpool"
+void fzgx_pool_primer_head(f32 *f, f64 *d) {
+    f[0] = 10.0f;
+    f[1] = 100.0f;
+    f[2] = 20.0f;
+    f[3] = 1000.0f;
+    f[4] = 2000.0f;
+    f[5] = 0.0f;
+    d[0] = 4503601774854144.0;
+}
+#pragma section code_type ".text"
+const u32 fzgx_pool_table_20[6] = { 0, 0, 0, 0, 0, 0 };
+const u32 fzgx_pool_table_38[1] = { 0x64646400 };
+#pragma section code_type ".fzgxpool"
+void fzgx_pool_primer_tail(f32 *f, f64 *d) {
+    f[0] = 65536.0f;
+    f[1] = 300.0f;
+    f[2] = 600.0f;
+    f[3] = 900.0f;
+    f[4] = 256.0f;
+    f[5] = 768.0f;
+    f[6] = 1280.0f;
+    d[0] = 0.01;
+    f[7] = 800.0f;
+    f[8] = 500.0f;
+    f[9] = 40000.0f;
+    d[1] = 4503599627370496.0;
+}
+#pragma section code_type ".text"
+
+void fn_1_158984(void) {
+    Obj_1_data_2A7E0_At3C *data;
+    s32 count;
+    s32 i;
+    RankingSlot *slot;
+    s32 j;
+    RankingSlot *other;
+    s32 collided;
+    struct fn_1_158984_Arg0 *camera;
+    s32 mode;
+    f32 width_x, center_x, x;
+    f32 width_y, center_y, y, upper_x, z;
+    f32 wrap_width_y, wrap_center_y, wrap_y, wrap_upper_y;
+    f32 wrap_width_z, wrap_center_z, wrap_z, wrap_upper_z;
+    s32 inside_x, inside_y, inside_z;
+    f32 dx, dy, dz;
+    f64 damp;
+    f32 spin_y, spin_z;
+    u32 color;
+
+    data = lbl_1_data_2A7E0.unk_3C;
+    fn_1_9AD54();
+    count = fn_1_58C4();
+    for (i = 0; i < count; i++) {
+        fn_1_5948(i);
+        mode = (s16)camera_get_mode();
+        if (mode >= 0) {
+            camera = fn_1_8627C(mode);
+            if (camera != 0) {
+                data->unk_4 = camera->unk_118 + 1;
+                break;
+            }
+        }
+        fn_1_627C(i);
+    }
+    slot = (RankingSlot *)((u8 *)data + 0xFA0C);
+    for (i = 0; i < (s32)data->unk_0; i++, slot++) {
+        if ((s32)data->unk_4 == 2) {
+            slot->spin.x = lbl_8006D188((s32)(65536.0f * (f32)(lbl_801A66A0.unk_0 % 300) / 300.0f));
+            slot->spin.y = lbl_8006D188((s32)(65536.0f * (f32)(lbl_801A66A0.unk_0 % 600) / 600.0f));
+            slot->spin.z = lbl_8006D188((s32)(65536.0f * (f32)(lbl_801A66A0.unk_0 % 900) / 900.0f));
+            spin_y = 768.0f;
+            spin_z = 1280.0f;
+            slot->model->angle_x += (s32)(256.0f * slot->spin.x);
+            slot->model->angle_y += (s32)(spin_y * slot->spin.y);
+            slot->model->angle_z += (s32)(spin_z * slot->spin.z);
+        } else {
+            damp = 0.01;
+            slot->model->angle_x = (s32)((f64)slot->model->angle_x + (f64)(damp * -slot->model->angle_x));
+            slot->model->angle_y = (s32)((f64)slot->model->angle_y + (f64)(damp * -slot->model->angle_y));
+            slot->model->angle_z = (s32)((f64)slot->model->angle_z + (f64)(damp * -slot->model->angle_z));
+        }
+        slot->model->flags &= 0xFEFFFFFF;
+        if (slot->active != 0 && ((s32)data->unk_4 == 1 || (s32)data->unk_4 >= 3)) {
+            if (slot->cooldown != 0) {
+                slot->cooldown--;
+            }
+            psvec_add(&slot->model->position, &slot->velocity, &slot->model->position);
+            fn_1_681C(0, (u32 *)&lbl_801A66CC->vector);
+            width_x = 800.0f;
+            x = slot->model->position.x;
+            center_x = lbl_801A66CC->vector.x;
+            upper_x = width_x + center_x;
+            if (x > upper_x) inside_x = 0;
+            else if (x < center_x - width_x) inside_x = 0;
+            else inside_x = 1;
+            if (inside_x) {
+                width_y = 500.0f;
+                y = slot->model->position.y;
+                if (y > width_y + (center_y = lbl_801A66CC->vector.y)) inside_y = 0;
+                else if (y < center_y - width_y) inside_y = 0;
+                else inside_y = 1;
+                if (inside_y) {
+                    z = slot->model->position.z;
+                    if (z > upper_x) inside_z = 0;
+                    else if (z < lbl_801A66CC->vector.z - 800.0f) inside_z = 0;
+                    else inside_z = 1;
+                    /* All axes are inside the bounds; skip the wrapping block. */
+                    if (inside_z) goto no_wrap;
+                }
+            }
+            if (x > upper_x) slot->model->position.x = center_x - 800.0f;
+            else if (x < center_x - 800.0f) slot->model->position.x = upper_x;
+            wrap_width_y = 500.0f;
+            wrap_y = slot->model->position.y;
+            wrap_center_y = lbl_801A66CC->vector.y;
+            wrap_upper_y = wrap_width_y + wrap_center_y;
+            if (wrap_y > wrap_upper_y) slot->model->position.y = wrap_center_y - wrap_width_y;
+            else if (wrap_y < wrap_center_y - wrap_width_y) slot->model->position.y = wrap_upper_y;
+            wrap_width_z = 800.0f;
+            wrap_z = slot->model->position.z;
+            wrap_center_z = lbl_801A66CC->vector.z;
+            wrap_upper_z = wrap_width_z + wrap_center_z;
+            if (wrap_z > wrap_upper_z) slot->model->position.z = wrap_center_z - wrap_width_z;
+            else if (wrap_z < wrap_center_z - wrap_width_z) slot->model->position.z = wrap_upper_z;
+no_wrap:
+            other = (RankingSlot *)(&data->unk_2724 + 0x34BA);
+            collided = 0;
+            for (j = 0; j < (s32)data->unk_0; j++, other++) {
+                if (i != j && slot->cooldown == 0) {
+                    RankingModel *model;
+                    RankingModel *other_model;
+                    f32 dz, dy, dx;
+                    other_model = other->model;
+                    model = slot->model;
+                    dx = model->position.x;
+                    dx -= other_model->position.x;
+                    dy = model->position.y;
+                    dy -= other_model->position.y;
+                    dz = model->position.z;
+                    dz -= other_model->position.z;
+                    dx *= dx;
+                    dx += dy * dy;
+                    dx += dz * dz;
+                    if (dx <= 40000.0f) {
+                        lbl_801A66CC->vector = slot->velocity;
+                        slot->velocity = other->velocity;
+                        other->velocity = lbl_801A66CC->vector;
+                        collided = 1;
+                    }
+                }
+            }
+            if (collided) {
+                slot->active = 0;
+                *(s32 *)((u8 *)data + data->unk_8 * 0x3C + 0xFA0C) = 1;
+                *(s32 *)((u8 *)data + data->unk_8 * 0x3C + 0xFA10) = 60;
+                data->unk_8++;
+            }
+        }
+        if ((s32)data->unk_8 >= (s32)data->unk_0) data->unk_8 = 0;
+    }
+    color = fzgx_pool_table_38[0];
+    fn_1_9A7A8(&color);
+}
+/* fzgx:end fn_1_158984 */
+
 /* fzgx:begin fn_1_15903C */
 // fn_1_15903C: empty in retail (single blr).
 void fn_1_15903C(void) {
