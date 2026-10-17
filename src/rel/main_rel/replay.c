@@ -378,6 +378,61 @@ void fn_1_F2DDC(void) {
 }
 /* fzgx:end fn_1_F2DDC */
 
+/* fzgx:begin fn_1_F2E50 */
+struct fn_1_F2E50_payload {
+    u8 pad_0[0x40];
+    u32 unk_40;
+};
+struct fn_1_F2E50_lbl_1_bss_7EFD0 {
+    u8 pad_0[0x4];
+    u8 unk_4;
+    u8 pad_5[3];
+    struct fn_1_F2E50_payload unk_8;
+    u16 unk_4C;
+};
+
+u16 fzgx_obj_lbl_1_bss_7EFD0;
+u16 fzgx_pool_lbl_1_bss_7EFD0_gap_7EFD2;
+u8 fzgx_obj_lbl_1_bss_7EFD4;
+u8 fzgx_pool_lbl_1_bss_7EFD0_gap_7EFD5;
+u16 fzgx_pool_lbl_1_bss_7EFD0_gap_7EFD5_fill_7EFD6;
+struct fn_1_F2E50_payload fzgx_obj_lbl_1_bss_7EFD8;
+u16 fzgx_obj_lbl_1_bss_7F01C;
+#pragma section code_type ".fzgxpool"
+static void fzgx_bss_layout(void) {
+volatile u8 s; /* fzgx-allow: S2 layout primer sink: MWCC emits .bss objects in first-access order */
+s = *(u8 *)&fzgx_obj_lbl_1_bss_7EFD0;
+s = *(u8 *)&fzgx_pool_lbl_1_bss_7EFD0_gap_7EFD2;
+s = fzgx_obj_lbl_1_bss_7EFD4;
+s = fzgx_pool_lbl_1_bss_7EFD0_gap_7EFD5;
+s = *(u8 *)&fzgx_pool_lbl_1_bss_7EFD0_gap_7EFD5_fill_7EFD6;
+s = *(u8 *)&fzgx_obj_lbl_1_bss_7EFD8;
+s = *(u8 *)&fzgx_obj_lbl_1_bss_7F01C;
+}
+#pragma section code_type ".text"
+static inline void fn_1_F2E50_clear(struct fn_1_F2E50_payload *p) {
+    *(u16 *)((u8 *)p->unk_40 + 160) = 0;
+}
+
+void fn_1_F2E50(u32 arg0) {
+    struct fn_1_F2E50_lbl_1_bss_7EFD0 *p = (void *)&lbl_1_bss_7EFD0;
+    u32 v0;
+    u32 v1;
+    u8 flags;
+    if ((fzgx_obj_lbl_1_bss_7EFD4 & 1) == 0) return;
+    fzgx_obj_lbl_1_bss_7EFD4 = 1;
+    if (arg0 == 0) {
+        fzgx_obj_lbl_1_bss_7EFD4 |= 42;
+        fn_1_F2E50_clear(&fzgx_obj_lbl_1_bss_7EFD8);
+        fzgx_obj_lbl_1_bss_7F01C = 0;
+        return;
+    }
+    if (arg0 != 1) return;
+    fzgx_obj_lbl_1_bss_7EFD4 |= 44;
+    fn_1_F2E50_clear(&fzgx_obj_lbl_1_bss_7EFD8);
+}
+/* fzgx:end fn_1_F2E50 */
+
 /* fzgx:begin fn_1_F2EB8 */
 struct fn_1_F2EB8_lbl_1_bss_7EFD4 {
     s8 unk_0;

@@ -7550,3 +7550,6 @@ rel/main_rel/rob/fn_1_96230.c:
 
 rel/main_rel/ghost/fn_1_EC910.c:
 	.text       start:0x000EC910 end:0x000ECDFC align:4
+
+rel/main_rel/replay/fn_1_F2E50.c:
+	.text       start:0x000F2E50 end:0x000F2EB8 align:4
