@@ -2700,6 +2700,98 @@ done:
 }
 /* fzgx:end fn_1_101454 */
 
+/* fzgx:begin fn_1_1014B4 */
+extern int sprintf(char *, const char *, ...);
+extern u32 fn_1_435C(u32);
+extern u32 fn_1_10161C(void);
+extern u32 fn_1_1018BC(void);
+extern s32 fn_1_3F8C(u8 *, u32 (*)(void), u32, u32);
+extern void fn_1_101BC4(void *);
+extern void *fn_80071484(u32);
+extern void *fn_80070F44(void *, void *);
+extern void GXInvalidateTexAll(void);
+
+extern u8 lbl_1_data_3F0C0__fzgx_offset_0[];
+extern u8 lbl_1_data_3F0DC__fzgx_offset_0[];
+extern u8 lbl_1_data_3F0F8__fzgx_offset_0[];
+static u32 fzgx_pool_data_lbl_1_data_3EFB8[1] = {  /* fzgx-allow: A1 retail data bytes and bindings */
+    0x23
+};
+static u32 fzgx_pool_data_lbl_1_data_3EFB8_4[65] = {  /* fzgx-allow: A1 retail data bytes and bindings */
+    0x6D5F6675, 0x74320000, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0,
+    0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0,
+    0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0,
+    0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0,
+    0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0,
+    0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0,
+    0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0,
+    0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0,
+    0x1
+};
+static u32 fzgx_pool_data_lbl_1_data_3F0C0[23] = {  /* fzgx-allow: A1 retail data bytes and bindings */
+    0x82A482CB, 0x82A482CB, 0x8382815B, 0x83682882, 0xBB82A482, 0xB382C882, 0xB5290000, 0x82D482E7,
+    0x82F182D4, 0x82E782F1, 0x8382815B, 0x83682850, 0x41443029, 0x0, 0x82AE82E9, 0x82AE82E9,
+    0x8382815B, 0x83682850, 0x41443129, 0x0, (u32)lbl_1_data_3F0C0__fzgx_offset_0, (u32)lbl_1_data_3F0DC__fzgx_offset_0, (u32)lbl_1_data_3F0F8__fzgx_offset_0
+};
+static u32 fzgx_pool_data_lbl_1_data_3EFB8_164[6] = {  /* fzgx-allow: A1 retail data bytes and bindings */
+    0x74657374, 0x5F6D6F64, 0x656C2F25, 0x732F2573, 0x2E74706C, 0x0
+};
+static u32 fzgx_pool_data_lbl_1_data_3EFB8_17C[6] = {  /* fzgx-allow: A1 retail data bytes and bindings */
+    0x74657374, 0x5F6D6F64, 0x656C2F25, 0x732F2573, 0x2E676D61, 0x0
+};
+static u32 fzgx_pool_data_lbl_1_data_3EFB8_194[3] = {  /* fzgx-allow: A1 retail data bytes and bindings */
+    0x436C6F74, 0x6843616C, 0x63000000
+};
+static u32 fzgx_pool_data_lbl_1_data_3EFB8_1A0[9] = {  /* fzgx-allow: A1 retail data bytes and bindings */
+    0x436C6F74, 0x68446973, 0x70000000, 0x25730000, 0x436C6F74, 0x68205465, 0x7374205B, 0x25735D20,
+    0x25640A00
+};
+#pragma section code_type ".fzgxpool"
+static void fzgx_data_layout_lbl_1_data_3EFB8(void) {
+    volatile u8 s;  /* fzgx-allow: S2 layout primer sink: keeps the retail .data objects in retail order */
+    s = *(u8 *)fzgx_pool_data_lbl_1_data_3EFB8;
+    s = *(u8 *)fzgx_pool_data_lbl_1_data_3EFB8_4;
+    s = *(u8 *)fzgx_pool_data_lbl_1_data_3F0C0;
+    s = *(u8 *)fzgx_pool_data_lbl_1_data_3EFB8_164;
+    s = *(u8 *)fzgx_pool_data_lbl_1_data_3EFB8_17C;
+    s = *(u8 *)fzgx_pool_data_lbl_1_data_3EFB8_194;
+    s = *(u8 *)fzgx_pool_data_lbl_1_data_3EFB8_1A0;
+}
+#pragma section code_type ".text"
+
+void fn_1_1014B4(u32 arg0, u32 arg1) {
+    Obj_1_bss_85250 *p = (Obj_1_bss_85250 *)&lbl_1_bss_85250;
+    
+    char buf[0x108];
+    u32 *obj;
+    u32 d;
+    u32 idx;
+
+    p->unk_4 = 14;
+    p->unk_8 = 0;
+    p->unk_C = 0;
+    p->unk_10 = 0;
+    sprintf(buf, (const char *)(((u8 *)fzgx_pool_data_lbl_1_data_3EFB8_164)), ((u8 *)fzgx_pool_data_lbl_1_data_3EFB8) + 4, ((u8 *)fzgx_pool_data_lbl_1_data_3EFB8) + 4);
+    p->unk_C = (u32)fn_80071484((u32)buf);
+    sprintf(buf, (const char *)(((u8 *)fzgx_pool_data_lbl_1_data_3EFB8_17C)), ((u8 *)fzgx_pool_data_lbl_1_data_3EFB8) + p->unk_8 * 0x104 + 4, ((u8 *)fzgx_pool_data_lbl_1_data_3EFB8) + p->unk_8 * 0x104 + 4);
+    p->unk_10 = fn_80070F44(buf, (void *)p->unk_C);
+    GXInvalidateTexAll();
+    fn_1_435C(arg0);
+    fn_1_3F8C(((u8 *)fzgx_pool_data_lbl_1_data_3EFB8_194), fn_1_10161C, 0, 5);
+    fn_1_435C(arg1);
+    fn_1_3F8C(((u8 *)fzgx_pool_data_lbl_1_data_3EFB8_1A0), fn_1_1018BC, 0, 5);
+    p->unk_14 = 1;
+    d = *(u32 *)(((u8 *)fzgx_pool_data_lbl_1_data_3EFB8) + p->unk_8 * 0x104);
+    idx = (p->unk_4 + d) % d;
+    p->unk_4 = idx;
+    obj = *(u32 **)(((u8 *)p->unk_10) + 8) ;
+    obj = *(u32 **)((u8 *)obj + idx * 8);
+    if (obj != 0 && (obj[1] & 0x10)) {
+        fn_1_101BC4(obj);
+    }
+}
+/* fzgx:end fn_1_1014B4 */
+
 /* fzgx:begin fn_1_10161C */
 typedef struct {
     u8 pad_0[0x8];
