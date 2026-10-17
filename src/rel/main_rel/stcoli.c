@@ -1885,6 +1885,82 @@ int fn_1_20994(void *arg, f32 *out) {
 }
 /* fzgx:end fn_1_20994 */
 
+/* fzgx:begin fn_1_214C4 noprologue */
+#include "types.h"
+#include "rel/main_rel/stcoli.h"
+
+typedef struct { u8 pad_0[0x40]; f32 lo; f32 hi; } Seg;
+typedef struct { u32 a; Seg *seg; u32 b; } Ent;
+extern const f32 lbl_1_rodata_6D0;
+
+#pragma opt_propagation off
+s32 fn_1_214C4(f32 *out, s32 start, f32 x) {
+    Obj_1_bss_3BE0_Target *tbl;
+    s32 v;
+    s32 offset;
+    s32 *p;
+    s32 i;
+    s32 sum;
+    s32 idx;
+    s32 loc[2];
+    f32 t;
+    f32 period;
+    s32 n;
+    s32 found;
+    *out = lbl_1_rodata_6D0;
+    if (lbl_1_bss_3BE0 == 0) {
+        return 0;
+    }
+    n = (s32)lbl_1_bss_3BE0->unk_8;
+    if (n == 0) {
+        return 0;
+    }
+    if (start < 0 || n <= start) {
+        start = 0;
+    }
+    found = 0;
+    loc[0] = 0;
+    loc[1] = -1;
+    t = x;
+    if ((((*(u32 *)&t) & 0x7F800000) - 0x7F800000) == 0) {
+        return 0;
+    }
+    while (x < 0.0f) {
+        period = *(f32 *)lbl_1_bss_3BE0->unk_90;
+        x += period;
+    }
+    while (x >= *(f32 *)lbl_1_bss_3BE0->unk_90) {
+        x -= *(f32 *)lbl_1_bss_3BE0->unk_90;
+    }
+    /* Reload the shared table pointer after normalizing the position. */
+    tbl = *(Obj_1_bss_3BE0_Target *volatile *)&lbl_1_bss_3BE0;
+    p = loc;
+    for (i = 0; i < n; i++) {
+        Seg *s;
+        f32 lo;
+        f32 hi;
+        offset = (i & 1) * 4;
+        v = *(s32 *)((u8 *)p + offset);
+        sum = v + n;
+        idx = (start + sum) % n;
+        if (i & 1) {
+            *(s32 *)((u8 *)p + offset) = v - 1;
+        } else {
+            *(s32 *)((u8 *)p + offset) = v + 1;
+        }
+        s = ((Ent *)tbl->unk_C)[idx].seg;
+        lo = s->lo;
+        hi = s->hi;
+        if (lo <= x && x <= hi) {
+            *out = (x - lo) / (hi - lo);
+            found = idx;
+            break;
+        }
+    }
+    return found;
+}
+/* fzgx:end fn_1_214C4 */
+
 /* fzgx:begin fn_1_21644 */
 void *fn_1_21644(void *arg0, f32 *arg1, void *arg2) {
     int local;

@@ -7838,3 +7838,9 @@ rel/main_rel/replay/fn_1_F38C0.c:
 
 rel/main_rel/sound/fn_1_A0978.c:
 	.text       start:0x000A0978 end:0x000A0AA4 align:4
+
+rel/main_rel/screen_effect/fn_1_7880C.c:
+	.text       start:0x0007880C end:0x000788B0 align:4
+
+rel/main_rel/stcoli/fn_1_214C4.c:
+	.text       start:0x000214C4 end:0x00021644 align:4

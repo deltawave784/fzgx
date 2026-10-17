@@ -1931,6 +1931,41 @@ u8 fn_1_7879C(u32 arg0) {
 }
 /* fzgx:end fn_1_7879C */
 
+/* fzgx:begin fn_1_7880C noprologue */
+typedef float f32;
+typedef unsigned int u32;
+typedef struct { f32 x, y, z; } V3;
+extern f32 lbl_1_rodata_3180[];
+extern void fn_80072864(u32);
+extern void fn_80072558(void);
+extern u32 lbl_8006DCA4(void);
+extern void lbl_8006E0A4(void *);
+extern void lbl_8006E13C(void *);
+extern u32 fn_800384FC(u32, u32);
+
+void fn_1_7880C(void) {
+    /* Preserve the pool read order across the vector images. */
+    f32 zero = *(volatile f32 *)&lbl_1_rodata_3180[0x20 / 4];
+    /* Volatile preserves the retail ordering of the first image's pool loads. */
+    V3 a = *(volatile V3 *)&lbl_1_rodata_3180[0xc0 / 4];
+    /* Volatile keeps the second image's pool loads after the first image. */
+    V3 b = *(volatile V3 *)&lbl_1_rodata_3180[0xcc / 4];
+    a.x = zero;
+    a.y = zero;
+    a.z = zero;
+    b.x = lbl_1_rodata_3180[0xd8 / 4];
+    b.y = lbl_1_rodata_3180[0xd8 / 4];
+    b.z = lbl_1_rodata_3180[0xd8 / 4];
+    fn_80072864(1);
+    fn_80072558();
+    lbl_8006DCA4();
+    lbl_8006E0A4(&a);
+    lbl_8006E13C(&b);
+    fn_80072558();
+    fn_800384FC(10, 10);
+}
+/* fzgx:end fn_1_7880C */
+
 /* fzgx:begin fn_1_788B0 */
 /* Shared literal pool primer: screen_effect.c pools every literal of the TU
    behind one base (lbl_1_rodata_3180). These dummy functions, in a section
