@@ -1720,6 +1720,344 @@ void fn_1_112F40(fn_1_10D2F0_Obj *obj) {
 }
 /* fzgx:end fn_1_112F40 */
 
+/* fzgx:begin fn_1_113C58 noprologue */
+#include "dolphin/types.h"
+#include "rel/main_rel/accessory.h"
+#include "psvec.h"
+
+typedef struct { f32 x, y, z; } AccessoryVec;
+typedef struct AccessoryPoint {
+    u8 unk_0;
+    u8 pad_1[15];
+    AccessoryVec unk_10;
+    AccessoryVec unk_1C;
+    AccessoryVec unk_28;
+    AccessoryVec unk_34;
+    f32 unk_40;
+} AccessoryPoint;
+typedef struct AccessoryLink {
+    AccessoryPoint *unk_0;
+    AccessoryPoint *unk_4;
+    f32 unk_8;
+} AccessoryLink;
+typedef struct {
+    u8 pad_0[8];
+    u8 *unk_8;
+} AccessoryModel;
+typedef struct {
+    u8 pad_0[0x8C];
+    s32 unk_8C;
+    u8 pad_90[0xC0];
+    AccessoryModel *unk_150;
+} AccessoryDataLocal;
+typedef struct {
+    u8 unk_0;
+    u8 pad_1[7];
+    u32 unk_8;
+    AccessoryDataLocal *unk_C;
+    void *unk_10;
+    u32 unk_14;
+    u32 unk_18;
+    u32 unk_1C;
+    u32 unk_20;
+    AccessoryPoint *unk_24;
+    AccessoryLink *unk_28;
+} AccessoryObjectLocal;
+
+extern const f32 lbl_1_rodata_7AB8[9];
+extern u32 lbl_801A6410[];
+extern s32 fn_80077B14(void *);
+extern void lbl_8006DBAC(void *);
+extern void lbl_8006DAEC(void);
+extern void lbl_8006DBE4(void);
+extern void lbl_8006E1B0(void *, void *);
+extern void lbl_8006DC20(void);
+extern void *fn_1_4630(u32, u32, const char *, int);
+extern void fn_1_46B4(u32, void *, const char *, int);
+extern f32 lbl_8006D118(f32 *, f32);
+extern f32 lbl_8006D0B4(f32);
+extern void fn_1_108A90(AccessoryObjectLocal *, u32, f32, f32, f32, f32);
+extern void fn_1_1286F4(AccessoryVec *);
+extern void fn_1_109114(AccessoryObjectLocal *);
+
+#define P_0x58 0.0013611111376020642
+#define P_0x60 0.0027222223579883575f
+#define P_0x68 0.0f
+#define P_0x9C 0.0001f
+#define P_0xA0 1.0f
+#define P_0x10C 0.065f
+#define P_0x154 0.049f
+#define P_0x188 0.2
+#define P_0x190 0.8
+#define P_0x198 0.5
+#define P_0x1A8 0.115f
+#define P_0x1D0 0.027f
+#define P_0x1E8 0.051f
+#define P_0x1F0 0.119f
+#define P_0x1F4 0.183f
+#define P_0x238 0.1f
+#define P_0x278 0.12f
+#define P_0x27C 0.07f
+#define P_0x280 -0.037f
+#define P_0x284 0.09f
+#define P_0x288 0.077f
+#define P_0x28C 0.112f
+#define P_0x290 0.18f
+#define P_0x294 -0.013f
+#define P_0x298 0.069f
+#define P_0x29C -0.002f
+#define P_0x2A0 0.021f
+#define P_0x2A4 -0.021f
+#define P_0x2A8 0.06f
+#define P_0x2AC 0.075f
+#define P_0x2B0 0.085f
+#define P_0x2B4 0.092f
+#define P_0x2B8 0.059f
+#define P_0x2BC 0.055f
+#define F(o) P_##o
+#define D(o) P_##o
+#define LIMIT(n,a,b,c,d) fn_1_108A90(obj,n,F(a),F(b),F(c),F(d))
+#pragma force_active on
+#pragma section code_type ".fzgxpool"
+static const u32 fzgx_pool_table_0[22] = {0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x3E800000, 0x00000000, 0x3C23D70A, 0x00000000, 0x00000000, 0x00000000, 0x3E7AD7F2, 0x9ABCAF48, 0x00000000, 0x00000000, 0x00000000, 0x3F000000, 0x3E800000, 0x00000000, 0x43300000, 0x00000000};
+static f64 fzgx_pool_primer_58(void) { return 0.0013611111376020642; }
+static f32 fzgx_pool_primer_60(void) { return 0.0027222223579883575f; }
+static const u32 fzgx_pool_table_64[1] = {0xBF800000};
+static f32 fzgx_pool_primer_68(void) { return 0.0f; }
+static const f32 fzgx_pool_float_6c[1] = {-2.0f};
+static const u32 fzgx_pool_table_70[11] = {0x40000000, 0x34000000, 0xBF800001, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0xBAB26750, 0xBB326750};
+static f32 fzgx_pool_primer_9c(void) { return 0.0001f; }
+static f32 fzgx_pool_primer_a0(void) { return 1.0f; }
+static const u32 fzgx_pool_table_a4[26] = {0x39D1B717, 0x3CCCCCCD, 0x3B8A71DE, 0x3FB33333, 0x28F5C28F, 0x3FD33333, 0x33333333, 0xBC9BA5E3, 0x3D6978D5, 0x3A7BEB9E, 0x00000000, 0x3FA4FDF3, 0xB1EB851F, 0xBFF00000, 0x00000000, 0x3F400000, 0xBE800000, 0xBF800000, 0x00000000, 0x00000000, 0x3F800000, 0x00000000, 0x00000000, 0x3E0D4FDF, 0x3B83126F, 0x3DED9168};
+static f32 fzgx_pool_primer_10c(void) { return 0.065f; }
+static const u32 fzgx_pool_table_110[17] = {0x3D8523F6, 0x00000000, 0x40200000, 0x00000000, 0x3B800000, 0x00000000, 0x3FA99999, 0x9999999A, 0x3F664CEA, 0x00000000, 0x3F947AE1, 0x47AE147B, 0x3F1A36E2, 0xEB1C432D, 0x00000000, 0x00000000, 0x00000000};
+static f32 fzgx_pool_primer_154(void) { return 0.049f; }
+static const u32 fzgx_pool_table_158[12] = {0x3B23D70B, 0x3D4CCCCD, 0xBE000000, 0x00000000, 0x3F8EB851, 0xEB851EB8, 0xBF000000, 0x00000000, 0x3FA70A3D, 0x70A3D70A, 0x396BEDFA, 0x00000000};
+static f64 fzgx_pool_primer_188(void) { return 0.2; }
+static f64 fzgx_pool_primer_190(void) { return 0.8; }
+static f64 fzgx_pool_primer_198(void) { return 0.5; }
+static const u32 fzgx_pool_table_1a0[2] = {0x3CF5C28F, 0x3A83126F};
+static f32 fzgx_pool_primer_1a8(void) { return 0.115f; }
+static const u32 fzgx_pool_table_1ac[9] = {0x3CA52EFA, 0x3E116873, 0x3C8C9539, 0x3E0624DD, 0x3DA3D70A, 0x3CB851EC, 0x3E19999A, 0x3E4CCCCD, 0x3D23D70B};
+static f32 fzgx_pool_primer_1d0(void) { return 0.027f; }
+static const u32 fzgx_pool_table_1d4[5] = {0x3C8637BE, 0x3E03126F, 0x3E10624E, 0x3C8A71DE, 0x3E051EB8};
+static f32 fzgx_pool_primer_1e8(void) { return 0.051f; }
+static const u32 fzgx_pool_table_1ec[1] = {0x3C68038B};
+static f32 fzgx_pool_primer_1f0(void) { return 0.119f; }
+static f32 fzgx_pool_primer_1f4(void) { return 0.183f; }
+static const u32 fzgx_pool_table_1f8[16] = {0x3C58ADAC, 0x3E989375, 0x3F4CCCCD, 0x41100000, 0x3A9D4952, 0x46FFFE00, 0x3B9D4952, 0x3A1D4952, 0xC7000000, 0x47800000, 0x421C0000, 0x3B03126F, 0x41E80000, 0xBA83126F, 0x3F0CCCCD, 0x3ECCCCCD};
+static f32 fzgx_pool_primer_238(void) { return 0.1f; }
+static const u32 fzgx_pool_table_23c[15] = {0x00000000, 0x43300000, 0x80000000, 0x3727C5AC, 0x3B378034, 0x3B16BB99, 0x3CB37005, 0x3E178D50, 0x3CECBFB2, 0x3E2E147B, 0x3C23D70B, 0x3FF00000, 0x00000000, 0x47000000, 0x41400000};
+static f32 fzgx_pool_primer_278(void) { return 0.12f; }
+static f32 fzgx_pool_primer_27c(void) { return 0.07f; }
+static f32 fzgx_pool_primer_280(void) { return -0.037f; }
+static f32 fzgx_pool_primer_284(void) { return 0.09f; }
+static f32 fzgx_pool_primer_288(void) { return 0.077f; }
+static f32 fzgx_pool_primer_28c(void) { return 0.112f; }
+static f32 fzgx_pool_primer_290(void) { return 0.18f; }
+static f32 fzgx_pool_primer_294(void) { return -0.013f; }
+static f32 fzgx_pool_primer_298(void) { return 0.069f; }
+static f32 fzgx_pool_primer_29c(void) { return -0.002f; }
+static f32 fzgx_pool_primer_2a0(void) { return 0.021f; }
+static f32 fzgx_pool_primer_2a4(void) { return -0.021f; }
+static f32 fzgx_pool_primer_2a8(void) { return 0.06f; }
+static f32 fzgx_pool_primer_2ac(void) { return 0.075f; }
+static f32 fzgx_pool_primer_2b0(void) { return 0.085f; }
+static f32 fzgx_pool_primer_2b4(void) { return 0.092f; }
+static f32 fzgx_pool_primer_2b8(void) { return 0.059f; }
+static f32 fzgx_pool_primer_2bc(void) { return 0.055f; }
+#pragma section code_type ".text"
+#pragma force_active off
+
+static inline void reset_points(AccessoryObjectLocal *obj) {
+    u32 n;
+    AccessoryPoint *p = obj->unk_24;
+    for (n = 0; n < obj->unk_18; n++, p++) {
+        lbl_8006DBE4();
+        lbl_8006E1B0(&p->unk_28, &p->unk_10);
+    }
+}
+#pragma fp_contract on
+void fn_1_113C58(AccessoryObjectLocal *arg0) {
+    AccessoryVec delta;
+    AccessoryVec noise;
+    f32 distance;
+    u32 k;
+    struct {u32 value;} initCount;
+    AccessoryPoint *initPoint;
+    AccessoryPoint *points;
+    u8 *matrix;
+    AccessoryLink **sorted;
+    f32 *weights;
+    AccessoryObjectLocal *obj = arg0;
+    AccessoryPoint *integrationPoint;
+    u32 i;
+    AccessoryLink *link;
+    u32 pass;
+    AccessoryPoint *finalPoint;
+    AccessoryLink **cursor;
+    u32 iterations;
+    AccessoryPoint *a;
+    AccessoryPoint *b;
+    const u8 *pool = (const u8 *)lbl_1_rodata_7AB8;
+    AccessoryLink *links;
+    u32 j;
+    if (obj != 0) {
+    if (obj->unk_10 != 0) {
+    fn_80077B14(obj->unk_10);
+    if (obj->unk_0 & 2) {
+        obj->unk_0 &= ~2;
+        lbl_8006DBAC(((u8 (*)[0x18C])obj->unk_C->unk_150->unk_8)[*(u32 *)(lbl_1_data_3FFBC + obj->unk_8 * 4)] + 0x88);
+        lbl_8006DAEC();
+        reset_points(obj);
+        lbl_8006DC20();
+    }
+    integrationPoint = obj->unk_24;
+    for (i = 0; i < obj->unk_18; i++, integrationPoint++) {
+        AccessoryPoint *p = integrationPoint;
+        if (!(p->unk_0 & 1)) {
+             p->unk_1C = p->unk_10;
+            p->unk_10.x += p->unk_34.x;
+            p->unk_10.y += p->unk_34.y;
+            p->unk_10.z += p->unk_34.z;
+            p->unk_10.y -= D(0x58);
+            p->unk_34.y -= F(0x60);
+        }
+    }
+    matrix = obj->unk_C->unk_150->unk_8 + *(u32 *)(lbl_1_data_3FFBC + obj->unk_8 * 4) * 0x18C;
+    points = obj->unk_24;
+    for (i = 0; i < obj->unk_18; i++, points++) {
+        lbl_8006DBAC(matrix + 0x88);
+        lbl_8006DAEC();
+        if (points->unk_0 & 1) {
+            lbl_8006DBE4();
+            lbl_8006E1B0(&points->unk_28, &points->unk_10);
+        }
+        lbl_8006DC20();
+    }
+    sorted = fn_1_4630(lbl_801A6410[0], obj->unk_1C * 4, lbl_1_data_40530, 0x147C);
+    weights = fn_1_4630(lbl_801A6410[0], obj->unk_1C * 4, lbl_1_data_40530, 0x147D);
+    {
+        f32 *weightcur;
+        AccessoryLink **sortcur;
+        u32 count;
+        AccessoryLink *item;
+        item = obj->unk_28;
+        sortcur = sorted;
+        count = 0;
+        weightcur = weights;
+        for (; count < obj->unk_1C; count++, weightcur++, sortcur++, item++) {
+            *weightcur = item->unk_0->unk_40 + item->unk_4->unk_40;
+            *sortcur = item;
+        }
+    }
+    for (i = 0; i < obj->unk_1C; i++) {
+        for (j = i; j < obj->unk_1C; j++) {
+            if (weights[i] < weights[j]) {
+                f32 tmp = weights[i];
+                AccessoryLink *tmpLink;
+                weights[i] = weights[j];
+                weights[j] = tmp;
+                tmpLink = sorted[i];
+                sorted[i] = sorted[j];
+                sorted[j] = tmpLink;
+            }
+        }
+    }
+    if (obj->unk_C->unk_8C == 2 || obj->unk_C->unk_8C == 3) iterations = 2;
+    else iterations = 4;
+    for (pass = 0; pass < iterations; pass++) {
+        cursor = sorted;
+        for (i = 0; i < obj->unk_1C; i++, cursor++) {
+            link = *cursor;
+            a = link->unk_0;
+            b = link->unk_4;
+            if (a && b) {
+                struct { f32 value; } stretched;
+                psvec_sub(&a->unk_10, &b->unk_10, &delta);
+                distance = __fmadds(delta.z, delta.z, __fmadds(delta.y, delta.y, delta.x * delta.x));
+                stretched.value = distance - F(0x9C);
+                if (stretched.value > link->unk_8) {
+                    f32 reciprocal = lbl_8006D118(&distance, distance);
+                    f32 f1 = lbl_8006D0B4(link->unk_8);
+                    f32 massB, massA;
+                    f32 factor, wa, wb;
+                    distance = reciprocal * (distance - f1);
+                    psvec_scale(&delta, distance, &delta);
+                    massA = a->unk_40;
+                    massB = b->unk_40;
+                    factor = F(0xA0) / (massA + massB);
+                    wa = -(massA * factor);
+                    wb = massB * factor;
+                    psvec_scale_add(&a->unk_10, &delta, wa, &a->unk_10);
+                    psvec_scale_add(&b->unk_10, &delta, wb, &b->unk_10);
+                }
+            }
+        }
+        if (obj->unk_C->unk_8C == 2 || obj->unk_C->unk_8C == 3) {
+            LIMIT(1,0x278,0x1A8,0x68,0x68);
+            LIMIT(0x10,0x278,0x68,0x68,0x68);
+            LIMIT(0x12,0x27C,0x280,0x68,0x68);
+            LIMIT(0x12,0x284,0x288,0x68,0x68);
+            LIMIT(0x12,0x28C,0x290,0x294,0x68);
+            LIMIT(0x17,0x27C,0x280,0x68,0x68);
+            LIMIT(0x17,0x284,0x288,0x68,0x68);
+            LIMIT(0x17,0x28C,0x290,0x294,0x68);
+            LIMIT(0x13,0x298,0x1E8,0x68,0x68);
+            LIMIT(0x13,0x10C,0x1F4,0x68,0x68);
+            LIMIT(0x18,0x298,0x1E8,0x68,0x68);
+            LIMIT(0x18,0x10C,0x1F4,0x68,0x68);
+        } else {
+            LIMIT(1,0x238,0x1A8,0x68,0x68);
+            LIMIT(0x10,0x238,0x68,0x68,0x68);
+            LIMIT(0x10,0x238,0x154,0x29C,0x2A0);
+            LIMIT(0x10,0x238,0x154,0x29C,0x2A4);
+            LIMIT(0x12,0x2A8,0x280,0x68,0x68);
+            LIMIT(0x12,0x27C,0x1D0,0x68,0x68);
+            LIMIT(0x12,0x2AC,0x288,0x68,0x68);
+            LIMIT(0x12,0x2B0,0x1F0,0x68,0x68);
+            LIMIT(0x12,0x2B4,0x290,0x294,0x68);
+            LIMIT(0x17,0x2A8,0x280,0x68,0x68);
+            LIMIT(0x17,0x27C,0x1D0,0x68,0x68);
+            LIMIT(0x17,0x2AC,0x288,0x68,0x68);
+            LIMIT(0x17,0x2B0,0x1F0,0x68,0x68);
+            LIMIT(0x17,0x2B4,0x290,0x294,0x68);
+            LIMIT(0x13,0x2B8,0x1E8,0x68,0x68);
+            LIMIT(0x13,0x2B8,0x1A8,0x68,0x68);
+            LIMIT(0x13,0x2BC,0x1F4,0x68,0x68);
+            LIMIT(0x18,0x2B8,0x1E8,0x68,0x68);
+            LIMIT(0x18,0x2B8,0x1A8,0x68,0x68);
+            LIMIT(0x18,0x2BC,0x1F4,0x68,0x68);
+        }
+    }
+    if (sorted) fn_1_46B4(lbl_801A6410[0], sorted, lbl_1_data_40530, 0x14F8);
+    if (weights) fn_1_46B4(lbl_801A6410[0], weights, lbl_1_data_40530, 0x14F9);
+    finalPoint = obj->unk_24;
+    {
+    f64 damping = D(0x190);
+    f64 response = D(0x188);
+    f64 noiseScale = D(0x198);
+    for (k = 0; k < obj->unk_18; k++, finalPoint++) {
+        AccessoryPoint *p = finalPoint;
+        f64 tmp;
+        fn_1_1286F4(&noise);
+        p->unk_34.x *= damping;
+        p->unk_34.y *= damping;
+        p->unk_34.z *= damping;
+        p->unk_34.x += (f64)(response * (p->unk_10.x - p->unk_1C.x));
+        p->unk_34.y += (f64)(response * (p->unk_10.y - p->unk_1C.y));
+        p->unk_34.z += (f64)(response * (p->unk_10.z - p->unk_1C.z));
+        p->unk_34.x += (f64)(noiseScale * noise.x);
+        p->unk_34.y += (f64)(noiseScale * noise.y);
+        p->unk_34.z += (f64)(noiseScale * noise.z);
+    }
+    }
+    fn_1_109114(obj);
+    }
+    }
+}
+/* fzgx:end fn_1_113C58 */
+
 /* fzgx:begin fn_1_1145C8 noprologue */
 #include "types.h"
 #include "game/main_rel/accessory_types.h"
