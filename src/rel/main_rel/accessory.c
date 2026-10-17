@@ -1720,6 +1720,133 @@ void fn_1_112F40(fn_1_10D2F0_Obj *obj) {
 }
 /* fzgx:end fn_1_112F40 */
 
+/* fzgx:begin fn_1_1145C8 noprologue */
+#include "types.h"
+#include "game/main_rel/accessory_types.h"
+
+typedef struct Accessory1145C8Node {
+    u8 flag;
+    u8 pad_1[0xF];
+    f32 keyA;
+    u8 pad_14[0x4];
+    f32 keyB;
+    u8 pad_1C[0x24];
+    f32 value;
+} Accessory1145C8Node;
+
+typedef struct Accessory1145C8Mode {
+    u8 pad_0[0x88];
+    s32 mode;
+} Accessory1145C8Mode;
+
+typedef struct Accessory1145C8Edge {
+    Accessory1145C8Node *a;
+    Accessory1145C8Node *b;
+    f32 len;
+} Accessory1145C8Edge;
+
+typedef struct Accessory1145C8 {
+    u8 pad_0[0xC];
+    Accessory1145C8Mode *unk_C;
+    u8 pad_10[0x8];
+    u32 count;
+    u32 edgeCount;
+    u8 pad_20[0x4];
+    Accessory1145C8Node *nodes;
+    Accessory1145C8Edge *edges;
+} Accessory1145C8;
+
+extern const f32 lbl_1_rodata_7B1C;
+extern const f32 lbl_1_rodata_7B20;
+extern u32 lbl_801A6410;
+extern void fn_1_10846C(Accessory1145C8 *);
+extern void fn_1_128884(void *, void *, s32);
+extern void *fn_1_4630(u32, u32, const char *, s32);
+
+void fn_1_1145C8(Accessory1145C8 *obj) {
+    u32 i;
+    u32 l;
+    Accessory1145C8Node *row;
+    u32 k;
+    u32 a;
+    Accessory1145C8Node *e;
+    Accessory1145C8Node *p;
+    Accessory1145C8Node *g;
+    u32 b;
+    Accessory1145C8Node *f;
+    u32 j;
+    Accessory1145C8Node *q;
+    u32 rows;
+    f32 value;
+
+    if (obj != NULL) {
+        fn_1_10846C(obj);
+        for (i = 0, e = obj->nodes; i < obj->count; i++, e++) {
+            if (e->flag & 1) {
+                e->flag = 0;
+                e->value = lbl_1_rodata_7B1C;
+            } else {
+                e->flag = 1;
+                e->value = lbl_1_rodata_7B20;
+            }
+        }
+
+        for (i = 0, e = obj->nodes; i < obj->count; i++, e++) {
+            if (obj->unk_C->mode == 4 || obj->unk_C->mode == 35) {
+                for (j = i + 1, f = &obj->nodes[i] + 1; j < obj->count; j++, f++) {
+                    if (e->keyA > f->keyA) {
+                        fn_1_128884(e, f, sizeof(Accessory1145C8Node));
+                    }
+                }
+            } else {
+                for (l = i + 1, g = &obj->nodes[i] + 1; l < obj->count; l++, g++) {
+                    if (e->keyA < g->keyA) {
+                        fn_1_128884(e, g, sizeof(Accessory1145C8Node));
+                    }
+                }
+            }
+        }
+
+        rows = obj->count / 5;
+        for (i = 0, row = obj->nodes; i < rows; i++, row += 5) {
+            value = -(f32)i / (f32)(rows - 1);
+            row[0].value = value;
+            row[1].value = value;
+            row[2].value = value;
+            row[3].value = value;
+            row[4].value = value;
+            for (a = 0, p = row; a < 5; a++, p++) {
+                for (b = a + 1, q = p + 1; b < 5; b++, q++) {
+                    if (p->keyB > q->keyB) {
+                        fn_1_128884(p, q, sizeof(Accessory1145C8Node));
+                    }
+                }
+            }
+        }
+
+        obj->edgeCount = (obj->count / 5) * 4 + (obj->count / 5 - 1) * 5;
+        obj->edges = fn_1_4630(lbl_801A6410, obj->edgeCount * sizeof(Accessory1145C8Edge), lbl_1_data_40530, 0x1563);
+
+        k = 0;
+        for (i = 0, e = obj->nodes; i < obj->count - 1; i++, e++) {
+            if ((i + 1) % 5 != 0) {
+                obj->edges[k].a = e;
+                obj->edges[k].b = e + 1;
+                obj->edges[k].len = fn_1_1289BC((const Point1024C4 *)e, (const Point1024C4 *)(e + 1));
+                k++;
+            }
+        }
+
+        for (i = 0, e = obj->nodes; i < obj->count - 5; i++, e++) {
+            obj->edges[k].a = e;
+            obj->edges[k].b = e + 5;
+            obj->edges[k].len = fn_1_1289BC((const Point1024C4 *)e, (const Point1024C4 *)(e + 5));
+            k++;
+        }
+    }
+}
+/* fzgx:end fn_1_1145C8 */
+
 /* fzgx:begin fn_1_1154D0 */
 typedef struct {
     u8 active;
