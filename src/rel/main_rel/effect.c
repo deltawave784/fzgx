@@ -4267,6 +4267,124 @@ void fn_1_60F84(fn_1_60F84_Effect *obj)
 }
 /* fzgx:end fn_1_60F84 */
 
+/* fzgx:begin fn_1_61070 noprologue */
+#include "types.h"
+#include "psvec.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/effect.h"
+
+/* Current matrix window in the Gekko locked cache. */
+#define LC_BASE 0xE0000000
+
+typedef struct Fn161070 {
+    u8 pad00[0x1c];
+    f32 field1c;
+    f32 field20;
+    f32 field24;
+    f32 field28;
+    u8 pad2c[0x8];
+    int field34;
+    u8 pad38[0x4];
+    u8 field3c[0x1c];
+    s16 field58;
+} Fn161070;
+
+typedef struct Vec {
+    f32 x;
+    f32 y;
+    f32 z;
+} Vec;
+
+typedef struct Mat44 {
+    f32 m[3][4];
+} Mat44;
+
+typedef struct EfxData {
+    f32 field0;
+    f32 field4;
+    u8 mtx[0x34];
+    u8 color[4];
+} EfxData;
+
+extern const f32 lbl_1_rodata_2950[200];
+extern void lbl_8006D9D8(void *);
+extern void lbl_8006D7B0(void);
+extern void mathutil_mtxA_rotate_z(s16);
+extern f32 lbl_8006D0B4(f32);
+extern void lbl_8006DB74(void *);
+extern void lbl_8006D848(f32);
+extern void lbl_8006DFC4(void *);
+extern void fn_1_9F914(void *, int);
+extern u8 *memset(u8 *, int, u32);
+
+#pragma opt_loop_invariants off
+#pragma opt_propagation off
+static inline f32 fn_1_61070_read_pointer(Vec * owner) { return owner->y; }
+static inline f32 fn_1_61070_read_pointer_(Vec * owner) { return owner->z; }
+#pragma opt_lifetimes off
+void fn_1_61070(Fn161070 *self) {
+    EfxData data;
+    Mat44 matrix;
+    Vec vector;
+    const f32 *pool = lbl_1_rodata_2950;
+    int id = self->field34;
+    f32 radius = self->field28;
+    f32 distance;
+    f32 scale;
+    f32 x;
+    void * lab_t0;
+    void * lab_t0__2;
+    void * lab_t0_;
+    const Mat44 * src;
+    void * lab_t0__;
+
+    lbl_8006D9D8((u8 *)self + 0x3c);
+    lbl_8006D7B0();
+    mathutil_mtxA_rotate_z(self->field58);
+
+    {
+        src = (const Mat44 *)LC_BASE;
+        psvec_set(&vector.x, src->m[2][3], src->m[1][3], src->m[0][3]);
+    }
+    x = vector.x * vector.x;
+    x += fn_1_61070_read_pointer(&vector) * fn_1_61070_read_pointer(&vector);
+    x += fn_1_61070_read_pointer_(&vector) * vector.z;
+    distance = lbl_8006D0B4(x);
+
+    if (distance > pool[1] + radius) {
+        lab_t0 = &matrix;
+        lab_t0_ = lab_t0;
+        lab_t0__ = lab_t0_;
+        lbl_8006DB74(lab_t0__);
+        lbl_8006D848((distance - radius) / distance);
+        lbl_8006DFC4(&matrix);
+    }
+
+{
+    u32 lab_t2;
+    lab_t2 = 0x40;
+    memset((u8 *)&data, 0, lab_t2);
+}
+    lab_t0 = data.mtx;
+    lab_t0__2 = lab_t0;
+    lab_t0__ = lab_t0__2;
+    lbl_8006DB74(lab_t0__);
+    scale = pool[0x54] * self->field28;
+    data.field0 = scale;
+    data.color[0] = (u8)(pool[0x17] * self->field1c);
+    data.color[1] = (u8)(pool[0x17] * self->field20);
+    data.color[2] = (u8)(pool[0x17] * self->field24);
+    data.color[3] = 0xff;
+    data.field4 = scale;
+    fn_1_9F914(&data, id);
+}
+#pragma opt_lifetimes reset
+
+#pragma opt_propagation reset
+
+#pragma opt_loop_invariants reset
+/* fzgx:end fn_1_61070 */
+
 /* fzgx:begin fn_1_611EC */
 #pragma section code_type ".fzgxpool"
 __declspec(section ".fzgxpool") static void fzgx_pool_prime1(void) {

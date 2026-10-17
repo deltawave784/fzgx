@@ -7751,3 +7751,6 @@ rel/main_rel/som/fn_1_1384C.c:
 
 rel/main_rel/stcoli/fn_1_1FB80.c:
 	.text       start:0x0001FB80 end:0x0001FC98 align:4
+
+rel/main_rel/effect/fn_1_61070.c:
+	.text       start:0x00061070 end:0x000611EC align:4
