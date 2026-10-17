@@ -2367,6 +2367,60 @@ void fn_1_2277C(StcoliObj *obj, StcoliDesc *desc)
 }
 /* fzgx:end fn_1_2277C */
 
+/* fzgx:begin fn_1_229EC noprologue */
+typedef float f32;
+typedef double f64;
+typedef struct { f32 pad0; f32 f4; f32 f8; f32 fc; f32 pad[12]; f32 f40; } S229;
+extern const f32 lbl_1_rodata_840[32];
+
+void fn_1_229EC(S229 *a, f32 *p, f32 *q)
+{
+    f32 d, t, x, k, m, n;
+    f32 old_q;
+    const f32 *K = lbl_1_rodata_840;
+    old_q = *q;
+    m = K[10] * a->f8;
+    n = K[10] * a->fc;
+    k = m / K[11];
+    x = k + *p;
+    d = x - old_q;
+    t = x / (K[12] + n);
+    if (t < K[3]) {
+        t = K[3];
+    }
+    k = K[13] * (a->f8 * (K[14] + a->f8));
+    t = t * k;
+    if (old_q < K[3]) {
+        t = t * K[15];
+    }
+    {
+        f32 e = d * t;
+        *p = x - e;
+    }
+    {
+        f32 y = *p;
+        f32 h = a->f40;
+        if (y > h) {
+            *p = y - h;
+        } else {
+            *p = K[3];
+        }
+    }
+    if (old_q < K[3]) {
+        d = d * K[16];
+    }
+    *q = *q + (K[17] * d) / a->f4;
+    {
+        f32 s = *q;
+        f32 u = s * s;
+        *q = s - (K[18] * u) / a->f4;
+    }
+    if (((const f64 *)K)[10] * *q < ((const f64 *)K)[11]) {
+        *q = K[3];
+    }
+}
+/* fzgx:end fn_1_229EC */
+
 /* fzgx:begin fn_1_22B10 noprologue */
 #include "types.h"
 

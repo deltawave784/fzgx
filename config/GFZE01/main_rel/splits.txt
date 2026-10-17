@@ -7952,3 +7952,6 @@ rel/main_rel/sel_static_disp/fn_1_14F608.c:
 
 rel/main_rel/effect/fn_1_5A8DC.c:
 	.text       start:0x0005A8DC end:0x0005ABC4 align:4
+
+rel/main_rel/stcoli/fn_1_229EC.c:
+	.text       start:0x000229EC end:0x00022B10 align:4
