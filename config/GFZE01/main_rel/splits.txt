@@ -7547,3 +7547,6 @@ rel/main_rel/sel_static_disp/fn_1_13EA9C.c:
 
 rel/main_rel/rob/fn_1_96230.c:
 	.text       start:0x00096230 end:0x00096630 align:4
+
+rel/main_rel/ghost/fn_1_EC910.c:
+	.text       start:0x000EC910 end:0x000ECDFC align:4
