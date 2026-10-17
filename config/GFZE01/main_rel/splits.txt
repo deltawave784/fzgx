@@ -7586,3 +7586,6 @@ rel/main_rel/sound/fn_1_A5594.c:
 
 rel/main_rel/_prolog/fn_1_1FE8.c:
 	.text       start:0x00001FE8 end:0x000021E4 align:4
+
+rel/main_rel/stcoli/fn_1_2BD30.c:
+	.text       start:0x0002BD30 end:0x0002BF8C align:4
