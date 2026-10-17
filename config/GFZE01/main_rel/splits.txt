@@ -7700,3 +7700,6 @@ rel/main_rel/effect/fn_1_67F20.c:
 
 rel/main_rel/effect/fn_1_619E4.c:
 	.text       start:0x000619E4 end:0x00061C84 align:4
+
+rel/main_rel/stcoli/fn_1_17098.c:
+	.text       start:0x00017098 end:0x00017920 align:4

@@ -338,6 +338,285 @@ s32 fn_1_14F18(fn_1_14F18_Vec *pos, void *arg1, fn_1_14F18_Vec *dir, f32 *outT,
 }
 /* fzgx:end fn_1_14F18 */
 
+/* fzgx:begin fn_1_17098 noprologue */
+#include "types.h"
+#include "game/main_rel/stcoli_types.h"
+#include "rel/main_rel/stcoli.h"
+
+typedef struct Sig_fn_1_2A8D0_ColiQuery {
+    u8 p[0xc];
+    Sig_fn_1_2A694_V pos;
+    Sig_fn_1_2A694_V dir;
+} Sig_fn_1_2A8D0_ColiQuery;
+
+extern f32 lbl_1_rodata_6D4[5];
+extern const f32 lbl_1_rodata_6E8;
+extern int fn_1_16BA0(void *, f32 *, void *, void *, u32);
+extern f32 fn_1_16E68(void *, void *, u32);
+extern s16 fn_1_7B054(void);
+extern void *lbl_8006D5A4(void *, u32, void *, f32);
+extern void lbl_8006D758(void);
+
+struct Sig_fn_1_18B40_fn_1_18B40_Obj {
+    u32 flags;
+    u8 pad_4[0x8];
+    s32 count;
+    struct Sig_fn_1_18B40_fn_1_18B40_Obj *entries;
+    u8 pad_14[0x38];
+    s32 unk_4C;
+};
+struct Sig_fn_1_18B40_fn_1_18B40_Vec { u32 x, y, z; };
+extern void fn_1_18B40(void *, void *, u32, struct Sig_fn_1_18B40_fn_1_18B40_Obj *, struct Sig_fn_1_18B40_fn_1_18B40_Vec *, int, void *, void *, f32, u32);
+
+typedef struct ColiRange {
+    f32 a, b;
+    u8 pad8[0x44];
+    s8 enabledA, enabledB;
+    u8 pad4E[2];
+} ColiRange;
+typedef struct ColiEntry {
+    u32 unk0;
+    ColiRange *ranges;
+    struct Sig_fn_1_18B40_fn_1_18B40_Obj *obj;
+} ColiEntry;
+typedef struct ColiResult {
+    s32 count;
+    u32 flags;
+    s32 any;
+    u8 padC[0x10];
+    u32 values[4];
+    f32 times[4];
+    u32 masks[4];
+    s32 ids[4];
+} ColiResult;
+typedef struct ColiContext {
+    ColiResult *result;
+    s32 *other;
+} ColiContext;
+typedef struct ColiRecord {
+    u32 words[3];
+    u32 valid;
+    f32 distance;
+    u8 pad14[0x34];
+} ColiRecord;
+typedef struct ColiManager {
+    u8 pad0[0x1B8];
+    s32 count;
+    s32 index;
+    s32 segment;
+    f32 time;
+    u32 unk1C8;
+    s32 total;
+    u8 pad1D0[8];
+    s32 enabled;
+    u8 pad1DC[0x50];
+    ColiRecord primary[4];
+    ColiRecord candidates[8];
+    s32 candidateIds[8];
+    s32 candidateCount;
+} ColiManager;
+extern ColiManager *lbl_801A66CC;
+typedef void (*ColiDispatch)(void *, u32, u32, struct Sig_fn_1_18B40_fn_1_18B40_Obj *, f32, struct Sig_fn_1_18B40_fn_1_18B40_Vec *, ColiContext *, void *, s32);
+
+static inline u32 coli_bit(u32 flags, s32 bit) {
+    return __rlwnm(flags, (bit + 1) & 31, 31, 31);
+}
+static inline void coli_dispatch(void *arg0, u32 arg1, u32 flags, struct Sig_fn_1_18B40_fn_1_18B40_Obj *obj, struct Sig_fn_1_18B40_fn_1_18B40_Vec *vector, ColiContext *ctx, void *arg6, s32 index, f32 t) {
+    ((f32 *)vector)[0] = lbl_1_rodata_6D4[0];
+    ((f32 *)vector)[1] = lbl_1_rodata_6D4[0];
+    ((f32 *)vector)[2] = lbl_1_rodata_6D4[0];
+    ((ColiDispatch *)lbl_1_data_5548)[__cntlzw(obj->flags & 0x3FE0000)](arg0, arg1, flags, obj, t, vector, ctx, arg6, index);
+}
+static inline s32 coli_selective(u32 flags) {
+    s32 enabled = 0;
+    if (flags & 0x1800000) {
+        if (flags & 0xF8000000) enabled = 1;
+    }
+    return enabled;
+}
+static inline void coli_skip(ColiContext *ctx) {
+    f32 time = lbl_1_rodata_6D4[0];
+    ctx->result->values[ctx->result->count] = 0;
+    ctx->result->times[ctx->result->count] = time;
+    ctx->result->masks[ctx->result->count] = 0;
+    ctx->result->ids[ctx->result->count] = -1;
+    if (ctx->result->count < 3) ctx->result->count++;
+}
+
+u32 fn_1_17098(void *arg0, u32 arg1, u32 v1, u32 arg3, u32 arg4, ColiContext *ctx, void *arg6) {
+    s32 v0;
+    s32 i;
+    s32 last;
+    s32 first;
+    s32 missed = 0;
+    s32 index;
+    void *point;
+    struct Sig_fn_1_18B40_fn_1_18B40_Obj *obj;
+    s32 *list = (s32 *)arg3;
+    u32 maskA, maskB, maskC;
+    f32 time;
+    f32 t;
+    s32 item;
+    f32 tmpTime;
+    s32 tmpItem;
+    f32 vector[3];
+    struct Sig_fn_1_18B40_fn_1_18B40_Vec mid;
+    s32 currentItem;
+    ColiEntry *entry;
+    ColiRange *range;
+    ColiRecord *best;
+    ColiRecord *rec;
+    s32 result;
+    if (ctx != 0) {
+        ctx->result->count = 0;
+        ctx->result->flags = 0;
+        ctx->result->any = 0;
+    }
+    if (arg6 != 0) *(u32 *)arg6 = 0;
+    v0 = coli_selective(v1);
+    if (v0 != 0) {
+        u32 bit = __rlwnm(v1, 1, 31, 31) != 0;
+        v1 |= 0x80000000U >> bit;
+    }
+    if ((s32)arg4 > 1) {
+        last = (s32)arg4 - 1;
+        first = 1;
+        lbl_801A66CC->count = last;
+    } else {
+        first = 0;
+        last = 0;
+        lbl_801A66CC->count = 1;
+    }
+    for (i = first; i <= last; i++) {
+        item = i;
+        index = list[i];
+        if (v0 && !coli_bit(v1, i)) index = -1;
+        if (index < 0) {
+            if (ctx) coli_skip(ctx);
+            missed++;
+            continue;
+        }
+        if (v1 & 0x80000) {
+            lbl_8006D5A4(arg0, arg1, &mid, lbl_1_rodata_6E8);
+            point = &mid;
+        } else if (v1 & 0x40000) {
+            point = (void *)arg1;
+        } else {
+            point = arg0;
+        }
+        if (v1 & 0x20000) {
+            tmpItem = item;
+            result = fn_1_16BA0(point, &tmpTime, (void *)index, &tmpItem, 1);
+            if (result < 0) {
+                time = fn_1_16E68(point, (void *)index, item);
+            } else {
+                index = result;
+                time = tmpTime;
+                item = tmpItem;
+            }
+        } else {
+            index = fn_1_16BA0(point, &time, (void *)index, &item, 0);
+        }
+        if (index < 0) {
+            if (ctx) coli_skip(ctx);
+            missed++;
+            continue;
+        }
+        currentItem = item;
+        entry = &((ColiEntry *)lbl_1_bss_3BE0->unk_C)[index];
+        range = entry->ranges;
+        obj = entry->obj;
+        t = range->a + (f32)(time * (range->b - range->a));
+        if (currentItem != 0 && obj->unk_4C != 0 && obj->unk_4C != currentItem) continue;
+        if (obj->flags & 2) continue;
+        lbl_801A66CC->index = currentItem;
+        lbl_801A66CC->segment = index;
+        lbl_801A66CC->time = time;
+        result = 0;
+        if (range[item].enabledA && range[item].enabledB) result = 1;
+        lbl_801A66CC->enabled = result;
+        if (ctx && lbl_801A66CC->count == *ctx->other) {
+            if (fn_1_7B054() == 0x18) {
+                if ((index >= 2 && index <= 0x1c) ||
+                    (index >= 0x1f && index <= 0x33) ||
+                    (index >= 0x3a && index <= 0xa3) ||
+                    (index >= 0xa7 && index <= 0xb7)) {
+                    lbl_801A66CC->enabled = 0;
+                }
+            } else if (fn_1_7B054() != 8) {
+                lbl_801A66CC->enabled = 0;
+            }
+        }
+        lbl_8006D758();
+        {
+            struct { struct Sig_fn_1_18B40_fn_1_18B40_Vec *value; } output;
+            output.value = (struct Sig_fn_1_18B40_fn_1_18B40_Vec *)vector;
+            coli_dispatch(arg0, arg1, v1, obj, output.value, ctx, arg6, index, t);
+        }
+        fn_1_18B40(arg0, (void *)arg1, v1, obj, (struct Sig_fn_1_18B40_fn_1_18B40_Vec *)vector, item, ctx, arg6, t, index);
+        lbl_801A66CC->total++;
+    }
+    lbl_801A66CC->total += missed;
+    if (ctx) {
+        if (ctx->result->any) {
+            for (i = 0; i < ctx->result->count; i++) {
+                if (ctx->result->masks[i] & 0x2200000) ctx->result->masks[i] |= 0x20000000;
+            }
+        }
+        for (i = 0; i < ctx->result->count; i++) {
+            if (ctx->result->masks[i] & 0xF0000000) ctx->result->flags |= ctx->result->masks[i];
+        }
+        if (v0 && (ctx->result->flags & 0xF0000000) != 0xF0000000) {
+            return fn_1_17098(arg0, arg1, v1 & 0x7FFFFFF, arg3, arg4, ctx, arg6);
+        }
+    }
+    best = 0;
+    rec = lbl_801A66CC->candidates;
+    for (i = 0; i < lbl_801A66CC->candidateCount; i++, rec++) {
+        if (rec->valid && (!best || rec->distance < best->distance)) best = rec;
+    }
+    if (best) {
+        lbl_801A66CC->primary[1] = *best;
+        if (ctx) {
+            rec = lbl_801A66CC->candidates;
+            for (i = 0; i < lbl_801A66CC->candidateCount; i++, rec++) {
+                if (rec->valid && rec != best) {
+                    ctx->result->masks[lbl_801A66CC->candidateIds[i]] &= 0xFFFFFFF;
+                }
+            }
+        }
+    }
+    result = 0;
+    if ((v1 & 5) == 5) {
+        if (lbl_801A66CC->primary[0].valid || lbl_801A66CC->primary[1].valid) {
+            rec = &lbl_801A66CC->primary[0];
+            i = 0;
+            if (!rec->valid) {
+                i = 1;
+                rec++;
+                if (!rec->valid) {
+                    i = 2;
+                    rec++;
+                }
+            }
+            best = rec;
+            for (; i < 2; i++, rec++) {
+                if (rec->valid && rec->distance < best->distance) best = rec;
+            }
+            lbl_801A66CC->primary[2] = *best;
+            result = 1;
+        }
+    } else if ((v1 & 1) && lbl_801A66CC->primary[0].valid) {
+        lbl_801A66CC->primary[2] = lbl_801A66CC->primary[0];
+        result = 1;
+    } else if ((v1 & 4) && lbl_801A66CC->primary[1].valid) {
+        lbl_801A66CC->primary[2] = lbl_801A66CC->primary[1];
+        result = 1;
+    }
+    return result;
+}
+/* fzgx:end fn_1_17098 */
+
 /* fzgx:begin fn_1_17B5C */
 typedef struct {
     u8 pad_0[0x40];
