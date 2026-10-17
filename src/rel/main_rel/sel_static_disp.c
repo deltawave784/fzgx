@@ -10856,6 +10856,55 @@ void fn_1_14F46C(DisplayState *state) {
 }
 /* fzgx:end fn_1_14F46C */
 
+/* fzgx:begin fn_1_14F608 noprologue */
+#include "types.h"
+#include "game/main_rel/sel_static_disp_types.h"
+
+extern void *fn_1_14F344(void *);
+extern s16 fn_1_14F090(void *, s32);
+extern s16 fn_1_14F01C(void *);
+
+static inline s32 find_entry(void *category, s32 id) {
+    s16 key = (s16)id;
+    s32 i = 0;
+    while ((s16)i < fn_1_14F01C(category)) {
+        if (id == fn_1_14F090(category, i)) {
+            return i;
+        }
+        i++;
+    }
+    return -1;
+}
+
+__typeof__(fn_1_14F608(0)) fn_1_14F608(int arg0) {
+    s16 v0;
+    s16 v2;
+    s32 v4;
+    u32 v1;
+    u32 v3;
+    void *t0;
+    t0 = fn_1_14F344((void *)arg0);
+    v0 = (s16)t0;
+    switch (v0) {
+    case 0:
+        v1 = (0x23800000 + 7940);
+        break;
+    case 1:
+        v1 = (0x23800000 + 12440);
+        break;
+    case 2:
+        v1 = (0x23800000 + 16940);
+        break;
+    default:
+        v1 = (0x23800000 + 7940);
+    }
+    v2 = (s16)arg0;
+    v3 = 0x23800000;
+    v4 = find_entry(t0, v2);
+    return (void *)(v1 + (s16)v4 * 0xb4);
+}
+/* fzgx:end fn_1_14F608 */
+
 /* fzgx:begin fn_1_14FC80 noprologue */
 #include "types.h"
 #include "dolphin/types.h"
