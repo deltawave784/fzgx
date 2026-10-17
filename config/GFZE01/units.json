@@ -58577,6 +58577,17 @@
   },
   {
     "module": "main_rel",
+    "source": "rel/main_rel/stcoli/fn_1_24A4C.c",
+    "symbols": [
+      "fn_1_24A4C"
+    ],
+    "status": "matching",
+    "mw_version": "GC/1.3.2",
+    "extra_cflags": [],
+    "tu": "rel/main_rel/stcoli.c"
+  },
+  {
+    "module": "main_rel",
     "source": "rel/main_rel/stcoli/fn_1_24F10.c",
     "symbols": [
       "fn_1_24F10"
