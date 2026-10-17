@@ -7568,3 +7568,6 @@ rel/main_rel/avline/fn_1_61370.c:
 
 rel/main_rel/stcoli/fn_1_14F18.c:
 	.text       start:0x00014F18 end:0x00015248 align:4
+
+rel/main_rel/enemy_ctrl/fn_1_CB028.c:
+	.text       start:0x000CB028 end:0x000CB404 align:4
