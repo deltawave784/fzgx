@@ -731,3 +731,6 @@ rel/sel/sel/fn_10_2406C.c:
 
 rel/sel/sel/fn_10_D044.c:
 	.text       start:0x0000D044 end:0x0000D5D4 align:4
+
+rel/sel/sel/fn_10_200D8.c:
+	.text       start:0x000200D8 end:0x000210F0 align:4
