@@ -2811,6 +2811,18 @@
   },
   {
     "module": "customize",
+    "source": "rel/customize/toolkit/fn_3_24BC0.c",
+    "symbols": [
+      "fn_3_24BC0"
+    ],
+    "status": "nonmatching",
+    "mw_version": "GC/1.3.2",
+    "extra_cflags": [],
+    "tu": "rel/customize/toolkit.c",
+    "pool": true
+  },
+  {
+    "module": "customize",
     "source": "rel/customize/toolkit/fn_3_268D0.c",
     "symbols": [
       "fn_3_268D0"
