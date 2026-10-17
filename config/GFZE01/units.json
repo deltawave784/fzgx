@@ -16397,6 +16397,16 @@
   },
   {
     "module": "main",
+    "source": "dol/fn_800224EC.c",
+    "symbols": [
+      "fn_800224EC"
+    ],
+    "status": "matching",
+    "mw_version": "GC/1.2.5n",
+    "extra_cflags": []
+  },
+  {
+    "module": "main",
     "source": "dol/fn_80022E5C.c",
     "symbols": [
       "fn_80022E5C"
