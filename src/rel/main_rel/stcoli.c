@@ -2208,6 +2208,142 @@ void fn_1_23640(Fn_1_23640 *self, int value) {
 }
 /* fzgx:end fn_1_23640 */
 
+/* fzgx:begin fn_1_236CC noprologue */
+#include "types.h"
+#include "psvec.h"
+#include "game/main_rel/stcoli_types.h"
+#include "game/vec3.h"
+
+typedef struct Fn_1_236CC_Consts {
+    u8 pad_0[0xC];
+    f32 zero;       /* 0x0C */
+    u8 pad_10[0x4];
+    f32 one;        /* 0x14 */
+    u8 pad_18[0xD8];
+    f32 f200;       /* 0xF0 */
+    f32 f0_02;      /* 0xF4 */
+    f64 f0_01;      /* 0xF8 */
+    f32 f0_04;      /* 0x100 */
+} Fn_1_236CC_Consts;
+
+typedef struct Fn_1_236CC_Words {
+    s32 a[3];
+} Fn_1_236CC_Words;
+
+extern const Fn_1_236CC_Consts lbl_1_rodata_840;
+extern double __fabs(double);
+
+extern s32 fn_1_2BF8C(Body *);
+extern void fn_1_289B4(Body *, s32 *, void *);
+extern s32 fn_1_27E34(Body *);
+extern f32 fn_1_253A4(Body *);
+extern void fn_1_25870(Body *);
+extern void fn_1_278B8(Body *, Part *, f32);
+extern void fn_1_25480(Body *, void *, f32);
+extern void fn_1_2A214(Body *);
+extern void fn_1_29800(Body *);
+extern void fn_1_290E8(Body *);
+extern void fn_1_294D0(Body *);
+extern void fn_1_28184(Body *);
+extern void fn_1_28F08(Body *, Vec3f *, f32);
+extern void fn_1_2B524(Body *);
+extern void fn_1_27DE4(Body *);
+extern void lbl_8006DBAC(void *);
+extern void lbl_8006DB74(void *);
+
+/* translation column of the current matrix in the locked cache */
+static inline void fn_1_236CC_set_translate(f32 x, f32 y, f32 z) {
+    *(f32 *)(0xE0000000 + 0x0C) = x;
+    *(f32 *)(0xE0000000 + 0x1C) = y;
+    *(f32 *)(0xE0000000 + 0x2C) = z;
+}
+
+#define BODY_VA0(b) ((Vec3f *)(b)->pad_A0)
+
+void fn_1_236CC(Body *b) {
+    const Fn_1_236CC_Consts *c;
+    f32 rate;
+    f32 speed;
+    f32 inv;
+    s32 i;
+    Fn_1_236CC_Words vel;
+    Fn_1_236CC_Words hit;
+    s32 found;
+    u8 n;
+    f32 z, y, x;
+    f32 zero;
+
+    c = &lbl_1_rodata_840;
+    if (fn_1_2BF8C(b) != 0) {
+        b->f58C &= ~0x8;
+        return;
+    }
+    b->f58C |= 0x8;
+    fn_1_289B4(b, &found, &hit);
+    if (fn_1_27E34(b) != 0 && found != 0) {
+        *(Fn_1_236CC_Words *)((u8 *)b + 0x1BC) = hit;
+    }
+    vel = *(Fn_1_236CC_Words *)&b->vel;
+    speed = fn_1_253A4(b);
+    fn_1_25870(b);
+    rate = BODY_VA0(b)->y;
+    if (b->b481 != 0) {
+        for (i = 0; i < 4; i++) {
+            fn_1_278B8(b, &b->parts[i], rate);
+        }
+    }
+    if (b->flags & 0x4) {
+        b->f580 = b->f580 * c->f0_02;
+    }
+    if (__fabs(b->f1F8) > c->f0_01) {
+        b->f580 = b->f580 * c->f0_04;
+    }
+    fn_1_25480(b, &vel, speed);
+    fn_1_2A214(b);
+    lbl_8006DBAC(b->mtxEC);
+    fn_1_29800(b);
+    fn_1_290E8(b);
+    fn_1_294D0(b);
+    inv = c->one / b->mass;
+    psvec_scale_add(&b->pos, &b->vel, inv, &b->pos);
+    fn_1_28184(b);
+    /* Volatile view preserves the position read order before locked-cache writes. */
+    x = *(volatile f32 *)&b->pos.x;
+    y = b->pos.y;
+    z = b->pos.z;
+    fn_1_236CC_set_translate(x, y, z);
+    fn_1_28F08(b, BODY_VA0(b), c->zero);
+    zero = c->zero;
+    fn_1_236CC_set_translate(zero, zero, zero);
+    lbl_8006DB74(b->mtxEC);
+    if (b->flags & 0x2000) {
+        b->flags |= 0x80000;
+    }
+    if (b->flags & 0x8000) {
+        b->flags &= ~0x180000;
+    }
+    if (b->flags & 0x400) {
+        n = b->b481;
+        if (n < 30) {
+            if (n % 6 == 0) {
+                fn_1_2B524(b);
+            }
+        } else if (n < 90) {
+            zero = c->zero;
+            BODY_VA0(b)->x = zero;
+            BODY_VA0(b)->y = zero;
+            BODY_VA0(b)->z = zero;
+        }
+    }
+    if (*((u8 *)b + 0x216) != 0) {
+        (*((u8 *)b + 0x216))--;
+    }
+    b->flags &= ~0x03803000;
+    *(f32 *)((u8 *)b + 0x208) = c->f200;
+    fn_1_27DE4(b);
+}
+/* fzgx:end fn_1_236CC */
+
 /* fzgx:begin fn_1_248C0 */
 typedef struct Fn_1_248C0 {
     u32 unk_00;

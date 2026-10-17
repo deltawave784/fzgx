@@ -7505,3 +7505,9 @@ rel/main_rel/effect/fn_1_64FB8.c:
 
 rel/main_rel/phys/fn_1_E2AE8.c:
 	.text       start:0x000E2AE8 end:0x000E2DCC align:4
+
+rel/main_rel/stcoli/fn_1_236CC.c:
+	.text       start:0x000236CC end:0x000239C4 align:4
+
+rel/main_rel/effect_car/fn_1_6E320.c:
+	.text       start:0x0006E320 end:0x0006E62C align:4
