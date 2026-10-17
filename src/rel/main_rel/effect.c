@@ -1481,6 +1481,197 @@ void fn_1_5A8D0(Fn1_5A8D0Data *data) {
 }
 /* fzgx:end fn_1_5A8D0 */
 
+/* fzgx:begin fn_1_5A8DC noprologue */
+#include "rel/main_rel/effect.h"
+
+#pragma section code_type ".fzgxpool"
+__declspec(section ".fzgxpool") static void fzgx_pool_prime1(void) {
+    volatile f32 s; volatile f64 d;  /* fzgx-allow: S2 pool primer sinks */
+    s = 60.0f;
+    s = 0.10000000149011612f;
+    s = 32767.0f;
+    s = 0.05000000074505806f;
+    d = 0.07;
+    s = 20000.0f;
+}
+static const u32 fzgx_pool_table1[1] = {0x00000000};  /* fzgx-allow: A1 retail pool bytes */
+__declspec(section ".fzgxpool") static void fzgx_pool_keep1(void) { const u32 *volatile cp; cp = fzgx_pool_table1; }  /* fzgx-allow: S2 pool primer sink */
+__declspec(section ".fzgxpool") static void fzgx_pool_prime2(void) {
+    volatile f32 s; volatile f64 d;  /* fzgx-allow: S2 pool primer sinks */
+    d = 4503599627370496.0;
+    s = 1.0f;
+    s = -0.029999999329447746f;
+    d = 15.0;
+    d = 4503601774854144.0;
+    d = 1.5;
+    d = 0.5;
+    s = 0.0f;
+    s = 0.5f;
+    s = 8.0f;
+    s = 255.0f;
+    s = 15.0f;
+    s = 0.20000000298023224f;
+    s = 0.07999999821186066f;
+    s = 0.25f;
+    s = 0.9800000190734863f;
+    s = 0.9900000095367432f;
+    s = 40.0f;
+    s = 20.0f;
+    s = 1.5f;
+    s = 0.44999998807907104f;
+    s = -2.0f;
+    s = 0.0833333358168602f;
+    s = 0.15000000596046448f;
+    s = 0.125f;
+    s = -0.4000000059604645f;
+    s = -0.30000001192092896f;
+    s = 2.0f;
+    s = 250.0f;
+    d = 0.6;
+    d = 0.4;
+    s = 0.30000001192092896f;
+}
+#pragma section code_type ".text"
+
+extern void *lbl_801A6D00;
+extern void fn_1_8645C(int index, void *arg);
+extern void lbl_8006E1B0(void *src, void *dst);
+extern u32 fn_1_3FC58(void);
+extern void *memcpy(void *, const void *, u32);
+extern void *memset(void *, int, u32);
+extern void lbl_8006E1F0(void *dst, f32 x, f32 y, f32 z);
+extern void fn_8006EF10(void *dir, s16 *yaw, s16 *pitch);
+
+typedef struct {
+    f32 x, y, z;
+} Fn15A8DCVec3;
+
+/* Address-of view of the manager pointer: retail materialises its address before the load. */
+typedef struct {
+    Obj_1_bss_38458_Target *ptr;
+} Fn15A8DCPtrHolder;
+
+typedef struct {
+    s8 state;            /* 0x00 */
+    u8 pad_1;
+    s16 index;           /* 0x02 */
+    s16 serial;          /* 0x04 */
+    u8 pad_6[6];
+    s16 type;            /* 0x0C */
+    u8 pad_e[0xA];
+    s16 id;              /* 0x18 */
+    u16 unk_1a;          /* 0x1A */
+    Fn15A8DCVec3 unk_1c; /* 0x1C */
+    f32 unk_28;          /* 0x28 */
+    f32 unk_2c;          /* 0x2C */
+    u8 pad_30[4];
+    u32 unk_34;          /* 0x34 */
+    u8 pad_38[4];
+    Fn15A8DCVec3 pos;    /* 0x3C */
+    Fn15A8DCVec3 vel;    /* 0x48 */
+    s16 yaw;             /* 0x54 */
+    s16 pitch;           /* 0x56 */
+    u8 pad_58[0x3C];
+    Fn15A8DCVec3 unk_94; /* 0x94 */
+    u8 pad_a0[0x48];
+} Fn15A8DCEffect;        /* 0xE8 */
+
+typedef struct {
+    u8 pad_0[0x18];
+    s16 id;              /* 0x18 */
+    u8 pad_1a[2];
+    Fn15A8DCVec3 unk_1c; /* 0x1C */
+    u8 pad_28[0x14];
+    Fn15A8DCVec3 pos;    /* 0x3C */
+    u8 pad_48[0x4C];
+    Fn15A8DCVec3 unk_94; /* 0x94 */
+} Fn15A8DCObject;
+
+/* Linear congruential random number, 15 bits (ANSI rand). */
+static inline u32 effect_rand_5A8DC(void) {
+    lbl_1_data_1D628 = lbl_1_data_1D628 * 0x41C64E6D + 0x3039;
+    return (lbl_1_data_1D628 >> 16) & 0x7FFF;
+}
+
+/* Same-TU copy of fn_1_58E3C, inlined by retail. */
+static inline s16 effect_spawn_5A8DC(void *source) {
+    s32 i;
+
+    if ((s32)fn_1_3FC58() != 0) {
+        return -1;
+    }
+
+    {
+        Fn15A8DCEffect *scan;
+        scan = *(Fn15A8DCEffect **)&lbl_1_bss_6C848;
+        i = 0;
+        for (; i < 0xbe; i++, scan++) {
+            if (!scan->state) {
+                scan->state = 1;
+                goto slot_found; /* fzgx-allow: S1 exits the slot search with its index intact */
+            }
+        }
+        i = -1;
+    }
+slot_found:
+    if (i < 0) {
+        return -1;
+    }
+    {
+        Fn15A8DCEffect *entry;
+        entry = *(Fn15A8DCEffect **)&lbl_1_bss_6C848 + i;
+        memcpy(entry, source, 0xe8);
+        entry->state = 1;
+        entry->index = i;
+        ((void (**)(void *))lbl_1_data_1D1D8)[entry->type](entry);
+        entry->serial = lbl_1_bss_6C850.unk_0;
+        lbl_1_bss_6C850.unk_0++;
+        if (lbl_1_bss_6C850.unk_0 < 0) {
+            lbl_1_bss_6C850.unk_0 = 0;
+        }
+        return entry->serial;
+    }
+}
+
+void fn_1_5A8DC(Fn15A8DCObject *obj) {
+    Fn15A8DCEffect buf;
+    Fn15A8DCVec3 pos;
+    Fn15A8DCVec3 oldPos;
+    Fn15A8DCVec3 dir;
+    f32 dx, dy, dz;
+    f32 scaled;
+
+    oldPos = obj->pos;
+    fn_1_8645C(obj->id, lbl_801A6D00);
+    lbl_8006E1B0(&obj->unk_94, &pos);
+    lbl_8006E1F0(&dir, 0.0f, 0.0f, 1.0f);
+    dx = pos.x - oldPos.x;
+    dy = pos.y - oldPos.y;
+    dz = pos.z - oldPos.z;
+    obj->pos = pos;
+
+    memset(&buf, 0, sizeof(buf));
+    buf.id = obj->id;
+    buf.type = 9;
+    buf.unk_1a = 0xffff;
+    buf.unk_34 = *(u32 *)((u8 *)lbl_1_bss_38458->unk_8 + 0x120);
+    buf.pos = pos;
+    buf.unk_94 = obj->unk_94;
+    buf.vel.x = dx;
+    buf.vel.y = dy;
+    buf.vel.z = dz;
+    buf.pos.x -= dx;
+    buf.pos.y -= dy;
+    buf.pos.z -= dz;
+    fn_8006EF10(&dir, &buf.yaw, &buf.pitch);
+    buf.unk_28 = 0.3f;
+    scaled = 0.2f * ((f32)effect_rand_5A8DC() / 32767.0f);
+    buf.unk_2c = 0.3f + scaled;
+    buf.unk_1c = obj->unk_1c;
+    effect_spawn_5A8DC(&buf);
+}
+/* fzgx:end fn_1_5A8DC */
+
 /* fzgx:begin fn_1_5ABC4 */
 // fn_1_5ABC4: empty in retail (single blr).
 void fn_1_5ABC4(void) {

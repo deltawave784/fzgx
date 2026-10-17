@@ -723,6 +723,66 @@ s32 fn_9_120C(struct Car *car) {
 }
 /* fzgx:end fn_9_120C */
 
+/* fzgx:begin fn_9_1310 */
+typedef struct {
+    u8 pad0[0x328];
+    s8 f328;
+    u8 pad1[0x338 - 0x329];
+    struct { u32 a, b, c; } slot[2];
+    u8 pad2[0x37c - 0x350];
+    u32 tab[4];
+    u8 pad3[0x390 - 0x38c];
+    u32 flags;
+    u8 pad4[0x3a0 - 0x394];
+    u32 f3a0;
+    u8 pad5[0x3b8 - 0x3a4];
+    s16 f3b8;
+    s16 f3ba;
+} Sig_fn_1_870BC_Car870BC;
+
+extern char lbl_9_data_7C[];
+extern char lbl_9_data_80[];
+extern char lbl_9_data_84[];
+extern u32 lbl_801A66A0;
+extern void lbl_8006D7F4(f32, f32, f32);
+extern void mathutil_mtxA_rotate_y(u32);
+extern void mathutil_mtxA_rotate_x(u32);
+extern void lbl_8006E14C(f32);
+extern void fn_80072558(void);
+extern void fn_1_870BC(Sig_fn_1_870BC_Car870BC *, s8, Sig_fn_1_870BC_Car870BC *, s16, u8, f32);
+
+#pragma section code_type ".fzgxpool"
+void __fzgxpool_head(void)
+{
+    lbl_8006D7F4(0.0f, 0.25f, 0.0f);
+}
+const void *const lbl_9_rodata_8[3] = {lbl_9_data_7C, lbl_9_data_80, lbl_9_data_84};
+void __fzgxpool_tail(u32 x)
+{
+    lbl_8006D7F4(160.0f, 50.0f, -10.0f);
+    lbl_8006D7F4(182.04444885253906f, 2.0f, 1.0f);
+    mathutil_mtxA_rotate_y((s32)(f32)x);
+}
+
+#pragma section code_type ".text"
+#pragma push
+#pragma opt_propagation on
+s32 fn_9_1310(Sig_fn_1_870BC_Car870BC *arg0)
+{
+    Sig_fn_1_870BC_Car870BC *self = arg0;
+    f32 zero = 0.0f;
+    s32 car = lbl_9_bss_8->unk_C;
+    lbl_8006D7F4(zero, zero, -10.0f);
+    mathutil_mtxA_rotate_y(-0x8000);
+    mathutil_mtxA_rotate_x(0x2000);
+    mathutil_mtxA_rotate_y((s32)(182.04444885253906f * (f32)(lbl_801A66A0 % 360)));
+    lbl_8006E14C(2.0f);
+    fn_80072558();
+    fn_1_870BC(self, (s8)car, self, 0, (u8)self->f3b8, 1.0f);
+    return 0;
+}
+/* fzgx:end fn_9_1310 */
+
 /* fzgx:begin colchg_chgcol_disp */
 extern u8 lbl_9_data_178[20];
 extern u8 lbl_9_bss_14[200];
