@@ -5993,3 +5993,6 @@ dol/fn_8005C120.c:
 
 dol/__fill_mem.c:
 	.init       start:0x80003488 end:0x80003540 align:4
+
+dol/fn_8006AF94.c:
+	.text       start:0x8006AF94 end:0x8006B048 align:4
