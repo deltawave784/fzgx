@@ -757,6 +757,124 @@ void fn_1_156B18(fn_1_156B18_State *state) {
 }
 /* fzgx:end fn_1_156B18 */
 
+/* fzgx:begin fn_1_156D9C noprologue */
+#include "types.h"
+
+#pragma section code_type ".fzgxpool"
+__declspec(section ".fzgxpool") static void fzgx_pool_prime1(void) {
+    volatile float s; volatile double d;  /* fzgx-allow: S2 pool primer sinks */
+    s = 0.0f;
+    s = -1.899999976158142f;
+    s = 25.0f;
+    s = -25.0f;
+    s = 30.0f;
+    s = 1.5f;
+    s = 170.0f;
+    s = 0.5f;
+    s = 248.0f;
+    s = 10.0f;
+    s = 60.0f;
+    s = 1.0f;
+    s = 1000.0f;
+    s = 0.10000000149011612f;
+}
+#pragma section code_type ".text"
+
+typedef struct RankObj {
+    u32 flags;
+    u32 unk_4;
+    u8 pad_8[0x10];
+    u32 unk_18;
+    u8 pad_1C[0x24];
+    f32 unk_40;
+    f32 unk_44;
+    u8 unk_48[4];
+    u8 unk_4C;
+    u8 unk_4D;
+} RankObj;
+
+typedef struct RankBuf {
+    u8 b0;
+    s32 v;
+    u32 z;
+    u8 a;
+    s16 s16_;
+    s16 s18;
+    s16 s1a;
+    s16 s1c;
+    u32 w20;
+    u32 w24;
+    u8 b28;
+    u8 b29;
+} RankBuf;
+
+extern u32 lbl_1_data_49B20;
+extern s32 fn_8006B55C(u32, u32 *, void *);
+extern s32 fn_8006B628(u32, void *);
+extern s32 fn_8006B6F8(u32);
+
+static inline void fn_1_156D9C_fzgx_inl(RankObj *o, s32 fzgx_init) {
+    RankBuf buf;
+    s32 val;
+    s32 ok;
+    f32 a;
+    f32 t;
+
+    if (o->unk_4C & 1) {
+        a = 10.0f * o->unk_44;
+        if (a > 60.0f) {
+            a = 60.0f;
+        }
+        val = ((s32)a + 10) & 0xff;
+    } else {
+        t = 1.0f - o->unk_40 / 1000.0f;
+        if (t < 0.1f) {
+            t = 0.1f;
+        }
+        a = 10.0f * o->unk_44;
+        if (a > 60.0f) {
+            a = 60.0f;
+        }
+        val = (s32)((10.0f + a) * t);
+    }
+    buf.b0 = ((u8 *)&lbl_1_data_49B20)[o->unk_4D % 5];
+    ok = fzgx_init;
+    buf.v = -1;
+    buf.z = 0;
+    buf.a = val;
+    buf.s16_ = 90;
+    buf.s18 = 60;
+    buf.s1a = 0;
+    buf.s1c = 0;
+    buf.w20 = 0;
+    buf.w24 = 0;
+    buf.b28 = 0;
+    buf.b29 = 0;
+    {
+    u32 data = o->unk_4;
+    if (o->unk_18 + 0x10000 == 0xFFFF) {
+        if (fn_8006B55C(data, &o->unk_18, &buf) >= 0) {
+            ok = 1;
+        }
+    } else {
+        if (fn_8006B628(o->unk_18, &buf) >= 0) {
+            ok = 1;
+        }
+    }
+    }
+    if (ok != 0 && !(o->flags & 0x10)) {
+        if (fn_8006B6F8(o->unk_18) >= 0) {
+            o->flags |= 0x10;
+        }
+    }
+}
+
+void fn_1_156D9C(RankObj *o)
+{
+    fn_1_156D9C_fzgx_inl(o, 0);
+}
+/* fzgx:end fn_1_156D9C */
+
 /* fzgx:begin fn_1_156F54 noprologue */
 #include "dolphin/types.h"
 

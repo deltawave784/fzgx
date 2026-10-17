@@ -1531,6 +1531,30 @@ void fn_1_76964(Fn1_76964Obj *obj) {
 }
 /* fzgx:end fn_1_76964 */
 
+/* fzgx:begin fn_1_769FC noprologue */
+#include "rel/main_rel/screen_effect.h"
+
+extern u32 fn_80008E84(u32);
+extern s32 fn_1_45D0(u32, u32, void *, u32);
+extern u32 lbl_801A6410[];
+
+struct Arg0 {
+    u8 pad_0[0xA0];
+    u32 unk_A0[5];
+    u32 unk_B4[5];
+    u32 unk_C8[5];
+};
+
+void fn_1_769FC(struct Arg0 *arg0, u32 arg1)
+{
+    u32 i = arg1 & 0xFF;
+    lbl_1_bss_6C8E8 = fn_80008E84(lbl_1_bss_6C8E4);
+    arg0->unk_A0[i] = fn_1_45D0(lbl_801A6410[0], arg0->unk_B4[i], lbl_1_data_1DAC0, 0x919);
+    arg0->unk_C8[i] = 0;
+    fn_80008E84(lbl_1_bss_6C8E8);
+}
+/* fzgx:end fn_1_769FC */
+
 /* fzgx:begin fn_1_76A94 noprologue */
 #include "types.h"
 #include "game/main_rel/screen_effect_types.h"

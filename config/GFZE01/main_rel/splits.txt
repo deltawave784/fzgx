@@ -7916,3 +7916,15 @@ rel/main_rel/car/fn_1_86900.c:
 
 rel/main_rel/bg_cas/fn_1_1014B4.c:
 	.text       start:0x001014B4 end:0x0010161C align:4
+
+rel/main_rel/ranking/fn_1_156D9C.c:
+	.text       start:0x00156D9C end:0x00156F54 align:4
+
+rel/main_rel/font/fn_1_4D10C.c:
+	.text       start:0x0004D10C end:0x0004D274 align:4
+
+rel/main_rel/sel_static_disp/fn_1_145B58.c:
+	.text       start:0x00145B58 end:0x00145C6C align:4
+
+rel/main_rel/screen_effect/fn_1_769FC.c:
+	.text       start:0x000769FC end:0x00076A94 align:4
