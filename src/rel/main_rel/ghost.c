@@ -1085,6 +1085,45 @@ void fn_1_F0164(void) {
 }
 /* fzgx:end fn_1_F0164 */
 
+/* fzgx:begin fn_1_F1300 noprologue */
+#include "dolphin/types.h"
+
+extern const f32 lbl_1_rodata_6B60;
+extern void lbl_8006D758(void);
+extern void mathutil_mtxA_rotate_z(s16);
+extern void mathutil_mtxA_rotate_y(s16);
+extern void mathutil_mtxA_rotate_x(s16);
+extern void fn_8006E5FC(f32 *);
+
+void fn_1_F1300(u32 count, f32 (*quat)[4], s8 *rotX, s16 *rotY, s8 *rotZ)
+{
+    f32 *prev = quat[0];
+    f32 *next = quat[1];
+    u32 i;
+    for (i = 0; i < count; i++, quat++) {
+        lbl_8006D758();
+        mathutil_mtxA_rotate_z((s16)(rotZ[i] << 8));
+        mathutil_mtxA_rotate_y(rotY[i]);
+        mathutil_mtxA_rotate_x((s16)(rotX[i] << 8));
+        fn_8006E5FC(quat[0]);
+    }
+    for (i = 0; i < count - 1; i++) {
+        f32 a = prev[0] * next[0];
+        f32 b = prev[1] * next[1];
+        f32 c = prev[2] * next[2];
+        f32 d = prev[3] * next[3];
+        if (d + (c + (a + b)) < lbl_1_rodata_6B60) {
+            next[0] = -next[0];
+            next[1] = -next[1];
+            next[2] = -next[2];
+            next[3] = -next[3];
+        }
+        prev += 4;
+        next += 4;
+    }
+}
+/* fzgx:end fn_1_F1300 */
+
 /* fzgx:begin fn_1_F143C */
 #pragma opt_common_subs off
 void fn_1_F143C(FnObject *obj, s32 index, const f32 *a, const f32 *b, void *arg5) {

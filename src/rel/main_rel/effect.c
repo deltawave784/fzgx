@@ -599,6 +599,76 @@ void fn_1_59514(void *obj) {
 }
 /* fzgx:end fn_1_59514 */
 
+/* fzgx:begin fn_1_5962C noprologue */
+#include "dolphin/types.h"
+
+typedef struct Vec5962C {
+    f32 x, y, z;
+} Vec5962C;
+
+typedef struct Obj5962C {
+    u8 pad0[0x10];
+    s32 age;
+    u8 pad14[8];
+    Vec5962C scale;
+    f32 size;
+    f32 targetSize;
+    u8 pad30[0xC];
+    Vec5962C position;
+    Vec5962C velocity;
+    u8 pad54[0xC];
+    Vec5962C previousPosition;
+    u8 pad6C[0x28];
+    f32 drag;
+    f32 targetDrag;
+} Obj5962C;
+
+extern void fn_1_5962C_prime_f32(f32);
+extern void fn_1_5962C_prime_f64(f64);
+#pragma section code_type ".fzgxpool"
+void fzgx_pool_prime_5962C(void)
+{
+    fn_1_5962C_prime_f32(60.0f);
+    fn_1_5962C_prime_f32(0.1f);
+    fn_1_5962C_prime_f32(32767.0f);
+    fn_1_5962C_prime_f32(0.05f);
+    fn_1_5962C_prime_f64(0.07);
+    fn_1_5962C_prime_f32(20000.0f);
+    fn_1_5962C_prime_f64(4503599627370496.0);
+    fn_1_5962C_prime_f32(1.0f);
+    fn_1_5962C_prime_f32(-0.03f);
+    fn_1_5962C_prime_f64(15.0);
+    fn_1_5962C_prime_f64(4503601774854144.0);
+}
+#pragma section code_type ".text"
+
+void fn_1_5962C(Obj5962C *obj)
+{
+    f32 factor;
+    obj->previousPosition = obj->position;
+    factor = 1.0f - obj->drag;
+    obj->velocity.y += -0.03f;
+    obj->velocity.x *= factor;
+    obj->velocity.y *= factor;
+    obj->velocity.z *= factor;
+    obj->position.x += obj->velocity.x;
+    obj->position.y += obj->velocity.y;
+    obj->position.z += obj->velocity.z;
+    obj->drag += (f32)(0.05f * (obj->targetDrag - obj->drag));
+    obj->size += (f32)(0.1f * (obj->targetSize - obj->size));
+    if ((f64)obj->age < 15.0) {
+        f32 scaleX;
+        f32 scaleFactor;
+        /* Preserve the scale load before the age conversion. */
+        scaleX = *(volatile f32 *)&obj->scale.x;
+        scaleFactor = 1.0f - 1.0f / (f32)(obj->age + 1);
+        obj->scale.x = scaleX * scaleFactor;
+        obj->scale.y *= scaleFactor;
+        obj->scale.z *= scaleFactor;
+    }
+}
+/* fzgx:end fn_1_5962C */
+
 /* fzgx:begin fn_1_59A70 */
 // fn_1_59A70: empty in retail (single blr).
 void fn_1_59A70(void) {
@@ -706,6 +776,78 @@ void fn_1_59B00(fn_1_59B00_Effect *effect) {
     }
 }
 /* fzgx:end fn_1_59B00 */
+
+/* fzgx:begin fn_1_59B90 noprologue */
+#include "dolphin/types.h"
+#include "game/main_rel/camera_types.h"
+#include "rel/main_rel/effect.h"
+#include "psvec.h"
+
+typedef struct Fn59B90Arg {
+    u8 pad_0[0x28];
+    f32 unk_28;
+    u8 pad_2C[0x10];
+    u8 unk_3C[0x18];
+    s16 unk_54;
+    s16 unk_56;
+} Fn59B90Arg;
+
+typedef struct Fn59B90Model {
+    u8 pad_0[8];
+    u8 unk_8[0xC];
+    f32 unk_14;
+} Fn59B90Model;
+
+typedef struct Fn59B90State {
+    u8 pad_0[0x90];
+    Fn59B90Model *unk_90;
+} Fn59B90State;
+
+extern s32 fn_1_54E34(void *, f32);
+extern f32 lbl_1_rodata_2954[2];
+extern void fn_1_56000(u8, u8, u8);
+extern void fn_1_556B8(void *);
+extern void lbl_8006D9D8(CamEntry *);
+extern u32 mathutil_mtxA_rotate_y(u32);
+extern u32 mathutil_mtxA_rotate_x(u32);
+extern void lbl_8006E14C(f32);
+extern void lbl_8006DB74(void *);
+extern f32 lbl_8006D0B4(f32);
+extern void lbl_8006D848(f32);
+extern void lbl_8006DFC4(void *);
+extern u32 u_gxutil_upload_some_mtx(u32, u32);
+
+#pragma fp_contract on
+void fn_1_59B90(Fn59B90Arg *arg) {
+    Fn59B90Model *model;
+    f32 matrix[3][4];
+    struct { f32 x, y, z; } vec;
+    f32 length;
+
+    model = ((Fn59B90State *)lbl_1_bss_38458->unk_8)->unk_90;
+    lbl_8006D9D8((CamEntry *)arg->unk_3C);
+    mathutil_mtxA_rotate_y(arg->unk_56);
+    mathutil_mtxA_rotate_x(arg->unk_54);
+    lbl_8006E14C(arg->unk_28 / model->unk_14);
+    if (fn_1_54E34(model->unk_8, arg->unk_28)) {
+        psvec_set(&vec, *(f32 *)(0xE0000000 + 0x2C), *(f32 *)(0xE0000000 + 0x1C), *(f32 *)(0xE0000000 + 0x0C));
+        lbl_8006DB74(matrix);
+        {
+            f32 y = vec.y;
+            length = vec.x * vec.x;
+            length = __fmadds(y, y, length);
+            length = __fmadds(vec.z, vec.z, length);
+            length = lbl_8006D0B4(length);
+        }
+        lbl_8006D848((length - lbl_1_rodata_2954[0]) / length);
+        lbl_8006DFC4(matrix);
+        fn_1_56000(1, 3, 0);
+        u_gxutil_upload_some_mtx((u32)lbl_801A6D00, 0);
+        fn_1_556B8(model);
+        fn_1_56000(1, 3, 1);
+    }
+}
+/* fzgx:end fn_1_59B90 */
 
 /* fzgx:begin fn_1_59CC4 */
 // fn_1_59CC4: empty in retail (single blr).

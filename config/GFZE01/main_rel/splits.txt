@@ -7619,3 +7619,12 @@ rel/main_rel/font/fn_1_492F0.c:
 
 rel/main_rel/font/fn_1_55C48.c:
 	.text       start:0x00055C48 end:0x00055D6C align:4
+
+rel/main_rel/ghost/fn_1_F1300.c:
+	.text       start:0x000F1300 end:0x000F143C align:4
+
+rel/main_rel/effect/fn_1_59B90.c:
+	.text       start:0x00059B90 end:0x00059CC4 align:4
+
+rel/main_rel/effect/fn_1_5962C.c:
+	.text       start:0x0005962C end:0x00059770 align:4
