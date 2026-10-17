@@ -408,6 +408,64 @@ void fn_1_151EF8(s16 *values, s16 value_count, Entry_151EF8 *entries, s16 group_
 }
 /* fzgx:end fn_1_151EF8 */
 
+/* fzgx:begin fn_1_152208 noprologue */
+#include "types.h"
+
+extern u32 fn_1_8D5F0(s16);
+extern int fn_1_F7BE4(s16);
+
+typedef struct {
+    s16 id;
+    s16 pad;
+    u32 flags;
+} GridEntry;
+
+void fn_1_152208(s16 *ids, s16 count, GridEntry *entries, s16 rows, s16 cols) {
+    s16 i;
+    struct { s16 value; } row;
+    s16 col;
+    s16 k;
+    s32 flag;
+    s32 base;
+    GridEntry *e;
+
+    flag = 0;
+    for (row.value = 0; row.value < 41; row.value++) {
+        if ((fn_1_8D5F0(row.value) & 0x10000000) && fn_1_F7BE4(row.value)) {
+            flag = 1;
+            break;
+        }
+    }
+
+    for (row.value = 0; row.value < rows; row.value++) {
+        for (col = 0; col < cols; col++) {
+            entries[row.value * cols + col].flags |= 0x40000000;
+            entries[row.value * cols + col].id = -1;
+        }
+    }
+
+    for (k = 0; k < count; k++) {
+        if (ids[k] != -1) {
+            row.value = k / cols;
+            col = k % cols;
+            e = &entries[col + row.value * cols];
+            e->id = ids[k];
+            e->flags = 0;
+            if (flag == 1) {
+                e->flags |= 0x80000000;
+            } else if (fn_1_8D5F0(e->id) & 0x10000000) {
+                e->flags |= 0x40000000;
+            } else {
+                e->flags |= 0x80000000;
+            }
+            if (fn_1_F7BE4(e->id)) {
+                e->flags &= 0x3FFFFFFF;
+            }
+        }
+    }
+}
+/* fzgx:end fn_1_152208 */
+
 /* fzgx:begin fn_1_152840 */
 typedef struct Entry {
     s16 id;

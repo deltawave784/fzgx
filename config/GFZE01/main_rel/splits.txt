@@ -7808,3 +7808,6 @@ rel/main_rel/accessory/fn_1_108A90.c:
 
 rel/main_rel/car/fn_1_80F80.c:
 	.text       start:0x00080F80 end:0x000810E4 align:4
+
+rel/main_rel/bg_aur/fn_1_152208.c:
+	.text       start:0x00152208 end:0x00152510 align:4
