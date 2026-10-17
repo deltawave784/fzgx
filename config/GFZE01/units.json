@@ -18461,6 +18461,16 @@
   },
   {
     "module": "main",
+    "source": "dol/fn_80037B68.c",
+    "symbols": [
+      "fn_80037B68"
+    ],
+    "status": "matching",
+    "mw_version": "GC/1.2.5n",
+    "extra_cflags": []
+  },
+  {
+    "module": "main",
     "source": "dol/fn_80037B94.c",
     "symbols": [
       "fn_80037B94"
@@ -24282,6 +24292,16 @@
     "source": "dol/fn_8006B870.c",
     "symbols": [
       "fn_8006B870"
+    ],
+    "status": "matching",
+    "mw_version": "GC/1.3.2",
+    "extra_cflags": []
+  },
+  {
+    "module": "main",
+    "source": "dol/fn_8006B92C.c",
+    "symbols": [
+      "fn_8006B92C"
     ],
     "status": "matching",
     "mw_version": "GC/1.3.2",
@@ -47227,6 +47247,18 @@
   },
   {
     "module": "main_rel",
+    "source": "rel/main_rel/game/fn_1_3EB78.c",
+    "symbols": [
+      "fn_1_3EB78"
+    ],
+    "status": "nonmatching",
+    "mw_version": null,
+    "extra_cflags": [],
+    "tu": "rel/main_rel/game.c",
+    "pool": true
+  },
+  {
+    "module": "main_rel",
     "source": "rel/main_rel/game/fn_1_3EF08.c",
     "symbols": [
       "fn_1_3EF08"
@@ -49115,6 +49147,17 @@
     ],
     "status": "matching",
     "mw_version": null,
+    "extra_cflags": [],
+    "tu": "rel/main_rel/live_camera.c"
+  },
+  {
+    "module": "main_rel",
+    "source": "rel/main_rel/live_camera/fn_1_12FD4.c",
+    "symbols": [
+      "fn_1_12FD4"
+    ],
+    "status": "matching",
+    "mw_version": "GC/1.3",
     "extra_cflags": [],
     "tu": "rel/main_rel/live_camera.c"
   },

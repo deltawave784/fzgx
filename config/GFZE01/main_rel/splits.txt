@@ -7967,3 +7967,9 @@ rel/main_rel/cloth/fn_1_106CAC.c:
 
 rel/main_rel/bg_aur/fn_1_152510.c:
 	.text       start:0x00152510 end:0x00152840 align:4
+
+rel/main_rel/game/fn_1_3EB78.c:
+	.text       start:0x0003EB78 end:0x0003EC88 align:4
+
+rel/main_rel/live_camera/fn_1_12FD4.c:
+	.text       start:0x00012FD4 end:0x00013018 align:4
