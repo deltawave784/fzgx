@@ -7706,3 +7706,6 @@ rel/main_rel/stcoli/fn_1_17098.c:
 
 rel/main_rel/car/fn_1_8D988.c:
 	.text       start:0x0008D988 end:0x0008DAB4 align:4
+
+rel/main_rel/archive/fn_1_12DAEC.c:
+	.text       start:0x0012DAEC end:0x0012E0B8 align:4
