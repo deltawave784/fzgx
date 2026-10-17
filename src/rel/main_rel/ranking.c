@@ -725,6 +725,99 @@ void fn_1_156B18(fn_1_156B18_State *state) {
 }
 /* fzgx:end fn_1_156B18 */
 
+/* fzgx:begin fn_1_156F54 noprologue */
+#include "dolphin/types.h"
+
+typedef struct Sig_fn_8006B55C_Fn8006B55CFlags {
+    u8 flag7:1;
+    u8 flag6:1;
+    u8 rest:6;
+} Sig_fn_8006B55C_Fn8006B55CFlags;
+
+typedef struct Sig_fn_8006B55C_Fn8006B55CData {
+    u8 flags_pad[4];
+    Sig_fn_8006B55C_Fn8006B55CFlags flags;
+    u8 _pad0[3];
+    u32 value;
+    u8 _pad1[0x44];
+    u8 payload[1];
+} Sig_fn_8006B55C_Fn8006B55CData;
+
+typedef struct Fn156F54State {
+    u32 flags;
+    Sig_fn_8006B55C_Fn8006B55CData *data;
+    u8 _pad08[0xC];
+    u32 handle;
+    u8 _pad18[0x34];
+    u8 state;
+} Fn156F54State;
+
+typedef struct Fn156F54Config {
+    u8 type;
+    u32 size;
+    u32 flags;
+    u8 volume;
+    u16 a;
+    u16 b;
+    u16 c;
+    u16 d;
+    u32 e;
+    u32 f;
+    u8 g;
+    u8 h;
+} Fn156F54Config;
+
+extern s32 fn_8006B55C(Sig_fn_8006B55C_Fn8006B55CData *, u32 *, u8 *);
+extern s32 fn_8006B628(u32, u8 *);
+extern s32 fn_8006B6F8(u32);
+
+static inline void fn156F54_update(Fn156F54State *arg0, s32 success)
+{
+    Fn156F54Config config;
+
+    {
+        config.type = 4;
+        config.size = 380;
+        config.flags = success;
+        config.volume = 160;
+        config.a = 90;
+        config.b = 30;
+        config.c = success;
+        config.d = success;
+        config.e = 5;
+        config.f = 100;
+        config.g = success;
+        config.h = success;
+        if (!(arg0->flags & 8)) {
+            Sig_fn_8006B55C_Fn8006B55CData *data = arg0->data;
+            if (arg0->handle == 0xFFFFFFFF) {
+                if (fn_8006B55C(data, &arg0->handle, (u8 *)&config) >= 0) {
+                    success = 1;
+                }
+            } else {
+                if (fn_8006B628(arg0->handle, (u8 *)&config) >= 0) {
+                    success = 1;
+                }
+            }
+            if (success && !(arg0->flags & 8)) {
+                if (fn_8006B6F8(arg0->handle) >= 0) {
+                    arg0->flags |= 8;
+                }
+            }
+        } else {
+            fn_8006B6F8(arg0->handle);
+        }
+    }
+}
+
+void fn_1_156F54(Fn156F54State *arg0)
+{
+    if (arg0->state & 8) {
+        fn156F54_update(arg0, 0);
+    }
+}
+/* fzgx:end fn_1_156F54 */
+
 /* fzgx:begin fn_1_157070 noprologue */
 #include "types.h"
 

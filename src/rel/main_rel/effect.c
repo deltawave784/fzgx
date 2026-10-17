@@ -2417,6 +2417,81 @@ void fn_1_5D918(void) {
 }
 /* fzgx:end fn_1_5D918 */
 
+/* fzgx:begin fn_1_5E3C4 noprologue */
+#include "rel/main_rel/effect.h"
+
+typedef struct Fn1_5E3C4Data {
+    u8 pad_00[0x10];
+    s32 unk_10;
+    u8 pad_14[0x9E];
+    u16 unk_B2;
+} Fn1_5E3C4Data;
+
+#pragma section code_type ".fzgxpool"
+/* volatile: preserve literal pool order by retaining each primer store. */
+void fzgx_pool_primer(volatile f32 *f, volatile f64 *d) {
+    *f = 60.0f;
+    *f = 0.1f;
+    *f = 32767.0f;
+    *f = 0.05f;
+    *d = 0.07;
+    *f = 20000.0f;
+    *d = 4503599627370496.0;
+    *f = 1.0f;
+    *f = -0.03f;
+    *d = 15.0;
+    *d = 4503601774854144.0;
+    *d = 1.5;
+    *d = 0.5;
+    *f = 0.0f;
+    *f = 0.5f;
+    *f = 8.0f;
+    *f = 255.0f;
+    *f = 15.0f;
+    *f = 0.2f;
+    *f = 0.08f;
+    *f = 0.25f;
+    *f = 0.98f;
+    *f = 0.99f;
+    *f = 40.0f;
+    *f = 20.0f;
+    *f = 1.5f;
+    *f = 0.45f;
+    *f = -2.0f;
+    *f = 0.0833333358168602f;
+    *f = 0.15f;
+    *f = 0.125f;
+    *f = -0.4f;
+    *f = -0.3f;
+    *f = 2.0f;
+    *f = 250.0f;
+    *d = 0.6;
+    *d = 0.4;
+    *f = 0.3f;
+    *f = -0.004f;
+    *f = 0.01666666753590107f;
+    *f = 65536.0f;
+    *f = 4096.0f;
+    *f = 0.96f;
+    *f = 0.4f;
+}
+#pragma section code_type ".text"
+
+void fn_1_5E3C4(Fn1_5E3C4Data *arg0) {
+    if (arg0->unk_B2 == 1) {
+        if (arg0->unk_10 == 0) {
+            lbl_1_data_1D628 = lbl_1_data_1D628 * 0x41C64E6D + 0x3039;
+            arg0->unk_10 = (s32)(60.0f * (0.4f + (f32)(0.25f * ((f32)((lbl_1_data_1D628 >> 16) & 0x7FFF) / 32767.0f))));
+        }
+    } else {
+        if (arg0->unk_10 == 0) {
+            lbl_1_data_1D628 = lbl_1_data_1D628 * 0x41C64E6D + 0x3039;
+            arg0->unk_10 = (s32)(60.0f * (0.08f + (f32)(0.25f * ((f32)((lbl_1_data_1D628 >> 16) & 0x7FFF) / 32767.0f))));
+        }
+    }
+}
+/* fzgx:end fn_1_5E3C4 */
+
 /* fzgx:begin fn_1_5EB08 */
 typedef struct FnObj {
     u8 pad18[0x18];

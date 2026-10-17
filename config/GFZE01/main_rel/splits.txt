@@ -7604,3 +7604,12 @@ rel/main_rel/sel_static_disp/fn_1_147508.c:
 
 rel/main_rel/sel_static_disp/fn_1_14267C.c:
 	.text       start:0x0014267C end:0x00142BDC align:4
+
+rel/main_rel/effect/fn_1_5E3C4.c:
+	.text       start:0x0005E3C4 end:0x0005E4D8 align:4
+
+rel/main_rel/camera/fn_1_AEB8.c:
+	.text       start:0x0000AEB8 end:0x0000AFC8 align:4
+
+rel/main_rel/ranking/fn_1_156F54.c:
+	.text       start:0x00156F54 end:0x00157070 align:4

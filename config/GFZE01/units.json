@@ -35974,6 +35974,20 @@
   },
   {
     "module": "main_rel",
+    "source": "rel/main_rel/camera/fn_1_AEB8.c",
+    "symbols": [
+      "fn_1_AEB8"
+    ],
+    "status": "matching",
+    "mw_version": null,
+    "extra_cflags": [],
+    "tu": "rel/main_rel/camera.c",
+    "pool": {
+      "@10": "lbl_1_rodata_230"
+    }
+  },
+  {
+    "module": "main_rel",
     "source": "rel/main_rel/camera/fn_1_B4D4.c",
     "symbols": [
       "fn_1_B4D4"
@@ -40823,6 +40837,26 @@
     "mw_version": null,
     "extra_cflags": [],
     "tu": "rel/main_rel/effect.c"
+  },
+  {
+    "module": "main_rel",
+    "source": "rel/main_rel/effect/fn_1_5E3C4.c",
+    "symbols": [
+      "fn_1_5E3C4"
+    ],
+    "status": "matching",
+    "mw_version": null,
+    "extra_cflags": [],
+    "tu": "rel/main_rel/effect.c",
+    "pool": {
+      "...rodata.0": "lbl_1_rodata_2950",
+      "@11": "lbl_1_rodata_295C+0x14",
+      "@7": "lbl_1_rodata_2954+0x4",
+      "@25": "lbl_1_rodata_29AC+0x10",
+      "@48": "lbl_1_rodata_29F0+0x30",
+      "@5": "lbl_1_rodata_2950",
+      "@24": "lbl_1_rodata_29AC+0xC"
+    }
   },
   {
     "module": "main_rel",
@@ -51927,6 +51961,17 @@
     "source": "rel/main_rel/ranking/fn_1_156B18.c",
     "symbols": [
       "fn_1_156B18"
+    ],
+    "status": "matching",
+    "mw_version": null,
+    "extra_cflags": [],
+    "tu": "rel/main_rel/ranking.c"
+  },
+  {
+    "module": "main_rel",
+    "source": "rel/main_rel/ranking/fn_1_156F54.c",
+    "symbols": [
+      "fn_1_156F54"
     ],
     "status": "matching",
     "mw_version": null,

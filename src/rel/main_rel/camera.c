@@ -1594,6 +1594,72 @@ void camera_update_transition(camera_update_transition_Camera *camera) {
 }
 /* fzgx:end camera_update_transition */
 
+/* fzgx:begin fn_1_AEB8 noprologue */
+#include "rel/main_rel/camera.h"
+
+extern f32 lbl_1_rodata_230[44];
+
+typedef struct { f32 x, y, z; } Vec;
+
+typedef struct {
+    u8 pad_0[0x8];
+    f32 unk_8;
+    u8 pad_C[0x6C];
+    s16 unk_78;
+    u8 pad_7A[0x12];
+    Vec unk_8C;
+    Vec unk_98;
+    s16 unk_A4;
+    u8 pad_A6[0x13E];
+    Vec unk_1E4;
+    f32 unk_1F0;
+    f32 unk_1F4;
+    u8 pad_1F8[2];
+    s16 unk_1FA;
+} Camera;
+
+typedef struct {
+    u32 unk_0;
+    Vec position;
+    Vec target;
+    f32 value;
+    s16 count;
+    s16 pad;
+} TransitionConfig;
+
+typedef struct {
+    s32 mode;
+    f32 unk_4;
+    TransitionConfig config;
+    u8 pad_2C[0x28];
+} TransitionPreset;
+
+void fn_1_AEB8(Camera *camera) {
+    TransitionPreset *preset;
+    TransitionConfig config;
+    Vec position;
+    s32 index = camera->unk_A4;
+    if (lbl_1_bss_960 == 14) {
+        camera_transition_count = 14;
+        preset = &((TransitionPreset *)lbl_1_data_3BD0)[index];
+    } else {
+        camera_transition_count = 5;
+        preset = &((TransitionPreset *)&lbl_1_data_3A2C)[index];
+    }
+    config = preset->config;
+    position = config.position;
+    camera->unk_1E4 = position;
+    camera->unk_1F0 = 0.0f;
+    camera->unk_1F4 = 0.0f;
+    camera->unk_78 = preset->mode;
+    camera->unk_8C = config.position;
+    camera->unk_98 = config.target;
+    camera->unk_1FA = config.count;
+    camera->unk_8 = config.value;
+    camera->unk_1FA = config.count;
+}
+/* fzgx:end fn_1_AEB8 */
+
 /* fzgx:begin camera_get_target_orientation */
 typedef struct camera_get_target_orientation_CameraObject {
     u8 pad_49c[0x49c];
