@@ -1091,6 +1091,214 @@ s32 fn_14_3DF0(s16 *arg0) {
 }
 /* fzgx:end fn_14_3DF0 */
 
+/* fzgx:begin fn_14_4008 */
+#include "rel/pilotpoint/pilotpoint.h"
+
+typedef struct fn_14_4008_Vec {
+    f32 x;
+    f32 y;
+    f32 z;
+} fn_14_4008_Vec;
+
+typedef struct fn_14_4008_Pos {
+    u32 unk_0;
+    fn_14_4008_Vec a;
+    fn_14_4008_Vec b;
+} fn_14_4008_Pos;
+
+typedef struct fn_14_4008_View {
+    u32 unk_0;
+    u32 unk_4;
+    u32 unk_8;
+    f32 unk_C;
+    f32 unk_10;
+    f32 unk_14;
+    u32 unk_18[7];
+} fn_14_4008_View;
+
+extern fn_14_4008_View lbl_1_data_1E5C0;
+extern u32 lbl_801A66A0;
+
+extern u32 fn_14_DC2C(void);
+extern void fn_80008BEC(void *, int, u32);
+extern void fn_80008BA8(void *, void *, u32);
+extern void fn_8006F038(fn_14_4008_Vec *, fn_14_4008_Vec *, s16);
+extern void lbl_8006DCDC(void);
+extern void fn_1_F7870(fn_14_4008_View *);
+extern void lbl_8006DCA4(void);
+extern void mathutil_mtxA_rotate_x(s16);
+extern void mathutil_mtxA_rotate_y(s16);
+extern s32 fn_1_128B00(s16);
+extern s16 fn_1_14F270(s32, s32, u32);
+extern u8 *fn_1_36AD0(void);
+extern void fn_1_151BDC(void *);
+extern void fn_1_14DE80(void *, s32 *, s32 *, s16, f32);
+extern void lbl_8006DAEC(void);
+extern void fn_1_14E054(void *, s32, s16, f32);
+extern void lbl_8006DBE4(void);
+extern void fn_1_14E198(void *, s32, s16, f32);
+extern void lbl_8006DC20(void);
+
+/* Literal-pool primer: lays out the TU's shared pool up to this function's entries. */
+static const u32 fzgx_pool_table_0[12] = {
+    0x00000000, 0x43270000, 0x42180000, 0x42B40000, 0x43A00000, 0x43580000,
+    0x41000000, 0x42C00000, 0x43A80000, 0x43BE0000, 0x40280000, 0x00000000,
+};
+#pragma section code_type ".fzgxpool"
+__declspec(section ".fzgxpool") u32 fzgx_pool_0(void) { return fzgx_pool_table_0[0]; }
+__declspec(section ".fzgxpool") f32 fzgx_pool_1(void) { return 1.0f; }
+static const u32 fzgx_pool_table_34[55] = {
+    0x42C60000, 0x41F00000, 0x430C0000,
+    0x43320000, 0x437E0000, 0x43920000, 0x44074000,
+    0x440FC000, 0x42C40000, 0x42280000, 0x00000000,
+    0x43300000, 0x80000000, 0x404E0000, 0x00000000,
+    0x40390000, 0x00000000, 0x403D0000, 0x00000000,
+    0xA0FF00FF, 0xFFFFFF00, 0xA0FF00FF, 0xFFFFFF00,
+    0xA0FF00FF, 0xFFFFFF00, 0xA0FF00FF, 0xFF8080FF,
+    0xA0FF00FF, 0xFFFFFF00, 0x43C60000, 0x433E0000,
+    0x3F000000, 0x00000000, 0x00000000, 0x00000000,
+    0x3FF00000, 0x00000000, 0x40320000, 0x00000000,
+    0x43080000, 0x3F0CCCCD, 0x42D80000, 0x43960000,
+    0x42A00000, 0x43C80000, 0x43C20000, 0x42C20000,
+    0x3D4CCCCD, 0x00000000, 0x40568000, 0x00000000,
+    0x403E0000, 0x00000000, 0x40000000, 0x00000000,
+};
+__declspec(section ".fzgxpool") u32 fzgx_pool_2(void) { return fzgx_pool_table_34[0]; }
+__declspec(section ".fzgxpool") f32 fzgx_pool_3(u32 x) { return (f32)x; }
+static const u32 fzgx_pool_table_118[16] = {
+    0x4341525F, 0x53454C00,
+    0x41200000, 0x41A00000, 0x00000000, 0x40AD2D2D,
+    0xC04FCFD0, 0x00000000, 0x40A00000, 0xC0400000, /* fzgx-allow: A1 float bits, not addresses */
+    0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000,
+};
+__declspec(section ".fzgxpool") u32 fzgx_pool_4(void) { return fzgx_pool_table_118[0]; }
+__declspec(section ".fzgxpool") f32 fzgx_pool_5(void) { return 0.7f; }
+__declspec(section ".fzgxpool") f32 fzgx_pool_7(void) { return 182.04445f; }
+static const u32 fzgx_pool_table_160[4] = {
+    0x3FE19999, 0x9999999A, 0x3F547AE1, 0x3D888889,
+};
+
+__declspec(section ".fzgxpool") u32 fzgx_pool_6(void) { return fzgx_pool_table_160[0]; }
+#pragma section code_type
+
+Obj_14_bss_92C4 lbl_14_bss_92C4;
+
+#pragma section code_type ".fzgxpool"
+static void fzgx_bss_layout(void) {
+    volatile u8 s; /* fzgx-allow: S2 layout primer sink: preserves owned BSS ordering */
+    s = lbl_14_bss_92C4.pad_0[0];
+}
+#pragma section code_type ".text"
+
+typedef struct fn_14_4008_Part {
+    s16 id;
+    u8 pad_2[0x35E];
+} fn_14_4008_Part;
+
+s32 fn_14_4008(void) {
+    struct { fn_14_4008_View *value; } camera;
+    fn_14_4008_View view;
+    f32 y;
+    f32 x;
+    f32 scale;
+    s32 sel0;
+    s32 sel1;
+    struct { s16 value; } selected;
+    struct { s16 value; } i;
+    struct { s16 value; } count;
+    s16 a;
+    s16 b;
+    s16 c;
+    s16 q;
+    s16 r;
+    struct { s32 value; } index;
+
+    fn_80008BEC(&lbl_14_bss_92C4.unk_4, 0, sizeof(fn_14_4008_Vec));
+    fn_80008BEC(&lbl_14_bss_92C4.unk_10, 0, sizeof(fn_14_4008_Vec));
+    {
+        fn_14_4008_Vec eye = { 0.0f, 10.0f, -5.0f };
+        fn_80008BA8(&lbl_14_bss_92C4.unk_4, &eye, sizeof(fn_14_4008_Vec));
+    }
+    {
+        fn_14_4008_Vec at = { 0.0f, 0.0f, 0.0f };
+        fn_80008BA8(&lbl_14_bss_92C4.unk_10, &at, sizeof(fn_14_4008_Vec));
+    }
+    fn_8006F038((void *)&lbl_14_bss_92C4.unk_4, (void *)&lbl_14_bss_92C4.unk_10, 0);
+    lbl_8006DCDC();
+
+    camera.value = &lbl_1_data_1E5C0;
+    scale = 0.7f;
+    x = camera.value->unk_C * scale;
+    y = camera.value->unk_10 * scale;
+    view = *camera.value;
+    view.unk_C = x - y;
+    view.unk_10 = x + y;
+    view.unk_14 = camera.value->unk_14;
+    fn_1_F7870(&view);
+
+    lbl_8006DCA4();
+    mathutil_mtxA_rotate_x(0x2000);
+    mathutil_mtxA_rotate_y((s16)(182.04445f * (f32)(lbl_801A66A0 % 360)));
+
+    sel0 = 0;
+    sel1 = 0;
+    selected.value = lbl_14_bss_110.unk_4;
+    count.value = 0;
+    c = 0;
+    b = 0;
+    a = 0;
+    for (i.value = count.value; i.value < 8U; i.value++) {
+        if (((Obj_14_bss_110 *)((u8 *)&lbl_14_bss_110 + i.value * 8))->unk_C & 8) {
+            if ((((Obj_14_bss_110 *)((u8 *)&lbl_14_bss_110 + i.value * 8))->unk_C & 0x40) || i.value == selected.value) {
+                q = count.value / lbl_14_bss_160.unk_0;
+                r = count.value % lbl_14_bss_160.unk_0 + 1;
+                switch (q) {
+                case 0:
+                    a = r;
+                    break;
+                case 1:
+                    b = r;
+                    break;
+                case 2:
+                    c = r;
+                    break;
+                }
+            }
+            count.value++;
+        }
+    }
+
+    if (*(s16 *)((u8 *)lbl_14_bss_8340 + (index.value = a * sizeof(*lbl_14_bss_8340))) ==
+        fn_1_14F270(fn_1_128B00(0), 0, 0x80000000)) {
+        fn_1_151BDC(fn_1_36AD0() + (fn_14_DC2C() & 0xFF) * 0x81C0);
+    } else {
+        fn_1_151BDC(lbl_14_bss_180);
+    }
+    fn_1_14DE80((u8 *)lbl_14_bss_8340 + index.value, &sel0, &sel1, lbl_14_data_2F36.unk_0, 1.0f);
+    lbl_8006DAEC();
+
+    if (((fn_14_4008_Part (*)[3])lbl_14_bss_8340)[b][1].id ==
+        fn_1_14F270(fn_1_128B00(1), 1, 0x80000000)) {
+        fn_1_151BDC(fn_1_36AD0() + (fn_14_DC2C() & 0xFF) * 0x81C0);
+    } else {
+        fn_1_151BDC(lbl_14_bss_180);
+    }
+    fn_1_14E054(&((fn_14_4008_Part (*)[3])lbl_14_bss_8340)[b], sel0, lbl_14_data_2F36.unk_0, 1.0f);
+    lbl_8006DBE4();
+
+    if (((fn_14_4008_Part (*)[3])lbl_14_bss_8340)[c][2].id ==
+        fn_1_14F270(fn_1_128B00(2), 2, 0x80000000)) {
+        fn_1_151BDC(fn_1_36AD0() + (fn_14_DC2C() & 0xFF) * 0x81C0);
+    } else {
+        fn_1_151BDC(lbl_14_bss_180);
+    }
+    fn_1_14E198(&((fn_14_4008_Part (*)[3])lbl_14_bss_8340)[c], sel1, lbl_14_data_2F36.unk_0, 1.0f);
+    lbl_8006DC20();
+    return 0;
+}
+/* fzgx:end fn_14_4008 */
+
 /* fzgx:begin fn_14_600C */
 extern struct fn_14_600C_lbl_14_bss_92E8 lbl_14_bss_92E8;
 extern u32 fn_80074188(u32, u32, u32, u32);
