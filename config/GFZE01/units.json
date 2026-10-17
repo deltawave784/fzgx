@@ -52805,6 +52805,18 @@
   },
   {
     "module": "main_rel",
+    "source": "rel/main_rel/rob/fn_1_96230.c",
+    "symbols": [
+      "fn_1_96230"
+    ],
+    "status": "nonmatching",
+    "mw_version": "GC/1.3.2",
+    "extra_cflags": [],
+    "tu": "rel/main_rel/rob.c",
+    "pool": true
+  },
+  {
+    "module": "main_rel",
     "source": "rel/main_rel/rob/fn_1_96630.c",
     "symbols": [
       "fn_1_96630"
