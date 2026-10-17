@@ -7451,6 +7451,73 @@ void fn_1_648D8(void) {
 }
 /* fzgx:end fn_1_648D8 */
 
+/* fzgx:begin fn_1_64E1C noprologue */
+#include "dolphin/types.h"
+#include "game/main_rel/camera_types.h"
+
+typedef struct {
+    u8 pad_00[0x1a];
+    u16 count_b;
+    u16 count_c;
+} Sig_fn_1_55210_Fn55210Arg;
+extern void fn_1_55FC4(f32);
+extern void fn_1_55FF0(f32);
+extern void fn_1_55210(Sig_fn_1_55210_Fn55210Arg *);
+extern void lbl_8006D9D8(CamEntry *);
+extern u32 mathutil_mtxA_rotate_y(u32);
+extern u32 mathutil_mtxA_rotate_x(u32);
+extern u32 mathutil_mtxA_rotate_z(u32);
+extern void lbl_8006E14C(f32);
+extern void fn_80072558(void);
+extern const f32 lbl_1_rodata_295C;
+extern const f32 lbl_1_rodata_2978;
+
+typedef struct {
+    u8 pad_00[0x10];
+    s32 timer;
+    u8 pad_14[0x14];
+    f32 scale;
+    f32 offset;
+    u8 pad_30[4];
+    Sig_fn_1_55210_Fn55210Arg *model;
+    u8 pad_38[4];
+    f32 x, y, z;
+    u8 pad_48[0xc];
+    s16 rx, ry, rz;
+    u8 pad_5a[0x46];
+    f32 dx, dy, dz;
+} Fn64E1CArg;
+
+void fn_1_64E1C(Fn64E1CArg *arg)
+{
+    struct { f32 x, y, z; } pos;
+    f32 scale;
+    Sig_fn_1_55210_Fn55210Arg *model;
+    model = arg->model;
+    pos.x = arg->x + (f32)(arg->offset * arg->dx);
+    pos.y = arg->y + (f32)(arg->offset * arg->dy);
+    pos.z = arg->z + (f32)(arg->offset * arg->dz);
+    scale = arg->scale;
+    lbl_8006D9D8((CamEntry *)&pos);
+    mathutil_mtxA_rotate_y(arg->ry);
+    mathutil_mtxA_rotate_x(arg->rx);
+    mathutil_mtxA_rotate_z(arg->rz);
+    lbl_8006E14C(scale);
+    fn_1_55FC4(scale);
+    fn_80072558();
+    {
+        f32 alpha;
+        if (arg->timer < 20) {
+            alpha = lbl_1_rodata_295C * (f32)arg->timer;
+        } else {
+            alpha = lbl_1_rodata_2978;
+        }
+        fn_1_55FF0(alpha);
+    }
+    fn_1_55210(model);
+}
+/* fzgx:end fn_1_64E1C */
+
 /* fzgx:begin fn_1_64F2C */
 #pragma section code_type ".fzgxpool"
 __declspec(section ".fzgxpool") static void fzgx_pool_prime1(void) {

@@ -463,6 +463,83 @@ void fn_1_7EB0C(void) {
 }
 /* fzgx:end fn_1_7EB0C */
 
+/* fzgx:begin fn_1_7EB8C noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/car_test.h"
+#include "game/main_rel/car_test_types.h"
+#include "psvec.h"
+
+extern f32 lbl_1_rodata_3508[4];
+extern void *lbl_801A6D00;
+extern void fn_1_556B8(void *);
+extern void lbl_8006DB74(void *);
+extern void lbl_8006D848(f32);
+extern void lbl_8006DFC4(void *);
+extern void fn_80072558(void);
+
+typedef struct DrawNode {
+    void *model0;
+    u32 pad4;
+    void *model8;
+} DrawNode;
+typedef struct DrawEntry {
+    u8 pad0[8];
+    DrawNode *node;
+} DrawEntry;
+typedef struct DrawPair {
+    DrawEntry *entry;
+    u32 pad4;
+} DrawPair;
+typedef struct DrawCar {
+    u8 pad0[0x328];
+    u8 mode;
+    u8 pad329[0x67];
+    u32 flags;
+    u8 pad394[0x10];
+    DrawPair *pairs;
+    u8 pad3A8[0x12];
+    s16 index;
+} DrawCar;
+
+static inline f32 calculate_blend(f32 z, u8 *pool) {
+    f32 blend = *(f32 *)(pool + 0x10);
+    if (__fabs(z) < *(f64 *)(pool + 0x18)) {
+        return blend;
+    }
+    if (z < *(f64 *)(pool + 0x30)) {
+        blend = *(f32 *)(pool + 0x28) +
+                *(f32 *)(pool + 0x38) / z;
+    }
+    return blend;
+}
+
+void fn_1_7EB8C(DrawCar *arg0) {
+    void *model;
+    f32 v[3];
+    f32 blend;
+    f32 *matrix = (f32 *)(0xE0000000 + 0x00);
+    u8 *pool = (u8 *)lbl_1_rodata_3508;
+    s8 index = arg0->index;
+    if (arg0->pairs != 0) {
+        if (arg0->flags & 0x04000000) {
+            model = arg0->pairs[index].entry->node->model0;
+        } else if ((s32)arg0->mode == 4) {
+            model = arg0->pairs[index].entry->node->model8;
+        } else {
+            model = arg0->pairs[index].entry->node->model0;
+        }
+        psvec_set(v, matrix[11], matrix[7], matrix[3]);
+        blend = calculate_blend(matrix[11], pool);
+        lbl_8006DB74((u8 *)lbl_801A6D00 + 0x60);
+        lbl_8006D848(blend);
+        lbl_8006DFC4((u8 *)lbl_801A6D00 + 0x60);
+        fn_80072558();
+        fn_1_556B8(model);
+    }
+}
+/* fzgx:end fn_1_7EB8C */
+
 /* fzgx:begin fn_1_7F1E8 */
 void fn_1_7F1E8(u32 arg0, u32 arg1) {
     fn_1_7ECB8(arg0, arg1, 0x80000000); // fzgx-allow: A1 retail sentinel

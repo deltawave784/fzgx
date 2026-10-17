@@ -7688,3 +7688,9 @@ rel/main_rel/effect_car/fn_1_6A7A4.c:
 
 rel/main_rel/alloc/fn_1_627C.c:
 	.text       start:0x0000627C end:0x00006394 align:4
+
+rel/main_rel/effect/fn_1_64E1C.c:
+	.text       start:0x00064E1C end:0x00064F2C align:4
+
+rel/main_rel/car_test/fn_1_7EB8C.c:
+	.text       start:0x0007EB8C end:0x0007ECB8 align:4
