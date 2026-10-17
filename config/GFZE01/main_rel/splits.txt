@@ -7583,3 +7583,6 @@ rel/main_rel/screen_effect/fn_1_7B558.c:
 
 rel/main_rel/sound/fn_1_A5594.c:
 	.text       start:0x000A5594 end:0x000A5848 align:4
+
+rel/main_rel/_prolog/fn_1_1FE8.c:
+	.text       start:0x00001FE8 end:0x000021E4 align:4
