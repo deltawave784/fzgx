@@ -58726,6 +58726,21 @@
   },
   {
     "module": "main_rel",
+    "source": "rel/main_rel/stcoli/fn_1_1FFA0.c",
+    "symbols": [
+      "fn_1_1FFA0"
+    ],
+    "status": "matching",
+    "mw_version": "GC/1.3.2",
+    "extra_cflags": [],
+    "tu": "rel/main_rel/stcoli.c",
+    "pool": {
+      "@104": "lbl_1_rodata_6D0",
+      "@105": "lbl_1_rodata_6D4"
+    }
+  },
+  {
+    "module": "main_rel",
     "source": "rel/main_rel/stcoli/fn_1_20258.c",
     "symbols": [
       "fn_1_20258"

@@ -1262,6 +1262,99 @@ void fn_1_1B010(u32 arg0, void *pos, u32 mode, StcoliEntity *entity, f32 *out, u
 }
 /* fzgx:end fn_1_1B010 */
 
+/* fzgx:begin fn_1_1FFA0 noprologue */
+#include "types.h"
+#include "psvec.h"
+
+typedef struct {
+    f32 x, y, z;
+} fn_1_1FFA0_Vec;
+
+/* Treat an infinite/NaN result as zero (exponent field all ones). */
+static inline BOOL fn_1_1FFA0_finite(f32 v) {
+    return (*(u32 *)&v & 0x7F800000) != 0x7F800000;
+}
+#define FN_1_1FFA0_FINITE(v) fn_1_1FFA0_finite(v)
+
+static inline f32 fn_1_1FFA0_squared_length(f32 x, f32 y, f32 z) {
+    f32 result = x * x;
+    result += y * y;
+    result += z * z;
+    return result;
+}
+
+/* Closest points between segments p1-p2 and p3-p4; returns their squared distance. */
+f32 fn_1_1FFA0(fn_1_1FFA0_Vec *p1, fn_1_1FFA0_Vec *p2, fn_1_1FFA0_Vec *p3, fn_1_1FFA0_Vec *p4,
+               fn_1_1FFA0_Vec *outA, fn_1_1FFA0_Vec *outB) {
+    f32 fzgx_live__;
+    f32 fzgx_live_;
+    f32 fzgx_live;
+    f32 s;
+    fn_1_1FFA0_Vec diff;
+    f32 t;
+    f32 p3z, p1y;
+    f32 d2y, d2z;
+    f32 d1y, d1x, rx, d1z, rz;
+    f32 d2x;
+    f32 a, e, c, b, f;
+    f32 ry;
+    f32 p1z, p1x;
+
+    fzgx_live_ = p3->x;
+    p1x = p1->x;
+    rx = p1x - fzgx_live_;
+    d2x = p4->x - fzgx_live_;
+    d1x = p2->x - p1x;
+    fzgx_live_ = p3->y;
+    p1y = p1->y;
+    d2y = p4->y - fzgx_live_;
+    d1y = p2->y - p1y;
+    fzgx_live_ = p3->y;
+    ry = p1y - fzgx_live_;
+    p3z = p3->z;
+    p1z = p1->z;
+    d2z = p4->z - p3z;
+    rz = p1z - p3z;
+    d1z = p2->z - p1z;
+
+    e = (f32)(rx * d2x) + (f32)(ry * d2y) + (f32)(rz * d2z);
+    b = (f32)(d2x * d1x) + (f32)(d2y * d1y) + (f32)(d2z * d1z);
+    c = (f32)(d2x * d2x) + (f32)(d2y * d2y) + (f32)(d2z * d2z);
+    f = (f32)(rx * d1x) + (f32)(ry * d1y) + (f32)(rz * d1z);
+    a = (f32)(d1x * d1x) + (f32)(d1y * d1y) + (f32)(d1z * d1z);
+
+    s = ((f32)(e * b) - (f32)(f * c)) / ((f32)(a * c) - (f32)(b * b));
+    if (!FN_1_1FFA0_FINITE(s)) {
+        s = 0.0f;
+    }
+    t = (e + (f32)(s * b)) / c;
+    if (!FN_1_1FFA0_FINITE(t)) {
+        t = 0.0f;
+    }
+
+    psvec_sub(p2, p1, outA);
+    if (s < 0.0f) {
+        s = 0.0f;
+    } else if (s > 1.0f) {
+        s = 1.0f;
+    }
+    psvec_scale(outA, s, outA);
+    psvec_add(p1, outA, outA);
+
+    psvec_sub(p4, p3, outB);
+    if (t < 0.0f) {
+        t = 0.0f;
+    } else if (t > 1.0f) {
+        t = 1.0f;
+    }
+    psvec_scale(outB, t, outB);
+    psvec_add(p3, outB, outB);
+
+    psvec_sub(outB, outA, &diff);
+    return fn_1_1FFA0_squared_length(diff.x, diff.y, diff.z);
+}
+/* fzgx:end fn_1_1FFA0 */
+
 /* fzgx:begin fn_1_20258 */
 typedef struct Fn_1_20258 {
     unsigned char pad00[0x30];
