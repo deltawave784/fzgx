@@ -248,6 +248,73 @@ void fn_1_4DE0(Obj_1_data_2CDC *obj, u32 arg1) {
 #pragma opt_dead_assignments reset
 /* fzgx:end fn_1_4DE0 */
 
+/* fzgx:begin fn_1_4E60 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/alloc.h"
+#include "game/main_rel/alloc_types.h"
+
+extern u32 fn_1_4060(void);
+extern void fn_8006CE1C(f32);
+struct Sig_fn_8006CDFC_fn_8006CDFC_Arg0 {
+    u8 unk_0;
+    u8 unk_1;
+    u8 unk_2;
+};
+extern void fn_8006CDFC(struct Sig_fn_8006CDFC_fn_8006CDFC_Arg0 *);
+
+#pragma section code_type ".fzgxpool"
+__declspec(section ".fzgxpool") static void fzgx_pool_prime1(void) {
+    volatile f32 s; volatile f64 d; /* fzgx-allow: S2 pool primer sinks */
+    s = 65535.0f;
+    s = 1.0f;
+    s = -1.0f;
+    s = 0.0f;
+    d = 4503599627370496.0;
+}
+#pragma section code_type ".text"
+
+#pragma opt_dead_assignments off
+void fn_1_4E60(Obj_1_data_2CDC *obj) {
+    f32 base;
+    f32 ratio;
+    f32 value;
+    u8 duration;
+    u8 step;
+    u32 color;
+
+    base = (f32)obj->unk_4 / 65535.0f;
+    duration = obj->unk_0 == 60 ? 15 : obj->unk_0;
+    step = obj->unk_1;
+    ratio = step > duration ? 1.0f : (f32)step / (f32)duration;
+    if (obj->unk_3 & 2) {
+        value = base * (1.0f - ratio);
+    } else {
+        f32 product = (1.0f - base) * ratio;
+        value = base + product;
+    }
+    if (value == 0.0f) {
+        Obj_1_data_2CDC *p;
+        fn_8006CE1C(0.0f);
+        p = &lbl_1_data_2CDC;
+        p->unk_8 = lbl_1_data_2CD8;
+    } else {
+        color = obj->unk_8;
+        fn_8006CDFC((struct Sig_fn_8006CDFC_fn_8006CDFC_Arg0 *)&color);
+        fn_8006CE1C(value);
+    }
+    obj->unk_1 += obj->unk_2;
+    if (obj->unk_1 > obj->unk_0) {
+        obj->unk_3 &= 0xFE;
+    }
+    if (!(obj->unk_3 & 1)) {
+        obj->unk_6 = -1;
+        obj->unk_4 = (s32)(65535.0f * value);
+        fn_1_4060();
+    }
+}
+/* fzgx:end fn_1_4E60 */
+
 /* fzgx:begin fn_1_4FEC */
 void fn_1_4FEC(void) {
     lbl_1_bss_F58 = 0;

@@ -7634,3 +7634,6 @@ rel/main_rel/effect/fn_1_5AF28.c:
 
 rel/main_rel/effect/fn_1_660EC.c:
 	.text       start:0x000660EC end:0x00066254 align:4
+
+rel/main_rel/alloc/fn_1_4E60.c:
+	.text       start:0x00004E60 end:0x00004FEC align:4
