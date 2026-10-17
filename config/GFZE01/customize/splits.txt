@@ -611,3 +611,6 @@ rel/customize/_prolog/fn_3_3AE8.c:
 
 rel/customize/emb_paste_editor/fn_3_106FC.c:
 	.text       start:0x000106FC end:0x00010B68 align:4
+
+rel/customize/emb_paste_editor/fn_3_139F0.c:
+	.text       start:0x000139F0 end:0x00013D98 align:4
