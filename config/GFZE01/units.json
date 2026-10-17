@@ -23488,6 +23488,16 @@
   },
   {
     "module": "main",
+    "source": "dol/fn_8005C120.c",
+    "symbols": [
+      "fn_8005C120"
+    ],
+    "status": "matching",
+    "mw_version": "GC/2.5",
+    "extra_cflags": []
+  },
+  {
+    "module": "main",
     "source": "dol/fn_8005C298.c",
     "symbols": [
       "fn_8005C298"
