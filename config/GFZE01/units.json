@@ -35541,6 +35541,17 @@
   },
   {
     "module": "main_rel",
+    "source": "rel/main_rel/burner/fn_1_9D0EC.c",
+    "symbols": [
+      "fn_1_9D0EC"
+    ],
+    "status": "matching",
+    "mw_version": "GC/1.3.2",
+    "extra_cflags": [],
+    "tu": "rel/main_rel/burner.c"
+  },
+  {
+    "module": "main_rel",
     "source": "rel/main_rel/burner/fn_1_9D230.c",
     "symbols": [
       "fn_1_9D230"
@@ -51315,6 +51326,24 @@
   },
   {
     "module": "main_rel",
+    "source": "rel/main_rel/phys/fn_1_E52F8.c",
+    "symbols": [
+      "fn_1_E52F8"
+    ],
+    "status": "matching",
+    "mw_version": "GC/1.3.2",
+    "extra_cflags": [],
+    "tu": "rel/main_rel/phys.c",
+    "pool": {
+      "...rodata.0": "lbl_1_rodata_6780",
+      "@48": "lbl_1_rodata_6800",
+      "@144": "lbl_1_rodata_69CC",
+      "@11": "lbl_1_rodata_6780+0x18",
+      "@76": "lbl_1_rodata_6808+0x50"
+    }
+  },
+  {
+    "module": "main_rel",
     "source": "rel/main_rel/phys/fn_1_E5430.c",
     "symbols": [
       "fn_1_E5430"
@@ -57986,6 +58015,17 @@
     ],
     "status": "matching",
     "mw_version": null,
+    "extra_cflags": [],
+    "tu": "rel/main_rel/sound.c"
+  },
+  {
+    "module": "main_rel",
+    "source": "rel/main_rel/sound/fn_1_A5AA0.c",
+    "symbols": [
+      "fn_1_A5AA0"
+    ],
+    "status": "matching",
+    "mw_version": "GC/1.3.2",
     "extra_cflags": [],
     "tu": "rel/main_rel/sound.c"
   },
@@ -73872,6 +73912,36 @@
       "@9": "lbl_10_rodata_158+0x44",
       "@96": "lbl_10_rodata_1E8+0x140",
       "@10": "lbl_10_rodata_158+0x48"
+    }
+  },
+  {
+    "module": "sel",
+    "source": "rel/sel/sel/fn_10_F57C.c",
+    "symbols": [
+      "fn_10_F57C"
+    ],
+    "status": "matching",
+    "mw_version": "GC/1.3.2",
+    "extra_cflags": [],
+    "tu": "rel/sel/sel.c",
+    "pool": {
+      "...rodata.0": "lbl_10_rodata_158",
+      "@27": "lbl_10_rodata_1E8",
+      "@120": "lbl_10_rodata_1E8+0x1A0",
+      "@121": "lbl_10_rodata_1E8+0x1A8",
+      "@122": "lbl_10_rodata_1E8+0x1B0",
+      "@123": "lbl_10_rodata_1E8+0x1B8",
+      "@124": "lbl_10_rodata_1E8+0x1BC",
+      "@11": "lbl_10_rodata_1A4",
+      "@125": "lbl_10_rodata_1E8+0x1C0",
+      "@126": "lbl_10_rodata_3AC",
+      "@14": "lbl_10_rodata_1A4+0xC",
+      "@127": "lbl_10_rodata_3AC+0x4",
+      "@128": "lbl_10_rodata_3AC+0x8",
+      "@44": "lbl_10_rodata_1E8+0x88",
+      "@129": "lbl_10_rodata_3AC+0xC",
+      "@130": "lbl_10_rodata_3AC+0x10",
+      "fzgx_pool_table1": "lbl_10_rodata_158"
     }
   },
   {

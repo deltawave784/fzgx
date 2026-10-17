@@ -2261,3 +2261,86 @@ void fn_1_A59AC(void) {
     }
 }
 /* fzgx:end fn_1_A59AC */
+
+/* fzgx:begin fn_1_A5AA0 noprologue */
+#include "types.h"
+#include "rel/main_rel/sound.h"
+
+typedef struct A5AA0Obj {
+    u32 unk0;
+    u8 pad4[0x1C];
+    u32 unk20;
+    u8 pad24[0x10];
+    void (*unk34)(void *);
+    u8 pad38[0x10];
+    u32 unk48;
+} A5AA0Obj;
+
+typedef struct A5AA0Slot {
+    A5AA0Obj *unk0;
+    u32 unk4;
+} A5AA0Slot;
+
+extern u32 lbl_1_bss_6F5C0;
+extern u8 lbl_1_bss_6F5C4[44];
+extern u8 *lbl_801A6410;
+extern u32 fn_1_45D0(void *, u32, void *, int);
+extern void OSReport(const char *, ...);
+extern void OSPanic(const char *, int, const char *, ...);
+extern u32 fn_80006B70(const char *, void *);
+extern u32 fn_80006DE8(void *);
+extern s32 fn_80006D1C(void *, void *, u32, u32);
+extern void fn_80006CE4(void *);
+extern s32 fn_80009CD4(void *, u32, void *, int);
+extern void OSLinkFixed(void *, u32);
+extern void OSLink(void *, u32);
+
+#pragma opt_propagation off
+void fn_1_A5AA0(const char *arg0, A5AA0Slot *arg1) {
+    u8 *d = (u8 *)&lbl_1_data_33FF0;
+    u32 loc[18];
+    s32 ok;
+    u32 p;
+    u32 sz2;
+    u32 size;
+    A5AA0Obj *o;
+
+    if ((s32)lbl_1_bss_6F5C0 >= 10) {
+        OSReport((const char *)(d + 0x148), arg0);
+        OSPanic((const char *)(d + 0x150), 0x3b, (const char *)(d + 0x160));
+    }
+    *(A5AA0Slot **)(lbl_1_bss_6F5C4 + (lbl_1_bss_6F5C0++ << 2)) = arg1;
+    arg1->unk0 = 0;
+    arg1->unk4 = 0;
+    if ((s32)fn_80006B70(arg0, loc) != 0) {
+        size = (fn_80006DE8(loc) + 31) & ~31;
+        sz2 = size;
+        arg1->unk0 = (A5AA0Obj *)fn_1_45D0(lbl_801A6410, size, d + 0x150, 0x48);
+        sz2 = fn_80006D1C(loc, arg1->unk0, sz2, 0);
+        fn_80006CE4(loc);
+        ok = sz2;
+        if (ok != 0) {
+            o = arg1->unk0;
+            p = (((((u32)o) + (31)) + (o->unk48))) & ~31;
+            if (p + o->unk20 - (u32)o > size) {
+                ok = fn_80009CD4(o, p + o->unk20 - (u32)o, d + 0x150, 0x55);
+                if (ok == 0) {
+                    p = arg1->unk4 = fn_1_45D0(lbl_801A6410, arg1->unk0->unk20, d + 0x150, 0x58);
+                }
+            }
+            if (ok != 0) {
+                OSLinkFixed(arg1->unk0, p);
+            } else {
+                OSLink(arg1->unk0, p);
+            }
+            arg1->unk0->unk34(arg1->unk0);
+        } else {
+            OSReport((const char *)(d + 0x148), arg0);
+            OSPanic((const char *)(d + 0x150), 0x64, (const char *)(d + 0x17c));
+        }
+    } else {
+        OSReport((const char *)(d + 0x148), arg0);
+        OSPanic((const char *)(d + 0x150), 0x69, (const char *)(d + 0x190));
+    }
+}
+/* fzgx:end fn_1_A5AA0 */
