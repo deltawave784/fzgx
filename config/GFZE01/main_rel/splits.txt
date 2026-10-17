@@ -7637,3 +7637,6 @@ rel/main_rel/effect/fn_1_660EC.c:
 
 rel/main_rel/alloc/fn_1_4E60.c:
 	.text       start:0x00004E60 end:0x00004FEC align:4
+
+rel/main_rel/cloth/fn_1_1050D0.c:
+	.text       start:0x001050D0 end:0x00105724 align:4
