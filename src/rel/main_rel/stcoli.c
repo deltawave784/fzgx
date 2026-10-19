@@ -4292,6 +4292,20 @@ f32 fn_1_278B8(u32 arg0, void *arg1, f32 arg2) {
 #pragma opt_common_subs reset
 /* fzgx:end fn_1_278B8 */
 
+/* fzgx:begin fn_1_27DE4 noprologue */
+#include "dolphin/types.h"
+#include "psvec.h"
+
+void fn_1_27DE4(void *arg0)
+{
+    f32 delta[3];
+    if (!(*(u32 *)arg0 & 0x8000)) {
+        psvec_sub((u8 *)arg0 + 0x7C, (u8 *)arg0 + 0x88, delta);
+        psvec_add((u8 *)arg0 + 0x1D4, delta, (u8 *)arg0 + 0x1D4);
+    }
+}
+/* fzgx:end fn_1_27DE4 */
+
 /* fzgx:begin fn_1_28660 */
 void fn_1_28660(Fn_1_28660 *self) {
     int result;
