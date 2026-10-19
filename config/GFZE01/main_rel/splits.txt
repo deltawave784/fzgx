@@ -7994,3 +7994,9 @@ rel/main_rel/sel_static_disp/fn_1_14E9A8.c:
 
 rel/main_rel/font/fn_1_5158C.c:
 	.text       start:0x0005158C end:0x00051678 align:4
+
+rel/main_rel/game/fn_1_3F4B8.c:
+	.text       start:0x0003F4B8 end:0x0003F4FC align:4
+
+rel/main_rel/spline/fn_1_F7BE4.c:
+	.text       start:0x000F7BE4 end:0x000F7C48 align:4

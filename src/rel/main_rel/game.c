@@ -2356,6 +2356,21 @@ s32 fn_1_3F440(u8 index) {
 }
 /* fzgx:end fn_1_3F440 */
 
+/* fzgx:begin fn_1_3F4B8 */
+extern u32 lbl_1_bss_26C5C;
+
+void fn_1_3F4B8(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, u8 arg5)
+{
+    lbl_1_bss_3C30.unk_13F8 = arg0 * 60;
+    lbl_1_bss_3C30.unk_13FA = arg1 * 60;
+    lbl_1_bss_3C30.unk_13FC = arg2 * 60;
+    lbl_1_bss_3C30.unk_13FE = arg3 * 60;
+    lbl_1_bss_3C30.unk_1400 = arg4 * 60;
+    lbl_1_bss_3C30.unk_1402 = arg5;
+    lbl_1_bss_26C5C = 1;
+}
+/* fzgx:end fn_1_3F4B8 */
+
 /* fzgx:begin fn_1_3F4FC */
 void fn_1_3F4FC(void) {
     u8 *dp;
