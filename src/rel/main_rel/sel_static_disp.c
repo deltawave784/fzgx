@@ -878,6 +878,138 @@ void fn_1_1358BC(s16 arg0, s16 arg1, int arg2, s16 arg3, int unused, void* arg5,
 }
 /* fzgx:end fn_1_1358BC */
 
+/* fzgx:begin fn_1_135D7C noprologue */
+#include "types.h"
+#include "font.h"
+#include "rel/main_rel/sel_static_disp.h"
+
+/* 164-byte table of 41 image ids. */
+typedef struct SelImageTable {
+    u32 image[41];
+} SelImageTable;
+
+/* FontDrawPacket layout as this unit's template stores it: the word at 0x30
+ * receives the integer format code. */
+typedef struct SelImagePacket {
+    u32 image;
+    f32 x, y, z;
+    f32 scale_x, scale_y;
+    f32 u0, v0, u1, v1;
+    s16 rotation_z, rotation_y;
+    f32 alpha;
+    u32 format;
+    u32 flags;
+    u8 color[4], color_add[4];
+    u32 unk_40;
+    u16 width, height;
+    void* pixels;
+    void* secondary;
+    void* vertex_callback;
+    u32 unk_54;
+} SelImagePacket;
+
+/* 0x81C0-byte machine entry */
+typedef struct SelMachineEntry {
+    u32 flags;
+    u8 pad_4[0x819C];
+    u8 image_index;
+    u8 pad_81A1[3];
+    u8 body;
+    u8 pad_81A5[7];
+    u8 cockpit;
+    u8 pad_81AD[7];
+    u8 booster;
+    u8 pad_81B5[0xB];
+} SelMachineEntry;
+
+extern SelImageTable lbl_1_rodata_8964;
+extern SelImagePacket lbl_1_rodata_26F8;
+extern const f64 lbl_1_rodata_8600;
+extern const f32 lbl_1_rodata_8960;
+extern void* fn_1_12F118(void);
+extern u8* fn_1_36AD0(void);
+extern void fn_1_49410(void);
+extern void fn_1_495C8(int);
+extern void fn_1_494DC(int);
+extern void fn_1_496FC(f32, f32);
+extern void fn_1_4954C(f32);
+extern void fn_1_4955C(f32, f32);
+extern void fn_1_4962C(void);
+extern u32 fn_1_14FEAC(u32, u32, u32, void*, void*);
+extern void fn_1_4CF3C(f32, void*, ...);
+
+void fn_1_135D7C(s16 x, s16 y, u32 format, s16 index, void* arg4, s16 slot, int arg6,
+                 f32 scale_x, f32 scale_y, f32 z) {
+    SelMachineEntry* entry;
+    u8* base;
+    u8 name[32];
+    SelImagePacket packet;
+    SelImageTable images;
+    s32 i;
+
+    images = lbl_1_rodata_8964;
+
+    if (index < 0) return;
+    if (arg6 != 0) return;
+
+    if (index >= 0x29) {
+        base = fn_1_12F118();
+        if (base == fn_1_36AD0()) {
+            entry = (SelMachineEntry*)base + slot;
+        } else {
+            entry = (SelMachineEntry*)base + (index - 0x29);
+        }
+        if (!(entry->flags & 0x40000000)) {
+            index = entry->image_index;
+            packet = lbl_1_rodata_26F8;
+            i = index < 0 ? 0 : ((u32)index > 40 ? 40 : index);
+            packet.image = images.image[i];
+            packet.x = (f32)x;
+            packet.y = (f32)y;
+            packet.z = z;
+            packet.scale_x *= scale_x;
+            packet.scale_y *= scale_y;
+            packet.format = format;
+            fn_1_4F734((FontDrawPacket*)&packet);
+        } else {
+            fn_1_49410();
+            switch (format) {
+            case 5: fn_1_495C8(0); break;
+            case 9: fn_1_495C8(8); break;
+            case 13: fn_1_495C8(0x10); break;
+            case 6: fn_1_495C8(1); break;
+            case 10: fn_1_495C8(9); break;
+            case 14: fn_1_495C8(0x11); break;
+            case 7: fn_1_495C8(2); break;
+            case 11: fn_1_495C8(0xA); break;
+            case 15: fn_1_495C8(0x12); break;
+            }
+            fn_1_494DC(0x23);
+            fn_1_496FC((f32)x, (f32)y);
+            fn_1_4954C(z);
+            fn_1_4955C(scale_x, scale_y);
+            fn_1_4962C();
+            {
+                const f32* scale = &lbl_1_rodata_8960;
+                fn_1_4CF3C(*scale * scale_x, &lbl_1_data_41A30,
+                           fn_1_14FEAC(entry->body, entry->cockpit, entry->booster, name, arg4));
+            }
+        }
+    } else {
+        packet = lbl_1_rodata_26F8;
+        i = index < 0 ? 0 : ((u32)index > 40 ? 40 : index);
+        packet.image = images.image[i];
+        packet.x = (f32)x;
+        packet.y = (f32)y;
+        packet.z = z;
+        packet.scale_x *= scale_x;
+        packet.scale_y *= scale_y;
+        packet.format = format;
+        fn_1_4F734((FontDrawPacket*)&packet);
+    }
+}
+/* fzgx:end fn_1_135D7C */
+
 /* fzgx:begin fn_1_1363F0 noprologue */
 #include "types.h"
 #include "dolphin/types.h"
