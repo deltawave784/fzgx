@@ -6038,3 +6038,9 @@ dol/fn_800372E0.c:
 
 dol/fn_8006BC1C.c:
 	.text       start:0x8006BC1C end:0x8006BC50 align:4
+
+dol/fn_80038944.c:
+	.text       start:0x80038944 end:0x80038A18 align:4
+
+dol/fn_800288C4.c:
+	.text       start:0x800288C4 end:0x800289C0 align:4

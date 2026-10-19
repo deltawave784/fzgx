@@ -2227,6 +2227,146 @@ void fn_1_21CFC(void *obj, f32 *scale)
 }
 /* fzgx:end fn_1_21CFC */
 
+/* fzgx:begin fn_1_21F18 noprologue */
+#include "types.h"
+#include "dolphin/hw_regs.h"
+#include "game/main_rel/car_test_types.h"
+
+typedef struct {
+    u8 pad_0[0x4];
+    u32 key;
+    u8 pad_8[0x20];
+    void *curve;
+} StcoliCurveSrc;
+
+typedef struct {
+    u8 pad_0[0x4];
+    StcoliCurveSrc *src;
+    u8 pad_8[0x10];
+    f32 value;
+} StcoliCurveOwner;
+
+typedef struct {
+    u8 pad_0[0xc];
+    s32 mode;
+    StcoliCurveOwner *owner;
+} StcoliDrawEntity;
+
+/* Literal pool of stcoli.c, read through one base register. */
+typedef struct {
+    u8 pad_0[0x8];
+    f32 zero;
+    u8 pad_C[0x14];
+    f32 half;
+    u8 pad_24[0x10];
+    f32 neg_half;
+} StcoliPool6C8;
+
+extern f32 lbl_1_rodata_6C8[2];
+extern void fn_1_18214(StcoliDrawEntity *, f32 *, void *);
+extern f32 fn_1_9E14C(u32, void *, f32);
+extern f32 lbl_8006D188(s16);
+extern void lbl_8006DAEC(void);
+extern u32 lbl_8006DCA4(void);
+extern void fn_80072558(void);
+extern void fn_8003462C(u32, u32, u32);
+extern void lbl_8006DB30(void);
+
+/* GX write-gather pipe: every store must reach the FIFO, hence volatile. */
+#define GX_WRITE_F32(v) (*(volatile f32 *)GX_FIFO_BASE = (v))
+
+static inline void GXPosition3f32(f32 x, f32 y, f32 z) {
+    GX_WRITE_F32(x);
+    GX_WRITE_F32(y);
+    GX_WRITE_F32(z);
+}
+
+static inline f32 fn_1_21F18_array_read(f32 *array, s32 index) { return array[index]; }
+#pragma opt_common_subs off
+void fn_1_21F18(StcoliDrawEntity *entity, f32 *scale, f32 time) {
+    StcoliPool6C8 *pool;
+    Fn183D28Vec3 v;
+    Fn183D28Vec3 pts[16];
+    Fn183D28Vec3 *p;
+    s32 i;
+    s32 angle;
+    f32 half;
+    f32 c;
+    f32 zero;
+    register f32 t;
+    StcoliCurveOwner *owner;
+    StcoliCurveSrc *src;
+
+    pool = (StcoliPool6C8 *)lbl_1_rodata_6C8;
+    fn_1_18214(entity, scale, NULL);
+    zero = pool->zero;
+    half = pool->half;
+    p = pts;
+    for (i = 0, angle = 0; i < 16; i++, angle += 0x1000) {
+        c = half * lbl_8006D188((s16)(angle + 0x4000));
+        p->x = half * lbl_8006D188((s16)angle);
+        p->y = c;
+        p->z = zero;
+        p->x *= fn_1_21F18_array_read(scale, 0);
+        p->y *= fn_1_21F18_array_read(scale, 1);
+        lbl_8006E1B0(p, p);
+        p++;
+    }
+    lbl_8006DAEC();
+    lbl_8006DCA4();
+    fn_80072558();
+    p = pts;
+    fn_8003462C(0xb0, 0, 17);
+    for (i = 0; i < 16; i++) {
+        GXPosition3f32(p->x, p->y, p->z);
+        p++;
+    }
+    GX_WRITE_F32(pts[0].x);
+    GX_WRITE_F32(pts[0].y);
+    GX_WRITE_F32(pts[0].z);
+    lbl_8006DB30();
+
+    if (entity->mode == 1) {
+        owner = entity->owner;
+        src = owner->src;
+        if (src->curve != NULL) {
+            t = fn_1_9E14C(src->key, src->curve, time);
+        } else {
+            t = owner->value;
+        }
+        {
+            /* Preserve the literal-component read order. */
+            volatile StcoliPool6C8 *components = pool;
+            register f32 n = components->neg_half;
+            f32 z = components->zero;
+            f32 x;
+            f32 y = n + t;
+            x = components->half;
+            v.z = z;
+            v.x = x;
+            v.y = y;
+            v.x = x * fn_1_21F18_array_read(scale, 0);
+            v.y = y * fn_1_21F18_array_read(scale, 1);
+        }
+        lbl_8006E1B0(&v, &pts[0]);
+        v.x = -v.x;
+        lbl_8006E1B0(&v, &pts[1]);
+        lbl_8006DAEC();
+        lbl_8006DCA4();
+        fn_80072558();
+        fn_8003462C(0xb0, 0, 2);
+        GX_WRITE_F32(pts[0].x);
+        GX_WRITE_F32(pts[0].y);
+        GX_WRITE_F32(pts[0].z);
+        GX_WRITE_F32(pts[1].x);
+        GX_WRITE_F32(pts[1].y);
+        GX_WRITE_F32(pts[1].z);
+        lbl_8006DB30();
+    }
+}
+#pragma opt_common_subs reset
+/* fzgx:end fn_1_21F18 */
+
 /* fzgx:begin fn_1_2277C noprologue */
 #include "dolphin/types.h"
 

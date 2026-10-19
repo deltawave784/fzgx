@@ -8024,3 +8024,6 @@ rel/main_rel/ghost/fn_1_EEB44.c:
 
 rel/main_rel/replay/fn_1_F326C.c:
 	.text       start:0x000F326C end:0x000F3574 align:4
+
+rel/main_rel/stcoli/fn_1_21F18.c:
+	.text       start:0x00021F18 end:0x0002221C align:4
