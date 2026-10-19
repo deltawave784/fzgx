@@ -972,6 +972,230 @@ void fn_1_EE3F4(void) {
 }
 /* fzgx:end fn_1_EE3F4 */
 
+/* fzgx:begin fn_1_EEB44 noprologue */
+#include "dolphin/types.h"
+#include "game/vec3.h"
+#include "rel/main_rel/ghost.h"
+
+typedef struct {
+    u8 pad0[0x24];
+    u8 min;
+    u8 sec;
+    u16 ms;
+} GhostRecord;
+typedef struct {
+    u8 pad0[0x1e0];
+    u8 min;
+    u8 sec;
+    u16 ms;
+} GhostPlayer;
+typedef struct {
+    u8 pad0[0x324];
+    s32 handle;
+} GhostObject;
+typedef struct {
+    u8 lapDelta;
+    u8 flags;
+    u8 angleY;
+    u8 angleX;
+    s16 angleZ;
+    u16 pad;
+    u32 packed;
+    u32 unused;
+} GhostFrame;
+
+typedef struct {
+    u8 pad0[0x1d8];
+    u32 busy;
+    u16 course;
+    u8 pad1[0x2d4 - 0x1de];
+    char file[0x338 - 0x2d4];
+    char fmtItem[0x10];
+    char fmtObj[0x10];
+} GhostStrings;
+
+extern void *lbl_801A6410;
+extern void fn_80008BEC(void *, int, u32);
+extern GhostPlayer *fn_1_3F0D8(u32, f32 *, u8 *);
+extern void fn_1_8645C(int, void *);
+extern void lbl_8006DBAC(Vec3 *);
+extern void fn_8006F5C4(s16 *, s16 *, s16 *);
+extern s32 fn_1_F17B4(const void *);
+extern void ghost_pack_bits(u32 *, const u32 *, const u32 *, const u32 *);
+extern u8 fn_1_3F114(void);
+extern s16 *fn_1_86254(int);
+extern void fn_1_12A734(s32);
+extern void fn_1_7F934(GhostObject *);
+extern void fn_1_46B4(void *, void *, const char *, int);
+extern int sprintf(char *, const char *, ...);
+extern void fn_1_14DBCC(void *);
+extern void fn_1_984F0(void *);
+
+void fn_1_EEB44(void)
+{
+/* one-member wrapper keeps the work base in one register (not rematerialized) */
+struct { GhostStrings *value; } str;
+struct { Obj_1_bss_7B180 *value; } work;
+char objName[0x100];
+char itemName[0x100];
+f32 mtx[3][4];
+f32 speed;
+u32 packed0;
+u32 packed1;
+u32 packed2;
+s16 angZ;
+s16 angY;
+s16 angX;
+u8 misc;
+GhostPlayer *player;
+GhostRecord *rec;
+GhostRecord **recs;
+s16 *course;
+u32 ptime;
+u32 rtime;
+u32 i;
+struct { u32 value; } ghostCounter;
+union { u8 *slot; GhostObject **objs; } cursor;
+union { void **items; u8 *ghost; } otherCursor;
+s32 j;
+s32 count;
+s32 f;
+u8 *lapFlags;
+u32 ghostIndex;
+
+str.value = (GhostStrings *)lbl_1_data_3E358;
+work.value = &lbl_1_bss_7B180;
+if ((s32)work.value->unk_8 != 0 && work.value->unk_38AC != 0 ) {
+if ((s32)work.value->unk_3894 != 0) {
+str.value->busy = 0;
+} else {
+i = 0;
+cursor.slot = work.value->arr_18D8;
+for (; i < 5; i++) {
+fn_80008BEC(cursor.slot, 0, 0x30);
+cursor.slot += 0x30;
+}
+if (lbl_1_bss_960 == 9) {
+if ((s32)work.value->unk_16C8 >= 0 && (s32)work.value->unk_17CC == 0) {
+player = fn_1_3F0D8(0, &speed, &misc);
+ptime = ((player)->min * 60000 + (player)->sec * 1000 + (player)->ms) ;
+rec = (GhostRecord *)work.value->unk_16B4;
+if (ptime >= ((rec)->min * 60000 + (rec)->sec * 1000 + (rec)->ms) ) {
+work.value->unk_174C = 3;
+} else {
+work.value->unk_174C = 1;
+}
+} else if ((s32)work.value->unk_17CC != 0) {
+work.value->unk_174C = 0;
+} else if (work.value->unk_174E == 0) {
+work.value->unk_174C = 0;
+}
+} else {
+if (work.value->unk_174E != 0 && (s32)work.value->unk_17CC == 0) {
+player = fn_1_3F0D8(0, &speed, &misc);
+ptime = ((player)->min * 60000 + (player)->sec * 1000 + (player)->ms) ;
+count = work.value->unk_174E;
+work.value->unk_174C = 1;
+recs = (GhostRecord **)&work.value->unk_16B4;
+for (j = 0; j < count; j++) {
+rec = recs[j];
+if (ptime >= ((rec)->min * 60000 + (rec)->sec * 1000 + (rec)->ms) ) {
+work.value->unk_174C = 3;
+}
+}
+} else if ((s32)work.value->unk_17CC != 0) {
+work.value->unk_174C = 0;
+} else if (work.value->unk_174E == 0) {
+work.value->unk_174C = 0;
+}
+}
+if (work.value->unk_16CC != 0xff) {
+player = fn_1_3F0D8(0, &speed, &misc);
+ptime = ((player)->min * 60000 + (player)->sec * 1000 + (player)->ms) ;
+if ((s32)work.value->unk_20 != 0) {
+recs = (GhostRecord **)&work.value->unk_16B4;
+recs += work.value->unk_174E;
+rec = recs[-2];
+rtime = ((rec)->min * 60000 + (rec)->sec * 1000 + (rec)->ms) ;
+} else {
+recs = (GhostRecord **)&work.value->unk_16B4;
+recs += work.value->unk_174E;
+rec = recs[-1];
+rtime = ((rec)->min * 60000 + (rec)->sec * 1000 + (rec)->ms) ;
+}
+if (rtime > ptime) {
+work.value->unk_174D = 1;
+} else {
+work.value->unk_174D = 3;
+}
+} else {
+work.value->unk_174D = 0;
+}
+work.value->unk_3894 = 1;
+fn_1_8645C(0, mtx);
+for (f = work.value->unk_0 - 3; (u32)f < work.value->unk_0; f++) {
+if (f > 0 && f < 0x7080) {
+lapFlags = (u8 *)work.value->unk_16E8;
+lapFlags[f] = 1;
+}
+}
+lbl_8006DBAC((Vec3 *)mtx);
+fn_8006F5C4(&angX, &angY, &angZ);
+((GhostFrame *)work.value->unk_38AC)->angleY = angZ >> 8;
+((GhostFrame *)work.value->unk_38AC)->angleZ = angY;
+((GhostFrame *)work.value->unk_38AC)->angleX = angX >> 8;
+((GhostFrame *)work.value->unk_38AC)->lapDelta = work.value->unk_0 - work.value->unk_4;
+packed0 = fn_1_F17B4(&mtx[0][3]);
+packed1 = fn_1_F17B4(&mtx[1][3]);
+packed2 = fn_1_F17B4(&mtx[2][3]);
+ghost_pack_bits(&((GhostFrame *)work.value->unk_38AC)->packed, &packed0, &packed1, &packed2);
+((GhostFrame *)work.value->unk_38AC)->flags = fn_1_3F114();
+((GhostFrame *)work.value->unk_38AC)->pad = 0;
+*(u8 *)work.value->unk_38B0 = 1;
+work.value->unk_38AC += sizeof(GhostFrame);
+work.value->unk_38B0++;
+work.value->unk_1820++;
+work.value->unk_4 = work.value->unk_0;
+work.value->unk_0++;
+work.value->unk_C = 1;
+str.value->course = 0;
+course = fn_1_86254(0);
+if (course != ((void *)0) ) {
+str.value->course = course[3];
+}
+cursor.objs = (GhostObject **)&work.value->unk_1794;
+otherCursor.items = (void **)&work.value->unk_17A8;
+{
+for (i = 0; i < 5; i++) {
+if (cursor.objs[i] != ((void *)0) ) {
+if (cursor.objs[i]->handle != -1) {
+fn_1_12A734(cursor.objs[i]->handle);
+cursor.objs[i]->handle = -1;
+}
+fn_1_7F934(cursor.objs[i]);
+fn_1_46B4(lbl_801A6410, cursor.objs[i], str.value->file, 0xd89);
+sprintf(objName, str.value->fmtObj, i);
+cursor.objs[i] = ((void *)0) ;
+}
+if (otherCursor.items[i] != ((void *)0) ) {
+fn_1_14DBCC(otherCursor.items[i]);
+fn_1_46B4(lbl_801A6410, otherCursor.items[i], str.value->file, 0xd93);
+sprintf(itemName, str.value->fmtItem, i);
+otherCursor.items[i] = ((void *)0) ;
+}
+}
+}
+otherCursor.ghost = work.value->arr_19C8;
+for (ghostCounter.value = 0; ghostCounter.value < work.value->unk_174E; ghostCounter.value++) {
+fn_1_984F0(otherCursor.ghost + ghostCounter.value * 0x620);
+}
+str.value->busy = 0;
+}
+}
+    return;
+}
+/* fzgx:end fn_1_EEB44 */
+
 /* fzgx:begin fn_1_EF0A0 */
 // fn_1_EF0A0: empty in retail (single blr).
 void fn_1_EF0A0(void) {

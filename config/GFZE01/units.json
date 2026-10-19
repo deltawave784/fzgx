@@ -48517,6 +48517,17 @@
   },
   {
     "module": "main_rel",
+    "source": "rel/main_rel/ghost/fn_1_EEB44.c",
+    "symbols": [
+      "fn_1_EEB44"
+    ],
+    "status": "matching",
+    "mw_version": "GC/1.3.2",
+    "extra_cflags": [],
+    "tu": "rel/main_rel/ghost.c"
+  },
+  {
+    "module": "main_rel",
     "source": "rel/main_rel/ghost/fn_1_EF0A0.c",
     "symbols": [
       "fn_1_EF0A0"
