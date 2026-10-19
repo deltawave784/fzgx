@@ -54994,6 +54994,21 @@
   },
   {
     "module": "main_rel",
+    "source": "rel/main_rel/replay/fn_1_F326C.c",
+    "symbols": [
+      "fn_1_F326C"
+    ],
+    "status": "matching",
+    "mw_version": "GC/1.3",
+    "extra_cflags": [],
+    "tu": "rel/main_rel/replay.c",
+    "pool": {
+      "@98": "lbl_1_rodata_6D60",
+      "@99": "lbl_1_rodata_6D64"
+    }
+  },
+  {
+    "module": "main_rel",
     "source": "rel/main_rel/replay/fn_1_F3574.c",
     "symbols": [
       "fn_1_F3574"

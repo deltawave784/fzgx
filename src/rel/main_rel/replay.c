@@ -592,6 +592,161 @@ void fn_1_F2F84(void) {
 }
 /* fzgx:end fn_1_F2F84 */
 
+/* fzgx:begin fn_1_F326C noprologue */
+#include "types.h"
+#include "rel/main_rel/replay.h"
+#include "game/main_rel/replay_types.h"
+
+typedef struct {
+    f32 x;
+    f32 y;
+    f32 z;
+} ReplayPos_F326C;
+
+typedef struct {
+    u16 count;    // 0xFEF0
+    u8 last[4];   // 0xFEF2
+} ReplayTrack_F326C;
+
+typedef struct {
+    u8 pad0[0x24];
+    u8 done[4];   // 0x24
+} ReplayStateView_F326C;
+
+// lbl_1_bss_7EFD4 as bit flags (MSB first)
+typedef struct {
+    u8 b7 : 1;
+    u8 b6 : 1;
+    u8 b5 : 1;
+    u8 b4 : 1;
+    u8 paused : 1;   // 0x08
+    u8 stopped : 1;  // 0x04
+    u8 b1 : 1;
+    u8 active : 1;   // 0x01
+} ReplayFlags_F326C;
+
+#define REPLAY_FLAGS (*(ReplayFlags_F326C *)&lbl_1_bss_7EFD4)
+
+extern u8 fn_1_86624(void);
+extern u8 fn_1_86810(int);
+extern u32 fn_1_864E8(int);
+extern u8 fn_1_86678(int);
+extern s16 fn_1_3F0C8(void);
+extern void fn_1_862D4(int, ReplayPos_F326C *);
+extern f32 fn_1_8CAF4(u32, s32);
+
+static inline int replay_is_recording(void) {
+    if (!REPLAY_FLAGS.active) {
+        return 0;
+    }
+    if (REPLAY_FLAGS.stopped) {
+        return 0;
+    }
+    return 1;
+}
+
+static inline int replay_is_paused(void) {
+    return REPLAY_FLAGS.paused;
+}
+
+static inline void replay_update_last(ReplayState_F3574 *state, ReplayTrack_F326C *track, s8 count, s32 i, u8 value) {
+    s32 j;
+    u32 offset = (u32)i + 2;
+    if (value != ((u8 *)track)[offset]) {
+        for (j = 0; j < count; j++) {
+            if (((u8 *)track)[offset] == fn_1_86810(j)) {
+                break;
+            }
+        }
+        if (j != count && j != i) {
+            fn_1_F3574(state, i, j, 0, value);
+        }
+        ((u8 *)track)[offset] = value;
+    }
+}
+
+#pragma opt_strength_reduction off
+void fn_1_F326C(ReplayState_F3574 *state) {
+    ReplayTrack_F326C *track;
+    s8 count;
+    u32 k;
+    s32 j;
+    s32 i;
+    u32 buttons;
+    u8 value;
+    u8 valid;
+    u8 idle;
+    u8 active;
+    s8 slot;
+    ReplayPos_F326C pos;
+    ReplayPos_F326C other;
+    f32 dz;
+    f32 dy;
+    f32 dx;
+
+    track = (ReplayTrack_F326C *)&state->buffer->eventCount;
+    if (!replay_is_recording() || replay_is_paused()) {
+        return;
+    }
+    state->frame++;
+    if (track->count >= 4) {
+        return;
+    }
+    count = (s8)fn_1_86624();
+    for (i = 0; i < count; i++) {
+        value = fn_1_86810(i);
+        if (((ReplayStateView_F326C *)state)->done[i] != 0) {
+            continue;
+        }
+        buttons = fn_1_864E8(i);
+        idle = value == 0;
+        slot = fn_1_86678(i);
+        valid = slot != -1;
+        active = idle | valid;
+        if (idle && fn_1_3F0C8() == 0x29 && track->count == 0) {
+            fn_1_F3574(state, i, i, 5, value);
+            continue;
+        }
+        if (!active) {
+            continue;
+        }
+        if (buttons & 0x10000) {
+            ((ReplayStateView_F326C *)state)->done[i] = 1;
+            fn_1_F3574(state, i, i, 6, value);
+        } else if (buttons & 0x40000) {
+            fn_1_F3574(state, i, i, 7, value);
+        } else if (valid) {
+            if (buttons & 0x2000000) {
+                fn_1_862D4(i, &pos);
+                k = i;
+                for (j = i + 1; j < count; j++) {
+                    fn_1_862D4(j, &other);
+                    dx = other.x;
+                    dx = dx - pos.x;
+                    dy = other.y;
+                    dy = dy - pos.y;
+                    dz = other.z;
+                    dz = dz - pos.z;
+                    dx = dx * dx;
+                    dx = dy * dy + dx;
+                    dx = dz * dz + dx;
+                    if (dx < 25.0f) {
+                        if (fn_1_8CAF4(k, j) < 5.0f) {
+                            fn_1_F3574(state, i, j, 2, value);
+                            break;
+                        }
+                    }
+                }
+            } else if (buttons & 0x800000) {
+                fn_1_F3574(state, i, i, 3, value);
+            } else {
+                replay_update_last(state, track, count, i, value);
+            }
+        }
+    }
+}
+/* fzgx:end fn_1_F326C */
+
 /* fzgx:begin fn_1_F3574 */
 // One 0x80-byte event record in the replay buffer.
 
