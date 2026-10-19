@@ -8099,3 +8099,6 @@ rel/main_rel/sel_static_disp/fn_1_14D994.c:
 
 rel/main_rel/effect/fn_1_67D0C.c:
 	.text       start:0x00067D0C end:0x00067E94 align:4
+
+rel/main_rel/sound/fn_1_A266C.c:
+	.text       start:0x000A266C end:0x000A2A70 align:4
