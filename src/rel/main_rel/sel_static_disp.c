@@ -878,6 +878,72 @@ void fn_1_1358BC(s16 arg0, s16 arg1, int arg2, s16 arg3, int unused, void* arg5,
 }
 /* fzgx:end fn_1_1358BC */
 
+/* fzgx:begin fn_1_135B80 noprologue */
+#include "types.h"
+#include "rel/main_rel/sel_static_disp.h"
+
+extern void fn_1_49410(void);
+extern void fn_1_495C8(int);
+extern void fn_1_494DC(int);
+extern void fn_1_496FC(f32, f32);
+extern void fn_1_4954C(f32);
+extern void fn_1_4955C(f32, f32);
+extern void fn_1_4962C(void);
+extern char* fn_1_14FEAC(void*, void*, void*, void*, int);
+extern char* fn_1_7F49C(s16, int, void*);
+extern void fn_1_4CF3C(f32, void*, ...);
+extern const f32 lbl_1_rodata_8960[];
+
+void fn_1_135B80(f32 scale, f32 arg7, f32 arg8, s16 x, s16 y, u32 mode, s16 index,
+                 u32 unused, void* a, void* b, void* c) {
+    u8 buf1[0x20];
+    u8 buf2[0x40];
+    char* str;
+
+    fn_1_49410();
+    switch (mode) {
+    case 5:
+        fn_1_495C8(0);
+        break;
+    case 9:
+        fn_1_495C8(8);
+        break;
+    case 13:
+        fn_1_495C8(0x10);
+        break;
+    case 6:
+        fn_1_495C8(1);
+        break;
+    case 10:
+        fn_1_495C8(9);
+        break;
+    case 14:
+        fn_1_495C8(0x11);
+        break;
+    case 7:
+        fn_1_495C8(2);
+        break;
+    case 11:
+        fn_1_495C8(0xa);
+        break;
+    case 15:
+        fn_1_495C8(0x12);
+        break;
+    }
+    fn_1_494DC(0x1c);
+    fn_1_496FC((f32)x, (f32)y);
+    fn_1_4954C(arg8);
+    fn_1_4955C(scale, arg7);
+    fn_1_4962C();
+
+    if (index >= 0x29 || index < 0) {
+        fn_1_4CF3C((f32)(lbl_1_rodata_8960[0] * scale), &lbl_1_data_41A30, (str = fn_1_14FEAC(a, b, c, buf1, 0)));
+    } else {
+        fn_1_4CF3C((f32)(lbl_1_rodata_8960[0] * scale), &lbl_1_data_41A30, (str = fn_1_7F49C(index, 0, buf2)));
+    }
+}
+/* fzgx:end fn_1_135B80 */
+
 /* fzgx:begin fn_1_135D7C noprologue */
 #include "types.h"
 #include "font.h"
