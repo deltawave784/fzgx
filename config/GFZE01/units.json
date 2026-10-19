@@ -28455,6 +28455,16 @@
   },
   {
     "module": "main",
+    "source": "dol/fn_8008F9D8.c",
+    "symbols": [
+      "fn_8008F9D8"
+    ],
+    "status": "matching",
+    "mw_version": "GC/1.2.5n",
+    "extra_cflags": []
+  },
+  {
+    "module": "main",
     "source": "dol/fn_8008FAB4.c",
     "symbols": [
       "fn_8008FAB4"
