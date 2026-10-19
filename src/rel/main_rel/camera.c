@@ -528,6 +528,52 @@ void fn_1_6990(u32 index, u32 *output) {
 #pragma peephole reset
 /* fzgx:end fn_1_6990 */
 
+/* fzgx:begin fn_1_6A0C pool */
+extern void lbl_8006DD14(void *, u32);
+
+#pragma force_active on
+Obj_1_bss_F68_Target *lbl_1_bss_F68;
+u8 *lbl_1_bss_F6C;
+u8 *lbl_1_bss_F70;
+
+/* Prime the native BSS pool in retail address order. */
+#pragma section code_type ".fzgxpool"
+static void *fzgx_fn_1_6A0C_bss_order(u32 index) {
+    if (index == 0) {
+        return lbl_1_bss_F68;
+    }
+    if (index == 1) {
+        return lbl_1_bss_F6C;
+    }
+    return lbl_1_bss_F70;
+}
+#pragma section code_type ".text"
+#pragma force_active reset
+
+#pragma peephole on
+#pragma opt_strength_reduction off
+void fn_1_6A0C(u32 index, u32 arg) {
+    u8 * fzgx_live;
+    Obj_1_bss_F68_Target *state = lbl_1_bss_F68;
+
+    if (state == 0) {
+        return;
+    }
+
+    switch ((s8)state->unk_48) {
+    case 9:
+    case 10:
+        lbl_8006DD14(lbl_1_bss_F70 + 0x7c, arg);
+        return;
+    default:
+        fzgx_live = lbl_1_bss_F6C;
+        lbl_8006DD14(((0x34) + (((index & 0xff) * 0x1fc) + (fzgx_live))), arg);
+        return;
+    }
+}
+#pragma opt_strength_reduction reset
+/* fzgx:end fn_1_6A0C */
+
 /* fzgx:begin camera_get_mode */
 // Return the normalized camera status, treating inactive states as zero.
 s16 camera_get_mode(void) {
