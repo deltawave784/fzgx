@@ -8045,3 +8045,6 @@ rel/main_rel/sel_static_disp/fn_1_135D7C.c:
 
 rel/main_rel/camera/fn_1_6A0C.c:
 	.text       start:0x00006A0C end:0x00006A80 align:4
+
+rel/main_rel/bg_lig/fn_1_D83E4.c:
+	.text       start:0x000D83E4 end:0x000D8784 align:4
