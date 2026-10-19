@@ -6074,3 +6074,15 @@ dol/fn_8006C7E8.c:
 
 dol/fn_800446E4.c:
 	.text       start:0x800446E4 end:0x80044A94 align:4
+
+dol/fn_800090A4.c:
+	.text       start:0x800090A4 end:0x80009468 align:4
+
+dol/fn_80058C94.c:
+	.text       start:0x80058C94 end:0x80058D24 align:4
+
+dol/fn_80058B54.c:
+	.text       start:0x80058B54 end:0x80058BFC align:4
+
+dol/fn_80059AB4.c:
+	.text       start:0x80059AB4 end:0x80059B44 align:4
