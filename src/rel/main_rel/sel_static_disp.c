@@ -1750,6 +1750,115 @@ void fn_1_138144(u32 arg0, u32 arg1) {
 }
 /* fzgx:end fn_1_138144 */
 
+/* fzgx:begin fn_1_138A04 noprologue */
+#include "types.h"
+#include "font.h"
+#include "rel/main_rel/sel_static_disp.h"
+
+extern FontDrawPacket lbl_1_rodata_26F8;
+extern s32 lbl_801A66B4;
+extern const f32 lbl_1_rodata_85EC;  /* 0.75f */
+extern const f32 lbl_1_rodata_85F4;  /* 100.0f */
+extern const f32 lbl_1_rodata_861C;  /* 0.0f */
+extern const f32 lbl_1_rodata_863C;  /* 1.0f */
+extern const f32 lbl_1_rodata_864C;  /* 0.64f */
+extern const f32 lbl_1_rodata_8664;  /* 0.6f */
+extern const f32 lbl_1_rodata_86D0;  /* 80.0f */
+extern const f32 lbl_1_rodata_87DC;  /* 6.0f */
+extern const f32 lbl_1_rodata_8A50;  /* 0.87f */
+extern const f32 lbl_1_rodata_8B40;  /* -4.0f */
+extern const f32 lbl_1_rodata_8B78;  /* 613.0f */
+extern const f32 lbl_1_rodata_8B7C;  /* 519.0f */
+extern const f32 lbl_1_rodata_8B80;  /* 591.0f */
+
+extern int fn_1_4F734(FontDrawPacket *);
+extern u16 fn_1_486C4(u32);
+extern u8 fn_1_141F94(u8);
+extern void fn_1_135D7C(s16, s16, s16, s16, s16, s16, s16, f32, f32, f32);
+extern void fn_1_136CC4(u32, u32, u32, s16);
+extern void fn_1_13A848(s16, s16, s32, s16, s32, f32, f32);
+extern void fn_1_13A994(s16, s16, s32, s16, s16, s32, f32, f32);
+extern void fn_1_49410(void);
+extern void fn_1_494DC(s16);
+extern void fn_1_4954C(f32);
+extern void fn_1_4955C(f32, f32);
+extern void fn_1_495C8(s32);
+extern void fn_1_4966C(f32, f32);
+extern void fn_1_496FC(f32, f32);
+extern void fn_1_4A0D8(const char *);
+extern void fn_1_51564(u16, u16, u16, u16, u16, u16);
+extern void fn_1_5158C(FontDrawPacket *, u32, s16, s16);
+extern void fn_1_51678(FontDrawPacket *, u32, s16, s16, s16, s16);
+
+#define fzgx_pool_data_lbl_1_data_40F58_BA8 (data + 0xBA8)
+#define fzgx_pool_data_lbl_1_data_40F58_BB8 (data + 0xBB8)
+#define fzgx_pool_data_lbl_1_data_40F58_BC0 (data + 0xBC0)
+
+void fn_1_138A04(s32 x, s32 y, s32 idx) {
+    const char *data;
+    s32 py;
+    s16 kind;
+    u8 color;
+    s16 w;
+    FontDrawPacket pkt;
+
+    data = (const char *)&lbl_1_data_40F58;
+    kind = (&lbl_1_bss_8B3A0.unk_E)[idx * 16];
+    color = fn_1_141F94(idx);
+
+    pkt = lbl_1_rodata_26F8;
+    pkt.image = 0x9D0C;
+    w = fn_1_486C4(0x9D0C);
+    fn_1_51678(&pkt, pkt.image, 0, 0, 285, w);
+    pkt.x = x;
+    pkt.y = y;
+    pkt.z = lbl_1_rodata_85F4;
+    fn_1_4F734(&pkt);
+
+    fn_1_51564(0, 0, 24, 20, 2, 2);
+    pkt = lbl_1_rodata_26F8;
+    pkt.image = 0x9D0B;
+    pkt.x = x + 18;
+    pkt.y = y + 18;
+    pkt.z = 80.0f;
+    pkt.flags = 10;
+    fn_1_5158C(&pkt, pkt.image, (s16)(color % 2), (s16)(color / 2));
+    fn_1_4F734(&pkt);
+
+    pkt = lbl_1_rodata_26F8;
+    pkt.image = 0x9D08;
+    pkt.x = x + 7;
+    pkt.y = y + 33;
+    pkt.z = lbl_1_rodata_86D0;
+    fn_1_4F734(&pkt);
+
+    {
+        f32 scale = 0.87f;
+        fn_1_135D7C(x + 36, y + 18, 9, kind, 0, idx, 0, scale, scale, lbl_1_rodata_87DC);
+    }
+    fn_1_136CC4(x + 16, y + 42, kind, idx);
+    fn_1_13A848(x + 467, y + 129, 1, kind, 0, lbl_1_rodata_8664, lbl_1_rodata_864C);
+    fn_1_13A994(x + 467, y + 148, 1, kind, lbl_801A66B4, 0, lbl_1_rodata_8664, lbl_1_rodata_8664);
+
+    fn_1_49410();
+    fn_1_495C8(10);
+    fn_1_494DC(4);
+    fn_1_4966C(lbl_1_rodata_8B40, lbl_1_rodata_861C);
+    fn_1_4954C(lbl_1_rodata_863C);
+    fn_1_496FC(lbl_1_rodata_8B78, py = color * 201 + 242);
+    fn_1_4A0D8(fzgx_pool_data_lbl_1_data_40F58_BA8);
+    fn_1_49410();
+    fn_1_495C8(10);
+    fn_1_4954C(lbl_1_rodata_863C);
+    fn_1_4955C(lbl_1_rodata_85EC, lbl_1_rodata_85EC);
+    fn_1_496FC(lbl_1_rodata_8B7C, py);
+    fn_1_4A0D8((const char *)fzgx_pool_data_lbl_1_data_40F58_BB8);
+    fn_1_4954C(lbl_1_rodata_863C);
+    fn_1_496FC(lbl_1_rodata_8B80, py);
+    fn_1_4A0D8((const char *)fzgx_pool_data_lbl_1_data_40F58_BC0);
+}
+/* fzgx:end fn_1_138A04 */
+
 /* fzgx:begin fn_1_138E44 noprologue */
 #include "types.h"
 #include "font.h"

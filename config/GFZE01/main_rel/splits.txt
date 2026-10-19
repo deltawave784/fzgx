@@ -8048,3 +8048,12 @@ rel/main_rel/camera/fn_1_6A0C.c:
 
 rel/main_rel/bg_lig/fn_1_D83E4.c:
 	.text       start:0x000D83E4 end:0x000D8784 align:4
+
+rel/main_rel/sel_static_disp/fn_1_138A04.c:
+	.text       start:0x00138A04 end:0x00138E44 align:4
+
+rel/main_rel/stcoli/fn_1_2BF8C.c:
+	.text       start:0x0002BF8C end:0x0002C688 align:4
+
+rel/main_rel/effect/fn_1_5DFA4.c:
+	.text       start:0x0005DFA4 end:0x0005E3C4 align:4
