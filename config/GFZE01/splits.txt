@@ -6053,3 +6053,6 @@ dol/fn_80043798.c:
 
 dol/fn_800510D8.c:
 	.text       start:0x800510D8 end:0x80051448 align:4
+
+dol/long2str.c:
+	.text       start:0x80082040 end:0x80082298 align:4

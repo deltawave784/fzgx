@@ -31,7 +31,7 @@ typedef struct print_format {
 
 extern void __num2dec(const decform *, f64, decimal *);
 extern char *fn_80083DB0(char *, const char *);
-extern char *long2str_80082040(s32, char *, print_format);
+extern char *long2str(s32, char *, print_format);
 
 /* Primer: an earlier function of the retail TU pooled "" at offset 0. */
 #pragma section RX ".fzgxpool"
@@ -106,7 +106,7 @@ char *double2hex(f64 num, char *buff, print_format format) {
 
     expbits = (*(s16 *)&ld & 0x7ff0) >> 4;
     exp = expbits - 1023;
-    p = long2str_80082040(exp, buff, exp_format);
+    p = long2str(exp, buff, exp_format);
     if (format.conversion_char == 'a')
         *--p = 'p';
     else
