@@ -3788,6 +3788,95 @@ void fn_1_250F8(Fn_1_250F8 *self) {
 }
 /* fzgx:end fn_1_250F8 */
 
+/* fzgx:begin fn_1_251F8 noprologue */
+#include "types.h"
+
+struct V3 {
+    f32 x;
+    f32 y;
+    f32 z;
+};
+
+extern f32 lbl_8006D0B4(f32);
+extern const f32 lbl_1_rodata_840[];
+
+static inline f32 *fn_1_251F8_array_read(f32 *array) { return array; }
+#pragma opt_common_subs off
+#pragma opt_propagation off
+#pragma opt_dead_assignments off
+static inline f32 fn_1_251F8_read_pointer(struct V3 * owner) { return owner->y; }
+static inline f32 fn_1_251F8_read_pointer_(struct V3 * owner) { return owner->x; }
+s32 fn_1_251F8(struct V3 *a0, struct V3 *a1, struct V3 *a2, struct V3 *a3, f32 *out, s32 *flag, f32 r0, f32 r1) {
+    f32 fzgx_live_;
+    f32 z2;
+    f32 fzgx_live__;
+    f32 fzgx_live;
+    f32 dz;
+    f32 big;
+    f32 dx;
+    f32 dy;
+    f32 ey;
+    f32 ex;
+    f32 ez;
+    struct { f32 value; } fx;
+    f32 A;
+    f32 B;
+    f32 C;
+    f32 D;
+    f32 E;
+    big = ((0x16c / 4)[lbl_1_rodata_840]);
+    *out = big;
+    *flag = 0;
+    fzgx_live__ = a0->x;
+    dx = fzgx_live__;
+    dx = dx - a2->x;
+    dy = a0->y - a2->y;
+    fzgx_live_ = a1->x;
+    fzgx_live_ = fzgx_live_ - fn_1_251F8_read_pointer_(a3);
+    ex = fzgx_live_ - dx;
+    fzgx_live = a0->z;
+    z2 = a2->z;
+    dz = fzgx_live - z2;
+{
+    ey = (a1->y - a3->y) - dy;
+    ez = (a1->z - a3->z) - dz;
+    A = (f32)((f32)(ez * ez) + (f32)((f32)(ex * ex) + (f32)(ey * ey)));
+    if (((0x114 / 4)[lbl_1_rodata_840]) > A) {
+        *flag = 1;
+        return 0;
+    }
+    fx.value = r0 + r1;
+    B = (f32)((f32)(dz * ez) + (f32)((f32)(dx * ex) + (f32)(dy * ey)));
+}
+    C = (f32)((f32)(dz * dz) + (f32)((f32)(dx * dx) + (f32)(dy * dy))) - (f32)(fx.value * fx.value);
+    D = (f32)(B * B) - (f32)(A * C);
+    if (((0xc / 4)[lbl_1_rodata_840]) > D) {
+        return 0;
+    }
+    if (((0xc / 4)[lbl_1_rodata_840]) >= C) {
+        *out = ((0xc / 4)[lbl_1_rodata_840]);
+        return 1;
+    }
+    if (((0xc / 4)[lbl_1_rodata_840]) >= C + (B + (A + B))) {
+    } else {
+        if (((0xc / 4)[lbl_1_rodata_840]) <= B) {
+            return 0;
+        }
+        if (-B >= A) {
+            return 0;
+        }
+    }
+    E = lbl_8006D0B4(D);
+    *out = -(B + E) / A;
+    return 1;
+}
+#pragma opt_dead_assignments reset
+
+#pragma opt_propagation reset
+
+#pragma opt_common_subs reset
+/* fzgx:end fn_1_251F8 */
+
 /* fzgx:begin fn_1_25480 noprologue */
 #include "game/main_rel/stcoli_types.h"
 #include "game/vec3.h"
