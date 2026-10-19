@@ -2120,3 +2120,6 @@ rel/movie_module/fn_12_3A888.c:
 
 rel/movie_module/fn_12_2FE60.c:
 	.text       start:0x0002FE60 end:0x00030930 align:4
+
+rel/movie_module/fn_12_7940.c:
+	.text       start:0x00007940 end:0x00007E58 align:4
