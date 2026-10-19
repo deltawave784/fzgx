@@ -939,6 +939,64 @@ void fn_1_105AB8(u32 arg0, u32 arg1) {
 }
 /* fzgx:end fn_1_105AB8 */
 
+/* fzgx:begin fn_1_105BD8 noprologue */
+#include "types.h"
+#include "psvec.h"
+
+typedef struct V3 { f32 x, y, z; } V3;
+
+extern void fn_1_681C(u8, V3 *);
+extern void fn_1_6914(u8, V3 *);
+extern void fn_1_6990(u8, V3 *);
+extern s32 camera_get_state(void);
+extern f32 lbl_1_rodata_78E8[19];
+extern f32 lbl_1_rodata_78E0[2];
+extern f32 lbl_8006D668(V3 *);
+
+static inline f32 fn_1_105BD8_read_pointer(V3 * owner) { return owner->z; }
+static inline f32 fn_1_105BD8_array_read(s32 index, f32 *array) { return array[index]; }
+static inline f32 fn_1_105BD8_read_pointer_(V3 * owner) { return owner->x; }
+#pragma opt_strength_reduction off
+static inline f32 fn_1_105BD8_read_pointer__(V3 * owner) { return owner->y; }
+#pragma opt_loop_invariants off
+void fn_1_105BD8(u32 id, V3 *a, V3 *b, V3 *c, V3 *out) {
+    fn_1_681C(id, a);
+    fn_1_6914(id, c);
+    fn_1_6990(id, b);
+    if ((s8)camera_get_state() == 9) {
+        f32 zero = fn_1_105BD8_array_read(0, lbl_1_rodata_78E8);
+        f32 one = fn_1_105BD8_array_read(0, lbl_1_rodata_78E0);
+        b->x = zero;
+        b->y = one;
+        b->z = zero;
+    }
+    psvec_sub(&c->x, &a->x, &c->x);
+    lbl_8006D668(c);
+    {
+        f32 z, y, x;
+        f32 by, bz, bx, cz, cy, cx;
+        cy = c->y;
+        bz = b->z;
+        cz = c->z;
+        bx = b->x;
+        by = b->y;
+        cx = c->x;
+        x = cy * bz;
+        y = cz * bx;
+        x = x - cz * by;
+        z = cx * by;
+        y = y - cx * bz;
+        out->x = x;
+        z = z - cy * bx;
+        out->y = y;
+        out->z = z;
+    }
+}
+#pragma opt_loop_invariants reset
+
+#pragma opt_strength_reduction reset
+/* fzgx:end fn_1_105BD8 */
+
 /* fzgx:begin fn_1_1067A8 */
 void fn_1_1067A8(void *arg0, f32 arg1, f32 arg2) {
     s32 result;
