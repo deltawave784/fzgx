@@ -142,6 +142,65 @@ tmp_cse1 = n * 4;
 }
 /* fzgx:end fn_1_F4F08 */
 
+/* fzgx:begin fn_1_F5458 noprologue */
+typedef float f32;
+typedef int s32;
+typedef unsigned int u32;
+typedef struct {
+    f32 x;
+    f32 y;
+    f32 z;
+    f32 w;
+} Sig_fn_8006EB4C_Quat;
+extern const f32 lbl_1_rodata_6D74;
+extern const f32 lbl_1_rodata_6D6C;
+extern void fn_1_F55C4(f32 *, f32 *, f32 *, f32 *);
+extern void fn_1_F588C(f32 *, f32 *, f32 *, f32);
+extern void fn_8006EB4C(Sig_fn_8006EB4C_Quat *, Sig_fn_8006EB4C_Quat *, Sig_fn_8006EB4C_Quat *, f32);
+
+void fn_1_F5458(Sig_fn_8006EB4C_Quat *out, u32 n, f32 *keys, Sig_fn_8006EB4C_Quat *pts, f32 t)
+{
+    u32 i;
+    u32 j;
+    f32 local;
+    f32 b[4];
+    f32 a[4];
+    f32 c[4];
+    f32 d[4];
+    f32 lab_t3;
+
+    i = 0;
+    {
+        u32 zero = 0;
+        for (j = n; j > zero; j--) {
+            if (keys[i] > t) {
+                i--;
+                break;
+            }
+            i++;
+        }
+    }
+    local = (t - keys[i]) / (keys[i + 1] - keys[i]);
+    if (i >= n - 1) {
+        local = lbl_1_rodata_6D74;
+        i = n - 2;
+    }
+    if ((u32)i < 1 || !(n - 3 >= i)) {
+        Sig_fn_8006EB4C_Quat *p = pts + i;
+        fn_8006EB4C(out, p, p + 1, local);
+    } else {
+        Sig_fn_8006EB4C_Quat *p = pts + i;
+        Sig_fn_8006EB4C_Quat *q = p + 1;
+        fn_1_F55C4(a, (f32 *)p, (f32 *)q, (f32 *)(p + 2));
+        fn_1_F55C4(b, (f32 *)(p - 1), (f32 *)p, (f32 *)q);
+        lab_t3 = local;
+        fn_1_F588C(c, (f32 *)p, (f32 *)q, lab_t3);
+        fn_1_F588C(d, b, a, local);
+        fn_1_F588C((f32 *)out, c, d, lbl_1_rodata_6D6C * local * (lbl_1_rodata_6D74 - local));
+    }
+}
+/* fzgx:end fn_1_F5458 */
+
 /* fzgx:begin fn_1_F55C4 */
 void fn_1_F55C4(f32 *out, f32 *arg1, f32 *in, f32 *arg3) {
     f32 temp[4];

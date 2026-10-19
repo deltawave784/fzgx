@@ -657,6 +657,157 @@ void fn_1_FBEA8(void) {
 }
 /* fzgx:end fn_1_FBEA8 */
 
+/* fzgx:begin fn_1_FBFE4 noprologue */
+#include "types.h"
+
+extern const f32 lbl_1_rodata_7598; // 0.0f
+extern u32 lbl_1_bss_85088[14];
+
+extern void GXLoadTexMtxImm(void *, u32, u32);
+extern void fn_80072EDC(s32, s32);
+extern void fn_800734A8(s32, s32, s32, s32);
+extern void fn_80073778(void *, s32);
+extern void fn_800738E0(s32, s32, s32);
+extern void fn_800739E0(s32, s32, s32);
+extern void fn_80073A58(s32, void *, s32);
+extern void fn_80073C6C(s32);
+extern void fn_80073D60(s32, s32, s32, s32, s32);
+extern void fn_800745A4(s32, s32, s32, s32, u32, u32);
+
+#define MAX(a, b) ((a) > (b) ? (a) : (b))
+
+typedef struct {
+    s32 active;      // 0x0
+    u8 pad_4[0x24];
+    f32 mtx[3][4];   // 0x28
+    s32 tex;         // 0x58
+    s8 off[4];       // 0x5c
+} CasLayer;
+
+typedef struct {
+    s32 active;      // 0x0
+    u8 id;           // 0x4
+    u8 pad_5[3];
+    s32 flags[3];    // 0x8
+    CasLayer lower[3]; // 0x14
+    CasLayer upper[3]; // 0x134
+    u8 pal[4];       // 0x254
+    f32 sx[3];       // 0x258
+    f32 sy[3];       // 0x264
+} CasEntry;
+
+typedef struct {
+    volatile s32 count;  // 0x0: snapshot count must be read before configuring layers
+    s32 x;      // 0x4
+    s32 tex;    // 0x8
+    s32 y;      // 0xc
+    s32 z;      // 0x10
+    s32 unk_14;
+    s32 unk_18;
+    s32 w;      // 0x1c
+    s32 unk_20;
+    s32 unk_24;
+    s32 unk_28;
+} CasAlloc;
+
+typedef struct {
+    u8 pad_0[0x15];
+    u8 id;
+} CasOwner;
+
+typedef struct {
+    u32 unk_0;
+    CasOwner *owner; // 0x4
+    u32 unk_8;
+    CasAlloc alloc;  // 0xc
+} CasState;
+
+extern CasEntry lbl_1_bss_84454[5];
+
+void fn_1_FBFE4(CasState *state) {
+    CasAlloc base;
+    CasAlloc cur;
+    f32 mtx[6];
+    u8 i;
+    CasOwner *owner;
+    s32 j;
+    struct { s32 value; } count;
+    CasEntry *entry;
+    s32 k;
+    CasLayer *layer;
+    s32 x, tex, y, z, w;
+    s32 x2, tex2, y2;
+
+    cur = state->alloc;
+    base = state->alloc;
+    owner = state->owner;
+    for (i = 0; i < 5; i++) {
+        entry = &lbl_1_bss_84454[i];
+        if (entry->active == 0) {
+            continue;
+        }
+        if (owner->id != entry->id) {
+            continue;
+        }
+        count.value = base.count;
+        for (j = 0; j < 3; j++) {
+            k = count.value - j - 1;
+            if (k < 0) {
+                continue;
+            }
+            if (entry->flags[j] != 0) {
+                fn_80073C6C(k);
+                fn_80072EDC(k, 4);
+                fn_800734A8(k, 0xff, 0xff, 0xff);
+            }
+            layer = &entry->upper[j];
+            if (layer->active != 0) {
+                x = base.x + layer->off[0];
+                y = base.y + layer->off[1];
+                z = base.z + layer->off[2];
+                w = base.w + layer->off[3];
+                tex = layer->tex;
+                cur.x = MAX(cur.x, x + 1);
+                cur.tex = MAX(cur.tex, tex + 3);
+                cur.y = MAX(cur.y, y + 1);
+                cur.z = MAX(cur.z, z + 1);
+                cur.w = MAX(cur.w, w + 1);
+                mtx[0] = entry->sx[j];
+                mtx[1] = lbl_1_rodata_7598;
+                mtx[2] = lbl_1_rodata_7598;
+                mtx[3] = lbl_1_rodata_7598;
+                mtx[4] = entry->sy[j];
+                mtx[5] = lbl_1_rodata_7598;
+                GXLoadTexMtxImm(layer->mtx, tex, 1);
+                fn_800745A4(x, 1, 4, tex, 0, 0x7d);
+                fn_80073778((void *)lbl_1_bss_85088[entry->pal[j]], y);
+                fn_800738E0(z, x, y);
+                fn_80073D60(k, z, 0, 0, w);
+                fn_800739E0(z, 0, 0);
+                fn_80073A58(w, mtx, 0);
+            } else {
+                fn_80073C6C(k);
+            }
+            layer = &entry->lower[j];
+            if (layer->active != 0) {
+                x2 = base.x + layer->off[0];
+                y2 = base.y + layer->off[1];
+                tex2 = layer->tex;
+                cur.x = MAX(cur.x, x2 + 1);
+                cur.tex = MAX(cur.tex, tex2 + 3);
+                cur.y = MAX(cur.y, y2 + 1);
+                fn_80073778((void *)lbl_1_bss_85088[entry->pal[j]], y2);
+                GXLoadTexMtxImm(layer->mtx, tex2, 1);
+                fn_800745A4(x2, 1, 4, tex2, 0, 0x7d);
+                fn_800734A8(k, x2, y2, 4);
+            }
+        }
+        state->alloc = cur;
+        break;
+    }
+}
+/* fzgx:end fn_1_FBFE4 */
+
 /* fzgx:begin fn_1_FC40C */
 // fn_1_FC40C: empty in retail (single blr).
 void fn_1_FC40C(void) {
