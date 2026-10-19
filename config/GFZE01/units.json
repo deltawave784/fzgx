@@ -54690,6 +54690,17 @@
   },
   {
     "module": "main_rel",
+    "source": "rel/main_rel/ranking/fn_1_159AE0.c",
+    "symbols": [
+      "fn_1_159AE0"
+    ],
+    "status": "matching",
+    "mw_version": "GC/1.3.2",
+    "extra_cflags": [],
+    "tu": "rel/main_rel/ranking.c"
+  },
+  {
+    "module": "main_rel",
     "source": "rel/main_rel/ranking/fn_1_15AC00.c",
     "symbols": [
       "fn_1_15AC00"

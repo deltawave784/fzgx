@@ -2601,6 +2601,157 @@ void fn_1_1598C4(s32 arg0, u8 arg1, u8 arg2, u8 arg3, u8 arg4, u8 arg5, u8 arg6,
 }
 /* fzgx:end fn_1_1598C4 */
 
+/* fzgx:begin fn_1_159AE0 */
+extern u32 lbl_801A63C0;
+extern u8 fn_1_128E10(u8);
+
+static inline void seed_rng(u32 seed) {
+    lbl_801A63C0 = seed ^ 0xCAE87FB5;
+}
+
+static inline s32 next_rng(void) {
+    lbl_801A63C0 = lbl_801A63C0 * 0x676A4B6B + 0x33CB;
+    return (lbl_801A63C0 >> 16) & 0x7FFF;
+}
+
+#define DIGIT(field, divisor) lbl_1_bss_8F878.field = (v0_2 / (divisor)) % 10 + '0'
+
+void fn_1_159AE0(void) {
+    u8 v0;
+    u64 v35, v4, v66, v65;
+    u8 v37;
+    u32 v79, v83;
+    s32 v84;
+    u64 v0_2;
+
+    if (lbl_1_bss_8F878.unk_38 != 0) {
+        v0 = fn_1_128E10(lbl_1_bss_8F878.unk_39);
+    } else {
+        v0 = 0;
+    }
+    if (lbl_1_bss_8F878.unk_39 >= 41) {
+        v4 = ((u64)lbl_1_bss_8F878.unk_10 << 32) | lbl_1_bss_8F878.unk_14;
+        v35 = lbl_1_bss_8F878.unk_34 + ((u64)lbl_1_bss_8F878.unk_3A << 18) +
+              ((u64)lbl_1_bss_8F878.unk_3B << 23) +
+              ((u64)lbl_1_bss_8F878.unk_3C << 28) +
+              ((u64)lbl_1_bss_8F878.unk_3E << 33);
+        v66 = (v4 & 1023) + ((v4 >> 10) & 1023) + ((v4 >> 20) & 1023) +
+              ((v4 >> 30) & 1023) + ((v4 >> 40) & 1023) +
+              ((v4 >> 50) & 1023) + ((v4 >> 60) & 1023);
+        for (v65 = 0; v65 < 16; v65++) {
+            v37 = (&lbl_1_bss_8F878.unk_0)[v65];
+            v66 += v37;
+            v66 += v37 & (((v65 + 1) * 6505) & 1023);
+        }
+        v66 += lbl_1_bss_8F878.unk_3D * 19;
+        v66 += (v35 & 4095) + ((v35 >> 12) & 4095) +
+               ((v35 >> 24) & 4095) + ((v35 >> 36) & 4095);
+        for (v65 = 0; v65 < 29; v65 += 3) {
+            v66 += 1 << ((v35 >> v65) & 7);
+        }
+        v35 += (v66 & 4095) << 37;
+        seed_rng(v35 & 255);
+        v84 = next_rng();
+        v0_2 = v35 + (((u64)v84 * 0x31AFD498DULL) & ~255ULL);
+        DIGIT(unk_3F, 100000000000000ULL);
+        DIGIT(unk_44, 10000000000000ULL);
+        DIGIT(unk_49, 1000000000000ULL);
+        lbl_1_bss_8F878.unk_42 = '-';
+        DIGIT(unk_40, 100000000000ULL);
+        DIGIT(unk_45, 10000000000ULL);
+        DIGIT(unk_4A, 1000000000ULL);
+        DIGIT(unk_4E, 100000000ULL);
+        lbl_1_bss_8F878.unk_47 = '-';
+        DIGIT(unk_41, 10000000ULL);
+        DIGIT(unk_46, 1000000ULL);
+        DIGIT(unk_4B, 100000ULL);
+        DIGIT(unk_4F, 10000ULL);
+        lbl_1_bss_8F878.unk_4C = '-';
+        DIGIT(unk_43, 1000ULL);
+        DIGIT(unk_48, 100ULL);
+        DIGIT(unk_4D, 10ULL);
+        lbl_1_bss_8F878.unk_50 = v0_2 % 10 + '0';
+        lbl_1_bss_8F878.unk_51 = 0;
+    } else if (v0 != 0) {
+        v4 = lbl_1_bss_8F878.unk_10;
+        v4 <<= 32;
+        v4 |= lbl_1_bss_8F878.unk_14;
+        v35 = lbl_1_bss_8F878.unk_34 + (v0 << 18) + (lbl_1_bss_8F878.unk_3E << 22);
+        v66 = (v4 & 1023) + ((v4 >> 10) & 1023) + ((v4 >> 20) & 1023) +
+              ((v4 >> 30) & 1023) + ((v4 >> 40) & 1023) +
+              ((v4 >> 50) & 1023) + ((v4 >> 60) & 1023);
+        for (v65 = 0; v65 < 16; v65++) {
+            v37 = (&lbl_1_bss_8F878.unk_0)[v65];
+            v66 += v37;
+            v66 += v37 & (((v65 + 1) * 6505) & 1023);
+        }
+        v66 += lbl_1_bss_8F878.unk_3D * 19;
+        v66 += (v35 & 1023) + ((v35 >> 10) & 1023) +
+               ((v35 >> 20) & 1023) + ((v35 >> 30) & 1023);
+        for (v65 = 0; v65 < 29; v65 += 3) {
+            v66 += 1 << ((v35 >> v65) & 7);
+        }
+        v35 += (u64)((s32)v66 & 1023) << 26;
+        seed_rng(v35 & 255);
+        v84 = next_rng();
+        v0_2 = v35 + (((u64)v84 * 0xE90EDULL) & ~255ULL);
+        DIGIT(unk_3F, 10000000000ULL);
+        DIGIT(unk_43, 1000000000ULL);
+        DIGIT(unk_46, 100000000ULL);
+        lbl_1_bss_8F878.unk_42 = '-';
+        DIGIT(unk_40, 10000000ULL);
+        DIGIT(unk_44, 1000000ULL);
+        DIGIT(unk_48, 100000ULL);
+        DIGIT(unk_4A, 10000ULL);
+        lbl_1_bss_8F878.unk_47 = '-';
+        DIGIT(unk_41, 1000ULL);
+        DIGIT(unk_45, 100ULL);
+        DIGIT(unk_49, 10ULL);
+        lbl_1_bss_8F878.unk_4B = v0_2 % 10 + '0';
+        lbl_1_bss_8F878.unk_4C = 0;
+    } else {
+        v4 = lbl_1_bss_8F878.unk_10;
+        v4 <<= 32;
+        v4 |= lbl_1_bss_8F878.unk_14;
+        v35 = lbl_1_bss_8F878.unk_34 + (lbl_1_bss_8F878.unk_39 << 18) + (lbl_1_bss_8F878.unk_3E << 24);
+        v66 = (v4 & 1023) + ((v4 >> 10) & 1023) + ((v4 >> 20) & 1023) +
+              ((v4 >> 30) & 1023) + ((v4 >> 40) & 1023) +
+              ((v4 >> 50) & 1023) + ((v4 >> 60) & 1023);
+        for (v65 = 0; v65 < 16; v65++) {
+            v37 = (&lbl_1_bss_8F878.unk_0)[v65];
+            v66 += v37;
+            v66 += v37 & (((v65 + 1) * 6505) & 1023);
+        }
+        v66 += lbl_1_bss_8F878.unk_3D * 19;
+        v66 += (v35 & 2047) + ((v35 >> 11) & 2047) +
+               ((v35 >> 22) & 2047) + ((v35 >> 33) & 2047) +
+               ((v35 >> 44) & 2047) + ((v35 >> 55) & 2047);
+        for (v65 = 0; v65 < 29; v65 += 3) {
+            v66 += 1 << ((v35 >> v65) & 7);
+        }
+        v35 += (u64)((s32)v66 & 2047) << 28;
+        seed_rng(v35 & 255);
+        v84 = next_rng();
+        v0_2 = v35 + (((u64)v84 * 0xD1A94AULL) & ~255ULL);
+        DIGIT(unk_3F, 100000000000ULL);
+        DIGIT(unk_42, 10000000000ULL);
+        DIGIT(unk_46, 1000000000ULL);
+        DIGIT(unk_4A, 100000000ULL);
+        lbl_1_bss_8F878.unk_43 = '-';
+        DIGIT(unk_40, 10000000ULL);
+        DIGIT(unk_44, 1000000ULL);
+        DIGIT(unk_47, 100000ULL);
+        DIGIT(unk_4B, 10000ULL);
+        lbl_1_bss_8F878.unk_48 = '-';
+        DIGIT(unk_41, 1000ULL);
+        DIGIT(unk_45, 100ULL);
+        DIGIT(unk_49, 10ULL);
+        lbl_1_bss_8F878.unk_4C = v0_2 % 10 + '0';
+        lbl_1_bss_8F878.unk_4D = 0;
+    }
+}
+/* fzgx:end fn_1_159AE0 */
+
 /* fzgx:begin fn_1_15AC00 */
 // Return the address of the ranking state byte at offset 0x3f.
 u8 *fn_1_15AC00(void) {
