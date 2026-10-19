@@ -4112,6 +4112,110 @@ void fn_1_53B14(u8 *color, f32 x, f32 y, f32 a, f32 b, f32 z) {
 }
 /* fzgx:end fn_1_53B14 */
 
+/* fzgx:begin fn_1_53BD8 noprologue */
+#include "dolphin/types.h"
+
+typedef struct Fn153BD8Params {
+    u32 type;
+    f32 x;
+    f32 y;
+    f32 z;
+    f32 field10[7];
+    f32 alpha;
+    u32 mode;
+    u32 field34;
+    u32 color;
+    u8 field3C[0x1C];
+} Fn153BD8Params;
+
+typedef struct Fn153BD8Color {
+    u8 r, g, b, a;
+} Fn153BD8Color;
+
+const Fn153BD8Params lbl_1_rodata_26F8 = {
+    0, 0.0f, 0.0f, 0.1f,
+    {1.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f},
+    1.0f, 5, 0, 0xFFFFFFFF, {0}
+};
+extern void fn_1_50190(void *, f32, f32, f32, f32, f32, f32);
+
+#pragma section code_type ".fzgxpool"
+/* Volatile stores preserve literal emission in this discarded pool primer. */
+void fzgx_pool_primer_0(volatile f32 *f, volatile f64 *d)
+{
+    f[0] = 0.0f;
+    f[1] = 1.0f;
+    d[0] = 4503599627370496.0;
+    f[2] = 55.0f;
+    f[3] = 0.1f;
+    f[4] = 90000.0f;
+    f[5] = 480.0f;
+    f[6] = 640.0f;
+    d[1] = 4503601774854144.0;
+    d[2] = 0.5;
+    f[7] = 0.75f;
+    d[3] = 0.002405626;
+    f[8] = 320.0f;
+    f[9] = 240.0f;
+    f[10] = 255.0f;
+    f[11] = 0.5f;
+    f[12] = 2.0f;
+    f[13] = 4.0f;
+}
+
+const u32 fzgx_pool_table_B8[] = {
+    0x00000000, 0x40000000, 0x40000000, 0x00000000,
+    0x3F800000, 0x3F800000, 0x9B000000, 0x40000000,
+    0x40000000, 0x9B000000, 0x3F800000, 0x3F800000,
+    0x0000FF00, 0x40000000, 0x40000000, 0x0000FF00,
+    0x3F800000, 0x3F800000, 0xFFF20000, 0x3F800000,
+    0x3F800000, 0xFF800000, 0x3F800000, 0x3F800000,
+    0x00008000, 0x40000000, 0x40000000,
+    0, 0, 0, 0
+};
+
+/* Volatile stores preserve literal emission in this discarded pool primer. */
+void fzgx_pool_primer_1(volatile f32 *f)
+{
+    f[0] = 0.125f;
+}
+
+const u32 fzgx_pool_table_138[2] = {0xFFFFFF00, 0x00000000};
+
+/* Volatile stores preserve literal emission in this discarded pool primer. */
+void fzgx_pool_primer_2(volatile f32 *f, volatile f64 *d)
+{
+    f[0] = 65536.0f;
+    f[1] = 80.0f;
+    f[2] = 60.0f;
+    d[0] = 255.0;
+    f[3] = 8.0f;
+    f[4] = 13.0f;
+    f[5] = 26.0f;
+}
+
+#pragma section code_type ".text"
+void fn_1_53BD8(Fn153BD8Color *color, f32 x, f32 y, f32 width, f32 height, f32 z)
+{
+    u8 *pool = (u8 *)&lbl_1_rodata_26F8;
+    Fn153BD8Params params = *(Fn153BD8Params *)pool;
+    f32 a;
+    f32 b;
+    params.type = 2;
+    params.x = x;
+    params.y = y;
+    params.z = z;
+    if (color != 0) {
+        params.alpha = (f32)(color->a / 255.0);
+        params.color = *(u32 *)color;
+    }
+    a = 13.0f;
+    b = 26.0f;
+    params.mode = 10;
+    fn_1_50190(&params, width, height, a, a, b, b);
+}
+/* fzgx:end fn_1_53BD8 */
+
 /* fzgx:begin fn_1_53C9C noprologue */
 #include "dolphin/types.h"
 

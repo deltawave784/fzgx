@@ -8084,3 +8084,6 @@ rel/main_rel/archive/fn_1_12D404.c:
 
 rel/main_rel/stcoli/fn_1_251F8.c:
 	.text       start:0x000251F8 end:0x000253A4 align:4
+
+rel/main_rel/font/fn_1_53BD8.c:
+	.text       start:0x00053BD8 end:0x00053C9C align:4
