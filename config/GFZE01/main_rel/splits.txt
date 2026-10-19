@@ -8057,3 +8057,6 @@ rel/main_rel/stcoli/fn_1_2BF8C.c:
 
 rel/main_rel/effect/fn_1_5DFA4.c:
 	.text       start:0x0005DFA4 end:0x0005E3C4 align:4
+
+rel/main_rel/font/fn_1_4B1D4.c:
+	.text       start:0x0004B1D4 end:0x0004B6D4 align:4
