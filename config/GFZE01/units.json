@@ -19731,6 +19731,23 @@
   },
   {
     "module": "main",
+    "source": "dol/fn_80043798.c",
+    "symbols": [
+      "fn_80043798"
+    ],
+    "status": "matching",
+    "mw_version": "GC/1.3.2",
+    "extra_cflags": [
+      "-sdata",
+      "8",
+      "-sdata2",
+      "8",
+      "-use_lmw_stmw",
+      "off"
+    ]
+  },
+  {
+    "module": "main",
     "source": "dol/fn_80043B48.c",
     "symbols": [
       "fn_80043B48"
