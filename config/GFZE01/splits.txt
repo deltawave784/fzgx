@@ -6056,3 +6056,6 @@ dol/fn_800510D8.c:
 
 dol/long2str.c:
 	.text       start:0x80082040 end:0x80082298 align:4
+
+dol/fn_80036F24.c:
+	.text       start:0x80036F24 end:0x80036FF0 align:4
