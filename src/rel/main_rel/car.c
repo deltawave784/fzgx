@@ -1203,6 +1203,135 @@ void fn_1_7FA04(u32 arg0) {
 }
 /* fzgx:end fn_1_7FA04 */
 
+/* fzgx:begin fn_1_7FAA8 noprologue */
+#include "types.h"
+
+typedef struct {
+    u32 flags;
+    s32 unk_4;
+    u32 unk_8;
+    u32 unk_C;
+} Sig_fn_1_45730_LoadEntry;
+typedef struct {
+    u32 unk_0;
+    u8 pad_4[0x48];
+    Sig_fn_1_45730_LoadEntry entry;
+} Sig_fn_1_45730_LoadResult;
+
+typedef struct {
+    u8 unk_0[2];
+    s16 id;
+    u32 mask4;
+    u8 mask8;
+    u8 pad_9[3];
+    u32 flagsC;
+    u8 pad_10[0x10];
+} CarListEntry;
+
+extern char *fn_80083DB0(char *, const char *);
+extern int fn_1_45730(void *, Sig_fn_1_45730_LoadResult *);
+extern int sprintf(char *, const char *, ...);
+extern u8 lbl_1_data_1F1D8[];
+extern s32 fn_1_45B2C(Sig_fn_1_45730_LoadResult *);
+extern void fn_1_45850(Sig_fn_1_45730_LoadResult *);
+extern void fn_1_801F8(s16, void *);
+extern void fn_80006E10(const char *);
+
+static inline s32 fn_1_7FAA8_impl(CarListEntry *list, s32 count, s32 initial) {
+    u8 *base = (u8 *)lbl_1_data_1F1D8;
+    s32 total;
+    s8 i;
+    u8 j;
+    s32 slot;
+    char **names;
+    CarListEntry *entry;
+    s32 sub;
+    s16 id;
+    s32 bit;
+    s16 k;
+    s32 flag;
+    Sig_fn_1_45730_LoadResult res;
+    char buf[0x20];
+
+    total = 0;
+    fn_80006E10((const char *)(base + 0xe0c));
+    entry = list;
+    names = (char **)(base + 0x324);
+    for (i = 0; i < (s8)count; entry++, i++) {
+        sub = initial;
+        id = entry->id;
+        flag = sub;
+        if (entry->flagsC & 0x100000) {
+            flag = 1;
+        }
+        fn_80083DB0(buf, names[id]);
+        if (flag == 1) {
+            fn_1_801F8(id, buf);
+        }
+        fn_80006E10(buf);
+        for (j = 0; j < 8; j++) {
+            bit = j;
+            if (entry->mask8 & (1 << bit)) {
+                fn_80083DB0(buf, names[id]);
+                if (flag == 1) {
+                    fn_1_801F8(id, buf);
+                }
+                if (j != 0) {
+                    if (j >= 4) {
+                        sprintf(buf, (const char *)(base + 0x1358), buf, bit - 4);
+                    } else {
+                        sprintf(buf, (const char *)(base + 0x1364), buf, bit);
+                    }
+                } else {
+                    sprintf(buf, (const char *)(base + 0x1370), buf);
+                }
+                if (fn_1_45730(buf, &res)) {
+                    sub += fn_1_45B2C(&res);
+                    fn_1_45850(&res);
+                }
+            }
+        }
+        for (k = 0; k < 5; k++) {
+            slot = k;
+            if (entry->mask4 & (1 << slot)) {
+                fn_80083DB0(buf, names[id]);
+                if (flag == 1) {
+                    fn_1_801F8(id, buf);
+                }
+                if (k == 0) {
+                    sprintf(buf, (const char *)(base + 0x1378), buf);
+                } else if (k == 4) {
+                    sprintf(buf, (const char *)(base + 0x1380), buf);
+                } else {
+                    sprintf(buf, (const char *)(base + 0x1390), buf, slot + 1);
+                }
+                if (fn_1_45730(buf, &res)) {
+                    sub += fn_1_45B2C(&res);
+                    fn_1_45850(&res);
+                }
+            }
+        }
+        fn_80083DB0(buf, names[id]);
+        if (flag == 1) {
+            fn_1_801F8(id, buf);
+        }
+        sprintf(buf, (const char *)(base + 0x139c), buf);
+        if (fn_1_45730(buf, &res)) {
+            sub += fn_1_45B2C(&res);
+            fn_1_45850(&res);
+        }
+        fn_80006E10((const char *)(base + 0xe20));
+        total += sub;
+    }
+    fn_80006E10((const char *)(base + 0xe20));
+    return total;
+}
+
+s32 fn_1_7FAA8(CarListEntry *list, s32 count) {
+    return fn_1_7FAA8_impl(list, count, 0);
+}
+/* fzgx:end fn_1_7FAA8 */
+
 /* fzgx:begin fn_1_7FD7C noprologue */
 typedef signed short s16;
 typedef signed long s32;

@@ -37137,6 +37137,17 @@
   },
   {
     "module": "main_rel",
+    "source": "rel/main_rel/car/fn_1_7FAA8.c",
+    "symbols": [
+      "fn_1_7FAA8"
+    ],
+    "status": "matching",
+    "mw_version": null,
+    "extra_cflags": [],
+    "tu": "rel/main_rel/car.c"
+  },
+  {
+    "module": "main_rel",
     "source": "rel/main_rel/car/fn_1_7FD7C.c",
     "symbols": [
       "fn_1_7FD7C"
@@ -47303,6 +47314,18 @@
     "mw_version": null,
     "extra_cflags": [],
     "tu": "rel/main_rel/game.c"
+  },
+  {
+    "module": "main_rel",
+    "source": "rel/main_rel/game/fn_1_34F38.c",
+    "symbols": [
+      "fn_1_34F38"
+    ],
+    "status": "nonmatching",
+    "mw_version": null,
+    "extra_cflags": [],
+    "tu": "rel/main_rel/game.c",
+    "pool": true
   },
   {
     "module": "main_rel",
