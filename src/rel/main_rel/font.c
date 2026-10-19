@@ -2162,6 +2162,51 @@ Slot *fn_1_4DF60(void) {
 }
 /* fzgx:end fn_1_4DF60 */
 
+/* fzgx:begin fn_1_4E060 noprologue */
+typedef unsigned char u8;
+
+typedef unsigned long u32;
+
+/* lbl_1_bss_4C688: .bss size 0x2000, referenced by 21 functions, shape {'object': 39} */
+typedef struct {
+u32 unk_0; /* 3 loads, 3 stores */
+u8 pad_4[0x4];
+u32 unk_8; /* 1 loads, 0 stores */
+u32 unk_C; /* 1 loads, 0 stores */
+u8 pad_10[0x68];
+u32 unk_78; /* 1 loads, 0 stores */
+u32 unk_7C; /* 1 loads, 0 stores */
+u32 unk_80; /* 8 loads, 3 stores */
+u8 pad_84[0x7C];
+u32 unk_100; /* 0 loads, 3 stores */
+u8 pad_104[0x7C];
+u32 unk_180; /* 0 loads, 3 stores */
+u8 pad_184[0x7C];
+u32 unk_200; /* 0 loads, 3 stores */
+u8 pad_204[0x7C];
+u32 unk_280; /* 0 loads, 3 stores */
+u8 pad_284[0x7C];
+u32 unk_300; /* 0 loads, 3 stores */
+u8 pad_304[0x7C];
+u32 unk_380; /* 0 loads, 3 stores */
+u8 pad_384[0x1C7C];
+} Obj_1_bss_4C688;
+extern Obj_1_bss_4C688 lbl_1_bss_4C688;
+
+#pragma opt_unroll_loops off
+void fn_1_4E060(void) {
+u32 *base;
+u32 *ptr;
+int count;
+base = &lbl_1_bss_4C688.unk_0;
+ptr = base;
+for (count = 0; count < 64; count++) {
+ptr[0] = 0;
+ptr += 32;
+}
+}
+/* fzgx:end fn_1_4E060 */
+
 /* fzgx:begin fn_1_4E0A4 */
 typedef struct FontMetric {
     f32 value;

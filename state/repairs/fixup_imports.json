@@ -16512,5 +16512,532 @@
     ],
     "link": "verified",
     "commit": "f2f6a5ca"
+  },
+  "fn_10_23990": {
+    "seed_symbol": "fn_4_B528",
+    "generator": "fzgx fixup",
+    "transform": "bind exact clone",
+    "seed": "#include \"types.h\"\n#include \"font.h\"\n#include \"rel/option/globals.h\"\n\nvoid fn_1_4A0D8(const char* text);\nvoid fn_1_4AE0C(const char* format, ...);\nint fn_1_4F734(FontDrawPacket* packet);\nvoid fn_1_4EDAC(FontDrawPacket* packet, f32 width, f32 height);\nvoid fn_1_51678(FontDrawPacket* packet, u32 image, s16 x, s16 y, s16 width, s16 height);\nvoid fn_1_517EC(FontDrawPacket* packet, s16 x, s16 y, s16 width, s16 height,\ns16 texture_width, s16 texture_height);\nstruct fn_8_DD64_lbl_801A63D0 {\nu32 unk_0;\n};\nstruct fn_8_DD64_lbl_8_rodata_408 {\nu8 pad_0[0x6F0];\nf64 unk_6F0;\nf64 unk_6F8;\nf32 unk_700;\nf32 unk_704;\nf32 unk_708;\nu32 unk_70C;\nu32 unk_710;\nu32 unk_714;\nu32 unk_718;\nu32 unk_71C;\nu32 unk_720;\nf32 unk_724;\nf32 unk_728;\nu8 pad_72C[0x4];\nf64 unk_730;\nf64 unk_738;\nf32 unk_740;\nu8 pad_744[0x4];\nf64 unk_748;\nf32 unk_750;\nf32 unk_754;\n};\nextern char * fn_80083CF4(char *, const char *, size_t);\nextern char * strcat(char *, const char *);\nextern char * strncpy(char *, const char *, size_t);\nextern int fn_1_4F734(FontDrawPacket *);\nextern int sprintf(char *, const char *, ...);\nextern size_t strlen(const char *);\nextern struct fn_8_DD64_lbl_801A63D0 lbl_801A63D0;\nextern struct fn_8_DD64_lbl_8_rodata_408 lbl_4_rodata_410;\nextern u32 fn_1_4060(void);\nextern u32 fn_1_49410(void);\ntypedef struct Sig_fn_800081C8_Color Sig_fn_800081C8_Color;\nextern u32 fn_800081C8(Sig_fn_800081C8_Color, Sig_fn_800081C8_Color, f32);\nextern u32 fn_800793D4(u8 *, u32, void *);\nextern u32 fn_80083DB0(u32, u32);\nextern u32 lbl_801A6410;\n\nextern u8 * fn_80083970(u8 *, const u8 *);\nextern u8 lbl_1_rodata_26F8[];\nextern u8 lbl_4_bss_5684;\nextern u8 lbl_4_data_2F78[];\nextern void fn_1_46B4(u32, u32, const char *, int);\nextern void fn_1_494DC(s16);\nextern void fn_1_49514(Sig_fn_800081C8_Color);\nextern void fn_1_4954C(f32);\nextern void fn_1_4955C(f32, f32);\nextern void fn_1_495C8(u8);\nextern void fn_1_4966C(f32, f32);\nextern void fn_1_496FC(f32, f32);\nextern void fn_1_4A0D8(const char *);\nstruct Sig_fn_800081C8_Color { u8 r, g, b, a; };\n\n#pragma fp_contract off\n#pragma opt_common_subs off\n#pragma opt_lifetimes off\n#pragma opt_loop_invariants off\nextern int __abs(int);\n#pragma force_active on\nstatic const u32 fzgx_pool_table_0[] = {2305855636u,0u,2187362913u,2187493987u,2187625061u,2187756135u,2187887209u,2188018283u,2188149357u,2188280431u,2188411505u,2188542579u,2188673653u,2188804727u,2188935801u,2189525634u,2189656708u,2189787782u,2189918856u,2190049930u,2190181004u,2190312078u,2190443152u,2190574226u,2190705300u,2190836374u,2190967448u,2191098522u,2186248784u,2186379858u,2186510932u,2186642006u,2186773080u,2179432936u,0u,2189525634u,2189656708u,2189787782u,2189918856u,2190049930u,2190181004u,2190312078u,2190443152u,2190574226u,2190705300u,2190836374u,2190967448u,2191098522u,2187362913u,2187493987u,2187625061u,2187756135u,2187887209u,2188018283u,2188149357u,2188280431u,2188411505u,2188542579u,2188673653u,2188804727u,2188935801u,2168488256u,2168488256u,2168488256u,2168488256u,2168488256u,2168488256u,0u,2337049990u,0u,2168553794u,2169274701u,2168815939u,2168750406u,2168947016u,2169078139u,2172420446u,2172748163u,2172944719u,2169602400u,2170716533u,2172027241u,2171240815u,2171634029u,2171502991u,2173731219u,2173993365u,2174124439u,2179432936u,0u,2194703079u,2192212680u,0u,2191557282u,2191819430u,2192081577u,2192278189u,2192540337u,2192802485u,2193064633u,2193326781u,2193588930u,2193916614u,2194178761u,2194309835u,2194440909u,2194703059u,2195096281u,2195489501u,2195620575u,2195751650u,2196013798u,2196210408u,2196341482u,2196472557u,2196669167u,2196800241u,2192212652u,2192474800u,2192736948u,2192999096u,2193261244u,2193523392u,2193851077u,2194113230u,2194768596u,2195161818u,2194637522u,2195030744u,2195423903u,2191622819u,2191884967u,2193720033u,2195948261u,2196537831u,2179465216u,2191491745u,2191753893u,2192016042u,2192343726u,2192605874u,2192868022u,2193130170u,2193392318u,2193654465u,2193982151u,2168488256u,2168488256u,2168488654u,2194768596u,2195161818u,2168488256u,2168488256u,2168488673u,2195948261u,2168488256u,2168488256u,2168488684u,2168488256u,2168488256u,2192147115u,2192409263u,2192671411u,2192933559u,2193195707u,2193457855u,2193785540u,2194047695u,2194834133u,2195227355u,2194506448u,2194899670u,2195292832u,2191688356u,2191950504u,2193785570u,2196013798u,2196603200u,2168455168u,2168488256u,2168488256u,2168488256u,2168488256u,2168488256u,2168488256u,2168488256u,2168488256u,2168488643u,2168488256u,2168488256u,2168488256u,2168488655u,2194834133u,2195227355u,2168488256u,2168488256u,2168488256u,2168488256u,2168488256u,2168488256u,2168488256u,2168488256u,2168488256u,2168488256u,2168488256u,2168488256u,2168488256u,2168488256u,2168488256u,2193719616u,2168488653u,2194703059u,2195096281u,2194571985u,2194965207u,2195358016u,2168488256u,2168488256u,2193850688u,2168488256u,2168488256u,2168455168u,2202698590u,2202698601u,0u,2202108739u,2202370887u,2202633034u,2202829646u,2203091794u,2203353942u,2203616090u,2203878238u,2204140387u,2204468071u,2204730218u,2204861292u,2204992366u,2205254516u,2195096442u,2206040958u,2206237569u,2206368644u,2206630792u,2206827402u,2206958476u,2207089551u,2207286161u,2207417235u,2207548235u,2202895183u,2203157331u,2203419479u,2203681627u,2203943775u,2204205924u,2204533608u,2205123442u,2205516503u,2205909872u,2205385590u,2195227516u,2202043202u,2202305350u,2202567573u,2207679330u,2206434181u,2206696334u,2179432936u,0u,2202043202u,2202305350u,2202567499u,2202895183u,2203157331u,2203419479u,2203681627u,2203943775u,2204205922u,2204533608u,2168488256u,2168488256u,2168488815u,2205320053u,2195161979u,2168488256u,2168488256u,2168488835u,2206565255u,2168488256u,2168488256u,2168488846u,2168488256u,2168488256u,2202370890u,2202829646u,2203091794u,2203353942u,2203616090u,2203878238u,2204140387u,2204468071u,2205188979u,2205582040u,2205975406u,2205254516u,2195096442u,2202108739u,2202370887u,2202633034u,2203091811u,2206499718u,2206761871u,2168488256u,0u,2168488256u,2207547712u,2168488853u,2168488256u,2207678784u,2168488256u,2168488256u,2168488256u,2168488804u,2168488256u,2168488256u,2168488256u,2168488816u,2205385590u,2195227516u,2168488256u,2168488256u,2168488256u,2168488256u,2168488256u,2168488256u,2168488256u,2168488256u,2168488256u,2202305429u,2168488256u,2207678784u,2168488256u,2168488256u,2168488256u,2168488802u,2168488256u,2205057905u,2205450966u,2205844335u,2205320053u,2195161979u,2168488256u,2207547712u,2168488779u,2203157348u,2168488256u,2168488256u,2168488256u,0u,1130459241u,1952541728u,1281717364u,1701999360u,2187362913u,2187493987u,2187625061u,2187756135u,2187887209u,2188018283u,2188149357u,2188280431u,2188411505u,2188542579u,2188673653u,2188804727u,2188935801u,2179432936u,0u,1399677292u,1814056037u,1953785202u,1929379840u,2189525634u,2189656708u,2189787782u,2189918856u,2190049930u,2190181004u,2190312078u,2190443152u,2190574226u,2190705300u,2190836374u,2190967448u,2191098522u,2179432936u,0u,1399416686u,1929379840u,2168684868u,2169012553u,2172354940u,2170454367u,2172748163u,2172944710u,2168947020u,2169340239u,2169602402u,2171175274u,2171437422u,2171568496u,2173731219u,2173993365u,2174124439u,2179432936u,0u,1316318562u,1701999360u,2186248784u,2186379858u,2186510932u,2186642006u,2186773080u,2179432936u,0u,1070260551u,2920577761u,1073392298u,2863311531u,1071644672u,0u,1111490560u,1048576000u,1072693248u,0u,1040522936u,0u,1073217536u,0u,1073741824u,0u,1070945621u,1031798784u};\n#pragma force_active reset\n#pragma push\n#pragma section code_type \".fzgxpool\"\nstatic f64 fzgx_signed_double(s32 value) { return (f64)value; }\nstatic f64 fzgx_unsigned_double(u32 value) { return (f64)value; }\nstatic f32 fzgx_glyph_size(s32 index) {\nswitch(index) {\ncase 0:return 32.0f;\ncase 1:return 24.0f;\ndefault:return 18.0f;\n}\n}\n#pragma force_active reset\n#pragma pop\nvoid fn_4_B528(u32 arg0) {\nu8 *p_lbl_8_data_A1E8;\nstruct fn_8_DD64_lbl_8_rodata_408 *p_lbl_8_rodata_408;\nu8 *p_lbl_1_rodata_26F8;\nu32 v0;\ns32 v1;\ns32 v2;\ns32 state_value;\ns32 cursor_next;\ns32 v3;\nu32 v4;\nf32 v5;\nf64 v6;\nf32 v7;\nstruct OptionNameEntry { u16 cursor, length; char *chars; u8 pad[12]; } *v8;\nu32 v9;\ns32 v10;\nu32 v12;\nu32 v13;\nu32 v14;\ns32 v15;\nf32 v16;\nu16 v17;\nf64 v18;\nu32 v19;\nu8 * v20;\nu32 v21;\nu32 v22;\nf64 v23;\nf32 v24;\nf64 v25;\nf32 v26;\nf32 v27;\nstruct { u32 a[22]; } loc_18;\nSig_fn_800081C8_Color loc_14;\nSig_fn_800081C8_Color loc_10;\nSig_fn_800081C8_Color loc_C;\nu32 loc_8;\n\nu32 lab_t0;\nu32 lab_t1;\np_lbl_8_data_A1E8 = lbl_4_data_2F78;\np_lbl_8_rodata_408 = &lbl_4_rodata_410;\nfn_800793D4((u8 *)lbl_801A63D0.unk_0, 0, (void *)1024);\nv0 = lbl_801A63D0.unk_0;\nif (lbl_4_bss_5684 != 0) {\n{ s32 __reg_value_v2 = arg0; v2 = __reg_value_v2; }\nv1 = (u32)&lbl_801A6410;\nv3 = (u32)((u8 *)(u32)p_lbl_8_data_A1E8 + 160);\nv1 = *(u32 *)((u8 *)v1 + 0);\nv4 = 465;\nfn_1_46B4(v1, v2, (const char *)v3, v4);\nv1 = fn_1_4060();\n} else {\nv1 = fn_1_49410();\nv1 = 42;\nfn_1_494DC(v1);\nv1 = 9;\nfn_1_495C8(v1);\nfn_1_4966C(12.0f, 0.0f);\nv1 = lbl_4_bss_5680->unk_3C;\nv8 = (struct OptionNameEntry *)v1 + *(u8 *)arg0;\nv19 = v8->cursor;\nv3 = (v19 - 10);\nv1 = (v19 + 11);\nif (v3 >= 0 && (s32)(v19 + 11) <= (s32)v8->length) {\n{ s32 __reg_value_v2 = (u32)v8->chars; v2 = __reg_value_v2; }\nv1 = v0;\nv9 = (v3 << 1);\nv3 = 42;\n{ s32 __reg_value_v2 = (v2 + v9); v2 = __reg_value_v2; }\nv1 = (u32)strncpy((char *)v1, (const char *)v2, v3);\n} else if (v19 < 10) {\nv10 = v19 - 10;\nv10 = v8->length + v10;\nif (v10 < 0) {\n{ s32 __reg_value_v2 = (u32)v8->chars; v2 = __reg_value_v2; }\nv1 = v0;\n{ s32 __reg_value_v2 = (v2 + (v19 << 1)); v2 = __reg_value_v2; }\nlab_t0 = v1;\nlab_t1 = v2;\nv1 = fn_80083DB0(lab_t0, lab_t1);\n{ s32 __reg_value_v2 = (u32)v8->chars; v2 = __reg_value_v2; }\nv1 = v0;\nv1 = (u32)strcat((char *)v1, (const char *)v2);\n{ s32 __reg_value_v2 = (u32)v8->chars; v2 = __reg_value_v2; }\nv1 = v0;\nv3 = ((v10 + 10) << 1);\nv1 = (u32)fn_80083CF4((char *)v1, (const char *)v2, v3);\n} else {\n{ s32 __reg_value_v2 = (u32)v8->chars; v2 = __reg_value_v2; }\nv1 = v0;\n{ s32 __reg_value_v2 = (v2 + (v10 << 1)); v2 = __reg_value_v2; }\nlab_t0 = v1;\nlab_t1 = v2;\nv1 = fn_80083DB0(lab_t0, lab_t1);\nv1 = v8->cursor;\nv10 = (v1 + 11);\nif ((s32)v10 > (s32)v8->length) {\n{ s32 __reg_value_v2 = (u32)v8->chars; v2 = __reg_value_v2; }\nv1 = v0;\nv1 = (u32)strcat((char *)v1, (const char *)v2);\nv1 = v0;\n{ s32 __reg_value_v2 = (u32)v8->chars; v2 = __reg_value_v2; }\nv3 = ((v10 - v8->length) << 1);\nv1 = (u32)fn_80083CF4((char *)v1, (const char *)v2, v3);\n} else {\n{ s32 __reg_value_v2 = (u32)v8->chars; v2 = __reg_value_v2; }\nv1 = v0;\nv3 = (v10 << 1);\nv1 = (u32)fn_80083CF4((char *)v1, (const char *)v2, v3);\n}\n}\n} else {\n{ s32 __reg_value_v2 = (u32)v8->chars; v2 = __reg_value_v2; }\nv1 = v0;\n{ s32 __reg_value_v2 = (v2 + (v3 << 1)); v2 = __reg_value_v2; }\nlab_t0 = v1;\nlab_t1 = v2;\nv1 = fn_80083DB0(lab_t0, lab_t1);\n{ s32 __reg_value_v2 = v8->cursor; v2 = __reg_value_v2; }\nv1 = v0;\nv3 = v8->length;\nv12 = (v2 + 11);\n{ s32 __reg_value_v2 = (u32)v8->chars; v2 = __reg_value_v2; }\nv3 = ((v12 - v3) << 1);\nv1 = (u32)fn_80083CF4((char *)v1, (const char *)v2, v3);\n}\n{ s32 __reg_value_v2 = *(u8 *)((u8 *)arg0 + 0); v2 = __reg_value_v2; }\nv1 = (u32)lbl_4_bss_5680;\nif ((u32)v2 == *(u8 *)((u8 *)v1 + 13)) {\nu32 b14;\n{ s32 __reg_value_v2 = (v0 + 6); v2 = __reg_value_v2; }\nv1 = (u32)&lbl_801A63D0;\nv3 = 14;\nv1 = *(u32 *)((u8 *)v1 + 0);\nv10 = (v1 + 44);\nb14 = (v1 + 88);\nv1 = v10;\nv1 = (u32)strncpy((char *)v1, (const char *)v2, v3);\nv1 = b14;\n{ s32 __reg_value_v2 = (v0 + 22); v2 = __reg_value_v2; }\nv3 = 14;\nv1 = (u32)strncpy((char *)v1, (const char *)v2, v3);\nv1 = v0;\nv3 = v10;\nv4 = b14;\n{ s32 __reg_value_v2 = (u32)((u8 *)(u32)p_lbl_8_data_A1E8 + 184); v2 = __reg_value_v2; }\nv1 = sprintf((char *)v1, (const char *)(u32)v2, v3, v4);\n}\nv1 = (u32)lbl_4_bss_5680;\nv1 = *(u8 *)((u8 *)v1 + 13);\nv1 = (*(u8 *)((u8 *)arg0 + 0) - v1);\nif (v1 < 0) {\nv1 += 4;\n}\nswitch (v1) {\ncase 0:\nv15 = 178;\nv16 = fzgx_glyph_size(0);\n{ Sig_fn_800081C8_Color color0 = {255, 255, 255, 0}; loc_14 = color0; }\nbreak;\ncase 1:\nv15 = 276;\nv16 = fzgx_glyph_size(1);\n{ Sig_fn_800081C8_Color color1 = {0, 255, 255, 0}; loc_14 = color1; }\nbreak;\ncase 2:\nv15 = 313;\nv16 = fzgx_glyph_size(2);\n{ Sig_fn_800081C8_Color color2 = {0, 255, 255, 0}; loc_14 = color2; }\nbreak;\ncase 3:\nv15 = 84;\nv16 = fzgx_glyph_size(1);\n{ Sig_fn_800081C8_Color color3 = {0, 255, 255, 0}; loc_14 = color3; }\n}\nstate_value = *(u16 *)((u8 *)arg0 + 4);\nv3 = v15 - state_value;\nv6 = 0.2 * fzgx_signed_double(v3);\nif ((s32)v6 != 0) {\n*(u16 *)((u8 *)arg0 + 4) = (s32)((f64)(u32)state_value + v6);\n} else {\nif (v3 < 0) {\nv1 = -1;\n} else {\nv1 = v3 > 0;\n}\n*(u16 *)((u8 *)arg0 + 4) += v1;\n}\nv7 = *(f32 *)((u8 *)arg0 + 8);\nv6 = 0.2;\n*(f32 *)((u8 *)arg0 + 8) = v7 + v6 * (v16 - v7);\nv1 = *(u8 *)((u8 *)arg0 + 2);\nv13 = v8->cursor;\nstate_value = v1 + 1;\nif (state_value == (s32)v13 || --v1 > (s32)v13) {\n*(u8 *)((u8 *)arg0 + 1) = 36;\n} else if (v1 == (s32)v13 || state_value < (s32)v13) {\n*(s8 *)((u8 *)arg0 + 1) = -36;\n}\nv2 = (s8)*(u8 *)((u8 *)arg0 + 1);\nv3 = -v2;\nv6 = 0.2 * fzgx_signed_double(v3);\nif ((s32)v6 != 0) {\n*(u8 *)((u8 *)arg0 + 1) = (s32)((f64)v2 + v6);\n} else {\nif (v3 < 0) {\nv1 = -1;\n} else {\nv1 = v3 > 0;\n}\n*(u8 *)((u8 *)arg0 + 1) += v1;\n}\nv1 = v0;\nv2 = (u32)(p_lbl_8_data_A1E8 + 196);\n*(u8 *)((u8 *)arg0 + 2) = v8->cursor;\nv1 = (u32)fn_80083970((u8 *)v1, (const u8 *)v2);\np_lbl_1_rodata_26F8 = lbl_1_rodata_26F8;\nv15 = 0x10000 - 28914;\nv20 = (u8 *)v1;\nv24 = 10.1f;\nv25 = 24.0;\nwhile (v20 != 0) {\nv1 = strlen((const char *)v0);\nstate_value = v20 - (u8 *)v0;\nv3 = v1 - 1;\nv1 = (u32)state_value >> 31;\nv1 = v1 + state_value;\nstate_value = (u32)v3 >> 2;\nv1 >>= 1;\nv3 = (u32)&loc_14;\nv2 = v1 - state_value;\nstate_value = (u32)p_lbl_1_rodata_26F8 - 4;\nfor (v21 = 11; v21 != 0; v21--) {\nv1 = *(u32 *)((u8 *)state_value + 4);\nv22 = *(u32 *)((u8 *)state_value + 8);\nstate_value += 8;\n*(u32 *)((u8 *)v3 + 4) = v1;\n*(u32 *)((u8 *)v3 + 8) = v22;\nv3 += 8;\n}\nloc_18.a[0] = v15;\nv3 = *(u8 *)((u8 *)arg0 + 1);\nv1 = (s8)v3;\nv26 = (f32)(s32)v2 * *(f32 *)((u8 *)arg0 + 8);\nv5 = (f32)(v1 + 320);\n*(f32 *)((u8 *)&loc_18 + 4) = v5 + v26;\nif (__abs((s32)v2) > 0) {\nv3 = 1;\nif ((s32)v2 < 0) v3 = -1;\nstate_value = (s32)v2 >> 31;\nv1 = state_value ^ (s32)v2;\nv1 -= state_value;\nv6 = 12.0;\nv7 = *(f32 *)((u8 *)&loc_18 + 4);\n*(f32 *)((u8 *)&loc_18 + 4) = v7 + v6 * (v3 * v1);\n}\n*(f32 *)((u8 *)&loc_18 + 8) = (f32)(u32)*(u16 *)((u8 *)arg0 + 4);\n*(f32 *)((u8 *)&loc_18 + 12) = v24;\nloc_18.a[12] = 10;\nv5 = 1.0f;\nv27 = *(f32 *)((u8 *)arg0 + 8) / v25;\n*(f32 *)((u8 *)&loc_18 + 20) = v27;\n*(f32 *)((u8 *)&loc_18 + 16) = v27;\n{\nSig_fn_800081C8_Color black = {0, 0, 0, 255};\nSig_fn_800081C8_Color white = {255, 255, 255, 255};\nloc_10 = black;\nloc_C = white;\nv1 = fn_800081C8(loc_10, loc_C, v5);\n}\nloc_18.a[14] = v1;\nfn_1_4F734((FontDrawPacket *)&loc_18);\nv20 = fn_80083970(v20 + 2, p_lbl_8_data_A1E8 + 196);\n}\nv2 = (s8)*(u8 *)((u8 *)arg0 + 1);\nv2 += 320;\nv5 = (f32)v2;\nv6 = (f32)(u32)*(u16 *)((u8 *)arg0 + 4);\nfn_1_496FC(v5, v6);\nv18 = *(f32 *)((u8 *)arg0 + 8) / 24.0;\nfn_1_4955C(v18, v18);\n{\nfn_1_49514(loc_14);\n}\nfn_1_4954C(10.0f);\nfn_1_4A0D8((const char *)v0);\n}\n}\n#pragma opt_loop_invariants reset\n\n#pragma opt_lifetimes reset\n#pragma opt_common_subs reset\n",
+    "seed_sha256": "ef2ecd467ccbe7538eed7666e2b0f2a4ebb2e388aa2fa3c5f9cce67b4ddddb70",
+    "generated_sha256": "d5149d5f0c03eddffbdff0491696378aeee33c7a0cf9e275240cfde50cb1667f",
+    "generated_source": "\ntypedef signed char s8;\ntypedef signed short s16;\ntypedef signed long s32;\n\ntypedef unsigned char u8;\ntypedef unsigned short u16;\ntypedef unsigned long u32;\n\ntypedef float f32;\ntypedef double f64;\n\ntypedef unsigned long size_t;\ntypedef struct FontDrawPacket FontDrawPacket;\ntypedef struct FontVertex {\nf32 x, y, z;\n} FontVertex;\nstruct FontDrawPacket {\nu32 image;\nf32 x, y, z;\nf32 scale_x, scale_y;\nf32 u0, v0, u1, v1;\ns16 rotation_z, rotation_y;\nf32 alpha;\nu32 flags;\nf32 depth;\nu8 color[4], color_add[4];\nu32 format;\nu16 width, height;\nvoid* pixels;\nFontDrawPacket* secondary;\nvoid (*vertex_callback)(FontDrawPacket* packet, FontVertex* vertices);\nu32 unk_54;\n};\nvoid fn_1_4A0D8(const char* text);\nvoid fn_1_4AE0C(const char* format, ...);\nint fn_1_4F734(FontDrawPacket* packet);\nvoid fn_1_4EDAC(FontDrawPacket* packet, f32 width, f32 height);\nvoid fn_1_51678(FontDrawPacket* packet, u32 image, s16 x, s16 y, s16 width, s16 height);\nvoid fn_1_517EC(FontDrawPacket* packet, s16 x, s16 y, s16 width, s16 height,\ns16 texture_width, s16 texture_height);\n\n/* lbl_4_bss_5680: .bss size 0x4, referenced by 8 functions, shape {'object': 112, 'pointer': 28} */\ntypedef struct {\nu32 unk_0; /* 11 loads, 6 stores */\nu32 unk_4; /* 1 loads, 1 stores */\nu32 unk_8; /* 4 loads, 1 stores */\nu8 unk_C; /* 8 loads, 1 stores */\nu8 unk_D; /* 5 loads, 4 stores */\nu8 unk_E; /* 10 loads, 3 stores */\nu8 unk_F; /* 3 loads, 12 stores */\nu8 unk_10; /* 1 loads, 0 stores */\nu8 unk_11; /* 2 loads, 1 stores */\nu16 unk_12; /* 3 loads, 3 stores */\nu8 unk_14; /* 2 loads, 2 stores */\nu8 unk_15; /* 2 loads, 2 stores */\nu8 unk_16; /* 2 loads, 2 stores */\nu8 unk_17; /* 2 loads, 2 stores */\nu32 unk_18; /* 1 loads, 1 stores */\nu32 unk_1C; /* 1 loads, 1 stores */\nu32 unk_20; /* 3 loads, 2 stores */\nu8 pad_24[0x4];\nu8 unk_28; /* 1 loads, 0 stores */\nu8 pad_29[0xD];\nu8 unk_36; /* 2 loads, 1 stores */\nu8 unk_37; /* 0 loads, 1 stores */\nu8 pad_38[0x2];\nu8 unk_3A; /* 2 loads, 2 stores */\nu8 unk_3B; /* 5 loads, 2 stores */\nu32 unk_3C; /* 4 loads, 2 stores */\n} Obj_4_bss_5680_Target;\nextern Obj_4_bss_5680_Target *lbl_10_bss_55CD8;\n\n/* lbl_4_data_2F78: .data size 0xA0, referenced by 5 functions, shape {} */\nextern u8 lbl_10_data_68E0[0xA0];\n\n/* lbl_4_bss_5684: .bss size 0x1, referenced by 3 functions, shape {'object': 3} */\nextern u8 lbl_10_bss_55CDC;\n\nvoid fn_1_4A0D8(const char* text);\nvoid fn_1_4AE0C(const char* format, ...);\nint fn_1_4F734(FontDrawPacket* packet);\nvoid fn_1_4EDAC(FontDrawPacket* packet, f32 width, f32 height);\nvoid fn_1_51678(FontDrawPacket* packet, u32 image, s16 x, s16 y, s16 width, s16 height);\nvoid fn_1_517EC(FontDrawPacket* packet, s16 x, s16 y, s16 width, s16 height,\ns16 texture_width, s16 texture_height);\nstruct fn_8_DD64_lbl_801A63D0 {\nu32 unk_0;\n};\nstruct fn_8_DD64_lbl_8_rodata_408 {\nu8 pad_0[0x6F0];\nf64 unk_6F0;\nf64 unk_6F8;\nf32 unk_700;\nf32 unk_704;\nf32 unk_708;\nu32 unk_70C;\nu32 unk_710;\nu32 unk_714;\nu32 unk_718;\nu32 unk_71C;\nu32 unk_720;\nf32 unk_724;\nf32 unk_728;\nu8 pad_72C[0x4];\nf64 unk_730;\nf64 unk_738;\nf32 unk_740;\nu8 pad_744[0x4];\nf64 unk_748;\nf32 unk_750;\nf32 unk_754;\n};\nextern char * fn_80083CF4(char *, const char *, size_t);\nextern char * strcat(char *, const char *);\nextern char * strncpy(char *, const char *, size_t);\nextern int fn_1_4F734(FontDrawPacket *);\nextern int sprintf(char *, const char *, ...);\nextern size_t strlen(const char *);\nextern struct fn_8_DD64_lbl_801A63D0 lbl_801A63D0;\nextern struct fn_8_DD64_lbl_8_rodata_408 lbl_10_rodata_1548;\nextern u32 fn_1_4060(void);\nextern u32 fn_1_49410(void);\ntypedef struct Sig_fn_800081C8_Color Sig_fn_800081C8_Color;\nextern u32 fn_800081C8(Sig_fn_800081C8_Color, Sig_fn_800081C8_Color, f32);\nextern u32 fn_800793D4(u8 *, u32, void *);\nextern u32 fn_80083DB0(u32, u32);\nextern u32 lbl_801A6410;\nextern u8 * fn_80083970(u8 *, const u8 *);\nextern u8 lbl_1_rodata_26F8[];\nextern u8 lbl_10_bss_55CDC;\nextern u8 lbl_10_data_68E0[];\nextern void fn_1_46B4(u32, u32, const char *, int);\nextern void fn_1_494DC(s16);\nextern void fn_1_49514(Sig_fn_800081C8_Color);\nextern void fn_1_4954C(f32);\nextern void fn_1_4955C(f32, f32);\nextern void fn_1_495C8(u8);\nextern void fn_1_4966C(f32, f32);\nextern void fn_1_496FC(f32, f32);\nextern void fn_1_4A0D8(const char *);\nstruct Sig_fn_800081C8_Color { u8 r, g, b, a; };\n#pragma fp_contract off\n#pragma opt_common_subs off\n#pragma opt_lifetimes off\n#pragma opt_loop_invariants off\nextern int __abs(int);\n#pragma force_active on\nstatic const u32 fzgx_pool_table_0[] = {2305855636u,0u,2187362913u,2187493987u,2187625061u,2187756135u,2187887209u,2188018283u,2188149357u,2188280431u,2188411505u,2188542579u,2188673653u,2188804727u,2188935801u,2189525634u,2189656708u,2189787782u,2189918856u,2190049930u,2190181004u,2190312078u,2190443152u,2190574226u,2190705300u,2190836374u,2190967448u,2191098522u,2186248784u,2186379858u,2186510932u,2186642006u,2186773080u,2179432936u,0u,2189525634u,2189656708u,2189787782u,2189918856u,2190049930u,2190181004u,2190312078u,2190443152u,2190574226u,2190705300u,2190836374u,2190967448u,2191098522u,2187362913u,2187493987u,2187625061u,2187756135u,2187887209u,2188018283u,2188149357u,2188280431u,2188411505u,2188542579u,2188673653u,2188804727u,2188935801u,2168488256u,2168488256u,2168488256u,2168488256u,2168488256u,2168488256u,0u,2337049990u,0u,2168553794u,2169274701u,2168815939u,2168750406u,2168947016u,2169078139u,2172420446u,2172748163u,2172944719u,2169602400u,2170716533u,2172027241u,2171240815u,2171634029u,2171502991u,2173731219u,2173993365u,2174124439u,2179432936u,0u,2194703079u,2192212680u,0u,2191557282u,2191819430u,2192081577u,2192278189u,2192540337u,2192802485u,2193064633u,2193326781u,2193588930u,2193916614u,2194178761u,2194309835u,2194440909u,2194703059u,2195096281u,2195489501u,2195620575u,2195751650u,2196013798u,2196210408u,2196341482u,2196472557u,2196669167u,2196800241u,2192212652u,2192474800u,2192736948u,2192999096u,2193261244u,2193523392u,2193851077u,2194113230u,2194768596u,2195161818u,2194637522u,2195030744u,2195423903u,2191622819u,2191884967u,2193720033u,2195948261u,2196537831u,2179465216u,2191491745u,2191753893u,2192016042u,2192343726u,2192605874u,2192868022u,2193130170u,2193392318u,2193654465u,2193982151u,2168488256u,2168488256u,2168488654u,2194768596u,2195161818u,2168488256u,2168488256u,2168488673u,2195948261u,2168488256u,2168488256u,2168488684u,2168488256u,2168488256u,2192147115u,2192409263u,2192671411u,2192933559u,2193195707u,2193457855u,2193785540u,2194047695u,2194834133u,2195227355u,2194506448u,2194899670u,2195292832u,2191688356u,2191950504u,2193785570u,2196013798u,2196603200u,2168455168u,2168488256u,2168488256u,2168488256u,2168488256u,2168488256u,2168488256u,2168488256u,2168488256u,2168488643u,2168488256u,2168488256u,2168488256u,2168488655u,2194834133u,2195227355u,2168488256u,2168488256u,2168488256u,2168488256u,2168488256u,2168488256u,2168488256u,2168488256u,2168488256u,2168488256u,2168488256u,2168488256u,2168488256u,2168488256u,2168488256u,2193719616u,2168488653u,2194703059u,2195096281u,2194571985u,2194965207u,2195358016u,2168488256u,2168488256u,2193850688u,2168488256u,2168488256u,2168455168u,2202698590u,2202698601u,0u,2202108739u,2202370887u,2202633034u,2202829646u,2203091794u,2203353942u,2203616090u,2203878238u,2204140387u,2204468071u,2204730218u,2204861292u,2204992366u,2205254516u,2195096442u,2206040958u,2206237569u,2206368644u,2206630792u,2206827402u,2206958476u,2207089551u,2207286161u,2207417235u,2207548235u,2202895183u,2203157331u,2203419479u,2203681627u,2203943775u,2204205924u,2204533608u,2205123442u,2205516503u,2205909872u,2205385590u,2195227516u,2202043202u,2202305350u,2202567573u,2207679330u,2206434181u,2206696334u,2179432936u,0u,2202043202u,2202305350u,2202567499u,2202895183u,2203157331u,2203419479u,2203681627u,2203943775u,2204205922u,2204533608u,2168488256u,2168488256u,2168488815u,2205320053u,2195161979u,2168488256u,2168488256u,2168488835u,2206565255u,2168488256u,2168488256u,2168488846u,2168488256u,2168488256u,2202370890u,2202829646u,2203091794u,2203353942u,2203616090u,2203878238u,2204140387u,2204468071u,2205188979u,2205582040u,2205975406u,2205254516u,2195096442u,2202108739u,2202370887u,2202633034u,2203091811u,2206499718u,2206761871u,2168488256u,0u,2168488256u,2207547712u,2168488853u,2168488256u,2207678784u,2168488256u,2168488256u,2168488256u,2168488804u,2168488256u,2168488256u,2168488256u,2168488816u,2205385590u,2195227516u,2168488256u,2168488256u,2168488256u,2168488256u,2168488256u,2168488256u,2168488256u,2168488256u,2168488256u,2202305429u,2168488256u,2207678784u,2168488256u,2168488256u,2168488256u,2168488802u,2168488256u,2205057905u,2205450966u,2205844335u,2205320053u,2195161979u,2168488256u,2207547712u,2168488779u,2203157348u,2168488256u,2168488256u,2168488256u,0u,1130459241u,1952541728u,1281717364u,1701999360u,2187362913u,2187493987u,2187625061u,2187756135u,2187887209u,2188018283u,2188149357u,2188280431u,2188411505u,2188542579u,2188673653u,2188804727u,2188935801u,2179432936u,0u,1399677292u,1814056037u,1953785202u,1929379840u,2189525634u,2189656708u,2189787782u,2189918856u,2190049930u,2190181004u,2190312078u,2190443152u,2190574226u,2190705300u,2190836374u,2190967448u,2191098522u,2179432936u,0u,1399416686u,1929379840u,2168684868u,2169012553u,2172354940u,2170454367u,2172748163u,2172944710u,2168947020u,2169340239u,2169602402u,2171175274u,2171437422u,2171568496u,2173731219u,2173993365u,2174124439u,2179432936u,0u,1316318562u,1701999360u,2186248784u,2186379858u,2186510932u,2186642006u,2186773080u,2179432936u,0u,1070260551u,2920577761u,1073392298u,2863311531u,1071644672u,0u,1111490560u,1048576000u,1072693248u,0u,1040522936u,0u,1073217536u,0u,1073741824u,0u,1070945621u,1031798784u};\n#pragma force_active reset\n#pragma push\n#pragma section code_type \".fzgxpool\"\nstatic f64 fzgx_signed_double(s32 value) { return (f64)value; }\nstatic f64 fzgx_unsigned_double(u32 value) { return (f64)value; }\nstatic f32 fzgx_glyph_size(s32 index) {\nswitch(index) {\ncase 0:return 32.0f;\ncase 1:return 24.0f;\ndefault:return 18.0f;\n}\n}\n#pragma force_active reset\n#pragma pop\nvoid fn_10_23990(u32 arg0) {\nu8 *p_lbl_8_data_A1E8;\nstruct fn_8_DD64_lbl_8_rodata_408 *p_lbl_8_rodata_408;\nu8 *p_lbl_1_rodata_26F8;\nu32 v0;\ns32 v1;\ns32 v2;\ns32 state_value;\ns32 cursor_next;\ns32 v3;\nu32 v4;\nf32 v5;\nf64 v6;\nf32 v7;\nstruct OptionNameEntry { u16 cursor, length; char *chars; u8 pad[12]; } *v8;\nu32 v9;\ns32 v10;\nu32 v12;\nu32 v13;\nu32 v14;\ns32 v15;\nf32 v16;\nu16 v17;\nf64 v18;\nu32 v19;\nu8 * v20;\nu32 v21;\nu32 v22;\nf64 v23;\nf32 v24;\nf64 v25;\nf32 v26;\nf32 v27;\nstruct { u32 a[22]; } loc_18;\nSig_fn_800081C8_Color loc_14;\nSig_fn_800081C8_Color loc_10;\nSig_fn_800081C8_Color loc_C;\nu32 loc_8;\nu32 lab_t0;\nu32 lab_t1;\np_lbl_8_data_A1E8 = lbl_10_data_68E0;\np_lbl_8_rodata_408 = &lbl_10_rodata_1548;\nfn_800793D4((u8 *)lbl_801A63D0.unk_0, 0, (void *)1024);\nv0 = lbl_801A63D0.unk_0;\nif (lbl_10_bss_55CDC != 0) {\n{ s32 __reg_value_v2 = arg0; v2 = __reg_value_v2; }\nv1 = (u32)&lbl_801A6410;\nv3 = (u32)((u8 *)(u32)p_lbl_8_data_A1E8 + 160);\nv1 = *(u32 *)((u8 *)v1 + 0);\nv4 = 465;\nfn_1_46B4(v1, v2, (const char *)v3, v4);\nv1 = fn_1_4060();\n} else {\nv1 = fn_1_49410();\nv1 = 42;\nfn_1_494DC(v1);\nv1 = 9;\nfn_1_495C8(v1);\nfn_1_4966C(12.0f, 0.0f);\nv1 = lbl_10_bss_55CD8->unk_3C;\nv8 = (struct OptionNameEntry *)v1 + *(u8 *)arg0;\nv19 = v8->cursor;\nv3 = (v19 - 10);\nv1 = (v19 + 11);\nif (v3 >= 0 && (s32)(v19 + 11) <= (s32)v8->length) {\n{ s32 __reg_value_v2 = (u32)v8->chars; v2 = __reg_value_v2; }\nv1 = v0;\nv9 = (v3 << 1);\nv3 = 42;\n{ s32 __reg_value_v2 = (v2 + v9); v2 = __reg_value_v2; }\nv1 = (u32)strncpy((char *)v1, (const char *)v2, v3);\n} else if (v19 < 10) {\nv10 = v19 - 10;\nv10 = v8->length + v10;\nif (v10 < 0) {\n{ s32 __reg_value_v2 = (u32)v8->chars; v2 = __reg_value_v2; }\nv1 = v0;\n{ s32 __reg_value_v2 = (v2 + (v19 << 1)); v2 = __reg_value_v2; }\nlab_t0 = v1;\nlab_t1 = v2;\nv1 = fn_80083DB0(lab_t0, lab_t1);\n{ s32 __reg_value_v2 = (u32)v8->chars; v2 = __reg_value_v2; }\nv1 = v0;\nv1 = (u32)strcat((char *)v1, (const char *)v2);\n{ s32 __reg_value_v2 = (u32)v8->chars; v2 = __reg_value_v2; }\nv1 = v0;\nv3 = ((v10 + 10) << 1);\nv1 = (u32)fn_80083CF4((char *)v1, (const char *)v2, v3);\n} else {\n{ s32 __reg_value_v2 = (u32)v8->chars; v2 = __reg_value_v2; }\nv1 = v0;\n{ s32 __reg_value_v2 = (v2 + (v10 << 1)); v2 = __reg_value_v2; }\nlab_t0 = v1;\nlab_t1 = v2;\nv1 = fn_80083DB0(lab_t0, lab_t1);\nv1 = v8->cursor;\nv10 = (v1 + 11);\nif ((s32)v10 > (s32)v8->length) {\n{ s32 __reg_value_v2 = (u32)v8->chars; v2 = __reg_value_v2; }\nv1 = v0;\nv1 = (u32)strcat((char *)v1, (const char *)v2);\nv1 = v0;\n{ s32 __reg_value_v2 = (u32)v8->chars; v2 = __reg_value_v2; }\nv3 = ((v10 - v8->length) << 1);\nv1 = (u32)fn_80083CF4((char *)v1, (const char *)v2, v3);\n} else {\n{ s32 __reg_value_v2 = (u32)v8->chars; v2 = __reg_value_v2; }\nv1 = v0;\nv3 = (v10 << 1);\nv1 = (u32)fn_80083CF4((char *)v1, (const char *)v2, v3);\n}\n}\n} else {\n{ s32 __reg_value_v2 = (u32)v8->chars; v2 = __reg_value_v2; }\nv1 = v0;\n{ s32 __reg_value_v2 = (v2 + (v3 << 1)); v2 = __reg_value_v2; }\nlab_t0 = v1;\nlab_t1 = v2;\nv1 = fn_80083DB0(lab_t0, lab_t1);\n{ s32 __reg_value_v2 = v8->cursor; v2 = __reg_value_v2; }\nv1 = v0;\nv3 = v8->length;\nv12 = (v2 + 11);\n{ s32 __reg_value_v2 = (u32)v8->chars; v2 = __reg_value_v2; }\nv3 = ((v12 - v3) << 1);\nv1 = (u32)fn_80083CF4((char *)v1, (const char *)v2, v3);\n}\n{ s32 __reg_value_v2 = *(u8 *)((u8 *)arg0 + 0); v2 = __reg_value_v2; }\nv1 = (u32)lbl_10_bss_55CD8;\nif ((u32)v2 == *(u8 *)((u8 *)v1 + 13)) {\nu32 b14;\n{ s32 __reg_value_v2 = (v0 + 6); v2 = __reg_value_v2; }\nv1 = (u32)&lbl_801A63D0;\nv3 = 14;\nv1 = *(u32 *)((u8 *)v1 + 0);\nv10 = (v1 + 44);\nb14 = (v1 + 88);\nv1 = v10;\nv1 = (u32)strncpy((char *)v1, (const char *)v2, v3);\nv1 = b14;\n{ s32 __reg_value_v2 = (v0 + 22); v2 = __reg_value_v2; }\nv3 = 14;\nv1 = (u32)strncpy((char *)v1, (const char *)v2, v3);\nv1 = v0;\nv3 = v10;\nv4 = b14;\n{ s32 __reg_value_v2 = (u32)((u8 *)(u32)p_lbl_8_data_A1E8 + 184); v2 = __reg_value_v2; }\nv1 = sprintf((char *)v1, (const char *)(u32)v2, v3, v4);\n}\nv1 = (u32)lbl_10_bss_55CD8;\nv1 = *(u8 *)((u8 *)v1 + 13);\nv1 = (*(u8 *)((u8 *)arg0 + 0) - v1);\nif (v1 < 0) {\nv1 += 4;\n}\nswitch (v1) {\ncase 0:\nv15 = 178;\nv16 = fzgx_glyph_size(0);\n{ Sig_fn_800081C8_Color color0 = {255, 255, 255, 0}; loc_14 = color0; }\nbreak;\ncase 1:\nv15 = 276;\nv16 = fzgx_glyph_size(1);\n{ Sig_fn_800081C8_Color color1 = {0, 255, 255, 0}; loc_14 = color1; }\nbreak;\ncase 2:\nv15 = 313;\nv16 = fzgx_glyph_size(2);\n{ Sig_fn_800081C8_Color color2 = {0, 255, 255, 0}; loc_14 = color2; }\nbreak;\ncase 3:\nv15 = 84;\nv16 = fzgx_glyph_size(1);\n{ Sig_fn_800081C8_Color color3 = {0, 255, 255, 0}; loc_14 = color3; }\n}\nstate_value = *(u16 *)((u8 *)arg0 + 4);\nv3 = v15 - state_value;\nv6 = 0.2 * fzgx_signed_double(v3);\nif ((s32)v6 != 0) {\n*(u16 *)((u8 *)arg0 + 4) = (s32)((f64)(u32)state_value + v6);\n} else {\nif (v3 < 0) {\nv1 = -1;\n} else {\nv1 = v3 > 0;\n}\n*(u16 *)((u8 *)arg0 + 4) += v1;\n}\nv7 = *(f32 *)((u8 *)arg0 + 8);\nv6 = 0.2;\n*(f32 *)((u8 *)arg0 + 8) = v7 + v6 * (v16 - v7);\nv1 = *(u8 *)((u8 *)arg0 + 2);\nv13 = v8->cursor;\nstate_value = v1 + 1;\nif (state_value == (s32)v13 || --v1 > (s32)v13) {\n*(u8 *)((u8 *)arg0 + 1) = 36;\n} else if (v1 == (s32)v13 || state_value < (s32)v13) {\n*(s8 *)((u8 *)arg0 + 1) = -36;\n}\nv2 = (s8)*(u8 *)((u8 *)arg0 + 1);\nv3 = -v2;\nv6 = 0.2 * fzgx_signed_double(v3);\nif ((s32)v6 != 0) {\n*(u8 *)((u8 *)arg0 + 1) = (s32)((f64)v2 + v6);\n} else {\nif (v3 < 0) {\nv1 = -1;\n} else {\nv1 = v3 > 0;\n}\n*(u8 *)((u8 *)arg0 + 1) += v1;\n}\nv1 = v0;\nv2 = (u32)(p_lbl_8_data_A1E8 + 196);\n*(u8 *)((u8 *)arg0 + 2) = v8->cursor;\nv1 = (u32)fn_80083970((u8 *)v1, (const u8 *)v2);\np_lbl_1_rodata_26F8 = lbl_1_rodata_26F8;\nv15 = 0x10000 - 28914;\nv20 = (u8 *)v1;\nv24 = 10.1f;\nv25 = 24.0;\nwhile (v20 != 0) {\nv1 = strlen((const char *)v0);\nstate_value = v20 - (u8 *)v0;\nv3 = v1 - 1;\nv1 = (u32)state_value >> 31;\nv1 = v1 + state_value;\nstate_value = (u32)v3 >> 2;\nv1 >>= 1;\nv3 = (u32)&loc_14;\nv2 = v1 - state_value;\nstate_value = (u32)p_lbl_1_rodata_26F8 - 4;\nfor (v21 = 11; v21 != 0; v21--) {\nv1 = *(u32 *)((u8 *)state_value + 4);\nv22 = *(u32 *)((u8 *)state_value + 8);\nstate_value += 8;\n*(u32 *)((u8 *)v3 + 4) = v1;\n*(u32 *)((u8 *)v3 + 8) = v22;\nv3 += 8;\n}\nloc_18.a[0] = v15;\nv3 = *(u8 *)((u8 *)arg0 + 1);\nv1 = (s8)v3;\nv26 = (f32)(s32)v2 * *(f32 *)((u8 *)arg0 + 8);\nv5 = (f32)(v1 + 320);\n*(f32 *)((u8 *)&loc_18 + 4) = v5 + v26;\nif (__abs((s32)v2) > 0) {\nv3 = 1;\nif ((s32)v2 < 0) v3 = -1;\nstate_value = (s32)v2 >> 31;\nv1 = state_value ^ (s32)v2;\nv1 -= state_value;\nv6 = 12.0;\nv7 = *(f32 *)((u8 *)&loc_18 + 4);\n*(f32 *)((u8 *)&loc_18 + 4) = v7 + v6 * (v3 * v1);\n}\n*(f32 *)((u8 *)&loc_18 + 8) = (f32)(u32)*(u16 *)((u8 *)arg0 + 4);\n*(f32 *)((u8 *)&loc_18 + 12) = v24;\nloc_18.a[12] = 10;\nv5 = 1.0f;\nv27 = *(f32 *)((u8 *)arg0 + 8) / v25;\n*(f32 *)((u8 *)&loc_18 + 20) = v27;\n*(f32 *)((u8 *)&loc_18 + 16) = v27;\n{\nSig_fn_800081C8_Color black = {0, 0, 0, 255};\nSig_fn_800081C8_Color white = {255, 255, 255, 255};\nloc_10 = black;\nloc_C = white;\nv1 = fn_800081C8(loc_10, loc_C, v5);\n}\nloc_18.a[14] = v1;\nfn_1_4F734((FontDrawPacket *)&loc_18);\nv20 = fn_80083970(v20 + 2, p_lbl_8_data_A1E8 + 196);\n}\nv2 = (s8)*(u8 *)((u8 *)arg0 + 1);\nv2 += 320;\nv5 = (f32)v2;\nv6 = (f32)(u32)*(u16 *)((u8 *)arg0 + 4);\nfn_1_496FC(v5, v6);\nv18 = *(f32 *)((u8 *)arg0 + 8) / 24.0;\nfn_1_4955C(v18, v18);\n{\nfn_1_49514(loc_14);\n}\nfn_1_4954C(10.0f);\nfn_1_4A0D8((const char *)v0);\n}\n}\n#pragma opt_loop_invariants reset\n#pragma opt_lifetimes reset\n#pragma opt_common_subs reset\n",
+    "compiler": "GC/1.3.2",
+    "flags": "",
+    "source": "rel/sel/sel/fn_10_23990.c",
+    "bytes": 1756,
+    "headers_sha256": "fae2435a8fa7d9aa315a83bba41165189d6b656b9f748898f189942fa2f550a4",
+    "oracle_sha256": "959ee3393e3e96d36d61cc247ef5421ca505fece9beeaf631f6851a5573f1650",
+    "recipe": [
+      {
+        "label": "expand owned clone declarations",
+        "input_sha256": "ef2ecd467ccbe7538eed7666e2b0f2a4ebb2e388aa2fa3c5f9cce67b4ddddb70",
+        "output_sha256": "de0c4cf23ce801c7f1e87ae0214d417857eec4457e4a364db61c1b1f496fcd74",
+        "input_symbol": "fn_4_B528",
+        "output_symbol": "fn_4_B528",
+        "edits": [
+          [
+            0,
+            68,
+            "\ntypedef signed char s8;\ntypedef signed short s16;\ntypedef signed long s32;\n\ntypedef unsigned char u8;\ntypedef unsigned short u16;\ntypedef unsigned long u32;\n\ntypedef float f32;\ntypedef double f64;\n\ntypedef unsigned long size_t;\ntypedef struct FontDrawPacket FontDrawPacket;\ntypedef struct FontVertex {\nf32 x, y, z;\n} FontVertex;\nstruct FontDrawPacket {\nu32 image;\nf32 x, y, z;\nf32 scale_x, scale_y;\nf32 u0, v0, u1, v1;\ns16 rotation_z, rotation_y;\nf32 alpha;\nu32 flags;\nf32 depth;\nu8 color[4], color_add[4];\nu32 format;\nu16 width, height;\nvoid* pixels;\nFontDrawPacket* secondary;\nvoid (*vertex_callback)(FontDrawPacket* packet, FontVertex* vertices);\nu32 unk_54;\n};\nvoid fn_1_4A0D8(const char* text);\nvoid fn_1_4AE0C(const char* format, ...);\nint fn_1_4F734(FontDrawPacket* packet);\nvoid fn_1_4EDAC(FontDrawPacket* packet, f32 width, f32 height);\nvoid fn_1_51678(FontDrawPacket* packet, u32 image, s16 x, s16 y, s16 width, s16 height);\nvoid fn_1_517EC(FontDrawPacket* packet, s16 x, s16 y, s16 width, s16 height,\ns16 texture_width, s16 texture_height);\n\n/* lbl_4_bss_5680: .bss size 0x4, referenced by 8 functions, shape {'object': 112, 'pointer': 28} */\ntypedef struct {\nu32 unk_0; /* 11 loads, 6 stores */\nu32 unk_4; /* 1 loads, 1 stores */\nu32 unk_8; /* 4 loads, 1 stores */\nu8 unk_C; /* 8 loads, 1 stores */\nu8 unk_D; /* 5 loads, 4 stores */\nu8 unk_E; /* 10 loads, 3 stores */\nu8 unk_F; /* 3 loads, 12 stores */\nu8 unk_10; /* 1 loads, 0 stores */\nu8 unk_11; /* 2 loads, 1 stores */\nu16 unk_12; /* 3 loads, 3 stores */\nu8 unk_14; /* 2 loads, 2 stores */\nu8 unk_15; /* 2 loads, 2 stores */\nu8 unk_16; /* 2 loads, 2 stores */\nu8 unk_17; /* 2 loads, 2 stores */\nu32 unk_18; /* 1 loads, 1 stores */\nu32 unk_1C; /* 1 loads, 1 stores */\nu32 unk_20; /* 3 loads, 2 stores */\nu8 pad_24[0x4];\nu8 unk_28; /* 1 loads, 0 stores */\nu8 pad_29[0xD];\nu8 unk_36; /* 2 loads, 1 stores */\nu8 unk_37; /* 0 loads, 1 stores */\nu8 pad_38[0x2];\nu8 unk_3A; /* 2 loads, 2 stores */\nu8 unk_3B; /* 5 loads, 2 stores */\nu32 unk_3C; /* 4 loads, 2 stores */\n} Obj_4_bss_5680_Target;\nextern Obj_4_bss_5680_Target *lbl_4_bss_5680;\n\n/* lbl_4_data_2F78: .data size 0xA0, referenced by 5 functions, shape {} */\nextern u8 lbl_4_data_2F78[0xA0];\n\n/* lbl_4_bss_5684: .bss size 0x1, referenced by 3 functions, shape {'object': 3} */\nextern u8 lbl_4_bss_5684;"
+          ],
+          [
+            1522,
+            1523,
+            ""
+          ],
+          [
+            2026,
+            2027,
+            ""
+          ],
+          [
+            8351,
+            8352,
+            ""
+          ],
+          [
+            15026,
+            15027,
+            ""
+          ]
+        ]
+      },
+      {
+        "label": "bind exact clone",
+        "input_sha256": "de0c4cf23ce801c7f1e87ae0214d417857eec4457e4a364db61c1b1f496fcd74",
+        "output_sha256": "d5149d5f0c03eddffbdff0491696378aeee33c7a0cf9e275240cfde50cb1667f",
+        "input_symbol": "fn_4_B528",
+        "output_symbol": "fn_10_23990",
+        "edits": [
+          [
+            2088,
+            2098,
+            "10_bss_55CD8"
+          ],
+          [
+            2191,
+            2202,
+            "10_data_68E0"
+          ],
+          [
+            2309,
+            2319,
+            "10_bss_55CDC"
+          ],
+          [
+            3466,
+            3478,
+            "10_rodata_1548"
+          ],
+          [
+            3862,
+            3899,
+            "10_bss_55CDC;\nextern u8 lbl_10_data_68E0"
+          ],
+          [
+            10012,
+            10018,
+            "10_23990"
+          ],
+          [
+            10649,
+            10700,
+            "10_data_68E0;\np_lbl_8_rodata_408 = &lbl_10_rodata_1548"
+          ],
+          [
+            10791,
+            10801,
+            "10_bss_55CDC"
+          ],
+          [
+            11144,
+            11154,
+            "10_bss_55CD8"
+          ],
+          [
+            13314,
+            13324,
+            "10_bss_55CD8"
+          ],
+          [
+            13912,
+            13922,
+            "10_bss_55CD8"
+          ]
+        ],
+        "clone": {
+          "donor": "fn_4_B528",
+          "recipient": "fn_10_23990",
+          "bindings": {
+            "lbl_4_rodata_410": "lbl_10_rodata_1548",
+            "lbl_4_data_2F78": "lbl_10_data_68E0",
+            "lbl_4_bss_5684": "lbl_10_bss_55CDC",
+            "lbl_4_bss_5680": "lbl_10_bss_55CD8",
+            "fn_4_B528": "fn_10_23990"
+          }
+        }
+      }
+    ],
+    "link": "pending"
+  },
+  "fn_8_DD64": {
+    "seed_symbol": "fn_4_B528",
+    "generator": "fzgx fixup",
+    "transform": "bind exact clone",
+    "seed": "#include \"types.h\"\n#include \"font.h\"\n#include \"rel/option/globals.h\"\n\nvoid fn_1_4A0D8(const char* text);\nvoid fn_1_4AE0C(const char* format, ...);\nint fn_1_4F734(FontDrawPacket* packet);\nvoid fn_1_4EDAC(FontDrawPacket* packet, f32 width, f32 height);\nvoid fn_1_51678(FontDrawPacket* packet, u32 image, s16 x, s16 y, s16 width, s16 height);\nvoid fn_1_517EC(FontDrawPacket* packet, s16 x, s16 y, s16 width, s16 height,\ns16 texture_width, s16 texture_height);\nstruct fn_8_DD64_lbl_801A63D0 {\nu32 unk_0;\n};\nstruct fn_8_DD64_lbl_8_rodata_408 {\nu8 pad_0[0x6F0];\nf64 unk_6F0;\nf64 unk_6F8;\nf32 unk_700;\nf32 unk_704;\nf32 unk_708;\nu32 unk_70C;\nu32 unk_710;\nu32 unk_714;\nu32 unk_718;\nu32 unk_71C;\nu32 unk_720;\nf32 unk_724;\nf32 unk_728;\nu8 pad_72C[0x4];\nf64 unk_730;\nf64 unk_738;\nf32 unk_740;\nu8 pad_744[0x4];\nf64 unk_748;\nf32 unk_750;\nf32 unk_754;\n};\nextern char * fn_80083CF4(char *, const char *, size_t);\nextern char * strcat(char *, const char *);\nextern char * strncpy(char *, const char *, size_t);\nextern int fn_1_4F734(FontDrawPacket *);\nextern int sprintf(char *, const char *, ...);\nextern size_t strlen(const char *);\nextern struct fn_8_DD64_lbl_801A63D0 lbl_801A63D0;\nextern struct fn_8_DD64_lbl_8_rodata_408 lbl_4_rodata_410;\nextern u32 fn_1_4060(void);\nextern u32 fn_1_49410(void);\ntypedef struct Sig_fn_800081C8_Color Sig_fn_800081C8_Color;\nextern u32 fn_800081C8(Sig_fn_800081C8_Color, Sig_fn_800081C8_Color, f32);\nextern u32 fn_800793D4(u8 *, u32, void *);\nextern u32 fn_80083DB0(u32, u32);\nextern u32 lbl_801A6410;\n\nextern u8 * fn_80083970(u8 *, const u8 *);\nextern u8 lbl_1_rodata_26F8[];\nextern u8 lbl_4_bss_5684;\nextern u8 lbl_4_data_2F78[];\nextern void fn_1_46B4(u32, u32, const char *, int);\nextern void fn_1_494DC(s16);\nextern void fn_1_49514(Sig_fn_800081C8_Color);\nextern void fn_1_4954C(f32);\nextern void fn_1_4955C(f32, f32);\nextern void fn_1_495C8(u8);\nextern void fn_1_4966C(f32, f32);\nextern void fn_1_496FC(f32, f32);\nextern void fn_1_4A0D8(const char *);\nstruct Sig_fn_800081C8_Color { u8 r, g, b, a; };\n\n#pragma fp_contract off\n#pragma opt_common_subs off\n#pragma opt_lifetimes off\n#pragma opt_loop_invariants off\nextern int __abs(int);\n#pragma force_active on\nstatic const u32 fzgx_pool_table_0[] = {2305855636u,0u,2187362913u,2187493987u,2187625061u,2187756135u,2187887209u,2188018283u,2188149357u,2188280431u,2188411505u,2188542579u,2188673653u,2188804727u,2188935801u,2189525634u,2189656708u,2189787782u,2189918856u,2190049930u,2190181004u,2190312078u,2190443152u,2190574226u,2190705300u,2190836374u,2190967448u,2191098522u,2186248784u,2186379858u,2186510932u,2186642006u,2186773080u,2179432936u,0u,2189525634u,2189656708u,2189787782u,2189918856u,2190049930u,2190181004u,2190312078u,2190443152u,2190574226u,2190705300u,2190836374u,2190967448u,2191098522u,2187362913u,2187493987u,2187625061u,2187756135u,2187887209u,2188018283u,2188149357u,2188280431u,2188411505u,2188542579u,2188673653u,2188804727u,2188935801u,2168488256u,2168488256u,2168488256u,2168488256u,2168488256u,2168488256u,0u,2337049990u,0u,2168553794u,2169274701u,2168815939u,2168750406u,2168947016u,2169078139u,2172420446u,2172748163u,2172944719u,2169602400u,2170716533u,2172027241u,2171240815u,2171634029u,2171502991u,2173731219u,2173993365u,2174124439u,2179432936u,0u,2194703079u,2192212680u,0u,2191557282u,2191819430u,2192081577u,2192278189u,2192540337u,2192802485u,2193064633u,2193326781u,2193588930u,2193916614u,2194178761u,2194309835u,2194440909u,2194703059u,2195096281u,2195489501u,2195620575u,2195751650u,2196013798u,2196210408u,2196341482u,2196472557u,2196669167u,2196800241u,2192212652u,2192474800u,2192736948u,2192999096u,2193261244u,2193523392u,2193851077u,2194113230u,2194768596u,2195161818u,2194637522u,2195030744u,2195423903u,2191622819u,2191884967u,2193720033u,2195948261u,2196537831u,2179465216u,2191491745u,2191753893u,2192016042u,2192343726u,2192605874u,2192868022u,2193130170u,2193392318u,2193654465u,2193982151u,2168488256u,2168488256u,2168488654u,2194768596u,2195161818u,2168488256u,2168488256u,2168488673u,2195948261u,2168488256u,2168488256u,2168488684u,2168488256u,2168488256u,2192147115u,2192409263u,2192671411u,2192933559u,2193195707u,2193457855u,2193785540u,2194047695u,2194834133u,2195227355u,2194506448u,2194899670u,2195292832u,2191688356u,2191950504u,2193785570u,2196013798u,2196603200u,2168455168u,2168488256u,2168488256u,2168488256u,2168488256u,2168488256u,2168488256u,2168488256u,2168488256u,2168488643u,2168488256u,2168488256u,2168488256u,2168488655u,2194834133u,2195227355u,2168488256u,2168488256u,2168488256u,2168488256u,2168488256u,2168488256u,2168488256u,2168488256u,2168488256u,2168488256u,2168488256u,2168488256u,2168488256u,2168488256u,2168488256u,2193719616u,2168488653u,2194703059u,2195096281u,2194571985u,2194965207u,2195358016u,2168488256u,2168488256u,2193850688u,2168488256u,2168488256u,2168455168u,2202698590u,2202698601u,0u,2202108739u,2202370887u,2202633034u,2202829646u,2203091794u,2203353942u,2203616090u,2203878238u,2204140387u,2204468071u,2204730218u,2204861292u,2204992366u,2205254516u,2195096442u,2206040958u,2206237569u,2206368644u,2206630792u,2206827402u,2206958476u,2207089551u,2207286161u,2207417235u,2207548235u,2202895183u,2203157331u,2203419479u,2203681627u,2203943775u,2204205924u,2204533608u,2205123442u,2205516503u,2205909872u,2205385590u,2195227516u,2202043202u,2202305350u,2202567573u,2207679330u,2206434181u,2206696334u,2179432936u,0u,2202043202u,2202305350u,2202567499u,2202895183u,2203157331u,2203419479u,2203681627u,2203943775u,2204205922u,2204533608u,2168488256u,2168488256u,2168488815u,2205320053u,2195161979u,2168488256u,2168488256u,2168488835u,2206565255u,2168488256u,2168488256u,2168488846u,2168488256u,2168488256u,2202370890u,2202829646u,2203091794u,2203353942u,2203616090u,2203878238u,2204140387u,2204468071u,2205188979u,2205582040u,2205975406u,2205254516u,2195096442u,2202108739u,2202370887u,2202633034u,2203091811u,2206499718u,2206761871u,2168488256u,0u,2168488256u,2207547712u,2168488853u,2168488256u,2207678784u,2168488256u,2168488256u,2168488256u,2168488804u,2168488256u,2168488256u,2168488256u,2168488816u,2205385590u,2195227516u,2168488256u,2168488256u,2168488256u,2168488256u,2168488256u,2168488256u,2168488256u,2168488256u,2168488256u,2202305429u,2168488256u,2207678784u,2168488256u,2168488256u,2168488256u,2168488802u,2168488256u,2205057905u,2205450966u,2205844335u,2205320053u,2195161979u,2168488256u,2207547712u,2168488779u,2203157348u,2168488256u,2168488256u,2168488256u,0u,1130459241u,1952541728u,1281717364u,1701999360u,2187362913u,2187493987u,2187625061u,2187756135u,2187887209u,2188018283u,2188149357u,2188280431u,2188411505u,2188542579u,2188673653u,2188804727u,2188935801u,2179432936u,0u,1399677292u,1814056037u,1953785202u,1929379840u,2189525634u,2189656708u,2189787782u,2189918856u,2190049930u,2190181004u,2190312078u,2190443152u,2190574226u,2190705300u,2190836374u,2190967448u,2191098522u,2179432936u,0u,1399416686u,1929379840u,2168684868u,2169012553u,2172354940u,2170454367u,2172748163u,2172944710u,2168947020u,2169340239u,2169602402u,2171175274u,2171437422u,2171568496u,2173731219u,2173993365u,2174124439u,2179432936u,0u,1316318562u,1701999360u,2186248784u,2186379858u,2186510932u,2186642006u,2186773080u,2179432936u,0u,1070260551u,2920577761u,1073392298u,2863311531u,1071644672u,0u,1111490560u,1048576000u,1072693248u,0u,1040522936u,0u,1073217536u,0u,1073741824u,0u,1070945621u,1031798784u};\n#pragma force_active reset\n#pragma push\n#pragma section code_type \".fzgxpool\"\nstatic f64 fzgx_signed_double(s32 value) { return (f64)value; }\nstatic f64 fzgx_unsigned_double(u32 value) { return (f64)value; }\nstatic f32 fzgx_glyph_size(s32 index) {\nswitch(index) {\ncase 0:return 32.0f;\ncase 1:return 24.0f;\ndefault:return 18.0f;\n}\n}\n#pragma force_active reset\n#pragma pop\nvoid fn_4_B528(u32 arg0) {\nu8 *p_lbl_8_data_A1E8;\nstruct fn_8_DD64_lbl_8_rodata_408 *p_lbl_8_rodata_408;\nu8 *p_lbl_1_rodata_26F8;\nu32 v0;\ns32 v1;\ns32 v2;\ns32 state_value;\ns32 cursor_next;\ns32 v3;\nu32 v4;\nf32 v5;\nf64 v6;\nf32 v7;\nstruct OptionNameEntry { u16 cursor, length; char *chars; u8 pad[12]; } *v8;\nu32 v9;\ns32 v10;\nu32 v12;\nu32 v13;\nu32 v14;\ns32 v15;\nf32 v16;\nu16 v17;\nf64 v18;\nu32 v19;\nu8 * v20;\nu32 v21;\nu32 v22;\nf64 v23;\nf32 v24;\nf64 v25;\nf32 v26;\nf32 v27;\nstruct { u32 a[22]; } loc_18;\nSig_fn_800081C8_Color loc_14;\nSig_fn_800081C8_Color loc_10;\nSig_fn_800081C8_Color loc_C;\nu32 loc_8;\n\nu32 lab_t0;\nu32 lab_t1;\np_lbl_8_data_A1E8 = lbl_4_data_2F78;\np_lbl_8_rodata_408 = &lbl_4_rodata_410;\nfn_800793D4((u8 *)lbl_801A63D0.unk_0, 0, (void *)1024);\nv0 = lbl_801A63D0.unk_0;\nif (lbl_4_bss_5684 != 0) {\n{ s32 __reg_value_v2 = arg0; v2 = __reg_value_v2; }\nv1 = (u32)&lbl_801A6410;\nv3 = (u32)((u8 *)(u32)p_lbl_8_data_A1E8 + 160);\nv1 = *(u32 *)((u8 *)v1 + 0);\nv4 = 465;\nfn_1_46B4(v1, v2, (const char *)v3, v4);\nv1 = fn_1_4060();\n} else {\nv1 = fn_1_49410();\nv1 = 42;\nfn_1_494DC(v1);\nv1 = 9;\nfn_1_495C8(v1);\nfn_1_4966C(12.0f, 0.0f);\nv1 = lbl_4_bss_5680->unk_3C;\nv8 = (struct OptionNameEntry *)v1 + *(u8 *)arg0;\nv19 = v8->cursor;\nv3 = (v19 - 10);\nv1 = (v19 + 11);\nif (v3 >= 0 && (s32)(v19 + 11) <= (s32)v8->length) {\n{ s32 __reg_value_v2 = (u32)v8->chars; v2 = __reg_value_v2; }\nv1 = v0;\nv9 = (v3 << 1);\nv3 = 42;\n{ s32 __reg_value_v2 = (v2 + v9); v2 = __reg_value_v2; }\nv1 = (u32)strncpy((char *)v1, (const char *)v2, v3);\n} else if (v19 < 10) {\nv10 = v19 - 10;\nv10 = v8->length + v10;\nif (v10 < 0) {\n{ s32 __reg_value_v2 = (u32)v8->chars; v2 = __reg_value_v2; }\nv1 = v0;\n{ s32 __reg_value_v2 = (v2 + (v19 << 1)); v2 = __reg_value_v2; }\nlab_t0 = v1;\nlab_t1 = v2;\nv1 = fn_80083DB0(lab_t0, lab_t1);\n{ s32 __reg_value_v2 = (u32)v8->chars; v2 = __reg_value_v2; }\nv1 = v0;\nv1 = (u32)strcat((char *)v1, (const char *)v2);\n{ s32 __reg_value_v2 = (u32)v8->chars; v2 = __reg_value_v2; }\nv1 = v0;\nv3 = ((v10 + 10) << 1);\nv1 = (u32)fn_80083CF4((char *)v1, (const char *)v2, v3);\n} else {\n{ s32 __reg_value_v2 = (u32)v8->chars; v2 = __reg_value_v2; }\nv1 = v0;\n{ s32 __reg_value_v2 = (v2 + (v10 << 1)); v2 = __reg_value_v2; }\nlab_t0 = v1;\nlab_t1 = v2;\nv1 = fn_80083DB0(lab_t0, lab_t1);\nv1 = v8->cursor;\nv10 = (v1 + 11);\nif ((s32)v10 > (s32)v8->length) {\n{ s32 __reg_value_v2 = (u32)v8->chars; v2 = __reg_value_v2; }\nv1 = v0;\nv1 = (u32)strcat((char *)v1, (const char *)v2);\nv1 = v0;\n{ s32 __reg_value_v2 = (u32)v8->chars; v2 = __reg_value_v2; }\nv3 = ((v10 - v8->length) << 1);\nv1 = (u32)fn_80083CF4((char *)v1, (const char *)v2, v3);\n} else {\n{ s32 __reg_value_v2 = (u32)v8->chars; v2 = __reg_value_v2; }\nv1 = v0;\nv3 = (v10 << 1);\nv1 = (u32)fn_80083CF4((char *)v1, (const char *)v2, v3);\n}\n}\n} else {\n{ s32 __reg_value_v2 = (u32)v8->chars; v2 = __reg_value_v2; }\nv1 = v0;\n{ s32 __reg_value_v2 = (v2 + (v3 << 1)); v2 = __reg_value_v2; }\nlab_t0 = v1;\nlab_t1 = v2;\nv1 = fn_80083DB0(lab_t0, lab_t1);\n{ s32 __reg_value_v2 = v8->cursor; v2 = __reg_value_v2; }\nv1 = v0;\nv3 = v8->length;\nv12 = (v2 + 11);\n{ s32 __reg_value_v2 = (u32)v8->chars; v2 = __reg_value_v2; }\nv3 = ((v12 - v3) << 1);\nv1 = (u32)fn_80083CF4((char *)v1, (const char *)v2, v3);\n}\n{ s32 __reg_value_v2 = *(u8 *)((u8 *)arg0 + 0); v2 = __reg_value_v2; }\nv1 = (u32)lbl_4_bss_5680;\nif ((u32)v2 == *(u8 *)((u8 *)v1 + 13)) {\nu32 b14;\n{ s32 __reg_value_v2 = (v0 + 6); v2 = __reg_value_v2; }\nv1 = (u32)&lbl_801A63D0;\nv3 = 14;\nv1 = *(u32 *)((u8 *)v1 + 0);\nv10 = (v1 + 44);\nb14 = (v1 + 88);\nv1 = v10;\nv1 = (u32)strncpy((char *)v1, (const char *)v2, v3);\nv1 = b14;\n{ s32 __reg_value_v2 = (v0 + 22); v2 = __reg_value_v2; }\nv3 = 14;\nv1 = (u32)strncpy((char *)v1, (const char *)v2, v3);\nv1 = v0;\nv3 = v10;\nv4 = b14;\n{ s32 __reg_value_v2 = (u32)((u8 *)(u32)p_lbl_8_data_A1E8 + 184); v2 = __reg_value_v2; }\nv1 = sprintf((char *)v1, (const char *)(u32)v2, v3, v4);\n}\nv1 = (u32)lbl_4_bss_5680;\nv1 = *(u8 *)((u8 *)v1 + 13);\nv1 = (*(u8 *)((u8 *)arg0 + 0) - v1);\nif (v1 < 0) {\nv1 += 4;\n}\nswitch (v1) {\ncase 0:\nv15 = 178;\nv16 = fzgx_glyph_size(0);\n{ Sig_fn_800081C8_Color color0 = {255, 255, 255, 0}; loc_14 = color0; }\nbreak;\ncase 1:\nv15 = 276;\nv16 = fzgx_glyph_size(1);\n{ Sig_fn_800081C8_Color color1 = {0, 255, 255, 0}; loc_14 = color1; }\nbreak;\ncase 2:\nv15 = 313;\nv16 = fzgx_glyph_size(2);\n{ Sig_fn_800081C8_Color color2 = {0, 255, 255, 0}; loc_14 = color2; }\nbreak;\ncase 3:\nv15 = 84;\nv16 = fzgx_glyph_size(1);\n{ Sig_fn_800081C8_Color color3 = {0, 255, 255, 0}; loc_14 = color3; }\n}\nstate_value = *(u16 *)((u8 *)arg0 + 4);\nv3 = v15 - state_value;\nv6 = 0.2 * fzgx_signed_double(v3);\nif ((s32)v6 != 0) {\n*(u16 *)((u8 *)arg0 + 4) = (s32)((f64)(u32)state_value + v6);\n} else {\nif (v3 < 0) {\nv1 = -1;\n} else {\nv1 = v3 > 0;\n}\n*(u16 *)((u8 *)arg0 + 4) += v1;\n}\nv7 = *(f32 *)((u8 *)arg0 + 8);\nv6 = 0.2;\n*(f32 *)((u8 *)arg0 + 8) = v7 + v6 * (v16 - v7);\nv1 = *(u8 *)((u8 *)arg0 + 2);\nv13 = v8->cursor;\nstate_value = v1 + 1;\nif (state_value == (s32)v13 || --v1 > (s32)v13) {\n*(u8 *)((u8 *)arg0 + 1) = 36;\n} else if (v1 == (s32)v13 || state_value < (s32)v13) {\n*(s8 *)((u8 *)arg0 + 1) = -36;\n}\nv2 = (s8)*(u8 *)((u8 *)arg0 + 1);\nv3 = -v2;\nv6 = 0.2 * fzgx_signed_double(v3);\nif ((s32)v6 != 0) {\n*(u8 *)((u8 *)arg0 + 1) = (s32)((f64)v2 + v6);\n} else {\nif (v3 < 0) {\nv1 = -1;\n} else {\nv1 = v3 > 0;\n}\n*(u8 *)((u8 *)arg0 + 1) += v1;\n}\nv1 = v0;\nv2 = (u32)(p_lbl_8_data_A1E8 + 196);\n*(u8 *)((u8 *)arg0 + 2) = v8->cursor;\nv1 = (u32)fn_80083970((u8 *)v1, (const u8 *)v2);\np_lbl_1_rodata_26F8 = lbl_1_rodata_26F8;\nv15 = 0x10000 - 28914;\nv20 = (u8 *)v1;\nv24 = 10.1f;\nv25 = 24.0;\nwhile (v20 != 0) {\nv1 = strlen((const char *)v0);\nstate_value = v20 - (u8 *)v0;\nv3 = v1 - 1;\nv1 = (u32)state_value >> 31;\nv1 = v1 + state_value;\nstate_value = (u32)v3 >> 2;\nv1 >>= 1;\nv3 = (u32)&loc_14;\nv2 = v1 - state_value;\nstate_value = (u32)p_lbl_1_rodata_26F8 - 4;\nfor (v21 = 11; v21 != 0; v21--) {\nv1 = *(u32 *)((u8 *)state_value + 4);\nv22 = *(u32 *)((u8 *)state_value + 8);\nstate_value += 8;\n*(u32 *)((u8 *)v3 + 4) = v1;\n*(u32 *)((u8 *)v3 + 8) = v22;\nv3 += 8;\n}\nloc_18.a[0] = v15;\nv3 = *(u8 *)((u8 *)arg0 + 1);\nv1 = (s8)v3;\nv26 = (f32)(s32)v2 * *(f32 *)((u8 *)arg0 + 8);\nv5 = (f32)(v1 + 320);\n*(f32 *)((u8 *)&loc_18 + 4) = v5 + v26;\nif (__abs((s32)v2) > 0) {\nv3 = 1;\nif ((s32)v2 < 0) v3 = -1;\nstate_value = (s32)v2 >> 31;\nv1 = state_value ^ (s32)v2;\nv1 -= state_value;\nv6 = 12.0;\nv7 = *(f32 *)((u8 *)&loc_18 + 4);\n*(f32 *)((u8 *)&loc_18 + 4) = v7 + v6 * (v3 * v1);\n}\n*(f32 *)((u8 *)&loc_18 + 8) = (f32)(u32)*(u16 *)((u8 *)arg0 + 4);\n*(f32 *)((u8 *)&loc_18 + 12) = v24;\nloc_18.a[12] = 10;\nv5 = 1.0f;\nv27 = *(f32 *)((u8 *)arg0 + 8) / v25;\n*(f32 *)((u8 *)&loc_18 + 20) = v27;\n*(f32 *)((u8 *)&loc_18 + 16) = v27;\n{\nSig_fn_800081C8_Color black = {0, 0, 0, 255};\nSig_fn_800081C8_Color white = {255, 255, 255, 255};\nloc_10 = black;\nloc_C = white;\nv1 = fn_800081C8(loc_10, loc_C, v5);\n}\nloc_18.a[14] = v1;\nfn_1_4F734((FontDrawPacket *)&loc_18);\nv20 = fn_80083970(v20 + 2, p_lbl_8_data_A1E8 + 196);\n}\nv2 = (s8)*(u8 *)((u8 *)arg0 + 1);\nv2 += 320;\nv5 = (f32)v2;\nv6 = (f32)(u32)*(u16 *)((u8 *)arg0 + 4);\nfn_1_496FC(v5, v6);\nv18 = *(f32 *)((u8 *)arg0 + 8) / 24.0;\nfn_1_4955C(v18, v18);\n{\nfn_1_49514(loc_14);\n}\nfn_1_4954C(10.0f);\nfn_1_4A0D8((const char *)v0);\n}\n}\n#pragma opt_loop_invariants reset\n\n#pragma opt_lifetimes reset\n#pragma opt_common_subs reset\n",
+    "seed_sha256": "ef2ecd467ccbe7538eed7666e2b0f2a4ebb2e388aa2fa3c5f9cce67b4ddddb70",
+    "generated_sha256": "fad0fadb6ca000ecda0308d92c338aa017b65baf792e79f1dd89841123cb77d5",
+    "generated_source": "\ntypedef signed char s8;\ntypedef signed short s16;\ntypedef signed long s32;\n\ntypedef unsigned char u8;\ntypedef unsigned short u16;\ntypedef unsigned long u32;\n\ntypedef float f32;\ntypedef double f64;\n\ntypedef unsigned long size_t;\ntypedef struct FontDrawPacket FontDrawPacket;\ntypedef struct FontVertex {\nf32 x, y, z;\n} FontVertex;\nstruct FontDrawPacket {\nu32 image;\nf32 x, y, z;\nf32 scale_x, scale_y;\nf32 u0, v0, u1, v1;\ns16 rotation_z, rotation_y;\nf32 alpha;\nu32 flags;\nf32 depth;\nu8 color[4], color_add[4];\nu32 format;\nu16 width, height;\nvoid* pixels;\nFontDrawPacket* secondary;\nvoid (*vertex_callback)(FontDrawPacket* packet, FontVertex* vertices);\nu32 unk_54;\n};\nvoid fn_1_4A0D8(const char* text);\nvoid fn_1_4AE0C(const char* format, ...);\nint fn_1_4F734(FontDrawPacket* packet);\nvoid fn_1_4EDAC(FontDrawPacket* packet, f32 width, f32 height);\nvoid fn_1_51678(FontDrawPacket* packet, u32 image, s16 x, s16 y, s16 width, s16 height);\nvoid fn_1_517EC(FontDrawPacket* packet, s16 x, s16 y, s16 width, s16 height,\ns16 texture_width, s16 texture_height);\n\n/* lbl_4_bss_5680: .bss size 0x4, referenced by 8 functions, shape {'object': 112, 'pointer': 28} */\ntypedef struct {\nu32 unk_0; /* 11 loads, 6 stores */\nu32 unk_4; /* 1 loads, 1 stores */\nu32 unk_8; /* 4 loads, 1 stores */\nu8 unk_C; /* 8 loads, 1 stores */\nu8 unk_D; /* 5 loads, 4 stores */\nu8 unk_E; /* 10 loads, 3 stores */\nu8 unk_F; /* 3 loads, 12 stores */\nu8 unk_10; /* 1 loads, 0 stores */\nu8 unk_11; /* 2 loads, 1 stores */\nu16 unk_12; /* 3 loads, 3 stores */\nu8 unk_14; /* 2 loads, 2 stores */\nu8 unk_15; /* 2 loads, 2 stores */\nu8 unk_16; /* 2 loads, 2 stores */\nu8 unk_17; /* 2 loads, 2 stores */\nu32 unk_18; /* 1 loads, 1 stores */\nu32 unk_1C; /* 1 loads, 1 stores */\nu32 unk_20; /* 3 loads, 2 stores */\nu8 pad_24[0x4];\nu8 unk_28; /* 1 loads, 0 stores */\nu8 pad_29[0xD];\nu8 unk_36; /* 2 loads, 1 stores */\nu8 unk_37; /* 0 loads, 1 stores */\nu8 pad_38[0x2];\nu8 unk_3A; /* 2 loads, 2 stores */\nu8 unk_3B; /* 5 loads, 2 stores */\nu32 unk_3C; /* 4 loads, 2 stores */\n} Obj_4_bss_5680_Target;\nextern Obj_4_bss_5680_Target *lbl_8_bss_550;\n\n/* lbl_4_data_2F78: .data size 0xA0, referenced by 5 functions, shape {} */\nextern u8 lbl_8_data_A1E8[0xA0];\n\n/* lbl_4_bss_5684: .bss size 0x1, referenced by 3 functions, shape {'object': 3} */\nextern u8 lbl_8_bss_554;\n\nvoid fn_1_4A0D8(const char* text);\nvoid fn_1_4AE0C(const char* format, ...);\nint fn_1_4F734(FontDrawPacket* packet);\nvoid fn_1_4EDAC(FontDrawPacket* packet, f32 width, f32 height);\nvoid fn_1_51678(FontDrawPacket* packet, u32 image, s16 x, s16 y, s16 width, s16 height);\nvoid fn_1_517EC(FontDrawPacket* packet, s16 x, s16 y, s16 width, s16 height,\ns16 texture_width, s16 texture_height);\nstruct fn_8_DD64_lbl_801A63D0 {\nu32 unk_0;\n};\nstruct fn_8_DD64_lbl_8_rodata_408 {\nu8 pad_0[0x6F0];\nf64 unk_6F0;\nf64 unk_6F8;\nf32 unk_700;\nf32 unk_704;\nf32 unk_708;\nu32 unk_70C;\nu32 unk_710;\nu32 unk_714;\nu32 unk_718;\nu32 unk_71C;\nu32 unk_720;\nf32 unk_724;\nf32 unk_728;\nu8 pad_72C[0x4];\nf64 unk_730;\nf64 unk_738;\nf32 unk_740;\nu8 pad_744[0x4];\nf64 unk_748;\nf32 unk_750;\nf32 unk_754;\n};\nextern char * fn_80083CF4(char *, const char *, size_t);\nextern char * strcat(char *, const char *);\nextern char * strncpy(char *, const char *, size_t);\nextern int fn_1_4F734(FontDrawPacket *);\nextern int sprintf(char *, const char *, ...);\nextern size_t strlen(const char *);\nextern struct fn_8_DD64_lbl_801A63D0 lbl_801A63D0;\nextern struct fn_8_DD64_lbl_8_rodata_408 lbl_8_rodata_408;\nextern u32 fn_1_4060(void);\nextern u32 fn_1_49410(void);\ntypedef struct Sig_fn_800081C8_Color Sig_fn_800081C8_Color;\nextern u32 fn_800081C8(Sig_fn_800081C8_Color, Sig_fn_800081C8_Color, f32);\nextern u32 fn_800793D4(u8 *, u32, void *);\nextern u32 fn_80083DB0(u32, u32);\nextern u32 lbl_801A6410;\nextern u8 * fn_80083970(u8 *, const u8 *);\nextern u8 lbl_1_rodata_26F8[];\nextern u8 lbl_8_bss_554;\nextern u8 lbl_8_data_A1E8[];\nextern void fn_1_46B4(u32, u32, const char *, int);\nextern void fn_1_494DC(s16);\nextern void fn_1_49514(Sig_fn_800081C8_Color);\nextern void fn_1_4954C(f32);\nextern void fn_1_4955C(f32, f32);\nextern void fn_1_495C8(u8);\nextern void fn_1_4966C(f32, f32);\nextern void fn_1_496FC(f32, f32);\nextern void fn_1_4A0D8(const char *);\nstruct Sig_fn_800081C8_Color { u8 r, g, b, a; };\n#pragma fp_contract off\n#pragma opt_common_subs off\n#pragma opt_lifetimes off\n#pragma opt_loop_invariants off\nextern int __abs(int);\n#pragma force_active on\nstatic const u32 fzgx_pool_table_0[] = {2305855636u,0u,2187362913u,2187493987u,2187625061u,2187756135u,2187887209u,2188018283u,2188149357u,2188280431u,2188411505u,2188542579u,2188673653u,2188804727u,2188935801u,2189525634u,2189656708u,2189787782u,2189918856u,2190049930u,2190181004u,2190312078u,2190443152u,2190574226u,2190705300u,2190836374u,2190967448u,2191098522u,2186248784u,2186379858u,2186510932u,2186642006u,2186773080u,2179432936u,0u,2189525634u,2189656708u,2189787782u,2189918856u,2190049930u,2190181004u,2190312078u,2190443152u,2190574226u,2190705300u,2190836374u,2190967448u,2191098522u,2187362913u,2187493987u,2187625061u,2187756135u,2187887209u,2188018283u,2188149357u,2188280431u,2188411505u,2188542579u,2188673653u,2188804727u,2188935801u,2168488256u,2168488256u,2168488256u,2168488256u,2168488256u,2168488256u,0u,2337049990u,0u,2168553794u,2169274701u,2168815939u,2168750406u,2168947016u,2169078139u,2172420446u,2172748163u,2172944719u,2169602400u,2170716533u,2172027241u,2171240815u,2171634029u,2171502991u,2173731219u,2173993365u,2174124439u,2179432936u,0u,2194703079u,2192212680u,0u,2191557282u,2191819430u,2192081577u,2192278189u,2192540337u,2192802485u,2193064633u,2193326781u,2193588930u,2193916614u,2194178761u,2194309835u,2194440909u,2194703059u,2195096281u,2195489501u,2195620575u,2195751650u,2196013798u,2196210408u,2196341482u,2196472557u,2196669167u,2196800241u,2192212652u,2192474800u,2192736948u,2192999096u,2193261244u,2193523392u,2193851077u,2194113230u,2194768596u,2195161818u,2194637522u,2195030744u,2195423903u,2191622819u,2191884967u,2193720033u,2195948261u,2196537831u,2179465216u,2191491745u,2191753893u,2192016042u,2192343726u,2192605874u,2192868022u,2193130170u,2193392318u,2193654465u,2193982151u,2168488256u,2168488256u,2168488654u,2194768596u,2195161818u,2168488256u,2168488256u,2168488673u,2195948261u,2168488256u,2168488256u,2168488684u,2168488256u,2168488256u,2192147115u,2192409263u,2192671411u,2192933559u,2193195707u,2193457855u,2193785540u,2194047695u,2194834133u,2195227355u,2194506448u,2194899670u,2195292832u,2191688356u,2191950504u,2193785570u,2196013798u,2196603200u,2168455168u,2168488256u,2168488256u,2168488256u,2168488256u,2168488256u,2168488256u,2168488256u,2168488256u,2168488643u,2168488256u,2168488256u,2168488256u,2168488655u,2194834133u,2195227355u,2168488256u,2168488256u,2168488256u,2168488256u,2168488256u,2168488256u,2168488256u,2168488256u,2168488256u,2168488256u,2168488256u,2168488256u,2168488256u,2168488256u,2168488256u,2193719616u,2168488653u,2194703059u,2195096281u,2194571985u,2194965207u,2195358016u,2168488256u,2168488256u,2193850688u,2168488256u,2168488256u,2168455168u,2202698590u,2202698601u,0u,2202108739u,2202370887u,2202633034u,2202829646u,2203091794u,2203353942u,2203616090u,2203878238u,2204140387u,2204468071u,2204730218u,2204861292u,2204992366u,2205254516u,2195096442u,2206040958u,2206237569u,2206368644u,2206630792u,2206827402u,2206958476u,2207089551u,2207286161u,2207417235u,2207548235u,2202895183u,2203157331u,2203419479u,2203681627u,2203943775u,2204205924u,2204533608u,2205123442u,2205516503u,2205909872u,2205385590u,2195227516u,2202043202u,2202305350u,2202567573u,2207679330u,2206434181u,2206696334u,2179432936u,0u,2202043202u,2202305350u,2202567499u,2202895183u,2203157331u,2203419479u,2203681627u,2203943775u,2204205922u,2204533608u,2168488256u,2168488256u,2168488815u,2205320053u,2195161979u,2168488256u,2168488256u,2168488835u,2206565255u,2168488256u,2168488256u,2168488846u,2168488256u,2168488256u,2202370890u,2202829646u,2203091794u,2203353942u,2203616090u,2203878238u,2204140387u,2204468071u,2205188979u,2205582040u,2205975406u,2205254516u,2195096442u,2202108739u,2202370887u,2202633034u,2203091811u,2206499718u,2206761871u,2168488256u,0u,2168488256u,2207547712u,2168488853u,2168488256u,2207678784u,2168488256u,2168488256u,2168488256u,2168488804u,2168488256u,2168488256u,2168488256u,2168488816u,2205385590u,2195227516u,2168488256u,2168488256u,2168488256u,2168488256u,2168488256u,2168488256u,2168488256u,2168488256u,2168488256u,2202305429u,2168488256u,2207678784u,2168488256u,2168488256u,2168488256u,2168488802u,2168488256u,2205057905u,2205450966u,2205844335u,2205320053u,2195161979u,2168488256u,2207547712u,2168488779u,2203157348u,2168488256u,2168488256u,2168488256u,0u,1130459241u,1952541728u,1281717364u,1701999360u,2187362913u,2187493987u,2187625061u,2187756135u,2187887209u,2188018283u,2188149357u,2188280431u,2188411505u,2188542579u,2188673653u,2188804727u,2188935801u,2179432936u,0u,1399677292u,1814056037u,1953785202u,1929379840u,2189525634u,2189656708u,2189787782u,2189918856u,2190049930u,2190181004u,2190312078u,2190443152u,2190574226u,2190705300u,2190836374u,2190967448u,2191098522u,2179432936u,0u,1399416686u,1929379840u,2168684868u,2169012553u,2172354940u,2170454367u,2172748163u,2172944710u,2168947020u,2169340239u,2169602402u,2171175274u,2171437422u,2171568496u,2173731219u,2173993365u,2174124439u,2179432936u,0u,1316318562u,1701999360u,2186248784u,2186379858u,2186510932u,2186642006u,2186773080u,2179432936u,0u,1070260551u,2920577761u,1073392298u,2863311531u,1071644672u,0u,1111490560u,1048576000u,1072693248u,0u,1040522936u,0u,1073217536u,0u,1073741824u,0u,1070945621u,1031798784u};\n#pragma force_active reset\n#pragma push\n#pragma section code_type \".fzgxpool\"\nstatic f64 fzgx_signed_double(s32 value) { return (f64)value; }\nstatic f64 fzgx_unsigned_double(u32 value) { return (f64)value; }\nstatic f32 fzgx_glyph_size(s32 index) {\nswitch(index) {\ncase 0:return 32.0f;\ncase 1:return 24.0f;\ndefault:return 18.0f;\n}\n}\n#pragma force_active reset\n#pragma pop\nvoid fn_8_DD64(u32 arg0) {\nu8 *p_lbl_8_data_A1E8;\nstruct fn_8_DD64_lbl_8_rodata_408 *p_lbl_8_rodata_408;\nu8 *p_lbl_1_rodata_26F8;\nu32 v0;\ns32 v1;\ns32 v2;\ns32 state_value;\ns32 cursor_next;\ns32 v3;\nu32 v4;\nf32 v5;\nf64 v6;\nf32 v7;\nstruct OptionNameEntry { u16 cursor, length; char *chars; u8 pad[12]; } *v8;\nu32 v9;\ns32 v10;\nu32 v12;\nu32 v13;\nu32 v14;\ns32 v15;\nf32 v16;\nu16 v17;\nf64 v18;\nu32 v19;\nu8 * v20;\nu32 v21;\nu32 v22;\nf64 v23;\nf32 v24;\nf64 v25;\nf32 v26;\nf32 v27;\nstruct { u32 a[22]; } loc_18;\nSig_fn_800081C8_Color loc_14;\nSig_fn_800081C8_Color loc_10;\nSig_fn_800081C8_Color loc_C;\nu32 loc_8;\nu32 lab_t0;\nu32 lab_t1;\np_lbl_8_data_A1E8 = lbl_8_data_A1E8;\np_lbl_8_rodata_408 = &lbl_8_rodata_408;\nfn_800793D4((u8 *)lbl_801A63D0.unk_0, 0, (void *)1024);\nv0 = lbl_801A63D0.unk_0;\nif (lbl_8_bss_554 != 0) {\n{ s32 __reg_value_v2 = arg0; v2 = __reg_value_v2; }\nv1 = (u32)&lbl_801A6410;\nv3 = (u32)((u8 *)(u32)p_lbl_8_data_A1E8 + 160);\nv1 = *(u32 *)((u8 *)v1 + 0);\nv4 = 465;\nfn_1_46B4(v1, v2, (const char *)v3, v4);\nv1 = fn_1_4060();\n} else {\nv1 = fn_1_49410();\nv1 = 42;\nfn_1_494DC(v1);\nv1 = 9;\nfn_1_495C8(v1);\nfn_1_4966C(12.0f, 0.0f);\nv1 = lbl_8_bss_550->unk_3C;\nv8 = (struct OptionNameEntry *)v1 + *(u8 *)arg0;\nv19 = v8->cursor;\nv3 = (v19 - 10);\nv1 = (v19 + 11);\nif (v3 >= 0 && (s32)(v19 + 11) <= (s32)v8->length) {\n{ s32 __reg_value_v2 = (u32)v8->chars; v2 = __reg_value_v2; }\nv1 = v0;\nv9 = (v3 << 1);\nv3 = 42;\n{ s32 __reg_value_v2 = (v2 + v9); v2 = __reg_value_v2; }\nv1 = (u32)strncpy((char *)v1, (const char *)v2, v3);\n} else if (v19 < 10) {\nv10 = v19 - 10;\nv10 = v8->length + v10;\nif (v10 < 0) {\n{ s32 __reg_value_v2 = (u32)v8->chars; v2 = __reg_value_v2; }\nv1 = v0;\n{ s32 __reg_value_v2 = (v2 + (v19 << 1)); v2 = __reg_value_v2; }\nlab_t0 = v1;\nlab_t1 = v2;\nv1 = fn_80083DB0(lab_t0, lab_t1);\n{ s32 __reg_value_v2 = (u32)v8->chars; v2 = __reg_value_v2; }\nv1 = v0;\nv1 = (u32)strcat((char *)v1, (const char *)v2);\n{ s32 __reg_value_v2 = (u32)v8->chars; v2 = __reg_value_v2; }\nv1 = v0;\nv3 = ((v10 + 10) << 1);\nv1 = (u32)fn_80083CF4((char *)v1, (const char *)v2, v3);\n} else {\n{ s32 __reg_value_v2 = (u32)v8->chars; v2 = __reg_value_v2; }\nv1 = v0;\n{ s32 __reg_value_v2 = (v2 + (v10 << 1)); v2 = __reg_value_v2; }\nlab_t0 = v1;\nlab_t1 = v2;\nv1 = fn_80083DB0(lab_t0, lab_t1);\nv1 = v8->cursor;\nv10 = (v1 + 11);\nif ((s32)v10 > (s32)v8->length) {\n{ s32 __reg_value_v2 = (u32)v8->chars; v2 = __reg_value_v2; }\nv1 = v0;\nv1 = (u32)strcat((char *)v1, (const char *)v2);\nv1 = v0;\n{ s32 __reg_value_v2 = (u32)v8->chars; v2 = __reg_value_v2; }\nv3 = ((v10 - v8->length) << 1);\nv1 = (u32)fn_80083CF4((char *)v1, (const char *)v2, v3);\n} else {\n{ s32 __reg_value_v2 = (u32)v8->chars; v2 = __reg_value_v2; }\nv1 = v0;\nv3 = (v10 << 1);\nv1 = (u32)fn_80083CF4((char *)v1, (const char *)v2, v3);\n}\n}\n} else {\n{ s32 __reg_value_v2 = (u32)v8->chars; v2 = __reg_value_v2; }\nv1 = v0;\n{ s32 __reg_value_v2 = (v2 + (v3 << 1)); v2 = __reg_value_v2; }\nlab_t0 = v1;\nlab_t1 = v2;\nv1 = fn_80083DB0(lab_t0, lab_t1);\n{ s32 __reg_value_v2 = v8->cursor; v2 = __reg_value_v2; }\nv1 = v0;\nv3 = v8->length;\nv12 = (v2 + 11);\n{ s32 __reg_value_v2 = (u32)v8->chars; v2 = __reg_value_v2; }\nv3 = ((v12 - v3) << 1);\nv1 = (u32)fn_80083CF4((char *)v1, (const char *)v2, v3);\n}\n{ s32 __reg_value_v2 = *(u8 *)((u8 *)arg0 + 0); v2 = __reg_value_v2; }\nv1 = (u32)lbl_8_bss_550;\nif ((u32)v2 == *(u8 *)((u8 *)v1 + 13)) {\nu32 b14;\n{ s32 __reg_value_v2 = (v0 + 6); v2 = __reg_value_v2; }\nv1 = (u32)&lbl_801A63D0;\nv3 = 14;\nv1 = *(u32 *)((u8 *)v1 + 0);\nv10 = (v1 + 44);\nb14 = (v1 + 88);\nv1 = v10;\nv1 = (u32)strncpy((char *)v1, (const char *)v2, v3);\nv1 = b14;\n{ s32 __reg_value_v2 = (v0 + 22); v2 = __reg_value_v2; }\nv3 = 14;\nv1 = (u32)strncpy((char *)v1, (const char *)v2, v3);\nv1 = v0;\nv3 = v10;\nv4 = b14;\n{ s32 __reg_value_v2 = (u32)((u8 *)(u32)p_lbl_8_data_A1E8 + 184); v2 = __reg_value_v2; }\nv1 = sprintf((char *)v1, (const char *)(u32)v2, v3, v4);\n}\nv1 = (u32)lbl_8_bss_550;\nv1 = *(u8 *)((u8 *)v1 + 13);\nv1 = (*(u8 *)((u8 *)arg0 + 0) - v1);\nif (v1 < 0) {\nv1 += 4;\n}\nswitch (v1) {\ncase 0:\nv15 = 178;\nv16 = fzgx_glyph_size(0);\n{ Sig_fn_800081C8_Color color0 = {255, 255, 255, 0}; loc_14 = color0; }\nbreak;\ncase 1:\nv15 = 276;\nv16 = fzgx_glyph_size(1);\n{ Sig_fn_800081C8_Color color1 = {0, 255, 255, 0}; loc_14 = color1; }\nbreak;\ncase 2:\nv15 = 313;\nv16 = fzgx_glyph_size(2);\n{ Sig_fn_800081C8_Color color2 = {0, 255, 255, 0}; loc_14 = color2; }\nbreak;\ncase 3:\nv15 = 84;\nv16 = fzgx_glyph_size(1);\n{ Sig_fn_800081C8_Color color3 = {0, 255, 255, 0}; loc_14 = color3; }\n}\nstate_value = *(u16 *)((u8 *)arg0 + 4);\nv3 = v15 - state_value;\nv6 = 0.2 * fzgx_signed_double(v3);\nif ((s32)v6 != 0) {\n*(u16 *)((u8 *)arg0 + 4) = (s32)((f64)(u32)state_value + v6);\n} else {\nif (v3 < 0) {\nv1 = -1;\n} else {\nv1 = v3 > 0;\n}\n*(u16 *)((u8 *)arg0 + 4) += v1;\n}\nv7 = *(f32 *)((u8 *)arg0 + 8);\nv6 = 0.2;\n*(f32 *)((u8 *)arg0 + 8) = v7 + v6 * (v16 - v7);\nv1 = *(u8 *)((u8 *)arg0 + 2);\nv13 = v8->cursor;\nstate_value = v1 + 1;\nif (state_value == (s32)v13 || --v1 > (s32)v13) {\n*(u8 *)((u8 *)arg0 + 1) = 36;\n} else if (v1 == (s32)v13 || state_value < (s32)v13) {\n*(s8 *)((u8 *)arg0 + 1) = -36;\n}\nv2 = (s8)*(u8 *)((u8 *)arg0 + 1);\nv3 = -v2;\nv6 = 0.2 * fzgx_signed_double(v3);\nif ((s32)v6 != 0) {\n*(u8 *)((u8 *)arg0 + 1) = (s32)((f64)v2 + v6);\n} else {\nif (v3 < 0) {\nv1 = -1;\n} else {\nv1 = v3 > 0;\n}\n*(u8 *)((u8 *)arg0 + 1) += v1;\n}\nv1 = v0;\nv2 = (u32)(p_lbl_8_data_A1E8 + 196);\n*(u8 *)((u8 *)arg0 + 2) = v8->cursor;\nv1 = (u32)fn_80083970((u8 *)v1, (const u8 *)v2);\np_lbl_1_rodata_26F8 = lbl_1_rodata_26F8;\nv15 = 0x10000 - 28914;\nv20 = (u8 *)v1;\nv24 = 10.1f;\nv25 = 24.0;\nwhile (v20 != 0) {\nv1 = strlen((const char *)v0);\nstate_value = v20 - (u8 *)v0;\nv3 = v1 - 1;\nv1 = (u32)state_value >> 31;\nv1 = v1 + state_value;\nstate_value = (u32)v3 >> 2;\nv1 >>= 1;\nv3 = (u32)&loc_14;\nv2 = v1 - state_value;\nstate_value = (u32)p_lbl_1_rodata_26F8 - 4;\nfor (v21 = 11; v21 != 0; v21--) {\nv1 = *(u32 *)((u8 *)state_value + 4);\nv22 = *(u32 *)((u8 *)state_value + 8);\nstate_value += 8;\n*(u32 *)((u8 *)v3 + 4) = v1;\n*(u32 *)((u8 *)v3 + 8) = v22;\nv3 += 8;\n}\nloc_18.a[0] = v15;\nv3 = *(u8 *)((u8 *)arg0 + 1);\nv1 = (s8)v3;\nv26 = (f32)(s32)v2 * *(f32 *)((u8 *)arg0 + 8);\nv5 = (f32)(v1 + 320);\n*(f32 *)((u8 *)&loc_18 + 4) = v5 + v26;\nif (__abs((s32)v2) > 0) {\nv3 = 1;\nif ((s32)v2 < 0) v3 = -1;\nstate_value = (s32)v2 >> 31;\nv1 = state_value ^ (s32)v2;\nv1 -= state_value;\nv6 = 12.0;\nv7 = *(f32 *)((u8 *)&loc_18 + 4);\n*(f32 *)((u8 *)&loc_18 + 4) = v7 + v6 * (v3 * v1);\n}\n*(f32 *)((u8 *)&loc_18 + 8) = (f32)(u32)*(u16 *)((u8 *)arg0 + 4);\n*(f32 *)((u8 *)&loc_18 + 12) = v24;\nloc_18.a[12] = 10;\nv5 = 1.0f;\nv27 = *(f32 *)((u8 *)arg0 + 8) / v25;\n*(f32 *)((u8 *)&loc_18 + 20) = v27;\n*(f32 *)((u8 *)&loc_18 + 16) = v27;\n{\nSig_fn_800081C8_Color black = {0, 0, 0, 255};\nSig_fn_800081C8_Color white = {255, 255, 255, 255};\nloc_10 = black;\nloc_C = white;\nv1 = fn_800081C8(loc_10, loc_C, v5);\n}\nloc_18.a[14] = v1;\nfn_1_4F734((FontDrawPacket *)&loc_18);\nv20 = fn_80083970(v20 + 2, p_lbl_8_data_A1E8 + 196);\n}\nv2 = (s8)*(u8 *)((u8 *)arg0 + 1);\nv2 += 320;\nv5 = (f32)v2;\nv6 = (f32)(u32)*(u16 *)((u8 *)arg0 + 4);\nfn_1_496FC(v5, v6);\nv18 = *(f32 *)((u8 *)arg0 + 8) / 24.0;\nfn_1_4955C(v18, v18);\n{\nfn_1_49514(loc_14);\n}\nfn_1_4954C(10.0f);\nfn_1_4A0D8((const char *)v0);\n}\n}\n#pragma opt_loop_invariants reset\n#pragma opt_lifetimes reset\n#pragma opt_common_subs reset\n",
+    "compiler": "GC/1.3.2",
+    "flags": "",
+    "source": "rel/title/operation/fn_8_DD64.c",
+    "bytes": 1756,
+    "headers_sha256": "fae2435a8fa7d9aa315a83bba41165189d6b656b9f748898f189942fa2f550a4",
+    "oracle_sha256": "959ee3393e3e96d36d61cc247ef5421ca505fece9beeaf631f6851a5573f1650",
+    "recipe": [
+      {
+        "label": "expand owned clone declarations",
+        "input_sha256": "ef2ecd467ccbe7538eed7666e2b0f2a4ebb2e388aa2fa3c5f9cce67b4ddddb70",
+        "output_sha256": "de0c4cf23ce801c7f1e87ae0214d417857eec4457e4a364db61c1b1f496fcd74",
+        "input_symbol": "fn_4_B528",
+        "output_symbol": "fn_4_B528",
+        "edits": [
+          [
+            0,
+            68,
+            "\ntypedef signed char s8;\ntypedef signed short s16;\ntypedef signed long s32;\n\ntypedef unsigned char u8;\ntypedef unsigned short u16;\ntypedef unsigned long u32;\n\ntypedef float f32;\ntypedef double f64;\n\ntypedef unsigned long size_t;\ntypedef struct FontDrawPacket FontDrawPacket;\ntypedef struct FontVertex {\nf32 x, y, z;\n} FontVertex;\nstruct FontDrawPacket {\nu32 image;\nf32 x, y, z;\nf32 scale_x, scale_y;\nf32 u0, v0, u1, v1;\ns16 rotation_z, rotation_y;\nf32 alpha;\nu32 flags;\nf32 depth;\nu8 color[4], color_add[4];\nu32 format;\nu16 width, height;\nvoid* pixels;\nFontDrawPacket* secondary;\nvoid (*vertex_callback)(FontDrawPacket* packet, FontVertex* vertices);\nu32 unk_54;\n};\nvoid fn_1_4A0D8(const char* text);\nvoid fn_1_4AE0C(const char* format, ...);\nint fn_1_4F734(FontDrawPacket* packet);\nvoid fn_1_4EDAC(FontDrawPacket* packet, f32 width, f32 height);\nvoid fn_1_51678(FontDrawPacket* packet, u32 image, s16 x, s16 y, s16 width, s16 height);\nvoid fn_1_517EC(FontDrawPacket* packet, s16 x, s16 y, s16 width, s16 height,\ns16 texture_width, s16 texture_height);\n\n/* lbl_4_bss_5680: .bss size 0x4, referenced by 8 functions, shape {'object': 112, 'pointer': 28} */\ntypedef struct {\nu32 unk_0; /* 11 loads, 6 stores */\nu32 unk_4; /* 1 loads, 1 stores */\nu32 unk_8; /* 4 loads, 1 stores */\nu8 unk_C; /* 8 loads, 1 stores */\nu8 unk_D; /* 5 loads, 4 stores */\nu8 unk_E; /* 10 loads, 3 stores */\nu8 unk_F; /* 3 loads, 12 stores */\nu8 unk_10; /* 1 loads, 0 stores */\nu8 unk_11; /* 2 loads, 1 stores */\nu16 unk_12; /* 3 loads, 3 stores */\nu8 unk_14; /* 2 loads, 2 stores */\nu8 unk_15; /* 2 loads, 2 stores */\nu8 unk_16; /* 2 loads, 2 stores */\nu8 unk_17; /* 2 loads, 2 stores */\nu32 unk_18; /* 1 loads, 1 stores */\nu32 unk_1C; /* 1 loads, 1 stores */\nu32 unk_20; /* 3 loads, 2 stores */\nu8 pad_24[0x4];\nu8 unk_28; /* 1 loads, 0 stores */\nu8 pad_29[0xD];\nu8 unk_36; /* 2 loads, 1 stores */\nu8 unk_37; /* 0 loads, 1 stores */\nu8 pad_38[0x2];\nu8 unk_3A; /* 2 loads, 2 stores */\nu8 unk_3B; /* 5 loads, 2 stores */\nu32 unk_3C; /* 4 loads, 2 stores */\n} Obj_4_bss_5680_Target;\nextern Obj_4_bss_5680_Target *lbl_4_bss_5680;\n\n/* lbl_4_data_2F78: .data size 0xA0, referenced by 5 functions, shape {} */\nextern u8 lbl_4_data_2F78[0xA0];\n\n/* lbl_4_bss_5684: .bss size 0x1, referenced by 3 functions, shape {'object': 3} */\nextern u8 lbl_4_bss_5684;"
+          ],
+          [
+            1522,
+            1523,
+            ""
+          ],
+          [
+            2026,
+            2027,
+            ""
+          ],
+          [
+            8351,
+            8352,
+            ""
+          ],
+          [
+            15026,
+            15027,
+            ""
+          ]
+        ]
+      },
+      {
+        "label": "bind exact clone",
+        "input_sha256": "de0c4cf23ce801c7f1e87ae0214d417857eec4457e4a364db61c1b1f496fcd74",
+        "output_sha256": "d5149d5f0c03eddffbdff0491696378aeee33c7a0cf9e275240cfde50cb1667f",
+        "input_symbol": "fn_4_B528",
+        "output_symbol": "fn_10_23990",
+        "edits": [
+          [
+            2088,
+            2098,
+            "10_bss_55CD8"
+          ],
+          [
+            2191,
+            2202,
+            "10_data_68E0"
+          ],
+          [
+            2309,
+            2319,
+            "10_bss_55CDC"
+          ],
+          [
+            3466,
+            3478,
+            "10_rodata_1548"
+          ],
+          [
+            3862,
+            3899,
+            "10_bss_55CDC;\nextern u8 lbl_10_data_68E0"
+          ],
+          [
+            10012,
+            10018,
+            "10_23990"
+          ],
+          [
+            10649,
+            10700,
+            "10_data_68E0;\np_lbl_8_rodata_408 = &lbl_10_rodata_1548"
+          ],
+          [
+            10791,
+            10801,
+            "10_bss_55CDC"
+          ],
+          [
+            11144,
+            11154,
+            "10_bss_55CD8"
+          ],
+          [
+            13314,
+            13324,
+            "10_bss_55CD8"
+          ],
+          [
+            13912,
+            13922,
+            "10_bss_55CD8"
+          ]
+        ],
+        "clone": {
+          "donor": "fn_4_B528",
+          "recipient": "fn_10_23990",
+          "bindings": {
+            "lbl_4_rodata_410": "lbl_10_rodata_1548",
+            "lbl_4_data_2F78": "lbl_10_data_68E0",
+            "lbl_4_bss_5684": "lbl_10_bss_55CDC",
+            "lbl_4_bss_5680": "lbl_10_bss_55CD8",
+            "fn_4_B528": "fn_10_23990"
+          }
+        }
+      },
+      {
+        "label": "bind exact clone",
+        "input_sha256": "d5149d5f0c03eddffbdff0491696378aeee33c7a0cf9e275240cfde50cb1667f",
+        "output_sha256": "fad0fadb6ca000ecda0308d92c338aa017b65baf792e79f1dd89841123cb77d5",
+        "input_symbol": "fn_10_23990",
+        "output_symbol": "fn_8_DD64",
+        "edits": [
+          [
+            2088,
+            2100,
+            "8_bss_550"
+          ],
+          [
+            2193,
+            2205,
+            "8_data_A1E8"
+          ],
+          [
+            2312,
+            2324,
+            "8_bss_554"
+          ],
+          [
+            3471,
+            3484,
+            "8_rodata_40"
+          ],
+          [
+            3869,
+            3909,
+            "8_bss_554;\nextern u8 lbl_8_data_A1E8"
+          ],
+          [
+            10022,
+            10030,
+            "8_DD64"
+          ],
+          [
+            10661,
+            10714,
+            "8_data_A1E8;\np_lbl_8_rodata_408 = &lbl_8_rodata_40"
+          ],
+          [
+            10806,
+            10818,
+            "8_bss_554"
+          ],
+          [
+            11161,
+            11173,
+            "8_bss_550"
+          ],
+          [
+            13333,
+            13345,
+            "8_bss_550"
+          ],
+          [
+            13933,
+            13945,
+            "8_bss_550"
+          ]
+        ],
+        "clone": {
+          "donor": "fn_10_23990",
+          "recipient": "fn_8_DD64",
+          "bindings": {
+            "lbl_10_rodata_1548": "lbl_8_rodata_408",
+            "lbl_10_data_68E0": "lbl_8_data_A1E8",
+            "lbl_10_bss_55CDC": "lbl_8_bss_554",
+            "lbl_10_bss_55CD8": "lbl_8_bss_550",
+            "fn_10_23990": "fn_8_DD64"
+          }
+        }
+      }
+    ],
+    "link": "pending"
+  },
+  "fn_1_4E060": {
+    "seed_symbol": "fn_1_4DDC0",
+    "generator": "fzgx fixup",
+    "transform": "bind exact clone",
+    "seed": "#include \"types.h\"\n#include \"rel/main_rel/font.h\"\n\n#pragma opt_unroll_loops off\nvoid fn_1_4DDC0(void) {\n    u32 *base;\n    u32 *ptr;\n    int count;\n\n    base = &lbl_1_bss_4C688.unk_0;\n    ptr = base;\n    for (count = 0; count < 64; count++) {\n        ptr[0] = 0;\n        ptr += 32;\n    }\n}\n",
+    "seed_sha256": "2b1bada7f6e8b015bdec23c41bb72adfc3c1bedf1fd8baf8596656fe33f75607",
+    "generated_sha256": "cec75951bd4420d1e8b3b4c2642bed4ca24197577e77ad5b8eff1d0de7bc8fef",
+    "generated_source": "\n\ntypedef unsigned char u8;\n\ntypedef unsigned long u32;\n\n/* lbl_1_bss_4C688: .bss size 0x2000, referenced by 21 functions, shape {'object': 39} */\ntypedef struct {\nu32 unk_0; /* 3 loads, 3 stores */\nu8 pad_4[0x4];\nu32 unk_8; /* 1 loads, 0 stores */\nu32 unk_C; /* 1 loads, 0 stores */\nu8 pad_10[0x68];\nu32 unk_78; /* 1 loads, 0 stores */\nu32 unk_7C; /* 1 loads, 0 stores */\nu32 unk_80; /* 8 loads, 3 stores */\nu8 pad_84[0x7C];\nu32 unk_100; /* 0 loads, 3 stores */\nu8 pad_104[0x7C];\nu32 unk_180; /* 0 loads, 3 stores */\nu8 pad_184[0x7C];\nu32 unk_200; /* 0 loads, 3 stores */\nu8 pad_204[0x7C];\nu32 unk_280; /* 0 loads, 3 stores */\nu8 pad_284[0x7C];\nu32 unk_300; /* 0 loads, 3 stores */\nu8 pad_304[0x7C];\nu32 unk_380; /* 0 loads, 3 stores */\nu8 pad_384[0x1C7C];\n} Obj_1_bss_4C688;\nextern Obj_1_bss_4C688 lbl_1_bss_4C688;\n\n#pragma opt_unroll_loops off\nvoid fn_1_4E060(void) {\nu32 *base;\nu32 *ptr;\nint count;\nbase = &lbl_1_bss_4C688.unk_0;\nptr = base;\nfor (count = 0; count < 64; count++) {\nptr[0] = 0;\nptr += 32;\n}\n}\n",
+    "compiler": "GC/1.3.2",
+    "flags": "",
+    "source": "rel/main_rel/font/fn_1_4E060.c",
+    "bytes": 68,
+    "headers_sha256": "fae2435a8fa7d9aa315a83bba41165189d6b656b9f748898f189942fa2f550a4",
+    "oracle_sha256": "959ee3393e3e96d36d61cc247ef5421ca505fece9beeaf631f6851a5573f1650",
+    "recipe": [
+      {
+        "label": "expand owned clone declarations",
+        "input_sha256": "2b1bada7f6e8b015bdec23c41bb72adfc3c1bedf1fd8baf8596656fe33f75607",
+        "output_sha256": "cf9c83fc9e93018a0cb1b6bb1694642492e0acd1d94dd8e5bc40d271012f6091",
+        "input_symbol": "fn_1_4DDC0",
+        "output_symbol": "fn_1_4DDC0",
+        "edits": [
+          [
+            0,
+            49,
+            "\n\ntypedef unsigned char u8;\n\ntypedef unsigned long u32;\n\n/* lbl_1_bss_4C688: .bss size 0x2000, referenced by 21 functions, shape {'object': 39} */\ntypedef struct {\nu32 unk_0; /* 3 loads, 3 stores */\nu8 pad_4[0x4];\nu32 unk_8; /* 1 loads, 0 stores */\nu32 unk_C; /* 1 loads, 0 stores */\nu8 pad_10[0x68];\nu32 unk_78; /* 1 loads, 0 stores */\nu32 unk_7C; /* 1 loads, 0 stores */\nu32 unk_80; /* 8 loads, 3 stores */\nu8 pad_84[0x7C];\nu32 unk_100; /* 0 loads, 3 stores */\nu8 pad_104[0x7C];\nu32 unk_180; /* 0 loads, 3 stores */\nu8 pad_184[0x7C];\nu32 unk_200; /* 0 loads, 3 stores */\nu8 pad_204[0x7C];\nu32 unk_280; /* 0 loads, 3 stores */\nu8 pad_284[0x7C];\nu32 unk_300; /* 0 loads, 3 stores */\nu8 pad_304[0x7C];\nu32 unk_380; /* 0 loads, 3 stores */\nu8 pad_384[0x1C7C];\n} Obj_1_bss_4C688;\nextern Obj_1_bss_4C688 lbl_1_bss_4C688;"
+          ],
+          [
+            104,
+            286,
+            "u32 *base;\nu32 *ptr;\nint count;\nbase = &lbl_1_bss_4C688.unk_0;\nptr = base;\nfor (count = 0; count < 64; count++) {\nptr[0] = 0;\nptr += 32;\n"
+          ]
+        ]
+      },
+      {
+        "label": "bind exact clone",
+        "input_sha256": "cf9c83fc9e93018a0cb1b6bb1694642492e0acd1d94dd8e5bc40d271012f6091",
+        "output_sha256": "cec75951bd4420d1e8b3b4c2642bed4ca24197577e77ad5b8eff1d0de7bc8fef",
+        "input_symbol": "fn_1_4DDC0",
+        "output_symbol": "fn_1_4E060",
+        "edits": [
+          [
+            858,
+            861,
+            "E06"
+          ]
+        ],
+        "clone": {
+          "donor": "fn_1_4DDC0",
+          "recipient": "fn_1_4E060",
+          "bindings": {
+            "lbl_1_bss_4C688": "lbl_1_bss_4C688",
+            "fn_1_4DDC0": "fn_1_4E060"
+          }
+        }
+      }
+    ],
+    "link": "pending"
+  },
+  "fn_800446E4": {
+    "seed_symbol": "fn_80043798",
+    "generator": "fzgx fixup",
+    "transform": "bind exact clone",
+    "seed": "\n#include \"types.h\"\n\ntypedef struct AdxXpndParams {\n    int channel_count;\n    const signed char *input;\n    int num_blocks;\n    short *output_left;\n    short *output_right;\n} AdxXpndParams;\n\ntypedef struct AdxXpnd {\n    int used;\n    int index;\n    int mode;\n    int status;\n    int num_decoded_blocks;\n    AdxXpndParams params;\n    short delay[2][2];\n    short coefficients[2];\n    short random_state;\n    short random_multiplier;\n    short random_increment;\n    short reserved;\n} AdxXpnd;\n\ntypedef struct AdxDecodeParams {\n    const unsigned short *input;\n    int input_blocks;\n    int channel_count;\n    int block_size;\n    int samples_per_block;\n    short *pcm_buffer;\n    int pcm_size;\n    int pcm_distance;\n    int write_position;\n    int room;\n    int loop_samples;\n} AdxDecodeParams;\n\ntypedef void (*AdxGetWriteInfo)(void *, int *, int *, int *);\n\ntypedef void (*AdxAddWriteInfo)(void *, int, int);\n\ntypedef struct AdxBasicDecoder {\n    short used;\n    short header_decoded;\n    int status;\n    AdxXpnd *expander;\n    signed char encoding;\n    signed char bits_per_sample;\n    signed char channel_count;\n    signed char block_length;\n    int samples_per_block;\n    int sample_rate;\n    int total_samples;\n    short coefficient;\n    short field_1E;\n    int loop_insert_samples;\n    short loop_count;\n    short loop_type;\n    int loop_start_sample;\n    int loop_start_offset;\n    int loop_end_sample;\n    int loop_end_offset;\n    int max_channels;\n    short *pcm_buffer;\n    int pcm_size;\n    int pcm_distance;\n    AdxDecodeParams decode;\n    short field_74;\n    short field_76;\n    AdxGetWriteInfo get_write_info;\n    void *get_write_object;\n    AdxAddWriteInfo add_write_info;\n    void *add_write_object;\n    int total_decoded_samples;\n    int current_write_position;\n    int decoded_samples;\n    int decoded_data_length;\n    short format_type;\n    short field_9A;\n    short codec_type;\n} AdxBasicDecoder;\n\nvoid fn_80043798(AdxBasicDecoder *decoder);\n\nint fn_8004E270(AdxXpnd *decoder);\n\nstatic inline AdxXpnd * fn_80043798_read_pointer(AdxBasicDecoder * owner) { return owner->expander; }\n#pragma opt_pointer_analysis off\nstatic inline const unsigned short * fn_80043798_read_pointer_(AdxDecodeParams * owner) { return owner->input; }\n#pragma opt_loop_invariants off\n#pragma opt_dead_assignments off\nvoid fn_80043798(AdxBasicDecoder *decoder) {\n    int fzgx_value;\n    AdxDecodeParams *params;\n    unsigned short *pcm;\n    unsigned short *left;\n    unsigned short *right;\n    const unsigned short *input;\n    unsigned short sample;\n    int i;\n    int count;\n    params = &decoder->decode;\n    input = fn_80043798_read_pointer_(params);\n    if (decoder->status == 1 && fn_8004E270(fn_80043798_read_pointer(decoder)) == 0) {\n        decoder->get_write_info(decoder->get_write_object, &params->write_position, &params->room,\n                                &params->loop_samples);\n        count = params->pcm_size - params->write_position;\n        if (count > params->room) {\n            count = params->room;\n        }\n        if (count > params->input_blocks) {\n            count = params->input_blocks;\n        }\n        pcm = (unsigned short *)params->pcm_buffer;\n        left = &pcm[params->write_position];\n        if (decoder->channel_count == 2) {\n            right = &pcm[params->pcm_distance + params->write_position];\n            for (i = 0; i < count; i++) {\n                left[i] = input[i * 2] << 8 | (sample = input[i * 2]) >> 8;\n                right[i] = ((i * 2 + 1)[input]) >> 8 | ((i * 2 + 1)[input]) << 8;\n            }\n        } else {\n            for (i = 0; i < count; i++) {\n                left[i] = ((i)[input]) << 8 | ((i)[input]) >> 8;\n            }\n        }\n        decoder->decoded_samples = count;\n        decoder->decoded_data_length = count * 2 * decoder->channel_count;\n        decoder->status = 2;\n    }\n    if (decoder->status == 2) {\n        decoder->add_write_info(decoder->add_write_object, decoder->decoded_data_length,\n                                decoder->decoded_samples);\n        fzgx_value = 3;\n        decoder->status = fzgx_value;\n    }\n}\n#pragma opt_dead_assignments reset\n\n#pragma opt_loop_invariants reset\n\n#pragma opt_pointer_analysis reset\n\n",
+    "seed_sha256": "ec9846fa4f9ab06eac005c4f7ade1e0b418264d56cdc47c11b46153fab220c66",
+    "generated_sha256": "5da96bbcd1073183cb948838cb8f996570dc1dfd5ab63bfa03731246ad65e31f",
+    "generated_source": "\n\ntypedef struct AdxXpndParams {\nint channel_count;\nconst signed char *input;\nint num_blocks;\nshort *output_left;\nshort *output_right;\n} AdxXpndParams;\ntypedef struct AdxXpnd {\nint used;\nint index;\nint mode;\nint status;\nint num_decoded_blocks;\nAdxXpndParams params;\nshort delay[2][2];\nshort coefficients[2];\nshort random_state;\nshort random_multiplier;\nshort random_increment;\nshort reserved;\n} AdxXpnd;\ntypedef struct AdxDecodeParams {\nconst unsigned short *input;\nint input_blocks;\nint channel_count;\nint block_size;\nint samples_per_block;\nshort *pcm_buffer;\nint pcm_size;\nint pcm_distance;\nint write_position;\nint room;\nint loop_samples;\n} AdxDecodeParams;\ntypedef void (*AdxGetWriteInfo)(void *, int *, int *, int *);\ntypedef void (*AdxAddWriteInfo)(void *, int, int);\ntypedef struct AdxBasicDecoder {\nshort used;\nshort header_decoded;\nint status;\nAdxXpnd *expander;\nsigned char encoding;\nsigned char bits_per_sample;\nsigned char channel_count;\nsigned char block_length;\nint samples_per_block;\nint sample_rate;\nint total_samples;\nshort coefficient;\nshort field_1E;\nint loop_insert_samples;\nshort loop_count;\nshort loop_type;\nint loop_start_sample;\nint loop_start_offset;\nint loop_end_sample;\nint loop_end_offset;\nint max_channels;\nshort *pcm_buffer;\nint pcm_size;\nint pcm_distance;\nAdxDecodeParams decode;\nshort field_74;\nshort field_76;\nAdxGetWriteInfo get_write_info;\nvoid *get_write_object;\nAdxAddWriteInfo add_write_info;\nvoid *add_write_object;\nint total_decoded_samples;\nint current_write_position;\nint decoded_samples;\nint decoded_data_length;\nshort format_type;\nshort field_9A;\nshort codec_type;\n} AdxBasicDecoder;\nvoid fn_800446E4(AdxBasicDecoder *decoder);\nint fn_8004E270(AdxXpnd *decoder);\nstatic inline AdxXpnd * fn_80043798_read_pointer(AdxBasicDecoder * owner) { return owner->expander; }\n#pragma opt_pointer_analysis off\nstatic inline const unsigned short * fn_80043798_read_pointer_(AdxDecodeParams * owner) { return owner->input; }\n#pragma opt_loop_invariants off\n#pragma opt_dead_assignments off\nvoid fn_800446E4(AdxBasicDecoder *decoder) {\nint fzgx_value;\nAdxDecodeParams *params;\nunsigned short *pcm;\nunsigned short *left;\nunsigned short *right;\nconst unsigned short *input;\nunsigned short sample;\nint i;\nint count;\nparams = &decoder->decode;\ninput = fn_80043798_read_pointer_(params);\nif (decoder->status == 1 && fn_8004E270(fn_80043798_read_pointer(decoder)) == 0) {\ndecoder->get_write_info(decoder->get_write_object, &params->write_position, &params->room,\n&params->loop_samples);\ncount = params->pcm_size - params->write_position;\nif (count > params->room) {\ncount = params->room;\n}\nif (count > params->input_blocks) {\ncount = params->input_blocks;\n}\npcm = (unsigned short *)params->pcm_buffer;\nleft = &pcm[params->write_position];\nif (decoder->channel_count == 2) {\nright = &pcm[params->pcm_distance + params->write_position];\nfor (i = 0; i < count; i++) {\nleft[i] = input[i * 2] << 8 | (sample = input[i * 2]) >> 8;\nright[i] = ((i * 2 + 1)[input]) >> 8 | ((i * 2 + 1)[input]) << 8;\n}\n} else {\nfor (i = 0; i < count; i++) {\nleft[i] = ((i)[input]) << 8 | ((i)[input]) >> 8;\n}\n}\ndecoder->decoded_samples = count;\ndecoder->decoded_data_length = count * 2 * decoder->channel_count;\ndecoder->status = 2;\n}\nif (decoder->status == 2) {\ndecoder->add_write_info(decoder->add_write_object, decoder->decoded_data_length,\ndecoder->decoded_samples);\nfzgx_value = 3;\ndecoder->status = fzgx_value;\n}\n}\n#pragma opt_dead_assignments reset\n#pragma opt_loop_invariants reset\n#pragma opt_pointer_analysis reset\n",
+    "compiler": "GC/1.3.2",
+    "flags": "-sdata 8 -sdata2 8 -use_lmw_stmw off",
+    "source": "dol/fn_800446E4.c",
+    "bytes": 944,
+    "headers_sha256": "fae2435a8fa7d9aa315a83bba41165189d6b656b9f748898f189942fa2f550a4",
+    "oracle_sha256": "959ee3393e3e96d36d61cc247ef5421ca505fece9beeaf631f6851a5573f1650",
+    "recipe": [
+      {
+        "label": "expand owned clone declarations",
+        "input_sha256": "ec9846fa4f9ab06eac005c4f7ade1e0b418264d56cdc47c11b46153fab220c66",
+        "output_sha256": "9f9be657855e93430813fe6f9c13b5f1220614e9d160ffcc591caa9cf68481f4",
+        "input_symbol": "fn_80043798",
+        "output_symbol": "fn_80043798",
+        "edits": [
+          [
+            1,
+            20,
+            ""
+          ],
+          [
+            52,
+            153,
+            "int channel_count;\nconst signed char *input;\nint num_blocks;\nshort *output_left;\n"
+          ],
+          [
+            191,
+            192,
+            ""
+          ],
+          [
+            217,
+            465,
+            "int used;\nint index;\nint mode;\nint status;\nint num_decoded_blocks;\nAdxXpndParams params;\nshort delay[2][2];\nshort coefficients[2];\nshort random_state;\nshort random_multiplier;\nshort random_increment;\n"
+          ],
+          [
+            492,
+            493,
+            ""
+          ],
+          [
+            526,
+            756,
+            "const unsigned short *input;\nint input_blocks;\nint channel_count;\nint block_size;\nint samples_per_block;\nshort *pcm_buffer;\nint pcm_size;\nint pcm_distance;\nint write_position;\nint room;\n"
+          ],
+          [
+            793,
+            794,
+            ""
+          ],
+          [
+            856,
+            857,
+            ""
+          ],
+          [
+            908,
+            909,
+            ""
+          ],
+          [
+            942,
+            1878,
+            "short used;\nshort header_decoded;\nint status;\nAdxXpnd *expander;\nsigned char encoding;\nsigned char bits_per_sample;\nsigned char channel_count;\nsigned char block_length;\nint samples_per_block;\nint sample_rate;\nint total_samples;\nshort coefficient;\nshort field_1E;\nint loop_insert_samples;\nshort loop_count;\nshort loop_type;\nint loop_start_sample;\nint loop_start_offset;\nint loop_end_sample;\nint loop_end_offset;\nint max_channels;\nshort *pcm_buffer;\nint pcm_size;\nint pcm_distance;\nAdxDecodeParams decode;\nshort field_74;\nshort field_76;\nAdxGetWriteInfo get_write_info;\nvoid *get_write_object;\nAdxAddWriteInfo add_write_info;\nvoid *add_write_object;\nint total_decoded_samples;\nint current_write_position;\nint decoded_samples;\nint decoded_data_length;\nshort format_type;\nshort field_9A;\n"
+          ],
+          [
+            1915,
+            1916,
+            ""
+          ],
+          [
+            1960,
+            1961,
+            ""
+          ],
+          [
+            1996,
+            1997,
+            ""
+          ],
+          [
+            2355,
+            4096,
+            "int fzgx_value;\nAdxDecodeParams *params;\nunsigned short *pcm;\nunsigned short *left;\nunsigned short *right;\nconst unsigned short *input;\nunsigned short sample;\nint i;\nint count;\nparams = &decoder->decode;\ninput = fn_80043798_read_pointer_(params);\nif (decoder->status == 1 && fn_8004E270(fn_80043798_read_pointer(decoder)) == 0) {\ndecoder->get_write_info(decoder->get_write_object, &params->write_position, &params->room,\n&params->loop_samples);\ncount = params->pcm_size - params->write_position;\nif (count > params->room) {\ncount = params->room;\n}\nif (count > params->input_blocks) {\ncount = params->input_blocks;\n}\npcm = (unsigned short *)params->pcm_buffer;\nleft = &pcm[params->write_position];\nif (decoder->channel_count == 2) {\nright = &pcm[params->pcm_distance + params->write_position];\nfor (i = 0; i < count; i++) {\nleft[i] = input[i * 2] << 8 | (sample = input[i * 2]) >> 8;\nright[i] = ((i * 2 + 1)[input]) >> 8 | ((i * 2 + 1)[input]) << 8;\n}\n} else {\nfor (i = 0; i < count; i++) {\nleft[i] = ((i)[input]) << 8 | ((i)[input]) >> 8;\n}\n}\ndecoder->decoded_samples = count;\ndecoder->decoded_data_length = count * 2 * decoder->channel_count;\ndecoder->status = 2;\n}\nif (decoder->status == 2) {\ndecoder->add_write_info(decoder->add_write_object, decoder->decoded_data_length,\ndecoder->decoded_samples);\nfzgx_value = 3;\ndecoder->status = fzgx_value;\n"
+          ],
+          [
+            4135,
+            4136,
+            ""
+          ],
+          [
+            4170,
+            4171,
+            ""
+          ],
+          [
+            4206,
+            4207,
+            ""
+          ]
+        ]
+      },
+      {
+        "label": "bind exact clone",
+        "input_sha256": "9f9be657855e93430813fe6f9c13b5f1220614e9d160ffcc591caa9cf68481f4",
+        "output_sha256": "5da96bbcd1073183cb948838cb8f996570dc1dfd5ab63bfa03731246ad65e31f",
+        "input_symbol": "fn_80043798",
+        "output_symbol": "fn_800446E4",
+        "edits": [
+          [
+            1639,
+            1643,
+            "46E4"
+          ],
+          [
+            2031,
+            2035,
+            "46E4"
+          ]
+        ],
+        "clone": {
+          "donor": "fn_80043798",
+          "recipient": "fn_800446E4",
+          "bindings": {
+            "fn_8004E270": "fn_8004E270",
+            "fn_80043798": "fn_800446E4"
+          }
+        }
+      }
+    ],
+    "link": "pending"
   }
 }
