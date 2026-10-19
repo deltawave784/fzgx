@@ -3748,6 +3748,62 @@ void fn_1_7B558(s32 arg0, s32 arg1, u32 x, u32 y, u32 w, u32 h, f32 scale) {
 #pragma opt_strength_reduction reset
 /* fzgx:end fn_1_7B558 */
 
+/* fzgx:begin fn_1_7BA08 pool noprologue */
+#include "types.h"
+#include "rel/main_rel/screen_effect.h"
+
+/* file-scope objects of the retail TU, in retail order: MWCC addresses them off one section base */
+u16 fzgx_obj_lbl_1_bss_6D7A8;
+u16 lbl_1_bss_6D7A8_2;
+u16 lbl_1_bss_6D7A8_4;
+u16 lbl_1_bss_6D7A8_fill_6D7AE;
+u32 lbl_1_bss_6D7A8_8;
+u32 lbl_1_bss_6D7A8_C;
+u32 lbl_1_bss_6D7A8_10;
+u32 lbl_1_bss_6D7A8_fill_6D7BC;
+u32 lbl_1_bss_6D7C0[10];
+u32 fzgx_obj_lbl_1_bss_6D7E8[2];
+u8 fzgx_obj_lbl_1_bss_6D7F0;
+u8 lbl_1_bss_6D7A8_gap_6D7F1;
+u16 lbl_1_bss_6D7A8_gap_6D7F1_fill_6D7F2;
+u32 fzgx_obj_lbl_1_bss_6D7F4[11];
+
+#pragma section code_type ".fzgxpool"
+static void fzgx_bss_layout(void) {
+    volatile u8 s;  /* fzgx-allow: S2 layout primer sink: MWCC emits .bss objects in first-access order */
+    s = *(u8 *)&fzgx_obj_lbl_1_bss_6D7A8;
+    s = *(u8 *)&lbl_1_bss_6D7A8_2;
+    s = *(u8 *)&lbl_1_bss_6D7A8_4;
+    s = *(u8 *)&lbl_1_bss_6D7A8_fill_6D7AE;
+    s = *(u8 *)&lbl_1_bss_6D7A8_8;
+    s = *(u8 *)&lbl_1_bss_6D7A8_C;
+    s = *(u8 *)&lbl_1_bss_6D7A8_10;
+    s = *(u8 *)&lbl_1_bss_6D7A8_fill_6D7BC;
+    s = *(u8 *)&lbl_1_bss_6D7C0;
+    s = *(u8 *)&fzgx_obj_lbl_1_bss_6D7E8;
+    s = *(u8 *)&fzgx_obj_lbl_1_bss_6D7F0;
+    s = *(u8 *)&lbl_1_bss_6D7A8_gap_6D7F1;
+    s = *(u8 *)&lbl_1_bss_6D7A8_gap_6D7F1_fill_6D7F2;
+    s = *(u8 *)&fzgx_obj_lbl_1_bss_6D7F4;
+}
+#pragma section code_type ".text"
+
+u32 fn_1_7BA08(u16 arg0, u16 arg1, u16 arg2) {
+    
+    u32 size0;
+    u32 size1;
+    u32 size2;
+
+    fzgx_obj_lbl_1_bss_6D7A8 = arg0;
+    lbl_1_bss_6D7A8_2 = arg1;
+    lbl_1_bss_6D7A8_4 = arg2;
+    lbl_1_bss_6D7A8_8 = arg0 * 64;
+    lbl_1_bss_6D7A8_C = arg1 * 12;
+    lbl_1_bss_6D7A8_10 = arg2 * 20;
+    return lbl_1_bss_6D7A8_8 + lbl_1_bss_6D7A8_C + lbl_1_bss_6D7A8_10;
+}
+/* fzgx:end fn_1_7BA08 */
+
 /* fzgx:begin fn_1_7BA48 pool noprologue */
 #include "types.h"
 
