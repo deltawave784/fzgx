@@ -7985,3 +7985,9 @@ rel/main_rel/font/fn_1_4DDC0.c:
 
 rel/main_rel/phys/fn_1_EB0D8.c:
 	.text       start:0x000EB0D8 end:0x000EB200 align:4
+
+rel/main_rel/archive/fn_1_12B5B4.c:
+	.text       start:0x0012B5B4 end:0x0012B664 align:4
+
+rel/main_rel/sel_static_disp/fn_1_14E9A8.c:
+	.text       start:0x0014E9A8 end:0x0014E9E4 align:4

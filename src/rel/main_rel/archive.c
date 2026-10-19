@@ -823,6 +823,35 @@ void fn_1_12B4EC(s16 arg0, s16 arg1) {
 }
 /* fzgx:end fn_1_12B4EC */
 
+/* fzgx:begin fn_1_12B5B4 noprologue */
+#include "dolphin/types.h"
+#include "rel/main_rel/archive.h"
+
+extern u8* fn_1_36AD0(void);
+
+typedef struct {
+    u32 unk_0;
+    u32 pad_4;
+} Fn_1_12B5B4Entry;
+
+typedef struct {
+    u8 pad_0[0x81A8];
+    Fn_1_12B5B4Entry unk_81A8[3];
+} Fn_1_12B5B4Data;
+
+#pragma opt_unroll_loops off
+void fn_1_12B5B4(s16 arg0, s16 arg1)
+{
+    Fn_1_12B5B4Data* data = (Fn_1_12B5B4Data*)fn_1_36AD0() + arg0;
+    s16 i = 0;
+    while ((s16)i < 3) {
+        data->unk_81A8[i].unk_0 =
+            ((u32 (*)[4][3])&lbl_1_bss_8B2E0.unk_0)[arg0][(s16)(arg1 % 4)][i];
+        i++;
+    }
+}
+/* fzgx:end fn_1_12B5B4 */
+
 /* fzgx:begin fn_1_12BB18 noprologue */
 #include "types.h"
 #include "game/main_rel/archive_types.h"
