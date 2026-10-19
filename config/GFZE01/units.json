@@ -18421,6 +18421,16 @@
   },
   {
     "module": "main",
+    "source": "dol/fn_800370A0.c",
+    "symbols": [
+      "fn_800370A0"
+    ],
+    "status": "matching",
+    "mw_version": "GC/1.2.5n",
+    "extra_cflags": []
+  },
+  {
+    "module": "main",
     "source": "dol/fn_800370E4.c",
     "symbols": [
       "fn_800370E4"
@@ -45840,6 +45850,17 @@
     "source": "rel/main_rel/font/fn_1_51564.c",
     "symbols": [
       "fn_1_51564"
+    ],
+    "status": "matching",
+    "mw_version": null,
+    "extra_cflags": [],
+    "tu": "rel/main_rel/font.c"
+  },
+  {
+    "module": "main_rel",
+    "source": "rel/main_rel/font/fn_1_5158C.c",
+    "symbols": [
+      "fn_1_5158C"
     ],
     "status": "matching",
     "mw_version": null,

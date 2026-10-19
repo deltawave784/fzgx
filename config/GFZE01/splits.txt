@@ -6023,3 +6023,6 @@ dol/fn_800749B0.c:
 
 dol/fn_800370E4.c:
 	.text       start:0x800370E4 end:0x80037128 align:4
+
+dol/fn_800370A0.c:
+	.text       start:0x800370A0 end:0x800370E4 align:4

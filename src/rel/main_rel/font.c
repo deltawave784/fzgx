@@ -2900,6 +2900,47 @@ void fn_1_51564(u16 first, u16 second, u16 third, u16 fourth, u16 fifth, u16 six
 }
 /* fzgx:end fn_1_51564 */
 
+/* fzgx:begin fn_1_5158C noprologue */
+#include "rel/main_rel/font.h"
+
+typedef struct FontDrawPacket FontDrawPacket;
+
+extern void fn_1_51678(FontDrawPacket *, u32, s16, s16, s16, s16);
+
+typedef struct FontGridState {
+    u8 pad[0x1805C];
+    s16 originX;
+    s16 originY;
+    s16 stepX;
+    s16 stepY;
+    s16 columns;
+    s16 rows;
+} FontGridState;
+
+static inline s32 grid_in_range(s32 value, s32 low, s32 high) {
+    if (value > high) return 0;
+    return value >= low;
+}
+
+static inline s32 grid_clamp(s16 value, s32 low, s32 high) {
+    s32 result = value;
+    if (value < low) result = low;
+    else if (result > high) result = high;
+    return result;
+}
+
+void fn_1_5158C(FontDrawPacket *packet, u32 code, s16 x, s16 y) {
+    s16 *state = (s16 *)((u8 *)&lbl_1_bss_4C678 + 0x20000);
+    s32 max;
+    max = state[-0x3FCE] - 1;
+    if (!grid_in_range(x, 0, max)) x = grid_clamp(x, 0, max);
+    max = state[-0x3FCD] - 1;
+    if (!grid_in_range(y, 0, max)) y = grid_clamp(y, 0, max);
+    fn_1_51678(packet, code, state[-0x3FD2] + x * state[-0x3FD0],
+              state[-0x3FD1] + y * state[-0x3FCF], state[-0x3FD0], state[-0x3FCF]);
+}
+/* fzgx:end fn_1_5158C */
+
 /* fzgx:begin fn_1_51678 */
 void fn_1_51678(FontDrawPacket *p, u32 image, s16 x, s16 y, s16 width, s16 height) {
     f32 inv_height, inv_width;
