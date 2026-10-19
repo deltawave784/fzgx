@@ -8093,3 +8093,9 @@ rel/main_rel/accessory/fn_1_118D90.c:
 
 rel/main_rel/memcard/fn_1_B40C0.c:
 	.text       start:0x000B40C0 end:0x000B4AC0 align:4
+
+rel/main_rel/sel_static_disp/fn_1_14D994.c:
+	.text       start:0x0014D994 end:0x0014DB48 align:4
+
+rel/main_rel/effect/fn_1_67D0C.c:
+	.text       start:0x00067D0C end:0x00067E94 align:4

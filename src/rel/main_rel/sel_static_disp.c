@@ -8957,6 +8957,71 @@ void fn_1_14D8DC(u8 *arg0, u8 *arg1, s16 arg2) {
 }
 /* fzgx:end fn_1_14D8DC */
 
+/* fzgx:begin fn_1_14D994 noprologue */
+#include "rel/main_rel/sel_static_disp.h"
+
+extern void *fn_1_D3884(u32);
+typedef struct {
+    s16 a;
+    s16 b;
+    s16 c;
+    u8 pad[2];
+    u32 v;
+    u32 pad2;
+} Ent_14D994;
+
+static inline void init_14D994(Ent_14D994 *e, u32 v, s32 i)
+{
+    e->v = v;
+    e->a = i;
+    e->b = i + 25;
+    e->c = i + 50;
+}
+
+void fn_1_14D994(u8 *arg0, u32 arg1, int flag)
+{
+    Ent_14D994 ents[25];
+    Ent_14D994 *p = ents;
+    u8 *d = lbl_1_data_43E78;
+    struct { s16 value; } j;
+    s16 k;
+    u8 *q_else;
+    struct { u8 *ptr; } q;
+    struct { Ent_14D994 *ptr; } e;
+    s16 i;
+    e.ptr = p;
+    for (i = 0; i < 25; i++) {
+        init_14D994(e.ptr, arg1, i);
+        e.ptr++;
+    }
+    if (flag) {
+        if (lbl_1_bss_6D82C.unk_0 == 0) {
+            fn_1_12AB38(d + 0x136c);
+            *(void **)&lbl_1_bss_6D82C = fn_1_D3884((u32)(d + 0x1378));
+            fn_1_12AB38(d + 0x1388);
+        }
+        fn_1_12AB38(d + 0x138c);
+        j.value = 0;
+        q.ptr = arg0;
+        for (; j.value < 25; j.value++) {
+            fn_1_14D728((void *)p, (void *)q.ptr);
+            q.ptr += 0xa20;
+            p++;
+        }
+        fn_1_12AB38(d + 0x1388);
+    } else {
+        fn_1_12AB38(d + 0x138c);
+        q_else = arg0;
+        for (k = 0; k < 25; k++) {
+            fn_1_14D728((void *)p, (void *)q_else);
+            q_else += 0xa20;
+            p++;
+        }
+        fn_1_12AB38(d + 0x1388);
+    }
+}
+/* fzgx:end fn_1_14D994 */
+
 /* fzgx:begin fn_1_14DB48 */
 typedef struct {
     u16 values[3];
