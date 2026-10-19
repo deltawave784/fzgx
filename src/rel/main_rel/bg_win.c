@@ -976,6 +976,217 @@ void fn_1_15E764(s32 index, void *arg) {
 }
 /* fzgx:end fn_1_15E764 */
 
+/* fzgx:begin fn_1_15EC40 */
+typedef struct {
+    u8 r, g, b, a;
+} BgWinColor;
+
+typedef struct {
+    u8 flags;
+    u8 pad_1[0x7];
+    u8 slot;
+    u8 timer;
+    u8 pad_A[0x2];
+    u32 time;
+} BgWinTimeEntry;
+
+extern void fn_1_49514(BgWinColor *);
+extern void fn_1_494DC(s16);
+extern void fn_1_495B0(u32);
+extern void fn_1_495A0(f32);
+extern u32 fn_1_58C4(void);
+extern void fn_1_4955C(f32, f32);
+extern f32 fn_1_51AC0(f32);
+extern f32 fn_1_519FC(f32);
+extern void fn_1_496FC(f32, f32);
+extern void fn_1_4AE0C(const char *, ...);
+extern void fn_1_49728(u8 value);
+
+/* Literal-pool primer: this TU's shared pool (retail lbl_1_rodata_DD58) is laid out in
+ * first-use order across the whole TU, so the words that precede this function's own
+ * literals are referenced here, in retail order, from a section the link drops. */
+#pragma section RX ".fzgxpool"
+
+__declspec(section ".fzgxpool") void fzgx_pool_primer_0(void) {
+    fn_1_519FC(1000000.0f);
+}
+
+__declspec(section ".fzgxpool") void fzgx_pool_primer_1(void) {
+    fn_1_519FC((f32)(s32)lbl_1_bss_3C30.unk_0);
+}
+
+static const u32 fzgx_pool_word_10[1] = { 0xFFFFFF00 };
+
+__declspec(section ".fzgxpool") void fzgx_pool_primer_2(void) {
+    fn_1_58C4();
+    fn_1_519FC(320.0f);
+    fn_1_519FC(240.0f);
+    fn_1_519FC(1.0f);
+    fn_1_519FC(0.8f);
+    fn_1_519FC(464.0f);
+    fn_1_519FC(5.0f);
+    fn_1_519FC(0.7f);
+    fn_1_519FC(255.0f);
+    fn_1_519FC(3.3f);
+    fn_1_519FC(20.0f);
+    fn_1_519FC(0.5f);
+    fn_1_519FC(0.0f);
+    fn_1_519FC(800.0f);
+    fn_1_519FC(42.0f);
+    fn_1_519FC(30.0f);
+    fn_1_519FC(16384.0f);
+    fn_1_519FC(32768.0f);
+    fn_1_519FC(0.001f);
+    fn_1_519FC(3.0f);
+    fn_1_519FC(8.0f);
+    fn_1_49728(fzgx_pool_word_10[0]);
+}
+
+static const u32 fzgx_pool_table_64[24] = {
+    0, 0, 75, 100, 76, 0, 35, 100, 152, 0, 75, 100,
+    76, 0, 35, 100, 228, 0, 75, 100, 304, 0, 75, 100,
+};
+
+__declspec(section ".fzgxpool") void fzgx_pool_primer_3(void) {
+    fn_1_519FC(120.0f);
+    fn_1_519FC(10.0f);
+    fn_1_519FC(2.0f);
+    fn_1_519FC(-10.0f);
+    fn_1_519FC(0.25f);
+    fn_1_519FC(100.0f);
+    fn_1_519FC(60.0f);
+    fn_1_49728(fzgx_pool_table_64[2]);
+}
+
+static const u32 fzgx_pool_table_E0[3] = { 0x45A00000, 0x3FC00000, 0x43500000 };
+
+__declspec(section ".fzgxpool") void fzgx_pool_primer_4(void) {
+    fn_1_49728(fzgx_pool_table_E0[0]);
+    fn_1_519FC(0.9f);
+}
+
+static const u32 fzgx_pool_table_F0[6] = { 0x42480000, 0x43B90000, 0x43000000, 0x43160000, 0x3E000000, 0 };
+
+__declspec(section ".fzgxpool") void fzgx_pool_primer_5(void) {
+    fn_1_49728(fzgx_pool_table_F0[0]);
+    fn_1_519FC((f32)lbl_1_bss_3C30.unk_0);
+}
+
+static const u32 fzgx_pool_table_110[24] = {
+    0x0000000F, 0x00000007, 0x0000000D, 0x00000005, 0x00000000, 0x00000000,
+    0x3F000000, 0x3F000000, 0x00000000, 0x3F000000, 0x3F000000, 0x3F800000,
+    0x3F000000, 0x00000000, 0x3F800000, 0x3F000000, 0x3F000000, 0x3F000000,
+    0x3F800000, 0x3F800000, 0x42200000, 0x43AF0000, 0x3FB33333, 0x42B40000,
+};
+
+__declspec(section ".fzgxpool") void fzgx_pool_primer_6(void) {
+    fn_1_49728(fzgx_pool_table_110[0]);
+    fn_1_519FC(15.0f);
+}
+
+static const u32 fzgx_pool_table_174[1] = { 0x43960000 };
+
+__declspec(section ".fzgxpool") void fzgx_pool_primer_7(void) {
+    fn_1_49728(fzgx_pool_table_174[0]);
+}
+
+#pragma section RX ".text"
+
+/* packed time: minutes in bits 20-27, seconds in 12-19, milliseconds in 0-11 */
+static inline u32 bgwin_time_ms(u32 t) {
+    u32 min = (t >> 20) & 0xFF;
+    u32 sec = (t >> 12) & 0xFF;
+    u32 ms = (sec + min * 60) * 1000;
+    ms = (t & 0xFFF) + ms;
+    return ms;
+}
+
+static inline u32 bgwin_time_diff(u32 a, u32 b) {
+    u32 ms_a = bgwin_time_ms(a);
+    u32 ms_b;
+    u32 frac_b = b & 0xFFF;
+    u32 d;
+    ms_b = ((b >> 12) & 0xFF) + ((b >> 20) & 0xFF) * 60;
+    ms_b *= 1000;
+    ms_b = frac_b + ms_b;
+    d = ms_a - ms_b;
+    if (ms_b > ms_a) {
+        d = ms_b - ms_a;
+    }
+    return ((d / 60000) << 20) | (((d / 1000) % 60) << 12) | (d % 1000);
+}
+
+void fn_1_15EC40(BgWinTimeEntry *entry) {
+    f32 scale;
+    f32 t;
+    u32 diff;
+    u8 sign;
+    s32 ahead;
+    u32 a;
+    struct { u32 value; } b;
+    u8 n;
+    f32 s0;
+    f32 s1;
+
+    ahead = 1;
+    n = entry->timer;
+    if (n > 45) {
+        t = (f32)(s32)(60 - n) / 15.0f;
+        scale = 0.5f * t;
+    } else if (n < 15) {
+        t = (f32)n / 15.0f;
+        scale = 0.5f * t;
+    } else {
+        scale = 0.5f;
+        t = 1.0f;
+    }
+
+    if (entry->flags & 8) {
+        a = (&lbl_1_bss_3C30.unk_13B4)[(entry->slot - 1) % 4];
+        if (a == 0 || (b.value = entry->time) == 0) {
+            return;
+        }
+        diff = bgwin_time_diff(a, b.value);
+        if (a < b.value) {
+            ahead = 0;
+        }
+    } else {
+        s32 i = (lbl_1_bss_3C30.unk_13F5 - 1) % 4;
+        a = (&lbl_1_bss_3C30.unk_13B4)[i];
+        b.value = (&lbl_1_bss_3C30.unk_13D4)[i];
+        if (a == 0 || b.value == 0) {
+            return;
+        }
+        diff = bgwin_time_diff(a, b.value);
+        if (a > b.value) {
+            ahead = 0;
+        }
+    }
+
+    if (ahead) {
+        BgWinColor c = {0x00, 0xFF, 0x00, 0x00};
+        fn_1_49514(&c);
+        sign = ';';
+    } else {
+        BgWinColor c = {0xE6, 0x00, 0x00, 0xFF};
+        fn_1_49514(&c);
+        sign = ':';
+    }
+    fn_1_494DC(10);
+    fn_1_495B0(0x80000000);
+    fn_1_495A0(scale);
+    s0 = (fn_1_58C4() == 1) ? 1.0f : 0.8f;
+    s1 = (fn_1_58C4() == 1) ? 1.0f : 0.8f;
+    fn_1_4955C(0.885f * t * s1, 0.9f * s0);
+    fn_1_496FC(fn_1_519FC(315.0f), fn_1_51AC0(250.0f));
+    fn_1_4AE0C((const char *)lbl_1_data_4C9B0, sign, (diff >> 20) & 0xFF, (diff >> 12) & 0xFF, diff & 0xFFF);
+    {
+        BgWinColor c = {0xFF, 0xFF, 0xFF, 0x00};
+        fn_1_49514(&c);
+    }
+}
+/* fzgx:end fn_1_15EC40 */
+
 /* fzgx:begin fn_1_15F618 */
 void *fn_1_15F618(s32 index) {
     return (u8 *)&lbl_1_bss_8FDA8 + index * 0x34;

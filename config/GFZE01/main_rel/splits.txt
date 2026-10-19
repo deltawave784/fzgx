@@ -8066,3 +8066,9 @@ rel/main_rel/avline/fn_1_60880.c:
 
 rel/main_rel/sel_static_disp/fn_1_135B80.c:
 	.text       start:0x00135B80 end:0x00135D7C align:4
+
+rel/main_rel/bg_win/fn_1_15EC40.c:
+	.text       start:0x0015EC40 end:0x0015EFEC align:4
+
+rel/main_rel/effect_car/fn_1_6D488.c:
+	.text       start:0x0006D488 end:0x0006D6A8 align:4

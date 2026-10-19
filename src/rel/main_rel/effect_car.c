@@ -383,6 +383,174 @@ void fn_1_6A7A4(u32 arg0, void *arg1, f32 arg2) {
 }
 /* fzgx:end fn_1_6A7A4 */
 
+/* fzgx:begin fn_1_6D488 noprologue */
+#include "types.h"
+#include "rel/main_rel/effect.h"
+#include "game/main_rel/car_test_types.h"
+
+struct Sig_fn_1_867CC_fn_1_867CC_Arg1 {
+    f32 x;
+    f32 y;
+    f32 z;
+};
+
+struct fn_1_6D488_Arg0 {
+    u8 pad_0[0x18];
+    s16 unk_18;
+    u8 pad_1A[0xb8 - 0x1a];
+    u8 mtx[0x30];
+};
+
+typedef struct {
+    u8 pad_0[0x24];
+    f32 unk_24;
+    u8 pad_28[0x18];
+    f64 unk_40;
+    u8 pad_48[0x74];
+    f32 unk_BC;
+    u8 pad_C0[0x190];
+    Fn183D28Vec3 unk_250;
+    f32 unk_25C;
+} Pool_6D488;
+
+typedef struct {
+    u8 pad_0[0x8];
+    u32 flags;
+    s16 unk_C;
+    u8 pad_E[0xA];
+    s16 unk_18;
+    u16 unk_1A;
+    u8 pad_1C[0xC];
+    f32 unk_28;
+    u8 pad_2C[0x10];
+    Fn183D28Vec3 unk_3C;
+    u8 pad_48[0xC];
+    s16 unk_54;
+    s16 unk_56;
+    u8 pad_58[0x2];
+    s16 unk_5A;
+    s16 unk_5C;
+    u8 pad_5E[0xE8 - 0x5E];
+} EffectRec_6D488;
+
+typedef union {
+    f64 value;
+    struct { u32 high, low; } bits;
+} UnsignedDouble_6D488;
+
+extern Pool_6D488 lbl_1_rodata_2D70;
+extern u32 fn_1_867CC(u32, struct Sig_fn_1_867CC_fn_1_867CC_Arg1 *);
+extern s32 fn_1_58C4(void);
+extern s16 camera_get_mode(void);
+extern u32 fn_1_584AC(void);
+extern s32 fn_1_66B8(struct Sig_fn_1_867CC_fn_1_867CC_Arg1 *, f32);
+extern s8 fn_1_86634(int);
+extern s16 fn_1_59078(Obj_1_bss_6C84C_Target *);
+extern s16 fn_1_58F50(const void *);
+extern void *memset(void *, int, u32);
+extern void lbl_8006DC6C(void *);
+extern void mathutil_mtxA_rotate_y(s16);
+extern void mathutil_mtxA_rotate_x(s16);
+
+/* Set the translation column of the locked-cache matrix A. */
+static inline void mtxA_set_translate_xyz(f32 x, f32 y, f32 z) {
+    *(f32 *)(0xE0000000 + 0x0C) = x;
+    *(f32 *)(0xE0000000 + 0x1C) = y;
+    *(f32 *)(0xE0000000 + 0x2C) = z;
+}
+
+/* Preserve the original translation unit's shared literal layout. */
+const u32 fzgx_pool_table_0[9] = {
+    0x00000000, 0xBF800000, 0x41C80000, 0x41700000, 0x41000000, 0x43160000, 0x41200000, 0x3F000000, 0x3E000000
+};
+#pragma section code_type ".fzgxpool"
+/* Volatile sink preserves the shared retail literal-pool slot. */
+void fzgx_pool_primer_24(volatile f32 *p) { *p = 32767.0f; }
+#pragma section code_type ".text"
+const u32 fzgx_pool_table_28[6] = {
+    0x41F00000, 0x41A00000, 0x44960000, 0x3E19999A, 0x43300000, 0x80000000
+};
+#pragma section code_type ".fzgxpool"
+/* Volatile sink preserves the shared retail literal-pool slot. */
+void fzgx_pool_primer_40(volatile f64 *p) { *p = 4503599627370496.0; }
+#pragma section code_type ".text"
+const u32 fzgx_pool_table_48[29] = {
+    0x437F0000, 0x42CC0000, 0x3FE99999, 0x9999999A, 0x3FCCCCCD, 0x40400000, 0x3C23D70A, 0x3F19999A, 0x3FD33333, 0x33333333, 0x3F333333, 0x3E4CCCCD, 0x3ECCCCCD, 0x3DCCCCCD, 0x3FC00000, 0x00000000, 0x40000000, 0x00000000, 0x3F4CCCCD, 0x3F800000, 0x42AA0000, 0x3E800000, 0x00000000, 0x00000000, 0x00000000, 0x42C80000, 0x40600000, 0x41B80000, 0x42700000
+};
+#pragma section code_type ".fzgxpool"
+/* Volatile sink preserves the shared retail literal-pool slot. */
+void fzgx_pool_primer_BC(volatile f32 *p) { *p = 4.0f; }
+#pragma section code_type ".text"
+const u32 fzgx_pool_table_C0[100] = {
+    0x34000000, 0x43080000, 0x3CF5C28F, 0x00000000, 0x3FE00000, 0x00000000, 0x3E99999A, 0x43000000, 0x43600000, 0x43FA0000, 0x3F6E147B, 0x40A00000, 0x40000000, 0x3D4CCCCD, 0x3DA3D70A, 0x3F666666, 0x3FD33333, 0x40000000, 0x3FC99999, 0x9999999A, 0xBFD33333, 0x33333333, 0xBFF00000, 0x00000000, 0x00000000, 0x00000000, 0x403E0000, 0x00000000, 0x40080000, 0x00000000, 0x3A83126F, 0x3B03126F, 0x3FF33333, 0x461C4000, 0x453B8000, 0x43360B61, 0x3F109091, 0x3F30B0B1, 0x4066C16C, 0x20000000, 0x40140000, 0x00000000, 0x3FE3851E, 0xB851EB85, 0x46800000, 0x00000000, 0x3DCCCCCD, 0x3FC00000, 0x44480000, 0x447A0000, 0x3FA99999, 0x9999999A, 0x40280000, 0x00000000, 0xBFC47AE1, 0x47AE147B, 0x405DC000, 0x00000000, 0x40040000, 0x00000000, 0x3FF00000, 0x00000000, 0x449C4000, 0x00000000, 0x3FD99999, 0x9999999A, 0x43960000, 0x00000000, 0x3FC99999, 0xA0000000, 0x451C4000, 0x459C4000, 0x3FB99999, 0x9999999A, 0x40490000, 0x00000000, 0x3F33A92A, 0x30553261, 0x3F947AE1, 0x47AE147B, 0x3F99999A, 0x00000000, 0x3FE33333, 0x33333333, 0x42300000, 0x00000000, 0x3FF4CCCC, 0xCCCCCCCD, 0x3A03126F, 0x00000000, 0x3F689374, 0xBC6A7EFA, 0x469C4000, 0x00000000, 0x3F800000, 0x3F000000, 0x42080000, 0x00000000, 0x40240000, 0x00000000
+};
+#pragma push
+#pragma opt_propagation off
+void fn_1_6D488(struct fn_1_6D488_Arg0 *arg0) {
+    f32 fzgx_lc0_z;
+    f32 fzgx_lc0_y;
+    f32 fzgx_lc0_x;
+    struct { f32 *value; } matrix;
+    u16 count;
+    f32 scale;
+    f32 range;
+    f32 max;
+    f32 y;
+    f32 x;
+    f32 z;
+    struct Sig_fn_1_867CC_fn_1_867CC_Arg1 pos;
+    EffectRec_6D488 rec;
+
+    fn_1_867CC(arg0->unk_18, &pos);
+    memset(&rec, 0, sizeof(rec));
+    rec.unk_18 = arg0->unk_18;
+    rec.unk_C = 17;
+    rec.unk_1A = 0xFFFF;
+    rec.flags |= 0x40000;
+    if (fn_1_58C4() >= 2U || arg0->unk_18 != camera_get_mode()) {
+        count = 1;
+    } else {
+        count = 3;
+    }
+    for (; count != 0; count--) {
+        rec.unk_54 = fn_1_584AC();
+        rec.unk_56 = fn_1_584AC();
+        rec.unk_5A = 768.0f + (f32)(768.0f * ((f32)(u16)fn_1_584AC() / 32767.0f));
+        rec.unk_5C = 768.0f + (f32)(768.0f * ((f32)(u16)fn_1_584AC() / 32767.0f));
+        if (fn_1_66B8(&pos, 4.0f) == 0) {
+            break;
+        }
+        lbl_8006DC6C(arg0->mtx);
+        {
+            {
+                /* Locked cache: hardware matrix A has fixed LC base 0xE0000000. */
+                matrix.value = (f32 *)(0xE0000000 + 0x00);
+                /* Volatile read keeps x loaded before the translation-column stores. */
+                fzgx_lc0_x = *(volatile f32 *)&(pos.x);
+                fzgx_lc0_y = (pos.y);
+                fzgx_lc0_z = (pos.z);
+                matrix.value[3] = fzgx_lc0_x;
+                matrix.value[7] = fzgx_lc0_y;
+                matrix.value[11] = fzgx_lc0_z;
+            }
+        }
+        mathutil_mtxA_rotate_y(rec.unk_56);
+        mathutil_mtxA_rotate_x(rec.unk_54);
+        {
+            Fn183D28Vec3 dir = {0.0f, 0.0f, -2.0f};
+            lbl_8006E1B0(&dir, &rec.unk_3C);
+        }
+        rec.unk_28 = 4.0f;
+        if (fn_1_86634(arg0->unk_18) != -1) {
+            fn_1_59078((Obj_1_bss_6C84C_Target *)&rec);
+        } else {
+            fn_1_58F50(&rec);
+        }
+    }
+}
+#pragma pop
+/* fzgx:end fn_1_6D488 */
+
 /* fzgx:begin fn_1_6D6A8 */
 struct Fn1_6D6A8Car {
     u8 pad_00[0x18];
