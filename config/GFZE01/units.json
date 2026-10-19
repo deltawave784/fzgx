@@ -18613,6 +18613,20 @@
   },
   {
     "module": "main",
+    "source": "dol/fn_8003887C.c",
+    "symbols": [
+      "fn_8003887C"
+    ],
+    "status": "matching",
+    "mw_version": "GC/1.2.5n",
+    "extra_cflags": [],
+    "pool": {
+      "...bss.0": "lbl_801783A0",
+      "lbl_801783A0": "lbl_801783A0"
+    }
+  },
+  {
+    "module": "main",
     "source": "dol/fn_80038944.c",
     "symbols": [
       "fn_80038944"
