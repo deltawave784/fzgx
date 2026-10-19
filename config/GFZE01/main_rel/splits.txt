@@ -7982,3 +7982,6 @@ rel/main_rel/spline/fn_1_F73A8.c:
 
 rel/main_rel/font/fn_1_4DDC0.c:
 	.text       start:0x0004DDC0 end:0x0004DE04 align:4
+
+rel/main_rel/phys/fn_1_EB0D8.c:
+	.text       start:0x000EB0D8 end:0x000EB200 align:4

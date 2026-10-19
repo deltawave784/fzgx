@@ -2378,6 +2378,70 @@ void fn_1_EB080(int mode) {
 u8 fn_1_EB0B0(void) { if (lbl_1_bss_7B188 != 0) { return lbl_1_bss_7C8CE; } return 0; }
 /* fzgx:end fn_1_EB0B0 */
 
+/* fzgx:begin fn_1_EB0D8 */
+#pragma opt_propagation off
+void *fn_1_EB0D8(u32 i) {
+    u32 *lengths;
+    f32 **values;
+    u32 n;
+    Obj_1_bss_7B180 *base = &lbl_1_bss_7B180;
+    u32 off;
+    if ((s32)base->unk_8 == 0) {
+        return 0;
+    }
+    off = i << 2;
+    {
+        u32 *a = &base->unk_1794;
+        if (*(u32 *)((u8 *)a + off) == 0) {
+            u32 *b = &base->unk_17A8;
+            if (*(u32 *)((u8 *)b + off) == 0) {
+                return 0;
+            }
+        }
+    }
+    {
+        u32 off = i << 1;
+        u16 *counts = &base->unk_1800;
+        n = *(u16 *)((u8 *)counts + off);
+    }
+    if (n <= 1) {
+        goto fail; /* Keep the verified branch to fail. */
+    }
+    {
+        lengths = &base->unk_1824;
+        values = (f32 **)&base->unk_1600;
+        if ((*(f32 **)((u8 *)values + off))[*(u32 *)((u8 *)lengths + off) - 1] <= (f32)n) {
+fail:
+            return 0;
+        }
+    }
+    if ((s32)base->unk_20 != 0 && base->unk_16CC != 255) {
+        u32 c = base->unk_174E;
+        u32 d = c - 2;
+        if (i == d) {
+            u32 j = c - 1;
+            u8 *result = (u8 *)&base->unk_1758;
+            return result + j * 12;
+        }
+        if (i == c - 1) {
+            u32 off = d * 12;
+            u8 *result = (u8 *)&base->unk_1758;
+            return result + off;
+        }
+        {
+            u32 off = i * 12;
+            u8 *result = (u8 *)&base->unk_1758;
+            return result + off;
+        }
+    }
+    {
+        u32 off = i * 12;
+        u8 *result = (u8 *)&base->unk_1758;
+        return result + off;
+    }
+}
+/* fzgx:end fn_1_EB0D8 */
+
 /* fzgx:begin fn_1_EB200 */
 // Return whether the active state is one of the physics states.
 int fn_1_EB200(void) {

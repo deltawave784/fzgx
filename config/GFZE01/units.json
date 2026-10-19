@@ -25968,6 +25968,23 @@
   },
   {
     "module": "main",
+    "source": "dol/fn_800749B0.c",
+    "symbols": [
+      "fn_800749B0"
+    ],
+    "status": "matching",
+    "mw_version": "GC/1.3.2",
+    "extra_cflags": [],
+    "pool": {
+      "...data.0": "lbl_8019F040",
+      "lbl_8019F040": "lbl_8019F040",
+      "lbl_8019F040__fzgx_offset_20": "lbl_8019F040+0x20",
+      "lbl_8019F040__fzgx_offset_50": "lbl_8019F040+0x50",
+      "lbl_8019F040__fzgx_offset_E0": "lbl_8019F040+0xE0"
+    }
+  },
+  {
+    "module": "main",
     "source": "dol/fn_80074A60.c",
     "symbols": [
       "fn_80074A60"
@@ -52870,6 +52887,20 @@
     "mw_version": "GC/1.3",
     "extra_cflags": [],
     "tu": "rel/main_rel/phys.c"
+  },
+  {
+    "module": "main_rel",
+    "source": "rel/main_rel/phys/fn_1_EB0D8.c",
+    "symbols": [
+      "fn_1_EB0D8"
+    ],
+    "status": "matching",
+    "mw_version": "GC/1.3.2",
+    "extra_cflags": [],
+    "tu": "rel/main_rel/phys.c",
+    "pool": {
+      "@24": "lbl_1_rodata_6B68"
+    }
   },
   {
     "module": "main_rel",

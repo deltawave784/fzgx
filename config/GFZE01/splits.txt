@@ -6017,3 +6017,6 @@ dol/fn_8006B224.c:
 
 dol/fn_8003A680.c:
 	.text       start:0x8003A680 end:0x8003A760 align:4
+
+dol/fn_800749B0.c:
+	.text       start:0x800749B0 end:0x80074A60 align:4
