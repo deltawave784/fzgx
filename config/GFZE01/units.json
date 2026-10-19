@@ -18441,6 +18441,16 @@
   },
   {
     "module": "main",
+    "source": "dol/fn_800372E0.c",
+    "symbols": [
+      "fn_800372E0"
+    ],
+    "status": "matching",
+    "mw_version": "GC/1.2.5n",
+    "extra_cflags": []
+  },
+  {
+    "module": "main",
     "source": "dol/fn_800377C8.c",
     "symbols": [
       "fn_800377C8"
