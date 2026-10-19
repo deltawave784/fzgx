@@ -10398,6 +10398,128 @@ u32 fn_10_13E18(u32 arg0, f32 arg1) {
 }
 /* fzgx:end fn_10_13E18 */
 
+/* fzgx:begin fn_10_14C84 noprologue */
+#include "types.h"
+#include "font.h"
+
+extern FontDrawPacket lbl_1_rodata_26F8;
+extern const f32 lbl_10_rodata_158[19];
+
+typedef struct { u8 c[4]; } fn_10_14C84_Color;
+extern const fn_10_14C84_Color lbl_10_rodata_6C4;
+
+#pragma section code_type ".fzgxpool"
+/* Native shared-pool primer; these words are data, not addresses. */
+static void fzgx_pool_primer_0(u32 *out, f32 *f, s32 x) {
+    const u32 table[34] = {
+        0u, 46336u, 46592u, 44288u, 45824u, 47104u, 45568u, 45312u, 44544u, 46080u, 47360u, 45056u, 44800u, 46848u, 0u, 0u, 15790335u, 1065353216u, 1056964608u, 0u, 1045220557u, 1053609165u, 1134559232u, 1077936128u, 1134657536u, 1082130432u, 1084227584u, 1086324736u, 1048576000u, 1182793728u, 1199570944u, 1114636288u, 1072693248u, 1057896676u
+    };
+    s32 i;
+    for (i = 0; i < 34; i++) out[i] = table[i];
+    *f = (f32)x;
+}
+#pragma section code_type ".text"
+
+#pragma section code_type ".fzgxpool"
+/* Native shared-pool primer; these words are data, not addresses. */
+static void fzgx_pool_primer_1(u32 *out, f32 *f, s32 x) {
+    const u32 table[128] = {
+        1127219200u, 0u, 1114130u, 1245204u, 1376274u, 1245204u, 0u, 15790335u, 0u, 15790335u, 65538u, 196612u, 327686u, 458760u, 589834u, 720908u, 1114130u, 1245204u, 1376274u, 1245204u, 16711680u, 4294967040u, 16711680u, 4294967040u, 16711680u, 16711680u, 1114374144u, 1118044160u, 1117388800u, 1120141312u, 1103626240u, 1122369536u, 1060320051u, 1091567616u, 1059760811u, 1138196480u, 0u, 0u, 1114898432u, 1117913088u, 1121714176u, 1109393408u, 1117782016u, 1129447424u, 1130758144u, 1136099328u, 1113325568u, 1117257728u, 1120403456u, 1136033792u, 1117126656u, 1122631680u, 1055566507u, 1126498304u, 1125842944u, 1118699520u, 1127743488u, 1119092736u, 1136558080u, 1139638272u, 1127088128u, 1137934336u, 1128398848u, 1174405120u, 1101004800u, 3321888768u, 1135935488u, 1141047296u, 1116733440u, 1093664768u, 1063675494u, 1057663659u, 3229614080u, 1135017984u, 1135247360u, 3233808384u, 1059061760u, 1135411200u, 1129512960u, 1126236160u, 1128267776u, 1032805417u, 1507352u, 1638426u, 1769500u, 1900574u, 2031649u, 2228224u, 16711680u, 4294967040u, 16711680u, 4294967040u, 16711680u, 4294967040u, 16711680u, 4294967040u, 16711680u, 1122893824u, 1124925440u, 1126170624u, 1126367232u, 1110179840u, 1124204544u, 0u, 1079410688u, 0u, 1079042048u, 0u, 1077313536u, 0u, 1102315520u, 1008981770u, 1063955115u, 1073741824u, 1131413504u, 953267991u, 1133182976u, 1134428160u, 4294967295u, 1061158912u, 1132068864u, 1136295936u, 1135673344u, 1116209152u, 1063116254u, 3212836864u, 1124859904u, 1112014848u
+    };
+    s32 i;
+    for (i = 0; i < 128; i++) out[i] = table[i];
+    *f = 0.1f;
+}
+#pragma section code_type ".text"
+
+#pragma section code_type ".fzgxpool"
+/* Native shared-pool primer; these words are data, not addresses. */
+static void fzgx_pool_primer_2(u32 *out, f32 *f, s32 x) {
+    const u32 table[6] = {
+        1142620160u, 1103101952u, 1092616192u, 1136656384u, 1142947840u, 1058362709u
+    };
+    s32 i;
+    for (i = 0; i < 6; i++) out[i] = table[i];
+    *f = 0.6f;
+}
+#pragma section code_type ".text"
+
+#pragma section code_type ".fzgxpool"
+/* Native shared-pool primer; these words are data, not addresses. */
+static void fzgx_pool_primer_3(u32 *out, f32 *f, s32 x) {
+    const u32 table[175] = {
+        255u, 255u, 1099431936u, 1135149056u, 1125515264u, 1097859072u, 1134460928u, 3268673536u, 1134493696u, 1121189888u, 1134985216u, 3266183168u, 1035489772u, 3241148416u, 1143029760u, 1144274944u, 1134886912u, 1065185444u, 1126629376u, 1108869120u, 255u, 1090519040u, 1136066560u, 1094713344u, 1096810496u, 1061326684u, 255u, 1114678231u, 1133248512u, 1085695590u, 1083179008u, 1060437492u, 4288479132u, 4288479132u, 3211369u, 10420437u, 17498433u, 24576429u, 31654425u, 38929384u, 65537000u, 65536000u, 2155905024u, 1120272384u, 1111228416u, 1116078080u, 1115684864u, 1130037248u, 1142194176u, 1142177792u, 1111490560u, 1053273620u, 1054530267u, 0u, 1110966272u, 1131806720u, 1123024896u, 1139474432u, 1131872256u, 1110704128u, 1107820544u, 1132527616u, 1050253722u, 1134821376u, 1132789760u, 1133772800u, 1134755840u, 1132855296u, 1105199104u, 1133838336u, 4288479132u, 4288479132u, 3211369u, 10420437u, 17498433u, 24576429u, 31654425u, 38863848u, 65537000u, 65536000u, 1u, 131075u, 196608u, 65538u, 131075u, 1u, 65538u, 196608u, 1u, 131074u, 1u, 65538u, 0u, 1u, 65536u, 0u, 1127615329u, 1028443341u, 1123942400u, 1079727096u, 981668463u, 0u, 3248488448u, 0u, 1135312896u, 1191181824u, 1074481995u, 1068017833u, 1069892933u, 1075419546u, 1075814304u, 1050056343u, 1134395392u, 1067869798u, 1135476736u, 0u, 4278190080u, 1135116288u, 1059648963u, 1055622431u, 1115422720u, 1061997773u, 1056293519u, 1067450368u, 1110441984u, 897988541u, 65536u, 41239u, 41240u, 0u, 0u, 41253u, 41254u, 65536u, 131072u, 41251u, 41252u, 131072u, 196608u, 41243u, 41244u, 262144u, 262144u, 41249u, 41250u, 196608u, 458752u, 41247u, 41248u, 458752u, 327680u, 41237u, 41238u, 327680u, 393216u, 41241u, 41242u, 393216u, 524288u, 41245u, 41246u, 262144u, 0u, 15790335u, 1132396544u, 1119748096u, 1127481344u, 1119354880u, 1092616191u, 1117795123u, 1118175232u, 1118437376u, 1059431846u, 1126957056u, 1118306304u
+    };
+    s32 i;
+    for (i = 0; i < 175; i++) out[i] = table[i];
+    
+}
+#pragma section code_type ".text"
+
+static inline void fn_10_14C84_init(FontDrawPacket *packet, u32 mode, u32 image) {
+    const fn_10_14C84_Color color = {{255, 0, 255, 0}};
+    packet->image = image;
+    packet->flags = mode;
+    *(fn_10_14C84_Color *)packet->color = color;
+}
+
+#pragma peephole on
+void fn_10_14C84(s32 x, s32 y, s32 w, s32 h, f32 alpha) {
+    FontDrawPacket packet;
+    s32 top;
+    s32 left;
+    s32 right;
+    s32 bottom;
+
+    packet = lbl_1_rodata_26F8;
+    left = x - w;
+    top = y - h;
+    packet.image = 0xA12B;
+    packet.alpha = alpha;
+    packet.z = 0.1f;
+    packet.x = left;
+    packet.y = top;
+    packet.flags = 0xF;
+    fn_1_4F734(&packet);
+    right = x + w;
+    packet.x = right;
+    packet.y = top;
+    packet.flags = 0x8000D;
+    fn_1_4F734(&packet);
+    bottom = y + h;
+    packet.x = left;
+    packet.y = bottom;
+    packet.flags = 0x100007;
+    fn_1_4F734(&packet);
+    packet.x = right;
+    packet.y = bottom;
+    packet.flags = 0x180005;
+    fn_1_4F734(&packet);
+
+    packet = lbl_1_rodata_26F8;
+    fn_10_14C84_init(&packet, 10, 0xA12C);
+    packet.alpha = alpha;
+    packet.z = 0.6f;
+    packet.x = left;
+    packet.y = top;
+    packet.flags = 0xF;
+    fn_1_4F734(&packet);
+    packet.x = right;
+    packet.y = top;
+    packet.flags = 0x8000D;
+    fn_1_4F734(&packet);
+    packet.x = left;
+    packet.y = bottom;
+    packet.flags = 0x100007;
+    fn_1_4F734(&packet);
+    packet.x = right;
+    packet.y = bottom;
+    packet.flags = 0x180005;
+    fn_1_4F734(&packet);
+}
+#pragma peephole reset
+/* fzgx:end fn_10_14C84 */
+
 /* fzgx:begin fn_10_160BC */
 int fn_10_160BC(s16 value) {
     switch (value) {
