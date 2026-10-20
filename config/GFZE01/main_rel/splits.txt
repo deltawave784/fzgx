@@ -8135,3 +8135,6 @@ rel/main_rel/effect/fn_1_64760.c:
 
 rel/main_rel/car/fn_1_83070.c:
 	.text       start:0x00083070 end:0x000835E0 align:4
+
+rel/main_rel/custom_memcard/fn_1_131C08.c:
+	.text       start:0x00131C08 end:0x00132488 align:4
