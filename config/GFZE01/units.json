@@ -1454,6 +1454,17 @@
   },
   {
     "module": "customize",
+    "source": "rel/customize/editor/fn_3_17098.c",
+    "symbols": [
+      "fn_3_17098"
+    ],
+    "status": "matching",
+    "mw_version": "GC/1.3.2",
+    "extra_cflags": [],
+    "tu": "rel/customize/editor.c"
+  },
+  {
+    "module": "customize",
     "source": "rel/customize/editor/fn_3_170E0.c",
     "symbols": [
       "fn_3_170E0"

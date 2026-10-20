@@ -17334,5 +17334,56 @@
       }
     ],
     "link": "pool"
+  },
+  "fn_3_17098": {
+    "seed_symbol": "fn_3_17098",
+    "generator": "fzgx fixup",
+    "transform": "peephole off",
+    "seed": "#include \"types.h\"\n#include \"rel/customize/editor.h\"\n\n#pragma opt_propagation off\nvoid fn_3_17098(void) {\n    s32 index;\n    u32 value;\n    u32 flags;\n    Obj_3_bss_A2410 *p;\n    index = 0;\n    p = &lbl_3_bss_A2410;\n    value = ((u32 *)&lbl_3_data_35C0)[index];\n    flags = 0x40000000;\n    p->unk_8 = flags;\n    p->unk_C = index;\n    *(u32 *)&p->unk_4 = value;\n    p->unk_10 = index;\n    p->unk_12 = index;\n    p->unk_14 = index;\n    p->unk_16 = 255;\n    p->unk_20 = index;\n}\n\n",
+    "seed_sha256": "90fab964bbdf35a2bfa10097836d3e0ab6d23fecb3452c1d176d8365bf7915dc",
+    "generated_sha256": "a681db46bf9b067df4cb4dc7064ca9da226a700b4eaef4cfcab95b530a67dcd4",
+    "generated_source": "#include \"types.h\"\n#include \"rel/customize/editor.h\"\n\n#pragma opt_propagation off\n#pragma peephole off\nvoid fn_3_17098(void) {\n    s8 index;\n    u32 value;\n    u32 flags;\n    Obj_3_bss_A2410 *p;\n    index = 0;\n    p = &lbl_3_bss_A2410;\n    value = ((u32 *)&lbl_3_data_35C0)[index];\n    flags = 0x40000000;\n    p->unk_8 = flags;\n    p->unk_C = index;\n    *(u32 *)&p->unk_4 = value;\n    p->unk_10 = index;\n    p->unk_12 = index;\n    p->unk_14 = index;\n    p->unk_16 = 255;\n    p->unk_20 = index;\n}\n#pragma peephole reset\n\n\n",
+    "compiler": "GC/1.3.2",
+    "flags": "",
+    "source": "rel/customize/editor/fn_3_17098.c",
+    "bytes": 72,
+    "headers_sha256": "fae2435a8fa7d9aa315a83bba41165189d6b656b9f748898f189942fa2f550a4",
+    "oracle_sha256": "26cf7c2184872ee662d0231ec010ecff098f10b821f527afaee26da3ace87d9f",
+    "recipe": [
+      {
+        "label": "index:s32->s8",
+        "input_sha256": "90fab964bbdf35a2bfa10097836d3e0ab6d23fecb3452c1d176d8365bf7915dc",
+        "output_sha256": "95c583a65f08ab373fac4e0eeadcf956bb6dd7ebb9f4037587c95d5640ce35bf",
+        "input_symbol": "fn_3_17098",
+        "output_symbol": "fn_3_17098",
+        "edits": [
+          [
+            111,
+            113,
+            "8"
+          ]
+        ]
+      },
+      {
+        "label": "peephole off",
+        "input_sha256": "95c583a65f08ab373fac4e0eeadcf956bb6dd7ebb9f4037587c95d5640ce35bf",
+        "output_sha256": "a681db46bf9b067df4cb4dc7064ca9da226a700b4eaef4cfcab95b530a67dcd4",
+        "input_symbol": "fn_3_17098",
+        "output_symbol": "fn_3_17098",
+        "edits": [
+          [
+            82,
+            82,
+            "#pragma peephole off\n"
+          ],
+          [
+            475,
+            475,
+            "#pragma peephole reset\n\n"
+          ]
+        ]
+      }
+    ],
+    "link": "pending"
   }
 }

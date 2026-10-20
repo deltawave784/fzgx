@@ -716,6 +716,30 @@ void fn_3_16FD0(u32 arg0) {
 }
 /* fzgx:end fn_3_16FD0 */
 
+/* fzgx:begin fn_3_17098 */
+#pragma opt_propagation off
+#pragma peephole off
+void fn_3_17098(void) {
+    s8 index;
+    u32 value;
+    u32 flags;
+    Obj_3_bss_A2410 *p;
+    index = 0;
+    p = &lbl_3_bss_A2410;
+    value = ((u32 *)&lbl_3_data_35C0)[index];
+    flags = 0x40000000;
+    p->unk_8 = flags;
+    p->unk_C = index;
+    *(u32 *)&p->unk_4 = value;
+    p->unk_10 = index;
+    p->unk_12 = index;
+    p->unk_14 = index;
+    p->unk_16 = 255;
+    p->unk_20 = index;
+}
+#pragma peephole reset
+/* fzgx:end fn_3_17098 */
+
 /* fzgx:begin fn_3_170E0 */
 void fn_3_170E0(void) {
     fn_3_17100();

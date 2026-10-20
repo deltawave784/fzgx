@@ -650,3 +650,6 @@ rel/customize/_prolog/fn_3_12D4.c:
 
 rel/customize/editor/fn_3_17100.c:
 	.text       start:0x00017100 end:0x000177AC align:4
+
+rel/customize/editor/fn_3_17098.c:
+	.text       start:0x00017098 end:0x000170E0 align:4
