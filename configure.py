@@ -408,7 +408,10 @@ def add_pool_rules() -> None:
         # `...o: mwcc src/... $` (a standalone unit): both become mwcc_pool
         # ninja_syntax writes native separators: backslashes on Windows
         obj = re.escape(f"build/{config.version}/src/{stem}.o").replace("/", r"[/\\]")
-        pat = re.compile(rf"^(build {obj}: )mwcc( |\$)", re.M)
+        # ninja_syntax wraps a long edge after `: $` and continues with the rule on the next
+        # line (`rel/car_colchg/car_colchg/colchg_selmate_disp.o`): the unit then compiled
+        # through plain mwcc, its primer linked as code and the module failed
+        pat = re.compile(rf"^(build {obj}: (?:\$\n[ \t]+)?)mwcc( |\$)", re.M)
         m = pat.search(text)
         if m:
             poolmap = ",".join(f"{k}={v}" for k, v in sorted(mapping.items()))

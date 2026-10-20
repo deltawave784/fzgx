@@ -21,7 +21,7 @@ import shutil
 import subprocess
 import time
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Tuple
 
 from . import oracle, poolfix, tufile, verify
 from .carve import carve
@@ -563,6 +563,27 @@ def _respell_for_link(p: Project, symbol: str, key: str, src: Path, res: oracle.
         return again
     src.write_text(text)
     return res
+
+
+def _respell_for_lint(src: Path, findings) -> Optional[Tuple[str, str]]:
+    """(description, text): the first mechanical respelling of the work copy that `fzgx lint`
+    accepts (`fixup_source.lint_spellings` and its single families), or None. Five bodies of
+    batches 183-185 at 100% needed an agent only for this (fn_1_3C18, fn_8006C7E8, fn_1_82724,
+    fn_1_65CDC, fn_15_3368); the oracle still decides on the respelled text."""
+    from . import fixup_source
+    from .lint import lint_text
+    text = src.read_text()
+    candidates = list(fixup_source.lint_spellings(text, findings))
+    for family in (fixup_source.hardware_literal_names, fixup_source.header_helper_includes,
+                   fixup_source.annotate_verified_branches):
+        try:
+            candidates += family(text, findings)
+        except Exception:
+            continue
+    for description, respelled in candidates:
+        if respelled != text and not lint_text(respelled):
+            return description, respelled
+    return None
 
 
 def _primer_sections(res: oracle.CheckResult, text: str) -> Optional[str]:
@@ -1149,6 +1170,16 @@ def _submit(p: Project, symbol: str, agent: str = "unknown", message: str = "",
     if not unit_src and src is None:
         return {"ok": False, "error": "nothing to submit: no work copy"}
     findings = lint_paths([src or oracle.unit_source_path(p, unit_src)])
+    lint_original: Optional[Tuple[str, str]] = None
+    if findings and src is not None and src == work and not _is_shadow(agent):
+        # the third deterministic work-copy repair: a lint-clean spelling of the same text
+        # (pasted psvec kernels -> the include, hardware literals -> hw_regs.h / sdk_addresses.h
+        # names, documented gotos). The oracle decides below; a rejected respell is undone.
+        picked = _respell_for_lint(src, [(r, ln, m) for _, r, ln, m in findings])
+        if picked:
+            lint_original = (picked[0], src.read_text())
+            src.write_text(picked[1])
+            findings = []
     if findings:
         return {"ok": False, "error": "lint", "findings": findings}
     installed = row is not None and row["status"] in ("matched", "asm")
@@ -1238,6 +1269,8 @@ def _submit(p: Project, symbol: str, agent: str = "unknown", message: str = "",
         return {"ok": True, "symbol": symbol, "commit": None, "unit": unit_src, "shadow": True, "saved": str(dest),
                 "note": "shadow trial: match recorded, nothing installed, relinked or committed"}
     if reason:
+        if lint_original is not None:
+            src.write_text(lint_original[1])  # the lint-clean spelling did not match: the agent's text stays
         out = {"ok": False, "error": reason, "percent": res.percent, "diff": res.diff}
         if row is not None and row["status"] in ("matched", "asm"):
             # a repeated submit of an installed unit is checked as a carved object (fn_1_EB4BC,
@@ -1283,7 +1316,8 @@ def _submit(p: Project, symbol: str, agent: str = "unknown", message: str = "",
              notes=(message or "") + (f" [pool: {', '.join(res.pool)}]" if res.matched_pool else ""),
              model=model, harness=harness, tokens_in=tokens_in, tokens_out=tokens_out, cost_usd=cost_usd)
     return {"ok": True, "symbol": symbol, "commit": commit, "unit": unit_src,
-            "link": "pool" if res.matched_pool else "pending", "pool": res.pool, "pool_map": res.pool_map}
+            "link": "pool" if res.matched_pool else "pending", "pool": res.pool, "pool_map": res.pool_map,
+            **({"lint_respelled": lint_original[0]} if lint_original else {})}
 
 
 def verify_links(p: Project, message: Optional[str] = None) -> Dict[str, Any]:

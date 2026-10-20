@@ -1514,6 +1514,14 @@ def link_conflicts(project: Project, module: str, symbol: str, obj: Optional[Pat
     except (OSError, ValueError, IndexError, struct.error):
         return []
     out: List[str] = []
+    primer = elf.section('.fzgxpool')
+    if primer is not None and primer['size'] and module != 'main' and not bound:
+        # the object as it would be linked still carries the primer: nothing retargets this unit
+        # (no pool binding, so ninja never runs poolfix.apply) and a REL partial link puts
+        # `.fzgxpool` into .text (colchg_selmate_disp: `fzgx_pool_double` undefined at `dtk rel make`)
+        names = sorted(s['name'] for s in symbols if s['shndx'] == primer['index'] and (s['info'] & 0xF) == 2 and s['name'])
+        out.append(f"primer without pool binding: `.fzgxpool` ({primer['size']} bytes: {', '.join(names) or 'anonymous'}) "
+                   f"would be linked as code; this match needs no pool binding, so drop the primer")
     undefined = [s['name'] for s in symbols if s['shndx'] == 0 and s['name']]
     for old, new in sorted(stale_promotion_names(project, module, undefined).items()):
         out.append(f"undefined at link: `{old}` is the pre-promotion spelling of the global symbol "

@@ -4014,6 +4014,7 @@ _FIFO_MEMBERS = {'u8': 'u8', 'unsigned char': 'u8', 'u16': 'u16', 'unsigned shor
                  'int': 's32', 'long': 's32', 'f32': 'f32', 'float': 'f32', 'f64': 'f64', 'double': 'f64'}
 _HW_OWNED = {'__OSBusClock': 'dolphin/hw_regs.h', '__OSTVMode': 'dolphin/hw_regs.h', 'GXWGFifo': 'dolphin/gx.h'}
 _HW_LITERAL = re.compile(r'\b0[xX]([0-9A-Fa-f]{8})[uUlL]*\b')
+_LC_BASE, _LC_SIZE = 0xE0000000, 0x4000  # Gekko locked cache: hw_regs.h `LC_BASE`, 16 KB
 
 
 def _hw_name(address, table):
@@ -4040,6 +4041,12 @@ _FILE_SCOPE_DATA = re.compile(
     r'(?P<name>\w+)(?P<dims>(?:\s*\[[^\]]*\])*)\s*=\s*(?P<init>\{(?:[^{}]|\{[^{}]*\})*\}|"(?:[^"\\]|\\.)*"(?:\s*"(?:[^"\\]|\\.)*")*|[^;{}]+);[^\n]*\n?')
 
 
+_PRIMER_REGION = re.compile(
+    r'(?ms)^[ \t]*#pragma\s+section\s+code_type\s+"\.fzgxpool"[^\n]*\n.*?'
+    r'(?:^[ \t]*#pragma\s+section\s+code_type(?:\s+"\.text")?[^\n]*\n|\Z)')
+_PRIMER_DECL = re.compile(r'(?m)^[ \t]*(?:extern\s+)?[\w \t*]+?\b(?P<name>fzgx_\w+)\s*(?:\([^;{]*\))?\s*;[^\n]*\n?')
+
+
 def link_spellings(body, conflicts, renames):
     """Respell what mwld refuses in an exact object match (`oracle.link_conflicts`), the oracle
     deciding afterwards as always. `renames` (old -> canonical, `oracle.stale_promotion_names`)
@@ -4057,6 +4064,17 @@ def link_spellings(body, conflicts, renames):
         text = pattern.sub(lambda m: renames[m.group(1)], text)
         if text != body:
             out.append(('canonical names after promotion ' + ', '.join(f'{a}->{b}' for a, b in sorted(renames.items())), text))
+    if any(c.startswith('primer without pool binding') for c in conflicts):
+        # the match needs no pool binding, so nothing drops the `.fzgxpool` primer at
+        # integration: remove the primer regions and the declarations only they used
+        # (colchg_selmate_disp's `extern void fzgx_pool_double(f64);`)
+        stripped = _PRIMER_REGION.sub('', text)
+        if stripped != text:
+            def unused_decl(m):
+                return '' if len(re.findall(r'\b' + re.escape(m['name']) + r'\b', stripped)) == 1 else m[0]
+            stripped = _PRIMER_DECL.sub(unused_decl, stripped)
+            text = stripped
+            out.append(('primer dropped (no pool binding to drop it at integration)', text))
     defined = sorted({m[1] for m in (re.match(r'multiply defined at link: `(\w+)`', c) for c in conflicts) if m})
     if defined:
         before = text
@@ -4136,6 +4154,11 @@ def hardware_literal_names(body, findings):
         # remaining literals in code and comments
         def lit_sub(m):
             address = int(m[1], 16)
+            if _LC_BASE <= address < _LC_BASE + _LC_SIZE:
+                # the locked-cache window (`((f32 *)0xE0000000)[3]`, the MTX scratch of fn_1_64760):
+                # hw_regs.h's LC_BASE is the same unsigned constant
+                includes.add('dolphin/hw_regs.h')
+                return 'LC_BASE' if address == _LC_BASE else f'(LC_BASE + 0x{address - _LC_BASE:X})'
             if address == 0x80000000 or not any(lo <= address <= hi for lo, hi in
                                                 ((0x80000000, 0x817FFFFF), (0xC0000000, 0xC17FFFFF), (0xCC000000, 0xCC00FFFF))):
                 return m[0]
@@ -4159,3 +4182,108 @@ def hardware_literal_names(body, findings):
         if text != body and text not in (t for _, t in out):
             out.append(('hardware literals by name' + (' (headers)' if use_headers else ' (sdk addresses)'), text))
     return out
+
+
+_HELPER_HEADERS = ('psvec.h',)
+_STATIC_INLINE_DEF = re.compile(r'^[ \t]*static\s+inline\s+[\w \t*]+?\b(?P<name>\w+)\s*\([^;{)]*\)\s*\{', re.M)
+
+
+def _header_helper_names(header):
+    """Names of the `static inline` helpers a shared header defines (include/psvec.h's kernels)."""
+    from .project import ROOT
+    path = ROOT / 'include' / header
+    try:
+        return {m['name'] for m in _STATIC_INLINE_DEF.finditer(path.read_text())}
+    except OSError:
+        return set()
+
+
+def _definition_end(text, brace):
+    """Index just past the brace matching text[brace] == '{', ignoring braces inside strings,
+    character literals and comments; None when unbalanced."""
+    depth, i, n = 0, brace, len(text)
+    while i < n:
+        c = text[i]
+        if c == '/' and text.startswith('//', i):
+            i = text.find('\n', i)
+            if i < 0:
+                return None
+            continue
+        if c == '/' and text.startswith('/*', i):
+            j = text.find('*/', i + 2)
+            if j < 0:
+                return None
+            i = j + 2
+            continue
+        if c in '"\'':
+            j = i + 1
+            while j < n and text[j] != c:
+                j += 2 if text[j] == '\\' else 1
+            i = j + 1
+            continue
+        if c == '{':
+            depth += 1
+        elif c == '}':
+            depth -= 1
+            if depth == 0:
+                return i + 1
+        i += 1
+    return None
+
+
+def header_helper_includes(body, findings):
+    """A body that pastes a shared header's inline-assembly helpers (the context prints
+    include/psvec.h's kernels and flattened bodies copy them: fn_1_64760, fn_15_3368) fails lint
+    A3 although `#include "psvec.h"` compiles the same code. Every pasted definition of a helper
+    the header defines is removed and the include added; the oracle rechecks the result.
+    Returns [(description, text)]; empty when no A3 finding or no helper is pasted."""
+    if not any(rule == 'A3' for rule, _, _ in findings):
+        return []
+    text = body
+    replaced = []
+    for header in _HELPER_HEADERS:
+        names = _header_helper_names(header)
+        if not names:
+            continue
+        spans = []
+        for m in _STATIC_INLINE_DEF.finditer(text):
+            if m['name'] not in names:
+                continue
+            end = _definition_end(text, m.end() - 1)
+            if end is None:
+                continue
+            tail = text[end:]
+            nl = tail.find('\n')
+            spans.append((m.start(), end + (nl + 1 if nl >= 0 else len(tail)), m['name']))
+        if not spans:
+            continue
+        for start, end, name in sorted(spans, reverse=True):
+            text = text[:start] + text[end:]
+            replaced.append(name)
+        text = _add_include(text, header)
+    if not replaced:
+        return []
+    return [('shared helpers by include ' + ', '.join(sorted(set(replaced))), text)]
+
+
+def lint_spellings(body, findings):
+    """Every mechanical lint repair of an exact match composed into one text, so a body that
+    needs several (pasted kernels, an `__OSBusClock : 0x800000F8` declaration, a locked-cache
+    literal) is clean in one candidate: `header_helper_includes`, then
+    `annotate_verified_branches`, then `hardware_literal_names` on the running result. The
+    oracle decides afterwards, as for each family alone. Returns [(description, text)]; empty
+    when no step applies or the composition equals a single step's text."""
+    from .lint import lint_text
+    text, steps = body, []
+    for family in (header_helper_includes, annotate_verified_branches, hardware_literal_names):
+        current = lint_text(text) if steps else findings
+        if not current:
+            break
+        candidates = family(text, current)
+        if not candidates:
+            continue
+        description, text = candidates[0]
+        steps.append(description)
+    if len(steps) < 2 or text == body:
+        return []
+    return [('lint-clean spelling: ' + '; '.join(steps), text)]

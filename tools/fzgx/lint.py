@@ -3,7 +3,8 @@
 Rules (docs/CODING_RULES.md):
   A1  no integer literal in 0x80000000..0x817FFFFF (cached RAM) or
       0xC0000000..0xC17FFFFF (uncached) or 0xCC000000..0xCC00FFFF (hardware
-      registers) outside include/dolphin/hw_regs.h
+      registers) outside include/dolphin/hw_regs.h; a direct operand of a bitwise
+      operator (`flags |= 0xC0000000`, `x & 0xC0000000`) is a mask, not an address
   A2  no cast of a literal to a pointer:  (T *)0x...
   A3  no inline assembly bodies in reconstructed C
   S1  no `goto` without a justification comment on the same or previous line
@@ -33,11 +34,30 @@ def _rel(path: Path) -> str:
         return path.as_posix()
 
 
+_BITWISE_BEFORE = re.compile(r"(?:(?<![|&])[|&](?!=)|\^|~|[|&^]=)\s*$")
+_BITWISE_AFTER = re.compile(r"^\s*(?:[|&](?![|&])|\^)")
+
+
+def _bitwise_operand(code: str, start: int, end: int) -> bool:
+    """True when the literal at code[start:end] (optionally suffixed `u`/`l`) is a direct operand
+    of a bitwise operator: `x |= 0xC0000000`, `x & 0xC0000000`, `~0xC0000000`, `0xC0000000 | y`.
+    `||`/`&&` are not bitwise. A1 exempts only this use: the value is a bit mask by construction,
+    never a pointer (fn_15_3368's car-flag mask `|= 0xC0000000` was refused for days)."""
+    while end < len(code) and code[end] in "uUlL":
+        end += 1
+    return bool(_BITWISE_BEFORE.search(code[:start])) or bool(_BITWISE_AFTER.match(code[end:]))
+
+
 def lint_file(path: Path) -> List[Tuple[str, int, str]]:
     if _rel(path) in EXEMPT:
         return []
+    return lint_text(path.read_text(errors="replace"))
+
+
+def lint_text(text: str) -> List[Tuple[str, int, str]]:
+    """The rules over a source text (a candidate body before it is written anywhere)."""
     findings: List[Tuple[str, int, str]] = []
-    lines = path.read_text(errors="replace").splitlines()
+    lines = text.splitlines()
     for i, line in enumerate(lines, 1):
         code = line.split("//", 1)[0]
         allow = {r for m in ALLOW_RE.finditer(line) for r in m.group(1).split(",")}  # every allow comment on the line
@@ -47,6 +67,8 @@ def lint_file(path: Path) -> List[Tuple[str, int, str]]:
             v = int(m.group(1), 16)
             if v == 0x80000000:
                 continue  # the sign-bit mask, not an address (nothing is addressed at the RAM base itself)
+            if _bitwise_operand(code, m.start(), m.end()):
+                continue  # a direct operand of `| & ^ ~` (`flags |= 0xC0000000`): a bit mask, not an address
             if any(lo <= v <= hi for lo, hi in RANGES) and "A1" not in allow:
                 findings.append(("A1", i, f"hardcoded address 0x{v:08X}; use a symbol"))
         if PTR_CAST_RE.search(code) and "A2" not in allow:

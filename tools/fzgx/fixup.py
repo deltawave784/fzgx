@@ -595,6 +595,10 @@ class Engine:
             if row.get('source_lint') and (check.matched or check.matched_pool):
                 yield from self._family(row, 'source.annotate_verified_branches', lambda: source.annotate_verified_branches(body, row['source_lint']))
                 yield from self._family(row, 'source.hardware_literal_names', lambda: source.hardware_literal_names(body, row['source_lint']))
+                # pasted include/psvec.h kernels (A3) and the composition of every mechanical
+                # lint repair in one text (fn_15_3368 needs three of them at once)
+                yield from self._family(row, 'source.header_helper_includes', lambda: source.header_helper_includes(body, row['source_lint']))
+                yield from self._family(row, 'source.lint_spellings', lambda: source.lint_spellings(body, row['source_lint']))
             if row.get('link_conflicts'):
                 module = self.project.resolve(row['symbol']).module
                 renames = oracle.stale_promotion_names(self.project, module, set(re.findall(r'\b\w+_[0-9A-Fa-f]{8}\b', body)))
