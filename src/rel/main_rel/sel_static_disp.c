@@ -11295,6 +11295,849 @@ __typeof__(fn_1_14F608(0)) fn_1_14F608(int arg0) {
 }
 /* fzgx:end fn_1_14F608 */
 
+/* fzgx:begin fn_1_14F6F8 noprologue */
+#include "types.h"
+#include "rel/main_rel/sel_static_disp.h"
+
+extern u8 lbl_1_data_44F58__fzgx_offset_0[];
+extern u8 lbl_1_data_44F60__fzgx_offset_0[];
+extern u8 lbl_1_data_44F68__fzgx_offset_0[];
+extern u8 lbl_1_data_44F70__fzgx_offset_0[];
+extern u8 lbl_1_data_44F78__fzgx_offset_0[];
+extern u8 lbl_1_data_44F80__fzgx_offset_0[];
+extern u8 lbl_1_data_44F88__fzgx_offset_0[];
+extern u8 lbl_1_data_44F90__fzgx_offset_0[];
+extern u8 lbl_1_data_44F98__fzgx_offset_0[];
+extern u8 lbl_1_data_44FA0__fzgx_offset_0[];
+extern u8 lbl_1_data_44FA8__fzgx_offset_0[];
+extern u8 lbl_1_data_44FB0__fzgx_offset_0[];
+extern u8 lbl_1_data_44FB8__fzgx_offset_0[];
+extern u8 lbl_1_data_44FC0__fzgx_offset_0[];
+extern u8 lbl_1_data_44FC8__fzgx_offset_0[];
+extern u8 lbl_1_data_44FD0__fzgx_offset_0[];
+extern u8 lbl_1_data_44FD8__fzgx_offset_0[];
+extern u8 lbl_1_data_44FE0__fzgx_offset_0[];
+extern u8 lbl_1_data_44FE8__fzgx_offset_0[];
+extern u8 lbl_1_data_44FF0__fzgx_offset_0[];
+extern u8 lbl_1_data_44FF8__fzgx_offset_0[];
+extern u8 lbl_1_data_45000__fzgx_offset_0[];
+extern u8 lbl_1_data_45008__fzgx_offset_0[];
+extern u8 lbl_1_data_45010__fzgx_offset_0[];
+extern u8 lbl_1_data_45018__fzgx_offset_0[];
+extern u8 lbl_1_data_45020__fzgx_offset_0[];
+extern u8 lbl_1_data_45028__fzgx_offset_0[];
+extern u8 lbl_1_data_45030__fzgx_offset_0[];
+extern u8 lbl_1_data_45038__fzgx_offset_0[];
+extern u8 lbl_1_data_45040__fzgx_offset_0[];
+extern u8 lbl_1_data_45048__fzgx_offset_0[];
+extern u8 lbl_1_data_45050__fzgx_offset_0[];
+extern u8 lbl_1_data_45058__fzgx_offset_0[];
+extern u8 lbl_1_data_45060__fzgx_offset_0[];
+extern u8 lbl_1_data_45068__fzgx_offset_0[];
+extern u8 lbl_1_data_45070__fzgx_offset_0[];
+extern u8 lbl_1_data_45078__fzgx_offset_0[];
+extern u8 lbl_1_data_45080__fzgx_offset_0[];
+extern u8 lbl_1_data_45088__fzgx_offset_0[];
+extern u8 lbl_1_data_45090__fzgx_offset_0[];
+extern u8 lbl_1_data_45098__fzgx_offset_0[];
+extern u8 lbl_1_data_450A0__fzgx_offset_0[];
+extern u8 lbl_1_data_450A8__fzgx_offset_0[];
+extern u8 lbl_1_data_450B0__fzgx_offset_0[];
+extern u8 lbl_1_data_450B8__fzgx_offset_0[];
+extern u8 lbl_1_data_450C0__fzgx_offset_0[];
+extern u8 lbl_1_data_450C8__fzgx_offset_0[];
+extern u8 lbl_1_data_450D0__fzgx_offset_0[];
+extern u8 lbl_1_data_450D8__fzgx_offset_0[];
+extern u8 lbl_1_data_450E0__fzgx_offset_0[];
+extern u8 lbl_1_data_450E8__fzgx_offset_0[];
+extern u8 lbl_1_data_450F0__fzgx_offset_0[];
+extern u8 lbl_1_data_450F8__fzgx_offset_0[];
+extern u8 lbl_1_data_45100__fzgx_offset_0[];
+extern u8 lbl_1_data_45108__fzgx_offset_0[];
+extern u8 lbl_1_data_45110__fzgx_offset_0[];
+extern u8 lbl_1_data_45118__fzgx_offset_0[];
+extern u8 lbl_1_data_45120__fzgx_offset_0[];
+extern u8 lbl_1_data_45128__fzgx_offset_0[];
+extern u8 lbl_1_data_45130__fzgx_offset_0[];
+extern u8 lbl_1_data_45138__fzgx_offset_0[];
+extern u8 lbl_1_data_45140__fzgx_offset_0[];
+extern u8 lbl_1_data_45148__fzgx_offset_0[];
+extern u8 lbl_1_data_45150__fzgx_offset_0[];
+extern u8 lbl_1_data_45158__fzgx_offset_0[];
+extern u8 lbl_1_data_45160__fzgx_offset_0[];
+extern u8 lbl_1_data_45168__fzgx_offset_0[];
+extern u8 lbl_1_data_45170__fzgx_offset_0[];
+extern u8 lbl_1_data_45178__fzgx_offset_0[];
+extern u8 lbl_1_data_45180__fzgx_offset_0[];
+extern u8 lbl_1_data_45188__fzgx_offset_0[];
+extern u8 lbl_1_data_45190__fzgx_offset_0[];
+extern u8 lbl_1_data_45198__fzgx_offset_0[];
+extern u8 lbl_1_data_451A0__fzgx_offset_0[];
+extern u8 lbl_1_data_451A8__fzgx_offset_0[];
+extern u8 lbl_1_data_45230__fzgx_offset_0[];
+extern u8 lbl_1_data_45234__fzgx_offset_0[];
+extern u8 lbl_1_data_45244__fzgx_offset_0[];
+extern u8 lbl_1_data_45248__fzgx_offset_0[];
+extern u8 lbl_1_data_45254__fzgx_offset_0[];
+extern u8 lbl_1_data_45258__fzgx_offset_0[];
+extern u8 lbl_1_data_45268__fzgx_offset_0[];
+extern u8 lbl_1_data_45270__fzgx_offset_0[];
+extern u8 lbl_1_data_4527C__fzgx_offset_0[];
+extern u8 lbl_1_data_45280__fzgx_offset_0[];
+extern u8 lbl_1_data_4528C__fzgx_offset_0[];
+extern u8 lbl_1_data_45290__fzgx_offset_0[];
+extern u8 lbl_1_data_452A0__fzgx_offset_0[];
+extern u8 lbl_1_data_452BC__fzgx_offset_0[];
+extern u8 lbl_1_data_452E4__fzgx_offset_0[];
+extern u8 lbl_1_data_45300__fzgx_offset_0[];
+extern u8 lbl_1_data_45328__fzgx_offset_0[];
+extern u8 lbl_1_data_45344__fzgx_offset_0[];
+extern u8 lbl_1_data_45370__fzgx_offset_0[];
+extern u8 lbl_1_data_45390__fzgx_offset_0[];
+extern u8 lbl_1_data_453B4__fzgx_offset_0[];
+extern u8 lbl_1_data_453D0__fzgx_offset_0[];
+extern u8 lbl_1_data_453FC__fzgx_offset_0[];
+extern u8 lbl_1_data_45418__fzgx_offset_0[];
+extern u8 lbl_1_data_45440__fzgx_offset_0[];
+extern u8 lbl_1_data_45460__fzgx_offset_0[];
+extern u8 lbl_1_data_45488__fzgx_offset_0[];
+extern u8 lbl_1_data_454A4__fzgx_offset_0[];
+extern u8 lbl_1_data_454D0__fzgx_offset_0[];
+extern u8 lbl_1_data_454E8__fzgx_offset_0[];
+extern u8 lbl_1_data_4550C__fzgx_offset_0[];
+extern u8 lbl_1_data_45528__fzgx_offset_0[];
+extern u8 lbl_1_data_45550__fzgx_offset_0[];
+extern u8 lbl_1_data_4556C__fzgx_offset_0[];
+extern u8 lbl_1_data_45594__fzgx_offset_0[];
+extern u8 lbl_1_data_455AC__fzgx_offset_0[];
+extern u8 lbl_1_data_455CC__fzgx_offset_0[];
+extern u8 lbl_1_data_455E8__fzgx_offset_0[];
+extern u8 lbl_1_data_45610__fzgx_offset_0[];
+extern u8 lbl_1_data_4562C__fzgx_offset_0[];
+extern u8 lbl_1_data_45650__fzgx_offset_0[];
+extern u8 lbl_1_data_4566C__fzgx_offset_0[];
+extern u8 lbl_1_data_45694__fzgx_offset_0[];
+extern u8 lbl_1_data_456B4__fzgx_offset_0[];
+extern u8 lbl_1_data_456E0__fzgx_offset_0[];
+extern u8 lbl_1_data_456FC__fzgx_offset_0[];
+extern u8 lbl_1_data_45720__fzgx_offset_0[];
+extern u8 lbl_1_data_4573C__fzgx_offset_0[];
+extern u8 lbl_1_data_45760__fzgx_offset_0[];
+extern u8 lbl_1_data_4577C__fzgx_offset_0[];
+extern u8 lbl_1_data_457A0__fzgx_offset_0[];
+extern u8 lbl_1_data_457B8__fzgx_offset_0[];
+extern u8 lbl_1_data_457D8__fzgx_offset_0[];
+extern u8 lbl_1_data_457F0__fzgx_offset_0[];
+extern u8 lbl_1_data_45810__fzgx_offset_0[];
+extern u8 lbl_1_data_45828__fzgx_offset_0[];
+extern u8 lbl_1_data_4584C__fzgx_offset_0[];
+extern u8 lbl_1_data_45868__fzgx_offset_0[];
+extern u8 lbl_1_data_4588C__fzgx_offset_0[];
+extern u8 lbl_1_data_458A8__fzgx_offset_0[];
+extern u8 lbl_1_data_458D4__fzgx_offset_0[];
+extern u8 lbl_1_data_458F0__fzgx_offset_0[];
+extern u8 lbl_1_data_45914__fzgx_offset_0[];
+extern u8 lbl_1_data_45930__fzgx_offset_0[];
+extern u8 lbl_1_data_45954__fzgx_offset_0[];
+extern u8 lbl_1_data_45970__fzgx_offset_0[];
+extern u8 lbl_1_data_45998__fzgx_offset_0[];
+extern u8 lbl_1_data_459B8__fzgx_offset_0[];
+extern u8 lbl_1_data_459E0__fzgx_offset_0[];
+extern u8 lbl_1_data_459FC__fzgx_offset_0[];
+extern u8 lbl_1_data_45A20__fzgx_offset_0[];
+extern u8 lbl_1_data_45A34__fzgx_offset_0[];
+extern u8 lbl_1_data_45A5C__fzgx_offset_0[];
+extern u8 lbl_1_data_45A74__fzgx_offset_0[];
+extern u8 lbl_1_data_45A98__fzgx_offset_0[];
+extern u8 lbl_1_data_45AB4__fzgx_offset_0[];
+extern u8 lbl_1_data_45AE0__fzgx_offset_0[];
+extern u8 lbl_1_data_45AF8__fzgx_offset_0[];
+extern u8 lbl_1_data_45B1C__fzgx_offset_0[];
+extern u8 lbl_1_data_45B34__fzgx_offset_0[];
+extern u8 lbl_1_data_45B54__fzgx_offset_0[];
+extern u8 lbl_1_data_45B70__fzgx_offset_0[];
+extern u8 lbl_1_data_45B94__fzgx_offset_0[];
+extern u8 lbl_1_data_45BB0__fzgx_offset_0[];
+extern u8 lbl_1_data_45BD8__fzgx_offset_0[];
+extern u8 lbl_1_data_45BF4__fzgx_offset_0[];
+extern u8 lbl_1_data_45C20__fzgx_offset_0[];
+extern u8 lbl_1_data_45C3C__fzgx_offset_0[];
+extern u8 lbl_1_data_45C64__fzgx_offset_0[];
+extern u8 lbl_1_data_45C80__fzgx_offset_0[];
+extern u8 lbl_1_data_45CA8__fzgx_offset_0[];
+extern u8 lbl_1_data_45CC0__fzgx_offset_0[];
+extern u8 lbl_1_data_45CE4__fzgx_offset_0[];
+extern u8 lbl_1_data_45CFC__fzgx_offset_0[];
+extern u8 lbl_1_data_45D20__fzgx_offset_0[];
+extern u8 lbl_1_data_45D3C__fzgx_offset_0[];
+extern u8 lbl_1_data_45D68__fzgx_offset_0[];
+extern u8 lbl_1_data_45D80__fzgx_offset_0[];
+extern u8 lbl_1_data_45DA4__fzgx_offset_0[];
+extern u8 lbl_1_data_45DC4__fzgx_offset_0[];
+extern u8 lbl_1_data_45DF0__fzgx_offset_0[];
+extern u8 lbl_1_data_45E0C__fzgx_offset_0[];
+extern u8 lbl_1_data_45E30__fzgx_offset_0[];
+extern u8 lbl_1_data_45E4C__fzgx_offset_0[];
+extern u8 lbl_1_data_45E70__fzgx_offset_0[];
+extern u8 lbl_1_data_45E8C__fzgx_offset_0[];
+extern u8 lbl_1_data_45EB8__fzgx_offset_0[];
+extern u8 lbl_1_data_45ED4__fzgx_offset_0[];
+extern u8 lbl_1_data_45EFC__fzgx_offset_0[];
+extern u8 lbl_1_data_45F14__fzgx_offset_0[];
+extern u8 lbl_1_data_45F38__fzgx_offset_0[];
+extern u8 lbl_1_data_45F54__fzgx_offset_0[];
+extern u8 lbl_1_data_45F7C__fzgx_offset_0[];
+extern u8 lbl_1_data_45F88__fzgx_offset_0[];
+extern u8 lbl_1_data_45F94__fzgx_offset_0[];
+extern u8 lbl_1_data_45FA8__fzgx_offset_0[];
+extern u8 lbl_1_data_45FC0__fzgx_offset_0[];
+extern u8 lbl_1_data_45FD0__fzgx_offset_0[];
+extern u8 lbl_1_data_45FE0__fzgx_offset_0[];
+extern u8 lbl_1_data_45FEC__fzgx_offset_0[];
+extern u8 lbl_1_data_45FFC__fzgx_offset_0[];
+extern u8 lbl_1_data_46008__fzgx_offset_0[];
+extern u8 lbl_1_data_46014__fzgx_offset_0[];
+extern u8 lbl_1_data_46024__fzgx_offset_0[];
+extern u8 lbl_1_data_46034__fzgx_offset_0[];
+extern u8 lbl_1_data_46048__fzgx_offset_0[];
+extern u8 lbl_1_data_46060__fzgx_offset_0[];
+extern u8 lbl_1_data_46070__fzgx_offset_0[];
+extern u8 lbl_1_data_46080__fzgx_offset_0[];
+extern u8 lbl_1_data_46090__fzgx_offset_0[];
+extern u8 lbl_1_data_460A0__fzgx_offset_0[];
+extern u8 lbl_1_data_460B0__fzgx_offset_0[];
+extern u8 lbl_1_data_460C8__fzgx_offset_0[];
+extern u8 lbl_1_data_460DC__fzgx_offset_0[];
+extern u8 lbl_1_data_460F4__fzgx_offset_0[];
+extern u8 lbl_1_data_46100__fzgx_offset_0[];
+extern u8 lbl_1_data_4610C__fzgx_offset_0[];
+extern u8 lbl_1_data_4611C__fzgx_offset_0[];
+extern u8 lbl_1_data_4612C__fzgx_offset_0[];
+extern u8 lbl_1_data_46140__fzgx_offset_0[];
+extern u8 lbl_1_data_46154__fzgx_offset_0[];
+extern u8 lbl_1_data_46164__fzgx_offset_0[];
+extern u8 lbl_1_data_46178__fzgx_offset_0[];
+extern u8 lbl_1_data_46188__fzgx_offset_0[];
+extern u8 lbl_1_data_46198__fzgx_offset_0[];
+extern u8 lbl_1_data_461A4__fzgx_offset_0[];
+extern u8 lbl_1_data_461B4__fzgx_offset_0[];
+extern u8 lbl_1_data_461C0__fzgx_offset_0[];
+extern u8 lbl_1_data_461CC__fzgx_offset_0[];
+extern u8 lbl_1_data_461DC__fzgx_offset_0[];
+extern u8 lbl_1_data_461EC__fzgx_offset_0[];
+extern u8 lbl_1_data_461F8__fzgx_offset_0[];
+extern u8 lbl_1_data_46204__fzgx_offset_0[];
+extern u8 lbl_1_data_46214__fzgx_offset_0[];
+extern u8 lbl_1_data_46228__fzgx_offset_0[];
+extern u8 lbl_1_data_46234__fzgx_offset_0[];
+extern u8 lbl_1_data_46244__fzgx_offset_0[];
+extern u8 lbl_1_data_46250__fzgx_offset_0[];
+extern u8 lbl_1_data_46260__fzgx_offset_0[];
+extern u8 lbl_1_data_46270__fzgx_offset_0[];
+extern u8 lbl_1_data_46280__fzgx_offset_0[];
+extern u8 lbl_1_data_46290__fzgx_offset_0[];
+extern u8 lbl_1_data_462B8__fzgx_offset_0[];
+extern u8 lbl_1_data_462BC__fzgx_offset_0[];
+extern u8 lbl_1_data_462C0__fzgx_offset_0[];
+extern u8 lbl_1_data_462C4__fzgx_offset_0[];
+extern u8 lbl_1_data_462C8__fzgx_offset_0[];
+extern u8 lbl_1_data_462CC__fzgx_offset_0[];
+extern u8 lbl_1_data_462D0__fzgx_offset_0[];
+extern u8 lbl_1_data_462D4__fzgx_offset_0[];
+extern u8 lbl_1_data_462D8__fzgx_offset_0[];
+extern u8 lbl_1_data_46300__fzgx_offset_0[];
+extern u8 lbl_1_data_46308__fzgx_offset_0[];
+extern u8 lbl_1_data_46310__fzgx_offset_0[];
+extern u8 lbl_1_data_46318__fzgx_offset_0[];
+extern u8 lbl_1_data_46328__fzgx_offset_0[];
+extern u8 lbl_1_data_46330__fzgx_offset_0[];
+static const union { u32 w[150]; const u32 v[0x258 / 4]; } fzgx_pool_init_fzgx_pool_table_0 = {{  /* fzgx-allow: A1 retail data bytes and bindings */
+    0x80000000, 0x10000000, 0x80000000, 0x80000000, 0x80000000, 0x80000000, 0x0, 0x80000000,  /* fzgx-allow: A1 retail data bytes */
+    0x10000000, 0x60000000, 0x80000000, 0x90000000, 0x0, 0x20000000, 0x20000000, 0x80000000,  /* fzgx-allow: A1 retail data bytes */
+    0x80000000, 0x10000000, 0x0, 0x20000000, 0x20000000, 0x80000000, 0x90000000, 0x0,  /* fzgx-allow: A1 retail data bytes */
+    0x0, 0x80000000, 0x10000000, 0x80000000, 0x0, 0x80000000, 0x80000000, 0x80000000,  /* fzgx-allow: A1 retail data bytes */
+    0x20000000, 0x80000000, 0x60000000, 0x80000000, 0x0, 0x20000000, 0x10000000, 0x0,  /* fzgx-allow: A1 retail data bytes */
+    0x80000000, 0x0, 0x80000000, 0x80000000, 0x10000000, 0x20000000, 0x90000000, 0x0,  /* fzgx-allow: A1 retail data bytes */
+    0x90000000, 0x20000000, 0x80000009, 0x8000001A, 0x10000002, 0x60000001, 0x18, 0x8000000A,  /* fzgx-allow: A1 retail data bytes */
+    0x80000002, 0x90000003, 0xA, 0x8000000B, 0x1B, 0x20000010, 0x90000002, 0x80000013,  /* fzgx-allow: A1 retail data bytes */
+    0x2000001A, 0xB, 0x80000019, 0x20000000, 0x8000001B, 0x20000011, 0x10000012, 0x80000008,  /* fzgx-allow: A1 retail data bytes */
+    0x80000012, 0x10000003, 0x3, (u32)lbl_1_data_44F58__fzgx_offset_0, (u32)lbl_1_data_44F60__fzgx_offset_0, (u32)lbl_1_data_44F68__fzgx_offset_0, (u32)lbl_1_data_44F70__fzgx_offset_0, (u32)lbl_1_data_44F78__fzgx_offset_0,  /* fzgx-allow: A1 retail data bytes */
+    (u32)lbl_1_data_44F80__fzgx_offset_0, (u32)lbl_1_data_44F88__fzgx_offset_0, (u32)lbl_1_data_44F90__fzgx_offset_0, (u32)lbl_1_data_44F98__fzgx_offset_0, (u32)lbl_1_data_44FA0__fzgx_offset_0, (u32)lbl_1_data_44FA8__fzgx_offset_0, (u32)lbl_1_data_44FB0__fzgx_offset_0, (u32)lbl_1_data_44FB8__fzgx_offset_0,
+    (u32)lbl_1_data_44FC0__fzgx_offset_0, (u32)lbl_1_data_44FC8__fzgx_offset_0, (u32)lbl_1_data_44FD0__fzgx_offset_0, (u32)lbl_1_data_44FD8__fzgx_offset_0, (u32)lbl_1_data_44FE0__fzgx_offset_0, (u32)lbl_1_data_44FE8__fzgx_offset_0, (u32)lbl_1_data_44FF0__fzgx_offset_0, (u32)lbl_1_data_44FF8__fzgx_offset_0,
+    (u32)lbl_1_data_45000__fzgx_offset_0, (u32)lbl_1_data_45008__fzgx_offset_0, (u32)lbl_1_data_45010__fzgx_offset_0, (u32)lbl_1_data_45018__fzgx_offset_0, (u32)lbl_1_data_45020__fzgx_offset_0, (u32)lbl_1_data_45028__fzgx_offset_0, (u32)lbl_1_data_45030__fzgx_offset_0, (u32)lbl_1_data_45038__fzgx_offset_0,
+    (u32)lbl_1_data_45040__fzgx_offset_0, (u32)lbl_1_data_45048__fzgx_offset_0, (u32)lbl_1_data_45050__fzgx_offset_0, (u32)lbl_1_data_45058__fzgx_offset_0, (u32)lbl_1_data_45060__fzgx_offset_0, (u32)lbl_1_data_45068__fzgx_offset_0, (u32)lbl_1_data_45070__fzgx_offset_0, (u32)lbl_1_data_45078__fzgx_offset_0,
+    (u32)lbl_1_data_45080__fzgx_offset_0, (u32)lbl_1_data_45088__fzgx_offset_0, (u32)lbl_1_data_45090__fzgx_offset_0, (u32)lbl_1_data_45098__fzgx_offset_0, (u32)lbl_1_data_450A0__fzgx_offset_0, (u32)lbl_1_data_450A8__fzgx_offset_0, (u32)lbl_1_data_450B0__fzgx_offset_0, (u32)lbl_1_data_450B8__fzgx_offset_0,
+    (u32)lbl_1_data_450C0__fzgx_offset_0, (u32)lbl_1_data_450C8__fzgx_offset_0, (u32)lbl_1_data_450D0__fzgx_offset_0, (u32)lbl_1_data_450D8__fzgx_offset_0, (u32)lbl_1_data_450E0__fzgx_offset_0, (u32)lbl_1_data_450E8__fzgx_offset_0, (u32)lbl_1_data_450F0__fzgx_offset_0, (u32)lbl_1_data_450F8__fzgx_offset_0,
+    (u32)lbl_1_data_45100__fzgx_offset_0, (u32)lbl_1_data_45108__fzgx_offset_0, (u32)lbl_1_data_45110__fzgx_offset_0, (u32)lbl_1_data_45118__fzgx_offset_0, (u32)lbl_1_data_45120__fzgx_offset_0, (u32)lbl_1_data_45128__fzgx_offset_0, (u32)lbl_1_data_45130__fzgx_offset_0, (u32)lbl_1_data_45138__fzgx_offset_0,
+    (u32)lbl_1_data_45140__fzgx_offset_0, (u32)lbl_1_data_45148__fzgx_offset_0, (u32)lbl_1_data_45150__fzgx_offset_0, (u32)lbl_1_data_45158__fzgx_offset_0, (u32)lbl_1_data_45160__fzgx_offset_0, (u32)lbl_1_data_45168__fzgx_offset_0, (u32)lbl_1_data_45170__fzgx_offset_0, (u32)lbl_1_data_45178__fzgx_offset_0,
+    (u32)lbl_1_data_45180__fzgx_offset_0, (u32)lbl_1_data_45188__fzgx_offset_0, (u32)lbl_1_data_45190__fzgx_offset_0, (u32)lbl_1_data_45198__fzgx_offset_0, (u32)lbl_1_data_451A0__fzgx_offset_0, (u32)lbl_1_data_451A8__fzgx_offset_0
+}};
+#pragma section code_type ".fzgxpool"
+static f32 fzgx_pool_primer_one(void) { return 1.0f; }
+#pragma section code_type ".text"
+static const union { u32 w[1831]; const u32 v[0x1C9C / 4]; } fzgx_pool_init_fzgx_pool_table_25C = {{  /* fzgx-allow: A1 retail data bytes and bindings */
+    (u32)lbl_1_data_45230__fzgx_offset_0, (u32)lbl_1_data_45230__fzgx_offset_0, (u32)lbl_1_data_45230__fzgx_offset_0, (u32)lbl_1_data_45230__fzgx_offset_0, (u32)lbl_1_data_45230__fzgx_offset_0, (u32)lbl_1_data_45234__fzgx_offset_0, (u32)lbl_1_data_45244__fzgx_offset_0, (u32)lbl_1_data_45244__fzgx_offset_0,
+    (u32)lbl_1_data_45244__fzgx_offset_0, (u32)lbl_1_data_45244__fzgx_offset_0, (u32)lbl_1_data_45244__fzgx_offset_0, (u32)lbl_1_data_45248__fzgx_offset_0, (u32)lbl_1_data_45254__fzgx_offset_0, (u32)lbl_1_data_45254__fzgx_offset_0, (u32)lbl_1_data_45254__fzgx_offset_0, (u32)lbl_1_data_45254__fzgx_offset_0,
+    (u32)lbl_1_data_45254__fzgx_offset_0, (u32)lbl_1_data_45258__fzgx_offset_0, (u32)lbl_1_data_45244__fzgx_offset_0, (u32)lbl_1_data_45244__fzgx_offset_0, (u32)lbl_1_data_45244__fzgx_offset_0, (u32)lbl_1_data_45244__fzgx_offset_0, (u32)lbl_1_data_45244__fzgx_offset_0, (u32)lbl_1_data_45268__fzgx_offset_0,
+    (u32)lbl_1_data_45254__fzgx_offset_0, (u32)lbl_1_data_45254__fzgx_offset_0, (u32)lbl_1_data_45254__fzgx_offset_0, (u32)lbl_1_data_45254__fzgx_offset_0, (u32)lbl_1_data_45254__fzgx_offset_0, (u32)lbl_1_data_45270__fzgx_offset_0, (u32)lbl_1_data_4527C__fzgx_offset_0, (u32)lbl_1_data_4527C__fzgx_offset_0,
+    (u32)lbl_1_data_4527C__fzgx_offset_0, (u32)lbl_1_data_4527C__fzgx_offset_0, (u32)lbl_1_data_4527C__fzgx_offset_0, (u32)lbl_1_data_45280__fzgx_offset_0, (u32)lbl_1_data_4528C__fzgx_offset_0, (u32)lbl_1_data_4528C__fzgx_offset_0, (u32)lbl_1_data_4528C__fzgx_offset_0, (u32)lbl_1_data_4528C__fzgx_offset_0,
+    (u32)lbl_1_data_4528C__fzgx_offset_0, (u32)lbl_1_data_45290__fzgx_offset_0, 0x0, 0x0, 0x70008, 0x80000000, 0x10000, 0x0,  /* fzgx-allow: A1 retail data bytes */
+    0x9000F, 0x10000000, 0x20000, 0x0, 0x30008, 0x80000000, 0x30000, 0x0,  /* fzgx-allow: A1 retail data bytes */
+    0x10008, 0x80000000, 0x40000, 0x0, 0x90008, 0x80000000, 0x50000, 0x0,  /* fzgx-allow: A1 retail data bytes */
+    0x30008, 0x80000000, 0x60000, 0x0, 0x30004, 0x0, 0x70000, 0x0,  /* fzgx-allow: A1 retail data bytes */
+    0x50008, 0x80000000, 0x80000, 0x0, 0x5000F, 0x10000000, 0x90000, 0x0,  /* fzgx-allow: A1 retail data bytes */
+    0x70063, 0x60000000, 0xA0000, 0x0, 0x70008, 0x80000000, 0xB0000, 0x0,  /* fzgx-allow: A1 retail data bytes */
+    0x3000F, 0x90000000, 0xC0000, 0x0, 0x10005, 0x0, 0xD0000, 0x0,
+    0x10005, 0x20000000, 0xE0000, 0x0, 0x30003, 0x20000000, 0xF0000, 0x0,
+    0x10008, 0x80000000, 0x100000, 0x0, 0x50008, 0x80000000, 0x110000, 0x0,  /* fzgx-allow: A1 retail data bytes */
+    0x7000F, 0x10000000, 0x120000, 0x0, 0x50005, 0x0, 0x130000, 0x0,
+    0x50004, 0x20000000, 0x140000, 0x0, 0x50004, 0x20000000, 0x150000, 0x0,
+    0x50008, 0x80000000, 0x160000, 0x0, 0x3000F, 0x90000000, 0x170000, 0x0,  /* fzgx-allow: A1 retail data bytes */
+    0x9000A, 0x0, 0x180000, 0x0, 0x70007, 0x0, 0x190001, 0x0,
+    0x70008, 0x80000000, 0x1A0001, 0x0, 0x7000F, 0x10000000, 0x1B0001, 0x0,  /* fzgx-allow: A1 retail data bytes */
+    0x10008, 0x80000000, 0x1C0001, 0x0, 0x50004, 0x0, 0x1D0001, 0x0,  /* fzgx-allow: A1 retail data bytes */
+    0x50008, 0x80000000, 0x1E0001, 0x0, 0x30008, 0x80000000, 0x1F0001, 0x0,  /* fzgx-allow: A1 retail data bytes */
+    0x90008, 0x80000000, 0x200001, 0x0, 0x90003, 0x20000000, 0x210001, 0x0,  /* fzgx-allow: A1 retail data bytes */
+    0x30008, 0x80000000, 0x220001, 0x0, 0x70063, 0x60000000, 0x230001, 0x0,  /* fzgx-allow: A1 retail data bytes */
+    0x90008, 0x80000000, 0x240001, 0x0, 0x1000A, 0x0, 0x250001, 0x0,  /* fzgx-allow: A1 retail data bytes */
+    0x50004, 0x20000000, 0x260001, 0x0, 0x3000F, 0x10000000, 0x270001, 0x0,
+    0x30005, 0x0, 0x280001, 0x0, 0x70008, 0x80000000, 0x290001, 0x0,  /* fzgx-allow: A1 retail data bytes */
+    0x90005, 0x0, 0x2A0001, 0x0, 0x50008, 0x80000000, 0x2B0001, 0x0,  /* fzgx-allow: A1 retail data bytes */
+    0x50008, 0x80000000, 0x2C0001, 0x0, 0x1000F, 0x10000000, 0x2D0001, 0x0,  /* fzgx-allow: A1 retail data bytes */
+    0x70004, 0x20000000, 0x2E0001, 0x0, 0x1000F, 0x90000000, 0x2F0001, 0x0,
+    0x50007, 0x0, 0x300001, 0x0, 0x5000F, 0x90000000, 0x310001, 0x0,
+    0x30005, 0x20000000, 0x320002, 0x0, 0x90008, 0x80000009, 0x330002, 0x0,  /* fzgx-allow: A1 retail data bytes */
+    0x50008, 0x8000001A, 0x340002, 0x0, 0x5000F, 0x10000002, 0x350002, 0x0,  /* fzgx-allow: A1 retail data bytes */
+    0x90063, 0x60000001, 0x360002, 0x0, 0x70004, 0x18, 0x370002, 0x0,
+    0x50008, 0x8000000A, 0x380002, 0x0, 0x10008, 0x80000002, 0x390002, 0x0,  /* fzgx-allow: A1 retail data bytes */
+    0x7000F, 0x90000003, 0x3A0002, 0x0, 0x30005, 0xA, 0x3B0002, 0x0,
+    0x30008, 0x8000000B, 0x3C0002, 0x0, 0x1000A, 0x1B, 0x3D0002, 0x0,  /* fzgx-allow: A1 retail data bytes */
+    0x50005, 0x20000010, 0x3E0002, 0x0, 0x3000F, 0x90000002, 0x3F0002, 0x0,
+    0x30008, 0x80000013, 0x400002, 0x0, 0x50004, 0x2000001A, 0x410002, 0x0,  /* fzgx-allow: A1 retail data bytes */
+    0x30005, 0xB, 0x420002, 0x0, 0x70008, 0x80000019, 0x430002, 0x0,  /* fzgx-allow: A1 retail data bytes */
+    0x70003, 0x20000000, 0x440002, 0x0, 0x30008, 0x8000001B, 0x450002, 0x0,  /* fzgx-allow: A1 retail data bytes */
+    0x50004, 0x20000011, 0x460002, 0x0, 0x1000F, 0x10000012, 0x470002, 0x0,
+    0x70008, 0x80000008, 0x480002, 0x0, 0x50008, 0x80000012, 0x490002, 0x0,  /* fzgx-allow: A1 retail data bytes */
+    0x7000F, 0x10000003, 0x4A0002, 0x0, 0x10007, 0x3, (u32)lbl_1_data_452A0__fzgx_offset_0, (u32)lbl_1_data_452A0__fzgx_offset_0,
+    (u32)lbl_1_data_452A0__fzgx_offset_0, (u32)lbl_1_data_452A0__fzgx_offset_0, (u32)lbl_1_data_452A0__fzgx_offset_0, (u32)lbl_1_data_452BC__fzgx_offset_0, (u32)lbl_1_data_452E4__fzgx_offset_0, (u32)lbl_1_data_452E4__fzgx_offset_0, (u32)lbl_1_data_452E4__fzgx_offset_0, (u32)lbl_1_data_452E4__fzgx_offset_0,
+    (u32)lbl_1_data_452E4__fzgx_offset_0, (u32)lbl_1_data_45300__fzgx_offset_0, (u32)lbl_1_data_45328__fzgx_offset_0, (u32)lbl_1_data_45328__fzgx_offset_0, (u32)lbl_1_data_45328__fzgx_offset_0, (u32)lbl_1_data_45328__fzgx_offset_0, (u32)lbl_1_data_45328__fzgx_offset_0, (u32)lbl_1_data_45344__fzgx_offset_0,
+    (u32)lbl_1_data_45370__fzgx_offset_0, (u32)lbl_1_data_45370__fzgx_offset_0, (u32)lbl_1_data_45370__fzgx_offset_0, (u32)lbl_1_data_45370__fzgx_offset_0, (u32)lbl_1_data_45370__fzgx_offset_0, (u32)lbl_1_data_45390__fzgx_offset_0, (u32)lbl_1_data_453B4__fzgx_offset_0, (u32)lbl_1_data_453B4__fzgx_offset_0,
+    (u32)lbl_1_data_453B4__fzgx_offset_0, (u32)lbl_1_data_453B4__fzgx_offset_0, (u32)lbl_1_data_453B4__fzgx_offset_0, (u32)lbl_1_data_453D0__fzgx_offset_0, (u32)lbl_1_data_453FC__fzgx_offset_0, (u32)lbl_1_data_453FC__fzgx_offset_0, (u32)lbl_1_data_453FC__fzgx_offset_0, (u32)lbl_1_data_453FC__fzgx_offset_0,
+    (u32)lbl_1_data_453FC__fzgx_offset_0, (u32)lbl_1_data_45418__fzgx_offset_0, (u32)lbl_1_data_45440__fzgx_offset_0, (u32)lbl_1_data_45440__fzgx_offset_0, (u32)lbl_1_data_45440__fzgx_offset_0, (u32)lbl_1_data_45440__fzgx_offset_0, (u32)lbl_1_data_45440__fzgx_offset_0, (u32)lbl_1_data_45460__fzgx_offset_0,
+    (u32)lbl_1_data_45488__fzgx_offset_0, (u32)lbl_1_data_45488__fzgx_offset_0, (u32)lbl_1_data_45488__fzgx_offset_0, (u32)lbl_1_data_45488__fzgx_offset_0, (u32)lbl_1_data_45488__fzgx_offset_0, (u32)lbl_1_data_454A4__fzgx_offset_0, (u32)lbl_1_data_454D0__fzgx_offset_0, (u32)lbl_1_data_454D0__fzgx_offset_0,
+    (u32)lbl_1_data_454D0__fzgx_offset_0, (u32)lbl_1_data_454D0__fzgx_offset_0, (u32)lbl_1_data_454D0__fzgx_offset_0, (u32)lbl_1_data_454E8__fzgx_offset_0, (u32)lbl_1_data_4550C__fzgx_offset_0, (u32)lbl_1_data_4550C__fzgx_offset_0, (u32)lbl_1_data_4550C__fzgx_offset_0, (u32)lbl_1_data_4550C__fzgx_offset_0,
+    (u32)lbl_1_data_4550C__fzgx_offset_0, (u32)lbl_1_data_45528__fzgx_offset_0, (u32)lbl_1_data_45550__fzgx_offset_0, (u32)lbl_1_data_45550__fzgx_offset_0, (u32)lbl_1_data_45550__fzgx_offset_0, (u32)lbl_1_data_45550__fzgx_offset_0, (u32)lbl_1_data_45550__fzgx_offset_0, (u32)lbl_1_data_4556C__fzgx_offset_0,
+    (u32)lbl_1_data_45594__fzgx_offset_0, (u32)lbl_1_data_45594__fzgx_offset_0, (u32)lbl_1_data_45594__fzgx_offset_0, (u32)lbl_1_data_45594__fzgx_offset_0, (u32)lbl_1_data_45594__fzgx_offset_0, (u32)lbl_1_data_455AC__fzgx_offset_0, (u32)lbl_1_data_455CC__fzgx_offset_0, (u32)lbl_1_data_455CC__fzgx_offset_0,
+    (u32)lbl_1_data_455CC__fzgx_offset_0, (u32)lbl_1_data_455CC__fzgx_offset_0, (u32)lbl_1_data_455CC__fzgx_offset_0, (u32)lbl_1_data_455E8__fzgx_offset_0, (u32)lbl_1_data_45610__fzgx_offset_0, (u32)lbl_1_data_45610__fzgx_offset_0, (u32)lbl_1_data_45610__fzgx_offset_0, (u32)lbl_1_data_45610__fzgx_offset_0,
+    (u32)lbl_1_data_45610__fzgx_offset_0, (u32)lbl_1_data_4562C__fzgx_offset_0, (u32)lbl_1_data_45650__fzgx_offset_0, (u32)lbl_1_data_45650__fzgx_offset_0, (u32)lbl_1_data_45650__fzgx_offset_0, (u32)lbl_1_data_45650__fzgx_offset_0, (u32)lbl_1_data_45650__fzgx_offset_0, (u32)lbl_1_data_4566C__fzgx_offset_0,
+    (u32)lbl_1_data_45694__fzgx_offset_0, (u32)lbl_1_data_45694__fzgx_offset_0, (u32)lbl_1_data_45694__fzgx_offset_0, (u32)lbl_1_data_45694__fzgx_offset_0, (u32)lbl_1_data_45694__fzgx_offset_0, (u32)lbl_1_data_456B4__fzgx_offset_0, (u32)lbl_1_data_456E0__fzgx_offset_0, (u32)lbl_1_data_456E0__fzgx_offset_0,
+    (u32)lbl_1_data_456E0__fzgx_offset_0, (u32)lbl_1_data_456E0__fzgx_offset_0, (u32)lbl_1_data_456E0__fzgx_offset_0, (u32)lbl_1_data_456FC__fzgx_offset_0, (u32)lbl_1_data_45720__fzgx_offset_0, (u32)lbl_1_data_45720__fzgx_offset_0, (u32)lbl_1_data_45720__fzgx_offset_0, (u32)lbl_1_data_45720__fzgx_offset_0,
+    (u32)lbl_1_data_45720__fzgx_offset_0, (u32)lbl_1_data_4573C__fzgx_offset_0, (u32)lbl_1_data_45760__fzgx_offset_0, (u32)lbl_1_data_45760__fzgx_offset_0, (u32)lbl_1_data_45760__fzgx_offset_0, (u32)lbl_1_data_45760__fzgx_offset_0, (u32)lbl_1_data_45760__fzgx_offset_0, (u32)lbl_1_data_4577C__fzgx_offset_0,
+    (u32)lbl_1_data_457A0__fzgx_offset_0, (u32)lbl_1_data_457A0__fzgx_offset_0, (u32)lbl_1_data_457A0__fzgx_offset_0, (u32)lbl_1_data_457A0__fzgx_offset_0, (u32)lbl_1_data_457A0__fzgx_offset_0, (u32)lbl_1_data_457B8__fzgx_offset_0, (u32)lbl_1_data_457D8__fzgx_offset_0, (u32)lbl_1_data_457D8__fzgx_offset_0,
+    (u32)lbl_1_data_457D8__fzgx_offset_0, (u32)lbl_1_data_457D8__fzgx_offset_0, (u32)lbl_1_data_457D8__fzgx_offset_0, (u32)lbl_1_data_457F0__fzgx_offset_0, (u32)lbl_1_data_45810__fzgx_offset_0, (u32)lbl_1_data_45810__fzgx_offset_0, (u32)lbl_1_data_45810__fzgx_offset_0, (u32)lbl_1_data_45810__fzgx_offset_0,
+    (u32)lbl_1_data_45810__fzgx_offset_0, (u32)lbl_1_data_45828__fzgx_offset_0, (u32)lbl_1_data_4584C__fzgx_offset_0, (u32)lbl_1_data_4584C__fzgx_offset_0, (u32)lbl_1_data_4584C__fzgx_offset_0, (u32)lbl_1_data_4584C__fzgx_offset_0, (u32)lbl_1_data_4584C__fzgx_offset_0, (u32)lbl_1_data_45868__fzgx_offset_0,
+    (u32)lbl_1_data_4588C__fzgx_offset_0, (u32)lbl_1_data_4588C__fzgx_offset_0, (u32)lbl_1_data_4588C__fzgx_offset_0, (u32)lbl_1_data_4588C__fzgx_offset_0, (u32)lbl_1_data_4588C__fzgx_offset_0, (u32)lbl_1_data_458A8__fzgx_offset_0, (u32)lbl_1_data_458D4__fzgx_offset_0, (u32)lbl_1_data_458D4__fzgx_offset_0,
+    (u32)lbl_1_data_458D4__fzgx_offset_0, (u32)lbl_1_data_458D4__fzgx_offset_0, (u32)lbl_1_data_458D4__fzgx_offset_0, (u32)lbl_1_data_458F0__fzgx_offset_0, (u32)lbl_1_data_45914__fzgx_offset_0, (u32)lbl_1_data_45914__fzgx_offset_0, (u32)lbl_1_data_45914__fzgx_offset_0, (u32)lbl_1_data_45914__fzgx_offset_0,
+    (u32)lbl_1_data_45914__fzgx_offset_0, (u32)lbl_1_data_45930__fzgx_offset_0, (u32)lbl_1_data_45954__fzgx_offset_0, (u32)lbl_1_data_45954__fzgx_offset_0, (u32)lbl_1_data_45954__fzgx_offset_0, (u32)lbl_1_data_45954__fzgx_offset_0, (u32)lbl_1_data_45954__fzgx_offset_0, (u32)lbl_1_data_45970__fzgx_offset_0,
+    (u32)lbl_1_data_45998__fzgx_offset_0, (u32)lbl_1_data_45998__fzgx_offset_0, (u32)lbl_1_data_45998__fzgx_offset_0, (u32)lbl_1_data_45998__fzgx_offset_0, (u32)lbl_1_data_45998__fzgx_offset_0, (u32)lbl_1_data_459B8__fzgx_offset_0, (u32)lbl_1_data_459E0__fzgx_offset_0, (u32)lbl_1_data_459E0__fzgx_offset_0,
+    (u32)lbl_1_data_459E0__fzgx_offset_0, (u32)lbl_1_data_459E0__fzgx_offset_0, (u32)lbl_1_data_459E0__fzgx_offset_0, (u32)lbl_1_data_459FC__fzgx_offset_0, (u32)lbl_1_data_45A20__fzgx_offset_0, (u32)lbl_1_data_45A20__fzgx_offset_0, (u32)lbl_1_data_45A20__fzgx_offset_0, (u32)lbl_1_data_45A20__fzgx_offset_0,
+    (u32)lbl_1_data_45A20__fzgx_offset_0, (u32)lbl_1_data_45A34__fzgx_offset_0, (u32)lbl_1_data_45A5C__fzgx_offset_0, (u32)lbl_1_data_45A5C__fzgx_offset_0, (u32)lbl_1_data_45A5C__fzgx_offset_0, (u32)lbl_1_data_45A5C__fzgx_offset_0, (u32)lbl_1_data_45A5C__fzgx_offset_0, (u32)lbl_1_data_45A74__fzgx_offset_0,
+    (u32)lbl_1_data_45A98__fzgx_offset_0, (u32)lbl_1_data_45A98__fzgx_offset_0, (u32)lbl_1_data_45A98__fzgx_offset_0, (u32)lbl_1_data_45A98__fzgx_offset_0, (u32)lbl_1_data_45A98__fzgx_offset_0, (u32)lbl_1_data_45AB4__fzgx_offset_0, (u32)lbl_1_data_45AE0__fzgx_offset_0, (u32)lbl_1_data_45AE0__fzgx_offset_0,
+    (u32)lbl_1_data_45AE0__fzgx_offset_0, (u32)lbl_1_data_45AE0__fzgx_offset_0, (u32)lbl_1_data_45AE0__fzgx_offset_0, (u32)lbl_1_data_45AF8__fzgx_offset_0, (u32)lbl_1_data_45B1C__fzgx_offset_0, (u32)lbl_1_data_45B1C__fzgx_offset_0, (u32)lbl_1_data_45B1C__fzgx_offset_0, (u32)lbl_1_data_45B1C__fzgx_offset_0,
+    (u32)lbl_1_data_45B1C__fzgx_offset_0, (u32)lbl_1_data_45B34__fzgx_offset_0, (u32)lbl_1_data_45B54__fzgx_offset_0, (u32)lbl_1_data_45B54__fzgx_offset_0, (u32)lbl_1_data_45B54__fzgx_offset_0, (u32)lbl_1_data_45B54__fzgx_offset_0, (u32)lbl_1_data_45B54__fzgx_offset_0, (u32)lbl_1_data_45B70__fzgx_offset_0,
+    (u32)lbl_1_data_45B94__fzgx_offset_0, (u32)lbl_1_data_45B94__fzgx_offset_0, (u32)lbl_1_data_45B94__fzgx_offset_0, (u32)lbl_1_data_45B94__fzgx_offset_0, (u32)lbl_1_data_45B94__fzgx_offset_0, (u32)lbl_1_data_45BB0__fzgx_offset_0, (u32)lbl_1_data_45BD8__fzgx_offset_0, (u32)lbl_1_data_45BD8__fzgx_offset_0,
+    (u32)lbl_1_data_45BD8__fzgx_offset_0, (u32)lbl_1_data_45BD8__fzgx_offset_0, (u32)lbl_1_data_45BD8__fzgx_offset_0, (u32)lbl_1_data_45BF4__fzgx_offset_0, (u32)lbl_1_data_45C20__fzgx_offset_0, (u32)lbl_1_data_45C20__fzgx_offset_0, (u32)lbl_1_data_45C20__fzgx_offset_0, (u32)lbl_1_data_45C20__fzgx_offset_0,
+    (u32)lbl_1_data_45C20__fzgx_offset_0, (u32)lbl_1_data_45C3C__fzgx_offset_0, (u32)lbl_1_data_45C64__fzgx_offset_0, (u32)lbl_1_data_45C64__fzgx_offset_0, (u32)lbl_1_data_45C64__fzgx_offset_0, (u32)lbl_1_data_45C64__fzgx_offset_0, (u32)lbl_1_data_45C64__fzgx_offset_0, (u32)lbl_1_data_45C80__fzgx_offset_0,
+    (u32)lbl_1_data_45CA8__fzgx_offset_0, (u32)lbl_1_data_45CA8__fzgx_offset_0, (u32)lbl_1_data_45CA8__fzgx_offset_0, (u32)lbl_1_data_45CA8__fzgx_offset_0, (u32)lbl_1_data_45CA8__fzgx_offset_0, (u32)lbl_1_data_45CC0__fzgx_offset_0, (u32)lbl_1_data_45CE4__fzgx_offset_0, (u32)lbl_1_data_45CE4__fzgx_offset_0,
+    (u32)lbl_1_data_45CE4__fzgx_offset_0, (u32)lbl_1_data_45CE4__fzgx_offset_0, (u32)lbl_1_data_45CE4__fzgx_offset_0, (u32)lbl_1_data_45CFC__fzgx_offset_0, (u32)lbl_1_data_45D20__fzgx_offset_0, (u32)lbl_1_data_45D20__fzgx_offset_0, (u32)lbl_1_data_45D20__fzgx_offset_0, (u32)lbl_1_data_45D20__fzgx_offset_0,
+    (u32)lbl_1_data_45D20__fzgx_offset_0, (u32)lbl_1_data_45D3C__fzgx_offset_0, (u32)lbl_1_data_45D68__fzgx_offset_0, (u32)lbl_1_data_45D68__fzgx_offset_0, (u32)lbl_1_data_45D68__fzgx_offset_0, (u32)lbl_1_data_45D68__fzgx_offset_0, (u32)lbl_1_data_45D68__fzgx_offset_0, (u32)lbl_1_data_45D80__fzgx_offset_0,
+    (u32)lbl_1_data_45DA4__fzgx_offset_0, (u32)lbl_1_data_45DA4__fzgx_offset_0, (u32)lbl_1_data_45DA4__fzgx_offset_0, (u32)lbl_1_data_45DA4__fzgx_offset_0, (u32)lbl_1_data_45DA4__fzgx_offset_0, (u32)lbl_1_data_45DC4__fzgx_offset_0, (u32)lbl_1_data_45DF0__fzgx_offset_0, (u32)lbl_1_data_45DF0__fzgx_offset_0,
+    (u32)lbl_1_data_45DF0__fzgx_offset_0, (u32)lbl_1_data_45DF0__fzgx_offset_0, (u32)lbl_1_data_45DF0__fzgx_offset_0, (u32)lbl_1_data_45E0C__fzgx_offset_0, (u32)lbl_1_data_45E30__fzgx_offset_0, (u32)lbl_1_data_45E30__fzgx_offset_0, (u32)lbl_1_data_45E30__fzgx_offset_0, (u32)lbl_1_data_45E30__fzgx_offset_0,
+    (u32)lbl_1_data_45E30__fzgx_offset_0, (u32)lbl_1_data_45E4C__fzgx_offset_0, (u32)lbl_1_data_45E70__fzgx_offset_0, (u32)lbl_1_data_45E70__fzgx_offset_0, (u32)lbl_1_data_45E70__fzgx_offset_0, (u32)lbl_1_data_45E70__fzgx_offset_0, (u32)lbl_1_data_45E70__fzgx_offset_0, (u32)lbl_1_data_45E8C__fzgx_offset_0,
+    (u32)lbl_1_data_45EB8__fzgx_offset_0, (u32)lbl_1_data_45EB8__fzgx_offset_0, (u32)lbl_1_data_45EB8__fzgx_offset_0, (u32)lbl_1_data_45EB8__fzgx_offset_0, (u32)lbl_1_data_45EB8__fzgx_offset_0, (u32)lbl_1_data_45ED4__fzgx_offset_0, (u32)lbl_1_data_45EFC__fzgx_offset_0, (u32)lbl_1_data_45EFC__fzgx_offset_0,
+    (u32)lbl_1_data_45EFC__fzgx_offset_0, (u32)lbl_1_data_45EFC__fzgx_offset_0, (u32)lbl_1_data_45EFC__fzgx_offset_0, (u32)lbl_1_data_45F14__fzgx_offset_0, (u32)lbl_1_data_45F38__fzgx_offset_0, (u32)lbl_1_data_45F38__fzgx_offset_0, (u32)lbl_1_data_45F38__fzgx_offset_0, (u32)lbl_1_data_45F38__fzgx_offset_0,
+    (u32)lbl_1_data_45F38__fzgx_offset_0, (u32)lbl_1_data_45F54__fzgx_offset_0, (u32)lbl_1_data_45F7C__fzgx_offset_0, (u32)lbl_1_data_45F7C__fzgx_offset_0, (u32)lbl_1_data_45F7C__fzgx_offset_0, (u32)lbl_1_data_45F7C__fzgx_offset_0, (u32)lbl_1_data_45F7C__fzgx_offset_0, (u32)lbl_1_data_45F88__fzgx_offset_0,
+    (u32)lbl_1_data_45F94__fzgx_offset_0, (u32)lbl_1_data_45F94__fzgx_offset_0, (u32)lbl_1_data_45F94__fzgx_offset_0, (u32)lbl_1_data_45F94__fzgx_offset_0, (u32)lbl_1_data_45F94__fzgx_offset_0, (u32)lbl_1_data_45FA8__fzgx_offset_0, (u32)lbl_1_data_45FC0__fzgx_offset_0, (u32)lbl_1_data_45FC0__fzgx_offset_0,
+    (u32)lbl_1_data_45FC0__fzgx_offset_0, (u32)lbl_1_data_45FC0__fzgx_offset_0, (u32)lbl_1_data_45FC0__fzgx_offset_0, (u32)lbl_1_data_45FD0__fzgx_offset_0, (u32)lbl_1_data_45FE0__fzgx_offset_0, (u32)lbl_1_data_45FE0__fzgx_offset_0, (u32)lbl_1_data_45FE0__fzgx_offset_0, (u32)lbl_1_data_45FE0__fzgx_offset_0,
+    (u32)lbl_1_data_45FE0__fzgx_offset_0, (u32)lbl_1_data_45FEC__fzgx_offset_0, (u32)lbl_1_data_45FFC__fzgx_offset_0, (u32)lbl_1_data_45FFC__fzgx_offset_0, (u32)lbl_1_data_45FFC__fzgx_offset_0, (u32)lbl_1_data_45FFC__fzgx_offset_0, (u32)lbl_1_data_45FFC__fzgx_offset_0, (u32)lbl_1_data_46008__fzgx_offset_0,
+    (u32)lbl_1_data_46014__fzgx_offset_0, (u32)lbl_1_data_46014__fzgx_offset_0, (u32)lbl_1_data_46014__fzgx_offset_0, (u32)lbl_1_data_46014__fzgx_offset_0, (u32)lbl_1_data_46014__fzgx_offset_0, (u32)lbl_1_data_46024__fzgx_offset_0, (u32)lbl_1_data_46034__fzgx_offset_0, (u32)lbl_1_data_46034__fzgx_offset_0,
+    (u32)lbl_1_data_46034__fzgx_offset_0, (u32)lbl_1_data_46034__fzgx_offset_0, (u32)lbl_1_data_46034__fzgx_offset_0, (u32)lbl_1_data_46048__fzgx_offset_0, (u32)lbl_1_data_46060__fzgx_offset_0, (u32)lbl_1_data_46060__fzgx_offset_0, (u32)lbl_1_data_46060__fzgx_offset_0, (u32)lbl_1_data_46060__fzgx_offset_0,
+    (u32)lbl_1_data_46060__fzgx_offset_0, (u32)lbl_1_data_46070__fzgx_offset_0, (u32)lbl_1_data_46080__fzgx_offset_0, (u32)lbl_1_data_46080__fzgx_offset_0, (u32)lbl_1_data_46080__fzgx_offset_0, (u32)lbl_1_data_46080__fzgx_offset_0, (u32)lbl_1_data_46080__fzgx_offset_0, (u32)lbl_1_data_46090__fzgx_offset_0,
+    (u32)lbl_1_data_460A0__fzgx_offset_0, (u32)lbl_1_data_460A0__fzgx_offset_0, (u32)lbl_1_data_460A0__fzgx_offset_0, (u32)lbl_1_data_460A0__fzgx_offset_0, (u32)lbl_1_data_460A0__fzgx_offset_0, (u32)lbl_1_data_460B0__fzgx_offset_0, (u32)lbl_1_data_460C8__fzgx_offset_0, (u32)lbl_1_data_460C8__fzgx_offset_0,
+    (u32)lbl_1_data_460C8__fzgx_offset_0, (u32)lbl_1_data_460C8__fzgx_offset_0, (u32)lbl_1_data_460C8__fzgx_offset_0, (u32)lbl_1_data_460DC__fzgx_offset_0, (u32)lbl_1_data_460F4__fzgx_offset_0, (u32)lbl_1_data_460F4__fzgx_offset_0, (u32)lbl_1_data_460F4__fzgx_offset_0, (u32)lbl_1_data_460F4__fzgx_offset_0,
+    (u32)lbl_1_data_460F4__fzgx_offset_0, (u32)lbl_1_data_46100__fzgx_offset_0, (u32)lbl_1_data_4610C__fzgx_offset_0, (u32)lbl_1_data_4610C__fzgx_offset_0, (u32)lbl_1_data_4610C__fzgx_offset_0, (u32)lbl_1_data_4610C__fzgx_offset_0, (u32)lbl_1_data_4610C__fzgx_offset_0, (u32)lbl_1_data_4611C__fzgx_offset_0,
+    (u32)lbl_1_data_4612C__fzgx_offset_0, (u32)lbl_1_data_4612C__fzgx_offset_0, (u32)lbl_1_data_4612C__fzgx_offset_0, (u32)lbl_1_data_4612C__fzgx_offset_0, (u32)lbl_1_data_4612C__fzgx_offset_0, (u32)lbl_1_data_46140__fzgx_offset_0, (u32)lbl_1_data_46154__fzgx_offset_0, (u32)lbl_1_data_46154__fzgx_offset_0,
+    (u32)lbl_1_data_46154__fzgx_offset_0, (u32)lbl_1_data_46154__fzgx_offset_0, (u32)lbl_1_data_46154__fzgx_offset_0, (u32)lbl_1_data_46164__fzgx_offset_0, (u32)lbl_1_data_46178__fzgx_offset_0, (u32)lbl_1_data_46178__fzgx_offset_0, (u32)lbl_1_data_46178__fzgx_offset_0, (u32)lbl_1_data_46178__fzgx_offset_0,
+    (u32)lbl_1_data_46178__fzgx_offset_0, (u32)lbl_1_data_46188__fzgx_offset_0, (u32)lbl_1_data_46198__fzgx_offset_0, (u32)lbl_1_data_46198__fzgx_offset_0, (u32)lbl_1_data_46198__fzgx_offset_0, (u32)lbl_1_data_46198__fzgx_offset_0, (u32)lbl_1_data_46198__fzgx_offset_0, (u32)lbl_1_data_461A4__fzgx_offset_0,
+    (u32)lbl_1_data_461B4__fzgx_offset_0, (u32)lbl_1_data_461B4__fzgx_offset_0, (u32)lbl_1_data_461B4__fzgx_offset_0, (u32)lbl_1_data_461B4__fzgx_offset_0, (u32)lbl_1_data_461B4__fzgx_offset_0, (u32)lbl_1_data_461C0__fzgx_offset_0, (u32)lbl_1_data_461CC__fzgx_offset_0, (u32)lbl_1_data_461CC__fzgx_offset_0,
+    (u32)lbl_1_data_461CC__fzgx_offset_0, (u32)lbl_1_data_461CC__fzgx_offset_0, (u32)lbl_1_data_461CC__fzgx_offset_0, (u32)lbl_1_data_461DC__fzgx_offset_0, (u32)lbl_1_data_461EC__fzgx_offset_0, (u32)lbl_1_data_461EC__fzgx_offset_0, (u32)lbl_1_data_461EC__fzgx_offset_0, (u32)lbl_1_data_461EC__fzgx_offset_0,
+    (u32)lbl_1_data_461EC__fzgx_offset_0, (u32)lbl_1_data_461F8__fzgx_offset_0, (u32)lbl_1_data_46204__fzgx_offset_0, (u32)lbl_1_data_46204__fzgx_offset_0, (u32)lbl_1_data_46204__fzgx_offset_0, (u32)lbl_1_data_46204__fzgx_offset_0, (u32)lbl_1_data_46204__fzgx_offset_0, (u32)lbl_1_data_46214__fzgx_offset_0,
+    (u32)lbl_1_data_46228__fzgx_offset_0, (u32)lbl_1_data_46228__fzgx_offset_0, (u32)lbl_1_data_46228__fzgx_offset_0, (u32)lbl_1_data_46228__fzgx_offset_0, (u32)lbl_1_data_46228__fzgx_offset_0, (u32)lbl_1_data_46234__fzgx_offset_0, (u32)lbl_1_data_46244__fzgx_offset_0, (u32)lbl_1_data_46244__fzgx_offset_0,
+    (u32)lbl_1_data_46244__fzgx_offset_0, (u32)lbl_1_data_46244__fzgx_offset_0, (u32)lbl_1_data_46244__fzgx_offset_0, (u32)lbl_1_data_46250__fzgx_offset_0, (u32)lbl_1_data_46260__fzgx_offset_0, (u32)lbl_1_data_46260__fzgx_offset_0, (u32)lbl_1_data_46260__fzgx_offset_0, (u32)lbl_1_data_46260__fzgx_offset_0,
+    (u32)lbl_1_data_46260__fzgx_offset_0, (u32)lbl_1_data_46270__fzgx_offset_0, (u32)lbl_1_data_46280__fzgx_offset_0, (u32)lbl_1_data_46280__fzgx_offset_0, (u32)lbl_1_data_46280__fzgx_offset_0, (u32)lbl_1_data_46280__fzgx_offset_0, (u32)lbl_1_data_46280__fzgx_offset_0, (u32)lbl_1_data_46290__fzgx_offset_0,
+    (u32)lbl_1_data_452A0__fzgx_offset_0, (u32)lbl_1_data_452A0__fzgx_offset_0, (u32)lbl_1_data_452A0__fzgx_offset_0, (u32)lbl_1_data_452A0__fzgx_offset_0, (u32)lbl_1_data_452A0__fzgx_offset_0, (u32)lbl_1_data_452BC__fzgx_offset_0, (u32)lbl_1_data_452E4__fzgx_offset_0, (u32)lbl_1_data_452E4__fzgx_offset_0,
+    (u32)lbl_1_data_452E4__fzgx_offset_0, (u32)lbl_1_data_452E4__fzgx_offset_0, (u32)lbl_1_data_452E4__fzgx_offset_0, (u32)lbl_1_data_45300__fzgx_offset_0, (u32)lbl_1_data_45328__fzgx_offset_0, (u32)lbl_1_data_45328__fzgx_offset_0, (u32)lbl_1_data_45328__fzgx_offset_0, (u32)lbl_1_data_45328__fzgx_offset_0,
+    (u32)lbl_1_data_45328__fzgx_offset_0, (u32)lbl_1_data_45344__fzgx_offset_0, (u32)lbl_1_data_45370__fzgx_offset_0, (u32)lbl_1_data_45370__fzgx_offset_0, (u32)lbl_1_data_45370__fzgx_offset_0, (u32)lbl_1_data_45370__fzgx_offset_0, (u32)lbl_1_data_45370__fzgx_offset_0, (u32)lbl_1_data_45390__fzgx_offset_0,
+    (u32)lbl_1_data_453B4__fzgx_offset_0, (u32)lbl_1_data_453B4__fzgx_offset_0, (u32)lbl_1_data_453B4__fzgx_offset_0, (u32)lbl_1_data_453B4__fzgx_offset_0, (u32)lbl_1_data_453B4__fzgx_offset_0, (u32)lbl_1_data_453D0__fzgx_offset_0, (u32)lbl_1_data_453FC__fzgx_offset_0, (u32)lbl_1_data_453FC__fzgx_offset_0,
+    (u32)lbl_1_data_453FC__fzgx_offset_0, (u32)lbl_1_data_453FC__fzgx_offset_0, (u32)lbl_1_data_453FC__fzgx_offset_0, (u32)lbl_1_data_45418__fzgx_offset_0, (u32)lbl_1_data_45440__fzgx_offset_0, (u32)lbl_1_data_45440__fzgx_offset_0, (u32)lbl_1_data_45440__fzgx_offset_0, (u32)lbl_1_data_45440__fzgx_offset_0,
+    (u32)lbl_1_data_45440__fzgx_offset_0, (u32)lbl_1_data_45460__fzgx_offset_0, (u32)lbl_1_data_45488__fzgx_offset_0, (u32)lbl_1_data_45488__fzgx_offset_0, (u32)lbl_1_data_45488__fzgx_offset_0, (u32)lbl_1_data_45488__fzgx_offset_0, (u32)lbl_1_data_45488__fzgx_offset_0, (u32)lbl_1_data_454A4__fzgx_offset_0,
+    (u32)lbl_1_data_454D0__fzgx_offset_0, (u32)lbl_1_data_454D0__fzgx_offset_0, (u32)lbl_1_data_454D0__fzgx_offset_0, (u32)lbl_1_data_454D0__fzgx_offset_0, (u32)lbl_1_data_454D0__fzgx_offset_0, (u32)lbl_1_data_454E8__fzgx_offset_0, (u32)lbl_1_data_4550C__fzgx_offset_0, (u32)lbl_1_data_4550C__fzgx_offset_0,
+    (u32)lbl_1_data_4550C__fzgx_offset_0, (u32)lbl_1_data_4550C__fzgx_offset_0, (u32)lbl_1_data_4550C__fzgx_offset_0, (u32)lbl_1_data_45528__fzgx_offset_0, (u32)lbl_1_data_45550__fzgx_offset_0, (u32)lbl_1_data_45550__fzgx_offset_0, (u32)lbl_1_data_45550__fzgx_offset_0, (u32)lbl_1_data_45550__fzgx_offset_0,
+    (u32)lbl_1_data_45550__fzgx_offset_0, (u32)lbl_1_data_4556C__fzgx_offset_0, (u32)lbl_1_data_45594__fzgx_offset_0, (u32)lbl_1_data_45594__fzgx_offset_0, (u32)lbl_1_data_45594__fzgx_offset_0, (u32)lbl_1_data_45594__fzgx_offset_0, (u32)lbl_1_data_45594__fzgx_offset_0, (u32)lbl_1_data_455AC__fzgx_offset_0,
+    (u32)lbl_1_data_455CC__fzgx_offset_0, (u32)lbl_1_data_455CC__fzgx_offset_0, (u32)lbl_1_data_455CC__fzgx_offset_0, (u32)lbl_1_data_455CC__fzgx_offset_0, (u32)lbl_1_data_455CC__fzgx_offset_0, (u32)lbl_1_data_455E8__fzgx_offset_0, (u32)lbl_1_data_45610__fzgx_offset_0, (u32)lbl_1_data_45610__fzgx_offset_0,
+    (u32)lbl_1_data_45610__fzgx_offset_0, (u32)lbl_1_data_45610__fzgx_offset_0, (u32)lbl_1_data_45610__fzgx_offset_0, (u32)lbl_1_data_4562C__fzgx_offset_0, (u32)lbl_1_data_45650__fzgx_offset_0, (u32)lbl_1_data_45650__fzgx_offset_0, (u32)lbl_1_data_45650__fzgx_offset_0, (u32)lbl_1_data_45650__fzgx_offset_0,
+    (u32)lbl_1_data_45650__fzgx_offset_0, (u32)lbl_1_data_4566C__fzgx_offset_0, (u32)lbl_1_data_45694__fzgx_offset_0, (u32)lbl_1_data_45694__fzgx_offset_0, (u32)lbl_1_data_45694__fzgx_offset_0, (u32)lbl_1_data_45694__fzgx_offset_0, (u32)lbl_1_data_45694__fzgx_offset_0, (u32)lbl_1_data_456B4__fzgx_offset_0,
+    (u32)lbl_1_data_456E0__fzgx_offset_0, (u32)lbl_1_data_456E0__fzgx_offset_0, (u32)lbl_1_data_456E0__fzgx_offset_0, (u32)lbl_1_data_456E0__fzgx_offset_0, (u32)lbl_1_data_456E0__fzgx_offset_0, (u32)lbl_1_data_456FC__fzgx_offset_0, (u32)lbl_1_data_45720__fzgx_offset_0, (u32)lbl_1_data_45720__fzgx_offset_0,
+    (u32)lbl_1_data_45720__fzgx_offset_0, (u32)lbl_1_data_45720__fzgx_offset_0, (u32)lbl_1_data_45720__fzgx_offset_0, (u32)lbl_1_data_4573C__fzgx_offset_0, (u32)lbl_1_data_45760__fzgx_offset_0, (u32)lbl_1_data_45760__fzgx_offset_0, (u32)lbl_1_data_45760__fzgx_offset_0, (u32)lbl_1_data_45760__fzgx_offset_0,
+    (u32)lbl_1_data_45760__fzgx_offset_0, (u32)lbl_1_data_4577C__fzgx_offset_0, (u32)lbl_1_data_457A0__fzgx_offset_0, (u32)lbl_1_data_457A0__fzgx_offset_0, (u32)lbl_1_data_457A0__fzgx_offset_0, (u32)lbl_1_data_457A0__fzgx_offset_0, (u32)lbl_1_data_457A0__fzgx_offset_0, (u32)lbl_1_data_457B8__fzgx_offset_0,
+    (u32)lbl_1_data_457D8__fzgx_offset_0, (u32)lbl_1_data_457D8__fzgx_offset_0, (u32)lbl_1_data_457D8__fzgx_offset_0, (u32)lbl_1_data_457D8__fzgx_offset_0, (u32)lbl_1_data_457D8__fzgx_offset_0, (u32)lbl_1_data_457F0__fzgx_offset_0, (u32)lbl_1_data_45810__fzgx_offset_0, (u32)lbl_1_data_45810__fzgx_offset_0,
+    (u32)lbl_1_data_45810__fzgx_offset_0, (u32)lbl_1_data_45810__fzgx_offset_0, (u32)lbl_1_data_45810__fzgx_offset_0, (u32)lbl_1_data_45828__fzgx_offset_0, (u32)lbl_1_data_4584C__fzgx_offset_0, (u32)lbl_1_data_4584C__fzgx_offset_0, (u32)lbl_1_data_4584C__fzgx_offset_0, (u32)lbl_1_data_4584C__fzgx_offset_0,
+    (u32)lbl_1_data_4584C__fzgx_offset_0, (u32)lbl_1_data_45868__fzgx_offset_0, (u32)lbl_1_data_4588C__fzgx_offset_0, (u32)lbl_1_data_4588C__fzgx_offset_0, (u32)lbl_1_data_4588C__fzgx_offset_0, (u32)lbl_1_data_4588C__fzgx_offset_0, (u32)lbl_1_data_4588C__fzgx_offset_0, (u32)lbl_1_data_458A8__fzgx_offset_0,
+    (u32)lbl_1_data_458D4__fzgx_offset_0, (u32)lbl_1_data_458D4__fzgx_offset_0, (u32)lbl_1_data_458D4__fzgx_offset_0, (u32)lbl_1_data_458D4__fzgx_offset_0, (u32)lbl_1_data_458D4__fzgx_offset_0, (u32)lbl_1_data_458F0__fzgx_offset_0, (u32)lbl_1_data_45914__fzgx_offset_0, (u32)lbl_1_data_45914__fzgx_offset_0,
+    (u32)lbl_1_data_45914__fzgx_offset_0, (u32)lbl_1_data_45914__fzgx_offset_0, (u32)lbl_1_data_45914__fzgx_offset_0, (u32)lbl_1_data_45930__fzgx_offset_0, (u32)lbl_1_data_45954__fzgx_offset_0, (u32)lbl_1_data_45954__fzgx_offset_0, (u32)lbl_1_data_45954__fzgx_offset_0, (u32)lbl_1_data_45954__fzgx_offset_0,
+    (u32)lbl_1_data_45954__fzgx_offset_0, (u32)lbl_1_data_45970__fzgx_offset_0, (u32)lbl_1_data_45998__fzgx_offset_0, (u32)lbl_1_data_45998__fzgx_offset_0, (u32)lbl_1_data_45998__fzgx_offset_0, (u32)lbl_1_data_45998__fzgx_offset_0, (u32)lbl_1_data_45998__fzgx_offset_0, (u32)lbl_1_data_459B8__fzgx_offset_0,
+    (u32)lbl_1_data_459E0__fzgx_offset_0, (u32)lbl_1_data_459E0__fzgx_offset_0, (u32)lbl_1_data_459E0__fzgx_offset_0, (u32)lbl_1_data_459E0__fzgx_offset_0, (u32)lbl_1_data_459E0__fzgx_offset_0, (u32)lbl_1_data_459FC__fzgx_offset_0, (u32)lbl_1_data_45A20__fzgx_offset_0, (u32)lbl_1_data_45A20__fzgx_offset_0,
+    (u32)lbl_1_data_45A20__fzgx_offset_0, (u32)lbl_1_data_45A20__fzgx_offset_0, (u32)lbl_1_data_45A20__fzgx_offset_0, (u32)lbl_1_data_45A34__fzgx_offset_0, (u32)lbl_1_data_45A5C__fzgx_offset_0, (u32)lbl_1_data_45A5C__fzgx_offset_0, (u32)lbl_1_data_45A5C__fzgx_offset_0, (u32)lbl_1_data_45A5C__fzgx_offset_0,
+    (u32)lbl_1_data_45A5C__fzgx_offset_0, (u32)lbl_1_data_45A74__fzgx_offset_0, (u32)lbl_1_data_45A98__fzgx_offset_0, (u32)lbl_1_data_45A98__fzgx_offset_0, (u32)lbl_1_data_45A98__fzgx_offset_0, (u32)lbl_1_data_45A98__fzgx_offset_0, (u32)lbl_1_data_45A98__fzgx_offset_0, (u32)lbl_1_data_45AB4__fzgx_offset_0,
+    (u32)lbl_1_data_45AE0__fzgx_offset_0, (u32)lbl_1_data_45AE0__fzgx_offset_0, (u32)lbl_1_data_45AE0__fzgx_offset_0, (u32)lbl_1_data_45AE0__fzgx_offset_0, (u32)lbl_1_data_45AE0__fzgx_offset_0, (u32)lbl_1_data_45AF8__fzgx_offset_0, (u32)lbl_1_data_45B1C__fzgx_offset_0, (u32)lbl_1_data_45B1C__fzgx_offset_0,
+    (u32)lbl_1_data_45B1C__fzgx_offset_0, (u32)lbl_1_data_45B1C__fzgx_offset_0, (u32)lbl_1_data_45B1C__fzgx_offset_0, (u32)lbl_1_data_45B34__fzgx_offset_0, (u32)lbl_1_data_45B54__fzgx_offset_0, (u32)lbl_1_data_45B54__fzgx_offset_0, (u32)lbl_1_data_45B54__fzgx_offset_0, (u32)lbl_1_data_45B54__fzgx_offset_0,
+    (u32)lbl_1_data_45B54__fzgx_offset_0, (u32)lbl_1_data_45B70__fzgx_offset_0, (u32)lbl_1_data_45B94__fzgx_offset_0, (u32)lbl_1_data_45B94__fzgx_offset_0, (u32)lbl_1_data_45B94__fzgx_offset_0, (u32)lbl_1_data_45B94__fzgx_offset_0, (u32)lbl_1_data_45B94__fzgx_offset_0, (u32)lbl_1_data_45BB0__fzgx_offset_0,
+    (u32)lbl_1_data_45BD8__fzgx_offset_0, (u32)lbl_1_data_45BD8__fzgx_offset_0, (u32)lbl_1_data_45BD8__fzgx_offset_0, (u32)lbl_1_data_45BD8__fzgx_offset_0, (u32)lbl_1_data_45BD8__fzgx_offset_0, (u32)lbl_1_data_45BF4__fzgx_offset_0, (u32)lbl_1_data_45C20__fzgx_offset_0, (u32)lbl_1_data_45C20__fzgx_offset_0,
+    (u32)lbl_1_data_45C20__fzgx_offset_0, (u32)lbl_1_data_45C20__fzgx_offset_0, (u32)lbl_1_data_45C20__fzgx_offset_0, (u32)lbl_1_data_45C3C__fzgx_offset_0, (u32)lbl_1_data_45C64__fzgx_offset_0, (u32)lbl_1_data_45C64__fzgx_offset_0, (u32)lbl_1_data_45C64__fzgx_offset_0, (u32)lbl_1_data_45C64__fzgx_offset_0,
+    (u32)lbl_1_data_45C64__fzgx_offset_0, (u32)lbl_1_data_45C80__fzgx_offset_0, (u32)lbl_1_data_45CA8__fzgx_offset_0, (u32)lbl_1_data_45CA8__fzgx_offset_0, (u32)lbl_1_data_45CA8__fzgx_offset_0, (u32)lbl_1_data_45CA8__fzgx_offset_0, (u32)lbl_1_data_45CA8__fzgx_offset_0, (u32)lbl_1_data_45CC0__fzgx_offset_0,
+    (u32)lbl_1_data_45CE4__fzgx_offset_0, (u32)lbl_1_data_45CE4__fzgx_offset_0, (u32)lbl_1_data_45CE4__fzgx_offset_0, (u32)lbl_1_data_45CE4__fzgx_offset_0, (u32)lbl_1_data_45CE4__fzgx_offset_0, (u32)lbl_1_data_45CFC__fzgx_offset_0, (u32)lbl_1_data_45D20__fzgx_offset_0, (u32)lbl_1_data_45D20__fzgx_offset_0,
+    (u32)lbl_1_data_45D20__fzgx_offset_0, (u32)lbl_1_data_45D20__fzgx_offset_0, (u32)lbl_1_data_45D20__fzgx_offset_0, (u32)lbl_1_data_45D3C__fzgx_offset_0, (u32)lbl_1_data_45D68__fzgx_offset_0, (u32)lbl_1_data_45D68__fzgx_offset_0, (u32)lbl_1_data_45D68__fzgx_offset_0, (u32)lbl_1_data_45D68__fzgx_offset_0,
+    (u32)lbl_1_data_45D68__fzgx_offset_0, (u32)lbl_1_data_45D80__fzgx_offset_0, (u32)lbl_1_data_45DA4__fzgx_offset_0, (u32)lbl_1_data_45DA4__fzgx_offset_0, (u32)lbl_1_data_45DA4__fzgx_offset_0, (u32)lbl_1_data_45DA4__fzgx_offset_0, (u32)lbl_1_data_45DA4__fzgx_offset_0, (u32)lbl_1_data_45DC4__fzgx_offset_0,
+    (u32)lbl_1_data_45DF0__fzgx_offset_0, (u32)lbl_1_data_45DF0__fzgx_offset_0, (u32)lbl_1_data_45DF0__fzgx_offset_0, (u32)lbl_1_data_45DF0__fzgx_offset_0, (u32)lbl_1_data_45DF0__fzgx_offset_0, (u32)lbl_1_data_45E0C__fzgx_offset_0, (u32)lbl_1_data_45E30__fzgx_offset_0, (u32)lbl_1_data_45E30__fzgx_offset_0,
+    (u32)lbl_1_data_45E30__fzgx_offset_0, (u32)lbl_1_data_45E30__fzgx_offset_0, (u32)lbl_1_data_45E30__fzgx_offset_0, (u32)lbl_1_data_45E4C__fzgx_offset_0, (u32)lbl_1_data_45E70__fzgx_offset_0, (u32)lbl_1_data_45E70__fzgx_offset_0, (u32)lbl_1_data_45E70__fzgx_offset_0, (u32)lbl_1_data_45E70__fzgx_offset_0,
+    (u32)lbl_1_data_45E70__fzgx_offset_0, (u32)lbl_1_data_45E8C__fzgx_offset_0, (u32)lbl_1_data_45EB8__fzgx_offset_0, (u32)lbl_1_data_45EB8__fzgx_offset_0, (u32)lbl_1_data_45EB8__fzgx_offset_0, (u32)lbl_1_data_45EB8__fzgx_offset_0, (u32)lbl_1_data_45EB8__fzgx_offset_0, (u32)lbl_1_data_45ED4__fzgx_offset_0,
+    (u32)lbl_1_data_45EFC__fzgx_offset_0, (u32)lbl_1_data_45EFC__fzgx_offset_0, (u32)lbl_1_data_45EFC__fzgx_offset_0, (u32)lbl_1_data_45EFC__fzgx_offset_0, (u32)lbl_1_data_45EFC__fzgx_offset_0, (u32)lbl_1_data_45F14__fzgx_offset_0, (u32)lbl_1_data_45F38__fzgx_offset_0, (u32)lbl_1_data_45F38__fzgx_offset_0,
+    (u32)lbl_1_data_45F38__fzgx_offset_0, (u32)lbl_1_data_45F38__fzgx_offset_0, (u32)lbl_1_data_45F38__fzgx_offset_0, (u32)lbl_1_data_45F54__fzgx_offset_0, (u32)lbl_1_data_45F7C__fzgx_offset_0, (u32)lbl_1_data_45F7C__fzgx_offset_0, (u32)lbl_1_data_45F7C__fzgx_offset_0, (u32)lbl_1_data_45F7C__fzgx_offset_0,
+    (u32)lbl_1_data_45F7C__fzgx_offset_0, (u32)lbl_1_data_45F88__fzgx_offset_0, (u32)lbl_1_data_45F94__fzgx_offset_0, (u32)lbl_1_data_45F94__fzgx_offset_0, (u32)lbl_1_data_45F94__fzgx_offset_0, (u32)lbl_1_data_45F94__fzgx_offset_0, (u32)lbl_1_data_45F94__fzgx_offset_0, (u32)lbl_1_data_45FA8__fzgx_offset_0,
+    (u32)lbl_1_data_45FC0__fzgx_offset_0, (u32)lbl_1_data_45FC0__fzgx_offset_0, (u32)lbl_1_data_45FC0__fzgx_offset_0, (u32)lbl_1_data_45FC0__fzgx_offset_0, (u32)lbl_1_data_45FC0__fzgx_offset_0, (u32)lbl_1_data_45FD0__fzgx_offset_0, (u32)lbl_1_data_45FE0__fzgx_offset_0, (u32)lbl_1_data_45FE0__fzgx_offset_0,
+    (u32)lbl_1_data_45FE0__fzgx_offset_0, (u32)lbl_1_data_45FE0__fzgx_offset_0, (u32)lbl_1_data_45FE0__fzgx_offset_0, (u32)lbl_1_data_45FEC__fzgx_offset_0, (u32)lbl_1_data_45FFC__fzgx_offset_0, (u32)lbl_1_data_45FFC__fzgx_offset_0, (u32)lbl_1_data_45FFC__fzgx_offset_0, (u32)lbl_1_data_45FFC__fzgx_offset_0,
+    (u32)lbl_1_data_45FFC__fzgx_offset_0, (u32)lbl_1_data_46008__fzgx_offset_0, (u32)lbl_1_data_46014__fzgx_offset_0, (u32)lbl_1_data_46014__fzgx_offset_0, (u32)lbl_1_data_46014__fzgx_offset_0, (u32)lbl_1_data_46014__fzgx_offset_0, (u32)lbl_1_data_46014__fzgx_offset_0, (u32)lbl_1_data_46024__fzgx_offset_0,
+    (u32)lbl_1_data_46034__fzgx_offset_0, (u32)lbl_1_data_46034__fzgx_offset_0, (u32)lbl_1_data_46034__fzgx_offset_0, (u32)lbl_1_data_46034__fzgx_offset_0, (u32)lbl_1_data_46034__fzgx_offset_0, (u32)lbl_1_data_46048__fzgx_offset_0, (u32)lbl_1_data_46060__fzgx_offset_0, (u32)lbl_1_data_46060__fzgx_offset_0,
+    (u32)lbl_1_data_46060__fzgx_offset_0, (u32)lbl_1_data_46060__fzgx_offset_0, (u32)lbl_1_data_46060__fzgx_offset_0, (u32)lbl_1_data_46070__fzgx_offset_0, (u32)lbl_1_data_46080__fzgx_offset_0, (u32)lbl_1_data_46080__fzgx_offset_0, (u32)lbl_1_data_46080__fzgx_offset_0, (u32)lbl_1_data_46080__fzgx_offset_0,
+    (u32)lbl_1_data_46080__fzgx_offset_0, (u32)lbl_1_data_46090__fzgx_offset_0, (u32)lbl_1_data_460A0__fzgx_offset_0, (u32)lbl_1_data_460A0__fzgx_offset_0, (u32)lbl_1_data_460A0__fzgx_offset_0, (u32)lbl_1_data_460A0__fzgx_offset_0, (u32)lbl_1_data_460A0__fzgx_offset_0, (u32)lbl_1_data_460B0__fzgx_offset_0,
+    (u32)lbl_1_data_460C8__fzgx_offset_0, (u32)lbl_1_data_460C8__fzgx_offset_0, (u32)lbl_1_data_460C8__fzgx_offset_0, (u32)lbl_1_data_460C8__fzgx_offset_0, (u32)lbl_1_data_460C8__fzgx_offset_0, (u32)lbl_1_data_460DC__fzgx_offset_0, (u32)lbl_1_data_460F4__fzgx_offset_0, (u32)lbl_1_data_460F4__fzgx_offset_0,
+    (u32)lbl_1_data_460F4__fzgx_offset_0, (u32)lbl_1_data_460F4__fzgx_offset_0, (u32)lbl_1_data_460F4__fzgx_offset_0, (u32)lbl_1_data_46100__fzgx_offset_0, (u32)lbl_1_data_4610C__fzgx_offset_0, (u32)lbl_1_data_4610C__fzgx_offset_0, (u32)lbl_1_data_4610C__fzgx_offset_0, (u32)lbl_1_data_4610C__fzgx_offset_0,
+    (u32)lbl_1_data_4610C__fzgx_offset_0, (u32)lbl_1_data_4611C__fzgx_offset_0, (u32)lbl_1_data_4612C__fzgx_offset_0, (u32)lbl_1_data_4612C__fzgx_offset_0, (u32)lbl_1_data_4612C__fzgx_offset_0, (u32)lbl_1_data_4612C__fzgx_offset_0, (u32)lbl_1_data_4612C__fzgx_offset_0, (u32)lbl_1_data_46140__fzgx_offset_0,
+    (u32)lbl_1_data_46154__fzgx_offset_0, (u32)lbl_1_data_46154__fzgx_offset_0, (u32)lbl_1_data_46154__fzgx_offset_0, (u32)lbl_1_data_46154__fzgx_offset_0, (u32)lbl_1_data_46154__fzgx_offset_0, (u32)lbl_1_data_46164__fzgx_offset_0, (u32)lbl_1_data_46178__fzgx_offset_0, (u32)lbl_1_data_46178__fzgx_offset_0,
+    (u32)lbl_1_data_46178__fzgx_offset_0, (u32)lbl_1_data_46178__fzgx_offset_0, (u32)lbl_1_data_46178__fzgx_offset_0, (u32)lbl_1_data_46188__fzgx_offset_0, (u32)lbl_1_data_46198__fzgx_offset_0, (u32)lbl_1_data_46198__fzgx_offset_0, (u32)lbl_1_data_46198__fzgx_offset_0, (u32)lbl_1_data_46198__fzgx_offset_0,
+    (u32)lbl_1_data_46198__fzgx_offset_0, (u32)lbl_1_data_461A4__fzgx_offset_0, (u32)lbl_1_data_461B4__fzgx_offset_0, (u32)lbl_1_data_461B4__fzgx_offset_0, (u32)lbl_1_data_461B4__fzgx_offset_0, (u32)lbl_1_data_461B4__fzgx_offset_0, (u32)lbl_1_data_461B4__fzgx_offset_0, (u32)lbl_1_data_461C0__fzgx_offset_0,
+    (u32)lbl_1_data_461CC__fzgx_offset_0, (u32)lbl_1_data_461CC__fzgx_offset_0, (u32)lbl_1_data_461CC__fzgx_offset_0, (u32)lbl_1_data_461CC__fzgx_offset_0, (u32)lbl_1_data_461CC__fzgx_offset_0, (u32)lbl_1_data_461DC__fzgx_offset_0, (u32)lbl_1_data_461EC__fzgx_offset_0, (u32)lbl_1_data_461EC__fzgx_offset_0,
+    (u32)lbl_1_data_461EC__fzgx_offset_0, (u32)lbl_1_data_461EC__fzgx_offset_0, (u32)lbl_1_data_461EC__fzgx_offset_0, (u32)lbl_1_data_461F8__fzgx_offset_0, (u32)lbl_1_data_46204__fzgx_offset_0, (u32)lbl_1_data_46204__fzgx_offset_0, (u32)lbl_1_data_46204__fzgx_offset_0, (u32)lbl_1_data_46204__fzgx_offset_0,
+    (u32)lbl_1_data_46204__fzgx_offset_0, (u32)lbl_1_data_46214__fzgx_offset_0, (u32)lbl_1_data_46228__fzgx_offset_0, (u32)lbl_1_data_46228__fzgx_offset_0, (u32)lbl_1_data_46228__fzgx_offset_0, (u32)lbl_1_data_46228__fzgx_offset_0, (u32)lbl_1_data_46228__fzgx_offset_0, (u32)lbl_1_data_46234__fzgx_offset_0,
+    (u32)lbl_1_data_46244__fzgx_offset_0, (u32)lbl_1_data_46244__fzgx_offset_0, (u32)lbl_1_data_46244__fzgx_offset_0, (u32)lbl_1_data_46244__fzgx_offset_0, (u32)lbl_1_data_46244__fzgx_offset_0, (u32)lbl_1_data_46250__fzgx_offset_0, (u32)lbl_1_data_46260__fzgx_offset_0, (u32)lbl_1_data_46260__fzgx_offset_0,
+    (u32)lbl_1_data_46260__fzgx_offset_0, (u32)lbl_1_data_46260__fzgx_offset_0, (u32)lbl_1_data_46260__fzgx_offset_0, (u32)lbl_1_data_46270__fzgx_offset_0, (u32)lbl_1_data_46280__fzgx_offset_0, (u32)lbl_1_data_46280__fzgx_offset_0, (u32)lbl_1_data_46280__fzgx_offset_0, (u32)lbl_1_data_46280__fzgx_offset_0,
+    (u32)lbl_1_data_46280__fzgx_offset_0, (u32)lbl_1_data_46290__fzgx_offset_0, (u32)lbl_1_data_452A0__fzgx_offset_0, (u32)lbl_1_data_452A0__fzgx_offset_0, (u32)lbl_1_data_452A0__fzgx_offset_0, (u32)lbl_1_data_452A0__fzgx_offset_0, (u32)lbl_1_data_452A0__fzgx_offset_0, (u32)lbl_1_data_452BC__fzgx_offset_0,
+    (u32)lbl_1_data_452E4__fzgx_offset_0, (u32)lbl_1_data_452E4__fzgx_offset_0, (u32)lbl_1_data_452E4__fzgx_offset_0, (u32)lbl_1_data_452E4__fzgx_offset_0, (u32)lbl_1_data_452E4__fzgx_offset_0, (u32)lbl_1_data_45300__fzgx_offset_0, (u32)lbl_1_data_45328__fzgx_offset_0, (u32)lbl_1_data_45328__fzgx_offset_0,
+    (u32)lbl_1_data_45328__fzgx_offset_0, (u32)lbl_1_data_45328__fzgx_offset_0, (u32)lbl_1_data_45328__fzgx_offset_0, (u32)lbl_1_data_45344__fzgx_offset_0, (u32)lbl_1_data_45370__fzgx_offset_0, (u32)lbl_1_data_45370__fzgx_offset_0, (u32)lbl_1_data_45370__fzgx_offset_0, (u32)lbl_1_data_45370__fzgx_offset_0,
+    (u32)lbl_1_data_45370__fzgx_offset_0, (u32)lbl_1_data_45390__fzgx_offset_0, (u32)lbl_1_data_453B4__fzgx_offset_0, (u32)lbl_1_data_453B4__fzgx_offset_0, (u32)lbl_1_data_453B4__fzgx_offset_0, (u32)lbl_1_data_453B4__fzgx_offset_0, (u32)lbl_1_data_453B4__fzgx_offset_0, (u32)lbl_1_data_453D0__fzgx_offset_0,
+    (u32)lbl_1_data_453FC__fzgx_offset_0, (u32)lbl_1_data_453FC__fzgx_offset_0, (u32)lbl_1_data_453FC__fzgx_offset_0, (u32)lbl_1_data_453FC__fzgx_offset_0, (u32)lbl_1_data_453FC__fzgx_offset_0, (u32)lbl_1_data_45418__fzgx_offset_0, (u32)lbl_1_data_45440__fzgx_offset_0, (u32)lbl_1_data_45440__fzgx_offset_0,
+    (u32)lbl_1_data_45440__fzgx_offset_0, (u32)lbl_1_data_45440__fzgx_offset_0, (u32)lbl_1_data_45440__fzgx_offset_0, (u32)lbl_1_data_45460__fzgx_offset_0, (u32)lbl_1_data_45488__fzgx_offset_0, (u32)lbl_1_data_45488__fzgx_offset_0, (u32)lbl_1_data_45488__fzgx_offset_0, (u32)lbl_1_data_45488__fzgx_offset_0,
+    (u32)lbl_1_data_45488__fzgx_offset_0, (u32)lbl_1_data_454A4__fzgx_offset_0, (u32)lbl_1_data_454D0__fzgx_offset_0, (u32)lbl_1_data_454D0__fzgx_offset_0, (u32)lbl_1_data_454D0__fzgx_offset_0, (u32)lbl_1_data_454D0__fzgx_offset_0, (u32)lbl_1_data_454D0__fzgx_offset_0, (u32)lbl_1_data_454E8__fzgx_offset_0,
+    (u32)lbl_1_data_4550C__fzgx_offset_0, (u32)lbl_1_data_4550C__fzgx_offset_0, (u32)lbl_1_data_4550C__fzgx_offset_0, (u32)lbl_1_data_4550C__fzgx_offset_0, (u32)lbl_1_data_4550C__fzgx_offset_0, (u32)lbl_1_data_45528__fzgx_offset_0, (u32)lbl_1_data_45550__fzgx_offset_0, (u32)lbl_1_data_45550__fzgx_offset_0,
+    (u32)lbl_1_data_45550__fzgx_offset_0, (u32)lbl_1_data_45550__fzgx_offset_0, (u32)lbl_1_data_45550__fzgx_offset_0, (u32)lbl_1_data_4556C__fzgx_offset_0, (u32)lbl_1_data_45594__fzgx_offset_0, (u32)lbl_1_data_45594__fzgx_offset_0, (u32)lbl_1_data_45594__fzgx_offset_0, (u32)lbl_1_data_45594__fzgx_offset_0,
+    (u32)lbl_1_data_45594__fzgx_offset_0, (u32)lbl_1_data_455AC__fzgx_offset_0, (u32)lbl_1_data_455CC__fzgx_offset_0, (u32)lbl_1_data_455CC__fzgx_offset_0, (u32)lbl_1_data_455CC__fzgx_offset_0, (u32)lbl_1_data_455CC__fzgx_offset_0, (u32)lbl_1_data_455CC__fzgx_offset_0, (u32)lbl_1_data_455E8__fzgx_offset_0,
+    (u32)lbl_1_data_45610__fzgx_offset_0, (u32)lbl_1_data_45610__fzgx_offset_0, (u32)lbl_1_data_45610__fzgx_offset_0, (u32)lbl_1_data_45610__fzgx_offset_0, (u32)lbl_1_data_45610__fzgx_offset_0, (u32)lbl_1_data_4562C__fzgx_offset_0, (u32)lbl_1_data_45650__fzgx_offset_0, (u32)lbl_1_data_45650__fzgx_offset_0,
+    (u32)lbl_1_data_45650__fzgx_offset_0, (u32)lbl_1_data_45650__fzgx_offset_0, (u32)lbl_1_data_45650__fzgx_offset_0, (u32)lbl_1_data_4566C__fzgx_offset_0, (u32)lbl_1_data_45694__fzgx_offset_0, (u32)lbl_1_data_45694__fzgx_offset_0, (u32)lbl_1_data_45694__fzgx_offset_0, (u32)lbl_1_data_45694__fzgx_offset_0,
+    (u32)lbl_1_data_45694__fzgx_offset_0, (u32)lbl_1_data_456B4__fzgx_offset_0, (u32)lbl_1_data_456E0__fzgx_offset_0, (u32)lbl_1_data_456E0__fzgx_offset_0, (u32)lbl_1_data_456E0__fzgx_offset_0, (u32)lbl_1_data_456E0__fzgx_offset_0, (u32)lbl_1_data_456E0__fzgx_offset_0, (u32)lbl_1_data_456FC__fzgx_offset_0,
+    (u32)lbl_1_data_45720__fzgx_offset_0, (u32)lbl_1_data_45720__fzgx_offset_0, (u32)lbl_1_data_45720__fzgx_offset_0, (u32)lbl_1_data_45720__fzgx_offset_0, (u32)lbl_1_data_45720__fzgx_offset_0, (u32)lbl_1_data_4573C__fzgx_offset_0, (u32)lbl_1_data_45760__fzgx_offset_0, (u32)lbl_1_data_45760__fzgx_offset_0,
+    (u32)lbl_1_data_45760__fzgx_offset_0, (u32)lbl_1_data_45760__fzgx_offset_0, (u32)lbl_1_data_45760__fzgx_offset_0, (u32)lbl_1_data_4577C__fzgx_offset_0, (u32)lbl_1_data_457A0__fzgx_offset_0, (u32)lbl_1_data_457A0__fzgx_offset_0, (u32)lbl_1_data_457A0__fzgx_offset_0, (u32)lbl_1_data_457A0__fzgx_offset_0,
+    (u32)lbl_1_data_457A0__fzgx_offset_0, (u32)lbl_1_data_457B8__fzgx_offset_0, (u32)lbl_1_data_457D8__fzgx_offset_0, (u32)lbl_1_data_457D8__fzgx_offset_0, (u32)lbl_1_data_457D8__fzgx_offset_0, (u32)lbl_1_data_457D8__fzgx_offset_0, (u32)lbl_1_data_457D8__fzgx_offset_0, (u32)lbl_1_data_457F0__fzgx_offset_0,
+    (u32)lbl_1_data_45810__fzgx_offset_0, (u32)lbl_1_data_45810__fzgx_offset_0, (u32)lbl_1_data_45810__fzgx_offset_0, (u32)lbl_1_data_45810__fzgx_offset_0, (u32)lbl_1_data_45810__fzgx_offset_0, (u32)lbl_1_data_45828__fzgx_offset_0, (u32)lbl_1_data_4584C__fzgx_offset_0, (u32)lbl_1_data_4584C__fzgx_offset_0,
+    (u32)lbl_1_data_4584C__fzgx_offset_0, (u32)lbl_1_data_4584C__fzgx_offset_0, (u32)lbl_1_data_4584C__fzgx_offset_0, (u32)lbl_1_data_45868__fzgx_offset_0, (u32)lbl_1_data_4588C__fzgx_offset_0, (u32)lbl_1_data_4588C__fzgx_offset_0, (u32)lbl_1_data_4588C__fzgx_offset_0, (u32)lbl_1_data_4588C__fzgx_offset_0,
+    (u32)lbl_1_data_4588C__fzgx_offset_0, (u32)lbl_1_data_458A8__fzgx_offset_0, (u32)lbl_1_data_458D4__fzgx_offset_0, (u32)lbl_1_data_458D4__fzgx_offset_0, (u32)lbl_1_data_458D4__fzgx_offset_0, (u32)lbl_1_data_458D4__fzgx_offset_0, (u32)lbl_1_data_458D4__fzgx_offset_0, (u32)lbl_1_data_458F0__fzgx_offset_0,
+    (u32)lbl_1_data_45914__fzgx_offset_0, (u32)lbl_1_data_45914__fzgx_offset_0, (u32)lbl_1_data_45914__fzgx_offset_0, (u32)lbl_1_data_45914__fzgx_offset_0, (u32)lbl_1_data_45914__fzgx_offset_0, (u32)lbl_1_data_45930__fzgx_offset_0, (u32)lbl_1_data_45954__fzgx_offset_0, (u32)lbl_1_data_45954__fzgx_offset_0,
+    (u32)lbl_1_data_45954__fzgx_offset_0, (u32)lbl_1_data_45954__fzgx_offset_0, (u32)lbl_1_data_45954__fzgx_offset_0, (u32)lbl_1_data_45970__fzgx_offset_0, (u32)lbl_1_data_45998__fzgx_offset_0, (u32)lbl_1_data_45998__fzgx_offset_0, (u32)lbl_1_data_45998__fzgx_offset_0, (u32)lbl_1_data_45998__fzgx_offset_0,
+    (u32)lbl_1_data_45998__fzgx_offset_0, (u32)lbl_1_data_459B8__fzgx_offset_0, (u32)lbl_1_data_459E0__fzgx_offset_0, (u32)lbl_1_data_459E0__fzgx_offset_0, (u32)lbl_1_data_459E0__fzgx_offset_0, (u32)lbl_1_data_459E0__fzgx_offset_0, (u32)lbl_1_data_459E0__fzgx_offset_0, (u32)lbl_1_data_459FC__fzgx_offset_0,
+    (u32)lbl_1_data_45A20__fzgx_offset_0, (u32)lbl_1_data_45A20__fzgx_offset_0, (u32)lbl_1_data_45A20__fzgx_offset_0, (u32)lbl_1_data_45A20__fzgx_offset_0, (u32)lbl_1_data_45A20__fzgx_offset_0, (u32)lbl_1_data_45A34__fzgx_offset_0, (u32)lbl_1_data_45A5C__fzgx_offset_0, (u32)lbl_1_data_45A5C__fzgx_offset_0,
+    (u32)lbl_1_data_45A5C__fzgx_offset_0, (u32)lbl_1_data_45A5C__fzgx_offset_0, (u32)lbl_1_data_45A5C__fzgx_offset_0, (u32)lbl_1_data_45A74__fzgx_offset_0, (u32)lbl_1_data_45A98__fzgx_offset_0, (u32)lbl_1_data_45A98__fzgx_offset_0, (u32)lbl_1_data_45A98__fzgx_offset_0, (u32)lbl_1_data_45A98__fzgx_offset_0,
+    (u32)lbl_1_data_45A98__fzgx_offset_0, (u32)lbl_1_data_45AB4__fzgx_offset_0, (u32)lbl_1_data_45AE0__fzgx_offset_0, (u32)lbl_1_data_45AE0__fzgx_offset_0, (u32)lbl_1_data_45AE0__fzgx_offset_0, (u32)lbl_1_data_45AE0__fzgx_offset_0, (u32)lbl_1_data_45AE0__fzgx_offset_0, (u32)lbl_1_data_45AF8__fzgx_offset_0,
+    (u32)lbl_1_data_45B1C__fzgx_offset_0, (u32)lbl_1_data_45B1C__fzgx_offset_0, (u32)lbl_1_data_45B1C__fzgx_offset_0, (u32)lbl_1_data_45B1C__fzgx_offset_0, (u32)lbl_1_data_45B1C__fzgx_offset_0, (u32)lbl_1_data_45B34__fzgx_offset_0, (u32)lbl_1_data_45B54__fzgx_offset_0, (u32)lbl_1_data_45B54__fzgx_offset_0,
+    (u32)lbl_1_data_45B54__fzgx_offset_0, (u32)lbl_1_data_45B54__fzgx_offset_0, (u32)lbl_1_data_45B54__fzgx_offset_0, (u32)lbl_1_data_45B70__fzgx_offset_0, (u32)lbl_1_data_45B94__fzgx_offset_0, (u32)lbl_1_data_45B94__fzgx_offset_0, (u32)lbl_1_data_45B94__fzgx_offset_0, (u32)lbl_1_data_45B94__fzgx_offset_0,
+    (u32)lbl_1_data_45B94__fzgx_offset_0, (u32)lbl_1_data_45BB0__fzgx_offset_0, (u32)lbl_1_data_45BD8__fzgx_offset_0, (u32)lbl_1_data_45BD8__fzgx_offset_0, (u32)lbl_1_data_45BD8__fzgx_offset_0, (u32)lbl_1_data_45BD8__fzgx_offset_0, (u32)lbl_1_data_45BD8__fzgx_offset_0, (u32)lbl_1_data_45BF4__fzgx_offset_0,
+    (u32)lbl_1_data_45C20__fzgx_offset_0, (u32)lbl_1_data_45C20__fzgx_offset_0, (u32)lbl_1_data_45C20__fzgx_offset_0, (u32)lbl_1_data_45C20__fzgx_offset_0, (u32)lbl_1_data_45C20__fzgx_offset_0, (u32)lbl_1_data_45C3C__fzgx_offset_0, (u32)lbl_1_data_45C64__fzgx_offset_0, (u32)lbl_1_data_45C64__fzgx_offset_0,
+    (u32)lbl_1_data_45C64__fzgx_offset_0, (u32)lbl_1_data_45C64__fzgx_offset_0, (u32)lbl_1_data_45C64__fzgx_offset_0, (u32)lbl_1_data_45C80__fzgx_offset_0, (u32)lbl_1_data_45CA8__fzgx_offset_0, (u32)lbl_1_data_45CA8__fzgx_offset_0, (u32)lbl_1_data_45CA8__fzgx_offset_0, (u32)lbl_1_data_45CA8__fzgx_offset_0,
+    (u32)lbl_1_data_45CA8__fzgx_offset_0, (u32)lbl_1_data_45CC0__fzgx_offset_0, (u32)lbl_1_data_45CE4__fzgx_offset_0, (u32)lbl_1_data_45CE4__fzgx_offset_0, (u32)lbl_1_data_45CE4__fzgx_offset_0, (u32)lbl_1_data_45CE4__fzgx_offset_0, (u32)lbl_1_data_45CE4__fzgx_offset_0, (u32)lbl_1_data_45CFC__fzgx_offset_0,
+    (u32)lbl_1_data_45D20__fzgx_offset_0, (u32)lbl_1_data_45D20__fzgx_offset_0, (u32)lbl_1_data_45D20__fzgx_offset_0, (u32)lbl_1_data_45D20__fzgx_offset_0, (u32)lbl_1_data_45D20__fzgx_offset_0, (u32)lbl_1_data_45D3C__fzgx_offset_0, (u32)lbl_1_data_45D68__fzgx_offset_0, (u32)lbl_1_data_45D68__fzgx_offset_0,
+    (u32)lbl_1_data_45D68__fzgx_offset_0, (u32)lbl_1_data_45D68__fzgx_offset_0, (u32)lbl_1_data_45D68__fzgx_offset_0, (u32)lbl_1_data_45D80__fzgx_offset_0, (u32)lbl_1_data_45DA4__fzgx_offset_0, (u32)lbl_1_data_45DA4__fzgx_offset_0, (u32)lbl_1_data_45DA4__fzgx_offset_0, (u32)lbl_1_data_45DA4__fzgx_offset_0,
+    (u32)lbl_1_data_45DA4__fzgx_offset_0, (u32)lbl_1_data_45DC4__fzgx_offset_0, (u32)lbl_1_data_45DF0__fzgx_offset_0, (u32)lbl_1_data_45DF0__fzgx_offset_0, (u32)lbl_1_data_45DF0__fzgx_offset_0, (u32)lbl_1_data_45DF0__fzgx_offset_0, (u32)lbl_1_data_45DF0__fzgx_offset_0, (u32)lbl_1_data_45E0C__fzgx_offset_0,
+    (u32)lbl_1_data_45E30__fzgx_offset_0, (u32)lbl_1_data_45E30__fzgx_offset_0, (u32)lbl_1_data_45E30__fzgx_offset_0, (u32)lbl_1_data_45E30__fzgx_offset_0, (u32)lbl_1_data_45E30__fzgx_offset_0, (u32)lbl_1_data_45E4C__fzgx_offset_0, (u32)lbl_1_data_45E70__fzgx_offset_0, (u32)lbl_1_data_45E70__fzgx_offset_0,
+    (u32)lbl_1_data_45E70__fzgx_offset_0, (u32)lbl_1_data_45E70__fzgx_offset_0, (u32)lbl_1_data_45E70__fzgx_offset_0, (u32)lbl_1_data_45E8C__fzgx_offset_0, (u32)lbl_1_data_45EB8__fzgx_offset_0, (u32)lbl_1_data_45EB8__fzgx_offset_0, (u32)lbl_1_data_45EB8__fzgx_offset_0, (u32)lbl_1_data_45EB8__fzgx_offset_0,
+    (u32)lbl_1_data_45EB8__fzgx_offset_0, (u32)lbl_1_data_45ED4__fzgx_offset_0, (u32)lbl_1_data_45EFC__fzgx_offset_0, (u32)lbl_1_data_45EFC__fzgx_offset_0, (u32)lbl_1_data_45EFC__fzgx_offset_0, (u32)lbl_1_data_45EFC__fzgx_offset_0, (u32)lbl_1_data_45EFC__fzgx_offset_0, (u32)lbl_1_data_45F14__fzgx_offset_0,
+    (u32)lbl_1_data_45F38__fzgx_offset_0, (u32)lbl_1_data_45F38__fzgx_offset_0, (u32)lbl_1_data_45F38__fzgx_offset_0, (u32)lbl_1_data_45F38__fzgx_offset_0, (u32)lbl_1_data_45F38__fzgx_offset_0, (u32)lbl_1_data_45F54__fzgx_offset_0, (u32)lbl_1_data_45F7C__fzgx_offset_0, (u32)lbl_1_data_45F7C__fzgx_offset_0,
+    (u32)lbl_1_data_45F7C__fzgx_offset_0, (u32)lbl_1_data_45F7C__fzgx_offset_0, (u32)lbl_1_data_45F7C__fzgx_offset_0, (u32)lbl_1_data_45F88__fzgx_offset_0, (u32)lbl_1_data_45F94__fzgx_offset_0, (u32)lbl_1_data_45F94__fzgx_offset_0, (u32)lbl_1_data_45F94__fzgx_offset_0, (u32)lbl_1_data_45F94__fzgx_offset_0,
+    (u32)lbl_1_data_45F94__fzgx_offset_0, (u32)lbl_1_data_45FA8__fzgx_offset_0, (u32)lbl_1_data_45FC0__fzgx_offset_0, (u32)lbl_1_data_45FC0__fzgx_offset_0, (u32)lbl_1_data_45FC0__fzgx_offset_0, (u32)lbl_1_data_45FC0__fzgx_offset_0, (u32)lbl_1_data_45FC0__fzgx_offset_0, (u32)lbl_1_data_45FD0__fzgx_offset_0,
+    (u32)lbl_1_data_45FE0__fzgx_offset_0, (u32)lbl_1_data_45FE0__fzgx_offset_0, (u32)lbl_1_data_45FE0__fzgx_offset_0, (u32)lbl_1_data_45FE0__fzgx_offset_0, (u32)lbl_1_data_45FE0__fzgx_offset_0, (u32)lbl_1_data_45FEC__fzgx_offset_0, (u32)lbl_1_data_45FFC__fzgx_offset_0, (u32)lbl_1_data_45FFC__fzgx_offset_0,
+    (u32)lbl_1_data_45FFC__fzgx_offset_0, (u32)lbl_1_data_45FFC__fzgx_offset_0, (u32)lbl_1_data_45FFC__fzgx_offset_0, (u32)lbl_1_data_46008__fzgx_offset_0, (u32)lbl_1_data_46014__fzgx_offset_0, (u32)lbl_1_data_46014__fzgx_offset_0, (u32)lbl_1_data_46014__fzgx_offset_0, (u32)lbl_1_data_46014__fzgx_offset_0,
+    (u32)lbl_1_data_46014__fzgx_offset_0, (u32)lbl_1_data_46024__fzgx_offset_0, (u32)lbl_1_data_46034__fzgx_offset_0, (u32)lbl_1_data_46034__fzgx_offset_0, (u32)lbl_1_data_46034__fzgx_offset_0, (u32)lbl_1_data_46034__fzgx_offset_0, (u32)lbl_1_data_46034__fzgx_offset_0, (u32)lbl_1_data_46048__fzgx_offset_0,
+    (u32)lbl_1_data_46060__fzgx_offset_0, (u32)lbl_1_data_46060__fzgx_offset_0, (u32)lbl_1_data_46060__fzgx_offset_0, (u32)lbl_1_data_46060__fzgx_offset_0, (u32)lbl_1_data_46060__fzgx_offset_0, (u32)lbl_1_data_46070__fzgx_offset_0, (u32)lbl_1_data_46080__fzgx_offset_0, (u32)lbl_1_data_46080__fzgx_offset_0,
+    (u32)lbl_1_data_46080__fzgx_offset_0, (u32)lbl_1_data_46080__fzgx_offset_0, (u32)lbl_1_data_46080__fzgx_offset_0, (u32)lbl_1_data_46090__fzgx_offset_0, (u32)lbl_1_data_460A0__fzgx_offset_0, (u32)lbl_1_data_460A0__fzgx_offset_0, (u32)lbl_1_data_460A0__fzgx_offset_0, (u32)lbl_1_data_460A0__fzgx_offset_0,
+    (u32)lbl_1_data_460A0__fzgx_offset_0, (u32)lbl_1_data_460B0__fzgx_offset_0, (u32)lbl_1_data_460C8__fzgx_offset_0, (u32)lbl_1_data_460C8__fzgx_offset_0, (u32)lbl_1_data_460C8__fzgx_offset_0, (u32)lbl_1_data_460C8__fzgx_offset_0, (u32)lbl_1_data_460C8__fzgx_offset_0, (u32)lbl_1_data_460DC__fzgx_offset_0,
+    (u32)lbl_1_data_460F4__fzgx_offset_0, (u32)lbl_1_data_460F4__fzgx_offset_0, (u32)lbl_1_data_460F4__fzgx_offset_0, (u32)lbl_1_data_460F4__fzgx_offset_0, (u32)lbl_1_data_460F4__fzgx_offset_0, (u32)lbl_1_data_46100__fzgx_offset_0, (u32)lbl_1_data_4610C__fzgx_offset_0, (u32)lbl_1_data_4610C__fzgx_offset_0,
+    (u32)lbl_1_data_4610C__fzgx_offset_0, (u32)lbl_1_data_4610C__fzgx_offset_0, (u32)lbl_1_data_4610C__fzgx_offset_0, (u32)lbl_1_data_4611C__fzgx_offset_0, (u32)lbl_1_data_4612C__fzgx_offset_0, (u32)lbl_1_data_4612C__fzgx_offset_0, (u32)lbl_1_data_4612C__fzgx_offset_0, (u32)lbl_1_data_4612C__fzgx_offset_0,
+    (u32)lbl_1_data_4612C__fzgx_offset_0, (u32)lbl_1_data_46140__fzgx_offset_0, (u32)lbl_1_data_46154__fzgx_offset_0, (u32)lbl_1_data_46154__fzgx_offset_0, (u32)lbl_1_data_46154__fzgx_offset_0, (u32)lbl_1_data_46154__fzgx_offset_0, (u32)lbl_1_data_46154__fzgx_offset_0, (u32)lbl_1_data_46164__fzgx_offset_0,
+    (u32)lbl_1_data_46178__fzgx_offset_0, (u32)lbl_1_data_46178__fzgx_offset_0, (u32)lbl_1_data_46178__fzgx_offset_0, (u32)lbl_1_data_46178__fzgx_offset_0, (u32)lbl_1_data_46178__fzgx_offset_0, (u32)lbl_1_data_46188__fzgx_offset_0, (u32)lbl_1_data_46198__fzgx_offset_0, (u32)lbl_1_data_46198__fzgx_offset_0,
+    (u32)lbl_1_data_46198__fzgx_offset_0, (u32)lbl_1_data_46198__fzgx_offset_0, (u32)lbl_1_data_46198__fzgx_offset_0, (u32)lbl_1_data_461A4__fzgx_offset_0, (u32)lbl_1_data_461B4__fzgx_offset_0, (u32)lbl_1_data_461B4__fzgx_offset_0, (u32)lbl_1_data_461B4__fzgx_offset_0, (u32)lbl_1_data_461B4__fzgx_offset_0,
+    (u32)lbl_1_data_461B4__fzgx_offset_0, (u32)lbl_1_data_461C0__fzgx_offset_0, (u32)lbl_1_data_461CC__fzgx_offset_0, (u32)lbl_1_data_461CC__fzgx_offset_0, (u32)lbl_1_data_461CC__fzgx_offset_0, (u32)lbl_1_data_461CC__fzgx_offset_0, (u32)lbl_1_data_461CC__fzgx_offset_0, (u32)lbl_1_data_461DC__fzgx_offset_0,
+    (u32)lbl_1_data_461EC__fzgx_offset_0, (u32)lbl_1_data_461EC__fzgx_offset_0, (u32)lbl_1_data_461EC__fzgx_offset_0, (u32)lbl_1_data_461EC__fzgx_offset_0, (u32)lbl_1_data_461EC__fzgx_offset_0, (u32)lbl_1_data_461F8__fzgx_offset_0, (u32)lbl_1_data_46204__fzgx_offset_0, (u32)lbl_1_data_46204__fzgx_offset_0,
+    (u32)lbl_1_data_46204__fzgx_offset_0, (u32)lbl_1_data_46204__fzgx_offset_0, (u32)lbl_1_data_46204__fzgx_offset_0, (u32)lbl_1_data_46214__fzgx_offset_0, (u32)lbl_1_data_46228__fzgx_offset_0, (u32)lbl_1_data_46228__fzgx_offset_0, (u32)lbl_1_data_46228__fzgx_offset_0, (u32)lbl_1_data_46228__fzgx_offset_0,
+    (u32)lbl_1_data_46228__fzgx_offset_0, (u32)lbl_1_data_46234__fzgx_offset_0, (u32)lbl_1_data_46244__fzgx_offset_0, (u32)lbl_1_data_46244__fzgx_offset_0, (u32)lbl_1_data_46244__fzgx_offset_0, (u32)lbl_1_data_46244__fzgx_offset_0, (u32)lbl_1_data_46244__fzgx_offset_0, (u32)lbl_1_data_46250__fzgx_offset_0,
+    (u32)lbl_1_data_46260__fzgx_offset_0, (u32)lbl_1_data_46260__fzgx_offset_0, (u32)lbl_1_data_46260__fzgx_offset_0, (u32)lbl_1_data_46260__fzgx_offset_0, (u32)lbl_1_data_46260__fzgx_offset_0, (u32)lbl_1_data_46270__fzgx_offset_0, (u32)lbl_1_data_46280__fzgx_offset_0, (u32)lbl_1_data_46280__fzgx_offset_0,
+    (u32)lbl_1_data_46280__fzgx_offset_0, (u32)lbl_1_data_46280__fzgx_offset_0, (u32)lbl_1_data_46280__fzgx_offset_0, (u32)lbl_1_data_46290__fzgx_offset_0, (u32)lbl_1_data_462B8__fzgx_offset_0, (u32)lbl_1_data_462B8__fzgx_offset_0, (u32)lbl_1_data_462B8__fzgx_offset_0, (u32)lbl_1_data_462B8__fzgx_offset_0,
+    (u32)lbl_1_data_462B8__fzgx_offset_0, (u32)lbl_1_data_462B8__fzgx_offset_0, (u32)lbl_1_data_462BC__fzgx_offset_0, (u32)lbl_1_data_462BC__fzgx_offset_0, (u32)lbl_1_data_462BC__fzgx_offset_0, (u32)lbl_1_data_462BC__fzgx_offset_0, (u32)lbl_1_data_462BC__fzgx_offset_0, (u32)lbl_1_data_462BC__fzgx_offset_0,
+    (u32)lbl_1_data_462C0__fzgx_offset_0, (u32)lbl_1_data_462C0__fzgx_offset_0, (u32)lbl_1_data_462C0__fzgx_offset_0, (u32)lbl_1_data_462C0__fzgx_offset_0, (u32)lbl_1_data_462C0__fzgx_offset_0, (u32)lbl_1_data_462C0__fzgx_offset_0, (u32)lbl_1_data_462C4__fzgx_offset_0, (u32)lbl_1_data_462C4__fzgx_offset_0,
+    (u32)lbl_1_data_462C4__fzgx_offset_0, (u32)lbl_1_data_462C4__fzgx_offset_0, (u32)lbl_1_data_462C4__fzgx_offset_0, (u32)lbl_1_data_462C4__fzgx_offset_0, (u32)lbl_1_data_462C8__fzgx_offset_0, (u32)lbl_1_data_462C8__fzgx_offset_0, (u32)lbl_1_data_462C8__fzgx_offset_0, (u32)lbl_1_data_462C8__fzgx_offset_0,
+    (u32)lbl_1_data_462C8__fzgx_offset_0, (u32)lbl_1_data_462C8__fzgx_offset_0, (u32)lbl_1_data_45230__fzgx_offset_0, (u32)lbl_1_data_45230__fzgx_offset_0, (u32)lbl_1_data_45230__fzgx_offset_0, (u32)lbl_1_data_45230__fzgx_offset_0, (u32)lbl_1_data_45230__fzgx_offset_0, (u32)lbl_1_data_45230__fzgx_offset_0,
+    (u32)lbl_1_data_462CC__fzgx_offset_0, (u32)lbl_1_data_462CC__fzgx_offset_0, (u32)lbl_1_data_462CC__fzgx_offset_0, (u32)lbl_1_data_462CC__fzgx_offset_0, (u32)lbl_1_data_462CC__fzgx_offset_0, (u32)lbl_1_data_462CC__fzgx_offset_0, (u32)lbl_1_data_462D0__fzgx_offset_0, (u32)lbl_1_data_462D0__fzgx_offset_0,
+    (u32)lbl_1_data_462D0__fzgx_offset_0, (u32)lbl_1_data_462D0__fzgx_offset_0, (u32)lbl_1_data_462D0__fzgx_offset_0, (u32)lbl_1_data_462D0__fzgx_offset_0, (u32)lbl_1_data_462D4__fzgx_offset_0, (u32)lbl_1_data_462D4__fzgx_offset_0, (u32)lbl_1_data_462D4__fzgx_offset_0, (u32)lbl_1_data_462D4__fzgx_offset_0,
+    (u32)lbl_1_data_462D4__fzgx_offset_0, (u32)lbl_1_data_462D4__fzgx_offset_0, (u32)lbl_1_data_462D8__fzgx_offset_0, (u32)lbl_1_data_462D8__fzgx_offset_0, (u32)lbl_1_data_462D8__fzgx_offset_0, (u32)lbl_1_data_462D8__fzgx_offset_0, (u32)lbl_1_data_462D8__fzgx_offset_0, (u32)lbl_1_data_462D8__fzgx_offset_0,
+    (u32)lbl_1_data_462B8__fzgx_offset_0, (u32)lbl_1_data_462B8__fzgx_offset_0, (u32)lbl_1_data_462B8__fzgx_offset_0, (u32)lbl_1_data_462B8__fzgx_offset_0, (u32)lbl_1_data_462B8__fzgx_offset_0, (u32)lbl_1_data_462B8__fzgx_offset_0, (u32)lbl_1_data_462BC__fzgx_offset_0, (u32)lbl_1_data_462BC__fzgx_offset_0,
+    (u32)lbl_1_data_462BC__fzgx_offset_0, (u32)lbl_1_data_462BC__fzgx_offset_0, (u32)lbl_1_data_462BC__fzgx_offset_0, (u32)lbl_1_data_462BC__fzgx_offset_0, (u32)lbl_1_data_462C0__fzgx_offset_0, (u32)lbl_1_data_462C0__fzgx_offset_0, (u32)lbl_1_data_462C0__fzgx_offset_0, (u32)lbl_1_data_462C0__fzgx_offset_0,
+    (u32)lbl_1_data_462C0__fzgx_offset_0, (u32)lbl_1_data_462C0__fzgx_offset_0, (u32)lbl_1_data_462C4__fzgx_offset_0, (u32)lbl_1_data_462C4__fzgx_offset_0, (u32)lbl_1_data_462C4__fzgx_offset_0, (u32)lbl_1_data_462C4__fzgx_offset_0, (u32)lbl_1_data_462C4__fzgx_offset_0, (u32)lbl_1_data_462C4__fzgx_offset_0,
+    (u32)lbl_1_data_462C8__fzgx_offset_0, (u32)lbl_1_data_462C8__fzgx_offset_0, (u32)lbl_1_data_462C8__fzgx_offset_0, (u32)lbl_1_data_462C8__fzgx_offset_0, (u32)lbl_1_data_462C8__fzgx_offset_0, (u32)lbl_1_data_462C8__fzgx_offset_0, (u32)lbl_1_data_45230__fzgx_offset_0, (u32)lbl_1_data_45230__fzgx_offset_0,
+    (u32)lbl_1_data_45230__fzgx_offset_0, (u32)lbl_1_data_45230__fzgx_offset_0, (u32)lbl_1_data_45230__fzgx_offset_0, (u32)lbl_1_data_45230__fzgx_offset_0, (u32)lbl_1_data_462CC__fzgx_offset_0, (u32)lbl_1_data_462CC__fzgx_offset_0, (u32)lbl_1_data_462CC__fzgx_offset_0, (u32)lbl_1_data_462CC__fzgx_offset_0,
+    (u32)lbl_1_data_462CC__fzgx_offset_0, (u32)lbl_1_data_462CC__fzgx_offset_0, (u32)lbl_1_data_462D0__fzgx_offset_0, (u32)lbl_1_data_462D0__fzgx_offset_0, (u32)lbl_1_data_462D0__fzgx_offset_0, (u32)lbl_1_data_462D0__fzgx_offset_0, (u32)lbl_1_data_462D0__fzgx_offset_0, (u32)lbl_1_data_462D0__fzgx_offset_0,
+    (u32)lbl_1_data_462D4__fzgx_offset_0, (u32)lbl_1_data_462D4__fzgx_offset_0, (u32)lbl_1_data_462D4__fzgx_offset_0, (u32)lbl_1_data_462D4__fzgx_offset_0, (u32)lbl_1_data_462D4__fzgx_offset_0, (u32)lbl_1_data_462D4__fzgx_offset_0, (u32)lbl_1_data_462D8__fzgx_offset_0, (u32)lbl_1_data_462D8__fzgx_offset_0,
+    (u32)lbl_1_data_462D8__fzgx_offset_0, (u32)lbl_1_data_462D8__fzgx_offset_0, (u32)lbl_1_data_462D8__fzgx_offset_0, (u32)lbl_1_data_462D8__fzgx_offset_0, (u32)lbl_1_data_46300__fzgx_offset_0, (u32)lbl_1_data_46300__fzgx_offset_0, (u32)lbl_1_data_46300__fzgx_offset_0, (u32)lbl_1_data_46300__fzgx_offset_0,
+    (u32)lbl_1_data_46300__fzgx_offset_0, (u32)lbl_1_data_46308__fzgx_offset_0, (u32)lbl_1_data_46310__fzgx_offset_0, (u32)lbl_1_data_46310__fzgx_offset_0, (u32)lbl_1_data_46310__fzgx_offset_0, (u32)lbl_1_data_46310__fzgx_offset_0, (u32)lbl_1_data_46310__fzgx_offset_0, (u32)lbl_1_data_46318__fzgx_offset_0,
+    (u32)lbl_1_data_46328__fzgx_offset_0, (u32)lbl_1_data_46328__fzgx_offset_0, (u32)lbl_1_data_46328__fzgx_offset_0, (u32)lbl_1_data_46328__fzgx_offset_0, (u32)lbl_1_data_46328__fzgx_offset_0, (u32)lbl_1_data_46330__fzgx_offset_0, 0x0
+}};
+#pragma section code_type ".fzgxpool"
+static f32 fzgx_pool_primer_conversion(s32 x) { return (f32)x; }
+#pragma section code_type ".text"
+static const union { u32 w[1275]; const u32 v[0x13EC / 4]; } fzgx_pool_init_fzgx_pool_table_1F00 = {{  /* fzgx-allow: A1 retail data bytes and bindings */
+    0x0, 0x0, 0x70000, 0x0, 0x10000, 0x0, 0x90000, 0x0,
+    0x20000, 0x0, 0x30000, 0x0, 0x30000, 0x0, 0x10000, 0x0,
+    0x40000, 0x0, 0x90000, 0x0, 0x50000, 0x0, 0x30000, 0x0,
+    0x60000, 0x0, 0x30000, 0x0, 0x70000, 0x0, 0x50000, 0x0,
+    0x80000, 0x0, 0x50000, 0x0, 0x90000, 0x0, 0x70000, 0x0,
+    0xA0000, 0x0, 0x70000, 0x0, 0xB0000, 0x0, 0x30000, 0x0,
+    0xC0000, 0x0, 0x10000, 0x0, 0xD0000, 0x0, 0x10000, 0x0,
+    0xE0000, 0x0, 0x30000, 0x0, 0xF0000, 0x0, 0x10000, 0x0,
+    0x100000, 0x0, 0x50000, 0x0, 0x110000, 0x0, 0x70000, 0x0,
+    0x120000, 0x0, 0x50000, 0x0, 0x130000, 0x0, 0x50000, 0x0,
+    0x140000, 0x0, 0x50000, 0x0, 0x150000, 0x0, 0x50000, 0x0,
+    0x160000, 0x0, 0x30000, 0x0, 0x170000, 0x0, 0x90000, 0x0,
+    0x180000, 0x0, 0x70000, 0x0, 0x190001, 0x0, 0x70000, 0x0,
+    0x1A0001, 0x0, 0x70000, 0x0, 0x1B0001, 0x0, 0x10000, 0x0,
+    0x1C0001, 0x0, 0x50000, 0x0, 0x1D0001, 0x0, 0x50000, 0x0,
+    0x1E0001, 0x0, 0x30000, 0x0, 0x1F0001, 0x0, 0x90000, 0x0,
+    0x200001, 0x0, 0x90000, 0x0, 0x210001, 0x0, 0x30000, 0x0,
+    0x220001, 0x0, 0x70000, 0x0, 0x230001, 0x0, 0x90000, 0x0,
+    0x240001, 0x0, 0x10000, 0x0, 0x250001, 0x0, 0x50000, 0x0,
+    0x260001, 0x0, 0x30000, 0x0, 0x270001, 0x0, 0x30000, 0x0,
+    0x280001, 0x0, 0x70000, 0x0, 0x290001, 0x0, 0x90000, 0x0,
+    0x2A0001, 0x0, 0x50000, 0x0, 0x2B0001, 0x0, 0x50000, 0x0,
+    0x2C0001, 0x0, 0x10000, 0x0, 0x2D0001, 0x0, 0x70000, 0x0,
+    0x2E0001, 0x0, 0x10000, 0x0, 0x2F0001, 0x0, 0x50000, 0x0,
+    0x300001, 0x0, 0x50000, 0x0, 0x310001, 0x0, 0x30000, 0x0,
+    0x320002, 0x0, 0x90009, 0x0, 0x330002, 0x0, 0x5001A, 0x0,
+    0x340002, 0x0, 0x50002, 0x0, 0x350002, 0x0, 0x90001, 0x0,
+    0x360002, 0x0, 0x70018, 0x0, 0x370002, 0x0, 0x5000A, 0x0,
+    0x380002, 0x0, 0x10002, 0x0, 0x390002, 0x0, 0x70003, 0x0,
+    0x3A0002, 0x0, 0x3000A, 0x0, 0x3B0002, 0x0, 0x3000B, 0x0,
+    0x3C0002, 0x0, 0x1001B, 0x0, 0x3D0002, 0x0, 0x50010, 0x0,
+    0x3E0002, 0x0, 0x30002, 0x0, 0x3F0002, 0x0, 0x30013, 0x0,
+    0x400002, 0x0, 0x5001A, 0x0, 0x410002, 0x0, 0x3000B, 0x0,
+    0x420002, 0x0, 0x70019, 0x0, 0x430002, 0x0, 0x70000, 0x0,
+    0x440002, 0x0, 0x3001B, 0x0, 0x450002, 0x0, 0x50011, 0x0,
+    0x460002, 0x0, 0x10012, 0x0, 0x470002, 0x0, 0x70008, 0x0,
+    0x480002, 0x0, 0x50012, 0x0, 0x490002, 0x0, 0x70003, 0x0,
+    0x4A0002, 0x0, 0x10003, 0x0, 0x0, 0x0, 0x70000, 0x0,
+    0x10000, 0x0, 0x90000, 0x0, 0x20000, 0x0, 0x30000, 0x0,
+    0x30000, 0x0, 0x10000, 0x0, 0x40000, 0x0, 0x90000, 0x0,
+    0x50000, 0x0, 0x30000, 0x0, 0x60000, 0x0, 0x30000, 0x0,
+    0x70000, 0x0, 0x50000, 0x0, 0x80000, 0x0, 0x50000, 0x0,
+    0x90000, 0x0, 0x70000, 0x0, 0xA0000, 0x0, 0x70000, 0x0,
+    0xB0000, 0x0, 0x30000, 0x0, 0xC0000, 0x0, 0x10000, 0x0,
+    0xD0000, 0x0, 0x10000, 0x0, 0xE0000, 0x0, 0x30000, 0x0,
+    0xF0000, 0x0, 0x10000, 0x0, 0x100000, 0x0, 0x50000, 0x0,
+    0x110000, 0x0, 0x70000, 0x0, 0x120000, 0x0, 0x50000, 0x0,
+    0x130000, 0x0, 0x50000, 0x0, 0x140000, 0x0, 0x50000, 0x0,
+    0x150000, 0x0, 0x50000, 0x0, 0x160000, 0x0, 0x30000, 0x0,
+    0x170000, 0x0, 0x90000, 0x0, 0x180000, 0x0, 0x70000, 0x0,
+    0x190001, 0x0, 0x70000, 0x0, 0x1A0001, 0x0, 0x70000, 0x0,
+    0x1B0001, 0x0, 0x10000, 0x0, 0x1C0001, 0x0, 0x50000, 0x0,
+    0x1D0001, 0x0, 0x50000, 0x0, 0x1E0001, 0x0, 0x30000, 0x0,
+    0x1F0001, 0x0, 0x90000, 0x0, 0x200001, 0x0, 0x90000, 0x0,
+    0x210001, 0x0, 0x30000, 0x0, 0x220001, 0x0, 0x70000, 0x0,
+    0x230001, 0x0, 0x90000, 0x0, 0x240001, 0x0, 0x10000, 0x0,
+    0x250001, 0x0, 0x50000, 0x0, 0x260001, 0x0, 0x30000, 0x0,
+    0x270001, 0x0, 0x30000, 0x0, 0x280001, 0x0, 0x70000, 0x0,
+    0x290001, 0x0, 0x90000, 0x0, 0x2A0001, 0x0, 0x50000, 0x0,
+    0x2B0001, 0x0, 0x50000, 0x0, 0x2C0001, 0x0, 0x10000, 0x0,
+    0x2D0001, 0x0, 0x70000, 0x0, 0x2E0001, 0x0, 0x10000, 0x0,
+    0x2F0001, 0x0, 0x50000, 0x0, 0x300001, 0x0, 0x50000, 0x0,
+    0x310001, 0x0, 0x30000, 0x0, 0x320002, 0x0, 0x90009, 0x0,
+    0x330002, 0x0, 0x5001A, 0x0, 0x340002, 0x0, 0x50002, 0x0,
+    0x350002, 0x0, 0x90001, 0x0, 0x360002, 0x0, 0x70018, 0x0,
+    0x370002, 0x0, 0x5000A, 0x0, 0x380002, 0x0, 0x10002, 0x0,
+    0x390002, 0x0, 0x70003, 0x0, 0x3A0002, 0x0, 0x3000A, 0x0,
+    0x3B0002, 0x0, 0x3000B, 0x0, 0x3C0002, 0x0, 0x1001B, 0x0,
+    0x3D0002, 0x0, 0x50010, 0x0, 0x3E0002, 0x0, 0x30002, 0x0,
+    0x3F0002, 0x0, 0x30013, 0x0, 0x400002, 0x0, 0x5001A, 0x0,
+    0x410002, 0x0, 0x3000B, 0x0, 0x420002, 0x0, 0x70019, 0x0,
+    0x430002, 0x0, 0x70000, 0x0, 0x440002, 0x0, 0x3001B, 0x0,
+    0x450002, 0x0, 0x50011, 0x0, 0x460002, 0x0, 0x10012, 0x0,
+    0x470002, 0x0, 0x70008, 0x0, 0x480002, 0x0, 0x50012, 0x0,
+    0x490002, 0x0, 0x70003, 0x0, 0x4A0002, 0x0, 0x10003, 0x0,
+    0x0, 0x0, 0x70000, 0x0, 0x10000, 0x0, 0x90000, 0x0,
+    0x20000, 0x0, 0x30000, 0x0, 0x30000, 0x0, 0x10000, 0x0,
+    0x40000, 0x0, 0x90000, 0x0, 0x50000, 0x0, 0x30000, 0x0,
+    0x60000, 0x0, 0x30000, 0x0, 0x70000, 0x0, 0x50000, 0x0,
+    0x80000, 0x0, 0x50000, 0x0, 0x90000, 0x0, 0x70000, 0x0,
+    0xA0000, 0x0, 0x70000, 0x0, 0xB0000, 0x0, 0x30000, 0x0,
+    0xC0000, 0x0, 0x10000, 0x0, 0xD0000, 0x0, 0x10000, 0x0,
+    0xE0000, 0x0, 0x30000, 0x0, 0xF0000, 0x0, 0x10000, 0x0,
+    0x100000, 0x0, 0x50000, 0x0, 0x110000, 0x0, 0x70000, 0x0,
+    0x120000, 0x0, 0x50000, 0x0, 0x130000, 0x0, 0x50000, 0x0,
+    0x140000, 0x0, 0x50000, 0x0, 0x150000, 0x0, 0x50000, 0x0,
+    0x160000, 0x0, 0x30000, 0x0, 0x170000, 0x0, 0x90000, 0x0,
+    0x180000, 0x0, 0x70000, 0x0, 0x190001, 0x0, 0x70000, 0x0,
+    0x1A0001, 0x0, 0x70000, 0x0, 0x1B0001, 0x0, 0x10000, 0x0,
+    0x1C0001, 0x0, 0x50000, 0x0, 0x1D0001, 0x0, 0x50000, 0x0,
+    0x1E0001, 0x0, 0x30000, 0x0, 0x1F0001, 0x0, 0x90000, 0x0,
+    0x200001, 0x0, 0x90000, 0x0, 0x210001, 0x0, 0x30000, 0x0,
+    0x220001, 0x0, 0x70000, 0x0, 0x230001, 0x0, 0x90000, 0x0,
+    0x240001, 0x0, 0x10000, 0x0, 0x250001, 0x0, 0x50000, 0x0,
+    0x260001, 0x0, 0x30000, 0x0, 0x270001, 0x0, 0x30000, 0x0,
+    0x280001, 0x0, 0x70000, 0x0, 0x290001, 0x0, 0x90000, 0x0,
+    0x2A0001, 0x0, 0x50000, 0x0, 0x2B0001, 0x0, 0x50000, 0x0,
+    0x2C0001, 0x0, 0x10000, 0x0, 0x2D0001, 0x0, 0x70000, 0x0,
+    0x2E0001, 0x0, 0x10000, 0x0, 0x2F0001, 0x0, 0x50000, 0x0,
+    0x300001, 0x0, 0x50000, 0x0, 0x310001, 0x0, 0x30000, 0x0,
+    0x320002, 0x0, 0x90009, 0x0, 0x330002, 0x0, 0x5001A, 0x0,
+    0x340002, 0x0, 0x50002, 0x0, 0x350002, 0x0, 0x90001, 0x0,
+    0x360002, 0x0, 0x70018, 0x0, 0x370002, 0x0, 0x5000A, 0x0,
+    0x380002, 0x0, 0x10002, 0x0, 0x390002, 0x0, 0x70003, 0x0,
+    0x3A0002, 0x0, 0x3000A, 0x0, 0x3B0002, 0x0, 0x3000B, 0x0,
+    0x3C0002, 0x0, 0x1001B, 0x0, 0x3D0002, 0x0, 0x50010, 0x0,
+    0x3E0002, 0x0, 0x30002, 0x0, 0x3F0002, 0x0, 0x30013, 0x0,
+    0x400002, 0x0, 0x5001A, 0x0, 0x410002, 0x0, 0x3000B, 0x0,
+    0x420002, 0x0, 0x70019, 0x0, 0x430002, 0x0, 0x70000, 0x0,
+    0x440002, 0x0, 0x3001B, 0x0, 0x450002, 0x0, 0x50011, 0x0,
+    0x460002, 0x0, 0x10012, 0x0, 0x470002, 0x0, 0x70008, 0x0,
+    0x480002, 0x0, 0x50012, 0x0, 0x490002, 0x0, 0x70003, 0x0,
+    0x4A0002, 0x0, 0x10003, 0x0, 0x0, 0x0, 0x70000, 0x0,
+    0x10000, 0x0, 0x90000, 0x0, 0x20000, 0x0, 0x30000, 0x0,
+    0x30000, 0x0, 0x10000, 0x0, 0x40000, 0x0, 0x90000, 0x0,
+    0x50000, 0x0, 0x30000, 0x0, 0x60000, 0x0, 0x30000, 0x0,
+    0x70000, 0x0, 0x50000, 0x0, 0x80000, 0x0, 0x50000, 0x0,
+    0x90000, 0x0, 0x70000, 0x0, 0xA0000, 0x0, 0x70000, 0x0,
+    0xB0000, 0x0, 0x30000, 0x0, 0xC0000, 0x0, 0x10000, 0x0,
+    0xD0000, 0x0, 0x10000, 0x0, 0xE0000, 0x0, 0x30000, 0x0,
+    0xF0000, 0x0, 0x10000, 0x0, 0x100000, 0x0, 0x50000, 0x0,
+    0x110000, 0x0, 0x70000, 0x0, 0x120000, 0x0, 0x50000, 0x0,
+    0x130000, 0x0, 0x50000, 0x0, 0x140000, 0x0, 0x50000, 0x0,
+    0x150000, 0x0, 0x50000, 0x0, 0x160000, 0x0, 0x30000, 0x0,
+    0x170000, 0x0, 0x90000, 0x0, 0x180000, 0x0, 0x70000, 0x0,
+    0x190001, 0x0, 0x70000, 0x0, 0x1A0001, 0x0, 0x70000, 0x0,
+    0x1B0001, 0x0, 0x10000, 0x0, 0x1C0001, 0x0, 0x50000, 0x0,
+    0x1D0001, 0x0, 0x50000, 0x0, 0x1E0001, 0x0, 0x30000, 0x0,
+    0x1F0001, 0x0, 0x90000, 0x0, 0x200001, 0x0, 0x90000, 0x0,
+    0x210001, 0x0, 0x30000, 0x0, 0x220001, 0x0, 0x70000, 0x0,
+    0x230001, 0x0, 0x90000, 0x0, 0x240001, 0x0, 0x10000, 0x0,
+    0x250001, 0x0, 0x50000, 0x0, 0x260001, 0x0, 0x30000, 0x0,
+    0x270001, 0x0, 0x30000, 0x0, 0x280001, 0x0, 0x70000, 0x0,
+    0x290001, 0x0, 0x90000, 0x0, 0x2A0001, 0x0, 0x50000, 0x0,
+    0x2B0001, 0x0, 0x50000, 0x0, 0x2C0001, 0x0, 0x10000, 0x0,
+    0x2D0001, 0x0, 0x70000, 0x0, 0x2E0001, 0x0, 0x10000, 0x0,
+    0x2F0001, 0x0, 0x50000, 0x0, 0x300001, 0x0, 0x50000, 0x0,
+    0x310001, 0x0, 0x30000, 0x0, 0x320002, 0x0, 0x90009, 0x0,
+    0x330002, 0x0, 0x5001A, 0x0, 0x340002, 0x0, 0x50002, 0x0,
+    0x350002, 0x0, 0x90001, 0x0, 0x360002, 0x0, 0x70018, 0x0,
+    0x370002, 0x0, 0x5000A, 0x0, 0x380002, 0x0, 0x10002, 0x0,
+    0x390002, 0x0, 0x70003, 0x0, 0x3A0002, 0x0, 0x3000A, 0x0,
+    0x3B0002, 0x0, 0x3000B, 0x0, 0x3C0002, 0x0, 0x1001B, 0x0,
+    0x3D0002, 0x0, 0x50010, 0x0, 0x3E0002, 0x0, 0x30002, 0x0,
+    0x3F0002, 0x0, 0x30013, 0x0, 0x400002, 0x0, 0x5001A, 0x0,
+    0x410002, 0x0, 0x3000B, 0x0, 0x420002, 0x0, 0x70019, 0x0,
+    0x430002, 0x0, 0x70000, 0x0, 0x440002, 0x0, 0x3001B, 0x0,
+    0x450002, 0x0, 0x50011, 0x0, 0x460002, 0x0, 0x10012, 0x0,
+    0x470002, 0x0, 0x70008, 0x0, 0x480002, 0x0, 0x50012, 0x0,
+    0x490002, 0x0, 0x70003, 0x0, 0x4A0002, 0x0, 0x10003, 0x0,
+    (u32)lbl_1_data_44F58__fzgx_offset_0, (u32)lbl_1_data_44F60__fzgx_offset_0, (u32)lbl_1_data_44F68__fzgx_offset_0, (u32)lbl_1_data_44F70__fzgx_offset_0, (u32)lbl_1_data_44F78__fzgx_offset_0, (u32)lbl_1_data_44F80__fzgx_offset_0, (u32)lbl_1_data_44F88__fzgx_offset_0, (u32)lbl_1_data_44F90__fzgx_offset_0,
+    (u32)lbl_1_data_44F98__fzgx_offset_0, (u32)lbl_1_data_44FA0__fzgx_offset_0, (u32)lbl_1_data_44FA8__fzgx_offset_0, (u32)lbl_1_data_44FB0__fzgx_offset_0, (u32)lbl_1_data_44FB8__fzgx_offset_0, (u32)lbl_1_data_44FC0__fzgx_offset_0, (u32)lbl_1_data_44FC8__fzgx_offset_0, (u32)lbl_1_data_44FD0__fzgx_offset_0,
+    (u32)lbl_1_data_44FD8__fzgx_offset_0, (u32)lbl_1_data_44FE0__fzgx_offset_0, (u32)lbl_1_data_44FE8__fzgx_offset_0, (u32)lbl_1_data_44FF0__fzgx_offset_0, (u32)lbl_1_data_44FF8__fzgx_offset_0, (u32)lbl_1_data_45000__fzgx_offset_0, (u32)lbl_1_data_45008__fzgx_offset_0, (u32)lbl_1_data_45010__fzgx_offset_0,
+    (u32)lbl_1_data_45018__fzgx_offset_0, (u32)lbl_1_data_45020__fzgx_offset_0, (u32)lbl_1_data_45028__fzgx_offset_0, (u32)lbl_1_data_45030__fzgx_offset_0, (u32)lbl_1_data_45038__fzgx_offset_0, (u32)lbl_1_data_45040__fzgx_offset_0, (u32)lbl_1_data_45048__fzgx_offset_0, (u32)lbl_1_data_45050__fzgx_offset_0,
+    (u32)lbl_1_data_45058__fzgx_offset_0, (u32)lbl_1_data_45060__fzgx_offset_0, (u32)lbl_1_data_45068__fzgx_offset_0, (u32)lbl_1_data_45070__fzgx_offset_0, (u32)lbl_1_data_45078__fzgx_offset_0, (u32)lbl_1_data_45080__fzgx_offset_0, (u32)lbl_1_data_45088__fzgx_offset_0, (u32)lbl_1_data_45090__fzgx_offset_0,
+    (u32)lbl_1_data_45098__fzgx_offset_0, (u32)lbl_1_data_450A0__fzgx_offset_0, (u32)lbl_1_data_450A8__fzgx_offset_0, (u32)lbl_1_data_450B0__fzgx_offset_0, (u32)lbl_1_data_450B8__fzgx_offset_0, (u32)lbl_1_data_450C0__fzgx_offset_0, (u32)lbl_1_data_450C8__fzgx_offset_0, (u32)lbl_1_data_450D0__fzgx_offset_0,
+    (u32)lbl_1_data_450D8__fzgx_offset_0, (u32)lbl_1_data_450E0__fzgx_offset_0, (u32)lbl_1_data_450E8__fzgx_offset_0, (u32)lbl_1_data_450F0__fzgx_offset_0, (u32)lbl_1_data_450F8__fzgx_offset_0, (u32)lbl_1_data_45100__fzgx_offset_0, (u32)lbl_1_data_45108__fzgx_offset_0, (u32)lbl_1_data_45110__fzgx_offset_0,
+    (u32)lbl_1_data_45118__fzgx_offset_0, (u32)lbl_1_data_45120__fzgx_offset_0, (u32)lbl_1_data_45128__fzgx_offset_0, (u32)lbl_1_data_45130__fzgx_offset_0, (u32)lbl_1_data_45138__fzgx_offset_0, (u32)lbl_1_data_45140__fzgx_offset_0, (u32)lbl_1_data_45148__fzgx_offset_0, (u32)lbl_1_data_45150__fzgx_offset_0,
+    (u32)lbl_1_data_45158__fzgx_offset_0, (u32)lbl_1_data_45160__fzgx_offset_0, (u32)lbl_1_data_45168__fzgx_offset_0, (u32)lbl_1_data_45170__fzgx_offset_0, (u32)lbl_1_data_45178__fzgx_offset_0, (u32)lbl_1_data_45180__fzgx_offset_0, (u32)lbl_1_data_45188__fzgx_offset_0, (u32)lbl_1_data_45190__fzgx_offset_0,
+    (u32)lbl_1_data_45198__fzgx_offset_0, (u32)lbl_1_data_451A0__fzgx_offset_0, (u32)lbl_1_data_451A8__fzgx_offset_0
+}};
+#pragma section code_type ".fzgxpool"
+static void fzgx_pool_primer_scalars(f32 *p) {
+    p[0] = 0.125f;
+    p[1] = 1200.0f;
+    p[2] = 0.00022222222469281405f;
+    p[3] = 0.0002142857265425846f;
+    p[4] = 0.0f;
+    p[5] = 0.3f;
+}
+#pragma section code_type ".text"
+
+struct fn_1_14F6F8_Copy12 { u32 a[3]; };
+struct fn_1_14F6F8_lbl_1_rodata_99D8 {
+    u8 pad_0[0x258];
+    f32 unk_258;
+    u8 pad_25C[0x1C9C];
+    f64 unk_1EF8;
+    u8 pad_1F00[0x13EC];
+    f32 unk_32EC;
+    f32 unk_32F0;
+    f32 unk_32F4;
+    f32 unk_32F8;
+    f32 unk_32FC;
+    f32 unk_3300;
+};
+
+extern s16 fn_1_14F01C(void *);
+extern s16 fn_1_14F090(void *, s32);
+extern const struct fn_1_14F6F8_lbl_1_rodata_99D8 lbl_1_rodata_99D8;
+extern void * fn_1_14F344(void *);
+
+static inline s32 find_index(void *group, s16 id) {
+    s32 i;
+    for (i = 0; (s16)i < fn_1_14F01C(group); i++) {
+        if (id == fn_1_14F090(group, i)) return i;
+    }
+    return -1;
+}
+
+static inline u32 get_part(void *id) {
+    u32 base;
+    void *group = fn_1_14F344(id);
+    switch ((s16)group) {
+    case 0: base = 0x23801F04; break;
+    case 1: base = 0x23803098; break;
+    case 2: base = 0x2380422C; break;
+    default: base = 0x23801F04; break;
+    }
+    return base + (s16)find_index(group, (s16)id) * 180;
+}
+
+#pragma opt_common_subs off
+
+u32 fn_1_14F6F8(void * arg0, void * arg1, void * arg2, u32 arg3) {
+    struct fn_1_14F6F8_lbl_1_rodata_99D8 *p_lbl_1_rodata_99D8;
+    void * t0;
+    u32 v5;
+    s32 v2;
+    u32 v11;
+    s32 v0;
+    u32 v1;
+    s32 v3;
+    u32 v4;
+    s32 v6;
+    s32 v7;
+    s32 v8;
+    s32 v9;
+    u32 v10;
+    s32 v12;
+    s32 v13;
+    s32 v14;
+    s32 v15;
+    u32 v16;
+    u32 v20;
+    u8 v17;
+    u8 v18;
+    union { f64 d; struct { u32 hi, lo; } w; } cv;
+    f32 v25;
+    f32 v24;
+    f32 v21;
+    f32 v22;
+    f64 v19;
+    f32 v23;
+    f64 converted;
+    f32 v26;
+    f32 v28;
+    f32 v29;
+    f32 v30;
+    f32 v31;
+    f32 v32;
+    f32 v33;
+    s32 v34;
+    s32 t1;
+    s32 t2;
+    void * t3;
+    s32 t4;
+    s32 t5;
+    void * t6;
+    s32 t7;
+    s32 t8;
+    /* 6 instruction(s) not lifted: see the ??? markers */
+    p_lbl_1_rodata_99D8 = (struct fn_1_14F6F8_lbl_1_rodata_99D8 *)&lbl_1_rodata_99D8;
+    v5 = get_part(arg0);
+    v11 = get_part(arg1);
+    v20 = get_part(arg2);
+    v17 = *(u8 *)((u8 *)*(u32 *)((u8 *)v11 + 0) + 3);
+    v18 = *(u8 *)((u8 *)*(u32 *)((u8 *)v5 + 0) + 3);
+    v0 = v18 - v17;
+    v23 = 0.125f;
+    v24 = (f32)v0;
+    v24 = v24 * v23;
+    *(u32 *)((u8 *)arg3 + 0) = (u32)(&lbl_1_data_4634C);
+    *(f32 *)((u8 *)arg3 + 4) = (f32)(*(f32 *)((u8 *)v20 + 4) + (f32)(*(f32 *)((u8 *)v5 + 4) + *(f32 *)((u8 *)v11 + 4)));
+    v25 = *(f32 *)((u8 *)arg3 + 4);
+    v25 -= 1200.0f;
+    if (v25 > 0.0f) {
+        v25 *= 0.00022222222469281405f;
+    } else {
+        v25 *= 0.0002142857265425846f;
+    }
+    v25 += 1.0f;
+    *(f32 *)((u8 *)arg3 + 8) = (f32)(*(f32 *)((u8 *)v20 + 8) + (f32)(*(f32 *)((u8 *)v5 + 8) + *(f32 *)((u8 *)v11 + 8)));
+    v26 = 0.3f;
+    *(f32 *)((u8 *)arg3 + 12) = (f32)(*(f32 *)((u8 *)v20 + 12) + (f32)(*(f32 *)((u8 *)v5 + 12) + *(f32 *)((u8 *)v11 + 12)));
+    *(f32 *)((u8 *)arg3 + 28) = (f32)(*(f32 *)((u8 *)v20 + 28) + (f32)(*(f32 *)((u8 *)v5 + 28) + *(f32 *)((u8 *)v11 + 28)));
+    *(f32 *)((u8 *)arg3 + 24) = (f32)(*(f32 *)((u8 *)v20 + 24) + (f32)(*(f32 *)((u8 *)v5 + 24) + *(f32 *)((u8 *)v11 + 24)));
+    v28 = *(f32 *)((u8 *)arg3 + 24);
+    v21 = (f32)(v26 * v28);
+    v21 = (f32)(v21 * v24);
+    *(f32 *)((u8 *)arg3 + 24) = (f32)(v28 + v21);
+    *(f32 *)((u8 *)arg3 + 32) = (f32)(*(f32 *)((u8 *)v20 + 32) + (f32)(*(f32 *)((u8 *)v5 + 32) + *(f32 *)((u8 *)v11 + 32)));
+    v29 = *(f32 *)((u8 *)arg3 + 32);
+    v21 = (f32)(v26 * v29);
+    v21 = (f32)(v21 * v24);
+    *(f32 *)((u8 *)arg3 + 32) = (f32)(v29 - v21);
+    *(f32 *)((u8 *)arg3 + 36) = (f32)(*(f32 *)((u8 *)v20 + 36) + (f32)(*(f32 *)((u8 *)v5 + 36) + *(f32 *)((u8 *)v11 + 36)));
+    *(f32 *)((u8 *)arg3 + 40) = (f32)(*(f32 *)((u8 *)v20 + 40) + (f32)(*(f32 *)((u8 *)v5 + 40) + *(f32 *)((u8 *)v11 + 40)));
+    *(f32 *)((u8 *)arg3 + 44) = (f32)(*(f32 *)((u8 *)v20 + 44) + (f32)(*(f32 *)((u8 *)v5 + 44) + *(f32 *)((u8 *)v11 + 44)));
+    *(f32 *)((u8 *)arg3 + 48) = (f32)(*(f32 *)((u8 *)v20 + 48) + (f32)(*(f32 *)((u8 *)v5 + 48) + *(f32 *)((u8 *)v11 + 48)));
+    v30 = *(f32 *)((u8 *)v20 + 52);
+    *(f32 *)((u8 *)arg3 + 52) = (f32)(v25 * (f32)(v30 + (f32)(*(f32 *)((u8 *)v5 + 52) + *(f32 *)((u8 *)v11 + 52))));
+    *(f32 *)((u8 *)arg3 + 56) = (f32)(*(f32 *)((u8 *)v20 + 56) + (f32)(*(f32 *)((u8 *)v5 + 56) + *(f32 *)((u8 *)v11 + 56)));
+    *(f32 *)((u8 *)arg3 + 60) = (f32)(*(f32 *)((u8 *)v20 + 60) + (f32)(*(f32 *)((u8 *)v5 + 60) + *(f32 *)((u8 *)v11 + 60)));
+    v31 = *(f32 *)((u8 *)v20 + 64);
+    *(f32 *)((u8 *)arg3 + 64) = (f32)(v31 + (f32)(*(f32 *)((u8 *)v5 + 64) + *(f32 *)((u8 *)v11 + 64)));
+    *(f32 *)((u8 *)arg3 + 68) = (f32)(*(f32 *)((u8 *)v5 + 68) * *(f32 *)((u8 *)v11 + 68));
+    *(u8 *)((u8 *)arg3 + 72) = ((*(u8 *)((u8 *)v5 + 72) + *(u8 *)((u8 *)v11 + 72)) + *(u8 *)((u8 *)v20 + 72));
+    v32 = *(f32 *)((u8 *)v5 + 16);
+    *(f32 *)((u8 *)arg3 + 16) = (f32)(v32 + (f32)(v32 * v24));
+    v33 = *(f32 *)((u8 *)v5 + 20);
+    *(f32 *)((u8 *)arg3 + 20) = (f32)(v33 + (f32)(v33 * v24));
+    *(f32 *)((u8 *)arg3 + 76) = *(f32 *)((u8 *)v11 + 76);
+    *(f32 *)((u8 *)arg3 + 80) = *(f32 *)((u8 *)v11 + 80);
+    v34 = *(u8 *)((u8 *)v20 + 73);
+    *(u8 *)((u8 *)arg3 + 73) = (v34 | (*(u8 *)((u8 *)v5 + 73) | *(u8 *)((u8 *)v11 + 73)));
+    *(struct fn_1_14F6F8_Copy12 *)((u8 *)arg3 + 84) = *(struct fn_1_14F6F8_Copy12 *)((u8 *)v5 + 84);
+    *(struct fn_1_14F6F8_Copy12 *)((u8 *)arg3 + 132) = *(struct fn_1_14F6F8_Copy12 *)((u8 *)v5 + 132);
+    *(struct fn_1_14F6F8_Copy12 *)((u8 *)arg3 + 96) = *(struct fn_1_14F6F8_Copy12 *)((u8 *)v5 + 96);
+    *(struct fn_1_14F6F8_Copy12 *)((u8 *)arg3 + 144) = *(struct fn_1_14F6F8_Copy12 *)((u8 *)v5 + 144);
+    *(struct fn_1_14F6F8_Copy12 *)((u8 *)arg3 + 108) = *(struct fn_1_14F6F8_Copy12 *)((u8 *)v5 + 108);
+    *(struct fn_1_14F6F8_Copy12 *)((u8 *)arg3 + 156) = *(struct fn_1_14F6F8_Copy12 *)((u8 *)v5 + 156);
+    *(struct fn_1_14F6F8_Copy12 *)((u8 *)arg3 + 120) = *(struct fn_1_14F6F8_Copy12 *)((u8 *)v5 + 120);
+    *(struct fn_1_14F6F8_Copy12 *)((u8 *)arg3 + 168) = *(struct fn_1_14F6F8_Copy12 *)((u8 *)v5 + 168);
+    return arg3;
+}
+/* fzgx:end fn_1_14F6F8 */
+
 /* fzgx:begin fn_1_14FC80 noprologue */
 #include "types.h"
 #include "dolphin/types.h"
