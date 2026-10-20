@@ -158,3 +158,6 @@ rel/pilotpoint/pilotpoint/fn_14_6044.c:
 
 rel/pilotpoint/pilotpoint/fn_14_4008.c:
 	.text       start:0x00004008 end:0x00004460 align:4
+
+rel/pilotpoint/pilotpoint/fn_14_34FC.c:
+	.text       start:0x000034FC end:0x00003AE8 align:4
