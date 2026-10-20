@@ -78637,6 +78637,17 @@
   },
   {
     "module": "title",
+    "source": "rel/title/title/fn_8_5FD4.c",
+    "symbols": [
+      "fn_8_5FD4"
+    ],
+    "status": "matching",
+    "mw_version": "GC/1.3",
+    "extra_cflags": [],
+    "tu": "rel/title/title.c"
+  },
+  {
+    "module": "title",
     "source": "rel/title/title/fn_8_6570.c",
     "symbols": [
       "fn_8_6570"
