@@ -8129,3 +8129,6 @@ rel/main_rel/car/fn_1_82724.c:
 
 rel/main_rel/effect/fn_1_65CDC.c:
 	.text       start:0x00065CDC end:0x00065E58 align:4
+
+rel/main_rel/effect/fn_1_64760.c:
+	.text       start:0x00064760 end:0x000648D4 align:4

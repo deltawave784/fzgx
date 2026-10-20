@@ -4222,7 +4222,8 @@
     "headers_sha256": "fae2435a8fa7d9aa315a83bba41165189d6b656b9f748898f189942fa2f550a4",
     "oracle_sha256": "26cf7c2184872ee662d0231ec010ecff098f10b821f527afaee26da3ace87d9f",
     "recipe": [],
-    "link": "rejected"
+    "link": "verified",
+    "commit": "280e3d99"
   },
   "fn_10_3A98": {
     "seed_symbol": "fn_10_3A98",
@@ -17453,5 +17454,77 @@
       }
     ],
     "link": "pool"
+  },
+  "fn_1_64760": {
+    "seed_symbol": "fn_1_64760",
+    "generator": "fzgx fixup",
+    "transform": "lint-clean spelling: shared helpers by include psvec_add, psvec_scale, psvec_scale_add, psvec_set, psvec_sub, psvec_sub_scale_add; hardware literals by name (headers)",
+    "seed": "\n\ntypedef signed long s32;\n\ntypedef unsigned char u8;\n\ntypedef unsigned long u32;\n\ntypedef float f32;\n\n/* Paired-single vector kernels recovered from retail code (2026-09-15).\n *\n * Retail's x/y lanes are handled by psq_l/psq_st with a displacement and the\n * z lane by lfs/stfs. MWCC's __vec2x32float__ type only ever emits the indexed\n * psq_lx/psq_stx forms, so the displacement form can come only from inline\n * assembly inlined into the caller; the compiler then allocates the registers\n * and schedules these instructions together with the surrounding code, which\n * is what the retail streams show. Pointers are untyped so every per-block Vec\n * typedef can be passed without a cast. */\n/* ab = a - b */\nstatic inline void psvec_sub(const register void *a, const register void *b, register void *ab) {\nregister f32 axy, bxy, az, bz;\nasm {psq_l axy, 0(a), 0, 0\npsq_l bxy, 0(b), 0, 0\nlfs az, 8(a)\nlfs bz, 8(b)\nps_sub axy, axy, bxy\nfsubs az, az, bz\npsq_st axy, 0(ab), 0, 0\nstfs az, 8(ab)\n}\n}\n/* ab = a + b */\nstatic inline void psvec_add(const register void *a, const register void *b, register void *ab) {\nregister f32 axy, bxy, az, bz;\nasm {psq_l axy, 0(a), 0, 0\npsq_l bxy, 0(b), 0, 0\nlfs az, 8(a)\nlfs bz, 8(b)\nps_add axy, axy, bxy\nfadds az, az, bz\npsq_st axy, 0(ab), 0, 0\nstfs az, 8(ab)\n}\n}\n/* dst = a * s */\nstatic inline void psvec_scale(const register void *a, register f32 s, register void *dst) {\nregister f32 axy, az;\nasm {psq_l axy, 0(a), 0, 0\nlfs az, 8(a)\nps_muls0 axy, axy, s\nfmuls az, az, s\npsq_st axy, 0(dst), 0, 0\nstfs az, 8(dst)\n}\n}\n/* dst = acc + v * s (retail loads the accumulator first: fn_1_236CC) */\nstatic inline void psvec_scale_add(const register void *acc, const register void *v, register f32 s, register void *dst) {\nregister f32 axy, vxy, az, vz;\nasm {psq_l axy, 0(acc), 0, 0\npsq_l vxy, 0(v), 0, 0\nlfs az, 8(acc)\nlfs vz, 8(v)\nps_madds0 axy, vxy, s, axy\nfmadds az, vz, s, az\npsq_st axy, 0(dst), 0, 0\nstfs az, 8(dst)\n}\n}\n/* d = a - b; out = b + d * s (the interpolation kernel: fn_1_115BE8, fn_1_108A90) */\nstatic inline void psvec_sub_scale_add(const register void *a, const register void *b, register f32 s, register void *d, register void *out) {\nregister f32 axy, bxy, az, bz;\nasm {psq_l axy, 0(a), 0, 0\npsq_l bxy, 0(b), 0, 0\nlfs az, 8(a)\nlfs bz, 8(b)\nps_sub axy, axy, bxy\nfsubs az, az, bz\npsq_st axy, 0(d), 0, 0\nstfs az, 8(d)\nps_madds0 bxy, axy, s, bxy\nfmadds bz, az, s, bz\npsq_st bxy, 0(out), 0, 0\nstfs bz, 8(out)\n}\n}\n/* dst = (x, y, z). The parameters are declared z, y, x: an inlined asm block's\n * register parameters take f0, f1, f2 in declaration order, and retail merges\n * x from f2 with y from f1 while z sits in f0 (fn_1_2A694). */\nstatic inline void psvec_set(register void *dst, register f32 z, register f32 y, register f32 x) {\nasm {ps_merge00 x, x, y\npsq_st x, 0(dst), 0, 0\nstfs z, 8(dst)\n}\n}\nextern const f32 lbl_1_rodata_2950[];\nextern void lbl_8006D9D8(void *);\nextern void lbl_8006D7B0(void);\nextern f32 lbl_8006D0B4(f32);\nextern void lbl_8006DB74(void *);\nextern void lbl_8006D848(f32);\nextern void lbl_8006DFC4(void *);\nextern void fn_1_9F914(void *, u32);\nextern void *memset(void *, int, u32);\nstruct Fn15D718 {\nu8 _pad00[0x1c];\nf32 value1c;\nf32 value20;\nf32 value24;\nf32 value28;\nu8 _pad2c[0x08];\nu32 object34;\nu8 _pad38[0x04];\nf32 value3c;\n};\nstruct Fn15D718Tmp {\nu8 data[0x30];\n};\nstruct Fn15D718Sub {\nu8 data[0x34];\n};\nstruct Fn15D718Work {\nf32 alpha;\nf32 alpha2;\nstruct Fn15D718Sub sub;\nu8 red;\nu8 green;\nu8 blue;\nu8 alphaByte;\n};\n#pragma opt_propagation off\n#pragma opt_common_subs on\nstatic inline f32 *fn_1_5D718_array_read(f32 *array) { return array; }\nstatic inline f32 fn_1_5D718_array_read_(s32 index, f32 *array) { return array[index]; }\n#pragma opt_strength_reduction off\nvoid fn_1_64760(struct Fn15D718 *self) {\nstruct Fn15D718Work work;\nstruct Fn15D718Tmp tmp;\nu32 object;\nf32 radius;\nf32 distance;\nf32 alpha;\nstruct { const f32 *value; } pool;\nf32 v[3];\nf32 x;\nf32 y;\nf32 z;\nf32 sq;\nf32 vy;\nobject = self->object34;\npool.value = lbl_1_rodata_2950;\nradius = self->value28;\nlbl_8006D9D8(&self->value3c);\nlbl_8006D7B0();\n/* translation column of the current matrix in the locked cache */\nx = ((f32 *)0xE0000000)[3];\ny = ((f32 *)0xE0000000)[7];\n(void) y; /* fzgx: keeps the web at its definition */\npsvec_set(v, (z = ((f32 *)0xE0000000)[11]), y, x);\nsq = (f32)(fn_1_5D718_array_read_(0, v) * (*((0) + (v))));\nsq += fn_1_5D718_array_read_(1, v) * fn_1_5D718_array_read_(1, v);\nsq += fn_1_5D718_array_read_(2, v) * fn_1_5D718_array_read_(2, v);\ndistance = lbl_8006D0B4(sq);\nif (distance > pool.value[1] + radius) {\nlbl_8006DB74(&tmp);\nlbl_8006D848((distance - radius) / distance);\nlbl_8006DFC4(&tmp);\n}\nmemset(&work, 0, 0x40);\nlbl_8006DB74(&work.sub);\nalpha = (*((pool.value) + (0x150 / 4))) * self->value28;\nwork.alpha = alpha;\nwork.red = (u8)(pool.value[0x5c / 4] * self->value1c);\nwork.green = (u8)(pool.value[0x5c / 4] * self->value20);\nwork.blue = (u8)(pool.value[0x5c / 4] * self->value24);\nwork.alphaByte = 0xff;\nwork.alpha2 = alpha;\nfn_1_9F914(&work, object);\n}\n#pragma opt_strength_reduction reset\n#pragma opt_common_subs reset\n#pragma opt_propagation reset\n",
+    "seed_sha256": "4c91d700f054f53fb522006a116be4a199db99225c010d423bbf02116c6cb6fd",
+    "generated_sha256": "f9e4cfb74fb491633ea3639ddc9b878696097cf40d164a431b204ec80525a800",
+    "generated_source": "#include \"dolphin/hw_regs.h\"\n#include \"psvec.h\"\n\n\ntypedef signed long s32;\n\ntypedef unsigned char u8;\n\ntypedef unsigned long u32;\n\ntypedef float f32;\n\n/* Paired-single vector kernels recovered from retail code (2026-09-15).\n *\n * Retail's x/y lanes are handled by psq_l/psq_st with a displacement and the\n * z lane by lfs/stfs. MWCC's __vec2x32float__ type only ever emits the indexed\n * psq_lx/psq_stx forms, so the displacement form can come only from inline\n * assembly inlined into the caller; the compiler then allocates the registers\n * and schedules these instructions together with the surrounding code, which\n * is what the retail streams show. Pointers are untyped so every per-block Vec\n * typedef can be passed without a cast. */\n/* ab = a - b */\n/* ab = a + b */\n/* dst = a * s */\n/* dst = acc + v * s (retail loads the accumulator first: fn_1_236CC) */\n/* d = a - b; out = b + d * s (the interpolation kernel: fn_1_115BE8, fn_1_108A90) */\n/* dst = (x, y, z). The parameters are declared z, y, x: an inlined asm block's\n * register parameters take f0, f1, f2 in declaration order, and retail merges\n * x from f2 with y from f1 while z sits in f0 (fn_1_2A694). */\nextern const f32 lbl_1_rodata_2950[];\nextern void lbl_8006D9D8(void *);\nextern void lbl_8006D7B0(void);\nextern f32 lbl_8006D0B4(f32);\nextern void lbl_8006DB74(void *);\nextern void lbl_8006D848(f32);\nextern void lbl_8006DFC4(void *);\nextern void fn_1_9F914(void *, u32);\nextern void *memset(void *, int, u32);\nstruct Fn15D718 {\nu8 _pad00[0x1c];\nf32 value1c;\nf32 value20;\nf32 value24;\nf32 value28;\nu8 _pad2c[0x08];\nu32 object34;\nu8 _pad38[0x04];\nf32 value3c;\n};\nstruct Fn15D718Tmp {\nu8 data[0x30];\n};\nstruct Fn15D718Sub {\nu8 data[0x34];\n};\nstruct Fn15D718Work {\nf32 alpha;\nf32 alpha2;\nstruct Fn15D718Sub sub;\nu8 red;\nu8 green;\nu8 blue;\nu8 alphaByte;\n};\n#pragma opt_propagation off\n#pragma opt_common_subs on\nstatic inline f32 *fn_1_5D718_array_read(f32 *array) { return array; }\nstatic inline f32 fn_1_5D718_array_read_(s32 index, f32 *array) { return array[index]; }\n#pragma opt_strength_reduction off\nvoid fn_1_64760(struct Fn15D718 *self) {\nstruct Fn15D718Work work;\nstruct Fn15D718Tmp tmp;\nu32 object;\nf32 radius;\nf32 distance;\nf32 alpha;\nstruct { const f32 *value; } pool;\nf32 v[3];\nf32 x;\nf32 y;\nf32 z;\nf32 sq;\nf32 vy;\nobject = self->object34;\npool.value = lbl_1_rodata_2950;\nradius = self->value28;\nlbl_8006D9D8(&self->value3c);\nlbl_8006D7B0();\n/* translation column of the current matrix in the locked cache */\nx = ((f32 *)LC_BASE)[3];\ny = ((f32 *)LC_BASE)[7];\n(void) y; /* fzgx: keeps the web at its definition */\npsvec_set(v, (z = ((f32 *)LC_BASE)[11]), y, x);\nsq = (f32)(fn_1_5D718_array_read_(0, v) * (*((0) + (v))));\nsq += fn_1_5D718_array_read_(1, v) * fn_1_5D718_array_read_(1, v);\nsq += fn_1_5D718_array_read_(2, v) * fn_1_5D718_array_read_(2, v);\ndistance = lbl_8006D0B4(sq);\nif (distance > pool.value[1] + radius) {\nlbl_8006DB74(&tmp);\nlbl_8006D848((distance - radius) / distance);\nlbl_8006DFC4(&tmp);\n}\nmemset(&work, 0, 0x40);\nlbl_8006DB74(&work.sub);\nalpha = (*((pool.value) + (0x150 / 4))) * self->value28;\nwork.alpha = alpha;\nwork.red = (u8)(pool.value[0x5c / 4] * self->value1c);\nwork.green = (u8)(pool.value[0x5c / 4] * self->value20);\nwork.blue = (u8)(pool.value[0x5c / 4] * self->value24);\nwork.alphaByte = 0xff;\nwork.alpha2 = alpha;\nfn_1_9F914(&work, object);\n}\n#pragma opt_strength_reduction reset\n#pragma opt_common_subs reset\n#pragma opt_propagation reset\n",
+    "compiler": "GC/1.3.2",
+    "flags": "",
+    "source": "rel/main_rel/effect/fn_1_64760.c",
+    "bytes": 372,
+    "headers_sha256": "fae2435a8fa7d9aa315a83bba41165189d6b656b9f748898f189942fa2f550a4",
+    "oracle_sha256": "c7bc5c8e6e4c2d950c245fab77bf0a8ee80c2083d6a5f208f4cd0ce104b87fac",
+    "recipe": [
+      {
+        "label": "lint-clean spelling: shared helpers by include psvec_add, psvec_scale, psvec_scale_add, psvec_set, psvec_sub, psvec_sub_scale_add; hardware literals by name (headers)",
+        "input_sha256": "4c91d700f054f53fb522006a116be4a199db99225c010d423bbf02116c6cb6fd",
+        "output_sha256": "f9e4cfb74fb491633ea3639ddc9b878696097cf40d164a431b204ec80525a800",
+        "input_symbol": "fn_1_64760",
+        "output_symbol": "fn_1_64760",
+        "edits": [
+          [
+            0,
+            0,
+            "#include \"dolphin/hw_regs.h\"\n#include \"psvec.h\"\n"
+          ],
+          [
+            711,
+            996,
+            ""
+          ],
+          [
+            1013,
+            1298,
+            ""
+          ],
+          [
+            1316,
+            1553,
+            ""
+          ],
+          [
+            1626,
+            1952,
+            ""
+          ],
+          [
+            2038,
+            2455,
+            ""
+          ],
+          [
+            2678,
+            2843,
+            ""
+          ],
+          [
+            4172,
+            4210,
+            "LC_BASE)[3];\ny = ((f32 *)LC_BASE"
+          ],
+          [
+            4296,
+            4306,
+            "LC_BASE"
+          ]
+        ]
+      }
+    ],
+    "link": "pending"
   }
 }
