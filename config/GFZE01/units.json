@@ -2614,6 +2614,25 @@
   },
   {
     "module": "customize",
+    "source": "rel/customize/toolkit/fn_3_1B4BC.c",
+    "symbols": [
+      "fn_3_1B4BC"
+    ],
+    "status": "matching",
+    "mw_version": "GC/2.0",
+    "extra_cflags": [],
+    "tu": "rel/customize/toolkit.c",
+    "pool": {
+      "...rodata.0": "lbl_3_rodata_6A0",
+      "@40": "lbl_3_rodata_6A0+0x90",
+      "@43": "lbl_3_rodata_744+0x4",
+      "@27": "lbl_3_rodata_6A0+0x58",
+      "@45": "lbl_3_rodata_744+0xC",
+      "@44": "lbl_3_rodata_744+0x8"
+    }
+  },
+  {
+    "module": "customize",
     "source": "rel/customize/toolkit/fn_3_1BA20.c",
     "symbols": [
       "fn_3_1BA20"

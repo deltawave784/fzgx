@@ -1609,6 +1609,92 @@ void fn_3_1B130(void *data, s16 x, s16 y, Rgba color) {
 }
 /* fzgx:end fn_3_1B130 */
 
+/* fzgx:begin fn_3_1B4BC noprologue */
+#include "types.h"
+#include "rel/customize/toolkit.h"
+
+extern void fn_3_146C0(void *, s16, s16, s16, u32 *);
+
+#pragma section code_type ".fzgxpool"
+/* Primes the unit's literal pool in retail first-use order so the shared
+ * pool offsets line up; mwld ignores this section. */
+static void fzgx_pool_primer(volatile f32 *f, volatile f64 *d, s32 i, u32 u) { /* volatile: keeps every literal store so the pool order is fixed */
+    *f=24.0f; *f=86.0f; *f=100.0f; *f=385.0f;
+    *f=170.0f; *f=104.0f; *f=40.0f; *f=96.0f;
+    *f=90.0f; *f=0.5f; *f=20.0f; *f=60.0f;
+    *f=80.0f; *f=15.0f; *f=30.0f; *f=320.0f;
+    *f=372.0f; *f=0.1f; *f=0.6f; *f=375.0f;
+    *f=0.75f; *f=248.0f; *f=1.0f; *f=0.8f;
+    *f=240.0f; *f=25.0f; *f=1.02f; *f=1.01f;
+    *f=0.4f; *f=32768.0f; *f=10.0f; *f=81.0f;
+    *f=399.0f; *f=18.0f; *f=12.0f;
+    *d=4503601774854144.0; *d=4503599627370496.0; *d=0.0;
+    *f=0.0f; *f=-1.0f; *d=0.5;
+}
+#pragma section code_type ".text"
+typedef struct { u32 rgba; } LineColor;
+static inline void line_point(void *dst, s16 x, s16 y, LineColor color) {
+    s16 i;
+    s32 radius;
+    u16 width;
+    width = lbl_3_bss_A2438.unk_C * 2 + 1;
+    radius = width;
+    radius = radius >> 1;
+    for (i = -radius; i <= radius; i++) {
+        LineColor c = color;
+        fn_3_146C0(dst, x - radius, y + i, width, &c.rgba);
+    }
+}
+
+void fn_3_1B4BC(void *dst, s16 x0, s16 y0, s16 x1, s16 y1, LineColor *color) {
+    s16 start;
+    s16 hi;
+    s16 tmp;
+    s16 lo;
+    f32 slope;
+    f32 error;
+    if (x1 == x0) {
+        if (y1 > y0) { start = y0; hi = y1; }
+        else { start = y1; hi = y0; }
+        for (lo = start; lo <= hi; lo++) line_point(dst, x0, lo, *color);
+    } else if (y1 == y0) {
+        if (x1 > x0) { start = x0; hi = x1; }
+        else { start = x1; hi = x0; }
+        for (lo = start; lo <= hi; lo++) line_point(dst, lo, y0, *color);
+    } else {
+        slope = (f32)(y1 - y0) / (f32)(x1 - x0);
+        error = 0.0f;
+        line_point(dst, x0, y0, *color);
+        if (slope < 0.0f) {
+            if (x0 > x1) { tmp = x0; x0 = x1; x1 = tmp; y0 = y1; }
+            while (x0 < x1) {
+                if (slope > -1.0f) line_point(dst, x0, y0, *color);
+                error -= slope;
+                x0++;
+                while (error > 0.5) {
+                    error -= 1.0f;
+                    y0--;
+                    line_point(dst, x0, y0, *color);
+                }
+            }
+        } else {
+            if (x0 > x1) { tmp = x0; x0 = x1; x1 = tmp; }
+            if (y0 > y1) y0 = y1;
+            while (x0 < x1) {
+                if (slope < 1.0f) line_point(dst, x0, y0, *color);
+                error += slope;
+                x0++;
+                while (error > 0.5) {
+                    error -= 1.0f;
+                    y0++;
+                    line_point(dst, x0, y0, *color);
+                }
+            }
+        }
+    }
+}
+/* fzgx:end fn_3_1B4BC */
+
 /* fzgx:begin fn_3_1BA20 */
 #pragma section code_type ".fzgxpool"
 __declspec(section ".fzgxpool") static void fzgx_pool_prime1(void) {
