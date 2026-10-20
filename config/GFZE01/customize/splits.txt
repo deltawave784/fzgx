@@ -656,3 +656,6 @@ rel/customize/editor/fn_3_17098.c:
 
 rel/customize/toolkit/fn_3_1B4BC.c:
 	.text       start:0x0001B4BC end:0x0001BA20 align:4
+
+rel/customize/editor/fn_3_15F44.c:
+	.text       start:0x00015F44 end:0x0001683C align:4
