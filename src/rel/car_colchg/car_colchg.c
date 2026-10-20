@@ -783,6 +783,116 @@ s32 fn_9_1310(Sig_fn_1_870BC_Car870BC *arg0)
 }
 /* fzgx:end fn_9_1310 */
 
+/* fzgx:begin colchg_selcar_disp noprologue */
+#include "dolphin/types.h"
+#include "rel/car_colchg/car_colchg.h"
+
+extern void fn_1_496FC(f32, f32);
+extern void fn_1_4AE0C(const char *, ...);
+extern char *fn_1_7F49C(s16, s16, char *);
+extern s32 strlen(const char *);
+extern char *fn_80083DB0(char *, const char *);
+extern void fn_1_4B83C(char *, const char *, const char *, const char *);
+extern int sprintf(char *, const char *, ...);
+extern f32 fn_1_4B040(const char *);
+extern void fn_1_4955C(f32, f32);
+extern u16 lbl_1_bss_D58;
+extern s16 *lbl_1_data_1FB6C[];
+extern u32 fn_9_120C(u32);
+extern u32 fn_9_1310(u32);
+
+typedef struct {
+    f32 unk_0;
+    f32 unk_4;
+    f32 unk_8;
+    f32 unk_C;
+    u8 pad_10[0x48];
+} SelcarDisplay;
+extern const SelcarDisplay lbl_1_rodata_26F8;
+extern u32 fn_1_8D3F8(void *, const SelcarDisplay *, u32 (*)(u32), void *);
+
+const f32 lbl_9_rodata_0 = 0.0f;
+const f32 lbl_9_rodata_4 = 0.25f;
+const u32 fzgx_pool_table_8[] = {0, 0, 0};
+
+extern void selcar_pool_double(f64);
+#pragma section code_type ".fzgxpool"
+void selcar_pool_primer(void) {
+    fn_1_496FC(160.0f, 50.0f);
+    fn_1_496FC(-10.0f, 182.04444885253906f);
+    fn_1_496FC(2.0f, 1.0f);
+    fn_1_496FC(0.0f, 0.0f);
+    selcar_pool_double(4503599627370496.0);
+    fn_1_496FC(250.0f, 255.0f);
+    fn_1_496FC(0.5f, 480.0f);
+}
+#pragma section code_type
+
+extern s16 lbl_9_data_0;
+extern char lbl_9_data_4[];
+extern char lbl_9_data_2C[];
+extern char lbl_9_data_40[];
+extern char lbl_9_data_54[];
+extern char lbl_9_data_68[];
+extern char lbl_9_data_7C[];
+extern char lbl_9_data_80[];
+extern char lbl_9_data_84[];
+extern char lbl_9_data_9C[];
+extern char lbl_9_data_B0[];
+
+void colchg_selcar_disp(void *arg0) {
+    s16 i;
+    s32 max_length;
+    char format[0x20];
+    char longest[0x20];
+    char text[0x20];
+    char name[0x20];
+    SelcarDisplay display;
+    s16 *car;
+    s16 car_index;
+    struct { void *value; } selected;
+    struct { char *value; } data;
+    data.value = (char *)&lbl_9_data_0;
+    car_index = lbl_9_bss_8->unk_0;
+    car = lbl_1_data_1FB6C[car_index];
+    fn_1_496FC(160.0f, 50.0f);
+    fn_1_4AE0C((char *)data.value + 0x100);
+    max_length = 0;
+    fn_1_7F49C(lbl_9_bss_8->unk_0, *(s16 *)data.value, name);
+    for (i = 0; i < 41; i++) {
+        s32 length = strlen(name);
+        if (length > max_length) {
+            max_length = length;
+            fn_80083DB0(longest, name);
+        }
+    }
+    fn_1_4B83C(format, (char *)data.value + 0x118, longest, name);
+    sprintf(text, format, name);
+    fn_1_4955C(250.0f / fn_1_4B040(text), 1.0f);
+    fn_1_4AE0C(text);
+    fn_1_4955C(1.0f, 1.0f);
+    fn_1_4955C(1.0f, 1.0f);
+    fn_1_4AE0C((char *)data.value + 0x120, lbl_9_bss_8->unk_0);
+    if (((lbl_1_bss_D58 >> 8) & 1) && car[0] == -1) {
+        fn_1_4AE0C((char *)data.value + 0x128);
+    }
+    selected.value = (u8 *)arg0 + car_index * 0x440;
+    for (i = 0; i < 2; i++) {
+        display = lbl_1_rodata_26F8;
+        display.unk_C = 255.0f;
+        display.unk_8 = 0.5f * (480.0f * (f32)(i % 2));
+        switch (i) {
+        case 0:
+            fn_1_8D3F8(lbl_9_bss_14 + i * 0x64, &display, fn_9_120C, selected.value);
+            break;
+        case 1:
+            fn_1_8D3F8(lbl_9_bss_14 + i * 0x64, &display, fn_9_1310, selected.value);
+            break;
+        }
+    }
+}
+/* fzgx:end colchg_selcar_disp */
+
 /* fzgx:begin colchg_chgcol_disp */
 extern u8 lbl_9_data_178[20];
 extern u8 lbl_9_bss_14[200];

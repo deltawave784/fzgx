@@ -127,6 +127,30 @@
   },
   {
     "module": "car_colchg",
+    "source": "rel/car_colchg/car_colchg/colchg_selcar_disp.c",
+    "symbols": [
+      "colchg_selcar_disp"
+    ],
+    "status": "matching",
+    "mw_version": null,
+    "extra_cflags": [],
+    "tu": "rel/car_colchg/car_colchg.c",
+    "pool": {
+      "...rodata.0": "lbl_9_rodata_0",
+      "@5": "lbl_9_rodata_14",
+      "@6": "lbl_9_rodata_18",
+      "@13": "lbl_9_rodata_18+0x20",
+      "@10": "lbl_9_rodata_18+0x10",
+      "@14": "lbl_9_rodata_18+0x24",
+      "@15": "lbl_9_rodata_18+0x28",
+      "@16": "lbl_9_rodata_18+0x2C",
+      "@47": "lbl_9_rodata_18+0x30",
+      "lbl_9_rodata_0": "lbl_9_rodata_0",
+      "lbl_9_rodata_4": "lbl_9_rodata_4"
+    }
+  },
+  {
+    "module": "car_colchg",
     "source": "rel/car_colchg/car_colchg/colchg_selcar_init.c",
     "symbols": [
       "colchg_selcar_init"
