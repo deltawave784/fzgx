@@ -893,6 +893,110 @@ void colchg_selcar_disp(void *arg0) {
 }
 /* fzgx:end colchg_selcar_disp */
 
+/* fzgx:begin colchg_selmate_disp */
+extern void colchg_menu_disp(void);
+void fn_1_426C(s16);
+extern void colchg_ezsel_disp(void);
+extern void colchg_save_disp(void);
+extern u16 lbl_1_bss_968;
+extern struct Struct_lbl_1_bss_D58 lbl_1_bss_D58;
+s32 fn_1_4C10(void);
+void fn_1_A8EB0(s32, s32);
+s32 fn_1_7F49C(s16, s32, void *);
+void fn_1_A8DD4(const char *, ...);
+void fn_1_80058(s8, struct CarColchgEntry *);
+void fn_1_80C18(u32, struct CarColchgEntry *, s32);
+void fn_1_426C(s16);
+s32 fn_1_4C10(void);
+void fn_1_A8EB0(s32, s32);
+s32 fn_1_7F49C(s16, s32, void *);
+void fn_1_A8DD4(const char *, ...);
+void fn_1_80058(s8, struct CarColchgEntry *);
+void fn_1_80C18(u32, struct CarColchgEntry *, s32);
+extern s16 lbl_1_bss_962;
+extern u32 lbl_1_bss_71688;
+extern u32 lbl_1_bss_7168C;
+extern struct Struct_lbl_1_bss_970 lbl_1_bss_970;
+extern u16 lbl_1_bss_96A;
+extern struct Entry *lbl_1_data_1FB6C[];
+extern u32 lbl_801A6410;
+void fn_1_7FA04(u32);
+void fn_1_8D168(u32);
+void fn_1_435C(u32);
+void fn_1_41A8(void);
+void fn_1_46B4(u32, u32, void *, s32);
+void fn_1_6400(void);
+u16 fn_1_3F8C(char *, void (*)(void), s32, s32);
+void fn_1_4A00(s32, s32, u32);
+extern void fn_9_1BCC(void);
+extern void fn_9_1AC4(void);
+extern u32 lbl_801A66A0;
+
+extern void fn_1_496FC(f32, f32);
+extern void fzgx_pool_double(f64);
+
+#pragma section code_type ".fzgxpool"
+void fzgx_pool_head(void) {
+    fn_1_496FC(0.0f, 0.25f);
+}
+const u32 fzgx_pool_pointers[3] = {0, 0, 0};
+void fzgx_pool_tail(void) {
+    fn_1_496FC(160.0f, 50.0f);
+    fn_1_496FC(-10.0f, 182.0444488525390625f);
+    fn_1_496FC(2.0f, 1.0f);
+    fzgx_pool_double(4503599627370496.0);
+    fn_1_496FC(250.0f, 255.0f);
+}
+#pragma section code_type ".text"
+
+struct SelmateDispConfig {
+    f32 unk_0;
+    f32 unk_4;
+    f32 unk_8;
+    f32 unk_C;
+    u8 pad_10[0x48];
+};
+extern const struct SelmateDispConfig lbl_1_rodata_26F8;
+extern struct Entry *lbl_1_data_1FB6C[];
+extern s32 fn_9_120C(void *);
+extern s32 fn_9_1310(void *);
+extern void fn_1_496FC(f32, f32);
+extern void fn_1_4AE0C(const char *, ...);
+extern u32 fn_1_8D3F8(void *, void *, s32 (*)(void *), void *);
+
+static inline s16 selmate_count(s16 car) {
+    s16 count = 0;
+    struct Entry *entry = lbl_1_data_1FB6C[car];
+    while (*(s16 *)entry != -1) {
+        entry = (struct Entry *)((u8 *)entry + 0xC);
+        count++;
+    }
+    return count;
+}
+
+void colchg_selmate_disp(void *arg0) {
+    s16 car;
+    s16 i;
+
+    car = lbl_9_bss_8->unk_0;
+    fn_1_496FC(160.0f, 50.0f);
+    fn_1_4AE0C((const char *)lbl_9_data_150, lbl_9_bss_8->unk_2, lbl_9_bss_8->unk_4, selmate_count(lbl_9_bss_8->unk_0) - 1);
+    for (i = 0; i < 2; i++) {
+        struct SelmateDispConfig config = lbl_1_rodata_26F8;
+        config.unk_C = 255.0f;
+        config.unk_8 = 0.5f * (480.0f * (i % 2));
+        switch (i) {
+        case 0:
+            fn_1_8D3F8(lbl_9_bss_14 + i * 0x64, &config, fn_9_120C, (u8 *)arg0 + car * 0x440);
+            break;
+        case 1:
+            fn_1_8D3F8(lbl_9_bss_14 + i * 0x64, &config, fn_9_1310, (u8 *)arg0 + car * 0x440);
+            break;
+        }
+    }
+}
+/* fzgx:end colchg_selmate_disp */
+
 /* fzgx:begin colchg_chgcol_disp */
 extern u8 lbl_9_data_178[20];
 extern u8 lbl_9_bss_14[200];
