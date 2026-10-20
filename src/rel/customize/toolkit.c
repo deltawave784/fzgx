@@ -1935,6 +1935,237 @@ void fn_3_1BF08(void *data, s16 x1, s16 y1, s16 x2, s16 y2, u32 *color) {
 }
 /* fzgx:end fn_3_1BF08 */
 
+/* fzgx:begin fn_3_1C278 noprologue */
+#include "types.h"
+#include "rel/customize/globals.h"
+#include "rel/customize/toolkit.h"
+#include "font.h"
+
+/* Sprite packet as used here: the word at 0x50 carries the colour pointer. */
+typedef struct {
+    u32 image;
+    f32 x, y, z;
+    f32 scale_x, scale_y;
+    f32 u0, v0, u1, v1;
+    s16 rotation_z, rotation_y;
+    f32 alpha;
+    u32 flags;
+    f32 depth;
+    u8 color[4], color_add[4];
+    u32 format;
+    u16 width, height;
+    void *pixels;
+    void *secondary;
+    void *color_ptr;
+    u32 unk_54;
+} Fn3_1C278_Packet;
+
+/* 16-byte records of lbl_3_bss_6D8C0, viewed from their field at +8. */
+typedef struct {
+    s16 name;
+    u8 pad_2[14];
+} Fn3_1C278_Entry;
+
+typedef struct {
+    u8 r, g, b, a;
+} Fn3_1C278_Rgba;
+
+extern Fn3_1C278_Packet lbl_1_rodata_26F8;
+extern u32 fn_3_1C8D0(s16, void *, f32);
+extern char *fn_3_2B750(s16, s16);
+extern void fn_1_49410(void);
+extern void fn_1_495FC(void);
+extern void fn_1_495B0(u32);
+extern void fn_1_4965C(u8);
+extern void fn_1_495C8(u8);
+extern void fn_1_4955C(f32, f32);
+extern void fn_1_496FC(f32, f32);
+extern void fn_1_4954C(f32);
+extern void fn_1_49738(void *);
+extern void fn_1_495A0(f32);
+extern char *fn_1_14FEAC(s16, s16, s16, char *, s16);
+extern void fn_1_494DC(s16);
+extern void fn_1_4962C(void);
+extern void fn_1_49514(Fn3_1C278_Rgba *);
+extern char *fn_1_14EE00(s16, char *, s16);
+extern s16 fn_1_14EF40(s16, s16, s16);
+extern void fn_1_14F6F8(s16, s16, s16, char *);
+extern void fn_1_136714(f32, f32, f32, s32, s32, s32, s32, void *);
+extern void fn_1_51914(Fn3_1C278_Packet *);
+extern void fn_1_51564(u16, u16, u16, u16, u16, u16);
+extern void fn_1_5158C(Fn3_1C278_Packet *, u32, s16, s16);
+extern void fn_1_51990(Fn3_1C278_Packet *);
+extern u32 fn_1_13EF64(u32, u32, u32, char *, u32, Fn3_1C278_Rgba *, void *, f32);
+
+#pragma section code_type ".fzgxpool"
+/* Literals the TU pooled before this function (retail lbl_3_rodata_768 +0x0..+0x18). */
+void fzgx_pool_fn_3_1C278(f32 *out) {
+    *out = 0.7f;
+}
+
+void fzgx_pool_fn_3_1C278_colors(Fn3_1C278_Rgba *c) {
+    Fn3_1C278_Rgba c1 = {0xFF, 0xFF, 0xFF, 0x00};
+    Fn3_1C278_Rgba c2 = {0xFF, 0xFF, 0x00, 0x00};
+    Fn3_1C278_Rgba c3 = {0xFF, 0x00, 0x00, 0x00};
+    Fn3_1C278_Rgba c4 = {0x00, 0x00, 0xFF, 0x00};
+    c[0] = c1;
+    c[1] = c2;
+    c[2] = c3;
+    c[3] = c4;
+}
+#pragma section code_type ".text"
+
+void fn_3_1C278(s16 id, s16 a, s16 b, s16 c, void *color, f32 alpha) {
+    char text[0x40];
+    Fn3_1C278_Packet packet;
+    Fn3_1C278_Packet icon;
+    char desc[0xB8];
+    Fn3_1C278_Entry *table;
+    s16 mode;
+    s16 count;
+    s32 col;
+    s32 row;
+
+    if (a == -1 || b == -1 || c == -1) {
+        fn_3_1C8D0(id, color, alpha);
+        return;
+    }
+
+    mode = lbl_3_bss_F0.unk_A;
+    if (lbl_3_bss_F0.unk_A == 5) {
+        fn_1_49410();
+        fn_1_495FC();
+        fn_1_495B0(0x80000000);
+        fn_1_4965C(2);
+        fn_1_495C8(1);
+        fn_1_4955C(0.45833334f, 0.45833334f);
+        fn_1_496FC(284.0f, 329.0f);
+        fn_1_4954C(100.0f);
+        if (color != NULL) {
+            fn_1_49738(color);
+        }
+        fn_1_495A0(alpha);
+        fn_1_4AE0C((const char *)&lbl_3_data_4B70, fn_1_14FEAC(a, b, c, text, mode));
+    }
+
+    fn_1_49410();
+    fn_1_495C8(9);
+    fn_1_494DC(0x23);
+    fn_1_4962C();
+    fn_1_4955C(0.9166667f, 0.9166667f);
+    fn_1_496FC(284.0f, 360.0f);
+    fn_1_4954C(100.0f);
+    if (color != NULL) {
+        fn_1_49738(color);
+    }
+    fn_1_495A0(alpha);
+    fn_1_4AE0C((const char *)&lbl_3_data_4B70, fn_1_14FEAC(a, b, c, text, 0));
+
+    fn_1_49410();
+    fn_1_495FC();
+    fn_1_495B0(0x80000000);
+    fn_1_4965C(2);
+    fn_1_4954C(100.0f);
+    fn_1_4955C(0.5416667f, 0.5416667f);
+    {
+        Fn3_1C278_Rgba color0 = {0xFF, 0xF2, 0x00, 0xFF};
+        fn_1_49514(&color0);
+    }
+    if (color != NULL) {
+        fn_1_49738(color);
+    }
+    fn_1_495A0(alpha);
+
+    fn_1_496FC(441.0f, 332.0f);
+    table = (Fn3_1C278_Entry *)((u8 *)&lbl_3_bss_6D8C0 + 8);
+    fn_1_4AE0C((const char *)&lbl_3_data_4B70, fn_1_14EE00(table[a].name, text, mode));
+    fn_1_496FC(441.0f, 345.0f);
+    fn_1_4AE0C((const char *)&lbl_3_data_4B70, fn_1_14EE00(table[c].name, text, mode));
+    fn_1_496FC(441.0f, 358.0f);
+    fn_1_4AE0C((const char *)&lbl_3_data_4B70, fn_1_14EE00(table[b].name, text, mode));
+
+    count = fn_1_14EF40(a, b, c);
+    fn_1_14F6F8(a, b, c, desc);
+
+    fn_1_49410();
+    fn_1_495FC();
+    fn_1_495B0(0x80000000);
+    fn_1_4965C(2);
+    fn_1_4954C(100.0f);
+    fn_1_4955C(0.48749998f, 0.5416667f);
+    if (color != NULL) {
+        fn_1_49738(color);
+    }
+    fn_1_495A0(alpha);
+    fn_1_496FC(395.0f, 331.0f);
+    fn_1_4AE0C(fn_3_2B750(0x1A, 0));
+    fn_1_496FC(395.0f, 345.0f);
+    fn_1_4AE0C(fn_3_2B750(0x1D, 0));
+    fn_1_496FC(395.0f, 359.0f);
+    fn_1_4AE0C(fn_3_2B750(0x1B, 0));
+
+    packet = lbl_1_rodata_26F8;
+    packet.image = 0x8903;
+    packet.x = 320.0f;
+    packet.y = 362.0f;
+    packet.z = 200.0f;
+    packet.flags = 10;
+    if (color != NULL) {
+        packet.color_ptr = color;
+        packet.flags |= 0x04000000;
+    }
+    packet.alpha = alpha;
+    fn_1_4F734((FontDrawPacket *)&packet);
+
+    fn_1_49410();
+    fn_1_495FC();
+    fn_1_495B0(0x80000000);
+    fn_1_4965C(2);
+    fn_1_496FC(323.0f, 381.0f);
+    fn_1_4954C(100.0f);
+    fn_1_4955C(0.5416667f, 0.5416667f);
+    if (color != NULL) {
+        fn_1_49738(color);
+    }
+    fn_1_495A0(alpha);
+    fn_1_4AE0C((const char *)lbl_3_data_4B74, count);
+    fn_1_136714(100.0f, 13.0f, alpha, count, 300, 381, 2, color);
+
+    icon = lbl_1_rodata_26F8;
+    icon.image = 0x890F;
+    row = id / 6;
+    col = id % 6;
+    icon.x = 0.007843138f + (f32)col / 6.0f;
+    icon.y = 0.007843138f + (f32)row / 7.0f;
+    icon.scale_x *= 0.14901961f;
+    icon.scale_y *= 0.12941177f;
+    fn_1_51914(&icon);
+
+    packet = lbl_1_rodata_26F8;
+    packet.image = 0xA000;
+    packet.flags = 10;
+    fn_1_51564(0, 0, 0x78, 0x78, 6, 7);
+    fn_1_5158C(&packet, packet.image, col, row);
+    packet.x = 132.0f;
+    packet.y = 362.0f;
+    packet.z = 150.0f;
+    packet.scale_x *= 0.8f;
+    packet.scale_y *= 0.8f;
+    fn_1_51990(&packet);
+    if (color != NULL) {
+        packet.color_ptr = color;
+        packet.flags |= 0x04000000;
+    }
+    packet.alpha = alpha;
+    fn_1_4F734((FontDrawPacket *)&packet);
+
+    {
+        Fn3_1C278_Rgba color1 = {0xFF, 0xFF, 0x00, 0x00};
+        fn_1_13EF64(0x1FB, 0x16A, 100, desc, 0x8906, &color1, color, 0.3f * alpha);
+    }
+}
+/* fzgx:end fn_3_1C278 */
+
 /* fzgx:begin fn_3_1D338 noprologue */
 #include "types.h"
 
