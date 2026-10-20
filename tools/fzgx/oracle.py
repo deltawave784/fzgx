@@ -69,6 +69,11 @@ class CheckResult:
     # file-scope definition of a retail data symbol the unit does not own (multiply defined).
     # Diagnostics only (`link_conflicts`); the row rules above are unchanged.
     link_conflicts: List[str] = field(default_factory=list)
+    # functions the body calls without any declaration (MWCC accepts the call as an implicit
+    # `int f()`: float arguments widen to double, the result is int, so the object can still
+    # score high while the C is wrong). Diagnostics and best-body selection only
+    # (`implicit_calls`); the row rules are unchanged.
+    implicit_calls: List[str] = field(default_factory=list)
 
     def to_json(self) -> dict:
         return {k: v for k, v in self.__dict__.items() if not k.startswith("_")}
@@ -1409,6 +1414,46 @@ def compile_source(project: Project, module: str, source: Path, obj: Path,
     cmd += [arg for path in include_dirs or [] for arg in ('-i', str(path))]
     cmd += shlex.split(flags) + ["-c", str(source), "-o", str(obj)]
     return subprocess.run(cmd, cwd=ROOT, text=True, capture_output=True, timeout=120)
+
+
+_NO_PROTOTYPE_RE = re.compile(r"^#\s*(\d+):(.*)$")
+
+
+def implicit_calls(project: Project, module: str, source: Path, mw_version: Optional[str] = None,
+                   extra_cflags: Optional[str] = None) -> List[str]:
+    """Functions `source` calls without a declaration, by name, from one extra compile under
+    `-requireprotos` (MWCC then reports `function has no prototype` as an error at the call;
+    the same text at a definition is a warning and is ignored). A body calling an undeclared
+    helper compiles and can outscore a sound body by a few rows (fn_1_451E4's 90.85%
+    `load_to_aram` body over the 90.48% declared one), so the agent path flags it and the
+    best-body rule demotes it. Diagnostic only: the compile verdict and the row rules never
+    read this. Empty on any failure of the probe itself."""
+    obj = source.with_name(source.stem + ".fzgxproto.o")
+    try:
+        cp = compile_source(project, module, source, obj, mw_version,
+                            _join_flags(extra_cflags, "-requireprotos -maxerrors 50"))
+        text = cp.stdout + cp.stderr
+    except (OSError, subprocess.SubprocessError):
+        return []
+    finally:
+        obj.unlink(missing_ok=True)
+    names: List[str] = []
+    lines = text.splitlines()
+    for i, line in enumerate(lines):
+        if not line.lstrip("# ").startswith("Error:") or "^" not in line:
+            continue
+        if i + 1 >= len(lines) or "function has no prototype" not in lines[i + 1]:
+            continue
+        m = _NO_PROTOTYPE_RE.match(lines[i - 1]) if i else None
+        if not m:
+            continue
+        # the source line and the caret line carry the same prefix width (`#    150: ` and
+        # `#   Error: `), so the caret column indexes the code text directly
+        col = line.index("^") - (len(lines[i - 1]) - len(m.group(2)))
+        ident = re.match(r"[A-Za-z_]\w*", m.group(2)[col:]) if col >= 0 else None
+        if ident and ident.group(0) not in names:
+            names.append(ident.group(0))
+    return names
 
 
 def unit_source_path(project: Project, unit_src: str) -> Path:

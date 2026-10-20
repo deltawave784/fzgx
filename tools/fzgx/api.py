@@ -41,7 +41,12 @@ MAX_CHECKS_LARGE = int(os.environ.get("FZGX_MAX_CHECKS_LARGE", 24))
 MAX_STALE_LARGE = int(os.environ.get("FZGX_MAX_STALE_LARGE", 8))
 STUB = '#include "types.h"\n\n// {symbol}: carved by fzgx; {note}\n'
 SHADOW_PREFIX = "shadow-"   # agent ids with this prefix run A/B trials that never relink or commit
-REVISE_PREFIX = "revise-"   # rewrite an already-matched unit for readability; kept only if still 100%
+REVISE_PREFIX = "revise-"
+# A body calling an undeclared function (MWCC's implicit `int f()`) is saved as the attempt's
+# best only when it beats the best sound body by more than this many points: the implicit
+# declaration itself costs rows (double promotion, int result), so a smaller lead is noise
+# around wrong C (fn_1_451E4: 90.85% undeclared `load_to_aram` over the 90.48% sound body).
+IMPLICIT_MARGIN = float(os.environ.get("FZGX_IMPLICIT_MARGIN", 2.0))   # rewrite an already-matched unit for readability; kept only if still 100%
 
 
 def _is_shadow(agent: Optional[str]) -> bool:
@@ -669,9 +674,15 @@ def check(p: Project, symbol: str, max_diff_lines: int = 80, versions: Optional[
             return {"ok": False, "symbol": symbol, "error": "the work copy is still the empty stub: write the complete "
                     "function with write_unit first, then probe compilers (nothing was compiled, no check spent)"}
         vers = list(oracle.CANDIDATE_VERSIONS) if versions == "all" else versions.split(",")
-        if versions == 'all' and options.get('mw') in vers:
-            vers.remove(options['mw'])
-            vers.insert(0, options['mw'])
+        # the compiler already selected for this attempt is always in the comparison, first: a
+        # partial probe (`versions=GC/1.2.5n,GC/1.2.5,GC/1.1`) used to select the best of only
+        # the versions it named and every later check compiled under it (fn_1_44A74: 68% under
+        # 1.2.5n after four checks at 81% under the retained GC/1.3, batch 189)
+        retained = options.get('mw')
+        if retained:
+            if retained in vers:
+                vers.remove(retained)
+            vers.insert(0, retained)
         out, best = {}, None
         variants = _probe_flag_variants(p, symbol, options.get('flags'))
         for ver in vers:
@@ -697,6 +708,8 @@ def check(p: Project, symbol: str, max_diff_lines: int = 80, versions: Optional[
                 break
         selected = None
         if best:
+            if src is not None:
+                best[1].implicit_calls = _implicit_calls(p, symbol, src, best[1])
             _record_check(p, key, src, best[1], archive=False)
             selected = dict(mw=best[1].mw_version, flags=best[1].extra_cflags)
             attempt = l.current_attempt(key)
@@ -711,11 +724,14 @@ def check(p: Project, symbol: str, max_diff_lines: int = 80, versions: Optional[
             out_check['submit_blocked'] = _submit_blocker(best[1])
         response = {"ok": True, "symbol": symbol, "versions": out,
                 "selected": selected, "selected_check": out_check,
+                "retained": retained if retained and selected and selected['mw'] == retained else None,
                 "stop": _budget_stop(l.current_attempt(key)),
                 "note": "The best tested compiler is retained for subsequent edits and submit. "
                         "-1 compiler missing, -2 check failed; the whole probe counts as one check"}
         return _finish_check(p, symbol, response, best[1] if best else None)
     res = _check_work(p, symbol, key, src, max_diff_lines, options.get('mw'), options.get('flags'))
+    if src is not None:
+        res.implicit_calls = _implicit_calls(p, symbol, src, res)
     checkview.save(p, key, res)
     out = res.to_json()
     blocker = _submit_blocker(res)
@@ -755,6 +771,35 @@ def _differing_rows(res: oracle.CheckResult) -> Optional[int]:
     return oracle.progress_rows(res)
 
 
+def _implicit_calls(p: Project, symbol: str, src: Path, res: oracle.CheckResult) -> List[str]:
+    """Undeclared callees of a compiled body (one `-requireprotos` compile; empty when the check
+    itself failed, since the compile error already says what is wrong)."""
+    sym = p.resolve(symbol)
+    if not res.ok or sym is None:
+        return []
+    try:
+        return oracle.implicit_calls(p, sym.module, Path(src), res.mw_version, res.extra_cflags)
+    except Exception:  # a diagnostic never fails a check
+        return []
+
+
+def _effective_score(percent: Optional[float], implicit: bool) -> float:
+    return (percent or 0.0) - (IMPLICIT_MARGIN if implicit else 0.0)
+
+
+def _best_meta(key: str) -> Optional[dict]:
+    """The saved best body's metadata, only while it describes the file beside it."""
+    meta = STATE_DIR / "attempts" / f"{key}.best.json"
+    try:
+        saved = json.loads(meta.read_text())
+    except (OSError, ValueError):
+        return None
+    best = meta.with_suffix('.c')
+    if not best.exists() or saved.get('sha256') != hashlib.sha256(best.read_bytes()).hexdigest():
+        return None
+    return saved
+
+
 def _record_check(p: Project, key: str, src: Optional[Path], res: oracle.CheckResult,
                   count: bool = True, archive: bool = True) -> dict:
     """Archive the body and compiler settings together, including version probes.
@@ -777,14 +822,32 @@ def _record_check(p: Project, key: str, src: Optional[Path], res: oracle.CheckRe
         except OSError:
             pass
     if src is not None and count:
-        stats = Ledger().bump_checks(key, check_score(res), _differing_rows(res))
-        if stats.get("improved"):
+        score = check_score(res)
+        stats = Ledger().bump_checks(key, score, _differing_rows(res))
+        # the saved best body: the ledger's best score decides while nothing is saved yet;
+        # afterwards a body with undeclared callees must beat a sound saved body by more than
+        # IMPLICIT_MARGIN, and a sound body replaces an undeclared one within that margin
+        saved = _best_meta(key)
+        implicit = bool(res.ok and res.implicit_calls)
+        if saved is None:
+            replace = bool(stats.get("improved"))
+        else:
+            replace = _effective_score(score, implicit) > _effective_score(
+                saved.get('percent'), bool(saved.get('implicit_calls')))
+        if replace:
             best = STATE_DIR / "attempts" / f"{key}.best.c"
             best.parent.mkdir(parents=True, exist_ok=True)
             shutil.copy(src, best)
             best.with_suffix('.json').write_text(json.dumps(dict(
                 sha256=hashlib.sha256(best.read_bytes()).hexdigest(),
-                mw=res.mw_version, flags=res.extra_cflags, percent=stats['best_in_attempt'])) + '\n')
+                mw=res.mw_version, flags=res.extra_cflags, percent=score,
+                implicit_calls=list(res.implicit_calls or []))) + '\n')
+        stats['saved_best'] = replace
+        if implicit and not replace and saved is not None:
+            stats['not_saved'] = (
+                f"not saved as the attempt's best: it calls undeclared {', '.join(res.implicit_calls)} "
+                f"and leads the sound saved body ({saved.get('percent') or 0:.2f}%) by less than "
+                f"{IMPLICIT_MARGIN:g} points")
         return stats
     return {}
 
@@ -809,6 +872,8 @@ def format_check(res: Dict[str, Any]) -> str:
         return 'Attempt completed automatically: ' + json.dumps(res['automatic'])
     if "versions" in res:
         text = "\n".join(f"{v:10s} {'n/a' if pct < 0 else f'{pct:.1f}%'}" for v, pct in res["versions"].items())
+        if res.get('retained'):
+            text += f"\nThe previously selected compiler {res['retained']} still scores best and stays selected."
         if res.get('selected_check'):
             text += '\nSelected for subsequent edits and submit:\n' + format_check(res['selected_check'])
         return text + (f"\nSTOP: {res['stop']}." if res.get("stop") else "")
@@ -820,6 +885,12 @@ def format_check(res: Dict[str, Any]) -> str:
         lines.append('Automatic submission rejected: ' + json.dumps(res['automatic']))
     if res.get('submit_blocked'):
         lines.append(res['submit_blocked'])
+    if res.get('implicit_calls'):
+        lines.append('undeclared function(s) called: ' + ', '.join(res['implicit_calls'])
+                     + ' (MWCC assumed `int f()`: float arguments widen to double, the result is int; '
+                     'declare the prototype or define the helper before relying on this score)')
+    if (res.get('budget') or {}).get('not_saved'):
+        lines.append(res['budget']['not_saved'])
     if res.get('primer_renamed'):
         lines.append('primer functions renamed in your work copy so the match can submit: '
                      + ', '.join(f'{a} -> {b}' for a, b in res['primer_renamed'].items()))
@@ -1400,10 +1471,11 @@ def release(p: Project, symbol: str, reason: str, harness: Optional[str] = None,
             percent=saved_percent, saved_from=saved_from,
             checks=_archived_check_numbers(key, saved_sha))) + '\n')
         body_path = str(dest)
+    attempt_row = dict(l.current_attempt(key) or {})
+    final = _save_final_copy(p, symbol, key, row, attempt_row, body_path, shadow, harness, model, save_only)
     best.unlink(missing_ok=True)
     best.with_suffix('.json').unlink(missing_ok=True)
     _discard_work(p, key)
-    attempt_row = dict(l.current_attempt(key) or {})
     l.finish(key, "released", "unmatched", notes=reason, body_path=body_path, model=model,
              harness=harness, tokens_in=tokens_in, tokens_out=tokens_out, cost_usd=cost_usd, shadow=shadow)
     out = {"ok": True, "symbol": symbol, "saved": body_path}
@@ -1414,14 +1486,68 @@ def release(p: Project, symbol: str, reason: str, harness: Optional[str] = None,
         if attempt_row.get('final_percent') is not None:
             out['last_check_percent'] = round(attempt_row['final_percent'], 2)
         out['note'] = ('The saved attempt is the best-scoring checked body of this attempt with its compiler '
-                       'settings; the final work copy was discarded' + (
-                           ' (it scored lower or did not compile)' if attempt_row.get('final_percent') is not None
-                           and (saved_percent or 0) > (attempt_row['final_percent'] or 0) + 1e-6 else '') + '.')
+                       'settings' + ('; the final work copy was saved beside it as an alternative seed'
+                                     if final else '; the final work copy was identical') + '.')
+    if final:
+        out['final'] = final
     if shadow:
         out["shadow"] = True
     else:
         out["attempts"] = row["attempts"] + 1
     return out
+
+
+def _save_final_copy(p: Project, symbol: str, key: str, row, attempt_row: dict, best_path: Optional[str],
+                     shadow: bool, harness: Optional[str], model: Optional[str], save_only: bool) -> Optional[dict]:
+    """Keep the final work copy of a released attempt as a second saved body when it differs
+    from the best checked one (`.fzgx/attempts/KEY.final.<ts>.c` with its compiler settings and
+    score, compiled or not) and record it as an ended attempt row (checks=0, outcome
+    `released-final`) so claim seeding, `recovered.py`, fixup and seedrank can rank it against
+    the best body. The best body was often the worse seed (fn_1_451E4: the saved 90.85% called
+    an undeclared helper; fn_1_1177C4: a union conversion dead end; fn_1_6D7BC: an 81% rewrite
+    discarded because its last edit did not compile). Nothing here changes acceptance."""
+    work = p.work_path(key)
+    if not work.exists():
+        return None
+    text = work.read_text()
+    if not text.strip() or "carved by fzgx;" in text:
+        return None
+    sha = hashlib.sha256(text.encode()).hexdigest()
+    if best_path and hashlib.sha256(Path(best_path).read_bytes()).hexdigest() == sha:
+        return None
+    seed = _compiler_options(p, key)
+    info: Dict[str, Any] = dict(sha256=sha, mw=seed.get('mw'), flags=seed.get('flags'), percent=None,
+                                compiled=None, saved_from='final work copy', checks=_archived_check_numbers(key, sha),
+                                attempt_id=attempt_row.get('id'), best_body=best_path)
+    if not save_only:
+        try:
+            res = oracle.check(p, symbol, 0, source=work, mw_version=seed.get('mw'), extra_cflags=seed.get('flags'))
+        except Exception as e:  # saving the body matters more than scoring it
+            res = oracle.CheckResult(False, symbol, "", error=str(e))
+        info['compiled'] = bool(res.ok)
+        if res.ok:
+            info['percent'] = round(check_score(res), 5)
+            info['mw'], info['flags'] = res.mw_version, res.extra_cflags
+            info['implicit_calls'] = _implicit_calls(p, symbol, work, res)
+        else:
+            info['error'] = (res.error or '')[-600:]
+    dest = STATE_DIR / "attempts" / f"{key}.{'shadow.' if shadow else ''}final.{int(time.time())}.c"
+    dest.parent.mkdir(parents=True, exist_ok=True)
+    dest.write_text(text)
+    dest.with_suffix('.json').write_text(json.dumps(info) + '\n')
+    now = int(time.time())
+    score = info['percent'] or 0.0
+    note = (f"final work copy of attempt {attempt_row.get('id')}: "
+            + (f"{score:.2f}% under {info['mw'] or 'module default'}" if info['compiled'] else
+               ('not checked' if info['compiled'] is None else 'did not compile')))
+    with Ledger().db as db:
+        db.execute(
+            "INSERT INTO attempts(symbol, agent, harness, model, started, ended, checks, final_percent, best_in_attempt, "
+            "outcome, notes, best_body_path) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)",
+            (key, row["claimed_by"], harness, model, now, now, 0, score, score,
+             ('shadow-' if shadow else '') + 'released-final', note, str(dest)))
+    return dict(saved=str(dest), percent=info['percent'], compiled=info['compiled'], mw=info['mw'],
+                implicit_calls=info.get('implicit_calls') or [])
 
 
 def abort_attempt(p: Project, symbol: str, reason: str) -> Dict[str, Any]:

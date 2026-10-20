@@ -20,7 +20,12 @@ rewriting a body that is mostly right.
 Once the work copy holds a complete body (the seed, or your first `write_unit`), call
 `check(SYMBOL, versions='all')` once before any further edit: it compiles the body under
 every CodeWarrior version, keeps the best for later edits and submission, and costs one
-check. A body that already matches under another compiler is submitted on the spot.
+check. A body that already matches under another compiler is submitted on the spot. A later
+partial probe (`versions='GC/1.2.5n,GC/1.1'`) always compares against the compiler already
+selected and keeps it unless a named version scores higher. `check` also lists
+`undeclared function(s) called`: fix those before trusting the score, since a body that
+calls an undeclared helper is not saved as the attempt's best over a sound body within
+2 points.
 
 Edit with `patch_unit(symbol, agent, old, new)` (one unique span, then compile and
 diff) or `write_unit(symbol, agent, source)` for a full replacement. Page through a

@@ -14,6 +14,10 @@ loses PENALTY points per retail row whose effect is missing from ours:
 - that are stores (not frame stores off r1) or non-move arithmetic with a
   nonzero immediate (addi/addis/mulli/ori/... ; `addi rX, rY, 0` is a move).
 
+A body that calls a function it never declares (`oracle.implicit_calls`: MWCC's implicit
+`int f()`) loses IMPLICIT_PENALTY points, the same margin `api.IMPLICIT_MARGIN` applies to
+the attempt's saved best, so a sound body within that margin seeds the next attempt.
+
 Results are cached per (symbol, body hash, compiler, flags) in
 .fzgx/seedrank.json, so a ranking compiles each candidate body once.
 """
@@ -32,6 +36,7 @@ from .project import STATE_DIR, Project, write_atomic
 PENALTY = 5.0          # points per dropped semantic row
 MAX_PENALTY = 15.0     # a badly broken body still ranks by its score beyond this
 WINDOW = 15.0          # candidates further below the top than this are never promoted
+IMPLICIT_PENALTY = 2.0  # a body calling undeclared functions (api.IMPLICIT_MARGIN: wrong C that still compiles)
 CACHE = STATE_DIR / "seedrank.json"
 _LOCK = threading.Lock()
 
@@ -122,11 +127,11 @@ def _load() -> dict:
 
 
 def _key(symbol: str, body: str, mw: Optional[str], flags: Optional[str]) -> str:
-    return "|".join(("v3", symbol, hashlib.sha256(body.encode()).hexdigest()[:16], mw or "", flags or ""))
+    return "|".join(("v4", symbol, hashlib.sha256(body.encode()).hexdigest()[:16], mw or "", flags or ""))
 
 
 def measure(p: Project, symbol: str, path: Path, mw: Optional[str] = None, flags: Optional[str] = None) -> Optional[dict]:
-    """{'percent', 'dropped'} for one saved body (cached); None if it does not compile."""
+    """{'percent', 'dropped', 'implicit'} for one saved body (cached); None if it does not compile."""
     from . import oracle
     body = Path(path).read_text()
     key = _key(symbol, body, mw, flags)
@@ -137,7 +142,9 @@ def measure(p: Project, symbol: str, path: Path, mw: Optional[str] = None, flags
     res = oracle.check(p, symbol, 0, source=Path(path), mw_version=mw, extra_cflags=flags)
     out = None
     if res.ok:
-        out = {"percent": round(oracle.progress_score(res), 4), "dropped": dropped_for(res) or []}
+        sym = p.resolve(symbol)
+        implicit = oracle.implicit_calls(p, sym.module, Path(path), res.mw_version, res.extra_cflags) if sym else []
+        out = {"percent": round(oracle.progress_score(res), 4), "dropped": dropped_for(res) or [], "implicit": implicit}
     with _LOCK:
         cache = _load()
         cache[key] = out
@@ -166,7 +173,7 @@ def pick(p: Project, symbol: str, candidates: Sequence[Tuple[float, Path, Option
         m = measure(p, symbol, Path(path), mw, flags)
         if m is None:
             continue
-        score = m["percent"] - penalty(m["dropped"])
+        score = m["percent"] - penalty(m["dropped"]) - (IMPLICIT_PENALTY if m.get("implicit") else 0.0)
         if best_score is None or score > best_score:
             best, best_score = i, score
         if len(seen) >= 6:
