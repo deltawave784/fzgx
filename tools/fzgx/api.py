@@ -1518,7 +1518,7 @@ def _save_final_copy(p: Project, symbol: str, key: str, row, attempt_row: dict, 
     seed = _compiler_options(p, key)
     info: Dict[str, Any] = dict(sha256=sha, mw=seed.get('mw'), flags=seed.get('flags'), percent=None,
                                 compiled=None, saved_from='final work copy', checks=_archived_check_numbers(key, sha),
-                                attempt_id=attempt_row.get('id'), best_body=best_path)
+                                attempt_id=attempt_row.get('id'), best_body_path=best_path)
     if not save_only:
         try:
             res = oracle.check(p, symbol, 0, source=work, mw_version=seed.get('mw'), extra_cflags=seed.get('flags'))
