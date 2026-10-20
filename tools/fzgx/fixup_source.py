@@ -4035,6 +4035,54 @@ def _add_include(text, header):
     return f'#include "{header}"\n' + text
 
 
+_FILE_SCOPE_DATA = re.compile(
+    r'(?m)^(?P<head>(?:static\s+)?(?:(?:const|volatile|unsigned|signed|struct|union|enum)\s+)*\w+(?:\s*\*+)?\s+)'
+    r'(?P<name>\w+)(?P<dims>(?:\s*\[[^\]]*\])*)\s*=\s*(?P<init>\{(?:[^{}]|\{[^{}]*\})*\}|"(?:[^"\\]|\\.)*"(?:\s*"(?:[^"\\]|\\.)*")*|[^;{}]+);[^\n]*\n?')
+
+
+def link_spellings(body, conflicts, renames):
+    """Respell what mwld refuses in an exact object match (`oracle.link_conflicts`), the oracle
+    deciding afterwards as always. `renames` (old -> canonical, `oracle.stale_promotion_names`)
+    replaces pre-promotion `name_ADDR` tokens with the global name (__pformatter's
+    `long2str_80082040`). A `multiply defined` conflict turns the file-scope definition of each
+    retail data symbol into an `extern` declaration of the same type; the private, unreferenced,
+    non-const definitions written next to them (a hand-laid `.data` cluster:
+    colchg_selcar_disp's `selcar_title` etc.) go too, since `-r` module links keep every
+    `.data` object and the module would grow. Pool primers (`const`, `.rodata`) are untouched.
+    Returns [(description, text)]; empty when nothing applies."""
+    out = []
+    text = body
+    if renames:
+        pattern = re.compile(r'(?<![\w.$@])(' + '|'.join(re.escape(n) for n in sorted(renames, key=len, reverse=True)) + r')(?![\w$@])')
+        text = pattern.sub(lambda m: renames[m.group(1)], text)
+        if text != body:
+            out.append(('canonical names after promotion ' + ', '.join(f'{a}->{b}' for a, b in sorted(renames.items())), text))
+    defined = sorted({m[1] for m in (re.match(r'multiply defined at link: `(\w+)`', c) for c in conflicts) if m})
+    if defined:
+        before = text
+        dropped = []
+
+        def sub(m):
+            name = m['name']
+            if name in defined:
+                dropped.append(name)
+                return f"extern {m['head'].replace('static ', '')}{name}{'[]' if m['dims'].strip() else ''};\n"
+            return m[0]
+        text = _FILE_SCOPE_DATA.sub(sub, text)
+        if set(dropped) == set(defined):
+            # private non-const file-scope data nothing in the body reads: extra `.data` bytes in a REL
+            def drop_private(m):
+                name = m['name']
+                if 'const' in m['head'] or len(re.findall(r'\b' + re.escape(name) + r'\b', text)) > 1:
+                    return m[0]
+                dropped.append(name)
+                return ''
+            text = _FILE_SCOPE_DATA.sub(drop_private, text)
+            if text != before:
+                out.append(('retail data declared extern ' + ', '.join(defined), text))
+    return out
+
+
 def hardware_literal_names(body, findings):
     """Lint-clean spellings of an exact match's hardware literals (A1/A2), proposed only after a
     full stock-object match so the oracle rechecks them: GX FIFO stores

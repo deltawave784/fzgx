@@ -509,9 +509,10 @@ def _check_work(p: Project, symbol: str, key: str, src: Optional[Path], max_diff
     renamed (whole-token rename, nothing else changes). The work copy keeps the rename only if
     the oracle then accepts the unit outright; the oracle's rules are unchanged."""
     res = oracle.check(p, symbol, max_diff_lines, source=src, mw_version=mw_version, extra_cflags=extra_cflags)
-    if (src is None or src != p.work_path(key) or not res.ok or not (res.matched or res.matched_pool)
-            or oracle.unit_fully_matches(res) is None):
+    if src is None or src != p.work_path(key) or not res.ok or not (res.matched or res.matched_pool):
         return res
+    if oracle.unit_fully_matches(res) is None:
+        return _respell_for_link(p, symbol, key, src, res, max_diff_lines, mw_version, extra_cflags)
     text = src.read_text()
     renames = _primer_renames(res, text)
     moved = _primer_sections(res, text) if not renames else None
@@ -528,6 +529,37 @@ def _check_work(p: Project, symbol: str, key: str, src: Optional[Path], max_diff
             again.primer_renamed = renames
         else:
             again.primer_moved = sorted(res.extra_in_base or [])
+        return again
+    src.write_text(text)
+    return res
+
+
+def _respell_for_link(p: Project, symbol: str, key: str, src: Path, res: oracle.CheckResult, max_diff_lines: int,
+                      mw_version: Optional[str], extra_cflags: Optional[str]) -> oracle.CheckResult:
+    """The second deterministic work-copy repair: an exact match whose object mwld would still
+    refuse (`res.link_conflicts`: a pre-promotion `name_ADDR` reference, retail data defined by
+    name) is re-checked with `fixup_source.link_spellings` applied. Kept only when the oracle
+    accepts the respelled text outright and the conflicts it could address are gone (the
+    link-mismatch class of batches codex-20261017i/20261019c). Nothing else changes."""
+    conflicts = list(getattr(res, 'link_conflicts', None) or [])
+    if not conflicts:
+        return res
+    from . import fixup_source
+    sym = p.resolve(symbol)
+    text = src.read_text()
+    renames = oracle.stale_promotion_names(p, sym.module, set(re.findall(r'\b\w+_[0-9A-Fa-f]{8}\b', text)))
+    candidates = fixup_source.link_spellings(text, conflicts, renames)
+    if not candidates:
+        return res
+    description, respelled = candidates[-1]
+    src.write_text(respelled)
+    again = oracle.check(p, symbol, max_diff_lines, source=src, mw_version=mw_version, extra_cflags=extra_cflags)
+    left = list(getattr(again, 'link_conflicts', None) or [])
+    addressed = [c for c in conflicts if c.startswith(('undefined at link', 'multiply defined at link'))]
+    if (again.ok and oracle.unit_fully_matches(again) is None
+            and not any(c.startswith(('undefined at link', 'multiply defined at link')) for c in left)
+            and (addressed or len(left) < len(conflicts))):
+        again.link_respelled = description
         return again
     src.write_text(text)
     return res
@@ -551,13 +583,25 @@ def _primer_sections(res: oracle.CheckResult, text: str) -> Optional[str]:
     return fixup_layout.primer_sections(text, set(extras))
 
 
+def _link_conflict_reason(res: oracle.CheckResult) -> Optional[str]:
+    """An exact object match the link would still refuse (`oracle.link_conflicts`), spelled for
+    the agent. The same text blocks `submit`, so the batch verifier never spends a relink and a
+    bisect on it (3 of the 2026-10-17/19 link-mismatch releases were this)."""
+    conflicts = list(getattr(res, 'link_conflicts', None) or [])
+    if not conflicts:
+        return None
+    return ("NOT SUBMITTED: the object matches but mwld would refuse it: " + "; ".join(conflicts[:4])
+            + ("" if len(conflicts) <= 4 else f"; +{len(conflicts) - 4} more")
+            + ". Respell the source (the link, not the oracle, decides these names).")
+
+
 def _submit_blocker(res: oracle.CheckResult) -> Optional[str]:
     """Why an oracle match will not be submitted, spelled for the agent; None if nothing blocks."""
     if not (res.ok and (res.matched or res.matched_pool)):
         return None
     reason = oracle.unit_fully_matches(res)
     if reason is None:
-        return None
+        return _link_conflict_reason(res)
     primers = set(getattr(res, 'primer_functions', ()) or ())
     extras = list(res.extra_in_base or [])
     if not extras:
@@ -761,6 +805,10 @@ def format_check(res: Dict[str, Any]) -> str:
     if res.get('primer_moved'):
         lines.append('primer functions moved into `.fzgxpool` in your work copy (a `#pragma section code_type` '
                      'pair around each) so the match can link: ' + ', '.join(res['primer_moved']))
+    if res.get('link_respelled'):
+        lines.append('work copy respelled so the match can link (' + res['link_respelled'] + ')')
+    for conflict in (res.get('link_conflicts') or [])[:4]:
+        lines.append('LINK CONFLICT (the object matches, mwld would refuse it): ' + conflict)
     if res.get('mw_version'):
         lines.append(f"compiler: {res['mw_version']}" + (f" extra: {res['extra_cflags']}" if res.get('extra_cflags') else ''))
     if res.get('instruction_rows') and not res['matched']:
@@ -1109,7 +1157,8 @@ def _submit(p: Project, symbol: str, agent: str = "unknown", message: str = "",
         # re-submit used to leave units.json rewritten); the check compiles under them anyway
         _set_unit_opts(p, unit_src, mw_version, extra_cflags)
         _reconfigure_and_split(p)
-    res = oracle.check(p, symbol, max_diff_lines, source=src, mw_version=mw_version, extra_cflags=extra_cflags)
+    res = (oracle.check(p, symbol, max_diff_lines, source=src, mw_version=mw_version, extra_cflags=extra_cflags)
+           if _is_shadow(agent) else _check_work(p, symbol, key, src, max_diff_lines, mw_version, extra_cflags))
     if res.ok and not _is_shadow(agent):
         # a symbol our object references that retail kept local to its TU must become global:
         # our unit is a different object now. dtk exports such a local under a suffixed name
@@ -1119,7 +1168,7 @@ def _submit(p: Project, symbol: str, agent: str = "unknown", message: str = "",
             _reconfigure_and_split(p)
             res = oracle.check(p, symbol, max_diff_lines, source=src,
                                mw_version=mw_version, extra_cflags=extra_cflags)
-    reason = oracle.unit_fully_matches(res)
+    reason = oracle.unit_fully_matches(res) or _link_conflict_reason(res)
     if not reason and getattr(res, 'pool_map', None) and src is not None:
         # the pool-retargeted object must be linkable: a label left in a section poolfix
         # emptied crashes mwldeppc, and verify would spend a full relink rejecting it

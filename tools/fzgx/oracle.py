@@ -64,6 +64,11 @@ class CheckResult:
     # functions our object defines in `.fzgxpool` (pool/layout primers): diagnostics and the
     # primer-rename repair only; the extras rule above does not read this
     primer_functions: Tuple[str, ...] = ()
+    # what mwld will refuse in this object although the function's rows all agree: a reference
+    # spelled with a retail symbol's pre-promotion `name_ADDR` suffix (undefined at link) or a
+    # file-scope definition of a retail data symbol the unit does not own (multiply defined).
+    # Diagnostics only (`link_conflicts`); the row rules above are unchanged.
+    link_conflicts: List[str] = field(default_factory=list)
 
     def to_json(self) -> dict:
         return {k: v for k, v in self.__dict__.items() if not k.startswith("_")}
@@ -195,7 +200,23 @@ def _render_diff(left_rows: List[dict], right_rows: List[dict], max_lines: int,
 def check(project: Project, symbol: str, max_diff_lines: int = 80, source: Optional[Path] = None,
           mw_version: Optional[str] = None, extra_cflags: Optional[str] = None) -> CheckResult:
     """Compile the unit (or `source`, an agent's work copy) into the unit's object and diff it.
-    For an uncarved function, `mw_version`/`extra_cflags` are the unit options being proposed."""
+    For an uncarved function, `mw_version`/`extra_cflags` are the unit options being proposed.
+    An exact match also reports what mwld would still refuse in the object (`link_conflicts`:
+    pre-promotion `name_ADDR` references, retail data defined by name); diagnostics only."""
+    res = _check(project, symbol, max_diff_lines, source, mw_version, extra_cflags)
+    if res.ok and res.matched and not res.matched_pool:
+        sym = project.resolve(symbol)
+        obj = getattr(res, '_object', None)
+        if sym is not None and obj is not None:
+            try:
+                res.link_conflicts = link_conflicts(project, sym.module, sym.name, obj, res.pool_map)
+            except Exception as e:  # a diagnostic must never fail a verdict
+                res.link_conflicts = [f"(link conflict scan failed: {e})"]
+    return res
+
+
+def _check(project: Project, symbol: str, max_diff_lines: int = 80, source: Optional[Path] = None,
+           mw_version: Optional[str] = None, extra_cflags: Optional[str] = None) -> CheckResult:
     sym = project.resolve(symbol)
     if sym is None:
         return CheckResult(False, symbol, "", error="unknown or ambiguous symbol (use module:name)")
@@ -1450,6 +1471,81 @@ def check_versions(project: Project, symbol: str, versions: List[str],
             out[ver] = -2.0
         else:
             out[ver] = progress_score(res)
+    return out
+
+
+_LINK_DATA_SECTIONS = ('.data', '.rodata', '.sdata', '.sdata2', '.bss', '.sbss', '.sbss2')
+
+
+def stale_promotion_names(project: Project, module: str, names) -> Dict[str, str]:
+    """`name_ADDR` spellings among `names` whose bare `name` is the global symbol at ADDR:
+    dtk exported the symbol under the suffixed name while it was `scope:local`; after its
+    promotion (`Project.promote_to_global`) only units and headers were rewritten, so a saved
+    body keeps the old spelling. The oracle resolves it by address (`_equivalent_reloc_rows`)
+    but mwld reports `undefined: 'long2str_80082040'` (__pformatter, batch codex-20261019c).
+    Returns old -> canonical name."""
+    out: Dict[str, str] = {}
+    for name in names:
+        m = re.fullmatch(r'(.+)_([0-9A-Fa-f]{8})', name)
+        if not m:
+            continue
+        sym = project.find_symbol(m[1], module) or project.find_symbol(m[1])
+        if sym and sym.addr == int(m[2], 16) and sym.scope == 'global' and m[1] not in project.ambiguous_names():
+            out[name] = m[1]
+    return out
+
+
+def link_conflicts(project: Project, module: str, symbol: str, obj: Optional[Path],
+                   bound: Optional[Dict[str, str]] = None) -> List[str]:
+    """What the link will refuse in `obj` (the object as it would be linked: after `poolfix.apply`)
+    even though every instruction row of `symbol` agrees with retail. Two shapes, both seen as
+    `link-mismatch` releases of 100% bodies:
+    - an undefined reference spelled `name_ADDR` where `name` is the global symbol at ADDR
+      (`undefined:` at link; see `stale_promotion_names`);
+    - a file-scope definition of a retail data symbol of this module that neither the carve
+      moves into the unit (`carve.exclusive_data`) nor a pool binding retargets (`multiply-defined`
+      against the retail data object: colchg_selcar_disp's `lbl_9_data_0..B0`, batch codex-20261017i).
+    Read-only; an empty list means the object's symbols are linkable."""
+    if obj is None or not Path(obj).exists():
+        return []
+    try:
+        elf = poolfix.Elf(Path(obj).read_bytes())
+        symbols = elf.symbols()
+    except (OSError, ValueError, IndexError, struct.error):
+        return []
+    out: List[str] = []
+    undefined = [s['name'] for s in symbols if s['shndx'] == 0 and s['name']]
+    for old, new in sorted(stale_promotion_names(project, module, undefined).items()):
+        out.append(f"undefined at link: `{old}` is the pre-promotion spelling of the global symbol "
+                   f"`{new}` (0x{project.find_symbol(new).addr:08X}); spell it `{new}`")
+    retail = project.symbols(module)
+    aliases = {f'{s.name}_{s.addr:08X}': s for s in retail.values()}
+    owned: set = set()
+    fn = project.function(f'{module}:{symbol}') or project.function(symbol)
+    if fn is not None:
+        from .carve import exclusive_data
+        owned = {s.name for group in exclusive_data(project, fn).values() for s in group}
+    bound_names = set((bound or {}).keys()) | set((bound or {}).values())
+    for s in symbols:
+        if (s['info'] & 0xF) != 1 or not s['size'] or not 0 < s['shndx'] < len(elf.sections):
+            continue
+        section = elf.sections[s['shndx']]
+        if section['name'] not in _LINK_DATA_SECTIONS or not section['flags'] & 2:
+            continue  # a section `poolfix.apply` emptied is not linked (link_hazards covers it)
+        known = retail.get(s['name']) or aliases.get(s['name'])
+        if known is None or known.kind != 'object' or known.name in owned or s['name'] in bound_names:
+            continue
+        if (s['info'] >> 4) == 0:
+            # a compiler-private copy under retail's name (MWCC's `@wstringBase0` for `L""`,
+            # __pformatter): the rows agree by name, but the link resolves our relocation to
+            # this copy, placed elsewhere, and the section grows by its size
+            out.append(f"private copy at link: local `{s['name']}` ({section['name']}, {s['size']} bytes) shadows "
+                       f"retail's global {known.section} object at 0x{known.addr:08X}; the relocation must bind "
+                       f"to retail's symbol (the oracle has no pool binding for it)")
+            continue
+        out.append(f"multiply defined at link: `{s['name']}` ({section['name']}, {s['size']} bytes) is retail's "
+                   f"{known.section} object at 0x{known.addr:08X}, linked from the module's data object; "
+                   f"declare it `extern` instead of defining it")
     return out
 
 

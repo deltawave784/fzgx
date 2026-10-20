@@ -391,6 +391,14 @@ class Engine:
                     shared = [s.name for s in definitions if s.name not in owned and s.name not in mapped]
                     if shared:
                         row.update(matched=False, object_matched=True, extra_data=shared)
+                if row.get('matched'):
+                    # the same link refusals `api.check` reports on a work copy: pre-promotion
+                    # `name_ADDR` references and retail `.data`/`.rodata` defined by name
+                    # (colchg_selcar_disp, __pformatter); the pool bindings above are honoured
+                    bound = {private: target for private, target, _ in getattr(self.check(row), '_pool_pairs', [])}
+                    conflicts = oracle.link_conflicts(self.project, sym.module, sym.name, Path(row['object']), bound)
+                    if conflicts:
+                        row.update(matched=False, object_matched=True, link_conflicts=conflicts)
             if row.get('matched'):
                 from .lint import lint_file
                 findings = lint_file(Path(row['source']))
@@ -587,6 +595,10 @@ class Engine:
             if row.get('source_lint') and (check.matched or check.matched_pool):
                 yield from self._family(row, 'source.annotate_verified_branches', lambda: source.annotate_verified_branches(body, row['source_lint']))
                 yield from self._family(row, 'source.hardware_literal_names', lambda: source.hardware_literal_names(body, row['source_lint']))
+            if row.get('link_conflicts'):
+                module = self.project.resolve(row['symbol']).module
+                renames = oracle.stale_promotion_names(self.project, module, set(re.findall(r'\b\w+_[0-9A-Fa-f]{8}\b', body)))
+                yield from self._family(row, 'source.link_spellings', lambda: source.link_spellings(body, row['link_conflicts'], renames))
             yield from self._family(row, 'source.inline_helpers', lambda: source.inline_helpers(body,name))
             for helper in row.get('extra_helpers', []):
                 if self.project.find_symbol(helper, self.project.resolve(row['symbol']).module):
