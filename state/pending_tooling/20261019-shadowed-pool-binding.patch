@@ -1,0 +1,82 @@
+--- a/tools/fzgx/oracle.py
++++ b/tools/fzgx/oracle.py
+@@ -395,7 +395,7 @@
+     res.percent = res.symbols.get(symbol, 0.0)
+     res.percent_adjusted = res.percent
+     res.matched = res.percent >= 100.0
+-    if not res.matched:
++    if not res.matched or _shadowed_pool_names(project, module, base):
+         lrows = left_syms.get(symbol, {}).get("instructions", [])
+         rrows = right_syms.get(symbol, {}).get("instructions", [])
+         res._rows = (lrows, rrows)
+@@ -466,6 +466,27 @@
+     return res
+ 
+ 
++def _shadowed_pool_names(project: Project, module: str, obj: Optional[Path]) -> List[str]:
++    """Private local `@` pool objects our object defines under the name of a retail global pool
++    object (`@wstringBase0`): a 100% row diff hides them, so the pool-row scan must still run
++    for such an object to bind (and poolfix to drop) the copy."""
++    if obj is None or not Path(obj).exists():
++        return []
++    try:
++        elf = poolfix.Elf(Path(obj).read_bytes())
++    except (OSError, ValueError, IndexError, struct.error):
++        return []
++    syms = project.symbols(module)
++    out = []
++    for s in elf.symbols():
++        if not s['name'].startswith('@') or s['info'] >> 4 != 0 or (s['info'] & 0xF) != 1 or not s['size']:
++            continue
++        retail = syms.get(s['name'])
++        if retail is not None and retail.kind == 'object' and retail.scope == 'global':
++            out.append(s['name'])
++    return out
++
++
+ def _interior_binding_rows(project, module, obj, left, right, lrows, rrows):
+     """Prove an explicit generated subobject/entry alias against retail relocs."""
+     if obj is None:
+@@ -911,10 +932,40 @@
+     elf = poolfix.Elf(obj.read_bytes()) if obj else None
+     objects = {s['name']: s for s in elf.symbols()} if elf else {}
+     for i, (l, r) in enumerate(zip(lrows, rrows)):
+-        if (l.get("diff_kind") or "DIFF_NONE") == "DIFF_NONE" and (r.get("diff_kind") or "DIFF_NONE") == "DIFF_NONE":
+-            continue
++        same_row = (l.get("diff_kind") or "DIFF_NONE") == "DIFF_NONE" and (r.get("diff_kind") or "DIFF_NONE") == "DIFF_NONE"
+         li, ri = l.get("instruction", {}), r.get("instruction", {})
+         lrel, rrel = li.get("relocation"), ri.get("relocation")
++        if same_row and lrel and rrel and elf is not None:
++            # MWCC names its wide-string pool `@wstringBase0`, the name retail's own (global)
++            # pool carries, so the row agrees by name while our object defines a private local
++            # copy: the link would resolve the relocation to that copy (__pformatter's `L""`).
++            # Bind the copy to retail's symbol when it is a local object of a pool section with
++            # retail's bytes; poolfix then drops the copy and relocates against the real pool.
++            try:
++                name = lsyms[lrel["target_symbol"]]["name"]
++                own = objects.get(name) if rsyms[rrel["target_symbol"]]["name"] == name else None
++            except (IndexError, KeyError, TypeError):
++                own = None
++            retail = syms.get(name) if name.startswith("@") else None
++            if (own is not None and retail is not None and own["info"] >> 4 == 0 and (own["info"] & 0xF) == 1
++                    and own["size"] and 0 < own["shndx"] < len(elf.sections)
++                    and retail.kind == "object" and retail.scope == "global"
++                    and retail.section in (".rodata", ".sdata2", ".data", ".sdata")
++                    and elf.sections[own["shndx"]]["name"] in (".rodata", ".sdata2", ".data", ".sdata")
++                    and int(lrel.get("addend") or 0) == int(rrel.get("addend") or 0)):
++                section = elf.sections[own["shndx"]]
++                mine = bytes(elf.data[section["offset"] + own["value"]:section["offset"] + own["value"] + own["size"]])
++                theirs = project.bytes_at(module, name)
++                if theirs is not None and own["size"] == retail.size and mine == theirs:
++                    rows.add(i)
++                    pair = (name, name, f"{name}=shared literal pool[{own['size']}]")
++                    if pair not in pairs:
++                        pairs.append(pair)
++                    continue
++                _note(notes, f"pool {name}: our private copy ({own['size']} bytes) is not retail's global pool object "
++                             f"({retail.size} bytes at 0x{retail.addr:08X}); the link would place ours elsewhere")
++        if same_row:
++            continue
+         if not lrel or not rrel or lrel.get("type_name") != rrel.get("type_name"):
+             continue
+         lp = [x for x in li.get("parts", []) if "reloc" not in json.dumps(x)]
