@@ -68,10 +68,21 @@ def _capture_index(cap: Path, symbol: str) -> Optional[str]:
     return finals[-1].name.split('-')[1] if finals else None
 
 
-def existing(symbol: str, body: str) -> Optional[Path]:
-    """The capture directory of SYMBOL when it holds a capture of exactly this body."""
+def _same_flags(cap: Path, flags: Optional[str]) -> bool:
+    """Whether the capture was compiled with the unit's extra flags (capture132.sh appends
+    EXTRA_FLAGS to the module flags in flags.txt). A capture made under other flags (one
+    `-use_lmw_stmw on` body captured without it: fn_12_C2C8) has a different prologue row
+    count, so its final PCode no longer aligns 1:1 with the object rows."""
+    f = cap / 'flags.txt'
+    if not f.exists():
+        return True
+    return f.read_text().strip().endswith((flags or '').strip())
+
+
+def existing(symbol: str, body: str, flags: Optional[str] = None) -> Optional[Path]:
+    """The capture directory of SYMBOL when it holds a capture of exactly this body under FLAGS."""
     cap = CAPTURE_ROOT / symbol
-    if _capture_index(cap, symbol) is None:
+    if _capture_index(cap, symbol) is None or not _same_flags(cap, flags):
         return None
     stamp = cap / 'body.sha256'
     src = cap / f'{symbol}.c'
@@ -85,7 +96,7 @@ def existing(symbol: str, body: str) -> Optional[Path]:
 
 def capture(p: Project, symbol: str, body: str, flags: Optional[str], timeout: int = 420) -> Optional[Path]:
     """Run the GC/1.3.2 capture of BODY (about 15 s) unless one of this body exists."""
-    cap = existing(symbol, body)
+    cap = existing(symbol, body, flags)
     if cap is not None or not available():
         return cap
     module = p.resolve(symbol).module
@@ -192,6 +203,10 @@ def _targets(check, residual, cap: Path, idx: str, cls: str) -> Dict[int, int]:
         return {}
     position = {row: n for n, (row, _) in enumerate(ours)}
     reg = re.compile(r'\b' + cls + r'(\d+)\b')
+    # register operands (kind 0) of this class only: operand class 4 is GPR, 3 is FPR (the
+    # 1.2.5/1.3.2 layout), so an `lfs f2, 0x10(r3)` row pairs its one f-register with the one
+    # FPR operand instead of being skipped for carrying a GPR base
+    opclass = {'r': 4, 'f': 3}[cls]
     out: Dict[int, int] = {}
     for k, retail, mine in residual:
         n = position.get(k)
@@ -202,8 +217,9 @@ def _targets(check, residual, cap: Path, idx: str, cls: str) -> Dict[int, int]:
         if len(ro) != len(rr):
             continue
         ins = final[n]
-        gops = [o for o in ins['operands'] if o.get('kind') == 0]
-        sops = [o for o in byaddr.get(ins['address'], {'operands': []})['operands'] if o.get('kind') == 0]
+        gops = [o for o in ins['operands'] if o.get('kind') == 0 and o.get('class') == opclass]
+        sops = [o for o in byaddr.get(ins['address'], {'operands': []})['operands']
+                if o.get('kind') == 0 and o.get('class') == opclass]
         if len(gops) != len(ro) or len(sops) != len(gops):
             continue
         for j, (a, b) in enumerate(zip(ro, rr)):
@@ -462,7 +478,7 @@ def proposals(p: Project, symbol: str, body: str, check, mw: Optional[str], flag
     residual, classes = eligible(check, mw)
     if not residual:
         return []
-    cap = capture(p, symbol, body, flags) if run_capture else existing(symbol, body)
+    cap = capture(p, symbol, body, flags) if run_capture else existing(symbol, body, flags)
     if cap is None:
         return []
     try:
