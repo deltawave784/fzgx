@@ -3274,6 +3274,266 @@ s32 fn_1_818AC(fn_1_818AC_Obj *a, fn_1_818AC_Obj *b) {
 }
 /* fzgx:end fn_1_818AC */
 
+/* fzgx:begin fn_1_82724 pool noprologue */
+#include "dolphin/types.h"
+#include "rel/main_rel/car.h"
+
+typedef struct CarInitInput {
+    u8 pad0[0xc];
+    u32 flags;
+    u8 pad10[0x10];
+} CarInitInput;
+
+typedef struct CarRuntime {
+    u8 pad0[0x474];
+    s8 driver;
+    u8 pad475[0x1ab];
+} CarRuntime;
+
+typedef struct CarInitObject {
+    u8 pad0[0x324];
+    s32 sentinel;
+    u8 pad328[4];
+    CarRuntime *runtime;
+    u8 pad330[0x60];
+    u32 flags;
+    u8 pad394[0xc];
+    u8 *special;
+    u8 pad3a4[0x9c];
+} CarInitObject;
+
+typedef struct CarShadow {
+    u8 pad[0x4c];
+} CarShadow;
+
+typedef struct CarInitManager {
+    u8 pad0[8];
+    void *effects;
+    u8 padc[4];
+    u32 unk10;
+    u32 unk14;
+    CarRuntime *runtime;
+    CarInitObject *objects;
+    void *special;
+    CarShadow *shadows;
+    s16 specialCount;
+    s8 shadowMode;
+    u8 pad2b[9];
+    u8 unk34;
+    u8 pad35[3];
+    u32 mode;
+    void *resource;
+    void *archive;
+} CarInitManager;
+
+typedef struct CarInitEvent {
+    u8 pad0[0xc];
+    s16 kind;
+    u8 pade[0xa];
+    s16 index;
+    u8 pad1a[0x1e];
+    CarRuntime *runtime;
+    u8 pad3c[0xac];
+} CarInitEvent;
+
+extern s8 lbl_1_bss_9C;
+extern u32 lbl_801A6410;
+extern void fn_1_8E188(void);
+extern void *fn_1_12AC00(void *);
+extern void *fn_1_12ADA0(void *, void *);
+extern void *fn_1_4630(u32, u32, void *, u32);
+extern void *fn_1_45D0(u32, u32, void *, u32);
+extern void fn_1_818BC(CarInitInput *, u32, u32);
+extern int fn_1_818AC(const void *, const void *);
+extern void qsort(void *, u32, u32, int (*)(const void *, const void *));
+extern void fn_1_983CC(void *, void *);
+extern void fn_80008BEC(void *, int, u32);
+extern s16 fn_1_58E3C(void *);
+extern void fn_1_5672C(void *, int);
+extern void fn_1_A7294(void *, u32);
+extern void fn_1_A744C(void *, u32);
+extern void fn_1_FC414(void *, u32);
+extern void fn_1_FCF74(void);
+extern void fn_1_56D4C(void *);
+extern void fn_1_568F8(void *);
+extern void fn_1_84860(void *);
+extern void *fn_1_435C(void *);
+extern s32 fn_1_3F8C(void *, void (*)(void *), void *, u32);
+extern void fn_1_568EC(void *, void *, void *);
+extern u32 fn_1_82C70(void *, u8, void *, void *, u8);
+
+#pragma opt_propagation on
+/* file-scope objects of the retail TU, in retail order: MWCC addresses them off one section base */
+u32 fzgx_obj_lbl_1_bss_6D820;
+u32 fzgx_obj_lbl_1_bss_6D824;
+void *lbl_1_bss_6D828;
+u32 fzgx_obj_lbl_1_bss_6D82C;
+u32 lbl_1_bss_6D82C_4;
+u32 lbl_1_bss_6D82C_8;
+CarRuntime *fzgx_obj_lbl_1_bss_6D838;
+CarInitObject *fzgx_obj_lbl_1_bss_6D83C;
+void *lbl_1_bss_6D83C_4;
+CarShadow *lbl_1_bss_6D83C_8;
+s16 lbl_1_bss_6D83C_C;
+s8 fzgx_obj_lbl_1_bss_6D84A;
+u8 lbl_1_bss_6D84A_fill_6D84B;
+u32 lbl_1_bss_6D84A_fill_6D84C;
+u32 lbl_1_bss_6D850;
+u8 lbl_1_bss_6D854;
+u8 lbl_1_bss_6D854_fill_6D855;
+u16 lbl_1_bss_6D854_fill_6D856;
+u32 lbl_1_bss_6D854_4;
+void *lbl_1_bss_6D854_8;
+u32 lbl_1_bss_6D854_fill_6D860;
+
+#pragma section code_type ".fzgxpool"
+static void fzgx_bss_layout(void) {
+    volatile u8 s;  /* fzgx-allow: S2 layout primer sink: MWCC emits .bss objects in first-access order */
+    s = *(u8 *)&fzgx_obj_lbl_1_bss_6D820;
+    s = *(u8 *)&fzgx_obj_lbl_1_bss_6D824;
+    s = *(u8 *)&lbl_1_bss_6D828;
+    s = *(u8 *)&fzgx_obj_lbl_1_bss_6D82C;
+    s = *(u8 *)&lbl_1_bss_6D82C_4;
+    s = *(u8 *)&lbl_1_bss_6D82C_8;
+    s = *(u8 *)&fzgx_obj_lbl_1_bss_6D838;
+    s = *(u8 *)&fzgx_obj_lbl_1_bss_6D83C;
+    s = *(u8 *)&lbl_1_bss_6D83C_4;
+    s = *(u8 *)&lbl_1_bss_6D83C_8;
+    s = *(u8 *)&lbl_1_bss_6D83C_C;
+    s = *(u8 *)&fzgx_obj_lbl_1_bss_6D84A;
+    s = *(u8 *)&lbl_1_bss_6D84A_fill_6D84B;
+    s = *(u8 *)&lbl_1_bss_6D84A_fill_6D84C;
+    s = *(u8 *)&lbl_1_bss_6D850;
+    s = *(u8 *)&lbl_1_bss_6D854;
+    s = *(u8 *)&lbl_1_bss_6D854_fill_6D855;
+    s = *(u8 *)&lbl_1_bss_6D854_fill_6D856;
+    s = *(u8 *)&lbl_1_bss_6D854_4;
+    s = *(u8 *)&lbl_1_bss_6D854_8;
+    s = *(u8 *)&lbl_1_bss_6D854_fill_6D860;
+}
+#pragma section code_type ".text"
+
+void fn_1_82724(void *arg0, void *arg1, CarInitInput *input, u32 count, u32 arg4)
+{
+    
+    u8 *data = (u8 *)&lbl_1_data_1F1D8;
+    CarRuntime *runtimeBase;
+    CarInitObject *objectBase;
+    u32 driverCount = 0;
+    CarShadow *shadowBase;
+    u32 i;
+    CarRuntime *runtime;
+    CarInitObject *object;
+    CarShadow *shadow;
+    CarInitEvent event;
+    struct ResourcePair { void *resource; void *archive; };
+    struct { struct ResourcePair *value; } pair;
+
+    lbl_1_bss_6D854 = 0;
+    if (lbl_1_bss_960 == 9 && lbl_1_bss_9C == 6) {
+        lbl_1_bss_6D854_4 = 1;
+        fn_1_8E188();
+    } else {
+        lbl_1_bss_6D854_4 = 0;
+    }
+    {
+        pair.value = (struct ResourcePair *)&lbl_1_bss_6D854_8;
+        if (pair.value->archive == 0) {
+            lbl_1_bss_6D854_8 = fn_1_12ADA0(data + 0x13d0, pair.value->archive = fn_1_12AC00(data + 0x13bc));
+        }
+    }
+    if (count > 30)
+        count = 30;
+    if (fzgx_obj_lbl_1_bss_6D83C == 0 && lbl_1_bss_6D83C_8 == 0) {
+    u32 *heap = &lbl_801A6410;
+    lbl_1_bss_6D82C_8 = 0;
+    lbl_1_bss_6D82C_4 = 0;
+    fzgx_obj_lbl_1_bss_6D83C = fn_1_4630(*heap, count * 0x440, data + 0xe18, 0x7a1);
+    for (i = 0; i < count; i++)
+        fzgx_obj_lbl_1_bss_6D83C[i].sentinel = -1;
+    lbl_1_bss_6D83C_C = 0;
+    for (i = 0; i < count; i++) {
+        if (input[i].flags & 0x04000000)
+            lbl_1_bss_6D83C_C++;
+    }
+    if (lbl_1_bss_6D83C_C != 0) {
+        lbl_1_bss_6D83C_4 = fn_1_4630(lbl_801A6410, lbl_1_bss_6D83C_C * 0xa20, data + 0xe18, 0x7aa);
+    }
+    fn_1_818BC(input, count, arg4);
+    qsort(fzgx_obj_lbl_1_bss_6D83C, count, 0x440, fn_1_818AC);
+    runtime = fzgx_obj_lbl_1_bss_6D838;
+    object = fzgx_obj_lbl_1_bss_6D83C;
+    for (i = 0; i < count; i++, runtime++, object++) {
+        object->runtime = runtime;
+        if (object->flags & 0x04000000)
+            fn_1_983CC(runtime, object->special + 0x6e0);
+        else
+            fn_1_983CC(runtime, object);
+        fn_80008BEC(&event, 0, 0xe8);
+        event.kind = 1;
+        event.index = i;
+        event.runtime = runtime;
+        fn_1_58E3C(&event);
+    }
+    shadow = fn_1_4630(lbl_801A6410, count * 0x4c, data + 0xe18, 0x7cc);
+    {
+        int shadowMode = fzgx_obj_lbl_1_bss_6D84A;
+        lbl_1_bss_6D83C_8 = shadow;
+        fn_1_5672C(shadow, shadowMode);
+    }
+    fn_1_A7294(fzgx_obj_lbl_1_bss_6D83C, count);
+    fn_1_A744C(fzgx_obj_lbl_1_bss_6D83C, count);
+    runtime = fzgx_obj_lbl_1_bss_6D838;
+    for (i = 0; i < count; i++) {
+        if (runtime[i].driver != -1)
+            driverCount++;
+    }
+    if (lbl_1_bss_960 == 2 || lbl_1_bss_960 == 14) {
+        if (lbl_1_bss_8B3A0.unk_0 == 1 || lbl_1_bss_8B3A0.unk_0 == 3 || lbl_1_bss_8B3A0.unk_0 == 2) {
+            fn_1_FC414(lbl_1_bss_6D828 = fn_1_45D0(lbl_801A6410, 0x10440, data + 0xe18, 0x7e2), 1);
+        } else {
+            fn_1_FC414(lbl_1_bss_6D828 = fn_1_45D0(lbl_801A6410, 0x41100, data + 0xe18, 0x7e7), 4);
+        }
+        fn_1_FCF74();
+    } else if (lbl_1_bss_960 == 12) {
+        fn_1_FC414(lbl_1_bss_6D828 = fn_1_45D0(lbl_801A6410, 0x10440, data + 0xe18, 0x7ee), 1);
+        fn_1_FCF74();
+    }
+    {
+    runtimeBase = fzgx_obj_lbl_1_bss_6D838;
+    shadowBase = lbl_1_bss_6D83C_8;
+    objectBase = fzgx_obj_lbl_1_bss_6D83C;
+    for (i = 0; i < count; i++, runtimeBase++, shadowBase++, objectBase++) {
+        fn_1_435C(arg0);
+        fn_1_3F8C(data + 0x14d4, fn_1_56D4C, shadowBase, 0x16);
+        fn_1_435C(arg1);
+        fn_1_568EC(shadowBase, runtimeBase, objectBase);
+        fn_1_3F8C(data + 0x14e4, fn_1_568F8, shadowBase, 0);
+        fn_1_3F8C(data + 0x14f8, fn_1_84860, objectBase, 0x11);
+        if (lbl_1_bss_960 == 10)
+            continue;
+        if (lbl_1_bss_960 == 2 || lbl_1_bss_960 == 14 || lbl_1_bss_960 == 12) {
+            if (lbl_1_bss_960 == 14) {
+                /* The selected car and the single-car fallback share setup. */
+                if (i == lbl_1_bss_525C.unk_F8)
+                    goto setupEffects; /* fzgx-allow: S1 shared setup tail; retail keeps this exact branch chain */
+                if (lbl_1_bss_525C.unk_F8 < 3)
+                    continue;
+                if (count == 1)
+                    goto setupEffects; /* fzgx-allow: S1 single-car fallback joins the shared setup tail */
+                continue;
+            } else if (lbl_1_bss_960 != 12 && i >= 4) {
+                continue;
+            }
+setupEffects:
+            fn_1_82C70(arg1, (u8)i, objectBase, lbl_1_bss_6D828, (u8)driverCount);
+        }
+    }
+    }
+    }
+}
+/* fzgx:end fn_1_82724 */
+
 /* fzgx:begin fn_1_82EDC */
 u32 *fn_1_82EDC(s16 arg0, s16 arg1, u32 *arg2) {
     u8 *p;

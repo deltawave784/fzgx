@@ -8123,3 +8123,6 @@ rel/main_rel/screen_effect/fn_1_7BA08.c:
 
 rel/main_rel/load/fn_1_46BFC.c:
 	.text       start:0x00046BFC end:0x00046C60 align:4
+
+rel/main_rel/car/fn_1_82724.c:
+	.text       start:0x00082724 end:0x00082C70 align:4
