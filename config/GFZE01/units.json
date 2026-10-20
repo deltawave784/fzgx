@@ -19036,6 +19036,17 @@
   },
   {
     "module": "main",
+    "source": "dol/fn_8003B010.c",
+    "symbols": [
+      "fn_8003B010"
+    ],
+    "status": "matching",
+    "mw_version": null,
+    "extra_cflags": [],
+    "asm": true
+  },
+  {
+    "module": "main",
     "source": "dol/fn_8003B798.c",
     "symbols": [
       "fn_8003B798"
