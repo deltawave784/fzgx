@@ -251,7 +251,8 @@ class Ledger:
             att = self.current_attempt(symbol)
         return {"checks": att["checks"] if att else 0, "stale": att["stale_checks"] if att else 0,
                 "best_in_attempt": att["best_in_attempt"] if att else percent, "improved": improved,
-                "progress": bool(improved or fewer)}
+                "progress": bool(improved or fewer), "percent": percent, "rows": rows,
+                "best_rows": att["best_rows"] if att else rows}
 
     def finish(self, symbol: str, outcome: str, status: str, notes: str = "",
                commit: Optional[str] = None, body_path: Optional[str] = None,

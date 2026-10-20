@@ -434,8 +434,24 @@ def _budget_stop(att) -> Optional[str]:
     if (att["checks"] or 0) >= checks:
         return f"budget exhausted: {checks} checks used"
     if (att["stale_checks"] or 0) >= stale:
-        return f"plateau: {stale} consecutive checks without improvement (best {att['best_in_attempt']:.1f}%)"
+        return f"plateau: {stale} consecutive checks without improvement ({_bar(att)})"
     return None
+
+
+def _bar(att) -> str:
+    """The attempt's progress bar in words: the better of objdiff's similarity and the
+    pool-adjusted row score, and the fewest differing rows after accepted relocations. A
+    check counts as progress when it beats either. The bar is set by the attempt's own
+    checks only (a claim starts at zero); when the first check set it, that check was the
+    seed, so the bar is the seed's score and the agent has to beat the seed (fn_1_146550,
+    fn_10_111E8: both plateaus were genuine, but the message named only a raw percentage
+    while the agent watched the adjusted score, and read the bar as carried over)."""
+    best = att["best_in_attempt"] or 0.0
+    rows = att["best_rows"]
+    out = f"best {best:.1f}%" + (f" / {rows} differing rows" if rows is not None else "")
+    if (att["checks"] or 0) >= 1 and (att["checks"] or 0) - (att["stale_checks"] or 0) == 1:
+        out += "; the first check (the seed) set that bar: beat the seed's score or its row count"
+    return out
 
 
 def _finish_check(p: Project, symbol: str, result: dict, checked: Optional[oracle.CheckResult] = None) -> dict:
@@ -742,6 +758,7 @@ def check(p: Project, symbol: str, max_diff_lines: int = 80, versions: Optional[
         conflict = _prologue_conflict(p, key, unit) if res.ok and unit else None
         if conflict:
             out["prologue_conflict"] = conflict
+        stats['stale_limit'] = _budget(key)[1]
         out['budget'] = stats
         stop = _budget_stop(l.current_attempt(key))
         if stop:
@@ -942,7 +959,15 @@ def format_check(res: Dict[str, Any]) -> str:
                      "Drop or align the declaration named below:\n" + res["prologue_conflict"])
     b = res.get("budget")
     if b:
-        lines.append(f"check {b['checks']}: best this attempt {b['best_in_attempt']:.1f}%")
+        line = f"check {b['checks']}: best this attempt {b['best_in_attempt']:.1f}%"
+        if b.get('best_rows') is not None:
+            line += f" / {b['best_rows']} differing rows"
+        if b.get('percent') is not None:
+            line += (f"; this check {b['percent']:.1f}%"
+                     + (f" / {b['rows']} rows" if b.get('rows') is not None else "")
+                     + (": progress (plateau counter reset)" if b.get('progress')
+                        else f": no progress ({b['stale']} stale check(s); the plateau stop fires at {b.get('stale_limit', '?')})"))
+        lines.append(line + ". Progress is a higher score (objdiff or adjusted, whichever is better) or fewer differing rows.")
     if res.get("stop"):
         lines.append(f"STOP: {res['stop']}. Do not write again.")
     return "\n".join(lines)

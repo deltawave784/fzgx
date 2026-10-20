@@ -109,6 +109,7 @@ def generate(p: Project, s: str, sym, path: Path, body: str, check, outdir: Path
     add('lockedcache', lambda: fixup_source.locked_cache_columns(body, sym.name))
     add('shiftprod', lambda: fixup_source.shift_products(body, sym.name))
     add('recipdiv', lambda: fixup_source.reciprocal_divisions(body, sym.name))
+    add('compound', lambda: fixup_source.compound_assignments(body, sym.name))
     add('inlineparam', lambda: fixup_source.constant_inline_parameters(body, sym.name))
     add('pragmas', lambda: fixup_evidence.optimizer_pragmas(body, sym.name))
     add('layout', lambda: fixup_layout.tu_section_layout(p, s, body, check))

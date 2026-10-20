@@ -676,6 +676,121 @@ def reciprocal_divisions(body: str, name: str) -> List[Tuple[str, str]]:
     return out
 
 
+_SIMPLE_OPERAND = re.compile(r'-?(?:\d+\.\d*(?:[eE][+-]?\d+)?[fF]?|\.\d+(?:[eE][+-]?\d+)?[fF]?|\d+[eE][+-]?\d+[fF]?|0[xX][0-9a-fA-F]+[uUlL]*|\d+[uUlL]*|[A-Za-z_]\w*)')
+_ASSIGN_STMT = re.compile(r'^([ \t]*)(?:(' + TYPE + r')\s+)?([A-Za-z_]\w*)\s*=\s*([^;=]+?);[ \t]*$', re.M)
+_COMPOUND_STMT = re.compile(r'^[ \t]*([A-Za-z_]\w*)\s*([-+*/])=\s*([^;]+?);[ \t]*$', re.M)
+
+
+def _top_binary_split(expr: str) -> Optional[Tuple[str, str, str]]:
+    """(left, op, right) at the LAST top-level `+ - * /` of `expr` whose right operand is one
+    simple token; None when the expression has no such split (unary signs are not splits)."""
+    depth = 0
+    last = None
+    for i, ch in enumerate(expr):
+        if ch in '([':
+            depth += 1
+        elif ch in ')]':
+            depth -= 1
+        elif depth == 0 and ch in '+-*/' and i > 0:
+            prev = expr[:i].rstrip()
+            if (not prev or prev[-1] in '+-*/%=<>!&|^~?:,(' or expr[i - 1:i + 1] in ('->', '++', '--')
+                    or expr[i:i + 2] in ('++', '--', '->')):
+                continue
+            last = i
+    if last is None:
+        return None
+    left, op, right = expr[:last].rstrip(), expr[last], expr[last + 1:].strip()
+    if not left or not _SIMPLE_OPERAND.fullmatch(right):
+        return None
+    return left, op, right
+
+
+def _strip_float_wrap(expr: str) -> str:
+    """`(f32)(E)` -> E: the single-precision cast an f32 lvalue implies anyway."""
+    m = re.fullmatch(r'\(\s*(?:f32|float)\s*\)\s*(\(.*\))', expr, re.S)
+    if m and _close(m.group(1), 0, len(m.group(1))) == len(m.group(1)):
+        return m.group(1)[1:-1].strip()
+    return expr
+
+
+def _is_value_load(expr: str) -> bool:
+    """A load, call or plain variable (what lands in the assigned web), not arithmetic."""
+    if re.fullmatch(r'[A-Za-z_]\w*', expr):
+        return True
+    if expr[0] in '-!~' or not re.search(r'\w\s*\(|\*\s*\(|\[|\w\.\w|->', expr):
+        return False
+    depth = 0
+    for i, ch in enumerate(expr):
+        if ch in '([':
+            depth += 1
+        elif ch in ')]':
+            depth -= 1
+        elif depth == 0 and ch in '+-*/%&|^<>?' and i > 0 and expr[i - 1:i + 1] not in ('->',) and expr[i:i + 2] != '->':
+            return False
+    return True
+
+
+def compound_assignments(body: str, name: str) -> List[Tuple[str, str]]:
+    """Temporary-numbering idioms of a float local written as one in-place web.
+
+    `v = (f32)(v + 1.0f)` after an if/else join splits `v` into a new copy-region web (an
+    extra register and `fmr`); `v += 1.0f` keeps the one web (fn_1_14F6F8, 2005b0b7).
+    `v = load - K` computes into a temporary and copies; `v = load; v -= K;` lands the reload
+    in v's web (same function). `half = (f32)x; half *= 0.5f;` keeps the conversion in its own
+    temporary where retail converts inside the strength-reduced `x / 2.0f` (fn_10_DAF8,
+    842cb4be). One candidate per site and one with every compatible site."""
+    out: List[Tuple[str, str]] = []
+    span = _function_body_span(body, name)
+    if not span:
+        return out
+    from .sdkimport import masked
+    code = masked(body)
+    lo, hi = span[1], span[2]
+    edits_: List[Tuple[int, int, str, str]] = []
+    for m in _ASSIGN_STMT.finditer(code, lo, hi):
+        if m.end() > hi:
+            break
+        indent, typ, var = m.group(1), m.group(2), m.group(3)
+        rhs = body[m.start(4):m.end(4)].strip()
+        uses_var = re.compile(rf'\b{re.escape(var)}\b')
+        split = _top_binary_split(_strip_float_wrap(rhs))
+        if split and not typ:
+            left, op, right = split
+            if left == var:
+                edits_.append((m.start(), m.end(), f"{indent}{var} {op}= {right};", f"{var} {op}= {right}"))
+                continue
+            if op in '+-' and not uses_var.search(left) and _is_value_load(left):
+                edits_.append((m.start(), m.end(), f"{indent}{var} = {left};\n{indent}{var} {op}= {right};",
+                               f"{var} = {left[:24]}; {var} {op}= {right}"))
+                continue
+        cm = re.fullmatch(r'\(\s*(?:f32|float)\s*\)\s*(.+)', rhs, re.S)
+        nxt = _COMPOUND_STMT.match(code, m.end() + 1) if m.end() + 1 < hi else None
+        if cm and nxt and nxt.end() <= hi and nxt.group(1) == var and _SIMPLE_OPERAND.fullmatch(nxt.group(3).strip()):
+            src, op, k = cm.group(1).strip(), nxt.group(2), nxt.group(3).strip()
+            if uses_var.search(src):
+                continue
+            head = f"{indent}{typ + ' ' if typ else ''}{var} = "
+            lit = _FLOAT_LIT.fullmatch(k)
+            n = _reciprocal_power(lit.group(1)) if lit and op == '*' else None
+            if n is not None:
+                edits_.append((m.start(), nxt.end(), f"{head}{src} / {2 ** n}.0{lit.group(2)};",
+                               f"{var} = {src[:24]} / {2 ** n}.0{lit.group(2)}"))
+            else:
+                edits_.append((m.start(), nxt.end(), f"{head}{src} {op} {k};", f"{var} = {src[:24]} {op} {k}"))
+    if not edits_:
+        return out
+    for a, b, new, label in edits_[:16]:
+        out.append((f"compound assignment {label}", body[:a] + new + body[b:]))
+    if len(edits_) > 1:
+        text, last = body, None
+        for a, b, new, _ in sorted(edits_, reverse=True):
+            if last is not None and b > last:
+                continue
+            text, last = text[:a] + new + text[b:], a
+        out.append(("compound assignment at every site", text))
+    return out
+
+
 _CONST_RE = r'-?\s*(?:0[xX][0-9a-fA-F]+[uUlL]*|\d+\.\d*(?:[eE][+-]?\d+)?[fF]?|\.\d+(?:[eE][+-]?\d+)?[fF]?|\d+[uUlL]*)'
 
 
@@ -1117,7 +1232,7 @@ def rewrites(body: str, name: str) -> List[Tuple[str, str]]:
     for fn in (primer_sections, scope_moves, split_inits, hoists, through_local, return_values,
                call_results_to_locals, wrap_constant_pointers, decse_repeated_expressions,
                scalar_carriers, dead_uses, variable_splits, signedness_flips, float_precision,
-               embedded_call_assignments, condition_embedded_assignments):
+               compound_assignments, embedded_call_assignments, condition_embedded_assignments):
         try:
             out += fn(body, name)
         except Exception:
