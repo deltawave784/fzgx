@@ -19417,6 +19417,20 @@
   },
   {
     "module": "main",
+    "source": "dol/fn_8003EC44.c",
+    "symbols": [
+      "fn_8003EC44"
+    ],
+    "status": "matching",
+    "mw_version": "GC/1.2.5n",
+    "extra_cflags": [],
+    "pool": {
+      "@72": "lbl_801A71D0",
+      "@70": "lbl_801A7200"
+    }
+  },
+  {
+    "module": "main",
     "source": "dol/fn_8003F834.c",
     "symbols": [
       "fn_8003F834"
