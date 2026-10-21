@@ -653,6 +653,166 @@ void fn_1_A1360(void) {
 }
 /* fzgx:end fn_1_A1360 */
 
+/* fzgx:begin fn_1_A1DCC pool */
+/* sound.c's .bss cluster: retail addresses every object off one base (lbl_1_bss_6EA98),
+ * so the unit defines the cluster in retail order and the primer fixes the emission order. */
+u32 lbl_1_bss_6EA98;                     /* +0x000 */
+u32 fzgx_obj_lbl_1_bss_6EA9C[2];         /* +0x004 */
+u8 fzgx_obj_lbl_1_bss_6EAA4[0x10];       /* +0x00C */
+u32 fzgx_obj_lbl_1_bss_6EAB4;            /* +0x01C flags */
+u32 fzgx_obj_lbl_1_bss_6EAB8;            /* +0x020 */
+f32 fzgx_obj_lbl_1_bss_6EABC;            /* +0x024 */
+f32 fzgx_obj_lbl_1_bss_6EAC0;            /* +0x028 */
+u8 fzgx_obj_lbl_1_bss_6EAC4;             /* +0x02C current track */
+u8 fzgx_obj_lbl_1_bss_6EAC5;             /* +0x02D */
+u8 fzgx_obj_lbl_1_bss_6EAC6;             /* +0x02E (aggregates would be 4-aligned) */
+u8 fzgx_obj_lbl_1_bss_6EAC7;             /* +0x02F */
+u32 fzgx_obj_lbl_1_bss_6EAC8;            /* +0x030 */
+u32 fzgx_obj_lbl_1_bss_6EACC;            /* +0x034 */
+Obj_1_bss_6EAD0 lbl_1_bss_6EAD0;         /* +0x038 */
+u8 lbl_1_bss_6F1D8;                      /* +0x740 */
+u32 lbl_1_bss_6F1DC;                     /* +0x744 */
+u8 lbl_1_bss_6F1E0;                      /* +0x748 */
+u8 fzgx_obj_lbl_1_bss_6F1E4[0x136];      /* +0x74C */
+u8 fzgx_obj_lbl_1_bss_6F31A;             /* +0x882 */
+s16 fzgx_obj_lbl_1_bss_6F31C[2];         /* +0x884 */
+f32 fzgx_obj_lbl_1_bss_6F320;            /* +0x888 */
+f32 fzgx_obj_lbl_1_bss_6F324;            /* +0x88C */
+u8 fzgx_obj_lbl_1_bss_6F328;             /* +0x890 */
+
+#pragma section code_type ".fzgxpool"
+u32 fzgx_bss_primer(void) {
+    u32 sum = 0;
+    sum += lbl_1_bss_6EA98;
+    sum += fzgx_obj_lbl_1_bss_6EA9C[0];
+    sum += fzgx_obj_lbl_1_bss_6EAA4[0];
+    sum += fzgx_obj_lbl_1_bss_6EAB4;
+    sum += fzgx_obj_lbl_1_bss_6EAB8;
+    sum += (u32)fzgx_obj_lbl_1_bss_6EABC;
+    sum += (u32)fzgx_obj_lbl_1_bss_6EAC0;
+    sum += fzgx_obj_lbl_1_bss_6EAC4;
+    sum += fzgx_obj_lbl_1_bss_6EAC5;
+    sum += fzgx_obj_lbl_1_bss_6EAC6;
+    sum += fzgx_obj_lbl_1_bss_6EAC7;
+    sum += fzgx_obj_lbl_1_bss_6EAC8;
+    sum += fzgx_obj_lbl_1_bss_6EACC;
+    sum += (u32)lbl_1_bss_6EAD0.unk_0;
+    sum += lbl_1_bss_6F1D8;
+    sum += lbl_1_bss_6F1DC;
+    sum += lbl_1_bss_6F1E0;
+    sum += fzgx_obj_lbl_1_bss_6F1E4[0];
+    sum += fzgx_obj_lbl_1_bss_6F31A;
+    sum += fzgx_obj_lbl_1_bss_6F31C[0];
+    sum += (u32)fzgx_obj_lbl_1_bss_6F320;
+    sum += (u32)fzgx_obj_lbl_1_bss_6F324;
+    sum += fzgx_obj_lbl_1_bss_6F328;
+    return sum;
+}
+#pragma section code_type ".text"
+
+extern u32 fn_1_F2F34(void);
+extern u8 lbl_1_rodata_437C[48];
+extern s8 lbl_1_rodata_43AC[8];
+extern const f32 lbl_1_rodata_42E0;
+extern const f32 lbl_1_rodata_42E4;
+extern const f32 lbl_1_rodata_42E8;
+extern void fn_8004D18C(u32, const char *);
+extern u32 fn_8004BF0C(u32, s32);
+
+static inline s8 fn_1_A1DCC_track(u8 id) {
+    if (id > 0x2D) {
+        return -1;
+    }
+    if (lbl_1_bss_8CA24 != 0 || lbl_1_bss_8B5F0 != 0) {
+        return 0x2C;
+    }
+    if (lbl_1_bss_8B5F1 != 0) {
+        return 0x2B;
+    }
+    return (s8)lbl_1_rodata_437C[id];
+}
+
+static inline void fn_1_A1DCC_play(u8 track) {
+    Obj_1_bss_6EAD0_At0 *pair = lbl_1_bss_6EAD0.unk_0;
+    u32 h = pair->unk_0;
+    u32 flags;
+    f32 vol;
+    f32 speed;
+
+    if (fzgx_obj_lbl_1_bss_6F31A != 0) {
+        return;
+    }
+    if (h == 0 || h == 0xFFFFFFFF) {
+        return;
+    }
+    if (h == pair->unk_0) {
+        flags = fzgx_obj_lbl_1_bss_6EAB4;
+        fzgx_obj_lbl_1_bss_6EAB4 = flags & ~4;
+        if (flags & 1) {
+            fzgx_obj_lbl_1_bss_6F31C[0] = lbl_1_data_2D93C[track];
+        } else {
+            speed = lbl_1_rodata_42E0;
+            vol = lbl_1_data_2D93C[track];
+            fzgx_obj_lbl_1_bss_6EABC = speed;
+            fzgx_obj_lbl_1_bss_6F320 = vol;
+        }
+    }
+    if (h == pair->unk_4) {
+        flags = fzgx_obj_lbl_1_bss_6EAB4;
+        fzgx_obj_lbl_1_bss_6EAB4 = flags & ~8;
+        if (flags & 2) {
+            fzgx_obj_lbl_1_bss_6F31C[1] = lbl_1_data_2D93C[track];
+        } else {
+            speed = lbl_1_rodata_42E4;
+            vol = lbl_1_data_2D93C[track];
+            fzgx_obj_lbl_1_bss_6EAC0 = speed;
+            fzgx_obj_lbl_1_bss_6F324 = vol;
+        }
+    }
+    fn_8004D18C(h, lbl_1_data_2D7B8[track]);
+    flags = fzgx_obj_lbl_1_bss_6EAB4;
+    if (flags & 3) {
+        if (flags & 1) {
+            fzgx_obj_lbl_1_bss_6F320 = lbl_1_rodata_42E8;
+        }
+        if (flags & 2) {
+            fzgx_obj_lbl_1_bss_6F324 = lbl_1_rodata_42E8;
+        }
+        fn_8004BF0C(h, -400);
+    } else {
+        fn_8004BF0C(h, lbl_1_data_2D93C[track]);
+    }
+    fzgx_obj_lbl_1_bss_6EAC4 = track;
+}
+
+static inline s8 *fn_1_A1DCC_array_read(s8 *array) { return array; }
+#pragma opt_propagation off
+void fn_1_A1DCC(u8 id) {
+    s8 track;
+
+    if (lbl_1_bss_960 == 10) {
+        return;
+    }
+    if (lbl_1_bss_6EAD0.unk_0 == NULL) {
+        return;
+    }
+    if ((s32)fn_1_F2F34() != 0) {
+        return;
+    }
+    fzgx_obj_lbl_1_bss_6EAC4 = 0xFF;
+    track = fn_1_A1DCC_track(id);
+    if (track == -1) {
+        if (++fzgx_obj_lbl_1_bss_6F328 > 5) {
+            fzgx_obj_lbl_1_bss_6F328 = 0;
+        }
+        fn_1_A1DCC_play(fn_1_A1DCC_array_read(lbl_1_rodata_43AC)[fzgx_obj_lbl_1_bss_6F328]);
+    } else {
+        fn_1_A1DCC_play(track);
+    }
+}
+#pragma opt_propagation reset
+/* fzgx:end fn_1_A1DCC */
+
 /* fzgx:begin fn_1_A2210 pool noprologue */
 #include "dolphin/types.h"
 #include "sofdec/adxt.h"

@@ -60125,6 +60125,18 @@
   },
   {
     "module": "main_rel",
+    "source": "rel/main_rel/sound/fn_1_A1DCC.c",
+    "symbols": [
+      "fn_1_A1DCC"
+    ],
+    "status": "nonmatching",
+    "mw_version": "GC/2.0",
+    "extra_cflags": [],
+    "tu": "rel/main_rel/sound.c",
+    "pool": true
+  },
+  {
+    "module": "main_rel",
     "source": "rel/main_rel/sound/fn_1_A2210.c",
     "symbols": [
       "fn_1_A2210"

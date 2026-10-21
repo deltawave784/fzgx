@@ -8156,3 +8156,6 @@ rel/main_rel/bg_lig/fn_1_D5FA8.c:
 
 rel/main_rel/bg_common/fn_1_1049E0.c:
 	.text       start:0x001049E0 end:0x001050D0 align:4
+
+rel/main_rel/sound/fn_1_A1DCC.c:
+	.text       start:0x000A1DCC end:0x000A2210 align:4
