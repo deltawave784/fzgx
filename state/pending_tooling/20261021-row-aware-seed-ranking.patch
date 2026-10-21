@@ -1,0 +1,222 @@
+diff --git a/tools/fzgx/api.py b/tools/fzgx/api.py
+index fcdfabf1..1e384dbe 100644
+--- a/tools/fzgx/api.py
++++ b/tools/fzgx/api.py
+@@ -860,15 +860,21 @@ def _record_check(p: Project, key: str, src: Optional[Path], res: oracle.CheckRe
+         stats = Ledger().bump_checks(key, score, _differing_rows(res), compiled=bool(res.ok))
+         stats['compiled'] = bool(res.ok)
+         # the saved best body: the ledger's best score decides while nothing is saved yet;
+-        # afterwards a body with undeclared callees must beat a sound saved body by more than
+-        # IMPLICIT_MARGIN, and a sound body replaces an undeclared one within that margin
++        # afterwards the body ranks by `seedrank.selection_score` (mean of objdiff's similarity
++        # and the pool-aware row score, less the dropped-row penalty: the attempt's progress
++        # scale alone kept fn_10_111E8's 208-row seed over the primed 111-row rewrite), a body
++        # with undeclared callees must beat a sound saved body by more than IMPLICIT_MARGIN,
++        # and a sound body replaces an undeclared one within that margin
++        from . import seedrank
+         saved = _best_meta(key)
+         implicit = _unsound(res)
++        selection = seedrank.selection_of(res, seedrank.dropped_for(res)) if res.ok else 0.0
+         if saved is None:
+             replace = bool(stats.get("improved"))
+         else:
+-            replace = _effective_score(score, implicit) > _effective_score(
+-                saved.get('percent'), bool(saved.get('implicit_calls') or saved.get('uninitialized_reads')))
++            replace = _effective_score(selection, implicit) > _effective_score(
++                saved.get('selection', saved.get('percent')),
++                bool(saved.get('implicit_calls') or saved.get('uninitialized_reads')))
+         if replace:
+             best = STATE_DIR / "attempts" / f"{key}.best.c"
+             best.parent.mkdir(parents=True, exist_ok=True)
+@@ -876,6 +882,8 @@ def _record_check(p: Project, key: str, src: Optional[Path], res: oracle.CheckRe
+             best.with_suffix('.json').write_text(json.dumps(dict(
+                 sha256=hashlib.sha256(best.read_bytes()).hexdigest(),
+                 mw=res.mw_version, flags=res.extra_cflags, percent=score,
++                selection=round(selection, 4), raw=round(res.percent, 4) if res.ok else 0.0,
++                rows=_differing_rows(res), row_score=seedrank.row_score(res) if res.ok else None,
+                 implicit_calls=list(res.implicit_calls or []),
+                 uninitialized_reads=list(getattr(res, 'uninitialized_reads', None) or []))) + '\n')
+         stats['saved_best'] = replace
+diff --git a/tools/fzgx/seedrank.py b/tools/fzgx/seedrank.py
+index 7d6b3030..8d3902ce 100644
+--- a/tools/fzgx/seedrank.py
++++ b/tools/fzgx/seedrank.py
+@@ -19,6 +19,15 @@ A body that calls a function it never declares (`oracle.body_diagnostics`: MWCC'
+ loses IMPLICIT_PENALTY points, the same margin `api.IMPLICIT_MARGIN` applies to the
+ attempt's saved best, so a sound body within that margin seeds the next attempt.
+ 
++The score itself is `selection_score`: the mean of objdiff's similarity (partial credit for
++register-only rows, but a correctly bound literal pool or section base still counts as a
++mismatch) and the row score (100 x the share of aligned instruction rows that agree after the
++oracle's accepted pool/section/absolute relocations: `oracle.progress_rows`). Ranking by the
++better of the two scales alone (`oracle.progress_score`, the attempt's progress scale) kept
++fn_10_111E8's 88.6% seed with 208 differing rows over the primed rewrite at 85.5% with 111
++rows and the pool bound, and fn_3_C400's 99.08% body with 25 rows over 98.9% with 10
++(round 55, measured over 1,100 functions with two or more saved bodies).
++
+ Results are cached per (symbol, body hash, compiler, flags) in
+ .fzgx/seedrank.json, so a ranking compiles each candidate body once.
+ """
+@@ -120,6 +129,37 @@ def penalty(dropped: Optional[Sequence[str]]) -> float:
+     return min(MAX_PENALTY, PENALTY * len(dropped or ()))
+ 
+ 
++def row_score(res) -> Optional[float]:
++    """100 x the share of aligned instruction rows that agree once the oracle's accepted
++    relocation rows (pool, section base, absolute) are taken out; None without a row alignment.
++    Equals `percent_adjusted` when accepted rows exist and the same formula otherwise."""
++    from . import oracle
++    rows = oracle.progress_rows(res)
++    n = getattr(res, "instruction_rows", 0) or 0
++    if rows is None or n <= 0:
++        return None
++    return round(100.0 * max(0, n - rows) / n, 4)
++
++
++def selection_score(raw: Optional[float], rows: Optional[float], dropped: Optional[Sequence[str]] = None,
++                    implicit: bool = False) -> float:
++    """The ranking scale for saved bodies and seeds (selection only, never acceptance):
++    the mean of objdiff's similarity and the pool-aware row score, less the dropped-row and
++    undeclared-callee penalties. Without a row score the raw score stands alone."""
++    raw = raw or 0.0
++    base = raw if rows is None else (raw + rows) / 2.0
++    return base - penalty(dropped) - (IMPLICIT_PENALTY if implicit else 0.0)
++
++
++def selection_of(res, dropped: Optional[Sequence[str]] = None, implicit: bool = False) -> float:
++    """selection_score of a CheckResult (0 when it did not compile)."""
++    if not res.ok:
++        return 0.0
++    if res.matched or getattr(res, "matched_pool", False):
++        return 100.0
++    return selection_score(res.percent, row_score(res), dropped, implicit)
++
++
+ def _load() -> dict:
+     try:
+         return json.loads(CACHE.read_text())
+@@ -128,11 +168,13 @@ def _load() -> dict:
+ 
+ 
+ def _key(symbol: str, body: str, mw: Optional[str], flags: Optional[str]) -> str:
+-    return "|".join(("v4", symbol, hashlib.sha256(body.encode()).hexdigest()[:16], mw or "", flags or ""))
++    return "|".join(("v5", symbol, hashlib.sha256(body.encode()).hexdigest()[:16], mw or "", flags or ""))
+ 
+ 
+ def measure(p: Project, symbol: str, path: Path, mw: Optional[str] = None, flags: Optional[str] = None) -> Optional[dict]:
+-    """{'percent', 'dropped', 'implicit'} for one saved body (cached); None if it does not compile."""
++    """{'percent', 'raw', 'rows', 'row_score', 'dropped', 'implicit', 'uninitialized'} for one saved
++    body (cached); None if it does not compile. `percent` is the progress scale, `raw` objdiff's
++    similarity, `rows` the differing-row count after accepted relocations."""
+     from . import oracle
+     body = Path(path).read_text()
+     key = _key(symbol, body, mw, flags)
+@@ -146,7 +188,9 @@ def measure(p: Project, symbol: str, path: Path, mw: Optional[str] = None, flags
+         sym = p.resolve(symbol)
+         diag = (oracle.body_diagnostics(p, sym.module, Path(path), res.mw_version, res.extra_cflags) if sym
+                 else {"implicit": [], "uninitialized": []})
+-        out = {"percent": round(oracle.progress_score(res), 4), "dropped": dropped_for(res) or [],
++        out = {"percent": round(oracle.progress_score(res), 4), "raw": round(res.percent, 4),
++               "rows": oracle.progress_rows(res), "row_score": row_score(res),
++               "dropped": dropped_for(res) or [],
+                "implicit": diag["implicit"], "uninitialized": diag["uninitialized"]}
+     with _LOCK:
+         cache = _load()
+@@ -158,7 +202,8 @@ def measure(p: Project, symbol: str, path: Path, mw: Optional[str] = None, flags
+ def pick(p: Project, symbol: str, candidates: Sequence[Tuple[float, Path, Optional[str], Optional[str]]]) -> Optional[int]:
+     """Index of the candidate to seed from. `candidates` is (recorded percent, body path, mw,
+     flags), best recorded first. Only bodies within WINDOW of the top are measured; the
+-    winner maximises percent - penalty(dropped), ties keep the recorded order."""
++    winner maximises `selection_score` (mean of objdiff's similarity and the pool-aware row
++    score, less the penalties); ties fall to the higher raw score, then the recorded order."""
+     if not candidates:
+         return None
+     top = candidates[0][0] or 0.0
+@@ -176,8 +221,9 @@ def pick(p: Project, symbol: str, candidates: Sequence[Tuple[float, Path, Option
+         m = measure(p, symbol, Path(path), mw, flags)
+         if m is None:
+             continue
+-        score = (m["percent"] - penalty(m["dropped"])
+-                 - (IMPLICIT_PENALTY if (m.get("implicit") or m.get("uninitialized")) else 0.0))
++        score = (selection_score(m.get("raw", m["percent"]), m.get("row_score"), m["dropped"],
++                                 bool(m.get("implicit") or m.get("uninitialized"))),
++                 m.get("raw", m["percent"]))
+         if best_score is None or score > best_score:
+             best, best_score = i, score
+         if len(seen) >= 6:
+diff --git a/tools/seeds/recovered.py b/tools/seeds/recovered.py
+index fbd9c71d..a06a605d 100644
+--- a/tools/seeds/recovered.py
++++ b/tools/seeds/recovered.py
+@@ -332,10 +332,20 @@ class SavedCandidates:
+                              'ledger:function/best-body-fallback')
+ 
+ 
+-def _ranked(score, dropped):
+-    """Selection score: objdiff's percent less seedrank's penalty for omitted retail stores or
+-    immediate addends (equal row weights let such bodies outscore correct ones)."""
+-    return score - seedrank.penalty(dropped)
++def _ranked(record):
++    """Selection score (`seedrank.selection_score`): the mean of objdiff's similarity and the
++    pool-aware row score, less seedrank's penalty for omitted retail stores or immediate
++    addends. Records measured before `raw`/`row_score` were frozen rank by their percent."""
++    return seedrank.selection_score(record.get('raw', record.get('current_percent', record.get('percent'))),
++                                    record.get('row_score'), record.get('dropped_rows'))
++
++
++def _measured(result):
++    """The frozen measurement of one check: progress percent, raw, row score, dropped shapes."""
++    if not result.ok:
++        return dict(current_percent=0, raw=0, row_score=None, dropped_rows=[])
++    return dict(current_percent=max(result.percent, result.percent_adjusted), raw=result.percent,
++                row_score=seedrank.row_score(result), dropped_rows=seedrank.dropped_for(result) or [])
+ 
+ 
+ def refine(saved, output, manifest, threshold):
+@@ -368,16 +378,17 @@ def refine(saved, output, manifest, threshold):
+             groups[(record['mw'], record['flags'])].append((symbol, path))
+         for (mw, flags), items in groups.items():
+             for symbol, result in oracle.check_many(saved.project, items, 0, mw, flags).items():
+-                score = max(result.percent, result.percent_adjusted) if result.ok else 0
+-                dropped = (seedrank.dropped_for(result) or []) if result.ok else []
++                measured = _measured(result)
++                score, dropped = measured['current_percent'], measured['dropped_rows']
+                 record = candidates[symbol]
+                 trials.append(dict(symbol=symbol, sha256=record['sha256'], origin=record['origin'],
+-                                   percent=score, dropped_rows=dropped, mw=result.mw_version, flags=result.extra_cflags))
++                                   percent=score, raw=measured['raw'], row_score=measured['row_score'],
++                                   dropped_rows=dropped, mw=result.mw_version, flags=result.extra_cflags))
+                 current = manifest[symbol]
+-                if _ranked(score, dropped) <= _ranked(current['current_percent'], current.get('dropped_rows')):
++                if _ranked(measured) <= _ranked(current):
+                     continue
+                 manifest[symbol].update({k: v for k, v in record.items() if k != 'body'})
+-                manifest[symbol].update(current_percent=score, current_error=None, dropped_rows=dropped,
++                manifest[symbol].update(measured, current_error=None,
+                                         mw=result.mw_version or mw, flags=result.extra_cflags or flags)
+                 Path(manifest[symbol]['path']).write_text(record['body'])
+         print(f'checked {len(trials)} alternate saved candidates', flush=True)
+@@ -430,9 +441,8 @@ def prepare(output: Path, threshold: float):
+     for (mw, flags), items in groups.items():
+         for symbol, result in oracle.check_many(saved.project, items, 0, mw, flags).items():
+             record = manifest[symbol]
+-            record['current_percent'] = max(result.percent, result.percent_adjusted) if result.ok else 0
++            record.update(_measured(result))
+             record['current_error'] = result.error if not result.ok else None
+-            record['dropped_rows'] = (seedrank.dropped_for(result) or []) if result.ok else []
+             record['mw'] = result.mw_version or mw
+             record['flags'] = result.extra_cflags or flags
+         checked += len(items)
+@@ -451,10 +461,8 @@ def prepare(output: Path, threshold: float):
+             continue
+         description, text, result = drifted
+         Path(record['path']).write_text(text)
+-        record.update(sha256=hashlib.sha256(text.encode()).hexdigest(), respelled=description,
+-                      current_percent=max(result.percent, result.percent_adjusted), current_error=None,
+-                      dropped_rows=seedrank.dropped_for(result) or [],
+-                      mw=result.mw_version or record['mw'], flags=result.extra_cflags or record['flags'])
++        record.update(_measured(result), sha256=hashlib.sha256(text.encode()).hexdigest(), respelled=description,
++                      current_error=None, mw=result.mw_version or record['mw'], flags=result.extra_cflags or record['flags'])
+         respelled += 1
+     if respelled:
+         print(f'{respelled} saved candidates respelled against the current headers', flush=True)

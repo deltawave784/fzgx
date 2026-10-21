@@ -10,3 +10,7 @@ A tooling round saves such a change here instead of committing it. Apply with `g
 - `20261020-pool-relocation-equality` (APPLIED 2026-10-21, user-approved): pools carrying pointer relocations bind when
   every relocated word's (type, module, section, resolved address) agrees with retail and plain bytes agree elsewhere.
   Gate PASS with `--also main:fn_8004EC34`. See the `.md`.
+- `20261021-row-aware-seed-ranking` (PENDING): saved best body, claim seed and recovered-seed manifest rank by
+  `seedrank.selection_score` (mean of objdiff similarity and the pool-aware row score, less the existing
+  penalties) instead of the progress scale alone; 60 of 955 multi-body choices move to fewer-row bodies
+  (fn_3_C400, fn_10_111E8). Gate PASS. See the `.md`.
