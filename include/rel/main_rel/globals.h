@@ -601,12 +601,14 @@ typedef struct {
 extern Obj_1_bss_6D838_Target *lbl_1_bss_6D838;  // array of 0x620-byte records
 
 // lbl_1_bss_3C00: .bss size 0x4, referenced by 58 functions, shape {'object': 2442}
+// Declared as an incomplete u8 array, never a scalar: a 1-byte (or 4-byte) declared object makes MWCC's alias analysis treat
+// every access through &lbl_1_bss_3C00 + off as one location and reuse stored values where retail reloads (fn_1_3DE80).
 // lbl_1_bss_3C00 is the first object (a byte, 3 bytes of alignment to 3C04) of the retail TU whose .bss runs 0x3C00..0x38450
 // (text ~0x2C908..0x40F54: functions now filed in stcoli.c, burner.c and game.c). It is NOT one struct: MWCC addresses every
 // object of that TU off this section base, so a function that touches two or more of them loads `addi rB, lbl_1_bss_3C00@l`
 // and reaches each object at its own offset (pointer needed: `addi rX, rB, off`). Never cast &lbl_1_bss_3C00 to a cluster view:
 // define the TU's objects in retail order (fixup_layout.tu_section_layout); each object keeps its own extern (globals.h, game.h).
-extern u8 lbl_1_bss_3C00;  // typedefs.json decl override
+extern u8 lbl_1_bss_3C00[];  // typedefs.json decl override
 
 // lbl_1_bss_38458: .bss size 0x4, referenced by 43 functions, shape {'object': 62, 'pointer': 9}
 typedef struct {

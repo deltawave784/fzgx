@@ -128,8 +128,10 @@
   ]
  },
  "lbl_1_bss_3C00": {
-  "decl": "u8 lbl_1_bss_3C00",
+  "decl": "u8 lbl_1_bss_3C00[]",
   "typedef": [
+   "// Declared as an incomplete u8 array, never a scalar: a 1-byte (or 4-byte) declared object makes MWCC's alias analysis treat",
+   "// every access through &lbl_1_bss_3C00 + off as one location and reuse stored values where retail reloads (fn_1_3DE80).",
    "// lbl_1_bss_3C00 is the first object (a byte, 3 bytes of alignment to 3C04) of the retail TU whose .bss runs 0x3C00..0x38450",
    "// (text ~0x2C908..0x40F54: functions now filed in stcoli.c, burner.c and game.c). It is NOT one struct: MWCC addresses every",
    "// object of that TU off this section base, so a function that touches two or more of them loads `addi rB, lbl_1_bss_3C00@l`",
