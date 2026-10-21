@@ -8144,3 +8144,6 @@ rel/main_rel/sel_static_disp/fn_1_14F6F8.c:
 
 rel/main_rel/bg_win/fn_1_15EFEC.c:
 	.text       start:0x0015EFEC end:0x0015F618 align:4
+
+rel/main_rel/effect/fn_1_67680.c:
+	.text       start:0x00067680 end:0x00067D0C align:4
