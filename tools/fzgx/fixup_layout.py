@@ -2126,7 +2126,10 @@ _SECTION_BASE = re.compile(r'addi (r\d+), r\d+, (\S+?)(?:\+0x[0-9A-Fa-f]+)?@l$')
 
 def _base_registers(rows, syms, anonymous_only=False):
     """section -> callee-saved register holding its base, one side of the diff rows (retail:
-    named objects of the section; ours: MWCC's anonymous `...data.0` section bases)."""
+    named objects of the section; ours: MWCC's anonymous `...data.0` section bases). When
+    retail addresses several named objects of one section, the base is the lowest one
+    (fn_3_11FF0: `lbl_3_bss_7EDC0` r27 is the `.bss` base, `lbl_3_bss_7EE40` r19 a later
+    object addressed by name; the section used to be dropped as ambiguous)."""
     out = {}
     for row in rows:
         m = _SECTION_BASE.match(((row.get('instruction') or {}).get('formatted') or ''))
@@ -2138,8 +2141,13 @@ def _base_registers(rows, syms, anonymous_only=False):
             continue
         section = '.' + anonymous[1] if anonymous else (known.section if known and known.kind == 'object' else None)
         if section in ('.data', '.rodata', '.bss'):
-            out.setdefault(section, set()).add(m[1])
-    return {s: next(iter(r)) for s, r in out.items() if len(r) == 1}
+            out.setdefault(section, {}).setdefault(m[1], set()).add(-1 if anonymous else known.addr)
+    result = {}
+    for section, regs in out.items():
+        lowest = sorted((min(addrs), reg) for reg, addrs in regs.items())
+        if len(lowest) == 1 or lowest[0][0] != lowest[1][0]:
+            result[section] = lowest[0][1]
+    return result
 
 
 def _touched_sections(region, before, syms):
@@ -2162,6 +2170,42 @@ def _touched_sections(region, before, syms):
     return out
 
 
+def _primer_section(text, objects):
+    """The one section a primer function references, or None: the sections of the defined
+    objects it names, `.rodata` for a pool primer (float literals, `fzgx_pool_prime/keep/
+    table` names), the engine's `fzgx_data_layout_*`/`fzgx_bss_layout` names."""
+    from .sdkimport import masked
+    inner = masked(text)
+    kinds = {objects[n] for n in set(re.findall(r'\b[A-Za-z_]\w*\b', inner)) if n in objects}
+    if _FLOAT_LITERAL.search(inner) or re.search(r'\bfzgx_pool_(?:prime|keep|table)\d', text):
+        kinds.add('.rodata')
+    for s in re.findall(r'\bfzgx_pool_(data|rodata)_', text):
+        kinds.add('.' + s)
+    if 'fzgx_bss_layout' in text:
+        kinds.add('.bss')
+    if 'fzgx_data_layout' in text and not kinds:
+        kinds.add('.data')
+    return kinds.pop() if len(kinds) == 1 else None
+
+
+def _emit_primers(seq):
+    """The primer items in order, wrapped in `code_type ".fzgxpool"` where they need it."""
+    out = ['\n']
+    open_pool = False
+    for lead, text, kind, section, name, _ in seq:
+        wrap = kind == 'primer' and not _POOL_DECLSPEC.search(text)
+        if wrap and not open_pool:
+            out.append('\n#pragma section code_type ".fzgxpool"\n')
+            open_pool = True
+        elif not wrap and open_pool:
+            out.append('#pragma section code_type ".text"\n\n')
+            open_pool = False
+        out.append(lead.strip('\n') + ('\n' if lead.strip() else '') + text.strip('\n') + '\n')
+    if open_pool:
+        out.append('#pragma section code_type ".text"\n')
+    return ''.join(out)
+
+
 def section_base_order(p, symbol, body, check, obj=None):
     """The order of a unit's section-base registers is the order in which the translation unit
     first references each section, not where the objects are defined (measured on fn_8_7484
@@ -2169,10 +2213,14 @@ def section_base_order(p, symbol, body, check, obj=None):
     `.fzgxpool` function touching three `.data` objects ahead of the pool primer gave `.data`
     retail's r31 and the pool r30, and dropping that primer from a matching body swapped them
     back). The section referenced first takes the highest callee-saved register. A body whose
-    `...data.0`/`...rodata.0` bases hold each other's registers is reordered: the primer
-    regions (`fzgx_pool_prime*` pool primers for `.rodata`, `fzgx_data_layout_*` for `.data`,
-    `fzgx_bss_layout` for `.bss`) move just above the function in retail's order, and a
-    `.data` primer over the body's own defined `.data` objects is added when there is none."""
+    anonymous `...data.0`/`...rodata.0`/`...bss.0` bases hold each other's registers is
+    reordered: every primer function (each tagged with the one section it touches, so a
+    region mixing pool primers with a `.bss` order function splits, fn_3_11FF0) is re-emitted
+    in retail's order just above the function, after the last definition it names, and a
+    section that has defined objects but no primer gets one over them (`fzgx_base_order_<s>`:
+    fn_16_2560's `static const` literals were first referenced by the function itself, so
+    `.data` always came first). Measured: fn_3_11FF0 96.21 -> 96.52 with retail's
+    rodata r29 / data r28 / bss r27."""
     rows = getattr(check, '_rows', None) if check is not None else None
     if not rows or not check.ok:
         return []
@@ -2184,10 +2232,12 @@ def section_base_order(p, symbol, body, check, obj=None):
     # address is the function's own CSE (fn_4_63D4: retail's data r30 over `lbl_4_bss_0` r29)
     retail, ours = _base_registers(rows[0], syms), _base_registers(rows[1], syms, anonymous_only=True)
     shared = [s for s in retail if s in ours]
-    if (len(shared) < 2 or {retail[s] for s in shared} != {ours[s] for s in shared}
-            or all(retail[s] == ours[s] for s in shared)):
-        return []
+    # the ranking of the shared sections' registers is what the first-reference order sets;
+    # the registers themselves also depend on the locals (fn_16_2560: retail data r28 /
+    # rodata r29 under two locals, ours rodata r29 / data r30 above them)
     desired = sorted(shared, key=lambda s: -int(retail[s][1:]))
+    if len(shared) < 2 or desired == sorted(shared, key=lambda s: -int(ours[s][1:])):
+        return []
     from .sdkimport import masked
     from .fixup_source import _function_body_span
     code = masked(body)
@@ -2195,103 +2245,93 @@ def section_base_order(p, symbol, body, check, obj=None):
     if not span:
         return []
     at = code.rfind('\n', 0, span[0]) + 1
-    regions = {}
-    for m in _PRIMER_REGION.finditer(body):
-        if m.end() > at:
-            break
-        text = m.group(0)
-        kinds = set()
-        if re.search(r'\bfzgx_pool_(?:prime|keep|table)\d', text):
-            kinds.add('.rodata')
-        if 'fzgx_bss_layout' in text:
-            kinds.add('.bss')
-        for section in re.findall(r'\bfzgx_pool_(data|rodata)_', text):
-            kinds.add('.' + section)
-        if 'fzgx_data_layout' in text and not re.search(r'\bfzgx_pool_(?:data|rodata)_', text):
-            kinds.add('.data')
-        if not kinds:
-            # a primer named otherwise (`fzgx_bss_order`, `fzgx_base_order_data`): the section
-            # of the defined objects it touches
-            kinds = _touched_sections(text, code[:at], syms)
-        if len(kinds) == 1:
-            regions.setdefault(kinds.pop(), []).append((m.start(), m.end()))
-    # a hand-written pool primer: `#pragma section RX ".fzgxpool"` and the `__declspec`
-    # functions after it: a pool primer when they spell literals, else the primer of the one
-    # section whose defined objects they touch (fn_1_1304's `fzgx_primer` storing to its
-    # `.bss` objects was invisible here, so the added `.data` primer landed below it and the
-    # `.data` base stayed r30)
-    statements = _top_statements(code)
-    for m in re.finditer(r'(?m)^[ \t]*#pragma section RX "\.fzgxpool"[^\n]*\n', body[:at]):
-        end = m.end()
-        for a, b in statements:
-            if a < m.end():
-                continue
-            if b > at or not re.match(r'\s*__declspec\s*\(\s*section\s*"\.fzgxpool"\s*\)', body[a:b]):
-                break
-            if code[end:a].strip():
-                break
-            end = b
-        if end > m.end():
-            nl = body.find('\n', end)
-            end = len(body[:at]) if nl < 0 or nl >= at else nl + 1
-        if end > m.end():
-            if re.search(r'\b\d+\.\d*f?\b', body[m.end():end]):
-                regions.setdefault('.rodata', []).append((m.start(), end))
-            else:
-                kinds = _touched_sections(body[m.end():end], code[:at], syms)
-                if len(kinds) == 1:
-                    regions.setdefault(kinds.pop(), []).append((m.start(), end))
-    # the first section keeps its primer where it is when it has one (other `.rodata` objects
-    # between the pool primer and the function must not move ahead of the pool); the later
-    # sections' primers move below it, just above the function, in retail's order
-    keep = desired[0] if regions.get(desired[0]) else None
-    later = [s for s in desired if s != keep]
-    moved = [r for s in later for r in regions.get(s, [])]
-    if any(a < d < b or c < b < d for a, b in moved for c, d in moved if (a, b) != (c, d)):
+    items, _tail = _section_items(body, code, at)
+    objects = {it[4]: it[3] for it in items if it[2] == 'obj'}
+    primers = {}
+    for k, it in enumerate(items):
+        if it[2] == 'primer':
+            section = _primer_section(it[1], objects)
+            if section is None:
+                # a primer named otherwise (`fzgx_bss_order`): the section of the defined
+                # objects it touches (`fzgx_obj_`/`fzgx_pool_` aliases through retail_address)
+                kinds = _touched_sections(it[1], code[:at], syms)
+                section = kinds.pop() if len(kinds) == 1 else None
+            if section is not None:
+                items[k] = (it[0], it[1], it[2], section, it[4], it[5])
+                primers.setdefault(section, []).append(items[k])
+    ordered, synthesized = [], []
+    for s in desired:
+        if primers.get(s):
+            ordered.extend(primers[s])
+            continue
+        defined = [it for it in items if it[2] == 'obj' and it[3] == s]
+        if not defined or s == '.rodata':
+            # nothing of this section is defined, so its first reference cannot move; the
+            # literal pool's first use is the pool primer's business (`shared_pool_primer`):
+            # touching a `static const` object by address or value changed nothing on
+            # fn_16_2560 (its one-word array is merged into the pool; a scalar read folds)
+            return []
+        tag = s.lstrip('.')
+        sink = '    volatile u8 s;  /* fzgx-allow: S2 layout primer sink: the TU references %s in retail order */\n' % s
+        uses = ''.join(f'    s = *(u8 *)&{it[4]};\n' for it in defined)
+        text = 'static void fzgx_base_order_%s(void) {\n%s%s}\n' % (tag, sink, uses)
+        item = ('', text, 'primer', s, 'fzgx_base_order_' + tag, None)
+        ordered.append(item)
+        synthesized.append(s)
+    # the block goes after the last definition any primer names, never above the first primer
+    # (a helper between it and the function keeps its place), and never below the function
+    # exact spans: an item's `start` counts its lead after section pragmas were stripped, so
+    # the statement text is located in the body (items come in body order); the lead comment
+    # moves with the primer only when it directly precedes it
+    located, cursor = {}, 0
+    for it in items:
+        if it[2] not in ('obj', 'primer'):
+            continue
+        k = body.find(it[1], cursor)
+        if k < 0:
+            return []
+        end = k + len(it[1])
+        lead = it[0] if it[0] and body[k - len(it[0]):k] == it[0] else ''
+        located[id(it)] = (k - len(lead), end)
+        cursor = end
+    # a section's defined objects interleaved with its primers (`fzgx_pool_table2` between
+    # `fzgx_pool_prime1` and `fzgx_pool_prime3`) move with them: the pool is laid out in
+    # first-use order, and the tables are used where they are defined
+    for s in desired:
+        own = [located[id(it)] for it in primers.get(s, ()) if id(it) in located]
+        if not own:
+            continue
+        lo, hi = min(a for a, _ in own), max(b for _, b in own)
+        for it in items:
+            if it[2] == 'obj' and it[3] == s and id(it) in located and lo < located[id(it)][0] < hi:
+                primers[s].append(it)
+        primers[s].sort(key=lambda it: located[id(it)][0])
+    ordered = [it for s in desired for it in (primers.get(s) or [o for o in ordered if o[3] == s and o[5] is None])]
+    touched = {n for it in ordered for n in set(re.findall(r'\b[A-Za-z_]\w*\b', masked(it[1]))) if n in objects}
+    pos = min((located[id(it)][0] for it in ordered if id(it) in located), default=at)
+    for it in items:
+        if it[2] == 'obj' and it[4] in touched:
+            pos = max(pos, located[id(it)][1])
+    pos = min(pos, at)
+    spans = sorted(located[id(it)] for it in ordered if id(it) in located)
+    if any(a < pos < b for a, b in spans):
         return []
-    blocks = {}
-    for s in later:
-        if regions.get(s):
-            # a hand-written primer's `volatile` sinks get the engine primers' justification
-            # (lint S2; the `.fzgxpool` section is dropped at integration)
-            blocks[s] = '\n'.join(re.sub(r'(?m)^(?![^\n]*(?://|/\*))([^\n]*\bvolatile\b[^\n]*?)[ \t]*$',
-                                         r'\1  /* fzgx-allow: S2 pool primer sink */', body[a:b].rstrip('\n')) + '\n'
-                                  for a, b in sorted(regions[s]))
-        elif s == '.data':
-            # no primer touches the body's own `.data` objects: one over every defined object
-            path = Path(obj) if obj else getattr(check, '_object', None)
-            if not path or not Path(path).exists():
-                return []
-            elf = poolfix.Elf(Path(path).read_bytes())
-            section = elf.section('.data')
-            if not section:
-                return []
-            names = []
-            for own in sorted(elf.symbols(), key=lambda o: o['value']):
-                if own['shndx'] != section['index'] or not own['size'] or own['info'] & 15 != 1:
-                    continue
-                if not re.fullmatch(r'[A-Za-z_]\w*', own['name']) or own['name'] in names:
-                    continue
-                definition = re.search(r'(?m)^(?![ \t]*extern\b)[^\n;(){}]*\b%s\b\s*(?:\[[^\]\n]*\]\s*)*(?:=|;)'
-                                       % re.escape(own['name']), code[:at])
-                if definition:
-                    names.append(own['name'])
-            if len(names) < 3:
-                return []  # MWCC addresses one or two objects by name, never off a section base
-            blocks[s] = ('#pragma section code_type ".fzgxpool"\nstatic void fzgx_base_order_data(void) {\n'
-                         '    volatile u8 s;  /* fzgx-allow: S2 layout primer sink: the TU references .data before its other sections */\n'
-                         + ''.join(f'    s = *(u8 *)&{n};\n' for n in names)
-                         + '}\n#pragma section code_type ".text"\n')
-    if not blocks:
+    head = body[:at]
+    for a, b in reversed(spans):
+        if b <= pos:
+            pos -= b - a
+        head = head[:a] + head[b:]
+    block = re.sub(r'(?m)^(?![^\n]*(?://|/\*))([^\n]*\bvolatile\b[^\n]*?)[ \t]*$',
+                   r'\1  /* fzgx-allow: S2 pool primer sink */', _emit_primers(ordered))
+    text = head[:pos].rstrip('\n') + '\n' + block + '\n' + head[pos:].lstrip('\n') + body[at:]
+    text = re.sub(r'\n{3,}', '\n\n', text)
+    if re.sub(r'\n{3,}', '\n\n', body) == text:
         return []
-    out = body[:at]
-    for a, b in sorted(moved, reverse=True):
-        out = out[:a] + out[b:]
     order = ' before '.join(desired)
-    text = out + '\n' + '\n'.join(blocks[s] for s in later if s in blocks) + '\n' + body[at:]
-    if text == body:
-        return []
-    return [(f'section base order: {order} (first reference takes the highest register)', text)]
+    label = f'section base order: {order} (first reference takes the highest register)'
+    if synthesized:
+        label += ', primer added for ' + ', '.join(synthesized)
+    return [(label, text)]
 
 
 _FLOAT_LITERAL = re.compile(r'(?<![\w.])(?:\d+\.\d*|\.\d+|\d+(?=[eE]))(?:[eE][+-]?\d+)?[fF]?(?![\w.])')
