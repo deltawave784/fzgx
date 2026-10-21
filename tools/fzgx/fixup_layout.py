@@ -1956,13 +1956,40 @@ def retail_pool_dump(p, symbol, check):
 
 _PRIMER_REGION = re.compile(r'(?m)^[ \t]*#pragma section code_type "\.fzgxpool"[ \t]*\n.*?^[ \t]*#pragma section code_type "\.text"[ \t]*\n', re.S)
 _CODE_TYPE = re.compile(r'(?m)^[ \t]*#pragma[ \t]+section[ \t]+code_type[ \t]+"([^"]*)"[ \t]*$')
-_PRIMER_DEF = re.compile(r'(?m)^(?![ \t]*#)[^;{}\n]*?\b(fzgx_\w+)[ \t]*\([^;{}]*\)[ \t]*\{')
+_PRIMER_DEF = re.compile(r'(?m)^(?![ \t]*#)[^;{}\n]*?\b(\w+)[ \t]*\([^;{}]*\)[ \t]*\{')
+# a function an agent wrote to prime the unit's literal pool or section layout, by name:
+# `fzgx_pool_prime_N` (the landed form), `pool_primer` (fn_3_1B4BC), `fn_1_E7764_pool_5`,
+# `fn_1_15EFEC_pool_signed`; anything else defined next to the target is a helper
+PRIMER_NAME = re.compile(r'(?i)^fzgx_|(?:^|_)(?:pool|primer|prime|literals?)(?:_|$|\d)')
+# `#pragma section` spellings that leave code in `.text` (measured on GC/1.3.2: `prime_a`
+# stayed in `.text` under every one of them, so the check still listed the primers as extra
+# code): the section name without `code_type`, and the `RX` flag forms. Only `code_type
+# ".fzgxpool"` (reset by `code_type ".text"` or a bare `code_type`) moves functions.
+_INEFFECTIVE_POOL_PRAGMA = re.compile(
+    r'(?m)^[ \t]*#pragma[ \t]+section[ \t]+(?:RX[ \t]+)?"\.fzgxpool"(?:[ \t]+"\.fzgxpool")?[ \t]*$')
+_INEFFECTIVE_TEXT_PRAGMA = re.compile(
+    r'(?m)^[ \t]*#pragma[ \t]+section[ \t]+(?:RX[ \t]+)?"\.text"(?:[ \t]+"\.text")?[ \t]*$')
+
+
+def primer_like(name: str) -> bool:
+    return bool(PRIMER_NAME.search(name))
+
+
+def normalize_primer_pragmas(body: str) -> str:
+    """The body with every ineffective `.fzgxpool` section pragma respelled as
+    `#pragma section code_type ".fzgxpool"` and, only then, its `.text` counterparts as
+    `#pragma section code_type ".text"`. Unchanged when no ineffective pool pragma exists."""
+    if not _INEFFECTIVE_POOL_PRAGMA.search(body):
+        return body
+    text = _INEFFECTIVE_POOL_PRAGMA.sub('#pragma section code_type ".fzgxpool"', body)
+    return _INEFFECTIVE_TEXT_PRAGMA.sub('#pragma section code_type ".text"', text)
 
 
 def stray_primer_functions(body: str, names=None) -> List[Tuple[str, int, int]]:
     """`fzgx_*` function definitions placed in `.text` (outside every `code_type ".fzgxpool"`
     region): (name, start, end) spans, `end` just past the closing brace. `names` restricts the
-    search to the functions an object check reported as extra. Such a primer is dropped by
+    search to the functions an object check reported as extra (any name then: the caller
+    decides which extras are primers, `primer_like`). Such a primer is dropped by
     nothing at integration: it links as code retail does not have, the module grows and every
     hash fails (fn_1_E252C, fn_1_115560, fn_1_147508, fn_10_17814, batches codex-20261016d/e)."""
     from .sdkimport import masked
@@ -1970,7 +1997,10 @@ def stray_primer_functions(body: str, names=None) -> List[Tuple[str, int, int]]:
     sections = sorted((m.start(), m.group(1)) for m in _CODE_TYPE.finditer(body))
     out = []
     for m in _PRIMER_DEF.finditer(code):
-        if names is not None and m.group(1) not in names:
+        if names is not None:
+            if m.group(1) not in names:
+                continue
+        elif not m.group(1).startswith('fzgx_'):
             continue
         current = '.text'
         for at, section in sections:
@@ -2009,6 +2039,88 @@ def primer_sections(body: str, names=None) -> Optional[str]:
         text = (text[:start] + '#pragma section code_type ".fzgxpool"\n' + text[start:cut].rstrip('\n') + '\n'
                 + '#pragma section code_type ".text"\n' + text[cut:])
     return text
+
+
+def reset_after_primers(body: str, symbol: str, primers) -> Optional[str]:
+    """The body with `#pragma section code_type ".text"` inserted after the last primer
+    definition when the target itself was emitted in `.fzgxpool` (a pool region never reset:
+    the oracle scores such a body 0, fn_1_E7764 spent eight checks there). None when no primer
+    definition is found or a reset already follows the last one."""
+    from .sdkimport import masked
+    code = masked(body)
+    last = None
+    for m in _PRIMER_DEF.finditer(code):
+        if m.group(1) == symbol or m.group(1) not in primers:
+            continue
+        depth, i = 0, m.end() - 1
+        while i < len(code):
+            if code[i] == '{':
+                depth += 1
+            elif code[i] == '}':
+                depth -= 1
+                if depth == 0:
+                    break
+            i += 1
+        else:
+            return None
+        last = max(last or 0, i + 1)
+    if last is None:
+        return None
+    nl = body.find('\n', last)
+    cut = len(body) if nl < 0 else nl + 1
+    following = body[cut:]
+    head = re.search(r'(?m)^[^\n;{}#]*\b' + re.escape(symbol) + r'[ \t]*\([^;{}]*\)[ \t]*\{', following)
+    region = following[:head.start()] if head else following
+    if re.search(r'(?m)^[ \t]*#pragma[ \t]+section[ \t]+code_type\b', region):
+        return None
+    return body[:cut] + '#pragma section code_type ".text"\n' + following
+
+
+def _fresh_primer_names(names, text: str) -> Dict[str, str]:
+    """old -> `fzgx_<old>` for every name lacking the prefix, skipping tokens `text` uses."""
+    out: Dict[str, str] = {}
+    for name in names:
+        if name.startswith('fzgx_'):
+            continue
+        new = 'fzgx_' + name
+        while re.search(r'\b' + re.escape(new) + r'\b', text) or new in out.values():
+            new += '_'
+        out[name] = new
+    return out
+
+
+def primer_repair(body: str, extras, in_pool) -> Optional[Tuple[str, Dict[str, str], List[str]]]:
+    """One mechanical repair of a matched body whose only blockers are its primers: the
+    ineffective pool pragmas respelled (`normalize_primer_pragmas`), every extra function
+    the object placed in `.fzgxpool` renamed `fzgx_<name>` (the oracle's primer rule needs
+    the prefix as well as the section), every primer-like extra still in `.text` moved into
+    `.fzgxpool` and renamed when it lacks the prefix. `extras` are the object's extra function
+    symbols, `in_pool` those of them already in `.fzgxpool`. Returns (text, renames, moved),
+    or None when a stray extra is not primer-like (a helper retail inlined away: the agent's
+    problem, reported as before) or nothing changes. Batch 20261020: fn_3_1B4BC's
+    `pool_primer`, fn_1_15EFEC's `fn_1_15EFEC_pool_*` and fn_1_E7764's `fn_1_E7764_pool_*`
+    were all repaired by hand over several checks each."""
+    extras = list(extras or [])
+    in_pool = set(in_pool or ())
+    if not extras:
+        return None
+    stray = [n for n in extras if n not in in_pool]
+    if any(not primer_like(n) for n in stray):
+        return None
+    text = normalize_primer_pragmas(body)
+    renames = _fresh_primer_names(extras, text)
+    if renames:
+        pattern = re.compile(r'\b(' + '|'.join(re.escape(n) for n in sorted(renames, key=len, reverse=True)) + r')\b')
+        text = pattern.sub(lambda m: renames[m.group(1)], text)
+    moved: List[str] = []
+    if stray:
+        current = {renames.get(n, n) for n in stray}
+        moved = sorted(n for n, _, _ in stray_primer_functions(text, current))
+        if moved:
+            text = primer_sections(text, set(moved)) or text
+    if text == body:
+        return None
+    return text, renames, moved
 _SECTION_BASE = re.compile(r'addi (r\d+), r\d+, (\S+?)(?:\+0x[0-9A-Fa-f]+)?@l$')
 
 

@@ -506,49 +506,63 @@ def _probe_flag_variants(p: Project, symbol: str, flags: Optional[str]) -> List[
     return out
 
 
-def _primer_renames(res: oracle.CheckResult, text: str) -> Dict[str, str]:
-    """Primer functions that alone keep an oracle match from submitting: every extra function
-    is defined in `.fzgxpool` but is not named `fzgx_*` (the extras rule's primer spelling).
-    Returns old name -> `fzgx_<old>`; empty when anything else blocks."""
+def _primer_repair(res: oracle.CheckResult, text: str):
+    """(text, renames, moved) from `fixup_layout.primer_repair`: the work copy with its primers
+    respelled when primers alone keep an oracle match from submitting (extra functions in
+    `.fzgxpool` lacking the `fzgx_` prefix, primer-like functions compiled into `.text`, the
+    ineffective `#pragma section ".fzgxpool"` / `RX` forms). None when a stray extra is not a
+    primer by name (a helper retail inlined) or nothing changes."""
+    from . import fixup_layout
     extras = list(res.extra_in_base or [])
     primers = set(getattr(res, 'primer_functions', ()) or ())
-    if not extras or not set(extras) <= primers:
-        return {}
-    out: Dict[str, str] = {}
-    for name in extras:
-        new = 'fzgx_' + name
-        while re.search(r'\b' + re.escape(new) + r'\b', text) or new in out.values():
-            new += '_'
-        out[name] = new
-    return out
+    if not extras:
+        return None
+    return fixup_layout.primer_repair(text, extras, set(extras) & primers)
 
 
 def _check_work(p: Project, symbol: str, key: str, src: Optional[Path], max_diff_lines: int,
                 mw_version: Optional[str], extra_cflags: Optional[str]) -> oracle.CheckResult:
     """oracle.check, plus one deterministic repair of the agent's work copy: a match blocked only
-    by `.fzgxpool` primers whose names lack the `fzgx_` prefix is re-checked with the primers
-    renamed (whole-token rename, nothing else changes). The work copy keeps the rename only if
-    the oracle then accepts the unit outright; the oracle's rules are unchanged."""
+    by its primers (names lacking the `fzgx_` prefix, primer functions compiled into `.text`,
+    ineffective section pragmas) is re-checked with the primers respelled
+    (`fixup_layout.primer_repair`: whole-token renames and `code_type` pragma pairs, nothing
+    else changes). The work copy keeps the respelling only if the oracle then accepts the
+    unit outright; the oracle's rules are unchanged."""
     res = oracle.check(p, symbol, max_diff_lines, source=src, mw_version=mw_version, extra_cflags=extra_cflags)
-    if src is None or src != p.work_path(key) or not res.ok or not (res.matched or res.matched_pool):
+    if src is None or src != p.work_path(key) or not res.ok:
+        return res
+    if symbol in (getattr(res, 'primer_functions', ()) or ()):
+        # the function itself landed in `.fzgxpool` (a primer region never reset; scored 0):
+        # reset the section after the last primer and re-check; kept only when it scores
+        from . import fixup_layout
+        text = src.read_text()
+        reset = fixup_layout.reset_after_primers(text, symbol, set(res.primer_functions))
+        if reset is None:
+            return res
+        src.write_text(reset)
+        again = oracle.check(p, symbol, max_diff_lines, source=src, mw_version=mw_version, extra_cflags=extra_cflags)
+        if not again.ok or symbol in (again.primer_functions or ()) or (again.percent or 0) <= (res.percent or 0):
+            src.write_text(text)
+            return res
+        again.section_reset = True
+        res = again
+    if not (res.matched or res.matched_pool):
         return res
     if oracle.unit_fully_matches(res) is None:
         return _respell_for_link(p, symbol, key, src, res, max_diff_lines, mw_version, extra_cflags)
     text = src.read_text()
-    renames = _primer_renames(res, text)
-    moved = _primer_sections(res, text) if not renames else None
-    if not renames and not moved:
+    repaired = _primer_repair(res, text)
+    if repaired is None:
         return res
-    if renames:
-        pattern = re.compile(r'\b(' + '|'.join(re.escape(n) for n in sorted(renames, key=len, reverse=True)) + r')\b')
-        src.write_text(pattern.sub(lambda m: renames[m.group(1)], text))
-    else:
-        src.write_text(moved)
+    respelled, renames, moved = repaired
+    src.write_text(respelled)
     again = oracle.check(p, symbol, max_diff_lines, source=src, mw_version=mw_version, extra_cflags=extra_cflags)
     if again.ok and oracle.unit_fully_matches(again) is None:
         if renames:
             again.primer_renamed = renames
-        else:
+        if moved:
+            again.primer_moved = moved
+        if respelled != text and not renames and not moved:
             again.primer_moved = sorted(res.extra_in_base or [])
         return again
     src.write_text(text)
@@ -605,24 +619,6 @@ def _respell_for_lint(src: Path, findings) -> Optional[Tuple[str, str]]:
         if respelled != text and not lint_text(respelled):
             return description, respelled
     return None
-
-
-def _primer_sections(res: oracle.CheckResult, text: str) -> Optional[str]:
-    """The work copy with its stray primers moved into `.fzgxpool`, when `fzgx_*` functions
-    defined in `.text` are all that keeps an oracle match from submitting (the link-mismatch
-    class of batches codex-20261016d/e: four 100% objects grew their module's .text). None
-    when anything else blocks or the text has no such definition."""
-    extras = list(res.extra_in_base or [])
-    if not extras or not all(n.startswith('fzgx_') for n in extras):
-        return None
-    primers = set(getattr(res, 'primer_functions', ()) or ())
-    if set(extras) & primers:
-        return None  # in `.fzgxpool` already: a naming problem, not a section one
-    from . import fixup_layout
-    stray = {name for name, _, _ in fixup_layout.stray_primer_functions(text, set(extras))}
-    if stray != set(extras):
-        return None
-    return fixup_layout.primer_sections(text, set(extras))
 
 
 def _link_conflict_reason(res: oracle.CheckResult) -> Optional[str]:
@@ -790,14 +786,23 @@ def _differing_rows(res: oracle.CheckResult) -> Optional[int]:
 
 def _implicit_calls(p: Project, symbol: str, src: Path, res: oracle.CheckResult) -> List[str]:
     """Undeclared callees of a compiled body (one `-requireprotos` compile; empty when the check
-    itself failed, since the compile error already says what is wrong)."""
+    itself failed, since the compile error already says what is wrong). The same compile's
+    `not initialized before being used` warnings are attached as `res.uninitialized_reads`."""
     sym = p.resolve(symbol)
+    res.uninitialized_reads = []
     if not res.ok or sym is None:
         return []
     try:
-        return oracle.implicit_calls(p, sym.module, Path(src), res.mw_version, res.extra_cflags)
+        diag = oracle.body_diagnostics(p, sym.module, Path(src), res.mw_version, res.extra_cflags)
     except Exception:  # a diagnostic never fails a check
         return []
+    res.uninitialized_reads = list(diag.get("uninitialized") or [])
+    return list(diag.get("implicit") or [])
+
+
+def _unsound(res: oracle.CheckResult) -> bool:
+    """A compiled body MWCC itself flags: undeclared callees or a never-assigned local read."""
+    return bool(res.ok and (res.implicit_calls or getattr(res, 'uninitialized_reads', None)))
 
 
 def _effective_score(percent: Optional[float], implicit: bool) -> float:
@@ -840,17 +845,18 @@ def _record_check(p: Project, key: str, src: Optional[Path], res: oracle.CheckRe
             pass
     if src is not None and count:
         score = check_score(res)
-        stats = Ledger().bump_checks(key, score, _differing_rows(res))
+        stats = Ledger().bump_checks(key, score, _differing_rows(res), compiled=bool(res.ok))
+        stats['compiled'] = bool(res.ok)
         # the saved best body: the ledger's best score decides while nothing is saved yet;
         # afterwards a body with undeclared callees must beat a sound saved body by more than
         # IMPLICIT_MARGIN, and a sound body replaces an undeclared one within that margin
         saved = _best_meta(key)
-        implicit = bool(res.ok and res.implicit_calls)
+        implicit = _unsound(res)
         if saved is None:
             replace = bool(stats.get("improved"))
         else:
             replace = _effective_score(score, implicit) > _effective_score(
-                saved.get('percent'), bool(saved.get('implicit_calls')))
+                saved.get('percent'), bool(saved.get('implicit_calls') or saved.get('uninitialized_reads')))
         if replace:
             best = STATE_DIR / "attempts" / f"{key}.best.c"
             best.parent.mkdir(parents=True, exist_ok=True)
@@ -858,11 +864,17 @@ def _record_check(p: Project, key: str, src: Optional[Path], res: oracle.CheckRe
             best.with_suffix('.json').write_text(json.dumps(dict(
                 sha256=hashlib.sha256(best.read_bytes()).hexdigest(),
                 mw=res.mw_version, flags=res.extra_cflags, percent=score,
-                implicit_calls=list(res.implicit_calls or []))) + '\n')
+                implicit_calls=list(res.implicit_calls or []),
+                uninitialized_reads=list(getattr(res, 'uninitialized_reads', None) or []))) + '\n')
         stats['saved_best'] = replace
         if implicit and not replace and saved is not None:
+            why = []
+            if res.implicit_calls:
+                why.append(f"it calls undeclared {', '.join(res.implicit_calls)}")
+            if getattr(res, 'uninitialized_reads', None):
+                why.append(f"it reads never-assigned {', '.join(res.uninitialized_reads)}")
             stats['not_saved'] = (
-                f"not saved as the attempt's best: it calls undeclared {', '.join(res.implicit_calls)} "
+                f"not saved as the attempt's best: {' and '.join(why)} "
                 f"and leads the sound saved body ({saved.get('percent') or 0:.2f}%) by less than "
                 f"{IMPLICIT_MARGIN:g} points")
         return stats
@@ -906,6 +918,10 @@ def format_check(res: Dict[str, Any]) -> str:
         lines.append('undeclared function(s) called: ' + ', '.join(res['implicit_calls'])
                      + ' (MWCC assumed `int f()`: float arguments widen to double, the result is int; '
                      'declare the prototype or define the helper before relying on this score)')
+    if res.get('uninitialized_reads'):
+        lines.append('local(s) read but never assigned: ' + ', '.join(res['uninitialized_reads'])
+                     + ' (MWCC: "not initialized before being used"; whatever register it happens to '
+                     'hold is not a match: assign the value retail computes before relying on this score)')
     if (res.get('budget') or {}).get('not_saved'):
         lines.append(res['budget']['not_saved'])
     if res.get('primer_renamed'):
@@ -914,6 +930,9 @@ def format_check(res: Dict[str, Any]) -> str:
     if res.get('primer_moved'):
         lines.append('primer functions moved into `.fzgxpool` in your work copy (a `#pragma section code_type` '
                      'pair around each) so the match can link: ' + ', '.join(res['primer_moved']))
+    if res.get('section_reset'):
+        lines.append('your work copy now resets the section after the primers (`#pragma section code_type ".text"`): '
+                     f'{res["symbol"]} itself had been emitted in `.fzgxpool`, which integration drops (scored 0)')
     if res.get('link_respelled'):
         lines.append('work copy respelled so the match can link (' + res['link_respelled'] + ')')
     for conflict in (res.get('link_conflicts') or [])[:4]:
@@ -962,7 +981,10 @@ def format_check(res: Dict[str, Any]) -> str:
         line = f"check {b['checks']}: best this attempt {b['best_in_attempt']:.1f}%"
         if b.get('best_rows') is not None:
             line += f" / {b['best_rows']} differing rows"
-        if b.get('percent') is not None:
+        if b.get('compiled') is False:
+            line += (f"; this check did not compile: it spends one of the checks, not the plateau "
+                     f"({b['stale']} stale check(s), unchanged; the plateau stop fires at {b.get('stale_limit', '?')})")
+        elif b.get('percent') is not None:
             line += (f"; this check {b['percent']:.1f}%"
                      + (f" / {b['rows']} rows" if b.get('rows') is not None else "")
                      + (": progress (plateau counter reset)" if b.get('progress')
@@ -1554,6 +1576,7 @@ def _save_final_copy(p: Project, symbol: str, key: str, row, attempt_row: dict, 
             info['percent'] = round(check_score(res), 5)
             info['mw'], info['flags'] = res.mw_version, res.extra_cflags
             info['implicit_calls'] = _implicit_calls(p, symbol, work, res)
+            info['uninitialized_reads'] = list(getattr(res, 'uninitialized_reads', None) or [])
         else:
             info['error'] = (res.error or '')[-600:]
     dest = STATE_DIR / "attempts" / f"{key}.{'shadow.' if shadow else ''}final.{int(time.time())}.c"

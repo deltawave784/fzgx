@@ -74,6 +74,9 @@ class CheckResult:
     # score high while the C is wrong). Diagnostics and best-body selection only
     # (`implicit_calls`); the row rules are unchanged.
     implicit_calls: List[str] = field(default_factory=list)
+    # locals the body reads and never assigns (MWCC's own `not initialized before being used`
+    # warning, `body_diagnostics`): diagnostics and best-body selection only.
+    uninitialized_reads: List[str] = field(default_factory=list)
 
     def to_json(self) -> dict:
         return {k: v for k, v in self.__dict__.items() if not k.startswith("_")}
@@ -1492,27 +1495,39 @@ def compile_source(project: Project, module: str, source: Path, obj: Path,
 _NO_PROTOTYPE_RE = re.compile(r"^#\s*(\d+):(.*)$")
 
 
-def implicit_calls(project: Project, module: str, source: Path, mw_version: Optional[str] = None,
-                   extra_cflags: Optional[str] = None) -> List[str]:
-    """Functions `source` calls without a declaration, by name, from one extra compile under
-    `-requireprotos` (MWCC then reports `function has no prototype` as an error at the call;
-    the same text at a definition is a warning and is ignored). A body calling an undeclared
-    helper compiles and can outscore a sound body by a few rows (fn_1_451E4's 90.85%
-    `load_to_aram` body over the 90.48% declared one), so the agent path flags it and the
-    best-body rule demotes it. Diagnostic only: the compile verdict and the row rules never
-    read this. Empty on any failure of the probe itself."""
+_UNINITIALIZED_RE = re.compile(r"variable '(\w+)' is not initialized before being used")
+
+
+def body_diagnostics(project: Project, module: str, source: Path, mw_version: Optional[str] = None,
+                     extra_cflags: Optional[str] = None) -> Dict[str, List[str]]:
+    """Two soundness diagnostics of a compiled body from one extra compile under
+    `-requireprotos`: `implicit` (functions called without a declaration: MWCC reports
+    `function has no prototype` as an error at the call; the same text at a definition is a
+    warning and is ignored) and `uninitialized` (locals MWCC warns are `not initialized before
+    being used`: it emits this by default, under every `-w` setting, for a local that is read
+    and never assigned; a local assigned on some path only is not reported). A body calling an
+    undeclared helper or reading a never-assigned local compiles and can outscore a sound body
+    by a few rows (fn_1_451E4's 90.85% `load_to_aram` body over the 90.48% declared one;
+    fn_3_28EBC's 94.7% body reading `v0` over the 94.4% sound one, batch 197), so the agent
+    path flags both and the best-body rule demotes them. Diagnostic only: the compile verdict
+    and the row rules never read this. Empty on any failure of the probe itself."""
     obj = source.with_name(source.stem + ".fzgxproto.o")
     try:
         cp = compile_source(project, module, source, obj, mw_version,
                             _join_flags(extra_cflags, "-requireprotos -maxerrors 50"))
         text = cp.stdout + cp.stderr
     except (OSError, subprocess.SubprocessError):
-        return []
+        return {"implicit": [], "uninitialized": []}
     finally:
         obj.unlink(missing_ok=True)
     names: List[str] = []
+    uninitialized: List[str] = []
     lines = text.splitlines()
     for i, line in enumerate(lines):
+        m = _UNINITIALIZED_RE.search(line)
+        if m and m.group(1) not in uninitialized:
+            uninitialized.append(m.group(1))
+            continue
         if not line.lstrip("# ").startswith("Error:") or "^" not in line:
             continue
         if i + 1 >= len(lines) or "function has no prototype" not in lines[i + 1]:
@@ -1526,7 +1541,13 @@ def implicit_calls(project: Project, module: str, source: Path, mw_version: Opti
         ident = re.match(r"[A-Za-z_]\w*", m.group(2)[col:]) if col >= 0 else None
         if ident and ident.group(0) not in names:
             names.append(ident.group(0))
-    return names
+    return {"implicit": names, "uninitialized": uninitialized}
+
+
+def implicit_calls(project: Project, module: str, source: Path, mw_version: Optional[str] = None,
+                   extra_cflags: Optional[str] = None) -> List[str]:
+    """Functions `source` calls without a declaration (`body_diagnostics`)."""
+    return body_diagnostics(project, module, source, mw_version, extra_cflags)["implicit"]
 
 
 def unit_source_path(project: Project, unit_src: str) -> Path:

@@ -14,9 +14,10 @@ loses PENALTY points per retail row whose effect is missing from ours:
 - that are stores (not frame stores off r1) or non-move arithmetic with a
   nonzero immediate (addi/addis/mulli/ori/... ; `addi rX, rY, 0` is a move).
 
-A body that calls a function it never declares (`oracle.implicit_calls`: MWCC's implicit
-`int f()`) loses IMPLICIT_PENALTY points, the same margin `api.IMPLICIT_MARGIN` applies to
-the attempt's saved best, so a sound body within that margin seeds the next attempt.
+A body that calls a function it never declares (`oracle.body_diagnostics`: MWCC's implicit
+`int f()`) or reads a local it never assigns (MWCC's `not initialized before being used`)
+loses IMPLICIT_PENALTY points, the same margin `api.IMPLICIT_MARGIN` applies to the
+attempt's saved best, so a sound body within that margin seeds the next attempt.
 
 Results are cached per (symbol, body hash, compiler, flags) in
 .fzgx/seedrank.json, so a ranking compiles each candidate body once.
@@ -143,8 +144,10 @@ def measure(p: Project, symbol: str, path: Path, mw: Optional[str] = None, flags
     out = None
     if res.ok:
         sym = p.resolve(symbol)
-        implicit = oracle.implicit_calls(p, sym.module, Path(path), res.mw_version, res.extra_cflags) if sym else []
-        out = {"percent": round(oracle.progress_score(res), 4), "dropped": dropped_for(res) or [], "implicit": implicit}
+        diag = (oracle.body_diagnostics(p, sym.module, Path(path), res.mw_version, res.extra_cflags) if sym
+                else {"implicit": [], "uninitialized": []})
+        out = {"percent": round(oracle.progress_score(res), 4), "dropped": dropped_for(res) or [],
+               "implicit": diag["implicit"], "uninitialized": diag["uninitialized"]}
     with _LOCK:
         cache = _load()
         cache[key] = out
@@ -173,7 +176,8 @@ def pick(p: Project, symbol: str, candidates: Sequence[Tuple[float, Path, Option
         m = measure(p, symbol, Path(path), mw, flags)
         if m is None:
             continue
-        score = m["percent"] - penalty(m["dropped"]) - (IMPLICIT_PENALTY if m.get("implicit") else 0.0)
+        score = (m["percent"] - penalty(m["dropped"])
+                 - (IMPLICIT_PENALTY if (m.get("implicit") or m.get("uninitialized")) else 0.0))
         if best_score is None or score > best_score:
             best, best_score = i, score
         if len(seen) >= 6:

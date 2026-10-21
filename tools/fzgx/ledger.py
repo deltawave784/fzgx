@@ -227,14 +227,18 @@ class Ledger:
             self.db.execute("UPDATE functions SET best_percent=? WHERE symbol=? AND status='unmatched'", (best, symbol))
         return {'old': old['best_percent'] if old else None, 'new': best}
 
-    def bump_checks(self, symbol: str, percent: float, rows: Optional[int] = None) -> Dict[str, float]:
+    def bump_checks(self, symbol: str, percent: float, rows: Optional[int] = None,
+                    compiled: bool = True) -> Dict[str, float]:
         """Record a check. Returns checks so far, consecutive non-improving checks, and bests.
 
         `percent` is one scale for the whole attempt (api.check_score: the better of objdiff's
         similarity and the pool-adjusted row score). `rows` is the count of instruction rows
         still differing after accepted pool/absolute relocations. Either a higher percent or
         fewer differing rows resets the plateau counter; only a higher percent replaces the
-        attempt's best (`improved`, which also selects the saved best body)."""
+        attempt's best (`improved`, which also selects the saved best body). A check whose
+        body did not compile (`compiled=False`) spends a check but leaves the plateau counter
+        where it was: it measured nothing about the match (fn_1_C3A0C, batch 201: a rename
+        across five edits was cut off by the stop after five compile errors)."""
         with self.db:
             att = self.current_attempt(symbol)
             improved = att is not None and percent > (att["best_in_attempt"] or 0.0)
@@ -242,10 +246,10 @@ class Ledger:
                      and (att["best_rows"] is None or rows < att["best_rows"]))
             self.db.execute(
                 "UPDATE attempts SET checks=checks+1, final_percent=?, "
-                "stale_checks=CASE WHEN ? THEN 0 ELSE stale_checks+1 END, "
+                "stale_checks=CASE WHEN ? THEN 0 WHEN ? THEN stale_checks ELSE stale_checks+1 END, "
                 "best_rows=CASE WHEN ? THEN ? ELSE best_rows END, "
                 "best_in_attempt=MAX(best_in_attempt, ?) WHERE symbol=? AND ended IS NULL",
-                (percent, improved or fewer, fewer, rows, percent, symbol))
+                (percent, improved or fewer, not compiled, fewer, rows, percent, symbol))
             self.db.execute(
                 "UPDATE functions SET best_percent=MAX(best_percent, ?) WHERE symbol=?", (percent, symbol))
             att = self.current_attempt(symbol)

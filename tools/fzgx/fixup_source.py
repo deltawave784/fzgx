@@ -1246,7 +1246,15 @@ def primer_sections(body: str, name: str) -> List[Tuple[str, str]]:
     fn_1_E252C, fn_1_115560, fn_1_147508, fn_10_17814). The pool order is unchanged."""
     from . import fixup_layout
     text = fixup_layout.primer_sections(body)
-    return [('primer section .fzgxpool', text)] if text else []
+    out = [('primer section .fzgxpool', text)] if text else []
+    # the same repair over every primer-like definition (`pool_primer`, `<fn>_pool_N`: the
+    # oracle only honours `fzgx_*` names in `.fzgxpool`) and the ineffective pragma forms
+    names = {m.group(1) for m in fixup_layout._PRIMER_DEF.finditer(body)
+             if m.group(1) != name and fixup_layout.primer_like(m.group(1))}
+    repaired = fixup_layout.primer_repair(body, sorted(names), ()) if names else None
+    if repaired and repaired[0] != text:
+        out.append(('primers renamed fzgx_* and moved into .fzgxpool', repaired[0]))
+    return out
 
 
 def _top_statements(text: str) -> Optional[List[Tuple[int, int]]]:
