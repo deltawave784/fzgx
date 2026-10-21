@@ -6110,3 +6110,6 @@ dol/fn_8003EC44.c:
 
 dol/float2str.c:
 	.text       start:0x800811AC end:0x800818C8 align:4
+
+dol/fn_80062360.c:
+	.text       start:0x80062360 end:0x80062654 align:4
