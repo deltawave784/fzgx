@@ -347,7 +347,7 @@ extern s32 fn_3_1FF7C(void);
 extern s32 fn_3_837C(s16 arg0);
 extern u32 fn_3_23A1C(u32, u32, u32, u32, u32);
 extern u32 fn_3_26A34(u32, u32, u32);
-extern u32 fn_3_1C278(s16, u8, u8, u8, u32, f32);
+extern void fn_3_1C278(s16 id, s16 a, s16 b, s16 c, void *color, f32 alpha);
 extern void fn_1_133DBC(void* arg0);
 extern void fn_1_8D1EC(void *, s32 (*)(u32), void *);
 extern void fn_1_134AD4(void);

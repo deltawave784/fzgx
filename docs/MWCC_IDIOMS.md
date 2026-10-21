@@ -428,6 +428,11 @@ without row alignment (`retail - ours` net rows):
   (`lbl_1_bss_3C00` to +0x34600, `lbl_1_bss_7B180` to +0x3BDC), the header declares that symbol as a struct view sized
   from every base-relative access (typedefs.json `decl` override) instead of dtk's 1- to 8-byte object; casts of an
   under-sized declared object let MWCC treat distinct offsets as one location (fn_1_304A8, fn_1_3E6D8, fn_1_EF768).
+  Superseded for `lbl_1_bss_3C00` (librarian pass 15, 2026-10-20): the 0x34604-byte view made every block that
+  defines the TU's objects in retail order (fn_1_31C3C, fn_1_3DB9C, fn_1_3EB78) a redeclaration under the prologue,
+  and no block used its fields. The header now declares the real byte object; blocks define the section layout
+  (`fixup_layout.tu_section_layout`) instead of casting the base. In retail every `off(rBase)` load/store is the
+  start of its own object (`sth 0x14e8(r31)` in fn_1_2C908 is an object at 0x50E8 inside dtk's 0x14BC `lbl_1_bss_3C30`).
 - Retail's `li rA, 0; mr rB, rA` for two counters starting equal comes from an inline helper whose parameter seeds both
   (`static inline void h(s16 init) { dir = init; delta = dir; ... }` called as `h(0)`); decrementing (`delta--`) before
   the matching increment keeps retail's schedule (fn_3_3F20, note #252).
