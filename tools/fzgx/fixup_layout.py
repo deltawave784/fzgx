@@ -2294,6 +2294,198 @@ def section_base_order(p, symbol, body, check, obj=None):
     return [(f'section base order: {order} (first reference takes the highest register)', text)]
 
 
+_FLOAT_LITERAL = re.compile(r'(?<![\w.])(?:\d+\.\d*|\.\d+|\d+(?=[eE]))(?:[eE][+-]?\d+)?[fF]?(?![\w.])')
+_SECTION_PRAGMA = re.compile(r'(?m)^[ \t]*#pragma[ \t]+section[ \t]+(?:code_type[ \t]+"[^"\n]*"|RX[ \t]+"\.fzgxpool")[^\n]*\n?')
+_RX_PRAGMA = re.compile(r'(?m)^[ \t]*#pragma[ \t]+section[ \t]+RX[ \t]+"\.fzgxpool"[^\n]*\n?')
+_POOL_DECLSPEC = re.compile(r'__declspec\s*\(\s*section\s*"\.fzgxpool"\s*\)')
+_TRAILING_LEAD = re.compile(r'(?:(?:/\*.*?\*/|//[^\n]*)[ \t]*\n?|\s)*\Z', re.S)
+_DEFINITION = re.compile(r'^(?!\s*(?:extern|typedef|struct\s+\w+\s*\{|union\s+\w+\s*\{|enum\b)\s)'
+                         r'(?P<spec>[^=;()\[]*?)\b(?P<name>[A-Za-z_]\w*)\s*(?P<dims>(?:\[[^\]]*\]\s*)*)(?P<init>=.*)?;\s*$', re.S)
+
+
+def _section_items(body: str, code: str, at: int):
+    """The file-scope items of `body[:at]`: (lead, text, kind, section, name, start). `lead` is the
+    comment/blank text an item carries; `kind` is `obj` (a defined object), `primer` (a
+    `.fzgxpool` function), `helper` (another function), `decl` (anything else, including
+    preprocessor lines). Section pragmas are stripped: primers are re-wrapped on emission."""
+    items = []
+    statements = [(a, b) for a, b in _top_statements(code) if b <= at]
+    pool = False
+    prev_end = 0
+    for a, b in statements:
+        gap = body[prev_end:a]
+        # the code-type pragma in force at this statement
+        for m in re.finditer(r'(?m)^[ \t]*#pragma[ \t]+section[ \t]+code_type[ \t]+"([^"\n]*)"', gap):
+            pool = m[1] == '.fzgxpool'
+        gap = _SECTION_PRAGMA.sub('', gap)
+        lead = _TRAILING_LEAD.search(gap)
+        lead_text = lead.group(0) if lead else ''
+        rest = gap[:len(gap) - len(lead_text)]
+        if rest.strip():
+            items.append(('', rest, 'decl', None, None, prev_end))
+        start = a - len(lead_text)
+        text = body[a:b]
+        stmt = code[a:b]
+        m = re.search(r'\b(\w+)\s*\([^;{}]*\)\s*\{', stmt)
+        if m and stmt.rstrip().endswith('}'):
+            name = m[1]
+            primer = pool or _POOL_DECLSPEC.search(stmt) or PRIMER_NAME.search(name)
+            items.append((lead_text, text, 'primer' if primer else 'helper', None, name, start))
+        else:
+            d = _DEFINITION.match(stmt.strip())
+            # `struct foo;` is a forward declaration; `struct foo bar;` defines bar
+            if d and '(' not in d['spec'] and not re.fullmatch(r'\s*(?:struct|union|enum)\s*', d['spec']):
+                spec = re.sub(r'^\s*static\s+', '', d['spec'].strip())
+                if re.match(r'(?:const\s+)[^*]*$', spec) or re.search(r'\*\s*const\s*$', spec):
+                    section = '.rodata'
+                elif d['init']:
+                    section = '.data'
+                else:
+                    section = '.bss'
+                items.append((lead_text, text, 'obj', section, d['name'], start))
+            else:
+                items.append((lead_text, text, 'decl', None, None, start))
+        prev_end = b
+    tail = _SECTION_PRAGMA.sub('', body[prev_end:at])
+    return items, tail
+
+
+def section_group_orders(p, symbol, body, check):
+    """Every order of the unit's section-object groups. Which callee-saved register each
+    anonymous section base takes (`...bss.N`, `...data.N`, the `...rodata.N` pool) follows
+    the source order in which the TU's first object or primer of each section is created
+    (fn_1_1049E0 closed its last rows only once the pool primers stood above the `.bss`
+    definitions; fn_1_331EC needed the `.bss` statics and their primer before the pool
+    primers). The leading definition block of each section (its defined objects and the
+    `.fzgxpool` primers that touch them, pool primers for `.rodata`) is permuted as a group,
+    and within a section the primers are tried before and after the definitions. Other
+    declarations are hoisted above the run, other functions stay below it; everything else
+    is kept byte for byte. `section_base_order` is the single-candidate form over primer
+    regions; this one also handles a mixed primer region and the definitions themselves."""
+    import itertools
+    from .sdkimport import masked
+    from .fixup_source import _function_body_span
+    sym = p.resolve(symbol)
+    if sym is None:
+        return []
+    code = masked(body)
+    span = _function_body_span(code, sym.name)
+    if not span:
+        return []
+    at = code.rfind('\n', 0, span[0]) + 1
+    items, tail = _section_items(body, code, at)
+    objects = {}
+    for lead, text, kind, section, name, _ in items:
+        if kind == 'obj':
+            objects[name] = section
+    tagged = []
+    for k, (lead, text, kind, section, name, start) in enumerate(items):
+        if kind == 'primer':
+            kinds = {objects[n] for n in set(re.findall(r'\b[A-Za-z_]\w*\b', masked(text))) if n in objects}
+            if _FLOAT_LITERAL.search(masked(text)) or re.search(r'\bfzgx_pool_(?:prime|keep|table)\d', text):
+                kinds.add('.rodata')
+            for s in re.findall(r'\bfzgx_pool_(data|rodata)_', text):
+                kinds.add('.' + s)
+            if 'fzgx_bss_layout' in text:
+                kinds.add('.bss')
+            if 'fzgx_data_layout' in text and not kinds:
+                kinds.add('.data')
+            if len(kinds) == 1:
+                items[k] = (lead, text, kind, kinds.pop(), name, start)
+                tagged.append(k)
+        elif kind == 'obj':
+            tagged.append(k)
+    if not tagged:
+        return []
+    first = tagged[0]
+    sections = []
+    for k in tagged:
+        if items[k][3] not in sections:
+            sections.append(items[k][3])
+    if len(sections) < 2 or len(sections) > 4:
+        return []
+    fixed = [it for it in items[first:] if it[2] == 'helper' or (it[2] == 'primer' and it[3] is None)]
+    hoisted = [it for it in items[first:] if it[2] == 'decl']
+    # a definition initialized with a function that stays below the run cannot move above it
+    below = {it[4] for it in fixed}
+    for it in items[first:]:
+        if it[2] == 'obj' and it[1].count('=') and below & set(re.findall(r'\b[A-Za-z_]\w*\b', masked(it[1]))):
+            return []
+    rx = ''.join(m.group(0) for m in _RX_PRAGMA.finditer(body[:at]))
+    # the prefix is the text up to the first tagged item's lead, section pragmas stripped
+    prefix = _SECTION_PRAGMA.sub('', body[:items[first][5]])
+    if rx and rx not in prefix:
+        prefix = prefix.rstrip('\n') + '\n\n' + rx
+    prefix = prefix.rstrip('\n') + '\n'
+    for it in hoisted:
+        prefix += '\n' + it[0].lstrip('\n') + it[1].rstrip('\n') + '\n'
+
+    def emit(seq):
+        out = ['\n']
+        open_pool = False
+        for lead, text, kind, section, name, _ in seq:
+            wrap = kind == 'primer' and not _POOL_DECLSPEC.search(text)
+            if wrap and not open_pool:
+                out.append('\n#pragma section code_type ".fzgxpool"\n')
+                open_pool = True
+            elif not wrap and open_pool:
+                out.append('#pragma section code_type ".text"\n\n')
+                open_pool = False
+            out.append(lead.strip('\n') + ('\n' if lead.strip() else '') + text.strip('\n') + '\n')
+        if open_pool:
+            out.append('#pragma section code_type ".text"\n')
+        return ''.join(out)
+
+    def well_formed(seq):
+        """No primer ahead of a defined object it names (its tables, its `.bss` objects)."""
+        defined = set()
+        for lead, text, kind, section, name, _ in seq:
+            if kind == 'obj':
+                defined.add(name)
+            elif kind == 'primer':
+                if any(n in objects and n not in defined for n in set(re.findall(r'\b[A-Za-z_]\w*\b', masked(text)))):
+                    return False
+        return True
+
+    groups = {}
+    for k in tagged:
+        groups.setdefault(items[k][3], []).append(items[k])
+    variants = {}
+    for s, lst in groups.items():
+        defs = [it for it in lst if it[2] == 'obj']
+        prim = [it for it in lst if it[2] == 'primer']
+        v = [('as is', lst)]
+        if defs and prim:
+            v += [('definitions first', defs + prim), ('primers first', prim + defs)]
+        seen = set()
+        variants[s] = []
+        for label, seq in v:
+            key = tuple(id(it) for it in seq)
+            if key not in seen:
+                seen.add(key)
+                variants[s].append((label, seq))
+    perms = list(itertools.permutations(sections))
+    if len(perms) * 3 ** len(sections) > 200:
+        variants = {s: v[:1] for s, v in variants.items()}
+    original = [id(items[k]) for k in tagged]
+    out = []
+    for order in perms:
+        for choice in itertools.product(*(variants[s] for s in order)):
+            seq = [it for _, lst in choice for it in lst]
+            if [id(it) for it in seq] == original or not well_formed(seq):
+                continue
+            text = prefix + emit(seq) + (emit(fixed) if fixed else '') + tail.lstrip('\n')
+            if not text.endswith('\n'):
+                text += '\n'
+            text = re.sub(r'\n{3,}', '\n\n', text) + body[at:]
+            if text == body or re.sub(r'\n{3,}', '\n\n', text) == re.sub(r'\n{3,}', '\n\n', body):
+                continue
+            label = ' before '.join(s.lstrip('.') for s in order) + ''.join(
+                f', {s.lstrip(".")} {l}' for s, (l, _) in zip(order, choice) if l != 'as is')
+            out.append((f'section group order: {label}', text))
+    return out
+
+
 def string_run(p, symbol, text, cast=''):
     sym = p.resolve(symbol)
     syms = p.symbols(sym.module)

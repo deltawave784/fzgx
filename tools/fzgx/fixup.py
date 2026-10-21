@@ -579,6 +579,10 @@ class Engine:
             # `...data.0`/`...rodata.0` holding each other's registers: the TU's first reference
             # to each section numbers its base, so the primers are reordered
             yield from self._family(row, 'layout.section_base_order', lambda: layout.section_base_order(self.project, row['symbol'], body, check, row.get('object')))
+            # every order of the unit's section-object groups (defined .bss/.data/.rodata
+            # objects and their primers): the first object created in each section numbers
+            # its base register (fn_1_1049E0: pool primers above the .bss definitions)
+            yield from self._family(row, 'layout.section_group_orders', lambda: layout.section_group_orders(self.project, row['symbol'], body, check))
             # defined TU section objects off their retail offsets / in DOL small data / unprimed
             yield from self._family(row, 'sections.repairs', lambda: sections.repairs(self.project, row['symbol'], body, check))
             yield from self._family(row, 'evidence.range_switches', lambda: evidence.range_switches(body, name, check))

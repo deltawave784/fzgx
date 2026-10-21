@@ -117,6 +117,7 @@ def generate(p: Project, s: str, sym, path: Path, body: str, check, outdir: Path
     add('datainit', lambda: fixup_layout.defined_data_initializers(p, s, body, check))
     add('pooltables', lambda: fixup_layout.retail_pool_tables(p, s, body, check))
     add('baseorder', lambda: fixup_layout.section_base_order(p, s, body, check))
+    add('secorder', lambda: fixup_layout.section_group_orders(p, s, body, check))
     add('sections', lambda: fixup_sections.repairs(p, s, body, check))
     rl: Dict[int, int] = {}
     if not families or 'attr' in families or 'regorder' in families:
