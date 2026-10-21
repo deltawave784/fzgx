@@ -665,3 +665,6 @@ rel/customize/toolkit/fn_3_23A1C.c:
 
 rel/customize/toolkit/fn_3_1C278.c:
 	.text       start:0x0001C278 end:0x0001C8D0 align:4
+
+rel/customize/emb_memcard/fn_3_F044.c:
+	.text       start:0x0000F044 end:0x0000F878 align:4
