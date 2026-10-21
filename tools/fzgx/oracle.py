@@ -400,7 +400,7 @@ def _diff(project: Project, module: str, symbol: str, unit: str, max_diff_lines:
     res.percent = res.symbols.get(symbol, 0.0)
     res.percent_adjusted = res.percent
     res.matched = res.percent >= 100.0
-    if not res.matched:
+    if not res.matched or _shadowed_pool_names(project, module, base):
         lrows = left_syms.get(symbol, {}).get("instructions", [])
         rrows = right_syms.get(symbol, {}).get("instructions", [])
         res._rows = (lrows, rrows)
@@ -469,6 +469,27 @@ def _diff(project: Project, module: str, symbol: str, unit: str, max_diff_lines:
         res.diff = [f"({symbol} is emitted in .fzgxpool, not .text: reset the section after the primer, "
                     f"`#pragma section code_type \".text\"` after it; scored 0)"] + list(res.diff or [])
     return res
+
+
+def _shadowed_pool_names(project: Project, module: str, obj: Optional[Path]) -> List[str]:
+    """Private local `@` pool objects our object defines under the name of a retail global pool
+    object (`@wstringBase0`): a 100% row diff hides them, so the pool-row scan must still run
+    for such an object to bind (and poolfix to drop) the copy."""
+    if obj is None or not Path(obj).exists():
+        return []
+    try:
+        elf = poolfix.Elf(Path(obj).read_bytes())
+    except (OSError, ValueError, IndexError, struct.error):
+        return []
+    syms = project.symbols(module)
+    out = []
+    for s in elf.symbols():
+        if not s['name'].startswith('@') or s['info'] >> 4 != 0 or (s['info'] & 0xF) != 1 or not s['size']:
+            continue
+        retail = syms.get(s['name'])
+        if retail is not None and retail.kind == 'object' and retail.scope == 'global':
+            out.append(s['name'])
+    return out
 
 
 def _interior_binding_rows(project, module, obj, left, right, lrows, rrows):
@@ -641,11 +662,19 @@ def _bss_base_rows(project, module, obj, left, right, lrows, rrows, function_nam
     return rows, pairs
 
 
-def _relocated_pool_matches(project, module, elf, section, address, extent):
+def _relocated_pool_matches(project, module, elf, section, address, extent, start=0):
     """Compare initialized bytes and symbolic pointer bindings across a shared pool."""
+    return _relocated_pool_mismatch(project, module, elf, section, address, extent, start) is None
+
+
+def _relocated_pool_mismatch(project, module, elf, section, address, extent, start=0):
+    """Why our pool bytes at `section[start:start+extent]` are not retail's at `address`, or
+    None when every byte agrees and every relocation inside the range binds the same
+    (type, module, section, resolved address) as retail's relocation at the same offset:
+    a pool word carrying a pointer is equal by its binding, never by its raw bytes."""
     from .dataimport import payload, pool_objects, resolve_target
 
-    actual = bytearray(elf.data[section['offset']:section['offset'] + extent])
+    actual = bytearray(elf.data[section['offset'] + start:section['offset'] + start + extent])
     expected = bytearray(extent)
     covered = bytearray(extent)
     bindings = []
@@ -662,13 +691,13 @@ def _relocated_pool_matches(project, module, elf, section, address, extent):
                 # Pool pointers are full words. Partial pointers and other
                 # relocation encodings need their own proof, not byte masking.
                 if rel['kind'] != 1 or offset < 0 or offset + 4 > extent:
-                    return False
+                    return f"retail relocation at +0x{max(offset, 0):X} is not a whole pointer word inside the pool"
                 target = project.find_symbol(rel['symbol'], rel['module'])
                 bindings.append((offset, rel['kind'], target.module, target.section, target.addr + rel['addend']))
-    except (ValueError, KeyError):
-        return False
+    except (ValueError, KeyError) as e:
+        return f"retail pool bytes unavailable: {e}"
     if not all(covered):
-        return False
+        return f"no retail object covers pool byte +0x{covered.index(0):X}"
     found = []
     symbols = elf.symbols()
     for rsec in elf.sections:
@@ -676,10 +705,11 @@ def _relocated_pool_matches(project, module, elf, section, address, extent):
             continue
         for pos in range(rsec['offset'], rsec['offset'] + rsec['size'], 12):
             offset, info, addend = struct.unpack_from('>IIi', elf.data, pos)
-            if offset >= extent:
+            offset -= start
+            if offset >= extent or offset + 4 <= 0:
                 continue
-            if info & 255 != 1 or offset + 4 > extent:
-                return False
+            if info & 255 != 1 or offset < 0 or offset + 4 > extent:
+                return f"our relocation at +0x{max(offset, 0):X} is not a whole pointer word inside the pool"
             own = symbols[info >> 8]
             target = resolve_target(project, module, own['name'])
             alias = re.fullmatch(r'(.+)__fzgx_offset_([0-9A-F]+)', own['name'])
@@ -687,17 +717,32 @@ def _relocated_pool_matches(project, module, elf, section, address, extent):
                 target = resolve_target(project, module, alias[1])
                 addend += int(alias[2], 16)
             if own['shndx'] == section['index']:
-                binding = (module, section['name'], address + own['value'] + addend)
+                binding = (module, section['name'], address + own['value'] - start + addend)
             elif own['shndx'] == 0 and target:
                 binding = (target.module, target.section, target.addr + addend)
+            elif (target and target.kind == 'function' and own['info'] & 15 == 2
+                  and elf.sections[own['shndx']]['name'] == '.text'):
+                # a switch table entry inside the pool: the function this unit defines, whose
+                # code the oracle diffs row by row; the entry binds its retail address
+                binding = (target.module, target.section, target.addr + addend)
             else:
-                return False
+                return f"our relocation at +0x{offset:X} names {own['name']}, which is not a retail symbol"
             found.append((offset, info & 255, *binding))
     if sorted(found) != sorted(bindings):
-        return False
+        ours_at = {f[0]: f for f in found}
+        retail_at = {b[0]: b for b in bindings}
+        for off in sorted(set(ours_at) | set(retail_at)):
+            if ours_at.get(off) != retail_at.get(off):
+                def _show(b):
+                    return "no relocation" if b is None else f"{b[2]}:{b[3]}+0x{b[4]:X}"
+                return (f"relocation at +0x{off:X} binds {_show(ours_at.get(off))}, "
+                        f"retail binds {_show(retail_at.get(off))}")
     for offset, *_ in bindings:
         actual[offset:offset + 4] = expected[offset:offset + 4] = bytes(4)
-    return actual == expected
+    if actual != expected:
+        first = next(i for i in range(0, extent, 4) if actual[i:i + 4] != expected[i:i + 4])
+        return f"word +0x{first:X} ours {actual[first:first + 4].hex()} retail {expected[first:first + 4].hex()}"
+    return None
 
 
 def _data_pool_rows(project, module, obj, left, right, lrows, rrows, section_name=".data",
@@ -916,10 +961,40 @@ def _pool_rows(project: Project, module: str, left: dict, right: dict,
     elf = poolfix.Elf(obj.read_bytes()) if obj else None
     objects = {s['name']: s for s in elf.symbols()} if elf else {}
     for i, (l, r) in enumerate(zip(lrows, rrows)):
-        if (l.get("diff_kind") or "DIFF_NONE") == "DIFF_NONE" and (r.get("diff_kind") or "DIFF_NONE") == "DIFF_NONE":
-            continue
+        same_row = (l.get("diff_kind") or "DIFF_NONE") == "DIFF_NONE" and (r.get("diff_kind") or "DIFF_NONE") == "DIFF_NONE"
         li, ri = l.get("instruction", {}), r.get("instruction", {})
         lrel, rrel = li.get("relocation"), ri.get("relocation")
+        if same_row and lrel and rrel and elf is not None:
+            # MWCC names its wide-string pool `@wstringBase0`, the name retail's own (global)
+            # pool carries, so the row agrees by name while our object defines a private local
+            # copy: the link would resolve the relocation to that copy (__pformatter's `L""`).
+            # Bind the copy to retail's symbol when it is a local object of a pool section with
+            # retail's bytes; poolfix then drops the copy and relocates against the real pool.
+            try:
+                name = lsyms[lrel["target_symbol"]]["name"]
+                own = objects.get(name) if rsyms[rrel["target_symbol"]]["name"] == name else None
+            except (IndexError, KeyError, TypeError):
+                own = None
+            retail = syms.get(name) if name.startswith("@") else None
+            if (own is not None and retail is not None and own["info"] >> 4 == 0 and (own["info"] & 0xF) == 1
+                    and own["size"] and 0 < own["shndx"] < len(elf.sections)
+                    and retail.kind == "object" and retail.scope == "global"
+                    and retail.section in (".rodata", ".sdata2", ".data", ".sdata")
+                    and elf.sections[own["shndx"]]["name"] in (".rodata", ".sdata2", ".data", ".sdata")
+                    and int(lrel.get("addend") or 0) == int(rrel.get("addend") or 0)):
+                section = elf.sections[own["shndx"]]
+                mine = bytes(elf.data[section["offset"] + own["value"]:section["offset"] + own["value"] + own["size"]])
+                theirs = project.bytes_at(module, name)
+                if theirs is not None and own["size"] == retail.size and mine == theirs:
+                    rows.add(i)
+                    pair = (name, name, f"{name}=shared literal pool[{own['size']}]")
+                    if pair not in pairs:
+                        pairs.append(pair)
+                    continue
+                _note(notes, f"pool {name}: our private copy ({own['size']} bytes) is not retail's global pool object "
+                             f"({retail.size} bytes at 0x{retail.addr:08X}); the link would place ours elsewhere")
+        if same_row:
+            continue
         if not lrel or not rrel or lrel.get("type_name") != rrel.get("type_name"):
             continue
         lp = [x for x in li.get("parts", []) if "reloc" not in json.dumps(x)]
@@ -976,15 +1051,6 @@ def _pool_rows(project: Project, module: str, left: dict, right: dict,
             if section['name'] not in ('.rodata', '.sdata2', '.data', '.sdata'):
                 _note(notes, f"pool {private_name} is in {section['name']}, not a literal-pool section")
                 continue
-            if anonymous and any(rel['type'] == 4 and rel['info'] == own['shndx'] and rel['size']
-                                 for rel in elf.sections):
-                _note(notes, f"pool {private_name}: our object carries relocations (pointers inside the pool), "
-                             "so its bytes cannot be proven equal to retail's; use plain values, not addresses")
-                continue
-            if any(rel['type'] == 4 and rel['info'] == own['shndx'] and
-                   any(own['value'] <= struct.unpack_from('>I', elf.data, off)[0] < own['value'] + own['size']
-                       for off in range(rel['offset'], rel['offset'] + rel['size'], 12)) for rel in elf.sections):
-                continue
             start = section['offset'] + own['value']
             size = own['size']
             if anonymous:
@@ -1005,16 +1071,17 @@ def _pool_rows(project: Project, module: str, left: dict, right: dict,
                     # the exact reach: the word after retail's last pooled access belongs to the
                     # next object, and our unit's pool continues with its own literals there
                     size = min(size, (reach + 3) & ~3)
-            # Anonymous section symbols have size zero until the range above
-            # is computed. Their pointer relocations still require the full
-            # byte-and-binding proof in _data_pool_rows.
-            if any(rel['type'] == 4 and rel['info'] == own['shndx'] and
-                   any(own['value'] <= struct.unpack_from('>I', elf.data, off)[0] < own['value'] + size
-                       for off in range(rel['offset'], rel['offset'] + rel['size'], 12)) for rel in elf.sections):
-                _note(notes, f"pool {private_name}: a relocation points into our pool object")
-                continue
+            # A pool legitimately carries pointers (string tables, function pointers, jump
+            # tables inside the TU's literal pool). Such a word is equal to retail's when its
+            # relocation binds the same resolved target, never by raw bytes; the proof below
+            # (`_relocated_pool_mismatch`) replaces the byte comparison for the whole range.
+            relocated = any(rel['type'] == 4 and rel['info'] == own['shndx'] and
+                            any(own['value'] <= struct.unpack_from('>I', elf.data, off)[0] < own['value'] + size
+                                for off in range(rel['offset'], rel['offset'] + rel['size'], 12))
+                            for rel in elf.sections)
             ours = bytes(elf.data[start:start + size])
         else:
+            relocated = False
             ours = b''.join(base64.b64decode(d.get('data', '')) for d in rsym.get('data_diff', []))
             if len(ours) not in (4, 8):
                 continue
@@ -1054,7 +1121,13 @@ def _pool_rows(project: Project, module: str, left: dict, right: dict,
             raw = project._raw_section(module, s.section)
             offset = address - project._section_base(module, s.section)
             retail = raw[offset:offset + len(ours)] if raw is not None and offset >= 0 else None
-        if not ours or ours != retail:
+        if relocated:
+            why = _relocated_pool_mismatch(project, module, elf, section, address, len(ours), own['value'])
+            if why is not None:
+                where = f"+0x{interior:X}" if interior else ""
+                _note(notes, f"pool {private_name} carries pointers and differs from retail {anchor.name}{where}: {why}")
+                continue
+        elif not ours or ours != retail:
             if notes is not None and ours:
                 note = _pool_byte_note(private_name, anchor.name, ours, retail, interior)
                 if note not in notes:
