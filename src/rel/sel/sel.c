@@ -2413,6 +2413,88 @@ void fn_10_3A98(void) {
 #pragma opt_propagation reset
 /* fzgx:end fn_10_3A98 */
 
+/* fzgx:begin fn_10_3C14 noprologue */
+#include "rel/sel/sel.h"
+
+typedef struct {
+    s16 key;
+    u16 pad;
+    u32 mask;
+} Sig_fn_1_152970_Fn152970Entry;
+extern s32 fn_1_152970(s16 *, s16 *, s16, u32, Sig_fn_1_152970_Fn152970Entry *, s16, s16);
+extern u8 lbl_1_bss_8B3A0[];
+#pragma ANSI_alias on
+#pragma opt_propagation off
+#pragma opt_lifetimes off
+/* file-scope objects of the retail TU, in retail order: MWCC addresses them off one section base */
+u32 fzgx_obj_lbl_10_bss_0[5];
+u32 fzgx_obj_lbl_10_bss_14;
+s16 fzgx_obj_lbl_10_bss_18;
+s16 fzgx_obj_lbl_10_bss_1A;
+u8 fzgx_obj_lbl_10_bss_1C;
+u8 lbl_10_bss_1C__fzgx_offset_1;
+u16 lbl_10_bss_1C__fzgx_offset_2;
+u32 lbl_10_bss_1C__fzgx_offset_4[232];
+u32 fzgx_obj_lbl_10_bss_3C0[74736];
+
+#pragma section code_type ".fzgxpool"
+static void fzgx_bss_layout(void) {
+    volatile u8 s;  /* fzgx-allow: S2 layout primer sink: MWCC emits .bss objects in first-access order */
+    s = *(u8 *)&fzgx_obj_lbl_10_bss_0;
+    s = *(u8 *)&fzgx_obj_lbl_10_bss_14;
+    s = *(u8 *)&fzgx_obj_lbl_10_bss_18;
+    s = *(u8 *)&fzgx_obj_lbl_10_bss_1A;
+    s = *(u8 *)&fzgx_obj_lbl_10_bss_1C;
+    s = *(u8 *)&lbl_10_bss_1C__fzgx_offset_1;
+    s = *(u8 *)&lbl_10_bss_1C__fzgx_offset_2;
+    s = *(u8 *)&lbl_10_bss_1C__fzgx_offset_4;
+    s = *(u8 *)&fzgx_obj_lbl_10_bss_3C0;
+}
+#pragma section code_type ".text"
+
+#define GRID (*(Sig_fn_1_152970_Fn152970Entry (*)[19][19])&fzgx_obj_lbl_10_bss_1C)
+
+void fn_10_3C14(void)
+{
+    s16 row;
+    s16 col;
+    u32 offset_2;
+    s16 height;
+    u32 offset;
+    u32 *masks;
+    s16 lab_t2;
+
+    if (!(*(u32 *)(lbl_1_bss_8B3A0 + 0x94) & 0x20000000)) {
+        lab_t2 = 0x36;
+        fn_1_152970(&row, &col, lab_t2, 0, GRID[0], fzgx_obj_lbl_10_bss_1A, fzgx_obj_lbl_10_bss_18);
+        masks = (u32 *)GRID;
+        masks = (u32 *)((u8 *)masks + 4);
+        offset = row * 0x98 + col * 8;
+        *(u32 *)((u8 *)masks + offset) |= 0x10000000;
+        lab_t2 = 0x37;
+        fn_1_152970(&row, &col, lab_t2, 0, GRID[0], fzgx_obj_lbl_10_bss_1A, fzgx_obj_lbl_10_bss_18);
+{
+    s16 width;
+        offset = row * 0x98 + col * 8;
+        height = fzgx_obj_lbl_10_bss_1A;
+        width = fzgx_obj_lbl_10_bss_18;
+        *(u32 *)((u8 *)masks + offset) |= 0x10000000;
+        lab_t2 = 0x38;
+        fn_1_152970(&row, &col, lab_t2, 0, GRID[0], height, width);
+        offset = row * 0x98 + col * 8;
+        height = fzgx_obj_lbl_10_bss_1A;
+        width = fzgx_obj_lbl_10_bss_18;
+        *(u32 *)((u8 *)masks + offset) |= 0x10000000;
+        lab_t2 = 0x39;
+        fn_1_152970(&row, &col, lab_t2, 0, GRID[0], height, width);
+}
+        offset_2 = row * 0x98 + col * 8;
+        *(u32 *)((u8 *)masks + offset_2) |= 0x10000000;
+    }
+}
+#pragma opt_lifetimes reset
+/* fzgx:end fn_10_3C14 */
+
 /* fzgx:begin fn_10_3D64 */
 s16 fn_10_3D64(void) {
     s16 result = 0;
