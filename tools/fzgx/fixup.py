@@ -1331,6 +1331,11 @@ def load_records(engine,args):
         if clone_members is None and (args.module and sym.module!=args.module or args.max_size is not None and sym.size>args.max_size):
             return
         rows.append(engine.record(symbol,body,mw,flags,**metadata))
+        # a saved body written against older headers (`&SYM` into a struct view where the
+        # header now declares `extern u8 SYM[];`, a private typedef the header since gained):
+        # the respelled text is one more variant; whichever fails to compile scores -1
+        for description, respelled in source.header_drift_spellings(body, sym.module):
+            rows.append(engine.record(symbol,respelled,mw,flags,**dict(metadata,label=(metadata.get('label') or 'saved-body')+' ('+description+')')))
     if args.symbol and (clone_members is None or args.body):
         from . import api
         body=Path(args.body).read_text() if args.body else api._attempt_text(p,args.symbol)

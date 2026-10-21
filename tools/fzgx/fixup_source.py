@@ -4410,3 +4410,147 @@ def lint_spellings(body, findings):
     if len(steps) < 2 or text == body:
         return []
     return [('lint-clean spelling: ' + '; '.join(steps), text)]
+
+
+# ---------------------------------------------------------------- header drift respelling
+# Saved bodies outlive the librarian's header passes: a symbol the body took as `&SYM` into a
+# struct-view pointer is later declared `extern u8 SYM[];` (lbl_1_bss_3C00, b73638a3: 26 saved
+# bodies stopped compiling with `illegal implicit conversion from 'unsigned char (*)[]'`), and a
+# struct the body defined privately later gains a header typedef of the same name (fn_1_36330:
+# `identifier 'Obj_1_bss_3C00' redeclared`). Both are spellings, not semantics: the respelled
+# body is one more candidate for the oracle (fixup, sweep, recovered seeds) or replaces a seed
+# only when the saved text no longer compiles and the respelled one does (claim).
+
+_HEADER_DECLARATIONS: Dict[str, Dict[str, dict]] = {}
+
+
+def _struct_typedefs(text):
+    """{name: normalized member text} for every `typedef struct [tag] {...} name;` in `text`,
+    with (start, end) spans in `_struct_typedef_spans`-compatible order; brace balanced so
+    nested anonymous structs/unions do not end the scan early."""
+    out = {}
+    for m in re.finditer(r'(?m)^[ \t]*typedef\s+struct(?:\s+\w+)?\s*\{', text):
+        depth, i = 1, m.end()
+        while i < len(text) and depth:
+            depth += {'{': 1, '}': -1}.get(text[i], 0)
+            i += 1
+        tail = re.match(r'\s*(\w+)\s*;[ \t]*\n?', text[i:])
+        if not depth and tail:
+            members = ' '.join(text[m.end():i - 1].split())
+            out[tail.group(1)] = dict(members=members, span=(m.start(), i + tail.end()))
+    return out
+
+
+def header_declarations(module):
+    """What the module's owned headers declare: incomplete arrays (`extern T NAME[];`) and struct
+    typedefs with their normalized member text. Cached per module for the process."""
+    if module not in _HEADER_DECLARATIONS:
+        root = oracle.ROOT / 'include' if module == 'main' else oracle.ROOT / 'include' / 'rel' / module
+        arrays, typedefs = {}, {}
+        for path in sorted(root.rglob('*.h')) if root.exists() else []:
+            try:
+                text = path.read_text(errors='replace')
+            except OSError:
+                continue
+            for m in re.finditer(r'(?m)^\s*extern\s+((?:(?:const|volatile|unsigned|signed|struct)\s+)*\w+)\s+(\w+)\s*\[\s*\]\s*;', text):
+                arrays[m.group(2)] = m.group(1)
+            for name, record in _struct_typedefs(text).items():
+                typedefs[name] = record['members']
+        _HEADER_DECLARATIONS[module] = dict(arrays=arrays, typedefs=typedefs)
+    return _HEADER_DECLARATIONS[module]
+
+
+def header_drift_spellings(body, module):
+    """[(description, text)]: the body respelled against the module's current headers, empty
+    when nothing applies. (1) `&SYM` taken as a struct-view pointer where the header declares
+    `extern T SYM[];` becomes `((View *)SYM)`, the view read from the cast, the initialized
+    declaration or the assigned lvalue's declared pointer type; a bare cast `(T *)&SYM` just
+    drops the `&`. (2) A private `typedef struct {...} Name;` colliding with a header typedef
+    is dropped when its members are identical and renamed `Name__fzgx_local` otherwise."""
+    decls = header_declarations(module)
+    text = body
+    steps = []
+    # a body that includes no module header owns every declaration it uses (fn_1_2F294's
+    # self-contained 90% body): nothing in it drifted
+    prefix = 'dol/' if module == 'main' else f'rel/{module}/'
+    if not re.search(r'(?m)^\s*#\s*include\s+"(?:' + re.escape(prefix) + r'|(?!types\.h)\w+\.h")', text):
+        return []
+    # (2) first: a dropped duplicate typedef can be the view type used by (1)
+    for name, record in sorted(_struct_typedefs(text).items(), key=lambda kv: -kv[1]['span'][0]):
+        header = decls['typedefs'].get(name)
+        if header is None:
+            continue
+        start, end = record['span']
+        if record['members'] == header:
+            text = text[:start] + text[end:]
+            steps.append(f'duplicate header typedef {name} dropped')
+        else:
+            text = re.sub(r'(?<![\w$])' + re.escape(name) + r'(?![\w$])', name + '__fzgx_local', text)
+            steps.append(f'private typedef {name} renamed (differs from the header)')
+    for sym in sorted(decls['arrays']):
+        if '&' + sym not in text or re.search(r'\bextern\b[^;{}]*\b' + re.escape(sym) + r'\s*[;\[]', text):
+            continue  # absent, or declared by the body itself
+        ref = r'&\s*' + re.escape(sym) + r'(?![\w\[$])'
+        before = text
+        # a cast already names the view: `(View *)&SYM` -> `(View *)SYM`
+        text = re.sub(r'(\(\s*(?:const\s+)?\w+\s*\*+\s*\))\s*' + ref, r'\1' + sym, text)
+        # `View *name = &SYM;`
+        text = re.sub(r'(\b(?!return\b)(\w+)\s*\*\s*\w+\s*=\s*)' + ref, lambda m: m.group(1) + f'(({m.group(2)} *){sym})', text)
+
+        # `lvalue = &SYM;`: the view is the declared pointer type of the lvalue's last identifier
+        def view_of(lvalue, depth=0):
+            # the declared pointer type of the lvalue: `a.b`/`a->b` through the struct `a` is
+            # declared with (the one-member carriers), a macro name through one expansion,
+            # else the first `T *ident` declaration in the body
+            parts = re.findall(r'\w+', lvalue)
+            if not parts or depth > 2:
+                return None
+            ident = parts[-1]
+            if len(parts) >= 2:
+                carrier = re.search(r'\{[^{}]*?(?<![\w$])(\w+)\s*\*\s*' + re.escape(ident) + r'\s*;[^{}]*\}\s*'
+                                    + re.escape(parts[-2]) + r'\s*[;,=\[]', text)
+                if carrier:
+                    return carrier.group(1)
+            macro = re.search(r'(?m)^\s*#\s*define\s+' + re.escape(ident) + r'\s+\(?\s*([\w$][\w$.>\[\]-]*)\s*\)?\s*$', text)
+            if macro:
+                return view_of(macro.group(1), depth + 1)
+            decl = re.search(r'(?<![\w$])(?!return\b)(\w+)\s*\*\s*' + re.escape(ident) + r'\s*(?=[;,=)\[])', text)
+            return decl.group(1) if decl else None
+
+        def assign(m):
+            # the lvalue is one flat character class, never nested repetition: the earlier
+            # declaration-normalizer regex stalled on real drafts
+            view = view_of(m.group(1))
+            if view is None:
+                return m.group(0)
+            return m.group(1) + f'(({view} *){sym})'
+        text = re.sub(r'((?<![\w$])[\w$][\w$.>\[\]-]*\s*=\s*)' + ref, assign, text)
+        if text != before:
+            steps.append(f'&{sym} taken as a struct view of the incomplete array')
+    if text == body or not steps:
+        return []
+    return [('header drift: ' + '; '.join(steps), text)]
+
+
+def header_drift_replacement(project, symbol, body, mw=None, flags=None):
+    """(description, text, CheckResult) when `body` no longer compiles under the module's
+    current headers and `header_drift_spellings` gives a text that does; None otherwise (the
+    saved text stays the seed). Used where one body must be chosen (claim seeding, sweep and
+    recovered-manifest seeds); the fixup engine records both as candidates instead."""
+    sym = project.resolve(symbol)
+    if sym is None:
+        return None
+    candidates = header_drift_spellings(body, sym.module)
+    if not candidates:
+        return None
+    scratch = oracle.STATE_DIR / 'work' / 'drift' / project.key(sym).replace(':', '__')
+    scratch.mkdir(parents=True, exist_ok=True)
+    original = scratch / 'original.c'
+    original.write_text(body)
+    if oracle.check(project, symbol, 0, source=original, mw_version=mw, extra_cflags=flags).ok:
+        return None
+    description, text = candidates[-1]
+    respelled = scratch / 'respelled.c'
+    respelled.write_text(text)
+    result = oracle.check(project, symbol, 0, source=respelled, mw_version=mw, extra_cflags=flags)
+    return (description, text, result) if result.ok else None

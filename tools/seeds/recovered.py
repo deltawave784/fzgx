@@ -437,6 +437,27 @@ def prepare(output: Path, threshold: float):
             record['flags'] = result.extra_cflags or flags
         checked += len(items)
         print(f'checked {checked}/{len(manifest)} saved candidates', flush=True)
+    # a frozen body that no longer compiles under the current headers (`&SYM` into a struct
+    # view, a private typedef the header since gained) is frozen respelled when the
+    # mechanical respelling compiles; its hash is the respelled text's
+    from fzgx import fixup_source
+    respelled = 0
+    for symbol, record in manifest.items():
+        if not record['current_error']:
+            continue
+        drifted = fixup_source.header_drift_replacement(saved.project, symbol, Path(record['path']).read_text(),
+                                                        record['mw'], record['flags'])
+        if not drifted:
+            continue
+        description, text, result = drifted
+        Path(record['path']).write_text(text)
+        record.update(sha256=hashlib.sha256(text.encode()).hexdigest(), respelled=description,
+                      current_percent=max(result.percent, result.percent_adjusted), current_error=None,
+                      dropped_rows=seedrank.dropped_for(result) or [],
+                      mw=result.mw_version or record['mw'], flags=result.extra_cflags or record['flags'])
+        respelled += 1
+    if respelled:
+        print(f'{respelled} saved candidates respelled against the current headers', flush=True)
     refine(saved, output, manifest, threshold)
     (output / 'manifest.json').write_text(json.dumps(manifest, indent=2) + '\n')
     summary = {k: audit[k] for k in ('functions', 'bytes', 'ledger_above_threshold', 'stale')}

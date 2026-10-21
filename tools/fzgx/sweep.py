@@ -171,6 +171,20 @@ def climb(p: Project, selection: Dict[str, str], outdir: Path, rounds: int = 4,
             f = safe
         cur[s] = f
     checks = oracle.check_many(p, list(cur.items()))
+    # a saved body that no longer compiles under the current headers (`&SYM` into a struct
+    # view, a typedef the header since gained) sweeps from its mechanical respelling when
+    # that one compiles; the oracle still decides every candidate
+    for s, f in cur.items():
+        r = checks.get(s)
+        if r is not None and not r.ok:
+            drifted = fixup_source.header_drift_replacement(p, s, f.read_text())
+            if drifted:
+                safe = outdir / 'seed' / (f.name.replace(':', '__'))
+                safe.parent.mkdir(parents=True, exist_ok=True)
+                safe.write_text(drifted[1])
+                cur[s] = safe
+                checks[s] = drifted[2]
+                print(f'{s}: seed respelled ({drifted[0]})')
     state: Dict[str, dict] = {}
     for s, f in cur.items():
         r = checks.get(s)

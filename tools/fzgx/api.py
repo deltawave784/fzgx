@@ -258,6 +258,14 @@ def claim(p: Project, symbol: str, agent: str, ttl: int = DEFAULT_TTL,
         seed_body = Path(seed['path']).read_text()
         if hashlib.sha256(seed_body.encode()).hexdigest() != seed['sha256']:
             return {'ok': False, 'error': 'seed source changed since batch preparation'}
+        # a seed written against older headers (`&SYM` into a struct view, a typedef the
+        # header since gained) starts respelled when the saved text no longer compiles and
+        # the respelling does (26 main_rel bodies after the lbl_1_bss_3C00 header passes)
+        from . import fixup_source
+        drifted = fixup_source.header_drift_replacement(p, symbol, seed_body, seed.get('mw'), seed.get('flags'))
+        if drifted:
+            seed_body = drifted[1]
+            seed = dict(seed, sha256=hashlib.sha256(seed_body.encode()).hexdigest(), respelled=drifted[0])
     shadow = _is_shadow(agent)
     held = l.get(key)
     if held and held["status"] == "claimed" and held["claimed_by"] == agent and l.current_attempt(key):
@@ -326,6 +334,10 @@ def claim(p: Project, symbol: str, agent: str, ttl: int = DEFAULT_TTL,
                 f"{f' ({pct:.1f}%)' if isinstance(pct, (int, float)) else ''} with its compiler settings, "
                 "not that attempt's final work copy: release notes that describe an unsaved or broken "
                 "last edit do not apply to it, so do not spend checks restoring an earlier body.")
+        if seed.get('respelled'):
+            out['seed']['instruction'] += (
+                f" The saved text no longer compiled under the current headers; it was respelled mechanically "
+                f"({seed['respelled']}) and compiles now. Keep that spelling.")
     else:
         out['next'] = ('Write the complete function with write_unit, then call check(symbol, versions="all") once '
                        '(one check; it keeps the best compiler) before further edits.')
