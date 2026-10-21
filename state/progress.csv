@@ -400,3 +400,4 @@ time_utc,git_head,matched_code_pct,matched_code,total_code,matched_functions,tot
 2026-10-21T00:00:03Z,4b9f5a8d,57.0078,1674344,2937044,6340,7312,53.5028,fable batch 200
 2026-10-21T00:44:41Z,bf7d19eb,57.0649,1676020,2937044,6341,7312,53.5598,fable batch 201
 2026-10-21T02:23:48Z,65fd5f48,57.0649,1676020,2937044,6341,7312,53.5598,"oracle patches applied: __pformatter, fn_4_7938"
+2026-10-21T02:24:05Z,b065066d,57.156,1678696,2937044,6343,7312,53.6248,oracle patches applied (after ninja)
