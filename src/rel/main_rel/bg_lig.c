@@ -144,6 +144,152 @@ s32 fn_1_D5C70(u32 arg0, u32 *arg1) {
 }
 /* fzgx:end fn_1_D5C70 */
 
+/* fzgx:begin fn_1_D5FA8 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/mdlload.h"
+#include "game/main_rel/mdlload_types.h"
+#include "dolphin/gx.h"
+
+extern s32 *fn_8000961C(s32);
+extern void *OSGetArenaLo(void);
+extern u32 OSGetArenaHi(void);
+extern void fn_80074918(u8, s32, u8);
+extern void fn_80074788(u32);
+extern void fn_80074660(u32);
+extern void fn_80073678(u32);
+extern void fn_80073C6C(s32);
+extern void fn_800747D0(u32, u32, s32, s32, u32, s32, s32);
+extern void fn_80072AB0(s32, s32, s32);
+extern void fn_800734A8(u32, s32, s32, s32);
+extern void fn_80072C24(s32, s32, s32, s32, s32);
+extern void fn_80072D64(s32, s32, s32, s32, u8, s32);
+extern void fn_80072CC4(s32, s32, s32, s32, s32);
+extern void fn_80072E20(s32, s32, s32, s32, u8, s32);
+extern void fn_800728A8(s32, s32, s32, s32);
+extern void fn_80072864(u32);
+extern void fn_8007245C(u32);
+extern u32 fn_800371F8(u32, void *);
+extern void fn_8003462C(u32, u32, u32);
+extern u32 lbl_801A66C8;
+
+typedef struct HeapBlock {
+    struct HeapBlock *prev;
+    struct HeapBlock *next;
+    u32 size;
+} HeapBlock;
+typedef struct HeapView { f32 x, y, z; } HeapView;
+typedef struct HeapColor { u8 r, g, b, a; } HeapColor;
+
+static inline void VERT(f32 x, f32 y, f32 z) { GX_WRITE_F32(x); GX_WRITE_F32(y); GX_WRITE_F32(z); }
+#define OFFSET(p) ((f32)((u32)(p) + 0x80000000))
+#define ARENA_SIZE 25165824.0f
+
+/* Draws the arena and heap block map. */
+void fn_1_D5FA8(s32 heap, HeapView *pos, f32 width, f32 height) {
+    HeapBlock *head;
+    u32 lo;
+    u32 hi;
+    HeapBlock *block;
+    u32 index;
+    HeapBlock *scan;
+    u32 count;
+    f32 start, end;
+    f32 depth;
+
+    head = (HeapBlock *)fn_8000961C(heap);
+    lo = (u32)OSGetArenaLo();
+    hi = OSGetArenaHi();
+    fn_80074918(0, 7, 0);
+    fn_80074788(1);
+    fn_80074660(0);
+    fn_80073678(1);
+    fn_80073C6C(0);
+    fn_800747D0(4, 0, 0, 0, 0, 2, 2);
+    fn_80072AB0(0, 0, 0);
+    fn_800734A8(0, 255, 255, 4);
+    fn_80072C24(0, 15, 15, 15, 2);
+    fn_80072D64(0, 0, 0, 0, 1, 0);
+    fn_80072CC4(0, 7, 7, 7, 1);
+    fn_80072E20(0, 0, 0, 0, 1, 0);
+    fn_800728A8(1, 4, 5, 0);
+    fn_80072864(2);
+    fn_8007245C(512);
+    {
+        HeapColor color = { 0x00, 0x00, 0x00, 0xFF };
+        fn_800371F8(1, &color);
+    }
+    fn_8003462C(128, 7, 4);
+    VERT(pos->x, pos->y, pos->z);
+    VERT(pos->x+width, pos->y, pos->z);
+    VERT(pos->x+width, pos->y+height, pos->z);
+    VERT(pos->x, pos->y+height, pos->z);
+    width -= 1.0f;
+    height -= 1.0f;
+    pos->x += 1.0f;
+    pos->y += 1.0f;
+    {
+        HeapColor color = { 0x7F, 0x7F, 0x7F, 0xFF };
+        fn_800371F8(1, &color);
+    }
+    fn_8003462C(128, 7, 4);
+    VERT(pos->x, pos->y, pos->z-0.001f);
+    VERT(pos->x+width, pos->y, pos->z-0.001f);
+    VERT(pos->x+width, pos->y+height, pos->z-0.001f);
+    VERT(pos->x, pos->y+height, pos->z-0.001f);
+    {
+        HeapColor color = { 0x00, 0xFF, 0x00, 0xFF };
+        fn_800371F8(1, &color);
+    }
+    fn_8003462C(128, 7, 4);
+    depth = 0.002f;
+    VERT(pos->x+OFFSET(lo)*width/ARENA_SIZE, pos->y, pos->z-depth);
+    VERT(pos->x+OFFSET(hi)*width/ARENA_SIZE, pos->y, pos->z-depth);
+    VERT(pos->x+OFFSET(hi)*width/ARENA_SIZE, pos->y+height, pos->z-depth);
+    VERT(pos->x+OFFSET(lo)*width/ARENA_SIZE, pos->y+height, pos->z-depth);
+    if (head) {
+        block = (HeapBlock *)head->size;
+        while (block) {
+            HeapColor color = { 0xFF, 0x00, 0x00, 0xFF };
+            fn_800371F8(1, &color);
+            fn_8003462C(128, 7, 4);
+            VERT(pos->x+OFFSET(block)*width/ARENA_SIZE, pos->y, pos->z-depth);
+            VERT(pos->x+width*OFFSET((u32)block+block->size)/ARENA_SIZE, pos->y, pos->z-depth);
+            VERT(pos->x+width*OFFSET((u32)block+block->size)/ARENA_SIZE, pos->y+height, pos->z-depth);
+            VERT(pos->x+OFFSET(block)*width/ARENA_SIZE, pos->y+height, pos->z-depth);
+            block = block->next;
+        }
+        head = head->next;
+        count = 0;
+        scan = head;
+        while (scan) {
+            scan = scan->next;
+            if (scan) {
+                count++;
+            }
+        }
+        index = 0;
+        while (head) {
+            HeapColor color = { 0x00, 0x00, 0xFF, 0xFF };
+            fn_800371F8(1, &color);
+            if (head->next) {
+                if (index == (lbl_801A66C8 >> 7) % count) {
+                    HeapColor blink = { 0xFF, 0xFF, 0x00, 0xFF };
+                    fn_800371F8(1, &blink);
+                }
+                index++;
+            }
+            fn_8003462C(128, 7, 4);
+            VERT(pos->x+OFFSET(head)*width/ARENA_SIZE, pos->y, pos->z-depth);
+            VERT(pos->x+width*OFFSET((u32)head+head->size)/ARENA_SIZE, pos->y, pos->z-depth);
+            VERT(pos->x+width*OFFSET((u32)head+head->size)/ARENA_SIZE, pos->y+height, pos->z-depth);
+            VERT(pos->x+OFFSET(head)*width/ARENA_SIZE, pos->y+height, pos->z-depth);
+            head = head->next;
+        }
+    }
+}
+/* fzgx:end fn_1_D5FA8 */
+
 /* fzgx:begin fn_1_D6680 */
 // fn_1_D6680: returns a constant.
 int fn_1_D6680(void) {
