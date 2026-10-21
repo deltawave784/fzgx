@@ -13266,6 +13266,23 @@
   },
   {
     "module": "main",
+    "source": "dol/__pformatter.c",
+    "symbols": [
+      "__pformatter"
+    ],
+    "status": "matching",
+    "mw_version": "GC/1.3.2",
+    "extra_cflags": [
+      "-use_lmw_stmw",
+      "on"
+    ],
+    "pool": {
+      "@wstringBase0": "@wstringBase0",
+      "@stringBase0": "@stringBase0_80094FC0"
+    }
+  },
+  {
+    "module": "main",
     "source": "dol/__prep_buffer.c",
     "symbols": [
       "__prep_buffer"

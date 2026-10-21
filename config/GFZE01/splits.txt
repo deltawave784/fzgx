@@ -6098,3 +6098,6 @@ dol/fn_8003B010.c:
 
 dol/fn_80050698.c:
 	.text       start:0x80050698 end:0x80050BD4 align:4
+
+dol/__pformatter.c:
+	.text       start:0x80080A38 end:0x800811AC align:4
