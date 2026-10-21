@@ -6107,3 +6107,6 @@ dol/fn_80086008.c:
 
 dol/fn_8003EC44.c:
 	.text       start:0x8003EC44 end:0x8003F834 align:4
+
+dol/float2str.c:
+	.text       start:0x800811AC end:0x800818C8 align:4
