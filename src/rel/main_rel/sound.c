@@ -2097,6 +2097,184 @@ void fn_1_A3654(void *player, u32 id) {
 }
 /* fzgx:end fn_1_A3654 */
 
+/* fzgx:begin fn_1_A3A1C pool noprologue */
+#include "types.h"
+
+extern const struct fn_1_A3A1C_lbl_1_rodata_454C_pool {
+    f32 unk_0;
+} lbl_1_rodata_454C;
+
+struct A3A_ent {
+    u8 unk_0;
+    u8 id;
+    u8 val;
+    u8 pad[0x11];
+};
+struct A3A_pair {
+    s8 a;
+    s8 b;
+};
+struct A3A_bss {
+    u8 pad_0[0x740];
+    u8 unk_740;
+    u8 pad_741[0x3];
+    u32 unk_744;
+    u8 pad_748[4];
+    struct A3A_ent ents[1];
+    u8 pad_760[0x82C - 0x760];
+    s8 count;
+    u8 pad_82D[0xA3];
+    struct A3A_pair pairs[1];
+};
+
+extern f32 fn_1_8652C(void *);
+extern s32 fn_80067344(u32, u32, u32, u32);
+extern s32 fn_80067898(u32);
+extern u32 fn_1_864E8(void *);
+
+/* file-scope objects of the retail TU, in retail order: MWCC addresses them off one section base */
+u32 fzgx_obj_lbl_1_bss_6EA98;
+u32 fzgx_obj_lbl_1_bss_6EA9C[2];
+u8 lbl_1_bss_6EAA4;
+u8 lbl_1_bss_6EA98_gap_6EAA5;
+u8 lbl_1_bss_6EAA6;
+u8 lbl_1_bss_6EA98_gap_6EAA7;
+u32 lbl_1_bss_6EAA8[2];
+u8 lbl_1_bss_6EAB0;
+u8 lbl_1_bss_6EA98_gap_6EAB1;
+u16 lbl_1_bss_6EA98_gap_6EAB1_fill_6EAB2;
+u32 fzgx_obj_lbl_1_bss_6EAB4[4];
+u16 lbl_1_bss_6EAB4_fill_6EAC4;
+u16 fzgx_obj_lbl_1_bss_6EAC6;
+u32 lbl_1_bss_6EAC6_fill_6EAC8[2];
+u32 fzgx_obj_lbl_1_bss_6EAD0[450];
+u8 fzgx_obj_lbl_1_bss_6F1D8;
+u8 lbl_1_bss_6EA98_gap_6F1D9;
+u16 lbl_1_bss_6EA98_gap_6F1D9_fill_6F1DA;
+u32 fzgx_obj_lbl_1_bss_6F1DC;
+u8 fzgx_obj_lbl_1_bss_6F1E0;
+u8 lbl_1_bss_6F1E1;
+u16 lbl_1_bss_6EA98_gap_6F1E2;
+struct A3A_ent fzgx_obj_lbl_1_bss_6F1E4[1];
+u32 lbl_1_bss_6F1E4_fill_6F1F8[16];
+u8 lbl_1_bss_6F1E4_fill_6F238;
+u8 lbl_1_bss_6F239;
+u16 lbl_1_bss_6EA98_gap_6F23A;
+u32 lbl_1_bss_6F23C;
+u16 lbl_1_bss_6F23C_fill_6F240;
+u8 lbl_1_bss_6F23C_fill_6F242;
+u8 fzgx_obj_lbl_1_bss_6F243;
+u32 lbl_1_bss_6F244[32];
+s8 lbl_1_bss_6F2C4;
+u8 lbl_1_bss_6EA98_gap_6F2C5;
+u16 lbl_1_bss_6EA98_gap_6F2C5_fill_6F2C6;
+u32 lbl_1_bss_6F2C8[4];
+u32 lbl_1_bss_6F2D8[15];
+u16 lbl_1_bss_6F2D8_fill_6F314;
+u8 lbl_1_bss_6F316;
+u8 lbl_1_bss_6F317;
+u16 lbl_1_bss_6EA98_gap_6F318;
+u16 lbl_1_bss_6F31A;
+u32 lbl_1_bss_6F31A_fill_6F31C[19];
+struct A3A_pair lbl_1_bss_6F31A_4E[1];
+u16 lbl_1_bss_6F31A_fill_6F36A;
+u32 lbl_1_bss_6F31A_fill_6F36C[14];
+
+#pragma section code_type ".fzgxpool"
+static void fzgx_bss_layout(void) {
+    volatile u8 s;  /* fzgx-allow: S2 layout primer sink: MWCC emits .bss objects in first-access order */
+    s = *(u8 *)&fzgx_obj_lbl_1_bss_6EA98;
+    s = *(u8 *)&fzgx_obj_lbl_1_bss_6EA9C;
+    s = *(u8 *)&lbl_1_bss_6EAA4;
+    s = *(u8 *)&lbl_1_bss_6EA98_gap_6EAA5;
+    s = *(u8 *)&lbl_1_bss_6EAA6;
+    s = *(u8 *)&lbl_1_bss_6EA98_gap_6EAA7;
+    s = *(u8 *)&lbl_1_bss_6EAA8;
+    s = *(u8 *)&lbl_1_bss_6EAB0;
+    s = *(u8 *)&lbl_1_bss_6EA98_gap_6EAB1;
+    s = *(u8 *)&lbl_1_bss_6EA98_gap_6EAB1_fill_6EAB2;
+    s = *(u8 *)&fzgx_obj_lbl_1_bss_6EAB4;
+    s = *(u8 *)&lbl_1_bss_6EAB4_fill_6EAC4;
+    s = *(u8 *)&fzgx_obj_lbl_1_bss_6EAC6;
+    s = *(u8 *)&lbl_1_bss_6EAC6_fill_6EAC8;
+    s = *(u8 *)&fzgx_obj_lbl_1_bss_6EAD0;
+    s = *(u8 *)&fzgx_obj_lbl_1_bss_6F1D8;
+    s = *(u8 *)&lbl_1_bss_6EA98_gap_6F1D9;
+    s = *(u8 *)&lbl_1_bss_6EA98_gap_6F1D9_fill_6F1DA;
+    s = *(u8 *)&fzgx_obj_lbl_1_bss_6F1DC;
+    s = *(u8 *)&fzgx_obj_lbl_1_bss_6F1E0;
+    s = *(u8 *)&lbl_1_bss_6F1E1;
+    s = *(u8 *)&lbl_1_bss_6EA98_gap_6F1E2;
+    s = *(u8 *)&fzgx_obj_lbl_1_bss_6F1E4;
+    s = *(u8 *)&lbl_1_bss_6F1E4_fill_6F1F8;
+    s = *(u8 *)&lbl_1_bss_6F1E4_fill_6F238;
+    s = *(u8 *)&lbl_1_bss_6F239;
+    s = *(u8 *)&lbl_1_bss_6EA98_gap_6F23A;
+    s = *(u8 *)&lbl_1_bss_6F23C;
+    s = *(u8 *)&lbl_1_bss_6F23C_fill_6F240;
+    s = *(u8 *)&lbl_1_bss_6F23C_fill_6F242;
+    s = *(u8 *)&fzgx_obj_lbl_1_bss_6F243;
+    s = *(u8 *)&lbl_1_bss_6F244;
+    s = *(u8 *)&lbl_1_bss_6F2C4;
+    s = *(u8 *)&lbl_1_bss_6EA98_gap_6F2C5;
+    s = *(u8 *)&lbl_1_bss_6EA98_gap_6F2C5_fill_6F2C6;
+    s = *(u8 *)&lbl_1_bss_6F2C8;
+    s = *(u8 *)&lbl_1_bss_6F2D8;
+    s = *(u8 *)&lbl_1_bss_6F2D8_fill_6F314;
+    s = *(u8 *)&lbl_1_bss_6F316;
+    s = *(u8 *)&lbl_1_bss_6F317;
+    s = *(u8 *)&lbl_1_bss_6EA98_gap_6F318;
+    s = *(u8 *)&lbl_1_bss_6F31A;
+    s = *(u8 *)&lbl_1_bss_6F31A_fill_6F31C;
+    s = *(u8 *)&lbl_1_bss_6F31A_4E;
+    s = *(u8 *)&lbl_1_bss_6F31A_fill_6F36A;
+    s = *(u8 *)&lbl_1_bss_6F31A_fill_6F36C;
+}
+#pragma section code_type ".text"
+
+static inline s32 A3A_clamp(s32 value) {
+    return value < 1 ? 1 : (value > 127 ? 127 : value);
+}
+
+#pragma opt_lifetimes off
+#pragma opt_propagation off
+void fn_1_A3A1C(void) {
+    struct A3A_ent *ent;
+    s8 i;
+    for (ent = fzgx_obj_lbl_1_bss_6F1E4, i = 0; i < lbl_1_bss_6F2C4; ent++, i++) {
+        u32 id = ent->id;
+        u32 t0 = fn_1_864E8((void *)id);
+        if ((t0 & 0x10) && fn_1_8652C((void *)id) > lbl_1_rodata_454C.unk_0) {
+            u8 v = ent->val;
+            if (v != 0 && lbl_1_bss_6F31A_4E[id].a == 0) {
+                if (t0 & 0x200) {
+                    fn_80067344(1, 16, 0xB0270000, v);
+                    if (fzgx_obj_lbl_1_bss_6F1D8 == 0 && fzgx_obj_lbl_1_bss_6F1DC <= 45) {
+                        fn_80067898(0xA9090700);
+                    }
+                } else {
+                    s32 w = A3A_clamp(v + 50);
+                    fn_80067344(1, 16, 0xB0270000, (u8)w);
+                    if (fzgx_obj_lbl_1_bss_6F1D8 == 0 && fzgx_obj_lbl_1_bss_6F1DC <= 45) {
+                        fn_80067898(0xA9090800);
+                    }
+                }
+            }
+            lbl_1_bss_6F31A_4E[id].a++;
+            lbl_1_bss_6F31A_4E[id].b = 0;
+            if (lbl_1_bss_6F31A_4E[id].a > 6) lbl_1_bss_6F31A_4E[id].a = 0;
+        } else {
+            lbl_1_bss_6F31A_4E[id].b++;
+            if (lbl_1_bss_6F31A_4E[id].b > 60) {
+                lbl_1_bss_6F31A_4E[id].a = 0;
+                lbl_1_bss_6F31A_4E[id].b = 60;
+            }
+        }
+    }
+}
+#pragma opt_lifetimes reset
+/* fzgx:end fn_1_A3A1C */
+
 /* fzgx:begin fn_1_A3BD8 pool */
 /* file-scope objects of the retail TU, in retail order: MWCC addresses them off one section base */
 u32 fzgx_obj_lbl_1_bss_6EA98;
