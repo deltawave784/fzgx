@@ -8330,3 +8330,6 @@ rel/main_rel/game/fn_1_32A40.c:
 
 rel/main_rel/load/fn_1_451E4.c:
 	.text       start:0x000451E4 end:0x00045730 align:4
+
+rel/main_rel/sound/fn_1_A0D20.c:
+	.text       start:0x000A0D20 end:0x000A0D7C align:4
