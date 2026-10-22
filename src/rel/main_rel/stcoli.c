@@ -338,6 +338,167 @@ s32 fn_1_14F18(fn_1_14F18_Vec *pos, void *arg1, fn_1_14F18_Vec *dir, f32 *outT,
 }
 /* fzgx:end fn_1_14F18 */
 
+/* fzgx:begin fn_1_16BA0 noprologue */
+#include "types.h"
+#include "game/vec3.h"
+#include "rel/main_rel/stcoli.h"
+
+typedef struct {
+    u8 pad_0[0x8];
+    f32 zero;
+    u8 pad_C[0x1C];
+    f32 wideThreshold;
+    f32 threshold;
+} fn_1_16BA0_Pool;
+
+typedef struct {
+    u8 pad_0[0x8];
+    f32 a0;
+    f32 ax;
+    f32 ay;
+    f32 az;
+    u8 pad_18[0xC];
+    f32 b0;
+    f32 bx;
+    f32 by;
+    f32 bz;
+    u8 pad_34[0x18];
+    s8 canBack;
+    s8 canFwd;
+    u8 pad_4E[0x2];
+} fn_1_16BA0_Plane;
+
+typedef struct {
+    s32 count;
+    fn_1_16BA0_Plane *planes;
+    u8 pad_8[0x4];
+} fn_1_16BA0_Seg;
+
+extern f32 lbl_1_rodata_6C8[2];
+extern s16 fn_1_7B054(void);
+
+#pragma opt_propagation off
+s32 fn_1_16BA0(Vec3f *pos, f32 *ratio, s32 idx, s32 *sub, s32 strict) {
+    fn_1_16BA0_Pool *pool;
+    f32 thr;
+    f32 neg;
+    f32 a;
+    f32 b;
+    f32 z;
+    f32 bz;
+    f32 az;
+    f32 ay;
+    f32 y;
+    f32 by;
+    f32 ax;
+    f32 x;
+    f32 bx;
+    f32 sb;
+    f32 sa;
+    s32 result;
+    s32 flag;
+    s32 i;
+    s32 count;
+    s32 cur;
+    s32 n;
+    s32 first;
+    fn_1_16BA0_Seg *segs;
+    fn_1_16BA0_Plane *p;
+    s32 j;
+    s32 k;
+    s32 back;
+    s32 fwd;
+
+    pool = (fn_1_16BA0_Pool *)&lbl_1_rodata_6C8;
+    if (fn_1_7B054() == 25) {
+        thr = pool->wideThreshold;
+    } else {
+        thr = pool->threshold;
+    }
+    *ratio = pool->zero;
+    count = lbl_1_bss_3BE0->unk_8;
+    segs = (fn_1_16BA0_Seg *)lbl_1_bss_3BE0->unk_C;
+    if (idx < 0 || count <= idx) {
+        idx = 0;
+    }
+    result = -1;
+    cur = *sub;
+    flag = lbl_1_bss_3BE0->unk_7D;
+    if (cur == 0) {
+        cur = 1;
+    }
+    n = 10;
+    if (count < 10) {
+        n = count;
+    }
+    neg = -thr;
+    first = segs[idx].count;
+    for (i = 0; i < n; i++) {
+        j = (idx + count) % count;
+        if (strict != 0 && first != segs[j].count) {
+            break;
+        }
+        if (cur != 0 && segs[j].count <= cur) {
+            k = segs[j].count - 1;
+        } else {
+            k = cur;
+        }
+        p = &segs[j].planes[k];
+        x = pos->x;
+        y = pos->y;
+        z = pos->z;
+        ax = p->ax;
+        bx = p->bx;
+        sa = x * ax;
+        ay = p->ay;
+        sb = x * bx;
+        by = p->by;
+        az = p->az;
+        sa += y * ay;
+        sb += y * by;
+        bz = p->bz;
+        sa += z * az;
+        sb += z * bz;
+        a = p->a0 + sa;
+        b = p->b0 + sb;
+        if (j == 0) {
+            fwd = neg <= b;
+            back = z < pool->zero;
+            if (flag != 0) {
+                back = 1;
+            }
+        } else if (j == count - 1) {
+            fwd = z >= pool->zero;
+            back = neg <= a;
+            if (flag != 0 && fn_1_7B054() != 41) {
+                fwd = 1;
+            }
+        } else {
+            fwd = neg <= b;
+            back = neg <= a;
+        }
+        if (fwd == 0) {
+            if (strict != 0 && p->canFwd == 0) {
+                break;
+            }
+            idx++;
+        } else if (back == 0) {
+            if (strict != 0 && p->canBack == 0) {
+                break;
+            }
+            idx--;
+        } else {
+            *sub = k;
+            result = j;
+            *ratio = a / (a + b);
+            break;
+        }
+    }
+    return result;
+}
+#pragma opt_propagation reset
+/* fzgx:end fn_1_16BA0 */
+
 /* fzgx:begin fn_1_16E68 noprologue */
 #include "types.h"
 #include "rel/main_rel/stcoli.h"

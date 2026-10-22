@@ -8240,3 +8240,6 @@ rel/main_rel/accessory/fn_1_126DE8.c:
 
 rel/main_rel/sel_static_disp/fn_1_1375C0.c:
 	.text       start:0x001375C0 end:0x001380F0 align:4
+
+rel/main_rel/stcoli/fn_1_16BA0.c:
+	.text       start:0x00016BA0 end:0x00016E68 align:4
