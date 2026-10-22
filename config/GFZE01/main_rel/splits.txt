@@ -8339,3 +8339,6 @@ rel/main_rel/sel_static_disp/fn_1_14A328.c:
 
 rel/main_rel/font/fn_1_539CC.c:
 	.text       start:0x000539CC end:0x00053B14 align:4
+
+rel/main_rel/font/fn_1_4DE04.c:
+	.text       start:0x0004DE04 end:0x0004DE44 align:4
