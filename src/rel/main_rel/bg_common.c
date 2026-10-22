@@ -2359,6 +2359,200 @@ void fn_1_107F50(void *arg0) {
 }
 /* fzgx:end fn_1_107F50 */
 
+/* fzgx:begin fn_1_108BD0 noprologue */
+#include "types.h"
+#include "game/vec3.h"
+
+#pragma section code_type ".fzgxpool"
+static const u32 fzgx_pool_table1[6] = {0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000};  /* fzgx-allow: A1 retail pool bytes */
+__declspec(section ".fzgxpool") static void fzgx_pool_keep1(void) { const u32 *volatile cp; cp = fzgx_pool_table1; }  /* fzgx-allow: S2 pool primer sink */
+__declspec(section ".fzgxpool") static void fzgx_pool_prime2(void) {
+    volatile f32 s; volatile f64 d;  /* fzgx-allow: S2 pool primer sinks */
+    d = 1.1920928955078125e-07;
+    s = 0.009999999776482582f;
+}
+static const u32 fzgx_pool_table3[3] = {0x00000000, 0x00000000, 0x00000000};  /* fzgx-allow: A1 retail pool bytes */
+__declspec(section ".fzgxpool") static void fzgx_pool_keep3(void) { const u32 *volatile cp; cp = fzgx_pool_table3; }  /* fzgx-allow: S2 pool primer sink */
+__declspec(section ".fzgxpool") static void fzgx_pool_prime4(void) {
+    volatile f32 s; volatile f64 d;  /* fzgx-allow: S2 pool primer sinks */
+    d = 1e-07;
+}
+static const u32 fzgx_pool_table5[3] = {0x00000000, 0x00000000, 0x00000000};  /* fzgx-allow: A1 retail pool bytes */
+__declspec(section ".fzgxpool") static void fzgx_pool_keep5(void) { const u32 *volatile cp; cp = fzgx_pool_table5; }  /* fzgx-allow: S2 pool primer sink */
+__declspec(section ".fzgxpool") static void fzgx_pool_prime6(void) {
+    volatile f32 s; volatile f64 d;  /* fzgx-allow: S2 pool primer sinks */
+    s = 0.5f;
+    s = 0.25f;
+}
+static const u32 fzgx_pool_table7[1] = {0x00000000};  /* fzgx-allow: A1 retail pool bytes */
+__declspec(section ".fzgxpool") static void fzgx_pool_keep7(void) { const u32 *volatile cp; cp = fzgx_pool_table7; }  /* fzgx-allow: S2 pool primer sink */
+__declspec(section ".fzgxpool") static void fzgx_pool_prime8(void) {
+    volatile f32 s; volatile f64 d;  /* fzgx-allow: S2 pool primer sinks */
+    d = 4503599627370496.0;
+    d = 0.0013611111376020642;
+    s = 0.0027222223579883575f;
+    s = -1.0f;
+    s = 0.0f;
+    s = -2.0f;
+    s = 2.0f;
+    s = 1.1920928955078125e-07f;
+    s = -1.0000001192092896f;
+}
+#pragma section code_type ".text"
+
+typedef struct {
+    void *obj;
+    void *name;
+} BgEntry;
+
+typedef struct {
+    u32 count;
+    u32 pad4;
+    BgEntry *entries;
+} BgEntryTable;
+
+typedef struct {
+    u8 pad0[0x88];
+    Vec3 unk_88;
+    u8 pad94[0x18C - 0x94];
+} BgPart;
+
+typedef struct {
+    u8 pad0[8];
+    BgPart *parts;
+} BgPartList;
+
+typedef struct {
+    u8 pad0[0x8C];
+    u32 index;
+    u8 pad90[0xE4 - 0x90];
+    BgEntryTable *tables[(0x150 - 0xE4) / 4];
+    BgPartList *partList;
+} BgModel;
+
+typedef struct {
+    u8 flags;
+    u8 pad1[0xF];
+    Vec3 pos;
+    u8 pad1C[0x44 - 0x1C];
+} BgPiece;
+
+typedef struct {
+    u8 pad0[8];
+    u32 nameIndex;
+    BgModel *model;
+    u8 pad10[8];
+    u32 pieceCount;
+    u8 pad1C[8];
+    BgPiece *pieces;
+} BgObject;
+
+extern u8 *fn_80083970(void *, void *);
+extern void lbl_8006DBAC(Vec3 *);
+extern void lbl_8006E1B0(Vec3 *, Vec3 *);
+extern f32 lbl_8006D0B4(f32);
+extern void lbl_8006D668(Vec3 *);
+extern void *lbl_1_data_3FCAC[];
+
+static inline f32 distSq(Vec3 *a, Vec3 *b)
+{
+    f32 dx = a->x - b->x;
+    f32 dy = a->y - b->y;
+    f32 dz = a->z - b->z;
+    f32 d = dx * dx;
+    d += dy * dy;
+    d += dz * dz;
+    return lbl_8006D0B4(d);
+}
+
+#pragma opt_propagation off
+void fn_1_108BD0(BgObject *bgArg, s32 partArg, f32 margin, f32 x, f32 y, f32 z)
+{
+    s32 part = partArg;
+    BgObject *bg = bgArg;
+    u32 i;
+    BgEntryTable *table;
+    BgEntry *entry;
+    BgPiece *piece;
+    BgPart *partPtr;
+    u32 n;
+    u32 count;
+    f32 radius;
+    f32 avgY;
+    f32 dz;
+    f32 dy;
+    f32 dx;
+    f32 limit;
+    f32 dist;
+    Vec3 pos;
+    Vec3 sum;
+
+    table = bg->model->tables[bg->model->index];
+    if (table == NULL) {
+        return;
+    }
+    entry = table->entries;
+    for (i = 0; i < table->count; i++, entry++) {
+        if (entry != NULL && fn_80083970(entry->name, lbl_1_data_3FCAC[bg->nameIndex]) != NULL) {
+            radius = 0.5f * *(f32 *)((u8 *)entry->obj + 0x14);
+            break;
+        }
+    }
+    radius = radius / 4.0f;
+    partPtr = &bg->model->partList->parts[part];
+    pos.x = x;
+    pos.y = y;
+    pos.z = z;
+    lbl_8006DBAC(&partPtr->unk_88);
+    lbl_8006E1B0(&pos, &pos);
+    sum = *(const Vec3 *)fzgx_pool_table5;
+    count = 0;
+    piece = bg->pieces;
+    for (n = 0; n < bg->pieceCount; n++, piece++) {
+        if (!(piece->flags & 1)) {
+            count++;
+            sum.x += piece->pos.x;
+            sum.y += piece->pos.y;
+            sum.z += piece->pos.z;
+        }
+    }
+    dx = sum.x / count;
+    dy = sum.y;
+    avgY = count;
+    sum.x = dx;
+    avgY = dy / avgY;
+    sum.y = avgY;
+    sum.z = sum.z / count;
+    dz = sum.z - pos.z;
+    dy = avgY - pos.y;
+    dist = sum.x - pos.x;
+    dist *= dist;
+    dist += dy * dy;
+    dist += dz * dz;
+    dist = lbl_8006D0B4(dist);
+    limit = radius;
+    limit += margin;
+    if (limit > dist) {
+        margin = limit - dist;
+        sum.x -= pos.x;
+        sum.y -= pos.y;
+        sum.z -= pos.z;
+        lbl_8006D668(&sum);
+        sum.x *= margin;
+        sum.y *= margin;
+        sum.z *= margin;
+        piece = bg->pieces;
+        for (i = 0; i < bg->pieceCount; i++, piece++) {
+            if (!(piece->flags & 1)) {
+                piece->pos.x += sum.x;
+                piece->pos.y += sum.y;
+                piece->pos.z += sum.z;
+            }
+        }
+    }
+}
+/* fzgx:end fn_1_108BD0 */
+
 /* fzgx:begin fn_1_1185B4 */
 #pragma section code_type ".fzgxpool"
 static const u32 fzgx_pool_table1[6] = {0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000};  /* fzgx-allow: A1 retail pool bytes */

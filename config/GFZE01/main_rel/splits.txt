@@ -8264,3 +8264,6 @@ rel/main_rel/prog/fn_1_A7024.c:
 
 rel/main_rel/spline/fn_1_F83F0.c:
 	.text       start:0x000F83F0 end:0x000F8580 align:4
+
+rel/main_rel/bg_common/fn_1_108BD0.c:
+	.text       start:0x00108BD0 end:0x00108EEC align:4
