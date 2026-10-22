@@ -6022,6 +6022,242 @@ void fn_1_14328C(u32 arg0, u32 arg1, u32 arg2) {
 }
 /* fzgx:end fn_1_14328C */
 
+/* fzgx:begin fn_1_143780 noprologue */
+#include "types.h"
+#include "font.h"
+#include "rel/main_rel/sel_static_disp.h"
+
+struct fn_1_143780_lbl_801A66A4 { s32 unk_0; };
+struct fn_1_143780_entry { u32 unk_0; f32 unk_4; u8 unk_8, unk_9; u16 unk_A; };
+struct fn_1_143780_view { u8 pad_0[0x16C]; struct fn_1_143780_entry entries[10]; };
+
+typedef struct fn_1_143780_Color { u8 c[4]; } Color;
+extern f32 lbl_8006D188(u32);
+extern int fn_1_4F734(FontDrawPacket *);
+extern struct fn_1_143780_lbl_801A66A4 lbl_801A66A4;
+extern u16 fn_1_48690(u32);
+extern u16 fn_1_486C4(u32);
+extern u32 fn_1_144A5C(void *);
+extern f32 lbl_1_rodata_26F8[22];
+extern u8 fn_1_3F114(void);
+extern void fn_1_143E7C(u32, u32, u32, u32, u32, u32, void *);
+extern void fn_1_49410(void);
+extern void fn_1_494DC(s16);
+extern void fn_1_49514(u32 *);
+extern void fn_1_4955C(f32, f32);
+extern void fn_1_496FC(f32, f32);
+extern void fn_1_4AE0C(const char *, ...);
+extern void fn_1_51678(FontDrawPacket *, u32, s16, s16, s16, s16);
+
+#pragma section code_type ".fzgxpool"
+static void fzgx_pool_primer_a(void) {
+    struct { u32 a[66]; } p = {{0,0,0,0x3dcccccd,0x3f800000,0x3f800000,0,0,0x3f800000,0x3f800000,0,0x3f800000,0x04000000,0,0xffffffff,0,0,0,0,0,0,0,0,0,0,0x3dcccccd,0x3f800000,0x3f800000,0,0,0x3f800000,0x3f800000,0,0x3f800000,0x04000000,0,0xffffffff,0,0,0,0,0,0,0,0,0,0,0x3dcccccd,0x3f800000,0x3f800000,0,0,0x3f800000,0x3f800000,0,0x3f800000,0x04000000,0,0xffffffff,0,0,0,0,0,0,0}};
+    volatile f32 f; /* Preserve literal-pool primer order. */
+    volatile f64 d; /* Preserve conversion constants in the pool. */
+    fn_1_144A5C(&p);
+    f = 0.0f;
+    f = 0.9583333134651184f;
+    f = 23.0f;
+    f = 2.0f;
+    f = 0.6666666865348816f;
+    f = 0.5f;
+    f = 0.5833333134651184f;
+    d = 4503601774854144.0;
+    f = 596.0f;
+    f = 528.0f;
+}
+static void fzgx_pool_primer_b(void) {
+    struct { u32 a[11]; } p = {{0x1a,0x23,0x9c,0xa5,0x18,0x21,0x85,0x8e,0xf2,0xfb,3233857536U /* RGBA */}};
+    volatile f32 f; /* Preserve literal-pool primer order. */
+    volatile f64 d; /* Preserve conversion constants in the pool. */
+    fn_1_144A5C(&p);
+    f = -4.0f;
+    f = 40.0f;
+    f = 480.0f;
+    f = 640.0f;
+    f = 90000.0f;
+    f = 0.3f;
+    f = 0.7f;
+    f = -1.0f;
+    f = 208.0f;
+    f = -1000.0f;
+    f = -50.0f;
+    f = 1.0f;
+    f = 10.0f;
+    f = 140.0f;
+    f = 224.0f;
+    f = 254.0f;
+    f = 256.0f;
+    f = -6.0f;
+    f = 5.0f;
+    f = 4.0f;
+    f = 12.0f;
+    f = 15.0f;
+    d = 4503599627370496.0;
+}
+static void fzgx_pool_primer_c(void) {
+    struct { u32 a[4]; } p = {{0x4e4f204e,0x414d4500,0x4e4f2044,0x41544100}};
+    volatile f32 f; /* Preserve literal-pool primer order. */
+    fn_1_144A5C(&p);
+    f = 100.0f;
+    f = 350.0f;
+    f = 44.0f;
+    f = 8.0f;
+}
+#pragma section code_type ".text"
+
+static inline void draw_color(u32 a,u32 b,u32 c,u32 d,u32 e,u32 f,Color color) {
+    fn_1_143E7C(a,b,c,d,e,f,&color);
+}
+static inline void set_color(Color color) {
+    fn_1_49514((u32 *)&color);
+}
+static inline void blend_color(FontDrawPacket *out, u32 a0, u32 b0, u32 a1, u32 b1, u32 a2, u32 b2, f32 sn) {
+    f32 one = 1.0f;
+    f32 t = (one + sn) / 2.0f;
+    out->color[0] = (s32)((f32)((f32)a0 * (one - t)) + (f32)((f32)b0 * t));
+    out->color[1] = (s32)((f32)((f32)a1 * (one - t)) + (f32)((f32)b1 * t));
+    out->color[2] = (s32)((f32)((f32)a2 * (one - t)) + (f32)((f32)b2 * t));
+    out->alpha = 0.35f;
+}
+
+#pragma opt_common_subs on
+#pragma opt_loop_invariants off
+void fn_1_143780(u32 arg0, u32 arg1, u32 arg2) {
+    u32 count;
+    u32 y1;
+    u32 y0;
+    s32 last;
+    struct fn_1_143780_entry *cur;
+    s32 i;
+    Obj_1_bss_26314 *obj;
+    struct fn_1_143780_entry *e;
+    u32 image;
+    f32 scale;
+    s32 frame;
+    s32 rem;
+    u32 a0, b0, a1, b1, a2, b2;
+    f32 sn;
+    f32 one;
+    f32 t;
+    f32 u;
+    Color loc_40;
+    Color loc_3C;
+    Color loc_38;
+    Color loc_34;
+    Color loc_30;
+    Color loc_2C;
+    Color loc_28;
+    Color loc_24;
+    Color loc_10;
+    Color loc_C;
+    Color loc_8;
+    struct { u32 a[10]; } loc_6C;
+    FontDrawPacket loc_94;
+    loc_10 = (Color){{255,255,255,255}};
+    loc_40 = loc_2C = loc_10;
+    loc_C = (Color){{0,240,230,255}};
+    loc_3C = loc_28 = loc_C;
+    loc_38 = (Color){{0,120,115,255}};
+    loc_8 = (Color){{160,255,0,255}};
+    loc_34 = loc_24 = loc_8;
+    {
+    struct { u32 a[4]; } loc_44 = {{26, 35, 316, 325}};
+    struct { u32 a[6]; } loc_54 = {{24, 33, 101, 110, 178, 187}};
+    loc_6C.a[0] = arg0;
+    loc_6C.a[1] = arg1;
+    loc_6C.a[2] = 354;
+    loc_6C.a[3] = 222;
+    loc_6C.a[4] = 340;
+    loc_6C.a[5] = 208;
+    loc_6C.a[6] = (u32)&loc_44;
+    loc_6C.a[7] = 4;
+    loc_6C.a[8] = (u32)&loc_54;
+    loc_6C.a[9] = 6;
+    fn_1_144A5C(&loc_6C);
+    loc_94 = *(FontDrawPacket *)lbl_1_rodata_26F8;
+    image = 0x9903;
+    loc_94.image = image;
+    fn_1_51678(&loc_94, image, 0, 108, 96, 36);
+    loc_94.x = (f32)(s32)(arg0 + 22);
+    loc_94.y = (f32)(s32)(arg1 + 179);
+    loc_94.z = 30.0f;
+    loc_94.scale_x *= 0.75f;
+    loc_94.scale_y *= 0.75f;
+    fn_1_4F734(&loc_94);
+    obj = (Obj_1_bss_26314 *)((u8 *)&lbl_1_bss_26314 + arg2 * 508);
+    count = fn_1_3F114() & 0xFF;
+    if (count <= 5) {
+        y1 = arg1 + 18;
+        y0 = arg1 + 16;
+        last = count - 1;
+        for (i = 0; i < (s32)count; i++) {
+            if (i < 5) {
+                e = &((struct fn_1_143780_view *)obj)->entries[last - i];
+                if (e->unk_0 == obj->unk_1CC && e->unk_4 == obj->unk_1D0) {
+                    loc_30 = loc_34;
+                } else {
+                    loc_30 = loc_40;
+                }
+                draw_color(arg0 + 332, y1, arg2, e->unk_8, e->unk_9, e->unk_A, loc_30);
+                loc_94 = *(FontDrawPacket *)lbl_1_rodata_26F8;
+                image = 0x9903;
+                loc_94.image = image;
+                fn_1_51678(&loc_94, image, 0, 36, 96, 36);
+                loc_94.x = (f32)((s32)arg0 + 22);
+                loc_94.y = (f32)(s32)y0;
+                loc_94.z = 30.0f;
+                loc_94.scale_x *= 0.75f;
+                loc_94.scale_y *= 0.75f;
+                *(Color *)loc_94.color = loc_30;
+                fn_1_4F734(&loc_94);
+                fn_1_49410();
+                fn_1_494DC(19);
+                fn_1_496FC((f32)(s32)(arg0 + 80), (f32)(s32)y1);
+                set_color(loc_30);
+                scale = 0.75f;
+                fn_1_4955C(scale, scale);
+                fn_1_4AE0C((const char *)lbl_1_data_424A0, i + 1);
+            }
+            y1 += 32;
+            y0 += 32;
+        }
+    } else {
+        cur = &((struct fn_1_143780_view *)obj)->entries[8];
+        loc_94 = *(FontDrawPacket *)lbl_1_rodata_26F8;
+        image = 0x9900;
+        loc_94.image = image;
+        loc_94.x = (f32)((s32)arg0 + 22);
+        loc_94.y = (f32)((s32)arg1 + 7);
+        loc_94.z = 30.0f;
+        fn_1_4F734(&loc_94);
+        draw_color(arg0 + 332, arg1 + 18, arg2, cur->unk_8, cur->unk_9, cur->unk_A, loc_24);
+    }
+    e = (struct fn_1_143780_entry *)((u32)obj + 0x1d8);
+    draw_color(arg0 + 332, arg1 + 179, arg2, e->unk_8, e->unk_9, e->unk_A, loc_2C);
+    loc_94 = *(FontDrawPacket *)lbl_1_rodata_26F8;
+    loc_94.image = 18;
+    loc_94.x = (f32)((s32)arg0 + 1);
+    loc_94.y = (f32)((s32)arg1 + 176);
+    loc_94.z = 54.0f;
+    *(Color *)loc_94.color = loc_28;
+    loc_94.scale_x *= 343.0f / (f32)fn_1_48690(18);
+    loc_94.scale_y *= 30.0f / (f32)fn_1_486C4((u32)loc_94.image);
+    frame = lbl_801A66A4.unk_0;
+    scale = 65536.0f;
+    rem = frame % 120;
+    scale = (f32)(scale * (f32)rem);
+    one = 1.0f;
+    t = (one + lbl_8006D188((s32)(f32)(scale / 120.0f))) / 2.0f;
+    loc_94.color[0] = (f32)((f32)loc_3C.c[0] * (one - t)) + (f32)((f32)loc_38.c[0] * t);
+    loc_94.color[1] = (f32)((f32)loc_3C.c[1] * (one - t)) + (f32)((f32)loc_38.c[1] * t);
+    loc_94.color[2] = (f32)((f32)loc_3C.c[2] * (one - t)) + (f32)((f32)loc_38.c[2] * t);
+    loc_94.alpha = 0.35f;
+    fn_1_4F734(&loc_94);
+    }
+}
+/* fzgx:end fn_1_143780 */
+
 /* fzgx:begin fn_1_143E7C */
 #pragma section code_type ".fzgxpool"
 static const u32 fzgx_pool_table1[3] = {0x00000000, 0x00000000, 0x00000000};  /* fzgx-allow: A1 retail pool bytes */
