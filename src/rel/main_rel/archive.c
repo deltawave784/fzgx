@@ -674,6 +674,46 @@ u32 fn_1_12AF64(void) {
 }
 /* fzgx:end fn_1_12AF64 */
 
+/* fzgx:begin fn_1_12AF7C */
+extern u32 lbl_1_rodata_8160[4];
+extern u8 *fn_1_36AD0(void);
+
+typedef struct {
+    u8 pad_0[0x81A8];
+    u32 unk_81A8[3][2];
+} Fn_1_12AF7CData;
+
+#define LD (((Fn_1_12AF7CData *)fn_1_36AD0())[i].unk_81A8[k][l])
+
+void fn_1_12AF7C(void) {
+    u32 tbl[4];
+    s16 g, r;
+    u32 b;
+    struct { s16 value; } a;
+    s16 i, k, l, j;
+
+    tbl[0] = lbl_1_rodata_8160[0];
+    tbl[1] = lbl_1_rodata_8160[1];
+    tbl[2] = lbl_1_rodata_8160[2];
+    tbl[3] = lbl_1_rodata_8160[3];
+    i = 0;
+    for (; i < 4; i++) {
+        for (j = 0; j < 4; j++) {
+            for (k = 0; k < 3; k++) {
+                for (l = 0; l < 1; l++) {
+                    a.value = LD & 0xFF;
+                    r = (u8)((tbl[j] >> 24) + (LD >> 24));
+                    g = (u8)(((tbl[j] >> 16) & 0xFF) + ((LD >> 16) & 0xFF));
+                    b = ((tbl[j] >> 8) & 0xFF) + ((LD >> 8) & 0xFF);
+                    ((u32 (*)[4][3][1])&lbl_1_bss_8B2E0.unk_0)[i][j][k][l] =
+                        (u32)(s16)a.value | ((r << 24) | (g << 16) | ((b << 8) & 0xFF00));
+                }
+            }
+        }
+    }
+}
+/* fzgx:end fn_1_12AF7C */
+
 /* fzgx:begin fn_1_12B120 */
 typedef struct {
     u16 unk0;
