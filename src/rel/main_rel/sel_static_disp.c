@@ -1076,6 +1076,79 @@ void fn_1_135D7C(s16 x, s16 y, u32 format, s16 index, void* arg4, s16 slot, int 
 }
 /* fzgx:end fn_1_135D7C */
 
+/* fzgx:begin fn_1_136174 noprologue */
+#include "types.h"
+#include "rel/main_rel/sel_static_disp.h"
+
+extern void fn_1_49410(void);
+extern const f64 lbl_1_rodata_8600;
+extern void fn_1_496FC(f32, f32);
+extern void fn_1_4955C(f32, f32);
+extern const f32 lbl_1_rodata_8A08;
+extern void fn_1_49514(u32 *);
+extern void fn_1_5233C(void);
+extern void fn_1_49738(void (*func)(void));
+extern const f32 lbl_1_rodata_863C;
+extern void fn_1_49748(f32);
+extern const f32 lbl_1_rodata_85E8;
+extern void fn_1_4954C(f32);
+extern void fn_1_495C8(int);
+extern const f32 lbl_1_rodata_8850;
+extern void fn_1_4CF3C(f32, void *, ...);
+extern u8 *fn_1_12F118(void);
+extern u8 *fn_1_36AD0(void);
+extern char *fn_1_7F49C(s16, s16, void *);
+extern void fn_1_4962C(void);
+extern char *fn_1_14FEAC(u8, u8, u8, void *, s16);
+
+void fn_1_136174(f32 arg7, f32 arg8, s16 arg0, s16 arg1, int arg2, s16 arg3,
+                 s16 arg4, s16 arg5, int arg6) {
+    u32 buffer[9];
+    u32 local;
+    u8 *entry;
+
+    if (arg4 == 0) return;
+    if (arg3 < 0) return;
+
+    fn_1_49410();
+    fn_1_496FC((f32)arg0, (f32)arg1);
+    fn_1_4955C(arg7, arg8);
+    local = *(u32 *)&lbl_1_rodata_8A08;
+    fn_1_49514(&local);
+    fn_1_49738(fn_1_5233C);
+    fn_1_49748(lbl_1_rodata_863C);
+    fn_1_4954C(lbl_1_rodata_85E8);
+    fn_1_495C8(arg2);
+
+    if (arg6 != 0) {
+        fn_1_4CF3C(lbl_1_rodata_8850, &lbl_1_data_41AB8);
+        return;
+    }
+
+    if (arg3 >= 0x29) {
+        entry = fn_1_12F118();
+        if (entry == fn_1_36AD0()) {
+            entry += arg5 * 0x81C0;
+        } else {
+            entry += (arg3 - 0x29) * 0x81C0;
+        }
+        if (!(*(u32 *)entry & 0x40000000)) {
+            fn_1_4CF3C(lbl_1_rodata_8850, &lbl_1_data_41A30,
+                       fn_1_7F49C(*(u8 *)(entry + 0x81A0), arg4, buffer));
+        } else {
+            fn_1_496FC((f32)arg0, (f32)arg1);
+            fn_1_4962C();
+            fn_1_4CF3C(lbl_1_rodata_8850, &lbl_1_data_41A30,
+                       fn_1_14FEAC(*(u8 *)(entry + 0x81A4), *(u8 *)(entry + 0x81AC),
+                                   *(u8 *)(entry + 0x81B4), buffer, arg4));
+        }
+    } else {
+        fn_1_4CF3C(lbl_1_rodata_8850, &lbl_1_data_41A30,
+                   fn_1_7F49C(arg3, arg4, buffer));
+    }
+}
+/* fzgx:end fn_1_136174 */
+
 /* fzgx:begin fn_1_1363F0 noprologue */
 #include "types.h"
 #include "dolphin/types.h"

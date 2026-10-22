@@ -1378,6 +1378,46 @@ void fn_1_1071C0(void) {
 }
 /* fzgx:end fn_1_1071C0 */
 
+/* fzgx:begin fn_1_10780C noprologue */
+#include "types.h"
+#include "psvec.h"
+
+extern f32 lbl_8006D668(u32 *);
+extern u16 lbl_1_bss_86ECC;
+extern u32 fn_1_1071E8(u8 *, u32, void *, void *, void *);
+extern u8 * fn_1_14F04(void);
+
+#pragma opt_propagation off
+void fn_1_10780C(void *arg0, void *arg1, u32 *arg2, void *arg3) {
+    s32 v0;
+    s32 v1;
+    struct { u32 a[3]; } loc_14;
+    u32 loc_8[3];
+    void *saved3;
+    u32 *saved2;
+    void *saved1;
+    void *saved0;
+    u8 *t0;
+    u8 *t1;
+    saved0 = arg0;
+    saved1 = arg1;
+    saved2 = arg2;
+    saved3 = arg3;
+    t1 = fn_1_14F04();
+    t0 = t1;
+    v0 = 511;
+    if ((lbl_1_bss_86ECC - 1) >= 0) {
+        v0 = lbl_1_bss_86ECC - 1;
+    }
+    fn_1_1071E8(t1, v0, &loc_14, 0, 0);
+    v1 = lbl_1_bss_86ECC + 1;
+    fn_1_1071E8(t0, v1 < 512 ? v1 : 0, loc_8, 0, 0);
+    psvec_sub(loc_8, &loc_14, saved2);
+    lbl_8006D668(saved2);
+    fn_1_1071E8(t0, lbl_1_bss_86ECC, saved0, saved1, saved3);
+}
+/* fzgx:end fn_1_10780C */
+
 /* fzgx:begin fn_1_107900 */
 void fn_1_107900(void) {
     fn_80008BEC(&lbl_1_bss_86ED0, 0, 0x1c70);

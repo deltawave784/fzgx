@@ -8204,3 +8204,9 @@ rel/main_rel/car/fn_1_892CC.c:
 
 rel/main_rel/stcoli/fn_1_29968.c:
 	.text       start:0x00029968 end:0x00029A0C align:4
+
+rel/main_rel/sel_static_disp/fn_1_136174.c:
+	.text       start:0x00136174 end:0x001363F0 align:4
+
+rel/main_rel/bg_common/fn_1_10780C.c:
+	.text       start:0x0010780C end:0x00107900 align:4
