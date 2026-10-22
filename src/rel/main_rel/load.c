@@ -321,6 +321,152 @@ s32 fn_1_45E84(s32 value) {
 }
 /* fzgx:end fn_1_45E84 */
 
+/* fzgx:begin fn_1_45E98 pool noprologue */
+#include "types.h"
+#include "dolphin/ar.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/load.h"
+
+extern void fn_1_D3214(void);
+extern void fn_1_45890(u32);
+extern void DCInvalidateRange(void *, u32);
+extern void ARQPostRequest(ARQRequest *, u32, u32, u32, u32, void *, u32, ARQCallback);
+extern void OSPanic(const char *, int, const char *, ...);
+extern void fn_80006FE0(char *, u32);
+extern char *strcat(char *, const char *);
+
+typedef struct {
+    u32 magic;
+    u32 data_offset;
+    u32 unk_8;
+    u32 table_offset;
+} fn_1_45E98_Header;
+
+typedef struct {
+    void *header;
+    void *data;
+    void *table;
+    u32 count;
+    void *end;
+    u32 unk_14;
+    u32 unk_18;
+} fn_1_45E98_Result;
+
+typedef struct {
+    u32 flags;
+    u32 b;
+    u32 c;
+} fn_1_45E98_NameEntry;
+
+typedef struct {
+    u32 unk_0;
+    u32 unk_4;
+    u32 unk_8;
+    u32 unk_C;
+} fn_1_45E98_LoadEntry;
+
+extern s32 fn_8006A3DC(fn_1_45E98_Header *, fn_1_45E98_Result *);
+extern s32 fn_8006A554(fn_1_45E98_Result *, char *);
+
+/* load.c state, addressed off lbl_1_bss_384C0 */
+#define LOAD_BUSY_FLAG ((s32 *)state)[0x10 / 4]
+#define LOAD_SLOTS ((s32 *)state + 0x5824 / 4)
+#define LOAD_ARAM_BUF (*(u8 **)&state[0x586C / 4])
+#define LOAD_TABLE ((fn_1_45E98_LoadEntry *)&state[0x18 / 4])
+
+#pragma pool_data on
+
+#pragma opt_loop_invariants off
+
+extern void fn_1_451E4(void);
+u8 lbl_1_data_6730[0x4C] =
+    "load.c\0\0cannot open file\n\0\0\0cannot read file\n\0\0\0ARAM archive extend error";
+void *fzgx_pool_table_4C[15] = {
+    (u8 *)fn_1_451E4 + 0x534,
+    (u8 *)fn_1_451E4 + 0xEC,
+    (u8 *)fn_1_451E4 + 0xF8,
+    (u8 *)fn_1_451E4 + 0x104,
+    (u8 *)fn_1_451E4 + 0x110,
+    (u8 *)fn_1_451E4 + 0x11C,
+    (u8 *)fn_1_451E4 + 0x128,
+    (u8 *)fn_1_451E4 + 0x26C,
+    (u8 *)fn_1_451E4 + 0x298,
+    (u8 *)fn_1_451E4 + 0x39C,
+    (u8 *)fn_1_451E4 + 0x3D8,
+    (u8 *)fn_1_451E4 + 0xA0,
+    (u8 *)fn_1_451E4 + 0x78,
+    (u8 *)fn_1_451E4 + 0xC0,
+    (u8 *)fn_1_451E4 + 0x64
+};
+char lbl_1_data_67B8[20] = "not archive file";
+u16 lbl_1_data_67CC = 0x2F00;
+
+/* ARQ transfer still in flight, or any DVD slot still busy. */
+static inline int fn_1_45E98_busy(u32 *state) {
+    s8 j;
+    s32 *slot;
+    if (LOAD_BUSY_FLAG != 0) {
+        return 1;
+    }
+    slot = LOAD_SLOTS;
+    for (j = 0; j < 16; j++) {
+        if (slot[j] != 0) {
+            return 1;
+        }
+    }
+    return 0;
+}
+
+void fn_1_45E98(const char *name, fn_1_45E98_LoadEntry **result) {
+    char buf[256];
+    ARQRequest req;
+    fn_1_45E98_Result res;
+    s32 i;
+    fn_1_45E98_LoadEntry *entry;
+    fn_1_45E98_Header *hdr;
+    fn_1_45E98_LoadEntry *p;
+    s32 found;
+    s32 k;
+    u32 target;
+    u32 *state;
+
+    state = lbl_1_bss_384C0;
+    entry = LOAD_TABLE;
+    found = -1;
+    for (i = 0; i < 0x400 && found == -1; i++, entry++) {
+        if (!(entry->unk_0 & 0x04000000)) {
+            continue;
+        }
+        while (fn_1_45E98_busy(state)) {
+            fn_1_D3214();
+        }
+        LOAD_BUSY_FLAG = 1;
+        DCInvalidateRange(LOAD_ARAM_BUF, entry->unk_C);
+        ARQPostRequest(&req, 0, 1, 1, entry->unk_8, LOAD_ARAM_BUF, entry->unk_C, fn_1_45890);
+        while (fn_1_45E98_busy(state)) {
+            fn_1_D3214();
+        }
+        hdr = (fn_1_45E98_Header *)LOAD_ARAM_BUF;
+        if (fn_8006A3DC(hdr, &res) == 0) {
+            OSPanic((const char *)lbl_1_data_6730, 0x370, lbl_1_data_67B8);
+        }
+        fn_80006FE0(buf, 0xff);
+        strcat(buf, (const char *)&lbl_1_data_67CC);
+        strcat(buf, name);
+        found = fn_8006A554(&res, buf);
+        if (found > 0) {
+            target = entry->unk_8 + ((fn_1_45E98_NameEntry *)(LOAD_ARAM_BUF + hdr->data_offset))[found].b;
+            for (k = 0, p = LOAD_TABLE; k < 0x400; k++, p++) {
+                if ((p->unk_0 & 0x48000000) == 0x48000000 && p->unk_8 == target) {
+                    *result = p;
+                    break;
+                }
+            }
+        }
+    }
+}
+/* fzgx:end fn_1_45E98 */
+
 /* fzgx:begin fn_1_46144 pool */
 #include "dolphin/ar.h"
 
