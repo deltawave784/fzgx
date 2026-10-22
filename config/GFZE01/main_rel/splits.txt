@@ -8231,3 +8231,6 @@ rel/main_rel/bg_common/fn_1_103264.c:
 
 rel/main_rel/sel_static_disp/fn_1_13FB8C.c:
 	.text       start:0x0013FB8C end:0x0014083C align:4
+
+rel/main_rel/accessory/fn_1_10A8D0.c:
+	.text       start:0x0010A8D0 end:0x0010AD18 align:4

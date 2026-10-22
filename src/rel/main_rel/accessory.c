@@ -622,6 +622,230 @@ void fn_1_10A43C(AccessoryObject *self) {
 }
 /* fzgx:end fn_1_10A43C */
 
+/* fzgx:begin fn_1_10A8D0 noprologue */
+#include "types.h"
+
+#pragma section code_type ".fzgxpool"
+static const u32 fzgx_pool_table1[6] = {0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000};  /* fzgx-allow: A1 retail pool bytes */
+__declspec(section ".fzgxpool") static void fzgx_pool_keep1(void) { const u32 *volatile cp; cp = fzgx_pool_table1; }  /* fzgx-allow: S2 pool primer sink */
+__declspec(section ".fzgxpool") static void fzgx_pool_prime2(void) {
+    volatile f32 s; volatile f64 d;  /* fzgx-allow: S2 pool primer sinks */
+    d = 1.1920928955078125e-07;
+    s = 0.009999999776482582f;
+}
+static const u32 fzgx_pool_table3[3] = {0x00000000, 0x00000000, 0x00000000};  /* fzgx-allow: A1 retail pool bytes */
+__declspec(section ".fzgxpool") static void fzgx_pool_keep3(void) { const u32 *volatile cp; cp = fzgx_pool_table3; }  /* fzgx-allow: S2 pool primer sink */
+__declspec(section ".fzgxpool") static void fzgx_pool_prime4(void) {
+    volatile f32 s; volatile f64 d;  /* fzgx-allow: S2 pool primer sinks */
+    d = 1e-07;
+}
+static const u32 fzgx_pool_table5[3] = {0x00000000, 0x00000000, 0x00000000};  /* fzgx-allow: A1 retail pool bytes */
+__declspec(section ".fzgxpool") static void fzgx_pool_keep5(void) { const u32 *volatile cp; cp = fzgx_pool_table5; }  /* fzgx-allow: S2 pool primer sink */
+__declspec(section ".fzgxpool") static void fzgx_pool_prime6(void) {
+    volatile f32 s; volatile f64 d;  /* fzgx-allow: S2 pool primer sinks */
+    s = 0.5f;
+    s = 0.25f;
+}
+static const u32 fzgx_pool_table7[1] = {0x00000000};  /* fzgx-allow: A1 retail pool bytes */
+__declspec(section ".fzgxpool") static void fzgx_pool_keep7(void) { const u32 *volatile cp; cp = fzgx_pool_table7; }  /* fzgx-allow: S2 pool primer sink */
+__declspec(section ".fzgxpool") static void fzgx_pool_prime8(void) {
+    volatile f32 s; volatile f64 d;  /* fzgx-allow: S2 pool primer sinks */
+    d = 4503599627370496.0;
+    d = 0.0013611111376020642;
+    s = 0.0027222223579883575f;
+    s = -1.0f;
+    s = 0.0f;
+    s = -2.0f;
+    s = 2.0f;
+    s = 1.1920928955078125e-07f;
+    s = -1.0000001192092896f;
+}
+static const u32 fzgx_pool_table9[6] = {0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000};  /* fzgx-allow: A1 retail pool bytes */
+__declspec(section ".fzgxpool") static void fzgx_pool_keep9(void) { const u32 *volatile cp; cp = fzgx_pool_table9; }  /* fzgx-allow: S2 pool primer sink */
+__declspec(section ".fzgxpool") static void fzgx_pool_prime10(void) {
+    volatile f32 s; volatile f64 d;  /* fzgx-allow: S2 pool primer sinks */
+    s = -0.0013611111789941788f;
+    s = -0.0027222223579883575f;
+    s = 9.999999747378752e-05f;
+    s = 1.0f;
+    s = 0.00039999998989515007f;
+    s = 0.02500000037252903f;
+    s = 0.004224999807775021f;
+    d = 0.0749999976158142;
+    d = 0.3;
+    s = -0.01899999938905239f;
+    s = 0.05700000002980232f;
+    s = 0.0009609999833628535f;
+}
+static const u32 fzgx_pool_table11[1] = {0x00000000};  /* fzgx-allow: A1 retail pool bytes */
+__declspec(section ".fzgxpool") static void fzgx_pool_keep11(void) { const u32 *volatile cp; cp = fzgx_pool_table11; }  /* fzgx-allow: S2 pool primer sink */
+__declspec(section ".fzgxpool") static void fzgx_pool_prime12(void) {
+    volatile f32 s; volatile f64 d;  /* fzgx-allow: S2 pool primer sinks */
+    d = 0.04099999949336052;
+    d = -1.0;
+    s = 0.75f;
+    s = -0.25f;
+}
+#pragma section code_type ".text"
+
+typedef struct Node_10A8D0 {
+    u8 flag;
+    u8 pad[0x13];
+    f32 keyA;
+    f32 keyB;
+    u8 pad2[0x24];
+    f32 value;
+} Node_10A8D0;
+
+typedef struct Edge_10A8D0 {
+    Node_10A8D0 *a;
+    Node_10A8D0 *b;
+    f32 weight;
+} Edge_10A8D0;
+
+typedef struct Graph_10A8D0 {
+    u8 pad[0x18];
+    u32 nodeCount;
+    u32 edgeCount;
+    u32 pad2;
+    Node_10A8D0 *nodes;
+    Edge_10A8D0 *edges;
+} Graph_10A8D0;
+
+extern u32 lbl_801A6410;
+extern char lbl_1_data_40530[];
+extern void fn_1_10846C(Graph_10A8D0 *);
+extern void fn_1_128884(void *, void *, s32);
+extern void *fn_1_4630(u32, u32, const char *, s32);
+extern f32 fn_1_1289BC(Node_10A8D0 *, Node_10A8D0 *);
+extern f32 lbl_8006D188(s16);
+extern f64 __fabs(f64);
+
+void fn_1_10A8D0(Graph_10A8D0 *g) {
+    struct { u32 value; } offset;
+    u32 k;
+    struct { u32 value; } crossIndex;
+    Node_10A8D0 *c;
+    u32 j;
+    u32 i;
+    struct { Node_10A8D0 *value; } pairA;
+    Node_10A8D0 *a;
+    struct { Node_10A8D0 *value; } b;
+    Node_10A8D0 *p;
+    u32 half;
+    struct { u32 value; } inner;
+    struct { u32 value; } edgeOffset;
+
+    if (g == NULL) {
+        return;
+    }
+    fn_1_10846C(g);
+
+    p = g->nodes;
+    for (i = 0; i < g->nodeCount; i++, p++) {
+        if (p->flag & 1) {
+            p->value = -1.0f;
+            p->flag = 0;
+        } else {
+            p->value = 0.0f;
+            p->flag = 1;
+        }
+    }
+
+    /* flagged nodes first */
+    i = 0;
+    a = g->nodes;
+    offset.value = i;
+    for (; i < g->nodeCount; offset.value += sizeof(Node_10A8D0), i++, a++) {
+        b.value = (Node_10A8D0 *)((u8 *)g->nodes + offset.value) + 1;
+        for (j = i + 1; j < g->nodeCount; j++, b.value++) {
+            if ((a->flag & 1) && !(b.value->flag & 1)) {
+                fn_1_128884(a, b.value, sizeof(Node_10A8D0));
+            }
+        }
+    }
+
+    /* within a flag group, by keyB descending */
+    i = 0;
+    a = g->nodes;
+    offset.value = i;
+    for (; i < g->nodeCount; offset.value += sizeof(Node_10A8D0), i++, a++) {
+        b.value = (Node_10A8D0 *)((u8 *)g->nodes + offset.value) + 1;
+        for (j = i + 1; j < g->nodeCount; j++, b.value++) {
+            if (a->flag == b.value->flag && a->keyB > b.value->keyB) {
+                fn_1_128884(a, b.value, sizeof(Node_10A8D0));
+            }
+        }
+    }
+
+    /* then by keyA, direction depending on the sign of keyB */
+    i = 0;
+    a = g->nodes;
+    offset.value = i;
+    for (; i < g->nodeCount; offset.value += sizeof(Node_10A8D0), i++, a++) {
+        b.value = (Node_10A8D0 *)((u8 *)g->nodes + offset.value) + 1;
+        for (j = i + 1; j < g->nodeCount; j++, b.value++) {
+            if (a->flag == b.value->flag) {
+                if (a->keyA < b.value->keyA && a->keyB > 0.0f && b.value->keyB > 0.0f) {
+                    fn_1_128884(a, b.value, sizeof(Node_10A8D0));
+                } else if (a->keyA > b.value->keyA && a->keyB < 0.0f && b.value->keyB < 0.0f) {
+                    fn_1_128884(a, b.value, sizeof(Node_10A8D0));
+                }
+            }
+        }
+    }
+
+    /* edges inside each half plus the ones joining the halves */
+    half = g->nodeCount / 2;
+    inner.value = (half - 1) * 2;
+    g->edgeCount = inner.value + half;
+    g->edges = fn_1_4630(lbl_801A6410, g->edgeCount * sizeof(Edge_10A8D0), lbl_1_data_40530, 0x8e1);
+
+    i = 0;
+    edgeOffset.value = i;
+    k = 0;
+    a = g->nodes;
+    for (; i < g->nodeCount - 1; i++, a++) {
+        if (a->flag == a[1].flag) {
+            ((Edge_10A8D0 *)((u8 *)g->edges + edgeOffset.value))->a = a;
+            ((Edge_10A8D0 *)((u8 *)g->edges + edgeOffset.value))->b = a + 1;
+            ((Edge_10A8D0 *)((u8 *)g->edges + edgeOffset.value))->weight = fn_1_1289BC(a, a + 1);
+            edgeOffset.value += sizeof(Edge_10A8D0);
+            k++;
+        }
+    }
+
+    pairA.value = g->nodes;
+    p = pairA.value;
+    for (i = 0; i < g->nodeCount; i++) {
+        if (p->flag != p[1].flag) {
+            c = p + 1;
+            break;
+        }
+        p++;
+    }
+
+    inner.value = k * sizeof(Edge_10A8D0);
+    for (crossIndex.value = 0; crossIndex.value < g->nodeCount; crossIndex.value++, pairA.value++, c++) {
+        ((Edge_10A8D0 *)((u8 *)g->edges + inner.value))->a = pairA.value;
+        ((Edge_10A8D0 *)((u8 *)g->edges + inner.value))->b = c;
+        ((Edge_10A8D0 *)((u8 *)g->edges + inner.value))->weight = fn_1_1289BC(pairA.value, c);
+        inner.value += sizeof(Edge_10A8D0);
+        if (pairA.value->flag != pairA.value[1].flag) {
+            break;
+        }
+    }
+
+    p = &g->nodes[g->nodeCount / 2];
+    for (i = g->nodeCount / 2; i < g->nodeCount; i++, p++) {
+        half = g->nodeCount / 2;
+        p->value = -1.0 * __fabs(lbl_8006D188((s16)(((i - half) << 15) / half + 0x4000)));
+        p->value *= 0.75f;
+        p->value -= 0.25f;
+    }
+}
+/* fzgx:end fn_1_10A8D0 */
+
 /* fzgx:begin fn_1_10B344 */
 typedef signed long s32;
 
