@@ -801,6 +801,101 @@ void fn_1_132488(void *arg0) {
 }
 /* fzgx:end fn_1_132488 */
 
+/* fzgx:begin fn_1_1324C4 */
+extern s32 lbl_801A66B4;
+extern const f32 lbl_1_rodata_85F0;
+extern const f32 lbl_1_rodata_861C;
+extern const f32 lbl_1_rodata_863C;
+extern const f32 lbl_1_rodata_8640;
+extern const f32 lbl_1_rodata_8644;
+extern const f32 lbl_1_rodata_8648;
+extern const f32 lbl_1_rodata_864C;
+extern const f32 lbl_1_rodata_8650;
+
+extern void fn_1_13D02C(void);
+extern void fn_1_49410(void);
+extern void fn_1_139F18(void *);
+extern void fn_1_139D60(void *);
+extern void fn_1_139AEC(void *);
+extern void fn_1_133DBC(s32);
+extern void fn_1_134AD4(void);
+extern void fn_1_13DA0C(void);
+extern void fn_1_13DC54(void);
+extern void fn_1_13DDB8(void);
+extern void fn_1_134A4C(void);
+extern void fn_1_13E054(s32, s32);
+extern void fn_1_132FB4(void);
+extern void fn_1_13EA9C(void *);
+extern void fn_1_1380F0(u32);
+extern u32 fn_1_13F7F8(s32, s16);
+extern void fn_1_13B328(u32, s32);
+extern int fn_1_8623C(void);
+extern void fn_1_134EE4(s32, s32, s32, f32);
+extern void fn_1_135894(s32, s16, s32, s16, s32, s16, s32, f32, f32);
+extern void fn_1_136174(s32, s32, s32, s16, s16, s16, s32, f32, f32);
+extern void fn_1_13EDDC(s32, s32, s16, s16, s32);
+extern void fn_1_1363F0(s16, s32, s32);
+extern void fn_1_1368A0(s16, s16, s32, f32, f32, f32, f32, f32);
+extern void fn_1_13750C(s32, s32, s16, s16);
+extern void fn_1_13A848(s32, s32, s32, s16, s32, f32, f32);
+extern void fn_1_13A994(s32, s32, s32, s16, s16, s32, f32, f32);
+
+#pragma opt_common_subs off
+void fn_1_1324C4(void *arg0) {
+    s32 isTen;
+    s16 id;
+    s16 pos;
+    s32 off;
+
+    isTen = lbl_1_bss_8B3A0.unk_0 == 10;
+    fn_1_13D02C();
+    fn_1_49410();
+    if ((lbl_1_bss_8B3A0.unk_94 & 0x80000000) == 0) {
+        fn_1_139F18(arg0);
+        fn_1_139D60(arg0);
+        if (isTen == 0) {
+            fn_1_139AEC(arg0);
+        }
+    }
+    fn_1_133DBC(1);
+    fn_1_134AD4();
+    fn_1_13DA0C();
+    fn_1_13DC54();
+    fn_1_13DDB8();
+    fn_1_134A4C();
+    if (isTen != 0) {
+        fn_1_13E054(0x18, 0xEC);
+    } else {
+        fn_1_132FB4();
+        fn_1_13EA9C(arg0);
+    }
+    if (lbl_1_bss_8B3A0.unk_A4->unk_19 != 0) {
+        fn_1_1380F0(((u32 *)lbl_1_data_418D4)[lbl_801A66B4]);
+    } else {
+        fn_1_1380F0(fn_1_13F7F8(1, lbl_801A66B4));
+    }
+    fn_1_13B328(0x30800000, 0);
+    id = fn_1_8623C();
+    pos = *(s16 *)((u8 *)&lbl_1_bss_8B3A0 + lbl_1_bss_8B3A0.unk_9E * 32 + 0xE);
+    fn_1_134EE4(0, 1, 0, lbl_1_rodata_861C);
+    fn_1_135894(0xD5, 366 - (lbl_801A66B4 == 5 ? 0 : (pos > 40 ? 4 : 7)), 6, pos, 0, id, 0, lbl_1_rodata_863C, lbl_1_rodata_863C);
+    {
+        f32 scale = lbl_1_rodata_85F0;
+        fn_1_136174(0xD5, 0x163, 1, pos, lbl_801A66B4, id, 0, scale, scale);
+    }
+    fn_1_13EDDC(0x1F9, 0x181, pos, id, 0);
+    fn_1_1363F0(id, 0, 1);
+    fn_1_1368A0(pos, id, 0, (*(const f32 volatile *)&lbl_1_rodata_8640) /* Retail reloads this object. */, lbl_1_rodata_8644, lbl_1_rodata_8648, lbl_1_rodata_863C, lbl_1_rodata_863C);
+    fn_1_13750C(0x17, 0x42, pos, id);
+    fn_1_13A848(0x1BA, 0x114, 1, pos, 0, lbl_1_rodata_864C, lbl_1_rodata_8650);
+    {
+        f32 scale = lbl_1_rodata_85F0;
+        fn_1_13A994(0x1BA, 0x128, 1, pos, lbl_801A66B4, 0, scale, scale);
+    }
+}
+#pragma opt_common_subs reset
+/* fzgx:end fn_1_1324C4 */
+
 /* fzgx:begin fn_1_132FB4 */
 #pragma opt_common_subs off
 #pragma opt_propagation off

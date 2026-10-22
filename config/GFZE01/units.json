@@ -41661,6 +41661,17 @@
   },
   {
     "module": "main_rel",
+    "source": "rel/main_rel/custom_memcard/fn_1_1324C4.c",
+    "symbols": [
+      "fn_1_1324C4"
+    ],
+    "status": "matching",
+    "mw_version": "GC/2.5",
+    "extra_cflags": [],
+    "tu": "rel/main_rel/custom_memcard.c"
+  },
+  {
+    "module": "main_rel",
     "source": "rel/main_rel/custom_memcard/fn_1_132FB4.c",
     "symbols": [
       "fn_1_132FB4"
