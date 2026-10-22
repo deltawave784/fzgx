@@ -75532,6 +75532,17 @@
   },
   {
     "module": "sel",
+    "source": "rel/sel/name_entry/fn_10_25CB0.c",
+    "symbols": [
+      "fn_10_25CB0"
+    ],
+    "status": "matching",
+    "mw_version": "GC/2.7",
+    "extra_cflags": [],
+    "tu": "rel/sel/name_entry.c"
+  },
+  {
+    "module": "sel",
     "source": "rel/sel/name_entry/fn_10_25E1C.c",
     "symbols": [
       "fn_10_25E1C"

@@ -750,6 +750,65 @@ void fn_10_25BC8(void) {
 }
 /* fzgx:end fn_10_25BC8 */
 
+/* fzgx:begin fn_10_25CB0 noprologue */
+#include "types.h"
+#include "rel/sel/globals.h"
+#include "rel/sel/name_entry.h"
+
+typedef struct { u8 b[4]; } W4;
+extern u8 lbl_10_data_68E0[160];
+extern W4 lbl_10_rodata_1D64;
+extern s32 lbl_801A66B4;
+extern u32 lbl_801A6410;
+extern char *fn_80083DB0(char *, const char *);
+extern u32 fn_1_435C(u32);
+extern void *fn_1_45D0(u32, u32, void *, u32);
+extern s32 fn_1_3F8C(void *, void *, void *, u32);
+extern void fn_10_2325C();
+
+void fn_10_25CB0(void) {
+    struct { s32 value; } i;
+    struct { u8 value; } idx;
+    W4 loc_8;
+    struct { s32 value; } off;
+    u8 *q;
+    u8 *e;
+    u8 *d = (u8 *)&lbl_10_data_68E0;
+
+    if (*(u8 *)((u8 *)lbl_10_bss_55CD8 + 0x28) == 0) {
+        if (lbl_801A66B4 == 5) {
+            fn_80083DB0((char *)((u8 *)lbl_10_bss_55CD8 + 0x28), (const char *)(d + 0x114));
+        } else {
+            fn_80083DB0((char *)((u8 *)lbl_10_bss_55CD8 + 0x28), (const char *)(d + 0x120));
+        }
+        loc_8 = lbl_10_rodata_1D64;
+        fn_1_435C(lbl_10_bss_55CD8->unk_8);
+        i.value = 0;
+        idx.value = 0;
+        off.value = 0;
+        while (*(e = ((off.value) + ((0x28) + ((u8 *)lbl_10_bss_55CD8)))) != 0) {
+            idx.value = (u8)i.value;
+            q = (u8 *)fn_1_45D0(lbl_801A6410, 0x12, d + 0xa0, 0xd4);
+            *(u16 *)(q + 8) = idx.value * 0x38 + 0x7e;
+            *(u16 *)(q + 0xa) = 0x17a;
+            q[0] = 2;
+            q[1] = 0;
+            *(u16 *)(q + 4) = *(u16 *)(q + 8);
+            *(u16 *)(q + 6) = *(u16 *)(q + 0xa);
+            q[2] = e[0];
+            q[3] = e[1];
+            *(W4 *)(q + 0xd) = loc_8;
+            q[0xc] = idx.value;
+            fn_1_3F8C(d + 0xc8, fn_10_2325C, q, 0xb);
+            off.value += 2;
+            i.value++;
+        }
+        lbl_10_bss_55CD8->unk_E = i.value;
+    }
+    lbl_10_bss_55CD8->unk_0 |= 0x10000000;
+}
+/* fzgx:end fn_10_25CB0 */
+
 /* fzgx:begin fn_10_25E1C */
 typedef struct {
     u8 pad[0x8c];
