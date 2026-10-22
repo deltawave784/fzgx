@@ -2132,3 +2132,6 @@ rel/movie_module/fn_12_10980.c:
 
 rel/movie_module/fn_12_298AC.c:
 	.text       start:0x000298AC end:0x00029FF8 align:4
+
+rel/movie_module/fn_12_22888.c:
+	.text       start:0x00022888 end:0x00022954 align:4
