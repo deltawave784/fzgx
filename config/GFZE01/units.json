@@ -51763,6 +51763,17 @@
   },
   {
     "module": "main_rel",
+    "source": "rel/main_rel/mdlload/fn_1_D4964.c",
+    "symbols": [
+      "fn_1_D4964"
+    ],
+    "status": "matching",
+    "mw_version": "GC/1.3",
+    "extra_cflags": [],
+    "tu": "rel/main_rel/mdlload.c"
+  },
+  {
+    "module": "main_rel",
     "source": "rel/main_rel/mdlload/fn_1_D4FFC.c",
     "symbols": [
       "fn_1_D4FFC"
