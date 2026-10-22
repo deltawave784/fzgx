@@ -8261,3 +8261,6 @@ rel/main_rel/sel_static_disp/fn_1_14B93C.c:
 
 rel/main_rel/prog/fn_1_A7024.c:
 	.text       start:0x000A7024 end:0x000A714C align:4
+
+rel/main_rel/spline/fn_1_F83F0.c:
+	.text       start:0x000F83F0 end:0x000F8580 align:4

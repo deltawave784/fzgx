@@ -1224,6 +1224,51 @@ int fn_1_F8334(s16 value) {
 }
 /* fzgx:end fn_1_F8334 */
 
+/* fzgx:begin fn_1_F83F0 noprologue */
+#include "rel/main_rel/spline.h"
+
+extern u32 fn_1_14D6D8(s16);
+extern u64 __shl2i(u32, u32, u32);
+
+void fn_1_F83F0(s16 id) {
+    s32 ok = 0;
+    s32 busy;
+    u64 mask;
+#pragma opt_propagation off
+    if (id > 63) {
+        mask = __shl2i(0, 1, (s16)(id - 64));
+        busy = 0;
+        mask = *(u64 *)&lbl_1_bss_7F0C0.unk_28 & mask;
+        if ((((u32)mask ^ (u32)busy) | ((u32)(mask >> 32) ^ (u32)busy)) != 0) {
+            busy = 1;
+        }
+    } else {
+        mask = __shl2i(0, 1, id);
+        busy = 0;
+        mask = *(u64 *)&lbl_1_bss_7F0C0.unk_20 & mask;
+        if ((((u32)mask ^ (u32)busy) | ((u32)(mask >> 32) ^ (u32)busy)) != 0) {
+            busy = 1;
+        }
+    }
+    if (busy == 0) {
+        if ((fn_1_14D6D8(id) & 0x20000000) == 0) {
+            ok = 1;
+        }
+    }
+    if (id > 63) {
+        *(u64 *)&lbl_1_bss_7F0C0.unk_28 |= ((u64)1 << (s16)(id - 64));
+        if (ok == 1) {
+            *(u64 *)&lbl_1_bss_7F0C0.unk_58 |= ((u64)1 << (s16)(id - 64));
+        }
+    } else {
+        *(u64 *)&lbl_1_bss_7F0C0.unk_20 |= ((u64)1 << id);
+        if (ok == 1) {
+            *(u64 *)&lbl_1_bss_7F0C0.unk_50 |= ((u64)1 << id);
+        }
+    }
+}
+/* fzgx:end fn_1_F83F0 */
+
 /* fzgx:begin fn_1_F8580 */
 void fn_1_F8580(void) {
     lbl_1_bss_7F0C0.unk_5C = 0;
