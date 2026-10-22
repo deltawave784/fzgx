@@ -34293,6 +34293,17 @@
   },
   {
     "module": "main_rel",
+    "source": "rel/main_rel/bg_cas/fn_1_FDC00.c",
+    "symbols": [
+      "fn_1_FDC00"
+    ],
+    "status": "matching",
+    "mw_version": "GC/1.3",
+    "extra_cflags": [],
+    "tu": "rel/main_rel/bg_cas.c"
+  },
+  {
+    "module": "main_rel",
     "source": "rel/main_rel/bg_cas/fn_1_FDD7C.c",
     "symbols": [
       "fn_1_FDD7C"

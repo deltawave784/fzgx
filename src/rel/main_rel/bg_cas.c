@@ -1803,6 +1803,79 @@ s32 fn_1_FDB40(void * arg0) {
 }
 /* fzgx:end fn_1_FDB40 */
 
+/* fzgx:begin fn_1_FDC00 */
+extern u32 lbl_1_rodata_7650[3];
+extern f32 lbl_1_rodata_761C[13];
+extern u32 fn_1_55210(u32);
+extern void fn_1_14DE80(void *, void *, void *, s8, f32);
+extern void fn_1_14E054(void *, void *, s8, f32);
+extern void fn_1_14E198(void *, void *, s8, f32);
+extern void fn_1_87238(void *, s8, f32);
+
+struct Slot { u32 *p; u32 pad[2]; };
+struct Car {
+    u8 pad0[0x328];
+    s8 kind;
+    u8 pad1[0xb];
+    struct Slot slots[1];
+    u8 pad1b[0x390 - 0x334 - 12];
+    u32 flags;
+    u8 pad2[0xc];
+    u32 a0;
+    u8 pad3[0x16];
+    s16 sel;
+};
+struct Hold { u8 pad[0x40F0]; s16 *p; };
+struct Obj { struct Car *car; };
+
+void fn_1_FDC00(struct Obj *arg0, struct Hold *arg1) {
+    struct Car *car;
+    struct { s8 value; } v;
+    s16 sel;
+    void *a0;
+    u32 loc10[3];
+    u32 lc;
+    u32 l8;
+    if (arg0 != 0) {
+        car = arg0->car;
+        sel = car->sel;
+        v.value = (s8)sel;
+        if (car->flags & 0x4000000) {
+            lc = 0;
+            l8 = 0;
+            loc10[0] = lbl_1_rodata_7650[0];
+            loc10[1] = lbl_1_rodata_7650[1];
+            loc10[2] = lbl_1_rodata_7650[2];
+            a0 = (void *)car->a0;
+            switch (*arg1->p) {
+            case 0:
+                fn_1_14DE80(a0, &lc, &l8, v.value, lbl_1_rodata_761C[0]);
+                break;
+            case 1:
+                fn_1_14E054(a0, loc10, v.value, lbl_1_rodata_761C[0]);
+                break;
+            case 2:
+                fn_1_14E198(a0, loc10, v.value, lbl_1_rodata_761C[0]);
+                break;
+            }
+        } else {
+            sel = *arg1->p;
+            if (sel == 0) {
+                fn_1_87238(car, v.value, lbl_1_rodata_761C[0]);
+            } else if (car->kind == 4) {
+                fn_1_55210(car->slots[v.value].p[sel]);
+            } else if (car->kind == 0x28) {
+                if ((s8)v.value == 0) {
+                    fn_1_55210(car->slots[v.value].p[sel + 2]);
+                } else {
+                    fn_1_55210(car->slots[v.value].p[sel]);
+                }
+            }
+        }
+    }
+}
+/* fzgx:end fn_1_FDC00 */
+
 /* fzgx:begin fn_1_FDD7C noprologue */
 #include "types.h"
 #include "game/main_rel/car_test_types.h"
