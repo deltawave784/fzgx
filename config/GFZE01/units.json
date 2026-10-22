@@ -47001,6 +47001,29 @@
   },
   {
     "module": "main_rel",
+    "source": "rel/main_rel/font/fn_1_4D2AC.c",
+    "symbols": [
+      "fn_1_4D2AC"
+    ],
+    "status": "matching",
+    "mw_version": null,
+    "extra_cflags": [],
+    "tu": "rel/main_rel/font.c",
+    "pool": {
+      "...rodata.0": "lbl_1_rodata_FD0",
+      "@25": "lbl_1_rodata_2678+0x4",
+      "@35": "lbl_1_rodata_26B8+0x8",
+      "@30": "lbl_1_rodata_2678+0x8",
+      "@10": "lbl_1_rodata_10E0",
+      "@20": "lbl_1_rodata_10F8+0x1574",
+      "@5": "lbl_1_rodata_10D8",
+      "@15": "lbl_1_rodata_10F8",
+      "@40": "lbl_1_rodata_26B8+0x10",
+      "@45": "lbl_1_rodata_26B8+0x14"
+    }
+  },
+  {
+    "module": "main_rel",
     "source": "rel/main_rel/font/fn_1_4D494.c",
     "symbols": [
       "fn_1_4D494"
