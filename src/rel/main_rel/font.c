@@ -4540,6 +4540,27 @@ void fn_1_53830(u32 period, f32 x, u8 val, volatile u8 *a, volatile u8 *b) {
 }
 /* fzgx:end fn_1_53830 */
 
+/* fzgx:begin fn_1_539CC noprologue */
+#include "types.h"
+#include "font.h"
+
+extern const f32 lbl_1_rodata_2754;
+
+typedef struct FrameColor {
+    u8 r, g, b, a;
+} FrameColor;
+
+#pragma fp_contract off
+FrameColor fn_1_539CC(const FrameColor *a, const FrameColor *b, f32 t) {
+    FrameColor color;
+    color.r = (f32)a->r * t + (f32)b->r * (lbl_1_rodata_2754 - t);
+    color.g = (f32)a->g * t + (f32)b->g * (lbl_1_rodata_2754 - t);
+    color.b = (f32)a->b * t + (f32)b->b * (lbl_1_rodata_2754 - t);
+    color.a = (f32)a->a * t + (f32)b->a * (lbl_1_rodata_2754 - t);
+    return color;
+}
+/* fzgx:end fn_1_539CC */
+
 /* fzgx:begin fn_1_53B14 noprologue */
 #include "types.h"
 #include "font.h"
