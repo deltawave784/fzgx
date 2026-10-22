@@ -13054,6 +13054,28 @@
   },
   {
     "module": "main",
+    "source": "dol/__cvt_dbl_usll.c",
+    "symbols": [
+      "__cvt_dbl_usll"
+    ],
+    "status": "matching",
+    "mw_version": null,
+    "extra_cflags": [],
+    "asm": true
+  },
+  {
+    "module": "main",
+    "source": "dol/__cvt_fp2unsigned.c",
+    "symbols": [
+      "__cvt_fp2unsigned"
+    ],
+    "status": "matching",
+    "mw_version": null,
+    "extra_cflags": [],
+    "asm": true
+  },
+  {
+    "module": "main",
     "source": "dol/__destroy_global_chain.c",
     "symbols": [
       "__destroy_global_chain"
@@ -13061,6 +13083,28 @@
     "status": "matching",
     "mw_version": "GC/1.3.2",
     "extra_cflags": []
+  },
+  {
+    "module": "main",
+    "source": "dol/__div2i.c",
+    "symbols": [
+      "__div2i"
+    ],
+    "status": "matching",
+    "mw_version": null,
+    "extra_cflags": [],
+    "asm": true
+  },
+  {
+    "module": "main",
+    "source": "dol/__div2u.c",
+    "symbols": [
+      "__div2u"
+    ],
+    "status": "matching",
+    "mw_version": null,
+    "extra_cflags": [],
+    "asm": true
   },
   {
     "module": "main",
@@ -13362,6 +13406,17 @@
   },
   {
     "module": "main",
+    "source": "dol/__mod2u.c",
+    "symbols": [
+      "__mod2u"
+    ],
+    "status": "matching",
+    "mw_version": null,
+    "extra_cflags": [],
+    "asm": true
+  },
+  {
+    "module": "main",
     "source": "dol/__num2dec.c",
     "symbols": [
       "__num2dec"
@@ -13433,6 +13488,39 @@
     "status": "matching",
     "mw_version": "GC/1.3.2",
     "extra_cflags": []
+  },
+  {
+    "module": "main",
+    "source": "dol/__shl2i.c",
+    "symbols": [
+      "__shl2i"
+    ],
+    "status": "matching",
+    "mw_version": null,
+    "extra_cflags": [],
+    "asm": true
+  },
+  {
+    "module": "main",
+    "source": "dol/__shr2i.c",
+    "symbols": [
+      "__shr2i"
+    ],
+    "status": "matching",
+    "mw_version": null,
+    "extra_cflags": [],
+    "asm": true
+  },
+  {
+    "module": "main",
+    "source": "dol/__shr2u.c",
+    "symbols": [
+      "__shr2u"
+    ],
+    "status": "matching",
+    "mw_version": null,
+    "extra_cflags": [],
+    "asm": true
   },
   {
     "module": "main",
