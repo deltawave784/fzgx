@@ -8216,3 +8216,6 @@ rel/main_rel/camera/fn_1_B870.c:
 
 rel/main_rel/background/fn_1_9E29C.c:
 	.text       start:0x0009E29C end:0x0009E514 align:4
+
+rel/main_rel/_prolog/fn_1_3CF0.c:
+	.text       start:0x00003CF0 end:0x00003F8C align:4
