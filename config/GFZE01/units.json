@@ -63556,6 +63556,25 @@
   },
   {
     "module": "main_rel",
+    "source": "rel/main_rel/stcoli/fn_1_29968.c",
+    "symbols": [
+      "fn_1_29968"
+    ],
+    "status": "matching",
+    "mw_version": null,
+    "extra_cflags": [],
+    "tu": "rel/main_rel/stcoli.c",
+    "pool": {
+      "...rodata.0": "lbl_1_rodata_840",
+      "@10": "lbl_1_rodata_854",
+      "@238": "lbl_1_rodata_954+0x1F0",
+      "@142": "lbl_1_rodata_954+0x84",
+      "@237": "lbl_1_rodata_954+0x1EC",
+      "@35": "lbl_1_rodata_860+0x48"
+    }
+  },
+  {
+    "module": "main_rel",
     "source": "rel/main_rel/stcoli/fn_1_2A214.c",
     "symbols": [
       "fn_1_2A214"
