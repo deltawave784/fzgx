@@ -8552,6 +8552,288 @@ void fn_1_2B524(Fn2B524_Self *self) {
 }
 /* fzgx:end fn_1_2B524 */
 
+/* fzgx:begin fn_1_2B684 pool noprologue */
+#include "types.h"
+#include "psvec.h"
+#include "game/main_rel/stcoli_types.h"
+#include "game/vec3.h"
+
+typedef struct Fn2B684Obj {
+    u8 pad_0[0x8];
+    f32 mass;            /* 0x08 */
+    u8 pad_C[0x70];
+    u32 seed7C;          /* 0x7C */
+    u32 seed80;          /* 0x80 */
+    u32 seed84;          /* 0x84 */
+    u8 pad_88[0xC];
+    Vec3f vel;           /* 0x94 */
+    Vec3f posA0;         /* 0xA0 */
+    u8 pad_AC[0xA0];
+    u8 mtx14C[0x30];     /* 0x14C */
+    f32 f17C;            /* 0x17C */
+    u8 pad_180[0x3C];
+    Vec3f dir1BC;        /* 0x1BC */
+    u8 pad_1C8[0x318];
+    u16 timer;           /* 0x4E0 */
+    u8 pad_4E2[0xE];
+    Vec3f pos4F0;        /* 0x4F0 */
+    u8 pad_4FC[0x90];
+    u32 flags;           /* 0x58C */
+} Fn2B684Obj;
+
+extern void lbl_8006E1F0(Vec3f *, f32, f32, f32);
+extern void fn_8006E2B0(void *, void *);
+extern void lbl_8006D5F0(void *, void *, f32);
+extern void lbl_8006DAEC(void);
+extern void lbl_8006DBAC(void *);
+extern f32 lbl_8006D6FC(void *, void *);
+extern f32 lbl_8006D0B4(f32);
+extern void mathutil_mtxA_from_quat(void *);
+extern void lbl_8006DFC4(void *);
+extern void lbl_8006DB74(void *);
+extern void lbl_8006DB30(void);
+
+extern void fzgx_use_f(f32);
+extern void fzgx_use_d(f64);
+
+/* Literal-pool primer: fixes the TU pool layout of lbl_1_rodata_840. */
+#pragma section RX ".fzgxpool"
+__declspec(section ".fzgxpool") void fzgx_pool_fn_1_2B684(void) {
+    fzgx_use_f(52.0f);
+    fzgx_use_f(0.0625f);
+    fzgx_use_f(45.0f);
+    fzgx_use_f(0.0f);
+    fzgx_use_f(1.7f);
+    fzgx_use_f(1.0f);
+    fzgx_use_f(0.1f);
+    fzgx_use_f(0.5f);
+    fzgx_use_d(4503599627370496.0);
+    fzgx_use_d(34359747031.0);
+    fzgx_use_f(36.0f);
+    fzgx_use_f(4.0f);
+    fzgx_use_f(0.6f);
+    fzgx_use_f(5.0f);
+    fzgx_use_f(0.05f);
+    fzgx_use_f(1000.0f);
+    fzgx_use_d(131072.0);
+    fzgx_use_d(216.0);
+    fzgx_use_d(2.0);
+    fzgx_use_f(0.25f);
+    fzgx_use_f(0.07f);
+    fzgx_use_f(0.2f);
+    fzgx_use_d(0.84);
+    fzgx_use_f(2.0f);
+    fzgx_use_f(1.8f);
+    fzgx_use_f(1.4f);
+    fzgx_use_f(1.5f);
+    fzgx_use_f(1.2f);
+    fzgx_use_f(2.3f);
+    fzgx_use_f(0.4f);
+    fzgx_use_f(3.2f);
+    fzgx_use_f(0.15f);
+    fzgx_use_f(-0.25f);
+    fzgx_use_f(0.16f);
+    fzgx_use_f(0.12f);
+    fzgx_use_f(0.08f);
+    fzgx_use_f(0.45f);
+    fzgx_use_f(0.7f);
+    fzgx_use_d(0.6000000238418579);
+    fzgx_use_f(0.31f);
+    fzgx_use_f(0.03f);
+    fzgx_use_f(0.01f);
+    fzgx_use_f(700.0f);
+    fzgx_use_d(0.57);
+    fzgx_use_f(0.57f);
+}
+
+static const f32 fzgx_quat_91C[4] = { 0.0f, 0.0f, 0.0f, 1.0f };
+extern void fzgx_use_p(const void *);
+
+__declspec(section ".fzgxpool") void fzgx_pool2_fn_1_2B684(void) {
+    fzgx_use_p(fzgx_quat_91C);
+    fzgx_use_f(-0.1f);
+}
+
+static const f32 fzgx_span_930[33] = {
+    200.0f, 0.02f, 1.035f, 2.0f, 0.04f, 0.8f, 2.6840277f, 1.971901e30f, 13.888889f,
+    1.1920929e-7f, 800.0f, 0.95f, 2.2f, -0.5f, 0.002f, 0.001f, 0.3f, 0.0f, 1.6999999f,
+    -1.5881868e-23f, 1.4499999f, -1.5881868e-23f, 80.0f, 1700.0f, 3.3515625f, 0.0f,
+    0.33333334f, -5000.0f, 900.0f, -10000.0f, 10.0f, 100.0f, 400.0f,
+};
+
+__declspec(section ".fzgxpool") void fzgx_pool3_fn_1_2B684(void) {
+    fzgx_use_p(fzgx_span_930);
+    fzgx_use_f(0.99f);
+}
+
+static const f32 fzgx_span_9B8[78] = {
+    20.0f, 1.01f, 1.875f, 0.0f, 1.7624999f, -1.0842022e-19f, 3.4f, 0.75f, 182.04445f, -45.0f,
+    1.8564814f, 3.8506526e24f, 2.347222f, -2.2789315e-30f, 1.13f, 0.0f, 1.4499999f, -1.0842022e-19f,
+    1.65f, 2.0f, 1.3101851f, -2.6592785e27f, 0.9f, 1.11f, 0.88657403f, -0.0787037f, 1.75f, 0.0f,
+    0.94907403f, -0.0787037f, 1.1851851f, -2.6592785e27f, 2000.0f, 500.0f, 1.5749999f,
+    -1.5881868e-23f, 0.64f, 0.35f, 1.9814814f, 3.8506526e24f, 2.175f, 2.0f, 1.9625f, 2.0f, 2.125f,
+    0.0f, 1.9375f, 0.0f, -0.4f, 0.0f, 2.1550925f, 1.0092287e36f, -1.0f, 0.0001f, 0.014f, 9.0f,
+    60.0f, 3.0f, 0.16666667f, 1200.0f, 1600.0f, 0.0f, 4.4765625f, 0.0f, 1.8f, 3.689349e19f, 0.25f,
+    0.0f, 0.003f, 0.125f, -2000.0f, 600.0f, 6.0f, 300.0f, 1.1111112f, 10000.0f, -3.0f, 10430.378f,
+};
+
+__declspec(section ".fzgxpool") void fzgx_pool4_fn_1_2B684(void) {
+    fzgx_use_p(fzgx_span_9B8);
+    fzgx_use_d(0.0);
+}
+
+static const f32 fzgx_span_AF8[30] = {
+    0.992f, 0.008f, 50.0f, 15.0f, 4000.0f, 0.0f, 2.1999998f, -107374184.0f, 1.3f, 0.009000001f,
+    6.109741f, 0.0f, 46.25f, 1100.0f, 120.0f, -50.0f, 176.0f, -0.0f, 30.0f, -0.2f, 90.0f, 0.006f,
+    2.2893517f, -5.943034e-19f, -5.0f, 4.5f, 3640.0f, 2.5f, -0.3f, 0.00006f,
+};
+
+__declspec(section ".fzgxpool") void fzgx_pool5_fn_1_2B684(void) {
+    fzgx_use_p(fzgx_span_AF8);
+    fzgx_use_f(65536.0f);
+}
+
+static const f32 fzgx_span_B74[11] = {
+    6.6666665f, 3.5f, 0.00024414063f, 9000.0f, 9.477427e-38f, 9.62465e-38f, 1.8475e-40f,
+    3.7909697e-37f, 2.3511322e-38f, 1.1296296f, 4.111937e-16f,
+};
+
+__declspec(section ".fzgxpool") void fzgx_pool6_fn_1_2B684(void) {
+    fzgx_use_p(fzgx_span_B74);
+    fzgx_use_f(0.0015f);
+    fzgx_use_f(450.0f);
+    fzgx_use_f(1365.0f);
+}
+
+#pragma opt_propagation off
+static inline void fn_1_2B684_cross(Vec3f *a, Vec3f *b, Vec3f *out) {
+    f32 ax = a->x, ay = a->y, bz = b->z;
+    f32 az = a->z, bx = b->x, by = b->y;
+    f32 x = ay * bz;
+    f32 y = az * bx;
+    f32 z;
+    y -= ax * bz;
+    x -= az * by;
+    z = ax * by;
+    z -= ay * bx;
+    out->x = x;
+    out->y = y;
+    out->z = z;
+}
+#pragma opt_propagation reset
+
+static inline f32 fn_1_2B684_clamp(f32 t) {
+    if (t < 0.0f) return 0.0f;
+    if (t > 1.0f) return 1.0f;
+    return t;
+}
+
+static inline f32 fn_1_2B684_square(f32 t) {
+    if (t < 0.0) return 0.0f;
+    return t * t;
+}
+
+static inline f32 fn_1_2B684_lensq(Vec3f *v) {
+    return v->z * v->z + (v->y * v->y + v->x * v->x);
+}
+
+#pragma opt_common_subs off
+#pragma opt_propagation off
+void fn_1_2B684(Fn2B684Obj *obj) {
+    f32 fzgx_live;
+    f32 dirv[3];
+#define dir (*(Vec3f *)dirv)
+    Vec3f push;
+    Vec3f spin;
+    Vec3f torque;
+    Vec3f up;
+    Vec3f axis;
+    Quat q;
+    u32 hash;
+    f32 t;
+    f32 k;
+    f32 scale;
+    f32 dot;
+    f32 top;
+    f32 sq;
+
+    hash = obj->seed7C ^ obj->seed80 ^ obj->seed84;
+    dir.x = (f32)(2.0f * ((f32)((hash ^ *(u32 *)&obj->posA0.x) & 0xFFFF) / 65536.0f)) - 1.0f;
+    dir.y = 0.0f;
+    dir.z = (f32)(2.0f * ((f32)((hash ^ *(u32 *)&obj->posA0.y) & 0xFFFF) / 65536.0f)) - 1.0f;
+    t = dir.x;
+    if (t > 0.0f) {
+        t += 0.5f;
+    } else {
+        t -= 0.5f;
+    }
+    dir.x = t;
+    if (dir.z > 0.0f) {
+        dir.z += 0.5f;
+    } else {
+        dir.z -= 0.5f;
+    }
+
+    t = (f32)(0.0015f * obj->f17C) - 1.0f;
+    k = fn_1_2B684_clamp(t);
+    top = 450.0f;
+    scale = k * (top / 216.0);
+
+    lbl_8006E1F0(&push, -dir.x, 0.5f, -dir.z);
+    fzgx_live = obj->mass;
+    psvec_scale(&push, scale * fzgx_live, &push);
+    obj->flags |= 2;
+    fn_8006E2B0(&push, &spin);
+    psvec_scale(&spin, 0.5f, &spin);
+    fn_1_2B684_cross(&dir, &spin, &torque);
+    psvec_add(&obj->posA0, &torque, &obj->pos4F0);
+    fzgx_live = obj->mass;
+    lbl_8006D5F0(&obj->dir1BC, &push, 0.2f * (scale * fzgx_live));
+    psvec_add(&obj->vel, &push, &obj->vel);
+
+    if (obj->timer > 30) {
+        obj->flags |= 0x20;
+        lbl_8006DAEC();
+        lbl_8006DBAC(obj->mtx14C);
+        lbl_8006E1F0(&up, 0.0f, 1.0f, 0.0f);
+        dot = lbl_8006D6FC(&up, &obj->dir1BC);
+        if (dot < 0.99f) {
+            f32 by, bz, y, x, bx, az, ay, ax, z;
+            ax = up.x; ay = up.y; az = up.z;
+            bz = obj->dir1BC.z; bx = obj->dir1BC.x; by = obj->dir1BC.y;
+            x = ay * bz;
+            y = az * bx;
+            z = ax * by;
+            x -= az * by;
+            y -= ax * bz;
+            z -= ay * bx;
+            axis.x = x;
+            axis.y = y;
+            axis.z = z;
+            sq = axis.x * axis.x;
+            sq += axis.y * axis.y;
+            sq += axis.z * axis.z;
+            if (lbl_8006D0B4(sq) > 0.1f) {
+                sq = fn_1_2B684_square(dot);
+                t = 1.0f - sq;
+                fn_8006E7E4(&q, &axis, (s32)(1365.0f * t));
+                mathutil_mtxA_from_quat(&q);
+                lbl_8006DFC4(obj->mtx14C);
+                lbl_8006DB74(obj->mtx14C);
+            }
+        }
+        lbl_8006DB30();
+    }
+
+    if (obj->timer < 2) {
+        obj->timer = 2;
+    } else if (++obj->timer >= 240) {
+        obj->timer = 240;
+    }
+}
+#pragma opt_common_subs reset
+/* fzgx:end fn_1_2B684 */
+
 /* fzgx:begin fn_1_2BA48 */
 typedef struct {
     f32 x, y, z;

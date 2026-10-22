@@ -8309,3 +8309,6 @@ rel/main_rel/mdlload/fn_1_D42A8.c:
 
 rel/main_rel/memcard/fn_1_BF198.c:
 	.text       start:0x000BF198 end:0x000BF520 align:4
+
+rel/main_rel/stcoli/fn_1_2B684.c:
+	.text       start:0x0002B684 end:0x0002BA48 align:4
