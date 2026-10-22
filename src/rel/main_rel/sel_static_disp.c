@@ -4399,6 +4399,257 @@ int fn_1_13FB24(u32 arg0) {
 }
 /* fzgx:end fn_1_13FB24 */
 
+/* fzgx:begin fn_1_13FB8C noprologue */
+#include "types.h"
+#include "font.h"
+#include "rel/main_rel/sel_static_disp.h"
+
+struct fn_1_13FB8C_Copy88 { u32 a[22]; };
+struct fn_1_13FB8C_Copy96 { u32 a[24]; };
+struct fn_1_13FB8C_Copy216 { u32 a[54]; };
+
+extern u32 lbl_1_rodata_8F40;
+extern u8 lbl_1_rodata_9018[216];
+extern u8 lbl_1_rodata_90F0[96];
+extern f32 lbl_1_rodata_26F8[22];
+extern u32 lbl_801A66A8;
+extern s32 lbl_801A66B4;
+extern u32 lbl_1_rodata_9150;
+extern u32 lbl_1_rodata_9154;
+extern const f32 lbl_1_rodata_863C;
+extern const f32 lbl_1_rodata_8A4C;
+extern const f32 lbl_1_rodata_9158;
+extern const f32 lbl_1_rodata_85F0;
+extern const f32 lbl_1_rodata_861C;
+extern const f32 lbl_1_rodata_85F8;
+extern const f32 lbl_1_rodata_8B2C;
+extern const f32 lbl_1_rodata_8B30;
+extern const f32 lbl_1_rodata_9164;
+extern const f32 lbl_1_rodata_915C;
+extern const f32 lbl_1_rodata_8818;
+extern const f32 lbl_1_rodata_8B6C;
+extern const f32 lbl_1_rodata_9160;
+extern const f32 lbl_1_rodata_88A8;
+extern const f32 lbl_1_rodata_9168;
+extern const f32 lbl_1_rodata_916C;
+extern void fn_1_49410(void);
+extern void fn_1_495FC(void);
+extern void fn_1_495B0(u32);
+extern void fn_1_4965C(u8);
+extern void fn_1_4955C(f32, f32);
+extern void fn_1_495A0(f32);
+extern void fn_1_4954C(f32);
+extern void fn_1_49514(u32 *);
+extern void fn_1_496FC(f32, f32);
+extern void fn_1_495C8(u32);
+extern void fn_1_4AE0C(const char *, ...);
+extern u32 fn_1_4DCB8(u32);
+extern void fn_1_4953C(u16);
+extern f32 lbl_8006D188(u32);
+#pragma opt_common_subs off
+#pragma opt_loop_invariants off
+
+static inline s16 fn_1_13FB8C_hidden(s16 row, Obj_1_bss_8B3A0 *state) {
+    switch (row) {
+    case 6: return 1;
+    case 3: return 1;
+    case 7: return 1;
+    case 1: return 1;
+    case 5: if (state->unk_12C == 0) return 1;
+    default: return 0;
+    }
+}
+static inline s16 fn_1_13FB8C_hidden0(s16 row, Obj_1_bss_8B3A0 *state) {
+    switch (row) {
+    case 4: return 1;
+    case 6: if (state->unk_4 != 3) return 1; break;
+    case 3: if (state->unk_4 == 4) return 1; break;
+    case 7: if (state->unk_4 != 2) return 1; break;
+    case 5: return 1;
+    }
+    return 0;
+}
+static inline f32 fn_1_13FB8C_max(f32 a) {
+    f32 b = lbl_1_rodata_861C;
+    if (a > b) return a;
+    return b;
+}
+static inline void fn_1_13FB8C_fade_in(f32 delta, f32 half, f32 *alpha) {
+    if (fn_1_13FB8C_max(delta) / half < lbl_1_rodata_861C) {
+        *alpha = lbl_1_rodata_861C;
+    } else if (fn_1_13FB8C_max(delta) / half > lbl_1_rodata_863C) {
+        *alpha = lbl_1_rodata_863C;
+    } else {
+        *alpha = (delta > lbl_1_rodata_861C ? delta : lbl_1_rodata_861C) / half;
+    }
+}
+static inline f32 fn_1_13FB8C_clamp(f32 t) {
+    if (t < lbl_1_rodata_861C) return lbl_1_rodata_861C;
+    if (t > lbl_1_rodata_863C) return lbl_1_rodata_863C;
+    return t;
+}
+#define PANEL_MAX(a,b) fn_1_13FB8C_max((a))
+#define PANEL_CLAMP(v,lo,hi) ((v) < (lo) ? (lo) : ((v) > (hi) ? (hi) : (v)))
+#define PACKET_F(n) (((f32 *)&packet)[(n)])
+#define PACKET_B(n) (((u8 *)&packet)[(n)])
+#define PRINT_VALUE(n) fn_1_4AE0C((char *)p_lbl_1_data_40F58 + 0xe8c, ((char **)values.a)[(n) * 6 + lbl_801A66B4])
+
+void fn_1_13FB8C(u32 arg0, u32 arg1, s16 arg2, s16 arg3, s32 arg4, f32 arg5) {
+    u8 *p_lbl_1_data_40F58;
+    struct fn_1_13FB8C_Copy216 values;
+    struct fn_1_13FB8C_Copy216 labels;
+    struct fn_1_13FB8C_Copy96 choices;
+    char *(*labelRow)[6];
+    s32 valueX;
+    s16 row;
+    s16 originX;
+    s16 originY;
+    f32 selectedAlpha;
+    f32 arrowLeft;
+    f32 arrowRight;
+    f32 arrowOffset;
+    f32 scale;
+    f32 alpha;
+    f32 half;
+    f32 delta;
+    u32 oldFont;
+    Obj_1_bss_8B3A0 *state;
+    p_lbl_1_data_40F58 = (u8 *)&lbl_1_data_40F58;
+    values = *(struct fn_1_13FB8C_Copy216 *)&lbl_1_rodata_8F40;
+    labels = *(struct fn_1_13FB8C_Copy216 *)lbl_1_rodata_9018;
+    choices = *(struct fn_1_13FB8C_Copy96 *)lbl_1_rodata_90F0;
+    alpha = lbl_1_rodata_863C;
+    scale = lbl_1_rodata_8A4C;
+    originX = arg0 + 21 - (s16)arg2 / 2;
+    originY = arg1 + 21 - (s16)arg3 / 2;
+    if (lbl_801A66B4 != 5) scale = lbl_1_rodata_9158;
+    {
+    u32 flags;
+    Obj_1_bss_8B3A0 *fadeState;
+    fadeState = (Obj_1_bss_8B3A0 *)&lbl_1_bss_8B3A0;
+    flags = fadeState->unk_140;
+    if ((flags & 0x80000000) && (flags & 0x20)) {
+        half = (f32)fadeState->unk_148 / 2.0f;
+        if (flags & 2) {
+            fn_1_13FB8C_fade_in((f32)fadeState->unk_146 - half, half, &alpha);
+        } else if (flags & 1) {
+            f32 t = (f32)fadeState->unk_146 / half;
+            t = fn_1_13FB8C_clamp(t);
+            alpha = lbl_1_rodata_863C - t;
+        }
+    } else if (lbl_1_bss_8B3A0.unk_0 == -1) {
+        return;
+    }
+    }
+    fn_1_49410();
+    fn_1_495FC();
+    fn_1_495B0(0x80000000);
+    fn_1_4965C(2);
+    fn_1_4955C(scale, scale);
+    fn_1_495A0(alpha);
+    fn_1_4954C(arg5);
+    labelRow = (char *(*)[6])labels.a;
+    state = (Obj_1_bss_8B3A0 *)&lbl_1_bss_8B3A0;
+    arrowOffset = lbl_1_rodata_85F8 * scale;
+    selectedAlpha = lbl_1_rodata_85F0 * alpha;
+    arrowLeft = (f32)(originX + 158) + arrowOffset;
+    arrowRight = (f32)(originX + 301) + arrowOffset;
+    valueX = originX + 238;
+    for (row = 0; row < 9; labelRow++, row++) {
+        u32 color = lbl_1_rodata_9150;
+        fn_1_49514(&color);
+        if (row == state->unk_92) {
+            struct fn_1_13FB8C_Copy88 packet;
+            packet = *(struct fn_1_13FB8C_Copy88 *)lbl_1_rodata_26F8;
+            packet.a[0] = 18;
+            PACKET_F(1) = (f32)(s16)arg0;
+            PACKET_F(2) = (f32)((s16)originY - 2);
+            PACKET_F(3) = lbl_1_rodata_915C;
+            packet.a[12] = 6;
+            PACKET_F(4) = PACKET_F(4) * lbl_1_rodata_8818;
+            PACKET_F(5) = PACKET_F(5) * lbl_1_rodata_8B6C;
+            PACKET_B(0x38) = (s32)(lbl_1_rodata_9160 + (f32)(lbl_1_rodata_88A8 * lbl_8006D188((s32)(lbl_1_rodata_9164 + (f32)(lbl_1_rodata_8B2C * (lbl_801A66A8 % 60)) / lbl_1_rodata_8B30))));
+            PACKET_B(0x39) = (s32)(lbl_1_rodata_9168 + (f32)(lbl_1_rodata_916C * lbl_8006D188((s32)(lbl_1_rodata_9164 + (f32)(lbl_1_rodata_8B2C * (lbl_801A66A8 % 60)) / lbl_1_rodata_8B30))));
+            PACKET_B(0x3a) = (s32)(lbl_1_rodata_9168 + (f32)(lbl_1_rodata_916C * lbl_8006D188((s32)(lbl_1_rodata_9164 + (f32)(lbl_1_rodata_8B2C * (lbl_801A66A8 % 60)) / lbl_1_rodata_8B30))));
+            PACKET_F(11) = selectedAlpha;
+            fn_1_4F734((FontDrawPacket *)&packet);
+        }
+        if (arg4 == 1 && fn_1_13FB8C_hidden(row, state) && row != 5) continue;
+        if (arg4 == 0 && fn_1_13FB8C_hidden0(row, state)) continue;
+        if (row == 8) {
+            fn_1_496FC((f32)(s16)arg0, (f32)(s16)originY);
+            fn_1_495C8(1);
+            fn_1_4AE0C((char *)p_lbl_1_data_40F58 + 0x11cc, (*labelRow)[lbl_801A66B4]);
+        } else {
+            if (arg4 == 1 && fn_1_13FB8C_hidden(row, state) && row == 5) {
+                u32 disabledColor = lbl_1_rodata_9154;
+                fn_1_49514(&disabledColor);
+            }
+            fn_1_496FC((f32)originX, (f32)(s16)originY);
+            fn_1_495C8(0);
+            fn_1_4AE0C((char *)p_lbl_1_data_40F58 + 0x11cc, (*labelRow)[lbl_801A66B4]);
+            {
+                alpha = (f32)(s16)originY + arrowOffset;
+                fn_1_496FC(arrowLeft, alpha);
+                oldFont = fn_1_4DCB8(10);
+                fn_1_4953C(0x4444);
+                fn_1_4AE0C((char *)p_lbl_1_data_40F58 + 0x11d0);
+                fn_1_4DCB8(oldFont);
+                fn_1_496FC(arrowRight, alpha);
+                oldFont = fn_1_4DCB8(10);
+                fn_1_4953C(0xbbbb);
+                fn_1_4AE0C((char *)p_lbl_1_data_40F58 + 0x11d0);
+                fn_1_4DCB8(oldFont);
+                fn_1_4953C(0);
+            }
+        }
+        fn_1_496FC((f32)valueX, (f32)(s16)originY);
+        fn_1_495C8(1);
+        switch (row) {
+        case 4:
+            fn_1_4AE0C((char *)p_lbl_1_data_40F58 + 0x11d4, state->unk_12C);
+            break;
+        case 6:
+            if (state->unk_12E == 0) PRINT_VALUE(0);
+            else PRINT_VALUE(1);
+            break;
+        case 3:
+            if (state->unk_130 == 0) PRINT_VALUE(5);
+            else PRINT_VALUE(4);
+            break;
+        case 1:
+            if (state->unk_132 == 0) PRINT_VALUE(3);
+            else PRINT_VALUE(2);
+            break;
+        case 7:
+            if (state->unk_134 == 0) PRINT_VALUE(7);
+            else PRINT_VALUE(6);
+            break;
+        case 2:
+            if (arg4 == 1) {
+                if (state->unk_136 == 0) PRINT_VALUE(3);
+                else PRINT_VALUE(2);
+            } else {
+                if (state->unk_138 == 0) PRINT_VALUE(3);
+                else PRINT_VALUE(2);
+            }
+            break;
+        case 0:
+            if (arg4 == 1) {
+                s16 count = state->unk_13A;
+                if ((s16)count == 0) PRINT_VALUE(8);
+                else fn_1_4AE0C((char *)p_lbl_1_data_40F58 + 0x11d4, count);
+            } else fn_1_4AE0C((char *)p_lbl_1_data_40F58 + 0x11d4, state->unk_13C);
+            break;
+        case 5:
+            fn_1_4AE0C((char *)p_lbl_1_data_40F58 + 0xe8c, ((char *(*)[6])choices.a)[state->unk_8][lbl_801A66B4]);
+            break;
+        }
+        originY += 23;
+    }
+}
+/* fzgx:end fn_1_13FB8C */
+
 /* fzgx:begin fn_1_14108C noprologue */
 #include "types.h"
 #include "dolphin/types.h"
