@@ -1374,6 +1374,53 @@ void fn_1_12C524(struct Entry_12C524 *arg0)
 }
 /* fzgx:end fn_1_12C524 */
 
+/* fzgx:begin fn_1_12C5E4 noprologue */
+#include "types.h"
+
+struct Sig_fn_80071718_fn_80071718_Arg0 {
+    u8 pad_0[0xC];
+    u32 unk_C;
+};
+extern void fn_80071718(struct Sig_fn_80071718_fn_80071718_Arg0 *);
+extern void fn_80008BEC(void *, int, u32);
+
+typedef struct Ent {
+    u8 pad0[0x328];
+    s8 id;
+    u8 pad1[0x37c - 0x329];
+    struct Sig_fn_80071718_fn_80071718_Arg0 *ptrs[4];
+    u8 pad2[0x3b8 - 0x38c];
+    s16 val;
+    u8 pad3[0x440 - 0x3ba];
+} Ent;
+
+#pragma opt_propagation off
+static inline void fn_1_12C5E4_impl(Ent *e) {
+    u32 *q;
+    s16 j;
+    s16 i;
+    s32 zero;
+
+    for (i = 0; i < 0x29; e++, i++) {
+        if (e->id >= 0 && e->id <= 0x28) {
+            j = 0;
+            zero = j;
+            for (q = (u32 *)e; j < 4; q++, j++) {
+                if (e->val % 4 != j && ((Ent *)q)->ptrs[0] != NULL) {
+                    fn_80071718(((Ent *)q)->ptrs[0]);
+                    ((Ent *)q)->ptrs[0] = (struct Sig_fn_80071718_fn_80071718_Arg0 *)zero;
+                }
+            }
+        }
+    }
+}
+
+void fn_1_12C5E4(void *arg, u32 lab_unused0, u32 lab_unused1, u32 lab_unused2) {
+    fn_1_12C5E4_impl((Ent *)arg);
+    fn_80008BEC(arg, 0, 0xAE40);
+}
+/* fzgx:end fn_1_12C5E4 */
+
 /* fzgx:begin fn_1_12C6BC */
 void fn_1_12C6BC(void *arg) {
     u8 *p;
