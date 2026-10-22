@@ -17515,6 +17515,16 @@
   },
   {
     "module": "main",
+    "source": "dol/fn_80025EF4.c",
+    "symbols": [
+      "fn_80025EF4"
+    ],
+    "status": "matching",
+    "mw_version": "GC/1.2.5n",
+    "extra_cflags": []
+  },
+  {
+    "module": "main",
     "source": "dol/fn_80026D70.c",
     "symbols": [
       "fn_80026D70"
