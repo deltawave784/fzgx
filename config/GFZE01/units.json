@@ -70344,6 +70344,17 @@
   },
   {
     "module": "movie_module",
+    "source": "rel/movie_module/fn_12_3D740.c",
+    "symbols": [
+      "fn_12_3D740"
+    ],
+    "status": "nonmatching",
+    "mw_version": "GC/1.3.2",
+    "extra_cflags": [],
+    "pool": true
+  },
+  {
+    "module": "movie_module",
     "source": "rel/movie_module/fn_12_3D968.c",
     "symbols": [
       "fn_12_3D968"
