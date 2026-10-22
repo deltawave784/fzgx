@@ -8141,6 +8141,148 @@ u32 fn_1_B8170(s32 card) {
 }
 /* fzgx:end fn_1_B8170 */
 
+/* fzgx:begin fn_1_B88C4 pool noprologue */
+#include "dolphin/types.h"
+#include "dolphin/card.h"
+#include "rel/main_rel/memcard.h"
+
+extern u32 lbl_801A6410;
+extern void *fn_1_45D0(u32,u32,const char *,int);
+extern void fn_1_46B4(u32,void *,const char *,int);
+extern s32 fn_8002DFE0(s32,void *,CARDCallback);
+extern u32 fn_1_B8170(s32);
+extern f32 lbl_1_rodata_4AE0[114];
+typedef struct Slot { u8 a[1]; s8 state; u8 b[10]; void *work; u8 c[44]; s32 blocks; s32 files; u8 d[92]; } Slot;
+typedef struct State { u8 a[8]; Slot slots[2]; u8 b[0x5c74-0x148]; s32 status; u8 active; u8 pad[3]; u32 flags[2]; s32 needed[2][6]; } State;
+static inline int valid(Slot *slots, s32 chan) { int v=0; /* Card status may be changed asynchronously. */ s8 state = *(volatile s8 *)&slots[chan].state; if(state!=-1 && state!=-3) v=1; return v; }
+static inline void cleanup(Slot *p,int line) { if(p->work) { fn_1_46B4(lbl_801A6410,p->work,lbl_1_data_3C7B8,line); p->work=0; } }
+static inline s32 need(int off,Slot *p) {
+ u8 *r=(u8 *)lbl_1_rodata_4AE0;
+ s32 free=p->blocks;
+ u32 size=*(u32 *)(r+off+0x24);
+ s32 n=(s32)((size+0x405f)&~0x1fff);
+ n/=8192;
+ if(size==0) { u8 kind=r[off+3]; if(kind==4)n=3; else if(kind==5)n=13; else if(kind==2)n=3; }
+ if(p->files<=0) return -n;
+ if(free-n>=0) return n;
+ return -n;
+}
+static inline s32 need_large(int off,Slot *p) {
+ u8 *r=(u8 *)lbl_1_rodata_4AE0;
+ u32 size=*(u32 *)(r+off+0x24);
+ s32 n=(s32)((size+0x405f)&~0x1fff);
+ s32 free=p->blocks;
+ n/=8192;
+ if(size==0) { u8 kind=r[off+3]; if(kind==4)n=3; else if(kind==5)n=13; else if(kind==2)n=3; }
+ if(p->files<=0) return -n;
+ if(free-n>=0) return n;
+ return -n;
+}
+/* file-scope objects of the retail TU, in retail order: MWCC addresses them off one section base */
+u32 fzgx_obj_lbl_1_bss_716C0[2];
+Slot fzgx_obj_lbl_1_bss_716C8[2];
+u32 fzgx_obj_lbl_1_bss_71808;
+u32 lbl_1_bss_7180C;
+u32 lbl_1_bss_71810[40];
+u8 lbl_1_bss_71810_fill_718B0;
+u8 fzgx_obj_lbl_1_bss_718B1;
+u16 lbl_1_bss_716C0_gap_718B2;
+u32 fzgx_obj_lbl_1_bss_718B4;
+u8 lbl_1_bss_718B8;
+u8 lbl_1_bss_718B9;
+u16 lbl_1_bss_718B9_fill_718BA;
+u32 lbl_1_bss_718B9_fill_718BC;
+u32 fzgx_obj_lbl_1_bss_718C0[8];
+u32 fzgx_obj_lbl_1_bss_718E0[5754];
+u32 lbl_1_bss_772C8[16];
+u16 lbl_1_bss_772C8_fill_77308;
+u8 fzgx_obj_lbl_1_bss_7730A;
+u8 lbl_1_bss_716C0_gap_7730B;
+u32 lbl_1_bss_7730C;
+u32 lbl_1_bss_77310[9];
+s32 lbl_1_bss_77310_24;
+u8 lbl_1_bss_77310_28;
+u8 lbl_1_bss_77310_fill_77339;
+u16 lbl_1_bss_77310_fill_7733A;
+u32 lbl_1_bss_77310_2C[2];
+s32 lbl_1_bss_77310_34[2][6];
+u32 lbl_1_bss_77310_fill_77374[3];
+
+#pragma section code_type ".fzgxpool"
+static void fzgx_bss_layout(void) {
+    volatile u8 s;  /* fzgx-allow: S2 layout primer sink: MWCC emits .bss objects in first-access order */
+    s = *(u8 *)&fzgx_obj_lbl_1_bss_716C0;
+    s = *(u8 *)&fzgx_obj_lbl_1_bss_716C8;
+    s = *(u8 *)&fzgx_obj_lbl_1_bss_71808;
+    s = *(u8 *)&lbl_1_bss_7180C;
+    s = *(u8 *)&lbl_1_bss_71810;
+    s = *(u8 *)&lbl_1_bss_71810_fill_718B0;
+    s = *(u8 *)&fzgx_obj_lbl_1_bss_718B1;
+    s = *(u8 *)&lbl_1_bss_716C0_gap_718B2;
+    s = *(u8 *)&fzgx_obj_lbl_1_bss_718B4;
+    s = *(u8 *)&lbl_1_bss_718B8;
+    s = *(u8 *)&lbl_1_bss_718B9;
+    s = *(u8 *)&lbl_1_bss_718B9_fill_718BA;
+    s = *(u8 *)&lbl_1_bss_718B9_fill_718BC;
+    s = *(u8 *)&fzgx_obj_lbl_1_bss_718C0;
+    s = *(u8 *)&fzgx_obj_lbl_1_bss_718E0;
+    s = *(u8 *)&lbl_1_bss_772C8;
+    s = *(u8 *)&lbl_1_bss_772C8_fill_77308;
+    s = *(u8 *)&fzgx_obj_lbl_1_bss_7730A;
+    s = *(u8 *)&lbl_1_bss_716C0_gap_7730B;
+    s = *(u8 *)&lbl_1_bss_7730C;
+    s = *(u8 *)&lbl_1_bss_77310;
+    s = *(u8 *)&lbl_1_bss_77310_24;
+    s = *(u8 *)&lbl_1_bss_77310_28;
+    s = *(u8 *)&lbl_1_bss_77310_fill_77339;
+    s = *(u8 *)&lbl_1_bss_77310_fill_7733A;
+    s = *(u8 *)&lbl_1_bss_77310_2C;
+    s = *(u8 *)&lbl_1_bss_77310_34;
+    s = *(u8 *)&lbl_1_bss_77310_fill_77374;
+}
+#pragma section code_type ".text"
+
+int fn_1_B88C4(void) {
+ 
+ Slot *p;
+ s32 result;
+ struct { s32 value; } chan;
+ lbl_1_bss_77310_24=0; lbl_1_bss_77310_28=1;
+ if(!valid(fzgx_obj_lbl_1_bss_716C8,0) && !valid(fzgx_obj_lbl_1_bss_716C8,1)) return 0;
+ chan.value=*((u8 *)&fzgx_obj_lbl_1_bss_718B1);
+ if((u32)chan.value>1)return 0;
+ p=fzgx_obj_lbl_1_bss_716C8; p+=chan.value;
+ p->work=fn_1_45D0(lbl_801A6410,0xa000,lbl_1_data_3C7B8,0x256d);
+ do {result=fn_8002DFE0(chan.value,p->work,0);}while(result==-1);
+ if(result!=0 && result!=-6) {cleanup(p,0x2573);}
+ else { s32 check; do{check=CARDCheck(chan.value);}while(check==-1); result=check; }
+ if(result!=0) {
+ do{result=CARDUnmount(chan.value);}while(result==-1);
+ cleanup(p,0x258c); return 0;
+ }
+ do{result=CARDFreeBlocks(chan.value,&p->blocks,&p->files);}while(result==-1);
+ if(result!=0) {p->blocks=-1;p->files=-1;}else p->blocks/=8192;
+ lbl_1_bss_77310_2C[chan.value]=fn_1_B8170(chan.value);
+ lbl_1_bss_77310_34[chan.value][1]=need(0x68,p);
+ lbl_1_bss_77310_34[chan.value][3]=need(0x100,p);
+ lbl_1_bss_77310_34[chan.value][2]=need(0xb4,p);
+ lbl_1_bss_77310_34[chan.value][4]=need_large(0x14c,p);
+ lbl_1_bss_77310_34[chan.value][5]=need_large(0x198,p);
+ do{result=CARDUnmount(chan.value);}while(result==-1);
+ cleanup(p,0x258c);
+ if(lbl_1_bss_962==100) {
+ if((lbl_1_bss_77310_34[chan.value][4]<0 && !(lbl_1_bss_77310_2C[chan.value]&16)) || p->files<=0)return 1;
+ return 0;
+ }
+ if((lbl_1_bss_77310_34[chan.value][1]<0 && !(lbl_1_bss_77310_2C[chan.value]&2)) ||
+ (lbl_1_bss_77310_34[chan.value][3]<0 && !(lbl_1_bss_77310_2C[chan.value]&8)) ||
+ (lbl_1_bss_77310_34[chan.value][2]<0 && !(lbl_1_bss_77310_2C[chan.value]&4)) ||
+ (lbl_1_bss_77310_34[chan.value][4]<0 && !(lbl_1_bss_77310_2C[chan.value]&16)) ||
+ (lbl_1_bss_77310_34[chan.value][5]<0 && !(lbl_1_bss_77310_2C[chan.value]&32)) || p->files<=0)return 1;
+ return 0;
+}
+/* fzgx:end fn_1_B88C4 */
+
 /* fzgx:begin fn_1_B9904 pool noprologue */
 #include "types.h"
 
