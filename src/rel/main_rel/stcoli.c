@@ -6557,6 +6557,61 @@ void fn_1_28F08(StcoliRot *rot, Vec3f *p, f32 yOff)
 }
 /* fzgx:end fn_1_28F08 */
 
+/* fzgx:begin fn_1_29044 noprologue */
+#include "game/vec3.h"
+#include "psvec.h"
+
+extern void fn_8006E2B0(void *, Vec3 *);
+
+typedef struct {
+    u8 pad[0xA0];
+    Vec3 v;
+} Object29044;
+
+/* Volatile preserves the ordered input stack copy before the call. */
+static inline void copy_vec(volatile Vec3 *out, f32 z, f32 y, f32 x)
+{
+    out->x = x;
+    out->y = y;
+    out->z = z;
+}
+
+static inline void cross_vec(const Vec3 *a, const Vec3 *b, Vec3 *out)
+{
+    f32 ax = a->x;
+    f32 ay = a->y;
+    f32 az = a->z;
+    f32 bx = b->x;
+    f32 by = b->y;
+    f32 bz = b->z;
+    f32 x, y, z;
+    x = ay * bz;
+    x -= az * by;
+    y = az * bx;
+    y -= ax * bz;
+    z = ax * by;
+    z -= ay * bx;
+    out->x = x;
+    out->y = y;
+    out->z = z;
+}
+
+#pragma opt_propagation off
+#pragma opt_common_subs off
+void fn_1_29044(Object29044 *self, Vec3 *vec, void *arg2)
+{
+    Vec3 result;
+    Vec3 cross;
+    Vec3 input;
+
+    copy_vec(&input, vec->z, vec->y, vec->x);
+    fn_8006E2B0(arg2, &result);
+    cross_vec(&input, &result, &cross);
+    psvec_add(&self->v, &cross, &self->v);
+}
+#pragma opt_common_subs reset
+/* fzgx:end fn_1_29044 */
+
 /* fzgx:begin fn_1_294D0 noprologue */
 #include "game/main_rel/stcoli_types.h"
 
