@@ -439,6 +439,38 @@
   },
   {
     "module": "customize",
+    "source": "rel/customize/_prolog/fn_3_10A4.c",
+    "symbols": [
+      "fn_3_10A4"
+    ],
+    "status": "matching",
+    "mw_version": "GC/1.3.2",
+    "extra_cflags": [],
+    "tu": "rel/customize/_prolog.c",
+    "pool": {
+      "...rodata.0": "lbl_3_rodata_0",
+      "@60": "lbl_3_rodata_44+0x64",
+      "@72": "lbl_3_rodata_44+0x7C",
+      "@68": "lbl_3_rodata_44+0x78",
+      "@46": "lbl_3_rodata_44+0x38",
+      "@43": "lbl_3_rodata_44+0x2C",
+      "@10": "lbl_3_rodata_0+0x14",
+      "@39": "lbl_3_rodata_44+0x1C",
+      "@41": "lbl_3_rodata_44+0x24",
+      "@61": "lbl_3_rodata_44+0x68",
+      "@31": "lbl_3_rodata_44+0xC",
+      "@76": "lbl_3_rodata_44+0x80",
+      "@63": "lbl_3_rodata_44+0x70",
+      "@80": "lbl_3_rodata_44+0x84",
+      "@84": "lbl_3_rodata_44+0x88",
+      "@64": "lbl_3_rodata_44+0x74",
+      "@88": "lbl_3_rodata_44+0x8C",
+      "@92": "lbl_3_rodata_44+0x90",
+      "@96": "lbl_3_rodata_44+0x94"
+    }
+  },
+  {
+    "module": "customize",
     "source": "rel/customize/_prolog/fn_3_12D4.c",
     "symbols": [
       "fn_3_12D4"

@@ -692,6 +692,191 @@ void fn_3_E64(u8 *arg0) {
 }
 /* fzgx:end fn_3_E64 */
 
+/* fzgx:begin fn_3_10A4 noprologue */
+#include "dolphin/types.h"
+
+typedef struct { u8 r, g, b, a; } Sig_fn_800081C8_Color;
+typedef Sig_fn_800081C8_Color Color;
+
+extern char *lbl_3_data_E80[2][6];
+extern char lbl_3_data_15D4[3];
+extern s32 lbl_801A66B4;
+
+extern u32 fn_800081C8(Color, Color, f32);
+extern void fn_1_49410(void);
+extern void fn_1_4955C(f32, f32);
+extern void fn_1_4954C(f32);
+extern void fn_1_495C8(u8);
+extern void fn_1_495B0(u32);
+extern void fn_1_49590(f32);
+extern void fn_1_4966C(f32, f32);
+extern void fn_1_496FC(f32, f32);
+extern void fn_1_4D494(void);
+extern void fn_1_49514(Color);
+extern void fn_1_49528(Color);
+extern void fn_1_4AE0C(const char *, ...);
+extern u32 fn_1_4D4C8(Color, f32, f32);
+
+extern void fzgx_pool_f32(f32);
+extern void fzgx_pool_f64(f64);
+extern void fzgx_pool_addr(void *);
+
+#pragma section code_type ".fzgxpool"
+void fzgx_pool_primer0(void)
+{
+    fzgx_pool_f32(0.0f);
+    fzgx_pool_f32(320.0f);
+    fzgx_pool_f32(240.0f);
+    fzgx_pool_f32(0.001f);
+    fzgx_pool_f32(0.01f);
+    fzgx_pool_f32(0.5f);
+    fzgx_pool_f32(480.0f);
+    fzgx_pool_f32(2.0f);
+    fzgx_pool_f64(4503599627370496.0);
+}
+void fzgx_pool_primer1(void)
+{
+    f32 values[6] = {0.0f, 10.0f, 10.0f, 0.0f, 0.0f, 0.0f};
+    fzgx_pool_addr(values);
+    fzgx_pool_f32(0.25f);
+}
+void fzgx_pool_primer2(void)
+{
+    Color color = {0, 0, 0, 0};
+    fzgx_pool_addr(&color);
+}
+void fzgx_pool_primer3(void)
+{
+    Color color = {255, 255, 255, 255};
+    fzgx_pool_addr(&color);
+    fzgx_pool_f32(500.0f);
+    fzgx_pool_f32(300.0f);
+    fzgx_pool_f32(0.1f);
+}
+void fzgx_pool_primer4(void)
+{
+    Color color = {255, 255, 255, 255};
+    fzgx_pool_addr(&color);
+    fzgx_pool_f32(1.5f);
+    fzgx_pool_f32(-1.0f);
+    fzgx_pool_f32(8.0f);
+    fzgx_pool_f32(4.0f);
+    fzgx_pool_f32(150.0f);
+    fzgx_pool_f32(0.09f);
+    fzgx_pool_f32(30.0f);
+    fzgx_pool_f32(0.55f);
+    fzgx_pool_f32(0.75f);
+    fzgx_pool_f64(4503601774854144.0);
+}
+void fzgx_pool_primer5(void)
+{
+    Color c0 = {160, 80, 80, 0};
+    Color c1 = {160, 160, 160, 0};
+    Color c2 = {255, 255, 255, 0};
+    Color c3 = {112, 112, 112, 0};
+    Color c4 = {0, 0, 0, 0};
+    Color c5 = {112, 112, 112, 0};
+    Color c6 = {0, 0, 0, 0};
+    Color c7 = {255, 255, 255, 0};
+    fzgx_pool_addr(&c0);
+    fzgx_pool_addr(&c1);
+    fzgx_pool_addr(&c2);
+    fzgx_pool_addr(&c3);
+    fzgx_pool_addr(&c4);
+    fzgx_pool_addr(&c5);
+    fzgx_pool_addr(&c6);
+    fzgx_pool_addr(&c7);
+    fzgx_pool_f32(1.0f);
+    fzgx_pool_f32(288.0f);
+    fzgx_pool_f32(0.08f);
+    fzgx_pool_f32(10.0f);
+    fzgx_pool_f32(352.0f);
+}
+static inline Color fn_3_10A4_color0(void)
+{
+    Color color = {160, 80, 80, 0};
+    return color;
+}
+static inline Color fn_3_10A4_color1(void)
+{
+    Color color = {160, 160, 160, 0};
+    return color;
+}
+static inline Color fn_3_10A4_color2(void)
+{
+    Color color = {255, 255, 255, 0};
+    return color;
+}
+static inline Color fn_3_10A4_color3(void)
+{
+    Color color = {112, 112, 112, 0};
+    return color;
+}
+static inline Color fn_3_10A4_color4(void)
+{
+    Color color = {0, 0, 0, 0};
+    return color;
+}
+static inline Color fn_3_10A4_color5(void)
+{
+    Color color = {112, 112, 112, 0};
+    return color;
+}
+static inline Color fn_3_10A4_color6(void)
+{
+    Color color = {0, 0, 0, 0};
+    return color;
+}
+static inline Color fn_3_10A4_color7(void)
+{
+    Color color = {255, 255, 255, 0};
+    return color;
+}
+
+#pragma section code_type ".text"
+void fn_3_10A4(u8 *arg0) {
+    Color color;
+    f32 s;
+
+    s = 1.0f;
+    *(u32 *)&color = fn_800081C8(fn_3_10A4_color0(), fn_3_10A4_color1(), s);
+    fn_1_49410();
+    s = 0.75f;
+    fn_1_4955C(s, s);
+    fn_1_4954C(0.09f);
+    fn_1_495C8(9);
+    if (lbl_801A66B4 != 5) {
+        fn_1_495B0(0x80000000);
+        fn_1_49590(0.5f);
+        fn_1_4966C(-1.0f, 4.0f);
+    }
+    fn_1_496FC(288.0f, 300.0f);
+    fn_1_495C8(10);
+    if (*arg0 == 0) {
+        fn_1_4D494();
+        fn_1_49514(fn_3_10A4_color2());
+        fn_1_4AE0C(lbl_3_data_15D4, lbl_3_data_E80[0][lbl_801A66B4]);
+        fn_1_4D4C8(color, 0.09f, 10.0f);
+    } else {
+        fn_1_49514(fn_3_10A4_color3());
+        fn_1_49528(fn_3_10A4_color4());
+        fn_1_4AE0C(lbl_3_data_15D4, lbl_3_data_E80[0][lbl_801A66B4]);
+    }
+    fn_1_496FC(352.0f, 300.0f);
+    fn_1_495C8(8);
+    if (*arg0 == 0) {
+        fn_1_49514(fn_3_10A4_color5());
+        fn_1_49528(fn_3_10A4_color6());
+        fn_1_4AE0C(lbl_3_data_15D4, lbl_3_data_E80[1][lbl_801A66B4]);
+    } else {
+        fn_1_4D494();
+        fn_1_49514(fn_3_10A4_color7());
+        fn_1_4AE0C(lbl_3_data_15D4, lbl_3_data_E80[1][lbl_801A66B4]);
+        fn_1_4D4C8(color, 0.09f, 10.0f);
+    }
+}
+/* fzgx:end fn_3_10A4 */
+
 /* fzgx:begin fn_3_12D4 noprologue */
 #include "dolphin/types.h"
 
