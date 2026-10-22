@@ -939,6 +939,75 @@ u32 fn_1_17098(void *arg0, u32 arg1, u32 v1, u32 arg3, u32 arg4, ColiContext *ct
 }
 /* fzgx:end fn_1_17098 */
 
+/* fzgx:begin fn_1_17A9C noprologue */
+#include "dolphin/types.h"
+
+typedef struct Position17A9C {
+    f32 x, y, z;
+} Position17A9C;
+
+typedef struct Entry17A9C {
+    Position17A9C pos;
+    u8 pad[0x80 - 0xC];
+} Entry17A9C;
+
+typedef struct State17A9C {
+    u8 pad0[0x1CC];
+    s32 count;
+    u8 pad1[0x5F4 - 0x1D0];
+    Entry17A9C entries[1];
+} State17A9C;
+
+extern State17A9C *lbl_801A66CC;
+
+/* Volatile input preserves the retail coordinate reloads for each candidate. */
+static inline f32 distance17A9C(volatile Position17A9C *a, Position17A9C *b) {
+    f32 dx, dy, dz;
+    dx = a->x;
+    dx -= b->x;
+    dy = a->y;
+    dy -= b->y;
+    dz = a->z;
+    dz -= b->z;
+    dx *= dx;
+    dx += dy * dy;
+    dx += dz * dz;
+    return dx;
+}
+
+static inline s32 count17A9C(State17A9C *state) {
+    return state->count;
+}
+
+s32 fn_1_17A9C(Position17A9C *arg0) {
+    State17A9C *state = lbl_801A66CC;
+    s32 count = count17A9C(state);
+    u8 *cursor;
+    s32 result;
+    s32 i;
+    f32 dx, dy, dz;
+    f32 dist, best;
+
+    if (count <= 1) {
+        result = 0;
+    } else {
+        dist = distance17A9C(arg0, &state->entries[1].pos);
+        best = dist;
+        cursor = (u8 *)&state->entries[2].pos - 0x444;
+        result = 1;
+        for (i = 2; i < count; i++) {
+            dist = distance17A9C(arg0, (Position17A9C *)(cursor + 0x444));
+            if (best > dist) {
+                result = i;
+                best = dist;
+            }
+            cursor += 0x80;
+        }
+    }
+    return result;
+}
+/* fzgx:end fn_1_17A9C */
+
 /* fzgx:begin fn_1_17B5C */
 typedef struct {
     u8 pad_0[0x40];
