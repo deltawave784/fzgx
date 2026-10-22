@@ -14714,6 +14714,16 @@
   },
   {
     "module": "main",
+    "source": "dol/fn_800075AC.c",
+    "symbols": [
+      "fn_800075AC"
+    ],
+    "status": "matching",
+    "mw_version": "GC/1.3",
+    "extra_cflags": []
+  },
+  {
+    "module": "main",
     "source": "dol/fn_80007654.c",
     "symbols": [
       "fn_80007654"
