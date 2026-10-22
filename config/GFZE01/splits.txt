@@ -6140,3 +6140,6 @@ dol/__shr2i.c:
 
 dol/__cvt_dbl_usll.c:
 	.text       start:0x80079E24 end:0x80079EF0 align:4
+
+dol/fn_8008F92C.c:
+	.text       start:0x8008F92C end:0x8008F9D8 align:4

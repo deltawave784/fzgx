@@ -1803,6 +1803,62 @@ s32 fn_1_FDB40(void * arg0) {
 }
 /* fzgx:end fn_1_FDB40 */
 
+/* fzgx:begin fn_1_FDEC8 noprologue */
+#include "types.h"
+
+extern int fn_1_FCF50(void);
+extern u32 fn_1_563B8(u32);
+extern void fn_1_566EC(int, int);
+extern void fn_1_7EB8C(void *, f32);
+extern void fn_1_7F20C(void *, s16, f32);
+extern void fn_1_7F1E8(void *, s16, f32);
+extern void lbl_8006DB74(void *);
+extern void lbl_8006DBAC(void *);
+extern void fn_80072558(void);
+
+void fn_1_FDEC8(u8 **owner, u8 *scene)
+{
+    u8 saveState[0x38];
+    struct { s16 value; } index;
+    struct { u8 *value; } obj;
+    struct { u32 value; } prevHook;
+    s16 mode;
+    s16 *entry;
+    f32 scale;
+
+    lbl_8006DB74(saveState);
+    index.value = 0;
+    obj.value = *owner;
+    mode = *(s16 *)(obj.value + 0x3ba);
+    if (mode == 3) {
+        *(s16 *)(obj.value + 0x3ba) = 2;
+    }
+    entry = *(s16 **)(scene + 0x40f0);
+    if (entry != NULL) {
+        index.value = *entry;
+        if (*(u32 *)(obj.value + 0x32c) == 0) {
+            scale = 0.5f;
+        } else {
+            scale = 1.0f;
+        }
+        prevHook.value = fn_1_563B8((u32)fn_1_FCF50);
+        fn_1_566EC(1, 0xff);
+        if (index.value == 0) {
+            fn_1_7EB8C(obj.value, scale);
+        } else if (*(u32 *)(obj.value + 0x390) & 0x04000000) {
+            fn_1_7F20C(obj.value, index.value, scale);
+        } else {
+            fn_1_7F1E8(obj.value, index.value, scale);
+        }
+        fn_1_566EC(0, 0);
+        fn_1_563B8(prevHook.value);
+        *(s16 *)(obj.value + 0x3ba) = mode;
+    }
+    lbl_8006DBAC(saveState);
+    fn_80072558();
+}
+/* fzgx:end fn_1_FDEC8 */
+
 /* fzgx:begin fn_1_FDFF4 */
 // Mark the background-collision object as active.
 void fn_1_FDFF4(void) {
