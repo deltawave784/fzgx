@@ -8818,6 +8818,104 @@ void fn_1_14B8FC(void) {
 }
 /* fzgx:end fn_1_14B8FC */
 
+/* fzgx:begin fn_1_14B93C noprologue */
+#include "types.h"
+#include "rel/main_rel/sel_static_disp.h"
+
+typedef struct {
+    u8 pad_0[0x4];
+    u8 unk_4;
+    u8 unk_5;
+    u8 pad_6[0xA];
+    u32 unk_10;
+    u8 pad_14[0x4];
+    f32 unk_18[2];
+    s32 unk_20[2];
+    s32 unk_28;
+    u8 pad_2C[0x4];
+    u8 unk_30;
+} SelState_14B93C;
+
+extern u32 lbl_801A66A4;
+extern void fn_1_3F2A0(void);
+extern u32 fn_1_14A9D0(u32, u32, u32, u32, u32, u32);
+extern void fn_1_A2D84(u32);
+extern void fn_1_14CA4C(void);
+extern int fn_1_8623C(void);
+
+#define SEL_LIMIT(p) ((p)->unk_5 == 4 ? (u32)lbl_1_bss_3C30.unk_8 : (u32)lbl_1_bss_3C30.unk_9)
+
+void fn_1_14B93C(void) {
+    SelState_14B93C *p = (SelState_14B93C *)&lbl_1_bss_8E518;
+    s32 n;
+    u8 c;
+    s32 result;
+    s32 v;
+    s32 i;
+
+    fn_1_3F2A0();
+    if ((s32)lbl_1_bss_25BA0.unk_0 != 0) {
+        return;
+    }
+    fn_1_14A9D0(SEL_LIMIT(p), 1, 30, 180, 0, 1);
+    if (((lbl_1_bss_9F8.unk_8 >> 8) & 1) && !((lbl_1_bss_D58.unk_8 >> 12) & 1)) {
+        if (lbl_801A66A4 - p->unk_10 >= 195) {
+            p->unk_5 = 8;
+            fn_1_A2D84(0xA9010400);
+        } else {
+            fn_1_14CA4C();
+        }
+    } else if ((*(volatile u16 *)&lbl_1_bss_9F8.unk_8 >> 9) & 1) {  /* fzgx-allow: S2 volatile view keeps the verified load order */
+        p->unk_5 = 3;
+        p->unk_4 = 0;
+        if (lbl_1_bss_960 == 1) {
+            p->unk_30 = 4;
+        } else {
+            u8 m = lbl_1_bss_3C30.unk_9;
+            p->unk_30 = (m < 6) ? m : 6;
+        }
+        i = 0;
+#pragma opt_propagation off
+        if (p->unk_28 != 0) {
+            s32 *pi;
+            f32 *pf;
+            pf = (f32 *)((u8 *)p + i + 0x18);
+            pi = (s32 *)((u8 *)p + i + 0x20);
+            n = fn_1_8623C();
+            c = p->unk_30;
+            v = *((u8 *)&lbl_1_bss_3C30 + n * 0xA0 + lbl_1_bss_3C30.unk_A7 + 0xE2);
+            p->unk_20[0] = v;
+            result = v - (c / 2 - 1);
+            p->unk_20[0] = result;
+            if (result < 0) {
+                *pi = 0;
+            } else if (result >= lbl_1_bss_3C30.unk_9 - c) {
+                *pi = lbl_1_bss_3C30.unk_9 - c;
+            }
+            *pf = (f32)*pi;
+        } else {
+            s32 *pi;
+            f32 *pf;
+            pf = (f32 *)((u8 *)p + i + 0x18);
+            pi = (s32 *)((u8 *)p + i + 0x20);
+            n = fn_1_8623C();
+            c = p->unk_30;
+            v = *((u8 *)&lbl_1_bss_3C30 + n * 0xA0 + lbl_1_bss_3C30.unk_A7 + 0xE2);
+            p->unk_20[0] = v;
+            result = v - (c / 2 - 1);
+            p->unk_20[0] = result;
+            if (result < 0) {
+                *pi = 0;
+            } else if (*pi >= (u8)SEL_LIMIT(p) - c) {
+                *pi = (u8)SEL_LIMIT(p) - c;
+            }
+            *pf = (f32)(u8)SEL_LIMIT(p) - (f32)p->unk_30;
+        }
+        fn_1_A2D84(0xA9010400);
+    }
+}
+/* fzgx:end fn_1_14B93C */
+
 /* fzgx:begin fn_1_14BC3C */
 // fn_1_14BC3C: empty in retail (single blr).
 void fn_1_14BC3C(void) {
