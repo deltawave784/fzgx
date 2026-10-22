@@ -674,3 +674,6 @@ rel/customize/customize/fn_3_AE74.c:
 
 rel/customize/toolkit/fn_3_26A34.c:
 	.text       start:0x00026A34 end:0x000273F4 align:4
+
+rel/customize/toolkit/fn_3_2B778.c:
+	.text       start:0x0002B778 end:0x0002BFB4 align:4

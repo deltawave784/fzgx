@@ -3365,6 +3365,33 @@
   },
   {
     "module": "customize",
+    "source": "rel/customize/toolkit/fn_3_2B778.c",
+    "symbols": [
+      "fn_3_2B778"
+    ],
+    "status": "matching",
+    "mw_version": "GC/1.3.2",
+    "extra_cflags": [],
+    "tu": "rel/customize/toolkit.c",
+    "pool": {
+      "...rodata.0": "lbl_3_rodata_768",
+      "@11": "lbl_3_rodata_800",
+      "@36": "lbl_3_rodata_960",
+      "@28": "lbl_3_rodata_8F0+0x2C",
+      "@29": "lbl_3_rodata_8F0+0x30",
+      "@27": "lbl_3_rodata_8F0+0x28",
+      "@26": "lbl_3_rodata_8F0+0x24",
+      "@30": "lbl_3_rodata_8F0+0x34",
+      "@21": "lbl_3_rodata_8F0+0x4",
+      "@41": "lbl_3_rodata_990+0x138",
+      "@46": "lbl_3_rodata_990+0x384",
+      "@16": "lbl_3_rodata_800+0xE8",
+      "@51": "lbl_3_rodata_990+0x48C",
+      "@5": "lbl_3_rodata_768+0x28"
+    }
+  },
+  {
+    "module": "customize",
     "source": "rel/customize/toolkit/fn_3_2BFB4.c",
     "symbols": [
       "fn_3_2BFB4"
