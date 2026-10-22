@@ -3694,6 +3694,90 @@ void fn_10_757C(void) {
 }
 /* fzgx:end fn_10_757C */
 
+/* fzgx:begin fn_10_7E84 noprologue */
+#include "types.h"
+#include "rel/sel/sel.h"
+
+typedef struct {
+    s32 active;
+    s32 entries[5];
+} Sig_fn_1_8F494_Fn1_8F494_Object;
+
+typedef struct SelState {
+    u8 pad_0[0x94];
+    u32 flags_94;
+    u8 pad_98[0x6];
+    u8 field_9E;
+} SelState;
+
+extern SelState lbl_1_bss_8B3A0;
+extern void *lbl_1_bss_6D82C;
+
+extern void fn_1_8F494(Sig_fn_1_8F494_Fn1_8F494_Object *);
+extern s16 fn_1_12CB04(s16);
+extern void fn_1_12C000(void *, s16);
+extern void fn_1_435C(u32 value);
+extern void fn_1_426C(s32 value);
+extern void fn_10_96F8(void *, void *);
+extern void fn_80071718(void *);
+
+/* The sel module addresses its BSS objects off one base (section + 0x50000). */
+#define MGR_S32(off) (*(s32 *)(mgr.value + (off)))
+#define MGR_U32(off) (*(u32 *)(mgr.value + (off)))
+#define MGR_PTR(off) ((void *)(mgr.value + (off)))
+
+#pragma opt_lifetimes off
+void fn_10_7E84(void) {
+    SelState *state = &lbl_1_bss_8B3A0;
+    register s16 *slot;
+    struct { u8 *value; } mgr;
+    s16 idx;
+    s16 i;
+    s16 v;
+
+    mgr.value = (u8 *)&lbl_10_bss_0 + 0x50000;
+    idx = (s16)state->field_9E;
+    slot = (s16 *)((u8 *)state + (idx << 5));
+    v = slot[7];
+    slot = (s16 *)((u32)slot + 0xe);
+
+    if ((state->flags_94 & 0x80000000) == 0) {
+        struct { u8 *value; } arr1;
+        struct { u8 *value; } arr2;
+
+        arr1.value = mgr.value + 0x1b7c;
+        arr1.value += idx * 0x4e0;
+        fn_1_8F494((Sig_fn_1_8F494_Fn1_8F494_Object *)arr1.value);
+        arr2.value = mgr.value + 0x2efc;
+        arr2.value += idx * 0x9c0;
+        for (i = 0; i < fn_1_12CB04(v); i++) {
+            fn_1_8F494((Sig_fn_1_8F494_Fn1_8F494_Object *)(arr2.value + i * 0x4e0));
+        }
+    }
+
+    if ((state->flags_94 & 0x80000000) == 0) {
+        fn_1_12C000(MGR_PTR(0x17ec), 1);
+        fn_1_12C000(MGR_PTR(0x197c), 1);
+    }
+
+    if (MGR_S32(0x1740) != -1) {
+        fn_1_435C(MGR_U32(-0x6c78));
+        fn_1_426C(MGR_S32(0x1740));
+        MGR_S32(0x1740) = -1;
+    }
+
+    fn_10_96F8(MGR_PTR(-0x6c60), 0);
+
+    if (lbl_1_bss_6D82C != 0) {
+        fn_80071718(lbl_1_bss_6D82C);
+        lbl_1_bss_6D82C = 0;
+    }
+
+    *slot = -1;
+    state->flags_94 &= ~0x800;
+}
+/* fzgx:end fn_10_7E84 */
+
 /* fzgx:begin fn_10_804C noprologue */
 #include "types.h"
 #include "sofdec/adxt.h"
