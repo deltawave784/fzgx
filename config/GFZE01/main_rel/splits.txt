@@ -8189,3 +8189,6 @@ rel/main_rel/archive/fn_1_12C5E4.c:
 
 rel/main_rel/memcard/fn_1_B22AC.c:
 	.text       start:0x000B22AC end:0x000B2770 align:4
+
+rel/main_rel/effect_car/fn_1_6CF3C.c:
+	.text       start:0x0006CF3C end:0x0006D488 align:4
