@@ -1632,6 +1632,201 @@ void fn_1_137584(void* arg0, void* arg1, void* arg2, void* arg3) {
 }
 /* fzgx:end fn_1_137584 */
 
+/* fzgx:begin fn_1_1375C0 noprologue */
+#include "types.h"
+#include "font.h"
+#include "rel/main_rel/sel_static_disp.h"
+
+struct fn_1_1375C0_Copy88 { u32 a[22]; };
+typedef struct {
+    u32 id;
+    f32 y, bgX, bgY, w, h, x, barY, barH, leftX, rightX, textX, textY;
+} PanelConfig;
+typedef struct { PanelConfig a[3]; } PanelConfigs;
+typedef struct {
+    u32 id;
+    f32 x, y, z, sx, sy;
+    u32 a[5];
+    f32 alpha;
+    u32 flags;
+    u32 b[7];
+    void (*callback)(void *, void *);
+    f32 user;
+} PanelPacket;
+typedef struct { s32 a[6]; } PanelWidths;
+
+extern u8 lbl_1_rodata_8A5C[156];
+extern f32 lbl_1_rodata_26F8[22];
+extern u32 lbl_1_rodata_8AF8[6];
+extern u32 lbl_1_rodata_8B10[6];
+extern u32 lbl_801A66A0;
+extern u32 lbl_801A66B4;
+extern const f32 lbl_1_rodata_85F0;
+extern const f32 lbl_1_rodata_85F4;
+extern const f32 lbl_1_rodata_861C;
+extern const f32 lbl_1_rodata_8638;
+extern const f32 lbl_1_rodata_863C;
+extern const f32 lbl_1_rodata_8664;
+extern const f32 lbl_1_rodata_86C4;
+extern const f32 lbl_1_rodata_87DC;
+extern const f32 lbl_1_rodata_8808;
+extern const f32 lbl_1_rodata_8B28;
+extern const f32 lbl_1_rodata_8B2C;
+extern const f32 lbl_1_rodata_8B30;
+extern const f32 lbl_1_rodata_8B34;
+extern const f32 lbl_1_rodata_8B38;
+extern const f32 lbl_1_rodata_8B3C;
+extern const f32 lbl_1_rodata_8B40;
+extern int fn_1_4F734(FontDrawPacket *);
+extern u16 fn_1_48690(u32);
+extern u16 fn_1_486C4(u32);
+typedef struct {
+    u8 pad_0[0x54];
+    f32 unk_54;
+} Sig_fn_1_1392E0_Fn1392E0Arg0;
+typedef struct {
+    f32 unk_0;
+    f32 unk_4;
+    u8 pad_8[0x1C];
+    f32 unk_24;
+    f32 unk_28;
+} Sig_fn_1_1392E0_Fn1392E0Arg1;
+extern void fn_1_1392E0(Sig_fn_1_1392E0_Fn1392E0Arg0 *, Sig_fn_1_1392E0_Fn1392E0Arg1 *);
+extern int fn_1_139A3C(int);
+extern f32 lbl_8006D188(u32);
+extern void fn_1_51678(FontDrawPacket *, u32, s16, s16, s16, s16);
+extern void fn_1_49410(void);
+extern void fn_1_494DC(s16);
+extern void fn_1_4966C(f32, f32);
+extern void fn_1_496FC(f32, f32);
+extern void fn_1_4A0D8(const char *);
+
+#pragma opt_propagation on
+static inline s32 panel_position(PanelConfig *p, s32 x, u8 value) {
+    f32 first = (lbl_1_rodata_8B28 * (f32)(100 - (s32)value)) / lbl_1_rodata_85F4;
+    f32 origin = (f32)x;
+    f32 width = p->w - lbl_1_rodata_8638;
+    return (s32)(first + (origin + p->x) + (width * (f32)value) / lbl_1_rodata_85F4);
+}
+static inline f32 panel_ratio(f32 divisor, f32 numerator) {
+    return numerator / divisor;
+}
+#pragma opt_common_subs off
+void fn_1_1375C0(u32 arg0, s32 arg1, s32 arg2, u32 arg3, s32 arg4) {
+    f32 fzgx_live;
+    PanelConfigs table = *(PanelConfigs *)lbl_1_rodata_8A5C;
+    PanelPacket back;
+    PanelPacket draw;
+    PanelWidths left;
+    PanelWidths right;
+    PanelConfig *p = &table.a[arg0];
+    f32 pulse;
+    f32 fade;
+    s32 position;
+    u8 value;
+    back = *(PanelPacket *)lbl_1_rodata_26F8;
+    back.id = p->id;
+    back.x = (f32)arg1;
+    back.y = (f32)arg2 + p->y;
+    back.z = lbl_1_rodata_86C4;
+    fn_1_4F734((FontDrawPacket *)&back);
+
+    back = *(PanelPacket *)lbl_1_rodata_26F8;
+    back.id = 18;
+    back.x = (f32)arg1 + p->bgX;
+    back.y = (f32)arg2 + p->bgY;
+    back.z = lbl_1_rodata_87DC;
+    back.sx *= (p->w - lbl_1_rodata_8B28) / (f32)fn_1_48690(18);
+    back.sy *= p->h / (f32)fn_1_486C4(back.id);
+    back.alpha = lbl_1_rodata_861C;
+    back.flags = 0x4000000;
+    back.user = (f32)arg4;
+    back.callback = (void (*)(void *, void *))fn_1_1392E0;
+    fn_1_4F734((FontDrawPacket *)&back);
+    if (lbl_1_bss_8B3A0.unk_94 & 0x40000000) arg4 = 0;
+    if (fn_1_139A3C((s16)arg4)) {
+        pulse = lbl_1_rodata_861C;
+    } else {
+        pulse = lbl_1_rodata_8808 + (f32)((f32)(lbl_1_rodata_8664 * (lbl_1_rodata_863C + lbl_8006D188((s32)((lbl_1_rodata_8B2C * (f32)(lbl_801A66A0 % 60)) / lbl_1_rodata_8B30)))) / 2.0f);
+    }
+    value = (&lbl_1_bss_8B3A0.unk_9F)[arg4];
+    {
+        f32 first = panel_ratio(lbl_1_rodata_85F4, lbl_1_rodata_8B28 * (f32)(100 - (s32)value));
+        f32 x = (f32)arg1;
+        struct { f32 value; } width;
+        width.value = p->w - lbl_1_rodata_8638;
+        fzgx_live = p->x;
+        position = (s32)(first + (x + fzgx_live) + panel_ratio(lbl_1_rodata_85F4, width.value * (f32)value));
+    }
+    draw = *(PanelPacket *)lbl_1_rodata_26F8;
+    draw.id = 0x9A0B;
+    draw.x = (f32)position;
+    draw.y = (f32)arg2 + p->barY;
+    draw.z = lbl_1_rodata_8B34;
+    fade = lbl_1_rodata_863C - (f32)(lbl_1_rodata_85F0 * pulse);
+    draw.flags = 6;
+    draw.alpha = fade;
+    fn_1_4F734((FontDrawPacket *)&draw);
+    if ((f32)position > lbl_1_rodata_8B28 + ((f32)arg1 + p->x)) {
+        draw = *(PanelPacket *)lbl_1_rodata_26F8;
+        draw.id = 0x9A0C;
+        draw.x = (f32)(position - 12);
+        draw.y = (f32)arg2 + p->barY;
+        draw.z = lbl_1_rodata_8B34;
+        draw.flags = 7;
+        draw.alpha = pulse;
+        fn_1_4F734((FontDrawPacket *)&draw);
+    }
+    if ((f32)position < p->w + ((f32)arg1 + p->x) - lbl_1_rodata_8638) {
+        draw = *(PanelPacket *)lbl_1_rodata_26F8;
+        draw.id = 0x9A0C;
+        draw.x = (f32)(position + 12);
+        draw.y = (f32)arg2 + p->barY;
+        draw.z = lbl_1_rodata_8B34;
+        draw.flags = 0x80005;
+        draw.alpha = pulse;
+        fn_1_4F734((FontDrawPacket *)&draw);
+    }
+    draw = *(PanelPacket *)lbl_1_rodata_26F8;
+    draw.id = 0x9A0D;
+    draw.x = (f32)position;
+    draw.y = (f32)arg2 + p->barY;
+    draw.z = lbl_1_rodata_8B38;
+    draw.sy = p->barH / (f32)fn_1_486C4(draw.id);
+    draw.flags = 14;
+    draw.alpha = fade;
+    fn_1_4F734((FontDrawPacket *)&draw);
+    left = *(PanelWidths *)lbl_1_rodata_8AF8;
+    right = *(PanelWidths *)lbl_1_rodata_8B10;
+    draw = *(PanelPacket *)lbl_1_rodata_26F8;
+    draw.id = 0x9A23;
+    fn_1_51678((FontDrawPacket *)&draw, 0x9A23, 0, 0, (s16)left.a[lbl_801A66B4], 20);
+    draw.x = (f32)arg1 + p->leftX;
+    draw.y = (f32)arg2 + p->barY;
+    draw.z = lbl_1_rodata_8B3C;
+    draw.flags = 5;
+    if ((f32)position < lbl_1_rodata_8B28 + ((f32)arg1 + p->x) + (f32)left.a[lbl_801A66B4]) draw.alpha = lbl_1_rodata_8808;
+    fn_1_4F734((FontDrawPacket *)&draw);
+    draw = *(PanelPacket *)lbl_1_rodata_26F8;
+    draw.id = 0x9A23;
+    fn_1_51678((FontDrawPacket *)&draw, 0x9A23, (s16)(72 - right.a[lbl_801A66B4]), 20, (s16)right.a[lbl_801A66B4], 20);
+    draw.x = (f32)arg1 + p->rightX;
+    draw.y = (f32)arg2 + p->barY;
+    draw.z = lbl_1_rodata_8B3C;
+    draw.flags = 7;
+    if ((f32)position > p->w + ((f32)arg1 + p->x) - lbl_1_rodata_8B28 - (f32)right.a[lbl_801A66B4]) draw.alpha = lbl_1_rodata_8808;
+    fn_1_4F734((FontDrawPacket *)&draw);
+    if ((s32)arg0 != 0) {
+        fn_1_49410();
+        fn_1_494DC(4);
+        fn_1_4966C(lbl_1_rodata_8B40, lbl_1_rodata_861C);
+        fn_1_496FC((f32)arg1 + p->textX, (f32)arg2 + p->textY);
+        fn_1_4A0D8((char *)lbl_1_data_41AF8);
+    }
+}
+#pragma opt_common_subs reset
+/* fzgx:end fn_1_1375C0 */
+
 /* fzgx:begin fn_1_1380F0 */
 void fn_1_1380F0(void* arg0) {
     fn_1_138144(arg0, lbl_1_bss_8B3A0.unk_94 & 0x40000000);
