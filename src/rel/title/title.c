@@ -4397,6 +4397,130 @@ void fn_8_5C50(void) {
 }
 /* fzgx:end fn_8_5C50 */
 
+/* fzgx:begin fn_8_5C54 */
+#include "rel/title/title.h"
+
+typedef struct {
+    u8 unk_0;
+    u8 unk_1;
+    u8 unk_2;
+    u8 unk_3;
+    u8 unk_4;
+} TitleSlot;
+
+typedef struct {
+    u8 unk_0;
+    u8 unk_1;
+    u8 unk_2;
+    u8 unk_3;
+    u8 unk_4;
+    u8 unk_5;
+    u8 unk_6[5];
+    u8 unk_B;
+} TitleSlotInfo;
+
+typedef struct {
+    u8 pad_0[0x8];
+    u16 unk_8;
+} TitleBss8B3A0;
+
+extern TitleBss8B3A0 lbl_1_bss_8B3A0;
+extern u32 lbl_801A63C0;
+extern TitleSlot lbl_1_bss_26B80[];
+extern u8 lbl_1_bss_7EFD8[];
+
+extern u32 fn_1_F453C(u32 data, u32 *bitpos, s32 bits);
+extern void fn_1_F47A0(u32);
+extern u8 *fn_1_36AD0(void);
+extern void fn_80008BA8(void *dst, void *src, u32 size);
+extern void fn_80008BEC(void *dst, s32 value, u32 size);
+extern void fn_1_3EF8C(u8);
+extern void fn_1_3ED8C(s32, s32, s32, u8, s32, u8, s32);
+extern void fn_1_3EB78(s32, u8 *, u8 *, s32);
+extern void fn_1_3EC88(s32, TitleSlotInfo *);
+extern void fn_1_3EFF0(void (*)(void), s32);
+extern void fn_1_3F02C(void (*)(void));
+extern void fn_8_6594(void);
+extern void fn_8_67B0(void);
+
+void fn_8_5C54(s32 arg0) {
+    s32 idx;
+    u32 count;
+    u32 i;
+    u32 kind;
+    u32 j;
+    s32 k;
+    u32 value;
+    s32 n;
+    TitleSlotInfo *info;
+    TitleSlotInfo infos[4];
+    u8 sel1[4];
+    u8 sel2[4];
+    u8 * tmp_call13;
+    s32 tmp_cse1;
+
+    lbl_8_bss_2AC = 0;
+    fn_1_F453C(lbl_8_bss_2B0, &lbl_8_bss_2AC, 8);
+    kind = fn_1_F453C(lbl_8_bss_2B0, &lbl_8_bss_2AC, 6);
+    fn_1_F47A0(fn_1_F453C(lbl_8_bss_2B0, &lbl_8_bss_2AC, 32));
+    lbl_801A63C0 = fn_1_F453C(lbl_8_bss_2B0, &lbl_8_bss_2AC, 32);
+    count = fn_1_F453C(lbl_8_bss_2B0, &lbl_8_bss_2AC, 5);
+    lbl_1_bss_8B3A0.unk_8 = fn_1_F453C(lbl_8_bss_2B0, &lbl_8_bss_2AC, 3);
+    fn_1_F453C(lbl_8_bss_2B0, &lbl_8_bss_2AC, 2);
+
+    n = 0;
+    for (i = 0; i < count; i++) {
+        lbl_1_bss_26B80[i].unk_0 = fn_1_F453C(lbl_8_bss_2B0, &lbl_8_bss_2AC, 1);
+        lbl_1_bss_26B80[i].unk_1 = fn_1_F453C(lbl_8_bss_2B0, &lbl_8_bss_2AC, 6);
+        if (lbl_1_bss_26B80[i].unk_0 != 0) {
+            lbl_1_bss_26B80[i].unk_2 = fn_1_F453C(lbl_8_bss_2B0, &lbl_8_bss_2AC, 2);
+            lbl_1_bss_26B80[i].unk_3 = fn_1_F453C(lbl_8_bss_2B0, &lbl_8_bss_2AC, 7);
+            idx = n & 0xFF;
+            sel1[idx] = lbl_1_bss_26B80[i].unk_1;
+            sel2[idx] = lbl_1_bss_26B80[i].unk_2;
+            if ((u8)fn_1_F453C(lbl_8_bss_2B0, &lbl_8_bss_2AC, 1)) {
+                for (j = 0; j < 0x81C0; j++) {
+                    value = (u8)((fn_1_F453C(lbl_8_bss_2B0, &lbl_8_bss_2AC, 8)));
+                    tmp_call13 = fn_1_36AD0();
+                    tmp_cse1 = i * 0x81C0;
+                    tmp_call13[tmp_cse1 + j] = value;
+                }
+                tmp_call13 = fn_1_36AD0();
+                tmp_cse1 += 4;
+                tmp_call13 += tmp_cse1;
+                fn_80008BA8(&infos[idx], tmp_call13, 12);
+            } else {
+                infos[idx].unk_1 = lbl_1_bss_26B80[i].unk_1;
+                infos[idx].unk_2 = 1 << lbl_1_bss_26B80[i].unk_2;
+                infos[idx].unk_B = lbl_1_bss_26B80[i].unk_3;
+                infos[idx].unk_4 = 0;
+                infos[idx].unk_3 = 0;
+                infos[idx].unk_5 = 0;
+                infos[idx].unk_0 = 0;
+                fn_80008BEC(infos[i].unk_6, 'A', 5);
+            }
+            n++;
+        } else {
+            lbl_1_bss_26B80[i].unk_2 = 0;
+            lbl_1_bss_26B80[i].unk_3 = 0;
+        }
+    }
+
+    for (k = 0; k < (n & 0xFF); k++) {
+        lbl_1_bss_7EFD8[k + 0x38] = fn_1_F453C(lbl_8_bss_2B0, &lbl_8_bss_2AC, 2) + 1;
+    }
+
+    if (arg0 != 0) {
+        fn_1_3EF8C(6);
+        fn_1_3ED8C(0, 3, 1, kind, 10, count, 0);
+        fn_1_3EB78(n, sel1, sel2, 0);
+        fn_1_3EC88(n, infos);
+        fn_1_3EFF0(fn_8_6594, 1);
+        fn_1_3F02C(fn_8_67B0);
+    }
+}
+/* fzgx:end fn_8_5C54 */
+
 /* fzgx:begin fn_8_5FD4 */
 #include "rel/title/title.h"
 
