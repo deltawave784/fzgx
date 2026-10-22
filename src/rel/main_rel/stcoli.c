@@ -338,6 +338,167 @@ s32 fn_1_14F18(fn_1_14F18_Vec *pos, void *arg1, fn_1_14F18_Vec *dir, f32 *outT,
 }
 /* fzgx:end fn_1_14F18 */
 
+/* fzgx:begin fn_1_16E68 noprologue */
+#include "types.h"
+#include "rel/main_rel/stcoli.h"
+
+#pragma section code_type ".fzgxpool"
+__declspec(section ".fzgxpool") static void fzgx_pool_prime1(void) {
+    volatile float s; volatile double d;  /* fzgx-allow: S2 pool primer sinks */
+    d = 4503601774854144.0;
+    s = 0.0f;
+    s = 1.0f;
+    s = -5.0f;
+    s = 10.0f;
+    s = -1.0f;
+    s = 2.0f;
+    s = 0.5f;
+    s = 2.5f;
+    s = 1.7000000476837158f;
+    s = 0.0010000000474974513f;
+}
+#pragma section code_type ".text"
+
+typedef struct {
+    f32 x, y, z;
+} StcoliVec;
+
+typedef struct {
+    u8 pad_0[0x8];
+    f32 d1;
+    f32 n1x, n1y, n1z;
+    u8 pad_18[0xC];
+    f32 d2;
+    f32 n2x, n2y, n2z;
+    u8 pad_34[0x1C];
+} StcoliPlanePair;
+
+typedef struct {
+    u32 unk_0;
+    StcoliPlanePair *planes;
+    u32 unk_8;
+} StcoliSegment;
+
+extern s16 fn_1_7B054(void);
+
+/* signed distances of the point to the segment's two boundary planes */
+#define PLANE1(v, p) ny = (p)->n1y; nz = (p)->n1z; dot = x * (p)->n1x; dot = y * ny + dot; dot = z * nz + dot; v = (p)->d1 + dot
+#define PLANE2(v, p) ny = (p)->n2y; nz = (p)->n2z; dot = x * (p)->n2x; dot = y * ny + dot; dot = z * nz + dot; v = (p)->d2 + dot
+
+#pragma opt_propagation off
+f32 fn_1_16E68(StcoliVec *pos, s32 idx, s32 sub) {
+    f32 thresh;
+    s32 count;
+    StcoliPlanePair *p;
+    StcoliSegment *seg;
+    f32 nz20;
+    f32 ny20;
+    f32 y0;
+    f32 x0;
+    f32 dot20;
+    f32 nz10;
+    f32 ny10;
+    f32 dot10;
+    f32 nz11;
+    f32 ny11;
+    f32 dot11;
+    f32 nz21;
+    f32 ny21;
+    f32 y1;
+    f32 x1;
+    f32 dot21;
+    f32 z2;
+    f32 y2;
+    f32 x2;
+    f32 dot22;
+    f32 negThresh;
+    f32 nz12;
+    f32 ny12;
+    f32 dot12;
+    f32 a;
+    f32 b;
+
+    if (fn_1_7B054() == 25) {
+        thresh = 1.7f;
+    } else {
+        thresh = 0.001f;
+    }
+    count = lbl_1_bss_3BE0->unk_8;
+    if (idx < 0 || count <= idx) {
+        idx = 0;
+    }
+    seg = (StcoliSegment *)lbl_1_bss_3BE0->unk_C;
+    p = seg[idx].planes + sub;
+
+    if (idx == 0) {
+        if (!(pos->z < 0.0f)) {
+            return 0.0f;
+        }
+        x0 = pos->x;
+        y0 = pos->y;
+        ny20 = p->n2y;
+        nz20 = p->n2z;
+        dot20 = x0 * p->n2x;
+        dot20 = y0 * ny20 + dot20;
+        dot20 = pos->z * nz20 + dot20;
+        b = p->d2 + dot20;
+        if (!(-thresh <= b)) {
+            return 1.0f;
+        }
+        ny10 = p->n1y;
+        nz10 = p->n1z;
+        dot10 = x0 * p->n1x;
+        dot10 = y0 * ny10 + dot10;
+        dot10 = pos->z * nz10 + dot10;
+        a = p->d1 + dot10;
+    } else if (idx == count - 1) {
+        if (!(pos->z >= 0.0f)) {
+            return 1.0f;
+        }
+        x1 = pos->x;
+        y1 = pos->y;
+        ny21 = p->n1y;
+        nz21 = p->n1z;
+        dot21 = x1 * p->n1x;
+        dot21 = y1 * ny21 + dot21;
+        dot21 = pos->z * nz21 + dot21;
+        a = p->d1 + dot21;
+        if (!(-thresh <= a)) {
+            return 0.0f;
+        }
+        ny11 = p->n2y;
+        nz11 = p->n2z;
+        dot11 = x1 * p->n2x;
+        dot11 = y1 * ny11 + dot11;
+        dot11 = pos->z * nz11 + dot11;
+        b = p->d2 + dot11;
+    } else {
+        x2 = pos->x;
+        y2 = pos->y;
+        z2 = pos->z;
+        negThresh = -thresh;
+        dot22 = x2 * p->n2x;
+        dot22 = y2 * p->n2y + dot22;
+        dot22 = z2 * p->n2z + dot22;
+        b = p->d2 + dot22;
+        if (!(negThresh <= b)) {
+            return 1.0f;
+        }
+        ny12 = p->n1y;
+        nz12 = p->n1z;
+        dot12 = x2 * p->n1x;
+        dot12 = y2 * ny12 + dot12;
+        dot12 = z2 * nz12 + dot12;
+        a = p->d1 + dot12;
+        if (!(negThresh <= a)) {
+            return 0.0f;
+        }
+    }
+    return a / (a + b);
+}
+#pragma opt_propagation reset
+/* fzgx:end fn_1_16E68 */
+
 /* fzgx:begin fn_1_17098 noprologue */
 #include "types.h"
 #include "game/main_rel/stcoli_types.h"

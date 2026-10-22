@@ -8174,3 +8174,6 @@ rel/main_rel/game/fn_1_2FDBC.c:
 
 rel/main_rel/effect_car/fn_1_6ED40.c:
 	.text       start:0x0006ED40 end:0x0006F288 align:4
+
+rel/main_rel/stcoli/fn_1_16E68.c:
+	.text       start:0x00016E68 end:0x00017098 align:4

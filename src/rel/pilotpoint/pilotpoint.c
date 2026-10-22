@@ -1975,6 +1975,606 @@ __declspec(section ".fzgxpool") static void fzgx_pool_keep25(void) { const unsig
 #pragma section code_type ".text"
 /* fzgx:end fn_14_6494 */
 
+/* fzgx:begin fn_14_7584 pool */
+#include "font.h"
+#include "rel/pilotpoint/pilotpoint.h"
+
+struct fn_14_7584_Copy88 { u32 a[22]; };
+struct fn_14_7584_lbl_801A66B4 { u32 unk_0; };
+struct fn_14_7584_lbl_14_rodata_0 {
+    f32 unk_0, unk_4, unk_8, unk_C, unk_10;
+    u8 pad_14[4]; f32 unk_18;
+    u8 pad_1C[0x14]; f32 unk_30;
+    u8 pad_34[0x2C]; f64 unk_60;
+    u8 pad_68[0x48]; f32 unk_B0;
+    u8 pad_B4[0x6C]; f32 unk_120, unk_124;
+    u8 pad_128[0x94]; f32 unk_1BC;
+    u8 pad_1C0[8]; f32 unk_1C8;
+    u8 pad_1CC[0x20]; u32 unk_1EC, unk_1F0; f32 unk_1F4;
+    u8 pad_1F8[0x20]; f32 unk_218;
+    u8 pad_21C[0x44]; u32 unk_260, unk_264;
+    f32 unk_268, unk_26C, unk_270, unk_274, unk_278, unk_27C, unk_280;
+    f32 unk_284, unk_288, unk_28C, unk_290, unk_294, unk_298;
+    f32 unk_29C, unk_2A0, unk_2A4, unk_2A8, unk_2AC;
+    f32 unk_2B0, unk_2B4, unk_2B8, unk_2BC, unk_2C0, unk_2C4, unk_2C8;
+    f32 unk_2CC, unk_2D0, unk_2D4;
+};
+extern struct fn_14_7584_lbl_14_rodata_0 lbl_14_rodata_0;
+extern struct fn_14_7584_lbl_801A66B4 lbl_801A66B4;
+extern u32 lbl_801A66A0;
+extern u32 lbl_1_rodata_26F8;
+extern u32 fn_14_DC6C(u32, u32);
+extern u32 fn_14_58C4(u32,u32);
+extern void fn_14_6044(s16,s16);
+extern u32 fn_14_6494(void);
+extern u32 fn_14_6758(u32,u32);
+extern u8 lbl_14_bss_91F4[100];
+extern s32 fn_14_4008(void);
+extern void fn_1_50164(void*,f32,f32,f32,f32);
+extern void fn_1_49410(void);
+extern void fn_1_495C8(u8);
+extern void fn_1_495B0(u32);
+extern void fn_1_4965C(u8);
+extern void fn_1_4954C(f32);
+extern void fn_1_495A0(f32);
+extern void fn_1_4955C(f32,f32);
+extern void fn_1_496FC(f32,f32);
+extern void fn_1_4AE0C(const char*,...);
+extern void fn_1_495FC(void);
+extern void fn_1_49590(f32);
+extern void fn_1_49514(u32*);
+extern u32 fn_1_8D3F8(void*,void*,s32 (*)(void),u32);
+extern void fn_1_1380F0(void*);
+extern void fn_1_133DBC(void*);
+extern void fn_1_134AD4(void);
+extern void fn_1_13B328(u32,s32);
+extern void fn_1_13D02C(void);
+#define FN_14_7584_CLAMP01(v) ((v) < 0.0f ? 0.0f : ((v) > 1.0f ? 1.0f : (v)))
+struct fn_14_7584_Color { u32 value; };
+/* Prime the module's shared literal pool in retail order. */
+#pragma section code_type ".fzgxpool"
+/* Volatile keeps this literal-pool primer store observable when compiling. */
+static void fzgx_fn_14_7584_pool_0(volatile f32 *p) { *p = 0.0f; }
+#pragma section code_type ".text"
+/* Prime the module's shared literal pool in retail order. */
+#pragma section code_type ".fzgxpool"
+/* Volatile keeps this literal-pool primer store observable when compiling. */
+static void fzgx_fn_14_7584_pool_4(volatile f32 *p) { *p = 167.0f; }
+#pragma section code_type ".text"
+/* Prime the module's shared literal pool in retail order. */
+#pragma section code_type ".fzgxpool"
+/* Volatile keeps this literal-pool primer store observable when compiling. */
+static void fzgx_fn_14_7584_pool_8(volatile f32 *p) { *p = 38.0f; }
+#pragma section code_type ".text"
+/* Prime the module's shared literal pool in retail order. */
+#pragma section code_type ".fzgxpool"
+/* Volatile keeps this literal-pool primer store observable when compiling. */
+static void fzgx_fn_14_7584_pool_c(volatile f32 *p) { *p = 90.0f; }
+#pragma section code_type ".text"
+/* Prime the module's shared literal pool in retail order. */
+#pragma section code_type ".fzgxpool"
+/* Volatile keeps this literal-pool primer store observable when compiling. */
+static void fzgx_fn_14_7584_pool_10(volatile f32 *p) { *p = 320.0f; }
+#pragma section code_type ".text"
+const u32 fn_14_7584_pool_14[1] = {0x43580000};
+/* Prime the module's shared literal pool in retail order. */
+#pragma section code_type ".fzgxpool"
+/* Volatile keeps this literal-pool primer store observable when compiling. */
+static void fzgx_fn_14_7584_pool_18(volatile f32 *p) { *p = 8.0f; }
+#pragma section code_type ".text"
+const u32 fn_14_7584_pool_1c[1] = {0x42C00000};
+const u32 fn_14_7584_pool_20[1] = {0x43A80000};
+const u32 fn_14_7584_pool_24[1] = {0x43BE0000};
+const u32 fn_14_7584_pool_28[1] = {0x40280000};
+const u32 fn_14_7584_pool_2c[1] = {0x00000000};
+/* Prime the module's shared literal pool in retail order. */
+#pragma section code_type ".fzgxpool"
+/* Volatile keeps this literal-pool primer store observable when compiling. */
+static void fzgx_fn_14_7584_pool_30(volatile f32 *p) { *p = 1.0f; }
+#pragma section code_type ".text"
+const u32 fn_14_7584_pool_34[1] = {0x42C60000};
+const u32 fn_14_7584_pool_38[1] = {0x41F00000};
+const u32 fn_14_7584_pool_3c[1] = {0x430C0000};
+const u32 fn_14_7584_pool_40[1] = {0x43320000};
+const u32 fn_14_7584_pool_44[1] = {0x437E0000};
+const u32 fn_14_7584_pool_48[1] = {0x43920000};
+const u32 fn_14_7584_pool_4c[1] = {0x44074000};
+const u32 fn_14_7584_pool_50[1] = {0x440FC000};
+const u32 fn_14_7584_pool_54[1] = {0x42C40000};
+const u32 fn_14_7584_pool_58[1] = {0x42280000};
+const u32 fn_14_7584_pool_5c[1] = {0x00000000};
+#pragma section code_type ".fzgxpool"
+/* Volatile keeps this literal-pool primer store observable when compiling. */
+static void fzgx_fn_14_7584_pool_60(volatile f32 *p, s32 value) { *p = (f32)value; }
+#pragma section code_type ".text"
+const u32 fn_14_7584_pool_68[1] = {0x404E0000};
+const u32 fn_14_7584_pool_6c[1] = {0x00000000};
+const u32 fn_14_7584_pool_70[1] = {0x40390000};
+const u32 fn_14_7584_pool_74[1] = {0x00000000};
+const u32 fn_14_7584_pool_78[1] = {0x403D0000};
+const u32 fn_14_7584_pool_7c[1] = {0x00000000};
+const u32 fn_14_7584_pool_80[1] = {0xA0FF00FF};
+const u32 fn_14_7584_pool_84[1] = {0xFFFFFF00};
+const u32 fn_14_7584_pool_88[1] = {0xA0FF00FF};
+const u32 fn_14_7584_pool_8c[1] = {0xFFFFFF00};
+const u32 fn_14_7584_pool_90[1] = {0xA0FF00FF};
+const u32 fn_14_7584_pool_94[1] = {0xFFFFFF00};
+const u32 fn_14_7584_pool_98[1] = {0xA0FF00FF};
+const u32 fn_14_7584_pool_9c[1] = {0xFF8080FF};
+const u32 fn_14_7584_pool_a0[1] = {0xA0FF00FF};
+const u32 fn_14_7584_pool_a4[1] = {0xFFFFFF00};
+const u32 fn_14_7584_pool_a8[1] = {0x43C60000};
+const u32 fn_14_7584_pool_ac[1] = {0x433E0000};
+/* Prime the module's shared literal pool in retail order. */
+#pragma section code_type ".fzgxpool"
+/* Volatile keeps this literal-pool primer store observable when compiling. */
+static void fzgx_fn_14_7584_pool_b0(volatile f32 *p) { *p = 0.5f; }
+#pragma section code_type ".text"
+const u32 fn_14_7584_pool_b4[1] = {0x00000000};
+const u32 fn_14_7584_pool_b8[1] = {0x00000000};
+const u32 fn_14_7584_pool_bc[1] = {0x00000000};
+const u32 fn_14_7584_pool_c0[1] = {0x3FF00000};
+const u32 fn_14_7584_pool_c4[1] = {0x00000000};
+const u32 fn_14_7584_pool_c8[1] = {0x40320000};
+const u32 fn_14_7584_pool_cc[1] = {0x00000000};
+const u32 fn_14_7584_pool_d0[1] = {0x43080000};
+const u32 fn_14_7584_pool_d4[1] = {0x3F0CCCCD};
+const u32 fn_14_7584_pool_d8[1] = {0x42D80000};
+const u32 fn_14_7584_pool_dc[1] = {0x43960000};
+const u32 fn_14_7584_pool_e0[1] = {0x42A00000};
+const u32 fn_14_7584_pool_e4[1] = {0x43C80000};
+const u32 fn_14_7584_pool_e8[1] = {0x43C20000};
+const u32 fn_14_7584_pool_ec[1] = {0x42C20000};
+const u32 fn_14_7584_pool_f0[1] = {0x3D4CCCCD};
+const u32 fn_14_7584_pool_f4[1] = {0x00000000};
+const u32 fn_14_7584_pool_f8[1] = {0x40568000};
+const u32 fn_14_7584_pool_fc[1] = {0x00000000};
+const u32 fn_14_7584_pool_100[1] = {0x403E0000};
+const u32 fn_14_7584_pool_104[1] = {0x00000000};
+const u32 fn_14_7584_pool_108[1] = {0x40000000};
+const u32 fn_14_7584_pool_10c[1] = {0x00000000};
+const u32 fn_14_7584_pool_110[1] = {0x43300000};
+const u32 fn_14_7584_pool_114[1] = {0x00000000};
+const u32 fn_14_7584_pool_118[1] = {0x4341525F};
+const u32 fn_14_7584_pool_11c[1] = {0x53454C00};
+/* Prime the module's shared literal pool in retail order. */
+#pragma section code_type ".fzgxpool"
+/* Volatile keeps this literal-pool primer store observable when compiling. */
+static void fzgx_fn_14_7584_pool_120(volatile f32 *p) { *p = 10.0f; }
+#pragma section code_type ".text"
+/* Prime the module's shared literal pool in retail order. */
+#pragma section code_type ".fzgxpool"
+/* Volatile keeps this literal-pool primer store observable when compiling. */
+static void fzgx_fn_14_7584_pool_124(volatile f32 *p) { *p = 20.0f; }
+#pragma section code_type ".text"
+const u32 fn_14_7584_pool_128[1] = {0x00000000};
+const u32 fn_14_7584_pool_12c[1] = {0x40AD2D2D};
+const u32 fn_14_7584_pool_130[1] = {0xC04FCFD0};
+const u32 fn_14_7584_pool_134[1] = {0x00000000};
+const u32 fn_14_7584_pool_138[1] = {0x40A00000};
+const u32 fn_14_7584_pool_13c[1] = {0xC0400000};
+const u32 fn_14_7584_pool_140[1] = {0x00000000};
+const u32 fn_14_7584_pool_144[1] = {0x00000000};
+const u32 fn_14_7584_pool_148[1] = {0x00000000};
+const u32 fn_14_7584_pool_14c[1] = {0x00000000};
+const u32 fn_14_7584_pool_150[1] = {0x00000000};
+const u32 fn_14_7584_pool_154[1] = {0x00000000};
+const u32 fn_14_7584_pool_158[1] = {0x3F333333};
+const u32 fn_14_7584_pool_15c[1] = {0x43360B61};
+const u32 fn_14_7584_pool_160[1] = {0x3FE19999};
+const u32 fn_14_7584_pool_164[1] = {0x9999999A};
+const u32 fn_14_7584_pool_168[1] = {0x3F547AE1};
+const u32 fn_14_7584_pool_16c[1] = {0x3D888889};
+const u32 fn_14_7584_pool_170[1] = {0x00000000};
+const u32 fn_14_7584_pool_174[1] = {0x41200000};
+const u32 fn_14_7584_pool_178[1] = {0xC0A00000};
+const u32 fn_14_7584_pool_17c[1] = {0x00000000};
+const u32 fn_14_7584_pool_180[1] = {0x00000000};
+const u32 fn_14_7584_pool_184[1] = {0x00000000};
+const u32 fn_14_7584_pool_188[1] = {0xFFFFFFFF};
+const u32 fn_14_7584_pool_18c[1] = {0xFF00FFFF};
+const u32 fn_14_7584_pool_190[1] = {0x411A0000};
+const u32 fn_14_7584_pool_194[1] = {0x00FF0000};
+const u32 fn_14_7584_pool_198[1] = {0xFFFFFF00};
+const u32 fn_14_7584_pool_19c[1] = {0xFFFFFF00};
+const u32 fn_14_7584_pool_1a0[1] = {0x00FF0000};
+const u32 fn_14_7584_pool_1a4[1] = {0x00060007};
+const u32 fn_14_7584_pool_1a8[1] = {0x00080000};
+const u32 fn_14_7584_pool_1ac[1] = {0xFFFFFF00};
+const u32 fn_14_7584_pool_1b0[1] = {0x00FF0000};
+const u32 fn_14_7584_pool_1b4[1] = {0xFFFFFF00};
+const u32 fn_14_7584_pool_1b8[1] = {0x3EEAAAAB};
+/* Prime the module's shared literal pool in retail order. */
+#pragma section code_type ".fzgxpool"
+/* Volatile keeps this literal-pool primer store observable when compiling. */
+static void fzgx_fn_14_7584_pool_1bc(volatile f32 *p) { *p = 0.6666666865348816f; }
+#pragma section code_type ".text"
+const u32 fn_14_7584_pool_1c0[1] = {0x3F1DF349};
+const u32 fn_14_7584_pool_1c4[1] = {0x3ED55555};
+/* Prime the module's shared literal pool in retail order. */
+#pragma section code_type ".fzgxpool"
+/* Volatile keeps this literal-pool primer store observable when compiling. */
+static void fzgx_fn_14_7584_pool_1c8(volatile f32 *p) { *p = 0.8333333134651184f; }
+#pragma section code_type ".text"
+const u32 fn_14_7584_pool_1cc[1] = {0x3EF8F8F9};
+const u32 fn_14_7584_pool_1d0[1] = {0xFFFFFFFF};
+const u32 fn_14_7584_pool_1d4[1] = {0x3F3F3F3F};
+const u32 fn_14_7584_pool_1d8[1] = {0x43F00000};
+const u32 fn_14_7584_pool_1dc[1] = {0x42780000};
+const u32 fn_14_7584_pool_1e0[1] = {0x42480000};
+const u32 fn_14_7584_pool_1e4[1] = {0x40A00000};
+const u32 fn_14_7584_pool_1e8[1] = {0x40E00000};
+static const struct fn_14_7584_Color fn_14_7584_red = {0x00FF0000};
+static const struct fn_14_7584_Color fn_14_7584_yellow = {0xFFFFFF00};
+/* Prime the module's shared literal pool in retail order. */
+#pragma section code_type ".fzgxpool"
+/* Volatile keeps this literal-pool primer store observable when compiling. */
+static void fzgx_fn_14_7584_pool_1f4(volatile f32 *p) { *p = 0.480392187833786f; }
+#pragma section code_type ".text"
+const u32 fn_14_7584_pool_1f8[1] = {0xFF00FFFF};
+const u32 fn_14_7584_pool_1fc[1] = {0xFFFFFFFF};
+const u32 fn_14_7584_pool_200[1] = {0x439D0000};
+const u32 fn_14_7584_pool_204[1] = {0x42A80000};
+const u32 fn_14_7584_pool_208[1] = {0x43A08000};
+const u32 fn_14_7584_pool_20c[1] = {0x43B20000};
+const u32 fn_14_7584_pool_210[1] = {0x3F400000};
+const u32 fn_14_7584_pool_214[1] = {0x424C0000};
+/* Prime the module's shared literal pool in retail order. */
+#pragma section code_type ".fzgxpool"
+/* Volatile keeps this literal-pool primer store observable when compiling. */
+static void fzgx_fn_14_7584_pool_218(volatile f32 *p) { *p = 0.30000001192092896f; }
+#pragma section code_type ".text"
+const u32 fn_14_7584_pool_21c[1] = {0x42B00000};
+const u32 fn_14_7584_pool_220[1] = {0x40000000};
+const u32 fn_14_7584_pool_224[1] = {0xFFFF0000};
+const u32 fn_14_7584_pool_228[1] = {0xFF000000};
+const u32 fn_14_7584_pool_22c[1] = {0xFFFF0000};
+const u32 fn_14_7584_pool_230[1] = {0xFF000000};
+const u32 fn_14_7584_pool_234[1] = {0xFFFFFF00};
+const u32 fn_14_7584_pool_238[1] = {0xFFFF0000};
+const u32 fn_14_7584_pool_23c[1] = {0xFF000000};
+const u32 fn_14_7584_pool_240[1] = {0xFFFFFF00};
+const u32 fn_14_7584_pool_244[1] = {0xFFFF0000};
+const u32 fn_14_7584_pool_248[1] = {0xFF000000};
+const u32 fn_14_7584_pool_24c[1] = {0xFFFFFF00};
+const u32 fn_14_7584_pool_250[1] = {0xFFFF0000};
+const u32 fn_14_7584_pool_254[1] = {0xFFFFFF00};
+const u32 fn_14_7584_pool_258[1] = {0x3F6BEBEC};
+const u32 fn_14_7584_pool_25c[1] = {0x3EEAEAEB};
+static const u32 fn_14_7584_pink[] = {0xFF00FFFF};
+static const struct fn_14_7584_Color fn_14_7584_white = {0xFFFFFFFF};
+/* Prime the module's shared literal pool in retail order. */
+#pragma section code_type ".fzgxpool"
+/* Volatile keeps this literal-pool primer store observable when compiling. */
+static void fzgx_fn_14_7584_pool_268(volatile f32 *p) { *p = 492.0f; }
+#pragma section code_type ".text"
+/* Prime the module's shared literal pool in retail order. */
+#pragma section code_type ".fzgxpool"
+/* Volatile keeps this literal-pool primer store observable when compiling. */
+static void fzgx_fn_14_7584_pool_26c(volatile f32 *p) { *p = 332.0f; }
+#pragma section code_type ".text"
+/* Prime the module's shared literal pool in retail order. */
+#pragma section code_type ".fzgxpool"
+/* Volatile keeps this literal-pool primer store observable when compiling. */
+static void fzgx_fn_14_7584_pool_270(volatile f32 *p) { *p = 40.0f; }
+#pragma section code_type ".text"
+/* Prime the module's shared literal pool in retail order. */
+#pragma section code_type ".fzgxpool"
+/* Volatile keeps this literal-pool primer store observable when compiling. */
+static void fzgx_fn_14_7584_pool_274(volatile f32 *p) { *p = 322.0f; }
+#pragma section code_type ".text"
+/* Prime the module's shared literal pool in retail order. */
+#pragma section code_type ".fzgxpool"
+/* Volatile keeps this literal-pool primer store observable when compiling. */
+static void fzgx_fn_14_7584_pool_278(volatile f32 *p) { *p = 41.0f; }
+#pragma section code_type ".text"
+/* Prime the module's shared literal pool in retail order. */
+#pragma section code_type ".fzgxpool"
+/* Volatile keeps this literal-pool primer store observable when compiling. */
+static void fzgx_fn_14_7584_pool_27c(volatile f32 *p) { *p = 238.0f; }
+#pragma section code_type ".text"
+/* Prime the module's shared literal pool in retail order. */
+#pragma section code_type ".fzgxpool"
+/* Volatile keeps this literal-pool primer store observable when compiling. */
+static void fzgx_fn_14_7584_pool_280(volatile f32 *p) { *p = 156.0f; }
+#pragma section code_type ".text"
+/* Prime the module's shared literal pool in retail order. */
+#pragma section code_type ".fzgxpool"
+/* Volatile keeps this literal-pool primer store observable when compiling. */
+static void fzgx_fn_14_7584_pool_284(volatile f32 *p) { *p = 1.2901960611343384f; }
+#pragma section code_type ".text"
+/* Prime the module's shared literal pool in retail order. */
+#pragma section code_type ".fzgxpool"
+/* Volatile keeps this literal-pool primer store observable when compiling. */
+static void fzgx_fn_14_7584_pool_288(volatile f32 *p) { *p = 0.8313725590705872f; }
+#pragma section code_type ".text"
+/* Prime the module's shared literal pool in retail order. */
+#pragma section code_type ".fzgxpool"
+/* Volatile keeps this literal-pool primer store observable when compiling. */
+static void fzgx_fn_14_7584_pool_28c(volatile f32 *p) { *p = 240.0f; }
+#pragma section code_type ".text"
+/* Prime the module's shared literal pool in retail order. */
+#pragma section code_type ".fzgxpool"
+/* Volatile keeps this literal-pool primer store observable when compiling. */
+static void fzgx_fn_14_7584_pool_290(volatile f32 *p) { *p = 0.009999999776482582f; }
+#pragma section code_type ".text"
+/* Prime the module's shared literal pool in retail order. */
+#pragma section code_type ".fzgxpool"
+/* Volatile keeps this literal-pool primer store observable when compiling. */
+static void fzgx_fn_14_7584_pool_294(volatile f32 *p) { *p = 8.00100040435791f; }
+#pragma section code_type ".text"
+/* Prime the module's shared literal pool in retail order. */
+#pragma section code_type ".fzgxpool"
+/* Volatile keeps this literal-pool primer store observable when compiling. */
+static void fzgx_fn_14_7584_pool_298(volatile f32 *p) { *p = 100.0f; }
+#pragma section code_type ".text"
+/* Prime the module's shared literal pool in retail order. */
+#pragma section code_type ".fzgxpool"
+/* Volatile keeps this literal-pool primer store observable when compiling. */
+static void fzgx_fn_14_7584_pool_29c(volatile f32 *p) { *p = 0.019999999552965164f; }
+#pragma section code_type ".text"
+/* Prime the module's shared literal pool in retail order. */
+#pragma section code_type ".fzgxpool"
+/* Volatile keeps this literal-pool primer store observable when compiling. */
+static void fzgx_fn_14_7584_pool_2a0(volatile f32 *p) { *p = 0.00009999999747378752f; }
+#pragma section code_type ".text"
+/* Prime the module's shared literal pool in retail order. */
+#pragma section code_type ".fzgxpool"
+/* Volatile keeps this literal-pool primer store observable when compiling. */
+static void fzgx_fn_14_7584_pool_2a4(volatile f32 *p) { *p = 16.0f; }
+#pragma section code_type ".text"
+/* Prime the module's shared literal pool in retail order. */
+#pragma section code_type ".fzgxpool"
+/* Volatile keeps this literal-pool primer store observable when compiling. */
+static void fzgx_fn_14_7584_pool_2a8(volatile f32 *p) { *p = 24.0f; }
+#pragma section code_type ".text"
+/* Prime the module's shared literal pool in retail order. */
+#pragma section code_type ".fzgxpool"
+/* Volatile keeps this literal-pool primer store observable when compiling. */
+static void fzgx_fn_14_7584_pool_2ac(volatile f32 *p) { *p = 73.0f; }
+#pragma section code_type ".text"
+/* Prime the module's shared literal pool in retail order. */
+#pragma section code_type ".fzgxpool"
+/* Volatile keeps this literal-pool primer store observable when compiling. */
+static void fzgx_fn_14_7584_pool_2b0(volatile f32 *p) { *p = 368.0f; }
+#pragma section code_type ".text"
+/* Prime the module's shared literal pool in retail order. */
+#pragma section code_type ".fzgxpool"
+/* Volatile keeps this literal-pool primer store observable when compiling. */
+static void fzgx_fn_14_7584_pool_2b4(volatile f32 *p) { *p = 193.0f; }
+#pragma section code_type ".text"
+/* Prime the module's shared literal pool in retail order. */
+#pragma section code_type ".fzgxpool"
+/* Volatile keeps this literal-pool primer store observable when compiling. */
+static void fzgx_fn_14_7584_pool_2b8(volatile f32 *p) { *p = 248.0f; }
+#pragma section code_type ".text"
+/* Prime the module's shared literal pool in retail order. */
+#pragma section code_type ".fzgxpool"
+/* Volatile keeps this literal-pool primer store observable when compiling. */
+static void fzgx_fn_14_7584_pool_2bc(volatile f32 *p) { *p = 36.0f; }
+#pragma section code_type ".text"
+/* Prime the module's shared literal pool in retail order. */
+#pragma section code_type ".fzgxpool"
+/* Volatile keeps this literal-pool primer store observable when compiling. */
+static void fzgx_fn_14_7584_pool_2c0(volatile f32 *p) { *p = 376.0f; }
+#pragma section code_type ".text"
+/* Prime the module's shared literal pool in retail order. */
+#pragma section code_type ".fzgxpool"
+/* Volatile keeps this literal-pool primer store observable when compiling. */
+static void fzgx_fn_14_7584_pool_2c4(volatile f32 *p) { *p = 211.0f; }
+#pragma section code_type ".text"
+/* Prime the module's shared literal pool in retail order. */
+#pragma section code_type ".fzgxpool"
+/* Volatile keeps this literal-pool primer store observable when compiling. */
+static void fzgx_fn_14_7584_pool_2c8(volatile f32 *p) { *p = 608.0f; }
+#pragma section code_type ".text"
+/* Prime the module's shared literal pool in retail order. */
+#pragma section code_type ".fzgxpool"
+/* Volatile keeps this literal-pool primer store observable when compiling. */
+static void fzgx_fn_14_7584_pool_2cc(volatile f32 *p) { *p = 257.0f; }
+#pragma section code_type ".text"
+/* Prime the module's shared literal pool in retail order. */
+#pragma section code_type ".fzgxpool"
+/* Volatile keeps this literal-pool primer store observable when compiling. */
+static void fzgx_fn_14_7584_pool_2d0(volatile f32 *p) { *p = 176.0f; }
+#pragma section code_type ".text"
+/* Prime the module's shared literal pool in retail order. */
+#pragma section code_type ".fzgxpool"
+/* Volatile keeps this literal-pool primer store observable when compiling. */
+static void fzgx_fn_14_7584_pool_2d4(volatile f32 *p) { *p = 239.0f; }
+#pragma section code_type ".text"
+
+
+static inline void fn_14_7584_points(s32 points) {
+    if (__abs(points) > 1) fn_1_4AE0C((const char *)&lbl_14_data_3028, points);
+    else fn_1_4AE0C((const char *)lbl_14_data_3030, points);
+}
+
+/* Per-screen-mode layout (title bar edge width, text scale) and the
+ * fade-in / fade-out alphas for the title bar and the headline text. */
+static inline void fn_14_7584_setup(s32 *edge, f32 *scale, f32 *barAlpha, f32 *textAlpha, f32 edgeScale) {
+    s32 initial;
+    f32 scaleFactor;
+    f32 edgeFactor;
+    u32 v2;
+    f32 v3;
+    f32 v4;
+    f32 v5;
+    f32 v6;
+    u32 v7;
+    f32 v8;
+    f32 v9;
+    f32 v12;
+    f32 v13;
+    *scale = 1.0f;
+    *edge = 470;
+    switch ((s32)lbl_801A66B4.unk_0) {
+    case 0:
+        initial = 470;
+        scaleFactor = 0.8313725590705872f;
+        *scale = *scale * scaleFactor;
+        edgeFactor = (f32)initial;
+        *edge = (s32)(edgeFactor * edgeScale);
+        break;
+    }
+    if ((s32)lbl_14_bss_92C0 != 0) {
+        v2 = lbl_14_bss_92BC;
+        *barAlpha = FN_14_7584_CLAMP01((f32)(s32)v2 / 10.0f);
+        *textAlpha = FN_14_7584_CLAMP01(((f32)(s32)v2 - 10.0f) / 20.0f);
+    } else {
+        v7 = lbl_14_bss_92BC;
+        *barAlpha = 1.0f - FN_14_7584_CLAMP01(((f32)(s32)v7 - 10.0f) / 20.0f);
+        *textAlpha = 1.0f - FN_14_7584_CLAMP01((f32)(s32)v7 / 10.0f);
+    }
+}
+#pragma push
+#pragma opt_propagation off
+void fn_14_7584(void) {
+    struct fn_14_7584_lbl_14_rodata_0 *p_lbl_14_rodata_0;
+    f32 v1;
+    f32 v11;
+    u32 v14;
+    struct { f32 value; } v15;
+    f32 v16;
+    f32 width;
+    f32 widthMin;
+    f32 v0;
+    struct fn_14_7584_Copy88 loc_C4;
+    struct fn_14_7584_Copy88 loc_6C;
+    struct fn_14_7584_Color color2;
+    struct fn_14_7584_Color color1;
+    struct fn_14_7584_Copy88 loc_14;
+    struct fn_14_7584_Color color3;
+    s32 edge;
+    s32 expired;
+    u32 flags;
+    p_lbl_14_rodata_0 = (struct fn_14_7584_lbl_14_rodata_0 *)&lbl_14_rodata_0;
+    fn_14_7584_setup(&edge, &v0, &v11, &v1, 1.2901960611343384f);
+    if (0.0f != v11) {
+        loc_C4 = *(struct fn_14_7584_Copy88 *)&lbl_1_rodata_26F8;
+        v14 = (0x10000 - 31737);
+        v15.value = (f32)(100.0f * v11);
+        loc_C4.a[0] = v14;
+        *(f32 *)((u8 *)&loc_C4 + 4) = 320.0f;
+        *(f32 *)((u8 *)&loc_C4 + 8) = 240.0f;
+        *(f32 *)((u8 *)&loc_C4 + 12) = 0.01f;
+        loc_C4.a[12] = 10;
+        v16 = 8.00100040435791f;
+        if (v15.value > 8.00100040435791f) v16 = v15.value;
+        width = (f32)(s16)edge * v11;
+        widthMin = 8.00100040435791f;
+        if (width > widthMin) widthMin = width;
+        fn_1_50164(&loc_C4, widthMin, v16, 8.0f, 8.0f);
+        *(f32 *)((u8 *)&loc_C4 + 12) = 0.02f;
+        *(f32 *)((u8 *)&loc_C4 + 44) = 0.5f;
+        v15.value = v15.value > 8.00100040435791f ? v15.value : 8.00100040435791f;
+        fn_1_50164(&loc_C4, width > 8.00100040435791f ? width : 8.00100040435791f, v15.value, 8.0f, 8.0f);
+    }
+    if (0.0f != v1) {
+        fn_1_49410();
+        fn_1_495C8(9);
+        fn_1_495B0(0x80000000);
+        fn_1_4965C(2);
+        fn_1_4954C(0.0001f);
+        fn_1_495A0(v1);
+        fn_1_4955C((16.0f * v0) / 24.0f, 0.6666666865348816f);
+        fn_1_496FC(320.0f, 240.0f);
+        fn_1_4AE0C((const char *)fn_14_DC6C(1,(s16)lbl_801A66B4.unk_0));
+    }
+    fn_14_58C4(24,73);
+    fn_14_6044(24,73);
+    loc_C4 = *(struct fn_14_7584_Copy88 *)&lbl_1_rodata_26F8;
+    loc_C4.a[0] = 0x8406;
+    *(f32 *)((u8 *)&loc_C4+4) = 24.0f;
+    *(f32 *)((u8 *)&loc_C4+8) = 73.0f;
+    *(f32 *)((u8 *)&loc_C4+12) = 90.0f;
+    fn_1_4F734((FontDrawPacket *)&loc_C4);
+    loc_6C = *(struct fn_14_7584_Copy88 *)&lbl_1_rodata_26F8;
+    loc_6C.a[0] = 0x8407;
+    *(f32 *)((u8 *)&loc_6C+4) = 368.0f;
+    *(f32 *)((u8 *)&loc_6C+8) = 193.0f;
+    *(f32 *)((u8 *)&loc_6C+12) = 90.0f;
+    fn_1_50164(&loc_6C,248.0f,36.0f,8.0f,8.0f);
+    fn_1_49410();
+    fn_1_495FC();
+    fn_1_495B0(0x80000000);
+    fn_1_4965C(2);
+    fn_1_49590(0.5f);
+    fn_1_496FC(376.0f,211.0f);
+    fn_1_4955C(0.6666666865348816f,0.6666666865348816f);
+    fn_1_495C8(8);
+    color1 = fn_14_7584_red;
+    fn_1_49514((u32 *)&color1);
+    fn_1_4AE0C((const char *)fn_14_DC6C(2,0));
+    fn_1_496FC(608.0f,211.0f);
+    fn_1_4955C(0.480392187833786f,0.8333333134651184f);
+    fn_1_495C8(10);
+    color2 = fn_14_7584_yellow;
+    fn_1_49514((u32 *)&color2);
+    fn_14_7584_points(99900);
+    fn_14_6494();
+    loc_14 = *(struct fn_14_7584_Copy88 *)&lbl_1_rodata_26F8;
+    *(f32 *)((u8 *)&loc_14+4) = 492.0f;
+    *(f32 *)((u8 *)&loc_14+8) = 332.0f;
+    *(f32 *)((u8 *)&loc_14+12) = 40.0f;
+    loc_14.a[12] = 10;
+    fn_1_8D3F8(lbl_14_bss_91F4,&loc_14,fn_14_4008,0);
+    color3 = fn_14_7584_white;
+    loc_14 = *(struct fn_14_7584_Copy88 *)&lbl_1_rodata_26F8;
+    loc_14.a[0] = 0x8404;
+    flags = lbl_14_bss_110.unk_0;
+    loc_14.a[12] = 10;
+    *(f32 *)((u8 *)&loc_14+4) = 492.0f;
+    *(f32 *)((u8 *)&loc_14+8) = 322.0f;
+    *(f32 *)((u8 *)&loc_14+12) = 41.0f;
+    loc_14.a[14] = fn_14_7584_pink[0];
+    *(f32 *)((u8 *)&loc_14+44) = 0.3f;
+    expired = 1;
+    if (flags & 0x40000000) {
+        if (lbl_14_bss_110.unk_48 == -1) expired = 1;
+        else if (lbl_801A66A0 - lbl_14_bss_110.unk_48 > lbl_14_bss_110.unk_4C) {
+            lbl_14_bss_110.unk_48 = -1;
+            expired = 1;
+        } else expired = 0;
+        if (!expired) {
+            if (lbl_801A66A0 % 3) *(struct fn_14_7584_Color *)&loc_14.a[14] = color3;
+            fn_1_50164(&loc_14,238.0f,156.0f,8.0f,8.0f);
+        } else goto secondary; /* retail falls through to the per-slot flag test */
+    } else {
+secondary:
+        if (*(u32 *)((u8 *)&lbl_14_bss_110 + lbl_14_bss_110.unk_4 * 8 + 12) & 8)
+            fn_1_50164(&loc_14,238.0f,156.0f,8.0f,8.0f);
+    }
+    fn_14_6758(20,257);
+    loc_C4 = *(struct fn_14_7584_Copy88 *)&lbl_1_rodata_26F8;
+    loc_C4.a[0] = 0x8400;
+    *(f32 *)((u8 *)&loc_C4+4) = 20.0f;
+    *(f32 *)((u8 *)&loc_C4+8) = 257.0f;
+    *(f32 *)((u8 *)&loc_C4+12) = 90.0f;
+    fn_1_4F734((FontDrawPacket *)&loc_C4);
+    loc_C4 = *(struct fn_14_7584_Copy88 *)&lbl_1_rodata_26F8;
+    loc_C4.a[0] = 0x8405;
+    *(f32 *)((u8 *)&loc_C4+4) = 176.0f;
+    *(f32 *)((u8 *)&loc_C4+8) = 239.0f;
+    *(f32 *)((u8 *)&loc_C4+12) = 90.0f;
+    fn_1_4F734((FontDrawPacket *)&loc_C4);
+    loc_C4 = *(struct fn_14_7584_Copy88 *)&lbl_1_rodata_26F8;
+    loc_C4.a[0] = 0x9203;
+    *(f32 *)((u8 *)&loc_C4+4) = 167.0f;
+    *(f32 *)((u8 *)&loc_C4+8) = 38.0f;
+    *(f32 *)((u8 *)&loc_C4+12) = 90.0f;
+    loc_C4.a[12] = 10;
+    fn_1_4F734((FontDrawPacket *)&loc_C4);
+    fn_1_1380F0((void *)fn_14_DC6C(0,(s16)lbl_801A66B4.unk_0));
+    fn_1_133DBC(0);
+    fn_1_134AD4();
+    fn_1_13B328(0x40800000,1);
+    fn_1_13D02C();
+}
+
+#pragma pop
+/* fzgx:end fn_14_7584 */
+
 /* fzgx:begin fn_14_7E04 */
 extern struct fn_14_7E04_lbl_14_bss_20 lbl_14_bss_20;
 extern struct fn_14_7E04_lbl_14_bss_92C0 lbl_14_bss_92C0;
