@@ -8177,3 +8177,6 @@ rel/main_rel/effect_car/fn_1_6ED40.c:
 
 rel/main_rel/stcoli/fn_1_16E68.c:
 	.text       start:0x00016E68 end:0x00017098 align:4
+
+rel/main_rel/accessory/fn_1_11ED0C.c:
+	.text       start:0x0011ED0C end:0x0011F250 align:4

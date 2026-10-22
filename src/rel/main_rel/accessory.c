@@ -2938,6 +2938,128 @@ void fn_1_11CAB4(NodeSet *set) {
 }
 /* fzgx:end fn_1_11CAB4 */
 
+/* fzgx:begin fn_1_11ED0C noprologue */
+#include "types.h"
+#include "rel/main_rel/accessory.h"
+#include "game/main_rel/accessory_types.h"
+
+typedef struct { f32 x,y,z; } Sig_fn_1_10846C_Vec10846C;
+typedef struct { u32 w[3]; } Sig_fn_1_10846C_Word3_10846C;
+typedef struct {
+ u8 flags,unk_1,count,pad_3;
+ u16 idx[4]; u8 pad_C[4];
+ Sig_fn_1_10846C_Vec10846C p10,p1C,p28;
+ Sig_fn_1_10846C_Word3_10846C c34;
+ u8 pad_40[4];
+} Sig_fn_1_10846C_Group10846C;
+typedef struct {
+ u8 pad_0[0x10]; void *model; u8 pad_14[4];
+ u32 groupCount,unk_1C; u8 pad_20[4];
+ Sig_fn_1_10846C_Group10846C *groups;
+ void *unk_28; u8 pad_2C[4]; void *srcModel;
+ u8 pad_34[0x30]; Sig_fn_1_10846C_Vec10846C *positions;
+} Sig_fn_1_10846C_Obj10846C;
+extern const f32 lbl_1_rodata_7B1C;
+extern const f32 lbl_1_rodata_7B20;
+extern void fn_1_10846C(Sig_fn_1_10846C_Obj10846C *);
+extern void fn_1_128884(void *,void *,s32);
+extern u32 lbl_801A6410;
+extern void *fn_1_4630(u32,u32,const char *,u32);
+extern f32 fn_1_1289BC(const Point1024C4 *,const Point1024C4 *);
+typedef struct { Sig_fn_1_10846C_Group10846C *a,*b; f32 value; } Edge;
+#pragma opt_propagation off
+static inline u32 edge_base(u32 n) {
+ return (n-1)*11+20;
+}
+#pragma opt_propagation on
+void fn_1_11ED0C(Sig_fn_1_10846C_Obj10846C *obj) {
+ u32 m;
+ Sig_fn_1_10846C_Group10846C *q;
+ u32 j;
+ u32 i;
+ Sig_fn_1_10846C_Group10846C *p;
+ u32 k;
+ Sig_fn_1_10846C_Group10846C *base;
+ u32 e;
+ u32 n;
+ s32 cnt;
+ if (!obj) return;
+ fn_1_10846C(obj);
+ for(i=0,p=obj->groups;i<obj->groupCount;i++,p++) {
+  if(p->flags&1) { p->flags=0; *(f32 *)p->pad_40=lbl_1_rodata_7B1C; }
+  else { p->flags=1; *(f32 *)p->pad_40=lbl_1_rodata_7B20; }
+ }
+ for(i=0,p=obj->groups;i<obj->groupCount;i++,p++) {
+  q=obj->groups+i+1;
+  for(j=i+1;j<obj->groupCount;j++,q++)
+   if(!p->flags && q->flags) fn_1_128884(p,q,68);
+ }
+ for(i=0,p=obj->groups;i<obj->groupCount;i++,p++) {
+  q=obj->groups+i+1;
+  for(j=i+1;j<obj->groupCount;j++,q++)
+   if(p->flags==q->flags && p->p10.x<q->p10.x) fn_1_128884(p,q,68);
+ }
+ i=0;
+ p=obj->groups;
+ do {
+  j=i+1;
+  q=p+1;
+  for(;j<11;j++,q++)
+   if(p->p10.z>q->p10.z) fn_1_128884(p,q,68);
+  i++; p++;
+ } while(i<11);
+ p=obj->groups;
+ for(i=0;i<obj->groupCount;i++,p++)
+  if(p->flags && !p[1].flags) break;
+ p++;
+ n=(obj->groupCount-(p-obj->groups))/11;
+ for(k=0;k<n;k++,p+=11) {
+  for(i=0;i<11;i++) *(f32 *)p[i].pad_40=-(f32)(k+1)/(f32)(n+1);
+  i=0;
+  q=p;
+  do {
+   m=i+1;
+   base=q+1;
+   for(;m<11;m++,base++)
+    if(q->p10.z>base->p10.z) fn_1_128884(q,base,68);
+   i++; q++;
+  } while(i<11);
+ }
+ n=obj->groupCount/11;
+ cnt=(u32)((u64)((n-1)*11+20)|0x100000000ULL);
+ n*=10;
+ obj->unk_1C=n+cnt;
+ obj->unk_28=fn_1_4630(lbl_801A6410,obj->unk_1C*12,lbl_1_data_40530,0x2349);
+ e=0;
+ p=obj->groups;
+ for(i=0;i<10;i++,p++) {
+  ((Edge *)obj->unk_28)[e].a=p;
+  ((Edge *)obj->unk_28)[e].b=p+12;
+  ((Edge *)obj->unk_28)[e].value=fn_1_1289BC((const Point1024C4 *)p,(const Point1024C4 *)(p+12)); e++;
+ }
+ p=obj->groups;
+ for(i=0;i<10;i++,p++) {
+  ((Edge *)obj->unk_28)[e].a=p+1;
+  ((Edge *)obj->unk_28)[e].b=p+11;
+  ((Edge *)obj->unk_28)[e].value=fn_1_1289BC((const Point1024C4 *)(p+1),(const Point1024C4 *)(p+11)); e++;
+ }
+ p=obj->groups;
+ for(i=0;i<obj->groupCount-1;i++,p++) {
+  if((i+1)%11) {
+   ((Edge *)obj->unk_28)[e].a=p;
+   ((Edge *)obj->unk_28)[e].b=p+1;
+   ((Edge *)obj->unk_28)[e].value=fn_1_1289BC((const Point1024C4 *)p,(const Point1024C4 *)(p+1)); e++;
+  }
+ }
+ p=obj->groups;
+ for(i=0;i<obj->groupCount-11;i++,p++) {
+  ((Edge *)obj->unk_28)[e].a=p;
+  ((Edge *)obj->unk_28)[e].b=p+11;
+  ((Edge *)obj->unk_28)[e].value=fn_1_1289BC((const Point1024C4 *)p,(const Point1024C4 *)(p+11)); e++;
+ }
+}
+/* fzgx:end fn_1_11ED0C */
+
 /* fzgx:begin fn_1_125CE8 */
 typedef struct {
     u8 active;
