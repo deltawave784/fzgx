@@ -8267,3 +8267,6 @@ rel/main_rel/spline/fn_1_F83F0.c:
 
 rel/main_rel/bg_common/fn_1_108BD0.c:
 	.text       start:0x00108BD0 end:0x00108EEC align:4
+
+rel/main_rel/sel_static_disp/fn_1_1492E0.c:
+	.text       start:0x001492E0 end:0x001498B8 align:4

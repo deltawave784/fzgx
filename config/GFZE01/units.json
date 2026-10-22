@@ -59040,6 +59040,29 @@
   },
   {
     "module": "main_rel",
+    "source": "rel/main_rel/sel_static_disp/fn_1_1492E0.c",
+    "symbols": [
+      "fn_1_1492E0"
+    ],
+    "status": "matching",
+    "mw_version": "GC/1.3.2",
+    "extra_cflags": [],
+    "tu": "rel/main_rel/sel_static_disp.c",
+    "pool": {
+      "...data.0": "lbl_1_data_42198",
+      "...rodata.0": "lbl_1_rodata_92C0",
+      "@26": "lbl_1_rodata_970C+0xF0",
+      "@27": "lbl_1_rodata_970C+0xF4",
+      "@21": "lbl_1_rodata_970C+0x40",
+      "@11": "lbl_1_rodata_93E8",
+      "@5": "lbl_1_rodata_9318+0xC4",
+      "@16": "lbl_1_rodata_9480+0x124",
+      "@28": "lbl_1_rodata_970C+0xF8",
+      "@29": "lbl_1_rodata_970C+0xFC"
+    }
+  },
+  {
+    "module": "main_rel",
     "source": "rel/main_rel/sel_static_disp/fn_1_1498B8.c",
     "symbols": [
       "fn_1_1498B8"
