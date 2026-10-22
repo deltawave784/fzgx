@@ -653,6 +653,179 @@ void fn_1_A1360(void) {
 }
 /* fzgx:end fn_1_A1360 */
 
+/* fzgx:begin fn_1_A1588 pool noprologue */
+#include "rel/main_rel/sound.h"
+
+extern const f32 lbl_1_rodata_42E0;
+extern const f32 lbl_1_rodata_42E4;
+extern const f32 lbl_1_rodata_42E8;
+extern void fn_8004D18C(u32, const char *);
+extern u32 fn_8004BF0C(u32, u32);
+typedef struct SoundState {
+u8 pad0[0x1c];
+u32 flags;
+u8 pad20[4];
+f32 rate[2];
+u8 index;
+u8 pad2d[0xb];
+u32 *handles;
+u8 pad3c[0x846];
+u8 disabled;
+u8 pad883;
+s16 volume[2];
+f32 target[2];
+} SoundState;
+/* file-scope objects of the retail TU, in retail order: MWCC addresses them off one section base */
+u32 fzgx_obj_lbl_1_bss_6EA98;
+u32 fzgx_obj_lbl_1_bss_6EA9C[2];
+u8 lbl_1_bss_6EAA4;
+u8 lbl_1_bss_6EA98_gap_6EAA5;
+u8 lbl_1_bss_6EAA6;
+u8 lbl_1_bss_6EA98_gap_6EAA7;
+u32 lbl_1_bss_6EAA8[2];
+u8 lbl_1_bss_6EAB0;
+u8 lbl_1_bss_6EA98_gap_6EAB1;
+u16 lbl_1_bss_6EA98_gap_6EAB1_fill_6EAB2;
+u32 fzgx_obj_lbl_1_bss_6EAB4;
+u32 lbl_1_bss_6EAB4_fill_6EAB8;
+f32 lbl_1_bss_6EAB4_8;
+f32 lbl_1_bss_6EAB4_C;
+u8 lbl_1_bss_6EAB4_10;
+u8 lbl_1_bss_6EAB4_fill_6EAC5;
+u16 fzgx_obj_lbl_1_bss_6EAC6;
+u32 lbl_1_bss_6EAC6_fill_6EAC8[2];
+u32 *fzgx_obj_lbl_1_bss_6EAD0;
+u32 lbl_1_bss_6EAD0_fill_6EAD4[449];
+u8 fzgx_obj_lbl_1_bss_6F1D8;
+u8 lbl_1_bss_6EA98_gap_6F1D9;
+u16 lbl_1_bss_6EA98_gap_6F1D9_fill_6F1DA;
+u32 fzgx_obj_lbl_1_bss_6F1DC;
+u8 fzgx_obj_lbl_1_bss_6F1E0;
+u8 lbl_1_bss_6F1E1;
+u16 lbl_1_bss_6EA98_gap_6F1E2;
+u32 fzgx_obj_lbl_1_bss_6F1E4[21];
+u8 lbl_1_bss_6F1E4_fill_6F238;
+u8 lbl_1_bss_6F239;
+u16 lbl_1_bss_6EA98_gap_6F23A;
+u32 lbl_1_bss_6F23C;
+u16 lbl_1_bss_6F23C_fill_6F240;
+u8 lbl_1_bss_6F23C_fill_6F242;
+u8 fzgx_obj_lbl_1_bss_6F243;
+u32 lbl_1_bss_6F244[32];
+u8 lbl_1_bss_6F2C4;
+u8 lbl_1_bss_6EA98_gap_6F2C5;
+u16 lbl_1_bss_6EA98_gap_6F2C5_fill_6F2C6;
+u32 lbl_1_bss_6F2C8[4];
+u32 lbl_1_bss_6F2D8[15];
+u16 lbl_1_bss_6F2D8_fill_6F314;
+u8 lbl_1_bss_6F316;
+u8 lbl_1_bss_6F317;
+u16 lbl_1_bss_6EA98_gap_6F318;
+u8 lbl_1_bss_6F31A;
+u8 lbl_1_bss_6F31A_fill_6F31B;
+s16 lbl_1_bss_6F31A_2[2];
+f32 lbl_1_bss_6F31A_6;
+f32 lbl_1_bss_6F31A_A;
+u32 lbl_1_bss_6F31A_fill_6F328[31];
+
+#pragma section code_type ".fzgxpool"
+static void fzgx_bss_layout(void) {
+    volatile u8 s;  /* fzgx-allow: S2 layout primer sink: MWCC emits .bss objects in first-access order */
+    s = *(u8 *)&fzgx_obj_lbl_1_bss_6EA98;
+    s = *(u8 *)&fzgx_obj_lbl_1_bss_6EA9C;
+    s = *(u8 *)&lbl_1_bss_6EAA4;
+    s = *(u8 *)&lbl_1_bss_6EA98_gap_6EAA5;
+    s = *(u8 *)&lbl_1_bss_6EAA6;
+    s = *(u8 *)&lbl_1_bss_6EA98_gap_6EAA7;
+    s = *(u8 *)&lbl_1_bss_6EAA8;
+    s = *(u8 *)&lbl_1_bss_6EAB0;
+    s = *(u8 *)&lbl_1_bss_6EA98_gap_6EAB1;
+    s = *(u8 *)&lbl_1_bss_6EA98_gap_6EAB1_fill_6EAB2;
+    s = *(u8 *)&fzgx_obj_lbl_1_bss_6EAB4;
+    s = *(u8 *)&lbl_1_bss_6EAB4_fill_6EAB8;
+    s = *(u8 *)&lbl_1_bss_6EAB4_8;
+    s = *(u8 *)&lbl_1_bss_6EAB4_C;
+    s = *(u8 *)&lbl_1_bss_6EAB4_10;
+    s = *(u8 *)&lbl_1_bss_6EAB4_fill_6EAC5;
+    s = *(u8 *)&fzgx_obj_lbl_1_bss_6EAC6;
+    s = *(u8 *)&lbl_1_bss_6EAC6_fill_6EAC8;
+    s = *(u8 *)&fzgx_obj_lbl_1_bss_6EAD0;
+    s = *(u8 *)&lbl_1_bss_6EAD0_fill_6EAD4;
+    s = *(u8 *)&fzgx_obj_lbl_1_bss_6F1D8;
+    s = *(u8 *)&lbl_1_bss_6EA98_gap_6F1D9;
+    s = *(u8 *)&lbl_1_bss_6EA98_gap_6F1D9_fill_6F1DA;
+    s = *(u8 *)&fzgx_obj_lbl_1_bss_6F1DC;
+    s = *(u8 *)&fzgx_obj_lbl_1_bss_6F1E0;
+    s = *(u8 *)&lbl_1_bss_6F1E1;
+    s = *(u8 *)&lbl_1_bss_6EA98_gap_6F1E2;
+    s = *(u8 *)&fzgx_obj_lbl_1_bss_6F1E4;
+    s = *(u8 *)&lbl_1_bss_6F1E4_fill_6F238;
+    s = *(u8 *)&lbl_1_bss_6F239;
+    s = *(u8 *)&lbl_1_bss_6EA98_gap_6F23A;
+    s = *(u8 *)&lbl_1_bss_6F23C;
+    s = *(u8 *)&lbl_1_bss_6F23C_fill_6F240;
+    s = *(u8 *)&lbl_1_bss_6F23C_fill_6F242;
+    s = *(u8 *)&fzgx_obj_lbl_1_bss_6F243;
+    s = *(u8 *)&lbl_1_bss_6F244;
+    s = *(u8 *)&lbl_1_bss_6F2C4;
+    s = *(u8 *)&lbl_1_bss_6EA98_gap_6F2C5;
+    s = *(u8 *)&lbl_1_bss_6EA98_gap_6F2C5_fill_6F2C6;
+    s = *(u8 *)&lbl_1_bss_6F2C8;
+    s = *(u8 *)&lbl_1_bss_6F2D8;
+    s = *(u8 *)&lbl_1_bss_6F2D8_fill_6F314;
+    s = *(u8 *)&lbl_1_bss_6F316;
+    s = *(u8 *)&lbl_1_bss_6F317;
+    s = *(u8 *)&lbl_1_bss_6EA98_gap_6F318;
+    s = *(u8 *)&lbl_1_bss_6F31A;
+    s = *(u8 *)&lbl_1_bss_6F31A_fill_6F31B;
+    s = *(u8 *)&lbl_1_bss_6F31A_2;
+    s = *(u8 *)&lbl_1_bss_6F31A_6;
+    s = *(u8 *)&lbl_1_bss_6F31A_A;
+    s = *(u8 *)&lbl_1_bss_6F31A_fill_6F328;
+}
+#pragma section code_type ".text"
+
+void fn_1_A1588(u32 handle, u32 index) {
+
+u32 *handles;
+u32 flags;
+if (lbl_1_bss_6F31A || handle == 0 || handle == -1U) return;
+handles = fzgx_obj_lbl_1_bss_6EAD0;
+if (handle == handles[0]) {
+flags = fzgx_obj_lbl_1_bss_6EAB4;
+fzgx_obj_lbl_1_bss_6EAB4 = flags & ~4U;
+if (flags & 1) {
+lbl_1_bss_6F31A_2[0] = lbl_1_data_2D93C[(u8)index];
+} else {
+s32 volume = lbl_1_data_2D93C[(u8)index];
+lbl_1_bss_6EAB4_8 = lbl_1_rodata_42E0;
+lbl_1_bss_6F31A_6 = volume;
+}
+}
+if (handle == handles[1]) {
+flags = fzgx_obj_lbl_1_bss_6EAB4;
+fzgx_obj_lbl_1_bss_6EAB4 = flags & ~8U;
+if (flags & 2) {
+lbl_1_bss_6F31A_2[1] = lbl_1_data_2D93C[(u8)index];
+} else {
+s32 volume = lbl_1_data_2D93C[(u8)index];
+lbl_1_bss_6EAB4_C = lbl_1_rodata_42E4;
+lbl_1_bss_6F31A_A = volume;
+}
+}
+fn_8004D18C(handle, lbl_1_data_2D7B8[(u8)index]);
+flags = fzgx_obj_lbl_1_bss_6EAB4;
+if (flags & 3) {
+if (flags & 1) lbl_1_bss_6F31A_6 = lbl_1_rodata_42E8;
+if (flags & 2) lbl_1_bss_6F31A_A = lbl_1_rodata_42E8;
+fn_8004BF0C(handle, -400);
+} else {
+fn_8004BF0C(handle, lbl_1_data_2D93C[(u8)index]);
+}
+lbl_1_bss_6EAB4_10 = index;
+}
+/* fzgx:end fn_1_A1588 */
+
 /* fzgx:begin fn_1_A1DCC pool */
 /* sound.c's .bss cluster: retail addresses every object off one base (lbl_1_bss_6EA98),
  * so the unit defines the cluster in retail order and the primer fixes the emission order. */
