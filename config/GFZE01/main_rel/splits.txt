@@ -8327,3 +8327,6 @@ rel/main_rel/sel_static_disp/fn_1_143780.c:
 
 rel/main_rel/game/fn_1_32A40.c:
 	.text       start:0x00032A40 end:0x000331EC align:4
+
+rel/main_rel/load/fn_1_451E4.c:
+	.text       start:0x000451E4 end:0x00045730 align:4
