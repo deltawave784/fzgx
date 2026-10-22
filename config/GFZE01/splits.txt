@@ -6113,3 +6113,6 @@ dol/float2str.c:
 
 dol/fn_80062360.c:
 	.text       start:0x80062360 end:0x80062654 align:4
+
+dol/__mod2i.c:
+	.text       start:0x80079BF8 end:0x80079D04 align:4
