@@ -3529,6 +3529,138 @@ void fn_1_125CE8(fn_1_125CE8_AccessoryData *data) {
 }
 /* fzgx:end fn_1_125CE8 */
 
+/* fzgx:begin fn_1_126DE8 noprologue */
+#include "types.h"
+#include "game/main_rel/accessory_types.h"
+#include "rel/main_rel/accessory.h"
+
+typedef struct { f32 x,y,z; } Sig_fn_1_10846C_Vec10846C;
+typedef struct { u32 w[3]; } Sig_fn_1_10846C_Word3_10846C;
+typedef struct {
+ u8 flags, unk_1, count, pad_3;
+ u16 idx[4]; u8 pad_C[4];
+ Sig_fn_1_10846C_Vec10846C p10,p1C,p28;
+ Sig_fn_1_10846C_Word3_10846C c34;
+ f32 weight;
+} Sig_fn_1_10846C_Group10846C;
+typedef struct {
+ u8 pad_0[12]; void *config; void *model;
+ u8 pad_14[4]; u32 groupCount,unk_1C;
+ u8 pad_20[4]; Sig_fn_1_10846C_Group10846C *groups;
+ void *unk_28; u8 pad_2C[4]; void *srcModel; u8 pad_34[0x30];
+ Sig_fn_1_10846C_Vec10846C *positions;
+} Sig_fn_1_10846C_Obj10846C;
+extern void fn_1_10846C(Sig_fn_1_10846C_Obj10846C *);
+extern void fn_1_128884(void *,void *,s32);
+extern f32 fn_1_1289BC(const Point1024C4 *,const Point1024C4 *);
+extern const f32 lbl_1_rodata_7B1C;
+extern f32 lbl_1_rodata_7B20;
+#define lbl_1_rodata_7B20 (&lbl_1_rodata_7B20)
+extern u32 lbl_801A6410;
+extern u32 fn_1_4630(u32,u32,const char *,u32);
+typedef Sig_fn_1_10846C_Group10846C Group;
+typedef struct { Group *a,*b; f32 distance; } Edge;
+void fn_1_126DE8(Sig_fn_1_10846C_Obj10846C *obj) {
+ u32 h[1];
+ Group *base;
+ u32 i,k,j,edgeCount,offset;
+ Group *p;
+ u32 width;
+ register Group *q,*row;
+ u32 n;
+ register u32 j2;
+ if (!obj) return;
+ if (*(s32 *)((u8 *)obj->config+0x88)==27) width=13;
+ else if (*(s32 *)((u8 *)obj->config+0x88)==4) width=15;
+ else if (*(s32 *)((u8 *)obj->config+0x88)==22) width=11;
+ fn_1_10846C(obj);
+ for (i=0,p=obj->groups;i<obj->groupCount;i++,p++) {
+  if (p->flags&1) { p->flags=0; p->weight=lbl_1_rodata_7B1C; }
+  else { p->flags=1; p->weight=0.0f; }
+ }
+ {
+ u32 firstOff[1], firstI[1];
+ Group *firstRow[1];
+ firstOff[0]=0;
+ for(firstI[0]=0,firstRow[0]=obj->groups,firstOff[0]=firstI[0];firstI[0]<obj->groupCount;firstOff[0]+=0x44,firstI[0]++,firstRow[0]++) {
+  row=firstRow[0];
+  for(j=firstI[0]+1,q=(Group *)((u8 *)obj->groups+firstOff[0]+0x44);j<obj->groupCount;j++,q++)
+   if(row->flags==0 && q->flags!=0) fn_1_128884(row,q,0x44);
+ }
+ }
+ {
+ u32 secondOff[1], secondI[1];
+ Group *secondRow[1];
+ u32 secondJ[1];
+ secondOff[0]=0;
+ for(secondI[0]=0,secondRow[0]=obj->groups,secondOff[0]=secondI[0];secondI[0]<obj->groupCount;secondOff[0]+=0x44,secondI[0]++,secondRow[0]++) {
+  for(secondJ[0]=secondI[0]+1,p=(Group *)((u8 *)obj->groups+secondOff[0]+0x44);secondJ[0]<obj->groupCount;secondJ[0]++,p++)
+   if(secondRow[0]->flags==p->flags && secondRow[0]->p10.x<p->p10.x) fn_1_128884(secondRow[0],p,0x44);
+ }
+ }
+ {
+ u32 kk[1];
+ Group *bb[1];
+ for(kk[0]=0,bb[0]=obj->groups;kk[0]<obj->groupCount/width;kk[0]++,bb[0]+=width) {
+  for(i=0,p=bb[0];i<width;i++,p++) {
+   register Group *zQ;
+   for(j2=i+1,zQ=p+1;j2<width;j2++,zQ++)
+    if(p->p10.z<zQ->p10.z) fn_1_128884(p,zQ,0x44);
+  }
+ }
+ }
+ {
+#define nn (&n)
+ u32 yzI[1];
+ Group *yzRow[1];
+ u32 yzJ[1];
+ for(yzI[0]=0,yzRow[0]=obj->groups;yzI[0]<width;yzI[0]++,yzRow[0]++) {
+  for(yzJ[0]=yzI[0]+1,p=yzRow[0]+1;yzJ[0]<width;yzJ[0]++,p++) {
+   if(yzRow[0]->p10.z>0.0f && p->p10.z>0.0f && yzRow[0]->p10.y>p->p10.y)
+    fn_1_128884(yzRow[0],p,0x44);
+   else if(yzRow[0]->p10.z<=0.0f && p->p10.z<=0.0f && yzRow[0]->p10.y<p->p10.y)
+    fn_1_128884(yzRow[0],p,0x44);
+  }
+ }
+
+ for(i=0,yzRow[0]=obj->groups;i<obj->groupCount;i++,yzRow[0]++)
+  if(yzRow[0]->flags!=0 && yzRow[0][1].flags==0) break;
+ yzRow[0]++;
+ nn[0]=(obj->groupCount-(yzRow[0]-obj->groups))/width;
+ for(k=0;k<nn[0];k++,yzRow[0]+=width) {
+  for(i=0;i<width;i++) yzRow[0][i].weight=-(f32)(k+1)/(f32)(nn[0]+1);
+  for(h[0]=0,p=yzRow[0];h[0]<width;h[0]++,p++) {
+   for(j=h[0]+1,q=p+1;j<width;j++,q++) {
+    if(p->p10.z>0.0f && q->p10.z>0.0f && p->p10.y>q->p10.y)
+     fn_1_128884(p,q,0x44);
+    else if(p->p10.z<=0.0f && q->p10.z<=0.0f && p->p10.y<q->p10.y)
+     fn_1_128884(p,q,0x44);
+   }
+  }
+ }
+ nn[0]=obj->groupCount/width;
+ obj->unk_1C=nn[0]*(width-1)+(nn[0]-1)*width;
+ obj->unk_28=(void *)fn_1_4630(lbl_801A6410,obj->unk_1C*12,lbl_1_data_40530,0x2f44);
+ edgeCount=0;
+ for(i=0,p=obj->groups;i<obj->groupCount-1;i++,p++) {
+  if((i+1)%width) {
+   ((Edge *)obj->unk_28)[edgeCount].a=p;
+   ((Edge *)obj->unk_28)[edgeCount].b=p+1;
+   ((Edge *)obj->unk_28)[edgeCount].distance=fn_1_1289BC((Point1024C4 *)p,(Point1024C4 *)(p+1));
+   edgeCount++;
+  }
+ }
+ edgeCount*=12;
+ for(i=0,p=obj->groups;i<obj->groupCount-width;i++,p++) {
+  ((Edge *)((u8 *)obj->unk_28+edgeCount))->a=p;
+  ((Edge *)((u8 *)obj->unk_28+edgeCount))->b=p+width;
+  ((Edge *)((u8 *)obj->unk_28+edgeCount))->distance=fn_1_1289BC((Point1024C4 *)p,(Point1024C4 *)(p+width));
+  edgeCount+=12;
+ }
+ }
+}
+/* fzgx:end fn_1_126DE8 */
+
 /* fzgx:begin fn_1_127FB8 */
 typedef struct {
     u8 active;
