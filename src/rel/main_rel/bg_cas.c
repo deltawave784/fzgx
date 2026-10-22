@@ -1803,6 +1803,80 @@ s32 fn_1_FDB40(void * arg0) {
 }
 /* fzgx:end fn_1_FDB40 */
 
+/* fzgx:begin fn_1_FDD7C noprologue */
+#include "types.h"
+#include "game/main_rel/car_test_types.h"
+
+typedef struct {
+    u8 _pad[0x32c];
+    void *field_32c;
+} Sig_fn_1_843BC_Fn1843BCObject;
+
+struct fn_1_FDD7C_Arg0 {
+    u32 unk_0;
+};
+
+extern f32 fn_1_843BC(Sig_fn_1_843BC_Fn1843BCObject *);
+extern f32 lbl_1_rodata_7614;
+extern f32 lbl_1_rodata_765C;
+extern int fn_1_FCF50(void);
+extern u32 fn_1_563B8(u32);
+extern u32 lbl_8006DCA4(void);
+extern void fn_1_566EC(int, int);
+extern void fn_1_7EB8C(void *, f32);
+extern void fn_1_7F1E8(void *, s16, f32);
+extern void fn_1_7F20C(void *, s16, f32);
+
+void fn_1_FDD7C(struct fn_1_FDD7C_Arg0 *arg0, void *arg1) {
+    struct { s16 value; } v5;
+    struct { u32 value; } v0;
+    struct { u32 value; } v7;
+    s16 v1;
+    u32 v2;
+    f32 v4;
+    f32 t0;
+    f32 threshold;
+
+    v5.value = 0;
+    v0.value = arg0->unk_0;
+    v1 = *(s16 *)((u8 *)v0.value + 954);
+    if (v1 == 3) {
+        *(s16 *)((u8 *)v0.value + 954) = 2;
+    }
+    v2 = *(u32 *)((u8 *)arg1 + 16624);
+    if (v2 != 0) {
+        v5.value = *(s16 *)v2;
+        if (*(u32 *)((u8 *)v0.value + 812) == 0) {
+            v4 = lbl_1_rodata_7614;
+        } else {
+            t0 = fn_1_843BC((Sig_fn_1_843BC_Fn1843BCObject *)v0.value);
+            v4 = *(f32 *)((u8 *)arg1 + 16608) = t0;
+            threshold = 0.7f;
+            if (v4 <= threshold) {
+                return;
+            }
+        }
+        v7.value = fn_1_563B8((u32)fn_1_FCF50);
+        fn_1_566EC(1, 255);
+        if (*(u32 *)((u8 *)v0.value + 812) != 0) {
+            lbl_8006DFE8((Fn183D28Vec3 *)(*(u32 *)((u8 *)v0.value + 812) + 332));
+        } else {
+            lbl_8006DCA4();
+        }
+        if ((s16)v5.value == 0) {
+            fn_1_7EB8C((void *)v0.value, v4);
+        } else if ((*(u32 *)((u8 *)v0.value + 912) & 0x4000000) != 0) {
+            fn_1_7F20C((void *)v0.value, v5.value, v4);
+        } else {
+            fn_1_7F1E8((void *)v0.value, v5.value, v4);
+        }
+        fn_1_566EC(0, 0);
+        fn_1_563B8(v7.value);
+        *(s16 *)((u8 *)v0.value + 954) = v1;
+    }
+}
+/* fzgx:end fn_1_FDD7C */
+
 /* fzgx:begin fn_1_FDEC8 noprologue */
 #include "types.h"
 

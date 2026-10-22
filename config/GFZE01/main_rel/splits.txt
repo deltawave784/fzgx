@@ -8288,3 +8288,6 @@ rel/main_rel/memcard/fn_1_B88C4.c:
 
 rel/main_rel/stcoli/fn_1_29044.c:
 	.text       start:0x00029044 end:0x000290E8 align:4
+
+rel/main_rel/bg_cas/fn_1_FDD7C.c:
+	.text       start:0x000FDD7C end:0x000FDEC8 align:4

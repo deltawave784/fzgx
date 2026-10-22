@@ -34234,6 +34234,20 @@
   },
   {
     "module": "main_rel",
+    "source": "rel/main_rel/bg_cas/fn_1_FDD7C.c",
+    "symbols": [
+      "fn_1_FDD7C"
+    ],
+    "status": "matching",
+    "mw_version": null,
+    "extra_cflags": [],
+    "tu": "rel/main_rel/bg_cas.c",
+    "pool": {
+      "@29": "lbl_1_rodata_765C"
+    }
+  },
+  {
+    "module": "main_rel",
     "source": "rel/main_rel/bg_cas/fn_1_FDEC8.c",
     "symbols": [
       "fn_1_FDEC8"
