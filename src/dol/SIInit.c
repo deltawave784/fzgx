@@ -34,7 +34,7 @@ extern const char *__SIVersion;
 
 extern SIControl Si_80123B94;
 
-void SIInterruptHandler_80011C74(__OSInterrupt interrupt, OSContext *context);
+void SIInterruptHandler(__OSInterrupt interrupt, OSContext *context);
 
 extern struct SDK_SIBios____bss_0 Packet;
 
@@ -51,7 +51,7 @@ void SIInit(void) {
     while (__SIRegs[13] & 1)
         ;
     __SIRegs[13] = 0x80000000;
-    __OSSetInterruptHandler(20, SIInterruptHandler_80011C74);
+    __OSSetInterruptHandler(20, SIInterruptHandler);
     __OSUnmaskInterrupts((0x80000000u >> (20)));
     SIGetType(0);
     SIGetType(1);

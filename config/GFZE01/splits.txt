@@ -6143,3 +6143,6 @@ dol/__cvt_dbl_usll.c:
 
 dol/fn_8008F92C.c:
 	.text       start:0x8008F92C end:0x8008F9D8 align:4
+
+dol/SIInterruptHandler.c:
+	.text       start:0x80011C74 end:0x80011FB8 align:4
