@@ -8306,3 +8306,6 @@ rel/main_rel/bg_cas/fn_1_FDC00.c:
 
 rel/main_rel/mdlload/fn_1_D42A8.c:
 	.text       start:0x000D42A8 end:0x000D4360 align:4
+
+rel/main_rel/memcard/fn_1_BF198.c:
+	.text       start:0x000BF198 end:0x000BF520 align:4
