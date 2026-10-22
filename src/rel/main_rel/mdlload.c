@@ -614,6 +614,46 @@ void fn_1_D41D8(void) {
 }
 /* fzgx:end fn_1_D41D8 */
 
+/* fzgx:begin fn_1_D42A8 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/mdlload.h"
+#include "game/main_rel/mdlload_types.h"
+
+extern void fn_1_681C(u8, u32 *);
+extern void fn_1_6898(u8, u32 *);
+extern f32 lbl_1_rodata_6168[112];
+
+typedef struct D42Vec { f32 x, y, z; } D42Vec;
+/* Volatile preserves the repeated source-vector reads in the clamped-distance calculation. */
+static inline f32 d42dist(volatile D42Vec *a, D42Vec *b) {
+    f32 value;
+    f32 dx;
+    f32 dy;
+    f32 dz;
+    dx = a->x;
+    dx -= b->x;
+    dy = a->y;
+    dy -= b->y;
+    dz = a->z;
+    dz -= b->z;
+    value = dx*dx;
+    value = value + dy*dy;
+    value = value + dz*dz;
+    return value;
+}
+static inline f32 fn_1_D42A8_array_read(f32 *array, s32 index) { return array[index]; }
+#pragma opt_common_subs off
+void fn_1_D42A8(u32 arg0, int arg1) {
+    D42Vec a;
+    D42Vec b;
+    fn_1_681C((u8)arg1, (u32 *)&a);
+    fn_1_6898((u8)arg1, (u32 *)&b);
+    ((f32 *)arg0)[arg1] = d42dist(&a, &b) < fn_1_D42A8_array_read(lbl_1_rodata_6168, 0) ? d42dist(&a, &b) : fn_1_D42A8_array_read(lbl_1_rodata_6168, 0);
+}
+#pragma opt_common_subs reset
+/* fzgx:end fn_1_D42A8 */
+
 /* fzgx:begin fn_1_D4360 */
 void fn_1_D4360(void *base) {
     *(s32 *)((char *)base + 0xc074) = 200;
