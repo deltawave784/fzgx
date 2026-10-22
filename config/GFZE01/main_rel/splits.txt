@@ -8198,3 +8198,6 @@ rel/main_rel/phys/fn_1_E733C.c:
 
 rel/main_rel/sound/fn_1_A3A1C.c:
 	.text       start:0x000A3A1C end:0x000A3BD8 align:4
+
+rel/main_rel/car/fn_1_892CC.c:
+	.text       start:0x000892CC end:0x000892E8 align:4

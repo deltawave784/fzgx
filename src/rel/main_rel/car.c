@@ -9284,6 +9284,23 @@ void fn_1_8901C(Fn8901CCar *car) {
 }
 /* fzgx:end fn_1_8901C */
 
+/* fzgx:begin fn_1_892CC noprologue */
+typedef unsigned int u32;
+typedef struct { u32 a, b, c; } V3;
+
+#pragma optimization_level 0
+#pragma opt_propagation off
+
+void fn_1_892CC(V3 *dst, V3 *src, u32 a, u32 b) {
+    a = src->a;
+    b = src->b;
+    dst->a = a;
+    a = src->c;
+    dst->b = b;
+    dst->c = a;
+}
+/* fzgx:end fn_1_892CC */
+
 /* fzgx:begin fn_1_892E8 noprologue */
 typedef struct { int x, y, z; } V3;
 #pragma optimization_level 2
