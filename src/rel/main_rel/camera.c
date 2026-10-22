@@ -2172,6 +2172,184 @@ void camera_save_parameters(f32 first_parameter, f32 second_parameter) {
 }
 /* fzgx:end camera_save_parameters */
 
+/* fzgx:begin fn_1_B870 pool noprologue */
+#include "types.h"
+#include "game/vec3.h"
+
+typedef struct B870Camera {
+    u8 pad_0[0x4];
+    Vec3f pos;    /* 0x04 */
+    Vec3f lookAt; /* 0x10 */
+    f32 fov;      /* 0x1C */
+    s16 rotZ;     /* 0x20 */
+} B870Camera;
+
+typedef struct {
+    u8 pad_0[0x8];
+    u16 unk_8;
+} B870Bss_D58;
+
+typedef struct {
+    s8 stick[4];
+    u8 unk_4;
+} B870Bss_A48;
+
+typedef struct {
+    u16 unk_0;
+    u16 unk_2;
+    u8 pad_4[0x4];
+    u16 unk_8;
+} B870Bss_9F8;
+
+extern B870Bss_D58 lbl_1_bss_D58;
+extern B870Bss_A48 lbl_1_bss_A48;
+extern B870Bss_9F8 lbl_1_bss_9F8;
+
+/* camera.c's .bss cluster at lbl_1_bss_1010, addressed off one section base. */
+u32 fzgx_obj_lbl_1_bss_1010;
+u8 lbl_1_bss_1014;
+B870Camera lbl_1_bss_1018;
+f32 fzgx_obj_lbl_1_bss_103C;
+f32 lbl_1_bss_1040;
+f32 lbl_1_bss_1044;
+u8 lbl_1_bss_1048;
+u8 lbl_1_bss_1049;
+
+extern void fn_1_C770(void);
+extern void fn_8006EDBC(Vec3f *, Vec3f *, s16 *, s16 *);
+extern void lbl_8006D7DC(Vec3f *);
+extern void mathutil_mtxA_rotate_x(s16);
+extern void mathutil_mtxA_rotate_y(s16);
+extern void mathutil_mtxA_rotate_z(s16);
+extern void lbl_8006E1B0(Vec3f *, Vec3f *);
+extern void fn_8006E250(Vec3f *, Vec3f *);
+extern f32 lbl_8006D0E8(f32);
+extern f32 lbl_8006D0B4(f32);
+
+/* Primer: the .bss order and the literals of earlier camera.c functions, as in retail. */
+extern void fzgx_touch_f(f32);
+extern void fzgx_touch(void *);
+#pragma section RX ".fzgxpool"
+__declspec(section ".fzgxpool") void fzgx_pool_primer(void) {
+    fzgx_touch(&fzgx_obj_lbl_1_bss_1010);
+    fzgx_touch(&lbl_1_bss_1014);
+    fzgx_touch(&lbl_1_bss_1018);
+    fzgx_touch(&fzgx_obj_lbl_1_bss_103C);
+    fzgx_touch(&lbl_1_bss_1040);
+    fzgx_touch(&lbl_1_bss_1044);
+    fzgx_touch(&lbl_1_bss_1048);
+    fzgx_touch(&lbl_1_bss_1049);
+    fzgx_touch_f(1.0f);
+    fzgx_touch_f(0.1f);
+    fzgx_touch_f(0.01f);
+    fzgx_touch_f(55.0f);
+}
+
+#pragma opt_lifetimes off
+void fn_1_B870(void) {
+    f32 speed;
+    f32 clamped;
+    f32 scale;
+    s32 rot;
+    s32 zoom;
+    u32 buttons;
+    s16 rotX;
+    s16 rotY;
+
+    if ((lbl_1_bss_D58.unk_8 >> 10) & 1) {
+        lbl_1_bss_1048 ^= 1;
+    }
+    if (lbl_1_bss_1014 != 0) {
+        fn_1_C770();
+        return;
+    }
+    fn_8006EDBC(&lbl_1_bss_1018.pos, &lbl_1_bss_1018.lookAt, &rotX, &rotY);
+    speed = fzgx_obj_lbl_1_bss_103C;
+    speed = 0.040000000000000008 * speed;
+    speed = speed * (1.0 + 4.0 * lbl_1_bss_A48.unk_4 / 140.0);
+    clamped = (speed > 50.0) ? 50.0 : speed;
+    {
+        Vec3f offsetA = {0.0f, 0.0f, 0.0f};
+        Vec3f offsetB = {0.0f, 0.0f, 0.0f};
+        Vec3f tmp;
+
+        if (lbl_1_bss_1049 != 0 && !((lbl_1_bss_9F8.unk_0 >> 6) & 1)) {
+            offsetA.x = speed * (*((0) + (lbl_1_bss_A48.stick))) / 60.0;
+            if ((lbl_1_bss_9F8.unk_2 >> 9) & 1) {
+                offsetA.y = clamped * (*((1) + (lbl_1_bss_A48.stick))) / 60.0;
+            } else {
+                offsetA.z = -clamped * (*((1) + (lbl_1_bss_A48.stick))) / 60.0;
+            }
+            offsetB.x = speed * (*((2) + (lbl_1_bss_A48.stick))) / 60.0;
+            if (((*(volatile u16 *)&lbl_1_bss_9F8.unk_2) >> 9) & 1) { /* Retail reloads the mode for the second stick. */
+                offsetB.y = clamped * (*((3) + (lbl_1_bss_A48.stick))) / 60.0;
+            } else {
+                offsetB.z = -clamped * (*((3) + (lbl_1_bss_A48.stick))) / 60.0;
+            }
+        }
+        lbl_8006D7DC(&lbl_1_bss_1018.pos);
+        mathutil_mtxA_rotate_y(rotY);
+        mathutil_mtxA_rotate_x(rotX);
+        mathutil_mtxA_rotate_z(lbl_1_bss_1018.rotZ);
+        lbl_8006E1B0(&offsetA, &lbl_1_bss_1018.pos);
+        fn_8006E250(&lbl_1_bss_1018.lookAt, &tmp);
+        tmp.x += offsetB.x;
+        tmp.y += offsetB.y;
+        tmp.z += offsetB.z;
+        lbl_8006E1B0(&tmp, &lbl_1_bss_1018.lookAt);
+        tmp.x = lbl_1_bss_1018.lookAt.x - lbl_1_bss_1018.pos.x;
+        tmp.y = lbl_1_bss_1018.lookAt.y - lbl_1_bss_1018.pos.y;
+        tmp.z = lbl_1_bss_1018.lookAt.z - lbl_1_bss_1018.pos.z;
+        if (__fmadds(tmp.z, tmp.z, __fmadds(tmp.y, tmp.y, tmp.x * tmp.x)) < 0.09) {
+            scale = 0.3 * lbl_8006D0E8(__fmadds(tmp.z, tmp.z, __fmadds(tmp.y, tmp.y, tmp.x * tmp.x)));
+            lbl_1_bss_1018.lookAt.x = lbl_1_bss_1018.pos.x + (f32)(tmp.x * scale);
+            lbl_1_bss_1018.lookAt.y = lbl_1_bss_1018.pos.y + (f32)(tmp.y * scale);
+            lbl_1_bss_1018.lookAt.z = lbl_1_bss_1018.pos.z + (f32)(tmp.z * scale);
+        }
+    }
+    {
+        Vec3f *pos = &lbl_1_bss_1018.pos;
+        Vec3f *lookAt = &lbl_1_bss_1018.lookAt;
+        f32 dx = pos->x;
+        f32 dz = pos->z;
+        f32 dy = pos->y;
+        dx -= lookAt->x;
+        dy -= lookAt->y;
+        dz -= lookAt->z;
+        dx = dx * dx;
+        dx = dy * dy + dx;
+        dx = dz * dz + dx;
+        fzgx_obj_lbl_1_bss_103C = lbl_8006D0B4(dx);
+    }
+    if (((lbl_1_bss_9F8.unk_2 >> 9) & 1) && lbl_1_bss_1049 != 0) {
+        buttons = (*(u16 volatile *)&(lbl_1_bss_9F8.unk_0)) /* Retail reloads this field. */;
+        if (buttons & 1) {
+            rot = 0x800;
+        } else {
+            rot = ((buttons >> 1) & 1) ? -0x800 : 0;
+        }
+{
+    B870Camera *cam = &lbl_1_bss_1018;
+        cam->rotZ += rot;
+}
+        buttons = lbl_1_bss_9F8.unk_0;
+        if ((buttons >> 2) & 1) {
+            zoom = 1;
+        } else {
+            zoom = ((buttons >> 3) & 1) ? -1 : 0;
+        }
+        lbl_1_bss_1018.fov += zoom;
+        lbl_1_bss_1018.fov = (lbl_1_bss_1018.fov < 0.1) ? 0.1
+                           : (lbl_1_bss_1018.fov > 90000.0) ? 90000.0 : lbl_1_bss_1018.fov;
+        if ((lbl_1_bss_9F8.unk_8 >> 9) & 1) {
+            lbl_1_bss_1018.rotZ = 0;
+            lbl_1_bss_1018.fov = 55.0f;
+        }
+    }
+}
+#pragma opt_lifetimes reset
+/* fzgx:end fn_1_B870 */
+
 /* fzgx:begin fn_1_BFA0 pool */
 extern u32 fn_1_CC5C(void);
 extern void fn_1_55FC4(f32);
