@@ -1426,6 +1426,108 @@ void fn_1_76448(struct fn_1_76448_Arg0 *arg0, u32 arg1) {
 }
 /* fzgx:end fn_1_76448 */
 
+/* fzgx:begin fn_1_76504 noprologue */
+#include "types.h"
+#include "game/main_rel/screen_effect_types.h"
+#include "rel/main_rel/screen_effect.h"
+
+typedef struct Sig_fn_1_76704_fn_1_76704_Effect {
+    u8 pad_00[0xe8];
+    s16 field_e8;
+    s16 field_ea;
+    s16 field_ec;
+    s16 field_ee;
+    s16 field_f0;
+    s16 field_f2;
+    s32 field_f4;
+    s16 field_f8;
+    s16 field_fa;
+    s16 field_fc;
+    s16 field_fe;
+    s16 field_100;
+    s16 field_102;
+} Sig_fn_1_76704_fn_1_76704_Effect;
+typedef struct Sig_fn_1_76704_fn_1_76704_Rect {
+    s16 x;
+    s16 y;
+    s16 w;
+    s16 h;
+    s16 offX;
+    s16 offY;
+    s32 half;
+} Sig_fn_1_76704_fn_1_76704_Rect;
+typedef struct {
+    u8 pad_0[0xB4];
+    u32 unk_B4[6];
+    u8 pad_CC[0x10];
+    u32 unk_DC;
+    u8 pad_E0[0x20];
+    s16 unk_100;
+    s16 unk_102;
+} Sig_fn_1_76964_Fn1_76964Obj;
+struct Sig_fn_1_76A94_Arg0 {
+    u8 pad_0[0xA0];
+    u32 img[1];
+    u8 pad_A4[0x38];
+    u32 idx;
+    u8 pad_E0[0x20];
+    s16 w;
+    s16 h;
+};
+struct Sig_fn_1_769FC_Arg0 {
+    u8 pad_0[0xA0];
+    u32 unk_A0[5];
+    u32 unk_B4[5];
+    u32 unk_C8[5];
+};
+extern u32 fn_1_769FC(struct Sig_fn_1_769FC_Arg0 *, u32);
+extern void OSPanic(const char *, int, const char *, ...);
+extern void fn_1_76650(fn_1_76650_ScreenEffect *);
+extern void fn_1_76704(Sig_fn_1_76704_fn_1_76704_Effect *, Sig_fn_1_76704_fn_1_76704_Rect *);
+extern void fn_1_76964(Sig_fn_1_76964_Fn1_76964Obj *);
+extern void fn_1_76A94(struct Sig_fn_1_76A94_Arg0 *, u32);
+extern void fn_1_76DBC(void);
+extern void fn_1_76DC0(s32);
+
+u32 fn_1_76504(u32 arg0, Sig_fn_1_76704_fn_1_76704_Rect *arg1, s32 arg2) {
+    u8 *p_lbl_1_data_1D960;
+    Obj_1_bss_6C8EC *v2;
+    s32 v1;
+    s32 v4;
+    p_lbl_1_data_1D960 = lbl_1_data_1D960;
+    if (lbl_1_bss_6D14C.unk_0 != 0) {
+        return 255;
+    }
+    if ((s32)arg0 == 0 || (s32)arg0 >= 38) {
+        return 255;
+    }
+    for (v1 = 0; (u8)v1 < 8; v1++) {
+        v2 = (Obj_1_bss_6C8EC *)((u8 *)&lbl_1_bss_6C8EC + (u8)v1 * 0x10c);
+        if ((s32)v2->unk_DC == 0) {
+            goto found; /* Keep the verified branch to found. */
+        }
+    }
+    OSPanic((char *)p_lbl_1_data_1D960 + 0x160, 0x879, (char *)p_lbl_1_data_1D960 + 0x2f4);
+found:
+    fn_1_76650((fn_1_76650_ScreenEffect *)v2);
+    v2->unk_DC = arg0;
+    fn_1_76DC0(v2->unk_DC);
+    fn_1_76704((Sig_fn_1_76704_fn_1_76704_Effect *)v2, arg1);
+    fn_1_76964((Sig_fn_1_76964_Fn1_76964Obj *)v2);
+    arg0 = (u32)(p_lbl_1_data_1D960 + 0x58);
+    for (v4 = 0; (u8)v4 < ((u8 *)arg0)[v2->unk_DC * 6 + 5]; v4++) {
+        if (arg2 != 0) {
+            fn_1_769FC((struct Sig_fn_1_769FC_Arg0 *)v2, v4);
+            fn_1_76A94((struct Sig_fn_1_76A94_Arg0 *)v2, v4);
+        } else {
+            (&v2->unk_A0)[(u8)v4] = 0;
+        }
+    }
+    fn_1_76DBC();
+    return v1;
+}
+/* fzgx:end fn_1_76504 */
+
 /* fzgx:begin fn_1_76650 */
 void fn_1_76650(fn_1_76650_ScreenEffect *effect) {
     s32 value;
