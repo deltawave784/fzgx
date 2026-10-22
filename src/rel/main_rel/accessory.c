@@ -4360,6 +4360,31 @@ f32 fn_1_1289BC(const Point1024C4 *a, const Point1024C4 *b) {
 }
 /* fzgx:end fn_1_1289BC */
 
+/* fzgx:begin fn_1_1289F0 noprologue */
+#include "psvec.h"
+
+extern const f32 lbl_1_rodata_7B58[];
+extern f32 lbl_8006D6FC(void *, void *);
+extern f32 lbl_8006D0B4(f32);
+
+static inline f32 fn_1_1289F0_array_read(f32 *array, s32 index) { return array[index]; }
+#pragma opt_propagation off
+f32 fn_1_1289F0(f32 *a, f32 *b, f32 *c) {
+    f32 d1[3];
+    f32 d2[3];
+    f32 len;
+    psvec_sub(c, a, d1);
+    psvec_sub(b, a, d2);
+    d2[0] = lbl_8006D6FC(d1, d2);
+    len = (f32)(fn_1_1289F0_array_read(d1, 0) * fn_1_1289F0_array_read(d1, 0));
+    len += fn_1_1289F0_array_read(d1, 1) * fn_1_1289F0_array_read(d1, 1);
+    len += fn_1_1289F0_array_read(d1, 2) * fn_1_1289F0_array_read(d1, 2);
+    len = lbl_8006D0B4(len);
+    return len * lbl_8006D0B4(lbl_1_rodata_7B58[0] - (f32)(fn_1_1289F0_array_read(d2, 0) * fn_1_1289F0_array_read(d2, 0)));
+}
+#pragma opt_propagation reset
+/* fzgx:end fn_1_1289F0 */
+
 /* fzgx:begin fn_1_128AAC */
 f32 fn_1_128AAC(s32 exponent, f32 value) {
     s32 sign;

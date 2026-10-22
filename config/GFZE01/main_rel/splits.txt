@@ -8273,3 +8273,6 @@ rel/main_rel/sel_static_disp/fn_1_1492E0.c:
 
 rel/main_rel/effect/fn_1_5E4D8.c:
 	.text       start:0x0005E4D8 end:0x0005EB08 align:4
+
+rel/main_rel/accessory/fn_1_1289F0.c:
+	.text       start:0x001289F0 end:0x00128AAC align:4
