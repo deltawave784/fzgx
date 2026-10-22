@@ -8249,3 +8249,6 @@ rel/main_rel/stcoli/fn_1_266A8.c:
 
 rel/main_rel/screen_effect/fn_1_76504.c:
 	.text       start:0x00076504 end:0x00076650 align:4
+
+rel/main_rel/stcoli/fn_1_2DB50.c:
+	.text       start:0x0002DB50 end:0x0002DE00 align:4
