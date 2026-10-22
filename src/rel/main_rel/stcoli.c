@@ -2004,6 +2004,81 @@ u32 fn_1_1FB80(void *pos, u32 mask) {
 #pragma opt_loop_invariants reset
 /* fzgx:end fn_1_1FB80 */
 
+/* fzgx:begin fn_1_1FC98 noprologue */
+#include "types.h"
+#include "game/vec3.h"
+#include "rel/main_rel/stcoli.h"
+
+typedef struct Sig_fn_1_1FC98_DB53CVec {
+    f32 x;
+    f32 y;
+    f32 z;
+} Sig_fn_1_1FC98_DB53CVec;
+
+typedef struct fn_1_1FC98_Entry {
+    Vec3f position;
+    s16 unk_C;
+    s16 unk_E;
+    s16 unk_10;
+    u8 pad_12[2];
+    f32 unk_14;
+    f32 unk_18;
+    f32 unk_1C;
+    u32 unk_20;
+} fn_1_1FC98_Entry;
+
+extern f32 lbl_1_rodata_708[78];
+extern f64 __fabs(f64);
+extern u32 lbl_8006D7DC(void *);
+extern u32 mathutil_mtxA_rotate_x(u32);
+extern u32 mathutil_mtxA_rotate_y(u32);
+extern u32 mathutil_mtxA_rotate_z(u32);
+extern void fn_8006E250(Vec3f *, Vec3f *);
+
+#pragma opt_loop_invariants off
+#pragma opt_propagation off
+u32 fn_1_1FC98(Vec3f *arg0, u32 arg1) {
+    struct { u32 value; } v4;
+    struct { s32 value; } v3;
+    struct { s32 value; } v0;
+    struct { fn_1_1FC98_Entry *value; } v2;
+    Vec3f loc_8;
+
+    v4.value = 0;
+    v3.value = 0;
+    v2.value = 0;
+    v0.value = (s32)lbl_1_bss_3BE0->unk_94;
+    v2.value = (fn_1_1FC98_Entry *)lbl_1_bss_3BE0->unk_98;
+    while (v3.value < v0.value) {
+        if ((v2.value->unk_20 & arg1) != 0) {
+            lbl_8006D7DC(v2.value);
+            if (v2.value->unk_10) {
+                mathutil_mtxA_rotate_z(v2.value->unk_10);
+            }
+            if (v2.value->unk_E) {
+                mathutil_mtxA_rotate_y(v2.value->unk_E);
+            }
+            if (v2.value->unk_C) {
+                mathutil_mtxA_rotate_x(v2.value->unk_C);
+            }
+            fn_8006E250(arg0, &loc_8);
+            if (__fabs(loc_8.x) <= (f32)(lbl_1_rodata_708[0] * v2.value->unk_14)) {
+                if (__fabs(loc_8.y) <= (f32)(lbl_1_rodata_708[0] * v2.value->unk_18)) {
+                    if (__fabs(loc_8.z) <= (f32)(lbl_1_rodata_708[0] * v2.value->unk_1C)) {
+                        v4.value |= v2.value->unk_20;
+                    }
+                }
+            }
+        }
+        v3.value++;
+        v2.value++;
+    }
+    return v4.value;
+}
+#pragma opt_propagation reset
+#pragma opt_loop_invariants reset
+/* fzgx:end fn_1_1FC98 */
+
 /* fzgx:begin fn_1_1FFA0 noprologue */
 #include "types.h"
 #include "psvec.h"
