@@ -42181,6 +42181,28 @@
   },
   {
     "module": "main_rel",
+    "source": "rel/main_rel/driver/fn_1_A89B0.c",
+    "symbols": [
+      "fn_1_A89B0"
+    ],
+    "status": "matching",
+    "mw_version": "GC/1.3.2",
+    "extra_cflags": [],
+    "tu": "rel/main_rel/driver.c",
+    "pool": {
+      "...rodata.0": "lbl_1_rodata_4A28",
+      "@23": "lbl_1_rodata_4A28",
+      "@46": "lbl_1_rodata_4A34+0x50",
+      "@47": "lbl_1_rodata_4A34+0x54",
+      "@37": "lbl_1_rodata_4A34+0x2C",
+      "@39": "lbl_1_rodata_4A34+0x34",
+      "@48": "lbl_1_rodata_4A34+0x58",
+      "@49": "lbl_1_rodata_4A34+0x5C",
+      "@50": "lbl_1_rodata_4A34+0x60"
+    }
+  },
+  {
+    "module": "main_rel",
     "source": "rel/main_rel/driver/fn_1_A8D4C.c",
     "symbols": [
       "fn_1_A8D4C"

@@ -8372,3 +8372,6 @@ rel/main_rel/game/fn_1_37E98.c:
 
 rel/main_rel/car/fn_1_83694.c:
 	.text       start:0x00083694 end:0x00083858 align:4
+
+rel/main_rel/driver/fn_1_A89B0.c:
+	.text       start:0x000A89B0 end:0x000A8D4C align:4
