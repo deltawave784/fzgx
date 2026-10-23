@@ -8390,3 +8390,6 @@ rel/main_rel/camera/fn_1_CC5C.c:
 
 rel/main_rel/memcard/fn_1_C40A0.c:
 	.text       start:0x000C40A0 end:0x000C42F4 align:4
+
+rel/main_rel/car/fn_1_86A2C.c:
+	.text       start:0x00086A2C end:0x00086E08 align:4
