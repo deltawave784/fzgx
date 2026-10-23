@@ -845,6 +845,56 @@ void fn_1_17C8(s8 *outX, s8 *outY, StickPoint *gate, u8 *dz) {
 }
 /* fzgx:end fn_1_17C8 */
 
+/* fzgx:begin fn_1_1ACC */
+extern const struct fn_1_1ACC_lbl_1_rodata_C0_pool {
+    f32 unk_0;
+} lbl_1_rodata_C0;
+
+#pragma opt_common_subs off
+#pragma opt_propagation off
+static inline s32 fn_1_1ACC_clamp(s32 x, s32 low, s32 high) {
+    return x < low ? low : (x > high ? high : x);
+}
+s8 fn_1_1ACC(s8 a, u8 *b, u8 *c) {
+    s32 pos;
+    s32 m;
+    s32 v;
+    struct { s32 value; } num;
+    s32 threshold;
+    s32 neg;
+    s32 x;
+    u32 den;
+    if (a == 0) return 0;
+    if (a < 0) {
+        x = a;
+        num.value = fn_1_1ACC_clamp(x, -(s32)b[1], 0);
+        threshold = c[1];
+        if (num.value >= -threshold) return 0;
+        neg = 1;
+        m = num.value >> 31;
+        num.value = ((m ^ num.value) - m) - threshold;
+        den = b[1] - threshold;
+    } else {
+        if (a < 0) v = 0;
+        else {
+            v = a;
+            if (v > (s32)b[0]) v = b[0];
+        }
+        pos = c[0];
+        if (v <= pos) return 0;
+        neg = 0;
+        num.value = v - pos;
+        den = b[0] - pos;
+    }
+    {
+        s32 r = (s8)(s32)(lbl_1_rodata_C0.unk_0 * (f32)num.value / (f32)den);
+        if (neg) r = -r;
+        return r;
+    }
+}
+#pragma opt_common_subs reset
+/* fzgx:end fn_1_1ACC */
+
 /* fzgx:begin fn_1_1C00 */
 void fn_1_1C00(const u8 *values, u32 flags, u16 *result) {
     u8 value0;

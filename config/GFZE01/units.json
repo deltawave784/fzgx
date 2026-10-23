@@ -30463,6 +30463,21 @@
   },
   {
     "module": "main_rel",
+    "source": "rel/main_rel/_prolog/fn_1_1ACC.c",
+    "symbols": [
+      "fn_1_1ACC"
+    ],
+    "status": "matching",
+    "mw_version": "GC/1.3",
+    "extra_cflags": [],
+    "tu": "rel/main_rel/_prolog.c",
+    "pool": {
+      "@36": "lbl_1_rodata_B8",
+      "@38": "lbl_1_rodata_A0"
+    }
+  },
+  {
+    "module": "main_rel",
     "source": "rel/main_rel/_prolog/fn_1_1C00.c",
     "symbols": [
       "fn_1_1C00"
