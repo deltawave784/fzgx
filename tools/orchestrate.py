@@ -51,6 +51,7 @@ def codex_binary() -> str:
     return 'codex'
 
 CLAUDE_TERMINAL_GRACE = 90  # seconds an SDK session may run after its terminal tool call
+CLAUDE_MAX_PROMPT_BYTES = 300_000  # larger task prompts are not sent to API sessions (see run_one)
 CLAUDE_MODELS = {"haiku": "claude-haiku-5-5", "sonnet": "claude-sonnet-5-5", "opus": "claude-opus-5-5",
                  "fable": "claude-fable-5-1"}
 # Matcher instructions per tier: --bare skips project agent discovery, so the body is passed explicitly.
@@ -246,6 +247,11 @@ def run_one(p: Project, harness: str, model: str, symbol: str, idx: int, timeout
                       'this function and installed its work copy. Continue from the supplied C and initial diff.\n'
                       + json.dumps(task))
             stdin = prompt  # the task (context and seed C) exceeds Windows' 32 KB command line
+            if len(prompt.encode()) > CLAUDE_MAX_PROMPT_BYTES:
+                # max_budget_usd is checked between requests: one first request over a huge context
+                # (fn_17_6D60's 1.16 MB data section, 930K tokens) cost $4.66 against a $4.17 cap.
+                raise RuntimeError(f'prompt is {len(prompt.encode())} bytes, over the '
+                                   f'{CLAUDE_MAX_PROMPT_BYTES}-byte API session limit; not started')
             (directory / f'{symbol}.prompt.txt').write_text(prompt + '\n')
             # A terminal tool call writes result_file before its MCP response is
             # returned. Stop the process group before another model request.
