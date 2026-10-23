@@ -7063,6 +7063,19 @@
   },
   {
     "module": "main",
+    "source": "dol/GXInit.c",
+    "symbols": [
+      "GXInit"
+    ],
+    "status": "matching",
+    "mw_version": "GC/1.2.5n",
+    "extra_cflags": [],
+    "pool": {
+      "resetFuncRegistered$1": "resetFuncRegistered$63"
+    }
+  },
+  {
+    "module": "main",
     "source": "dol/GXInitFifoBase.c",
     "symbols": [
       "GXInitFifoBase"
