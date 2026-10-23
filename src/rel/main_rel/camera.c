@@ -1567,6 +1567,335 @@ void fn_1_8B10(fn_1_8B10_CameraObject *camera, CameraOutput *output) {
 }
 /* fzgx:end fn_1_8B10 */
 
+/* fzgx:begin fn_1_8D08 pool noprologue */
+#include "types.h"
+#include "game/main_rel/car_test_types.h"
+#include "game/main_rel/car_types.h"
+
+typedef struct Sig_fn_1_8B10_CameraOutput {
+    f32 x0;
+    f32 y0;
+    s16 flags0;
+    u8 pad_0A[2];
+    f32 x1;
+    f32 y1;
+    s16 flags1;
+    u8 pad_16[2];
+    f32 x2;
+    f32 y2;
+    s16 flags2;
+} Sig_fn_1_8B10_CameraOutput;
+typedef struct Sig_fn_1_8B10_fn_1_8B10_CameraObject {
+    s16 pad_00;
+    s16 kind;
+    u8 pad_04[0xA0];
+    s16 index;
+} Sig_fn_1_8B10_fn_1_8B10_CameraObject;
+
+typedef struct fn_1_8D08_Vec { f32 x, y, z; } fn_1_8D08_Vec;
+
+typedef struct fn_1_8D08_Camera {
+    s16 unk_00;
+    s16 index;            /* 0x02 */
+    s16 unk_04;
+    s16 angle;            /* 0x06 */
+    f32 unk_08;
+    f32 unk_0C;
+    fn_1_8D08_Vec pos;    /* 0x10 */
+    u8 pad_1C[0xC];
+    fn_1_8D08_Vec look;   /* 0x28 */
+    f32 mtx[3][4];        /* 0x34 */
+    fn_1_8D08_Vec unk_64;
+    f32 lerp;             /* 0x70 */
+    u8 pad_74[4];
+    s16 unk_78;
+    u8 pad_7A[2];
+    f32 unk_7C;
+    f32 unk_80;
+    f32 unk_84;
+    s32 unk_88;
+    fn_1_8D08_Vec target; /* 0x8C */
+    fn_1_8D08_Vec unk_98;
+    s16 mode;             /* 0xA4 */
+    s16 prevMode;         /* 0xA6 */
+    u16 unk_A8;
+    u8 pad_AA[0x1E4 - 0xAA];
+    fn_1_8D08_Vec unk_1E4;
+    f32 unk_1F0;
+    f32 unk_1F4;
+    s16 unk_1F8;
+    s16 unk_1FA;
+} fn_1_8D08_Camera;
+
+extern f32 fn_1_A888(fn_1_8D08_Camera *);
+extern s32 fn_1_58C4(void);
+extern s32 fn_1_5910(void);
+extern u32 fn_1_F2F34(void);
+extern void lbl_8006E1C0(fn_1_8D08_Vec *, fn_1_8D08_Vec *);
+extern void mathutil_mtxA_rotate_x(s16);
+extern u8 fn_1_FA4C0(void);
+extern void lbl_8006DC6C(void *);
+extern void fn_1_862D4(s16, fn_1_8D08_Vec *);
+extern void fn_1_8636C(s16, void *);
+extern void fn_1_8A0C(s16);
+extern void fn_1_8B10(Sig_fn_1_8B10_fn_1_8B10_CameraObject *, Sig_fn_1_8B10_CameraOutput *);
+
+/* Native shared literal pool, including the preceding camera literals. */
+const f32 fzgx_camera_literal_0 = 0.3f;
+const f32 fzgx_camera_literal_1 = 1.1f;
+const u32 fzgx_camera_up_x[1] = {0};
+const u32 fzgx_camera_up_y[1] = {0x3F800000};
+const u32 fzgx_camera_up_z[1] = {0};
+const fn_1_8D08_Vec fzgx_camera_target = {0.0f, 0.0f, 0.0f};
+const u32 fzgx_camera_fwd_x[1] = {0};
+const u32 fzgx_camera_fwd_y[1] = {0};
+const u32 fzgx_camera_fwd_z[1] = {0xBF800000};
+const f32 fzgx_camera_height[1] = {55.0f};
+const f32 fzgx_camera_zero[1] = {0.0f};
+const f32 fzgx_camera_distance[1] = {-10.0f};
+const f64 fzgx_camera_half[1] = {0.5};
+
+/* translate the locked-cache matrix A */
+static inline void mtxA_set_translate(fn_1_8D08_Vec *v) {
+    f32 x = v->x;
+    f32 y = v->y;
+    f32 z = v->z;
+    *(f32 *)(0xE0000000 + 0x0C) = x;
+    *(f32 *)(0xE0000000 + 0x1C) = y;
+    *(f32 *)(0xE0000000 + 0x2C) = z;
+}
+
+/* look point: matrix A applied to (0, 0, -10) */
+#define camera_update_look(cam) { \
+    /* Read the scale before the locked-cache matrix column. */ \
+    dist = *(volatile f32 *)fzgx_camera_distance; \
+    /* Preserve locked-cache matrix access order. */ \
+    x = *(volatile f32 *)(0xE0000000 + 0x08); \
+    x = x * dist + *(f32 *)(0xE0000000 + 0x0C); \
+    y = *(f32 *)(0xE0000000 + 0x18); \
+    y = y * dist + *(f32 *)(0xE0000000 + 0x1C); \
+    z = *(f32 *)(0xE0000000 + 0x28); \
+    z = z * dist + *(f32 *)(0xE0000000 + 0x2C); \
+    cam->look.x = x; \
+    cam->look.y = y; \
+    cam->look.z = z; \
+}
+
+static inline f32 fn_1_8D08_look_z(f32 distance) {
+    f32 value = *(f32 *)(0xE0000000 + 0x28);
+    value = value * distance + *(f32 *)(0xE0000000 + 0x2C);
+    return value;
+}
+static inline f32 fn_1_8D08_read_pointer(fn_1_8D08_Camera * owner) { return owner->lerp; }
+static inline f32 (* fn_1_8D08_read_pointer_(fn_1_8D08_Camera * owner))[4] { return owner->mtx; }
+static inline f32 (* fn_1_8D08_read_pointer__(fn_1_8D08_Camera * owner))[4] { return owner->mtx; }
+#pragma opt_lifetimes off
+void fn_1_8D08(fn_1_8D08_Camera *cam, f32 arg1) {
+    f32 z;
+    f32 y;
+    f32 x;
+    f32 dist;
+    Sig_fn_1_8B10_CameraOutput out;
+    f32 mtx[3][4];
+    fn_1_8D08_Vec pos;
+
+    cam->unk_A8 = 0;
+    cam->mode = 1;
+    if ((u32)fn_1_58C4() == 1 && (s32)fn_1_F2F34() == 0) {
+        cam->mode = fn_1_FA4C0();
+    }
+    cam->prevMode = cam->mode;
+    fn_1_8B10((Sig_fn_1_8B10_fn_1_8B10_CameraObject *)cam, &out);
+    fn_1_862D4(cam->index, &pos);
+    fn_1_8636C(cam->index, fn_1_8D08_read_pointer__(cam));
+    lbl_8006DC6C(fn_1_8D08_read_pointer_(cam));
+    {
+        f32 fzgx_lc0_z;
+        f32 fzgx_lc0_y;
+        f32 fzgx_lc0_x;
+        /* Capture the first coordinate before the remaining matrix-translation loads. */
+        fzgx_lc0_x = *(volatile f32 *)&((&pos)->x);
+        fzgx_lc0_y = (&pos)->y;
+        fzgx_lc0_z = (&pos)->z;
+        /* Locked-cache stores must complete before copying the pool vector. */
+        /* Preserve locked-cache matrix access order. */
+        *(volatile f32 *)(0xE0000000 + 0x0C) = fzgx_lc0_x;
+        /* Preserve locked-cache matrix access order. */
+        *(volatile f32 *)(0xE0000000 + 0x1C) = fzgx_lc0_y;
+        /* Preserve locked-cache matrix access order. */
+        *(volatile f32 *)(0xE0000000 + 0x2C) = fzgx_lc0_z;
+    }
+    {
+        fn_1_8D08_Vec up;
+        u32 c, b, a;
+        /* Ordered word copy following the locked-cache stores. */
+        /* Preserve ordered vector initialization around the locked-cache accesses. */
+        a = *(volatile const u32 *)fzgx_camera_up_x;
+        /* Preserve ordered vector initialization around the locked-cache accesses. */
+        b = *(volatile const u32 *)fzgx_camera_up_y;
+        /* Preserve ordered vector initialization around the locked-cache accesses. */
+        c = *(volatile const u32 *)fzgx_camera_up_z;
+        /* Preserve ordered vector initialization around the locked-cache accesses. */
+        ((volatile u32 *)&up)[0] = a;
+        /* Preserve ordered vector initialization around the locked-cache accesses. */
+        ((volatile u32 *)&up)[1] = b;
+        /* Preserve ordered vector initialization around the locked-cache accesses. */
+        ((volatile u32 *)&up)[2] = c;
+        lbl_8006E1C0(&up, &cam->unk_64);
+    }
+    {
+        fn_1_8D08_Vec target = fzgx_camera_target;
+        target.y = out.x0;
+        target.z = out.y0;
+        cam->target = target;
+    }
+    cam->angle = out.flags0;
+    cam->unk_08 = fzgx_camera_height[0];
+    cam->unk_0C = arg1;
+    cam->unk_84 = fzgx_camera_zero[0];
+    cam->unk_78 = 0;
+    cam->unk_7C = fzgx_camera_zero[0];
+    cam->unk_80 = fzgx_camera_zero[0];
+    cam->unk_88 = 0;
+    lbl_8006DC6C(fn_1_8D08_read_pointer__(cam));
+    {
+        f32 fzgx_lc1_z;
+        f32 fzgx_lc1_y;
+        f32 fzgx_lc1_x;
+        /* Capture the first coordinate before the remaining matrix-translation loads. */
+        fzgx_lc1_x = *(volatile f32 *)&((&pos)->x);
+        fzgx_lc1_y = (&pos)->y;
+        fzgx_lc1_z = (&pos)->z;
+        *(f32 *)(0xE0000000 + 0x0C) = fzgx_lc1_x;
+        *(f32 *)(0xE0000000 + 0x1C) = fzgx_lc1_y;
+        *(f32 *)(0xE0000000 + 0x2C) = fzgx_lc1_z;
+    }
+    lbl_8006E1B0((Fn183D28Vec3 *)&cam->target, (Fn183D28Vec3 *)&cam->pos);
+    lbl_8006DC6C(fn_1_8D08_read_pointer__(cam));
+    {
+        f32 fzgx_lc2_z;
+        f32 fzgx_lc2_y;
+        f32 fzgx_lc2_x;
+        /* Capture the first coordinate before the remaining matrix-translation loads. */
+        fzgx_lc2_x = *(volatile f32 *)&((&cam->pos)->x);
+        fzgx_lc2_y = (&cam->pos)->y;
+        fzgx_lc2_z = (&cam->pos)->z;
+        *(f32 *)(0xE0000000 + 0x0C) = fzgx_lc2_x;
+        *(f32 *)(0xE0000000 + 0x1C) = fzgx_lc2_y;
+        *(f32 *)(0xE0000000 + 0x2C) = fzgx_lc2_z;
+    }
+    mathutil_mtxA_rotate_x(cam->angle);
+    camera_update_look(cam);
+    cam->unk_1E4 = cam->pos;
+    cam->unk_1F0 = fzgx_camera_zero[0];
+    cam->unk_1F4 = fzgx_camera_zero[0];
+    cam->unk_1FA = 0;
+    /* Complete initialization before the ordered forward-vector copy. */
+    /* Preserve ordered vector initialization around the locked-cache accesses. */
+    *(volatile s16 *)&cam->unk_1F8 = -1;
+    {
+        u32 b, a;
+        /* Preserve ordered vector initialization around the locked-cache accesses. */
+        a = *(volatile const u32 *)fzgx_camera_fwd_x;
+        /* Preserve ordered vector initialization around the locked-cache accesses. */
+        b = *(volatile const u32 *)fzgx_camera_fwd_y;
+        /* Preserve ordered vector initialization around the locked-cache accesses. */
+        ((volatile u32 *)&cam->unk_98)[0] = a;
+        /* Preserve ordered vector initialization around the locked-cache accesses. */
+        ((volatile u32 *)&cam->unk_98)[1] = b;
+        /* Preserve ordered vector initialization around the locked-cache accesses. */
+        b = *(volatile const u32 *)fzgx_camera_fwd_z;
+        /* Preserve ordered vector initialization around the locked-cache accesses. */
+        ((volatile u32 *)&cam->unk_98)[2] = b;
+    }
+    {
+        fn_1_8D08_Vec pos2;
+        fn_1_862D4(cam->index, &pos2);
+        fn_1_8636C(cam->index, mtx);
+        lbl_8006DC6C(mtx);
+        {
+            f32 fzgx_lc3_z;
+            f32 fzgx_lc3_y;
+            f32 fzgx_lc3_x;
+            /* Capture the first coordinate before the remaining matrix-translation loads. */
+            fzgx_lc3_x = *(volatile f32 *)&((&pos2)->x);
+            fzgx_lc3_y = (&pos2)->y;
+            fzgx_lc3_z = (&pos2)->z;
+            *(f32 *)(0xE0000000 + 0x0C) = fzgx_lc3_x;
+            *(f32 *)(0xE0000000 + 0x1C) = fzgx_lc3_y;
+            *(f32 *)(0xE0000000 + 0x2C) = fzgx_lc3_z;
+        }
+    }
+    cam->lerp = fn_1_A888(cam);
+    cam->unk_78 = 0;
+    if (cam->mode < 5) {
+        cam->target.y = cam->target.y + (f32)(cam->lerp * (out.x2 - cam->target.y));
+        cam->target.z = cam->target.z + (f32)(cam->lerp * (out.y2 - cam->target.y));
+        {
+            f64 angle = cam->angle;
+            f32 delta;
+            f32 weight = fn_1_8D08_read_pointer(cam);
+            f32 step;
+            f64 half;
+            delta = out.flags2 - cam->angle;
+            step = weight * delta;
+            half = step * fzgx_camera_half[0];
+#pragma fp_contract off
+            cam->angle = angle + half;
+#pragma fp_contract on
+        }
+        lbl_8006DC6C(fn_1_8D08_read_pointer__(cam));
+        {
+            f32 fzgx_lc4_z;
+            f32 fzgx_lc4_y;
+            f32 fzgx_lc4_x;
+            /* Capture the first coordinate before the remaining matrix-translation loads. */
+            fzgx_lc4_x = *(volatile f32 *)&((&pos)->x);
+            fzgx_lc4_y = (&pos)->y;
+            fzgx_lc4_z = (&pos)->z;
+            *(f32 *)(0xE0000000 + 0x0C) = fzgx_lc4_x;
+            *(f32 *)(0xE0000000 + 0x1C) = fzgx_lc4_y;
+            *(f32 *)(0xE0000000 + 0x2C) = fzgx_lc4_z;
+        }
+        lbl_8006E1B0((Fn183D28Vec3 *)&cam->target, (Fn183D28Vec3 *)&cam->pos);
+        lbl_8006DC6C(fn_1_8D08_read_pointer__(cam));
+        {
+            f32 fzgx_lc5_z;
+            f32 fzgx_lc5_y;
+            f32 fzgx_lc5_x;
+            /* Capture the first coordinate before the remaining matrix-translation loads. */
+            fzgx_lc5_x = *(volatile f32 *)&((&cam->pos)->x);
+            fzgx_lc5_y = (&cam->pos)->y;
+            fzgx_lc5_z = (&cam->pos)->z;
+            *(f32 *)(0xE0000000 + 0x0C) = fzgx_lc5_x;
+            *(f32 *)(0xE0000000 + 0x1C) = fzgx_lc5_y;
+            *(f32 *)(0xE0000000 + 0x2C) = fzgx_lc5_z;
+        }
+        mathutil_mtxA_rotate_x(cam->angle);
+        {
+            f32 look_z;
+            /* Read the scale before the locked-cache matrix column. */
+            dist = *(volatile f32 *)fzgx_camera_distance;
+            /* Preserve locked-cache matrix access order. */
+            x = *(volatile f32 *)(0xE0000000 + 0x08);
+            x = x * dist + *(f32 *)(0xE0000000 + 0x0C);
+            y = *(f32 *)(0xE0000000 + 0x18);
+            /* Preserve matrix-column load order. */
+            /* Preserve locked-cache matrix access order. */
+            z = *(volatile f32 *)(0xE0000000 + 0x1C);
+            y = y * dist + z;
+            look_z = *(f32 *)(0xE0000000 + 0x28);
+            look_z = look_z * dist + *(f32 *)(0xE0000000 + 0x2C);
+            cam->look.x = x;
+            cam->look.y = y;
+            cam->look.z = look_z;
+        }
+    }
+    fn_1_8A0C(fn_1_5910());
+}
+#pragma opt_lifetimes reset
+/* fzgx:end fn_1_8D08 */
+
 /* fzgx:begin fn_1_A888 noprologue */
 #include "types.h"
 
