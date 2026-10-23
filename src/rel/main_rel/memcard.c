@@ -7871,6 +7871,49 @@ u8 fn_1_B7CD4(void) {
 }
 /* fzgx:end fn_1_B7CD4 */
 
+/* fzgx:begin fn_1_B7CE4 noprologue */
+#include "types.h"
+#include "dolphin/os/OSTime.h"
+#include "rel/main_rel/memcard.h"
+
+extern int sprintf(char *, const char *, ...);
+extern char *strncpy(char *, const char *, size_t);
+extern f32 lbl_1_rodata_4AE0[114];
+extern void OSTicksToCalendarTime(OSTime, OSCalendarTime *);
+/* Retail reads the language selection twice. */
+extern volatile int lbl_801A66B4;
+
+#pragma opt_propagation on
+void fn_1_B7CE4(int arg0, char *arg1) {
+    OSCalendarTime cal;
+    char buf[32];
+    u8 *d = (u8 *)&lbl_1_data_35AC8;
+    u32 (*t)[6];
+    u32 lab_t4;
+    if (arg0 != 1) {
+        u8 *e = (u8 *)lbl_1_rodata_4AE0 + arg0 * 0x4c;
+        char *s = (char *)(d + 0x7384);
+        if (lbl_801A66B4 == 5) {
+            s = (char *)(d + 0x7380);
+        }
+        {
+            int idx;
+            int row = e[0x3f];
+            idx = lbl_801A66B4;
+            t = (u32 (*)[6])(d + 0x5c84);
+            lab_t4 = t[78][idx];
+            sprintf(arg1, (char *)(d + 0x7388), t[row][idx], s, lab_t4);
+        }
+    } else {
+        strncpy(arg1, (char *)((Obj_1_bss_716C8 *)((u8 *)&lbl_1_bss_716C8 + (s8)lbl_1_bss_7730A * 0xa0))->pad_54, 0x20);
+        OSTicksToCalendarTime(OSGetTime(), &cal);
+        sprintf(buf, (char *)(d + 0x7390), cal.year % 100, cal.mon + 1, (lab_t4 = cal.mday));
+        strncpy(arg1, buf, 8);
+    }
+}
+#pragma opt_propagation reset
+/* fzgx:end fn_1_B7CE4 */
+
 /* fzgx:begin fn_1_B7E14 */
 // Save the current memory-card state in the global work buffer.
 
