@@ -31368,6 +31368,17 @@
   },
   {
     "module": "main_rel",
+    "source": "rel/main_rel/accessory/fn_1_1091D4.c",
+    "symbols": [
+      "fn_1_1091D4"
+    ],
+    "status": "matching",
+    "mw_version": "GC/1.3",
+    "extra_cflags": [],
+    "tu": "rel/main_rel/accessory.c"
+  },
+  {
+    "module": "main_rel",
     "source": "rel/main_rel/accessory/fn_1_10A43C.c",
     "symbols": [
       "fn_1_10A43C"
