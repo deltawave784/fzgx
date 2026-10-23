@@ -1021,6 +1021,155 @@ void fn_17_3090(void) {
 }
 /* fzgx:end fn_17_3090 */
 
+/* fzgx:begin fn_17_3160 pool */
+#include "rel/main_rel/camera.h"
+
+typedef struct {
+    u8 pad_0[0x58];
+    u32 unk_58;
+    u8 pad_5C[0xDC];
+    u32 unk_138;
+} InterviewGlobals;
+
+typedef struct {
+    u32 unk_0;
+    u32 unk_4;
+} InterviewSub60;
+
+const u32 lbl_17_rodata_0[] = {
+0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0xC1200000, 0x3F800000, 0x41F00000, 0x00000000, 0x3DCCCCCD, 0x47AFC800, 0x00FF00FF, 0x808080FF, 0xFFFFFFFF, 0x80808000, 0x3F000000, 0x3E4CCCCD, 0x82FF0000, 0xFF780000, 0x00000000, 0x3F947AE1, 0x47AE147B, 0x3FB99999, 0x9999999A, 0x43300000, 0x00000000, 0x43300000, 0x80000000, 0xFFFFFF00, 0x00000000, 0x00000000, 0x00000000, 0x3FF00000, 0x00000000, 0x40240000, 0x00000000, 0x3FECCCCC, 0xCCCCCCCD, 0x3A1D4952, 0x40000000, 0x43A00000, 0x434D0000, 0x40A00000, 0x00000000, 0x3FE99999, 0x9999999A, 0x437A0000, 0x43340000, 0x41200000, 0x43480000, 0x42400000, 0x42480000, 0x42960000, 0x00000000, 0x00000000, 0x43480000, 0x3F19999A /* fzgx-allow: A1 verified retail literal-pool bytes, including float and RGBA encodings; these are not addresses. */
+};
+
+extern CameraState *camera_get_state_object(void);
+extern u32 fn_17_58E0(void);
+extern void fn_17_4E54(void);
+extern u32 fn_17_456C(void);
+extern void fn_17_5FA8(void);
+extern u32 fn_17_802C(void);
+extern u32 fn_80007AB4(void *);
+
+/* file-scope objects of the retail TU, in retail order: MWCC addresses them off one section base */
+u8 fzgx_obj_lbl_17_bss_0;
+u8 fzgx_obj_lbl_17_bss_1;
+u8 lbl_17_bss_2;
+u8 lbl_17_bss_3;
+u32 lbl_17_bss_3_fill_4[2];
+u32 lbl_17_bss_C;
+u32 lbl_17_bss_10;
+u32 fzgx_obj_lbl_17_bss_14;
+u32 fzgx_obj_lbl_17_bss_18[2];
+u32 lbl_17_bss_20;
+u32 lbl_17_bss_24[4];
+u32 lbl_17_bss_34[8];
+u32 fzgx_obj_lbl_17_bss_54;
+u32 fzgx_obj_lbl_17_bss_58;
+u32 lbl_17_bss_58_fill_5C;
+u8 fzgx_obj_lbl_17_bss_60;
+u8 lbl_17_bss_60_fill_61;
+u16 lbl_17_bss_60_fill_62;
+u32 lbl_17_bss_60_fill_64[28];
+u16 lbl_17_bss_60_fill_D4;
+u16 fzgx_obj_lbl_17_bss_D6;
+u32 fzgx_obj_lbl_17_bss_D8[8];
+u16 lbl_17_bss_D8_fill_F8;
+u16 lbl_17_bss_FA_fill_FA;
+u32 lbl_17_bss_FA_fill_FC[15];
+u32 lbl_17_bss_FA_3E;
+u32 lbl_17_bss_FA_fill_13C[4];
+
+#pragma section code_type ".fzgxpool"
+static void fzgx_bss_layout(void) {
+    volatile u8 s;  /* fzgx-allow: S2 layout primer sink: MWCC emits .bss objects in first-access order */
+    s = *(u8 *)&lbl_17_rodata_0;
+    s = *(u8 *)&fzgx_obj_lbl_17_bss_0;
+    s = *(u8 *)&fzgx_obj_lbl_17_bss_1;
+    s = *(u8 *)&lbl_17_bss_2;
+    s = *(u8 *)&lbl_17_bss_3;
+    s = *(u8 *)&lbl_17_bss_3_fill_4;
+    s = *(u8 *)&lbl_17_bss_C;
+    s = *(u8 *)&lbl_17_bss_10;
+    s = *(u8 *)&fzgx_obj_lbl_17_bss_14;
+    s = *(u8 *)&fzgx_obj_lbl_17_bss_18;
+    s = *(u8 *)&lbl_17_bss_20;
+    s = *(u8 *)&lbl_17_bss_24;
+    s = *(u8 *)&lbl_17_bss_34;
+    s = *(u8 *)&fzgx_obj_lbl_17_bss_54;
+    s = *(u8 *)&fzgx_obj_lbl_17_bss_58;
+    s = *(u8 *)&lbl_17_bss_58_fill_5C;
+    s = *(u8 *)&fzgx_obj_lbl_17_bss_60;
+    s = *(u8 *)&lbl_17_bss_60_fill_61;
+    s = *(u8 *)&lbl_17_bss_60_fill_62;
+    s = *(u8 *)&lbl_17_bss_60_fill_64;
+    s = *(u8 *)&lbl_17_bss_60_fill_D4;
+    s = *(u8 *)&fzgx_obj_lbl_17_bss_D6;
+    s = *(u8 *)&fzgx_obj_lbl_17_bss_D8;
+    s = *(u8 *)&lbl_17_bss_D8_fill_F8;
+    s = *(u8 *)&lbl_17_bss_FA_fill_FA;
+    s = *(u8 *)&lbl_17_bss_FA_fill_FC;
+    s = *(u8 *)&lbl_17_bss_FA_3E;
+    s = *(u8 *)&lbl_17_bss_FA_fill_13C;
+}
+#pragma section code_type ".text"
+
+#pragma opt_propagation off
+void fn_17_3160(void) {
+    struct { InterviewSub60 *value; } sub;
+    void * lab_t0;
+
+    camera_get_state_object();
+
+    if (!((lbl_1_bss_D58.unk_2 >> 9) & 1)) {
+        if (fzgx_obj_lbl_17_bss_58 & 0x80000000) {
+            fn_17_58E0();
+        }
+    }
+
+    switch (lbl_17_bss_FA_3E) {
+    case 0: {
+        struct { u8 r, g, b, a; } c = { 0, 0, 0, 255 };
+        lab_t0 = &c;
+        fn_80007AB4(lab_t0);
+        break;
+    }
+    case 1: {
+        struct { u8 r, g, b, a; } c = { 64, 64, 64, 255 };
+        lab_t0 = &c;
+        fn_80007AB4(lab_t0);
+        break;
+    }
+    case 2: {
+        struct { u8 r, g, b, a; } c = { 64, 64, 136, 255 };
+        lab_t0 = &c;
+        fn_80007AB4(lab_t0);
+        break;
+    }
+    case 3: {
+        struct { u8 r, g, b, a; } c = { 170, 170, 170, 255 };
+        lab_t0 = &c;
+        fn_80007AB4(lab_t0);
+        break;
+    }
+    default: {
+        struct { u8 r, g, b, a; } c = { 255, 0, 0, 255 };
+        lab_t0 = &c;
+        fn_80007AB4(lab_t0);
+        break;
+    }
+    }
+
+    fn_17_4E54();
+    fn_17_456C();
+
+    sub.value = (InterviewSub60 *)((u8 *)&fzgx_obj_lbl_17_bss_60);
+    if (sub.value->unk_4 & 2) {
+        fn_17_5FA8();
+    }
+
+    fn_17_802C();
+}
+#pragma opt_propagation reset
+/* fzgx:end fn_17_3160 */
+
 /* fzgx:begin fn_17_3270 */
 typedef struct InterviewState {
     u32 first;
