@@ -4246,6 +4246,101 @@ void fn_1_8365C(s32 enabled) {
 }
 /* fzgx:end fn_1_8365C */
 
+/* fzgx:begin fn_1_83694 noprologue */
+#include "rel/main_rel/car.h"
+
+extern const f32 lbl_1_rodata_3508[];
+#define P32(o) (pool.v[(o) / 4])
+#define P64(o) (*(const f64 *)((const u8 *)pool.v + (o)))
+
+static inline void fn_1_83694_add(u8 *car, f32 a, f32 b, f32 limit)
+{
+    b = a + b;
+    *(f32 *)(car + 0x1f8) = b;
+    b = *(f32 *)(car + 0x1f8);
+    if (b > limit) {
+        *(f32 *)(car + 0x1f8) = limit;
+    }
+}
+
+static inline void fn_1_83694_sub(u8 *car, f32 a, f32 b, f32 limit)
+{
+    b = a - b;
+    *(f32 *)(car + 0x1f8) = b;
+    b = *(f32 *)(car + 0x1f8);
+    if (b < limit) {
+        *(f32 *)(car + 0x1f8) = limit;
+    }
+}
+
+#pragma opt_propagation off
+void fn_1_83694(u8 *car)
+{
+    struct { const f32 *v; } pool;
+    struct { f32 v; } highLimit, lowLimit;
+    f32 highStep;
+    f32 highA;
+    f32 lowStep;
+    f32 lowA;
+    f32 a;
+    s32 idx;
+    f32 f3;
+    u8 b;
+    u32 flags;
+
+    pool.v = lbl_1_rodata_3508;
+    idx = *(s8 *)(car + 0x474);
+    f3 = *(f32 *)((u8 *)&lbl_1_bss_C70.unk_8 + idx * 0x14);
+
+    if (((&lbl_1_bss_A88.unk_0)[idx * 6] >> 4) & 1) {
+        a = *(f32 *)(car + 0x1fc);
+        if (__fabs(a) > P64(0x558) && __fabs(a - *(f32 *)(car + 0x20c)) > P64(0x560)) {
+            *(u32 *)car |= 8;
+        }
+    }
+    if (f3 > P32(0x568)) {
+        highA = *(f32 *)(car + 0x1f8);
+        highStep = P32(0x56c);
+        fn_1_83694_add(car, highA, highStep, P32(0x28));
+    } else if (f3 < P32(0x570)) {
+        lowA = *(f32 *)(car + 0x1f8);
+        lowStep = P32(0x56c);
+        fn_1_83694_sub(car, lowA, lowStep, P32(0x574));
+    } else {
+        *(f32 *)(car + 0x1f8) = *(f32 *)(car + 0x1f8) * P32(0x578);
+    }
+    flags = 0;
+    if (f3 < P32(0x570)) {
+        flags |= 0x10;
+    }
+    if (f3 > P32(0x568)) {
+        flags |= 0x20;
+    }
+    if (flags == 0x10 || flags == 0x20) {
+        b = *(car + 0x4c3);
+        if ((b & 0xf0) == flags) {
+            if ((b & 0xf) < 9) {
+                *(u32 *)car |= 0x20000;
+                if (f3 > P32(0x10)) {
+                    *(s8 *)(car + 0x614) = 1;
+                } else {
+                    *(s8 *)(car + 0x614) = -1;
+                }
+                *(f32 *)(car + 0x610) = P32(0x57c) * f3;
+            } else {
+                *(car + 0x4c3) = flags | 0xa;
+            }
+        } else {
+            *(car + 0x4c3) = flags | 0xa;
+        }
+    }
+    if (*(f32 *)(car + 0x204) > P32(0x568) && *(car + 0x197) < 0x1e) {
+        *(u32 *)car |= 0x1000;
+    }
+    *(u32 *)(car + 0x58c) |= 4;
+}
+/* fzgx:end fn_1_83694 */
+
 /* fzgx:begin fn_1_83858 pool noprologue */
 #include "types.h"
 #include "rel/main_rel/globals.h"
