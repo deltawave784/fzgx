@@ -54630,6 +54630,22 @@
   },
   {
     "module": "main_rel",
+    "source": "rel/main_rel/motasglist/fn_1_442D8.c",
+    "symbols": [
+      "fn_1_442D8"
+    ],
+    "status": "matching",
+    "mw_version": "GC/1.3",
+    "extra_cflags": [],
+    "tu": "rel/main_rel/motasglist.c",
+    "pool": {
+      "@59": "lbl_1_rodata_F58",
+      "@60": "lbl_1_rodata_F60",
+      "@57": "lbl_1_rodata_F74"
+    }
+  },
+  {
+    "module": "main_rel",
     "source": "rel/main_rel/motasglist/fn_1_449A8.c",
     "symbols": [
       "fn_1_449A8"
