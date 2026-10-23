@@ -14451,6 +14451,77 @@ done:
 }
 /* fzgx:end fn_1_14FEAC */
 
+/* fzgx:begin fn_1_1502BC noprologue */
+#include "types.h"
+#include "rel/main_rel/sel_static_disp.h"
+
+struct Names { u8 *a[75]; };
+struct Slot { void *p; void *q; };
+struct D {
+    u8 pad_0[0x1388];
+    u8 lock_a[4];
+    u8 lock_b[0x24e8 - 0x138c];
+    char fmt_num[0x24fc - 0x24e8];
+    char fmt_plain[4];
+};
+
+extern int sprintf(char *, const char *, ...);
+extern size_t strlen(const char *);
+extern u8 lbl_8015B200[];
+extern u32 fn_1_12ADA0(void *, void *);
+extern u8 lbl_1_rodata_CE10[];
+extern void fn_1_12AB38(void *);
+extern void fn_1_8019C(void *);
+
+struct Slot *fn_1_1502BC(struct Slot *arg0, s16 *arg1, s16 arg2) {
+    struct D *d = (struct D *)lbl_1_data_43E78;
+    s16 j;
+    u8 *str;
+    s16 k;
+    struct Slot *e;
+    s16 *ip;
+    struct Slot *s;
+    int mask;
+    u8 **tbl;
+    s16 i;
+    int idx;
+    struct Names names;
+    char buf[64];
+
+    fn_1_12AB38(d->lock_b);
+    ip = arg1;
+    s = arg0;
+    mask = arg2;
+    for (i = 0; (tbl = names.a, i < 3); i++) {
+        idx = *ip;
+        names = *(struct Names *)lbl_1_rodata_CE10;
+        str = tbl[idx];
+        for (k = 0; k < strlen((char *)str); k++) {
+            int c = tbl[idx][k];
+            tbl[idx][k] = (c == -1) ? -1 : lbl_8015B200[c];
+        }
+        e = s;
+        for (k = 0; k < 3; k++) {
+            if ((mask & (1 << k)) && e->p == 0) {
+                if (k != 0) {
+                    sprintf(buf, d->fmt_num, tbl[idx], k + 1);
+                } else {
+                    sprintf(buf, d->fmt_plain, tbl[idx]);
+                }
+                e->q = 0;
+                e->p = (void *)fn_1_12ADA0(buf, e->q);
+                fn_1_8019C(e->p);
+            }
+            e++;
+        }
+        ip++;
+        s += 6;
+    }
+    fn_1_12AB38(d->lock_a);
+    return arg0;
+}
+/* fzgx:end fn_1_1502BC */
+
 /* fzgx:begin fn_1_150464 */
 void fn_1_150464(u32 arg0) {
     u32 v2;
