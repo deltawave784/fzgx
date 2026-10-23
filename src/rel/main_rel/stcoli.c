@@ -2833,6 +2833,138 @@ void fn_1_21F18(StcoliDrawEntity *entity, f32 *scale, f32 time) {
 #pragma opt_common_subs reset
 /* fzgx:end fn_1_21F18 */
 
+/* fzgx:begin fn_1_224F8 noprologue */
+#include "types.h"
+#include "game/main_rel/stcoli_types.h"
+
+typedef struct {
+    f32 x;
+    f32 y;
+    f32 z;
+} StcoliGateVec;
+
+typedef struct {
+    StcoliGateVec pos;
+    s16 rot_x;
+    s16 rot_y;
+    s16 rot_z;
+    u8 pad_12[2];
+    f32 width;
+    f32 height;
+    u8 pad_1C[4];
+    u32 round;
+} StcoliGate;
+
+typedef struct {
+    u8 pad_0[0x8];
+    f32 zero;    /* 0x08 */
+    f32 one;     /* 0x0C */
+    u8 pad_10[0x4];
+    f32 ten;     /* 0x14 */
+    f32 neg_one; /* 0x18 */
+    u8 pad_1C[0x4];
+    f32 half;    /* 0x20 */
+} Fn_1_224F8Constants;
+
+extern s16 fn_1_7B054();
+extern void lbl_8006DAEC(void);
+extern void lbl_8006D7DC(void *);
+extern u32 mathutil_mtxA_rotate_x(u32);
+extern u32 mathutil_mtxA_rotate_y(u32);
+extern u32 mathutil_mtxA_rotate_z(u32);
+extern void lbl_8006DF44(void);
+extern void lbl_8006E1B0(void *, void *);
+extern void lbl_8006DB30(void);
+
+#pragma section code_type ".fzgxpool"
+/* Volatile stores preserve the retail shared literal pool's ordering. */
+void fzgx_fn_1_224F8_pool_primer(volatile f64 *d, volatile f32 *f) {
+    *d = 4503601774854144.0;
+    *f = 0.0f;
+    *f = 1.0f;
+    *f = -5.0f;
+    *f = 10.0f;
+    *f = -1.0f;
+    *f = 2.0f;
+    *f = 0.5f;
+}
+#pragma section code_type ".text"
+
+s32 fn_1_224F8(StcoliGateVec *start, StcoliGateVec *end, u32 *mask) {
+    const Fn_1_224F8Constants *c;
+    s32 result;
+    s32 i;
+    s32 first;
+    StcoliGate *gate;
+    StcoliGateVec p0;
+    StcoliGateVec p1;
+    StcoliGateVec delta;
+    StcoliGateVec hit;
+    f32 sx;
+    f32 sy;
+    f32 t;
+    s32 below1;
+
+    c = (const Fn_1_224F8Constants *)&lbl_1_rodata_6C8;
+    result = -1;
+    if (fn_1_7B054() == -1) {
+        return -1;
+    }
+    if (lbl_1_bss_3BE0 == NULL) {
+        return -1;
+    }
+    first = __cntlzw(*mask);
+    lbl_8006DAEC();
+    for (i = first, gate = &((StcoliGate *)lbl_1_bss_3BE0->unk_B0)[first]; i < (s32)lbl_1_bss_3BE0->unk_AC; i++, gate++) {
+        if (!__rlwnm(*mask, (i + 1) & 0x1F, 31, 31)) {
+            continue;
+        }
+        lbl_8006D7DC(gate);
+        if (gate->rot_z) {
+            mathutil_mtxA_rotate_z(gate->rot_z);
+        }
+        if (gate->rot_y) {
+            mathutil_mtxA_rotate_y(gate->rot_y);
+        }
+        if (gate->rot_x) {
+            mathutil_mtxA_rotate_x(gate->rot_x);
+        }
+        lbl_8006DF44();
+        lbl_8006E1B0(start, &p0);
+        lbl_8006E1B0(end, &p1);
+        below1 = p1.z < 0.0f;
+        if (!(p0.z < 0.0f) || below1) {
+            continue;
+        }
+        sx = 0.5f * (10.0f * gate->width);
+        sy = 0.5f * (10.0f * gate->height);
+        p0.x /= sx;
+        p0.y /= sy;
+        p1.x /= sx;
+        p1.y /= sy;
+        psvec_sub(&p0, &p1, &delta);
+        t = -(p0.z / delta.z);
+        psvec_scale_add(&p0, &delta, t, &hit);
+        if (gate->round) {
+            f32 xx = hit.x * hit.x;
+            f32 yy = hit.y * hit.y;
+            if (xx + yy <= 1.0f) {
+                result = i;
+                break;
+            }
+        } else if ((-1.0f) <= hit.x && hit.x <= 1.0f && (-1.0f) <= hit.y && hit.y <= 1.0f) {
+            result = i;
+            break;
+        }
+    }
+    lbl_8006DB30();
+    if (result >= 0) {
+        *mask &= 0xFFFFFFFFu >> (result + 1);
+    }
+    return result;
+}
+/* fzgx:end fn_1_224F8 */
+
 /* fzgx:begin fn_1_2277C noprologue */
 #include "dolphin/types.h"
 

@@ -8402,3 +8402,9 @@ rel/main_rel/camera/fn_1_56B8.c:
 
 rel/main_rel/memcard/fn_1_B7CE4.c:
 	.text       start:0x000B7CE4 end:0x000B7E14 align:4
+
+rel/main_rel/stcoli/fn_1_224F8.c:
+	.text       start:0x000224F8 end:0x0002277C align:4
+
+rel/main_rel/load/fn_1_45964.c:
+	.text       start:0x00045964 end:0x00045A58 align:4

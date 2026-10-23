@@ -330,6 +330,105 @@ void fn_1_45890(void) {
 }
 /* fzgx:end fn_1_45890 */
 
+/* fzgx:begin fn_1_45964 pool noprologue */
+#include "types.h"
+#include "dolphin/ar.h"
+
+struct S45964 {
+    s32 kind;
+    u8 pad[0x50];
+    u32 value;
+};
+
+struct B384C0 {
+    u8 pad_0[0x14];
+    u8 idx;
+    u8 pad_15[0x5824 - 0x15];
+    u32 flags[16];
+    u8 pad2[0x5af4 - 0x5864];
+    u32 data[16];
+};
+
+extern u32 fn_1_45A58(void);
+extern void DCInvalidateRange(void *, u32);
+extern void ARQPostRequest(void *, u32, u32, u32, u32, void *, u32, void *);
+extern u32 fn_80006DAC(void *, void *, u32, u32, void *, void *, u32);
+
+/* file-scope objects of the retail TU, in retail order: MWCC addresses them off one section base */
+u8 fzgx_obj_lbl_1_bss_384C0;
+u8 lbl_1_bss_384C0_fill_384C1;
+u16 lbl_1_bss_384C0_fill_384C2;
+u32 lbl_1_bss_384C4;
+u32 fzgx_obj_lbl_1_bss_384C8;
+u32 lbl_1_bss_384CC;
+u32 fzgx_obj_lbl_1_bss_384D0;
+u8 lbl_1_bss_384D0_4;
+u8 lbl_1_bss_384D0_fill_384D5;
+u16 lbl_1_bss_384D0_fill_384D6;
+u32 fzgx_obj_lbl_1_bss_384D8[5632];
+u32 lbl_1_bss_3DCD8;
+u32 fzgx_obj_lbl_1_bss_3DCDC[2];
+u32 lbl_1_bss_3DCE4[16];
+u32 lbl_1_bss_3DCE4_fill_3DD24;
+u32 lbl_1_bss_3DD28[35];
+u8 lbl_1_bss_3DD28_8C[16][32];
+u32 lbl_1_bss_3DD28_28C[16];
+
+#pragma section code_type ".fzgxpool"
+static void fzgx_bss_layout(void) {
+    volatile u8 s;  /* fzgx-allow: S2 layout primer sink: MWCC emits .bss objects in first-access order */
+    s = *(u8 *)&fzgx_obj_lbl_1_bss_384C0;
+    s = *(u8 *)&lbl_1_bss_384C0_fill_384C1;
+    s = *(u8 *)&lbl_1_bss_384C0_fill_384C2;
+    s = *(u8 *)&lbl_1_bss_384C4;
+    s = *(u8 *)&fzgx_obj_lbl_1_bss_384C8;
+    s = *(u8 *)&lbl_1_bss_384CC;
+    s = *(u8 *)&fzgx_obj_lbl_1_bss_384D0;
+    s = *(u8 *)&lbl_1_bss_384D0_4;
+    s = *(u8 *)&lbl_1_bss_384D0_fill_384D5;
+    s = *(u8 *)&lbl_1_bss_384D0_fill_384D6;
+    s = *(u8 *)&fzgx_obj_lbl_1_bss_384D8;
+    s = *(u8 *)&lbl_1_bss_3DCD8;
+    s = *(u8 *)&fzgx_obj_lbl_1_bss_3DCDC;
+    s = *(u8 *)&lbl_1_bss_3DCE4;
+    s = *(u8 *)&lbl_1_bss_3DCE4_fill_3DD24;
+    s = *(u8 *)&lbl_1_bss_3DD28;
+    s = *(u8 *)&lbl_1_bss_3DD28_8C;
+    s = *(u8 *)&lbl_1_bss_3DD28_28C;
+}
+#pragma section code_type ".text"
+
+#pragma opt_propagation off
+u32 fn_1_45964(struct S45964 *arg0, void *arg1, u32 arg2, u32 arg3, u32 arg4) {
+    u32 i;
+    u32 indexBytes;
+    u8 n;
+    u32 size;
+    u32 offset;
+    u8 *req;
+
+    i = lbl_1_bss_384D0_4;
+    n = (u8)(i + 1);
+    lbl_1_bss_384D0_4 = i + 1;
+    indexBytes = i << 2;
+    req = lbl_1_bss_3DD28_8C[i];
+    *(u32 *)((u8 *)lbl_1_bss_3DCE4 + indexBytes) = 1;
+    *(u32 *)((u8 *)lbl_1_bss_3DD28_28C + indexBytes) = arg4;
+    offset = arg3;
+    lbl_1_bss_384D0_4 = (n > 15) ? 0 : n;
+    switch (arg0->kind) {
+    case 1:
+        size = arg2;
+        DCInvalidateRange(arg1, size);
+        ARQPostRequest(req, 0, 1, 1, arg0->value + offset, arg1, size, (void *)fn_1_45A58);
+        return 1;
+    default:
+        return fn_80006DAC((u8 *)arg0 + 4, arg1, arg2, offset, (void *)fn_1_45A58, (void *)fn_1_45A58, 0);
+    }
+}
+#pragma opt_propagation reset
+/* fzgx:end fn_1_45964 */
+
 /* fzgx:begin fn_1_45A58 pool noprologue */
 #include "types.h"
 
