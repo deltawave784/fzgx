@@ -263,6 +263,12 @@ Rules that hold for everyone:
 - Batches: `uv run tools/orchestrate.py --harness codex ...` (codex only; tiers: gpt-5.6-luna, then gpt-5.6-terra;
   Sonnet and Gemini Flash were tried and dropped) (headless, one report
   per batch, periodic live verification and a final drain). Never use in-process subagents.
+- Claude API-credit batches: `--harness claude --model opus|sonnet|haiku|fable --budget-usd N`
+  (required) runs `claude --bare -p` sessions, which authenticate only with `ANTHROPIC_API_KEY`
+  (or `--api-key-file PATH`, kept outside the repo), never the subscription login. Each session
+  gets `--max-budget-usd` (`--agent-budget-usd`, default budget/parallel) and the runner reserves
+  every running session's cap, so a batch cannot pass `--budget-usd`. The matcher-large/-mid
+  agent body is passed as the system prompt because `--bare` skips agent discovery.
 - DeepSeek trials use the same Codex harness: `--provider deepseek --model deepseek-flash`
   selects DeepSeek-V4.1-Flash. Supply `DEEPSEEK_API_KEY` or `--api-key-file PATH`;
   keys stay outside the repository and out of command arguments. The provider and

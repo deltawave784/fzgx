@@ -29,9 +29,9 @@ from fzgx.ledger import Ledger
 from fzgx.project import ROOT, STATE_DIR, Project
 
 MATCHER_TOOLS = ["Read", "mcp__fzgx__write_unit", "mcp__fzgx__patch_unit", "mcp__fzgx__check", "mcp__fzgx__read_evidence", "mcp__fzgx__release"]
-# The user's defaults are Fable 5.1 (claude) and GPT-6 Astra (codex); matchers must never run on those.
+# Fable (claude) and GPT-6 Astra (codex) run only when asked for with --model; they spend limits several times faster.
 DEFAULT_CODEX_MODEL = "gpt-6.1-sol"   # the account's Codex default (config.toml `model`); `--model` overrides
-EXPECTED_MODEL = {"claude": "claude-haiku-4-5", "codex": DEFAULT_CODEX_MODEL}
+EXPECTED_MODEL = {"claude": "claude-haiku-5-5", "codex": DEFAULT_CODEX_MODEL}
 
 
 def codex_binary() -> str:
@@ -50,7 +50,38 @@ def codex_binary() -> str:
             return builds[0]
     return 'codex'
 
-CLAUDE_MODELS = {"haiku": "claude-haiku-4-5", "sonnet": "claude-sonnet-5", "opus": "claude-opus-5"}
+CLAUDE_MODELS = {"haiku": "claude-haiku-5-5", "sonnet": "claude-sonnet-5-5", "opus": "claude-opus-5-5",
+                 "fable": "claude-fable-5-1"}
+# Matcher instructions per tier: --bare skips project agent discovery, so the body is passed explicitly.
+CLAUDE_AGENT_FILES = {"haiku": "matcher-mid.md", "sonnet": "matcher-mid.md", "opus": "matcher-large.md",
+                      "fable": "matcher-large.md"}
+
+
+def claude_binary() -> str:
+    """`claude` from the PATH, else the newest CLI the Claude desktop app installed
+    (%APPDATA%/Claude/claude-code/<version>/<build>/claude.exe), which is not on the PATH."""
+    import glob
+    import shutil
+    found = shutil.which('claude')
+    if found:
+        return found
+    roaming = os.environ.get('APPDATA')
+    if roaming:
+        builds = sorted(glob.glob(os.path.join(roaming, 'Claude', 'claude-code', '*', '*', 'claude.exe')),
+                        key=os.path.getmtime, reverse=True)
+        if builds:
+            return builds[0]
+    return 'claude'
+
+
+def claude_agent_prompt(model: str, directory: Path) -> Path:
+    """The matcher agent's body (frontmatter removed) as a system-prompt file for --bare sessions."""
+    text = (ROOT / '.claude' / 'agents' / CLAUDE_AGENT_FILES.get(model, 'matcher-large.md')).read_text()
+    if text.startswith('---'):
+        text = text.split('---', 2)[2].lstrip()
+    path = directory / 'matcher-system-prompt.md'
+    path.write_text(text)
+    return path
 # $/M tokens from platform.openai.com/docs/pricing (2026-09-08): input, cached input, cache write, output.
 # Codex reports usage but no cost; Claude Code reports total_cost_usd itself.
 CODEX_PRICES = {"gpt-5.6-luna": (0.20, 0.02, 0.25, 1.20), "gpt-5.6-terra": (2.00, 0.20, 2.50, 12.00),
@@ -97,10 +128,12 @@ def select_tu(p: Project, module: str, tu_files: List[str], max_size: int = 0, r
     return out
 
 
-def claude_cmd(symbol: str, agent_id: str, model: str) -> List[str]:
+def claude_cmd(symbol: str, agent_id: str, model: str, system_prompt: Path, agent_budget: float) -> List[str]:
+    """--bare authenticates strictly with ANTHROPIC_API_KEY (API credits), never the subscription login."""
     prompt = f"SYMBOL={symbol}  AGENT_ID={agent_id}. Match this function following your loop."
-    return ["claude", "-p", prompt, "--agent", "matcher", "--model", model,
-            "--output-format", "json", "--no-session-persistence",
+    return [claude_binary(), "--bare", "-p", prompt, "--model", CLAUDE_MODELS.get(model, model),
+            "--append-system-prompt-file", str(system_prompt),
+            "--output-format", "json", "--no-session-persistence", "--max-budget-usd", f"{agent_budget:.2f}",
             "--mcp-config", ".mcp.json", "--strict-mcp-config", "--disable-slash-commands",
             "--allowedTools", ",".join(MATCHER_TOOLS)]
 
@@ -151,8 +184,9 @@ def parse_claude(out: str) -> Dict:
             return {"text": d.get("result", ""), "cost": d.get("total_cost_usd", 0.0) or 0.0,
                     "turns": d.get("num_turns"), "tokens_in": u.get("input_tokens", 0) + u.get("cache_read_input_tokens", 0)
                     + u.get("cache_creation_input_tokens", 0), "tokens_out": u.get("output_tokens", 0),
-                    "model": next(iter(d.get("modelUsage", {}) or {"": None}), "")}
-    return {"text": out, "cost": 0.0, "turns": None, "tokens_in": 0, "tokens_out": 0, "model": ""}
+                    "model": next(iter(d.get("modelUsage", {}) or {"": None}), ""),
+                    "models": list(d.get("modelUsage", {}) or {})}
+    return {"text": out, "cost": 0.0, "turns": None, "tokens_in": 0, "tokens_out": 0, "model": "", "models": []}
 
 
 def deepseek_rate_multiplier(timestamp: Optional[str]) -> float:
@@ -179,7 +213,8 @@ def price_usage(model: str, samples: List, provider: str, fast: bool = False) ->
 
 
 def run_one(p: Project, harness: str, model: str, symbol: str, idx: int, timeout: int, batch: str,
-            shadow: bool = False, fast: bool = False, revise: bool = False, provider: str = "openai") -> Dict:
+            shadow: bool = False, fast: bool = False, revise: bool = False, provider: str = "openai",
+            agent_budget: float = 0.0) -> Dict:
     prefix = "revise-" if revise else ("shadow-" if shadow else "")
     agent_id = f"{prefix}{batch}-{harness}-{idx}"
     if harness == "claude" and revise:
@@ -216,7 +251,7 @@ def run_one(p: Project, harness: str, model: str, symbol: str, idx: int, timeout
         (directory / f'{symbol}.assignment.json').write_text(json.dumps(assignment, indent=2) + '\n')
         setup_secs = round(time.time() - t0, 3)
         if not result_file.exists():
-            cmd = claude_cmd(symbol, agent_id, model)
+            cmd = claude_cmd(symbol, agent_id, model, claude_agent_prompt(model, directory), agent_budget)
             task = {'context': assignment['context']}
             if seed:
                 task['seed'] = {k: seed[k] for k in ('source', 'kind', 'instruction', 'prior_attempt') if k in seed}
@@ -292,8 +327,11 @@ def run_one(p: Project, harness: str, model: str, symbol: str, idx: int, timeout
                 outcome = 'matched' if att['outcome'] in ('matched', 'matched-pool', 'shadow-matched') else outcome + '+released'
         except Exception as error:
             out += '\nAutomatic cleanup failed: ' + str(error)
-    if info["model"] and not info["model"].startswith(EXPECTED_MODEL[harness]):
-        outcome = f"WRONG-MODEL({info['model']})"
+    used = info.get("models") or ([info["model"]] if info["model"] else [])
+    if used and not any(m.startswith(EXPECTED_MODEL[harness]) for m in used):
+        outcome = f"WRONG-MODEL({','.join(used)})"
+    elif used:
+        info["model"] = next(m for m in used if m.startswith(EXPECTED_MODEL[harness]))
     pct = 100.0 if outcome == "matched" else (att["best_in_attempt"] if att else None)
     checks = att["checks"] if att else None
     # cost accounting onto the attempt this agent opened
@@ -345,14 +383,21 @@ def _fan_out(p: Project, a, model: str, symbols: List[str], batch: str, revise: 
                            codex_server_cmd(model, a.provider, a.effort, a.fast), price_usage))
     results: List[Dict] = []
     spent = 0.0
+    cap = a.agent_budget_usd or 0.0
+    # Each running agent reserves its own --max-budget-usd cap, so spent + reservations never pass the batch budget.
     with ThreadPoolExecutor(max_workers=a.parallel) as ex:
         futs = {}
         queue = list(enumerate(symbols, 1))
         while queue or futs:
-            while queue and len(futs) < a.parallel and (a.budget_usd is None or spent < a.budget_usd):
+            while queue and len(futs) < a.parallel and (a.budget_usd is None
+                                                         or spent + cap * (len(futs) + 1) <= a.budget_usd + 1e-9):
                 i, s = queue.pop(0)
-                futs[ex.submit(run_one, p, a.harness, model, s, i, a.timeout, batch, a.shadow, a.fast, revise, a.provider)] = s
+                futs[ex.submit(run_one, p, a.harness, model, s, i, a.timeout, batch, a.shadow, a.fast, revise,
+                               a.provider, cap)] = s
             if not futs:
+                if queue:
+                    print(f"budget: ${spent:.2f} of ${a.budget_usd:.2f} spent; {len(queue)} functions not started",
+                          flush=True)
                 break
             done = next(as_completed(list(futs)))
             futs.pop(done)
@@ -412,8 +457,11 @@ def main(argv: Optional[List[str]] = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("--harness", choices=["claude", "codex"], default="codex")
     ap.add_argument("--provider", choices=["openai", "deepseek"], default="openai", help="codex model provider")
-    ap.add_argument("--api-key-file", type=Path, help="DeepSeek key file; otherwise use DEEPSEEK_API_KEY")
-    ap.add_argument("--model", help="claude: haiku|sonnet|opus (default haiku); codex: model name (default gpt-6.1-sol)")
+    ap.add_argument("--api-key-file", type=Path,
+                    help="DeepSeek or Anthropic key file; otherwise DEEPSEEK_API_KEY / ANTHROPIC_API_KEY")
+    ap.add_argument("--model", help="claude: haiku|sonnet|opus|fable (default haiku); codex: model name (default gpt-6.1-sol)")
+    ap.add_argument("--agent-budget-usd", type=float,
+                    help="claude: --max-budget-usd per agent session (default: --budget-usd / --parallel)")
     ap.add_argument("--parallel", type=int, default=48)
     ap.add_argument("--tool-parallel", type=int, default=min(16, os.cpu_count() or 4),
                     help="maximum simultaneous local tool processes, independent of model sessions")
@@ -467,10 +515,23 @@ def main(argv: Optional[List[str]] = None) -> int:
                 ap.error(f"cannot read --api-key-file: {error}")
         if not a.dry_run and not os.environ.get("DEEPSEEK_API_KEY"):
             ap.error("set DEEPSEEK_API_KEY or pass --api-key-file")
-    elif a.api_key_file:
-        ap.error("--api-key-file requires --provider deepseek")
+    elif a.api_key_file and a.harness != "claude":
+        ap.error("--api-key-file requires --provider deepseek or --harness claude")
     if a.harness == "claude":
         a.provider = "anthropic"
+        # API credits only: --bare sessions read ANTHROPIC_API_KEY and never the subscription login.
+        if a.api_key_file:
+            try:
+                os.environ["ANTHROPIC_API_KEY"] = a.api_key_file.expanduser().read_text().strip()
+            except OSError as error:
+                ap.error(f"cannot read --api-key-file: {error}")
+        if not a.dry_run and not os.environ.get("ANTHROPIC_API_KEY"):
+            ap.error("--harness claude bills API credits: set ANTHROPIC_API_KEY or pass --api-key-file")
+        if a.budget_usd is None or a.budget_usd <= 0:
+            ap.error("--harness claude requires a positive --budget-usd")
+        a.agent_budget_usd = a.agent_budget_usd or a.budget_usd / a.parallel
+        if a.agent_budget_usd > a.budget_usd:
+            ap.error("--agent-budget-usd cannot exceed --budget-usd")
     for option, name in ((a.max_checks, 'FZGX_MAX_CHECKS'), (a.max_stale, 'FZGX_MAX_STALE'),
                          (a.max_attempts, 'FZGX_MAX_ATTEMPTS')):
         if option is not None:
