@@ -157,6 +157,8 @@ def split_inits(body: str, name: str) -> List[Tuple[str, str]]:
         if not m:
             break
         dm = DECL_RE.match(l.rstrip("\n"))
+        if not dm:  # a declaration DECL_RE cannot split (fn_15_5460) cannot take a folded init
+            break
         new_line = f"{indent}{dm.group(1)} {dm.group(2)}{dm.group(3)} = {m.group(2)};\n"
         text = text.replace(l, new_line, 1)
         text = text.replace(m.group(0), "\n" if m.group(0).startswith("\n") else "", 1)
