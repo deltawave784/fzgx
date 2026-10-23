@@ -77301,6 +77301,18 @@
   },
   {
     "module": "sel",
+    "source": "rel/sel/sel/fn_10_17E44.c",
+    "symbols": [
+      "fn_10_17E44"
+    ],
+    "status": "nonmatching",
+    "mw_version": "GC/2.5",
+    "extra_cflags": [],
+    "tu": "rel/sel/sel.c",
+    "pool": true
+  },
+  {
+    "module": "sel",
     "source": "rel/sel/sel/fn_10_18A50.c",
     "symbols": [
       "fn_10_18A50"
