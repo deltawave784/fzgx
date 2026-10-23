@@ -1292,6 +1292,195 @@ void fn_1_32A40(Racer *racer) {
 }
 /* fzgx:end fn_1_32A40 */
 
+/* fzgx:begin fn_1_331EC pool */
+typedef struct Track {
+ u8 pad0[0xfc]; f32 unk_FC, unk_100; u8 pad104[0x14]; s32 unk_118,unk_11C;
+} Track;
+typedef struct Racer {
+ u32 flags; s16 id,slot; u8 pad8[0x174]; f32 speed; u8 pad180[4]; f32 distance;
+ u8 pad188[0x6c]; f32 a,b,c,d,e; u8 pad208[0x18]; f32 x; u8 pad224[8]; f32 y;
+ u8 pad230[0x244]; s8 controller; u8 pad475[0x27]; Track *track; u8 pad4a0[0x3c]; f32 factor;
+ u8 pad4e0[0xac]; u32 flags58c; u8 state;
+} Racer;
+typedef struct Config { u32 flags; u8 pad4; u8 mode; u8 pad6[0x26]; Track *track; u8 pad30[0x74]; u16 lock; u8 pada6[0x2a]; void (*callback)(struct Config*,Racer*); } Config;
+/* The TU's .bss objects, in retail layout order: MWCC addresses them off one
+   section base, materialising an object's address for any non-zero field. */
+static u8 fzgx_obj_lbl_1_bss_3C00[4];
+#define s_bss_0 fzgx_obj_lbl_1_bss_3C00
+static u8 s_bss_4[0x26];
+static s16 s_phase;
+static u8 s_bss_2C[4];
+static Config s_cfg;
+static u8 s_bss_104[0x1624-0x104];
+static u8 s_dirty;
+static u8 s_bss_1628[0x17f8-0x1628];
+static u8 *s_entries[4];
+static u8 s_bss_1808[0x22048-0x1808];
+static s16 s_values[4];
+static u8 s_bss_22050[0x22f20-0x22050];
+static u8 s_flags[4];
+static u8 s_bss_22F24[0x1c];
+static f32 s_last_distance;
+static f32 s_best_distance;
+static s32 s_active;
+#pragma section code_type ".fzgxpool"
+/* Reads every object once, in layout order, so MWCC emits them in that order. */
+void fzgx_bss_primer(volatile u32 *p) {
+ *p = s_bss_0[0]; *p = s_bss_4[0]; *p = s_phase; *p = s_bss_2C[0]; *p = s_cfg.flags; *p = s_bss_104[0];
+ *p = s_dirty; *p = s_bss_1628[0]; *p = (u32)s_entries[0]; *p = s_bss_1808[0];
+ *p = s_values[0]; *p = s_bss_22050[0]; *p = s_flags[0]; *p = s_bss_22F24[0];
+ *p = s_last_distance; *p = s_best_distance; *p = s_active;
+}
+#pragma section code_type ".text"
+const u32 fzgx_pool_table_0[1] = {0xFFFFFF00};
+#pragma section code_type ".fzgxpool"
+/* Volatile stores retain the shared literal pool's retail order. */
+void fzgx_pool_primer_4(volatile f32 *p, volatile f64 *d, u32 x) {
+ *p=0.0f; *p=15.0f; *p=1.0f; *p=10.0f; *p=1.25f;
+ *p=0.1f; *p=0.9f; *p=0.0006f; *p=0.4f; *p=0.75f; *p=70.0f;
+ *p=0.5f; *p=36.0f; *p=16.0f; *p=45.0f; *p=0.0008f; *p=18.0f; *p=50.0f;
+ *d=(f64)x;
+}
+#pragma section code_type ".text"
+// Volatile stores retain native shared-pool literals in retail order.
+extern u8 lbl_1_data_5F6C[], lbl_1_data_5FA8[], lbl_1_data_5FE0[], lbl_1_data_6020[], lbl_1_data_605C[], lbl_1_data_609C[], lbl_1_data_60CC[], lbl_1_data_6104[], lbl_1_data_613C[], lbl_1_data_617C[], lbl_1_data_61BC[], lbl_1_data_61C8[], lbl_1_data_62C0[], lbl_1_data_62C4[];
+const u32 fzgx_pool_table_58[52] = {0};
+#pragma section code_type ".fzgxpool"
+/* Volatile stores retain the shared literal pool's retail order. */
+void fzgx_pool_primer_128(volatile f32 *p, volatile f64 *d, s32 x) { *p=0.8f; *p=80.0f; *p=60.0f; *d=(f64)x; }
+#pragma section code_type ".text"
+const u32 fzgx_pool_table_140[2]={0,0xFFFFFF00};
+#pragma section code_type ".fzgxpool"
+/* Volatile stores retain the shared literal pool's retail order. */
+void fzgx_pool_primer_148(volatile f32 *p) { *p=470.0f; *p=0.0625f; *p=14.0f; *p=127.0f; *p=0.25f; }
+#pragma section code_type ".text"
+const u32 fzgx_pool_table_15C[3]={0x03E8FED4,0xFE70FE0C,0xFE0CFE0C};
+#pragma section code_type ".fzgxpool"
+/* Volatile stores retain the shared literal pool's retail order. */
+void fzgx_pool_primer_168(volatile f32 *p) { *p=10000.0f; *p=15000.0f; *p=9999.0f; }
+#pragma section code_type ".text"
+const u32 fzgx_pool_table_174[2]={0xFFFFFF00,0x80808000};
+#pragma section code_type ".fzgxpool"
+/* Volatile stores retain the shared literal pool's retail order. */
+void fzgx_pool_primer_17C(volatile f32 *p) { *p=320.0f; *p=240.0f; *p=280.0f; *p=200.0f; *p=40.0f; *p=30.0f; }
+#pragma section code_type ".text"
+const u32 fzgx_pool_table_194[5]={0x80808000,0xFFFFFF00,0x80808000,0xFFFFFF00,0xFFFFFF00};
+const u32 fzgx_pool_table_1A8[2]={0,0};
+const u32 fzgx_pool_table_1B0[1]={0xFFFFFF00};
+#pragma section code_type ".fzgxpool"
+/* Volatile stores retain the shared literal pool's retail order. */
+void fzgx_pool_primer_1B4(volatile f32 *p) { *p=0.05f; *p=0.15f; *p=0.08f; *p=2.0f; *p=4.0f; *p=255.0f; *p=1.1f; *p=38.0f; *p=20.0f; *p=180.0f; *p=3.0f; *p=0.0002f; *p=100.0f; *p=75.0f; *p=0.0004f; *p=150.0f; }
+#pragma section code_type ".text"
+const u32 fzgx_pool_table_1F4[7]={0xFFF200FF,0xFFF200FF,0x80808080,0xFFFFFF96,0xFFF200FF,0xFFF200FF,0xFFFFFF96};
+#pragma section code_type ".fzgxpool"
+/* Volatile stores retain the shared literal pool's retail order. */
+void fzgx_pool_primer_210(volatile f32 *p, volatile f64 *d) { *p=0.01f; *p=1000.0f; *d=20.0; }
+#pragma section code_type ".text"
+const u32 fzgx_pool_table_220[4]={0x80000000,0x40000000,0x20000000,0x10000000};
+#pragma section code_type ".fzgxpool"
+/* Volatile stores retain the shared literal pool's retail order. */
+void fzgx_pool_primer_230(volatile f32 *p) { *p=620.0f; *p=140.0f; *p=3000.0f; *p=0.00033333333f; *p=0.3f; *p=0.7f; *p=0.2f; *p=0.6f; }
+#pragma section code_type ".text"
+typedef struct Input { u32 head; f32 f4,f8,fc,f10,f14; u8 pad18[0x1c]; f32 f34; u8 pad38[0xc]; f32 f44; u8 pad48[0x70]; } Input;
+extern s32 fn_1_F2F34(void);
+extern u8 fn_1_3BB0(u32);
+extern u8 lbl_1_data_2B60[4],lbl_1_bss_D70[8];
+extern u8 fn_1_84794(s16);
+extern u32 *fn_1_82EDC(s16,s16,u32*);
+extern void fn_1_22B10(Input*,f32);
+extern void fn_1_22E8C(Racer*,Input*);
+static inline f32 track_total(Track *t) {
+ f32 distance=(f32)t->unk_11C*t->unk_FC;
+ return t->unk_100+distance;
+}
+static inline void apply_handicap(Input *in, Racer *r, f32 diff) {
+ if(diff>3000.0f) diff=3000.0f;
+ diff*=0.00033333333f;
+ in->fc += (f32)(1.1f*diff);
+ in->f8 += (f32)(0.3f*diff);
+ in->f10 += (f32)(0.3f*(f32)(in->f10*diff));
+ in->f44 -= (f32)(0.7f*(f32)(in->f44*diff));
+ in->f34 += (f32)(0.2f*(f32)(in->f34*diff));
+ r->factor=1.0f-(f32)(0.2f*diff);
+}
+void fn_1_331EC(Racer *r) {
+ Input in;
+ s32 freeze=0;
+ f32 diff;
+ s16 slot,controller;
+ s16 i;
+ if (!(s_cfg.flags & 0x10) && r->track->unk_118 < 1) r->flags &= ~0x40;
+ if(s_cfg.callback) s_cfg.callback(&s_cfg,r);
+ if (s_cfg.lock) r->flags &= ~0x10000000;
+ if (s_cfg.mode==2) {
+  if (!(r->flags & 0x10000) && (r->distance>100.0f || r->distance>s_best_distance)) r->flags58c |=0x40;
+  s_last_distance=r->distance;
+ }
+ if ((s_cfg.flags&0x40000) && !s_cfg.lock && !(r->flags&0x200)) {
+  if(r->speed<1.0f) r->c=0.0f;
+  r->a=0.0f; r->e=0.5f; r->b=0.0f; r->d=0.0f;
+  r->flags &= 0xfff7dfff; r->flags &=0xfffdfff7; r->flags |=0x10000000;
+ } else if ((s_cfg.flags&0x80) && !(r->flags&0x200)) {
+  if(r->speed<1.0f) r->c=0.0f;
+  r->a=0.0f; r->e=1.0f; r->b=0.0f; r->d=0.0f;
+  r->flags &=0xfff7dfff; r->flags &=0xfffdfff7;
+ } else if(s_phase<=40) {
+  r->c=0.0f; r->a=0.0f; r->b=0.0f;
+  if(s_cfg.flags&0x100) {
+   freeze=1; if(!(r->flags&0x20000000)) r->d=0.6f;
+   r->e=0.0f; r->flags &=0xfff7dfbf; r->flags &=0xfffdfff7;
+  }
+ } else if(s_cfg.flags&0x80000) {
+  r->c=0.0f; r->a=0.0f; r->e=0.3f; r->b=0.0f; r->d=0.0f;
+  r->flags &=0xfff7dfff; r->flags &=0xfffdfff7;
+ }
+ if(s_cfg.mode==2 && !(r->flags&0x10000) && (r->flags58c&0x40)) s_cfg.mode=6;
+ if(r->controller!=-1 && s_active && !r->state) {
+  if(s_cfg.flags&0x800000) {
+   if(!fn_1_F2F34()) {
+    r->state=fn_1_3BB0(r->controller);
+    (&lbl_1_bss_7EFD8.unk_38)[r->id]=r->state;
+    (&lbl_1_bss_7EFD8.unk_3C)[r->id]=lbl_1_data_2B60[r->id];
+    lbl_1_bss_D70[r->id]=lbl_1_data_2B60[r->id];
+   } else {
+    r->state=(&lbl_1_bss_7EFD8.unk_38)[r->id];
+    lbl_1_bss_D70[r->id]=(&lbl_1_bss_7EFD8.unk_3C)[r->id];
+   }
+  } else {
+   lbl_1_bss_D70[r->id]=lbl_1_data_2B60[r->id];
+   r->state=fn_1_3BB0(r->controller);
+  }
+ } else if(!(s_cfg.flags&0x800) && s_active && r->controller!=-1) {
+  s8 state=fn_1_3BB0(r->controller);
+  if(state && r->state!=state) {s_dirty=1; r->state=state;}
+ }
+ controller=r->controller; slot=r->slot;
+ if(controller==-1) {
+  for(i=0;i<4;i++) {
+   if(r->id==fn_1_84794(i)) {controller=i;break;}
+  }
+ }
+ fn_1_82EDC(controller,slot,(u32*)&in);
+ if(freeze && !(r->flags&0x4000000)) { r->x=in.f8; r->y=in.fc; }
+ else {
+  u8 *p=s_entries[r->id];
+  if(p) { f32 v = p[0xb]; v *= 0.01f; fn_1_22B10(&in,v); }
+  else { f32 v = s_values[r->id]; v *= 0.01f; fn_1_22B10(&in,v); }
+ }
+ if(s_cfg.flags&0x20000) {
+  Track *rt;
+  Track *t=s_cfg.track;
+  if(!(r->flags&0x4000200)) {
+   f32 a,b;
+   apply_handicap(&in,r,track_total(t)-track_total(r->track));
+  }
+ }
+ if(!(r->flags&0x4000000) && !freeze) fn_1_22E8C(r,&in);
+ if(s_cfg.flags&0x8000) r->flags |=1;
+ if(s_flags[r->id] && s_phase==42) r->flags |=1;
+}
+/* fzgx:end fn_1_331EC */
+
 /* fzgx:begin fn_1_33890 */
 typedef struct {
     u8 pad_0[0x5];

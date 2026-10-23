@@ -8393,3 +8393,6 @@ rel/main_rel/memcard/fn_1_C40A0.c:
 
 rel/main_rel/car/fn_1_86A2C.c:
 	.text       start:0x00086A2C end:0x00086E08 align:4
+
+rel/main_rel/game/fn_1_331EC.c:
+	.text       start:0x000331EC end:0x00033890 align:4
