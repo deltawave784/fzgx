@@ -79510,6 +79510,17 @@
   },
   {
     "module": "story",
+    "source": "rel/story/story_mode/fn_7_232C.c",
+    "symbols": [
+      "fn_7_232C"
+    ],
+    "status": "matching",
+    "mw_version": "GC/1.3",
+    "extra_cflags": [],
+    "tu": "rel/story/story_mode.c"
+  },
+  {
+    "module": "story",
     "source": "rel/story/story_mode/fn_7_235C.c",
     "symbols": [
       "fn_7_235C"

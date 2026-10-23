@@ -1315,6 +1315,31 @@ int fn_7_2324(void) {
 }
 /* fzgx:end fn_7_2324 */
 
+/* fzgx:begin fn_7_232C */
+struct fn_7_232C_bss {
+    u8 pad_0[0x24];
+    u32 unk_24;
+    u8 pad_28[0x298 - 0x28];
+    s32 unk_298;
+    u8 pad_29C[4];
+    u32 unk_2A0;
+};
+
+extern struct fn_7_232C_bss lbl_7_bss_0;
+
+#pragma opt_propagation off
+s32 fn_7_232C(u32 *arg0) {
+    s32 ret = 0;
+    struct fn_7_232C_bss *bss = &lbl_7_bss_0;
+    bss->unk_24 = (bss->unk_2A0 = *arg0) & 2;
+    if (bss->unk_298 != 0) {
+        ret = 2;
+    }
+    return ret;
+}
+#pragma opt_propagation reset
+/* fzgx:end fn_7_232C */
+
 /* fzgx:begin fn_7_235C */
 extern struct fn_7_235C_lbl_7_bss_48 lbl_7_bss_48;
 
