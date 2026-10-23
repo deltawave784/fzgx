@@ -8375,3 +8375,6 @@ rel/main_rel/car/fn_1_83694.c:
 
 rel/main_rel/driver/fn_1_A89B0.c:
 	.text       start:0x000A89B0 end:0x000A8D4C align:4
+
+rel/main_rel/bg_cas/fn_1_FFA0C.c:
+	.text       start:0x000FFA0C end:0x000FFC60 align:4
