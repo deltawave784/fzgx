@@ -4596,6 +4596,64 @@ void fn_1_128F10(void) {
 }
 /* fzgx:end fn_1_128F10 */
 
+/* fzgx:begin fn_1_128F54 noprologue */
+#include "dolphin/types.h"
+#include "rel/main_rel/accessory.h"
+
+extern s8 fn_1_86624(void);
+extern s32 fn_1_58C4(void);
+extern s16 fn_1_6B48(s32);
+extern f32 fn_1_8CAF4(u32, s32);
+extern const f32 lbl_1_rodata_8068;
+extern const f32 lbl_1_rodata_806C[];
+
+void fn_1_128F54(void)
+{
+    struct { u32 value; } entries;
+    u32 count;
+    struct { u32 value; } machine;
+    u32 i;
+    u32 j;
+    s32 found;
+    f32 value;
+    s32 tmp_call1;
+
+    tmp_call1 = fn_1_86624();
+    count = (s8)tmp_call1;
+    entries.value = fn_1_58C4();
+
+    for (i = 0; i < entries.value; i++) {
+        machine.value = fn_1_6B48(i);
+        if (machine.value == (u32)-1) {
+            (&lbl_1_bss_89770.unk_0)[i] = lbl_1_rodata_8068;
+            (&lbl_1_bss_89760.unk_0)[i] = 0;
+        } else {
+            found = 0;
+            for (j = 0; j < count; j++) {
+                if (machine.value != j) {
+                    value = fn_1_8CAF4(machine.value, j);
+                    if (!(value > lbl_1_rodata_806C[0])) {
+                        if (found == 0) {
+                            (&lbl_1_bss_89770.unk_0)[i] = value;
+                            found = 1;
+                            (&lbl_1_bss_89760.unk_0)[i] = j;
+                        }
+                        if (value > (&lbl_1_bss_89770.unk_0)[i]) {
+                            (&lbl_1_bss_89760.unk_0)[i] = j;
+                            (&lbl_1_bss_89770.unk_0)[i] = value;
+                        }
+                    }
+                }
+            }
+            if (found == 0) {
+                (&lbl_1_bss_89760.unk_0)[i] = 0;
+                (&lbl_1_bss_89770.unk_0)[i] = lbl_1_rodata_8068;
+            }
+        }
+    }
+}
+/* fzgx:end fn_1_128F54 */
+
 /* fzgx:begin fn_1_12999C noprologue */
 #include "types.h"
 
