@@ -8366,3 +8366,6 @@ rel/main_rel/ghost/fn_1_EE530.c:
 
 rel/main_rel/_prolog/fn_1_1ACC.c:
 	.text       start:0x00001ACC end:0x00001C00 align:4
+
+rel/main_rel/game/fn_1_37E98.c:
+	.text       start:0x00037E98 end:0x000382C4 align:4
