@@ -262,8 +262,9 @@ def run_one(p: Project, harness: str, model: str, symbol: str, idx: int, timeout
             prompt = (f'SYMBOL={symbol} AGENT_ID={agent_id} MODEL={model}. The runner has already assigned '
                       'this function and installed its work copy. Continue from the supplied C and initial diff.\n'
                       + json.dumps(task))
-            cmd[cmd.index('-p') + 1] = prompt
-            stdin = None
+            # The task (context and seed C) exceeds Windows' 32 KB command line: send it on stdin.
+            del cmd[cmd.index('-p') + 1]
+            stdin = prompt
             (directory / f'{symbol}.prompt.txt').write_text(prompt + '\n')
             # A terminal tool call writes result_file before its MCP response is
             # returned. Stop the process group before another model request.
