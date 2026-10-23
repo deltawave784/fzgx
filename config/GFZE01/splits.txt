@@ -6176,3 +6176,6 @@ dol/fn_8006B99C.c:
 
 dol/GXInit.c:
 	.text       start:0x800309FC end:0x8003128C align:4
+
+dol/fn_800371F8.c:
+	.text       start:0x800371F8 end:0x8003726C align:4
