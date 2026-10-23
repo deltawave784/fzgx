@@ -8408,3 +8408,6 @@ rel/main_rel/stcoli/fn_1_224F8.c:
 
 rel/main_rel/load/fn_1_45964.c:
 	.text       start:0x00045964 end:0x00045A58 align:4
+
+rel/main_rel/bg_aur/fn_1_152A28.c:
+	.text       start:0x00152A28 end:0x00152CB4 align:4

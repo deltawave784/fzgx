@@ -613,6 +613,87 @@ s32 fn_1_152970(s16 *out_group, s16 *out_entry, s16 key, u32 mask, Fn152970Entry
 }
 /* fzgx:end fn_1_152970 */
 
+/* fzgx:begin fn_1_152A28 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/bg_aur.h"
+
+typedef struct Cell {
+    s16 id;
+    u8 pad[2];
+    u32 flags;
+} Cell;
+
+static inline s32 find_cell(s16 *out_group, s16 *out_entry, s16 key, u32 mask, Cell *entries, s16 group_count, s16 entry_count) {
+    s16 count;
+    s16 group;
+    s16 entry;
+
+    if (key == -1) {
+        return 0;
+    }
+
+    count = entry_count;
+    for (group = 0; group < group_count; group++) {
+        for (entry = 0; entry < count; entry++) {
+            if ((entries[(group * count) + entry].flags & mask) == 0 &&
+                key == entries[(group * count) + entry].id) {
+                *out_group = group;
+                *out_entry = entry;
+                return 1;
+            }
+        }
+    }
+    return 0;
+}
+
+static inline s32 get_cell(s16 x, s16 y, Cell *table, s16 multiplier) {
+    s16 value;
+
+    if (lbl_1_bss_8B3A0.unk_94 & 0x00020000) {
+        if (table[(x * multiplier) + y].flags & ~0x3FFFFFFF)
+            return -1;
+    } else {
+        if (table[(x * multiplier) + y].flags & 0x40000000)
+            return -1;
+    }
+
+    if (table[(x * multiplier) + y].id == -1)
+        return -1;
+    return table[(x * multiplier) + y].id;
+}
+
+/* Step from the cell holding `key` by (dx, dy), wrapping around the grid and
+ * skipping cells that are hidden or empty; returns the id of the cell reached. */
+s32 fn_1_152A28(s16 key, s16 dx, s16 dy, Cell *table, s16 rows, s16 cols) {
+    s32 id;
+    s16 entry;
+    s16 group;
+    s16 total;
+
+    total = rows * cols;
+    if (lbl_1_bss_8B3A0.unk_94 & 0x00020000) {
+        find_cell(&group, &entry, key, ~0x3FFFFFFF, table, rows, cols);
+    } else {
+        find_cell(&group, &entry, key, 0x40000000, table, rows, cols);
+    }
+
+    if (dy != 0) {
+        do {
+            entry = (entry + dy + total) % cols;
+            id = get_cell(group, entry, table, cols);
+        } while ((s16)id < 0);
+    }
+    if (dx != 0) {
+        do {
+            group = (group + dx + total) % rows;
+            id = get_cell(group, entry, table, cols);
+        } while ((s16)id < 0);
+    }
+    return id;
+}
+/* fzgx:end fn_1_152A28 */
+
 /* fzgx:begin fn_1_152CB4 */
 typedef struct Fn152CB4Cell {
     s16 id;
