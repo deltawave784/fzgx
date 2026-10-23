@@ -6,7 +6,7 @@
 Codex sessions share one app-server process. The runner assigns functions,
 serves bound dynamic tools, enforces attempt limits, and stops completed turns.
 Local compiler concurrency is independent of the number of model sessions.
-Claude's legacy CLI transport remains available with --harness claude.
+--harness claude runs Claude Agent SDK sessions on API credits (tools/claude_sdk_worker.py).
 """
 
 from __future__ import annotations
@@ -50,28 +50,12 @@ def codex_binary() -> str:
             return builds[0]
     return 'codex'
 
+CLAUDE_TERMINAL_GRACE = 90  # seconds an SDK session may run after its terminal tool call
 CLAUDE_MODELS = {"haiku": "claude-haiku-5-5", "sonnet": "claude-sonnet-5-5", "opus": "claude-opus-5-5",
                  "fable": "claude-fable-5-1"}
 # Matcher instructions per tier: --bare skips project agent discovery, so the body is passed explicitly.
 CLAUDE_AGENT_FILES = {"haiku": "matcher-mid.md", "sonnet": "matcher-mid.md", "opus": "matcher-large.md",
                       "fable": "matcher-large.md"}
-
-
-def claude_binary() -> str:
-    """`claude` from the PATH, else the newest CLI the Claude desktop app installed
-    (%APPDATA%/Claude/claude-code/<version>/<build>/claude.exe), which is not on the PATH."""
-    import glob
-    import shutil
-    found = shutil.which('claude')
-    if found:
-        return found
-    roaming = os.environ.get('APPDATA')
-    if roaming:
-        builds = sorted(glob.glob(os.path.join(roaming, 'Claude', 'claude-code', '*', '*', 'claude.exe')),
-                        key=os.path.getmtime, reverse=True)
-        if builds:
-            return builds[0]
-    return 'claude'
 
 
 def claude_agent_prompt(model: str, directory: Path) -> Path:
@@ -129,13 +113,11 @@ def select_tu(p: Project, module: str, tu_files: List[str], max_size: int = 0, r
 
 
 def claude_cmd(symbol: str, agent_id: str, model: str, system_prompt: Path, agent_budget: float) -> List[str]:
-    """--bare authenticates strictly with ANTHROPIC_API_KEY (API credits), never the subscription login."""
-    prompt = f"SYMBOL={symbol}  AGENT_ID={agent_id}. Match this function following your loop."
-    return [claude_binary(), "--bare", "-p", prompt, "--model", CLAUDE_MODELS.get(model, model),
-            "--append-system-prompt-file", str(system_prompt),
-            "--output-format", "json", "--no-session-persistence", "--max-budget-usd", f"{agent_budget:.2f}",
-            "--mcp-config", ".mcp.json", "--strict-mcp-config", "--disable-slash-commands",
-            "--allowedTools", ",".join(MATCHER_TOOLS)]
+    """One Agent SDK session (tools/claude_sdk_worker.py, prompt on stdin). The SDK bills API credits;
+    its --bare CLI authenticates only with ANTHROPIC_API_KEY, never the subscription login."""
+    return [sys.executable, str(ROOT / 'tools' / 'claude_sdk_worker.py'), '--model', CLAUDE_MODELS.get(model, model),
+            '--system-prompt-file', str(system_prompt), '--budget-usd', f'{agent_budget:.2f}',
+            '--mcp-config', str(ROOT / '.mcp.json'), '--allowed-tools', ','.join(MATCHER_TOOLS), '--cwd', str(ROOT)]
 
 
 def codex_server_cmd(model: str, provider: str, effort: Optional[str], fast: bool = False) -> List[str]:
@@ -238,6 +220,7 @@ def run_one(p: Project, harness: str, model: str, symbol: str, idx: int, timeout
             raise RuntimeError((cp.stderr or cp.stdout or 'worker CLI returned no result')[-2000:])
 
     out, rc, proc, setup_secs = '', 0, None, 0.0
+    killed_after_terminal = False
     try:
         assignment = worker_cli('claim', symbol, '--agent', agent_id,
                                 *([] if revise else ['--check']), timeout_s=timeout)
@@ -262,9 +245,7 @@ def run_one(p: Project, harness: str, model: str, symbol: str, idx: int, timeout
             prompt = (f'SYMBOL={symbol} AGENT_ID={agent_id} MODEL={model}. The runner has already assigned '
                       'this function and installed its work copy. Continue from the supplied C and initial diff.\n'
                       + json.dumps(task))
-            # The task (context and seed C) exceeds Windows' 32 KB command line: send it on stdin.
-            del cmd[cmd.index('-p') + 1]
-            stdin = prompt
+            stdin = prompt  # the task (context and seed C) exceeds Windows' 32 KB command line
             (directory / f'{symbol}.prompt.txt').write_text(prompt + '\n')
             # A terminal tool call writes result_file before its MCP response is
             # returned. Stop the process group before another model request.
@@ -272,6 +253,7 @@ def run_one(p: Project, harness: str, model: str, symbol: str, idx: int, timeout
                                     stdin=subprocess.PIPE if stdin else subprocess.DEVNULL,
                                     **compat.new_group(), env=env)
             first = True
+            terminal_seen = None
             while True:
                 remaining = timeout - (time.time() - t0)
                 if remaining <= 0:
@@ -282,7 +264,11 @@ def run_one(p: Project, harness: str, model: str, symbol: str, idx: int, timeout
                     break
                 except subprocess.TimeoutExpired:
                     first = False
-                    if result_file.exists():
+                    if result_file.exists() and terminal_seen is None:
+                        terminal_seen = time.time()
+                    # An SDK session prints its cost only when it exits: give it time to end its turn.
+                    if terminal_seen is not None and time.time() - terminal_seen >= CLAUDE_TERMINAL_GRACE:
+                        killed_after_terminal = True
                         compat.kill_group(proc.pid, force=False)
                         try:
                             so, se = proc.communicate(timeout=5)
@@ -307,10 +293,14 @@ def run_one(p: Project, harness: str, model: str, symbol: str, idx: int, timeout
         out += '\nHarness error: ' + str(error)
         rc = 1
     info = parse_claude(out)
+    if proc and not info["cost"] and (killed_after_terminal or rc == -9):
+        # Killed before the SDK printed its cost: count the whole session cap so the batch budget holds.
+        info["cost"], info["cost_estimated"] = agent_budget, True
     key = api._key(p, symbol)
     l = Ledger()
-    att = l.db.execute("SELECT * FROM attempts WHERE symbol=? AND agent=? ORDER BY id DESC LIMIT 1",
-                       (key, agent_id)).fetchone()
+    # The release's automatic final-copy row is bookkeeping, not the agent's outcome.
+    att = l.db.execute("SELECT * FROM attempts WHERE symbol=? AND agent=? AND COALESCE(outcome, '') != 'released-final' "
+                       "ORDER BY id DESC LIMIT 1", (key, agent_id)).fetchone()
     terminal = att and att["outcome"] in ("matched", "matched-pool", "released", "shadow-matched", "shadow-released")
     # Tool outcomes and counters are authoritative; models sometimes misformat or miscount RESULT.
     outcome = att["outcome"].removeprefix("shadow-") if terminal else (

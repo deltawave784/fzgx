@@ -264,11 +264,13 @@ Rules that hold for everyone:
   Sonnet and Gemini Flash were tried and dropped) (headless, one report
   per batch, periodic live verification and a final drain). Never use in-process subagents.
 - Claude API-credit batches: `--harness claude --model opus|sonnet|haiku|fable --budget-usd N`
-  (required) runs `claude --bare -p` sessions, which authenticate only with `ANTHROPIC_API_KEY`
-  (or `--api-key-file PATH`, kept outside the repo), never the subscription login. Each session
-  gets `--max-budget-usd` (`--agent-budget-usd`, default budget/parallel) and the runner reserves
-  every running session's cap, so a batch cannot pass `--budget-usd`. The matcher-large/-mid
-  agent body is passed as the system prompt because `--bare` skips agent discovery.
+  (required) runs Claude Agent SDK sessions (`tools/claude_sdk_worker.py`, `--bare`), which
+  authenticate only with `ANTHROPIC_API_KEY` (or `--api-key-file PATH`, kept outside the repo),
+  never the subscription login. Promotional API credits cover Agent SDK requests but not Claude
+  Code CLI requests (`claude -p` returned "Credit balance is too low" on the same key). Each
+  session gets `max_budget_usd` (`--agent-budget-usd`, default budget/parallel) and the runner
+  reserves every running session's cap, so a batch cannot pass `--budget-usd`. The
+  matcher-large/-mid agent body is appended to the system prompt (`--bare` skips agent discovery).
 - DeepSeek trials use the same Codex harness: `--provider deepseek --model deepseek-flash`
   selects DeepSeek-V4.1-Flash. Supply `DEEPSEEK_API_KEY` or `--api-key-file PATH`;
   keys stay outside the repository and out of command arguments. The provider and
