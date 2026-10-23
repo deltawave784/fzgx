@@ -972,6 +972,181 @@ void fn_1_EE3F4(void) {
 }
 /* fzgx:end fn_1_EE3F4 */
 
+/* fzgx:begin fn_1_EE530 noprologue */
+#include "types.h"
+#include "rel/main_rel/ghost.h"
+#include "psvec.h"
+
+#pragma fp_contract on
+typedef struct Sig_fn_1_87610_Fn187610Data {
+ u8 pad_000[2]; s8 field_002; u8 pad_003[0x205]; u8 field_208[0x120];
+} Sig_fn_1_87610_Fn187610Data;
+typedef struct Sig_fn_1_87610_Fn187610Object {
+ u8 pad_000[0x328]; s8 field_328; u8 pad_329[7]; void *field_330; u8 pad_334[0x86]; s16 field_3BA;
+} Sig_fn_1_87610_Fn187610Object;
+extern const f32 lbl_1_rodata_6B60, lbl_1_rodata_6BBC, lbl_1_rodata_6BD0, lbl_1_rodata_6C18;
+extern const f32 lbl_1_rodata_6CEC, lbl_1_rodata_6CF0, lbl_1_rodata_6CF4, lbl_1_rodata_6CF8, lbl_1_rodata_6CFC, lbl_1_rodata_6D00;
+extern f32 lbl_8006D0B4(f32);
+extern f32 lbl_8006D668(void *);
+extern s32 fn_1_5910(void);
+extern void OSPanic(const char *, int, const char *, ...);
+extern void fn_1_14E5E4(u32, u32, f32);
+extern void fn_1_556B8(void *);
+extern void fn_1_55FF0(f32);
+extern void fn_1_56000(u8,u8,u8);
+extern void fn_1_5621C(f32,f32,f32,f32);
+extern void fn_1_56298(f32,f32,f32,f32);
+extern void fn_1_681C(u32,u32 *);
+extern void fn_1_875B4(void *,void *,void *,f32);
+extern void fn_1_875EC(void *,void *,void *,f32);
+extern void fn_1_87610(Sig_fn_1_87610_Fn187610Object *,Sig_fn_1_87610_Fn187610Data *);
+extern void fn_80072558(void);
+extern void fn_80074A60(u32,u32);
+extern void fn_80074A6C(void);
+extern void lbl_8006DB74(void *);
+extern void lbl_8006DC20(void);
+extern void lbl_8006DD14(void *,void *);
+extern void lbl_8006DFC4(void *);
+extern void lbl_8006E14C(f32);
+extern u32 lbl_8006DAEC(void);
+extern u32 lbl_8006DCA4(void);
+extern void lbl_8006E0A4(void *);
+
+typedef struct { f32 x,y,z; } EEVec;
+typedef struct { void **model; u32 a,b; } EEModel;
+typedef struct { u8 pad[0x334]; EEModel models[3]; } EEObject;
+#define eeclamp(x,lo,hi) ((x)<(lo)?(lo):((x)>(hi)?(hi):(x)))
+static inline f32 eefade(f32 value) { return lbl_1_rodata_6CEC*(eeclamp(value-lbl_1_rodata_6CF4,lbl_1_rodata_6B60,lbl_1_rodata_6CF0)/lbl_1_rodata_6CF8); }
+#pragma opt_common_subs off
+#pragma opt_lifetimes off
+void fn_1_EE530(void) {
+ Obj_1_bss_7B180 *p_lbl_1_bss_7B180;
+ u32 v2;
+ f32 **v5;
+ u32 *v6;
+ u32 v7, v8, v10, v4, v3, v1;
+ u32 v0;
+ s32 v9;
+ u32 v11;
+ s32 v13;
+ f32 v12;
+ f32 v21;
+ f32 v30,v29,v31,v32,v33,v34,v35;
+ f32 dx;
+ s8 v37;
+ f32 loc_50[12];
+ f32 loc_20[12];
+ f32 loc_14[3];
+ f32 loc_8[3];
+ p_lbl_1_bss_7B180 = &lbl_1_bss_7B180;
+ if ((s32)p_lbl_1_bss_7B180->unk_8 != 0) {
+ if (p_lbl_1_bss_7B180->unk_174E <= 1) v0=0;
+ else if (p_lbl_1_bss_7B180->unk_174E <= 3) v0=1;
+ else v0=2;
+
+ v1=(u32)p_lbl_1_bss_7B180->arr_38C4;
+ v2=(u32)&p_lbl_1_bss_7B180->unk_39B4;
+ v3=(u32)&p_lbl_1_bss_7B180->unk_39F0;
+ v4=(u32)&p_lbl_1_bss_7B180->unk_1800;
+ v5=(f32 **)&p_lbl_1_bss_7B180->unk_1600;
+ v6=(u32 *)&p_lbl_1_bss_7B180->unk_1824;
+ v7=(u32)&p_lbl_1_bss_7B180->unk_17A8;
+ v8=(u32)&p_lbl_1_bss_7B180->unk_1794;
+ v9=-32767;
+ for(v10=0;v10<p_lbl_1_bss_7B180->unk_174E;v10++) {
+ lbl_8006DD14((void *)v1,loc_50);
+ v13=*(s32 *)v3;
+ *(EEVec *)loc_14=*(EEVec *)v2;
+ if(v9<v13) v9=v13;
+ if (*(u16 *)v4>1 &&
+ !((*(f32 **)v5)[*(u32 *)v6-1] <= (f32)*(u16 *)v4)) {
+ v12=lbl_1_rodata_6B60;
+ fn_1_56298(v12,v12,v12,v12);
+ v12=lbl_1_rodata_6BD0;
+ fn_1_5621C(v12,v12,v12,v12);
+ fn_1_681C((u8)fn_1_5910(),(u32 *)loc_8);
+ psvec_sub(loc_14,loc_8,loc_8);
+ v12=loc_8[0]*loc_8[0];
+ v12=loc_8[1]*loc_8[1]+v12;
+ v12=loc_8[2]*loc_8[2]+v12;
+ v21=lbl_8006D0B4(v12);
+ lbl_8006D668(loc_8);
+ psvec_scale(loc_8,lbl_1_rodata_6CFC,loc_8);
+ psvec_add(loc_14,loc_8,loc_8);
+ fn_1_56000(1,3,1);
+ lbl_8006DCA4();
+ lbl_8006E0A4(loc_8);
+ lbl_8006DFC4(loc_50);
+ lbl_8006E14C((lbl_1_rodata_6CFC+v21)/v21);
+ fn_80072558();
+ fn_1_55FF0(lbl_1_rodata_6D00);
+ if ((s32)p_lbl_1_bss_7B180->unk_20 != 0 && v10==p_lbl_1_bss_7B180->unk_174E-1) {
+ v12=lbl_1_rodata_6C18; fn_1_5621C(v12,v12,lbl_1_rodata_6BD0,lbl_1_rodata_6BD0);
+ } else {v12=lbl_1_rodata_6BD0; fn_1_5621C(v12,v12,lbl_1_rodata_6C18,v12);}
+ v11=*(u32 *)v7;
+ if(v11) {
+ fn_1_14E5E4(v11,*(s16 *)((u8 *)*(u32 *)v8+954),lbl_1_rodata_6D00);
+ } else {
+ v11=*(u32 *)v8;
+ if(v11) {
+ fn_1_556B8(*((EEObject *)v11)->models[v0].model);
+ lbl_8006DAEC();
+ v11=*(u32 *)v8;
+ fn_1_87610((Sig_fn_1_87610_Fn187610Object *)v11,(Sig_fn_1_87610_Fn187610Data *)v11);
+ v11=*(u32 *)v8;
+ fn_1_875B4((void *)v11,(void *)v11,(void *)(s8)*(s16 *)((u8 *)v11+954),lbl_1_rodata_6D00);
+ lbl_8006DC20();
+ }}
+ v12=lbl_1_rodata_6B60; fn_1_5621C(v12,v12,v12,v12);
+ fn_1_56000(1,3,1);
+ fn_1_681C((u8)fn_1_5910(),(u32 *)loc_8);
+ dx=loc_8[0];
+ dx-=loc_14[0];
+ v29=loc_8[1];
+ v29-=loc_14[1];
+ v30=loc_8[2];
+ v30-=loc_14[2];
+ v31=dx*dx;
+ v31=v29*v29+v31;
+ v31=v30*v30+v31;
+ v33=eeclamp(eefade(v31),lbl_1_rodata_6B60,lbl_1_rodata_6BBC);
+ lbl_8006DCA4();lbl_8006E0A4(loc_14);lbl_8006DFC4(loc_50);fn_80072558();fn_80074A60(4,1);
+ if((s32)p_lbl_1_bss_7B180->unk_20!=0 && v10==p_lbl_1_bss_7B180->unk_174E-1) {
+ v12=lbl_1_rodata_6C18;fn_1_5621C(v12,v12,lbl_1_rodata_6BD0,lbl_1_rodata_6BD0);
+ }else {v12=lbl_1_rodata_6BD0;fn_1_5621C(v12,v12,lbl_1_rodata_6C18,v12);}
+ v11=*(u32 *)v8;
+ if(v11) {
+ v37=(s8)*(s16 *)((u8 *)v11+954);
+ lbl_8006DB74(loc_20);
+ v11=*(u32 *)v8;
+ if((*(u32 *)((u8 *)v11+912)&0x4000000)!=0) {
+ v11=*(u32 *)((u8 *)v11+928);
+ if(!v11) return;
+ fn_1_14E5E4(v11,v37,v33);
+ } else {
+ if((s8)*(u8 *)((u8 *)v11+808)>=41) OSPanic((char *)lbl_1_data_3E62C,3173,(char *)lbl_1_data_3E73C);
+ {
+ u32 object;
+ v11=v37*12;
+ object=*(u32 *)v8;
+ fn_1_556B8(**(void ***)((u8 *)object+v11+820));
+ }
+ lbl_8006DAEC();
+ v11=*(u32 *)v8;
+ fn_1_87610((Sig_fn_1_87610_Fn187610Object *)v11,(Sig_fn_1_87610_Fn187610Data *)v11);
+ v11=*(u32 *)v8;
+ fn_1_875EC((void *)v11,(void *)v11,(void *)(s8)*(s16 *)((u8 *)v11+954),v33);
+ lbl_8006DC20();
+ }}
+ fn_80074A6C();
+ v12=lbl_1_rodata_6BD0;fn_1_5621C(v12,v12,v12,v12);fn_1_56000(1,3,1);
+ }
+ v1+=48; v2+=12; v3+=4; v4+=2; v5++; v6++; v7+=4; v8+=4;
+ }
+ }
+}
+/* fzgx:end fn_1_EE530 */
+
 /* fzgx:begin fn_1_EEB44 noprologue */
 #include "dolphin/types.h"
 #include "game/vec3.h"
