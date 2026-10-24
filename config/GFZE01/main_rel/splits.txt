@@ -8423,3 +8423,6 @@ rel/main_rel/screen_effect/fn_1_7ACDC.c:
 
 rel/main_rel/motasglist/fn_1_442D8.c:
 	.text       start:0x000442D8 end:0x00044884 align:4
+
+rel/main_rel/effect_car/fn_1_71768.c:
+	.text       start:0x00071768 end:0x00071CA0 align:4
