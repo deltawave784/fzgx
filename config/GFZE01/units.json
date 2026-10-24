@@ -18708,6 +18708,16 @@
   },
   {
     "module": "main",
+    "source": "dol/fn_80034BB8.c",
+    "symbols": [
+      "fn_80034BB8"
+    ],
+    "status": "matching",
+    "mw_version": "GC/1.2.5n",
+    "extra_cflags": []
+  },
+  {
+    "module": "main",
     "source": "dol/fn_80034D34.c",
     "symbols": [
       "fn_80034D34"
