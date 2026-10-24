@@ -64827,6 +64827,36 @@
   },
   {
     "module": "main_rel",
+    "source": "rel/main_rel/stcoli/fn_1_28184.c",
+    "symbols": [
+      "fn_1_28184"
+    ],
+    "status": "matching",
+    "mw_version": "GC/1.3.2",
+    "extra_cflags": [],
+    "tu": "rel/main_rel/stcoli.c",
+    "pool": {
+      "...rodata.0": "lbl_1_rodata_840",
+      "@225": "lbl_1_rodata_954+0x180",
+      "@28": "lbl_1_rodata_854",
+      "@202": "lbl_1_rodata_954+0x134",
+      "@51": "lbl_1_rodata_860+0x40",
+      "@125": "lbl_1_rodata_954",
+      "@26": "lbl_1_rodata_84C",
+      "@35": "lbl_1_rodata_860+0x14",
+      "@154": "lbl_1_rodata_954+0x64",
+      "@97": "lbl_1_rodata_860+0xA8",
+      "@36": "lbl_1_rodata_860+0x18",
+      "@163": "lbl_1_rodata_954+0x94",
+      "@226": "lbl_1_rodata_954+0x184",
+      "@71": "lbl_1_rodata_860+0x58",
+      "@31": "lbl_1_rodata_860",
+      "@155": "lbl_1_rodata_954+0x68",
+      "@150": "lbl_1_rodata_954+0x54"
+    }
+  },
+  {
+    "module": "main_rel",
     "source": "rel/main_rel/stcoli/fn_1_28660.c",
     "symbols": [
       "fn_1_28660"

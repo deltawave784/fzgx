@@ -8432,3 +8432,6 @@ rel/main_rel/sel_static_disp/fn_1_1420E0.c:
 
 rel/main_rel/memcard/fn_1_B6B28.c:
 	.text       start:0x000B6B28 end:0x000B7C00 align:4
+
+rel/main_rel/stcoli/fn_1_28184.c:
+	.text       start:0x00028184 end:0x00028660 align:4
