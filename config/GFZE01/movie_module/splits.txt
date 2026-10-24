@@ -2165,3 +2165,6 @@ rel/movie_module/fn_12_1578.c:
 
 rel/movie_module/fn_12_323B0.c:
 	.text       start:0x000323B0 end:0x0003245C align:4
+
+rel/movie_module/fn_12_1F61C.c:
+	.text       start:0x0001F61C end:0x0001FADC align:4
