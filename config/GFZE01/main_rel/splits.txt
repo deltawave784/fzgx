@@ -8435,3 +8435,6 @@ rel/main_rel/memcard/fn_1_B6B28.c:
 
 rel/main_rel/stcoli/fn_1_28184.c:
 	.text       start:0x00028184 end:0x00028660 align:4
+
+rel/main_rel/bitmap/fn_1_487EC.c:
+	.text       start:0x000487EC end:0x00048A0C align:4
