@@ -8429,3 +8429,6 @@ rel/main_rel/effect_car/fn_1_71768.c:
 
 rel/main_rel/sel_static_disp/fn_1_1420E0.c:
 	.text       start:0x001420E0 end:0x001421D8 align:4
+
+rel/main_rel/memcard/fn_1_B6B28.c:
+	.text       start:0x000B6B28 end:0x000B7C00 align:4
