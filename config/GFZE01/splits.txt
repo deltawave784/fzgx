@@ -6188,3 +6188,6 @@ dol/fn_8006B470.c:
 
 dol/fn_8006BC84.c:
 	.text       start:0x8006BC84 end:0x8006BCF8 align:4
+
+dol/fn_80039B38.c:
+	.text       start:0x80039B38 end:0x80039B7C align:4
