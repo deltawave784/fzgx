@@ -1570,6 +1570,76 @@ void fn_1_106B68(void) {
 }
 /* fzgx:end fn_1_106B68 */
 
+/* fzgx:begin fn_1_106D30 pool noprologue */
+#include "types.h"
+#include "dolphin/os/OSThread.h"
+#include "rel/main_rel/bg_common.h"
+
+extern void *fn_1_106CAC(void *);
+extern long fn_80010CB0(OSThread *);
+extern BOOL OSIsThreadTerminated(OSThread *);
+typedef void *(*Sig_OSCreateThread_OSThreadStartFunction)(void *);
+extern BOOL OSCreateThread(OSThread *, Sig_OSCreateThread_OSThreadStartFunction, void *, void *, u32, OSPriority, u16);
+
+typedef struct {
+    u8 pad0[0x248];
+    s32 state;
+    u8 pad1[0x918 - 0x24C];
+    OSThread thread;
+} Bg85280;
+
+/* file-scope objects of the retail TU, in retail order: MWCC addresses them off one section base */
+u32 fzgx_obj_lbl_1_bss_85280[2];
+u32 lbl_1_bss_85288[2];
+u32 fzgx_obj_lbl_1_bss_85290;
+u32 lbl_1_bss_85294;
+u32 lbl_1_bss_85298[136];
+u32 fzgx_obj_lbl_1_bss_854B8[4];
+s32 lbl_1_bss_854B8__fzgx_offset_10;
+u32 lbl_1_bss_854B8__fzgx_offset_14[435];
+OSThread lbl_1_bss_854B8__fzgx_offset_6E0;
+u32 lbl_1_bss_854B8__fzgx_offset_9F8[4];
+u16 lbl_1_bss_854B8__fzgx_offset_A08;
+u8 lbl_1_bss_854B8__fzgx_offset_A09;
+u16 lbl_1_bss_854B8__fzgx_offset_A0A;
+u32 lbl_1_bss_854B8__fzgx_offset_A0C[1023];
+
+#pragma section code_type ".fzgxpool"
+static void fzgx_bss_layout(void) {
+    volatile u8 s;  /* fzgx-allow: S2 layout primer sink: MWCC emits .bss objects in first-access order */
+    s = *(u8 *)&fzgx_obj_lbl_1_bss_85280;
+    s = *(u8 *)&lbl_1_bss_85288;
+    s = *(u8 *)&fzgx_obj_lbl_1_bss_85290;
+    s = *(u8 *)&lbl_1_bss_85294;
+    s = *(u8 *)&lbl_1_bss_85298;
+    s = *(u8 *)&fzgx_obj_lbl_1_bss_854B8;
+    s = *(u8 *)&lbl_1_bss_854B8__fzgx_offset_10;
+    s = *(u8 *)&lbl_1_bss_854B8__fzgx_offset_14;
+    s = *(u8 *)&lbl_1_bss_854B8__fzgx_offset_6E0;
+    s = *(u8 *)&lbl_1_bss_854B8__fzgx_offset_9F8;
+    s = *(u8 *)&lbl_1_bss_854B8__fzgx_offset_A08;
+    s = *(u8 *)&lbl_1_bss_854B8__fzgx_offset_A09;
+    s = *(u8 *)&lbl_1_bss_854B8__fzgx_offset_A0A;
+    s = *(u8 *)&lbl_1_bss_854B8__fzgx_offset_A0C;
+}
+#pragma section code_type ".text"
+
+s32 fn_1_106D30(void) {
+    s32 tmp_call1;
+
+    tmp_call1 = OSIsThreadTerminated(&lbl_1_bss_854B8__fzgx_offset_6E0);
+    if (tmp_call1) {
+        if (lbl_1_bss_854B8__fzgx_offset_10 == 2) {
+            return tmp_call1;
+        }
+        lbl_1_bss_854B8__fzgx_offset_10 = 0;
+        OSCreateThread(&lbl_1_bss_854B8__fzgx_offset_6E0, fn_1_106CAC, NULL, (u8 *)&lbl_1_bss_854B8__fzgx_offset_A08 + 0x1000, 0x1000, 0x1e, 1);
+        return fn_80010CB0(&lbl_1_bss_854B8__fzgx_offset_6E0);
+    }
+    return tmp_call1;
+}
+/* fzgx:end fn_1_106D30 */
+
 /* fzgx:begin fn_1_106DB4 */
 s32 fn_1_106DB4(u32 arg0, u32 arg1) {
     volatile u32 *counter;  /* fzgx: count is re-read after each store in the retail loop */

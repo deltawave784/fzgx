@@ -8438,3 +8438,6 @@ rel/main_rel/stcoli/fn_1_28184.c:
 
 rel/main_rel/bitmap/fn_1_487EC.c:
 	.text       start:0x000487EC end:0x00048A0C align:4
+
+rel/main_rel/bg_common/fn_1_106D30.c:
+	.text       start:0x00106D30 end:0x00106DB4 align:4
