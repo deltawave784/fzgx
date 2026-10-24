@@ -1520,6 +1520,263 @@ void _epilog(void) {
 }
 /* fzgx:end _epilog */
 
+/* fzgx:begin fn_10_D2C noprologue */
+#include "types.h"
+#include "rel/sel/sel.h"
+
+typedef struct {
+    u8 pad_0[0xE];
+    s16 unk_E;
+    u8 pad_10[4];
+    u8 unk_14;
+    u8 pad_15[0xB];
+} SelPlayer;
+
+typedef struct {
+    s16 unk_0;
+    u8 pad_2[0x2];
+    s16 unk_4;
+    s16 unk_6;
+    u8 pad_8[0x84];
+    s16 unk_8C;
+    u8 pad_8E[0x2];
+    s16 unk_90;
+    u8 pad_92[0x2];
+    u32 unk_94;
+    u8 pad_98[7];
+    u8 unk_9F[4];
+    u8 pad_A3[0x89];
+    s16 unk_12C;
+    s16 unk_12E;
+    s16 unk_130;
+    s16 unk_132;
+    s16 unk_134;
+    s16 unk_136;
+    s16 unk_138;
+    s16 unk_13A;
+    s16 unk_13C;
+} SelState;
+
+typedef struct {
+    u8 unk_0;
+    u8 pad_1[5];
+} SelD5B8;
+
+typedef struct {
+    u16 unk_0;
+    u8 pad_2[0xA];
+    u16 unk_C;
+    u16 unk_E;
+    u16 unk_10;
+    u16 unk_12;
+    u16 unk_14;
+} SelWindow;
+
+typedef struct {
+    u8 pad_0[0x2C];
+    SelWindow window;
+    u8 pad_42[0x2C];
+} SelD5DC;
+
+typedef struct {
+    u32 unk_0;
+    u32 unk_4;
+} SelD888;
+
+typedef struct {
+    u8 unk_0;
+    u8 unk_1;
+    u8 unk_2;
+    u8 unk_3;
+    u8 unk_4;
+    u8 unk_5;
+    u8 unk_6[5];
+    u8 unk_B;
+} TitleSlotInfo;
+
+extern SelState lbl_1_bss_8B3A0;
+extern SelD5B8 lbl_1_rodata_D5B8[];
+extern SelD5DC lbl_1_rodata_D5DC[];
+extern u32 lbl_1_rodata_D870[];
+extern SelD888 lbl_1_rodata_D888[];
+extern u16 lbl_1_rodata_D8B8[];
+
+extern u8 fn_1_128DD8(u8);
+extern void fn_1_3EF8C(u8);
+extern void fn_1_3FCB0(s32);
+extern void fn_1_3FCD4(u32);
+extern void fn_1_3ED8C(u32, u32, u32, u32, u32, u32, u32);
+extern void fn_1_52E0(u8);
+extern void fn_1_5328(u8);
+extern u8 *fn_1_36AD0(void);
+extern void fn_80008BA8(void *, void *, u32);
+extern void fn_1_3EC88(u32, TitleSlotInfo *);
+extern void fn_1_3F4B8(s32, s32, s32, s32, s32, u8);
+extern void fn_1_3F800(u32);
+extern void fn_1_3F810(u8, u32);
+extern void fn_1_3F834(u8);
+extern void fn_1_3F844(u16);
+
+#define PLAYER(i) ((SelPlayer *)&lbl_1_bss_8B3A0)[i]
+#define PLAYER_DATA_SIZE 0x81C0
+
+void fn_10_D2C(void) {
+    u8 i;
+    TitleSlotInfo slots[4];
+    u32 arg6;
+    u32 course;
+    u32 count;
+    s32 arg2;
+    s32 sel;
+    u32 playerDataSize;
+    s16 bit;
+    s16 v;
+    u8 *pd;
+    u8 loopIndex;
+    u8 idx;
+
+    idx = fn_1_128DD8(lbl_1_bss_8B3A0.unk_90);
+    course = lbl_1_bss_8B3A0.unk_90 & 0xFF;
+    switch (lbl_1_bss_8B3A0.unk_0) {
+    case 9:
+    case 11:
+        fn_1_3EF8C(6);
+        break;
+    case 0:
+        fn_1_3EF8C(0);
+        if (lbl_1_bss_8B3A0.unk_6 > 4) {
+            fn_1_3EF8C(6);
+        }
+        if (lbl_1_bss_8B3A0.unk_4 < 2) {
+            fn_1_3EF8C(3);
+        }
+        v = lbl_1_bss_8B3A0.unk_6;
+        lbl_1_bss_8B3A0.unk_6 = v < 1 ? 1 : (v > 4 ? 4 : v);
+        v = lbl_1_bss_8B3A0.unk_4;
+        lbl_1_bss_8B3A0.unk_4 = v < 1 ? 1 : (v > 4 ? 4 : v);
+        break;
+    case 1:
+        fn_1_3EF8C(1);
+        course = lbl_1_bss_8B3A0.unk_8C & 0xFF;
+        break;
+    case 3:
+        if (lbl_1_bss_8B3A0.unk_13A == 0) {
+            fn_1_3EF8C(3);
+        } else {
+            fn_1_3EF8C(6);
+            fn_1_3FCB0(0x4000010);
+        }
+        fn_1_3FCD4(0x20000);
+        break;
+    default:
+        fn_1_3EF8C(2);
+        break;
+    }
+
+    arg6 = lbl_1_bss_8B3A0.unk_6 & 0xFF;
+    count = lbl_1_bss_8B3A0.unk_4 & 0xFF;
+    if (lbl_1_bss_8B3A0.unk_94 & 0x40000000) {
+        u8 n = lbl_1_rodata_D5B8[idx].unk_0;
+        fn_1_3ED8C(0, n, n, course, 10, arg6, 0);
+    } else {
+        arg2 = 3;
+        if (lbl_1_bss_8B3A0.unk_0 == 0) {
+            arg2 = lbl_1_bss_8B3A0.unk_13C;
+            if (lbl_1_bss_8B3A0.unk_130 == 1) {
+                arg6 = 4;
+            }
+            fn_1_52E0(lbl_1_bss_8B3A0.unk_134 != 0);
+            sel = 4;
+            if (lbl_1_bss_8B3A0.unk_12E == 0) {
+                sel = 3;
+            }
+            fn_1_5328(sel);
+            if (lbl_1_bss_8B3A0.unk_132 == 1) {
+                fn_1_3FCB0(0x20000);
+            } else {
+                fn_1_3FCD4(0x20000);
+            }
+            if (lbl_1_bss_8B3A0.unk_138 == 1) {
+                fn_1_3FCB0(0x8000);
+            } else {
+                fn_1_3FCD4(0x8000);
+            }
+        } else if (lbl_1_bss_8B3A0.unk_0 == 3) {
+            arg2 = lbl_1_bss_8B3A0.unk_13A;
+            arg6 = (lbl_1_bss_8B3A0.unk_12C + lbl_1_bss_8B3A0.unk_4) & 0xFF;
+            if (lbl_1_bss_8B3A0.unk_136 == 1) {
+                fn_1_3FCB0(0x8000);
+            } else {
+                fn_1_3FCD4(0x8000);
+            }
+        }
+        fn_1_3ED8C(0, arg2 & 0xFF, 1, course, 1, arg6, 0);
+    }
+
+    if (lbl_1_bss_8B3A0.unk_94 & 0x40000000) {
+        for (bit = 0; bit <= 3; bit++) {
+            if (PLAYER(0).unk_14 & (1 << bit)) {
+                break;
+            }
+        }
+        playerDataSize = PLAYER_DATA_SIZE;
+        for (i = 0; (loopIndex = i, (s32)loopIndex < 1); i++) {
+            u32 n = i;
+            s8 level = PLAYER(i).unk_E;
+            if (level > 40) {
+                pd = fn_1_36AD0() + n * PLAYER_DATA_SIZE;
+                if (!(*(u32 *)pd & 0x40000000)) {
+                    level = pd[0x81A0];
+                } else {
+                    level = loopIndex + 50;
+                }
+            }
+            slots[n].unk_1 = level;
+            slots[n].unk_2 = PLAYER(i).unk_14;
+            slots[n].unk_4 = fn_1_36AD0()[n * playerDataSize + 8];
+            slots[n].unk_3 = fn_1_36AD0()[n * playerDataSize + 7];
+            slots[n].unk_B = lbl_1_bss_8B3A0.unk_9F[n];
+            fn_80008BA8(slots[n].unk_6, &lbl_10_data_5E4, 5);
+        }
+        fn_1_3EC88(1, slots);
+    } else {
+        for (i = 0; i < 4U; i++) {
+            u8 n = i;
+            u32 index = i;
+            s16 value;
+            if (PLAYER(i).unk_E > 40) {
+                pd = fn_1_36AD0() + index * PLAYER_DATA_SIZE;
+                PLAYER(i).unk_E = n + 50;
+                if (!(*(u32 *)pd & 0x40000000)) {
+                    PLAYER(i).unk_E = pd[0x81A0];
+                }
+            }
+            value = PLAYER(i).unk_E;
+            slots[index].unk_1 = value;
+            slots[index].unk_2 = PLAYER(i).unk_14;
+            slots[index].unk_B = lbl_1_bss_8B3A0.unk_9F[index];
+            slots[index].unk_4 = fn_1_36AD0()[index * PLAYER_DATA_SIZE + 8];
+            slots[index].unk_3 = fn_1_36AD0()[index * PLAYER_DATA_SIZE + 7];
+            slots[index].unk_5 = 0;
+            slots[index].unk_0 = 0;
+            fn_80008BA8(slots[index].unk_6, &lbl_10_data_5E4, 5);
+        }
+        fn_1_3EC88(count, slots);
+    }
+
+    if (lbl_1_bss_8B3A0.unk_94 & 0x40000000) {
+        SelWindow *w;
+        arg6 = idx;
+        w = &lbl_1_rodata_D5DC[arg6].window;
+        fn_1_3F4B8(w->unk_0, (u16)(w->unk_C + w->unk_14), w->unk_E, w->unk_10, w->unk_12, w->unk_14);
+        fn_1_3F800(lbl_1_rodata_D870[arg6]);
+        fn_1_3F810(lbl_1_rodata_D888[arg6].unk_0, lbl_1_rodata_D888[arg6].unk_4);
+        fn_1_3F834(idx);
+        fn_1_3F844(lbl_1_rodata_D8B8[arg6]);
+    }
+}
+/* fzgx:end fn_10_D2C */
+
 /* fzgx:begin fn_10_12D8 noprologue */
 #include "types.h"
 #include "sofdec/adxt.h"

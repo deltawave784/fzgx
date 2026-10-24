@@ -79301,6 +79301,20 @@
   },
   {
     "module": "sel",
+    "source": "rel/sel/sel/fn_10_D2C.c",
+    "symbols": [
+      "fn_10_D2C"
+    ],
+    "status": "matching",
+    "mw_version": "GC/1.3",
+    "extra_cflags": [],
+    "tu": "rel/sel/sel.c",
+    "pool": {
+      "@107": "jumptable_10_data_5EC"
+    }
+  },
+  {
+    "module": "sel",
     "source": "rel/sel/sel/fn_10_D5D4.c",
     "symbols": [
       "fn_10_D5D4"
