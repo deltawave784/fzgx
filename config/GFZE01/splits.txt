@@ -6242,3 +6242,18 @@ dol/u_gxutil_upload_some_mtx.c:
 
 dol/fn_80015B78.c:
 	.text       start:0x80015B78 end:0x80015C1C align:4
+
+dol/fn_8005997C.c:
+	.text       start:0x8005997C end:0x800599E4 align:4
+
+dol/fn_80059A4C.c:
+	.text       start:0x80059A4C end:0x80059AB4 align:4
+
+dol/fn_80059B44.c:
+	.text       start:0x80059B44 end:0x80059BAC align:4
+
+dol/fn_80058E44.c:
+	.text       start:0x80058E44 end:0x80058ED4 align:4
+
+dol/fn_800599E4.c:
+	.text       start:0x800599E4 end:0x80059A4C align:4
