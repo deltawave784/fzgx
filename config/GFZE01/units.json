@@ -67502,6 +67502,17 @@
   },
   {
     "module": "movie_module",
+    "source": "rel/movie_module/fn_12_24C48.c",
+    "symbols": [
+      "fn_12_24C48"
+    ],
+    "status": "nonmatching",
+    "mw_version": "GC/1.3.2",
+    "extra_cflags": [],
+    "pool": true
+  },
+  {
+    "module": "movie_module",
     "source": "rel/movie_module/fn_12_24D68.c",
     "symbols": [
       "fn_12_24D68"
