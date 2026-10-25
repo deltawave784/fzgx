@@ -6269,3 +6269,6 @@ dol/mathutil_mtxA_rotate_x.c:
 
 dol/mathutil_quat_mult.c:
 	.text       start:0x8006E540 end:0x8006E5B4 align:4
+
+dol/fn_8004A068.c:
+	.text       start:0x8004A068 end:0x8004A530 align:4
