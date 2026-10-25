@@ -19740,6 +19740,17 @@
   },
   {
     "module": "main",
+    "source": "dol/fn_8003BD78.c",
+    "symbols": [
+      "fn_8003BD78"
+    ],
+    "status": "matching",
+    "mw_version": null,
+    "extra_cflags": [],
+    "asm": true
+  },
+  {
+    "module": "main",
     "source": "dol/fn_8003BE1C.c",
     "symbols": [
       "fn_8003BE1C"
