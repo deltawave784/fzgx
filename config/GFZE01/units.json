@@ -78211,6 +78211,17 @@
   },
   {
     "module": "sel",
+    "source": "rel/sel/sel/fn_10_19F1C.c",
+    "symbols": [
+      "fn_10_19F1C"
+    ],
+    "status": "matching",
+    "mw_version": "GC/2.5",
+    "extra_cflags": [],
+    "tu": "rel/sel/sel.c"
+  },
+  {
+    "module": "sel",
     "source": "rel/sel/sel/fn_10_19F70.c",
     "symbols": [
       "fn_10_19F70"
