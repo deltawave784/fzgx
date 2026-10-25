@@ -35663,6 +35663,17 @@
   },
   {
     "module": "main_rel",
+    "source": "rel/main_rel/bg_common/fn_1_107F74.c",
+    "symbols": [
+      "fn_1_107F74"
+    ],
+    "status": "matching",
+    "mw_version": "GC/1.3",
+    "extra_cflags": [],
+    "tu": "rel/main_rel/bg_common.c"
+  },
+  {
+    "module": "main_rel",
     "source": "rel/main_rel/bg_common/fn_1_108BD0.c",
     "symbols": [
       "fn_1_108BD0"

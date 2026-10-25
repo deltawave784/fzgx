@@ -2429,6 +2429,111 @@ void fn_1_107F50(void *arg0) {
 }
 /* fzgx:end fn_1_107F50 */
 
+/* fzgx:begin fn_1_107F74 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/bg_common.h"
+
+extern s32 fn_1_54E34(void *, f32);
+extern void fn_1_F7870(void *);
+extern void fn_1_556B8(void *);
+extern u32 lbl_1_data_1E5C0[13];
+extern void lbl_8006DCA4(void);
+extern void lbl_8006E0A4(void *);
+extern void mathutil_mtxA_rotate_z(s32);
+extern void mathutil_mtxA_rotate_y(s32);
+extern void mathutil_mtxA_rotate_x(s32);
+extern void lbl_8006E14C(f32);
+extern void lbl_8006DFC4(void *);
+extern u8 *fn_80083970(u8 *, const u8 *);
+extern void fn_80072558(void);
+
+
+typedef struct {
+    u8 pad_0[0xa0];
+    s16 rx;
+    s16 ry;
+    s16 rz;
+    u8 pad_a6[2];
+    u8 pos[0x10];
+    f32 scale;
+    u8 pad_bc[0x150 - 0xbc];
+    u8 *unk_150;
+} BgObj;
+
+typedef struct {
+    u8 b[0x34];
+} BgMaterial;
+
+typedef struct {
+    BgMaterial mats[2];
+    u8 s68[0x79c - 0x68];
+    u8 *names[0xc4];
+    u32 ids[0x20];
+    u8 pad[0x100c - 0xb2c];
+    u8 str1[0xc];
+    u8 str2[0xc];
+} BgData;
+
+#pragma opt_loop_invariants off
+#pragma opt_propagation off
+static inline void apply_bg_material(BgData *base, s32 idx) {
+    u8 *material = (u8 *)&base->mats[1];
+    fn_1_F7870(material + (idx - 1) * sizeof(BgMaterial));
+}
+
+void fn_1_107F74(BgObj *obj, int flag) {
+    struct { BgData *value; } data;
+    u32 i;
+    Obj_1_bss_86ED0 *e;
+    u8 *ent;
+    s32 r;
+    u32 *ids;
+    u8 **names;
+    u8 **names2;
+    u8 *model;
+    data.value = (BgData *)lbl_1_data_3F510;
+    if (obj == NULL) return;
+    e = &lbl_1_bss_86ED0;
+    for (i = 0; i < 0x46; i++, e = (Obj_1_bss_86ED0 *)((u8 *)e + 0x68)) {
+        if (e == NULL || e->unk_C != (u32)obj) continue;
+        ids = data.value->ids;
+        model = obj->unk_150;
+        ent = *(u8 **)(model + 8) + ids[e->unk_8] * 0x18c;
+        lbl_8006DCA4();
+        lbl_8006E0A4(obj->pos);
+        mathutil_mtxA_rotate_z(obj->rz);
+        mathutil_mtxA_rotate_y(obj->rx);
+        mathutil_mtxA_rotate_x(obj->ry);
+        lbl_8006E14C(obj->scale);
+        lbl_8006DFC4(ent + 0x88);
+        r = fn_1_54E34((u8 *)e->unk_10 + 8, *(f32 *)((u8 *)e->unk_10 + 0x14)) ? 1 : 0;
+        if (flag != 0 && r == 0) continue;
+        if ((void *)e->unk_10 == NULL) continue;
+        if ((s16)lbl_1_bss_960 != 4) {
+            names = data.value->names;
+            if (fn_80083970(names[e->unk_8], data.value->str1) != NULL) {
+                apply_bg_material(data.value, 1);
+            } else {
+                names2 = data.value->names;
+                if (fn_80083970(names2[e->unk_8], data.value->str2) != NULL) {
+                    apply_bg_material(data.value, 0);
+                }
+            }
+        }
+        fn_80072558();
+        fn_1_556B8((void *)e->unk_10);
+        if ((s16)lbl_1_bss_960 != 4) {
+            names = data.value->names;
+            if (fn_80083970(names[e->unk_8], data.value->str2) != NULL) {
+                fn_1_F7870(lbl_1_data_1E5C0);
+            }
+        }
+    }
+}
+#pragma peephole reset
+/* fzgx:end fn_1_107F74 */
+
 /* fzgx:begin fn_1_108BD0 noprologue */
 #include "types.h"
 #include "game/vec3.h"
