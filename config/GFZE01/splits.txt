@@ -6272,3 +6272,9 @@ dol/mathutil_quat_mult.c:
 
 dol/fn_8004A068.c:
 	.text       start:0x8004A068 end:0x8004A530 align:4
+
+dol/fn_80059764.c:
+	.text       start:0x80059764 end:0x800597F4 align:4
+
+dol/fn_80059028.c:
+	.text       start:0x80059028 end:0x8005912C align:4
