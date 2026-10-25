@@ -674,14 +674,17 @@ def tu_objects(p, symbol, text, mode, cache, retail_bases=(), only=None, derive=
         uses = list(re.finditer(r"(&?)\b%s->(\w+)((?:\[[^\[\]]*\])*)" % re.escape(pvar), out_text))
         # a pointer model is a local of the function holding its statement: another function's
         # parameter of the same name (`record_ptr(void *p) { return p; }`, fn_3_E5D4) is not a
-        # use. Every `p->` rewrite above is file-wide, so one outside that function declines.
+        # use. The `p->` rewrites above are file-wide (a helper receiving the model under the
+        # same parameter name follows them, fn_800456A0), so with a `p->` outside the function
+        # the whole file stays the scope, as before; file-scope macros expand inside it.
         scope = out_text
         if pvar and not pvar.startswith('fzgx_p_') and stmt_removed and stmt_removed in out_text:
             span = _enclosing_function(out_text, out_text.index(stmt_removed))
             if span is not None:
-                if re.search(r"\b%s->" % re.escape(pvar), out_text[:span[0]] + out_text[span[1]:]):
-                    notes.append(f'{pvar}: -> uses outside its function'); return None, notes
-                scope = out_text[span[0]:span[1]]
+                outside = "\n".join(l for l in (out_text[:span[0]] + "\n" + out_text[span[1]:]).split("\n")
+                                    if not l.lstrip().startswith('#'))
+                if not re.search(r"\b%s->" % re.escape(pvar), outside):
+                    scope = out_text[span[0]:span[1]]
         other = re.sub(r"\b%s->" % re.escape(pvar), '', scope).replace(stmt_removed, '')
         other = "\n".join(l for l in other.split("\n") if not l.lstrip().startswith('#'))
         other = re.sub(r"(?:struct\s+)?%s\s*\*\s*%s\s*;" % (re.escape(tname), re.escape(pvar)), '', other)
