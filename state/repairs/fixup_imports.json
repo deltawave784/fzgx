@@ -17890,5 +17890,22 @@
     "oracle_sha256": "f085515cb889ee5d601739a0e2d7f10e7331f8ce351cdd47a70c78cdb5dde226",
     "recipe": [],
     "link": "pool"
+  },
+  "fn_1_2A500": {
+    "seed_symbol": "fn_1_2A500",
+    "generator": "fzgx fixup",
+    "transform": "saved-body",
+    "seed": "#include \"types.h\"\n#define fn_1_15578 fn_1_15578_header_decl\n#include \"game/main_rel/live_camera_types.h\"\n#undef fn_1_15578\n\nstruct fn_1_2A500_Arg0 {\n    u8 pad_0[0x4];\n    s16 unk_4;\n    u8 pad_6[0x492];\n    u32 unk_498;\n};\nstruct fn_1_2A500_lbl_1_rodata_854 {\n    f32 unk_0;\n};\n\nextern f32 lbl_1_rodata_84C;\nextern f32 lbl_8006D0B4(f32);\nextern const f32 lbl_1_rodata_854[2];\nextern void *fn_1_8627C(s32);\nextern void lbl_8006DAEC(void);\nextern void lbl_8006DB30(void);\nextern s32 fn_1_15578(void *, fn_1_11544_LiveCamVec *, void *, void *, u32, void *, u32, u32, u32, void *);\n\n#pragma opt_propagation off\ns32 fn_1_2A500(struct fn_1_2A500_Arg0 *arg0, fn_1_11544_LiveCamVec *arg1, fn_1_11544_LiveCamVec *arg2, void *arg3, u32 arg4, f32 *arg5) {\n    s32 v0;\n    f32 v1;\n    f32 v3;\n    f32 v2;\n    f32 v4;\n    fn_1_11544_LiveCamVec loc_14;\n    f32 loc_10;\n    void *t0;\n    f32 t2;\n    t0 = fn_1_8627C(arg0->unk_4);\n    lbl_8006DAEC();\n    loc_14 = *arg1;\n    if (fn_1_15578(&loc_14, arg2, &loc_10, arg3, arg4, (u8 *)t0 + 0x9C, *(u32 *)((u8 *)t0 + 0x98), 0, arg0->unk_498, arg0)) {\n        v4 = arg1->x;\n        v4 -= arg2->x;\n        v2 = arg1->y;\n        v2 -= arg2->y;\n        v3 = arg1->z;\n        v3 -= arg2->z;\n        v4 = v4 * v4;\n        v4 = v2 * v2 + v4;\n        v4 = v3 * v3 + v4;\n        v1 = (lbl_1_rodata_854[0] - loc_10) * lbl_8006D0B4(v4);\n        *arg1 = loc_14;\n        v0 = 1;\n    } else {\n        v0 = 0;\n        v1 = lbl_1_rodata_84C;\n    }\n    lbl_8006DB30();\n    *arg5 = v1;\n    return v0;\n}\n#pragma opt_propagation reset\n",
+    "seed_sha256": "a91105cae27a94f22076e9078e99eda50cc118571e2ad7eca96e0478faae0cb4",
+    "generated_sha256": "a91105cae27a94f22076e9078e99eda50cc118571e2ad7eca96e0478faae0cb4",
+    "generated_source": "#include \"types.h\"\n#define fn_1_15578 fn_1_15578_header_decl\n#include \"game/main_rel/live_camera_types.h\"\n#undef fn_1_15578\n\nstruct fn_1_2A500_Arg0 {\n    u8 pad_0[0x4];\n    s16 unk_4;\n    u8 pad_6[0x492];\n    u32 unk_498;\n};\nstruct fn_1_2A500_lbl_1_rodata_854 {\n    f32 unk_0;\n};\n\nextern f32 lbl_1_rodata_84C;\nextern f32 lbl_8006D0B4(f32);\nextern const f32 lbl_1_rodata_854[2];\nextern void *fn_1_8627C(s32);\nextern void lbl_8006DAEC(void);\nextern void lbl_8006DB30(void);\nextern s32 fn_1_15578(void *, fn_1_11544_LiveCamVec *, void *, void *, u32, void *, u32, u32, u32, void *);\n\n#pragma opt_propagation off\ns32 fn_1_2A500(struct fn_1_2A500_Arg0 *arg0, fn_1_11544_LiveCamVec *arg1, fn_1_11544_LiveCamVec *arg2, void *arg3, u32 arg4, f32 *arg5) {\n    s32 v0;\n    f32 v1;\n    f32 v3;\n    f32 v2;\n    f32 v4;\n    fn_1_11544_LiveCamVec loc_14;\n    f32 loc_10;\n    void *t0;\n    f32 t2;\n    t0 = fn_1_8627C(arg0->unk_4);\n    lbl_8006DAEC();\n    loc_14 = *arg1;\n    if (fn_1_15578(&loc_14, arg2, &loc_10, arg3, arg4, (u8 *)t0 + 0x9C, *(u32 *)((u8 *)t0 + 0x98), 0, arg0->unk_498, arg0)) {\n        v4 = arg1->x;\n        v4 -= arg2->x;\n        v2 = arg1->y;\n        v2 -= arg2->y;\n        v3 = arg1->z;\n        v3 -= arg2->z;\n        v4 = v4 * v4;\n        v4 = v2 * v2 + v4;\n        v4 = v3 * v3 + v4;\n        v1 = (lbl_1_rodata_854[0] - loc_10) * lbl_8006D0B4(v4);\n        *arg1 = loc_14;\n        v0 = 1;\n    } else {\n        v0 = 0;\n        v1 = lbl_1_rodata_84C;\n    }\n    lbl_8006DB30();\n    *arg5 = v1;\n    return v0;\n}\n#pragma opt_propagation reset\n",
+    "compiler": "GC/1.3",
+    "flags": "",
+    "source": "rel/main_rel/stcoli/fn_1_2A500.c",
+    "bytes": 312,
+    "headers_sha256": "cbf4d25975eeb2b89d3d24f1a204398c7ddd8d2fe867e7d7dd4de0a8b0058ac6",
+    "oracle_sha256": "f085515cb889ee5d601739a0e2d7f10e7331f8ce351cdd47a70c78cdb5dde226",
+    "recipe": [],
+    "link": "pending"
   }
 }
