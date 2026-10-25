@@ -6221,3 +6221,18 @@ dol/mathutil_mtxA_rotate_y.c:
 
 dol/fn_8000BFC0.c:
 	.text       start:0x8000BFC0 end:0x8000BFC8 align:4
+
+dol/fn_80015B24.c:
+	.text       start:0x80015B24 end:0x80015B50 align:4
+
+dol/fn_8008AFF0.c:
+	.text       start:0x8008AFF0 end:0x8008B028 align:4
+
+dol/fn_8006E2D8.c:
+	.text       start:0x8006E2D8 end:0x8006E324 align:4
+
+dol/fn_80072558.c:
+	.text       start:0x80072558 end:0x800725DC align:4
+
+dol/fn_8003BCE4.c:
+	.text       start:0x8003BCE4 end:0x8003BD78 align:4
