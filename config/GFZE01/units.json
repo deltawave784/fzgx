@@ -15799,6 +15799,17 @@
   },
   {
     "module": "main",
+    "source": "dol/fn_80015B78.c",
+    "symbols": [
+      "fn_80015B78"
+    ],
+    "status": "matching",
+    "mw_version": null,
+    "extra_cflags": [],
+    "asm": true
+  },
+  {
+    "module": "main",
     "source": "dol/fn_80015C1C.c",
     "symbols": [
       "fn_80015C1C"
@@ -30551,6 +30562,17 @@
       "-use_lmw_stmw",
       "off"
     ]
+  },
+  {
+    "module": "main",
+    "source": "dol/u_gxutil_upload_some_mtx.c",
+    "symbols": [
+      "u_gxutil_upload_some_mtx"
+    ],
+    "status": "matching",
+    "mw_version": null,
+    "extra_cflags": [],
+    "asm": true
   },
   {
     "module": "main",

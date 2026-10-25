@@ -6236,3 +6236,9 @@ dol/fn_80072558.c:
 
 dol/fn_8003BCE4.c:
 	.text       start:0x8003BCE4 end:0x8003BD78 align:4
+
+dol/u_gxutil_upload_some_mtx.c:
+	.text       start:0x800724CC end:0x80072558 align:4
+
+dol/fn_80015B78.c:
+	.text       start:0x80015B78 end:0x80015C1C align:4
