@@ -108,8 +108,29 @@ def private_data_objects(body, obj, check):
     return [('private objects in verified shared data section', text)]
 
 
+def _brace_body(src, opening):
+    """Text between the `{` at `opening` and its matching `}`, or None."""
+    depth = 0
+    for i in range(opening, len(src)):
+        if src[i] == '{':
+            depth += 1
+        elif src[i] == '}':
+            depth -= 1
+            if depth == 0:
+                return src[opening + 1:i]
+    return None
+
+
 def struct_text(tname, text):
     for src in (text, include_text()):
+        # the matching brace, not the first `\n}` after the tag: a one-line definition
+        # (`typedef struct State { u32 size, unused; Body body; } State;`, fn_12_24C48)
+        # otherwise ran on into the next function's body
+        m = re.search(r"(?:typedef\s+)?struct\s+%s\s*\{" % re.escape(tname), src)
+        if m:
+            inner = _brace_body(src, m.end() - 1)
+            if inner is not None:
+                return inner
         m = re.search(r"(?:typedef\s+)?struct\s+%s\s*\{(.*?)\n\}" % re.escape(tname), src, re.S)
         if m:
             return m.group(1)
@@ -134,6 +155,16 @@ def field_decls(body):
             dims = re.findall(r"\[([^\]]+)\]", m.group(3) or '')
             out[m.group(2)] = (ttext, dims, line)
             continue
+        # comma declarators: `u32 size, unused;`, `u8 *a, b[4];` (the stars bind per name)
+        cm = re.match(r"((?:const\s+|volatile\s+|unsigned\s+|signed\s+)*(?:struct\s+|union\s+|enum\s+)?\w+)\s+([^;(){}]*,[^;(){}]*);$", line)
+        if cm:
+            base = re.sub(r"\s+", " ", cm.group(1))
+            parts = [re.match(r"\s*(\**)\s*(\w+)\s*((?:\[[^\]]+\])*)\s*$", d) for d in cm.group(2).split(',')]
+            if all(parts):
+                for d in parts:
+                    ttext = base + (' ' + d.group(1) if d.group(1) else '')
+                    out[d.group(2)] = (ttext, re.findall(r"\[([^\]]+)\]", d.group(3) or ''), f"{ttext} {d.group(2)}{d.group(3)};")
+                continue
         pm = re.match(r"([\w\s\*]+)\(\s*\*\s*(\w+)\s*((?:\[[^\]]+\])*)\s*\)\s*(\([^)]*\));$", line)
         if pm:
             # a function pointer or an array of them: `void (*funcs[5])(void);`
@@ -507,6 +538,16 @@ def derived_models(text, syms):
     return text
 
 
+def _enclosing_function(text, pos):
+    """(start, end) of the file-scope function definition containing `pos`, or None."""
+    from .sdkimport import masked
+    code = masked(text)
+    for a, b in _top_statements(code):
+        if a <= pos < b and code[b - 1] == '}':
+            return a, b
+    return None
+
+
 def tu_objects(p, symbol, text, mode, cache, retail_bases=(), only=None, derive=False):
     sym = p.resolve(symbol)
     syms = p.symbols(sym.module)
@@ -631,7 +672,17 @@ def tu_objects(p, symbol, text, mode, cache, retail_bases=(), only=None, derive=
         # an index holding another use (`s->k[i][s->c[i] - 1]`) ends the subscript run: the
         # inner use is rewritten on its own (a `[^\]]*` subscript swallowed it, fn_1_F0B5C)
         uses = list(re.finditer(r"(&?)\b%s->(\w+)((?:\[[^\[\]]*\])*)" % re.escape(pvar), out_text))
-        other = re.sub(r"\b%s->" % re.escape(pvar), '', out_text).replace(stmt_removed, '')
+        # a pointer model is a local of the function holding its statement: another function's
+        # parameter of the same name (`record_ptr(void *p) { return p; }`, fn_3_E5D4) is not a
+        # use. Every `p->` rewrite above is file-wide, so one outside that function declines.
+        scope = out_text
+        if pvar and not pvar.startswith('fzgx_p_') and stmt_removed and stmt_removed in out_text:
+            span = _enclosing_function(out_text, out_text.index(stmt_removed))
+            if span is not None:
+                if re.search(r"\b%s->" % re.escape(pvar), out_text[:span[0]] + out_text[span[1]:]):
+                    notes.append(f'{pvar}: -> uses outside its function'); return None, notes
+                scope = out_text[span[0]:span[1]]
+        other = re.sub(r"\b%s->" % re.escape(pvar), '', scope).replace(stmt_removed, '')
         other = "\n".join(l for l in other.split("\n") if not l.lstrip().startswith('#'))
         other = re.sub(r"(?:struct\s+)?%s\s*\*\s*%s\s*;" % (re.escape(tname), re.escape(pvar)), '', other)
         if re.search(r"\b%s\b" % re.escape(pvar), other if '.' in pvar else without_member_names(other)):
@@ -1457,7 +1508,11 @@ def tu_data_objects(p, symbol, text, top=False, limit=0x100000):
                 edits.append((lo + d.start(), lo + d.end()))
             if amp is None:
                 decl = re.search(r'\bextern\s+(?:const\s+)?(\w+(?:\s+char)?)\s+%s\s*\[' % re.escape(label), code[:head] + include_text())
-                if not decl or not re.fullmatch(BYTE_TYPES, decl[1]):
+                # an array of any element type decays to its address; behind an explicit byte
+                # cast (`u8 *base = (u8 *)lbl_1_data_2A0C0;` over `u32 lbl[4]`, fn_1_9D994)
+                # every offset is in bytes too. Uncast, only a byte array keeps byte offsets.
+                byte_cast = re.search(r'=\s*\(\s*%s\s*\*\s*\)' % BYTE_TYPES, m[0])
+                if not decl or not (re.fullmatch(BYTE_TYPES, decl[1]) or byte_cast):
                     continue
             tokens, all_edits, origins = found.setdefault(label, ([], [], {}))
             tokens.append((var, re.sub(r'\s+', ' ', ptype)))
