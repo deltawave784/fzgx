@@ -2990,6 +2990,169 @@ void fn_3_679C(void) {
 }
 /* fzgx:end fn_3_679C */
 
+/* fzgx:begin fn_3_6AC4 pool noprologue */
+#include "dolphin/types.h"
+#include "rel/customize/globals.h"
+
+typedef struct {
+    u16 held;
+    u8 pad2[6];
+    u16 pressed;
+    u8 padA[6];
+    volatile u16 repeat; /* Retail reloads repeat independently for each direction test. */
+    u16 repeat2;
+} CustPad;
+
+typedef struct {
+    s16 id;
+    s16 kind;
+    s16 cost;
+    s16 arg;
+    s16 unk8;
+} CustEntry;
+
+typedef struct {
+    u32 unk8;
+    u32 unkC;
+    u8 pad10[0x10];
+} CustHead;
+
+typedef struct {
+    u8 pad[0xc2];
+    s16 cursor;
+    s16 scroll;
+    u8 padC6[0xa];
+} CustList;
+
+typedef struct {
+    s16 unk0;
+    s16 unk2;
+    s16 unk4;
+    s16 port;
+    u8 pad8[0x7E084 - 0xF8];
+} CustPort;
+
+/* Contiguous customize work-area objects. */
+Obj_3_bss_0 lbl_3_bss_0;
+u32 lbl_3_bss_8;
+u32 lbl_3_bss_C;
+static u8 cust_head_padding[0x10];
+CustList lbl_3_bss_20;
+Obj_3_bss_F0 lbl_3_bss_F0;
+CustEntry lbl_3_bss_7E084[44];
+s16 lbl_3_bss_7E23C;
+static u8 cust_work_padding[0x7E084 - 0x120];
+
+#pragma section code_type ".fzgxpool"
+extern void __fzgx_pool_sink(void *);
+void fzgx___fzgx_pool_prime(void)
+{
+    __fzgx_pool_sink(&lbl_3_bss_0);
+    __fzgx_pool_sink(&lbl_3_bss_8);
+    __fzgx_pool_sink(&lbl_3_bss_C);
+    __fzgx_pool_sink(cust_head_padding);
+    __fzgx_pool_sink(&lbl_3_bss_20);
+    __fzgx_pool_sink(&lbl_3_bss_F0);
+    __fzgx_pool_sink(cust_work_padding);
+    __fzgx_pool_sink(lbl_3_bss_7E084);
+    __fzgx_pool_sink(&lbl_3_bss_7E23C);
+}
+#pragma section code_type ".text"
+
+#define cust_head lbl_3_bss_8
+#define cust_list lbl_3_bss_20
+#define cust_port lbl_3_bss_F0
+#define cust_entries lbl_3_bss_7E084
+#define cust_count lbl_3_bss_7E23C
+
+extern CustPad lbl_1_bss_9F8[];
+extern u8 lbl_1_bss_7F0C0[];
+extern u32 lbl_801A66A8;
+
+extern void fn_3_7A08(s16 *, s16 *, int);
+extern void fn_3_BD00(s32, s32, s32, u32);
+extern void fn_1_7B4C0(void);
+extern void fn_1_7B2E8(s16);
+extern void fn_1_A2D84(u32);
+extern s32 fn_1_F9028(s16);
+extern void fn_1_F946C(s16);
+extern void fn_1_F9888(s16);
+
+s32 fn_3_6AC4(void)
+{
+    s16 old;
+    s16 lo;
+    s16 d;
+    s16 id;
+    u32 delta;
+    s16 hi;
+    s16 cost;
+    s16 port;
+
+    port = lbl_3_bss_F0.unk_6;
+    (void) port;  /* fzgx: keeps the web at its definition */
+    delta = 0;
+    if ((lbl_1_bss_9F8[port].repeat >> 3) & 1 || (lbl_1_bss_9F8[port].repeat2 >> 3) & 1) {
+        delta = -1;
+    }
+    if ((lbl_1_bss_9F8[port].repeat >> 2) & 1 || (lbl_1_bss_9F8[port].repeat2 >> 2) & 1) {
+        delta++;
+    }
+
+    d = delta;
+    old = cust_list.cursor;
+    {
+    s32 cur;
+    cur = old;
+    cur += d;
+    if (cur < 0) {
+        cur = 0;
+    } else if (cur > cust_count - 1) {
+        cur = cust_count - 1;
+    }
+    cust_list.cursor = cur;
+
+    if (old != (s16)cur && cust_count > 0) {
+        if (*(s16 *)((u8 *)cust_entries + old * 10 + 2) == 1) {
+            fn_1_7B4C0();
+        }
+        if (cust_entries[cust_list.cursor].kind == 1) {
+            fn_1_7B2E8(cust_entries[cust_list.cursor].arg);
+        }
+        fn_1_A2D84(0xA9010000);
+        lbl_801A66A8 = 0;
+        fn_3_7A08(&lo, &hi, 5);
+        if (cust_list.cursor < lo || cust_list.cursor > hi) {
+            fn_3_BD00(delta, 0, (s16)(d * 10), 0x08000001);
+            cust_list.scroll -= delta;
+        }
+    }
+
+    }
+    if ((lbl_1_bss_9F8[port].pressed >> 8) & 1 && cust_count > 0) {
+        CustEntry *entry = &cust_entries[cust_list.cursor];
+        cost = entry->cost;
+        id = entry->id;
+        if (fn_1_F9028(id) == 0 && *(u32 *)(lbl_1_bss_7F0C0 + 0x48F8) >= (u32)cost) {
+            *(u32 *)(lbl_1_bss_7F0C0 + 0x48F8) -= cost;
+            fn_1_F946C(id);
+            fn_1_F9888(id);
+            lbl_3_bss_8 = 1;
+            fn_1_A2D84(0xA9010100);
+            lbl_3_bss_C = 1;
+        } else {
+            fn_1_A2D84(0xA9011400);
+        }
+    }
+
+    if ((lbl_1_bss_9F8[port].held >> 9) & 1) {
+        fn_1_A2D84(0xA9010200);
+        return -1;
+    }
+    return 0;
+}
+/* fzgx:end fn_3_6AC4 */
+
 /* fzgx:begin fn_3_6D2C */
 void fn_3_6D2C(void) {
     u32 flags;

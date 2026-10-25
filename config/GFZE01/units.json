@@ -865,6 +865,18 @@
   },
   {
     "module": "customize",
+    "source": "rel/customize/_prolog/fn_3_6AC4.c",
+    "symbols": [
+      "fn_3_6AC4"
+    ],
+    "status": "nonmatching",
+    "mw_version": "GC/1.3.2",
+    "extra_cflags": [],
+    "tu": "rel/customize/_prolog.c",
+    "pool": true
+  },
+  {
+    "module": "customize",
     "source": "rel/customize/_prolog/fn_3_6D2C.c",
     "symbols": [
       "fn_3_6D2C"
