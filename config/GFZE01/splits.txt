@@ -6200,3 +6200,24 @@ dol/fn_800720B0.c:
 
 dol/fn_80034BB8.c:
 	.text       start:0x80034BB8 end:0x80034D0C align:4
+
+dol/__flush_cache.c:
+	.init       start:0x80003424 end:0x80003458 align:4
+
+dol/__init_registers.c:
+	.init       start:0x800032B0 end:0x80003340 align:4
+
+dol/GXLoadNrmMtxImm.c:
+	.text       start:0x80038CAC end:0x80038CFC align:4
+
+dol/GXLoadPosMtxImm.c:
+	.text       start:0x80038C5C end:0x80038CAC align:4
+
+dol/mathutil_mtxA_rotate_z.c:
+	.text       start:0x8006E424 end:0x8006E498 align:4
+
+dol/mathutil_mtxA_rotate_y.c:
+	.text       start:0x8006E398 end:0x8006E424 align:4
+
+dol/fn_8000BFC0.c:
+	.text       start:0x8000BFC0 end:0x8000BFC8 align:4

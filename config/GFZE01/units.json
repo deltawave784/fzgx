@@ -7210,6 +7210,28 @@
   },
   {
     "module": "main",
+    "source": "dol/GXLoadNrmMtxImm.c",
+    "symbols": [
+      "GXLoadNrmMtxImm"
+    ],
+    "status": "matching",
+    "mw_version": null,
+    "extra_cflags": [],
+    "asm": true
+  },
+  {
+    "module": "main",
+    "source": "dol/GXLoadPosMtxImm.c",
+    "symbols": [
+      "GXLoadPosMtxImm"
+    ],
+    "status": "matching",
+    "mw_version": null,
+    "extra_cflags": [],
+    "asm": true
+  },
+  {
+    "module": "main",
     "source": "dol/GXPeekZ.c",
     "symbols": [
       "GXPeekZ"
@@ -13334,6 +13356,17 @@
   },
   {
     "module": "main",
+    "source": "dol/__flush_cache.c",
+    "symbols": [
+      "__flush_cache"
+    ],
+    "status": "matching",
+    "mw_version": null,
+    "extra_cflags": [],
+    "asm": true
+  },
+  {
+    "module": "main",
     "source": "dol/__fwrite.c",
     "symbols": [
       "__fwrite"
@@ -13474,6 +13507,17 @@
     "source": "dol/__init_hardware.c",
     "symbols": [
       "__init_hardware"
+    ],
+    "status": "matching",
+    "mw_version": null,
+    "extra_cflags": [],
+    "asm": true
+  },
+  {
+    "module": "main",
+    "source": "dol/__init_registers.c",
+    "symbols": [
+      "__init_registers"
     ],
     "status": "matching",
     "mw_version": null,
@@ -15397,6 +15441,17 @@
     "status": "matching",
     "mw_version": null,
     "extra_cflags": []
+  },
+  {
+    "module": "main",
+    "source": "dol/fn_8000BFC0.c",
+    "symbols": [
+      "fn_8000BFC0"
+    ],
+    "status": "matching",
+    "mw_version": null,
+    "extra_cflags": [],
+    "asm": true
   },
   {
     "module": "main",
@@ -29940,6 +29995,28 @@
     "source": "dol/mathutil_init.c",
     "symbols": [
       "mathutil_init"
+    ],
+    "status": "matching",
+    "mw_version": null,
+    "extra_cflags": [],
+    "asm": true
+  },
+  {
+    "module": "main",
+    "source": "dol/mathutil_mtxA_rotate_y.c",
+    "symbols": [
+      "mathutil_mtxA_rotate_y"
+    ],
+    "status": "matching",
+    "mw_version": null,
+    "extra_cflags": [],
+    "asm": true
+  },
+  {
+    "module": "main",
+    "source": "dol/mathutil_mtxA_rotate_z.c",
+    "symbols": [
+      "mathutil_mtxA_rotate_z"
     ],
     "status": "matching",
     "mw_version": null,
