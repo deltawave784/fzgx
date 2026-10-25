@@ -6260,3 +6260,9 @@ dol/fn_800599E4.c:
 
 dol/fn_8003BD78.c:
 	.text       start:0x8003BD78 end:0x8003BE1C align:4
+
+dol/__AICallbackStackSwitch.c:
+	.text       start:0x8001E5A8 end:0x8001E600 align:4
+
+dol/mathutil_mtxA_rotate_x.c:
+	.text       start:0x8006E324 end:0x8006E398 align:4

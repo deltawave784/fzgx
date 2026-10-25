@@ -11316,6 +11316,17 @@
   },
   {
     "module": "main",
+    "source": "dol/__AICallbackStackSwitch.c",
+    "symbols": [
+      "__AICallbackStackSwitch"
+    ],
+    "status": "matching",
+    "mw_version": null,
+    "extra_cflags": [],
+    "asm": true
+  },
+  {
+    "module": "main",
     "source": "dol/__AIDHandler.c",
     "symbols": [
       "__AIDHandler"
@@ -30130,6 +30141,17 @@
     "source": "dol/mathutil_init.c",
     "symbols": [
       "mathutil_init"
+    ],
+    "status": "matching",
+    "mw_version": null,
+    "extra_cflags": [],
+    "asm": true
+  },
+  {
+    "module": "main",
+    "source": "dol/mathutil_mtxA_rotate_x.c",
+    "symbols": [
+      "mathutil_mtxA_rotate_x"
     ],
     "status": "matching",
     "mw_version": null,
