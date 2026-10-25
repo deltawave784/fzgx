@@ -3201,6 +3201,182 @@ s32 fn_1_79C88(EffectManager *manager, u32 *out, s32 reverse, f32 value) {
 }
 /* fzgx:end fn_1_79C88 */
 
+/* fzgx:begin fn_1_79E54 noprologue */
+#include "types.h"
+#include "game/main_rel/car_test_types.h"
+#include "rel/main_rel/screen_effect.h"
+
+typedef struct fn_1_79E54_Target {
+    u8 pad_0[0x8];
+    Fn183D28Vec3 pos;
+    f32 unk_14;
+} fn_1_79E54_Target;
+
+typedef struct fn_1_79E54_Entry {
+    u32 unk_0;
+    u32 unk_4;
+    fn_1_79E54_Target *target;
+    f32 dist;
+} fn_1_79E54_Entry;
+
+typedef struct fn_1_79E54_List {
+    u32 flags;
+    s32 count;
+    fn_1_79E54_Entry *entries;
+} fn_1_79E54_List;
+
+typedef struct fn_1_79E54_Camera {
+    u8 pad_0[0x2C];
+    f32 unk_2C;
+} fn_1_79E54_Camera;
+
+extern f32 fn_1_A71AC(void);
+extern f32 lbl_1_rodata_3278[];
+extern fn_1_79E54_Camera *lbl_801A6D00;
+extern void lbl_8006E1B0(Fn183D28Vec3 *, Fn183D28Vec3 *);
+
+/* TU literal pool slots (lbl_1_rodata_3278 is the shared pool base) */
+#define POOL_ONE  pool[21]  /* 1.0f */
+#define POOL_ZERO pool[28]  /* 0.0f */
+#define POOL_K240 pool[32]  /* 240.0f */
+#define POOL_EPS  pool[43]  /* FLT_EPSILON */
+#define POOL_TWO  pool[44]  /* 2.0f */
+
+#define CLAMP01(t) ((t) < POOL_ZERO ? POOL_ZERO : ((t) > POOL_ONE ? POOL_ONE : (t)))
+
+#pragma opt_propagation off
+fn_1_79E54_Target *fn_1_79E54(fn_1_79E54_List *list, u32 *outId, f32 *outT, s32 advance, f32 speed) {
+    s32 m;
+    s32 n;
+    f32 *pool = lbl_1_rodata_3278;
+    fn_1_79E54_Target *target;
+    fn_1_79E54_Entry *e;
+    s32 i;
+    s32 hasX;
+    s32 hasLoop;
+    s32 count;
+    u32 flags;
+    f32 dist;
+    f32 viewDist;
+    f32 camDist;
+    f32 spd;
+    f32 t;
+    f32 scale;
+    f32 lo;
+    f32 k;
+    f32 r;
+    fn_1_79E54_Entry *q;
+    Fn183D28Vec3 pos;
+
+    spd = speed;
+    *outT = POOL_ONE;
+    e = list->entries;
+    target = e->target;
+    if (target == NULL) {
+        return NULL;
+    }
+    flags = list->flags;
+    count = list->count;
+    hasLoop = flags & 0x40;
+    hasX = flags & 1;
+    n = hasLoop ? count - 2 : count;
+    m = hasX ? n - 1 : n;
+    if (flags & 0x80) {
+        dist = POOL_ZERO;
+    } else {
+        dist = lbl_1_data_4;
+    }
+    lbl_8006E1B0(&target->pos, &pos);
+    viewDist = -pos.z;
+    camDist = -lbl_801A6D00->unk_2C;
+    if (list->flags & 2) {
+        if (camDist < POOL_EPS) {
+            i = 0;
+        } else {
+            for (i = 0; i < list->count; i++, e++) {
+                if (camDist < e->dist) {
+                    if (hasX) {
+                        q = list->entries + n - 1;
+                        dist = camDist;
+                        lo = q[-1].dist;
+                        t = (camDist - lo) / (q->dist - lo);
+                        *outT = CLAMP01(t);
+                    }
+                    if (hasLoop) {
+                        if (!(list->flags & 0x80)) {
+                            k = POOL_TWO * target->unk_14;
+                            spd = k * spd;
+                            dist = POOL_K240 * spd / (viewDist * fn_1_A71AC());
+                        } else if (!hasX) {
+                            dist = camDist;
+                        }
+                    }
+                    break;
+                }
+            }
+        }
+    } else {
+        if (viewDist < POOL_EPS) {
+            i = 0;
+        } else {
+            k = POOL_TWO * target->unk_14;
+            spd = k * spd;
+            scale = viewDist * fn_1_A71AC();
+            for (i = 0; i < m; i++, e++) {
+                r = e->dist / POOL_K240;
+                if (spd > r * scale) {
+                    if (hasX) {
+                        q = list->entries + n - 1;
+                        dist = POOL_K240 * spd / scale;
+                        lo = q[-1].dist;
+                        t = (dist - lo) / (q->dist - lo);
+                        *outT = CLAMP01(t);
+                    }
+                    if (hasLoop) {
+                        if (list->flags & 0x80) {
+                            dist = camDist;
+                        } else if (!hasX) {
+                            dist = POOL_K240 * spd / scale;
+                        }
+                    }
+                    break;
+                }
+            }
+        }
+    }
+    if (e->target != NULL && i < m) {
+        if (advance && i != m - 1) {
+            for (; i < m - 1; i++) {
+                e++;
+                if (e->target == NULL) {
+                    e--;
+                    break;
+                }
+            }
+        }
+        if (hasLoop) {
+            if (*outT >= POOL_ONE) {
+                q = list->entries + count - 1;
+                lo = POOL_ZERO;
+                r = q->dist;
+                t = (r - dist) / (r - q[-1].dist);
+                *outT = t < lo ? lo : (t > POOL_ONE ? POOL_ONE : t);
+            }
+        }
+        if (*outT > POOL_ZERO) {
+            if (outId != NULL) {
+                *outId = e->unk_0;
+            }
+            return e->target;
+        }
+    }
+    if (outId != NULL) {
+        *outId = 0;
+    }
+    return NULL;
+}
+/* fzgx:end fn_1_79E54 */
+
 /* fzgx:begin fn_1_7A240 noprologue */
 #include "types.h"
 #include "game/main_rel/car_test_types.h"
