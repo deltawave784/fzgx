@@ -689,3 +689,6 @@ rel/customize/emb_paste_editor/fn_3_11FF0.c:
 
 rel/customize/editor/fn_3_18960.c:
 	.text       start:0x00018960 end:0x00019C50 align:4
+
+rel/customize/emb_memcard/fn_3_E5D4.c:
+	.text       start:0x0000E5D4 end:0x0000E6F8 align:4

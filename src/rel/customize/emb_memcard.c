@@ -39,6 +39,103 @@ void fn_3_C328(void) {
 }
 /* fzgx:end fn_3_C328 */
 
+/* fzgx:begin fn_3_E5D4 pool noprologue */
+#include "types.h"
+#include "rel/customize/emb_memcard.h"
+#include "rel/customize/emb_paste_editor.h"
+#include "game/main_rel/car_types.h"
+#include "game/main_rel/shadowmap_types.h"
+
+typedef struct Sig_fn_3_F948_MemCardSlot { u32 unk0; u32 flags; u8 pad[0x2058]; } Sig_fn_3_F948_MemCardSlot;
+struct Sig_fn_1_87238_CarSlot { struct Model **model_ptr; char pad[8]; };
+struct Sig_fn_1_87238_fn_1_87238_Car { char pad[0x328]; s8 field_0x328; char pad1[0xb]; struct Sig_fn_1_87238_CarSlot slots[1]; char pad2[0x50]; u32 flags; };
+extern f32 lbl_3_rodata_378[84];
+extern s16 fn_3_F948(Sig_fn_3_F948_MemCardSlot *);
+extern void fn_1_870BC(fn_1_568F8_Data *, s8, fn_1_568F8_Data *, s32, u8, f32);
+extern void fn_1_87238(struct Sig_fn_1_87238_fn_1_87238_Car *, s8, f32);
+extern void fn_80008BEC(void *, int, u32);
+extern void fn_1_151BDC(u32);
+extern void fn_1_14E2DC(u32, u32, f32);
+struct E5D4_Record { u8 pad[5]; u8 kind; u8 end[0x81ba]; };
+struct E5D4_State { u8 pad[0x1c]; s16 state; u8 pad1e[0x28]; u8 index; };
+struct E5D4_Buffer { u8 pad[0x390]; u32 flags; u8 pad394[0xc]; u32 model; u32 other; u8 pad3a8[0x12]; s16 value; u8 end[0x84]; };
+#pragma opt_pointer_analysis off
+#pragma opt_propagation off
+static inline struct E5D4_Record *record_ptr(void *p) { return p; }
+/* file-scope objects of the retail TU, in retail order: MWCC addresses them off one section base */
+Obj_3_bss_7EDC0_At0 *fzgx_obj_lbl_3_bss_7EDC0;
+u32 lbl_3_bss_7EDC0_fill_7EDC4;
+u32 lbl_3_bss_7EDC0_8;
+u8 lbl_3_bss_7EDCC;
+u8 lbl_3_bss_7EDCC_fill_7EDCD;
+u16 lbl_3_bss_7EDCC_fill_7EDCE;
+u8 lbl_3_bss_7EDCC_4;
+u8 lbl_3_bss_7EDCC_fill_7EDD1;
+u16 lbl_3_bss_7EDCC_fill_7EDD2;
+u32 lbl_3_bss_7EDCC_fill_7EDD4;
+u8 fzgx_obj_lbl_3_bss_7EDD8;
+u8 lbl_3_bss_7EDD8_fill_7EDD9;
+u16 lbl_3_bss_7EDD8_fill_7EDDA;
+u32 lbl_3_bss_7EDD8_fill_7EDDC[25];
+u32 fzgx_obj_lbl_3_bss_7EE40[8304];
+u32 fzgx_obj_lbl_3_bss_87000[16];
+u32 fzgx_obj_lbl_3_bss_87040[8304];
+
+#pragma section code_type ".fzgxpool"
+static void fzgx_bss_layout(void) {
+    volatile u8 s;  /* fzgx-allow: S2 layout primer sink: MWCC emits .bss objects in first-access order */
+    s = *(u8 *)&fzgx_obj_lbl_3_bss_7EDC0;
+    s = *(u8 *)&lbl_3_bss_7EDC0_fill_7EDC4;
+    s = *(u8 *)&lbl_3_bss_7EDC0_8;
+    s = *(u8 *)&lbl_3_bss_7EDCC;
+    s = *(u8 *)&lbl_3_bss_7EDCC_fill_7EDCD;
+    s = *(u8 *)&lbl_3_bss_7EDCC_fill_7EDCE;
+    s = *(u8 *)&lbl_3_bss_7EDCC_4;
+    s = *(u8 *)&lbl_3_bss_7EDCC_fill_7EDD1;
+    s = *(u8 *)&lbl_3_bss_7EDCC_fill_7EDD2;
+    s = *(u8 *)&lbl_3_bss_7EDCC_fill_7EDD4;
+    s = *(u8 *)&fzgx_obj_lbl_3_bss_7EDD8;
+    s = *(u8 *)&lbl_3_bss_7EDD8_fill_7EDD9;
+    s = *(u8 *)&lbl_3_bss_7EDD8_fill_7EDDA;
+    s = *(u8 *)&lbl_3_bss_7EDD8_fill_7EDDC;
+    s = *(u8 *)&fzgx_obj_lbl_3_bss_7EE40;
+    s = *(u8 *)&fzgx_obj_lbl_3_bss_87000;
+    s = *(u8 *)&fzgx_obj_lbl_3_bss_87040;
+}
+#pragma section code_type ".text"
+
+void fn_3_E5D4(void) {
+ 
+ struct E5D4_Buffer buffer __attribute__((aligned(32)));
+ Obj_3_bss_7EDD8 *state;
+ state = (Obj_3_bss_7EDD8 *)((u8 *)&fzgx_obj_lbl_3_bss_7EDD8);
+ if (record_ptr((u8 *)fzgx_obj_lbl_3_bss_7EDC0 + (state->unk_46) * 0x81c0)->kind < 41) {
+  fn_1_870BC(*(fn_1_568F8_Data **)((u8 *)&lbl_3_bss_7EDCC), 0, *(fn_1_568F8_Data **)((u8 *)&lbl_3_bss_7EDCC), 0, 1, lbl_3_rodata_378[0]);
+  if (fn_3_F948((Sig_fn_3_F948_MemCardSlot *)((u8 *)&fzgx_obj_lbl_3_bss_7EE40 + 0x20)) != 0) {
+   state = (Obj_3_bss_7EDD8 *)((u8 *)&fzgx_obj_lbl_3_bss_7EDD8);
+   if (state->unk_1C == 0) {
+    fn_1_87238(*(struct Sig_fn_1_87238_fn_1_87238_Car **)((u8 *)&lbl_3_bss_7EDCC), 0, lbl_3_rodata_378[0]);
+   }
+  }
+ } else {
+  fn_80008BEC(&buffer, 0, 0x440);
+  { u32 other;
+  u32 model;
+  u32 flags;
+  flags = buffer.flags;
+  model = lbl_3_bss_7EDC0_8;
+  other = *(u32 *)((u8 *)&lbl_3_bss_7EDCC_4);
+  flags |= 0x4000000;
+  buffer.flags = flags;
+  buffer.model = model;
+  buffer.other = other; }
+  buffer.value = 0;
+  fn_1_151BDC((u32)&fzgx_obj_lbl_3_bss_7EE40);
+  fn_1_14E2DC(lbl_3_bss_7EDC0_8, 0, lbl_3_rodata_378[0]);
+ }
+}
+/* fzgx:end fn_3_E5D4 */
+
 /* fzgx:begin fn_3_F044 */
 #include "font.h"
 
