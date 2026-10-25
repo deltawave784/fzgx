@@ -30182,6 +30182,17 @@
   },
   {
     "module": "main",
+    "source": "dol/mathutil_quat_mult.c",
+    "symbols": [
+      "mathutil_quat_mult"
+    ],
+    "status": "matching",
+    "mw_version": null,
+    "extra_cflags": [],
+    "asm": true
+  },
+  {
+    "module": "main",
     "source": "dol/mbtowc.c",
     "symbols": [
       "mbtowc"

@@ -6266,3 +6266,6 @@ dol/__AICallbackStackSwitch.c:
 
 dol/mathutil_mtxA_rotate_x.c:
 	.text       start:0x8006E324 end:0x8006E398 align:4
+
+dol/mathutil_quat_mult.c:
+	.text       start:0x8006E540 end:0x8006E5B4 align:4
