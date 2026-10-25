@@ -17911,6 +17911,28 @@ s32 fn_10_19924(s16 *id) {
 }
 /* fzgx:end fn_10_19924 */
 
+/* fzgx:begin fn_10_19EC8 noprologue */
+#include "types.h"
+#include "rel/sel/sel.h"
+
+typedef struct {
+    u8 pad_00[0x54];
+    f32 value;
+} Fn10_19EC8Object;
+
+extern void fn_80074188(s16, s16, s16, s16);
+
+#pragma scheduling 750
+void fn_10_19EC8(Fn10_19EC8Object * __restrict obj, u32 unused) {
+    Obj_10_bss_55AE4 *entry = &lbl_10_bss_55AE4;
+    f32 value = obj->value;
+    s16 index = (s16)value;
+    entry = (Obj_10_bss_55AE4 *)((u8 *)entry + index * 8);
+
+    fn_80074188(entry->unk_0, entry->unk_2, entry->unk_4, entry->unk_6);
+}
+/* fzgx:end fn_10_19EC8 */
+
 /* fzgx:begin fn_10_19F70 */
 #pragma section code_type ".fzgxpool"
 static const u32 fzgx_pool_table1[17] = {0x00000000, 0x0000B500, 0x0000B600, 0x0000AD00, 0x0000B300, 0x0000B800, 0x0000B200, 0x0000B100, 0x0000AE00, 0x0000B400, 0x0000B900, 0x0000B000, 0x0000AF00, 0x0000B700, 0x00000000, 0x00000000, 0x00F0F0FF};  /* fzgx-allow: A1 retail pool bytes */
