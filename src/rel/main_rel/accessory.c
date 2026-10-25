@@ -2217,6 +2217,255 @@ void fn_1_112F40(fn_1_10D2F0_Obj *obj) {
 }
 /* fzgx:end fn_1_112F40 */
 
+/* fzgx:begin fn_1_1132E4 noprologue */
+#include "types.h"
+
+typedef struct RopeVec {
+    f32 x, y, z;
+} RopeVec;
+
+typedef struct RopeNode {
+    u8 flags;
+    u8 pad_1;
+    u8 count;
+    u8 pad_3;
+    u16 idx[6];
+    RopeVec pos;   /* 0x10 */
+    RopeVec prev;  /* 0x1C */
+    RopeVec local; /* 0x28 */
+    RopeVec vel;   /* 0x34 */
+    f32 mass;      /* 0x40 */
+} RopeNode;
+
+typedef struct RopeLink {
+    RopeNode *a;
+    RopeNode *b;
+    f32 len;
+} RopeLink;
+
+typedef struct RopeEntry {
+    u8 pad_0[0x88];
+    u8 mtx[0x18C - 0x88];
+} RopeEntry;
+
+typedef struct RopeOwnerSub {
+    u8 pad_0[0x8];
+    RopeEntry *entries;
+} RopeOwnerSub;
+
+typedef struct RopeOwner {
+    u8 pad_0[0x150];
+    RopeOwnerSub *sub;
+} RopeOwner;
+
+typedef struct RopeMtx {
+    u8 data[0x40];
+} RopeMtx;
+
+typedef struct Rope {
+    u8 flags;
+    u8 pad_1[7];
+    s32 type;         /* 0x08 */
+    RopeOwner *owner; /* 0x0C */
+    void *model;      /* 0x10 */
+    u8 pad_14[4];
+    u32 nodeCount;    /* 0x18 */
+    u32 linkCount;    /* 0x1C */
+    u8 pad_20[4];
+    RopeNode *nodes;  /* 0x24 */
+    RopeLink *links;  /* 0x28 */
+} Rope;
+
+/* accessory.c literal pool */
+typedef struct RopePool {
+    u8 pad_0[0x58];
+    f64 gravityHalf; /* 0x58 */
+    f32 gravity;     /* 0x60 */
+    u8 pad_64[0x38];
+    f32 slack;       /* 0x9C */
+    f32 one;         /* 0xA0 */
+    f32 maxDist2;    /* 0xA4 */
+} RopePool;
+
+extern const RopePool lbl_1_rodata_7AB8;
+extern u8 lbl_1_data_3FFBC[0x574];
+extern RopeMtx *fn_80077B14(void *);
+extern void lbl_8006DBAC(void *);
+extern void lbl_8006DAEC(void);
+extern void lbl_8006DBE4(void);
+extern void lbl_8006E1B0(RopeVec *, RopeVec *);
+extern void lbl_8006DC20(void);
+extern f32 lbl_8006D118(f32 *, f32);
+extern f32 lbl_8006D0B4(f32);
+extern void fn_8006E250(RopeVec *, RopeMtx *);
+
+#define ROPE_ENTRY(r) (&(r)->owner->sub->entries[((s32 *)lbl_1_data_3FFBC)[(r)->type]])
+
+static inline void RopeVecSet(f32 *v, f32 x, f32 y, f32 z) {
+    v[0] = x;
+    v[1] = y;
+    v[2] = z;
+}
+
+void fn_1_1132E4(Rope *rope) {
+    const RopePool *pool = &lbl_1_rodata_7AB8;
+    RopeMtx *mtx;
+    f32 inv;
+    f32 s;
+    f32 wa;
+    f32 wb;
+    f32 k;
+    f32 dz;
+    f32 dy;
+    f32 dx;
+    f32 e[3];
+    f32 d[3];
+    RopeVec c;
+    f32 d2;
+
+    if (rope != NULL && rope->model != NULL) {
+        fn_80077B14(rope->model);
+
+        if (rope->flags & 2) {
+            rope->flags &= ~2;
+            lbl_8006DBAC(ROPE_ENTRY(rope)->mtx);
+            lbl_8006DAEC();
+            {
+                RopeNode *n = rope->nodes;
+                u32 i;
+                for (i = 0; i < rope->nodeCount; i++, n++) {
+                    lbl_8006DBE4();
+                    lbl_8006E1B0(&n->local, &n->pos);
+                }
+            }
+            lbl_8006DC20();
+        }
+
+        /* integrate free nodes under gravity */
+        {
+            u32 i;
+            RopeNode *n = rope->nodes;
+            for (i = 0; i < rope->nodeCount; i++, n++) {
+                if (!(n->flags & 1)) {
+                    n->prev = n->pos;
+                    n->pos.y = n->pos.y + (n->vel.y - pool->gravityHalf);
+                    n->vel.y = n->vel.y - pool->gravity;
+                }
+            }
+        }
+
+        /* pinned nodes follow their attachment matrix */
+        {
+            RopeNode *n;
+            RopeEntry *entry = ROPE_ENTRY(rope);
+            u32 i;
+            n = rope->nodes;
+            for (i = 0; i < rope->nodeCount; i++, n++) {
+                lbl_8006DBAC(entry->mtx);
+                lbl_8006DAEC();
+                if (n->flags & 1) {
+                    lbl_8006DBE4();
+                    lbl_8006E1B0(&n->local, &n->pos);
+                }
+                lbl_8006DC20();
+            }
+        }
+
+        /* distance constraints */
+        {
+            RopeLink *link = rope->links;
+            RopeNode *a, *b;
+            u32 i;
+            f32 t;
+            for (i = 0; i < rope->linkCount; i++, link++) {
+                a = link->a;
+                b = link->b;
+                if (a != NULL && b != NULL) {
+                    dx = a->pos.x - b->pos.x;
+                    dy = a->pos.y - b->pos.y;
+                    dz = a->pos.z - b->pos.z;
+                    RopeVecSet((f32 *)e, dx, dy, dz);
+                    t = (f32)(dx * dx) + dy * dy + dz * dz;
+                    d2 = t;
+                    dx = t - pool->slack;
+                    if (dx > link->len) {
+                        inv = lbl_8006D118(&d2, t);
+                        d2 = inv * (d2 - lbl_8006D0B4(link->len));
+                        e[0] *= d2;
+                        e[1] *= d2;
+                        e[2] *= d2;
+                        s = pool->one / (a->mass + b->mass);
+                        wa = a->mass * s;
+                        wb = b->mass * s;
+                        a->pos.x -= (f32)(e[0] * wa);
+                        a->pos.y -= (f32)(e[1] * wa);
+                        a->pos.z -= (f32)(e[2] * wa);
+                        b->pos.x += (f32)(e[0] * wb);
+                        b->pos.y += (f32)(e[1] * wb);
+                        b->pos.z += (f32)(e[2] * wb);
+                    }
+                }
+            }
+        }
+
+        /* keep every node within reach of its anchor */
+        {
+            u32 i;
+            RopeNode *n;
+            RopeEntry *entry = ROPE_ENTRY(rope);
+            f32 t;
+            n = rope->nodes;
+            k = pool->maxDist2;
+            for (i = 0; i < rope->nodeCount; i++, n++) {
+                lbl_8006DBAC(entry->mtx);
+                lbl_8006E1B0(&n->local, &c);
+                dx = n->pos.x - c.x;
+                dy = n->pos.y - c.y;
+                dz = n->pos.z - c.z;
+                RopeVecSet((f32 *)d, dx, dy, dz);
+                t = (f32)(dx * dx);
+                t += dy * dy;
+                t += dz * dz;
+                d2 = t;
+                if (t > k) {
+                    d2 = lbl_8006D0B4(k / d2);
+                    n->pos.x = c.x + (f32)(d[0] * d2);
+                    n->pos.y = c.y + (f32)(d[1] * d2);
+                    n->pos.z = c.z + (f32)(d[2] * d2);
+                    n->prev = n->pos;
+                }
+            }
+        }
+
+        {
+            u32 i;
+            RopeNode *n = rope->nodes;
+            for (i = 0; i < rope->nodeCount; i++, n++) {
+                n->vel.x = n->pos.x - n->prev.x;
+                n->vel.y = n->pos.y - n->prev.y;
+                n->vel.z = n->pos.z - n->prev.z;
+            }
+        }
+
+        {
+            u16 *indices;
+            RopeNode *n;
+            s32 j;
+            u32 i;
+            mtx = fn_80077B14(rope->model);
+            lbl_8006DBAC(ROPE_ENTRY(rope)->mtx);
+            n = rope->nodes;
+            for (i = 0; i < rope->nodeCount; i++, n++) {
+                indices = (u16 *)n;
+                for (j = 0; j < n->count; indices++, j++) {
+                    fn_8006E250(&n->pos, &mtx[indices[2]]);
+                }
+            }
+        }
+    }
+}
+/* fzgx:end fn_1_1132E4 */
+
 /* fzgx:begin fn_1_113C58 noprologue */
 #include "dolphin/types.h"
 #include "rel/main_rel/accessory.h"
