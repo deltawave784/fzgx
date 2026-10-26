@@ -132,6 +132,20 @@ file from what actually unblocked functions; keep each item one or two lines.
   `s32 iy = i` by `(s32)i` turns it into a CSE object coloured before the pool base
   (fn_3_20748, 99.5 -> 99.1). The capture verdict now reports this law for shadow blockers;
   `fixup_capture.pointer_locals` is the only lever and it is already tried at three positions.
+- **High-half base swap is a TU-object question, not an allocation one (2026-10-25).** Retail
+  `addi r30, r3, lbl@l; addis r31, r30, 0x5` (base r30, high half r31) against our r31/r30 pair
+  is not reachable from an extern cluster: over 40 spellings of fn_10_4790 (declaration and
+  definition order, carriers on either side, recomputed `base + 0x50000`, inline helpers,
+  `register`, typed struct members, `opt_propagation/lifetimes/common_subs off`) none flips it.
+  The GC/1.3.2 capture shows why: with propagation on, a constant-address local is propagated
+  into straight-line uses and rematerialized; with it off the base's address temp is numbered
+  above the declared high-half local and colors first. A matched sibling (fn_10_12D8) only
+  keeps the base because control flow separates its last use. Defining the retail objects in the
+  unit gives the exact pair, since MWCC addresses them off its own section base:
+  `fixup_layout.flatten_byte_views` turns byte-pointer locals at constant offsets (`base =
+  (u8 *)&lbl; hi = base + 0x50000; *(T *)(hi - 0x6c78)`) into `lbl + 0x49388` arithmetic for
+  the bare layout model (fn_10_4790 84.9 -> 100, fn_10_8314 -> 100, fn_3_6E14 95.2 -> 98.9).
+  Typed-struct bases (`Obj *obj; u32 upper = (u32)obj + 0x20000`, fn_1_3CDB0) are not covered yet.
 
 ## Selection panel evidence (2026-09-15)
 
