@@ -8465,3 +8465,6 @@ rel/main_rel/font/fn_1_4BD4C.c:
 
 rel/main_rel/font/fn_1_50A90.c:
 	.text       start:0x00050A90 end:0x00051564 align:4
+
+rel/main_rel/effect_car/fn_1_6BFB8.c:
+	.text       start:0x0006BFB8 end:0x0006C87C align:4

@@ -383,6 +383,212 @@ void fn_1_6A7A4(u32 arg0, void *arg1, f32 arg2) {
 }
 /* fzgx:end fn_1_6A7A4 */
 
+/* fzgx:begin fn_1_6BFB8 noprologue */
+#include "types.h"
+#include "game/vec3.h"
+#include "rel/main_rel/effect.h"
+#include "rel/main_rel/effect_car.h"
+
+extern f32 fn_1_8652C(int);
+extern f32 lbl_8006D0B4(f32);
+extern f64 __fabs(f64);
+extern s16 camera_get_entry_field_0xa4(u32);
+extern s16 fn_1_58F50(const void *);
+extern s16 fn_1_59078(Obj_1_bss_6C84C_Target *);
+extern s32 fn_1_58C4(void);
+extern s32 fn_1_5910(void);
+extern s32 fn_1_66B8(u32, f32);
+extern u32 fn_1_584AC(void);
+extern s32 fn_1_6EC0(u8);
+extern u32 fn_1_864E8(int);
+extern u8 *memset(u8 *, int, u32);
+extern void *fn_1_868C0(s8);
+extern void *lbl_8006DC6C(void *);
+extern void fn_1_681C(u32, u32 *);
+extern void fn_8006E2B0(void *, Vec3 *);
+
+#define FIELD(type, ptr, offset) (*(type *)((u8 *)(ptr) + (offset)))
+#define RAND() ((f32)(u16)fn_1_584AC() / 32767.0f)
+#pragma fp_contract on
+#pragma section code_type ".fzgxpool"
+static void fzgx_pool_primer_0(void) {
+    /* Volatile stores prime the shared literal pool in retail order. */
+    volatile f32 f;
+    volatile f64 d;  /* fzgx-allow: S2 volatile keeps the verified access order */
+    f=0.0f; f=-1.0f; f=25.0f; f=15.0f;
+    f=8.0f; f=150.0f; f=10.0f; f=0.5f;
+    f=0.125f; f=32767.0f; f=30.0f; f=20.0f;
+    f=1200.0f; f=0.15f;
+    d=4503601774854144.0; d=4503599627370496.0;
+    f=255.0f; f=102.0f; d=0.8;
+    f=1.6f; f=3.0f; f=0.01f; f=0.6f;
+    d=0.3; f=0.7f; f=0.2f; f=0.4f; f=0.1f;
+    d=0.125; d=2.0;
+    f=0.8f; f=1.0f; f=85.0f; f=0.25f;
+}
+#pragma section code_type ".text"
+#pragma force_active on
+static const u32 fzgx_pool_table_A0[3] = {0,0,0};
+#pragma force_active reset
+#pragma section code_type ".fzgxpool"
+static void fzgx_pool_primer_1(void) {
+    /* Volatile stores prime the shared literal pool in retail order. */
+    volatile f32 f;
+    volatile f64 d;  /* fzgx-allow: S2 volatile keeps the verified access order */
+    f=100.0f; f=3.5f; f=23.0f; f=60.0f; f=4.0f;
+    f=0.00000011920928955078125f; f=136.0f; f=0.03f;
+    d=0.5; f=0.3f; f=128.0f; f=224.0f; f=500.0f;
+    f=0.93f; f=5.0f; f=2.0f; f=0.05f; f=0.08f; f=0.9f;
+    d=0.30000001192092896; d=0.2; d=-0.3; d=-1.0; d=0.0; d=30.0; d=3.0;
+    f=0.001f; f=0.002f; f=1.9f; f=10000.0f; f=3000.0f;
+}
+#pragma section code_type ".text"
+static inline f32 fn_1_6BFB8_length3(f32 x, f32 z, f32 y, f32 *v) {
+    x -= v[0];
+    y -= v[1];
+    x *= x;
+    z -= v[2];
+    x = y*y + x;
+    x = z*z + x;
+    return lbl_8006D0B4(x);
+}
+static inline f32 fn_1_6BFB8_length(u32 p, f32 *v) {
+    return fn_1_6BFB8_length3(FIELD(f32,p,0x7c), FIELD(f32,p,0x84), FIELD(f32,p,0x80), v);
+}
+static inline f32 fn_1_6BFB8_mag(Vec3 *v) {
+    f32 s, y, z;
+    s = v->x * v->x;
+    y = v->y;
+    s = (f32)(y * y + s);
+    z = v->z;
+    s = (f32)(z * z + s);
+    return lbl_8006D0B4(s);
+}
+static inline f32 fn_1_6BFB8_min(f32 distance, u32 p, f32 *v) {
+    if (distance < fn_1_6BFB8_length(p, v)) return distance;
+    distance = fn_1_6BFB8_length(p, v);
+    return distance;
+}
+#define fn_1_6BFB8_nearest(d,p,v) (*(d) = fn_1_6BFB8_min(*(d),p,v))
+#define LENGTH() fn_1_6BFB8_length(v0,loc_8)
+
+#pragma fp_contract on
+void fn_1_6BFB8(u32 arg0) {
+    u32 v0;
+    u32 v9;
+    u32 v2;
+    u32 player_count;
+    struct { u32 value; } v21;
+    f32 v4;
+    f32 v5;
+    f32 v6;
+    f32 v10;
+    f32 v40;
+    f32 v3;
+    f32 v41;
+    f32 v42;
+    u8 loc_20[0xe8];
+    Vec3 *loc_68;
+    Vec3 loc_14;
+    f32 loc_8[3];
+
+    v0 = FIELD(u32,arg0,0x38);
+    v9 = fn_1_864E8(FIELD(s16,arg0,0x18));
+    fn_1_868C0((s8)FIELD(s16,arg0,0x18));
+    if (!fn_1_66B8(arg0 + 0x3c, 4.0f)) return;
+    if (fn_1_6EC0((u8)fn_1_5910())) {
+        player_count = fn_1_58C4();
+        fn_1_681C(0, (u32 *)loc_8);
+        v4 = LENGTH();
+        for (v21.value = 1; v21.value < player_count; v21.value++) {
+            fn_1_681C((u8)v21.value, (u32 *)loc_8);
+            v4 < LENGTH() ? (v4 = v4) : (v4 = LENGTH());
+        }
+        if (v4 > 100.0f) return;
+    }
+    memset(loc_20, 0, 0xe8);
+    FIELD(s16,loc_20,0x18) = FIELD(s16,arg0,0x18);
+    FIELD(s16,loc_20,0x0c) = 12;
+    FIELD(u16,loc_20,0x1a) = 0xffff;
+    FIELD(u32,loc_20,0x34) = FIELD(u32,lbl_1_bss_38458->unk_8,0xd0);
+    v4 = 0.1f * fn_1_6BFB8_mag((Vec3 *)(loc_20 + 0x48));
+    loc_68 = (Vec3 *)(loc_20 + 0x48);
+    FIELD(f32,loc_20,0x48) = FIELD(f32,arg0,0x48) + (f32)(v4 * (RAND() - 0.5f));
+    FIELD(f32,loc_20,0x4c) = FIELD(f32,arg0,0x4c) + (f32)(v4 * (RAND() - 0.5f));
+    FIELD(f32,loc_20,0x50) = FIELD(f32,arg0,0x50) + (f32)(v4 * (RAND() - 0.5f));
+    lbl_8006DC6C((u8 *)arg0 + 0xb8);
+    fn_8006E2B0(loc_68, &loc_14);
+    loc_14.x *= -0.3;
+    loc_14.y *= -0.3;
+    loc_14.z *= -1.0;
+    *(Vec3 *)(loc_20 + 0x48) = loc_14;
+    v5 = fn_1_8652C(FIELD(s16,arg0,0x18));
+    v40 = 0.3f + (f32)(0.2f * RAND());
+    switch (FIELD(s16,v0,6)) {
+    case 2: case 10: case 23: case 28: case 35: case 36: case 38:
+        v3 = 0.9f; v41 = 0.8f; v42 = 0.5f; break;
+    case 0: case 4: case 7: case 19: case 20: case 24: case 37: case 40:
+        v3 = 0.9f; v41 = 0.6f; v42 = 0.5f; break;
+    case 5: case 14: case 16: case 17: case 26: case 39:
+        v3 = 0.5f; v41 = 0.9f; v42 = v3; break;
+    case 3: case 6: case 11: case 12: case 13: case 18: case 27: case 31: case 32:
+        v3 = 0.4f; v42 = 0.9f; v41 = v3; break;
+    case 8: case 21: case 22: case 25: case 29: case 30: case 33:
+        v3 = 0.5f; v41 = 0.4f; v42 = v3; break;
+    default:
+        v3 = 0.9f; v41 = v3; v42 = v3; break;
+    }
+    FIELD(f32,loc_20,0x1c) = v3 * v40;
+    FIELD(f32,loc_20,0x20) = v41 * v40;
+    FIELD(f32,loc_20,0x24) = v42 * v40;
+    if ((v9 & 0x40) && FIELD(f32,loc_20,0x50) > 0.0 && __fabs(FIELD(f32,loc_20,0x4c)) < 0.8) {
+        FIELD(s16,arg0,0xac) = 15;
+        FIELD(u16,loc_20,0xb2) = 0;
+        if ((s8)FIELD(u8,v0,0x475) != -1 && fn_1_6EC0(FIELD(u8,v0,0x475)) && !camera_get_entry_field_0xa4(FIELD(u8,v0,0x475))) return;
+        FIELD(s32,loc_20,0x10) = 20.0f + (f32)(10.0f * RAND());
+        FIELD(f32,loc_20,0x94) = 0.0f;
+        FIELD(f32,loc_20,0x98) = 0.2f;
+        FIELD(f32,loc_20,0x9c) = -FIELD(f32,loc_20,0x50);
+        FIELD(f32,loc_20,0x2c) = 5.0f + RAND();
+        FIELD(f32,loc_20,0x28) = 30.0 + (f64)(3.0 * RAND());
+        FIELD(f32,loc_20,0x88) = 0.001f * RAND();
+        FIELD(f32,loc_20,0x8c) = 0.001f + (f32)(0.002f * RAND());
+        FIELD(f32,loc_20,0xb4) = 1.0f;
+        fn_1_59078((Obj_1_bss_6C84C_Target *)loc_20);
+    }
+    if (FIELD(s16,arg0,0xac) > 0) {
+        FIELD(s16,arg0,0xac)--;
+        v2 = 0;
+    } else {
+        v2 = 1;
+    }
+    FIELD(u16,loc_20,0xb2) = 1;
+    while ((u8)v2) {
+        FIELD(s32,loc_20,0x10) = 10.0f + (f32)(10.0f * RAND());
+        FIELD(u32,loc_20,0x34) = FIELD(u32,lbl_1_bss_38458->unk_8,0x70);
+        FIELD(f32,loc_20,0x94) = 1.9f * (RAND() - 0.5f);
+        FIELD(f32,loc_20,0x98) = 0.8f + (f32)(0.4f * RAND());
+        FIELD(f32,loc_20,0x9c) = 0.3f * (RAND() - 0.5f);
+        if ((s8)FIELD(u8,v0,0x475) != -1 && fn_1_6EC0(FIELD(u8,v0,0x475)) && !camera_get_entry_field_0xa4(FIELD(u8,v0,0x475))) {
+            if (FIELD(f32,loc_20,0x94) > 0.0f) {
+                FIELD(f32,loc_20,0x94) += 1.0f;
+            } else {
+                FIELD(f32,loc_20,0x94) -= 1.0f;
+            }
+            FIELD(f32,loc_20,0x98) += 0.5f;
+            FIELD(f32,loc_20,0x9c) -= 5.0f;
+        }
+        FIELD(f32,loc_20,0x2c) = 0.001f + (f32)((v5 / 10000.0f) * RAND());
+        FIELD(f32,loc_20,0x28) = 0.01f + (f32)((v5 / 3000.0f) * RAND());
+        FIELD(f32,loc_20,0x88) = 0.05f * RAND();
+        FIELD(f32,loc_20,0x8c) = 0.05f + (f32)(0.05f * RAND());
+        FIELD(f32,loc_20,0xb4) = 0.5f;
+        fn_1_58F50(loc_20);
+        v2--;
+    }
+}
+/* fzgx:end fn_1_6BFB8 */
+
 /* fzgx:begin fn_1_6C87C pool noprologue */
 #include "types.h"
 #include "rel/main_rel/effect_car.h"
