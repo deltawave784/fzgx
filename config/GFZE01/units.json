@@ -24273,6 +24273,34 @@
   },
   {
     "module": "main",
+    "source": "dol/fn_80058D24.c",
+    "symbols": [
+      "fn_80058D24"
+    ],
+    "status": "nonmatching",
+    "mw_version": "GC/1.3.2",
+    "extra_cflags": [
+      "-use_lmw_stmw",
+      "on"
+    ],
+    "pool": true
+  },
+  {
+    "module": "main",
+    "source": "dol/fn_80058DB4.c",
+    "symbols": [
+      "fn_80058DB4"
+    ],
+    "status": "nonmatching",
+    "mw_version": "GC/1.3.2",
+    "extra_cflags": [
+      "-use_lmw_stmw",
+      "on"
+    ],
+    "pool": true
+  },
+  {
+    "module": "main",
     "source": "dol/fn_80058E44.c",
     "symbols": [
       "fn_80058E44"
