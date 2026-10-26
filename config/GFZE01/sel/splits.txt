@@ -812,3 +812,6 @@ rel/sel/sel/fn_10_1F9C.c:
 
 rel/sel/sel/fn_10_CA94.c:
 	.text       start:0x0000CA94 end:0x0000CB20 align:4
+
+rel/sel/sel/fn_10_7FC0.c:
+	.text       start:0x00007FC0 end:0x0000804C align:4

@@ -18247,5 +18247,146 @@
     ],
     "link": "verified",
     "commit": "296297c6"
+  },
+  "fn_10_7FC0": {
+    "seed_symbol": "fn_10_CA94",
+    "generator": "fzgx fixup",
+    "transform": "bind exact clone",
+    "seed": "#include \"types.h\"\n\nextern char lbl_10_data_8DC[22];\nextern void fn_10_1B660(void);\nextern void *fn_1_435C(void *);\nextern void *fn_1_3F8C(void *, void *, int, int);\nextern void *fn_1_12F1E8(int);\nextern void fn_1_4A00(int, int, void *);\n\ntypedef struct lbl_10_bss_14_t {\n    u8 fzgx_u8_14;\n    u8 pad_1[0x3];\n} lbl_10_bss_14_t;\n\ntypedef struct lbl_10_bss_49388_t {\n    u8 fzgx_u8_49388;\n    u8 pad_1[0x3];\n} lbl_10_bss_49388_t;\n\ntypedef struct lbl_10_bss_4938C_t {\n    u8 fzgx_u8_4938C;\n    u8 pad_1[0x1];\n} lbl_10_bss_4938C_t;\n\ntypedef struct lbl_10_bss_51740_t {\n    u8 fzgx_u8_51740;\n    u8 pad_1[0x3];\n} lbl_10_bss_51740_t;\n\ntypedef struct lbl_10_bss_51744_t {\n    u8 fzgx_u8_51744;\n    u8 pad_1[0x3];\n} lbl_10_bss_51744_t;\n\n/* file-scope objects of the retail TU, in retail order: MWCC addresses them off one section base */\nu32 fzgx_obj_lbl_10_bss_0[5];\nlbl_10_bss_14_t fzgx_obj_lbl_10_bss_14;\nu16 fzgx_obj_lbl_10_bss_18;\nu16 fzgx_obj_lbl_10_bss_1A;\nu32 fzgx_obj_lbl_10_bss_1C[233];\nu32 fzgx_obj_lbl_10_bss_3C0[74736];\nu32 fzgx_obj_lbl_10_bss_49380;\nu32 fzgx_obj_lbl_10_bss_49384;\nlbl_10_bss_49388_t fzgx_obj_lbl_10_bss_49388;\nlbl_10_bss_4938C_t fzgx_obj_lbl_10_bss_4938C;\nu8 fzgx_obj_lbl_10_bss_4938E;\nu8 fzgx_obj_lbl_10_bss_4938F;\nu32 fzgx_obj_lbl_10_bss_49390[4];\nu32 fzgx_obj_lbl_10_bss_493A0[5832];\nu32 lbl_10_bss_4EEC0[2592];\nlbl_10_bss_51740_t fzgx_obj_lbl_10_bss_51740;\nlbl_10_bss_51744_t fzgx_obj_lbl_10_bss_51744;\n\n#pragma section code_type \".fzgxpool\"\nstatic void fzgx_bss_layout(void) {\n    volatile u8 s;  /* fzgx-allow: S2 layout primer sink: MWCC emits .bss objects in first-access order */\n    s = *(u8 *)&fzgx_obj_lbl_10_bss_0;\n    s = *(u8 *)&fzgx_obj_lbl_10_bss_14;\n    s = *(u8 *)&fzgx_obj_lbl_10_bss_18;\n    s = *(u8 *)&fzgx_obj_lbl_10_bss_1A;\n    s = *(u8 *)&fzgx_obj_lbl_10_bss_1C;\n    s = *(u8 *)&fzgx_obj_lbl_10_bss_3C0;\n    s = *(u8 *)&fzgx_obj_lbl_10_bss_49380;\n    s = *(u8 *)&fzgx_obj_lbl_10_bss_49384;\n    s = *(u8 *)&fzgx_obj_lbl_10_bss_49388;\n    s = *(u8 *)&fzgx_obj_lbl_10_bss_4938C;\n    s = *(u8 *)&fzgx_obj_lbl_10_bss_4938E;\n    s = *(u8 *)&fzgx_obj_lbl_10_bss_4938F;\n    s = *(u8 *)&fzgx_obj_lbl_10_bss_49390;\n    s = *(u8 *)&fzgx_obj_lbl_10_bss_493A0;\n    s = *(u8 *)&lbl_10_bss_4EEC0;\n    s = *(u8 *)&fzgx_obj_lbl_10_bss_51740;\n    s = *(u8 *)&fzgx_obj_lbl_10_bss_51744;\n}\n#pragma section code_type \".text\"\n\nvoid fn_10_CA94(void) {\n\n\n    fn_1_435C(*(void **)(((u8 *)&fzgx_obj_lbl_10_bss_49388.fzgx_u8_49388)));\n    *(void **)(((u8 *)&fzgx_obj_lbl_10_bss_51740.fzgx_u8_51740)) =\n        fn_1_3F8C(lbl_10_data_8DC, fn_10_1B660, 0, 8);\n    fn_1_12F1E8(0x1e0);\n    fn_1_4A00(1, (u8)*(s16 *)(((u8 *)&fzgx_obj_lbl_10_bss_4938C.fzgx_u8_4938C)),\n        *(void **)(((u8 *)&fzgx_obj_lbl_10_bss_49388.fzgx_u8_49388)));\n    *(u32 *)(((u8 *)&fzgx_obj_lbl_10_bss_51744.fzgx_u8_51744)) = 0;\n    *(u32 *)(((u8 *)&fzgx_obj_lbl_10_bss_14.fzgx_u8_14)) = -1;\n}\n",
+    "seed_sha256": "fdc37bb2248f59d2bde8e0ddf8d3d3727cf4fab431b9d00279c88e5f13c95c00",
+    "generated_sha256": "6cdd8952858154636ea2859d6711edb12865cb54fb2471f5e0903c5e8caf4a7a",
+    "generated_source": "\n\ntypedef signed short s16;\n\ntypedef unsigned char u8;\ntypedef unsigned short u16;\ntypedef unsigned long u32;\n\nextern char lbl_10_data_744[22];\nextern void fn_10_1B65C(void);\nextern void *fn_1_435C(void *);\nextern void *fn_1_3F8C(void *, void *, int, int);\nextern void *fn_1_12F1E8(int);\nextern void fn_1_4A00(int, int, void *);\ntypedef struct lbl_10_bss_14_t {\nu8 fzgx_u8_14;\nu8 pad_1[0x3];\n} lbl_10_bss_14_t;\ntypedef struct lbl_10_bss_49388_t {\nu8 fzgx_u8_49388;\nu8 pad_1[0x3];\n} lbl_10_bss_49388_t;\ntypedef struct lbl_10_bss_4938C_t {\nu8 fzgx_u8_4938C;\nu8 pad_1[0x1];\n} lbl_10_bss_4938C_t;\ntypedef struct lbl_10_bss_51740_t {\nu8 fzgx_u8_51740;\nu8 pad_1[0x3];\n} lbl_10_bss_51740_t;\ntypedef struct lbl_10_bss_51744_t {\nu8 fzgx_u8_51744;\nu8 pad_1[0x3];\n} lbl_10_bss_51744_t;\n/* file-scope objects of the retail TU, in retail order: MWCC addresses them off one section base */\nu32 fzgx_obj_lbl_10_bss_0[5];\nlbl_10_bss_14_t fzgx_obj_lbl_10_bss_14;\nu16 fzgx_obj_lbl_10_bss_18;\nu16 fzgx_obj_lbl_10_bss_1A;\nu32 fzgx_obj_lbl_10_bss_1C[233];\nu32 fzgx_obj_lbl_10_bss_3C0[74736];\nu32 fzgx_obj_lbl_10_bss_49380;\nu32 fzgx_obj_lbl_10_bss_49384;\nlbl_10_bss_49388_t fzgx_obj_lbl_10_bss_49388;\nlbl_10_bss_4938C_t fzgx_obj_lbl_10_bss_4938C;\nu8 fzgx_obj_lbl_10_bss_4938E;\nu8 fzgx_obj_lbl_10_bss_4938F;\nu32 fzgx_obj_lbl_10_bss_49390[4];\nu32 fzgx_obj_lbl_10_bss_493A0[5832];\nu32 lbl_10_bss_4EEC0[2592];\nlbl_10_bss_51740_t fzgx_obj_lbl_10_bss_51740;\nlbl_10_bss_51744_t fzgx_obj_lbl_10_bss_51744;\n#pragma section code_type \".fzgxpool\"\nstatic void fzgx_bss_layout(void) {\nvolatile u8 s; /* fzgx-allow: S2 layout primer sink: MWCC emits .bss objects in first-access order */\ns = *(u8 *)&fzgx_obj_lbl_10_bss_0;\ns = *(u8 *)&fzgx_obj_lbl_10_bss_14;\ns = *(u8 *)&fzgx_obj_lbl_10_bss_18;\ns = *(u8 *)&fzgx_obj_lbl_10_bss_1A;\ns = *(u8 *)&fzgx_obj_lbl_10_bss_1C;\ns = *(u8 *)&fzgx_obj_lbl_10_bss_3C0;\ns = *(u8 *)&fzgx_obj_lbl_10_bss_49380;\ns = *(u8 *)&fzgx_obj_lbl_10_bss_49384;\ns = *(u8 *)&fzgx_obj_lbl_10_bss_49388;\ns = *(u8 *)&fzgx_obj_lbl_10_bss_4938C;\ns = *(u8 *)&fzgx_obj_lbl_10_bss_4938E;\ns = *(u8 *)&fzgx_obj_lbl_10_bss_4938F;\ns = *(u8 *)&fzgx_obj_lbl_10_bss_49390;\ns = *(u8 *)&fzgx_obj_lbl_10_bss_493A0;\ns = *(u8 *)&lbl_10_bss_4EEC0;\ns = *(u8 *)&fzgx_obj_lbl_10_bss_51740;\ns = *(u8 *)&fzgx_obj_lbl_10_bss_51744;\n}\n#pragma section code_type \".text\"\nvoid fn_10_7FC0(void) {\nfn_1_435C(*(void **)(((u8 *)&fzgx_obj_lbl_10_bss_49388.fzgx_u8_49388)));\n*(void **)(((u8 *)&fzgx_obj_lbl_10_bss_51740.fzgx_u8_51740)) =\nfn_1_3F8C(lbl_10_data_744, fn_10_1B65C, 0, 8);\nfn_1_12F1E8(0x1e0);\nfn_1_4A00(1, (u8)*(s16 *)(((u8 *)&fzgx_obj_lbl_10_bss_4938C.fzgx_u8_4938C)),\n*(void **)(((u8 *)&fzgx_obj_lbl_10_bss_49388.fzgx_u8_49388)));\n*(u32 *)(((u8 *)&fzgx_obj_lbl_10_bss_51744.fzgx_u8_51744)) = 0;\n*(u32 *)(((u8 *)&fzgx_obj_lbl_10_bss_14.fzgx_u8_14)) = -1;\n}\n",
+    "compiler": "GC/1.3.2",
+    "flags": "",
+    "source": "rel/sel/sel/fn_10_7FC0.c",
+    "bytes": 140,
+    "headers_sha256": "cbf4d25975eeb2b89d3d24f1a204398c7ddd8d2fe867e7d7dd4de0a8b0058ac6",
+    "oracle_sha256": "f085515cb889ee5d601739a0e2d7f10e7331f8ce351cdd47a70c78cdb5dde226",
+    "recipe": [
+      {
+        "label": "expand owned clone declarations",
+        "input_sha256": "fdc37bb2248f59d2bde8e0ddf8d3d3727cf4fab431b9d00279c88e5f13c95c00",
+        "output_sha256": "78b6f386bcaade6e8096321a23bb53d74ff98b64a673b39d6b9353cca5df0d30",
+        "input_symbol": "fn_10_CA94",
+        "output_symbol": "fn_10_CA94",
+        "edits": [
+          [
+            0,
+            18,
+            "\n\ntypedef signed short s16;\n\ntypedef unsigned char u8;\ntypedef unsigned short u16;\ntypedef unsigned long u32;"
+          ],
+          [
+            238,
+            239,
+            ""
+          ],
+          [
+            272,
+            295,
+            "u8 fzgx_u8_14;\n"
+          ],
+          [
+            329,
+            330,
+            ""
+          ],
+          [
+            366,
+            392,
+            "u8 fzgx_u8_49388;\n"
+          ],
+          [
+            429,
+            430,
+            ""
+          ],
+          [
+            466,
+            492,
+            "u8 fzgx_u8_4938C;\n"
+          ],
+          [
+            529,
+            530,
+            ""
+          ],
+          [
+            566,
+            592,
+            "u8 fzgx_u8_51740;\n"
+          ],
+          [
+            629,
+            630,
+            ""
+          ],
+          [
+            666,
+            692,
+            "u8 fzgx_u8_51744;\n"
+          ],
+          [
+            729,
+            730,
+            ""
+          ],
+          [
+            1431,
+            1432,
+            ""
+          ],
+          [
+            1506,
+            2278,
+            "volatile u8 s; /* fzgx-allow: S2 layout primer sink: MWCC emits .bss objects in first-access order */\ns = *(u8 *)&fzgx_obj_lbl_10_bss_0;\ns = *(u8 *)&fzgx_obj_lbl_10_bss_14;\ns = *(u8 *)&fzgx_obj_lbl_10_bss_18;\ns = *(u8 *)&fzgx_obj_lbl_10_bss_1A;\ns = *(u8 *)&fzgx_obj_lbl_10_bss_1C;\ns = *(u8 *)&fzgx_obj_lbl_10_bss_3C0;\ns = *(u8 *)&fzgx_obj_lbl_10_bss_49380;\ns = *(u8 *)&fzgx_obj_lbl_10_bss_49384;\ns = *(u8 *)&fzgx_obj_lbl_10_bss_49388;\ns = *(u8 *)&fzgx_obj_lbl_10_bss_4938C;\ns = *(u8 *)&fzgx_obj_lbl_10_bss_4938E;\ns = *(u8 *)&fzgx_obj_lbl_10_bss_4938F;\ns = *(u8 *)&fzgx_obj_lbl_10_bss_49390;\ns = *(u8 *)&fzgx_obj_lbl_10_bss_493A0;\ns = *(u8 *)&lbl_10_bss_4EEC0;\ns = *(u8 *)&fzgx_obj_lbl_10_bss_51740;\n"
+          ],
+          [
+            2353,
+            2354,
+            ""
+          ],
+          [
+            2378,
+            2827,
+            "fn_1_435C(*(void **)(((u8 *)&fzgx_obj_lbl_10_bss_49388.fzgx_u8_49388)));\n*(void **)(((u8 *)&fzgx_obj_lbl_10_bss_51740.fzgx_u8_51740)) =\nfn_1_3F8C(lbl_10_data_8DC, fn_10_1B660, 0, 8);\nfn_1_12F1E8(0x1e0);\nfn_1_4A00(1, (u8)*(s16 *)(((u8 *)&fzgx_obj_lbl_10_bss_4938C.fzgx_u8_4938C)),\n*(void **)(((u8 *)&fzgx_obj_lbl_10_bss_49388.fzgx_u8_49388)));\n*(u32 *)(((u8 *)&fzgx_obj_lbl_10_bss_51744.fzgx_u8_51744)) = 0;\n"
+          ]
+        ]
+      },
+      {
+        "label": "bind exact clone",
+        "input_sha256": "78b6f386bcaade6e8096321a23bb53d74ff98b64a673b39d6b9353cca5df0d30",
+        "output_sha256": "6cdd8952858154636ea2859d6711edb12865cb54fb2471f5e0903c5e8caf4a7a",
+        "input_symbol": "fn_10_CA94",
+        "output_symbol": "fn_10_7FC0",
+        "edits": [
+          [
+            135,
+            167,
+            "744[22];\nextern void fn_10_1B65C"
+          ],
+          [
+            2335,
+            2339,
+            "7FC0"
+          ],
+          [
+            2506,
+            2522,
+            "744, fn_10_1B65C"
+          ]
+        ],
+        "clone": {
+          "donor": "fn_10_CA94",
+          "recipient": "fn_10_7FC0",
+          "bindings": {
+            "lbl_10_bss_0": "lbl_10_bss_0",
+            "lbl_10_data_8DC": "lbl_10_data_744",
+            "fn_10_1B660": "fn_10_1B65C",
+            "fn_10_CA94": "fn_10_7FC0"
+          }
+        }
+      }
+    ],
+    "link": "pending"
   }
 }
