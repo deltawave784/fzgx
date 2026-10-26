@@ -6284,3 +6284,15 @@ dol/fn_80058D24.c:
 
 dol/fn_80058DB4.c:
 	.text       start:0x80058DB4 end:0x80058E44 align:4
+
+dol/fn_800597F4.c:
+	.text       start:0x800597F4 end:0x80059884 align:4
+
+dol/fn_80059884.c:
+	.text       start:0x80059884 end:0x80059914 align:4
+
+dol/fn_80058EF4.c:
+	.text       start:0x80058EF4 end:0x80058FE4 align:4
+
+dol/fn_8005912C.c:
+	.text       start:0x8005912C end:0x800592E0 align:4
