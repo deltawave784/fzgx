@@ -42,6 +42,14 @@ file from what actually unblocked functions; keep each item one or two lines.
   asm helper's register parameters (they interfere with every earlier value and f0-f13)
   keep degree >= K at their scan and colour after the long-lived float. Function or block locals and value parameters all fail (capture of
   fn_1_438AC, 2026-10-26; the same family emits this variant).
+  A computed column where retail keeps each load and its `fmadds` result in one FPR
+  (`lfs f4, 0x8; ... fmadds f4, f4, f5, f0`) is an unsplit read-modify-write local
+  (`x = m[0][2]; x = x * s + m[0][3];`): with `opt_lifetimes` on, MWCC's range splitter
+  (IROUseDef.c `fn_00459420`) gives the result its own `@N` object numbered above every local
+  (capture of fn_1_10CC38, 2026-10-26). Retail compiled such functions under
+  `#pragma opt_lifetimes off` with one named variable per region of every other reused local,
+  the new names declared first (split objects number above the declared locals). `fixup` family
+  `lifetime_splits` writes those regions mechanically (fn_1_10CC38 landed).
 - **Evaluation order at a call**: a value produced by a call and consumed in an expression
   is evaluated first when written inline; holding it in a local moves the call and can
   swap `mullw`/`add` operands (fn_1_76704).

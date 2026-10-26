@@ -1333,7 +1333,7 @@ def rewrites(body: str, name: str) -> List[Tuple[str, str]]:
                call_results_to_locals, wrap_constant_pointers, decse_repeated_expressions,
                scalar_carriers, dead_uses, variable_splits, signedness_flips, float_precision,
                compound_assignments, embedded_call_assignments, condition_embedded_assignments,
-               expression_embedded_assignments):
+               expression_embedded_assignments, lifetime_splits):
         try:
             out += fn(body, name)
         except Exception:
@@ -4664,3 +4664,253 @@ def header_drift_replacement(project, symbol, body, mw=None, flags=None):
     respelled.write_text(text)
     result = oracle.check(project, symbol, 0, source=respelled, mw_version=mw, extra_cflags=flags)
     return (description, text, result) if result.ok else None
+
+
+
+_LT_KEYWORDS = {'if', 'else', 'for', 'while', 'do', 'switch', 'return', 'case', 'default', 'break',
+                'continue', 'goto', 'sizeof', 'struct', 'union', 'enum', 'typedef', 'static', 'const',
+                'volatile', 'register', 'extern', 'inline'}
+
+
+def _lt_scalar_locals(code: str, span) -> List[Tuple[str, str, int, int]]:
+    """(type, name, declaration start, declaration end) of the leading scalar declarations,
+    several declarators per line included; arrays and aggregates never take a web."""
+    out, i = [], span[1]
+    scalar = re.compile(r'\s*((?:(?:const|volatile|register)\s+)*' + TYPE + r')\s*([^;{}()=]*(?:=[^;{}]*)?);')
+    other = re.compile(r'\s*(?:(?:const|volatile|static|register)\s+)*(?:(?:struct|union|enum)\b[^;]*?'
+                       r'(?:\{[^{}]*\})?[^;{}]*|[A-Za-z_]\w*\s*\**\s*[A-Za-z_(][^;{}]*);')
+    while True:
+        pre = re.compile(r'\s*#[^\n]*\n').match(code, i)
+        if pre:
+            i = pre.end()
+            continue
+        m = scalar.match(code, i)
+        words = re.match(r'\s*([A-Za-z_]\w*)', code[i:i + 80])
+        if not words or words[1] in _LT_KEYWORDS - {'const', 'volatile', 'register', 'struct', 'union', 'enum', 'static'}:
+            return out
+        if m and m[2].strip() and not re.match(r'\s*(?:struct|union|enum)\b', m[1]):
+            full = re.sub(r'^(?:(?:volatile|register)\s+)+', '', m[1]).strip()
+            base = full.rstrip('* ').strip()
+            lead = full[len(base):].replace(' ', '')    # `T *a, b`: the star binds to a only
+            for n, part in enumerate(m[2].split(',')):
+                d = re.fullmatch(r'\s*(\**)\s*([A-Za-z_]\w*)\s*(?:=.*)?', part, re.S)
+                if d:
+                    stars = (lead if n == 0 else '') + d[1]
+                    out.append(((base + ' ' + stars).strip(), d[2], m.start(1), m.end()))
+            i = m.end()
+            continue
+        m = other.match(code, i)
+        if not m or re.match(r'\s*[A-Za-z_]\w*\s*(?:=|\(|->|\.|\[)', code[i:m.end()]):
+            return out
+        i = m.end()
+
+
+
+
+
+def _lt_splits(code: str, lo: int, hi: int, taken: set):
+    """The range splits of one function body code[lo:hi] written as named locals: (tokens,
+    renames as (start, end, variable, new name), created locals as (start, type, new name)),
+    or None when braces cannot bound the control flow (goto, a loop or switch without
+    braces). Every block's leading scalar declarations are considered."""
+    if re.search(r'\bgoto\b', code[lo:hi]):
+        return None
+    toks = [(t.start(), t.end(), t[0]) for t in TOKEN.finditer(code, lo, hi)]
+
+    def opener(k):
+        depth, j = 0, k
+        while j >= 0:
+            depth += {')': 1, '(': -1}.get(toks[j][2], 0)
+            if depth == 0:
+                return j
+            j -= 1
+        return -1
+    for k, (a, b, t) in enumerate(toks):
+        if t in ('for', 'while', 'switch') and k + 1 < len(toks) and toks[k + 1][2] == '(':
+            depth, j = 0, k + 1
+            while j < len(toks):
+                depth += {'(': 1, ')': -1}.get(toks[j][2], 0)
+                if depth == 0:
+                    break
+                j += 1
+            if j + 1 >= len(toks) or toks[j + 1][2] not in ('{', ';'):
+                return None
+        if t == 'do' and (k + 1 >= len(toks) or toks[k + 1][2] != '{'):
+            return None
+    # the enclosing blocks of every token: (open position, 'loop' / 'switch' / '' body, the
+    # loop statement's start)
+    stack, chain, close_of, blocks = [(lo - 1, '', lo)], [], {lo - 1: hi}, [lo - 1]
+    for k, (a, b, t) in enumerate(toks):
+        if t == '{':
+            prev = toks[k - 1][2] if k else ''
+            kind, begin = ('loop', toks[k - 1][0]) if prev == 'do' else ('', a)
+            if prev == ')':
+                j = opener(k - 1)
+                if j > 0 and toks[j - 1][2] in ('for', 'while', 'switch'):
+                    kind = 'switch' if toks[j - 1][2] == 'switch' else 'loop'
+                    begin = toks[j - 1][0]
+            stack.append((a, kind, begin))
+            blocks.append(a)
+        chain.append(tuple(stack))
+        if t == '}' and len(stack) > 1:
+            close_of[stack[-1][0]] = a
+            stack.pop()
+    rename, created = [], []
+    for block_open in blocks:
+        b_lo, b_hi = block_open + 1, close_of.get(block_open, hi)
+        locs = _lt_scalar_locals(code, (None, b_lo))
+        variables = {nm: typ for typ, nm, _, _ in locs}
+        decl_end = max((l[3] for l in locs), default=b_lo)
+        for var in variables:
+            decls = re.findall(r'(?:^|[;{}(,])\s*(?:const\s+)?' + TYPE + r'\s+\**\s*' + re.escape(var)
+                               + r'\s*[;=,\[)]', code[b_lo:b_hi])
+            if len(decls) > 1 or re.search(r'&\s*' + re.escape(var) + r'\b(?!\s*(?:->|\[))', code[b_lo:b_hi]):
+                continue
+            mentions = [k for k, (a, b, t) in enumerate(toks) if t == var and b_lo <= a < b_hi
+                        and (k == 0 or toks[k - 1][2] not in ('.', '->'))]
+            kills = []   # (statement start token, defined-name token)
+            for k in mentions:
+                if k + 1 >= len(toks) or toks[k + 1][2] != '=':
+                    continue
+                start = k
+                prev = toks[k - 1][2] if k else '{'
+                if prev == '(' and k >= 2 and toks[k - 2][2] == 'for':
+                    start = k - 2
+                    prev = toks[k - 3][2] if k >= 3 else '{'
+                if prev not in (';', '{', '}') or chain[start][-1][1] == 'switch':
+                    continue    # conditional, or reachable past it through a case label
+                j = k + 2
+                while j < len(toks) and toks[j][2] != ';':
+                    j += 1
+                if any(toks[q][2] == var for q in range(k + 2, j)):
+                    continue    # a read-modify-write definition keeps its web
+                kills.append((start, k))
+            regions = []
+            for n, (start, k) in enumerate(kills):
+                enclosing = chain[start]
+                if any(kind == 'switch' for _, kind, _ in enclosing):
+                    continue
+                # inside a loop a definition starts a web only when nothing in the outermost
+                # loop (its header included) reads the variable before it: no value crosses
+                # the back edge
+                loops = [begin for _, kind, begin in enclosing if kind == 'loop']
+                if loops and any(loops[0] <= toks[u][0] < toks[start][0] for u in mentions):
+                    continue
+                block = enclosing[-1][0]
+                stop = next((s for s, _ in kills[n + 1:] if chain[s][-1][0] == block), None)
+                stop_pos = toks[stop][0] if stop is not None else close_of.get(block, hi)
+                for u in mentions:
+                    if u <= k or toks[u][0] < stop_pos:
+                        continue
+                    # a later mention is safe when a killing definition at the top level of one
+                    # of its enclosing blocks lies between the region and it
+                    inside = {b0 for b0, _, _ in chain[u]}
+                    if not any(stop_pos <= toks[s][0] <= toks[u][0] and chain[s][-1][0] in inside
+                               for s, _ in kills):
+                        break
+                else:
+                    regions.append((toks[start][0], stop_pos))
+            outside = [toks[u][0] for u in mentions if toks[u][0] >= decl_end
+                       and not any(x <= toks[u][0] < y for x, y in regions)]
+            for n, (a, b) in enumerate(regions):
+                if not outside and n == 0:
+                    continue    # every web is a split: the first keeps the declared object
+                m = n + 1
+                new = f'{var}_r{m}'
+                while new in taken or re.search(r'\b' + new + r'\b', code):
+                    m += 1
+                    new = f'{var}_r{m}'
+                taken.add(new)
+                rename.append((a, b, var, new))
+                created.append((a, variables[var], new))
+    return toks, rename, created
+
+
+def _lt_apply(text: str, toks, rename) -> str:
+    edits = []
+    for k, (a, b, t) in enumerate(toks):
+        if k and toks[k - 1][2] in ('.', '->'):
+            continue
+        owner = [r for r in rename if r[2] == t and r[0] <= a < r[1]]
+        if owner:
+            edits.append((a, b, max(owner)[3]))   # the innermost (latest starting) region
+    for a, b, new in reversed(edits):
+        text = text[:a] + new + text[b:]
+    return text
+
+
+def lifetime_splits(body: str, name: str) -> List[Tuple[str, str]]:
+    """`#pragma opt_lifetimes off` with the compiler's range splits written as named locals.
+
+    With lifetimes on, MWCC (IROUseDef.c `fn_00459420`, run when `copts.lifetimes`) splits
+    every local whose definitions form disconnected def-use webs into compiler objects
+    numbered above every declared local, a read-modify-write chain `x = load; x = x * s + m;`
+    included (the load and the result are separate webs). Retail keeps such a chain in one
+    register (`lfs f4; fmadds f4, f4, f5, f0`: fn_1_10CC38's locked-cache column, capture
+    2026-10-26), which only an unsplit local gives, while every other reused local of the same
+    function is split. So the original disabled the splitter and wrote one variable per region:
+    every killing definition (`v = e;` or `for (v = e; ...)` at the top level of a block, outside
+    any switch, `e` not reading `v`, not read earlier in an enclosing loop) whose later uses are
+    all re-killed starts a new named local, declared first in creation order (split objects
+    number above the declared locals). Read-modify-write definitions keep the variable. The
+    same renaming is offered inside the static inline helpers the function calls (their
+    inlined locals are split by the caller's compile)."""
+    from .sdkimport import masked
+    code = masked(body)
+    span = _function_body_span(code, name)
+    if not span:
+        return []
+    taken = set()
+    main = _lt_splits(code, span[1], span[2], taken)
+    if main is None:
+        return []
+    toks, rename, created = main
+    helpers = []   # (start, helper name, toks, rename, created)
+    for h in re.finditer(r'(?m)^static\s+inline\s+[^;{}()]*?\b(\w+)\s*\([^;{}]*\)\s*\{', code):
+        if h[1] == name or not re.search(r'\b' + re.escape(h[1]) + r'\s*\(', code[span[1]:span[2]]):
+            continue
+        hspan = _function_body_span(code[h.start():], h[1])
+        if not hspan:
+            continue
+        found = _lt_splits(code, h.start() + hspan[1], h.start() + hspan[2], taken)
+        if found and found[2]:
+            helpers.append((h.start(), h[1]) + tuple(found))
+
+    def declare(text, fn, decls, where):
+        span2 = _function_body_span(masked(text), fn)
+        if where == 'first':
+            at = span2[1]
+        else:
+            locs = _lt_scalar_locals(masked(text), span2)
+            at = max(l[3] for l in locs) if locs else span2[1]
+        lines = ''.join(f'\n    {declarator(typ.strip(), new)};' for _, typ, new in decls)
+        return text[:at] + lines + text[at:]
+
+    def wrap(text):
+        span3 = _function_body_span(masked(text), name)
+        head = text.rfind('\n', 0, span3[0]) + 1
+        end = text.find('\n', span3[2])
+        end = len(text) if end < 0 else end + 1
+        return (text[:head] + '#pragma opt_lifetimes off\n' + text[head:end]
+                + '#pragma opt_lifetimes reset\n' + text[end:])
+    out = []
+    created.sort()
+    if created:
+        renamed = _lt_apply(body, toks, rename)
+        for label, decls in (('creation order', created), ('reverse creation order', created[::-1])):
+            for where in ('first', 'last'):
+                out.append((f'lifetimes off, {len(created)} range splits as named locals declared '
+                            f'{where} ({label})', wrap(declare(renamed, name, decls, where))))
+    if helpers:
+        # renames are position based: apply the later function first
+        groups = sorted([(span[0], name, toks, rename, created)] + helpers, key=lambda g: -g[0])
+        total = sum(len(g[4]) for g in groups)
+        for reverse in (False, True):
+            text = body
+            for _, fn, t, r, c in groups:
+                if c:
+                    text = declare(_lt_apply(text, t, r), fn, sorted(c, reverse=reverse), 'first')
+            out.append((f'lifetimes off, {total} range splits as named locals, inline helpers '
+                        f'{",".join(h[1] for h in helpers)} included'
+                        + (' (reverse creation order)' if reverse else ''), wrap(text)))
+    return out

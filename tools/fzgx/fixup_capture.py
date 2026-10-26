@@ -317,7 +317,10 @@ def verdict_text(a: dict) -> str:
         # only pass a shadow when the shadow's access is spelled through a declared pointer local
         hint = ('structural: shadow webs are numbered above every local in reverse creation order; '
                 'declaration order, counter reuse and fresh counters cannot pass one (only a declared '
-                'pointer local replacing the indexed access, at the cost of the neighbours\' degree phase)')
+                'pointer local replacing the indexed access, at the cost of the neighbours\' degree phase); '
+                'a pass1 @N object holding a later web of a reused or read-modify-write local is a '
+                'range split (IROUseDef splitting, copts.lifetimes): `#pragma opt_lifetimes off` with '
+                'one named local per region declared first removes it (source.lifetime_splits, fn_1_10CC38)')
     elif 'temp' in kinds:
         hint = 'expression/statement order (lowering temporary)'
     elif 'parameter' in kinds:

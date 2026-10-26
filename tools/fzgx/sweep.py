@@ -100,6 +100,7 @@ def generate(p: Project, s: str, sym, path: Path, body: str, check, outdir: Path
     add('heldcall', lambda: fixup_source.call_results_to_locals(body, sym.name))
     add('through', lambda: fixup_source.through_local(body, sym.name))
     add('splits', lambda: fixup_source.variable_splits(body, sym.name))
+    add('lifetimes', lambda: fixup_source.lifetime_splits(body, sym.name))
     add('carriers', lambda: fixup_source.scalar_carriers(body, sym.name))
     add('constptr', lambda: fixup_source.wrap_constant_pointers(body, sym.name))
     add('decse', lambda: fixup_source.decse_repeated_expressions(body, sym.name))
