@@ -58775,6 +58775,226 @@ void fn_17_750C(Interview750C *interview) {
 }
 /* fzgx:end fn_17_750C */
 
+/* fzgx:begin fn_17_7728 pool */
+#include "rel/interview/interview.h"
+
+typedef struct {
+    f32 x, y, z;
+} IvVec;
+
+typedef struct {
+    u32 unk_0;
+    IvVec pos;
+    IvVec rot;
+    f32 scale;
+    s16 time;
+    u8 pad_22[2];
+} IvKey;
+
+typedef struct {
+    s32 unk_0;
+    u8 pad_4[4];
+    IvKey key;
+    u8 pad_2C[0x28];
+} IvEntry;
+
+typedef struct {
+    u8 pad_0[6];
+    s16 unk_6;
+    s16 unk_8;
+    u8 pad_A[0x7A];
+    s16 unk_84;
+    u8 pad_86[0x10];
+    s16 unk_96;
+} IvTimer;
+
+typedef struct {
+    s32 base;
+    u8 pad_4[0x10];
+    IvTimer *timer;
+} IvClock;
+
+typedef struct {
+    u8 pad_0[4];
+    u8 isDefault;
+    u8 pad_5[0x53];
+    u32 flags;
+    u16 mode;
+    u8 pad_5E[2];
+    IvClock clock;
+} IvState;
+
+typedef struct {
+    f32 scale;
+    u8 pad_4[0x1C];
+    s16 time;
+    s16 unk_22;
+    s16 unk_24;
+    u8 pad_26[2];
+    IvVec pos;
+    IvVec rot;
+    s16 unk_40;
+    s16 unk_42;
+    s16 unk_44;
+    u8 pad_46[2];
+    IvVec pos2;
+    f32 unk_54;
+    f32 unk_58;
+} IvCam;
+
+extern const f32 lbl_17_rodata_20;
+
+/* file-scope objects of the retail TU (from a matched sibling), in retail order: MWCC addresses them off one section base */
+u8 fzgx_obj_lbl_17_bss_0;
+u8 fzgx_obj_lbl_17_bss_1;
+u8 lbl_17_bss_2;
+u8 lbl_17_bss_3;
+u32 lbl_17_bss_3_fill_4[2];
+u32 lbl_17_bss_C;
+u32 lbl_17_bss_10;
+u32 fzgx_obj_lbl_17_bss_14;
+u32 fzgx_obj_lbl_17_bss_18[2];
+u32 lbl_17_bss_20;
+u32 lbl_17_bss_24[4];
+u32 lbl_17_bss_34[8];
+u32 fzgx_obj_lbl_17_bss_54;
+u32 fzgx_obj_lbl_17_bss_58;
+u32 lbl_17_bss_58_fill_5C;
+u8 fzgx_obj_lbl_17_bss_60;
+u8 lbl_17_bss_60_fill_61;
+u16 lbl_17_bss_60_fill_62;
+u32 lbl_17_bss_60_fill_64[28];
+u16 lbl_17_bss_60_fill_D4;
+u16 fzgx_obj_lbl_17_bss_D6;
+u32 fzgx_obj_lbl_17_bss_D8[8];
+u16 lbl_17_bss_D8_fill_F8;
+u16 lbl_17_bss_FA_fill_FA;
+u32 lbl_17_bss_FA_fill_FC[15];
+u32 lbl_17_bss_FA_3E;
+u32 lbl_17_bss_FA_fill_13C[4];
+
+#pragma section code_type ".fzgxpool"
+static void fzgx_bss_layout(void) {
+    volatile u8 s;  /* fzgx-allow: S2 layout primer sink: MWCC emits .bss objects in first-access order */
+    s = *(u8 *)&fzgx_obj_lbl_17_bss_0;
+    s = *(u8 *)&fzgx_obj_lbl_17_bss_1;
+    s = *(u8 *)&lbl_17_bss_2;
+    s = *(u8 *)&lbl_17_bss_3;
+    s = *(u8 *)&lbl_17_bss_3_fill_4;
+    s = *(u8 *)&lbl_17_bss_C;
+    s = *(u8 *)&lbl_17_bss_10;
+    s = *(u8 *)&fzgx_obj_lbl_17_bss_14;
+    s = *(u8 *)&fzgx_obj_lbl_17_bss_18;
+    s = *(u8 *)&lbl_17_bss_20;
+    s = *(u8 *)&lbl_17_bss_24;
+    s = *(u8 *)&lbl_17_bss_34;
+    s = *(u8 *)&fzgx_obj_lbl_17_bss_54;
+    s = *(u8 *)&fzgx_obj_lbl_17_bss_58;
+    s = *(u8 *)&lbl_17_bss_58_fill_5C;
+    s = *(u8 *)&fzgx_obj_lbl_17_bss_60;
+    s = *(u8 *)&lbl_17_bss_60_fill_61;
+    s = *(u8 *)&lbl_17_bss_60_fill_62;
+    s = *(u8 *)&lbl_17_bss_60_fill_64;
+    s = *(u8 *)&lbl_17_bss_60_fill_D4;
+    s = *(u8 *)&fzgx_obj_lbl_17_bss_D6;
+    s = *(u8 *)&fzgx_obj_lbl_17_bss_D8;
+    s = *(u8 *)&lbl_17_bss_D8_fill_F8;
+    s = *(u8 *)&lbl_17_bss_FA_fill_FA;
+    s = *(u8 *)&lbl_17_bss_FA_fill_FC;
+    s = *(u8 *)&lbl_17_bss_FA_3E;
+    s = *(u8 *)&lbl_17_bss_FA_fill_13C;
+}
+#pragma section code_type ".text"
+
+
+static inline IvEntry *fn_17_7728_entry(IvState *st, u32 flag, s16 row, s16 col, s32 idx) {
+    IvEntry *t;
+
+    if (flag && (*(u16 *)&lbl_17_bss_58_fill_5C) < 5) {
+        t = (IvEntry *)&lbl_17_data_63BD0;
+    } else if (flag && (*(u16 *)&lbl_17_bss_58_fill_5C) >= 9) {
+        t = (IvEntry *)&lbl_17_data_63D20;
+    } else {
+        t = ((IvEntry *(*)[16])lbl_17_data_63190)[row][col];
+    }
+    if (t == NULL) {
+        return NULL;
+    }
+    if (t->unk_0 == -1) {
+        (*(u8 *)&lbl_17_bss_3_fill_4) = 1;
+        t = (IvEntry *)&lbl_17_data_0;
+    } else {
+        (*(u8 *)&lbl_17_bss_3_fill_4) = 0;
+    }
+    t += idx;
+    if (t == NULL) {
+        return NULL;
+    }
+    return t;
+}
+
+static inline IvTimer * fn_17_7728_read_pointer(IvClock * owner) { return owner->timer; }
+void fn_17_7728(IvCam *cam) {
+    IvKey key;
+    IvVec pos;
+    IvEntry *cur;
+    IvEntry *next;
+    IvState *st = (IvState *)((void *)&fzgx_obj_lbl_17_bss_0);
+    struct { IvClock *value; } clock;
+    IvTimer *timer;
+    u32 flag;
+
+    clock.value = (IvClock *)(((u8 *)&fzgx_obj_lbl_17_bss_60));
+    timer = fn_17_7728_read_pointer(clock.value);
+    flag = fzgx_obj_lbl_17_bss_58 & 1;
+
+    cur = fn_17_7728_entry(st, flag, cam->unk_44, cam->unk_42, cam->unk_40);
+    next = fn_17_7728_entry(st, flag, cam->unk_44, cam->unk_42, cam->unk_40 + 1);
+
+    key = cur->key;
+    pos = key.pos;
+    cam->pos2 = pos;
+    cam->unk_54 = lbl_17_rodata_20;
+    cam->unk_58 = lbl_17_rodata_20;
+
+    if (next->key.unk_0 == 0 || cur->unk_0 < 0 || next == NULL) {
+        cam->unk_22 = cur->unk_0;
+        if ((*(u8 *)&lbl_17_bss_3_fill_4)) {
+            switch (cam->unk_40) {
+            case 1:
+                if (timer->unk_8 < 0) {
+                    cam->unk_22 = timer->unk_6 - clock.value->base;
+                } else {
+                    cam->unk_22 = timer->unk_8 - clock.value->base;
+                }
+                if (cam->unk_22 < 0) {
+                    cam->unk_22 = cur->unk_0;
+                }
+                break;
+            case 3:
+                if (timer->unk_8 < 0) {
+                    cam->unk_22 = timer->unk_84 - clock.value->base;
+                } else {
+                    cam->unk_22 = timer->unk_96 - clock.value->base;
+                }
+                if (cam->unk_22 < 0) {
+                    cam->unk_22 = cur->unk_0;
+                }
+                break;
+            }
+        }
+    } else {
+        cam->unk_22 = next->key.unk_0 - cur->key.unk_0;
+    }
+    cam->unk_24 = cam->unk_22;
+    cam->pos = pos;
+    cam->rot = key.rot;
+    cam->time = key.time;
+    cam->scale = key.scale;
+    cam->time = key.time;
+}
+/* fzgx:end fn_17_7728 */
+
 /* fzgx:begin fn_17_802C */
 /* Retail addresses the whole TU literal pool (lbl_17_rodata_0) through one base register.
  * The primer below lays the pool out in retail order ahead of the function, so the

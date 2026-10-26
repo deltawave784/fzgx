@@ -8459,3 +8459,9 @@ rel/main_rel/burner/fn_1_9A7BC.c:
 
 rel/main_rel/effect_car/fn_1_6E62C.c:
 	.text       start:0x0006E62C end:0x0006ED40 align:4
+
+rel/main_rel/font/fn_1_4BD4C.c:
+	.text       start:0x0004BD4C end:0x0004C16C align:4
+
+rel/main_rel/font/fn_1_50A90.c:
+	.text       start:0x00050A90 end:0x00051564 align:4

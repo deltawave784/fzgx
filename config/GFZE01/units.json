@@ -4296,6 +4296,18 @@
   },
   {
     "module": "interview",
+    "source": "rel/interview/interview/fn_17_7728.c",
+    "symbols": [
+      "fn_17_7728"
+    ],
+    "status": "nonmatching",
+    "mw_version": null,
+    "extra_cflags": [],
+    "tu": "rel/interview/interview.c",
+    "pool": true
+  },
+  {
+    "module": "interview",
     "source": "rel/interview/interview/fn_17_802C.c",
     "symbols": [
       "fn_17_802C"
@@ -48085,6 +48097,17 @@
   },
   {
     "module": "main_rel",
+    "source": "rel/main_rel/font/fn_1_4BD4C.c",
+    "symbols": [
+      "fn_1_4BD4C"
+    ],
+    "status": "matching",
+    "mw_version": null,
+    "extra_cflags": [],
+    "tu": "rel/main_rel/font.c"
+  },
+  {
+    "module": "main_rel",
     "source": "rel/main_rel/font/fn_1_4CDE4.c",
     "symbols": [
       "fn_1_4CDE4"
@@ -48721,6 +48744,21 @@
     "pool": {
       "@35": "lbl_1_rodata_2758",
       "@39": "lbl_1_rodata_2778"
+    }
+  },
+  {
+    "module": "main_rel",
+    "source": "rel/main_rel/font/fn_1_50A90.c",
+    "symbols": [
+      "fn_1_50A90"
+    ],
+    "status": "matching",
+    "mw_version": null,
+    "extra_cflags": [],
+    "tu": "rel/main_rel/font.c",
+    "pool": {
+      "@45": "lbl_1_rodata_2758",
+      "@48": "lbl_1_rodata_2778"
     }
   },
   {
