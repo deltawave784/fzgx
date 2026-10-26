@@ -338,3 +338,6 @@ rel/title/operation/fn_8_F9E4.c:
 
 rel/title/title/fn_8_5C54.c:
 	.text       start:0x00005C54 end:0x00005FD4 align:4
+
+rel/title/name_entry/fn_8_EFA4.c:
+	.text       start:0x0000EFA4 end:0x0000F9E4 align:4
