@@ -1728,6 +1728,179 @@ void fn_1_10C9B0(Fn10C9B0List *list) {
 }
 /* fzgx:end fn_1_10C9B0 */
 
+/* fzgx:begin fn_1_10CC38 noprologue */
+#include "types.h"
+#include "game/main_rel/car_test_types.h"
+#include "game/vec3.h"
+#include "rel/main_rel/accessory.h"
+
+struct Sig_fn_80077B14_fn_80077B14_Arg0 { u8 pad_0[4]; u32 unk_4; u8 pad_8[0x18]; u32 unk_20; };
+struct fn_1_10CC38_lbl_1_rodata_7AB8 {
+ u8 pad_0[0x58]; f64 unk_58; f32 unk_60; u8 pad_64[0x38]; f32 unk_9C;
+ u8 pad_A0[0xA8]; Vec3f unk_148; f32 unk_154, unk_158, unk_15C, unk_160;
+};
+extern const struct fn_1_10CC38_lbl_1_rodata_7AB8 lbl_1_rodata_7AB8;
+extern s32 fn_80077B14(struct Sig_fn_80077B14_fn_80077B14_Arg0 *);
+extern void lbl_8006DBAC(Vec3 *);
+extern void lbl_8006DAEC(void);
+extern void lbl_8006DBE4(void);
+extern void lbl_8006DC20(void);
+extern f32 lbl_8006D0B4(f32);
+extern void fn_8006E250(Vec3f *, Vec3f *);
+typedef struct Particle {
+ u8 flags; u8 pad1; u8 count; u8 pad3; u16 links[6];
+ Vec3f pos, prev, local, vel; f32 mass;
+} Particle;
+typedef struct ModelData { u8 pad[8]; u8 *data; } ModelData;
+typedef struct Owner { u8 pad[0x150]; ModelData *model; } Owner;
+typedef struct Rope {
+ u8 flags; u8 pad[7]; u32 index; Owner *owner; struct Sig_fn_80077B14_fn_80077B14_Arg0 *handle;
+ u32 unk14, count, unk1c, unk20; Particle *particles;
+} Rope;
+#define BASE(r) ((r)->owner->model->data + ((u32 *)lbl_1_data_3FFBC)[(r)->index] * 0x18c)
+#define SETMAT(b) lbl_8006DBAC((Vec3 *)((b) + 0x88))
+#define TRANS(a,b) lbl_8006E1B0((Fn183D28Vec3 *)(a),(Fn183D28Vec3 *)(b))
+#pragma opt_lifetimes off
+void fn_1_10CC38(Rope *arg0) {
+    Particle * p_r2;
+    u32 i_r2;
+    Particle * p_r3;
+    f32 dx_r2;
+    f32 dy_r2;
+    f32 len_r2;
+    f32 dz_r2;
+    f32 scale_r2;
+    u32 i_r3;
+    Particle * p_r4;
+    u32 i_r4;
+ f32 z, y, x;
+ f32 s;
+ const struct fn_1_10CC38_lbl_1_rodata_7AB8 *pool = &lbl_1_rodata_7AB8;
+ Particle *group;
+ Particle *p;
+ u32 i;
+ struct { u8 *value; } base_holder;
+#define base base_holder.value
+ s32 j;
+ u16 *link;
+ u8 *vertices;
+ Vec3f loc_20, loc_14, loc_8;
+ f64 gravity;
+ f32 accel;
+ f32 len, scale;
+ f32 dx,dy,dz;
+ f32 limit;
+ if (arg0 && arg0->handle) {
+ fn_80077B14(arg0->handle);
+ if (arg0->flags & 2) {
+ arg0->flags &= ~2;
+ SETMAT(BASE(arg0));
+ lbl_8006DAEC();
+ p=arg0->particles;
+ for(i=0;i<arg0->count;i++,p++) {
+ lbl_8006DBE4(); TRANS(&p->local,&p->pos);
+ }
+ lbl_8006DC20();
+ }
+ p_r2=arg0->particles;
+ for(i_r2=0;i_r2<arg0->count;i_r2++,p_r2++) {
+ if (!(p_r2->flags & 1)) {
+ p_r2->prev=p_r2->pos;
+ p_r2->pos.x+=p_r2->vel.x; p_r2->pos.y+=p_r2->vel.y; p_r2->pos.z+=p_r2->vel.z;
+ p_r2->pos.y=(f32)(p_r2->pos.y-pool->unk_58);
+ p_r2->vel.y-=pool->unk_60;
+ }
+ }
+ { u8 *b2; u32 k;
+ b2=BASE(arg0); p_r3=arg0->particles;
+ for(k=0;k<arg0->count;k++,p_r3++) {
+ SETMAT(b2); lbl_8006DAEC();
+ if(p_r3->flags&1) { lbl_8006DBE4(); TRANS(&p_r3->local,&p_r3->pos); }
+ lbl_8006DC20();
+ } }
+{ u32 k; Particle *q; u8 *b3;
+ b3=BASE(arg0); q=arg0->particles; limit=pool->unk_9C;
+ for(k=0;k<arg0->count;k++,q++) {
+ SETMAT(b3); TRANS(&q->local,&loc_8);
+ dx=q->pos.x-loc_8.x; loc_14.x=dx;
+ len=dx*dx;
+ dy=q->pos.y-loc_8.y; loc_14.y=dy;
+ len+=dy*dy;
+ dz=q->pos.z-loc_8.z; loc_14.z=dz;
+ len+=dz*dz;
+ if(len>limit) {
+ scale=lbl_8006D0B4(limit/len);
+ q->pos.x=loc_8.x+(f32)(loc_14.x*scale);
+ q->pos.y=loc_8.y+(f32)(loc_14.y*scale);
+ q->pos.z=loc_8.z+(f32)(loc_14.z*scale);
+ q->prev=q->pos;
+ }
+ }
+ }
+ {
+ u8 *matrix=arg0->owner->model->data;
+ loc_20=pool->unk_148;
+ lbl_8006DBAC((Vec3 *)(matrix+0x844));
+ s=pool->unk_154;
+ {
+ x=*(f32 *)(0xE0000008); y=*(f32 *)(0xE0000018); z=*(f32 *)(0xE0000028);
+ x=x*s+*(f32 *)(0xE000000C); y=y*s+*(f32 *)(0xE000001C); z=z*s+*(f32 *)(0xE000002C);
+ *(f32 *)(0xE000000C)=x; *(f32 *)(0xE000001C)=y; *(f32 *)(0xE000002C)=z; }
+ TRANS(&loc_20,&loc_20);
+ }
+ { u32 k; Particle *q;
+ base=BASE(arg0); q=arg0->particles;
+ for(k=0;k<arg0->count;k++,q++) {
+ if(!(q->flags&1)) {
+ dx_r2=q->pos.x-loc_20.x; loc_14.x=dx_r2;
+ dy_r2=q->pos.y-loc_20.y; loc_14.y=dy_r2;
+ len_r2=dy_r2*dy_r2+(f32)(dx_r2*dx_r2);
+ dz_r2=q->pos.z-loc_20.z;
+ len_r2=dz_r2*dz_r2+len_r2; loc_14.z=dz_r2;
+ if(len_r2<pool->unk_158) {
+ scale_r2=pool->unk_15C/lbl_8006D0B4(len_r2);
+ q->pos.x=loc_20.x+(f32)(loc_14.x*scale_r2);
+ q->pos.y=loc_20.y+(f32)(loc_14.y*scale_r2);
+ q->pos.z=loc_20.z+(f32)(loc_14.z*scale_r2);
+ }
+ }
+ }
+ }
+ group=arg0->particles;
+ for(i_r3=0;i_r3<(arg0->count-1)/3;i_r3++,group+=3) {
+ SETMAT(base); TRANS(&group->local,&loc_14);
+ group->prev=loc_14;
+ loc_14.x=group->pos.x-loc_14.x; loc_14.y=group->pos.y-loc_14.y; loc_14.z=group->pos.z-loc_14.z;
+ SETMAT(base); TRANS(&group[1].local,&group[1].pos);
+ group[1].pos.x+=loc_14.x; group[1].pos.y+=loc_14.y; group[1].pos.z+=loc_14.z;
+ SETMAT(base); TRANS(&group[2].local,&group[2].pos);
+ group[2].pos.x+=loc_14.x; group[2].pos.y+=loc_14.y; group[2].pos.z+=loc_14.z;
+ group->prev=group->pos; group[1].prev=group[1].pos; group[2].prev=group[2].pos;
+ }
+ group->prev=group->pos;
+ accel=pool->unk_160;
+ p_r4=arg0->particles;
+ for(i_r4=0;i_r4<arg0->count;i_r4++,p_r4++) {
+ p_r4->vel.x=(accel/p_r4->mass)*(p_r4->pos.x-p_r4->prev.x);
+ p_r4->vel.y=(accel/p_r4->mass)*(p_r4->pos.y-p_r4->prev.y);
+ p_r4->vel.z=(accel/p_r4->mass)*(p_r4->pos.z-p_r4->prev.z);
+ }
+ vertices=(u8 *)fn_80077B14(arg0->handle);
+ SETMAT(BASE(arg0));
+ { Particle *q; s32 l; u32 k; u16 *link;
+ q=arg0->particles;
+ for(k=0;k<arg0->count;k++,q++) {
+ link=(u16 *)q;
+ for(l=0;l<q->count;link++,l++) {
+ fn_8006E250(&q->pos,(Vec3f *)(vertices+(link[2]<<6)));
+ }
+ }
+ }
+ }
+}
+#pragma opt_lifetimes reset
+/* fzgx:end fn_1_10CC38 */
+
 /* fzgx:begin fn_1_10D2F0 */
 /* The TU's literal pool, addressed through one base register. */
 
