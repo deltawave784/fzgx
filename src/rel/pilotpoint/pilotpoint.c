@@ -1,5 +1,77 @@
 #include "types.h"
 
+/* fzgx:begin _prolog */
+struct P_bss0 {
+    u8 pad_0[0x14];
+    u32 unk_14;
+    u8 pad_18[0x4];
+    u32 unk_1C;
+    u32 unk_20;
+};
+struct P_801A6410 {
+    u32 unk_0;
+};
+
+extern struct P_bss0 lbl_14_bss_0;
+extern struct P_801A6410 lbl_801A6410;
+extern u8 lbl_14_data_2FB0[0xD];
+extern u8 lbl_14_data_2FC0[0x4C];
+extern void (*lbl_1_bss_7167C)(void);
+extern u32 (*lbl_1_bss_71680)(void);
+extern void (*lbl_1_bss_71684)(void);
+extern s16 lbl_1_bss_96A;
+extern u32 *lbl_1_bss_6EAD0[];
+
+extern void fn_14_220(void);
+extern void fn_14_2A0(void);
+extern u32 fn_14_268(void);
+extern u32 fn_14_DC2C(void);
+extern u32 fn_1_7BA08(u32, u32, u32);
+extern u32 fn_1_45D0(u32, u32, void *, u32);
+extern u32 fn_1_7BA48(u32);
+extern void fn_1_3CF0(u32, u32);
+extern u32 fn_1_435C(u32);
+extern s32 fn_1_3F8C(void *, void *, u32, u32);
+extern void fn_1_7BAF8(void);
+extern void fn_1_411A4(u32);
+extern void fn_1_48418(s32);
+extern void fn_1_479F0(s16);
+extern void fn_1_159440(int, int);
+extern void fn_8006CE1C(f32);
+extern void fn_1_A8F78(void);
+extern u32 fn_1_A0680(void);
+extern u32 fn_1_A1588(u32, u32);
+extern void fn_1_3EF14(void *);
+
+void _prolog(void) {
+    u8 buf[0x14c0];
+    struct P_bss0 *p = (struct P_bss0 *)&lbl_14_bss_0;
+    lbl_1_bss_7167C = fn_14_220;
+    lbl_1_bss_71680 = fn_14_268;
+    lbl_1_bss_71684 = fn_14_2A0;
+    p->unk_14 = fn_1_45D0(lbl_801A6410.unk_0, fn_1_7BA08(0x20, 0x20, 0x40), lbl_14_data_2FB0, 0x313);
+    fn_1_7BA48(p->unk_14);
+    p->unk_1C = fn_1_45D0(lbl_801A6410.unk_0, 0x173c, lbl_14_data_2FB0, 0x314);
+    fn_1_3CF0(p->unk_1C, 0x80);
+    p->unk_20 = fn_1_45D0(lbl_801A6410.unk_0, 0x173c, lbl_14_data_2FB0, 0x315);
+    fn_1_3CF0(p->unk_20, 0x80);
+    fn_1_435C(p->unk_20);
+    fn_1_3F8C(lbl_14_data_2FC0, (void *)fn_1_7BAF8, p->unk_14, 2);
+    fn_1_411A4(1);
+    fn_1_48418(2);
+    fn_1_479F0(13);
+    fn_1_479F0(1);
+    fn_1_159440(2, 0);
+    lbl_1_bss_96A = 0xac;
+    fn_8006CE1C(0.0f);
+    fn_1_A8F78();
+    fn_1_A0680();
+    fn_1_A1588(**lbl_1_bss_6EAD0, 0x1f);
+    fn_14_DC2C();
+    fn_1_3EF14(buf);
+}
+/* fzgx:end _prolog */
+
 /* fzgx:begin _epilog */
 struct _epilog_lbl_14_bss_0 {
     u8 pad_0[0x14];
