@@ -1521,6 +1521,143 @@ void fn_1_433E0(Fn1433E0Object *object) {
 #pragma opt_propagation reset
 /* fzgx:end fn_1_433E0 */
 
+/* fzgx:begin fn_1_438AC noprologue */
+#include "types.h"
+#include "psvec.h"
+#include "game/main_rel/car_test_types.h"
+#include "game/main_rel/motasglist_types.h"
+#include "game/vec3.h"
+
+extern const f32 lbl_1_rodata_F50;
+extern const f32 lbl_1_rodata_F54;
+extern const f32 lbl_1_rodata_F68;
+extern const f64 lbl_1_rodata_F60;
+extern int fn_1_442D8(void *, void *, u16, f32, s32);
+extern void fn_1_44A74(void *, void *);
+extern void fn_8006E250(Vec3f *, Vec3f *);
+extern void lbl_8006D758(void);
+extern void lbl_8006D7B0(void);
+extern void lbl_8006DB74(void *);
+extern void lbl_8006DBAC(void *);
+extern void lbl_8006DFC4(void *);
+extern void mathutil_mtxA_rotate_x(s32);
+extern void mathutil_mtxA_rotate_y(s32);
+extern void mathutil_mtxA_rotate_z(s32);
+
+static inline void fn_1_438AC_set_translate(Fn183D28Vec3 *v) {
+    f32 x = *(volatile f32 *)&v->x;  /* fzgx-allow: S2 volatile view keeps the verified load order */
+    f32 y = v->y;
+    f32 z = v->z;
+    *(f32 *)(0xE0000000 + 0x0C) = x;
+    *(f32 *)(0xE0000000 + 0x1C) = y;
+    *(f32 *)(0xE0000000 + 0x2C) = z;
+}
+
+void fn_1_438AC(Fn142E74Object *arg0, Fn142E74Entry *arg1, s32 arg2) {
+    u32 v1;
+    u16 v2;
+    void *v3;
+    Fn142E74Entry *v5 = arg1;
+    u8 *v6;
+    Fn183D28Vec3 scale;
+    Fn183D28Vec3 rot;
+    Fn183D28Vec3 loc_8;
+    {
+    f32 v0;
+    if (arg2 != 0) {
+        v0 = *(f32 *)((u8 *)arg0 + 100);
+        v1 = 3;
+    } else {
+        v1 = 0;
+        v0 = *(f32 *)((u8 *)arg0 + 76);
+    }
+    v2 = *(u16 *)((u8 *)arg1 + 6);
+    if (v2 == 65535) {
+        lbl_8006D758();
+        scale.x = lbl_1_rodata_F50;
+        scale.y = lbl_1_rodata_F50;
+        scale.z = lbl_1_rodata_F50;
+    } else if ((*(u16 *)((u8 *)arg1 + 4) & 4) != 0) {
+        lbl_8006D7B0();
+        scale.x = lbl_1_rodata_F50;
+        scale.y = lbl_1_rodata_F50;
+        scale.z = lbl_1_rodata_F50;
+    } else {
+        v3 = (u8 *)arg0->entries + v2 * 396;
+        lbl_8006DBAC((u8 *)v3 + 136);
+        scale = *(Fn183D28Vec3 *)((u8 *)v3 + 184);
+    }
+    if ((arg0->flags & 2) != 0) {
+        v6 = *(u8 **)((u8 *)arg1 + 208);
+        if ((v6[0] & 64) == 0) {
+            v5 = (Fn142E74Entry *)((u8 *)arg0->entries + *(u16 *)(v6 + 4) * 396);
+        }
+    }
+    if ((*(u16 *)((u8 *)arg1 + 4) & 1) != 0) {
+        lbl_8006E1B0((Fn183D28Vec3 *)((u8 *)arg1 + 8), &loc_8);
+        fn_1_442D8(&loc_8, v5, v1 + 12, v0, arg2);
+        if ((arg0->flags & 2) != 0) {
+            if ((**(u8 **)((u8 *)arg1 + 208) & 1) != 0) loc_8.x = -loc_8.x;
+            if ((**(u8 **)((u8 *)arg1 + 208) & 2) != 0) loc_8.y = -loc_8.y;
+            if ((**(u8 **)((u8 *)arg1 + 208) & 4) != 0) loc_8.z = -loc_8.z;
+        }
+    } else {
+        loc_8 = *(Fn183D28Vec3 *)((u8 *)arg1 + 8);
+        fn_1_442D8(&loc_8, v5, v1 + 12, v0, arg2);
+        if ((arg0->flags & 2) != 0) {
+            if ((**(u8 **)((u8 *)arg1 + 208) & 1) != 0) loc_8.x = -loc_8.x;
+            if ((**(u8 **)((u8 *)arg1 + 208) & 2) != 0) loc_8.y = -loc_8.y;
+            if ((**(u8 **)((u8 *)arg1 + 208) & 4) != 0) loc_8.z = -loc_8.z;
+        }
+        lbl_8006E1B0(&loc_8, &loc_8);
+    }
+    /* Capture the column before writing the locked-cache matrix. */
+    fn_1_438AC_set_translate(&loc_8);
+    psvec_set(&((struct { u8 pad[196]; Fn183D28Vec3 v; } *)arg1)->v, *(f32 *)(0xE0000000 + 0x2C), *(f32 *)(0xE0000000 + 0x1C), *(f32 *)(0xE0000000 + 0x0C));
+    rot.x = lbl_1_rodata_F54;
+    rot.y = lbl_1_rodata_F54;
+    rot.z = lbl_1_rodata_F54;
+    lbl_8006DFC4((u8 *)arg1 + 40);
+    if ((arg0->flags & 2) != 0) {
+        mathutil_mtxA_rotate_z((s32)(lbl_1_rodata_F68 * (f32)((s8)(*(u8 **)((u8 *)arg1 + 208))[3] * 45)));
+        mathutil_mtxA_rotate_y((s32)(lbl_1_rodata_F68 * (f32)((s8)(*(u8 **)((u8 *)arg1 + 208))[2] * 45)));
+        mathutil_mtxA_rotate_x((s32)(lbl_1_rodata_F68 * (f32)((s8)(*(u8 **)((u8 *)arg1 + 208))[1] * 45)));
+    }
+    if ((*(u16 *)((u8 *)arg1 + 4) & 1) != 0) {
+        lbl_8006DB74((u8 *)arg1 + 136);
+        fn_1_44A74(arg0, arg1);
+    }
+    if (fn_1_442D8(&rot, v5, v1 + 6, v0, arg2)) {
+        if ((arg0->flags & 2) != 0) {
+            if ((**(u8 **)((u8 *)arg1 + 208) & 8) != 0) rot.x = -rot.x;
+            if ((**(u8 **)((u8 *)arg1 + 208) & 16) != 0) rot.y = -rot.y;
+            if ((**(u8 **)((u8 *)arg1 + 208) & 32) != 0) rot.z = -rot.z;
+        }
+        mathutil_mtxA_rotate_z((s32)(lbl_1_rodata_F68 * rot.z));
+        mathutil_mtxA_rotate_y((s32)(lbl_1_rodata_F68 * rot.y));
+        mathutil_mtxA_rotate_x((s32)(lbl_1_rodata_F68 * rot.x));
+    } else if ((*(u16 *)((u8 *)arg1 + 4) & 4) == 0) {
+        lbl_8006DFC4((u8 *)arg1 + 88);
+    }
+    *(f32 *)((u8 *)arg1 + 184) = lbl_1_rodata_F50;
+    *(f32 *)((u8 *)arg1 + 188) = lbl_1_rodata_F50;
+    *(f32 *)((u8 *)arg1 + 192) = lbl_1_rodata_F50;
+    fn_1_442D8((u8 *)arg1 + 184, v5, v1, v0, arg2);
+    ((struct { u8 pad[184]; f32 x, y, z; } *)arg1)->x *= scale.x;
+    *(f32 *)((u8 *)arg1 + 188) *= scale.y;
+    *(f32 *)((u8 *)arg1 + 192) *= scale.z;
+    lbl_8006DB74((u8 *)arg1 + 136);
+    if ((*(u16 *)((u8 *)arg1 + 4) & 1) == 0) {
+        v2 = *(u16 *)((u8 *)arg1 + 6);
+        if (v2 != 65535) {
+            lbl_8006DBAC((u8 *)arg0->entries + v2 * 396 + 136);
+            fn_8006E250((Vec3f *)((u8 *)arg1 + 196), (Vec3f *)((u8 *)arg1 + 196));
+        }
+    }
+    }
+}
+/* fzgx:end fn_1_438AC */
+
 /* fzgx:begin fn_1_43E08 noprologue */
 #include "types.h"
 #include "dolphin/hw_regs.h"

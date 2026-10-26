@@ -8468,3 +8468,6 @@ rel/main_rel/font/fn_1_50A90.c:
 
 rel/main_rel/effect_car/fn_1_6BFB8.c:
 	.text       start:0x0006BFB8 end:0x0006C87C align:4
+
+rel/main_rel/motasglist/fn_1_438AC.c:
+	.text       start:0x000438AC end:0x00043E08 align:4
