@@ -2259,6 +2259,373 @@ s16 fn_1_6E320(EffCar *car, EffVec *offset, u8 mode) {
 }
 /* fzgx:end fn_1_6E320 */
 
+/* fzgx:begin fn_1_6E62C noprologue */
+#include "types.h"
+#include "rel/main_rel/effect_car.h"
+
+extern f32 lbl_8006D0B4(f32);
+extern s16 camera_get_mode(void);
+extern s16 fn_1_58F50(const void *);
+extern s32 fn_1_58C4(void);
+extern u32 fn_1_584AC(void);
+extern u32 lbl_801A66A0;
+extern u8 * memset(u8 *, int, u32);
+extern void lbl_8006DD14(u32, void *);
+
+/* Literal-pool primer: lays out the TU's shared lbl_1_rodata_2D70 pool in retail order. */
+#pragma section code_type ".fzgxpool"
+extern void fzgx_sink_f(f32);
+extern void fzgx_sink_d(f64);
+void fzgx_pool_primer_0(void) { fzgx_sink_f(0.0f); fzgx_sink_f(-1.0f); }
+static const u32 fzgx_pool_table_8[5] = { 0x41C80000, 0x41700000, 0x41000000, 0x43160000, 0x41200000 };
+void fzgx_pool_primer_1C(void) { fzgx_sink_f(0.5f); }
+static const u32 fzgx_pool_table_20[1] = { 0x3E000000 };
+void fzgx_pool_primer_24(void) { fzgx_sink_f(32767.0f); }
+static const u32 fzgx_pool_table_28[6] = { 0x41F00000, 0x41A00000, 0x44960000, 0x3E19999A, 0x43300000, 0x80000000 };
+void fzgx_pool_primer_40(u32 x) { fzgx_sink_f((f32)x); }
+static const u32 fzgx_pool_table_48[2] = { 0x437F0000, 0x42CC0000 };
+void fzgx_pool_primer_50(void) { fzgx_sink_d(0.8); }
+static const u32 fzgx_pool_table_58[1] = { 0x3FCCCCCD };
+void fzgx_pool_primer_5C(void) { fzgx_sink_f(3.0f); }
+static const u32 fzgx_pool_table_60[7] = { 0x3C23D70A, 0x3F19999A, 0x3FD33333, 0x33333333, 0x3F333333, 0x3E4CCCCD, 0x3ECCCCCD };
+void fzgx_pool_primer_7C(void) { fzgx_sink_f(0.1f); }
+static const u32 fzgx_pool_table_80[4] = { 0x3FC00000, 0x00000000, 0x40000000, 0x00000000 };
+void fzgx_pool_primer_90(void) { fzgx_sink_f(0.8f); fzgx_sink_f(1.0f); }
+static const u32 fzgx_pool_table_98[8] = { 0x42AA0000, 0x3E800000, 0x00000000, 0x00000000, 0x00000000, 0x42C80000, 0x40600000, 0x41B80000 };
+void fzgx_pool_primer_B8(void) { fzgx_sink_f(60.0f); }
+static const u32 fzgx_pool_table_BC[3] = { 0x40800000, 0x34000000, 0x43080000 };
+void fzgx_pool_primer_C8(void) { fzgx_sink_f(0.03f); }
+static const u32 fzgx_pool_table_CC[3] = { 0x00000000, 0x3FE00000, 0x00000000 };
+void fzgx_pool_primer_D8(void) { fzgx_sink_f(0.3f); }
+static const u32 fzgx_pool_table_DC[5] = { 0x43000000, 0x43600000, 0x43FA0000, 0x3F6E147B, 0x40A00000 };
+void fzgx_pool_primer_F0(void) { fzgx_sink_f(2.0f); fzgx_sink_f(0.05f); }
+static const u32 fzgx_pool_table_F8[1] = { 0x3DA3D70A };
+void fzgx_pool_primer_FC(void) { fzgx_sink_f(0.9f); }
+static const u32 fzgx_pool_table_100[122] = {
+    0x3FD33333, 0x40000000, 0x3FC99999, 0x9999999A,
+    0xBFD33333, 0x33333333, 0xBFF00000, 0x00000000,
+    0x00000000, 0x00000000, 0x403E0000, 0x00000000,
+    0x40080000, 0x00000000, 0x3A83126F, 0x3B03126F,
+    0x3FF33333, 0x461C4000, 0x453B8000, 0x43360B61,
+    0x3F109091, 0x3F30B0B1, 0x4066C16C, 0x20000000,
+    0x40140000, 0x00000000, 0x3FE3851E, 0xB851EB85,
+    0x46800000, 0x00000000, 0x3DCCCCCD, 0x3FC00000,
+    0x44480000, 0x447A0000, 0x3FA99999, 0x9999999A,
+    0x40280000, 0x00000000, 0xBFC47AE1, 0x47AE147B,
+    0x405DC000, 0x00000000, 0x40040000, 0x00000000,
+    0x3FF00000, 0x00000000, 0x449C4000, 0x00000000,
+    0x3FD99999, 0x9999999A, 0x43960000, 0x00000000,
+    0x3FC99999, 0xA0000000, 0x451C4000, 0x459C4000,
+    0x3FB99999, 0x9999999A, 0x40490000, 0x00000000,
+    0x3F33A92A, 0x30553261, 0x3F947AE1, 0x47AE147B,
+    0x3F99999A, 0x00000000, 0x3FE33333, 0x33333333,
+    0x42300000, 0x00000000, 0x3FF4CCCC, 0xCCCCCCCD,
+    0x3A03126F, 0x00000000, 0x3F689374, 0xBC6A7EFA,
+    0x469C4000, 0x00000000, 0x3F800000, 0x3F000000,
+    0x42080000, 0x00000000, 0x40240000, 0x00000000,
+    0x00000000, 0x00000000, 0xC0000000, 0x44400000,
+    0x00000000, 0x00000000, 0x00000000, 0x41800000,
+    0x45800000, 0x40C00000, 0x44E38E39, 0x42EE0000,
+    0x424C0000, 0x00000000, 0x3DCCCCCD, 0x00000000,
+    0x40200000, 0x43C80000, 0x44FA0000, 0x43300000,
+    0x00000000, 0x3DCCCCCD, 0x40000000, 0x00000000,
+    0x3F800000, 0x00000000, 0x3FE66666, 0x00000000,
+    0x3FD55555, 0x60000000, 0x3FE99999, 0xA0000000,
+    0x00000000, 0xBF000000, 0x3FA66666, 0xBF99999A,
+    0x44BB8000, 0x00000000,
+};
+void fzgx_pool_primer_2E8(void) { fzgx_sink_d(0.4000000059604645); }
+#pragma section code_type ".text"
+
+#pragma opt_propagation on
+#pragma opt_loop_invariants off
+void fn_1_6E62C(u32 arg0, void * arg1, f32 arg2) {
+    u32 v0;
+    s32 v1;
+    u32 v2;
+    s32 v3;
+    f32 v4;
+    f32 v5;
+    f32 v6;
+    u32 v8;
+    f32 v9;
+    f32 v12;
+    f32 v11;
+    f32 v10;
+    f32 v54;
+    f32 v23;
+    f32 v22;
+    f32 v24;
+    f32 v25;
+    s16 v26;
+    f32 v27;
+    f32 v28;
+    f32 v29;
+    f32 v31;
+    f32 v32;
+    f32 v33;
+    f32 v39;
+    f32 v38;
+    f32 v37;
+    f32 v34;
+    f32 v30;
+    f32 v40;
+    f32 v35;
+    f32 v41;
+    f32 v42;
+    f32 v43;
+    f32 v46;
+    f32 v45;
+    f32 v44;
+    f32 v47;
+    f32 v48;
+    f32 v49;
+    f32 v50;
+    f32 v51;
+    f64 v55;
+    f32 v56;
+    u32 v59;
+    struct { u16 a[116]; } loc_50;
+    struct { u32 a[12]; } loc_20;
+    u32 loc_1C;
+    u32 loc_18;
+    u32 loc_14;
+    u32 loc_10;
+    u32 loc_C;
+    u32 loc_8;
+    s32 t1;
+    s16 t2;
+    u8 * t3;
+    f32 t4;
+    u32 t5;
+    u32 t6;
+    u32 t7;
+    u32 t9;
+    u32 t10;
+    u32 t11;
+    u32 t12;
+    u32 t13;
+    u32 t14;
+    u32 t15;
+    s16 t16;
+    lbl_8006DD14((arg0 + 184), (void *)&loc_20);
+    v0 = *(u32 *)((u8 *)arg0 + 56);
+    loc_50.a[13] = 0;
+    t1 = fn_1_58C4();
+    v1 = t1;
+    v4 = arg2;
+    if ((u32)t1 < 2) {
+    t2 = camera_get_mode();
+    v1 = t2;
+    v1 = (s16)v1;
+    if (*(s16 *)((u8 *)arg0 + 24) == v1 || (lbl_801A66A0 & 0x1) == 0) {
+    v2 = (v0 + 580);
+    v3 = 4;
+    v8 = v0;
+    do {
+    if ((*(u32 *)((u8 *)v2 + 0) & 0x2) == 0) {
+    v24 = *(f32 *)((u8 *)arg0 + 72) * *(f32 *)((u8 *)arg0 + 72);
+    v22 = *(f32 *)((u8 *)arg0 + 76);
+    v24 += v22 * v22;
+    v23 = *(f32 *)((u8 *)arg0 + 80);
+    v24 += v23 * v23;
+    v4 = 3.0f;
+    v5 = (f32)(v24 / v4);
+    if (0.0f != v5) {
+    v25 = 0.9f;
+    if (v5 > v25) {
+    v5 = v25;
+    }
+    if (loc_50.a[13] == 0) {
+    v1 = (u32)&loc_50;
+    t3 = (u8 *)(memset((u8 *)v1, 0, 232));
+    v1 = (s32)(t3);
+    v26 = *(s16 *)((u8 *)arg0 + 24);
+    loc_50.a[12] = v26;
+    loc_50.a[6] = 24;
+    loc_50.a[13] = 1;
+    v1 = lbl_1_bss_38458->unk_8;
+    *(u32 *)((u8 *)&loc_50 + 52) = *(u32 *)((u8 *)v1 + 160);
+    }
+    v4 = 0.9f;
+    *(f32 *)((u8 *)&loc_50 + 72) = (f32)(*(f32 *)((u8 *)arg0 + 72) * v4);
+    *(f32 *)((u8 *)&loc_50 + 76) = (f32)(*(f32 *)((u8 *)arg0 + 76) * v4);
+    *(f32 *)((u8 *)&loc_50 + 80) = (f32)(*(f32 *)((u8 *)arg0 + 80) * v4);
+    v27 = 0.3f;
+    if (v3 == 3 || v3 == 1) {
+    v27 *= -1.0f;
+    }
+    v4 = *(f32 *)((u8 *)&loc_50 + 72);
+    v28 = (f32)(v4 + (f32)(*(f32 *)((u8 *)arg1 + 0) * v27));
+    *(f32 *)((u8 *)&loc_50 + 72) = v28;
+    v4 = (f32)(v28 * v28);
+    v29 = (f32)(*(f32 *)((u8 *)&loc_50 + 76) + (f32)(*(f32 *)((u8 *)arg1 + 4) * v27));
+    *(f32 *)((u8 *)&loc_50 + 76) = v29;
+    v4 += v29 * v29;
+    v30 = (f32)(*(f32 *)((u8 *)&loc_50 + 80) + (f32)(*(f32 *)((u8 *)arg1 + 8) * v27));
+    v4 += v30 * v30;
+    *(f32 *)((u8 *)&loc_50 + 80) = v30;
+    t4 = lbl_8006D0B4(v4);
+    v4 = t4;
+    v6 = (f32)(0.03f * v4);
+    t5 = fn_1_584AC();
+    v1 = t5;
+    v1 = (v1 & 0xFFFF);
+    v4 = 0.5f;
+    v31 = (f32)(u32)v1;
+    v32 = (f32)(v31 / 32767.0f);
+    v4 = (f32)(v32 - v4);
+    v4 = (f32)(v6 * v4);
+    *(f32 *)((u8 *)&loc_50 + 72) = (f32)(*(f32 *)((u8 *)&loc_50 + 72) + v4);
+    t6 = fn_1_584AC();
+    v1 = t6;
+    v1 = (v1 & 0xFFFF);
+    v4 = 0.5f;
+    v33 = (f32)(u32)v1;
+    v34 = (f32)(v33 / 32767.0f);
+    v4 = (f32)(v34 - v4);
+    v4 = (f32)(v6 * v4);
+    *(f32 *)((u8 *)&loc_50 + 76) = (f32)(*(f32 *)((u8 *)&loc_50 + 76) + v4);
+    t7 = fn_1_584AC();
+    v1 = t7;
+    v1 = (v1 & 0xFFFF);
+    v10 = *(f32 *)((u8 *)&loc_50 + 72);
+    v11 = *(f32 *)((u8 *)&loc_50 + 76);
+    v35 = (f32)(0.8f * v5);
+    v4 = 0.5f;
+    v4 = (f32)((f32)((f32)(u32)v1 / 32767.0f) - v4);
+    v4 = (f32)(v6 * v4);
+    v12 = (f32)(*(f32 *)((u8 *)&loc_50 + 80) + v4);
+    *(f32 *)((u8 *)&loc_50 + 80) = v12;
+    v37 = *(f32 *)((u8 *)v2 + 56);
+    v38 = *(f32 *)((u8 *)v2 + 60);
+    v39 = *(f32 *)((u8 *)v2 + 64);
+    v31 = (f32)(v37 * v35);
+    v32 = (f32)(v38 * v35);
+    v33 = (f32)(v39 * v35);
+    v40 = v10 * v37;
+    v40 += v11 * v38;
+    v40 += v12 * v39;
+    v41 = (f32)(v10 - (f32)(v40 * v37));
+    v42 = (f32)(v11 - (f32)(v40 * v38));
+    v43 = (f32)(v12 - (f32)(v40 * v39));
+    *(f32 *)((u8 *)&loc_50 + 72) = v41;
+    *(f32 *)((u8 *)&loc_50 + 76) = v42;
+    *(f32 *)((u8 *)&loc_50 + 80) = v43;
+    *(f32 *)((u8 *)&loc_50 + 72) = (f32)(v41 + v31);
+    *(f32 *)((u8 *)&loc_50 + 76) = (f32)(v42 + v32);
+    *(f32 *)((u8 *)&loc_50 + 80) = (f32)(v43 + v33);
+    v1 = *(u32 *)((u8 *)v2 + 32);
+    loc_14 = v1;
+    v1 = *(u32 *)((u8 *)v2 + 36);
+    loc_8 = *(u32 *)((u8 *)v2 + 20);
+    loc_18 = v1;
+    v1 = *(u32 *)((u8 *)v2 + 40);
+    loc_C = *(u32 *)((u8 *)v2 + 24);
+    loc_1C = v1;
+    v44 = *(f32 *)&loc_14;
+    v44 -= *(f32 *)&loc_8;
+    loc_10 = *(u32 *)((u8 *)v2 + 28);
+    v45 = *(f32 *)&loc_18;
+    v45 -= *(f32 *)&loc_C;
+    v4 = (f32)(v44 * v44);
+    v46 = *(f32 *)&loc_1C;
+    v46 -= *(f32 *)&loc_10;
+    v4 += v45 * v45;
+    v4 += v46 * v46;
+    v4 = (lbl_8006D0B4(v4));
+    v6 = v4;
+    v8 = 0x43300000;
+    v9 = v6;
+    while (v9 > 0.0f) {
+    v48 = (f32)(v9 / v6);
+    v47 = 1.0f;
+    v49 = (f32)(v47 - v48);
+    t9 = fn_1_584AC();
+    v1 = t9;
+    v50 = (f32)(u32)(v1 & 0xFFFF);
+    v51 = v50 / 32767.0f;
+    v50 = v5 * v51;
+    v50 = 0.05f * v50;
+    v50 = 0.1f + v50;
+    v50 = 60.0f * v50;
+    *(u32 *)((u8 *)&loc_50 + 16) = (s32)v50;
+    *(f32 *)((u8 *)&loc_50 + 60) = (f32)((f32)((*(f32 *)&loc_14) * v48) + (f32)((*(f32 *)&loc_8) * v49));
+    *(f32 *)((u8 *)&loc_50 + 64) = (f32)((f32)((*(f32 *)&loc_18) * v48) + (f32)((*(f32 *)&loc_C) * v49));
+    *(f32 *)((u8 *)&loc_50 + 68) = (f32)((f32)((*(f32 *)&loc_1C) * v48) + (f32)((*(f32 *)&loc_10) * v49));
+    t10 = fn_1_584AC();
+    v1 = t10;
+    v47 = (f32)((f32)(u32)(v1 & 0xFFFF));
+    v47 = (f32)((f32)(v47 / 32767.0f));
+    v47 = (f32)((f32)(0.1f * v47));
+    v47 = (f32)((f32)(0.8f + v47));
+    *(f32 *)((u8 *)&loc_50 + 44) = v47;
+    t11 = fn_1_584AC();
+    v1 = t11;
+    v54 = (f32)(u32)(v1 & 0xFFFF);
+    v54 /= 32767.0f;
+    v54 = v5 * v54;
+    v55 = 0.8 * (f64)v54;
+    v55 = 0.4000000059604645 + v55;
+    v56 = (f32)v55;
+    *(f32 *)((u8 *)&loc_50 + 40) = v56;
+    *(f32 *)((u8 *)&loc_50 + 60) += (f32)(v56 * *(f32 *)((u8 *)v2 + 56));
+    *(f32 *)((u8 *)&loc_50 + 64) += (f32)(v56 * *(f32 *)((u8 *)v2 + 60));
+    *(f32 *)((u8 *)&loc_50 + 68) += (f32)(v56 * *(f32 *)((u8 *)v2 + 64));
+    *(f32 *)((u8 *)&loc_50 + 60) -= (f32)(0.8f * *(f32 *)((u8 *)&loc_50 + 72));
+    *(f32 *)((u8 *)&loc_50 + 64) -= (f32)(0.8f * *(f32 *)((u8 *)&loc_50 + 76));
+    *(f32 *)((u8 *)&loc_50 + 68) -= (f32)(0.8f * *(f32 *)((u8 *)&loc_50 + 80));
+    t12 = fn_1_584AC();
+    v1 = t12;
+    v4 = (f32)(u32)(v1 & 0xFFFF);
+    v4 = (f32)(v4 / 32767.0f);
+    v4 = (f32)(v4 - 0.5f);
+    v4 = (f32)(0.3f * v4);
+    *(f32 *)((u8 *)&loc_50 + 60) += v4;
+    t13 = fn_1_584AC();
+    v1 = t13;
+    v4 = (f32)(u32)(v1 & 0xFFFF);
+    v4 = (f32)(v4 / 32767.0f);
+    v4 = (f32)(v4 - 0.5f);
+    v4 = (f32)(0.3f * v4);
+    *(f32 *)((u8 *)&loc_50 + 64) += v4;
+    t14 = fn_1_584AC();
+    v1 = t14;
+    v4 = (f32)(u32)(v1 & 0xFFFF);
+    v4 = (f32)(v4 / 32767.0f);
+    v4 = (f32)(v4 - 0.5f);
+    v4 = (f32)(0.3f * v4);
+    *(f32 *)((u8 *)&loc_50 + 68) += v4;
+    t15 = fn_1_584AC();
+    v1 = t15;
+    v59 = (v1 & 0xFFFF);
+    v1 = (u32)&loc_50;
+    v47 = (f32)((f32)(u32)v59);
+    v47 = (f32)((f32)(v47 / 32767.0f));
+    v47 = (f32)((f32)(0.5f * v47));
+    v47 = (f32)((f32)(0.5f + v47));
+    v47 = (f32)((f32)(0.5f * v47));
+    *(f32 *)((u8 *)&loc_50 + 28) = v47;
+    *(f32 *)((u8 *)&loc_50 + 32) = v47;
+    *(f32 *)((u8 *)&loc_50 + 36) = v47;
+    t16 = fn_1_58F50((const void *)v1);
+    v1 = t16;
+    v47 = 2.0f;
+    v9 = (f32)(v9 - v47);
+    v47 = 0.0f;
+    }
+    }
+    }
+    v3--;
+    v2 += 92;
+    } while (v3 > 0);
+    }
+    }
+    return;
+}
+#pragma opt_propagation reset
+/* fzgx:end fn_1_6E62C */
+
 /* fzgx:begin fn_1_6ED40 pool noprologue */
 #include "types.h"
 #include "game/main_rel/car_test_types.h"
