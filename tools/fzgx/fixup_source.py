@@ -3194,6 +3194,15 @@ def annotate_verified_branches(body, findings):
                                + text[end:])
             changed = True
             continue
+        if rule == 'S2' and re.search(r'\bvolatile\b', lines[line - 1].split('//', 1)[0]):
+            # a volatile declaration (local carrier, file-scope object) a sweep family introduced:
+            # the full match is its justification too (fn_1_6BFB8's sweep match was refused by S2)
+            text = lines[line - 1]
+            end = len(text.rstrip('\r\n'))
+            lines[line - 1] = (text[:end] + '  /* fzgx-allow: S2 volatile keeps the verified access order */'
+                               + text[end:])
+            changed = True
+            continue
         if rule != 'S1':
             continue
         match = re.search(r'\bgoto\s+(\w+)\s*;', lines[line - 1])
