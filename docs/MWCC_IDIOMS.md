@@ -489,3 +489,45 @@ without row alignment (`retail - ours` net rows):
 - Caller-proven narrow return (librarian, 2026-10-14): a callee that only returns small constants (`li r3, N`) compiles
   identically as `int` or `u8`; its caller decides (a `u8` result kept in a callee-saved register is `clrlwi r31, r3, 24`,
   an `int` one is `clrlwi r0` plus `mr`), so the truth is the caller's type (fn_10_26434 for fn_10_26000).
+
+## Optimizer rules read from the public mwcceppc source (rayanht/mwcc, 2026-10-26)
+
+Citations are to the CC0 matching decompilation (`FZGX_MWCC_SRC`, never copied here); each
+rule was probed with real GC/1.3.2 compiles of saved bodies.
+
+- **IR copy propagation moves only numbers and local copies.** `IRO_CopyAndConstantPropagation`
+  (optimizer/IroPropagate.c) takes a candidate only through `fn_004592e0`: the right side is an
+  int/float/vector constant (`fn_0044d520`, optimizer/IroDump.c) or a non-volatile register local.
+  `&global`, `p + off` and every address are *not* copy-propagated; it also skips any use whose
+  block has a greater loop depth than the definition's (`block->loopdepth > node->block->loopdepth`;
+  depths exist only after `IRO_FindLoops`, so the first pass-0 propagation ignores loops).
+- **Expression propagation is block-local and single-use.** `IroPropagate_PropagateExpressions`
+  substitutes `v = expr` into a later use only inside the same IR node, only when `v` has one use
+  there (`uses == 1`) and the assignment's value is not itself used (`IROLF_Reffed`, a chained
+  `a = (v = expr)`). Under -O4 it runs again in pass 1 (`IRO_Optimizer`, optimizer/IrOptimizer.c),
+  so a second use that dead-store removal deletes in pass 0 does not keep it from folding.
+- **Backend add propagation never fires.** `COpt_AddPropagation` (optimizer/AddPropagation.c) tests
+  `flags & fRecordBit | 0x400`, which is always non-zero, so `canPropagate` is always 0. Folding of
+  `addi rA, rB, c1` into a later `addi rX, rA, c2` comes from the IR or from the peephole
+  (`combine_addi`, `fold_addi_or_mr_reaching_def`, backend/Peephole.c: folds when the first result is
+  the same register or dead, and nothing in between uses it or redefines its base).
+  fn_1_ED540 (retail `addi r20, r31, 0x19c8 ... addi r20, r20, 0x620`): twelve spellings (hoisted
+  temp, in-loop use with `opt_loop_invariants` on and off, `v += 0x620` in the preheader, `for`
+  initializer, chained assignment, peephole off) all compile to one `addi r20, r31, 0x1fe8`; the
+  fold survives `#pragma peephole off`, so it happens before the peephole. Only an `if` between the
+  two statements (a separate IR node) kept both adds, at the cost of a real branch. Unsolved: the
+  retail shape needs an IR node boundary that disappears before code generation.
+- **IR unroll trip guards fold only by IR constant propagation.** `unroll_loop` (optimizer/IroLoop.c)
+  computes the trip count into a temporary (`create_loop_iteration_count`) and emits
+  `if (count <= factor) goto remainder` (`create_source_constant_branch`). Only
+  `IRO_CopyAndConstantPropagation` turns the temporary into a constant for
+  `IRO_EvaluateConditionals`; the backend's `ConstantPropagation.c` folds `addi`/`add` but not compares.
+  A caller compiled under `#pragma opt_propagation off` therefore keeps `li r0, N; cmpwi r0, F; ble`
+  before the `mtctr` of a constant-bound loop that retail enters directly (fn_12_21C8: N=0xdc, F=8;
+  inlined helpers inherit the caller's setting, so a pragma around the inline definition does not help).
+  Turning propagation on removes the guard but folds the inlined `li r3, 0; cmpwi r3, 1` result tests
+  (96.0% -> 88.6%): retail had propagation on, and those results had more than one reaching definition.
+- **Known-count backend unrolling needs a divisor.** `unroll_counting_loop` and `unroll_loop_by_factor`
+  (optimizer/LoopOptimization.c) lower the factor from `unroll_factor_limit` until it divides the trip
+  count; a remainder loop after `li rN, count/8; mtctr` is therefore the IR unroller's output, not the
+  backend's.
