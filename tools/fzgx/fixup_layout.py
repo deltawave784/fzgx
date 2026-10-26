@@ -538,6 +538,131 @@ def derived_models(text, syms):
     return text
 
 
+_BYTE_T = r"(?:const\s+)?(?:u8|s8|char|unsigned\s+char|signed\s+char)"
+_INT = r"0x[0-9A-Fa-f]+|\d+"
+
+
+def flatten_byte_views(p, symbol, text):
+    """Byte-pointer locals at constant offsets from one same-module .bss object, re-spelled as
+    byte arithmetic on the object itself (`extern u8 lbl[]; *(T *)(lbl + 0x49388)`), the shape
+    the `bare` model lays out as retail TU objects.
+
+    `base = (u8 *)&lbl_10_bss_0; hi = base + 0x50000; *(u32 *)(hi - 0x6c78)` keeps the base as
+    a declared local and the high half as a compiler temp, so the high half is colored first and
+    takes r31 where retail holds the section base in r30 and `addis r31, r30, 0x5` (fn_10_4790,
+    fn_10_8314). No declaration order, carrier or pragma reaches retail's order; with the objects
+    defined in the unit MWCC addresses them off its own section base and the pair comes out as
+    retail's (fn_10_4790: 84.9% -> 100%). Returns the rewritten text or None."""
+    sym = p.resolve(symbol)
+    if sym is None:
+        return None
+    syms = p.symbols(sym.module)
+    fm = re.search(r"\n[^\n;{}]*\b%s\s*\([^;{}]*\)\s*\{" % re.escape(sym.name), text)
+    if not fm:
+        return None
+    inner = _brace_body(text, fm.end() - 1)
+    if inner is None:
+        return None
+    lo, hi = fm.end(), fm.end() + len(inner)
+    code = text[lo:hi]
+    # byte pointers: plain locals and the one-member carrier `struct { u8 *value; } c;`
+    ptrs = {}
+    for m in re.finditer(r"(?m)^[ \t]*%s\s*\*\s*(\w+)\s*(?:=[^;]*)?;" % _BYTE_T, code):
+        ptrs[m.group(1)] = m.group(0)
+    for m in re.finditer(r"(?m)^[ \t]*struct\s*\{\s*%s\s*\*\s*(\w+)\s*;\s*\}\s*(\w+)\s*;" % _BYTE_T, code):
+        ptrs[f"{m.group(2)}.{m.group(1)}"] = m.group(0)
+    if not ptrs:
+        return None
+
+    def bss(name):
+        s = syms.get(name)
+        return s is not None and s.section == '.bss' and s.kind == 'object'
+
+    byte_arrays = {m.group(1) for m in re.finditer(r"\bextern\s+%s\s+(\w+)\s*\[[^\]]*\]\s*;" % _BYTE_T, text)}
+    # value of each pointer: (object, byte offset), resolved in assignment order
+    resolved, stmts = {}, {}
+    base_form = re.compile(r"(?:\(\s*%s\s*\*\s*\)\s*&?\s*(lbl_\w+)|&\s*(lbl_\w+)\s*\[\s*0\s*\]|(lbl_\w+))$" % _BYTE_T)
+    for _ in range(4):
+        for pv in ptrs:
+            if pv in resolved:
+                continue
+            pat = re.escape(pv).replace(r'\.', r'\s*\.\s*')
+            assigns = list(re.finditer(r"(?<![\w.>])%s\s*=(?!=)\s*([^;]*);" % pat, code))
+            if len(assigns) != 1:
+                continue
+            rhs = assigns[0].group(1).strip()
+            got = None
+            bm = base_form.match(rhs)
+            if bm:
+                name = bm.group(1) or bm.group(2) or bm.group(3)
+                if bss(name) and (bm.group(1) or name in byte_arrays):
+                    got = (name, 0)
+            else:
+                dm = re.fullmatch(r"(?:\(\s*%s\s*\*\s*\)\s*)?(.+?)\s*([+-])\s*(%s)" % (_BYTE_T, _INT), rhs)
+                if dm:
+                    left, sign, k = dm.group(1).strip(), dm.group(2), int(dm.group(3), 0)
+                    left = re.sub(r"\s*\.\s*", ".", left)
+                    src = resolved.get(left)
+                    if src is None:
+                        lm = base_form.match(left)
+                        if lm:
+                            name = lm.group(1) or lm.group(2) or lm.group(3)
+                            if bss(name) and (lm.group(1) or name in byte_arrays):
+                                src = (name, 0)
+                    if src is not None:
+                        got = (src[0], src[1] + (k if sign == '+' else -k))
+            if got is not None and got[1] >= 0:
+                resolved[pv] = got
+                stmts[pv] = assigns[0]
+    if not resolved:
+        return None
+    out = code
+    done = []
+    # derived pointers first: their assignments still name the pointer they derive from
+    for pv, (name, off) in reversed(list(resolved.items())):
+        pat = re.escape(pv).replace(r'\.', r'\s*\.\s*')
+        stmt = stmts[pv].group(0)
+        decl = ptrs[pv]
+        # an initialized declaration is its own assignment
+        rest = out.replace(stmt, '\0', 1) if stmt not in decl else out.replace(decl, '\0', 1)
+        if stmt not in decl:
+            rest = rest.replace(decl, '\0', 1)
+
+        def at(k):
+            v = off + k
+            return f"({name} + 0x{v:X})" if v >= 0 else None
+
+        bad = False
+
+        def plus(m):
+            nonlocal bad
+            v = at(int(m.group(2), 0) * (1 if m.group(1) == '+' else -1))
+            if v is None:
+                bad = True
+                return m.group(0)
+            return v
+        new = re.sub(r"(?<![\w.>])%s\s*([+-])\s*(%s)\b(?!\s*[*/%%\[(.])" % (pat, _INT), plus, rest)
+        new = re.sub(r"(?<![\w.>])%s\s*\[\s*(%s)\s*\]" % (pat, _INT), lambda m: f"{name}[0x{off + int(m.group(1), 0):X}]", new)
+        new = re.sub(r"(?<![\w.>])%s\b(?!\s*(?:->|\[|=(?!=)|\+\+|--|[+\-*/|&^]=|\.))" % pat, lambda m: f"({name} + 0x{off:X})", new)
+        if bad or re.search(r"(?<![\w.>])%s\b" % pat, new):
+            continue
+        out = new.replace('\0', '', 2)
+        done.append(pv)
+    if not done:
+        return None
+    # the removed declarations and assignments leave indentation-only lines
+    out = re.sub(r"(?m)^[ \t]+\n", "", out)
+    text = text[:lo] + out + text[hi:]
+    for name in sorted({resolved[pv][0] for pv in done}):
+        if name in byte_arrays:
+            continue
+        local = re.compile(r"\nextern\s+[^;\n]*\b%s\b[^;\n]*;" % re.escape(name))
+        decl = f"\nextern u8 {name}[];"
+        text = local.sub(decl, text, 1) if local.search(text[:fm.start() + 1]) else (
+            text[:fm.start()] + decl + text[fm.start():])
+    return text
+
+
 def _enclosing_function(text, pos):
     """(start, end) of the file-scope function definition containing `pos`, or None."""
     from .sdkimport import masked
@@ -2907,6 +3032,20 @@ def tu_section_layout(p, symbol, body, check):
                 out.append((f'define retail TU bss objects ({label})', text))
                 if only is None and mode != 'merge':
                     bases.append((mode, text))
+    # byte-pointer locals off one object (`base = (u8 *)&lbl; hi = base + 0x50000`) as byte
+    # arithmetic on the object, which the bare model lays out (fn_10_4790: 84.9% -> 100%)
+    try:
+        flat = flatten_byte_views(p, symbol, body)
+    except (ValueError, KeyError, IndexError, AttributeError, OSError):
+        flat = None
+    if flat:
+        for mode in ('dtk', 'split', 'merge'):
+            try:
+                text, notes = tu_objects(p, symbol, flat, mode, cache, retail_bases)
+            except (ValueError, KeyError, IndexError, AttributeError, OSError):
+                text = None
+            if text and text not in {t for _, t in out}:
+                out.append((f'define retail TU bss objects ({mode}, flattened byte views)', text))
     # views derived from a model at a constant offset, as models of the retail object holding
     # them (fn_3_381C: 80.7% -> pool match); an addition, the plain layouts above stay
     for mode in ('dtk', 'split', 'merge'):
