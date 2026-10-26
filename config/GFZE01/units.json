@@ -3221,6 +3221,18 @@
   },
   {
     "module": "customize",
+    "source": "rel/customize/toolkit/fn_3_225F8.c",
+    "symbols": [
+      "fn_3_225F8"
+    ],
+    "status": "nonmatching",
+    "mw_version": null,
+    "extra_cflags": [],
+    "tu": "rel/customize/toolkit.c",
+    "pool": true
+  },
+  {
+    "module": "customize",
     "source": "rel/customize/toolkit/fn_3_23524.c",
     "symbols": [
       "fn_3_23524"
