@@ -698,3 +698,6 @@ rel/customize/_prolog/fn_3_A12C.c:
 
 rel/customize/_prolog/fn_3_6AC4.c:
 	.text       start:0x00006AC4 end:0x00006D2C align:4
+
+rel/customize/emb_memcard/fn_3_CE94.c:
+	.text       start:0x0000CE94 end:0x0000D9A0 align:4
