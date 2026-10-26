@@ -54,7 +54,7 @@ def _bitwise_operand(code: str, start: int, end: int) -> bool:
 _POOL_TABLE = re.compile(
     r'(?m)^[ \t]*(?:static[ \t]+)?(?:(?:const|volatile)[ \t]+)+(?:unsigned[ \t]+|signed[ \t]+)?'
     r'(?:u8|u16|u32|u64|s8|s16|s32|s64|int|long|short|char|(?:union|struct)(?:[ \t]+\w+)?(?:[ \t]*\{[^{}]*\})?)[ \t]+'
-    r'(?P<name>fzgx_\w*|\w*[Pp]ool\w*)[ \t]*(?:\[[^\]\n]*\][ \t]*)+=[ \t]*\{')
+    r'(?P<name>fzgx_\w*|\w*[Pp]ool\w*|\w+_pad[0-9A-Fa-f]+)[ \t]*(?:\[[^\]\n]*\][ \t]*)+=[ \t]*\{')
 
 
 def _pool_table_lines(text: str) -> set:
@@ -63,7 +63,9 @@ def _pool_table_lines(text: str) -> set:
     word tables agents name the same way). Their words are the bit patterns of pooled
     literals: 0xC0400000 is -3.0f, 0xC0A00000 is -5.0f, 0xC1700000 is -15.0f. A1 read them as
     uncached-RAM addresses and blocked two 100% matches until the agents respelled them as
-    decimals (fn_3_23A1C) and `0xC000u << 16` (fn_1_67680). Nothing outside the braces is
+    decimals (fn_3_23A1C) and `0xC000u << 16` (fn_1_67680). The shared-pool primer's raw
+    filler tables are named `<symbol>_pad<offset>` (fn_3_225F8_pad1C0 held -3.0f and -5.0f and
+    blocked an exact match in tooling round 60), so that name form is a pool table too. Nothing outside the braces is
     exempt, so an address kept in a scalar or in any other table is still flagged."""
     out: set = set()
     for m in _POOL_TABLE.finditer(text):
