@@ -17,6 +17,13 @@ file from what actually unblocked functions; keep each item one or two lines.
   temporary or wrapped in `(f32)` stays `fmuls` + `fadds`. Only the product that is a
   direct operand fuses: retail `fmuls; fnmsubs` for `x*y - z*w` is `(f32)(x*y) - z*w`;
   retail `fmuls x; fmadds y; fmadds z` for a squared length is `(f32)(x*x) + y*y + z*z`.
+- **Float literal in double context** (GC/1.3.2, 2026-10-26): `(f64)0.8f` and `0.8f * d`
+  fold to a new double constant (`lfd` of 0x3FE99999A0000000, one more pool slot that
+  shifts every later shared-pool offset); retail's `lfs` of the float word followed by
+  double arithmetic is `f32 k = 0.8f; ... k * d`. `native_pool_literals` emits that form
+  (`promoted floats held`), resolves pool reads made through inline helpers' pointer
+  parameters, and offers each native body already primed (fn_1_6AF70 97.3 -> 99.3,
+  fn_1_D6C10 95.7 -> 97.1).
 - **Signedness**: `cmpwi`/`lha`/`extsh`/`srawi` need a signed operand type (cast or
   declaration), `cmplwi`/`lhz`/`clrlwi`/`srwi` an unsigned one; flip the operand of that
   statement, not unrelated locals.

@@ -576,6 +576,39 @@ def pool_scalar_reads(p, symbol, body, check):
         if owner in roots:
             roots[name] = roots[owner]
             variables[name] = roots[owner][1]
+    # A static inline helper reading the pool through a pointer parameter (fn_1_6AF70's
+    # `noise(pool)`): when every call in the function passes a pool alias, the helper's reads
+    # are the same literals. Left as reads, the inlined parameter keeps a second pool base.
+    scoped = {}
+    def tag(ty):
+        return re.sub(r'\b(?:const|volatile|extern|static)\b|\*|\s+',' ',ty).split()
+    for helper in re.finditer(r'\bstatic\s+inline\s+[^;{}()=]*?\b(\w+)\s*\(([^()]*)\)\s*\{',code[:span[0]]):
+        hspan = _function_span(code[helper.start():],helper[1])
+        if not hspan:
+            continue
+        hspan = (helper.start()+hspan[0],helper.start()+hspan[1])
+        calls = [c for c in re.finditer(r'\b'+re.escape(helper[1])+r'\s*\(([^()]*)\)',code[span[0]:span[1]])]
+        for index,param in enumerate(helper[2].split(',')):
+            named = re.fullmatch(r'\s*(.*?[\s*])(\w+)\s*',param)
+            if not named or '*' not in named[1] or (named[2] in roots and named[2] not in scoped) or re.search(r'\b'+named[2]+r'\b',code[span[0]:span[1]]):
+                continue
+            owners = set()
+            for call in calls:
+                args = call[1].split(',')
+                arg = re.sub(r'^(?:\s*\([^()]*\))*\s*&?\s*','',args[index]).strip() if index<len(args) else ''
+                owners.add(roots[arg][0] if arg in roots else None)
+            if len(owners)!=1 or None in owners:
+                continue
+            anchor = owners.pop()
+            if named[2] in scoped and roots[named[2]] != (anchor,named[1].strip()):
+                continue
+            if tag(named[1])[-2:] != tag(next(ty for a,ty in roots.values() if a==anchor))[-2:]:
+                continue
+            roots[named[2]] = (anchor,named[1].strip())
+            variables[named[2]] = named[1].strip()
+            scoped.setdefault(named[2],[]).append(hspan)
+    if scoped:
+        layouts = record_layouts(code,span[0],variables)
     ranges, position, macro = [(span[0],span[1])], 0, None
     for line in code[:span[0]].splitlines(keepends=True):
         if line.lstrip().startswith('#define '):
@@ -588,11 +621,12 @@ def pool_scalar_reads(p, symbol, body, check):
         pattern = r'\b'+re.escape(name)+r'((?:\s*(?:->|\.)\s*\w+)*)(?:\s*\[([^]\n]+)\])?'
         for use in re.finditer(pattern,code):
             start,end = use.span()
-            if not any(a<=start and end<=b for a,b in ranges):
+            if not any(a<=start and end<=b for a,b in scoped.get(name,ranges)):
                 continue
             prefix = code[code.rfind('\n',0,start)+1:start]
-            wrapper = re.search(r'\(\s*\*\s*\(\s*(?:f32|float|f64|double)\s+(?:volatile\s+)?\*\s*\)\s*&\s*\(\s*$',code[:start])
-            closing = re.match(r'\s*\)\s*\)',code[end:]) if wrapper else None
+            # a reload view of the scalar, `(*(f32 volatile *)&(p->k))` or `*(const volatile f32 *)&p->k`
+            wrapper = re.search(r'(\(\s*)?\*\s*\(\s*(?:(?:const|volatile)\s+)*(?:f32|float|f64|double)\s+(?:(?:const|volatile)\s+)*\*\s*\)\s*&\s*(\(\s*)?$',code[:start])
+            closing = re.match(r'\s*\)'*sum(g is not None for g in wrapper.groups()),code[end:]) if wrapper else None
             if (re.match(r'\s*\)*\s*(?:=(?!=)|[+*/&|^-]=|\+\+|--|\[|->|\.)',code[end:])
                     or (re.search(r'(?:&|\+\+|--)\s*\(*\s*$',code[:start]) and not closing)
                     or re.fullmatch(r'\s*(?!return\b)'+TYPE+r'\s+',prefix)
@@ -640,7 +674,7 @@ def pool_scalar_reads(p, symbol, body, check):
                    + re.escape(name) + r'\s*\+\s*(0x[0-9A-Fa-f]+|\d+)\s*\)')
         for use in re.finditer(pattern,code):
             start,end = use.span()
-            if not any(a<=start and end<=b for a,b in ranges) or any(a<end and start<b for a,b in taken):
+            if not any(a<=start and end<=b for a,b in scoped.get(name,ranges)) or any(a<end and start<b for a,b in taken):
                 continue
             if re.match(r'\s*(?:=(?!=)|[+*/&|^-]=|\+\+|--)',code[end:]) or re.search(r'&\s*$',code[:start]):
                 continue
@@ -669,6 +703,29 @@ def native_pool_literals(p, symbol, body, check):
     for start,end,value in sorted(set(edits),reverse=True):
         text = text[:start]+'('+value+')'+text[end:]
     out = [('recover native shared-pool literals',text)]
+    # MWCC folds a float literal cast to double (`(f64)0.8f`) into a new double constant
+    # (`lfd` of 0x3FE99999A0000000, one more pool slot shifting every later offset); retail
+    # loads the float word and computes in double. A float local holding the literal keeps
+    # the `lfs` (fn_1_D6C10, fn_1_6AF70: measured under GC/1.3.2).
+    promoted, names = body, {}
+    for start,end,value in sorted(set(edits),reverse=True):
+        if value.endswith('f') and re.search(r'\(\s*(?:f64|double)\s*\)\s*\(*\s*$',code[:start]):
+            local = names.setdefault(value,f'fzgx_pool_f32_{len(names)}')
+            promoted = promoted[:start]+local+promoted[end:]
+        else:
+            promoted = promoted[:start]+'('+value+')'+promoted[end:]
+    if names:
+        from .fixup_source import _decl_anchor
+        anchor = _decl_anchor(promoted, p.resolve(symbol).name)
+        if anchor:
+            _, _, top, indent = anchor
+            decls = ''.join(f'{indent}f32 {local} = {value};\n' for value,local in names.items())
+            out.append(('recover native shared-pool literals, promoted floats held',promoted[:top]+decls+promoted[top:]))
+    # The pool layout is the primer's: offer each native form primed at once, since an
+    # unprimed native body usually scores below its struct-view seed and leaves the frontier
+    # before the primer would see it.
+    for label,native in list(out):
+        out += [(label+'; '+plabel,ptext) for plabel,ptext in shared_pool_primer(p,symbol,native,check,native=True)]
     # A readonly pool load can move past unrelated stores. Keep its address
     # expression, so shortening the scalar's lifetime does not split the pool.
     reads = {(a,b) for a,b,_ in edits}
@@ -3722,7 +3779,7 @@ def _initializer_words(body, name, spans=False):
     return out
 
 
-def shared_pool_primer(p, symbol, body, check):
+def shared_pool_primer(p, symbol, body, check, native=False):
     """Retail addresses a translation unit's literal pool through one base register: the pool
     is laid out in first-use order across the whole TU, so a per-function unit's own pool never
     has the same offsets and every `lfs f, off(rB)` differs. A primer reproduces retail's pool
@@ -3748,7 +3805,9 @@ def shared_pool_primer(p, symbol, body, check):
     lrows, rrows = check._rows
     lfmt = [((r.get('instruction') or {}).get('formatted') or '') for r in lrows]
     rfmt = [((r.get('instruction') or {}).get('formatted') or '') for r in rrows]
-    if not any('...rodata' in t or re.match(r'(?:lfs|lfd)\s+f\d+,\s+@\d+@', t) for t in rfmt):
+    # `native`: the caller has just made the literals native (`native_pool_literals`); the rows
+    # are the pre-rewrite body's, only retail's rows are read below
+    if not native and not any('...rodata' in t or re.match(r'(?:lfs|lfd)\s+f\d+,\s+@\d+@', t) for t in rfmt):
         return []  # the body does not use native literals yet (recover native shared-pool literals first)
     syms = p.symbols(sym.module)
     bases = {}

@@ -274,7 +274,7 @@ class Engine:
             # retail data initializers rename the objects' uses everywhere; their gain is in data
             # that no implicated code line shows
             if (not changed or changed & lines or (first_stmt and all(c < first_stmt for c in changed))
-                    or label.startswith('retail initializers for defined data objects')):
+                    or label.startswith(('retail initializers for defined data objects', 'recover native shared-pool literals'))):
                 relevant.append((label, text))
             else:
                 rest.append((label, text))
@@ -585,6 +585,10 @@ class Engine:
             yield from self._family(row, 'layout.section_group_orders', lambda: layout.section_group_orders(self.project, row['symbol'], body, check))
             # defined TU section objects off their retail offsets / in DOL small data / unprimed
             yield from self._family(row, 'sections.repairs', lambda: sections.repairs(self.project, row['symbol'], body, check))
+            # the shared-pool rewrite is one whole-function edit whose gain is the pool layout (the
+            # primed forms): ranked behind ~1,300 local edits it never reached the candidate cap
+            # (fn_1_6AF70, fn_1_D6C10)
+            yield from self._family(row, 'evidence.native_pool_literals (primed)', lambda: [c for c in evidence.native_pool_literals(self.project, row['symbol'], body, check) if '; prime ' in c[0]])
             yield from self._family(row, 'evidence.range_switches', lambda: evidence.range_switches(body, name, check))
             yield from self._family(row, 'layout.native_string_views', lambda: layout.native_string_views(self.project, row['symbol'], body))
             yield from self._family(row, 'evidence.swapped_call_arguments', lambda: evidence.swapped_call_arguments(self.project, row['symbol'], body, check))
