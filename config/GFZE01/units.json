@@ -15888,6 +15888,17 @@
   },
   {
     "module": "main",
+    "source": "dol/fn_80015B50.c",
+    "symbols": [
+      "fn_80015B50"
+    ],
+    "status": "matching",
+    "mw_version": null,
+    "extra_cflags": [],
+    "asm": true
+  },
+  {
+    "module": "main",
     "source": "dol/fn_80015B78.c",
     "symbols": [
       "fn_80015B78"
