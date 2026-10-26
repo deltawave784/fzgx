@@ -699,6 +699,44 @@ void fn_7_15B8(void) {
 }
 /* fzgx:end fn_7_15B8 */
 
+/* fzgx:begin fn_7_15BC */
+#include "rel/story/story_mode.h"
+
+extern int fn_1_8623C(void);
+extern u8 *fn_1_3F0D8(u32, f32 *, u8 *);
+typedef struct { u8 min; u8 sec; u16 ms; } StoryTime;
+typedef struct { u8 pad[0x6c]; StoryTime times[12][12]; } StoryRecords;
+extern StoryRecords lbl_1_bss_7F0C0;
+extern u8 lbl_1_bss_9C[];
+
+void fn_7_15BC(void) {
+    f32 unused;
+    u8 unused2;
+    u8 *result;
+    Obj_7_bss_10_Target *selection;
+    s32 row;
+    s32 course;
+    u8 *time;
+    result = fn_1_3F0D8((u8)fn_1_8623C(), &unused, &unused2);
+    selection = lbl_7_bss_10;
+    course = selection->unk_0;
+    row = (s8)selection->unk_1;
+    course = (s8)course;
+    time = (u8 *)&lbl_1_bss_7F0C0.times[row] + course * 4;
+    if ((*time == 0 &&
+         lbl_1_bss_7F0C0.times[row][course].sec == 0 &&
+         lbl_1_bss_7F0C0.times[row][course].ms == 0) ||
+        (s32)(*(u16 *)(result + 0x1e2) + (result[0x1e1] * 1000 + result[0x1e0] * 60000)) <
+        (s32)(lbl_1_bss_7F0C0.times[row][course].ms +
+                   (lbl_1_bss_7F0C0.times[row][course].sec * 1000 + *time * 60000))) {
+        *time = result[0x1e0];
+        lbl_1_bss_7F0C0.times[(s8)selection->unk_1][course].sec = result[0x1e1];
+        lbl_1_bss_7F0C0.times[(s8)selection->unk_1][course].ms = *(u16 *)(result + 0x1e2);
+        lbl_1_bss_9C[3] = 1;
+    }
+}
+/* fzgx:end fn_7_15BC */
+
 /* fzgx:begin fn_7_16FC */
 extern u16 lbl_1_bss_96A;
 
