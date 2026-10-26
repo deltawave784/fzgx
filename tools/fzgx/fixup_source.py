@@ -931,6 +931,55 @@ def embedded_call_assignments(body: str, name: str) -> List[Tuple[str, str]]:
 
 
 
+EXPRESSION_EMBED_LIMIT = 60
+
+
+def expression_embedded_assignments(body: str, name: str, lines=None,
+                                    limit: int = EXPRESSION_EMBED_LIMIT) -> List[Tuple[str, str]]:
+    """`x = E; y = A op x ...;` -> `y = A op (x = E) ...;`: the assignment is lowered inside its
+    first use, after the operands written before it, so the use's earlier operand loads are
+    numbered below E's temporaries while x's web is still created first. A lowering-temporary
+    residual (two FPR/GPR temps swapped, declaration order unable to move them) closes this way:
+    fn_3_225F8's `v21 = 1.0f + 0.5f * t3; v22 = PF16 * v21;` gave the 1.0f constant f3 and the
+    PF16 load f2; `v22 = PF16 * (v21 = ...)` gives retail's f2/f3 (capture renumbering: the sum
+    below the load, the load below the constant). LINES (body line numbers, 1-based) restricts
+    the sites to statements on or next to implicated lines."""
+    out: List[Tuple[str, str]] = []
+    span = _function_body_span(body, name)
+    if not span:
+        return out
+    inner = body[span[1]:span[2]]
+    base_line = body.count('\n', 0, span[1]) + 1
+    near = None if lines is None else {ln + d for ln in lines for d in (-1, 0, 1)}
+    pat = re.compile(r'(?m)^([ \t]+)([A-Za-z_]\w*) = ([^;\n{}]+);\n([ \t]+)([^;\n{}=]*?[^=!<>+\-*/%&|^ \t])\s*=\s*([^;\n{}]+);\n')
+    k = 0
+    while len(out) < limit:
+        m = pat.search(inner, k)
+        if not m:
+            break
+        k = m.start() + len(m.group(1)) + 1
+        ind, x, expr, ind2, lhs, rhs = m.groups()
+        if x == name or re.search(r'\b' + re.escape(x) + r'\b', expr) or re.search(r'\b' + re.escape(x) + r'\b', lhs):
+            continue
+        if re.match(r'\s*(?:if|for|while|return|switch|case|do|else)\b', lhs) or '(' in lhs and ')' not in lhs:
+            continue
+        uses = list(re.finditer(r'(?<![\w.>&])' + re.escape(x) + r'(?![\w\[(])(?!\s*(?:=[^=]|\+\+|--))', rhs))
+        if len(uses) != 1 or len(re.findall(r'\b' + re.escape(x) + r'\b', rhs)) != 1:
+            continue
+        if uses[0].start() == 0 and uses[0].end() == len(rhs.rstrip()):
+            continue  # `y = x;` is a plain copy, not an operand
+        if near is not None:
+            ln = base_line + inner.count('\n', 0, m.start())
+            if ln not in near and ln + 1 not in near:
+                continue
+        u = uses[0]
+        new_rhs = rhs[:u.start()] + f"({x} = {expr.strip()})" + rhs[u.end():]
+        s0, e0 = span[1] + m.start(), span[1] + m.end()
+        out.append((f"embed {x} = ... in the next statement's operand",
+                    body[:s0] + f"{ind2}{lhs} = {new_rhs};\n" + body[e0:]))
+    return out
+
+
 def condition_embedded_assignments(body: str, name: str) -> List[Tuple[str, str]]:
     """`if (G OP k) { x = G; } else ...` and `x = G; if (x OP k)` -> `if ((x = G) OP k)`: the
     load lowers straight into x's web (a virgin named local otherwise gets `lwz rT; cmp rT;
@@ -1234,7 +1283,8 @@ def rewrites(body: str, name: str) -> List[Tuple[str, str]]:
     for fn in (primer_sections, scope_moves, split_inits, hoists, through_local, return_values,
                call_results_to_locals, wrap_constant_pointers, decse_repeated_expressions,
                scalar_carriers, dead_uses, variable_splits, signedness_flips, float_precision,
-               compound_assignments, embedded_call_assignments, condition_embedded_assignments):
+               compound_assignments, embedded_call_assignments, condition_embedded_assignments,
+               expression_embedded_assignments):
         try:
             out += fn(body, name)
         except Exception:

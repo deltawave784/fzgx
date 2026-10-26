@@ -129,6 +129,9 @@ def generate(p: Project, s: str, sym, path: Path, body: str, check, outdir: Path
     # (bounded above six), block-scoped locals of that class hoisted; the line attribution
     # names the locals whose moves are tried when the class is large
     add('regorder', lambda: fixup_evidence.register_class_orders(p, s, body, check, rl))
+    # lowering-temporary residuals: an assignment embedded in the next statement's operand
+    # changes the temporaries' creation order (fn_3_225F8); every site (line attribution lost fn_8005FDE0)
+    add('embed', lambda: fixup_source.expression_embedded_assignments(body, sym.name))
     # an allocator capture of this exact body under .fzgx/capture/SYMBOL: its verdict selects the
     # structural family (the sweep never runs a capture; `fzgx fixup SYMBOL` does)
     add('capture', lambda: fixup_capture.proposals(p, s, body, check, oracle.module_flags(p, sym.module)[1], None, run_capture=False))

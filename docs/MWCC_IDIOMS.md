@@ -146,6 +146,14 @@ file from what actually unblocked functions; keep each item one or two lines.
   (u8 *)&lbl; hi = base + 0x50000; *(T *)(hi - 0x6c78)`) into `lbl + 0x49388` arithmetic for
   the bare layout model (fn_10_4790 84.9 -> 100, fn_10_8314 -> 100, fn_3_6E14 95.2 -> 98.9).
   Typed-struct bases (`Obj *obj; u32 upper = (u32)obj + 0x20000`, fn_1_3CDB0) are not covered yet.
+- **Lowering-temporary swaps: embed the assignment in its first use** (2026-10-26, GC/1.3.2
+  capture). When the capture verdict says two temps are swapped ("numbered later than retail"),
+  renumber the window in the replay (`Graph.relabel` over permutations of the target block's
+  vregs) to read the creation order retail needs. fn_3_225F8's two blinking-arrow blocks needed
+  the sum's web below the `PF(16)` load and the load below the 1.0f constant: `v21 = 1.0f + 0.5f*t3;
+  v22 = PF(16) * v21;` creates the constant first; `v22 = PF(16) * (v21 = 1.0f + 0.5f*t3);`
+  creates the load first and matched. `fixup_source.expression_embedded_assignments` (engine
+  `rewrites`, sweep family `embed`) tries every adjacent site.
 
 ## Selection panel evidence (2026-09-15)
 
