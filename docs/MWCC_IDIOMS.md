@@ -153,6 +153,20 @@ file from what actually unblocked functions; keep each item one or two lines.
   (u8 *)&lbl; hi = base + 0x50000; *(T *)(hi - 0x6c78)`) into `lbl + 0x49388` arithmetic for
   the bare layout model (fn_10_4790 84.9 -> 100, fn_10_8314 -> 100, fn_3_6E14 95.2 -> 98.9).
   Typed-struct bases (`Obj *obj; u32 upper = (u32)obj + 0x20000`, fn_1_3CDB0) are not covered yet.
+- **Interior addresses (`addi rX, rBase, 0x8; lbz 0x1(rX)`) are aggregate objects of the TU**
+  (probe compiles under GC/1.3.2, 2026-10-26). With the objects defined in the unit, MWCC reads a
+  scalar object base-relative (`lbz 0x1f1(r31)`) and materializes the address of an aggregate
+  (array or struct) before every member access (`addi r3, r31, 0x8; lbz 0xa1(r3)` for
+  `ch[1].st` of `static Chan ch[2]` at +8), even for a constant index. An extern view of the
+  cluster folds both offsets (`lbz 0xa9(r31)`) under every inline helper, pointer parameter,
+  local and pragma tried. Of two anonymous section bases (`.bss` and the unit's own `.data`),
+  the callee-saved register goes to the section whose objects are *defined first in the file*:
+  fn_1_B4AC0 got retail's `r31 = bss, r30 = data` only with the bss layout placed before the
+  data pool. `tu_section_layout` now reads `(u32)p + N` model uses and uncast `u8 *p = &lbl`
+  byte views and offers each layout ahead of the unit's data (fn_1_C24A4 96.6 -> 98.2,
+  237 -> 87 rows). Not this class: ED540's `addi r20, r31, 0x19c8 ... addi r20, r20, 0x620`
+  (a struct model member, folded by copy propagation under every spelling tried) and bodies
+  that pass the model pointer to inline helpers (fn_1_BA144).
 - **Lowering-temporary swaps: embed the assignment in its first use** (2026-10-26, GC/1.3.2
   capture). When the capture verdict says two temps are swapped ("numbered later than retail"),
   renumber the window in the replay (`Graph.relabel` over permutations of the target block's

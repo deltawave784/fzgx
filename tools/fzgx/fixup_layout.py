@@ -579,6 +579,10 @@ def flatten_byte_views(p, symbol, text):
         return s is not None and s.section == '.bss' and s.kind == 'object'
 
     byte_arrays = {m.group(1) for m in re.finditer(r"\bextern\s+%s\s+(\w+)\s*\[[^\]]*\]\s*;" % _BYTE_T, text)}
+    # `u8 *p = &lbl;` over a byte scalar a module header declares (`extern u8 lbl_1_bss_716C0;`,
+    # dtk's size-8 head of fn_1_B4AC0's cluster) is the same byte view as the cast spelling
+    byte_scalars = {m.group(1) for m in re.finditer(r"\bextern\s+%s\s+(\w+)\s*;" % _BYTE_T, text + include_text())}
+    rhs_form = re.compile(r"&\s*(lbl_\w+)$")
     # value of each pointer: (object, byte offset), resolved in assignment order
     resolved, stmts = {}, {}
     base_form = re.compile(r"(?:\(\s*%s\s*\*\s*\)\s*&?\s*(lbl_\w+)|&\s*(lbl_\w+)\s*\[\s*0\s*\]|(lbl_\w+))$" % _BYTE_T)
@@ -596,6 +600,10 @@ def flatten_byte_views(p, symbol, text):
             if bm:
                 name = bm.group(1) or bm.group(2) or bm.group(3)
                 if bss(name) and (bm.group(1) or name in byte_arrays):
+                    got = (name, 0)
+            elif rhs_form.match(rhs):
+                name = rhs_form.match(rhs).group(1)
+                if bss(name) and name in byte_scalars:
                     got = (name, 0)
             else:
                 dm = re.fullmatch(r"(?:\(\s*%s\s*\*\s*\)\s*)?(.+?)\s*([+-])\s*(%s)" % (_BYTE_T, _INT), rhs)
@@ -673,7 +681,12 @@ def _enclosing_function(text, pos):
     return None
 
 
-def tu_objects(p, symbol, text, mode, cache, retail_bases=(), only=None, derive=False):
+# a unary `&`: in `v == 0 && lbl[0x1F1]` the second `&` belongs to the logical and (fn_1_B4AC0's
+# flattened view became `v == 0 &(u8 *)&obj` and the candidate never compiled)
+_UNARY_AMP = r"(?<![&\w)\]])(?<![&\w)\]]\s)"
+
+
+def tu_objects(p, symbol, text, mode, cache, retail_bases=(), only=None, derive=False, early=False):
     sym = p.resolve(symbol)
     syms = p.symbols(sym.module)
     notes = []
@@ -722,7 +735,7 @@ def tu_objects(p, symbol, text, mode, cache, retail_bases=(), only=None, derive=
         if kind == 'direct':
             pvar = f'fzgx_p_{base}'
             out_text = re.sub(r"\b%s\." % re.escape(base), f"{pvar}->", out_text)
-            out_text = re.sub(r"&\s*%s\b(?![\.\w])" % re.escape(base), f"((u8 *){pvar} + 0)", out_text)
+            out_text = re.sub(_UNARY_AMP + r"&\s*%s\b(?![\.\w])" % re.escape(base), f"((u8 *){pvar} + 0)", out_text)
             body_only = "\n".join(l for l in out_text.replace(stmt, '').split("\n") if not l.lstrip().startswith('#'))
             if re.search(r"(?<![\w>])%s\b(?!\s*->)" % re.escape(base), body_only):
                 notes.append(f'{base}: direct global used as a value'); return None, notes
@@ -736,9 +749,9 @@ def tu_objects(p, symbol, text, mode, cache, retail_bases=(), only=None, derive=
         if kind == 'bare':
             esz0 = SCALAR[tname]
             pvar = f'fzgx_p_{base}'
-            out_text = re.sub(r"&\s*%s\s*\[\s*(0x[0-9A-Fa-f]+|\d+)\s*\]" % re.escape(base), lambda mm: f"({tname} *)({pvar} + {int(mm.group(1), 0)})", out_text)
+            out_text = re.sub(_UNARY_AMP + r"&\s*%s\s*\[\s*(0x[0-9A-Fa-f]+|\d+)\s*\]" % re.escape(base), lambda mm: f"({tname} *)({pvar} + {int(mm.group(1), 0)})", out_text)
             out_text = re.sub(r"(?<![\w&])%s\s*\[\s*(0x[0-9A-Fa-f]+|\d+)\s*\]" % re.escape(base), lambda mm: f"{pvar}[{int(mm.group(1), 0)}]", out_text)
-            out_text = re.sub(r"&\s*%s\b(?![\.\[\w])" % re.escape(base), f"({tname} *)({pvar} + 0)", out_text)
+            out_text = re.sub(_UNARY_AMP + r"&\s*%s\b(?![\.\[\w])" % re.escape(base), f"({tname} *)({pvar} + 0)", out_text)
             out_text = re.sub(r"(?<![\w&.>])%s\s*\+\s*(0x[0-9A-Fa-f]+|\d+)\b" % re.escape(base),
                               lambda mm: f"({tname} *)({pvar} + {int(mm.group(1), 0)})", out_text)
             body_only = "\n".join(l for l in out_text.replace(stmt, '').split("\n") if not l.lstrip().startswith('#'))
@@ -794,6 +807,12 @@ def tu_objects(p, symbol, text, mode, cache, retail_bases=(), only=None, derive=
             synthetic[fname] = n
             return f"(u8 *)&{pvar}->{fname}"
         out_text = re.sub(r"\(u8 \*\)\s*(?:\(u32\)\s*)?\b%s\b\s*\+\s*(0x[0-9A-Fa-f]+|\d+)" % re.escape(pvar), _byteoff, out_text)
+        # the integer spelling of the same interior address, `(u32)p + 8` (fn_1_C24A4's port
+        # array, fn_1_BA144): retail keeps that address as an object address (`addi r3, r30, 0x8;
+        # lbz 0x1(r3)`), which only a defined object at +8 reproduces; as a model use the
+        # pointer was rejected and the cluster never got its layout
+        out_text = re.sub(r"\(\s*u32\s*\)\s*\b%s\b\s*\+\s*(0x[0-9A-Fa-f]+|\d+)\b(?!\s*[*/%%\[(])" % re.escape(pvar),
+                          lambda mm: "(u32)" + _byteoff(mm), out_text)
         # an index holding another use (`s->k[i][s->c[i] - 1]`) ends the subscript run: the
         # inner use is rewritten on its own (a `[^\]]*` subscript swallowed it, fn_1_F0B5C)
         uses = list(re.finditer(r"(&?)\b%s->(\w+)((?:\[[^\[\]]*\])*)" % re.escape(pvar), out_text))
@@ -1083,6 +1102,16 @@ def tu_objects(p, symbol, text, mode, cache, retail_bases=(), only=None, derive=
             out_text = re.sub(r"\n[^\n]*\bextern\b[^\n;]*\b%s\b[^\n;]*;" % re.escape(dn.group(1)), '', out_text)
     fm = re.search(r"\n[^\n;{}]*\b%s\s*\([^;{}]*\)\s*\{" % re.escape(sym.name), out_text)
     at = _first_use_point(out_text, fm.start() + 1, {re.split(r'\W', acc)[0] for _, _, acc in all_defs})
+    if early:
+        # before the unit's own initialized data: of two anonymous section bases MWCC gives the
+        # callee-saved register to the section whose objects are defined first in the file
+        # (fn_1_B4AC0: bss defined after the `.data` pool put the data base in r31, retail's
+        # bss base; defined before it, both bases match)
+        data = set(re.findall(r"\b(fzgx_(?:pool_init|data)_\w+)\s*(?:\[[^\]]*\])*\s*=\s*\{", out_text[:at]))
+        moved = _first_use_point(out_text, at, data) if data else at
+        if moved >= at:
+            return None, notes + ['no data definition before the layout']
+        at = moved
     # names a module header declares with its own layout are defined under an alias (the
     # oracle binds the section base through it); every use in this unit follows the alias
     renamed = {}
@@ -1100,7 +1129,13 @@ def tu_objects(p, symbol, text, mode, cache, retail_bases=(), only=None, derive=
     # addressed off r13 (fn_8005596C); `section ".data"` keeps an uninitialized one in .bss
     spec = '__declspec(section ".data") ' if sym.module == 'main' else ''
     block += "\n".join(spec + d for _, d, _ in all_defs) + "\n\n"
-    block += '#pragma section code_type ".fzgxpool"\nstatic void fzgx_bss_layout(void) {\n    volatile u8 s;  /* fzgx-allow: S2 layout primer sink: MWCC emits .bss objects in first-access order */\n'
+    # a body that already carries a layout primer (another cluster's earlier layout, fn_1_B4AC0)
+    # keeps it: a second `fzgx_bss_layout` is a redefinition and the candidate never compiled
+    primer, n = 'fzgx_bss_layout', 0
+    while re.search(r"\b%s\s*\(" % primer, out_text):
+        n += 1
+        primer = f'fzgx_bss_layout_{n}'
+    block += '#pragma section code_type ".fzgxpool"\nstatic void ' + primer + '(void) {\n    volatile u8 s;  /* fzgx-allow: S2 layout primer sink: MWCC emits .bss objects in first-access order */\n'
     block += "".join(f"    s = *(u8 *)&{acc};\n" for _, _, acc in all_defs)
     block += '}\n#pragma section code_type ".text"\n\n'
     out_text = out_text[:at] + block + out_text[at:]
@@ -3032,6 +3067,14 @@ def tu_section_layout(p, symbol, body, check):
                 out.append((f'define retail TU bss objects ({label})', text))
                 if only is None and mode != 'merge':
                     bases.append((mode, text))
+            # the same layout defined ahead of the unit's initialized data (section base order)
+            try:
+                text, notes = tu_objects(p, symbol, body, mode, cache, retail_bases, only, early=True)
+            except (ValueError, KeyError, IndexError, AttributeError, OSError):
+                text = None
+            if text and text not in {t for _, t in out}:
+                label = mode if only is None else f'{mode}, {next(iter(only))} only'
+                out.append((f'define retail TU bss objects ({label}, before the TU data)', text))
     # byte-pointer locals off one object (`base = (u8 *)&lbl; hi = base + 0x50000`) as byte
     # arithmetic on the object, which the bare model lays out (fn_10_4790: 84.9% -> 100%)
     try:
@@ -3046,6 +3089,12 @@ def tu_section_layout(p, symbol, body, check):
                 text = None
             if text and text not in {t for _, t in out}:
                 out.append((f'define retail TU bss objects ({mode}, flattened byte views)', text))
+            try:
+                text, notes = tu_objects(p, symbol, flat, mode, cache, retail_bases, early=True)
+            except (ValueError, KeyError, IndexError, AttributeError, OSError):
+                text = None
+            if text and text not in {t for _, t in out}:
+                out.append((f'define retail TU bss objects ({mode}, flattened byte views, before the TU data)', text))
     # views derived from a model at a constant offset, as models of the retail object holding
     # them (fn_3_381C: 80.7% -> pool match); an addition, the plain layouts above stay
     for mode in ('dtk', 'split', 'merge'):
