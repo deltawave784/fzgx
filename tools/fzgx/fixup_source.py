@@ -1168,6 +1168,46 @@ def _lc_volatile_read(expr: str) -> Optional[str]:
     return None
 
 
+def _lc_lvalue(expr: str) -> bool:
+    """A column value whose address can be passed: a dereference or a member/element access.
+    A bare local is excluded (taking its address would move it to the stack)."""
+    e = expr.strip()
+    deref = re.fullmatch(r'\*\s*\([^()]*\)\s*(?:&\s*)?(?:\([^()]*\)|[A-Za-z_][\w.\->\[\] ]*)', e)
+    return bool(deref or _LC_MEMBER.fullmatch(e)) and _LC_ARG_UNSAFE.search(' ' + e) is None
+
+
+def _lc_helper_copy(body: str, name: str, calls) -> List[Tuple[str, str]]:
+    """The column copy through a static inline helper that reads the three values into its own
+    locals. Inlined locals are compiler objects numbered above every function-scope local, so
+    they colour before the function's long-lived values; function-scope temporaries instead push
+    the `register` parameters of a following paired-single asm helper (`psvec_set`, whose
+    operands interfere with every value live since function entry) below the K threshold, and a
+    long-lived float then claims f31 before them. fn_1_438AC (capture 2026-10-26): v0 took f31
+    and psvec_set's x/y f29/f30 with block or function locals; the helper gave retail's
+    f29/f30/f31 and matched. Helper value parameters do not work: arguments become window
+    temporaries again."""
+    if not calls or not all(c[2] for c in calls):
+        return []
+    head = re.search(r'(?m)^[^\n;{}]*\b' + re.escape(name) + r'\s*\([^;{]*\)\s*\{', body)
+    if not head or re.search(r'\b' + re.escape(name) + r'_lc_copy\b', body):
+        return []
+    volatile = any(c[3] or re.search(r'\bvolatile\b', c[2]) for c in calls)
+    note = '  /* fzgx-allow: S2 volatile first read keeps the locked-cache column loads in order */'
+    first = ('volatile f32 *s0' if volatile else 'f32 *s0') + ', f32 *s1, f32 *s2'
+    helper = (f'/* locked-cache translation column copied through the helper\'s own locals */\n'
+              f'static inline void {name}_lc_copy({first}) {{{note if volatile else ""}\n'
+              f'    f32 x = *s0;\n    f32 y = *s1;\n    f32 z = *s2;\n'
+              f'    *(f32 *)(0xE0000000 + 0x0C) = x;\n'
+              f'    *(f32 *)(0xE0000000 + 0x1C) = y;\n'
+              f'    *(f32 *)(0xE0000000 + 0x2C) = z;\n}}\n\n')
+    text = body
+    for a, b, call, held in sorted(calls, reverse=True):
+        line = call.rstrip('\n') + (note if re.search(r'\bvolatile\b', call) else '') + '\n'
+        text = text[:a] + line + text[b:]
+    pos = head.start()
+    return [('locked-cache column copy through an inline helper\'s locals', text[:pos] + helper + text[pos:])]
+
+
 def _locked_cache_core(body: str, name: str) -> List[Tuple[str, str]]:
     span = _function_body_span(body, name)
     if not span:
@@ -1184,7 +1224,7 @@ def _locked_cache_core(body: str, name: str) -> List[Tuple[str, str]]:
     def balanced(text):
         return text.count('(') == text.count(')') and text.count('[') == text.count(']')
 
-    edits = []
+    edits, calls = [], []
     for n, site in enumerate(sites):
         a, b, indent = site.start(), site.end(), site[1]
         values = [v.strip() for v in (site[2], site[3], site[4])]
@@ -1222,6 +1262,9 @@ def _locked_cache_core(body: str, name: str) -> List[Tuple[str, str]]:
                 run[ln[2]] = ln[3].strip(); k = ln.start()
             if set(run) == set(values) and all(balanced(e) for e in run.values()):
                 rest = re.sub(r'(?m)^[ \t]*(?:const\s+)?f32\s+[^;{}()=]*;[ \t]*$', '', inner[:k] + inner[b:])
+                # member declarations of an anonymous view (`(struct { u8 pad[184]; f32 x, y, z; } *)p`)
+                # are not uses of the locals (fn_1_438AC)
+                rest = re.sub(r'\b(?:struct|union)\s*\w*\s*\{[^{}]*\}', 'struct', rest)
                 exprs = ' '.join(run.values())
                 if not any(re.search(r'(?<!\.)(?<!->)\b' + v + r'\b', exprs) for v in values) and not any(
                         re.search(r'(?<!\.)(?<!->)\b' + v + r'\b', rest) for v in values):
@@ -1240,11 +1283,17 @@ def _locked_cache_core(body: str, name: str) -> List[Tuple[str, str]]:
                     f'{i2}*(f32 *)(0xE0000000 + 0x1C) = {y};\n'
                     f'{i2}*(f32 *)(0xE0000000 + 0x2C) = {z};\n{indent}}}\n')
         held = _lc_volatile_read(values[0])
+        first = held or values[0]
+        lvalues = [first] + values[1:]
+        call = (f'{indent}{name}_lc_copy(&({lvalues[0]}), &({lvalues[1]}), &({lvalues[2]}));\n'
+                if all(_lc_lvalue(v) for v in lvalues) else None)
         edits.append((span[1] + a, span[1] + b, block(values[0]), block(held) if held else None))
+        calls.append((span[1] + a, span[1] + b, call, bool(held)))
     text = body
     for a, b, new, _ in sorted(edits, reverse=True):
         text = text[:a] + new + text[b:]
     out = [('locked-cache column copy in reverse-declared temporaries', text)]
+    out += _lc_helper_copy(body, name, calls)
     if any(e[3] for e in edits):
         # without opt_propagation off MWCC forward-substitutes the first-stored value's load
         # into its store (a window temporary: f0, loaded last). A volatile read of that one
