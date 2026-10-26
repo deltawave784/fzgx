@@ -8471,3 +8471,6 @@ rel/main_rel/effect_car/fn_1_6BFB8.c:
 
 rel/main_rel/motasglist/fn_1_438AC.c:
 	.text       start:0x000438AC end:0x00043E08 align:4
+
+rel/main_rel/stcoli/fn_1_203E4.c:
+	.text       start:0x000203E4 end:0x000207DC align:4

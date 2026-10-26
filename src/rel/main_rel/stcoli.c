@@ -2236,6 +2236,189 @@ f32 fn_1_20258(Fn_1_20258 *self, f32 *out_ratio) {
 #pragma opt_strength_reduction reset
 /* fzgx:end fn_1_20258 */
 
+/* fzgx:begin fn_1_203E4 noprologue */
+#include "types.h"
+#include "game/vec3.h"
+#include "rel/main_rel/stcoli.h"
+#include "dolphin/hw_regs.h"
+#include "psvec.h"
+
+/* The current matrix (mtxA) lives in the locked cache. */
+#define MTXA ((f32(*)[4])LC_BASE)
+
+typedef struct {
+    u8 pad_0[0x3C];
+    f32 unk_3C;
+    f32 unk_40;
+    u8 pad_44[0x24];
+    f32 unk_68;
+    f32 unk_6C;
+    f32 unk_70;
+    f32 unk_74;
+    f32 unk_78;
+    u32 unk_7C;
+} fn_1_203E4_Obj;
+
+/* View of the stcoli.c literal pool at lbl_1_rodata_6C8. */
+typedef struct {
+    u8 pad_0[0x8];
+    f32 zero;      /* 0x08 */
+    f32 one;       /* 0x0C */
+    u8 pad_10[0x8];
+    f32 minusOne;  /* 0x18 */
+    u8 pad_1C[0x7C];
+    f64 half;      /* 0x98 */
+    u8 pad_A0[0x1C];
+    f32 angleScale; /* 0xBC */
+    u8 pad_C0[0x10];
+    f64 two;       /* 0xD0 */
+    f64 zeroD;     /* 0xD8 */
+    f64 angleScaleD; /* 0xE0 */
+    f64 oneD;      /* 0xE8 */
+    f64 minusOneD; /* 0xF0 */
+} fn_1_203E4_Pool;
+
+extern const u8 lbl_1_rodata_6C8[];
+extern void lbl_8006DC6C(void *);
+extern void lbl_8006DBAC(void *);
+extern void lbl_8006E15C(f32, f32, f32);
+extern u32 mathutil_mtxA_rotate_z(u32);
+extern void lbl_8006E0B4(f32, f32, f32);
+/* Interior entry 0xC bytes into mathutil_mtxA_rotate_z (mirror about the x axis). */
+extern void mathutil_mtxA_rotate_z__fzgx_offset_C(f32, f32);
+#define fn_1_203E4_flip mathutil_mtxA_rotate_z__fzgx_offset_C
+extern void OSReport(const char *, ...);
+extern void OSPanic(const char *, int, const char *, ...);
+
+#pragma opt_propagation off
+/* mtxA translation along its x axis */
+static inline void fn_1_203E4_translate_x(f32 (*mtx)[4], f32 d) {
+    f32 x, y, z;
+    x = ((0)[mtx])[0];
+    y = ((1)[mtx])[0];
+    z = ((2)[mtx])[0];
+    x = x * d + mtx[0][3];
+    y = y * d + mtx[1][3];
+    z = z * d + mtx[2][3];
+    mtx[0][3] = x;
+    mtx[1][3] = y;
+    mtx[2][3] = z;
+}
+
+/* Translation used by the curved section. */
+static inline void fn_1_203E4_translate_curve(f32 (*mtx)[4], f32 d) {
+    f32 x, y, z, xx, yy, zz;
+    x = mtx[0][0];
+    y = mtx[1][0];
+    z = mtx[2][0];
+    xx = mtx[0][3];
+    yy = mtx[1][3];
+    zz = mtx[2][3];
+    x = x * d + xx;
+    y = y * d + yy;
+    z = z * d + zz;
+    mtx[0][3] = x;
+    mtx[1][3] = y;
+    mtx[2][3] = z;
+}
+
+/* mtxA translation along its y axis */
+static inline void fn_1_203E4_translate_y(f32 (*mtx)[4], f32 d) {
+    f32 x, y, z;
+    x = ((0)[mtx])[1];
+    y = ((1)[mtx])[1];
+    z = ((2)[mtx])[1];
+    x = x * d + mtx[0][3];
+    y = y * d + mtx[1][3];
+    z = z * d + mtx[2][3];
+    mtx[0][3] = x;
+    mtx[1][3] = y;
+    mtx[2][3] = z;
+}
+
+#pragma opt_propagation off
+#pragma opt_lifetimes off
+void fn_1_203E4(fn_1_203E4_Obj *obj, s32 noOut, Vec3 *out, f32 pos, f32 scale, f32 dir) {
+    f32 tz, ty, tx, distance;
+    f32 (*mtx)[4];
+    u32 flags;
+    u8 *strings;
+    const fn_1_203E4_Pool *k;
+    f32 half;
+    f32 sign;
+
+    strings = lbl_1_data_5548;
+    k = (const fn_1_203E4_Pool *)lbl_1_rodata_6C8;
+    if (k->zeroD == dir) {
+        lbl_8006DC6C(obj);
+        mtx = MTXA;
+        /* Preserve the retail order of translation-column loads. */
+        tx = *(volatile f32 *)&obj->unk_70;
+        ty = obj->unk_74;
+        tz = obj->unk_78;
+        ((0)[mtx])[3] = tx;
+        ((1)[mtx])[3] = ty;
+        ((2)[mtx])[3] = tz;
+    } else {
+        lbl_8006DBAC(obj);
+    }
+    flags = obj->unk_7C;
+    if (flags & 1) {
+        dir = -dir;
+    }
+    if ((flags & 0x2200000) || k->zero == dir) {
+        distance = pos * scale;
+        fn_1_203E4_translate_x(mtx = MTXA, distance);
+    } else if (flags & 0x1800000) {
+        f64 angle, angleScale;
+        lbl_8006E15C(k->one, dir, k->one);
+        angleScale = k->angleScaleD;
+        angle = k->two;
+        angle *= pos;
+        mathutil_mtxA_rotate_z((s32)(angleScale * (angle * obj->unk_6C)));
+        fn_1_203E4_translate_y(mtx = MTXA, k->half * -obj->unk_68);
+        if (noOut == 0 && (obj->unk_7C & 1)) {
+            fn_1_203E4_flip(k->zero, k->minusOne);
+        }
+    } else if (flags & 0x400000) {
+        half = k->half * (obj->unk_3C / scale);
+        sign = (pos > k->zero) ? k->oneD : k->minusOneD;
+        if (k->oneD != dir) {
+            lbl_8006E15C(k->one, dir, k->one);
+        }
+        if (__fabs(pos) < half) {
+            lbl_8006E0B4(pos * scale, k->half * -obj->unk_40, k->zero);
+        } else {
+            f64 poolHalf = k->half;
+            if (__fabs(pos) > poolHalf - half) {
+                lbl_8006E0B4(scale * ((f64)(poolHalf * sign) - pos), poolHalf * obj->unk_40, k->zero);
+                if (noOut == 0) {
+                    fn_1_203E4_flip(k->zero, k->minusOne);
+                }
+            } else {
+                pos = (f32)(pos - (f32)(sign * half)) / (poolHalf - (f64)(k->two * half));
+                fn_1_203E4_translate_curve(mtx = MTXA, poolHalf * (sign * obj->unk_3C));
+                mathutil_mtxA_rotate_z((s32)(k->angleScale * pos));
+                fn_1_203E4_translate_y(mtx = MTXA, k->half * -obj->unk_40);
+            }
+        }
+        if (noOut == 0 && (obj->unk_7C & 1)) {
+            fn_1_203E4_flip(k->zero, k->minusOne);
+        }
+    } else {
+        OSReport((char *)strings + 0x164, flags);
+        OSPanic((char *)strings + 0x12C, 0x16A5, (char *)strings + 0x15C);
+    }
+    if (noOut) {
+        mtx = MTXA;
+        psvec_set(out, ((2)[mtx])[3], ((1)[mtx])[3], ((0)[mtx])[3]);
+    }
+}
+#pragma opt_lifetimes reset
+
+#pragma opt_propagation reset
+/* fzgx:end fn_1_203E4 */
+
 /* fzgx:begin fn_1_207DC */
 #include "types.h"
 

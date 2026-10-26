@@ -64912,6 +64912,20 @@
   },
   {
     "module": "main_rel",
+    "source": "rel/main_rel/stcoli/fn_1_203E4.c",
+    "symbols": [
+      "fn_1_203E4"
+    ],
+    "status": "matching",
+    "mw_version": "GC/1.3.2",
+    "extra_cflags": [],
+    "tu": "rel/main_rel/stcoli.c",
+    "pool": {
+      "mathutil_mtxA_rotate_z__fzgx_offset_C": "mathutil_mtxA_rotate_z+0xC"
+    }
+  },
+  {
+    "module": "main_rel",
     "source": "rel/main_rel/stcoli/fn_1_207DC.c",
     "symbols": [
       "fn_1_207DC"
