@@ -12,6 +12,7 @@ names onto those objects (fn_1_14B1FC closed this way by hand from fn_1_14C6F8).
 only: the oracle and the 16 hashes decide."""
 from __future__ import annotations
 
+import bisect
 import re
 from typing import Dict, List, Optional, Tuple
 
@@ -21,8 +22,23 @@ SIZES = {'u8': 1, 's8': 1, 'char': 1, 'BOOL8': 1, 'u16': 2, 's16': 2, 'short': 2
          'u32': 4, 's32': 4, 'int': 4, 'long': 4, 'f32': 4, 'float': 4, 'BOOL': 4,
          'f64': 8, 'double': 8, 'u64': 8, 's64': 8}
 LAYOUT_COMMENT = '/* file-scope objects of the retail TU'
-DECL = re.compile(r"^((?:volatile\s+|const\s+)*(?:unsigned\s+|signed\s+)?\w+(?:\s*\*+)?)\s*(\w+)\s*((?:\[[^\]]+\])*)\s*;\s*$")
+# a layout line: optional `__declspec(section ".data")` (the DOL units' spelling), the type,
+# the name, dims, and an optional trailing comment (`/* fzgx-allow: ... */` on volatiles)
+DECLSPEC = r'(?:__declspec\(section\s+"[^"]*"\)\s*)?'
+DECL = re.compile(r"^(" + DECLSPEC + r")((?:volatile\s+|const\s+)*(?:unsigned\s+|signed\s+)?\w+(?:\s*\*+)?)\s*(\w+)\s*((?:\[[^\]]+\])*)\s*;\s*(/\*.*?\*/)?\s*$")
 PRIMER = re.compile(r"#pragma section code_type \"\.fzgxpool\"\s*\nstatic void (fzgx_bss_layout\w*)\(void\) \{.*?\n\}\s*\n#pragma section code_type \"\.text\"\s*\n", re.S)
+# a retail data symbol: REL `lbl_<m>_<section>_<offset>` or DOL `lbl_<address>`
+LBL = r"(?:lbl_\d+_(?:bss|sbss|data|sdata)_[0-9A-F]+|lbl_[0-9A-F]{8})"
+DATA_SECTIONS = ('.bss', '.sbss', '.data', '.sdata')
+DEBUG = False
+
+
+def _decl(line: str) -> Optional[dict]:
+    m = DECL.match(line.strip())
+    if not m or re.match(r"(?:return|extern|typedef|static|goto)\b", m.group(2)):
+        return None
+    return dict(spec=m.group(1).strip(), type=re.sub(r"\s+", " ", m.group(2)), name=m.group(3),
+                dims=re.findall(r"\[([^\]]+)\]", m.group(4)), comment=m.group(5) or '')
 
 
 def _type_size(t: str) -> Optional[Tuple[int, int]]:
@@ -47,64 +63,284 @@ def _decl_size(t: str, dims: List[str]) -> Optional[Tuple[int, int]]:
     return n, (max(a, 4) if dims else a)
 
 
-def _addr_hint(name: str, syms) -> Optional[int]:
+def _addr_hint(name: str, syms, section: Optional[str] = '.bss', exact: bool = False) -> Optional[int]:
+    """Retail address a layout name stands for: a dtk symbol, `<sym>_<off>` (an object at that
+    offset inside it) or `<sym>_fill_<addr>` (a gap from that address), in `section` (any data
+    section when None)."""
     base = name[len('fzgx_obj_'):] if name.startswith('fzgx_obj_') else name
     s = syms.get(base)
-    if s is not None and s.section == '.bss':
+    m = None
+    if exact:
+        # the REL TU layouts' original reading: a dtk `.bss` symbol name only
+        return s.addr if s is not None and s.section == '.bss' else None
+    if s is None:
+        m = re.fullmatch(r"(%s)(?:_fill_([0-9A-F]+)|(?:__fzgx_offset)?_([0-9A-F]+))" % LBL, base)
+        s = syms.get(m.group(1)) if m else None
+    if s is None and re.fullmatch(r"lbl_[0-9A-F]{8}", base):
+        # a DOL label names its own address: an interior label of a dtk symbol
+        a = int(base[4:], 16)
+        s = _containing(syms, a)
+        if s is not None and s.section in ((section,) if section else DATA_SECTIONS):
+            return a
+        return None
+    if s is None or s.section not in ((section,) if section else DATA_SECTIONS):
+        return None
+    if m is None:
         return s.addr
+    return int(m.group(2), 16) if m.group(2) else s.addr + int(m.group(3), 16)
+
+
+def _included_text(body: str, depth: int = 4) -> str:
+    """Text of the project headers `body` includes, transitively."""
+    out, todo, seen = [], re.findall(r'(?m)^\s*#\s*include\s+"([^"]+)"', body), set()
+    while todo and depth >= 0:
+        nxt = []
+        for inc in todo:
+            path = tufile.ROOT / 'include' / inc
+            if inc in seen or not path.is_file():
+                continue
+            seen.add(inc)
+            t = path.read_text(errors='replace')
+            out.append(t)
+            nxt += re.findall(r'(?m)^\s*#\s*include\s+"([^"]+)"', t)
+        todo, depth = nxt, depth - 1
+    return "\n".join(out)
+
+
+_SPANS: Dict[tuple, tuple] = {}
+
+
+def _containing(syms, addr: int, section: Optional[str] = None):
+    """The data symbol of `syms` (in `section`, else any data section: DOL addresses are
+    unique, REL offsets are per section) whose extent holds `addr`."""
+    key = (id(syms), section)
+    spans = _SPANS.get(key)
+    if spans is None or spans[0] is not syms:
+        rows = sorted(((s.addr, s.size or 0, s) for s in syms.values()
+                       if getattr(s, 'section', None) in ((section,) if section else DATA_SECTIONS)),
+                      key=lambda r: (r[0], -r[1]))
+        spans = _SPANS[key] = (syms, [r[0] for r in rows], rows)
+    i = bisect.bisect_right(spans[1], addr) - 1
+    if i >= 0:
+        start, size, s = spans[2][i]
+        if start <= addr < start + size:
+            return s
     return None
 
 
-def sibling_layouts(p, sym) -> List[List[dict]]:
-    """Every `.bss` layout a matched block of `sym`'s TU defines, as ordered object lists."""
+def _section_of(name: str, syms) -> Optional[str]:
+    base = name[len('fzgx_obj_'):] if name.startswith('fzgx_obj_') else name
+    m = re.match(LBL, base)
+    s = syms.get(m.group(0)) if m else None
+    return s.section if s is not None and s.section in DATA_SECTIONS else None
+
+
+def _typedefs(text: str) -> Dict[str, str]:
+    """`typedef struct ... } Name;` definitions of a source, by name."""
+    out = {}
+    for m in re.finditer(r"(?m)^typedef\s+struct\s*\w*\s*\{", text):
+        inner = fixup_layout._brace_body(text, m.end() - 1)
+        if inner is None:
+            continue
+        end = m.end() + len(inner)
+        tm = re.match(r"\}\s*(\w+)\s*;[ \t]*\n?", text[end:])
+        if tm:
+            out[tm.group(1)] = text[m.start():end + tm.end()]
+    return out
+
+
+def _sibling_sources(p, sym):
+    """(name, text) of matched sources that can carry a layout of `sym`'s data: the other
+    blocks of its TU, or, for a module without a TU map (the DOL's per-function units), every
+    other matched source of the module's source directory that defines a layout."""
     tu = tufile.tu_source_for(p, sym)
-    if not tu:
-        return []
-    tf = tufile.load(p, tu)
+    if tu:
+        for block in tufile.load(p, tu).blocks:
+            if block.name != sym.name:
+                yield block.name, block.body
+        return
+    root = tufile.ROOT / 'src' / p.module_src_prefix(sym.module)
+    if not root.is_dir():
+        return
+    for path in sorted(root.rglob('*.c')):
+        if path.stem == sym.name:
+            continue
+        try:
+            text = path.read_text(errors='replace')
+        except OSError:
+            continue
+        if LAYOUT_COMMENT in text and 'fzgx_bss_layout' in text:
+            yield path.stem, text
+
+
+def sibling_layouts(p, sym) -> List[List[dict]]:
+    """Every data-section layout a matched sibling of `sym` defines, as ordered object lists."""
     syms = p.symbols(sym.module)
     out, seen = [], set()
-    for block in tf.blocks:
-        if block.name == sym.name or 'fzgx_bss_layout' not in block.body:
+    strict_modes = (True, False) if tufile.tu_source_for(p, sym) else (False,)
+    for _, body in _sibling_sources(p, sym):
+        if 'fzgx_bss_layout' not in body:
             continue
-        lines = block.body.splitlines()
-        for i, line in enumerate(lines):
+        typedefs = None
+        lines = body.splitlines()
+        for strict, (i, line) in ((st, il) for st in strict_modes for il in enumerate(lines)):
             if not line.lstrip().startswith(LAYOUT_COMMENT):
                 continue
             objs = []
             for ln in lines[i + 1:]:
-                m = DECL.match(ln.strip())
-                if not m or ln.strip().startswith(('return', 'extern', 'typedef', 'static')):
+                d = _decl(ln)
+                if d is not None and strict and (d['spec'] or d['comment']):
+                    d = None
+                if d is None:
                     break
-                t, name = re.sub(r"\s+", " ", m.group(1)), m.group(2)
-                dims = re.findall(r"\[([^\]]+)\]", m.group(3))
-                objs.append(dict(type=t, name=name, dims=dims))
-            laid = _assign(objs, syms)
+                base_t = re.sub(r"\b(?:volatile|const)\b", "", d['type']).strip()
+                if '*' not in base_t and base_t not in SIZES:
+                    typedefs = _typedefs(body) if typedefs is None else typedefs
+                    if base_t in typedefs:
+                        d['typedef'] = typedefs[base_t]
+                objs.append(d)
+            laid = _assign(objs, syms, strict)
             if laid:
                 key = tuple((o['name'], o['addr'], o['size']) for o in laid)
                 if key not in seen:
                     seen.add(key)
                     out.append(laid)
+    for merged in _merged_layouts([l for l in out if not l[0].get('strict')], syms):
+        key = tuple((o['name'], o['addr'], o['size']) for o in merged)
+        if key not in seen:
+            seen.add(key)
+            out.append(merged)
     return out
 
 
-def _assign(objs: List[dict], syms) -> Optional[List[dict]]:
-    """Sequential addresses under natural alignment, anchored at the first object and checked
-    against every name that is a real dtk symbol (an inconsistent layout is not used)."""
-    if not objs:
+def _merged_layouts(layouts: List[List[dict]], syms) -> List[List[dict]]:
+    """Each sibling splits a cluster only where its own function needed an object, so the
+    retail TU's objects are the union of every sibling's object starts (fn_80058D24 needs
+    fn_80059428's `lbl_8018FF78_40` and fn_80058B54's `lbl_8018FF78_1C0` together). One
+    merged layout per group of overlapping same-section layouts: an object spanning exactly
+    two consecutive starts keeps its most common spelling, a longer array is cut at the next
+    start, any other gap becomes a fill named by its address (fills never add a start)."""
+    groups: List[List[List[dict]]] = []
+    for lay in sorted(layouts, key=lambda l: l[0]['addr']):
+        g = groups[-1] if groups else None
+        if g and g[0][0].get('section') == lay[0].get('section') and \
+                lay[0]['addr'] < max(l[-1]['addr'] + l[-1]['size'] for l in g):
+            g.append(lay)
+        else:
+            groups.append([lay])
+    out = []
+    for g in groups:
+        if len(g) < 2:
+            continue
+        # a fill is the gap a sibling left after its last needed byte, not a retail object
+        named = [o for l in g for o in l if '_fill_' not in o['name']]
+        # an end only bounds an object at a word boundary: a byte read (`u8 lbl_8018FF60`)
+        # names the start of a larger retail object, not its extent
+        starts = sorted({o['addr'] for o in named} | {o['addr'] + o['size'] for o in named if (o['addr'] + o['size']) % 4 == 0}
+                        | {max(l[-1]['addr'] + l[-1]['size'] for l in g)})
+        objs = []
+        for a, b in zip(starts, starts[1:]):
+            exact = [o for l in g for o in l if o['addr'] == a and o['size'] == b - a]
+            if exact:
+                spell = lambda o: (o['type'], tuple(o['dims']), o['name'])
+                counts: Dict[tuple, int] = {}
+                for o in exact:
+                    counts[spell(o)] = counts.get(spell(o), 0) + 1
+                best = max(exact, key=lambda o: counts[spell(o)])
+                objs.append({k: v for k, v in best.items() if k not in ('addr', 'size', 'align')})
+                continue
+            longer = [o for l in g for o in l if o['addr'] == a and o['size'] > b - a and len(o['dims']) == 1]
+            cut = None
+            for o in longer:
+                esz = _type_size(o['type'])
+                if esz and (b - a) % esz[0] == 0:
+                    cut = dict(o, dims=[str((b - a) // esz[0])])
+                    cut = {k: v for k, v in cut.items() if k not in ('addr', 'size', 'align')}
+                    break
+            if cut is not None:
+                objs.append(cut)
+                continue
+            n = b - a
+            s = _containing(syms, a, g[0][0].get('section'))
+            if s is not None and s.addr == a:
+                name = s.name
+            elif s is not None:
+                name = f"{s.name}_fill_{a:X}"
+            else:
+                objs = None
+                break
+            if a % 4 == 0 and n % 4 == 0:
+                t, dims = 'u32', ([str(n // 4)] if n > 4 else [])
+            elif n == 1:
+                t, dims = 'u8', []
+            elif n == 2 and a % 2 == 0:
+                t, dims = 'u16', []
+            else:
+                objs = None
+                break
+            objs.append(dict(spec=g[0][0].get('spec', ''), type=t, name=name, dims=dims, comment=''))
+        if objs:
+            laid = _assign(objs, syms)
+            if laid:
+                out.append(laid)
+    return out
+
+
+def _struct_size(tname: str, text: str) -> Optional[Tuple[int, int]]:
+    """(size, alignment) of a flat struct of scalars, pointers and function pointers."""
+    body = fixup_layout.struct_text(tname, text)
+    if body is None:
+        # a one-line anonymous typedef: `typedef struct { u32 fn; u32 arg; } CallbackPair;`
+        td = _typedefs(text).get(tname)
+        body = td[td.index('{') + 1:td.rindex('}')] if td else None
+    if body is None or re.search(r"\b(?:struct|union)\s*\w*\s*\{", body):
         return None
-    pos = _addr_hint(objs[0]['name'], syms)
-    if pos is None:
-        return None
-    for o in objs:
-        sz = _decl_size(o['type'], o['dims'])
+    pos, align = 0, 1
+    for _, (ftype, dims, _) in fixup_layout.field_decls(body).items():
+        sz = (4, 4) if ftype is None else _type_size(ftype)
         if sz is None:
             return None
+        n = sz[0]
+        try:
+            for d in dims:
+                n *= int(d, 0)
+        except ValueError:
+            return None
+        pos = (pos + sz[1] - 1) // sz[1] * sz[1] + n
+        align = max(align, sz[1])
+    return ((pos + align - 1) // align * align, align) if pos else None
+
+
+def _assign(objs: List[dict], syms, strict: bool = False) -> Optional[List[dict]]:
+    """Sequential addresses under natural alignment, anchored at the first object and checked
+    against every name that encodes a retail address (an inconsistent layout is not used).
+    A struct object is sized from its typedef, else from the next object's anchor. `strict`
+    keeps the REL TU reading (dtk `.bss` names only, scalar types): the candidates it gave
+    before DOL units and `.data` were read stay in the family."""
+    if not objs:
+        return None
+    section = '.bss' if strict else _section_of(objs[0]['name'], syms)
+    pos = _addr_hint(objs[0]['name'], syms, section, strict) if section else None
+    if pos is None:
+        return None
+    for k, o in enumerate(objs):
+        sz = _decl_size(o['type'], o['dims'])
+        if sz is None and o.get('typedef') and not o['dims']:
+            sz = _struct_size(re.sub(r"\b(?:volatile|const)\b", "", o['type']).strip(), o['typedef'])
+        hint = _addr_hint(o['name'], syms, section, strict)
+        if sz is None and strict:
+            return None
+        if sz is None:
+            nxt = _addr_hint(objs[k + 1]['name'], syms, section) if k + 1 < len(objs) else None
+            start = hint if hint is not None else pos
+            if nxt is None or nxt <= start or '*' in o['type']:
+                return None
+            sz = (nxt - start, 4 if (nxt - start) % 4 == 0 and start % 4 == 0 else 1)
         size, align = sz
         pos = (pos + align - 1) // align * align
-        hint = _addr_hint(o['name'], syms)
         if hint is not None and hint != pos:
             return None
-        o['addr'], o['size'], o['align'] = pos, size, align
+        o['addr'], o['size'], o['align'], o['section'], o['strict'] = pos, size, align, section, strict
         pos += size
     return objs
 
@@ -116,6 +352,8 @@ def _ptr_view(t: str, dims: List[str]) -> str:
 class _Layout:
     def __init__(self, objs: List[dict]):
         self.objs = objs
+        self.section = objs[0].get('section', '.bss')
+        self.strict = bool(objs[0].get('strict'))
         self.start = objs[0]['addr']
         self.end = objs[-1]['addr'] + objs[-1]['size']
 
@@ -141,6 +379,9 @@ class _Layout:
         if dims:
             inner = ''.join('[%s]' % d for d in dims[1:])
             return f"(({t} (*){inner}){ref})" if inner else f"(({t} *){ref})"
+        if '(*)' in t:
+            # a function pointer field: `void (*)(u32)` viewed through `void (**)(u32)`
+            return f"(*({t.replace('(*)', '(**)', 1)}){ref})"
         return f"(*({t} *){ref})"
 
 
@@ -155,10 +396,19 @@ def _struct_fields(tname: str, body: str) -> Optional[Dict[str, Tuple[int, str, 
     if re.search(r"\b(?:struct|union)\s*\w*\s*\{", text):
         return None
     out, pos = {}, 0
-    for fname, (ftype, dims, _) in fixup_layout.field_decls(text).items():
-        if ftype is None:
-            return None
-        sz = _type_size(ftype)
+    for fname, (ftype, dims, raw) in fixup_layout.field_decls(text).items():
+        if ftype is not None and '*' not in ftype and _type_size(ftype) is None:
+            # a struct member: sized from its own definition
+            sz = _struct_size(re.sub(r"\b(?:volatile|const|struct)\b", "", ftype).strip(), body)
+        elif ftype is None:
+            # a function pointer field keeps its type as an abstract declarator
+            fm = re.match(r"\s*([\w\s\*]+?)\s*\(\s*\*\s*\w+\s*\)\s*(\([^)]*\))\s*;$", raw)
+            if not fm or dims:
+                return None
+            ftype = re.sub(r"\s+", " ", fm.group(1)) + " (*)" + fm.group(2)
+            sz = (4, 4)
+        else:
+            sz = _type_size(ftype)
         if sz is None:
             return None
         n = sz[0]
@@ -174,11 +424,11 @@ def _struct_fields(tname: str, body: str) -> Optional[Dict[str, Tuple[int, str, 
 
 
 def _cluster_name_addr(name: str, syms, lay: _Layout) -> Optional[int]:
-    a = _addr_hint(name, syms)
+    a = _addr_hint(name, syms, lay.section, lay.strict)
     return a if a is not None and lay.start <= a < lay.end else None
 
 
-def _own_definitions(body: str, syms, lay: _Layout, sibling_names) -> List[tuple]:
+def _own_definitions(body: str, syms, lay: _Layout, sibling_names, members: bool = False) -> List[tuple]:
     """(line, type, name, dims, addr) of the body's file-scope definitions inside the cluster:
     its own layout block (addresses laid out like a sibling's) and resolvable top-level names."""
     out, seen = [], set()
@@ -188,22 +438,27 @@ def _own_definitions(body: str, syms, lay: _Layout, sibling_names) -> List[tuple
             continue
         objs, raw = [], []
         for ln in lines[i + 1:]:
-            m = DECL.match(ln.strip())
-            if not m or ln.strip().startswith(('return', 'extern', 'typedef', 'static')):
+            d = _decl(ln)
+            if d is not None and not members and (d["spec"] or d["comment"]):
+                d = None
+            if d is None:
                 break
-            objs.append(dict(type=re.sub(r"\s+", " ", m.group(1)), name=m.group(2),
-                             dims=re.findall(r"\[([^\]]+)\]", m.group(3))))
+            objs.append(d)
             raw.append(ln)
-        laid = _assign(objs, syms)
+        laid = _assign(objs, syms, lay.strict)
         if laid and any(lay.start <= o['addr'] < lay.end for o in laid):
             for o, ln in zip(laid, raw):
                 out.append((ln, o['type'], o['name'], o['dims'], o['addr']))
                 seen.add(o['name'])
         break
-    for m in re.finditer(r"(?m)^((?:volatile\s+)?(?:unsigned\s+|signed\s+)?\w+(?:\s*\*+)?)[ \t]+(\w+)[ \t]*((?:\[[^\]]+\])*)[ \t]*;[ \t]*\n", body):
+    # with `members`: DOL spellings too (a `__declspec(section)` prefix, a zero initializer,
+    # a trailing comment: fn_80058D24's `CallbackBlock lbl_8018FFB8 = {0};`)
+    top = (r"(?m)^(?:__declspec\(section\s+\"[^\"]*\"\)[ \t]*)?((?:volatile\s+)?(?:unsigned\s+|signed\s+)?\w+(?:\s*\*+)?)[ \t]+(\w+)[ \t]*((?:\[[^\]]+\])*)[ \t]*(?:=[ \t]*(?:\{[ \t]*0[ \t]*\}|0)[ \t]*)?;[ \t]*(?:/\*[^\n]*?\*/[ \t]*)?\n"
+           if members else r"(?m)^((?:volatile\s+)?(?:unsigned\s+|signed\s+)?\w+(?:\s*\*+)?)[ \t]+(\w+)[ \t]*((?:\[[^\]]+\])*)[ \t]*;[ \t]*\n")
+    for m in re.finditer(top, body):
         if m.group(1).split()[0] in ('return', 'extern', 'typedef', 'static', 'goto') or m.group(2) in seen:
             continue
-        a = _addr_hint(m.group(2), syms)
+        a = _addr_hint(m.group(2), syms, lay.section, lay.strict)
         if a is None or not lay.start <= a < lay.end:
             continue
         out.append((m.group(0), re.sub(r"\s+", " ", m.group(1)), m.group(2),
@@ -211,12 +466,61 @@ def _own_definitions(body: str, syms, lay: _Layout, sibling_names) -> List[tuple
     return out
 
 
-def transplant(p, sym, body: str, objs: List[dict], adopt_field_types: bool) -> Optional[str]:
+def _addr_expr(lay: _Layout, addr: int, cast: str) -> Optional[str]:
+    """`(cast)` address of retail `addr` over the layout's objects."""
+    o = lay.containing(addr)
+    if o is None:
+        return None
+    if addr == o['addr']:
+        return f"(({cast})&{o['name']})"
+    return f"(({cast})((u8 *)&{o['name']} + 0x{addr - o['addr']:X}))"
+
+
+def _model_arithmetic(text: str, n: str, baddr: int, lay: _Layout, failed: list) -> str:
+    """A pointer model's byte and element arithmetic (`(u8 *)p + 0x30`, `&((T *)p)[22]`,
+    `(u32)p | 0xB8`) addresses retail objects of the layout: rewrite each onto the object
+    holding that address (fn_80059764's `(u32)state | 0xB8` is `&lbl_8018FF68`). The model's
+    own declaration goes when nothing else uses it."""
+    q = re.escape(n)
+
+    def num(s):
+        return int(s.rstrip('uUlL'), 0)
+
+    def byte(mm):
+        e = _addr_expr(lay, baddr + num(mm.group(2)), mm.group(1).strip())
+        if e is None:
+            failed.append(mm.group(0))
+            return mm.group(0)
+        return e
+    text = re.sub(r"\(\s*((?:const\s+|volatile\s+)*(?:u8|s8|char|unsigned\s+char)\s*\*)\s*\)\s*\(?\s*%s\s*\)?\s*\+\s*(0[xX][0-9A-Fa-f]+|\d+)[uUlL]*\b" % q, byte, text)
+    text = re.sub(r"\(\s*((?:u32|s32|unsigned\s+int|int))\s*\)\s*\(?\s*%s\s*\)?\s*[+|]\s*(0[xX][0-9A-Fa-f]+|\d+)[uUlL]*\b" % q, byte, text)
+
+    def elem(mm):
+        amp, t, k = mm.group(1), mm.group(2).strip(), num(mm.group(3))
+        bare = re.sub(r"\b(?:volatile|const|struct)\b", "", t).strip()
+        sz = _type_size(bare) or _struct_size(bare, text)
+        v = lay.view(t, [], baddr + k * sz[0]) if sz else None
+        if v is None:
+            failed.append(mm.group(0))
+            return mm.group(0)
+        return f"(&{v})" if amp else v
+    text = re.sub(r"(&\s*)?\(\s*\(\s*((?:const\s+|volatile\s+|struct\s+)*\w+)\s*\*\s*\)\s*%s\s*\)\s*\[\s*(0[xX][0-9A-Fa-f]+|\d+)\s*\]" % q, elem, text)
+    # the model itself: its declaration goes when no use is left
+    decl = re.search(r"(?m)^[ \t]*(?:(?:volatile|const)\s+)*(?:struct\s+)?\w+\s*\*\s*%s\s*=\s*[^;\n]*;[ \t]*\n" % q, text)
+    if decl and not re.search(r"\b%s\b" % q, text[:decl.start()] + text[decl.end():]):
+        text = text[:decl.start()] + text[decl.end():]
+    return text
+
+
+def transplant(p, sym, body: str, objs: List[dict], adopt_field_types: bool, members: bool = False) -> Optional[str]:
+    """`members` adds the DOL model spellings (fn_80059764's earlier bodies): a volatile model's
+    qualifier on every view, nested member chains (`s->state.unk_4`), the model's byte/element
+    arithmetic, and only types visible through the body's own includes."""
     syms = p.symbols(sym.module)
     lay0 = _Layout(objs)
     text = body
     # the body's own definitions of cluster objects (an earlier layout) and its primer
-    own = _own_definitions(body, syms, lay0, {o['name'] for o in objs})
+    own = _own_definitions(body, syms, lay0, {o["name"] for o in objs}, members)
     merged = [dict(o) for o in objs]
     keep_names = set()
     own_defs = {}
@@ -230,9 +534,13 @@ def transplant(p, sym, body: str, objs: List[dict], adopt_field_types: bool) -> 
     # a sibling-only object whose type the candidate cannot name: the body's own extern type
     # for that name when it has the same size, else an untyped pointer of the same size
     known = body + "\n" + fixup_layout.include_text()
+    # a type the candidate can name: defined by the body or a header it includes (a struct
+    # tag declared somewhere else under include/ is not in scope: `Object *`, fn_80053DB4)
+    visible = (body + "\n" + _included_text(body)) if members else known
+    typedefs = []
     for o in merged:
         base_t = re.sub(r"[\s*]|\b(?:volatile|const|unsigned|signed)\b", "", o['type'])
-        if o.get('src') == 'body' or base_t in SIZES or re.search(r"(?:\}\s*|\btypedef\b[^;{}]*\b|\bstruct\s+)%s\b" % re.escape(base_t), known):
+        if o.get('src') == 'body' or base_t in SIZES or re.search(r"(?:\}\s*|\btypedef\b[^;{}]*\b|\bstruct\s+)%s\b" % re.escape(base_t), visible):
             continue
         em = re.search(r"\nextern\s+((?:volatile\s+)?\w+(?:\s*\*+)?)\s+%s\s*((?:\[[^\]]+\])*)\s*;" % re.escape(o['name']), known)
         if em:
@@ -240,6 +548,12 @@ def transplant(p, sym, body: str, objs: List[dict], adopt_field_types: bool) -> 
             if _decl_size(t, dims) and _decl_size(t, dims)[0] == o['size']:
                 o['type'], o['dims'] = t, dims
                 continue
+        if o.get('typedef'):
+            # the sibling's own struct typedef travels with its object (DOL units name them
+            # per function: `Cb_80059428`)
+            if o['typedef'] not in typedefs:
+                typedefs.append(o['typedef'])
+            continue
         if '*' not in o['type']:
             return None
         o['type'] = 'void ' + '*' * o['type'].count('*')
@@ -250,10 +564,16 @@ def transplant(p, sym, body: str, objs: List[dict], adopt_field_types: bool) -> 
             text = text.replace(pm.group(0), '')
     # struct views of a cluster object: pointer models and direct `lbl.field` uses
     bases = {}
-    for m in re.finditer(r"\((?:struct\s+)?(\w+)\s*\*\)\s*&\s*(lbl_\d+_bss_[0-9A-F]+)\b(?!\s*[\[.])", text):
+    cast = (r"\(\s*(?:(?:volatile|const)\s+)*(?:struct\s+)?(\w+)\s*\*\s*\)\s*&\s*(%s)\b(?!\s*[\[.])" % LBL if members
+            else r"\((?:struct\s+)?(\w+)\s*\*\)\s*&\s*(lbl_\d+_bss_[0-9A-F]+)\b(?!\s*[\[.])")
+    for m in re.finditer(cast, text):
         if _type_size(m.group(1)) is None and _cluster_name_addr(m.group(2), syms, lay) is not None:
             bases.setdefault(m.group(2), set()).add(m.group(1))
-    for m in re.finditer(r"(?<![\w.>])(lbl_\d+_bss_[0-9A-F]+)\s*\.\s*\w+", text):
+    # an uncast pointer model over the header's own type: `volatile T *p = &lbl;`
+    for m in re.finditer(r"(?m)^[ \t]*(?:(?:volatile|const)\s+)*(?:struct\s+)?(\w+)\s*\*\s*\w+\s*=\s*&\s*(%s)\s*;" % LBL, text if members else ''):
+        if _type_size(m.group(1)) is None and _cluster_name_addr(m.group(2), syms, lay) is not None:
+            bases.setdefault(m.group(2), set()).add(m.group(1))
+    for m in re.finditer(r"(?<![\w.>])(%s)\s*\.\s*\w+" % LBL, text):
         if _cluster_name_addr(m.group(1), syms, lay) is None:
             continue
         hm = re.search(r"\nextern\s+(?:struct\s+)?(\w+)\s+%s\s*;" % re.escape(m.group(1)), text + "\n" + fixup_layout.include_text())
@@ -271,7 +591,7 @@ def transplant(p, sym, body: str, objs: List[dict], adopt_field_types: bool) -> 
                 return None
             if direct:
                 names = [base]
-                pat = r"(?<![\w.>])(%s)\s*\.\s*(\w+)"
+                pat = r"(?<![\w.>])(%s)\s*\.\s*(\w+)((?:\s*\.\s*\w+)*)"
             else:
                 names = set(re.findall(r"\b(?:struct\s+)?%s\s*\*\s*(\w+)" % re.escape(tn), text))
                 for mm in re.finditer(r"(?m)^[ \t]*#\s*define\s+\w+\(([^)]*)\)(.*)$", text):
@@ -279,17 +599,33 @@ def transplant(p, sym, body: str, objs: List[dict], adopt_field_types: bool) -> 
                         if re.search(r"\(\s*%s\s*\)\s*->\s*(\w+)" % re.escape(arg), mm.group(2)):
                             names.add(arg)
                 names = sorted(n for n in names if n not in ('const', 'volatile'))
-                pat = r"(?:\(\s*(%s)\s*\)|(?<![\w.>])(%s))\s*->\s*(\w+)"
+                pat = r"(?:\(\s*(%s)\s*\)|(?<![\w.>])(%s))\s*->\s*(\w+)((?:\s*\.\s*\w+)*)"
             for n in names:
                 failed = []
+                qual = 'volatile ' if members and not direct and re.search(
+                    r"\bvolatile\s+(?:struct\s+)?%s\s*\*\s*%s\b" % (re.escape(tn), re.escape(n)), text) else ''
 
-                def sub(mm, direct=direct):
+                def sub(mm, direct=direct, qual=qual):
                     fname = mm.group(2) if direct else mm.group(3)
+                    chain = re.findall(r"\w+", mm.group(3) if direct else mm.group(4))
                     f = fields.get(fname)
                     if f is None:
                         failed.append(fname)
                         return mm.group(0)
                     off, ft, fdims = f
+                    # a nested struct member (`s->state.unk_4`): follow the chain to the leaf
+                    tail = mm.group(3) if direct else mm.group(4)
+                    whole = len(chain)
+                    while members and chain and not fdims:
+                        inner = _struct_fields(re.sub(r"\b(?:volatile|const|struct)\b", "", ft).strip(), text)
+                        g = inner.get(chain[0]) if inner else None
+                        if g is None:
+                            break
+                        if 'volatile' in ft and not qual:
+                            qual = 'volatile '
+                        off, ft, fdims = off + g[0], g[1], g[2]
+                        chain.pop(0)
+                    rest = tail if len(chain) == whole else ''.join('.' + c for c in chain)
                     if adopt_field_types and not fdims:
                         o = lay.at(baddr + off)
                         sz = _type_size(ft)
@@ -297,16 +633,22 @@ def transplant(p, sym, body: str, objs: List[dict], adopt_field_types: bool) -> 
                                 and adopted.get(o['name'], ft) == ft:
                             adopted[o['name']] = ft
                             o['type'] = ft
+                    if qual and not ft.startswith('volatile') and '(*)' not in ft:
+                        ft = qual + ft
                     v = lay.view(ft, fdims, baddr + off)
                     if v is None:
                         failed.append(fname)
                         return mm.group(0)
-                    return v
+                    return v + rest
                 if direct:
                     text = re.sub(pat % re.escape(n), sub, text)
                 else:
                     text = re.sub(pat % (re.escape(n), re.escape(n)), sub, text)
+                    if members:
+                        text = _model_arithmetic(text, n, baddr, lay, failed)
                 if failed:
+                    if DEBUG:
+                        print('transplant declined:', failed)
                     return None
     if adopt_field_types and not adopted:
         return None
@@ -322,7 +664,7 @@ def transplant(p, sym, body: str, objs: List[dict], adopt_field_types: bool) -> 
             return None
         text = re.sub(r"&\s*%s\b(?!\s*[\[.])" % re.escape(base), f"((void *)&{o['name']})", text)
     decl_lines = set()
-    for m in re.finditer(r"(?m)^[ \t]*extern\s+[^;\n(]*?\b(lbl_\d+_bss_[0-9A-F]+|fzgx_obj_lbl_\d+_bss_[0-9A-F]+)\s*((?:\[[^\]]*\])*)\s*;[ \t]*\n", text):
+    for m in re.finditer(r"(?m)^[ \t]*extern\s+[^;\n(]*?\b((?:fzgx_obj_)?%s)\s*((?:\[[^\]]*\])*)\s*;[ \t]*\n" % LBL, text):
         if _cluster_name_addr(m.group(1), syms, lay) is not None:
             decl_lines.add(m.group(0))
     for line in decl_lines:
@@ -335,9 +677,9 @@ def transplant(p, sym, body: str, objs: List[dict], adopt_field_types: bool) -> 
             if v is None:
                 return None
             rename[name] = v
-    for name in set(re.findall(r"\b(lbl_\d+_bss_[0-9A-F]+)\b", text)):
+    for name in set(re.findall(r"\b(%s)\b" % LBL, text)):
         a = _cluster_name_addr(name, syms, lay)
-        if a is None or name in {o['name'] for o in lay.objs} or name in bases:
+        if a is None or name in {o['name'] for o in lay.objs} or name in bases or (members and name in rename):
             continue
         hm = re.search(r"\nextern\s+((?:volatile\s+)?\w+(?:\s*\*+)?)\s+%s\s*((?:\[[^\]]*\])*)\s*;" % re.escape(name), body + "\n" + fixup_layout.include_text())
         if not hm:
@@ -357,9 +699,14 @@ def transplant(p, sym, body: str, objs: List[dict], adopt_field_types: bool) -> 
             text = text.replace(line, "", 1)
     for name, v in rename.items():
         text = re.sub(r"(?<![\w.>])%s\b" % re.escape(name), lambda _m, v=v: v, text)
-    block = [LAYOUT_COMMENT + ' (from a matched sibling), in retail order: MWCC addresses them off one section base */']
+    block = [t.rstrip('\n') for t in typedefs if t not in text]
+    block += [LAYOUT_COMMENT + ' (from a matched sibling), in retail order: MWCC addresses them off one section base */']
     for o in lay.objs:
-        block.append(f"{o['type']} {o['name']}{''.join('[%s]' % d for d in o['dims'])};")
+        spec = o.get('spec') or ''
+        note = o.get('comment') or ''
+        if not note and 'volatile' in o['type']:
+            note = '/* fzgx-allow: S2 the matched sibling\'s layout keeps this object volatile */'
+        block.append(f"{spec + ' ' if spec else ''}{o['type']} {o['name']}{''.join('[%s]' % d for d in o['dims'])};{' ' + note if note else ''}")
     primer = 'fzgx_bss_layout' if not re.search(r"fzgx_bss_layout\s*\(", text) else f'fzgx_bss_layout_{lay.start:X}'
     block += ['', '#pragma section code_type ".fzgxpool"', f'static void {primer}(void) {{',
               '    volatile u8 s;  /* fzgx-allow: S2 layout primer sink: MWCC emits .bss objects in first-access order */']
@@ -391,25 +738,27 @@ def sibling_section_layouts(p, symbol, body, check=None) -> List[Tuple[str, str]
     out = []
     for objs in layouts:
         lay = _Layout(objs)
-        refs = [n for n in set(re.findall(r"\b((?:fzgx_obj_)?lbl_\d+_bss_[0-9A-F]+)\b", body))
+        refs = [n for n in set(re.findall(r"\b((?:fzgx_obj_)?%s)\b" % LBL, body))
                 if _cluster_name_addr(n, syms, lay) is not None]
         if not refs:
             continue
-        for adopt in (False, True):
+        for adopt, members in ((False, False), (True, False), (False, True), (True, True)):
             try:
-                text = transplant(p, sym, body, [dict(o) for o in objs], adopt)
+                text = transplant(p, sym, body, [dict(o) for o in objs], adopt, members)
             except (ValueError, KeyError, IndexError, AttributeError, re.error, StopIteration):
                 text = None
             if text and text not in {t for _, t in out}:
-                label = f"transplant sibling bss layout 0x{lay.start:X}..0x{lay.end:X}" + (' (field types)' if adopt else '')
+                label = f"transplant sibling {lay.section.lstrip('.')} layout 0x{lay.start:X}..0x{lay.end:X}" + (' (field types)' if adopt else '') \
+                    + (' (member arithmetic)' if members else '')
                 out.append((label, text))
-                names = {m.group(1) for m in re.finditer(r"(?m)^(?:volatile\s+)?\w+(?:\s*\*+)?\s+(\w+)\s*(?:\[[^\]]+\])*\s*;", text)}
                 # layout position of each object: held locals declared in address order too
                 addrs = {}
                 for line in text.splitlines():
-                    m = DECL.match(line.strip())
-                    if m and m.group(2) in names:
-                        addrs.setdefault(m.group(2), len(addrs))
+                    if line[:1].isspace():
+                        continue
+                    d = _decl(line)
+                    if d:
+                        addrs.setdefault(d['name'], len(addrs))
                 for order in ('argument', 'address', 'reversed address'):
                     held = held_helper_addresses(text, addrs, order)
                     if held and held not in {t for _, t in out}:
