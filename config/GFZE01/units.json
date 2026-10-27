@@ -52487,6 +52487,17 @@
   },
   {
     "module": "main_rel",
+    "source": "rel/main_rel/live_camera/fn_1_1289C.c",
+    "symbols": [
+      "fn_1_1289C"
+    ],
+    "status": "matching",
+    "mw_version": null,
+    "extra_cflags": [],
+    "tu": "rel/main_rel/live_camera.c"
+  },
+  {
+    "module": "main_rel",
     "source": "rel/main_rel/live_camera/fn_1_12B88.c",
     "symbols": [
       "fn_1_12B88"
@@ -62446,6 +62457,17 @@
     "mw_version": null,
     "extra_cflags": [],
     "tu": "rel/main_rel/shadowmap.c"
+  },
+  {
+    "module": "main_rel",
+    "source": "rel/main_rel/som/fn_1_1304C.c",
+    "symbols": [
+      "fn_1_1304C"
+    ],
+    "status": "matching",
+    "mw_version": null,
+    "extra_cflags": [],
+    "tu": "rel/main_rel/som.c"
   },
   {
     "module": "main_rel",
@@ -76703,6 +76725,16 @@
     "mw_version": null,
     "extra_cflags": [],
     "tu": "rel/replay/replay_mode.c"
+  },
+  {
+    "module": "sample",
+    "source": "rel/sample/fn_18_444.c",
+    "symbols": [
+      "fn_18_444"
+    ],
+    "status": "matching",
+    "mw_version": null,
+    "extra_cflags": []
   },
   {
     "module": "sample",

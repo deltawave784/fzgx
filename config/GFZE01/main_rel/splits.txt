@@ -8495,3 +8495,9 @@ rel/main_rel/effect_car/fn_1_71D0C.c:
 
 rel/main_rel/memcard/fn_1_B8338.c:
 	.text       start:0x000B8338 end:0x000B88C4 align:4
+
+rel/main_rel/live_camera/fn_1_1289C.c:
+	.text       start:0x0001289C end:0x00012B88 align:4
+
+rel/main_rel/som/fn_1_1304C.c:
+	.text       start:0x0001304C end:0x0001350C align:4

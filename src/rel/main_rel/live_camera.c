@@ -2296,6 +2296,86 @@ u32 fn_1_12860(u32 arg0, u32 arg1) {
 }
 /* fzgx:end fn_1_12860 */
 
+/* fzgx:begin fn_1_1289C noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/live_camera.h"
+
+#define LZ_N 4096
+#define LZ_F 18
+#define LZ_THRESHOLD 2
+
+/* Okumura-style LZSS decoder over a little-endian sized blob. */
+u32 *fn_1_1289C(u32 *state) {
+    u8 text_buf[LZ_N + LZ_F - 1];
+    int j, k, r, c;
+    long i;
+    u8 *cur;
+    u8 *out;
+    u32 flags;
+    u32 limit;
+    u8 *src;
+    void (*done)(u32);
+    u8 *dst;
+    u32 out_size;
+
+    src = (u8 *)state[0];
+    done = (void (*)(u32))state[2];
+    dst = (u8 *)state[1];
+    limit = __lwbrx((u32 *)src, 0) + 8;
+    out_size = __lwbrx((u32 *)src, 4);
+
+    if (limit == 0 || out_size == 0) {
+        return 0;
+    }
+
+    out = dst;
+    cur = src + 8;
+
+    for (i = 0; i < LZ_N - LZ_F; i++) {
+        text_buf[i] = 0;
+    }
+
+    r = LZ_N - LZ_F;
+    flags = 0;
+
+    for (;;) {
+        if (((flags >>= 1) & 0x100) == 0) {
+            if ((u32)(cur - src) >= limit) break;
+            c = *cur++;
+            flags = c | 0xff00;
+        }
+
+        if (flags & 1) {
+            if ((u32)(cur - src) >= limit) break;
+            c = *cur++;
+            *out++ = c;
+            text_buf[r++] = c;
+            r &= LZ_N - 1;
+        } else {
+            if ((u32)(cur - src) >= limit) break;
+            i = cur[0];
+            if ((u32)((cur + 1) - src) >= limit) break;
+            j = cur[1];
+            cur += 2;
+            i |= (j & 0xf0) << 4;
+            j = (j & 0x0f) + LZ_THRESHOLD;
+            for (k = 0; k <= j; k++) {
+                c = text_buf[(i + k) & (LZ_N - 1)];
+                *out++ = c;
+                text_buf[r++] = c;
+                r &= LZ_N - 1;
+            }
+        }
+    }
+
+    if (done != 0) {
+        done(out_size);
+    }
+    return &out_size;
+}
+/* fzgx:end fn_1_1289C */
+
 /* fzgx:begin fn_1_12B88 noprologue */
 #include "types.h"
 #include "rel/main_rel/live_camera.h"
