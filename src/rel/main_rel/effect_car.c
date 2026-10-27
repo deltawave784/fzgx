@@ -383,6 +383,472 @@ void fn_1_6A7A4(u32 arg0, void *arg1, f32 arg2) {
 }
 /* fzgx:end fn_1_6A7A4 */
 
+/* fzgx:begin fn_1_6AF70 noprologue */
+#include "types.h"
+#include "rel/main_rel/effect_car.h"
+
+struct fn_1_6AF70_lbl_1_rodata_2D70 {
+    f32 unk_0;
+    f32 unk_4;
+    u8 pad_8[0x14];
+    f32 unk_1C;
+    u8 pad_20[0x4];
+    f32 unk_24;
+    u8 pad_28[0x18];
+    f64 unk_40;
+    u8 pad_48[0x2C];
+    f32 unk_74;
+    f32 unk_78;
+    u8 pad_7C[0x14];
+    f32 unk_90;
+    f32 unk_94;
+    u8 pad_98[0x20];
+    f32 unk_B8;
+    f32 unk_BC;
+    u8 pad_C0[0x10];
+    f64 unk_D0;
+    f32 unk_D8;
+    u8 pad_DC[0xC];
+    f32 unk_E8;
+    f32 unk_EC;
+    f32 unk_F0;
+    f32 unk_F4;
+    f32 unk_F8;
+};
+struct fn_1_6AF70_lbl_801A66A0 {
+    u32 unk_0;
+};
+#pragma section code_type ".fzgxpool"
+__declspec(section ".fzgxpool") static void fzgx_pool_prime1(void) {
+    volatile float s; volatile double d;  /* fzgx-allow: S2 pool primer sinks */
+    s = 0.0f;
+    s = -1.0f;
+    s = 25.0f;
+    s = 15.0f;
+    s = 8.0f;
+    s = 150.0f;
+    s = 10.0f;
+    s = 0.5f;
+    s = 0.125f;
+    s = 32767.0f;
+    s = 30.0f;
+    s = 20.0f;
+    s = 1200.0f;
+    s = 0.15000000596046448f;
+    d = 4503601774854144.0;
+    d = 4503599627370496.0;
+    s = 255.0f;
+    s = 102.0f;
+    d = 0.8;
+    s = 1.600000023841858f;
+    s = 3.0f;
+    s = 0.009999999776482582f;
+    s = 0.6000000238418579f;
+    d = 0.3;
+    s = 0.699999988079071f;
+    s = 0.20000000298023224f;
+    s = 0.4000000059604645f;
+    s = 0.10000000149011612f;
+    s = 1.5f;
+}
+static const unsigned long fzgx_pool_table2[1] = {0x00000000};  /* fzgx-allow: A1 retail pool bytes */
+__declspec(section ".fzgxpool") static void fzgx_pool_keep2(void) { const unsigned long *volatile cp; cp = fzgx_pool_table2; }  /* fzgx-allow: S2 pool primer sink */
+__declspec(section ".fzgxpool") static void fzgx_pool_prime3(void) {
+    volatile float s; volatile double d;  /* fzgx-allow: S2 pool primer sinks */
+    d = 2.0;
+    s = 0.800000011920929f;
+    s = 1.0f;
+    s = 85.0f;
+    s = 0.25f;
+}
+static const unsigned long fzgx_pool_table4[3] = {0x00000000, 0x00000000, 0x00000000};  /* fzgx-allow: A1 retail pool bytes */
+__declspec(section ".fzgxpool") static void fzgx_pool_keep4(void) { const unsigned long *volatile cp; cp = fzgx_pool_table4; }  /* fzgx-allow: S2 pool primer sink */
+__declspec(section ".fzgxpool") static void fzgx_pool_prime5(void) {
+    volatile float s; volatile double d;  /* fzgx-allow: S2 pool primer sinks */
+    s = 100.0f;
+    s = 3.5f;
+    s = 23.0f;
+    s = 60.0f;
+    s = 4.0f;
+    s = 1.1920928955078125e-07f;
+    s = 136.0f;
+    s = 0.029999999329447746f;
+}
+static const unsigned long fzgx_pool_table6[1] = {0x00000000};  /* fzgx-allow: A1 retail pool bytes */
+__declspec(section ".fzgxpool") static void fzgx_pool_keep6(void) { const unsigned long *volatile cp; cp = fzgx_pool_table6; }  /* fzgx-allow: S2 pool primer sink */
+__declspec(section ".fzgxpool") static void fzgx_pool_prime7(void) {
+    volatile float s; volatile double d;  /* fzgx-allow: S2 pool primer sinks */
+    d = 0.5;
+    s = 0.30000001192092896f;
+    s = 128.0f;
+    s = 224.0f;
+    s = 500.0f;
+    s = 0.9300000071525574f;
+    s = 5.0f;
+    s = 2.0f;
+    s = 0.05000000074505806f;
+    s = 0.07999999821186066f;
+    s = 0.8999999761581421f;
+}
+#pragma section code_type ".text"
+
+struct fn_1_6AF70_lbl_1_bss_6F3A4 {
+    f32 unk_0[30];
+};
+
+extern f32 lbl_8006D0B4(f32);
+extern s16 fn_1_58F50(const void *);
+extern u32 fn_1_58C4(void);
+extern struct fn_1_6AF70_lbl_1_bss_6F3A4 lbl_1_bss_6F3A4;
+#pragma pool_data on
+extern const struct fn_1_6AF70_lbl_1_rodata_2D70 lbl_1_rodata_2D70;
+extern struct fn_1_6AF70_lbl_801A66A0 lbl_801A66A0;
+extern u32 fn_1_584AC(void);
+extern u8 * memset(u8 *, int, u32);
+extern void lbl_8006DD14(u32, void *);
+
+static inline f32 fn_1_6AF70_random(const struct fn_1_6AF70_lbl_1_rodata_2D70 *pool) {
+    return (f32)(fn_1_584AC() & 0xFFFF) / (32767.0f);
+}
+
+static inline f64 fn_1_6AF70_noise(const struct fn_1_6AF70_lbl_1_rodata_2D70 *pool) {
+    f32 value = (f32)(fn_1_584AC() & 0xFFFF) / (32767.0f);
+    return (f64)value - (0.5);
+}
+
+typedef struct fn_1_6AF70_Vec { f32 x, y, z; } fn_1_6AF70_Vec;
+static inline void fn_1_6AF70_sub(fn_1_6AF70_Vec *dst, const fn_1_6AF70_Vec *a, const fn_1_6AF70_Vec *b) {
+    dst->x = a->x - b->x;
+    dst->y = a->y - b->y;
+    dst->z = a->z - b->z;
+}
+static inline void fn_1_6AF70_scale(fn_1_6AF70_Vec *dst, const fn_1_6AF70_Vec *src, f32 scale) {
+    dst->x = scale * src->x;
+    dst->y = scale * src->y;
+    dst->z = scale * src->z;
+}
+static inline f32 fn_1_6AF70_dot(const fn_1_6AF70_Vec *a, const fn_1_6AF70_Vec *b) {
+    f32 x = a->x;
+    f32 y = a->y;
+    f32 z = a->z;
+    f32 bx = b->x;
+    f32 by = b->y;
+    f32 bz = b->z;
+    f32 result = x * bx;
+    result += y * by;
+    result += z * bz;
+    return result;
+}
+static inline void fn_1_6AF70_add_scaled(fn_1_6AF70_Vec *dst, const fn_1_6AF70_Vec *src, f32 scale) {
+    dst->x = dst->x + (f32)(src->x * scale);
+    dst->y = dst->y + (f32)(src->y * scale);
+    dst->z = dst->z + (f32)(src->z * scale);
+}
+static inline void fn_1_6AF70_sub_scaled(fn_1_6AF70_Vec *dst, const fn_1_6AF70_Vec *src, f32 scale) {
+    dst->x = dst->x - (f32)(src->x * scale);
+    dst->y = dst->y - (f32)(src->y * scale);
+    dst->z = dst->z - (f32)(src->z * scale);
+}
+static inline f32 fn_1_6AF70_multiply(f32 a, f32 b) {
+    return a * b;
+}
+static inline void fn_1_6AF70_project_sub(fn_1_6AF70_Vec *dst, const fn_1_6AF70_Vec *src, f32 scale) {
+    dst->x = dst->x - (f32)(scale * src->x);
+    dst->y = dst->y - (f32)(scale * src->y);
+    dst->z = dst->z - (f32)(scale * src->z);
+}
+static inline f32 fn_1_6AF70_distance(const fn_1_6AF70_Vec *a, const fn_1_6AF70_Vec *b) {
+    f32 x = a->x;
+    f32 y = a->y;
+    f32 z = a->z;
+    f32 result;
+    x -= b->x;
+    y -= b->y;
+    z -= b->z;
+    result = x * x;
+    result += y * y;
+    result += z * z;
+    return lbl_8006D0B4(result);
+}
+
+#pragma opt_common_subs off
+void fn_1_6AF70(u32 arg0, void * arg1) {
+    s32 v7;
+    const struct fn_1_6AF70_lbl_1_rodata_2D70 *p_lbl_1_rodata_2D70;
+    u32 v0;
+    u32 v1;
+    s32 v75;
+    s32 v11;
+    s32 v10;
+    f32 v8;
+    f32 v6;
+    f32 v9;
+    f32 v64;
+    f32 v65;
+    s32 v2;
+    u32 v3;
+    f32 v4;
+    u32 v5;
+    u32 v13;
+    /* side delta and direction: declared highest-to-lowest so dz/dy colour before dx and nz before ny */
+    f32 dz;
+    f32 dy;
+    f32 dx;
+    f32 nx;
+    f32 nz;
+    f32 ny;
+    f32 v32;
+    s16 v33;
+    u32 v34;
+    f32 v35;
+    f32 v36;
+    f32 v37;
+    f32 v38;
+    f32 v39;
+    f32 v40;
+    f32 v41;
+    f32 v42;
+    u32 v43;
+    f32 v44;
+    f32 v45;
+    f64 v46;
+    u32 v47;
+    f32 v48;
+    f32 v49;
+    f64 v50;
+    f32 v51;
+    f32 v52;
+    f32 v53;
+    f32 v54;
+    f32 v55;
+    u32 v56;
+    f32 v57;
+    f32 v58;
+    f32 v59;
+    f32 v60;
+    f32 v61;
+    f32 v62;
+    f32 v63;
+    f32 v66;
+    f32 v67;
+    f32 v68;
+    f32 v69;
+    f32 v70;
+    f32 v71;
+    f32 v72;
+    f32 v73;
+    f32 v74;
+    u32 v76;
+    f32 total;
+    struct { f32 a[58]; } loc_5C;
+    struct { u32 a[12]; } loc_2C;
+    struct { u32 x, y, z; } delta;
+    f32 fzgx_pool_f32_0 = 0.800000012f;
+#define loc_20 (*(f32 *)&delta.x)
+#define loc_24 (*(f32 *)&delta.y)
+#define loc_28 (*(f32 *)&delta.z)
+    struct { u32 x, y, z; } end, start;
+#define loc_14 end.x
+#define loc_18 end.y
+#define loc_1C end.z
+#define loc_8 start.x
+#define loc_C start.y
+#define loc_10 start.z
+    /* frame */
+    u32 t3;
+    u32 t4;
+    u32 t5;
+    f32 t6;
+    f32 t7;
+    f32 t8;
+    u32 t9;
+    u32 t10;
+    u32 t11;
+    u32 t12;
+    u32 t13;
+    u32 t14;
+    u32 t15;
+    /* 3 instruction(s) not lifted: see the ??? markers */
+    p_lbl_1_rodata_2D70 = (const struct fn_1_6AF70_lbl_1_rodata_2D70 *)&lbl_1_rodata_2D70;
+    total = (0.0f);
+    lbl_8006DD14((arg0 + 184), (void *)&loc_2C);
+    v0 = *(u32 *)((u8 *)arg0 + 56);
+    *(u16 *)((u8 *)&loc_5C + 26) = 0;
+    v1 = (v0 + 580);
+    if ((u32)fn_1_58C4() >= 2 || (s8)*(u8 *)((u8 *)v0 + 1141) == -1) {
+        if (lbl_801A66A0.unk_0 % 5 != 0) goto done; /* Keep the verified branch to done. */
+    }
+    v75 = 4;
+outer_loop:
+    v5 = *(u32 *)((u8 *)v1 + 0);
+    v7 = 0;
+    if ((v5 & 0x2) == 0 && (v5 & 0x4) != 0) {
+    /* direction loads stay locals: the delta stores below may alias arg1 */
+    dx = *(f32 *)((u8 *)v1 + 32) - *(f32 *)((u8 *)v1 + 20);
+    dy = *(f32 *)((u8 *)v1 + 36) - *(f32 *)((u8 *)v1 + 24);
+    dz = *(f32 *)((u8 *)v1 + 40) - *(f32 *)((u8 *)v1 + 28);
+    nx = *(f32 *)arg1;
+    ny = *(f32 *)((u8 *)arg1 + 4);
+    nz = *(f32 *)((u8 *)arg1 + 8);
+    loc_20 = dx;
+    loc_24 = dy;
+    loc_28 = dz;
+    v32 = dx * nx;
+    v32 += dy * ny;
+    v32 += dz * nz;
+    v6 = v32;
+    if (v32 > (0.0f)) {
+        if (v75 == 3 || v75 == 1) goto next_side; /* Keep the verified branch to next_side. */
+    } else {
+        if (v75 == 4 || v75 == 2) goto next_side; /* Keep the verified branch to next_side. */
+        v7 = 1;
+        v6 *= (-1.0f);
+    }
+    v4 = (1.0f);
+    v6 = v6 - v4;
+    if (v6 < (0.0f)) goto next_side; /* Keep the verified branch to next_side. */
+    {
+    {
+    {
+    if (v6 > v4) {
+    v6 = v4;
+    }
+    total = total + v6;
+    if (*(u16 *)((u8 *)&loc_5C + 26) == 0) {
+        memset((u8 *)&loc_5C, 0, 232);
+        v33 = *(s16 *)((u8 *)arg0 + 24);
+        *(u16 *)((u8 *)&loc_5C + 24) = v33;
+        *(u16 *)((u8 *)&loc_5C + 12) = 2;
+        *(u16 *)((u8 *)&loc_5C + 26) = 3;
+        v34 = lbl_1_bss_38458->unk_8;
+        *(u32 *)((u8 *)&loc_5C + 52) = *(u32 *)((u8 *)v34 + 232);
+    }
+    fn_1_6AF70_scale((fn_1_6AF70_Vec *)&loc_5C.a[18], (const fn_1_6AF70_Vec *)&delta, (0.930000007f));
+    v41 = fn_1_6AF70_dot((const fn_1_6AF70_Vec *)&loc_5C.a[18], (const fn_1_6AF70_Vec *)((u8 *)v1 + 56));
+    fn_1_6AF70_project_sub((fn_1_6AF70_Vec *)&loc_5C.a[18], (const fn_1_6AF70_Vec *)((u8 *)v1 + 56), v41);
+    t3 = fn_1_584AC();
+    v43 = t3 & 0xFFFF;
+    v44 = (f32)(u32)v43;
+    v45 = v44 / (32767.0f);
+    v46 = (f64)v45 - (0.5);
+    v46 = (f64)fzgx_pool_f32_0 * v46;
+    loc_5C.a[18] = (f32)((f64)loc_5C.a[18] + v46);
+    t4 = fn_1_584AC();
+    v47 = t4 & 0xFFFF;
+    v48 = (f32)(u32)v47;
+    v49 = v48 / (32767.0f);
+    v50 = (f64)v49 - (0.5);
+    v50 = (f64)fzgx_pool_f32_0 * v50;
+    loc_5C.a[19] = (f32)((f64)loc_5C.a[19] + v50);
+    t5 = fn_1_584AC();
+    v51 = (f32)(u32)(t5 & 0xFFFF);
+    v57 = v51 / (32767.0f);
+    v50 = (f64)v57;
+    v50 = (f64)fzgx_pool_f32_0 * (v50 - (0.5));
+    loc_5C.a[20] = (f32)((f64)loc_5C.a[20] + v50);
+    v4 = v6 < (0.300000012f) ? (0.300000012f) : v6 > (1.0f) ? (1.0f) : v6;
+    v53 = fzgx_pool_f32_0 * v4;
+    fn_1_6AF70_add_scaled((fn_1_6AF70_Vec *)&loc_5C.a[18], (const fn_1_6AF70_Vec *)((u8 *)v1 + 56), v53);
+    if (v7 != 0) {
+        v4 = v6 < (0.300000012f) ? (0.300000012f) : v6 > (1.0f) ? (1.0f) : v6;
+        v54 = -v4;
+        fn_1_6AF70_add_scaled((fn_1_6AF70_Vec *)&loc_5C.a[18], (const fn_1_6AF70_Vec *)arg1, v54);
+    } else {
+        v55 = v6 < (0.300000012f) ? (0.300000012f) : v6 > (1.0f) ? (1.0f) : v6;
+        fn_1_6AF70_add_scaled((fn_1_6AF70_Vec *)&loc_5C.a[18], (const fn_1_6AF70_Vec *)arg1, v55);
+    }
+    if (v75 == 3 || v75 == 4) {
+    *(u32 *)((u8 *)&loc_5C + 8) = (*(u32 *)((u8 *)&loc_5C + 8) | 16384);
+    }
+    loc_14 = *(u32 *)((u8 *)v1 + 32);
+    loc_8 = *(u32 *)((u8 *)v1 + 20);
+    loc_18 = *(u32 *)((u8 *)v1 + 36);
+    v56 = *(u32 *)((u8 *)v1 + 40);
+    loc_C = *(u32 *)((u8 *)v1 + 24);
+    loc_1C = v56;
+    loc_10 = *(u32 *)((u8 *)v1 + 28);
+#define SIDE_DISTANCE fn_1_6AF70_distance((const fn_1_6AF70_Vec *)&loc_14, (const fn_1_6AF70_Vec *)&loc_8)
+    v8 = SIDE_DISTANCE < (0.0f) ? (0.0f) :
+         SIDE_DISTANCE > (5.0f) ? (5.0f) : SIDE_DISTANCE;
+#undef SIDE_DISTANCE
+    v9 = v8;
+    if (v8 > (4.0f)) {
+    v10 = 3;
+    } else {
+    if (v8 > (2.0f)) {
+    v10 = 2;
+    } else {
+    v10 = 1;
+    }
+    }
+    v11 = 0;
+    goto inner_test; /* Bottom-tested particle-count loop. */
+inner_loop:
+    v64 = v9 / v8;
+    v65 = ((1.0f)) - v64;
+    v67 = fn_1_6AF70_random(p_lbl_1_rodata_2D70);
+    /* reassigned step by step: a single-use local is re-lowered at its use, which
+       would hoist 60 and 0.05 ahead of 0.08 */
+    v69 = (f32)(v6 * v67);
+    v69 = v69 * (0.0799999982f);
+    v69 = v69 + (0.0500000007f);
+    *(u32 *)((u8 *)&loc_5C + 16) = (s32)(f32)(v69 * (60.0f));
+    loc_5C.a[15] = (f32)(*(f32 *)&loc_14 * v64) + (f32)(*(f32 *)&loc_8 * v65);
+    loc_5C.a[16] = (f32)(*(f32 *)&loc_18 * v64) + (f32)(*(f32 *)&loc_C * v65);
+    *(u32 *)((u8 *)&loc_5C + 60) = loc_14;
+    *(u32 *)((u8 *)&loc_5C + 64) = loc_18;
+    loc_5C.a[17] = (f32)(*(f32 *)&loc_1C * v64) + (f32)(*(f32 *)&loc_10 * v65);
+    *(u32 *)((u8 *)&loc_5C + 68) = loc_1C;
+    t10 = fn_1_584AC();
+    v4 = (f32)(u32)(t10 & 0xFFFF);
+    v4 = v4 / ((32767.0f));
+    v4 = v4 - ((0.5f));
+    v4 = ((0.800000012f)) * v4;
+    loc_5C.a[15] = loc_5C.a[15] + v4;
+    t11 = fn_1_584AC();
+    v4 = (f32)(u32)(t11 & 0xFFFF);
+    v4 = v4 / ((32767.0f));
+    v4 = v4 - ((0.5f));
+    v4 = ((0.800000012f)) * v4;
+    loc_5C.a[16] = loc_5C.a[16] + v4;
+    t12 = fn_1_584AC();
+    v71 = (f32)(u32)(t12 & 0xFFFF);
+    v73 = v71 / ((32767.0f));
+    loc_5C.a[17] = loc_5C.a[17] + (f32)(((0.800000012f)) * (f32)(v73 - ((0.5f))));
+    fn_1_6AF70_sub_scaled((fn_1_6AF70_Vec *)&loc_5C.a[15], (const fn_1_6AF70_Vec *)&loc_5C.a[18], (1.0f));
+    t13 = fn_1_584AC();
+    loc_5C.a[11] = fn_1_6AF70_multiply((f32)(((0.5f)) + (f32)(((0.300000012f)) * (f32)((f32)(u32)(t13 & 0xFFFF) / ((32767.0f))))), (0.5f));
+    t14 = fn_1_584AC();
+    v4 = v6 * (f32)((f32)(u32)(t14 & 0xFFFF) / ((32767.0f)));
+    v4 = ((0.200000003f)) * v4;
+    loc_5C.a[10] = fn_1_6AF70_multiply((f32)(((0.400000006f)) + v4), (0.5f));
+    t15 = fn_1_584AC();
+    v74 = ((0.5f)) + (f32)(((0.300000012f)) * (f32)((f32)(u32)(t15 & 0xFFFF) / ((32767.0f))));
+    v4 = ((0.5f)) * v74;
+    loc_5C.a[8] = v4;
+    loc_5C.a[7] = ((0.800000012f)) * v74;
+    loc_5C.a[9] = v4;
+    fn_1_58F50((const void *)&loc_5C);
+    v11++;
+    v9 = v9 - ((2.0f));
+inner_test:
+    if (v11 < v10) goto inner_loop; /* Particle-count loop back edge. */
+    }
+    }
+    }
+    }
+next_side:
+    v75--;
+    v1 += 92;
+    if (v75 > 0) goto outer_loop; /* Iterate four car sides. */
+    v4 = (0.5f);
+    lbl_1_bss_6F3A4.unk_0[*(s16 *)((u8 *)v0 + 4)] = v4 * total;
+done:
+    return;
+}
+#pragma opt_common_subs reset
+/* fzgx:end fn_1_6AF70 */
+
 /* fzgx:begin fn_1_6BFB8 noprologue */
 #include "types.h"
 #include "game/vec3.h"
