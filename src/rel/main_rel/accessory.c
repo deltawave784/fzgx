@@ -4659,6 +4659,270 @@ void fn_1_125CE8(fn_1_125CE8_AccessoryData *data) {
 }
 /* fzgx:end fn_1_125CE8 */
 
+/* fzgx:begin fn_1_1262A4 noprologue */
+#include "types.h"
+#include "game/main_rel/accessory_types.h"
+
+/* The TU's shared literal pool (lbl_1_rodata_7AB8...), primed in retail order. */
+#pragma section code_type ".fzgxpool"
+static const unsigned long fzgx_pool_table1[6] = {0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000};  /* fzgx-allow: A1 retail pool bytes */
+__declspec(section ".fzgxpool") static void fzgx_pool_keep1(void) { const unsigned long *volatile cp; cp = fzgx_pool_table1; }  /* fzgx-allow: S2 pool primer sink */
+__declspec(section ".fzgxpool") static void fzgx_pool_prime4(void) {
+    volatile float s; volatile double d;  /* fzgx-allow: S2 pool primer sinks */
+    d = 1.1920928955078125e-07;
+    s = 0.009999999776482582f;
+}
+static const unsigned long fzgx_pool_table5[3] = {0x00000000, 0x00000000, 0x00000000};  /* fzgx-allow: A1 retail pool bytes */
+__declspec(section ".fzgxpool") static void fzgx_pool_keep5(void) { const unsigned long *volatile cp; cp = fzgx_pool_table5; }  /* fzgx-allow: S2 pool primer sink */
+__declspec(section ".fzgxpool") static void fzgx_pool_prime6(void) {
+    volatile float s; volatile double d;  /* fzgx-allow: S2 pool primer sinks */
+    d = 1e-07;
+}
+static const unsigned long fzgx_pool_table7[3] = {0x00000000, 0x00000000, 0x00000000};  /* fzgx-allow: A1 retail pool bytes */
+__declspec(section ".fzgxpool") static void fzgx_pool_keep7(void) { const unsigned long *volatile cp; cp = fzgx_pool_table7; }  /* fzgx-allow: S2 pool primer sink */
+__declspec(section ".fzgxpool") static void fzgx_pool_prime8(void) {
+    volatile float s; volatile double d;  /* fzgx-allow: S2 pool primer sinks */
+    s = 0.5f;
+    s = 0.25f;
+}
+static const unsigned long fzgx_pool_table9[1] = {0x00000000};  /* fzgx-allow: A1 retail pool bytes */
+__declspec(section ".fzgxpool") static void fzgx_pool_keep9(void) { const unsigned long *volatile cp; cp = fzgx_pool_table9; }  /* fzgx-allow: S2 pool primer sink */
+__declspec(section ".fzgxpool") static void fzgx_pool_prime10(void) {
+    volatile float s; volatile double d;  /* fzgx-allow: S2 pool primer sinks */
+    d = 4503599627370496.0;
+    d = 0.0013611111376020642;
+    s = 0.0027222223579883575f;
+    s = -1.0f;
+    s = 0.0f;
+    s = -2.0f;
+    s = 2.0f;
+    s = 1.1920928955078125e-07f;
+    s = -1.0000001192092896f;
+}
+static const unsigned long fzgx_pool_table13[6] = {0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000};  /* fzgx-allow: A1 retail pool bytes */
+__declspec(section ".fzgxpool") static void fzgx_pool_keep13(void) { const unsigned long *volatile cp; cp = fzgx_pool_table13; }  /* fzgx-allow: S2 pool primer sink */
+__declspec(section ".fzgxpool") static void fzgx_pool_prime14(void) {
+    volatile float s; volatile double d;  /* fzgx-allow: S2 pool primer sinks */
+    s = -0.0013611111789941788f;
+    s = -0.0027222223579883575f;
+    s = 9.999999747378752e-05f;
+    s = 1.0f;
+    s = 0.00039999998989515007f;
+    s = 0.02500000037252903f;
+    s = 0.004224999807775021f;
+    d = 0.0749999976158142;
+    d = 0.3;
+    s = -0.01899999938905239f;
+    s = 0.05700000002980232f;
+    s = 0.0009609999833628535f;
+}
+static const unsigned long fzgx_pool_table15[1] = {0x00000000};  /* fzgx-allow: A1 retail pool bytes */
+__declspec(section ".fzgxpool") static void fzgx_pool_keep15(void) { const unsigned long *volatile cp; cp = fzgx_pool_table15; }  /* fzgx-allow: S2 pool primer sink */
+__declspec(section ".fzgxpool") static void fzgx_pool_prime16(void) {
+    volatile float s; volatile double d;  /* fzgx-allow: S2 pool primer sinks */
+    d = 0.04099999949336052;
+    d = -1.0;
+    s = 0.75f;
+    s = -0.25f;
+}
+static const unsigned long fzgx_pool_table17[9] = {0xBF800000, 0x00000000, 0x00000000, 0x3F800000, 0x00000000, 0x00000000, 0x3E0D4FDF, 0x3B83126F, 0x3DED9168};  /* fzgx-allow: A1 retail pool bytes */
+__declspec(section ".fzgxpool") static void fzgx_pool_keep17(void) { const unsigned long *volatile cp; cp = fzgx_pool_table17; }  /* fzgx-allow: S2 pool primer sink */
+__declspec(section ".fzgxpool") static void fzgx_pool_prime18(void) {
+    volatile float s; volatile double d;  /* fzgx-allow: S2 pool primer sinks */
+    s = 0.06499999761581421f;
+    s = 0.06500999629497528f;
+}
+static const unsigned long fzgx_pool_table19[1] = {0x00000000};  /* fzgx-allow: A1 retail pool bytes */
+__declspec(section ".fzgxpool") static void fzgx_pool_keep19(void) { const unsigned long *volatile cp; cp = fzgx_pool_table19; }  /* fzgx-allow: S2 pool primer sink */
+__declspec(section ".fzgxpool") static void fzgx_pool_prime20(void) {
+    volatile float s; volatile double d;  /* fzgx-allow: S2 pool primer sinks */
+    d = 8.0;
+    s = 0.00390625f;
+}
+static const unsigned long fzgx_pool_table21[1] = {0x00000000};  /* fzgx-allow: A1 retail pool bytes */
+__declspec(section ".fzgxpool") static void fzgx_pool_keep21(void) { const unsigned long *volatile cp; cp = fzgx_pool_table21; }  /* fzgx-allow: S2 pool primer sink */
+__declspec(section ".fzgxpool") static void fzgx_pool_prime22(void) {
+    volatile float s; volatile double d;  /* fzgx-allow: S2 pool primer sinks */
+    d = 0.05;
+    d = 0.0027222223579883575;
+    d = 0.02;
+    d = 0.0001;
+}
+static const unsigned long fzgx_pool_table23[3] = {0x00000000, 0x00000000, 0x00000000};  /* fzgx-allow: A1 retail pool bytes */
+__declspec(section ".fzgxpool") static void fzgx_pool_keep23(void) { const unsigned long *volatile cp; cp = fzgx_pool_table23; }  /* fzgx-allow: S2 pool primer sink */
+__declspec(section ".fzgxpool") static void fzgx_pool_prime24(void) {
+    volatile float s; volatile double d;  /* fzgx-allow: S2 pool primer sinks */
+    s = 0.04899999871850014f;
+    s = 0.002500000176951289f;
+    s = 0.05000000074505806f;
+}
+#pragma section code_type ".text"
+
+typedef struct ClothNode1262A4 {
+    u8 flags;
+    u8 pad_1[0xF];
+    f32 height;  /* 0x10 */
+    f32 order;   /* 0x14 */
+    f32 side;    /* 0x18 */
+    u8 pad_1C[0x24];
+    f32 weight;  /* 0x40 */
+} ClothNode1262A4;
+
+typedef struct ClothLink1262A4 {
+    ClothNode1262A4 *a;
+    ClothNode1262A4 *b;
+    f32 len;
+} ClothLink1262A4;
+
+typedef struct ClothObj1262A4 {
+    u8 pad_0[0x18];
+    u32 nodeCount;
+    u32 linkCount;
+    u8 pad_20[4];
+    ClothNode1262A4 *nodes;
+    ClothLink1262A4 *links;
+} ClothObj1262A4;
+
+extern void fn_1_10846C(void *);
+extern void fn_1_128884(void *, void *, s32);
+extern void *fn_1_4630(u32, u32, const char *, s32);
+extern u32 lbl_801A6410;
+extern char lbl_1_data_40530[0x6C];
+
+void fn_1_1262A4(ClothObj1262A4 *obj) {
+    u32 c0;
+    ClothNode1262A4 *e4;
+    ClothNode1262A4 *e0;
+    ClothNode1262A4 *nodes;
+    ClothNode1262A4 *e2;
+    ClothNode1262A4 *pc;
+    ClothNode1262A4 *front;
+    ClothNode1262A4 *back;
+    ClothNode1262A4 *src;
+    u32 k;
+    u32 m;
+    ClothNode1262A4 *e;
+    ClothNode1262A4 *dst;
+    ClothNode1262A4 *e3;
+    ClothNode1262A4 * ring_2;
+    ClothNode1262A4 sorted[8];
+    struct { u32 value; } i;
+    u32 ja;
+    u32 jb;
+    u32 g;
+    u32 idx;
+    f32 t;
+    ClothNode1262A4 *ring;
+    ClothNode1262A4 *pb;
+
+    if (obj == NULL) {
+        return;
+    }
+    fn_1_10846C(obj);
+
+    c0 = 0;
+    e0 = obj->nodes;
+    for (; c0 < obj->nodeCount; c0++, e0++) {
+        if (e0->flags & 1) {
+            e0->weight = -1.0f;
+            e0->flags = 0;
+        } else {
+            e0->weight = 0.0f;
+            e0->flags = 1;
+        }
+    }
+
+    /* sort by height */
+    e0 = obj->nodes;
+    for (c0 = 0; c0 < obj->nodeCount; c0++, e0++) {
+        pb = &obj->nodes[c0] + 1;
+        for (ja = c0 + 1; ja < obj->nodeCount; ja++, pb++) {
+            if (e0->height > pb->height) {
+                fn_1_128884(e0, pb, sizeof(ClothNode1262A4));
+            }
+        }
+    }
+
+    /* move the first raised pinned node to the end */
+    nodes = obj->nodes;
+    e2 = nodes;
+    for (i.value = 0; i.value < obj->nodeCount; i.value++, e2++) {
+        if (e2->height > 0.05f && (e2->flags & 1)) {
+            pb = e2;
+            break;
+        }
+    }
+    for (c0 = pb - nodes; c0 < obj->nodeCount - 1; c0++, pb++) {
+        fn_1_128884(pb, pb + 1, sizeof(ClothNode1262A4));
+    }
+
+    /* order each ring of eight */
+    ring = obj->nodes;
+    for (g = 0; g < obj->nodeCount / 8; g++, ring += 8) {
+        for (i.value = 0, pb = ring; i.value < 8; i.value++, pb++) {
+            jb = i.value + 1;
+            pc = pb + 1;
+            for (; jb < 8; jb++, pc++) {
+                if (pb->order < pc->order) {
+                    fn_1_128884(pb, pc, sizeof(ClothNode1262A4));
+                }
+            }
+        }
+        front = sorted;
+        *front = ring[0];
+        front++;
+        back = sorted;
+        back += 7;
+        e = ring + 1;
+        for (k = 1; k < 8; k++, e++) {
+            if (e->side > 0.0f) {
+                *front = *e;
+                front++;
+            } else {
+                *back = *e;
+                back--;
+            }
+        }
+        t = -(f32)g;
+        dst = ring;
+        src = sorted;
+        for (m = 0; m < 8; m++, dst++, src++) {
+            *dst = *src;
+            dst->weight = t / (f32)(obj->nodeCount / 8 - 1);
+        }
+    }
+
+    obj->linkCount = 0x40;
+    obj->links = fn_1_4630(lbl_801A6410, obj->linkCount * sizeof(ClothLink1262A4), lbl_1_data_40530, 0x2DF1);
+
+    idx = 0;
+    ring_2 = obj->nodes;
+    for (g = 0; g < obj->nodeCount / 8 - 1; g++, ring_2 += 8) {
+        e3 = ring_2;
+        for (i.value = 0; i.value < 7; i.value++, e3++) {
+            obj->links[idx].a = e3;
+            obj->links[idx].b = e3 + 1;
+            obj->links[idx].len = fn_1_1289BC((Point1024C4 *)e3, (Point1024C4 *)(e3 + 1));
+            idx++;
+        }
+        obj->links[idx].a = &ring_2[7];
+        obj->links[idx].b = ring_2;
+        obj->links[idx].len = fn_1_1289BC((Point1024C4 *)&ring_2[7], (Point1024C4 *)ring_2);
+        idx++;
+    }
+    ring_2 = obj->nodes;
+    for (g = 0; g < obj->nodeCount / 8 - 1; g++, ring_2 += 8) {
+        e4 = ring_2;
+        for (i.value = 0; i.value < 8; i.value++, e4++) {
+            obj->links[idx].a = e4;
+            obj->links[idx].b = e4 + 8;
+            obj->links[idx].len = fn_1_1289BC((Point1024C4 *)e4, (Point1024C4 *)(e4 + 8));
+            idx++;
+        }
+    }
+}
+/* fzgx:end fn_1_1262A4 */
+
 /* fzgx:begin fn_1_126DE8 noprologue */
 #include "types.h"
 #include "game/main_rel/accessory_types.h"
