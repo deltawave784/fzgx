@@ -670,6 +670,54 @@ def _relocated_pool_matches(project, module, elf, section, address, extent, star
     return _relocated_pool_mismatch(project, module, elf, section, address, extent, start) is None
 
 
+def _retail_section_bytes(project, module, section, addr, size):
+    """Retail bytes at `addr` in `section` (by address for the DOL), or None."""
+    if module == "main":
+        for base, data in project._rel_layout(module).values():
+            if base <= addr and addr + size <= base + len(data):
+                return data[addr - base:addr - base + size]
+        return None
+    raw = project._raw_section(module, section)
+    if raw is None:
+        return None
+    start = addr - project._section_base(module, section)
+    return raw[start:start + size] if 0 <= start and start + size <= len(raw) else None
+
+
+def _cover_alignment_padding(project, module, section, address, extent, expected, covered):
+    """Cover an uncovered run that is exactly the alignment padding retail places before
+    an aligned object: bounded by retail objects on both sides, shorter than the next
+    object's alignment, ending at that object's aligned start, and zero in the retail
+    section bytes. Those zero bytes become the expected bytes (no relocation can live in
+    padding; ours there would fail the binding comparison)."""
+    objs = sorted((s for s in project.symbols(module).values()
+                   if s.kind == 'object' and s.section == section and s.size),
+                  key=lambda s: s.addr)
+    i = 0
+    while i < extent:
+        if covered[i]:
+            i += 1
+            continue
+        j = i
+        while j < extent and not covered[j]:
+            j += 1
+        lo, hi = address + i, address + j
+        prev = [s for s in objs if s.end == lo]
+        nxt = next((s for s in objs if s.addr == hi), None)
+        try:
+            align = int((nxt.attrs or {}).get('align', '0'), 0) if nxt else 0
+        except ValueError:
+            align = 0
+        if (i > 0 and j < extent and prev and nxt and align > 1 and hi % align == 0
+                and hi - lo < align and (lo + align - 1) // align * align == hi
+                and not any(s.addr < hi and s.end > lo for s in objs)):
+            raw = _retail_section_bytes(project, module, section, lo, hi - lo)
+            if raw is not None and not any(raw):
+                expected[i:j] = raw
+                covered[i:j] = b'\1' * (j - i)
+        i = j
+
+
 def _relocated_pool_mismatch(project, module, elf, section, address, extent, start=0):
     """Why our pool bytes at `section[start:start+extent]` are not retail's at `address`, or
     None when every byte agrees and every relocation inside the range binds the same
@@ -699,6 +747,9 @@ def _relocated_pool_mismatch(project, module, elf, section, address, extent, sta
                 bindings.append((offset, rel['kind'], target.module, target.section, target.addr + rel['addend']))
     except (ValueError, KeyError) as e:
         return f"retail pool bytes unavailable: {e}"
+    if not all(covered):
+        _cover_alignment_padding(project, module, section['name'], address, extent,
+                                 expected, covered)
     if not all(covered):
         return f"no retail object covers pool byte +0x{covered.index(0):X}"
     found = []
