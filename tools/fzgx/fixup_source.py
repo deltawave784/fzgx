@@ -1333,7 +1333,7 @@ def rewrites(body: str, name: str) -> List[Tuple[str, str]]:
                call_results_to_locals, wrap_constant_pointers, decse_repeated_expressions,
                scalar_carriers, dead_uses, variable_splits, signedness_flips, float_precision,
                compound_assignments, embedded_call_assignments, condition_embedded_assignments,
-               expression_embedded_assignments, lifetime_splits):
+               expression_embedded_assignments, lifetime_splits, constant_address_locals):
         try:
             out += fn(body, name)
         except Exception:
@@ -5057,3 +5057,122 @@ def split_region_orders(body: str, name: str) -> List[Tuple[str, str]]:
             if re.search(rf'\b{re.escape(q)}\b', l2):
                 combined.append((f'{label}; {l2}', t2))
     return combined + merged + _sr_first_reference_hoists(body, name)
+
+
+_CONST_ADDRESS = re.compile(r'\bLC_BASE\b')
+_CONST_ADDRESS_LITERAL = re.compile(r'\b0[xX][eE]0{7}[uU]?\b')
+
+
+def constant_address_locals(body: str, name: str) -> List[Tuple[str, str]]:
+    """The locked-cache base (`LC_BASE`, 0xE0000000) held in a declared local under
+    `#pragma opt_propagation off`.
+
+    MWCC hoists a constant address used inside a loop into a compiler object (a pass-2
+    shadow) numbered above every declared local, so it claims its callee-saved register
+    before them; retail's base often sits below the hoisted pool base and magic divisor
+    (fn_1_71D0C: LC r26, pool r27, 0x55555556 r28; ours LC r28). A plain or struct-wrapped
+    local assigned the constant is copy-propagated back into that shadow; with propagation
+    off the one-member struct keeps a pass-1 web numbered at its declaration. The constant
+    reaches every use in the function and in the macros it expands (the macro is redefined
+    to the local over the function and restored after it). Variants: every declaration
+    position, assigned at the first statement or right before the first top-level loop. A
+    static inline helper that uses the base and is called only by this function takes it as
+    an extra trailing parameter (`_lc_parameterize_helpers`), since a helper defined before
+    the function cannot see the local."""
+    out = _constant_address_core(body, name)
+    prepared = _lc_parameterize_helpers(body, name)
+    if prepared != body:
+        seen = {t for _, t in out}
+        out += [(label + ' (helper takes the base)', t) for label, t in _constant_address_core(prepared, name)
+                if t not in seen]
+    return out
+
+
+def _lc_parameterize_helpers(body: str, name: str) -> str:
+    """Every static inline helper whose body names `LC_BASE` and whose only calls are in
+    `name` gains a trailing `u32 fzgx_lc_base` parameter that replaces the macro in its body;
+    each call passes `LC_BASE` (the same constant, so the expansion is unchanged)."""
+    span = _function_body_span(body, name)
+    if not span:
+        return body
+    edits = []
+    for m in re.finditer(r'(?m)^static\s+inline\s+[^\n(;]*?\b(\w+)\s*\(([^()]*)\)\s*\{', body[:span[0]]):
+        helper, params = m.group(1), m.group(2).strip()
+        if helper == name or re.search(r'\bfzgx_lc_base\b', body):
+            continue
+        depth, k = 0, m.end() - 1
+        while k < len(body):
+            depth += {'{': 1, '}': -1}.get(body[k], 0)
+            if depth == 0:
+                break
+            k += 1
+        hbody = body[m.end():k]
+        if not _CONST_ADDRESS.search(hbody):
+            continue
+        calls = [c for c in re.finditer(rf'\b{re.escape(helper)}\s*\(', body) if c.start() != m.start(1)]
+        if not calls or any(not span[1] <= c.start() < span[2] for c in calls):
+            continue
+        closes = []
+        for c in calls:
+            d, q = 1, c.end()
+            while q < len(body) and d:
+                d += {'(': 1, ')': -1}.get(body[q], 0)
+                q += 1
+            empty = not body[c.end():q - 1].strip()
+            closes.append((q - 1, 'LC_BASE' if empty else ', LC_BASE'))
+        newparams = 'u32 fzgx_lc_base' if params in ('', 'void') else params + ', u32 fzgx_lc_base'
+        edits.append((m.start(2), m.end(2), newparams))
+        edits.append((m.end(), k, _CONST_ADDRESS.sub('fzgx_lc_base', hbody)))
+        edits += [(q, q, arg) for q, arg in closes]
+    for a, b, t in sorted(edits, reverse=True):
+        body = body[:a] + t + body[b:]
+    return body
+
+
+def _constant_address_core(body: str, name: str) -> List[Tuple[str, str]]:
+    out: List[Tuple[str, str]] = []
+    a = _decl_anchor(body, name)
+    if not a:
+        return out
+    span, locs, top, indent = a
+    inner = body[top:span[2]]
+    macro = bool(_CONST_ADDRESS.search(inner)) or any(
+        _CONST_ADDRESS.search(m.group(2)) and re.search(rf'\b{re.escape(m.group(1))}\b', inner)
+        for m in re.finditer(r'(?m)^[ \t]*#\s*define\s+(\w+)(?:\([^)]*\))?([^\n]*)', body[:span[0]]))
+    literal = bool(_CONST_ADDRESS_LITERAL.search(inner))
+    if not (macro or literal) or re.search(r'\bfzgx_lc\b', body):
+        return out
+    head_start = body.rfind('\n', 0, span[0]) + 1
+    end = body.find('\n', span[2])
+    end = len(body) if end < 0 else end + 1
+    loop = re.search(r'(?m)^' + re.escape(indent) + r'(?:for|while|do)\b', inner)
+    sites = [('at the first statement', top)]
+    if loop and loop.start() > 0:
+        sites.append(('before the first loop', top + loop.start()))
+    # the declaration position never changed the result (fn_1_71D0C: all nine equal);
+    # the assignment site did. First and last keep the budget small.
+    positions = sorted({locs[0][0] if locs else top, top})
+    decl = f'{indent}struct {{ u32 value; }} fzgx_lc;\n'
+    for pragma in (True, False):
+        for k, pos in enumerate(positions):
+            for where, at in sites:
+                text = body[:span[2]]
+                stmt = f'{indent}fzgx_lc.value = LC_BASE;\n' if macro else f'{indent}fzgx_lc.value = 0xE0000000u;\n'
+                if macro:
+                    stmt += '#undef LC_BASE\n#define LC_BASE (fzgx_lc.value)\n'
+                tail = text[at:]
+                if literal:
+                    tail = _CONST_ADDRESS_LITERAL.sub('fzgx_lc.value', tail)
+                text = text[:at] + stmt + tail
+                text = text[:pos] + decl + text[pos:]
+                fn_text = text[head_start:] + body[span[2]:end]
+                after = ''
+                if pragma:
+                    fn_text = '#pragma opt_propagation off\n' + fn_text
+                    after += '#pragma opt_propagation reset\n'
+                if macro:
+                    after += '#undef LC_BASE\n#define LC_BASE 0xE0000000u\n'
+                out.append((f"locked-cache base in a declared local #{k} {where}"
+                            + (" under opt_propagation off" if pragma else ""),
+                            body[:head_start] + fn_text + after + body[end:]))
+    return out

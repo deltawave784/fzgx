@@ -104,6 +104,7 @@ def generate(p: Project, s: str, sym, path: Path, body: str, check, outdir: Path
     add('splitorder', lambda: fixup_source.split_region_orders(body, sym.name))
     add('carriers', lambda: fixup_source.scalar_carriers(body, sym.name))
     add('constptr', lambda: fixup_source.wrap_constant_pointers(body, sym.name))
+    add('constaddr', lambda: fixup_source.constant_address_locals(body, sym.name))
     add('decse', lambda: fixup_source.decse_repeated_expressions(body, sym.name))
     add('decl', lambda: decl_moves(body, sym.name))
     # a helper made by the inline-parameter family holds the moved locals

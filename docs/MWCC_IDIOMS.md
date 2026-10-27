@@ -550,3 +550,14 @@ rule was probed with real GC/1.3.2 compiles of saved bodies.
   (optimizer/LoopOptimization.c) lower the factor from `unroll_factor_limit` until it divides the trip
   count; a remainder loop after `li rN, count/8; mtctr` is therefore the IR unroller's output, not the
   backend's.
+- **A constant address hoisted out of a loop is a compiler object; hold it in a carrier under
+  `opt_propagation off`.** The locked-cache base `0xE0000000` used inside a loop is hoisted into a
+  temporary numbered above every declared local, so it claims its callee-saved register before
+  the pool base and a magic divisor that retail ranks above it (fn_1_71D0C: retail LC r26, pool
+  r27, 0x55555556 r28; ours LC r28). A plain or one-member-struct local assigned the constant is
+  propagated back into that temporary; `struct { u32 value; } fzgx_lc; fzgx_lc.value = LC_BASE;`
+  assigned right before the loop under a function-scoped `#pragma opt_propagation off` matched
+  (assigned at the first statement it did not; the declaration position made no difference).
+  `fixup_source.constant_address_locals` (sweep family `constaddr`) emits it, redefining `LC_BASE`
+  over the function and passing the base as a trailing parameter to static inline helpers only
+  this function calls (round 68: 1 of 45 LC near misses closed).
