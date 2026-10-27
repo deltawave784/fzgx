@@ -46548,6 +46548,40 @@
   },
   {
     "module": "main_rel",
+    "source": "rel/main_rel/effect_car/fn_1_71D0C.c",
+    "symbols": [
+      "fn_1_71D0C"
+    ],
+    "status": "matching",
+    "mw_version": null,
+    "extra_cflags": [],
+    "tu": "rel/main_rel/effect_car.c",
+    "pool": {
+      "...rodata.0": "lbl_1_rodata_2D70",
+      "@20": "lbl_1_rodata_2D70+0x40",
+      "@14": "lbl_1_rodata_2D70+0x24",
+      "@219": "lbl_1_rodata_2D70+0x270",
+      "@218": "lbl_1_rodata_2D70+0x26C",
+      "@78": "lbl_1_rodata_2D70+0xF0",
+      "@31": "lbl_1_rodata_2D70+0x78",
+      "@27": "lbl_1_rodata_2D70+0x64",
+      "@19": "lbl_1_rodata_2D70+0x38",
+      "@33": "lbl_1_rodata_2D70+0x80",
+      "@12": "lbl_1_rodata_2D70+0x1C",
+      "@46": "lbl_1_rodata_2D70+0x9C",
+      "@30": "lbl_1_rodata_2D70+0x74",
+      "@73": "lbl_1_rodata_2D70+0xDC",
+      "@21": "lbl_1_rodata_2D70+0x48",
+      "@74": "lbl_1_rodata_2D70+0xE0",
+      "@44": "lbl_1_rodata_2D70+0x94",
+      "v$381": "lbl_1_rodata_2D70+0x3AC",
+      "v$383": "lbl_1_rodata_2D70+0x3B8",
+      "v$385": "lbl_1_rodata_2D70+0x3C4",
+      "@386": "lbl_1_rodata_2D70+0x3D0"
+    }
+  },
+  {
+    "module": "main_rel",
     "source": "rel/main_rel/effect_car/fn_1_72318.c",
     "symbols": [
       "fn_1_72318"

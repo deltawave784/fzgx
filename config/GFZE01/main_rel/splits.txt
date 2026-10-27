@@ -8489,3 +8489,6 @@ rel/main_rel/sel_static_disp/fn_1_147A04.c:
 
 rel/main_rel/accessory/fn_1_1262A4.c:
 	.text       start:0x001262A4 end:0x00126774 align:4
+
+rel/main_rel/effect_car/fn_1_71D0C.c:
+	.text       start:0x00071D0C end:0x00072318 align:4
