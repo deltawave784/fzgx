@@ -4136,6 +4136,215 @@ void fn_1_118D90(u32 arg0, f32 arg1) {
 }
 /* fzgx:end fn_1_118D90 */
 
+/* fzgx:begin fn_1_11B958 noprologue */
+#include "types.h"
+#include "game/main_rel/car_test_types.h"
+#include "game/vec3.h"
+#include "rel/main_rel/accessory.h"
+
+struct Sig_fn_80077B14_fn_80077B14_Arg0 {
+ u8 pad_0[4]; u32 unk_4; u8 pad_8[0x18]; u32 unk_20;
+};
+typedef struct { f32 x,y,z; } Sig_fn_1_1286F4_Vec3f;
+extern s32 fn_80077B14(struct Sig_fn_80077B14_fn_80077B14_Arg0 *);
+extern void fn_1_1286F4(Sig_fn_1_1286F4_Vec3f *);
+extern void lbl_8006DBAC(Vec3 *);
+extern void lbl_8006DAEC(void);
+extern void lbl_8006DBE4(void);
+extern void lbl_8006DC20(void);
+extern f32 lbl_8006D118(f32, f32 *);
+extern f32 lbl_8006D0B4(f32);
+extern f64 __fabs(f64);
+extern void fn_8006E250(Vec3f *, Vec3f *);
+extern const u8 lbl_1_rodata_7AB8[];
+typedef struct Node {
+ u8 flags, pad1, count, pad3;
+ u16 links[6];
+ Fn183D28Vec3 pos,prev,local,vel;
+ f32 weight;
+} Node;
+typedef struct { Node *a,*b; f32 length; } Link;
+typedef struct { u8 pad[8]; u8 *base; } Model;
+typedef struct { u8 pad[0x150]; Model *model; } Owner;
+typedef struct { u8 flags; u8 pad[7]; u32 index; Owner *owner;
+ struct Sig_fn_80077B14_fn_80077B14_Arg0 *obj;
+ u32 pad14,count,linkCount,pad20; Node *nodes; Link *links; } Work;
+#define F(o) (*(const f32 *)(pool+(o)))
+#define D(o) (*(const f64 *)(pool+(o)))
+#define INDEX(i) (((u32 *)lbl_1_data_3FFBC)[i])
+static inline f32 fn_1_11B958_read_pointer(Link * owner) { return owner->length; }
+#pragma opt_common_subs off
+void fn_1_11B958(Work *arg0) {
+ const u8 *pool=lbl_1_rodata_7AB8;
+ /* Declaration order fixes the callee-saved register assignment. */
+ Node *n1;
+ u32 i1;
+ Node *n3;
+ u8 *model3;
+ u32 i3;
+ u32 k;
+ Link *l;
+ Node *a;
+ u32 li;
+ u32 i2;
+ Node *n2;
+ u32 i4;
+ Node *n4;
+ u8 *model4;
+ u32 i5;
+ Node *n5;
+ u8 *model5;
+ u16 *lp;
+ Node *fn;
+ u32 fj;
+ u32 fi;
+ u8 *fmodel;
+ Node *b;
+ u32 i6;
+ Node *n6;
+ f32 eps;
+ f64 h;
+ f64 f;
+ f64 w;
+ Fn183D28Vec3 deltav;
+ Fn183D28Vec3 random;
+ Fn183D28Vec3 target;
+ Fn183D28Vec3 diffv;
+ Fn183D28Vec3 center;
+ Fn183D28Vec3 *dp = &deltav;
+ Fn183D28Vec3 *dfp = &diffv;
+#define delta (*dp)
+#define diff (*dfp)
+ f32 len;
+ if(arg0 && arg0->obj) {
+ fn_80077B14(arg0->obj);
+ if(arg0->flags & 2) {
+ arg0->flags &= ~2;
+ lbl_8006DBAC((Vec3 *)(arg0->owner->model->base+INDEX(arg0->index)*396+136));
+ lbl_8006DAEC();
+ for(i1=0,n1=arg0->nodes;i1<arg0->count;i1++,n1++) {
+ lbl_8006DBE4();
+ lbl_8006E1B0(&n1->local,&n1->pos);
+ }
+ lbl_8006DC20();
+ }
+ for(i2=0,n2=arg0->nodes;i2<arg0->count;i2++,n2++) {
+ if(!(n2->flags&1)) {
+ fn_1_1286F4((Sig_fn_1_1286F4_Vec3f *)&random);
+ n2->prev=n2->pos;
+ h=D(0x198);
+ {
+ f64 ax; f32 vx; f32 px;
+ ax=h*random.x; vx=n2->vel.x; px=n2->pos.x;
+ n2->pos.x=px+(vx+ax);
+ }
+ f=h*random.y;
+ n2->pos.y=n2->vel.y+f+n2->pos.y;
+ f=h*random.z;
+ n2->pos.z=n2->vel.z+f+n2->pos.z;
+ n2->pos.y=n2->pos.y-D(0x58);
+ n2->vel.x=n2->vel.x+random.x;
+ n2->vel.y=n2->vel.y+random.y;
+ n2->vel.z=n2->vel.z+random.z;
+ n2->vel.y=n2->vel.y-F(0x60);
+ }
+ }
+ model3=arg0->owner->model->base+INDEX(arg0->index)*396;
+ for(i3=0,n3=arg0->nodes;i3<arg0->count;i3++,n3++) {
+ lbl_8006DBAC((Vec3 *)(model3+136));
+ lbl_8006DAEC();
+ if(n3->flags&1) {
+ lbl_8006DBE4();
+ lbl_8006E1B0(&n3->local,&n3->pos);
+ }
+ lbl_8006DC20();
+ }
+ for(k=0;k<2;k++) {
+ for(li=0,l=arg0->links;li<arg0->linkCount;li++,l++) {
+ a=l->a; b=l->b;
+ if(a && b) {
+ f32 y,z,x,inv,s,wa,wb,r,fa,cz,cy,cx,fb;
+ x=a->pos.x-b->pos.x;
+ y=a->pos.y-b->pos.y;
+ z=a->pos.z-b->pos.z;
+ delta.x=x; delta.y=y; delta.z=z;
+ len=(f32)(x*x)+y*y+z*z;
+ if(len-F(0x9c)>fn_1_11B958_read_pointer(l)) {
+ inv=lbl_8006D118(len,&len);
+ r=lbl_8006D0B4(fn_1_11B958_read_pointer(l));
+ s=inv*(len-r);
+ len=s;
+ cx=delta.x*s; cy=delta.y*s; cz=delta.z*s;
+ wa=a->weight; wb=b->weight;
+ /* Read the original position before updating the correction vector. */
+ x=a->pos.x;
+ delta.x=cx; delta.y=cy; delta.z=cz;
+ r=F(0xa0)/(wa+wb);
+ fa=wa*r; fb=wb*r;
+ a->pos.x=x-(f32)(cx*fa);
+ a->pos.y-=(f32)(cy*fa);
+ a->pos.z-=(f32)(cz*fa);
+ b->pos.x+=(f32)(cx*fb);
+ b->pos.y+=(f32)(cy*fb);
+ b->pos.z+=(f32)(cz*fb);
+ }
+ }
+ }
+ }
+ model4=arg0->owner->model->base+INDEX(arg0->index)*396;
+ for(i4=0,n4=arg0->nodes;i4<arg0->count;i4++,n4++) {
+ if(!(n4->flags&1)) {
+ f64 w;
+ f32 dx,x,dy,dz,s;
+ lbl_8006DBAC((Vec3 *)(model4+136));
+ lbl_8006E1B0(&n4->local,&target);
+ s=F(0x428);
+ /* target.x is read before pos.x is captured in x. */
+ dx=s*(target.x-(x=n4->pos.x));
+ w=D(0x268)-__fabs(n4->weight);
+ dy=s*(target.y-n4->pos.y);
+ dz=s*(target.z-n4->pos.z);
+ dx*=w; dy*=w; dz*=w;
+ n4->pos.x=x+dx;
+ n4->pos.y+=dy;
+ n4->pos.z+=dz;
+ }
+ }
+ model5=arg0->owner->model->base+INDEX(arg0->index)*396;
+ for(i5=0,n5=arg0->nodes;i5<arg0->count;i5++,n5++) {
+ f32 cz,cy,cx,r,scale;
+ lbl_8006DBAC((Vec3 *)(model5+136));
+ lbl_8006E1B0(&n5->local,&center);
+ cx=n5->pos.x-center.x;
+ cy=n5->pos.y-center.y;
+ cz=n5->pos.z-center.z;
+ r=cx*cx; r+=cy*cy; r+=cz*cz;
+ diff.x=cx; diff.y=cy; diff.z=cz;
+ if(r>F(0xa4)) {
+ scale=lbl_8006D0B4(F(0xa4)/r);
+ n5->pos.x=center.x+(f32)(diff.x*scale);
+ n5->pos.y=center.y+(f32)(diff.y*scale);
+ n5->pos.z=center.z+(f32)(diff.z*scale);
+ n5->prev=n5->pos;
+ }
+ }
+ for(i6=0,n6=arg0->nodes;i6<arg0->count;i6++,n6++) {
+ n6->vel.x=n6->pos.x-n6->prev.x;
+ n6->vel.y=n6->pos.y-n6->prev.y;
+ n6->vel.z=n6->pos.z-n6->prev.z;
+ }
+ fmodel=(u8 *)fn_80077B14(arg0->obj);
+ lbl_8006DBAC((Vec3 *)(arg0->owner->model->base+INDEX(arg0->index)*396+136));
+ for(fi=0,fn=arg0->nodes;fi<arg0->count;fi++,fn++) {
+ for(fj=0,lp=(u16 *)fn;(s32)fj<fn->count;lp++,fj++) {
+ fn_8006E250((Vec3f *)&fn->pos,(Vec3f *)(fmodel+(lp[2]<<6)));
+ }
+ }
+ }
+}
+#pragma opt_common_subs reset
+/* fzgx:end fn_1_11B958 */
+
 /* fzgx:begin fn_1_11CAB4 noprologue */
 #include "types.h"
 

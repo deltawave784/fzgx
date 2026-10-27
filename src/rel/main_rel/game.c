@@ -377,6 +377,246 @@ void fn_1_2FDBC(Racer_2FDBC *racer) {
 }
 /* fzgx:end fn_1_2FDBC */
 
+/* fzgx:begin fn_1_3181C pool noprologue */
+#include "rel/main_rel/game.h"
+
+typedef struct {
+    s16 id;
+    u8 pad2[2];
+    s32 unk4;
+    u8 unk8;
+    u8 pad9[3];
+    u32 unkC;
+    u8 pad10[0x10];
+} PadEntry;
+
+typedef struct {
+    u32 v[4];
+} PadMasks;
+
+typedef struct {
+    u8 *racer;
+    u8 pad4[0x1E];
+    s16 unk22;
+    u8 pad24[0x58];
+    u8 color0;
+    u8 color1;
+    u8 color2;
+    u8 pad7F;
+    u8 character;
+    u8 selection;
+    u8 machine;
+    u8 pad83;
+    s16 unk84;
+    s16 unk86;
+    s16 unk88;
+    s16 unk8A;
+    s16 unk8C;
+    s16 unk8E;
+    u32 unk90;
+    u32 unk94;
+    s16 unk98;
+    s16 unk9A;
+    s16 unk9C;
+    u8 pad9E[2];
+} Player;
+
+typedef struct {
+    u8 pad0[5];
+    u8 mode;
+    u8 pad6[2];
+    u8 count;
+    u8 total;
+    u8 padA[0x22];
+    u32 words[30];
+    u8 padA4[0x30];
+    Player players[30];
+    u8 ids[30];
+    u8 pad13B2[0x160C - 0x13B2];
+} Setup;
+
+extern u32 lbl_1_rodata_DF8[4];
+extern u32 lbl_801A6410;
+extern u8 lbl_1_data_6400[0x11];
+extern void fn_1_81808(s8 *);
+extern void fn_1_80058(u8, PadEntry *);
+extern s32 fn_1_8171C(s32);
+extern u8 *fn_1_36AD0(void);
+extern void fn_1_14F38C(void *, u8 *);
+extern u8 *fn_1_83070(u32, u32, void *, u32);
+extern void fn_1_435C(u32);
+extern void fn_1_2FDBC(void);
+extern s16 fn_1_3F8C(void *, void *, void *, s32);
+extern u32 fn_80008E84(u32);
+
+/* Retail objects of this TU's .bss, in address order (section base = lbl_1_bss_3C00). */
+static u8 fzgx_obj_lbl_1_bss_3C00[4];
+static u8 fzgx_obj_3C04[0x2C];
+static Setup fzgx_obj_3C30;
+static u8 fzgx_obj_523C[0x1BC];
+static u8 *fzgx_obj_53F8[0x22];
+u8 lbl_1_bss_5480[0x20700];
+static u8 fzgx_obj_25B80[8];
+static u32 fzgx_obj_25B88[0x30];
+static s16 fzgx_obj_25C48[0x2E];
+static u32 fzgx_obj_25CA4[0x7E];
+static PadEntry fzgx_obj_25E9C[30];
+static u8 fzgx_obj_2625C[0x20];
+static u32 fzgx_obj_2627C[0x1E];
+static u8 fzgx_obj_262F4;
+static u32 fzgx_obj_262F8;
+static u8 fzgx_obj_262FC[4];
+static s16 fzgx_obj_26300;
+
+#pragma section code_type ".fzgxpool"
+void fzgx_layout_fn_1_3181C(void)
+{
+    fn_80008E84(fzgx_obj_lbl_1_bss_3C00[0]);
+    fn_80008E84(fzgx_obj_3C04[0]);
+    fn_80008E84(fzgx_obj_3C30.count);
+    fn_80008E84(fzgx_obj_523C[0]);
+    fn_80008E84((u32)fzgx_obj_53F8[0]);
+    fn_80008E84(lbl_1_bss_5480[0]);
+    fn_80008E84(fzgx_obj_25B80[0]);
+    fn_80008E84(fzgx_obj_25B88[0]);
+    fn_80008E84(fzgx_obj_25C48[0]);
+    fn_80008E84(fzgx_obj_25CA4[0]);
+    fn_80008E84(fzgx_obj_25E9C[0].id);
+    fn_80008E84(fzgx_obj_2625C[0]);
+    fn_80008E84(fzgx_obj_2627C[0]);
+    fn_80008E84(fzgx_obj_262F4);
+    fn_80008E84(fzgx_obj_262F8);
+    fn_80008E84(fzgx_obj_262FC[0]);
+    fn_80008E84(fzgx_obj_26300);
+}
+#pragma section code_type ".text"
+
+void fn_1_3181C(void)
+{
+#define g (&fzgx_obj_3C30)
+    u8 *res;
+    u32 saved;
+    s32 i;
+    s32 j;
+    s16 slot;
+    PadMasks masks;
+    s8 slots[4];
+
+    masks = *(PadMasks *)lbl_1_rodata_DF8;
+    fn_1_81808(slots);
+    for (i = 0; i < g->total; i++) {
+        fn_1_80058(fzgx_obj_2625C[i], &fzgx_obj_25E9C[i]);
+        fzgx_obj_25E9C[i].id = i;
+        fzgx_obj_25E9C[i].unk8 = fzgx_obj_523C[i];
+        fzgx_obj_25E9C[i].unkC = fzgx_obj_2627C[i];
+        fzgx_obj_25E9C[i].unk4 = fn_1_8171C(1);
+        slot = -1;
+        for (j = 0; j < 4; j++) {
+            if (slots[j] == i) {
+                slots[j] = -1;
+                slot = j;
+            }
+        }
+        if (i < g->count) {
+            if (g->count > 1) {
+                fzgx_obj_25E9C[i].unk4 = fn_1_8171C(2);
+                switch (fzgx_obj_25E9C[i].unk8) {
+                case 1:
+                    fzgx_obj_25E9C[i].unk8 = 0x10;
+                    break;
+                case 2:
+                    fzgx_obj_25E9C[i].unk8 = 0x20;
+                    break;
+                case 4:
+                    fzgx_obj_25E9C[i].unk8 = 0x40;
+                    break;
+                case 8:
+                    fzgx_obj_25E9C[i].unk8 = 0x80;
+                    break;
+                }
+            } else {
+                fzgx_obj_25E9C[i].unk4 = fn_1_8171C(0);
+                fzgx_obj_25E9C[i].unkC |= masks.v[i];
+            }
+            if (slot != -1) {
+                u8 *data = fn_1_36AD0() + slot * 0x81C0;
+
+                fn_1_14F38C(&fzgx_obj_25E9C[i], data);
+            }
+        }
+        if (g->count == 0 && (i < fzgx_obj_262F4 || i == 0)) {
+            fzgx_obj_25E9C[i].unk4 = fn_1_8171C(0);
+            fzgx_obj_25E9C[i].unkC |= 0x80000000;
+            fzgx_obj_25E9C[i].unk8 = 1;
+        }
+    }
+
+    saved = fn_80008E84(fzgx_obj_262F8);
+    res = fn_1_83070(fzgx_obj_25B88[0], fzgx_obj_25CA4[0], fzgx_obj_25E9C, g->total);
+    /* volatile: retail reads this global and discards the value */
+    (void)*(volatile u32 *)&lbl_801A6410;
+    fn_80008E84(saved);
+
+    for (j = 0; j < g->total; j++) {
+        Player *p = &fzgx_obj_3C30.players[j];
+        u8 *q = res + j * 0x620;
+        u8 *ptr;
+        s8 k;
+
+        p->racer = q + 0x3C;
+        k = (s8)q[0x475];
+        if (k != -1) {
+            fzgx_obj_262FC[k] = q[0x474];
+        }
+        fzgx_obj_3C30.ids[j] = j;
+        fzgx_obj_3C30.words[j] = *(u32 *)(q + 0x49C);
+        p->color0 = 0xFF;
+        p->color1 = 0xFF;
+        p->color2 = 0xFF;
+        p->character = *(s16 *)(q + 6);
+        p->machine = *(s16 *)(q + 6);
+        p->selection = fzgx_obj_25C48[j];
+        p->unk22 = 0;
+        p->unk84 = 0;
+        p->unk8A = 0;
+        p->unk86 = 0;
+        p->unk88 = 0;
+        p->unk8C = 0;
+        p->unk8E = 0;
+        p->unk98 = 0;
+        p->unk90 = 0;
+        p->unk94 = 0;
+        p->unk9A = 0;
+        p->unk9C = 0;
+        if (fzgx_obj_3C30.mode == 2 && j == 0) {
+            fn_1_435C(fzgx_obj_25B88[0]);
+            fzgx_obj_26300 = fn_1_3F8C(lbl_1_data_6400, fn_1_2FDBC, res, 0x1E);
+        }
+        ptr = fzgx_obj_53F8[j];
+        if (ptr != NULL) {
+            u8 character;
+
+            p->selection = ptr[0xB];
+            character = ptr[1];
+            if (character >= 0x29) {
+                k = (s8)q[0x474];
+                if (k != -1) {
+                    u8 *e = lbl_1_bss_5480 + k * 0x81C0;
+                    p->character = e[0x81A0];
+                    p->machine = e[5];
+                    p->color0 = e[0x81A4];
+                    p->color1 = e[0x81AC];
+                    p->color2 = e[0x81B4];
+                }
+            } else {
+                p->machine = character;
+                p->character = character;
+            }
+        }
+    }
+}
+/* fzgx:end fn_1_3181C */
+
 /* fzgx:begin fn_1_31C3C pool noprologue */
 #include "types.h"
 

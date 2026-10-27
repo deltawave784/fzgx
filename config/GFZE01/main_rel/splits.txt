@@ -8510,3 +8510,9 @@ rel/main_rel/font/fn_1_52968.c:
 
 rel/main_rel/sel_static_disp/fn_1_144254.c:
 	.text       start:0x00144254 end:0x00144A5C align:4
+
+rel/main_rel/game/fn_1_3181C.c:
+	.text       start:0x0003181C end:0x00031C3C align:4
+
+rel/main_rel/accessory/fn_1_11B958.c:
+	.text       start:0x0011B958 end:0x0011BFCC align:4

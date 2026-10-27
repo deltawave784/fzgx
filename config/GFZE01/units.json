@@ -32342,6 +32342,17 @@
   },
   {
     "module": "main_rel",
+    "source": "rel/main_rel/accessory/fn_1_11B958.c",
+    "symbols": [
+      "fn_1_11B958"
+    ],
+    "status": "matching",
+    "mw_version": "GC/1.3.2",
+    "extra_cflags": [],
+    "tu": "rel/main_rel/accessory.c"
+  },
+  {
+    "module": "main_rel",
     "source": "rel/main_rel/accessory/fn_1_11CAB4.c",
     "symbols": [
       "fn_1_11CAB4"
@@ -50217,6 +50228,18 @@
     "source": "rel/main_rel/game/fn_1_2FDBC.c",
     "symbols": [
       "fn_1_2FDBC"
+    ],
+    "status": "nonmatching",
+    "mw_version": "GC/1.3.2",
+    "extra_cflags": [],
+    "tu": "rel/main_rel/game.c",
+    "pool": true
+  },
+  {
+    "module": "main_rel",
+    "source": "rel/main_rel/game/fn_1_3181C.c",
+    "symbols": [
+      "fn_1_3181C"
     ],
     "status": "nonmatching",
     "mw_version": "GC/1.3.2",
