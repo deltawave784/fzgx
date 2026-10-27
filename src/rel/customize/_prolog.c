@@ -2478,6 +2478,208 @@ void fn_3_4F08(void) {
 }
 /* fzgx:end fn_3_4F08 */
 
+/* fzgx:begin fn_3_5070 pool noprologue */
+#include "types.h"
+#include "rel/customize/globals.h"
+
+typedef struct {
+    s16 unk_0;
+    s16 unk_2;
+    s16 unk_4;
+    s16 player;
+    s16 sel;
+    s16 unk_A;
+    s16 state;
+    s16 values[4];
+} CustomizeMenu;
+
+/* Pad input block; the hardware-fed words are volatile so each poll re-reads them. */
+typedef struct {
+    u8 pad_0[0x8];
+    volatile u16 trig;  /* fzgx-allow: S2 volatile keeps the verified access order */
+    u8 pad_A[0x6];
+    volatile u16 rep0;  /* fzgx-allow: S2 volatile keeps the verified access order */
+    u16 rep1;
+} PadState;
+
+extern PadState lbl_1_bss_9F8[];
+extern const s16 lbl_3_rodata_19C[4];
+extern u8 lbl_3_bss_6DD74;
+extern void fn_1_A2D84(u32);
+extern void fn_3_0(s16, s32);
+extern void fn_3_BD00(s32, s32, s32, u32);
+
+#pragma pool_data on
+Obj_3_bss_0 lbl_3_bss_0;
+u8 lbl_3_bss_8[0x10];
+s16 lbl_3_bss_18;
+u8 lbl_3_bss_1A[1];
+u8 lbl_3_bss_1D;
+u8 lbl_3_bss_1E[0xD0];
+Obj_3_bss_F0 lbl_3_bss_F0;
+
+#pragma section code_type ".fzgxpool"
+#pragma force_active on
+static void fzgx___fzgx_pool_primer(void) {
+    void *volatile p; /* primer: fixes the retail section order of the BSS objects */
+    p = &lbl_3_bss_0;
+    p = &lbl_3_bss_8;
+    p = &lbl_3_bss_18;
+    p = &lbl_3_bss_1A;
+    p = &lbl_3_bss_1D;
+    p = &lbl_3_bss_1E;
+    p = &lbl_3_bss_F0;
+}
+#pragma force_active reset
+#pragma section code_type ".text"
+
+/* value + delta clamped to [lo, hi]; the sum is formed inside so the operand
+ * temporaries are created in retail's order (value load before the delta). */
+static inline s32 stepMenuValue(s32 value, s32 delta, s16 lo, s16 hi) {
+    s32 sum = value + delta;
+    return sum < lo ? lo : (sum > hi ? hi : sum);
+}
+
+#pragma opt_common_subs on
+s32 fn_3_5070(void) {
+    Obj_3_bss_0 *work = &lbl_3_bss_0;
+    s16 v;
+    s16 player = (&lbl_3_bss_F0)->unk_6;
+    struct { Obj_3_bss_F0 *p; } menu;
+    struct { s16 *p; } values;
+    s16 dir;
+    s16 lo;
+    s16 hi;
+    s32 result = 0;
+    s16 prev;
+    s16 old;
+    s32 n;
+    s16 state;
+    prev = -1;
+
+    n = lbl_3_bss_18 + 1;
+    lbl_3_bss_18 = (n < 10) ? n : 10;
+
+    values.p = 0;
+    menu.p = (&lbl_3_bss_F0);
+    state = menu.p->unk_C;
+    switch (state) {
+    case 0:
+        dir = 0;
+        if ((lbl_1_bss_9F8[player].rep0 & 1) || (lbl_1_bss_9F8[player].rep1 & 1)) {
+            dir = -1;
+        }
+        if (((lbl_1_bss_9F8[player].rep0 >> 1) & 1) || ((lbl_1_bss_9F8[player].rep1 >> 1) & 1)) {
+            dir++;
+        }
+        if (dir != 0) {
+            fn_1_A2D84(0xA9010000);
+            prev = (&lbl_3_bss_F0)->unk_8;
+            (&lbl_3_bss_F0)->unk_8 = (((&lbl_3_bss_F0)->unk_8 + dir) > 3) ? 0 : ((((&lbl_3_bss_F0)->unk_8 + dir) < 0) ? 3 : ((&lbl_3_bss_F0)->unk_8 + dir));
+        }
+        fn_3_0((&lbl_3_bss_F0)->unk_8, 1);
+        if (prev != -1) {
+            s16 angles[4];
+            struct { s32 to; s32 from; } angle;
+
+            *(u32 *)&angles[0] = ((u32 *)lbl_3_rodata_19C)[0];
+            *(u32 *)&angles[2] = ((u32 *)lbl_3_rodata_19C)[1];
+            angle.from = (s16)(angles[prev] * 90);
+            angle.to = (s16)(angles[(&lbl_3_bss_F0)->unk_8] * 90);
+            if (dir < 0 && angle.from < angle.to) {
+                angle.from += 360;
+            }
+            if (dir > 0 && (s16)angle.from > angle.to) {
+                angle.to += 360;
+            }
+            fn_3_BD00((s16)(dir * 5), angle.from, angle.to, 0x40000000);
+            return 0;
+        }
+        if ((lbl_1_bss_9F8[player].trig >> 8) & 1) {
+            menu.p->unk_C++;
+            fn_1_A2D84(0xA9010100);
+            fn_3_BD00(1, 0, 16, 0x20000000);
+        } else if ((lbl_1_bss_9F8[player].trig >> 9) & 1) {
+            fn_1_A2D84(0xA9010200);
+            result = -1;
+        }
+        break;
+    case 1:
+        if (!(((Obj_3_bss_140 *)((u8 *)&lbl_3_bss_140 + menu.p->unk_8 * 0x81C0))->unk_0 & 0x80000000)) {
+            lo = 0;
+            hi = 1;
+        } else {
+            lo = 0;
+            hi = 3;
+            if (!(((Obj_3_bss_140 *)((u8 *)&lbl_3_bss_140 + menu.p->unk_8 * 0x81C0))->unk_0 & 0x40000000)) {
+                lo = 2;
+            }
+        }
+        values.p = &lbl_3_bss_F0.unk_E;
+        v = values.p[state];
+        if (v < lo) {
+            v = lo;
+        } else if (v > hi) {
+            v = hi;
+        }
+        values.p[state] = v;
+        old = values.p[menu.p->unk_C];
+        dir = 0;
+        if ((lbl_1_bss_9F8[player].rep0 & 1) || (lbl_1_bss_9F8[player].rep1 & 1)) {
+            dir = -1;
+        }
+        if (((lbl_1_bss_9F8[player].rep0 >> 1) & 1) || ((lbl_1_bss_9F8[player].rep1 >> 1) & 1)) {
+            dir++;
+        }
+        /* Re-read the active menu state after polling input (volatile defeats the CSE with `old`). */
+        {
+            s32 state = *(volatile s16 *)&menu.p->unk_C;  /* fzgx-allow: S2 volatile view keeps the verified load order */
+            values.p[state] = stepMenuValue(values.p[state], dir, lo, hi);
+        }
+        if (old != values.p[menu.p->unk_C]) {
+            fn_1_A2D84(0xA9010000);
+        }
+        if ((lbl_1_bss_9F8[player].trig >> 8) & 1) {
+            if (!(((Obj_3_bss_140 *)((u8 *)&lbl_3_bss_140 + menu.p->unk_8 * 0x81C0))->unk_0 & 0x80000000)) {
+                switch (values.p[menu.p->unk_C]) {
+                case 0:
+                    result = 1;
+                    break;
+                case 1:
+                    result = 2;
+                    break;
+                }
+            } else {
+                switch (values.p[menu.p->unk_C]) {
+                case 0:
+                    result = 3;
+                    break;
+                case 1:
+                    result = 4;
+                    break;
+                case 2:
+                    result = 5;
+                    break;
+                case 3:
+                    lbl_3_bss_6DD74 = 1;
+                    result = 6;
+                    lbl_3_bss_1D = 0;
+                    break;
+                }
+                menu.p->unk_C = 0;
+            }
+            fn_1_A2D84(0xA9010100);
+        } else if ((lbl_1_bss_9F8[player].trig >> 9) & 1) {
+            menu.p->unk_C--;
+            fn_1_A2D84(0xA9010200);
+            fn_3_BD00(1, 0, 16, 0x10000000);
+        }
+        break;
+    }
+    return result;
+}
+/* fzgx:end fn_3_5070 */
+
 /* fzgx:begin fn_3_5A50 */
 struct Meta { u32 value; u8 pad[0x81bc]; };
 
