@@ -8501,3 +8501,6 @@ rel/main_rel/live_camera/fn_1_1289C.c:
 
 rel/main_rel/som/fn_1_1304C.c:
 	.text       start:0x0001304C end:0x0001350C align:4
+
+rel/main_rel/live_camera/fn_1_F3D0.c:
+	.text       start:0x0000F3D0 end:0x0000F6A8 align:4
