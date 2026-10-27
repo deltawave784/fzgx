@@ -542,6 +542,77 @@ _BYTE_T = r"(?:const\s+)?(?:u8|s8|char|unsigned\s+char|signed\s+char)"
 _INT = r"0x[0-9A-Fa-f]+|\d+"
 
 
+def _strip_comments(text):
+    return re.sub(r"//[^\n]*", "", re.sub(r"/\*.*?\*/", "", text, flags=re.S))
+
+
+def _view_fields(text, tname):
+    """Naive natural-alignment offsets of a plain view struct (`u8 pad[0x5c7c]; u32 flags[2];`):
+    field -> (offset, element type, element size, dims). None when a field is not a scalar."""
+    st = struct_text(tname, text)
+    if st is None:
+        return None
+    out, off = {}, 0
+    for fname, (ttext, dims, _) in field_decls(st).items():
+        if ttext is None:
+            return None
+        t = ttext.replace('const ', '').replace('volatile ', '').strip()
+        size = 4 if '*' in t else SCALAR.get(t)
+        if size is None or t == 'void':
+            return None
+        n = 1
+        for d in dims:
+            try:
+                n *= int(d, 0)
+            except ValueError:
+                return None
+        off = (off + size - 1) // size * size
+        out[fname] = (off, ttext, size, dims)
+        off += size * n
+    return out
+
+
+def _fold_byte_view_forms(text, code, name):
+    """Spellings of a flattened byte view the `bare` model cannot read, folded onto `name + N`:
+    `(name + 0xA) + (0xB)`, `*(T *)((name + 0xA) + i * sizeof(T))` as an element of an array
+    view, and member reads through a cast view struct `((View *)(name + 0xA))->m[i]`. Each left
+    as is the whole model failed ("bare symbol used as a value") and the cluster kept no layout
+    (fn_1_B8EDC's memcard flags at +0x5c7c and counters at +0x5c74)."""
+    n = re.escape(name)
+    paren = r"\(\s*%s\s*\+\s*(%s)\s*\)" % (n, _INT)
+    code = re.sub(r"\(\s*%s\s*\+\s*\(?\s*(%s)\s*\)?\s*\)" % (paren, _INT),
+                  lambda m: f"({name} + 0x{int(m.group(1), 0) + int(m.group(2), 0):X})", code)
+    code = re.sub(r"%s\s*\+\s*\(\s*(%s)\s*\)" % (paren, _INT),
+                  lambda m: f"({name} + 0x{int(m.group(1), 0) + int(m.group(2), 0):X})", code)
+
+    def elem(m):
+        t, k = m.group(1).strip(), int(m.group(4), 0)
+        size = 4 if '*' in t else SCALAR.get(t.replace('const ', '').strip())
+        if size != k:
+            return m.group(0)
+        return f"(({t} *)({name} + 0x{int(m.group(2), 0):X}))[{m.group(3).strip()}]"
+    code = re.sub(r"\*\s*\(\s*((?:const\s+)?\w+(?:\s*\*)?)\s*\*\s*\)\s*\(\s*%s\s*\+\s*(\w+(?:\s*\.\s*\w+)?)\s*\*\s*(%s)\s*\)"
+                  % (paren, _INT), elem, code)
+    views = {}
+
+    def member(m):
+        tname, base, fname, idx = m.group(1), int(m.group(2), 0), m.group(3), m.group(4)
+        if tname not in views:
+            views[tname] = _view_fields(text, tname)
+        fields = views[tname]
+        if not fields or fname not in fields:
+            return m.group(0)
+        off, ttext, size, dims = fields[fname]
+        if dims and idx is not None:
+            return f"(({ttext} *)({name} + 0x{base + off:X}))[{idx.strip()}]"
+        if not dims and idx is None:
+            return f"(*({ttext} *)({name} + 0x{base + off:X}))"
+        return m.group(0)
+    code = re.sub(r"\(\s*\(\s*(\w+)\s*\*\s*\)\s*\(\s*%s\s*\+\s*(%s)\s*\)\s*\)\s*->\s*(\w+)(?:\s*\[([^\[\]]+)\])?" % (n, _INT),
+                  member, code)
+    return code
+
+
 def flatten_byte_views(p, symbol, text):
     """Byte-pointer locals at constant offsets from one same-module .bss object, re-spelled as
     byte arithmetic on the object itself (`extern u8 lbl[]; *(T *)(lbl + 0x49388)`), the shape
@@ -658,6 +729,8 @@ def flatten_byte_views(p, symbol, text):
         done.append(pv)
     if not done:
         return None
+    for name in sorted({resolved[pv][0] for pv in done}):
+        out = _fold_byte_view_forms(text, out, name)
     # the removed declarations and assignments leave indentation-only lines
     out = re.sub(r"(?m)^[ \t]+\n", "", out)
     text = text[:lo] + out + text[hi:]
@@ -736,7 +809,7 @@ def tu_objects(p, symbol, text, mode, cache, retail_bases=(), only=None, derive=
             pvar = f'fzgx_p_{base}'
             out_text = re.sub(r"\b%s\." % re.escape(base), f"{pvar}->", out_text)
             out_text = re.sub(_UNARY_AMP + r"&\s*%s\b(?![\.\w])" % re.escape(base), f"((u8 *){pvar} + 0)", out_text)
-            body_only = "\n".join(l for l in out_text.replace(stmt, '').split("\n") if not l.lstrip().startswith('#'))
+            body_only = "\n".join(l for l in _strip_comments(out_text.replace(stmt, '')).split("\n") if not l.lstrip().startswith('#'))
             if re.search(r"(?<![\w>])%s\b(?!\s*->)" % re.escape(base), body_only):
                 notes.append(f'{base}: direct global used as a value'); return None, notes
             stmt_removed = stmt
@@ -754,7 +827,7 @@ def tu_objects(p, symbol, text, mode, cache, retail_bases=(), only=None, derive=
             out_text = re.sub(_UNARY_AMP + r"&\s*%s\b(?![\.\[\w])" % re.escape(base), f"({tname} *)({pvar} + 0)", out_text)
             out_text = re.sub(r"(?<![\w&.>])%s\s*\+\s*(0x[0-9A-Fa-f]+|\d+)\b" % re.escape(base),
                               lambda mm: f"({tname} *)({pvar} + {int(mm.group(1), 0)})", out_text)
-            body_only = "\n".join(l for l in out_text.replace(stmt, '').split("\n") if not l.lstrip().startswith('#'))
+            body_only = "\n".join(l for l in _strip_comments(out_text.replace(stmt, '')).split("\n") if not l.lstrip().startswith('#'))
             if re.search(r"(?<![\w>])%s\b" % re.escape(base), body_only):
                 notes.append(f'{base}: bare symbol used as a value'); return None, notes
             stmt_removed = stmt
@@ -1107,7 +1180,7 @@ def tu_objects(p, symbol, text, mode, cache, retail_bases=(), only=None, derive=
         # callee-saved register to the section whose objects are defined first in the file
         # (fn_1_B4AC0: bss defined after the `.data` pool put the data base in r31, retail's
         # bss base; defined before it, both bases match)
-        data = set(re.findall(r"\b(fzgx_(?:pool_init|data)_\w+)\s*(?:\[[^\]]*\])*\s*=\s*\{", out_text[:at]))
+        data = set(re.findall(r"\b(fzgx_(?:pool_init|pool_data|data)_\w+)\s*(?:\[[^\]]*\])*\s*=\s*\{", out_text[:at]))
         moved = _first_use_point(out_text, at, data) if data else at
         if moved >= at:
             return None, notes + ['no data definition before the layout']
@@ -3082,19 +3155,25 @@ def tu_section_layout(p, symbol, body, check):
     except (ValueError, KeyError, IndexError, AttributeError, OSError):
         flat = None
     if flat:
-        for mode in ('dtk', 'split', 'merge'):
-            try:
-                text, notes = tu_objects(p, symbol, flat, mode, cache, retail_bases)
-            except (ValueError, KeyError, IndexError, AttributeError, OSError):
-                text = None
-            if text and text not in {t for _, t in out}:
-                out.append((f'define retail TU bss objects ({mode}, flattened byte views)', text))
-            try:
-                text, notes = tu_objects(p, symbol, flat, mode, cache, retail_bases, early=True)
-            except (ValueError, KeyError, IndexError, AttributeError, OSError):
-                text = None
-            if text and text not in {t for _, t in out}:
-                out.append((f'define retail TU bss objects ({mode}, flattened byte views, before the TU data)', text))
+        # the flattened object alone too: a body that also models another TU's cluster
+        # (fn_1_B8EDC's lbl_1_bss_9F8, addressed by name in retail) put both clusters in one
+        # .bss and shifted every flattened offset by the other's size
+        flat_models = sorted({m[2] for m in find_models(flat) if syms.get(m[2]) and syms[m[2]].section == '.bss'})
+        for only in [None] + ([{b} for b in flat_models[:4]] if len(flat_models) > 1 else []):
+            tag = '' if only is None else f', {next(iter(only))} only'
+            for mode in ('dtk', 'split', 'merge'):
+                try:
+                    text, notes = tu_objects(p, symbol, flat, mode, cache, retail_bases, only)
+                except (ValueError, KeyError, IndexError, AttributeError, OSError):
+                    text = None
+                if text and text not in {t for _, t in out}:
+                    out.append((f'define retail TU bss objects ({mode}, flattened byte views{tag})', text))
+                try:
+                    text, notes = tu_objects(p, symbol, flat, mode, cache, retail_bases, only, early=True)
+                except (ValueError, KeyError, IndexError, AttributeError, OSError):
+                    text = None
+                if text and text not in {t for _, t in out}:
+                    out.append((f'define retail TU bss objects ({mode}, flattened byte views, before the TU data{tag})', text))
     # views derived from a model at a constant offset, as models of the retail object holding
     # them (fn_3_381C: 80.7% -> pool match); an addition, the plain layouts above stay
     for mode in ('dtk', 'split', 'merge'):
