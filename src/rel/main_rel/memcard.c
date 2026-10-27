@@ -10809,6 +10809,167 @@ u32 fn_1_B8170(s32 card) {
 }
 /* fzgx:end fn_1_B8170 */
 
+/* fzgx:begin fn_1_B8338 pool noprologue */
+#include "rel/main_rel/memcard.h"
+#include "dolphin/card.h"
+
+extern u32 lbl_801A6410;
+extern f32 lbl_1_rodata_4AE0[114];
+extern s32 fn_1_45D0(u32, u32, const char *, int);
+extern void fn_1_46B4(u32, u32, const char *, int);
+extern s32 fn_8002DFE0(s32, void *, CARDCallback);
+extern u32 fn_1_B8170(s32);
+
+typedef struct Slot {
+    u8 pad0; s8 status; u8 pad2[10];
+    void *work;
+    u8 pad10[0x2c];
+    s32 blocks, files;
+    u8 pad44[0x5c];
+} Slot;
+
+typedef struct SpaceSet {
+    s32 need[6];
+} SpaceSet;
+
+/* The memory-card state objects of this TU's .bss, in retail order. */
+u8 fzgx_obj_lbl_1_bss_716C0[8];
+Slot fzgx_slots[147];
+u8 fzgx_gap[0x5c74 - 8 - 147 * 0xa0];
+s32 fzgx_5c74;
+u8 fzgx_5c78;
+u8 fzgx_5c79;
+u32 fzgx_flags[2];
+SpaceSet fzgx_space[2];
+
+/* Layout primer: first accesses fix the .bss order. */
+#pragma section code_type ".fzgxpool"
+s32 fzgx_prime_bss(void)
+{
+    /* MWCC lays .bss out in reverse first-access order. */
+    return fzgx_flags[0] + fzgx_space[0].need[0] + fzgx_5c79 + fzgx_5c78 + fzgx_5c74 +
+           fzgx_gap[0] + fzgx_slots[0].status + fzgx_obj_lbl_1_bss_716C0[0];
+}
+#pragma section code_type ".text"
+
+/* Return the signed space requirement for the available card resources. */
+static inline s32 fit(Slot *slot, s32 n, s32 free)
+{
+    if (slot->files <= 0) return -n;
+    if (free - n >= 0) return n;
+    return -n;
+}
+
+static inline s32 space(s32 chan, int index, u32 size, s32 free)
+{
+    Slot *slot = &fzgx_slots[chan];
+    u8 *data = (u8 *)lbl_1_rodata_4AE0;
+    s32 n = (size + 0x405f) & ~0x1fff;
+    n /= 8192;
+    if (size == 0) {
+        u32 type = data[index * 0x4c + 0x6b];
+        if (type == 4) n = 3;
+        else if (type == 5) n = 13;
+        else if (type == 2) n = 3;
+    }
+    if (slot->files <= 0) n = -n;
+    else { if (free - n >= 0) return n; n = -n; }
+    return n;
+}
+
+static inline s32 present(s32 chan)
+{
+    s32 valid = 0;
+    if (fzgx_slots[chan].status != -1 && fzgx_slots[chan].status != -3) valid = 1;
+    return valid;
+}
+
+static inline void unmount(s32 chan, Slot *slot)
+{
+    while (CARDUnmount(chan) == -1) {}
+    if (slot->work) {
+        fn_1_46B4(lbl_801A6410, (u32)slot->work, lbl_1_data_3C7B8, 0x258c);
+        slot->work = 0;
+    }
+}
+
+#pragma opt_lifetimes off
+s32 fn_1_B8338(s32 chan)
+{
+    Slot *slot;
+    s32 result;
+    fzgx_5c74 = 0;
+    fzgx_5c78 = 1;
+    fzgx_5c79 = chan;
+    if (!present(chan)) return 0;
+    slot = &fzgx_slots[chan];
+    slot->work = (void *)fn_1_45D0(lbl_801A6410, 0xa000, lbl_1_data_3C7B8, 0x256d);
+    do { result = fn_8002DFE0(chan, slot->work, 0); } while (result == -1);
+    if (result != 0 && result != -6) {
+        if (slot->work) {
+            fn_1_46B4(lbl_801A6410, (u32)slot->work, lbl_1_data_3C7B8, 0x2573);
+            slot->work = 0;
+        }
+    } else {
+        s32 checked;
+        do { checked = CARDCheck(chan); } while (checked == -1);
+        result = checked;
+    }
+    if (result != 0) { unmount(chan, slot); return 0; }
+    do { result = CARDFreeBlocks(chan, &slot->blocks, &slot->files); } while (result == -1);
+    if (result != 0) { slot->blocks = -1; slot->files = -1; }
+    else slot->blocks /= 8192;
+    fzgx_flags[chan] = fn_1_B8170(chan);
+#define SPACE(dst, index) \
+    { \
+        s32 free; \
+        u8 *data = (u8 *)lbl_1_rodata_4AE0; \
+        u32 size = *(u32 *)(data + (index) * 0x4c + 0x8c); \
+        free = slot->blocks; \
+        dst = space(chan, index, size, free); \
+    }
+#define SPACE_TAIL(dst, index) \
+    { \
+        s32 free; \
+        u8 *data = (u8 *)lbl_1_rodata_4AE0; \
+        u32 size = *(u32 *)(data + (index) * 0x4c + 0x8c); \
+        s32 n = (size + 0x405f) & ~0x1fff; \
+        n /= 8192; \
+        free = slot->blocks; \
+        if (size == 0) { \
+            u32 type = data[(index) * 0x4c + 0x6b]; \
+            if (type == 4) n = 3; \
+            else if (type == 5) n = 13; \
+            else if (type == 2) n = 3; \
+        } \
+        do { \
+            if (slot->files <= 0) { n = -n; break; } \
+            if (free - n >= 0) break; \
+            n = -n; \
+        } while (0); \
+        dst = n; \
+    }
+    SPACE(fzgx_space[chan].need[1], 0);
+    SPACE(fzgx_space[chan].need[3], 2);
+    SPACE(fzgx_space[chan].need[2], 1);
+    SPACE(fzgx_space[chan].need[4], 3);
+    SPACE(fzgx_space[chan].need[5], 4);
+    unmount(chan, slot);
+    if (lbl_1_bss_962 == 100) {
+        if ((fzgx_space[chan].need[4] < 0 && !(fzgx_flags[chan] & 16)) || slot->files <= 0) return 1;
+        return 0;
+    }
+    if ((fzgx_space[chan].need[1] < 0 && !(fzgx_flags[chan] & 2)) ||
+        (fzgx_space[chan].need[3] < 0 && !(fzgx_flags[chan] & 8)) ||
+        (fzgx_space[chan].need[2] < 0 && !(fzgx_flags[chan] & 4)) ||
+        (fzgx_space[chan].need[4] < 0 && !(fzgx_flags[chan] & 16)) ||
+        (fzgx_space[chan].need[5] < 0 && !(fzgx_flags[chan] & 32)) ||
+        slot->files <= 0) return 1;
+    return 0;
+}
+#pragma opt_lifetimes reset
+/* fzgx:end fn_1_B8338 */
+
 /* fzgx:begin fn_1_B88C4 pool noprologue */
 #include "dolphin/types.h"
 #include "dolphin/card.h"
