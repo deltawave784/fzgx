@@ -8483,3 +8483,6 @@ rel/main_rel/face/fn_1_D2404.c:
 
 rel/main_rel/effect/fn_1_60D54.c:
 	.text       start:0x00060D54 end:0x00060F7C align:4
+
+rel/main_rel/sel_static_disp/fn_1_147A04.c:
+	.text       start:0x00147A04 end:0x00148444 align:4
