@@ -8504,3 +8504,9 @@ rel/main_rel/som/fn_1_1304C.c:
 
 rel/main_rel/live_camera/fn_1_F3D0.c:
 	.text       start:0x0000F3D0 end:0x0000F6A8 align:4
+
+rel/main_rel/font/fn_1_52968.c:
+	.text       start:0x00052968 end:0x00052B68 align:4
+
+rel/main_rel/sel_static_disp/fn_1_144254.c:
+	.text       start:0x00144254 end:0x00144A5C align:4
