@@ -1333,7 +1333,8 @@ def rewrites(body: str, name: str) -> List[Tuple[str, str]]:
                call_results_to_locals, wrap_constant_pointers, decse_repeated_expressions,
                scalar_carriers, dead_uses, variable_splits, signedness_flips, float_precision,
                compound_assignments, embedded_call_assignments, condition_embedded_assignments,
-               expression_embedded_assignments, lifetime_splits, constant_address_locals):
+               expression_embedded_assignments, lifetime_splits, constant_address_locals,
+               long_loop_counters):
         try:
             out += fn(body, name)
         except Exception:
@@ -5176,3 +5177,74 @@ def _constant_address_core(body: str, name: str) -> List[Tuple[str, str]]:
                             + (" under opt_propagation off" if pragma else ""),
                             body[:head_start] + fn_text + after + body[end:]))
     return out
+
+
+_INT_SPELLING = r'(?:signed\s+int|signed|int|unsigned\s+int|unsigned)'
+_LONG_OF = {'signed int': 'long', 'signed': 'long', 'int': 'long',
+            'unsigned int': 'unsigned long', 'unsigned': 'unsigned long'}
+
+
+def long_loop_counters(body: str, name: str) -> List[Tuple[str, str]]:
+    """A constant-start loop counter declared `long` (`s32`) instead of `int`: the IR
+    unroller's entry guard then survives.
+
+    `unroll_loop` (IroLoop.c) copies the loop test into the preheader as an entry guard
+    after the last pass-0 constant propagation that precedes it; the trip count comes from
+    the init's constant directly, so it is known either way. `IRO_CopyAndConstantPropagation`
+    then folds the guard when the counter's `V = 0` is a propagation candidate, which needs
+    the assignment's type to be the variable's own type object: an `int` constant assigned to
+    a `long` counter is not, so retail's `li r5, 0; cmpwi r5, 0xfee; bge` before the
+    unrolled loop's `mtctr` stays while the count is still `li r0, 0x1fd` (the three LZ
+    window clears fn_18_444, fn_1_1304C, fn_1_1289C, round 69; function-wide
+    `opt_propagation off` also keeps the guard but leaves the count guard and breaks other
+    loops). Every counter of a `for` loop initialised with a constant (in the header, or by
+    `V = c;` before `for (; V ...)`) is retyped at its declaration, one at a time and all
+    together; a comma declaration splits the counter out after (and before) the rest."""
+    out: List[Tuple[str, str]] = []
+    span = _function_body_span(body, name)
+    if not span:
+        return out
+    inner = body[span[1]:span[2]]
+    const = r'-?(?:0[xX][0-9a-fA-F]+|\d+)[uUlL]*'
+    names: List[str] = []
+    for m in re.finditer(rf'\bfor\s*\(\s*(\w+)\s*=\s*{const}\s*;\s*\1\s*(?:<|<=|!=|>|>=)', inner):
+        names.append(m.group(1))
+    for m in re.finditer(rf'\bfor\s*\(\s*;\s*(\w+)\s*(?:<|<=|!=|>|>=)', inner):
+        v = m.group(1)
+        prev = list(re.finditer(rf'\b{re.escape(v)}\s*=\s*({const})\s*;', inner[:m.start()]))
+        if prev and not re.search(rf'\b{re.escape(v)}\s*(?:[-+*/|&^]?=(?!=)|\+\+|--)',
+                                  inner[prev[-1].end():m.start()]):
+            names.append(v)
+    names = list(dict.fromkeys(names))
+    retyped = {v: _long_counter_options(body, name, v) for v in names}
+    for v, options in retyped.items():
+        for where, text in options:
+            out.append((f'loop counter {v} declared long{where}', text))
+    if sum(1 for o in retyped.values() if o) > 1:
+        text = body
+        for v in names:
+            options = _long_counter_options(text, name, v)
+            text = options[0][1] if options else text
+        out.append(('every constant-start loop counter declared long', text))
+    return out
+
+
+def _long_counter_options(body: str, name: str, v: str) -> List[Tuple[str, str]]:
+    """`v`'s `int` declaration in `name` respelled `long` (a comma list splits it out)."""
+    span = _function_body_span(body, name)
+    if not span:
+        return []
+    decl = re.compile(rf'(?m)^([ \t]*)({_INT_SPELLING})\s+([^;\n()]*?)\s*;')
+    for d in decl.finditer(body, span[1], span[2]):
+        parts = [p.strip() for p in d.group(3).split(',')]
+        hit = [k for k, p in enumerate(parts) if re.match(rf'{re.escape(v)}\b(?!\s*\[)', p)]
+        if not hit:
+            continue
+        ind, ty = d.group(1), re.sub(r'\s+', ' ', d.group(2))
+        longty, own = _LONG_OF[ty], parts[hit[0]]
+        if len(parts) == 1:
+            return [('', body[:d.start()] + f'{ind}{longty} {own};' + body[d.end():])]
+        rest = ', '.join(p for k, p in enumerate(parts) if k != hit[0])
+        return [(' after the rest', body[:d.start()] + f'{ind}{ty} {rest};\n{ind}{longty} {own};' + body[d.end():]),
+                (' before the rest', body[:d.start()] + f'{ind}{longty} {own};\n{ind}{ty} {rest};' + body[d.end():])]
+    return []

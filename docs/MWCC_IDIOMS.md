@@ -546,6 +546,14 @@ rule was probed with real GC/1.3.2 compiles of saved bodies.
   inlined helpers inherit the caller's setting, so a pragma around the inline definition does not help).
   Turning propagation on removes the guard but folds the inlined `li r3, 0; cmpwi r3, 1` result tests
   (96.0% -> 88.6%): retail had propagation on, and those results had more than one reaching definition.
+- **An unroller entry guard that survives is a `long` counter.** The opposite case: retail keeps the
+  copied loop test `li r5, 0; cmpwi r5, 0xfee; bge` before an 8x-unrolled loop whose count is already
+  folded (`li r0, 0x1fd; mtctr`, no `cmpwi r0, 8`). The count comes from the init's constant
+  (`create_loop_iteration_count` reads `init->right`), the guard reads the counter, and propagation
+  takes `V = 0` only when the assignment's type is the variable's own type object
+  (`fn_004592e0`, IroPropagate.c): an `int` literal assigned to a `long` (`s32`) counter is not
+  a candidate. Declaring the counter `long` closed all three LZ window clears (fn_18_444, fn_1_1304C,
+  fn_1_1289C, round 69; `0L` does not). Family `longctr` (`fixup_source.long_loop_counters`).
 - **Known-count backend unrolling needs a divisor.** `unroll_counting_loop` and `unroll_loop_by_factor`
   (optimizer/LoopOptimization.c) lower the factor from `unroll_factor_limit` until it divides the trip
   count; a remainder loop after `li rN, count/8; mtctr` is therefore the IR unroller's output, not the
