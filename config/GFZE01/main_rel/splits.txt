@@ -8480,3 +8480,6 @@ rel/main_rel/accessory/fn_1_10CC38.c:
 
 rel/main_rel/face/fn_1_D2404.c:
 	.text       start:0x000D2404 end:0x000D27B8 align:4
+
+rel/main_rel/effect/fn_1_60D54.c:
+	.text       start:0x00060D54 end:0x00060F7C align:4
