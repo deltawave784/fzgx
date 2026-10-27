@@ -596,6 +596,11 @@ class Engine:
             yield from self._family(row, 'evidence.relocation_bindings', lambda: evidence.relocation_bindings(body, check))
             yield from self._family(row, 'layout.bss_member_bindings', lambda: layout.bss_member_bindings(self.project, row['symbol'], body, row.get('object'), check))
             yield from self._family(row, 'layout.private_data_objects', lambda: layout.private_data_objects(body, row.get('object'), check))
+            # a register-only residual: the range splitter numbers reused locals' regions by first
+            # reference, and a loop pointer may be a region of an earlier loop's pointer
+            # (fn_1_1262A4 capture); placed ahead of the declaration graphs' 96 slots
+            if evidence._register_residual(check)[0]:
+                yield from self._family(row, 'source.split_region_orders', lambda: source.split_region_orders(body, name))
         yield from self._family(row, 'source.split_declaration_groups', lambda: source.split_declaration_groups(body, name))
         yield from self._family(row, 'source.locked_cache_columns', lambda: source.locked_cache_columns(body, name))
         yield from self._family(row, 'source.accessor_lifetimes', lambda: source.accessor_lifetimes(body, name))

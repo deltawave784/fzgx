@@ -50,6 +50,17 @@ file from what actually unblocked functions; keep each item one or two lines.
   `#pragma opt_lifetimes off` with one named variable per region of every other reused local,
   the new names declared first (split objects number above the declared locals). `fixup` family
   `lifetime_splits` writes those regions mechanically (fn_1_10CC38 landed).
+- **Range-split creation order** (capture of fn_1_1262A4, 2026-10-26, landed): the splitter walks
+  the variable records in creation order, which is the order of each local's *first reference* in
+  the function; every later web of a reused local becomes the next `@N`, and split objects number
+  in reverse creation order above the declared locals. So when two reused locals' regions in one
+  loop take swapped callee-saved registers (sort loops: counter r30 / pointer r29 against retail
+  r29 / r30), change which is referenced first (`p = base; for (c = 0; ...)` against
+  `c = 0; p = base; for (; ...)` or `for (c = 0, p = base; ...)` in the first loop that uses
+  them). A loop pointer retail keeps high (`lwz r30, nodes(rObj)` straight in) while ours, a
+  separate declared local, falls to r25 is a split region of an earlier loop's pointer: reuse
+  that variable (`e1` renamed to `e0`). Declaration order changes neither. `fixup` family
+  `split_region_orders` (sweep `splitorder`) emits both levers and their combination.
 - **Evaluation order at a call**: a value produced by a call and consumed in an expression
   is evaluated first when written inline; holding it in a local moves the call and can
   swap `mullw`/`add` operands (fn_1_76704).

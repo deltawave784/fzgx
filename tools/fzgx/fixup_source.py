@@ -4914,3 +4914,146 @@ def lifetime_splits(body: str, name: str) -> List[Tuple[str, str]]:
                         f'{",".join(h[1] for h in helpers)} included'
                         + (' (reverse creation order)' if reverse else ''), wrap(text)))
     return out
+
+
+def _sr_loops(code: str, lo: int, hi: int) -> List[Tuple[int, int]]:
+    """(header start, body end) of every for/while/do loop in code[lo:hi] with a braced body."""
+    out = []
+    for m in re.finditer(r'\b(?:for|while|do)\b', code[lo:hi]):
+        a = lo + m.start()
+        k = a + len(m.group(0))
+        if m.group(0) != 'do':
+            k = _close(code, code.find('(', k), hi) if code.find('(', k) >= 0 else None
+            if k is None:
+                continue
+        b = re.match(r'\s*\{', code[k:hi])
+        if not b:
+            continue
+        depth, j = 0, k + b.end() - 1
+        while j < hi:
+            depth += (code[j] == '{') - (code[j] == '}')
+            j += 1
+            if depth == 0:
+                out.append((a, j))
+                break
+    return out
+
+
+def _sr_first_reference_hoists(body: str, name: str) -> List[Tuple[str, str]]:
+    """Move a loop header's initialisations ahead of the assignments just before the loop, or
+    a header's later initialisations ahead of the loop: either changes which local the
+    function references first."""
+    from .sdkimport import masked
+    code = masked(body)
+    span = _function_body_span(code, name)
+    if not span:
+        return []
+    names = {l[3] for l in _locals(body, span)}
+    out = []
+    for m in re.finditer(r'(?m)^([ \t]*)for\s*\(([^;()]*(?:\([^;()]*\)[^;()]*)*);', code[span[1]:span[2]]):
+        indent, init = m.group(1), m.group(2)
+        hs = span[1] + m.start(2)
+        he = span[1] + m.end(2)
+        parts = [x.strip() for x in init.split(',')] if init.strip() else []
+        assigns = [re.fullmatch(r'([A-Za-z_]\w*(?:\.\w+)?)\s*=\s*([^=].*)', x) for x in parts]
+        if not parts or not all(assigns) or any(a.group(1).split('.')[0] not in names for a in assigns):
+            continue
+        line_start = span[1] + m.start()
+        # the simple assignments immediately before the loop
+        run = []
+        at = line_start
+        while len(run) < 3:
+            prev = code.rfind('\n', 0, at - 1) + 1
+            pm = re.fullmatch(r'[ \t]*([A-Za-z_]\w*)\s*=\s*([^;{}\n]+);[ \t]*\n', code[prev:at])
+            if not pm or pm.group(1) not in names or prev <= span[1]:
+                break
+            run.insert(0, (prev, at, pm.group(1), pm.group(2)))
+            at = prev
+        header_vars = {a.group(1).split('.')[0] for a in assigns}
+        header_reads = set(re.findall(r'\b\w+\b', ' '.join(a.group(2) for a in assigns)))
+        if run and not (header_reads & {r[2] for r in run}) and not any(
+                header_vars & set(re.findall(r'\b\w+\b', r[3])) for r in run):
+            moved = ''.join(f'{indent}{x};\n' for x in parts)
+            text = body[:run[0][0]] + moved + body[run[0][0]:hs] + body[he:]
+            out.append((f'split-region order: {",".join(sorted(header_vars))} referenced before '
+                        f'{",".join(r[2] for r in run)}', text))
+        if len(parts) > 1:
+            first = parts[0]
+            rest = parts[1:]
+            if not set(re.findall(r'\b\w+\b', first)) & {a.group(1) for a in assigns[1:]}:
+                moved = ''.join(f'{indent}{x};\n' for x in rest)
+                text = body[:line_start] + moved + body[line_start:hs] + first + body[he:]
+                out.append((f'split-region order: {",".join(a.group(1) for a in assigns[1:])} '
+                            f'referenced before {assigns[0].group(1)}', text))
+    return out
+
+
+def _sr_merges(body: str, name: str) -> List[Tuple[str, str, str]]:
+    """A loop pointer or counter local confined to one region renamed to an earlier same-typed local that is
+    dead there: (label, merged text, region start in the merged text)."""
+    from .sdkimport import masked
+    code = masked(body)
+    span = _function_body_span(code, name)
+    if not span:
+        return []
+    locs = _locals(body, span)
+    inner_lo = locs[-1][1] if locs else span[1]
+    loops = _sr_loops(code, inner_lo, span[2])
+    norm = lambda t: re.sub(r'\s+', ' ', re.sub(r'\b(?:register|volatile)\b', '', t)).strip()
+    uses = {}
+    for l in locs:
+        if l[4] or ('*' not in l[2] and l[2].strip() not in ('u32', 's32', 'int', 'u16', 's16', 'u8', 's8')):
+            continue
+        found = [u.start() + inner_lo for u in re.finditer(rf'(?<![\w.>]){re.escape(l[3])}\b', code[inner_lo:span[2]])]
+        if found and not re.search(rf'&\s*{re.escape(l[3])}\b', code[inner_lo:span[2]]):
+            uses[l[3]] = (l, found)
+    out = []
+    for p, (pl, pu) in uses.items():
+        a, b = pu[0], pu[-1]
+        # p must start with a killing definition: `p = ...` (not `==`) and be a loop pointer
+        if not re.match(rf'{re.escape(p)}\s*=(?!=)', code[a:a + len(p) + 4]):
+            continue
+        if not re.search(rf'\b{re.escape(p)}\s*(?:\+\+|\+=)|\+\+\s*{re.escape(p)}\b', code[a:b + len(p) + 4]):
+            continue
+        found = []
+        for q, (ql, qu) in uses.items():
+            if q == p or norm(ql[2]) != norm(pl[2]):
+                continue
+            # an earlier loop's pointer: used before p's region only, or re-killed after it
+            if any(a <= u <= b for u in qu) or qu[0] > a:
+                continue
+            after = [u for u in qu if u > b]
+            if after and not re.match(rf'{re.escape(q)}\s*=(?!=)', code[after[0]:after[0] + len(q) + 4]):
+                continue
+            # q live around a loop that contains p's region would be clobbered
+            if any(la <= a and b <= lb and any(la <= u <= lb for u in qu) for la, lb in loops):
+                continue
+            text = body
+            for u in reversed(pu):
+                text = text[:u] + q + text[u + len(p):]
+            text = text[:pl[0]] + text[pl[1]:]
+            found.append((max(u for u in qu if u < a), f'split-region merge: {p} renamed to {q}', text, q))
+        # the nearest dead pointer first (the previous loop's)
+        out += [f[1:] for f in sorted(found, reverse=True)[:2]]
+    return out
+
+
+def split_region_orders(body: str, name: str) -> List[Tuple[str, str]]:
+    """Range-split creation order (IROUseDef.c `fn_00459420`, capture of fn_1_1262A4, 2026-10-26).
+
+    With `opt_lifetimes` on, MWCC splits every local whose definitions form several disconnected
+    webs; it walks the variable records in creation order, i.e. the order in which the function
+    first references each local, and each split object takes the next `@N`. Split objects are
+    numbered in reverse creation order above every declared local, so the region of the local
+    referenced first numbers highest and claims its callee-saved register first. Two levers follow:
+    the first reference of a loop counter against a loop pointer (`p = base; for (c = 0; ...)`
+    against `c = 0; p = base; for (; ...)`), and a loop pointer that retail keeps as a split
+    region of an earlier loop's pointer (a separate declared local numbers below every split
+    object and claims a low register). Each merge is offered with every first-reference order."""
+    combined, merged = [], []
+    for label, text, q in _sr_merges(body, name)[:32]:
+        merged.append((label, text))
+        for l2, t2 in _sr_first_reference_hoists(text, name):
+            if re.search(rf'\b{re.escape(q)}\b', l2):
+                combined.append((f'{label}; {l2}', t2))
+    return combined + merged + _sr_first_reference_hoists(body, name)
