@@ -35,7 +35,9 @@ import shlex
 import subprocess
 import tarfile
 import io
+import os
 import time
+from contextlib import contextmanager
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 from typing import Dict, List, Optional
@@ -648,8 +650,29 @@ def upstream_imports(sha: str) -> Dict[str, dict]:
     return out
 
 
+@contextmanager
+def _bound(agent: str, label: str):
+    """Bind the CLI process to the harvest identity for one write_unit call. An unbound
+    write_unit that checks a full match submits it AND link-verifies and commits at once
+    (api._finish_check), one relink per function: 14 landings took 36 minutes. Bound, the
+    automatic submit stays pending and one `fzgx verify` per chunk links the lot."""
+    keys = ('FZGX_AGENT_ID', 'FZGX_HARNESS', 'FZGX_MODEL')
+    saved = {k: os.environ.get(k) for k in keys}
+    os.environ.update(FZGX_AGENT_ID=agent, FZGX_HARNESS='harvest', FZGX_MODEL=label)
+    try:
+        yield
+    finally:
+        for k, v in saved.items():
+            if v is None:
+                os.environ.pop(k, None)
+            else:
+                os.environ[k] = v
+
+
 def land(p: Project, results: List[dict], agent: str, label: str, provenance: Path,
-         skip: frozenset = frozenset(), sha: str = '') -> dict:
+         skip: frozenset = frozenset(), sha: str = '', chunk: int = 40) -> dict:
+    """Submit every clean match, then `fzgx verify` once per `chunk` submissions (verify bisects
+    and uncarves anything that breaks the link; provenance keeps only what stays matched)."""
     upstream = upstream_imports(sha) if sha else {}
     prov = json.loads(provenance.read_text()) if provenance.exists() else {}
     ledger = Ledger()
@@ -659,26 +682,58 @@ def land(p: Project, results: List[dict], agent: str, label: str, provenance: Pa
     todo = sorted((r for r in results if r['status'] in ('matched', 'pool')
                    and r['symbol'] not in prov and r['symbol'] not in skip),
                   key=lambda r: (r['status'] != 'matched', r['size']))
-    landed, failed = [], []
+    landed, failed, verifies, pending = [], [], [], 0
+
+    def save():
+        provenance.parent.mkdir(parents=True, exist_ok=True)
+        provenance.write_text(json.dumps(prov, indent=1, sort_keys=True) + '\n')
+
+    def verify_chunk():
+        nonlocal pending
+        v = api.verify_links(p, f'match: harvest {label} chunk')
+        verifies.append({k: v.get(k) for k in ('ok', 'verified', 'rejected', 'commit')} if isinstance(v, dict) else v)
+        now = dict(Ledger().db.execute('SELECT symbol, status FROM functions'))
+        for sym in [k for k in prov if now.get(k) != 'matched']:
+            failed.append(dict(symbol=sym, stage='link', error='uncarved by fzgx verify'))
+            prov.pop(sym)
+            if sym in landed:
+                landed.remove(sym)
+        save()
+        pending = 0
+
     for r in todo:
         sym, b = r['symbol'], r['best']
         body = Path(b['body']).read_text()
-        row = ledger.get(p.key(p.resolve(sym)))
+        key = p.key(p.resolve(sym))
+        row = ledger.get(key)
         if row and row['status'] == 'matched':
             continue
+        # a blocked function is open work: an exact body elsewhere is what unblocks it, and
+        # it goes back to blocked (same reason) unless the submit succeeds
+        blocked = row['blocked_reason'] if row and row['status'] == 'blocked' else None
+        if blocked is not None:
+            api.unblock(p, sym)
         try:
-            # local_seed=False: the harvested body is installed below, not this tree's seed
             c = _retrying(api.claim, p, sym, agent, max_attempts=999, local_seed=False)
             if not c.get('ok'):
                 failed.append(dict(symbol=sym, stage='claim', error=c.get('error')))
+                if blocked is not None:
+                    api.block(p, sym, blocked)
                 continue
-            w = _retrying(api.write_unit, p, sym, agent, body)
+            with _bound(agent, label):
+                w = _retrying(api.write_unit, p, sym, agent, body)
             if not w.get('ok'):
                 _retrying(api.release, p, sym, 'harvest: write failed', agent=agent)
                 failed.append(dict(symbol=sym, stage='write', error=w.get('error')))
                 continue
-            s = _retrying(api.submit, p, sym, agent=agent, message=f'harvest {sym} from {label}', harness='harvest',
-                          model=label, mw_version=b.get('mw'), extra_cflags=b.get('flags') or '')
+            row = ledger.get(key)
+            if row and row['status'] == 'matched':
+                s = {'ok': True, 'automatic': True}  # write_unit's check already submitted it
+            else:
+                # the harvested compiler options differ from this tree's: submit with them
+                s = _retrying(api.submit, p, sym, agent=agent, message=f'harvest {sym} from {label}',
+                              harness='harvest', model=label, mw_version=b.get('mw'),
+                              extra_cflags=b.get('flags') or '')
         except Exception as error:
             failed.append(dict(symbol=sym, stage='error', error=f'{type(error).__name__}: {error}'[:300]))
             try:
@@ -691,16 +746,22 @@ def land(p: Project, results: List[dict], agent: str, label: str, provenance: Pa
                              flags=b.get('flags'), ref_name=r.get('ref_name'), unit=r.get('ref_unit'),
                              ref_unit_options=r.get('ref_unit_options'), upstream=upstream.get(r.get('ref_name') or sym),
                              sha256=hashlib.sha256(body.encode()).hexdigest(), landed=int(time.time()))
-            provenance.parent.mkdir(parents=True, exist_ok=True)
-            provenance.write_text(json.dumps(prov, indent=1, sort_keys=True) + '\n')
+            save()
             landed.append(sym)
+            pending += 1
+            if pending >= chunk:
+                verify_chunk()
         else:
             failed.append(dict(symbol=sym, stage='submit', error=str(s.get('error') or s)[:300]))
             try:
                 _retrying(api.release, p, sym, 'harvest: submit failed', agent=agent, save_only=True)
             except Exception as error:
                 failed[-1]['release'] = str(error)
-    return dict(landed=len(landed), failed=failed)
+        if blocked is not None and ledger.get(key)['status'] != 'matched':
+            api.block(p, sym, blocked)
+    if pending:
+        verify_chunk()
+    return dict(landed=len(landed), failed=failed, verifies=verifies)
 
 
 def run(p: Project, ref: str, label: Optional[str] = None, do_land: bool = False,
