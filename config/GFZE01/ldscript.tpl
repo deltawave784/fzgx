@@ -72,6 +72,7 @@ SECTIONS
     UNK_817FFFFC = 0x817FFFFC;
     __OSActiveThreadQueue = 0x800000DC;
     __OSTVMode = 0x800000CC;
+    __OSCoreClock = 0x800000FC;
     /* SDK absolute globals; configure.py generates their C constants. */
     GXFIFO = 0xCC008000;
     /* SDK absolute globals; configure.py generates their C constants. */
