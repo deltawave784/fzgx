@@ -6386,3 +6386,15 @@ dol/fn_8004D8DC.c:
 
 dol/fn_80069CE4.c:
 	.text       start:0x80069CE4 end:0x80069FCC align:4
+
+dol/fn_8005596C.c:
+	.text       start:0x8005596C end:0x80055D94 align:4
+
+dol/fn_8006953C.c:
+	.text       start:0x8006953C end:0x80069AE0 align:4
+
+dol/fn_80047C94.c:
+	.text       start:0x80047C94 end:0x800482B8 align:4
+
+dol/fn_80037E30.c:
+	.text       start:0x80037E30 end:0x800384FC align:4

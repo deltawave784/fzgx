@@ -347,3 +347,9 @@ rel/title/operation/fn_8_B380.c:
 
 rel/title/_prolog/fn_8_704.c:
 	.text       start:0x00000704 end:0x00000754 align:4
+
+rel/title/operation/fn_8_A3A4.c:
+	.text       start:0x0000A3A4 end:0x0000A954 align:4
+
+rel/title/operation/fn_8_E440.c:
+	.text       start:0x0000E440 end:0x0000EFA4 align:4

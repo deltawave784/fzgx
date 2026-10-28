@@ -8699,3 +8699,69 @@ rel/main_rel/game/fn_1_3E6D8.c:
 
 rel/main_rel/stcoli/fn_1_18784.c:
 	.text       start:0x00018784 end:0x00018B40 align:4
+
+rel/main_rel/effect/fn_1_62360.c:
+	.text       start:0x00062360 end:0x00062794 align:4
+
+rel/main_rel/bg_win/fn_1_15E7F4.c:
+	.text       start:0x0015E7F4 end:0x0015EC40 align:4
+
+rel/main_rel/accessory/fn_1_125DF0.c:
+	.text       start:0x00125DF0 end:0x001262A4 align:4
+
+rel/main_rel/accessory/fn_1_11CD3C.c:
+	.text       start:0x0011CD3C end:0x0011D1FC align:4
+
+rel/main_rel/memcard/fn_1_C062C.c:
+	.text       start:0x000C062C end:0x000C0B0C align:4
+
+rel/main_rel/memcard/fn_1_C0E00.c:
+	.text       start:0x000C0E00 end:0x000C132C align:4
+
+rel/main_rel/stcoli/fn_1_22F90.c:
+	.text       start:0x00022F90 end:0x00023500 align:4
+
+rel/main_rel/stcoli/fn_1_2E3B4.c:
+	.text       start:0x0002E3B4 end:0x0002E928 align:4
+
+rel/main_rel/accessory/fn_1_1256EC.c:
+	.text       start:0x001256EC end:0x00125CE8 align:4
+
+rel/main_rel/accessory/fn_1_10D7D4.c:
+	.text       start:0x0010D7D4 end:0x0010DDE4 align:4
+
+rel/main_rel/accessory/fn_1_10AD18.c:
+	.text       start:0x0010AD18 end:0x0010B344 align:4
+
+rel/main_rel/accessory/fn_1_10BE3C.c:
+	.text       start:0x0010BE3C end:0x0010C4E4 align:4
+
+rel/main_rel/custom_memcard/fn_1_132774.c:
+	.text       start:0x00132774 end:0x00132FB4 align:4
+
+rel/main_rel/ranking/fn_1_1556B4.c:
+	.text       start:0x001556B4 end:0x00155F7C align:4
+
+rel/main_rel/accessory/fn_1_12744C.c:
+	.text       start:0x0012744C end:0x00127FB8 align:4
+
+rel/main_rel/car/fn_1_93734.c:
+	.text       start:0x00093734 end:0x000943F8 align:4
+
+rel/main_rel/car/fn_1_943F8.c:
+	.text       start:0x000943F8 end:0x000950E8 align:4
+
+rel/main_rel/accessory/fn_1_11A774.c:
+	.text       start:0x0011A774 end:0x0011B4E4 align:4
+
+rel/main_rel/accessory/fn_1_1192D0.c:
+	.text       start:0x001192D0 end:0x0011A158 align:4
+
+rel/main_rel/enemy_ctrl/fn_1_CDC8C.c:
+	.text       start:0x000CDC8C end:0x000CEB38 align:4
+
+rel/main_rel/accessory/fn_1_11F250.c:
+	.text       start:0x0011F250 end:0x001201E4 align:4
+
+rel/main_rel/accessory/fn_1_110478.c:
+	.text       start:0x00110478 end:0x00111510 align:4
