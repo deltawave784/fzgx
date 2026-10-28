@@ -138,39 +138,46 @@ typedef struct {
 } Obj_1_bss_718C0;
 extern Obj_1_bss_718C0 lbl_1_bss_718C0;
 
-// lbl_1_data_3D230: .data size 0x4, 3 refs from memcard.c (own data block)
-extern u32 lbl_1_data_3D230;
-
 // lbl_1_bss_7730A: .bss size 0x1, 3 refs from memcard.c
 extern u8 lbl_1_bss_7730A;
 
-// lbl_1_bss_7AC48: .bss size 0x8, 3 refs from memcard.c
+// lbl_1_data_3D230: .data size 0x4, 3 refs from memcard.c (own data block)
+extern u32 lbl_1_data_3D230;
+
+// lbl_1_bss_7AC48: .bss size 0x4, 3 refs from memcard.c
+#ifndef FZGX_TYPES_LBL_1_BSS_7AC48
+#define FZGX_TYPES_LBL_1_BSS_7AC48
+// one layout for every TU header that declares this symbol (librarian, typedefs.json)
+// retail: the line-table pointer at 7AC48 and its u16 count at 7AC4C are two objects
+// (fn_1_C3A0C: sth r4, 0x4(r29) off the TU's .bss base); 7AC4C is never named by retail.
 typedef struct {
     u32 unk_0;  // 2 loads, 0 stores
     u8 pad_4[0xC];
     u32 unk_10;  // 4 loads, 4 stores
 } Obj_1_bss_7AC48_At0;
+// legacy view of 7AC48..7AC4F used by saved bodies (pointer + count); not an object type
 typedef struct {
-    Obj_1_bss_7AC48_At0 *unk_0;  // 9 loads, 2 stores
-    u16 unk_4;  // 4 loads, 1 stores
+    Obj_1_bss_7AC48_At0 *unk_0;
+    u16 unk_4;
     u8 pad_6[0x2];
 } Obj_1_bss_7AC48;
-extern Obj_1_bss_7AC48 lbl_1_bss_7AC48;
+#endif
+extern Obj_1_bss_7AC48_At0 *lbl_1_bss_7AC48;  // typedefs.json decl override
+
+// lbl_1_bss_71808: .bss size 0x4, 2 refs from memcard.c
+extern u32 lbl_1_bss_71808;
 
 // lbl_1_bss_718B4: .bss size 0x4, 2 refs from memcard.c
 extern u32 lbl_1_bss_718B4;
 
-// lbl_1_bss_71808: .bss size 0x4, 2 refs from memcard.c
-extern u32 lbl_1_bss_71808;
+// lbl_1_bss_718B1: .bss size 0x1, 2 refs from memcard.c
+extern u8 lbl_1_bss_718B1;
 
 // lbl_1_bss_7A380: .bss size 0x8, 2 refs from memcard.c
 extern u32 lbl_1_bss_7A380;
 
 // lbl_1_data_2BD54: .data size 0xA68, 2 refs from memcard.c
 extern u8 lbl_1_data_2BD54[0xA68];
-
-// lbl_1_bss_718B1: .bss size 0x1, 2 refs from memcard.c
-extern u8 lbl_1_bss_718B1;
 
 // lbl_1_bss_718E0: .bss size 0x59E8, 2 refs from memcard.c
 #ifndef FZGX_TYPES_LBL_1_BSS_718E0
@@ -211,17 +218,23 @@ extern u8 lbl_1_bss_AA0[0x150];
 // lbl_1_data_2B60: .data size 0x4, 2 refs from memcard.c
 extern u32 lbl_1_data_2B60;
 
-// lbl_1_data_3D138: .data size 0xC, 2 refs from memcard.c (own data block)
-extern u8 lbl_1_data_3D138[0xC];
-
 // lbl_1_data_3D124: .data size 0x13, 2 refs from memcard.c (own data block)
 extern u8 lbl_1_data_3D124[0x13];
 
-// jumptable_1_data_3CD44: .data size 0x9C, 1 refs from memcard.c (own data block)
-extern u8 jumptable_1_data_3CD44[0x9C];
+// lbl_1_data_3D138: .data size 0xC, 2 refs from memcard.c (own data block)
+extern u8 lbl_1_data_3D138[0xC];
 
-// jumptable_1_data_3CEF4: .data size 0x24, 1 refs from memcard.c (own data block)
-extern u8 jumptable_1_data_3CEF4[0x24];
+// jumptable_1_data_3C8E0: .data size 0xA0, 1 refs from memcard.c (own data block)
+extern u8 jumptable_1_data_3C8E0[0xA0];
+
+// jumptable_1_data_3CA18: .data size 0x9C, 1 refs from memcard.c (own data block)
+extern u8 jumptable_1_data_3CA18[0x9C];
+
+// jumptable_1_data_3C980: .data size 0x98, 1 refs from memcard.c (own data block)
+extern u8 jumptable_1_data_3C980[0x98];
+
+// jumptable_1_data_3CAB4: .data size 0x9C, 1 refs from memcard.c (own data block)
+extern u8 jumptable_1_data_3CAB4[0x9C];
 
 // jumptable_1_data_3CB68: .data size 0x9C, 1 refs from memcard.c (own data block)
 extern u8 jumptable_1_data_3CB68[0x9C];
@@ -229,8 +242,17 @@ extern u8 jumptable_1_data_3CB68[0x9C];
 // jumptable_1_data_3CC0C: .data size 0x9C, 1 refs from memcard.c (own data block)
 extern u8 jumptable_1_data_3CC0C[0x9C];
 
-// jumptable_1_data_3CAB4: .data size 0x9C, 1 refs from memcard.c (own data block)
-extern u8 jumptable_1_data_3CAB4[0x9C];
+// jumptable_1_data_3CCA8: .data size 0x9C, 1 refs from memcard.c (own data block)
+extern u8 jumptable_1_data_3CCA8[0x9C];
+
+// jumptable_1_data_3CD44: .data size 0x9C, 1 refs from memcard.c (own data block)
+extern u8 jumptable_1_data_3CD44[0x9C];
+
+// jumptable_1_data_3CEF4: .data size 0x24, 1 refs from memcard.c (own data block)
+extern u8 jumptable_1_data_3CEF4[0x24];
+
+// lbl_1_data_3CF40: .data size 0xF, 1 refs from memcard.c (own data block)
+extern u8 lbl_1_data_3CF40[0xF];
 
 // lbl_1_data_3D108: .data size 0x11, 1 refs from memcard.c (own data block)
 extern u8 lbl_1_data_3D108[0x11];
@@ -243,20 +265,5 @@ typedef struct {
     s16 unk_6;  // 1 loads, 0 stores
 } Obj_1_data_3D11C;
 extern Obj_1_data_3D11C lbl_1_data_3D11C;
-
-// jumptable_1_data_3C8E0: .data size 0xA0, 1 refs from memcard.c (own data block)
-extern u8 jumptable_1_data_3C8E0[0xA0];
-
-// jumptable_1_data_3CCA8: .data size 0x9C, 1 refs from memcard.c (own data block)
-extern u8 jumptable_1_data_3CCA8[0x9C];
-
-// jumptable_1_data_3CA18: .data size 0x9C, 1 refs from memcard.c (own data block)
-extern u8 jumptable_1_data_3CA18[0x9C];
-
-// jumptable_1_data_3C980: .data size 0x98, 1 refs from memcard.c (own data block)
-extern u8 jumptable_1_data_3C980[0x98];
-
-// lbl_1_data_3CF40: .data size 0xF, 1 refs from memcard.c (own data block)
-extern u8 lbl_1_data_3CF40[0xF];
 
 #endif  // REL_MAIN_REL_MEMCARD_H

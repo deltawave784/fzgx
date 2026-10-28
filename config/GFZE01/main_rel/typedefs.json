@@ -1522,5 +1522,27 @@
    "} LiveCamera;",
    "#endif"
   ]
+ },
+ "lbl_1_bss_7AC48": {
+  "decl": "Obj_1_bss_7AC48_At0 *lbl_1_bss_7AC48",
+  "typedef": [
+   "#ifndef FZGX_TYPES_LBL_1_BSS_7AC48",
+   "#define FZGX_TYPES_LBL_1_BSS_7AC48",
+   "// one layout for every TU header that declares this symbol (librarian, typedefs.json)",
+   "// retail: the line-table pointer at 7AC48 and its u16 count at 7AC4C are two objects",
+   "// (fn_1_C3A0C: sth r4, 0x4(r29) off the TU's .bss base); 7AC4C is never named by retail.",
+   "typedef struct {",
+   "    u32 unk_0;  // 2 loads, 0 stores",
+   "    u8 pad_4[0xC];",
+   "    u32 unk_10;  // 4 loads, 4 stores",
+   "} Obj_1_bss_7AC48_At0;",
+   "// legacy view of 7AC48..7AC4F used by saved bodies (pointer + count); not an object type",
+   "typedef struct {",
+   "    Obj_1_bss_7AC48_At0 *unk_0;",
+   "    u16 unk_4;",
+   "    u8 pad_6[0x2];",
+   "} Obj_1_bss_7AC48;",
+   "#endif"
+  ]
  }
 }
