@@ -5458,7 +5458,7 @@ void fzgx_shared_pool_primer_c(volatile f32 *f, volatile f64 *d) {
 }
 
 #pragma section code_type ".text"
-void fn_1_53E40(FontColor *color, const char *text, f32 x, f32 y, f32 z, f32 scale, f32 spacing) {
+void fn_1_53E40(FontColor *color, f32 x, f32 y, f32 z, f32 scale, f32 spacing, const char *text) {
     f32 width;
     f32 height;
     f32 pad;
