@@ -1713,8 +1713,11 @@ def tu_data_objects(p, symbol, text, top=False, limit=0x100000):
             # `table = lbl + 0x60000;`: a view of the far part of a large block (retail
             # addresses objects beyond 32 KB of the section base through one `addis` web,
             # fn_17_5C24, fn_16_1038); every use of the view is that much further in
-            if base and amp and not re.search(r'\*\s*\)\s*&', m[0]):
-                continue  # `&lbl + N` without a byte cast scales by the object's size
+            if base and amp and not re.search(r'\*\s*\)\s*&', m[0]) and not re.search(
+                    r'\bextern\s+(?:const\s+)?%s\s+%s\s*;' % (BYTE_TYPES, re.escape(label)), code[:head] + include_text()):
+                # `&lbl + N` without a byte cast scales by the object's size; over a byte
+                # scalar (`extern u8 lbl_17_data_0;`, fn_17_424C's far view) it is in bytes
+                continue
             known = syms.get(label)
             if not known or known.section not in DATA_SECTIONS or known.kind != 'object':
                 continue
@@ -3151,6 +3154,110 @@ def row_array_views(text):
     return out if out != text else None
 
 
+_ALIAS_DECL = re.compile(r'extern\s+u8\s+\w+__fzgx_offset_[0-9A-Fa-f]+\s*\[\s*\]\s*;$')
+
+
+def _section_group(stmt, pool):
+    """'.bss'/'.data'/'.rodata' for a movable file-scope statement of a defined TU section
+    (masked text, `pool`: it sits under `code_type ".fzgxpool"`), else None."""
+    s = re.sub(r'\s+', ' ', stmt).strip()
+    if _ALIAS_DECL.match(s):
+        return '.data'
+    if s.endswith('}'):  # a function definition: only the layout/pool primers move
+        if not pool and '.fzgxpool' not in s[:s.find('{')]:
+            return None
+        name = re.search(r'\b(\w+)\s*\([^(){}]*\)\s*\{', s)
+        name = name[1] if name else ''
+        if name.startswith('fzgx_bss_layout'):
+            return '.bss'
+        if name.startswith('fzgx_data_layout'):
+            return '.data'
+        if re.match(r'fzgx_pool_(?:keep|prime)', name):
+            return '.rodata'
+        return None
+    if re.match(r'(?:extern|typedef|struct\s+\w+\s*;|union\b|enum\b)', s) or '(' in s.split('=')[0]:
+        return None
+    if re.match(r'(?:static\s+)?const\s+unsigned\s+long\s+fzgx_pool_(?:table|word)', s):
+        return '.rodata'
+    head, init = (s.split('=', 1) + [None])[:2]
+    if not re.search(r'\w\s*(?:\[[^\]]*\]\s*)*;?$', head.strip()):
+        return None
+    if init is None:
+        return '.bss'
+    return '.rodata' if re.search(r'\bconst\b', head) else '.data'
+
+
+def section_group_orders(p, symbol, text):
+    """The unit's defined TU section groups (`.bss` objects and their first-access primer,
+    `.data` objects with their `__fzgx_offset_` aliases and layout primer, the `.rodata` pool
+    tables and literal primers) in every other order, next to each other after the last type
+    definition. MWCC numbers each section's base temporary by where the section's first
+    definition sits in the file, so the callee-saved permutation of the bases follows this
+    order (fn_17_424C: data r31, bss r30, rodata r29 needs data, then bss, then the pool
+    primer; fn_1_1018BC's bss/rodata swap). Returns [(label, text)]."""
+    from itertools import permutations
+    from .sdkimport import masked
+    from .fixup_source import _function_body_span
+    sym = p.resolve(symbol)
+    code = masked(text)
+    span = _function_body_span(code, sym.name)
+    if not span:
+        return []
+    fstart = code.rfind('\n', 0, span[0]) + 1
+    pragmas = [(m.start(), m[1]) for m in _CODE_TYPE.finditer(text)]
+    groups, after_types, moved, first = {'.bss': [], '.data': [], '.rodata': []}, 0, [], {}
+    for s, e in _top_statements(code):
+        if s >= fstart:
+            break
+        stmt = code[s:e]
+        if re.match(r'\s*(?:typedef\b|(?:struct|union|enum)\s*\w*\s*(?:\{.*\})?\s*;$)', stmt, re.S):
+            after_types = e
+            continue
+        pool = next((t for at, t in reversed(pragmas) if at < s), '.text') == '.fzgxpool'
+        raw = text[s:e]
+        g = _section_group(raw, pool)
+        if g:
+            fn = raw.rstrip().endswith('}')
+            # a primer under the pragma keeps it; `__declspec(section ".fzgxpool")` carries its own
+            groups[g].append((raw, fn and '.fzgxpool' not in raw[:raw.find('{')]))
+            moved.append((s, e))
+            first.setdefault(g, s)
+    present = [g for g in ('.bss', '.data', '.rodata') if groups[g]]
+    if len(present) < 2:
+        return []
+    anchor = max(min(s for s, _ in moved), code.find('\n', after_types) + 1 if after_types else 0)
+    stripped = text
+    for s, e in sorted(moved, reverse=True):
+        nl = e + 1 if text[e:e + 1] == '\n' else e
+        stripped = stripped[:s] + stripped[nl:]
+    anchor -= sum((e + (1 if text[e:e + 1] == '\n' else 0)) - s for s, e in moved if s < anchor)
+    anchor = stripped.rfind('\n', 0, anchor) + 1 if anchor else 0
+
+    def emit(g):
+        out, inpool = [], False
+        for stmt, fn in groups[g]:
+            if fn and not inpool:
+                out.append('#pragma section code_type ".fzgxpool"')
+                inpool = True
+            elif not fn and inpool:
+                out.append('#pragma section code_type ".text"')
+                inpool = False
+            out.append(stmt)
+        if inpool:
+            out.append('#pragma section code_type ".text"')
+        return '\n'.join(out) + '\n'
+
+    original = sorted(present, key=first.get)
+    out, seen = [], {text}
+    for order in permutations(present):
+        cand = stripped[:anchor] + '\n' + ''.join(emit(g) for g in order) + '\n' + stripped[anchor:]
+        if cand not in seen:
+            seen.add(cand)
+            tag = ', '.join(g[1:] for g in order) + (' (same order)' if list(order) == original else '')
+            out.append((f'order the defined TU sections: {tag}', cand))
+    return out
+
+
 def tu_section_layout(p, symbol, body, check):
     """Proposals: retail BSS objects defined in the unit (per dtk symbol / per referenced field),
     each also with the TU's string run reproduced, and the string run alone."""
@@ -3272,6 +3379,20 @@ def tu_section_layout(p, symbol, body, check):
         if viewed and viewed not in {t for _, t in out + rows}:
             rows.append((label, viewed))
     out += rows
+    # the defined section groups in every order (base registers follow definition order),
+    # for the body as saved and for each whole-TU layout above
+    seen = {t for _, t in out}
+    reorder = [('body', body)] + [(l, t) for l, t in out if l.startswith('define retail TU data objects')
+                                  or re.fullmatch(r'define retail TU bss objects \((?:dtk|split|merge)\)', l)]
+    for label, text in reorder:
+        try:
+            orders = section_group_orders(p, symbol, text)
+        except (ValueError, KeyError, IndexError, AttributeError, TypeError, OSError):
+            orders = []
+        for name, t in orders:
+            if t not in seen:
+                seen.add(t)
+                out.append((f'{name} ({label})', t))
     # a section layout changes what the base register holds; a file-scope
     # `opt_propagation off` written for the old extern view can then rematerialize
     # `addis rX, rBase, N` at every far access (fn_1_2FAA0): offer each layout without it
