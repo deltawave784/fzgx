@@ -6323,3 +6323,12 @@ dol/fn_80037128.c:
 
 dol/fn_80037190.c:
 	.text       start:0x80037190 end:0x800371F8 align:4
+
+dol/fn_80056584.c:
+	.text       start:0x80056584 end:0x800565F0 align:4
+
+dol/fn_8005BDD4.c:
+	.text       start:0x8005BDD4 end:0x8005BE48 align:4
+
+dol/fn_8008F838.c:
+	.text       start:0x8008F838 end:0x8008F8B0 align:4
