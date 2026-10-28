@@ -601,3 +601,33 @@ rule was probed with real GC/1.3.2 compiles of saved bodies.
   inlined parameter's constant into every use, so moving the call into the helper changes nothing; the argument
   `li r3` targets a physical register, outside the window. fn_8006AA44's `li r6, 0x40` kept past the next `li` is
   scheduling, not a copy.
+
+## Simplify-scan degree: capture verdicts (GC/1.3.2 replay, 2026-10-28)
+
+A WSL capture (`tools/capture/capture132.sh`) runs in ~11 s and the replay reproduces it exactly
+(fn_1_DF6AC: FPR 140/140 simplify rows and 174/174 colors, GPR 74/74; fn_1_82C70: 134/134).
+`simplify_replay.py DIR IDX V:+N` / `V:-N` / `V=W` answers which degree or number a residual needs.
+
+- **A node's degree at its own scan-1 turn counts every higher-numbered neighbour not yet pushed.**
+  Simplify scans vregs in ascending order. A long-lived lowering temp numbered before the short
+  temps inside its own range is visited while those temps are still in the graph, misses K, and
+  is pushed in scan 2 after every long-lived pass-1 object: popped first, it claims the highest
+  callee-saved register. fn_1_DF6AC: sinA1 (v134, the `FMR` of the first sqrt result) has degree
+  33 at its turn (14 call-clobbered FPRs, 11 un-pushed long webs, 8 higher temps: normalize's
+  `0.0f` load v135, `dot`'s six loads v137-v142 and its `0.0f` v143), K=32, so it gets f31; retail
+  gives it f20. Two fewer at its turn (`134:-2` to `134:-25`) or any two of those later temps
+  numbered below it (`135=133 143=132`, `137=133 138=132`, or sinA1 renumbered to v137-v143)
+  reproduces all 15 FPR targets. Not levers (capture-verified, numbering unchanged): the struct
+  wrapper vs a plain local for sinA (both are the call-result temp), a `zero` local or an inline
+  parameter carrying the `0.0f` (constants are not register objects; each `lfs` is a fresh
+  temp). Holding `dot`'s loads in locals restructures the schedule (44.8%). Open: a spelling that
+  creates the sqrt-result web after `dot`'s loads, or two of those loads before it.
+- **A degree one below K decides the order between two parameters.** fn_1_82C70:
+  `port = ok = f()` put the u8 truncation into port's web (`clrlwi. r26`). Retail's
+  `clrlwi. r0, r3, 24; mr r26, r3; stb r26` is `ok = f(); if ((u8)ok) ...; G = ok;` (fixes that
+  row), but then port is no longer live at the end: degree 28 < K=29, pushed in scan 1, colored
+  after arg0 (r25/r26 swap) and the result takes r27 instead of sharing r26. `33:+1` to `33:+11`
+  reproduces all three targets: port needs at least one more interference that is not the result.
+  Declaring port `int`/`u32` and reassigning it does not help: MWCC renames the reassigned
+  parameter (the result stays a separate temp, numbering and degree unchanged).
+  fn_1_82C70 compiles identically under GC/1.3 and GC/1.3.2, so the 1.3.2 capture applies.
