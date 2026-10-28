@@ -18733,6 +18733,19 @@
   },
   {
     "module": "main",
+    "source": "dol/fn_80033EB0.c",
+    "symbols": [
+      "fn_80033EB0"
+    ],
+    "status": "matching",
+    "mw_version": "GC/1.2.5",
+    "extra_cflags": [
+      "-use_lmw_stmw",
+      "on"
+    ]
+  },
+  {
+    "module": "main",
     "source": "dol/fn_8003401C.c",
     "symbols": [
       "fn_8003401C"
