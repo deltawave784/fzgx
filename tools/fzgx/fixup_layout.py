@@ -2196,14 +2196,12 @@ def retail_pool_tables(p, symbol, body, check):
     who wrote placeholders (fn_1_15EC40: 0x110..0x174 of lbl_1_rodata_DD58) could only learn
     five differing words per check from the pool note."""
     anchors = retail_pool_anchors(p, symbol, check, merged_only=True)
-    if not anchors or not _POOL_TABLE.search(body):
+    if not anchors or not (_POOL_TABLE.search(body) or _NUMBERED_TABLE.search(body)):
         return []
     module = p.resolve(symbol).module
     out = []
     for name in anchors:
         tables = list(_POOL_TABLE.finditer(body))
-        if not tables:
-            continue
         span = max([anchors[name]] + [int(t.group(2), 16) + 4 * int(t.group(3), 0) for t in tables])
         words = retail_words(p, module, name, span)
         if not words:
@@ -2227,6 +2225,49 @@ def retail_pool_tables(p, symbol, body, check):
             changed += 1
         if changed:
             out.append((f'retail pool words ({name}, {changed} primer tables)', text))
+        out += _short_primer_tables(body, name, words)
+    return out
+
+
+# the shared-pool primer's own tables (`fixup_evidence.shared_pool_primer`): numbered, not
+# named by offset, so `_POOL_TABLE` never reaches them
+_NUMBERED_TABLE = re.compile(r'(static\s+const\s+unsigned\s+long\s+fzgx_pool_table\d+\s*\[\s*(\d+)\s*\]\s*=\s*)\{([^{}]*)\}')
+
+
+def _short_primer_tables(body, name, words):
+    """A primer table whose initializer has fewer words than its declared length: C fills the
+    missing words with zeros at the END, so every word after a dropped zero sits early in the
+    pool (fn_1_84860: `fzgx_pool_table12[306]` with 304 entries after an edit to its 248-zero
+    run; 25 pool rows). The table is replaced by the retail slice that equals its words with
+    one zero run widened by the missing count. Only retail words are written."""
+    out = []
+    for t in reversed(list(_NUMBERED_TABLE.finditer(body))):
+        n = int(t.group(2))
+        try:
+            have = [int(w.strip().rstrip('uUlL'), 0) & 0xFFFFFFFF for w in t.group(3).split(',') if w.strip()]
+        except ValueError:
+            continue
+        missing = n - len(have)
+        if missing <= 0 or len(have) < 2 or n > len(words):
+            continue
+        found = []
+        for o in range(len(words) - n + 1):
+            want = words[o:o + n]
+            j = 0
+            while j < len(have) and have[j] == want[j]:
+                j += 1
+            # the dropped words are zeros inside (or next to) a zero run of the table
+            if all(w == 0 for w in want[j:j + missing]) and want[j + missing:] == have[j:] and want not in found:
+                found.append(want)
+                if len(found) > 1:
+                    break
+        if len(found) != 1:
+            continue  # absent or ambiguous: no candidate rather than a guess
+        want = found[0]
+        rows = [', '.join(f'0x{w:08X}' for w in want[i:i + 6]) for i in range(0, n, 6)]
+        text = body[:t.start()] + t.group(1) + '{\n    ' + ',\n    '.join(rows) + ',\n}' + body[t.end():]
+        out.append((f'retail pool words ({name}: {t.group(0).split("[")[0].split()[-1]} declared [{n}], '
+                    f'initialized with {len(have)}; {missing} zero words restored)', text))
     return out
 
 

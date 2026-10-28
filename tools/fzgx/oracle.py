@@ -1000,7 +1000,39 @@ def _pool_byte_note(private: str, anchor_name: str, ours: bytes, retail: Optiona
     words = [(i, ours[i:i + 4], retail[i:i + 4]) for i in range(0, len(ours), 4) if ours[i:i + 4] != retail[i:i + 4]]
     shown = ", ".join(f"+0x{base_offset + i:X} ours {a.hex()} retail {b.hex()}" for i, a, b in words[:5])
     more = f" (+{len(words) - 5} more words)" if len(words) > 5 else ""
-    return f"pool {private} differs from retail {anchor_name} in {len(words)} of {len(ours) // 4} words: {shown}{more}"
+    return f"pool {private} differs from retail {anchor_name} in {len(words)} of {len(ours) // 4} words: {shown}{more}" \
+        + _pool_shift_hint(ours, retail, words, base_offset)
+
+
+def _pool_shift_hint(ours: bytes, retail: bytes, words, base_offset: int) -> str:
+    """Diagnostics only: when (nearly) every differing word is retail's word a few words further
+    on (or back), part of the pool is shifted, which a table whose initializer count differs
+    from its declared length produces (fn_1_84860: `fzgx_pool_table12[306]` with 304 entries put
+    the rest of the table 8 bytes early; its two zero-filled tail words are the exceptions)."""
+    if len(words) < 4:
+        return ""
+    first = words[0][0]
+    for shift in (s * k for s in range(1, 17) for k in (4, -4)):
+        hits = sum(1 for i, a, _ in words if 0 <= i + shift <= len(retail) - 4 and a == retail[i + shift:i + shift + 4])
+        if hits * 10 < len(words) * 9:
+            continue
+        way = "early" if shift > 0 else "late"
+        return (f"; from +0x{base_offset + first:X} {hits} of the {len(words)} differing words are retail's"
+                f" {abs(shift)} bytes {way}: a table ending at or after that offset has {abs(shift) // 4} word(s)"
+                f" {'too few' if shift > 0 else 'too many'} (C zero-fills a short initializer at the end)")
+    return ""
+    first = words[0][0]
+    for shift in (s * k for s in range(1, 17) for k in (4, -4)):
+        if first + shift < 0:
+            continue
+        span = range(first, len(ours) - max(shift, 0), 4)
+        if len(span) < 2 or any(ours[i:i + 4] != retail[i + shift:i + shift + 4] for i in span):
+            continue
+        way = "early" if shift > 0 else "late"
+        return (f"; from +0x{base_offset + first:X} our words are retail's {abs(shift)} bytes {way}: a table"
+                f" before that offset has {abs(shift) // 4} word(s) {'too few' if shift > 0 else 'too many'}"
+                " (an initializer shorter than its declared length is zero-filled at the end)")
+    return ""
 
 
 def _pool_rows(project: Project, module: str, left: dict, right: dict,
