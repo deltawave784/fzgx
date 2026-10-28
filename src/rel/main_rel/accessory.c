@@ -4136,6 +4136,136 @@ void fn_1_118D90(u32 arg0, f32 arg1) {
 }
 /* fzgx:end fn_1_118D90 */
 
+/* fzgx:begin fn_1_11A158 noprologue */
+#include "types.h"
+#include "game/main_rel/accessory_types.h"
+#include "rel/main_rel/accessory.h"
+
+extern u32 fn_1_4630(u32, u32, const char *, s32);
+extern u32 lbl_801A6410;
+extern void fn_1_10846C(void *);
+extern void fn_1_128884(void *, void *, s32);
+
+typedef fn_1_10D2F0_Entry Entry;
+
+void fn_1_11A158(fn_1_10D2F0_Obj *obj) {
+    u32 div;
+    u32 j;
+    Entry *a;
+    u32 k;
+    u32 rows;
+    u32 i;
+    u32 count;
+    u32 n;
+    u32 q;
+    Entry *base;
+    Entry *p;
+    Entry *b;
+    f32 num;
+
+    if (obj != NULL) {
+        fn_1_10846C(obj);
+
+        for (i = 0, p = obj->unk_24; i < obj->unk_18; i++, p++) {
+            if (p->unk_0 & 1) {
+                p->unk_0 = 0;
+                p->unk_40 = -1.0f;
+            } else {
+                p->unk_0 = 1;
+                p->unk_40 = 0.0f;
+            }
+        }
+
+        for (i = 0, p = obj->unk_24; i < obj->unk_18; i++, p++) {
+            for (j = i + 1, a = obj->unk_24 + i + 1; j < obj->unk_18; j++, a++) {
+                if (p->unk_0 == 0 && a->unk_0 != 0) {
+                    fn_1_128884(p, a, sizeof(Entry));
+                }
+            }
+        }
+
+        for (i = 0, p = obj->unk_24; i < obj->unk_18; i++, p++) {
+            for (j = i + 1, a = obj->unk_24 + i + 1; j < obj->unk_18; j++, a++) {
+                if (p->unk_0 == a->unk_0 && p->unk_10.x < a->unk_10.x) {
+                    fn_1_128884(p, a, sizeof(Entry));
+                }
+            }
+        }
+
+        for (i = 0, p = obj->unk_24; i < obj->unk_18 / 13; i++, p += 13) {
+            for (j = 0, a = p; j < 13; j++, a++) {
+                for (k = j + 1, b = a + 1; k < 13; k++, b++) {
+                    if (a->unk_10.z < b->unk_10.z) {
+                        fn_1_128884(a, b, sizeof(Entry));
+                    }
+                }
+            }
+        }
+
+        /* first row: positive-z entries by descending y, the rest by ascending y */
+        for (i = 0, p = obj->unk_24; i < 13; i++, p++) {
+            for (j = i + 1, a = p + 1; j < 13; j++, a++) {
+                if (p->unk_10.z > 0.0f && a->unk_10.z > 0.0f && p->unk_10.y > a->unk_10.y) {
+                    fn_1_128884(p, a, sizeof(Entry));
+                } else if (p->unk_10.z <= 0.0f && a->unk_10.z <= 0.0f && p->unk_10.y < a->unk_10.y) {
+                    fn_1_128884(p, a, sizeof(Entry));
+                }
+            }
+        }
+
+        base = obj->unk_24;
+        count = obj->unk_18;
+        p = base;
+        for (i = 0; i < count; i++) {
+            if (p->unk_0 != 0 && p[1].unk_0 == 0) {
+                break;
+            }
+            p++;
+        }
+        p++;
+        rows = (count - (p - base)) / 13;
+        div = rows + 1;
+        for (i = 0; i < rows; i++, p += 13) {
+            num = -(f32)(i + 1);
+            for (j = 0; j < 13; j++) {
+                p[j].unk_40 = num / (f32)div;
+            }
+            for (j = 0, a = p; j < 13; j++, a++) {
+                for (k = j + 1, b = a + 1; k < 13; k++, b++) {
+                    if (a->unk_10.z > 0.0f && b->unk_10.z > 0.0f && a->unk_10.y > b->unk_10.y) {
+                        fn_1_128884(a, b, sizeof(Entry));
+                    } else if (a->unk_10.z <= 0.0f && b->unk_10.z <= 0.0f && a->unk_10.y < b->unk_10.y) {
+                        fn_1_128884(a, b, sizeof(Entry));
+                    }
+                }
+            }
+        }
+
+        q = obj->unk_18 / 13;
+        obj->unk_1C = q * 12 + (q - 1) * 13;
+        obj->unk_28 = (fn_1_10D2F0_Link *)fn_1_4630(lbl_801A6410, obj->unk_1C * sizeof(fn_1_10D2F0_Link), lbl_1_data_40530, 0x1D66);
+
+        n = 0;
+        p = obj->unk_24;
+        for (i = 0; i < obj->unk_18 - 1; i++, p++) {
+            if ((i + 1) % 13 != 0) {
+                obj->unk_28[n].a = p;
+                obj->unk_28[n].b = p + 1;
+                obj->unk_28[n].len = fn_1_1289BC((const Point1024C4 *)p, (const Point1024C4 *)(p + 1));
+                n++;
+            }
+        }
+
+        p = obj->unk_24;
+        for (i = 0; i < obj->unk_18 - 13; n++, i++, p++) {
+            obj->unk_28[n].a = p;
+            obj->unk_28[n].b = p + 13;
+            obj->unk_28[n].len = fn_1_1289BC((const Point1024C4 *)p, (const Point1024C4 *)(p + 13));
+        }
+    }
+}
+/* fzgx:end fn_1_11A158 */
+
 /* fzgx:begin fn_1_11B958 noprologue */
 #include "types.h"
 #include "game/main_rel/car_test_types.h"
