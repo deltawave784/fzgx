@@ -3553,6 +3553,210 @@ void fn_1_D0E74(void) {
 }
 /* fzgx:end fn_1_D0E74 */
 
+/* fzgx:begin fn_1_D123C noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/enemy_ctrl.h"
+
+extern u32 lbl_1_bss_7AC48[5];
+extern void *lbl_801A6410;
+extern void fn_1_46B4(void *, u32, void *, u32);
+extern void fn_1_C489C(void);
+extern u32 lbl_1_bss_7AC54[4];
+extern u8 lbl_1_bss_7AC90[12];
+extern u32 lbl_1_rodata_5D40[7];
+extern u32 fn_1_5910(void *);
+extern u8 fn_1_86810(void *);
+extern u32 fn_1_3F7E0(void);
+extern void fn_1_49410(void);
+extern void fn_1_494DC(u32);
+extern const f32 lbl_1_rodata_5C3C;
+extern const f32 lbl_1_rodata_5D18;
+extern void fn_1_496FC(f32, f32);
+extern void fn_1_495C8(u32);
+extern void fn_1_49728(u32);
+extern void fn_1_4AE0C(void *, ...);
+extern const f32 lbl_1_rodata_5D5C;
+extern const f32 lbl_1_rodata_5D60;
+extern f32 lbl_1_rodata_26F8[22];
+extern const f32 lbl_1_rodata_5D64;
+extern const f32 lbl_1_rodata_5D68;
+extern void fn_1_51E60(void *);
+extern const f32 lbl_1_rodata_5D6C;
+extern void fn_1_C8DC0(void);
+extern void fn_80008E84(u32);
+extern const f32 lbl_1_rodata_5D88;
+extern const f32 lbl_1_rodata_5D8C;
+extern void fn_1_4955C(f32, f32);
+extern const f32 lbl_1_rodata_5CD4;
+extern const f32 lbl_1_rodata_5D90;
+extern void fn_1_4966C(f32, f32);
+extern const f64 lbl_1_rodata_5C00;
+extern const f32 lbl_1_rodata_5CFC;
+extern const f32 lbl_1_rodata_5DC8;
+extern const f32 lbl_1_rodata_5E0C;
+extern int sprintf(char *, const char *, ...);
+extern s16 fn_1_12C7B8(s16);
+extern s32 fn_1_465D0(char *, s32);
+extern s8 fn_1_86690(s8);
+extern u32 fn_1_12C930(u32);
+extern u8 fn_1_86624(void);
+extern u8 lbl_1_bss_9C;
+extern void *fn_1_868C0(s8);
+extern void fn_80006E10(u32);
+
+typedef struct {
+    u32 flags;
+    s32 unk_4;
+    u32 unk_8;
+    u32 unk_C;
+} LoadEntry;
+typedef struct {
+    u32 unk_0;
+    u8 pad_4[0x48];
+    LoadEntry entry;
+} LoadResult;
+
+extern u32 lbl_1_bss_7ACE0;
+extern u32 lbl_1_bss_7ACDC;
+extern void *lbl_801A6410;
+extern void fn_80006E10(u32);
+extern s8 fn_1_86690(s8);
+extern s16 fn_1_12C7B8(s16);
+extern void *fn_1_868C0(s8);
+extern u32 fn_1_12C930(u32);
+extern int fn_1_45730(void *, LoadResult *);
+extern void fn_1_45850(void *);
+extern u32 fn_1_45B2C(void *);
+extern u32 fn_1_45D0(u32, u32, void *, u32);
+extern void fn_1_458A0(void *, void *, void *, u32);
+extern void DCInvalidateRange(void *, void *);
+extern u32 fn_80071100(void *, u32, void *);
+extern int sprintf(char *, const char *, ...);
+extern void OSReport(const char *, ...);
+
+s32 fn_1_D123C(u32 arg0) {
+    u8 *base = (u8 *)&lbl_1_data_3D670;
+    char buf[0x78];
+    LoadResult res;
+    s32 sid;
+    void *ptr;
+    s16 f;
+    u32 v4;
+    u8 v1;
+    u8 v5;
+    u32 *entry;
+    u32 *aligned;
+    u32 size;
+    u32 *aligned2;
+    u32 size2;
+    u32 *entry2;
+
+    fn_80006E10((u32)(base + 0x2BC));
+    sid = (s8)arg0;
+    v1 = (u8)fn_1_12C7B8(fn_1_86690(sid));
+    ptr = fn_1_868C0(sid);
+    v4 = ((u32 *)lbl_1_data_20D1C)[(s16)fn_1_12C930(v1)];
+    f = *(s16 *)((u8 *)ptr + 0x3B8);
+    v5 = (u8)f;
+    v5 %= 4;
+    if (v5 != 0 && v5 != 4) {
+        sprintf(buf, (const char *)(base + 0x2C4), v4, v5);
+        if (fn_1_45730(buf, &res) == 0) {
+            sprintf(buf, (const char *)(base + 0x2D8), v4);
+            OSReport((const char *)(base + 0x2E4), v1, v5);
+        }
+        fn_1_45850(&res);
+    } else {
+        sprintf(buf, (const char *)(base + 0x2D8), v4);
+    }
+    if (*(s16 *)&lbl_1_bss_960 == 9) {
+        switch ((s8)lbl_1_bss_9C) {
+        case 3:
+            if (v1 == 6) sprintf(buf, (const char *)(base + 0x318));
+            break;
+        case 5:
+            if (v1 == 6) sprintf(buf, (const char *)(base + 0x32C));
+            break;
+        case 4:
+            if (v1 == 0x17 && v5 != 0) {
+                switch ((s32)(u8)arg0 % 5) {
+                case 0: sprintf(buf, (const char *)(base + 0x340)); break;
+                case 1: sprintf(buf, (const char *)(base + 0x358)); break;
+                case 2: sprintf(buf, (const char *)(base + 0x370)); break;
+                case 3: sprintf(buf, (const char *)(base + 0x388)); break;
+                default: sprintf(buf, (const char *)(base + 0x3A0)); break;
+                }
+            }
+            break;
+        }
+    }
+    if (fn_1_45730(buf, &res) == 0) {
+        fn_80006E10((u32)(base + 0x3B8));
+        return 0;
+    }
+    size = fn_1_45B2C(&res);
+    if ((*(u32 **)&lbl_1_bss_7ACE0)[(u8)arg0] != 0) {
+        entry = (u32 *)(*(u32 **)&lbl_1_bss_7ACE0)[(u8)arg0];
+    } else {
+        entry = (u32 *)fn_1_45D0(*(u32 *)&lbl_801A6410,
+                             (((size + 0x1F) & ~0x1F) + 0x20),
+                             base + 0x3BC, 0xD2);
+    }
+    aligned = (u32 *)(((u32)entry + 0x3F) & ~0x1F);
+    DCInvalidateRange(aligned, (void *)size);
+    fn_1_458A0(&res, aligned, (void *)size, 0);
+    entry[0] = aligned[0];
+    entry[1] = (u32)&aligned[1];
+    entry[2] = (u32)aligned;
+    entry[3] = 0;
+    (*(u32 **)&lbl_1_bss_7ACE0)[(u8)arg0] = (u32)entry;
+    sprintf(buf, (const char *)(base + 0x3C4), v4);
+    if (*(s16 *)&lbl_1_bss_960 == 9) {
+        switch ((s8)lbl_1_bss_9C) {
+        case 3:
+            if (v1 == 6) sprintf(buf, (const char *)(base + 0x3D0));
+            break;
+        case 5:
+            if (v1 == 6) sprintf(buf, (const char *)(base + 0x3E4));
+            break;
+        case 4:
+            if (v1 == 0x17 && v5 != 0) {
+                switch ((s32)(u8)arg0 % 5) {
+                case 0: sprintf(buf, (const char *)(base + 0x3F8)); break;
+                case 1: sprintf(buf, (const char *)(base + 0x410)); break;
+                case 2: sprintf(buf, (const char *)(base + 0x428)); break;
+                case 3: sprintf(buf, (const char *)(base + 0x440)); break;
+                default: sprintf(buf, (const char *)(base + 0x458)); break;
+                }
+            }
+            break;
+        }
+    }
+    if (fn_1_45730(buf, &res) == 0) {
+        fn_80006E10((u32)(base + 0x3B8));
+        return 0;
+    }
+    size2 = fn_1_45B2C(&res);
+    if ((*(u32 **)&lbl_1_bss_7ACDC)[(u8)arg0] != 0) {
+        entry2 = (u32 *)(*(u32 **)&lbl_1_bss_7ACDC)[(u8)arg0];
+    } else {
+        entry2 = (u32 *)fn_1_45D0(*(u32 *)&lbl_801A6410,
+                             (((size2 + 0x1F) & ~0x1F) + 0x20),
+                             base + 0x3BC, 0x121);
+    }
+    aligned2 = (u32 *)((u8 *)entry2 + 0x20);
+    DCInvalidateRange(aligned2, (void *)size2);
+    fn_1_458A0(&res, aligned2, (void *)size2, 0);
+    fn_80071100(aligned2, (u32)entry2,
+                (void *)(*(u32 **)&lbl_1_bss_7ACE0)[(u8)arg0]);
+    entry2[4] &= ~1;
+    (*(u32 **)&lbl_1_bss_7ACDC)[(u8)arg0] = (u32)entry2;
+    fn_80006E10((u32)(base + 0x3B8));
+    return 1;
+}
+/* fzgx:end fn_1_D123C */
+
 /* fzgx:begin fn_1_D19B8 */
 #pragma opt_pointer_analysis off
 void fn_1_D19B8(u8 *arg0) {

@@ -8834,3 +8834,6 @@ rel/main_rel/game/fn_1_36B10.c:
 
 rel/main_rel/game/fn_1_3B7D4.c:
 	.text       start:0x0003B7D4 end:0x0003C880 align:4
+
+rel/main_rel/enemy_ctrl/fn_1_D123C.c:
+	.text       start:0x000D123C end:0x000D1780 align:4
