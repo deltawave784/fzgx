@@ -1051,6 +1051,129 @@ s32 fn_1_7000(void) {
 }
 /* fzgx:end fn_1_7000 */
 
+/* fzgx:begin fn_1_707C noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/camera.h"
+
+extern void fn_1_BD54(void);
+extern void fn_1_B870(void);
+extern void camera_get_extended_state_storage(__typeof__(lbl_1_bss_F68));
+extern void lbl_8006DBAC(void);
+extern void fn_8006F038(void *, void *, s16);
+extern void lbl_8006DCDC(void);
+extern s16 fn_1_6B48(s16 value);
+extern void fn_1_6D2C(u32);
+extern s32 lbl_1_bss_F78;
+extern void fn_1_A2DF4(u32, u32, u32);
+extern s8 fn_1_86624(void);
+extern s8 fn_1_86634(s32 index);
+extern void OSPanic(u8 *file, int line, u8 *message, ...);
+extern u8 lbl_1_bss_F74;
+extern u8 lbl_1_bss_F75;
+extern f32 lbl_1_rodata_188;
+extern s32 fn_1_8708(u8 mode, f32 *value0, f32 *value1);
+extern void fn_1_8A0C(s16 index);
+extern void fn_1_A6FE8(void);
+extern void fn_1_8D08(GameCameraEntry *value);
+extern f32 lbl_1_bss_1040;
+extern f32 lbl_1_bss_1044;
+extern void OSReport(const unsigned char *, ...);
+extern u8 lbl_1_bss_103C[4];
+extern u8 lbl_1_bss_108C[52];
+extern u8 lbl_1_bss_1014;
+
+extern s8 fn_1_86624(void);
+extern s8 fn_1_86634(s32 index);
+extern void OSPanic(u8 *file, int line, u8 *message, ...);
+extern void fn_1_8A0C(s16 index);
+extern void OSReport(const unsigned char *, ...);
+
+extern f32 lbl_1_rodata_2E0[32];
+extern f32 lbl_8006D6FC(f32 *value, void *target);
+u32 fn_1_6514(u32);
+extern struct fn_1_6400_lbl_801A6410 lbl_801A6410;
+extern u32 fn_1_46B4(u32, u32, void *, u32);
+extern f64 lbl_1_rodata_478;
+extern f32 lbl_1_rodata_49C;
+extern f32 lbl_1_bss_10C0[6];
+
+typedef struct {
+    u8 pad_0[2];
+    s16 unk_2;
+    u8 pad_4[0x1F8];
+} fn_1_707C_Entry;
+
+typedef struct {
+    u8 pad_0[0x6];
+    s16 unk_6;
+} fn_1_707C_Flag;
+
+#pragma peephole on
+/* file-scope objects of the retail TU, in retail order: MWCC addresses them off one section base */
+Obj_1_bss_F68_Target *fzgx_obj_lbl_1_bss_F68;
+u8 *fzgx_obj_game_camera_entries;
+u8 *fzgx_obj_live_camera;
+
+#pragma section code_type ".fzgxpool"
+static void fzgx_bss_layout(void) {
+    volatile u8 s;  /* fzgx-allow: S2 layout primer sink: MWCC emits .bss objects in first-access order */
+    s = *(u8 *)&fzgx_obj_lbl_1_bss_F68;
+    s = *(u8 *)&fzgx_obj_game_camera_entries;
+    s = *(u8 *)&fzgx_obj_live_camera;
+}
+#pragma section code_type ".text"
+
+static inline fn_1_707C_Flag * fn_1_707C_read_pointer(void) { return (fn_1_707C_Flag *)(void *)fzgx_obj_live_camera; }
+#pragma opt_dead_assignments off
+s32 fn_1_707C(u8 arg0) {
+    u32 i;
+    s32 value;
+    fn_1_707C_Entry *cur;
+    u32 count;
+    u32 id;
+    fn_1_707C_Entry *entries;
+    fn_1_707C_Flag *flags;
+    Obj_1_bss_F68_Target *obj;
+    fn_1_707C_Entry * fzgx_live;
+
+    if ((obj = (Obj_1_bss_F68_Target *)(void *)fzgx_obj_lbl_1_bss_F68) == 0) {
+        return 0;
+    }
+
+    fzgx_live = (fn_1_707C_Entry *)(void *)fzgx_obj_game_camera_entries;
+    entries = fzgx_live;
+    i = 0;
+    id = arg0;
+    count = obj->unk_49;
+    flags = fn_1_707C_read_pointer();
+    cur = entries;
+
+    {
+    u32 fzgx_loop_i_1063;
+for (fzgx_loop_i_1063 = 0; fzgx_loop_i_1063 < count; fzgx_loop_i_1063++) {
+        if ((fzgx_loop_i_1063 == 0 && ((s8)obj->unk_48 == 9 || (s8)obj->unk_48 == 10)) ||
+            (fzgx_loop_i_1063 == 3 && (s8)obj->unk_48 == 6)) {
+            value = flags->unk_6;
+        } else if (fzgx_loop_i_1063 == 1 && (s8)obj->unk_48 == 10) {
+            value = entries->unk_2;
+        } else {
+            value = cur->unk_2;
+        }
+        if ((u32)value == id) {
+            return 1;
+        }
+        cur = (fn_1_707C_Entry *)((u8 *)cur + 0x1FC);
+    }
+    i = fzgx_loop_i_1063;
+}
+    return 0;
+}
+#pragma opt_dead_assignments reset
+
+#pragma peephole reset
+/* fzgx:end fn_1_707C */
+
 /* fzgx:begin camera_set_entry_field_0xa8 */
 void camera_set_entry_field_0xa8(u8 index, s16 value) {
     // Store the selected camera entry's parameter.

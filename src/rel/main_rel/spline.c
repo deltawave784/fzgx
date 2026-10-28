@@ -1198,6 +1198,87 @@ s32 fn_1_F8158(s32 value) {
 }
 /* fzgx:end fn_1_F8158 */
 
+/* fzgx:begin fn_1_F8214 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/spline.h"
+
+extern void mathutil_quat_mult(f32 *, f32 *, f32 *);
+extern void fn_1_F56F8(f32 *out, f32 *in);
+extern const f32 lbl_1_rodata_6D78;
+extern void fn_1_F57A8(f32 *out, f32 *in);
+extern const f32 lbl_1_rodata_6D70;
+extern f64 fn_80088538(f32);
+extern f64 fn_800883E8(f32);
+extern f32 lbl_8006D0B4(f32);
+extern f64 fn_80087E80(f32);
+extern void fn_8006E8DC(void *);
+extern void fn_1_9A508(Obj_1_data_2A7E0 *arg0);
+extern void fn_1_F5B88(Obj_1_data_2A7E0_At3C *arg0);
+extern void fn_1_9AD88(void);
+extern void fn_1_F65A0(Obj_1_data_2A7E0_At3C *);
+extern void fn_1_F7578(void);
+extern void fn_8001D32C(u32 *);
+extern void fn_80008BEC(void *dst, s32 value, u32 size);
+extern void fn_1_F75D8(void *, int, int, int);
+extern void fn_1_F8918(u8 *, u8 *);
+extern s32 fn_8008023C(u8 *, Obj_1_bss_7F0C0 *, u32);
+extern void fn_1_F85A0(Obj_1_bss_7F0C0 *, u8 *);
+extern u16 lbl_1_data_414[36];
+extern int fn_1_8D5F0(s16 value);
+extern void fn_1_F7CAC(s16);
+extern s32 fn_1_F7BE4(s16);
+extern void fn_1_F7F48(s16 value);
+extern int fn_1_14D6D8(s16 value);
+extern void fn_1_F83F0(s16 value);
+extern void fn_1_F8214(s16 value);
+extern void fn_1_F8A04(void);
+extern void fn_1_F8A90(void);
+extern void fn_1_F8A7C(void);
+extern void fn_1_F8AFC(u32 value);
+extern void fn_1_F8B64(void);
+extern void fn_1_F8BA8(void);
+extern void fn_1_F8B7C(void);
+extern void fn_1_F8BD4(void);
+extern void fn_1_F8C28(s32 value);
+extern void fn_1_F8CCC(s32 value);
+extern void fn_1_F8CA0(s32 value);
+extern struct Table lbl_1_rodata_6FF0;
+extern void fn_80083DB0(void *arg0, u32 arg1);
+extern void fn_1_F9D04(u8 index);
+extern void fn_1_F9D90(void);
+extern void fn_1_F9E38(void);
+extern void fn_1_F9EE4(s32 value);
+extern u8 fn_1_FA69C(s32 index);
+extern void fn_1_3EF14(void *);
+extern s32 fn_1_58C4(void);
+extern void fn_1_FA89C(Obj_1_data_2A7E0_At3C *obj);
+extern void fn_1_76BF8(void);
+extern void fn_1_72648(void);
+extern void fn_1_FB0B4(Obj_1_bss_84428 *data);
+extern void fn_1_FB180(int *value);
+extern void fn_1_9AD54(void);
+extern void fn_1_FB18C(void);
+
+extern void fn_1_F8918(u8 *, u8 *);
+extern u16 lbl_1_data_414[36];
+extern void fn_8001D3E4(int index, int value);
+extern u32 lbl_801A66A0;
+
+void fn_1_F8214(s16 value) {
+    u64 mask;
+    if (value > 63) {
+        mask = 1ULL << (s16)(value - 64);
+        *(u64 *)&lbl_1_bss_7F0C0.unk_10 |= mask;
+        *(u64 *)&lbl_1_bss_7F0C0.unk_58 &= ~mask;
+    } else {
+        mask = 1ULL << value;
+        *(u64 *)&lbl_1_bss_7F0C0.unk_8 |= mask;
+        *(u64 *)&lbl_1_bss_7F0C0.unk_50 &= ~mask;
+    }
+}
+/* fzgx:end fn_1_F8214 */
+
 /* fzgx:begin fn_1_F82E0 */
 void fn_1_F82E0(void) {
     s16 i;
@@ -2437,6 +2518,90 @@ u8 fn_1_FA4C0(void) {
     return *(u8 *)(lbl_1_bss_84420 + 0x8);
 }
 /* fzgx:end fn_1_FA4C0 */
+
+/* fzgx:begin fn_1_FA4D4 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/spline.h"
+
+extern void mathutil_quat_mult(f32 *, f32 *, f32 *);
+extern void fn_1_F56F8(f32 *out, f32 *in);
+extern const f32 lbl_1_rodata_6D78;
+extern void fn_1_F57A8(f32 *out, f32 *in);
+extern const f32 lbl_1_rodata_6D70;
+extern f64 fn_80088538(f32);
+extern f64 fn_800883E8(f32);
+extern f32 lbl_8006D0B4(f32);
+extern f64 fn_80087E80(f32);
+extern void fn_8006E8DC(void *);
+extern void fn_1_9A508(Obj_1_data_2A7E0 *arg0);
+extern void fn_1_F5B88(Obj_1_data_2A7E0_At3C *arg0);
+extern void fn_1_9AD88(void);
+extern void fn_1_F65A0(Obj_1_data_2A7E0_At3C *);
+extern void fn_1_F7578(void);
+extern void fn_8001D32C(u32 *);
+extern void fn_80008BEC(void *dst, s32 value, u32 size);
+extern void fn_1_F75D8(void *, int, int, int);
+extern void fn_1_F8918(u8 *, u8 *);
+extern s32 fn_8008023C(u8 *, Obj_1_bss_7F0C0 *, u32);
+extern void fn_1_F85A0(Obj_1_bss_7F0C0 *, u8 *);
+extern u16 lbl_1_data_414[36];
+extern int fn_1_8D5F0(s16 value);
+extern void fn_1_F7CAC(s16);
+extern s32 fn_1_F7BE4(s16);
+extern void fn_1_F7F48(s16 value);
+extern int fn_1_14D6D8(s16 value);
+extern void fn_1_F83F0(s16 value);
+extern void fn_1_F8214(s16 value);
+extern void fn_1_F8A04(void);
+extern void fn_1_F8A90(void);
+extern void fn_1_F8A7C(void);
+extern void fn_1_F8AFC(u32 value);
+extern void fn_1_F8B64(void);
+extern void fn_1_F8BA8(void);
+extern void fn_1_F8B7C(void);
+extern void fn_1_F8BD4(void);
+extern void fn_1_F8C28(s32 value);
+extern void fn_1_F8CCC(s32 value);
+extern void fn_1_F8CA0(s32 value);
+extern struct Table lbl_1_rodata_6FF0;
+extern void fn_80083DB0(void *arg0, u32 arg1);
+extern void fn_1_F9D04(u8 index);
+extern void fn_1_F9D90(void);
+extern void fn_1_F9E38(void);
+extern void fn_1_F9EE4(s32 value);
+extern u8 fn_1_FA69C(s32 index);
+extern void fn_1_3EF14(void *);
+extern s32 fn_1_58C4(void);
+extern void fn_1_FA89C(Obj_1_data_2A7E0_At3C *obj);
+extern void fn_1_76BF8(void);
+extern void fn_1_72648(void);
+extern void fn_1_FB0B4(Obj_1_bss_84428 *data);
+extern void fn_1_FB180(int *value);
+extern void fn_1_9AD54(void);
+extern void fn_1_FB18C(void);
+
+extern void fn_1_F8918(u8 *, u8 *);
+extern u16 lbl_1_data_414[36];
+extern void fn_8001D3E4(int index, int value);
+extern u32 lbl_801A66A0;
+
+/* View of the object lbl_1_bss_84420 points to (the header types the pointer as u32). */
+struct SplineWork {
+    u8 pad_0[0xa];
+    s16 unk_a[41];
+};
+
+void fn_1_FA4D4(void) {
+    s16 i;
+    struct SplineWork *work;
+
+    for (i = 0; i < 41; i++) {
+        work = (struct SplineWork *)lbl_1_bss_84420;
+        work->unk_a[i] = 0;
+    }
+}
+/* fzgx:end fn_1_FA4D4 */
 
 /* fzgx:begin fn_1_FA5A8 */
 void fn_1_FA5A8(s16 index, u8 bit) {

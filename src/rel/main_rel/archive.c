@@ -2574,6 +2574,95 @@ s16 fn_1_12EF24(s16 row, s16 column) {
 }
 /* fzgx:end fn_1_12EF24 */
 
+/* fzgx:begin fn_1_12EF80 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/archive.h"
+
+extern void OSPanic(u8 *arg0, s32 arg1, u8 *arg2, ...);
+extern void fn_1_12A350(void *arg0, s32 arg1);
+extern s32 fn_8006A480(void *arg0, void *arg1, void *arg2);
+extern s32 fn_8006A998(void *arg0);
+extern void fn_8006A9AC(void *arg0);
+extern void fn_1_12AC28(void *arg0, s32 arg1, s32 arg2);
+extern void fn_1_12ADC8(void *arg0, void *arg1, s32 arg2, s32 arg3);
+extern void fn_1_12BB18(void *arg0, void *arg1, void *arg2, void *arg3, void *arg4);
+extern void fn_1_8D168(void *arg);
+extern void fn_1_14DB48(void *arg0, void *arg1, u32 arg2);
+extern void fn_1_14DBCC(void *arg);
+extern u32 fn_1_95120(void *arg);
+extern const struct Table lbl_1_rodata_8230;
+extern u32 lbl_801A66A0;
+extern void fn_1_7B2E8(u8 value);
+extern void fn_1_13C1A0(void);
+extern void *fn_1_3F8C(void *table, void (*callback)(void), void *arg1, void *arg2);
+extern void fn_1_426C(s32 value);
+extern void fn_1_7B4C0(void);
+extern void fn_1_C2454(void);
+extern s32 fn_1_C24A4(void);
+extern u8 fn_1_B7C00(void);
+
+extern s32 lbl_1_bss_897A4;
+extern void *lbl_801A6410;
+extern void fn_1_46B4(void *arg0, void *arg1, unsigned char *arg2, s32 arg3);
+extern void OSPanic(u8 *arg0, s32 arg1, u8 *arg2, ...);
+
+extern void OSPanic(u8 *arg0, s32 arg1, u8 *arg2, ...);
+extern s32 lbl_1_bss_8CA44[10];
+
+extern void OSPanic(u8 *arg0, s32 arg1, u8 *arg2, ...);
+extern void fn_1_435C();
+extern s32 fn_1_45730(void *arg0, void *arg1);
+extern s32 fn_1_45B2C(void *arg0);
+extern void *fn_1_45D0(u32 arg0, u32 arg1, void *arg2, u32 arg3);
+extern void fn_1_458A0(void *arg0, void *arg1, u32 arg2, u32 arg3);
+extern void fn_1_45850(void *arg0);
+extern void fn_8006A9B4(void *arg0, void *arg1);
+extern void fn_80006E10(void *arg0);
+extern u32 fn_1_12DAEC(u32, u32, u32, void *, u32, u32, u32);
+extern u32 fn_1_12C524(u32);
+extern void fn_1_12C000(void *arg, s16 count);
+extern void fn_1_8CED0(void *arg, u16 a, u16 b);
+extern void fn_1_8D0A4(void *arg);
+extern s16 fn_1_12C930(s16 arg);
+extern u8 lbl_1_data_20D1C[180];
+extern u8 lbl_1_bss_8B4EC[128];
+extern void fn_80083DB0(void *arg0, char *arg1);
+extern void strcat(void *arg0, void *arg1);
+extern s32 fn_1_F89E4(u8 value);
+
+void fn_1_12EF80(s16 value, s16 *row, s16 *column)
+{
+    s16 table[11][6] = {
+        { -1, -1, -1, -1, -1, -1 },
+        { 1, 16, 26, 8, 5, -1 },
+        { 14, 7, 11, 13, 3, -1 },
+        { 15, 10, 29, 9, 27, -1 },
+        { 24, 25, 17, 21, 28, -1 },
+        { 31, 32, 33, 34, 35, 36 },
+        { 36, 31, 32, 33, 34, 35 },
+        { 82, 54, 55, 56, 57, 58 },
+        { 81, 85, 86, 87, 88, 89 },
+        { 1, 8, 7, 5, -1, -1 },
+        { 16, -1, -1, -1, -1, -1 },
+    };
+    s16 i;
+    s16 j;
+
+    *row = -1;
+    *column = -1;
+    for (i = 0; i < 11; i++) {
+        for (j = 0; j < 6; j++) {
+            if (value == table[i][j]) {
+                *row = i;
+                *column = j;
+                return;
+            }
+        }
+    }
+}
+/* fzgx:end fn_1_12EF80 */
+
 /* fzgx:begin fn_1_12F028 */
 s16 fn_1_12F028(s16 value) {
     EntryTable table;

@@ -4774,3 +4774,117 @@ void fn_1_7BB80(Blk_7BB80 *arg0, u32 arg1, u32 lab_unused0, u32 lab_unused1, u32
 }
 #pragma opt_propagation reset
 /* fzgx:end fn_1_7BB80 */
+
+/* fzgx:begin fn_1_7BD6C noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/screen_effect.h"
+
+extern u32 lbl_1_bss_6C8DC[2];
+extern u32 lbl_801A6410;
+extern void fn_1_46B4(u32 arg0, u32 arg1, void *arg2, u32 arg3);
+extern void fn_1_727BC(u32 arg0, u32 arg1, void *arg2);
+extern void fn_1_76A94(void *arg0, u32 arg1);
+extern void fn_1_76DBC(void);
+extern void fn_1_4E500(void);
+extern void fn_1_4E638(int);
+extern void fn_1_4E6F4(void);
+extern void fn_80073778(void *arg0, int arg1);
+extern s32 fn_1_A5D9C(void);
+extern const f32 lbl_1_rodata_31AC;
+extern u32 fn_80008E84(u32 arg);
+extern void fn_1_77238(void);
+extern void fn_1_772E0(void);
+extern void fn_1_77384(void *arg);
+extern void fn_80072864(int arg0);
+extern void fn_800745A4(int arg0, int arg1, int arg2, int arg3, int arg4, int arg5);
+extern void fn_80074660(int arg0);
+extern void fn_80073678(int arg0);
+extern void fn_80073898(int arg0);
+extern void fn_80074788(int arg0);
+extern void fn_800738E0(int arg0, int arg1, int arg2);
+extern void fn_80073D60(int arg0, int arg1, int arg2, int arg3, int arg4);
+extern void fn_800734A8(int arg0, int arg1, int arg2, int arg3);
+extern void fn_80072EDC(int arg0, int arg1);
+extern f32 lbl_1_rodata_31B0[10];
+extern const f64 lbl_1_rodata_31A0;
+extern void lbl_8006D784(f32 *arg);
+extern void fn_80073A58(int arg0, f32 *arg1, int arg2);
+extern void fn_800739E0(int arg0, int arg1, int arg2);
+extern void GXLoadTexMtxImm(f32 *arg0, int arg1, int arg2);
+extern void fn_8006FDEC(void);
+extern void fn_8006FEFC(void);
+extern void fn_8006FD1C(void);
+extern void fn_1_79810(void);
+extern void fn_1_79948(void);
+extern void fn_1_791B0(void);
+extern void fn_1_9A1E8(void);
+extern void fn_1_9A864(void);
+extern u8 fn_1_7B074(void);
+extern void fn_80071718(void *arg);
+extern void fn_800711A8(void *arg);
+extern void fn_1_14CB4(void);
+extern void fn_1_FA84(void);
+extern const f32 lbl_1_rodata_32CC;
+extern void fn_1_79C88(void *arg0, s32 arg1, f32 arg2, s32 arg3);
+extern void lbl_8006DBAC(void *arg0);
+extern void lbl_8006E1B0(void *arg0, void *arg1);
+extern void sprintf(char *dst, const char *format, ...);
+extern void fn_1_465D0(char *text, int arg);
+extern void fn_1_14D5C(void *object, int arg);
+extern void fn_1_46EA8(int value);
+extern void fn_1_12620(void *object);
+extern void fn_1_46DC4(void *obj);
+
+extern void fn_1_727BC();
+extern void fn_8006FDEC(void);
+extern void fn_80071718(void *);
+extern void fn_800711A8(void *);
+extern u32 fn_8003526C(u32, u32);
+extern u32 fn_80074300(u32, u32, u32, u32);
+extern u32 fn_80074438(u32, u32, u32, u32);
+
+extern void OSPanic(const char *, int, const char *, ...);
+extern s32 fn_80074D08(u32);
+
+static inline s32 highest_bit(u32 value, u8 *data) {
+    s32 highest = 31 - __cntlzw(value);
+    if (highest > 7 || highest < 0) {
+        OSPanic((const char *)(data + 0x8ec), 0x30, (const char *)(data + 0x904));
+    }
+    return highest;
+}
+
+u32 fn_1_7BD6C(s32 value) {
+    s32 highest;
+    struct { u16 *value; } map;
+    s32 bit;
+    u16 *entries;
+    u32 result;
+    u8 *data = lbl_1_data_1E558;
+    u8 *state = (u8 *)&lbl_1_bss_6D7A8;
+
+    if (*(u16 *)(state + 0x18) >= lbl_1_bss_6D7A8.unk_4) {
+        OSPanic((const char *)(data + 0x8ec), 0xa5, (const char *)(data + 0x92c));
+    }
+    entries = (u16 *)(*(u32 *)(state + 0x24) + *(u16 *)(state + 0x18) * 0x14);
+    entries[0] = (u16)value;
+    entries[1] = ((Obj_1_bss_6D7A8 *)state)->unk_16 - 1;
+    *(u32 *)(state + 0x38) = value;
+    result = fn_80074D08(value);
+    highest = highest_bit(value, data);
+    bit = highest;
+    map.value = (u16 *)(state + 0x28);
+    highest = 1;
+    while (bit >= 0) {
+        if (map.value[bit] == 0xffff) {
+            OSPanic((const char *)(data + 0x8ec), 0xb1, (const char *)(data + 0x940));
+        }
+        entries[bit + 2] = map.value[bit];
+        value = value & ~(highest << bit);
+        bit = 31 - __cntlzw(value);
+    }
+    *(u16 *)(state + 0x18) += 1;
+    return result;
+}
+/* fzgx:end fn_1_7BD6C */

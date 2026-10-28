@@ -6335,3 +6335,24 @@ dol/fn_8008F838.c:
 
 dol/fn_8003D42C.c:
 	.text       start:0x8003D42C end:0x8003D4C0 align:4
+
+dol/fn_80033650.c:
+	.text       start:0x80033650 end:0x800336EC align:4
+
+dol/fn_80009468.c:
+	.text       start:0x80009468 end:0x8000951C align:4
+
+dol/fn_800365B4.c:
+	.text       start:0x800365B4 end:0x8003666C align:4
+
+dol/fn_800805C0.c:
+	.text       start:0x800805C0 end:0x8008067C align:4
+
+dol/fn_80053DB4.c:
+	.text       start:0x80053DB4 end:0x80053EA0 align:4
+
+dol/fn_80035734.c:
+	.text       start:0x80035734 end:0x80035828 align:4
+
+dol/fn_80035828.c:
+	.text       start:0x80035828 end:0x8003591C align:4

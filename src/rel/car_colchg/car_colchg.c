@@ -665,6 +665,70 @@ void fn_9_1124(void)
 }
 /* fzgx:end fn_9_1124 */
 
+/* fzgx:begin colchg_menu_disp */
+extern void colchg_menu_disp(void);
+void fn_1_426C(s16);
+extern void colchg_ezsel_disp(void);
+extern void colchg_save_disp(void);
+extern u16 lbl_1_bss_968;
+extern struct Struct_lbl_1_bss_D58 lbl_1_bss_D58;
+s32 fn_1_4C10(void);
+void fn_1_A8EB0(s32, s32);
+s32 fn_1_7F49C(s16, s32, void *);
+void fn_1_A8DD4(const char *, ...);
+void fn_1_80058(s8, struct CarColchgEntry *);
+void fn_1_80C18(u32, struct CarColchgEntry *, s32);
+void fn_1_426C(s16);
+s32 fn_1_4C10(void);
+void fn_1_A8EB0(s32, s32);
+s32 fn_1_7F49C(s16, s32, void *);
+void fn_1_A8DD4(const char *, ...);
+void fn_1_80058(s8, struct CarColchgEntry *);
+void fn_1_80C18(u32, struct CarColchgEntry *, s32);
+extern s16 lbl_1_bss_962;
+extern u32 lbl_1_bss_71688;
+extern u32 lbl_1_bss_7168C;
+extern struct Struct_lbl_1_bss_970 lbl_1_bss_970;
+extern u16 lbl_1_bss_96A;
+extern struct Entry *lbl_1_data_1FB6C[];
+extern u32 lbl_801A6410;
+void fn_1_7FA04(u32);
+void fn_1_8D168(u32);
+void fn_1_435C(u32);
+void fn_1_41A8(void);
+void fn_1_46B4(u32, u32, void *, s32);
+void fn_1_6400(void);
+u16 fn_1_3F8C(char *, void (*)(void), s32, s32);
+void fn_1_4A00(s32, s32, u32);
+extern void fn_9_1BCC(void);
+extern void fn_9_1AC4(void);
+extern u32 lbl_801A66A0;
+
+extern const f32 lbl_9_rodata_14;
+extern const f32 lbl_9_rodata_18;
+extern void fn_1_496FC(f32, f32);
+extern void fn_1_4AE0C(const char *, ...);
+extern struct Struct_lbl_1_bss_970 lbl_1_bss_970;
+
+void colchg_menu_disp(void)
+{
+    u32 base = (u32)&lbl_9_data_0;
+    u8 *sel;
+    s8 i;
+
+    fn_1_496FC(lbl_9_rodata_14, lbl_9_rodata_18);
+    fn_1_4AE0C((const char *)(base + 0xd8));
+    sel = (u8 *)&lbl_1_bss_970;
+    for (i = 0x72; i < 0x79; i++) {
+        switch (i) {
+        case 0x73:
+            fn_1_4AE0C((const char *)(base + 0xe8), (const char *)(sel[4] == i ? base + 0xfc : base + 0x98));
+            break;
+        }
+    }
+}
+/* fzgx:end colchg_menu_disp */
+
 /* fzgx:begin fn_9_120C */
 #pragma section code_type ".fzgxpool"
 __declspec(section ".fzgxpool") static void fzgx_pool_prime1(void) {

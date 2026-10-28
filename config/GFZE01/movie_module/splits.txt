@@ -2186,3 +2186,21 @@ rel/movie_module/fn_12_8B4C.c:
 
 rel/movie_module/fn_12_321E8.c:
 	.text       start:0x000321E8 end:0x00032280 align:4
+
+rel/movie_module/fn_12_32280.c:
+	.text       start:0x00032280 end:0x00032318 align:4
+
+rel/movie_module/fn_12_32318.c:
+	.text       start:0x00032318 end:0x000323B0 align:4
+
+rel/movie_module/fn_12_3267C.c:
+	.text       start:0x0003267C end:0x00032714 align:4
+
+rel/movie_module/fn_12_32834.c:
+	.text       start:0x00032834 end:0x000328CC align:4
+
+rel/movie_module/fn_12_3A69C.c:
+	.text       start:0x0003A69C end:0x0003A784 align:4
+
+rel/movie_module/fn_12_D42C.c:
+	.text       start:0x0000D42C end:0x0000D55C align:4

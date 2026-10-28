@@ -330,6 +330,88 @@ void fn_1_45890(void) {
 }
 /* fzgx:end fn_1_45890 */
 
+/* fzgx:begin fn_1_458A0 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/load.h"
+
+extern u32 lbl_1_bss_3DCE4[17];
+extern void *fn_80006DFC(void *arg);
+extern void fn_1_D3214(void);
+extern s32 fn_8000700C(s32 arg0);
+extern void fn_1_3BDC(s32 arg0);
+extern void fn_8000659C(void);
+extern u32 lbl_1_bss_384C4;
+extern void fn_1_46A8C(u32 value);
+extern u32 lbl_1_bss_3DCD8;
+extern u32 lbl_1_bss_3DD28[179];
+extern void fn_1_47EE4(s32);
+extern void fn_1_485C8(s32);
+extern void fn_1_48140(s32 value);
+extern void fn_1_4DDC0(void);
+extern void fn_1_4F724(void);
+
+extern u8 lbl_1_bss_3E024[52];
+extern char lbl_1_data_1A3AC[5];
+extern void fn_80083DB0(void *arg0, void *arg1);
+extern u32 fn_80006CE4(u32);
+extern void *fn_80006DE8(void *);
+extern u32 lbl_801A6410;
+extern void *fn_1_4630(u32 arg0, u32 arg1, u8 *arg2, u32 arg3);
+extern void *fn_1_46B4(u32 arg0, void *arg1, u8 *arg2, u32 arg3);
+extern void strcat(void *arg0, void *arg1);
+extern void fn_1_48004(s32 value, s32 arg);
+
+typedef void (*Sig_ARQPostRequest_ARQCallback)(u32 pointerToARQRequest);
+typedef struct Sig_ARQPostRequest_ARQRequest {
+    struct Sig_ARQPostRequest_ARQRequest *next;
+    u32 owner;
+    u32 type;
+    u32 priority;
+    u32 source;
+    u32 dest;
+    u32 length;
+    Sig_ARQPostRequest_ARQCallback callback;
+} Sig_ARQPostRequest_ARQRequest;
+struct fn_1_458A0_Arg0 {
+    u32 unk_0;
+    u8 pad_4[0x50];
+    u32 unk_54;
+};
+extern void ARQPostRequest(Sig_ARQPostRequest_ARQRequest *, u32, u32, u32, u32, void *, u32, Sig_ARQPostRequest_ARQCallback);
+extern void DCInvalidateRange(void *, u32);
+extern void fn_1_45890(void);
+extern void fn_1_D3214(void);
+extern int fn_1_45AD4(void);
+extern u32 fn_80006D1C(void *arg0);
+
+static inline void set_load_flag(void) {
+    lbl_1_bss_384D0 = 1;
+}
+
+#pragma opt_propagation off
+u32 fn_1_458A0(struct fn_1_458A0_Arg0 *arg0, void *arg1, u32 arg2, u32 arg3) {
+    struct { u32 a[10]; } req;
+    struct { u32 value; } len;
+    struct { u32 value; } lab_t1;
+    len.value = arg2;
+    switch ((s32)arg0->unk_0) {
+    case 1:
+        set_load_flag();
+        lab_t1.value = len.value;
+        DCInvalidateRange(arg1, lab_t1.value);
+        ARQPostRequest((Sig_ARQPostRequest_ARQRequest *)&req, 0, 1, 1, arg0->unk_54 + arg3, arg1, len.value, (Sig_ARQPostRequest_ARQCallback)fn_1_45890);
+        while (fn_1_45AD4() != 0) {
+            fn_1_D3214();
+        }
+        return len.value;
+    default:
+        return fn_80006D1C((u8 *)arg0 + 4);
+    }
+}
+#pragma opt_propagation reset
+/* fzgx:end fn_1_458A0 */
+
 /* fzgx:begin fn_1_45964 pool noprologue */
 #include "types.h"
 #include "dolphin/ar.h"
@@ -566,6 +648,128 @@ void fn_1_45BE0(void) {
     lbl_1_bss_384C8 = 0;
 }
 /* fzgx:end fn_1_45BE0 */
+
+/* fzgx:begin fn_1_45BF0 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/load.h"
+
+extern u32 lbl_1_bss_3DCE4[17];
+extern void *fn_80006DFC(void *arg);
+extern void fn_1_D3214(void);
+extern s32 fn_8000700C(s32 arg0);
+extern void fn_1_3BDC(s32 arg0);
+extern void fn_8000659C(void);
+extern u32 lbl_1_bss_384C4;
+extern void fn_1_46A8C(u32 value);
+extern u32 lbl_1_bss_3DCD8;
+extern u32 lbl_1_bss_3DD28[179];
+extern void fn_1_47EE4(s32);
+extern void fn_1_485C8(s32);
+extern void fn_1_48140(s32 value);
+extern void fn_1_4DDC0(void);
+extern void fn_1_4F724(void);
+
+extern u8 lbl_1_bss_3E024[52];
+extern char lbl_1_data_1A3AC[5];
+extern void fn_80083DB0(void *arg0, void *arg1);
+extern u32 fn_80006CE4(u32);
+extern void *fn_80006DE8(void *);
+extern u32 lbl_801A6410;
+extern void *fn_1_4630(u32 arg0, u32 arg1, u8 *arg2, u32 arg3);
+extern void *fn_1_46B4(u32 arg0, void *arg1, u8 *arg2, u32 arg3);
+extern void strcat(void *arg0, void *arg1);
+extern void fn_1_48004(s32 value, s32 arg);
+
+extern u32 fn_1_45D78(u32, u32, u32 *, s32);
+extern int fn_1_45CD8(int);
+
+typedef struct LoadEntry {
+    u32 unk_0;
+    u32 unk_4;
+    u32 unk_8;
+    u32 unk_c;
+} LoadEntry;
+
+typedef struct LoadManager {
+    u8 pad0[0x18];
+    LoadEntry entries[1408];
+    u32 unk_5818;
+    u32 unk_581c;
+    u32 unk_5820;
+    u8 pad5824[0x5b34 - 0x5824];
+    u32 unk_5b34;
+} LoadManager;
+
+/* file-scope objects of the retail TU, in retail order: MWCC addresses them off one section base */
+u32 fzgx_obj_lbl_1_bss_384C0;
+u32 lbl_1_bss_384C4;
+u32 fzgx_obj_lbl_1_bss_384C8;
+u32 lbl_1_bss_384CC;
+u32 fzgx_obj_lbl_1_bss_384D0[2];
+LoadEntry fzgx_obj_lbl_1_bss_384D8[1408];
+u32 lbl_1_bss_3DCD8;
+u32 fzgx_obj_lbl_1_bss_3DCDC;
+u32 lbl_1_bss_3DCDC__fzgx_offset_4;
+u32 lbl_1_bss_3DCE4[17];
+u32 lbl_1_bss_3DD28[179];
+u32 fzgx_obj_lbl_1_bss_3DFF4;
+u32 lbl_1_bss_3DFF4__fzgx_offset_4[2];
+
+#pragma section code_type ".fzgxpool"
+static void fzgx_bss_layout(void) {
+    volatile u8 s;  /* fzgx-allow: S2 layout primer sink: MWCC emits .bss objects in first-access order */
+    s = *(u8 *)&fzgx_obj_lbl_1_bss_384C0;
+    s = *(u8 *)&lbl_1_bss_384C4;
+    s = *(u8 *)&fzgx_obj_lbl_1_bss_384C8;
+    s = *(u8 *)&lbl_1_bss_384CC;
+    s = *(u8 *)&fzgx_obj_lbl_1_bss_384D0;
+    s = *(u8 *)&fzgx_obj_lbl_1_bss_384D8;
+    s = *(u8 *)&lbl_1_bss_3DCD8;
+    s = *(u8 *)&fzgx_obj_lbl_1_bss_3DCDC;
+    s = *(u8 *)&lbl_1_bss_3DCDC__fzgx_offset_4;
+    s = *(u8 *)&lbl_1_bss_3DCE4;
+    s = *(u8 *)&lbl_1_bss_3DD28;
+    s = *(u8 *)&fzgx_obj_lbl_1_bss_3DFF4;
+    s = *(u8 *)&lbl_1_bss_3DFF4__fzgx_offset_4;
+}
+#pragma section code_type ".text"
+
+LoadEntry *fn_1_45BF0(u32 size) {
+    s32 wrapped = 0;
+    LoadEntry *entry;
+    u32 addr;
+    
+    u32 aligned_size;
+    aligned_size = (size + 0x1F) & ~0x1F;
+
+    do {
+        if (fzgx_obj_lbl_1_bss_3DFF4 - lbl_1_bss_3DCD8 > aligned_size) {
+            addr = lbl_1_bss_3DCD8;
+            lbl_1_bss_3DCD8 = addr + aligned_size;
+        } else {
+            if (fzgx_obj_lbl_1_bss_3DFF4 - fzgx_obj_lbl_1_bss_3DCDC < aligned_size) {
+                return NULL;
+            }
+            addr = fzgx_obj_lbl_1_bss_3DCDC;
+            lbl_1_bss_3DCD8 = addr + aligned_size;
+            if (wrapped != 0) {
+                return NULL;
+            }
+            wrapped = 1;
+        }
+    } while (fn_1_45D78(addr, aligned_size, &lbl_1_bss_3DCD8, 0) == 0);
+
+    entry = fzgx_obj_lbl_1_bss_384D8;
+    entry += lbl_1_bss_3DCDC__fzgx_offset_4;
+    lbl_1_bss_3DCDC__fzgx_offset_4 = fn_1_45CD8(lbl_1_bss_3DCDC__fzgx_offset_4);
+    entry->unk_0 = 0x80000000;
+    entry->unk_8 = addr;
+    entry->unk_c = size;
+
+    return entry;
+}
+/* fzgx:end fn_1_45BF0 */
 
 /* fzgx:begin fn_1_45CD8 */
 int fn_1_45CD8(int index) {

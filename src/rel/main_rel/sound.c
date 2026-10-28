@@ -940,6 +940,95 @@ lbl_1_bss_6EAB4_10 = index;
 }
 /* fzgx:end fn_1_A1588 */
 
+/* fzgx:begin fn_1_A1CE8 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/sound.h"
+
+extern void *lbl_801A6410;
+extern void fn_1_44A4(void);
+extern void *fn_80008E84(void *arg);
+extern u32 fn_1_45D0(void *arg0, void *arg1, u32 *arg2, int arg3);
+extern void fn_1_46B4(u32, void *, void *, u32);
+extern s8 lbl_1_bss_6EAA6;
+extern u8 lbl_1_bss_6EAA4;
+extern void fn_80067974(void);
+extern void fn_800280F0(void);
+extern void fn_80026FE0(void);
+extern u8 lbl_1_bss_6EAA8[8];
+extern u8 lbl_1_bss_6EAB0;
+extern void ARInit(u8 *arg0, int arg1);
+extern void fn_80020530(void);
+extern u8 lbl_1_bss_6F1E1;
+extern void fn_1_A2DF4(s32, void *, s32);
+extern void fn_1_A2E24(u32 arg0, u32 arg1, s32 arg2);
+extern void fn_80008BEC(void *, s32, s32);
+extern void fn_1_A0680(void);
+extern void fn_80067898(u32);
+extern void fn_800674FC(u16 arg0, u32 arg1, s16 arg2);
+extern s32 camera_get_mode(void);
+extern u8 lbl_1_bss_6F2D8[62];
+extern void fn_80067344(s32, s32, u32, s32);
+extern void fn_1_A5470(s32 value);
+extern u32 fn_1_3F13C(void);
+extern u32 fn_1_EB0B0(void);
+extern s32 fn_1_F1B94(void);
+extern u32 lbl_1_rodata_45D0[];
+extern u32 lbl_1_rodata_4718[];
+extern u32 lbl_1_rodata_4730[];
+extern u32 lbl_1_rodata_47A8[];
+extern u8 lbl_1_bss_6F41C[260];
+extern s32 fn_1_86690(s32 value);
+extern void *lbl_1_rodata_4820[41];
+extern int fn_8004C658(u32 obj);
+extern int fn_8004BBCC(u32 obj);
+extern void ADXT_Pause(u32 obj, int arg);
+extern int fn_1_3FC38(void);
+
+extern void fn_1_A2DF4(s32, void *, s32);
+extern void fn_80008BEC(void *, s32, s32);
+extern s32 fn_1_86690(s32 value);
+extern void fn_80067344(s32 arg0, s32 arg1, u32 arg2, s32 arg3);
+extern void fn_80067898(u32 value);
+extern void *lbl_1_rodata_4820[41];
+
+extern void *lbl_801A6410;
+extern void *fn_80008E84();
+extern void fn_1_44A4(void);
+
+extern void *lbl_801A6410;
+extern void fn_1_44A4(void);
+extern void *fn_80008E84();
+extern u32 fn_1_45D0(void *arg0, void *arg1, u32 *arg2, int arg3);
+extern void fn_80063094(s32 arg0, void *arg1, s32 arg2);
+extern void fn_80065D70(int);
+
+extern u8 lbl_1_bss_6F243;
+extern u16 lbl_1_rodata_4328[42];
+
+void fn_1_A1CE8(u32 arg0) {
+    s16 v;
+    if (lbl_1_bss_6EAD0.unk_0 == NULL || (u8)arg0 >= 0x2D || lbl_1_bss_6F243 != 0) {
+        return;
+    }
+    if (fn_8004C658(lbl_1_bss_6EAD0.unk_0->unk_0) == 3) {
+        if ((u8)arg0 < 0x29) {
+            v = lbl_1_rodata_4328[(u8)arg0];
+        } else if ((u8)arg0 == 0x29) {
+            v = 0x100;
+        } else if ((u8)arg0 == 0x2A) {
+            v = 0;
+        } else if ((u8)arg0 == 0x2B) {
+            v = 0x200;
+        } else if ((u8)arg0 == 0x2C) {
+            v = 0x300;
+        }
+        fn_80067898(0xA8000000 | (s16)v);
+        lbl_1_bss_6F243 = 1;
+    }
+}
+/* fzgx:end fn_1_A1CE8 */
+
 /* fzgx:begin fn_1_A1DCC pool */
 /* sound.c's .bss cluster: retail addresses every object off one base (lbl_1_bss_6EA98),
  * so the unit defines the cluster in retail order and the primer fixes the emission order. */
