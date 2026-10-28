@@ -906,6 +906,283 @@ def constant_inline_parameters(body: str, name: str) -> List[Tuple[str, str]]:
     return out
 
 
+_REGION_SCALAR = re.compile(r'(?:(?:register|const|volatile)\s+)*(?:[us](?:8|16|32)|f32|f64|int|char|short|long|'
+                            r'float|double|BOOL|bool|unsigned(?:\s+(?:int|char|short|long))?)\s*|.*\*\s*')
+
+
+def _region_refs(code: str, var: str):
+    """Occurrences of a variable (member names `.v`/`->v` excluded)."""
+    return [m.start() for m in re.finditer(rf'(?<![\w.])(?<!->)\b{re.escape(var)}\b', code)]
+
+
+def _region_defines_first(code: str, var: str) -> bool:
+    """The first occurrence of var in code is the target of a plain assignment that does not
+    read var (`v = expr;`, `a = v = 0;`)."""
+    refs = _region_refs(code, var)
+    if not refs:
+        return False
+    m = re.match(r'\s*=(?!=)', code[refs[0] + len(var):])
+    if not m:
+        return False
+    end = code.find(';', refs[0])
+    return not any(r < end for r in refs[1:]) if end >= 0 else False
+
+
+def region_inline_helpers(body: str, name: str) -> List[Tuple[str, str]]:
+    """Two locals holding the same constant moved, with the statements around them, into an
+    inlined static helper.
+
+    MWCC's second value-numbering pass (ValueNumbering.c, `PC_LI` case) only numbers a `li`
+    whose destination lies in the coalesce window: compiler temporaries, which include the
+    locals and parameters of an inlined function (CodeGen.c, `@`-named objects allocated after
+    `Registers_BeginCoalesceWindow`). Two such temporaries loaded with one constant become
+    `li rA, K; mr rB, rA`, and the copy survives coalescing when both are modified later.
+    Declared locals of the function itself never take part, so every spelling of
+    `a = 0; b = a;` in the caller folds to two `li`. Measured on mwcceppc 1.3.2 (probe
+    compiles, fn_4_A0C `li r29,0; mr r27,r29` for a strength-reduced counter, fn_1_C24A4
+    `li r4,0; mr r5,r4; ori r0,r4,1`). A whole-body helper is no answer for large functions:
+    MWCC's default `inline_max_size` leaves it out of line. The helper therefore spans only the
+    top-level statements from the constant assignment to the last use of the pair, receives
+    the outer values it reads by value and returns the one outer variable it defines; locals
+    used only there (or dead on entry and exit) move inside. Inlined locals are numbered in
+    the opposite order to declared locals, so the reversed declaration order is tried too."""
+    out: List[Tuple[str, str]] = []
+    split = split_declaration_groups(body, name)
+    if split:
+        body = split[0][1]
+    span = _function_body_span(body, name)
+    if not span:
+        return out
+    from .sdkimport import masked
+    code = masked(body)
+    head_start = max(code.rfind('\n', 0, span[0]), code.rfind(';', 0, span[0]), code.rfind('}', 0, span[0])) + 1
+    helper = f"{name}_fzgx_region"
+    if re.search(rf'\b{helper}\b', body):
+        return out
+    popen = code.index('(', span[0])
+    pclose = code.rfind(')', popen, span[1])
+    params = body[popen + 1:pclose].strip()
+    ptypes: Dict[str, str] = {}
+    if params and params != 'void':
+        if '(' in params or '...' in params:
+            return out
+        for prm in params.split(','):
+            pm = re.fullmatch(r'\s*(.*?)\s*\b([A-Za-z_]\w*)\s*', prm)
+            if not pm or '[' in prm:
+                return out
+            ptypes[pm.group(2)] = pm.group(1)
+    raw = _top_statements(code[span[1] + 1:span[2]])
+    if not raw:
+        return out
+    base = span[1] + 1
+    stmts: List[Tuple[int, int]] = []
+    for a, b in raw:
+        a, b = base + a, base + b
+        # `struct { ... } name;` splits into the braced part and `name;`
+        if stmts and re.fullmatch(r'\s*[A-Za-z_]\w*(?:\[[^\]]*\])*\s*;', code[a:b]) and \
+                re.match(r'\s*(?:struct|union)\b', code[stmts[-1][0]:stmts[-1][1]]) and code[stmts[-1][1] - 1] == '}':
+            stmts[-1] = (stmts[-1][0], b)
+            continue
+        stmts.append((a, b))
+    # leading declarations: (stmt index, type, name, dims, initializer)
+    decls: Dict[str, Tuple[int, str, str, Optional[str]]] = {}
+    first = 0
+    for i, (a, b) in enumerate(stmts):
+        text = ' '.join(code[a:b].split())
+        dm = DECL_RE.match(text)
+        if dm and dm.group(1).strip() not in ('return', 'goto', 'else'):
+            decls[dm.group(2)] = (i, dm.group(1).strip(), dm.group(3) or '', dm.group(4))
+            first = i + 1
+            continue
+        am = re.fullmatch(r'((?:struct|union)\s*(?:\w+\s*)?\{.*\})\s*([A-Za-z_]\w*)((?:\[[^\]]*\])*)\s*;', text)
+        if am:
+            decls[am.group(2)] = (i, am.group(1), am.group(3), None)
+            first = i + 1
+            continue
+        break
+    body_stmts = list(range(first, len(stmts)))
+    if not body_stmts:
+        return out
+    variables = {v: t for v, (_, t, d, _) in decls.items()}
+    variables.update(ptypes)
+
+    def stext(i):
+        return code[stmts[i][0]:stmts[i][1]]
+
+    # constant pairs: `b = a` after `a = K`, `a = b = K`, `a = K; b = K` in neighbouring statements
+    pairs: List[Tuple[str, str]] = []
+    inner = code[stmts[first][0]:span[2]] if first < len(stmts) else ''
+    scal = [v for v, (_, t, d, _) in decls.items() if not d and re.fullmatch(_REGION_SCALAR, t)]
+    for m in re.finditer(r'(?<![\w.>])([A-Za-z_]\w*)\s*=\s*([A-Za-z_]\w*)\s*=\s*(' + _CONST_RE + r')\s*;', inner):
+        if m.group(1) in scal and m.group(2) in scal:
+            pairs.append((m.group(2), m.group(1), m.start()))
+    for m in re.finditer(r'(?<![\w.>])([A-Za-z_]\w*)\s*=\s*([A-Za-z_]\w*)\s*;', inner):
+        b_, a_ = m.groups()
+        if b_ not in scal or a_ not in scal or a_ == b_:
+            continue
+        before = inner[:m.start()]
+        refs = _region_refs(before, a_)
+        if refs and re.match(r'\s*=\s*(' + _CONST_RE + r')\s*;', before[refs[-1] + len(a_):]):
+            pairs.append((a_, b_, refs[-1]))
+    consts = [(m.start(), m.group(1), re.sub(r'\s+', '', m.group(2)))
+              for m in re.finditer(r'(?<![\w.>])([A-Za-z_]\w*)\s*=\s*(' + _CONST_RE + r')\s*;', inner)
+              if m.group(1) in scal]
+    for (p0, v0, k0), (p1, v1, k1) in zip(consts, consts[1:]):
+        if v0 != v1 and k0 == k1 and not re.search(r'[{}]', inner[p0:p1]) and inner[p0:p1].count(';') <= 4:
+            pairs.append((v0, v1, p0))
+    seen = set()
+    pairs = [p for p in pairs if not (frozenset(p[:2]) in seen or seen.add(frozenset(p[:2])))][:3]
+    indent = '    '
+    origin = stmts[first][0]
+    for a_, b_, at in pairs:
+        refstmts = [i for i in body_stmts if _region_refs(stext(i), a_) or _region_refs(stext(i), b_)]
+        start = next((i for i in body_stmts if stmts[i][0] <= origin + at < stmts[i][1]), None)
+        if start is None:
+            continue
+        later = [i for i in refstmts if i >= start]
+        for end in sorted(later, reverse=True):
+            built = _region_helper(body, code, name, helper, stmts, body_stmts, decls, variables, head_start,
+                                   span, start, end, indent)
+            if built is None:
+                continue
+            for label, text in built:
+                out.append((f"{a_}/{b_}: statements {start - first}..{end - first} inlined{label}", text))
+            break
+    return out
+
+
+def _region_helper(body, code, name, helper, stmts, body_stmts, decls, variables, head_start, span,
+                   start, end, indent):
+    """Texts with statements start..end of a function moved into an inlined helper, or None
+    when the region cannot be expressed (returns, labels, two live-out variables, aggregates
+    passed out, address-taken outer variables)."""
+    region_code = code[stmts[start][0]:stmts[end][1]]
+    if re.search(r'\breturn\b|\bgoto\b|^\s*[A-Za-z_]\w*\s*:(?!:)|\bcase\b|\bdefault\s*:|__asm|\basm\b',
+                 region_code, re.M):
+        return None
+    if re.search(r'\b(?:break|continue)\b', region_code) and '{' not in region_code:
+        return None
+
+    def absorbed(lo):
+        """Extend the region backwards over plain definitions of variables used only there."""
+        while lo - 1 >= body_stmts[0]:
+            prev = code[stmts[lo - 1][0]:stmts[lo - 1][1]]
+            pm = re.fullmatch(r'\s*([A-Za-z_]\w*)\s*=(?!=)([^;]*);\s*', prev)
+            if not pm or pm.group(1) not in decls:
+                break
+            v = pm.group(1)
+            if _region_refs(pm.group(2), v):
+                break
+            outside = [i for i in body_stmts if (i < lo - 1 or i > end) and _region_refs(code[stmts[i][0]:stmts[i][1]], v)]
+            if outside:
+                break
+            lo -= 1
+        return lo
+
+    results = []
+    starts = [start]
+    wider = absorbed(start)
+    if wider != start:
+        starts.append(wider)
+    for lo in starts:
+        built = _region_text(body, code, name, helper, stmts, body_stmts, decls, variables, head_start, span,
+                             lo, end, indent)
+        if built is None:
+            continue
+        for label, text in built:
+            results.append(((' (preceding definitions included)' if lo != start else '') + label, text))
+    return results or None
+
+
+def _region_text(body, code, name, helper, stmts, body_stmts, decls, variables, head_start, span,
+                 lo, hi, indent):
+    region_code = code[stmts[lo][0]:stmts[hi][1]]
+    before = ''.join(code[stmts[i][0]:stmts[i][1]] + ';' for i in body_stmts if i < lo)
+    after_ids = [i for i in body_stmts if i > hi]
+    after = ''.join(code[stmts[i][0]:stmts[i][1]] + ';' for i in after_ids)
+    used = [v for v in variables if _region_refs(region_code, v)]
+    used.sort(key=lambda v: _region_refs(region_code, v)[0])
+    inside, inputs, output = [], [], None
+    for v in used:
+        typ = variables[v]
+        dims = decls[v][2] if v in decls else ''
+        assigned = bool(re.search(rf'(?<![\w.])(?<!->)\b{re.escape(v)}\s*(?:[-+*/%&|^]|<<|>>)?=(?!=)|'
+                                  rf'(?:\+\+|--)\s*\b{re.escape(v)}\b|(?<![\w.])(?<!->)\b{re.escape(v)}\s*(?:\+\+|--)|'
+                                  rf'&\s*\b{re.escape(v)}\b', region_code)) or bool(dims)
+        in_before = bool(_region_refs(before, v))
+        in_after = bool(_region_refs(after, v))
+        is_param = v not in decls
+        init = decls[v][3] if v in decls else None
+        dead_in = (not in_before and not is_param and init is None) or _region_defines_first(region_code, v)
+        dead_out = not in_after or _region_defines_first(after, v)
+        if v in decls and dead_in and dead_out:
+            inside.append(v)
+            continue
+        if v in decls and not in_before and not in_after:
+            inside.append(v)  # used only here: its declaration (and initializer) moves inside
+            continue
+        if not assigned:
+            if dims or re.search(r'\b(?:struct|union)\b', typ) and '*' not in typ:
+                return None
+            inputs.append(v)
+            continue
+        if output is not None or dims or (re.search(r'\b(?:struct|union)\b', typ) and '*' not in typ):
+            return None
+        if re.search(rf'&\s*\b{re.escape(v)}\b', region_code):
+            return None
+        output = v
+        if not dead_in:
+            inputs.append(v)
+    if output is None and not inside:
+        return None
+    rtype = variables[output] if output else 'void'
+    hparams = ', '.join(f"{variables[v]} {v}" for v in inputs) or 'void'
+    args = ', '.join(inputs)
+    region_text = body[stmts[lo][0]:stmts[hi][1]]
+    decl_lines = {}
+    for v in inside:
+        i = decls[v][0]
+        text = body[stmts[i][0]:stmts[i][1]].strip()
+        decl_lines[v] = indent + text + "\n"
+    if output and output not in inputs:
+        decl_lines.setdefault(output, f"{indent}{variables[output]} {output};\n")
+    order = [v for v in sorted(decl_lines, key=lambda v: decls[v][0] if v in decls else -1)]
+    call = f"{output} = {helper}({args});" if output else f"{helper}({args});"
+    # the outer function: region replaced by the call, declarations used nowhere else dropped
+    drop = []
+    for v in inside:
+        i = decls[v][0]
+        rest = ''.join(code[stmts[j][0]:stmts[j][1]] + ';' for j in body_stmts if j < lo or j > hi)
+        if not _region_refs(rest, v):
+            drop.append(i)
+    # rebuild with dropped declarations removed (positions relative to span[1] + 1)
+    base = span[1] + 1
+    pieces, cursor = [], base
+    for i in sorted(drop):
+        a, b = stmts[i]
+        line_a = body.rfind('\n', 0, a) + 1
+        line_b = body.find('\n', b)
+        line_b = len(body) if line_b < 0 else line_b + 1
+        if body[line_a:a].strip() or body[b:line_b].strip():
+            line_a, line_b = a, b
+        pieces.append(body[cursor:line_a])
+        cursor = line_b
+    pieces.append(body[cursor:stmts[lo][0]])
+    outer_body = ''.join(pieces) + call + body[stmts[hi][1]:span[2]]
+    results = []
+    orders = [('', order)]
+    if len(order) > 1:
+        orders.append((', declarations reversed', order[::-1]))
+    for label, ordered in orders:
+        hdef = (f"static inline {rtype} {helper}({hparams}) {{\n" + ''.join(decl_lines[v] for v in ordered)
+                + '\n' + indent + region_text.strip() + "\n" + (f"{indent}return {output};\n" if output else '')
+                + "}\n\n")
+        text = body[:head_start] + ('\n' if head_start and body[head_start - 1] != '\n' else '') + hdef \
+            + body[head_start:span[1] + 1] + outer_body + body[span[2]:]
+        results.append((label, text))
+    return results
+
+
 
 def embedded_call_assignments(body: str, name: str) -> List[Tuple[str, str]]:
     """`x = expr; f(.., x, ..)` -> `f(.., (x = expr), ..)`: the load lowers straight into the
@@ -2085,6 +2362,7 @@ def extra_families(body: str, name: str) -> List[Tuple[str, str, str]]:
     #     variable first; a constant local turned into an inlined helper's parameter
     out += [("recipdiv", l, t) for l, t in reciprocal_divisions(body, name)]
     out += [("inlineparam", l, t) for l, t in constant_inline_parameters(body, name)]
+    out += [("inlineregion", l, t) for l, t in region_inline_helpers(body, name)]
     return out
 
 
@@ -2630,7 +2908,8 @@ def all_rewrites(body: str, name: str) -> List[Tuple[str, str, str]]:
     # every edit of a family applied together (the same fix at every site): the composition of
     # the per-site texts when their edits do not overlap
     for fam, texts in by_fam.items():
-        if len(texts) < 2 or fam in ("decl-order", "regalloc", "param-count", "struct-pad", "inlineparam"):
+        if len(texts) < 2 or fam in ("decl-order", "regalloc", "param-count", "struct-pad", "inlineparam",
+                                          "inlineregion"):
             continue
         changes=[]
         for t in texts[:24]:

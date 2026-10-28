@@ -579,3 +579,25 @@ rule was probed with real GC/1.3.2 compiles of saved bodies.
   `*(s8 *)ptr` lets MWCC drop the `extsb` before a `stb` (fn_1_A47F4 0x310/0x334; `include/dolphin/os/OSFastCast.h`).
 - Folded hardware-register addresses (`lis rX, 0xCC00; stw rY, 0x6828(rX)`) come from `HW_REG32_LITERAL(off)`
   (`include/dolphin/hw_regs.h`, base `FZGX_ADDR___CPRegs`); `extern vu32 __EXIRegs[]` adds an `addi @l`.
+- **Constant copies (`li rA, K; mr rB, rA`) come from value numbering of compiler temporaries** (tooling round,
+  2026-10-27). The second `ValueNumbering_PerformValueNumbering(1)` (optimizer/GlobalOptimizer.c, after constant
+  propagation) numbers a `li`/`lis` only when its destination lies in the coalesce window (optimizer/ValueNumbering.c,
+  `PC_LI` case, `gGPRCoalesceFirst..Last`); any other `li` just invalidates. The window opens after the declared
+  locals and parameters get their registers (backend/CodeGen.c `allocate_object_registers`, then
+  `Registers_BeginCoalesceWindow`): it holds `@`-named objects, i.e. the locals and parameters of inlined functions,
+  IR temporaries and lowering temps. So two *inlined-helper locals* set to one constant become `li; mr` (the copy
+  stays when both are modified later), while declared locals of the function never do: every caller spelling
+  (`b = a`, `b = a = 0`, casts, declaration orders, `opt_propagation off`) gives two `li`. Probes (GC/1.3.2):
+  `static inline void lp(void) { unsigned i; for (i = 0; i < 3; i++) { int y = i * 2; ... } }` gives fn_4_A0C's
+  `li r31, 0; mr r30, r31` for the strength-reduced counter; the same loop in the caller gives two `li`; locals
+  `present = 0; mask = present;` in a helper give fn_1_C24A4's `li r4, 0; mr r5, r4; ori r0, r4, 1`. Inlined locals
+  number in the opposite order to declared locals: the reversed declaration order is the first one to try. A
+  whole-body helper does not work for large functions: MWCC's default `inline_max_size` leaves it out of line
+  (`#pragma inline_max_size(10000)` inlines it, but changes the whole function's allocation), so the helper should
+  span only the region of the pair. `fixup_source.region_inline_helpers` (family `inlineregion`, `decl` moves on
+  `NAME_fzgx_region`) builds it: fn_1_C24A4 4 rows -> 1 (word score 99.47 -> 99.89), fn_4_A0C 95.8% -> 97.5%
+  (97.85%, two scheduling rows, when `row` is a helper local too). Not this mechanism: a constant *argument*
+  shared with stores (fn_1_36330's `li r3, -1` for four stores and the call): IR constant propagation folds an
+  inlined parameter's constant into every use, so moving the call into the helper changes nothing; the argument
+  `li r3` targets a physical register, outside the window. fn_8006AA44's `li r6, 0x40` kept past the next `li` is
+  scheduling, not a copy.
