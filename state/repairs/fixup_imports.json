@@ -19229,5 +19229,150 @@
     ],
     "link": "verified",
     "commit": "370b1d81"
+  },
+  "fn_1_10B5A8": {
+    "seed_symbol": "fn_1_10A6A0",
+    "generator": "fzgx fixup",
+    "transform": "bind exact clone",
+    "seed": "#include \"types.h\"\n#include \"rel/main_rel/globals.h\"\n#include \"rel/main_rel/accessory.h\"\n\nextern void *fn_80077B14(void *);\nextern void lbl_8006DBAC(void *);\nextern void fn_8006E250(void *, void *);\nextern void fn_1_10846C(void);\nextern f32 lbl_1_rodata_7B1C;\nextern f32 lbl_1_rodata_7B20;\nextern s32 fn_1_14D670(void);\nextern u32 lbl_801A66A0;\nextern s32 fn_1_86678(s32 arg);\nextern u32 lbl_1_bss_897AC[1741];\nextern u32 lbl_1_bss_897A4;\nextern u32 lbl_1_bss_897A8;\nextern void * lbl_801A6410;\nextern void lbl_8006DAEC(void);\nextern void lbl_8006DBE4(void);\nextern void lbl_8006E1B0(void *, void *);\nextern void lbl_8006DC20(void);\nextern const f64 lbl_1_rodata_7BF8;\nextern void fn_80008BA8(void *dst, void *src, int size);\nextern void *fn_1_45D0(void *manager, int type, void *data, int code);\nextern void fn_1_105744(void);\nextern void fn_1_106DB4(void);\nextern void fn_1_9D0EC(u32, u32, void*, void*);\nextern void fn_1_103AA8(void);\nextern u32 lbl_1_bss_85288[2];\nextern void fn_1_103AD4(void);\nextern void fn_1_105768(void);\nextern void fn_1_9E5B8(void *);\nextern f32 lbl_1_rodata_7B58[40];\nextern u8 lbl_1_rodata_8058[16];\nextern int mathutil_mtxA_rotate_z__fzgx_offset_C();\nextern struct fn_1_129D9C_system *lbl_801A6D00;\nextern void lbl_8006DCA4(void);\nextern void lbl_8006E1C0(void *, void *);\nextern void lbl_8006DFC4(void *);\nextern void lbl_8006D7B0(void);\nextern void lbl_8006D668(void *);\nextern void lbl_8006E0B4(f32, f32, f32);\nextern void lbl_8006E14C(f32);\nextern void lbl_8006DB74(void *);\nextern void fn_80072558(void);\nextern void fn_80083DB0(void *, void *);\nextern void *fn_1_55210(void *);\nextern void *fn_1_548AC(u32);\nextern void *fn_1_5448C(void *);\nextern void fn_1_5489C(void *, void *);\nextern void fn_1_12A0E0(void);\n\nextern void *fn_80077B14(void *);\nextern void lbl_8006DBAC(void *);\nextern void lbl_8006DAEC(void);\nextern void lbl_8006DBE4(void);\nextern void lbl_8006E1B0(void *, void *);\nextern void lbl_8006DC20(void);\nextern void fn_8006E250(void *, void *);\n\ntypedef union fn_1_10A6A0_Vec {\n    u32 w[3];\n    struct {\n        f32 x;\n        f32 y;\n        f32 z;\n    };\n} fn_1_10A6A0_Vec;\n\ntypedef struct fn_1_10A6A0_Part {\n    s8 unk_0;\n    u8 pad_1;\n    u8 unk_2;\n    u8 pad_3;\n    u16 unk_4[6];\n    fn_1_10A6A0_Vec unk_10;\n    fn_1_10A6A0_Vec unk_1C;\n    fn_1_10A6A0_Vec unk_28;\n    fn_1_10A6A0_Vec unk_34;\n    u32 unk_40;\n} fn_1_10A6A0_Part;\n\ntypedef struct fn_1_10A6A0_Model {\n    u8 pad_0[0x8];\n    u8 *unk_8;\n} fn_1_10A6A0_Model;\n\ntypedef struct fn_1_10A6A0_Data {\n    u8 pad_0[0x150];\n    fn_1_10A6A0_Model *unk_150;\n} fn_1_10A6A0_Data;\n\ntypedef struct fn_1_10A6A0_Object {\n    u8 unk_0;\n    u8 pad_1[7];\n    u32 unk_8;\n    fn_1_10A6A0_Data *unk_C;\n    void *unk_10;\n    u32 pad_14;\n    u32 unk_18;\n    u8 pad_1C[8];\n    fn_1_10A6A0_Part *unk_24;\n} fn_1_10A6A0_Object;\n\nstatic inline void fn_1_10A6A0_reset_parts(fn_1_10A6A0_Object *self)\n{\n    s32 i;\n    fn_1_10A6A0_Part *p;\n\n    p = self->unk_24;\n    for (i = 0; i < self->unk_18; i++, p++) {\n        lbl_8006DBE4();\n        lbl_8006E1B0(&p->unk_28, &p->unk_10);\n    }\n}\n\nstatic inline void fn_1_10A6A0_attach_parts(fn_1_10A6A0_Object *self, u8 *tbl)\n{\n    s32 i;\n    s32 j;\n    fn_1_10A6A0_Part *p;\n\n    p = self->unk_24;\n    for (i = 0; i < self->unk_18; i++, p++) {\n        for (j = 0; j < (s32)p->unk_2; j++) {\n            fn_8006E250(&p->unk_10, tbl + p->unk_4[j] * 64);\n        }\n    }\n}\n\nvoid fn_1_10A6A0(fn_1_10A6A0_Object *self)\n{\n    s32 i;\n    s32 n;\n    fn_1_10A6A0_Part *part;\n    u8 *pool;\n    u8 *tbl;\n    s32 j;\n    fn_1_10A6A0_Part *delta;\n\n    if (self == 0) {\n        return;\n    }\n    if (self->unk_10 == 0) {\n        return;\n    }\n    fn_80077B14(self->unk_10);\n\n    if (self->unk_0 & 2) {\n        self->unk_0 &= ~2;\n        lbl_8006DBAC(self->unk_C->unk_150->unk_8 +\n                    ((u32 *)&lbl_1_data_3FFBC)[self->unk_8] * 0x18c + 0x88);\n        lbl_8006DAEC();\n        fn_1_10A6A0_reset_parts(self);\n        lbl_8006DC20();\n    }\n\n    pool = self->unk_C->unk_150->unk_8 +\n           ((u32 *)&lbl_1_data_3FFBC)[self->unk_8] * 0x18c;\n    n = 0;\n    part = self->unk_24;\n    for (i = 0; i < self->unk_18; i++, part++) {\n        if (part->unk_0 & 1) {\n            lbl_8006DBAC(pool + 0x88);\n            lbl_8006E1B0(&part->unk_28, &part->unk_10);\n        }\n        else {\n            part->unk_10 = ((fn_1_10A6A0_Vec *)&lbl_1_bss_88B50)[n];\n            n++;\n        }\n    }\n\n    delta = self->unk_24;\n    for (j = 0; j < self->unk_18; j++, delta++) {\n        delta->unk_34.x = delta->unk_10.x - delta->unk_1C.x;\n        delta->unk_34.y = delta->unk_10.y - delta->unk_1C.y;\n        delta->unk_34.z = delta->unk_10.z - delta->unk_1C.z;\n    }\n\n    tbl = (u8 *)fn_80077B14(self->unk_10);\n    lbl_8006DBAC(self->unk_C->unk_150->unk_8 +\n                ((u32 *)&lbl_1_data_3FFBC)[self->unk_8] * 0x18c + 0x88);\n    fn_1_10A6A0_attach_parts(self, tbl);\n}\n",
+    "seed_sha256": "228d524ca6ca0c557b54596efd3da60c49ee02ee24461b8012bcb843b159dbe2",
+    "generated_sha256": "2fe2a2fd1a6f7a6ade7cc5da7e619e03de875ca70c0bd1f031dc2072bcc68caa",
+    "generated_source": "\ntypedef signed char s8;\n\ntypedef signed long s32;\n\ntypedef unsigned char u8;\ntypedef unsigned short u16;\ntypedef unsigned long u32;\n\ntypedef float f32;\n\n/* lbl_1_data_3FFBC: .data size 0x574, referenced by 31 functions, shape {} */\nextern u8 lbl_1_data_3FFBC[0x574];\n\n/* lbl_1_bss_88B50: .bss size 0xC00, 8 refs from accessory.c */\ntypedef struct {\nu32 unk_0; /* 4 loads, 4 stores */\nu32 unk_4; /* 5 loads, 5 stores */\nu32 unk_8; /* 4 loads, 4 stores */\nu8 pad_C[0xBF4];\n} Obj_1_bss_88B50;\nextern Obj_1_bss_88B50 lbl_1_bss_88B50;\n\nextern void *fn_80077B14(void *);\nextern void lbl_8006DBAC(void *);\nextern void fn_8006E250(void *, void *);\n\nextern void lbl_8006DAEC(void);\nextern void lbl_8006DBE4(void);\nextern void lbl_8006E1B0(void *, void *);\nextern void lbl_8006DC20(void);\n\nextern void *fn_80077B14(void *);\nextern void lbl_8006DBAC(void *);\nextern void lbl_8006DAEC(void);\nextern void lbl_8006DBE4(void);\nextern void lbl_8006E1B0(void *, void *);\nextern void lbl_8006DC20(void);\nextern void fn_8006E250(void *, void *);\ntypedef union fn_1_10A6A0_Vec {\nu32 w[3];\nstruct {\nf32 x;\nf32 y;\nf32 z;\n};\n} fn_1_10A6A0_Vec;\ntypedef struct fn_1_10A6A0_Part {\ns8 unk_0;\nu8 pad_1;\nu8 unk_2;\nu8 pad_3;\nu16 unk_4[6];\nfn_1_10A6A0_Vec unk_10;\nfn_1_10A6A0_Vec unk_1C;\nfn_1_10A6A0_Vec unk_28;\nfn_1_10A6A0_Vec unk_34;\nu32 unk_40;\n} fn_1_10A6A0_Part;\ntypedef struct fn_1_10A6A0_Model {\nu8 pad_0[0x8];\nu8 *unk_8;\n} fn_1_10A6A0_Model;\ntypedef struct fn_1_10A6A0_Data {\nu8 pad_0[0x150];\nfn_1_10A6A0_Model *unk_150;\n} fn_1_10A6A0_Data;\ntypedef struct fn_1_10A6A0_Object {\nu8 unk_0;\nu8 pad_1[7];\nu32 unk_8;\nfn_1_10A6A0_Data *unk_C;\nvoid *unk_10;\nu32 pad_14;\nu32 unk_18;\nu8 pad_1C[8];\nfn_1_10A6A0_Part *unk_24;\n} fn_1_10A6A0_Object;\nstatic inline void fn_1_10A6A0_reset_parts(fn_1_10A6A0_Object *self)\n{\ns32 i;\nfn_1_10A6A0_Part *p;\np = self->unk_24;\nfor (i = 0; i < self->unk_18; i++, p++) {\nlbl_8006DBE4();\nlbl_8006E1B0(&p->unk_28, &p->unk_10);\n}\n}\nstatic inline void fn_1_10A6A0_attach_parts(fn_1_10A6A0_Object *self, u8 *tbl)\n{\ns32 i;\ns32 j;\nfn_1_10A6A0_Part *p;\np = self->unk_24;\nfor (i = 0; i < self->unk_18; i++, p++) {\nfor (j = 0; j < (s32)p->unk_2; j++) {\nfn_8006E250(&p->unk_10, tbl + p->unk_4[j] * 64);\n}\n}\n}\nvoid fn_1_10B5A8(fn_1_10A6A0_Object *self)\n{\ns32 i;\ns32 n;\nfn_1_10A6A0_Part *part;\nu8 *pool;\nu8 *tbl;\ns32 j;\nfn_1_10A6A0_Part *delta;\nif (self == 0) {\nreturn;\n}\nif (self->unk_10 == 0) {\nreturn;\n}\nfn_80077B14(self->unk_10);\nif (self->unk_0 & 2) {\nself->unk_0 &= ~2;\nlbl_8006DBAC(self->unk_C->unk_150->unk_8 +\n((u32 *)&lbl_1_data_3FFBC)[self->unk_8] * 0x18c + 0x88);\nlbl_8006DAEC();\nfn_1_10A6A0_reset_parts(self);\nlbl_8006DC20();\n}\npool = self->unk_C->unk_150->unk_8 +\n((u32 *)&lbl_1_data_3FFBC)[self->unk_8] * 0x18c;\nn = 0;\npart = self->unk_24;\nfor (i = 0; i < self->unk_18; i++, part++) {\nif (part->unk_0 & 1) {\nlbl_8006DBAC(pool + 0x88);\nlbl_8006E1B0(&part->unk_28, &part->unk_10);\n}\nelse {\npart->unk_10 = ((fn_1_10A6A0_Vec *)&lbl_1_bss_88B50)[n];\nn++;\n}\n}\ndelta = self->unk_24;\nfor (j = 0; j < self->unk_18; j++, delta++) {\ndelta->unk_34.x = delta->unk_10.x - delta->unk_1C.x;\ndelta->unk_34.y = delta->unk_10.y - delta->unk_1C.y;\ndelta->unk_34.z = delta->unk_10.z - delta->unk_1C.z;\n}\ntbl = (u8 *)fn_80077B14(self->unk_10);\nlbl_8006DBAC(self->unk_C->unk_150->unk_8 +\n((u32 *)&lbl_1_data_3FFBC)[self->unk_8] * 0x18c + 0x88);\nfn_1_10A6A0_attach_parts(self, tbl);\n}\n",
+    "compiler": "GC/1.3.2",
+    "flags": "",
+    "source": "rel/main_rel/accessory/fn_1_10B5A8.c",
+    "bytes": 560,
+    "headers_sha256": "b30ce45496c4d89267c6d34178bfde5f7727a5577e4f124cd864a5f715517474",
+    "oracle_sha256": "aec47744586763605c17f3f28ac8be00e6d2f5e5a90788cb9b9b6db5de7e118d",
+    "recipe": [
+      {
+        "label": "expand owned clone declarations",
+        "input_sha256": "228d524ca6ca0c557b54596efd3da60c49ee02ee24461b8012bcb843b159dbe2",
+        "output_sha256": "6f759aadc0c26e931c2575b35c58b1dab6e68f2f0d716bb2080111c6e9cac8a6",
+        "input_symbol": "fn_1_10A6A0",
+        "output_symbol": "fn_1_10A6A0",
+        "edits": [
+          [
+            0,
+            88,
+            "\ntypedef signed char s8;\n\ntypedef signed long s32;\n\ntypedef unsigned char u8;\ntypedef unsigned short u16;\ntypedef unsigned long u32;\n\ntypedef float f32;\n\n/* lbl_1_data_3FFBC: .data size 0x574, referenced by 31 functions, shape {} */\nextern u8 lbl_1_data_3FFBC[0x574];\n\n/* lbl_1_bss_88B50: .bss size 0xC00, 8 refs from accessory.c */\ntypedef struct {\nu32 unk_0; /* 4 loads, 4 stores */\nu32 unk_4; /* 5 loads, 5 stores */\nu32 unk_8; /* 4 loads, 4 stores */\nu8 pad_C[0xBF4];\n} Obj_1_bss_88B50;\nextern Obj_1_bss_88B50 lbl_1_bss_88B50;"
+          ],
+          [
+            199,
+            494,
+            ""
+          ],
+          [
+            633,
+            1749,
+            ""
+          ],
+          [
+            1997,
+            1998,
+            ""
+          ],
+          [
+            2030,
+            2106,
+            "u32 w[3];\nstruct {\nf32 x;\nf32 y;\nf32 z;\n"
+          ],
+          [
+            2128,
+            2129,
+            ""
+          ],
+          [
+            2163,
+            2353,
+            "s8 unk_0;\nu8 pad_1;\nu8 unk_2;\nu8 pad_3;\nu16 unk_4[6];\nfn_1_10A6A0_Vec unk_10;\nfn_1_10A6A0_Vec unk_1C;\nfn_1_10A6A0_Vec unk_28;\nfn_1_10A6A0_Vec unk_34;\n"
+          ],
+          [
+            2385,
+            2386,
+            ""
+          ],
+          [
+            2421,
+            2444,
+            "u8 pad_0[0x8];\n"
+          ],
+          [
+            2476,
+            2477,
+            ""
+          ],
+          [
+            2511,
+            2536,
+            "u8 pad_0[0x150];\n"
+          ],
+          [
+            2584,
+            2585,
+            ""
+          ],
+          [
+            2621,
+            2768,
+            "u8 unk_0;\nu8 pad_1[7];\nu32 unk_8;\nfn_1_10A6A0_Data *unk_C;\nvoid *unk_10;\nu32 pad_14;\nu32 unk_18;\nu8 pad_1C[8];\n"
+          ],
+          [
+            2816,
+            2817,
+            ""
+          ],
+          [
+            2888,
+            3068,
+            "s32 i;\nfn_1_10A6A0_Part *p;\np = self->unk_24;\nfor (i = 0; i < self->unk_18; i++, p++) {\nlbl_8006DBE4();\nlbl_8006E1B0(&p->unk_28, &p->unk_10);"
+          ],
+          [
+            3071,
+            3071,
+            "}"
+          ],
+          [
+            3153,
+            3391,
+            "s32 i;\ns32 j;\nfn_1_10A6A0_Part *p;\np = self->unk_24;\nfor (i = 0; i < self->unk_18; i++, p++) {\nfor (j = 0; j < (s32)p->unk_2; j++) {\nfn_8006E250(&p->unk_10, tbl + p->unk_4[j] * 64);"
+          ],
+          [
+            3394,
+            3394,
+            "}\n}"
+          ],
+          [
+            3440,
+            4833,
+            "s32 i;\ns32 n;\nfn_1_10A6A0_Part *part;\nu8 *pool;\nu8 *tbl;\ns32 j;\nfn_1_10A6A0_Part *delta;\nif (self == 0) {\nreturn;\n}\nif (self->unk_10 == 0) {\nreturn;\n}\nfn_80077B14(self->unk_10);\nif (self->unk_0 & 2) {\nself->unk_0 &= ~2;\nlbl_8006DBAC(self->unk_C->unk_150->unk_8 +\n((u32 *)&lbl_1_data_3FFBC)[self->unk_8] * 0x18c + 0x88);\nlbl_8006DAEC();\nfn_1_10A6A0_reset_parts(self);\nlbl_8006DC20();\n}\npool = self->unk_C->unk_150->unk_8 +\n((u32 *)&lbl_1_data_3FFBC)[self->unk_8] * 0x18c;\nn = 0;\npart = self->unk_24;\nfor (i = 0; i < self->unk_18; i++, part++) {\nif (part->unk_0 & 1) {\nlbl_8006DBAC(pool + 0x88);\nlbl_8006E1B0(&part->unk_28, &part->unk_10);\n}\nelse {\npart->unk_10 = ((fn_1_10A6A0_Vec *)&lbl_1_bss_88B50)[n];\nn++;\n}\n}\ndelta = self->unk_24;\nfor (j = 0; j < self->unk_18; j++, delta++) {\ndelta->unk_34.x = delta->unk_10.x - delta->unk_1C.x;\ndelta->unk_34.y = delta->unk_10.y - delta->unk_1C.y;\ndelta->unk_34.z = delta->unk_10.z - delta->unk_1C.z;\n}\ntbl = (u8 *)fn_80077B14(self->unk_10);\nlbl_8006DBAC(self->unk_C->unk_150->unk_8 +\n((u32 *)&lbl_1_data_3FFBC)[self->unk_8] * 0x18c + 0x88);\n"
+          ]
+        ]
+      },
+      {
+        "label": "bind exact clone",
+        "input_sha256": "6f759aadc0c26e931c2575b35c58b1dab6e68f2f0d716bb2080111c6e9cac8a6",
+        "output_sha256": "2fe2a2fd1a6f7a6ade7cc5da7e619e03de875ca70c0bd1f031dc2072bcc68caa",
+        "input_symbol": "fn_1_10A6A0",
+        "output_symbol": "fn_1_10B5A8",
+        "edits": [
+          [
+            2212,
+            2216,
+            "B5A8"
+          ]
+        ],
+        "clone": {
+          "donor": "fn_1_10A6A0",
+          "recipient": "fn_1_10B5A8",
+          "bindings": {
+            "lbl_1_data_3FFBC": "lbl_1_data_3FFBC",
+            "lbl_1_bss_88B50": "lbl_1_bss_88B50",
+            "fn_1_10A6A0": "fn_1_10B5A8"
+          }
+        }
+      }
+    ],
+    "link": "pending"
   }
 }
