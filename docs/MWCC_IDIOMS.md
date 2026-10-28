@@ -569,3 +569,13 @@ rule was probed with real GC/1.3.2 compiles of saved bodies.
   `fixup_source.constant_address_locals` (sweep family `constaddr`) emits it, redefining `LC_BASE`
   over the function and passing the base as a trailing parameter to static inline helpers only
   this function calls (round 68: 1 of 45 LC near misses closed).
+
+- Librarian pass 16 (2026-10-27). A scalar FPR stored six times with displacement `psq_st v, 0..0x28(d), 0, qr0`
+  and then reused as `ps_mr fN, v` is `psvec_fill4(d, v)` from `include/psvec_fill.h` (fn_1_4EDAC 96.97 -> 99.49%;
+  four `psvec_set` calls give merges and stfs instead). Adding any inline function to an already-included header
+  (psvec.h) renumbers MWCC's anonymous `@N` literals in every includer and breaks matched units' `pool` maps
+  (9 live_camera/stcoli pool units failed): put new kernels in a new header.
+- The SDK fast casts read the temporary inside the asm block for signed widths (`lbz; extsb`, `lha`): a C read
+  `*(s8 *)ptr` lets MWCC drop the `extsb` before a `stb` (fn_1_A47F4 0x310/0x334; `include/dolphin/os/OSFastCast.h`).
+- Folded hardware-register addresses (`lis rX, 0xCC00; stw rY, 0x6828(rX)`) come from `HW_REG32_LITERAL(off)`
+  (`include/dolphin/hw_regs.h`, base `FZGX_ADDR___CPRegs`); `extern vu32 __EXIRegs[]` adds an `addi @l`.
