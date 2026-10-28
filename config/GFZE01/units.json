@@ -68795,6 +68795,16 @@
   },
   {
     "module": "movie_module",
+    "source": "rel/movie_module/fn_12_26C0C.c",
+    "symbols": [
+      "fn_12_26C0C"
+    ],
+    "status": "matching",
+    "mw_version": "GC/1.3.2",
+    "extra_cflags": []
+  },
+  {
+    "module": "movie_module",
     "source": "rel/movie_module/fn_12_26C1C.c",
     "symbols": [
       "fn_12_26C1C"
