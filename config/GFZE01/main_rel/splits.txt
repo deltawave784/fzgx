@@ -8543,3 +8543,6 @@ rel/main_rel/sel_static_disp/fn_1_14E96C.c:
 
 rel/main_rel/memcard/fn_1_B8E84.c:
 	.text       start:0x000B8E84 end:0x000B8EDC align:4
+
+rel/main_rel/sel_static_disp/fn_1_14BC40.c:
+	.text       start:0x0014BC40 end:0x0014BCBC align:4
