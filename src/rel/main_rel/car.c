@@ -3155,6 +3155,242 @@ void fn_1_810E4(u32 arg0) {
 }
 /* fzgx:end fn_1_810E4 */
 
+/* fzgx:begin fn_1_81164 pool noprologue */
+#include "types.h"
+
+typedef struct Model81164 {
+    u8 pad_0[0x8];
+    void *unk_8;
+    u32 unk_C;
+} Model81164;
+
+typedef struct Car81164 {
+    u8 pad_0[0x328];
+    s8 unk_328;
+    u8 pad_329[0x37C - 0x329];
+    Model81164 *unk_37C[5];
+    u32 unk_390;
+    u8 pad_394[0x3A8 - 0x394];
+    u32 unk_3A8;
+    u8 pad_3AC[0x3B8 - 0x3AC];
+    s16 unk_3B8;
+} Car81164;
+
+/* The TU's .data objects, laid out at their retail offsets from lbl_1_data_1F1D8. */
+extern u8 lbl_1_data_1F1D8__fzgx_offset_0[];
+extern u8 lbl_1_data_1F1E0__fzgx_offset_0[];
+extern u8 lbl_1_data_1F1E8__fzgx_offset_0[];
+extern u8 lbl_1_data_1F1F0__fzgx_offset_0[];
+extern u8 lbl_1_data_1F1F8__fzgx_offset_0[];
+extern u8 lbl_1_data_1F200__fzgx_offset_0[];
+extern u8 lbl_1_data_1F208__fzgx_offset_0[];
+extern u8 lbl_1_data_1F210__fzgx_offset_0[];
+extern u8 lbl_1_data_1F218__fzgx_offset_0[];
+extern u8 lbl_1_data_1F220__fzgx_offset_0[];
+extern u8 lbl_1_data_1F224__fzgx_offset_0[];
+extern u8 lbl_1_data_1F22C__fzgx_offset_0[];
+extern u8 lbl_1_data_1F234__fzgx_offset_0[];
+extern u8 lbl_1_data_1F23C__fzgx_offset_0[];
+extern u8 lbl_1_data_1F244__fzgx_offset_0[];
+extern u8 lbl_1_data_1F24C__fzgx_offset_0[];
+extern u8 lbl_1_data_1F254__fzgx_offset_0[];
+extern u8 lbl_1_data_1F25C__fzgx_offset_0[];
+extern u8 lbl_1_data_1F264__fzgx_offset_0[];
+extern u8 lbl_1_data_1F26C__fzgx_offset_0[];
+extern u8 lbl_1_data_1F274__fzgx_offset_0[];
+extern u8 lbl_1_data_1F27C__fzgx_offset_0[];
+extern u8 lbl_1_data_1F284__fzgx_offset_0[];
+extern u8 lbl_1_data_1F28C__fzgx_offset_0[];
+extern u8 lbl_1_data_1F294__fzgx_offset_0[];
+extern u8 lbl_1_data_1F29C__fzgx_offset_0[];
+extern u8 lbl_1_data_1F2A4__fzgx_offset_0[];
+extern u8 lbl_1_data_1F2A8__fzgx_offset_0[];
+extern u8 lbl_1_data_1F2B0__fzgx_offset_0[];
+extern u8 lbl_1_data_1F2B8__fzgx_offset_0[];
+extern u8 lbl_1_data_1F2C0__fzgx_offset_0[];
+extern u8 lbl_1_data_1F2C8__fzgx_offset_0[];
+extern u8 lbl_1_data_1F2D0__fzgx_offset_0[];
+extern u8 lbl_1_data_1F2D8__fzgx_offset_0[];
+extern u8 lbl_1_data_1F2E0__fzgx_offset_0[];
+extern u8 lbl_1_data_1F2E8__fzgx_offset_0[];
+extern u8 lbl_1_data_1F2F0__fzgx_offset_0[];
+extern u8 lbl_1_data_1F2F8__fzgx_offset_0[];
+extern u8 lbl_1_data_1F300__fzgx_offset_0[];
+extern u8 lbl_1_data_1F308__fzgx_offset_0[];
+extern u8 lbl_1_data_1F310__fzgx_offset_0[];
+extern u8 lbl_1_data_1F3BC__fzgx_offset_0[];
+extern u8 lbl_1_data_1F3C4__fzgx_offset_0[];
+extern u8 lbl_1_data_1F3CC__fzgx_offset_0[];
+extern u8 lbl_1_data_1F3D4__fzgx_offset_0[];
+extern u8 lbl_1_data_1F3DC__fzgx_offset_0[];
+extern u8 lbl_1_data_1F3E4__fzgx_offset_0[];
+extern u8 lbl_1_data_1F3EC__fzgx_offset_0[];
+extern u8 lbl_1_data_1F3F4__fzgx_offset_0[];
+extern u8 lbl_1_data_1F3FC__fzgx_offset_0[];
+extern u8 lbl_1_data_1F404__fzgx_offset_0[];
+extern u8 lbl_1_data_1F408__fzgx_offset_0[];
+extern u8 lbl_1_data_1F410__fzgx_offset_0[];
+extern u8 lbl_1_data_1F418__fzgx_offset_0[];
+extern u8 lbl_1_data_1F420__fzgx_offset_0[];
+extern u8 lbl_1_data_1F428__fzgx_offset_0[];
+extern u8 lbl_1_data_1F430__fzgx_offset_0[];
+extern u8 lbl_1_data_1F438__fzgx_offset_0[];
+extern u8 lbl_1_data_1F440__fzgx_offset_0[];
+extern u8 lbl_1_data_1F448__fzgx_offset_0[];
+extern u8 lbl_1_data_1F450__fzgx_offset_0[];
+extern u8 lbl_1_data_1F458__fzgx_offset_0[];
+extern u8 lbl_1_data_1F460__fzgx_offset_0[];
+extern u8 lbl_1_data_1F468__fzgx_offset_0[];
+extern u8 lbl_1_data_1F470__fzgx_offset_0[];
+extern u8 lbl_1_data_1F478__fzgx_offset_0[];
+extern u8 lbl_1_data_1F480__fzgx_offset_0[];
+extern u8 lbl_1_data_1F488__fzgx_offset_0[];
+extern u8 lbl_1_data_1F48C__fzgx_offset_0[];
+extern u8 lbl_1_data_1F494__fzgx_offset_0[];
+extern u8 lbl_1_data_1F49C__fzgx_offset_0[];
+extern u8 lbl_1_data_1F4A4__fzgx_offset_0[];
+extern u8 lbl_1_data_1F4AC__fzgx_offset_0[];
+extern u8 lbl_1_data_1F4B4__fzgx_offset_0[];
+extern u8 lbl_1_data_1F4BC__fzgx_offset_0[];
+extern u8 lbl_1_data_1F4C4__fzgx_offset_0[];
+extern u8 lbl_1_data_1F4CC__fzgx_offset_0[];
+extern u8 lbl_1_data_1F4D4__fzgx_offset_0[];
+extern u8 lbl_1_data_1F4DC__fzgx_offset_0[];
+extern u8 lbl_1_data_1F4E4__fzgx_offset_0[];
+extern u8 lbl_1_data_1F4EC__fzgx_offset_0[];
+extern u8 lbl_1_data_1F4F4__fzgx_offset_0[];
+
+/* Upper-case vehicle codes, their pointer table, then the lower-case codes (names table follows). */
+static union { u32 w[201]; char v[0x324]; } fzgx_d_000 = {{  /* fzgx-allow: A1 retail data bytes and bindings */
+    0x5247415A, 0x45000000, 0x57434154, 0x0, 0x47464F58, 0x0, 0x49544947, 0x45520000,
+    0x46535449, 0x4E470000, 0x57474F4F, 0x53450000, 0x4246414C, 0x434F4E00, 0x44434C41, 0x57000000,
+    0x47535441, 0x52000000, 0x4C575900, 0x4D574F4C, 0x46000000, 0x53504952, 0x41000000, 0x44414E43,
+    0x0, 0x41524F42, 0x494E0000, 0x4246414E, 0x47000000, 0x53504841, 0x4E000000, 0x4750414E,
+    0x0, 0x48535045, 0x45440000, 0x53414E47, 0x0, 0x4B4D4554, 0x45000000, 0x514D4554,
+    0x45000000, 0x544E4F52, 0x49000000, 0x4E544855, 0x4E000000, 0x57424F41, 0x52000000, 0x48484157,
+    0x4B000000, 0x57574153, 0x50000000, 0x4D545900, 0x4D485552, 0x52000000, 0x43424541, 0x52000000,
+    0x4242554C, 0x4C000000, 0x4441524B, 0x53000000, 0x46415453, 0x0, 0x53434152, 0x50000000,
+    0x50494E4B, 0x53000000, 0x4D47554C, 0x4C000000, 0x53524154, 0x0, 0x534D4F4F, 0x4E000000,
+    0x50524142, 0x42495400, 0x47544158, 0x49000000, 0x52524F43, 0x4B000000, 0x5241494E, 0x50000000,
+    (u32)lbl_1_data_1F1D8__fzgx_offset_0, (u32)lbl_1_data_1F1E0__fzgx_offset_0, (u32)lbl_1_data_1F1E8__fzgx_offset_0, (u32)lbl_1_data_1F1F0__fzgx_offset_0, (u32)lbl_1_data_1F1F8__fzgx_offset_0, (u32)lbl_1_data_1F200__fzgx_offset_0, (u32)lbl_1_data_1F208__fzgx_offset_0, (u32)lbl_1_data_1F210__fzgx_offset_0,
+    (u32)lbl_1_data_1F218__fzgx_offset_0, (u32)lbl_1_data_1F220__fzgx_offset_0, (u32)lbl_1_data_1F224__fzgx_offset_0, (u32)lbl_1_data_1F22C__fzgx_offset_0, (u32)lbl_1_data_1F234__fzgx_offset_0, (u32)lbl_1_data_1F23C__fzgx_offset_0, (u32)lbl_1_data_1F244__fzgx_offset_0, (u32)lbl_1_data_1F24C__fzgx_offset_0,
+    (u32)lbl_1_data_1F254__fzgx_offset_0, (u32)lbl_1_data_1F25C__fzgx_offset_0, (u32)lbl_1_data_1F264__fzgx_offset_0, (u32)lbl_1_data_1F26C__fzgx_offset_0, (u32)lbl_1_data_1F274__fzgx_offset_0, (u32)lbl_1_data_1F27C__fzgx_offset_0, (u32)lbl_1_data_1F284__fzgx_offset_0, (u32)lbl_1_data_1F28C__fzgx_offset_0,
+    (u32)lbl_1_data_1F294__fzgx_offset_0, (u32)lbl_1_data_1F29C__fzgx_offset_0, (u32)lbl_1_data_1F2A4__fzgx_offset_0, (u32)lbl_1_data_1F2A8__fzgx_offset_0, (u32)lbl_1_data_1F2B0__fzgx_offset_0, (u32)lbl_1_data_1F2B8__fzgx_offset_0, (u32)lbl_1_data_1F2C0__fzgx_offset_0, (u32)lbl_1_data_1F2C8__fzgx_offset_0,
+    (u32)lbl_1_data_1F2D0__fzgx_offset_0, (u32)lbl_1_data_1F2D8__fzgx_offset_0, (u32)lbl_1_data_1F2E0__fzgx_offset_0, (u32)lbl_1_data_1F2E8__fzgx_offset_0, (u32)lbl_1_data_1F2F0__fzgx_offset_0, (u32)lbl_1_data_1F2F8__fzgx_offset_0, (u32)lbl_1_data_1F300__fzgx_offset_0, (u32)lbl_1_data_1F308__fzgx_offset_0,
+    (u32)lbl_1_data_1F310__fzgx_offset_0, 0x7267617A, 0x65000000, 0x77636174, 0x0, 0x67666F78, 0x0, 0x69746967,
+    0x65720000, 0x66737469, 0x6E670000, 0x77676F6F, 0x73650000, 0x6266616C, 0x636F6E00, 0x64636C61,
+    0x77000000, 0x67737461, 0x72000000, 0x6C777900, 0x6D776F6C, 0x66000000, 0x73706972, 0x61000000,
+    0x64616E63, 0x0, 0x61726F62, 0x696E0000, 0x6266616E, 0x67000000, 0x73706861, 0x6E000000,
+    0x6770616E, 0x0, 0x68737065, 0x65640000, 0x73616E67, 0x0, 0x6B6D6574, 0x65000000,
+    0x716D6574, 0x65000000, 0x746E6F72, 0x69000000, 0x6E746875, 0x6E000000, 0x77626F61, 0x72000000,
+    0x68686177, 0x6B000000, 0x77776173, 0x70000000, 0x6D747900, 0x6D687572, 0x72000000, 0x63626561,
+    0x72000000, 0x6262756C, 0x6C000000, 0x6461726B, 0x73000000, 0x66617473, 0x0, 0x73636172,
+    0x70000000, 0x70696E6B, 0x73000000, 0x6D67756C, 0x6C000000, 0x73726174, 0x0, 0x736D6F6F,
+    0x6E000000, 0x70726162, 0x62697400, 0x67746178, 0x69000000, 0x72726F63, 0x6B000000, 0x7261696E,
+    0x70000000
+}};
+
+/* Lower-case vehicle code per car kind. */
+static union { u32 w[41]; char *v[41]; } fzgx_d_names = {{  /* fzgx-allow: A1 retail data bytes and bindings */
+    (u32)lbl_1_data_1F3BC__fzgx_offset_0, (u32)lbl_1_data_1F3C4__fzgx_offset_0, (u32)lbl_1_data_1F3CC__fzgx_offset_0, (u32)lbl_1_data_1F3D4__fzgx_offset_0, (u32)lbl_1_data_1F3DC__fzgx_offset_0, (u32)lbl_1_data_1F3E4__fzgx_offset_0, (u32)lbl_1_data_1F3EC__fzgx_offset_0, (u32)lbl_1_data_1F3F4__fzgx_offset_0,
+    (u32)lbl_1_data_1F3FC__fzgx_offset_0, (u32)lbl_1_data_1F404__fzgx_offset_0, (u32)lbl_1_data_1F408__fzgx_offset_0, (u32)lbl_1_data_1F410__fzgx_offset_0, (u32)lbl_1_data_1F418__fzgx_offset_0, (u32)lbl_1_data_1F420__fzgx_offset_0, (u32)lbl_1_data_1F428__fzgx_offset_0, (u32)lbl_1_data_1F430__fzgx_offset_0,
+    (u32)lbl_1_data_1F438__fzgx_offset_0, (u32)lbl_1_data_1F440__fzgx_offset_0, (u32)lbl_1_data_1F448__fzgx_offset_0, (u32)lbl_1_data_1F450__fzgx_offset_0, (u32)lbl_1_data_1F458__fzgx_offset_0, (u32)lbl_1_data_1F460__fzgx_offset_0, (u32)lbl_1_data_1F468__fzgx_offset_0, (u32)lbl_1_data_1F470__fzgx_offset_0,
+    (u32)lbl_1_data_1F478__fzgx_offset_0, (u32)lbl_1_data_1F480__fzgx_offset_0, (u32)lbl_1_data_1F488__fzgx_offset_0, (u32)lbl_1_data_1F48C__fzgx_offset_0, (u32)lbl_1_data_1F494__fzgx_offset_0, (u32)lbl_1_data_1F49C__fzgx_offset_0, (u32)lbl_1_data_1F4A4__fzgx_offset_0, (u32)lbl_1_data_1F4AC__fzgx_offset_0,
+    (u32)lbl_1_data_1F4B4__fzgx_offset_0, (u32)lbl_1_data_1F4BC__fzgx_offset_0, (u32)lbl_1_data_1F4C4__fzgx_offset_0, (u32)lbl_1_data_1F4CC__fzgx_offset_0, (u32)lbl_1_data_1F4D4__fzgx_offset_0, (u32)lbl_1_data_1F4DC__fzgx_offset_0, (u32)lbl_1_data_1F4E4__fzgx_offset_0, (u32)lbl_1_data_1F4EC__fzgx_offset_0,
+    (u32)lbl_1_data_1F4F4__fzgx_offset_0
+}};
+char fzgx_d_3C8[0xE0C - 0x3C8] = { 1 };
+char fzgx_d_E0C[0x1358 - 0xE0C] = { 1 };
+char fzgx_d_1358[0xC] = { 1 };
+char fzgx_d_1364[0xC] = { 1 };
+char fzgx_d_1370[0x13E4 - 0x1370] = { 1 };
+char fzgx_d_13E4[8] = { 1 };
+char fzgx_d_13EC[8] = { 1 };
+char fzgx_d_13F4[0x147C - 0x13F4] = { 1 };
+char fzgx_d_147C[8] = { 1 };
+
+extern Model81164 *fn_1_D3884(char *);
+extern void fn_80006E10(const char *);
+extern char *fn_80083DB0(char *, const char *);
+extern int sprintf(char *, const char *, ...);
+extern u32 fn_80077D40(Model81164 *);
+extern u32 fn_80071470(void *, u32);
+extern void fn_80008BA8(u32, u32, u32);
+extern void fn_80071718(Model81164 *);
+
+static inline void make_name(char *buf, Car81164 *car, s32 alt) {
+    s32 kind = car->unk_328;
+
+    fn_80083DB0(buf, fzgx_d_names.v[kind]);
+    if (alt == 1) {
+        switch (kind) {
+        case 6:
+            fn_80083DB0(buf, fzgx_d_13E4);
+            break;
+        case 0:
+            fn_80083DB0(buf, fzgx_d_13EC);
+            break;
+        case 1:
+            fn_80083DB0(buf, fzgx_d_13F4);
+            break;
+        }
+    }
+}
+
+void fn_1_81164(Car81164 *car, s16 from, s16 to) {
+    char buf[0x20];
+    Model81164 *model;
+    s16 i;
+    s16 j;
+    s32 alt;
+    u8 n;
+    u32 a;
+
+    if (car->unk_390 & 0x4000000) {
+        car->unk_3B8 = to;
+        return;
+    }
+    if (from == to) {
+        return;
+    }
+    i = from % 4;
+    j = to % 4;
+    if (from / 4 != to / 4) {
+        return;
+    }
+    if (car->unk_37C[i] == NULL || car->unk_37C[j] != NULL) {
+        return;
+    }
+    alt = 0;
+    fn_80006E10(fzgx_d_E0C);
+    if (car->unk_390 & 0x100000) {
+        alt = 1;
+    }
+    make_name(buf, car, alt);
+    fn_80006E10(buf);
+    make_name(buf, car, alt);
+    n = to;
+    if (n != 0) {
+        if (n >= 4) {
+            sprintf(buf, fzgx_d_1358, buf, n - 4);
+        } else {
+            sprintf(buf, fzgx_d_1364, buf);
+        }
+    } else {
+        sprintf(buf, fzgx_d_1370, buf);
+    }
+    model = fn_1_D3884(buf);
+    fn_80006E10(fzgx_d_147C);
+    car->unk_3A8 = fn_80077D40(model);
+    a = fn_80071470(model->unk_8, 0);
+    fn_80008BA8(fn_80071470(car->unk_37C[i]->unk_8, 0), a, car->unk_3A8);
+    fn_80071718(model);
+    car->unk_37C[j] = car->unk_37C[i];
+    car->unk_37C[i] = NULL;
+    car->unk_3B8 = to;
+}
+/* fzgx:end fn_1_81164 */
+
 /* fzgx:begin fn_1_81408 noprologue */
 #include "types.h"
 #include "rel/main_rel/car.h"
