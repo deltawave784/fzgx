@@ -71,8 +71,9 @@ extern u32 fn_1_45B2C(Sig_fn_1_45730_LoadResult *);
 extern void fn_1_458A0(Sig_fn_1_45730_LoadResult *, void *, u32, u32);
 extern void fn_1_45850(Sig_fn_1_45730_LoadResult *);
 extern u32 fn_1_107B8(Sig_fn_1_101D0_Fn_1_101D0_State *);
-extern void fn_1_862D4(s16, Vec3 *);
-extern void fn_1_15578(void *, fn_1_11544_LiveCamVec *, void *, void *, u32, void *, u32, u32, u32, u32);
+extern void fn_1_862D4(int, Vec3 *);
+/* returns a status in r3 (fn_1_648DC tests it; stcoli.c callers store it) */
+extern int fn_1_15578(void *, fn_1_11544_LiveCamVec *, void *, void *, u32, void *, u32, u32, u32, u32);
 extern void fn_8006E2B0(void *, Vec3 *);
 
 #endif  // GAME_MAIN_REL_LIVE_CAMERA_TYPES_H

@@ -72,7 +72,7 @@ extern Outer *lbl_1_bss_38454;
 extern void lbl_8006D9D8(CamEntry *);
 extern struct fn_1_6400_lbl_801A6410 lbl_801A6410;
 extern struct fn_1_AA54_lbl_1_rodata_388 lbl_1_rodata_388;
-extern void fn_1_862D4(u8 index, Vec3 *out);
+extern void fn_1_862D4(int index, Vec3 *out);  /* car.c definition: full-width index (fn_1_12907C: mr r3, r28) */
 extern void fn_1_8658C(u8 index, Vec3 *out);
 extern void fn_1_AEB8(camera_reset_transition_Camera *);
 extern void fn_1_AFC8(camera_update_transition_Camera *);
