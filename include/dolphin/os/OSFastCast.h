@@ -44,22 +44,32 @@ static inline u16 __OSf32tou16(register f32 inF) {
     return *(u16 *)ptr;
 }
 
+/* The signed casts read the temporary inside the asm block, as the retail SDK does: a C read
+ * `*(s8 *)ptr` lets MWCC drop the extsb before a following stb, while retail fn_1_A47F4
+ * (0x310, 0x334) keeps `psq_st f30, 0x10(r1), 1, qr4; lbz r0, 0x10(r1); extsb r0, r0; stb`.
+ * Probe (GC/1.3.2 -O4,p): this form gives exactly that sequence with 4-byte slots 0x10/0xc.
+ * The unsigned casts keep the C read: matched effect.c/sound.c units depend on it. */
 static inline s8 __OSf32tos8(register f32 inF) {
     f32 tmp;
     register f32 *ptr = &tmp;
+    register s8 out;
     asm {
         psq_st inF, 0(ptr), 1, OS_FASTCAST_S8
+        lbz out, 0(ptr)
+        extsb out, out
     }
-    return *(s8 *)ptr;
+    return out;
 }
 
 static inline s16 __OSf32tos16(register f32 inF) {
     f32 tmp;
     register f32 *ptr = &tmp;
+    register s16 out;
     asm {
         psq_st inF, 0(ptr), 1, OS_FASTCAST_S16
+        lha out, 0(ptr)
     }
-    return *(s16 *)ptr;
+    return out;
 }
 
 static inline f32 __OSu8tof32(register u8 *in) {
