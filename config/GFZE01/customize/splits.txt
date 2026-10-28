@@ -722,3 +722,6 @@ rel/customize/_prolog/fn_3_9800.c:
 
 rel/customize/_prolog/fn_3_6E14.c:
 	.text       start:0x00006E14 end:0x00006F90 align:4
+
+rel/customize/toolkit/fn_3_20748.c:
+	.text       start:0x00020748 end:0x00020B3C align:4

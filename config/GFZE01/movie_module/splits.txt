@@ -2225,3 +2225,27 @@ rel/movie_module/fn_12_226D0.c:
 
 rel/movie_module/fn_12_28304.c:
 	.text       start:0x00028304 end:0x000284F8 align:4
+
+rel/movie_module/fn_12_3DCF0.c:
+	.text       start:0x0003DCF0 end:0x0003DF08 align:4
+
+rel/movie_module/fn_12_10F3C.c:
+	.text       start:0x00010F3C end:0x00011168 align:4
+
+rel/movie_module/fn_12_1EF80.c:
+	.text       start:0x0001EF80 end:0x0001F1AC align:4
+
+rel/movie_module/fn_12_22008.c:
+	.text       start:0x00022008 end:0x00022254 align:4
+
+rel/movie_module/fn_12_38AF0.c:
+	.text       start:0x00038AF0 end:0x00038D94 align:4
+
+rel/movie_module/fn_12_36208.c:
+	.text       start:0x00036208 end:0x000364CC align:4
+
+rel/movie_module/fn_12_2105C.c:
+	.text       start:0x0002105C end:0x000213D8 align:4
+
+rel/movie_module/fn_12_27884.c:
+	.text       start:0x00027884 end:0x00027C58 align:4

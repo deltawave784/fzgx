@@ -707,6 +707,178 @@ void fn_1_DB198(BgSanObject *object, void *arg1) {
 }
 /* fzgx:end fn_1_DB198 */
 
+/* fzgx:begin fn_1_DB268 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/bg_san.h"
+
+extern void fn_1_DC6FC(void *context);
+extern void fn_1_DC5E8(Obj_1_data_2A7E0_At3C *, s32);
+extern void fn_1_9AD54(void);
+extern void fn_1_FBEA8(void);
+extern void fn_1_103F58(void *arg);
+extern void fn_1_9AD88(void);
+extern void fn_1_9A508(void);
+extern void fn_1_DAF94(Obj_1_data_2A7E0_At3C *);
+extern s32 fn_1_5910(void);
+extern void *fn_1_9D260(Obj_1_data_2A7E0 *arg0);
+extern s16 fn_1_7B054(void);
+extern s16 fn_1_3F0C8(void);
+extern const f32 lbl_1_rodata_663C;
+extern void fn_1_1067A8(void *arg0, f32 arg1, f32 arg2);
+extern void fn_1_103D28(void *arg0, int arg1, f32 arg2);
+extern f32 lbl_1_rodata_66D0[30];
+extern void fn_1_72648(Obj_1_data_2A7E0 *);
+extern void fn_1_103090(void *);
+extern void fn_1_1030A4(void *);
+extern void *fn_1_54448(s32);
+extern void *fn_1_548AC(s32);
+extern void fn_1_DC764(void);
+extern void fn_1_5489C(void *, void *);
+extern const f64 lbl_1_rodata_6748;
+extern void fn_1_D6C10(void *, f32);
+extern f32 lbl_1_rodata_6644[35];
+extern void lbl_8006DCA4(void *data);
+extern void fn_1_DB53C(void);
+extern void fn_1_103264(void *, void *);
+extern void OSPanic(const char *, int, const char *, ...);
+extern struct fn_1_DA6A8_lbl_801A6410 lbl_801A6410;
+extern void * fn_80077B64(struct Sig_fn_80077B64_fn_80077B64_Arg0 *);
+extern s32 fn_80077B14(struct Sig_fn_80077B14_fn_80077B14_Arg0 *);
+extern void fn_1_46B4(u32, u32, const char *, int);
+extern f32 lbl_1_rodata_6628;
+extern void fn_1_FB87C(u32 *, u32);
+extern u32 fn_1_FBFE4();
+extern void fn_1_FB96C(int);
+extern u32 fn_1_105AB8(u32, u32);
+
+#pragma section code_type ".fzgxpool"
+__declspec(section ".fzgxpool") static void fzgx_pool_prime1(void) {
+    volatile f32 s; volatile f64 d;  /* fzgx-allow: S2 pool primer sinks */
+    s = 0.0f;
+    s = 30.0f;
+    s = 1.0f;
+    s = 0.5f;
+}
+#pragma section code_type ".text"
+
+typedef struct {
+    f32 x, y, z;
+} Fn1DB268_Vec;
+
+typedef struct {
+    Fn1DB268_Vec pos;
+    f32 height;
+} Fn1DB268_Point;
+
+typedef struct {
+    s16 head;
+    f32 height;
+    Fn1DB268_Point upper[128];
+    Fn1DB268_Point lower[128];
+} Fn1DB268_Trail;
+
+typedef struct {
+    u32 unk_0;
+    u8 pad_4[0x8];
+    Fn1DB268_Vec pos;
+    s16 rot_x;
+    s16 rot_y;
+    s16 rot_z;
+    f32 scale;
+} Fn1DB268_Source;
+
+typedef struct {
+    Fn1DB268_Source *source;
+    Fn1DB268_Vec pos;
+    s32 age;
+    u8 pad_14[4];
+    Fn1DB268_Trail trail;
+} Fn1DB268_Effect;
+
+extern u32 fn_1_58C4(void);
+extern u32 lbl_801A66A0;
+extern f32 lbl_8006D0B4(f32);
+extern void lbl_8006D7DC(void *);
+extern void mathutil_mtxA_rotate_z(s16);
+extern void mathutil_mtxA_rotate_y(s16);
+extern void mathutil_mtxA_rotate_x(s16);
+extern void lbl_8006E1B0(void *, void *);
+
+void fn_1_DB268(Fn1DB268_Effect *effect) {
+    Fn1DB268_Trail *slot; /* the trail shifted to the head entry: slot->upper[0] is upper[head] */
+    Fn1DB268_Source *source;
+    Fn1DB268_Trail *trail;
+    Fn1DB268_Vec vecs[2];
+    f32 dist;
+    f32 drop;
+    f32 dz;
+    f32 dy;
+    f32 dx;
+    f32 rise;
+    s32 i;
+    Fn1DB268_Point *upper;
+    Fn1DB268_Point *lower;
+
+    if (fn_1_58C4() >= 2) {
+        return;
+    }
+    source = effect->source;
+    trail = &effect->trail;
+    if (lbl_801A66A0 & 1) {
+        return;
+    }
+    if (effect->age < 0xF8) {
+        effect->age++;
+    }
+    dx = source->pos.x - effect->pos.x;
+    dy = source->pos.y - effect->pos.y;
+    dz = source->pos.z - effect->pos.z;
+    vecs[1].x = dx;
+    vecs[1].y = dy;
+    vecs[1].z = dz;
+    dist = dx * dx;
+    dist += dy * dy;
+    dist += dz * dz;
+    dist = lbl_8006D0B4(dist);
+    trail->head = (trail->head + 1) % 128;
+    slot = (Fn1DB268_Trail *)((u8 *)trail + trail->head * sizeof(Fn1DB268_Point));
+    lbl_8006D7DC(&source->pos);
+    mathutil_mtxA_rotate_z(source->rot_z);
+    mathutil_mtxA_rotate_y(source->rot_y);
+    mathutil_mtxA_rotate_x(source->rot_x);
+    rise = 25.0f;
+    rise *= source->scale;
+    {
+        Fn1DB268_Vec offset = {0.0f, 0.0f, 0.0f};
+        offset.y = rise;
+        vecs[0] = offset;
+        lbl_8006E1B0(&vecs[0], &vecs[0]);
+        slot->upper[0].pos = vecs[0];
+    }
+    {
+        Fn1DB268_Vec offset = {0.0f, 0.0f, 0.0f};
+        offset.y = -rise;
+        vecs[0] = offset;
+        lbl_8006E1B0(&vecs[0], &vecs[0]);
+        slot->lower[0].pos = vecs[0];
+    }
+    drop = 0.1f * dist;
+    trail->height -= drop;
+    slot->upper[0].height = trail->height;
+    slot->lower[0].height = trail->height;
+    upper = trail->upper;
+    lower = trail->lower;
+    for (i = 0; i < 128; i++, upper++, lower++) {
+        if (i != trail->head) {
+            upper->height += 0.02f * dist;
+            lower->height += 0.02f * dist;
+        }
+    }
+    effect->pos = source->pos;
+}
+/* fzgx:end fn_1_DB268 */
+
 /* fzgx:begin fn_1_DB53C noprologue */
 #include "types.h"
 

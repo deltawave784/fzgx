@@ -8654,3 +8654,48 @@ rel/main_rel/sound/fn_1_A176C.c:
 
 rel/main_rel/spline/fn_1_F9888.c:
 	.text       start:0x000F9888 end:0x000F9A80 align:4
+
+rel/main_rel/motasglist/fn_1_42254.c:
+	.text       start:0x00042254 end:0x00042458 align:4
+
+rel/main_rel/live_camera/fn_1_1361C.c:
+	.text       start:0x0001361C end:0x0001383C align:4
+
+rel/main_rel/stcoli/fn_1_2DF98.c:
+	.text       start:0x0002DF98 end:0x0002E1B8 align:4
+
+rel/main_rel/accessory/fn_1_10A6A0.c:
+	.text       start:0x0010A6A0 end:0x0010A8D0 align:4
+
+rel/main_rel/game/fn_1_391F0.c:
+	.text       start:0x000391F0 end:0x00039420 align:4
+
+rel/main_rel/bg_cas/fn_1_FC760.c:
+	.text       start:0x000FC760 end:0x000FCA10 align:4
+
+rel/main_rel/mdlload/fn_1_D59A8.c:
+	.text       start:0x000D59A8 end:0x000D5C68 align:4
+
+rel/main_rel/bg_san/fn_1_DB268.c:
+	.text       start:0x000DB268 end:0x000DB53C align:4
+
+rel/main_rel/game/fn_1_3F8EC.c:
+	.text       start:0x0003F8EC end:0x0003FBF4 align:4
+
+rel/main_rel/stcoli/fn_1_27E34.c:
+	.text       start:0x00027E34 end:0x00028184 align:4
+
+rel/main_rel/memcard/fn_1_B9DE8.c:
+	.text       start:0x000B9DE8 end:0x000BA144 align:4
+
+rel/main_rel/game/fn_1_304A8.c:
+	.text       start:0x000304A8 end:0x00030824 align:4
+
+rel/main_rel/sound/fn_1_A1964.c:
+	.text       start:0x000A1964 end:0x000A1CE8 align:4
+
+rel/main_rel/game/fn_1_3E6D8.c:
+	.text       start:0x0003E6D8 end:0x0003EA70 align:4
+
+rel/main_rel/stcoli/fn_1_18784.c:
+	.text       start:0x00018784 end:0x00018B40 align:4

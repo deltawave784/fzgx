@@ -6371,3 +6371,18 @@ dol/fn_80055EC0.c:
 
 dol/fn_80046D94.c:
 	.text       start:0x80046D94 end:0x80046F7C align:4
+
+dol/fn_80049E34.c:
+	.text       start:0x80049E34 end:0x8004A068 align:4
+
+dol/fn_80020FA4.c:
+	.text       start:0x80020FA4 end:0x800211E0 align:4
+
+dol/fn_80043D34.c:
+	.text       start:0x80043D34 end:0x80043FA4 align:4
+
+dol/fn_8004D8DC.c:
+	.text       start:0x8004D8DC end:0x8004DBBC align:4
+
+dol/fn_80069CE4.c:
+	.text       start:0x80069CE4 end:0x80069FCC align:4
