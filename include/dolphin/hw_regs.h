@@ -25,4 +25,10 @@ u32 __OSCoreClock : FZGX_ADDR___OSCoreClock; /* 0x800000FC, the 486 MHz core clo
 #define VI_DTV_STAT 0x37
 #define VI_REG_LITERAL(index) (*(vu16 *)(FZGX_ADDR___VIRegs + 2 * (index)))
 
+/* Any hardware register at a folded literal address off the 0xCC000000 window
+   (`lis rX, 0xCC00; stw rY, 0x6828(rX)`: GXInit, fn_8008ED70, fn_8008F838), where retail did not
+   go through a linker-defined block symbol (`extern __EXIRegs[]` materializes `addi rX, @l`). */
+#define HW_REG32_LITERAL(offset) (*(vu32 *)(FZGX_ADDR___CPRegs + (offset)))
+#define HW_REG16_LITERAL(offset) (*(vu16 *)(FZGX_ADDR___CPRegs + (offset)))
+
 #endif
