@@ -56,3 +56,6 @@ rel/movie/_prolog/fn_5_169C.c:
 
 rel/movie/_prolog/fn_5_6E8.c:
 	.text       start:0x000006E8 end:0x000007A0 align:4
+
+rel/movie/_prolog/fn_5_37C.c:
+	.text       start:0x0000037C end:0x000004C8 align:4

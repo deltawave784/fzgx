@@ -2821,6 +2821,153 @@ void fn_1_12F30C(void *arg0, Fn1_12F30CState *state) {
 }
 /* fzgx:end fn_1_12F30C */
 
+/* fzgx:begin fn_1_12F358 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/archive.h"
+
+extern void OSPanic(u8 *arg0, s32 arg1, u8 *arg2, ...);
+extern void fn_1_12A350(void *arg0, s32 arg1);
+extern s32 fn_8006A480(void *arg0, void *arg1, void *arg2);
+extern s32 fn_8006A998(void *arg0);
+extern void fn_8006A9AC(void *arg0);
+extern void fn_1_12AC28(void *arg0, s32 arg1, s32 arg2);
+extern void fn_1_12ADC8(void *arg0, void *arg1, s32 arg2, s32 arg3);
+extern void fn_1_12BB18(void *arg0, void *arg1, void *arg2, void *arg3, void *arg4);
+extern void fn_1_8D168(void *arg);
+extern void fn_1_14DB48(void *arg0, void *arg1, u32 arg2);
+extern void fn_1_14DBCC(void *arg);
+extern u32 fn_1_95120(void *arg);
+extern const struct Table lbl_1_rodata_8230;
+extern u32 lbl_801A66A0;
+extern void fn_1_7B2E8(u8 value);
+extern void fn_1_13C1A0(void);
+extern void *fn_1_3F8C(void *table, void (*callback)(void), void *arg1, void *arg2);
+extern void fn_1_426C(s32 value);
+extern void fn_1_7B4C0(void);
+extern void fn_1_C2454(void);
+extern s32 fn_1_C24A4(void);
+extern u8 fn_1_B7C00(void);
+
+extern s32 lbl_1_bss_897A4;
+extern void *lbl_801A6410;
+extern void fn_1_46B4(void *arg0, void *arg1, unsigned char *arg2, s32 arg3);
+extern void OSPanic(u8 *arg0, s32 arg1, u8 *arg2, ...);
+
+extern void OSPanic(u8 *arg0, s32 arg1, u8 *arg2, ...);
+extern s32 lbl_1_bss_8CA44[10];
+
+extern void OSPanic(u8 *arg0, s32 arg1, u8 *arg2, ...);
+extern void fn_1_435C();
+extern s32 fn_1_45730(void *arg0, void *arg1);
+extern s32 fn_1_45B2C(void *arg0);
+extern void *fn_1_45D0(u32 arg0, u32 arg1, void *arg2, u32 arg3);
+extern void fn_1_458A0(void *arg0, void *arg1, u32 arg2, u32 arg3);
+extern void fn_1_45850(void *arg0);
+extern void fn_8006A9B4(void *arg0, void *arg1);
+extern void fn_80006E10(void *arg0);
+extern u32 fn_1_12DAEC(u32, u32, u32, void *, u32, u32, u32);
+extern u32 fn_1_12C524(u32);
+extern void fn_1_12C000(void *arg, s16 count);
+extern void fn_1_8CED0(void *arg, u16 a, u16 b);
+extern void fn_1_8D0A4(void *arg);
+extern s16 fn_1_12C930(s16 arg);
+extern u8 lbl_1_data_20D1C[180];
+extern u8 lbl_1_bss_8B4EC[128];
+extern void fn_80083DB0(void *arg0, char *arg1);
+extern void strcat(void *arg0, void *arg1);
+extern s32 fn_1_F89E4(u8 value);
+
+extern u8 lbl_1_data_2B0D4[112];
+extern u8 fn_1_F8CF0(s32);
+extern void fn_1_A2D84(u32);
+
+struct fn_1_12F358_state {
+    u8 pad_0[0x9E];
+    u8 unk_9E;
+    u8 tail_9F[0xAD];
+};
+struct fn_1_12F358_entry {
+    u8 pad_0[8];
+    u16 unk_8;
+    u8 pad_A[0xA];
+};
+
+
+u32 fzgx_obj_lbl_1_bss_8B2E0[48];
+struct fn_1_12F358_state fzgx_obj_lbl_1_bss_8B3A0;
+u32 fzgx_obj_lbl_1_bss_8B4EC[32];
+u32 fzgx_obj_lbl_1_bss_8B56C[24];
+u32 fzgx_obj_lbl_1_bss_8B5CC[8];
+u32 fzgx_obj_lbl_1_bss_8B5EC;
+u8 fzgx_obj_lbl_1_bss_8B5F0;
+u8 fzgx_obj_lbl_1_bss_8B5F1;
+#pragma section code_type ".fzgxpool"
+__declspec(section ".fzgxpool") static void prime_native_selection_bss(void) {
+    void *volatile sink; /* Native BSS object order for the measured shared section base. */
+    sink = &fzgx_obj_lbl_1_bss_8B2E0;
+    sink = &fzgx_obj_lbl_1_bss_8B3A0;
+    sink = &fzgx_obj_lbl_1_bss_8B4EC;
+    sink = &fzgx_obj_lbl_1_bss_8B56C;
+    sink = &fzgx_obj_lbl_1_bss_8B5CC;
+    sink = &fzgx_obj_lbl_1_bss_8B5EC;
+    sink = &fzgx_obj_lbl_1_bss_8B5F0;
+    sink = &fzgx_obj_lbl_1_bss_8B5F1;
+}
+#pragma section code_type ".text"
+#pragma opt_propagation off
+#pragma opt_strength_reduction off
+static inline u32 fn_1_12F358_flags(struct fn_1_12F358_state *state) {
+    struct fn_1_12F358_entry *inputs = (void *)&lbl_1_bss_9F8;
+    u32 index = state->unk_9E;
+    return (inputs[index].unk_8 >> 4) & 1;
+}
+
+#pragma opt_propagation on
+#pragma opt_loop_invariants on
+#pragma opt_strength_reduction on
+#pragma opt_common_subs off
+void fn_1_12F358(u16 arg0) {
+    u8 *selection_types;
+    s32 v0;
+    s32 lab_t0;
+    v0 = (s16)arg0;
+    selection_types = lbl_1_data_2B0D4;
+    if ((selection_types[v0] == 1 || selection_types[v0] == 17) && fn_1_F8CF0(0)) {
+        if (fn_1_12F358_flags(&fzgx_obj_lbl_1_bss_8B3A0)) {
+            if ((fzgx_obj_lbl_1_bss_8B5F0 = (fzgx_obj_lbl_1_bss_8B5F0 != 1))) {
+                lab_t0 = 0xA9010100;
+                fn_1_A2D84(lab_t0);
+            } else {
+                lab_t0 = 0xA9010000;
+                fn_1_A2D84(lab_t0);
+            }
+        }
+    } else {
+        fzgx_obj_lbl_1_bss_8B5F0 = 0;
+    }
+    if (selection_types[v0] == 4 && fn_1_F8CF0(1)) {
+        if (fn_1_12F358_flags(&fzgx_obj_lbl_1_bss_8B3A0)) {
+            if ((fzgx_obj_lbl_1_bss_8B5F1 = (fzgx_obj_lbl_1_bss_8B5F1 != 1))) {
+                lab_t0 = 0xA9010100;
+                fn_1_A2D84(lab_t0);
+            } else {
+                lab_t0 = 0xA9010000;
+                fn_1_A2D84(lab_t0);
+            }
+        }
+    } else {
+        fzgx_obj_lbl_1_bss_8B5F1 = 0;
+    }
+    return;
+}
+#pragma opt_common_subs reset
+
+#pragma opt_strength_reduction reset
+
+#pragma opt_loop_invariants reset
+/* fzgx:end fn_1_12F358 */
+
 /* fzgx:begin fn_1_130B8C noprologue */
 #include "dolphin/types.h"
 
@@ -3352,3 +3499,81 @@ void fn_1_131154(void) {
     }
 }
 /* fzgx:end fn_1_131154 */
+
+/* fzgx:begin fn_1_131194 noprologue */
+#include "types.h"
+#include "dolphin/os/OSTime.h"
+
+typedef struct {
+    s32 unk_00;
+    s32 unk_04;
+    s32 unk_08;
+    u32 unk_0C;
+    u8 pad_10[8];
+    u32 unk_18;
+    u8 pad_1C[0x18];
+    char unk_34[0x1C];
+} MemcardState;
+
+typedef struct {
+    u8 unk_0;
+    u8 pad_1[3];
+    u32 unk_4;
+    u32 unk_8;
+    u32 unk_C;
+    u8 pad_10[0x14];
+} MemcardRequest;
+
+typedef struct {
+    s32 unk_00;
+    s32 unk_04;
+    s32 unk_08;
+    s32 unk_0C;
+    s32 unk_10;
+    s32 unk_14;
+    s32 unk_18;
+    s32 unk_1C;
+    s32 unk_20;
+} CalTime;
+
+extern MemcardState lbl_1_bss_8CA40;
+extern u8 lbl_1_data_40D50[0x20];
+extern u32 lbl_801A6410;
+
+extern void OSPanic(const char *arg0, s32 arg1, const char *arg2, ...);
+extern u32 fn_1_4630(u32 arg0, u32 arg1, u8 *arg2, u32 arg3);
+extern void fn_80008BA8(u32 arg0, u32 arg1, u32 arg2);
+extern void fn_80008BEC(void *dst, s32 value, u32 size);
+extern void fn_1_AA6D8(s32 arg0, u8 arg1, void *arg2);
+extern int sprintf(char *dst, const char *fmt, ...);
+
+void fn_1_131194(void) {
+    u8 *data = (u8 *)&lbl_1_data_40D50;
+    MemcardState *state = (MemcardState *)&lbl_1_bss_8CA40;
+    CalTime cal;
+    MemcardRequest request;
+    u32 buf;
+
+    if (state->unk_0C == 0) {
+        state->unk_00 = -1;
+        state->unk_08 = -1;
+        state->unk_0C = 0;
+        OSPanic((const char *)(data + 0x154), 0xF5, (const char *)(data + 0x168));
+    } else if (state->unk_08 == -1) {
+        state->unk_00 = -1;
+    } else {
+        buf = (u32)fn_1_4630(lbl_801A6410, 0x20700, data + 0x154, 0xFF);
+        state->unk_18 = buf;
+        fn_80008BA8(buf, state->unk_0C, 0x20700);
+        OSTicksToCalendarTime(OSGetTime(), (OSCalendarTime *)&cal);
+        fn_80008BEC(&request, 0, 0x24);
+        request.unk_4 = 0;
+        request.unk_0 = 3;
+        request.unk_C = state->unk_18;
+        request.unk_8 = (u32)&state->unk_34[0];
+        sprintf(&state->unk_34[0], (const char *)(data + 0x18C), cal.unk_14 % 100, cal.unk_10 + 1, cal.unk_0C, cal.unk_08, cal.unk_04);
+        fn_1_AA6D8(0, (u8)state->unk_08, &request);
+        state->unk_04 = 3;
+    }
+}
+/* fzgx:end fn_1_131194 */

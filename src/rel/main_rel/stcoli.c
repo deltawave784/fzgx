@@ -9357,6 +9357,384 @@ f32 fn_1_2A41C(Fn_1_2A41C *self, int arg) {
 }
 /* fzgx:end fn_1_2A41C */
 
+/* fzgx:begin fn_1_2A500 noprologue */
+#include "types.h"
+#include "dolphin/types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/stcoli.h"
+#include "dolphin/hw_regs.h"
+#include "psvec.h"
+
+typedef struct Node {
+    u32 unk_0;
+    u8 pad_4[0x8];
+    s32 count;
+    struct Node *children;
+    u8 pad_14[0x50 - 0x14];
+} Node;
+
+typedef struct StcoliNode StcoliNode;
+
+struct StcoliNode {
+    u32 flags;
+    u8 pad[8];
+    s32 count;
+    StcoliNode *items;
+    u8 rest[0x3c];
+};
+
+typedef struct StcoliVec {
+    u32 x;
+    u32 y;
+    u32 z;
+} StcoliVec;
+
+typedef struct {
+    unsigned char pad0[0x0c];
+    int count;
+    void *entries;
+} Fn118F28Object;
+
+typedef struct Fn_1_20258Constants {
+    unsigned char pad08[8];
+    f32 value08;
+    f32 value0c;
+    unsigned char pad10[0xb0];
+    f64 valuec0;
+    f32 valuec8;
+    unsigned char padcc[4];
+    f64 valued0;
+} Fn_1_20258Constants;
+
+typedef struct {
+    u32 f00, f04, f08, f0c, f10, f14, f18, f1c, f20, f24;
+    u32 f28, f2c, f30, f34, f38, f3c, f40, f44;
+} Cfg;
+
+typedef struct {
+    u8 pad_0[0x4];
+    Cfg *cfg;
+    u8 pad_8[0xc];
+    f32 fx;
+    f32 fy;
+    f32 fz;
+    f32 rxv;
+    f32 ryv;
+    f32 rzv;
+    f32 sxv;
+    f32 syv;
+    f32 szv;
+} Entity;
+
+typedef struct {
+    u32 count;
+    u32 entries[1];
+} Stack;
+
+struct fn_1_2B478_lbl_801A6D00 {
+    u32 unk_0;
+};
+
+typedef struct {
+    f32 x;
+    f32 y;
+    f32 z;
+} Vec3;
+
+typedef struct {
+    f32 m[10];
+    f64 d;
+} Mtx;
+
+struct Pool {
+    u8 pad_0[0xc];
+    f32 one;
+    u8 pad_10[0xc];
+    f32 two;
+    u8 pad_20[0x14];
+    f32 half;
+};
+
+struct fn_1_207DC_pool {
+    u8 pad_0[8];
+    f32 zero;
+    f32 one;
+    u8 pad_10[0xB0];
+    f64 eps;
+    f32 pi;
+    u8 pad_CC[4];
+    f64 two;
+};
+
+struct fn_1_21950_lbl_1_rodata_6C8 {
+    u8 pad_0[0x8];
+    f32 unk_8;
+    u8 pad_C[0x14];
+    f32 unk_20;
+    u8 pad_24[0x10];
+    f32 unk_34;
+};
+
+typedef struct {
+    u8 pad_0[0x30];
+    Vec3 pos;
+    f32 ax;
+    f32 ay;
+    Vec3 v0;
+    Vec3 e;
+    Vec3 m;
+    f32 d0;
+    f32 d1;
+    Vec3 o;
+    u32 f7c;
+    u8 pad_80[0x7c];
+    u32 fffc;
+} Rec;
+
+typedef struct {
+    u32 f00;
+    u32 f04;
+    u32 f08;
+    u32 f0c;
+    u32 f10;
+    u32 f14;
+    u32 f18;
+    u32 f1c;
+    u32 f20;
+    u32 f24;
+    u32 f28;
+    u32 f2c;
+    u32 f30;
+    u32 f34;
+    u32 f38;
+    u32 f3c;
+    u32 f40;
+    u32 f44;
+} fn_1_18784_Cfg;
+
+typedef struct {
+    u32 f00;
+    fn_1_18784_Cfg *cfg;
+    u32 f08;
+    u32 f0c;
+    u32 f10;
+    u32 f14;
+    f32 f18;
+} Src;
+
+typedef struct {
+    u32 f00;
+    fn_1_18784_Cfg *cfg;
+    u32 f08;
+    s32 f0c;
+    Src *f10;
+    u32 f14;
+    f32 f18;
+    f32 f1c;
+    f32 f20;
+    f32 f24;
+    f32 f28;
+    f32 f2c;
+} Motion;
+
+typedef struct {
+    f32 x;
+    f32 y;
+    f32 z;
+} fn_1_21CFC_Vec;
+
+struct fn_1_2D524_Copy200 { char *a[10][5]; };
+
+struct fn_1_2D524_Copy8 { char *a[2]; };
+
+struct fn_1_2D524_lbl_1_rodata_BD8 {
+    u8 pad_0[0x24];
+    f32 unk_24;
+    u8 pad_28[0x30];
+    struct fn_1_2D524_Copy200 unk_58;
+    struct fn_1_2D524_Copy8 unk_120;
+    f32 unk_128;
+    f32 unk_12C;
+    f32 unk_130;
+};
+extern void fn_1_9E14C();
+extern void fn_1_9E170(u32 arg0, u32 arg1, u32 arg2, u32 arg3);
+extern const f32 lbl_1_rodata_6D0;
+extern f32 lbl_1_rodata_6F8;
+extern u32 mathutil_mtxA_rotate_x(u32);
+extern u32 mathutil_mtxA_rotate_y(u32);
+extern u32 mathutil_mtxA_rotate_z(u32);
+extern void fn_80008BEC(void *dest, int value, u32 size);
+extern void lbl_8006E0B4(f32, f32, f32);
+extern Fn_1_20258Constants lbl_1_rodata_6C8;
+extern u8 *lbl_801A66CC;
+extern struct fn_1_2B478_lbl_801A6D00 lbl_801A6D00;
+extern f64 __fabs(f64);
+extern void lbl_8006DB74(void *);
+extern void fn_1_18214();
+extern void lbl_8006DAEC(void);
+extern void lbl_8006DB30(void);
+extern void lbl_8006DBE4();
+extern void fn_1_1902C(StcoliNode *root, StcoliVec *vec, void *arg3, f32 value);
+extern void fn_1_18784();
+extern void fn_1_18F28(Fn118F28Object *obj, int *args, int arg2, float value);
+extern u32 fn_1_203E4(void *, u32, void *, f32, f32, f32);
+extern void OSReport(const char *format, ...);
+extern void OSPanic(const char *file, int line, const char *msg, ...);
+extern u32 lbl_8006DCA4(void);
+extern void lbl_8006E1B0(void *, void *);
+extern void fn_8003462C(u32 arg0, u32 arg1, u32 arg2);
+extern void fn_80072558(void);
+extern f32 lbl_1_rodata_6B0[6];
+extern void fn_1_17D5C(Node *node, u32 *acc);
+extern int fn_1_210A8(void *, f32 *, int, int, int);
+extern int fn_1_16BA0(void *, void *, void *, int *, int);
+extern f32 fn_1_16E68(void *, void *, int);
+extern unsigned char lbl_1_rodata_840[];
+extern void fn_1_22F90(void *self, int value);
+extern void lbl_8006E1F0(void *, f32, f32, f32);
+extern void fn_1_8A190(void *arg0, void *arg1);
+extern int fn_1_15578();
+extern void *memset(void *, int, unsigned int);
+extern int fn_1_4C10(void);
+extern u32 fn_1_4060(void);
+extern void fn_1_EB080(int mode);
+extern void fn_1_9D77C(u32, u32);
+extern void fn_1_46B4(u32 arg0, u32 arg1, const char *arg2, int arg3);
+extern u32 lbl_801A6410;
+extern int fn_1_180F4(int first, int second, int count, int ascending);
+extern void fn_1_21950(u32 arg0, f32 arg1, f32 arg2);
+extern f32 lbl_1_rodata_6D4;
+extern char lbl_1_bss_9C;
+extern void fn_1_A2D84(u32 arg0);
+extern u32 fn_1_8C66C(u32 index);
+extern int fn_1_163BC(void *arg0, void *arg1, int mask, int value);
+extern void lbl_8006E1D8(void *arg0, f32 arg1, f32 arg2, f32 arg3);
+extern double lbl_1_rodata_910;
+extern const f32 lbl_1_rodata_84C;
+extern const f32 lbl_1_rodata_854;
+extern s16 fn_1_7B054();
+extern void *fn_1_868C0(s8 index);
+extern void fn_1_F7338(int arg0, void *arg1, void *arg2);
+extern const f32 lbl_1_rodata_85C;
+extern void fn_8006E978(f32 *arg0, Vec3 *arg1, Vec3 *arg2);
+extern void mathutil_mtxA_from_quat(void *);
+extern void lbl_8006DFC4(void *);
+extern f64 lbl_1_rodata_860[22];
+extern f32 lbl_1_rodata_B74[25];
+extern f32 lbl_8006D6FC(void *, void *);
+extern s16 lbl_1_bss_3C2A[3];
+extern f32 lbl_8006D188(s16 angle);
+extern f32 lbl_8006D0B4(f32);
+extern void fn_8006E7E4(void *, void *, s32);
+extern u32 fn_1_8627C(s32 index);
+extern u8 * fn_1_14F04(void);
+extern u32 fn_1_2B684(u32);
+extern u32 lbl_801A66C8[2];
+extern f32 lbl_1_rodata_92C[10];
+extern void lbl_8006DBAC(void *arg0);
+extern void fn_8006E250(void *arg0, void *arg1);
+extern void lbl_8006D668(void *arg0);
+extern char *fn_1_14EA74(s16 arg0, char *arg1, s16 arg2);
+extern char *fn_1_15BA78(char *name);
+extern f32 fn_1_4B068(char *);
+extern f32 fn_1_4B090(s32 value);
+extern int sprintf(char *s, const char *format, ...);
+extern s16 fn_1_12EF24(s16 row, s16 column);
+extern struct fn_1_2D524_lbl_1_rodata_BD8 lbl_1_rodata_BD8;
+extern u32 lbl_801A66B4;
+extern u32 fn_1_4AEC0(u32 value);
+extern void fn_1_F83F0(s16 arg0);
+extern u32 fn_1_F8D10(void);
+extern char *lbl_1_data_2BD54[][6];
+extern void *fn_1_7F49C(s16 arg0, s16 arg1, void *arg2);
+extern void fn_1_49410(void);
+extern void fn_1_4955C(f32 value1, f32 value2);
+extern void fn_1_49590(f32 value);
+extern void fn_1_495B0(u32 value);
+extern void fn_1_495C8(u8 value);
+extern void fn_1_A2DC4(u32 arg0);
+extern void fn_1_F2008(s32 arg);
+extern void fn_1_F7F48(s16 value);
+extern void fn_1_F8A58(u32 value);
+extern void fn_1_F8C00(s32 value);
+extern void fn_1_F8D38(u32 value);
+extern void fn_1_F9D68(u32 arg);
+extern void fn_1_F9DE8(u32 param);
+extern u8 lbl_1_bss_6F316;
+extern u32 fn_1_A1588(void *, u32);
+extern void ADXT_Stop(void *);
+extern u32 fn_1_435C(u32 value);
+extern void fn_1_40E08(u32 arg0);
+extern u32 lbl_1_rodata_D18;
+extern u32 lbl_1_rodata_D1C[11];
+extern void fn_1_49F0(u32 *value);
+extern void fn_1_4A00(s32 enabled, u8 mode, void *value);
+extern u32 lbl_1_bss_25B9C;
+extern u32 fn_1_304A8(void);
+extern void fn_1_3F2A0(void);
+
+/* result block passed to the helper; the helper fills scale and vec */
+struct CalcOut {
+    u32 flags;
+    void *self;
+    f32 scale;
+    Vec3 v;
+};
+
+
+static inline f32 fn_1_2A500_read_pointer(Vec3 * owner) { return owner->x; }
+static inline f32 fn_1_2A500_read_y(Vec3 * owner) { return owner->y; }
+static inline f32 fn_1_2A500_read_z(Vec3 * owner) { return owner->z; }
+#pragma opt_common_subs off
+s32 fn_1_2A500(void *self, Vec3 *out, Vec3 *pos, void *a, void *b, f32 *outF)
+{
+    u32 *fzgx_value;
+    void *mgr = (void *)fn_1_8627C(*(s16 *)((u8 *)self + 4));
+    struct CalcOut res;
+    s32 found_2;
+    s32 found;
+    f32 f;
+
+    lbl_8006DAEC();
+
+    res.v = *out;
+    fzgx_value = &(res.flags);
+    *fzgx_value = *(u32 *)((u8 *)self + 0x498);
+    res.self = self;
+
+    found = fn_1_15578(&res.v, pos, &res.scale, a, b,
+                       (u8 *)mgr + 0x9C, *(u32 *)((u8 *)mgr + 0x98), 0);
+
+    if (found != 0) {
+        f32 dz = fn_1_2A500_read_z(out);
+        f32 dy = fn_1_2A500_read_y(out);
+        f32 dx = fn_1_2A500_read_pointer(out);
+        f32 d;
+
+        dz = dz - pos->z;
+        dy = dy - pos->y;
+        dx = dx - pos->x;
+        d = (f32)(dx * dx);
+        d = d + dy * dy;
+        d = d + dz * dz;
+
+        f = ((((const f32 *)&lbl_1_rodata_854))[0] - res.scale) * lbl_8006D0B4(d);
+
+        *out = res.v;
+        found_2 = 1;
+    } else {
+        f = (((const f32 *)&lbl_1_rodata_84C))[0];
+        found_2 = 0;
+    }
+
+    lbl_8006DB30();
+    *outF = f;
+    return found_2;
+}
+#pragma opt_common_subs reset
+/* fzgx:end fn_1_2A500 */
+
 /* fzgx:begin fn_1_2A638 */
 void fn_1_2A638(void *arg0, Fn_1_2A638 *self) {
     lbl_8006E1D8((char *)self + 0x14, self->field08,
@@ -11921,6 +12299,213 @@ void fn_1_2DB50(Obj_1_bss_5138 *obj) {
     }
 }
 /* fzgx:end fn_1_2DB50 */
+
+/* fzgx:begin fn_1_2DE00 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/game.h"
+
+typedef u32 (*GameStepFn)(void);
+typedef s32 (*GameModeFn)(void);
+typedef struct {
+    u32 unk_0;
+    u8 pad_4[2];
+    u16 unk_6;
+    u8 unk_8;
+    u8 unk_9;
+    u8 pad_A[0x9];
+    u8 unk_13[5];
+    u8 pad_18[0x68];
+    u8 unk_80;
+    u8 unk_81;
+    u8 unk_82;
+    u8 unk_83;
+    u8 pad_84[0x1C];
+} GamePlayer;
+typedef struct {
+    u32 unk_0;
+    u8 pad_4;
+    u8 unk_5;
+    u8 unk_6;
+    u8 unk_7;
+    u8 unk_8;
+    u8 unk_9;
+    u8 unk_A;
+    u8 unk_B;
+    u8 unk_C;
+    u8 unk_D;
+    u8 unk_E[4];
+    u8 pad_12[0xA4 - 0x12];
+    u16 unk_A4;
+    u8 unk_A6;
+    u8 unk_A7;
+    u8 pad_A8[4];
+    GameStepFn unk_AC;
+    GameStepFn unk_B0;
+    GameStepFn unk_B4;
+    GameStepFn unk_B8;
+    GameStepFn unk_BC;
+    GameStepFn unk_C0;
+    u32 unk_C4;
+    GameStepFn unk_C8;
+    GameModeFn unk_CC;
+    u8 pad_D0[0x4];
+    GamePlayer players[4];
+    u8 pad_354[0x13F6 - 0x354];
+    u8 unk_13F6;
+    u8 pad_13F7[0x1474 - 0x13F7];
+    u32 unk_1474;
+    u16 unk_1478[4];
+    u32 unk_1480[4];
+    u8 pad_1490[0x14B8 - 0x1490];
+} GameState;
+typedef struct {
+    void *unk_0;
+    u8 unk_4;
+    u8 unk_5;
+    u8 unk_6;
+    u8 pad_7;
+} GameSlotEntry;
+typedef struct {
+    GameSlotEntry entries[30];
+    GamePlayer player;
+    u8 unk_190;
+    u8 unk_191;
+    u8 unk_192;
+    u8 pad_193;
+    u8 unk_194[4];
+} GameSlotTable;
+typedef struct {
+    u8 pad_0[3];
+    u8 unk_3;
+    u8 pad_4[0x2C];
+} GameObj5108;
+typedef struct {
+    u8 pad_0[0xD8];
+    f32 unk_D8;
+    u8 pad_DC[0x475 - 0xDC];
+    u8 unk_475;
+    u8 pad_476[0x482 - 0x476];
+    u8 unk_482;
+    u8 pad_483[0x49C - 0x483];
+    void *unk_49C;
+} GameRacer;
+typedef struct {
+    u8 pad_0[0x1FC];
+} GameRaceRecord;
+typedef struct {
+    u8 pad_0[0x328];
+    s8 unk_328;
+} GameCar;
+u32 fzgx_obj_lbl_1_bss_3C00;
+u32 fzgx_obj_lbl_1_bss_3C04;
+u32 fzgx_obj_lbl_1_bss_3C08;
+s32 lbl_1_bss_3C08__fzgx_offset_4;
+u8 fzgx_obj_lbl_1_bss_3C10;
+u8 fzgx_obj_lbl_1_bss_3C11;
+u8 fzgx_obj_lbl_1_bss_3C12;
+u8 lbl_1_bss_3C12__fzgx_offset_1;
+u8 lbl_1_bss_3C12__fzgx_offset_2[0x8];
+u8 fzgx_obj_lbl_1_bss_3C1C[0xE];
+s16 fzgx_obj_lbl_1_bss_3C2A;
+u32 lbl_1_bss_3C2A__fzgx_offset_2;
+GameState fzgx_obj_lbl_1_bss_3C30;
+s16 lbl_1_bss_3C30__fzgx_offset_14B8[2];
+u16 fzgx_obj_lbl_1_bss_50EC[0x8];
+s16 lbl_1_bss_50EC__fzgx_offset_10;
+u16 lbl_1_bss_50EC__fzgx_offset_12;
+u32 fzgx_obj_lbl_1_bss_5100;
+u8 fzgx_obj_lbl_1_bss_5104[0x4];
+GameObj5108 lbl_1_bss_5104__fzgx_offset_4;
+u8 fzgx_obj_lbl_1_bss_5138[0x104];
+u8 fzgx_obj_lbl_1_bss_523C[0x20];
+GameSlotTable fzgx_obj_lbl_1_bss_525C;
+u16 fzgx_obj_lbl_1_bss_53F4;
+u8 fzgx_pool_gap_bss_53F6;
+u8 fzgx_pool_gap_bss_53F7;
+u32 fzgx_obj_lbl_1_bss_53F8[0x22];
+#pragma section code_type ".fzgxpool"
+static void fzgx_bss_layout(void) {
+    volatile u8 s;  /* fzgx-allow: S2 layout primer sink: MWCC emits .bss objects in first-access order */
+    s = *(u8 *)&fzgx_obj_lbl_1_bss_3C00;
+    s = *(u8 *)&fzgx_obj_lbl_1_bss_3C04;
+    s = *(u8 *)&fzgx_obj_lbl_1_bss_3C08;
+    s = *(u8 *)&lbl_1_bss_3C08__fzgx_offset_4;
+    s = *(u8 *)&fzgx_obj_lbl_1_bss_3C10;
+    s = *(u8 *)&fzgx_obj_lbl_1_bss_3C11;
+    s = *(u8 *)&fzgx_obj_lbl_1_bss_3C12;
+    s = *(u8 *)&lbl_1_bss_3C12__fzgx_offset_1;
+    s = *(u8 *)&lbl_1_bss_3C12__fzgx_offset_2;
+    s = *(u8 *)&fzgx_obj_lbl_1_bss_3C1C;
+    s = *(u8 *)&fzgx_obj_lbl_1_bss_3C2A;
+    s = *(u8 *)&lbl_1_bss_3C2A__fzgx_offset_2;
+    s = *(u8 *)&fzgx_obj_lbl_1_bss_3C30;
+    s = *(u8 *)&lbl_1_bss_3C30__fzgx_offset_14B8;
+    s = *(u8 *)&fzgx_obj_lbl_1_bss_50EC;
+    s = *(u8 *)&lbl_1_bss_50EC__fzgx_offset_10;
+    s = *(u8 *)&lbl_1_bss_50EC__fzgx_offset_12;
+    s = *(u8 *)&fzgx_obj_lbl_1_bss_5100;
+    s = *(u8 *)&fzgx_obj_lbl_1_bss_5104;
+    s = *(u8 *)&lbl_1_bss_5104__fzgx_offset_4;
+    s = *(u8 *)&fzgx_obj_lbl_1_bss_5138;
+    s = *(u8 *)&fzgx_obj_lbl_1_bss_523C;
+    s = *(u8 *)&fzgx_obj_lbl_1_bss_525C;
+    s = *(u8 *)&fzgx_obj_lbl_1_bss_53F4;
+    s = *(u8 *)&fzgx_pool_gap_bss_53F6;
+    s = *(u8 *)&fzgx_pool_gap_bss_53F7;
+    s = *(u8 *)&fzgx_obj_lbl_1_bss_53F8;
+}
+#pragma section code_type ".text"
+typedef struct {
+    u8 pad_0[0x81C0];
+} GameRaceBuf;
+extern void fn_1_3F2A0(void);
+extern s32 fn_1_8623C(void);
+extern void fn_80008BA8(void *, void *, u32);
+
+#pragma opt_loop_invariants off
+void fn_1_2DE00(s32 arg0)
+{
+    s32 i;
+    GameRaceBuf *buf;
+    s32 j;
+    GameSlotEntry *e;
+    GamePlayer *p;
+
+    if (fzgx_obj_lbl_1_bss_3C30.unk_0 & 0x00400000) {
+        return;
+    }
+    fn_1_3F2A0();
+    buf = (GameRaceBuf *)lbl_1_bss_5480;
+    fzgx_obj_lbl_1_bss_525C.unk_192 = 0;
+    for (i = 0, j = 0; j < 30 && i < fzgx_obj_lbl_1_bss_3C30.unk_9; i++, j++) {
+        p = &fzgx_obj_lbl_1_bss_3C30.players[i];
+        e = &fzgx_obj_lbl_1_bss_525C.entries[p->unk_8];
+        e->unk_4 = p->unk_80;
+        e->unk_5 = p->unk_82;
+        e->unk_6 = fzgx_obj_lbl_1_bss_523C[i];
+        if (fzgx_obj_lbl_1_bss_53F8[i] != 0) {
+            e->unk_0 = &buf[i];
+        } else {
+            e->unk_0 = NULL;
+        }
+    }
+    p = &fzgx_obj_lbl_1_bss_3C30.players[fn_1_8623C()];
+    p->unk_6 = 0;
+    p->unk_6 += p->unk_13[0];
+    p->unk_6 += p->unk_13[1];
+    p->unk_6 += p->unk_13[2];
+    p->unk_6 += p->unk_13[3];
+    p->unk_6 += p->unk_13[4];
+    fn_80008BA8(&fzgx_obj_lbl_1_bss_525C.player, p, sizeof(GamePlayer));
+    fzgx_obj_lbl_1_bss_525C.unk_191 = 0;
+    if (arg0 != 0) {
+        fzgx_obj_lbl_1_bss_525C.unk_190 = fzgx_obj_lbl_1_bss_3C30.unk_7;
+        fzgx_obj_lbl_1_bss_3C30.unk_0 |= 0x00400000;
+    }
+}
+#pragma opt_loop_invariants reset
+/* fzgx:end fn_1_2DE00 */
 
 /* fzgx:begin fn_1_2E1B8 pool noprologue */
 #include "types.h"

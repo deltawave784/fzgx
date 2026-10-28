@@ -2204,3 +2204,24 @@ rel/movie_module/fn_12_3A69C.c:
 
 rel/movie_module/fn_12_D42C.c:
 	.text       start:0x0000D42C end:0x0000D55C align:4
+
+rel/movie_module/fn_12_232DC.c:
+	.text       start:0x000232DC end:0x00023410 align:4
+
+rel/movie_module/fn_12_331A8.c:
+	.text       start:0x000331A8 end:0x000332DC align:4
+
+rel/movie_module/fn_12_22254.c:
+	.text       start:0x00022254 end:0x00022390 align:4
+
+rel/movie_module/fn_12_2A6FC.c:
+	.text       start:0x0002A6FC end:0x0002A85C align:4
+
+rel/movie_module/fn_12_2D288.c:
+	.text       start:0x0002D288 end:0x0002D420 align:4
+
+rel/movie_module/fn_12_226D0.c:
+	.text       start:0x000226D0 end:0x00022888 align:4
+
+rel/movie_module/fn_12_28304.c:
+	.text       start:0x00028304 end:0x000284F8 align:4

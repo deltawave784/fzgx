@@ -185,3 +185,6 @@ rel/story/story_mode/fn_7_4648.c:
 
 rel/story/story_mode/fn_7_15BC.c:
 	.text       start:0x000015BC end:0x000016FC align:4
+
+rel/story/story_mode/fn_7_FB4.c:
+	.text       start:0x00000FB4 end:0x00001134 align:4
