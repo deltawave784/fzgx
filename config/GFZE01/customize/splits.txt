@@ -728,3 +728,6 @@ rel/customize/toolkit/fn_3_20748.c:
 
 rel/customize/toolkit/fn_3_1C8D0.c:
 	.text       start:0x0001C8D0 end:0x0001D338 align:4
+
+rel/customize/toolkit/fn_3_286BC.c:
+	.text       start:0x000286BC end:0x00028EBC align:4

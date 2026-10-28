@@ -3697,6 +3697,42 @@
   },
   {
     "module": "customize",
+    "source": "rel/customize/toolkit/fn_3_286BC.c",
+    "symbols": [
+      "fn_3_286BC"
+    ],
+    "status": "matching",
+    "mw_version": "GC/1.3.2",
+    "extra_cflags": [],
+    "tu": "rel/customize/toolkit.c",
+    "pool": {
+      "...rodata.0": "lbl_3_rodata_768",
+      "@52": "lbl_3_rodata_800",
+      "@438": "lbl_3_rodata_990+0x3B4",
+      "@352": "lbl_3_rodata_990+0x3A8",
+      "@106": "lbl_3_rodata_960",
+      "@72": "lbl_3_rodata_800+0xD8",
+      "@439": "lbl_3_rodata_990+0x3B8",
+      "@268": "lbl_3_rodata_990+0x2D0",
+      "@440": "lbl_3_rodata_990+0x3BC",
+      "@96": "lbl_3_rodata_8F0+0x48",
+      "@29": "lbl_3_rodata_768+0x58",
+      "@91": "lbl_3_rodata_8F0+0x34",
+      "@441": "lbl_3_rodata_990+0x3C0",
+      "@220": "lbl_3_rodata_990+0x17C",
+      "@206": "lbl_3_rodata_990+0x154",
+      "@117": "lbl_3_rodata_990+0x4",
+      "@78": "lbl_3_rodata_8F0",
+      "@442": "lbl_3_rodata_990+0x3C4",
+      "@443": "lbl_3_rodata_990+0x3C8",
+      "@82": "lbl_3_rodata_8F0+0x10",
+      "@116": "lbl_3_rodata_990",
+      "@79": "lbl_3_rodata_8F0+0x4",
+      "@444": "lbl_3_rodata_990+0x3CC"
+    }
+  },
+  {
+    "module": "customize",
     "source": "rel/customize/toolkit/fn_3_2A2F8.c",
     "symbols": [
       "fn_3_2A2F8"
