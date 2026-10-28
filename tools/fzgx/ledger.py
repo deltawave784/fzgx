@@ -173,7 +173,7 @@ class Ledger:
 
     def ranked_local_attempt(self, project, symbol: str) -> Optional[tuple]:
         """best_local_attempt, re-ranked by `seedrank`: among the saved bodies near the top
-        score, one that omits a retail store or immediate addend ranks below a complete body
+        score the one with the fewest differing rows seeds the claim (ties by percent); one that omits a retail store or immediate addend ranks below a complete body
         (objdiff's equal row weights put fn_17_7728's store-less 95.2% body above correct ones).
         Selection only; compiles each candidate once (cached)."""
         from . import seedrank

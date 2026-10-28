@@ -19,6 +19,12 @@ A body that calls a function it never declares (`oracle.body_diagnostics`: MWCC'
 loses IMPLICIT_PENALTY points, the same margin `api.IMPLICIT_MARGIN` applies to the
 attempt's saved best, so a sound body within that margin seeds the next attempt.
 
+The primary key is the number of rows still differing (`oracle.progress_rows`), not the
+percentage: objdiff's similarity can rank a body with more differing rows above one with fewer
+(fn_1_5CA00: a 25-row 99.2% seed over a 12-row 97.1% body; fn_8_D034: 63 rows at 99.0% over
+22 rows at 96.8%), and the matcher's remaining work is the rows. Dropped semantic rows count
+DROPPED_ROWS extra rows each; percent minus the penalties breaks ties.
+
 Results are cached per (symbol, body hash, compiler, flags) in
 .fzgx/seedrank.json, so a ranking compiles each candidate body once.
 """
@@ -38,6 +44,8 @@ PENALTY = 5.0          # points per dropped semantic row
 MAX_PENALTY = 15.0     # a badly broken body still ranks by its score beyond this
 WINDOW = 15.0          # candidates further below the top than this are never promoted
 IMPLICIT_PENALTY = 2.0  # a body calling undeclared functions (api.IMPLICIT_MARGIN: wrong C that still compiles)
+DROPPED_ROWS = 2       # extra rows per dropped semantic row (it already counts once as a differing row)
+MAX_MEASURED = 12      # distinct bodies measured per ranking (each is one cached compile)
 CACHE = STATE_DIR / "seedrank.json"
 _LOCK = threading.Lock()
 
@@ -128,7 +136,7 @@ def _load() -> dict:
 
 
 def _key(symbol: str, body: str, mw: Optional[str], flags: Optional[str]) -> str:
-    return "|".join(("v4", symbol, hashlib.sha256(body.encode()).hexdigest()[:16], mw or "", flags or ""))
+    return "|".join(("v5", symbol, hashlib.sha256(body.encode()).hexdigest()[:16], mw or "", flags or ""))
 
 
 def measure(p: Project, symbol: str, path: Path, mw: Optional[str] = None, flags: Optional[str] = None) -> Optional[dict]:
@@ -146,7 +154,8 @@ def measure(p: Project, symbol: str, path: Path, mw: Optional[str] = None, flags
         sym = p.resolve(symbol)
         diag = (oracle.body_diagnostics(p, sym.module, Path(path), res.mw_version, res.extra_cflags) if sym
                 else {"implicit": [], "uninitialized": []})
-        out = {"percent": round(oracle.progress_score(res), 4), "dropped": dropped_for(res) or [],
+        out = {"percent": round(oracle.progress_score(res), 4), "rows": oracle.progress_rows(res),
+               "dropped": dropped_for(res) or [],
                "implicit": diag["implicit"], "uninitialized": diag["uninitialized"]}
     with _LOCK:
         cache = _load()
@@ -155,14 +164,26 @@ def measure(p: Project, symbol: str, path: Path, mw: Optional[str] = None, flags
     return out
 
 
+def rank_key(m: dict) -> tuple:
+    """Sort key of a measured body (lower ranks first): a sound body before one calling undeclared
+    functions or reading unassigned locals, then fewest differing rows (dropped semantic rows
+    weigh DROPPED_ROWS extra each; a body without row alignment ranks after every aligned one),
+    then the higher percent - penalty(dropped)."""
+    unsound = bool(m.get("implicit") or m.get("uninitialized"))
+    rows = m.get("rows")
+    dropped = min(len(m.get("dropped") or ()), int(MAX_PENALTY // PENALTY))
+    return (unsound, float("inf") if rows is None else rows + DROPPED_ROWS * dropped,
+            -(m["percent"] - penalty(m.get("dropped"))))
+
+
 def pick(p: Project, symbol: str, candidates: Sequence[Tuple[float, Path, Optional[str], Optional[str]]]) -> Optional[int]:
     """Index of the candidate to seed from. `candidates` is (recorded percent, body path, mw,
-    flags), best recorded first. Only bodies within WINDOW of the top are measured; the
-    winner maximises percent - penalty(dropped), ties keep the recorded order."""
+    flags), best recorded first. Only bodies within WINDOW of the top are measured (at most
+    MAX_MEASURED distinct ones); the winner has the lowest `rank_key`, ties keep the recorded order."""
     if not candidates:
         return None
     top = candidates[0][0] or 0.0
-    best, best_score, seen = 0, None, set()
+    best, best_key, seen = 0, None, set()
     for i, (percent, path, mw, flags) in enumerate(candidates):
         if (percent or 0.0) < top - WINDOW:
             break
@@ -176,10 +197,9 @@ def pick(p: Project, symbol: str, candidates: Sequence[Tuple[float, Path, Option
         m = measure(p, symbol, Path(path), mw, flags)
         if m is None:
             continue
-        score = (m["percent"] - penalty(m["dropped"])
-                 - (IMPLICIT_PENALTY if (m.get("implicit") or m.get("uninitialized")) else 0.0))
-        if best_score is None or score > best_score:
-            best, best_score = i, score
-        if len(seen) >= 6:
+        key = rank_key(m)
+        if best_key is None or key < best_key:
+            best, best_key = i, key
+        if len(seen) >= MAX_MEASURED:
             break
     return best
