@@ -38,7 +38,9 @@ CAPTURE_ROOT = Path(os.environ.get('FZGX_CAPTURE_DIR', str(ROOT / '.fzgx' / 'cap
 CAPTURE_SCRIPT = ROOT / 'tools' / 'capture' / 'capture132.sh'
 RECOVERY = ROOT / 'tools' / 'capture' / 'recovery'
 CAPTURE_VERSION = 'GC/1.3.2'
-MIN_PERCENT = 98.9
+# 98.0: register-only base-register swaps (24 rows of a long function) sit at 98.3-98.9%
+# (fn_17_8B44, fn_10_13B24) and were never given a verdict
+MIN_PERCENT = 98.0
 CALLEE_SAVED = {'r': range(14, 32), 'f': range(14, 32)}
 
 
@@ -128,6 +130,7 @@ def capture(p: Project, symbol: str, body: str, flags: Optional[str], timeout: i
 
 
 _REG = re.compile(r'\b([rf])(\d+)\b')
+_RELOC = re.compile(r'([\w.$@]+?)@(ha|h|l|sda21)\b')
 _BRANCH = re.compile(r'^(b\w*)\s+(?:0x[0-9a-fA-F]+|\S+)$')
 
 
@@ -141,12 +144,25 @@ def residual_rows(check) -> Tuple[Optional[list], set]:
     accepted = getattr(check, '_accepted_rows', set()) or set()
     out, classes = [], set()
     k, n = 0, min(len(lrows), len(rrows))
+    # symbols the oracle already bound on accepted rows (`lis r6, lbl_10_rodata_158@ha` against
+    # the unit's `...rodata.0@ha`): the same pair on a register-renamed row is a renaming too
+    bound: Dict[str, str] = {}
+    for j in accepted:
+        if j < n:
+            x, y = stuck._fmt(lrows[j]) or '', stuck._fmt(rrows[j]) or ''
+            mx, my = _RELOC.findall(x), _RELOC.findall(y)
+            if len(mx) == len(my) == 1 and _RELOC.sub('S', x) == _RELOC.sub('S', y):
+                bound[my[0][0]] = mx[0][0]
+
+    def unbind(text: str) -> str:
+        return _RELOC.sub(lambda m: (bound.get(m.group(1), m.group(1)) + '@' + m.group(2)), text) if bound else text
+
     while k < n:
         a, b = lrows[k], rrows[k]
         if k in accepted or ((a.get('diff_kind') or 'DIFF_NONE') == 'DIFF_NONE'
                              and (b.get('diff_kind') or 'DIFF_NONE') == 'DIFF_NONE'):
             k += 1; continue
-        lf, of = stuck._fmt(a), stuck._fmt(b)
+        lf, of = stuck._fmt(a), unbind(stuck._fmt(b) or '')
         if lf == of or not lf or not of:
             k += 1; continue
         bl, bo = _BRANCH.match(lf), _BRANCH.match(of)
@@ -154,8 +170,8 @@ def residual_rows(check) -> Tuple[Optional[list], set]:
             k += 1; continue
         if _REG.sub('R', lf) == _REG.sub('R', of):
             pairs = [(k, lf, of)]
-        elif k + 1 < n and _REG.sub('R', lf) == _REG.sub('R', stuck._fmt(rrows[k + 1]) or '')                 and _REG.sub('R', stuck._fmt(lrows[k + 1]) or '') == _REG.sub('R', of):
-            pairs = [(k + 1, lf, stuck._fmt(rrows[k + 1])), (k, stuck._fmt(lrows[k + 1]), of)]
+        elif k + 1 < n and _REG.sub('R', lf) == _REG.sub('R', unbind(stuck._fmt(rrows[k + 1]) or ''))                 and _REG.sub('R', stuck._fmt(lrows[k + 1]) or '') == _REG.sub('R', of):
+            pairs = [(k + 1, lf, unbind(stuck._fmt(rrows[k + 1]) or '')), (k, stuck._fmt(lrows[k + 1]), of)]
             k += 1
         else:
             return None, set()
@@ -243,6 +259,26 @@ def _class(row) -> str:
     return 'temp'
 
 
+def _base_temps(cap: Path, idx: str) -> set:
+    """GPR webs holding a constant section address: `addi rT, rH, sym@l` (a symbol operand) and
+    `addis rT, rB, N` over such a web (the high-half base `&lbl + 0x60000`). MWCC creates them
+    while lowering, after every declared local and compiler shadow is numbered."""
+    f = cap / f'allocator-{idx}.json'
+    if not f.exists():
+        return set()
+    out: set = set()
+    for b in json.loads(f.read_text()).get('blocks', []):
+        for ins in b.get('instructions', []):
+            m = (ins.get('opcode_descriptor') or {}).get('mnemonic')
+            ops = ins.get('operands') or []
+            regs = [o for o in ops if o.get('kind') == 0 and o.get('class') == 4]
+            if m not in ('ADDI', 'ADDIS') or len(regs) < 2 or not regs[0].get('flags', 0) & 2:
+                continue
+            if (m == 'ADDI' and any(o.get('kind') == 3 for o in ops)) or (m == 'ADDIS' and regs[1].get('reg') in out):
+                out.add(regs[0]['reg'])
+    return out
+
+
 def analyse(check, residual, classes, cap: Path, symbol: str) -> Optional[dict]:
     """Classify every target web and the web that blocks its retail register.
 
@@ -255,6 +291,15 @@ def analyse(check, residual, classes, cap: Path, symbol: str) -> Optional[dict]:
     if idx is None:
         return None
     out = {'symbol': symbol, 'capture': str(cap), 'index': idx, 'targets': []}
+    try:
+        bases = _base_temps(cap, idx)
+    except (OSError, ValueError, KeyError, TypeError):
+        bases = set()
+
+    def kind(w, row):
+        # a declared local assigned the address (`data = &lbl + 0x60000`) stays a local
+        return 'base' if w in bases and _class(row) == 'temp' else _class(row)
+
     for cls in sorted(classes):
         rcls = {'r': 'gpr', 'f': 'fpr'}[cls]
         try:
@@ -272,7 +317,7 @@ def analyse(check, residual, classes, cap: Path, symbol: str) -> Optional[dict]:
         for v, want in sorted(targets.items()):
             got = color.get(v)
             row = rows.get(v, {})
-            t = {'vreg': v, 'name': row.get('name', '?'), 'class': _class(row), 'region': row.get('region', '?'),
+            t = {'vreg': v, 'name': row.get('name', '?'), 'class': kind(v, row) if cls == 'r' else _class(row), 'region': row.get('region', '?'),
                  'degree': row.get('degree'), 'want': f'{cls}{want}', 'got': f'{cls}{got}', 'blockers': []}
             if got == want or v not in rank:
                 out['targets'].append(t)
@@ -280,13 +325,13 @@ def analyse(check, residual, classes, cap: Path, symbol: str) -> Optional[dict]:
             before_me = [w for w in graph.neighbors.get(v, []) if w in rank and rank[w] < rank[v]]
             occupants = [w for w in before_me if color.get(w) == want]
             if occupants:
-                t['blockers'] = [{'vreg': w, 'name': rows.get(w, {}).get('name', '?'), 'class': _class(rows.get(w)),
+                t['blockers'] = [{'vreg': w, 'name': rows.get(w, {}).get('name', '?'), 'class': kind(w, rows.get(w)) if cls == 'r' else _class(rows.get(w)),
                                   'region': rows.get(w, {}).get('region', '?'), 'role': 'holds ' + t['want']}
                                  for w in occupants]
             elif got in claimed_by and rank.get(claimed_by[got], 1 << 30) < rank[v] and want in claimed_by \
                     and rank[claimed_by[want]] < rank[v]:
                 w = claimed_by[got]
-                t['blockers'] = [{'vreg': w, 'name': rows.get(w, {}).get('name', '?'), 'class': _class(rows.get(w)),
+                t['blockers'] = [{'vreg': w, 'name': rows.get(w, {}).get('name', '?'), 'class': kind(w, rows.get(w)) if cls == 'r' else _class(rows.get(w)),
                                   'region': rows.get(w, {}).get('region', '?'), 'role': f'claimed {t["got"]} first'}]
             else:
                 role = (f'{t["want"]} free at its turn: numbered later than retail' if want not in CALLEE_SAVED[cls]
@@ -307,7 +352,23 @@ def verdict_text(a: dict) -> str:
         who = ', '.join(f"{b['name']} ({b['class']} {b['region']}, {b['role']})" for b in t['blockers']) or 'none'
         parts.append(f"{t['name']} ({t['class']} v{t['vreg']}) wants {t['want']} got {t['got']}: {who}")
     kinds = {b['class'] for t in a['targets'] for b in t['blockers']} | {t['class'] for t in a['targets'] if t['want'] != t['got']}
-    if kinds <= {'local', 'order'}:
+    if 'base' in kinds:
+        # measured 2026-10-28 (fn_10_13B24, fn_17_8B44 GC/1.3.2 captures): the literal-pool or
+        # section base (`lis/addi sym@l`, `addis +0x60000`) is a lowering temporary, numbered after
+        # every parameter, declared local and @N shadow; when both webs are pushed in the same
+        # simplify scan it is coloured first and claims the higher callee-saved register. Retail's
+        # order (a declared local above the base) replays exactly with the two numbers exchanged
+        # (fn_10_13B24 `43=38`), but no spelling tried renumbers either web: declaration and
+        # definition order, struct/plain pointer carriers of the base under opt_propagation off,
+        # dropping the local (it becomes an @N shadow, still below), an inline helper parameter,
+        # native literals with the module pool primer, the TU .data/.bss defined in the unit
+        # (the base stays a temporary), and other compiler versions
+        hint = ('structural: a section/literal-pool base (lis/addi or addis high half) is a lowering '
+                'temporary numbered after every local and shadow, so it out-ranks them when they share '
+                'a simplify scan; declaration order, carriers, propagation pragmas, native pool literals '
+                'and unit-defined TU data do not renumber it (docs/MWCC_IDIOMS.md "Section base outranks '
+                'a declared local"); two bases order by creation, see tu_section_layout')
+    elif kinds <= {'local', 'order'}:
         hint = 'declaration order (solver)'
     elif 'shadow' in kinds:
         # measured 2026-10-15 (fn_1_1188CC, fn_1_11B4E4, fn_1_7B558, fn_3_20748 captures): compiler

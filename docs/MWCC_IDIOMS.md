@@ -631,3 +631,26 @@ A WSL capture (`tools/capture/capture132.sh`) runs in ~11 s and the replay repro
   Declaring port `int`/`u32` and reassigning it does not help: MWCC renames the reassigned
   parameter (the result stays a separate temp, numbering and degree unchanged).
   fn_1_82C70 compiles identically under GC/1.3 and GC/1.3.2, so the 1.3.2 capture applies.
+- **Section base outranks a declared local** (tooling round, 2026-10-28, GC/1.3.2 captures of
+  fn_10_13B24 and fn_17_8B44). A literal-pool or TU section base (`lis; addi rB, sym@l`, and the
+  `addis rH, rB, 6` high half over it) is a lowering temporary: it is numbered after every
+  parameter, declared local and @N shadow (fn_10_13B24: params v32-34, locals v35-38, shadows
+  v39-40, pool base v43; fn_17_8B44: `data` v38, pool base v41 in the window). When it and a
+  long-lived local are pushed in the same simplify scan (all five callee-saved webs of
+  fn_10_13B24 drop below K together in scan 2; both of fn_17_8B44's are below K in scan 1), the
+  higher number is coloured first and claims r31. Retail's order (x r31 above pool r30, data r31
+  above pool r30) replays exactly with the two numbers exchanged (`simplify_replay.py DIR IDX 43=38`);
+  a degree change does not reproduce it (x needs +16 interferences surviving scan 1). No spelling
+  tried renumbers either web: declaration and definition order; the pool held in a plain or
+  one-member-struct pointer local at any position, with and without `opt_propagation off` (the
+  local's web stays empty and the address temp survives); `x` removed (it becomes shadow @316,
+  still below the base); `x = arg1; x *= 150` (folded to the same shadow); `x` as an inline
+  helper parameter (an @N object); native literals with the module's pool primer; the TU's
+  `.data` and `.bss` defined in the unit (424C's layout transplanted into 8B44: the base stays
+  a temporary, `data` stays a local; without the local the high half is no longer hoisted to the
+  entry); GC/1.1-2.6. Two section bases order among themselves by creation (fn_17_424C's
+  layout family); a declared local cannot be numbered above one. The capture verdict
+  (`fixup_capture`) now names the class (`base`) instead of the misleading "expression order",
+  runs from 98.0% (these swaps are 98.3-98.9% on long functions), and treats a symbol pair the
+  oracle already bound (`lbl_10_rodata_158` against `...rodata.0`) as a renaming. Open: a source
+  form in which `x` is a window web (a rename region) without an extra `mr`.
