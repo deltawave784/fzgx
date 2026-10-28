@@ -8534,3 +8534,6 @@ rel/main_rel/stcoli/fn_1_2EBB8.c:
 
 rel/main_rel/accessory/fn_1_11A158.c:
 	.text       start:0x0011A158 end:0x0011A774 align:4
+
+rel/main_rel/driver/fn_1_C24A4.c:
+	.text       start:0x000C24A4 end:0x000C3378 align:4
