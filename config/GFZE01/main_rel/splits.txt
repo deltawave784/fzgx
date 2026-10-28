@@ -8765,3 +8765,72 @@ rel/main_rel/accessory/fn_1_11F250.c:
 
 rel/main_rel/accessory/fn_1_110478.c:
 	.text       start:0x00110478 end:0x00111510 align:4
+
+rel/main_rel/accessory/fn_1_111980.c:
+	.text       start:0x00111980 end:0x00112F40 align:4
+
+rel/main_rel/sound/fn_1_A0214.c:
+	.text       start:0x000A0214 end:0x000A02F0 align:4
+
+rel/main_rel/game/fn_1_3EC88.c:
+	.text       start:0x0003EC88 end:0x0003ED8C align:4
+
+rel/main_rel/game/fn_1_38BBC.c:
+	.text       start:0x00038BBC end:0x00038CF4 align:4
+
+rel/main_rel/sound/fn_1_A11EC.c:
+	.text       start:0x000A11EC end:0x000A1340 align:4
+
+rel/main_rel/game/fn_1_320A4.c:
+	.text       start:0x000320A4 end:0x00032200 align:4
+
+rel/main_rel/game/fn_1_359B8.c:
+	.text       start:0x000359B8 end:0x00035BC4 align:4
+
+rel/main_rel/game/fn_1_382C4.c:
+	.text       start:0x000382C4 end:0x000384E8 align:4
+
+rel/main_rel/game/fn_1_39C60.c:
+	.text       start:0x00039C60 end:0x0003A044 align:4
+
+rel/main_rel/game/fn_1_37AA8.c:
+	.text       start:0x00037AA8 end:0x00037E98 align:4
+
+rel/main_rel/game/fn_1_30D84.c:
+	.text       start:0x00030D84 end:0x0003129C align:4
+
+rel/main_rel/stcoli/fn_1_3C880.c:
+	.text       start:0x0003C880 end:0x0003CDB0 align:4
+
+rel/main_rel/game/fn_1_30824.c:
+	.text       start:0x00030824 end:0x00030D84 align:4
+
+rel/main_rel/game/fn_1_3129C.c:
+	.text       start:0x0003129C end:0x0003181C align:4
+
+rel/main_rel/game/fn_1_395CC.c:
+	.text       start:0x000395CC end:0x00039C60 align:4
+
+rel/main_rel/game/fn_1_3B11C.c:
+	.text       start:0x0003B11C end:0x0003B7D4 align:4
+
+rel/main_rel/game/fn_1_3DE80.c:
+	.text       start:0x0003DE80 end:0x0003E5D0 align:4
+
+rel/main_rel/game/fn_1_35BC4.c:
+	.text       start:0x00035BC4 end:0x00036330 align:4
+
+rel/main_rel/stcoli/fn_1_3A330.c:
+	.text       start:0x0003A330 end:0x0003AEC4 align:4
+
+rel/main_rel/game/fn_1_3CE94.c:
+	.text       start:0x0003CE94 end:0x0003DB9C align:4
+
+rel/main_rel/game/fn_1_33A20.c:
+	.text       start:0x00033A20 end:0x00034924 align:4
+
+rel/main_rel/game/fn_1_36B10.c:
+	.text       start:0x00036B10 end:0x00037AA8 align:4
+
+rel/main_rel/game/fn_1_3B7D4.c:
+	.text       start:0x0003B7D4 end:0x0003C880 align:4
