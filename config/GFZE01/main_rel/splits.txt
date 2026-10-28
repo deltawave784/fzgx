@@ -8840,3 +8840,6 @@ rel/main_rel/enemy_ctrl/fn_1_D123C.c:
 
 rel/main_rel/accessory/fn_1_10B5A8.c:
 	.text       start:0x0010B5A8 end:0x0010B7D8 align:4
+
+rel/main_rel/bg_common/fn_1_1071E8.c:
+	.text       start:0x001071E8 end:0x0010780C align:4
