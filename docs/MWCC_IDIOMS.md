@@ -23,6 +23,25 @@ file from what actually unblocked functions; keep each item one or two lines.
   fn_1_D523C whole-body wrapper 4.4% (call) -> 97.2% inlined; fn_17_1798 2.0% -> 97.35% (identical to the
   plain body). Inlining a whole body only renumbers its locals as `@` temporaries; it does not by itself
   turn `beq exit` into retail's `bne next; b exit`.
+- **Uninverted `bCC next; b exit` pairs come from one `||` early-return chain** (GC/1.3.2 probes and
+  real bodies, 2026-10-28). MWCC inverts `if (c) goto L; goto X; L:` only at statement level
+  (`fold_and_invert_conditional_branch`, optimizer/COptimizer.c); nothing at PCode level inverts a pair.
+  `if (A || B || C) return;` lowers its leaves in codegen: A and B branch to the return block, the last
+  leaf branches round it (`bCC next; b exit`), and the return block keeps several predecessors, so the
+  pair survives. Separate `if (A) return; if (B) return;` or an `&&` guard around the body give the
+  inverted `b!CC exit`. Apply it whenever retail shows the pair after a run of early-exit tests: merge
+  the consecutive early returns (including the earlier ones) into one `||` condition. fn_1_1018BC
+  `if (at10 == NULL || (f & 1) || ((f >> 1) & 1)) return;` (7 -> 5 rows; a `switch` on the last bit
+  gives the same pair), fn_1_D523C `if (slot == -1 || k == 2 || !(k == 1 || c0 != a || ...)) return;`
+  (23 -> 21 rows, branch rows gone; only the base-register swap remains). A dead `b X` block right after
+  a switch dispatch is the same mechanism: a `default: return;`/case body whose block was reached only
+  by retargeted branches stays in the code (probe b7). Switch lowering (backend/Switch.c, identical in
+  1.3.2 by probe) emits the lower-bound test `cmpwi 0; bge body; b default` for every signed 32-bit
+  switch whose default covers values on both sides of the case range: both sides are separate default
+  ranges, and casting to u8/u16/u32 changes nothing (the expression is promoted to `int`). The compare
+  is omitted only when the two leftmost ranges share a target (`b` alone, the compare dies) or for an
+  unpromoted unsigned type narrower than int, which would use `cmplwi`. fn_1_D7758's retail
+  `cmpwi 20; bge exit; b body; b exit` is therefore not a plain `switch (i)`; still open.
 - **Fused multiply-add**: `a + b*c` in one expression gives `fmadds`; a product held in a
   temporary or wrapped in `(f32)` stays `fmuls` + `fadds`. Only the product that is a
   direct operand fuses: retail `fmuls; fnmsubs` for `x*y - z*w` is `(f32)(x*y) - z*w`;
