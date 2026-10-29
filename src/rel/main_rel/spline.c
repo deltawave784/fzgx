@@ -449,6 +449,154 @@ void fn_1_F5B88(Obj_1_data_2A7E0_At3C *arg0) {
 #pragma opt_lifetimes reset
 /* fzgx:end fn_1_F5B88 */
 
+/* fzgx:begin fn_1_F5D94 noprologue */
+#include "types.h"
+#include "game/main_rel/burner_types.h"
+#include "game/vec3.h"
+
+struct fn_1_F5D94_lbl_801A6D00 { u32 unk_0; };
+extern u32 lbl_801A63C0;
+extern struct fn_1_F5D94_lbl_801A6D00 lbl_801A6D00;
+extern u32 lbl_801A66CC;
+extern void lbl_8006DBAC(Vec3 *);
+extern f32 lbl_8006D0B4(f32);
+
+#pragma section code_type ".fzgxpool"
+void fzgx_fn_1_F5D94_pool_primer(volatile f32 *p, volatile f64 *q) {  /* fzgx-allow: S2 volatile keeps the verified access order */
+    *p = 0.0f; *p = 6.0f; *p = 32767.0f; *p = 0.02f;
+    *p = 1.0f; *p = 15.0f; *q = 4503601774854144.0;
+    *p = 0.1f; *p = 36.0f; *q = 0.5; *p = 1.5f; *p = 2.0f;
+    *p = 0.4f; *p = 0.5f; *p = 0.2f; *p = 30.0f; *p = 180.0f;
+    *p = 2.5f; *p = 0.025f; *p = 0.0005f; *p = 0.04f; *p = 0.05f;
+}
+#pragma section code_type ".text"
+
+#define F(o) (*(f32 *)((u8 *)v13 + (o)))
+#define I(o) (*(s32 *)((u8 *)v13 + (o)))
+static inline s32 fn_1_F5D94_rnd(void) {
+    lbl_801A63C0 = lbl_801A63C0 * 0x676A4B6B + 0x33CB;
+    return (lbl_801A63C0 >> 16) & 0x7FFF;
+}
+#define RND() ((f32)fn_1_F5D94_rnd() / 32767.0f)
+
+static inline f32 fn_1_F5D94_distance(fn_1_9CCE8_Vec3 *a, fn_1_9CCE8_Vec3 *b) {
+    register f32 dx = a->x;
+    register f32 dy = a->y;
+    register f32 dz = a->z;
+    dx -= b->x;
+    dy -= b->y;
+    dz -= b->z;
+    dx = (f32)(dx * dx);
+    dx += dy * dy;
+    dx += dz * dz;
+    return lbl_8006D0B4(dx);
+}
+
+static inline f32 fn_1_F5D94_clamp(f32 value, f32 low, f32 high) {
+    if (value < low) return low;
+    if (value > high) return high;
+    return value;
+}
+
+#pragma opt_floatingpoint off
+#pragma opt_propagation on
+static inline f32 fn_1_F5D94_reciprocal(f32 value) {
+    return 1.0f / (1.0f + (f32)(2.5f * value));
+}
+void fn_1_F5D94(void *arg0) {
+    register f32 v5;
+    f32 v0, v1, v2, v6, v9, v10, v11;
+    s32 v12;
+    void *v13 = arg0;
+    s32 v8;
+    f32 v21;
+    f32 v36;
+    fn_1_9CCE8_Vec3 loc_14;
+    fn_1_9CCE8_Vec3 loc_8;
+
+    lbl_8006DBAC((Vec3 *)lbl_801A66CC);
+    fn_8006E294(&loc_8);
+    lbl_8006DBAC((Vec3 *)(lbl_801A6D00.unk_0 + 48));
+    fn_8006E294(&loc_14);
+    F(8) = fn_1_F5D94_distance(&loc_14, &loc_8);
+    v2 = F(12);
+    F(12) = v2 + (f32)(0.1f * (1.0f - v2));
+    v5 = F(8);
+    v8 = (s32)(36.0f * F(12));
+    if (v5 > 0.5) {
+        v9 = 2.0f;
+        v6 = 1.5f;
+        v10 = v5 - v9;
+        v6 = fn_1_F5D94_clamp(v10, v6, v9);
+        v11 = 1.0f / v6;
+        v8 = (s32)((f32)v8 * v11);
+    }
+    v13 = (u8 *)v13 + 20;
+    for (v12 = 36; v12 > 0; v12--) {
+        if (v8 > v12 && I(48) == 0) {
+            v21 = 0.0f;
+            F(0) = 6.0f * RND();
+            F(4) = 6.0f * RND();
+            F(8) = 6.0f * RND();
+            *(fn_1_9CCE8_Vec3 *)((u8 *)v13 + 12) = *(fn_1_9CCE8_Vec3 *)v13;
+            F(24) = v21 + (f32)(0.4f * (RND() - 0.5f));
+            F(28) = 0.1f + (f32)(0.2f * RND());
+            F(32) = v21 + (f32)(0.4f * (RND() - 0.5f));
+            F(36) = v21;
+            F(40) = 0.02f * (1.0f + RND());
+            F(44) = 0.02f * (1.0f + RND());
+            F(40) = F(44);
+            I(48) = (s32)(30.0f + (f32)(180.0f * RND()));
+        }
+        if (I(48) > 0) {
+            v0 = F(24);
+            v1 = F(28);
+            v2 = F(32);
+            v0 = (f32)(v0 * v0);
+            v0 += v1 * v1;
+            v0 += v2 * v2;
+            v5 = fn_1_F5D94_reciprocal(v36 = lbl_8006D0B4(v0));
+            F(40) = (1.0f - (f32)(v5 * RND())) * F(44);
+            v0 = RND();
+            F(24) = F(24) + (f32)(0.025f * (f32)(v36 * (v0 - 0.5f)));
+            v0 = RND();
+            F(28) = F(28) + (f32)(0.025f * (f32)(v36 * (v0 - 0.5f)));
+            v0 = RND();
+            F(32) += (f32)(0.025f * (f32)(v36 * (v0 - 0.5f)));
+            v21 = 0.0f;
+            F(28) += 0.0005f;
+            F(24) += (f32)(0.04f * (v21 - F(24)));
+            F(28) += (f32)(0.04f * (0.2f - F(28)));
+            F(32) += (f32)(0.04f * (v21 - F(32)));
+            *(fn_1_9CCE8_Vec3 *)((u8 *)v13 + 12) = *(fn_1_9CCE8_Vec3 *)v13;
+            v0 = RND();
+            F(0) = F(0) + (F(24) + (f32)(0.05f * (v0 - 0.5f)));
+            v0 = RND();
+            F(4) = F(4) + (F(28) + (f32)(0.05f * (v0 - 0.5f)));
+            v0 = RND();
+            F(8) = F(8) + (F(32) + (f32)(0.05f * (v0 - 0.5f)));
+            while (F(0) < 0.0f) F(0) += 6.0f;
+            while (F(0) > 6.0f) F(0) -= 6.0f;
+            while (F(4) < 0.0f) F(4) += 6.0f;
+            while (F(4) > 6.0f) F(4) -= 6.0f;
+            while (F(8) < 0.0f) F(8) += 6.0f;
+            while (F(8) > 6.0f) F(8) -= 6.0f;
+            I(48)--;
+            if ((f32)I(48) < 15.0f) {
+                F(36) = F(36) * ((f32)I(48) / (f32)(I(48) + 1));
+            } else {
+                F(36) = F(36) + (f32)(0.2f * (1.0f - F(36)));
+            }
+            if (I(48) <= 0) {
+                F(36) = 0.0f;
+                I(48) = 0;
+            }
+        }
+        v13 = (u8 *)v13 + 52;
+    }
+}
+/* fzgx:end fn_1_F5D94 */
+
 /* fzgx:begin fn_1_F70C0 */
 // fn_1_F70C0: returns a constant.
 int fn_1_F70C0(void) {
