@@ -8849,3 +8849,9 @@ rel/main_rel/car/fn_1_81164.c:
 
 rel/main_rel/shadowmap/fn_1_57810.c:
 	.text       start:0x00057810 end:0x000579A0 align:4
+
+rel/main_rel/effect_car/fn_1_7099C.c:
+	.text       start:0x0007099C end:0x00071024 align:4
+
+rel/main_rel/spline/fn_1_FB18C.c:
+	.text       start:0x000FB18C end:0x000FB770 align:4

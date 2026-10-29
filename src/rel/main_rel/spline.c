@@ -3018,6 +3018,225 @@ void fn_1_FB180(int *value) {
 }
 /* fzgx:end fn_1_FB180 */
 
+/* fzgx:begin fn_1_FB18C noprologue */
+#include "types.h"
+#include "psvec.h"
+#include "rel/main_rel/spline.h"
+
+typedef struct {
+    f32 x, y, z;
+} SplineVec;
+
+typedef struct {
+    u8 pad_0[0x8];
+    s16 unk_8;
+    u8 pad_A[0xE];
+    f32 unk_18;
+    u8 pad_1C[0x3C];
+    f32 unk_58;
+    u8 pad_5C[0x28];
+    f32 unk_84;
+    u8 pad_88[0x6C];
+    f32 unk_F4;
+    u8 pad_F8[0x5C];
+    u32 unk_154;
+} SplineObj;
+
+extern u32 lbl_801A63C0;
+extern u32 lbl_801A66A0;
+
+extern s16 fn_1_E5430(s16);
+extern SplineObj *fn_1_E54A8(s16, s16);
+extern s32 fn_1_E5770(SplineObj *, u64);
+extern void fn_1_E5930(SplineObj *, u64);
+extern void fn_1_E594C(SplineObj *, u64);
+extern s16 fn_1_E5568(s16);
+extern u32 fn_1_DE180(SplineObj *, SplineVec *, f32);
+/* retail evaluates the float argument before the object at both call sites */
+extern void fn_1_E57F4(f32, SplineObj *);
+extern void fn_1_E5988(SplineObj *, SplineVec *);
+extern void fn_1_E5A94(SplineObj *, SplineVec *);
+extern void fn_1_E57FC(SplineObj *, SplineVec *);
+extern void fn_80008BEC(void *, int, u32);
+
+/* Shared literal pool primer: earlier functions of the TU fill the pool up to +0xF0.
+ * MWCC emits a function's aggregate initializers before its scalar literals and the
+ * int-to-float constants last, so each group gets its own primer. */
+#pragma section code_type ".fzgxpool"
+extern void fzgx_pool_sink(const void *);
+void fzgx_pool_primer(void) {
+    u32 t[4] = {0x00000000, 0x028001E0, 0x00000000, 0x00000001};
+    fzgx_pool_sink(t);
+}
+void fzgx_pool_primer2(f32 *f) {
+    f[0] = 1.0f;
+    f[1] = -1.0f;
+}
+void fzgx_pool_primer2b(f32 *f, u32 u, s32 s) {
+    f[2] = (f32)u;
+    f[3] = (f32)s;
+}
+void fzgx_pool_primer2c(f32 *f, f64 *d) {
+    f[4] = 490000.0f;
+    f[5] = 20.0f;
+    f[6] = 13.0f;
+    f[7] = 0.5f;
+    d[0] = 50.0;
+    d[1] = 10.0;
+    f[8] = 0.0f;
+}
+void fzgx_pool_primer3(f32 *f, f64 *d) {
+    {
+        u32 t[3] = {0x00000000, 0x41A00000, 0x00000000};
+        fzgx_pool_sink(t);
+    }
+    {
+        u32 t[33] = {
+            0x41A00000, 0x00000000, 0x00000000, 0x00000001, 0x00000000, 0x00000000,
+            0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+            0x00000000, 0x00000001, 0x012C0005, 0x000500C8, 0x00000000, 0x00000000,
+            0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000001,
+            0x02580003, 0x001401F4, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+            0x00000000, 0x00000000, 0x00000000,
+        };
+        fzgx_pool_sink(t);
+    }
+    f[9] = -0.5f;
+    f[10] = 32767.0f;
+    f[11] = 0.05235988f;
+    d[2] = 216.0;
+}
+#pragma section code_type ".text"
+
+static inline s32 spline_rand(void) {
+    lbl_801A63C0 = lbl_801A63C0 * 0x676A4B6B + 0x33CB;
+    return (lbl_801A63C0 >> 16) & 0x7FFF;
+}
+
+static inline f32 spline_clamp01(f32 x) {
+    return (x < 0.0f) ? 0.0f : ((x > 1.0f) ? 1.0f : x);
+}
+
+/* Fade pass: age every object and fade it out over its last 30 frames. */
+static inline void spline_fade_pass(void) {
+    s16 i2;
+    SplineObj *obj2;
+    s16 n;
+    f32 limit;
+    f32 rem;
+    f32 t;
+
+    n = fn_1_E5430(4);
+    for (i2 = 0; i2 < n; i2++) {
+        obj2 = fn_1_E54A8(4, i2);
+        if (!fn_1_E5770(obj2, 3)) {
+            obj2->unk_154++;
+        }
+        limit = (obj2->unk_8 % 4 == 0) ? 240.0f : 120.0f;
+        if ((f32)obj2->unk_154 > limit) {
+            obj2->unk_154 = 0;
+            fn_1_E5930(obj2, 3);
+        } else {
+            rem = limit - (f32)obj2->unk_154;
+            if (rem < 30.0f) {
+                t = rem / 30.0f;
+                fn_1_E57F4(spline_clamp01(t), obj2);
+            }
+        }
+    }
+}
+
+/* Spawn scan over the n objects, starting at the running spawn count. */
+static inline void spline_spawn_loop(s16 n) {
+    s16 i3;
+    s16 count;
+    SplineObj *obj3;
+
+    count = 0;
+    for (i3 = count; i3 < n; i3++) {
+        obj3 = fn_1_E54A8(4, i3);
+        if (fn_1_E5770(obj3, 3) && count < lbl_1_bss_84428.unk_8 && fn_1_E5568(4) < lbl_1_bss_84428.unk_A) {
+            SplineVec out;
+            SplineVec tmp;
+            SplineVec scale;
+            SplineVec rot;
+            f32 dx;
+            f32 dy;
+            f32 dz;
+
+            fn_1_E594C(obj3, 3);
+            fn_1_E594C(obj3, 0x8000);
+            fn_1_E57F4(1.0f, obj3);
+            obj3->unk_154 = 0;
+
+            /* position: box center offset by a random point of the box */
+            psvec_scale(&lbl_1_bss_84428.unk_1C, -0.5f, &tmp);
+            dx = lbl_1_bss_84428.unk_1C * ((f32)spline_rand() / 32767.0f);
+            dy = lbl_1_bss_84428.unk_20 * ((f32)spline_rand() / 32767.0f);
+            dz = lbl_1_bss_84428.unk_24 * ((f32)spline_rand() / 32767.0f);
+            tmp.x += dx;
+            tmp.y += dy;
+            tmp.z += dz;
+            psvec_add((u8 *)&lbl_1_bss_84428 + 0x10, &tmp, &out);
+            fn_1_E5988(obj3, &out);
+
+            rot.x = 0.05235988f * (spline_rand() % 2 + 2);
+            rot.y = 0.05235988f * (spline_rand() % 2 + 2);
+            rot.z = 0.05235988f * (spline_rand() % 2 + 2);
+            fn_1_E5A94(obj3, &rot);
+
+            fn_80008BEC(&scale, 0, sizeof(scale));
+            scale.z = (spline_rand() % 180 + 30) / 216.0;
+            fn_1_E57FC(obj3, &scale);
+            count++;
+        }
+    }
+}
+
+#pragma inline_max_size(4096)
+void fn_1_FB18C(void) {
+    SplineObj *obj1;
+    s16 i1;
+    s16 n;
+    f32 v;
+    f32 base;
+
+    n = fn_1_E5430(4);
+    {
+        SplineVec up = {0.0f, 1.0f, 0.0f};
+
+        base = 0.0f;
+        for (i1 = 0; i1 < n; i1++) {
+            obj1 = fn_1_E54A8(4, i1);
+            if (fn_1_E5770(obj1, 0x20)) {
+                v = 0.99f * obj1->unk_84 * obj1->unk_F4;
+                if (obj1->unk_58 < base + v) {
+                    obj1->unk_58 = base + v;
+                    fn_1_DE180(obj1, &up, 0.05f * obj1->unk_18);
+                    fn_1_E5930(obj1, 0x40000000);
+                }
+            }
+        }
+    }
+
+    spline_fade_pass();
+
+    if ((s32)lbl_1_bss_84428.unk_0 == 1) {
+        if (lbl_1_bss_84428.unk_4 != -1) {
+            lbl_1_bss_84428.unk_4 = (lbl_1_bss_84428.unk_4-- > 0) ? lbl_1_bss_84428.unk_4-- : 0;
+        }
+        if (lbl_1_bss_84428.unk_4 == 0) {
+            lbl_1_bss_84428.unk_0 = 0;
+        }
+
+        n = fn_1_E5430(4);
+        if (lbl_801A66A0 % lbl_1_bss_84428.unk_6 == 0) {
+            spline_spawn_loop(n);
+        }
+    }
+}
+/* fzgx:end fn_1_FB18C */
+
 /* fzgx:begin fn_1_FB770 */
 int fn_1_FB770(int flag, u32 *value) {
     Obj_1_data_2A7E0_At3C *object = lbl_1_data_2A7E0.unk_3C;
