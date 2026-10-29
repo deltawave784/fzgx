@@ -5147,16 +5147,112 @@ def header_helper_includes(body, findings):
     return [('shared helpers by include ' + ', '.join(sorted(set(replaced))), text)]
 
 
+_A1_RANGES = ((0x80000000, 0x817FFFFF), (0xC0000000, 0xC17FFFFF), (0xCC000000, 0xCC00FFFF))
+
+
+def _initializer_offsets(text):
+    """Sorted (start, end) spans of brace initializers (`= {...}`, nested braces included)."""
+    spans, stack, i, n = [], [], 0, len(text)
+    while i < n:
+        c = text[i]
+        if text.startswith('/*', i):
+            j = text.find('*/', i + 2)
+            i = n if j < 0 else j + 2
+            continue
+        if text.startswith('//', i):
+            j = text.find('\n', i)
+            i = n if j < 0 else j
+            continue
+        if c in '"\'':
+            j = i + 1
+            while j < n and text[j] != c:
+                j += 2 if text[j] == '\\' else 1
+            i = j + 1
+            continue
+        if c == '{':
+            init = bool(stack and stack[-1][0]) or text[:i].rstrip().endswith('=')
+            stack.append((init, i))
+        elif c == '}' and stack:
+            init, start = stack.pop()
+            if init and not (stack and stack[-1][0]):
+                spans.append((start, i + 1))
+        i += 1
+    return spans
+
+
+def non_address_literals(body, findings):
+    """A1 literals of an exact match that are values, not addresses: a call argument
+    (`fn_1_495B0(0xC0000000)`, fn_15_4578), a scalar (`mask = 0xC0000000`), a float bit pattern
+    in a local word table (0xC0400000 is -3.0f). Only literals with no hardware name
+    (`hardware_literal_names` spells the rest) and outside a pointer cast (A2, a real address)
+    are touched. A word of a brace initializer keeps its spelling and its line gains the
+    `fzgx-allow: A1 retail data bytes` comment the data importer writes; any other value is
+    respelled `(0xHHHHu << 16)` (`| 0xLLLLu` when the low half is set), the same unsigned
+    constant, as fn_1_67680 was respelled by hand. Returns [(description, text)]; the oracle
+    rechecks the text, so a respelling that changed code cannot land."""
+    rows = {line for rule, line, _ in findings if rule == 'A1'}
+    if not rows:
+        return []
+    table = oracle.abs_symbols()
+    inits = _initializer_offsets(body)
+    lines = body.split('\n')
+    starts, pos = [], 0
+    for line in lines:
+        starts.append(pos)
+        pos += len(line) + 1
+    allow, edits = set(), []
+    for number in sorted(rows):
+        if not 0 < number <= len(lines):
+            continue
+        line = lines[number - 1]
+        code = line.split('//', 1)[0]
+        for m in _HW_LITERAL.finditer(code):
+            value = int(m[1], 16)
+            if value == 0x80000000 or not any(lo <= value <= hi for lo, hi in _A1_RANGES):
+                continue
+            if _hw_name(value, table) is not None:
+                continue
+            if re.search(r'\*\s*\)\s*$', code[:m.start()]):
+                continue  # `(T *)0x...`: an address (A2), never respelled as a value
+            if code.rfind('/*', 0, m.start()) > code.rfind('*/', 0, m.start()):
+                continue  # inside a block comment on this line
+            at = starts[number - 1] + m.start()
+            if any(s < at < e for s, e in inits):
+                allow.add(number)
+                continue
+            suffix = re.match(r'0[xX][0-9A-Fa-f]{8}([uUlL]*)', m[0]).group(1)
+            suffix = suffix if 'u' in suffix.lower() else 'u' + suffix
+            high, low = value >> 16, value & 0xFFFF
+            spelled = f'(0x{high:X}{suffix} << 16)' if not low else f'(0x{high:X}{suffix} << 16 | 0x{low:X}u)'
+            edits.append((number, m.start(), m.end(), spelled))
+    if not edits and not allow:
+        return []
+    for number, start, end, spelled in sorted(edits, reverse=True):
+        line = lines[number - 1]
+        lines[number - 1] = line[:start] + spelled + line[end:]
+    for number in sorted(allow):
+        if 'fzgx-allow' not in lines[number - 1]:
+            lines[number - 1] = lines[number - 1].rstrip() + '  /* fzgx-allow: A1 retail data bytes */'
+    steps = []
+    if edits:
+        steps.append(f'{len(edits)} value literal(s) respelled as shifts')
+    if allow:
+        steps.append(f'{len(allow)} initializer line(s) marked retail data')
+    return [('non-address literals: ' + ', '.join(steps), '\n'.join(lines))]
+
+
 def lint_spellings(body, findings):
     """Every mechanical lint repair of an exact match composed into one text, so a body that
     needs several (pasted kernels, an `__OSBusClock : 0x800000F8` declaration, a locked-cache
     literal) is clean in one candidate: `header_helper_includes`, then
-    `annotate_verified_branches`, then `hardware_literal_names` on the running result. The
+    `annotate_verified_branches`, then `hardware_literal_names`, then `non_address_literals`
+    on the running result. The
     oracle decides afterwards, as for each family alone. Returns [(description, text)]; empty
     when no step applies or the composition equals a single step's text."""
     from .lint import lint_text
     text, steps = body, []
-    for family in (header_helper_includes, annotate_verified_branches, hardware_literal_names):
+    for family in (header_helper_includes, annotate_verified_branches, hardware_literal_names,
+                   non_address_literals):
         current = lint_text(text) if steps else findings
         if not current:
             break

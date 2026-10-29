@@ -622,7 +622,7 @@ def _respell_for_lint(src: Path, findings) -> Optional[Tuple[str, str]]:
     text = src.read_text()
     candidates = list(fixup_source.lint_spellings(text, findings))
     for family in (fixup_source.hardware_literal_names, fixup_source.header_helper_includes,
-                   fixup_source.annotate_verified_branches):
+                   fixup_source.annotate_verified_branches, fixup_source.non_address_literals):
         try:
             candidates += family(text, findings)
         except Exception:

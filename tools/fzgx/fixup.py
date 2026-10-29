@@ -668,6 +668,7 @@ class Engine:
             if row.get('source_lint') and (check.matched or check.matched_pool):
                 yield from self._family(row, 'source.annotate_verified_branches', lambda: source.annotate_verified_branches(body, row['source_lint']))
                 yield from self._family(row, 'source.hardware_literal_names', lambda: source.hardware_literal_names(body, row['source_lint']))
+                yield from self._family(row, 'source.non_address_literals', lambda: source.non_address_literals(body, row['source_lint']))
                 # pasted include/psvec.h kernels (A3) and the composition of every mechanical
                 # lint repair in one text (fn_15_3368 needs three of them at once)
                 yield from self._family(row, 'source.header_helper_includes', lambda: source.header_helper_includes(body, row['source_lint']))
