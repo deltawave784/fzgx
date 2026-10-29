@@ -4697,6 +4697,30 @@
   },
   {
     "module": "interview",
+    "source": "rel/interview/interview/fn_17_8B44.c",
+    "symbols": [
+      "fn_17_8B44"
+    ],
+    "status": "matching",
+    "mw_version": "GC/1.3.2",
+    "extra_cflags": [],
+    "tu": "rel/interview/interview.c",
+    "pool": {
+      "...data.0": "lbl_17_data_0",
+      "...rodata.0": "lbl_17_rodata_0",
+      "@27": "lbl_17_rodata_3C",
+      "@225": "lbl_17_rodata_25C+0x54",
+      "@55": "lbl_17_rodata_68+0x38",
+      "@231": "lbl_17_rodata_25C+0x6C",
+      "@232": "lbl_17_rodata_25C+0x70",
+      "@204": "lbl_17_rodata_25C+0x1C",
+      "@233": "lbl_17_rodata_25C+0x74",
+      "@166": "lbl_17_rodata_1B8+0x30",
+      "fzgx_pool_data_lbl_17_data_0": "lbl_17_data_0"
+    }
+  },
+  {
+    "module": "interview",
     "source": "rel/interview/interview/fn_17_8C7C.c",
     "symbols": [
       "fn_17_8C7C"
