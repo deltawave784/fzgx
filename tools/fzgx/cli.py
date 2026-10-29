@@ -772,6 +772,8 @@ def build_parser() -> argparse.ArgumentParser:
     s.add_argument('--drafts', action='store_true', help='include saved lifter bodies')
     s.add_argument('--max-variants', type=int, default=8, help='saved bodies per function taken into the baseline (best scores first, one per compiler setting kept); 0 = all')
     s.add_argument('--no-save-attempts', action='store_true', help='do not save bodies that beat the best saved attempt as attempts')
+    s.add_argument('--verdicts', nargs='+', metavar='SYMBOL', help='capture each saved best body under GC/1.3.2, search the allocator replay for the smallest override reproducing retail colours, classify the source lever and write .fzgx/capture/verdicts.json (fixup then tries the verdict families first)')
+    s.add_argument('--no-capture', action='store_true', help='with --verdicts: use existing captures only')
     s = sub.add_parser("route", help="next functions for a Claude Code wave, each with the subagent type to run it"); s.set_defaults(fn=cmd_route)
     s.add_argument("--limit", type=int, default=8); s.add_argument("--small", type=int, default=256, help="largest size (bytes) for the sonnet tier")
     s.add_argument("--module"); s.add_argument("--tier", choices=["sonnet", "opus"]); s.add_argument("--json", action="store_true")

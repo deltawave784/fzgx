@@ -200,6 +200,110 @@ def hoists(body: str, name: str) -> List[Tuple[str, str]]:
     return out
 
 
+_FWD_DECL = r"^[ \t]*(?:const\s+)?(?:struct\s+)?\w+[\s*]+{v}\s*;[ \t]*\n"
+
+
+def forwarded_locals(body: str, name: str) -> List[Tuple[str, str]]:
+    """The inverse of a held local: `v = EXPR;` assigned once (no call, no side effect, operands
+    never assigned afterwards) is substituted into every later use and its declaration dropped.
+    A declared local is numbered in pass 1 below every window web; written as its expression the
+    value becomes a CSE/loop-invariant shadow or lowering temporary in the window, numbered after
+    the locals (capture verdict class `inline-region`, e.g. fn_1_10B800's `lb = obj->s->q->p`
+    replays with lb numbered above the loop temporaries, `v43->v54`)."""
+    out: List[Tuple[str, str]] = []
+    span = _function_body_span(body, name)
+    if not span:
+        return out
+    lo, hi = span[1], span[2]
+    inner = body[lo:hi]
+    names = sorted(set(re.findall(r"^[ \t]*(?:const\s+)?(?:struct\s+)?\w+[\s*]+(\w+)\s*;", inner, re.M)))
+
+    def assign(v):
+        e = re.escape(v)
+        return re.compile(rf"(?<![\w.>]){e}\s*(?:[-+*/%&|^]|<<|>>)?=(?!=)|(?:\+\+|--)\s*{e}\b"
+                          rf"|(?<![\w.>]){e}\s*(?:\+\+|--)|&\s*{e}\b")
+
+    for v in names:
+        defs = list(assign(v).finditer(inner))
+        if len(defs) != 1:
+            continue
+        m = re.compile(rf"^([ \t]*){re.escape(v)}\s*=\s*([^;{{}}]+);[ \t]*\n", re.M).search(inner)
+        if not m or not (m.start() <= defs[0].start() <= m.end(2)):
+            continue
+        expr = m.group(2).strip()
+        if re.search(r"\w\s*\(", expr) or re.search(r"\+\+|--|(?<![=!<>])=(?!=)", expr):
+            continue
+        after = inner[m.end():]
+        operands = set(re.findall(r"(?<![.>\w])[A-Za-z_]\w*", expr)) - {v}
+        if any(assign(w).search(after) for w in operands):
+            continue
+        decl = re.compile(_FWD_DECL.format(v=re.escape(v)), re.M)
+        before = decl.sub("", inner[:m.start()], count=1)
+        use = re.compile(rf"(?<![\w.>]){re.escape(v)}\b")
+        uses = list(use.finditer(after))
+        if not uses or use.search(before):
+            continue
+        new_after = after
+        for u in reversed(uses):
+            new_after = new_after[:u.start()] + "(" + expr + ")" + new_after[u.end():]
+        text = before + new_after
+        out.append((f"forward {v} = {expr[:40]} into its {len(uses)} uses", body[:lo] + text + body[hi:]))
+    return out
+
+
+def definition_moves(body: str, name: str, limit: int = 6) -> List[Tuple[str, str]]:
+    """A local's only assignment `v = EXPR;` moved up or down past neighbouring one-line
+    statements of its block (never past one assigning an operand of EXPR or reading/writing v).
+    The move lengthens or shortens v's live range, i.e. changes its interference degree at its
+    simplify turn: the lever of a capture verdict of class `degree` (fn_1_10B800: `43:+16`
+    reproduces retail's r31 for `lb`, defined earlier it interferes with the loop's setup)."""
+    out: List[Tuple[str, str]] = []
+    span = _function_body_span(body, name)
+    if not span:
+        return out
+    lo, hi = span[1], span[2]
+    inner = body[lo:hi]
+    lines = inner.splitlines(keepends=True)
+    starts = [0]
+    for ln in lines:
+        starts.append(starts[-1] + len(ln))
+    simple = re.compile(r"^([ \t]*)[^{}\n]*;[ \t]*\n$")
+
+    def assigns(text, w):
+        e = re.escape(w)
+        return re.search(rf"(?<![\w.>]){e}\s*(?:[-+*/%&|^]|<<|>>)?=(?!=)|(?:\+\+|--)\s*{e}\b|(?<![\w.>]){e}\s*(?:\+\+|--)|&\s*{e}\b", text)
+
+    for k, ln in enumerate(lines):
+        m = re.match(r"^([ \t]*)([A-Za-z_]\w*)\s*=(?!=)\s*([^;{}]+);[ \t]*\n$", ln)
+        if not m:
+            continue
+        ind, v, expr = m.groups()
+        if sum(1 for _ in re.finditer(rf"(?<![\w.>]){re.escape(v)}\s*(?:[-+*/%&|^]|<<|>>)?=(?!=)", inner)) != 1:
+            continue
+        operands = set(re.findall(r"(?<![.>\w])[A-Za-z_]\w*", expr)) - {v}
+        for direction in (-1, 1):
+            j, moved = k + direction, 0
+            while 0 <= j < len(lines) and moved < limit:
+                other = lines[j]
+                sm = simple.match(other)
+                if not sm or sm.group(1) != ind or re.match(r"\s*(?:return|break|continue|goto|case|default)\b", other):
+                    break
+                if re.search(rf"(?<![\w.>]){re.escape(v)}\b", other) or any(assigns(other, w) for w in operands):
+                    break
+                if re.match(r"^\s*(?:const\s+)?(?:struct\s+)?\w+[\s*]+\w+(?:\[[^\]]*\])*\s*(?:=[^;]*)?;", other) \
+                        and not re.match(r"^\s*\w+\s*=", other):
+                    break  # a declaration: v cannot move above the block's declarations
+                moved += 1
+                if direction < 0:
+                    new = lines[:j] + [ln] + lines[j:k] + lines[k + 1:]
+                else:
+                    new = lines[:k] + lines[k + 1:j + 1] + [ln] + lines[j + 1:]
+                out.append((f"move {v} = definition {'up' if direction < 0 else 'down'} {moved}",
+                            body[:lo] + ''.join(new) + body[hi:]))
+                j += direction
+    return out
+
+
 def through_local(body: str, name: str) -> List[Tuple[str, str]]:
     """`x = A op B;` where A is a load -> `x = A; x = x op B;` (the loaded value is the local's
     own register), and `if (p->f OP k)` -> `t = p->f; if (t OP k)` with a fresh local."""

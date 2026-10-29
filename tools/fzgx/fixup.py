@@ -585,6 +585,38 @@ class Engine:
         except OSError:
             pass
 
+    def directed(self, row, body, name, check):
+        """Candidates of the families a saved capture verdict selects for this body (or, marked
+        stale, for an earlier body of the symbol: the class still holds for a derived body)."""
+        from . import fixup_verdicts
+        verdict = fixup_verdicts.verdict_for(row['symbol'], body)
+        if not verdict or not verdict.get('families'):
+            return
+        sym = row['symbol']
+        generators = {
+            'capture.solver': lambda: capture_family.proposals(self.project, sym, body, check, row['mw'], row.get('flags'), run_capture=False),
+            'capture.pointer_locals': lambda: capture_family.pointer_locals(body, name),
+            'evidence.register_class_orders': lambda: evidence.register_class_orders(self.project, sym, body, check, self.row_lines(row)),
+            'evidence.attributed_declaration_swaps': lambda: evidence.attributed_declaration_swaps(self.project, sym, body, check, self.row_lines(row)),
+            'evidence.attributed_inlines': lambda: evidence.attributed_inlines(self.project, sym, body, check, self.row_lines(row)),
+            'evidence.induction_indexing': lambda: evidence.induction_indexing(self.project, sym, body, check),
+            'evidence.parameter_copies': lambda: evidence.parameter_copies(self.project, sym, body, check),
+            'evidence.scalar_lifetimes': lambda: evidence.scalar_lifetimes(self.project, sym, body, check),
+            'source.rewrites': lambda: [('regalloc: ' + l, t) for l, t in source.rewrites(body, name)],
+        }
+        names = fixup_verdicts.target_names(verdict)
+        self.emit({'stage': 'capture-directed', 'symbol': sym, 'class': verdict.get('class'),
+                   'stale': bool(verdict.get('stale')), 'families': verdict['families'], 'names': names})
+        for key in verdict['families']:
+            fn = generators.get(key)
+            if fn is None and key.startswith('source.') and hasattr(source, key[7:]):
+                fn = (lambda f: lambda: f(body, name))(getattr(source, key[7:]))
+            if fn is None:
+                continue
+            found = self._family(row, 'directed ' + key, fn)
+            for label, text in fixup_verdicts.prioritise(found, body, names):
+                yield 'capture ' + verdict['class'] + ': ' + label, text
+
     def proposals(self, row, capture=None, max_orders=50000):
         body = Path(row['source']).read_text()
         name = self.project.resolve(row['symbol']).name
@@ -593,6 +625,10 @@ class Engine:
         operators = {}
         captured_operators = []
         check = self.check(row)
+        if check.ok and not (check.matched or check.matched_pool):
+            # a capture verdict (`fzgx fixup --verdicts`) names the lever's class: its families
+            # first, candidates touching the target webs' names ahead of the rest
+            yield from self.directed(row, body, name, check)
         if check.ok:
             # a body that defines the TU's data objects itself with placeholder contents: one
             # candidate, first, since its whole gain is in data the word score cannot see
@@ -1598,6 +1634,9 @@ def command(p,args):
         args.min_percent = 0 if getattr(args, 'clones', False) else 95
     if args.rounds < 0 or args.beam < 1 or args.max_candidates < 1 or (args.budget is not None and args.budget <= 0):
         raise ValueError('rounds must be nonnegative; beam, max-candidates and budget must be positive')
+    if getattr(args, 'verdicts', None):
+        from . import fixup_verdicts
+        return fixup_verdicts.command(p, args.verdicts, run_capture=not args.no_capture)
     if args.archive:
         return replay_archive(args.archive)
     if args.capture:

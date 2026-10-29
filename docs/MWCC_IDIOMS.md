@@ -689,3 +689,31 @@ A WSL capture (`tools/capture/capture132.sh`) runs in ~11 s and the replay repro
   runs from 98.0% (these swaps are 98.3-98.9% on long functions), and treats a symbol pair the
   oracle already bound (`lbl_10_rodata_158` against `...rodata.0`) as a renaming. Open: a source
   form in which `x` is a window web (a rename region) without an extra `mr`.
+
+## Capture verdicts in batch (tooling round T1, 2026-10-28)
+
+`fzgx fixup --verdicts SYM ...` (`tools/fzgx/fixup_verdicts.py`) captures each saved best body
+(seedrank) under GC/1.3.2 (a GC/1.3 body only when 1.3.2 gives the same rows), maps every
+register-renamed row to its web (agreeing rows pin the other webs), and searches the replay's
+override space (`a=b` exchange, `va->vb` move, `v:+N` degree; a 6-wide beam up to three steps,
+~1 ms per replay) for the smallest change giving every mapped web retail's register. One row per
+function goes to `.fzgx/capture/verdicts.json`; `fzgx fixup` runs the class's families first.
+
+- **Classes** (22 stalled near-misses): web-split 6, unresolved 6 (best partial override
+  recorded), base-temp 3, copy-coalesce 3, inline-region 2, expression-order 2.
+  *web-split*: retail gives one of our webs two registers (fn_1_82C70's `port`: `clrlwi. r0`
+  then `mr r26`), so the value lives in two variables in retail. *copy-coalesce*: our temp is
+  copied into a web that retail defines directly (fn_10_111E8's `row`: `addi r0; mr r23, r0`
+  against `addi r23`). Neither can be reached by renumbering; they are reported, not searched.
+- **A declared local numbered above window webs is the value written without the local.**
+  fn_16_2560: `y = 24 - a` (a pass-1 local) needed to be numbered above the window's `a`/`b`
+  copies (`v36->v39`); substituting the expression into its three uses
+  (`fixup_source.forwarded_locals`) makes it a window CSE web and closed 12 of 13 rows. The last
+  row was a function-local `static const u32 color_data[1]` duplicating the primer's raw
+  `fzgx_pool_table1` word: retail reads it at pool offset 0, so the table itself is the local's
+  object (rename the primer table, drop the local) -> pool match, landed. The same substitution
+  on fn_1_10B800's `lb = obj->s->q->p` reloads it every loop trip (63 rows): only side-effect-free
+  values whose operands do not change across calls survive it.
+- `fixup_source.definition_moves` (the `degree` lever: moving a local's only assignment past
+  neighbouring statements) did not reproduce fn_1_10B800's `43:+16`; that needs 16 more
+  interferences, i.e. a range spanning the loop setup, not a one-statement move.
