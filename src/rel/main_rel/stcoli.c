@@ -3535,6 +3535,172 @@ void fn_1_21F18(StcoliDrawEntity *entity, f32 *scale, f32 time) {
 #pragma opt_common_subs reset
 /* fzgx:end fn_1_21F18 */
 
+/* fzgx:begin fn_1_2221C noprologue */
+#include "types.h"
+#include "dolphin/hw_regs.h"
+#include "game/main_rel/car_test_types.h"
+
+typedef struct {
+    s32 type;
+    f32 time;
+    f32 value;
+    f32 tanIn;
+    f32 tanOut;
+} Sig_fn_1_9DDA8_fn_1_9DDA8_CurveKey;
+
+typedef struct {
+    u8 pad_0[0x4];
+    u32 unk_4;
+    u8 pad_8[0x10];
+    u32 unk_18;
+    u8 pad_1C[0xC];
+    Sig_fn_1_9DDA8_fn_1_9DDA8_CurveKey *unk_28;
+    u8 pad_2C[0x10];
+    Sig_fn_1_9DDA8_fn_1_9DDA8_CurveKey *unk_3C;
+} fn_1_2221C_Anim;
+
+typedef struct {
+    u8 pad_0[0x4];
+    fn_1_2221C_Anim *anim;
+    u8 pad_8[0x10];
+    f32 unk_18;
+    u8 pad_1C[0x10];
+    f32 unk_2C;
+} fn_1_2221C_Obj;
+
+/* view of the TU literal pool at lbl_1_rodata_6C8 */
+typedef struct {
+    u8 pad_0[0x8];
+    f32 zero;
+    u8 pad_C[0x10];
+    f32 two;
+    f32 half;
+    u8 pad_24[0x10];
+    f32 neg_half;
+} fn_1_2221C_Pool;
+
+extern f32 lbl_1_rodata_6C8[2];
+extern f32 fn_1_9E14C(u32, Sig_fn_1_9DDA8_fn_1_9DDA8_CurveKey *, f32);
+extern f32 lbl_8006D188(s16);
+extern u32 lbl_8006DCA4(void);
+extern void fn_8003462C(u32, u32, u32);
+extern void fn_80072558(void);
+extern void lbl_8006DAEC(void);
+extern void lbl_8006DB30(void);
+extern void lbl_8006E1B0(Fn183D28Vec3 *, Fn183D28Vec3 *);
+extern f64 __fabs(f64);
+
+#define LC_MTX ((f32 (*)[4])LC_BASE)
+/* GX write-gather FIFO: the compiler is free to reorder these stores */
+#define GX_FIFO_F32 (*(f32 *)GX_FIFO_BASE)
+
+static inline void fn_1_2221C_pos3(f32 x, f32 y, f32 z) {
+    GX_FIFO_F32 = x;
+    GX_FIFO_F32 = y;
+    GX_FIFO_F32 = z;
+}
+
+#pragma opt_lifetimes off
+#pragma opt_propagation off
+void fn_1_2221C(fn_1_2221C_Obj *obj, Fn183D28Vec3 *scale, f32 t) {
+    f32 tz;
+    f32 ty;
+    f32 tx;
+    Fn183D28Vec3 *q;
+    Fn183D28Vec3 *b;
+    Fn183D28Vec3 *p;
+    f32 zero;
+    f32 width;
+    f32 half;
+    f32 y;
+    f32 radius;
+    f32 offset;
+    f32 value;
+    f32 x;
+    s32 output_i;
+    s32 i;
+    s32 j;
+    fn_1_2221C_Anim *anim;
+    s32 angle;
+    Fn183D28Vec3 buf[18];
+    struct { f32 (*value)[4]; } m;
+    struct { fn_1_2221C_Pool *value; } c;
+
+    c.value = (fn_1_2221C_Pool *)lbl_1_rodata_6C8;
+
+    anim = obj->anim;
+    if (anim->unk_3C != 0) {
+        value = fn_1_9E14C(anim->unk_18, anim->unk_3C, t);
+    } else {
+        value = obj->unk_2C;
+    }
+    width = __fabs(value * (c.value->two * scale->x));
+    if (anim->unk_28 != 0) {
+        value = fn_1_9E14C(anim->unk_4, anim->unk_28, t);
+    } else {
+        value = obj->unk_18;
+    }
+    radius = __fabs(value * scale->y);
+
+    zero = c.value->zero;
+    half = c.value->half;
+    b = buf;
+    for (i = 0, m.value = LC_MTX; i < 2; i++) {
+        lbl_8006DAEC();
+        offset = width * ((i == 0) ? c.value->half : c.value->neg_half);
+        tx = m.value[0][0];
+        tx = tx * offset + m.value[0][3];
+        ty = m.value[1][0];
+        ty = ty * offset + m.value[1][3];
+        tz = m.value[2][0];
+        tz = tz * offset + m.value[2][3];
+        m.value[0][3] = tx;
+        m.value[1][3] = ty;
+        m.value[2][3] = tz;
+        angle = (i == 0) ? 0 : 0x8000;
+        q = b;
+        for (j = 0; j <= 8; j++) {
+            y = half * lbl_8006D188(angle + 0x4000);
+            x = half * lbl_8006D188(angle);
+            q->x = x;
+            q->y = y;
+            q->z = zero;
+            q->x *= radius;
+            q->y *= radius;
+            lbl_8006E1B0(q, q);
+            angle += 0x1000;
+            q++;
+            b++;
+        }
+        lbl_8006DB30();
+    }
+
+    lbl_8006DAEC();
+    lbl_8006DCA4();
+    fn_80072558();
+    p = buf;
+    fn_8003462C(0xB0, 0, 19);
+    output_i = 0;
+    if (output_i < 18) {
+    for (output_i = 0; output_i < 18; output_i += 6) {
+        fn_1_2221C_pos3(p[0].x, p[0].y, p[0].z);
+#define WRITE_NEXT(k) { f32 vx; f32 vz; f32 vy; vz = p[k].z; vy = p[k].y; vx = p[k].x; GX_FIFO_F32 = vx; GX_FIFO_F32 = vy; GX_FIFO_F32 = vz; }
+        WRITE_NEXT(1);
+        WRITE_NEXT(2);
+        WRITE_NEXT(3);
+        WRITE_NEXT(4);
+        WRITE_NEXT(5);
+#undef WRITE_NEXT
+        p += 6;
+    }
+    }
+    GX_FIFO_F32 = buf[0].x;
+    GX_FIFO_F32 = buf[0].y;
+    GX_FIFO_F32 = buf[0].z;
+    lbl_8006DB30();
+}
+/* fzgx:end fn_1_2221C */
+
 /* fzgx:begin fn_1_224F8 noprologue */
 #include "types.h"
 #include "game/main_rel/stcoli_types.h"
