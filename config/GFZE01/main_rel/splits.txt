@@ -8900,3 +8900,6 @@ rel/main_rel/stcoli/fn_1_216F0.c:
 
 rel/main_rel/stcoli/fn_1_2221C.c:
 	.text       start:0x0002221C end:0x000224F8 align:4
+
+rel/main_rel/effect/fn_1_5CA00.c:
+	.text       start:0x0005CA00 end:0x0005D010 align:4

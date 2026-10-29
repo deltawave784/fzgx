@@ -3012,6 +3012,198 @@ void fn_1_5C83C(struct Fn1_5C83CObject *self) {
 }
 /* fzgx:end fn_1_5C83C */
 
+/* fzgx:begin fn_1_5CA00 pool noprologue */
+#include "types.h"
+#include "game/main_rel/car_test_types.h"
+#include "game/main_rel/car_types.h"
+
+struct fn_1_5CA00_Arg0 { u8 pad_0[0x18]; s16 unk_18; u8 pad_1A[0x22]; Fn183D28Vec3 unk_3C; };
+struct fn_1_5CA00_lbl_1_rodata_2950 {
+ u8 pad_0[0x20]; f64 unk_20; f32 unk_28; u8 pad_2C[0x14];
+ f64 unk_40; u8 pad_48[8]; f32 unk_50; f32 unk_54; u8 pad_58[4]; f32 unk_5C;
+ u8 pad_60[0x40]; f32 unk_A0; u8 pad_A4[0xAC]; f32 unk_150;
+ u8 pad_154[4]; f64 unk_158; f64 unk_160; f64 unk_168;
+};
+extern struct fn_1_5CA00_lbl_1_rodata_2950 lbl_1_rodata_2950;
+extern s16 camera_get_mode(void);
+extern s32 fn_1_5910(void);
+extern s32 fn_1_6EC0(u8);
+extern u32 lbl_8006DCA4(void);
+extern void *lbl_8006DC6C(void *);
+extern void *memset(void *,int,u32);
+extern void fn_1_862D4(int,Triple *);
+extern void lbl_8006E0A4(u32);
+extern void lbl_8006D7B0(void);
+extern f32 lbl_8006D0B4(f32);
+extern void fn_8006EDBC(void *,void *,s16 *,s16 *);
+extern void lbl_8006D7DC(void *);
+extern u32 mathutil_mtxA_rotate_y(s32);
+extern u32 mathutil_mtxA_rotate_x(s32);
+extern void lbl_8006E15C(f32,f32,f32);
+extern void fn_8006E294(void *);
+extern s32 lbl_8006D24C(f32,f32);
+extern void lbl_8006DB74(void *);
+extern int fn_1_9F914(const void *,const void *);
+struct Draw5CA { f32 width,height; u32 mtx[12]; u32 flags; s8 r; u8 g,b,a; };
+/* Preserve the shared literal pool's first-use order. */
+#pragma force_active on
+#pragma section code_type ".fzgxpool"
+static void fzgx_fn_1_5CA00_pool0(u32 u) {
+ volatile f32 f; volatile f64 d;  /* fzgx-allow: S2 volatile keeps the verified access order */
+ f=60.0f; f=0.1f; f=32767.0f; f=0.05f;
+ d=0.07; f=20000.0f; d=(f64)u;
+}
+#pragma section code_type ".text"
+#pragma section code_type ".fzgxpool"
+static void fzgx_fn_1_5CA00_pool1(s32 s) {
+ volatile f32 f; volatile f64 d;  /* fzgx-allow: S2 volatile keeps the verified access order */
+ f=1.0f; f=-0.03f; d=15.0; d=(f64)s;
+}
+#pragma section code_type ".text"
+#pragma section code_type ".fzgxpool"
+static void fzgx_fn_1_5CA00_pool2(void) {
+ volatile f32 f; volatile f64 d;  /* fzgx-allow: S2 volatile keeps the verified access order */
+ d=1.5; d=0.5;
+ f=0.0f;
+ f=0.5f;
+ f=8.0f;
+ f=255.0f;
+ f=15.0f;
+ f=0.20000000298023224f;
+ f=0.07999999821186066f;
+ f=0.25f;
+ f=0.9800000190734863f;
+ f=0.9900000095367432f;
+ f=40.0f;
+ f=20.0f;
+ f=1.5f;
+ f=0.44999998807907104f;
+ f=-2.0f;
+ f=0.0833333358168602f;
+ f=0.15000000596046448f;
+ f=0.125f;
+ f=-0.4000000059604645f;
+ f=-0.30000001192092896f;
+ f=2.0f;
+ f=250.0f;
+ d=0.6; d=0.4;
+ f=0.30000001192092896f;
+ f=-0.004000000189989805f;
+ f=0.01666666753590107f;
+ f=65536.0f;
+ f=4096.0f;
+ f=0.9599999785423279f;
+ f=0.4000000059604645f;
+ f=0.05050000175833702f;
+ f=0.050999999046325684f;
+ f=0.949999988079071f;
+ f=0.8999999761581421f;
+ d=150.0; d=10.0; d=3.0;
+}
+#pragma section code_type ".text"
+static const f32 fn_1_5CA00_pool_vec0[3] = {0.0f,0.1f,-2.4f};
+#pragma section code_type ".fzgxpool"
+static void fzgx_fn_1_5CA00_pool3(void) {
+ volatile f32 f; volatile f64 d;  /* fzgx-allow: S2 volatile keeps the verified access order */
+ f=5.0f; d=1.2; d=0.1; f=10.0f; f=18.0f; d=0.7; d=50.0;
+}
+#pragma section code_type ".text"
+static const f32 fn_1_5CA00_pool_vec1[3] = {0.0f,0.1f,-2.4f};
+#pragma section code_type ".fzgxpool"
+static void fzgx_fn_1_5CA00_pool4(void) {
+ volatile f32 f; volatile f64 d;  /* fzgx-allow: S2 volatile keeps the verified access order */
+ f=19.0f; d=24.0; f=0.7071067690849304f; d=0.0; d=255.0; d=0.9;
+}
+#pragma section code_type ".text"
+#pragma force_active off
+
+#define FIELD(off) (*(f32 *)((u8 *)arg0 + (off)))
+static inline f64 color_clamp(f64 value, f64 min, f64 max) {
+ return value < min ? min : value > max ? max : value;
+}
+static inline void load_car_matrix(struct fn_1_5CA00_Arg0 *car) {
+ lbl_8006E0A4((u32)&car->unk_3C);
+}
+static inline f32 draw_max(f32 a, f32 b) { if(a>b) return a; return b; }
+/* Keep the metadata commit after the alpha write, but allow its read to hoist. */
+static inline void init_draw_metadata(struct Draw5CA *d) { *(volatile u8 *)&d->a=255; *(volatile u32 *)&d->flags=d->flags|2; }
+#define CLAMP255(v) ((v) < 0.0 ? 0.0 : (v) > 255.0 ? 255.0 : (v))
+#define COLORS(R) { d.r=(u8)CLAMP255(1.5*(u32)(R)); d.g=(u8)CLAMP255(1.5*(u32)d.g); d.b=(u8)CLAMP255(1.5*(u32)d.b); }
+#pragma opt_propagation off
+#pragma opt_loop_invariants off
+void fn_1_5CA00(struct fn_1_5CA00_Arg0 *arg0) {
+ u32 model;
+ u8 mode;
+ u32 *draw_mtx;
+ u8 i;
+ f32 zero,scale,length,half;
+ struct Draw5CA d;
+ Fn183D28Vec3 loc_3C,loc_30,mid,diff;
+ Triple loc_C;
+ s16 ax,ay;
+ f32 z,y,x,t,width;
+ s32 red;
+ fn_1_862D4(arg0->unk_18,&loc_C);
+ model=*(u32 *)((u8 *)arg0+52);
+ lbl_8006DC6C((u8 *)arg0+184);
+ x=*(volatile f32 *)((u8 *)&loc_C); y=*(f32 *)((u8 *)&loc_C+4); z=*(f32 *)((u8 *)&loc_C+8);  /* fzgx-allow: S2 volatile view keeps the verified load order */
+ *(f32 *)(0xE0000000+0xC)=x; *(f32 *)(0xE0000000+0x1C)=y; *(f32 *)(0xE0000000+0x2C)=z;
+ lbl_8006E1B0(&arg0->unk_3C,&loc_3C);
+ lbl_8006E1B0((Fn183D28Vec3 *)((u8 *)arg0+148),&loc_30);
+ lbl_8006DCA4();
+ lbl_8006E1B0(&loc_3C,&loc_3C); lbl_8006E1B0(&loc_30,&loc_30);
+ if ((s32)fn_1_6EC0((u8)fn_1_5910()) && arg0->unk_18==(s16)camera_get_mode()) mode=1;
+ else if((s32)fn_1_6EC0((u8)fn_1_5910())) mode=2;
+ else mode=3;
+ memset(&d,0,64);
+ scale=FIELD(40);
+ d.width=0.7071067690849304f*scale;
+ red=(s32)(255.0f*FIELD(28)); d.r=red; d.g=(u8)(255.0f*FIELD(32)); d.b=(u8)(255.0f*FIELD(36)); init_draw_metadata(&d);
+ if(mode==1) COLORS((u8)d.r) else COLORS((u8)d.r)
+ zero=0.0f; half=0.5f;
+ draw_mtx=d.mtx;
+ for(i=mode;i!=0;i--) {
+ t=FIELD(180);
+ switch(i) {
+ case 4: loc_3C.x-=t;loc_3C.y+=t;loc_30.x-=t;loc_30.y+=t;break;
+ case 3: t=2.0f*t;loc_3C.x+=t;loc_30.x+=t;break;
+ case 2: t=2.0f*t;loc_3C.y-=t;loc_30.y-=t;break;
+ case 1: if(mode==1) {loc_3C.y=loc_3C.y+(f32)(2.0f*t);} else {t=2.0f*t;loc_3C.x-=t;loc_30.x-=t;}break;
+ }
+ diff.x=loc_3C.x-loc_30.x; diff.y=loc_3C.y-loc_30.y;
+ if(zero==diff.x && zero==diff.y) {load_car_matrix(arg0);lbl_8006D7B0();}
+ else {
+ f32 x0,x1,z1,y0,z0,y1,sx,sy,mx,sz,factor,dx,dz,dy,sq;
+ /* Reload the endpoint snapshot after the degenerate-transform branch. */
+ x1=*(volatile f32 *)&loc_3C.x; x0=*(volatile f32 *)&loc_30.x;
+ y1=*(volatile f32 *)&loc_3C.y; y0=*(volatile f32 *)&loc_30.y;  /* fzgx-allow: S2 volatile view keeps the verified load order */
+ dx=x1-x0; sx=x1+x0;
+ z1=*(volatile f32 *)&loc_3C.z; z0=*(volatile f32 *)&loc_30.z;  /* fzgx-allow: S2 volatile view keeps the verified load order */
+ dy=y1-y0; sq=dx*dx;
+ dz=z1-z0; sy=y1+y0;
+ factor=0.5f;
+ sz=z1+z0;
+ sq=sq+dy*dy;
+ mx=factor*sx;mid.x=mx;mid.y=factor*sy;mid.z=factor*sz;
+ sq=sq+dz*dz;
+ length=0.9*lbl_8006D0B4(sq);
+ fn_8006EDBC(&loc_3C,&loc_30,&ax,&ay);
+ lbl_8006D7DC(&mid);mathutil_mtxA_rotate_y(ay);mathutil_mtxA_rotate_x(ax);
+ lbl_8006E15C(1.0f,1.0f,length/scale);
+ mathutil_mtxA_rotate_x(0x4000);
+ fn_8006E294(&diff);mathutil_mtxA_rotate_y(lbl_8006D24C(diff.x,diff.z));
+ }
+ lbl_8006DB74(draw_mtx);
+ t=length*half;
+ width=d.width;
+ d.height=draw_max(t,width);
+ fn_1_9F914(&d,(void *)model);
+ }
+}
+#pragma opt_propagation reset
+#pragma opt_loop_invariants reset
+/* fzgx:end fn_1_5CA00 */
+
 /* fzgx:begin fn_1_5D010 */
 // fn_1_5D010: empty in retail (single blr).
 void fn_1_5D010(void) {
