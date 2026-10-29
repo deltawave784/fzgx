@@ -7479,6 +7479,266 @@ void fn_1_146B5C(u32 unused, u8 *arg1) {
 #pragma opt_propagation reset
 /* fzgx:end fn_1_146B5C */
 
+/* fzgx:begin fn_1_146C88 noprologue */
+#include "types.h"
+#include "font.h"
+#include "rel/main_rel/sel_static_disp.h"
+
+typedef struct {
+    u8 pad_0[0x24];
+    s32 unk_24;
+    u8 pad_28[0xD];
+    u8 unk_35;
+    u8 pad_36[0x16];
+    s32 unk_4C;
+    u8 pad_50[0x14];
+    s32 unk_64;
+    s32 unk_68;
+    s32 unk_6C;
+    u8 pad_70[0xBC];
+    FontDrawPacket unk_12C;
+} fn_1_146C88_Obj;
+
+typedef struct {
+    u32 a[4];
+} fn_1_146C88_Tbl;
+
+extern int fn_1_4F734(FontDrawPacket *);
+extern void *fn_1_868C0(s8);
+extern void fn_1_51564(u16, u16, u16, u16, u16, u16);
+extern void fn_1_5158C(FontDrawPacket *, u32, s16, s16);
+extern void fn_1_149BF4(FontDrawPacket *, FontVertex *);
+extern void fn_1_149C2C(FontDrawPacket *, FontVertex *);
+extern void fn_1_149C64(FontDrawPacket *, FontVertex *);
+extern u8 lbl_1_data_424D0[];
+extern u8 lbl_1_data_424E4[];
+extern u8 lbl_1_data_424F8[];
+extern u8 lbl_1_data_4250C[];
+extern u8 lbl_1_data_42520[];
+extern u8 lbl_1_data_42534[];
+extern u8 lbl_1_data_42548[];
+extern u8 lbl_1_data_4255C[];
+
+/* sel_static_disp.c's .rodata, laid out as retail (base lbl_1_rodata_92C0) */
+#define FZGX_PACKET(cb) \
+    { 0, 0.0f, 0.0f, 0.1f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0, 0, 1.0f, 0x04000000, 0.0f, \
+      { 0xFF, 0xFF, 0xFF, 0xFF }, { 0, 0, 0, 0 }, 0, 0, 0, NULL, NULL, cb, 0 }
+
+static const FontDrawPacket fzgx_pool_000 = FZGX_PACKET(fn_1_149BF4);
+static const FontDrawPacket fzgx_pool_058 = FZGX_PACKET(fn_1_149C2C);
+static const FontDrawPacket fzgx_pool_0B0 = FZGX_PACKET(fn_1_149C64);
+static const u32 fzgx_pool_108[7] = {
+    0x00000000, 0x3F755555, 0x41B80000, 0x40000000, 0x3F2AAAAB, 0x3F000000, 0x3F155555,
+};
+
+#pragma section RX ".fzgxpool"
+__declspec(section ".fzgxpool") const void *fzgx_primer_0(s32 i, f32 *o) {
+    *o = (f32)i;
+    return &fzgx_pool_108;
+}
+
+static const u32 fzgx_pool_130[14] = {
+    0x44150000, 0x44040000, 0x0000001A, 0x00000023, 0x0000009C, 0x000000A5, 0x00000018,
+    0x00000021, 0x00000085, 0x0000008E, 0x000000F2, 0x000000FB, 0xC0C0C000, 0xC0800000,
+};
+
+__declspec(section ".fzgxpool") const void *fzgx_primer_1(f32 *o) {
+    *o = 40.0f;
+    return &fzgx_pool_130;
+}
+
+static const u32 fzgx_pool_16C[116] = {
+    0x43F00000,
+    0x44200000, 0x47AFC800, 0x3E99999A, 0x3F333333,
+    0xBF800000, 0x43500000, 0xC47A0000, 0xC2480000,
+    0x3F800000, 0x41200000, 0x430C0000, 0x43600000,
+    0x437E0000, 0x43800000, 0xC0C00000, 0x40A00000,
+    0x40800000, 0x41400000, 0x41700000, 0x00000000,
+    0x43300000, 0x00000000, 0x4E4F204E, 0x414D4500,
+    0x4E4F2044, 0x41544100, 0x42C80000, 0x43AF0000,
+    0x42300000, 0x41000000, 0xFFFFFFFF, 0x00F0E6FF,
+    0x007873FF, 0xA0FF00FF, 0x0000001A, 0x00000023,
+    0x0000013C, 0x00000145, 0x00000018, 0x00000021,
+    0x00000065, 0x0000006E, 0x000000B2, 0x000000BB,
+    0x41F00000, 0x3F400000, 0x42580000, 0x43AB8000,
+    0x47800000, 0x42F00000, 0x3EB33333, 0xFFFFFFFF,
+    0x00F0E6FF, 0x007873FF, 0xFFFF00FF, 0xFFFF00FF,
+    0x8080FFFF, 0x0000001A, 0x00000023, 0x0000013C,
+    0x00000145, 0x00000018, 0x00000021, 0x00000065,
+    0x0000006E, 0x000000B2, 0x000000BB, 0x19FF1900,
+    0x19FF1900, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x406FE000, 0x00000000, 0x41A00000, 0x0000001A,
+    0x00000023, 0x0000013C, 0x00000145, 0xFFFFFF00,
+    0x19FF1900, 0x0000001A, 0x00000023, 0x0000013C,
+    0x00000145, 0x19FF1900, 0x00FFFFFF, 0x00FFFFFF,
+    0xFFFFFF00, 0x3F4CCCCD, 0xC0000000, 0x0000001A,
+    0x00000023, 0x0000013C, 0x00000145, 0x00000018,
+    0x00000021, 0x0000001A, 0x00000023, 0x0000013C,
+    0x00000145, 0x00000018, 0x00000021, 0xFFFF00FF,
+    0x19FF1900, 0x00000000, 0x0000001A, 0x00000023,
+    0x0000013C, 0x00000145, 0x19FF1900,
+};
+static void *const fzgx_pool_33C[8] = {
+    lbl_1_data_424D0, lbl_1_data_424E4, lbl_1_data_424F8, lbl_1_data_4250C,
+    lbl_1_data_42520, lbl_1_data_42534, lbl_1_data_42548, lbl_1_data_4255C,
+};
+static const u32 fzgx_pool_35C[44] = {
+    0x42880000,
+    0x42AC0000, 0x3EC00000, 0x42A00000, 0x41600000,
+    0x41A80000, 0x3F8CCCCD, 0x43C78000, 0x440F8000,
+    0x3F59999A, 0x43FF0000, 0x19FF1900, 0x19FF1900,
+    0xF4962800, 0xF4962800, 0xFFFF0000, 0x00000000,
+    0xFFFFFF00, 0xF4962800, 0xF4962800, 0xFFFF0000,
+    0x00000000, 0xFFFFFF00, 0xF4962800, 0xFFFF00FF,
+    0x00000000, 0x19FF1900, 0x19FF1900, 0xF4962800,
+    0xF4962800, 0x8080FF00, 0x00000000, 0xFFFFFF00,
+    0xF4962800, 0xF4962800, 0x8080FF00, 0x00000000,
+    0xFFFFFF00, 0x43B10000, 0x42A80000, 0x41B00000,
+    0x3F266666, 0x43400000, 0x42400000,
+};
+
+__declspec(section ".fzgxpool") const void *fzgx_primer_2(f32 *o) {
+    *o = 46.0f;
+    return &fzgx_pool_16C[0] + (u32)&fzgx_pool_33C + (u32)&fzgx_pool_35C;
+}
+
+static const u32 fzgx_pool_410[16] = {
+    0x425C0000, 0xFADC82FF, 0x00000000, 0x441FC000,
+    0x43EF8000, 0x43A00000, 0x428C0000, 0x42E00000,
+    0x43F60000, 0x42040000, 0x41980000, 0x41C00000,
+    0x42480000, 0x41E80000, 0x42900000, 0x423C0000,
+};
+static const fn_1_146C88_Tbl fzgx_pool_450 = {{0x9736, 0x9737, 0x9738, 0x9739}};
+static const fn_1_146C88_Tbl fzgx_pool_460 = {{0x973A, 0x973B, 0x973C, 0x973D}};
+
+__declspec(section ".fzgxpool") const void *fzgx_primer_3(void) {
+    return (u8 *)&fzgx_pool_000 + (u32)&fzgx_pool_058 + (u32)&fzgx_pool_410;
+}
+#pragma section RX ".text"
+
+static inline BOOL fn_1_146C88_in8(s32 mode) {
+    BOOL r = TRUE;
+    if (!((u32)(mode - 8) <= 1)) {
+        r = FALSE;
+    }
+    return r;
+}
+
+static inline BOOL fn_1_146C88_isA(s32 mode) {
+    BOOL r = TRUE;
+    if (!fn_1_146C88_in8(mode) && mode != 10) {
+        r = FALSE;
+    }
+    return r;
+}
+
+static inline BOOL fn_1_146C88_in4(s32 mode) {
+    BOOL r = TRUE;
+    if (!((u32)(mode - 4) <= 1)) {
+        r = FALSE;
+    }
+    return r;
+}
+
+static inline BOOL fn_1_146C88_isB1(s32 mode) {
+    BOOL r = TRUE;
+    if (!fn_1_146C88_in4(mode) && mode != 9) {
+        r = FALSE;
+    }
+    return r;
+}
+
+static inline BOOL fn_1_146C88_isB2(s32 mode) {
+    BOOL r = TRUE;
+    if (!fn_1_146C88_isB1(mode) && mode != 10) {
+        r = FALSE;
+    }
+    return r;
+}
+
+static inline BOOL fn_1_146C88_isB(s32 mode) {
+    BOOL r = TRUE;
+    if (!fn_1_146C88_isB2(mode) && mode != 6) {
+        r = FALSE;
+    }
+    return r;
+}
+
+void fn_1_146C88(s32 mode, fn_1_146C88_Obj *__restrict obj) {
+    s32 x;
+    s32 y;
+    u8 idx;
+    s32 n;
+    void *p;
+    FontDrawPacket packet;
+    fn_1_146C88_Tbl tblA;
+    fn_1_146C88_Tbl tblB;
+
+    x = (obj->unk_68 + 0x78) + obj->unk_6C;
+    y = obj->unk_64 + 0x17;
+
+    if (fn_1_146C88_isA(mode) || fn_1_146C88_isB(mode)) {
+        packet = obj->unk_12C;
+        packet.image = 0x9718;
+        packet.x = (f32)x;
+        packet.y = (f32)y;
+        packet.z = 46.0f;
+        packet.flags |= 10;
+        fn_1_4F734(&packet);
+    }
+
+    packet = obj->unk_12C;
+    packet.image = 0x9719;
+    packet.x = (f32)x;
+    packet.y = (f32)y;
+    packet.z = 45.0f;
+    packet.flags |= 10;
+    fn_1_4F734(&packet);
+
+    packet = obj->unk_12C;
+    packet.image = 0x9717;
+    packet.x = (f32)x;
+    packet.y = (f32)y;
+    packet.z = 40.0f;
+    packet.flags |= 10;
+    fn_1_4F734(&packet);
+
+    tblA = fzgx_pool_450;
+    tblB = fzgx_pool_460;
+    if (fn_1_146C88_isB(mode)) {
+        idx = 0;
+    } else {
+        p = fn_1_868C0((s8)obj->unk_4C);
+        if (p != NULL) {
+            idx = *(s16 *)((u8 *)p + 0x3B8) % 4;
+        } else {
+            idx = 0;
+        }
+    }
+
+    packet = fzgx_pool_0B0;
+    if (lbl_1_bss_8E52C != 0) {
+        packet.image = tblA.a[idx];
+        fn_1_51564(0, 0, 36, 36, 6, 7);
+        packet.x = (f32)x;
+        packet.y = (f32)y;
+        packet.z = 42.0f;
+        n = obj->unk_24;
+    } else {
+        packet.image = tblB.a[idx];
+        fn_1_51564(0, 0, 64, 64, 6, 7);
+        n = obj->unk_35 > 41 ? 41 : obj->unk_35;
+        packet.x = (f32)x;
+        packet.y = (f32)(y - 2);
+        packet.z = 38.0f;
+    }
+    fn_1_5158C(&packet, packet.image, n % 6, n / 6);
+    packet.flags |= 10;
+    fn_1_4F734(&packet);
+}
+/* fzgx:end fn_1_146C88 */
+
 /* fzgx:begin fn_1_147508 noprologue */
 #include "types.h"
 #include "font.h"
