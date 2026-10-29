@@ -3240,6 +3240,24 @@
   "unit": "dol/fn_80020FA4.c",
   "upstream": null
  },
+ "fn_80022BF4": {
+  "commit": "66fc043b8446ef5fe9f21cd04bdd7acffeed924d",
+  "flags": "",
+  "kind": "raw",
+  "landed": 1793286054,
+  "mw": "GC/1.2.5n",
+  "ref_name": "fn_80022BF4",
+  "ref_unit_options": {
+   "compiler_options": null,
+   "extra_cflags": [],
+   "mw_version": "GC/1.2.5n"
+  },
+  "sha256": "d6d89e6f87a502a95c8387288e58498a2f63575793fd2196e4c272260603b50b",
+  "source": "karamzov123/fzero-gx-decomp@66fc043 (CC0)",
+  "status": "matched",
+  "unit": "dol/fn_80022BF4.c",
+  "upstream": null
+ },
  "fn_80033650": {
   "commit": "a8c6fe13345e6c9bc32ce28362153b13e4478f82",
   "flags": "",
@@ -3783,6 +3801,27 @@
   "unit": "dol/fn_8005BDD4.c",
   "upstream": null
  },
+ "fn_8005C7C0": {
+  "commit": "66fc043b8446ef5fe9f21cd04bdd7acffeed924d",
+  "flags": "-use_lmw_stmw on",
+  "kind": "raw",
+  "landed": 1793286026,
+  "mw": "GC/1.3.2",
+  "ref_name": "fn_8005C7C0",
+  "ref_unit_options": {
+   "compiler_options": null,
+   "extra_cflags": [
+    "-use_lmw_stmw",
+    "on"
+   ],
+   "mw_version": "GC/1.3.2"
+  },
+  "sha256": "d949b8d11f9c3d0cd0715bc9ea4f8e9efd4b91133b6290b20792661a3b6770e8",
+  "source": "karamzov123/fzero-gx-decomp@66fc043 (CC0)",
+  "status": "matched",
+  "unit": "dol/fn_8005C7C0.c",
+  "upstream": null
+ },
  "fn_8006953C": {
   "commit": "a8c6fe13345e6c9bc32ce28362153b13e4478f82",
   "flags": "",
@@ -3837,6 +3876,24 @@
   "unit": "dol/fn_800805C0.c",
   "upstream": null
  },
+ "fn_8008ECE0": {
+  "commit": "66fc043b8446ef5fe9f21cd04bdd7acffeed924d",
+  "flags": "",
+  "kind": "raw",
+  "landed": 1793285776,
+  "mw": "GC/1.2.5n",
+  "ref_name": "fn_8008ECE0",
+  "ref_unit_options": {
+   "compiler_options": null,
+   "extra_cflags": [],
+   "mw_version": "GC/1.2.5n"
+  },
+  "sha256": "5e463d0f36511971b900da3c8dda78574d956a25e1e530f4c5caeb623d4cb211",
+  "source": "karamzov123/fzero-gx-decomp@66fc043 (CC0)",
+  "status": "matched",
+  "unit": "dol/fn_8008ECE0.c",
+  "upstream": null
+ },
  "fn_8008ED70": {
   "commit": "a8c6fe13345e6c9bc32ce28362153b13e4478f82",
   "flags": "",
@@ -3853,6 +3910,24 @@
   "source": "karamzov123/fzero-gx-decomp@a8c6fe13 (CC0)",
   "status": "matched",
   "unit": "dol/fn_8008ED70.c",
+  "upstream": null
+ },
+ "fn_8008EED8": {
+  "commit": "66fc043b8446ef5fe9f21cd04bdd7acffeed924d",
+  "flags": "",
+  "kind": "raw",
+  "landed": 1793285901,
+  "mw": "GC/1.1",
+  "ref_name": "fn_8008EED8",
+  "ref_unit_options": {
+   "compiler_options": null,
+   "extra_cflags": [],
+   "mw_version": "GC/1.1"
+  },
+  "sha256": "9a4901b2b8acddbe265bc9863bf4a1f2d0cefa1c7f733d0186ca85fc27980d8d",
+  "source": "karamzov123/fzero-gx-decomp@66fc043 (CC0)",
+  "status": "matched",
+  "unit": "dol/fn_8008EED8.c",
   "upstream": null
  },
  "fn_8008F838": {
