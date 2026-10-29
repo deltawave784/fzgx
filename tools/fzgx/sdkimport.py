@@ -87,6 +87,13 @@ def integer_expression(text: str) -> int:
             return node.value
         if isinstance(node, ast.BinOp) and type(node.op) in ops:
             return ops[type(node.op)](value(node.left), value(node.right))
+        if isinstance(node, (ast.BinOp,)) and isinstance(node.op, (ast.Div, ast.FloorDiv, ast.Mod)):
+            # C integer division truncates toward zero (`pool[0x3c/4]`, fn_17_8B44)
+            a, b = value(node.left), value(node.right)
+            if b == 0:
+                raise ValueError(f'division by zero in constant expression: {text}')
+            q = abs(a) // abs(b) * (1 if (a < 0) == (b < 0) else -1)
+            return a - q * b if isinstance(node.op, ast.Mod) else q
         if isinstance(node, ast.UnaryOp) and isinstance(node.op, (ast.USub, ast.UAdd, ast.Invert)):
             return {ast.USub: operator.neg, ast.UAdd: operator.pos, ast.Invert: operator.invert}[type(node.op)](value(node.operand))
         raise ValueError(f'unsupported SDK address expression: {text}')

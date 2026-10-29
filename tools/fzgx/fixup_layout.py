@@ -137,6 +137,12 @@ def struct_text(tname, text):
         m = re.search(r"typedef\s+struct\s*\w*\s*\{([^{}]*)\n\}\s*%s\s*;" % re.escape(tname), src, re.S)
         if m:
             return m.group(1)
+        # a one-line or nested anonymous typedef (`typedef struct { u8 pad[0x282c]; char
+        # *t[24]; } Data;`, fn_17_8B44): match the brace, then the typedef name after it
+        for m in re.finditer(r"typedef\s+struct\s*\w*\s*\{", src):
+            inner = _brace_body(src, m.end() - 1)
+            if inner is not None and re.match(r"\}\s*%s\s*;" % re.escape(tname), src[m.end() + len(inner):]):
+                return inner
     return None
 
 
