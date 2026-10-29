@@ -3,7 +3,9 @@
 `build/<version>/report.json` is rewritten by every `ninja` (the progress target); this module reads
 its `measures`, appends a row to `state/progress.csv` when the matched code changed (or a note is
 given), and reports the change since the previous row and since the first. The CSV is committed:
-it is the history of the number the project is judged by.
+it is the history of the number the project is judged by. `git_head` is the HEAD that was measured:
+the progress commit that records the row comes after it, so a batch without matches stamps the
+previous batch's progress commit.
 """
 
 from __future__ import annotations
@@ -20,6 +22,26 @@ from .project import ROOT, Project
 FIELDS = ["time_utc", "git_head", "matched_code_pct", "matched_code", "total_code",
           "matched_functions", "total_functions", "complete_code_pct", "note"]
 CSV = ROOT / "state" / "progress.csv"
+
+
+def refresh(p: Project) -> Optional[str]:
+    """Bring `report.json` up to date with the linked tree before it is read. `fzgx verify` and the
+    batch drain build only `build/<v>/ok`, never the report, so a row recorded straight after a
+    match measured the previous build (every row from batch 282 to 287 lagged one match). Runs
+    `ninja <report>` under the build lock (a no-op when current); returns an error string or None."""
+    from . import oracle
+    report = p.build_dir / "report.json"
+    try:
+        with oracle.build_lock():
+            cp = oracle.run(["ninja", p.rel(report)], timeout=1800)
+    except oracle.LockTimeout as e:
+        return str(e)
+    if cp.returncode != 0:
+        return f"ninja {p.rel(report)} failed: {(cp.stdout or '')[-400:]}"
+    ok = p.build_dir / "ok"
+    if ok.exists() and report.exists() and report.stat().st_mtime < ok.stat().st_mtime:
+        return f"{p.rel(report)} is older than {p.rel(ok)} after the refresh"
+    return None
 
 
 def measure(p: Project) -> Dict[str, object]:

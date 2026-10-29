@@ -139,6 +139,11 @@ def cmd_seed_corpus(a, p):
 
 def cmd_progress(a, p):
     from . import progress
+    if not a.stale_ok:
+        err = progress.refresh(p)
+        if err:
+            print(f"error: cannot refresh the progress report ({err}); nothing recorded (pass --stale-ok to read it anyway)")
+            return 1
     row = progress.measure(p)
     history = progress.rows()
     if a.json:
@@ -784,7 +789,7 @@ def build_parser() -> argparse.ArgumentParser:
     s.add_argument("--from-checks", action="store_true", help="seed from the per-function check archives (.fzgx/checks/) when a checked body beats the saved best")
     s = sub.add_parser("progress", help="the matched-code percentage over time: print it, record it in state/progress.csv, show the change"); s.set_defaults(fn=cmd_progress)
     s.add_argument("--note", help="label for the row (e.g. 'fable batch 23'); a note records a row even if nothing changed")
-    s.add_argument("--no-record", action="store_true"); s.add_argument("--stale-ok", action="store_true"); s.add_argument("--json", action="store_true")
+    s.add_argument("--no-record", action="store_true"); s.add_argument("--stale-ok", action="store_true", help="read report.json as it is (no ninja refresh)"); s.add_argument("--json", action="store_true")
     s.add_argument("--history", type=int, default=0, metavar="N", help="also print the last N recorded rows")
     s = sub.add_parser("gate", help="the gate a tooling change must pass: lint, build, 16 hashes, a pool-unit sample and the latest matches re-checked"); s.set_defaults(fn=cmd_gate)
     s.add_argument("--pool-sample", type=int, default=24); s.add_argument("--recent", type=int, default=24); s.add_argument("--json", action="store_true")
