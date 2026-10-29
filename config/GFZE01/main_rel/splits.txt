@@ -8885,3 +8885,6 @@ rel/main_rel/spline/fn_1_F5D94.c:
 
 rel/main_rel/replay/fn_1_F4810.c:
 	.text       start:0x000F4810 end:0x000F4E3C align:4
+
+rel/main_rel/car/fn_1_8F62C.c:
+	.text       start:0x0008F62C end:0x0008FE74 align:4
