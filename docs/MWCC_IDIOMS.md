@@ -42,6 +42,12 @@ file from what actually unblocked functions; keep each item one or two lines.
   is omitted only when the two leftmost ranges share a target (`b` alone, the compare dies) or for an
   unpromoted unsigned type narrower than int, which would use `cmplwi`. fn_1_D7758's retail
   `cmpwi 20; bge exit; b body; b exit` is therefore not a plain `switch (i)`; still open.
+  The fixup family `fixup_evidence.exit_branch_pairs` (sweep `--families exits`) applies this when a
+  differing row holds a branch: it merges runs of early exits into one `||`, splits `||` exits, turns a
+  trailing `&&` guard into a negated early `return`/`continue` merged with the exits before it (and back),
+  and moves, drops, adds or respells switch defaults (range switches become range tests). It reproduces
+  both hand fixes above from the old bodies; the switch-default forms did not reach fn_3_152BC's dead
+  `b` or fn_1_D7758's pair (default first/last/dropped/`break`/`goto` all compile identically).
 - **Fused multiply-add**: `a + b*c` in one expression gives `fmadds`; a product held in a
   temporary or wrapped in `(f32)` stays `fmuls` + `fadds`. Only the product that is a
   direct operand fuses: retail `fmuls; fnmsubs` for `x*y - z*w` is `(f32)(x*y) - z*w`;

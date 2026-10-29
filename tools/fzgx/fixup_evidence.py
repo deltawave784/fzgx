@@ -810,6 +810,24 @@ def rotate_bit_tests(body, name, check):
     return list(dict.fromkeys(out))
 
 
+_BRANCH_ROW = re.compile(r'b(?:eq|ne|lt|le|gt|ge|ns|so|dnz|dz)?[+-]?\s')
+
+
+def exit_branch_pairs(body, name, check):
+    """Early-exit and switch-default spellings (`fixup_source.exit_branch_chains`) when a
+    differing row holds a conditional or unconditional branch on either side: retail's
+    uninverted `bCC next; b exit` against our inverted `b!CC exit`, or retail's dead `b X`
+    after a switch dispatch (fn_1_1018BC, fn_1_D523C, fn_3_152BC, fn_1_D7758)."""
+    from . import fixup_source as source
+    for t, o in zip(*check._rows):
+        if (t.get('diff_kind') or 'DIFF_NONE') == 'DIFF_NONE' and (o.get('diff_kind') or 'DIFF_NONE') == 'DIFF_NONE':
+            continue
+        a, b = stuck._fmt(t), stuck._fmt(o)
+        if a.split(' ')[:1] != b.split(' ')[:1] and (_BRANCH_ROW.match(a) or _BRANCH_ROW.match(b)):
+            return source.exit_branch_chains(body, name)
+    return []
+
+
 def range_switches(body, name, check):
     """Recover contiguous switch cases flattened into a signed range test."""
     from . import fixup_source as source

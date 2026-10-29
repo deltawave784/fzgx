@@ -5553,3 +5553,460 @@ def _long_counter_options(body: str, name: str, v: str) -> List[Tuple[str, str]]
         return [(' after the rest', body[:d.start()] + f'{ind}{ty} {rest};\n{ind}{longty} {own};' + body[d.end():]),
                 (' before the rest', body[:d.start()] + f'{ind}{longty} {own};\n{ind}{ty} {rest};' + body[d.end():])]
     return []
+
+
+# ---------------------------------------------------------------- uninverted exit-branch pairs
+# MWCC inverts `if (c) goto L; goto X; L:` only at statement level (COptimizer
+# fold_and_invert_conditional_branch). `if (A || B || C) return;` lowers its leaves in codegen:
+# A and B branch to the shared exit block, the last leaf keeps `bCC next; b exit`, and the exit
+# block keeps several predecessors. Separate early exits, or an `&&` guard around the rest of
+# the body, give the single inverted `b!CC exit`. A dead `b X` right after a switch dispatch is
+# an orphaned default/case block of the same mechanism (docs/MWCC_IDIOMS.md, "Laws to apply
+# first"; fn_1_1018BC 7 -> 5 rows, fn_1_D523C 23 -> 21 rows by hand).
+
+_EXIT_STMT = re.compile(r'(?:return\b[^;]*|goto\s+\w+|break|continue)\s*;')
+
+
+def _ex_statements(code: str, lo: int, hi: int) -> Optional[List[Tuple[int, int]]]:
+    """Top-level statement spans of code[lo:hi] (masked code: no comments or strings).
+    A label prefix stays with its statement; an `else` continues its `if`; `= {...};`
+    initializers and `do {...} while (c);` end at their semicolon."""
+    spans, start, paren, brace, i = [], None, 0, 0, lo
+    while i < hi:
+        c = code[i]
+        if start is None:
+            if c.isspace():
+                i += 1
+                continue
+            if c == '#':  # a preprocessor line inside the body: not reliable
+                return None
+            start = i
+        if c in '([':
+            paren += 1
+        elif c in ')]':
+            paren -= 1
+        elif c == '{':
+            brace += 1
+        elif c == '}':
+            brace -= 1
+            if brace == 0 and paren == 0:
+                rest = code[i + 1:hi]
+                head = code[start:i]
+                # a compound statement ends at its brace; a declaration's `= {...}` at its `;`
+                compound = re.match(r'(?:(?!default\b)\w+\s*:(?!:)\s*)*(?:if|for|while|switch|else|\{)', head)
+                if compound and not re.match(r'\s*(?:else\b|;|,|\))', rest) and not re.match(r'do\b', head):
+                    spans.append((start, i + 1))
+                    start = None
+        elif c == ';' and paren == 0 and brace == 0:
+            if not re.match(r'\s*else\b', code[i + 1:hi]):
+                spans.append((start, i + 1))
+                start = None
+        if paren < 0 or brace < 0:
+            return None
+        i += 1
+    return spans if start is None else None
+
+
+def _ex_match_paren(code: str, i: int) -> Optional[int]:
+    """Index after the parenthesis matching code[i] == '('."""
+    depth = 0
+    for j in range(i, len(code)):
+        depth += (code[j] == '(') - (code[j] == ')')
+        if depth == 0:
+            return j + 1
+    return None
+
+
+def _ex_if(code: str, s: int, e: int):
+    """(cond_lo, cond_hi, then_lo, then_hi, braced) of `if (C) S` without else, else None."""
+    m = re.match(r'if\s*\(', code[s:e])
+    if not m:
+        return None
+    po = s + m.end() - 1
+    pc = _ex_match_paren(code, po)
+    if pc is None or pc > e:
+        return None
+    j = pc
+    while j < e and code[j].isspace():
+        j += 1
+    if j >= e:
+        return None
+    if code[j] == '{':
+        depth, k = 0, j
+        while k < e:
+            depth += (code[k] == '{') - (code[k] == '}')
+            if depth == 0:
+                break
+            k += 1
+        if k + 1 != e:
+            return None  # an else branch or trailing text
+        return po + 1, pc - 1, j + 1, k, True
+    if re.search(r'\belse\b', code[j:e]):
+        return None
+    return po + 1, pc - 1, j, e, False
+
+
+def _ex_exit(code: str, body: str, lo: int, hi: int) -> Optional[str]:
+    """The single exit statement of a then-branch, normalized, else None."""
+    if not _EXIT_STMT.fullmatch(code[lo:hi].strip()):
+        return None
+    return ' '.join(body[lo:hi].split())
+
+
+def _ex_top_ops(expr: str) -> List[Tuple[int, str]]:
+    """(index, operator) of the depth-0 logical, comparison, assignment, ternary and comma
+    operators of an expression."""
+    out, depth, i, n = [], 0, 0, len(expr)
+    while i < n:
+        c = expr[i]
+        if c in '([{':
+            depth += 1
+        elif c in ')]}':
+            depth -= 1
+        elif depth == 0:
+            two = expr[i:i + 2]
+            if two in ('<<', '>>'):
+                if expr[i + 2:i + 3] == '=':
+                    out.append((i, '='))
+                    i += 3
+                    continue
+                i += 2
+                continue
+            if two == '->':
+                i += 2
+                continue
+            if two in ('&&', '||', '==', '!=', '<=', '>='):
+                out.append((i, two))
+                i += 2
+                continue
+            if two in ('+=', '-=', '*=', '/=', '%=', '&=', '|=', '^='):
+                out.append((i, '='))
+                i += 2
+                continue
+            if c in '<>?,=':
+                out.append((i, c))
+        i += 1
+    return out
+
+
+def _ex_strip(expr: str) -> str:
+    expr = expr.strip()
+    while expr.startswith('(') and _ex_match_paren(expr, 0) == len(expr):
+        expr = expr[1:-1].strip()
+    return expr
+
+
+def _ex_split(expr: str, op: str) -> List[str]:
+    expr = _ex_strip(expr)
+    parts, last = [], 0
+    for i, o in _ex_top_ops(expr):
+        if o == op:
+            parts.append(expr[last:i].strip())
+            last = i + 2
+    parts.append(expr[last:].strip())
+    return parts
+
+
+def _ex_operand(expr: str) -> str:
+    """An operand of a `||` chain: parenthesized when it holds a lower-precedence operator."""
+    expr = _ex_strip(expr)
+    if any(o in ('?', ',', '=', '&&') for _, o in _ex_top_ops(expr)) or _ex_bitwise(expr):
+        return f'({expr})'
+    return expr
+
+
+def _ex_bitwise(expr: str) -> bool:
+    """A depth-0 binary `&`, `|` or `^` (kept parenthesized inside a logical chain)."""
+    depth = 0
+    for i, c in enumerate(expr):
+        if c in '([{':
+            depth += 1
+        elif c in ')]}':
+            depth -= 1
+        elif depth == 0 and c in '&|^' and expr[i - 1:i] != c and expr[i + 1:i + 2] != c:
+            prev = expr[:i].rstrip()[-1:]
+            if prev and (prev.isalnum() or prev in '_)]'):
+                return True
+    return False
+
+
+_EX_FLIP = {'==': '!=', '!=': '==', '<': '>=', '>=': '<', '>': '<=', '<=': '>'}
+
+
+def _ex_negate(expr: str) -> str:
+    expr = _ex_strip(expr)
+    ops = _ex_top_ops(expr)
+    kinds = {o for _, o in ops}
+    if '||' in kinds and not kinds & {'?', ',', '='}:
+        return ' && '.join(_ex_and_operand(_ex_negate(x)) for x in _ex_split(expr, '||'))
+    if '&&' in kinds and not kinds & {'?', ',', '=', '||'}:
+        return ' || '.join(_ex_operand(_ex_negate(x)) for x in _ex_split(expr, '&&'))
+    if len(ops) == 1 and ops[0][1] in _EX_FLIP:
+        i, o = ops[0]
+        return f'{expr[:i].strip()} {_EX_FLIP[o]} {expr[i + len(o):].strip()}'
+    if not ops and expr.startswith('!'):
+        inner = expr[1:].strip()
+        if inner.startswith('(') and _ex_match_paren(inner, 0) == len(inner):
+            return _ex_strip(inner)
+        if re.fullmatch(r'\w+(?:(?:\.|->)\w+|\[\w+\])*', inner):
+            return inner
+    if not ops and re.fullmatch(r'\w+(?:(?:\.|->)\w+|\[\w+\])*', expr):
+        return '!' + expr
+    return f'!({expr})'
+
+
+def _ex_and_operand(expr: str) -> str:
+    return f'({expr})' if any(o in ('?', ',', '=', '||') for _, o in _ex_top_ops(expr)) or _ex_bitwise(expr) else expr
+
+
+def _ex_indent(body: str, pos: int) -> str:
+    line = body.rfind('\n', 0, pos) + 1
+    return re.match(r'[ \t]*', body[line:]).group(0)
+
+
+def _ex_shift(text: str, ind: str, delta: int) -> str:
+    """Lines after the first re-indented by delta spaces (negative: removed when present)."""
+    lines = text.split('\n')
+    out = [lines[0]]
+    for l in lines[1:]:
+        if delta < 0:
+            cut = min(-delta, len(l) - len(l.lstrip(' ')))
+            out.append(l[cut:])
+        else:
+            out.append((' ' * delta + l) if l.strip() else l)
+    return '\n'.join(out)
+
+
+def _ex_if_text(cond: str, exit_stmt: str, indent: str, braced: bool) -> str:
+    if braced:
+        return f'if ({cond}) {{\n{indent}    {exit_stmt}\n{indent}}}'
+    return f'if ({cond}) {exit_stmt}'
+
+
+def _ex_blocks(code: str, span) -> List[Tuple[int, int, str]]:
+    """(inner_lo, inner_hi, kind) of every compound block of the function body; kind is
+    'top', 'loop', 'switch' or 'other'."""
+    out = [(span[1], span[2], 'top')]
+    for i in range(span[1], span[2]):
+        if code[i] != '{':
+            continue
+        depth, k = 0, i
+        while k < span[2]:
+            depth += (code[k] == '{') - (code[k] == '}')
+            if depth == 0:
+                break
+            k += 1
+        if k >= span[2]:
+            continue
+        head = code[max(span[1], i - 600):i].rstrip()
+        kind = 'other'
+        if head.endswith(')'):
+            depth2, j = 0, len(head) - 1
+            while j >= 0:
+                depth2 += (head[j] == ')') - (head[j] == '(')
+                if depth2 == 0:
+                    break
+                j -= 1
+            kw = re.search(r'(\w+)\s*$', head[:j])
+            if kw and kw.group(1) in ('for', 'while'):
+                kind = 'loop'
+            elif kw and kw.group(1) == 'switch':
+                kind = 'switch'
+        elif re.search(r'\bdo$', head):
+            kind = 'loop'
+        elif head.endswith('='):
+            continue  # an initializer
+        out.append((i + 1, k, kind))
+    return out
+
+
+def exit_branch_chains(body: str, name: str, limit: int = 96) -> List[Tuple[str, str]]:
+    """Early-exit spellings that decide whether an exit test keeps retail's uninverted
+    `bCC next; b exit` pair: consecutive `if (A) EXIT; if (B) EXIT;` merged into one `||`
+    condition (every contiguous run), an `||` exit split back into separate statements, a
+    trailing `&&` guard of a void body (or loop body) turned into a negated `||` early return
+    (`continue`) merged with the exits before it, and the reverse (early return -> guard).
+    Switches: default clauses moved, dropped, added or respelled; an orphaned default block
+    is retail's dead `b X` after the dispatch (switch_default_variants)."""
+    from .sdkimport import masked
+    code = masked(body)
+    span = _function_body_span(code, name)
+    if not span:
+        return []
+    void_fn = bool(re.search(r'\bvoid\s+' + re.escape(name) + r'\s*\(', code[max(0, span[0] - 40):span[1]]))
+    out: List[Tuple[str, str]] = []
+
+    def emit(label, lo, hi, text):
+        new = body[:lo] + text + body[hi:]
+        if new != body:
+            out.append((label, new))
+
+    for blo, bhi, kind in _ex_blocks(code, span):
+        if kind == 'switch':
+            continue
+        stmts = _ex_statements(code, blo, bhi)
+        if not stmts:
+            continue
+        info = []
+        for s, e in stmts:
+            m = _ex_if(code, s, e)
+            ex = _ex_exit(code, body, m[2], m[3]) if m else None
+            info.append((s, e, m, ex))
+        # 1. merge every contiguous run (length >= 2) of early exits sharing one exit statement
+        i = 0
+        while i < len(info):
+            j = i
+            while info[i][3] and j + 1 < len(info) and info[j + 1][3] == info[i][3]:
+                j += 1
+            for a in range(i, j):
+                for b in range(a + 1, j + 1):
+                    conds = [_ex_operand(body[info[k][2][0]:info[k][2][1]]) for k in range(a, b + 1)]
+                    text = _ex_if_text(' || '.join(conds), info[a][3], _ex_indent(body, info[a][0]), info[a][2][4])
+                    emit(f'merge {b - a + 1} early exits ({info[a][3]}) into one ||', info[a][0], info[b][1], text)
+            i = j + 1
+        # 2. split an `||` exit into separate statements (fully, and at each single cut)
+        for s, e, m, ex in info:
+            if not ex:
+                continue
+            parts = _ex_split(body[m[0]:m[1]], '||')
+            if not 2 <= len(parts) <= 8:
+                continue
+            ind = _ex_indent(body, s)
+            cuts = [list(range(1, len(parts)))] + ([[c] for c in range(1, len(parts))] if len(parts) > 2 else [])
+            for cut in cuts:
+                groups, last = [], 0
+                for c in cut + [len(parts)]:
+                    groups.append(' || '.join(_ex_operand(x) for x in parts[last:c]))
+                    last = c
+                emit(f'split || exit ({ex}) at {cut}', s, e,
+                     ('\n' + ind).join(_ex_if_text(g, ex, ind, m[4]) for g in groups))
+        # 3. a trailing guard `if (C) { BODY }` -> `if (!C) EXIT; BODY`, merged with the exits before it
+        exit_stmt = 'return;' if kind == 'top' and void_fn else 'continue;' if kind == 'loop' else None
+        if exit_stmt and info:
+            s, e, m, ex = info[-1]
+            if m and m[4] and not ex and code[m[2]:m[3]].strip():
+                ind = _ex_indent(body, s)
+                inner = body[m[2]:m[3]].strip()
+                inner = _ex_shift(inner, ind, -4)
+                neg = _ex_negate(body[m[0]:m[1]])
+                for braced in (False, True):
+                    emit(f'guard -> early {exit_stmt[:-1]}{" (braced)" if braced else ""}', s, e,
+                         _ex_if_text(neg, exit_stmt, ind, braced) + '\n' + ind + inner)
+                k = len(info) - 2
+                while k >= 0 and info[k][3] == exit_stmt:
+                    k -= 1
+                for a in range(k + 1, len(info) - 1):
+                    conds = [_ex_operand(body[info[q][2][0]:info[q][2][1]]) for q in range(a, len(info) - 1)]
+                    conds.append(_ex_operand(neg))
+                    emit(f'guard -> early {exit_stmt[:-1]} merged with {len(info) - 1 - a} exits', info[a][0], e,
+                         _ex_if_text(' || '.join(conds), exit_stmt, ind, info[a][2][4]) + '\n' + ind + inner)
+        # 4. the reverse: one of the last early returns of a void body -> a guard around the rest
+        if kind == 'top' and void_fn:
+            for idx, (s, e, m, ex) in enumerate(info[:-1]):
+                if ex != 'return;' or idx < len(info) - 7:
+                    continue
+                ind = _ex_indent(body, s)
+                rest = _ex_shift(body[info[idx + 1][0]:info[-1][1]], ind, 4)
+                emit('early return -> guard', s, info[-1][1],
+                     f'if ({_ex_negate(body[m[0]:m[1]])}) {{\n{ind}    {rest}\n{ind}}}')
+    out.extend(switch_default_variants(body, name, code, span, void_fn))
+    seen, uniq = set(), []
+    for label, text in out:
+        if text not in seen:
+            seen.add(text)
+            uniq.append((label, text))
+    return uniq[:limit]
+
+
+def switch_default_variants(body: str, name: str, code: str, span, void_fn: bool) -> List[Tuple[str, str]]:
+    """The default clause of every switch moved first/last, dropped when it only breaks,
+    added when missing, and its single exit respelled; a contiguous-range switch whose cases
+    share one `break` becomes a range test with the default's exit."""
+    out: List[Tuple[str, str]] = []
+    for m in re.finditer(r'\bswitch\s*\(', code[span[1]:span[2]]):
+        sw_lo = span[1] + m.start()
+        po = span[1] + m.end() - 1
+        pc = _ex_match_paren(code, po)
+        if pc is None:
+            continue
+        ob = code.find('{', pc)
+        if ob < 0 or code[pc:ob].strip():
+            continue
+        depth, cb = 0, ob
+        while cb < span[2]:
+            depth += (code[cb] == '{') - (code[cb] == '}')
+            if depth == 0:
+                break
+            cb += 1
+        if cb >= span[2]:
+            continue
+        labels, depth, i = [], 0, ob + 1
+        while i < cb:
+            c = code[i]
+            if c in '({[':
+                depth += 1
+            elif c in ')}]':
+                depth -= 1
+            elif depth == 0 and not (code[i - 1].isalnum() or code[i - 1] == '_'):
+                lm = re.match(r'(case\b[^:;]*?|default\s*):(?!:)', code[i:cb])
+                if lm:
+                    labels.append((i, i + lm.end(), lm.group(1).strip()))
+                    i += lm.end()
+                    continue
+            i += 1
+        if not labels or code[ob + 1:labels[0][0]].strip():
+            continue
+        clauses = []  # (start, end of labels, end, [labels])
+        k = 0
+        while k < len(labels):
+            j = k
+            while j + 1 < len(labels) and not code[labels[j][1]:labels[j + 1][0]].strip():
+                j += 1
+            end = labels[j + 1][0] if j + 1 < len(labels) else cb
+            clauses.append((labels[k][0], labels[j][1], end, [l[2] for l in labels[k:j + 1]]))
+            k = j + 1
+        ind = _ex_indent(body, labels[0][0])
+        close = body.rfind('\n', 0, cb) + 1
+        close = close if not body[close:cb].strip() else cb
+
+        def rebuild(cls, extra=''):
+            pieces = [ind + body[lo:hi].strip() for lo, _, hi, _ in cls] + ([ind + extra] if extra else [])
+            return body[:ob + 1] + '\n' + '\n'.join(pieces) + '\n' + body[close:]
+
+        dflt = [c for c in clauses if 'default' in c[3]]
+        if not dflt:
+            for alt in ['break;'] + (['return;'] if void_fn else []):
+                out.append((f'switch default {alt} added last', rebuild(clauses, f'default: {alt}')))
+            continue
+        d = dflt[0]
+        others = [c for c in clauses if c is not d]
+        if d[3] != ['default'] or not others:
+            continue
+        stmt = ' '.join(code[d[1]:d[2]].split())
+        if clauses[0] is not d:
+            out.append(('switch default first', rebuild([d] + others)))
+        if clauses[-1] is not d:
+            out.append(('switch default last', rebuild(others + [d])))
+        if stmt in ('break;', 'continue;', ''):
+            out.append(('switch default dropped', rebuild(others)))
+        if _EXIT_STMT.fullmatch(stmt):
+            for alt in ['break;', 'continue;'] + (['return;'] if void_fn else []):
+                if alt != stmt:
+                    out.append((f'switch default {stmt} -> {alt}', body[:d[1]] + ' ' + alt + body[d[1] + len(body[d[1]:d[2]].rstrip()):]))
+                    if clauses[-1] is not d:
+                        out.append((f'switch default {stmt} -> {alt}, last', rebuild(others, f'default: {alt}')))
+        # a contiguous-range switch whose cases share one `break;` -> a range test with the default's exit
+        if len(others) == 1 and ' '.join(code[others[0][1]:others[0][2]].split()) == 'break;' and _EXIT_STMT.fullmatch(stmt):
+            values = [_int_literal(l[4:].strip()) if l.startswith('case') else None for l in others[0][3]]
+            if values and None not in values and sorted(values) == list(range(min(values), max(values) + 1)):
+                lo, hi = min(values), max(values)
+                e = _ex_strip(body[po + 1:pc - 1])
+                e = e if re.fullmatch(r'\w+(?:(?:\.|->)\w+|\[\w+\])*', e) else f'({e})'
+                sw_ind = _ex_indent(body, sw_lo)
+                tests = [f'{e} < {lo} || {e} > {hi}', f'{e} > {hi} || {e} < {lo}', f'{e} >= {hi + 1}',
+                         f'!({e} >= {lo} && {e} <= {hi})'] + ([f'(u32){e} > {hi}'] if lo == 0 else [])
+                for t in tests:
+                    for braced in (False, True):
+                        out.append((f'range switch -> if ({t}) {stmt}',
+                                    body[:sw_lo] + _ex_if_text(t, stmt, sw_ind, braced) + body[cb + 1:]))
+    return [(l, t) for l, t in out if t and t != body]

@@ -59,6 +59,29 @@ def _init_spawned_worker(output, environment):
         raise RuntimeError('spawned generation worker computed a different environment fingerprint')
 
 
+class _SpawnWithoutMain:
+    """Spawned workers re-run the parent's `__main__` script (multiprocessing imports it by path
+    as `__mp_main__`) unless the script guards its top level. A caller script that claims,
+    checks and releases at top level then ran a second release inside every generation worker
+    of `api.release`'s fixup step; the child's release unlinked `KEY.best.c` and the parent's
+    copy raised FileNotFoundError (fn_1_1018BC, fn_1_D523C, tooling round 288). The workers need
+    nothing from `__main__` (`_init_spawned_worker` rebuilds the engine), so the script's path
+    is hidden from the spawn preparation data while the pool starts its processes."""
+
+    def __enter__(self):
+        import sys
+        self.main = sys.modules.get('__main__')
+        self.path = None
+        if self.main is not None and getattr(getattr(self.main, '__spec__', None), 'name', None) is None:
+            self.path = self.main.__dict__.pop('__file__', None)
+        return self
+
+    def __exit__(self, *exc):
+        if self.path is not None:
+            self.main.__file__ = self.path
+        return False
+
+
 class Engine:
     def __init__(self, project, output, verbose=False, load_cache=True):
         self.project, self.output, self.verbose = project, output, verbose
@@ -200,7 +223,7 @@ class Engine:
             # directory. Serial generation of a module round (800 seeds) took longer than the
             # whole search budget there.
             try:
-                with ProcessPoolExecutor(max_workers=workers, mp_context=multiprocessing.get_context('spawn'),
+                with _SpawnWithoutMain(), ProcessPoolExecutor(max_workers=workers, mp_context=multiprocessing.get_context('spawn'),
                                          initializer=_init_spawned_worker, initargs=(str(self.output), self.environment)) as ex:
                     return list(ex.map(_generate_in_worker, jobs, chunksize=1))
             except (OSError, RuntimeError, ValueError, TypeError, ImportError, AttributeError) as error:
@@ -590,6 +613,7 @@ class Engine:
             # (fn_1_6AF70, fn_1_D6C10)
             yield from self._family(row, 'evidence.native_pool_literals (primed)', lambda: [c for c in evidence.native_pool_literals(self.project, row['symbol'], body, check) if '; prime ' in c[0]])
             yield from self._family(row, 'evidence.range_switches', lambda: evidence.range_switches(body, name, check))
+            yield from self._family(row, 'evidence.exit_branch_pairs', lambda: evidence.exit_branch_pairs(body, name, check))
             yield from self._family(row, 'layout.native_string_views', lambda: layout.native_string_views(self.project, row['symbol'], body))
             yield from self._family(row, 'evidence.swapped_call_arguments', lambda: evidence.swapped_call_arguments(self.project, row['symbol'], body, check))
             yield from self._family(row, 'layout.overlapping_field_views', lambda: layout.overlapping_field_views(self.project, row['symbol'], body))

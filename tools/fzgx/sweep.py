@@ -125,6 +125,8 @@ def generate(p: Project, s: str, sym, path: Path, body: str, check, outdir: Path
     add('baseorder', lambda: fixup_layout.section_base_order(p, s, body, check))
     add('secorder', lambda: fixup_layout.section_group_orders(p, s, body, check))
     add('sections', lambda: fixup_sections.repairs(p, s, body, check))
+    # uninverted `bCC next; b exit` pairs and dead dispatch branches: early-exit chains
+    add('exits', lambda: fixup_evidence.exit_branch_pairs(body, sym.name, check))
     rl: Dict[int, int] = {}
     if not families or 'attr' in families or 'regorder' in families:
         try:
