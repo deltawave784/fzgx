@@ -532,3 +532,4 @@ time_utc,git_head,matched_code_pct,matched_code,total_code,matched_functions,tot
 2026-10-28T21:25:54Z,8abfc5615,73.3607,2154636,2937044,6824,7312,65.4643,Fable batch 286
 2026-10-29T01:39:56Z,1dd5e33aa,73.3607,2154636,2937044,6824,7312,65.4643,Fable batch 287 (targeted)
 2026-10-29T01:44:45Z,9cbc2dadc,73.3743,2155036,2937044,6825,7312,65.4779,after batch 287 (report refreshed: includes fn_1_57810)
+2026-10-29T02:55:50Z,c0d963b5b,73.5142,2159144,2937044,6828,7312,65.5293,Fable batch 288 (targeted)
