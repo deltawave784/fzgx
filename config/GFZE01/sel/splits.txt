@@ -848,3 +848,6 @@ rel/sel/sel/fn_10_8DFC.c:
 
 rel/sel/sel/fn_10_19040.c:
 	.text       start:0x00019040 end:0x00019290 align:4
+
+rel/sel/sel/fn_10_22330.c:
+	.text       start:0x00022330 end:0x00022760 align:4

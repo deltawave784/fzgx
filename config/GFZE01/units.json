@@ -78504,6 +78504,23 @@
   },
   {
     "module": "option",
+    "source": "rel/option/_prolog/fn_4_63D4.c",
+    "symbols": [
+      "fn_4_63D4"
+    ],
+    "status": "matching",
+    "mw_version": "GC/1.3.2",
+    "extra_cflags": [],
+    "tu": "rel/option/_prolog.c",
+    "pool": {
+      "...data.0": "lbl_4_data_0",
+      "@32": "jumptable_4_data_2AC8",
+      "...bss.0": "lbl_4_bss_0",
+      "fzgx_obj_lbl_4_bss_0": "lbl_4_bss_0"
+    }
+  },
+  {
+    "module": "option",
     "source": "rel/option/_prolog/fn_4_6678.c",
     "symbols": [
       "fn_4_6678"
@@ -83685,6 +83702,44 @@
     "mw_version": null,
     "extra_cflags": [],
     "tu": "rel/sel/sel.c"
+  },
+  {
+    "module": "sel",
+    "source": "rel/sel/sel/fn_10_22330.c",
+    "symbols": [
+      "fn_10_22330"
+    ],
+    "status": "matching",
+    "mw_version": "GC/1.3.2",
+    "extra_cflags": [],
+    "tu": "rel/sel/sel.c",
+    "pool": {
+      "...rodata.0": "lbl_10_rodata_158",
+      "@27": "lbl_10_rodata_1E8",
+      "@239": "lbl_10_rodata_3AC+0x148",
+      "@57": "lbl_10_rodata_1E8+0xA4",
+      "@10": "lbl_10_rodata_158+0x48",
+      "@18": "lbl_10_rodata_1A4+0x1C",
+      "@9": "lbl_10_rodata_158+0x44",
+      "@417": "lbl_10_rodata_5D0+0x3A8",
+      "@43": "lbl_10_rodata_1E8+0x84",
+      "@150": "lbl_10_rodata_3AC+0x44",
+      "@991": "lbl_10_rodata_5D0+0xDB8",
+      "@1032": "lbl_10_rodata_5D0+0xF30",
+      "@124": "lbl_10_rodata_1E8+0x1BC",
+      "@80": "lbl_10_rodata_1E8+0x100",
+      "@26": "lbl_10_rodata_1E0",
+      "@22": "lbl_10_rodata_1A4+0x2C",
+      "@11": "lbl_10_rodata_1A4",
+      "@84": "lbl_10_rodata_1E8+0x110",
+      "@409": "lbl_10_rodata_5D0+0x388",
+      "@306": "lbl_10_rodata_5D0+0xC8",
+      "@408": "lbl_10_rodata_5D0+0x384",
+      "@181": "lbl_10_rodata_3AC+0xA8",
+      "@151": "lbl_10_rodata_3AC+0x48",
+      "@960": "lbl_10_rodata_5D0+0xD54",
+      "@1033": "lbl_10_rodata_5D0+0xF34"
+    }
   },
   {
     "module": "sel",
