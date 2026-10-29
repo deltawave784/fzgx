@@ -84448,6 +84448,18 @@
   },
   {
     "module": "sel",
+    "source": "rel/sel/sel/fn_10_8DFC.c",
+    "symbols": [
+      "fn_10_8DFC"
+    ],
+    "status": "nonmatching",
+    "mw_version": "GC/1.3.2",
+    "extra_cflags": [],
+    "tu": "rel/sel/sel.c",
+    "pool": true
+  },
+  {
+    "module": "sel",
     "source": "rel/sel/sel/fn_10_8F0C.c",
     "symbols": [
       "fn_10_8F0C"
