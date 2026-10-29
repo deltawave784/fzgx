@@ -304,6 +304,244 @@ def definition_moves(body: str, name: str, limit: int = 6) -> List[Tuple[str, st
     return out
 
 
+# Zero-cost barriers and table qualifiers, after karamzov123/fzero-gx-decomp (CC0), 2026-10-29
+# (docs/MWCC_IDIOMS.md): `v = v;` emits no code but keeps v a user-local web, `p = p;` at the
+# top of an inline helper keeps the argument from being substituted as an expression, and a
+# `const` table no longer aliases the stores before its loads.
+_LOCAL_NAME = re.compile(r"^[ \t]*(?:const\s+|volatile\s+|register\s+)*(?:(?:struct|union|enum)\s+\w+|\w+)[\s*]+"
+                         r"(\w+)\s*(?:=[^;]*)?;", re.M)
+_DECL_LINE = re.compile(r"^\s*(?:const\s+|volatile\s+|static\s+|register\s+)*(?:(?:struct|union|enum)\s+\w+|"
+                        r"[us](?:8|16|32|64)|f32|f64|int|char|short|long|unsigned|signed|float|double|void|"
+                        r"[A-Z]\w*)[\s*]+\w+(?:\[[^\]]*\])*\s*(?:=[^;]*)?;")
+
+
+def _assigned_in(text: str, v: str) -> bool:
+    e = re.escape(v)
+    return bool(re.search(rf"(?<![\w.>]){e}\s*(?:[-+*/%&|^]|<<|>>)?=(?!=)|(?:\+\+|--)\s*{e}\b"
+                          rf"|(?<![\w.>]){e}\s*(?:\+\+|--)|&\s*{e}\b", text))
+
+
+def _block_end(text: str, i: int) -> int:
+    """Index just past the statement starting at text[i] (a braced block or up to `;`)."""
+    while i < len(text) and text[i] in " \t\n":
+        i += 1
+    if i < len(text) and text[i] == "{":
+        depth = 0
+        for k in range(i, len(text)):
+            depth += text[k] == "{"
+            depth -= text[k] == "}"
+            if depth == 0:
+                return k + 1
+        return len(text)
+    k = text.find(";", i)
+    return len(text) if k < 0 else k + 1
+
+
+def self_assignment_barriers(body: str, name: str, limit: int = 32) -> List[Tuple[str, str]]:
+    """`v = EXPR;` followed by `v = v;` (no code: single-use folding of v stops, so v stays a
+    declared local's web colored after the IRO temporaries; karamzov123's fn_1_CDC8C), and a
+    loop-invariant local read in a `for` body appended to the step as `, v = v` (blocks the
+    constant propagation of that one value without `opt_propagation off`; their fn_1_22F90)."""
+    out: List[Tuple[str, str]] = []
+    span = _function_body_span(body, name)
+    if not span:
+        return out
+    lo, hi = span[1], span[2]
+    inner = body[lo:hi]
+    names = set(_LOCAL_NAME.findall(inner))
+    names |= {p for p in re.findall(r"(\w+)\s*(?:,|$)", re.sub(r"\[[^\]]*\]", "", body[span[0]:lo].split("(", 1)[-1].rsplit(")", 1)[0]))
+              if p not in ("void",)}
+    names = {n for n in names if not re.fullmatch(r"\d.*|[us](?:8|16|32)|f32|f64|int|char|void", n)}
+    lines = inner.splitlines(keepends=True)
+    pos = 0
+    for k, ln in enumerate(lines):
+        start = pos
+        pos += len(ln)
+        m = re.match(r"^([ \t]*)(?:(?:const\s+)?(?:struct\s+)?\w+[\s*]+)?([A-Za-z_]\w*)\s*=(?!=)\s*[^;{}]+;[ \t]*(?://[^\n]*|/\*.*?\*/)?\n$", ln)
+        if not m or m.group(2) not in names or re.match(r"\s*(?:return|if|while|for|else)\b", ln):
+            continue
+        ind, v = m.groups()
+        if re.search(rf"^\s*{re.escape(v)}\s*=\s*{re.escape(v)}\s*;", lines[k + 1] if k + 1 < len(lines) else ""):
+            continue
+        declared_here = not re.match(rf"\s*{re.escape(v)}\s*=", ln)
+        if declared_here:
+            nxt = next((x for x in lines[k + 1:] if x.strip()), "")
+            if _DECL_LINE.match(nxt):
+                continue  # a statement among the declarations is not C89
+        at = lo + pos
+        out.append((f"barrier {v} = {v} after line {k + 1}", body[:at] + f"{ind}{v} = {v};\n" + body[at:]))
+        if len(out) >= limit:
+            break
+    for m in re.finditer(r"\bfor\s*\(", inner):
+        depth, i = 0, m.end() - 1
+        while i < len(inner):
+            depth += inner[i] == "("
+            depth -= inner[i] == ")"
+            if depth == 0:
+                break
+            i += 1
+        header = inner[m.end():i]
+        if header.count(";") != 2:
+            continue
+        loop = inner[i + 1:_block_end(inner, i + 1)]
+        for v in sorted(names):
+            if not re.search(rf"(?<![\w.>]){re.escape(v)}\b", loop) or _assigned_in(loop + header, v):
+                continue
+            step = header.rsplit(";", 1)
+            new_header = step[0] + ";" + (step[1].rstrip() + ", " if step[1].strip() else " ") + f"{v} = {v}"
+            at, end = lo + m.end(), lo + i
+            out.append((f"barrier for-step {v} = {v}", body[:at] + new_header + body[end:]))
+            if len(out) >= 2 * limit:
+                return out
+    return out
+
+
+_INLINE_PARAMS_DEF = re.compile(r"^[ \t]*(?:static\s+)?(?:inline|__inline)\s+(?:static\s+)?[^;{}()]*?\b(\w+)\s*\(([^;{}]*)\)\s*\{", re.M)
+
+
+def inline_parameter_barriers(body: str, name: str) -> List[Tuple[str, str]]:
+    """`param = param;` at the top of a static inline helper (after its declarations): the AST
+    inliner then binds the argument to a parameter variable instead of substituting the argument
+    expression, which changes operand lowering order at the call site (karamzov123's fn_4_28FC).
+    One candidate per parameter and one with every parameter."""
+    out: List[Tuple[str, str]] = []
+    for m in _INLINE_PARAMS_DEF.finditer(body):
+        helper = m.group(1)
+        if helper == name:
+            continue
+        params = []
+        for p in m.group(2).split(","):
+            p = re.sub(r"\[[^\]]*\]", "", p).strip()
+            if not p or p in ("void", "...") or "(" in p:
+                continue
+            pm = re.search(r"(\w+)\s*$", p)
+            if pm and pm.group(1) not in ("void",) and not re.fullmatch(r"[us](?:8|16|32)|f32|f64|int|char", pm.group(1)):
+                params.append(pm.group(1))
+        span = _function_body_span(body, helper)
+        if not params or not span:
+            continue
+        try:
+            decls = _locals(body, span)
+        except Exception:
+            decls = []
+        kept = []
+        for d in decls:  # `return p;` parses as a declaration of type `return`
+            if d[2].strip(' *') in ('return', 'goto', 'break', 'continue', 'case', 'else', 'do'):
+                break
+            kept.append(d)
+        at = kept[-1][1] if kept else span[1]
+        if body[at - 1:at] != "\n":
+            nl = body.find("\n", at)
+            at = nl + 1 if 0 <= nl < span[2] else at
+        if any(re.search(rf"^\s*{re.escape(p)}\s*=\s*{re.escape(p)}\s*;", body[span[1]:span[2]], re.M) for p in params):
+            continue
+        prefix = "" if body[at - 1:at] == "\n" else "\n"
+        for p in params:
+            out.append((f"inline barrier {helper}: {p} = {p}", body[:at] + prefix + f"    {p} = {p};\n" + body[at:]))
+        if len(params) > 1:
+            text = "".join(f"    {p} = {p};\n" for p in params)
+            out.append((f"inline barrier {helper}: all parameters", body[:at] + prefix + text + body[at:]))
+    return out
+
+
+_EXTERN_TABLE = re.compile(r"^extern[ \t]+(?!const\b)((?:volatile[ \t]+)?(?:(?:struct|union)[ \t]+\w+|\w+)[ \t*]*?)[ \t]*(\w+)[ \t]*((?:\[[^\]\n]*\])+)[ \t]*;", re.M)
+
+
+def const_extern_tables(body: str, name: str) -> List[Tuple[str, str]]:
+    """`extern T tbl[];` that the body never writes -> `extern const T tbl[];`. An unqualified
+    table is assumed to alias every earlier byte/half/word store, so its loads cannot be
+    scheduled above them; const lets them hoist (retail's load-before-store, karamzov123's
+    fn_8006953C). One candidate per table and one with every table."""
+    out: List[Tuple[str, str]] = []
+    found = []
+    for m in _EXTERN_TABLE.finditer(body):
+        t, sym = m.group(1).strip(), m.group(2)
+        e = re.escape(sym)
+        rest = body[:m.start()] + body[m.end():]
+        if "volatile" in t or re.search(rf"(?<![\w.>]){e}\s*(?:\[[^\]]*\]\s*)*(?:\.\w+\s*|->\w+\s*|\[[^\]]*\]\s*)*(?:[-+*/%&|^]|<<|>>)?=(?!=)"
+                                        rf"|(?:\+\+|--)\s*{e}\b|(?<![\w.>]){e}(?:\s*\[[^\]]*\])*\s*(?:\+\+|--)", rest):
+            continue
+        if not re.search(rf"(?<![\w.>]){e}\b", rest):
+            continue
+        found.append((m, t, sym))
+    for m, t, sym in found:
+        new = f"extern const {t} {sym}{m.group(3)};"
+        out.append((f"const table {sym}", body[:m.start()] + new + body[m.end():]))
+    if len(found) > 1:
+        text = body
+        for m, t, sym in reversed(found):
+            text = text[:m.start()] + f"extern const {t} {sym}{m.group(3)};" + text[m.end():]
+        out.append(("const tables (all)", text))
+    return out
+
+
+def _trees(terms: List[str]):
+    """Every full binary bracketing of TERMS in their given order."""
+    if len(terms) == 1:
+        yield terms[0]
+        return
+    for k in range(1, len(terms)):
+        for left in _trees(terms[:k]):
+            for right in _trees(terms[k:]):
+                yield f"({left} + {right})"
+
+
+def add_trees(body: str, name: str, cap: int = 720) -> List[Tuple[str, str]]:
+    """A flat `+` chain of 3..6 pure terms rewritten as every binary tree of its terms: every
+    order and bracketing up to four terms (120 trees), every bracketing of the source order plus
+    every order left-associated for five or six. MWCC keeps the source association of integer
+    and pointer sums, so retail's `add` operand order and its address CSEs pin one tree
+    (karamzov123: 30,240 trees for six terms compile in one batch)."""
+    ops: List[dict] = []
+    try:
+        commutations(body, name, ops)
+    except Exception:
+        return []
+    adds = [o for o in ops if o['op'] == '+']
+    by_span = {(o['start'], o['end']): o for o in adds}
+    children = set()
+    for o in adds:
+        if o['left'] in by_span:
+            children.add(o['left'])
+        if o['right'] in by_span:
+            children.add(o['right'])
+    out: List[Tuple[str, str]] = []
+    seen = set()
+
+    def flatten(o):
+        terms = []
+        for side in ('left', 'right'):
+            s = o[side]
+            if s in by_span:
+                terms += flatten(by_span[s])
+            else:
+                terms.append(body[s[0]:s[1]].strip())
+        return terms
+
+    for o in adds:
+        if (o['start'], o['end']) in children:
+            continue
+        terms = flatten(o)
+        if not 3 <= len(terms) <= 6:
+            continue
+        orders = list(itertools.permutations(terms)) if len(terms) <= 4 else [tuple(terms)]
+        texts = [t for order in orders for t in _trees(list(order))]
+        if len(terms) > 4:
+            for order in itertools.permutations(terms):
+                acc = order[0]
+                for t in order[1:]:
+                    acc = f"({acc} + {t})"
+                texts.append(acc)
+        for t in texts:
+            new = body[:o['start']] + t + body[o['end']:]
+            if new != body and new not in seen:
+                seen.add(new)
+                out.append((f"add-tree {len(terms)} terms at {o['start']}: {t[:60]}", new))
+                if len(out) >= cap:
+                    return out
+    return out
+
+
 def through_local(body: str, name: str) -> List[Tuple[str, str]]:
     """`x = A op B;` where A is a load -> `x = A; x = x op B;` (the loaded value is the local's
     own register), and `if (p->f OP k)` -> `t = p->f; if (t OP k)` with a fresh local."""

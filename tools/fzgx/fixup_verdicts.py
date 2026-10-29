@@ -55,12 +55,12 @@ CLASS_FAMILIES = {
     'held-local': ['source.rewrites', 'source.call_results_to_locals', 'source.decse_repeated_expressions', 'capture.pointer_locals', 'evidence.induction_indexing',
                    'source.through_local', 'source.promoted_locals'],
     'inline-region': ['source.forwarded_locals', 'source.region_inline_helpers', 'source.inline_helpers',
-                      'source.definition_moves'],
+                      'source.definition_moves', 'source.inline_parameter_barriers', 'source.self_assignment_barriers'],
     'parameter-copy': ['evidence.parameter_copies'],
     'degree': ['source.definition_moves', 'source.variable_splits', 'source.lifetime_splits', 'evidence.scalar_lifetimes',
                'source.loop_lifetimes', 'source.reuse_temporaries'],
     'expression-order': ['source.definition_moves', 'source.commutations', 'source.expression_trees', 'source.initialization_orders',
-                         'evidence.attributed_inlines'],
+                         'evidence.attributed_inlines', 'source.add_trees', 'source.inline_parameter_barriers'],
     # retail defines the copied-to local directly (fn_10_111E8's `row` by the addi): the temp
     # must not exist, so the value is written straight into the local or the copy disappears
     'copy-coalesce': ['source.wrap_constant_pointers', 'source.constant_address_locals', 'source.split_inits',
@@ -68,7 +68,11 @@ CLASS_FAMILIES = {
                       'source.variable_splits'],
     # retail gives one of our webs two registers: the value lives in two variables
     'web-split': ['source.variable_splits', 'source.lifetime_splits', 'evidence.scalar_lifetimes',
-                  'source.through_local'],
+                  'source.through_local', 'source.self_assignment_barriers'],
+    # no override reproduced retail's colours: the zero-cost barriers (karamzov123, CC0) change
+    # a web's class without changing code, then the read-only table qualifier (scheduling)
+    'unresolved': ['source.self_assignment_barriers', 'source.inline_parameter_barriers',
+                   'source.const_extern_tables', 'source.forwarded_locals', 'source.definition_moves'],
     'base-temp': [],
 }
 

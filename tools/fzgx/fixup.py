@@ -800,7 +800,10 @@ class Engine:
                         yield from self._family(row, 'evidence.optimizer_pragmas (commuted)', lambda: [(label+' with '+policy,combined) for policy,combined in evidence.optimizer_pragmas(text,name)])
         families.extend(deferred_graph)
         families.extend([self._family(row, 'source.' + fn, lambda: getattr(source, fn)(body, name)) for fn in
-                         ('missing_values', 'expression_trees', 'commutations', 'shift_products')])
+                         ('missing_values', 'expression_trees', 'commutations', 'shift_products',
+                          # karamzov123's levers (CC0, 2026-10-29): zero-cost `v = v;` barriers, an
+                          # inline helper's `p = p;`, const read-only tables, every tree of a flat sum
+                          'self_assignment_barriers', 'inline_parameter_barriers', 'const_extern_tables', 'add_trees')])
         families.append(self._family(row, 'source.probes', lambda: source.probes(body,name,64)))
         families.append(self._family(row, 'source.all_rewrites', lambda: [(family+': '+label,text) for family,label,text in source.all_rewrites(body,name)]))
         # Inlined helpers contribute instructions and stack lifetimes to this

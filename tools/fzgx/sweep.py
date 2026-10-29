@@ -117,6 +117,12 @@ def generate(p: Project, s: str, sym, path: Path, body: str, check, outdir: Path
     add('compound', lambda: fixup_source.compound_assignments(body, sym.name))
     add('inlineparam', lambda: fixup_source.constant_inline_parameters(body, sym.name))
     add('inlineregion', lambda: fixup_source.region_inline_helpers(body, sym.name))
+    # karamzov123/fzero-gx-decomp (CC0, 2026-10-29): `v = v;` / for-step barriers, `p = p;` at the
+    # top of inline helpers, `extern const` read-only tables, every tree of a flat 3..6-term sum
+    add('barrier', lambda: fixup_source.self_assignment_barriers(body, sym.name, limit=24))
+    add('inlinebarrier', lambda: fixup_source.inline_parameter_barriers(body, sym.name))
+    add('consttable', lambda: fixup_source.const_extern_tables(body, sym.name))
+    add('addtree', lambda: fixup_source.add_trees(body, sym.name, cap=120))
     add('pragmas', lambda: fixup_evidence.optimizer_pragmas(body, sym.name))
     add('layout', lambda: fixup_layout.tu_section_layout(p, s, body, check))
     add('sibling', lambda: fixup_sibling.sibling_section_layouts(p, s, body, check))

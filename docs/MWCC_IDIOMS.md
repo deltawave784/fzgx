@@ -717,3 +717,65 @@ function goes to `.fzgx/capture/verdicts.json`; `fzgx fixup` runs the class's fa
 - `fixup_source.definition_moves` (the `degree` lever: moving a local's only assignment past
   neighbouring statements) did not reproduce fn_1_10B800's `43:+16`; that needs 16 more
   interferences, i.e. a range spanning the loop setup, not a one-statement move.
+
+## Findings from karamzov123/fzero-gx-decomp (CC0), 2026-10-29
+
+Reported by the karamzov123 fork (same tooling base) and restated here. Items marked
+*measured here* were re-probed on this tree; the rest are their observations.
+
+1. **Barriers that cost no code.** A self-assignment `v = v;` placed after `v = expr;` emits
+   nothing (*measured here*: identical instruction count on GC/1.3.2) but stops MWCC from
+   folding a single-use value into its use, so `v` stays a declared-local web and is coloured
+   after the optimizer's `@` temporaries (their fn_1_CDC8C). At the top of a `static inline`
+   helper, `param = param;` prevents the inliner from substituting the caller's argument
+   expression for the parameter; the operands are then lowered in a different order
+   (fn_4_28FC). Appending `, v = v` to a `for` step hides one loop-invariant from constant
+   propagation without turning `opt_propagation` off for the whole function (fn_1_22F90).
+   Engine families: `self_assignment_barriers`, `inline_parameter_barriers`.
+2. **Qualify read-only tables `const`.** Loads from a plain `extern u16 tbl[]` are assumed to
+   alias any earlier byte/half/word store, so the scheduler keeps them below those stores.
+   Declared `extern const`, they move above, giving retail's load-before-store order
+   (fn_8006953C). Engine family: `const_extern_tables`.
+3. **Sum association is part of the code.** MWCC keeps the source tree of an integer or
+   pointer sum, so the `add` operand order and the address CSEs pin a single bracketing.
+   Compile every binary tree of the terms in one batch and word-compare: six terms give
+   720 orders x 42 bracketings = 30,240 trees, a few seconds. Engine family: `add_trees`
+   (all orders and bracketings up to four terms; bracketings plus left-associated orders
+   for five and six).
+4. **Byte swap that must not become `stwbrx`.** GC/1.3.2 recognises a full 32-bit swap
+   feeding a store and emits `stwbrx`. Retail's `rlwinm`/`rlwimi` chain comes from a swap
+   whose low half is narrowed first:
+   `u32 low = (u16)v; return (low << 24) | ((low << 8) & 0xFF0000) | ((v >> 8) & 0xFF00) | (v >> 24);`
+5. **Small spellings.** `u32 mask = 0x80000000 >> n; w &= ~mask;` computes the address before
+   the shift. Prefer `base + 0x28 + n * 2` to the lifter's `src = base + 0x28 + i; i += 2`.
+   `inv = 1 - t; inv *= inv;` squares in place and keeps one float register.
+6. **Scan for clones before repairing.** option, title and sel share menu code; an
+   opcode-sequence comparison of unmatched against matched functions found nine matches in
+   a day. Porting the matched sibling's C beat repairing the unmatched body.
+7. **`#pragma section code_type` is sticky.** `#pragma section code_type ".fzgxpool"` stays in
+   force until `code_type ".text"` (*measured here*, GC/1.1, 1.2.5n, 1.3.2: every later
+   function lands in `.fzgxpool`). A `#pragma pop` that closes an enclosing `#pragma push`
+   does restore the previous section, so the five title blocks using push/pop (fn_8_7EFC,
+   fn_8_8440, fn_8_89B8, fn_8_DD64, fn_8_6C90) compile their function into `.text` and are
+   verified C links. `fzgx lint` rule P1 now flags a region left open at the end of a block
+   or file; the two open regions in `src/` (fn_3_6270, fn_1_155FB4) are pool blocks whose
+   function compiles into `.fzgxpool`.
+8. **8-byte alignment of BSS/data objects.** They saw a `u8[0xA]` pad move by 4 and shift
+   every later object, fixed by separate `s16`s. *Not reproduced here at object level*: under
+   this project's flags (GC/1.2.5n and 1.3.2, `-align powerpc`) plain `u8[8]`, `u8[0xA]`,
+   `u8[0x10]` and an 8-byte struct of words all take 4-byte alignment in `.bss` and `.data`;
+   only a `double` member takes 8. Check the member types before assuming a size rule.
+9. **Section base names.** When the only differences are `...data.0` against
+   `lbl_M_data_X`, the oracle binds the base to a `fzgx_obj_lbl_M_data_X` that starts at the
+   same address and is no larger than the retail symbol.
+10. **Dead ends they measured.** A different `-O` level never matched (269 functions). A
+    deterministic sweep over the 99%+ band produced 0 matches in 40,208 candidates. Raising
+    plateau limits spends tokens without adding matches. About 12% of rows classed as register
+    allocation were relocation-only. A search can "match" by inventing a return value, so
+    diff what the search changed before accepting it.
+11. **Refinements.** Inline-helper locals declared in reverse order gave
+    `li r28, 0; mr r29, r28`. Where `vert` is known to be 0, `vert--` reproduces retail
+    and `vert = -1` does not. Read operand order off retail: `add rD, rX, rAcc` is
+    `x + acc`. Before choosing a return type, look at the epilogue: a function that never
+    sets r3 is `void`. Lint A1 misfires on float bit patterns and on hex or "volatile"
+    inside comments; `fzgx-allow` must be on the flagged line itself.

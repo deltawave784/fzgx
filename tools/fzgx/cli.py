@@ -394,6 +394,20 @@ def cmd_trivial(a, p):
 
 def cmd_reuse(a, p):
     from . import reuse
+    if a.near is not None:
+        exclude = tuple(m for m in (a.exclude_modules or '').split(',') if m)
+        pairs = reuse.near_clones(p, a.near, exclude, a.module, check=not a.no_check)
+        if a.json:
+            _print(pairs, True)
+            return 0
+        for pr in pairs:
+            print(f"{pr['symbol']:16} {pr['module']:11} best {pr['best']:6.2f} <- {pr['donor']:16} "
+                  f"{pr['donor_module']:11} ops {pr['ratio']:.3f} port {pr.get('percent')!s:>6} "
+                  f"{'MATCH ' if pr.get('matched') else ''}{pr.get('body', pr.get('note', ''))}")
+        better = [x for x in pairs if (x.get('percent') or 0) > x['best']]
+        print(f"{len(pairs)} near clones; {len(better)} ports beat the saved best; "
+              f"{sum(1 for x in pairs if x.get('matched'))} match (seed: fzgx fixup SYMBOL --body PATH)")
+        return 0
     _print(reuse.run(p, a.max_size, a.module, not a.no_submit), a.json)
     return 0
 
@@ -832,6 +846,11 @@ def build_parser() -> argparse.ArgumentParser:
     s = sub.add_parser("reuse", help="reuse verified C for identical retail instruction shapes"); s.set_defaults(fn=cmd_reuse)
     s.add_argument("--module"); s.add_argument("--max-size", type=int, default=255)
     s.add_argument("--no-submit", action="store_true")
+    s.add_argument("--near", type=float, nargs='?', const=0.9, default=None,
+                   help="near-identical opcode sequences (difflib ratio, default 0.9): port matched C, "
+                        "oracle-scored, never submitted")
+    s.add_argument("--exclude-modules", help="comma-separated modules whose unmatched functions are not ported")
+    s.add_argument("--no-check", action="store_true", help="with --near: list pairs without compiling ports")
     s = sub.add_parser("harvest", help="land C matched on another ref of this project (a fork branch); oracle and lint decide")
     s.set_defaults(fn=cmd_harvest)
     s.add_argument("ref", help="git ref, e.g. karamzov/main (fetched remote)")

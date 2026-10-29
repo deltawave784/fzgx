@@ -188,3 +188,113 @@ def run(p: Project, max_size: int = 255, module: Optional[str] = None, do_submit
         archive=None, saved=False, apply=do_submit, min_percent=100, max_percent=100,
         module=module, max_size=max_size, limit=None, rounds=0, beam=3,
         max_candidates=80, budget=None, drafts=False))
+
+
+# ----------------------------------------------------------------------------- near clones
+# karamzov123/fzero-gx-decomp (CC0, 2026-10-29): option/title/sel share menu code, and an
+# opcode-sequence comparison of unmatched against matched functions found nine ports in a day.
+# `families` above needs identical shapes (names only differ); this scan accepts sequences that
+# differ in a few instructions, rebinds the donor's matched C by the references of aligned
+# instructions, and lets the oracle score the port. Nothing is submitted here: a port that
+# scores is a seed for `fzgx fixup SYMBOL --body PATH`, which still decides.
+
+NEAR_ROOT = ROOT / '.fzgx' / 'nearclones'
+
+
+def _opcodes(fn) -> list:
+    return [line.split(': ', 1)[-1].split()[0] for line in fn.asm if not line.endswith(':') and line.strip()]
+
+
+def _aligned_refs(a, b) -> dict:
+    """donor ref -> recipient ref, read off instruction pairs inside equal opcode blocks."""
+    import difflib
+    la = [ln for ln in a.asm if not ln.endswith(':') and ln.strip()]
+    lb = [ln for ln in b.asm if not ln.endswith(':') and ln.strip()]
+    ra, rb = set(a.refs), set(b.refs)
+    tok = re.compile(r'[A-Za-z_$@.][\w$@.]*')
+    mapping, conflict = {}, set()
+    sm = difflib.SequenceMatcher(None, _opcodes(a), _opcodes(b), autojunk=False)
+    for tag, i1, i2, j1, j2 in sm.get_opcodes():
+        if tag != 'equal':
+            continue
+        for x, y in zip(la[i1:i2], lb[j1:j2]):
+            na = [t for t in tok.findall(x.split(': ', 1)[-1]) if t in ra]
+            nb = [t for t in tok.findall(y.split(': ', 1)[-1]) if t in rb]
+            if len(na) != len(nb):
+                continue
+            for u, v in zip(na, nb):
+                if mapping.get(u, v) != v:
+                    conflict.add(u)
+                mapping.setdefault(u, v)
+    return {u: v for u, v in mapping.items() if u not in conflict and u != v}
+
+
+def near_clones(p: Project, min_ratio: float = 0.9, exclude=(), module: Optional[str] = None,
+                min_size: int = 32, check: bool = True) -> list:
+    """Pairs (recipient unmatched, donor matched) whose retail opcode sequences agree to at
+    least MIN_RATIO (difflib), best donor per recipient; with CHECK, the donor's matched C is
+    rebound (donor name and aligned references) and scored by the oracle for the recipient."""
+    import bisect
+    import difflib
+    ledger = Ledger()
+    rows = ledger.db.execute("SELECT symbol, module, status, size, unit, best_percent FROM functions "
+                             "WHERE status IN ('matched', 'unmatched') AND size >= ?", (min_size,)).fetchall()
+    donors, recipients = [], []
+    for key, mod, status, size, unit, best in rows:
+        if status == 'unmatched' and (mod in exclude or (module and mod != module)):
+            continue
+        try:
+            fn = p.function_asm(mod).get(key.split(':')[-1])
+        except Exception:
+            continue
+        if fn is None or fn.symbol.size != size:
+            continue
+        item = dict(symbol=key, module=mod, size=size, unit=unit, best=best or 0.0, fn=fn, ops=_opcodes(fn))
+        (donors if status == 'matched' else recipients).append(item)
+    donors.sort(key=lambda d: d['size'])
+    sizes = [d['size'] for d in donors]
+    pairs = []
+    for r in recipients:
+        lo = bisect.bisect_left(sizes, int(r['size'] * min_ratio))
+        hi = bisect.bisect_right(sizes, int(r['size'] / min_ratio) + 4)
+        best = None
+        for d in donors[lo:hi]:
+            sm = difflib.SequenceMatcher(None, d['ops'], r['ops'], autojunk=False)
+            if sm.real_quick_ratio() < min_ratio or sm.quick_ratio() < min_ratio:
+                continue
+            ratio = sm.ratio()
+            if ratio >= min_ratio and (best is None or ratio > best[0]
+                                       or (ratio == best[0] and d['module'] == r['module'])):
+                best = (ratio, d)
+        if best:
+            pairs.append(dict(symbol=r['symbol'], module=r['module'], size=r['size'], best=r['best'],
+                              donor=best[1]['symbol'], donor_module=best[1]['module'],
+                              ratio=round(best[0], 4), _r=r, _d=best[1]))
+    if check and pairs:
+        NEAR_ROOT.mkdir(parents=True, exist_ok=True)
+        items = []
+        for pr in pairs:
+            d, r = pr['_d'], pr['_r']
+            try:
+                donor_src = oracle.unit_source_path(p, d['unit']).read_text()
+            except (OSError, TypeError):
+                pr['note'] = 'donor unit source missing'
+                continue
+            mapping = _aligned_refs(d['fn'], r['fn'])
+            mapping[d['fn'].symbol.name] = r['fn'].symbol.name
+            path = NEAR_ROOT / (pr['symbol'].replace(':', '__') + '.c')
+            path.write_text(replace_symbols(donor_src, mapping))
+            pr['body'] = str(path)
+            pr['rebound'] = len(mapping)
+            items.append((pr['symbol'], path))
+        results = oracle.check_many(p, items)
+        for pr in pairs:
+            res = results.get(pr['symbol'])
+            if res is not None:
+                pr['percent'] = round(res.percent or 0.0, 2) if res.ok else None
+                pr['matched'] = bool(res.ok and (res.matched or res.matched_pool))
+    for pr in pairs:
+        pr.pop('_r', None)
+        pr.pop('_d', None)
+    pairs.sort(key=lambda x: (-(x.get('percent') or 0), -x['ratio']))
+    return pairs

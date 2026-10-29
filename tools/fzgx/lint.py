@@ -12,6 +12,7 @@ Rules (docs/CODING_RULES.md):
   A3  no inline assembly bodies in reconstructed C
   S1  no `goto` without a justification comment on the same or previous line
   S2  no `volatile` / codegen-only `union` without a justification comment
+  P1  no `#pragma section code_type ".fzgxpool"` left in force at the end of a block or file
 A line may opt out with `// fzgx-allow: <rule> <reason>`.
 """
 
@@ -121,7 +122,52 @@ def lint_text(text: str) -> List[Tuple[str, int, str]]:
             findings.append(("S1", i, "goto without a justification comment"))
         if re.search(r"\bvolatile\b", code) and not justified and "S2" not in allow:
             findings.append(("S2", i, "volatile without a justification comment"))
+    findings.extend(_pool_section_findings(lines))
     return findings
+
+
+_CODE_TYPE = re.compile(r'^\s*#\s*pragma\s+section\s+code_type\b\s*(?:"([^"]*)")?')
+_PRAGMA_STACK = re.compile(r'^\s*#\s*pragma\s+(push|pop)\b')
+_BLOCK_MARK = re.compile(r'/\*\s*fzgx:(begin|end)\b')
+
+
+def _pool_section_findings(lines: List[str]) -> List[Tuple[str, int, str]]:
+    """P1: `#pragma section code_type ".fzgxpool"` still in force at the end of a block (or of the
+    file). MWCC keeps a code_type until it is switched back to `.text` or a `#pragma pop` closes
+    the enclosing `push` (measured on GC/1.1, 1.2.5n and 1.3.2), so every later function of the
+    unit, and of the TU once it is collapsed, would be emitted into the section integration
+    drops. Primer emitters close the region with `#pragma section code_type ".text"`."""
+    out: List[Tuple[str, int, str]] = []
+    if "fzgxpool" not in "".join(lines):
+        return out
+    stack: List[str] = []
+    cur, opened, pooled = ".text", 0, False
+    for i, line in enumerate(lines, 1):
+        mark = _BLOCK_MARK.search(line)
+        if mark and mark.group(1) == "begin":
+            # a `pool` block is not linked from C (retail's object is), so the stray region
+            # cannot move linked code until the block is revised; work copies have no markers
+            stack, cur, opened = [], ".text", 0
+            pooled = bool(re.search(r"fzgx:begin\s+\S+[^*]*\bpool\b", line))
+        ps = _PRAGMA_STACK.match(line)
+        if ps:
+            if ps.group(1) == "push":
+                stack.append(cur)
+            elif stack:
+                cur = stack.pop()
+        m = _CODE_TYPE.match(line)
+        if m:
+            cur = m.group(1) or ".text"
+            if cur == ".fzgxpool":
+                opened = i
+        if mark and mark.group(1) == "end" and cur == ".fzgxpool" and not pooled:
+            out.append(("P1", opened, 'code_type ".fzgxpool" not reset before the block ends; '
+                                      'add #pragma section code_type ".text"'))
+            stack, cur = [], ".text"
+    if cur == ".fzgxpool":
+        out.append(("P1", opened, 'code_type ".fzgxpool" still in force at end of file; '
+                                  'add #pragma section code_type ".text"'))
+    return out
 
 
 def lint_paths(paths: Iterable[Path]) -> List[Tuple[str, str, int, str]]:
