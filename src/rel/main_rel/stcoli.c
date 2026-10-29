@@ -15689,19 +15689,8 @@ void fn_1_3A330(void)
 
 /* fzgx:begin fn_1_3C880 pool noprologue */
 #include "types.h"
-#include "types.h"
-#include "types.h"
 
-#ifndef REL_MAIN_REL_GLOBALS_H
-#define REL_MAIN_REL_GLOBALS_H
 
-#endif  // REL_MAIN_REL_GLOBALS_H
-#ifndef REL_MAIN_REL_GAME_H
-#define REL_MAIN_REL_GAME_H
-
-#endif  // REL_MAIN_REL_GAME_H
-
-/* end rel/main_rel/game.h */
 
 typedef u32 (*GameStepFn)(void);
 typedef s32 (*GameModeFn)(void);

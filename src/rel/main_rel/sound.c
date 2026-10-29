@@ -312,15 +312,6 @@ void fn_1_9FFD8(void) {
 /* fzgx:end fn_1_9FFD8 */
 
 /* fzgx:begin fn_1_A0214 pool */
-#ifndef REL_MAIN_REL_GLOBALS_H
-#define REL_MAIN_REL_GLOBALS_H
-
-#endif  // REL_MAIN_REL_GLOBALS_H
-#ifndef REL_MAIN_REL_SOUND_H
-#define REL_MAIN_REL_SOUND_H
-
-#endif  // REL_MAIN_REL_SOUND_H
-
 typedef struct SoundEntry {
     u32 unk_0;
     u8 pad_4[0x2C];

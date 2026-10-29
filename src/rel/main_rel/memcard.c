@@ -11114,17 +11114,7 @@ int fn_1_B88C4(void) {
 
 /* fzgx:begin fn_1_B8E84 noprologue */
 #include "types.h"
-#include "types.h"
-#include "types.h"
 
-#ifndef REL_MAIN_REL_GLOBALS_H
-#define REL_MAIN_REL_GLOBALS_H
-
-#endif  // REL_MAIN_REL_GLOBALS_H
-#ifndef REL_MAIN_REL_MEMCARD_H
-#define REL_MAIN_REL_MEMCARD_H
-
-#endif  // REL_MAIN_REL_MEMCARD_H
 
 typedef struct CardEntry {
     u8 pad_00[0x3C];
