@@ -8185,6 +8185,134 @@ void fn_1_11F250(Work *arg0) {
 #pragma opt_common_subs reset
 /* fzgx:end fn_1_11F250 */
 
+/* fzgx:begin fn_1_122348 noprologue */
+#include "types.h"
+
+typedef struct {
+    u8 flags;
+    u8 pad_1[0xF];
+    f32 unk10;
+    u8 pad_14[4];
+    f32 unk18;
+    u8 pad_1C[0x24];
+    f32 unk40;
+} Group122348;
+
+typedef struct {
+    u8 pad_0[0x8C];
+    s32 mode;
+} Owner122348;
+
+typedef struct {
+    u8 pad_0[0xC];
+    Owner122348 *owner;
+    u8 pad_10[8];
+    u32 count;
+    u8 pad_1C[8];
+    Group122348 *groups;
+} Obj122348;
+
+extern const f32 lbl_1_rodata_7B1C;
+extern const f32 lbl_1_rodata_7B20;
+extern void fn_1_10846C(Obj122348 *);
+extern void fn_1_128884(void *, void *, s32);
+
+void fn_1_122348(Obj122348 *obj) {
+    Group122348 *h;
+    u32 j;
+    Group122348 *g_2;
+    s32 n;
+    u32 k;
+    Group122348 *start;
+    u32 rounds;
+    u32 i;
+    Group122348 *g;
+    s32 num;
+
+    if (obj == NULL) {
+        return;
+    }
+    num = (obj->owner->mode == 2) ? 9 : 13;
+    fn_1_10846C(obj);
+
+    k = 0;
+    g = obj->groups;
+    for (; k < obj->count; k++, g++) {
+        if (g->flags & 1) {
+            g->flags = 0;
+            g->unk40 = lbl_1_rodata_7B1C;
+        } else {
+            g->flags = 1;
+            g->unk40 = lbl_1_rodata_7B20;
+        }
+    }
+
+    g = obj->groups;
+    for (k = 0; k < obj->count; k++, g++) {
+        j = k + 1;
+        h = &obj->groups[k] + 1;
+        for (; j < obj->count; j++, h++) {
+            if (g->flags == 0 && h->flags != 0) {
+                fn_1_128884(g, h, sizeof(Group122348));
+            }
+        }
+    }
+
+    g = obj->groups;
+    for (k = 0; k < obj->count; k++, g++) {
+        h = &obj->groups[k] + 1;
+        for (j = k + 1; j < obj->count; j++, h++) {
+            if (g->flags == h->flags && g->unk10 < h->unk10) {
+                fn_1_128884(g, h, sizeof(Group122348));
+            }
+        }
+    }
+
+    n = num;
+    g = obj->groups;
+    for (k = 0; k < num; k++, g++) {
+        for (j = k + 1, h = g + 1; j < num; j++, h++) {
+            if (g->unk18 > h->unk18) {
+                fn_1_128884(g, h, sizeof(Group122348));
+            }
+        }
+    }
+    g = obj->groups + n;
+    for (k = n; k < num * 2; k++, g++) {
+        for (j = k + 1, h = g + 1; j < num * 2; j++, h++) {
+            if (g->unk18 > h->unk18) {
+                fn_1_128884(g, h, sizeof(Group122348));
+            }
+        }
+    }
+
+    start = obj->groups;
+    for (i = 0; i < obj->count; i++) {
+        if (start->flags != 0 && start[1].flags == 0) {
+            break;
+        }
+        start++;
+    }
+    start++;
+    rounds = (obj->count - (start - obj->groups)) / n;
+
+    for (k = 0; k < rounds; k++) {
+        for (i = 0; i < n; i++) {
+            start[i].unk40 = -(f32)(k + 1) / (f32)(rounds + 1);
+        }
+        h = start;
+        for (j = 0; j < n; j++, h++) {
+            for (i = j + 1, g_2 = h + 1; i < n; i++, g_2++) {
+                if (h->unk18 > g_2->unk18) {
+                    fn_1_128884(h, g_2, sizeof(Group122348));
+                }
+            }
+        }
+        start += n;
+    }
+}
+/* fzgx:end fn_1_122348 */
+
 /* fzgx:begin fn_1_12277C noprologue */
 #include "types.h"
 #include "rel/main_rel/globals.h"
