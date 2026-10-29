@@ -8906,3 +8906,6 @@ rel/main_rel/effect/fn_1_5CA00.c:
 
 rel/main_rel/sel_static_disp/fn_1_146C88.c:
 	.text       start:0x00146C88 end:0x00147188 align:4
+
+rel/main_rel/effect/fn_1_6028C.c:
+	.text       start:0x0006028C end:0x00060734 align:4

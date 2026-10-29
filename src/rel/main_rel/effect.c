@@ -5606,6 +5606,272 @@ void fn_1_601B4(EffectState *effect) {
 }
 /* fzgx:end fn_1_601B4 */
 
+/* fzgx:begin fn_1_6028C noprologue */
+#include "types.h"
+#include "rel/main_rel/effect.h"
+#include "game/main_rel/camera_types.h"
+
+typedef struct {
+    f32 x;
+    f32 y;
+    f32 z;
+} BeamVec;
+
+typedef struct {
+    u8 pad_00[0x14];
+    s32 timer;          /* 0x14 */
+    u8 pad_18[0x10];
+    f32 scale;          /* 0x28 */
+    u8 pad_2C[0x4];
+    f32 angle;          /* 0x30 */
+    u8 pad_34[0x8];
+    BeamVec start;      /* 0x3C */
+    u8 pad_48[0xC];
+    s16 variant;        /* 0x54 */
+    u8 pad_56[0x32];
+    BeamVec end;        /* 0x88 */
+    u8 pad_94[0x1E];
+    u16 alt;            /* 0xB2 */
+    f32 alpha;          /* 0xB4 */
+} BeamEffect;
+
+/* view of lbl_1_data_1C698 (the TU's .data block) */
+typedef struct {
+    u8 pad_000[0xF90];
+    u32 seed;               /* 0xF90 */
+    u8 pad_F94[0x1188 - 0xF94];
+    char beamNames[4][0x14]; /* 0x1188 */
+    char missing[0xC];      /* 0x11D8 */
+    char glowAlt[0x14];     /* 0x11E4 */
+    char glow[0x14];        /* 0x11F8 */
+} EffectData;
+
+extern void *fn_1_9CE1C(const char *, s32);
+extern void fn_1_A8E78(const char *);
+extern void fn_1_56000(u8, u8, u8);
+extern void fn_1_55FC4(f32);
+extern void fn_1_55FF0(f32);
+extern void fn_1_55210(void *);
+extern f32 lbl_8006D0B4(f32);
+extern void fn_80073778(void *, s32);
+extern void lbl_8006DCA4(void);
+extern void fn_8006F3E4(s16 *, s16 *, s16 *);
+extern void mathutil_mtxA_rotate_y(s32);
+extern void mathutil_mtxA_rotate_z(s32);
+extern void lbl_8006E14C(f32);
+extern void fn_80072558(void);
+
+static inline void beam_vec_sub(BeamVec *out, BeamVec *a, BeamVec *b)
+{
+    out->x = a->x - b->x;
+    out->y = a->y - b->y;
+    out->z = a->z - b->z;
+}
+
+static inline f32 beam_vec_length(BeamVec *v)
+{
+    const f32 *p = (const f32 *)v;
+    f32 y = p[1];
+    f32 z = p[2];
+    f32 len;
+{
+    f32 x = p[0];
+    len = x * x;
+}
+    len += y * y;
+    len += z * z;
+    return lbl_8006D0B4(len);
+}
+
+/* orient the current matrix along the segment from start to end; returns its length */
+typedef struct {
+    u8 pad_00[0x28];
+    f32 one;
+    u8 pad_2C[0x28];
+    f32 half;
+    u8 pad_58[0x70];
+    f32 angleScale;
+    u8 pad_CC[0x17C];
+    f64 percent;
+    f32 width;
+} BeamConstants;
+
+extern const f32 lbl_1_rodata_2950;
+
+static inline f32 beam_segment_length(BeamVec *a, BeamVec *b)
+{
+    f32 x = a->x - b->x;
+    f32 y = a->y - b->y;
+    f32 z = a->z - b->z;
+    f32 len = x * x;
+    len += y * y;
+    len += z * z;
+    return len;
+}
+
+#pragma opt_lifetimes off
+static inline f32 beam_orient(BeamEffect *effect, BeamVec *startArg, BeamVec *endArg, const BeamConstants *constants)
+{
+    f32 fzgx_value;
+    BeamVec mid;
+    BeamVec start;
+    BeamVec end;
+    s16 rotZ;
+    s16 rotX;
+    s16 rotY;
+    f32 len;
+    f32 dy;
+    f32 dz;
+    f32 dx;
+    f32 fzgx_live;
+    f32 sumZ;
+    f32 sumX;
+    f32 sumY;
+    f32 endY;
+    f32 startY;
+    f32 endZ;
+    f32 endX;
+    f32 startX;
+    f32 startZ;
+
+    end = *endArg;
+    start = *startArg;
+    lbl_8006DCA4();
+    fn_8006F3E4(&rotX, &rotY, &rotZ);
+    endX = end.x;
+    startX = start.x;
+    endY = end.y;
+    startY = start.y;
+    endZ = end.z;
+    startZ = start.z;
+    sumX = endX;
+    sumX += startX;
+    fzgx_live = endX - startX;
+    dy = endY - startY;
+    dz = endZ - startZ;
+    startY = endY + startY;
+    sumZ = endZ + startZ;
+    len = fzgx_live * fzgx_live;
+    len += dy * dy;
+    len += dz * dz;
+    fzgx_live = constants->half;
+    fzgx_value = fzgx_live * sumX;
+    mid.x = fzgx_value;
+    mid.y = fzgx_live * startY;
+    mid.z = fzgx_live * sumZ;
+    len = lbl_8006D0B4(len);
+    lbl_8006D9D8((void *)&mid);
+    mathutil_mtxA_rotate_y((s16)-rotX);
+    mathutil_mtxA_rotate_z((s16)((s32)(constants->angleScale * effect->angle) - 0x1000));
+    return len;
+}
+
+static inline void *beam_model(EffectData *data, const char *name)
+{
+    void **res = fn_1_9CE1C(name, 1);
+    if (res == NULL) {
+        fn_1_A8E78(data->missing);
+    }
+    return *res;
+}
+
+#pragma opt_dead_assignments off
+#pragma opt_lifetimes off
+void fn_1_6028C(BeamEffect *effect)
+{
+    const BeamConstants *constants = (const BeamConstants *)&lbl_1_rodata_2950;
+    EffectData *data = (EffectData *)lbl_1_data_1C698;
+    BeamVec end;
+    BeamVec start;
+    BeamVec delta;
+    const char *name;
+    void *model;
+    f32 scale;
+    f32 alpha;
+
+    end = effect->end;
+    start = effect->start;
+    end.x = start.x;
+    end.z = start.z;
+    beam_vec_sub(&delta, &start, &end);
+    beam_vec_length(&delta);
+
+    if (effect->timer > 0) {
+        if (!(effect->timer & 1)) {
+            u32 seed = data->seed * 1103515245 + 12345;
+            data->seed = seed;
+            effect->variant = (s32)((seed >> 16) & 0x7FFF) % 4;
+        }
+        switch (effect->variant) {
+        case 0:
+            name = data->beamNames[0];
+            break;
+        case 1:
+            name = data->beamNames[1];
+            break;
+        case 2:
+            name = data->beamNames[2];
+            break;
+        default:
+            name = data->beamNames[3];
+            break;
+        }
+    } else {
+        switch (effect->variant) {
+        case 0:
+            name = data->beamNames[0];
+            break;
+        case 1:
+            name = data->beamNames[1];
+            break;
+        case 2:
+            name = data->beamNames[2];
+            break;
+        default:
+            name = data->beamNames[3];
+            break;
+        }
+    }
+    model = beam_model(data, name);
+    fn_80073778(*(void **)((u8 *)model + 0x24), 0);
+    scale = beam_orient(effect, &start, &end, constants);
+    fn_1_56000(1, 3, 0);
+    scale = constants->percent * (constants->width * (effect->scale * scale));
+    lbl_8006E14C(scale);
+    fn_1_55FC4(scale);
+    fn_80072558();
+    alpha = constants->half * effect->alpha;
+    if (alpha > constants->one) {
+        fn_1_55FF0(constants->one);
+    } else {
+        fn_1_55FF0(alpha);
+    }
+    fn_1_55210(model);
+    fn_1_56000(1, 3, 1);
+
+    name = data->glow;
+    if (effect->alt != 0) {
+        name = data->glowAlt;
+    }
+    model = beam_model(data, name);
+    fn_80073778(*(void **)((u8 *)model + 0x24), 0);
+    beam_orient(effect, &start, &end, constants);
+    fn_1_56000(1, 3, 0);
+    lbl_8006E14C(effect->scale);
+    fn_1_55FC4(effect->scale);
+    fn_80072558();
+    alpha = constants->half * effect->alpha;
+    if (alpha > constants->one) {
+        fn_1_55FF0(constants->one);
+    } else {
+        fn_1_55FF0(alpha);
+    }
+    fn_1_55210(model);
+    fn_1_56000(1, 3, 1);
+}
+#pragma opt_dead_assignments reset
+/* fzgx:end fn_1_6028C */
+
 /* fzgx:begin fn_1_60734 */
 typedef struct Fn60734 {
     u8 pad_00[0x0e];
