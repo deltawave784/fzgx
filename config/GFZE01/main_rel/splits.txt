@@ -8882,3 +8882,6 @@ rel/main_rel/burner/fn_1_9A0A8.c:
 
 rel/main_rel/spline/fn_1_F5D94.c:
 	.text       start:0x000F5D94 end:0x000F65A0 align:4
+
+rel/main_rel/replay/fn_1_F4810.c:
+	.text       start:0x000F4810 end:0x000F4E3C align:4
