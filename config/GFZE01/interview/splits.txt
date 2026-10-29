@@ -200,3 +200,6 @@ rel/interview/interview/fn_17_9314.c:
 
 rel/interview/interview/fn_17_8B44.c:
 	.text       start:0x00008B44 end:0x00008C7C align:4
+
+rel/interview/interview/fn_17_8870.c:
+	.text       start:0x00008870 end:0x00008B44 align:4
