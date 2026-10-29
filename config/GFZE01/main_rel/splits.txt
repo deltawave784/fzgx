@@ -8918,3 +8918,6 @@ rel/main_rel/stcoli/fn_1_1FDB0.c:
 
 rel/main_rel/sel_static_disp/fn_1_141A80.c:
 	.text       start:0x00141A80 end:0x00141C10 align:4
+
+rel/main_rel/effect_car/fn_1_68284.c:
+	.text       start:0x00068284 end:0x00068B68 align:4
