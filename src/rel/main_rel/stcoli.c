@@ -3033,6 +3033,128 @@ void fn_1_216C0(void *arg0, void *arg1, void *arg2) {
 }
 /* fzgx:end fn_1_216C0 */
 
+/* fzgx:begin fn_1_216F0 noprologue */
+#include "types.h"
+#include "rel/main_rel/stcoli.h"
+
+typedef struct {
+    f32 x;
+    f32 y;
+    f32 z;
+} ColiVec3;
+
+/* one 0x50-byte checkpoint plane pair */
+typedef struct {
+    u8 pad_0[0x8];
+    f32 d0;
+    f32 n0x;
+    f32 n0y;
+    f32 n0z;
+    u8 pad_18[0x8];
+    f32 zmin;
+    f32 d1;
+    f32 n1x;
+    f32 n1y;
+    f32 n1z;
+    u8 pad_34[0x8];
+    f32 zmax;
+    u8 pad_40[0x10];
+} ColiCheckpoint;
+
+typedef struct {
+    u32 unk_0;
+    ColiCheckpoint *entries;
+    u32 unk_8;
+} ColiCheckpointList;
+
+extern s16 fn_1_7B054(void);
+extern const f32 lbl_1_rodata_6C8[];
+
+#pragma opt_propagation off
+#pragma opt_lifetimes off
+s32 fn_1_216F0(ColiVec3 *pos, s32 idx, s32 lane) {
+    const f32 *pool = lbl_1_rodata_6C8;
+    f32 eps;
+    s32 count;
+    ColiCheckpointList *lists;
+    ColiCheckpoint *cp;
+    s32 in1;
+    s32 in0;
+    s32 flag;
+    f32 a;
+    f32 z;
+    f32 b;
+    f32 y;
+    f32 x;
+    f32 dot1;
+    f32 dot0;
+
+    if (fn_1_7B054() == 25) {
+        eps = pool[10];
+    } else {
+        eps = pool[11];
+    }
+
+    if (lbl_1_bss_3BE0 == NULL) {
+        return -1;
+    }
+    count = (s32)lbl_1_bss_3BE0->unk_8;
+    if (count == 0) {
+        return -1;
+    }
+    if (idx < 0 || count <= idx) {
+        idx = 0;
+    }
+    lists = (ColiCheckpointList *)lbl_1_bss_3BE0->unk_C;
+    cp = &lists[idx].entries[lane];
+    flag = lbl_1_bss_3BE0->unk_7D;
+
+    x = pos->x;
+    y = pos->y;
+    z = pos->z;
+    dot0 = x * cp->n0x;
+    dot1 = cp->n1x;
+    dot1 = x * dot1;
+    x = cp->n1y;
+    dot0 += y * cp->n0y;
+    dot1 += y * x;
+    y = cp->n1z;
+    dot0 += z * cp->n0z;
+    dot1 += z * y;
+    a = cp->d0 + dot0;
+    b = cp->d1 + dot1;
+
+    if (idx == 0) {
+        in0 = -eps <= b;
+        in1 = z < pool[2];
+        if (flag != 0) {
+            in1 = 1;
+        }
+    } else if (idx == count - 1) {
+        in0 = z >= pool[2];
+        in1 = -eps <= a;
+        if (flag != 0) {
+            if (fn_1_7B054() != 41) {
+                in0 = 1;
+            }
+        }
+    } else {
+        in0 = -eps <= b;
+        in1 = -eps <= a;
+    }
+
+    if (!(in1 && in0)) {
+        if (fn_1_7B054() == 7 && idx >= 32 && idx <= 43) {
+            if (cp->zmin - pool[62] <= pos->z && pos->z <= cp->zmax + eps) {
+                return idx;
+            }
+        }
+        return -1;
+    }
+    return idx;
+}
+/* fzgx:end fn_1_216F0 */
+
 /* fzgx:begin fn_1_2192C */
 void fn_1_2192C(void *self, void *arg) {
     fn_1_18214(self, arg, 0);
