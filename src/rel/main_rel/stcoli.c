@@ -2476,6 +2476,81 @@ u32 fn_1_1FC98(Vec3f *arg0, u32 arg1) {
 #pragma opt_loop_invariants reset
 /* fzgx:end fn_1_1FC98 */
 
+/* fzgx:begin fn_1_1FDB0 noprologue */
+#include "types.h"
+#include "psvec.h"
+
+struct fn_1_1FDB0_Arg0 { u8 pad_0[8]; f32 unk_8; };
+struct fn_1_1FDB0_Arg1 { u32 unk_0; u32 unk_4; u32 unk_8; };
+struct fn_1_1FDB0_Arg2 { u8 pad_0[8]; f32 unk_8; };
+struct fn_1_1FDB0_Arg3 { u32 unk_0; u32 unk_4; u32 unk_8; };
+struct Vec { f32 x,y,z; };
+struct Scratch { u8 pad[0xd4]; struct Vec v; };
+extern struct Scratch *lbl_801A66CC;
+extern const f32 lbl_1_rodata_6D0;
+extern f32 lbl_1_rodata_6D4[5];
+extern f32 lbl_8006D0B4(f32);
+static inline f32 fn_1_1FDB0_squared_length(f32 x, f32 y, f32 z) {
+ struct { f32 value; } result;
+ result.value = x*x;
+ result.value += y*y;
+ result.value += z*z;
+ return result.value;
+}
+static inline BOOL fn_1_1FDB0_finite(f32 v) {
+ return (*(u32 *)&v & 0x7f800000) != 0x7f800000;
+}
+static inline void fn_1_1FDB0_projection(f32 x, f32 y, f32 z, struct Vec *a, f32 *ax_out, f32 *ay_out, f32 *norm_out, f32 *dot_out) {
+ struct { f32 value; } norm, dot;
+ f32 ax, ay;
+ ax = *(volatile f32 *)&a->x;  /* fzgx-allow: S2 volatile view keeps the verified load order */
+ dot.value = x*ax;
+ norm.value = x*x;
+ norm.value += y*y;
+ norm.value += z*z;
+ ay = a->y;
+ dot.value += y*ay;
+ dot.value += z*a->z;
+ *ax_out = ax;
+ *ay_out = ay;
+ *norm_out = norm.value;
+ *dot_out = dot.value;
+}
+#pragma opt_common_subs on
+#pragma opt_propagation on
+#pragma opt_lifetimes off
+f32 fn_1_1FDB0(struct fn_1_1FDB0_Arg0 *arg0, struct fn_1_1FDB0_Arg1 *arg1, struct fn_1_1FDB0_Arg2 *arg2, struct fn_1_1FDB0_Arg3 *arg3) {
+ f32 t, norm, dot, ax, ay;
+ struct Vec d, a, b;
+ f32 l, m;
+ psvec_sub(arg2,arg1,&d);
+ psvec_sub(arg1,arg0,&a);
+ fn_1_1FDB0_projection(d.x,d.y,d.z,&a,&ax,&ay,&norm,&dot);
+ t = -dot / norm;
+ if (!fn_1_1FDB0_finite(t)) {
+  *arg3 = *(struct fn_1_1FDB0_Arg3 *)arg1;
+  return lbl_8006D0B4(fn_1_1FDB0_squared_length(ax,ay,a.z));
+ }
+ if (lbl_1_rodata_6D0 <= t && t <= lbl_1_rodata_6D4[0]) {
+  psvec_scale(&d,t,&lbl_801A66CC->v);
+  psvec_add(&a,&lbl_801A66CC->v,&a);
+  psvec_add(arg1,&lbl_801A66CC->v,arg3);
+  return lbl_8006D0B4(fn_1_1FDB0_squared_length(a.x,a.y,a.z));
+ }
+ psvec_sub(arg2,arg0,&b);
+ l=fn_1_1FDB0_squared_length(a.x,a.y,a.z);
+ m=fn_1_1FDB0_squared_length(b.x,b.y,b.z);
+ if (l<m) {
+  *arg3=*(struct fn_1_1FDB0_Arg3 *)arg1;
+  return lbl_8006D0B4(l);
+ }
+ *arg3=*(struct fn_1_1FDB0_Arg3 *)arg2;
+ return lbl_8006D0B4(m);
+}
+#pragma opt_propagation reset
+#pragma opt_common_subs reset
+/* fzgx:end fn_1_1FDB0 */
+
 /* fzgx:begin fn_1_1FFA0 noprologue */
 #include "types.h"
 #include "psvec.h"

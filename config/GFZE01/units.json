@@ -68442,6 +68442,17 @@
   },
   {
     "module": "main_rel",
+    "source": "rel/main_rel/stcoli/fn_1_1FDB0.c",
+    "symbols": [
+      "fn_1_1FDB0"
+    ],
+    "status": "matching",
+    "mw_version": "GC/1.3.2",
+    "extra_cflags": [],
+    "tu": "rel/main_rel/stcoli.c"
+  },
+  {
+    "module": "main_rel",
     "source": "rel/main_rel/stcoli/fn_1_1FFA0.c",
     "symbols": [
       "fn_1_1FFA0"
