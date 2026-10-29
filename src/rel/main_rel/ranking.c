@@ -442,10 +442,7 @@ void fn_1_155FA8(u32 value) {
 }
 /* fzgx:end fn_1_155FA8 */
 
-/* fzgx:begin fn_1_155FB4 pool noprologue */
-#include "types.h"
-#include "rel/main_rel/globals.h"
-
+/* fzgx:begin fn_1_155FB4 pool */
 extern void fn_1_3EF14(void *);
 extern char *strncpy(char *, const char *, size_t);
 
@@ -470,11 +467,11 @@ typedef struct {
 
 // Retail lays these out one after another in ranking.c's .bss and addresses
 // them off one section base register.
-RankState lbl_1_bss_8EF20;
+RankState fzgx_obj_lbl_1_bss_8EF20;
 RankEntry lbl_1_bss_8EF68[10];
 u8 fzgx_obj_gap_8F198[0x248];
 u32 lbl_1_bss_8F3E0;
-u32 lbl_1_bss_8F3E4;
+u32 fzgx_obj_lbl_1_bss_8F3E4;
 char lbl_1_bss_8F3E8[0x11];
 
 typedef struct {
@@ -494,13 +491,14 @@ typedef struct {
 
 #pragma section code_type ".fzgxpool"
 __declspec(section ".fzgxpool") void fzgx_primer(void) {
-    fn_1_3EF14(&lbl_1_bss_8EF20);
+    fn_1_3EF14(&fzgx_obj_lbl_1_bss_8EF20);
     fn_1_3EF14(lbl_1_bss_8EF68);
     fn_1_3EF14(fzgx_obj_gap_8F198);
     fn_1_3EF14(&lbl_1_bss_8F3E0);
-    fn_1_3EF14(&lbl_1_bss_8F3E4);
+    fn_1_3EF14(&fzgx_obj_lbl_1_bss_8F3E4);
     fn_1_3EF14(lbl_1_bss_8F3E8);
 }
+#pragma section code_type ".text"
 
 void fn_1_155FB4(const char *name) {
     RankEntry *entries;
@@ -513,7 +511,7 @@ void fn_1_155FB4(const char *name) {
     lbl_1_bss_8F3E8[0x10] = 0;
     fn_1_3EF14(qp);
     if (qp->flags & 0x1000) {
-        entries = lbl_1_bss_8EF20.entries;
+        entries = fzgx_obj_lbl_1_bss_8EF20.entries;
         for (i = 9; i >= 0; i--) {
             e = &entries[i];
             if (qp->id == e->id && qp->unk_145C == e->unk_18 && qp->unk_145E == e->unk_1A &&
