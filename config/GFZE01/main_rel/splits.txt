@@ -8861,3 +8861,6 @@ rel/main_rel/ghost/fn_1_F0168.c:
 
 rel/main_rel/accessory/fn_1_1250D0.c:
 	.text       start:0x001250D0 end:0x001256EC align:4
+
+rel/main_rel/sel_static_disp/fn_1_1507C4.c:
+	.text       start:0x001507C4 end:0x00150C8C align:4
