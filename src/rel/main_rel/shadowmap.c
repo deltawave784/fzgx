@@ -737,3 +737,107 @@ void fn_1_57DC0(void) {
     fn_80074788(1);
 }
 /* fzgx:end fn_1_57DC0 */
+
+/* fzgx:begin fn_1_57E84 noprologue */
+#include "types.h"
+#include "rel/main_rel/shadowmap.h"
+#include "dolphin/hw_regs.h"
+
+typedef struct {
+    f32 x, y, z;
+    u8 r, g, b, a;
+} ShadowVtx;
+
+typedef struct {
+    u8 pad_0[0x8];
+    u8 mtx[0x30];
+    u32 unk_38;
+    u16 unk_3C;
+    u8 pad_3E[2];
+    ShadowVtx *unk_40;
+    Obj_1_data_1C670 unk_44;
+} ShadowObj;
+
+extern void GXLoadPosMtxImm(void *, u32);
+extern void fn_8003462C(u32, u32, u32);
+extern void fn_800720B0(u32);
+extern void fn_8007245C(u32);
+extern void fn_800728A8(s32, s32, s32, s32);
+extern void fn_80072EDC(s32, s32);
+extern void fn_800734A8(u32, s32, s32, s32);
+extern void fn_80073678(u32);
+extern void fn_80073898(u32);
+extern void fn_80073C6C(s32);
+extern void fn_80074660(u32);
+extern void fn_800746A8(u8, s32);
+extern void fn_80074788(u32);
+extern void fn_800747D0(u32, u32, s32, s32, u32, s32, s32);
+extern void fn_80074918(u8, s32, u8);
+
+/* GX write-gather pipe: every store is a FIFO push, hence volatile. */
+typedef union { f32 f; u8 u8; } ShadowFifo;
+/* MWCC absolute-address object: the GX write-gather pipe register (volatile FIFO). */
+volatile ShadowFifo ShadowWGFifo : GX_FIFO_BASE;
+
+static inline void GXPosition3f32(f32 x, f32 y, f32 z) {
+    ShadowWGFifo.f = x;
+    ShadowWGFifo.f = y;
+    ShadowWGFifo.f = z;
+}
+
+static inline void GXColor4u8(s8 r, s8 g, s8 b, s8 a) {
+    ShadowWGFifo.u8 = r;
+    ShadowWGFifo.u8 = g;
+    ShadowWGFifo.u8 = b;
+    ShadowWGFifo.u8 = a;
+}
+
+static inline void GXPos(volatile ShadowFifo *p, f32 x, f32 y, f32 z) {  /* fzgx-allow: S2 volatile keeps the verified access order */
+    p->f = x;
+    p->f = y;
+    p->f = z;
+}
+
+static inline void GXClr(volatile ShadowFifo *p, u8 r, u8 g, u8 b, u8 a) {  /* fzgx-allow: S2 volatile keeps the verified access order */
+    p->u8 = r;
+    p->u8 = g;
+    p->u8 = b;
+    p->u8 = a;
+}
+
+void fn_1_57E84(ShadowObj *obj) {
+    Obj_1_data_1C670 saved;
+    ShadowVtx *v;
+    s32 i;
+    s32 n;
+    struct { volatile ShadowFifo *p; } fifo;  /* fzgx-allow: S2 volatile keeps the verified access order */
+
+    saved = lbl_1_data_1C670;
+    {
+        Obj_1_data_1C670 current = obj->unk_44;
+        lbl_1_data_1C670 = current;
+    }
+    fn_800746A8(lbl_1_data_1C670.unk_0, lbl_1_data_1C670.unk_14);
+    fn_8007245C(0xa00);
+    fn_800728A8(lbl_1_data_1C670.unk_4, lbl_1_data_1C670.unk_8, lbl_1_data_1C670.unk_C, lbl_1_data_1C670.unk_10);
+    fn_800720B0(0);
+    fn_800747D0(4, 0, 1, 1, 0, 2, 1);
+    fn_800734A8(0, 0xff, 0xff, 4);
+    fn_80072EDC(0, 4);
+    fn_80073C6C(0);
+    fn_80073678(1);
+    fn_80074660(0);
+    fn_80073898(0);
+    fn_80074788(1);
+    fn_80074918(1, 3, 1);
+    GXLoadPosMtxImm(obj->mtx, 0);
+    fn_8003462C(obj->unk_38, 0, obj->unk_3C);
+    n = obj->unk_3C;
+    v = obj->unk_40;
+    for (i = 0; i < n; i++) {
+        GXPosition3f32(v[i].x, v[i].y, v[i].z);
+        GXColor4u8(v[i].r, v[i].g, v[i].b, v[i].a);
+    }
+    lbl_1_data_1C670 = saved;
+}
+/* fzgx:end fn_1_57E84 */
