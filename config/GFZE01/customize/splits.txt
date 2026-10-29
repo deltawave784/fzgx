@@ -731,3 +731,6 @@ rel/customize/toolkit/fn_3_1C8D0.c:
 
 rel/customize/toolkit/fn_3_286BC.c:
 	.text       start:0x000286BC end:0x00028EBC align:4
+
+rel/customize/_prolog/_epilog.c:
+	.text       start:0x00000944 end:0x00000AF8 align:4
