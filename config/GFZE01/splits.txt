@@ -6404,3 +6404,15 @@ dol/fn_80055304.c:
 
 dol/fn_80054B6C.c:
 	.text       start:0x80054B6C end:0x800551D0 align:4
+
+dol/fn_8008ECE0.c:
+	.text       start:0x8008ECE0 end:0x8008ED30 align:4
+
+dol/fn_8008EED8.c:
+	.text       start:0x8008EED8 end:0x8008EFE0 align:4
+
+dol/fn_8005C7C0.c:
+	.text       start:0x8005C7C0 end:0x8005C9D8 align:4
+
+dol/fn_80022BF4.c:
+	.text       start:0x80022BF4 end:0x80022E5C align:4
