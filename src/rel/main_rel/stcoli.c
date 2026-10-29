@@ -338,6 +338,189 @@ s32 fn_1_14F18(fn_1_14F18_Vec *pos, void *arg1, fn_1_14F18_Vec *dir, f32 *outT,
 }
 /* fzgx:end fn_1_14F18 */
 
+/* fzgx:begin fn_1_15248 noprologue */
+#include "types.h"
+#include "psvec.h"
+#include "game/main_rel/car_test_types.h"
+
+#pragma section code_type ".fzgxpool"
+__declspec(section ".fzgxpool") static void fzgx_pool_prime1(void) {
+    volatile float s; volatile double d;  /* fzgx-allow: S2 pool primer sinks */
+    d = 4503601774854144.0;
+    s = 0.0f;
+    s = 1.0f;
+    s = -5.0f;
+    s = 10.0f;
+    s = -1.0f;
+    s = 2.0f;
+    s = 0.5f;
+    s = 2.5f;
+    s = 1.7f;
+    s = 0.001f;
+    s = 182.04445f;
+    s = -0.5f;
+}
+#pragma section code_type ".text"
+
+typedef struct {
+    u8 pad_0[0x4];
+    Fn183D28Vec3 normal;
+    Fn183D28Vec3 verts[1];
+} fn_1_15248_Poly;
+
+typedef struct {
+    u8 pad_0[0xd4];
+    Fn183D28Vec3 delta;
+} fn_1_15248_Work;
+
+extern f32 fn_1_1FFA0(void *, void *, void *, void *, void *, void *);
+extern f32 lbl_8006D668(void *);
+/* reloaded on every access in retail, including after the paired-single stores */
+extern fn_1_15248_Work *volatile lbl_801A66CC;
+extern void lbl_8006DF44(void);
+extern f32 (*lbl_801A6D00)[4];
+
+#pragma opt_lifetimes off
+static inline void fn_1_15248_cross(Fn183D28Vec3 *a, Fn183D28Vec3 *b, Fn183D28Vec3 *out)
+{
+    f32 x, y, z;
+    x = a->y * b->z;
+    x -= a->z * b->y;
+    y = a->z * b->x;
+    y -= a->x * b->z;
+    z = a->x * b->y;
+    z -= a->y * b->x;
+    out->x = x;
+    out->y = y;
+    out->z = z;
+}
+static inline f32 fn_1_15248_dot(Fn183D28Vec3 *a, Fn183D28Vec3 *b)
+{
+    f32 d;
+    f32 y, z;
+    /* Snapshot the shared scratch components before accumulating. */
+    y = *(volatile f32 *)&a->y;
+    z = *(volatile f32 *)&a->z;  /* fzgx-allow: S2 volatile view keeps the verified load order */
+    d = a->x * b->x;
+    d = y * b->y + d;
+    d = z * b->z + d;
+    return d;
+}
+
+s32 fn_1_15248(Fn183D28Vec3 *pos, Fn183D28Vec3 *arg1, fn_1_15248_Poly *poly, s32 n, f32 radius)
+{
+    Fn183D28Vec3 local[4];
+    Fn183D28Vec3 edge;
+    Fn183D28Vec3 side;
+    Fn183D28Vec3 origin;
+    Fn183D28Vec3 point;
+    Fn183D28Vec3 out0;
+    Fn183D28Vec3 out1;
+    s32 count;
+    Fn183D28Vec3 *nrm;
+    s32 j;
+    s32 i;
+    Fn183D28Vec3 *verts;
+    s32 found;
+    f32 (*mtx)[4];
+    s32 next;
+    f32 hi;
+    f32 lo;
+    f32 y;
+    f32 zero;
+    f32 rr;
+
+    if (n > 4) {
+        return 0;
+    }
+
+    psvec_sub(&poly->verts[1], &poly->verts[0], &edge);
+    fn_1_15248_cross(&edge, &poly->normal, &side);
+    {
+        f32 z, y, x;
+        x = poly->normal.y * side.z;
+        x -= poly->normal.z * side.y;
+        y = poly->normal.z * side.x;
+        y -= poly->normal.x * side.z;
+        z = poly->normal.x * side.y;
+        z -= poly->normal.y * side.x;
+        edge.x = x;
+        edge.y = y;
+        edge.z = z;
+    }
+    lbl_8006D668(&edge);
+    lbl_8006D668(&side);
+
+    mtx = lbl_801A6D00;
+    mtx[0][0] = edge.x;
+    mtx[0][1] = poly->normal.x;
+    mtx[0][2] = side.x;
+    mtx[0][3] = pos->x;
+    mtx[1][0] = edge.y;
+    mtx[1][1] = poly->normal.y;
+    mtx[1][2] = side.y;
+    mtx[1][3] = pos->y;
+    mtx[2][0] = edge.z;
+    mtx[2][1] = poly->normal.z;
+    mtx[2][2] = side.z;
+    mtx[2][3] = pos->z;
+    lbl_8006DF44();
+
+    lo = -5.0f;
+    hi = 10.0f;
+    verts = poly->verts;
+    found = 0;
+    for (i = 0; i < n; i++, verts++) {
+        lbl_8006E1B0(verts, &local[i]);
+        y = -local[i].y;
+        if (lo <= y && y <= hi) {
+            found = 1;
+        }
+    }
+    if (found == 0) {
+        return 0;
+    }
+
+    verts = poly->verts;
+    nrm = &verts[n];
+    zero = 0.0f;
+    count = 0;
+    for (i = 0; i < n; i++, verts++, nrm++) {
+        Fn183D28Vec3 *delta;
+        f32 d;
+        psvec_sub(pos, verts, &lbl_801A66CC->delta);
+        delta = &lbl_801A66CC->delta;
+        d = fn_1_15248_dot(delta, nrm);
+        if (d < zero) {
+            break;
+        }
+        count++;
+    }
+    if (count == n) {
+        return 1;
+    }
+
+    zero = 0.0f;
+    origin.x = zero;
+    origin.y = zero;
+    origin.z = zero;
+    lbl_8006E1B0(arg1, &point);
+    zero = 0.0f;
+    rr = radius * radius;
+    point.y = zero;
+    local[0].y = zero;
+    for (j = 0; j < n; j++) {
+        next = (j == n - 1) ? 0 : j + 1;
+        local[next].y = zero;
+        if (fn_1_1FFA0(&origin, &point, &local[j], &local[next], &out0, &out1) < rr) {
+            return 1;
+        }
+    }
+    return 0;
+}
+#pragma opt_lifetimes reset
+/* fzgx:end fn_1_15248 */
+
 /* fzgx:begin fn_1_16BA0 noprologue */
 #include "types.h"
 #include "game/vec3.h"

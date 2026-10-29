@@ -8867,3 +8867,6 @@ rel/main_rel/sel_static_disp/fn_1_1507C4.c:
 
 rel/main_rel/accessory/fn_1_122348.c:
 	.text       start:0x00122348 end:0x0012277C align:4
+
+rel/main_rel/stcoli/fn_1_15248.c:
+	.text       start:0x00015248 end:0x00015578 align:4
