@@ -19588,7 +19588,7 @@
     "oracle_sha256": "4f4280db582bf286fb3450f07c85f2c43af7834bf9de20637f91f182b8b72072",
     "recipe": [],
     "link": "verified",
-    "commit": "a362c9357"
+    "commit": "a379a0095"
   },
   "fn_17_8870": {
     "seed_symbol": "fn_17_8870",
@@ -19605,6 +19605,7 @@
     "headers_sha256": "b30ce45496c4d89267c6d34178bfde5f7727a5577e4f124cd864a5f715517474",
     "oracle_sha256": "4f4280db582bf286fb3450f07c85f2c43af7834bf9de20637f91f182b8b72072",
     "recipe": [],
-    "link": "pending"
+    "link": "verified",
+    "commit": "a379a0095"
   }
 }
