@@ -44008,6 +44008,23 @@
   },
   {
     "module": "main_rel",
+    "source": "rel/main_rel/car_test/fn_1_7ECB8.c",
+    "symbols": [
+      "fn_1_7ECB8"
+    ],
+    "status": "matching",
+    "mw_version": "GC/1.3.2",
+    "extra_cflags": [],
+    "tu": "rel/main_rel/car_test.c",
+    "pool": {
+      "...rodata.0": "lbl_1_rodata_3508",
+      "@23": "lbl_1_rodata_3530+0x18",
+      "@153": "lbl_1_rodata_3530+0x48",
+      "@156": "lbl_1_rodata_3530+0x50"
+    }
+  },
+  {
+    "module": "main_rel",
     "source": "rel/main_rel/car_test/fn_1_7F1E8.c",
     "symbols": [
       "fn_1_7F1E8"
@@ -69402,6 +69419,32 @@
     "tu": "rel/main_rel/stcoli.c",
     "pool": {
       "@46": "lbl_1_rodata_84C"
+    }
+  },
+  {
+    "module": "main_rel",
+    "source": "rel/main_rel/stcoli/fn_1_2ABD4.c",
+    "symbols": [
+      "fn_1_2ABD4"
+    ],
+    "status": "matching",
+    "mw_version": "GC/1.3.2",
+    "extra_cflags": [],
+    "tu": "rel/main_rel/stcoli.c",
+    "pool": {
+      "...rodata.0": "lbl_1_rodata_840",
+      "@31": "lbl_1_rodata_860",
+      "@257": "lbl_1_rodata_954+0x1F4",
+      "@29": "lbl_1_rodata_854+0x4",
+      "@30": "lbl_1_rodata_85C",
+      "@71": "lbl_1_rodata_860+0x58",
+      "@182": "lbl_1_rodata_954+0xE4",
+      "@26": "lbl_1_rodata_84C",
+      "@28": "lbl_1_rodata_854",
+      "@209": "lbl_1_rodata_954+0x150",
+      "@270": "lbl_1_rodata_B74+0xC",
+      "@248": "lbl_1_rodata_954+0x1C8",
+      "@229": "lbl_1_rodata_954+0x190"
     }
   },
   {
