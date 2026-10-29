@@ -1046,7 +1046,11 @@ def region_inline_helpers(body: str, name: str) -> List[Tuple[str, str]]:
             if built is None:
                 continue
             for label, text in built:
-                out.append((f"{a_}/{b_}: statements {start - first}..{end - first} inlined{label}", text))
+                # a region past MWCC's default inline_max_size stays a call (16 of 109 region
+                # candidates over the 80%+ saved bodies, 2026-10-28) unless the caller carries the pragma
+                sized = inline_size_pragmas(text, name)
+                out.append((f"{a_}/{b_}: statements {start - first}..{end - first} inlined{label}",
+                            sized[0][1] if sized else text))
             break
     return out
 
@@ -1617,6 +1621,28 @@ def rewrites(body: str, name: str) -> List[Tuple[str, str]]:
         except Exception:
             continue
     return out
+
+
+_INLINE_DEF = re.compile(r'^[ \t]*(?:static\s+)?inline\b[^;{=]*?\b([A-Za-z_]\w*)\s*\([^;{]*\)\s*\{', re.M)
+
+
+def inline_size_pragmas(body: str, name: str) -> List[Tuple[str, str]]:
+    """`#pragma inline_max_size(4096)` on the line before the function when the body defines an
+    `inline` helper ahead of it. `-inline auto` leaves a helper above MWCC's default size limit out
+    of line (40 one-line statements inline, 48 do not; `-inline on`, `inline_depth` do not help),
+    and the pragma state in effect at the caller's definition decides, not the one at the helper's
+    (GC/1.3.2 probes 2026-10-28: fn_1_D523C's whole-body wrapper 4.4% as a call, 97.2% inlined).
+    Without a helper the pragma leaves the code byte-identical. Applied to every region helper
+    (`region_inline_helpers`); saved matcher bodies had no helper left out of line (2,114 checked)."""
+    span = _function_body_span(body, name)
+    if not span or re.search(r'#pragma\s+inline_max_size', body):
+        return []
+    helpers = [m.group(1) for m in _INLINE_DEF.finditer(body, 0, span[0]) if m.group(1) != name]
+    if not helpers:
+        return []
+    line = body.rfind('\n', 0, span[0]) + 1
+    return [(f"inline_max_size(4096) before {name} (inline helper {helpers[0]})",
+             body[:line] + "#pragma inline_max_size(4096)\n" + body[line:])]
 
 
 def primer_sections(body: str, name: str) -> List[Tuple[str, str]]:

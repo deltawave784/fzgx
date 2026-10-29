@@ -13,6 +13,16 @@ file from what actually unblocked functions; keep each item one or two lines.
   the indexed `psq_lx` forms from C, so scalar or `__vec2x32float__` code can never match.
   Pass loads straight as `psvec_set` arguments; loading them into locals first changes
   the registers.
+- **Large inline helpers** (GC/1.3.2 probes, 2026-10-28): `-inline auto` inlines a `static inline` helper
+  only up to MWCC's default `inline_max_size` (a helper of 40 one-line `if (a > k) ext(a + k);` inlines,
+  48 is called). `-inline on/deferred/all` and `#pragma inline_depth` do not lift the limit. What does is
+  `#pragma inline_max_size(4096)` (or `#pragma always_inline on`) **in effect at the caller's definition**:
+  the pragma state at the call site decides, so a pragma placed before the helper and switched off before
+  the caller leaves the call (that is why batch 287's wrappers stayed calls). Put it on the line before
+  `void FN(...)`; with no helper in the unit it changes nothing (fn_1_D523C byte-identical). Measured:
+  fn_1_D523C whole-body wrapper 4.4% (call) -> 97.2% inlined; fn_17_1798 2.0% -> 97.35% (identical to the
+  plain body). Inlining a whole body only renumbers its locals as `@` temporaries; it does not by itself
+  turn `beq exit` into retail's `bne next; b exit`.
 - **Fused multiply-add**: `a + b*c` in one expression gives `fmadds`; a product held in a
   temporary or wrapped in `(f32)` stays `fmuls` + `fadds`. Only the product that is a
   direct operand fuses: retail `fmuls; fnmsubs` for `x*y - z*w` is `(f32)(x*y) - z*w`;
@@ -593,7 +603,7 @@ rule was probed with real GC/1.3.2 compiles of saved bodies.
   `present = 0; mask = present;` in a helper give fn_1_C24A4's `li r4, 0; mr r5, r4; ori r0, r4, 1`. Inlined locals
   number in the opposite order to declared locals: the reversed declaration order is the first one to try. A
   whole-body helper does not work for large functions: MWCC's default `inline_max_size` leaves it out of line
-  (`#pragma inline_max_size(10000)` inlines it, but changes the whole function's allocation), so the helper should
+  (`#pragma inline_max_size(4096)` before the caller inlines it, but renumbers the whole function's locals), so the helper should
   span only the region of the pair. `fixup_source.region_inline_helpers` (family `inlineregion`, `decl` moves on
   `NAME_fzgx_region`) builds it: fn_1_C24A4 4 rows -> 1 (word score 99.47 -> 99.89), fn_4_A0C 95.8% -> 97.5%
   (97.85%, two scheduling rows, when `row` is a helper local too). Not this mechanism: a constant *argument*
