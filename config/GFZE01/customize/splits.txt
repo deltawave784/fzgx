@@ -740,3 +740,6 @@ rel/customize/toolkit/fn_3_1857C.c:
 
 rel/customize/_prolog/fn_3_7038.c:
 	.text       start:0x00007038 end:0x00007360 align:4
+
+rel/customize/toolkit/fn_3_28EBC.c:
+	.text       start:0x00028EBC end:0x00029508 align:4
