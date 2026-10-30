@@ -854,3 +854,6 @@ rel/sel/sel/fn_10_22330.c:
 
 rel/sel/sel/fn_10_15B20.c:
 	.text       start:0x00015B20 end:0x000160BC align:4
+
+rel/sel/sel/fn_10_22998.c:
+	.text       start:0x00022998 end:0x0002323C align:4
