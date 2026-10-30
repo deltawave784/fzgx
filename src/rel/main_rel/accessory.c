@@ -7158,6 +7158,165 @@ void fn_1_11B958(Work *arg0) {
 #pragma opt_common_subs reset
 /* fzgx:end fn_1_11B958 */
 
+/* fzgx:begin fn_1_11BFCC noprologue */
+#include "game/main_rel/accessory_types.h"
+#include "rel/main_rel/accessory.h"
+
+extern const struct fn_1_11BFCC_lbl_1_rodata_7B1C_pool {
+    f32 unk_0;
+} lbl_1_rodata_7B1C;
+
+extern const struct fn_1_11BFCC_lbl_1_rodata_7B20_pool {
+    f32 unk_0;
+} lbl_1_rodata_7B20;
+
+typedef struct Node11BFCC {
+    u8 flag;
+    u8 pad_1[0xF];
+    f32 unk_10;
+    f32 unk_14;
+    f32 unk_18;
+    u8 pad_1C[0x24];
+    f32 unk_40;
+} Node11BFCC;
+
+typedef struct Edge11BFCC {
+    Node11BFCC *a;
+    Node11BFCC *b;
+    f32 len;
+} Edge11BFCC;
+
+typedef struct Obj11BFCC {
+    u8 pad_0[0x18];
+    u32 count;
+    u32 edgeCount;
+    u8 pad_20[4];
+    Node11BFCC *nodes;
+    Edge11BFCC *edges;
+} Obj11BFCC;
+
+typedef struct Row11BFCC {
+    Node11BFCC n[8];
+} Row11BFCC;
+
+extern void fn_1_10846C(void *);
+extern void fn_1_128884(void *, void *, s32);
+extern void *fn_1_4630(u32, u32, const char *, s32);
+extern struct { u32 unk_0; } lbl_801A6410;
+void fn_1_11BFCC(Obj11BFCC *obj) {
+    struct { s32 v; } i1;
+    struct { Node11BFCC *v; } a1;
+    struct { u32 v; } g;
+    struct { Node11BFCC *v; } back;
+    struct { Node11BFCC *v; } front;
+    Row11BFCC tmp;
+    Node11BFCC *b1;
+    u32 i4;
+    u32 i2;
+    u32 j2;
+    Node11BFCC *b2;
+    Node11BFCC *a2;
+    u32 i;
+    u32 e;
+    Node11BFCC *row;
+    Node11BFCC *a;
+    u32 part_i;
+    Node11BFCC *scan;
+    Node11BFCC *src;
+    u32 copy_i;
+    Node11BFCC *dest;
+    Node11BFCC *a4;
+    u32 j1;
+
+    if (obj == NULL) {
+        return;
+    }
+    fn_1_10846C(obj);
+    i = 0;
+    a = obj->nodes;
+    for (; i < obj->count; i++, a++) {
+        if (a->flag & 1) {
+            a->unk_40 = lbl_1_rodata_7B1C.unk_0;
+            a->flag = 0;
+        } else {
+            a->unk_40 = lbl_1_rodata_7B20.unk_0;
+            a->flag = 1;
+        }
+    }
+
+    i = 0;
+    a = obj->nodes;
+    for (; i < obj->count; i++, a++) {
+        for (j1 = i + 1, b1 = &obj->nodes[i] + 1; j1 < obj->count; j1++, b1++) {
+            if (a->unk_10 > b1->unk_10) {
+                fn_1_128884(a, b1, sizeof(Node11BFCC));
+            }
+        }
+    }
+
+    row = obj->nodes;
+    for (g.v = 0; g.v < (obj->count >> 3); g.v++, row += 8) {
+        for (i2 = 0, a2 = row; i2 < 8; i2++, a2++) {
+            for (j2 = i2 + 1, b2 = a2 + 1; j2 < 8; j2++, b2++) {
+                if (a2->unk_14 < b2->unk_14) {
+                    fn_1_128884(a2, b2, sizeof(Node11BFCC));
+                }
+            }
+        }
+        front.v = tmp.n;
+        back.v = front.v;
+        *back.v = row[0];
+        scan = row + 1;
+        front.v = (back.v += 7) - 6;
+        for (part_i = 1; part_i < 8; part_i++, scan++) {
+            if (scan->unk_18 > lbl_1_rodata_7B20.unk_0) {
+                *front.v = *scan;
+                front.v++;
+            } else {
+                *back.v = *scan;
+                back.v--;
+            }
+        }
+        for (copy_i = 0, dest = row, src = tmp.n; copy_i < 8; copy_i++, src++, dest++) {
+            *dest = *src;
+            if (g.v == (obj->count >> 3) - 1) {
+                dest->unk_40 = lbl_1_rodata_7B20.unk_0;
+            } else {
+                dest->unk_40 = -(f32)g.v / (f32)((obj->count >> 3) - 1);
+            }
+        }
+    }
+
+    obj->edgeCount = 80;
+    obj->edges = fn_1_4630(lbl_801A6410.unk_0, obj->edgeCount * sizeof(Edge11BFCC), lbl_1_data_40530, 0x1f83);
+
+    e = 0;
+    row = obj->nodes;
+    for (g.v = 0; g.v < (obj->count >> 3) - 1; g.v++, row += 8) {
+        for (i4 = 0, a4 = row; i4 < 7; i4++, a4++) {
+            obj->edges[e].a = a4;
+            obj->edges[e].b = a4 + 1;
+            obj->edges[e].len = fn_1_1289BC((Point1024C4 *)a4, (Point1024C4 *)(a4 + 1));
+            e++;
+        }
+        obj->edges[e].a = &row[7];
+        obj->edges[e].b = &row[0];
+        obj->edges[e].len = fn_1_1289BC((Point1024C4 *)&row[7], (Point1024C4 *)&row[0]);
+        e++;
+    }
+
+    row = obj->nodes;
+    for (j1 = 0; j1 < (obj->count >> 3) - 1; j1++, row += 8) {
+        for (b2 = row, j2 = 0; j2 < 8; j2++, b2++) {
+            obj->edges[e].a = b2;
+            obj->edges[e].b = b2 + 8;
+            obj->edges[e].len = fn_1_1289BC((Point1024C4 *)b2, (Point1024C4 *)(b2 + 8));
+            e++;
+        }
+    }
+}
+/* fzgx:end fn_1_11BFCC */
+
 /* fzgx:begin fn_1_11C440 noprologue */
 typedef signed long s32;
 
