@@ -8945,3 +8945,6 @@ rel/main_rel/sel_static_disp/fn_1_14BD94.c:
 
 rel/main_rel/font/fn_1_4EDAC.c:
 	.text       start:0x0004EDAC end:0x0004F724 align:4
+
+rel/main_rel/effect/fn_1_654B0.c:
+	.text       start:0x000654B0 end:0x000656C8 align:4
