@@ -44791,6 +44791,197 @@ void fn_17_613C(void) {
 }
 /* fzgx:end fn_17_613C */
 
+/* fzgx:begin fn_17_65F4 pool */
+#include "rel/interview/interview.h"
+
+extern const f32 lbl_17_rodata_0[6];
+
+typedef struct InterviewPosition65F4 {
+    f32 x, y, z;
+} InterviewPosition65F4;
+
+typedef struct InterviewObject65F4 {
+    u8 pad_0[0xA0];
+    s16 angle;
+    u8 pad_A2[6];
+    InterviewPosition65F4 position;
+} InterviewObject65F4;
+
+typedef struct InterviewInfo65F4 {
+    u8 pad_0[6];
+    s16 limit;
+} InterviewInfo65F4;
+
+typedef struct InterviewState65F4 {
+    s32 frame;
+    u8 pad_4[8];
+    s16 mode;
+    u8 pad_E[6];
+    InterviewInfo65F4 *info;
+} InterviewState65F4;
+
+typedef struct Glob65F4 {
+    u8 pad_0[0x2C];
+    f32 f2c;
+    u8 pad_30[0x30];
+    InterviewState65F4 state;
+    u8 pad_78[0x60];
+    InterviewObject65F4 *obj;
+} Glob65F4;
+
+#pragma opt_propagation off
+/* file-scope objects of the retail TU, in retail order: MWCC addresses them off one section base */
+u8 fzgx_obj_lbl_17_bss_0;
+u8 fzgx_obj_lbl_17_bss_1;
+u8 lbl_17_bss_2;
+u8 lbl_17_bss_3;
+u32 lbl_17_bss_3_fill_4[2];
+u32 lbl_17_bss_C;
+u32 lbl_17_bss_10;
+u32 fzgx_obj_lbl_17_bss_14;
+u32 fzgx_obj_lbl_17_bss_18[2];
+u32 lbl_17_bss_20;
+u32 lbl_17_bss_24[2];
+f32 lbl_17_bss_24_8;
+u32 lbl_17_bss_24_fill_30;
+u32 lbl_17_bss_34[8];
+u32 fzgx_obj_lbl_17_bss_54;
+u32 fzgx_obj_lbl_17_bss_58[2];
+InterviewState65F4 fzgx_obj_lbl_17_bss_60;
+u32 lbl_17_bss_60_fill_78[23];
+u16 lbl_17_bss_60_fill_D4;
+u16 fzgx_obj_lbl_17_bss_D6;
+InterviewObject65F4 *fzgx_obj_lbl_17_bss_D8;
+u32 lbl_17_bss_D8_fill_DC[7];
+u16 lbl_17_bss_D8_fill_F8;
+
+#pragma section code_type ".fzgxpool"
+static const u32 fzgx_pool_table_0[6] = {
+    0x00000000,    0x00000000,    0x00000000,    0x00000000,
+    0x00000000,    0xC1200000
+};
+
+static void fzgx_rodata_layout_18(void) {
+    volatile f32 value; /* fzgx-allow: shared literal-pool layout primer sink */
+    value = 1.0f;
+}
+static const u32 fzgx_pool_table_1C[1] = {
+    0x41F00000
+};
+
+static void fzgx_rodata_layout_20(void) {
+    volatile f32 value; /* fzgx-allow: shared literal-pool layout primer sink */
+    value = 0.0f;
+}
+static const u32 fzgx_pool_table_24[138] = {
+    0x3DCCCCCD,    0x47AFC800,    0x00FF00FF,    0x808080FF,
+    0xFFFFFFFF,    0x80808000,    0x3F000000,    0x3E4CCCCD,
+    0x82FF0000,    0xFF780000,    0x00000000,    0x3F947AE1,
+    0x47AE147B,    0x3FB99999,    0x9999999A,    0x43300000,
+    0x00000000,    0x43300000,    0x80000000,    0xFFFFFF00,
+    0x00000000,    0x00000000,    0x00000000,    0x3FF00000,
+    0x00000000,    0x40240000,    0x00000000,    0x3FECCCCC,
+    0xCCCCCCCD,    0x3A1D4952,    0x40000000,    0x43A00000,
+    0x434D0000,    0x40A00000,    0x00000000,    0x3FE99999,
+    0x9999999A,    0x437A0000,    0x43340000,    0x41200000,
+    0x43480000,    0x42400000,    0x42480000,    0x42960000,
+    0x00000000,    0x00000000,    0x43480000,    0x3F19999A,
+    0x000000FF,    0x404040FF,    0x404088FF,    0xAAAAAAFF,
+    0xFF0000FF,    0xBF000000,    0x00000000,    0xBFE1EB85,
+    0x1EB851EC,    0x00000000,    0x00000000,    0xBC23D70A,
+    0x3C23D70A,    0x43700000,    0x44228000,    0xC3480000,
+    0x395C3372,    0x00000000,    0x00000000,    0xBC23D70A,
+    0x00000000,    0x00000000,    0xBC23D70A,    0x3F889374,
+    0xBC6A7EFA,    0x3F8EB851,    0xEB851EB8,    0xBC23D70A,
+    0x00000000,    0x3F8A9FBE,    0x76C8B439,    0x3F10E885,
+    0x9C8C9321,    0x47000000,    0x47800000,    0x44CA8000,
+    0x45800000,    0x44610000,    0x44160000,    0x432E0000,
+    0x42B40000,    0x42FA0000,    0x3749539C,    0x3A83126F,
+    0x42C80000,    0x00000000,    0x00000000,    0x00000000,
+    0x00000000,    0x00000000,    0x00000000,    0x40400000,
+    0x46FFFE00,    0x3F666666,    0x00000000,    0x00000000,
+    0x00000000,    0x3E23D70A,    0x00000000,    0x00000000,
+    0xBFE66666,    0x00000000,    0x00000000,    0xBEA3D70A,
+    0xC1C00000,    0x3FC00000,    0x3E99999A,    0xBE19999A,
+    0x40E66667,    0x3F4CCCCD,    0xC1A80000,    0x41100000,
+    0x3D23D70A,    0x3F851EB8,    0xBFD9999A,    0xC1C00000,
+    0x425C0000,    0x00FF00FF,    0x808080FF,    0xFFFFFFFF,
+    0x000000FF,    0x00000000,    0x00000000,    0xBC23D70A,
+    0x42D40000,    0x432F0000,    0x3F333333,    0x42140000,
+    0xC2C80000,    0x3B449BA6
+};
+
+static void fzgx_rodata_layout_24C(void) {
+    volatile u32 word; /* fzgx-allow: shared literal-pool layout primer sink */
+    volatile f32 value; /* fzgx-allow: shared literal-pool layout primer sink */
+    word = fzgx_pool_table_0[0];
+    word = fzgx_pool_table_1C[0];
+    word = fzgx_pool_table_24[0];
+    value = 2.3f;
+    value = -21.13f;
+    value = -1.8f;
+    value = -4.0f;
+}
+
+static void fzgx_bss_layout(void) {
+    volatile u8 s;  /* fzgx-allow: S2 layout primer sink: MWCC emits .bss objects in first-access order */
+    s = *(u8 *)&fzgx_obj_lbl_17_bss_0;
+    s = *(u8 *)&fzgx_obj_lbl_17_bss_1;
+    s = *(u8 *)&lbl_17_bss_2;
+    s = *(u8 *)&lbl_17_bss_3;
+    s = *(u8 *)&lbl_17_bss_3_fill_4;
+    s = *(u8 *)&lbl_17_bss_C;
+    s = *(u8 *)&lbl_17_bss_10;
+    s = *(u8 *)&fzgx_obj_lbl_17_bss_14;
+    s = *(u8 *)&fzgx_obj_lbl_17_bss_18;
+    s = *(u8 *)&lbl_17_bss_20;
+    s = *(u8 *)&lbl_17_bss_24;
+    s = *(u8 *)&lbl_17_bss_24_8;
+    s = *(u8 *)&lbl_17_bss_24_fill_30;
+    s = *(u8 *)&lbl_17_bss_34;
+    s = *(u8 *)&fzgx_obj_lbl_17_bss_54;
+    s = *(u8 *)&fzgx_obj_lbl_17_bss_58;
+    s = *(u8 *)&fzgx_obj_lbl_17_bss_60;
+    s = *(u8 *)&lbl_17_bss_60_fill_78;
+    s = *(u8 *)&lbl_17_bss_60_fill_D4;
+    s = *(u8 *)&fzgx_obj_lbl_17_bss_D6;
+    s = *(u8 *)&fzgx_obj_lbl_17_bss_D8;
+    s = *(u8 *)&lbl_17_bss_D8_fill_DC;
+    s = *(u8 *)&lbl_17_bss_D8_fill_F8;
+}
+#pragma section code_type ".text"
+
+static inline InterviewInfo65F4 * fn_17_65F4_read_pointer(InterviewState65F4 * owner) { return owner->info; }
+static inline void fn_17_65F4_update(InterviewState65F4 *state, f32 scale) {
+    InterviewPosition65F4 position;
+    InterviewInfo65F4 *info = fn_17_65F4_read_pointer(state);
+    s32 *frame = &state->frame;
+
+    if (state->mode == 11) {
+        lbl_17_bss_24_8 = scale;
+        if (*frame >= info->limit) {
+            position.x = -4.0f;
+            position.y = -1.8f;
+            position.z = -21.13f;
+            fzgx_obj_lbl_17_bss_D8->position = position;
+            fzgx_obj_lbl_17_bss_D8->angle = 0x3000;
+        }
+    } else {
+        f32 zero = 0.0f;
+        position.x = zero;
+        position.y = zero;
+        lbl_17_bss_24_8 = 1.0f;
+        position.z = zero;
+        fzgx_obj_lbl_17_bss_D8->position = position;
+        fzgx_obj_lbl_17_bss_D8->angle = 0;
+    }
+}
+
+void fn_17_65F4(void) {
+    fn_17_65F4_update(&fzgx_obj_lbl_17_bss_60, 2.3f);
+}
+/* fzgx:end fn_17_65F4 */
+
 /* fzgx:begin fn_17_66C0 */
 typedef struct InterviewState {
     u8 pad[0x88];
