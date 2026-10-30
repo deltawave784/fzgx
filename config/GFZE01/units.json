@@ -61745,6 +61745,25 @@
   },
   {
     "module": "main_rel",
+    "source": "rel/main_rel/rob/fn_1_97288.c",
+    "symbols": [
+      "fn_1_97288"
+    ],
+    "status": "matching",
+    "mw_version": null,
+    "extra_cflags": [],
+    "tu": "rel/main_rel/rob.c",
+    "pool": {
+      "...rodata.0": "lbl_1_rodata_3E48",
+      "@44": "lbl_1_rodata_3FA0+0x68",
+      "@75": "lbl_1_rodata_4010+0x74",
+      "@9": "lbl_1_rodata_3F6C",
+      "@14": "lbl_1_rodata_3F70+0x10",
+      "@11": "lbl_1_rodata_3F70+0x4"
+    }
+  },
+  {
+    "module": "main_rel",
     "source": "rel/main_rel/rob/fn_1_97F1C.c",
     "symbols": [
       "fn_1_97F1C"
