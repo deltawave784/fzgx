@@ -8954,3 +8954,6 @@ rel/main_rel/memcard/fn_1_C3A0C.c:
 
 rel/main_rel/cloth/fn_1_101BC4.c:
 	.text       start:0x00101BC4 end:0x0010240C align:4
+
+rel/main_rel/effect/fn_1_59770.c:
+	.text       start:0x00059770 end:0x00059A70 align:4

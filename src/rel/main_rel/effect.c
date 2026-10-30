@@ -1118,6 +1118,220 @@ void fn_1_5962C(Obj5962C *obj)
 }
 /* fzgx:end fn_1_5962C */
 
+/* fzgx:begin fn_1_59770 noprologue */
+#include "types.h"
+#include "game/vec3.h"
+
+#pragma section code_type ".fzgxpool"
+__declspec(section ".fzgxpool") static void fzgx_pool_prime1(void) {
+    volatile f32 s; volatile f64 d;  /* fzgx-allow: S2 pool primer sinks */
+    s = 60.0f;
+    s = 0.10000000149011612f;
+    s = 32767.0f;
+    s = 0.05000000074505806f;
+    d = 0.07;
+    s = 20000.0f;
+}
+static const union { u32 w[1]; const u32 v[1]; } fzgx_pool_init_fzgx_pool_table2 = {{  /* fzgx-allow: A1 retail data bytes and bindings */
+    0x0
+}};  /* fzgx-allow: A1 retail pool bytes */
+__declspec(section ".fzgxpool") static void fzgx_pool_keep2(void) { const u32 *volatile cp; cp = fzgx_pool_init_fzgx_pool_table2.v; }  /* fzgx-allow: S2 pool primer sink */
+__declspec(section ".fzgxpool") static void fzgx_pool_prime3(void) {
+    volatile f32 s; volatile f64 d;  /* fzgx-allow: S2 pool primer sinks */
+    d = 4503599627370496.0;
+    s = 1.0f;
+    s = -0.029999999329447746f;
+    d = 15.0;
+    d = 4503601774854144.0;
+    d = 1.5;
+    d = 0.5;
+}
+#pragma section code_type ".text"
+
+typedef struct {
+    f32 scale;
+    u32 unk4;
+    f32 mtx[3][4];
+    u32 unk38;
+    u8 r;
+    u8 g;
+    u8 b;
+    u8 a;
+} fn_1_59770_Sprite;
+
+typedef struct {
+    u8 pad_0[0x8];
+    u32 flags;
+    u8 pad_C[0xC];
+    s16 unk18;
+    u8 pad_1A[0x2];
+    f32 red;
+    f32 green;
+    f32 blue;
+    f32 scale;
+    u8 pad_2C[0x8];
+    void *unk34;
+    u8 pad_38[0x4];
+    Vec3 pos;
+    u8 pad_48[0x18];
+    Vec3 prevPos;
+} fn_1_59770_Effect;
+
+extern void *lbl_801A66CC;
+extern void fn_1_8636C(int, void *);
+extern int fn_1_9F914(const void *, const void *);
+extern void lbl_8006DBAC(void *);
+extern void lbl_8006E1B0(Vec3 *, Vec3 *);
+extern void lbl_8006DCA4(void);
+extern void lbl_8006E0A4(Vec3 *);
+extern void lbl_8006DC6C(void *);
+extern void mathutil_mtxA_rotate_x(s32);
+extern void mathutil_mtxA_rotate_y(s32);
+extern f32 lbl_8006D668(Vec3 *);
+extern f32 lbl_8006D0B4(f32);
+extern void fn_8006EDBC(Vec3 *, Vec3 *, s16 *, s16 *);
+extern void lbl_8006D7DC(Vec3 *);
+extern void lbl_8006E15C(f32, f32, f32);
+extern void fn_8006E294(Vec3 *);
+extern s32 lbl_8006D24C(f32, f32);
+extern void *memset(void *, int, u32);
+extern void lbl_8006DB74(void *);
+
+static inline void offset_segment(Vec3 *head, Vec3 *tail, Vec3 *dir, f32 width)
+{
+    f32 ox = dir->x * width;
+    f32 oy = dir->y * width;
+    head->x += ox;
+    head->y += oy;
+    tail->x -= ox;
+    tail->y -= oy;
+}
+
+static inline f32 segment_length_squared(Vec3 *head, Vec3 *tail)
+{
+    f32 dx = head->x - tail->x;
+    f32 dy = head->y - tail->y;
+    f32 dz = head->z - tail->z;
+    return (f32)(dx * dx) + dy * dy + dz * dz;
+}
+
+static inline void set_segment_midpoint(Vec3 *out, f32 y, f32 x, f32 z, f32 factor)
+{
+    out->x = factor * x;
+    out->y = factor * y;
+    out->z = factor * z;
+}
+
+#pragma opt_lifetimes off
+#pragma opt_propagation off
+void fn_1_59770(fn_1_59770_Effect *effect)
+{
+    f32 workZ;
+    f32 workY;
+    f32 headY;
+    f32 headX;
+    f32 workX;
+    f32 width;
+    f32 offset;
+    f32 tailX;
+    f32 shiftedX;
+    f32 offsetY;
+    f32 mtx[3][4];
+    fn_1_59770_Sprite sprite;
+    Vec3 head;
+    Vec3 tail;
+    Vec3 mid;
+    Vec3 dir;
+    s16 rotX;
+    s16 rotY;
+    f32 size;
+    f32 scale;
+    f32 len;
+    f32 dx;
+    f32 dy;
+    f32 dz;
+    void *target;
+
+    target = effect->unk34;
+    fn_1_8636C(effect->unk18, mtx);
+    scale = effect->scale;
+    lbl_8006DBAC(lbl_801A66CC);
+    lbl_8006E1B0(&effect->prevPos, &tail);
+    lbl_8006DCA4();
+    lbl_8006E1B0(&effect->pos, &head);
+    tail.x = (f64)(1.5 * tail.x) - (f64)(0.5 * head.x);
+    tail.y = (f64)(1.5 * tail.y) - (f64)(0.5 * head.y);
+    tail.z = (f64)(1.5 * tail.z) - (f64)(0.5 * head.z);
+    if (head.z < 0.0f && tail.z < 0.0f) {
+        size = effect->scale;
+        dir.x = head.x - tail.x;
+        dir.y = head.y - tail.y;
+        if (0.0f == dir.x && 0.0f == dir.y) {
+            lbl_8006E0A4(&effect->pos);
+            lbl_8006DC6C(mtx);
+            mathutil_mtxA_rotate_x(0x4000);
+        } else {
+            dir.z = 0.0f;
+            lbl_8006D668(&dir);
+            width = scale;
+            width *= 0.1f;
+            workZ = dir.x;
+            workY = dir.y;
+            /* Keep the endpoint loads in their original evaluation order. */
+            headX = *(volatile f32 *)&head.x;
+            workX = tail.x;
+            offset = workZ * width;
+            offsetY = workY * width;
+            workY = tail.y;
+            tailX = workX - offset;
+            headY = head.y;
+            shiftedX = headX + offset;
+            offset = workY - offsetY;
+            width = 0.5f;
+            headY = headY + offsetY;
+            workY = shiftedX - tailX;
+            headX = shiftedX + tailX;
+            head.x = shiftedX;
+            offsetY = headY - offset;
+            workY = workY * workY;
+            head.y = headY;
+            shiftedX = head.z - tail.z;
+            tail.x = tailX;
+            headY = headY + offset;
+            workY = offsetY * offsetY + workY;
+            tail.y = offset;
+            dy = width * headY;
+            headX = width * headX;
+            mid.x = headX;
+            mid.y = dy;
+            mid.z = width * (head.z + tail.z);
+            workY = shiftedX * shiftedX + workY;
+            len = lbl_8006D0B4(workY);
+            fn_8006EDBC(&head, &tail, &rotX, &rotY);
+            lbl_8006D7DC(&mid);
+            mathutil_mtxA_rotate_y(rotY);
+            mathutil_mtxA_rotate_x(rotX);
+            lbl_8006E15C(1.0f, 1.0f, len / scale);
+            mathutil_mtxA_rotate_x(0x4000);
+            fn_8006E294(&dir);
+            mathutil_mtxA_rotate_y(lbl_8006D24C(dir.x, dir.z));
+        }
+        memset(&sprite, 0, sizeof(sprite));
+        lbl_8006DB74(sprite.mtx);
+        sprite.scale = 8.0f * size;
+        if ((effect->flags >> 14) & 1) {
+            sprite.scale = sprite.scale / 2.0f;
+        }
+        sprite.r = 255.0f * effect->red;
+        sprite.g = 255.0f * effect->green;
+        sprite.b = 255.0f * effect->blue;
+        sprite.a = 0xff;
+        fn_1_9F914(&sprite, target);
+    }
+}
+#pragma opt_propagation reset
+/* fzgx:end fn_1_59770 */
+
 /* fzgx:begin fn_1_59A70 */
 // fn_1_59A70: empty in retail (single blr).
 void fn_1_59A70(void) {
