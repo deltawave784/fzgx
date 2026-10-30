@@ -2853,6 +2853,178 @@ s32 fn_1_F0B5C(s32 i, V3 *out) {
 }
 /* fzgx:end fn_1_F0B5C */
 
+/* fzgx:begin fn_1_F0E00 pool noprologue */
+#include "dolphin/types.h"
+
+extern u8 fn_1_3F114(void);
+extern const f64 lbl_1_rodata_6B68;
+extern const f32 lbl_1_rodata_6BD0;
+extern const f64 lbl_1_rodata_6C88;
+extern const f32 lbl_1_rodata_6CB8;
+extern const f32 lbl_1_rodata_6B60;
+extern const f32 lbl_1_rodata_6D34;
+extern const f32 lbl_1_rodata_6D10;
+
+typedef struct {
+    u8 b0;
+    s8 b1;
+    u8 pad2[4];
+    u16 h6;
+    u8 pad8[8];
+} GhostKey;
+
+/* File-scope objects in retail order. */
+u8 lbl_1_bss_7B180[0x8];
+u8 lbl_1_bss_7B188[0x24];
+u8 lbl_1_bss_7B1AC[0x13D8];
+void *lbl_1_bss_7C584[127];
+f32 *lbl_1_bss_7C780[5];
+u8 lbl_1_bss_7C794[0x78];
+s8 *lbl_1_bss_7C80C[5];
+u16 *lbl_1_bss_7C820[5];
+u8 lbl_1_bss_7C834[0x30];
+GhostKey *lbl_1_bss_7C864;
+u8 lbl_1_bss_7C868[0x118];
+u16 lbl_1_bss_7C980[16];
+u32 lbl_1_bss_7C9A0;
+u32 lbl_1_bss_7C9A4[5];
+u8 lbl_1_bss_7C9B8[0x2060];
+u32 lbl_1_bss_7EA18;
+f32 lbl_1_bss_7EA1C;
+f32 lbl_1_bss_7EA20;
+s8 lbl_1_bss_7EA24;
+
+#pragma section code_type ".fzgxpool"
+static void fzgx_bss_layout(void) {
+    volatile u8 s;  /* fzgx-allow: S2 layout primer sink: MWCC emits .bss objects in first-access order */
+    s = *(u8 *)&lbl_1_bss_7B180;
+    s = *(u8 *)&lbl_1_bss_7B188;
+    s = *(u8 *)&lbl_1_bss_7B1AC;
+    s = *(u8 *)&lbl_1_bss_7C584;
+    s = *(u8 *)&lbl_1_bss_7C780;
+    s = *(u8 *)&lbl_1_bss_7C794;
+    s = *(u8 *)&lbl_1_bss_7C80C;
+    s = *(u8 *)&lbl_1_bss_7C820;
+    s = *(u8 *)&lbl_1_bss_7C834;
+    s = *(u8 *)&lbl_1_bss_7C864;
+    s = *(u8 *)&lbl_1_bss_7C868;
+    s = *(u8 *)&lbl_1_bss_7C980;
+    s = *(u8 *)&lbl_1_bss_7C9A0;
+    s = *(u8 *)&lbl_1_bss_7C9A4;
+    s = *(u8 *)&lbl_1_bss_7C9B8;
+    s = *(u8 *)&lbl_1_bss_7EA18;
+    s = *(u8 *)&lbl_1_bss_7EA1C;
+    s = *(u8 *)&lbl_1_bss_7EA20;
+    s = *(u8 *)&lbl_1_bss_7EA24;
+}
+#pragma section code_type ".text"
+
+static inline f32 ghost_ratio(u32 a, u32 b) {
+    return (f32)a / (f32)b;
+}
+
+static inline u32 ghost_lerp(u32 a, u32 lo, u32 hi, u32 b) {
+    f32 r = (f32)a / (f32)b;
+    return (f32)lo * (lbl_1_rodata_6BD0 - r) + (f32)(f32)hi * r;
+}
+
+s32 fn_1_F0E00(s32 idx, s32 *out) {
+    u32 cur;
+    u32 target;
+    s32 i;
+    f32 *tbl;
+    u16 v;
+
+    if (lbl_1_bss_7EA18 == 0) {
+        *out = 0;
+        return 0;
+    }
+    v = lbl_1_bss_7C980[idx];
+#define tbl lbl_1_bss_7C780[idx]
+    if ((f32)v >= tbl[lbl_1_bss_7C9A4[idx] - 1]) {
+        cur = fn_1_3F114() * 0xFFFF;
+    } else {
+        f32 t0;
+        u32 a;
+        u32 b;
+        u32 lo;
+        u32 hi;
+        u16 *vals;
+        s8 *hiw;
+        s32 k;
+        f32 r;
+
+        for (i = 0; (f32)v > tbl[i]; i++) {
+        }
+        a = v;
+        i--;
+        vals = lbl_1_bss_7C820[idx];
+        t0 = tbl[i];
+        lo = vals[i];
+        hi = vals[i + 1];
+        a = (f32)a - t0;
+        hiw = lbl_1_bss_7C80C[idx];
+        lo += hiw[i] * 0xFFFF;
+        hi += hiw[i + 1] * 0xFFFF;
+        b = tbl[i + 1] - t0;
+        r = (f32)a / (f32)b;
+        cur = (f32)((f32)lo * (lbl_1_rodata_6BD0 - r)) + (f32)((f32)hi * r);
+    }
+    target = lbl_1_rodata_6CB8 * (lbl_1_bss_7EA20 + (f32)lbl_1_bss_7EA24);
+    if (target > cur) {
+        GhostKey *keys = lbl_1_bss_7C864;
+        u32 n = lbl_1_bss_7C9A0;
+        f32 sum = lbl_1_rodata_6B60;
+        f32 key;
+        s32 lo;
+
+        do {
+            n--;
+            key = (f32)keys[n].h6;
+            key += (f32)(keys[n].b1 * 0xFFFF);
+            sum += (f32)keys[n].b0;
+        } while ((f32)cur < key);
+        lo = keys[n].h6 + keys[n].b1 * 0xFFFF;
+        sum -= (f32)(u32)(cur - lo) /
+               (f32)(u32)(keys[n + 1].h6 + keys[n + 1].b1 * 0xFFFF - lo);
+        *out = lbl_1_rodata_6D34 * -sum / lbl_1_rodata_6D10;
+    } else {
+        s8 *h;
+        u16 *p;
+        s8 *hiw = lbl_1_bss_7C80C[idx];
+        u16 *vals = lbl_1_bss_7C820[idx];
+        s32 j;
+        s32 lo;
+        u32 a;
+        u32 b;
+        f32 key;
+        f32 r;
+        f32 *t;
+
+        h = hiw;
+        p = vals;
+        j = 0;
+        do {
+            key = (s32)(*p + *h * 0xFFFF);
+            h++;
+            p++;
+            j++;
+        } while ((f32)target > key);
+        j -= 2;
+        a = target;
+        lo = vals[j] + hiw[j] * 0xFFFF;
+        a -= lo;
+        b = vals[j + 1] + hiw[j + 1] * 0xFFFF - lo;
+        r = (f32)a / (f32)b;
+        t = lbl_1_bss_7C780[idx];
+        r = t[j] + (f32)(r * (t[j + 1] - t[j]));
+        r = (f32)lbl_1_bss_7C980[idx] - r;
+        *out = lbl_1_rodata_6D34 * r / lbl_1_rodata_6D10;
+    }
+    return 1;
+}
+/* fzgx:end fn_1_F0E00 */
+
 /* fzgx:begin fn_1_F1300 noprologue */
 #include "dolphin/types.h"
 
