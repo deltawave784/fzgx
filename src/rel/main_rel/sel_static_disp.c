@@ -12599,6 +12599,208 @@ void fn_1_14E1E0(void *arg0, void *arg1, s16 arg2, int arg3, f32 arg4) {
 }
 /* fzgx:end fn_1_14E1E0 */
 
+/* fzgx:begin fn_1_14E5E4 noprologue */
+#include "types.h"
+#include "dolphin/types.h"
+
+typedef struct {
+    void *value;
+} Val;
+
+typedef struct {
+    u8 pad8[8];
+    Val *value;
+} Ref;
+
+typedef struct {
+    u8 pad344[0x344];
+    Ref *ref;
+} Obj;
+
+extern const f32 lbl_1_rodata_9C30;
+extern void fn_1_55FF0(f32);
+extern s16 fn_1_14F344(s16);
+extern void fn_80072558(void);
+extern void fn_1_151C3C(int, s16);
+extern void fn_1_556B8(void *);
+extern void fn_1_55210(void *);
+extern void fn_1_151C78(void);
+extern void lbl_8006DAEC(void);
+extern void lbl_8006DBE4(void);
+extern void lbl_8006DC20(void);
+extern void lbl_8006E0A4(void *);
+
+#pragma opt_lifetimes off
+
+/* Returns base + i * 0x360 + off for the first of three entries whose kind is 0. */
+static inline void *find(void *base, int off) {
+    s16 i;
+    s16 *entry = (s16 *)base;
+    void *r = 0;
+    for (i = 0; (u32)(s32)i < 3; i++) {
+        if (fn_1_14F344(*entry) == 0) {
+            r = (u8 *)base + (s16)i * 0x360 + off;
+            break;
+        }
+        entry = (s16 *)((u8 *)entry + 0x360);
+    }
+    return r;
+}
+
+static inline void *find2(void *base, int off) {
+    s16 i;
+    s16 *entry;
+    void *r = 0;
+    i = 0;
+    entry = (s16 *)base;
+    for (; (u32)(s32)i < 3; i++) {
+        if (fn_1_14F344(*entry) == 0) {
+            r = (u8 *)base + (s16)i * 0x360 + off;
+            break;
+        }
+        entry = (s16 *)((u8 *)entry + 0x360);
+    }
+    return r;
+}
+
+/* Same-TU siblings fn_1_14DEC8 / fn_1_14E09C (and its kind-2 twin), inlined here by retail. */
+static inline void drawKind0(void *arg0, void **arg1, void **argB, s16 arg3, int arg4, f32 arg5) {
+    Obj *obj;
+    s16 *entry;
+    s16 i;
+    int same;
+    void *value;
+    void *second;
+
+    second = *argB;
+    same = lbl_1_rodata_9C30 == arg5;
+    if (!same) {
+        fn_1_55FF0(arg5);
+    }
+
+    i = 0;
+    entry = (s16 *)arg0;
+    obj = (Obj *)((u8 *)arg0 + ((s32)arg3 << 2));
+    for (; (u32)(s32)i < 3; i++) {
+        if (fn_1_14F344(*entry) == 0) {
+            value = obj->ref->value->value;
+            if (value != 0) {
+                fn_80072558();
+                fn_1_151C3C(0, *(s16 *)((u8 *)arg0 + (s16)i * 0x360));
+                if (same || arg4 != 0) {
+                    fn_1_556B8(value);
+                } else {
+                    fn_1_55210(value);
+                }
+                fn_1_151C78();
+                value = 0;
+                second = arg0;
+                for (i = 0; (u32)(s32)i < 3; i++) {
+                    if (fn_1_14F344(*(s16 *)second) == 0) {
+                        value = (u8 *)arg0 + (s16)i * 0x360 + 0x23c;
+                        break;
+                    }
+                    second = (u8 *)second + 0x360;
+                }
+                second = 0;
+                *arg1 = value;
+                i = 0;
+                value = arg0;
+                for (; (u32)(s32)i < 3; i++) {
+                    if (fn_1_14F344(*(s16 *)value) == 0) {
+                        second = (u8 *)arg0 + (s16)i * 0x360 + 0x228;
+                        break;
+                    }
+                    value = (u8 *)value + 0x360;
+                }
+                break;
+            }
+        }
+        entry = (s16 *)((u8 *)entry + 0x360);
+        obj = (Obj *)((u8 *)obj + 0x360);
+    }
+    *argB = second;
+}
+
+static inline void drawKinds(void *arg0, void *arg1, void *argB, s16 arg2, int arg3, f32 arg4) {
+    s16 i;
+    void *value;
+    Obj *obj;
+    Obj *obj2;
+    s16 *entry;
+    int same;
+
+    same = lbl_1_rodata_9C30 == arg4;
+    if (arg1 != 0) {
+        if (!same) {
+            fn_1_55FF0(arg4);
+        }
+
+        entry = (s16 *)arg0;
+        obj = (Obj *)((u8 *)arg0 + ((s32)arg2 << 2));
+        for (i = 0; (u32)(s32)i < 3; i++) {
+            if (fn_1_14F344(*entry) == 1) {
+                value = obj->ref->value->value;
+                if (value != 0) {
+                    lbl_8006E0A4(arg1);
+                    fn_80072558();
+                    fn_1_151C3C(1, *entry);
+                    if (same || arg3 != 0) {
+                        fn_1_556B8(value);
+                    } else {
+                        fn_1_55210(value);
+                    }
+                    fn_1_151C78();
+                }
+            }
+            entry = (s16 *)((u8 *)entry + 0x360);
+            obj = (Obj *)((u8 *)obj + 0x360);
+        }
+    }
+    lbl_8006DBE4();
+    same = lbl_1_rodata_9C30 == arg4;
+    if (argB != 0) {
+        if (!same) {
+            fn_1_55FF0(arg4);
+        }
+
+        entry = (s16 *)arg0;
+        obj2 = (Obj *)((u8 *)arg0 + ((s32)arg2 << 2));
+        for (i = 0; (u32)(s32)i < 3; i++) {
+            if (fn_1_14F344(*entry) == 2) {
+                value = obj2->ref->value->value;
+                if (value != 0) {
+                    lbl_8006E0A4(argB);
+                    fn_80072558();
+                    fn_1_151C3C(2, *entry);
+                    if (same || arg3 != 0) {
+                        fn_1_556B8(value);
+                    } else {
+                        fn_1_55210(value);
+                    }
+                    fn_1_151C78();
+                }
+            }
+            entry = (s16 *)((u8 *)entry + 0x360);
+            obj2 = (Obj *)((u8 *)obj2 + 0x360);
+        }
+    }
+}
+
+#pragma opt_lifetimes off
+void fn_1_14E5E4(void *arg0, s16 arg1, f32 arg2) {
+    void *a;
+    void *b;
+
+    a = 0;
+    b = 0;
+    drawKind0(arg0, &a, &b, arg1, 1, arg2);
+    lbl_8006DAEC();
+    drawKinds(arg0, a, b, arg1, 1, arg2);
+    lbl_8006DC20();
+}
+/* fzgx:end fn_1_14E5E4 */
+
 /* fzgx:begin fn_1_14E8A4 */
 typedef struct {
     s16 value;
