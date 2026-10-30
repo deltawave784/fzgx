@@ -8969,3 +8969,6 @@ rel/main_rel/bg_san/fn_1_DB9B0.c:
 
 rel/main_rel/bg_common/fn_1_108128.c:
 	.text       start:0x00108128 end:0x0010846C align:4
+
+rel/main_rel/bg_lig/fn_1_D6C10.c:
+	.text       start:0x000D6C10 end:0x000D720C align:4
