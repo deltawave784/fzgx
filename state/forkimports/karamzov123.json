@@ -950,6 +950,24 @@
    "source": "cached upstream dcd0c3352c57a93fd4e2c338ea4d6c0f8aa0678b"
   }
  },
+ "fn_17_3E08": {
+  "commit": "41713f65188a15d36c8da9d65841053d4774ba68",
+  "flags": "",
+  "kind": "fixup-import",
+  "landed": 1793341463,
+  "mw": "GC/1.3.2",
+  "ref_name": "fn_17_3E08",
+  "ref_unit_options": {
+   "compiler_options": null,
+   "extra_cflags": [],
+   "mw_version": "GC/1.3.2"
+  },
+  "sha256": "bed54b4332d4e50efb2ab03e4f0e245213a55b717794a8c2b758e10350785a5f",
+  "source": "karamzov123/fzero-gx-decomp@41713f6 (CC0)",
+  "status": "matched",
+  "unit": "rel/interview/interview.c",
+  "upstream": null
+ },
  "fn_17_6D60": {
   "commit": "a8c6fe13345e6c9bc32ce28362153b13e4478f82",
   "flags": "",
@@ -3478,6 +3496,47 @@
   "source": "karamzov123/fzero-gx-decomp@a8c6fe13 (CC0)",
   "status": "matched",
   "unit": "dol/fn_80043D34.c",
+  "upstream": null
+ },
+ "fn_80044EF8": {
+  "commit": "41713f65188a15d36c8da9d65841053d4774ba68",
+  "flags": "",
+  "kind": "raw",
+  "landed": 1793341494,
+  "mw": "GC/1.3.2",
+  "ref_name": "fn_80044EF8",
+  "ref_unit_options": {
+   "compiler_options": null,
+   "extra_cflags": [],
+   "mw_version": "GC/1.3.2"
+  },
+  "sha256": "8c666ce6ca41936bd8e9e394014341f4aab29595723c09427367cea638b70654",
+  "source": "karamzov123/fzero-gx-decomp@41713f6 (CC0)",
+  "status": "matched",
+  "unit": "dol/fn_80044EF8.c",
+  "upstream": null
+ },
+ "fn_800456A0": {
+  "commit": "41713f65188a15d36c8da9d65841053d4774ba68",
+  "flags": "-sdata 0 -sdata2 0",
+  "kind": "raw",
+  "landed": 1793341636,
+  "mw": "GC/1.3.2",
+  "ref_name": "fn_800456A0",
+  "ref_unit_options": {
+   "compiler_options": null,
+   "extra_cflags": [
+    "-sdata",
+    "0",
+    "-sdata2",
+    "0"
+   ],
+   "mw_version": "GC/1.3.2"
+  },
+  "sha256": "800c9d34cbdeaf7e4a4b7c32cf74edef25f0caa82ca8fe118ef1fb4ea4f53bcf",
+  "source": "karamzov123/fzero-gx-decomp@41713f6 (CC0)",
+  "status": "matched",
+  "unit": "dol/fn_800456A0.c",
   "upstream": null
  },
  "fn_80046D94": {
