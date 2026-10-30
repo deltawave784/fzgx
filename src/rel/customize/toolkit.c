@@ -423,6 +423,40 @@ extern void fn_3_1BF08(void *data, s16 x1, s16 y1, s16 x2, s16 y2, u32 *color);
 extern void fn_3_156A8(void);
 extern void fn_3_1ACE4(void *data, s32 first_a, s32 second_a, s32 first_b, s32 second_b, u32 *values);
 
+/* fzgx:begin fn_3_1857C noprologue */
+#include "types.h"
+#include "rel/customize/toolkit.h"
+
+extern u32 lbl_801A6410;
+extern s32 fn_1_45D0();
+
+Obj_3_bss_A2438 lbl_3_bss_A2438;
+u32 lbl_3_bss_A2454;
+u8 lbl_3_bss_A2458;
+
+#pragma opt_propagation off
+static inline void InitCustomizeState(Obj_3_bss_A2438 *p) {
+    p->unk_4 = 0x80000000;
+    p->unk_C = 2;
+    p->unk_12 = 0;
+    p->unk_14 = 0;
+    p->unk_15 = 0;
+    p->unk_D = 0;
+    p->unk_E = 0;
+    p->unk_F = 0;
+    p->unk_10 = 0;
+    p->unk_18 = 0;
+    p->unk_1A = 0;
+}
+
+void fn_3_1857C(void) {
+    InitCustomizeState(&lbl_3_bss_A2438);
+    lbl_3_bss_A2438.unk_0 = 0;
+    lbl_3_bss_A2454 = fn_1_45D0(lbl_801A6410, 0x2000, lbl_3_data_3D14, 0x8C);
+    lbl_3_bss_A2458 = 1;
+}
+/* fzgx:end fn_3_1857C */
+
 /* fzgx:begin fn_3_19C50 */
 void fn_3_19C50(void) {
     fn_1_46B4(lbl_801A6410, lbl_3_bss_A2454, (const char *)(u8 *)(lbl_3_data_3D14), 0x294);
