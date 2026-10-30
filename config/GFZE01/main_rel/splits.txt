@@ -8936,3 +8936,6 @@ rel/main_rel/ghost/fn_1_EB8F4.c:
 
 rel/main_rel/rob/fn_1_97288.c:
 	.text       start:0x00097288 end:0x000977BC align:4
+
+rel/main_rel/phys/fn_1_E7524.c:
+	.text       start:0x000E7524 end:0x000E7764 align:4
