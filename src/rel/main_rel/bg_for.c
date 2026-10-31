@@ -1327,6 +1327,154 @@ void fn_1_E1A00(Fn1E1A00Object *obj, const u8 *cmd) {
 }
 /* fzgx:end fn_1_E1A00 */
 
+/* fzgx:begin fn_1_E3324 */
+#include "rel/main_rel/spline.h"
+
+typedef struct {
+    u8 pad_0[0x1A8];
+} E3324_Elem;
+
+typedef struct {
+    u8 pad_0[0xC];
+    s16 unk_C;
+    u8 pad_E[0x6];
+    s16 unk_14;
+    u8 pad_16[0xE];
+    s16 unk_24;
+    u8 pad_26[0x6];
+    s16 unk_2C;
+    u8 pad_2E[0x2];
+    u32 flags;
+} E3324_State;
+
+typedef struct {
+    u8 pad_0[0x20];
+    u32 flags;
+} E3324_A8;
+
+typedef struct {
+    u8 pad_0[0x3];
+    u8 unk_3;
+    u8 pad_4[0x34];
+} E3324_B8;
+
+extern s16 fn_1_7B054(void);
+extern Obj_1_bss_84428 *fn_1_FB0A8(void);
+extern u8 lbl_1_bss_9C[];
+extern void fn_1_E1C10(void);
+extern s16 fn_1_E5430(s16);
+extern void *fn_1_E54A8(s16, s16);
+extern void fn_1_E1A00(void *, u32);
+extern void fn_1_E2DCC(void);
+extern void fn_1_E252C(s16, s16, void *);
+extern void fn_1_E2AE8(void);
+extern void fn_1_E5930(void *, s64);
+extern const f32 lbl_1_rodata_6994;
+extern f32 lbl_1_rodata_6998[13];
+extern void fn_1_E87A4(f64, f64);
+
+static inline s32 E3324_loop(s32 cnt, E3324_B8 *b8, s32 bound, u16 *key, s16 *m) {
+    u32 mask;
+    *m = cnt;
+    bound = ((Obj_1_bss_3BE0_Target *)bound)->unk_B4;
+    mask = *key & 0xFFu;
+    for (; *m < bound; (*m)++, b8++) {
+        if ((b8->unk_3 & 0xFu) == mask) {
+            cnt++;
+        }
+    }
+    return cnt;
+}
+
+
+void fn_1_E3324(void) {
+    E3324_State *state;
+    s16 n;
+    struct { E3324_Elem *value; } elems;
+    struct { s16 value; } i;
+    u8 *tbl;
+    s16 j;
+    s16 k;
+
+    state = (E3324_State *)&lbl_1_bss_7AE88;
+    switch (((u8 *)&lbl_1_data_2B0D4)[fn_1_7B054()]) {
+    case 13:
+        state->unk_24 = fn_1_FB0A8()->unk_A;
+        break;
+    }
+
+    {
+        s16 count;
+        E3324_A8 *a8;
+        s16 m;
+
+        count = lbl_1_bss_3BE0->unk_A4;
+        state->unk_2C = m = 0;
+        a8 = (E3324_A8 *)lbl_1_bss_3BE0->unk_A8;
+        for (; m < count; m++, a8++) {
+            if (a8->flags & 0x80000000) {
+                state->unk_2C++;
+            }
+        }
+    }
+
+    if (fn_1_7B054() == 37) {
+        E3324_B8 *b8;
+        s32 src;
+        struct { u16 value; } key;
+        struct { s16 value; } m;
+        src = (s32)lbl_1_bss_3BE0;
+        b8 = (E3324_B8 *)((Obj_1_bss_3BE0_Target *)src)->unk_B8;
+        if (lbl_1_bss_960 == 9) key.value = lbl_1_bss_9C[1];
+        else key.value = 0;
+        state->unk_C = E3324_loop(0, b8, src, &key.value, &m.value);
+        state->unk_14 = 0;
+    } else {
+        state->unk_C = 0;
+        state->unk_14 = lbl_1_bss_3BE0->unk_B4;
+    }
+
+    fn_1_E1C10();
+    tbl = lbl_1_data_3DDA8;
+    for (i.value = 0; i.value < 6; i.value++) {
+        n = fn_1_E5430(i.value);
+        elems.value = fn_1_E54A8(i.value, 0);
+        {
+    s16 fzgx_loop_k_2368;
+for (fzgx_loop_k_2368 = 0; fzgx_loop_k_2368 < n; fzgx_loop_k_2368++, elems.value++) {
+            fn_1_E1A00(elems.value, (u32)tbl);
+        }
+    k = fzgx_loop_k_2368;
+}
+    }
+
+    fn_1_E2DCC();
+    for (j = 0; j < 6; j++) {
+        n = fn_1_E5430(j);
+        elems.value = fn_1_E54A8(j, 0);
+        for (i.value = 0; i.value < n; i.value++, elems.value++) {
+            fn_1_E252C(j, i.value, elems.value);
+        }
+    }
+
+    fn_1_E2AE8();
+    switch (((u8 *)&lbl_1_data_2B0D4)[fn_1_7B054()]) {
+    case 13:
+        for (k = 0; k < fn_1_E5430(4); k++) {
+            fn_1_E5930(fn_1_E54A8(4, k), 3);
+        }
+        break;
+    }
+
+    if (fn_1_E5430(2)) {
+        fn_1_E87A4(lbl_1_rodata_6994, lbl_1_rodata_6998[0]);
+        state->flags |= 0x80000000;
+    } else {
+        state->flags &= ~0x80000000;
+    }
+}
+/* fzgx:end fn_1_E3324 */
+
 /* fzgx:begin fn_1_E3778 */
 extern void OSPanic(const char *, int, const char *, ...);
 extern struct fn_1_DCE60_lbl_1_rodata_6750 lbl_1_rodata_6750;

@@ -8984,3 +8984,6 @@ rel/main_rel/shadowmap/fn_1_5745C.c:
 
 rel/main_rel/stcoli/fn_1_192E8.c:
 	.text       start:0x000192E8 end:0x00019AE0 align:4
+
+rel/main_rel/bg_for/fn_1_E3324.c:
+	.text       start:0x000E3324 end:0x000E35F0 align:4
