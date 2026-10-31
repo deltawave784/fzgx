@@ -2235,6 +2235,351 @@ void fn_1_1902C(StcoliNode *root, StcoliVec *vec, void *arg3, f32 value) {
 }
 /* fzgx:end fn_1_1902C */
 
+/* fzgx:begin fn_1_192E8 noprologue */
+#include "dolphin/hw_regs.h"
+#include "types.h"
+#include "game/vec3.h"
+#include "game/main_rel/car_test_types.h"
+#include "rel/main_rel/stcoli.h"
+#include "psvec.h"
+
+struct fn_1_192E8_Arg4 {
+    u32 unk_0;
+    u8 pad_4[0x38];
+    f32 unk_3C;
+    f32 unk_40;
+};
+struct fn_1_192E8_lbl_1_rodata_6C8 {
+    u8 pad_0[0x8];
+    f32 unk_8;
+    u8 pad_C[0xC];
+    f32 unk_18;
+    u8 pad_1C[0x4];
+    f32 unk_20;
+    u8 pad_24[0x10];
+    f32 unk_34;
+    f32 unk_38;
+    f32 unk_3C;
+};
+struct fn_1_192E8_Node {
+    s32 index;
+    u32 unk_4;
+    u32 unk_8;
+    u8 pad_C[0x30];
+    u32 links[4];
+};
+struct fn_1_192E8_Table {
+    s32 count;
+    u8 pad_4[8];
+    Vec3 normal;
+    u32 unk_18;
+    struct fn_1_192E8_Arg4 *objects[8];
+    u32 flags[4];
+    s32 ids[4];
+};
+struct fn_1_192E8_Context {
+    struct fn_1_192E8_Node *node;
+    struct fn_1_192E8_Table *table;
+};
+struct fn_1_192E8_Contact {
+    s32 unk_0;
+    s32 unk_4;
+    f32 unk_8;
+    u32 flags;
+    f32 t;
+    Vec3 point;
+    Vec3 normal;
+    Vec3 correction;
+    Vec3 position;
+    u32 *link;
+};
+struct fn_1_192E8_Volume {
+    Vec3 matrix;
+    u8 pad_C[0x24];
+    f32 width;
+    u8 pad_34[8];
+    f32 height;
+};
+struct fn_1_192E8_Manager {
+    u8 pad_0[0xD4];
+    Vec3 position;
+    u8 pad_E0[0xD8];
+    s32 unk_1B8;
+    s32 unk_1BC;
+    s32 unk_1C0;
+    f32 unk_1C4;
+    u8 pad_1C8[8];
+    s32 num_volumes;
+    u8 pad_1D4[0x178];
+    struct fn_1_192E8_Contact contacts[8];
+    s32 indices[8];
+    s32 num_contacts;
+    u8 pad_5B0[0x200];
+    struct fn_1_192E8_Volume volumes[1];
+};
+/* Reproduce the translation unit's shared floating-point pool order. */
+#pragma section code_type ".fzgxpool"
+#pragma force_active on
+static void fzgx_192E8_pool_primer(volatile f32 *f, volatile f64 *d)  /* fzgx-allow: S2 volatile keeps the verified access order */
+{
+    d[0] = 4503601774854144.0;
+    f[0] = 0.0f;
+    f[1] = 1.0f;
+    f[2] = -5.0f;
+    f[3] = 10.0f;
+    f[4] = -1.0f;
+    f[5] = 2.0f;
+    f[6] = 0.5f;
+    f[7] = 2.5f;
+    f[8] = 1.7f;
+    f[9] = 0.001f;
+    f[10] = 182.04444885253906f;
+    f[11] = -0.5f;
+    f[12] = 200.0f;
+    f[13] = 0.1f;
+}
+#pragma force_active reset
+#pragma section code_type ".text"
+extern const struct fn_1_192E8_lbl_1_rodata_6C8 lbl_1_rodata_6C8;
+extern struct fn_1_192E8_Manager *lbl_801A66CC;
+extern int fn_1_17B5C(int, int, int, f32);
+extern s16 fn_1_7B054(void);
+extern void lbl_8006E1D8(Vec3 *, f32, f32, f32);
+extern void lbl_8006DAEC(void);
+extern void lbl_8006DBAC(Vec3 *);
+extern void lbl_8006E1B0(Fn183D28Vec3 *, Fn183D28Vec3 *);
+extern void lbl_8006DB30(void);
+#define fabsf(x) __fabsf(x)
+
+static inline int fn_1_192E8_allowed(struct fn_1_192E8_Context *ctx,
+    struct fn_1_192E8_Arg4 *wall, int id, int side,
+    struct fn_1_192E8_lbl_1_rodata_6C8 *pool)
+{
+    s32 index;
+    s32 count;
+    u32 needed;
+    u32 flags;
+    u32 mask;
+    s32 other;
+    s32 mode;
+    if (ctx == 0) return 0;
+    index = ctx->node->index;
+    count = ctx->table->count;
+    flags = ctx->table->flags[index];
+    if (count <= index) return 0;
+    if (!__rlwnm(flags, (side + 1) & 31, 31, 31)) return 0;
+    mask = 0x03E00000;
+    if (lbl_801A66CC->unk_1B8 == count) mask |= 0xC00;
+    needed = wall->unk_0 & mask;
+    other = ctx->table->ids[index];
+    if (needed == (needed & flags)) {
+        if (ctx->table->objects[index] != wall) {
+            if (!fn_1_17B5C(other, id, lbl_1_bss_3BE0->unk_8, 200.0f)) goto failed; /* Keep the verified branch to failed. */
+        }
+        if (fn_1_7B054() == 0x10) {
+            if (id >= 0x5F && id <= 0x79 && !(other >= 0x5F && other <= 0x79)) {
+                mode = lbl_801A66CC->unk_1BC;
+                if ((mode == 1 && side == 0) || (mode == 2 && side == 1)) return 0;
+            }
+            return 1;
+        } else if (fn_1_7B054() == 0x1C) {
+            if (id >= 0x74 && id <= 0x90) {
+                if (other < 0x74) {
+                    mode = lbl_801A66CC->unk_1BC;
+                    if ((mode == 1 && side == 1) || (mode == 2 && side == 0)) return 0;
+                }
+                if (other > 0x90) {
+                    mode = lbl_801A66CC->unk_1BC;
+                    if ((mode == 1 && side == 0) || (mode == 2 && side == 1)) return 0;
+                }
+                return 1;
+            } else if (id >= 0xA8 && id <= 0xC6) {
+                if (other < 0xA8) {
+                    mode = lbl_801A66CC->unk_1BC;
+                    if ((mode == 1 && side == 0) || (mode == 2 && side == 1)) return 0;
+                }
+                if (other > 0xC6) {
+                    mode = lbl_801A66CC->unk_1BC;
+                    if ((mode == 1 && side == 1) || (mode == 2 && side == 0)) return 0;
+                }
+                return 1;
+            }
+            return 1;
+        }
+        return 1;
+    }
+failed:
+    return 0;
+}
+
+static inline f32 fn_1_192E8_dot(f32 ax, f32 ay, f32 az, f32 bx, f32 by, f32 bz)
+{
+    return (f32)(bx * ax) + by * ay + bz * az;
+}
+
+static inline f32 fn_1_192E8_vdot(Vec3 *a, Vec3 *b)
+{
+    f32 z, y, x;
+    z = a->z;
+    y = a->y;
+    x = a->x;
+    return (f32)(x * b->x) + y * b->y + z * b->z;
+}
+
+static inline void fn_1_192E8_normal(Vec3 *out, f32 scale)
+{
+    f32 x, y, z;
+    x = *(f32 *)LC_BASE;
+    y = *(f32 *)(LC_BASE + 0x10);
+    z = *(f32 *)(LC_BASE + 0x20);
+    x *= scale;
+    y *= scale;
+    z *= scale;
+    out->x = x;
+    out->y = y;
+    out->z = z;
+}
+
+#pragma opt_lifetimes off
+int fn_1_192E8(Vec3 *arg0, Vec3 *arg1, Vec3 *arg2, Vec3 *arg3,
+    struct fn_1_192E8_Arg4 *arg4, f32 *arg5, struct fn_1_192E8_Context *arg6,
+    int arg7, u32 *arg9_input, int arg10_input, f32 arg8)
+{
+    f32 dot_z, dot_y, dot_x;
+    f32 z, y, x;
+    struct fn_1_192E8_lbl_1_rodata_6C8 *p_lbl_1_rodata_6C8;
+    f32 v0;
+    f32 v1;
+    int hit;
+    u32 v2;
+    u32 v3;
+    int arg10 = arg10_input;
+    u32 *arg9 = arg9_input;
+    int v4;
+    f32 t;
+    f32 limit;
+    Vec3 position;
+    Vec3 normal;
+    union { f32 f; u32 u; } bits;
+    s32 i;
+    f32 half;
+    f32 height;
+    f32 width;
+    struct fn_1_192E8_Contact *contact;
+    s32 *index_ptr;
+    f32 depth;
+    f32 scale;
+    f32 product;
+    p_lbl_1_rodata_6C8 = (struct fn_1_192E8_lbl_1_rodata_6C8 *)&lbl_1_rodata_6C8;
+    v0 = (f32)(0.5f * arg8);
+    v1 = 0.5f;
+    if (arg8 > 0.0f) {
+        v1 = -0.5f;
+        v2 = 0;
+        v3 = 1024;
+        limit = arg4->unk_40;
+        v4 = v1 >= arg2->x;
+        hit = v4 && arg3->x >= v1;
+    } else {
+        v2 = 1;
+        v3 = 2048;
+        limit = arg4->unk_3C;
+        v4 = v1 <= arg2->x;
+        hit = v4 && arg3->x <= v1;
+    }
+    if (hit) {
+        t = (arg3->x + v0) / (arg3->x - arg2->x);
+        bits.f = t;
+        if ((bits.u & 0x7F800000) != 0x7F800000 &&
+            (!arg10 || fabsf(arg3->y + (f32)(t * (arg2->y - arg3->y))) <= limit)) {
+            hit = 1;
+        } else {
+            hit = 0;
+        }
+        *arg9 |= 0x80000000U >> v2;
+    }
+    if (!hit && v4 && fn_1_192E8_allowed(arg6, arg4, arg7, v2, p_lbl_1_rodata_6C8)) {
+        if (!arg10 || fabsf(arg2->y) <= limit || fabsf(arg3->y) <= limit) {
+            *arg9 |= 0x80000000U >> v2;
+            t = 0.0f;
+            hit = 1;
+        }
+    }
+    if (hit) {
+        lbl_8006E1D8(&position, *arg5 * (0.5f * -arg8),
+            0.0f, 0.0f);
+        if (lbl_801A66CC->num_volumes > 0) {
+            lbl_8006DAEC();
+            half = 0.5f;
+            for (i = 0; i < lbl_801A66CC->num_volumes; i++) {
+                lbl_8006DBAC(&lbl_801A66CC->volumes[i].matrix);
+                width = half * lbl_801A66CC->volumes[i].width;
+                height = lbl_801A66CC->volumes[i].height;
+                lbl_8006E1B0((Fn183D28Vec3 *)&position, (Fn183D28Vec3 *)&lbl_801A66CC->position);
+                if (fabsf(lbl_801A66CC->position.x) <= width - 0.1f &&
+                    fabsf(lbl_801A66CC->position.y) <= height) {
+                    if (arg6 != 0) arg6->node->unk_8 = 1;
+                    *arg9 &= ~(0x80000000U >> v2);
+                    hit = 0;
+                    break;
+                }
+            }
+            lbl_8006DB30();
+        }
+        if (hit) {
+            fn_1_192E8_normal(&normal, arg8);
+            if (arg6 != 0) {
+                dot_x = arg6->table->normal.x;
+                /* Keep the normal's y read in the scalar dot-product local. */
+                dot_y = *(volatile f32 *)&arg6->table->normal.y;
+                dot_x = (f32)(dot_x * normal.x);
+                /* The z read follows the first product in the dot kernel. */
+                dot_z = *(volatile f32 *)&arg6->table->normal.z;
+                dot_x = dot_y * normal.y + dot_x;
+                dot_x = dot_z * normal.z + dot_x;
+                if (dot_x < 0.0f) {
+                    *arg9 &= ~(0x80000000U >> v2);
+                    hit = 0;
+                }
+            }
+        }
+        if (hit) {
+            f32 zero;
+            contact = &lbl_801A66CC->contacts[lbl_801A66CC->num_contacts];
+            contact->flags = 0;
+            contact->t = -1.0f;
+            zero = 0.0f;
+            index_ptr = &lbl_801A66CC->indices[lbl_801A66CC->num_contacts++];
+            contact->position = position;
+            psvec_sub_scale_add(arg0, arg1, t, &position, &contact->point);
+            contact->normal = normal;
+            depth = (f32)(*arg5 * (f32)(arg8 * (v0 + arg2->x))) - 0.5f;
+            if (depth < zero) {
+                scale = arg8 * -depth;
+                x = *(volatile f32 *)LC_BASE;  /* fzgx-allow: S2 volatile view keeps the verified load order */
+                y = *(f32 *)(LC_BASE + 0x10);
+                z = *(f32 *)(LC_BASE + 0x20);
+                contact->correction.x = x * scale;
+                contact->correction.y = y * scale;
+                contact->correction.z = z * scale;
+            } else {
+                contact->correction.x = zero;
+                contact->correction.y = zero;
+                contact->correction.z = zero;
+            }
+            contact->t = t;
+            contact->flags = v3;
+            contact->unk_0 = lbl_801A66CC->unk_1BC;
+            contact->unk_4 = lbl_801A66CC->unk_1C0;
+            contact->unk_8 = lbl_801A66CC->unk_1C4;
+            contact->link = arg6 != 0 ? &arg6->node->links[arg6->node->index] : 0;
+            *index_ptr = arg6 != 0 ? arg6->node->index : 0;
+        }
+    }
+    return hit;
+}
+/* fzgx:end fn_1_192E8 */
+
 /* fzgx:begin fn_1_1B010 noprologue */
 #include "types.h"
 #include "game/vec3.h"
