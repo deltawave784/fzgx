@@ -8987,3 +8987,6 @@ rel/main_rel/stcoli/fn_1_192E8.c:
 
 rel/main_rel/bg_for/fn_1_E3324.c:
 	.text       start:0x000E3324 end:0x000E35F0 align:4
+
+rel/main_rel/phys/fn_1_E8938.c:
+	.text       start:0x000E8938 end:0x000E95B4 align:4
