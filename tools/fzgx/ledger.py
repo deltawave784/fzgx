@@ -52,6 +52,13 @@ NOTE_MAX = 5          # notes per submit/release call
 NOTE_CHARS = 300      # characters per note detail
 
 
+# A saved body larger than this never seeds a model session: the prompt carries it inline and
+# Codex rejects turns over 1,048,576 characters (`input_too_large`). fn_17_424C and fn_17_1798
+# carried 1.1 MB bodies (whole-TU data tables from a layout rewrite); every claim re-picked them
+# and crashed in seconds, batch after batch. They stay in the repair corpus for fixup.
+PROMPT_SEED_MAX_BYTES = 400_000
+
+
 class Ledger:
     def __init__(self, path: Optional[Path] = None) -> None:
         self.path = path or STATE_DIR / "ledger.db"
@@ -155,11 +162,12 @@ class Ledger:
             "SELECT * FROM attempts WHERE symbol=? AND ended IS NULL ORDER BY id DESC LIMIT 1",
             (symbol,)).fetchone()
 
-    def best_local_attempt(self, symbol: str) -> Optional[tuple]:
+    def best_local_attempt(self, symbol: str, max_bytes: Optional[int] = None) -> Optional[tuple]:
         """(attempt row, body path) of the best ended attempt whose saved body exists on this
         machine, ranked by best_in_attempt (the saved body is the attempt's best; final_percent
         is only its last check). A restored state/ledger.json carries the recording machine's
-        absolute paths; a body copied into this checkout's .fzgx/attempts/ is found by name."""
+        absolute paths; a body copied into this checkout's .fzgx/attempts/ is found by name.
+        `max_bytes` skips bodies too large to hand to a model (PROMPT_SEED_MAX_BYTES)."""
         rows = self.db.execute(
             "SELECT * FROM attempts WHERE symbol=? AND ended IS NOT NULL AND best_body_path IS NOT NULL "
             "ORDER BY COALESCE(best_in_attempt, final_percent) DESC, id DESC", (symbol,)).fetchall()
@@ -167,11 +175,11 @@ class Ledger:
             path = Path(row["best_body_path"])
             if not path.exists():
                 path = STATE_DIR / "attempts" / path.name.replace("\\", "/").rsplit("/", 1)[-1]
-            if path.exists():
+            if path.exists() and (max_bytes is None or path.stat().st_size <= max_bytes):
                 return row, path
         return None
 
-    def ranked_local_attempt(self, project, symbol: str) -> Optional[tuple]:
+    def ranked_local_attempt(self, project, symbol: str, max_bytes: Optional[int] = None) -> Optional[tuple]:
         """best_local_attempt, re-ranked by `seedrank`: among the saved bodies near the top
         score the one with the fewest differing rows seeds the claim (ties by percent); one that omits a retail store or immediate addend ranks below a complete body
         (objdiff's equal row weights put fn_17_7728's store-less 95.2% body above correct ones).
@@ -185,7 +193,7 @@ class Ledger:
             path = Path(row["best_body_path"])
             if not path.exists():
                 path = STATE_DIR / "attempts" / path.name.replace("\\", "/").rsplit("/", 1)[-1]
-            if path.exists():
+            if path.exists() and (max_bytes is None or path.stat().st_size <= max_bytes):
                 found.append((row, path))
         if len(found) < 2:
             return found[0] if found else None

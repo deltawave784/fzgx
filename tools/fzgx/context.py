@@ -9,7 +9,7 @@ from functools import lru_cache
 from pathlib import Path
 from typing import List, Optional
 
-from .ledger import Ledger
+from .ledger import PROMPT_SEED_MAX_BYTES, Ledger
 from . import tufile
 from .project import STATE_DIR, ROOT, Function, Project, Symbol
 
@@ -318,7 +318,7 @@ def build_context(project: Project, ledger: Optional[Ledger], symbol: str,
             parts.append(f"\n## Current unit\n```c\n{cur}\n```")
 
     if ledger and not supplied_source and not (row and (row["claimed_by"] or "").startswith("shadow-")):
-        found = ledger.ranked_local_attempt(project, symbol)
+        found = ledger.ranked_local_attempt(project, symbol, max_bytes=PROMPT_SEED_MAX_BYTES)
         att, best_path = found if found else (None, None)
         if att:
             body = best_path.read_text()

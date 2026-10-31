@@ -26,7 +26,7 @@ from typing import Any, Dict, List, Optional, Tuple
 from . import oracle, poolfix, tufile, verify
 from .carve import carve
 from .context import build_context
-from .ledger import Ledger
+from .ledger import PROMPT_SEED_MAX_BYTES, Ledger
 from .lint import lint_paths
 from .project import ROOT, STATE_DIR, Project, fs_key
 
@@ -201,7 +201,8 @@ def _seed_record(key: str) -> dict:
 def _local_seed(l: Ledger, key: str, p: Optional[Project] = None) -> dict:
     """Without a batch manifest, a claim starts from the best saved attempt on this machine,
     with the compiler settings recorded beside it (ranked by `seedrank` when a project is given)."""
-    found = l.ranked_local_attempt(p, key) if p is not None else l.best_local_attempt(key)
+    found = (l.ranked_local_attempt(p, key, max_bytes=PROMPT_SEED_MAX_BYTES) if p is not None
+             else l.best_local_attempt(key, max_bytes=PROMPT_SEED_MAX_BYTES))
     if not found:
         return {}
     row, path = found
