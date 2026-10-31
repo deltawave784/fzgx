@@ -883,6 +883,77 @@ void fn_3_14778(u16 width, u16 height, u8 format, u32 data) {
 }
 /* fzgx:end fn_3_14778 */
 
+/* fzgx:begin fn_3_149AC */
+extern void * memcpy(void *, const void *, u32);
+
+typedef struct EmblemColor {
+    u8 r;
+    u8 g;
+    u8 b;
+    u8 a;
+} EmblemColor;
+
+/* Reads one texel of the emblem texture (4x4 tiles) as an RGBA8 color. */
+u32 fn_3_149AC(u8 *data, s16 x, s16 y) {
+    u16 pix;
+    EmblemColor color;
+    s16 tileX;
+    s16 tileY;
+    s16 tilesW;
+    s16 tile;
+    s16 px;
+    s16 py;
+    s16 offset;
+    u8 hi;
+    u8 lo;
+
+    switch ((s32)lbl_3_bss_A23E0) {
+    default:
+    case 6:
+        /* All unsupported formats share the common return. */
+        goto done;
+    case 4:
+        tileX = x / 4;
+        tileY = y / 4;
+        tilesW = (lbl_3_bss_A23D8 + 1) / 4;
+        tile = tileX + tileY * tilesW;
+        px = x % 4;
+        py = y % 4;
+        hi = data[(offset = (tile << 5) + ((px + (py << 2)) << 1))];
+        lo = data[offset + 1];
+        pix = hi << 8;
+        pix |= lo;
+        color.r = ((((pix & 0xF800) >> 8)) | ((pix & 7)));
+        color.g = ((pix & 0x7E0) >> 3) | (pix & 3);
+        color.b = (pix & 7) | ((pix & 0x1F) << 3);
+        break;
+    case 5:
+        tileX = x / 4;
+        tileY = y / 4;
+        tilesW = (lbl_3_bss_A23D8 + 1) / 4;
+        tile = tileX + tileY * tilesW;
+        px = x % 4;
+        py = y % 4;
+        offset = (tile << 5) + ((px + (py << 2)) << 1);
+        memcpy(&pix, data + offset, 2);
+        if (pix & 0x8000) {
+            color.a = 0xFF;
+            color.r = (pix >> 7) & 0xF8;
+            color.g = (pix >> 2) & 0xF8;
+            color.b = (pix & 0x1F) << 3;
+        } else {
+            color.a = (pix >> 8) & 0x70;
+            color.r = (pix >> 4) & 0xF0;
+            color.g = pix & 0xF0;
+            color.b = (pix & 0xF) << 4;
+        }
+        break;
+    }
+done:
+    return *(u32 *)&color;
+}
+/* fzgx:end fn_3_149AC */
+
 /* fzgx:begin fn_3_15240 */
 void fn_3_15240(void *arg0, s16 arg1, void *arg2, u16 arg3, s16 arg4, void *arg5) {
     s32 i;
