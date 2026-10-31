@@ -822,3 +822,26 @@ helper block, an int-to-float tail, still differs). Laws found while matching th
   statement moves, a struct or split locals for `d` (scalars leave memory) do not remove it; under
   the 1.2.5 rules only a non-aliasable stack object (not array/struct/address-taken) lacks that
   edge, so the retail spelling of the stored vector is still unknown.
+
+## Kept register copies (`li; mr`, tooling round T7, 2026-10-31)
+
+Probe compiles under GC/1.3.2 (`-O4,p`, main_rel flags). Retail `li r22, 0x0; ...; mr r24, r22`
+where we emit two `li` (census "copy-coalesce": fn_1_14CEB8, fn_8_C038, fn_10_111E8, ...):
+
+- `i = 0; off1 = i;`, `off1 = i = 0;`, `off1.value = i;` (scalar source), `off1 = i.value;`
+  (scalar destination), an inline `cpy(&off1, i)` and `*&off1 = i` all propagate the constant:
+  two `li`.
+- A copy between two one-member struct locals survives: `i.value = 0; off1.value = i.value;`
+  gives `li r30, 0; mr r29, r30`. So does an inline helper whose own modified parameter is
+  copied through a pointer to a struct member (`static inline s32 f(s32 cnt, s16 *m) { *m = cnt;
+  ... cnt++; }` called as `f(0, &m.value)`): fn_1_E3324's landed shape.
+- A one-member struct destination fed from a single-definition scalar also keeps the copy
+  (`tmp.bytes[2] = z = 0; off1.value = z;`).
+- Measured on the census: wrapping both sides of every `b = a;` / same-literal pair (108
+  candidates over 27 near-misses at 99%+) closed no function. The copy row closes, but a carrier
+  claims its callee-saved register ahead of the other locals regardless of declaration position
+  (fn_1_14CEB8: z at r27 where retail has r22; fn_10_111E8: `row` carrier gives exactly retail's
+  instructions with an r23/r24/r25 three-cycle left). The remaining question is the allocation
+  order, i.e. a capture (`capture132.sh`) of the carrier body, not another spelling search.
+- The join copy `lwz r0 | li r0, 0` then `mr r25, r0` (fn_1_9C724's ternary) is a different
+  case: ternary, `if/else`, inline helper, scalar or carrier temporaries all coalesce into v6.

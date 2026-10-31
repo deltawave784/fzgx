@@ -728,6 +728,17 @@ def resolve(p: Project, tu_source: str, v, apply: bool = True,
         for n, ln in reconcile._decls(b.body):
             variants.setdefault(n, Counter())[ln] += 1
             where.setdefault(n, {})[b.name] = ln
+    # a `volatile` declaration's justification comment sits on the line above it (lint S2):
+    # it travels with the declaration into the prologue
+    justification: Dict[str, str] = {}
+    for b in tf.blocks + [tf.prologue]:
+        text_ = b if isinstance(b, str) else b.body
+        prev_ = ''
+        for ln_ in text_.splitlines():
+            s_ = ln_.strip()
+            if re.search(r'\bvolatile\b', s_) and tutidy.DECL_LINE_RE.match(ln_) and re.match(r'/[/*]', prev_):
+                justification.setdefault(s_, prev_)
+            prev_ = s_
     # a TU-local definition called by a block before it (no declaration anywhere) was an
     # implicit `int f()` there: the whole-file compile rejects the later definition, so it
     # joins the prologue too (bg_cas.c: fn_1_FB96C calls fn_1_FB9DC before defining it)
@@ -900,6 +911,8 @@ def resolve(p: Project, tu_source: str, v, apply: bool = True,
                 lines.append(truth)  # the TU's own definition, declared ahead of its callers
             else:
                 lines.append(truth)
+            if lines and lines[-1] == truth and truth.strip() in justification:
+                lines[-1] = justification[truth.strip()] + '\n' + truth
         report['knr'] = sorted(knr)
         return order_prologue_types(dedupe_typedef_lines(base_prologue).rstrip('\n') + '\n' + '\n'.join(dict.fromkeys(lines)) + '\n')
 
