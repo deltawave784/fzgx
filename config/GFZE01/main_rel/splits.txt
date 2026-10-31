@@ -8975,3 +8975,6 @@ rel/main_rel/bg_lig/fn_1_D6C10.c:
 
 rel/main_rel/sel_static_disp/fn_1_13ABA8.c:
 	.text       start:0x0013ABA8 end:0x0013B24C align:4
+
+rel/main_rel/accessory/fn_1_1244F0.c:
+	.text       start:0x001244F0 end:0x00124AD4 align:4

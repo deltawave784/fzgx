@@ -8698,6 +8698,171 @@ void fn_1_12277C(fn_1_12277C_Object *self)
 }
 /* fzgx:end fn_1_12277C */
 
+/* fzgx:begin fn_1_1244F0 noprologue */
+#include "types.h"
+#include "game/main_rel/accessory_types.h"
+#include "rel/main_rel/accessory.h"
+
+typedef struct {
+    u8 flags;
+    u8 pad_1[0xF];
+    f32 f10;
+    f32 f14;
+    f32 f18;
+    u8 pad_1C[0x24];
+    f32 f40;
+} Group1244F0; /* 0x44 */
+
+typedef struct {
+    Group1244F0 *a;
+    Group1244F0 *b;
+    f32 distance;
+} Link1244F0;
+
+typedef struct {
+    u8 pad_0[0x18];
+    u32 groupCount;
+    u32 linkCount;
+    u8 pad_20[4];
+    Group1244F0 *groups;
+    Link1244F0 *links;
+} Obj1244F0;
+
+extern f32 fn_1_1289BC(const Point1024C4 *, const Point1024C4 *);
+extern void *fn_1_4630(u32, u32, const char *, s32);
+extern u32 lbl_801A6410;
+extern void fn_1_10846C(Obj1244F0 *);
+extern void fn_1_128884(void *, void *, s32);
+
+#pragma opt_lifetimes on
+void fn_1_1244F0(Obj1244F0 *obj) {
+    Group1244F0 *p;
+    u32 jRow;
+    Group1244F0 *aRow;
+    Group1244F0 *a4;
+    Group1244F0 *bFirst;
+    Group1244F0 *b2;
+    u32 kRow;
+    Group1244F0 *a;
+    Group1244F0 *b;
+    Group1244F0 *bRow;
+    u32 j;
+    u32 k4;
+    u32 rows;
+    u32 n;
+    u32 i;
+    Group1244F0 *g;
+    f32 v;
+    u32 j4;
+
+    if (obj != NULL) {
+        fn_1_10846C(obj);
+
+        g = obj->groups;
+        for (i = 0; i < obj->groupCount; i++, g++) {
+            if (g->flags & 1) {
+                g->flags = 0;
+                g->f40 = -1.0f;
+            } else {
+                g->flags = 1;
+                g->f40 = 0.0f;
+            }
+        }
+
+        p = obj->groups;
+        for (i = 0; i < obj->groupCount; i++, p++) {
+            j = i + 1;
+            b = obj->groups + i + 1;
+            for (; j < obj->groupCount; j++, b++) {
+                if (p->flags == 0 && b->flags != 0) {
+                    fn_1_128884(p, b, sizeof(Group1244F0));
+                }
+            }
+        }
+
+        p = obj->groups;
+        for (i = 0; i < obj->groupCount; i++, p++) {
+            b2 = obj->groups + i + 1;
+            for (j = i + 1; j < obj->groupCount; j++, b2++) {
+                if (p->flags == b2->flags && p->f10 < b2->f10) {
+                    fn_1_128884(p, b2, sizeof(Group1244F0));
+                }
+            }
+        }
+
+        p = obj->groups;
+        for (i = 0; i < obj->groupCount / 9; i++, p += 9) {
+            for (j = 0, a4 = p; j < 9; j++, a4++) {
+                for (k4 = j + 1, a = a4 + 1; k4 < 9; k4++, a++) {
+                    if (a4->f18 < a->f18) {
+                        fn_1_128884(a4, a, sizeof(Group1244F0));
+                    }
+                }
+            }
+        }
+
+        for (p = obj->groups, i = 0; i < 9; i++, p++) {
+            for (j = i + 1, bFirst = p + 1; j < 9; j++, bFirst++) {
+                if (p->f18 > 0.0f && bFirst->f18 > 0.0f && p->f14 > bFirst->f14) {
+                    fn_1_128884(p, bFirst, sizeof(Group1244F0));
+                } else if (p->f18 <= 0.0f && bFirst->f18 <= 0.0f && p->f14 < bFirst->f14) {
+                    fn_1_128884(p, bFirst, sizeof(Group1244F0));
+                }
+            }
+        }
+
+        p = obj->groups;
+        for (i = 0; i < obj->groupCount; i++, p++) {
+            if (p->flags != 0 && p[1].flags == 0) {
+                break;
+            }
+        }
+        p++;
+        rows = (obj->groupCount - (p - obj->groups)) / 9;
+
+        for (i = 0; i < rows; i++, p += 9) {
+            for (j = 0; j < 9; j += 3) {
+                v = -(f32)(i + 1) / (f32)(rows + 1);
+                p[j].f40 = v;
+                p[j + 1].f40 = v;
+                p[j + 2].f40 = v;
+            }
+            for (aRow = p, jRow = 0; jRow < 9; jRow++, aRow++) {
+                for (kRow = jRow + 1, bRow = aRow + 1; kRow < 9; kRow++, bRow++) {
+                    if (aRow->f18 > 0.0f && bRow->f18 > 0.0f && aRow->f14 > bRow->f14) {
+                        fn_1_128884(aRow, bRow, sizeof(Group1244F0));
+                    } else if (aRow->f18 <= 0.0f && bRow->f18 <= 0.0f && aRow->f14 < bRow->f14) {
+                        fn_1_128884(aRow, bRow, sizeof(Group1244F0));
+                    }
+                }
+            }
+        }
+
+        obj->linkCount = (obj->groupCount / 9) * 8 + (obj->groupCount / 9 - 1) * 9;
+        obj->links = fn_1_4630(lbl_801A6410, obj->linkCount * sizeof(Link1244F0), lbl_1_data_40530, 0x2904);
+
+        n = 0;
+        p = obj->groups;
+        for (i = 0; i < obj->groupCount - 1; i++, p++) {
+            if ((i + 1) % 9 != 0) {
+                obj->links[n].a = p;
+                obj->links[n].b = p + 1;
+                obj->links[n].distance = fn_1_1289BC((const Point1024C4 *)p, (const Point1024C4 *)(p + 1));
+                n++;
+            }
+        }
+
+        p = obj->groups;
+        for (i = 0; i < obj->groupCount - 9; i++, p++) {
+            obj->links[n].a = p;
+            obj->links[n].b = p + 9;
+            obj->links[n].distance = fn_1_1289BC((const Point1024C4 *)p, (const Point1024C4 *)(p + 9));
+            n++;
+        }
+    }
+}
+/* fzgx:end fn_1_1244F0 */
+
 /* fzgx:begin fn_1_124AD4 noprologue */
 #include "types.h"
 #include "psvec.h"
