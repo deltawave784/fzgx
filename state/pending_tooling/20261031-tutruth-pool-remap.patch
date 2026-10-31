@@ -1,0 +1,21 @@
+diff --git a/tools/fzgx/tutruth.py b/tools/fzgx/tutruth.py
+index 88266c7b2..05e6ca9e2 100644
+--- a/tools/fzgx/tutruth.py
++++ b/tools/fzgx/tutruth.py
+@@ -1056,7 +1056,15 @@ def resolve(p: Project, tu_source: str, v, apply: bool = True,
+         for u in list(units.values()):
+             if isinstance(u.get('pool'), dict):
+                 res = oracle.check(p, f"{module}:{u['symbols'][0]}", 20)
+-                if res.ok and (res.matched or res.matched_pool) and res.pool_map != u['pool']:
++                # only a re-derived map under which the block matches outright replaces the old
++                # one: a pool match whose private sections cannot all be emptied (a unit that
++                # keeps its own BSS definitions, identity bindings) returns an empty `pool_map`,
++                # and writing it dropped fn_1_128F10's bindings (multiply-defined link, pass 18)
++                if not (res.ok and res.matched and res.pool_map):
++                    if not (res.ok and (res.matched or res.matched_pool)):
++                        report.setdefault('pool_unverified', []).append(u['symbols'][0])
++                    continue
++                if res.pool_map != u['pool']:
+                     with oracle.build_lock('units.lock'):
+                         all_units = p.load_units()
+                         for x in all_units:
