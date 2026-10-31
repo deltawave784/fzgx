@@ -793,3 +793,30 @@ Reported by the karamzov123 fork (same tooling base) and restated here. Items ma
     fn_800720B0 and fn_80072168 are `needs-web-alignment` (the interference graph differs from
     retail's): no declaration order or tie re-sweep can close them, only a source change in the
     value webs. This agrees with the T1 verdicts above (no class closed by order alone).
+
+## Scheduler replay (GC/1.3.2 capture, tooling round T6, 2026-10-31)
+
+`capture132.sh` now also writes `pcode-sched-NNNN-before.json` at every Scheduler entry
+(0x500020; three per function, the second is the pre-allocation list scheduling, so pass 2 for a
+single-function file and 3k-1 for the k-th function when primer helpers compile first).
+`tools/capture/recovery/sched_replay.py DIR [--pass N]` replays the recovered list scheduler
+(Scheduler.c, MachineSimulation750.c) and validates every block; `--block B --before I --after J`
+lists the single dependence edges whose removal makes input instruction I issue before J.
+Measured: fn_1_102750 26/26 blocks and fn_1_D9D8C 12/12 blocks reproduce exactly (one primer
+helper block, an int-to-float tail, still differs). Laws found while matching the compiler:
+
+- **A store cannot issue while another store is in the LSU's second stage**, so two stores are
+  at least two cycles apart (without this rule 2 of 26 blocks differ).
+- **Stack slots are (object, offset, width)**: `d[0]` and `d[1]` of one local array do not
+  conflict; overlapping widths do (`stw 4(obj)` vs `lfd 0(obj)`). In the 1.3.2 snapshot the
+  memory operand's offset is bytes 2..3 and its object bytes 6..9 (the reader's `object` field
+  is shifted for kind 3).
+- **Constant-pool loads (flag 0x40) take part in no memory relation.** Pointer reads depend on
+  every later write (WAR, with the load's 2-cycle latency); pointer writes on every later access.
+- The fdivs clone triple (fn_1_102750, fn_1_11492C, fn_1_D9D8C): every ordering is reproduced
+  except one edge. Retail lacks the WAR edge from the `a->pos.x` pointer load to the `d[1]`
+  stack store (`--before 14 --after 18` names exactly `12 -> 13` in both captured clones); with
+  it the store waits until the cycle after `fadds` and `fdivs` wins the race. Volatile qualifiers,
+  statement moves, a struct or split locals for `d` (scalars leave memory) do not remove it; under
+  the 1.2.5 rules only a non-aliasable stack object (not array/struct/address-taken) lacks that
+  edge, so the retail spelling of the stored vector is still unknown.

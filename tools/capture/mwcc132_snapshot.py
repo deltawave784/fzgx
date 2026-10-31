@@ -157,6 +157,15 @@ class Session:
         snap = self.reader.coloring_snapshot(CLASS_ARGS[name], self.stack, int(gdb.parse_and_eval("$pc")))
         _write(self.output / f"coloring-{self.index:04d}-{name}-{attempt:02d}-after.json", snap)
 
+    def schedule(self):
+        # Scheduler entry (0x500020): the block order the list scheduler starts from. The pass
+        # before coloring runs on virtual registers (rank tie-break), the later ones on colors.
+        self.schedules = getattr(self, "schedules", 0) + 1
+        pc = int(gdb.parse_and_eval("$pc"))
+        _write(self.output / f"pcode-sched-{self.schedules:04d}-before.json",
+               self.reader.pcode_stage(f"before-schedule-{self.schedules}", pc))
+        print(f"captured PCode before scheduler pass {self.schedules}")
+
     def final(self):
         _write(self.output / f"pcode-{self.index:04d}-final.json", self.reader.pcode_stage("final", int(gdb.parse_and_eval("$pc"))))
         print(f"captured final PCode {self.index}")
@@ -192,6 +201,7 @@ class Mwcc132Capture(gdb.Command):
         s = Session(argument.strip())
         HookBreakpoint(0x5077B0, s, "allocate")
         HookBreakpoint(0x507A30, s, "select")
+        HookBreakpoint(0x500020, s, "schedule")  # Scheduler entry: input order of every pass
         HookBreakpoint(0x433FC8, s, "final")  # reconvergence after the FINAL CODE dump block
         print("mwcc132 capture armed")
 
