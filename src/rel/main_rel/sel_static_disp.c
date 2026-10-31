@@ -3385,6 +3385,120 @@ void fn_1_13A9B8(f32 arg7, f32 arg8, s16 arg0, s16 arg1, int arg2, void* arg3,
 }
 /* fzgx:end fn_1_13A9B8 */
 
+/* fzgx:begin fn_1_13ABA8 noprologue */
+#include "types.h"
+#include "rel/main_rel/sel_static_disp.h"
+#include "font.h"
+
+struct fn_1_13ABA8_lbl_1_rodata_8C14 {
+    u32 unk_0; u32 unk_4; u32 unk_8; u32 unk_C; u32 unk_10; u32 unk_14;
+};
+struct fn_1_13ABA8_lbl_1_rodata_8C2C {
+    u32 unk_0; u32 unk_4; u32 unk_8; u32 unk_C; u32 unk_10; u32 unk_14;
+};
+struct fn_1_13ABA8_packet {
+    u32 flags;
+    f32 x, y, z;
+    u32 tail[18];
+};
+extern struct fn_1_13ABA8_lbl_1_rodata_8C14 lbl_1_rodata_8C14;
+extern struct fn_1_13ABA8_lbl_1_rodata_8C2C lbl_1_rodata_8C2C;
+extern struct fn_1_13ABA8_packet lbl_1_rodata_26F8;
+extern const f32 lbl_1_rodata_861C;
+extern const f32 lbl_1_rodata_8C44;
+extern const f32 lbl_1_rodata_8C48;
+extern const f32 lbl_1_rodata_85F0;
+extern s32 lbl_801A66B4;
+extern int fn_1_4F734(FontDrawPacket*);
+extern u8 fn_1_B7C00(void);
+extern void fn_1_49410(void);
+extern void fn_1_495C8(int);
+extern void fn_1_49590(f32);
+extern void fn_1_495B0(u32);
+extern s32 fn_1_13B24C(s32, s32, s32, s32, const char*);
+extern u32 fn_1_13F7F8(s16, s16);
+
+#define DRAW_CASE(bit,offset,id) \
+    case bit: \
+        width += fn_1_13B24C(pass, width + start, 439, 21, (const char*)(p_lbl_1_data_40F58 + offset)); \
+        width += fn_1_13B24C(pass, width + start, 439, textHeight, (const char*)fn_1_13F7F8(id, (s16)lbl_801A66B4)); \
+        break;
+
+static inline s32 fn_1_13ABA8_spacing(s32 *table, s32 index) {
+    s32 off = index * 4;
+    return *(s32 *)((u8 *)table + off);
+}
+
+#pragma opt_lifetimes off
+void fn_1_13ABA8(u32 arg0) {
+    struct fn_1_13ABA8_packet loc_38;
+    struct fn_1_13ABA8_lbl_1_rodata_8C14 loc_20;
+    struct fn_1_13ABA8_lbl_1_rodata_8C2C loc_8;
+    s32 start;
+    s32 pass;
+    s32 width;
+    s32 textHeight;
+    u8 *p_lbl_1_data_40F58;
+    u32 remaining;
+    u32 bit;
+    s32 totalWidth;
+    u8 nextBit;
+    u32 bitMask;
+    s32 spacingIndex;
+    struct { s32 *ptr; s32 offset; } spacing;
+    p_lbl_1_data_40F58 = (u8*)&lbl_1_data_40F58;
+    totalWidth = 0;
+    loc_20 = lbl_1_rodata_8C14;
+    loc_8 = lbl_1_rodata_8C2C;
+    loc_38 = lbl_1_rodata_26F8;
+    loc_38.flags = 0x9A02;
+    loc_38.x = lbl_1_rodata_861C;
+    loc_38.y = lbl_1_rodata_8C44;
+    loc_38.z = lbl_1_rodata_8C48;
+    fn_1_4F734((FontDrawPacket*)&loc_38);
+    if (fn_1_B7C00() != 0) return;
+    fn_1_49410();
+    fn_1_495C8(8);
+    fn_1_49590(lbl_1_rodata_85F0);
+    fn_1_495B0(0x80000000);
+    spacing.ptr = (s32*)&loc_20;
+    for (pass = 0; pass <= 1; pass++) {
+        textHeight = ((s32*)&loc_8)[lbl_801A66B4];
+        start = 320 - totalWidth / 2;
+        remaining = arg0;
+        width = 0;
+        nextBit = __cntlzw(arg0);
+        for (; remaining != 0;
+             nextBit = __cntlzw(remaining)) {
+            bit = nextBit;
+            switch (bit) {
+                DRAW_CASE(4, 0xBC0, 3)
+                DRAW_CASE(1, 0xBD8, 4)
+                DRAW_CASE(0, 0xBB8, 5)
+                DRAW_CASE(8, 0xBDC, 8)
+                DRAW_CASE(9, 0xBE0, 9)
+                DRAW_CASE(2, 0xBD8, 6)
+                DRAW_CASE(5, 0xBE4, 10)
+                DRAW_CASE(6, 0xBE8, 11)
+                DRAW_CASE(7, 0xBF0, 12)
+                DRAW_CASE(10, 0xBF8, 13)
+                DRAW_CASE(3, 0xBD8, 7)
+                DRAW_CASE(11, 0xBDC, 14)
+                DRAW_CASE(12, 0xBDC, 15)
+                DRAW_CASE(13, 0xBB8, 16)
+                DRAW_CASE(14, 0xBE0, 17)
+            }
+            bitMask = lbl_801A66B4 * 4;
+            width += *(s32 *)((u8 *)spacing.ptr + bitMask);
+            bitMask = 0x80000000U >> bit;
+            remaining &= ~bitMask;
+        }
+        width -= spacing.ptr[lbl_801A66B4];
+        if (pass == 0) totalWidth = width;
+    }
+}
+/* fzgx:end fn_1_13ABA8 */
+
 /* fzgx:begin fn_1_13B24C */
 s32 fn_1_13B24C(s32 arg0, s32 arg1, s32 arg2, s32 arg3, const char* arg4) {
     f32 temp;
