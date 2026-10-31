@@ -869,8 +869,6 @@ void fn_3_8F8(void) {
 /* fzgx:end fn_3_8F8 */
 
 /* fzgx:begin _epilog pool */
-
-
 typedef struct {
     u8 pad[0x64];
 } EpilogSlot;
@@ -958,7 +956,6 @@ int fn_3_AF8(Fn3AF8Arg *arg) {
 /* fzgx:end fn_3_AF8 */
 
 /* fzgx:begin fn_3_B30 */
-
 s32 fn_3_B30(Fn3B30Data *data) {
     s16 index = data->index;
     u32 *entry = (u32 *)((((u8 *)&lbl_3_bss_140)) + index * 0x81c0);
@@ -2168,11 +2165,6 @@ void fn_3_39F0(void) {
 /* fzgx:end fn_3_39F0 */
 
 /* fzgx:begin fn_3_3AE8 pool */
-
-
-
-
-
 /* Retail literal pool (lbl_3_rodata_0 .. 0xF8), primed in first-use order. */
 #pragma section code_type ".fzgxpool"
 static const u32 fzgx_pool_table1[1] = {0x00000000};  /* fzgx-allow: A1 retail pool bytes */
@@ -3728,6 +3720,164 @@ void fn_3_61B8(void) {
     fn_1_15BB34((u32)((u8 *)(u32)p_lbl_3_data_0 + 4444));
 }
 /* fzgx:end fn_3_61B8 */
+
+/* fzgx:begin fn_3_6270 pool noprologue */
+#include "types.h"
+
+typedef struct {
+    u32 flags;      /* 0x00 */
+    u16 unk_4;
+    s16 padIndex;   /* 0x06 */
+    u8 pad_8[0x1C];
+    u32 state;      /* 0x24 */
+} fn_3_6270_Sub;
+
+typedef struct {
+    u8 pad_0[0x8];
+    u16 trig;             /* 0x08 */
+    u8 pad_A[0x6];
+    volatile u16 rep;     /* 0x10 */
+    volatile u16 rep2;    /* 0x12 */
+} fn_3_6270_Pad;
+
+/* this TU's .bss objects, in retail address order (base lbl_3_bss_0) */
+static u8 lbl_3_bss_0[8];
+static s32 lbl_3_bss_8;
+static u8 lbl_3_bss_C[0xE4];
+static fn_3_6270_Sub lbl_3_bss_F0;
+static u8 lbl_3_bss_118[0x8];
+static s32 lbl_3_bss_120;
+static u8 lbl_3_bss_124[0x20844 - 0x124];
+static s16 lbl_3_bss_20844;
+static s16 lbl_3_bss_20846;
+static s16 lbl_3_bss_20848;
+static s16 lbl_3_bss_2084A;
+static s32 lbl_3_bss_2084C;
+static u32 lbl_3_bss_20850;
+static u8 lbl_3_bss_20854[0x243A8 - 0x20854];
+static u32 lbl_3_bss_243A8;
+
+extern s16 lbl_1_bss_96A;
+extern fn_3_6270_Pad lbl_1_bss_9F8[];
+extern u32 lbl_1_bss_6EAB4;
+extern u32 lbl_3_data_B4;
+extern u32 lbl_801A66A8;
+extern int fn_1_4C10(void);
+extern void fn_1_1280(u32);
+extern void fn_1_4A00(s32, u8, u32);
+extern void fn_1_A2D84(u32);
+extern void fn_3_679C(void);
+
+/* fixes the TU's .bss order; dropped at integration */
+#pragma section code_type ".fzgxpool"
+__declspec(section ".fzgxpool") void fzgx_primer_fn_3_6270(void) {
+    fn_1_A2D84((u32)lbl_3_bss_0);
+    fn_1_A2D84((u32)&lbl_3_bss_8);
+    fn_1_A2D84((u32)lbl_3_bss_C);
+    fn_1_A2D84((u32)&lbl_3_bss_F0);
+    fn_1_A2D84((u32)lbl_3_bss_118);
+    fn_1_A2D84((u32)&lbl_3_bss_120);
+    fn_1_A2D84((u32)lbl_3_bss_124);
+    fn_1_A2D84((u32)&lbl_3_bss_20844);
+    fn_1_A2D84((u32)&lbl_3_bss_20846);
+    fn_1_A2D84((u32)&lbl_3_bss_20848);
+    fn_1_A2D84((u32)&lbl_3_bss_2084A);
+    fn_1_A2D84((u32)&lbl_3_bss_2084C);
+    fn_1_A2D84((u32)&lbl_3_bss_20850);
+    fn_1_A2D84((u32)lbl_3_bss_20854);
+    fn_1_A2D84((u32)&lbl_3_bss_243A8);
+}
+#pragma section code_type ".text"
+
+static inline int fn_3_6270_busy(fn_3_6270_Sub *sub) {
+    if ((sub->state & 0x80000000) && !(sub->state & 1) && !(sub->flags & 2)) {
+        return 1;
+    }
+    if (fn_1_4C10()) {
+        return 1;
+    }
+    return 0;
+}
+
+void fn_3_6270(void) {
+    struct { s16 horiz; s32 vert; } move;
+    s32 idx;
+    s32 next;
+    s32 prev;
+
+    fn_3_679C();
+    if (lbl_3_bss_120 == -1) {
+        fn_1_4C10();
+    }
+    if (fn_3_6270_busy(&lbl_3_bss_F0)) {
+        return;
+    }
+    prev = lbl_3_bss_120;
+    if (prev != -1) {
+        lbl_3_bss_120 = -1;
+        lbl_1_bss_96A = prev;
+        return;
+    }
+
+    move.vert = lbl_3_bss_F0.padIndex;
+    idx = move.vert;
+    move.horiz = 0;
+    move.vert = move.horiz;
+    if (((lbl_1_bss_9F8[idx].rep >> 3) & 1) || ((lbl_1_bss_9F8[idx].rep2 >> 3) & 1)) {
+        move.vert--;
+        fn_1_A2D84(0xA9010000);
+        lbl_801A66A8 = 0;
+    }
+    if (((lbl_1_bss_9F8[idx].rep >> 2) & 1) || ((lbl_1_bss_9F8[idx].rep2 >> 2) & 1)) {
+        move.vert++;
+        fn_1_A2D84(0xA9010000);
+        lbl_801A66A8 = 0;
+    }
+    next = lbl_3_bss_20844 + (s16)move.vert;
+    lbl_3_bss_20844 = next > 2 ? 0 : (next < 0 ? 2 : next);
+
+    if ((lbl_1_bss_9F8[idx].trig >> 9) & 1) {
+        move.horiz = -1;
+        fn_1_A2D84(0xA9010200);
+    }
+    if ((lbl_1_bss_9F8[idx].trig >> 8) & 1) {
+        move.horiz = 1;
+        fn_1_A2D84(0xA9010100);
+    }
+
+    if (move.horiz == -1) {
+        if (lbl_3_bss_8 != 0) {
+            lbl_3_bss_120 = 0x5D;
+            fn_1_1280(1);
+            lbl_3_data_B4 = 0x5C;
+            lbl_3_bss_F0.flags |= 0x1000000;
+        } else {
+            fn_1_4A00(0, 15, lbl_3_bss_20850);
+            lbl_3_bss_243A8 = 0;
+            lbl_1_bss_6EAB4 |= 0x24;
+            lbl_3_bss_120 = 0x5C;
+        }
+    } else if (move.horiz != 0) {
+        switch (lbl_3_bss_20844) {
+        case 0:
+            fn_1_4A00(0, 15, lbl_3_bss_20850);
+            lbl_3_bss_243A8 = 0;
+            lbl_3_bss_120 = 0x6D;
+            break;
+        case 1:
+            fn_1_4A00(0, 15, lbl_3_bss_20850);
+            lbl_3_bss_243A8 = 0;
+            lbl_3_bss_120 = 0x67;
+            break;
+        case 2:
+            fn_1_4A00(0, 15, lbl_3_bss_20850);
+            lbl_3_bss_243A8 = 0;
+            lbl_3_bss_120 = 0x6F;
+            break;
+        }
+    }
+}
+/* fzgx:end fn_3_6270 */
 
 /* fzgx:begin fn_3_6540 */
 void fn_3_6540(void) {
@@ -7270,9 +7420,6 @@ void fn_3_A12C(void) {
 /* fzgx:end fn_3_A12C */
 
 /* fzgx:begin fn_3_AC4C */
-
-
-
 #pragma opt_propagation off
 void fn_3_AC4C(void) {
     fn_3_AC4C_CustomizeEntry *entries = (((fn_3_AC4C_CustomizeEntry *)&lbl_3_bss_20860));
