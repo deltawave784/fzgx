@@ -1,5 +1,5 @@
 {
- "generated": 1793431257,
+ "generated": 1793437987,
  "functions": [
   {
    "symbol": "car_colchg:_prolog",
@@ -824334,9 +824334,9 @@
    "detail": "Obj_1_bss_7B180 needs recovered array types at offsets 0x1600 (f32 *[5]), 0x168C (s8 *[5]), 0x16A0 (u16 *[5]), 0x1800 (u16[16]), and 0x1824 (u32[5]); currently scalar fields plus byte padding force casts and change indexed address formation.",
    "source": "agent:codex-20261029a-codex-97",
    "created_at": 1793277692,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1793437966
   },
   {
    "id": 549,
@@ -824382,9 +824382,9 @@
    "detail": "Obj_1_bss_7B180 declares retail indexed tables as scalar fields: offsets 0x1600, 0x168C, 0x16A0, 0x1800, and 0x1824 need f32 *[5], s8 *[5], u16 *[5], u16[16], and u32[5] respectively. Header-based reconstruction changes address materialization; the retained 98.0% seed instead relies on overlapping s",
    "source": "agent:codex-20261029c-codex-97",
    "created_at": 1793305128,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1793437966
   },
   {
    "id": 553,
@@ -824406,9 +824406,9 @@
    "detail": "Obj_1_bss_7B180 appears to need five-word array fields at 0x16EC, 0x1700, 0x1714, and 0x1728 (currently separate u32 fields), plus a five-word array at 0x16B4 (currently u32 plus arr_16B8[0x10]); retail materializes each array base before indexed accesses.",
    "source": "agent:codex-20261029c-codex-132",
    "created_at": 1793306952,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1793437967
   },
   {
    "id": 555,
@@ -824442,9 +824442,9 @@
    "detail": "Extend Obj_3_bss_A2460 in rel/customize/toolkit.h: retail fn_3_2C73C writes s16 at 0x34, three f32 at 0x38/0x3C/0x40, a 12-byte aggregate at 0x44, and a 6-byte aggregate at 0x50. The current recovered type ends at 0x08, preventing typed access to these fields.",
    "source": "agent:codex-20261029d-astra-codex-11",
    "created_at": 1793317796,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1793437972
   },
   {
    "id": 558,
@@ -824490,9 +824490,9 @@
    "detail": "Recover/expose the f32 tail at offset 0xD0 in Obj_1_bss_8FDA8 in include/rel/main_rel/bg_win.h (size 0xD4; .unk_D0 is rejected). A direct typed member store should address BSS base +0x110 without the best candidate's extra zero-offset object-address materialization. Native definitions of lbl_1_bss_8",
    "source": "agent:codex-20261029d-codex-131",
    "created_at": 1793321575,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1793437968
   },
   {
    "id": 562,
@@ -824502,9 +824502,9 @@
    "detail": "The SDK headers do not define OS_BUS_CLOCK or an inline OSPhysicalToCached; providing the standard low-memory clock macro outside this unit is needed to replace the unmatched __OSBusClock extern access without hardcoding an address.",
    "source": "agent:codex-20261029e-codex-90",
    "created_at": 1793331796,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1793437970
   },
   {
    "id": 563,
@@ -824514,9 +824514,9 @@
    "detail": "Obj_1_bss_7B180 should represent 0x16EC..0x16FF, 0x1700..0x1713, 0x1714..0x1727, and 0x1728..0x173B as four u32[5] arrays, and 0x16B4..0x16C7 as a u32[5] entry array rather than scalar-plus-padding; preserve all following offsets. Scalar-pointer indexed, array-pointer cast, inline-helper, and pointe",
    "source": "agent:codex-20261029e-codex-128",
    "created_at": 1793333812,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1793437967
   },
   {
    "id": 564,
@@ -824538,9 +824538,9 @@
    "detail": "bg_win.h declares lbl_1_bss_8FD68 as one 0x40-byte Obj_1_bss_8FD68 with padding at offset 0, but this function and matched fn_1_15C36C access an array of 0x10-byte records containing four f32 fields at offsets 0, 4, 8, and 12; the header needs that array layout.",
    "source": "agent:codex-20261029f-astra-codex-9",
    "created_at": 1793343685,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1793437968
   },
   {
    "id": 566,
@@ -824550,9 +824550,9 @@
    "detail": "Obj_3_bss_A2460 in rel/customize/toolkit.h is only 8 bytes, but fn_3_2C73C accesses s16 +0x34, a three-float vector +0x38, three words +0x44, u32 +0x50, and u16 +0x54; reconcile the shared object's recovered layout before further matching.",
    "source": "agent:codex-20261029f-astra-codex-10",
    "created_at": 1793344140,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1793437972
   },
   {
    "id": 567,
@@ -824562,9 +824562,9 @@
    "detail": "dolphin/os.h does not expose OS_BUS_CLOCK or OS_BASE_CACHED, and dolphin/os/OSAddress.h is absent; a canonical SDK low-memory bus-clock mapping is needed to avoid a forbidden hardcoded address and the extra __OSBusClock address materialization.",
    "source": "agent:codex-20261029f-codex-78",
    "created_at": 1793345953,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1793437970
   },
   {
    "id": 568,
@@ -824610,9 +824610,9 @@
    "detail": "Review Obj_1_bss_8FDA8's 0xD4-byte layout: the four entries occupy 0xD0 bytes, and retail accesses the following f32 at lbl_1_bss_8FD68+0x110 (BSS 0x8FE78) as a direct pooled scalar. The header exposes no unk_D0 member; a correctly typed tail field or separate scalar with non-overlapping object boun",
    "source": "agent:codex-20261029f-codex-100",
    "created_at": 1793347432,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1793437969
   },
   {
    "id": 572,
@@ -824634,9 +824634,9 @@
    "detail": "SDK low-memory clock access needs a canonical OS_BUS_CLOCK definition: dolphin/os.h and dolphin/os/OSTime.h do not define it; declaring __OSBusClock externally adds a low-half address instruction and changes invariant scheduling.",
    "source": "agent:codex-20261030a-codex-71",
    "created_at": 1793358508,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1793437970
   },
   {
    "id": 574,
@@ -824646,9 +824646,9 @@
    "detail": "In include/rel/main_rel/ghost.h, Obj_1_bss_7B180 fields at 0x1600, 0x168C and 0x16A0 are indexed arrays of five f32 *, s8 * and u16 * respectively, not scalar u32 plus padding; 0x1800 is an indexed u16 array (at least five elements), and 0x1824 is u32[5]. The 98% seed instead splits these into owned",
    "source": "agent:codex-20261030a-codex-94",
    "created_at": 1793359473,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1793437967
   },
   {
    "id": 575,
@@ -824658,9 +824658,9 @@
    "detail": "Obj_1_bss_7B180 exposes four indexed u32[5] blocks at offsets 0x16EC, 0x1700, 0x1714, and 0x1728 as scalar fields; the allocation block at 0x16B4 is likewise indexed across five words. Recover array field views in phys.h to avoid indexing beyond scalar members.",
    "source": "agent:codex-20261030a-codex-126",
    "created_at": 1793361359,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1793437968
   },
   {
    "id": 576,
@@ -824694,9 +824694,9 @@
    "detail": "Provide the SDK low-memory bus-clock access abstraction: dolphin/os.h lacks OS_BUS_CLOCK and OS_BASE_CACHED, dolphin/os/OSAddress.h is absent, and OSPhysicalToCached is an out-of-line call; the synthetic __OSBusClock extern leaves an extra address instruction.",
    "source": "agent:codex-20261030b-codex-79",
    "created_at": 1793370102,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1793437971
   },
   {
    "id": 579,
@@ -824706,9 +824706,9 @@
    "detail": "The supplied Obj_3_bss_0 header layout is only 8 bytes, but fn_3_15A0 accesses its controller at +0xF6 and save state at +0x2437C; typed header fields are needed to remove the seed's offset aliases and overlay.",
    "source": "agent:codex-20261030b-codex-78",
    "created_at": 1793370114,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1793437973
   },
   {
    "id": 580,
@@ -824766,9 +824766,9 @@
    "detail": "include/dolphin/os.h lacks the SDK OS_BUS_CLOCK low-memory macro (confirmed undefined); OS_BASE_CACHED is also unavailable, and dolphin/os/OSAddress.h does not exist. Provide the standard cached low-memory clock access in the SDK header so this unit can use it without a hardcoded address; the curren",
    "source": "agent:codex-20261030c-codex-69",
    "created_at": 1793382418,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1793437971
   },
   {
    "id": 585,
@@ -824790,9 +824790,9 @@
    "detail": "Obj_3_bss_A2460 in rel/customize/toolkit.h is only 8 bytes, while fn_3_2C73C accesses s16 at +0x34, a three-float vector at +0x38, a 12-byte initializer at +0x44, and a six-byte copy at +0x50. Resolve whether these are separate adjacent pooled objects or extend the recovered layout; the supplied see",
    "source": "agent:codex-20261030d-astra-codex-9",
    "created_at": 1793393467,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1793437973
   },
   {
    "id": 587,
@@ -824814,9 +824814,9 @@
    "detail": "Provide the SDK low-memory bus-clock accessor: OS_BUS_CLOCK and OS_BASE_CACHED are undefined, and OSPhysicalToCached compiles as an out-of-line call; the private scalar extern __OSBusClock cannot reproduce retail's constant-base access without a forbidden hardcoded address.",
    "source": "agent:codex-20261030d-codex-78",
    "created_at": 1793395669,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1793437971
   },
   {
    "id": 589,
@@ -824862,9 +824862,9 @@
    "detail": "The available dolphin/os.h and dolphin/os/OSTime.h do not expose OS_BUS_CLOCK, OSTicksToMicroseconds, or OSPhysicalToCached; matching the retail low-memory bus-clock access without a hardcoded address needs the canonical SDK low-memory clock macro supplied by a header.",
    "source": "agent:codex-20261030e-codex-71",
    "created_at": 1793407162,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1793437972
   },
   {
    "id": 593,
@@ -824886,9 +824886,9 @@
    "detail": "bg_win.h declares lbl_1_bss_8FD68 as one 0x40-byte Obj_1_bss_8FD68 with its first float hidden in padding, but this function and matched fn_1_15C36C access it as an array of four 0x10-byte records containing four f32 fields; correct the shared declaration before replacing the seed's BgWinVec4 array ",
    "source": "agent:codex-20261030f-astra-codex-5",
    "created_at": 1793416289,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1793437969
   },
   {
    "id": 595,
@@ -824910,6 +824910,18 @@
    "detail": "The supplied SoundState overlay spans 0x7B4 bytes from lbl_1_bss_6EA98, but sound.h declares that symbol as u32 and cached data separately declares overlapping lbl_1_bss_6EAD0 (offset 0x38, size 0x708); reconcile the module-owned layout before retaining this private overlay.",
    "source": "agent:codex-20261030f-codex-109",
    "created_at": 1793420276,
+   "status": "open",
+   "resolved_by": null,
+   "resolved_at": null
+  },
+  {
+   "id": 597,
+   "symbol": "fn_1_F0E00",
+   "kind": "data",
+   "tu": "rel/main_rel/ghost.c",
+   "detail": "Obj_1_bss_7B180 (typedefs.json lbl_1_bss_7B180): pass 18 made 0x168C s8*[5], 0x16A0 u16*[5], 0x16EC/0x1700/0x1714/0x1728 u32[5]. Still scalar because matched blocks use them as scalars: 0x1600 (f32*[5]; ghost.c fn_1_F5xxx &unk_1600, phys.c), 0x16B4 (u32[5]; ghost.c reads it as a scalar pointer), 0x1",
+   "source": "librarian-pass18",
+   "created_at": 1793437974,
    "status": "open",
    "resolved_by": null,
    "resolved_at": null
