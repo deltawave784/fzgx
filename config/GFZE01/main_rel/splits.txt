@@ -8978,3 +8978,6 @@ rel/main_rel/sel_static_disp/fn_1_13ABA8.c:
 
 rel/main_rel/accessory/fn_1_1244F0.c:
 	.text       start:0x001244F0 end:0x00124AD4 align:4
+
+rel/main_rel/shadowmap/fn_1_5745C.c:
+	.text       start:0x0005745C end:0x00057714 align:4
