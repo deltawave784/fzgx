@@ -1603,6 +1603,10 @@ def save_improved_attempts(p,engine,report,margin=0.05):
         pick+=[r for r in rows if r.get('label','').startswith(('define retail TU','define indexed element'))]
         best=None
         for row in {r['id']:r for r in pick}.values():
+            # never save a body whose first statement on a local reads it (`x_2 = x_2 + k`): it
+            # outscored the sound bodies and re-seeded fn_1_ED540 for six attempts
+            if oracle.self_seeded_locals(Path(row['source']).read_text()):
+                engine.emit(dict(stage='save-attempt-unsound',symbol=symbol,label=row.get('label')));continue
             result=engine.check(row)
             if result.ok:
                 score=oracle.progress_score(result)

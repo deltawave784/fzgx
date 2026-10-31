@@ -136,7 +136,7 @@ def _load() -> dict:
 
 
 def _key(symbol: str, body: str, mw: Optional[str], flags: Optional[str]) -> str:
-    return "|".join(("v5", symbol, hashlib.sha256(body.encode()).hexdigest()[:16], mw or "", flags or ""))
+    return "|".join(("v6", symbol, hashlib.sha256(body.encode()).hexdigest()[:16], mw or "", flags or ""))
 
 
 def measure(p: Project, symbol: str, path: Path, mw: Optional[str] = None, flags: Optional[str] = None) -> Optional[dict]:

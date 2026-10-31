@@ -822,7 +822,14 @@ def variable_splits(body: str, name: str) -> List[Tuple[str, str]]:
         # (fn_8003043C: the late result declared right after base takes r26 after base)
         cuts = {defs[1].start(), defs[-1].start()}
         for cut in sorted(cuts):
-            tail = re.sub(r'\b' + re.escape(nm) + r'\b', nm + '_2', inner[cut:])
+            # the cut definition's right-hand side still reads the first region's value: renaming
+            # it too turned `v19 = v19 + k` into `v19_2 = v19_2 + k`, a read of a never-assigned
+            # local (fn_1_ED540's unsound 99.68% body; 1,415 of 22,164 split candidates)
+            eq = inner.index('=', cut) + 1
+            end = inner.find(';', eq)
+            end = len(inner) if end < 0 else end
+            tail = (re.sub(r'\b' + re.escape(nm) + r'\b', nm + '_2', inner[cut:eq]) + inner[eq:end]
+                    + re.sub(r'\b' + re.escape(nm) + r'\b', nm + '_2', inner[end:]))
             text = body[:top] + inner[:cut] + tail + body[span[2]:]
             positions = [("last", top)] + [(f"after {l[3]}", l[1]) for l in locs]
             for label, pos in positions:

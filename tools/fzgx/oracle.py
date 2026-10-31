@@ -1579,6 +1579,30 @@ _NO_PROTOTYPE_RE = re.compile(r"^#\s*(\d+):(.*)$")
 
 
 _UNINITIALIZED_RE = re.compile(r"variable '(\w+)' is not initialized before being used")
+_SELF_DEF_RE = re.compile(r"^[ \t]+(\w+)[ \t]*(=(?!=)|[-+*/%|&^]=|<<=|>>=|\+\+|--)([^;\n]*);", re.M)
+_LOCAL_DECL_RE = re.compile(r"^[ \t]+(?!(?:return|goto|break|continue|extern|static|case|default|else|do)\b)"
+                            r"[A-Za-z_]\w*\b[^=(){};\n]*;[ \t]*(?:/\*.*\*/|//.*)?$")
+
+
+def self_seeded_locals(text: str) -> List[str]:
+    """Locals whose first use after their declaration reads them: `x = x + k;`, `x += k;` or
+    `x++;` with nothing but indented declarations of `x` before it. A compile-free complement
+    to MWCC's `not initialized` warning, so the repair save paths can reject such bodies per
+    candidate (fn_1_ED540's 99.68% body: the variable-split family renamed `v19 = v19 + k` to
+    `v19_2 = v19_2 + k` and every fixup run saved it again as an improvement; four agents
+    re-seeded from it). Textual and conservative: a parameter, macro, global or any other
+    earlier mention of the name clears it."""
+    out: List[str] = []
+    for m in _SELF_DEF_RE.finditer(text):
+        name, op, rhs = m.groups()
+        # a member of the same name (`x = obj->x;`) is not a read of the local
+        if name in out or (op == "=" and not re.search(rf"(?<![.\w])(?<!->)\b{re.escape(name)}\b", rhs)):
+            continue
+        prior = [text.rfind("\n", 0, o.start()) + 1 for o in re.finditer(rf"\b{re.escape(name)}\b", text[:m.start()])]
+        lines = [text[s:text.find("\n", s) if text.find("\n", s) >= 0 else len(text)] for s in prior]
+        if lines and all(_LOCAL_DECL_RE.match(line) for line in lines):
+            out.append(name)
+    return out
 
 
 def body_diagnostics(project: Project, module: str, source: Path, mw_version: Optional[str] = None,
@@ -1588,7 +1612,8 @@ def body_diagnostics(project: Project, module: str, source: Path, mw_version: Op
     `function has no prototype` as an error at the call; the same text at a definition is a
     warning and is ignored) and `uninitialized` (locals MWCC warns are `not initialized before
     being used`: it emits this by default, under every `-w` setting, for a local that is read
-    and never assigned; a local assigned on some path only is not reported). A body calling an
+    and never assigned; a local assigned on some path only is not reported; `self_seeded_locals`
+    adds textual `x = x + k` first definitions). A body calling an
     undeclared helper or reading a never-assigned local compiles and can outscore a sound body
     by a few rows (fn_1_451E4's 90.85% `load_to_aram` body over the 90.48% declared one;
     fn_3_28EBC's 94.7% body reading `v0` over the 94.4% sound one, batch 197), so the agent
@@ -1624,6 +1649,10 @@ def body_diagnostics(project: Project, module: str, source: Path, mw_version: Op
         ident = re.match(r"[A-Za-z_]\w*", m.group(2)[col:]) if col >= 0 else None
         if ident and ident.group(0) not in names:
             names.append(ident.group(0))
+    try:  # the reads MWCC stays silent about: a local's first statement reading it
+        uninitialized += [n for n in self_seeded_locals(source.read_text()) if n not in uninitialized]
+    except OSError:
+        pass
     return {"implicit": names, "uninitialized": uninitialized}
 
 
