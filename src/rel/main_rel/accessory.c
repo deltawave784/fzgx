@@ -1,14 +1,514 @@
 #include "types.h"
+#include "game/main_rel/accessory_types.h"
+#include "dolphin/types.h"
+#include "game/main_rel/car_test_types.h"
 #include "rel/main_rel/globals.h"
 #include "rel/main_rel/accessory.h"
 #include "rel/main_rel/cloth.h"
 #include "psvec.h"
-#include "game/main_rel/accessory_types.h"
+#include "game/vec3.h"
 
-extern void fn_1_10846C();
-extern void fn_1_128884(void *arg0, void *arg1, s32 type);
+
+
+typedef union fn_1_10A6A0_Vec {
+    u32 w[3];
+    struct {
+        f32 x;
+        f32 y;
+        f32 z;
+    };
+} fn_1_10A6A0_Vec;
+
+typedef struct fn_1_10A6A0_Model {
+    u8 pad_0[0x8];
+    u8 *unk_8;
+} fn_1_10A6A0_Model;
+
+typedef struct fn_1_10A6A0_Data {
+    u8 pad_0[0x150];
+    fn_1_10A6A0_Model *unk_150;
+} fn_1_10A6A0_Data;
+
+typedef struct fn_1_10A6A0_Part {
+    s8 unk_0;
+    u8 pad_1;
+    u8 unk_2;
+    u8 pad_3;
+    u16 unk_4[6];
+    fn_1_10A6A0_Vec unk_10;
+    fn_1_10A6A0_Vec unk_1C;
+    fn_1_10A6A0_Vec unk_28;
+    fn_1_10A6A0_Vec unk_34;
+    u32 unk_40;
+} fn_1_10A6A0_Part;
+
+typedef struct fn_1_10A6A0_Object {
+    u8 unk_0;
+    u8 pad_1[7];
+    u32 unk_8;
+    fn_1_10A6A0_Data *unk_C;
+    void *unk_10;
+    u32 pad_14;
+    u32 unk_18;
+    u8 pad_1C[8];
+    fn_1_10A6A0_Part *unk_24;
+} fn_1_10A6A0_Object;
+
+typedef struct { Node *a,*b; f32 length; } Link;
+
+typedef struct { f32 x,y,z; } Sig_fn_1_1286F4_Vec3f;
+
+struct fn_1_10AD18_Sig_fn_80077B14_fn_80077B14_Arg0 {
+ u8 pad_0[4]; u32 unk_4; u8 pad_8[0x18]; u32 unk_20;
+};
+
+typedef struct { u8 flags; u8 pad[7]; u32 index; fn_1_10AD18_Owner *owner;
+ struct fn_1_10AD18_Sig_fn_80077B14_fn_80077B14_Arg0 *obj;
+ u32 pad14,count,linkCount,pad20; fn_1_10AD18_Node *nodes; Link *links; } Work;
+
+typedef struct {
+    u32 w[3];
+} Sig_fn_1_10846C_Word3_10846C;
+
+typedef struct RopeMtx {
+    u8 data[0x40];
+} RopeMtx;
+
+struct fn_1_10BE3C_Sig_fn_80077B14_fn_80077B14_Arg0 {
+ u8 pad_0[4]; u32 unk_4; u8 pad_8[0x18]; u32 unk_20;
+};
+
+struct fn_1_10CC38_Sig_fn_80077B14_fn_80077B14_Arg0 { u8 pad_0[4]; u32 unk_4; u8 pad_8[0x18]; u32 unk_20; };
+
+struct fn_1_10D7D4_Sig_fn_80077B14_fn_80077B14_Arg0 {
+ u8 pad_0[4]; u32 unk_4; u8 pad_8[0x18]; u32 unk_20;
+};
+
+struct fn_1_110478_Sig_fn_80077B14_fn_80077B14_Arg0 {
+ u8 pad_0[4]; u32 unk_4; u8 pad_8[0x18]; u32 unk_20;
+};
+
+struct fn_1_111980_Sig_fn_80077B14_fn_80077B14_Arg0 {
+ u8 pad_0[4]; u32 unk_4; u8 pad_8[0x18]; u32 unk_20;
+};
+
+struct fn_1_1188CC_Sig_fn_80077B14_fn_80077B14_Arg0 {
+    u8 pad_0[0x4];
+    u32 unk_4;
+    u8 pad_8[0x18];
+    u32 unk_20;
+};
+
+struct fn_1_1192D0_Sig_fn_80077B14_fn_80077B14_Arg0 {
+ u8 pad_0[4]; u32 unk_4; u8 pad_8[0x18]; u32 unk_20;
+};
+
+struct fn_1_11A774_Sig_fn_80077B14_fn_80077B14_Arg0 {
+ u8 pad_0[4]; u32 unk_4; u8 pad_8[0x18]; u32 unk_20;
+};
+
+struct fn_1_11B958_Sig_fn_80077B14_fn_80077B14_Arg0 {
+ u8 pad_0[4]; u32 unk_4; u8 pad_8[0x18]; u32 unk_20;
+};
+
+struct fn_1_11C440_Sig_fn_80077B14_fn_80077B14_Arg0 {
+u8 pad_0[4]; u32 unk_4; u8 pad_8[0x18]; u32 unk_20;
+};
+
+struct fn_1_11CD3C_Sig_fn_80077B14_fn_80077B14_Arg0 {
+ u8 pad_0[4]; u32 unk_4; u8 pad_8[0x18]; u32 unk_20;
+};
+
+struct fn_1_11F250_Sig_fn_80077B14_fn_80077B14_Arg0 {
+ u8 pad_0[4]; u32 unk_4; u8 pad_8[0x18]; u32 unk_20;
+};
+
+struct fn_1_124AD4_Sig_fn_80077B14_fn_80077B14_Arg0 {
+ u8 pad_0[4]; u32 unk_4; u8 pad_8[0x18]; u32 unk_20;
+};
+
+struct fn_1_1256EC_Sig_fn_80077B14_fn_80077B14_Arg0 {
+ u8 pad_0[4]; u32 unk_4; u8 pad_8[0x18]; u32 unk_20;
+};
+
+struct fn_1_125DF0_Sig_fn_80077B14_fn_80077B14_Arg0 {
+ u8 pad_0[4]; u32 unk_4; u8 pad_8[0x18]; u32 unk_20;
+};
+
+struct fn_1_126774_Sig_fn_80077B14_fn_80077B14_Arg0 {
+u8 pad_0[4]; u32 unk_4; u8 pad_8[0x18]; u32 unk_20;
+};
+
+struct fn_1_12744C_Sig_fn_80077B14_fn_80077B14_Arg0 {
+ u8 pad_0[4]; u32 unk_4; u8 pad_8[0x18]; u32 unk_20;
+};
+
+typedef struct {
+    u32 w[3];
+} Word3_10846C;
+
+typedef struct fn_1_10AD18_Vec3 {
+    f32 x;
+    f32 y;
+    f32 z;
+} fn_1_10AD18_Vec3;
+
+typedef struct fn_1_10BE3C_Vec3 {
+    f32 x;
+    f32 y;
+    f32 z;
+} fn_1_10BE3C_Vec3;
+
+typedef struct fn_1_10D7D4_Vec3 {
+    f32 x;
+    f32 y;
+    f32 z;
+} fn_1_10D7D4_Vec3;
+
+typedef struct fn_1_110478_Vec3 {
+    f32 x;
+    f32 y;
+    f32 z;
+} fn_1_110478_Vec3;
+
+typedef struct fn_1_111980_Vec3 {
+    f32 x;
+    f32 y;
+    f32 z;
+} fn_1_111980_Vec3;
+
+typedef struct fn_1_1192D0_Vec3 {
+    f32 x;
+    f32 y;
+    f32 z;
+} fn_1_1192D0_Vec3;
+
+typedef struct fn_1_11A774_Vec3 {
+    f32 x;
+    f32 y;
+    f32 z;
+} fn_1_11A774_Vec3;
+
+typedef struct fn_1_11C440_Vec3 {
+f32 x;
+f32 y;
+f32 z;
+} fn_1_11C440_Vec3;
+
+typedef struct fn_1_11CD3C_Vec3 {
+    f32 x;
+    f32 y;
+    f32 z;
+} fn_1_11CD3C_Vec3;
+
+typedef struct fn_1_11F250_Vec3 {
+    f32 x;
+    f32 y;
+    f32 z;
+} fn_1_11F250_Vec3;
+
+typedef struct fn_1_1256EC_Vec3 {
+    f32 x;
+    f32 y;
+    f32 z;
+} fn_1_1256EC_Vec3;
+
+typedef struct fn_1_125DF0_Vec3 {
+    f32 x;
+    f32 y;
+    f32 z;
+} fn_1_125DF0_Vec3;
+
+typedef struct fn_1_126774_Vec3 {
+f32 x;
+f32 y;
+f32 z;
+} fn_1_126774_Vec3;
+
+typedef struct fn_1_12744C_Vec3 {
+    f32 x;
+    f32 y;
+    f32 z;
+} fn_1_12744C_Vec3;
+
+typedef struct RopeVec {
+    f32 x, y, z;
+} RopeVec;
+
+typedef struct fn_1_10AD18_Vec3f {
+    f32 x, y, z;
+} fn_1_10AD18_Vec3f;
+
+typedef struct fn_1_10BE3C_Vec3f {
+    f32 x, y, z;
+} fn_1_10BE3C_Vec3f;
+
+typedef struct fn_1_10D7D4_Vec3f {
+    f32 x, y, z;
+} fn_1_10D7D4_Vec3f;
+
+typedef struct fn_1_110478_Vec3f {
+    f32 x, y, z;
+} fn_1_110478_Vec3f;
+
+typedef struct fn_1_111980_Vec3f {
+    f32 x, y, z;
+} fn_1_111980_Vec3f;
+
+typedef struct fn_1_1192D0_Vec3f {
+    f32 x, y, z;
+} fn_1_1192D0_Vec3f;
+
+typedef struct fn_1_11A774_Vec3f {
+    f32 x, y, z;
+} fn_1_11A774_Vec3f;
+
+typedef struct fn_1_11C440_Vec3f {
+f32 x, y, z;
+} fn_1_11C440_Vec3f;
+
+typedef struct fn_1_11CD3C_Vec3f {
+    f32 x, y, z;
+} fn_1_11CD3C_Vec3f;
+
+typedef struct fn_1_11F250_Vec3f {
+    f32 x, y, z;
+} fn_1_11F250_Vec3f;
+
+typedef struct fn_1_1256EC_Vec3f {
+    f32 x, y, z;
+} fn_1_1256EC_Vec3f;
+
+typedef struct fn_1_125DF0_Vec3f {
+    f32 x, y, z;
+} fn_1_125DF0_Vec3f;
+
+typedef struct fn_1_126774_Vec3f {
+f32 x, y, z;
+} fn_1_126774_Vec3f;
+
+typedef struct fn_1_12744C_Vec3f {
+    f32 x, y, z;
+} fn_1_12744C_Vec3f;
+
+typedef struct {
+    f32 x, y, z;
+} Vec10846C;
+
+typedef struct {
+    u8 flags;             /* 0x00 */
+    u8 unk_1;             /* 0x01 */
+    u8 count;             /* 0x02 */
+    u8 pad_3;
+    u16 idx[4];           /* 0x04 */
+    u8 pad_C[4];
+    Vec10846C p10;        /* 0x10 */
+    Vec10846C p1C;        /* 0x1C */
+    Vec10846C p28;        /* 0x28 */
+    Word3_10846C c34;     /* 0x34 */
+    u8 pad_40[4];
+} Group10846C;
+
+typedef struct {
+    u8 pad_0[0x10];
+    void *model;          /* 0x10 */
+    u8 pad_14[4];
+    u32 groupCount;       /* 0x18 */
+    u32 unk_1C;           /* 0x1C */
+    u8 pad_20[4];
+    Group10846C *groups;  /* 0x24 */
+    void *unk_28;         /* 0x28 */
+    u8 pad_2C[4];
+    void *srcModel;       /* 0x30 */
+    u8 pad_34[0x30];
+    Vec10846C *positions; /* 0x64 */
+} Obj10846C;
+
+typedef struct { f32 x, y, z; } fn_1_1286F4_Vec3f;
+
+typedef struct RopePool {
+    u8 pad_0[0x58];
+    f64 gravityHalf; /* 0x58 */
+    f32 gravity;     /* 0x60 */
+    u8 pad_64[0x38];
+    f32 slack;       /* 0x9C */
+    f32 one;         /* 0xA0 */
+    f32 maxDist2;    /* 0xA4 */
+} RopePool;
+
+struct fn_1_10CC38_lbl_1_rodata_7AB8 {
+ u8 pad_0[0x58]; f64 unk_58; f32 unk_60; u8 pad_64[0x38]; f32 unk_9C;
+ u8 pad_A0[0xA8]; Vec3f unk_148; f32 unk_154, unk_158, unk_15C, unk_160;
+};
+
+typedef struct { f32 x,y,z; } LocalVec;
+
+struct fn_1_115560_lbl_1_rodata_7AB8 {
+ u8 pad_0[0x50]; f64 unk_50; u8 pad_58[0x130]; f64 unk_188,unk_190,unk_198;
+ u8 pad_1A0[0x1C4]; LocalVec unk_364; f64 unk_370,unk_378;
+};
+
+typedef struct { u8 p0[8]; u8 *base; } Inner;
+
+typedef struct { f32 x, y, z; } fn_1_108A90_Vec3;
+
+typedef struct { u8 flags; u8 pad[0xF]; fn_1_108A90_Vec3 pos; f32 w; u8 rest[0x44 - 0x20]; } Ent;
+
+typedef struct { u8 p0[0xC]; struct { u8 p[0x150]; Inner *in; } *c; u8 p1[0x8]; u32 count; u8 p2[0x8]; Ent *ents; } Obj;
+
+typedef struct {
+    u8 pad_0[0x150];
+    struct {
+        u8 pad_0[8];
+        u8 *unk_8;
+    } *unk_150;
+} fn_1_109114_AccessoryData;
+
+typedef struct {
+    u8 pad_0[0x8];
+    u32 unk_8;
+    fn_1_109114_AccessoryData *unk_C;
+    void *unk_10;
+    u8 pad_14[4];
+    u32 unk_18;
+    u8 pad_1C[8];
+    u8 *unk_24;
+} fn_1_109114_AccessoryObject;
+
+typedef struct {
+    u8 pad_0[0x88];
+    u8 mtx[0x18C - 0x88];
+} Fn108EECElem;
+
+typedef struct {
+    u8 pad_0[0x8];
+    Fn108EECElem *elems;
+} Fn108EECList;
+
+typedef struct {
+    u8 pad_0[0x150];
+    Fn108EECList *list;
+} Fn108EECOwner;
+
+typedef struct {
+    f32 x;
+    f32 y;
+    f32 z;
+} V3;
+
+typedef struct {
+    u8 flags;
+    u8 pad_1[0xF];
+    V3 pos;
+    u8 pad_1C[0x28];
+} Fn108EECPoint;
+
+typedef struct {
+    u8 pad_0[0xC];
+    Fn108EECOwner *owner;
+    u8 pad_10[0x8];
+    u32 count;
+    u8 pad_1C[0x8];
+    Fn108EECPoint *points;
+} Fn108EECObj;
+
+typedef struct {
+    u8 pad_0[0x9];
+    u8 count;           /* 0x9 */
+    u8 pad_A[0x14A6];
+} fn_1_12999C_Info_12999C;
+
+typedef struct {
+    u32 flags;          /* 0x0 */
+    u8 pad_4[0x148];
+    u8 body[0x329];     /* 0x14c */
+    s8 slot;            /* 0x475 */
+    u8 pad_476[0x26];
+    u8 *info;           /* 0x49c */
+} fn_1_12999C_Entry_12999C;
+
+typedef struct {
+    u32 words[6];
+} fn_1_12999C_Tmp_12999C;
 extern void * lbl_801A6410;
 extern u32 fn_1_4630();
+extern void *fn_80077B14(void *);
+extern void fn_1_46B4(u32 arg0, u32 arg1, const char *arg2, int arg3);
+extern void fn_80008BEC(void *dest, int value, u32 size);
+extern const f64 lbl_1_rodata_7AE8;
+extern Word3_10846C lbl_1_rodata_7ADC;
+extern void lbl_8006DBAC(void *);
+extern f32 lbl_8006D0E8(f32);
+extern f32 lbl_8006D0B4(f32);
+extern void fn_8006E250(void *, void *);
+extern void lbl_8006D668(void *);
+extern void fn_8006E978(f32 *arg0, Vec3 *arg1, Vec3 *arg2);
+extern void mathutil_mtxA_from_quat(void *);
+extern void lbl_8006DB74(void *);
+extern void lbl_8006DFC4(void *);
+extern void fn_1_10846C();
+extern void fn_1_128884(void *, void *, s32);
+extern const f32 lbl_1_rodata_7B1C;
+extern const f32 lbl_1_rodata_7B20;
+extern s16 fn_1_14D670(void);
+extern u32 lbl_801A66A0;
+extern u8 fn_1_86678(int index);
+extern u32 lbl_1_bss_897AC[1741];
+extern u32 lbl_1_bss_897A4;
+extern u32 lbl_1_bss_897A8;
+extern void lbl_8006DAEC(void);
+extern void lbl_8006DBE4(void);
+extern void lbl_8006DC20(void);
+extern const f64 lbl_1_rodata_7BF8;
+extern void fn_80008BA8(u32 arg0, u32 arg1, u32 arg2);
+extern s32 fn_1_45D0();
+extern void fn_1_105744(void);
+extern s32 fn_1_106DB4(u32 arg0, u32 arg1);
+extern void fn_1_9D0EC(u32, u32, void*, void*);
+extern void fn_1_103AA8(void);
+extern u32 lbl_1_bss_85288[2];
+extern void fn_1_103AD4(void);
+extern void fn_1_105768(void);
+extern void fn_1_9E5B8(void *);
+extern f32 lbl_1_rodata_7B58[40];
+extern u8 lbl_1_rodata_8058[16];
+extern int mathutil_mtxA_rotate_z__fzgx_offset_C();
+extern void lbl_8006DCA4(void);
+extern void lbl_8006E1C0(void *, void *);
+extern void lbl_8006D7B0(void);
+extern void lbl_8006E0B4(f32, f32, f32);
+extern void lbl_8006E14C(f32);
+extern void fn_80072558(void);
+extern char *fn_80083DB0(char *dst, const char *src);
+extern void *fn_1_55210(void *);
+extern void * fn_1_548AC(u32 amount);
+extern void *fn_1_5448C(void *);
+extern void fn_1_5489C(void **arg0, void **arg1);
+extern void fn_1_12A0E0(u8 *p);
+extern f32 lbl_8006D188(s32);
+extern f64 __fabs(f64);
+extern void fn_1_1286F4(fn_1_1286F4_Vec3f *out);
+extern f32 lbl_8006D118(f32, f32 *);
+extern const u8 lbl_1_rodata_7AB8[];
+extern f32 fn_1_128AAC(s32, f32);
+extern u32 lbl_801A63C0;
+extern const char *fn_1_950E8(void *);
+extern int fn_80083BCC(const char *s1, const char *s2);
+extern void fn_1_108128(void *, s32);
+extern void fn_1_108A90(Obj *o, s32 idx, f32 r, f32 x, f32 y, f32 z);
+extern void fn_1_109114(fn_1_109114_AccessoryObject *self);
+extern void lbl_8006D758(void);
+extern void lbl_8006E0A4(void *);
+extern f64 fabs(f64);
+extern void fn_1_108EEC(Fn108EECObj *obj, s32 from, s32 to, f32 radius, f32 x, f32 y, f32 z);
+extern void mathutil_mtxA_rotate_z(s32);
+extern fn_1_1286F4_Vec3f lbl_1_bss_88B40;
+extern f32 lbl_8006D6FC(void *, void *);
+extern u8 fn_1_86624(void);
+extern s32 fn_1_58C4(void);
+extern s16 fn_1_6B48(s32 index);
+extern f32 fn_1_8CAF4(u32 a, s32 b);
+extern const f32 lbl_1_rodata_806C[];
 extern s8 lbl_1_bss_9C[8];
 extern u8 lbl_1_bss_89780;
 extern u8 lbl_1_bss_7CA58[];
@@ -19,13 +519,13 @@ extern void fn_1_3EF14(void *arg1);
 extern f32 fn_1_A71AC(void);
 extern s32 fn_1_40B20(void);
 extern void *fn_1_86254(int index);
-extern u8 fn_1_5910(void);
-extern s8 fn_1_12A24C(s8);
+extern s32 fn_1_5910(void);
+extern s8 fn_1_12A24C(s8 arg);
 extern int fn_1_D66BC(void *unused, void *arg);
 extern void fn_1_129D9C();
 extern u32 fn_1_F1D60(void);
 extern int fn_1_4C10(void);
-extern u8 *fn_1_F1C54(u32);
+extern char *fn_1_F1C54(int idx);
 extern u8 fn_1_EB0B0(void);
 extern u8 *fn_80083970(u8 *str, const u8 *needle);
 extern void fn_1_520A0(void);
@@ -44,56 +544,12 @@ extern void fn_1_4955C(f32 value1, f32 value2);
 extern void fn_1_4966C(f32 value1, f32 value2);
 extern void fn_1_4A0D8(const char *);
 extern void fn_1_520CC(void);
-extern void lbl_8006DBAC(void *);
-extern int fn_80083BCC(const char *s1, const char *s2);
 extern void fn_1_108920(void *accessory);
-extern void *fn_80077B14(void *);
-extern void fn_1_46B4(u32 arg0, u32 arg1, const char *arg2, int arg3);
-extern void fn_80008BEC(void *dest, int value, u32 size);
-extern const f32 lbl_1_rodata_7B1C;
-extern const f32 lbl_1_rodata_7B20;
-extern void fn_8006E250(void *, void *);
 extern void fn_800737E4(void *, s32);
 extern void fn_80074918(u8 arg0, s32 arg1, u8 arg2);
-extern s32 fn_1_14D670(void);
-extern u32 lbl_801A66A0;
-extern u8 fn_1_86678(int index);
-extern u32 lbl_1_bss_897AC[1741];
-extern u32 lbl_1_bss_897A4;
-extern u32 lbl_1_bss_897A8;
-extern void lbl_8006DAEC(void);
-extern void lbl_8006DBE4(void);
-extern void lbl_8006E1B0(void *, void *);
-extern void lbl_8006DC20(void);
-extern const f64 lbl_1_rodata_7BF8;
-extern void fn_80008BA8(void *dst, void *src, int size);
-extern s32 fn_1_45D0();
-extern void fn_1_105744(void);
-extern s32 fn_1_106DB4(u32 arg0, u32 arg1);
-extern void fn_1_9D0EC(u32, u32, void*, void*);
-extern void fn_1_103AA8(void);
-extern u32 lbl_1_bss_85288[2];
-extern void fn_1_103AD4(void);
-extern void fn_1_105768(void);
-extern void fn_1_9E5B8(void *);
-extern f32 lbl_1_rodata_7B58[40];
-extern u8 lbl_1_rodata_8058[16];
-extern int mathutil_mtxA_rotate_z__fzgx_offset_C();
-extern void lbl_8006DCA4(void);
-extern void lbl_8006E1C0(void *, void *);
-extern void lbl_8006DFC4(void *);
-extern void lbl_8006D7B0(void);
-extern void lbl_8006D668(void *);
-extern void lbl_8006E0B4(f32, f32, f32);
-extern void lbl_8006E14C(f32);
-extern void lbl_8006DB74(void *);
-extern void fn_80072558(void);
-extern char *fn_80083DB0(char *dst, const char *src);
-extern void *fn_1_55210(void *);
-extern void * fn_1_548AC(u32 amount);
-extern void *fn_1_5448C(void *);
-extern void fn_1_5489C(void **arg0, void **arg1);
-extern void fn_1_12A0E0(u8 *p);
+extern f64 fzgx_pool_primer_188(void);
+extern f64 fzgx_pool_primer_190(void);
+extern f64 fzgx_pool_primer_198(void);
 
 /* fzgx:begin fn_1_10846C noprologue */
 #include "types.h"
@@ -261,7 +717,14 @@ void fn_1_10846C(Obj10846C *obj) {
 }
 /* fzgx:end fn_1_10846C */
 
-/* fzgx:begin fn_1_108870 */
+/* fzgx:begin fn_1_108870 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/accessory.h"
+#include "rel/main_rel/cloth.h"
+#include "psvec.h"
+#include "game/main_rel/accessory_types.h"
+
 typedef struct {
     u8 pad_0[0xc];
     u32 unk_c;
@@ -280,7 +743,16 @@ fn_1_108870_AccessoryEntry *fn_1_108870(void) {
 }
 /* fzgx:end fn_1_108870 */
 
-/* fzgx:begin fn_1_1088B8 */
+/* fzgx:begin fn_1_1088B8 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/accessory.h"
+#include "rel/main_rel/cloth.h"
+#include "psvec.h"
+#include "game/main_rel/accessory_types.h"
+
+extern void fn_1_108920(void *accessory);
+
 typedef struct {
     u8 pad_0[0xc];
     u32 unk_c;
@@ -299,7 +771,20 @@ void fn_1_1088B8(void *arg) {
 }
 /* fzgx:end fn_1_1088B8 */
 
-/* fzgx:begin fn_1_108920 */
+/* fzgx:begin fn_1_108920 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/accessory.h"
+#include "rel/main_rel/cloth.h"
+#include "psvec.h"
+#include "game/main_rel/accessory_types.h"
+
+extern void * lbl_801A6410;
+extern void fn_1_108920(void *accessory);
+extern void *fn_80077B14(void *);
+extern void fn_1_46B4(u32 arg0, u32 arg1, const char *arg2, int arg3);
+extern void fn_80008BEC(void *dest, int value, u32 size);
+
 struct fn_1_108920_Copy12 { u32 a[3]; };
 
 
@@ -521,7 +1006,18 @@ void fn_1_108EEC(Fn108EECObj *obj, s32 from, s32 to, f32 radius, f32 x, f32 y, f
 }
 /* fzgx:end fn_1_108EEC */
 
-/* fzgx:begin fn_1_109114 */
+/* fzgx:begin fn_1_109114 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/accessory.h"
+#include "rel/main_rel/cloth.h"
+#include "psvec.h"
+#include "game/main_rel/accessory_types.h"
+
+extern void lbl_8006DBAC(void *);
+extern void *fn_80077B14(void *);
+extern void fn_8006E250(void *, void *);
+
 typedef struct {
     u8 pad_0[0x150];
     struct {
@@ -791,7 +1287,19 @@ void fn_1_1091D4(u32 arg0) {
 #pragma opt_common_subs reset
 /* fzgx:end fn_1_1091D4 */
 
-/* fzgx:begin fn_1_10A43C */
+/* fzgx:begin fn_1_10A43C noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/accessory.h"
+#include "rel/main_rel/cloth.h"
+#include "psvec.h"
+#include "game/main_rel/accessory_types.h"
+
+extern void fn_1_10846C();
+extern void fn_1_128884(void *arg0, void *arg1, s32 type);
+extern const f32 lbl_1_rodata_7B1C;
+extern const f32 lbl_1_rodata_7B20;
+
 void fn_1_10A43C(AccessoryObject *self) {
     int i;
     int j;
@@ -1511,7 +2019,19 @@ void fn_1_10AD18(Work *arg0) {
 #pragma opt_common_subs reset
 /* fzgx:end fn_1_10AD18 */
 
-/* fzgx:begin fn_1_10B344 */
+/* fzgx:begin fn_1_10B344 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/accessory.h"
+#include "rel/main_rel/cloth.h"
+#include "psvec.h"
+#include "game/main_rel/accessory_types.h"
+
+extern void fn_1_10846C();
+extern void fn_1_128884(void *arg0, void *arg1, s32 type);
+extern const f32 lbl_1_rodata_7B1C;
+extern const f32 lbl_1_rodata_7B20;
+
 typedef signed long s32;
 
 typedef unsigned char u8;
@@ -1719,7 +2239,16 @@ fn_1_10A6A0_attach_parts(self, tbl);
 }
 /* fzgx:end fn_1_10B5A8 */
 
-/* fzgx:begin fn_1_10B7D8 */
+/* fzgx:begin fn_1_10B7D8 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/accessory.h"
+#include "rel/main_rel/cloth.h"
+#include "psvec.h"
+#include "game/main_rel/accessory_types.h"
+
+extern void fn_1_10846C();
+
 // Initializes accessory data only when an accessory object is present.
 void fn_1_10B7D8(void *accessory) {
     if (accessory != 0) {
@@ -2190,7 +2719,17 @@ void fn_1_10BE3C(Work *arg0) {
 #pragma opt_common_subs reset
 /* fzgx:end fn_1_10BE3C */
 
-/* fzgx:begin fn_1_10C4E4 */
+/* fzgx:begin fn_1_10C4E4 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/accessory.h"
+#include "rel/main_rel/cloth.h"
+#include "psvec.h"
+#include "game/main_rel/accessory_types.h"
+
+extern void fn_1_10846C();
+extern void fn_1_128884(void *arg0, void *arg1, s32 type);
+
 #pragma section code_type ".fzgxpool"
 static const u32 fzgx_pool_table1[6] = {0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000};  /* fzgx-allow: A1 retail pool bytes */
 __declspec(section ".fzgxpool") static void fzgx_pool_keep1(void) { const u32 *volatile cp; cp = fzgx_pool_table1; }  /* fzgx-allow: S2 pool primer sink */
@@ -2330,7 +2869,23 @@ void fn_1_10C4E4(Graph10C4E4 *g) {
 }
 /* fzgx:end fn_1_10C4E4 */
 
-/* fzgx:begin fn_1_10C7B4 */
+/* fzgx:begin fn_1_10C7B4 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/accessory.h"
+#include "rel/main_rel/cloth.h"
+#include "psvec.h"
+#include "game/main_rel/accessory_types.h"
+
+extern void lbl_8006DBAC(void *);
+extern void *fn_80077B14(void *);
+extern void fn_8006E250(void *, void *);
+extern void lbl_8006DAEC(void);
+extern void lbl_8006DBE4(void);
+extern void lbl_8006E1B0(void *, void *);
+extern void lbl_8006DC20(void);
+extern const f64 lbl_1_rodata_7BF8;
+
 typedef struct {
     u8 pad_0[0x150];
     struct {
@@ -2742,7 +3297,19 @@ void fn_1_10CC38(Rope *arg0) {
 #pragma opt_lifetimes reset
 /* fzgx:end fn_1_10CC38 */
 
-/* fzgx:begin fn_1_10D2F0 */
+/* fzgx:begin fn_1_10D2F0 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/accessory.h"
+#include "rel/main_rel/cloth.h"
+#include "psvec.h"
+#include "game/main_rel/accessory_types.h"
+
+extern void fn_1_10846C();
+extern void fn_1_128884(void *arg0, void *arg1, s32 type);
+extern void * lbl_801A6410;
+extern u32 fn_1_4630();
+
 /* The TU's literal pool, addressed through one base register. */
 
 
@@ -5218,7 +5785,18 @@ void fn_1_1145C8(Accessory1145C8 *obj) {
 }
 /* fzgx:end fn_1_1145C8 */
 
-/* fzgx:begin fn_1_1154D0 */
+/* fzgx:begin fn_1_1154D0 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/accessory.h"
+#include "rel/main_rel/cloth.h"
+#include "psvec.h"
+#include "game/main_rel/accessory_types.h"
+
+extern void fn_1_10846C();
+extern const f32 lbl_1_rodata_7B1C;
+extern const f32 lbl_1_rodata_7B20;
+
 typedef struct {
     u8 active;
     u8 _pad01[0x33];
@@ -5400,7 +5978,18 @@ void fn_1_115560(Rope *arg0) {
 }
 /* fzgx:end fn_1_115560 */
 
-/* fzgx:begin fn_1_115B58 */
+/* fzgx:begin fn_1_115B58 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/accessory.h"
+#include "rel/main_rel/cloth.h"
+#include "psvec.h"
+#include "game/main_rel/accessory_types.h"
+
+extern void fn_1_10846C();
+extern const f32 lbl_1_rodata_7B1C;
+extern const f32 lbl_1_rodata_7B20;
+
 typedef struct {
     u8 active;
     u8 _pad01[0x33];
@@ -5443,7 +6032,18 @@ void fn_1_115B58(Fn115B58Object *obj) {
 }
 /* fzgx:end fn_1_115B58 */
 
-/* fzgx:begin fn_1_1166EC */
+/* fzgx:begin fn_1_1166EC noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/accessory.h"
+#include "rel/main_rel/cloth.h"
+#include "psvec.h"
+#include "game/main_rel/accessory_types.h"
+
+extern void fn_1_10846C();
+extern const f32 lbl_1_rodata_7B1C;
+extern const f32 lbl_1_rodata_7B20;
+
 typedef struct {
     u8 active;
     u8 _pad01[0x33];
@@ -9388,7 +9988,16 @@ void fn_1_1256EC(Work *arg0) {
 #pragma opt_common_subs reset
 /* fzgx:end fn_1_1256EC */
 
-/* fzgx:begin fn_1_125CE8 */
+/* fzgx:begin fn_1_125CE8 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/accessory.h"
+#include "rel/main_rel/cloth.h"
+#include "psvec.h"
+#include "game/main_rel/accessory_types.h"
+
+extern void fn_1_10846C();
+
 typedef struct {
     u8 active;
     u8 pad_1[0x0f];
@@ -10534,7 +11143,17 @@ void fn_1_12744C(Work *arg0) {
 #pragma opt_common_subs reset
 /* fzgx:end fn_1_12744C */
 
-/* fzgx:begin fn_1_127FB8 */
+/* fzgx:begin fn_1_127FB8 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/accessory.h"
+#include "rel/main_rel/cloth.h"
+#include "psvec.h"
+#include "game/main_rel/accessory_types.h"
+
+extern void fn_1_10846C();
+extern const f32 lbl_1_rodata_7B20;
+
 typedef struct {
     u8 active;
     u8 _pad01[0x3f];
@@ -10770,7 +11389,16 @@ void fn_1_128038(fn_1_128038_AccessoryObject *self) {
 }
 /* fzgx:end fn_1_128038 */
 
-/* fzgx:begin fn_1_1286F4 */
+/* fzgx:begin fn_1_1286F4 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/accessory.h"
+#include "rel/main_rel/cloth.h"
+#include "psvec.h"
+#include "game/main_rel/accessory_types.h"
+
+extern u32 lbl_801A66A0;
+
 #pragma section code_type ".fzgxpool"
 static const unsigned long fzgx_pool_table1[4] = {0x00000000, 0x00000000, 0x00000000, 0x00000000};  /* fzgx-allow: A1 retail pool bytes */
 __declspec(section ".fzgxpool") static void fzgx_pool_keep1(void) { const unsigned long *volatile cp; cp = fzgx_pool_table1; }  /* fzgx-allow: S2 pool primer sink */
@@ -11189,7 +11817,20 @@ void fn_1_1286F4(Vec3f *out) {
 }
 /* fzgx:end fn_1_1286F4 */
 
-/* fzgx:begin fn_1_128884 */
+/* fzgx:begin fn_1_128884 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/accessory.h"
+#include "rel/main_rel/cloth.h"
+#include "psvec.h"
+#include "game/main_rel/accessory_types.h"
+
+extern void fn_1_128884(void *arg0, void *arg1, s32 type);
+extern void * lbl_801A6410;
+extern void fn_1_46B4(u32 arg0, u32 arg1, const char *arg2, int arg3);
+extern void fn_80008BA8(void *dst, void *src, int size);
+extern s32 fn_1_45D0();
+
 void fn_1_128884(void *arg0, void *arg1, s32 type) {
     u8 tmp1[0x44];
     u8 tmp2[0x0c];
@@ -11221,7 +11862,14 @@ void fn_1_128884(void *arg0, void *arg1, s32 type) {
 }
 /* fzgx:end fn_1_128884 */
 
-/* fzgx:begin fn_1_1289BC */
+/* fzgx:begin fn_1_1289BC noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/accessory.h"
+#include "rel/main_rel/cloth.h"
+#include "psvec.h"
+#include "game/main_rel/accessory_types.h"
+
 f32 fn_1_1289BC(const Point1024C4 *a, const Point1024C4 *b) {
     f32 dz = a->v[2] - b->v[2];
     f32 dy = a->v[1] - b->v[1];
@@ -11258,7 +11906,16 @@ f32 fn_1_1289F0(f32 *a, f32 *b, f32 *c) {
 #pragma opt_propagation reset
 /* fzgx:end fn_1_1289F0 */
 
-/* fzgx:begin fn_1_128AAC */
+/* fzgx:begin fn_1_128AAC noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/accessory.h"
+#include "rel/main_rel/cloth.h"
+#include "psvec.h"
+#include "game/main_rel/accessory_types.h"
+
+extern f32 lbl_1_rodata_7B58[40];
+
 f32 fn_1_128AAC(s32 exponent, f32 value) {
     s32 sign;
     s32 n;
@@ -11281,7 +11938,16 @@ f32 fn_1_128AAC(s32 exponent, f32 value) {
 }
 /* fzgx:end fn_1_128AAC */
 
-/* fzgx:begin fn_1_128B00 */
+/* fzgx:begin fn_1_128B00 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/accessory.h"
+#include "rel/main_rel/cloth.h"
+#include "psvec.h"
+#include "game/main_rel/accessory_types.h"
+
+extern s32 fn_1_14D670(void);
+
 s32 fn_1_128B00(s16 value) {
     switch (value) {
     case 0:
@@ -11330,7 +11996,14 @@ void fn_1_128B60(u8 *a0, u8 *a1, u8 *a2, u8 *b0, u8 *b1, u8 *b2, u8 *c0, u8 *c1,
 }
 /* fzgx:end fn_1_128B60 */
 
-/* fzgx:begin fn_1_128DD8 */
+/* fzgx:begin fn_1_128DD8 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/accessory.h"
+#include "rel/main_rel/cloth.h"
+#include "psvec.h"
+#include "game/main_rel/accessory_types.h"
+
 // Return the table index for a matching accessory value, or the first unused index.
 u8 fn_1_128DD8(u8 value) {
     u8 *table;
@@ -11349,7 +12022,16 @@ u8 fn_1_128DD8(u8 value) {
 }
 /* fzgx:end fn_1_128DD8 */
 
-/* fzgx:begin fn_1_128E10 */
+/* fzgx:begin fn_1_128E10 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/accessory.h"
+#include "rel/main_rel/cloth.h"
+#include "psvec.h"
+#include "game/main_rel/accessory_types.h"
+
+extern u8 lbl_1_rodata_8058[16];
+
 #pragma pack(push, 1)
 typedef struct {
     u32 word_0;
@@ -11380,7 +12062,16 @@ u8 fn_1_128E10(u8 value) {
 }
 /* fzgx:end fn_1_128E10 */
 
-/* fzgx:begin fn_1_128E8C */
+/* fzgx:begin fn_1_128E8C noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/accessory.h"
+#include "rel/main_rel/cloth.h"
+#include "psvec.h"
+#include "game/main_rel/accessory_types.h"
+
+extern u32 lbl_801A66A0;
+
 typedef struct {
     u8 field_0;
     u8 field_1;
@@ -11418,7 +12109,18 @@ void fn_1_128E8C(u32 unused, FnData *data) {
 }
 /* fzgx:end fn_1_128E8C */
 
-/* fzgx:begin fn_1_128F10 pool */
+/* fzgx:begin fn_1_128F10 pool noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/accessory.h"
+#include "rel/main_rel/cloth.h"
+#include "psvec.h"
+#include "game/main_rel/accessory_types.h"
+
+extern u8 lbl_1_bss_89780;
+extern u32 lbl_1_bss_897A4;
+extern u32 lbl_1_bss_897A8;
+
 struct fn_1_129D9C_rodata;
 
 typedef struct lbl_1_bss_89760_t {
@@ -11920,7 +12622,18 @@ void fn_1_129D9C(void *arg0, struct fn_1_129D9C_vec *arg1, struct fn_1_129D9C_ob
 #pragma opt_common_subs reset
 /* fzgx:end fn_1_129D9C */
 
-/* fzgx:begin fn_1_12A080 */
+/* fzgx:begin fn_1_12A080 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/accessory.h"
+#include "rel/main_rel/cloth.h"
+#include "psvec.h"
+#include "game/main_rel/accessory_types.h"
+
+extern void fn_1_12A080(void);
+extern void fn_800737E4(void *, s32);
+extern void fn_80074918(u8 arg0, s32 arg1, u8 arg2);
+
 struct fn_1_12A080_lbl_1_rodata_8068_pool {
     f32 unk_0;
     u8 pad_4[0x4C];
@@ -11950,7 +12663,35 @@ void fn_1_12A080(void) {
 #pragma opt_propagation reset
 /* fzgx:end fn_1_12A080 */
 
-/* fzgx:begin fn_1_12A0E0 */
+/* fzgx:begin fn_1_12A0E0 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/accessory.h"
+#include "rel/main_rel/cloth.h"
+#include "psvec.h"
+#include "game/main_rel/accessory_types.h"
+
+extern f32 fn_1_A71AC(void);
+extern void fn_1_520A0(void);
+extern void fn_1_52070(u32 value);
+extern void fn_1_49410(void);
+extern void fn_1_494DC(s16 index);
+extern void fn_1_49514(u32 *value);
+extern void fn_1_4954C(f32 value);
+extern void fn_1_496FC(f32 value1, f32 value2);
+extern void fn_1_12A080(void);
+extern void fn_1_49738(u32 value);
+extern void fn_1_495FC(void);
+extern void fn_1_495C8(u8 value);
+extern void fn_1_495A0(f32 value);
+extern void fn_1_4955C(f32 value1, f32 value2);
+extern void fn_1_4966C(f32 value1, f32 value2);
+extern void fn_1_4A0D8(const char *);
+extern void fn_1_520CC(void);
+extern void lbl_8006DBAC(void *);
+extern int fn_80083BCC(const char *s1, const char *s2);
+extern void fn_1_12A0E0(u8 *p);
+
 #pragma section code_type ".fzgxpool"
 __declspec(section ".fzgxpool") static void fzgx_pool_prime1(void) {
     volatile f32 s; volatile f64 d;  /* fzgx-allow: S2 pool primer sinks */
@@ -12057,7 +12798,17 @@ void fn_1_12A0E0(u8 *p) {
 }
 /* fzgx:end fn_1_12A0E0 */
 
-/* fzgx:begin fn_1_12A24C */
+/* fzgx:begin fn_1_12A24C noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/accessory.h"
+#include "rel/main_rel/cloth.h"
+#include "psvec.h"
+#include "game/main_rel/accessory_types.h"
+
+extern s8 fn_1_12A24C(s8);
+extern u8 fn_1_86678(int index);
+
 s8 fn_1_12A24C(s8 arg) {
     if ((s8)fn_1_86678((s32)arg) == -1) {
         return -1;
@@ -12066,7 +12817,16 @@ s8 fn_1_12A24C(s8 arg) {
 }
 /* fzgx:end fn_1_12A24C */
 
-/* fzgx:begin fn_1_12A290 */
+/* fzgx:begin fn_1_12A290 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/accessory.h"
+#include "rel/main_rel/cloth.h"
+#include "psvec.h"
+#include "game/main_rel/accessory_types.h"
+
+extern u32 lbl_1_bss_897AC[1741];
+
 u32 fn_1_12A290(s32 index) {
     if (index == -1) {
         return 0;
@@ -12075,13 +12835,31 @@ u32 fn_1_12A290(s32 index) {
 }
 /* fzgx:end fn_1_12A290 */
 
-/* fzgx:begin fn_1_12A2B8 */
+/* fzgx:begin fn_1_12A2B8 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/accessory.h"
+#include "rel/main_rel/cloth.h"
+#include "psvec.h"
+#include "game/main_rel/accessory_types.h"
+
+extern u32 lbl_1_bss_897A4;
+
 void fn_1_12A2B8(u32 value) {
     lbl_1_bss_897A4 = value;
 }
 /* fzgx:end fn_1_12A2B8 */
 
-/* fzgx:begin fn_1_12A2C4 */
+/* fzgx:begin fn_1_12A2C4 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/accessory.h"
+#include "rel/main_rel/cloth.h"
+#include "psvec.h"
+#include "game/main_rel/accessory_types.h"
+
+extern u32 lbl_1_bss_897A8;
+
 void fn_1_12A2C4(u32 value) {
     lbl_1_bss_897A8 = value;
 }

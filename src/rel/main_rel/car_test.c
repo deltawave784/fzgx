@@ -1,8 +1,111 @@
 #include "types.h"
+#include "game/main_rel/car_test_types.h"
 #include "rel/main_rel/globals.h"
 #include "rel/main_rel/car_test.h"
-#include "game/main_rel/car_test_types.h"
+#include "psvec.h"
 
+typedef struct {
+    f32 x;
+    f32 y;
+    f32 z;
+} CtVec3;
+
+typedef struct {
+    u8 r;
+    u8 g;
+    u8 b;
+    u8 a;
+} CtColor;
+
+typedef struct {
+    u8 pad_0[4];
+    s16 id;
+    u8 pad_6[0x76];
+    CtVec3 pos;
+    u8 pad_88[0xc4];
+    u8 mtx[0x30];
+} CtBody;
+
+typedef struct {
+    u32 unk_0;
+    u8 *name;
+} CtPart;
+
+typedef struct {
+    u32 count;
+    u8 pad_4[4];
+    CtPart *parts;
+} CtPartList;
+
+typedef struct {
+    void **models;
+    CtPartList *info;
+    u8 pad_8[4];
+} CtSlot;
+
+typedef struct {
+    u8 pad_0[2];
+    s8 max_parts;
+    u8 pad_3[0x329];
+    CtBody *body;
+    u8 *mtxs;
+    CtSlot slots[4];
+    u8 pad_364[0x56];
+    s16 sel;
+} CtCar;
+
+typedef struct { u8 b[0xE8]; } Blob870BC;
+extern u32 lbl_801A66A0;
+extern void fn_1_57714(u8 value);
+extern void fn_1_5773C(CtVec3 *, CtVec3 *, CtColor *);
+extern void fn_1_A77DC(CtCar *);
+extern void fn_1_A7854(CtCar *, void *);
+extern void fn_1_3BDC(u32 arg0);
+extern void fn_1_87610(CtCar *, CtCar *);
+extern void fn_1_55210(void *);
+extern void fn_1_87238(CtCar *, s8, f32);
+extern s32 fn_1_3C18(s32);
+extern void fn_1_A8EF8(u16 arg0, u16 arg1);
+extern void fn_1_A8DD4(const char *format, ...);
+extern u32 lbl_8006DAEC(void);
+extern void lbl_8006DCA4(void);
+extern void fn_80008BEC(void *dest, int value, u32 size);
+extern void fn_80072558(void);
+extern void lbl_8006E0A4(u32);
+extern u32 mathutil_mtxA_rotate_y(u32);
+extern void fn_80074D68(f32 arg0, f32 arg1, f32 arg2);
+extern void fn_80074D78(u32 arg0);
+extern void lbl_8006D7DC(CtVec3 *);
+extern void lbl_8006DB74(void *);
+extern void lbl_8006DB30(void);
+extern u8 *fn_80083970(u8 *str, const u8 *needle);
+extern u32 lbl_8006DBE4(void);
+extern void lbl_8006DFC4(void *);
+extern void *memset(void *dst, int value, u32 size);
+extern u8 fn_1_816E8(void *, u8);
+extern u32 fn_800793D4(u8 *arg0, u32 arg1, u32 arg2);
+extern s32 fn_1_5910(void);
+extern void fn_1_5634C(u8 value);
+extern void fn_1_5635C(u8 value, f32 value2, f32 value3);
+extern void fn_1_56374(u8 value1, u8 value2, u8 value3);
+extern void fn_1_7EB0C(void);
+extern f32 lbl_1_rodata_3508[4];
+extern u32 lbl_801A6D00;
+extern void fn_1_556B8(void *value);
+extern void lbl_8006D848(f32);
+extern f32 lbl_8006D188(u32);
+extern f64 __fabs(f64);
+extern u32 fn_1_14DDF4(u32);
+extern void * fn_1_14DD68(u32);
+extern void fn_80008BA8(u32 arg0, u32 arg1, u32 arg2);
+extern Blob870BC lbl_1_rodata_3968;
+extern u32 lbl_1_bss_6D82C[3];
+extern void fn_1_14E2DC(u32, s32, f32);
+extern void fn_1_8E450(u32 value);
+extern void fn_1_875B4(void *arg, int value_1, int value_2, f32 value);
+extern void fn_1_8E480(void);
+extern void fn_800713E0(u32, u32);
+extern void fn_800712E4(u32, u32, void *);
 extern void fn_1_3EF14(void *arg1);
 extern s32 fn_1_58C4(void);
 extern s16 fn_1_7B054(void);
@@ -14,13 +117,11 @@ extern s32 camera_get_values(f32 *value0, f32 *value1);
 extern s32 fn_1_A5DC4(void);
 extern u8 lbl_1_bss_6D980[32];
 extern u8 lbl_1_bss_6D9A0[188];
-extern void fn_1_5634C(u8 value);
-extern void fn_1_7ECB8(u32 arg0, u32 arg1, u32 arg2);
+extern void fn_1_7ECB8();
 extern void *lbl_801A6410;
 extern const f64 lbl_1_rodata_3588;
 extern void fn_1_12AB38(void *arg0);
 extern s32 fn_1_45D0();
-extern void fn_80008BEC(void *dest, int value, u32 size);
 extern void fn_1_80F80(void *, u8, void *);
 extern void fn_1_1502BC(void *, void *, void *);
 extern char *fn_80083DB0(char *dst, const char *src);
@@ -28,7 +129,6 @@ extern void fn_1_801F8(s16 arg0, void *arg1);
 extern const f32 lbl_1_rodata_33AC;
 extern u32 fn_1_4630();
 extern const f32 lbl_1_rodata_33B0[84];
-extern void *memset(void *dst, int value, u32 size);
 extern void fn_1_46B4(u32 arg0, u32 arg1, const char *arg2, int arg3);
 extern void fn_1_7F954(u32 arg0, u32 arg1);
 extern void fn_1_49614(void);
@@ -89,60 +189,17 @@ void fn_1_7C1E8(void *out) {
 /* fzgx:end fn_1_7C1E8 */
 
 /* fzgx:begin fn_1_7C2A0 */
-typedef struct {
-    f32 x;
-    f32 y;
-    f32 z;
-} CtVec3;
 
 typedef struct {
     CtVec3 from;
     CtVec3 to;
 } CtAxis;
 
-typedef struct {
-    u8 r;
-    u8 g;
-    u8 b;
-    u8 a;
-} CtColor;
 
-typedef struct {
-    u8 pad_0[4];
-    s16 id;
-    u8 pad_6[0x76];
-    CtVec3 pos;
-    u8 pad_88[0xc4];
-    u8 mtx[0x30];
-} CtBody;
 
-typedef struct {
-    u32 unk_0;
-    u8 *name;
-} CtPart;
 
-typedef struct {
-    u32 count;
-    u8 pad_4[4];
-    CtPart *parts;
-} CtPartList;
 
-typedef struct {
-    void **models;
-    CtPartList *info;
-    u8 pad_8[4];
-} CtSlot;
 
-typedef struct {
-    u8 pad_0[2];
-    s8 max_parts;
-    u8 pad_3[0x329];
-    CtBody *body;
-    u8 *mtxs;
-    CtSlot slots[4];
-    u8 pad_364[0x56];
-    s16 sel;
-} CtCar;
 
 typedef struct {
     u8 pad_0[6];
@@ -176,32 +233,6 @@ __declspec(section ".fzgxpool") static void fzgx_pool_prime1(void) {
 }
 #pragma section code_type ".text"
 
-extern u32 lbl_801A66A0;
-extern void fn_1_57714(u8);
-extern void fn_1_5773C(CtVec3 *, CtVec3 *, CtColor *);
-extern void fn_1_A77DC(CtCar *);
-extern void fn_1_A7854(CtCar *, void *);
-extern void fn_1_3BDC(s32);
-extern void fn_1_87610(CtCar *, CtCar *);
-extern void fn_1_55210(void *);
-extern void fn_1_87238(CtCar *, s8, f32);
-extern s32 fn_1_3C18(s32);
-extern void fn_1_A8EF8(u16, u16);
-extern void fn_1_A8DD4(const char *, ...);
-extern void lbl_8006DAEC(void);
-extern void lbl_8006DCA4(void);
-extern void fn_80008BEC(void *, int, u32);
-extern void fn_80072558(void);
-extern void lbl_8006E0A4(CtVec3 *);
-extern void mathutil_mtxA_rotate_y(s32);
-extern void fn_80074D68(f32, f32, f32);
-extern void fn_80074D78(u32);
-extern void lbl_8006D7DC(CtVec3 *);
-extern void lbl_8006DB74(void *);
-extern void lbl_8006DB30(void);
-extern u8 *fn_80083970(u8 *, const u8 *);
-extern void lbl_8006DBE4(void);
-extern void lbl_8006DFC4(void *);
 
 void fn_1_7C2A0(CtCar *car) {
     s8 count;
@@ -248,7 +279,7 @@ void fn_1_7C2A0(CtCar *car) {
         car->body->pos.x = 3.0f - (f32)(6.0f * (f32)(id % 2));
         car->body->pos.z = -3.0f + (f32)(6.0f * (f32)(id / 2));
     }
-    lbl_8006E0A4(&car->body->pos);
+    lbl_8006E0A4( (u32)(CtVec3 *)(&car->body->pos));
     if ((s32)CT_STATE->mode == 5) {
         mathutil_mtxA_rotate_y((s32)(182.04444885253906f * (f32)(lbl_801A66A0 % 360)));
     }
@@ -373,9 +404,6 @@ typedef struct {
 #define INPUT_14 (*(u16 *)&lbl_1_bss_9F8.pad_14[0])
 #define INPUT_24 (*(u16 *)&lbl_1_bss_9F8.pad_14[0x10])
 #define INPUT_26 (*(u16 *)&lbl_1_bss_9F8.pad_14[0x12])
-extern void * memset(void *, int, u32);
-extern u8 fn_1_816E8(void *, u8);
-extern u32 fn_800793D4(u8 *, u32, u32);
 
 /* saturate a u8 channel at 0xFF after a signed step */
 #define CLAMP_U8(x) (((x) > 0xFFU) ? 0xFF : (x))
@@ -981,20 +1009,7 @@ void fn_1_7EB0C(void) {
 }
 /* fzgx:end fn_1_7EB0C */
 
-/* fzgx:begin fn_1_7EB8C noprologue */
-#include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/car_test.h"
-#include "game/main_rel/car_test_types.h"
-#include "psvec.h"
-
-extern f32 lbl_1_rodata_3508[4];
-extern void *lbl_801A6D00;
-extern void fn_1_556B8(void *);
-extern void lbl_8006DB74(void *);
-extern void lbl_8006D848(f32);
-extern void lbl_8006DFC4(void *);
-extern void fn_80072558(void);
+/* fzgx:begin fn_1_7EB8C */
 
 typedef struct DrawNode {
     void *model0;
@@ -1049,9 +1064,9 @@ void fn_1_7EB8C(DrawCar *arg0) {
         }
         psvec_set(v, matrix[11], matrix[7], matrix[3]);
         blend = calculate_blend(matrix[11], pool);
-        lbl_8006DB74((u8 *)lbl_801A6D00 + 0x60);
+        lbl_8006DB74((u8 *)(*((void * *)&lbl_801A6D00)) + 0x60);
         lbl_8006D848(blend);
-        lbl_8006DFC4((u8 *)lbl_801A6D00 + 0x60);
+        lbl_8006DFC4((u8 *)(*((void * *)&lbl_801A6D00)) + 0x60);
         fn_80072558();
         fn_1_556B8(model);
     }
@@ -1632,7 +1647,12 @@ s8 fn_1_83D28(Fn183D28Car *car, f32 speed) {
 }
 /* fzgx:end fn_1_83D28 */
 
-/* fzgx:begin fn_1_870BC */
+/* fzgx:begin fn_1_870BC noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/car_test.h"
+#include "game/main_rel/car_test_types.h"
+
 typedef struct { u8 b[0xE8]; } Blob870BC;
 extern Blob870BC lbl_1_rodata_3968;
 extern u32 lbl_1_bss_6D82C[3];

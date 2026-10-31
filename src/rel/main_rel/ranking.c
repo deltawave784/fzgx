@@ -1,30 +1,71 @@
 #include "types.h"
+#include "game/main_rel/ranking_types.h"
+#include "dolphin/types.h"
 #include "rel/main_rel/globals.h"
 #include "rel/main_rel/ranking.h"
-#include "game/main_rel/ranking_types.h"
+#include "font.h"
+#include "psvec.h"
 
-extern void fn_1_12EF80(s16 value, s16 *out_0, s16 *out_1);
+
+
+typedef struct Sig_fn_8006B55C_Fn8006B55CFlags { u8 flag7:1; u8 flag6:1; u8 rest:6; } Sig_fn_8006B55C_Fn8006B55CFlags;
+
+typedef struct { u32 w[8]; } Blk32;
+
+typedef struct { u8 pad[0x18]; u16 v; } Blk3;
+
+typedef struct fn_1_156C08_Sig_fn_8006B55C_Fn8006B55CData {
+    u8 flags_pad[4]; Sig_fn_8006B55C_Fn8006B55CFlags flags; u8 _pad0[3];
+    u16 value; u8 _pad1[0x44]; u8 payload[1];
+} fn_1_156C08_Sig_fn_8006B55C_Fn8006B55CData;
+
+typedef struct fn_1_156F54_Sig_fn_8006B55C_Fn8006B55CData {
+    u8 flags_pad[4];
+    Sig_fn_8006B55C_Fn8006B55CFlags flags;
+    u8 _pad0[3];
+    u32 value;
+    u8 _pad1[0x44];
+    u8 payload[1];
+} fn_1_156F54_Sig_fn_8006B55C_Fn8006B55CData;
+
+struct fn_1_157950_Copy88 { u32 a[22]; };
+
+struct fn_1_157FC8_Copy88 { u32 a[22]; };
+
+struct fn_1_158984_lbl_1_rodata_D958 {
+    u8 pad_0[0x18];
+    f64 unk_18;
+    u8 pad_20[0x18];
+    u32 unk_38;
+    f32 unk_3C;
+    f32 unk_40;
+    f32 unk_44;
+    f32 unk_48;
+    f32 unk_4C;
+    f32 unk_50;
+    f32 unk_54;
+    f64 unk_58;
+    f32 unk_60;
+    f32 unk_64;
+    f32 unk_68;
+    u8 pad_6C[0x4];
+    f64 unk_70;
+};
+
+struct fn_1_158984_lbl_801A66A0 { u32 unk_0; };
+
+typedef struct { f32 x, y, z; } RankingVector;
+
+typedef struct {
+    u8 pad_0[0xD4];
+    RankingVector vector;
+} RankingScratch;
+extern void fn_1_12EF80(s16 value, s16 *row, s16 *column);
+extern void fn_1_3EF14(void *arg1);
 extern void fn_80008BA8(u32 arg0, u32 arg1, u32 arg2);
 extern void fn_80008BEC(void *dest, int value, u32 size);
-extern void fn_1_3EF14(void *arg1);
 extern char *strncpy(char *dst, const char *src, size_t n);
-extern f32 lbl_1_rodata_D8C8[18];
-extern void fn_1_1569E8(void *entry);
-extern s32 fn_8006B55C(void *, u32 *, void *);
-extern s32 fn_8006B628(u32 value, u32 param);
-extern s32 fn_8006B6F8(u32 value);
-extern const f32 lbl_1_rodata_D910;
-extern f32 lbl_1_rodata_D914[3];
-extern s32 fn_8006B7B4(u32 value);
-extern f32 lbl_1_rodata_D920;
-extern u32 fn_1_157920(void);
-extern void fn_1_4060(void);
-extern void fn_1_157950(void);
-extern void fn_1_157FC8(void);
-extern void fn_1_4811C(int arg);
-extern f32 lbl_1_rodata_DAE8;
-extern f64 lbl_1_rodata_DAF0;
-extern s16 fn_1_14F01C(s16 value);
+extern size_t strlen(const char *str);
 extern u32 lbl_801A6410[];
 extern void fn_1_46B4(u32 arg0, u32 arg1, const char *arg2, int arg3);
 extern Obj_1_bss_8EF20_At0 *fn_1_4630(u32, u32, u8 *, u32);
@@ -35,19 +76,70 @@ extern s16 lbl_1_bss_96A;
 extern void fn_1_A1360(void);
 extern void fn_1_A1364(void);
 extern u8 lbl_1_bss_8F420[8];
+extern f32 lbl_1_rodata_D8C8[18];
 extern void fn_1_1574E0();
+extern s32 fn_8006B7B4(u32 value);
 extern s32 fn_8006B870();
+extern void fn_1_157950(void);
+extern void fn_1_157FC8(void);
+extern u32 fn_1_157920(void);
+extern u32 fn_1_4060(void);
 extern u32 lbl_1_bss_8F57C[3];
 extern void fn_1_9AD88(void);
 extern void fn_1_1594AC(int index, int flag);
 extern void OSReport(const char *format, ...);
 extern s32 fn_1_465D0(s32 arg0, s32 arg1);
 extern void fn_1_9AD54(void);
-extern s32 fn_1_156218(u32 arg, void *out0, void *out1, void *out2);
+extern void fn_1_1569E8(void *entry);
+extern int fn_1_156218(s32 a, Blk32 *dst1, Blk3 *dst3, Blk32 *dst2);
 extern u32 lbl_1_bss_8F3FC[9];
+extern void fn_1_4811C(int arg);
 extern void fn_1_48004(s32 index, s32 image);
 extern u32 lbl_1_rodata_DAF8[16];
 extern void fn_1_9A508(void);
+extern f64 __fabs(f64);
+extern s32 fn_8006B55C(void *, u32 *, void *);
+extern s32 fn_8006B628(u32 value, u32 param);
+extern s32 fn_8006B6F8(u32 value);
+extern f32 lbl_1_rodata_D920;
+extern struct fn_1_157950_Copy88 lbl_1_rodata_26F8;
+extern void fn_1_49410(void);
+extern void fn_1_495B0(u32 value);
+extern void fn_1_5233C(void *arg0, void *arg1);
+extern void fn_1_49738(u32 value);
+extern void fn_1_49748(f32 value);
+extern void fn_1_495C8(u8 value);
+extern void fn_1_49590(f32 value);
+extern void fn_1_4955C(f32 value1, f32 value2);
+extern void fn_1_49514(u32 *value);
+extern void fn_1_494DC(s16 index);
+extern void fn_1_4965C(u8 value);
+extern void fn_1_496FC(f32 value1, f32 value2);
+extern void fn_1_495A0(f32);
+extern void fn_1_4CF3C(const char *format, f32 x, ...);
+extern u32 lbl_1_rodata_D978[3];
+extern u32 lbl_1_rodata_D984[39];
+extern f32 lbl_8006D188(u32);
+extern s16 camera_get_mode(void);
+extern s32 fn_1_58C4(void);
+extern struct fn_1_158984_lbl_1_rodata_D958 lbl_1_rodata_D958;
+extern struct fn_1_158984_lbl_801A66A0 lbl_801A66A0;
+extern RankingScratch *lbl_801A66CC;
+extern u32 fn_1_5948(u32);
+extern void fn_1_627C();
+extern u32 fn_1_8627C(s32 index);
+extern void fn_1_681C(u32 index, u32 *output);
+extern void fn_1_9A7A8(u32 *value);
+extern u32 lbl_801A63C0;
+extern u8 fn_1_128E10(u8 value);
+extern u32 fn_1_B7FC8(void);
+extern u32 fn_8003D4C0(void);
+extern u8 lbl_1_bss_718E0[23016];
+extern const f32 lbl_1_rodata_D910;
+extern f32 lbl_1_rodata_D914[3];
+extern f32 lbl_1_rodata_DAE8;
+extern f64 lbl_1_rodata_DAF0;
+extern s16 fn_1_14F01C(s16 value);
 extern int lbl_801A66B4;
 extern s32 fn_1_46DC4(s32 value);
 
@@ -443,8 +535,6 @@ void fn_1_155FA8(u32 value) {
 /* fzgx:end fn_1_155FA8 */
 
 /* fzgx:begin fn_1_155FB4 pool */
-extern void fn_1_3EF14(void *);
-extern char *strncpy(char *, const char *, size_t);
 
 typedef struct {
     u32 id;          // 0x0
@@ -458,17 +548,17 @@ typedef struct {
     u8 unk_1E;
     u8 unk_1F;
     u8 pad_20[0x18];
-} RankEntry; // 0x38
+} fn_1_155FB4_RankEntry; // 0x38
 
 typedef struct {
-    RankEntry *entries;  // 0x0
+    fn_1_155FB4_RankEntry *entries;  // 0x0
     u8 pad_4[0x44];
 } RankState;
 
 // Retail lays these out one after another in ranking.c's .bss and addresses
 // them off one section base register.
 RankState fzgx_obj_lbl_1_bss_8EF20;
-RankEntry lbl_1_bss_8EF68[10];
+fn_1_155FB4_RankEntry lbl_1_bss_8EF68[10];
 u8 fzgx_obj_gap_8F198[0x248];
 u32 lbl_1_bss_8F3E0;
 u32 fzgx_obj_lbl_1_bss_8F3E4;
@@ -501,8 +591,8 @@ __declspec(section ".fzgxpool") void fzgx_primer(void) {
 #pragma section code_type ".text"
 
 void fn_1_155FB4(const char *name) {
-    RankEntry *entries;
-    RankEntry *e;
+    fn_1_155FB4_RankEntry *entries;
+    fn_1_155FB4_RankEntry *e;
     RankQuery q;
     RankQuery *qp = &q;
     s32 i;
@@ -548,7 +638,7 @@ u32 *fn_1_156198(u32 arg0) {
     struct { u32 a[14]; } loc_8;
     /* frame */
     u32 t0;
-    t0 = fn_1_156218(arg0, (void *)&loc_78, (void *)&loc_40, (void *)&loc_8);
+    t0 = fn_1_156218(arg0, (Blk32 *)((void *)&loc_78), (Blk3 *)((void *)&loc_40), (Blk32 *)((void *)&loc_8));
     v0 = t0;
     if ((s32)t0 == 0) {
         v0 = 0;
@@ -573,13 +663,8 @@ u32 *fn_1_156198(u32 arg0) {
 }
 /* fzgx:end fn_1_156198 */
 
-/* fzgx:begin fn_1_156218 noprologue */
-#include "rel/main_rel/ranking.h"
+/* fzgx:begin fn_1_156218 */
 
-typedef struct { u32 w[8]; } Blk32;
-typedef struct { u8 pad[0x18]; u16 v; } Blk3;
-
-extern void fn_1_12EF80(s16, s16 *, s16 *);
 
 int fn_1_156218(s32 a, Blk32 *dst1, Blk3 *dst3, Blk32 *dst2) {
     s16 x;
@@ -1984,7 +2069,14 @@ void fn_1_157940(void) {
 }
 /* fzgx:end fn_1_157940 */
 
-/* fzgx:begin fn_1_157950 */
+/* fzgx:begin fn_1_157950 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/ranking.h"
+#include "game/main_rel/ranking_types.h"
+
+extern void fn_1_157950(void);
+
 #include "font.h"
 
 struct fn_1_157950_Copy88 { u32 a[22]; };
@@ -2132,7 +2224,14 @@ void fn_1_157950(void) {
 }
 /* fzgx:end fn_1_157950 */
 
-/* fzgx:begin fn_1_157FC8 */
+/* fzgx:begin fn_1_157FC8 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/ranking.h"
+#include "game/main_rel/ranking_types.h"
+
+extern void fn_1_157FC8(void);
+
 #include "font.h"
 
 struct fn_1_157FC8_Copy88 { u32 a[22]; };
@@ -2312,9 +2411,6 @@ void fn_1_1586A8(void) {
 /* fzgx:end fn_1_1586A8 */
 
 /* fzgx:begin fn_1_1586AC */
-extern void fn_1_9A508(void);
-extern u32 lbl_1_rodata_D978[3];
-extern u32 lbl_1_rodata_D984[39];
 
 typedef struct { u32 v[3]; } fn_1_1586AC_Vec;
 
@@ -2372,35 +2468,11 @@ void fn_1_158980(void) {
 }
 /* fzgx:end fn_1_158980 */
 
-/* fzgx:begin fn_1_158984 noprologue */
-#include "types.h"
-#include "psvec.h"
-#include "rel/main_rel/ranking.h"
-
+/* fzgx:begin fn_1_158984 */
 struct fn_1_158984_Arg0 {
     u8 pad_0[0x118];
     u32 unk_118;
 };
-struct fn_1_158984_lbl_1_rodata_D958 {
-    u8 pad_0[0x18];
-    f64 unk_18;
-    u8 pad_20[0x18];
-    u32 unk_38;
-    f32 unk_3C;
-    f32 unk_40;
-    f32 unk_44;
-    f32 unk_48;
-    f32 unk_4C;
-    f32 unk_50;
-    f32 unk_54;
-    f64 unk_58;
-    f32 unk_60;
-    f32 unk_64;
-    f32 unk_68;
-    u8 pad_6C[0x4];
-    f64 unk_70;
-};
-typedef struct { f32 x, y, z; } RankingVector;
 typedef struct {
     u32 flags;
     u8 pad_4[8];
@@ -2415,24 +2487,7 @@ typedef struct {
     u8 pad_20[0x18];
     RankingModel *model;
 } RankingSlot;
-struct fn_1_158984_lbl_801A66A0 { u32 unk_0; };
-typedef struct {
-    u8 pad_0[0xD4];
-    RankingVector vector;
-} RankingScratch;
 
-extern f32 lbl_8006D188(u32);
-extern s16 camera_get_mode(void);
-extern s32 fn_1_58C4(void);
-extern struct fn_1_158984_lbl_1_rodata_D958 lbl_1_rodata_D958;
-extern struct fn_1_158984_lbl_801A66A0 lbl_801A66A0;
-extern RankingScratch *lbl_801A66CC;
-extern u32 fn_1_5948(u32);
-extern u32 fn_1_627C(u32);
-extern void *fn_1_8627C(s32);
-extern void fn_1_681C(u32, u32 *);
-extern void fn_1_9AD54(void);
-extern void fn_1_9A7A8(u32 *);
 
 #pragma section code_type ".fzgxpool"
 void fzgx_pool_primer_head(f32 *f, f64 *d) {
@@ -2491,7 +2546,7 @@ void fn_1_158984(void) {
         fn_1_5948(i);
         mode = (s16)camera_get_mode();
         if (mode >= 0) {
-            camera = fn_1_8627C(mode);
+            camera = (void *)fn_1_8627C(mode);
             if (camera != 0) {
                 data->unk_4 = camera->unk_118 + 1;
                 break;
@@ -2647,17 +2702,16 @@ typedef struct {
     s32 gy;
     s32 gz;
     RankItem *item;
-} RankEntry;
+} fn_1_15906C_RankEntry;
 
 typedef struct {
     s32 count;
     s32 unk_4;
     s32 unk_8;
     s32 grid[20][20][40];
-    RankEntry entries[1];
+    fn_1_15906C_RankEntry entries[1];
 } RankMgr;
 
-extern u32 lbl_801A63C0;
 
 typedef struct {
     u32 a[22];
@@ -2703,7 +2757,7 @@ __declspec(section ".rodata") static RankVec origin = {0.0f, 0.0f, 0.0f};
 
 int fn_1_15906C(s32 arg0, RankItem *item) {
     RankMgr *mgr = (RankMgr *)lbl_1_data_2A7E0.unk_3C;
-    RankEntry *e;
+    fn_1_15906C_RankEntry *e;
     RankItem *it;
     f64 jitter;
     f32 speed;
@@ -3027,8 +3081,6 @@ void fn_1_1598C4(s32 arg0, u8 arg1, u8 arg2, u8 arg3, u8 arg4, u8 arg5, u8 arg6,
 /* fzgx:end fn_1_1598C4 */
 
 /* fzgx:begin fn_1_159AE0 */
-extern u32 lbl_801A63C0;
-extern u8 fn_1_128E10(u8);
 
 static inline void seed_rng(u32 seed) {
     lbl_801A63C0 = seed ^ 0xCAE87FB5;
@@ -3185,17 +3237,13 @@ u8 *fn_1_15AC00(void) {
 /* fzgx:end fn_1_15AC00 */
 
 /* fzgx:begin fn_1_15AC10 */
-extern u32 fn_1_B7FC8(void);
-extern u32 fn_8003D4C0(void);
-extern u8 lbl_1_bss_718E0[23016];
-extern u32 lbl_801A63C0[];
 
 static inline void set_seed(u32 value) {
-    lbl_801A63C0[0] = value;
+    (((u32 *)&lbl_801A63C0))[0] = value;
 }
 static inline s32 next_random(void) {
-    lbl_801A63C0[0] = lbl_801A63C0[0] * 0x676A4B6B + 0x33CB;
-    return (lbl_801A63C0[0] >> 16) & 0x7FFF;
+    (((u32 *)&lbl_801A63C0))[0] = (((u32 *)&lbl_801A63C0))[0] * 0x676A4B6B + 0x33CB;
+    return ((((u32 *)&lbl_801A63C0))[0] >> 16) & 0x7FFF;
 }
 
 static inline u64 make_value(void) {

@@ -1,10 +1,105 @@
 #include "types.h"
+#include "game/main_rel/cloth_types.h"
 #include "rel/main_rel/globals.h"
 #include "rel/main_rel/cloth.h"
-#include "game/main_rel/cloth_types.h"
+#include "dolphin/gx.h"
 
-extern u32 fn_1_435C(u32 value);
+struct fn_1_101BC4_Copy12 { u32 a[3]; };
+
+struct fn_1_101BC4_lbl_1_rodata_77F8 {
+    u8 pad_0[0x38];
+    struct fn_1_101BC4_Copy12 unk_38;
+    u8 pad_44[4];
+    const f64 unk_48;
+    const f32 unk_50, unk_54, unk_58;
+    u8 pad_5C[4];
+    const f64 unk_60, unk_68;
+    const f32 unk_70;
+    u8 pad_74[4];
+    const f64 unk_78, unk_80;
+    const f64 unk_88;
+    const f32 unk_90, unk_94, unk_98;
+};
+
+typedef struct Point1024C4 {
+    u8 pad[0x10];
+    f32 v[3];
+} Point1024C4;
+
+struct fn_1_101BC4_Sig_fn_80077B14_fn_80077B14_Arg0 {
+    u8 pad_0[4]; u32 unk_4; u8 pad_8[0x18]; u32 unk_20;
+};
+
+struct fn_1_1024F8_Sig_fn_80077B14_fn_80077B14_Arg0 {
+    u8 pad_0[0x4];
+    u32 unk_4;
+    u8 pad_8[0x18];
+    u32 unk_20;
+};
+
+struct Sig_fn_80077B64_fn_80077B64_Arg0 {
+    u8 pad_0[4]; u32 unk_4;
+};
+
+struct fn_1_1050D0_lbl_1_rodata_78D0 {
+    u8 pad_0[0x4];
+    f32 unk_4;
+    u8 pad_8[0x8];
+    f32 unk_10;
+    u8 pad_14[0x4];
+    f32 unk_18;
+    u8 pad_1C[0x8];
+    f32 unk_24;
+    u8 pad_28[0xE4];
+    f32 unk_10C;
+};
+extern const struct fn_1_101BC4_lbl_1_rodata_77F8 lbl_1_rodata_77F8;
+extern f32 fn_1_1024C4(const Point1024C4 *a, const Point1024C4 *b);
+extern f64 __fabs(f64);
+extern s32 fn_80077B14(struct fn_1_101BC4_Sig_fn_80077B14_fn_80077B14_Arg0 *);
+extern void *fn_80077B64(struct Sig_fn_80077B64_fn_80077B64_Arg0 *);
+extern u32 fn_1_4630();
 extern u32 fn_1_46B4(u32, u32, void *, u32);
+extern void fn_1_10240C(u32 arg0, u32 arg1, s32 arg2);
+extern void fn_80008BEC(void *dest, int value, u32 size);
+extern f32 lbl_8006D188(s16);
+extern s32 lbl_801A66A0;
+extern struct fn_1_1050D0_lbl_1_rodata_78D0 lbl_1_rodata_78D0;
+extern s32 fn_1_58C4(void);
+extern s32 fn_1_5910(void);
+extern u16 lbl_1_bss_85298[272];
+extern void *lbl_801A6D00;
+extern u32 camera_get_status(void);
+extern void fn_1_7BEAC();
+extern u32 fn_1_F2F34(void);
+extern void lbl_8006D7F4(f32, f32, f32);
+extern void lbl_8006DAEC(void);
+extern void lbl_8006DBE4(void);
+extern void lbl_8006DCA4(void);
+extern void lbl_8006DFC4(void *);
+extern void lbl_8006E0A4(void *);
+extern void mathutil_mtxA_rotate_x(s32);
+extern void mathutil_mtxA_rotate_y(s32);
+extern void fn_1_556B8(void *value);
+extern void fn_1_56000(u8 value0, u8 value1, u8 value2);
+extern void fn_1_560F0(s32 index, void *arg);
+extern void fn_8003462C(u32 arg0, u32 arg1, u32 arg2);
+extern void fn_8007245C(u32 value);
+extern void fn_800724C8(void);
+extern void fn_80072558(void);
+extern void fn_80072864(u32 arg0);
+extern void fn_800728A8(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
+extern void fn_80072EDC(s32 arg0, s32 arg1);
+extern void fn_800734A8(u32 arg0, s32 arg1, s32 arg2, s32 arg3);
+extern void fn_80073678(u32 arg0);
+extern void fn_80074918(u8 arg0, s32 arg1, u8 arg2);
+extern void fn_80077BBC(s32 arg0);
+extern void lbl_8006D758(void);
+extern void lbl_8006DB30(void);
+extern void lbl_8006E0B4(f32, f32, f32);
+extern void lbl_8006E15C(f32, f32, f32);
+extern int fn_1_151AF0(void *arg0, int mode, void *arg2, void *arg3, void *arg4, void *arg5);
+extern u32 fn_1_435C(u32 value);
 extern void fn_1_41A8(void);
 extern void fn_800711A8(void *);
 extern void fn_80071718(void *);
@@ -79,45 +174,10 @@ void fn_1_101AE8(u32 arg0, u32 arg1, u32 arg2, u32 arg3) {
 }
 /* fzgx:end fn_1_101AE8 */
 
-/* fzgx:begin fn_1_101BC4 noprologue */
-#include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/cloth.h"
-#include "game/main_rel/cloth_types.h"
-
-struct Sig_fn_80077B64_fn_80077B64_Arg0 {
-    u8 pad_0[4]; u32 unk_4;
-};
-struct Sig_fn_80077B14_fn_80077B14_Arg0 {
-    u8 pad_0[4]; u32 unk_4; u8 pad_8[0x18]; u32 unk_20;
-};
+/* fzgx:begin fn_1_101BC4 */
 typedef struct Sig_fn_1_1024C4_Point1024C4 {
     u8 pad[0x10]; f32 v[3];
 } Sig_fn_1_1024C4_Point1024C4;
-struct fn_1_101BC4_Copy12 { u32 a[3]; };
-struct fn_1_101BC4_lbl_1_rodata_77F8 {
-    u8 pad_0[0x38];
-    struct fn_1_101BC4_Copy12 unk_38;
-    u8 pad_44[4];
-    const f64 unk_48;
-    const f32 unk_50, unk_54, unk_58;
-    u8 pad_5C[4];
-    const f64 unk_60, unk_68;
-    const f32 unk_70;
-    u8 pad_74[4];
-    const f64 unk_78, unk_80;
-    const f64 unk_88;
-    const f32 unk_90, unk_94, unk_98;
-};
-extern const struct fn_1_101BC4_lbl_1_rodata_77F8 lbl_1_rodata_77F8;
-extern f32 fn_1_1024C4(const Sig_fn_1_1024C4_Point1024C4 *, const Sig_fn_1_1024C4_Point1024C4 *);
-extern f64 __fabs(f64);
-extern s32 fn_80077B14(struct Sig_fn_80077B14_fn_80077B14_Arg0 *);
-extern void *fn_80077B64(struct Sig_fn_80077B64_fn_80077B64_Arg0 *);
-extern u32 fn_1_4630(u32, u32, void *, u32);
-extern u32 fn_1_46B4(u32, u32, void *, u32);
-extern void fn_1_10240C(u32, u32, u32);
-extern void fn_80008BEC(void *, int, u32);
 
 /* Preserve the ordered accesses of the chained vector copies. */
 static inline void fn_1_101BC4_copy12(volatile struct fn_1_101BC4_Copy12 *dst, const volatile struct fn_1_101BC4_Copy12 *src) {
@@ -199,7 +259,7 @@ void fn_1_101BC4(u32 arg0) {
             p_lbl_1_bss_85250->unk_20 = 0;
         }
         v1 = (u32)fn_80077B64((struct Sig_fn_80077B64_fn_80077B64_Arg0 *)arg0);
-        v2 = fn_80077B14((struct Sig_fn_80077B14_fn_80077B14_Arg0 *)arg0);
+        v2 = fn_80077B14((struct fn_1_101BC4_Sig_fn_80077B14_fn_80077B14_Arg0 *)arg0);
         p_lbl_1_bss_85250->unk_18 = (Obj_1_bss_85250_At18 *)
             fn_1_4630(*(u32 *)&lbl_801A6410, *(u32 *)v1 * 68, &lbl_1_data_3F17C, 287);
         v3 = p_lbl_1_rodata_77F8->unk_48;
@@ -381,7 +441,7 @@ void fn_1_101BC4(u32 arg0) {
                     v51 = v4 + 68;
                     *(u32 *)((u32)p_lbl_1_bss_85250->unk_20 + v6_2 * 24) = v4;
                     *(u32 *)((u32)p_lbl_1_bss_85250->unk_20 + v6_2 * 24 + 4) = v51;
-                    v15 = fn_1_1024C4((const Sig_fn_1_1024C4_Point1024C4 *)v4, (const Sig_fn_1_1024C4_Point1024C4 *)v51);
+                    v15 = fn_1_1024C4( (const Point1024C4 *)((const Sig_fn_1_1024C4_Point1024C4 *)v4), (const Point1024C4 *)((const Sig_fn_1_1024C4_Point1024C4 *)v51));
                     v0.value = (u32)p_lbl_1_bss_85250->unk_20;
                     v53 = p_lbl_1_rodata_77F8->unk_90;
                     *(f32 *)(v0.value + v6_2 * 24 + 8) = v15;
@@ -408,7 +468,7 @@ void fn_1_101BC4(u32 arg0) {
                     __fabs((f32)(((Obj_1_bss_85250_At18 *)v4)->unk_18 - ((Obj_1_bss_85250_At18 *)v59)->unk_18)) < v3) {
                     *(u32 *)((u32)p_lbl_1_bss_85250->unk_20 + v6_2 * 24) = v4;
                     *(u32 *)((u32)p_lbl_1_bss_85250->unk_20 + v6_2 * 24 + 4) = v59;
-                    v15 = fn_1_1024C4((const Sig_fn_1_1024C4_Point1024C4 *)v4, (const Sig_fn_1_1024C4_Point1024C4 *)v59);
+                    v15 = fn_1_1024C4( (const Point1024C4 *)((const Sig_fn_1_1024C4_Point1024C4 *)v4), (const Point1024C4 *)((const Sig_fn_1_1024C4_Point1024C4 *)v59));
                     v0.value = (u32)p_lbl_1_bss_85250->unk_20;
                     v62 = p_lbl_1_rodata_77F8->unk_90;
                     *(f32 *)(v0.value + v6_2 * 24 + 8) = v15;
@@ -441,10 +501,6 @@ void fn_1_10240C(u32 arg0, u32 arg1, s32 arg2) {
 /* fzgx:end fn_1_10240C */
 
 /* fzgx:begin fn_1_1024C4 */
-typedef struct Point1024C4 {
-    u8 pad[0x10];
-    f32 v[3];
-} Point1024C4;
 
 f32 fn_1_1024C4(const Point1024C4 *a, const Point1024C4 *b) {
     f32 dz = a->v[2] - b->v[2];
@@ -458,12 +514,6 @@ f32 fn_1_1024C4(const Point1024C4 *a, const Point1024C4 *b) {
 /* fzgx:end fn_1_1024C4 */
 
 /* fzgx:begin fn_1_1024F8 */
-struct Sig_fn_80077B14_fn_80077B14_Arg0 {
-    u8 pad_0[0x4];
-    u32 unk_4;
-    u8 pad_8[0x18];
-    u32 unk_20;
-};
 
 typedef struct ClothVec {
     f32 x, y, z;
@@ -482,17 +532,14 @@ typedef struct ClothPoint {
 } ClothPoint;
 
 typedef struct ClothMeshEntry {
-    struct Sig_fn_80077B14_fn_80077B14_Arg0 *mesh;
+    struct fn_1_1024F8_Sig_fn_80077B14_fn_80077B14_Arg0 *mesh;
     u32 unk_4;
 } ClothMeshEntry;
 
-extern f32 lbl_8006D188(s16);
-extern s32 fn_80077B14(struct Sig_fn_80077B14_fn_80077B14_Arg0 *);
-extern s32 lbl_801A66A0;
 
 void fn_1_1024F8(void) {
     Obj_1_bss_85250 *p = &lbl_1_bss_85250;
-    struct Sig_fn_80077B14_fn_80077B14_Arg0 *mesh;
+    struct fn_1_1024F8_Sig_fn_80077B14_fn_80077B14_Arg0 *mesh;
     u8 *verts;
     s32 sq;
     u32 i;
@@ -503,7 +550,7 @@ void fn_1_1024F8(void) {
     if (mesh == NULL) {
         return;
     }
-    verts = (u8 *)fn_80077B14(mesh);
+    verts = (u8 *)fn_80077B14( (struct fn_1_101BC4_Sig_fn_80077B14_fn_80077B14_Arg0 *)(struct fn_1_1024F8_Sig_fn_80077B14_fn_80077B14_Arg0 *)(mesh));
     if (mesh->unk_4 & 0x10) {
         for (i = 0; i < p->unk_1C; i++) {
             ((ClothPoint *)p->unk_18)[i].pos = ((ClothPoint *)p->unk_18)[i].rest;
@@ -603,60 +650,9 @@ void fn_1_1030A4(Cloth *self) {
 }
 /* fzgx:end fn_1_1030A4 */
 
-/* fzgx:begin fn_1_1050D0 noprologue */
-#include "types.h"
-#include "dolphin/gx.h"
-#include "rel/main_rel/cloth.h"
-
+/* fzgx:begin fn_1_1050D0 */
 typedef struct { f32 x, y, z; } Vec;
 
-struct fn_1_1050D0_lbl_1_rodata_78D0 {
-    u8 pad_0[0x4];
-    f32 unk_4;
-    u8 pad_8[0x8];
-    f32 unk_10;
-    u8 pad_14[0x4];
-    f32 unk_18;
-    u8 pad_1C[0x8];
-    f32 unk_24;
-    u8 pad_28[0xE4];
-    f32 unk_10C;
-};
-extern struct fn_1_1050D0_lbl_1_rodata_78D0 lbl_1_rodata_78D0;
-extern s32 fn_1_58C4(void);
-extern s32 fn_1_5910(void);
-extern u16 lbl_1_bss_85298[272];
-extern u32 lbl_801A66A0;
-extern void *lbl_801A6D00;
-extern u32 camera_get_status(void);
-extern u32 fn_1_7BEAC(u32);
-extern u32 fn_1_F2F34(void);
-extern void lbl_8006D7F4(f32, f32, f32);
-extern void lbl_8006DAEC(void);
-extern void lbl_8006DBE4(void);
-extern void lbl_8006DCA4(void);
-extern void lbl_8006DFC4(void *);
-extern void lbl_8006E0A4(void *);
-extern void mathutil_mtxA_rotate_x(s32);
-extern void mathutil_mtxA_rotate_y(s32);
-extern void fn_1_556B8(void *);
-extern void fn_1_56000(u8, u8, u8);
-extern void fn_1_560F0(s32, void *);
-extern void fn_8003462C(u32, u32, u32);
-extern void fn_8007245C(u32);
-extern void fn_800724C8(void);
-extern void fn_80072558(void);
-extern void fn_80072864(u32);
-extern void fn_800728A8(s32, s32, s32, s32);
-extern void fn_80072EDC(s32, s32);
-extern void fn_800734A8(u32, s32, s32, s32);
-extern void fn_80073678(u32);
-extern void fn_80074918(u8, s32, u8);
-extern void fn_80077BBC(s32);
-extern void lbl_8006D758(void);
-extern void lbl_8006DB30(void);
-extern void lbl_8006E0B4(f32, f32, f32);
-extern void lbl_8006E15C(f32, f32, f32);
 #define __WGPIPE GXWGFifo.f32
 
 void fn_1_1050D0(void) {
@@ -730,23 +726,23 @@ void fn_1_1050D0(void) {
         if (v19 != 2) {
             if (v3 == 0 || v19 != 0) {
                 lbl_8006DBE4();
-                mathutil_mtxA_rotate_x((s16)(((lbl_801A66A0 % 300) << 16) / 300));
+                mathutil_mtxA_rotate_x((s16)((((*((u32 *)&lbl_801A66A0)) % 300) << 16) / 300));
                 if (v3) lbl_8006E0B4(p_lbl_1_rodata_78D0->unk_10C, p_lbl_1_rodata_78D0->unk_18, p_lbl_1_rodata_78D0->unk_18);
                 fn_80072558();
                 fn_1_556B8((void *)*(u32 *)(p_lbl_1_bss_38460->unk_8->unk_8 + 8));
             }
             lbl_8006DBE4();
-            mathutil_mtxA_rotate_x((s16)(-((lbl_801A66A0 % 300) << 16) / 300));
+            mathutil_mtxA_rotate_x((s16)(-(((*((u32 *)&lbl_801A66A0)) % 300) << 16) / 300));
             if (v3) lbl_8006E0B4(p_lbl_1_rodata_78D0->unk_10C, p_lbl_1_rodata_78D0->unk_18, p_lbl_1_rodata_78D0->unk_18);
             fn_80072558();
             fn_1_556B8((void *)*(u32 *)(p_lbl_1_bss_38460->unk_8->unk_8 + 16));
             lbl_8006DBE4();
-            mathutil_mtxA_rotate_x((s16)(-((lbl_801A66A0 % 100) << 16) / 100));
+            mathutil_mtxA_rotate_x((s16)(-(((*((u32 *)&lbl_801A66A0)) % 100) << 16) / 100));
             if (v3) lbl_8006E0B4(p_lbl_1_rodata_78D0->unk_10C, p_lbl_1_rodata_78D0->unk_18, p_lbl_1_rodata_78D0->unk_18);
             fn_80072558();
             fn_1_556B8((void *)*(u32 *)(p_lbl_1_bss_38460->unk_8->unk_8 + 24));
             lbl_8006DBE4();
-            mathutil_mtxA_rotate_x((s16)(((lbl_801A66A0 % 60) << 16) / 60));
+            mathutil_mtxA_rotate_x((s16)((((*((u32 *)&lbl_801A66A0)) % 60) << 16) / 60));
             if (v3) lbl_8006E0B4(p_lbl_1_rodata_78D0->unk_10C, p_lbl_1_rodata_78D0->unk_18, p_lbl_1_rodata_78D0->unk_18);
             fn_80072558();
             fn_1_556B8((void *)*(u32 *)(p_lbl_1_bss_38460->unk_8->unk_8 + 32));
@@ -806,16 +802,14 @@ typedef struct {
     u8 pad_24C[0x6BC];
     u8 unk_908;
 } BgJpegState;
-extern int fn_1_151AF0(u8 *, int, void *, void *, void *, Sig_fn_8003C1A4_JpegDec *);
 
 s32 fn_1_106CAC(void) {
     BgJpegState *p = (BgJpegState *)&lbl_1_bss_85280;
     if ((s32)p->unk_248 == 2) {
         return 0;
     }
-    fn_1_151AF0((u8 *)p->base.unk_4, 0,
-        (void *)(&lbl_1_data_3F284.unk_0)[p->unk_908], 0, 0,
-        (Sig_fn_8003C1A4_JpegDec *)p->base.unk_0);
+    fn_1_151AF0( (void *)((u8 *)p->base.unk_4), 0,
+        (void *)(&lbl_1_data_3F284.unk_0)[p->unk_908], 0, 0, (void *)((Sig_fn_8003C1A4_JpegDec *)p->base.unk_0));
     p->unk_908 = 1 - p->unk_908;
     p->unk_248 = 1;
     return 0;

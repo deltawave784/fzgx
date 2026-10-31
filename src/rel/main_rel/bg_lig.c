@@ -1,9 +1,170 @@
 #include "types.h"
+#include "game/main_rel/bg_lig_types.h"
+#include "game/main_rel/mdlload_types.h"
+#include "game/main_rel/car_test_types.h"
 #include "rel/main_rel/globals.h"
 #include "rel/main_rel/bg_lig.h"
-#include "game/main_rel/bg_lig_types.h"
+#include "rel/main_rel/mdlload.h"
+#include "dolphin/gx.h"
 
+
+
+typedef struct {
+    f32 x;
+    f32 y;
+    f32 z;
+} LigVec;
+
+struct fn_1_D6C10_lbl_1_rodata_6360 {
+    u8 pad_0[0x28];
+    const f32 unk_28;
+    u8 pad_2C[0x4];
+    const f64 unk_30;
+    const f32 unk_38;
+    const f32 unk_3C;
+    const f32 unk_40;
+    const f32 unk_44;
+    const f32 unk_48;
+    u8 pad_4C[0x14];
+    const f64 unk_60;
+    u8 pad_68[0x18];
+    const f32 unk_80;
+    u8 pad_84[0x1C];
+    const f32 unk_A0;
+    u8 pad_A4[0x1C];
+    const f64 unk_C0;
+    u8 pad_C8[0x14];
+    u32 unk_DC;
+    u32 unk_E0;
+    u32 unk_E4;
+    const f32 unk_E8;
+    u8 pad_EC[0x4];
+    const f64 unk_F0;
+    const f64 unk_F8;
+    const f32 unk_100;
+    const f32 unk_104;
+    const f32 unk_108;
+    u8 pad_10C[0x4];
+    const f64 unk_110;
+    const f32 unk_118;
+    u8 pad_11C[0x4];
+    const f64 unk_120;
+    const f64 unk_128;
+};
+
+struct fn_1_D6C10_lbl_801A66A0 {
+    u32 unk_0;
+};
+
+typedef f32 LigMtx[3][4];
+
+typedef struct {
+    f32 width;       /* 0x00 */
+    f32 height;      /* 0x04 */
+    LigMtx mtx;      /* 0x08 */
+    u32 flags;       /* 0x38 */
+    u8 color[4];     /* 0x3C */
+} LigPacket;
+
+typedef struct {
+    f32 scale;
+    f32 scale2;
+    f32 mtx[3][4];
+    u32 flags;
+    u8 r;
+    u8 g;
+    u8 b;
+    u8 a;
+} LigDrawParams;
+
+typedef struct {
+    LigVec pos;      /* 0x00 */
+    u8 pad_C[0xC];
+    f32 r;           /* 0x18 */
+    f32 g;           /* 0x1C */
+    f32 b;           /* 0x20 */
+    f32 size;        /* 0x24 */
+    s16 angle;       /* 0x28 */
+    u8 pad_2A[0x2];
+    s16 fade;        /* 0x2C */
+} LigSource;
+
+typedef struct {
+    u8 pad_00[0x18];
+    f32 r;
+    f32 g;
+    f32 b;
+    f32 scale;
+    s16 rot_z;
+} LigDrawObj;
+
+typedef struct {
+    u8 pad_00[0x8];
+    LigDrawObj *obj;
+} LigDrawEvent;
+
+typedef struct {
+    u8 pad_000[0x3f0];
+    fn_1_D7A10_LigEntry entries[14];
+    LigVec target;
+    u8 pad_69c[0xc];
+    f32 unk_6a8;
+    f32 unk_6ac;
+    f32 unk_6b0;
+    f32 unk_6b4;
+    u8 pad_6b8[0x4];
+    s16 unk_6bc;
+    u8 pad_6be[0x2];
+    f32 unk_6c0;
+} LigLightObj;
+extern s32 *fn_8000961C(s32 arg0);
+extern void* OSGetArenaLo(void);
+extern u32 OSGetArenaHi(void);
+extern void fn_80074918(u8 arg0, s32 arg1, u8 arg2);
+extern void fn_80074788(u32 arg0);
+extern void fn_80074660(u32 arg0);
+extern void fn_80073678(u32 arg0);
+extern void fn_80073C6C(s32 index);
+extern void fn_800747D0(u32 arg0, u32 arg1, s32 arg2, s32 arg3, u32 arg4, s32 arg5, s32 arg6);
+extern void fn_80072AB0(s32 arg0, s32 arg1, s32 arg2);
+extern void fn_800734A8(u32 arg0, s32 arg1, s32 arg2, s32 arg3);
+extern void fn_80072C24(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
+extern void fn_80072D64(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u8 arg4, s32 arg5);
+extern void fn_80072CC4(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
+extern void fn_80072E20(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u8 arg4, s32 arg5);
+extern void fn_800728A8(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
+extern void fn_80072864(u32 arg0);
+extern void fn_8007245C(u32 value);
+extern u32 fn_800371F8(u32, void *);
+extern void fn_8003462C(u32 arg0, u32 arg1, u32 arg2);
+extern u32 lbl_801A66C8;
+extern f32 lbl_8006D0B4(f32);
+extern s16 fn_1_58E3C(void *source);
 extern s32 fn_1_58C4();
+extern const struct fn_1_D6C10_lbl_1_rodata_6360 lbl_1_rodata_6360;
+extern struct fn_1_D6C10_lbl_801A66A0 lbl_801A66A0;
+extern u32 fn_1_584AC(void);
+extern s32 fn_1_66B8(void *arg0, f32 arg1);
+extern void *memset(void *dst, int value, u32 size);
+extern void fn_1_681C(u32 index, u32 *output);
+extern void fn_1_9EDE8(LigPacket *);
+extern void lbl_8006DCA4(void);
+extern void lbl_8006D7DC(LigVec *);
+extern void mathutil_mtxA_rotate_z(s16);
+extern void lbl_8006DB74(LigMtx);
+extern void fn_80073778(void *obj, s32 index);
+extern void fn_800745A4(u32 arg0, s32 arg1, s32 arg2, u32 arg3, u32 arg4, u32 arg5);
+extern void fn_800735C8(s32 index, s32 value);
+extern void fn_80073620(s32 index, s32 value);
+extern void fn_800720B0(s32 arg0);
+extern void lbl_8006D758(void);
+extern void fn_1_6898(u32 index, u32 *output);
+extern void fn_1_6914(u32 index, u32 *output);
+extern s16 camera_get_mode(void);
+extern f32 fn_1_8652C(int index);
+extern u32 fn_1_1FB80(void *pos, u32 mask);
+extern void fn_1_D7EF4(void *, u32);
+extern void lbl_8006D668(LigVec *);
 extern void fn_1_9A508(void);
 extern f32 lbl_1_rodata_64A0[33];
 extern void fn_1_D79E4(void *obj);
@@ -16,7 +177,7 @@ extern u32 fn_1_DA6A8(void *, u32);
 extern void fn_1_D9224(void *, u32);
 extern void fn_1_446C(void);
 extern void fn_1_D9D8C(Obj_1_bss_7AD78 *obj, u32 arg, s32 index);
-extern void fn_1_DA3A0(Obj_1_bss_7AD78 *obj);
+extern void fn_1_DA3A0();
 extern void fn_80008BEC(void *dest, int value, u32 size);
 extern void fn_80008BA8(u32 arg0, u32 arg1, u32 arg2);
 extern u32 lbl_1_rodata_6490[4];
@@ -25,27 +186,32 @@ extern u32 fn_1_76504(s32, void *, s32);
 extern void fn_1_7269C(u32 arg0, u32 arg1, void *arg2);
 extern void fn_1_5948(s32 index);
 extern void fn_1_D8388();
-extern void fn_1_627C(s32 index);
+extern void fn_1_627C();
 extern u32 fn_1_9D260();
 extern void fn_1_9AD88(void);
-extern void *memset(void *dst, int value, u32 size);
-extern void fn_1_D7EF4(void *, u32);
 extern f32 lbl_1_rodata_6594[];
-extern void lbl_8006DCA4(void);
 extern s32 fn_1_54E34(void *arg0, f32 arg1);
 extern void **fn_1_54448(s32 arg0);
 extern void * fn_1_548AC(u32 amount);
-extern void fn_1_D8878(void);
+extern void fn_1_D8878(LigSource *src);
 extern void fn_1_5489C(void **arg0, void **arg1);
 extern f32 lbl_1_rodata_6524[];
-extern void fn_1_D7C44(void);
+extern void fn_1_D7C44(LigDrawEvent *event);
 extern f32 lbl_8006D188(s32 value);
-extern void fn_1_D83E4(Obj_1_data_2A7E0_At3C *obj, s32 index);
+extern void fn_1_D83E4(LigLightObj *obj, u32 index);
 extern void fn_1_E87FC(void);
 extern void OSPanic(const char *file, int line, const char *msg, ...);
 extern u32 lbl_1_rodata_6358;
 
-/* fzgx:begin fn_1_D5C70 */
+/* fzgx:begin fn_1_D5C70 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/bg_lig.h"
+#include "game/main_rel/bg_lig_types.h"
+
+extern s32 fn_1_58C4();
+extern void OSPanic(const char *file, int line, const char *msg, ...);
+
 typedef struct {
     u32 unk0;
     void *data;
@@ -290,62 +456,109 @@ void fn_1_D5FA8(s32 heap, HeapView *pos, f32 width, f32 height) {
 }
 /* fzgx:end fn_1_D5FA8 */
 
-/* fzgx:begin fn_1_D6680 */
+/* fzgx:begin fn_1_D6680 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/bg_lig.h"
+#include "game/main_rel/bg_lig_types.h"
+
 // fn_1_D6680: returns a constant.
 int fn_1_D6680(void) {
     return 0;
 }
 /* fzgx:end fn_1_D6680 */
 
-/* fzgx:begin fn_1_D6688 */
+/* fzgx:begin fn_1_D6688 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/bg_lig.h"
+#include "game/main_rel/bg_lig_types.h"
+
 // fn_1_D6688: returns a constant.
 int fn_1_D6688(void) {
     return 1;
 }
 /* fzgx:end fn_1_D6688 */
 
-/* fzgx:begin fn_1_D6690 */
+/* fzgx:begin fn_1_D6690 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/bg_lig.h"
+#include "game/main_rel/bg_lig_types.h"
+
 // fn_1_D6690: returns a constant.
 int fn_1_D6690(void) {
     return 0;
 }
 /* fzgx:end fn_1_D6690 */
 
-/* fzgx:begin fn_1_D6698 */
+/* fzgx:begin fn_1_D6698 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/bg_lig.h"
+#include "game/main_rel/bg_lig_types.h"
+
 // fn_1_D6698: returns a constant.
 int fn_1_D6698(void) {
     return 0;
 }
 /* fzgx:end fn_1_D6698 */
 
-/* fzgx:begin fn_1_D66A0 */
+/* fzgx:begin fn_1_D66A0 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/bg_lig.h"
+#include "game/main_rel/bg_lig_types.h"
+
 // fn_1_D66A0: returns a constant.
 int fn_1_D66A0(void) {
     return 0;
 }
 /* fzgx:end fn_1_D66A0 */
 
-/* fzgx:begin fn_1_D66A8 */
+/* fzgx:begin fn_1_D66A8 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/bg_lig.h"
+#include "game/main_rel/bg_lig_types.h"
+
 // fn_1_D66A8: returns a constant.
 int fn_1_D66A8(void) {
     return 0;
 }
 /* fzgx:end fn_1_D66A8 */
 
-/* fzgx:begin fn_1_D66B0 */
+/* fzgx:begin fn_1_D66B0 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/bg_lig.h"
+#include "game/main_rel/bg_lig_types.h"
+
 // fn_1_D66B0: returns a constant.
 int fn_1_D66B0(void) {
     return 0;
 }
 /* fzgx:end fn_1_D66B0 */
 
-/* fzgx:begin fn_1_D66B8 */
+/* fzgx:begin fn_1_D66B8 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/bg_lig.h"
+#include "game/main_rel/bg_lig_types.h"
+
 // fn_1_D66B8: empty in retail (single blr).
 void fn_1_D66B8(void) {
 }
 /* fzgx:end fn_1_D66B8 */
 
-/* fzgx:begin fn_1_D66BC */
+/* fzgx:begin fn_1_D66BC noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/bg_lig.h"
+#include "game/main_rel/bg_lig_types.h"
+
+extern void fn_80008BA8(u32 arg0, u32 arg1, u32 arg2);
+
 int fn_1_D66BC(void *unused, void *arg)
 {
     fn_80008BA8( (u32)(void *)(arg), (u32)(void *)(lbl_1_data_3DC38), 0x10);
@@ -353,13 +566,25 @@ int fn_1_D66BC(void *unused, void *arg)
 }
 /* fzgx:end fn_1_D66BC */
 
-/* fzgx:begin fn_1_D66F4 */
+/* fzgx:begin fn_1_D66F4 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/bg_lig.h"
+#include "game/main_rel/bg_lig_types.h"
+
 // fn_1_D66F4: empty in retail (single blr).
 void fn_1_D66F4(void) {
 }
 /* fzgx:end fn_1_D66F4 */
 
-/* fzgx:begin fn_1_D66F8 */
+/* fzgx:begin fn_1_D66F8 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/bg_lig.h"
+#include "game/main_rel/bg_lig_types.h"
+
+extern u32 lbl_1_rodata_6358;
+
 struct fn_1_D66F8_Arg1 {
     u8 unk_0;
 };
@@ -376,7 +601,12 @@ void fn_1_D66F8(u8 arg0, u8 *arg1, s8 *arg2) {
 }
 /* fzgx:end fn_1_D66F8 */
 
-/* fzgx:begin fn_1_D6740 */
+/* fzgx:begin fn_1_D6740 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/bg_lig.h"
+#include "game/main_rel/bg_lig_types.h"
+
 // fn_1_D6740: returns a constant.
 int fn_1_D6740(void) {
     return 1;
@@ -777,7 +1007,17 @@ void fn_1_D6C10(VecD6C10 *arg0, f32 arg1) {
 }
 /* fzgx:end fn_1_D6C10 */
 
-/* fzgx:begin fn_1_D720C */
+/* fzgx:begin fn_1_D720C noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/bg_lig.h"
+#include "game/main_rel/bg_lig_types.h"
+
+extern u32 lbl_1_rodata_6490[4];
+extern u32 lbl_801A63D0;
+extern u32 fn_1_76504(s32, void *, s32);
+extern void fn_1_7269C(u32 arg0, u32 arg1, void *arg2);
+
 void fn_1_D720C(void) {
     u32 local[4];
     u32 result;
@@ -791,7 +1031,27 @@ void fn_1_D720C(void) {
 }
 /* fzgx:end fn_1_D720C */
 
-/* fzgx:begin fn_1_D7274 */
+/* fzgx:begin fn_1_D7274 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/bg_lig.h"
+#include "game/main_rel/bg_lig_types.h"
+
+extern s32 fn_1_58C4();
+extern void fn_1_9A508(void);
+extern void fn_1_D79E4(void *obj);
+extern u8 fn_1_5300(void);
+extern void fn_1_77B80(u32 arg0);
+extern void fn_1_76BF8(void);
+extern void fn_1_72648(void);
+extern void fn_1_4404(void);
+extern u32 fn_1_DA6A8(void *, u32);
+extern void fn_1_D9224(void *, u32);
+extern void fn_1_446C(void);
+extern void fn_1_D9D8C(Obj_1_bss_7AD78 *obj, u32 arg, s32 index);
+extern void fn_1_DA3A0(Obj_1_bss_7AD78 *obj);
+extern void fn_80008BEC(void *dest, int value, u32 size);
+
 #pragma opt_dead_assignments off
 #pragma opt_pointer_analysis on
 void fn_1_D7274(void) {
@@ -861,7 +1121,17 @@ void fn_1_D7274(void) {
 #pragma opt_dead_assignments reset
 /* fzgx:end fn_1_D7274 */
 
-/* fzgx:begin fn_1_D744C */
+/* fzgx:begin fn_1_D744C noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/bg_lig.h"
+#include "game/main_rel/bg_lig_types.h"
+
+extern s32 fn_1_58C4();
+extern void fn_1_5948(s32 index);
+extern void fn_1_D8388();
+extern void fn_1_627C(s32 index);
+
 // Initializes each available background-light entry.
 void fn_1_D744C(void) {
     Obj_1_data_2A7E0_At3C *obj;
@@ -878,7 +1148,21 @@ void fn_1_D744C(void) {
 }
 /* fzgx:end fn_1_D744C */
 
-/* fzgx:begin fn_1_D74C4 */
+/* fzgx:begin fn_1_D74C4 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/bg_lig.h"
+#include "game/main_rel/bg_lig_types.h"
+
+extern s32 fn_1_58C4();
+extern void fn_1_D9D8C(Obj_1_bss_7AD78 *obj, u32 arg, s32 index);
+extern void fn_1_DA3A0(Obj_1_bss_7AD78 *obj);
+extern void fn_1_5948(s32 index);
+extern void fn_1_627C(s32 index);
+extern u32 fn_1_9D260();
+extern void fn_1_D83E4(Obj_1_data_2A7E0_At3C *obj, s32 index);
+extern void fn_1_E87FC(void);
+
 // Initializes background-light data and installs the completion callback.
 void fn_1_D74C4(void) {
     Obj_1_bss_7AD78 *tmp;
@@ -912,7 +1196,19 @@ void fn_1_D74C4(void) {
 }
 /* fzgx:end fn_1_D74C4 */
 
-/* fzgx:begin fn_1_D75CC */
+/* fzgx:begin fn_1_D75CC noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/bg_lig.h"
+#include "game/main_rel/bg_lig_types.h"
+
+extern void fn_1_76BF8(void);
+extern void fn_1_72648(void);
+extern void fn_1_4404(void);
+extern u32 fn_1_DA6A8(void *, u32);
+extern void fn_1_446C(void);
+extern void fn_80008BEC(void *dest, int value, u32 size);
+
 typedef struct {
     u8 data[0xac];
 } Sig_fn_1_D8D08_fn_1_D8D08_LigEntry;
@@ -957,7 +1253,15 @@ void fn_1_D75CC(void) {
 }
 /* fzgx:end fn_1_D75CC */
 
-/* fzgx:begin fn_1_D7688 */
+/* fzgx:begin fn_1_D7688 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/bg_lig.h"
+#include "game/main_rel/bg_lig_types.h"
+
+extern u32 fn_1_9D260();
+extern void fn_1_9AD88(void);
+
 void fn_1_D7688(void) {
     Obj_1_data_2A7E0_At3C *obj = lbl_1_data_2A7E0.unk_3C;
     void *value = (void *)fn_1_9D260(&lbl_1_data_2A7E0);
@@ -968,13 +1272,23 @@ void fn_1_D7688(void) {
 }
 /* fzgx:end fn_1_D7688 */
 
-/* fzgx:begin fn_1_D76EC */
+/* fzgx:begin fn_1_D76EC noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/bg_lig.h"
+#include "game/main_rel/bg_lig_types.h"
+
 // fn_1_D76EC: empty in retail (single blr).
 void fn_1_D76EC(void) {
 }
 /* fzgx:end fn_1_D76EC */
 
-/* fzgx:begin fn_1_D76F0 */
+/* fzgx:begin fn_1_D76F0 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/bg_lig.h"
+#include "game/main_rel/bg_lig_types.h"
+
 // Copies a three-component float vector into the indexed light buffer entry.
 void fn_1_D76F0(const f32 *src, s16 index) {
     f32 *dst = (f32 *)lbl_1_data_2A7E0.unk_3C;
@@ -986,7 +1300,12 @@ void fn_1_D76F0(const f32 *src, s16 index) {
 }
 /* fzgx:end fn_1_D76F0 */
 
-/* fzgx:begin fn_1_D7724 */
+/* fzgx:begin fn_1_D7724 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/bg_lig.h"
+#include "game/main_rel/bg_lig_types.h"
+
 typedef struct {
     u32 x;
     u32 y;
@@ -1002,13 +1321,26 @@ void fn_1_D7724(Vec3Bits *dst, s16 index) {
 }
 /* fzgx:end fn_1_D7724 */
 
-/* fzgx:begin fn_1_D79E4 */
+/* fzgx:begin fn_1_D79E4 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/bg_lig.h"
+#include "game/main_rel/bg_lig_types.h"
+
+extern void fn_1_D79E4(void *obj);
+extern void *memset(void *dst, int value, u32 size);
+
 void fn_1_D79E4(void *obj) {
     memset((u8 *)obj + 0x30, 0, 0x3c0);
 }
 /* fzgx:end fn_1_D79E4 */
 
-/* fzgx:begin fn_1_D7A10 */
+/* fzgx:begin fn_1_D7A10 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/bg_lig.h"
+#include "game/main_rel/bg_lig_types.h"
+
 #pragma section code_type ".fzgxpool"
 static const u32 fzgx_pool_table1[4] = {0x00000000, 0x0280012C, 0x00000000, 0x00000001};  /* fzgx-allow: A1 retail pool bytes */
 __declspec(section ".fzgxpool") static void fzgx_pool_keep1(void) { const u32 *volatile cp; cp = fzgx_pool_table1; }  /* fzgx-allow: S2 pool primer sink */
@@ -1091,7 +1423,19 @@ void fn_1_D7A10(fn_1_D7A10_LigEntry *base) {
 }
 /* fzgx:end fn_1_D7A10 */
 
-/* fzgx:begin fn_1_D7B7C */
+/* fzgx:begin fn_1_D7B7C noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/bg_lig.h"
+#include "game/main_rel/bg_lig_types.h"
+
+extern void lbl_8006DCA4(void);
+extern s32 fn_1_54E34(void *arg0, f32 arg1);
+extern void * fn_1_548AC(u32 amount);
+extern void fn_1_5489C(void **arg0, void **arg1);
+extern f32 lbl_1_rodata_6524[];
+extern void fn_1_D7C44(void);
+
 void fn_1_D7B7C(fn_1_D7B7C_LigEntry *base) {
     void *data;
     fn_1_D7B7C_LigEntry *entry;
@@ -1275,7 +1619,16 @@ void fn_1_D7C44(LigDrawEvent *event) {
 }
 /* fzgx:end fn_1_D7C44 */
 
-/* fzgx:begin fn_1_D8388 */
+/* fzgx:begin fn_1_D8388 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/bg_lig.h"
+#include "game/main_rel/bg_lig_types.h"
+
+extern s32 fn_1_58C4();
+extern void fn_1_D8388();
+extern void fn_1_D7EF4(void *, u32);
+
 // Initializes each lighting entry while the lighting system is available.
 void fn_1_D8388(void *obj) {
     u8 *entry = (u8 *)obj;
@@ -1519,7 +1872,22 @@ void fn_1_D83E4(LigLightObj *obj, u32 index) {
 }
 /* fzgx:end fn_1_D83E4 */
 
-/* fzgx:begin fn_1_D8784 */
+/* fzgx:begin fn_1_D8784 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/bg_lig.h"
+#include "game/main_rel/bg_lig_types.h"
+
+extern s32 fn_1_58C4();
+extern f32 lbl_1_rodata_6594[];
+extern void lbl_8006DCA4(void);
+extern s32 fn_1_54E34(void *arg0, f32 arg1);
+extern void **fn_1_54448(s32 arg0);
+extern void * fn_1_548AC(u32 amount);
+extern void fn_1_D8878(void);
+extern void fn_1_5489C(void **arg0, void **arg1);
+extern f32 lbl_1_rodata_6524[];
+
 typedef void (*LigCallback)(void);
 
 typedef struct {
@@ -1846,7 +2214,12 @@ void fn_1_D8878(LigSource *src) {
 }
 /* fzgx:end fn_1_D8878 */
 
-/* fzgx:begin fn_1_D8CA8 */
+/* fzgx:begin fn_1_D8CA8 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/bg_lig.h"
+#include "game/main_rel/bg_lig_types.h"
+
 void fn_1_D8CA8(fn_1_D8CA8_LigObject *obj) {
     s32 count = obj->count;
     fn_1_D8CA8_LigEntry *entry = obj->entries;
@@ -1860,7 +2233,12 @@ void fn_1_D8CA8(fn_1_D8CA8_LigObject *obj) {
 }
 /* fzgx:end fn_1_D8CA8 */
 
-/* fzgx:begin fn_1_D8D08 */
+/* fzgx:begin fn_1_D8D08 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/bg_lig.h"
+#include "game/main_rel/bg_lig_types.h"
+
 void fn_1_D8D08(LigContainer *container) {
     s32 count = container->count;
     fn_1_D8D08_LigEntry *entry = container->entries;
@@ -1873,7 +2251,14 @@ void fn_1_D8D08(LigContainer *container) {
 }
 /* fzgx:end fn_1_D8D08 */
 
-/* fzgx:begin fn_1_D8D58 */
+/* fzgx:begin fn_1_D8D58 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/bg_lig.h"
+#include "game/main_rel/bg_lig_types.h"
+
+extern f32 lbl_8006D188(s32 value);
+
 #pragma section code_type ".fzgxpool"
 static const u32 fzgx_pool_table1[4] = {0x00000000, 0x0280012C, 0x00000000, 0x00000001};  /* fzgx-allow: A1 retail pool bytes */
 __declspec(section ".fzgxpool") static void fzgx_pool_keep1(void) { const u32 *volatile cp; cp = fzgx_pool_table1; }  /* fzgx-allow: S2 pool primer sink */
@@ -1997,7 +2382,12 @@ void fn_1_D8D58(LigObject *obj, void *arg) {
 }
 /* fzgx:end fn_1_D8D58 */
 
-/* fzgx:begin fn_1_D8EEC */
+/* fzgx:begin fn_1_D8EEC noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/bg_lig.h"
+#include "game/main_rel/bg_lig_types.h"
+
 // Applies the operation to each entry in the object.
 void fn_1_D8EEC(fn_1_D8EEC_LigObject *obj, void *arg) {
     s32 count = obj->unk_6d4;
@@ -2011,7 +2401,12 @@ void fn_1_D8EEC(fn_1_D8EEC_LigObject *obj, void *arg) {
 }
 /* fzgx:end fn_1_D8EEC */
 
-/* fzgx:begin fn_1_D8F4C */
+/* fzgx:begin fn_1_D8F4C noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/bg_lig.h"
+#include "game/main_rel/bg_lig_types.h"
+
 typedef struct {
     u8 pad_0[0x24];
     u32 unk_24;

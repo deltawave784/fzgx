@@ -1176,10 +1176,8 @@ typedef struct {
     u8 arr_1668[0x10];
     u32 unk_1678;
     u8 arr_167C[0x10];
-    u32 unk_168C;
-    u8 arr_1690[0x10];
-    u32 unk_16A0;
-    u8 arr_16A4[0x10];
+    s8 *unk_168C[5];  // indexed per player (fn_1_F0E00)
+    u16 *unk_16A0[5];  // indexed per player (fn_1_F0E00)
     u32 unk_16B4;
     u8 arr_16B8[0x10];
     u32 unk_16C8;
@@ -1193,26 +1191,10 @@ typedef struct {
     u8 pad_16E1[0x3];
     u32 unk_16E4;
     u32 unk_16E8;
-    u32 unk_16EC;
-    u32 unk_16F0;
-    u32 unk_16F4;
-    u32 unk_16F8;
-    u32 unk_16FC;
-    u32 unk_1700;
-    u32 unk_1704;
-    u32 unk_1708;
-    u32 unk_170C;
-    u32 unk_1710;
-    u32 unk_1714;
-    u32 unk_1718;
-    u32 unk_171C;
-    u32 unk_1720;
-    u32 unk_1724;
-    u32 unk_1728;
-    u32 unk_172C;
-    u32 unk_1730;
-    u32 unk_1734;
-    u32 unk_1738;
+    u32 unk_16EC[5];  // indexed per player (fn_1_E9770)
+    u32 unk_1700[5];  // indexed per player (fn_1_E9770)
+    u32 unk_1714[5];  // indexed per player (fn_1_E9770)
+    u32 unk_1728[5];  // indexed per player (fn_1_E9770)
     u32 unk_173C;
     u32 unk_1740;
     u32 unk_1744;
@@ -1434,6 +1416,9 @@ extern Obj_1_bss_7EFD8 lbl_1_bss_7EFD8;
 // lbl_1_data_5730: .data size 0xC, referenced by 21 functions, shape {'object': 98}
 extern char lbl_1_data_5730[0xC];  // 'OVERTAKE'
 
+// lbl_1_data_3C7B8: .data size 0xA, referenced by 21 functions, shape {'object': 52}
+extern char lbl_1_data_3C7B8[0xA];  // 'memcard.c'
+
 // lbl_1_bss_6EAB4: .bss size 0x12, referenced by 21 functions, shape {'object': 69}
 typedef struct {
     u32 unk_0;  // 43 loads, 26 stores
@@ -1466,9 +1451,6 @@ typedef struct {
     u8 pad_384[0x1C7C];
 } Obj_1_bss_4C688;
 extern Obj_1_bss_4C688 lbl_1_bss_4C688;
-
-// lbl_1_data_3C7B8: .data size 0xA, referenced by 21 functions, shape {'object': 52}
-extern char lbl_1_data_3C7B8[0xA];  // 'memcard.c'
 
 // lbl_1_bss_84420: .bss size 0x8, referenced by 21 functions, shape {'object': 32, 'pointer': 10}
 extern u32 lbl_1_bss_84420;

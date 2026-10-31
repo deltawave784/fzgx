@@ -1,13 +1,47 @@
 #include "types.h"
+#include "game/main_rel/shadowmap_types.h"
 #include "rel/main_rel/globals.h"
 #include "rel/main_rel/shadowmap.h"
 #include "psvec.h"
-#include "game/main_rel/shadowmap_types.h"
+#include "sdk_addresses.h"
+#include "dolphin/hw_regs.h"
+#include "dolphin/gx.h"
 
+typedef struct {
+    f32 x, y, z;
+    u8 r, g, b, a;
+} fn_1_57E84_ShadowVtx;
+
+typedef struct {
+    u8 pad_0[0x8];
+    u8 mtx[0x30];
+    u32 unk_38;
+    u16 unk_3C;
+    u8 pad_3E[2];
+    fn_1_57E84_ShadowVtx *unk_40;
+    Obj_1_data_1C670 unk_44;
+} ShadowObj;
+extern void *lbl_801A6D00;
+extern void GXLoadPosMtxImm(void *arg0, int arg1);
+extern void fn_1_57DC0();
+extern void fn_8003462C(u32 arg0, u32 arg1, u32 arg2);
+extern void fn_800720B0(s32 arg0);
+extern void fn_8007245C(u32 value);
+extern void fn_800728A8(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
+extern void fn_80072EDC(s32 arg0, s32 arg1);
+extern void fn_800734A8(u32 arg0, s32 arg1, s32 arg2, s32 arg3);
+extern void fn_80073678(u32 arg0);
+extern void fn_80073898(u32 arg0);
+extern void fn_80073C6C(s32 index);
+extern void fn_80074660(u32 arg0);
+extern void fn_800746A8();
+extern void fn_80074788(u32 arg0);
+extern void fn_800747D0(u32 arg0, u32 arg1, s32 arg2, s32 arg3, u32 arg4, s32 arg5, s32 arg6);
+extern void fn_80074918(u8 arg0, s32 arg1, u8 arg2);
 extern f64 __fabs(f64);
 extern int fn_1_56724(void);
 extern void fn_80038F10(f32* out);
-extern void fn_80038FD8(u32 *, u32 *, u32 *, u32 *);
+extern void fn_80038FD8(u32 *left, u32 *top, u32 *width, u32 *height);
 extern void fn_80038BFC(f32* out);
 extern void fn_8006F1F0(void *, void *, void *);
 extern void lbl_8006DB74(void *arg);
@@ -23,22 +57,9 @@ extern void lbl_8006DC6C(void *);
 extern void lbl_8006DFD8(void *);
 extern void lbl_8006DBAC(void *);
 extern void fn_80072558(void);
-extern void fn_80074788(u32 arg0);
-extern void fn_80074660(u32 arg0);
-extern void fn_80073678(u32 arg0);
-extern void fn_80073898(u32 arg0);
-extern void fn_800747D0(u32 arg0, u32 arg1, s32 arg2, s32 arg3, u32 arg4, s32 arg5, s32 arg6);
-extern void fn_80073C6C(s32 index);
-extern void fn_800734A8(u32 arg0, s32 arg1, s32 arg2, s32 arg3);
-extern void fn_80072EDC(s32 arg0, s32 arg1);
-extern void fn_800728A8(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
-extern void fn_80074918(u8 arg0, s32 arg1, u8 arg2);
 extern u32 fn_80077BAC(u32 arg0);
 extern void GXInvalidateTexAll(void);
 extern void fn_80072270(f32 *);
-extern void fn_800746A8();
-extern void fn_8007245C(u32 value);
-extern void fn_800720B0(u32);
 extern void *lbl_801A6410;
 extern void fn_1_46B4(u32 arg0, u32 arg1, const char *arg2, int arg3);
 extern f32 lbl_1_rodata_28B4[16];
@@ -58,14 +79,10 @@ extern void fn_80072E20(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u8 arg4, s32 arg
 extern void fn_80072864(u32 arg0);
 extern void GXSetAlphaCompare(u32, u32, u32, u32, u32);
 extern void lbl_8006D758(void);
-extern void GXLoadPosMtxImm(void *arg0, int arg1);
-extern void fn_8003462C(u32 arg0, u32 arg1, u32 arg2);
-extern void *lbl_801A6D00;
 extern f32 lbl_1_rodata_28F4[23];
-extern void fn_1_57DC0(void);
 extern void * fn_1_548AC(u32 amount);
 extern void *fn_1_5448C(void *arg);
-extern void fn_1_57E84(void);
+extern void fn_1_57E84(ShadowObj *obj);
 extern void fn_1_5489C(void **arg0, void **arg1);
 extern void fn_80008BA8(u32 arg0, u32 arg1, u32 arg2);
 
@@ -529,19 +546,12 @@ void fn_1_57810(u16 n, Vtx3 *verts, Col *color) {
 #pragma opt_lifetimes reset
 /* fzgx:end fn_1_57810 */
 
-/* fzgx:begin fn_1_579A0 noprologue */
-#include "types.h"
-#include "dolphin/hw_regs.h"
-
-typedef struct ShadowVtx {
+/* fzgx:begin fn_1_579A0 */
+typedef struct fn_1_579A0_ShadowVtx {
     f32 x, y, z;
     u8 c0, c1, c2, c3;
-} ShadowVtx;
+} fn_1_579A0_ShadowVtx;
 
-extern void fn_1_57DC0(void);
-extern void GXLoadPosMtxImm(void *arg0, int arg1);
-extern void fn_8003462C(u32 size, u32 heap, u32 alignment);
-extern void *lbl_801A6D00;
 
 /* GX write-gather FIFO port */
 #define FIFO_F32 (*(volatile f32 *)GX_FIFO_BASE) /* fzgx-allow: S2 memory-mapped GX FIFO writes */
@@ -561,7 +571,7 @@ static inline void Col4(u8 r, u8 g, u8 b, u8 a) {
 }
 
 #pragma opt_strength_reduction off
-void fn_1_579A0(ShadowVtx *a, ShadowVtx *b) {
+void fn_1_579A0(fn_1_579A0_ShadowVtx *a, fn_1_579A0_ShadowVtx *b) {
     f32 fzgx_live;
     u32 lab_t1;
     u32 lab_t2;
@@ -578,14 +588,7 @@ void fn_1_579A0(ShadowVtx *a, ShadowVtx *b) {
 #pragma opt_strength_reduction reset
 /* fzgx:end fn_1_579A0 */
 
-/* fzgx:begin fn_1_57A70 noprologue */
-#include "types.h"
-#include "dolphin/gx.h"
-
-extern u32 lbl_801A6D00;
-extern void GXLoadPosMtxImm(u32, u32);
-extern void fn_1_57DC0(u32);
-extern void fn_8003462C(u32, u32, u32);
+/* fzgx:begin fn_1_57A70 */
 
 typedef struct { f32 x, y, z; s8 a, b, c, d; } V16;
 
@@ -609,7 +612,7 @@ void fn_1_57A70(u32 n, V16 *v) {
     V16 *p;
     if ((u16)n >= 2) {
         fn_1_57DC0(n);
-        GXLoadPosMtxImm(lbl_801A6D00, 0);
+        GXLoadPosMtxImm( (void *)(u32)((*((u32 *)&lbl_801A6D00))), 0);
         fn_8003462C(0xB0, 0, n);
         p = v;
         count = n;
@@ -623,7 +626,19 @@ void fn_1_57A70(u32 n, V16 *v) {
 #pragma opt_loop_invariants reset
 /* fzgx:end fn_1_57A70 */
 
-/* fzgx:begin fn_1_57BBC */
+/* fzgx:begin fn_1_57BBC noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/shadowmap.h"
+#include "psvec.h"
+#include "game/main_rel/shadowmap_types.h"
+
+extern void lbl_8006DB74(void *arg);
+extern void * fn_1_548AC(u32 amount);
+extern void *fn_1_5448C(void *arg);
+extern void fn_1_57E84(void);
+extern void fn_1_5489C(void **arg0, void **arg1);
+
 typedef struct {
     u32 unk_0;
     u32 unk_4;
@@ -675,7 +690,20 @@ void fn_1_57BBC(Fn1_57BBC_ArgBlock *arg0, Fn1_57BBC_ArgBlock *arg1) {
 }
 /* fzgx:end fn_1_57BBC */
 
-/* fzgx:begin fn_1_57CD0 */
+/* fzgx:begin fn_1_57CD0 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/shadowmap.h"
+#include "psvec.h"
+#include "game/main_rel/shadowmap_types.h"
+
+extern void lbl_8006DB74(void *arg);
+extern void * fn_1_548AC(u32 amount);
+extern void *fn_1_5448C(void *arg);
+extern void fn_1_57E84(void);
+extern void fn_1_5489C(void **arg0, void **arg1);
+extern void fn_80008BA8(u32 arg0, u32 arg1, u32 arg2);
+
 typedef struct {
     u8 pad_0[0x4];
     void (*unk_4)(void);
@@ -738,41 +766,9 @@ void fn_1_57DC0(void) {
 }
 /* fzgx:end fn_1_57DC0 */
 
-/* fzgx:begin fn_1_57E84 noprologue */
-#include "types.h"
-#include "rel/main_rel/shadowmap.h"
-#include "dolphin/hw_regs.h"
+/* fzgx:begin fn_1_57E84 */
 
-typedef struct {
-    f32 x, y, z;
-    u8 r, g, b, a;
-} ShadowVtx;
 
-typedef struct {
-    u8 pad_0[0x8];
-    u8 mtx[0x30];
-    u32 unk_38;
-    u16 unk_3C;
-    u8 pad_3E[2];
-    ShadowVtx *unk_40;
-    Obj_1_data_1C670 unk_44;
-} ShadowObj;
-
-extern void GXLoadPosMtxImm(void *, u32);
-extern void fn_8003462C(u32, u32, u32);
-extern void fn_800720B0(u32);
-extern void fn_8007245C(u32);
-extern void fn_800728A8(s32, s32, s32, s32);
-extern void fn_80072EDC(s32, s32);
-extern void fn_800734A8(u32, s32, s32, s32);
-extern void fn_80073678(u32);
-extern void fn_80073898(u32);
-extern void fn_80073C6C(s32);
-extern void fn_80074660(u32);
-extern void fn_800746A8(u8, s32);
-extern void fn_80074788(u32);
-extern void fn_800747D0(u32, u32, s32, s32, u32, s32, s32);
-extern void fn_80074918(u8, s32, u8);
 
 /* GX write-gather pipe: every store is a FIFO push, hence volatile. */
 typedef union { f32 f; u8 u8; } ShadowFifo;
@@ -807,7 +803,7 @@ static inline void GXClr(volatile ShadowFifo *p, u8 r, u8 g, u8 b, u8 a) {  /* f
 
 void fn_1_57E84(ShadowObj *obj) {
     Obj_1_data_1C670 saved;
-    ShadowVtx *v;
+    fn_1_57E84_ShadowVtx *v;
     s32 i;
     s32 n;
     struct { volatile ShadowFifo *p; } fifo;  /* fzgx-allow: S2 volatile keeps the verified access order */

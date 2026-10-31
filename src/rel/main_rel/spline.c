@@ -1,8 +1,141 @@
 #include "types.h"
+#include "game/main_rel/spline_types.h"
+#include "game/main_rel/burner_types.h"
+#include "game/main_rel/light_types.h"
 #include "rel/main_rel/globals.h"
 #include "rel/main_rel/spline.h"
-#include "game/main_rel/spline_types.h"
+#include "game/vec3.h"
+#include "psvec.h"
 
+typedef struct {
+    f32 x;
+    f32 y;
+    f32 z;
+    f32 w;
+} Sig_fn_8006EB4C_Quat;
+
+struct fn_1_F5D94_lbl_801A6D00 { u32 unk_0; };
+
+typedef struct {
+    u32 dummy[16];
+} LightObj_F75D8;
+
+typedef struct {
+    f32 x, y, z;
+} LightVec_F75D8;
+
+typedef struct {
+    u8 r, g, b, a;
+} LightColor_F75D8;
+
+typedef struct {
+    LightVec_F75D8 pos;       /* 0x00 */
+    LightVec_F75D8 dir;       /* 0x0C */
+    LightColor_F75D8 ambient; /* 0x18 */
+    LightColor_F75D8 color;   /* 0x1C */
+    s8 distFn;                /* 0x20 */
+    u8 pad_21[3];
+    f32 refDist;              /* 0x24 */
+    f32 refBright;            /* 0x28 */
+    s8 spotFn;                /* 0x2C */
+    u8 pad_2D[3];
+    f32 cutoff;               /* 0x30 */
+} LightDesc_F75D8;
+
+typedef struct {
+    s16 unk_0;
+    s16 unk_2;
+    s16 unk_4;
+    s16 unk_6;
+    s16 unk_8;
+} fn_1_F9888_Element;
+
+typedef struct {
+    fn_1_F9888_Element elements[44];
+} fn_1_F9888_Table;
+
+typedef struct {
+    s16 unk_0;
+    s16 unk_2;
+    s16 unk_4;
+    s16 unk_6;
+    s16 unk_8;
+} fn_1_F9244_Element;
+
+typedef struct {
+    fn_1_F9244_Element elements[44];
+} fn_1_F9244_Table;
+
+typedef struct {
+    s16 unk_0;
+    s16 unk_2;
+    s16 unk_4;
+    s16 unk_6;
+    s16 unk_8;
+} fn_1_F946C_Element;
+
+typedef struct {
+    fn_1_F946C_Element elements[44];
+} fn_1_F946C_Table;
+
+typedef struct {
+    s16 unk_0;
+    s16 unk_2;
+    s16 unk_4;
+    s16 unk_6;
+    s16 unk_8;
+} fn_1_F965C_Element;
+
+typedef struct {
+    fn_1_F965C_Element elements[44];
+} fn_1_F965C_Table;
+
+typedef struct {
+    u8 pad_0[0x8];
+    s16 unk_8;
+    u8 pad_A[0xE];
+    f32 unk_18;
+    u8 pad_1C[0x3C];
+    f32 unk_58;
+    u8 pad_5C[0x28];
+    f32 unk_84;
+    u8 pad_88[0x6C];
+    f32 unk_F4;
+    u8 pad_F8[0x5C];
+    u32 unk_154;
+} SplineObj;
+
+typedef struct {
+    f32 x, y, z;
+} SplineVec;
+extern const f32 lbl_1_rodata_6D74;
+extern const f32 lbl_1_rodata_6D6C;
+extern void fn_1_F55C4(f32 *, f32 *, f32 *, f32 *);
+extern void fn_1_F588C(f32 *, f32 *, f32 *, f32);
+extern void fn_8006EB4C(Sig_fn_8006EB4C_Quat *, Sig_fn_8006EB4C_Quat *, Sig_fn_8006EB4C_Quat *, f32);
+extern u32 lbl_801A63C0;
+extern struct fn_1_F5D94_lbl_801A6D00 lbl_801A6D00;
+extern u32 lbl_801A66CC;
+extern void lbl_8006DBAC(Vec3 *);
+extern f32 lbl_8006D0B4(f32);
+extern s32 fn_1_5910(void);
+extern void fn_1_7BB80(LightObj_F75D8 *, s32);
+extern void fn_1_7BCCC(Triple_80074D28 *arg0);
+extern u32 fn_1_7BD6C(s32 value);
+extern void lbl_8006DAEC(void);
+extern void lbl_8006D758(void);
+extern void lbl_8006DCA4(void);
+extern f32 lbl_8006D668(LightVec_F75D8 *);
+extern void lbl_8006D5F0(LightVec_F75D8 *, LightVec_F75D8 *, f32);
+extern void lbl_8006E1B0(void *, LightVec_F75D8 *);
+extern void lbl_8006E1C0(LightVec_F75D8 *, LightVec_F75D8 *);
+extern void fn_800356AC(LightObj_F75D8 *, LightColor_F75D8 *);
+extern void fn_80035680(LightObj_F75D8 *, f32, f32, f32);
+extern void fn_80035690(LightObj_F75D8 *, f32, f32, f32);
+extern void fn_80035420(LightObj_F75D8 *, f32, s32);
+extern void GXInitLightDistAttn(LightObj_F75D8 *, f32, f32, s32);
+extern void fn_80074CF4(f32 arg0, f32 arg1, f32 arg2);
+extern void lbl_8006DB30(void);
 extern void fn_1_F7B2C(void);
 extern void fn_1_F7E88(void);
 extern void fn_1_F8048(void);
@@ -14,76 +147,42 @@ extern void fn_1_F9C6C(void);
 extern void fn_1_F9E4C(void);
 extern void fn_1_F9D24(void);
 extern void fn_1_F9DA4(void);
-extern void fn_1_F9CD0(u8, u8);
-extern u32 fn_1_FA4D4(void);
+extern void fn_1_F9CD0(u8 index, u8 shift);
+extern void fn_1_FA4D4(void);
 extern void fn_1_FA61C(void);
 extern u32 fn_800793D4(u8 *arg0, u32 arg1, u32 arg2);
-extern u32 lbl_1_rodata_6E38;
-extern void fn_80008BA8(u32 arg0, u32 arg1, u32 arg2);
-extern u32 fn_1_F9CA0(u32 arg0, u32 arg1);
-extern s32 fn_1_F21B8(s32 arg);
-extern u8 fn_1_FA69C(s32 index);
-extern void *lbl_801A6410;
-extern void *fn_1_4630(void *, u32, const char *, int);
-extern void fn_1_46B4(u32 arg0, u32 arg1, const char *arg2, int arg3);
-extern char *fn_80083DB0(char *dst, const char *src);
-extern s32 fn_1_58C4(void);
-extern void fn_1_5948(int);
-extern void fn_1_627C(int);
-extern void fn_1_A714C(f32 *a, f32 *b, f32 *c, f32 *d);
-extern void fn_80015CB0(f32 *out, f32 a, f32 b, f32 c, f32 d, f32 e, f32 f);
-extern void fn_80038FD8(u32 *, u32 *, u32 *, u32 *);
-extern const f32 lbl_1_rodata_6D7C;
-extern const f32 lbl_1_rodata_6D80;
-extern const f32 lbl_1_rodata_6D74;
-extern f64 fn_80088538(f32);
-extern f64 fn_800883E8(f64 angle);
-extern u32 lbl_801A63C0;
-extern int fn_1_866B4(s8);
-extern u32 fn_1_864FC(u32 index);
-extern void fn_1_F73A8(int, void *, void *);
 extern u64 __shl2i(u32, u32, s32);
-extern u32 fn_1_76504(s32, void *, s32);
-extern u32 lbl_801A63D0;
-extern void fn_1_7269C(u32 arg0, u32 arg1, void *arg2);
-extern void fn_1_72768(u32 arg0, u32 arg1);
-extern void fn_1_FAB40(void);
-extern void fn_80008BEC(void *dest, int value, u32 size);
-extern void fn_1_76BF8(void);
-extern void fn_1_72648(void);
-extern void fn_1_9A508();
-extern void fn_1_FB0B4(Obj_1_bss_84428 *data);
-extern void fn_1_FB180(int *value);
-extern u32 lbl_1_rodata_74CC[3];
-extern u32 lbl_1_rodata_74D8[46];
+extern u32 fn_1_8D5F0(s16 index);
 extern void mathutil_quat_mult(f32 *, f32 *, f32 *);
 extern void fn_1_F56F8(f32 *out, f32 *in);
 extern const f32 lbl_1_rodata_6D78;
 extern void fn_1_F57A8(f32 *out, f32 *in);
 extern const f32 lbl_1_rodata_6D70;
-extern f32 lbl_8006D0B4(f32);
+extern void fn_80088538();
+extern f64 fn_800883E8(f64 angle);
 extern f64 fn_80087E80(f64 value);
+extern void fn_1_9A508();
 extern void fn_1_F5B88(Obj_1_data_2A7E0_At3C *arg0);
 extern void fn_1_9AD88(void);
 extern void fn_1_F65A0(Obj_1_data_2A7E0_At3C *);
 extern void fn_1_F7578(void);
 extern void fn_8001D32C(u32 *commands);
-extern void fn_1_F75D8(void *, int, int, int);
-extern void fn_1_F8918(u8 *src, u8 *dst);
+extern void fn_80008BEC(void *dest, int value, u32 size);
+extern void fn_1_F75D8();
+extern void fn_1_F8918(u8 *, u8 *);
 extern s32 fn_8008023C(u32 arg0, u32 arg1, u32 arg2);
 extern void fn_1_F85A0(Obj_1_bss_7F0C0 *, u8 *);
 extern u16 lbl_1_data_414[36];
-extern u32 fn_1_8D5F0(s16 index);
-extern void fn_1_F7CAC(s16 value);
-extern s32 fn_1_F7BE4(s16);
-extern void fn_1_F7F48(s16 value);
+extern void fn_1_F7CAC(s16);
+extern s32 fn_1_F7BE4();
+extern void fn_1_F7F48(s16 id);
 extern u32 fn_1_14D6D8(s16 index);
-extern void fn_1_F83F0(s16 value);
+extern void fn_1_F83F0(s16 id);
 extern void fn_1_F8214(s16 value);
 extern void fn_1_F8A04(void);
 extern void fn_1_F8A90(void);
 extern void fn_1_F8A7C(void);
-extern void fn_1_F8AFC(u32 arg0);
+extern void fn_1_F8AFC(u32);
 extern void fn_1_F8B64(void);
 extern void fn_1_F8BA8(void);
 extern void fn_1_F8B7C(void);
@@ -91,17 +190,101 @@ extern void fn_1_F8BD4(void);
 extern void fn_1_F8C28(s32 value);
 extern void fn_1_F8CCC(s32 value);
 extern void fn_1_F8CA0(s32 value);
+extern struct Table lbl_1_rodata_6FF0;
+extern char *fn_80083DB0(char *dst, const char *src);
 extern void fn_1_F9D04(u8 index);
 extern void fn_1_F9D90(void);
 extern void fn_1_F9E38(void);
-extern void fn_1_F9EE4(s32 arg0);
+extern void fn_1_F9EE4(s32);
+extern u8 fn_1_FA69C(s32 index);
 extern void fn_1_3EF14(void *arg1);
+extern s32 fn_1_58C4(void);
+extern void fn_1_76BF8(void);
+extern void fn_1_72648(void);
+extern void fn_1_FB0B4(Obj_1_bss_84428 *data);
+extern void fn_1_FB180(int *value);
 extern void fn_1_9AD54(void);
 extern void fn_1_FB18C(void);
 extern void fn_8001D3E4(u32 channel, u32 command);
 extern u32 lbl_801A66A0;
+extern u32 lbl_1_rodata_6E38;
+extern void fn_80008BA8(u32 arg0, u32 arg1, u32 arg2);
+extern u32 fn_1_F9CA0(u32 arg0, u32 arg1);
+extern s32 fn_1_F21B8(s32 arg);
+extern u32 fn_1_F9D44(u32);
+extern u32 ghost_test_record_flag0(s32 arg);
+extern void ghost_set_record_flag2(s32 arg);
+extern u32 fn_1_F9DC4(u32);
+extern u32 fn_1_F210C(s32 arg);
+extern void fn_1_F9E10(u32 param);
+extern void ghost_set_record_flag1(s32 arg);
+extern u32 fn_1_F2740(u32 a, u32 b);
+extern char *strncpy(char *dst, const char *src, size_t n);
+extern s32 lbl_801A66B4;
+extern u8 lbl_1_data_3ECFC__fzgx_offset_0[];
+extern u8 lbl_1_data_3ED0C__fzgx_offset_0[];
+extern u8 lbl_1_data_3ED20__fzgx_offset_0[];
+extern u8 lbl_1_data_3ED34__fzgx_offset_0[];
+extern u8 lbl_1_data_3ED48__fzgx_offset_0[];
+extern u8 lbl_1_data_3ED5C__fzgx_offset_0[];
+extern u8 lbl_1_data_3ED70__fzgx_offset_0[];
+extern u8 lbl_1_data_3ED84__fzgx_offset_0[];
+extern u8 lbl_1_data_3ED98__fzgx_offset_0[];
+extern u8 lbl_1_data_3EDAC__fzgx_offset_0[];
+extern u8 lbl_1_data_3EDE8__fzgx_offset_0[];
+extern u8 lbl_1_data_3EDF8__fzgx_offset_0[];
+extern u8 lbl_1_data_3EE0C__fzgx_offset_0[];
+extern u8 lbl_1_data_3EE20__fzgx_offset_0[];
+extern u8 lbl_1_data_3EE34__fzgx_offset_0[];
+extern u8 lbl_1_data_3EE48__fzgx_offset_0[];
+extern u8 lbl_1_data_3EE5C__fzgx_offset_0[];
+extern u8 lbl_1_data_3EE6C__fzgx_offset_0[];
+extern u8 lbl_1_data_3EE7C__fzgx_offset_0[];
+extern u8 lbl_1_data_3EE90__fzgx_offset_0[];
+extern s16 fn_1_E5430(s16 index);
+extern void * fn_1_E54A8(s16 type, s16 index);
+extern s32 fn_1_E5770(SplineObj *, u64);
+extern void fn_1_E5930();
+extern void fn_1_E594C(SplineObj *, u64);
+extern s16 fn_1_E5568(s16 id);
+extern u32 fn_1_DE180(SplineObj *, SplineVec *, f32);
+extern void fn_1_E57F4(f32, SplineObj *);
+extern void fn_1_E5988(void *base, void *value);
+extern void fn_1_E5A94(void *base, void *value);
+extern void fn_1_E57FC(void *object, void *source);
+extern void fzgx_pool_sink(const void *);
+extern void *lbl_801A6410;
+extern u32 fn_1_4630();
+extern void fn_1_46B4(u32 arg0, u32 arg1, const char *arg2, int arg3);
+extern void fn_1_5948(int);
+extern void fn_1_627C();
+extern void fn_1_A714C(f32 *a, f32 *b, f32 *c, f32 *d);
+extern void fn_80015CB0(f32 *out, f32 a, f32 b, f32 c, f32 d, f32 e, f32 f);
+extern void fn_80038FD8(u32 *left, u32 *top, u32 *width, u32 *height);
+extern const f32 lbl_1_rodata_6D7C;
+extern const f32 lbl_1_rodata_6D80;
+extern s32 fn_1_866B4(s32 id);
+extern u32 fn_1_864FC(u32 index);
+extern void fn_1_F73A8(s32 idx, s32 kind, s32 val);
+extern u32 fn_1_76504(s32, void *, s32);
+extern u32 lbl_801A63D0;
+extern void fn_1_7269C(u32 arg0, u32 arg1, void *arg2);
+extern void fn_1_72768(u32 arg0, u32 arg1);
+extern void fn_1_FAB40(void);
+extern u32 lbl_1_rodata_74CC[3];
+extern u32 lbl_1_rodata_74D8[46];
+extern void fn_1_F5D94(void *arg0);
 
-/* fzgx:begin fn_1_F4F08 */
+/* fzgx:begin fn_1_F4F08 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/spline.h"
+#include "game/main_rel/spline_types.h"
+
+extern void *lbl_801A6410;
+extern void *fn_1_4630(void *, u32, const char *, int);
+extern void fn_1_46B4(u32 arg0, u32 arg1, const char *arg2, int arg3);
+
 /* Natural cubic spline setup: computes second derivatives y2[] for the
  * knots (x[], y[]) by tridiagonal elimination. */
 void fn_1_F4F08(u32 n, f32 *x, f32 *y, f32 *y2) {
@@ -201,7 +384,17 @@ void fn_1_F5458(Sig_fn_8006EB4C_Quat *out, u32 n, f32 *keys, Sig_fn_8006EB4C_Qua
 }
 /* fzgx:end fn_1_F5458 */
 
-/* fzgx:begin fn_1_F55C4 */
+/* fzgx:begin fn_1_F55C4 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/spline.h"
+#include "game/main_rel/spline_types.h"
+
+extern void mathutil_quat_mult(f32 *, f32 *, f32 *);
+extern void fn_1_F56F8(f32 *out, f32 *in);
+extern const f32 lbl_1_rodata_6D78;
+extern void fn_1_F57A8(f32 *out, f32 *in);
+
 void fn_1_F55C4(f32 *out, f32 *arg1, f32 *in, f32 *arg3) {
     f32 temp[4];
 
@@ -226,7 +419,17 @@ void fn_1_F55C4(f32 *out, f32 *arg1, f32 *in, f32 *arg3) {
 }
 /* fzgx:end fn_1_F55C4 */
 
-/* fzgx:begin fn_1_F56F8 */
+/* fzgx:begin fn_1_F56F8 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/spline.h"
+#include "game/main_rel/spline_types.h"
+
+extern f64 fn_80088538(f32);
+extern f64 fn_800883E8(f64 angle);
+extern void fn_1_F56F8(f32 *out, f32 *in);
+extern const f32 lbl_1_rodata_6D70;
+
 void fn_1_F56F8(f32 *out, f32 *in) {
     f32 value;
     f32 scale;
@@ -248,7 +451,18 @@ void fn_1_F56F8(f32 *out, f32 *in) {
 }
 /* fzgx:end fn_1_F56F8 */
 
-/* fzgx:begin fn_1_F57A8 */
+/* fzgx:begin fn_1_F57A8 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/spline.h"
+#include "game/main_rel/spline_types.h"
+
+extern f64 fn_800883E8(f64 angle);
+extern void fn_1_F57A8(f32 *out, f32 *in);
+extern const f32 lbl_1_rodata_6D70;
+extern f32 lbl_8006D0B4(f32);
+extern f64 fn_80087E80(f64 value);
+
 void fn_1_F57A8(f32 *out, f32 *in) {
     f32 length;
     f32 scale;
@@ -270,7 +484,18 @@ void fn_1_F57A8(f32 *out, f32 *in) {
 }
 /* fzgx:end fn_1_F57A8 */
 
-/* fzgx:begin fn_1_F588C */
+/* fzgx:begin fn_1_F588C noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/spline.h"
+#include "game/main_rel/spline_types.h"
+
+extern const f32 lbl_1_rodata_6D7C;
+extern const f32 lbl_1_rodata_6D80;
+extern const f32 lbl_1_rodata_6D74;
+extern f64 fn_80088538(f32);
+extern f64 fn_800883E8(f64 angle);
+
 #pragma fp_contract off
 
 
@@ -297,7 +522,12 @@ void fn_1_F588C(f32 *out, f32 *a, f32 *b, f32 t) {
 }
 /* fzgx:end fn_1_F588C */
 
-/* fzgx:begin fn_1_F5A2C */
+/* fzgx:begin fn_1_F5A2C noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/spline.h"
+#include "game/main_rel/spline_types.h"
+
 void fn_1_F5A2C(Vec4 *dst, const Vec4 *a, const Vec4 *b, f32 t) {
     f32 delta;
     f32 product;
@@ -323,13 +553,26 @@ void fn_1_F5A2C(Vec4 *dst, const Vec4 *a, const Vec4 *b, f32 t) {
 }
 /* fzgx:end fn_1_F5A2C */
 
-/* fzgx:begin fn_1_F5AAC */
+/* fzgx:begin fn_1_F5AAC noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/spline.h"
+#include "game/main_rel/spline_types.h"
+
 // fn_1_F5AAC: empty in retail (single blr).
 void fn_1_F5AAC(void) {
 }
 /* fzgx:end fn_1_F5AAC */
 
-/* fzgx:begin fn_1_F5AB0 */
+/* fzgx:begin fn_1_F5AB0 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/spline.h"
+#include "game/main_rel/spline_types.h"
+
+extern void fn_1_9A508();
+extern void fn_1_F5B88(Obj_1_data_2A7E0_At3C *arg0);
+
 void fn_1_F5AB0(void) {
     Obj_1_data_2A7E0_At3C *arg0 = lbl_1_data_2A7E0.unk_3C;
     fn_1_9A508(&lbl_1_data_2A7E0);
@@ -337,13 +580,25 @@ void fn_1_F5AB0(void) {
 }
 /* fzgx:end fn_1_F5AB0 */
 
-/* fzgx:begin fn_1_F5AEC */
+/* fzgx:begin fn_1_F5AEC noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/spline.h"
+#include "game/main_rel/spline_types.h"
+
 // fn_1_F5AEC: empty in retail (single blr).
 void fn_1_F5AEC(void) {
 }
 /* fzgx:end fn_1_F5AEC */
 
-/* fzgx:begin fn_1_F5AF0 */
+/* fzgx:begin fn_1_F5AF0 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/spline.h"
+#include "game/main_rel/spline_types.h"
+
+extern void fn_1_9AD54(void);
+
 // Update the spline state after refreshing the shared data.
 void fn_1_F5AF0(void) {
     Obj_1_data_2A7E0_At3C *state;
@@ -356,13 +611,26 @@ void fn_1_F5AF0(void) {
 }
 /* fzgx:end fn_1_F5AF0 */
 
-/* fzgx:begin fn_1_F5B38 */
+/* fzgx:begin fn_1_F5B38 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/spline.h"
+#include "game/main_rel/spline_types.h"
+
 // fn_1_F5B38: empty in retail (single blr).
 void fn_1_F5B38(void) {
 }
 /* fzgx:end fn_1_F5B38 */
 
-/* fzgx:begin fn_1_F5B3C */
+/* fzgx:begin fn_1_F5B3C noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/spline.h"
+#include "game/main_rel/spline_types.h"
+
+extern void fn_1_9AD88(void);
+extern void fn_1_F65A0(Obj_1_data_2A7E0_At3C *);
+
 void fn_1_F5B3C(void) {
     Obj_1_data_2A7E0_At3C *obj = lbl_1_data_2A7E0.unk_3C;
 
@@ -373,13 +641,27 @@ void fn_1_F5B3C(void) {
 }
 /* fzgx:end fn_1_F5B3C */
 
-/* fzgx:begin fn_1_F5B84 */
+/* fzgx:begin fn_1_F5B84 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/spline.h"
+#include "game/main_rel/spline_types.h"
+
 // fn_1_F5B84: empty in retail (single blr).
 void fn_1_F5B84(void) {
 }
 /* fzgx:end fn_1_F5B84 */
 
-/* fzgx:begin fn_1_F5B88 */
+/* fzgx:begin fn_1_F5B88 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/spline.h"
+#include "game/main_rel/spline_types.h"
+
+extern s32 fn_1_58C4(void);
+extern u32 lbl_801A63C0;
+extern void fn_1_F5B88(Obj_1_data_2A7E0_At3C *arg0);
+
 typedef struct {
     f32 x, y, z;
 } Vec3f;
@@ -597,21 +879,38 @@ void fn_1_F5D94(void *arg0) {
 }
 /* fzgx:end fn_1_F5D94 */
 
-/* fzgx:begin fn_1_F70C0 */
+/* fzgx:begin fn_1_F70C0 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/spline.h"
+#include "game/main_rel/spline_types.h"
+
 // fn_1_F70C0: returns a constant.
 int fn_1_F70C0(void) {
     return 1;
 }
 /* fzgx:end fn_1_F70C0 */
 
-/* fzgx:begin fn_1_F70C8 */
+/* fzgx:begin fn_1_F70C8 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/spline.h"
+#include "game/main_rel/spline_types.h"
+
 // fn_1_F70C8: returns a constant.
 int fn_1_F70C8(void) {
     return 1;
 }
 /* fzgx:end fn_1_F70C8 */
 
-/* fzgx:begin fn_1_F70D0 */
+/* fzgx:begin fn_1_F70D0 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/spline.h"
+#include "game/main_rel/spline_types.h"
+
+extern void fn_80008BEC(void *dest, int value, u32 size);
+
 // Clear the spline state buffers and mark the state as initialized.
 void fn_1_F70D0(void) {
     u32 *state = (u32 *)&lbl_1_bss_7F028;
@@ -622,7 +921,15 @@ void fn_1_F70D0(void) {
 }
 /* fzgx:end fn_1_F70D0 */
 
-/* fzgx:begin fn_1_F7128 */
+/* fzgx:begin fn_1_F7128 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/spline.h"
+#include "game/main_rel/spline_types.h"
+
+extern void fn_8001D3E4(u32 channel, u32 command);
+extern u32 lbl_801A66A0;
+
 void fn_1_F7128(void) {
     int i;
     Obj_1_bss_7F03C *dst;
@@ -682,14 +989,30 @@ void fn_1_F7128(void) {
 }
 /* fzgx:end fn_1_F7128 */
 
-/* fzgx:begin fn_1_F7308 */
+/* fzgx:begin fn_1_F7308 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/spline.h"
+#include "game/main_rel/spline_types.h"
+
+extern void fn_1_F7578(void);
+
 void fn_1_F7308(void) {
     fn_1_F7578();
     lbl_1_bss_7F028 &= 0xFE;
 }
 /* fzgx:end fn_1_F7308 */
 
-/* fzgx:begin fn_1_F7338 */
+/* fzgx:begin fn_1_F7338 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/spline.h"
+#include "game/main_rel/spline_types.h"
+
+extern int fn_1_866B4(s8);
+extern u32 fn_1_864FC(u32 index);
+extern void fn_1_F73A8(int, void *, void *);
+
 void fn_1_F7338(int arg0, void *arg1, void *arg2) {
     s8 value;
 
@@ -795,19 +1118,38 @@ void fn_1_F73A8(s32 idx, s32 kind, s32 val) {
 }
 /* fzgx:end fn_1_F73A8 */
 
-/* fzgx:begin fn_1_F755C */
+/* fzgx:begin fn_1_F755C noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/spline.h"
+#include "game/main_rel/spline_types.h"
+
 void fn_1_F755C(u8 value) {
     lbl_1_data_3E8F0 = value;
 }
 /* fzgx:end fn_1_F755C */
 
-/* fzgx:begin fn_1_F7568 */
+/* fzgx:begin fn_1_F7568 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/spline.h"
+#include "game/main_rel/spline_types.h"
+
 u8 fn_1_F7568(void) {
     return lbl_1_data_3E8F0;
 }
 /* fzgx:end fn_1_F7568 */
 
-/* fzgx:begin fn_1_F7578 */
+/* fzgx:begin fn_1_F7578 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/spline.h"
+#include "game/main_rel/spline_types.h"
+
+extern void fn_80008BEC(void *dest, int value, u32 size);
+extern void fn_1_F7578(void);
+extern void fn_8001D32C(u32 *commands);
+
 // Initialize the spline work buffers to their default values.
 
 void fn_1_F7578(void) {
@@ -949,7 +1291,14 @@ void fn_1_F75D8(LightDesc_F75D8 **lights, s32 useOverride, s32 mode) {
 }
 /* fzgx:end fn_1_F75D8 */
 
-/* fzgx:begin fn_1_F7870 */
+/* fzgx:begin fn_1_F7870 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/spline.h"
+#include "game/main_rel/spline_types.h"
+
+extern void fn_1_F75D8(void *, int, int, int);
+
 void fn_1_F7870(u32 value) {
     u32 values[2];
 
@@ -959,19 +1308,41 @@ void fn_1_F7870(u32 value) {
 }
 /* fzgx:end fn_1_F7870 */
 
-/* fzgx:begin fn_1_F78AC */
+/* fzgx:begin fn_1_F78AC noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/spline.h"
+#include "game/main_rel/spline_types.h"
+
+extern void fn_1_F75D8(void *, int, int, int);
+
 void fn_1_F78AC(void *arg0) {
     fn_1_F75D8(arg0, 1, 0, 0);
 }
 /* fzgx:end fn_1_F78AC */
 
-/* fzgx:begin fn_1_F78D8 */
+/* fzgx:begin fn_1_F78D8 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/spline.h"
+#include "game/main_rel/spline_types.h"
+
+extern void fn_1_F75D8(void *, int, int, int);
+
 void fn_1_F78D8(void *arg0) {
     fn_1_F75D8(arg0, 1, 0, 1);
 }
 /* fzgx:end fn_1_F78D8 */
 
-/* fzgx:begin fn_1_F7904 */
+/* fzgx:begin fn_1_F7904 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/spline.h"
+#include "game/main_rel/spline_types.h"
+
+extern void fn_1_F8918(u8 *src, u8 *dst);
+extern s32 fn_8008023C(u32 arg0, u32 arg1, u32 arg2);
+
 // Builds the spline workspace and reports whether its serialized data is valid.
 s32 fn_1_F7904(void) {
     u8 buffer[0x5360];
@@ -981,7 +1352,16 @@ s32 fn_1_F7904(void) {
 }
 /* fzgx:end fn_1_F7904 */
 
-/* fzgx:begin fn_1_F7954 */
+/* fzgx:begin fn_1_F7954 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/spline.h"
+#include "game/main_rel/spline_types.h"
+
+extern void fn_1_F8918(u8 *src, u8 *dst);
+extern s32 fn_8008023C(u32 arg0, u32 arg1, u32 arg2);
+extern void fn_1_F85A0(Obj_1_bss_7F0C0 *, u8 *);
+
 s32 fn_1_F7954(void) {
     u8 buffer[0x5360];
     u8 *workspace;
@@ -996,7 +1376,15 @@ s32 fn_1_F7954(void) {
 }
 /* fzgx:end fn_1_F7954 */
 
-/* fzgx:begin fn_1_F79C8 */
+/* fzgx:begin fn_1_F79C8 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/spline.h"
+#include "game/main_rel/spline_types.h"
+
+extern void fn_1_F8918(u8 *src, u8 *dst);
+extern u16 lbl_1_data_414[36];
+
 // Initialize spline data and publish the active spline region.
 void fn_1_F79C8(void) {
     fn_1_F8918(&lbl_1_bss_718E0.pad_1A2[0x1e], (u8 *)&lbl_1_bss_7F0C0);
@@ -1097,7 +1485,16 @@ void fn_1_F7A20(void)
 }
 /* fzgx:end fn_1_F7A20 */
 
-/* fzgx:begin fn_1_F7B2C */
+/* fzgx:begin fn_1_F7B2C noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/spline.h"
+#include "game/main_rel/spline_types.h"
+
+extern void fn_1_F7B2C(void);
+extern u32 fn_1_8D5F0(s16 index);
+extern void fn_1_F7CAC(s16 value);
+
 void fn_1_F7B2C(void) {
     s16 i;
 
@@ -1109,7 +1506,14 @@ void fn_1_F7B2C(void) {
 }
 /* fzgx:end fn_1_F7B2C */
 
-/* fzgx:begin fn_1_F7B80 */
+/* fzgx:begin fn_1_F7B80 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/spline.h"
+#include "game/main_rel/spline_types.h"
+
+extern s32 fn_1_F7BE4(s16);
+
 s16 fn_1_F7B80(void) {
     s16 i;
     s16 count;
@@ -1145,7 +1549,12 @@ s32 fn_1_F7BE4(u32 arg0, u32 arg1) {
 }
 /* fzgx:end fn_1_F7BE4 */
 
-/* fzgx:begin fn_1_F7C48 */
+/* fzgx:begin fn_1_F7C48 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/spline.h"
+#include "game/main_rel/spline_types.h"
+
 s16 fn_1_F7C48(s16 arg) {
     u64 mask = (u64)1 << arg;
     u64 bits = ((u64)lbl_1_bss_7F0C0.unk_48 << 32) | lbl_1_bss_7F0C0.unk_4C;
@@ -1160,7 +1569,14 @@ s16 fn_1_F7C48(s16 arg) {
 }
 /* fzgx:end fn_1_F7C48 */
 
-/* fzgx:begin fn_1_F7CAC */
+/* fzgx:begin fn_1_F7CAC noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/spline.h"
+#include "game/main_rel/spline_types.h"
+
+extern void fn_1_F7CAC(s16 value);
+
 void fn_1_F7CAC(s16 value) {
     u64 mask = (u64)1 << value;
 
@@ -1169,7 +1585,15 @@ void fn_1_F7CAC(s16 value) {
 }
 /* fzgx:end fn_1_F7CAC */
 
-/* fzgx:begin fn_1_F7D18 */
+/* fzgx:begin fn_1_F7D18 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/spline.h"
+#include "game/main_rel/spline_types.h"
+
+extern u32 fn_1_8D5F0(s16 index);
+extern void fn_1_F7F48(s16 value);
+
 void fn_1_F7D18(void) {
     s16 i;
 
@@ -1181,7 +1605,15 @@ void fn_1_F7D18(void) {
 }
 /* fzgx:end fn_1_F7D18 */
 
-/* fzgx:begin fn_1_F7D6C */
+/* fzgx:begin fn_1_F7D6C noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/spline.h"
+#include "game/main_rel/spline_types.h"
+
+extern u32 fn_1_8D5F0(s16 index);
+extern void fn_1_F7F48(s16 value);
+
 void fn_1_F7D6C(void) {
     s16 i;
 
@@ -1193,7 +1625,15 @@ void fn_1_F7D6C(void) {
 }
 /* fzgx:end fn_1_F7D6C */
 
-/* fzgx:begin fn_1_F7DC0 */
+/* fzgx:begin fn_1_F7DC0 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/spline.h"
+#include "game/main_rel/spline_types.h"
+
+extern u32 fn_1_14D6D8(s16 index);
+extern void fn_1_F83F0(s16 value);
+
 enum {
     SIGN_BIT = (u32)1 << 31
 };
@@ -1210,7 +1650,15 @@ void fn_1_F7DC0(void) {
 }
 /* fzgx:end fn_1_F7DC0 */
 
-/* fzgx:begin fn_1_F7E24 */
+/* fzgx:begin fn_1_F7E24 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/spline.h"
+#include "game/main_rel/spline_types.h"
+
+extern u32 fn_1_14D6D8(s16 index);
+extern void fn_1_F83F0(s16 value);
+
 void fn_1_F7E24(void) {
     s16 i;
 
@@ -1224,7 +1672,16 @@ void fn_1_F7E24(void) {
 }
 /* fzgx:end fn_1_F7E24 */
 
-/* fzgx:begin fn_1_F7E88 */
+/* fzgx:begin fn_1_F7E88 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/spline.h"
+#include "game/main_rel/spline_types.h"
+
+extern void fn_1_F7E88(void);
+extern u32 fn_1_8D5F0(s16 index);
+extern void fn_1_F7F48(s16 value);
+
 void fn_1_F7E88(void) {
     s16 i;
 
@@ -1236,7 +1693,12 @@ void fn_1_F7E88(void) {
 }
 /* fzgx:end fn_1_F7E88 */
 
-/* fzgx:begin fn_1_F7EDC */
+/* fzgx:begin fn_1_F7EDC noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/spline.h"
+#include "game/main_rel/spline_types.h"
+
 s32 fn_1_F7EDC(s16 value) {
     u64 result;
     u64 mask;
@@ -1288,7 +1750,12 @@ void fn_1_F7F48(s16 id) {
 #pragma opt_loop_invariants reset
 /* fzgx:end fn_1_F7F48 */
 
-/* fzgx:begin fn_1_F8030 */
+/* fzgx:begin fn_1_F8030 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/spline.h"
+#include "game/main_rel/spline_types.h"
+
 // Clears the spline state counters.
 void fn_1_F8030(void) {
     lbl_1_bss_7F0C0.unk_4C = 0;
@@ -1296,7 +1763,16 @@ void fn_1_F8030(void) {
 }
 /* fzgx:end fn_1_F8030 */
 
-/* fzgx:begin fn_1_F8048 */
+/* fzgx:begin fn_1_F8048 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/spline.h"
+#include "game/main_rel/spline_types.h"
+
+extern void fn_1_F8048(void);
+extern u32 fn_1_14D6D8(s16 index);
+extern void fn_1_F8214(s16 value);
+
 void fn_1_F8048(void) {
     s16 i;
 
@@ -1308,7 +1784,12 @@ void fn_1_F8048(void) {
 }
 /* fzgx:end fn_1_F8048 */
 
-/* fzgx:begin fn_1_F809C */
+/* fzgx:begin fn_1_F809C noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/spline.h"
+#include "game/main_rel/spline_types.h"
+
 s32 fn_1_F809C(s32 value) {
     s16 index;
     u64 mask;
@@ -1334,7 +1815,14 @@ s32 fn_1_F809C(s32 value) {
 }
 /* fzgx:end fn_1_F809C */
 
-/* fzgx:begin fn_1_F8158 */
+/* fzgx:begin fn_1_F8158 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/spline.h"
+#include "game/main_rel/spline_types.h"
+
+extern u64 __shl2i(u32, u32, s32);
+
 s32 fn_1_F8158(s32 value) {
     u64 mask;
     if ((s16)value > 63) {
@@ -1427,7 +1915,16 @@ void fn_1_F8214(s16 value) {
 }
 /* fzgx:end fn_1_F8214 */
 
-/* fzgx:begin fn_1_F82E0 */
+/* fzgx:begin fn_1_F82E0 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/spline.h"
+#include "game/main_rel/spline_types.h"
+
+extern void fn_1_F82E0(void);
+extern u32 fn_1_14D6D8(s16 index);
+extern void fn_1_F83F0(s16 value);
+
 void fn_1_F82E0(void) {
     s16 i;
 
@@ -1439,7 +1936,12 @@ void fn_1_F82E0(void) {
 }
 /* fzgx:end fn_1_F82E0 */
 
-/* fzgx:begin fn_1_F8334 */
+/* fzgx:begin fn_1_F8334 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/spline.h"
+#include "game/main_rel/spline_types.h"
+
 int fn_1_F8334(s16 value) {
     u64 mask;
 
@@ -1498,7 +2000,12 @@ void fn_1_F83F0(s16 id) {
 }
 /* fzgx:end fn_1_F83F0 */
 
-/* fzgx:begin fn_1_F8580 */
+/* fzgx:begin fn_1_F8580 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/spline.h"
+#include "game/main_rel/spline_types.h"
+
 void fn_1_F8580(void) {
     lbl_1_bss_7F0C0.unk_5C = 0;
     lbl_1_bss_7F0C0.unk_58 = 0;
@@ -1507,7 +2014,15 @@ void fn_1_F8580(void) {
 }
 /* fzgx:end fn_1_F8580 */
 
-/* fzgx:begin fn_1_F8918 */
+/* fzgx:begin fn_1_F8918 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/spline.h"
+#include "game/main_rel/spline_types.h"
+
+extern u32 lbl_801A63C0;
+extern void fn_1_F8918(u8 *src, u8 *dst);
+
 void fn_1_F8918(u8 *src, u8 *dst) {
     u8 *hdr = src + 0x60;
     u32 seed = *(u32 *)hdr ^ 0xcae87fb5;
@@ -1530,55 +2045,109 @@ void fn_1_F8918(u8 *src, u8 *dst) {
 }
 /* fzgx:end fn_1_F8918 */
 
-/* fzgx:begin fn_1_F89C0 */
+/* fzgx:begin fn_1_F89C0 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/spline.h"
+#include "game/main_rel/spline_types.h"
+
+extern void fn_1_F89C0(void);
+extern void fn_1_F8A04(void);
+extern void fn_1_F8A90(void);
+
 void fn_1_F89C0(void) {
     fn_1_F8A04();
     fn_1_F8A90();
 }
 /* fzgx:end fn_1_F89C0 */
 
-/* fzgx:begin fn_1_F89E4 */
+/* fzgx:begin fn_1_F89E4 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/spline.h"
+#include "game/main_rel/spline_types.h"
+
 // Returns the selected bit from the rolling flag mask.
 u32 fn_1_F89E4(u8 value) {
     return __rlwnm(((u32 *)&lbl_1_bss_7F0C0)[4672], (value + 1) & 0x1f, 31, 31);
 }
 /* fzgx:end fn_1_F89E4 */
 
-/* fzgx:begin fn_1_F8A04 */
+/* fzgx:begin fn_1_F8A04 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/spline.h"
+#include "game/main_rel/spline_types.h"
+
+extern void fn_1_F8A04(void);
+
 // Clears the spline object's reset flag.
 void fn_1_F8A04(void) {
     ((u32 *)&lbl_1_bss_7F0C0)[4672] = 0;
 }
 /* fzgx:end fn_1_F8A04 */
 
-/* fzgx:begin fn_1_F8A18 */
+/* fzgx:begin fn_1_F8A18 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/spline.h"
+#include "game/main_rel/spline_types.h"
+
+extern void fn_1_F8A18(void);
+extern void fn_1_F8A7C(void);
+
 void fn_1_F8A18(void) {
     fn_1_F8A7C();
 }
 /* fzgx:end fn_1_F8A18 */
 
-/* fzgx:begin fn_1_F8A38 */
+/* fzgx:begin fn_1_F8A38 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/spline.h"
+#include "game/main_rel/spline_types.h"
+
 // Tests the spline flag selected by the low byte of the input.
 u32 fn_1_F8A38(u32 value) {
     return __rlwnm(((u32 *)&lbl_1_bss_7F0C0)[4673], ((value & 0xff) + 1) & 0x1f, 31, 31);
 }
 /* fzgx:end fn_1_F8A38 */
 
-/* fzgx:begin fn_1_F8A58 */
+/* fzgx:begin fn_1_F8A58 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/spline.h"
+#include "game/main_rel/spline_types.h"
+
 // Sets the spline flag selected by the low byte of the input.
 void fn_1_F8A58(u32 value) {
     ((u32 *)&lbl_1_bss_7F0C0)[4673] |= 0x80000000u >> (value & 0xff);
 }
 /* fzgx:end fn_1_F8A58 */
 
-/* fzgx:begin fn_1_F8A7C */
+/* fzgx:begin fn_1_F8A7C noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/spline.h"
+#include "game/main_rel/spline_types.h"
+
+extern void fn_1_F8A7C(void);
+
 // Clears the spline object's state field.
 void fn_1_F8A7C(void) {
     ((u32 *)&lbl_1_bss_7F0C0)[4673] = 0;
 }
 /* fzgx:end fn_1_F8A7C */
 
-/* fzgx:begin fn_1_F8A90 */
+/* fzgx:begin fn_1_F8A90 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/spline.h"
+#include "game/main_rel/spline_types.h"
+
+extern void fn_1_F8A90(void);
+extern void fn_1_F8AFC(u32 arg0);
+
 void fn_1_F8A90(void) {
     u32 i;
 
@@ -1588,7 +2157,12 @@ void fn_1_F8A90(void) {
 }
 /* fzgx:end fn_1_F8A90 */
 
-/* fzgx:begin fn_1_F8AD4 */
+/* fzgx:begin fn_1_F8AD4 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/spline.h"
+#include "game/main_rel/spline_types.h"
+
 // Sets the spline state bit selected by the caller.
 void fn_1_F8AD4(u32 value) {
     u32* state_word = (u32*)((u8*)&lbl_1_bss_7F0C0 + 0x4900);
@@ -1597,7 +2171,14 @@ void fn_1_F8AD4(u32 value) {
 }
 /* fzgx:end fn_1_F8AD4 */
 
-/* fzgx:begin fn_1_F8AFC */
+/* fzgx:begin fn_1_F8AFC noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/spline.h"
+#include "game/main_rel/spline_types.h"
+
+extern void fn_1_F8AFC(u32 arg0);
+
 struct fn_1_F8AFC_lbl_1_bss_7F0C0 {
     u8 pad_0[0x4900];
     u32 unk_4900;
@@ -1611,7 +2192,18 @@ void fn_1_F8AFC(u32 arg0) {
 }
 /* fzgx:end fn_1_F8AFC */
 
-/* fzgx:begin fn_1_F8B24 */
+/* fzgx:begin fn_1_F8B24 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/spline.h"
+#include "game/main_rel/spline_types.h"
+
+extern void fn_1_F8B24(void);
+extern void fn_1_F8B64(void);
+extern void fn_1_F8BA8(void);
+extern void fn_1_F8B7C(void);
+extern void fn_1_F8BD4(void);
+
 void fn_1_F8B24(void) {
     fn_1_F8B64();
     fn_1_F8BA8();
@@ -1620,14 +2212,26 @@ void fn_1_F8B24(void) {
 }
 /* fzgx:end fn_1_F8B24 */
 
-/* fzgx:begin fn_1_F8B50 */
+/* fzgx:begin fn_1_F8B50 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/spline.h"
+#include "game/main_rel/spline_types.h"
+
 // Mark the spline state as initialized.
 void fn_1_F8B50(void) {
     *(u32 *)((u8 *)&lbl_1_bss_7F0C0 + 0x4910) = 1;
 }
 /* fzgx:end fn_1_F8B50 */
 
-/* fzgx:begin fn_1_F8B64 */
+/* fzgx:begin fn_1_F8B64 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/spline.h"
+#include "game/main_rel/spline_types.h"
+
+extern void fn_1_F8B64(void);
+
 // Clear the spline state counters.
 void fn_1_F8B64(void) {
     ((u32 *)&lbl_1_bss_7F0C0)[4676] = 0;
@@ -1635,28 +2239,57 @@ void fn_1_F8B64(void) {
 }
 /* fzgx:end fn_1_F8B64 */
 
-/* fzgx:begin fn_1_F8B7C */
+/* fzgx:begin fn_1_F8B7C noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/spline.h"
+#include "game/main_rel/spline_types.h"
+
+extern void fn_1_F8B7C(void);
+extern void fn_1_F8C28(s32 value);
+
 void fn_1_F8B7C(void) {
     fn_1_F8C28(0x80000000u);
     fn_1_F8C28(0x40000000u);
 }
 /* fzgx:end fn_1_F8B7C */
 
-/* fzgx:begin fn_1_F8BA8 */
+/* fzgx:begin fn_1_F8BA8 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/spline.h"
+#include "game/main_rel/spline_types.h"
+
+extern void fn_1_F8BA8(void);
+extern void fn_1_F8CCC(s32 value);
+
 void fn_1_F8BA8(void) {
     fn_1_F8CCC(0x80000000u);
     fn_1_F8CCC(0x40000000u);
 }
 /* fzgx:end fn_1_F8BA8 */
 
-/* fzgx:begin fn_1_F8BD4 */
+/* fzgx:begin fn_1_F8BD4 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/spline.h"
+#include "game/main_rel/spline_types.h"
+
+extern void fn_1_F8BD4(void);
+extern void fn_1_F8CA0(s32 value);
+
 void fn_1_F8BD4(void) {
     fn_1_F8CA0(0);
     fn_1_F8CA0(1);
 }
 /* fzgx:end fn_1_F8BD4 */
 
-/* fzgx:begin fn_1_F8C00 */
+/* fzgx:begin fn_1_F8C00 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/spline.h"
+#include "game/main_rel/spline_types.h"
+
 // Sets the bit corresponding to the spline index.
 void fn_1_F8C00(s32 value) {
     value *= 2;
@@ -1664,7 +2297,14 @@ void fn_1_F8C00(s32 value) {
 }
 /* fzgx:end fn_1_F8C00 */
 
-/* fzgx:begin fn_1_F8C28 */
+/* fzgx:begin fn_1_F8C28 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/spline.h"
+#include "game/main_rel/spline_types.h"
+
+extern void fn_1_F8C28(s32 value);
+
 // Clears the bit corresponding to the spline index.
 void fn_1_F8C28(s32 value) {
     value *= 2;
@@ -1672,7 +2312,12 @@ void fn_1_F8C28(s32 value) {
 }
 /* fzgx:end fn_1_F8C28 */
 
-/* fzgx:begin fn_1_F8C50 */
+/* fzgx:begin fn_1_F8C50 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/spline.h"
+#include "game/main_rel/spline_types.h"
+
 struct fn_1_F8C50_lbl_1_bss_7F0C0 {
     u8 pad_0[0x4910];
     u32 unk_4910;
@@ -1687,7 +2332,12 @@ u8 fn_1_F8C50(s32 arg0) {
 }
 /* fzgx:end fn_1_F8C50 */
 
-/* fzgx:begin fn_1_F8C74 */
+/* fzgx:begin fn_1_F8C74 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/spline.h"
+#include "game/main_rel/spline_types.h"
+
 // Sets the bit corresponding to the supplied spline index.
 void fn_1_F8C74(s32 value) {
     value *= 2;
@@ -1695,7 +2345,14 @@ void fn_1_F8C74(s32 value) {
 }
 /* fzgx:end fn_1_F8C74 */
 
-/* fzgx:begin fn_1_F8CA0 */
+/* fzgx:begin fn_1_F8CA0 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/spline.h"
+#include "game/main_rel/spline_types.h"
+
+extern void fn_1_F8CA0(s32 value);
+
 // Clears the bit corresponding to the spline index.
 void fn_1_F8CA0(s32 value) {
     value *= 2;
@@ -1703,21 +2360,38 @@ void fn_1_F8CA0(s32 value) {
 }
 /* fzgx:end fn_1_F8CA0 */
 
-/* fzgx:begin fn_1_F8CCC */
+/* fzgx:begin fn_1_F8CCC noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/spline.h"
+#include "game/main_rel/spline_types.h"
+
+extern void fn_1_F8CCC(s32 value);
+
 // Clears the bit selected by value from the spline state mask.
 void fn_1_F8CCC(s32 value) {
     ((u32 *)&lbl_1_bss_7F0C0)[4677] &= ~(((u32)1 << 31) >> (31 - value));
 }
 /* fzgx:end fn_1_F8CCC */
 
-/* fzgx:begin fn_1_F8CF0 */
+/* fzgx:begin fn_1_F8CF0 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/spline.h"
+#include "game/main_rel/spline_types.h"
+
 u8 fn_1_F8CF0(s32 value) {
     u32 x = ((u32 *)&lbl_1_bss_7F0C0)[4677];
     return __rlwnm(x, (32 - value) & 31, 31, 31);
 }
 /* fzgx:end fn_1_F8CF0 */
 
-/* fzgx:begin fn_1_F8D10 */
+/* fzgx:begin fn_1_F8D10 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/spline.h"
+#include "game/main_rel/spline_types.h"
+
 // Clamps the spline counter to its maximum permitted value.
 u32 fn_1_F8D10(void) {
     u32 value = 99999;
@@ -1729,7 +2403,12 @@ u32 fn_1_F8D10(void) {
 }
 /* fzgx:end fn_1_F8D10 */
 
-/* fzgx:begin fn_1_F8D38 */
+/* fzgx:begin fn_1_F8D38 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/spline.h"
+#include "game/main_rel/spline_types.h"
+
 // Clamps the spline limit and stores it in the shared spline state.
 void fn_1_F8D38(u32 value) {
     if (value > 0x1869F) {
@@ -1739,7 +2418,15 @@ void fn_1_F8D38(u32 value) {
 }
 /* fzgx:end fn_1_F8D38 */
 
-/* fzgx:begin fn_1_F8D5C */
+/* fzgx:begin fn_1_F8D5C noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/spline.h"
+#include "game/main_rel/spline_types.h"
+
+extern u32 lbl_1_rodata_6E38;
+extern void fn_80008BA8(u32 arg0, u32 arg1, u32 arg2);
+
 struct fn_1_F8D5C_Copy440 { u32 a[110]; };
 
 
@@ -1751,7 +2438,14 @@ void fn_1_F8D5C(u32 arg0, u32 arg1) {
 }
 /* fzgx:end fn_1_F8D5C */
 
-/* fzgx:begin fn_1_F8DC4 */
+/* fzgx:begin fn_1_F8DC4 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/spline.h"
+#include "game/main_rel/spline_types.h"
+
+extern char *fn_80083DB0(char *dst, const char *src);
+
 void fn_1_F8DC4(s16 index0, s16 index1, void *arg0) {
     struct fn_1_F8DC4_Table table;
 
@@ -2274,7 +2968,15 @@ void fn_1_F9888(s16 arg0) {
 }
 /* fzgx:end fn_1_F9888 */
 
-/* fzgx:begin fn_1_F9C6C */
+/* fzgx:begin fn_1_F9C6C noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/spline.h"
+#include "game/main_rel/spline_types.h"
+
+extern void fn_1_F9C6C(void);
+extern void fn_1_F9D04(u8 index);
+
 void fn_1_F9C6C(void) {
     fn_1_F9D04(0);
     fn_1_F9D04(1);
@@ -2282,14 +2984,28 @@ void fn_1_F9C6C(void) {
 }
 /* fzgx:end fn_1_F9C6C */
 
-/* fzgx:begin fn_1_F9CA0 */
+/* fzgx:begin fn_1_F9CA0 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/spline.h"
+#include "game/main_rel/spline_types.h"
+
+extern u32 fn_1_F9CA0(u32 arg0, u32 arg1);
+
 // Returns the selected high-to-low flag bit for a spline entry.
 u32 fn_1_F9CA0(u32 arg0, u32 arg1) {
     return (&lbl_1_bss_7F0C0.unk_64)[(u8)arg0 * 24] & ((s32)0x8000 >> (u8)arg1);
 }
 /* fzgx:end fn_1_F9CA0 */
 
-/* fzgx:begin fn_1_F9CD0 */
+/* fzgx:begin fn_1_F9CD0 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/spline.h"
+#include "game/main_rel/spline_types.h"
+
+extern void fn_1_F9CD0(u8, u8);
+
 // Sets the requested flag in an indexed spline record.
 void fn_1_F9CD0(u8 index, u8 shift) {
     u16 *flags = &lbl_1_bss_7F0C0.unk_64;
@@ -2297,73 +3013,143 @@ void fn_1_F9CD0(u8 index, u8 shift) {
 }
 /* fzgx:end fn_1_F9CD0 */
 
-/* fzgx:begin fn_1_F9D04 */
+/* fzgx:begin fn_1_F9D04 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/spline.h"
+#include "game/main_rel/spline_types.h"
+
+extern void fn_1_F9D04(u8 index);
+
 // Clear the selected spline entry's status field.
 void fn_1_F9D04(u8 index) {
     (&lbl_1_bss_7F0C0.unk_64)[index * 0x18] = 0;
 }
 /* fzgx:end fn_1_F9D04 */
 
-/* fzgx:begin fn_1_F9D24 */
+/* fzgx:begin fn_1_F9D24 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/spline.h"
+#include "game/main_rel/spline_types.h"
+
+extern void fn_1_F9D24(void);
+extern void fn_1_F9D90(void);
+
 void fn_1_F9D24(void) {
     fn_1_F9D90();
 }
 /* fzgx:end fn_1_F9D24 */
 
-/* fzgx:begin fn_1_F9D44 */
+/* fzgx:begin fn_1_F9D44 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/spline.h"
+#include "game/main_rel/spline_types.h"
+
 // Tests the requested spline flag.
 u32 fn_1_F9D44(u32 arg) {
     return lbl_1_bss_7F0C0.unk_68 & (0x8000 >> (arg & 0xff));
 }
 /* fzgx:end fn_1_F9D44 */
 
-/* fzgx:begin fn_1_F9D68 */
+/* fzgx:begin fn_1_F9D68 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/spline.h"
+#include "game/main_rel/spline_types.h"
+
 void fn_1_F9D68(u32 arg) {
     lbl_1_bss_7F0C0.unk_68 |= 0x8000 >> (arg & 0xff);
 }
 /* fzgx:end fn_1_F9D68 */
 
-/* fzgx:begin fn_1_F9D90 */
+/* fzgx:begin fn_1_F9D90 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/spline.h"
+#include "game/main_rel/spline_types.h"
+
+extern void fn_1_F9D90(void);
+
 // Clear the spline object's active flags.
 void fn_1_F9D90(void) {
     lbl_1_bss_7F0C0.unk_68 = 0;
 }
 /* fzgx:end fn_1_F9D90 */
 
-/* fzgx:begin fn_1_F9DA4 */
+/* fzgx:begin fn_1_F9DA4 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/spline.h"
+#include "game/main_rel/spline_types.h"
+
+extern void fn_1_F9DA4(void);
+extern void fn_1_F9E38(void);
+
 void fn_1_F9DA4(void) {
     fn_1_F9E38();
 }
 /* fzgx:end fn_1_F9DA4 */
 
-/* fzgx:begin fn_1_F9DC4 */
+/* fzgx:begin fn_1_F9DC4 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/spline.h"
+#include "game/main_rel/spline_types.h"
+
 // Return the bit selected by the low byte of the requested flag index.
 u32 fn_1_F9DC4(u32 arg) {
     return lbl_1_bss_7F0C0.unk_6A & (0x8000 >> (arg & 0xff));
 }
 /* fzgx:end fn_1_F9DC4 */
 
-/* fzgx:begin fn_1_F9DE8 */
+/* fzgx:begin fn_1_F9DE8 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/spline.h"
+#include "game/main_rel/spline_types.h"
+
 void fn_1_F9DE8(u32 param) {
     lbl_1_bss_7F0C0.unk_6A |= 0x8000 >> (param & 0xFF);
 }
 /* fzgx:end fn_1_F9DE8 */
 
-/* fzgx:begin fn_1_F9E10 */
+/* fzgx:begin fn_1_F9E10 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/spline.h"
+#include "game/main_rel/spline_types.h"
+
 // Clear the bit selected by the low byte of the shift amount.
 void fn_1_F9E10(u32 param) {
     lbl_1_bss_7F0C0.unk_6A &= ~(0x8000 >> (param & 0xFF));
 }
 /* fzgx:end fn_1_F9E10 */
 
-/* fzgx:begin fn_1_F9E38 */
+/* fzgx:begin fn_1_F9E38 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/spline.h"
+#include "game/main_rel/spline_types.h"
+
+extern void fn_1_F9E38(void);
+
 // Clear the spline object's status field.
 void fn_1_F9E38(void) {
     lbl_1_bss_7F0C0.unk_6A = 0;
 }
 /* fzgx:end fn_1_F9E38 */
 
-/* fzgx:begin fn_1_F9E4C */
+/* fzgx:begin fn_1_F9E4C noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/spline.h"
+#include "game/main_rel/spline_types.h"
+
+extern void fn_1_F9E4C(void);
+extern void fn_1_F9EE4(s32 arg0);
+
 void fn_1_F9E4C(void) {
     fn_1_F9EE4(0);
     fn_1_F9EE4(1);
@@ -2414,7 +3200,15 @@ u32 fn_1_F9EB0(u32 arg0, u32 arg1) {
 }
 /* fzgx:end fn_1_F9EB0 */
 
-/* fzgx:begin fn_1_F9EE4 */
+/* fzgx:begin fn_1_F9EE4 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/spline.h"
+#include "game/main_rel/spline_types.h"
+
+extern void fn_80008BEC(void *dest, int value, u32 size);
+extern void fn_1_F9EE4(s32 arg0);
+
 // Reset one spline slot and clear its working buffer.
 void fn_1_F9EE4(s32 arg0) {
     *(u16 *)((u8 *)&lbl_1_bss_7F0C0 + ((arg0 & 0xFF) * 0x30) + 0x66) = 0;
@@ -2422,7 +3216,12 @@ void fn_1_F9EE4(s32 arg0) {
 }
 /* fzgx:end fn_1_F9EE4 */
 
-/* fzgx:begin fn_1_F9F2C */
+/* fzgx:begin fn_1_F9F2C noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/spline.h"
+#include "game/main_rel/spline_types.h"
+
 // Set the packed flag for a valid four-dimensional spline selection.
 void fn_1_F9F2C(u8 a, u8 b, u8 c, u8 d) {
     s32 index;
@@ -2445,7 +3244,12 @@ void fn_1_F9F2C(u8 a, u8 b, u8 c, u8 d) {
 }
 /* fzgx:end fn_1_F9F2C */
 
-/* fzgx:begin fn_1_F9FB4 */
+/* fzgx:begin fn_1_F9FB4 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/spline.h"
+#include "game/main_rel/spline_types.h"
+
 void fn_1_F9FB4(void) {
     u32 ptr = lbl_1_bss_84420;
 
@@ -2458,7 +3262,12 @@ void fn_1_F9FB4(void) {
 }
 /* fzgx:end fn_1_F9FB4 */
 
-/* fzgx:begin fn_1_F9FEC */
+/* fzgx:begin fn_1_F9FEC noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/spline.h"
+#include "game/main_rel/spline_types.h"
+
 // Returns the low flag bit stored in the spline state.
 u32 fn_1_F9FEC(void) {
     u32 ptr = lbl_1_bss_84420;
@@ -2466,7 +3275,12 @@ u32 fn_1_F9FEC(void) {
 }
 /* fzgx:end fn_1_F9FEC */
 
-/* fzgx:begin fn_1_FA004 */
+/* fzgx:begin fn_1_FA004 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/spline.h"
+#include "game/main_rel/spline_types.h"
+
 // Reads the second status byte and returns its bit-mask value.
 u32 fn_1_FA004(void) {
     u32 ptr = lbl_1_bss_84420;
@@ -2474,7 +3288,12 @@ u32 fn_1_FA004(void) {
 }
 /* fzgx:end fn_1_FA004 */
 
-/* fzgx:begin fn_1_FA01C */
+/* fzgx:begin fn_1_FA01C noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/spline.h"
+#include "game/main_rel/spline_types.h"
+
 struct fn_1_FA01C_lbl_1_bss_84420 {
     u32 unk_0;
 };
@@ -2487,7 +3306,12 @@ u32 fn_1_FA01C(void) {
 }
 /* fzgx:end fn_1_FA01C */
 
-/* fzgx:begin fn_1_FA038 */
+/* fzgx:begin fn_1_FA038 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/spline.h"
+#include "game/main_rel/spline_types.h"
+
 void fn_1_FA038(void) {
     u32 ptr = lbl_1_bss_84420;
 
@@ -2500,7 +3324,12 @@ void fn_1_FA038(void) {
 }
 /* fzgx:end fn_1_FA038 */
 
-/* fzgx:begin fn_1_FA070 */
+/* fzgx:begin fn_1_FA070 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/spline.h"
+#include "game/main_rel/spline_types.h"
+
 u32 fn_1_FA070(void) {
     u32 ptr = lbl_1_bss_84420;
     // Test the object's low flag bit.
@@ -2508,14 +3337,24 @@ u32 fn_1_FA070(void) {
 }
 /* fzgx:end fn_1_FA070 */
 
-/* fzgx:begin fn_1_FA088 */
+/* fzgx:begin fn_1_FA088 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/spline.h"
+#include "game/main_rel/spline_types.h"
+
 u32 fn_1_FA088(void) {
     u32 ptr = lbl_1_bss_84420;
     return (*(u8 *)(ptr + 2)) & 2;
 }
 /* fzgx:end fn_1_FA088 */
 
-/* fzgx:begin fn_1_FA0A0 */
+/* fzgx:begin fn_1_FA0A0 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/spline.h"
+#include "game/main_rel/spline_types.h"
+
 struct fn_1_FA0A0_lbl_1_bss_84420 {
     u32 unk_0;
 };
@@ -2528,7 +3367,12 @@ u32 fn_1_FA0A0(void) {
 }
 /* fzgx:end fn_1_FA0A0 */
 
-/* fzgx:begin fn_1_FA0BC */
+/* fzgx:begin fn_1_FA0BC noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/spline.h"
+#include "game/main_rel/spline_types.h"
+
 typedef struct {
     u8 pad_0[0x4900];
     u32 flags;
@@ -2560,7 +3404,12 @@ u32 fn_1_FA0BC(s32 mode) {
 }
 /* fzgx:end fn_1_FA0BC */
 
-/* fzgx:begin fn_1_FA154 */
+/* fzgx:begin fn_1_FA154 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/spline.h"
+#include "game/main_rel/spline_types.h"
+
 void fn_1_FA154(u32 byte_index, u32 bit_index) {
     u32 index;
     u32 ptr;
@@ -2575,7 +3424,12 @@ void fn_1_FA154(u32 byte_index, u32 bit_index) {
 }
 /* fzgx:end fn_1_FA154 */
 
-/* fzgx:begin fn_1_FA180 */
+/* fzgx:begin fn_1_FA180 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/spline.h"
+#include "game/main_rel/spline_types.h"
+
 typedef struct { u8 pad[3]; u8 d[1]; } T;
 
 u32 fn_1_FA180(u8 a, u8 b) {
@@ -2797,7 +3651,14 @@ void fn_1_FA1D8(u32 arg0, u32 arg1, SplineTimeTable *table) {
 #pragma opt_common_subs reset
 /* fzgx:end fn_1_FA1D8 */
 
-/* fzgx:begin fn_1_FA450 */
+/* fzgx:begin fn_1_FA450 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/spline.h"
+#include "game/main_rel/spline_types.h"
+
+extern void fn_1_3EF14(void *arg1);
+
 // Store the value when initialization permits the update.
 void fn_1_FA450(u8 value) {
     u8 local[0x14c0];
@@ -2813,7 +3674,12 @@ void fn_1_FA450(u8 value) {
 }
 /* fzgx:end fn_1_FA450 */
 
-/* fzgx:begin fn_1_FA4C0 */
+/* fzgx:begin fn_1_FA4C0 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/spline.h"
+#include "game/main_rel/spline_types.h"
+
 // Return the byte at offset 0x8 from the spline object referenced by the global.
 u8 fn_1_FA4C0(void) {
     return *(u8 *)(lbl_1_bss_84420 + 0x8);
@@ -2904,7 +3770,12 @@ void fn_1_FA4D4(void) {
 }
 /* fzgx:end fn_1_FA4D4 */
 
-/* fzgx:begin fn_1_FA5A8 */
+/* fzgx:begin fn_1_FA5A8 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/spline.h"
+#include "game/main_rel/spline_types.h"
+
 void fn_1_FA5A8(s16 index, u8 bit) {
     u32 base;
     u16 value;
@@ -2920,7 +3791,12 @@ void fn_1_FA5A8(s16 index, u8 bit) {
 }
 /* fzgx:end fn_1_FA5A8 */
 
-/* fzgx:begin fn_1_FA5E0 */
+/* fzgx:begin fn_1_FA5E0 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/spline.h"
+#include "game/main_rel/spline_types.h"
+
 u32 fn_1_FA5E0(u32 arg0, u32 arg1) {
     s16 v0;
     u32 v1;
@@ -2940,21 +3816,38 @@ u32 fn_1_FA5E0(u32 arg0, u32 arg1) {
 }
 /* fzgx:end fn_1_FA5E0 */
 
-/* fzgx:begin fn_1_FA61C */
+/* fzgx:begin fn_1_FA61C noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/spline.h"
+#include "game/main_rel/spline_types.h"
+
+extern void fn_1_FA61C(void);
+
 // Clears the low flag bit in the spline state.
 void fn_1_FA61C(void) {
     ((u8 *)lbl_1_bss_84420)[0x85] &= 0xfe;
 }
 /* fzgx:end fn_1_FA61C */
 
-/* fzgx:begin fn_1_FA638 */
+/* fzgx:begin fn_1_FA638 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/spline.h"
+#include "game/main_rel/spline_types.h"
+
 // Returns whether the spline state flag is enabled.
 u8 fn_1_FA638(void) {
     return ((u8*)lbl_1_bss_84420)[0x85] & 1;
 }
 /* fzgx:end fn_1_FA638 */
 
-/* fzgx:begin fn_1_FA650 */
+/* fzgx:begin fn_1_FA650 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/spline.h"
+#include "game/main_rel/spline_types.h"
+
 // Toggle the enabled bit in the spline state.
 void fn_1_FA650(void) {
     u8* state = (u8*)lbl_1_bss_84420;
@@ -2967,7 +3860,12 @@ void fn_1_FA650(void) {
 }
 /* fzgx:end fn_1_FA650 */
 
-/* fzgx:begin fn_1_FA67C */
+/* fzgx:begin fn_1_FA67C noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/spline.h"
+#include "game/main_rel/spline_types.h"
+
 void fn_1_FA67C(s32 index) {
     u8 *base;
 
@@ -2979,7 +3877,14 @@ void fn_1_FA67C(s32 index) {
 }
 /* fzgx:end fn_1_FA67C */
 
-/* fzgx:begin fn_1_FA69C */
+/* fzgx:begin fn_1_FA69C noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/spline.h"
+#include "game/main_rel/spline_types.h"
+
+extern u8 fn_1_FA69C(s32 index);
+
 // Return the spline entry value for an in-range index.
 u8 fn_1_FA69C(s32 index) {
     u8 *base;
@@ -2992,7 +3897,18 @@ u8 fn_1_FA69C(s32 index) {
 }
 /* fzgx:end fn_1_FA69C */
 
-/* fzgx:begin fn_1_FA6C0 */
+/* fzgx:begin fn_1_FA6C0 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/spline.h"
+#include "game/main_rel/spline_types.h"
+
+extern u32 fn_1_76504(s32, void *, s32);
+extern u32 lbl_801A63D0;
+extern void fn_1_7269C(u32 arg0, u32 arg1, void *arg2);
+extern void fn_1_72768(u32 arg0, u32 arg1);
+extern void fn_1_FAB40(void);
+
 struct fn_1_FA6C0_lbl_1_data_2A7E0 {
     u8 pad_0[0x3C];
     u32 unk_3C;
@@ -3022,7 +3938,20 @@ void fn_1_FA6C0(void) {
 }
 /* fzgx:end fn_1_FA6C0 */
 
-/* fzgx:begin fn_1_FA75C */
+/* fzgx:begin fn_1_FA75C noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/spline.h"
+#include "game/main_rel/spline_types.h"
+
+extern s32 fn_1_58C4(void);
+extern void fn_80008BEC(void *dest, int value, u32 size);
+extern void fn_1_76BF8(void);
+extern void fn_1_72648(void);
+extern void fn_1_9A508();
+extern void fn_1_FB0B4(Obj_1_bss_84428 *data);
+extern void fn_1_FB180(int *value);
+
 // Reset spline state while preserving the active spline entry.
 void fn_1_FA75C(void) {
     s32 spline_index;
@@ -3060,39 +3989,84 @@ void fn_1_FA75C(void) {
 }
 /* fzgx:end fn_1_FA75C */
 
-/* fzgx:begin fn_1_FA82C */
+/* fzgx:begin fn_1_FA82C noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/spline.h"
+#include "game/main_rel/spline_types.h"
+
 // fn_1_FA82C: empty in retail (single blr).
 void fn_1_FA82C(void) {
 }
 /* fzgx:end fn_1_FA82C */
 
-/* fzgx:begin fn_1_FA830 */
+/* fzgx:begin fn_1_FA830 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/spline.h"
+#include "game/main_rel/spline_types.h"
+
+extern void fn_1_9AD54(void);
+extern void fn_1_FB18C(void);
+
 void fn_1_FA830(void) {
     fn_1_9AD54();
     fn_1_FB18C();
 }
 /* fzgx:end fn_1_FA830 */
 
-/* fzgx:begin fn_1_FA854 */
+/* fzgx:begin fn_1_FA854 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/spline.h"
+#include "game/main_rel/spline_types.h"
+
+extern void fn_1_76BF8(void);
+extern void fn_1_72648(void);
+
 void fn_1_FA854(void) {
     fn_1_76BF8();
     fn_1_72648();
 }
 /* fzgx:end fn_1_FA854 */
 
-/* fzgx:begin fn_1_FA878 */
+/* fzgx:begin fn_1_FA878 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/spline.h"
+#include "game/main_rel/spline_types.h"
+
+extern void fn_1_9AD88(void);
+
 void fn_1_FA878(void) {
     fn_1_9AD88();
 }
 /* fzgx:end fn_1_FA878 */
 
-/* fzgx:begin fn_1_FA898 */
+/* fzgx:begin fn_1_FA898 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/spline.h"
+#include "game/main_rel/spline_types.h"
+
 // fn_1_FA898: empty in retail (single blr).
 void fn_1_FA898(void) {
 }
 /* fzgx:end fn_1_FA898 */
 
-/* fzgx:begin fn_1_FA89C */
+/* fzgx:begin fn_1_FA89C noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/spline.h"
+#include "game/main_rel/spline_types.h"
+
+extern s32 fn_1_58C4(void);
+extern void fn_1_5948(int);
+extern void fn_1_627C(int);
+extern void fn_1_A714C(f32 *a, f32 *b, f32 *c, f32 *d);
+extern void fn_80015CB0(f32 *out, f32 a, f32 b, f32 c, f32 d, f32 e, f32 f);
+extern void fn_80038FD8(u32 *, u32 *, u32 *, u32 *);
+
 void fn_1_FA89C(SplineViewportHolder *holder) {
     int count;
     u32 x, w, y, h;
@@ -3128,13 +4102,28 @@ void fn_1_FA89C(SplineViewportHolder *holder) {
 }
 /* fzgx:end fn_1_FA89C */
 
-/* fzgx:begin fn_1_FB0A8 */
+/* fzgx:begin fn_1_FB0A8 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/spline.h"
+#include "game/main_rel/spline_types.h"
+
 Obj_1_bss_84428 *fn_1_FB0A8(void) {
     return &lbl_1_bss_84428;
 }
 /* fzgx:end fn_1_FB0A8 */
 
-/* fzgx:begin fn_1_FB0B4 */
+/* fzgx:begin fn_1_FB0B4 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/spline.h"
+#include "game/main_rel/spline_types.h"
+
+extern void fn_80008BA8(u32 arg0, u32 arg1, u32 arg2);
+extern void fn_1_FB0B4(Obj_1_bss_84428 *data);
+extern u32 lbl_1_rodata_74CC[3];
+extern u32 lbl_1_rodata_74D8[46];
+
 void fn_1_FB0B4(Obj_1_bss_84428 *data) {
     u32 first[3];
     u32 second[3];
@@ -3159,7 +4148,14 @@ void fn_1_FB0B4(Obj_1_bss_84428 *data) {
 }
 /* fzgx:end fn_1_FB0B4 */
 
-/* fzgx:begin fn_1_FB180 */
+/* fzgx:begin fn_1_FB180 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/spline.h"
+#include "game/main_rel/spline_types.h"
+
+extern void fn_1_FB180(int *value);
+
 // Set the destination value to one.
 void fn_1_FB180(int *value) {
     *value = 1;
@@ -3385,7 +4381,12 @@ void fn_1_FB18C(void) {
 }
 /* fzgx:end fn_1_FB18C */
 
-/* fzgx:begin fn_1_FB770 */
+/* fzgx:begin fn_1_FB770 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/spline.h"
+#include "game/main_rel/spline_types.h"
+
 int fn_1_FB770(int flag, u32 *value) {
     Obj_1_data_2A7E0_At3C *object = lbl_1_data_2A7E0.unk_3C;
 

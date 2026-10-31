@@ -1,10 +1,67 @@
 #include "types.h"
 #include "dolphin/types.h"
+#include "game/main_rel/ghost_types.h"
 #include "rel/main_rel/globals.h"
 #include "rel/main_rel/ghost.h"
 #include "dolphin/ar.h"
-#include "game/main_rel/ghost_types.h"
+#include "font.h"
+#include "game/vec3.h"
+#include "psvec.h"
 
+typedef struct { f32 x, y, z; } V3;
+
+typedef struct Sig_fn_1_87610_Fn187610Object {
+ u8 pad_000[0x328]; s8 field_328; u8 pad_329[7]; void *field_330; u8 pad_334[0x86]; s16 field_3BA;
+} Sig_fn_1_87610_Fn187610Object;
+
+typedef struct Sig_fn_1_87610_Fn187610Data {
+ u8 pad_000[2]; s8 field_002; u8 pad_003[0x205]; u8 field_208[0x120];
+} Sig_fn_1_87610_Fn187610Data;
+
+typedef struct {
+    f32 x;
+    f32 y;
+    f32 z;
+} GhostVec;
+
+typedef struct {
+    u8 pad0[0x1e0];
+    u8 min;
+    u8 sec;
+    u16 ms;
+} GhostPlayer;
+
+typedef struct {
+    u8 pad0[0x324];
+    s32 handle;
+} GhostObject;
+
+typedef struct {
+    u16 index;    /* 0x0 */
+    s16 id;       /* 0x2 */
+    u32 kind;     /* 0x4 */
+    u8 pad[0x18];
+} fn_1_F0168_GhostEntry;
+
+typedef struct {
+    u16 r;        /* 0x0 */
+    u16 g;        /* 0x2 */
+    u16 b;        /* 0x4 */
+    u16 pad;
+    u32 flags;    /* 0x8 */
+    u32 pad2;
+} GhostDisplayState;
+
+typedef struct {
+    f32 x, y, z, w;
+} GhostQuat;
+
+typedef struct {
+    u8 unk_00[0x328];
+    s8 unk_328;
+    u8 unk_329[0x0B];
+    void ***unk_334;
+} fn_1_F23E8_GhostEntry;
 extern u32 lbl_801A6410[];
 extern void fn_1_46B4(u32 arg0, u32 arg1, const char *arg2, int arg3);
 extern int fn_1_B7E98(int index);
@@ -13,69 +70,274 @@ extern void fn_1_B9BE0(void);
 extern void fn_1_AA6D8(s32, s32, void *);
 extern void fn_1_F1D70(void);
 extern void fn_80008BEC(void *dest, int value, u32 size);
-extern void fn_1_BC29C();
-extern void fn_1_EE530(void);
+extern u8 fn_1_B7C00(void);
+extern int fn_1_B7CD4(void);
+extern u32 fn_1_B7C5C(void);
 extern u32 fn_1_4630();
+extern void OSReport(const char *format, ...);
 extern void fn_80008BA8(u32 arg0, u32 arg1, u32 arg2);
+extern f64 __fabs(f64);
+extern u32 lbl_801A66B4;
+extern u32 lbl_801A66A0;
+extern u32 lbl_1_rodata_6B70;
+extern u32 lbl_1_rodata_6B74;
+extern u32 lbl_1_rodata_6B78;
+extern u32 lbl_1_rodata_6B7C;
+extern u32 lbl_1_rodata_6B80;
+extern u32 lbl_1_rodata_6B84;
+extern u32 lbl_1_rodata_6B88;
+extern u32 lbl_1_rodata_6B8C;
+extern u32 lbl_1_rodata_6B90;
+extern f32 lbl_1_rodata_26F8[22];
+extern const f32 lbl_1_rodata_6B60;
+extern const f64 lbl_1_rodata_6B68;
+extern const f32 lbl_1_rodata_6B94;
+extern const f32 lbl_1_rodata_6B98;
+extern const f32 lbl_1_rodata_6B9C;
+extern const f32 lbl_1_rodata_6BA0;
+extern const f32 lbl_1_rodata_6BA4;
+extern const f32 lbl_1_rodata_6BA8;
+extern const f32 lbl_1_rodata_6BAC;
+extern const f32 lbl_1_rodata_6BB0;
+extern const f32 lbl_1_rodata_6BB4;
+extern const f32 lbl_1_rodata_6BB8;
+extern const f32 lbl_1_rodata_6BBC;
+extern const f32 lbl_1_rodata_6BC0;
+extern const f32 lbl_1_rodata_6BC4;
+extern const f32 lbl_1_rodata_6BC8;
+extern const f32 lbl_1_rodata_6BCC;
+extern const f32 lbl_1_rodata_6BD0;
+extern const f32 lbl_1_rodata_6BD4;
+extern const f32 lbl_1_rodata_6BD8;
+extern const f32 lbl_1_rodata_6BDC;
+extern const f32 lbl_1_rodata_6BE0;
+extern const f64 lbl_1_rodata_6BE8;
+extern const f64 lbl_1_rodata_6BF0;
+extern const f64 lbl_1_rodata_6BF8;
+extern const f64 lbl_1_rodata_6C00;
+extern const f32 lbl_1_rodata_6C08;
+extern const f32 lbl_1_rodata_6C0C;
+extern const f32 lbl_1_rodata_6C10;
+extern const f32 lbl_1_rodata_6C14;
+extern const f32 lbl_1_rodata_6C18;
+extern const f64 lbl_1_rodata_6C20;
+extern const f64 lbl_1_rodata_6C28;
+extern const f32 lbl_1_rodata_6C30;
+extern const f32 lbl_1_rodata_6C34;
+extern const f32 lbl_1_rodata_6C38;
+extern const f32 lbl_1_rodata_6C3C;
+extern const f32 lbl_1_rodata_6C40;
+extern const f32 lbl_1_rodata_6C44;
+extern const f32 lbl_1_rodata_6C48;
+extern const f32 lbl_1_rodata_6C4C;
+extern const f64 lbl_1_rodata_6C50;
+extern const f64 lbl_1_rodata_6C58;
+extern const f64 lbl_1_rodata_6C60;
+extern const f32 lbl_1_rodata_6C68;
+extern const f64 lbl_1_rodata_6C70;
+extern const f64 lbl_1_rodata_6C78;
+extern const f32 lbl_1_rodata_6C80;
+extern f64 lbl_1_rodata_6C88;
+extern void fn_1_EC910(void);
+extern s32 fn_1_F21B8(s32);
+extern void fn_1_53B14(u8 *color, f32 x, f32 y, f32 a, f32 b, f32 z);
+extern void fn_1_53C9C(u8 *, f32, f32, f32, f32, f32, const char *);
+extern void fn_1_BFE20(s16 x, s16 y, f32 z, f32 w, f32 h, f32 pos, f32 size);
+extern u32 ghost_test_flag(s32);
+extern void fn_1_A2D84(u32 arg0);
+extern void fn_1_F1E30(s32);
+extern void fn_1_F1ED0(s32);
+extern void fn_1_49410(void);
+extern void fn_1_49614(void);
+extern void fn_1_4955C(f32 value1, f32 value2);
+extern void fn_1_4966C(f32 value1, f32 value2);
+extern void fn_1_4954C(f32 value);
+extern void fn_1_495B0(u32 value);
+extern void fn_1_49590(f32 value);
+extern void fn_1_12EF80(s16 value, s16 *row, s16 *column);
+extern void fn_1_49514(u32 *value);
+extern void fn_1_496FC(f32 value1, f32 value2);
+extern s32 fn_1_F2280(s32);
+extern void *fn_1_7F49C(s16 arg0, s16 arg1, void *arg2);
+extern f32 lbl_8006D188(s16);
+extern void ghost_reset(void);
+extern void fn_1_ECE00(void);
+extern void fn_1_ECF68(void);
+extern void fn_1_ED540(void);
+extern void fn_1_EE530(void);
+extern void fn_1_EF0A0(void);
+extern void fn_1_EF5E0(void);
+extern void fn_1_EF768(void);
+extern void fn_1_EF860(void);
+extern void fn_1_EF924(void);
+extern void fn_1_EF97C(void);
+extern void fn_1_EFA1C(void);
+extern void fn_1_EF0A8(void);
+extern void fn_1_EF488(void);
+extern void fn_1_EF4F8(void);
+extern void fn_1_EFA8C(void);
+extern void fn_1_F0168(void);
+extern u8 fn_1_ECDFC__fzgx_offset_0[];
+extern u8 fn_1_ECE00__fzgx_offset_0[];
+extern u8 fn_1_ECE04__fzgx_offset_0[];
+extern u8 fn_1_ECF68__fzgx_offset_0[];
+extern u8 fn_1_ECF88__fzgx_offset_0[];
+extern u8 fn_1_ED540__fzgx_offset_0[];
+extern u8 fn_1_EE3F4__fzgx_offset_0[];
+extern u8 fn_1_EE530__fzgx_offset_0[];
+extern u8 fn_1_EEB44__fzgx_offset_0[];
+extern u8 fn_1_EF0A0__fzgx_offset_0[];
+extern u8 fn_1_EF0A4__fzgx_offset_0[];
+extern u8 fn_1_EF0A8__fzgx_offset_0[];
+extern u8 fn_1_EF484__fzgx_offset_0[];
+extern u8 fn_1_EF488__fzgx_offset_0[];
+extern u8 fn_1_EF4F4__fzgx_offset_0[];
+extern u8 fn_1_EF4F8__fzgx_offset_0[];
+extern u8 fn_1_EF5DC__fzgx_offset_0[];
+extern u8 fn_1_EF5E0__fzgx_offset_0[];
+extern u8 fn_1_EF764__fzgx_offset_0[];
+extern u8 fn_1_EF768__fzgx_offset_0[];
+extern u8 fn_1_EF85C__fzgx_offset_0[];
+extern u8 fn_1_EF860__fzgx_offset_0[];
+extern u8 fn_1_EF920__fzgx_offset_0[];
+extern u8 fn_1_EF924__fzgx_offset_0[];
+extern u8 fn_1_EF978__fzgx_offset_0[];
+extern u8 fn_1_EF97C__fzgx_offset_0[];
+extern u8 fn_1_EFA18__fzgx_offset_0[];
+extern u8 fn_1_EFA1C__fzgx_offset_0[];
+extern u8 fn_1_EFA4C__fzgx_offset_0[];
+extern u8 fn_1_EFA88__fzgx_offset_0[];
+extern u8 fn_1_EFA8C__fzgx_offset_0[];
+extern u8 fn_1_F0164__fzgx_offset_0[];
+extern u8 fn_1_F0168__fzgx_offset_0[];
+extern u8 ghost_reset__fzgx_offset_0[];
+extern u8 lbl_1_data_3E358__fzgx_offset_0[];
+extern u8 lbl_1_data_3E364__fzgx_offset_0[];
+extern u8 lbl_1_data_3E36C__fzgx_offset_0[];
+extern u8 lbl_1_data_3E378__fzgx_offset_0[];
+extern u8 lbl_1_data_3E380__fzgx_offset_0[];
+extern u8 lbl_1_data_3E38C__fzgx_offset_0[];
+extern u8 lbl_1_data_3E394__fzgx_offset_0[];
+extern u8 lbl_1_data_3E39C__fzgx_offset_0[];
+extern u8 lbl_1_data_3E3C0__fzgx_offset_0[];
+extern u8 lbl_1_data_3E3CC__fzgx_offset_0[];
+extern u8 lbl_1_data_3E3D8__fzgx_offset_0[];
+extern u8 lbl_1_data_3E478__fzgx_offset_0[];
+extern u8 lbl_1_data_3E48C__fzgx_offset_0[];
+extern u8 lbl_1_data_3E490__fzgx_offset_0[];
+extern u8 lbl_1_data_3E4BC__fzgx_offset_0[];
+extern u8 lbl_1_data_3E4C8__fzgx_offset_0[];
+extern u8 lbl_1_data_3E4F4__fzgx_offset_0[];
+extern u8 lbl_1_data_3E504__fzgx_offset_0[];
+extern int sprintf(char *s, const char *format, ...);
+extern void fn_1_F1960(u32, void *, u32);
+extern const f32 lbl_1_rodata_6C94;
+extern const f64 lbl_1_rodata_6C98;
+extern const f64 lbl_1_rodata_6CA0;
+extern const volatile f64 lbl_1_rodata_6CA8;  /* volatile: retail reloads it at every access */
+extern const f64 lbl_1_rodata_6CB0;
+extern const f32 lbl_1_rodata_6CB8;
+extern f32 lbl_8006D0B4(f32 x);
+extern f32 __fmadds(f32, f32, f32);
+extern s32 fn_1_3F164(void);
+extern s32 fn_1_F17B4(const void *);
+extern u32 fn_1_F1588(void);
+extern void *fn_1_86254(int index);
+extern void fn_1_8645C(int index, void *arg);
+extern s32 fn_1_F0B5C(s32 i, V3 *out);
+extern void fn_1_F0D10(s32, void *);
+extern s32 fn_1_F0E00(s32 idx, s32 *out);
+extern void fn_8006F5C4(s16 *arg0, s16 *arg1, s16 *arg2);
+extern void ghost_pack_bits(u32 *, const u32 *, const u32 *, const u32 *);
+extern void lbl_8006DBAC(Vec3 *);
+extern f32 lbl_8006D668(void *);
+extern s32 fn_1_5910(void);
+extern void OSPanic(const char *file, int line, const char *msg, ...);
+extern void fn_1_14E5E4(void *arg0, s16 arg1, f32 arg2);
+extern void fn_1_556B8(void *value);
+extern void fn_1_55FF0(f32 value);
+extern void fn_1_56000(u8 value0, u8 value1, u8 value2);
+extern void fn_1_5621C(f32 value0, f32 value1, f32 value2, f32 value3);
+extern void fn_1_56298(f32 value0, f32 value1, f32 value2, f32 value3);
+extern void fn_1_681C(u32 index, u32 *output);
+extern void fn_1_875B4(void *arg, int value_1, int value_2, f32 value);
+extern void fn_1_875EC();
+extern void fn_1_87610(Sig_fn_1_87610_Fn187610Object *,Sig_fn_1_87610_Fn187610Data *);
+extern void fn_80072558(void);
+extern void fn_80074A60(u32 arg0, u32 arg1);
+extern void fn_80074A6C(void);
+extern void lbl_8006DB74(void *a);
+extern void lbl_8006DC20(void);
+extern void lbl_8006DD14(void *a, void *b);
+extern void lbl_8006DFC4(void *a);
+extern void lbl_8006E14C(f32);
+extern u32 lbl_8006DAEC(void);
+extern u32 lbl_8006DCA4(void);
+extern void lbl_8006E0A4(void *);
+extern u8 *fn_1_3F0D8(u32 index, f32 *value, u8 *flag);
+extern u8 fn_1_3F114(void);
+extern void fn_1_12A734(s32 idx);
+extern void fn_1_7F934(void *arg0);
+extern void fn_1_14DBCC(void *);
+extern void fn_1_984F0(void *object);
 extern void fn_1_C0510(void *);
-extern void ARQPostRequest(void *arg0, u32 arg1, u32 arg2, u32 arg3, void *arg4, void *arg5, u32 arg6, void (*callback)(void));
+extern void fn_1_80058(s8 arg0, u8 *arg1);
+extern void* fn_1_7F518(s16 car_type, void* car, s32 initialize);
+extern s32 fn_1_465D0(s32 arg0, s32 arg1);
+extern void fn_1_14F46C(GhostDisplayState *, void *);
+extern void fn_1_F4F08(u32 n, f32 *x, f32 *y, f32 *y2);
+extern void fn_1_F1300(u32, void *, u32, u32, u32);
+extern void fn_80006E10(u32 arg0);
+extern V3 lbl_1_rodata_6D28;
+extern f32 fn_1_F4E3C(s32 count, f32 *x, f32 *z, f32 *y, f32 value);
+extern const f32 lbl_1_rodata_6D34;
+extern const f32 lbl_1_rodata_6D10;
+extern void lbl_8006D758(void);
+extern void mathutil_mtxA_rotate_z(s16);
+extern void mathutil_mtxA_rotate_y(s16);
+extern void mathutil_mtxA_rotate_x(s16);
+extern void fn_8006E5FC(f32 *arg0);
 extern void fn_1_F1950(void);
 extern u32 fn_8002071C();
 extern u32 fn_800206FC(u32 arg0);
-extern void OSReport(const char *, ...);
 extern u32 ARGetDMAStatus(void);
 extern void DCInvalidateRange(void *, u32);
+extern u32 fn_1_F5458(GhostQuat *, s32, u32, u32, f32);
+extern void fn_1_983CC(void *, fn_1_F23E8_GhostEntry *);
+extern void fn_1_98634(f32 value);
+extern void lbl_8006D7DC(GhostVec *);
+extern void lbl_8006E0B4(f32, f32, f32);
+extern void mathutil_mtxA_from_quat(GhostQuat *);
+extern void fn_1_BC29C();
+extern void ARQPostRequest(ARQRequest *request, u32 owner, u32 type, u32 priority, u32 source, u32 dest, u32 length, ARQCallback callback);
 extern void fn_1_F23E8(void);
-extern u8 fn_1_B7C00(void);
 extern void fn_1_B9DE8(Obj_1_bss_7ECB4 *obj);
 extern u8 lbl_1_bss_7EA00[56];
-extern int fn_1_B7CD4(void);
-extern u32 fn_1_B7C5C(void);
 extern u32 lbl_1_bss_7B19C[2];
 extern void fn_1_C1394(void);
-extern void fn_1_49410(void);
 extern void fn_1_495FC(void);
 extern const f32 lbl_1_rodata_6D20;
 extern const f32 lbl_1_rodata_6D24;
-extern void fn_1_496FC(f32 value1, f32 value2);
 extern void fn_1_495C8(u8 value);
 extern s32 lbl_1_bss_7B198;
-extern void fn_1_4AE0C(const char* format, ...);
 extern u8 lbl_1_bss_7C8CE[70];
 extern u32 lbl_1_bss_7EA38[159];
-extern const f64 lbl_1_rodata_6B68;
-extern const f32 lbl_1_rodata_6D10;
 extern const f32 lbl_1_rodata_6D44;
 extern void DCFlushRange(void *addr, u32 size);
 extern u32 lbl_1_bss_7C848[2];
 extern u8 lbl_1_bss_7C8CD;
 extern u32 lbl_1_bss_7C948;
-extern void fn_1_12EF80(s16 arg, s16 *out_a, s16 *out_b);
 extern u32 lbl_1_bss_7B190[2];
 extern u32 lbl_1_bss_7ED58[158];
-extern f64 lbl_1_rodata_6C88;
-extern s32 fn_1_F21B8(s32 arg);
-extern void fn_1_F0D10(s32, void *);
-extern void fn_1_F0B5C(s32, void *);
-extern void fn_1_F0E00(s32, void *);
-extern s32 fn_1_3F164(void);
 extern void fn_1_1596DC(int index);
 extern void fn_1_484CC(s32 index);
 extern u32 lbl_1_bss_7C914[13];
 extern const f32 lbl_1_rodata_6D38;
 extern const f32 lbl_1_rodata_6D3C;
 extern const f32 lbl_1_rodata_6D40;
-extern void lbl_8006DD14(void *a, void *b);
-extern f32 lbl_8006D0B4(f32 x);
-extern void lbl_8006D7DC(void *a);
-extern void lbl_8006DFC4(void *a);
-extern void lbl_8006DB74(void *a);
-extern const f32 lbl_1_rodata_6BBC;
-extern const f32 lbl_1_rodata_6BD0;
 extern const f64 lbl_1_rodata_6D48;
 extern const f32 lbl_1_rodata_6D50;
 extern f64 fn_80088598(f64, f64);
-extern u8 *fn_1_3F0D8(u32 index, f32 *value, u8 *flag);
 
 /* fzgx:begin fn_1_EB330 noprologue */
 #include "types.h"
@@ -352,11 +614,11 @@ typedef struct {
     u8 pad_0[0x1];
     u8 unk_1;
     u8 pad_2[0x26];
-} GhostEntry;
+} fn_1_EB85C_GhostEntry;
 
 int fn_1_EB85C(void) {
     int result;
-    GhostEntry *entry;
+    fn_1_EB85C_GhostEntry *entry;
     int i;
 
     if (fn_1_B7C00() != 0) {
@@ -368,7 +630,7 @@ int fn_1_EB85C(void) {
     }
 
     result = fn_1_F21B8(lbl_1_bss_8B3A0.unk_90) != 0;
-    entry = (GhostEntry *)&lbl_1_bss_7B1AC;
+    entry = (fn_1_EB85C_GhostEntry *)&lbl_1_bss_7B1AC;
     for (i = 0; i < 0x7f; i++) {
         if (lbl_1_bss_8B3A0.unk_90 == entry[i].unk_1) {
             result++;
@@ -1565,8 +1827,8 @@ void fn_1_EE3F4(void) {
 
     while ((u32)i < base[0x174e]) {
         fn_1_F0D10(i, unk_38c4);
-        fn_1_F0B5C(i, unk_39b4);
-        fn_1_F0E00(i, unk_39f0);
+        fn_1_F0B5C(i, (V3 *)(void *)(unk_39b4));
+        fn_1_F0E00(i, (s32 *)(void *)(unk_39f0));
         if (!fn_1_3F164()) {
             value = *unk_1800;
             converted = (f32)(u32)value;
@@ -1575,7 +1837,7 @@ void fn_1_EE3F4(void) {
             }
         }
         fn_1_F0D10(i, unk_3a04);
-        fn_1_F0B5C(i, unk_3af4);
+        fn_1_F0B5C(i, (V3 *)(void *)(unk_3af4));
         fn_1_F143C( (FnObject *)(void *)(unk_19c8), i, (const f32 *)(void *)(unk_3af4), (const f32 *)(void *)(unk_39b4), unk_3a04);
         unk_38c4 = (u8 *)unk_38c4 + 0x30;
         unk_39b4 = (u8 *)unk_39b4 + 0xc;
@@ -1766,27 +2028,13 @@ void fn_1_EE530(void) {
 }
 /* fzgx:end fn_1_EE530 */
 
-/* fzgx:begin fn_1_EEB44 noprologue */
-#include "dolphin/types.h"
-#include "game/vec3.h"
-#include "rel/main_rel/ghost.h"
-
+/* fzgx:begin fn_1_EEB44 */
 typedef struct {
     u8 pad0[0x24];
     u8 min;
     u8 sec;
     u16 ms;
-} GhostRecord;
-typedef struct {
-    u8 pad0[0x1e0];
-    u8 min;
-    u8 sec;
-    u16 ms;
-} GhostPlayer;
-typedef struct {
-    u8 pad0[0x324];
-    s32 handle;
-} GhostObject;
+} fn_1_EEB44_GhostRecord;
 typedef struct {
     u8 lapDelta;
     u8 flags;
@@ -1808,22 +2056,6 @@ typedef struct {
     char fmtObj[0x10];
 } GhostStrings;
 
-extern void *lbl_801A6410;
-extern void fn_80008BEC(void *, int, u32);
-extern GhostPlayer *fn_1_3F0D8(u32, f32 *, u8 *);
-extern void fn_1_8645C(int, void *);
-extern void lbl_8006DBAC(Vec3 *);
-extern void fn_8006F5C4(s16 *, s16 *, s16 *);
-extern s32 fn_1_F17B4(const void *);
-extern void ghost_pack_bits(u32 *, const u32 *, const u32 *, const u32 *);
-extern u8 fn_1_3F114(void);
-extern s16 *fn_1_86254(int);
-extern void fn_1_12A734(s32);
-extern void fn_1_7F934(GhostObject *);
-extern void fn_1_46B4(void *, void *, const char *, int);
-extern int sprintf(char *, const char *, ...);
-extern void fn_1_14DBCC(void *);
-extern void fn_1_984F0(void *);
 
 void fn_1_EEB44(void)
 {
@@ -1842,8 +2074,8 @@ s16 angY;
 s16 angX;
 u8 misc;
 GhostPlayer *player;
-GhostRecord *rec;
-GhostRecord **recs;
+fn_1_EEB44_GhostRecord *rec;
+fn_1_EEB44_GhostRecord **recs;
 s16 *course;
 u32 ptime;
 u32 rtime;
@@ -1871,9 +2103,9 @@ cursor.slot += 0x30;
 }
 if (lbl_1_bss_960 == 9) {
 if ((s32)work.value->unk_16C8 >= 0 && (s32)work.value->unk_17CC == 0) {
-player = fn_1_3F0D8(0, &speed, &misc);
+player = (GhostPlayer *)fn_1_3F0D8(0, &speed, &misc);
 ptime = ((player)->min * 60000 + (player)->sec * 1000 + (player)->ms) ;
-rec = (GhostRecord *)work.value->unk_16B4;
+rec = (fn_1_EEB44_GhostRecord *)work.value->unk_16B4;
 if (ptime >= ((rec)->min * 60000 + (rec)->sec * 1000 + (rec)->ms) ) {
 work.value->unk_174C = 3;
 } else {
@@ -1886,11 +2118,11 @@ work.value->unk_174C = 0;
 }
 } else {
 if (work.value->unk_174E != 0 && (s32)work.value->unk_17CC == 0) {
-player = fn_1_3F0D8(0, &speed, &misc);
+player = (GhostPlayer *)fn_1_3F0D8(0, &speed, &misc);
 ptime = ((player)->min * 60000 + (player)->sec * 1000 + (player)->ms) ;
 count = work.value->unk_174E;
 work.value->unk_174C = 1;
-recs = (GhostRecord **)&work.value->unk_16B4;
+recs = (fn_1_EEB44_GhostRecord **)&work.value->unk_16B4;
 for (j = 0; j < count; j++) {
 rec = recs[j];
 if (ptime >= ((rec)->min * 60000 + (rec)->sec * 1000 + (rec)->ms) ) {
@@ -1904,15 +2136,15 @@ work.value->unk_174C = 0;
 }
 }
 if (work.value->unk_16CC != 0xff) {
-player = fn_1_3F0D8(0, &speed, &misc);
+player = (GhostPlayer *)fn_1_3F0D8(0, &speed, &misc);
 ptime = ((player)->min * 60000 + (player)->sec * 1000 + (player)->ms) ;
 if ((s32)work.value->unk_20 != 0) {
-recs = (GhostRecord **)&work.value->unk_16B4;
+recs = (fn_1_EEB44_GhostRecord **)&work.value->unk_16B4;
 recs += work.value->unk_174E;
 rec = recs[-2];
 rtime = ((rec)->min * 60000 + (rec)->sec * 1000 + (rec)->ms) ;
 } else {
-recs = (GhostRecord **)&work.value->unk_16B4;
+recs = (fn_1_EEB44_GhostRecord **)&work.value->unk_16B4;
 recs += work.value->unk_174E;
 rec = recs[-1];
 rtime = ((rec)->min * 60000 + (rec)->sec * 1000 + (rec)->ms) ;
@@ -1953,7 +2185,7 @@ work.value->unk_4 = work.value->unk_0;
 work.value->unk_0++;
 work.value->unk_C = 1;
 str.value->course = 0;
-course = fn_1_86254(0);
+course = (s16 *)fn_1_86254(0);
 if (course != ((void *)0) ) {
 str.value->course = course[3];
 }
@@ -1966,14 +2198,14 @@ if (cursor.objs[i]->handle != -1) {
 fn_1_12A734(cursor.objs[i]->handle);
 cursor.objs[i]->handle = -1;
 }
-fn_1_7F934(cursor.objs[i]);
-fn_1_46B4(lbl_801A6410, cursor.objs[i], str.value->file, 0xd89);
+fn_1_7F934( (void *)(GhostObject *)(cursor.objs[i]));
+fn_1_46B4( (u32)(void *)((*((void * *)&lbl_801A6410))), (u32)(void *)(cursor.objs[i]), str.value->file, 0xd89);
 sprintf(objName, str.value->fmtObj, i);
 cursor.objs[i] = ((void *)0) ;
 }
 if (otherCursor.items[i] != ((void *)0) ) {
 fn_1_14DBCC(otherCursor.items[i]);
-fn_1_46B4(lbl_801A6410, otherCursor.items[i], str.value->file, 0xd93);
+fn_1_46B4( (u32)(void *)((*((void * *)&lbl_801A6410))), (u32)(void *)(otherCursor.items[i]), str.value->file, 0xd93);
 sprintf(itemName, str.value->fmtItem, i);
 otherCursor.items[i] = ((void *)0) ;
 }
@@ -3105,7 +3337,7 @@ void fn_1_F143C(FnObject *obj, s32 index, const f32 *a, const f32 *b, void *arg5
         obj->field_200 = lbl_1_rodata_6D40;
     }
 
-    lbl_8006D7DC((void *)a);
+    lbl_8006D7DC( (GhostVec *)((void *)a));
     lbl_8006DFC4(arg5);
     lbl_8006DB74(obj->field_14c);
 }
@@ -3243,7 +3475,21 @@ void fn_1_F1950(void) {
 }
 /* fzgx:end fn_1_F1950 */
 
-/* fzgx:begin fn_1_F1960 */
+/* fzgx:begin fn_1_F1960 noprologue */
+#include "types.h"
+#include "dolphin/types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/ghost.h"
+#include "dolphin/ar.h"
+#include "game/main_rel/ghost_types.h"
+
+extern void ARQPostRequest(void *arg0, u32 arg1, u32 arg2, u32 arg3, void *arg4, void *arg5, u32 arg6, void (*callback)(void));
+extern void fn_1_F1950(void);
+extern u32 fn_8002071C();
+extern u32 fn_800206FC(u32 arg0);
+extern u32 ARGetDMAStatus(void);
+extern void DCFlushRange(void *addr, u32 size);
+
 void fn_1_F1960(void *arg0, void *arg1, u32 arg2) {
     u32 result;
     u8 temp[0x20];

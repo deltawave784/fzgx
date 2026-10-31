@@ -1,4 +1,396 @@
 #include "types.h"
+#include "game/main_rel/effect_car_types.h"
+#include "game/main_rel/car_types.h"
+#include "game/main_rel/car_test_types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/effect_car.h"
+#include "dolphin/hw_regs.h"
+#include "game/vec3.h"
+#include "rel/main_rel/effect.h"
+
+struct fn_1_68284_lbl_801A66A0 { u32 unk_0; };
+
+struct fn_1_6A7A4_lbl_801A66A0 {
+    u32 unk_0;
+};
+
+struct fn_1_6AF70_lbl_801A66A0 {
+    u32 unk_0;
+};
+
+struct Sig_fn_1_867CC_fn_1_867CC_Arg1 {
+    f32 x;
+    f32 y;
+    f32 z;
+};
+
+typedef struct { f32 x, y, z; } Fn1_6C87CVec;
+
+typedef struct Fn1_6C87CCar {
+    u8 pad_00[0x18];
+    s16 unk_18;
+    u8 pad_1a[0x22];
+    Fn1_6C87CVec unk_3c;
+    Fn1_6C87CVec unk_48;
+    u8 pad_54[0x64];
+    u8 unk_b8[0x30];
+} Fn1_6C87CCar;
+
+struct fn_1_6D488_Arg0 {
+    u8 pad_0[0x18];
+    s16 unk_18;
+    u8 pad_1A[0xb8 - 0x1a];
+    u8 mtx[0x30];
+};
+
+struct Sig_fn_1_862A8_fn_1_862A8_Arg1 {
+    u32 unk_0; u32 unk_4; u32 unk_8;
+};
+
+typedef struct {
+    f32 x, y, z;
+} fn_1_6F90C_Vec3f;
+
+typedef struct Fn1_71024Vec {
+    f32 x, y, z;
+} Fn1_71024Vec;
+
+struct Fn1_6D6A8Car {
+    u8 pad_00[0x18];
+    s16 field_18;
+};
+
+struct EffectCarData {
+    u32 flags;
+    s16 field_4;
+    u8 pad_6[0x475 - 6];
+    s8 field_475;
+};
+
+struct fn_1_6F90C_EffectCar {
+    u8 pad_00[0x38];
+    struct EffectCarData *data;
+    fn_1_6F90C_Vec3f pos;
+    u8 pad_48[0x5c - 0x48];
+    u16 field_5c;
+    u8 pad_5e[0xb2 - 0x5e];
+    u16 field_b2;
+};
+
+typedef struct { f32 x, y, z; } Fn1_6DD68Vec;
+
+typedef struct Fn1_6DD68Car {
+    u8 pad_00[0x18];
+    s16 unk_18;
+    u8 pad_1a[0x22];
+    Fn1_6DD68Vec unk_3c;
+    Fn1_6DD68Vec unk_48;
+    u8 pad_54[0x64];
+    u8 unk_b8[0x30];
+} Fn1_6DD68Car;
+
+struct fn_1_6ED40_Arg0 {
+ u8 pad_0[0x18]; s16 unk_18;
+ u8 pad_1A[0x22]; f32 unk_3C, unk_40, unk_44;
+ u8 pad_48[0x70]; u8 unk_B8[1];
+};
+
+typedef struct {
+    u8 pad_0[0x18];
+    s16 id;
+} fn_1_723E0_EffectCar;
+
+typedef struct {
+    f32 x;
+    f32 y;
+    f32 z;
+} fn_1_6E320_EffVec;
+
+typedef struct {
+    u8 pad_0[0x18];
+    s16 unk_18;
+    u8 pad_1A[0x3C - 0x1A];
+    fn_1_6E320_EffVec pos;
+    u8 pad_48[0xB4 - 0x48];
+    f32 unk_B4;
+    u8 unk_B8[0x30];
+} EffCar;
+
+struct fn_1_6F288_EffectCar {
+    u8 pad_00[0x18];
+    s16 field_18;
+    u8 pad_1a[0x1a];
+    u32 field_34;
+};
+
+typedef struct {
+    u8 pad_0[0x24];
+    f32 unk_24;
+    u8 pad_28[0x18];
+    f64 unk_40;
+    u8 pad_48[0x74];
+    f32 unk_BC;
+    u8 pad_C0[0x190];
+    Fn183D28Vec3 unk_250;
+    f32 unk_25C;
+} Pool_6D488;
+
+struct fn_1_6CF3C_lbl_1_rodata_2D70 {
+    u8 pad_0[0x1C];
+    f32 unk_1C;
+    u8 pad_20[0x4];
+    f32 unk_24;
+    u8 pad_28[0x18];
+    f64 unk_40;
+    f32 unk_48;
+    u8 pad_4C[0x18];
+    f32 unk_64;
+    f64 unk_68;
+    u8 pad_70[0x4];
+    f32 unk_74;
+    u8 pad_78[0x18];
+    f32 unk_90;
+    f32 unk_94;
+    u8 pad_98[0x20];
+    f32 unk_B8;
+    u8 pad_BC[0x14];
+    f64 unk_D0;
+    f32 unk_D8;
+    u8 pad_DC[0x10];
+    f32 unk_EC;
+    u8 pad_F0[0x18];
+    f64 unk_108;
+    u8 pad_110[0xB0];
+    f64 unk_1C0;
+    u8 pad_1C8[0x38];
+    f32 unk_200;
+    u8 pad_204[0x4];
+    f64 unk_208;
+    f32 unk_210;
+    u8 pad_214[0x4];
+    f64 unk_218;
+    f32 unk_220;
+    u8 pad_224[0x4];
+    f64 unk_228;
+    f32 unk_230;
+};
+
+struct fn_1_702A0_lbl_1_rodata_2D70 {
+    u8 pad_0[0x1C]; f32 unk_1C;
+    u8 pad_20[4]; f32 unk_24;
+    u8 pad_28[0x10]; f64 unk_38; f64 unk_40; f32 unk_48;
+    u8 pad_4C[0x24]; f32 unk_70; f32 unk_74; f32 unk_78;
+    u8 pad_7C[0x14]; f32 unk_90; f32 unk_94;
+    u8 pad_98[0x20]; f32 unk_B8;
+    u8 pad_BC[0x14]; f64 unk_D0;
+    u8 pad_D8[0x18]; f32 unk_F0;
+    u8 pad_F4[0x12C]; f32 unk_220;
+    u8 pad_224[0x5C]; f32 unk_280;
+    u8 pad_284[0xE4]; f32 unk_368;
+    u8 pad_36C[4]; f64 unk_370; f32 unk_378;
+};
+
+struct fn_1_6AF70_lbl_1_rodata_2D70 {
+    f32 unk_0;
+    f32 unk_4;
+    u8 pad_8[0x14];
+    f32 unk_1C;
+    u8 pad_20[0x4];
+    f32 unk_24;
+    u8 pad_28[0x18];
+    f64 unk_40;
+    u8 pad_48[0x2C];
+    f32 unk_74;
+    f32 unk_78;
+    u8 pad_7C[0x14];
+    f32 unk_90;
+    f32 unk_94;
+    u8 pad_98[0x20];
+    f32 unk_B8;
+    f32 unk_BC;
+    u8 pad_C0[0x10];
+    f64 unk_D0;
+    f32 unk_D8;
+    u8 pad_DC[0xC];
+    f32 unk_E8;
+    f32 unk_EC;
+    f32 unk_F0;
+    f32 unk_F4;
+    f32 unk_F8;
+};
+
+struct fn_1_71768_lbl_1_rodata_2D70 {
+    u8 pad_0[0x1C];
+    f32 unk_1C;
+    u8 pad_20[0x4];
+    f32 unk_24;
+    f32 unk_28;
+    u8 pad_2C[0x14];
+    f64 unk_40;
+    f32 unk_48;
+    u8 pad_4C[0x10];
+    f32 unk_5C;
+    f32 unk_60;
+    u8 pad_64[0x10];
+    f32 unk_74;
+    u8 pad_78[0x18];
+    f32 unk_90;
+    f32 unk_94;
+    u8 pad_98[0x20];
+    f32 unk_B8;
+    u8 pad_BC[0x8];
+    f32 unk_C4;
+    u8 pad_C8[0x8];
+    f64 unk_D0;
+    u8 pad_D8[0x14];
+    volatile f32 unk_EC; /* Volatile preserves the two retail clamp-bound reloads. */
+    u8 pad_F0[0x90];
+    f32 unk_180;
+    u8 pad_184[0x9C];
+    f32 unk_220;
+    u8 pad_224[0x174];
+    volatile f32 unk_398; /* Volatile keeps the scale load inside each emission iteration. */
+};
+
+struct fn_1_6AF70_lbl_1_bss_6F3A4 {
+    f32 unk_0[30];
+};
+
+struct fn_1_702A0_lbl_801A63C0 { u32 unk_0; };
+
+struct fn_1_7099C_Arg0 {
+ u8 pad_0[0x18]; u16 unk_18; u8 pad_1A[0x1E]; u32 unk_38;
+ Fn183D28Vec3 pos; Fn183D28Vec3 vel; u8 pad_54[0x64]; u8 matrix[0x30];
+};
+
+typedef struct Fn1_71024Car {
+    u8 pad_00[0x18];
+    s16 unk_18;
+    u8 pad_1a[0x1e];
+    u8 *unk_38;
+    Fn1_71024Vec pos;
+    Fn1_71024Vec vel;
+} Fn1_71024Car;
+
+struct fn_1_6CF3C_Vec { f32 x, y, z; };
+
+struct fn_1_6CF3C_Arg0 {
+    u8 pad_0[0x18];
+    s16 unk_18;
+    u8 pad_1A[2];
+    f32 unk_1C, unk_20, unk_24;
+    u8 pad_28[0x14];
+    struct fn_1_6CF3C_Vec unk_3C;
+    struct fn_1_6CF3C_Vec unk_48;
+    u8 pad_54[0x64];
+    f32 unk_B8[12];
+};
+
+typedef struct Fn1_71D0CCar {
+    u8 pad_00[0x18];
+    s16 id;              /* 0x18 */
+    u8 pad_1a[0x1e];
+    u32 unk_38;          /* 0x38 */
+    u8 pad_3c[0xc];
+    Fn183D28Vec3 vel;    /* 0x48 */
+    u8 pad_54[0x4];
+    s16 unk_58;          /* 0x58 */
+    u8 pad_5a[0x5e];
+    u8 mtx[0x30];        /* 0xb8 */
+} Fn1_71D0CCar;
+extern u32 lbl_801A66A0;
+extern u32 lbl_801A66C8;
+extern f32 fn_1_8652C(int index);
+extern f32 lbl_8006D0B4(f32);
+extern f32 lbl_8006D668(void *);
+extern s32 fn_1_58C4(void);
+extern s32 fn_1_66B8(void *arg0, f32 arg1);
+extern void fn_1_6C87C(Fn1_6C87CCar *car, Fn1_6C87CVec *dir, f32 arg2);
+extern void fn_1_6D488();
+extern u32 fn_1_862A8(u32, struct Sig_fn_1_862A8_fn_1_862A8_Arg1 *);
+extern u32 fn_1_864E8(int index);
+extern u32 fn_1_86514(int index);
+extern void *fn_1_868C0(s8 index);
+extern void fn_1_681C(u32 index, u32 *output);
+extern void fn_1_6D6A8();
+extern void fn_1_6F404(void *, void *);
+extern void fn_1_6F8D0(void *, void *);
+extern void fn_1_6F90C(struct fn_1_6F90C_EffectCar *self, void *arg1);
+extern void fn_1_71CA0(void *, void *, u16);
+extern void fn_1_862D4(int index, Triple *out);
+extern void fn_1_8636C(int index, void *arg);
+extern void fn_1_A2D84(u32 arg0);
+extern void fn_1_A3C78(s32 arg0, s32 arg1);
+extern void fn_1_6BFB8(u32 arg0);
+extern u32 fn_1_8627C(s32 index);
+extern u32 fn_1_1FB80(void *pos, u32 mask);
+extern void fn_1_6DD68(Fn1_6DD68Car *car, u32 unused, u32 count);
+extern void fn_1_6E62C();
+extern s16 camera_get_mode(void);
+extern void fn_1_6ED40(struct fn_1_6ED40_Arg0 *arg0, void *arg1);
+extern void fn_1_723E0(fn_1_723E0_EffectCar *car);
+extern u32 fn_1_584AC(void);
+extern void fn_1_A2E5C(s32 arg0, s32 arg1);
+extern u32 fn_1_6EC0(u8 index);
+extern s16 fn_1_6E320();
+extern void fn_1_6A7A4();
+extern void fn_1_6AF70(u32 arg0, void * arg1);
+extern u32 fn_1_6B8A4(u32, void *);
+extern void fn_1_6F288(struct fn_1_6F288_EffectCar *arg0);
+extern void fn_1_106EA4(f32 arg0);
+extern f64 __fabs(f64);
+extern u8 lbl_1_rodata_2D70[];
+extern void lbl_8006DD14(u32, void *);
+extern void *memset(void *dest, int value, u32 size);
+extern void lbl_8006DC6C();
+extern s16 camera_get_entry_field_0xa4(u32 index);
+extern s16 fn_1_58F50(const void *);
+extern struct fn_1_6AF70_lbl_1_bss_6F3A4 lbl_1_bss_6F3A4;
+extern s16 fn_1_59078(Obj_1_bss_6C84C_Target *arg0);
+extern s32 fn_1_5910(void);
+extern void fn_8006E2B0(void *, Vec3 *);
+extern void lbl_8006D5F0(u32, u32, f32);
+extern void fn_1_867CC(s16 arg0, void *arg1);
+extern u8 fn_1_86634(int index);
+extern void mathutil_mtxA_rotate_y(s16);
+extern void mathutil_mtxA_rotate_x(s16);
+extern u32 lbl_8006E1C0(void *, void *);
+extern void fn_8006F1F0(fn_1_6E320_EffVec *, fn_1_6E320_EffVec *, fn_1_6E320_EffVec *);
+extern void lbl_8006DB74(void *);
+extern void fzgx_sink_f(f32);
+extern void fzgx_sink_d(f64);
+extern u32 lbl_801A63C0;
+extern void fn_1_6FD58(void *arg0, void *arg1, f32 arg2, f32 arg3);
+extern void fn_1_7099C(struct fn_1_7099C_Arg0 *arg0, Fn183D28Vec3 *arg1, u32 arg2, f32 arg3, f32 arg4);
+extern void fn_1_71024(Fn1_71024Car *car, Fn1_71024Vec *vel, u32 count, f32 scale);
+extern void fn_1_71768(u32 arg0, u32 arg1);
+extern void fn_1_A5594(u32 arg0, Fn183D28Vec3 *pos);
+extern void fn_1_702A0(void *arg0, void *arg1, u8 count_arg, u8 arg3);
+extern void game_camera_set_shake(s16 index, s16 mode, s32 value, const f32 *delta);
+extern void fn_1_6CF3C(struct fn_1_6CF3C_Arg0 *arg0, struct fn_1_6CF3C_Vec *arg1, f32 arg2, f32 arg3);
+extern void *lbl_801A6410;
+extern u32 lbl_1_rodata_314C[13];
+extern s16 fn_1_72318();
+extern void fn_1_71D0C();
+extern void fn_1_46B4(u32 arg0, u32 arg1, const char *arg2, int arg3);
+extern u32 fn_1_4630();
+extern s16 fn_1_58E3C(void *source);
+extern s8 lbl_1_bss_6C878[];
+extern u32 fn_80008C20(void *, void *, void *);
+extern void fn_1_A33F0(s32 id, f32 level);
+extern u32 fn_1_6D7BC(void *, void *, f32);
+extern void fzgx_pool_primer_24(void);
+extern void fzgx_pool_primer_40(u32 x);
+extern void fzgx_pool_primer_0(void);
+extern void fzgx_pool_primer_90(void);
+extern void fzgx_pool_primer_108(volatile f64 *p);  /* fzgx-allow: S2 volatile keeps the verified access order */
+extern void fzgx_pool_primer_024(volatile f32 *p);  /* fzgx-allow: S2 volatile keeps the verified access order */
+extern void fzgx_pool_primer_05C(volatile f32 *p);  /* fzgx-allow: S2 volatile keeps the verified access order */
+extern void fzgx_pool_primer_094(volatile f32 *p);  /* fzgx-allow: S2 volatile keeps the verified access order */
+extern void fzgx_pool_primer_180(volatile f32 *p);  /* fzgx-allow: S2 volatile keeps the verified access order */
+
+/* fzgx:begin fn_1_680F8 noprologue */
+#include "types.h"
 #include "rel/main_rel/globals.h"
 #include "rel/main_rel/effect_car.h"
 #include "dolphin/hw_regs.h"
@@ -6,36 +398,12 @@
 
 extern void *memset(void *dest, int value, u32 size);
 extern void *lbl_801A6410;
-extern void fn_1_867CC(s16 arg0, void *arg1);
-extern u16 fn_1_584AC(void);
-extern s16 fn_1_59078(void *arg0);
-extern u32 fn_1_864E8(int index);
-extern s16 fn_1_58F50(const void *source);
-extern u32 lbl_1_rodata_314C[13];
-extern void lbl_8006DC6C(void *arg0, u32 arg1);
-extern void lbl_8006E1B0(void *arg0, void *arg1);
-extern void fn_1_6F90C(void *arg0, void *arg1);
-extern s16 fn_1_72318();
-extern void fn_1_71D0C(void *arg0, void *arg1);
-extern void fn_1_46B4(u32 arg0, u32 arg1, const char *arg2, int arg3);
 extern u32 fn_1_4630();
 extern void fn_1_862D4(s16 value, void *result);
 extern s16 fn_1_58E3C(void *source);
 extern u32 fn_1_58C4(void);
 extern s8 lbl_1_bss_6C878[];
-extern void *fn_1_868C0(s8 index);
-extern u32 fn_1_71024(void *, void *, u32, f32);
-extern u32 fn_1_7099C(void *, void *, u32, f32, f32);
-extern u32 fn_1_71768(void *, void *);
-extern u32 fn_1_702A0(void *, void *, u32, u32);
-extern u32 fn_80008C20(void *, void *, void *);
-extern u32 lbl_8006E1C0(void *, void *);
-extern u32 fn_1_6FD58(void *, void *, f32, f32);
-extern void fn_1_A33F0(s32 id, f32 level);
-extern u32 fn_1_6D7BC(void *, void *, f32);
-extern u32 fn_1_A5594(u32, void *);
 
-/* fzgx:begin fn_1_680F8 */
 typedef struct Fn1_680F8Arg {
     u8 pad_00[0x18];
     s16 unk_18;
@@ -85,7 +453,16 @@ void fn_1_680F8(Fn1_680F8Arg *arg) {
 }
 /* fzgx:end fn_1_680F8 */
 
-/* fzgx:begin fn_1_68248 */
+/* fzgx:begin fn_1_68248 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/effect_car.h"
+#include "dolphin/hw_regs.h"
+#include "game/main_rel/effect_car_types.h"
+
+extern void *lbl_801A6410;
+extern void fn_1_46B4(u32 arg0, u32 arg1, const char *arg2, int arg3);
+
 typedef struct Fn1_68248Arg {
     u8 pad0[0x34];
     void *unk_34;
@@ -383,13 +760,25 @@ void fn_1_68284(u32 arg0) {
 }
 /* fzgx:end fn_1_68284 */
 
-/* fzgx:begin fn_1_68B68 */
+/* fzgx:begin fn_1_68B68 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/effect_car.h"
+#include "dolphin/hw_regs.h"
+#include "game/main_rel/effect_car_types.h"
+
 // Stub function that immediately returns.
 void fn_1_68B68(void) {
 }
 /* fzgx:end fn_1_68B68 */
 
-/* fzgx:begin fn_1_69BBC */
+/* fzgx:begin fn_1_69BBC noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/effect_car.h"
+#include "dolphin/hw_regs.h"
+#include "game/main_rel/effect_car_types.h"
+
 typedef struct fn_1_69BBC_EffectCar {
     u8 pad_00[0x1a];
     u16 field_1a;
@@ -2049,7 +2438,18 @@ void fn_1_6D488(struct fn_1_6D488_Arg0 *arg0) {
 #pragma pop
 /* fzgx:end fn_1_6D488 */
 
-/* fzgx:begin fn_1_6D6A8 */
+/* fzgx:begin fn_1_6D6A8 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/effect_car.h"
+#include "dolphin/hw_regs.h"
+#include "game/main_rel/effect_car_types.h"
+
+extern void *memset(void *dest, int value, u32 size);
+extern void fn_1_867CC(s16 arg0, void *arg1);
+extern u16 fn_1_584AC(void);
+extern s16 fn_1_59078(void *arg0);
+
 struct Fn1_6D6A8Car {
     u8 pad_00[0x18];
     s16 field_18;
@@ -2673,7 +3073,18 @@ void fn_1_6DD68(Fn1_6DD68Car *car, u32 unused, u32 count) {
 }
 /* fzgx:end fn_1_6DD68 */
 
-/* fzgx:begin fn_1_6E140 */
+/* fzgx:begin fn_1_6E140 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/effect_car.h"
+#include "dolphin/hw_regs.h"
+#include "game/main_rel/effect_car_types.h"
+
+extern void *memset(void *dest, int value, u32 size);
+extern u16 fn_1_584AC(void);
+extern s16 fn_1_58F50(const void *source);
+extern u32 fn_1_58C4(void);
+
 #include "types.h"
 #include "rel/main_rel/effect_car.h"
 
@@ -3916,7 +4327,19 @@ void fn_1_6ED40(struct fn_1_6ED40_Arg0 *arg0, void *arg1) {
 #pragma opt_propagation reset
 /* fzgx:end fn_1_6ED40 */
 
-/* fzgx:begin fn_1_6F288 */
+/* fzgx:begin fn_1_6F288 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/effect_car.h"
+#include "dolphin/hw_regs.h"
+#include "game/main_rel/effect_car_types.h"
+
+extern void *memset(void *dest, int value, u32 size);
+extern void fn_1_867CC(s16 arg0, void *arg1);
+extern u16 fn_1_584AC(void);
+extern u32 fn_1_864E8(int index);
+extern s16 fn_1_58F50(const void *source);
+
 struct fn_1_6F288_EffectCar {
     u8 pad_00[0x18];
     s16 field_18;
@@ -4206,7 +4629,26 @@ void fn_1_6F288(struct fn_1_6F288_EffectCar *arg0) {
 }
 /* fzgx:end fn_1_6F288 */
 
-/* fzgx:begin fn_1_6F404 */
+/* fzgx:begin fn_1_6F404 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/effect_car.h"
+#include "dolphin/hw_regs.h"
+#include "game/main_rel/effect_car_types.h"
+
+extern u16 fn_1_584AC(void);
+extern void *fn_1_868C0(s8 index);
+extern u32 fn_1_71024(void *, void *, u32, f32);
+extern u32 fn_1_7099C(void *, void *, u32, f32, f32);
+extern u32 fn_1_71768(void *, void *);
+extern u32 fn_1_702A0(void *, void *, u32, u32);
+extern u32 fn_80008C20(void *, void *, void *);
+extern u32 lbl_8006E1C0(void *, void *);
+extern u32 fn_1_6FD58(void *, void *, f32, f32);
+extern void fn_1_A33F0(s32 id, f32 level);
+extern u32 fn_1_6D7BC(void *, void *, f32);
+extern u32 fn_1_A5594(u32, void *);
+
 void fn_1_6F404(void *arg0, void *arg1) {
     struct fn_1_6F404_lbl_1_rodata_2D70 *tbl;
     u32 sp[3];
@@ -4313,7 +4755,15 @@ void fn_1_6F404(void *arg0, void *arg1) {
 }
 /* fzgx:end fn_1_6F404 */
 
-/* fzgx:begin fn_1_6F8D0 */
+/* fzgx:begin fn_1_6F8D0 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/effect_car.h"
+#include "dolphin/hw_regs.h"
+#include "game/main_rel/effect_car_types.h"
+
+extern void fn_1_6F90C(void *arg0, void *arg1);
+
 void fn_1_6F8D0(void *arg0, void *arg1) {
     struct EffectData {
         u8 pad_000[0x58c];
@@ -6159,7 +6609,18 @@ void fn_1_71024(Fn1_71024Car *car, Fn1_71024Vec *vel, u32 count, f32 scale) {
 }
 /* fzgx:end fn_1_71024 */
 
-/* fzgx:begin fn_1_714A8 */
+/* fzgx:begin fn_1_714A8 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/effect_car.h"
+#include "dolphin/hw_regs.h"
+#include "game/main_rel/effect_car_types.h"
+
+extern void *memset(void *dest, int value, u32 size);
+extern u16 fn_1_584AC(void);
+extern s16 fn_1_59078(void *arg0);
+extern s16 fn_1_58F50(const void *source);
+
 struct Fn1_714A8Work {
     u8 pad_00[0xc];
     s16 field_0c;
@@ -6745,7 +7206,16 @@ void fn_1_71768(u32 arg0, u32 arg1) {
 }
 /* fzgx:end fn_1_71768 */
 
-/* fzgx:begin fn_1_71CA0 */
+/* fzgx:begin fn_1_71CA0 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/effect_car.h"
+#include "dolphin/hw_regs.h"
+#include "game/main_rel/effect_car_types.h"
+
+extern s16 fn_1_72318();
+extern void fn_1_71D0C(void *arg0, void *arg1);
+
 void fn_1_71CA0(void *arg0, void *arg1, u16 arg2) {
     if (arg2 == 0xb4) {
         ((struct {
@@ -7231,7 +7701,21 @@ void fn_1_71D0C(Fn1_71D0CCar *car) {
 #define LC_BASE 0xE0000000u
 /* fzgx:end fn_1_71D0C */
 
-/* fzgx:begin fn_1_72318 */
+/* fzgx:begin fn_1_72318 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/effect_car.h"
+#include "dolphin/hw_regs.h"
+#include "game/main_rel/effect_car_types.h"
+
+extern void *memset(void *dest, int value, u32 size);
+extern void fn_1_867CC(s16 arg0, void *arg1);
+extern s16 fn_1_59078(void *arg0);
+extern u32 lbl_1_rodata_314C[13];
+extern void lbl_8006DC6C(void *arg0, u32 arg1);
+extern void lbl_8006E1B0(void *arg0, void *arg1);
+extern s16 fn_1_72318();
+
 struct EffectWorkData {
     u8 pad_00[0xc];
     s16 field_0c;

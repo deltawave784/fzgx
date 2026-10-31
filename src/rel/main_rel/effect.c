@@ -2,9 +2,15 @@
 #include "game/main_rel/effect_types.h"
 #include "dolphin/types.h"
 #include "game/main_rel/car_test_types.h"
+#include "game/main_rel/camera_types.h"
+#include "game/main_rel/car_types.h"
 #include "rel/main_rel/globals.h"
 #include "rel/main_rel/effect.h"
 #include "psvec.h"
+#include "game/vec3.h"
+#include "dolphin/os/OSFastCast.h"
+#include "dolphin/hw_regs.h"
+
 
 struct P {
     u8 pad_0[0xC];
@@ -79,81 +85,584 @@ typedef struct Fn620C8Obj {
     f32 brightness;
     Fn183D28Vec3 pos;
 } Fn620C8Obj;
-extern u32 fn_1_3FC58(void);
-extern void *memset(void *, int, u32);
-extern void *memcpy(void *, const void *, u32);
-extern const f32 lbl_1_rodata_2950;
-extern u32 fn_1_86514(int index);
-extern void fn_1_867CC(s16 value, void *out);
-extern u8 fn_1_86634(int index);
-extern u32 fn_1_6EC0(u8 index);
-extern s16 camera_get_entry_field_0xa4(u32 index);
-extern void lbl_8006D9D8(void *);
-extern void lbl_8006D7B0(void);
-extern f32 lbl_8006D0B4(f32 value);
-extern void lbl_8006DB74(void *);
-extern void lbl_8006D848(f32);
-extern void lbl_8006DFC4(void *);
+
+typedef struct EffectVec3 {
+    u32 x;
+    u32 y;
+    u32 z;
+} EffectVec3;
+
+typedef struct Fx {
+    u8 state;
+    u8 pad1[0xF];
+    s32 unk10;
+    u8 pad14[8];
+    f32 unk1c, unk20, unk24, unk28, unk2c;
+    u8 pad30[0xC];
+    f32 unk3c, unk40, unk44, unk48, unk4c, unk50;
+    u8 pad54[0x34];
+    f32 unk88, unk8c;
+    u8 pad90[0x1C];
+    s16 unkac, unkae;
+} Fx;
+
+typedef struct { f32 x, y, z; } V3;
+
+struct Fn15D718Sub {
+    u8 data[0x34];
+};
+
+struct Fn15D718Tmp {
+    u8 data[0x30];
+};
+
+struct Fn15D718Work {
+    f32 alpha;
+    f32 alpha2;
+    struct Fn15D718Sub sub;
+    u8 red;
+    u8 green;
+    u8 blue;
+    u8 alphaByte;
+};
+
+struct Fn15D718 {
+    u8 _pad00[0x1c];
+    f32 value1c;
+    f32 value20;
+    f32 value24;
+    f32 value28;
+    u8 _pad2c[0x08];
+    u32 object34;
+    u8 _pad38[0x04];
+    f32 value3c;
+};
+
+typedef struct Mat44 {
+    f32 m[3][4];
+} Mat44;
+
+typedef struct Fn161070 {
+    u8 pad00[0x1c];
+    f32 field1c;
+    f32 field20;
+    f32 field24;
+    f32 field28;
+    u8 pad2c[0x8];
+    int field34;
+    u8 pad38[0x4];
+    u8 field3c[0x1c];
+    s16 field58;
+} Fn161070;
+
+typedef struct EfxData {
+    f32 field0;
+    f32 field4;
+    u8 mtx[0x34];
+    u8 color[4];
+} EfxData;
+
+typedef struct Vec {
+    f32 x;
+    f32 y;
+    f32 z;
+} Vec;
+
+typedef struct AvlineEntry {
+    s8 unk_00;
+    u8 _pad01;
+    s16 unk_02;
+    s16 unk_04;
+    u8 _pad06[0xe2];
+} AvlineEntry;
+
+typedef struct Effect_63518_vec {
+    u32 x;
+    u32 y;
+    u32 z;
+} Effect_63518_vec;
+
+typedef struct Effect_63518 {
+    u8 unk00[0x14];
+    u32 unk14;
+    u8 unk18[0x20];
+    Effect_63518_vec *unk38;
+    Effect_63518_vec unk3c;
+    u8 unk48[0x10];
+    u16 unk58;
+    u8 unk5a[0x06];
+    Effect_63518_vec unk60;
+    u8 unk6c[0x40];
+    u16 unkac;
+    u16 unkae;
+    u16 unkb0;
+} Effect_63518;
+
+typedef struct EffVec3 {
+    f32 x;
+    f32 y;
+    f32 z;
+} EffVec3;
+
+struct fn_1_619E4_pool {
+    u8 pad_0[0x28];
+    f32 one;        /* 0x28 */
+    u8 pad_2C[0x24];
+    f32 zero;       /* 0x50 */
+    f32 half;       /* 0x54 */
+    u8 pad_58[0x4];
+    f32 c255;       /* 0x5C */
+    u8 pad_60[0x40];
+    f32 two;        /* 0xA0 */
+    u8 pad_A4[0x214];
+    f32 widthScale; /* 0x2B8 */
+};
+
+struct fn_1_5CA00_lbl_1_rodata_2950 {
+ u8 pad_0[0x20]; f64 unk_20; f32 unk_28; u8 pad_2C[0x14];
+ f64 unk_40; u8 pad_48[8]; f32 unk_50; f32 unk_54; u8 pad_58[4]; f32 unk_5C;
+ u8 pad_60[0x40]; f32 unk_A0; u8 pad_A4[0xAC]; f32 unk_150;
+ u8 pad_154[4]; f64 unk_158; f64 unk_160; f64 unk_168;
+};
+
+typedef struct {
+    u8 pad_00[0x1a];
+    u16 count_b;
+    u16 count_c;
+} Sig_fn_1_55210_Fn55210Arg;
+
+typedef struct {
+    u8 unk_00[8];
+    u32 unk_08;
+    u32 unk_0C;
+    u32 unk_10;
+    f32 unk_14;
+} Sig_fn_1_5557C_Fn1_5557CObject;
+
+typedef Sig_fn_1_5557C_Fn1_5557CObject Sig_fn_1_555D0_Fn1_555D0Object;
+
+typedef struct GXTexObj {
+    u32 dummy[8];
+} GXTexObj;
+
+typedef struct EffectPoolState {
+    u8 *pool[2];
+    s16 serial;
+} EffectPoolState;
+
+typedef struct {
+    u8 pad_0[0x14];
+    f32 size;
+} Fn1_64388Model;
+
+typedef struct {
+    u8 pad_0[0x10];
+    s32 timer;
+    u8 pad_14[0x8];
+    f32 r;
+    f32 g;
+    f32 b;
+    f32 scale;
+    u8 pad_2C[0x8];
+    Fn1_64388Model *model;
+    u8 pad_38[0x4];
+    Fn183D28Vec3 pos;
+    u8 pad_48[0xae - 0x48];
+    s16 rotZ;
+} Fn1_64388Effect;
+
+typedef struct {
+    u8 pad_0[0x8];
+    Fn1_64388Effect *effect;
+} Fn1_64388Work;
+extern void *lbl_801A6410;
+extern u32 fn_1_4630();
+extern void fn_1_9F7DC(void);
+extern void fn_1_58114(void);
+extern void fn_1_3BDC(u32 arg0);
+extern s32 fn_1_3F164(void);
+extern void fn_1_9F8FC(void);
+extern void fn_1_5819C(void);
+extern s32 fn_1_58C4(void);
+extern void camera_forward_status(void);
+extern void fn_1_63518(Effect_63518 *effect);
+extern u32 fn_1_3C18(s32 arg0);
+extern u8 fn_1_5942C__fzgx_offset_0[];
+extern u8 fn_1_5944C__fzgx_offset_0[];
+extern u8 fn_1_5946C__fzgx_offset_0[];
+extern u8 fn_1_5948C__fzgx_offset_0[];
+extern u8 fn_1_594AC__fzgx_offset_0[];
+extern u8 fn_1_594CC__fzgx_offset_0[];
+extern u8 fn_1_594EC__fzgx_offset_0[];
+extern u8 fn_1_594F0__fzgx_offset_0[];
+extern u8 fn_1_594F4__fzgx_offset_0[];
+extern u8 fn_1_594F8__fzgx_offset_0[];
+extern u8 fn_1_594FC__fzgx_offset_0[];
+extern u8 fn_1_59500__fzgx_offset_0[];
+extern u8 fn_1_59504__fzgx_offset_0[];
+extern u8 fn_1_59508__fzgx_offset_0[];
+extern u8 fn_1_5950C__fzgx_offset_0[];
+extern u8 fn_1_59510__fzgx_offset_0[];
+extern u8 fn_1_59514__fzgx_offset_0[];
+extern u8 fn_1_5962C__fzgx_offset_0[];
+extern u8 fn_1_59770__fzgx_offset_0[];
+extern u8 fn_1_59A70__fzgx_offset_0[];
+extern u8 fn_1_59A74__fzgx_offset_0[];
+extern u8 fn_1_59B00__fzgx_offset_0[];
+extern u8 fn_1_59B90__fzgx_offset_0[];
+extern u8 fn_1_59CC4__fzgx_offset_0[];
+extern u8 fn_1_59CC8__fzgx_offset_0[];
+extern u8 fn_1_59D54__fzgx_offset_0[];
+extern u8 fn_1_59EE4__fzgx_offset_0[];
+extern u8 fn_1_5A8CC__fzgx_offset_0[];
+extern u8 fn_1_5A8D0__fzgx_offset_0[];
+extern u8 fn_1_5A8DC__fzgx_offset_0[];
+extern u8 fn_1_5ABC4__fzgx_offset_0[];
+extern u8 fn_1_5ABC8__fzgx_offset_0[];
+extern u8 fn_1_5ABCC__fzgx_offset_0[];
+extern u8 fn_1_5AC48__fzgx_offset_0[];
+extern u8 fn_1_5AF28__fzgx_offset_0[];
+extern u8 fn_1_5B074__fzgx_offset_0[];
+extern u8 fn_1_5B078__fzgx_offset_0[];
+extern u8 fn_1_5B188__fzgx_offset_0[];
+extern u8 fn_1_5B30C__fzgx_offset_0[];
+extern u8 fn_1_5B3CC__fzgx_offset_0[];
+extern u8 fn_1_5B3D0__fzgx_offset_0[];
+extern u8 fn_1_5B450__fzgx_offset_0[];
+extern u8 fn_1_5B578__fzgx_offset_0[];
+extern u8 fn_1_5B6F0__fzgx_offset_0[];
+extern u8 fn_1_5B6F4__fzgx_offset_0[];
+extern u8 fn_1_5B780__fzgx_offset_0[];
+extern u8 fn_1_5B7F8__fzgx_offset_0[];
+extern u8 fn_1_5BF6C__fzgx_offset_0[];
+extern u8 fn_1_5BF70__fzgx_offset_0[];
+extern u8 fn_1_5BFF0__fzgx_offset_0[];
+extern u8 fn_1_5C058__fzgx_offset_0[];
+extern u8 fn_1_5C780__fzgx_offset_0[];
+extern u8 fn_1_5C784__fzgx_offset_0[];
+extern u8 fn_1_5C83C__fzgx_offset_0[];
+extern u8 fn_1_5CA00__fzgx_offset_0[];
+extern u8 fn_1_5D010__fzgx_offset_0[];
+extern u8 fn_1_5D014__fzgx_offset_0[];
+extern u8 fn_1_5D020__fzgx_offset_0[];
+extern u8 fn_1_5D1B8__fzgx_offset_0[];
+extern u8 fn_1_5D374__fzgx_offset_0[];
+extern u8 fn_1_5D378__fzgx_offset_0[];
+extern u8 fn_1_5D4FC__fzgx_offset_0[];
+extern u8 fn_1_5D500__fzgx_offset_0[];
+extern u8 fn_1_5D718__fzgx_offset_0[];
+extern u8 fn_1_5D88C__fzgx_offset_0[];
+extern u8 fn_1_5D918__fzgx_offset_0[];
+extern u8 fn_1_5D91C__fzgx_offset_0[];
+extern u8 fn_1_5DFA4__fzgx_offset_0[];
+extern u8 fn_1_5E3C4__fzgx_offset_0[];
+extern u8 fn_1_5E4D8__fzgx_offset_0[];
+extern u8 fn_1_5EB08__fzgx_offset_0[];
+extern u8 fn_1_5F5C4__fzgx_offset_0[];
+extern u8 fn_1_5F5C8__fzgx_offset_0[];
+extern u8 fn_1_5F654__fzgx_offset_0[];
+extern u8 fn_1_5F9B8__fzgx_offset_0[];
+extern u8 fn_1_5FE24__fzgx_offset_0[];
+extern u8 fn_1_5FE28__fzgx_offset_0[];
+extern u8 fn_1_5FE2C__fzgx_offset_0[];
+extern u8 fn_1_5FE30__fzgx_offset_0[];
+extern u8 fn_1_5FFAC__fzgx_offset_0[];
+extern u8 fn_1_5FFB0__fzgx_offset_0[];
+extern u8 fn_1_60170__fzgx_offset_0[];
+extern u8 fn_1_601B4__fzgx_offset_0[];
+extern u8 fn_1_6028C__fzgx_offset_0[];
+extern u8 fn_1_60734__fzgx_offset_0[];
+extern u8 fn_1_60880__fzgx_offset_0[];
+extern u8 fn_1_60B80__fzgx_offset_0[];
+extern u8 fn_1_60C70__fzgx_offset_0[];
+extern u8 fn_1_60C74__fzgx_offset_0[];
+extern u8 fn_1_60C84__fzgx_offset_0[];
+extern u8 fn_1_60C88__fzgx_offset_0[];
+extern u8 fn_1_60D54__fzgx_offset_0[];
+extern u8 fn_1_60F7C__fzgx_offset_0[];
+extern u8 fn_1_60F80__fzgx_offset_0[];
+extern u8 fn_1_60F84__fzgx_offset_0[];
+extern u8 fn_1_61070__fzgx_offset_0[];
+extern u8 fn_1_611EC__fzgx_offset_0[];
+extern u8 fn_1_61370__fzgx_offset_0[];
+extern u8 fn_1_61640__fzgx_offset_0[];
+extern u8 fn_1_61760__fzgx_offset_0[];
+extern u8 fn_1_617A4__fzgx_offset_0[];
+extern u8 fn_1_618B8__fzgx_offset_0[];
+extern u8 fn_1_619E4__fzgx_offset_0[];
+extern u8 fn_1_61C84__fzgx_offset_0[];
+extern u8 fn_1_61C88__fzgx_offset_0[];
+extern u8 fn_1_61CA8__fzgx_offset_0[];
+extern u8 fn_1_61CC8__fzgx_offset_0[];
+extern u8 fn_1_61CE8__fzgx_offset_0[];
+extern u8 fn_1_62AF8__fzgx_offset_0[];
+extern u8 fn_1_62C84__fzgx_offset_0[];
+extern u8 fn_1_62E9C__fzgx_offset_0[];
+extern u8 fn_1_6312C__fzgx_offset_0[];
+extern u8 fn_1_63130__fzgx_offset_0[];
+extern u8 fn_1_6313C__fzgx_offset_0[];
+extern u8 fn_1_632D4__fzgx_offset_0[];
+extern u8 fn_1_633BC__fzgx_offset_0[];
+extern u8 fn_1_633C0__fzgx_offset_0[];
+extern u8 fn_1_63514__fzgx_offset_0[];
+extern u8 fn_1_635BC__fzgx_offset_0[];
+extern u8 fn_1_63858__fzgx_offset_0[];
+extern u8 fn_1_64098__fzgx_offset_0[];
+extern u8 fn_1_640A4__fzgx_offset_0[];
+extern u8 fn_1_642E8__fzgx_offset_0[];
+extern u8 fn_1_645C8__fzgx_offset_0[];
+extern u8 fn_1_645CC__fzgx_offset_0[];
+extern u8 fn_1_645D0__fzgx_offset_0[];
+extern u8 fn_1_645D4__fzgx_offset_0[];
+extern u8 fn_1_64760__fzgx_offset_0[];
+extern u8 fn_1_648D4__fzgx_offset_0[];
+extern u8 fn_1_648D8__fzgx_offset_0[];
+extern u8 fn_1_648DC__fzgx_offset_0[];
+extern u8 fn_1_64E1C__fzgx_offset_0[];
+extern u8 fn_1_64F2C__fzgx_offset_0[];
+extern u8 fn_1_64FB8__fzgx_offset_0[];
+extern u8 fn_1_65268__fzgx_offset_0[];
+extern u8 fn_1_65420__fzgx_offset_0[];
+extern u8 fn_1_65424__fzgx_offset_0[];
+extern u8 fn_1_654B0__fzgx_offset_0[];
+extern u8 fn_1_656C8__fzgx_offset_0[];
+extern u8 fn_1_65AAC__fzgx_offset_0[];
+extern u8 fn_1_65AB0__fzgx_offset_0[];
+extern u8 fn_1_65B58__fzgx_offset_0[];
+extern u8 fn_1_65B5C__fzgx_offset_0[];
+extern u8 fn_1_65CDC__fzgx_offset_0[];
+extern u8 fn_1_65E58__fzgx_offset_0[];
+extern u8 fn_1_65E88__fzgx_offset_0[];
+extern u8 fn_1_65E8C__fzgx_offset_0[];
+extern u8 fn_1_660EC__fzgx_offset_0[];
+extern u8 fn_1_66254__fzgx_offset_0[];
+extern u8 fn_1_662D4__fzgx_offset_0[];
+extern u8 fn_1_662D8__fzgx_offset_0[];
+extern u8 fn_1_67294__fzgx_offset_0[];
+extern u8 fn_1_67414__fzgx_offset_0[];
+extern u8 fn_1_6742C__fzgx_offset_0[];
+extern u8 fn_1_67430__fzgx_offset_0[];
+extern u8 fn_1_6755C__fzgx_offset_0[];
+extern u8 fn_1_6766C__fzgx_offset_0[];
+extern u8 fn_1_6767C__fzgx_offset_0[];
+extern u8 fn_1_67680__fzgx_offset_0[];
+extern u8 fn_1_67D0C__fzgx_offset_0[];
+extern u8 fn_1_67E94__fzgx_offset_0[];
+extern u8 fn_1_67F20__fzgx_offset_0[];
+extern u8 fn_1_68054__fzgx_offset_0[];
+extern u8 fn_1_680F4__fzgx_offset_0[];
+extern u8 lbl_1_data_1CC68__fzgx_offset_0[];
+extern u8 lbl_1_data_1CC78__fzgx_offset_0[];
+extern u8 lbl_1_data_1CC8C__fzgx_offset_0[];
+extern u8 lbl_1_data_1CC9C__fzgx_offset_0[];
+extern u8 lbl_1_data_1CCAC__fzgx_offset_0[];
+extern u8 lbl_1_data_1CCC0__fzgx_offset_0[];
+extern u8 lbl_1_data_1CCD0__fzgx_offset_0[];
+extern u8 lbl_1_data_1CCE4__fzgx_offset_0[];
+extern u8 lbl_1_data_1CCFC__fzgx_offset_0[];
+extern u8 lbl_1_data_1CD14__fzgx_offset_0[];
+extern u8 lbl_1_data_1CD30__fzgx_offset_0[];
+extern u8 lbl_1_data_1CD48__fzgx_offset_0[];
+extern u8 lbl_1_data_1CD60__fzgx_offset_0[];
+extern u8 lbl_1_data_1CD7C__fzgx_offset_0[];
+extern u8 lbl_1_data_1CD88__fzgx_offset_0[];
+extern u8 lbl_1_data_1CD98__fzgx_offset_0[];
+extern u8 lbl_1_data_1CDA8__fzgx_offset_0[];
+extern u8 lbl_1_data_1CDB8__fzgx_offset_0[];
+extern u8 lbl_1_data_1CDCC__fzgx_offset_0[];
+extern u8 lbl_1_data_1CDE0__fzgx_offset_0[];
+extern u8 lbl_1_data_1CDF4__fzgx_offset_0[];
+extern u8 lbl_1_data_1CE04__fzgx_offset_0[];
+extern u8 lbl_1_data_1CE10__fzgx_offset_0[];
+extern u8 lbl_1_data_1CE20__fzgx_offset_0[];
+extern u8 lbl_1_data_1CE30__fzgx_offset_0[];
+extern u8 lbl_1_data_1CE44__fzgx_offset_0[];
+extern u8 lbl_1_data_1CE58__fzgx_offset_0[];
+extern u8 lbl_1_data_1CE68__fzgx_offset_0[];
+extern u8 lbl_1_data_1CE78__fzgx_offset_0[];
+extern u8 lbl_1_data_1CE8C__fzgx_offset_0[];
+extern u8 lbl_1_data_1CE9C__fzgx_offset_0[];
+extern u8 lbl_1_data_1CEB0__fzgx_offset_0[];
+extern u8 lbl_1_data_1CEC8__fzgx_offset_0[];
+extern u8 lbl_1_data_1CEDC__fzgx_offset_0[];
+extern u8 lbl_1_data_1CEF0__fzgx_offset_0[];
+extern u8 lbl_1_data_1CF08__fzgx_offset_0[];
+extern u8 lbl_1_data_1CF1C__fzgx_offset_0[];
+extern u8 lbl_1_data_1CF30__fzgx_offset_0[];
+extern u8 lbl_1_data_1CF4C__fzgx_offset_0[];
+extern u8 lbl_1_data_1CF58__fzgx_offset_0[];
+extern u8 lbl_1_data_1CF6C__fzgx_offset_0[];
+extern u8 lbl_1_data_1CF78__fzgx_offset_0[];
+extern u8 lbl_1_data_1CF84__fzgx_offset_0[];
+extern u8 lbl_1_data_1CF90__fzgx_offset_0[];
+extern u8 lbl_1_data_1CF9C__fzgx_offset_0[];
+extern u8 lbl_1_data_1CFA8__fzgx_offset_0[];
+extern u8 lbl_1_data_1CFB4__fzgx_offset_0[];
+extern u8 lbl_1_data_1CFC0__fzgx_offset_0[];
+extern u8 lbl_1_data_1CFCC__fzgx_offset_0[];
+extern u8 lbl_1_data_1CFD8__fzgx_offset_0[];
+extern u8 lbl_1_data_1CFE4__fzgx_offset_0[];
+extern u8 lbl_1_data_1CFF0__fzgx_offset_0[];
+extern u8 lbl_1_data_1CFFC__fzgx_offset_0[];
+extern u8 lbl_1_data_1D008__fzgx_offset_0[];
+extern u8 lbl_1_data_1D014__fzgx_offset_0[];
+extern u8 lbl_1_data_1D020__fzgx_offset_0[];
+extern u8 lbl_1_data_1D02C__fzgx_offset_0[];
+extern u8 lbl_1_data_1D038__fzgx_offset_0[];
+extern u8 lbl_1_data_1D044__fzgx_offset_0[];
+extern u8 lbl_1_data_1D050__fzgx_offset_0[];
+extern u8 lbl_1_data_1D05C__fzgx_offset_0[];
+extern u8 lbl_1_data_1D068__fzgx_offset_0[];
+extern u8 lbl_1_data_1D074__fzgx_offset_0[];
+extern u8 lbl_1_data_1D080__fzgx_offset_0[];
+extern u8 lbl_1_data_1D08C__fzgx_offset_0[];
+extern u8 lbl_1_data_1D098__fzgx_offset_0[];
+extern u8 lbl_1_data_1D0A4__fzgx_offset_0[];
+extern u8 lbl_1_data_1D0B0__fzgx_offset_0[];
+extern u8 lbl_1_data_1D0BC__fzgx_offset_0[];
+extern void fn_1_5962C_prime_f32(f32);
+extern void fn_1_5962C_prime_f64(f64);
+extern void fn_1_8636C();
 extern int fn_1_9F914(const void *src0, const void *src1);
 extern void lbl_8006DCA4();
-extern s32 fn_1_54E34(void *arg0, f32 arg1);
-extern void *fn_1_5448C(void *);
-extern void fn_1_5489C(void **arg0, void **arg1);
-extern void fn_1_862D4(s16 value, void *result);
-extern void *fn_1_548AC(u32 size);
-extern void *lbl_801A6410;
-extern s32 fn_1_45D0();
-extern u32 lbl_1_bss_6C864;
-extern void fn_1_8636C();
+extern void lbl_8006E0A4(void *);
 extern void *lbl_8006DC6C(void *);
-extern void lbl_8006DBAC(void *);
-extern u32 lbl_8006DA50(void);
-extern void lbl_8006DF44(void);
+extern void mathutil_mtxA_rotate_x(s16 value);
+extern void mathutil_mtxA_rotate_y(s16 value);
+extern f32 lbl_8006D668(Vec3 *);
+extern f32 lbl_8006D0B4(f32 value);
+extern void fn_8006EDBC(Vec3 *arg0, Vec3 *arg1, s16 *arg2, s16 *arg3);
+extern void lbl_8006D7DC(void *obj);
+extern void lbl_8006E15C(f32, f32, f32);
+extern void fn_8006E294(Vec3 *);
+extern s32 lbl_8006D24C(f32, f32);
+extern void *memset(void *, int, u32);
+extern void lbl_8006DB74(void *);
+extern s32 fn_1_54E34(void *arg0, f32 arg1);
+extern const f64 lbl_1_rodata_2954;
 extern void fn_1_56000(u8 value0, u8 value1, u8 value2);
-extern void fn_1_5621C(f32 value0, f32 value1, f32 value2, f32 value3);
 extern void fn_1_556B8(void *value);
+extern void lbl_8006E14C(f32);
+extern void lbl_8006D848(f32);
+extern void lbl_8006DFC4(void *);
+extern u32 u_gxutil_upload_some_mtx(u32, u32);
+extern void fn_1_8645C(int index, void *arg);
+extern u32 fn_1_3FC58(void);
+extern void *memcpy(void *, const void *, u32);
+extern void fn_8006EF10(void *arg0, s16 *arg1, s16 *arg2);
+extern f32 lbl_1_rodata_2978[4];
+extern void fn_1_5621C(f32 value0, f32 value1, f32 value2, f32 value3);
+extern void fn_1_557C4(void *value);
+extern void lbl_8006D7B0(void);
+extern u32 lbl_801A66A0;
+extern const f32 lbl_1_rodata_2950;
+extern s16 camera_get_mode(void);
+extern s32 fn_1_5910(void);
+extern u32 fn_1_6EC0(u8 index);
+extern s32 fn_1_66B8(void *arg0, f32 arg1);
+extern f32 fn_1_A71AC(void);
+extern void mathutil_mtxA_rotate_z(int);
+extern void fn_1_57714(u8 value);
+extern void fn_1_57720(u32 value_1, u32 value_2, u32 value_3, u32 value_4);
+extern void fn_1_579A0(void *, void *);
+extern void lbl_8006D758(void);
+extern u32 fn_1_86514(int index);
+extern void *fn_1_86254(int index);
+extern s16 camera_get_entry_field_0xa4(u32 index);
+extern void fn_1_867CC(s16 value, void *out);
+extern void *fn_1_868C0(s8 index);
+extern void fn_1_9EA94(void *light);
+extern void lbl_8006D95C(s32);
+extern void fn_80074788(u32 arg0);
+extern void fn_80072864(u32 arg0);
+extern void fn_800745A4(u32 arg0, s32 arg1, s32 arg2, u32 arg3, u32 arg4, u32 arg5);
+extern void fn_800734A8(u32 arg0, s32 arg1, s32 arg2, s32 arg3);
+extern void fn_80072AB0(s32 arg0, s32 arg1, s32 arg2);
+extern void fn_800735C8(s32 index, s32 value);
+extern void fn_80073620(s32 index, s32 value);
+extern void fn_80073C6C(s32 index);
+extern void fn_80072C24(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
+extern void fn_80072D64(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u8 arg4, s32 arg5);
+extern void fn_80072CC4(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
+extern void fn_80072E20(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u8 arg4, s32 arg5);
+extern void fn_80073678(u32 arg0);
+extern void fn_80074660(u32 arg0);
+extern void fn_80074918(u8 arg0, s32 arg1, u8 arg2);
+extern void fn_800720B0(s32 arg0);
+extern void fn_800728A8(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
+extern void fn_80073778(void *obj, s32 index);
+extern s32 fn_1_9CE1C(const char *arg0, s32 arg1);
+extern void fn_1_A8E78(int arg);
+extern void fn_1_55FC4(f32 value);
+extern void fn_1_55FF0(f32 value);
+extern void fn_1_55210(void *);
+extern void fn_8006F3E4(s16 *arg0, s16 *arg1, s16 *arg2);
+extern void fn_80072558(void);
+extern void fn_1_5557C(void *object);
+extern void fn_1_555D0(void *object);
+extern volatile f32 __fzgx_pool_f;  /* fzgx-allow: S2 shared-pool primer sink */
+extern volatile f64 __fzgx_pool_d;  /* fzgx-allow: S2 shared-pool primer sink */
 extern void fn_80038F10(f32* out);
 extern u32 fn_80038EEC();
 extern u32 fn_80074188(u32 arg0, u32 arg1, u32 arg2, u32 arg3);
-extern void lbl_8006E0A4(void *);
-extern void lbl_8006E14C(f32);
-extern void mathutil_mtxA_rotate_x(s16 value);
-extern void fn_80072558(void);
-extern void fn_80074918(u8 arg0, s32 arg1, u8 arg2);
+extern u32 lbl_8006DA50(void);
 extern void fn_80074300();
 extern void fn_80074438(u32 arg0, u32 arg1, u32 arg2, u32 arg3);
 extern void fn_8003526C(void *, u8);
 extern void GXInitTexObj(void *, void *, u16, u16, s32, s32, s32, u8);
-extern s32 fn_1_66B8(void *, f32);
-extern void *lbl_801A6D00;
-extern void fn_1_8645C(int index, void *arg);
+extern void GXLoadPosMtxImm(void *,u32);
+extern void fn_1_62794(void *);
+extern f32 lbl_8006D188(s32);
+extern void lbl_8006D1B8(s16,void *);
+extern void fn_800724C8(void);
+extern void fn_8007245C(u32 value);
+extern void fn_8003462C(u32 arg0, u32 arg1, u32 arg2);
+extern void fn_80073898(u32 arg0);
+extern void *lbl_801A63D0;
+extern void fn_80038BFC(f32* out);
+extern void lbl_8006DAEC(void);
+extern void lbl_8006DB30(void);
+extern void lbl_8006DFD8(void *);
+extern void GXLoadTexMtxImm(f32 *, u32, u32);
+extern void fn_80073A58(int index, void *arg, s8 value);
+extern void fn_800747D0(u32 arg0, u32 arg1, s32 arg2, s32 arg3, u32 arg4, s32 arg5, s32 arg6);
+extern void fn_800738E0(s32 arg0, s32 arg1, s32 arg2);
+extern void fn_80073B50(u32 index, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, u8 arg7, u8 arg8, s32 arg9);
+extern void fn_1_681C(u32 index, u32 *output);
+extern u32 fn_1_864E8(int index);
+extern u32 lbl_801A63C0;
+extern void lbl_8006D5A4(void *, void *, void *, f32);
+extern const f32 lbl_1_rodata_295C;
+extern void *fn_1_5448C(void *);
+extern void fn_1_5489C(void **arg0, void **arg1);
+extern void * fn_1_548AC(u32 amount);
+extern u8 lbl_1_data_3C7C4[];
+extern u8 lbl_1_data_3C89C[];
+extern void lbl_8006D7F4(f32, f32, f32);
+extern u32 fn_1_56018(s32 value);
+extern void fn_1_560F0(s32 index, void *arg);
+extern void fzgx_pool_f32(f32);
+extern void fzgx_pool_f64(f64);
+extern u32 fn_1_3FC8C(void);
+extern static inline void spawn(EffectPoolState *st, void *src, int bank);
+extern u8 fn_1_86634(int index);
+extern s32 fn_1_45D0();
+extern u32 lbl_1_bss_6C864;
+extern void lbl_8006DF44(void);
 extern void fn_8006FA24(void *, void *, void *, f32);
-extern void mathutil_mtxA_rotate_z(int);
-extern void mathutil_mtxA_rotate_y(s16 value);
 extern const f32 lbl_1_rodata_2AA0[21];
 extern f32 lbl_1_rodata_29AC[5];
-extern void fn_1_55FC4(f32 value);
-extern void fn_1_55FF0(f32 value);
-extern void fn_1_5557C(void *object);
-extern void fn_1_555D0(void *object);
 extern u32 GXGetTexBufferSize(u16, u16, u32, u32, u8);
 extern void fn_1_46B4(u32 arg0, u32 arg1, const char *arg2, int arg3);
 extern void fn_1_4730(u32 value, u32 count, u32 size, const char *file, int line);
-extern void lbl_8006D7DC(void *obj);
-extern void *fn_1_868C0(s8 index);
-extern void *fn_1_86254(int index);
-extern void lbl_8006D95C(s32);
-extern void fn_1_3BDC(u32 arg0);
-extern u32 fn_1_3C18(s32 arg0);
 extern void fn_80008BEC(void *dest, int value, u32 size);
-extern void fn_80008BA8(void *, void *, int);
+extern void fn_80008BA8(u32 arg0, u32 arg1, u32 arg2);
 extern void fn_1_680F8(void);
-extern void fn_1_68284(void);
+extern void fn_1_68284();
 extern void fn_1_68B68(void);
 extern void fn_1_68248(void);
 extern void fn_1_69BBC(void);
 extern void fn_1_69BCC(void);
-extern f32 lbl_1_rodata_2978[4];
 extern f32 lbl_1_rodata_2AF4[14];
 extern void fn_1_5EB98(void);
 extern f32 lbl_1_rodata_2A5C[5];
@@ -163,19 +672,16 @@ extern void fn_1_620C4(void);
 extern f32 lbl_1_rodata_2B2C[145];
 extern void fn_1_638E8(void);
 extern const f32 lbl_1_rodata_2A70[12];
-extern void fn_1_64388(void);
+extern void fn_1_64388(Fn1_64388Work *work);
 extern void fn_1_65748(void);
 extern int fn_1_61E60();
-extern u32 fn_1_3FC8C(void);
 extern const f32 lbl_1_rodata_29A4;
 extern f64 lbl_1_rodata_2988;
 extern void fn_1_620C8(Fn620C8Obj *obj);
 extern f32 fn_1_8652C(int index);
-extern void fn_1_557C4(void *value);
 extern const f32 lbl_1_rodata_29C0;
 extern const f32 lbl_1_rodata_29F0;
-extern s32 fn_1_58C4(void);
-extern const f64 lbl_1_rodata_2954;
+extern void fzgx_pool_primer(void);
 
 /* fzgx:begin fn_1_584D4 noprologue */
 #include "types.h"
@@ -626,7 +1132,90 @@ void fn_1_58994(void) {
 }
 /* fzgx:end fn_1_58994 */
 
-/* fzgx:begin fn_1_58C6C */
+/* fzgx:begin fn_1_58C6C noprologue */
+#include "types.h"
+#include "game/main_rel/effect_types.h"
+#include "dolphin/types.h"
+#include "game/main_rel/car_test_types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/effect.h"
+#include "psvec.h"
+
+struct P {
+    u8 pad_0[0xC];
+    f32 unk_C;
+    u8 pad_10[0x18];
+    f32 unk_28;
+    u8 pad_2C[0xC];
+    f64 unk_38;
+    u8 pad_40[0x20];
+    f32 unk_60;
+    f32 unk_64;
+    u8 pad_68[0xC];
+    f32 unk_74;
+    u8 pad_78[0x54];
+    f32 unk_CC;
+    f32 unk_D0;
+    f32 unk_D4;
+    f32 unk_D8;
+    f32 unk_DC;
+};
+
+typedef struct Fn620C8Viewport {
+    f32 x;
+    f32 y;
+    f32 w;
+    f32 h;
+    f32 near;
+    f32 far;
+} Fn620C8Viewport;
+
+typedef struct Obj {
+    u8 b0;
+    u8 pad1[0xF];
+    s32 n10;
+    u8 pad14[4];
+    s16 id18;
+    u8 pad1a[0x0E];
+    f32 f28;
+    f32 f2c;
+    u8 pad30[0x0C];
+    f32 m3c[3];
+    f32 f48;
+    f32 f4c;
+    f32 f50;
+    s16 s54;
+    u8 pad56[4];
+    s16 s5a;
+    u8 pad5c[0x38];
+    f32 p94[3];
+    u8 pada0[0x14];
+    f32 fb4;
+} Obj;
+
+typedef struct Fn620C8Model {
+    u8 pad_0[0x8];
+    u8 data[0xC];
+    f32 scale;
+} Fn620C8Model;
+
+typedef struct Fn620C8TexObj {
+    u32 dummy[8];
+    void *image;
+} Fn620C8TexObj;
+
+typedef struct Fn620C8Obj {
+    u8 pad_0[0x28];
+    f32 time;
+    u8 pad_2C[0x8];
+    Fn620C8Model *model;
+    Fn620C8TexObj *tex;
+    u8 rot[0x78];
+    f32 brightness;
+    Fn183D28Vec3 pos;
+} Fn620C8Obj;
+extern void fn_1_620C8(Fn620C8Obj *obj);
+
 struct fn_1_58C6C_lbl_1_bss_6C848_T {
     u8 unk_0;
     u8 pad_1[0x7];
@@ -671,7 +1260,91 @@ void fn_1_58C6C(void) {
 }
 /* fzgx:end fn_1_58C6C */
 
-/* fzgx:begin fn_1_58D38 */
+/* fzgx:begin fn_1_58D38 noprologue */
+#include "types.h"
+#include "game/main_rel/effect_types.h"
+#include "dolphin/types.h"
+#include "game/main_rel/car_test_types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/effect.h"
+#include "psvec.h"
+
+struct P {
+    u8 pad_0[0xC];
+    f32 unk_C;
+    u8 pad_10[0x18];
+    f32 unk_28;
+    u8 pad_2C[0xC];
+    f64 unk_38;
+    u8 pad_40[0x20];
+    f32 unk_60;
+    f32 unk_64;
+    u8 pad_68[0xC];
+    f32 unk_74;
+    u8 pad_78[0x54];
+    f32 unk_CC;
+    f32 unk_D0;
+    f32 unk_D4;
+    f32 unk_D8;
+    f32 unk_DC;
+};
+
+typedef struct Fn620C8Viewport {
+    f32 x;
+    f32 y;
+    f32 w;
+    f32 h;
+    f32 near;
+    f32 far;
+} Fn620C8Viewport;
+
+typedef struct Obj {
+    u8 b0;
+    u8 pad1[0xF];
+    s32 n10;
+    u8 pad14[4];
+    s16 id18;
+    u8 pad1a[0x0E];
+    f32 f28;
+    f32 f2c;
+    u8 pad30[0x0C];
+    f32 m3c[3];
+    f32 f48;
+    f32 f4c;
+    f32 f50;
+    s16 s54;
+    u8 pad56[4];
+    s16 s5a;
+    u8 pad5c[0x38];
+    f32 p94[3];
+    u8 pada0[0x14];
+    f32 fb4;
+} Obj;
+
+typedef struct Fn620C8Model {
+    u8 pad_0[0x8];
+    u8 data[0xC];
+    f32 scale;
+} Fn620C8Model;
+
+typedef struct Fn620C8TexObj {
+    u32 dummy[8];
+    void *image;
+} Fn620C8TexObj;
+
+typedef struct Fn620C8Obj {
+    u8 pad_0[0x28];
+    f32 time;
+    u8 pad_2C[0x8];
+    Fn620C8Model *model;
+    Fn620C8TexObj *tex;
+    u8 rot[0x78];
+    f32 brightness;
+    Fn183D28Vec3 pos;
+} Fn620C8Obj;
+extern void fn_1_3BDC(u32 arg0);
+extern u32 fn_1_3C18(s32 arg0);
+
 typedef struct fn_1_58D38_EffectState {
     fn_1_58D38_EffectEntry *unk_00;
     fn_1_58D38_EffectEntry *unk_04;
@@ -726,7 +1399,91 @@ void fn_1_58D38(void) {
 }
 /* fzgx:end fn_1_58D38 */
 
-/* fzgx:begin fn_1_58E3C */
+/* fzgx:begin fn_1_58E3C noprologue */
+#include "types.h"
+#include "game/main_rel/effect_types.h"
+#include "dolphin/types.h"
+#include "game/main_rel/car_test_types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/effect.h"
+#include "psvec.h"
+
+struct P {
+    u8 pad_0[0xC];
+    f32 unk_C;
+    u8 pad_10[0x18];
+    f32 unk_28;
+    u8 pad_2C[0xC];
+    f64 unk_38;
+    u8 pad_40[0x20];
+    f32 unk_60;
+    f32 unk_64;
+    u8 pad_68[0xC];
+    f32 unk_74;
+    u8 pad_78[0x54];
+    f32 unk_CC;
+    f32 unk_D0;
+    f32 unk_D4;
+    f32 unk_D8;
+    f32 unk_DC;
+};
+
+typedef struct Fn620C8Viewport {
+    f32 x;
+    f32 y;
+    f32 w;
+    f32 h;
+    f32 near;
+    f32 far;
+} Fn620C8Viewport;
+
+typedef struct Obj {
+    u8 b0;
+    u8 pad1[0xF];
+    s32 n10;
+    u8 pad14[4];
+    s16 id18;
+    u8 pad1a[0x0E];
+    f32 f28;
+    f32 f2c;
+    u8 pad30[0x0C];
+    f32 m3c[3];
+    f32 f48;
+    f32 f4c;
+    f32 f50;
+    s16 s54;
+    u8 pad56[4];
+    s16 s5a;
+    u8 pad5c[0x38];
+    f32 p94[3];
+    u8 pada0[0x14];
+    f32 fb4;
+} Obj;
+
+typedef struct Fn620C8Model {
+    u8 pad_0[0x8];
+    u8 data[0xC];
+    f32 scale;
+} Fn620C8Model;
+
+typedef struct Fn620C8TexObj {
+    u32 dummy[8];
+    void *image;
+} Fn620C8TexObj;
+
+typedef struct Fn620C8Obj {
+    u8 pad_0[0x28];
+    f32 time;
+    u8 pad_2C[0x8];
+    Fn620C8Model *model;
+    Fn620C8TexObj *tex;
+    u8 rot[0x78];
+    f32 brightness;
+    Fn183D28Vec3 pos;
+} Fn620C8Obj;
+extern u32 fn_1_3FC58(void);
+extern void *memcpy(void *, const void *, u32);
+
 typedef struct {
     s8 unk_0;
     u8 pad_1;
@@ -778,7 +1535,92 @@ slot_found:
 }
 /* fzgx:end fn_1_58E3C */
 
-/* fzgx:begin fn_1_58F50 */
+/* fzgx:begin fn_1_58F50 noprologue */
+#include "types.h"
+#include "game/main_rel/effect_types.h"
+#include "dolphin/types.h"
+#include "game/main_rel/car_test_types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/effect.h"
+#include "psvec.h"
+
+struct P {
+    u8 pad_0[0xC];
+    f32 unk_C;
+    u8 pad_10[0x18];
+    f32 unk_28;
+    u8 pad_2C[0xC];
+    f64 unk_38;
+    u8 pad_40[0x20];
+    f32 unk_60;
+    f32 unk_64;
+    u8 pad_68[0xC];
+    f32 unk_74;
+    u8 pad_78[0x54];
+    f32 unk_CC;
+    f32 unk_D0;
+    f32 unk_D4;
+    f32 unk_D8;
+    f32 unk_DC;
+};
+
+typedef struct Fn620C8Viewport {
+    f32 x;
+    f32 y;
+    f32 w;
+    f32 h;
+    f32 near;
+    f32 far;
+} Fn620C8Viewport;
+
+typedef struct Obj {
+    u8 b0;
+    u8 pad1[0xF];
+    s32 n10;
+    u8 pad14[4];
+    s16 id18;
+    u8 pad1a[0x0E];
+    f32 f28;
+    f32 f2c;
+    u8 pad30[0x0C];
+    f32 m3c[3];
+    f32 f48;
+    f32 f4c;
+    f32 f50;
+    s16 s54;
+    u8 pad56[4];
+    s16 s5a;
+    u8 pad5c[0x38];
+    f32 p94[3];
+    u8 pada0[0x14];
+    f32 fb4;
+} Obj;
+
+typedef struct Fn620C8Model {
+    u8 pad_0[0x8];
+    u8 data[0xC];
+    f32 scale;
+} Fn620C8Model;
+
+typedef struct Fn620C8TexObj {
+    u32 dummy[8];
+    void *image;
+} Fn620C8TexObj;
+
+typedef struct Fn620C8Obj {
+    u8 pad_0[0x28];
+    f32 time;
+    u8 pad_2C[0x8];
+    Fn620C8Model *model;
+    Fn620C8TexObj *tex;
+    u8 rot[0x78];
+    f32 brightness;
+    Fn183D28Vec3 pos;
+} Fn620C8Obj;
+extern u32 fn_1_3FC58(void);
+extern void *memcpy(void *, const void *, u32);
+extern u32 fn_1_3FC8C(void);
+
 typedef struct {
     u8 unk_0;
     u8 pad_1[1];
@@ -833,7 +1675,92 @@ found:
 }
 /* fzgx:end fn_1_58F50 */
 
-/* fzgx:begin fn_1_59078 */
+/* fzgx:begin fn_1_59078 noprologue */
+#include "types.h"
+#include "game/main_rel/effect_types.h"
+#include "dolphin/types.h"
+#include "game/main_rel/car_test_types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/effect.h"
+#include "psvec.h"
+
+struct P {
+    u8 pad_0[0xC];
+    f32 unk_C;
+    u8 pad_10[0x18];
+    f32 unk_28;
+    u8 pad_2C[0xC];
+    f64 unk_38;
+    u8 pad_40[0x20];
+    f32 unk_60;
+    f32 unk_64;
+    u8 pad_68[0xC];
+    f32 unk_74;
+    u8 pad_78[0x54];
+    f32 unk_CC;
+    f32 unk_D0;
+    f32 unk_D4;
+    f32 unk_D8;
+    f32 unk_DC;
+};
+
+typedef struct Fn620C8Viewport {
+    f32 x;
+    f32 y;
+    f32 w;
+    f32 h;
+    f32 near;
+    f32 far;
+} Fn620C8Viewport;
+
+typedef struct Obj {
+    u8 b0;
+    u8 pad1[0xF];
+    s32 n10;
+    u8 pad14[4];
+    s16 id18;
+    u8 pad1a[0x0E];
+    f32 f28;
+    f32 f2c;
+    u8 pad30[0x0C];
+    f32 m3c[3];
+    f32 f48;
+    f32 f4c;
+    f32 f50;
+    s16 s54;
+    u8 pad56[4];
+    s16 s5a;
+    u8 pad5c[0x38];
+    f32 p94[3];
+    u8 pada0[0x14];
+    f32 fb4;
+} Obj;
+
+typedef struct Fn620C8Model {
+    u8 pad_0[0x8];
+    u8 data[0xC];
+    f32 scale;
+} Fn620C8Model;
+
+typedef struct Fn620C8TexObj {
+    u32 dummy[8];
+    void *image;
+} Fn620C8TexObj;
+
+typedef struct Fn620C8Obj {
+    u8 pad_0[0x28];
+    f32 time;
+    u8 pad_2C[0x8];
+    Fn620C8Model *model;
+    Fn620C8TexObj *tex;
+    u8 rot[0x78];
+    f32 brightness;
+    Fn183D28Vec3 pos;
+} Fn620C8Obj;
+extern u32 fn_1_3FC58(void);
+extern void *memcpy(void *, const void *, u32);
+extern u32 fn_1_3FC8C(void);
+
 s16 fn_1_59078(Obj_1_bss_6C84C_Target *arg0) {
     Obj_1_bss_6C84C_Target *obj;
     s32 i;
@@ -873,7 +1800,91 @@ slot_found:
 }
 /* fzgx:end fn_1_59078 */
 
-/* fzgx:begin fn_1_59290 */
+/* fzgx:begin fn_1_59290 noprologue */
+#include "types.h"
+#include "game/main_rel/effect_types.h"
+#include "dolphin/types.h"
+#include "game/main_rel/car_test_types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/effect.h"
+#include "psvec.h"
+
+struct P {
+    u8 pad_0[0xC];
+    f32 unk_C;
+    u8 pad_10[0x18];
+    f32 unk_28;
+    u8 pad_2C[0xC];
+    f64 unk_38;
+    u8 pad_40[0x20];
+    f32 unk_60;
+    f32 unk_64;
+    u8 pad_68[0xC];
+    f32 unk_74;
+    u8 pad_78[0x54];
+    f32 unk_CC;
+    f32 unk_D0;
+    f32 unk_D4;
+    f32 unk_D8;
+    f32 unk_DC;
+};
+
+typedef struct Fn620C8Viewport {
+    f32 x;
+    f32 y;
+    f32 w;
+    f32 h;
+    f32 near;
+    f32 far;
+} Fn620C8Viewport;
+
+typedef struct Obj {
+    u8 b0;
+    u8 pad1[0xF];
+    s32 n10;
+    u8 pad14[4];
+    s16 id18;
+    u8 pad1a[0x0E];
+    f32 f28;
+    f32 f2c;
+    u8 pad30[0x0C];
+    f32 m3c[3];
+    f32 f48;
+    f32 f4c;
+    f32 f50;
+    s16 s54;
+    u8 pad56[4];
+    s16 s5a;
+    u8 pad5c[0x38];
+    f32 p94[3];
+    u8 pada0[0x14];
+    f32 fb4;
+} Obj;
+
+typedef struct Fn620C8Model {
+    u8 pad_0[0x8];
+    u8 data[0xC];
+    f32 scale;
+} Fn620C8Model;
+
+typedef struct Fn620C8TexObj {
+    u32 dummy[8];
+    void *image;
+} Fn620C8TexObj;
+
+typedef struct Fn620C8Obj {
+    u8 pad_0[0x28];
+    f32 time;
+    u8 pad_2C[0x8];
+    Fn620C8Model *model;
+    Fn620C8TexObj *tex;
+    u8 rot[0x78];
+    f32 brightness;
+    Fn183D28Vec3 pos;
+} Fn620C8Obj;
+extern void fn_80008BEC(void *dest, int value, u32 size);
+extern void fn_80008BA8(void *, void *, int);
+
 void fn_1_59290(void) {
     u8 buffer1[0xe8];
     u8 buffer2[0xe8];
@@ -929,104 +1940,1505 @@ void fn_1_59290(void) {
 }
 /* fzgx:end fn_1_59290 */
 
-/* fzgx:begin fn_1_5942C */
+/* fzgx:begin fn_1_5942C noprologue */
+#include "types.h"
+#include "game/main_rel/effect_types.h"
+#include "dolphin/types.h"
+#include "game/main_rel/car_test_types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/effect.h"
+#include "psvec.h"
+
+struct P {
+    u8 pad_0[0xC];
+    f32 unk_C;
+    u8 pad_10[0x18];
+    f32 unk_28;
+    u8 pad_2C[0xC];
+    f64 unk_38;
+    u8 pad_40[0x20];
+    f32 unk_60;
+    f32 unk_64;
+    u8 pad_68[0xC];
+    f32 unk_74;
+    u8 pad_78[0x54];
+    f32 unk_CC;
+    f32 unk_D0;
+    f32 unk_D4;
+    f32 unk_D8;
+    f32 unk_DC;
+};
+
+typedef struct Fn620C8Viewport {
+    f32 x;
+    f32 y;
+    f32 w;
+    f32 h;
+    f32 near;
+    f32 far;
+} Fn620C8Viewport;
+
+typedef struct Obj {
+    u8 b0;
+    u8 pad1[0xF];
+    s32 n10;
+    u8 pad14[4];
+    s16 id18;
+    u8 pad1a[0x0E];
+    f32 f28;
+    f32 f2c;
+    u8 pad30[0x0C];
+    f32 m3c[3];
+    f32 f48;
+    f32 f4c;
+    f32 f50;
+    s16 s54;
+    u8 pad56[4];
+    s16 s5a;
+    u8 pad5c[0x38];
+    f32 p94[3];
+    u8 pada0[0x14];
+    f32 fb4;
+} Obj;
+
+typedef struct Fn620C8Model {
+    u8 pad_0[0x8];
+    u8 data[0xC];
+    f32 scale;
+} Fn620C8Model;
+
+typedef struct Fn620C8TexObj {
+    u32 dummy[8];
+    void *image;
+} Fn620C8TexObj;
+
+typedef struct Fn620C8Obj {
+    u8 pad_0[0x28];
+    f32 time;
+    u8 pad_2C[0x8];
+    Fn620C8Model *model;
+    Fn620C8TexObj *tex;
+    u8 rot[0x78];
+    f32 brightness;
+    Fn183D28Vec3 pos;
+} Fn620C8Obj;
+extern void fn_1_680F8(void);
+
 // fn_1_5942C: wrapper that calls fn_1_680F8
 void fn_1_5942C(void) {
     fn_1_680F8();
 }
 /* fzgx:end fn_1_5942C */
 
-/* fzgx:begin fn_1_5944C */
+/* fzgx:begin fn_1_5944C noprologue */
+#include "types.h"
+#include "game/main_rel/effect_types.h"
+#include "dolphin/types.h"
+#include "game/main_rel/car_test_types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/effect.h"
+#include "psvec.h"
+
+struct P {
+    u8 pad_0[0xC];
+    f32 unk_C;
+    u8 pad_10[0x18];
+    f32 unk_28;
+    u8 pad_2C[0xC];
+    f64 unk_38;
+    u8 pad_40[0x20];
+    f32 unk_60;
+    f32 unk_64;
+    u8 pad_68[0xC];
+    f32 unk_74;
+    u8 pad_78[0x54];
+    f32 unk_CC;
+    f32 unk_D0;
+    f32 unk_D4;
+    f32 unk_D8;
+    f32 unk_DC;
+};
+
+typedef struct Fn620C8Viewport {
+    f32 x;
+    f32 y;
+    f32 w;
+    f32 h;
+    f32 near;
+    f32 far;
+} Fn620C8Viewport;
+
+typedef struct Obj {
+    u8 b0;
+    u8 pad1[0xF];
+    s32 n10;
+    u8 pad14[4];
+    s16 id18;
+    u8 pad1a[0x0E];
+    f32 f28;
+    f32 f2c;
+    u8 pad30[0x0C];
+    f32 m3c[3];
+    f32 f48;
+    f32 f4c;
+    f32 f50;
+    s16 s54;
+    u8 pad56[4];
+    s16 s5a;
+    u8 pad5c[0x38];
+    f32 p94[3];
+    u8 pada0[0x14];
+    f32 fb4;
+} Obj;
+
+typedef struct Fn620C8Model {
+    u8 pad_0[0x8];
+    u8 data[0xC];
+    f32 scale;
+} Fn620C8Model;
+
+typedef struct Fn620C8TexObj {
+    u32 dummy[8];
+    void *image;
+} Fn620C8TexObj;
+
+typedef struct Fn620C8Obj {
+    u8 pad_0[0x28];
+    f32 time;
+    u8 pad_2C[0x8];
+    Fn620C8Model *model;
+    Fn620C8TexObj *tex;
+    u8 rot[0x78];
+    f32 brightness;
+    Fn183D28Vec3 pos;
+} Fn620C8Obj;
+extern void fn_1_68284(void);
+
 void fn_1_5944C(void) {
     fn_1_68284();
 }
 /* fzgx:end fn_1_5944C */
 
-/* fzgx:begin fn_1_5946C */
+/* fzgx:begin fn_1_5946C noprologue */
+#include "types.h"
+#include "game/main_rel/effect_types.h"
+#include "dolphin/types.h"
+#include "game/main_rel/car_test_types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/effect.h"
+#include "psvec.h"
+
+struct P {
+    u8 pad_0[0xC];
+    f32 unk_C;
+    u8 pad_10[0x18];
+    f32 unk_28;
+    u8 pad_2C[0xC];
+    f64 unk_38;
+    u8 pad_40[0x20];
+    f32 unk_60;
+    f32 unk_64;
+    u8 pad_68[0xC];
+    f32 unk_74;
+    u8 pad_78[0x54];
+    f32 unk_CC;
+    f32 unk_D0;
+    f32 unk_D4;
+    f32 unk_D8;
+    f32 unk_DC;
+};
+
+typedef struct Fn620C8Viewport {
+    f32 x;
+    f32 y;
+    f32 w;
+    f32 h;
+    f32 near;
+    f32 far;
+} Fn620C8Viewport;
+
+typedef struct Obj {
+    u8 b0;
+    u8 pad1[0xF];
+    s32 n10;
+    u8 pad14[4];
+    s16 id18;
+    u8 pad1a[0x0E];
+    f32 f28;
+    f32 f2c;
+    u8 pad30[0x0C];
+    f32 m3c[3];
+    f32 f48;
+    f32 f4c;
+    f32 f50;
+    s16 s54;
+    u8 pad56[4];
+    s16 s5a;
+    u8 pad5c[0x38];
+    f32 p94[3];
+    u8 pada0[0x14];
+    f32 fb4;
+} Obj;
+
+typedef struct Fn620C8Model {
+    u8 pad_0[0x8];
+    u8 data[0xC];
+    f32 scale;
+} Fn620C8Model;
+
+typedef struct Fn620C8TexObj {
+    u32 dummy[8];
+    void *image;
+} Fn620C8TexObj;
+
+typedef struct Fn620C8Obj {
+    u8 pad_0[0x28];
+    f32 time;
+    u8 pad_2C[0x8];
+    Fn620C8Model *model;
+    Fn620C8TexObj *tex;
+    u8 rot[0x78];
+    f32 brightness;
+    Fn183D28Vec3 pos;
+} Fn620C8Obj;
+extern void fn_1_68B68(void);
+
 void fn_1_5946C(void) {
     fn_1_68B68();
 }
 /* fzgx:end fn_1_5946C */
 
-/* fzgx:begin fn_1_5948C */
+/* fzgx:begin fn_1_5948C noprologue */
+#include "types.h"
+#include "game/main_rel/effect_types.h"
+#include "dolphin/types.h"
+#include "game/main_rel/car_test_types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/effect.h"
+#include "psvec.h"
+
+struct P {
+    u8 pad_0[0xC];
+    f32 unk_C;
+    u8 pad_10[0x18];
+    f32 unk_28;
+    u8 pad_2C[0xC];
+    f64 unk_38;
+    u8 pad_40[0x20];
+    f32 unk_60;
+    f32 unk_64;
+    u8 pad_68[0xC];
+    f32 unk_74;
+    u8 pad_78[0x54];
+    f32 unk_CC;
+    f32 unk_D0;
+    f32 unk_D4;
+    f32 unk_D8;
+    f32 unk_DC;
+};
+
+typedef struct Fn620C8Viewport {
+    f32 x;
+    f32 y;
+    f32 w;
+    f32 h;
+    f32 near;
+    f32 far;
+} Fn620C8Viewport;
+
+typedef struct Obj {
+    u8 b0;
+    u8 pad1[0xF];
+    s32 n10;
+    u8 pad14[4];
+    s16 id18;
+    u8 pad1a[0x0E];
+    f32 f28;
+    f32 f2c;
+    u8 pad30[0x0C];
+    f32 m3c[3];
+    f32 f48;
+    f32 f4c;
+    f32 f50;
+    s16 s54;
+    u8 pad56[4];
+    s16 s5a;
+    u8 pad5c[0x38];
+    f32 p94[3];
+    u8 pada0[0x14];
+    f32 fb4;
+} Obj;
+
+typedef struct Fn620C8Model {
+    u8 pad_0[0x8];
+    u8 data[0xC];
+    f32 scale;
+} Fn620C8Model;
+
+typedef struct Fn620C8TexObj {
+    u32 dummy[8];
+    void *image;
+} Fn620C8TexObj;
+
+typedef struct Fn620C8Obj {
+    u8 pad_0[0x28];
+    f32 time;
+    u8 pad_2C[0x8];
+    Fn620C8Model *model;
+    Fn620C8TexObj *tex;
+    u8 rot[0x78];
+    f32 brightness;
+    Fn183D28Vec3 pos;
+} Fn620C8Obj;
+extern void fn_1_68248(void);
+
 void fn_1_5948C(void) {
     fn_1_68248();
 }
 /* fzgx:end fn_1_5948C */
 
-/* fzgx:begin fn_1_594AC */
+/* fzgx:begin fn_1_594AC noprologue */
+#include "types.h"
+#include "game/main_rel/effect_types.h"
+#include "dolphin/types.h"
+#include "game/main_rel/car_test_types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/effect.h"
+#include "psvec.h"
+
+struct P {
+    u8 pad_0[0xC];
+    f32 unk_C;
+    u8 pad_10[0x18];
+    f32 unk_28;
+    u8 pad_2C[0xC];
+    f64 unk_38;
+    u8 pad_40[0x20];
+    f32 unk_60;
+    f32 unk_64;
+    u8 pad_68[0xC];
+    f32 unk_74;
+    u8 pad_78[0x54];
+    f32 unk_CC;
+    f32 unk_D0;
+    f32 unk_D4;
+    f32 unk_D8;
+    f32 unk_DC;
+};
+
+typedef struct Fn620C8Viewport {
+    f32 x;
+    f32 y;
+    f32 w;
+    f32 h;
+    f32 near;
+    f32 far;
+} Fn620C8Viewport;
+
+typedef struct Obj {
+    u8 b0;
+    u8 pad1[0xF];
+    s32 n10;
+    u8 pad14[4];
+    s16 id18;
+    u8 pad1a[0x0E];
+    f32 f28;
+    f32 f2c;
+    u8 pad30[0x0C];
+    f32 m3c[3];
+    f32 f48;
+    f32 f4c;
+    f32 f50;
+    s16 s54;
+    u8 pad56[4];
+    s16 s5a;
+    u8 pad5c[0x38];
+    f32 p94[3];
+    u8 pada0[0x14];
+    f32 fb4;
+} Obj;
+
+typedef struct Fn620C8Model {
+    u8 pad_0[0x8];
+    u8 data[0xC];
+    f32 scale;
+} Fn620C8Model;
+
+typedef struct Fn620C8TexObj {
+    u32 dummy[8];
+    void *image;
+} Fn620C8TexObj;
+
+typedef struct Fn620C8Obj {
+    u8 pad_0[0x28];
+    f32 time;
+    u8 pad_2C[0x8];
+    Fn620C8Model *model;
+    Fn620C8TexObj *tex;
+    u8 rot[0x78];
+    f32 brightness;
+    Fn183D28Vec3 pos;
+} Fn620C8Obj;
+extern void fn_1_69BBC(void);
+
 void fn_1_594AC(void) {
     fn_1_69BBC();
 }
 /* fzgx:end fn_1_594AC */
 
-/* fzgx:begin fn_1_594CC */
+/* fzgx:begin fn_1_594CC noprologue */
+#include "types.h"
+#include "game/main_rel/effect_types.h"
+#include "dolphin/types.h"
+#include "game/main_rel/car_test_types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/effect.h"
+#include "psvec.h"
+
+struct P {
+    u8 pad_0[0xC];
+    f32 unk_C;
+    u8 pad_10[0x18];
+    f32 unk_28;
+    u8 pad_2C[0xC];
+    f64 unk_38;
+    u8 pad_40[0x20];
+    f32 unk_60;
+    f32 unk_64;
+    u8 pad_68[0xC];
+    f32 unk_74;
+    u8 pad_78[0x54];
+    f32 unk_CC;
+    f32 unk_D0;
+    f32 unk_D4;
+    f32 unk_D8;
+    f32 unk_DC;
+};
+
+typedef struct Fn620C8Viewport {
+    f32 x;
+    f32 y;
+    f32 w;
+    f32 h;
+    f32 near;
+    f32 far;
+} Fn620C8Viewport;
+
+typedef struct Obj {
+    u8 b0;
+    u8 pad1[0xF];
+    s32 n10;
+    u8 pad14[4];
+    s16 id18;
+    u8 pad1a[0x0E];
+    f32 f28;
+    f32 f2c;
+    u8 pad30[0x0C];
+    f32 m3c[3];
+    f32 f48;
+    f32 f4c;
+    f32 f50;
+    s16 s54;
+    u8 pad56[4];
+    s16 s5a;
+    u8 pad5c[0x38];
+    f32 p94[3];
+    u8 pada0[0x14];
+    f32 fb4;
+} Obj;
+
+typedef struct Fn620C8Model {
+    u8 pad_0[0x8];
+    u8 data[0xC];
+    f32 scale;
+} Fn620C8Model;
+
+typedef struct Fn620C8TexObj {
+    u32 dummy[8];
+    void *image;
+} Fn620C8TexObj;
+
+typedef struct Fn620C8Obj {
+    u8 pad_0[0x28];
+    f32 time;
+    u8 pad_2C[0x8];
+    Fn620C8Model *model;
+    Fn620C8TexObj *tex;
+    u8 rot[0x78];
+    f32 brightness;
+    Fn183D28Vec3 pos;
+} Fn620C8Obj;
+extern void fn_1_69BCC(void);
+
 void fn_1_594CC(void) {
     fn_1_69BCC();
 }
 /* fzgx:end fn_1_594CC */
 
-/* fzgx:begin fn_1_594EC */
+/* fzgx:begin fn_1_594EC noprologue */
+#include "types.h"
+#include "game/main_rel/effect_types.h"
+#include "dolphin/types.h"
+#include "game/main_rel/car_test_types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/effect.h"
+#include "psvec.h"
+
+struct P {
+    u8 pad_0[0xC];
+    f32 unk_C;
+    u8 pad_10[0x18];
+    f32 unk_28;
+    u8 pad_2C[0xC];
+    f64 unk_38;
+    u8 pad_40[0x20];
+    f32 unk_60;
+    f32 unk_64;
+    u8 pad_68[0xC];
+    f32 unk_74;
+    u8 pad_78[0x54];
+    f32 unk_CC;
+    f32 unk_D0;
+    f32 unk_D4;
+    f32 unk_D8;
+    f32 unk_DC;
+};
+
+typedef struct Fn620C8Viewport {
+    f32 x;
+    f32 y;
+    f32 w;
+    f32 h;
+    f32 near;
+    f32 far;
+} Fn620C8Viewport;
+
+typedef struct Obj {
+    u8 b0;
+    u8 pad1[0xF];
+    s32 n10;
+    u8 pad14[4];
+    s16 id18;
+    u8 pad1a[0x0E];
+    f32 f28;
+    f32 f2c;
+    u8 pad30[0x0C];
+    f32 m3c[3];
+    f32 f48;
+    f32 f4c;
+    f32 f50;
+    s16 s54;
+    u8 pad56[4];
+    s16 s5a;
+    u8 pad5c[0x38];
+    f32 p94[3];
+    u8 pada0[0x14];
+    f32 fb4;
+} Obj;
+
+typedef struct Fn620C8Model {
+    u8 pad_0[0x8];
+    u8 data[0xC];
+    f32 scale;
+} Fn620C8Model;
+
+typedef struct Fn620C8TexObj {
+    u32 dummy[8];
+    void *image;
+} Fn620C8TexObj;
+
+typedef struct Fn620C8Obj {
+    u8 pad_0[0x28];
+    f32 time;
+    u8 pad_2C[0x8];
+    Fn620C8Model *model;
+    Fn620C8TexObj *tex;
+    u8 rot[0x78];
+    f32 brightness;
+    Fn183D28Vec3 pos;
+} Fn620C8Obj;
+
 // fn_1_594EC: empty in retail (single blr).
 void fn_1_594EC(void) {
 }
 /* fzgx:end fn_1_594EC */
 
-/* fzgx:begin fn_1_594F0 */
+/* fzgx:begin fn_1_594F0 noprologue */
+#include "types.h"
+#include "game/main_rel/effect_types.h"
+#include "dolphin/types.h"
+#include "game/main_rel/car_test_types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/effect.h"
+#include "psvec.h"
+
+struct P {
+    u8 pad_0[0xC];
+    f32 unk_C;
+    u8 pad_10[0x18];
+    f32 unk_28;
+    u8 pad_2C[0xC];
+    f64 unk_38;
+    u8 pad_40[0x20];
+    f32 unk_60;
+    f32 unk_64;
+    u8 pad_68[0xC];
+    f32 unk_74;
+    u8 pad_78[0x54];
+    f32 unk_CC;
+    f32 unk_D0;
+    f32 unk_D4;
+    f32 unk_D8;
+    f32 unk_DC;
+};
+
+typedef struct Fn620C8Viewport {
+    f32 x;
+    f32 y;
+    f32 w;
+    f32 h;
+    f32 near;
+    f32 far;
+} Fn620C8Viewport;
+
+typedef struct Obj {
+    u8 b0;
+    u8 pad1[0xF];
+    s32 n10;
+    u8 pad14[4];
+    s16 id18;
+    u8 pad1a[0x0E];
+    f32 f28;
+    f32 f2c;
+    u8 pad30[0x0C];
+    f32 m3c[3];
+    f32 f48;
+    f32 f4c;
+    f32 f50;
+    s16 s54;
+    u8 pad56[4];
+    s16 s5a;
+    u8 pad5c[0x38];
+    f32 p94[3];
+    u8 pada0[0x14];
+    f32 fb4;
+} Obj;
+
+typedef struct Fn620C8Model {
+    u8 pad_0[0x8];
+    u8 data[0xC];
+    f32 scale;
+} Fn620C8Model;
+
+typedef struct Fn620C8TexObj {
+    u32 dummy[8];
+    void *image;
+} Fn620C8TexObj;
+
+typedef struct Fn620C8Obj {
+    u8 pad_0[0x28];
+    f32 time;
+    u8 pad_2C[0x8];
+    Fn620C8Model *model;
+    Fn620C8TexObj *tex;
+    u8 rot[0x78];
+    f32 brightness;
+    Fn183D28Vec3 pos;
+} Fn620C8Obj;
+
 // fn_1_594F0: empty in retail (single blr).
 void fn_1_594F0(void) {
 }
 /* fzgx:end fn_1_594F0 */
 
-/* fzgx:begin fn_1_594F4 */
+/* fzgx:begin fn_1_594F4 noprologue */
+#include "types.h"
+#include "game/main_rel/effect_types.h"
+#include "dolphin/types.h"
+#include "game/main_rel/car_test_types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/effect.h"
+#include "psvec.h"
+
+struct P {
+    u8 pad_0[0xC];
+    f32 unk_C;
+    u8 pad_10[0x18];
+    f32 unk_28;
+    u8 pad_2C[0xC];
+    f64 unk_38;
+    u8 pad_40[0x20];
+    f32 unk_60;
+    f32 unk_64;
+    u8 pad_68[0xC];
+    f32 unk_74;
+    u8 pad_78[0x54];
+    f32 unk_CC;
+    f32 unk_D0;
+    f32 unk_D4;
+    f32 unk_D8;
+    f32 unk_DC;
+};
+
+typedef struct Fn620C8Viewport {
+    f32 x;
+    f32 y;
+    f32 w;
+    f32 h;
+    f32 near;
+    f32 far;
+} Fn620C8Viewport;
+
+typedef struct Obj {
+    u8 b0;
+    u8 pad1[0xF];
+    s32 n10;
+    u8 pad14[4];
+    s16 id18;
+    u8 pad1a[0x0E];
+    f32 f28;
+    f32 f2c;
+    u8 pad30[0x0C];
+    f32 m3c[3];
+    f32 f48;
+    f32 f4c;
+    f32 f50;
+    s16 s54;
+    u8 pad56[4];
+    s16 s5a;
+    u8 pad5c[0x38];
+    f32 p94[3];
+    u8 pada0[0x14];
+    f32 fb4;
+} Obj;
+
+typedef struct Fn620C8Model {
+    u8 pad_0[0x8];
+    u8 data[0xC];
+    f32 scale;
+} Fn620C8Model;
+
+typedef struct Fn620C8TexObj {
+    u32 dummy[8];
+    void *image;
+} Fn620C8TexObj;
+
+typedef struct Fn620C8Obj {
+    u8 pad_0[0x28];
+    f32 time;
+    u8 pad_2C[0x8];
+    Fn620C8Model *model;
+    Fn620C8TexObj *tex;
+    u8 rot[0x78];
+    f32 brightness;
+    Fn183D28Vec3 pos;
+} Fn620C8Obj;
+
 // fn_1_594F4: empty in retail (single blr).
 void fn_1_594F4(void) {
 }
 /* fzgx:end fn_1_594F4 */
 
-/* fzgx:begin fn_1_594F8 */
+/* fzgx:begin fn_1_594F8 noprologue */
+#include "types.h"
+#include "game/main_rel/effect_types.h"
+#include "dolphin/types.h"
+#include "game/main_rel/car_test_types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/effect.h"
+#include "psvec.h"
+
+struct P {
+    u8 pad_0[0xC];
+    f32 unk_C;
+    u8 pad_10[0x18];
+    f32 unk_28;
+    u8 pad_2C[0xC];
+    f64 unk_38;
+    u8 pad_40[0x20];
+    f32 unk_60;
+    f32 unk_64;
+    u8 pad_68[0xC];
+    f32 unk_74;
+    u8 pad_78[0x54];
+    f32 unk_CC;
+    f32 unk_D0;
+    f32 unk_D4;
+    f32 unk_D8;
+    f32 unk_DC;
+};
+
+typedef struct Fn620C8Viewport {
+    f32 x;
+    f32 y;
+    f32 w;
+    f32 h;
+    f32 near;
+    f32 far;
+} Fn620C8Viewport;
+
+typedef struct Obj {
+    u8 b0;
+    u8 pad1[0xF];
+    s32 n10;
+    u8 pad14[4];
+    s16 id18;
+    u8 pad1a[0x0E];
+    f32 f28;
+    f32 f2c;
+    u8 pad30[0x0C];
+    f32 m3c[3];
+    f32 f48;
+    f32 f4c;
+    f32 f50;
+    s16 s54;
+    u8 pad56[4];
+    s16 s5a;
+    u8 pad5c[0x38];
+    f32 p94[3];
+    u8 pada0[0x14];
+    f32 fb4;
+} Obj;
+
+typedef struct Fn620C8Model {
+    u8 pad_0[0x8];
+    u8 data[0xC];
+    f32 scale;
+} Fn620C8Model;
+
+typedef struct Fn620C8TexObj {
+    u32 dummy[8];
+    void *image;
+} Fn620C8TexObj;
+
+typedef struct Fn620C8Obj {
+    u8 pad_0[0x28];
+    f32 time;
+    u8 pad_2C[0x8];
+    Fn620C8Model *model;
+    Fn620C8TexObj *tex;
+    u8 rot[0x78];
+    f32 brightness;
+    Fn183D28Vec3 pos;
+} Fn620C8Obj;
+
 // fn_1_594F8: empty in retail (single blr).
 void fn_1_594F8(void) {
 }
 /* fzgx:end fn_1_594F8 */
 
-/* fzgx:begin fn_1_594FC */
+/* fzgx:begin fn_1_594FC noprologue */
+#include "types.h"
+#include "game/main_rel/effect_types.h"
+#include "dolphin/types.h"
+#include "game/main_rel/car_test_types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/effect.h"
+#include "psvec.h"
+
+struct P {
+    u8 pad_0[0xC];
+    f32 unk_C;
+    u8 pad_10[0x18];
+    f32 unk_28;
+    u8 pad_2C[0xC];
+    f64 unk_38;
+    u8 pad_40[0x20];
+    f32 unk_60;
+    f32 unk_64;
+    u8 pad_68[0xC];
+    f32 unk_74;
+    u8 pad_78[0x54];
+    f32 unk_CC;
+    f32 unk_D0;
+    f32 unk_D4;
+    f32 unk_D8;
+    f32 unk_DC;
+};
+
+typedef struct Fn620C8Viewport {
+    f32 x;
+    f32 y;
+    f32 w;
+    f32 h;
+    f32 near;
+    f32 far;
+} Fn620C8Viewport;
+
+typedef struct Obj {
+    u8 b0;
+    u8 pad1[0xF];
+    s32 n10;
+    u8 pad14[4];
+    s16 id18;
+    u8 pad1a[0x0E];
+    f32 f28;
+    f32 f2c;
+    u8 pad30[0x0C];
+    f32 m3c[3];
+    f32 f48;
+    f32 f4c;
+    f32 f50;
+    s16 s54;
+    u8 pad56[4];
+    s16 s5a;
+    u8 pad5c[0x38];
+    f32 p94[3];
+    u8 pada0[0x14];
+    f32 fb4;
+} Obj;
+
+typedef struct Fn620C8Model {
+    u8 pad_0[0x8];
+    u8 data[0xC];
+    f32 scale;
+} Fn620C8Model;
+
+typedef struct Fn620C8TexObj {
+    u32 dummy[8];
+    void *image;
+} Fn620C8TexObj;
+
+typedef struct Fn620C8Obj {
+    u8 pad_0[0x28];
+    f32 time;
+    u8 pad_2C[0x8];
+    Fn620C8Model *model;
+    Fn620C8TexObj *tex;
+    u8 rot[0x78];
+    f32 brightness;
+    Fn183D28Vec3 pos;
+} Fn620C8Obj;
+
 // fn_1_594FC: empty in retail (single blr).
 void fn_1_594FC(void) {
 }
 /* fzgx:end fn_1_594FC */
 
-/* fzgx:begin fn_1_59500 */
+/* fzgx:begin fn_1_59500 noprologue */
+#include "types.h"
+#include "game/main_rel/effect_types.h"
+#include "dolphin/types.h"
+#include "game/main_rel/car_test_types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/effect.h"
+#include "psvec.h"
+
+struct P {
+    u8 pad_0[0xC];
+    f32 unk_C;
+    u8 pad_10[0x18];
+    f32 unk_28;
+    u8 pad_2C[0xC];
+    f64 unk_38;
+    u8 pad_40[0x20];
+    f32 unk_60;
+    f32 unk_64;
+    u8 pad_68[0xC];
+    f32 unk_74;
+    u8 pad_78[0x54];
+    f32 unk_CC;
+    f32 unk_D0;
+    f32 unk_D4;
+    f32 unk_D8;
+    f32 unk_DC;
+};
+
+typedef struct Fn620C8Viewport {
+    f32 x;
+    f32 y;
+    f32 w;
+    f32 h;
+    f32 near;
+    f32 far;
+} Fn620C8Viewport;
+
+typedef struct Obj {
+    u8 b0;
+    u8 pad1[0xF];
+    s32 n10;
+    u8 pad14[4];
+    s16 id18;
+    u8 pad1a[0x0E];
+    f32 f28;
+    f32 f2c;
+    u8 pad30[0x0C];
+    f32 m3c[3];
+    f32 f48;
+    f32 f4c;
+    f32 f50;
+    s16 s54;
+    u8 pad56[4];
+    s16 s5a;
+    u8 pad5c[0x38];
+    f32 p94[3];
+    u8 pada0[0x14];
+    f32 fb4;
+} Obj;
+
+typedef struct Fn620C8Model {
+    u8 pad_0[0x8];
+    u8 data[0xC];
+    f32 scale;
+} Fn620C8Model;
+
+typedef struct Fn620C8TexObj {
+    u32 dummy[8];
+    void *image;
+} Fn620C8TexObj;
+
+typedef struct Fn620C8Obj {
+    u8 pad_0[0x28];
+    f32 time;
+    u8 pad_2C[0x8];
+    Fn620C8Model *model;
+    Fn620C8TexObj *tex;
+    u8 rot[0x78];
+    f32 brightness;
+    Fn183D28Vec3 pos;
+} Fn620C8Obj;
+
 // fn_1_59500: empty in retail (single blr).
 void fn_1_59500(void) {
 }
 /* fzgx:end fn_1_59500 */
 
-/* fzgx:begin fn_1_59504 */
+/* fzgx:begin fn_1_59504 noprologue */
+#include "types.h"
+#include "game/main_rel/effect_types.h"
+#include "dolphin/types.h"
+#include "game/main_rel/car_test_types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/effect.h"
+#include "psvec.h"
+
+struct P {
+    u8 pad_0[0xC];
+    f32 unk_C;
+    u8 pad_10[0x18];
+    f32 unk_28;
+    u8 pad_2C[0xC];
+    f64 unk_38;
+    u8 pad_40[0x20];
+    f32 unk_60;
+    f32 unk_64;
+    u8 pad_68[0xC];
+    f32 unk_74;
+    u8 pad_78[0x54];
+    f32 unk_CC;
+    f32 unk_D0;
+    f32 unk_D4;
+    f32 unk_D8;
+    f32 unk_DC;
+};
+
+typedef struct Fn620C8Viewport {
+    f32 x;
+    f32 y;
+    f32 w;
+    f32 h;
+    f32 near;
+    f32 far;
+} Fn620C8Viewport;
+
+typedef struct Obj {
+    u8 b0;
+    u8 pad1[0xF];
+    s32 n10;
+    u8 pad14[4];
+    s16 id18;
+    u8 pad1a[0x0E];
+    f32 f28;
+    f32 f2c;
+    u8 pad30[0x0C];
+    f32 m3c[3];
+    f32 f48;
+    f32 f4c;
+    f32 f50;
+    s16 s54;
+    u8 pad56[4];
+    s16 s5a;
+    u8 pad5c[0x38];
+    f32 p94[3];
+    u8 pada0[0x14];
+    f32 fb4;
+} Obj;
+
+typedef struct Fn620C8Model {
+    u8 pad_0[0x8];
+    u8 data[0xC];
+    f32 scale;
+} Fn620C8Model;
+
+typedef struct Fn620C8TexObj {
+    u32 dummy[8];
+    void *image;
+} Fn620C8TexObj;
+
+typedef struct Fn620C8Obj {
+    u8 pad_0[0x28];
+    f32 time;
+    u8 pad_2C[0x8];
+    Fn620C8Model *model;
+    Fn620C8TexObj *tex;
+    u8 rot[0x78];
+    f32 brightness;
+    Fn183D28Vec3 pos;
+} Fn620C8Obj;
+
 // fn_1_59504: empty in retail (single blr).
 void fn_1_59504(void) {
 }
 /* fzgx:end fn_1_59504 */
 
-/* fzgx:begin fn_1_59508 */
+/* fzgx:begin fn_1_59508 noprologue */
+#include "types.h"
+#include "game/main_rel/effect_types.h"
+#include "dolphin/types.h"
+#include "game/main_rel/car_test_types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/effect.h"
+#include "psvec.h"
+
+struct P {
+    u8 pad_0[0xC];
+    f32 unk_C;
+    u8 pad_10[0x18];
+    f32 unk_28;
+    u8 pad_2C[0xC];
+    f64 unk_38;
+    u8 pad_40[0x20];
+    f32 unk_60;
+    f32 unk_64;
+    u8 pad_68[0xC];
+    f32 unk_74;
+    u8 pad_78[0x54];
+    f32 unk_CC;
+    f32 unk_D0;
+    f32 unk_D4;
+    f32 unk_D8;
+    f32 unk_DC;
+};
+
+typedef struct Fn620C8Viewport {
+    f32 x;
+    f32 y;
+    f32 w;
+    f32 h;
+    f32 near;
+    f32 far;
+} Fn620C8Viewport;
+
+typedef struct Obj {
+    u8 b0;
+    u8 pad1[0xF];
+    s32 n10;
+    u8 pad14[4];
+    s16 id18;
+    u8 pad1a[0x0E];
+    f32 f28;
+    f32 f2c;
+    u8 pad30[0x0C];
+    f32 m3c[3];
+    f32 f48;
+    f32 f4c;
+    f32 f50;
+    s16 s54;
+    u8 pad56[4];
+    s16 s5a;
+    u8 pad5c[0x38];
+    f32 p94[3];
+    u8 pada0[0x14];
+    f32 fb4;
+} Obj;
+
+typedef struct Fn620C8Model {
+    u8 pad_0[0x8];
+    u8 data[0xC];
+    f32 scale;
+} Fn620C8Model;
+
+typedef struct Fn620C8TexObj {
+    u32 dummy[8];
+    void *image;
+} Fn620C8TexObj;
+
+typedef struct Fn620C8Obj {
+    u8 pad_0[0x28];
+    f32 time;
+    u8 pad_2C[0x8];
+    Fn620C8Model *model;
+    Fn620C8TexObj *tex;
+    u8 rot[0x78];
+    f32 brightness;
+    Fn183D28Vec3 pos;
+} Fn620C8Obj;
+
 // fn_1_59508: empty in retail (single blr).
 void fn_1_59508(void) {
 }
 /* fzgx:end fn_1_59508 */
 
-/* fzgx:begin fn_1_5950C */
+/* fzgx:begin fn_1_5950C noprologue */
+#include "types.h"
+#include "game/main_rel/effect_types.h"
+#include "dolphin/types.h"
+#include "game/main_rel/car_test_types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/effect.h"
+#include "psvec.h"
+
+struct P {
+    u8 pad_0[0xC];
+    f32 unk_C;
+    u8 pad_10[0x18];
+    f32 unk_28;
+    u8 pad_2C[0xC];
+    f64 unk_38;
+    u8 pad_40[0x20];
+    f32 unk_60;
+    f32 unk_64;
+    u8 pad_68[0xC];
+    f32 unk_74;
+    u8 pad_78[0x54];
+    f32 unk_CC;
+    f32 unk_D0;
+    f32 unk_D4;
+    f32 unk_D8;
+    f32 unk_DC;
+};
+
+typedef struct Fn620C8Viewport {
+    f32 x;
+    f32 y;
+    f32 w;
+    f32 h;
+    f32 near;
+    f32 far;
+} Fn620C8Viewport;
+
+typedef struct Obj {
+    u8 b0;
+    u8 pad1[0xF];
+    s32 n10;
+    u8 pad14[4];
+    s16 id18;
+    u8 pad1a[0x0E];
+    f32 f28;
+    f32 f2c;
+    u8 pad30[0x0C];
+    f32 m3c[3];
+    f32 f48;
+    f32 f4c;
+    f32 f50;
+    s16 s54;
+    u8 pad56[4];
+    s16 s5a;
+    u8 pad5c[0x38];
+    f32 p94[3];
+    u8 pada0[0x14];
+    f32 fb4;
+} Obj;
+
+typedef struct Fn620C8Model {
+    u8 pad_0[0x8];
+    u8 data[0xC];
+    f32 scale;
+} Fn620C8Model;
+
+typedef struct Fn620C8TexObj {
+    u32 dummy[8];
+    void *image;
+} Fn620C8TexObj;
+
+typedef struct Fn620C8Obj {
+    u8 pad_0[0x28];
+    f32 time;
+    u8 pad_2C[0x8];
+    Fn620C8Model *model;
+    Fn620C8TexObj *tex;
+    u8 rot[0x78];
+    f32 brightness;
+    Fn183D28Vec3 pos;
+} Fn620C8Obj;
+
 // fn_1_5950C: empty in retail (single blr).
 void fn_1_5950C(void) {
 }
 /* fzgx:end fn_1_5950C */
 
-/* fzgx:begin fn_1_59510 */
+/* fzgx:begin fn_1_59510 noprologue */
+#include "types.h"
+#include "game/main_rel/effect_types.h"
+#include "dolphin/types.h"
+#include "game/main_rel/car_test_types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/effect.h"
+#include "psvec.h"
+
+struct P {
+    u8 pad_0[0xC];
+    f32 unk_C;
+    u8 pad_10[0x18];
+    f32 unk_28;
+    u8 pad_2C[0xC];
+    f64 unk_38;
+    u8 pad_40[0x20];
+    f32 unk_60;
+    f32 unk_64;
+    u8 pad_68[0xC];
+    f32 unk_74;
+    u8 pad_78[0x54];
+    f32 unk_CC;
+    f32 unk_D0;
+    f32 unk_D4;
+    f32 unk_D8;
+    f32 unk_DC;
+};
+
+typedef struct Fn620C8Viewport {
+    f32 x;
+    f32 y;
+    f32 w;
+    f32 h;
+    f32 near;
+    f32 far;
+} Fn620C8Viewport;
+
+typedef struct Obj {
+    u8 b0;
+    u8 pad1[0xF];
+    s32 n10;
+    u8 pad14[4];
+    s16 id18;
+    u8 pad1a[0x0E];
+    f32 f28;
+    f32 f2c;
+    u8 pad30[0x0C];
+    f32 m3c[3];
+    f32 f48;
+    f32 f4c;
+    f32 f50;
+    s16 s54;
+    u8 pad56[4];
+    s16 s5a;
+    u8 pad5c[0x38];
+    f32 p94[3];
+    u8 pada0[0x14];
+    f32 fb4;
+} Obj;
+
+typedef struct Fn620C8Model {
+    u8 pad_0[0x8];
+    u8 data[0xC];
+    f32 scale;
+} Fn620C8Model;
+
+typedef struct Fn620C8TexObj {
+    u32 dummy[8];
+    void *image;
+} Fn620C8TexObj;
+
+typedef struct Fn620C8Obj {
+    u8 pad_0[0x28];
+    f32 time;
+    u8 pad_2C[0x8];
+    Fn620C8Model *model;
+    Fn620C8TexObj *tex;
+    u8 rot[0x78];
+    f32 brightness;
+    Fn183D28Vec3 pos;
+} Fn620C8Obj;
+
 // fn_1_59510: empty in retail (single blr).
 void fn_1_59510(void) {
 }
 /* fzgx:end fn_1_59510 */
 
-/* fzgx:begin fn_1_59514 */
+/* fzgx:begin fn_1_59514 noprologue */
+#include "types.h"
+#include "game/main_rel/effect_types.h"
+#include "dolphin/types.h"
+#include "game/main_rel/car_test_types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/effect.h"
+#include "psvec.h"
+
+struct P {
+    u8 pad_0[0xC];
+    f32 unk_C;
+    u8 pad_10[0x18];
+    f32 unk_28;
+    u8 pad_2C[0xC];
+    f64 unk_38;
+    u8 pad_40[0x20];
+    f32 unk_60;
+    f32 unk_64;
+    u8 pad_68[0xC];
+    f32 unk_74;
+    u8 pad_78[0x54];
+    f32 unk_CC;
+    f32 unk_D0;
+    f32 unk_D4;
+    f32 unk_D8;
+    f32 unk_DC;
+};
+
+typedef struct Fn620C8Viewport {
+    f32 x;
+    f32 y;
+    f32 w;
+    f32 h;
+    f32 near;
+    f32 far;
+} Fn620C8Viewport;
+
+typedef struct Obj {
+    u8 b0;
+    u8 pad1[0xF];
+    s32 n10;
+    u8 pad14[4];
+    s16 id18;
+    u8 pad1a[0x0E];
+    f32 f28;
+    f32 f2c;
+    u8 pad30[0x0C];
+    f32 m3c[3];
+    f32 f48;
+    f32 f4c;
+    f32 f50;
+    s16 s54;
+    u8 pad56[4];
+    s16 s5a;
+    u8 pad5c[0x38];
+    f32 p94[3];
+    u8 pada0[0x14];
+    f32 fb4;
+} Obj;
+
+typedef struct Fn620C8Model {
+    u8 pad_0[0x8];
+    u8 data[0xC];
+    f32 scale;
+} Fn620C8Model;
+
+typedef struct Fn620C8TexObj {
+    u32 dummy[8];
+    void *image;
+} Fn620C8TexObj;
+
+typedef struct Fn620C8Obj {
+    u8 pad_0[0x28];
+    f32 time;
+    u8 pad_2C[0x8];
+    Fn620C8Model *model;
+    Fn620C8TexObj *tex;
+    u8 rot[0x78];
+    f32 brightness;
+    Fn183D28Vec3 pos;
+} Fn620C8Obj;
+extern f32 fn_1_8652C(int index);
+
 void fn_1_59514(void *obj) {
     if (*(s32 *)((u8 *)obj + 0x10) == 0) {
         u32 s = lbl_1_data_1D628 * 0x41c64e6d + 0x3039;
@@ -1332,13 +3744,177 @@ void fn_1_59770(fn_1_59770_Effect *effect)
 #pragma opt_propagation reset
 /* fzgx:end fn_1_59770 */
 
-/* fzgx:begin fn_1_59A70 */
+/* fzgx:begin fn_1_59A70 noprologue */
+#include "types.h"
+#include "game/main_rel/effect_types.h"
+#include "dolphin/types.h"
+#include "game/main_rel/car_test_types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/effect.h"
+#include "psvec.h"
+
+struct P {
+    u8 pad_0[0xC];
+    f32 unk_C;
+    u8 pad_10[0x18];
+    f32 unk_28;
+    u8 pad_2C[0xC];
+    f64 unk_38;
+    u8 pad_40[0x20];
+    f32 unk_60;
+    f32 unk_64;
+    u8 pad_68[0xC];
+    f32 unk_74;
+    u8 pad_78[0x54];
+    f32 unk_CC;
+    f32 unk_D0;
+    f32 unk_D4;
+    f32 unk_D8;
+    f32 unk_DC;
+};
+
+typedef struct Fn620C8Viewport {
+    f32 x;
+    f32 y;
+    f32 w;
+    f32 h;
+    f32 near;
+    f32 far;
+} Fn620C8Viewport;
+
+typedef struct Obj {
+    u8 b0;
+    u8 pad1[0xF];
+    s32 n10;
+    u8 pad14[4];
+    s16 id18;
+    u8 pad1a[0x0E];
+    f32 f28;
+    f32 f2c;
+    u8 pad30[0x0C];
+    f32 m3c[3];
+    f32 f48;
+    f32 f4c;
+    f32 f50;
+    s16 s54;
+    u8 pad56[4];
+    s16 s5a;
+    u8 pad5c[0x38];
+    f32 p94[3];
+    u8 pada0[0x14];
+    f32 fb4;
+} Obj;
+
+typedef struct Fn620C8Model {
+    u8 pad_0[0x8];
+    u8 data[0xC];
+    f32 scale;
+} Fn620C8Model;
+
+typedef struct Fn620C8TexObj {
+    u32 dummy[8];
+    void *image;
+} Fn620C8TexObj;
+
+typedef struct Fn620C8Obj {
+    u8 pad_0[0x28];
+    f32 time;
+    u8 pad_2C[0x8];
+    Fn620C8Model *model;
+    Fn620C8TexObj *tex;
+    u8 rot[0x78];
+    f32 brightness;
+    Fn183D28Vec3 pos;
+} Fn620C8Obj;
+
 // fn_1_59A70: empty in retail (single blr).
 void fn_1_59A70(void) {
 }
 /* fzgx:end fn_1_59A70 */
 
-/* fzgx:begin fn_1_59A74 */
+/* fzgx:begin fn_1_59A74 noprologue */
+#include "types.h"
+#include "game/main_rel/effect_types.h"
+#include "dolphin/types.h"
+#include "game/main_rel/car_test_types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/effect.h"
+#include "psvec.h"
+
+struct P {
+    u8 pad_0[0xC];
+    f32 unk_C;
+    u8 pad_10[0x18];
+    f32 unk_28;
+    u8 pad_2C[0xC];
+    f64 unk_38;
+    u8 pad_40[0x20];
+    f32 unk_60;
+    f32 unk_64;
+    u8 pad_68[0xC];
+    f32 unk_74;
+    u8 pad_78[0x54];
+    f32 unk_CC;
+    f32 unk_D0;
+    f32 unk_D4;
+    f32 unk_D8;
+    f32 unk_DC;
+};
+
+typedef struct Fn620C8Viewport {
+    f32 x;
+    f32 y;
+    f32 w;
+    f32 h;
+    f32 near;
+    f32 far;
+} Fn620C8Viewport;
+
+typedef struct Obj {
+    u8 b0;
+    u8 pad1[0xF];
+    s32 n10;
+    u8 pad14[4];
+    s16 id18;
+    u8 pad1a[0x0E];
+    f32 f28;
+    f32 f2c;
+    u8 pad30[0x0C];
+    f32 m3c[3];
+    f32 f48;
+    f32 f4c;
+    f32 f50;
+    s16 s54;
+    u8 pad56[4];
+    s16 s5a;
+    u8 pad5c[0x38];
+    f32 p94[3];
+    u8 pada0[0x14];
+    f32 fb4;
+} Obj;
+
+typedef struct Fn620C8Model {
+    u8 pad_0[0x8];
+    u8 data[0xC];
+    f32 scale;
+} Fn620C8Model;
+
+typedef struct Fn620C8TexObj {
+    u32 dummy[8];
+    void *image;
+} Fn620C8TexObj;
+
+typedef struct Fn620C8Obj {
+    u8 pad_0[0x28];
+    f32 time;
+    u8 pad_2C[0x8];
+    Fn620C8Model *model;
+    Fn620C8TexObj *tex;
+    u8 rot[0x78];
+    f32 brightness;
+    Fn183D28Vec3 pos;
+} Fn620C8Obj;
+
 #pragma section code_type ".fzgxpool"
 __declspec(section ".fzgxpool") static void fzgx_pool_prime1(void) {
     volatile f32 s; volatile f64 d;  /* fzgx-allow: S2 pool primer sinks */
@@ -1391,7 +3967,89 @@ void fn_1_59A74(struct fn_1_59A74_Arg0 *arg0) {
 }
 /* fzgx:end fn_1_59A74 */
 
-/* fzgx:begin fn_1_59B00 */
+/* fzgx:begin fn_1_59B00 noprologue */
+#include "types.h"
+#include "game/main_rel/effect_types.h"
+#include "dolphin/types.h"
+#include "game/main_rel/car_test_types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/effect.h"
+#include "psvec.h"
+
+struct P {
+    u8 pad_0[0xC];
+    f32 unk_C;
+    u8 pad_10[0x18];
+    f32 unk_28;
+    u8 pad_2C[0xC];
+    f64 unk_38;
+    u8 pad_40[0x20];
+    f32 unk_60;
+    f32 unk_64;
+    u8 pad_68[0xC];
+    f32 unk_74;
+    u8 pad_78[0x54];
+    f32 unk_CC;
+    f32 unk_D0;
+    f32 unk_D4;
+    f32 unk_D8;
+    f32 unk_DC;
+};
+
+typedef struct Fn620C8Viewport {
+    f32 x;
+    f32 y;
+    f32 w;
+    f32 h;
+    f32 near;
+    f32 far;
+} Fn620C8Viewport;
+
+typedef struct Obj {
+    u8 b0;
+    u8 pad1[0xF];
+    s32 n10;
+    u8 pad14[4];
+    s16 id18;
+    u8 pad1a[0x0E];
+    f32 f28;
+    f32 f2c;
+    u8 pad30[0x0C];
+    f32 m3c[3];
+    f32 f48;
+    f32 f4c;
+    f32 f50;
+    s16 s54;
+    u8 pad56[4];
+    s16 s5a;
+    u8 pad5c[0x38];
+    f32 p94[3];
+    u8 pada0[0x14];
+    f32 fb4;
+} Obj;
+
+typedef struct Fn620C8Model {
+    u8 pad_0[0x8];
+    u8 data[0xC];
+    f32 scale;
+} Fn620C8Model;
+
+typedef struct Fn620C8TexObj {
+    u32 dummy[8];
+    void *image;
+} Fn620C8TexObj;
+
+typedef struct Fn620C8Obj {
+    u8 pad_0[0x28];
+    f32 time;
+    u8 pad_2C[0x8];
+    Fn620C8Model *model;
+    Fn620C8TexObj *tex;
+    u8 rot[0x78];
+    f32 brightness;
+    Fn183D28Vec3 pos;
+} Fn620C8Obj;
+
 typedef struct fn_1_59B00_Effect {
     u8 pad_00[0x10];
     s32 frame;
@@ -1512,13 +4170,178 @@ void fn_1_59B90(Fn59B90Arg *arg) {
 }
 /* fzgx:end fn_1_59B90 */
 
-/* fzgx:begin fn_1_59CC4 */
+/* fzgx:begin fn_1_59CC4 noprologue */
+#include "types.h"
+#include "game/main_rel/effect_types.h"
+#include "dolphin/types.h"
+#include "game/main_rel/car_test_types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/effect.h"
+#include "psvec.h"
+
+struct P {
+    u8 pad_0[0xC];
+    f32 unk_C;
+    u8 pad_10[0x18];
+    f32 unk_28;
+    u8 pad_2C[0xC];
+    f64 unk_38;
+    u8 pad_40[0x20];
+    f32 unk_60;
+    f32 unk_64;
+    u8 pad_68[0xC];
+    f32 unk_74;
+    u8 pad_78[0x54];
+    f32 unk_CC;
+    f32 unk_D0;
+    f32 unk_D4;
+    f32 unk_D8;
+    f32 unk_DC;
+};
+
+typedef struct Fn620C8Viewport {
+    f32 x;
+    f32 y;
+    f32 w;
+    f32 h;
+    f32 near;
+    f32 far;
+} Fn620C8Viewport;
+
+typedef struct Obj {
+    u8 b0;
+    u8 pad1[0xF];
+    s32 n10;
+    u8 pad14[4];
+    s16 id18;
+    u8 pad1a[0x0E];
+    f32 f28;
+    f32 f2c;
+    u8 pad30[0x0C];
+    f32 m3c[3];
+    f32 f48;
+    f32 f4c;
+    f32 f50;
+    s16 s54;
+    u8 pad56[4];
+    s16 s5a;
+    u8 pad5c[0x38];
+    f32 p94[3];
+    u8 pada0[0x14];
+    f32 fb4;
+} Obj;
+
+typedef struct Fn620C8Model {
+    u8 pad_0[0x8];
+    u8 data[0xC];
+    f32 scale;
+} Fn620C8Model;
+
+typedef struct Fn620C8TexObj {
+    u32 dummy[8];
+    void *image;
+} Fn620C8TexObj;
+
+typedef struct Fn620C8Obj {
+    u8 pad_0[0x28];
+    f32 time;
+    u8 pad_2C[0x8];
+    Fn620C8Model *model;
+    Fn620C8TexObj *tex;
+    u8 rot[0x78];
+    f32 brightness;
+    Fn183D28Vec3 pos;
+} Fn620C8Obj;
+
 // fn_1_59CC4: empty in retail (single blr).
 void fn_1_59CC4(void) {
 }
 /* fzgx:end fn_1_59CC4 */
 
-/* fzgx:begin fn_1_59CC8 */
+/* fzgx:begin fn_1_59CC8 noprologue */
+#include "types.h"
+#include "game/main_rel/effect_types.h"
+#include "dolphin/types.h"
+#include "game/main_rel/car_test_types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/effect.h"
+#include "psvec.h"
+
+struct P {
+    u8 pad_0[0xC];
+    f32 unk_C;
+    u8 pad_10[0x18];
+    f32 unk_28;
+    u8 pad_2C[0xC];
+    f64 unk_38;
+    u8 pad_40[0x20];
+    f32 unk_60;
+    f32 unk_64;
+    u8 pad_68[0xC];
+    f32 unk_74;
+    u8 pad_78[0x54];
+    f32 unk_CC;
+    f32 unk_D0;
+    f32 unk_D4;
+    f32 unk_D8;
+    f32 unk_DC;
+};
+
+typedef struct Fn620C8Viewport {
+    f32 x;
+    f32 y;
+    f32 w;
+    f32 h;
+    f32 near;
+    f32 far;
+} Fn620C8Viewport;
+
+typedef struct Obj {
+    u8 b0;
+    u8 pad1[0xF];
+    s32 n10;
+    u8 pad14[4];
+    s16 id18;
+    u8 pad1a[0x0E];
+    f32 f28;
+    f32 f2c;
+    u8 pad30[0x0C];
+    f32 m3c[3];
+    f32 f48;
+    f32 f4c;
+    f32 f50;
+    s16 s54;
+    u8 pad56[4];
+    s16 s5a;
+    u8 pad5c[0x38];
+    f32 p94[3];
+    u8 pada0[0x14];
+    f32 fb4;
+} Obj;
+
+typedef struct Fn620C8Model {
+    u8 pad_0[0x8];
+    u8 data[0xC];
+    f32 scale;
+} Fn620C8Model;
+
+typedef struct Fn620C8TexObj {
+    u32 dummy[8];
+    void *image;
+} Fn620C8TexObj;
+
+typedef struct Fn620C8Obj {
+    u8 pad_0[0x28];
+    f32 time;
+    u8 pad_2C[0x8];
+    Fn620C8Model *model;
+    Fn620C8TexObj *tex;
+    u8 rot[0x78];
+    f32 brightness;
+    Fn183D28Vec3 pos;
+} Fn620C8Obj;
+extern const f32 lbl_1_rodata_2950;
+
 #pragma section code_type ".fzgxpool"
 __declspec(section ".fzgxpool") static void fzgx_pool_prime1(void) {
     volatile f32 s; volatile f64 d;  /* fzgx-allow: S2 pool primer sinks */
@@ -1576,7 +4399,91 @@ void fn_1_59CC8(struct Fn159CC8Object *arg0) {
 #pragma opt_lifetimes reset
 /* fzgx:end fn_1_59CC8 */
 
-/* fzgx:begin fn_1_59D54 */
+/* fzgx:begin fn_1_59D54 noprologue */
+#include "types.h"
+#include "game/main_rel/effect_types.h"
+#include "dolphin/types.h"
+#include "game/main_rel/car_test_types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/effect.h"
+#include "psvec.h"
+
+struct P {
+    u8 pad_0[0xC];
+    f32 unk_C;
+    u8 pad_10[0x18];
+    f32 unk_28;
+    u8 pad_2C[0xC];
+    f64 unk_38;
+    u8 pad_40[0x20];
+    f32 unk_60;
+    f32 unk_64;
+    u8 pad_68[0xC];
+    f32 unk_74;
+    u8 pad_78[0x54];
+    f32 unk_CC;
+    f32 unk_D0;
+    f32 unk_D4;
+    f32 unk_D8;
+    f32 unk_DC;
+};
+
+typedef struct Fn620C8Viewport {
+    f32 x;
+    f32 y;
+    f32 w;
+    f32 h;
+    f32 near;
+    f32 far;
+} Fn620C8Viewport;
+
+typedef struct Obj {
+    u8 b0;
+    u8 pad1[0xF];
+    s32 n10;
+    u8 pad14[4];
+    s16 id18;
+    u8 pad1a[0x0E];
+    f32 f28;
+    f32 f2c;
+    u8 pad30[0x0C];
+    f32 m3c[3];
+    f32 f48;
+    f32 f4c;
+    f32 f50;
+    s16 s54;
+    u8 pad56[4];
+    s16 s5a;
+    u8 pad5c[0x38];
+    f32 p94[3];
+    u8 pada0[0x14];
+    f32 fb4;
+} Obj;
+
+typedef struct Fn620C8Model {
+    u8 pad_0[0x8];
+    u8 data[0xC];
+    f32 scale;
+} Fn620C8Model;
+
+typedef struct Fn620C8TexObj {
+    u32 dummy[8];
+    void *image;
+} Fn620C8TexObj;
+
+typedef struct Fn620C8Obj {
+    u8 pad_0[0x28];
+    f32 time;
+    u8 pad_2C[0x8];
+    Fn620C8Model *model;
+    Fn620C8TexObj *tex;
+    u8 rot[0x78];
+    f32 brightness;
+    Fn183D28Vec3 pos;
+} Fn620C8Obj;
+extern f32 lbl_8006D0B4(f32 value);
+extern void fn_1_862D4(s16 value, void *result);
+
 #pragma section code_type ".fzgxpool"
 __declspec(section ".fzgxpool") static void fzgx_pool_prime1(void) {
     volatile f32 s; volatile f64 d;  /* fzgx-allow: S2 pool primer sinks */
@@ -1678,13 +4585,177 @@ void fn_1_59D54(fn_1_59D54_Effect *effect) {
 }
 /* fzgx:end fn_1_59D54 */
 
-/* fzgx:begin fn_1_5A8CC */
+/* fzgx:begin fn_1_5A8CC noprologue */
+#include "types.h"
+#include "game/main_rel/effect_types.h"
+#include "dolphin/types.h"
+#include "game/main_rel/car_test_types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/effect.h"
+#include "psvec.h"
+
+struct P {
+    u8 pad_0[0xC];
+    f32 unk_C;
+    u8 pad_10[0x18];
+    f32 unk_28;
+    u8 pad_2C[0xC];
+    f64 unk_38;
+    u8 pad_40[0x20];
+    f32 unk_60;
+    f32 unk_64;
+    u8 pad_68[0xC];
+    f32 unk_74;
+    u8 pad_78[0x54];
+    f32 unk_CC;
+    f32 unk_D0;
+    f32 unk_D4;
+    f32 unk_D8;
+    f32 unk_DC;
+};
+
+typedef struct Fn620C8Viewport {
+    f32 x;
+    f32 y;
+    f32 w;
+    f32 h;
+    f32 near;
+    f32 far;
+} Fn620C8Viewport;
+
+typedef struct Obj {
+    u8 b0;
+    u8 pad1[0xF];
+    s32 n10;
+    u8 pad14[4];
+    s16 id18;
+    u8 pad1a[0x0E];
+    f32 f28;
+    f32 f2c;
+    u8 pad30[0x0C];
+    f32 m3c[3];
+    f32 f48;
+    f32 f4c;
+    f32 f50;
+    s16 s54;
+    u8 pad56[4];
+    s16 s5a;
+    u8 pad5c[0x38];
+    f32 p94[3];
+    u8 pada0[0x14];
+    f32 fb4;
+} Obj;
+
+typedef struct Fn620C8Model {
+    u8 pad_0[0x8];
+    u8 data[0xC];
+    f32 scale;
+} Fn620C8Model;
+
+typedef struct Fn620C8TexObj {
+    u32 dummy[8];
+    void *image;
+} Fn620C8TexObj;
+
+typedef struct Fn620C8Obj {
+    u8 pad_0[0x28];
+    f32 time;
+    u8 pad_2C[0x8];
+    Fn620C8Model *model;
+    Fn620C8TexObj *tex;
+    u8 rot[0x78];
+    f32 brightness;
+    Fn183D28Vec3 pos;
+} Fn620C8Obj;
+
 // fn_1_5A8CC: empty in retail (single blr).
 void fn_1_5A8CC(void) {
 }
 /* fzgx:end fn_1_5A8CC */
 
-/* fzgx:begin fn_1_5A8D0 */
+/* fzgx:begin fn_1_5A8D0 noprologue */
+#include "types.h"
+#include "game/main_rel/effect_types.h"
+#include "dolphin/types.h"
+#include "game/main_rel/car_test_types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/effect.h"
+#include "psvec.h"
+
+struct P {
+    u8 pad_0[0xC];
+    f32 unk_C;
+    u8 pad_10[0x18];
+    f32 unk_28;
+    u8 pad_2C[0xC];
+    f64 unk_38;
+    u8 pad_40[0x20];
+    f32 unk_60;
+    f32 unk_64;
+    u8 pad_68[0xC];
+    f32 unk_74;
+    u8 pad_78[0x54];
+    f32 unk_CC;
+    f32 unk_D0;
+    f32 unk_D4;
+    f32 unk_D8;
+    f32 unk_DC;
+};
+
+typedef struct Fn620C8Viewport {
+    f32 x;
+    f32 y;
+    f32 w;
+    f32 h;
+    f32 near;
+    f32 far;
+} Fn620C8Viewport;
+
+typedef struct Obj {
+    u8 b0;
+    u8 pad1[0xF];
+    s32 n10;
+    u8 pad14[4];
+    s16 id18;
+    u8 pad1a[0x0E];
+    f32 f28;
+    f32 f2c;
+    u8 pad30[0x0C];
+    f32 m3c[3];
+    f32 f48;
+    f32 f4c;
+    f32 f50;
+    s16 s54;
+    u8 pad56[4];
+    s16 s5a;
+    u8 pad5c[0x38];
+    f32 p94[3];
+    u8 pada0[0x14];
+    f32 fb4;
+} Obj;
+
+typedef struct Fn620C8Model {
+    u8 pad_0[0x8];
+    u8 data[0xC];
+    f32 scale;
+} Fn620C8Model;
+
+typedef struct Fn620C8TexObj {
+    u32 dummy[8];
+    void *image;
+} Fn620C8TexObj;
+
+typedef struct Fn620C8Obj {
+    u8 pad_0[0x28];
+    f32 time;
+    u8 pad_2C[0x8];
+    Fn620C8Model *model;
+    Fn620C8TexObj *tex;
+    u8 rot[0x78];
+    f32 brightness;
+    Fn183D28Vec3 pos;
+} Fn620C8Obj;
+
 typedef struct {
     u8 pad[0x10];
     s32 field_10;
@@ -1886,19 +4957,265 @@ void fn_1_5A8DC(Fn15A8DCObject *obj) {
 }
 /* fzgx:end fn_1_5A8DC */
 
-/* fzgx:begin fn_1_5ABC4 */
+/* fzgx:begin fn_1_5ABC4 noprologue */
+#include "types.h"
+#include "game/main_rel/effect_types.h"
+#include "dolphin/types.h"
+#include "game/main_rel/car_test_types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/effect.h"
+#include "psvec.h"
+
+struct P {
+    u8 pad_0[0xC];
+    f32 unk_C;
+    u8 pad_10[0x18];
+    f32 unk_28;
+    u8 pad_2C[0xC];
+    f64 unk_38;
+    u8 pad_40[0x20];
+    f32 unk_60;
+    f32 unk_64;
+    u8 pad_68[0xC];
+    f32 unk_74;
+    u8 pad_78[0x54];
+    f32 unk_CC;
+    f32 unk_D0;
+    f32 unk_D4;
+    f32 unk_D8;
+    f32 unk_DC;
+};
+
+typedef struct Fn620C8Viewport {
+    f32 x;
+    f32 y;
+    f32 w;
+    f32 h;
+    f32 near;
+    f32 far;
+} Fn620C8Viewport;
+
+typedef struct Obj {
+    u8 b0;
+    u8 pad1[0xF];
+    s32 n10;
+    u8 pad14[4];
+    s16 id18;
+    u8 pad1a[0x0E];
+    f32 f28;
+    f32 f2c;
+    u8 pad30[0x0C];
+    f32 m3c[3];
+    f32 f48;
+    f32 f4c;
+    f32 f50;
+    s16 s54;
+    u8 pad56[4];
+    s16 s5a;
+    u8 pad5c[0x38];
+    f32 p94[3];
+    u8 pada0[0x14];
+    f32 fb4;
+} Obj;
+
+typedef struct Fn620C8Model {
+    u8 pad_0[0x8];
+    u8 data[0xC];
+    f32 scale;
+} Fn620C8Model;
+
+typedef struct Fn620C8TexObj {
+    u32 dummy[8];
+    void *image;
+} Fn620C8TexObj;
+
+typedef struct Fn620C8Obj {
+    u8 pad_0[0x28];
+    f32 time;
+    u8 pad_2C[0x8];
+    Fn620C8Model *model;
+    Fn620C8TexObj *tex;
+    u8 rot[0x78];
+    f32 brightness;
+    Fn183D28Vec3 pos;
+} Fn620C8Obj;
+
 // fn_1_5ABC4: empty in retail (single blr).
 void fn_1_5ABC4(void) {
 }
 /* fzgx:end fn_1_5ABC4 */
 
-/* fzgx:begin fn_1_5ABC8 */
+/* fzgx:begin fn_1_5ABC8 noprologue */
+#include "types.h"
+#include "game/main_rel/effect_types.h"
+#include "dolphin/types.h"
+#include "game/main_rel/car_test_types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/effect.h"
+#include "psvec.h"
+
+struct P {
+    u8 pad_0[0xC];
+    f32 unk_C;
+    u8 pad_10[0x18];
+    f32 unk_28;
+    u8 pad_2C[0xC];
+    f64 unk_38;
+    u8 pad_40[0x20];
+    f32 unk_60;
+    f32 unk_64;
+    u8 pad_68[0xC];
+    f32 unk_74;
+    u8 pad_78[0x54];
+    f32 unk_CC;
+    f32 unk_D0;
+    f32 unk_D4;
+    f32 unk_D8;
+    f32 unk_DC;
+};
+
+typedef struct Fn620C8Viewport {
+    f32 x;
+    f32 y;
+    f32 w;
+    f32 h;
+    f32 near;
+    f32 far;
+} Fn620C8Viewport;
+
+typedef struct Obj {
+    u8 b0;
+    u8 pad1[0xF];
+    s32 n10;
+    u8 pad14[4];
+    s16 id18;
+    u8 pad1a[0x0E];
+    f32 f28;
+    f32 f2c;
+    u8 pad30[0x0C];
+    f32 m3c[3];
+    f32 f48;
+    f32 f4c;
+    f32 f50;
+    s16 s54;
+    u8 pad56[4];
+    s16 s5a;
+    u8 pad5c[0x38];
+    f32 p94[3];
+    u8 pada0[0x14];
+    f32 fb4;
+} Obj;
+
+typedef struct Fn620C8Model {
+    u8 pad_0[0x8];
+    u8 data[0xC];
+    f32 scale;
+} Fn620C8Model;
+
+typedef struct Fn620C8TexObj {
+    u32 dummy[8];
+    void *image;
+} Fn620C8TexObj;
+
+typedef struct Fn620C8Obj {
+    u8 pad_0[0x28];
+    f32 time;
+    u8 pad_2C[0x8];
+    Fn620C8Model *model;
+    Fn620C8TexObj *tex;
+    u8 rot[0x78];
+    f32 brightness;
+    Fn183D28Vec3 pos;
+} Fn620C8Obj;
+
 // fn_1_5ABC8: empty in retail (single blr).
 void fn_1_5ABC8(void) {
 }
 /* fzgx:end fn_1_5ABC8 */
 
-/* fzgx:begin fn_1_5ABCC */
+/* fzgx:begin fn_1_5ABCC noprologue */
+#include "types.h"
+#include "game/main_rel/effect_types.h"
+#include "dolphin/types.h"
+#include "game/main_rel/car_test_types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/effect.h"
+#include "psvec.h"
+
+struct P {
+    u8 pad_0[0xC];
+    f32 unk_C;
+    u8 pad_10[0x18];
+    f32 unk_28;
+    u8 pad_2C[0xC];
+    f64 unk_38;
+    u8 pad_40[0x20];
+    f32 unk_60;
+    f32 unk_64;
+    u8 pad_68[0xC];
+    f32 unk_74;
+    u8 pad_78[0x54];
+    f32 unk_CC;
+    f32 unk_D0;
+    f32 unk_D4;
+    f32 unk_D8;
+    f32 unk_DC;
+};
+
+typedef struct Fn620C8Viewport {
+    f32 x;
+    f32 y;
+    f32 w;
+    f32 h;
+    f32 near;
+    f32 far;
+} Fn620C8Viewport;
+
+typedef struct Obj {
+    u8 b0;
+    u8 pad1[0xF];
+    s32 n10;
+    u8 pad14[4];
+    s16 id18;
+    u8 pad1a[0x0E];
+    f32 f28;
+    f32 f2c;
+    u8 pad30[0x0C];
+    f32 m3c[3];
+    f32 f48;
+    f32 f4c;
+    f32 f50;
+    s16 s54;
+    u8 pad56[4];
+    s16 s5a;
+    u8 pad5c[0x38];
+    f32 p94[3];
+    u8 pada0[0x14];
+    f32 fb4;
+} Obj;
+
+typedef struct Fn620C8Model {
+    u8 pad_0[0x8];
+    u8 data[0xC];
+    f32 scale;
+} Fn620C8Model;
+
+typedef struct Fn620C8TexObj {
+    u32 dummy[8];
+    void *image;
+} Fn620C8TexObj;
+
+typedef struct Fn620C8Obj {
+    u8 pad_0[0x28];
+    f32 time;
+    u8 pad_2C[0x8];
+    Fn620C8Model *model;
+    Fn620C8TexObj *tex;
+    u8 rot[0x78];
+    f32 brightness;
+    Fn183D28Vec3 pos;
+} Fn620C8Obj;
+
 #pragma section code_type ".fzgxpool"
 __declspec(section ".fzgxpool") static void fzgx_pool_prime1(void) {
     volatile f32 s; volatile f64 d;  /* fzgx-allow: S2 pool primer sinks */
@@ -1969,7 +5286,92 @@ void fn_1_5ABCC(Fn1_5ABCCOutput *out) {
 #pragma opt_loop_invariants reset
 /* fzgx:end fn_1_5ABCC */
 
-/* fzgx:begin fn_1_5AC48 */
+/* fzgx:begin fn_1_5AC48 noprologue */
+#include "types.h"
+#include "game/main_rel/effect_types.h"
+#include "dolphin/types.h"
+#include "game/main_rel/car_test_types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/effect.h"
+#include "psvec.h"
+
+struct P {
+    u8 pad_0[0xC];
+    f32 unk_C;
+    u8 pad_10[0x18];
+    f32 unk_28;
+    u8 pad_2C[0xC];
+    f64 unk_38;
+    u8 pad_40[0x20];
+    f32 unk_60;
+    f32 unk_64;
+    u8 pad_68[0xC];
+    f32 unk_74;
+    u8 pad_78[0x54];
+    f32 unk_CC;
+    f32 unk_D0;
+    f32 unk_D4;
+    f32 unk_D8;
+    f32 unk_DC;
+};
+
+typedef struct Fn620C8Viewport {
+    f32 x;
+    f32 y;
+    f32 w;
+    f32 h;
+    f32 near;
+    f32 far;
+} Fn620C8Viewport;
+
+typedef struct Obj {
+    u8 b0;
+    u8 pad1[0xF];
+    s32 n10;
+    u8 pad14[4];
+    s16 id18;
+    u8 pad1a[0x0E];
+    f32 f28;
+    f32 f2c;
+    u8 pad30[0x0C];
+    f32 m3c[3];
+    f32 f48;
+    f32 f4c;
+    f32 f50;
+    s16 s54;
+    u8 pad56[4];
+    s16 s5a;
+    u8 pad5c[0x38];
+    f32 p94[3];
+    u8 pada0[0x14];
+    f32 fb4;
+} Obj;
+
+typedef struct Fn620C8Model {
+    u8 pad_0[0x8];
+    u8 data[0xC];
+    f32 scale;
+} Fn620C8Model;
+
+typedef struct Fn620C8TexObj {
+    u32 dummy[8];
+    void *image;
+} Fn620C8TexObj;
+
+typedef struct Fn620C8Obj {
+    u8 pad_0[0x28];
+    f32 time;
+    u8 pad_2C[0x8];
+    Fn620C8Model *model;
+    Fn620C8TexObj *tex;
+    u8 rot[0x78];
+    f32 brightness;
+    Fn183D28Vec3 pos;
+} Fn620C8Obj;
+extern u32 fn_1_3FC58(void);
+extern void *memset(void *, int, u32);
+extern void *memcpy(void *, const void *, u32);
+
 #pragma section code_type ".fzgxpool"
 __declspec(section ".fzgxpool") static void fzgx_pool_prime1(void) {
     volatile f32 s; volatile f64 d;  /* fzgx-allow: S2 pool primer sinks */
@@ -2201,7 +5603,89 @@ void fn_1_5AF28(DrawObject *object) {
 }
 /* fzgx:end fn_1_5AF28 */
 
-/* fzgx:begin fn_1_5B074 */
+/* fzgx:begin fn_1_5B074 noprologue */
+#include "types.h"
+#include "game/main_rel/effect_types.h"
+#include "dolphin/types.h"
+#include "game/main_rel/car_test_types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/effect.h"
+#include "psvec.h"
+
+struct P {
+    u8 pad_0[0xC];
+    f32 unk_C;
+    u8 pad_10[0x18];
+    f32 unk_28;
+    u8 pad_2C[0xC];
+    f64 unk_38;
+    u8 pad_40[0x20];
+    f32 unk_60;
+    f32 unk_64;
+    u8 pad_68[0xC];
+    f32 unk_74;
+    u8 pad_78[0x54];
+    f32 unk_CC;
+    f32 unk_D0;
+    f32 unk_D4;
+    f32 unk_D8;
+    f32 unk_DC;
+};
+
+typedef struct Fn620C8Viewport {
+    f32 x;
+    f32 y;
+    f32 w;
+    f32 h;
+    f32 near;
+    f32 far;
+} Fn620C8Viewport;
+
+typedef struct Obj {
+    u8 b0;
+    u8 pad1[0xF];
+    s32 n10;
+    u8 pad14[4];
+    s16 id18;
+    u8 pad1a[0x0E];
+    f32 f28;
+    f32 f2c;
+    u8 pad30[0x0C];
+    f32 m3c[3];
+    f32 f48;
+    f32 f4c;
+    f32 f50;
+    s16 s54;
+    u8 pad56[4];
+    s16 s5a;
+    u8 pad5c[0x38];
+    f32 p94[3];
+    u8 pada0[0x14];
+    f32 fb4;
+} Obj;
+
+typedef struct Fn620C8Model {
+    u8 pad_0[0x8];
+    u8 data[0xC];
+    f32 scale;
+} Fn620C8Model;
+
+typedef struct Fn620C8TexObj {
+    u32 dummy[8];
+    void *image;
+} Fn620C8TexObj;
+
+typedef struct Fn620C8Obj {
+    u8 pad_0[0x28];
+    f32 time;
+    u8 pad_2C[0x8];
+    Fn620C8Model *model;
+    Fn620C8TexObj *tex;
+    u8 rot[0x78];
+    f32 brightness;
+    Fn183D28Vec3 pos;
+} Fn620C8Obj;
+
 // fn_1_5B074: empty in retail (single blr).
 void fn_1_5B074(void) {
 }
@@ -2286,7 +5770,89 @@ void fn_1_5B078(Fn1_5B078Object* arg0) {
 }
 /* fzgx:end fn_1_5B078 */
 
-/* fzgx:begin fn_1_5B188 */
+/* fzgx:begin fn_1_5B188 noprologue */
+#include "types.h"
+#include "game/main_rel/effect_types.h"
+#include "dolphin/types.h"
+#include "game/main_rel/car_test_types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/effect.h"
+#include "psvec.h"
+
+struct P {
+    u8 pad_0[0xC];
+    f32 unk_C;
+    u8 pad_10[0x18];
+    f32 unk_28;
+    u8 pad_2C[0xC];
+    f64 unk_38;
+    u8 pad_40[0x20];
+    f32 unk_60;
+    f32 unk_64;
+    u8 pad_68[0xC];
+    f32 unk_74;
+    u8 pad_78[0x54];
+    f32 unk_CC;
+    f32 unk_D0;
+    f32 unk_D4;
+    f32 unk_D8;
+    f32 unk_DC;
+};
+
+typedef struct Fn620C8Viewport {
+    f32 x;
+    f32 y;
+    f32 w;
+    f32 h;
+    f32 near;
+    f32 far;
+} Fn620C8Viewport;
+
+typedef struct Obj {
+    u8 b0;
+    u8 pad1[0xF];
+    s32 n10;
+    u8 pad14[4];
+    s16 id18;
+    u8 pad1a[0x0E];
+    f32 f28;
+    f32 f2c;
+    u8 pad30[0x0C];
+    f32 m3c[3];
+    f32 f48;
+    f32 f4c;
+    f32 f50;
+    s16 s54;
+    u8 pad56[4];
+    s16 s5a;
+    u8 pad5c[0x38];
+    f32 p94[3];
+    u8 pada0[0x14];
+    f32 fb4;
+} Obj;
+
+typedef struct Fn620C8Model {
+    u8 pad_0[0x8];
+    u8 data[0xC];
+    f32 scale;
+} Fn620C8Model;
+
+typedef struct Fn620C8TexObj {
+    u32 dummy[8];
+    void *image;
+} Fn620C8TexObj;
+
+typedef struct Fn620C8Obj {
+    u8 pad_0[0x28];
+    f32 time;
+    u8 pad_2C[0x8];
+    Fn620C8Model *model;
+    Fn620C8TexObj *tex;
+    u8 rot[0x78];
+    f32 brightness;
+    Fn183D28Vec3 pos;
+} Fn620C8Obj;
+
 #pragma section code_type ".fzgxpool"
 __declspec(section ".fzgxpool") static void fzgx_pool_prime1(void) {
     volatile float s; volatile double d;  /* fzgx-allow: S2 pool primer sinks */
@@ -2396,7 +5962,98 @@ void fn_1_5B188(struct A *a) {
 #pragma opt_common_subs reset
 /* fzgx:end fn_1_5B188 */
 
-/* fzgx:begin fn_1_5B30C */
+/* fzgx:begin fn_1_5B30C noprologue */
+#include "types.h"
+#include "game/main_rel/effect_types.h"
+#include "dolphin/types.h"
+#include "game/main_rel/car_test_types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/effect.h"
+#include "psvec.h"
+
+struct P {
+    u8 pad_0[0xC];
+    f32 unk_C;
+    u8 pad_10[0x18];
+    f32 unk_28;
+    u8 pad_2C[0xC];
+    f64 unk_38;
+    u8 pad_40[0x20];
+    f32 unk_60;
+    f32 unk_64;
+    u8 pad_68[0xC];
+    f32 unk_74;
+    u8 pad_78[0x54];
+    f32 unk_CC;
+    f32 unk_D0;
+    f32 unk_D4;
+    f32 unk_D8;
+    f32 unk_DC;
+};
+
+typedef struct Fn620C8Viewport {
+    f32 x;
+    f32 y;
+    f32 w;
+    f32 h;
+    f32 near;
+    f32 far;
+} Fn620C8Viewport;
+
+typedef struct Obj {
+    u8 b0;
+    u8 pad1[0xF];
+    s32 n10;
+    u8 pad14[4];
+    s16 id18;
+    u8 pad1a[0x0E];
+    f32 f28;
+    f32 f2c;
+    u8 pad30[0x0C];
+    f32 m3c[3];
+    f32 f48;
+    f32 f4c;
+    f32 f50;
+    s16 s54;
+    u8 pad56[4];
+    s16 s5a;
+    u8 pad5c[0x38];
+    f32 p94[3];
+    u8 pada0[0x14];
+    f32 fb4;
+} Obj;
+
+typedef struct Fn620C8Model {
+    u8 pad_0[0x8];
+    u8 data[0xC];
+    f32 scale;
+} Fn620C8Model;
+
+typedef struct Fn620C8TexObj {
+    u32 dummy[8];
+    void *image;
+} Fn620C8TexObj;
+
+typedef struct Fn620C8Obj {
+    u8 pad_0[0x28];
+    f32 time;
+    u8 pad_2C[0x8];
+    Fn620C8Model *model;
+    Fn620C8TexObj *tex;
+    u8 rot[0x78];
+    f32 brightness;
+    Fn183D28Vec3 pos;
+} Fn620C8Obj;
+extern void lbl_8006D9D8(void *);
+extern void lbl_8006D7B0(void);
+extern s32 fn_1_54E34(void *arg0, f32 arg1);
+extern void fn_1_56000(u8 value0, u8 value1, u8 value2);
+extern void fn_1_5621C(f32 value0, f32 value1, f32 value2, f32 value3);
+extern void lbl_8006E14C(f32);
+extern void mathutil_mtxA_rotate_z(int);
+extern f32 lbl_1_rodata_2978[4];
+extern void fn_1_557C4(void *value);
+
 struct fn_1_5B30C_Arg0 {
     u8 pad_0[0x34];
     u32 unk_34;
@@ -2431,13 +6088,177 @@ void fn_1_5B30C(struct fn_1_5B30C_Arg0 *arg0) {
 }
 /* fzgx:end fn_1_5B30C */
 
-/* fzgx:begin fn_1_5B3CC */
+/* fzgx:begin fn_1_5B3CC noprologue */
+#include "types.h"
+#include "game/main_rel/effect_types.h"
+#include "dolphin/types.h"
+#include "game/main_rel/car_test_types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/effect.h"
+#include "psvec.h"
+
+struct P {
+    u8 pad_0[0xC];
+    f32 unk_C;
+    u8 pad_10[0x18];
+    f32 unk_28;
+    u8 pad_2C[0xC];
+    f64 unk_38;
+    u8 pad_40[0x20];
+    f32 unk_60;
+    f32 unk_64;
+    u8 pad_68[0xC];
+    f32 unk_74;
+    u8 pad_78[0x54];
+    f32 unk_CC;
+    f32 unk_D0;
+    f32 unk_D4;
+    f32 unk_D8;
+    f32 unk_DC;
+};
+
+typedef struct Fn620C8Viewport {
+    f32 x;
+    f32 y;
+    f32 w;
+    f32 h;
+    f32 near;
+    f32 far;
+} Fn620C8Viewport;
+
+typedef struct Obj {
+    u8 b0;
+    u8 pad1[0xF];
+    s32 n10;
+    u8 pad14[4];
+    s16 id18;
+    u8 pad1a[0x0E];
+    f32 f28;
+    f32 f2c;
+    u8 pad30[0x0C];
+    f32 m3c[3];
+    f32 f48;
+    f32 f4c;
+    f32 f50;
+    s16 s54;
+    u8 pad56[4];
+    s16 s5a;
+    u8 pad5c[0x38];
+    f32 p94[3];
+    u8 pada0[0x14];
+    f32 fb4;
+} Obj;
+
+typedef struct Fn620C8Model {
+    u8 pad_0[0x8];
+    u8 data[0xC];
+    f32 scale;
+} Fn620C8Model;
+
+typedef struct Fn620C8TexObj {
+    u32 dummy[8];
+    void *image;
+} Fn620C8TexObj;
+
+typedef struct Fn620C8Obj {
+    u8 pad_0[0x28];
+    f32 time;
+    u8 pad_2C[0x8];
+    Fn620C8Model *model;
+    Fn620C8TexObj *tex;
+    u8 rot[0x78];
+    f32 brightness;
+    Fn183D28Vec3 pos;
+} Fn620C8Obj;
+
 // fn_1_5B3CC: empty in retail (single blr).
 void fn_1_5B3CC(void) {
 }
 /* fzgx:end fn_1_5B3CC */
 
-/* fzgx:begin fn_1_5B3D0 */
+/* fzgx:begin fn_1_5B3D0 noprologue */
+#include "types.h"
+#include "game/main_rel/effect_types.h"
+#include "dolphin/types.h"
+#include "game/main_rel/car_test_types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/effect.h"
+#include "psvec.h"
+
+struct P {
+    u8 pad_0[0xC];
+    f32 unk_C;
+    u8 pad_10[0x18];
+    f32 unk_28;
+    u8 pad_2C[0xC];
+    f64 unk_38;
+    u8 pad_40[0x20];
+    f32 unk_60;
+    f32 unk_64;
+    u8 pad_68[0xC];
+    f32 unk_74;
+    u8 pad_78[0x54];
+    f32 unk_CC;
+    f32 unk_D0;
+    f32 unk_D4;
+    f32 unk_D8;
+    f32 unk_DC;
+};
+
+typedef struct Fn620C8Viewport {
+    f32 x;
+    f32 y;
+    f32 w;
+    f32 h;
+    f32 near;
+    f32 far;
+} Fn620C8Viewport;
+
+typedef struct Obj {
+    u8 b0;
+    u8 pad1[0xF];
+    s32 n10;
+    u8 pad14[4];
+    s16 id18;
+    u8 pad1a[0x0E];
+    f32 f28;
+    f32 f2c;
+    u8 pad30[0x0C];
+    f32 m3c[3];
+    f32 f48;
+    f32 f4c;
+    f32 f50;
+    s16 s54;
+    u8 pad56[4];
+    s16 s5a;
+    u8 pad5c[0x38];
+    f32 p94[3];
+    u8 pada0[0x14];
+    f32 fb4;
+} Obj;
+
+typedef struct Fn620C8Model {
+    u8 pad_0[0x8];
+    u8 data[0xC];
+    f32 scale;
+} Fn620C8Model;
+
+typedef struct Fn620C8TexObj {
+    u32 dummy[8];
+    void *image;
+} Fn620C8TexObj;
+
+typedef struct Fn620C8Obj {
+    u8 pad_0[0x28];
+    f32 time;
+    u8 pad_2C[0x8];
+    Fn620C8Model *model;
+    Fn620C8TexObj *tex;
+    u8 rot[0x78];
+    f32 brightness;
+    Fn183D28Vec3 pos;
+} Fn620C8Obj;
+
 #pragma section code_type ".fzgxpool"
 __declspec(section ".fzgxpool") static void fzgx_pool_prime1(void) {
     volatile f32 s; volatile f64 d;  /* fzgx-allow: S2 pool primer sinks */
@@ -2524,7 +6345,91 @@ void fn_1_5B3D0(struct fn_1_5B3D0_Arg0 *arg0) {
 #pragma opt_common_subs reset
 /* fzgx:end fn_1_5B3D0 */
 
-/* fzgx:begin fn_1_5B450 */
+/* fzgx:begin fn_1_5B450 noprologue */
+#include "types.h"
+#include "game/main_rel/effect_types.h"
+#include "dolphin/types.h"
+#include "game/main_rel/car_test_types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/effect.h"
+#include "psvec.h"
+
+struct P {
+    u8 pad_0[0xC];
+    f32 unk_C;
+    u8 pad_10[0x18];
+    f32 unk_28;
+    u8 pad_2C[0xC];
+    f64 unk_38;
+    u8 pad_40[0x20];
+    f32 unk_60;
+    f32 unk_64;
+    u8 pad_68[0xC];
+    f32 unk_74;
+    u8 pad_78[0x54];
+    f32 unk_CC;
+    f32 unk_D0;
+    f32 unk_D4;
+    f32 unk_D8;
+    f32 unk_DC;
+};
+
+typedef struct Fn620C8Viewport {
+    f32 x;
+    f32 y;
+    f32 w;
+    f32 h;
+    f32 near;
+    f32 far;
+} Fn620C8Viewport;
+
+typedef struct Obj {
+    u8 b0;
+    u8 pad1[0xF];
+    s32 n10;
+    u8 pad14[4];
+    s16 id18;
+    u8 pad1a[0x0E];
+    f32 f28;
+    f32 f2c;
+    u8 pad30[0x0C];
+    f32 m3c[3];
+    f32 f48;
+    f32 f4c;
+    f32 f50;
+    s16 s54;
+    u8 pad56[4];
+    s16 s5a;
+    u8 pad5c[0x38];
+    f32 p94[3];
+    u8 pada0[0x14];
+    f32 fb4;
+} Obj;
+
+typedef struct Fn620C8Model {
+    u8 pad_0[0x8];
+    u8 data[0xC];
+    f32 scale;
+} Fn620C8Model;
+
+typedef struct Fn620C8TexObj {
+    u32 dummy[8];
+    void *image;
+} Fn620C8TexObj;
+
+typedef struct Fn620C8Obj {
+    u8 pad_0[0x28];
+    f32 time;
+    u8 pad_2C[0x8];
+    Fn620C8Model *model;
+    Fn620C8TexObj *tex;
+    u8 rot[0x78];
+    f32 brightness;
+    Fn183D28Vec3 pos;
+} Fn620C8Obj;
+extern void *lbl_801A6D00;
+extern void fn_1_8645C(int index, void *arg);
+
 #pragma section code_type ".fzgxpool"
 __declspec(section ".fzgxpool") static void fzgx_pool_prime1(void) {
     volatile f32 s; volatile f64 d;  /* fzgx-allow: S2 pool primer sinks */
@@ -2768,13 +6673,177 @@ void fn_1_5B578(EffObj *a)
 #pragma opt_common_subs reset
 /* fzgx:end fn_1_5B578 */
 
-/* fzgx:begin fn_1_5B6F0 */
+/* fzgx:begin fn_1_5B6F0 noprologue */
+#include "types.h"
+#include "game/main_rel/effect_types.h"
+#include "dolphin/types.h"
+#include "game/main_rel/car_test_types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/effect.h"
+#include "psvec.h"
+
+struct P {
+    u8 pad_0[0xC];
+    f32 unk_C;
+    u8 pad_10[0x18];
+    f32 unk_28;
+    u8 pad_2C[0xC];
+    f64 unk_38;
+    u8 pad_40[0x20];
+    f32 unk_60;
+    f32 unk_64;
+    u8 pad_68[0xC];
+    f32 unk_74;
+    u8 pad_78[0x54];
+    f32 unk_CC;
+    f32 unk_D0;
+    f32 unk_D4;
+    f32 unk_D8;
+    f32 unk_DC;
+};
+
+typedef struct Fn620C8Viewport {
+    f32 x;
+    f32 y;
+    f32 w;
+    f32 h;
+    f32 near;
+    f32 far;
+} Fn620C8Viewport;
+
+typedef struct Obj {
+    u8 b0;
+    u8 pad1[0xF];
+    s32 n10;
+    u8 pad14[4];
+    s16 id18;
+    u8 pad1a[0x0E];
+    f32 f28;
+    f32 f2c;
+    u8 pad30[0x0C];
+    f32 m3c[3];
+    f32 f48;
+    f32 f4c;
+    f32 f50;
+    s16 s54;
+    u8 pad56[4];
+    s16 s5a;
+    u8 pad5c[0x38];
+    f32 p94[3];
+    u8 pada0[0x14];
+    f32 fb4;
+} Obj;
+
+typedef struct Fn620C8Model {
+    u8 pad_0[0x8];
+    u8 data[0xC];
+    f32 scale;
+} Fn620C8Model;
+
+typedef struct Fn620C8TexObj {
+    u32 dummy[8];
+    void *image;
+} Fn620C8TexObj;
+
+typedef struct Fn620C8Obj {
+    u8 pad_0[0x28];
+    f32 time;
+    u8 pad_2C[0x8];
+    Fn620C8Model *model;
+    Fn620C8TexObj *tex;
+    u8 rot[0x78];
+    f32 brightness;
+    Fn183D28Vec3 pos;
+} Fn620C8Obj;
+
 // fn_1_5B6F0: empty in retail (single blr).
 void fn_1_5B6F0(void) {
 }
 /* fzgx:end fn_1_5B6F0 */
 
-/* fzgx:begin fn_1_5B6F4 */
+/* fzgx:begin fn_1_5B6F4 noprologue */
+#include "types.h"
+#include "game/main_rel/effect_types.h"
+#include "dolphin/types.h"
+#include "game/main_rel/car_test_types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/effect.h"
+#include "psvec.h"
+
+struct P {
+    u8 pad_0[0xC];
+    f32 unk_C;
+    u8 pad_10[0x18];
+    f32 unk_28;
+    u8 pad_2C[0xC];
+    f64 unk_38;
+    u8 pad_40[0x20];
+    f32 unk_60;
+    f32 unk_64;
+    u8 pad_68[0xC];
+    f32 unk_74;
+    u8 pad_78[0x54];
+    f32 unk_CC;
+    f32 unk_D0;
+    f32 unk_D4;
+    f32 unk_D8;
+    f32 unk_DC;
+};
+
+typedef struct Fn620C8Viewport {
+    f32 x;
+    f32 y;
+    f32 w;
+    f32 h;
+    f32 near;
+    f32 far;
+} Fn620C8Viewport;
+
+typedef struct Obj {
+    u8 b0;
+    u8 pad1[0xF];
+    s32 n10;
+    u8 pad14[4];
+    s16 id18;
+    u8 pad1a[0x0E];
+    f32 f28;
+    f32 f2c;
+    u8 pad30[0x0C];
+    f32 m3c[3];
+    f32 f48;
+    f32 f4c;
+    f32 f50;
+    s16 s54;
+    u8 pad56[4];
+    s16 s5a;
+    u8 pad5c[0x38];
+    f32 p94[3];
+    u8 pada0[0x14];
+    f32 fb4;
+} Obj;
+
+typedef struct Fn620C8Model {
+    u8 pad_0[0x8];
+    u8 data[0xC];
+    f32 scale;
+} Fn620C8Model;
+
+typedef struct Fn620C8TexObj {
+    u32 dummy[8];
+    void *image;
+} Fn620C8TexObj;
+
+typedef struct Fn620C8Obj {
+    u8 pad_0[0x28];
+    f32 time;
+    u8 pad_2C[0x8];
+    Fn620C8Model *model;
+    Fn620C8TexObj *tex;
+    u8 rot[0x78];
+    f32 brightness;
+    Fn183D28Vec3 pos;
+} Fn620C8Obj;
+
 typedef struct Fn15B6F4 {
     u8 _pad00[0x10];
     s32 unk_10;
@@ -2858,7 +6927,90 @@ void fn_1_5B6F4(Fn15B6F4 *obj) {
 }
 /* fzgx:end fn_1_5B6F4 */
 
-/* fzgx:begin fn_1_5B780 */
+/* fzgx:begin fn_1_5B780 noprologue */
+#include "types.h"
+#include "game/main_rel/effect_types.h"
+#include "dolphin/types.h"
+#include "game/main_rel/car_test_types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/effect.h"
+#include "psvec.h"
+
+struct P {
+    u8 pad_0[0xC];
+    f32 unk_C;
+    u8 pad_10[0x18];
+    f32 unk_28;
+    u8 pad_2C[0xC];
+    f64 unk_38;
+    u8 pad_40[0x20];
+    f32 unk_60;
+    f32 unk_64;
+    u8 pad_68[0xC];
+    f32 unk_74;
+    u8 pad_78[0x54];
+    f32 unk_CC;
+    f32 unk_D0;
+    f32 unk_D4;
+    f32 unk_D8;
+    f32 unk_DC;
+};
+
+typedef struct Fn620C8Viewport {
+    f32 x;
+    f32 y;
+    f32 w;
+    f32 h;
+    f32 near;
+    f32 far;
+} Fn620C8Viewport;
+
+typedef struct Obj {
+    u8 b0;
+    u8 pad1[0xF];
+    s32 n10;
+    u8 pad14[4];
+    s16 id18;
+    u8 pad1a[0x0E];
+    f32 f28;
+    f32 f2c;
+    u8 pad30[0x0C];
+    f32 m3c[3];
+    f32 f48;
+    f32 f4c;
+    f32 f50;
+    s16 s54;
+    u8 pad56[4];
+    s16 s5a;
+    u8 pad5c[0x38];
+    f32 p94[3];
+    u8 pada0[0x14];
+    f32 fb4;
+} Obj;
+
+typedef struct Fn620C8Model {
+    u8 pad_0[0x8];
+    u8 data[0xC];
+    f32 scale;
+} Fn620C8Model;
+
+typedef struct Fn620C8TexObj {
+    u32 dummy[8];
+    void *image;
+} Fn620C8TexObj;
+
+typedef struct Fn620C8Obj {
+    u8 pad_0[0x28];
+    f32 time;
+    u8 pad_2C[0x8];
+    Fn620C8Model *model;
+    Fn620C8TexObj *tex;
+    u8 rot[0x78];
+    f32 brightness;
+    Fn183D28Vec3 pos;
+} Fn620C8Obj;
+extern const f32 lbl_1_rodata_29A4;
+
 typedef struct Fn15B780 {
     u8 state;
     u8 _pad01[0x0f];
@@ -2882,13 +7034,177 @@ void fn_1_5B780(Fn15B780 *effect) {
 }
 /* fzgx:end fn_1_5B780 */
 
-/* fzgx:begin fn_1_5BF6C */
+/* fzgx:begin fn_1_5BF6C noprologue */
+#include "types.h"
+#include "game/main_rel/effect_types.h"
+#include "dolphin/types.h"
+#include "game/main_rel/car_test_types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/effect.h"
+#include "psvec.h"
+
+struct P {
+    u8 pad_0[0xC];
+    f32 unk_C;
+    u8 pad_10[0x18];
+    f32 unk_28;
+    u8 pad_2C[0xC];
+    f64 unk_38;
+    u8 pad_40[0x20];
+    f32 unk_60;
+    f32 unk_64;
+    u8 pad_68[0xC];
+    f32 unk_74;
+    u8 pad_78[0x54];
+    f32 unk_CC;
+    f32 unk_D0;
+    f32 unk_D4;
+    f32 unk_D8;
+    f32 unk_DC;
+};
+
+typedef struct Fn620C8Viewport {
+    f32 x;
+    f32 y;
+    f32 w;
+    f32 h;
+    f32 near;
+    f32 far;
+} Fn620C8Viewport;
+
+typedef struct Obj {
+    u8 b0;
+    u8 pad1[0xF];
+    s32 n10;
+    u8 pad14[4];
+    s16 id18;
+    u8 pad1a[0x0E];
+    f32 f28;
+    f32 f2c;
+    u8 pad30[0x0C];
+    f32 m3c[3];
+    f32 f48;
+    f32 f4c;
+    f32 f50;
+    s16 s54;
+    u8 pad56[4];
+    s16 s5a;
+    u8 pad5c[0x38];
+    f32 p94[3];
+    u8 pada0[0x14];
+    f32 fb4;
+} Obj;
+
+typedef struct Fn620C8Model {
+    u8 pad_0[0x8];
+    u8 data[0xC];
+    f32 scale;
+} Fn620C8Model;
+
+typedef struct Fn620C8TexObj {
+    u32 dummy[8];
+    void *image;
+} Fn620C8TexObj;
+
+typedef struct Fn620C8Obj {
+    u8 pad_0[0x28];
+    f32 time;
+    u8 pad_2C[0x8];
+    Fn620C8Model *model;
+    Fn620C8TexObj *tex;
+    u8 rot[0x78];
+    f32 brightness;
+    Fn183D28Vec3 pos;
+} Fn620C8Obj;
+
 // fn_1_5BF6C: empty in retail (single blr).
 void fn_1_5BF6C(void) {
 }
 /* fzgx:end fn_1_5BF6C */
 
-/* fzgx:begin fn_1_5BF70 */
+/* fzgx:begin fn_1_5BF70 noprologue */
+#include "types.h"
+#include "game/main_rel/effect_types.h"
+#include "dolphin/types.h"
+#include "game/main_rel/car_test_types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/effect.h"
+#include "psvec.h"
+
+struct P {
+    u8 pad_0[0xC];
+    f32 unk_C;
+    u8 pad_10[0x18];
+    f32 unk_28;
+    u8 pad_2C[0xC];
+    f64 unk_38;
+    u8 pad_40[0x20];
+    f32 unk_60;
+    f32 unk_64;
+    u8 pad_68[0xC];
+    f32 unk_74;
+    u8 pad_78[0x54];
+    f32 unk_CC;
+    f32 unk_D0;
+    f32 unk_D4;
+    f32 unk_D8;
+    f32 unk_DC;
+};
+
+typedef struct Fn620C8Viewport {
+    f32 x;
+    f32 y;
+    f32 w;
+    f32 h;
+    f32 near;
+    f32 far;
+} Fn620C8Viewport;
+
+typedef struct Obj {
+    u8 b0;
+    u8 pad1[0xF];
+    s32 n10;
+    u8 pad14[4];
+    s16 id18;
+    u8 pad1a[0x0E];
+    f32 f28;
+    f32 f2c;
+    u8 pad30[0x0C];
+    f32 m3c[3];
+    f32 f48;
+    f32 f4c;
+    f32 f50;
+    s16 s54;
+    u8 pad56[4];
+    s16 s5a;
+    u8 pad5c[0x38];
+    f32 p94[3];
+    u8 pada0[0x14];
+    f32 fb4;
+} Obj;
+
+typedef struct Fn620C8Model {
+    u8 pad_0[0x8];
+    u8 data[0xC];
+    f32 scale;
+} Fn620C8Model;
+
+typedef struct Fn620C8TexObj {
+    u32 dummy[8];
+    void *image;
+} Fn620C8TexObj;
+
+typedef struct Fn620C8Obj {
+    u8 pad_0[0x28];
+    f32 time;
+    u8 pad_2C[0x8];
+    Fn620C8Model *model;
+    Fn620C8TexObj *tex;
+    u8 rot[0x78];
+    f32 brightness;
+    Fn183D28Vec3 pos;
+} Fn620C8Obj;
+
 struct fn_1_5BF70_Arg0 {
     u8 pad_0[0x10];
     s32 unk_10;
@@ -2990,7 +7306,90 @@ void fn_1_5BF70(struct fn_1_5BF70_Arg0 *arg0) {
 }
 /* fzgx:end fn_1_5BF70 */
 
-/* fzgx:begin fn_1_5BFF0 */
+/* fzgx:begin fn_1_5BFF0 noprologue */
+#include "types.h"
+#include "game/main_rel/effect_types.h"
+#include "dolphin/types.h"
+#include "game/main_rel/car_test_types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/effect.h"
+#include "psvec.h"
+
+struct P {
+    u8 pad_0[0xC];
+    f32 unk_C;
+    u8 pad_10[0x18];
+    f32 unk_28;
+    u8 pad_2C[0xC];
+    f64 unk_38;
+    u8 pad_40[0x20];
+    f32 unk_60;
+    f32 unk_64;
+    u8 pad_68[0xC];
+    f32 unk_74;
+    u8 pad_78[0x54];
+    f32 unk_CC;
+    f32 unk_D0;
+    f32 unk_D4;
+    f32 unk_D8;
+    f32 unk_DC;
+};
+
+typedef struct Fn620C8Viewport {
+    f32 x;
+    f32 y;
+    f32 w;
+    f32 h;
+    f32 near;
+    f32 far;
+} Fn620C8Viewport;
+
+typedef struct Obj {
+    u8 b0;
+    u8 pad1[0xF];
+    s32 n10;
+    u8 pad14[4];
+    s16 id18;
+    u8 pad1a[0x0E];
+    f32 f28;
+    f32 f2c;
+    u8 pad30[0x0C];
+    f32 m3c[3];
+    f32 f48;
+    f32 f4c;
+    f32 f50;
+    s16 s54;
+    u8 pad56[4];
+    s16 s5a;
+    u8 pad5c[0x38];
+    f32 p94[3];
+    u8 pada0[0x14];
+    f32 fb4;
+} Obj;
+
+typedef struct Fn620C8Model {
+    u8 pad_0[0x8];
+    u8 data[0xC];
+    f32 scale;
+} Fn620C8Model;
+
+typedef struct Fn620C8TexObj {
+    u32 dummy[8];
+    void *image;
+} Fn620C8TexObj;
+
+typedef struct Fn620C8Obj {
+    u8 pad_0[0x28];
+    f32 time;
+    u8 pad_2C[0x8];
+    Fn620C8Model *model;
+    Fn620C8TexObj *tex;
+    u8 rot[0x78];
+    f32 brightness;
+    Fn183D28Vec3 pos;
+} Fn620C8Obj;
+extern const f32 lbl_1_rodata_29A4;
+
 struct fn_1_5BFF0_Arg0 {
     u8 unk_0;
     u8 pad_1[0xF];
@@ -3011,13 +7410,178 @@ void fn_1_5BFF0(struct fn_1_5BFF0_Arg0 *arg0) {
 }
 /* fzgx:end fn_1_5BFF0 */
 
-/* fzgx:begin fn_1_5C780 */
+/* fzgx:begin fn_1_5C780 noprologue */
+#include "types.h"
+#include "game/main_rel/effect_types.h"
+#include "dolphin/types.h"
+#include "game/main_rel/car_test_types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/effect.h"
+#include "psvec.h"
+
+struct P {
+    u8 pad_0[0xC];
+    f32 unk_C;
+    u8 pad_10[0x18];
+    f32 unk_28;
+    u8 pad_2C[0xC];
+    f64 unk_38;
+    u8 pad_40[0x20];
+    f32 unk_60;
+    f32 unk_64;
+    u8 pad_68[0xC];
+    f32 unk_74;
+    u8 pad_78[0x54];
+    f32 unk_CC;
+    f32 unk_D0;
+    f32 unk_D4;
+    f32 unk_D8;
+    f32 unk_DC;
+};
+
+typedef struct Fn620C8Viewport {
+    f32 x;
+    f32 y;
+    f32 w;
+    f32 h;
+    f32 near;
+    f32 far;
+} Fn620C8Viewport;
+
+typedef struct Obj {
+    u8 b0;
+    u8 pad1[0xF];
+    s32 n10;
+    u8 pad14[4];
+    s16 id18;
+    u8 pad1a[0x0E];
+    f32 f28;
+    f32 f2c;
+    u8 pad30[0x0C];
+    f32 m3c[3];
+    f32 f48;
+    f32 f4c;
+    f32 f50;
+    s16 s54;
+    u8 pad56[4];
+    s16 s5a;
+    u8 pad5c[0x38];
+    f32 p94[3];
+    u8 pada0[0x14];
+    f32 fb4;
+} Obj;
+
+typedef struct Fn620C8Model {
+    u8 pad_0[0x8];
+    u8 data[0xC];
+    f32 scale;
+} Fn620C8Model;
+
+typedef struct Fn620C8TexObj {
+    u32 dummy[8];
+    void *image;
+} Fn620C8TexObj;
+
+typedef struct Fn620C8Obj {
+    u8 pad_0[0x28];
+    f32 time;
+    u8 pad_2C[0x8];
+    Fn620C8Model *model;
+    Fn620C8TexObj *tex;
+    u8 rot[0x78];
+    f32 brightness;
+    Fn183D28Vec3 pos;
+} Fn620C8Obj;
+
 // fn_1_5C780: empty in retail (single blr).
 void fn_1_5C780(void) {
 }
 /* fzgx:end fn_1_5C780 */
 
-/* fzgx:begin fn_1_5C784 */
+/* fzgx:begin fn_1_5C784 noprologue */
+#include "types.h"
+#include "game/main_rel/effect_types.h"
+#include "dolphin/types.h"
+#include "game/main_rel/car_test_types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/effect.h"
+#include "psvec.h"
+
+struct P {
+    u8 pad_0[0xC];
+    f32 unk_C;
+    u8 pad_10[0x18];
+    f32 unk_28;
+    u8 pad_2C[0xC];
+    f64 unk_38;
+    u8 pad_40[0x20];
+    f32 unk_60;
+    f32 unk_64;
+    u8 pad_68[0xC];
+    f32 unk_74;
+    u8 pad_78[0x54];
+    f32 unk_CC;
+    f32 unk_D0;
+    f32 unk_D4;
+    f32 unk_D8;
+    f32 unk_DC;
+};
+
+typedef struct Fn620C8Viewport {
+    f32 x;
+    f32 y;
+    f32 w;
+    f32 h;
+    f32 near;
+    f32 far;
+} Fn620C8Viewport;
+
+typedef struct Obj {
+    u8 b0;
+    u8 pad1[0xF];
+    s32 n10;
+    u8 pad14[4];
+    s16 id18;
+    u8 pad1a[0x0E];
+    f32 f28;
+    f32 f2c;
+    u8 pad30[0x0C];
+    f32 m3c[3];
+    f32 f48;
+    f32 f4c;
+    f32 f50;
+    s16 s54;
+    u8 pad56[4];
+    s16 s5a;
+    u8 pad5c[0x38];
+    f32 p94[3];
+    u8 pada0[0x14];
+    f32 fb4;
+} Obj;
+
+typedef struct Fn620C8Model {
+    u8 pad_0[0x8];
+    u8 data[0xC];
+    f32 scale;
+} Fn620C8Model;
+
+typedef struct Fn620C8TexObj {
+    u32 dummy[8];
+    void *image;
+} Fn620C8TexObj;
+
+typedef struct Fn620C8Obj {
+    u8 pad_0[0x28];
+    f32 time;
+    u8 pad_2C[0x8];
+    Fn620C8Model *model;
+    Fn620C8TexObj *tex;
+    u8 rot[0x78];
+    f32 brightness;
+    Fn183D28Vec3 pos;
+} Fn620C8Obj;
+extern void fn_1_8636C();
+
 #pragma section code_type ".fzgxpool"
 __declspec(section ".fzgxpool") static void fzgx_pool_prime1(void) {
     volatile f32 s; volatile f64 d;  /* fzgx-allow: S2 pool primer sinks */
@@ -3066,7 +7630,92 @@ void fn_1_5C784(EffectWork *self) {
 #pragma opt_loop_invariants reset
 /* fzgx:end fn_1_5C784 */
 
-/* fzgx:begin fn_1_5C83C */
+/* fzgx:begin fn_1_5C83C noprologue */
+#include "types.h"
+#include "game/main_rel/effect_types.h"
+#include "dolphin/types.h"
+#include "game/main_rel/car_test_types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/effect.h"
+#include "psvec.h"
+
+struct P {
+    u8 pad_0[0xC];
+    f32 unk_C;
+    u8 pad_10[0x18];
+    f32 unk_28;
+    u8 pad_2C[0xC];
+    f64 unk_38;
+    u8 pad_40[0x20];
+    f32 unk_60;
+    f32 unk_64;
+    u8 pad_68[0xC];
+    f32 unk_74;
+    u8 pad_78[0x54];
+    f32 unk_CC;
+    f32 unk_D0;
+    f32 unk_D4;
+    f32 unk_D8;
+    f32 unk_DC;
+};
+
+typedef struct Fn620C8Viewport {
+    f32 x;
+    f32 y;
+    f32 w;
+    f32 h;
+    f32 near;
+    f32 far;
+} Fn620C8Viewport;
+
+typedef struct Obj {
+    u8 b0;
+    u8 pad1[0xF];
+    s32 n10;
+    u8 pad14[4];
+    s16 id18;
+    u8 pad1a[0x0E];
+    f32 f28;
+    f32 f2c;
+    u8 pad30[0x0C];
+    f32 m3c[3];
+    f32 f48;
+    f32 f4c;
+    f32 f50;
+    s16 s54;
+    u8 pad56[4];
+    s16 s5a;
+    u8 pad5c[0x38];
+    f32 p94[3];
+    u8 pada0[0x14];
+    f32 fb4;
+} Obj;
+
+typedef struct Fn620C8Model {
+    u8 pad_0[0x8];
+    u8 data[0xC];
+    f32 scale;
+} Fn620C8Model;
+
+typedef struct Fn620C8TexObj {
+    u32 dummy[8];
+    void *image;
+} Fn620C8TexObj;
+
+typedef struct Fn620C8Obj {
+    u8 pad_0[0x28];
+    f32 time;
+    u8 pad_2C[0x8];
+    Fn620C8Model *model;
+    Fn620C8TexObj *tex;
+    u8 rot[0x78];
+    f32 brightness;
+    Fn183D28Vec3 pos;
+} Fn620C8Obj;
+extern void fn_1_862D4(s16 value, void *result);
+extern void fn_1_8636C();
+extern void fn_8006FA24(void *, void *, void *, f32);
+
 #pragma section code_type ".fzgxpool"
 __declspec(section ".fzgxpool") static void fzgx_pool_prime1(void) {
     volatile f32 s; volatile f64 d;  /* fzgx-allow: S2 pool primer sinks */
@@ -3418,13 +8067,177 @@ void fn_1_5CA00(struct fn_1_5CA00_Arg0 *arg0) {
 #pragma opt_loop_invariants reset
 /* fzgx:end fn_1_5CA00 */
 
-/* fzgx:begin fn_1_5D010 */
+/* fzgx:begin fn_1_5D010 noprologue */
+#include "types.h"
+#include "game/main_rel/effect_types.h"
+#include "dolphin/types.h"
+#include "game/main_rel/car_test_types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/effect.h"
+#include "psvec.h"
+
+struct P {
+    u8 pad_0[0xC];
+    f32 unk_C;
+    u8 pad_10[0x18];
+    f32 unk_28;
+    u8 pad_2C[0xC];
+    f64 unk_38;
+    u8 pad_40[0x20];
+    f32 unk_60;
+    f32 unk_64;
+    u8 pad_68[0xC];
+    f32 unk_74;
+    u8 pad_78[0x54];
+    f32 unk_CC;
+    f32 unk_D0;
+    f32 unk_D4;
+    f32 unk_D8;
+    f32 unk_DC;
+};
+
+typedef struct Fn620C8Viewport {
+    f32 x;
+    f32 y;
+    f32 w;
+    f32 h;
+    f32 near;
+    f32 far;
+} Fn620C8Viewport;
+
+typedef struct Obj {
+    u8 b0;
+    u8 pad1[0xF];
+    s32 n10;
+    u8 pad14[4];
+    s16 id18;
+    u8 pad1a[0x0E];
+    f32 f28;
+    f32 f2c;
+    u8 pad30[0x0C];
+    f32 m3c[3];
+    f32 f48;
+    f32 f4c;
+    f32 f50;
+    s16 s54;
+    u8 pad56[4];
+    s16 s5a;
+    u8 pad5c[0x38];
+    f32 p94[3];
+    u8 pada0[0x14];
+    f32 fb4;
+} Obj;
+
+typedef struct Fn620C8Model {
+    u8 pad_0[0x8];
+    u8 data[0xC];
+    f32 scale;
+} Fn620C8Model;
+
+typedef struct Fn620C8TexObj {
+    u32 dummy[8];
+    void *image;
+} Fn620C8TexObj;
+
+typedef struct Fn620C8Obj {
+    u8 pad_0[0x28];
+    f32 time;
+    u8 pad_2C[0x8];
+    Fn620C8Model *model;
+    Fn620C8TexObj *tex;
+    u8 rot[0x78];
+    f32 brightness;
+    Fn183D28Vec3 pos;
+} Fn620C8Obj;
+
 // fn_1_5D010: empty in retail (single blr).
 void fn_1_5D010(void) {
 }
 /* fzgx:end fn_1_5D010 */
 
-/* fzgx:begin fn_1_5D014 */
+/* fzgx:begin fn_1_5D014 noprologue */
+#include "types.h"
+#include "game/main_rel/effect_types.h"
+#include "dolphin/types.h"
+#include "game/main_rel/car_test_types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/effect.h"
+#include "psvec.h"
+
+struct P {
+    u8 pad_0[0xC];
+    f32 unk_C;
+    u8 pad_10[0x18];
+    f32 unk_28;
+    u8 pad_2C[0xC];
+    f64 unk_38;
+    u8 pad_40[0x20];
+    f32 unk_60;
+    f32 unk_64;
+    u8 pad_68[0xC];
+    f32 unk_74;
+    u8 pad_78[0x54];
+    f32 unk_CC;
+    f32 unk_D0;
+    f32 unk_D4;
+    f32 unk_D8;
+    f32 unk_DC;
+};
+
+typedef struct Fn620C8Viewport {
+    f32 x;
+    f32 y;
+    f32 w;
+    f32 h;
+    f32 near;
+    f32 far;
+} Fn620C8Viewport;
+
+typedef struct Obj {
+    u8 b0;
+    u8 pad1[0xF];
+    s32 n10;
+    u8 pad14[4];
+    s16 id18;
+    u8 pad1a[0x0E];
+    f32 f28;
+    f32 f2c;
+    u8 pad30[0x0C];
+    f32 m3c[3];
+    f32 f48;
+    f32 f4c;
+    f32 f50;
+    s16 s54;
+    u8 pad56[4];
+    s16 s5a;
+    u8 pad5c[0x38];
+    f32 p94[3];
+    u8 pada0[0x14];
+    f32 fb4;
+} Obj;
+
+typedef struct Fn620C8Model {
+    u8 pad_0[0x8];
+    u8 data[0xC];
+    f32 scale;
+} Fn620C8Model;
+
+typedef struct Fn620C8TexObj {
+    u32 dummy[8];
+    void *image;
+} Fn620C8TexObj;
+
+typedef struct Fn620C8Obj {
+    u8 pad_0[0x28];
+    f32 time;
+    u8 pad_2C[0x8];
+    Fn620C8Model *model;
+    Fn620C8TexObj *tex;
+    u8 rot[0x78];
+    f32 brightness;
+    Fn183D28Vec3 pos;
+} Fn620C8Obj;
+
 typedef struct Fn1_5D014Object {
     u8 pad[0xae];
     s16 field_ae;
@@ -3846,13 +8659,180 @@ void fn_1_5D1B8(Obj *o)
 #pragma opt_propagation reset
 /* fzgx:end fn_1_5D1B8 */
 
-/* fzgx:begin fn_1_5D374 */
+/* fzgx:begin fn_1_5D374 noprologue */
+#include "types.h"
+#include "game/main_rel/effect_types.h"
+#include "dolphin/types.h"
+#include "game/main_rel/car_test_types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/effect.h"
+#include "psvec.h"
+
+struct P {
+    u8 pad_0[0xC];
+    f32 unk_C;
+    u8 pad_10[0x18];
+    f32 unk_28;
+    u8 pad_2C[0xC];
+    f64 unk_38;
+    u8 pad_40[0x20];
+    f32 unk_60;
+    f32 unk_64;
+    u8 pad_68[0xC];
+    f32 unk_74;
+    u8 pad_78[0x54];
+    f32 unk_CC;
+    f32 unk_D0;
+    f32 unk_D4;
+    f32 unk_D8;
+    f32 unk_DC;
+};
+
+typedef struct Fn620C8Viewport {
+    f32 x;
+    f32 y;
+    f32 w;
+    f32 h;
+    f32 near;
+    f32 far;
+} Fn620C8Viewport;
+
+typedef struct Obj {
+    u8 b0;
+    u8 pad1[0xF];
+    s32 n10;
+    u8 pad14[4];
+    s16 id18;
+    u8 pad1a[0x0E];
+    f32 f28;
+    f32 f2c;
+    u8 pad30[0x0C];
+    f32 m3c[3];
+    f32 f48;
+    f32 f4c;
+    f32 f50;
+    s16 s54;
+    u8 pad56[4];
+    s16 s5a;
+    u8 pad5c[0x38];
+    f32 p94[3];
+    u8 pada0[0x14];
+    f32 fb4;
+} Obj;
+
+typedef struct Fn620C8Model {
+    u8 pad_0[0x8];
+    u8 data[0xC];
+    f32 scale;
+} Fn620C8Model;
+
+typedef struct Fn620C8TexObj {
+    u32 dummy[8];
+    void *image;
+} Fn620C8TexObj;
+
+typedef struct Fn620C8Obj {
+    u8 pad_0[0x28];
+    f32 time;
+    u8 pad_2C[0x8];
+    Fn620C8Model *model;
+    Fn620C8TexObj *tex;
+    u8 rot[0x78];
+    f32 brightness;
+    Fn183D28Vec3 pos;
+} Fn620C8Obj;
+
 // fn_1_5D374: empty in retail (single blr).
 void fn_1_5D374(void) {
 }
 /* fzgx:end fn_1_5D374 */
 
-/* fzgx:begin fn_1_5D378 */
+/* fzgx:begin fn_1_5D378 noprologue */
+#include "types.h"
+#include "game/main_rel/effect_types.h"
+#include "dolphin/types.h"
+#include "game/main_rel/car_test_types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/effect.h"
+#include "psvec.h"
+
+struct P {
+    u8 pad_0[0xC];
+    f32 unk_C;
+    u8 pad_10[0x18];
+    f32 unk_28;
+    u8 pad_2C[0xC];
+    f64 unk_38;
+    u8 pad_40[0x20];
+    f32 unk_60;
+    f32 unk_64;
+    u8 pad_68[0xC];
+    f32 unk_74;
+    u8 pad_78[0x54];
+    f32 unk_CC;
+    f32 unk_D0;
+    f32 unk_D4;
+    f32 unk_D8;
+    f32 unk_DC;
+};
+
+typedef struct Fn620C8Viewport {
+    f32 x;
+    f32 y;
+    f32 w;
+    f32 h;
+    f32 near;
+    f32 far;
+} Fn620C8Viewport;
+
+typedef struct Obj {
+    u8 b0;
+    u8 pad1[0xF];
+    s32 n10;
+    u8 pad14[4];
+    s16 id18;
+    u8 pad1a[0x0E];
+    f32 f28;
+    f32 f2c;
+    u8 pad30[0x0C];
+    f32 m3c[3];
+    f32 f48;
+    f32 f4c;
+    f32 f50;
+    s16 s54;
+    u8 pad56[4];
+    s16 s5a;
+    u8 pad5c[0x38];
+    f32 p94[3];
+    u8 pada0[0x14];
+    f32 fb4;
+} Obj;
+
+typedef struct Fn620C8Model {
+    u8 pad_0[0x8];
+    u8 data[0xC];
+    f32 scale;
+} Fn620C8Model;
+
+typedef struct Fn620C8TexObj {
+    u32 dummy[8];
+    void *image;
+} Fn620C8TexObj;
+
+typedef struct Fn620C8Obj {
+    u8 pad_0[0x28];
+    f32 time;
+    u8 pad_2C[0x8];
+    Fn620C8Model *model;
+    Fn620C8TexObj *tex;
+    u8 rot[0x78];
+    f32 brightness;
+    Fn183D28Vec3 pos;
+} Fn620C8Obj;
+extern u8 fn_1_86634(int index);
+extern u32 fn_1_6EC0(u8 index);
+extern s16 camera_get_entry_field_0xa4(u32 index);
+
 #pragma section code_type ".fzgxpool"
 __declspec(section ".fzgxpool") static void fzgx_pool_prime1(void) {
     volatile float s; volatile double d;  /* fzgx-allow: S2 pool primer sinks */
@@ -3997,13 +8977,182 @@ void fn_1_5D378(FxObj *obj)
 }
 /* fzgx:end fn_1_5D378 */
 
-/* fzgx:begin fn_1_5D4FC */
+/* fzgx:begin fn_1_5D4FC noprologue */
+#include "types.h"
+#include "game/main_rel/effect_types.h"
+#include "dolphin/types.h"
+#include "game/main_rel/car_test_types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/effect.h"
+#include "psvec.h"
+
+struct P {
+    u8 pad_0[0xC];
+    f32 unk_C;
+    u8 pad_10[0x18];
+    f32 unk_28;
+    u8 pad_2C[0xC];
+    f64 unk_38;
+    u8 pad_40[0x20];
+    f32 unk_60;
+    f32 unk_64;
+    u8 pad_68[0xC];
+    f32 unk_74;
+    u8 pad_78[0x54];
+    f32 unk_CC;
+    f32 unk_D0;
+    f32 unk_D4;
+    f32 unk_D8;
+    f32 unk_DC;
+};
+
+typedef struct Fn620C8Viewport {
+    f32 x;
+    f32 y;
+    f32 w;
+    f32 h;
+    f32 near;
+    f32 far;
+} Fn620C8Viewport;
+
+typedef struct Obj {
+    u8 b0;
+    u8 pad1[0xF];
+    s32 n10;
+    u8 pad14[4];
+    s16 id18;
+    u8 pad1a[0x0E];
+    f32 f28;
+    f32 f2c;
+    u8 pad30[0x0C];
+    f32 m3c[3];
+    f32 f48;
+    f32 f4c;
+    f32 f50;
+    s16 s54;
+    u8 pad56[4];
+    s16 s5a;
+    u8 pad5c[0x38];
+    f32 p94[3];
+    u8 pada0[0x14];
+    f32 fb4;
+} Obj;
+
+typedef struct Fn620C8Model {
+    u8 pad_0[0x8];
+    u8 data[0xC];
+    f32 scale;
+} Fn620C8Model;
+
+typedef struct Fn620C8TexObj {
+    u32 dummy[8];
+    void *image;
+} Fn620C8TexObj;
+
+typedef struct Fn620C8Obj {
+    u8 pad_0[0x28];
+    f32 time;
+    u8 pad_2C[0x8];
+    Fn620C8Model *model;
+    Fn620C8TexObj *tex;
+    u8 rot[0x78];
+    f32 brightness;
+    Fn183D28Vec3 pos;
+} Fn620C8Obj;
+
 // fn_1_5D4FC: empty in retail (single blr).
 void fn_1_5D4FC(void) {
 }
 /* fzgx:end fn_1_5D4FC */
 
-/* fzgx:begin fn_1_5D500 */
+/* fzgx:begin fn_1_5D500 noprologue */
+#include "types.h"
+#include "game/main_rel/effect_types.h"
+#include "dolphin/types.h"
+#include "game/main_rel/car_test_types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/effect.h"
+#include "psvec.h"
+
+struct P {
+    u8 pad_0[0xC];
+    f32 unk_C;
+    u8 pad_10[0x18];
+    f32 unk_28;
+    u8 pad_2C[0xC];
+    f64 unk_38;
+    u8 pad_40[0x20];
+    f32 unk_60;
+    f32 unk_64;
+    u8 pad_68[0xC];
+    f32 unk_74;
+    u8 pad_78[0x54];
+    f32 unk_CC;
+    f32 unk_D0;
+    f32 unk_D4;
+    f32 unk_D8;
+    f32 unk_DC;
+};
+
+typedef struct Fn620C8Viewport {
+    f32 x;
+    f32 y;
+    f32 w;
+    f32 h;
+    f32 near;
+    f32 far;
+} Fn620C8Viewport;
+
+typedef struct Obj {
+    u8 b0;
+    u8 pad1[0xF];
+    s32 n10;
+    u8 pad14[4];
+    s16 id18;
+    u8 pad1a[0x0E];
+    f32 f28;
+    f32 f2c;
+    u8 pad30[0x0C];
+    f32 m3c[3];
+    f32 f48;
+    f32 f4c;
+    f32 f50;
+    s16 s54;
+    u8 pad56[4];
+    s16 s5a;
+    u8 pad5c[0x38];
+    f32 p94[3];
+    u8 pada0[0x14];
+    f32 fb4;
+} Obj;
+
+typedef struct Fn620C8Model {
+    u8 pad_0[0x8];
+    u8 data[0xC];
+    f32 scale;
+} Fn620C8Model;
+
+typedef struct Fn620C8TexObj {
+    u32 dummy[8];
+    void *image;
+} Fn620C8TexObj;
+
+typedef struct Fn620C8Obj {
+    u8 pad_0[0x28];
+    f32 time;
+    u8 pad_2C[0x8];
+    Fn620C8Model *model;
+    Fn620C8TexObj *tex;
+    u8 rot[0x78];
+    f32 brightness;
+    Fn183D28Vec3 pos;
+} Fn620C8Obj;
+extern u32 fn_1_86514(int index);
+extern void fn_1_867CC(s16 value, void *out);
+extern u8 fn_1_86634(int index);
+extern u32 fn_1_6EC0(u8 index);
+extern s16 camera_get_entry_field_0xa4(u32 index);
+
 #pragma section code_type ".fzgxpool"
 __declspec(section ".fzgxpool") static void fzgx_pool_prime1(void) {
     volatile float s; volatile double d;  /* fzgx-allow: S2 pool primer sinks */
@@ -4260,7 +9409,91 @@ void fn_1_5D718(struct Fn15D718 *self) {
 #pragma opt_propagation reset
 /* fzgx:end fn_1_5D718 */
 
-/* fzgx:begin fn_1_5D88C */
+/* fzgx:begin fn_1_5D88C noprologue */
+#include "types.h"
+#include "game/main_rel/effect_types.h"
+#include "dolphin/types.h"
+#include "game/main_rel/car_test_types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/effect.h"
+#include "psvec.h"
+
+struct P {
+    u8 pad_0[0xC];
+    f32 unk_C;
+    u8 pad_10[0x18];
+    f32 unk_28;
+    u8 pad_2C[0xC];
+    f64 unk_38;
+    u8 pad_40[0x20];
+    f32 unk_60;
+    f32 unk_64;
+    u8 pad_68[0xC];
+    f32 unk_74;
+    u8 pad_78[0x54];
+    f32 unk_CC;
+    f32 unk_D0;
+    f32 unk_D4;
+    f32 unk_D8;
+    f32 unk_DC;
+};
+
+typedef struct Fn620C8Viewport {
+    f32 x;
+    f32 y;
+    f32 w;
+    f32 h;
+    f32 near;
+    f32 far;
+} Fn620C8Viewport;
+
+typedef struct Obj {
+    u8 b0;
+    u8 pad1[0xF];
+    s32 n10;
+    u8 pad14[4];
+    s16 id18;
+    u8 pad1a[0x0E];
+    f32 f28;
+    f32 f2c;
+    u8 pad30[0x0C];
+    f32 m3c[3];
+    f32 f48;
+    f32 f4c;
+    f32 f50;
+    s16 s54;
+    u8 pad56[4];
+    s16 s5a;
+    u8 pad5c[0x38];
+    f32 p94[3];
+    u8 pada0[0x14];
+    f32 fb4;
+} Obj;
+
+typedef struct Fn620C8Model {
+    u8 pad_0[0x8];
+    u8 data[0xC];
+    f32 scale;
+} Fn620C8Model;
+
+typedef struct Fn620C8TexObj {
+    u32 dummy[8];
+    void *image;
+} Fn620C8TexObj;
+
+typedef struct Fn620C8Obj {
+    u8 pad_0[0x28];
+    f32 time;
+    u8 pad_2C[0x8];
+    Fn620C8Model *model;
+    Fn620C8TexObj *tex;
+    u8 rot[0x78];
+    f32 brightness;
+    Fn183D28Vec3 pos;
+} Fn620C8Obj;
+extern f32 lbl_1_rodata_29AC[5];
+extern f32 lbl_1_rodata_2978[4];
+
 struct Fn15D88C {
     u8 _pad08[0x08];
     u32 flags;
@@ -4293,7 +9526,89 @@ void fn_1_5D88C(struct Fn15D88C *self) {
 }
 /* fzgx:end fn_1_5D88C */
 
-/* fzgx:begin fn_1_5D918 */
+/* fzgx:begin fn_1_5D918 noprologue */
+#include "types.h"
+#include "game/main_rel/effect_types.h"
+#include "dolphin/types.h"
+#include "game/main_rel/car_test_types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/effect.h"
+#include "psvec.h"
+
+struct P {
+    u8 pad_0[0xC];
+    f32 unk_C;
+    u8 pad_10[0x18];
+    f32 unk_28;
+    u8 pad_2C[0xC];
+    f64 unk_38;
+    u8 pad_40[0x20];
+    f32 unk_60;
+    f32 unk_64;
+    u8 pad_68[0xC];
+    f32 unk_74;
+    u8 pad_78[0x54];
+    f32 unk_CC;
+    f32 unk_D0;
+    f32 unk_D4;
+    f32 unk_D8;
+    f32 unk_DC;
+};
+
+typedef struct Fn620C8Viewport {
+    f32 x;
+    f32 y;
+    f32 w;
+    f32 h;
+    f32 near;
+    f32 far;
+} Fn620C8Viewport;
+
+typedef struct Obj {
+    u8 b0;
+    u8 pad1[0xF];
+    s32 n10;
+    u8 pad14[4];
+    s16 id18;
+    u8 pad1a[0x0E];
+    f32 f28;
+    f32 f2c;
+    u8 pad30[0x0C];
+    f32 m3c[3];
+    f32 f48;
+    f32 f4c;
+    f32 f50;
+    s16 s54;
+    u8 pad56[4];
+    s16 s5a;
+    u8 pad5c[0x38];
+    f32 p94[3];
+    u8 pada0[0x14];
+    f32 fb4;
+} Obj;
+
+typedef struct Fn620C8Model {
+    u8 pad_0[0x8];
+    u8 data[0xC];
+    f32 scale;
+} Fn620C8Model;
+
+typedef struct Fn620C8TexObj {
+    u32 dummy[8];
+    void *image;
+} Fn620C8TexObj;
+
+typedef struct Fn620C8Obj {
+    u8 pad_0[0x28];
+    f32 time;
+    u8 pad_2C[0x8];
+    Fn620C8Model *model;
+    Fn620C8TexObj *tex;
+    u8 rot[0x78];
+    f32 brightness;
+    Fn183D28Vec3 pos;
+} Fn620C8Obj;
+
 // fn_1_5D918: empty in retail (single blr).
 void fn_1_5D918(void) {
 }
@@ -4971,7 +10286,97 @@ else if(t>10.0f) {x=F(0x1c);f=1.0f-(f32)(0.025f*(t-10.0f));F(0x1c)=x*f;F(0x20)*=
 }
 /* fzgx:end fn_1_5E4D8 */
 
-/* fzgx:begin fn_1_5EB08 */
+/* fzgx:begin fn_1_5EB08 noprologue */
+#include "types.h"
+#include "game/main_rel/effect_types.h"
+#include "dolphin/types.h"
+#include "game/main_rel/car_test_types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/effect.h"
+#include "psvec.h"
+
+struct P {
+    u8 pad_0[0xC];
+    f32 unk_C;
+    u8 pad_10[0x18];
+    f32 unk_28;
+    u8 pad_2C[0xC];
+    f64 unk_38;
+    u8 pad_40[0x20];
+    f32 unk_60;
+    f32 unk_64;
+    u8 pad_68[0xC];
+    f32 unk_74;
+    u8 pad_78[0x54];
+    f32 unk_CC;
+    f32 unk_D0;
+    f32 unk_D4;
+    f32 unk_D8;
+    f32 unk_DC;
+};
+
+typedef struct Fn620C8Viewport {
+    f32 x;
+    f32 y;
+    f32 w;
+    f32 h;
+    f32 near;
+    f32 far;
+} Fn620C8Viewport;
+
+typedef struct Obj {
+    u8 b0;
+    u8 pad1[0xF];
+    s32 n10;
+    u8 pad14[4];
+    s16 id18;
+    u8 pad1a[0x0E];
+    f32 f28;
+    f32 f2c;
+    u8 pad30[0x0C];
+    f32 m3c[3];
+    f32 f48;
+    f32 f4c;
+    f32 f50;
+    s16 s54;
+    u8 pad56[4];
+    s16 s5a;
+    u8 pad5c[0x38];
+    f32 p94[3];
+    u8 pada0[0x14];
+    f32 fb4;
+} Obj;
+
+typedef struct Fn620C8Model {
+    u8 pad_0[0x8];
+    u8 data[0xC];
+    f32 scale;
+} Fn620C8Model;
+
+typedef struct Fn620C8TexObj {
+    u32 dummy[8];
+    void *image;
+} Fn620C8TexObj;
+
+typedef struct Fn620C8Obj {
+    u8 pad_0[0x28];
+    f32 time;
+    u8 pad_2C[0x8];
+    Fn620C8Model *model;
+    Fn620C8TexObj *tex;
+    u8 rot[0x78];
+    f32 brightness;
+    Fn183D28Vec3 pos;
+} Fn620C8Obj;
+extern void lbl_8006DCA4();
+extern s32 fn_1_54E34(void *arg0, f32 arg1);
+extern void *fn_1_5448C(void *);
+extern void fn_1_5489C(void **arg0, void **arg1);
+extern void fn_1_862D4(s16 value, void *result);
+extern void *fn_1_548AC(u32 size);
+extern f32 lbl_1_rodata_2AF4[14];
+extern void fn_1_5EB98(void);
+
 typedef struct FnObj {
     u8 pad18[0x18];
     s16 value;
@@ -5008,13 +10413,177 @@ void fn_1_5EB08(FnObj *object) {
 }
 /* fzgx:end fn_1_5EB08 */
 
-/* fzgx:begin fn_1_5F5C4 */
+/* fzgx:begin fn_1_5F5C4 noprologue */
+#include "types.h"
+#include "game/main_rel/effect_types.h"
+#include "dolphin/types.h"
+#include "game/main_rel/car_test_types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/effect.h"
+#include "psvec.h"
+
+struct P {
+    u8 pad_0[0xC];
+    f32 unk_C;
+    u8 pad_10[0x18];
+    f32 unk_28;
+    u8 pad_2C[0xC];
+    f64 unk_38;
+    u8 pad_40[0x20];
+    f32 unk_60;
+    f32 unk_64;
+    u8 pad_68[0xC];
+    f32 unk_74;
+    u8 pad_78[0x54];
+    f32 unk_CC;
+    f32 unk_D0;
+    f32 unk_D4;
+    f32 unk_D8;
+    f32 unk_DC;
+};
+
+typedef struct Fn620C8Viewport {
+    f32 x;
+    f32 y;
+    f32 w;
+    f32 h;
+    f32 near;
+    f32 far;
+} Fn620C8Viewport;
+
+typedef struct Obj {
+    u8 b0;
+    u8 pad1[0xF];
+    s32 n10;
+    u8 pad14[4];
+    s16 id18;
+    u8 pad1a[0x0E];
+    f32 f28;
+    f32 f2c;
+    u8 pad30[0x0C];
+    f32 m3c[3];
+    f32 f48;
+    f32 f4c;
+    f32 f50;
+    s16 s54;
+    u8 pad56[4];
+    s16 s5a;
+    u8 pad5c[0x38];
+    f32 p94[3];
+    u8 pada0[0x14];
+    f32 fb4;
+} Obj;
+
+typedef struct Fn620C8Model {
+    u8 pad_0[0x8];
+    u8 data[0xC];
+    f32 scale;
+} Fn620C8Model;
+
+typedef struct Fn620C8TexObj {
+    u32 dummy[8];
+    void *image;
+} Fn620C8TexObj;
+
+typedef struct Fn620C8Obj {
+    u8 pad_0[0x28];
+    f32 time;
+    u8 pad_2C[0x8];
+    Fn620C8Model *model;
+    Fn620C8TexObj *tex;
+    u8 rot[0x78];
+    f32 brightness;
+    Fn183D28Vec3 pos;
+} Fn620C8Obj;
+
 // fn_1_5F5C4: empty in retail (single blr).
 void fn_1_5F5C4(void) {
 }
 /* fzgx:end fn_1_5F5C4 */
 
-/* fzgx:begin fn_1_5F5C8 */
+/* fzgx:begin fn_1_5F5C8 noprologue */
+#include "types.h"
+#include "game/main_rel/effect_types.h"
+#include "dolphin/types.h"
+#include "game/main_rel/car_test_types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/effect.h"
+#include "psvec.h"
+
+struct P {
+    u8 pad_0[0xC];
+    f32 unk_C;
+    u8 pad_10[0x18];
+    f32 unk_28;
+    u8 pad_2C[0xC];
+    f64 unk_38;
+    u8 pad_40[0x20];
+    f32 unk_60;
+    f32 unk_64;
+    u8 pad_68[0xC];
+    f32 unk_74;
+    u8 pad_78[0x54];
+    f32 unk_CC;
+    f32 unk_D0;
+    f32 unk_D4;
+    f32 unk_D8;
+    f32 unk_DC;
+};
+
+typedef struct Fn620C8Viewport {
+    f32 x;
+    f32 y;
+    f32 w;
+    f32 h;
+    f32 near;
+    f32 far;
+} Fn620C8Viewport;
+
+typedef struct Obj {
+    u8 b0;
+    u8 pad1[0xF];
+    s32 n10;
+    u8 pad14[4];
+    s16 id18;
+    u8 pad1a[0x0E];
+    f32 f28;
+    f32 f2c;
+    u8 pad30[0x0C];
+    f32 m3c[3];
+    f32 f48;
+    f32 f4c;
+    f32 f50;
+    s16 s54;
+    u8 pad56[4];
+    s16 s5a;
+    u8 pad5c[0x38];
+    f32 p94[3];
+    u8 pada0[0x14];
+    f32 fb4;
+} Obj;
+
+typedef struct Fn620C8Model {
+    u8 pad_0[0x8];
+    u8 data[0xC];
+    f32 scale;
+} Fn620C8Model;
+
+typedef struct Fn620C8TexObj {
+    u32 dummy[8];
+    void *image;
+} Fn620C8TexObj;
+
+typedef struct Fn620C8Obj {
+    u8 pad_0[0x28];
+    f32 time;
+    u8 pad_2C[0x8];
+    Fn620C8Model *model;
+    Fn620C8TexObj *tex;
+    u8 rot[0x78];
+    f32 brightness;
+    Fn183D28Vec3 pos;
+} Fn620C8Obj;
+
 typedef signed long s32;
 
 typedef unsigned char u8;
@@ -5676,25 +11245,359 @@ void fn_1_5F9B8(fn_1_5F9B8_Effect *effect) {
 }
 /* fzgx:end fn_1_5F9B8 */
 
-/* fzgx:begin fn_1_5FE24 */
+/* fzgx:begin fn_1_5FE24 noprologue */
+#include "types.h"
+#include "game/main_rel/effect_types.h"
+#include "dolphin/types.h"
+#include "game/main_rel/car_test_types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/effect.h"
+#include "psvec.h"
+
+struct P {
+    u8 pad_0[0xC];
+    f32 unk_C;
+    u8 pad_10[0x18];
+    f32 unk_28;
+    u8 pad_2C[0xC];
+    f64 unk_38;
+    u8 pad_40[0x20];
+    f32 unk_60;
+    f32 unk_64;
+    u8 pad_68[0xC];
+    f32 unk_74;
+    u8 pad_78[0x54];
+    f32 unk_CC;
+    f32 unk_D0;
+    f32 unk_D4;
+    f32 unk_D8;
+    f32 unk_DC;
+};
+
+typedef struct Fn620C8Viewport {
+    f32 x;
+    f32 y;
+    f32 w;
+    f32 h;
+    f32 near;
+    f32 far;
+} Fn620C8Viewport;
+
+typedef struct Obj {
+    u8 b0;
+    u8 pad1[0xF];
+    s32 n10;
+    u8 pad14[4];
+    s16 id18;
+    u8 pad1a[0x0E];
+    f32 f28;
+    f32 f2c;
+    u8 pad30[0x0C];
+    f32 m3c[3];
+    f32 f48;
+    f32 f4c;
+    f32 f50;
+    s16 s54;
+    u8 pad56[4];
+    s16 s5a;
+    u8 pad5c[0x38];
+    f32 p94[3];
+    u8 pada0[0x14];
+    f32 fb4;
+} Obj;
+
+typedef struct Fn620C8Model {
+    u8 pad_0[0x8];
+    u8 data[0xC];
+    f32 scale;
+} Fn620C8Model;
+
+typedef struct Fn620C8TexObj {
+    u32 dummy[8];
+    void *image;
+} Fn620C8TexObj;
+
+typedef struct Fn620C8Obj {
+    u8 pad_0[0x28];
+    f32 time;
+    u8 pad_2C[0x8];
+    Fn620C8Model *model;
+    Fn620C8TexObj *tex;
+    u8 rot[0x78];
+    f32 brightness;
+    Fn183D28Vec3 pos;
+} Fn620C8Obj;
+
 // fn_1_5FE24: empty in retail (single blr).
 void fn_1_5FE24(void) {
 }
 /* fzgx:end fn_1_5FE24 */
 
-/* fzgx:begin fn_1_5FE28 */
+/* fzgx:begin fn_1_5FE28 noprologue */
+#include "types.h"
+#include "game/main_rel/effect_types.h"
+#include "dolphin/types.h"
+#include "game/main_rel/car_test_types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/effect.h"
+#include "psvec.h"
+
+struct P {
+    u8 pad_0[0xC];
+    f32 unk_C;
+    u8 pad_10[0x18];
+    f32 unk_28;
+    u8 pad_2C[0xC];
+    f64 unk_38;
+    u8 pad_40[0x20];
+    f32 unk_60;
+    f32 unk_64;
+    u8 pad_68[0xC];
+    f32 unk_74;
+    u8 pad_78[0x54];
+    f32 unk_CC;
+    f32 unk_D0;
+    f32 unk_D4;
+    f32 unk_D8;
+    f32 unk_DC;
+};
+
+typedef struct Fn620C8Viewport {
+    f32 x;
+    f32 y;
+    f32 w;
+    f32 h;
+    f32 near;
+    f32 far;
+} Fn620C8Viewport;
+
+typedef struct Obj {
+    u8 b0;
+    u8 pad1[0xF];
+    s32 n10;
+    u8 pad14[4];
+    s16 id18;
+    u8 pad1a[0x0E];
+    f32 f28;
+    f32 f2c;
+    u8 pad30[0x0C];
+    f32 m3c[3];
+    f32 f48;
+    f32 f4c;
+    f32 f50;
+    s16 s54;
+    u8 pad56[4];
+    s16 s5a;
+    u8 pad5c[0x38];
+    f32 p94[3];
+    u8 pada0[0x14];
+    f32 fb4;
+} Obj;
+
+typedef struct Fn620C8Model {
+    u8 pad_0[0x8];
+    u8 data[0xC];
+    f32 scale;
+} Fn620C8Model;
+
+typedef struct Fn620C8TexObj {
+    u32 dummy[8];
+    void *image;
+} Fn620C8TexObj;
+
+typedef struct Fn620C8Obj {
+    u8 pad_0[0x28];
+    f32 time;
+    u8 pad_2C[0x8];
+    Fn620C8Model *model;
+    Fn620C8TexObj *tex;
+    u8 rot[0x78];
+    f32 brightness;
+    Fn183D28Vec3 pos;
+} Fn620C8Obj;
+
 // fn_1_5FE28: empty in retail (single blr).
 void fn_1_5FE28(void) {
 }
 /* fzgx:end fn_1_5FE28 */
 
-/* fzgx:begin fn_1_5FE2C */
+/* fzgx:begin fn_1_5FE2C noprologue */
+#include "types.h"
+#include "game/main_rel/effect_types.h"
+#include "dolphin/types.h"
+#include "game/main_rel/car_test_types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/effect.h"
+#include "psvec.h"
+
+struct P {
+    u8 pad_0[0xC];
+    f32 unk_C;
+    u8 pad_10[0x18];
+    f32 unk_28;
+    u8 pad_2C[0xC];
+    f64 unk_38;
+    u8 pad_40[0x20];
+    f32 unk_60;
+    f32 unk_64;
+    u8 pad_68[0xC];
+    f32 unk_74;
+    u8 pad_78[0x54];
+    f32 unk_CC;
+    f32 unk_D0;
+    f32 unk_D4;
+    f32 unk_D8;
+    f32 unk_DC;
+};
+
+typedef struct Fn620C8Viewport {
+    f32 x;
+    f32 y;
+    f32 w;
+    f32 h;
+    f32 near;
+    f32 far;
+} Fn620C8Viewport;
+
+typedef struct Obj {
+    u8 b0;
+    u8 pad1[0xF];
+    s32 n10;
+    u8 pad14[4];
+    s16 id18;
+    u8 pad1a[0x0E];
+    f32 f28;
+    f32 f2c;
+    u8 pad30[0x0C];
+    f32 m3c[3];
+    f32 f48;
+    f32 f4c;
+    f32 f50;
+    s16 s54;
+    u8 pad56[4];
+    s16 s5a;
+    u8 pad5c[0x38];
+    f32 p94[3];
+    u8 pada0[0x14];
+    f32 fb4;
+} Obj;
+
+typedef struct Fn620C8Model {
+    u8 pad_0[0x8];
+    u8 data[0xC];
+    f32 scale;
+} Fn620C8Model;
+
+typedef struct Fn620C8TexObj {
+    u32 dummy[8];
+    void *image;
+} Fn620C8TexObj;
+
+typedef struct Fn620C8Obj {
+    u8 pad_0[0x28];
+    f32 time;
+    u8 pad_2C[0x8];
+    Fn620C8Model *model;
+    Fn620C8TexObj *tex;
+    u8 rot[0x78];
+    f32 brightness;
+    Fn183D28Vec3 pos;
+} Fn620C8Obj;
+
 // fn_1_5FE2C: empty in retail (single blr).
 void fn_1_5FE2C(void) {
 }
 /* fzgx:end fn_1_5FE2C */
 
-/* fzgx:begin fn_1_5FE30 */
+/* fzgx:begin fn_1_5FE30 noprologue */
+#include "types.h"
+#include "game/main_rel/effect_types.h"
+#include "dolphin/types.h"
+#include "game/main_rel/car_test_types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/effect.h"
+#include "psvec.h"
+
+struct P {
+    u8 pad_0[0xC];
+    f32 unk_C;
+    u8 pad_10[0x18];
+    f32 unk_28;
+    u8 pad_2C[0xC];
+    f64 unk_38;
+    u8 pad_40[0x20];
+    f32 unk_60;
+    f32 unk_64;
+    u8 pad_68[0xC];
+    f32 unk_74;
+    u8 pad_78[0x54];
+    f32 unk_CC;
+    f32 unk_D0;
+    f32 unk_D4;
+    f32 unk_D8;
+    f32 unk_DC;
+};
+
+typedef struct Fn620C8Viewport {
+    f32 x;
+    f32 y;
+    f32 w;
+    f32 h;
+    f32 near;
+    f32 far;
+} Fn620C8Viewport;
+
+typedef struct Obj {
+    u8 b0;
+    u8 pad1[0xF];
+    s32 n10;
+    u8 pad14[4];
+    s16 id18;
+    u8 pad1a[0x0E];
+    f32 f28;
+    f32 f2c;
+    u8 pad30[0x0C];
+    f32 m3c[3];
+    f32 f48;
+    f32 f4c;
+    f32 f50;
+    s16 s54;
+    u8 pad56[4];
+    s16 s5a;
+    u8 pad5c[0x38];
+    f32 p94[3];
+    u8 pada0[0x14];
+    f32 fb4;
+} Obj;
+
+typedef struct Fn620C8Model {
+    u8 pad_0[0x8];
+    u8 data[0xC];
+    f32 scale;
+} Fn620C8Model;
+
+typedef struct Fn620C8TexObj {
+    u32 dummy[8];
+    void *image;
+} Fn620C8TexObj;
+
+typedef struct Fn620C8Obj {
+    u8 pad_0[0x28];
+    f32 time;
+    u8 pad_2C[0x8];
+    Fn620C8Model *model;
+    Fn620C8TexObj *tex;
+    u8 rot[0x78];
+    f32 brightness;
+    Fn183D28Vec3 pos;
+} Fn620C8Obj;
+extern void lbl_8006DCA4();
+extern s32 fn_1_54E34(void *arg0, f32 arg1);
+extern void *fn_1_5448C(void *);
+extern void fn_1_5489C(void **arg0, void **arg1);
+extern void fn_1_862D4(s16 value, void *result);
+extern void *fn_1_548AC(u32 size);
+
 typedef struct {
     u8 unk[0x18];
     s16 value;
@@ -5730,7 +11633,99 @@ void fn_1_5FE30(fn_1_5FE30_FZeroObject *object) {
 }
 /* fzgx:end fn_1_5FE30 */
 
-/* fzgx:begin fn_1_5FEBC */
+/* fzgx:begin fn_1_5FEBC noprologue */
+#include "types.h"
+#include "game/main_rel/effect_types.h"
+#include "dolphin/types.h"
+#include "game/main_rel/car_test_types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/effect.h"
+#include "psvec.h"
+
+struct P {
+    u8 pad_0[0xC];
+    f32 unk_C;
+    u8 pad_10[0x18];
+    f32 unk_28;
+    u8 pad_2C[0xC];
+    f64 unk_38;
+    u8 pad_40[0x20];
+    f32 unk_60;
+    f32 unk_64;
+    u8 pad_68[0xC];
+    f32 unk_74;
+    u8 pad_78[0x54];
+    f32 unk_CC;
+    f32 unk_D0;
+    f32 unk_D4;
+    f32 unk_D8;
+    f32 unk_DC;
+};
+
+typedef struct Fn620C8Viewport {
+    f32 x;
+    f32 y;
+    f32 w;
+    f32 h;
+    f32 near;
+    f32 far;
+} Fn620C8Viewport;
+
+typedef struct Obj {
+    u8 b0;
+    u8 pad1[0xF];
+    s32 n10;
+    u8 pad14[4];
+    s16 id18;
+    u8 pad1a[0x0E];
+    f32 f28;
+    f32 f2c;
+    u8 pad30[0x0C];
+    f32 m3c[3];
+    f32 f48;
+    f32 f4c;
+    f32 f50;
+    s16 s54;
+    u8 pad56[4];
+    s16 s5a;
+    u8 pad5c[0x38];
+    f32 p94[3];
+    u8 pada0[0x14];
+    f32 fb4;
+} Obj;
+
+typedef struct Fn620C8Model {
+    u8 pad_0[0x8];
+    u8 data[0xC];
+    f32 scale;
+} Fn620C8Model;
+
+typedef struct Fn620C8TexObj {
+    u32 dummy[8];
+    void *image;
+} Fn620C8TexObj;
+
+typedef struct Fn620C8Obj {
+    u8 pad_0[0x28];
+    f32 time;
+    u8 pad_2C[0x8];
+    Fn620C8Model *model;
+    Fn620C8TexObj *tex;
+    u8 rot[0x78];
+    f32 brightness;
+    Fn183D28Vec3 pos;
+} Fn620C8Obj;
+extern void *memset(void *, int, u32);
+extern void fn_1_867CC(s16 value, void *out);
+extern void lbl_8006D9D8(void *);
+extern void lbl_8006D7B0(void);
+extern void lbl_8006DB74(void *);
+extern int fn_1_9F914(const void *src0, const void *src1);
+extern void mathutil_mtxA_rotate_x(s16 value);
+extern void mathutil_mtxA_rotate_y(s16 value);
+extern const f32 lbl_1_rodata_2AA0[21];
+extern f32 lbl_1_rodata_29AC[5];
+
 void fn_1_5FEBC(fn_1_5FEBC_EffectObject *object) {
     u8 result[12];
     u8 data[64];
@@ -5761,13 +11756,179 @@ void fn_1_5FEBC(fn_1_5FEBC_EffectObject *object) {
 }
 /* fzgx:end fn_1_5FEBC */
 
-/* fzgx:begin fn_1_5FFAC */
+/* fzgx:begin fn_1_5FFAC noprologue */
+#include "types.h"
+#include "game/main_rel/effect_types.h"
+#include "dolphin/types.h"
+#include "game/main_rel/car_test_types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/effect.h"
+#include "psvec.h"
+
+struct P {
+    u8 pad_0[0xC];
+    f32 unk_C;
+    u8 pad_10[0x18];
+    f32 unk_28;
+    u8 pad_2C[0xC];
+    f64 unk_38;
+    u8 pad_40[0x20];
+    f32 unk_60;
+    f32 unk_64;
+    u8 pad_68[0xC];
+    f32 unk_74;
+    u8 pad_78[0x54];
+    f32 unk_CC;
+    f32 unk_D0;
+    f32 unk_D4;
+    f32 unk_D8;
+    f32 unk_DC;
+};
+
+typedef struct Fn620C8Viewport {
+    f32 x;
+    f32 y;
+    f32 w;
+    f32 h;
+    f32 near;
+    f32 far;
+} Fn620C8Viewport;
+
+typedef struct Obj {
+    u8 b0;
+    u8 pad1[0xF];
+    s32 n10;
+    u8 pad14[4];
+    s16 id18;
+    u8 pad1a[0x0E];
+    f32 f28;
+    f32 f2c;
+    u8 pad30[0x0C];
+    f32 m3c[3];
+    f32 f48;
+    f32 f4c;
+    f32 f50;
+    s16 s54;
+    u8 pad56[4];
+    s16 s5a;
+    u8 pad5c[0x38];
+    f32 p94[3];
+    u8 pada0[0x14];
+    f32 fb4;
+} Obj;
+
+typedef struct Fn620C8Model {
+    u8 pad_0[0x8];
+    u8 data[0xC];
+    f32 scale;
+} Fn620C8Model;
+
+typedef struct Fn620C8TexObj {
+    u32 dummy[8];
+    void *image;
+} Fn620C8TexObj;
+
+typedef struct Fn620C8Obj {
+    u8 pad_0[0x28];
+    f32 time;
+    u8 pad_2C[0x8];
+    Fn620C8Model *model;
+    Fn620C8TexObj *tex;
+    u8 rot[0x78];
+    f32 brightness;
+    Fn183D28Vec3 pos;
+} Fn620C8Obj;
+
 // fn_1_5FFAC: empty in retail (single blr).
 void fn_1_5FFAC(void) {
 }
 /* fzgx:end fn_1_5FFAC */
 
-/* fzgx:begin fn_1_60170 */
+/* fzgx:begin fn_1_60170 noprologue */
+#include "types.h"
+#include "game/main_rel/effect_types.h"
+#include "dolphin/types.h"
+#include "game/main_rel/car_test_types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/effect.h"
+#include "psvec.h"
+
+struct P {
+    u8 pad_0[0xC];
+    f32 unk_C;
+    u8 pad_10[0x18];
+    f32 unk_28;
+    u8 pad_2C[0xC];
+    f64 unk_38;
+    u8 pad_40[0x20];
+    f32 unk_60;
+    f32 unk_64;
+    u8 pad_68[0xC];
+    f32 unk_74;
+    u8 pad_78[0x54];
+    f32 unk_CC;
+    f32 unk_D0;
+    f32 unk_D4;
+    f32 unk_D8;
+    f32 unk_DC;
+};
+
+typedef struct Fn620C8Viewport {
+    f32 x;
+    f32 y;
+    f32 w;
+    f32 h;
+    f32 near;
+    f32 far;
+} Fn620C8Viewport;
+
+typedef struct Obj {
+    u8 b0;
+    u8 pad1[0xF];
+    s32 n10;
+    u8 pad14[4];
+    s16 id18;
+    u8 pad1a[0x0E];
+    f32 f28;
+    f32 f2c;
+    u8 pad30[0x0C];
+    f32 m3c[3];
+    f32 f48;
+    f32 f4c;
+    f32 f50;
+    s16 s54;
+    u8 pad56[4];
+    s16 s5a;
+    u8 pad5c[0x38];
+    f32 p94[3];
+    u8 pada0[0x14];
+    f32 fb4;
+} Obj;
+
+typedef struct Fn620C8Model {
+    u8 pad_0[0x8];
+    u8 data[0xC];
+    f32 scale;
+} Fn620C8Model;
+
+typedef struct Fn620C8TexObj {
+    u32 dummy[8];
+    void *image;
+} Fn620C8TexObj;
+
+typedef struct Fn620C8Obj {
+    u8 pad_0[0x28];
+    f32 time;
+    u8 pad_2C[0x8];
+    Fn620C8Model *model;
+    Fn620C8TexObj *tex;
+    u8 rot[0x78];
+    f32 brightness;
+    Fn183D28Vec3 pos;
+} Fn620C8Obj;
+extern void *lbl_801A6410;
+extern void fn_1_46B4(u32 arg0, u32 arg1, const char *arg2, int arg3);
+
 typedef struct {
     u8 unk[0x38];
     void *field38;
@@ -5781,7 +11942,91 @@ void fn_1_60170(fn_1_60170_FZeroObject *object) {
 }
 /* fzgx:end fn_1_60170 */
 
-/* fzgx:begin fn_1_601B4 */
+/* fzgx:begin fn_1_601B4 noprologue */
+#include "types.h"
+#include "game/main_rel/effect_types.h"
+#include "dolphin/types.h"
+#include "game/main_rel/car_test_types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/effect.h"
+#include "psvec.h"
+
+struct P {
+    u8 pad_0[0xC];
+    f32 unk_C;
+    u8 pad_10[0x18];
+    f32 unk_28;
+    u8 pad_2C[0xC];
+    f64 unk_38;
+    u8 pad_40[0x20];
+    f32 unk_60;
+    f32 unk_64;
+    u8 pad_68[0xC];
+    f32 unk_74;
+    u8 pad_78[0x54];
+    f32 unk_CC;
+    f32 unk_D0;
+    f32 unk_D4;
+    f32 unk_D8;
+    f32 unk_DC;
+};
+
+typedef struct Fn620C8Viewport {
+    f32 x;
+    f32 y;
+    f32 w;
+    f32 h;
+    f32 near;
+    f32 far;
+} Fn620C8Viewport;
+
+typedef struct Obj {
+    u8 b0;
+    u8 pad1[0xF];
+    s32 n10;
+    u8 pad14[4];
+    s16 id18;
+    u8 pad1a[0x0E];
+    f32 f28;
+    f32 f2c;
+    u8 pad30[0x0C];
+    f32 m3c[3];
+    f32 f48;
+    f32 f4c;
+    f32 f50;
+    s16 s54;
+    u8 pad56[4];
+    s16 s5a;
+    u8 pad5c[0x38];
+    f32 p94[3];
+    u8 pada0[0x14];
+    f32 fb4;
+} Obj;
+
+typedef struct Fn620C8Model {
+    u8 pad_0[0x8];
+    u8 data[0xC];
+    f32 scale;
+} Fn620C8Model;
+
+typedef struct Fn620C8TexObj {
+    u32 dummy[8];
+    void *image;
+} Fn620C8TexObj;
+
+typedef struct Fn620C8Obj {
+    u8 pad_0[0x28];
+    f32 time;
+    u8 pad_2C[0x8];
+    Fn620C8Model *model;
+    Fn620C8TexObj *tex;
+    u8 rot[0x78];
+    f32 brightness;
+    Fn183D28Vec3 pos;
+} Fn620C8Obj;
+extern const f32 lbl_1_rodata_29C0;
+extern const f32 lbl_1_rodata_29F0;
+
 typedef struct {
     u8 unk_0[0x10];
     s32 unk_10;
@@ -6086,7 +12331,89 @@ void fn_1_6028C(BeamEffect *effect)
 #pragma opt_dead_assignments reset
 /* fzgx:end fn_1_6028C */
 
-/* fzgx:begin fn_1_60734 */
+/* fzgx:begin fn_1_60734 noprologue */
+#include "types.h"
+#include "game/main_rel/effect_types.h"
+#include "dolphin/types.h"
+#include "game/main_rel/car_test_types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/effect.h"
+#include "psvec.h"
+
+struct P {
+    u8 pad_0[0xC];
+    f32 unk_C;
+    u8 pad_10[0x18];
+    f32 unk_28;
+    u8 pad_2C[0xC];
+    f64 unk_38;
+    u8 pad_40[0x20];
+    f32 unk_60;
+    f32 unk_64;
+    u8 pad_68[0xC];
+    f32 unk_74;
+    u8 pad_78[0x54];
+    f32 unk_CC;
+    f32 unk_D0;
+    f32 unk_D4;
+    f32 unk_D8;
+    f32 unk_DC;
+};
+
+typedef struct Fn620C8Viewport {
+    f32 x;
+    f32 y;
+    f32 w;
+    f32 h;
+    f32 near;
+    f32 far;
+} Fn620C8Viewport;
+
+typedef struct Obj {
+    u8 b0;
+    u8 pad1[0xF];
+    s32 n10;
+    u8 pad14[4];
+    s16 id18;
+    u8 pad1a[0x0E];
+    f32 f28;
+    f32 f2c;
+    u8 pad30[0x0C];
+    f32 m3c[3];
+    f32 f48;
+    f32 f4c;
+    f32 f50;
+    s16 s54;
+    u8 pad56[4];
+    s16 s5a;
+    u8 pad5c[0x38];
+    f32 p94[3];
+    u8 pada0[0x14];
+    f32 fb4;
+} Obj;
+
+typedef struct Fn620C8Model {
+    u8 pad_0[0x8];
+    u8 data[0xC];
+    f32 scale;
+} Fn620C8Model;
+
+typedef struct Fn620C8TexObj {
+    u32 dummy[8];
+    void *image;
+} Fn620C8TexObj;
+
+typedef struct Fn620C8Obj {
+    u8 pad_0[0x28];
+    f32 time;
+    u8 pad_2C[0x8];
+    Fn620C8Model *model;
+    Fn620C8TexObj *tex;
+    u8 rot[0x78];
+    f32 brightness;
+    Fn183D28Vec3 pos;
+} Fn620C8Obj;
+
 typedef struct Fn60734 {
     u8 pad_00[0x0e];
     s16 unk_0e;
@@ -6536,13 +12863,178 @@ void fn_1_60B80(Sig_fn_1_60B80_Obj *obj, u32 lab_unused0, u32 lab_unused1, u32 l
 }
 /* fzgx:end fn_1_60B80 */
 
-/* fzgx:begin fn_1_60C70 */
+/* fzgx:begin fn_1_60C70 noprologue */
+#include "types.h"
+#include "game/main_rel/effect_types.h"
+#include "dolphin/types.h"
+#include "game/main_rel/car_test_types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/effect.h"
+#include "psvec.h"
+
+struct P {
+    u8 pad_0[0xC];
+    f32 unk_C;
+    u8 pad_10[0x18];
+    f32 unk_28;
+    u8 pad_2C[0xC];
+    f64 unk_38;
+    u8 pad_40[0x20];
+    f32 unk_60;
+    f32 unk_64;
+    u8 pad_68[0xC];
+    f32 unk_74;
+    u8 pad_78[0x54];
+    f32 unk_CC;
+    f32 unk_D0;
+    f32 unk_D4;
+    f32 unk_D8;
+    f32 unk_DC;
+};
+
+typedef struct Fn620C8Viewport {
+    f32 x;
+    f32 y;
+    f32 w;
+    f32 h;
+    f32 near;
+    f32 far;
+} Fn620C8Viewport;
+
+typedef struct Obj {
+    u8 b0;
+    u8 pad1[0xF];
+    s32 n10;
+    u8 pad14[4];
+    s16 id18;
+    u8 pad1a[0x0E];
+    f32 f28;
+    f32 f2c;
+    u8 pad30[0x0C];
+    f32 m3c[3];
+    f32 f48;
+    f32 f4c;
+    f32 f50;
+    s16 s54;
+    u8 pad56[4];
+    s16 s5a;
+    u8 pad5c[0x38];
+    f32 p94[3];
+    u8 pada0[0x14];
+    f32 fb4;
+} Obj;
+
+typedef struct Fn620C8Model {
+    u8 pad_0[0x8];
+    u8 data[0xC];
+    f32 scale;
+} Fn620C8Model;
+
+typedef struct Fn620C8TexObj {
+    u32 dummy[8];
+    void *image;
+} Fn620C8TexObj;
+
+typedef struct Fn620C8Obj {
+    u8 pad_0[0x28];
+    f32 time;
+    u8 pad_2C[0x8];
+    Fn620C8Model *model;
+    Fn620C8TexObj *tex;
+    u8 rot[0x78];
+    f32 brightness;
+    Fn183D28Vec3 pos;
+} Fn620C8Obj;
+
 // fn_1_60C70: empty in retail (single blr).
 void fn_1_60C70(void) {
 }
 /* fzgx:end fn_1_60C70 */
 
-/* fzgx:begin fn_1_60C74 */
+/* fzgx:begin fn_1_60C74 noprologue */
+#include "types.h"
+#include "game/main_rel/effect_types.h"
+#include "dolphin/types.h"
+#include "game/main_rel/car_test_types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/effect.h"
+#include "psvec.h"
+
+struct P {
+    u8 pad_0[0xC];
+    f32 unk_C;
+    u8 pad_10[0x18];
+    f32 unk_28;
+    u8 pad_2C[0xC];
+    f64 unk_38;
+    u8 pad_40[0x20];
+    f32 unk_60;
+    f32 unk_64;
+    u8 pad_68[0xC];
+    f32 unk_74;
+    u8 pad_78[0x54];
+    f32 unk_CC;
+    f32 unk_D0;
+    f32 unk_D4;
+    f32 unk_D8;
+    f32 unk_DC;
+};
+
+typedef struct Fn620C8Viewport {
+    f32 x;
+    f32 y;
+    f32 w;
+    f32 h;
+    f32 near;
+    f32 far;
+} Fn620C8Viewport;
+
+typedef struct Obj {
+    u8 b0;
+    u8 pad1[0xF];
+    s32 n10;
+    u8 pad14[4];
+    s16 id18;
+    u8 pad1a[0x0E];
+    f32 f28;
+    f32 f2c;
+    u8 pad30[0x0C];
+    f32 m3c[3];
+    f32 f48;
+    f32 f4c;
+    f32 f50;
+    s16 s54;
+    u8 pad56[4];
+    s16 s5a;
+    u8 pad5c[0x38];
+    f32 p94[3];
+    u8 pada0[0x14];
+    f32 fb4;
+} Obj;
+
+typedef struct Fn620C8Model {
+    u8 pad_0[0x8];
+    u8 data[0xC];
+    f32 scale;
+} Fn620C8Model;
+
+typedef struct Fn620C8TexObj {
+    u32 dummy[8];
+    void *image;
+} Fn620C8TexObj;
+
+typedef struct Fn620C8Obj {
+    u8 pad_0[0x28];
+    f32 time;
+    u8 pad_2C[0x8];
+    Fn620C8Model *model;
+    Fn620C8TexObj *tex;
+    u8 rot[0x78];
+    f32 brightness;
+    Fn183D28Vec3 pos;
+} Fn620C8Obj;
+extern f32 lbl_1_rodata_2A5C[5];
+
 struct fn_1_60C74_Effect {
     u8 _pad[0x28];
     f32 field_28;
@@ -6553,7 +13045,89 @@ void fn_1_60C74(struct fn_1_60C74_Effect *effect) {
 }
 /* fzgx:end fn_1_60C74 */
 
-/* fzgx:begin fn_1_60C84 */
+/* fzgx:begin fn_1_60C84 noprologue */
+#include "types.h"
+#include "game/main_rel/effect_types.h"
+#include "dolphin/types.h"
+#include "game/main_rel/car_test_types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/effect.h"
+#include "psvec.h"
+
+struct P {
+    u8 pad_0[0xC];
+    f32 unk_C;
+    u8 pad_10[0x18];
+    f32 unk_28;
+    u8 pad_2C[0xC];
+    f64 unk_38;
+    u8 pad_40[0x20];
+    f32 unk_60;
+    f32 unk_64;
+    u8 pad_68[0xC];
+    f32 unk_74;
+    u8 pad_78[0x54];
+    f32 unk_CC;
+    f32 unk_D0;
+    f32 unk_D4;
+    f32 unk_D8;
+    f32 unk_DC;
+};
+
+typedef struct Fn620C8Viewport {
+    f32 x;
+    f32 y;
+    f32 w;
+    f32 h;
+    f32 near;
+    f32 far;
+} Fn620C8Viewport;
+
+typedef struct Obj {
+    u8 b0;
+    u8 pad1[0xF];
+    s32 n10;
+    u8 pad14[4];
+    s16 id18;
+    u8 pad1a[0x0E];
+    f32 f28;
+    f32 f2c;
+    u8 pad30[0x0C];
+    f32 m3c[3];
+    f32 f48;
+    f32 f4c;
+    f32 f50;
+    s16 s54;
+    u8 pad56[4];
+    s16 s5a;
+    u8 pad5c[0x38];
+    f32 p94[3];
+    u8 pada0[0x14];
+    f32 fb4;
+} Obj;
+
+typedef struct Fn620C8Model {
+    u8 pad_0[0x8];
+    u8 data[0xC];
+    f32 scale;
+} Fn620C8Model;
+
+typedef struct Fn620C8TexObj {
+    u32 dummy[8];
+    void *image;
+} Fn620C8TexObj;
+
+typedef struct Fn620C8Obj {
+    u8 pad_0[0x28];
+    f32 time;
+    u8 pad_2C[0x8];
+    Fn620C8Model *model;
+    Fn620C8TexObj *tex;
+    u8 rot[0x78];
+    f32 brightness;
+    Fn183D28Vec3 pos;
+} Fn620C8Obj;
+
 // fn_1_60C84: empty in retail (single blr).
 void fn_1_60C84(void) {
 }
@@ -6932,19 +13506,266 @@ void fn_1_60D54(u8 *arg0) {
 #pragma opt_dead_assignments reset
 /* fzgx:end fn_1_60D54 */
 
-/* fzgx:begin fn_1_60F7C */
+/* fzgx:begin fn_1_60F7C noprologue */
+#include "types.h"
+#include "game/main_rel/effect_types.h"
+#include "dolphin/types.h"
+#include "game/main_rel/car_test_types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/effect.h"
+#include "psvec.h"
+
+struct P {
+    u8 pad_0[0xC];
+    f32 unk_C;
+    u8 pad_10[0x18];
+    f32 unk_28;
+    u8 pad_2C[0xC];
+    f64 unk_38;
+    u8 pad_40[0x20];
+    f32 unk_60;
+    f32 unk_64;
+    u8 pad_68[0xC];
+    f32 unk_74;
+    u8 pad_78[0x54];
+    f32 unk_CC;
+    f32 unk_D0;
+    f32 unk_D4;
+    f32 unk_D8;
+    f32 unk_DC;
+};
+
+typedef struct Fn620C8Viewport {
+    f32 x;
+    f32 y;
+    f32 w;
+    f32 h;
+    f32 near;
+    f32 far;
+} Fn620C8Viewport;
+
+typedef struct Obj {
+    u8 b0;
+    u8 pad1[0xF];
+    s32 n10;
+    u8 pad14[4];
+    s16 id18;
+    u8 pad1a[0x0E];
+    f32 f28;
+    f32 f2c;
+    u8 pad30[0x0C];
+    f32 m3c[3];
+    f32 f48;
+    f32 f4c;
+    f32 f50;
+    s16 s54;
+    u8 pad56[4];
+    s16 s5a;
+    u8 pad5c[0x38];
+    f32 p94[3];
+    u8 pada0[0x14];
+    f32 fb4;
+} Obj;
+
+typedef struct Fn620C8Model {
+    u8 pad_0[0x8];
+    u8 data[0xC];
+    f32 scale;
+} Fn620C8Model;
+
+typedef struct Fn620C8TexObj {
+    u32 dummy[8];
+    void *image;
+} Fn620C8TexObj;
+
+typedef struct Fn620C8Obj {
+    u8 pad_0[0x28];
+    f32 time;
+    u8 pad_2C[0x8];
+    Fn620C8Model *model;
+    Fn620C8TexObj *tex;
+    u8 rot[0x78];
+    f32 brightness;
+    Fn183D28Vec3 pos;
+} Fn620C8Obj;
+
 // fn_1_60F7C: empty in retail (single blr).
 void fn_1_60F7C(void) {
 }
 /* fzgx:end fn_1_60F7C */
 
-/* fzgx:begin fn_1_60F80 */
+/* fzgx:begin fn_1_60F80 noprologue */
+#include "types.h"
+#include "game/main_rel/effect_types.h"
+#include "dolphin/types.h"
+#include "game/main_rel/car_test_types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/effect.h"
+#include "psvec.h"
+
+struct P {
+    u8 pad_0[0xC];
+    f32 unk_C;
+    u8 pad_10[0x18];
+    f32 unk_28;
+    u8 pad_2C[0xC];
+    f64 unk_38;
+    u8 pad_40[0x20];
+    f32 unk_60;
+    f32 unk_64;
+    u8 pad_68[0xC];
+    f32 unk_74;
+    u8 pad_78[0x54];
+    f32 unk_CC;
+    f32 unk_D0;
+    f32 unk_D4;
+    f32 unk_D8;
+    f32 unk_DC;
+};
+
+typedef struct Fn620C8Viewport {
+    f32 x;
+    f32 y;
+    f32 w;
+    f32 h;
+    f32 near;
+    f32 far;
+} Fn620C8Viewport;
+
+typedef struct Obj {
+    u8 b0;
+    u8 pad1[0xF];
+    s32 n10;
+    u8 pad14[4];
+    s16 id18;
+    u8 pad1a[0x0E];
+    f32 f28;
+    f32 f2c;
+    u8 pad30[0x0C];
+    f32 m3c[3];
+    f32 f48;
+    f32 f4c;
+    f32 f50;
+    s16 s54;
+    u8 pad56[4];
+    s16 s5a;
+    u8 pad5c[0x38];
+    f32 p94[3];
+    u8 pada0[0x14];
+    f32 fb4;
+} Obj;
+
+typedef struct Fn620C8Model {
+    u8 pad_0[0x8];
+    u8 data[0xC];
+    f32 scale;
+} Fn620C8Model;
+
+typedef struct Fn620C8TexObj {
+    u32 dummy[8];
+    void *image;
+} Fn620C8TexObj;
+
+typedef struct Fn620C8Obj {
+    u8 pad_0[0x28];
+    f32 time;
+    u8 pad_2C[0x8];
+    Fn620C8Model *model;
+    Fn620C8TexObj *tex;
+    u8 rot[0x78];
+    f32 brightness;
+    Fn183D28Vec3 pos;
+} Fn620C8Obj;
+
 // fn_1_60F80: empty in retail (single blr).
 void fn_1_60F80(void) {
 }
 /* fzgx:end fn_1_60F80 */
 
-/* fzgx:begin fn_1_60F84 */
+/* fzgx:begin fn_1_60F84 noprologue */
+#include "types.h"
+#include "game/main_rel/effect_types.h"
+#include "dolphin/types.h"
+#include "game/main_rel/car_test_types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/effect.h"
+#include "psvec.h"
+
+struct P {
+    u8 pad_0[0xC];
+    f32 unk_C;
+    u8 pad_10[0x18];
+    f32 unk_28;
+    u8 pad_2C[0xC];
+    f64 unk_38;
+    u8 pad_40[0x20];
+    f32 unk_60;
+    f32 unk_64;
+    u8 pad_68[0xC];
+    f32 unk_74;
+    u8 pad_78[0x54];
+    f32 unk_CC;
+    f32 unk_D0;
+    f32 unk_D4;
+    f32 unk_D8;
+    f32 unk_DC;
+};
+
+typedef struct Fn620C8Viewport {
+    f32 x;
+    f32 y;
+    f32 w;
+    f32 h;
+    f32 near;
+    f32 far;
+} Fn620C8Viewport;
+
+typedef struct Obj {
+    u8 b0;
+    u8 pad1[0xF];
+    s32 n10;
+    u8 pad14[4];
+    s16 id18;
+    u8 pad1a[0x0E];
+    f32 f28;
+    f32 f2c;
+    u8 pad30[0x0C];
+    f32 m3c[3];
+    f32 f48;
+    f32 f4c;
+    f32 f50;
+    s16 s54;
+    u8 pad56[4];
+    s16 s5a;
+    u8 pad5c[0x38];
+    f32 p94[3];
+    u8 pada0[0x14];
+    f32 fb4;
+} Obj;
+
+typedef struct Fn620C8Model {
+    u8 pad_0[0x8];
+    u8 data[0xC];
+    f32 scale;
+} Fn620C8Model;
+
+typedef struct Fn620C8TexObj {
+    u32 dummy[8];
+    void *image;
+} Fn620C8TexObj;
+
+typedef struct Fn620C8Obj {
+    u8 pad_0[0x28];
+    f32 time;
+    u8 pad_2C[0x8];
+    Fn620C8Model *model;
+    Fn620C8TexObj *tex;
+    u8 rot[0x78];
+    f32 brightness;
+    Fn183D28Vec3 pos;
+} Fn620C8Obj;
+extern const f32 lbl_1_rodata_2950;
+
 /* Shared literal pool primer: lays out lbl_1_rodata_2950 in retail order so the
    function's own literals dedupe onto retail's offsets (0xcc, 0x118, 0x38, 0x28, 0x1a0). */
 #pragma section code_type ".fzgxpool"
@@ -7223,7 +14044,91 @@ void fn_1_61070(Fn161070 *self) {
 #pragma opt_loop_invariants reset
 /* fzgx:end fn_1_61070 */
 
-/* fzgx:begin fn_1_611EC */
+/* fzgx:begin fn_1_611EC noprologue */
+#include "types.h"
+#include "game/main_rel/effect_types.h"
+#include "dolphin/types.h"
+#include "game/main_rel/car_test_types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/effect.h"
+#include "psvec.h"
+
+struct P {
+    u8 pad_0[0xC];
+    f32 unk_C;
+    u8 pad_10[0x18];
+    f32 unk_28;
+    u8 pad_2C[0xC];
+    f64 unk_38;
+    u8 pad_40[0x20];
+    f32 unk_60;
+    f32 unk_64;
+    u8 pad_68[0xC];
+    f32 unk_74;
+    u8 pad_78[0x54];
+    f32 unk_CC;
+    f32 unk_D0;
+    f32 unk_D4;
+    f32 unk_D8;
+    f32 unk_DC;
+};
+
+typedef struct Fn620C8Viewport {
+    f32 x;
+    f32 y;
+    f32 w;
+    f32 h;
+    f32 near;
+    f32 far;
+} Fn620C8Viewport;
+
+typedef struct Obj {
+    u8 b0;
+    u8 pad1[0xF];
+    s32 n10;
+    u8 pad14[4];
+    s16 id18;
+    u8 pad1a[0x0E];
+    f32 f28;
+    f32 f2c;
+    u8 pad30[0x0C];
+    f32 m3c[3];
+    f32 f48;
+    f32 f4c;
+    f32 f50;
+    s16 s54;
+    u8 pad56[4];
+    s16 s5a;
+    u8 pad5c[0x38];
+    f32 p94[3];
+    u8 pada0[0x14];
+    f32 fb4;
+} Obj;
+
+typedef struct Fn620C8Model {
+    u8 pad_0[0x8];
+    u8 data[0xC];
+    f32 scale;
+} Fn620C8Model;
+
+typedef struct Fn620C8TexObj {
+    u32 dummy[8];
+    void *image;
+} Fn620C8TexObj;
+
+typedef struct Fn620C8Obj {
+    u8 pad_0[0x28];
+    f32 time;
+    u8 pad_2C[0x8];
+    Fn620C8Model *model;
+    Fn620C8TexObj *tex;
+    u8 rot[0x78];
+    f32 brightness;
+    Fn183D28Vec3 pos;
+} Fn620C8Obj;
+extern void *lbl_801A6410;
+extern s32 fn_1_45D0();
+
 #pragma section code_type ".fzgxpool"
 __declspec(section ".fzgxpool") static void fzgx_pool_prime1(void) {
     volatile float s; volatile double d;  /* fzgx-allow: S2 pool primer sinks */
@@ -7421,7 +14326,102 @@ void fn_1_611EC(EffObj611EC *p)
 }
 /* fzgx:end fn_1_611EC */
 
-/* fzgx:begin fn_1_61640 */
+/* fzgx:begin fn_1_61640 noprologue */
+#include "types.h"
+#include "game/main_rel/effect_types.h"
+#include "dolphin/types.h"
+#include "game/main_rel/car_test_types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/effect.h"
+#include "psvec.h"
+
+struct P {
+    u8 pad_0[0xC];
+    f32 unk_C;
+    u8 pad_10[0x18];
+    f32 unk_28;
+    u8 pad_2C[0xC];
+    f64 unk_38;
+    u8 pad_40[0x20];
+    f32 unk_60;
+    f32 unk_64;
+    u8 pad_68[0xC];
+    f32 unk_74;
+    u8 pad_78[0x54];
+    f32 unk_CC;
+    f32 unk_D0;
+    f32 unk_D4;
+    f32 unk_D8;
+    f32 unk_DC;
+};
+
+typedef struct Fn620C8Viewport {
+    f32 x;
+    f32 y;
+    f32 w;
+    f32 h;
+    f32 near;
+    f32 far;
+} Fn620C8Viewport;
+
+typedef struct Obj {
+    u8 b0;
+    u8 pad1[0xF];
+    s32 n10;
+    u8 pad14[4];
+    s16 id18;
+    u8 pad1a[0x0E];
+    f32 f28;
+    f32 f2c;
+    u8 pad30[0x0C];
+    f32 m3c[3];
+    f32 f48;
+    f32 f4c;
+    f32 f50;
+    s16 s54;
+    u8 pad56[4];
+    s16 s5a;
+    u8 pad5c[0x38];
+    f32 p94[3];
+    u8 pada0[0x14];
+    f32 fb4;
+} Obj;
+
+typedef struct Fn620C8Model {
+    u8 pad_0[0x8];
+    u8 data[0xC];
+    f32 scale;
+} Fn620C8Model;
+
+typedef struct Fn620C8TexObj {
+    u32 dummy[8];
+    void *image;
+} Fn620C8TexObj;
+
+typedef struct Fn620C8Obj {
+    u8 pad_0[0x28];
+    f32 time;
+    u8 pad_2C[0x8];
+    Fn620C8Model *model;
+    Fn620C8TexObj *tex;
+    u8 rot[0x78];
+    f32 brightness;
+    Fn183D28Vec3 pos;
+} Fn620C8Obj;
+extern const f32 lbl_1_rodata_2950;
+extern void lbl_8006D9D8(void *);
+extern void fn_1_862D4(s16 value, void *result);
+extern void fn_1_8636C();
+extern void lbl_8006E14C(f32);
+extern void mathutil_mtxA_rotate_x(s16 value);
+extern void *lbl_801A6D00;
+extern void mathutil_mtxA_rotate_z(int);
+extern void mathutil_mtxA_rotate_y(s16 value);
+extern void fn_1_55FC4(f32 value);
+extern void fn_1_55FF0(f32 value);
+extern void fn_1_5557C(void *object);
+extern void fn_1_555D0(void *object);
+
 #pragma section code_type ".fzgxpool"
 __declspec(section ".fzgxpool") static void fzgx_pool_prime1(void) {
     volatile f32 s; volatile f64 d;  /* fzgx-allow: S2 pool primer sinks */
@@ -7653,7 +14653,91 @@ void fn_1_61640(struct Fn1_61640Object *object) {
 #pragma opt_propagation reset
 /* fzgx:end fn_1_61640 */
 
-/* fzgx:begin fn_1_61760 */
+/* fzgx:begin fn_1_61760 noprologue */
+#include "types.h"
+#include "game/main_rel/effect_types.h"
+#include "dolphin/types.h"
+#include "game/main_rel/car_test_types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/effect.h"
+#include "psvec.h"
+
+struct P {
+    u8 pad_0[0xC];
+    f32 unk_C;
+    u8 pad_10[0x18];
+    f32 unk_28;
+    u8 pad_2C[0xC];
+    f64 unk_38;
+    u8 pad_40[0x20];
+    f32 unk_60;
+    f32 unk_64;
+    u8 pad_68[0xC];
+    f32 unk_74;
+    u8 pad_78[0x54];
+    f32 unk_CC;
+    f32 unk_D0;
+    f32 unk_D4;
+    f32 unk_D8;
+    f32 unk_DC;
+};
+
+typedef struct Fn620C8Viewport {
+    f32 x;
+    f32 y;
+    f32 w;
+    f32 h;
+    f32 near;
+    f32 far;
+} Fn620C8Viewport;
+
+typedef struct Obj {
+    u8 b0;
+    u8 pad1[0xF];
+    s32 n10;
+    u8 pad14[4];
+    s16 id18;
+    u8 pad1a[0x0E];
+    f32 f28;
+    f32 f2c;
+    u8 pad30[0x0C];
+    f32 m3c[3];
+    f32 f48;
+    f32 f4c;
+    f32 f50;
+    s16 s54;
+    u8 pad56[4];
+    s16 s5a;
+    u8 pad5c[0x38];
+    f32 p94[3];
+    u8 pada0[0x14];
+    f32 fb4;
+} Obj;
+
+typedef struct Fn620C8Model {
+    u8 pad_0[0x8];
+    u8 data[0xC];
+    f32 scale;
+} Fn620C8Model;
+
+typedef struct Fn620C8TexObj {
+    u32 dummy[8];
+    void *image;
+} Fn620C8TexObj;
+
+typedef struct Fn620C8Obj {
+    u8 pad_0[0x28];
+    f32 time;
+    u8 pad_2C[0x8];
+    Fn620C8Model *model;
+    Fn620C8TexObj *tex;
+    u8 rot[0x78];
+    f32 brightness;
+    Fn183D28Vec3 pos;
+} Fn620C8Obj;
+extern void *lbl_801A6410;
+extern void fn_1_46B4(u32 arg0, u32 arg1, const char *arg2, int arg3);
+
 struct Fn1_61760Object {
     u8 _pad38[0x38];
     void *effect_resource;
@@ -7667,7 +14751,90 @@ void fn_1_61760(struct Fn1_61760Object *object) {
 }
 /* fzgx:end fn_1_61760 */
 
-/* fzgx:begin fn_1_617A4 */
+/* fzgx:begin fn_1_617A4 noprologue */
+#include "types.h"
+#include "game/main_rel/effect_types.h"
+#include "dolphin/types.h"
+#include "game/main_rel/car_test_types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/effect.h"
+#include "psvec.h"
+
+struct P {
+    u8 pad_0[0xC];
+    f32 unk_C;
+    u8 pad_10[0x18];
+    f32 unk_28;
+    u8 pad_2C[0xC];
+    f64 unk_38;
+    u8 pad_40[0x20];
+    f32 unk_60;
+    f32 unk_64;
+    u8 pad_68[0xC];
+    f32 unk_74;
+    u8 pad_78[0x54];
+    f32 unk_CC;
+    f32 unk_D0;
+    f32 unk_D4;
+    f32 unk_D8;
+    f32 unk_DC;
+};
+
+typedef struct Fn620C8Viewport {
+    f32 x;
+    f32 y;
+    f32 w;
+    f32 h;
+    f32 near;
+    f32 far;
+} Fn620C8Viewport;
+
+typedef struct Obj {
+    u8 b0;
+    u8 pad1[0xF];
+    s32 n10;
+    u8 pad14[4];
+    s16 id18;
+    u8 pad1a[0x0E];
+    f32 f28;
+    f32 f2c;
+    u8 pad30[0x0C];
+    f32 m3c[3];
+    f32 f48;
+    f32 f4c;
+    f32 f50;
+    s16 s54;
+    u8 pad56[4];
+    s16 s5a;
+    u8 pad5c[0x38];
+    f32 p94[3];
+    u8 pada0[0x14];
+    f32 fb4;
+} Obj;
+
+typedef struct Fn620C8Model {
+    u8 pad_0[0x8];
+    u8 data[0xC];
+    f32 scale;
+} Fn620C8Model;
+
+typedef struct Fn620C8TexObj {
+    u32 dummy[8];
+    void *image;
+} Fn620C8TexObj;
+
+typedef struct Fn620C8Obj {
+    u8 pad_0[0x28];
+    f32 time;
+    u8 pad_2C[0x8];
+    Fn620C8Model *model;
+    Fn620C8TexObj *tex;
+    u8 rot[0x78];
+    f32 brightness;
+    Fn183D28Vec3 pos;
+} Fn620C8Obj;
+extern const f32 lbl_1_rodata_2950;
+
 #pragma section code_type ".fzgxpool"
 __declspec(section ".fzgxpool") static void fzgx_pool_prime1(void) {
     volatile f32 s; volatile f64 d;  /* fzgx-allow: S2 pool primer sinks */
@@ -8104,37 +15271,537 @@ void fn_1_619E4(fn_1_619E4_Obj *obj) {
 #pragma opt_common_subs reset
 /* fzgx:end fn_1_619E4 */
 
-/* fzgx:begin fn_1_61C84 */
+/* fzgx:begin fn_1_61C84 noprologue */
+#include "types.h"
+#include "game/main_rel/effect_types.h"
+#include "dolphin/types.h"
+#include "game/main_rel/car_test_types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/effect.h"
+#include "psvec.h"
+
+struct P {
+    u8 pad_0[0xC];
+    f32 unk_C;
+    u8 pad_10[0x18];
+    f32 unk_28;
+    u8 pad_2C[0xC];
+    f64 unk_38;
+    u8 pad_40[0x20];
+    f32 unk_60;
+    f32 unk_64;
+    u8 pad_68[0xC];
+    f32 unk_74;
+    u8 pad_78[0x54];
+    f32 unk_CC;
+    f32 unk_D0;
+    f32 unk_D4;
+    f32 unk_D8;
+    f32 unk_DC;
+};
+
+typedef struct Fn620C8Viewport {
+    f32 x;
+    f32 y;
+    f32 w;
+    f32 h;
+    f32 near;
+    f32 far;
+} Fn620C8Viewport;
+
+typedef struct Obj {
+    u8 b0;
+    u8 pad1[0xF];
+    s32 n10;
+    u8 pad14[4];
+    s16 id18;
+    u8 pad1a[0x0E];
+    f32 f28;
+    f32 f2c;
+    u8 pad30[0x0C];
+    f32 m3c[3];
+    f32 f48;
+    f32 f4c;
+    f32 f50;
+    s16 s54;
+    u8 pad56[4];
+    s16 s5a;
+    u8 pad5c[0x38];
+    f32 p94[3];
+    u8 pada0[0x14];
+    f32 fb4;
+} Obj;
+
+typedef struct Fn620C8Model {
+    u8 pad_0[0x8];
+    u8 data[0xC];
+    f32 scale;
+} Fn620C8Model;
+
+typedef struct Fn620C8TexObj {
+    u32 dummy[8];
+    void *image;
+} Fn620C8TexObj;
+
+typedef struct Fn620C8Obj {
+    u8 pad_0[0x28];
+    f32 time;
+    u8 pad_2C[0x8];
+    Fn620C8Model *model;
+    Fn620C8TexObj *tex;
+    u8 rot[0x78];
+    f32 brightness;
+    Fn183D28Vec3 pos;
+} Fn620C8Obj;
+
 // fn_1_61C84: empty in retail (single blr).
 void fn_1_61C84(void) {
 }
 /* fzgx:end fn_1_61C84 */
 
-/* fzgx:begin fn_1_61C88 */
+/* fzgx:begin fn_1_61C88 noprologue */
+#include "types.h"
+#include "game/main_rel/effect_types.h"
+#include "dolphin/types.h"
+#include "game/main_rel/car_test_types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/effect.h"
+#include "psvec.h"
+
+struct P {
+    u8 pad_0[0xC];
+    f32 unk_C;
+    u8 pad_10[0x18];
+    f32 unk_28;
+    u8 pad_2C[0xC];
+    f64 unk_38;
+    u8 pad_40[0x20];
+    f32 unk_60;
+    f32 unk_64;
+    u8 pad_68[0xC];
+    f32 unk_74;
+    u8 pad_78[0x54];
+    f32 unk_CC;
+    f32 unk_D0;
+    f32 unk_D4;
+    f32 unk_D8;
+    f32 unk_DC;
+};
+
+typedef struct Fn620C8Viewport {
+    f32 x;
+    f32 y;
+    f32 w;
+    f32 h;
+    f32 near;
+    f32 far;
+} Fn620C8Viewport;
+
+typedef struct Obj {
+    u8 b0;
+    u8 pad1[0xF];
+    s32 n10;
+    u8 pad14[4];
+    s16 id18;
+    u8 pad1a[0x0E];
+    f32 f28;
+    f32 f2c;
+    u8 pad30[0x0C];
+    f32 m3c[3];
+    f32 f48;
+    f32 f4c;
+    f32 f50;
+    s16 s54;
+    u8 pad56[4];
+    s16 s5a;
+    u8 pad5c[0x38];
+    f32 p94[3];
+    u8 pada0[0x14];
+    f32 fb4;
+} Obj;
+
+typedef struct Fn620C8Model {
+    u8 pad_0[0x8];
+    u8 data[0xC];
+    f32 scale;
+} Fn620C8Model;
+
+typedef struct Fn620C8TexObj {
+    u32 dummy[8];
+    void *image;
+} Fn620C8TexObj;
+
+typedef struct Fn620C8Obj {
+    u8 pad_0[0x28];
+    f32 time;
+    u8 pad_2C[0x8];
+    Fn620C8Model *model;
+    Fn620C8TexObj *tex;
+    u8 rot[0x78];
+    f32 brightness;
+    Fn183D28Vec3 pos;
+} Fn620C8Obj;
+extern int fn_1_61D08();
+
 void fn_1_61C88(void) {
     fn_1_61D08();
 }
 /* fzgx:end fn_1_61C88 */
 
-/* fzgx:begin fn_1_61CA8 */
+/* fzgx:begin fn_1_61CA8 noprologue */
+#include "types.h"
+#include "game/main_rel/effect_types.h"
+#include "dolphin/types.h"
+#include "game/main_rel/car_test_types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/effect.h"
+#include "psvec.h"
+
+struct P {
+    u8 pad_0[0xC];
+    f32 unk_C;
+    u8 pad_10[0x18];
+    f32 unk_28;
+    u8 pad_2C[0xC];
+    f64 unk_38;
+    u8 pad_40[0x20];
+    f32 unk_60;
+    f32 unk_64;
+    u8 pad_68[0xC];
+    f32 unk_74;
+    u8 pad_78[0x54];
+    f32 unk_CC;
+    f32 unk_D0;
+    f32 unk_D4;
+    f32 unk_D8;
+    f32 unk_DC;
+};
+
+typedef struct Fn620C8Viewport {
+    f32 x;
+    f32 y;
+    f32 w;
+    f32 h;
+    f32 near;
+    f32 far;
+} Fn620C8Viewport;
+
+typedef struct Obj {
+    u8 b0;
+    u8 pad1[0xF];
+    s32 n10;
+    u8 pad14[4];
+    s16 id18;
+    u8 pad1a[0x0E];
+    f32 f28;
+    f32 f2c;
+    u8 pad30[0x0C];
+    f32 m3c[3];
+    f32 f48;
+    f32 f4c;
+    f32 f50;
+    s16 s54;
+    u8 pad56[4];
+    s16 s5a;
+    u8 pad5c[0x38];
+    f32 p94[3];
+    u8 pada0[0x14];
+    f32 fb4;
+} Obj;
+
+typedef struct Fn620C8Model {
+    u8 pad_0[0x8];
+    u8 data[0xC];
+    f32 scale;
+} Fn620C8Model;
+
+typedef struct Fn620C8TexObj {
+    u32 dummy[8];
+    void *image;
+} Fn620C8TexObj;
+
+typedef struct Fn620C8Obj {
+    u8 pad_0[0x28];
+    f32 time;
+    u8 pad_2C[0x8];
+    Fn620C8Model *model;
+    Fn620C8TexObj *tex;
+    u8 rot[0x78];
+    f32 brightness;
+    Fn183D28Vec3 pos;
+} Fn620C8Obj;
+extern int fn_1_61EF4();
+
 void fn_1_61CA8(void) {
     fn_1_61EF4();
 }
 /* fzgx:end fn_1_61CA8 */
 
-/* fzgx:begin fn_1_61CC8 */
+/* fzgx:begin fn_1_61CC8 noprologue */
+#include "types.h"
+#include "game/main_rel/effect_types.h"
+#include "dolphin/types.h"
+#include "game/main_rel/car_test_types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/effect.h"
+#include "psvec.h"
+
+struct P {
+    u8 pad_0[0xC];
+    f32 unk_C;
+    u8 pad_10[0x18];
+    f32 unk_28;
+    u8 pad_2C[0xC];
+    f64 unk_38;
+    u8 pad_40[0x20];
+    f32 unk_60;
+    f32 unk_64;
+    u8 pad_68[0xC];
+    f32 unk_74;
+    u8 pad_78[0x54];
+    f32 unk_CC;
+    f32 unk_D0;
+    f32 unk_D4;
+    f32 unk_D8;
+    f32 unk_DC;
+};
+
+typedef struct Fn620C8Viewport {
+    f32 x;
+    f32 y;
+    f32 w;
+    f32 h;
+    f32 near;
+    f32 far;
+} Fn620C8Viewport;
+
+typedef struct Obj {
+    u8 b0;
+    u8 pad1[0xF];
+    s32 n10;
+    u8 pad14[4];
+    s16 id18;
+    u8 pad1a[0x0E];
+    f32 f28;
+    f32 f2c;
+    u8 pad30[0x0C];
+    f32 m3c[3];
+    f32 f48;
+    f32 f4c;
+    f32 f50;
+    s16 s54;
+    u8 pad56[4];
+    s16 s5a;
+    u8 pad5c[0x38];
+    f32 p94[3];
+    u8 pada0[0x14];
+    f32 fb4;
+} Obj;
+
+typedef struct Fn620C8Model {
+    u8 pad_0[0x8];
+    u8 data[0xC];
+    f32 scale;
+} Fn620C8Model;
+
+typedef struct Fn620C8TexObj {
+    u32 dummy[8];
+    void *image;
+} Fn620C8TexObj;
+
+typedef struct Fn620C8Obj {
+    u8 pad_0[0x28];
+    f32 time;
+    u8 pad_2C[0x8];
+    Fn620C8Model *model;
+    Fn620C8TexObj *tex;
+    u8 rot[0x78];
+    f32 brightness;
+    Fn183D28Vec3 pos;
+} Fn620C8Obj;
+extern void fn_1_620C4(void);
+
 void fn_1_61CC8(void) {
     fn_1_620C4();
 }
 /* fzgx:end fn_1_61CC8 */
 
-/* fzgx:begin fn_1_61CE8 */
+/* fzgx:begin fn_1_61CE8 noprologue */
+#include "types.h"
+#include "game/main_rel/effect_types.h"
+#include "dolphin/types.h"
+#include "game/main_rel/car_test_types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/effect.h"
+#include "psvec.h"
+
+struct P {
+    u8 pad_0[0xC];
+    f32 unk_C;
+    u8 pad_10[0x18];
+    f32 unk_28;
+    u8 pad_2C[0xC];
+    f64 unk_38;
+    u8 pad_40[0x20];
+    f32 unk_60;
+    f32 unk_64;
+    u8 pad_68[0xC];
+    f32 unk_74;
+    u8 pad_78[0x54];
+    f32 unk_CC;
+    f32 unk_D0;
+    f32 unk_D4;
+    f32 unk_D8;
+    f32 unk_DC;
+};
+
+typedef struct Fn620C8Viewport {
+    f32 x;
+    f32 y;
+    f32 w;
+    f32 h;
+    f32 near;
+    f32 far;
+} Fn620C8Viewport;
+
+typedef struct Obj {
+    u8 b0;
+    u8 pad1[0xF];
+    s32 n10;
+    u8 pad14[4];
+    s16 id18;
+    u8 pad1a[0x0E];
+    f32 f28;
+    f32 f2c;
+    u8 pad30[0x0C];
+    f32 m3c[3];
+    f32 f48;
+    f32 f4c;
+    f32 f50;
+    s16 s54;
+    u8 pad56[4];
+    s16 s5a;
+    u8 pad5c[0x38];
+    f32 p94[3];
+    u8 pada0[0x14];
+    f32 fb4;
+} Obj;
+
+typedef struct Fn620C8Model {
+    u8 pad_0[0x8];
+    u8 data[0xC];
+    f32 scale;
+} Fn620C8Model;
+
+typedef struct Fn620C8TexObj {
+    u32 dummy[8];
+    void *image;
+} Fn620C8TexObj;
+
+typedef struct Fn620C8Obj {
+    u8 pad_0[0x28];
+    f32 time;
+    u8 pad_2C[0x8];
+    Fn620C8Model *model;
+    Fn620C8TexObj *tex;
+    u8 rot[0x78];
+    f32 brightness;
+    Fn183D28Vec3 pos;
+} Fn620C8Obj;
+extern int fn_1_61E60();
+
 void fn_1_61CE8(void) {
     fn_1_61E60();
 }
 /* fzgx:end fn_1_61CE8 */
 
-/* fzgx:begin fn_1_61D08 */
+/* fzgx:begin fn_1_61D08 noprologue */
+#include "types.h"
+#include "game/main_rel/effect_types.h"
+#include "dolphin/types.h"
+#include "game/main_rel/car_test_types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/effect.h"
+#include "psvec.h"
+
+struct P {
+    u8 pad_0[0xC];
+    f32 unk_C;
+    u8 pad_10[0x18];
+    f32 unk_28;
+    u8 pad_2C[0xC];
+    f64 unk_38;
+    u8 pad_40[0x20];
+    f32 unk_60;
+    f32 unk_64;
+    u8 pad_68[0xC];
+    f32 unk_74;
+    u8 pad_78[0x54];
+    f32 unk_CC;
+    f32 unk_D0;
+    f32 unk_D4;
+    f32 unk_D8;
+    f32 unk_DC;
+};
+
+typedef struct Fn620C8Viewport {
+    f32 x;
+    f32 y;
+    f32 w;
+    f32 h;
+    f32 near;
+    f32 far;
+} Fn620C8Viewport;
+
+typedef struct Obj {
+    u8 b0;
+    u8 pad1[0xF];
+    s32 n10;
+    u8 pad14[4];
+    s16 id18;
+    u8 pad1a[0x0E];
+    f32 f28;
+    f32 f2c;
+    u8 pad30[0x0C];
+    f32 m3c[3];
+    f32 f48;
+    f32 f4c;
+    f32 f50;
+    s16 s54;
+    u8 pad56[4];
+    s16 s5a;
+    u8 pad5c[0x38];
+    f32 p94[3];
+    u8 pada0[0x14];
+    f32 fb4;
+} Obj;
+
+typedef struct Fn620C8Model {
+    u8 pad_0[0x8];
+    u8 data[0xC];
+    f32 scale;
+} Fn620C8Model;
+
+typedef struct Fn620C8TexObj {
+    u32 dummy[8];
+    void *image;
+} Fn620C8TexObj;
+
+typedef struct Fn620C8Obj {
+    u8 pad_0[0x28];
+    f32 time;
+    u8 pad_2C[0x8];
+    Fn620C8Model *model;
+    Fn620C8TexObj *tex;
+    u8 rot[0x78];
+    f32 brightness;
+    Fn183D28Vec3 pos;
+} Fn620C8Obj;
+extern void *lbl_801A6410;
+extern s32 fn_1_45D0();
+extern u32 GXGetTexBufferSize(u16, u16, u32, u32, u8);
+extern int fn_1_61D08();
+
 typedef struct {
     u8 pad_0[0x20];
     void *unk_20;
@@ -8368,7 +16035,93 @@ fn_1_61D08_EffectObject *obj;
 #pragma opt_common_subs reset
 /* fzgx:end fn_1_61D08 */
 
-/* fzgx:begin fn_1_61E60 */
+/* fzgx:begin fn_1_61E60 noprologue */
+#include "types.h"
+#include "game/main_rel/effect_types.h"
+#include "dolphin/types.h"
+#include "game/main_rel/car_test_types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/effect.h"
+#include "psvec.h"
+
+struct P {
+    u8 pad_0[0xC];
+    f32 unk_C;
+    u8 pad_10[0x18];
+    f32 unk_28;
+    u8 pad_2C[0xC];
+    f64 unk_38;
+    u8 pad_40[0x20];
+    f32 unk_60;
+    f32 unk_64;
+    u8 pad_68[0xC];
+    f32 unk_74;
+    u8 pad_78[0x54];
+    f32 unk_CC;
+    f32 unk_D0;
+    f32 unk_D4;
+    f32 unk_D8;
+    f32 unk_DC;
+};
+
+typedef struct Fn620C8Viewport {
+    f32 x;
+    f32 y;
+    f32 w;
+    f32 h;
+    f32 near;
+    f32 far;
+} Fn620C8Viewport;
+
+typedef struct Obj {
+    u8 b0;
+    u8 pad1[0xF];
+    s32 n10;
+    u8 pad14[4];
+    s16 id18;
+    u8 pad1a[0x0E];
+    f32 f28;
+    f32 f2c;
+    u8 pad30[0x0C];
+    f32 m3c[3];
+    f32 f48;
+    f32 f4c;
+    f32 f50;
+    s16 s54;
+    u8 pad56[4];
+    s16 s5a;
+    u8 pad5c[0x38];
+    f32 p94[3];
+    u8 pada0[0x14];
+    f32 fb4;
+} Obj;
+
+typedef struct Fn620C8Model {
+    u8 pad_0[0x8];
+    u8 data[0xC];
+    f32 scale;
+} Fn620C8Model;
+
+typedef struct Fn620C8TexObj {
+    u32 dummy[8];
+    void *image;
+} Fn620C8TexObj;
+
+typedef struct Fn620C8Obj {
+    u8 pad_0[0x28];
+    f32 time;
+    u8 pad_2C[0x8];
+    Fn620C8Model *model;
+    Fn620C8TexObj *tex;
+    u8 rot[0x78];
+    f32 brightness;
+    Fn183D28Vec3 pos;
+} Fn620C8Obj;
+extern void *lbl_801A6410;
+extern void fn_1_46B4(u32 arg0, u32 arg1, const char *arg2, int arg3);
+extern void fn_1_4730(u32 value, u32 count, u32 size, const char *file, int line);
+extern int fn_1_61E60();
+
 // Releases the effect resources and clears the active effect references.
 int fn_1_61E60(object)
 Fn1_61E60Object *object;
@@ -8386,7 +16139,97 @@ Fn1_61E60Object *object;
 }
 /* fzgx:end fn_1_61E60 */
 
-/* fzgx:begin fn_1_61EF4 */
+/* fzgx:begin fn_1_61EF4 noprologue */
+#include "types.h"
+#include "game/main_rel/effect_types.h"
+#include "dolphin/types.h"
+#include "game/main_rel/car_test_types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/effect.h"
+#include "psvec.h"
+
+struct P {
+    u8 pad_0[0xC];
+    f32 unk_C;
+    u8 pad_10[0x18];
+    f32 unk_28;
+    u8 pad_2C[0xC];
+    f64 unk_38;
+    u8 pad_40[0x20];
+    f32 unk_60;
+    f32 unk_64;
+    u8 pad_68[0xC];
+    f32 unk_74;
+    u8 pad_78[0x54];
+    f32 unk_CC;
+    f32 unk_D0;
+    f32 unk_D4;
+    f32 unk_D8;
+    f32 unk_DC;
+};
+
+typedef struct Fn620C8Viewport {
+    f32 x;
+    f32 y;
+    f32 w;
+    f32 h;
+    f32 near;
+    f32 far;
+} Fn620C8Viewport;
+
+typedef struct Obj {
+    u8 b0;
+    u8 pad1[0xF];
+    s32 n10;
+    u8 pad14[4];
+    s16 id18;
+    u8 pad1a[0x0E];
+    f32 f28;
+    f32 f2c;
+    u8 pad30[0x0C];
+    f32 m3c[3];
+    f32 f48;
+    f32 f4c;
+    f32 f50;
+    s16 s54;
+    u8 pad56[4];
+    s16 s5a;
+    u8 pad5c[0x38];
+    f32 p94[3];
+    u8 pada0[0x14];
+    f32 fb4;
+} Obj;
+
+typedef struct Fn620C8Model {
+    u8 pad_0[0x8];
+    u8 data[0xC];
+    f32 scale;
+} Fn620C8Model;
+
+typedef struct Fn620C8TexObj {
+    u32 dummy[8];
+    void *image;
+} Fn620C8TexObj;
+
+typedef struct Fn620C8Obj {
+    u8 pad_0[0x28];
+    f32 time;
+    u8 pad_2C[0x8];
+    Fn620C8Model *model;
+    Fn620C8TexObj *tex;
+    u8 rot[0x78];
+    f32 brightness;
+    Fn183D28Vec3 pos;
+} Fn620C8Obj;
+extern void fn_1_862D4(s16 value, void *result);
+extern u32 lbl_1_bss_6C864;
+extern void fn_1_8636C();
+extern void *lbl_8006DC6C(void *);
+extern void lbl_8006DBAC(void *);
+extern u32 lbl_8006DA50(void);
+extern void lbl_8006DF44(void);
+extern int fn_1_61EF4();
+
 #pragma section code_type ".fzgxpool"
 __declspec(section ".fzgxpool") static void fzgx_pool_prime1(void) {
     volatile float s; volatile double d;  /* fzgx-allow: S2 pool primer sinks */
@@ -8609,7 +16452,90 @@ Obj *self;
 #pragma opt_propagation reset
 /* fzgx:end fn_1_61EF4 */
 
-/* fzgx:begin fn_1_620C4 */
+/* fzgx:begin fn_1_620C4 noprologue */
+#include "types.h"
+#include "game/main_rel/effect_types.h"
+#include "dolphin/types.h"
+#include "game/main_rel/car_test_types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/effect.h"
+#include "psvec.h"
+
+struct P {
+    u8 pad_0[0xC];
+    f32 unk_C;
+    u8 pad_10[0x18];
+    f32 unk_28;
+    u8 pad_2C[0xC];
+    f64 unk_38;
+    u8 pad_40[0x20];
+    f32 unk_60;
+    f32 unk_64;
+    u8 pad_68[0xC];
+    f32 unk_74;
+    u8 pad_78[0x54];
+    f32 unk_CC;
+    f32 unk_D0;
+    f32 unk_D4;
+    f32 unk_D8;
+    f32 unk_DC;
+};
+
+typedef struct Fn620C8Viewport {
+    f32 x;
+    f32 y;
+    f32 w;
+    f32 h;
+    f32 near;
+    f32 far;
+} Fn620C8Viewport;
+
+typedef struct Obj {
+    u8 b0;
+    u8 pad1[0xF];
+    s32 n10;
+    u8 pad14[4];
+    s16 id18;
+    u8 pad1a[0x0E];
+    f32 f28;
+    f32 f2c;
+    u8 pad30[0x0C];
+    f32 m3c[3];
+    f32 f48;
+    f32 f4c;
+    f32 f50;
+    s16 s54;
+    u8 pad56[4];
+    s16 s5a;
+    u8 pad5c[0x38];
+    f32 p94[3];
+    u8 pada0[0x14];
+    f32 fb4;
+} Obj;
+
+typedef struct Fn620C8Model {
+    u8 pad_0[0x8];
+    u8 data[0xC];
+    f32 scale;
+} Fn620C8Model;
+
+typedef struct Fn620C8TexObj {
+    u32 dummy[8];
+    void *image;
+} Fn620C8TexObj;
+
+typedef struct Fn620C8Obj {
+    u8 pad_0[0x28];
+    f32 time;
+    u8 pad_2C[0x8];
+    Fn620C8Model *model;
+    Fn620C8TexObj *tex;
+    u8 rot[0x78];
+    f32 brightness;
+    Fn183D28Vec3 pos;
+} Fn620C8Obj;
+extern void fn_1_620C4(void);
+
 // fn_1_620C4: empty in retail (single blr).
 void fn_1_620C4(void) {
 }
@@ -9366,7 +17292,89 @@ void fn_1_62794(void *tex) {
 }
 /* fzgx:end fn_1_62794 */
 
-/* fzgx:begin fn_1_62AF8 */
+/* fzgx:begin fn_1_62AF8 noprologue */
+#include "types.h"
+#include "game/main_rel/effect_types.h"
+#include "dolphin/types.h"
+#include "game/main_rel/car_test_types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/effect.h"
+#include "psvec.h"
+
+struct P {
+    u8 pad_0[0xC];
+    f32 unk_C;
+    u8 pad_10[0x18];
+    f32 unk_28;
+    u8 pad_2C[0xC];
+    f64 unk_38;
+    u8 pad_40[0x20];
+    f32 unk_60;
+    f32 unk_64;
+    u8 pad_68[0xC];
+    f32 unk_74;
+    u8 pad_78[0x54];
+    f32 unk_CC;
+    f32 unk_D0;
+    f32 unk_D4;
+    f32 unk_D8;
+    f32 unk_DC;
+};
+
+typedef struct Fn620C8Viewport {
+    f32 x;
+    f32 y;
+    f32 w;
+    f32 h;
+    f32 near;
+    f32 far;
+} Fn620C8Viewport;
+
+typedef struct Obj {
+    u8 b0;
+    u8 pad1[0xF];
+    s32 n10;
+    u8 pad14[4];
+    s16 id18;
+    u8 pad1a[0x0E];
+    f32 f28;
+    f32 f2c;
+    u8 pad30[0x0C];
+    f32 m3c[3];
+    f32 f48;
+    f32 f4c;
+    f32 f50;
+    s16 s54;
+    u8 pad56[4];
+    s16 s5a;
+    u8 pad5c[0x38];
+    f32 p94[3];
+    u8 pada0[0x14];
+    f32 fb4;
+} Obj;
+
+typedef struct Fn620C8Model {
+    u8 pad_0[0x8];
+    u8 data[0xC];
+    f32 scale;
+} Fn620C8Model;
+
+typedef struct Fn620C8TexObj {
+    u32 dummy[8];
+    void *image;
+} Fn620C8TexObj;
+
+typedef struct Fn620C8Obj {
+    u8 pad_0[0x28];
+    f32 time;
+    u8 pad_2C[0x8];
+    Fn620C8Model *model;
+    Fn620C8TexObj *tex;
+    u8 rot[0x78];
+    f32 brightness;
+    Fn183D28Vec3 pos;
+} Fn620C8Obj;
+
 #pragma section code_type ".fzgxpool"
 __declspec(section ".fzgxpool") static void fzgx_pool_prime1(void) {
     volatile f32 s; volatile f64 d;  /* fzgx-allow: S2 pool primer sinks */
@@ -9889,13 +17897,177 @@ void fn_1_62E9C(struct Eff62E9C *e) {
 }
 /* fzgx:end fn_1_62E9C */
 
-/* fzgx:begin fn_1_6312C */
+/* fzgx:begin fn_1_6312C noprologue */
+#include "types.h"
+#include "game/main_rel/effect_types.h"
+#include "dolphin/types.h"
+#include "game/main_rel/car_test_types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/effect.h"
+#include "psvec.h"
+
+struct P {
+    u8 pad_0[0xC];
+    f32 unk_C;
+    u8 pad_10[0x18];
+    f32 unk_28;
+    u8 pad_2C[0xC];
+    f64 unk_38;
+    u8 pad_40[0x20];
+    f32 unk_60;
+    f32 unk_64;
+    u8 pad_68[0xC];
+    f32 unk_74;
+    u8 pad_78[0x54];
+    f32 unk_CC;
+    f32 unk_D0;
+    f32 unk_D4;
+    f32 unk_D8;
+    f32 unk_DC;
+};
+
+typedef struct Fn620C8Viewport {
+    f32 x;
+    f32 y;
+    f32 w;
+    f32 h;
+    f32 near;
+    f32 far;
+} Fn620C8Viewport;
+
+typedef struct Obj {
+    u8 b0;
+    u8 pad1[0xF];
+    s32 n10;
+    u8 pad14[4];
+    s16 id18;
+    u8 pad1a[0x0E];
+    f32 f28;
+    f32 f2c;
+    u8 pad30[0x0C];
+    f32 m3c[3];
+    f32 f48;
+    f32 f4c;
+    f32 f50;
+    s16 s54;
+    u8 pad56[4];
+    s16 s5a;
+    u8 pad5c[0x38];
+    f32 p94[3];
+    u8 pada0[0x14];
+    f32 fb4;
+} Obj;
+
+typedef struct Fn620C8Model {
+    u8 pad_0[0x8];
+    u8 data[0xC];
+    f32 scale;
+} Fn620C8Model;
+
+typedef struct Fn620C8TexObj {
+    u32 dummy[8];
+    void *image;
+} Fn620C8TexObj;
+
+typedef struct Fn620C8Obj {
+    u8 pad_0[0x28];
+    f32 time;
+    u8 pad_2C[0x8];
+    Fn620C8Model *model;
+    Fn620C8TexObj *tex;
+    u8 rot[0x78];
+    f32 brightness;
+    Fn183D28Vec3 pos;
+} Fn620C8Obj;
+
 // fn_1_6312C: empty in retail (single blr).
 void fn_1_6312C(void) {
 }
 /* fzgx:end fn_1_6312C */
 
-/* fzgx:begin fn_1_63130 */
+/* fzgx:begin fn_1_63130 noprologue */
+#include "types.h"
+#include "game/main_rel/effect_types.h"
+#include "dolphin/types.h"
+#include "game/main_rel/car_test_types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/effect.h"
+#include "psvec.h"
+
+struct P {
+    u8 pad_0[0xC];
+    f32 unk_C;
+    u8 pad_10[0x18];
+    f32 unk_28;
+    u8 pad_2C[0xC];
+    f64 unk_38;
+    u8 pad_40[0x20];
+    f32 unk_60;
+    f32 unk_64;
+    u8 pad_68[0xC];
+    f32 unk_74;
+    u8 pad_78[0x54];
+    f32 unk_CC;
+    f32 unk_D0;
+    f32 unk_D4;
+    f32 unk_D8;
+    f32 unk_DC;
+};
+
+typedef struct Fn620C8Viewport {
+    f32 x;
+    f32 y;
+    f32 w;
+    f32 h;
+    f32 near;
+    f32 far;
+} Fn620C8Viewport;
+
+typedef struct Obj {
+    u8 b0;
+    u8 pad1[0xF];
+    s32 n10;
+    u8 pad14[4];
+    s16 id18;
+    u8 pad1a[0x0E];
+    f32 f28;
+    f32 f2c;
+    u8 pad30[0x0C];
+    f32 m3c[3];
+    f32 f48;
+    f32 f4c;
+    f32 f50;
+    s16 s54;
+    u8 pad56[4];
+    s16 s5a;
+    u8 pad5c[0x38];
+    f32 p94[3];
+    u8 pada0[0x14];
+    f32 fb4;
+} Obj;
+
+typedef struct Fn620C8Model {
+    u8 pad_0[0x8];
+    u8 data[0xC];
+    f32 scale;
+} Fn620C8Model;
+
+typedef struct Fn620C8TexObj {
+    u32 dummy[8];
+    void *image;
+} Fn620C8TexObj;
+
+typedef struct Fn620C8Obj {
+    u8 pad_0[0x28];
+    f32 time;
+    u8 pad_2C[0x8];
+    Fn620C8Model *model;
+    Fn620C8TexObj *tex;
+    u8 rot[0x78];
+    f32 brightness;
+    Fn183D28Vec3 pos;
+} Fn620C8Obj;
+
 struct fn_1_63130_obj {
     u8 unk_00[0xAE];
     s16 unk_AE;
@@ -10151,7 +18323,97 @@ void fn_1_6313C(Fx *p) {
 #pragma opt_propagation reset
 /* fzgx:end fn_1_6313C */
 
-/* fzgx:begin fn_1_632D4 */
+/* fzgx:begin fn_1_632D4 noprologue */
+#include "types.h"
+#include "game/main_rel/effect_types.h"
+#include "dolphin/types.h"
+#include "game/main_rel/car_test_types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/effect.h"
+#include "psvec.h"
+
+struct P {
+    u8 pad_0[0xC];
+    f32 unk_C;
+    u8 pad_10[0x18];
+    f32 unk_28;
+    u8 pad_2C[0xC];
+    f64 unk_38;
+    u8 pad_40[0x20];
+    f32 unk_60;
+    f32 unk_64;
+    u8 pad_68[0xC];
+    f32 unk_74;
+    u8 pad_78[0x54];
+    f32 unk_CC;
+    f32 unk_D0;
+    f32 unk_D4;
+    f32 unk_D8;
+    f32 unk_DC;
+};
+
+typedef struct Fn620C8Viewport {
+    f32 x;
+    f32 y;
+    f32 w;
+    f32 h;
+    f32 near;
+    f32 far;
+} Fn620C8Viewport;
+
+typedef struct Obj {
+    u8 b0;
+    u8 pad1[0xF];
+    s32 n10;
+    u8 pad14[4];
+    s16 id18;
+    u8 pad1a[0x0E];
+    f32 f28;
+    f32 f2c;
+    u8 pad30[0x0C];
+    f32 m3c[3];
+    f32 f48;
+    f32 f4c;
+    f32 f50;
+    s16 s54;
+    u8 pad56[4];
+    s16 s5a;
+    u8 pad5c[0x38];
+    f32 p94[3];
+    u8 pada0[0x14];
+    f32 fb4;
+} Obj;
+
+typedef struct Fn620C8Model {
+    u8 pad_0[0x8];
+    u8 data[0xC];
+    f32 scale;
+} Fn620C8Model;
+
+typedef struct Fn620C8TexObj {
+    u32 dummy[8];
+    void *image;
+} Fn620C8TexObj;
+
+typedef struct Fn620C8Obj {
+    u8 pad_0[0x28];
+    f32 time;
+    u8 pad_2C[0x8];
+    Fn620C8Model *model;
+    Fn620C8TexObj *tex;
+    u8 rot[0x78];
+    f32 brightness;
+    Fn183D28Vec3 pos;
+} Fn620C8Obj;
+extern void *memset(void *, int, u32);
+extern void lbl_8006DB74(void *);
+extern int fn_1_9F914(const void *src0, const void *src1);
+extern void lbl_8006DCA4();
+extern void mathutil_mtxA_rotate_z(int);
+extern const f32 lbl_1_rodata_2AA0[21];
+extern f32 lbl_1_rodata_29AC[5];
+extern void lbl_8006D7DC(void *obj);
+
 struct fn_1_632D4_obj {
     u8 unk_00[0x1C];
     f32 unk_1C;
@@ -10211,7 +18473,89 @@ void fn_1_632D4(struct fn_1_632D4_obj *obj) {
 }
 /* fzgx:end fn_1_632D4 */
 
-/* fzgx:begin fn_1_633BC */
+/* fzgx:begin fn_1_633BC noprologue */
+#include "types.h"
+#include "game/main_rel/effect_types.h"
+#include "dolphin/types.h"
+#include "game/main_rel/car_test_types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/effect.h"
+#include "psvec.h"
+
+struct P {
+    u8 pad_0[0xC];
+    f32 unk_C;
+    u8 pad_10[0x18];
+    f32 unk_28;
+    u8 pad_2C[0xC];
+    f64 unk_38;
+    u8 pad_40[0x20];
+    f32 unk_60;
+    f32 unk_64;
+    u8 pad_68[0xC];
+    f32 unk_74;
+    u8 pad_78[0x54];
+    f32 unk_CC;
+    f32 unk_D0;
+    f32 unk_D4;
+    f32 unk_D8;
+    f32 unk_DC;
+};
+
+typedef struct Fn620C8Viewport {
+    f32 x;
+    f32 y;
+    f32 w;
+    f32 h;
+    f32 near;
+    f32 far;
+} Fn620C8Viewport;
+
+typedef struct Obj {
+    u8 b0;
+    u8 pad1[0xF];
+    s32 n10;
+    u8 pad14[4];
+    s16 id18;
+    u8 pad1a[0x0E];
+    f32 f28;
+    f32 f2c;
+    u8 pad30[0x0C];
+    f32 m3c[3];
+    f32 f48;
+    f32 f4c;
+    f32 f50;
+    s16 s54;
+    u8 pad56[4];
+    s16 s5a;
+    u8 pad5c[0x38];
+    f32 p94[3];
+    u8 pada0[0x14];
+    f32 fb4;
+} Obj;
+
+typedef struct Fn620C8Model {
+    u8 pad_0[0x8];
+    u8 data[0xC];
+    f32 scale;
+} Fn620C8Model;
+
+typedef struct Fn620C8TexObj {
+    u32 dummy[8];
+    void *image;
+} Fn620C8TexObj;
+
+typedef struct Fn620C8Obj {
+    u8 pad_0[0x28];
+    f32 time;
+    u8 pad_2C[0x8];
+    Fn620C8Model *model;
+    Fn620C8TexObj *tex;
+    u8 rot[0x78];
+    f32 brightness;
+    Fn183D28Vec3 pos;
+} Fn620C8Obj;
+
 // fn_1_633BC: empty in retail (single blr).
 void fn_1_633BC(void) {
 }
@@ -10355,13 +18699,178 @@ void fn_1_633C0(FxObj633C0 *obj) {
 #pragma opt_propagation reset
 /* fzgx:end fn_1_633C0 */
 
-/* fzgx:begin fn_1_63514 */
+/* fzgx:begin fn_1_63514 noprologue */
+#include "types.h"
+#include "game/main_rel/effect_types.h"
+#include "dolphin/types.h"
+#include "game/main_rel/car_test_types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/effect.h"
+#include "psvec.h"
+
+struct P {
+    u8 pad_0[0xC];
+    f32 unk_C;
+    u8 pad_10[0x18];
+    f32 unk_28;
+    u8 pad_2C[0xC];
+    f64 unk_38;
+    u8 pad_40[0x20];
+    f32 unk_60;
+    f32 unk_64;
+    u8 pad_68[0xC];
+    f32 unk_74;
+    u8 pad_78[0x54];
+    f32 unk_CC;
+    f32 unk_D0;
+    f32 unk_D4;
+    f32 unk_D8;
+    f32 unk_DC;
+};
+
+typedef struct Fn620C8Viewport {
+    f32 x;
+    f32 y;
+    f32 w;
+    f32 h;
+    f32 near;
+    f32 far;
+} Fn620C8Viewport;
+
+typedef struct Obj {
+    u8 b0;
+    u8 pad1[0xF];
+    s32 n10;
+    u8 pad14[4];
+    s16 id18;
+    u8 pad1a[0x0E];
+    f32 f28;
+    f32 f2c;
+    u8 pad30[0x0C];
+    f32 m3c[3];
+    f32 f48;
+    f32 f4c;
+    f32 f50;
+    s16 s54;
+    u8 pad56[4];
+    s16 s5a;
+    u8 pad5c[0x38];
+    f32 p94[3];
+    u8 pada0[0x14];
+    f32 fb4;
+} Obj;
+
+typedef struct Fn620C8Model {
+    u8 pad_0[0x8];
+    u8 data[0xC];
+    f32 scale;
+} Fn620C8Model;
+
+typedef struct Fn620C8TexObj {
+    u32 dummy[8];
+    void *image;
+} Fn620C8TexObj;
+
+typedef struct Fn620C8Obj {
+    u8 pad_0[0x28];
+    f32 time;
+    u8 pad_2C[0x8];
+    Fn620C8Model *model;
+    Fn620C8TexObj *tex;
+    u8 rot[0x78];
+    f32 brightness;
+    Fn183D28Vec3 pos;
+} Fn620C8Obj;
+
 // fn_1_63514: empty in retail (single blr).
 void fn_1_63514(void) {
 }
 /* fzgx:end fn_1_63514 */
 
-/* fzgx:begin fn_1_63518 */
+/* fzgx:begin fn_1_63518 noprologue */
+#include "types.h"
+#include "game/main_rel/effect_types.h"
+#include "dolphin/types.h"
+#include "game/main_rel/car_test_types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/effect.h"
+#include "psvec.h"
+
+struct P {
+    u8 pad_0[0xC];
+    f32 unk_C;
+    u8 pad_10[0x18];
+    f32 unk_28;
+    u8 pad_2C[0xC];
+    f64 unk_38;
+    u8 pad_40[0x20];
+    f32 unk_60;
+    f32 unk_64;
+    u8 pad_68[0xC];
+    f32 unk_74;
+    u8 pad_78[0x54];
+    f32 unk_CC;
+    f32 unk_D0;
+    f32 unk_D4;
+    f32 unk_D8;
+    f32 unk_DC;
+};
+
+typedef struct Fn620C8Viewport {
+    f32 x;
+    f32 y;
+    f32 w;
+    f32 h;
+    f32 near;
+    f32 far;
+} Fn620C8Viewport;
+
+typedef struct Obj {
+    u8 b0;
+    u8 pad1[0xF];
+    s32 n10;
+    u8 pad14[4];
+    s16 id18;
+    u8 pad1a[0x0E];
+    f32 f28;
+    f32 f2c;
+    u8 pad30[0x0C];
+    f32 m3c[3];
+    f32 f48;
+    f32 f4c;
+    f32 f50;
+    s16 s54;
+    u8 pad56[4];
+    s16 s5a;
+    u8 pad5c[0x38];
+    f32 p94[3];
+    u8 pada0[0x14];
+    f32 fb4;
+} Obj;
+
+typedef struct Fn620C8Model {
+    u8 pad_0[0x8];
+    u8 data[0xC];
+    f32 scale;
+} Fn620C8Model;
+
+typedef struct Fn620C8TexObj {
+    u32 dummy[8];
+    void *image;
+} Fn620C8TexObj;
+
+typedef struct Fn620C8Obj {
+    u8 pad_0[0x28];
+    f32 time;
+    u8 pad_2C[0x8];
+    Fn620C8Model *model;
+    Fn620C8TexObj *tex;
+    u8 rot[0x78];
+    f32 brightness;
+    Fn183D28Vec3 pos;
+} Fn620C8Obj;
+extern s32 fn_1_58C4(void);
+
 typedef struct Effect_63518_vec {
     u32 x;
     u32 y;
@@ -10704,7 +19213,97 @@ void fn_1_635BC(Fn1635BCEffect *e) {
 }
 /* fzgx:end fn_1_635BC */
 
-/* fzgx:begin fn_1_63858 */
+/* fzgx:begin fn_1_63858 noprologue */
+#include "types.h"
+#include "game/main_rel/effect_types.h"
+#include "dolphin/types.h"
+#include "game/main_rel/car_test_types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/effect.h"
+#include "psvec.h"
+
+struct P {
+    u8 pad_0[0xC];
+    f32 unk_C;
+    u8 pad_10[0x18];
+    f32 unk_28;
+    u8 pad_2C[0xC];
+    f64 unk_38;
+    u8 pad_40[0x20];
+    f32 unk_60;
+    f32 unk_64;
+    u8 pad_68[0xC];
+    f32 unk_74;
+    u8 pad_78[0x54];
+    f32 unk_CC;
+    f32 unk_D0;
+    f32 unk_D4;
+    f32 unk_D8;
+    f32 unk_DC;
+};
+
+typedef struct Fn620C8Viewport {
+    f32 x;
+    f32 y;
+    f32 w;
+    f32 h;
+    f32 near;
+    f32 far;
+} Fn620C8Viewport;
+
+typedef struct Obj {
+    u8 b0;
+    u8 pad1[0xF];
+    s32 n10;
+    u8 pad14[4];
+    s16 id18;
+    u8 pad1a[0x0E];
+    f32 f28;
+    f32 f2c;
+    u8 pad30[0x0C];
+    f32 m3c[3];
+    f32 f48;
+    f32 f4c;
+    f32 f50;
+    s16 s54;
+    u8 pad56[4];
+    s16 s5a;
+    u8 pad5c[0x38];
+    f32 p94[3];
+    u8 pada0[0x14];
+    f32 fb4;
+} Obj;
+
+typedef struct Fn620C8Model {
+    u8 pad_0[0x8];
+    u8 data[0xC];
+    f32 scale;
+} Fn620C8Model;
+
+typedef struct Fn620C8TexObj {
+    u32 dummy[8];
+    void *image;
+} Fn620C8TexObj;
+
+typedef struct Fn620C8Obj {
+    u8 pad_0[0x28];
+    f32 time;
+    u8 pad_2C[0x8];
+    Fn620C8Model *model;
+    Fn620C8TexObj *tex;
+    u8 rot[0x78];
+    f32 brightness;
+    Fn183D28Vec3 pos;
+} Fn620C8Obj;
+extern void lbl_8006DCA4();
+extern s32 fn_1_54E34(void *arg0, f32 arg1);
+extern void *fn_1_5448C(void *);
+extern void fn_1_5489C(void **arg0, void **arg1);
+extern void fn_1_862D4(s16 value, void *result);
+extern void *fn_1_548AC(u32 size);
+extern f32 lbl_1_rodata_2B2C[145];
+extern void fn_1_638E8(void);
+
 struct LocalData {
     u8 data[0x10];
 };
@@ -10739,7 +19338,89 @@ void fn_1_63858(struct fn_1_63858_Object *object) {
 }
 /* fzgx:end fn_1_63858 */
 
-/* fzgx:begin fn_1_64098 */
+/* fzgx:begin fn_1_64098 noprologue */
+#include "types.h"
+#include "game/main_rel/effect_types.h"
+#include "dolphin/types.h"
+#include "game/main_rel/car_test_types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/effect.h"
+#include "psvec.h"
+
+struct P {
+    u8 pad_0[0xC];
+    f32 unk_C;
+    u8 pad_10[0x18];
+    f32 unk_28;
+    u8 pad_2C[0xC];
+    f64 unk_38;
+    u8 pad_40[0x20];
+    f32 unk_60;
+    f32 unk_64;
+    u8 pad_68[0xC];
+    f32 unk_74;
+    u8 pad_78[0x54];
+    f32 unk_CC;
+    f32 unk_D0;
+    f32 unk_D4;
+    f32 unk_D8;
+    f32 unk_DC;
+};
+
+typedef struct Fn620C8Viewport {
+    f32 x;
+    f32 y;
+    f32 w;
+    f32 h;
+    f32 near;
+    f32 far;
+} Fn620C8Viewport;
+
+typedef struct Obj {
+    u8 b0;
+    u8 pad1[0xF];
+    s32 n10;
+    u8 pad14[4];
+    s16 id18;
+    u8 pad1a[0x0E];
+    f32 f28;
+    f32 f2c;
+    u8 pad30[0x0C];
+    f32 m3c[3];
+    f32 f48;
+    f32 f4c;
+    f32 f50;
+    s16 s54;
+    u8 pad56[4];
+    s16 s5a;
+    u8 pad5c[0x38];
+    f32 p94[3];
+    u8 pada0[0x14];
+    f32 fb4;
+} Obj;
+
+typedef struct Fn620C8Model {
+    u8 pad_0[0x8];
+    u8 data[0xC];
+    f32 scale;
+} Fn620C8Model;
+
+typedef struct Fn620C8TexObj {
+    u32 dummy[8];
+    void *image;
+} Fn620C8TexObj;
+
+typedef struct Fn620C8Obj {
+    u8 pad_0[0x28];
+    f32 time;
+    u8 pad_2C[0x8];
+    Fn620C8Model *model;
+    Fn620C8TexObj *tex;
+    u8 rot[0x78];
+    f32 brightness;
+    Fn183D28Vec3 pos;
+} Fn620C8Obj;
+
 typedef struct Fn164098Object {
     u8 pad[0xae];
     u16 value;
@@ -10750,7 +19431,91 @@ void fn_1_64098(Fn164098Object *object) {
 }
 /* fzgx:end fn_1_64098 */
 
-/* fzgx:begin fn_1_640A4 pool */
+/* fzgx:begin fn_1_640A4 pool noprologue */
+#include "types.h"
+#include "game/main_rel/effect_types.h"
+#include "dolphin/types.h"
+#include "game/main_rel/car_test_types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/effect.h"
+#include "psvec.h"
+
+struct P {
+    u8 pad_0[0xC];
+    f32 unk_C;
+    u8 pad_10[0x18];
+    f32 unk_28;
+    u8 pad_2C[0xC];
+    f64 unk_38;
+    u8 pad_40[0x20];
+    f32 unk_60;
+    f32 unk_64;
+    u8 pad_68[0xC];
+    f32 unk_74;
+    u8 pad_78[0x54];
+    f32 unk_CC;
+    f32 unk_D0;
+    f32 unk_D4;
+    f32 unk_D8;
+    f32 unk_DC;
+};
+
+typedef struct Fn620C8Viewport {
+    f32 x;
+    f32 y;
+    f32 w;
+    f32 h;
+    f32 near;
+    f32 far;
+} Fn620C8Viewport;
+
+typedef struct Obj {
+    u8 b0;
+    u8 pad1[0xF];
+    s32 n10;
+    u8 pad14[4];
+    s16 id18;
+    u8 pad1a[0x0E];
+    f32 f28;
+    f32 f2c;
+    u8 pad30[0x0C];
+    f32 m3c[3];
+    f32 f48;
+    f32 f4c;
+    f32 f50;
+    s16 s54;
+    u8 pad56[4];
+    s16 s5a;
+    u8 pad5c[0x38];
+    f32 p94[3];
+    u8 pada0[0x14];
+    f32 fb4;
+} Obj;
+
+typedef struct Fn620C8Model {
+    u8 pad_0[0x8];
+    u8 data[0xC];
+    f32 scale;
+} Fn620C8Model;
+
+typedef struct Fn620C8TexObj {
+    u32 dummy[8];
+    void *image;
+} Fn620C8TexObj;
+
+typedef struct Fn620C8Obj {
+    u8 pad_0[0x28];
+    f32 time;
+    u8 pad_2C[0x8];
+    Fn620C8Model *model;
+    Fn620C8TexObj *tex;
+    u8 rot[0x78];
+    f32 brightness;
+    Fn183D28Vec3 pos;
+} Fn620C8Obj;
+extern const f32 lbl_1_rodata_2950;
+extern s32 fn_1_66B8(void *, f32);
+
 typedef struct {
     u8 state;
     u8 pad_1[0x7];
@@ -10873,7 +19638,96 @@ void fn_1_640A4(SmokeParticle *p)
 }
 /* fzgx:end fn_1_640A4 */
 
-/* fzgx:begin fn_1_642E8 */
+/* fzgx:begin fn_1_642E8 noprologue */
+#include "types.h"
+#include "game/main_rel/effect_types.h"
+#include "dolphin/types.h"
+#include "game/main_rel/car_test_types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/effect.h"
+#include "psvec.h"
+
+struct P {
+    u8 pad_0[0xC];
+    f32 unk_C;
+    u8 pad_10[0x18];
+    f32 unk_28;
+    u8 pad_2C[0xC];
+    f64 unk_38;
+    u8 pad_40[0x20];
+    f32 unk_60;
+    f32 unk_64;
+    u8 pad_68[0xC];
+    f32 unk_74;
+    u8 pad_78[0x54];
+    f32 unk_CC;
+    f32 unk_D0;
+    f32 unk_D4;
+    f32 unk_D8;
+    f32 unk_DC;
+};
+
+typedef struct Fn620C8Viewport {
+    f32 x;
+    f32 y;
+    f32 w;
+    f32 h;
+    f32 near;
+    f32 far;
+} Fn620C8Viewport;
+
+typedef struct Obj {
+    u8 b0;
+    u8 pad1[0xF];
+    s32 n10;
+    u8 pad14[4];
+    s16 id18;
+    u8 pad1a[0x0E];
+    f32 f28;
+    f32 f2c;
+    u8 pad30[0x0C];
+    f32 m3c[3];
+    f32 f48;
+    f32 f4c;
+    f32 f50;
+    s16 s54;
+    u8 pad56[4];
+    s16 s5a;
+    u8 pad5c[0x38];
+    f32 p94[3];
+    u8 pada0[0x14];
+    f32 fb4;
+} Obj;
+
+typedef struct Fn620C8Model {
+    u8 pad_0[0x8];
+    u8 data[0xC];
+    f32 scale;
+} Fn620C8Model;
+
+typedef struct Fn620C8TexObj {
+    u32 dummy[8];
+    void *image;
+} Fn620C8TexObj;
+
+typedef struct Fn620C8Obj {
+    u8 pad_0[0x28];
+    f32 time;
+    u8 pad_2C[0x8];
+    Fn620C8Model *model;
+    Fn620C8TexObj *tex;
+    u8 rot[0x78];
+    f32 brightness;
+    Fn183D28Vec3 pos;
+} Fn620C8Obj;
+extern void lbl_8006DCA4();
+extern s32 fn_1_54E34(void *arg0, f32 arg1);
+extern void *fn_1_5448C(void *);
+extern void fn_1_5489C(void **arg0, void **arg1);
+extern void *fn_1_548AC(u32 size);
+extern const f32 lbl_1_rodata_2A70[12];
+extern void fn_1_64388(void);
+
 typedef struct fn_1_642E8_EffectState {
     char bytes[0x14];
 } fn_1_642E8_EffectState;
@@ -11217,19 +20071,265 @@ void fn_1_64388(Fn1_64388Work *work)
 }
 /* fzgx:end fn_1_64388 */
 
-/* fzgx:begin fn_1_645C8 */
+/* fzgx:begin fn_1_645C8 noprologue */
+#include "types.h"
+#include "game/main_rel/effect_types.h"
+#include "dolphin/types.h"
+#include "game/main_rel/car_test_types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/effect.h"
+#include "psvec.h"
+
+struct P {
+    u8 pad_0[0xC];
+    f32 unk_C;
+    u8 pad_10[0x18];
+    f32 unk_28;
+    u8 pad_2C[0xC];
+    f64 unk_38;
+    u8 pad_40[0x20];
+    f32 unk_60;
+    f32 unk_64;
+    u8 pad_68[0xC];
+    f32 unk_74;
+    u8 pad_78[0x54];
+    f32 unk_CC;
+    f32 unk_D0;
+    f32 unk_D4;
+    f32 unk_D8;
+    f32 unk_DC;
+};
+
+typedef struct Fn620C8Viewport {
+    f32 x;
+    f32 y;
+    f32 w;
+    f32 h;
+    f32 near;
+    f32 far;
+} Fn620C8Viewport;
+
+typedef struct Obj {
+    u8 b0;
+    u8 pad1[0xF];
+    s32 n10;
+    u8 pad14[4];
+    s16 id18;
+    u8 pad1a[0x0E];
+    f32 f28;
+    f32 f2c;
+    u8 pad30[0x0C];
+    f32 m3c[3];
+    f32 f48;
+    f32 f4c;
+    f32 f50;
+    s16 s54;
+    u8 pad56[4];
+    s16 s5a;
+    u8 pad5c[0x38];
+    f32 p94[3];
+    u8 pada0[0x14];
+    f32 fb4;
+} Obj;
+
+typedef struct Fn620C8Model {
+    u8 pad_0[0x8];
+    u8 data[0xC];
+    f32 scale;
+} Fn620C8Model;
+
+typedef struct Fn620C8TexObj {
+    u32 dummy[8];
+    void *image;
+} Fn620C8TexObj;
+
+typedef struct Fn620C8Obj {
+    u8 pad_0[0x28];
+    f32 time;
+    u8 pad_2C[0x8];
+    Fn620C8Model *model;
+    Fn620C8TexObj *tex;
+    u8 rot[0x78];
+    f32 brightness;
+    Fn183D28Vec3 pos;
+} Fn620C8Obj;
+
 // fn_1_645C8: empty in retail (single blr).
 void fn_1_645C8(void) {
 }
 /* fzgx:end fn_1_645C8 */
 
-/* fzgx:begin fn_1_645CC */
+/* fzgx:begin fn_1_645CC noprologue */
+#include "types.h"
+#include "game/main_rel/effect_types.h"
+#include "dolphin/types.h"
+#include "game/main_rel/car_test_types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/effect.h"
+#include "psvec.h"
+
+struct P {
+    u8 pad_0[0xC];
+    f32 unk_C;
+    u8 pad_10[0x18];
+    f32 unk_28;
+    u8 pad_2C[0xC];
+    f64 unk_38;
+    u8 pad_40[0x20];
+    f32 unk_60;
+    f32 unk_64;
+    u8 pad_68[0xC];
+    f32 unk_74;
+    u8 pad_78[0x54];
+    f32 unk_CC;
+    f32 unk_D0;
+    f32 unk_D4;
+    f32 unk_D8;
+    f32 unk_DC;
+};
+
+typedef struct Fn620C8Viewport {
+    f32 x;
+    f32 y;
+    f32 w;
+    f32 h;
+    f32 near;
+    f32 far;
+} Fn620C8Viewport;
+
+typedef struct Obj {
+    u8 b0;
+    u8 pad1[0xF];
+    s32 n10;
+    u8 pad14[4];
+    s16 id18;
+    u8 pad1a[0x0E];
+    f32 f28;
+    f32 f2c;
+    u8 pad30[0x0C];
+    f32 m3c[3];
+    f32 f48;
+    f32 f4c;
+    f32 f50;
+    s16 s54;
+    u8 pad56[4];
+    s16 s5a;
+    u8 pad5c[0x38];
+    f32 p94[3];
+    u8 pada0[0x14];
+    f32 fb4;
+} Obj;
+
+typedef struct Fn620C8Model {
+    u8 pad_0[0x8];
+    u8 data[0xC];
+    f32 scale;
+} Fn620C8Model;
+
+typedef struct Fn620C8TexObj {
+    u32 dummy[8];
+    void *image;
+} Fn620C8TexObj;
+
+typedef struct Fn620C8Obj {
+    u8 pad_0[0x28];
+    f32 time;
+    u8 pad_2C[0x8];
+    Fn620C8Model *model;
+    Fn620C8TexObj *tex;
+    u8 rot[0x78];
+    f32 brightness;
+    Fn183D28Vec3 pos;
+} Fn620C8Obj;
+
 // fn_1_645CC: empty in retail (single blr).
 void fn_1_645CC(void) {
 }
 /* fzgx:end fn_1_645CC */
 
-/* fzgx:begin fn_1_645D0 */
+/* fzgx:begin fn_1_645D0 noprologue */
+#include "types.h"
+#include "game/main_rel/effect_types.h"
+#include "dolphin/types.h"
+#include "game/main_rel/car_test_types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/effect.h"
+#include "psvec.h"
+
+struct P {
+    u8 pad_0[0xC];
+    f32 unk_C;
+    u8 pad_10[0x18];
+    f32 unk_28;
+    u8 pad_2C[0xC];
+    f64 unk_38;
+    u8 pad_40[0x20];
+    f32 unk_60;
+    f32 unk_64;
+    u8 pad_68[0xC];
+    f32 unk_74;
+    u8 pad_78[0x54];
+    f32 unk_CC;
+    f32 unk_D0;
+    f32 unk_D4;
+    f32 unk_D8;
+    f32 unk_DC;
+};
+
+typedef struct Fn620C8Viewport {
+    f32 x;
+    f32 y;
+    f32 w;
+    f32 h;
+    f32 near;
+    f32 far;
+} Fn620C8Viewport;
+
+typedef struct Obj {
+    u8 b0;
+    u8 pad1[0xF];
+    s32 n10;
+    u8 pad14[4];
+    s16 id18;
+    u8 pad1a[0x0E];
+    f32 f28;
+    f32 f2c;
+    u8 pad30[0x0C];
+    f32 m3c[3];
+    f32 f48;
+    f32 f4c;
+    f32 f50;
+    s16 s54;
+    u8 pad56[4];
+    s16 s5a;
+    u8 pad5c[0x38];
+    f32 p94[3];
+    u8 pada0[0x14];
+    f32 fb4;
+} Obj;
+
+typedef struct Fn620C8Model {
+    u8 pad_0[0x8];
+    u8 data[0xC];
+    f32 scale;
+} Fn620C8Model;
+
+typedef struct Fn620C8TexObj {
+    u32 dummy[8];
+    void *image;
+} Fn620C8TexObj;
+
+typedef struct Fn620C8Obj {
+    u8 pad_0[0x28];
+    f32 time;
+    u8 pad_2C[0x8];
+    Fn620C8Model *model;
+    Fn620C8TexObj *tex;
+    u8 rot[0x78];
+    f32 brightness;
+    Fn183D28Vec3 pos;
+} Fn620C8Obj;
+
 // fn_1_645D0: empty in retail (single blr).
 void fn_1_645D0(void) {
 }
@@ -11597,13 +20697,177 @@ fn_1_9F914(&work, object);
 #pragma opt_propagation reset
 /* fzgx:end fn_1_64760 */
 
-/* fzgx:begin fn_1_648D4 */
+/* fzgx:begin fn_1_648D4 noprologue */
+#include "types.h"
+#include "game/main_rel/effect_types.h"
+#include "dolphin/types.h"
+#include "game/main_rel/car_test_types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/effect.h"
+#include "psvec.h"
+
+struct P {
+    u8 pad_0[0xC];
+    f32 unk_C;
+    u8 pad_10[0x18];
+    f32 unk_28;
+    u8 pad_2C[0xC];
+    f64 unk_38;
+    u8 pad_40[0x20];
+    f32 unk_60;
+    f32 unk_64;
+    u8 pad_68[0xC];
+    f32 unk_74;
+    u8 pad_78[0x54];
+    f32 unk_CC;
+    f32 unk_D0;
+    f32 unk_D4;
+    f32 unk_D8;
+    f32 unk_DC;
+};
+
+typedef struct Fn620C8Viewport {
+    f32 x;
+    f32 y;
+    f32 w;
+    f32 h;
+    f32 near;
+    f32 far;
+} Fn620C8Viewport;
+
+typedef struct Obj {
+    u8 b0;
+    u8 pad1[0xF];
+    s32 n10;
+    u8 pad14[4];
+    s16 id18;
+    u8 pad1a[0x0E];
+    f32 f28;
+    f32 f2c;
+    u8 pad30[0x0C];
+    f32 m3c[3];
+    f32 f48;
+    f32 f4c;
+    f32 f50;
+    s16 s54;
+    u8 pad56[4];
+    s16 s5a;
+    u8 pad5c[0x38];
+    f32 p94[3];
+    u8 pada0[0x14];
+    f32 fb4;
+} Obj;
+
+typedef struct Fn620C8Model {
+    u8 pad_0[0x8];
+    u8 data[0xC];
+    f32 scale;
+} Fn620C8Model;
+
+typedef struct Fn620C8TexObj {
+    u32 dummy[8];
+    void *image;
+} Fn620C8TexObj;
+
+typedef struct Fn620C8Obj {
+    u8 pad_0[0x28];
+    f32 time;
+    u8 pad_2C[0x8];
+    Fn620C8Model *model;
+    Fn620C8TexObj *tex;
+    u8 rot[0x78];
+    f32 brightness;
+    Fn183D28Vec3 pos;
+} Fn620C8Obj;
+
 // fn_1_648D4: empty in retail (single blr).
 void fn_1_648D4(void) {
 }
 /* fzgx:end fn_1_648D4 */
 
-/* fzgx:begin fn_1_648D8 */
+/* fzgx:begin fn_1_648D8 noprologue */
+#include "types.h"
+#include "game/main_rel/effect_types.h"
+#include "dolphin/types.h"
+#include "game/main_rel/car_test_types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/effect.h"
+#include "psvec.h"
+
+struct P {
+    u8 pad_0[0xC];
+    f32 unk_C;
+    u8 pad_10[0x18];
+    f32 unk_28;
+    u8 pad_2C[0xC];
+    f64 unk_38;
+    u8 pad_40[0x20];
+    f32 unk_60;
+    f32 unk_64;
+    u8 pad_68[0xC];
+    f32 unk_74;
+    u8 pad_78[0x54];
+    f32 unk_CC;
+    f32 unk_D0;
+    f32 unk_D4;
+    f32 unk_D8;
+    f32 unk_DC;
+};
+
+typedef struct Fn620C8Viewport {
+    f32 x;
+    f32 y;
+    f32 w;
+    f32 h;
+    f32 near;
+    f32 far;
+} Fn620C8Viewport;
+
+typedef struct Obj {
+    u8 b0;
+    u8 pad1[0xF];
+    s32 n10;
+    u8 pad14[4];
+    s16 id18;
+    u8 pad1a[0x0E];
+    f32 f28;
+    f32 f2c;
+    u8 pad30[0x0C];
+    f32 m3c[3];
+    f32 f48;
+    f32 f4c;
+    f32 f50;
+    s16 s54;
+    u8 pad56[4];
+    s16 s5a;
+    u8 pad5c[0x38];
+    f32 p94[3];
+    u8 pada0[0x14];
+    f32 fb4;
+} Obj;
+
+typedef struct Fn620C8Model {
+    u8 pad_0[0x8];
+    u8 data[0xC];
+    f32 scale;
+} Fn620C8Model;
+
+typedef struct Fn620C8TexObj {
+    u32 dummy[8];
+    void *image;
+} Fn620C8TexObj;
+
+typedef struct Fn620C8Obj {
+    u8 pad_0[0x28];
+    f32 time;
+    u8 pad_2C[0x8];
+    Fn620C8Model *model;
+    Fn620C8TexObj *tex;
+    u8 rot[0x78];
+    f32 brightness;
+    Fn183D28Vec3 pos;
+} Fn620C8Obj;
+
 // fn_1_648D8: empty in retail (single blr).
 void fn_1_648D8(void) {
 }
@@ -11676,7 +20940,89 @@ void fn_1_64E1C(Fn64E1CArg *arg)
 }
 /* fzgx:end fn_1_64E1C */
 
-/* fzgx:begin fn_1_64F2C */
+/* fzgx:begin fn_1_64F2C noprologue */
+#include "types.h"
+#include "game/main_rel/effect_types.h"
+#include "dolphin/types.h"
+#include "game/main_rel/car_test_types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/effect.h"
+#include "psvec.h"
+
+struct P {
+    u8 pad_0[0xC];
+    f32 unk_C;
+    u8 pad_10[0x18];
+    f32 unk_28;
+    u8 pad_2C[0xC];
+    f64 unk_38;
+    u8 pad_40[0x20];
+    f32 unk_60;
+    f32 unk_64;
+    u8 pad_68[0xC];
+    f32 unk_74;
+    u8 pad_78[0x54];
+    f32 unk_CC;
+    f32 unk_D0;
+    f32 unk_D4;
+    f32 unk_D8;
+    f32 unk_DC;
+};
+
+typedef struct Fn620C8Viewport {
+    f32 x;
+    f32 y;
+    f32 w;
+    f32 h;
+    f32 near;
+    f32 far;
+} Fn620C8Viewport;
+
+typedef struct Obj {
+    u8 b0;
+    u8 pad1[0xF];
+    s32 n10;
+    u8 pad14[4];
+    s16 id18;
+    u8 pad1a[0x0E];
+    f32 f28;
+    f32 f2c;
+    u8 pad30[0x0C];
+    f32 m3c[3];
+    f32 f48;
+    f32 f4c;
+    f32 f50;
+    s16 s54;
+    u8 pad56[4];
+    s16 s5a;
+    u8 pad5c[0x38];
+    f32 p94[3];
+    u8 pada0[0x14];
+    f32 fb4;
+} Obj;
+
+typedef struct Fn620C8Model {
+    u8 pad_0[0x8];
+    u8 data[0xC];
+    f32 scale;
+} Fn620C8Model;
+
+typedef struct Fn620C8TexObj {
+    u32 dummy[8];
+    void *image;
+} Fn620C8TexObj;
+
+typedef struct Fn620C8Obj {
+    u8 pad_0[0x28];
+    f32 time;
+    u8 pad_2C[0x8];
+    Fn620C8Model *model;
+    Fn620C8TexObj *tex;
+    u8 rot[0x78];
+    f32 brightness;
+    Fn183D28Vec3 pos;
+} Fn620C8Obj;
+
 #pragma section code_type ".fzgxpool"
 __declspec(section ".fzgxpool") static void fzgx_pool_prime1(void) {
     volatile f32 s; volatile f64 d;  /* fzgx-allow: S2 pool primer sinks */
@@ -12125,7 +21471,100 @@ void fn_1_65268(Object *object) {
 }
 /* fzgx:end fn_1_65268 */
 
-/* fzgx:begin fn_1_652F4 */
+/* fzgx:begin fn_1_652F4 noprologue */
+#include "types.h"
+#include "game/main_rel/effect_types.h"
+#include "dolphin/types.h"
+#include "game/main_rel/car_test_types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/effect.h"
+#include "psvec.h"
+
+struct P {
+    u8 pad_0[0xC];
+    f32 unk_C;
+    u8 pad_10[0x18];
+    f32 unk_28;
+    u8 pad_2C[0xC];
+    f64 unk_38;
+    u8 pad_40[0x20];
+    f32 unk_60;
+    f32 unk_64;
+    u8 pad_68[0xC];
+    f32 unk_74;
+    u8 pad_78[0x54];
+    f32 unk_CC;
+    f32 unk_D0;
+    f32 unk_D4;
+    f32 unk_D8;
+    f32 unk_DC;
+};
+
+typedef struct Fn620C8Viewport {
+    f32 x;
+    f32 y;
+    f32 w;
+    f32 h;
+    f32 near;
+    f32 far;
+} Fn620C8Viewport;
+
+typedef struct Obj {
+    u8 b0;
+    u8 pad1[0xF];
+    s32 n10;
+    u8 pad14[4];
+    s16 id18;
+    u8 pad1a[0x0E];
+    f32 f28;
+    f32 f2c;
+    u8 pad30[0x0C];
+    f32 m3c[3];
+    f32 f48;
+    f32 f4c;
+    f32 f50;
+    s16 s54;
+    u8 pad56[4];
+    s16 s5a;
+    u8 pad5c[0x38];
+    f32 p94[3];
+    u8 pada0[0x14];
+    f32 fb4;
+} Obj;
+
+typedef struct Fn620C8Model {
+    u8 pad_0[0x8];
+    u8 data[0xC];
+    f32 scale;
+} Fn620C8Model;
+
+typedef struct Fn620C8TexObj {
+    u32 dummy[8];
+    void *image;
+} Fn620C8TexObj;
+
+typedef struct Fn620C8Obj {
+    u8 pad_0[0x28];
+    f32 time;
+    u8 pad_2C[0x8];
+    Fn620C8Model *model;
+    Fn620C8TexObj *tex;
+    u8 rot[0x78];
+    f32 brightness;
+    Fn183D28Vec3 pos;
+} Fn620C8Obj;
+extern void *memset(void *, int, u32);
+extern void fn_1_867CC(s16 value, void *out);
+extern void lbl_8006D9D8(void *);
+extern void lbl_8006DB74(void *);
+extern int fn_1_9F914(const void *src0, const void *src1);
+extern void mathutil_mtxA_rotate_x(s16 value);
+extern const f32 lbl_1_rodata_2AA0[21];
+extern f32 lbl_1_rodata_29AC[5];
+extern void *fn_1_868C0(s8 index);
+extern void *fn_1_86254(int index);
+extern void lbl_8006D95C(s32);
+
 typedef struct {
     u8 pad_00[0x18];
     s16 unk_18;
@@ -12187,13 +21626,177 @@ void fn_1_652F4(fn_1_652F4_Effect *effect) {
 #pragma opt_common_subs reset
 /* fzgx:end fn_1_652F4 */
 
-/* fzgx:begin fn_1_65420 */
+/* fzgx:begin fn_1_65420 noprologue */
+#include "types.h"
+#include "game/main_rel/effect_types.h"
+#include "dolphin/types.h"
+#include "game/main_rel/car_test_types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/effect.h"
+#include "psvec.h"
+
+struct P {
+    u8 pad_0[0xC];
+    f32 unk_C;
+    u8 pad_10[0x18];
+    f32 unk_28;
+    u8 pad_2C[0xC];
+    f64 unk_38;
+    u8 pad_40[0x20];
+    f32 unk_60;
+    f32 unk_64;
+    u8 pad_68[0xC];
+    f32 unk_74;
+    u8 pad_78[0x54];
+    f32 unk_CC;
+    f32 unk_D0;
+    f32 unk_D4;
+    f32 unk_D8;
+    f32 unk_DC;
+};
+
+typedef struct Fn620C8Viewport {
+    f32 x;
+    f32 y;
+    f32 w;
+    f32 h;
+    f32 near;
+    f32 far;
+} Fn620C8Viewport;
+
+typedef struct Obj {
+    u8 b0;
+    u8 pad1[0xF];
+    s32 n10;
+    u8 pad14[4];
+    s16 id18;
+    u8 pad1a[0x0E];
+    f32 f28;
+    f32 f2c;
+    u8 pad30[0x0C];
+    f32 m3c[3];
+    f32 f48;
+    f32 f4c;
+    f32 f50;
+    s16 s54;
+    u8 pad56[4];
+    s16 s5a;
+    u8 pad5c[0x38];
+    f32 p94[3];
+    u8 pada0[0x14];
+    f32 fb4;
+} Obj;
+
+typedef struct Fn620C8Model {
+    u8 pad_0[0x8];
+    u8 data[0xC];
+    f32 scale;
+} Fn620C8Model;
+
+typedef struct Fn620C8TexObj {
+    u32 dummy[8];
+    void *image;
+} Fn620C8TexObj;
+
+typedef struct Fn620C8Obj {
+    u8 pad_0[0x28];
+    f32 time;
+    u8 pad_2C[0x8];
+    Fn620C8Model *model;
+    Fn620C8TexObj *tex;
+    u8 rot[0x78];
+    f32 brightness;
+    Fn183D28Vec3 pos;
+} Fn620C8Obj;
+
 // fn_1_65420: empty in retail (single blr).
 void fn_1_65420(void) {
 }
 /* fzgx:end fn_1_65420 */
 
-/* fzgx:begin fn_1_65424 */
+/* fzgx:begin fn_1_65424 noprologue */
+#include "types.h"
+#include "game/main_rel/effect_types.h"
+#include "dolphin/types.h"
+#include "game/main_rel/car_test_types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/effect.h"
+#include "psvec.h"
+
+struct P {
+    u8 pad_0[0xC];
+    f32 unk_C;
+    u8 pad_10[0x18];
+    f32 unk_28;
+    u8 pad_2C[0xC];
+    f64 unk_38;
+    u8 pad_40[0x20];
+    f32 unk_60;
+    f32 unk_64;
+    u8 pad_68[0xC];
+    f32 unk_74;
+    u8 pad_78[0x54];
+    f32 unk_CC;
+    f32 unk_D0;
+    f32 unk_D4;
+    f32 unk_D8;
+    f32 unk_DC;
+};
+
+typedef struct Fn620C8Viewport {
+    f32 x;
+    f32 y;
+    f32 w;
+    f32 h;
+    f32 near;
+    f32 far;
+} Fn620C8Viewport;
+
+typedef struct Obj {
+    u8 b0;
+    u8 pad1[0xF];
+    s32 n10;
+    u8 pad14[4];
+    s16 id18;
+    u8 pad1a[0x0E];
+    f32 f28;
+    f32 f2c;
+    u8 pad30[0x0C];
+    f32 m3c[3];
+    f32 f48;
+    f32 f4c;
+    f32 f50;
+    s16 s54;
+    u8 pad56[4];
+    s16 s5a;
+    u8 pad5c[0x38];
+    f32 p94[3];
+    u8 pada0[0x14];
+    f32 fb4;
+} Obj;
+
+typedef struct Fn620C8Model {
+    u8 pad_0[0x8];
+    u8 data[0xC];
+    f32 scale;
+} Fn620C8Model;
+
+typedef struct Fn620C8TexObj {
+    u32 dummy[8];
+    void *image;
+} Fn620C8TexObj;
+
+typedef struct Fn620C8Obj {
+    u8 pad_0[0x28];
+    f32 time;
+    u8 pad_2C[0x8];
+    Fn620C8Model *model;
+    Fn620C8TexObj *tex;
+    u8 rot[0x78];
+    f32 brightness;
+    Fn183D28Vec3 pos;
+} Fn620C8Obj;
+
 #pragma section code_type ".fzgxpool"
 __declspec(section ".fzgxpool") static void fzgx_pool_prime1(void) {
     volatile f32 s; volatile f64 d;  /* fzgx-allow: S2 pool primer sinks */
@@ -12574,7 +22177,95 @@ void fn_1_654B0(Particle654B0 *p)
 #pragma opt_common_subs reset
 /* fzgx:end fn_1_654B0 */
 
-/* fzgx:begin fn_1_656C8 */
+/* fzgx:begin fn_1_656C8 noprologue */
+#include "types.h"
+#include "game/main_rel/effect_types.h"
+#include "dolphin/types.h"
+#include "game/main_rel/car_test_types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/effect.h"
+#include "psvec.h"
+
+struct P {
+    u8 pad_0[0xC];
+    f32 unk_C;
+    u8 pad_10[0x18];
+    f32 unk_28;
+    u8 pad_2C[0xC];
+    f64 unk_38;
+    u8 pad_40[0x20];
+    f32 unk_60;
+    f32 unk_64;
+    u8 pad_68[0xC];
+    f32 unk_74;
+    u8 pad_78[0x54];
+    f32 unk_CC;
+    f32 unk_D0;
+    f32 unk_D4;
+    f32 unk_D8;
+    f32 unk_DC;
+};
+
+typedef struct Fn620C8Viewport {
+    f32 x;
+    f32 y;
+    f32 w;
+    f32 h;
+    f32 near;
+    f32 far;
+} Fn620C8Viewport;
+
+typedef struct Obj {
+    u8 b0;
+    u8 pad1[0xF];
+    s32 n10;
+    u8 pad14[4];
+    s16 id18;
+    u8 pad1a[0x0E];
+    f32 f28;
+    f32 f2c;
+    u8 pad30[0x0C];
+    f32 m3c[3];
+    f32 f48;
+    f32 f4c;
+    f32 f50;
+    s16 s54;
+    u8 pad56[4];
+    s16 s5a;
+    u8 pad5c[0x38];
+    f32 p94[3];
+    u8 pada0[0x14];
+    f32 fb4;
+} Obj;
+
+typedef struct Fn620C8Model {
+    u8 pad_0[0x8];
+    u8 data[0xC];
+    f32 scale;
+} Fn620C8Model;
+
+typedef struct Fn620C8TexObj {
+    u32 dummy[8];
+    void *image;
+} Fn620C8TexObj;
+
+typedef struct Fn620C8Obj {
+    u8 pad_0[0x28];
+    f32 time;
+    u8 pad_2C[0x8];
+    Fn620C8Model *model;
+    Fn620C8TexObj *tex;
+    u8 rot[0x78];
+    f32 brightness;
+    Fn183D28Vec3 pos;
+} Fn620C8Obj;
+extern void lbl_8006DCA4();
+extern s32 fn_1_54E34(void *arg0, f32 arg1);
+extern void *fn_1_5448C(void *);
+extern void fn_1_5489C(void **arg0, void **arg1);
+extern void *fn_1_548AC(u32 size);
+extern void fn_1_65748(void);
+
 typedef struct {
     u32 unk_00;
     void (*unk_04)(void);
@@ -12606,13 +22297,177 @@ void fn_1_656C8(fn_1_656C8_EffectObject *object) {
 }
 /* fzgx:end fn_1_656C8 */
 
-/* fzgx:begin fn_1_65AAC */
+/* fzgx:begin fn_1_65AAC noprologue */
+#include "types.h"
+#include "game/main_rel/effect_types.h"
+#include "dolphin/types.h"
+#include "game/main_rel/car_test_types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/effect.h"
+#include "psvec.h"
+
+struct P {
+    u8 pad_0[0xC];
+    f32 unk_C;
+    u8 pad_10[0x18];
+    f32 unk_28;
+    u8 pad_2C[0xC];
+    f64 unk_38;
+    u8 pad_40[0x20];
+    f32 unk_60;
+    f32 unk_64;
+    u8 pad_68[0xC];
+    f32 unk_74;
+    u8 pad_78[0x54];
+    f32 unk_CC;
+    f32 unk_D0;
+    f32 unk_D4;
+    f32 unk_D8;
+    f32 unk_DC;
+};
+
+typedef struct Fn620C8Viewport {
+    f32 x;
+    f32 y;
+    f32 w;
+    f32 h;
+    f32 near;
+    f32 far;
+} Fn620C8Viewport;
+
+typedef struct Obj {
+    u8 b0;
+    u8 pad1[0xF];
+    s32 n10;
+    u8 pad14[4];
+    s16 id18;
+    u8 pad1a[0x0E];
+    f32 f28;
+    f32 f2c;
+    u8 pad30[0x0C];
+    f32 m3c[3];
+    f32 f48;
+    f32 f4c;
+    f32 f50;
+    s16 s54;
+    u8 pad56[4];
+    s16 s5a;
+    u8 pad5c[0x38];
+    f32 p94[3];
+    u8 pada0[0x14];
+    f32 fb4;
+} Obj;
+
+typedef struct Fn620C8Model {
+    u8 pad_0[0x8];
+    u8 data[0xC];
+    f32 scale;
+} Fn620C8Model;
+
+typedef struct Fn620C8TexObj {
+    u32 dummy[8];
+    void *image;
+} Fn620C8TexObj;
+
+typedef struct Fn620C8Obj {
+    u8 pad_0[0x28];
+    f32 time;
+    u8 pad_2C[0x8];
+    Fn620C8Model *model;
+    Fn620C8TexObj *tex;
+    u8 rot[0x78];
+    f32 brightness;
+    Fn183D28Vec3 pos;
+} Fn620C8Obj;
+
 // fn_1_65AAC: empty in retail (single blr).
 void fn_1_65AAC(void) {
 }
 /* fzgx:end fn_1_65AAC */
 
-/* fzgx:begin fn_1_65AB0 */
+/* fzgx:begin fn_1_65AB0 noprologue */
+#include "types.h"
+#include "game/main_rel/effect_types.h"
+#include "dolphin/types.h"
+#include "game/main_rel/car_test_types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/effect.h"
+#include "psvec.h"
+
+struct P {
+    u8 pad_0[0xC];
+    f32 unk_C;
+    u8 pad_10[0x18];
+    f32 unk_28;
+    u8 pad_2C[0xC];
+    f64 unk_38;
+    u8 pad_40[0x20];
+    f32 unk_60;
+    f32 unk_64;
+    u8 pad_68[0xC];
+    f32 unk_74;
+    u8 pad_78[0x54];
+    f32 unk_CC;
+    f32 unk_D0;
+    f32 unk_D4;
+    f32 unk_D8;
+    f32 unk_DC;
+};
+
+typedef struct Fn620C8Viewport {
+    f32 x;
+    f32 y;
+    f32 w;
+    f32 h;
+    f32 near;
+    f32 far;
+} Fn620C8Viewport;
+
+typedef struct Obj {
+    u8 b0;
+    u8 pad1[0xF];
+    s32 n10;
+    u8 pad14[4];
+    s16 id18;
+    u8 pad1a[0x0E];
+    f32 f28;
+    f32 f2c;
+    u8 pad30[0x0C];
+    f32 m3c[3];
+    f32 f48;
+    f32 f4c;
+    f32 f50;
+    s16 s54;
+    u8 pad56[4];
+    s16 s5a;
+    u8 pad5c[0x38];
+    f32 p94[3];
+    u8 pada0[0x14];
+    f32 fb4;
+} Obj;
+
+typedef struct Fn620C8Model {
+    u8 pad_0[0x8];
+    u8 data[0xC];
+    f32 scale;
+} Fn620C8Model;
+
+typedef struct Fn620C8TexObj {
+    u32 dummy[8];
+    void *image;
+} Fn620C8TexObj;
+
+typedef struct Fn620C8Obj {
+    u8 pad_0[0x28];
+    f32 time;
+    u8 pad_2C[0x8];
+    Fn620C8Model *model;
+    Fn620C8TexObj *tex;
+    u8 rot[0x78];
+    f32 brightness;
+    Fn183D28Vec3 pos;
+} Fn620C8Obj;
+
 #pragma section code_type ".fzgxpool"
 __declspec(section ".fzgxpool") static void fzgx_pool_prime1(void) {
     volatile f32 s; volatile f64 d;  /* fzgx-allow: S2 pool primer sinks */
@@ -12866,7 +22721,89 @@ void fn_1_65AB0(Fn165AB0Object *obj) {
 }
 /* fzgx:end fn_1_65AB0 */
 
-/* fzgx:begin fn_1_65B58 */
+/* fzgx:begin fn_1_65B58 noprologue */
+#include "types.h"
+#include "game/main_rel/effect_types.h"
+#include "dolphin/types.h"
+#include "game/main_rel/car_test_types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/effect.h"
+#include "psvec.h"
+
+struct P {
+    u8 pad_0[0xC];
+    f32 unk_C;
+    u8 pad_10[0x18];
+    f32 unk_28;
+    u8 pad_2C[0xC];
+    f64 unk_38;
+    u8 pad_40[0x20];
+    f32 unk_60;
+    f32 unk_64;
+    u8 pad_68[0xC];
+    f32 unk_74;
+    u8 pad_78[0x54];
+    f32 unk_CC;
+    f32 unk_D0;
+    f32 unk_D4;
+    f32 unk_D8;
+    f32 unk_DC;
+};
+
+typedef struct Fn620C8Viewport {
+    f32 x;
+    f32 y;
+    f32 w;
+    f32 h;
+    f32 near;
+    f32 far;
+} Fn620C8Viewport;
+
+typedef struct Obj {
+    u8 b0;
+    u8 pad1[0xF];
+    s32 n10;
+    u8 pad14[4];
+    s16 id18;
+    u8 pad1a[0x0E];
+    f32 f28;
+    f32 f2c;
+    u8 pad30[0x0C];
+    f32 m3c[3];
+    f32 f48;
+    f32 f4c;
+    f32 f50;
+    s16 s54;
+    u8 pad56[4];
+    s16 s5a;
+    u8 pad5c[0x38];
+    f32 p94[3];
+    u8 pada0[0x14];
+    f32 fb4;
+} Obj;
+
+typedef struct Fn620C8Model {
+    u8 pad_0[0x8];
+    u8 data[0xC];
+    f32 scale;
+} Fn620C8Model;
+
+typedef struct Fn620C8TexObj {
+    u32 dummy[8];
+    void *image;
+} Fn620C8TexObj;
+
+typedef struct Fn620C8Obj {
+    u8 pad_0[0x28];
+    f32 time;
+    u8 pad_2C[0x8];
+    Fn620C8Model *model;
+    Fn620C8TexObj *tex;
+    u8 rot[0x78];
+    f32 brightness;
+    Fn183D28Vec3 pos;
+} Fn620C8Obj;
+
 // fn_1_65B58: empty in retail (single blr).
 void fn_1_65B58(void) {
 }
@@ -14121,7 +24058,90 @@ fn_1_9F914(&data, id);
 #pragma opt_loop_invariants reset
 /* fzgx:end fn_1_65CDC */
 
-/* fzgx:begin fn_1_65E58 */
+/* fzgx:begin fn_1_65E58 noprologue */
+#include "types.h"
+#include "game/main_rel/effect_types.h"
+#include "dolphin/types.h"
+#include "game/main_rel/car_test_types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/effect.h"
+#include "psvec.h"
+
+struct P {
+    u8 pad_0[0xC];
+    f32 unk_C;
+    u8 pad_10[0x18];
+    f32 unk_28;
+    u8 pad_2C[0xC];
+    f64 unk_38;
+    u8 pad_40[0x20];
+    f32 unk_60;
+    f32 unk_64;
+    u8 pad_68[0xC];
+    f32 unk_74;
+    u8 pad_78[0x54];
+    f32 unk_CC;
+    f32 unk_D0;
+    f32 unk_D4;
+    f32 unk_D8;
+    f32 unk_DC;
+};
+
+typedef struct Fn620C8Viewport {
+    f32 x;
+    f32 y;
+    f32 w;
+    f32 h;
+    f32 near;
+    f32 far;
+} Fn620C8Viewport;
+
+typedef struct Obj {
+    u8 b0;
+    u8 pad1[0xF];
+    s32 n10;
+    u8 pad14[4];
+    s16 id18;
+    u8 pad1a[0x0E];
+    f32 f28;
+    f32 f2c;
+    u8 pad30[0x0C];
+    f32 m3c[3];
+    f32 f48;
+    f32 f4c;
+    f32 f50;
+    s16 s54;
+    u8 pad56[4];
+    s16 s5a;
+    u8 pad5c[0x38];
+    f32 p94[3];
+    u8 pada0[0x14];
+    f32 fb4;
+} Obj;
+
+typedef struct Fn620C8Model {
+    u8 pad_0[0x8];
+    u8 data[0xC];
+    f32 scale;
+} Fn620C8Model;
+
+typedef struct Fn620C8TexObj {
+    u32 dummy[8];
+    void *image;
+} Fn620C8TexObj;
+
+typedef struct Fn620C8Obj {
+    u8 pad_0[0x28];
+    f32 time;
+    u8 pad_2C[0x8];
+    Fn620C8Model *model;
+    Fn620C8TexObj *tex;
+    u8 rot[0x78];
+    f32 brightness;
+    Fn183D28Vec3 pos;
+} Fn620C8Obj;
+extern void fn_1_8636C();
+
 typedef struct fn_1_65E58_Effect {
     u8 _pad_00[0x10];
     int field_10;
@@ -14136,7 +24156,89 @@ void fn_1_65E58(fn_1_65E58_Effect *effect) {
 }
 /* fzgx:end fn_1_65E58 */
 
-/* fzgx:begin fn_1_65E88 */
+/* fzgx:begin fn_1_65E88 noprologue */
+#include "types.h"
+#include "game/main_rel/effect_types.h"
+#include "dolphin/types.h"
+#include "game/main_rel/car_test_types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/effect.h"
+#include "psvec.h"
+
+struct P {
+    u8 pad_0[0xC];
+    f32 unk_C;
+    u8 pad_10[0x18];
+    f32 unk_28;
+    u8 pad_2C[0xC];
+    f64 unk_38;
+    u8 pad_40[0x20];
+    f32 unk_60;
+    f32 unk_64;
+    u8 pad_68[0xC];
+    f32 unk_74;
+    u8 pad_78[0x54];
+    f32 unk_CC;
+    f32 unk_D0;
+    f32 unk_D4;
+    f32 unk_D8;
+    f32 unk_DC;
+};
+
+typedef struct Fn620C8Viewport {
+    f32 x;
+    f32 y;
+    f32 w;
+    f32 h;
+    f32 near;
+    f32 far;
+} Fn620C8Viewport;
+
+typedef struct Obj {
+    u8 b0;
+    u8 pad1[0xF];
+    s32 n10;
+    u8 pad14[4];
+    s16 id18;
+    u8 pad1a[0x0E];
+    f32 f28;
+    f32 f2c;
+    u8 pad30[0x0C];
+    f32 m3c[3];
+    f32 f48;
+    f32 f4c;
+    f32 f50;
+    s16 s54;
+    u8 pad56[4];
+    s16 s5a;
+    u8 pad5c[0x38];
+    f32 p94[3];
+    u8 pada0[0x14];
+    f32 fb4;
+} Obj;
+
+typedef struct Fn620C8Model {
+    u8 pad_0[0x8];
+    u8 data[0xC];
+    f32 scale;
+} Fn620C8Model;
+
+typedef struct Fn620C8TexObj {
+    u32 dummy[8];
+    void *image;
+} Fn620C8TexObj;
+
+typedef struct Fn620C8Obj {
+    u8 pad_0[0x28];
+    f32 time;
+    u8 pad_2C[0x8];
+    Fn620C8Model *model;
+    Fn620C8TexObj *tex;
+    u8 rot[0x78];
+    f32 brightness;
+    Fn183D28Vec3 pos;
+} Fn620C8Obj;
+
 // fn_1_65E88: empty in retail (single blr).
 void fn_1_65E88(void) {
 }
@@ -14552,7 +24654,89 @@ void fn_1_660EC(Fn660ECObject *obj)
 }
 /* fzgx:end fn_1_660EC */
 
-/* fzgx:begin fn_1_66254 */
+/* fzgx:begin fn_1_66254 noprologue */
+#include "types.h"
+#include "game/main_rel/effect_types.h"
+#include "dolphin/types.h"
+#include "game/main_rel/car_test_types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/effect.h"
+#include "psvec.h"
+
+struct P {
+    u8 pad_0[0xC];
+    f32 unk_C;
+    u8 pad_10[0x18];
+    f32 unk_28;
+    u8 pad_2C[0xC];
+    f64 unk_38;
+    u8 pad_40[0x20];
+    f32 unk_60;
+    f32 unk_64;
+    u8 pad_68[0xC];
+    f32 unk_74;
+    u8 pad_78[0x54];
+    f32 unk_CC;
+    f32 unk_D0;
+    f32 unk_D4;
+    f32 unk_D8;
+    f32 unk_DC;
+};
+
+typedef struct Fn620C8Viewport {
+    f32 x;
+    f32 y;
+    f32 w;
+    f32 h;
+    f32 near;
+    f32 far;
+} Fn620C8Viewport;
+
+typedef struct Obj {
+    u8 b0;
+    u8 pad1[0xF];
+    s32 n10;
+    u8 pad14[4];
+    s16 id18;
+    u8 pad1a[0x0E];
+    f32 f28;
+    f32 f2c;
+    u8 pad30[0x0C];
+    f32 m3c[3];
+    f32 f48;
+    f32 f4c;
+    f32 f50;
+    s16 s54;
+    u8 pad56[4];
+    s16 s5a;
+    u8 pad5c[0x38];
+    f32 p94[3];
+    u8 pada0[0x14];
+    f32 fb4;
+} Obj;
+
+typedef struct Fn620C8Model {
+    u8 pad_0[0x8];
+    u8 data[0xC];
+    f32 scale;
+} Fn620C8Model;
+
+typedef struct Fn620C8TexObj {
+    u32 dummy[8];
+    void *image;
+} Fn620C8TexObj;
+
+typedef struct Fn620C8Obj {
+    u8 pad_0[0x28];
+    f32 time;
+    u8 pad_2C[0x8];
+    Fn620C8Model *model;
+    Fn620C8TexObj *tex;
+    u8 rot[0x78];
+    f32 brightness;
+    Fn183D28Vec3 pos;
+} Fn620C8Obj;
+
 typedef struct {
     u8 pad[0x28];
     f32 field_28;
@@ -14771,7 +24955,89 @@ void fn_1_66254(fn_1_66254_output *output) {
 }
 /* fzgx:end fn_1_66254 */
 
-/* fzgx:begin fn_1_662D4 */
+/* fzgx:begin fn_1_662D4 noprologue */
+#include "types.h"
+#include "game/main_rel/effect_types.h"
+#include "dolphin/types.h"
+#include "game/main_rel/car_test_types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/effect.h"
+#include "psvec.h"
+
+struct P {
+    u8 pad_0[0xC];
+    f32 unk_C;
+    u8 pad_10[0x18];
+    f32 unk_28;
+    u8 pad_2C[0xC];
+    f64 unk_38;
+    u8 pad_40[0x20];
+    f32 unk_60;
+    f32 unk_64;
+    u8 pad_68[0xC];
+    f32 unk_74;
+    u8 pad_78[0x54];
+    f32 unk_CC;
+    f32 unk_D0;
+    f32 unk_D4;
+    f32 unk_D8;
+    f32 unk_DC;
+};
+
+typedef struct Fn620C8Viewport {
+    f32 x;
+    f32 y;
+    f32 w;
+    f32 h;
+    f32 near;
+    f32 far;
+} Fn620C8Viewport;
+
+typedef struct Obj {
+    u8 b0;
+    u8 pad1[0xF];
+    s32 n10;
+    u8 pad14[4];
+    s16 id18;
+    u8 pad1a[0x0E];
+    f32 f28;
+    f32 f2c;
+    u8 pad30[0x0C];
+    f32 m3c[3];
+    f32 f48;
+    f32 f4c;
+    f32 f50;
+    s16 s54;
+    u8 pad56[4];
+    s16 s5a;
+    u8 pad5c[0x38];
+    f32 p94[3];
+    u8 pada0[0x14];
+    f32 fb4;
+} Obj;
+
+typedef struct Fn620C8Model {
+    u8 pad_0[0x8];
+    u8 data[0xC];
+    f32 scale;
+} Fn620C8Model;
+
+typedef struct Fn620C8TexObj {
+    u32 dummy[8];
+    void *image;
+} Fn620C8TexObj;
+
+typedef struct Fn620C8Obj {
+    u8 pad_0[0x28];
+    f32 time;
+    u8 pad_2C[0x8];
+    Fn620C8Model *model;
+    Fn620C8TexObj *tex;
+    u8 rot[0x78];
+    f32 brightness;
+    Fn183D28Vec3 pos;
+} Fn620C8Obj;
+
 // fn_1_662D4: empty in retail (single blr).
 void fn_1_662D4(void) {
 }
@@ -14943,7 +25209,90 @@ void fn_1_67294(FxArg *arg) {
 #pragma opt_propagation reset
 /* fzgx:end fn_1_67294 */
 
-/* fzgx:begin fn_1_67414 */
+/* fzgx:begin fn_1_67414 noprologue */
+#include "types.h"
+#include "game/main_rel/effect_types.h"
+#include "dolphin/types.h"
+#include "game/main_rel/car_test_types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/effect.h"
+#include "psvec.h"
+
+struct P {
+    u8 pad_0[0xC];
+    f32 unk_C;
+    u8 pad_10[0x18];
+    f32 unk_28;
+    u8 pad_2C[0xC];
+    f64 unk_38;
+    u8 pad_40[0x20];
+    f32 unk_60;
+    f32 unk_64;
+    u8 pad_68[0xC];
+    f32 unk_74;
+    u8 pad_78[0x54];
+    f32 unk_CC;
+    f32 unk_D0;
+    f32 unk_D4;
+    f32 unk_D8;
+    f32 unk_DC;
+};
+
+typedef struct Fn620C8Viewport {
+    f32 x;
+    f32 y;
+    f32 w;
+    f32 h;
+    f32 near;
+    f32 far;
+} Fn620C8Viewport;
+
+typedef struct Obj {
+    u8 b0;
+    u8 pad1[0xF];
+    s32 n10;
+    u8 pad14[4];
+    s16 id18;
+    u8 pad1a[0x0E];
+    f32 f28;
+    f32 f2c;
+    u8 pad30[0x0C];
+    f32 m3c[3];
+    f32 f48;
+    f32 f4c;
+    f32 f50;
+    s16 s54;
+    u8 pad56[4];
+    s16 s5a;
+    u8 pad5c[0x38];
+    f32 p94[3];
+    u8 pada0[0x14];
+    f32 fb4;
+} Obj;
+
+typedef struct Fn620C8Model {
+    u8 pad_0[0x8];
+    u8 data[0xC];
+    f32 scale;
+} Fn620C8Model;
+
+typedef struct Fn620C8TexObj {
+    u32 dummy[8];
+    void *image;
+} Fn620C8TexObj;
+
+typedef struct Fn620C8Obj {
+    u8 pad_0[0x28];
+    f32 time;
+    u8 pad_2C[0x8];
+    Fn620C8Model *model;
+    Fn620C8TexObj *tex;
+    u8 rot[0x78];
+    f32 brightness;
+    Fn183D28Vec3 pos;
+} Fn620C8Obj;
+extern const f64 lbl_1_rodata_2954;
+
 struct fn_1_67414_Arg0 {
     u8 pad_0[0x10];
     u32 unk_10;
@@ -14959,7 +25308,89 @@ void fn_1_67414(struct fn_1_67414_Arg0 *arg0) {
 }
 /* fzgx:end fn_1_67414 */
 
-/* fzgx:begin fn_1_6742C */
+/* fzgx:begin fn_1_6742C noprologue */
+#include "types.h"
+#include "game/main_rel/effect_types.h"
+#include "dolphin/types.h"
+#include "game/main_rel/car_test_types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/effect.h"
+#include "psvec.h"
+
+struct P {
+    u8 pad_0[0xC];
+    f32 unk_C;
+    u8 pad_10[0x18];
+    f32 unk_28;
+    u8 pad_2C[0xC];
+    f64 unk_38;
+    u8 pad_40[0x20];
+    f32 unk_60;
+    f32 unk_64;
+    u8 pad_68[0xC];
+    f32 unk_74;
+    u8 pad_78[0x54];
+    f32 unk_CC;
+    f32 unk_D0;
+    f32 unk_D4;
+    f32 unk_D8;
+    f32 unk_DC;
+};
+
+typedef struct Fn620C8Viewport {
+    f32 x;
+    f32 y;
+    f32 w;
+    f32 h;
+    f32 near;
+    f32 far;
+} Fn620C8Viewport;
+
+typedef struct Obj {
+    u8 b0;
+    u8 pad1[0xF];
+    s32 n10;
+    u8 pad14[4];
+    s16 id18;
+    u8 pad1a[0x0E];
+    f32 f28;
+    f32 f2c;
+    u8 pad30[0x0C];
+    f32 m3c[3];
+    f32 f48;
+    f32 f4c;
+    f32 f50;
+    s16 s54;
+    u8 pad56[4];
+    s16 s5a;
+    u8 pad5c[0x38];
+    f32 p94[3];
+    u8 pada0[0x14];
+    f32 fb4;
+} Obj;
+
+typedef struct Fn620C8Model {
+    u8 pad_0[0x8];
+    u8 data[0xC];
+    f32 scale;
+} Fn620C8Model;
+
+typedef struct Fn620C8TexObj {
+    u32 dummy[8];
+    void *image;
+} Fn620C8TexObj;
+
+typedef struct Fn620C8Obj {
+    u8 pad_0[0x28];
+    f32 time;
+    u8 pad_2C[0x8];
+    Fn620C8Model *model;
+    Fn620C8TexObj *tex;
+    u8 rot[0x78];
+    f32 brightness;
+    Fn183D28Vec3 pos;
+} Fn620C8Obj;
+
 // fn_1_6742C: empty in retail (single blr).
 void fn_1_6742C(void) {
 }
@@ -15034,7 +25465,99 @@ void fn_1_67430(Fn167430 *arg0) {
 }
 /* fzgx:end fn_1_67430 */
 
-/* fzgx:begin fn_1_6755C */
+/* fzgx:begin fn_1_6755C noprologue */
+#include "types.h"
+#include "game/main_rel/effect_types.h"
+#include "dolphin/types.h"
+#include "game/main_rel/car_test_types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/effect.h"
+#include "psvec.h"
+
+struct P {
+    u8 pad_0[0xC];
+    f32 unk_C;
+    u8 pad_10[0x18];
+    f32 unk_28;
+    u8 pad_2C[0xC];
+    f64 unk_38;
+    u8 pad_40[0x20];
+    f32 unk_60;
+    f32 unk_64;
+    u8 pad_68[0xC];
+    f32 unk_74;
+    u8 pad_78[0x54];
+    f32 unk_CC;
+    f32 unk_D0;
+    f32 unk_D4;
+    f32 unk_D8;
+    f32 unk_DC;
+};
+
+typedef struct Fn620C8Viewport {
+    f32 x;
+    f32 y;
+    f32 w;
+    f32 h;
+    f32 near;
+    f32 far;
+} Fn620C8Viewport;
+
+typedef struct Obj {
+    u8 b0;
+    u8 pad1[0xF];
+    s32 n10;
+    u8 pad14[4];
+    s16 id18;
+    u8 pad1a[0x0E];
+    f32 f28;
+    f32 f2c;
+    u8 pad30[0x0C];
+    f32 m3c[3];
+    f32 f48;
+    f32 f4c;
+    f32 f50;
+    s16 s54;
+    u8 pad56[4];
+    s16 s5a;
+    u8 pad5c[0x38];
+    f32 p94[3];
+    u8 pada0[0x14];
+    f32 fb4;
+} Obj;
+
+typedef struct Fn620C8Model {
+    u8 pad_0[0x8];
+    u8 data[0xC];
+    f32 scale;
+} Fn620C8Model;
+
+typedef struct Fn620C8TexObj {
+    u32 dummy[8];
+    void *image;
+} Fn620C8TexObj;
+
+typedef struct Fn620C8Obj {
+    u8 pad_0[0x28];
+    f32 time;
+    u8 pad_2C[0x8];
+    Fn620C8Model *model;
+    Fn620C8TexObj *tex;
+    u8 rot[0x78];
+    f32 brightness;
+    Fn183D28Vec3 pos;
+} Fn620C8Obj;
+extern void *memset(void *, int, u32);
+extern void lbl_8006D9D8(void *);
+extern void lbl_8006DB74(void *);
+extern void lbl_8006DFC4(void *);
+extern int fn_1_9F914(const void *src0, const void *src1);
+extern void fn_1_8636C();
+extern void mathutil_mtxA_rotate_x(s16 value);
+extern const f32 lbl_1_rodata_2AA0[21];
+extern f32 lbl_1_rodata_29AC[5];
+extern void lbl_8006D95C(s32);
+
 typedef struct {
     u8 pad_0[0x18];
     s16 unk_18;
@@ -15094,7 +25617,90 @@ void fn_1_6755C(FnObj_6755C *obj) {
 }
 /* fzgx:end fn_1_6755C */
 
-/* fzgx:begin fn_1_6766C */
+/* fzgx:begin fn_1_6766C noprologue */
+#include "types.h"
+#include "game/main_rel/effect_types.h"
+#include "dolphin/types.h"
+#include "game/main_rel/car_test_types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/effect.h"
+#include "psvec.h"
+
+struct P {
+    u8 pad_0[0xC];
+    f32 unk_C;
+    u8 pad_10[0x18];
+    f32 unk_28;
+    u8 pad_2C[0xC];
+    f64 unk_38;
+    u8 pad_40[0x20];
+    f32 unk_60;
+    f32 unk_64;
+    u8 pad_68[0xC];
+    f32 unk_74;
+    u8 pad_78[0x54];
+    f32 unk_CC;
+    f32 unk_D0;
+    f32 unk_D4;
+    f32 unk_D8;
+    f32 unk_DC;
+};
+
+typedef struct Fn620C8Viewport {
+    f32 x;
+    f32 y;
+    f32 w;
+    f32 h;
+    f32 near;
+    f32 far;
+} Fn620C8Viewport;
+
+typedef struct Obj {
+    u8 b0;
+    u8 pad1[0xF];
+    s32 n10;
+    u8 pad14[4];
+    s16 id18;
+    u8 pad1a[0x0E];
+    f32 f28;
+    f32 f2c;
+    u8 pad30[0x0C];
+    f32 m3c[3];
+    f32 f48;
+    f32 f4c;
+    f32 f50;
+    s16 s54;
+    u8 pad56[4];
+    s16 s5a;
+    u8 pad5c[0x38];
+    f32 p94[3];
+    u8 pada0[0x14];
+    f32 fb4;
+} Obj;
+
+typedef struct Fn620C8Model {
+    u8 pad_0[0x8];
+    u8 data[0xC];
+    f32 scale;
+} Fn620C8Model;
+
+typedef struct Fn620C8TexObj {
+    u32 dummy[8];
+    void *image;
+} Fn620C8TexObj;
+
+typedef struct Fn620C8Obj {
+    u8 pad_0[0x28];
+    f32 time;
+    u8 pad_2C[0x8];
+    Fn620C8Model *model;
+    Fn620C8TexObj *tex;
+    u8 rot[0x78];
+    f32 brightness;
+    Fn183D28Vec3 pos;
+} Fn620C8Obj;
+extern f32 lbl_1_rodata_2978[4];
+
 typedef struct {
     u8 padding[0xb4];
     f32 value;
@@ -15105,7 +25711,89 @@ void fn_1_6766C(Fn6766CObject *object) {
 }
 /* fzgx:end fn_1_6766C */
 
-/* fzgx:begin fn_1_6767C */
+/* fzgx:begin fn_1_6767C noprologue */
+#include "types.h"
+#include "game/main_rel/effect_types.h"
+#include "dolphin/types.h"
+#include "game/main_rel/car_test_types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/effect.h"
+#include "psvec.h"
+
+struct P {
+    u8 pad_0[0xC];
+    f32 unk_C;
+    u8 pad_10[0x18];
+    f32 unk_28;
+    u8 pad_2C[0xC];
+    f64 unk_38;
+    u8 pad_40[0x20];
+    f32 unk_60;
+    f32 unk_64;
+    u8 pad_68[0xC];
+    f32 unk_74;
+    u8 pad_78[0x54];
+    f32 unk_CC;
+    f32 unk_D0;
+    f32 unk_D4;
+    f32 unk_D8;
+    f32 unk_DC;
+};
+
+typedef struct Fn620C8Viewport {
+    f32 x;
+    f32 y;
+    f32 w;
+    f32 h;
+    f32 near;
+    f32 far;
+} Fn620C8Viewport;
+
+typedef struct Obj {
+    u8 b0;
+    u8 pad1[0xF];
+    s32 n10;
+    u8 pad14[4];
+    s16 id18;
+    u8 pad1a[0x0E];
+    f32 f28;
+    f32 f2c;
+    u8 pad30[0x0C];
+    f32 m3c[3];
+    f32 f48;
+    f32 f4c;
+    f32 f50;
+    s16 s54;
+    u8 pad56[4];
+    s16 s5a;
+    u8 pad5c[0x38];
+    f32 p94[3];
+    u8 pada0[0x14];
+    f32 fb4;
+} Obj;
+
+typedef struct Fn620C8Model {
+    u8 pad_0[0x8];
+    u8 data[0xC];
+    f32 scale;
+} Fn620C8Model;
+
+typedef struct Fn620C8TexObj {
+    u32 dummy[8];
+    void *image;
+} Fn620C8TexObj;
+
+typedef struct Fn620C8Obj {
+    u8 pad_0[0x28];
+    f32 time;
+    u8 pad_2C[0x8];
+    Fn620C8Model *model;
+    Fn620C8TexObj *tex;
+    u8 rot[0x78];
+    f32 brightness;
+    Fn183D28Vec3 pos;
+} Fn620C8Obj;
+
 // fn_1_6767C: empty in retail (single blr).
 void fn_1_6767C(void) {
 }
@@ -15528,7 +26216,89 @@ void fn_1_67D0C(EffObj *obj)
 #pragma opt_common_subs reset
 /* fzgx:end fn_1_67D0C */
 
-/* fzgx:begin fn_1_67E94 */
+/* fzgx:begin fn_1_67E94 noprologue */
+#include "types.h"
+#include "game/main_rel/effect_types.h"
+#include "dolphin/types.h"
+#include "game/main_rel/car_test_types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/effect.h"
+#include "psvec.h"
+
+struct P {
+    u8 pad_0[0xC];
+    f32 unk_C;
+    u8 pad_10[0x18];
+    f32 unk_28;
+    u8 pad_2C[0xC];
+    f64 unk_38;
+    u8 pad_40[0x20];
+    f32 unk_60;
+    f32 unk_64;
+    u8 pad_68[0xC];
+    f32 unk_74;
+    u8 pad_78[0x54];
+    f32 unk_CC;
+    f32 unk_D0;
+    f32 unk_D4;
+    f32 unk_D8;
+    f32 unk_DC;
+};
+
+typedef struct Fn620C8Viewport {
+    f32 x;
+    f32 y;
+    f32 w;
+    f32 h;
+    f32 near;
+    f32 far;
+} Fn620C8Viewport;
+
+typedef struct Obj {
+    u8 b0;
+    u8 pad1[0xF];
+    s32 n10;
+    u8 pad14[4];
+    s16 id18;
+    u8 pad1a[0x0E];
+    f32 f28;
+    f32 f2c;
+    u8 pad30[0x0C];
+    f32 m3c[3];
+    f32 f48;
+    f32 f4c;
+    f32 f50;
+    s16 s54;
+    u8 pad56[4];
+    s16 s5a;
+    u8 pad5c[0x38];
+    f32 p94[3];
+    u8 pada0[0x14];
+    f32 fb4;
+} Obj;
+
+typedef struct Fn620C8Model {
+    u8 pad_0[0x8];
+    u8 data[0xC];
+    f32 scale;
+} Fn620C8Model;
+
+typedef struct Fn620C8TexObj {
+    u32 dummy[8];
+    void *image;
+} Fn620C8TexObj;
+
+typedef struct Fn620C8Obj {
+    u8 pad_0[0x28];
+    f32 time;
+    u8 pad_2C[0x8];
+    Fn620C8Model *model;
+    Fn620C8TexObj *tex;
+    u8 rot[0x78];
+    f32 brightness;
+    Fn183D28Vec3 pos;
+} Fn620C8Obj;
+
 #pragma section code_type ".fzgxpool"
 __declspec(section ".fzgxpool") static void fzgx_pool_prime1(void) {
     volatile f32 s; volatile f64 d;  /* fzgx-allow: S2 pool primer sinks */
@@ -15688,7 +26458,96 @@ void fn_1_67F20(Fn167F20State *p)
 }
 /* fzgx:end fn_1_67F20 */
 
-/* fzgx:begin fn_1_68054 */
+/* fzgx:begin fn_1_68054 noprologue */
+#include "types.h"
+#include "game/main_rel/effect_types.h"
+#include "dolphin/types.h"
+#include "game/main_rel/car_test_types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/effect.h"
+#include "psvec.h"
+
+struct P {
+    u8 pad_0[0xC];
+    f32 unk_C;
+    u8 pad_10[0x18];
+    f32 unk_28;
+    u8 pad_2C[0xC];
+    f64 unk_38;
+    u8 pad_40[0x20];
+    f32 unk_60;
+    f32 unk_64;
+    u8 pad_68[0xC];
+    f32 unk_74;
+    u8 pad_78[0x54];
+    f32 unk_CC;
+    f32 unk_D0;
+    f32 unk_D4;
+    f32 unk_D8;
+    f32 unk_DC;
+};
+
+typedef struct Fn620C8Viewport {
+    f32 x;
+    f32 y;
+    f32 w;
+    f32 h;
+    f32 near;
+    f32 far;
+} Fn620C8Viewport;
+
+typedef struct Obj {
+    u8 b0;
+    u8 pad1[0xF];
+    s32 n10;
+    u8 pad14[4];
+    s16 id18;
+    u8 pad1a[0x0E];
+    f32 f28;
+    f32 f2c;
+    u8 pad30[0x0C];
+    f32 m3c[3];
+    f32 f48;
+    f32 f4c;
+    f32 f50;
+    s16 s54;
+    u8 pad56[4];
+    s16 s5a;
+    u8 pad5c[0x38];
+    f32 p94[3];
+    u8 pada0[0x14];
+    f32 fb4;
+} Obj;
+
+typedef struct Fn620C8Model {
+    u8 pad_0[0x8];
+    u8 data[0xC];
+    f32 scale;
+} Fn620C8Model;
+
+typedef struct Fn620C8TexObj {
+    u32 dummy[8];
+    void *image;
+} Fn620C8TexObj;
+
+typedef struct Fn620C8Obj {
+    u8 pad_0[0x28];
+    f32 time;
+    u8 pad_2C[0x8];
+    Fn620C8Model *model;
+    Fn620C8TexObj *tex;
+    u8 rot[0x78];
+    f32 brightness;
+    Fn183D28Vec3 pos;
+} Fn620C8Obj;
+extern void lbl_8006DCA4();
+extern s32 fn_1_54E34(void *arg0, f32 arg1);
+extern void *fn_1_5448C(void *);
+extern void fn_1_5489C(void **arg0, void **arg1);
+extern void *fn_1_548AC(u32 size);
+extern const f32 lbl_1_rodata_2A70[12];
+extern void fn_1_64388(void);
+
 typedef struct fn_1_68054_EffectObject {
     u8 pad0[0x28];
     f32 value;
@@ -15727,7 +26586,89 @@ void fn_1_68054(fn_1_68054_EffectObject *effect) {
 }
 /* fzgx:end fn_1_68054 */
 
-/* fzgx:begin fn_1_680F4 */
+/* fzgx:begin fn_1_680F4 noprologue */
+#include "types.h"
+#include "game/main_rel/effect_types.h"
+#include "dolphin/types.h"
+#include "game/main_rel/car_test_types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/effect.h"
+#include "psvec.h"
+
+struct P {
+    u8 pad_0[0xC];
+    f32 unk_C;
+    u8 pad_10[0x18];
+    f32 unk_28;
+    u8 pad_2C[0xC];
+    f64 unk_38;
+    u8 pad_40[0x20];
+    f32 unk_60;
+    f32 unk_64;
+    u8 pad_68[0xC];
+    f32 unk_74;
+    u8 pad_78[0x54];
+    f32 unk_CC;
+    f32 unk_D0;
+    f32 unk_D4;
+    f32 unk_D8;
+    f32 unk_DC;
+};
+
+typedef struct Fn620C8Viewport {
+    f32 x;
+    f32 y;
+    f32 w;
+    f32 h;
+    f32 near;
+    f32 far;
+} Fn620C8Viewport;
+
+typedef struct Obj {
+    u8 b0;
+    u8 pad1[0xF];
+    s32 n10;
+    u8 pad14[4];
+    s16 id18;
+    u8 pad1a[0x0E];
+    f32 f28;
+    f32 f2c;
+    u8 pad30[0x0C];
+    f32 m3c[3];
+    f32 f48;
+    f32 f4c;
+    f32 f50;
+    s16 s54;
+    u8 pad56[4];
+    s16 s5a;
+    u8 pad5c[0x38];
+    f32 p94[3];
+    u8 pada0[0x14];
+    f32 fb4;
+} Obj;
+
+typedef struct Fn620C8Model {
+    u8 pad_0[0x8];
+    u8 data[0xC];
+    f32 scale;
+} Fn620C8Model;
+
+typedef struct Fn620C8TexObj {
+    u32 dummy[8];
+    void *image;
+} Fn620C8TexObj;
+
+typedef struct Fn620C8Obj {
+    u8 pad_0[0x28];
+    f32 time;
+    u8 pad_2C[0x8];
+    Fn620C8Model *model;
+    Fn620C8TexObj *tex;
+    u8 rot[0x78];
+    f32 brightness;
+    Fn183D28Vec3 pos;
+} Fn620C8Obj;
+
 // fn_1_680F4: empty in retail (single blr).
 void fn_1_680F4(void) {
 }

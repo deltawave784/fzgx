@@ -1,47 +1,487 @@
 #include "types.h"
+#include "game/main_rel/bg_common_types.h"
+#include "game/main_rel/bg_lig_types.h"
+#include "game/main_rel/camera_types.h"
 #include "rel/main_rel/globals.h"
 #include "rel/main_rel/bg_common.h"
-#include "game/main_rel/bg_common_types.h"
+#include "psvec.h"
+#include "game/vec3.h"
+#include "dolphin/ar.h"
+#include "dolphin/os/OSThread.h"
+#include "dolphin/hw_regs.h"
 
+
+
+struct Sig_fn_1_9E598_Node { Sig_fn_1_9E598_Node *next; };
+
+typedef struct {
+    f32 x;
+    f32 y;
+    f32 z;
+} fn_1_104730_Vec;
+
+typedef struct {
+    fn_1_104730_Vec dir;
+    fn_1_104730_Vec up;
+} fn_1_104730_Basis;
+
+typedef struct {
+    u8 pad_0[0x18];
+    f32 zero;
+    u8 pad_1C[0x9C];
+    fn_1_104730_Vec default_pos;
+    fn_1_104730_Basis default_basis;
+    f32 near_dir;
+    f32 mid_up;
+    f32 mid_dir;
+    f32 near_up;
+    f32 far_dir;
+    f32 far_up;
+} fn_1_104730_Consts;
+
+struct fn_1_103264_lbl_1_rodata_78D0 {
+    u8 pad_0[0x10];
+    f32 unk_10, unk_14, unk_18, unk_1C, unk_20, unk_24, unk_28, unk_2C;
+    f32 unk_30, unk_34, unk_38, unk_3C, unk_40, unk_44, unk_48, unk_4C;
+    f32 unk_50, unk_54, unk_58, unk_5C, unk_60;
+};
+
+struct Table10576C { u32 a[10]; };
+
+struct fn_1_10576C_lbl_1_rodata_78D0 {
+    u8 pad_0[0x38];
+    f32 unk_38;
+    u8 pad_3C[0xD4];
+    struct Table10576C table;
+    f32 unk_138;
+};
+
+struct fn_1_103FCC_lbl_1_rodata_78D0 {
+    u8 pad_0[0x8];
+    f64 unk_8;
+    f32 unk_10;
+    f32 unk_14;
+    f32 unk_18;
+    u8 pad_1C[0x4];
+    f32 unk_20;
+    u8 pad_24[0xC];
+    f32 unk_30;
+    u8 pad_34[0x10];
+    f32 unk_44;
+    u8 pad_48[0x48];
+    f32 unk_90;
+    u8 pad_94[0x8];
+    f32 unk_9C;
+    f32 unk_A0;
+    f32 unk_A4;
+    f32 unk_A8;
+    f32 unk_AC;
+    f32 unk_B0;
+};
+
+typedef struct {
+    u8 pad_0[0xC];
+    fn_1_104730_Vec near_;
+    fn_1_104730_Vec mid;
+    fn_1_104730_Vec far_;
+    fn_1_104730_Basis basis;
+    u8 unk_48[0x40];
+} fn_1_104730_Entry;
+
+struct fn_1_1049E0_lbl_801A63C0 { u32 unk_0; };
+
+struct fn_1_105AB8_lbl_1_rodata_7A0C {
+    u32 unk_0;
+};
+
+typedef struct V3 { f32 x, y, z; } V3;
+
+typedef struct {
+    f32 x;
+    f32 y;
+    f32 z;
+} Fn108128Vec;
+
+typedef void *(*Sig_OSCreateThread_OSThreadStartFunction)(void *);
+
+typedef struct Sig_fn_1_20258_Fn_1_20258 {
+    unsigned char pad00[0x30];
+    f32 field30;
+    f32 field34;
+    unsigned char pad38[4];
+    f32 field3c;
+    unsigned char pad40[0x28];
+    f32 field68;
+    f32 field6c;
+    unsigned char pad70[0xc];
+    u32 flags;
+} Sig_fn_1_20258_Fn_1_20258;
+
+typedef struct {
+    u8 pad_0[0xc];
+    u32 unk_c;
+    u8 pad_10[0x58];
+} Sig_fn_1_108870_fn_1_108870_AccessoryEntry;
+
+typedef struct { void *unk_0; const char *unk_4; } fn_1_107930_Entry;
+
+typedef struct { u32 unk_0; u32 unk_4; fn_1_107930_Entry *unk_8; } fn_1_107930_List;
+
+typedef struct {
+    u8 pad_0[0x88];
+    s32 unk_88;
+    s32 unk_8C;
+    u8 pad_90[0x54];
+    fn_1_107930_List *unk_E4[3];
+} fn_1_107930_Object;
+
+typedef struct {
+    u8 unk_00[0x8];
+    u32 unk_08;
+    u8 *unk_0C;
+    u8 unk_10[0x8];
+    u32 unk_18;
+    u8 unk_1C[0x8];
+    u8 *unk_24;
+} Fn107E90Context;
+
+typedef struct {
+    s32 unk_0;
+    s32 unk_4;
+    s32 unk_8;
+    s32 unk_C;
+    s32 unk_10;
+    s32 unk_14;
+    s32 unk_18;
+    s32 unk_1C;
+    s32 unk_20;
+    s32 unk_24;
+    s32 unk_28;
+} BgTexState;
+
+typedef struct {
+    u8 pad_0[0xC];
+    BgTexState state;
+} BgTexObj;
+
+typedef struct {
+    u8 pad_0[0xa0];
+    s16 rx;
+    s16 ry;
+    s16 rz;
+    u8 pad_a6[2];
+    u8 pos[0x10];
+    f32 scale;
+    u8 pad_bc[0x150 - 0xbc];
+    u8 *unk_150;
+} BgObj;
+extern fn_1_104730_Consts lbl_1_rodata_78D0;
+extern f32 lbl_8006D0B4(f32);
+extern s32 fn_1_54E34(void *arg0, f32 arg1);
+extern s32 fn_1_9E514(f32 arg0);
+extern u32 fn_1_9E29C(u32, u32, u32);
+extern u32 lbl_8006D7B0(void);
+extern void lbl_8006DFC4(void *);
+extern u32 mathutil_mtxA_rotate_x(u32);
+extern u32 mathutil_mtxA_rotate_y(u32);
+extern u32 mathutil_mtxA_rotate_z(u32);
+extern void OSPanic(const char *file, int line, const char *msg, ...);
+extern void fn_1_557C4(void *value);
+extern void fn_1_56000(u8 value0, u8 value1, u8 value2);
+extern void fn_1_5621C(f32 value0, f32 value1, f32 value2, f32 value3);
+extern void fn_1_56298(f32 value0, f32 value1, f32 value2, f32 value3);
+extern void fn_1_9E598(Sig_fn_1_9E598_Node *);
+extern void fn_80038BFC(f32* out);
+extern void lbl_8006D758(void);
+extern void lbl_8006DAEC(void);
+extern void lbl_8006DB30(void);
+extern void lbl_8006DB74(void *);
+extern void lbl_8006E0B4(f32,f32,f32);
+extern void lbl_8006E14C(f32);
+extern void lbl_8006E1F0(void *, f32, f32, f32);
+extern u32 fn_1_584AC(void);
+extern void fn_80073778(void *obj, s32 index);
+extern void fn_80073A58(int index, void *arg, s8 value);
+extern void fn_800745A4(u32 arg0, s32 arg1, s32 arg2, u32 arg3, u32 arg4, u32 arg5);
+extern void fn_800738E0(s32 arg0, s32 arg1, s32 arg2);
+extern void fn_800739E0(s32 index, s32 arg1, s32 arg2);
+extern void fn_80073D60(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
 extern s32 fn_1_5910(void);
+extern u32 lbl_8006E0A4(u32);
+extern void fn_1_556B8(void *value);
+extern void fn_1_A714C(f32 *a, f32 *b, f32 *c, f32 *d);
+extern void fn_80072558(void);
+extern void fn_80072B7C(u32 arg0);
+extern void lbl_8006DCA4(void);
+extern void lbl_8006E13C(void *);
+extern f32 __fmadds(f32, f32, f32);
+extern fn_1_104730_Entry lbl_1_bss_85298[];
+extern s32 lbl_1_bss_85294;
+extern void fn_1_5948(int);
+extern void fn_1_627C();
+extern s16 camera_get_mode(void);
+extern void lbl_8006D784(void *);
+extern void fn_1_8636C(int index, void *arg);
+extern struct fn_1_1049E0_lbl_801A63C0 lbl_801A63C0;
+extern s16 fn_1_3F0C8(void);
+extern s32 fn_1_58C4(void);
+extern s32 fn_1_6514(s32 value);
+extern u32 fn_1_864E8(int index);
+extern u32 fn_1_F2F34(void);
+extern u8 lbl_1_bss_6F239;
+extern void fn_1_104730(int, int);
+extern void fn_1_A2D84(u32 arg0);
+extern s32 fn_1_106D30(void);
+extern void DCInvalidateRange(void *, u32);
+extern void ARQPostRequest(ARQRequest *request, u32 owner, u32 type, u32 priority, u32 source, u32 dest, u32 length, ARQCallback callback);
+extern u32 fn_1_86244(void);
+extern u32 lbl_1_bss_38460[21];
+extern u8 fn_1_3F114(void);
+extern u32 fn_1_8627C(s32 index);
+extern struct fn_1_105AB8_lbl_1_rodata_7A0C lbl_1_rodata_7A0C;
+extern void fn_1_105BD8(u32 id, V3 *a, V3 *b, V3 *c, V3 *out);
+extern u32 fn_1_105CC8(void *, void *, void *, void *, void *, void *, void *, void *);
+extern u32 lbl_1_rodata_7A10;
+extern void fn_1_681C(u32 index, u32 *output);
+extern void fn_1_6914(u32 index, u32 *output);
+extern void fn_1_6990(u32 index, u32 *output);
+extern s32 camera_get_state(void);
+extern f32 lbl_1_rodata_78E8[19];
+extern f32 lbl_1_rodata_78E0[2];
+extern f32 lbl_8006D668(V3 *);
+extern s32 fn_1_106CAC(void);
+extern long fn_80010CB0(OSThread *thread);
+extern BOOL OSIsThreadTerminated(OSThread *thread);
+extern BOOL OSCreateThread(OSThread *, Sig_OSCreateThread_OSThreadStartFunction, void *, void *, u32, OSPriority, u16);
+extern f32 fn_1_20258(Sig_fn_1_20258_Fn_1_20258 *, f32 *);
+extern f32 lbl_1_bss_7AC88[2];
+extern u8 lbl_1_bss_86EC7[5];
+extern u32 fn_1_17920(u32, void *, f32);
+extern s32 fn_1_214C4(f32 *out, s32 start, f32 x);
+extern void lbl_8006DC6C(void *);
+extern void lbl_8006DBAC(void *arg);
+extern void lbl_8006E15C(f32,f32,f32);
+extern u16 lbl_1_bss_86ECC;
+extern u32 fn_1_1071E8(u8 *, u32, void *, void *, void *);
+extern u8 *fn_1_14F04(void);
+extern Sig_fn_1_108870_fn_1_108870_AccessoryEntry *fn_1_108870(void);
+extern int fn_80083BCC(const char *s1, const char *s2);
+extern int sprintf(char *s, const char *format, ...);
+extern f32 lbl_1_rodata_7AB8[9];
+extern u32 lbl_1_bss_88B40[3];
+extern u8 *fn_80083970(u8 *str, const u8 *needle);
+extern u32 lbl_1_bss_88B4C;
+extern f64 __fabs(f64);
+extern void fn_1_1088B8(void *arg);
+extern void fn_1_107930(fn_1_107930_Object *arg);
+extern void fn_1_107E90(Fn107E90Context *context);
+extern void lbl_8006E1B0(void *arg0, void *arg1);
+extern void lbl_8006DD14(void *arg0, void *arg1);
+extern u8 fn_1_1091D4__fzgx_offset_0[];
+extern u8 fn_1_10976C__fzgx_offset_0[];
+extern u8 fn_1_10A43C__fzgx_offset_0[];
+extern u8 fn_1_10A6A0__fzgx_offset_0[];
+extern u8 fn_1_10A8D0__fzgx_offset_0[];
+extern u8 fn_1_10AD18__fzgx_offset_0[];
+extern u8 fn_1_10B344__fzgx_offset_0[];
+extern u8 fn_1_10B5A8__fzgx_offset_0[];
+extern u8 fn_1_10B7D8__fzgx_offset_0[];
+extern u8 fn_1_10B800__fzgx_offset_0[];
+extern u8 fn_1_10BA00__fzgx_offset_0[];
+extern u8 fn_1_10BE3C__fzgx_offset_0[];
+extern u8 fn_1_10C4E4__fzgx_offset_0[];
+extern u8 fn_1_10C7B4__fzgx_offset_0[];
+extern u8 fn_1_10C9B0__fzgx_offset_0[];
+extern u8 fn_1_10CC38__fzgx_offset_0[];
+extern u8 fn_1_10D2F0__fzgx_offset_0[];
+extern u8 fn_1_10D7D4__fzgx_offset_0[];
+extern u8 fn_1_10DDE4__fzgx_offset_0[];
+extern u8 fn_1_10E3B4__fzgx_offset_0[];
+extern u8 fn_1_110008__fzgx_offset_0[];
+extern u8 fn_1_110478__fzgx_offset_0[];
+extern u8 fn_1_111510__fzgx_offset_0[];
+extern u8 fn_1_111980__fzgx_offset_0[];
+extern u8 fn_1_112F40__fzgx_offset_0[];
+extern u8 fn_1_1132E4__fzgx_offset_0[];
+extern u8 fn_1_1137E4__fzgx_offset_0[];
+extern u8 fn_1_113C58__fzgx_offset_0[];
+extern u8 fn_1_1145C8__fzgx_offset_0[];
+extern u8 fn_1_11492C__fzgx_offset_0[];
+extern u8 fn_1_1154D0__fzgx_offset_0[];
+extern u8 fn_1_115560__fzgx_offset_0[];
+extern u8 fn_1_115B58__fzgx_offset_0[];
+extern u8 fn_1_115BE8__fzgx_offset_0[];
+extern u8 fn_1_1166EC__fzgx_offset_0[];
+extern u8 fn_1_11677C__fzgx_offset_0[];
+extern u8 fn_1_1171B8__fzgx_offset_0[];
+extern u8 fn_1_117424__fzgx_offset_0[];
+extern u8 fn_1_1177C4__fzgx_offset_0[];
+extern u8 fn_1_117D5C__fzgx_offset_0[];
+extern u8 fn_1_1185B4__fzgx_offset_0[];
+extern u8 fn_1_1188CC__fzgx_offset_0[];
+extern u8 fn_1_118D90__fzgx_offset_0[];
+extern u8 fn_1_1192D0__fzgx_offset_0[];
+extern u8 fn_1_11A158__fzgx_offset_0[];
+extern u8 fn_1_11A774__fzgx_offset_0[];
+extern u8 fn_1_11B4E4__fzgx_offset_0[];
+extern u8 fn_1_11B958__fzgx_offset_0[];
+extern u8 fn_1_11BFCC__fzgx_offset_0[];
+extern u8 fn_1_11C440__fzgx_offset_0[];
+extern u8 fn_1_11CAB4__fzgx_offset_0[];
+extern u8 fn_1_11CD3C__fzgx_offset_0[];
+extern u8 fn_1_11D1FC__fzgx_offset_0[];
+extern u8 fn_1_11DE2C__fzgx_offset_0[];
+extern u8 fn_1_11ED0C__fzgx_offset_0[];
+extern u8 fn_1_11F250__fzgx_offset_0[];
+extern u8 fn_1_1201E4__fzgx_offset_0[];
+extern u8 fn_1_120804__fzgx_offset_0[];
+extern u8 fn_1_122348__fzgx_offset_0[];
+extern u8 fn_1_12277C__fzgx_offset_0[];
+extern u8 fn_1_12295C__fzgx_offset_0[];
+extern u8 fn_1_123050__fzgx_offset_0[];
+extern u8 fn_1_1244F0__fzgx_offset_0[];
+extern u8 fn_1_124AD4__fzgx_offset_0[];
+extern u8 fn_1_1250D0__fzgx_offset_0[];
+extern u8 fn_1_1256EC__fzgx_offset_0[];
+extern u8 fn_1_125CE8__fzgx_offset_0[];
+extern u8 fn_1_125DF0__fzgx_offset_0[];
+extern u8 fn_1_1262A4__fzgx_offset_0[];
+extern u8 fn_1_126774__fzgx_offset_0[];
+extern u8 fn_1_126DE8__fzgx_offset_0[];
+extern u8 fn_1_12744C__fzgx_offset_0[];
+extern u8 fn_1_127FB8__fzgx_offset_0[];
+extern u8 fn_1_128038__fzgx_offset_0[];
+extern u8 lbl_1_data_3F578__fzgx_offset_0[];
+extern u8 lbl_1_data_3F58C__fzgx_offset_0[];
+extern u8 lbl_1_data_3F5A0__fzgx_offset_0[];
+extern u8 lbl_1_data_3F5B4__fzgx_offset_0[];
+extern u8 lbl_1_data_3F5C8__fzgx_offset_0[];
+extern u8 lbl_1_data_3F5DC__fzgx_offset_0[];
+extern u8 lbl_1_data_3F5F0__fzgx_offset_0[];
+extern u8 lbl_1_data_3F604__fzgx_offset_0[];
+extern u8 lbl_1_data_3F618__fzgx_offset_0[];
+extern u8 lbl_1_data_3F630__fzgx_offset_0[];
+extern u8 lbl_1_data_3F644__fzgx_offset_0[];
+extern u8 lbl_1_data_3F658__fzgx_offset_0[];
+extern u8 lbl_1_data_3F66C__fzgx_offset_0[];
+extern u8 lbl_1_data_3F680__fzgx_offset_0[];
+extern u8 lbl_1_data_3F694__fzgx_offset_0[];
+extern u8 lbl_1_data_3F6A8__fzgx_offset_0[];
+extern u8 lbl_1_data_3F6B8__fzgx_offset_0[];
+extern u8 lbl_1_data_3F6C8__fzgx_offset_0[];
+extern u8 lbl_1_data_3F6D8__fzgx_offset_0[];
+extern u8 lbl_1_data_3F6E8__fzgx_offset_0[];
+extern u8 lbl_1_data_3F6FC__fzgx_offset_0[];
+extern u8 lbl_1_data_3F710__fzgx_offset_0[];
+extern u8 lbl_1_data_3F724__fzgx_offset_0[];
+extern u8 lbl_1_data_3F738__fzgx_offset_0[];
+extern u8 lbl_1_data_3F748__fzgx_offset_0[];
+extern u8 lbl_1_data_3F75C__fzgx_offset_0[];
+extern u8 lbl_1_data_3F770__fzgx_offset_0[];
+extern u8 lbl_1_data_3F780__fzgx_offset_0[];
+extern u8 lbl_1_data_3F790__fzgx_offset_0[];
+extern u8 lbl_1_data_3F7A0__fzgx_offset_0[];
+extern u8 lbl_1_data_3F7B0__fzgx_offset_0[];
+extern u8 lbl_1_data_3F7C0__fzgx_offset_0[];
+extern u8 lbl_1_data_3F7D0__fzgx_offset_0[];
+extern u8 lbl_1_data_3F7E4__fzgx_offset_0[];
+extern u8 lbl_1_data_3F7F8__fzgx_offset_0[];
+extern u8 lbl_1_data_3F80C__fzgx_offset_0[];
+extern u8 lbl_1_data_3F820__fzgx_offset_0[];
+extern u8 lbl_1_data_3F834__fzgx_offset_0[];
+extern u8 lbl_1_data_3F848__fzgx_offset_0[];
+extern u8 lbl_1_data_3F85C__fzgx_offset_0[];
+extern u8 lbl_1_data_3F870__fzgx_offset_0[];
+extern u8 lbl_1_data_3F884__fzgx_offset_0[];
+extern u8 lbl_1_data_3F898__fzgx_offset_0[];
+extern u8 lbl_1_data_3F8AC__fzgx_offset_0[];
+extern u8 lbl_1_data_3F8C0__fzgx_offset_0[];
+extern u8 lbl_1_data_3F8D4__fzgx_offset_0[];
+extern u8 lbl_1_data_3F8E4__fzgx_offset_0[];
+extern u8 lbl_1_data_3F8F4__fzgx_offset_0[];
+extern u8 lbl_1_data_3F904__fzgx_offset_0[];
+extern u8 lbl_1_data_3F918__fzgx_offset_0[];
+extern u8 lbl_1_data_3F92C__fzgx_offset_0[];
+extern u8 lbl_1_data_3F940__fzgx_offset_0[];
+extern u8 lbl_1_data_3F954__fzgx_offset_0[];
+extern u8 lbl_1_data_3F968__fzgx_offset_0[];
+extern u8 lbl_1_data_3F97C__fzgx_offset_0[];
+extern u8 lbl_1_data_3F990__fzgx_offset_0[];
+extern u8 lbl_1_data_3F9A4__fzgx_offset_0[];
+extern u8 lbl_1_data_3F9B8__fzgx_offset_0[];
+extern u8 lbl_1_data_3F9CC__fzgx_offset_0[];
+extern u8 lbl_1_data_3F9E0__fzgx_offset_0[];
+extern u8 lbl_1_data_3F9F0__fzgx_offset_0[];
+extern u8 lbl_1_data_3FA00__fzgx_offset_0[];
+extern u8 lbl_1_data_3FA14__fzgx_offset_0[];
+extern u8 lbl_1_data_3FA28__fzgx_offset_0[];
+extern u8 lbl_1_data_3FA3C__fzgx_offset_0[];
+extern u8 lbl_1_data_3FA50__fzgx_offset_0[];
+extern u8 lbl_1_data_3FA64__fzgx_offset_0[];
+extern u8 lbl_1_data_3FA78__fzgx_offset_0[];
+extern u8 lbl_1_data_3FA88__fzgx_offset_0[];
+extern u8 lbl_1_data_3FA98__fzgx_offset_0[];
+extern u8 lbl_1_data_3FAAC__fzgx_offset_0[];
+extern u8 lbl_1_data_3FAC0__fzgx_offset_0[];
+extern u8 lbl_1_data_3FAD4__fzgx_offset_0[];
+extern u8 lbl_1_data_3FAE4__fzgx_offset_0[];
+extern u8 lbl_1_data_3FAF4__fzgx_offset_0[];
+extern u8 lbl_1_data_3FB08__fzgx_offset_0[];
+extern u8 lbl_1_data_3FB18__fzgx_offset_0[];
+extern u8 lbl_1_data_3FB28__fzgx_offset_0[];
+extern u8 lbl_1_data_3FB3C__fzgx_offset_0[];
+extern u8 lbl_1_data_3FB50__fzgx_offset_0[];
+extern u8 lbl_1_data_3FB60__fzgx_offset_0[];
+extern u8 lbl_1_data_3FB70__fzgx_offset_0[];
+extern u8 lbl_1_data_3FB80__fzgx_offset_0[];
+extern u8 lbl_1_data_3FB90__fzgx_offset_0[];
+extern u8 lbl_1_data_3FBA4__fzgx_offset_0[];
+extern u8 lbl_1_data_3FBB8__fzgx_offset_0[];
+extern u8 lbl_1_data_3FBCC__fzgx_offset_0[];
+extern u8 lbl_1_data_3FBE0__fzgx_offset_0[];
+extern u8 lbl_1_data_3FBF4__fzgx_offset_0[];
+extern u8 lbl_1_data_3FC08__fzgx_offset_0[];
+extern u8 lbl_1_data_3FC1C__fzgx_offset_0[];
+extern u8 lbl_1_data_3FC30__fzgx_offset_0[];
+extern u8 lbl_1_data_3FC44__fzgx_offset_0[];
+extern u8 lbl_1_data_3FC58__fzgx_offset_0[];
+extern u8 lbl_1_data_3FC68__fzgx_offset_0[];
+extern u8 lbl_1_data_3FC78__fzgx_offset_0[];
+extern u8 lbl_1_data_3FC88__fzgx_offset_0[];
+extern u8 lbl_1_data_3FC98__fzgx_offset_0[];
+extern void fn_1_F7870(u32 value);
+extern u32 lbl_1_data_1E5C0[13];
+extern s32 fn_80077B14(void *);
+extern u32 lbl_801A66A0;
 extern f32 lbl_1_rodata_7960[43];
 extern f32 lbl_1_rodata_7A40[2];
-extern s32 fn_1_58C4(void);
-extern void lbl_8006DCA4(void);
-extern void fn_1_57714(s32 arg0);
+extern void fn_1_57714(u8 value);
 extern void fn_1_57720(u32 value_1, u32 value_2, u32 value_3, u32 value_4);
 extern void fn_1_57CD0(u32 value, void *arg);
 extern void * fn_1_548AC(u32 amount);
 extern void fn_1_5489C(void **arg0, void **arg1);
-extern u8 *fn_80083970(u8 *str, const u8 *needle);
 extern void fn_1_10846C(void *);
 extern void fn_1_128884(void *arg0, void *arg1, s32 type);
 extern f32 fn_1_128AAC(s32 exponent, f32 value);
-extern f32 lbl_1_rodata_78E8[19];
-extern void fn_1_103B00(void);
+extern void fn_1_103B00(BgTexObj *obj);
 extern f32 lbl_1_rodata_7934[11];
 extern void fn_1_9E5B8(void *);
 extern void **fn_1_54448(s32 arg0);
-extern void fn_1_103FCC(void);
+extern void fn_1_103FCC(void *arg0);
 extern void fn_1_10688C(void);
 extern void fn_1_106B68(void);
 extern u8 lbl_1_bss_86EC4;
 extern void fn_80008BEC(void *dest, int value, u32 size);
-extern void fn_1_1088B8(void *arg);
-extern void lbl_8006DBAC(void *arg);
-extern void lbl_8006E1B0(void *arg0, void *arg1);
-extern void fn_1_107F74(void *arg0, int arg1);
+extern void fn_1_107F74(BgObj *obj, int flag);
 extern u32 lbl_801A6410;
 extern u32 lbl_1_data_3F284[2];
-extern s32 OSIsThreadTerminated(void *arg0);
-extern void OSCancelThread(void *arg0);
+extern void OSCancelThread(OSThread *thread);
 extern void fn_1_46B4(u32 arg0, u32 arg1, const char *arg2, int arg3);
 extern void fn_1_469BC(void);
-extern void fn_1_466B0(s32 arg0, s32 arg1);
+extern u32 fn_1_466B0(u32 arg0, s32 arg1);
 extern u32 lbl_1_bss_85288[2];
 extern void *memset(void *, int, u32);
 extern void lbl_8006D91C(s32);
-extern void lbl_8006E1F0(void *, f32, f32, f32);
 
 /* fzgx:begin fn_1_103264 noprologue */
 #include "types.h"
@@ -295,7 +735,15 @@ void fn_1_103264(fn_1_D8EEC_LigEntry *arg0, void *arg1) {
 #pragma opt_common_subs reset
 /* fzgx:end fn_1_103264 */
 
-/* fzgx:begin fn_1_103AA8 */
+/* fzgx:begin fn_1_103AA8 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/bg_common.h"
+#include "game/main_rel/bg_common_types.h"
+
+extern f32 lbl_1_rodata_78E8[19];
+extern void fn_1_103B00(void);
+
 // Initializes the background-common state and its update callback.
 void fn_1_103AA8(void) {
     lbl_1_bss_85290 = lbl_1_rodata_78E8[0];
@@ -303,7 +751,15 @@ void fn_1_103AA8(void) {
 }
 /* fzgx:end fn_1_103AA8 */
 
-/* fzgx:begin fn_1_103AD4 */
+/* fzgx:begin fn_1_103AD4 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/bg_common.h"
+#include "game/main_rel/bg_common_types.h"
+
+extern f32 lbl_1_rodata_78E8[19];
+extern f32 lbl_1_rodata_7934[11];
+
 void fn_1_103AD4(void) {
     f32 current = lbl_1_bss_85290;
 
@@ -420,7 +876,16 @@ void fn_1_103B00(BgTexObj *obj) {
 }
 /* fzgx:end fn_1_103B00 */
 
-/* fzgx:begin fn_1_103D28 */
+/* fzgx:begin fn_1_103D28 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/bg_common.h"
+#include "game/main_rel/bg_common_types.h"
+
+extern void *memset(void *, int, u32);
+extern void lbl_8006D91C(s32);
+extern void lbl_8006E1F0(void *, f32, f32, f32);
+
 #pragma section code_type ".fzgxpool"
 static const unsigned long fzgx_pool_table1[1] = {0x42700000};  /* fzgx-allow: A1 retail pool bytes */
 __declspec(section ".fzgxpool") static void fzgx_pool_keep1(void) { const unsigned long *volatile cp; cp = fzgx_pool_table1; }  /* fzgx-allow: S2 pool primer sink */
@@ -496,7 +961,14 @@ void fn_1_103D28(u8 *base, f32 arg1, u8 count) {
 }
 /* fzgx:end fn_1_103D28 */
 
-/* fzgx:begin fn_1_103F10 */
+/* fzgx:begin fn_1_103F10 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/bg_common.h"
+#include "game/main_rel/bg_common_types.h"
+
+extern void fn_1_9E5B8(void *);
+
 void fn_1_103F10(void *arg) {
     int count;
     u8 *entry;
@@ -511,7 +983,17 @@ void fn_1_103F10(void *arg) {
 }
 /* fzgx:end fn_1_103F10 */
 
-/* fzgx:begin fn_1_103F58 */
+/* fzgx:begin fn_1_103F58 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/bg_common.h"
+#include "game/main_rel/bg_common_types.h"
+
+extern void * fn_1_548AC(u32 amount);
+extern void fn_1_5489C(void **arg0, void **arg1);
+extern void **fn_1_54448(s32 arg0);
+extern void fn_1_103FCC(void);
+
 void fn_1_103F58(void *arg0) {
     void *value;
     Fn1_103F58_Object *object;
@@ -878,13 +1360,25 @@ void fn_1_103FCC(void *arg0) {
 }
 /* fzgx:end fn_1_103FCC */
 
-/* fzgx:begin fn_1_104710 */
+/* fzgx:begin fn_1_104710 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/bg_common.h"
+#include "game/main_rel/bg_common_types.h"
+
+extern void fn_1_10688C(void);
+
 void fn_1_104710(void) {
     fn_1_10688C();
 }
 /* fzgx:end fn_1_104710 */
 
-/* fzgx:begin fn_1_104730 */
+/* fzgx:begin fn_1_104730 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/bg_common.h"
+#include "game/main_rel/bg_common_types.h"
+
 typedef struct {
     f32 x;
     f32 y;
@@ -999,7 +1493,15 @@ void fn_1_104730(int index, int use_matrix) {
 #pragma opt_propagation reset
 /* fzgx:end fn_1_104730 */
 
-/* fzgx:begin fn_1_1049E0 pool */
+/* fzgx:begin fn_1_1049E0 pool noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/bg_common.h"
+#include "game/main_rel/bg_common_types.h"
+
+extern s32 fn_1_58C4(void);
+extern void lbl_8006DCA4(void);
+
 #include "dolphin/ar.h"
 
 struct fn_1_1049E0_lbl_801A63C0 { u32 unk_0; };
@@ -1257,14 +1759,26 @@ void fn_1_1049E0(void *arg0, f32 arg1) {
 }
 /* fzgx:end fn_1_1049E0 */
 
-/* fzgx:begin fn_1_105724 */
+/* fzgx:begin fn_1_105724 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/bg_common.h"
+#include "game/main_rel/bg_common_types.h"
+
+extern void fn_1_106B68(void);
+
 // fn_1_105724: simple wrapper function calling fn_1_106B68
 void fn_1_105724(void) {
     fn_1_106B68();
 }
 /* fzgx:end fn_1_105724 */
 
-/* fzgx:begin fn_1_105744 */
+/* fzgx:begin fn_1_105744 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/bg_common.h"
+#include "game/main_rel/bg_common_types.h"
+
 // Reset the shared background state to its initial sentinel and zero values.
 void fn_1_105744(void) {
     lbl_1_bss_854B8.unk_C = -1;
@@ -1274,13 +1788,25 @@ void fn_1_105744(void) {
 }
 /* fzgx:end fn_1_105744 */
 
-/* fzgx:begin fn_1_105768 */
+/* fzgx:begin fn_1_105768 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/bg_common.h"
+#include "game/main_rel/bg_common_types.h"
+
 // fn_1_105768: empty in retail (single blr).
 void fn_1_105768(void) {
 }
 /* fzgx:end fn_1_105768 */
 
-/* fzgx:begin fn_1_10576C */
+/* fzgx:begin fn_1_10576C noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/bg_common.h"
+#include "game/main_rel/bg_common_types.h"
+
+extern s32 fn_1_58C4(void);
+
 struct Table10576C { u32 a[10]; };
 struct fn_1_10576C_lbl_1_rodata_78D0 {
     u8 pad_0[0x38];
@@ -1386,7 +1912,14 @@ void fn_1_10576C(void) {
 }
 /* fzgx:end fn_1_10576C */
 
-/* fzgx:begin fn_1_105AB8 */
+/* fzgx:begin fn_1_105AB8 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/bg_common.h"
+#include "game/main_rel/bg_common_types.h"
+
+extern s32 fn_1_58C4(void);
+
 struct fn_1_105AB8_lbl_1_rodata_7A0C {
     u32 unk_0;
 };
@@ -1507,7 +2040,21 @@ void fn_1_105BD8(u32 id, V3 *a, V3 *b, V3 *c, V3 *out) {
 #pragma opt_strength_reduction reset
 /* fzgx:end fn_1_105BD8 */
 
-/* fzgx:begin fn_1_1067A8 */
+/* fzgx:begin fn_1_1067A8 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/bg_common.h"
+#include "game/main_rel/bg_common_types.h"
+
+extern s32 fn_1_5910(void);
+extern f32 lbl_1_rodata_7960[43];
+extern f32 lbl_1_rodata_7A40[2];
+extern s32 fn_1_58C4(void);
+extern void lbl_8006DCA4(void);
+extern void fn_1_57714(s32 arg0);
+extern void fn_1_57720(u32 value_1, u32 value_2, u32 value_3, u32 value_4);
+extern void fn_1_57CD0(u32 value, void *arg);
+
 void fn_1_1067A8(void *arg0, f32 arg1, f32 arg2) {
     s32 result;
     s32 value;
@@ -1535,7 +2082,21 @@ void fn_1_1067A8(void *arg0, f32 arg1, f32 arg2) {
 }
 /* fzgx:end fn_1_1067A8 */
 
-/* fzgx:begin fn_1_106B68 */
+/* fzgx:begin fn_1_106B68 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/bg_common.h"
+#include "game/main_rel/bg_common_types.h"
+
+extern void fn_1_106B68(void);
+extern u32 lbl_801A6410;
+extern u32 lbl_1_data_3F284[2];
+extern s32 OSIsThreadTerminated(void *arg0);
+extern void OSCancelThread(void *arg0);
+extern void fn_1_46B4(u32 arg0, u32 arg1, const char *arg2, int arg3);
+extern void fn_1_469BC(void);
+extern void fn_1_466B0(s32 arg0, s32 arg1);
+
 void fn_1_106B68(void) {
     u32 *data;
     Obj_1_bss_85280 *base;
@@ -1640,7 +2201,14 @@ s32 fn_1_106D30(void) {
 }
 /* fzgx:end fn_1_106D30 */
 
-/* fzgx:begin fn_1_106DB4 */
+/* fzgx:begin fn_1_106DB4 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/bg_common.h"
+#include "game/main_rel/bg_common_types.h"
+
+extern u32 lbl_1_bss_85288[2];
+
 s32 fn_1_106DB4(u32 arg0, u32 arg1) {
     volatile u32 *counter;  /* fzgx: count is re-read after each store in the retail loop */
     u8 *entry;
@@ -1685,13 +2253,25 @@ s32 fn_1_106DB4(u32 arg0, u32 arg1) {
 }
 /* fzgx:end fn_1_106DB4 */
 
-/* fzgx:begin fn_1_106EA4 */
+/* fzgx:begin fn_1_106EA4 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/bg_common.h"
+#include "game/main_rel/bg_common_types.h"
+
 void fn_1_106EA4(f32 arg0) {
     lbl_1_bss_85290 = arg0;
 }
 /* fzgx:end fn_1_106EA4 */
 
-/* fzgx:begin fn_1_1071C0 */
+/* fzgx:begin fn_1_1071C0 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/bg_common.h"
+#include "game/main_rel/bg_common_types.h"
+
+extern u8 lbl_1_bss_86EC4;
+
 void fn_1_1071C0(void) {
     if (lbl_1_bss_86EC4 != 0) {
         lbl_1_bss_86EC4 = 0;
@@ -1866,13 +2446,27 @@ void fn_1_10780C(void *arg0, void *arg1, u32 *arg2, void *arg3) {
 }
 /* fzgx:end fn_1_10780C */
 
-/* fzgx:begin fn_1_107900 */
+/* fzgx:begin fn_1_107900 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/bg_common.h"
+#include "game/main_rel/bg_common_types.h"
+
+extern void fn_80008BEC(void *dest, int value, u32 size);
+
 void fn_1_107900(void) {
     fn_80008BEC(&lbl_1_bss_86ED0, 0, 0x1c70);
 }
 /* fzgx:end fn_1_107900 */
 
-/* fzgx:begin fn_1_107930 */
+/* fzgx:begin fn_1_107930 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/bg_common.h"
+#include "game/main_rel/bg_common_types.h"
+
+extern u8 *fn_80083970(u8 *str, const u8 *needle);
+
 typedef struct {
     u8 pad_0[0xc];
     u32 unk_c;
@@ -2027,7 +2621,14 @@ void fn_1_107930(fn_1_107930_Object *arg) {
 #pragma opt_loop_invariants reset
 /* fzgx:end fn_1_107930 */
 
-/* fzgx:begin fn_1_107C4C */
+/* fzgx:begin fn_1_107C4C noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/bg_common.h"
+#include "game/main_rel/bg_common_types.h"
+
+extern void fn_1_1088B8(void *arg);
+
 void fn_1_107C4C(void *arg) {
     if (arg != 0) {
         fn_1_1088B8(arg);
@@ -2512,7 +3113,15 @@ void fn_1_107C74(BgOwner *owner) {
 #pragma opt_common_subs reset
 /* fzgx:end fn_1_107C74 */
 
-/* fzgx:begin fn_1_107E90 */
+/* fzgx:begin fn_1_107E90 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/bg_common.h"
+#include "game/main_rel/bg_common_types.h"
+
+extern void lbl_8006DBAC(void *arg);
+extern void lbl_8006E1B0(void *arg0, void *arg1);
+
 typedef struct {
     u8 unk_00[0x8];
     u32 unk_08;
@@ -2543,13 +3152,27 @@ void fn_1_107E90(Fn107E90Context *context) {
 }
 /* fzgx:end fn_1_107E90 */
 
-/* fzgx:begin fn_1_107F2C */
+/* fzgx:begin fn_1_107F2C noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/bg_common.h"
+#include "game/main_rel/bg_common_types.h"
+
+extern void fn_1_107F74(void *arg0, int arg1);
+
 void fn_1_107F2C(void *arg0) {
     fn_1_107F74(arg0, 0);
 }
 /* fzgx:end fn_1_107F2C */
 
-/* fzgx:begin fn_1_107F50 */
+/* fzgx:begin fn_1_107F50 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/bg_common.h"
+#include "game/main_rel/bg_common_types.h"
+
+extern void fn_1_107F74(void *arg0, int arg1);
+
 void fn_1_107F50(void *arg0) {
     fn_1_107F74(arg0, 1);
 }
@@ -2952,7 +3575,17 @@ void fn_1_108BD0(BgObject *bgArg, s32 partArg, f32 margin, f32 x, f32 y, f32 z)
 }
 /* fzgx:end fn_1_108BD0 */
 
-/* fzgx:begin fn_1_1185B4 */
+/* fzgx:begin fn_1_1185B4 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/bg_common.h"
+#include "game/main_rel/bg_common_types.h"
+
+extern u8 *fn_80083970(u8 *str, const u8 *needle);
+extern void fn_1_10846C(void *);
+extern void fn_1_128884(void *arg0, void *arg1, s32 type);
+extern f32 fn_1_128AAC(s32 exponent, f32 value);
+
 #pragma section code_type ".fzgxpool"
 static const u32 fzgx_pool_table1[6] = {0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000};  /* fzgx-allow: A1 retail pool bytes */
 __declspec(section ".fzgxpool") static void fzgx_pool_keep1(void) { const u32 *volatile cp; cp = fzgx_pool_table1; }  /* fzgx-allow: S2 pool primer sink */

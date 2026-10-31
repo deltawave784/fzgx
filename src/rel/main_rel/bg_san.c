@@ -1,70 +1,194 @@
 #include "types.h"
+#include "game/main_rel/bg_san_types.h"
 #include "rel/main_rel/globals.h"
 #include "rel/main_rel/bg_san.h"
-#include "game/main_rel/bg_san_types.h"
+#include "psvec.h"
+#include "rel/main_rel/bg_lig.h"
+#include "game/vec3.h"
+#include "dolphin/gx.h"
 
-extern void fn_1_DAAFC();
-extern f32 lbl_1_rodata_6628;
-extern void fn_1_FB87C(u32 *values, u8 count);
-extern u32 fn_1_FBFE4();
-extern s32 fn_1_58C4();
-extern void fn_1_103D28(void *arg0, int arg1, f32 arg2);
-extern void fn_1_9A508(void);
-extern void fn_1_FB96C(int index);
-extern void fn_1_DAB1C();
-extern void fn_1_FB9C0(int index);
-extern void fn_1_103F10(void *arg);
-extern void fn_1_DAB3C();
-extern void lbl_8006D91C(s32);
-extern void mathutil_mtxA_rotate_x(s32);
-extern void mathutil_mtxA_rotate_y(s32);
-extern void mathutil_mtxA_rotate_z(s32);
-extern void lbl_8006E1C0(void *, void *);
-extern void lbl_8006D7DC(void *);
-extern void lbl_8006E13C(void *);
-extern void lbl_8006DB74(void *);
-void fn_1_5948(s32);
-void fn_1_627C(s32);
+
+extern void fn_1_DC764();  /* takes the handler (reads handler->unk_08); non-prototype so Handler.unk_04 accepts it */
+
+struct fn_1_DB9B0_lbl_1_rodata_6638 {
+    f32 unk_0; u8 pad_4[4]; f32 unk_8; f32 unk_C;
+    u8 pad_10[0x34];
+    u32 unk_44; u32 unk_48; u32 unk_4C;
+    u32 unk_50; u32 unk_54; u32 unk_58;
+    f32 unk_5C; f64 unk_60; f64 unk_68; f64 unk_70;
+    f32 unk_78; f32 unk_7C; f32 unk_80;
+    u8 pad_84[4]; f64 unk_88; f64 unk_90;
+};
+
+typedef struct V3 { f32 x, y, z; } V3;
+
+typedef struct Src { u8 pad[0xc]; V3 pos; } Src;
+
+typedef struct Elem { V3 pos; f32 w; } Elem;
+
+typedef struct Entry {
+    Src *src;
+    V3 cur;
+    s32 zero;
+    f32 one;
+    s16 a;
+    f32 b;
+    Elem first[128];
+    Elem second[128];
+} Entry;
+
+typedef struct Obj {
+    u8 pad[0x10];
+    s32 count;
+    Entry entries[1];
+} Obj;
+
+typedef struct DB53CVec {
+    f32 x;
+    f32 y;
+    f32 z;
+} DB53CVec;
+
+typedef struct {
+    f32 x, y, z;
+} BgSanVec3;
+
+typedef struct {
+    f32 x, y, z;
+} Fn1DB268_Vec;
+
+typedef struct {
+    u32 unk_0;
+    u8 pad_4[0x8];
+    Fn1DB268_Vec pos;
+    s16 rot_x;
+    s16 rot_y;
+    s16 rot_z;
+    f32 scale;
+} Fn1DB268_Source;
+
+typedef struct {
+    Fn1DB268_Vec pos;
+    f32 height;
+} Fn1DB268_Point;
+
+typedef struct {
+    s16 head;
+    f32 height;
+    Fn1DB268_Point upper[128];
+    Fn1DB268_Point lower[128];
+} Fn1DB268_Trail;
+
+typedef struct {
+    Fn1DB268_Source *source;
+    Fn1DB268_Vec pos;
+    s32 age;
+    u8 pad_14[4];
+    Fn1DB268_Trail trail;
+} Fn1DB268_Effect;
+extern f32 lbl_8006D668(u32 *);
 extern void fn_1_9AD54(void);
-extern s16 fn_1_7B054();
+extern s32 fn_1_58C4();
+extern s16 fn_1_7B054(void);
 extern s16 fn_1_3F0C8(void);
 extern f32 lbl_1_rodata_6638;
 extern const f32 lbl_1_rodata_663C;
 extern void fn_1_106084(void *target, s32 index, f32 x, f32 y, f32 z);
-extern void fn_1_DB268(void *entry);
-extern u32 fn_1_9D260();
-extern void fn_1_DCB10(void);
-extern void fn_1_DC648(void *object);
-extern u32 lbl_801A66A0;
-extern f32 lbl_8006D188(s32);
-extern void fn_1_1030D4(void *entry, void *arg);
-extern s32 fn_1_5910();
-extern void fn_1_681C(u32 index, u32 *output);
-extern s32 fn_1_1FB80(u8 *, s32);
+extern const f32 lbl_1_rodata_6640;
 extern void fn_1_DC6FC(void *context);
-extern void fn_1_DC5E8(Obj_1_data_2A7E0_At3C *container, s32 arg);
+extern void fn_1_DC5E8(Obj_1_data_2A7E0_At3C *, s32);
 extern void fn_1_FBEA8(void);
 extern void fn_1_103F58(void *arg0);
 extern void fn_1_9AD88(void);
-extern void fn_1_DAF94(Obj_1_data_2A7E0_At3C *);
+extern void fn_1_9A508(void);
+extern void fn_1_DAF94(Obj *obj);
+extern s32 fn_1_5910();
+extern u32 fn_1_9D260();
 extern void fn_1_1067A8(void *arg0, f32 arg1, f32 arg2);
+extern void fn_1_103D28(u8 *base, f32 arg1, u8 count);
 extern f32 lbl_1_rodata_66D0[30];
 extern void fn_1_72648();
 extern void fn_1_103090(void *);
 extern void fn_1_1030A4(void *);
 extern void **fn_1_54448(s32 arg0);
 extern void * fn_1_548AC(u32 amount);
-extern void fn_1_DC764();  /* takes the handler (reads handler->unk_08); non-prototype so Handler.unk_04 accepts it */
+extern void fn_1_DC764(void);
 extern void fn_1_5489C(void **arg0, void **arg1);
 extern const f64 lbl_1_rodata_6748;
 extern void fn_1_D6C10(void *, f32);
 extern f32 lbl_1_rodata_6644[35];
-extern void lbl_8006DCA4(void *data);
-extern void fn_1_DB53C(void);
+extern void lbl_8006DCA4();
+extern void fn_1_DB53C(void *arg0, f32 arg1);
 extern void fn_1_103264(void *, void *);
 extern void OSPanic(const char *file, int line, const char *msg, ...);
 extern void fn_1_46B4(u32 arg0, u32 arg1, const char *arg2, int arg3);
-extern u32 fn_1_105AB8(u32, u32);
+extern f32 lbl_1_rodata_6628;
+extern void fn_1_FB87C(u32 *values, u8 count);
+extern u32 fn_1_FBFE4();
+extern void fn_1_FB96C(int index);
+extern void fn_1_105AB8(u32 arg0, u32 arg1);
+extern u32 lbl_801A66A0;
+extern f32 lbl_8006D0B4(f32);
+extern void lbl_8006D7DC(void *);
+extern void mathutil_mtxA_rotate_z(s32);
+extern void mathutil_mtxA_rotate_y(s32);
+extern void mathutil_mtxA_rotate_x(s32);
+extern void lbl_8006E1B0(void *, void *);
+extern DB53CVec lbl_1_bss_7ADB8[];
+extern u32 lbl_801A6D00;
+extern s32 fn_1_6F84(void);
+extern f32 fn_1_DC084(BgSanVec3 *pos);
+extern s32 fn_1_54E34(void *arg0, f32 arg1);
+extern s16 camera_get_mode(void);
+extern u32 camera_get_flags(void);
+extern void camera_forward_status(void);
+extern void fn_1_862D4(s32, DB53CVec *);
+extern u32 fn_1_864E8(int index);
+extern u32 fn_1_1FC98(Vec3f *arg0, u32 arg1);
+extern u32 fn_1_8627C(s32 index);
+extern void fn_1_DB9B0(void *arg0);
+extern void u_gxutil_upload_some_mtx(u32, u32);
+extern void fn_80072864(u32 arg0);
+extern void fn_800728A8(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
+extern void fn_80073778(void *obj, s32 index);
+extern u32 fn_80036104(void *);
+extern u16 GXGetTexObjHeight(void *);
+extern u16 GXGetTexObjWidth(void *);
+extern void *fn_800360D8(void *);
+extern void GXInitTexObj(void *, void *, u16, u16, u32, u32, u32, u8);
+extern void fn_8007245C(u32 value);
+extern void fn_800747D0(u32 arg0, u32 arg1, s32 arg2, s32 arg3, u32 arg4, s32 arg5, s32 arg6);
+extern void fn_80073C6C(s32 index);
+extern void fn_800745A4(u32 arg0, s32 arg1, s32 arg2, u32 arg3, u32 arg4, u32 arg5);
+extern void fn_800734A8(u32 arg0, s32 arg1, s32 arg2, s32 arg3);
+extern void fn_80072EDC(s32 arg0, s32 arg1);
+extern void fn_80073678(u32 arg0);
+extern void fn_80074660(u32 arg0);
+extern void fn_80074788(u32 arg0);
+extern void fn_80073898(u32 arg0);
+extern f32 lbl_8006D188(s32);
+extern f32 lbl_8006D534(Vec3 *, Vec3 *);
+extern f64 __fabs(f64);
+extern u32 lbl_8006D46C(f32);
+extern void lbl_8006D5F0(Vec3 *, Vec3 *, f32);
+extern void fn_1_681C(u32 index, u32 *output);
+extern void fn_8003462C(u32 arg0, u32 arg1, u32 arg2);
+extern void fn_1_1030D4(void *entry, void *arg);
+extern void fn_1_DAAFC();
+extern void fn_1_DAB1C();
+extern void fn_1_FB9C0(int index);
+extern void fn_1_103F10(void *arg);
+extern void fn_1_DAB3C();
+extern void lbl_8006D91C(s32);
+extern void lbl_8006E1C0(void *, void *);
+extern void lbl_8006E13C(void *);
+extern void lbl_8006DB74(void *);
+void fn_1_5948(s32);
+extern void fn_1_627C();
+extern void fn_1_DB268(Fn1DB268_Effect *effect);
+extern void fn_1_DCB10(void);
+extern void fn_1_DC648(void *object);
+extern u32 fn_1_1FB80(void *pos, u32 mask);
 
 /* fzgx:begin fn_1_D8FC4 */
 typedef struct {
@@ -315,7 +439,7 @@ void fn_1_DA7E4(void) {
         fn_1_FB96C(4);
     }
     (*((struct fn_1_DA7E4_lbl_1_data_2A7E0 *)&lbl_1_data_2A7E0)).unk_2C = (u32)fn_1_FBFE4;
-    fn_1_103D28(&obj->unk_BD8, 10, lbl_1_rodata_6628);
+    fn_1_103D28((u8 *)(&obj->unk_BD8), lbl_1_rodata_6628, (u8)(10));
 }
 /* fzgx:end fn_1_DA7E4 */
 
@@ -506,7 +630,7 @@ void fn_1_DAD6C(void) {
 
     obj = lbl_1_data_2A7E0.unk_3C;
     fn_1_9A508();
-    fn_1_DAF94(obj);
+    fn_1_DAF94( (Obj *)(Obj_1_data_2A7E0_At3C *)(obj));
 }
 /* fzgx:end fn_1_DAD6C */
 
@@ -533,13 +657,6 @@ void fn_1_DADA8(void) {
 /* fzgx:end fn_1_DADA8 */
 
 /* fzgx:begin fn_1_DAE24 */
-extern void fn_1_9AD54(void);
-extern s32 fn_1_58C4();
-extern s16 fn_1_7B054();
-extern s16 fn_1_3F0C8(void);
-extern f32 lbl_1_rodata_6638;
-extern const f32 lbl_1_rodata_663C;
-extern void fn_1_106084(void *target, s32 index, f32 x, f32 y, f32 z);
 
 /* Per-frame update of the san background: spawns effects for each active slot. */
 void fn_1_DAE24(void) {
@@ -600,40 +717,17 @@ void fn_1_DAF90(void) {
 }
 /* fzgx:end fn_1_DAF90 */
 
-/* fzgx:begin fn_1_DAF94 noprologue */
-#include "types.h"
+/* fzgx:begin fn_1_DAF94 */
 
-extern u32 fn_1_58C4(void);
-extern const f32 lbl_1_rodata_6638;
-extern const f32 lbl_1_rodata_6640;
-
-typedef struct V3 { f32 x, y, z; } V3;
-typedef struct Elem { V3 pos; f32 w; } Elem;
-typedef struct Src { u8 pad[0xc]; V3 pos; } Src;
-typedef struct Entry {
-    Src *src;
-    V3 cur;
-    s32 zero;
-    f32 one;
-    s16 a;
-    f32 b;
-    Elem first[128];
-    Elem second[128];
-} Entry;
-typedef struct Obj {
-    u8 pad[0x10];
-    s32 count;
-    Entry entries[1];
-} Obj;
 
 void fn_1_DAF94(Obj *obj) {
     Entry *e = obj->entries;
-    if (fn_1_58C4() < 2) {
+    if ((u32)fn_1_58C4() < 2) {
         f32 one;
         f32 zero;
         Src *s;
         s32 n;
-        zero = lbl_1_rodata_6638;
+        zero = (*((const f32 *)&lbl_1_rodata_6638));
         one = lbl_1_rodata_6640;
         n = obj->count;
         for (; n > 0; n--) {
@@ -669,7 +763,7 @@ void fn_1_DB138(BgSanContext *context) {
         count = context->unk_10;
         entry = (u8 *)context + 0x14;
         while (count > 0) {
-            fn_1_DB268(entry);
+            fn_1_DB268( (Fn1DB268_Effect *)(void *)(entry));
             count -= 1;
             entry += 0x1020;
         }
@@ -677,7 +771,20 @@ void fn_1_DB138(BgSanContext *context) {
 }
 /* fzgx:end fn_1_DB138 */
 
-/* fzgx:begin fn_1_DB198 */
+/* fzgx:begin fn_1_DB198 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/bg_san.h"
+#include "game/main_rel/bg_san_types.h"
+
+extern s32 fn_1_58C4();
+extern void * fn_1_548AC(u32 amount);
+extern void fn_1_DC764();  /* takes the handler (reads handler->unk_08); non-prototype so Handler.unk_04 accepts it */
+extern void fn_1_5489C(void **arg0, void **arg1);
+extern f32 lbl_1_rodata_6644[35];
+extern void lbl_8006DCA4(void *data);
+extern void fn_1_DB53C(void);
+
 typedef struct BgSanAllocation {
     u8 unk_00[0x4];
     void (*unk_04)(void);
@@ -707,50 +814,9 @@ void fn_1_DB198(BgSanObject *object, void *arg1) {
 }
 /* fzgx:end fn_1_DB198 */
 
-/* fzgx:begin fn_1_DB268 noprologue */
-#include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/bg_san.h"
-
-extern void fn_1_DC6FC(void *context);
-extern void fn_1_DC5E8(Obj_1_data_2A7E0_At3C *, s32);
-extern void fn_1_9AD54(void);
-extern void fn_1_FBEA8(void);
-extern void fn_1_103F58(void *arg);
-extern void fn_1_9AD88(void);
-extern void fn_1_9A508(void);
-extern void fn_1_DAF94(Obj_1_data_2A7E0_At3C *);
-extern s32 fn_1_5910(void);
-extern void *fn_1_9D260(Obj_1_data_2A7E0 *arg0);
-extern s16 fn_1_7B054(void);
-extern s16 fn_1_3F0C8(void);
-extern const f32 lbl_1_rodata_663C;
-extern void fn_1_1067A8(void *arg0, f32 arg1, f32 arg2);
-extern void fn_1_103D28(void *arg0, int arg1, f32 arg2);
-extern f32 lbl_1_rodata_66D0[30];
-extern void fn_1_72648(Obj_1_data_2A7E0 *);
-extern void fn_1_103090(void *);
-extern void fn_1_1030A4(void *);
-extern void *fn_1_54448(s32);
-extern void *fn_1_548AC(s32);
-extern void fn_1_DC764(void);
-extern void fn_1_5489C(void *, void *);
-extern const f64 lbl_1_rodata_6748;
-extern void fn_1_D6C10(void *, f32);
-extern f32 lbl_1_rodata_6644[35];
-extern void lbl_8006DCA4(void *data);
-extern void fn_1_DB53C(void);
-extern void fn_1_103264(void *, void *);
-extern void OSPanic(const char *, int, const char *, ...);
+/* fzgx:begin fn_1_DB268 */
 extern struct fn_1_DA6A8_lbl_801A6410 lbl_801A6410;
 extern void * fn_80077B64(struct Sig_fn_80077B64_fn_80077B64_Arg0 *);
-extern s32 fn_80077B14(struct Sig_fn_80077B14_fn_80077B14_Arg0 *);
-extern void fn_1_46B4(u32, u32, const char *, int);
-extern f32 lbl_1_rodata_6628;
-extern void fn_1_FB87C(u32 *, u32);
-extern u32 fn_1_FBFE4();
-extern void fn_1_FB96C(int);
-extern u32 fn_1_105AB8(u32, u32);
 
 #pragma section code_type ".fzgxpool"
 __declspec(section ".fzgxpool") static void fzgx_pool_prime1(void) {
@@ -762,48 +828,11 @@ __declspec(section ".fzgxpool") static void fzgx_pool_prime1(void) {
 }
 #pragma section code_type ".text"
 
-typedef struct {
-    f32 x, y, z;
-} Fn1DB268_Vec;
 
-typedef struct {
-    Fn1DB268_Vec pos;
-    f32 height;
-} Fn1DB268_Point;
 
-typedef struct {
-    s16 head;
-    f32 height;
-    Fn1DB268_Point upper[128];
-    Fn1DB268_Point lower[128];
-} Fn1DB268_Trail;
 
-typedef struct {
-    u32 unk_0;
-    u8 pad_4[0x8];
-    Fn1DB268_Vec pos;
-    s16 rot_x;
-    s16 rot_y;
-    s16 rot_z;
-    f32 scale;
-} Fn1DB268_Source;
 
-typedef struct {
-    Fn1DB268_Source *source;
-    Fn1DB268_Vec pos;
-    s32 age;
-    u8 pad_14[4];
-    Fn1DB268_Trail trail;
-} Fn1DB268_Effect;
 
-extern u32 fn_1_58C4(void);
-extern u32 lbl_801A66A0;
-extern f32 lbl_8006D0B4(f32);
-extern void lbl_8006D7DC(void *);
-extern void mathutil_mtxA_rotate_z(s16);
-extern void mathutil_mtxA_rotate_y(s16);
-extern void mathutil_mtxA_rotate_x(s16);
-extern void lbl_8006E1B0(void *, void *);
 
 void fn_1_DB268(Fn1DB268_Effect *effect) {
     Fn1DB268_Trail *slot; /* the trail shifted to the head entry: slot->upper[0] is upper[head] */
@@ -820,7 +849,7 @@ void fn_1_DB268(Fn1DB268_Effect *effect) {
     Fn1DB268_Point *upper;
     Fn1DB268_Point *lower;
 
-    if (fn_1_58C4() >= 2) {
+    if ((u32)fn_1_58C4() >= 2) {
         return;
     }
     source = effect->source;
@@ -1116,12 +1145,7 @@ void fn_1_DB53C(void *arg0, f32 arg1) {
 }
 /* fzgx:end fn_1_DB53C */
 
-/* fzgx:begin fn_1_DB9B0 noprologue */
-#include "types.h"
-#include "psvec.h"
-#include "game/vec3.h"
-#include "dolphin/gx.h"
-
+/* fzgx:begin fn_1_DB9B0 */
 typedef struct Sig_fn_1_DB9B0_DB53CVec {
     f32 x; f32 y; f32 z;
 } Sig_fn_1_DB9B0_DB53CVec;
@@ -1139,31 +1163,12 @@ typedef struct Sig_fn_1_DB9B0_DB53CItem {
     Sig_fn_1_DB9B0_DB53CVec pos;
     u8 pad_82C[0x7F4];
 } Sig_fn_1_DB9B0_DB53CItem;
-struct fn_1_DB9B0_lbl_1_rodata_6638 {
-    f32 unk_0; u8 pad_4[4]; f32 unk_8; f32 unk_C;
-    u8 pad_10[0x34];
-    u32 unk_44; u32 unk_48; u32 unk_4C;
-    u32 unk_50; u32 unk_54; u32 unk_58;
-    f32 unk_5C; f64 unk_60; f64 unk_68; f64 unk_70;
-    f32 unk_78; f32 unk_7C; f32 unk_80;
-    u8 pad_84[4]; f64 unk_88; f64 unk_90;
-};
 typedef struct DB9B0Point { Vec3 pos; f32 t; } DB9B0Point;
 typedef struct DB9B0Trail { s16 head; u8 pad_2[6]; DB9B0Point a[128]; DB9B0Point b[128]; } DB9B0Trail;
 typedef union DB9B0Pipe { f32 f; u8 b; } DB9B0Pipe;
 // Graphics FIFO accesses are volatile hardware writes.
 #define wgPipe (*(volatile DB9B0Pipe *)&GXWGFifo)
 #define DB9B0_PIPE_F wgPipe.f
-extern f32 lbl_8006D188(u32);
-extern f32 lbl_8006D534(Vec3 *, Vec3 *);
-extern f64 __fabs(f64);
-extern s32 fn_1_58C4(void);
-extern s32 fn_1_5910(void);
-extern const struct fn_1_DB9B0_lbl_1_rodata_6638 lbl_1_rodata_6638;
-extern u32 lbl_8006D46C(f32);
-extern void lbl_8006D5F0(Vec3 *, Vec3 *, f32);
-extern void fn_1_681C(u32, u32 *);
-extern void fn_8003462C(u32, u32, u32);
 
 /* Prime the module's shared literal pool in retail order. */
 #pragma section code_type ".fzgxpool"
@@ -1217,7 +1222,7 @@ static inline void DB9B0_tex(f32 s, f32 t) {
 #pragma opt_lifetimes off
 void fn_1_DB9B0(void *arg0) {
     s32 v3_r2;
-    const struct fn_1_DB9B0_lbl_1_rodata_6638 *p_lbl_1_rodata_6638 = &lbl_1_rodata_6638;
+    const struct fn_1_DB9B0_lbl_1_rodata_6638 *p_lbl_1_rodata_6638 = ((const struct fn_1_DB9B0_lbl_1_rodata_6638 *)&lbl_1_rodata_6638);
     Sig_fn_1_DB9B0_DB53CObj *v1;
     u8 *v0;
     s32 v3;
@@ -1314,18 +1319,8 @@ void fn_1_DB9B0(void *arg0) {
 #pragma opt_lifetimes reset
 /* fzgx:end fn_1_DB9B0 */
 
-/* fzgx:begin fn_1_DC084 noprologue */
-#include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/bg_san.h"
+/* fzgx:begin fn_1_DC084 */
 
-typedef struct {
-    f32 x, y, z;
-} BgSanVec3;
-
-extern u32 fn_1_58C4(void);
-extern void fn_1_681C(u8 index, BgSanVec3 *out);
-extern f32 lbl_8006D0B4(f32);
 
 #define BGSAN_MIN(a, b) ((a) < (b) ? (a) : (b))
 
@@ -1351,11 +1346,11 @@ f32 fn_1_DC084(BgSanVec3 *pos) {
     u32 i;
     f32 best;
 
-    count = fn_1_58C4();
-    fn_1_681C(0, &other);
+    count = (u32)fn_1_58C4();
+    fn_1_681C(0, (u32 *)(BgSanVec3 *)(&other));
     best = bgsan_distance(pos, &other);
     for (i = 1; i < count; i++) {
-        fn_1_681C((u8)i, &other);
+        fn_1_681C((u8)i, (u32 *)(BgSanVec3 *)(&other));
         // MIN evaluates its operand twice, so the distance is recomputed on the smaller path.
         best = BGSAN_MIN(best, bgsan_distance(pos, &other));
     }
@@ -1407,7 +1402,7 @@ void fn_1_DC208(void) {
 
     obj->unk_0 = 0;
     fn_1_9A508();
-    fn_1_103D28((u8 *)obj + 0x1588, 0x14, lbl_1_rodata_66D0[0]);
+    fn_1_103D28((u8 *)((u8 *)obj + 0x1588), lbl_1_rodata_66D0[0], (u8)(0x14));
     fn_1_DC3A4( (fn_1_DC3A4_Container *)(Obj_1_data_2A7E0_At3C *)(obj));
 }
 /* fzgx:end fn_1_DC208 */
@@ -1601,7 +1596,7 @@ void fn_1_DC648(void *object) {
 
     index = (u32)fn_1_5910(object);
     fn_1_681C((u8)index, (u32 *)(u8 *)(&local));
-    direction = fn_1_1FB80(&local, 1);
+    direction = (s32)fn_1_1FB80( (void *)(u8 *)(&local), 1);
     offset = (index << 1) + 0x2264;
     if ((direction & 1) != 0) {
         value = *(s16 *)((u8 *)object + offset);

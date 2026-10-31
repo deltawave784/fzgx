@@ -8,33 +8,35 @@
 // functions or living in its .data block), layouts recovered from every access in the module.
 
 // lbl_1_bss_8FDA8: .bss size 0xD4, 12 refs from bg_win.c
+// four 0x34-byte per-player entries (fields of entry 0 below; blocks index idx*0x34) and the f32 at +0xD0 that fn_1_15E27C stores
 typedef struct {
-    u8 unk_0;  // 6 loads, 5 stores
-    u8 unk_1;  // 2 loads, 2 stores
-    u8 unk_2;  // 1 loads, 1 stores
-    u8 unk_3;  // 2 loads, 1 stores
-    u32 unk_4;  // 1 loads, 1 stores
-    u8 unk_8;  // 2 loads, 1 stores
-    u8 unk_9;  // 1 loads, 1 stores
-    u8 unk_A;  // 2 loads, 2 stores
-    u8 unk_B;  // 3 loads, 2 stores
-    u32 unk_C;  // 0 loads, 2 stores
-    u32 unk_10;  // 0 loads, 1 stores
+    u8 unk_0;
+    u8 unk_1;
+    u8 unk_2;
+    u8 unk_3;
+    u32 unk_4;
+    u8 unk_8;
+    u8 unk_9;
+    u8 unk_A;
+    u8 unk_B;
+    u32 unk_C;
+    u32 unk_10;
     u8 pad_14[0x1C];
-    f32 unk_30;  // 1 loads, 1 stores
-    u8 pad_34[0xA0];
+    f32 unk_30;
+    u8 pad_34[0x9C];
+    f32 unk_D0;
 } Obj_1_bss_8FDA8;
-extern Obj_1_bss_8FDA8 lbl_1_bss_8FDA8;
+extern Obj_1_bss_8FDA8 lbl_1_bss_8FDA8;  // typedefs.json decl override
 
 // lbl_1_bss_8FD68: .bss size 0x40, 5 refs from bg_win.c
+// bg_win's per-player colour record: fn_1_15C36C stores four f32 at idx*0x10, fn_1_15C4EC reads them (dtk size 0x40)
 typedef struct {
-    u8 pad_0[0x4];
-    f32 unk_4;  // 2 loads, 1 stores
-    f32 unk_8;  // 2 loads, 1 stores
-    f32 unk_C;  // 2 loads, 1 stores
-    u8 pad_10[0x30];
+    f32 unk_0;
+    f32 unk_4;
+    f32 unk_8;
+    f32 unk_C;
 } Obj_1_bss_8FD68;
-extern Obj_1_bss_8FD68 lbl_1_bss_8FD68;
+extern Obj_1_bss_8FD68 lbl_1_bss_8FD68[4];  // typedefs.json decl override
 
 // lbl_1_bss_8F8E0: .bss size 0xA0, 4 refs from bg_win.c
 typedef struct {
@@ -91,14 +93,14 @@ typedef struct {
 } Obj_1_bss_50EC;
 extern Obj_1_bss_50EC lbl_1_bss_50EC;
 
-// lbl_1_data_4C9B0: .data size 0x11, 1 refs from bg_win.c (own data block)
-extern u8 lbl_1_data_4C9B0[0x11];
-
 // lbl_1_data_4C930: .data size 0x24, 1 refs from bg_win.c (own data block)
 extern u8 lbl_1_data_4C930[0x24];
 
 // jumptable_1_data_4C954: .data size 0x2C, 1 refs from bg_win.c (own data block)
 extern u8 jumptable_1_data_4C954[0x2C];
+
+// lbl_1_data_4C9B0: .data size 0x11, 1 refs from bg_win.c (own data block)
+extern u8 lbl_1_data_4C9B0[0x11];
 
 // lbl_1_data_4C9A0: .data size 0xF, 1 refs from bg_win.c (own data block)
 extern u8 lbl_1_data_4C9A0[0xF];
