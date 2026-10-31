@@ -1025,6 +1025,107 @@ void fn_3_BFC(char *destination, void *unused, const char *source, const char *s
 }
 /* fzgx:end fn_3_BFC */
 
+/* fzgx:begin fn_3_CB4 noprologue */
+#include "types.h"
+#include "rel/customize/globals.h"
+
+typedef struct CustomizeData {
+    u8 pad_0[0x630];
+    char *names[6];
+    u8 pad_648[0xe80 - 0x648];
+    char *paths[1][6];
+    u8 pad_e98[0x15cc - 0xe98];
+    char suffix[4];
+} CustomizeData;
+
+typedef struct CustomizePool {
+    f32 values[0x58 / 4];
+    u32 color;
+    f32 more[9];
+} CustomizePool;
+
+/* integer address sums keep the table base as its own addi (lwzx form) */
+#pragma opt_propagation off
+#pragma opt_common_subs off
+#define PATH(data) (*(char **)(((u32)(data) + 0xe80) + (lbl_3_bss_2437C[0] * 0x18 + lbl_801A66B4 * 4)))
+
+extern f32 lbl_3_rodata_0[];
+extern u8 lbl_3_bss_2437C[44];
+extern s32 lbl_801A66B4;
+extern void fn_3_BFC(char *, void *, const char *, const char *);
+extern u32 fn_1_4AEC0(u32);
+extern void fn_1_4AEB4(f32);
+extern void fn_1_49410(void);
+extern void fn_1_4966C(f32, f32);
+extern void fn_1_495B0(u32);
+extern void fn_1_49590(f32);
+extern void fn_1_53C9C(void *color, char *text, f32 x, f32 y, f32 scale, f32 spacing, f32 alpha);
+
+static inline char *CustomizeName(CustomizeData *data, s32 selected) {
+    char **names = (char **)((u32)data + 0x630);
+    return names[selected];
+}
+
+#pragma opt_lifetimes off
+void fn_3_CB4(char *name) {
+    CustomizeData *data;
+    CustomizePool *pool;
+    u32 color;
+    char buffer[0x400];
+    char **names;
+    u32 paths;
+    s32 row;
+    s32 offset;
+
+    pool = (CustomizePool *)lbl_3_rodata_0;
+    data = (CustomizeData *)&lbl_3_data_0;
+    color = pool->color;
+    fn_1_4AEC0(1);
+    fn_1_4AEB4(pool->more[0]);
+    fn_1_49410();
+    fn_1_4966C(pool->more[1], pool->more[2]);
+    if (lbl_801A66B4 != 5) {
+        fn_1_495B0(0x80000000);
+        fn_1_49590(pool->values[0x14 / 4]);
+        fn_1_4966C(pool->more[1], pool->more[3]);
+    }
+    row = lbl_3_bss_2437C[0] * 0x18;
+    offset = row + lbl_801A66B4 * 4;
+    paths = (u32)data + 0xe80;
+    fn_3_BFC(buffer, name, data->suffix, *(char **)(paths + offset));
+    {
+        u32 paths;
+        s32 row;
+        s32 offset;
+        row = lbl_3_bss_2437C[0] * 0x18;
+        offset = row + lbl_801A66B4 * 4;
+        paths = (u32)data + 0xe80;
+        fn_3_BFC(buffer, buffer, data->suffix, *(char **)(paths + offset));
+    }
+    {
+        u32 paths;
+        s32 row;
+        s32 offset;
+        row = lbl_3_bss_2437C[0] * 0x18;
+        offset = row + lbl_801A66B4 * 4;
+        paths = (u32)data + 0xe80;
+        fn_3_BFC(buffer, buffer, data->suffix, *(char **)(paths + offset));
+    }
+    {
+        names = data->names;
+        if (name == names[lbl_801A66B4]) {
+            names = (char **)&color;
+            fn_1_53C9C(names, buffer, pool->values[1], pool->more[4], pool->more[5], pool->more[6], pool->more[7]);
+        } else {
+            names = (char **)&color;
+            fn_1_53C9C(names, buffer, pool->values[1], pool->more[4], pool->more[5], pool->more[6], pool->more[8]);
+        }
+    }
+    fn_1_4AEC0(0);
+    fn_1_4AEB4(pool->values[0x44 / 4]);
+}
+/* fzgx:end fn_3_CB4 */
+
 /* fzgx:begin fn_3_E64 pool noprologue */
 #include "types.h"
 #include "rel/customize/globals.h"
