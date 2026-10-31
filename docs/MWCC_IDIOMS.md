@@ -758,8 +758,10 @@ Reported by the karamzov123 fork (same tooling base) and restated here. Items ma
    does restore the previous section, so the five title blocks using push/pop (fn_8_7EFC,
    fn_8_8440, fn_8_89B8, fn_8_DD64, fn_8_6C90) compile their function into `.text` and are
    verified C links. `fzgx lint` rule P1 now flags a region left open at the end of a block
-   or file; the two open regions in `src/` (fn_3_6270, fn_1_155FB4) are pool blocks whose
-   function compiles into `.fzgxpool`.
+   or file, pool blocks included (2026-10-31): fn_3_6270's open region emitted the function
+   itself into `.fzgxpool`, so its recorded 100% pool match scored 0 under the current oracle; it
+   was uncarved and returned to unmatched at its real 94.2% body (the other 283 pool matches
+   recheck exact; fn_1_155FB4 closes its region).
 8. **8-byte alignment of BSS/data objects.** They saw a `u8[0xA]` pad move by 4 and shift
    every later object, fixed by separate `s16`s. *Not reproduced here at object level*: under
    this project's flags (GC/1.2.5n and 1.3.2, `-align powerpc`) plain `u8[8]`, `u8[0xA]`,

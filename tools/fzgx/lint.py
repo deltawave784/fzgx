@@ -141,14 +141,14 @@ def _pool_section_findings(lines: List[str]) -> List[Tuple[str, int, str]]:
     if "fzgxpool" not in "".join(lines):
         return out
     stack: List[str] = []
-    cur, opened, pooled = ".text", 0, False
+    cur, opened = ".text", 0
     for i, line in enumerate(lines, 1):
         mark = _BLOCK_MARK.search(line)
         if mark and mark.group(1) == "begin":
-            # a `pool` block is not linked from C (retail's object is), so the stray region
-            # cannot move linked code until the block is revised; work copies have no markers
+            # pool blocks too: their retail object links, but a region left open before the
+            # function emits the function itself into .fzgxpool and the recorded pool match
+            # scores 0 (fn_3_6270 carried such a 100% pool match until 2026-10-31)
             stack, cur, opened = [], ".text", 0
-            pooled = bool(re.search(r"fzgx:begin\s+\S+[^*]*\bpool\b", line))
         ps = _PRAGMA_STACK.match(line)
         if ps:
             if ps.group(1) == "push":
@@ -160,7 +160,7 @@ def _pool_section_findings(lines: List[str]) -> List[Tuple[str, int, str]]:
             cur = m.group(1) or ".text"
             if cur == ".fzgxpool":
                 opened = i
-        if mark and mark.group(1) == "end" and cur == ".fzgxpool" and not pooled:
+        if mark and mark.group(1) == "end" and cur == ".fzgxpool":
             out.append(("P1", opened, 'code_type ".fzgxpool" not reset before the block ends; '
                                       'add #pragma section code_type ".text"'))
             stack, cur = [], ".text"
