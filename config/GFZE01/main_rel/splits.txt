@@ -8990,3 +8990,6 @@ rel/main_rel/bg_for/fn_1_E3324.c:
 
 rel/main_rel/phys/fn_1_E8938.c:
 	.text       start:0x000E8938 end:0x000E95B4 align:4
+
+rel/main_rel/memcard/fn_1_B8EDC.c:
+	.text       start:0x000B8EDC end:0x000B9904 align:4
