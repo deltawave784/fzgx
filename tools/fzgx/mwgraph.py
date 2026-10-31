@@ -359,8 +359,19 @@ def capture(project, args, locked=False):
         config.write_text(json.dumps(expected))
         start = time.perf_counter()
         script = root / 'tools/fzgx/mwgraph_lldb.py'
+        # `xcrun lldb` is the macOS launcher; a bare `lldb` with embedded Python works on Linux
+        # (karamzov 41713f6, measured exact replay on six bodies). Fail before taking the build
+        # lock with a named error instead of a FileNotFoundError on 'xcrun'. On Windows use the
+        # gdb captures under tools/capture/ (capture132.sh through WSL).
+        import shutil
+        launcher = (['xcrun', 'lldb'] if shutil.which('xcrun')
+                    else ['lldb'] if shutil.which('lldb') else None)
+        if launcher is None:
+            raise RuntimeError('allocator capture needs `xcrun lldb` or `lldb` (with embedded '
+                               'Python) on PATH and Wibo at build/tools/wibo; on Windows use '
+                               'tools/capture/capture132.sh')
         with (nullcontext() if locked else oracle.build_lock()), (output / 'lldb.log').open('w') as log:
-            command = ['xcrun', 'lldb', '-b', '-o', f'command script import "{script}"',
+            command = [*launcher, '-b', '-o', f'command script import "{script}"',
                        '-o', f'script mwgraph_lldb.run(lldb.debugger, {str(config)!r})',
                        '-o', 'quit']
             process = subprocess.Popen(command, cwd=root, stdout=log, stderr=subprocess.STDOUT,
@@ -410,7 +421,14 @@ def capture(project, args, locked=False):
                 witnesses += selection_order(before, desired) is not None
         inverse_ns = time.perf_counter_ns() - start
         start = time.perf_counter_ns()
-        target_words = oracle.words(Path(inputs[symbol]['target']), job['name'])
+        # A hand-built corpus record may lack the retail target path; resolve it from the
+        # project rather than dying with KeyError after the compiler run (karamzov 41713f6).
+        target = inputs[symbol].get('target')
+        if not target:
+            target = project.target_object_for(project.resolve(symbol))
+            if target is None:
+                raise ValueError(f'{symbol}: capture corpus record has no retail target')
+        target_words = oracle.words(Path(target), job['name'])
         constraints = mwconstraints.target_mapping(target_words, baseline_words)
         projections = []
         if constraints['status'] == 'fixed-graph-hypothesis':

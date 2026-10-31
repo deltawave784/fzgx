@@ -779,3 +779,17 @@ Reported by the karamzov123 fork (same tooling base) and restated here. Items ma
     `x + acc`. Before choosing a return type, look at the epilogue: a function that never
     sets r3 is `void`. Lint A1 misfires on float bit patterns and on hex or "volatile"
     inside comments; `fzgx-allow` must be on the flagged line itself.
+12. **LLDB capture on Linux (their 41713f6, 2026-10-29).** `mwgraph.capture` runs on Linux with
+    a bare `lldb` that embeds Python and the unstripped Wibo 1.0.0 release at `build/tools/wibo`
+    (the loader breakpoint is `loadPEFromSource`); 0.51 s/function, exact replay on six bodies.
+    Ported: the `xcrun lldb` -> `lldb` launcher fallback with a named error, and the retail
+    target resolved through `Project.target_object_for` when a corpus record has no `target`.
+    Skipped: their lldb environment scrub (it pins `PYTHONHOME=/usr` for one host's Python 3.14;
+    Windows captures here go through gdb in WSL, `tools/capture/capture132.sh`). Their verdicts,
+    real-allocator measurements: fn_12_3A64 (movie_module, theirs) is `fixed-graph-hypothesis`,
+    retail's colouring is a three-cycle (`table` r29->r28, `object` r28->r27, `far_z` r27->r29)
+    reachable by selection order but with zero declaration projections (853 projected candidates,
+    0 matches): a parameter or `@` web holds the rank. fn_12_7870, fn_80059DD8, fn_80022BF4,
+    fn_800720B0 and fn_80072168 are `needs-web-alignment` (the interference graph differs from
+    retail's): no declaration order or tie re-sweep can close them, only a source change in the
+    value webs. This agrees with the T1 verdicts above (no class closed by order alone).
