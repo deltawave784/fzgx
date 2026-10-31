@@ -746,3 +746,6 @@ rel/customize/emb_paste_editor/fn_3_FD30.c:
 
 rel/customize/_prolog/fn_3_6270.c:
 	.text       start:0x00006270 end:0x00006540 align:4
+
+rel/customize/emb_memcard/fn_3_D9A0.c:
+	.text       start:0x0000D9A0 end:0x0000E5D4 align:4
