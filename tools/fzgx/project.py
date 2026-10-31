@@ -26,6 +26,14 @@ ROOT = Path(__file__).resolve().parent.parent.parent
 DEFAULT_VERSION = "GFZE01"
 # Ledger, locks, saved attempts and caches: outside build/ on purpose (a build wipe must not lose state).
 STATE_DIR = ROOT / ".fzgx"
+
+
+def fs_key(key: str) -> str:
+    """A ledger key as a file-name stem. `module:name` keys (the REL `_prolog`/`_epilog` rows) must not
+    reach a path as is: on NTFS `customize:_prolog.log` is an alternate data stream of a file named
+    `customize`, which `open` accepts but rename, glob and listing do not (every codex session on a REL
+    entry point lost its terminal record and ended `incomplete`)."""
+    return key.replace(":", "__")
 _ASM_INDEX_LOCK = threading.RLock()  # see Project.function_asm
 
 # "name = .section:0xADDR; // type:function size:0x10 scope:global align:4 data:4byte"
@@ -693,7 +701,7 @@ class Project:
 
     def work_path(self, key: str) -> Path:
         """An agent's private working copy of a function's unit (never the tree)."""
-        return STATE_DIR / "work" / (key.replace(":", "__") + ".c")
+        return STATE_DIR / "work" / (fs_key(key) + ".c")
 
     def save_units(self, units: List[dict]) -> None:
         units.sort(key=lambda u: (u["module"], u["source"]))

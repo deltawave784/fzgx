@@ -19,7 +19,7 @@ from pathlib import Path
 
 from fzgx import api, compat
 from fzgx.ledger import Ledger
-from fzgx.project import ROOT, STATE_DIR
+from fzgx.project import ROOT, STATE_DIR, fs_key
 
 
 def tool(name, description, **parameters):
@@ -369,12 +369,12 @@ class Matcher:
         self.server, self.slots = server, slots
         self.symbol, self.agent, self.model = symbol, agent, model
         self.directory = directory
-        self.terminal = directory / f'{symbol}.terminal.json'
+        self.terminal = directory / f'{fs_key(symbol)}.terminal.json'
         if self.terminal.exists():
             raise ValueError(f'{self.terminal}: already completed; use a new batch name')
         self.env = {**os.environ, 'FZGX_AGENT_ID': agent, 'FZGX_SYMBOL': symbol,
                     'FZGX_HARNESS': 'codex', 'FZGX_MODEL': model, 'FZGX_RESULT_FILE': str(self.terminal)}
-        self.log = (directory / f'{symbol}.log').open('w', buffering=1)
+        self.log = (directory / f'{fs_key(symbol)}.log').open('w', buffering=1)
         self.done, self.lock = asyncio.Event(), asyncio.Lock()
         self.thread = self.turn = None
         self.interruption = None
@@ -503,7 +503,7 @@ class Matcher:
                     try:
                         command = [name.replace('_', '-'), self.symbol, '--agent', self.agent]
                         for key, value in args.items():
-                            path = self.directory / f'{self.symbol}.tool.{key}'
+                            path = self.directory / f'{fs_key(self.symbol)}.tool.{key}'
                             path.write_text(value)
                             paths.append(path)
                             command += ['--file' if key == 'source' else f'--{key}-file', str(path)]
@@ -545,7 +545,7 @@ class Matcher:
                 seed = assignment.get('seed') or {}
                 if assignment.get('initial_check'):
                     seed['instruction'] = 'Continue this installed work copy from the initial diff using patch_unit.'
-                (self.directory / f'{self.symbol}.assignment.json').write_text(json.dumps(assignment, indent=2) + '\n')
+                (self.directory / f'{fs_key(self.symbol)}.assignment.json').write_text(json.dumps(assignment, indent=2) + '\n')
                 setup_secs = round(time.monotonic() - started, 3)
                 if self.server.stopping.is_set() and not self.terminal.exists():
                     raise BatchStopped('batch interrupted after assignment; saved for resume')
@@ -558,7 +558,7 @@ class Matcher:
                     if assignment.get('initial_check'):
                         task['initial_check'] = assignment['initial_check']
                     prompt = f'Assigned function: {self.symbol}. Continue the supplied reconstruction.\n' + json.dumps(task)
-                    (self.directory / f'{self.symbol}.prompt.txt').write_text(prompt + '\n')
+                    (self.directory / f'{fs_key(self.symbol)}.prompt.txt').write_text(prompt + '\n')
                     instructions = ROOT / 'tools' / ('codex_revise.md' if revise else 'codex_matcher.md')
                     response = await self.server.request('thread/start', dict(
                         model=self.model, modelProvider=options.provider, cwd=str(ROOT), approvalPolicy='never',

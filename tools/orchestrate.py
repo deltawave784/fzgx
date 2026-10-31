@@ -26,7 +26,7 @@ from typing import Dict, List, Optional
 
 from fzgx import api, compat, reuse, trivial
 from fzgx.ledger import Ledger
-from fzgx.project import ROOT, STATE_DIR, Project
+from fzgx.project import ROOT, STATE_DIR, Project, fs_key
 
 MATCHER_TOOLS = ["Read", "mcp__fzgx__write_unit", "mcp__fzgx__patch_unit", "mcp__fzgx__check", "mcp__fzgx__read_evidence", "mcp__fzgx__release"]
 # Fable (claude) and GPT-6 Astra (codex) run only when asked for with --model; they spend limits several times faster.
@@ -205,7 +205,7 @@ def run_one(p: Project, harness: str, model: str, symbol: str, idx: int, timeout
     t0 = time.time()
     directory = STATE_DIR / 'runs' / batch
     directory.mkdir(parents=True, exist_ok=True)
-    result_file = directory / f'{symbol}.terminal.json'
+    result_file = directory / f'{fs_key(symbol)}.terminal.json'
     if result_file.exists():
         raise ValueError(f'{result_file}: worker already completed; use a new batch name')
     env = {**os.environ, 'CLAUDE_CODE_DISABLE_TERMINAL_TITLE': '1', 'FZGX_AGENT_ID': agent_id,
@@ -232,7 +232,7 @@ def run_one(p: Project, harness: str, model: str, symbol: str, idx: int, timeout
             seed['instruction'] = 'Your work copy contains this C. Continue from initial_check with patch_unit.'
         elif revise:
             assignment['source'] = p.work_path(api._key(p, symbol)).read_text()
-        (directory / f'{symbol}.assignment.json').write_text(json.dumps(assignment, indent=2) + '\n')
+        (directory / f'{fs_key(symbol)}.assignment.json').write_text(json.dumps(assignment, indent=2) + '\n')
         setup_secs = round(time.time() - t0, 3)
         if not result_file.exists():
             cmd = claude_cmd(symbol, agent_id, model, claude_agent_prompt(model, directory), agent_budget)
@@ -252,7 +252,7 @@ def run_one(p: Project, harness: str, model: str, symbol: str, idx: int, timeout
                 # (fn_17_6D60's 1.16 MB data section, 930K tokens) cost $4.66 against a $4.17 cap.
                 raise RuntimeError(f'prompt is {len(prompt.encode())} bytes, over the '
                                    f'{CLAUDE_MAX_PROMPT_BYTES}-byte API session limit; not started')
-            (directory / f'{symbol}.prompt.txt').write_text(prompt + '\n')
+            (directory / f'{fs_key(symbol)}.prompt.txt').write_text(prompt + '\n')
             # A terminal tool call writes result_file before its MCP response is
             # returned. Stop the process group before another model request.
             proc = subprocess.Popen(cmd, cwd=ROOT, text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
@@ -335,7 +335,7 @@ def run_one(p: Project, harness: str, model: str, symbol: str, idx: int, timeout
     l.db.execute("UPDATE attempts SET tokens_in=?, tokens_out=?, cost_usd=?, harness=?, model=COALESCE(NULLIF(?, ''), model) "
                  "WHERE id=(SELECT id FROM attempts WHERE symbol=? AND agent=? ORDER BY id DESC LIMIT 1)",
                  (info["tokens_in"], info["tokens_out"], info["cost"], harness, info["model"], key, agent_id))
-    log = STATE_DIR / "runs" / batch / f"{symbol}.log"
+    log = STATE_DIR / "runs" / batch / f"{fs_key(symbol)}.log"
     log.parent.mkdir(parents=True, exist_ok=True)
     log.write_text(out)
     return {"symbol": symbol, "outcome": outcome, "percent": pct, "checks": checks, "cost": info["cost"], "model": info["model"],

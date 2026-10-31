@@ -11,7 +11,7 @@ from pathlib import Path
 
 from fzgx import oracle, stuck
 from fzgx.ledger import Ledger
-from fzgx.project import ROOT, STATE_DIR, Project
+from fzgx.project import ROOT, STATE_DIR, Project, fs_key
 
 
 def diagnose(batch, seeds, output, minimum):
@@ -121,7 +121,7 @@ def mine_transcripts(batch, output):
         reason = ('interrupted' if row['outcome'].startswith('interrupted') else
                   'stale_limit' if notes.startswith('plateau:') else 'check_limit' if notes.startswith('budget exhausted:')
                   else 'model_ended' if notes.startswith('model ended') else 'matched' if row['outcome'] == 'matched' else 'voluntary_release')
-        events = [json.loads(line) for line in (directory / f'{symbol}.log').read_text().splitlines()]
+        events = [json.loads(line) for line in (directory / f'{fs_key(symbol)}.log').read_text().splitlines()]
         errors, samples = Counter(), {}
         responses, output_tokens, reasoning_tokens, retries = 0, 0, 0, 0
         previous_usage = {}

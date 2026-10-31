@@ -12,7 +12,7 @@ from pathlib import Path
 
 from . import compat, oracle, tufile
 from .ledger import Ledger
-from .project import ROOT, STATE_DIR, Project
+from .project import ROOT, STATE_DIR, Project, fs_key
 
 STUB = '#include "types.h"\n\n// {symbol}: carved by fzgx; {note}\n'
 
@@ -102,7 +102,7 @@ def verify(p: Project, message: Optional[str] = None) -> Dict[str, object]:
         if bad:
             from .uncarve import uncarve
             for k in bad:
-                keep = STATE_DIR / "attempts" / f"{k}.linkfail.{int(time.time())}.c"
+                keep = STATE_DIR / "attempts" / f"{fs_key(k)}.linkfail.{int(time.time())}.c"
                 keep.parent.mkdir(parents=True, exist_ok=True)
                 rec = p.unit_record(units[k])
                 if rec and rec.get("tu"):
@@ -146,7 +146,7 @@ def verify(p: Project, message: Optional[str] = None) -> Dict[str, object]:
                                     capture_output=True).stdout.strip()
             for k in good:
                 l.db.execute("UPDATE functions SET link_state='verified', matched_commit=? WHERE symbol=?", (commit, k))
-                (REVISE_PRIOR_DIR / f"{k}.json").unlink(missing_ok=True)  # the rewrite is the verified state now
+                (REVISE_PRIOR_DIR / f"{fs_key(k)}.json").unlink(missing_ok=True)  # the rewrite is the verified state now
             journal.unlink(missing_ok=True)
     return {"ok": True, "verified": good, "rejected": bad, "revise_restored": restored, "commit": commit,
             "fast_path": fast_path, "secs": round(time.time() - t0, 3)}
@@ -162,14 +162,14 @@ def restore_revised(p: Project, l: Ledger, bad: List[str], units: Dict[str, str]
     and the attempt is recorded as a revise rejection. Returns the restored keys (the caller relinks)."""
     out = []
     for k in bad:
-        path = REVISE_PRIOR_DIR / f"{k}.json"
+        path = REVISE_PRIOR_DIR / f"{fs_key(k)}.json"
         if not path.exists():
             continue
         prior = json.loads(path.read_text())
         rec, block = prior.get("unit"), prior.get("block")
         if not rec or not block or rec.get("source") != units[k]:
             continue
-        keep = STATE_DIR / "attempts" / f"{k}.revise-linkfail.{int(time.time())}.c"
+        keep = STATE_DIR / "attempts" / f"{fs_key(k)}.revise-linkfail.{int(time.time())}.c"
         keep.parent.mkdir(parents=True, exist_ok=True)
         current = p.unit_record(units[k])
         if rec.get("tu"):

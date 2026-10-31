@@ -27,7 +27,7 @@ from typing import Dict, List, Optional
 
 from . import oracle
 from .ledger import Ledger
-from .project import ROOT, STATE_DIR, Project
+from .project import ROOT, STATE_DIR, Project, fs_key
 
 AGENT = "import-corpus"
 
@@ -117,7 +117,7 @@ def run(p: Project, per_symbol: int = 2, apply: bool = True, from_checks: bool =
         for symbol, records in picks.items():
             if rank < len(records):
                 r = records[rank]
-                body = scratch / f"{symbol}.{r['digest'][:12]}.c"
+                body = scratch / f"{fs_key(symbol)}.{r['digest'][:12]}.c"
                 body.write_text(r["body"])
                 groups[(r.get("mw"), r.get("flags"))].append((symbol, body, r))
         for (mw, flags), items in groups.items():
@@ -146,7 +146,7 @@ def run(p: Project, per_symbol: int = 2, apply: bool = True, from_checks: bool =
         if not apply:
             continue
         kind = "checks" if from_checks else "corpus"
-        dest = STATE_DIR / "attempts" / f"{symbol}.{kind}.{b['record']['digest'][:12]}.c"
+        dest = STATE_DIR / "attempts" / f"{fs_key(symbol)}.{kind}.{b['record']['digest'][:12]}.c"
         dest.parent.mkdir(parents=True, exist_ok=True)
         dest.write_text(b["body"].read_text())
         dest.with_suffix(".json").write_text(json.dumps(dict(

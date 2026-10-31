@@ -28,7 +28,7 @@ from .carve import carve
 from .context import build_context
 from .ledger import Ledger
 from .lint import lint_paths
-from .project import ROOT, STATE_DIR, Project
+from .project import ROOT, STATE_DIR, Project, fs_key
 
 DEFAULT_TTL = int(os.environ.get('FZGX_CLAIM_TTL', 1800))
 MAX_ATTEMPTS = int(os.environ.get("FZGX_MAX_ATTEMPTS", 3))  # a stronger-tier round raises it for its agents
@@ -300,7 +300,7 @@ def claim(p: Project, symbol: str, agent: str, ttl: int = DEFAULT_TTL,
     name = p.resolve(symbol).name
     if seed_body is not None:
         work.write_text(seed_body)
-        best = STATE_DIR / "attempts" / f"{key}.best.c"
+        best = STATE_DIR / "attempts" / f"{fs_key(key)}.best.c"
         best.parent.mkdir(parents=True, exist_ok=True)
         best.write_text(seed_body)
         best.with_suffix('.json').write_text(json.dumps(dict(
@@ -823,7 +823,7 @@ def _effective_score(percent: Optional[float], implicit: bool) -> float:
 
 def _best_meta(key: str) -> Optional[dict]:
     """The saved best body's metadata, only while it describes the file beside it."""
-    meta = STATE_DIR / "attempts" / f"{key}.best.json"
+    meta = STATE_DIR / "attempts" / f"{fs_key(key)}.best.json"
     try:
         saved = json.loads(meta.read_text())
     except (OSError, ValueError):
@@ -870,7 +870,7 @@ def _record_check(p: Project, key: str, src: Optional[Path], res: oracle.CheckRe
             replace = _effective_score(score, implicit) > _effective_score(
                 saved.get('percent'), bool(saved.get('implicit_calls') or saved.get('uninitialized_reads')))
         if replace:
-            best = STATE_DIR / "attempts" / f"{key}.best.c"
+            best = STATE_DIR / "attempts" / f"{fs_key(key)}.best.c"
             best.parent.mkdir(parents=True, exist_ok=True)
             shutil.copy(src, best)
             best.with_suffix('.json').write_text(json.dumps(dict(
@@ -1133,7 +1133,7 @@ def _save_revise_prior(p: Project, key: str, unit_src: str, row) -> None:
         block = {"file": path.read_text()} if path.exists() else None
     if block is None:
         return
-    path = REVISE_PRIOR_DIR / f"{key}.json"
+    path = REVISE_PRIOR_DIR / f"{fs_key(key)}.json"
     keys = row.keys() if row is not None else []
     if path.exists() and "link_state" in keys and row["link_state"] == "pending":
         return  # an earlier revise is still pending verification: its prior is the verified one
@@ -1167,7 +1167,7 @@ def _discard_work(p: Project, key: str) -> None:
     p.work_path(key).unlink(missing_ok=True)
     p.work_path(key).with_suffix('.compiler.json').unlink(missing_ok=True)
     p.work_path(key).with_suffix('.diff.json').unlink(missing_ok=True)
-    best = STATE_DIR / 'attempts' / f'{key}.best.c'
+    best = STATE_DIR / 'attempts' / f'{fs_key(key)}.best.c'
     best.unlink(missing_ok=True)
     best.with_suffix('.json').unlink(missing_ok=True)
 
@@ -1379,7 +1379,7 @@ def _submit(p: Project, symbol: str, agent: str = "unknown", message: str = "",
         _discard_work(p, key)
         link = "pool" if res.matched_pool else "pending"
         if link != "pending":  # nothing for verify to decide
-            (REVISE_PRIOR_DIR / f"{key}.json").unlink(missing_ok=True)
+            (REVISE_PRIOR_DIR / f"{fs_key(key)}.json").unlink(missing_ok=True)
         l.db.execute("UPDATE functions SET link_state=? WHERE symbol=?", (link, key))
         l.finish(key, "matched", "matched", notes=f"revised: {message}", model=model, harness=harness,
                  tokens_in=tokens_in, tokens_out=tokens_out, cost_usd=cost_usd, shadow=True)
@@ -1387,7 +1387,7 @@ def _submit(p: Project, symbol: str, agent: str = "unknown", message: str = "",
     if _is_shadow(agent):
         if reason:
             return {"ok": False, "error": reason, "percent": res.percent, "shadow": True}
-        dest = STATE_DIR / "attempts" / f"{key}.shadow.{time.time_ns()}.c"
+        dest = STATE_DIR / "attempts" / f"{fs_key(key)}.shadow.{time.time_ns()}.c"
         dest.parent.mkdir(parents=True, exist_ok=True)
         shutil.copy(src or oracle.unit_source_path(p, unit_src), dest)
         dest.with_suffix(".json").write_text(json.dumps({"sha256": hashlib.sha256(dest.read_bytes()).hexdigest(),
@@ -1485,7 +1485,7 @@ def release(p: Project, symbol: str, reason: str, harness: Optional[str] = None,
     shadow = _is_shadow(row["claimed_by"])
     body_path = None
     work = p.work_path(key)
-    best = STATE_DIR / "attempts" / f"{key}.best.c"
+    best = STATE_DIR / "attempts" / f"{fs_key(key)}.best.c"
     src = best if best.exists() else (work if work.exists() else None)
     if src is not None and src.read_text().strip() != STUB.format(symbol=p.resolve(symbol).name, note="write the complete unit with write_unit").strip():
         # last resort, a few seconds: the deterministic repairs on the best body (type flips for
@@ -1514,7 +1514,7 @@ def release(p: Project, symbol: str, reason: str, harness: Optional[str] = None,
                 r["fixup"] = fx.get("label")
                 r["fixup_secs"] = fx["secs"]
                 return r
-        dest = STATE_DIR / "attempts" / f"{key}.{'shadow.' if shadow else ''}{int(time.time())}.c"
+        dest = STATE_DIR / "attempts" / f"{fs_key(key)}.{'shadow.' if shadow else ''}{int(time.time())}.c"
         dest.parent.mkdir(parents=True, exist_ok=True)
         shutil.copy(src, dest)  # the best-scoring body, not necessarily the last one written
         saved_sha = hashlib.sha256(dest.read_bytes()).hexdigest()
@@ -1591,7 +1591,7 @@ def _save_final_copy(p: Project, symbol: str, key: str, row, attempt_row: dict, 
             info['uninitialized_reads'] = list(getattr(res, 'uninitialized_reads', None) or [])
         else:
             info['error'] = (res.error or '')[-600:]
-    dest = STATE_DIR / "attempts" / f"{key}.{'shadow.' if shadow else ''}final.{int(time.time())}.c"
+    dest = STATE_DIR / "attempts" / f"{fs_key(key)}.{'shadow.' if shadow else ''}final.{int(time.time())}.c"
     dest.parent.mkdir(parents=True, exist_ok=True)
     dest.write_text(text)
     dest.with_suffix('.json').write_text(json.dumps(info) + '\n')
@@ -1737,7 +1737,7 @@ def _attempt_text(p: Project, key: str) -> Optional[str]:
     work = p.work_path(key)
     if claimed and work.exists():
         return work.read_text()
-    best = STATE_DIR / "attempts" / f"{key}.best.c"
+    best = STATE_DIR / "attempts" / f"{fs_key(key)}.best.c"
     if claimed and best.exists():
         return best.read_text()
     # among near-top saved bodies, one omitting a retail store/addend ranks down (seedrank)

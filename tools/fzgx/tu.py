@@ -19,7 +19,7 @@ from typing import Dict, List, Optional, Tuple
 
 from . import oracle, tufile
 from .ledger import Ledger
-from .project import ROOT, STATE_DIR, Project
+from .project import ROOT, STATE_DIR, Project, fs_key
 
 IDENT_RE = r"(?<![A-Za-z0-9_])%s(?![A-Za-z0-9_])"
 
@@ -227,7 +227,7 @@ def migrate(p: Project, module: str, verify: bool = True) -> Dict[str, object]:
             key = p.key(p.find_symbol(name, module))
             if u["status"] != "matching":
                 if text.strip() and "arved by fzgx" not in text:  # a real attempt, not the carve stub
-                    best = STATE_DIR / "attempts" / f"{key}.best.c"
+                    best = STATE_DIR / "attempts" / f"{fs_key(key)}.best.c"
                     if not best.exists():
                         best.parent.mkdir(parents=True, exist_ok=True)
                         best.write_text(text)

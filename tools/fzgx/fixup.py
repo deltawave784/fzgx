@@ -18,7 +18,7 @@ import struct
 import time
 
 from . import fixup_capture as capture_family, fixup_evidence as evidence, fixup_layout as layout, fixup_sections as sections, fixup_sibling as sibling, fixup_source as source, mwgraph, oracle, reuse
-from .project import ROOT, STATE_DIR, Project
+from .project import ROOT, STATE_DIR, Project, fs_key
 
 
 def digest(value):
@@ -1620,7 +1620,7 @@ def save_improved_attempts(p,engine,report,margin=0.05):
         if not c.get('ok'):
             engine.emit(dict(stage='save-attempt-skipped',symbol=symbol,error=str(c.get('error'))[:200]));continue
         body=Path(row['source']).read_text()
-        best_path=STATE_DIR/'attempts'/f'{key}.best.c'
+        best_path=STATE_DIR/'attempts'/f'{fs_key(key)}.best.c'
         best_path.parent.mkdir(parents=True,exist_ok=True)
         best_path.write_text(body)
         best_path.with_suffix('.json').write_text(json.dumps(dict(sha256=digest(best_path.read_bytes()),mw=row['mw'],

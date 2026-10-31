@@ -14,7 +14,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from fzgx import oracle, seedrank
 from fzgx.ledger import Ledger
-from fzgx.project import ROOT, STATE_DIR, Project
+from fzgx.project import ROOT, STATE_DIR, Project, fs_key
 
 
 def digest(body):
@@ -328,7 +328,7 @@ class SavedCandidates:
                 self.evidence[symbol].append(dict(origin='ledger:function', percent=row['best_percent']))
                 if not self.candidates[symbol]:
                     self.add(symbol, dict(percent=row['best_percent'],
-                                          path=str(STATE_DIR / 'attempts' / f'{symbol}.best.c')),
+                                          path=str(STATE_DIR / 'attempts' / f'{fs_key(symbol)}.best.c')),
                              'ledger:function/best-body-fallback')
 
 

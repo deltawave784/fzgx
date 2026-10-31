@@ -23,7 +23,7 @@ from pathlib import Path
 from typing import Dict, List, Optional, Tuple
 
 from . import compat, poolfix
-from .project import ROOT, STATE_DIR, Project, Symbol
+from .project import ROOT, STATE_DIR, Project, Symbol, fs_key
 
 OBJDIFF = compat.tool("objdiff-cli")
 
@@ -1892,7 +1892,7 @@ def why_link(project: Project, symbol: str) -> Dict[str, object]:
         return {"ok": False, "error": "no unit for this function"}
     key = project.key(sym)
     body = None
-    for cand in sorted((STATE_DIR / "attempts").glob(f"{key}.linkfail.*.c"), reverse=True):
+    for cand in sorted((STATE_DIR / "attempts").glob(f"{fs_key(key)}.linkfail.*.c"), reverse=True):
         body = cand.read_text()
         break
     with build_lock():
