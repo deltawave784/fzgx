@@ -220,6 +220,15 @@ def run(p: Project, min_percent: float = 80.0, module: Optional[str] = None, wor
             options[key] = (record.get('mw'), record.get('flags'))
     else:
         bodies = best_bodies(p, min_percent, module, max_size)
+        # each saved body under the compiler it was scored with (its attempt sidecar): a GC/1.3
+        # plateau body recompiled under the module's GC/1.3.2 is classified as another function
+        for key, record in bodies.items():
+            try:
+                meta = json.loads(Path(record[0]).with_suffix('.json').read_text())
+            except (OSError, ValueError):
+                continue
+            if meta.get('mw') or meta.get('flags'):
+                options[key] = (meta.get('mw') or None, meta.get('flags') or None)
     items = sorted(bodies.items())
     # one parallel batched compile for every body, then the row analysis in threads
     groups = defaultdict(list)

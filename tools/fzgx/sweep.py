@@ -19,15 +19,30 @@ from .ledger import Ledger
 from .project import Project, STATE_DIR
 
 Candidate = Tuple[str, str]
+# (mw_version, extra_cflags) a saved body was checked under; (None, None) is the module's own
+Settings = Tuple[Optional[str], Optional[str]]
 
 
-def row_lines(p: Project, sym, path: Path, check, outdir: Path) -> Dict[int, int]:
+def saved_settings(path: Path) -> Settings:
+    """The compiler a saved attempt body was scored under (its `.json` sidecar). A sweep that
+    recompiles a GC/1.3 body under the module's GC/1.3.2 climbs a different function: the 99.5%
+    plateau body of fn_1_F0508 scored 85% there, and six close-outs swept that one instead."""
+    try:
+        meta = json.loads(Path(path).with_suffix('.json').read_text())
+    except (OSError, ValueError):
+        return (None, None)
+    return (meta.get('mw') or None, meta.get('flags') or None)
+
+
+def row_lines(p: Project, sym, path: Path, check, outdir: Path,
+              settings: Settings = (None, None)) -> Dict[int, int]:
     """{differing row: source line} from a `-sym on` compile (the code is byte-identical)."""
     obj = outdir / 'sym' / (path.stem + '.sym.o')
     obj.parent.mkdir(parents=True, exist_ok=True)
     try:
         if not obj.exists():
-            oracle.compile_source(p, sym.module, path, obj, None, '-sym on')
+            oracle.compile_source(p, sym.module, path, obj, settings[0],
+                                  ' '.join(x for x in (settings[1], '-sym on') if x))
         table = linemap.tables(obj).get(sym.name, []) if obj.exists() else []
     except Exception:
         return {}
@@ -73,7 +88,7 @@ def decl_moves(body: str, name: str) -> List[Candidate]:
 
 
 def generate(p: Project, s: str, sym, path: Path, body: str, check, outdir: Path,
-             families: Optional[List[str]]) -> List[Candidate]:
+             families: Optional[List[str]], settings: Settings = (None, None)) -> List[Candidate]:
     c: List[Candidate] = []
 
     def add(fam, fn):
@@ -136,7 +151,7 @@ def generate(p: Project, s: str, sym, path: Path, body: str, check, outdir: Path
     rl: Dict[int, int] = {}
     if not families or 'attr' in families or 'regorder' in families:
         try:
-            rl = row_lines(p, sym, path, check, outdir)
+            rl = row_lines(p, sym, path, check, outdir, settings)
         except Exception:
             rl = {}
     # register-only residuals: every order of the implicated class's function-scope locals
@@ -148,7 +163,8 @@ def generate(p: Project, s: str, sym, path: Path, body: str, check, outdir: Path
     add('embed', lambda: fixup_source.expression_embedded_assignments(body, sym.name))
     # an allocator capture of this exact body under .fzgx/capture/SYMBOL: its verdict selects the
     # structural family (the sweep never runs a capture; `fzgx fixup SYMBOL` does)
-    add('capture', lambda: fixup_capture.proposals(p, s, body, check, oracle.module_flags(p, sym.module)[1], None, run_capture=False))
+    add('capture', lambda: fixup_capture.proposals(p, s, body, check, settings[0] or oracle.module_flags(p, sym.module)[1],
+                                                          settings[1], run_capture=False))
     if not families or 'attr' in families:
         try:
             if rl:
@@ -172,11 +188,25 @@ def _score(r) -> float:
     return oracle.progress_score(r)
 
 
+def _check_grouped(p: Project, items: List[Tuple[str, Path]], settings: Dict[str, Settings]) -> dict:
+    """`check_many` per recorded compiler setting."""
+    groups: Dict[Settings, list] = collections.defaultdict(list)
+    for s, f in items:
+        groups[settings.get(s, (None, None))].append((s, f))
+    out: dict = {}
+    for (mw, flags), group in groups.items():
+        out.update(oracle.check_many(p, group, mw_version=mw, extra_cflags=flags))
+    return out
+
+
 def climb(p: Project, selection: Dict[str, str], outdir: Path, rounds: int = 4,
-          families: Optional[List[str]] = None) -> Dict[str, dict]:
+          families: Optional[List[str]] = None,
+          settings: Optional[Dict[str, Settings]] = None) -> Dict[str, dict]:
     """Hill-climb every selected body: the best candidate by word score replaces the body when
-    objdiff confirms the gain. Returns {symbol: {base, percent, file, matched, history}}."""
+    objdiff confirms the gain. Every candidate compiles under its seed's recorded compiler
+    (`settings`, default the module's). Returns {symbol: {base, percent, file, matched, history, mw, flags}}."""
     outdir.mkdir(parents=True, exist_ok=True)
+    settings = {s: v for s, v in (settings or {}).items() if v != (None, None)}
     cur = {}
     for s, f in selection.items():
         f = Path(f)
@@ -188,14 +218,14 @@ def climb(p: Project, selection: Dict[str, str], outdir: Path, rounds: int = 4,
             safe.write_text(f.read_text())
             f = safe
         cur[s] = f
-    checks = oracle.check_many(p, list(cur.items()))
+    checks = _check_grouped(p, list(cur.items()), settings)
     # a saved body that no longer compiles under the current headers (`&SYM` into a struct
     # view, a typedef the header since gained) sweeps from its mechanical respelling when
     # that one compiles; the oracle still decides every candidate
     for s, f in cur.items():
         r = checks.get(s)
         if r is not None and not r.ok:
-            drifted = fixup_source.header_drift_replacement(p, s, f.read_text())
+            drifted = fixup_source.header_drift_replacement(p, s, f.read_text(), *settings.get(s, (None, None)))
             if drifted:
                 safe = outdir / 'seed' / (f.name.replace(':', '__'))
                 safe.parent.mkdir(parents=True, exist_ok=True)
@@ -207,8 +237,9 @@ def climb(p: Project, selection: Dict[str, str], outdir: Path, rounds: int = 4,
     for s, f in cur.items():
         r = checks.get(s)
         if r and r.ok:
+            mw, flags = settings.get(s, (None, None))
             state[s] = dict(base=_score(r), percent=_score(r), rows=oracle.progress_rows(r), file=str(f),
-                            matched=r.matched, history=[], check=r)
+                            matched=r.matched, history=[], check=r, mw=mw, flags=flags)
     print('functions', len(state))
     # scratch this run writes (candidate C, their objects, compile chunk directories):
     # everything outside the final per-function files is removed before returning
@@ -221,13 +252,14 @@ def climb(p: Project, selection: Dict[str, str], outdir: Path, rounds: int = 4,
             sym = p.resolve(s)
             path = Path(state[s]['file'])
             body = path.read_text()
-            for k, (label, text) in enumerate(generate(p, s, sym, path, body, state[s]['check'], outdir, families)):
+            for k, (label, text) in enumerate(generate(p, s, sym, path, body, state[s]['check'], outdir, families,
+                                                       settings.get(s, (None, None)))):
                 # `module:name` keys: a colon in a Windows file name opens an NTFS stream
                 f = outdir / f'r{rnd}' / f"{s.replace(':', '__')}__{k}.c"
                 f.parent.mkdir(exist_ok=True)
                 f.write_text(text)
                 created.add(str(f))
-                gen[sym.module].append((s, f, label))
+                gen[(sym.module,) + settings.get(s, (None, None))].append((s, f, label))
                 nc += 1
         print(f'round {rnd}: {len(active)} functions, {nc} candidates')
         if not nc:
@@ -236,8 +268,9 @@ def climb(p: Project, selection: Dict[str, str], outdir: Path, rounds: int = 4,
         # retail data initializers change no code word: they compete on a tie with the body
         data: Dict[str, tuple] = {}
         targets: Dict[str, Optional[List[int]]] = {}
-        for module, lst in gen.items():
-            objs = oracle.compile_many(p, module, [f for _, f, _ in lst], outdir / f'r{rnd}' / 'obj' / module)
+        for (module, mw, flags), lst in gen.items():
+            objs = oracle.compile_many(p, module, [f for _, f, _ in lst], outdir / f'r{rnd}' / 'obj' / module,
+                                       mw_version=mw, extra_cflags=flags)
             created_objects.update(str(o) for o in objs.values())
             created_dirs.update(str(Path(o).parent) for o in objs.values())
             for s, f, label in lst:
@@ -261,9 +294,10 @@ def climb(p: Project, selection: Dict[str, str], outdir: Path, rounds: int = 4,
         basew: Dict[str, float] = {}
         by_module: Dict[str, list] = collections.defaultdict(list)
         for s in active:
-            by_module[p.resolve(s).module].append(s)
-        for module, syms in by_module.items():
-            objs = oracle.compile_many(p, module, [Path(state[s]['file']) for s in syms], outdir / f'r{rnd}' / 'base' / module)
+            by_module[(p.resolve(s).module,) + settings.get(s, (None, None))].append(s)
+        for (module, mw, flags), syms in by_module.items():
+            objs = oracle.compile_many(p, module, [Path(state[s]['file']) for s in syms], outdir / f'r{rnd}' / 'base' / module,
+                                       mw_version=mw, extra_cflags=flags)
             created_objects.update(str(o) for o in objs.values())
             created_dirs.update(str(Path(o).parent) for o in objs.values())
             for s in syms:
@@ -277,7 +311,7 @@ def climb(p: Project, selection: Dict[str, str], outdir: Path, rounds: int = 4,
             if s not in {w for w, _ in winners} and (b[0], b[1]) >= basew.get(s, (-1.0, -1.0)):
                 best[s] = b
                 winners.append((s, b[2]))
-        res = oracle.check_many(p, winners)
+        res = _check_grouped(p, winners, settings)
         gained = 0
         for s, f in winners:
             r = res.get(s)
@@ -328,11 +362,18 @@ def land(p: Project, rep: Dict[str, dict], label: str) -> Dict[str, list]:
         work = p.work_path(s)
         work.parent.mkdir(parents=True, exist_ok=True)
         work.write_text(body)
+        mw, flags = r.get('mw'), r.get('flags')
+        attempt = Ledger().current_attempt(api._key(p, s))
+        if attempt and (mw or flags):
+            # the release records the body's compiler from this file, as a version probe leaves it
+            work.with_suffix('.compiler.json').write_text(json.dumps(dict(
+                attempt_id=attempt['id'], mw=mw, flags=flags)) + chr(10))
         # the sweep already holds this body's objdiff verdict: record it instead of a second
         # check (5 s each); `submit` re-verifies matches itself
         Ledger().bump_checks(api._key(p, s), pct, r.get('rows'))
         if r.get('matched'):
-            sub = api.submit(p, s, agent=agent, message=f'{s}: {label}', harness='deterministic')
+            sub = api.submit(p, s, agent=agent, message=f'{s}: {label}', harness='deterministic',
+                             mw_version=mw, extra_cflags=flags)
             if sub.get('ok'):
                 submitted.append(s)
             else:
@@ -385,13 +426,14 @@ def run(p: Project, min_percent: float, max_percent: float, outdir: Optional[Pat
         families: Optional[List[str]], do_land: bool, symbols: Optional[List[str]] = None) -> Dict[str, dict]:
     bodies = stuck.best_bodies(p, min_percent)
     sel = {s: r[0] for s, r in bodies.items() if r[1] <= max_percent and (not symbols or s in symbols)}
+    settings = {s: saved_settings(Path(f)) for s, f in sel.items()}
     outdir = outdir or (STATE_DIR / 'work' / f'sweep-{int(min_percent)}')
     drafts = {s: f for s, f in lift_drafts(min_percent, max_percent, outdir, bodies).items()
               if not symbols or s in symbols}
     if drafts:
         print('lifter drafts for functions without a saved body', len(drafts))
     sel.update(drafts)
-    rep = climb(p, sel, outdir, rounds, families)
+    rep = climb(p, sel, outdir, rounds, families, settings)
     if do_land:
         land(p, rep, 'sweep')
     return rep
