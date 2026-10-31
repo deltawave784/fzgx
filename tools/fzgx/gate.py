@@ -60,7 +60,10 @@ def run(p: Project, pool_sample: int = 24, recent: int = 24, seed: int = 7, also
         return report
     units = [u for u in p.load_units() if isinstance(u.get("pool"), dict) and u.get("status") == "matching" and not u.get("asm")]
     random.Random(seed).shuffle(units)
-    report["pool_sample"] = _check_units(p, [u["symbols"][0] for u in units[:pool_sample]])
+    # REL entry points (_prolog/_epilog) exist in every module and only resolve as module:name
+    names = [u["symbols"][0] if p.resolve(u["symbols"][0]) is not None else f"{u['module']}:{u['symbols'][0]}"
+             for u in units[:pool_sample]]
+    report["pool_sample"] = _check_units(p, names)
     db = Ledger().db
     latest = [r[0] for r in db.execute(
         "SELECT symbol FROM attempts WHERE outcome='matched' AND agent NOT LIKE 'diag%' ORDER BY id DESC LIMIT ?", (recent * 2,))]
