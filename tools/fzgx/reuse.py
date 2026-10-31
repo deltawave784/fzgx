@@ -170,9 +170,11 @@ class Declarations:
         wrapper = self.root / (row['id'][:24] + '.c')
         wrapper.write_text(self.protect(body))
         cmd = [*compat.mwcc(row['mw']), *args, '-EP', str(wrapper)]
-        result = subprocess.run(cmd, cwd=ROOT, text=True, capture_output=True, timeout=60)
-        if result.returncode:
-            raise ValueError(result.stdout[-2000:] + result.stderr[-2000:])
+        # expanded headers can carry bytes the locale codec rejects; on Windows a strict decode
+        # fails in the reader thread and leaves stdout None
+        result = subprocess.run(cmd, cwd=ROOT, text=True, errors='replace', capture_output=True, timeout=60)
+        if result.returncode or result.stdout is None:
+            raise ValueError((result.stdout or '')[-2000:] + (result.stderr or '')[-2000:])
         body = re.sub(r'FZGX_PRESERVE_[0-9a-f]{64}', lambda m: self.markers[m[0]], result.stdout)
         body = declaration_closure(body)
         self.expanded[row['id']] = body
