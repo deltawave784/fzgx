@@ -5883,6 +5883,194 @@ void fn_8_D024(void) {
 }
 /* fzgx:end fn_8_D024 */
 
+/* fzgx:begin fn_8_D034 pool */
+#include "rel/title/operation.h"
+
+struct Sig_fn_8_CF94_fn_8_CF94_Arg0 {
+ u32 unk_0; u8 pad_4[0xA4]; u32 unk_A8; u32 unk_AC; u8 pad_B0[0x14]; u32 unk_C4; u8 pad_C8[4]; u32 unk_CC;
+};
+struct fn_8_D034_lbl_8_bss_540 {
+ u8 unk_0; u8 pad_1[3]; s32 unk_4; s32 unk_8; s32 unk_C;
+};
+struct fn_8_D034_lbl_8_rodata_368 {
+ u32 unk_0, unk_4, unk_8, unk_C, unk_10, unk_14;
+ u32 unk_18; u32 pad_1C;
+ f64 unk_20, unk_28, unk_30, unk_38, unk_40, unk_48, unk_50, unk_58, unk_60, unk_68;
+ f32 unk_70, unk_74, unk_78, unk_7C, unk_80, unk_84, unk_88, unk_8C;
+ f64 unk_90, unk_98;
+};
+struct fn_8_D034_lbl_1_bss_8E51D { u8 unk_0; };
+struct Input { u8 pad[8]; u16 held; u8 pad_A[18]; u16 pressed; };
+extern struct Input lbl_1_bss_9F8;
+extern u16 lbl_1_bss_96A;
+extern s32 lbl_801A66B4;
+extern struct fn_8_D034_lbl_1_bss_8E51D lbl_1_bss_8E51D;
+u8 lbl_8_bss_540;
+s32 lbl_8_bss_544;
+s32 lbl_8_bss_548;
+s32 lbl_8_bss_54C;
+extern char lbl_8_data_A0C4[],lbl_8_data_A174[],lbl_8_data_A178[],lbl_8_data_A17C[],lbl_8_data_A180[],lbl_8_data_A184[];
+struct Strings { const char *s[6]; };
+const struct Strings lbl_8_rodata_368={{lbl_8_data_A0C4,lbl_8_data_A174,lbl_8_data_A178,lbl_8_data_A17C,lbl_8_data_A180,lbl_8_data_A184}};
+const u32 title_color[1]={0xFFFFFF00};
+#define lbl_8_rodata_strings lbl_8_rodata_368
+#pragma opt_lifetimes off
+#pragma opt_propagation off
+#pragma opt_stack_frame off
+#pragma section code_type ".fzgxpool"
+void fzgx_bss_primer(void) {
+ lbl_8_bss_540=0; lbl_8_bss_544=0; lbl_8_bss_548=0; lbl_8_bss_54C=0;
+}
+#pragma section code_type ".text"
+#pragma opt_lifetimes on
+#pragma opt_propagation on
+#define title_sound_time 989.0
+#define title_enter_end 795.0
+#define title_fade_time 15.0
+#define title_exit_begin 975.0
+#define title_zero_d 0.0
+#define title_one_d 1.0
+#define title_enter_begin 780.0
+#define title_exit_end 990.0
+#define title_half 0.5f
+#define title_y 240.0f
+#define title_zero_f 0.0f
+#define title_one_f 1.0f
+#define title_scale 0.8333333134651184f
+#define title_five 5.0f
+#define title_max_alpha 255.0f
+#define title_twenty 20.0f
+#define title_skip_time 1800.0
+#pragma section code_type ".fzgxpool"
+void fzgx_title_pool_prefix(f64 *p) {
+ p[0]=989.0; p[1]=795.0; p[2]=15.0; p[3]=975.0; p[4]=0.0;
+}
+#pragma section code_type ".text"
+const f64 title_center = 320.0;
+const f64 title_width = 640.0;
+extern s32 fn_1_1555B0(s32);
+extern u32 fn_1_3EB78(u32,u32,u32,u32);
+extern u32 fn_1_3ED8C(u32,u32,u32,u32,u32,u32,u32);
+extern void fn_1_14A1AC(u8);
+extern void fn_1_14BC40(void);
+extern void fn_1_1554D0(void);
+extern void fn_1_3EF08(u8);
+extern void fn_1_3EF8C(u8);
+extern void fn_1_3EFF0(u32,u8);
+extern void fn_1_3F02C(u32);
+extern void fn_1_47F74(s32);
+extern void fn_1_A2D84(u32);
+extern void fn_8_CF94(struct Sig_fn_8_CF94_fn_8_CF94_Arg0 *);
+extern void fn_8_D020(void);
+extern void fn_1_49410(void);
+extern void fn_1_495B0(u32);
+extern void fn_1_49590(f32);
+extern void fn_1_495C8(u8);
+extern void fn_1_496FC(f32,f32);
+extern void fn_1_4954C(f32);
+extern void fn_1_4955C(f32,f32);
+extern void fn_1_495A0(f32);
+extern void fn_1_4D0A0(void);
+extern void fn_1_5233C(void);
+extern void fn_1_49738(u32);
+extern void fn_1_49748(f32);
+extern void fn_1_4A0D8(const char *);
+extern void fn_1_4D0D4(u32 *,f32);
+extern void fn_1_14BCBC(void *,u32);
+extern u32 fn_1_144F40(u32,void *);
+extern int fn_1_3F038(void);
+extern void fn_8006CE1C(f32);
+extern void fn_1_3F894(void);
+static inline int outside(s32 t) { return (f64)t<title_enter_begin || title_exit_end<(f64)t; }
+static inline int inside(s32 t) { return title_enter_end<(f64)t && (f64)t<title_exit_begin; }
+static inline int low(s32 t) { return title_enter_begin<=(f64)t && (f64)t<=title_enter_end; }
+static inline f64 offset(s32 t,f64 a) { return (f32)((f64)t-a)/title_fade_time; }
+#pragma opt_propagation on
+static inline void xoffset_value(s32 t, f64 *x) {
+ *x = (f64)t<title_enter_end ? offset(t,title_enter_end) : ((f64)t>title_exit_begin ? offset(t,title_exit_begin) : title_zero_d);
+}
+#pragma opt_propagation on
+static inline f64 xoffset(s32 t) {
+ f64 x;
+ xoffset_value(t, &x);
+ return x;
+}
+#pragma opt_propagation on
+static inline void mul_title_width(f64 *x, f64 width) {
+ *x = width * *x;
+}
+static inline void xpos_value(f64 *x, f32 *out) {
+ /* Volatile access preserves the loads' position in the display update. */
+ mul_title_width(x, *(volatile const f64 *)&title_width);
+ *out = *(volatile const f64 *)&title_center + *x;  /* fzgx-allow: S2 volatile keeps the verified access order */
+}
+#pragma opt_propagation on
+static inline f64 xshift(s32 t) { return title_width*xoffset(t); }
+static inline f64 endoffset(s32 t) { return (f32)(title_exit_end-(f64)t)/title_fade_time; }
+#pragma opt_lifetimes on
+#pragma opt_propagation on
+#pragma opt_stack_frame off
+void fn_8_D034(f32 arg0) {
+ u32 color_copy;
+ union { u32 word; u8 bytes[4]; } color;
+ struct Strings loc_10;
+ u32 v0,v1,v2,v3,v4;
+ s32 v5,v9;
+ f64 v7;
+ f32 v14,alpha;
+ struct fn_8_D034_lbl_8_rodata_368 *p_lbl_8_rodata_368;
+ struct Input *input;
+ loc_10=lbl_8_rodata_strings;
+ v0=lbl_8_bss_544;
+ if((s32)v0==1) {
+ v4=lbl_8_data_A0C0+1;
+ v4 = ((s32)v4>36) ? 31 : ((s32)v4<31 ? 36 : v4);
+ lbl_8_bss_540=v4; lbl_8_data_A0C0=v4;
+ fn_1_3EF8C(6);
+ fn_1_3ED8C(0,3,1,lbl_8_data_A0C0,10,10,0);
+ fn_1_3EB78(0,0,0,0);
+ fn_1_3EFF0((u32)fn_8_CF94,1); fn_1_3F02C((u32)fn_8_D020);
+ fn_1_3EF08(0); fn_1_14A1AC(lbl_1_bss_8E51D.unk_0);
+ fn_1_14BC40(); fn_1_1554D0(); fn_1_1555B0(lbl_8_bss_540);
+ lbl_8_bss_548=1020; lbl_8_bss_54C=0;
+ fn_1_47F74(149); fn_1_47F74(151); fn_1_47F74(152);
+ }
+ v5=lbl_8_bss_544; lbl_8_bss_544=v5-1;
+ if(v5<=0) {
+ if(lbl_8_bss_54C==0 && title_sound_time==(f64)lbl_8_bss_548) fn_1_A2D84(0xA9121C00);
+ if(lbl_8_bss_54C==0) {
+ v9=lbl_8_bss_548;
+ {
+ f32 v14, alpha;
+ v7 = xoffset(v9);
+ xpos_value(&v7, &v14);
+ alpha = (f32)(outside(v9) ? title_zero_d : (inside(v9) ? 1.0 : (low(v9) ? offset(v9,780.0) : endoffset(v9))));
+ alpha=alpha*alpha;
+ fn_1_49410(); fn_1_495B0(0x80000000);
+ fn_1_49590(0.5f); fn_1_495C8(9);
+ fn_1_496FC(v14,240.0f); fn_1_4954C(0.0f);
+ if(lbl_801A66B4==5) fn_1_4955C(1.0f,1.0f);
+ else fn_1_4955C(0.8333333134651184f,0.8333333134651184f);
+ fn_1_495A0(alpha); fn_1_4D0A0(); fn_1_49738((u32)fn_1_5233C); fn_1_49748(5.0f);
+ fn_1_4A0D8(loc_10.s[lbl_801A66B4]);
+ color.word=title_color[0]; color.bytes[3]=(s32)(255.0f*alpha);
+ color_copy=color.word; fn_1_4D0D4(&color_copy,20.0f);
+ }
+ }
+ fn_1_14BCBC(&lbl_8_bss_540,0);
+ input=&lbl_1_bss_9F8;
+ if(((input->pressed>>3)&1)||((input->pressed>>2)&1)||(input->pressed&1)||((input->pressed>>1)&1)||((input->held>>11)&1)||((input->held>>9)&1)||((input->held>>8)&1)) {
+ if(lbl_8_bss_54C==0) {
+ lbl_8_bss_548+=1800.0; lbl_8_bss_54C=1;
+ }}
+ fn_1_144F40(10,&lbl_8_bss_540);
+ if(fn_1_3F038()) lbl_1_bss_96A=158;
+ else { v5=lbl_8_bss_548; lbl_8_bss_548=v5-1;
+ if(v5<0) { fn_8006CE1C(1.0f); fn_1_3F894(); }}
+ }
+}
+/* fzgx:end fn_8_D034 */
+
 /* fzgx:begin fn_8_D5F4 */
 extern u32 fn_1_14BD74(u32);
 extern u32 fn_1_15555C(u32);

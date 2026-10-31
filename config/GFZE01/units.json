@@ -88140,6 +88140,18 @@
   },
   {
     "module": "title",
+    "source": "rel/title/operation/fn_8_D034.c",
+    "symbols": [
+      "fn_8_D034"
+    ],
+    "status": "nonmatching",
+    "mw_version": "GC/1.3.2",
+    "extra_cflags": [],
+    "tu": "rel/title/operation.c",
+    "pool": true
+  },
+  {
+    "module": "title",
     "source": "rel/title/operation/fn_8_D5F4.c",
     "symbols": [
       "fn_8_D5F4"
