@@ -13741,6 +13741,202 @@ void fn_1_8DBA4(u8 value) {
 }
 /* fzgx:end fn_1_8DBA4 */
 
+/* fzgx:begin fn_1_8DBB0 pool noprologue */
+#include "types.h"
+
+struct Car8DBB0 {
+    u8 pad_0[0x1C];
+    u8 *unk_1C;
+    u8 pad_20[0xA];
+    s8 unk_2A;
+    u8 pad_2B[0x1ED];
+    u8 unk_218;
+};
+struct Car8DBB0Buf {
+    u8 pad_0[9];
+    u8 unk_9;
+    u8 pad_a[0x14b6];
+};
+struct Car8DBB0Obj {
+    u8 pad_0[0x32c];
+    u8 *unk_32c;
+    u8 pad_330[0x5c];
+    u8 unk_38c;
+    u8 pad_38d[0x2d];
+    s16 unk_3ba;
+};
+
+extern f32 lbl_1_rodata_3518[6];
+extern const f32 lbl_1_rodata_3E2C;
+extern void fn_1_3EF14(void *);
+extern void fn_80008BEC(void *, int, u32);
+extern void fn_1_3BDC(u32);
+extern u32 fn_1_84860(void *);
+extern u32 fn_1_3C18(u32);
+extern u32 lbl_8006DCA4(void);
+extern void lbl_8006DD7C(void);
+extern void lbl_8006E0B4(f32, f32, f32);
+extern void lbl_8006DB74(void *);
+
+/* file-scope objects of the retail TU, in retail order: MWCC addresses them off one section base */
+u32 fzgx_obj_lbl_1_bss_6D820;
+u32 fzgx_obj_lbl_1_bss_6D824;
+u32 lbl_1_bss_6D828;
+u32 fzgx_obj_lbl_1_bss_6D82C[3];
+u32 fzgx_obj_lbl_1_bss_6D838;
+u8 *fzgx_obj_lbl_1_bss_6D83C;
+u32 lbl_1_bss_6D83C_fill_6D840[2];
+u16 lbl_1_bss_6D83C_fill_6D848;
+s8 fzgx_obj_lbl_1_bss_6D84A;
+u8 lbl_1_bss_6D84A_fill_6D84B;
+u32 lbl_1_bss_6D84A_fill_6D84C;
+u32 lbl_1_bss_6D850;
+u32 lbl_1_bss_6D854[4];
+u32 fzgx_obj_lbl_1_bss_6D864;
+u8 fzgx_obj_lbl_1_bss_6D868;
+u8 lbl_1_bss_6D820_gap_6D869;
+u16 lbl_1_bss_6D820_gap_6D869_fill_6D86A;
+u32 lbl_1_bss_6D86C[34];
+u32 lbl_1_bss_6D8F4[31];
+u32 lbl_1_bss_6D970;
+u32 lbl_1_bss_6D974;
+u32 lbl_1_bss_6D978;
+u32 lbl_1_bss_6D97C;
+u32 lbl_1_bss_6D980[8];
+u32 fzgx_obj_lbl_1_bss_6D9A0[38];
+u8 lbl_1_bss_6D9A0_98;
+u8 lbl_1_bss_6D9A0_fill_6DA39;
+u16 lbl_1_bss_6D9A0_fill_6DA3A;
+u32 lbl_1_bss_6D9A0_fill_6DA3C[8];
+u32 lbl_1_bss_6DA5C[7];
+u16 lbl_1_bss_6DA5C_fill_6DA78;
+u8 lbl_1_bss_6DA7A;
+u8 lbl_1_bss_6DA7B;
+u32 lbl_1_bss_6DA7B_fill_6DA7C;
+u32 lbl_1_bss_6DA80[440];
+u32 lbl_1_bss_6E160[435];
+u8 lbl_1_bss_6E82C;
+u8 lbl_1_bss_6E82C_fill_6E82D;
+u16 lbl_1_bss_6E82C_fill_6E82E;
+u32 lbl_1_bss_6E82C_fill_6E830[74];
+
+#pragma section code_type ".fzgxpool"
+static void fzgx_bss_layout(void) {
+    volatile u8 s;  /* fzgx-allow: S2 layout primer sink: MWCC emits .bss objects in first-access order */
+    s = *(u8 *)&fzgx_obj_lbl_1_bss_6D820;
+    s = *(u8 *)&fzgx_obj_lbl_1_bss_6D824;
+    s = *(u8 *)&lbl_1_bss_6D828;
+    s = *(u8 *)&fzgx_obj_lbl_1_bss_6D82C;
+    s = *(u8 *)&fzgx_obj_lbl_1_bss_6D838;
+    s = *(u8 *)&fzgx_obj_lbl_1_bss_6D83C;
+    s = *(u8 *)&lbl_1_bss_6D83C_fill_6D840;
+    s = *(u8 *)&lbl_1_bss_6D83C_fill_6D848;
+    s = *(u8 *)&fzgx_obj_lbl_1_bss_6D84A;
+    s = *(u8 *)&lbl_1_bss_6D84A_fill_6D84B;
+    s = *(u8 *)&lbl_1_bss_6D84A_fill_6D84C;
+    s = *(u8 *)&lbl_1_bss_6D850;
+    s = *(u8 *)&lbl_1_bss_6D854;
+    s = *(u8 *)&fzgx_obj_lbl_1_bss_6D864;
+    s = *(u8 *)&fzgx_obj_lbl_1_bss_6D868;
+    s = *(u8 *)&lbl_1_bss_6D820_gap_6D869;
+    s = *(u8 *)&lbl_1_bss_6D820_gap_6D869_fill_6D86A;
+    s = *(u8 *)&lbl_1_bss_6D86C;
+    s = *(u8 *)&lbl_1_bss_6D8F4;
+    s = *(u8 *)&lbl_1_bss_6D970;
+    s = *(u8 *)&lbl_1_bss_6D974;
+    s = *(u8 *)&lbl_1_bss_6D978;
+    s = *(u8 *)&lbl_1_bss_6D97C;
+    s = *(u8 *)&lbl_1_bss_6D980;
+    s = *(u8 *)&fzgx_obj_lbl_1_bss_6D9A0;
+    s = *(u8 *)&lbl_1_bss_6D9A0_98;
+    s = *(u8 *)&lbl_1_bss_6D9A0_fill_6DA39;
+    s = *(u8 *)&lbl_1_bss_6D9A0_fill_6DA3A;
+    s = *(u8 *)&lbl_1_bss_6D9A0_fill_6DA3C;
+    s = *(u8 *)&lbl_1_bss_6DA5C;
+    s = *(u8 *)&lbl_1_bss_6DA5C_fill_6DA78;
+    s = *(u8 *)&lbl_1_bss_6DA7A;
+    s = *(u8 *)&lbl_1_bss_6DA7B;
+    s = *(u8 *)&lbl_1_bss_6DA7B_fill_6DA7C;
+    s = *(u8 *)&lbl_1_bss_6DA80;
+    s = *(u8 *)&lbl_1_bss_6E160;
+    s = *(u8 *)&lbl_1_bss_6E82C;
+    s = *(u8 *)&lbl_1_bss_6E82C_fill_6E82D;
+    s = *(u8 *)&lbl_1_bss_6E82C_fill_6E82E;
+    s = *(u8 *)&lbl_1_bss_6E82C_fill_6E830;
+}
+#pragma section code_type ".text"
+
+#pragma opt_lifetimes off
+static inline s32 Car8DBB0Clamp(s8 value) {
+    if (value < 0) return 0;
+    return value > 5 ? 5 : value;
+}
+
+static inline s8 Car8DBB0Next(struct Car8DBB0Obj *p, s32 value, s8 next) {
+    if (next == 5) return next;
+    if ((s8)value < 0 || next > 5) return Car8DBB0Clamp(value);
+    while (next < 5) {
+        if (p->unk_38c & (1 << next)) return next;
+        next++;
+    }
+    return -1;
+}
+
+static inline struct Car8DBB0Obj *Car8DBB0Get(s8 idx) {
+    if (idx < fzgx_obj_lbl_1_bss_6D84A && fzgx_obj_lbl_1_bss_6D83C != 0) {
+        return (struct Car8DBB0Obj *)(fzgx_obj_lbl_1_bss_6D83C + idx * 0x440);
+    }
+    return 0;
+}
+
+static inline void Car8DBB0BuildRow(s32 i, s16 *out) {
+    s32 j;
+    s8 k_2;
+    struct Car8DBB0Obj *p;
+    u32 result;
+    s32 offset;
+    for (j = 0; j < 5;) {
+        p = Car8DBB0Get(i);
+        lbl_8006DCA4();
+        lbl_8006DD7C();
+        lbl_8006E0B4(lbl_1_rodata_3518[0], lbl_1_rodata_3518[0], lbl_1_rodata_3E2C);
+        lbl_8006DB74(p->unk_32c + 0x14c);
+        k_2 = Car8DBB0Next(p, j, j);
+        j = k_2;
+        if (j == -1) break;
+        p->unk_3ba = j;
+        fn_1_3BDC(0);
+        fn_1_84860(p);
+        result = fn_1_3C18(0);
+        offset = j * 2;
+        j = k_2;
+        j = j + 1;
+        *(s16 *)((u8 *)out + offset) = result;
+    }
+}
+
+#pragma opt_lifetimes on
+#pragma inline_max_size(4096)
+#pragma opt_common_subs off
+void fn_1_8DBB0(void) {
+    s16 *out;
+    s32 i;
+    struct Car8DBB0Buf buf;
+
+    fn_1_3EF14(&buf);
+    fn_80008BEC((u8 *)&lbl_1_bss_6E82C, 0, 0x12c);
+    lbl_1_bss_6D9A0_98 = 1;
+    i = 0;
+    out = (s16 *)((u8 *)&lbl_1_bss_6E82C);
+    for (; i < buf.unk_9; i++) {
+        Car8DBB0BuildRow(i, out);
+        out += 5;
+    }
+    lbl_1_bss_6D9A0_98 = 0;
+}
+#pragma opt_common_subs reset
+/* fzgx:end fn_1_8DBB0 */
+
 /* fzgx:begin fn_1_8E084 */
 typedef struct {
     u8 pad0[0x38c];
