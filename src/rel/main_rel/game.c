@@ -125,6 +125,645 @@ extern u16 lbl_1_bss_25B80;
 extern u8 lbl_1_bss_26B1D;
 extern void fn_1_15E260(s32 index);
 
+/* fzgx:begin fn_1_2FAA0 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/game.h"
+
+typedef struct Sig_ADXT_Pause_AdxSjdHandle Sig_ADXT_Pause_AdxSjdHandle;
+
+typedef struct Sig_ADXT_Pause_ADXStream Sig_ADXT_Pause_ADXStream;
+
+typedef struct Sig_ADXT_Pause_AXRNAHandle Sig_ADXT_Pause_AXRNAHandle;
+
+typedef struct Sig_ADXT_Pause_SJCK {
+    unsigned char *data;
+    int len;
+} Sig_ADXT_Pause_SJCK;
+
+typedef void (*Sig_ADXT_Pause_SJErrorCallback)(void *object, int error);
+
+typedef struct Sig_ADXT_Pause_SJInterface Sig_ADXT_Pause_SJInterface;
+
+typedef struct Sig_ADXT_Pause_SJ Sig_ADXT_Pause_SJ;
+
+struct Sig_ADXT_Pause_SJ {
+    const Sig_ADXT_Pause_SJInterface *interface;
+};
+
+struct Sig_ADXT_Pause_SJInterface {
+    void *reserved[3];
+    void (*destroy)(Sig_ADXT_Pause_SJ *sj);
+    const void *(*get_uuid)(Sig_ADXT_Pause_SJ *sj);
+    void (*reset)(Sig_ADXT_Pause_SJ *sj);
+    void (*get_chunk)(Sig_ADXT_Pause_SJ *sj, int channel, int max_size, Sig_ADXT_Pause_SJCK *chunk);
+    void (*unget_chunk)(Sig_ADXT_Pause_SJ *sj, int channel, Sig_ADXT_Pause_SJCK *chunk);
+    void (*put_chunk)(Sig_ADXT_Pause_SJ *sj, int channel, Sig_ADXT_Pause_SJCK *chunk);
+    int (*get_num_data)(Sig_ADXT_Pause_SJ *sj, int channel);
+    int (*is_get_chunk)(Sig_ADXT_Pause_SJ *sj, int channel, int size, int *available);
+    void (*entry_error_func)(Sig_ADXT_Pause_SJ *sj, Sig_ADXT_Pause_SJErrorCallback callback, void *object);
+};
+
+typedef struct Sig_ADXT_Pause_ADX_AMP Sig_ADXT_Pause_ADX_AMP;
+
+typedef struct Sig_ADXT_Pause_LSCObject Sig_ADXT_Pause_LSCObject;
+
+typedef struct Sig_ADXT_Pause_ADXTHandle {
+    s8 used;
+    s8 status;
+    s8 stream_type;
+    s8 maximum_channels;
+    Sig_ADXT_Pause_AdxSjdHandle *decoder;
+    Sig_ADXT_Pause_ADXStream *stream;
+    Sig_ADXT_Pause_AXRNAHandle *rna;
+    Sig_ADXT_Pause_SJ *stream_sj;
+    Sig_ADXT_Pause_SJ *input_sj;
+    Sig_ADXT_Pause_SJ *output_sj[2];
+    u8 *input_buffer;
+    s32 input_buffer_size;
+    s32 input_extra_size;
+    u8 *output_buffer;
+    s32 output_buffer_size;
+    s32 output_buffer_distance;
+    s32 server_frequency;
+    s16 stream_buffer_sectors;
+    s16 minimum_buffer_sectors;
+    s16 output_volume;
+    s16 output_pan[2];
+    s16 field_46;
+    s32 maximum_decode_samples;
+    s32 loop_count;
+    s32 link_data_length;
+    s32 field_54;
+    s32 field_58;
+    s32 field_5C;
+    s16 error_code;
+    u8 reserved_62[2];
+    s32 field_64;
+    s16 field_68;
+    s16 field_6A;
+    s8 stream_loop_enabled;
+    s8 auto_receiver;
+    u8 reserved_6E[2];
+    s8 suppress_playback;
+    s8 decoder_ready;
+    s8 paused;
+    u8 reserved_73;
+    Sig_ADXT_Pause_ADX_AMP *amplifier;
+    Sig_ADXT_Pause_SJ *amplifier_input[2];
+    Sig_ADXT_Pause_SJ *amplifier_output[2];
+    s32 time_offset;
+    s32 eos_sector;
+    s32 loop_sample_count;
+    Sig_ADXT_Pause_LSCObject *linked_stream_controller;
+    s8 link_enabled;
+    u8 reserved_99[3];
+    u32 playback_time;
+    s32 playback_start_vsync;
+    s32 linked_decoded_samples;
+    s8 pending_stream_start;
+    u8 reserved_A9[3];
+    u8 *work_end;
+    const char *pending_filename;
+    void *pending_directory;
+    s32 pending_file_offset;
+    s32 pending_file_sectors;
+} Sig_ADXT_Pause_ADXTHandle;
+
+typedef struct Sig_ADXT_Stop_AdxSjdHandle Sig_ADXT_Stop_AdxSjdHandle;
+
+typedef struct Sig_ADXT_Stop_ADXStream Sig_ADXT_Stop_ADXStream;
+
+typedef struct Sig_ADXT_Stop_AXRNAHandle Sig_ADXT_Stop_AXRNAHandle;
+
+typedef struct Sig_ADXT_Stop_SJCK {
+    unsigned char *data;
+    int len;
+} Sig_ADXT_Stop_SJCK;
+
+typedef void (*Sig_ADXT_Stop_SJErrorCallback)(void *object, int error);
+
+typedef struct Sig_ADXT_Stop_SJInterface Sig_ADXT_Stop_SJInterface;
+
+typedef struct Sig_ADXT_Stop_SJ Sig_ADXT_Stop_SJ;
+
+struct Sig_ADXT_Stop_SJInterface {
+    void *reserved[3];
+    void (*destroy)(Sig_ADXT_Stop_SJ *sj);
+    const void *(*get_uuid)(Sig_ADXT_Stop_SJ *sj);
+    void (*reset)(Sig_ADXT_Stop_SJ *sj);
+    void (*get_chunk)(Sig_ADXT_Stop_SJ *sj, int channel, int max_size, Sig_ADXT_Stop_SJCK *chunk);
+    void (*unget_chunk)(Sig_ADXT_Stop_SJ *sj, int channel, Sig_ADXT_Stop_SJCK *chunk);
+    void (*put_chunk)(Sig_ADXT_Stop_SJ *sj, int channel, Sig_ADXT_Stop_SJCK *chunk);
+    int (*get_num_data)(Sig_ADXT_Stop_SJ *sj, int channel);
+    int (*is_get_chunk)(Sig_ADXT_Stop_SJ *sj, int channel, int size, int *available);
+    void (*entry_error_func)(Sig_ADXT_Stop_SJ *sj, Sig_ADXT_Stop_SJErrorCallback callback, void *object);
+};
+
+struct Sig_ADXT_Stop_SJ {
+    const Sig_ADXT_Stop_SJInterface *interface;
+};
+
+typedef struct Sig_ADXT_Stop_ADX_AMP Sig_ADXT_Stop_ADX_AMP;
+
+typedef struct Sig_ADXT_Stop_LSCObject Sig_ADXT_Stop_LSCObject;
+
+typedef struct Sig_ADXT_Stop_ADXTHandle {
+    s8 used;
+    s8 status;
+    s8 stream_type;
+    s8 maximum_channels;
+    Sig_ADXT_Stop_AdxSjdHandle *decoder;
+    Sig_ADXT_Stop_ADXStream *stream;
+    Sig_ADXT_Stop_AXRNAHandle *rna;
+    Sig_ADXT_Stop_SJ *stream_sj;
+    Sig_ADXT_Stop_SJ *input_sj;
+    Sig_ADXT_Stop_SJ *output_sj[2];
+    u8 *input_buffer;
+    s32 input_buffer_size;
+    s32 input_extra_size;
+    u8 *output_buffer;
+    s32 output_buffer_size;
+    s32 output_buffer_distance;
+    s32 server_frequency;
+    s16 stream_buffer_sectors;
+    s16 minimum_buffer_sectors;
+    s16 output_volume;
+    s16 output_pan[2];
+    s16 field_46;
+    s32 maximum_decode_samples;
+    s32 loop_count;
+    s32 link_data_length;
+    s32 field_54;
+    s32 field_58;
+    s32 field_5C;
+    s16 error_code;
+    u8 reserved_62[2];
+    s32 field_64;
+    s16 field_68;
+    s16 field_6A;
+    s8 stream_loop_enabled;
+    s8 auto_receiver;
+    u8 reserved_6E[2];
+    s8 suppress_playback;
+    s8 decoder_ready;
+    s8 paused;
+    u8 reserved_73;
+    Sig_ADXT_Stop_ADX_AMP *amplifier;
+    Sig_ADXT_Stop_SJ *amplifier_input[2];
+    Sig_ADXT_Stop_SJ *amplifier_output[2];
+    s32 time_offset;
+    s32 eos_sector;
+    s32 loop_sample_count;
+    Sig_ADXT_Stop_LSCObject *linked_stream_controller;
+    s8 link_enabled;
+    u8 reserved_99[3];
+    u32 playback_time;
+    s32 playback_start_vsync;
+    s32 linked_decoded_samples;
+    s8 pending_stream_start;
+    u8 reserved_A9[3];
+    u8 *work_end;
+    const char *pending_filename;
+    void *pending_directory;
+    s32 pending_file_offset;
+    s32 pending_file_sectors;
+} Sig_ADXT_Stop_ADXTHandle;
+
+typedef struct {
+    u8 unk[0xb];
+    u8 value;
+} Entry;
+
+typedef struct {
+    u8 pad_0[2];
+    s16 unk_2;
+    u8 pad_4[8];
+    u32 unk_C;
+    u8 pad_10[0x10];
+} Obj_1_bss_25E9C;
+
+typedef struct {
+    u8 pad[0x2f8];
+    u32 value_2f8;
+    u32 value_2fc;
+    u32 value_300;
+    u32 value_304;
+    u32 value_308;
+    u32 value_30c;
+    u32 value_310;
+    u32 value_314;
+    u32 value_318;
+    u32 value_31c;
+} Fn40710Config;
+extern void fn_1_15E330(s32 index, u32 value, void *arg);
+extern void fn_1_15E5E4(s32 index, void *arg);
+extern void fn_1_15E688(s32 index, u32 value, u8 state, void *arg);
+extern void fn_1_15E3E0(s32 index, u32 value);
+extern void fn_1_15E434(u32 value);
+extern void fn_1_15E540(s32 index, void *arg);
+extern void fn_1_CB404(u8 value);
+extern void fn_1_D07C4(u32 arg0, u32 arg1);
+extern u32 lbl_1_bss_25B84;
+extern u32 OSGetTick(void);
+extern void fn_1_A0978(void);
+extern void fn_1_35174(void);
+extern s32 fn_1_3EFA8(void);
+extern u16 lbl_1_bss_26B7A[3];
+extern u16 lbl_1_bss_26300;
+extern void fn_80008BA8(u32 arg0, u32 arg1, u32 arg2);
+extern void fn_80008BEC(void *dest, int value, u32 size);
+extern u32 fn_1_101C0(void);
+extern u32 fn_1_A11EC(void);
+extern u32 fn_1_435C(u32 value);
+extern void ADXT_Pause(Sig_ADXT_Pause_ADXTHandle *, s32);
+extern void fn_1_4310(u32 arg0);
+extern void fn_1_48004(s32 index, s32 image);
+extern void fn_1_8616C(void);
+extern void fn_1_A1588(u32 arg0, u32 arg1);
+extern void fn_1_D0790(void);
+extern void fn_1_817C0(void);
+extern u32 lbl_1_bss_381FC;
+extern void fn_1_EB080(int mode);
+extern s64 OSGetTime(void);
+extern void fn_1_4A00(u32 arg0, u32 arg1, u32 arg2);
+extern void fn_1_5370(u32 arg0, u32 arg1);
+extern void fn_1_15E27C(void);
+extern void fn_1_4811C(int arg);
+extern void fn_1_A8F78(void);
+extern u8 lbl_1_bss_262F4;
+extern u32 lbl_1_bss_25E74[7];
+extern u8 lbl_1_bss_3C10;
+extern void fn_1_36330(void);
+extern void fn_1_36B10(void);
+extern void fn_1_3C98(void);
+extern void fn_1_37AA8(void);
+extern void fn_1_37E98(void);
+extern f32 lbl_1_bss_26304[4];
+extern u8 lbl_1_bss_26B04[20];
+extern u8 lbl_1_bss_26314[2032];
+extern s16 fn_1_12EF24(s16 row, s16 column);
+extern u8 lbl_1_bss_523C[32];
+extern Entry *lbl_1_bss_53F8[34];
+extern void OSPanic(const void *, u32, const char *, ...);
+extern Obj_1_bss_25E9C lbl_1_bss_25E9C[30];
+extern void fn_1_12AB38(void *arg0);
+extern void fn_1_465D0(char *value, u32 flag);
+extern void* fn_1_7F518(s16 car_type, void* car, s32 initialize);
+extern int sprintf(char *s, const char *format, ...);
+extern void fn_1_451E4(void);
+extern void fn_1_D3214(void);
+extern void fn_8001AF64(void);
+extern u32 fn_1_467F4(void);
+extern u32 fn_1_13018(void);
+extern u32 fn_1_46C60(void);
+extern u32 lbl_1_bss_26C2C[2];
+extern u32 lbl_1_bss_262F8[2];
+extern u16 lbl_1_bss_26C68[35526];
+extern u32 lbl_1_bss_3C08[2];
+extern u32 fn_800075AC(u32, u32, u32);
+extern u32 ghost_test_record_flag0(s32 arg);
+extern u32 fn_1_F9D44(u32 arg);
+extern u8 fn_1_F8C50(s32 arg0);
+extern void fn_1_2DB50(void);
+extern void fn_1_3F8C(void *, void *, Obj_1_bss_5138 *, int);
+extern void fn_1_2D888(void);
+extern void fn_1_2D524(void);
+extern u32 fn_1_FA070(void);
+extern int fn_1_FA180(int, u8);
+extern u32 fn_1_F9FEC(void);
+extern void fn_1_A2DC4(u32 arg0);
+extern Fn40710Config lbl_1_rodata_BD8;
+extern u8 lbl_1_bss_26B54[8];
+extern u32 fn_1_40EE4(void);
+extern u32 lbl_801A63D0;
+extern u32 lbl_1_bss_26C34[9];
+extern u8 lbl_1_bss_38218[568];
+extern u32 fn_1_4060(void);
+extern void ARQPostRequest(u8 *arg0, u32 arg1, u32 arg2, u32 arg3, u32 arg4, u32 arg5, u32 arg6, u32 arg7);
+extern u32 lbl_801A63C0;
+extern void fn_1_40BE4(void);
+extern u32 GXGetTexBufferSize(u32, u32, u32, u32, u32);
+extern u32 lbl_1_bss_26B4C;
+extern u8 lbl_1_bss_25E90[8];
+extern s32 fn_1_48B0(u32 arg0, u32 arg1);
+extern void fn_1_40F54(void *arg0);
+extern u32 lbl_801A6CE0;
+extern u32 lbl_1_bss_38454;
+extern u32 fn_80070DE0(u32 arg0);
+extern void fn_1_D3884();
+extern void fn_1_D358C();
+extern void fn_800711A8(Obj_1_bss_38458_Target *target);
+extern void fn_80071718(u32 value);
+extern void fn_1_41134(void *unused, char *value);
+extern void fn_1_411D4(u32, char *);
+extern int fn_80016DF8(char *buffer);
+extern void fn_1_412A0(u32 index);
+extern size_t strlen(const char *str);
+extern int fn_80083BCC(const char *s1, const char *s2);
+extern u8 lbl_1_A9011300;
+extern u8 lbl_1_A9011100;
+extern u8 lbl_1_A9011000;
+
+typedef struct GXColor {
+    u8 r, g, b, a;
+} GXColor;
+
+/* the retail TU's .bss objects this function uses, at their retail offsets, so MWCC addresses them off one section base */
+u8 fzgx_obj_lbl_1_bss_3C00[4];
+u8 fzgx_pool_gap_3C04[0x18];
+u32 fzgx_obj_lbl_1_bss_3C1C;
+u8 lbl_1_bss_3C1C__fzgx_offset_4;
+u8 fzgx_pool_gap_3C21;
+u8 fzgx_pool_gap_3C22;
+u8 fzgx_pool_gap_3C23;
+u8 fzgx_pool_gap_3C24[0x14E0];
+s8 fzgx_obj_lbl_1_bss_5104;
+u8 fzgx_pool_gap_5105;
+u8 fzgx_pool_gap_5106;
+u8 fzgx_pool_gap_5107;
+u8 fzgx_pool_gap_5108[0x20A98];
+s32 fzgx_obj_lbl_1_bss_25BA0;
+u8 fzgx_pool_gap_25BA4[0x40];
+u16 fzgx_pool_gap_25BE4;
+u16 lbl_1_bss_25BA0__fzgx_offset_46;
+u16 lbl_1_bss_25BA0__fzgx_offset_48;
+u8 fzgx_pool_gap_25BEA;
+u8 fzgx_pool_gap_25BEB;
+s32 lbl_1_bss_25BA0__fzgx_offset_4C;
+u32 fzgx_pool_gap_25BF0;
+s32 lbl_1_bss_25BA0__fzgx_offset_54;
+f32 lbl_1_bss_25BA0__fzgx_offset_58;
+u32 fzgx_pool_gap_25BFC;
+GXColor lbl_1_bss_25BA0__fzgx_offset_60[0xA];
+GXColor lbl_1_bss_25BA0__fzgx_offset_88[0x2];
+u8 fzgx_pool_gap_25C30[0x8];
+s32 lbl_1_bss_25BA0__fzgx_offset_98;
+u8 fzgx_pool_gap_25C3C[0x8];
+s32 lbl_1_bss_25BA0__fzgx_offset_A4;
+
+#pragma section code_type ".fzgxpool"
+__declspec(section ".fzgxpool") static void fzgx_bss_prime(void) {
+    volatile u32 s;  /* fzgx-allow: S2 primer sink */
+    s = fzgx_obj_lbl_1_bss_3C00[0];
+    s = fzgx_pool_gap_3C04[0];
+    s = fzgx_obj_lbl_1_bss_3C1C;
+    s = lbl_1_bss_3C1C__fzgx_offset_4;
+    s = fzgx_pool_gap_3C21;
+    s = fzgx_pool_gap_3C22;
+    s = fzgx_pool_gap_3C23;
+    s = fzgx_pool_gap_3C24[0];
+    s = fzgx_obj_lbl_1_bss_5104;
+    s = fzgx_pool_gap_5105;
+    s = fzgx_pool_gap_5106;
+    s = fzgx_pool_gap_5107;
+    s = fzgx_pool_gap_5108[0];
+    s = fzgx_obj_lbl_1_bss_25BA0;
+    s = fzgx_pool_gap_25BA4[0];
+    s = fzgx_pool_gap_25BE4;
+    s = lbl_1_bss_25BA0__fzgx_offset_46;
+    s = lbl_1_bss_25BA0__fzgx_offset_48;
+    s = fzgx_pool_gap_25BEA;
+    s = fzgx_pool_gap_25BEB;
+    s = lbl_1_bss_25BA0__fzgx_offset_4C;
+    s = fzgx_pool_gap_25BF0;
+    s = lbl_1_bss_25BA0__fzgx_offset_54;
+    s = *(u32 *)&lbl_1_bss_25BA0__fzgx_offset_58;
+    s = fzgx_pool_gap_25BFC;
+    s = lbl_1_bss_25BA0__fzgx_offset_60[0].r;
+    s = lbl_1_bss_25BA0__fzgx_offset_88[0].r;
+    s = fzgx_pool_gap_25C30[0];
+    s = lbl_1_bss_25BA0__fzgx_offset_98;
+    s = fzgx_pool_gap_25C3C[0];
+    s = lbl_1_bss_25BA0__fzgx_offset_A4;
+}
+#pragma section code_type ".text"
+
+/* the retail TU's .rodata ahead of this function's literals, so MWCC addresses them off one section base */
+
+#pragma section code_type ".fzgxpool"
+static const u32 fzgx_pool_table1[1] = {0xFFFFFF00};  /* fzgx-allow: A1 retail pool bytes */
+__declspec(section ".fzgxpool") static void fzgx_pool_keep1(void) { const u32 *volatile cp; cp = fzgx_pool_table1; }  /* fzgx-allow: S2 pool primer sink */
+__declspec(section ".fzgxpool") static void fzgx_pool_prime2(void) {
+    volatile f32 s; volatile f64 d;  /* fzgx-allow: S2 pool primer sinks */
+    s = 0.0f;
+    s = 15.0f;
+    s = 1.0f;
+    s = 10.0f;
+    s = 1.25f;
+    s = 0.10000000149011612f;
+    s = 0.8999999761581421f;
+    s = 0.0006000000284984708f;
+    s = 0.4000000059604645f;
+    s = 0.75f;
+    s = 70.0f;
+    s = 0.5f;
+    s = 36.0f;
+    s = 16.0f;
+    s = 45.0f;
+    s = 0.0007999999797903001f;
+    s = 18.0f;
+    s = 50.0f;
+}
+static const u32 fzgx_pool_table3[1] = {0x00000000};  /* fzgx-allow: A1 retail pool bytes */
+__declspec(section ".fzgxpool") static void fzgx_pool_keep3(void) { const u32 *volatile cp; cp = fzgx_pool_table3; }  /* fzgx-allow: S2 pool primer sink */
+__declspec(section ".fzgxpool") static void fzgx_pool_prime4(void) {
+    volatile f32 s; volatile f64 d;  /* fzgx-allow: S2 pool primer sinks */
+    d = 4503599627370496.0;
+}
+static const u32 fzgx_pool_table5[52] = {0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000};  /* fzgx-allow: A1 retail pool bytes */
+__declspec(section ".fzgxpool") static void fzgx_pool_keep5(void) { const u32 *volatile cp; cp = fzgx_pool_table5; }  /* fzgx-allow: S2 pool primer sink */
+__declspec(section ".fzgxpool") static void fzgx_pool_prime6(void) {
+    volatile f32 s; volatile f64 d;  /* fzgx-allow: S2 pool primer sinks */
+    s = 0.800000011920929f;
+    s = 80.0f;
+    s = 60.0f;
+}
+static const u32 fzgx_pool_table7[1] = {0x00000000};  /* fzgx-allow: A1 retail pool bytes */
+__declspec(section ".fzgxpool") static void fzgx_pool_keep7(void) { const u32 *volatile cp; cp = fzgx_pool_table7; }  /* fzgx-allow: S2 pool primer sink */
+__declspec(section ".fzgxpool") static void fzgx_pool_prime8(void) {
+    volatile f32 s; volatile f64 d;  /* fzgx-allow: S2 pool primer sinks */
+    d = 4503601774854144.0;
+}
+static const u32 fzgx_pool_table9[2] = {0x00000000, 0xFFFFFF00};  /* fzgx-allow: A1 retail pool bytes */
+__declspec(section ".fzgxpool") static void fzgx_pool_keep9(void) { const u32 *volatile cp; cp = fzgx_pool_table9; }  /* fzgx-allow: S2 pool primer sink */
+__declspec(section ".fzgxpool") static void fzgx_pool_prime10(void) {
+    volatile f32 s; volatile f64 d;  /* fzgx-allow: S2 pool primer sinks */
+    s = 470.0f;
+    s = 0.0625f;
+    s = 14.0f;
+    s = 127.0f;
+    s = 0.25f;
+}
+static const u32 fzgx_pool_table11[3] = {0x03E8FED4, 0xFE70FE0C, 0xFE0CFE0C};  /* fzgx-allow: A1 retail pool bytes */
+__declspec(section ".fzgxpool") static void fzgx_pool_keep11(void) { const u32 *volatile cp; cp = fzgx_pool_table11; }  /* fzgx-allow: S2 pool primer sink */
+__declspec(section ".fzgxpool") static void fzgx_pool_prime12(void) {
+    volatile f32 s; volatile f64 d;  /* fzgx-allow: S2 pool primer sinks */
+    s = 10000.0f;
+    s = 15000.0f;
+    s = 9999.0f;
+}
+static const u32 fzgx_pool_table13[2] = {0xFFFFFF00, 0x80808000};  /* fzgx-allow: A1 retail pool bytes */
+__declspec(section ".fzgxpool") static void fzgx_pool_keep13(void) { const u32 *volatile cp; cp = fzgx_pool_table13; }  /* fzgx-allow: S2 pool primer sink */
+__declspec(section ".fzgxpool") static void fzgx_pool_prime14(void) {
+    volatile f32 s; volatile f64 d;  /* fzgx-allow: S2 pool primer sinks */
+    s = 320.0f;
+    s = 240.0f;
+    s = 280.0f;
+    s = 200.0f;
+    s = 40.0f;
+    s = 30.0f;
+}
+static const u32 fzgx_pool_table15[8] = {0x80808000, 0xFFFFFF00, 0x80808000, 0xFFFFFF00, 0xFFFFFF00, 0x00000000, 0x00000000, 0xFFFFFF00};  /* fzgx-allow: A1 retail pool bytes */
+__declspec(section ".fzgxpool") static void fzgx_pool_keep15(void) { const u32 *volatile cp; cp = fzgx_pool_table15; }  /* fzgx-allow: S2 pool primer sink */
+__declspec(section ".fzgxpool") static void fzgx_pool_prime16(void) {
+    volatile f32 s; volatile f64 d;  /* fzgx-allow: S2 pool primer sinks */
+    s = 0.05000000074505806f;
+    s = 0.15000000596046448f;
+    s = 0.07999999821186066f;
+    s = 2.0f;
+    s = 4.0f;
+    s = 255.0f;
+    s = 1.100000023841858f;
+    s = 38.0f;
+    s = 20.0f;
+    s = 180.0f;
+    s = 3.0f;
+    s = 0.00019999999494757503f;
+    s = 100.0f;
+    s = 75.0f;
+    s = 0.00039999998989515007f;
+    s = 150.0f;
+}
+#pragma section code_type ".text"
+
+/* .bss 0x9F8: the buttons of one pad port */
+typedef struct PadButtons {
+    u16 unk_0;
+    u8 pad_2[6];
+    u16 unk_8;
+    u8 pad_A[6];
+    u16 unk_10;
+    u16 unk_12;
+} PadButtons;
+
+extern u32 fn_1_2EE3C(void);
+extern void fn_1_2C7C4(u8 *value, const u8 *target, int step);
+extern void fn_1_A2DC4(u32 arg0);
+extern void OSPanic(const void *, u32, const char *, ...);
+
+static inline s32 fn_1_2FAA0_color_eq(GXColor a, GXColor b) {
+    if (a.r != b.r) {
+        return 0;
+    }
+    if (a.g != b.g) {
+        return 0;
+    }
+    if (a.b != b.b) {
+        return 0;
+    }
+    return 1;
+}
+
+static inline void fn_1_2FAA0_color_fade(GXColor *color, GXColor target) {
+    fn_1_2C7C4((u8 *)color, (u8 *)&target, 20);
+}
+
+/* port is scaled in place, so MWCC indexes from the field's address (addi; lhzx) as retail does */
+static inline u16 fn_1_2FAA0_pad_word(u16 *field, s32 port) {
+    port *= sizeof(PadButtons) / sizeof(u16);
+    field += port;
+    return *field;
+}
+
+static inline s32 fn_1_2FAA0_input(void) {
+    s32 decided;
+
+    decided = 0;
+    if ((fn_1_2FAA0_pad_word(&((PadButtons *)&lbl_1_bss_9F8)->unk_10, lbl_1_bss_3C1C__fzgx_offset_4) & 1) ||
+        (fn_1_2FAA0_pad_word(&((PadButtons *)&lbl_1_bss_9F8)->unk_12, lbl_1_bss_3C1C__fzgx_offset_4) & 1)) {
+        if (lbl_1_bss_25BA0__fzgx_offset_98 == 1) {
+            fn_1_A2DC4(0xA9011300);
+        }
+        lbl_1_bss_25BA0__fzgx_offset_98 = 0;
+    } else if (((fn_1_2FAA0_pad_word(&((PadButtons *)&lbl_1_bss_9F8)->unk_10, lbl_1_bss_3C1C__fzgx_offset_4) >> 1) & 1) ||
+               ((fn_1_2FAA0_pad_word(&((PadButtons *)&lbl_1_bss_9F8)->unk_12, lbl_1_bss_3C1C__fzgx_offset_4) >> 1) & 1)) {
+        if (lbl_1_bss_25BA0__fzgx_offset_98 == 0) {
+            fn_1_A2DC4(0xA9011300);
+        }
+        lbl_1_bss_25BA0__fzgx_offset_98 = 1;
+    }
+    if ((fn_1_2FAA0_pad_word(&((PadButtons *)&lbl_1_bss_9F8)->unk_8, lbl_1_bss_3C1C__fzgx_offset_4) >> 8) & 1) {
+        if (lbl_1_bss_25BA0__fzgx_offset_98 == 0) {
+            decided = 1;
+            lbl_1_bss_25BA0__fzgx_offset_4C = 1 << fzgx_obj_lbl_1_bss_5104;
+            fn_1_A2DC4(0xA9011100);
+        } else {
+            lbl_1_bss_25BA0__fzgx_offset_54 = 0;
+            fn_1_A2DC4(0xA9011000);
+        }
+    } else if (((fn_1_2FAA0_pad_word(&((PadButtons *)&lbl_1_bss_9F8)->unk_8, lbl_1_bss_3C1C__fzgx_offset_4) >> 9) & 1) ||
+               ((fn_1_2FAA0_pad_word(&((PadButtons *)&lbl_1_bss_9F8)->unk_8, lbl_1_bss_3C1C__fzgx_offset_4) >> 12) & 1)) {
+        lbl_1_bss_25BA0__fzgx_offset_54 = 0;
+        fn_1_A2DC4(0xA9011000);
+    }
+    return decided;
+}
+
+void fn_1_2FAA0(void) {
+    GXColor *color;
+    s32 i;
+    s32 ret;
+
+    ret = 0;
+    lbl_1_bss_25BA0__fzgx_offset_4C = -2;
+    lbl_1_bss_25BA0__fzgx_offset_A4 = 1;
+    if (lbl_1_bss_25BA0__fzgx_offset_46 == 0) {
+        OSPanic(&lbl_1_data_62EC, 2983, (const char *)lbl_1_data_62F4);
+    }
+    if (fzgx_obj_lbl_1_bss_25BA0 == 0) {
+        if (lbl_1_bss_25BA0__fzgx_offset_54 != 0) {
+            ret = fn_1_2FAA0_input();
+        } else {
+            ret = fn_1_2EE3C();
+        }
+    }
+
+    for (i = 0, color = lbl_1_bss_25BA0__fzgx_offset_60; i < 14; i++) {
+        if (lbl_1_bss_25BA0__fzgx_offset_46 & (1 << i)) {
+            if (fzgx_obj_lbl_1_bss_5104 == i) {
+                *color = (GXColor){0xFF, 0xF2, 0x00, 0xFF};
+            } else if (fn_1_2FAA0_color_eq(*color, (GXColor){0xFF, 0xF2, 0x00, 0xFF})) {
+                color->b = 10;
+            } else if (lbl_1_bss_25BA0__fzgx_offset_48 & (1 << i)) {
+                fn_1_2FAA0_color_fade(color, (GXColor){0x80, 0x80, 0x80, 0x80});
+            } else {
+                fn_1_2FAA0_color_fade(color, (GXColor){0xFF, 0xFF, 0xFF, 0x96});
+            }
+            color++;
+        }
+    }
+
+    if (lbl_1_bss_25BA0__fzgx_offset_54 != 0) {
+        if (lbl_1_bss_25BA0__fzgx_offset_98 != 0) {
+            lbl_1_bss_25BA0__fzgx_offset_88[1] = (GXColor){0xFF, 0xF2, 0x00, 0xFF};
+            color = &lbl_1_bss_25BA0__fzgx_offset_88[0];
+        } else {
+            lbl_1_bss_25BA0__fzgx_offset_88[0] = (GXColor){0xFF, 0xF2, 0x00, 0xFF};
+            color = &lbl_1_bss_25BA0__fzgx_offset_88[1];
+        }
+        fn_1_2FAA0_color_fade(color, (GXColor){0xFF, 0xFF, 0xFF, 0x96});
+    }
+
+    if (lbl_1_bss_25BA0__fzgx_offset_58 == 0.0f) {
+        lbl_1_bss_25BA0__fzgx_offset_58 = 0.01f;
+    }
+    if (ret != 0) {
+        fzgx_obj_lbl_1_bss_5104 = -1;
+    }
+}
+/* fzgx:end fn_1_2FAA0 */
+
 /* fzgx:begin fn_1_2FDBC pool noprologue */
 #include "types.h"
 #include "rel/main_rel/game.h"
@@ -2725,6 +3364,169 @@ void fn_1_320A4(void)
     lbl_1_bss_26B04__fzgx_offset_10 = 1;
 }
 /* fzgx:end fn_1_320A4 */
+
+/* fzgx:begin fn_1_32200 pool */
+#ifndef REL_MAIN_REL_GLOBALS_H
+#define REL_MAIN_REL_GLOBALS_H
+
+// lbl_1_data_3D544: .data size 0x10, referenced by 26 functions, shape {'object': 9}
+typedef struct {
+    u32 unk_0;  // 4 loads, 2 stores
+    u8 pad_4[0x4];
+    u8 unk_8;  // 1 loads, 0 stores
+    u8 pad_9[0x7];
+} Obj_1_data_3D544;
+extern Obj_1_data_3D544 lbl_1_data_3D544;
+
+#endif  // REL_MAIN_REL_GLOBALS_H
+#ifndef REL_MAIN_REL_GAME_H
+#define REL_MAIN_REL_GAME_H
+
+// lbl_1_data_5B7C: .data size 0x1, 4 refs from game.c
+extern u8 lbl_1_data_5B7C;
+
+#endif  // REL_MAIN_REL_GAME_H
+
+typedef struct RaceSetup {
+    u32 unk_0;
+    u8 unk_4;
+    u8 unk_5;
+    u8 pad_6[2];
+    u8 unk_8;
+    u8 pad_9[0x14B3];
+} RaceSetup;
+
+typedef struct Racer {
+    u32 unk_0;
+    s16 unk_4;
+    u8 pad_6[0x474 - 0x6];
+    s8 unk_474;
+    s8 unk_475;
+    u8 pad_476[0x58C - 0x476];
+    u32 unk_58C;
+    u8 pad_590[0x5D9 - 0x590];
+    u8 unk_5D9;
+} Racer;
+
+/* the retail TU's .bss objects this function uses, at their retail offsets, so MWCC addresses them off one section base */
+u8 fzgx_obj_lbl_1_bss_3C00[4];
+u8 fzgx_pool_gap_3C04[0x2C];
+RaceSetup fzgx_obj_lbl_1_bss_3C30;
+u16 fzgx_obj_lbl_1_bss_50EC[10];
+u8 fzgx_pool_gap_5100[0x25B84 - 0x5100];
+s32 fzgx_obj_lbl_1_bss_25B84;
+u32 fzgx_obj_lbl_1_bss_25B88;
+u16 *lbl_1_bss_25B88__fzgx_offset_4;
+u32 lbl_1_bss_25B88__fzgx_offset_8;
+u32 fzgx_pool_gap_25B94;
+u16 fzgx_obj_lbl_1_bss_25B98;
+u16 fzgx_pool_gap_25B9A;
+u8 fzgx_pool_gap_25B9C[0x26B18 - 0x25B9C];
+u8 fzgx_obj_lbl_1_bss_26B18;
+u8 fzgx_obj_lbl_1_bss_26B19;
+u8 fzgx_obj_lbl_1_bss_26B1A;
+u8 fzgx_obj_lbl_1_bss_26B1B;
+u8 fzgx_obj_lbl_1_bss_26B1C;
+
+#pragma section code_type ".fzgxpool"
+__declspec(section ".fzgxpool") static void fzgx_bss_prime(void) {
+    volatile u32 s;  /* fzgx-allow: S2 primer sink */
+    s = fzgx_obj_lbl_1_bss_3C00[0];
+    s = fzgx_pool_gap_3C04[0];
+    s = fzgx_obj_lbl_1_bss_3C30.unk_0;
+    s = fzgx_obj_lbl_1_bss_50EC[0];
+    s = fzgx_pool_gap_5100[0];
+    s = fzgx_obj_lbl_1_bss_25B84;
+    s = fzgx_obj_lbl_1_bss_25B88;
+    s = (u32)lbl_1_bss_25B88__fzgx_offset_4;
+    s = lbl_1_bss_25B88__fzgx_offset_8;
+    s = fzgx_pool_gap_25B94;
+    s = fzgx_obj_lbl_1_bss_25B98;
+    s = fzgx_pool_gap_25B9A;
+    s = fzgx_pool_gap_25B9C[0];
+    s = fzgx_obj_lbl_1_bss_26B18;
+    s = fzgx_obj_lbl_1_bss_26B19;
+    s = fzgx_obj_lbl_1_bss_26B1A;
+    s = fzgx_obj_lbl_1_bss_26B1B;
+    s = fzgx_obj_lbl_1_bss_26B1C;
+}
+#pragma section code_type ".text"
+
+extern void fn_1_2E928(Racer *racer);
+
+/* one step of a player's countdown while out: cut to `start` once it is above `limit`, then count down */
+static inline void fn_1_32200_countdown(Racer *racer, u16 limit, u16 start) {
+    s8 player = racer->unk_475;
+    u16 *timer;
+
+    if (fzgx_obj_lbl_1_bss_50EC[player] > limit) {
+        fzgx_obj_lbl_1_bss_50EC[player] = start;
+        timer = &fzgx_obj_lbl_1_bss_50EC[racer->unk_475];
+        lbl_1_bss_25B88__fzgx_offset_8++;
+        if (fzgx_obj_lbl_1_bss_25B98 == 0) {
+            if (lbl_1_bss_25B88__fzgx_offset_4 == NULL) {
+                lbl_1_bss_25B88__fzgx_offset_4 = timer;
+                fzgx_obj_lbl_1_bss_25B84 = 0;
+            } else if (*lbl_1_bss_25B88__fzgx_offset_4 == 0 || fzgx_obj_lbl_1_bss_25B84 == 0) {
+                lbl_1_bss_25B88__fzgx_offset_4 = timer;
+                fzgx_obj_lbl_1_bss_25B84 = 0;
+            }
+        }
+    } else {
+        fzgx_obj_lbl_1_bss_50EC[player] -= fzgx_obj_lbl_1_bss_50EC[player] != 0;
+    }
+}
+
+void fn_1_32200(Racer *racer, s32 port) {
+    u8 mask;
+    u8 cause;
+
+    if (racer->unk_475 != -1) {
+        mask = 1 << racer->unk_475;
+        cause = 0xFF;
+        if (racer->unk_0 & 0x10000000) {
+            fzgx_obj_lbl_1_bss_26B18 |= mask;
+            cause = 2;
+        } else if (racer->unk_0 & 0x80) {
+            fzgx_obj_lbl_1_bss_26B19 |= mask;
+            cause = 0;
+        } else if (racer->unk_0 & 0x800) {
+            fzgx_obj_lbl_1_bss_26B1A |= mask;
+            cause = 1;
+        }
+        switch (cause) {
+        case 0:
+            fn_1_32200_countdown(racer, 300, 300);
+            break;
+        case 1:
+            fn_1_32200_countdown(racer, 300, 300);
+            break;
+        case 2:
+            fn_1_32200_countdown(racer, 300, 300);
+            break;
+        default:
+            fn_1_32200_countdown(racer, 60, 0);
+            break;
+        }
+        if (lbl_1_data_5B7C != 5) {
+            (&lbl_1_data_3D544.unk_0)[racer->unk_475] = 0;
+        }
+    }
+    if (port != -1) {
+        fzgx_obj_lbl_1_bss_26B1B |= 1 << port;
+        if (racer->unk_58C & 0x10) {
+            if (++racer->unk_5D9 > 60) {
+                racer->unk_5D9 = 60;
+                fzgx_obj_lbl_1_bss_26B1C |= 1 << port;
+            }
+        }
+    }
+    if (racer->unk_4 < fzgx_obj_lbl_1_bss_3C30.unk_8) {
+        racer->unk_0 |= 0x08000000;
+    }
+    fn_1_2E928(racer);
+}
+/* fzgx:end fn_1_32200 */
 
 /* fzgx:begin fn_1_32600 */
 #pragma section code_type ".fzgxpool"
@@ -17656,6 +18458,472 @@ void fn_1_3EC88(u8 count, GameEntrant *src) {
     fzgx_obj_lbl_1_bss_3C30.unk_8 = n;
 }
 /* fzgx:end fn_1_3EC88 */
+
+/* fzgx:begin fn_1_3ED8C noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/game.h"
+
+typedef struct Sig_ADXT_Pause_AdxSjdHandle Sig_ADXT_Pause_AdxSjdHandle;
+
+typedef struct Sig_ADXT_Pause_ADXStream Sig_ADXT_Pause_ADXStream;
+
+typedef struct Sig_ADXT_Pause_AXRNAHandle Sig_ADXT_Pause_AXRNAHandle;
+
+typedef struct Sig_ADXT_Pause_SJCK {
+    unsigned char *data;
+    int len;
+} Sig_ADXT_Pause_SJCK;
+
+typedef void (*Sig_ADXT_Pause_SJErrorCallback)(void *object, int error);
+
+typedef struct Sig_ADXT_Pause_SJInterface Sig_ADXT_Pause_SJInterface;
+
+typedef struct Sig_ADXT_Pause_SJ Sig_ADXT_Pause_SJ;
+
+struct Sig_ADXT_Pause_SJ {
+    const Sig_ADXT_Pause_SJInterface *interface;
+};
+
+struct Sig_ADXT_Pause_SJInterface {
+    void *reserved[3];
+    void (*destroy)(Sig_ADXT_Pause_SJ *sj);
+    const void *(*get_uuid)(Sig_ADXT_Pause_SJ *sj);
+    void (*reset)(Sig_ADXT_Pause_SJ *sj);
+    void (*get_chunk)(Sig_ADXT_Pause_SJ *sj, int channel, int max_size, Sig_ADXT_Pause_SJCK *chunk);
+    void (*unget_chunk)(Sig_ADXT_Pause_SJ *sj, int channel, Sig_ADXT_Pause_SJCK *chunk);
+    void (*put_chunk)(Sig_ADXT_Pause_SJ *sj, int channel, Sig_ADXT_Pause_SJCK *chunk);
+    int (*get_num_data)(Sig_ADXT_Pause_SJ *sj, int channel);
+    int (*is_get_chunk)(Sig_ADXT_Pause_SJ *sj, int channel, int size, int *available);
+    void (*entry_error_func)(Sig_ADXT_Pause_SJ *sj, Sig_ADXT_Pause_SJErrorCallback callback, void *object);
+};
+
+typedef struct Sig_ADXT_Pause_ADX_AMP Sig_ADXT_Pause_ADX_AMP;
+
+typedef struct Sig_ADXT_Pause_LSCObject Sig_ADXT_Pause_LSCObject;
+
+typedef struct Sig_ADXT_Pause_ADXTHandle {
+    s8 used;
+    s8 status;
+    s8 stream_type;
+    s8 maximum_channels;
+    Sig_ADXT_Pause_AdxSjdHandle *decoder;
+    Sig_ADXT_Pause_ADXStream *stream;
+    Sig_ADXT_Pause_AXRNAHandle *rna;
+    Sig_ADXT_Pause_SJ *stream_sj;
+    Sig_ADXT_Pause_SJ *input_sj;
+    Sig_ADXT_Pause_SJ *output_sj[2];
+    u8 *input_buffer;
+    s32 input_buffer_size;
+    s32 input_extra_size;
+    u8 *output_buffer;
+    s32 output_buffer_size;
+    s32 output_buffer_distance;
+    s32 server_frequency;
+    s16 stream_buffer_sectors;
+    s16 minimum_buffer_sectors;
+    s16 output_volume;
+    s16 output_pan[2];
+    s16 field_46;
+    s32 maximum_decode_samples;
+    s32 loop_count;
+    s32 link_data_length;
+    s32 field_54;
+    s32 field_58;
+    s32 field_5C;
+    s16 error_code;
+    u8 reserved_62[2];
+    s32 field_64;
+    s16 field_68;
+    s16 field_6A;
+    s8 stream_loop_enabled;
+    s8 auto_receiver;
+    u8 reserved_6E[2];
+    s8 suppress_playback;
+    s8 decoder_ready;
+    s8 paused;
+    u8 reserved_73;
+    Sig_ADXT_Pause_ADX_AMP *amplifier;
+    Sig_ADXT_Pause_SJ *amplifier_input[2];
+    Sig_ADXT_Pause_SJ *amplifier_output[2];
+    s32 time_offset;
+    s32 eos_sector;
+    s32 loop_sample_count;
+    Sig_ADXT_Pause_LSCObject *linked_stream_controller;
+    s8 link_enabled;
+    u8 reserved_99[3];
+    u32 playback_time;
+    s32 playback_start_vsync;
+    s32 linked_decoded_samples;
+    s8 pending_stream_start;
+    u8 reserved_A9[3];
+    u8 *work_end;
+    const char *pending_filename;
+    void *pending_directory;
+    s32 pending_file_offset;
+    s32 pending_file_sectors;
+} Sig_ADXT_Pause_ADXTHandle;
+
+typedef struct Sig_ADXT_Stop_AdxSjdHandle Sig_ADXT_Stop_AdxSjdHandle;
+
+typedef struct Sig_ADXT_Stop_ADXStream Sig_ADXT_Stop_ADXStream;
+
+typedef struct Sig_ADXT_Stop_AXRNAHandle Sig_ADXT_Stop_AXRNAHandle;
+
+typedef struct Sig_ADXT_Stop_SJCK {
+    unsigned char *data;
+    int len;
+} Sig_ADXT_Stop_SJCK;
+
+typedef void (*Sig_ADXT_Stop_SJErrorCallback)(void *object, int error);
+
+typedef struct Sig_ADXT_Stop_SJInterface Sig_ADXT_Stop_SJInterface;
+
+typedef struct Sig_ADXT_Stop_SJ Sig_ADXT_Stop_SJ;
+
+struct Sig_ADXT_Stop_SJInterface {
+    void *reserved[3];
+    void (*destroy)(Sig_ADXT_Stop_SJ *sj);
+    const void *(*get_uuid)(Sig_ADXT_Stop_SJ *sj);
+    void (*reset)(Sig_ADXT_Stop_SJ *sj);
+    void (*get_chunk)(Sig_ADXT_Stop_SJ *sj, int channel, int max_size, Sig_ADXT_Stop_SJCK *chunk);
+    void (*unget_chunk)(Sig_ADXT_Stop_SJ *sj, int channel, Sig_ADXT_Stop_SJCK *chunk);
+    void (*put_chunk)(Sig_ADXT_Stop_SJ *sj, int channel, Sig_ADXT_Stop_SJCK *chunk);
+    int (*get_num_data)(Sig_ADXT_Stop_SJ *sj, int channel);
+    int (*is_get_chunk)(Sig_ADXT_Stop_SJ *sj, int channel, int size, int *available);
+    void (*entry_error_func)(Sig_ADXT_Stop_SJ *sj, Sig_ADXT_Stop_SJErrorCallback callback, void *object);
+};
+
+struct Sig_ADXT_Stop_SJ {
+    const Sig_ADXT_Stop_SJInterface *interface;
+};
+
+typedef struct Sig_ADXT_Stop_ADX_AMP Sig_ADXT_Stop_ADX_AMP;
+
+typedef struct Sig_ADXT_Stop_LSCObject Sig_ADXT_Stop_LSCObject;
+
+typedef struct Sig_ADXT_Stop_ADXTHandle {
+    s8 used;
+    s8 status;
+    s8 stream_type;
+    s8 maximum_channels;
+    Sig_ADXT_Stop_AdxSjdHandle *decoder;
+    Sig_ADXT_Stop_ADXStream *stream;
+    Sig_ADXT_Stop_AXRNAHandle *rna;
+    Sig_ADXT_Stop_SJ *stream_sj;
+    Sig_ADXT_Stop_SJ *input_sj;
+    Sig_ADXT_Stop_SJ *output_sj[2];
+    u8 *input_buffer;
+    s32 input_buffer_size;
+    s32 input_extra_size;
+    u8 *output_buffer;
+    s32 output_buffer_size;
+    s32 output_buffer_distance;
+    s32 server_frequency;
+    s16 stream_buffer_sectors;
+    s16 minimum_buffer_sectors;
+    s16 output_volume;
+    s16 output_pan[2];
+    s16 field_46;
+    s32 maximum_decode_samples;
+    s32 loop_count;
+    s32 link_data_length;
+    s32 field_54;
+    s32 field_58;
+    s32 field_5C;
+    s16 error_code;
+    u8 reserved_62[2];
+    s32 field_64;
+    s16 field_68;
+    s16 field_6A;
+    s8 stream_loop_enabled;
+    s8 auto_receiver;
+    u8 reserved_6E[2];
+    s8 suppress_playback;
+    s8 decoder_ready;
+    s8 paused;
+    u8 reserved_73;
+    Sig_ADXT_Stop_ADX_AMP *amplifier;
+    Sig_ADXT_Stop_SJ *amplifier_input[2];
+    Sig_ADXT_Stop_SJ *amplifier_output[2];
+    s32 time_offset;
+    s32 eos_sector;
+    s32 loop_sample_count;
+    Sig_ADXT_Stop_LSCObject *linked_stream_controller;
+    s8 link_enabled;
+    u8 reserved_99[3];
+    u32 playback_time;
+    s32 playback_start_vsync;
+    s32 linked_decoded_samples;
+    s8 pending_stream_start;
+    u8 reserved_A9[3];
+    u8 *work_end;
+    const char *pending_filename;
+    void *pending_directory;
+    s32 pending_file_offset;
+    s32 pending_file_sectors;
+} Sig_ADXT_Stop_ADXTHandle;
+
+typedef struct {
+    u8 unk[0xb];
+    u8 value;
+} Entry;
+
+typedef struct {
+    u8 pad_0[2];
+    s16 unk_2;
+    u8 pad_4[8];
+    u32 unk_C;
+    u8 pad_10[0x10];
+} Obj_1_bss_25E9C;
+
+typedef struct {
+    u8 pad[0x2f8];
+    u32 value_2f8;
+    u32 value_2fc;
+    u32 value_300;
+    u32 value_304;
+    u32 value_308;
+    u32 value_30c;
+    u32 value_310;
+    u32 value_314;
+    u32 value_318;
+    u32 value_31c;
+} Fn40710Config;
+extern void fn_1_15E330(s32 index, u32 value, void *arg);
+extern void fn_1_15E5E4(s32 index, void *arg);
+extern void fn_1_15E688(s32 index, u32 value, u8 state, void *arg);
+extern void fn_1_15E3E0(s32 index, u32 value);
+extern void fn_1_15E434(u32 value);
+extern void fn_1_15E540(s32 index, void *arg);
+extern void fn_1_CB404(u8 value);
+extern void fn_1_D07C4(u32 arg0, u32 arg1);
+extern u32 lbl_1_bss_25B84;
+extern u32 OSGetTick(void);
+extern void fn_1_A0978(void);
+extern void fn_1_35174(void);
+extern s32 fn_1_3EFA8(void);
+extern u16 lbl_1_bss_26B7A[3];
+extern u16 lbl_1_bss_26300;
+extern void fn_80008BA8(u32 arg0, u32 arg1, u32 arg2);
+extern void fn_80008BEC(void *dest, int value, u32 size);
+extern u32 fn_1_101C0(void);
+extern u32 fn_1_A11EC(void);
+extern u32 fn_1_435C(u32 value);
+extern void ADXT_Pause(Sig_ADXT_Pause_ADXTHandle *, s32);
+extern void fn_1_4310(u32 arg0);
+extern void fn_1_48004(s32 index, s32 image);
+extern void fn_1_8616C(void);
+extern void fn_1_A1588(u32 arg0, u32 arg1);
+extern void fn_1_D0790(void);
+extern void fn_1_817C0(void);
+extern u32 lbl_1_bss_381FC;
+extern void fn_1_EB080(int mode);
+extern s64 OSGetTime(void);
+extern void fn_1_4A00(u32 arg0, u32 arg1, u32 arg2);
+extern void fn_1_5370(u32 arg0, u32 arg1);
+extern void fn_1_15E27C(void);
+extern void fn_1_4811C(int arg);
+extern void fn_1_A8F78(void);
+extern u8 lbl_1_bss_262F4;
+extern u32 lbl_1_bss_25E74[7];
+extern u8 lbl_1_bss_3C10;
+extern void fn_1_36330(void);
+extern void fn_1_36B10(void);
+extern void fn_1_3C98(void);
+extern void fn_1_37AA8(void);
+extern void fn_1_37E98(void);
+extern f32 lbl_1_bss_26304[4];
+extern u8 lbl_1_bss_26B04[20];
+extern u8 lbl_1_bss_26314[2032];
+extern s16 fn_1_12EF24(s16 row, s16 column);
+extern u8 lbl_1_bss_523C[32];
+extern Entry *lbl_1_bss_53F8[34];
+extern void OSPanic(const void *, u32, const char *, ...);
+extern Obj_1_bss_25E9C lbl_1_bss_25E9C[30];
+extern void fn_1_12AB38(void *arg0);
+extern void fn_1_465D0(char *value, u32 flag);
+extern void* fn_1_7F518(s16 car_type, void* car, s32 initialize);
+extern int sprintf(char *s, const char *format, ...);
+extern void fn_1_451E4(void);
+extern void fn_1_D3214(void);
+extern void fn_8001AF64(void);
+extern u32 fn_1_467F4(void);
+extern u32 fn_1_13018(void);
+extern u32 fn_1_46C60(void);
+extern u32 lbl_1_bss_26C2C[2];
+extern u32 lbl_1_bss_262F8[2];
+extern u16 lbl_1_bss_26C68[35526];
+extern u32 lbl_1_bss_3C08[2];
+extern u32 fn_800075AC(u32, u32, u32);
+extern u32 ghost_test_record_flag0(s32 arg);
+extern u32 fn_1_F9D44(u32 arg);
+extern u8 fn_1_F8C50(s32 arg0);
+extern void fn_1_2DB50(void);
+extern void fn_1_3F8C(void *, void *, Obj_1_bss_5138 *, int);
+extern void fn_1_2D888(void);
+extern void fn_1_2D524(void);
+extern u32 fn_1_FA070(void);
+extern int fn_1_FA180(int, u8);
+extern u32 fn_1_F9FEC(void);
+extern void fn_1_A2DC4(u32 arg0);
+extern Fn40710Config lbl_1_rodata_BD8;
+extern u8 lbl_1_bss_26B54[8];
+extern u32 fn_1_40EE4(void);
+extern u32 lbl_801A63D0;
+extern u32 lbl_1_bss_26C34[9];
+extern u8 lbl_1_bss_38218[568];
+extern u32 fn_1_4060(void);
+extern void ARQPostRequest(u8 *arg0, u32 arg1, u32 arg2, u32 arg3, u32 arg4, u32 arg5, u32 arg6, u32 arg7);
+extern u32 lbl_801A63C0;
+extern void fn_1_40BE4(void);
+extern u32 GXGetTexBufferSize(u32, u32, u32, u32, u32);
+extern u32 lbl_1_bss_26B4C;
+extern u8 lbl_1_bss_25E90[8];
+extern s32 fn_1_48B0(u32 arg0, u32 arg1);
+extern void fn_1_40F54(void *arg0);
+extern u32 lbl_801A6CE0;
+extern u32 lbl_1_bss_38454;
+extern u32 fn_80070DE0(u32 arg0);
+extern void fn_1_D3884();
+extern void fn_1_D358C();
+extern void fn_800711A8(Obj_1_bss_38458_Target *target);
+extern void fn_80071718(u32 value);
+extern void fn_1_41134(void *unused, char *value);
+extern void fn_1_411D4(u32, char *);
+extern int fn_80016DF8(char *buffer);
+extern void fn_1_412A0(u32 index);
+extern size_t strlen(const char *str);
+extern int fn_80083BCC(const char *s1, const char *s2);
+extern u8 lbl_1_A9011300;
+extern u8 lbl_1_A9011100;
+extern u8 lbl_1_A9011000;
+
+typedef struct RaceSetup {
+    u32 unk_0;
+    u8 unk_4;
+    u8 unk_5;
+    u8 unk_6;
+    u8 unk_7;
+    u8 unk_8;
+    u8 unk_9;
+    u8 pad_A[0x9C];
+    u8 unk_A6;
+    u8 pad_A7[0x135D];
+    u8 unk_1404;
+    u8 pad_1405[0x5F];
+    u32 unk_1464;
+    u8 pad_1468[0x4];
+    u8 unk_146C;
+    u8 unk_146D;
+    u16 unk_146E;
+    u8 unk_1470;
+    u8 unk_1471;
+    u8 unk_1472;
+    u8 pad_1473[0x49];
+} RaceSetup;
+
+/* the retail TU's .bss objects this function uses, at their retail offsets, so MWCC addresses them off one
+ * section base; the fzgx_pool_gap_ objects span the retail objects in between, which this function does not touch */
+u8 fzgx_obj_lbl_1_bss_3C00[4];
+u8 fzgx_pool_gap_3C04[0x2C];
+RaceSetup fzgx_obj_lbl_1_bss_3C30;
+u8 fzgx_pool_gap_50EC[0x150];
+u8 fzgx_obj_lbl_1_bss_523C[0x20];
+u8 fzgx_pool_gap_525C[0x19C];
+void *fzgx_obj_lbl_1_bss_53F8[34];
+u8 fzgx_pool_gap_5480[0x20DDC];
+u8 fzgx_obj_lbl_1_bss_2625C[0x20];
+u32 fzgx_obj_lbl_1_bss_2627C[30];
+u8 fzgx_obj_lbl_1_bss_262F4;
+u8 fzgx_pool_gap_262F5;
+u8 fzgx_pool_gap_262F6;
+u8 fzgx_pool_gap_262F7;
+u8 fzgx_pool_gap_262F8[0x880];
+u8 fzgx_pool_gap_26B78;
+u8 fzgx_pool_gap_26B79;
+u8 fzgx_obj_lbl_1_bss_26B7A;
+u8 fzgx_pool_fzgx_obj_lbl_1_bss_26B7A__b1;
+u8 fzgx_pool_fzgx_obj_lbl_1_bss_26B7A__b2;
+u8 fzgx_pool_fzgx_obj_lbl_1_bss_26B7A__b3;
+u8 fzgx_pool_fzgx_obj_lbl_1_bss_26B7A__b4;
+u8 fzgx_pool_fzgx_obj_lbl_1_bss_26B7A__b5;
+u8 fzgx_pool_gap_26B80[0xDC];
+u32 fzgx_obj_lbl_1_bss_26C5C;
+
+#pragma section code_type ".fzgxpool"
+__declspec(section ".fzgxpool") static void fzgx_bss_prime(void) {
+    volatile u32 s;  /* fzgx-allow: S2 primer sink */
+    s = fzgx_obj_lbl_1_bss_3C00[0];
+    s = fzgx_pool_gap_3C04[0];
+    s = fzgx_obj_lbl_1_bss_3C30.unk_0;
+    s = fzgx_pool_gap_50EC[0];
+    s = fzgx_obj_lbl_1_bss_523C[0];
+    s = fzgx_pool_gap_525C[0];
+    s = *(u32 *)fzgx_obj_lbl_1_bss_53F8;
+    s = fzgx_pool_gap_5480[0];
+    s = fzgx_obj_lbl_1_bss_2625C[0];
+    s = fzgx_obj_lbl_1_bss_2627C[0];
+    s = fzgx_obj_lbl_1_bss_262F4;
+    s = fzgx_pool_gap_262F5;
+    s = fzgx_pool_gap_262F6;
+    s = fzgx_pool_gap_262F7;
+    s = fzgx_pool_gap_262F8[0];
+    s = fzgx_pool_gap_26B78;
+    s = fzgx_pool_gap_26B79;
+    s = fzgx_obj_lbl_1_bss_26B7A;
+    s = fzgx_pool_fzgx_obj_lbl_1_bss_26B7A__b1;
+    s = fzgx_pool_fzgx_obj_lbl_1_bss_26B7A__b2;
+    s = fzgx_pool_fzgx_obj_lbl_1_bss_26B7A__b3;
+    s = fzgx_pool_fzgx_obj_lbl_1_bss_26B7A__b4;
+    s = fzgx_pool_fzgx_obj_lbl_1_bss_26B7A__b5;
+    s = fzgx_pool_gap_26B80[0];
+    s = fzgx_obj_lbl_1_bss_26C5C;
+}
+#pragma section code_type ".text"
+
+extern u8 lbl_1_data_5B7C;
+
+void fn_1_3ED8C(RaceSetup *setup, u8 unk_4, u8 unk_1404, u8 course, u8 unk_7, u8 racers, u32 flags) {
+    u32 i;
+
+    if (setup == NULL) {
+        setup = &fzgx_obj_lbl_1_bss_3C30;
+    }
+    setup->unk_0 = flags;
+    setup->unk_4 = unk_4;
+    setup->unk_1404 = unk_1404;
+    setup->unk_5 = lbl_1_data_5B7C;
+    if (lbl_1_data_5B7C == 1) {
+        setup->unk_A6 = course;
+        setup->unk_6 = 0;
+    } else {
+        setup->unk_A6 = 0xFF;
+        setup->unk_6 = course;
+    }
+    setup->unk_7 = unk_7;
+    setup->unk_9 = racers;
+    setup->unk_8 = 0;
+    setup->unk_1464 = 0;
+    setup->unk_146C = 0;
+    setup->unk_146D = 0;
+    setup->unk_1470 = 0;
+    setup->unk_146E = 1500;
+    fzgx_obj_lbl_1_bss_26C5C = 0;
+    /* retail stores one byte at 0x26B7C (stb), though symbols.txt types lbl_1_bss_26B7A as 2-byte data */
+    fzgx_pool_fzgx_obj_lbl_1_bss_26B7A__b2 = 0;
+    fzgx_obj_lbl_1_bss_3C00[0] = 0;
+    fzgx_obj_lbl_1_bss_262F4 = 1;
+    for (i = 0; i < 30; i++) {
+        fzgx_obj_lbl_1_bss_2625C[i] = i;
+        fzgx_obj_lbl_1_bss_523C[i] = 0x10;
+        fzgx_obj_lbl_1_bss_2627C[i] = 0;
+        fzgx_obj_lbl_1_bss_53F8[i] = NULL;
+    }
+    setup->unk_1471 = 0xFF;
+    setup->unk_1472 = 0xFF;
+}
+/* fzgx:end fn_1_3ED8C */
 
 /* fzgx:begin fn_1_3EF08 */
 void fn_1_3EF08(u8 value) {
