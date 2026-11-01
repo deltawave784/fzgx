@@ -7096,6 +7096,353 @@ s32 fn_1_858A8(s16 *a, s16 *b) {
 #pragma opt_common_subs reset
 /* fzgx:end fn_1_858A8 */
 
+/* fzgx:begin fn_1_85C58 noprologue */
+#include "types.h"
+#include "game/vec3.h"
+#include "rel/main_rel/car.h"
+
+extern s16 fn_1_7B054(void);
+extern u8 *fn_1_14F04(void);
+extern int fn_1_20994(void *, f32 *);
+extern void fn_1_17920(int, void *, f32);
+extern void lbl_8006DBAC(Vec3 *);
+extern void lbl_8006E0B4(f32, f32, f32);
+extern void lbl_8006D758(void);
+
+typedef struct {
+    f32 v[5];
+} fn_1_85C58_F5;
+
+typedef struct {
+    u8 v[5];
+} fn_1_85C58_U5;
+
+/* car.c's literal pool (lbl_1_rodata_3508 onwards), as far as this function reads it */
+typedef struct {
+    u8 pad_0[0x10];
+    f32 zero;
+    u8 pad_14[0x64];
+    f64 int_bias;
+    u8 pad_80[0x4E8];
+    f32 tenth;
+    u8 pad_56C[0x3C];
+    f32 half;
+    u8 pad_5AC[0xDC];
+    fn_1_85C58_F5 base;
+    fn_1_85C58_F5 step;
+    fn_1_85C58_U5 counts;
+    u8 pad_6B5[3];
+    fn_1_85C58_F5 scaleA;
+    fn_1_85C58_F5 scaleB;
+} fn_1_85C58_Pool;
+
+#pragma pool_data on
+
+extern char lbl_1_data_1FFFC[];
+extern char lbl_1_data_20008[];
+extern char lbl_1_data_20018[];
+extern char lbl_1_data_20024[];
+extern char lbl_1_data_20038[];
+extern char lbl_1_data_20044[];
+extern char lbl_1_data_2005C[];
+extern char lbl_1_data_20068[];
+extern char lbl_1_data_2007C[];
+extern char lbl_1_data_2008C[];
+extern char lbl_1_data_200A4[];
+extern char lbl_1_data_200B0[];
+extern char lbl_1_data_200C0[];
+extern char lbl_1_data_200CC[];
+extern char lbl_1_data_200E0[];
+extern char lbl_1_data_200EC[];
+extern char lbl_1_data_200FC[];
+extern char lbl_1_data_20108[];
+extern char lbl_1_data_20118[];
+extern char lbl_1_data_20128[];
+extern char lbl_1_data_2013C[];
+extern char lbl_1_data_20148[];
+extern char lbl_1_data_20158[];
+extern char lbl_1_data_20168[];
+extern char lbl_1_data_2017C[];
+extern char lbl_1_data_2018C[];
+extern char lbl_1_data_2019C[];
+extern char lbl_1_data_201A8[];
+extern char lbl_1_data_201B8[];
+extern char lbl_1_data_201C4[];
+extern char lbl_1_data_201D4[];
+extern char lbl_1_data_201E4[];
+extern char lbl_1_data_201F8[];
+extern char lbl_1_data_20208[];
+extern char lbl_1_data_2021C[];
+extern char lbl_1_data_2022C[];
+extern char lbl_1_data_20240[];
+extern char lbl_1_data_20250[];
+extern char lbl_1_data_20264[];
+extern char lbl_1_data_20270[];
+extern char lbl_1_data_20280[];
+extern char lbl_1_data_20290[];
+extern char lbl_1_data_202A0[];
+extern char lbl_1_data_202B0[];
+extern char lbl_1_data_202C0[];
+extern char lbl_1_data_202D0[];
+extern char lbl_1_data_202E0[];
+extern char lbl_1_data_202EC[];
+extern char lbl_1_data_202FC[];
+extern char lbl_1_data_20308[];
+extern char lbl_1_data_20318[];
+extern char lbl_1_data_20324[];
+extern char lbl_1_data_20334[];
+extern char lbl_1_data_20344[];
+extern char lbl_1_data_2035C[];
+extern char lbl_1_data_20370[];
+extern char lbl_1_data_20384[];
+extern char lbl_1_data_20390[];
+extern char lbl_1_data_203A0[];
+extern char lbl_1_data_203AC[];
+extern char lbl_1_data_203BC[];
+extern char lbl_1_data_203CC[];
+extern char lbl_1_data_203E0[];
+extern char lbl_1_data_203EC[];
+extern char lbl_1_data_20400[];
+extern char lbl_1_data_20410[];
+extern char lbl_1_data_20428[];
+extern char lbl_1_data_20434[];
+extern char lbl_1_data_20448[];
+extern char lbl_1_data_20458[];
+extern char lbl_1_data_2046C[];
+extern char lbl_1_data_20478[];
+extern char lbl_1_data_20488[];
+extern char lbl_1_data_20494[];
+extern char lbl_1_data_204A4[];
+extern char lbl_1_data_204B0[];
+extern char lbl_1_data_204C4[];
+extern char lbl_1_data_204D0[];
+extern char lbl_1_data_204E4[];
+extern char lbl_1_data_204F4[];
+extern char lbl_1_data_20508[];
+extern char lbl_1_data_20518[];
+extern char lbl_1_data_20720[];
+extern char lbl_1_data_20728[];
+extern char lbl_1_data_20730[];
+extern char lbl_1_data_20738[];
+extern char lbl_1_data_20740[];
+extern char lbl_1_data_20748[];
+extern char lbl_1_data_20750[];
+extern char lbl_1_data_20758[];
+extern char lbl_1_data_20760[];
+extern char lbl_1_data_2076C[];
+extern char lbl_1_data_20778[];
+extern char lbl_1_data_20784[];
+extern char lbl_1_data_20790[];
+extern char lbl_1_data_207A0[];
+
+const u32 fzgx_pool_table_0[4] = {
+    0x40400000, 0x40000000, 0x40000000, 0x3FC00000
+};
+
+#pragma section code_type ".fzgxpool"
+void fzgx_fn_1_85C58_pool_zero(void) { lbl_8006E0B4(0.0f, 0.0f, 0.0f); }
+#pragma section code_type ".text"
+
+const u32 fzgx_pool_table_14[25] = {
+    0x00000000, 0x3E800000, 0x00000000, 0x3FB99999,
+    0x9999999A, 0x3F800000, 0x00000000, 0x3FC33333,
+    0x34CCCCCD, 0x3D4CCCCD, 0x41F00000, 0x3B800000,
+    0x43360B61, 0x43340000, 0x42300000, 0x42B20000,
+    0x43B40000, 0x42700000, 0x00000000, 0x3FC0A3D7,
+    0x08CCCCCD, 0x3CF5C28F, 0x00000000, 0x43300000,
+    0x00000000
+};
+
+#pragma section code_type ".fzgxpool"
+f32 fzgx_fn_1_85C58_pool_bias(s32 n) { return (f32)n; }
+#pragma section code_type ".text"
+
+const u32 fzgx_pool_table_80[314] = {
+    0x00000000, 0x00000000, (u32)&lbl_1_data_1FFFC, (u32)&lbl_1_data_1FFFC,
+    (u32)&lbl_1_data_1FFFC, (u32)&lbl_1_data_1FFFC, (u32)&lbl_1_data_1FFFC, (u32)&lbl_1_data_20008,
+    (u32)&lbl_1_data_20018, (u32)&lbl_1_data_20018, (u32)&lbl_1_data_20018, (u32)&lbl_1_data_20018,
+    (u32)&lbl_1_data_20018, (u32)&lbl_1_data_20024, (u32)&lbl_1_data_20038, (u32)&lbl_1_data_20038,
+    (u32)&lbl_1_data_20038, (u32)&lbl_1_data_20038, (u32)&lbl_1_data_20038, (u32)&lbl_1_data_20044,
+    (u32)&lbl_1_data_2005C, (u32)&lbl_1_data_2005C, (u32)&lbl_1_data_2005C, (u32)&lbl_1_data_2005C,
+    (u32)&lbl_1_data_2005C, (u32)&lbl_1_data_20068, (u32)&lbl_1_data_2007C, (u32)&lbl_1_data_2007C,
+    (u32)&lbl_1_data_2007C, (u32)&lbl_1_data_2007C, (u32)&lbl_1_data_2007C, (u32)&lbl_1_data_2008C,
+    (u32)&lbl_1_data_200A4, (u32)&lbl_1_data_200A4, (u32)&lbl_1_data_200A4, (u32)&lbl_1_data_200A4,
+    (u32)&lbl_1_data_200A4, (u32)&lbl_1_data_200B0, (u32)&lbl_1_data_200C0, (u32)&lbl_1_data_200C0,
+    (u32)&lbl_1_data_200C0, (u32)&lbl_1_data_200C0, (u32)&lbl_1_data_200C0, (u32)&lbl_1_data_200CC,
+    (u32)&lbl_1_data_200E0, (u32)&lbl_1_data_200E0, (u32)&lbl_1_data_200E0, (u32)&lbl_1_data_200E0,
+    (u32)&lbl_1_data_200E0, (u32)&lbl_1_data_200EC, (u32)&lbl_1_data_200FC, (u32)&lbl_1_data_200FC,
+    (u32)&lbl_1_data_200FC, (u32)&lbl_1_data_200FC, (u32)&lbl_1_data_200FC, (u32)&lbl_1_data_20108,
+    (u32)&lbl_1_data_20118, (u32)&lbl_1_data_20118, (u32)&lbl_1_data_20118, (u32)&lbl_1_data_20118,
+    (u32)&lbl_1_data_20118, (u32)&lbl_1_data_20128, (u32)&lbl_1_data_2013C, (u32)&lbl_1_data_2013C,
+    (u32)&lbl_1_data_2013C, (u32)&lbl_1_data_2013C, (u32)&lbl_1_data_2013C, (u32)&lbl_1_data_20148,
+    (u32)&lbl_1_data_20158, (u32)&lbl_1_data_20158, (u32)&lbl_1_data_20158, (u32)&lbl_1_data_20158,
+    (u32)&lbl_1_data_20158, (u32)&lbl_1_data_20168, (u32)&lbl_1_data_2017C, (u32)&lbl_1_data_2017C,
+    (u32)&lbl_1_data_2017C, (u32)&lbl_1_data_2017C, (u32)&lbl_1_data_2017C, (u32)&lbl_1_data_2018C,
+    (u32)&lbl_1_data_2019C, (u32)&lbl_1_data_2019C, (u32)&lbl_1_data_2019C, (u32)&lbl_1_data_2019C,
+    (u32)&lbl_1_data_2019C, (u32)&lbl_1_data_201A8, (u32)&lbl_1_data_201B8, (u32)&lbl_1_data_201B8,
+    (u32)&lbl_1_data_201B8, (u32)&lbl_1_data_201B8, (u32)&lbl_1_data_201B8, (u32)&lbl_1_data_201C4,
+    (u32)&lbl_1_data_201D4, (u32)&lbl_1_data_201D4, (u32)&lbl_1_data_201D4, (u32)&lbl_1_data_201D4,
+    (u32)&lbl_1_data_201D4, (u32)&lbl_1_data_201E4, (u32)&lbl_1_data_201F8, (u32)&lbl_1_data_201F8,
+    (u32)&lbl_1_data_201F8, (u32)&lbl_1_data_201F8, (u32)&lbl_1_data_201F8, (u32)&lbl_1_data_20208,
+    (u32)&lbl_1_data_2021C, (u32)&lbl_1_data_2021C, (u32)&lbl_1_data_2021C, (u32)&lbl_1_data_2021C,
+    (u32)&lbl_1_data_2021C, (u32)&lbl_1_data_2022C, (u32)&lbl_1_data_20240, (u32)&lbl_1_data_20240,
+    (u32)&lbl_1_data_20240, (u32)&lbl_1_data_20240, (u32)&lbl_1_data_20240, (u32)&lbl_1_data_20250,
+    (u32)&lbl_1_data_20264, (u32)&lbl_1_data_20264, (u32)&lbl_1_data_20264, (u32)&lbl_1_data_20264,
+    (u32)&lbl_1_data_20264, (u32)&lbl_1_data_20270, (u32)&lbl_1_data_20280, (u32)&lbl_1_data_20280,
+    (u32)&lbl_1_data_20280, (u32)&lbl_1_data_20280, (u32)&lbl_1_data_20280, (u32)&lbl_1_data_20290,
+    (u32)&lbl_1_data_202A0, (u32)&lbl_1_data_202A0, (u32)&lbl_1_data_202A0, (u32)&lbl_1_data_202A0,
+    (u32)&lbl_1_data_202A0, (u32)&lbl_1_data_202B0, (u32)&lbl_1_data_202C0, (u32)&lbl_1_data_202C0,
+    (u32)&lbl_1_data_202C0, (u32)&lbl_1_data_202C0, (u32)&lbl_1_data_202C0, (u32)&lbl_1_data_202D0,
+    (u32)&lbl_1_data_202E0, (u32)&lbl_1_data_202E0, (u32)&lbl_1_data_202E0, (u32)&lbl_1_data_202E0,
+    (u32)&lbl_1_data_202E0, (u32)&lbl_1_data_202EC, (u32)&lbl_1_data_202FC, (u32)&lbl_1_data_202FC,
+    (u32)&lbl_1_data_202FC, (u32)&lbl_1_data_202FC, (u32)&lbl_1_data_202FC, (u32)&lbl_1_data_20308,
+    (u32)&lbl_1_data_20318, (u32)&lbl_1_data_20318, (u32)&lbl_1_data_20318, (u32)&lbl_1_data_20318,
+    (u32)&lbl_1_data_20318, (u32)&lbl_1_data_20324, (u32)&lbl_1_data_20334, (u32)&lbl_1_data_20334,
+    (u32)&lbl_1_data_20334, (u32)&lbl_1_data_20334, (u32)&lbl_1_data_20334, (u32)&lbl_1_data_20344,
+    (u32)&lbl_1_data_2035C, (u32)&lbl_1_data_2035C, (u32)&lbl_1_data_2035C, (u32)&lbl_1_data_2035C,
+    (u32)&lbl_1_data_2035C, (u32)&lbl_1_data_20370, (u32)&lbl_1_data_20384, (u32)&lbl_1_data_20384,
+    (u32)&lbl_1_data_20384, (u32)&lbl_1_data_20384, (u32)&lbl_1_data_20384, (u32)&lbl_1_data_20390,
+    (u32)&lbl_1_data_203A0, (u32)&lbl_1_data_203A0, (u32)&lbl_1_data_203A0, (u32)&lbl_1_data_203A0,
+    (u32)&lbl_1_data_203A0, (u32)&lbl_1_data_203AC, (u32)&lbl_1_data_203BC, (u32)&lbl_1_data_203BC,
+    (u32)&lbl_1_data_203BC, (u32)&lbl_1_data_203BC, (u32)&lbl_1_data_203BC, (u32)&lbl_1_data_203CC,
+    (u32)&lbl_1_data_203E0, (u32)&lbl_1_data_203E0, (u32)&lbl_1_data_203E0, (u32)&lbl_1_data_203E0,
+    (u32)&lbl_1_data_203E0, (u32)&lbl_1_data_203EC, (u32)&lbl_1_data_20400, (u32)&lbl_1_data_20400,
+    (u32)&lbl_1_data_20400, (u32)&lbl_1_data_20400, (u32)&lbl_1_data_20400, (u32)&lbl_1_data_20410,
+    (u32)&lbl_1_data_20428, (u32)&lbl_1_data_20428, (u32)&lbl_1_data_20428, (u32)&lbl_1_data_20428,
+    (u32)&lbl_1_data_20428, (u32)&lbl_1_data_20434, (u32)&lbl_1_data_20448, (u32)&lbl_1_data_20448,
+    (u32)&lbl_1_data_20448, (u32)&lbl_1_data_20448, (u32)&lbl_1_data_20448, (u32)&lbl_1_data_20458,
+    (u32)&lbl_1_data_2046C, (u32)&lbl_1_data_2046C, (u32)&lbl_1_data_2046C, (u32)&lbl_1_data_2046C,
+    (u32)&lbl_1_data_2046C, (u32)&lbl_1_data_20478, (u32)&lbl_1_data_20488, (u32)&lbl_1_data_20488,
+    (u32)&lbl_1_data_20488, (u32)&lbl_1_data_20488, (u32)&lbl_1_data_20488, (u32)&lbl_1_data_20494,
+    (u32)&lbl_1_data_204A4, (u32)&lbl_1_data_204A4, (u32)&lbl_1_data_204A4, (u32)&lbl_1_data_204A4,
+    (u32)&lbl_1_data_204A4, (u32)&lbl_1_data_204B0, (u32)&lbl_1_data_204C4, (u32)&lbl_1_data_204C4,
+    (u32)&lbl_1_data_204C4, (u32)&lbl_1_data_204C4, (u32)&lbl_1_data_204C4, (u32)&lbl_1_data_204D0,
+    (u32)&lbl_1_data_204E4, (u32)&lbl_1_data_204E4, (u32)&lbl_1_data_204E4, (u32)&lbl_1_data_204E4,
+    (u32)&lbl_1_data_204E4, (u32)&lbl_1_data_204F4, (u32)&lbl_1_data_20508, (u32)&lbl_1_data_20508,
+    (u32)&lbl_1_data_20508, (u32)&lbl_1_data_20508, (u32)&lbl_1_data_20508, (u32)&lbl_1_data_20518,
+    0x00330000, 0x00010001, 0x00020002, 0x00030003,
+    0x0004002F, 0x00050004, 0x00060005, 0x00070006,
+    0x00080007, 0x00090008, 0x000A002A, 0x000B0009,
+    0x000C002B, 0x000D000A, 0x000E002C, 0x000F000B,
+    0x0010002D, 0x0011000C, 0x0012002E, 0x0013000D,
+    0x0014000E, 0x003D000F, 0x003E0010, 0x003F0011,
+    0x00400012, 0x00410013, 0x00420014, 0x00430015,
+    0x00440016, 0x00450017, 0x00460018, 0x00470019,
+    0x0048001A, 0x0049001B, 0x004A001C, 0x004B001D,
+    0x004C0034, 0x004D0035, 0x004E0036, 0x004F0037,
+    0x001F001E, 0x0020001F, 0x00210020, 0x00220021,
+    0x00230022, 0x00240023, 0x00250024, 0x00260025,
+    0x00270026, 0x00280027, 0x00290028, 0x002A0029,
+    0x00500038, 0x00510030, 0x00520031, 0x00530032,
+    0x00540033, 0xFFFF0000, 0x42C80000, 0x0032001E,
+    0x00140004, 0xFFFFFFFF, 0x3FE00000, 0x00000000,
+    0x3FC99999, 0xA0000000
+};
+
+#pragma section code_type ".fzgxpool"
+void fzgx_fn_1_85C58_pool_tenth(void) { lbl_8006E0B4(0.1f, 0.0f, 0.0f); }
+#pragma section code_type ".text"
+
+const u32 fzgx_pool_table_56c[15] = {
+    0x3DF5C28F, 0xBDCCCCCD, 0xBF800000, 0x3F666666,
+    0x3EFAE148, 0x3FE99999, 0xA0000000, 0x3ECCCCCD,
+    0x00000000, 0x3F000000, 0x3F000000, 0x40000000,
+    0xB4000000, 0x43700000, 0x3F400000
+};
+
+#pragma section code_type ".fzgxpool"
+void fzgx_fn_1_85C58_pool_half(void) { lbl_8006E0B4(0.5f, 0.0f, 0.0f); }
+#pragma section code_type ".text"
+
+const u32 fzgx_pool_table_5ac[55] = {
+    0x447A0000, 0xFFFFFFFF, 0xFFFFFFFF, 0x3F800000,
+    0x3F800000, 0x3F800000, 0x3F800000, 0x3F800000,
+    0x00000000, 0x00000000, 0x3F800000, 0x00000000,
+    0x3F800000, 0x00000000, 0x3F800000, 0x00000000,
+    0x00000000, 0x3F800000, 0x3F800000, 0x00000000,
+    0x3F800000, 0x3F800000, 0x3F800000, 0x00000000,
+    0x00000000, 0x00000000, 0x3F800000, 0x00000000,
+    0x00000000, 0xBF800000, 0x3F4CCCCD, (u32)&lbl_1_data_20720,
+    (u32)&lbl_1_data_20728, (u32)&lbl_1_data_20730, (u32)&lbl_1_data_20738, (u32)&lbl_1_data_20740,
+    (u32)&lbl_1_data_20748, (u32)&lbl_1_data_20750, (u32)&lbl_1_data_20758, (u32)&lbl_1_data_20760,
+    (u32)&lbl_1_data_2076C, (u32)&lbl_1_data_20778, (u32)&lbl_1_data_20784, (u32)&lbl_1_data_20790,
+    (u32)&lbl_1_data_207A0, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x3FF00000, 0x00000000, 0x41700000,
+    0x3C23D70A, 0x437F0000, 0x43000000
+};
+
+static inline void fn_1_85C58_apply(f32 zero, u8 *obj, f32 arg1, s32 arg0,
+                                    u8 count, f32 *scale_a, f32 *scale_b, u8 idx) {
+    lbl_8006E0B4((f32)(zero * (*(f32 *)(obj + 0x68) - arg1)) +
+                    (f32)(scale_b[idx] * (scale_a[idx] * (arg1 * (0.5f - (f32)(arg0 % count) / (f32)(count - 1))))),
+                0.1f, zero);
+}
+
+static inline void fn_1_85C58_set_pos(Vec3 *pos, f32 x, f32 y, f32 z) {
+    pos->x = x;
+    pos->y = y;
+    pos->z = z;
+}
+
+static inline f32 * fn_1_85C58_read_pointer_read_pointer(fn_1_85C58_F5 * owner) { return owner->v; }
+static inline f32 * fn_1_85C58_read_pointer(fn_1_85C58_F5 * owner) { return fn_1_85C58_read_pointer_read_pointer(owner); }
+#pragma opt_dead_assignments off
+void fn_1_85C58(s32 arg0, f32 arg1) {
+    fn_1_85C58_F5 base = {{19.0f, 15.0f, 19.0f, 19.0f, 19.0f}};
+    fn_1_85C58_F5 step = {{12.9f, 13.0f, 13.0f, 13.0f, 13.0f}};
+    fn_1_85C58_U5 counts = {{6, 1, 4, 6, 2}};
+    fn_1_85C58_F5 scaleA = {{0.5f, 0.5f, 0.5f, 0.5f, 0.2f}};
+    fn_1_85C58_F5 scaleB = {{1.0f, 1.0f, -1.0f, -1.0f, 1.0f}};
+    f32 height;
+    u8 idx;
+    u8 *obj;
+    int hit;
+    u8 count;
+    f32 z;
+
+    if (lbl_1_bss_960 == 9 && fn_1_7B054() == 37) {
+        idx = 1;
+    } else if (lbl_1_bss_960 == 9 && fn_1_7B054() == 39) {
+        idx = 2;
+    } else if (lbl_1_bss_960 == 9 && fn_1_7B054() == 43) {
+        idx = 3;
+    } else if (fn_1_7B054() == 45) {
+        idx = 4;
+    } else {
+        idx = 0;
+    }
+
+    if (lbl_1_bss_3BE0 != NULL) {
+        {
+            Vec3 pos;
+            u8 *raw = fn_1_14F04();
+            u32 pos_addr = (u32)&pos;
+            pos.x = 0.0f;
+            pos.y = 0.0f;
+            pos.z = z = base.v[idx] + (f32)((f32)arg0 * step.v[idx]);
+            obj = raw + 0x400;
+            hit = fn_1_20994((void *)pos_addr, &height);
+        }
+        fn_1_17920(hit, NULL, height);
+        lbl_8006DBAC((Vec3 *)obj);
+        if (lbl_1_bss_3BE0->unk_7D != 0 && hit == 0 && height < 0.0f) {
+            lbl_8006E0B4(0.0f, 0.0f, z);
+        }
+        count = counts.v[idx];
+        if (count > 1) {
+            f32 *scale_a = fn_1_85C58_read_pointer(&scaleA);
+            f32 *scale_b = scaleB.v;
+            fn_1_85C58_apply(0.0f, obj, arg1, arg0, count, scale_a, scale_b, idx);
+        } else {
+            lbl_8006E0B4(0.0f, 0.1f, 0.0f);
+        }
+    } else {
+        lbl_8006D758();
+    }
+}
+#pragma opt_dead_assignments reset
+/* fzgx:end fn_1_85C58 */
+
 /* fzgx:begin fn_1_85F70 */
 void fn_1_85F70(void) {
     fn_1_23500();
