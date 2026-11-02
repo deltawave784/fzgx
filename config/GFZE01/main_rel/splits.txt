@@ -9026,3 +9026,72 @@ rel/main_rel/sel_static_disp/fn_1_148950.c:
 
 rel/main_rel/game/fn_1_32200.c:
 	.text       start:0x00032200 end:0x00032600 align:4
+
+rel/main_rel/font/fn_1_52690.c:
+	.text       start:0x00052690 end:0x00052718 align:4
+
+rel/main_rel/font/fn_1_52718.c:
+	.text       start:0x00052718 end:0x000527B4 align:4
+
+rel/main_rel/bg_win/fn_1_15E27C.c:
+	.text       start:0x0015E27C end:0x0015E330 align:4
+
+rel/main_rel/bg_win/fn_1_15C4EC.c:
+	.text       start:0x0015C4EC end:0x0015C5A4 align:4
+
+rel/main_rel/font/fn_1_52270.c:
+	.text       start:0x00052270 end:0x0005233C align:4
+
+rel/main_rel/ghost/fn_1_F0D10.c:
+	.text       start:0x000F0D10 end:0x000F0E00 align:4
+
+rel/main_rel/motasglist/fn_1_44884.c:
+	.text       start:0x00044884 end:0x000449A8 align:4
+
+rel/main_rel/sel_static_disp/fn_1_14B500.c:
+	.text       start:0x0014B500 end:0x0014B62C align:4
+
+rel/main_rel/font/fn_1_4EC74.c:
+	.text       start:0x0004EC74 end:0x0004EDAC align:4
+
+rel/main_rel/driver/fn_1_A9A28.c:
+	.text       start:0x000A9A28 end:0x000A9B70 align:4
+
+rel/main_rel/live_camera/fn_1_11748.c:
+	.text       start:0x00011748 end:0x0001189C align:4
+
+rel/main_rel/memcard/fn_1_C3378.c:
+	.text       start:0x000C3378 end:0x000C34F0 align:4
+
+rel/main_rel/stcoli/fn_1_17920.c:
+	.text       start:0x00017920 end:0x00017A9C align:4
+
+rel/main_rel/load/fn_1_46EE8.c:
+	.text       start:0x00046EE8 end:0x0004706C align:4
+
+rel/main_rel/driver/fn_1_A9FFC.c:
+	.text       start:0x000A9FFC end:0x000AA188 align:4
+
+rel/main_rel/motasglist/fn_1_4502C.c:
+	.text       start:0x0004502C end:0x000451D4 align:4
+
+rel/main_rel/driver/fn_1_AA188.c:
+	.text       start:0x000AA188 end:0x000AA350 align:4
+
+rel/main_rel/font/fn_1_49F08.c:
+	.text       start:0x00049F08 end:0x0004A0D8 align:4
+
+rel/main_rel/font/fn_1_4BB5C.c:
+	.text       start:0x0004BB5C end:0x0004BD48 align:4
+
+rel/main_rel/spline/fn_1_F9A80.c:
+	.text       start:0x000F9A80 end:0x000F9C6C align:4
+
+rel/main_rel/bg_for/fn_1_DDF80.c:
+	.text       start:0x000DDF80 end:0x000DE180 align:4
+
+rel/main_rel/sel_static_disp/fn_1_148738.c:
+	.text       start:0x00148738 end:0x00148950 align:4
+
+rel/main_rel/stcoli/fn_1_2C97C.c:
+	.text       start:0x0002C97C end:0x0002CBAC align:4

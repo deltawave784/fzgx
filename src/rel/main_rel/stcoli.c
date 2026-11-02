@@ -1122,6 +1122,111 @@ u32 fn_1_17098(void *arg0, u32 arg1, u32 v1, u32 arg3, u32 arg4, ColiContext *ct
 }
 /* fzgx:end fn_1_17098 */
 
+/* fzgx:begin fn_1_17920 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+
+typedef struct {
+    f32 unk_0;
+    f32 unk_4;
+} fn_1_17920_Record;
+
+/* one 12-byte entry of the table at lbl_1_bss_3BE0->unk_C */
+typedef struct {
+    u32 unk_0;
+    fn_1_17920_Record *unk_4;
+    void *unk_8;
+} fn_1_17920_Slot;
+
+/* one of the five 0x48-byte result slots */
+typedef struct {
+    u8 pad_0[0xC];
+    u32 unk_C;
+    f32 unk_10;
+    u8 pad_14[0x34];
+} fn_1_17920_Result;
+
+/* local view of the collision work area at [lbl_801A66CC]; the track query's area starts at +0x1B0 */
+typedef struct {
+    u8 pad_0[0x1B0];
+    f32 unk_1B0;
+    f32 unk_1B4;
+    s32 unk_1B8;
+    u32 unk_1BC;
+    u8 pad_1C0[0x8];
+    u32 unk_1C8;
+    s32 unk_1CC;
+    u32 unk_1D0;
+    u32 unk_1D4;
+    u8 pad_1D8[0xC];
+    fn_1_17920_Result unk_1E4[5];
+    u8 pad_34C[0x260];
+    u32 unk_5AC;
+    u8 pad_5B0[0x7C];
+    u32 unk_62C;
+} fn_1_17920_Work;
+
+typedef struct {
+    f32 x;
+    f32 y;
+    f32 z;
+} fn_1_17920_Vec;
+
+extern fn_1_17920_Work *lbl_801A66CC;
+extern void lbl_8006D758(void);
+extern void fn_1_1902C(void *node, fn_1_17920_Vec *scale, void *arg2, f32 t);
+
+/* the TU's .rodata from lbl_1_rodata_6C8 up to this function's -1.0f and 2.0f */
+#pragma section code_type ".fzgxpool"
+__declspec(section ".fzgxpool") static void fzgx_pool_prime(void) {
+    volatile f32 s; volatile f64 d;  /* fzgx-allow: S2 pool primer sinks */
+    d = 4503601774854144.0;
+    s = 0.0f;
+    s = 1.0f;
+    s = -5.0f;
+    s = 10.0f;
+}
+#pragma section code_type ".text"
+
+void fn_1_17920(s32 index, void *arg1, f32 t) {
+    fn_1_17920_Slot *table;
+    fn_1_17920_Record *rec;
+    void *node;
+    f32 pos;
+    f32 *p;
+    fn_1_17920_Vec scale;
+    s32 i;
+
+    table = (fn_1_17920_Slot *)lbl_1_bss_3BE0->unk_C;
+    rec = table[index].unk_4;
+    node = table[index].unk_8;
+    pos = rec->unk_0 + (f32)(t * (rec->unk_4 - rec->unk_0));
+    lbl_801A66CC->unk_1C8 = 0;
+    lbl_801A66CC->unk_1CC = 0;
+    lbl_801A66CC->unk_1D0 = 0;
+    lbl_801A66CC->unk_1D4 = 0;
+    lbl_801A66CC->unk_62C = 0;
+    lbl_801A66CC->unk_5AC = 0;
+    for (i = 0; i < 5; i++) {
+        fn_1_17920_Result *r = &lbl_801A66CC->unk_1E4[i];
+        r->unk_C = 0;
+        r->unk_10 = -1.0f;
+    }
+    lbl_801A66CC->unk_1B0 = 2.0f;
+    lbl_801A66CC->unk_1B4 = 0.0f;
+    lbl_8006D758();
+    /* filled through a pointer: retail computes &scale before the call's other arguments */
+    p = &scale.x;
+    for (i = 0; i < 3; i++) {
+        p[i] = 1.0f;
+    }
+    lbl_801A66CC->unk_1BC = 1;
+    fn_1_1902C(node, &scale, arg1, pos);
+    lbl_801A66CC->unk_1CC++;
+    lbl_801A66CC->unk_1B8 = lbl_801A66CC->unk_1CC > 1 ? lbl_801A66CC->unk_1CC - 1 : lbl_801A66CC->unk_1CC;
+}
+/* fzgx:end fn_1_17920 */
+
 /* fzgx:begin fn_1_17A9C noprologue */
 #include "dolphin/types.h"
 
@@ -13923,6 +14028,183 @@ u32 fn_1_2C908(void) {
 }
 #pragma opt_lifetimes reset
 /* fzgx:end fn_1_2C908 */
+
+/* fzgx:begin fn_1_2C97C noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/stcoli.h"
+
+/* .bss 0x9F8: the buttons of one pad port (+0x8: pressed this frame) */
+typedef struct {
+    u16 unk_0;
+    u8 pad_2[6];
+    u16 unk_8;
+    u8 pad_A[6];
+    u16 unk_10;
+    u16 unk_12;
+} PadButtons;
+
+/* local view of .bss 0x3C30: only the fields this function touches */
+typedef struct {
+    u8 pad_0[5];
+    u8 unk_5;
+    u8 pad_6[0xBE];
+    void *unk_C4;
+    u8 pad_C8[0x14BC - 0xC8];
+} Obj3C30;
+
+/* the object at .bss 0x5108 that fn_1_40710 takes */
+typedef struct {
+    u8 unk_0;
+    u8 unk_1;
+    u8 unk_2;
+    u8 unk_3;
+    u8 pad_4[0x2C];
+} Obj5108;
+
+extern int fn_1_4C10(void);
+extern u32 fn_1_435C(u32 value);
+extern s32 fn_1_3F8C(void *, u32 (*)(void), s32, s32);
+extern u32 fn_1_2C908(void);
+extern void fn_1_49F0(u32 *value);
+extern void fn_1_4A00(s32 enabled, u8 mode, u32 value);
+typedef struct {
+    u8 pad_0[0x475];
+    s8 unk_475;
+} Racer;
+
+extern Racer *fn_1_86254(s32);
+extern s8 fn_1_86624(void);
+extern void fn_1_40710(Obj5108 *);
+extern const u32 lbl_1_rodata_BD8;
+
+/* the retail TU's .bss objects this function uses, at their retail offsets, so MWCC addresses them off one
+ * section base; the fzgx_pool_gap_ objects span the retail objects in between, which this function does not touch */
+u32 fzgx_obj_lbl_1_bss_3C00;
+u8 fzgx_pool_gap_3C04[0xC];
+u8 fzgx_obj_lbl_1_bss_3C10;
+u8 fzgx_pool_gap_3C11;
+u8 fzgx_pool_gap_3C12;
+u8 fzgx_pool_gap_3C13;
+u8 fzgx_pool_gap_3C14[8];
+u32 fzgx_obj_lbl_1_bss_3C1C;
+u8 lbl_1_bss_3C1C__fzgx_offset_4;
+u8 fzgx_pool_gap_3C21;
+u8 fzgx_pool_gap_3C22;
+u8 fzgx_pool_gap_3C23;
+u32 fzgx_pool_gap_3C24;
+s16 fzgx_pool_gap_3C28;
+s16 fzgx_obj_lbl_1_bss_3C2A;
+u32 fzgx_pool_gap_3C2C;
+Obj3C30 fzgx_obj_lbl_1_bss_3C30;
+u8 fzgx_pool_gap_50EC[0x14];
+u32 fzgx_obj_lbl_1_bss_5100;
+s8 fzgx_obj_lbl_1_bss_5104;
+u8 fzgx_pool_gap_5105;
+u8 fzgx_pool_gap_5106;
+u8 fzgx_pool_gap_5107;
+Obj5108 lbl_1_bss_5104__fzgx_offset_4;
+
+#pragma section code_type ".fzgxpool"
+static void fzgx_bss_layout(void) {
+    volatile u8 s;  /* fzgx-allow: S2 layout primer sink: MWCC emits .bss objects in first-access order */
+    s = *(u8 *)&fzgx_obj_lbl_1_bss_3C00;
+    s = *(u8 *)&fzgx_pool_gap_3C04;
+    s = *(u8 *)&fzgx_obj_lbl_1_bss_3C10;
+    s = *(u8 *)&fzgx_pool_gap_3C11;
+    s = *(u8 *)&fzgx_pool_gap_3C12;
+    s = *(u8 *)&fzgx_pool_gap_3C13;
+    s = *(u8 *)&fzgx_pool_gap_3C14;
+    s = *(u8 *)&fzgx_obj_lbl_1_bss_3C1C;
+    s = *(u8 *)&lbl_1_bss_3C1C__fzgx_offset_4;
+    s = *(u8 *)&fzgx_pool_gap_3C21;
+    s = *(u8 *)&fzgx_pool_gap_3C22;
+    s = *(u8 *)&fzgx_pool_gap_3C23;
+    s = *(u8 *)&fzgx_pool_gap_3C24;
+    s = *(u8 *)&fzgx_pool_gap_3C28;
+    s = *(u8 *)&fzgx_obj_lbl_1_bss_3C2A;
+    s = *(u8 *)&fzgx_pool_gap_3C2C;
+    s = *(u8 *)&fzgx_obj_lbl_1_bss_3C30;
+    s = *(u8 *)&fzgx_pool_gap_50EC;
+    s = *(u8 *)&fzgx_obj_lbl_1_bss_5100;
+    s = *(u8 *)&fzgx_obj_lbl_1_bss_5104;
+    s = *(u8 *)&fzgx_pool_gap_5105;
+    s = *(u8 *)&fzgx_pool_gap_5106;
+    s = *(u8 *)&fzgx_pool_gap_5107;
+    s = *(u8 *)&lbl_1_bss_5104__fzgx_offset_4;
+}
+#pragma section code_type ".text"
+
+/* port is scaled in place, so MWCC indexes from the field's address (addi; lhzx) as retail does */
+static inline u16 fn_1_2C97C_pad_word(u16 *field, s32 port) {
+    port *= sizeof(PadButtons) / sizeof(u16);
+    field += port;
+    return *field;
+}
+
+#define PAD(field) fn_1_2C97C_pad_word(&((PadButtons *)&lbl_1_bss_9F8)->field, lbl_1_bss_3C1C__fzgx_offset_4)
+
+s32 fn_1_2C97C(void) {
+    s32 cancel;
+    s32 confirm;
+    u16 pressed;
+    s16 i;
+    u32 color;
+
+    if (fn_1_4C10() != 0) {
+        return 4;
+    }
+    if (lbl_1_bss_5104__fzgx_offset_4.unk_3 & 1) {
+        if ((PAD(unk_10) & 1) || (PAD(unk_12) & 1)) {
+            lbl_1_bss_5104__fzgx_offset_4.unk_1 = 0;
+        } else if (((PAD(unk_10) >> 1) & 1) || ((PAD(unk_12) >> 1) & 1)) {
+            lbl_1_bss_5104__fzgx_offset_4.unk_1 = 1;
+        } else {
+            pressed = PAD(unk_8);
+            cancel = 0;
+            confirm = 0;
+            if (((pressed >> 9) & 1) || ((pressed >> 12) & 1)) {
+                cancel = 1;
+            } else if ((pressed >> 8) & 1) {
+                if (lbl_1_bss_5104__fzgx_offset_4.unk_1 == 0) {
+                    confirm = 1;
+                } else {
+                    cancel = 1;
+                }
+            }
+            if (cancel || confirm) {
+                if (cancel) {
+                    lbl_1_bss_5104__fzgx_offset_4.unk_3 |= 4;
+                } else if (confirm) {
+                    lbl_1_bss_5104__fzgx_offset_4.unk_3 |= 2;
+                    if (fzgx_obj_lbl_1_bss_3C2A == 0x29) {
+                        fn_1_435C(fzgx_obj_lbl_1_bss_5100);
+                        fn_1_3F8C(lbl_1_data_5F5C, fn_1_2C908, 0, 0xD);
+                        color = lbl_1_rodata_BD8;
+                        fn_1_49F0(&color);
+                        if (fzgx_obj_lbl_1_bss_3C10 != 0) {
+                            fn_1_4A00(0, 0x78, fzgx_obj_lbl_1_bss_5100);
+                        } else {
+                            fn_1_4A00(0, 0x1E, fzgx_obj_lbl_1_bss_5100);
+                        }
+                        if (fzgx_obj_lbl_1_bss_3C30.unk_5 == 1) {
+                            fn_1_86254(0)->unk_475 = 0;
+                            for (i = 1; i < fn_1_86624(); i++) {
+                                fn_1_86254(i)->unk_475 = -1;
+                            }
+                        }
+                    }
+                }
+                fzgx_obj_lbl_1_bss_3C30.unk_C4 = NULL;
+                fzgx_obj_lbl_1_bss_5104 = -1;
+            }
+            fn_1_40710(&lbl_1_bss_5104__fzgx_offset_4);
+        }
+        return 4;
+    }
+    return 0;
+}
+/* fzgx:end fn_1_2C97C */
 
 /* fzgx:begin fn_1_2D038 pool noprologue */
 #include "types.h"

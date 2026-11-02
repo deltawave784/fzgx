@@ -1768,6 +1768,161 @@ void fn_1_A9868(u32 arg0, u32 arg1, u32 arg2, f32 arg3) {
 }
 /* fzgx:end fn_1_A9868 */
 
+/* fzgx:begin fn_1_A9A28 noprologue */
+#include "types.h"
+#include "dolphin/hw_regs.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/driver.h"
+
+typedef struct {
+    u8 r;
+    u8 g;
+    u8 b;
+    u8 a;
+} GXColor;
+
+typedef union {
+    u8 u8;
+    f32 f32;
+} PPCWGPipe;
+
+volatile PPCWGPipe GXWGFifo : GX_FIFO_BASE; /* volatile: hardware port */
+
+extern void fn_8003462C(u32, u32, u32);
+
+/* The SDK's const-parameter vertex writers; GC/2.5 keeps the by-value color in registers across them. */
+static inline void GXPosition3f32(const f32 x, const f32 y, const f32 z) {
+    GXWGFifo.f32 = x;
+    GXWGFifo.f32 = y;
+    GXWGFifo.f32 = z;
+}
+
+static inline void GXColor4u8(const u8 r, const u8 g, const u8 b, const u8 a) {
+    GXWGFifo.u8 = r;
+    GXWGFifo.u8 = g;
+    GXWGFifo.u8 = b;
+    GXWGFifo.u8 = a;
+}
+
+/* Draws one line (GXBegin 0xA8, two vertices) from (x0, y0) to (x1, y1), each coordinate offset by 0.5,
+ * while lbl_1_bss_71690.unk_0 is set. */
+void fn_1_A9A28(s16 x0, s16 y0, s16 x1, s16 y1, GXColor color) {
+    if ((s32)lbl_1_bss_71690.unk_0 != 0) {
+        fn_8003462C(0xA8, 0, 2);
+        GXPosition3f32(0.5f + x0, 0.5f + y0, 0.0f);
+        GXColor4u8(color.r, color.g, color.b, color.a);
+        GXPosition3f32(0.5f + x1, 0.5f + y1, 0.0f);
+        GXColor4u8(color.r, color.g, color.b, color.a);
+    }
+}
+/* fzgx:end fn_1_A9A28 */
+
+/* fzgx:begin fn_1_A9FFC noprologue */
+#include "types.h"
+#include "dolphin/hw_regs.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/driver.h"
+
+typedef struct {
+    u8 r;
+    u8 g;
+    u8 b;
+    u8 a;
+} GXColor;
+
+typedef union {
+    u8 u8;
+    f32 f32;
+} PPCWGPipe;
+
+volatile PPCWGPipe GXWGFifo : GX_FIFO_BASE; /* volatile: hardware port */
+
+extern void fn_8003462C(u32, u32, u32);
+
+/* The SDK's const-parameter vertex writers; GC/2.5 keeps the by-value color in registers across them. */
+static inline void GXPosition3f32(const f32 x, const f32 y, const f32 z) {
+    GXWGFifo.f32 = x;
+    GXWGFifo.f32 = y;
+    GXWGFifo.f32 = z;
+}
+
+static inline void GXColor4u8(const u8 r, const u8 g, const u8 b, const u8 a) {
+    GXWGFifo.u8 = r;
+    GXWGFifo.u8 = g;
+    GXWGFifo.u8 = b;
+    GXWGFifo.u8 = a;
+}
+
+/* Fills the w by h rectangle at (x, y) with one color (GXBegin 0x80, four vertices), each coordinate offset
+ * by 0.5, while lbl_1_bss_71690.unk_0 is set. */
+void fn_1_A9FFC(s16 x, s16 y, s16 w, s16 h, GXColor color) {
+    if ((s32)lbl_1_bss_71690.unk_0 != 0) {
+        fn_8003462C(0x80, 0, 4);
+        GXPosition3f32(0.5f + x, 0.5f + y, 0.0f);
+        GXColor4u8(color.r, color.g, color.b, color.a);
+        GXPosition3f32(0.5f + (x + w), 0.5f + y, 0.0f);
+        GXColor4u8(color.r, color.g, color.b, color.a);
+        GXPosition3f32(0.5f + (x + w), 0.5f + (y + h), 0.0f);
+        GXColor4u8(color.r, color.g, color.b, color.a);
+        GXPosition3f32(0.5f + x, 0.5f + (y + h), 0.0f);
+        GXColor4u8(color.r, color.g, color.b, color.a);
+    }
+}
+/* fzgx:end fn_1_A9FFC */
+
+/* fzgx:begin fn_1_AA188 noprologue */
+#include "types.h"
+#include "dolphin/hw_regs.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/driver.h"
+
+typedef struct {
+    u8 r;
+    u8 g;
+    u8 b;
+    u8 a;
+} GXColor;
+
+typedef union {
+    u8 u8;
+    f32 f32;
+} PPCWGPipe;
+
+volatile PPCWGPipe GXWGFifo : GX_FIFO_BASE; /* volatile: hardware port */
+
+extern void fn_8003462C(u32, u32, u32);
+
+/* The SDK's const-parameter vertex writers; GC/2.5 keeps the by-value colors in registers across them. */
+static inline void GXPosition3f32(const f32 x, const f32 y, const f32 z) {
+    GXWGFifo.f32 = x;
+    GXWGFifo.f32 = y;
+    GXWGFifo.f32 = z;
+}
+
+static inline void GXColor4u8(const u8 r, const u8 g, const u8 b, const u8 a) {
+    GXWGFifo.u8 = r;
+    GXWGFifo.u8 = g;
+    GXWGFifo.u8 = b;
+    GXWGFifo.u8 = a;
+}
+
+/* Fills the w by h rectangle at (x, y) with one color per corner (GXBegin 0x80, four vertices, clockwise from
+ * (x, y)), each coordinate offset by 0.5, while lbl_1_bss_71690.unk_0 is set. */
+void fn_1_AA188(s16 x, s16 y, s16 w, s16 h, GXColor c0, GXColor c1, GXColor c2, GXColor c3) {
+    if ((s32)lbl_1_bss_71690.unk_0 != 0) {
+        fn_8003462C(0x80, 0, 4);
+        GXPosition3f32(0.5f + x, 0.5f + y, 0.0f);
+        GXColor4u8(c0.r, c0.g, c0.b, c0.a);
+        GXPosition3f32(0.5f + (x + w), 0.5f + y, 0.0f);
+        GXColor4u8(c1.r, c1.g, c1.b, c1.a);
+        GXPosition3f32(0.5f + (x + w), 0.5f + (y + h), 0.0f);
+        GXColor4u8(c2.r, c2.g, c2.b, c2.a);
+        GXPosition3f32(0.5f + x, 0.5f + (y + h), 0.0f);
+        GXColor4u8(c3.r, c3.g, c3.b, c3.a);
+    }
+}
+/* fzgx:end fn_1_AA188 */
+
 /* fzgx:begin fn_1_AA350 */
 #include "dolphin/hw_regs.h"
 #include "types.h"

@@ -21310,6 +21310,149 @@ void fn_1_C2454(void) {
 }
 /* fzgx:end fn_1_C2454 */
 
+/* fzgx:begin fn_1_C3378 noprologue */
+#include "types.h"
+#include "types.h"
+#include "types.h"
+
+#ifndef REL_MAIN_REL_GLOBALS_H
+#define REL_MAIN_REL_GLOBALS_H
+
+#endif  // REL_MAIN_REL_GLOBALS_H
+#ifndef REL_MAIN_REL_MEMCARD_H
+#define REL_MAIN_REL_MEMCARD_H
+
+// lbl_1_bss_718C0: .bss size 0x20, 4 refs from memcard.c
+typedef struct {
+    u32 unk_0;  // 1 loads, 0 stores
+    u8 unk_4;  // 0 loads, 1 stores
+    u8 unk_5;  // 0 loads, 1 stores
+    u8 unk_6;  // 0 loads, 1 stores
+    u8 unk_7;  // 0 loads, 1 stores
+    u8 pad_8[0x8];
+    u16 unk_10;  // 0 loads, 1 stores
+    u8 pad_12[0x4];
+    u8 unk_16;  // 0 loads, 1 stores
+    u8 pad_17[0x19];
+    u16 unk_30;  // 0 loads, 1 stores
+    u8 pad_32[0x4];
+    u8 unk_36;  // 0 loads, 1 stores
+    u8 pad_37[0x19];
+    u16 unk_50;  // 0 loads, 1 stores
+    u8 pad_52[0x4];
+    u8 unk_56;  // 0 loads, 1 stores
+    u8 pad_57[0x19];
+    u16 unk_70;  // 0 loads, 1 stores
+    u8 pad_72[0x4];
+    u8 unk_76;  // 0 loads, 1 stores
+} Obj_1_bss_718C0_At0;
+typedef struct {
+    Obj_1_bss_718C0_At0 *unk_0;  // 8 loads, 1 stores
+    u8 pad_4[0x1C];
+} Obj_1_bss_718C0;
+extern Obj_1_bss_718C0 lbl_1_bss_718C0;
+
+// lbl_1_bss_718E0: .bss size 0x59E8, 2 refs from memcard.c
+typedef struct {
+    u16 unk_0;  // 0 loads, 1 stores
+    u8 unk_2;  // 2 loads, 1 stores
+    u8 unk_3;  // 1 loads, 1 stores
+    u8 pad_4[0x2];
+    u16 unk_6;  // 0 loads, 1 stores
+    u8 pad_8[0x198];
+    u16 unk_1A0;  // 0 loads, 1 stores
+    u8 pad_1A2[0x537E];
+    u16 unk_5520;  // 0 loads, 1 stores
+    u8 pad_5522[0x1];
+    u8 unk_5523;  // 1 loads, 0 stores
+    u8 pad_5524[0x4C4];
+} Obj_1_bss_718E0;
+extern Obj_1_bss_718E0 lbl_1_bss_718E0;
+
+// lbl_1_data_2AC0: .data size 0x80, 2 refs from memcard.c
+extern u8 lbl_1_data_2AC0[0x80];
+
+// lbl_1_data_2B40: .data size 0x10, 2 refs from memcard.c
+extern u8 lbl_1_data_2B40[0x10];
+
+// lbl_1_data_2B50: .data size 0x8, 2 refs from memcard.c
+extern u32 lbl_1_data_2B50;
+
+// lbl_1_data_2B58: .data size 0x8, 2 refs from memcard.c
+extern u32 lbl_1_data_2B58;
+
+// lbl_1_bss_AA0: .bss size 0x150, 2 refs from memcard.c
+extern u8 lbl_1_bss_AA0[0x150];
+
+// lbl_1_data_2B60: .data size 0x4, 2 refs from memcard.c
+extern u32 lbl_1_data_2B60;
+
+// lbl_1_data_3D11C: .data size 0x8, 1 refs from memcard.c (own data block)
+typedef struct {
+    s16 unk_0;  // 1 loads, 0 stores
+    s16 unk_2;  // 1 loads, 0 stores
+    s16 unk_4;  // 1 loads, 0 stores
+    s16 unk_6;  // 1 loads, 0 stores
+} Obj_1_data_3D11C;
+extern Obj_1_data_3D11C lbl_1_data_3D11C;
+
+#endif  // REL_MAIN_REL_MEMCARD_H
+
+extern void fn_80008BEC(void *dst, s32 value, s32 size);
+
+extern void fn_80008BEC(void *dst, s32 value, s32 size);
+extern void fn_80008BA8(void *dst, void *src, u32 size);
+extern u32 fn_1_A6F1C(void);
+extern void fn_1_3B34(void);
+
+/* the 0x20-byte entries of the block lbl_1_bss_718C0.unk_0 points to; unk_10 is s16 like the table copied into it */
+typedef struct {
+    u8 pad_0[0x10];
+    s16 unk_10;
+    u8 pad_12[0x4];
+    u8 unk_16;
+    u8 pad_17[0x9];
+} Obj_1_bss_718C0_Entry;
+
+// Sets the save block's defaults: clears it, then copies in the game's controller options, the button settings
+// after fn_1_3B34 has put the stock ones back.
+void fn_1_C3378(void) {
+    Obj_1_bss_718C0_Entry *entry;
+    u8 *bytes;
+    s16 *src;
+    s32 i;
+
+    fn_80008BEC(&lbl_1_bss_718E0, 0, 0x59E0);
+    lbl_1_bss_718C0.unk_0 = (Obj_1_bss_718C0_At0 *)((u8 *)&lbl_1_bss_718E0 + 0x55C2);
+    /* retail stores halfwords at 0x0, 0x6, 0x1A0 and 0x5520 (sth), though symbols.txt types lbl_1_bss_718E0 as
+     * byte data */
+    lbl_1_bss_718E0.unk_1A0 = 0;
+    lbl_1_bss_718E0.unk_5520 = 0;
+    lbl_1_bss_718E0.unk_0 = 0;
+    lbl_1_bss_718E0.unk_6 = 0;
+    lbl_1_bss_718E0.unk_2 = 0xF;
+    fn_80008BA8((u8 *)&lbl_1_bss_718E0 + 0x8, lbl_1_data_2AC0, 0x40);
+    fn_80008BA8((u8 *)&lbl_1_bss_718E0 + 0x48, lbl_1_data_2B40, 0x8);
+    fn_80008BA8((u8 *)&lbl_1_bss_718E0 + 0x5542, &lbl_1_data_2B50, 0x8);
+    fn_80008BA8((u8 *)&lbl_1_bss_718E0 + 0x554A, &lbl_1_data_2B58, 0x8);
+    lbl_1_bss_718E0.unk_3 = fn_1_A6F1C();
+    fn_1_3B34();
+    fn_80008BA8((u8 *)&lbl_1_bss_718E0 + 0x50, lbl_1_bss_AA0, 0x150);
+    fn_80008BA8((u8 *)&lbl_1_bss_718E0 + 0x5556, &lbl_1_data_2B60, 0x4);
+
+    bytes = &lbl_1_bss_718C0.unk_0->unk_4;
+    for (i = 0; i < 4; i++) {
+        bytes[i] = 50;
+    }
+    entry = (Obj_1_bss_718C0_Entry *)lbl_1_bss_718C0.unk_0;
+    src = &lbl_1_data_3D11C.unk_0;
+    for (i = 0; i < 4; i++, src++) {
+        entry[i].unk_10 = *src;
+        entry[i].unk_16 = 1;
+    }
+}
+/* fzgx:end fn_1_C3378 */
+
 /* fzgx:begin fn_1_C34F0 noprologue */
 #include "types.h"
 #include "rel/main_rel/globals.h"

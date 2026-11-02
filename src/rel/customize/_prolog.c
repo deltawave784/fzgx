@@ -1722,6 +1722,66 @@ void fn_3_14C4(void) {
 }
 /* fzgx:end fn_3_14C4 */
 
+/* fzgx:begin fn_3_14E4 noprologue */
+#include "types.h"
+
+extern void fn_1_4A00(s32, u8, u32);
+extern void fn_1_130EE8(u32, u32);
+extern u32 fn_1_435C(u32);
+extern s32 fn_1_3F8C(void *, void *, u32, u32);
+extern void fn_1_47F74(s32);
+extern void fn_1_A176C(u32, s32);
+extern void fn_3_2BFB4(void);
+extern char lbl_3_data_15D8[];
+extern u32 lbl_3_data_BC[2];
+extern u8 lbl_1_bss_6EAD0[1800];
+
+/* the retail TU's .bss objects this function uses, at their retail offsets, so MWCC addresses them off one
+ * section base; the fzgx_pool_gap_ objects span the retail objects in between, which this function does not touch */
+u32 fzgx_obj_lbl_3_bss_0[2];
+u8 fzgx_pool_gap_8[0x20844];
+u32 fzgx_obj_lbl_3_bss_2084C;
+u32 fzgx_obj_lbl_3_bss_20850;
+u8 fzgx_pool_gap_20854[0x3B28];
+u8 fzgx_obj_lbl_3_bss_2437C;
+u8 lbl_3_bss_2437C__fzgx_offset_1;
+u8 lbl_3_bss_2437C__fzgx_offset_2;
+u8 fzgx_pool_gap_2437F;
+u32 lbl_3_bss_2437C__fzgx_offset_4;
+u32 lbl_3_bss_2437C__fzgx_offset_8;
+
+#pragma section code_type ".fzgxpool"
+static void fzgx_bss_layout(void) {
+    volatile u8 s; /* fzgx-allow: S2 layout primer sink */
+    s = *(u8 *)fzgx_obj_lbl_3_bss_0;
+    s = *fzgx_pool_gap_8;
+    s = *(u8 *)&fzgx_obj_lbl_3_bss_2084C;
+    s = *(u8 *)&fzgx_obj_lbl_3_bss_20850;
+    s = *fzgx_pool_gap_20854;
+    s = fzgx_obj_lbl_3_bss_2437C;
+    s = lbl_3_bss_2437C__fzgx_offset_1;
+    s = lbl_3_bss_2437C__fzgx_offset_2;
+    s = fzgx_pool_gap_2437F;
+    s = *(u8 *)&lbl_3_bss_2437C__fzgx_offset_4;
+    s = *(u8 *)&lbl_3_bss_2437C__fzgx_offset_8;
+}
+#pragma section code_type ".text"
+
+void fn_3_14E4(void) {
+    fn_1_4A00(1, 0xf, fzgx_obj_lbl_3_bss_20850);
+    fn_1_130EE8(fzgx_obj_lbl_3_bss_2084C, fzgx_obj_lbl_3_bss_20850);
+    fn_1_435C(fzgx_obj_lbl_3_bss_20850);
+    lbl_3_data_BC[0] = fn_1_3F8C(lbl_3_data_15D8, fn_3_2BFB4, 0, 8);
+    fn_1_47F74(0x85);
+    fn_1_47F74(0xa1);
+    lbl_3_bss_2437C__fzgx_offset_1 = 0;
+    lbl_3_bss_2437C__fzgx_offset_2 = 0xff;
+    lbl_3_bss_2437C__fzgx_offset_4 = 0;
+    fn_1_A176C(**(u32 **)lbl_1_bss_6EAD0, 8);
+    lbl_3_bss_2437C__fzgx_offset_8 = 0;
+}
+/* fzgx:end fn_3_14E4 */
+
 /* fzgx:begin fn_3_33A0 */
 void fn_3_33A0(void) {
     fn_1_131004();

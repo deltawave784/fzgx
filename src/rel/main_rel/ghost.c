@@ -3085,6 +3085,63 @@ s32 fn_1_F0B5C(s32 i, V3 *out) {
 }
 /* fzgx:end fn_1_F0B5C */
 
+/* fzgx:begin fn_1_F0D10 noprologue */
+#include "types.h"
+
+typedef struct { f32 x, y, z, w; } Quat;
+
+extern void fn_1_F5458(Quat *out, s32 count, f32 *times, void *keys, f32 frame);
+extern void fn_80008BEC(void *dst, int value, int size);
+extern void mathutil_mtxA_from_quat(Quat *q);
+extern void lbl_8006DB74(void *mtx);
+
+/* the retail TU's .bss objects this function uses, at their retail offsets, so MWCC addresses them off one
+ * section base; the fzgx_pool_gap_ objects span the retail objects in between, which this function does not touch */
+u32 fzgx_obj_lbl_1_bss_7B180[2];
+u8 fzgx_pool_gap_7B188[0x13FC];
+u32 fzgx_obj_lbl_1_bss_7C584[127];
+f32 *lbl_1_bss_7C584__fzgx_offset_1FC[5];
+u8 fzgx_pool_gap_7C794[0xC8];
+u32 fzgx_obj_lbl_1_bss_7C85C[19];
+void *lbl_1_bss_7C85C__fzgx_offset_4C[5];
+u8 fzgx_pool_gap_7C8BC[0x90];
+u32 fzgx_obj_lbl_1_bss_7C94C[13];
+u16 lbl_1_bss_7C94C__fzgx_offset_34[18];
+s32 lbl_1_bss_7C94C__fzgx_offset_58[5];
+
+#pragma section code_type ".fzgxpool"
+static void fzgx_bss_layout(void) {
+    volatile u8 s;  /* fzgx-allow: S2 layout primer sink: MWCC emits .bss objects in first-access order */
+    s = *(u8 *)&fzgx_obj_lbl_1_bss_7B180;
+    s = *(u8 *)&fzgx_pool_gap_7B188;
+    s = *(u8 *)&fzgx_obj_lbl_1_bss_7C584;
+    s = *(u8 *)&lbl_1_bss_7C584__fzgx_offset_1FC;
+    s = *(u8 *)&fzgx_pool_gap_7C794;
+    s = *(u8 *)&fzgx_obj_lbl_1_bss_7C85C;
+    s = *(u8 *)&lbl_1_bss_7C85C__fzgx_offset_4C;
+    s = *(u8 *)&fzgx_pool_gap_7C8BC;
+    s = *(u8 *)&fzgx_obj_lbl_1_bss_7C94C;
+    s = *(u8 *)&lbl_1_bss_7C94C__fzgx_offset_34;
+    s = *(u8 *)&lbl_1_bss_7C94C__fzgx_offset_58;
+}
+#pragma section code_type ".text"
+
+s32 fn_1_F0D10(s32 i, void *mtx) {
+    Quat q;
+
+    fn_1_F5458(&q, lbl_1_bss_7C94C__fzgx_offset_58[i], lbl_1_bss_7C584__fzgx_offset_1FC[i],
+               lbl_1_bss_7C85C__fzgx_offset_4C[i], (f32)lbl_1_bss_7C94C__fzgx_offset_34[i]);
+    if ((f32)lbl_1_bss_7C94C__fzgx_offset_34[i] >=
+        lbl_1_bss_7C584__fzgx_offset_1FC[i][lbl_1_bss_7C94C__fzgx_offset_58[i] - 1]) {
+        fn_80008BEC(mtx, 0, 0x30);
+        return 0;
+    }
+    mathutil_mtxA_from_quat(&q);
+    lbl_8006DB74(mtx);
+    return 1;
+}
+/* fzgx:end fn_1_F0D10 */
+
 /* fzgx:begin fn_1_F0E00 pool noprologue */
 #include "dolphin/types.h"
 

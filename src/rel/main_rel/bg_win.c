@@ -751,6 +751,27 @@ void fn_1_15C36C(void) {
 }
 /* fzgx:end fn_1_15C36C */
 
+/* fzgx:begin fn_1_15C4EC noprologue */
+#include "types.h"
+
+typedef struct {
+    u8 pad_0[0x54];
+    f32 unk_54;
+} fn_1_15C4EC_Arg;
+
+extern f32 lbl_1_bss_8FD68[4][4];
+extern u32 fn_80074188(u32, u32, u32, u32);
+
+/* GC/2.5 with __restrict, like the same callback shape in sel (fn_10_19EC8, fn_10_19F1C): retail loads +0x54
+ * before saving LR, which GC/1.3.2 never schedules for a load through a parameter */
+void fn_1_15C4EC(fn_1_15C4EC_Arg *__restrict arg0) {
+    s32 index = arg0->unk_54;
+
+    fn_80074188(lbl_1_bss_8FD68[index][0], lbl_1_bss_8FD68[index][1], lbl_1_bss_8FD68[index][2],
+                lbl_1_bss_8FD68[index][3]);
+}
+/* fzgx:end fn_1_15C4EC */
+
 /* fzgx:begin fn_1_15C5A4 noprologue */
 #include "types.h"
 
@@ -1022,6 +1043,76 @@ void fn_1_15E260(s32 index) {
     (&lbl_1_bss_8FDA8.unk_0)[index * 0x34] |= 4;
 }
 /* fzgx:end fn_1_15E260 */
+
+/* fzgx:begin fn_1_15E27C noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/bg_win.h"
+
+extern u32 lbl_1_bss_8FD60[2];
+extern int fn_1_15BCDC(void *);
+extern void fn_1_4060(void);
+
+extern u32 lbl_1_bss_8FE80[8];
+
+extern void *fn_1_435C(void *);
+extern void fn_1_15E220(u8 *value);
+extern void fn_1_3F8C(void *, void *, u8 *, s32);
+extern u32 lbl_1_bss_8FEA0;
+extern u8 lbl_1_bss_8FE7C;
+extern u32 strlen(const char *str);
+extern s32 fn_8006FC1C(const char *a, const char *b);
+extern void fn_1_15E1E8(u8 *value);
+
+typedef struct {
+    u8 unk_0;
+    u8 unk_1;
+    u8 unk_2;
+    u8 unk_3;
+    u8 pad_4[4];
+    u8 unk_8;
+    u8 unk_9;
+    u8 unk_A;
+    u8 unk_B;
+    u8 pad_C[0x24];
+    f32 unk_30;
+} fn_1_15E27C_Entry;
+
+/* the retail TU's .bss objects this function uses, at their retail offsets, so MWCC addresses them off one
+ * section base */
+u32 fzgx_obj_lbl_1_bss_8FD68[16];
+fn_1_15E27C_Entry fzgx_obj_lbl_1_bss_8FDA8[4];
+f32 lbl_1_bss_8FDA8__fzgx_offset_D0;
+u8 fzgx_obj_lbl_1_bss_8FE7C;
+
+#pragma section code_type ".fzgxpool"
+static void fzgx_bss_layout(void) {
+    volatile u8 s;  /* fzgx-allow: S2 layout primer sink: MWCC emits .bss objects in first-access order */
+    s = *(u8 *)&fzgx_obj_lbl_1_bss_8FD68;
+    s = *(u8 *)&fzgx_obj_lbl_1_bss_8FDA8;
+    s = *(u8 *)&lbl_1_bss_8FDA8__fzgx_offset_D0;
+    s = *(u8 *)&fzgx_obj_lbl_1_bss_8FE7C;
+}
+#pragma section code_type ".text"
+
+void fn_1_15E27C(void) {
+    s32 i;
+
+    for (i = 0; i < 4; i++) {
+        fzgx_obj_lbl_1_bss_8FDA8[i].unk_0 = 0;
+        fzgx_obj_lbl_1_bss_8FDA8[i].unk_1 = 0;
+        fzgx_obj_lbl_1_bss_8FDA8[i].unk_2 = 0;
+        fzgx_obj_lbl_1_bss_8FDA8[i].unk_3 = 0;
+        fzgx_obj_lbl_1_bss_8FDA8[i].unk_8 = 0;
+        fzgx_obj_lbl_1_bss_8FDA8[i].unk_9 = 0;
+        fzgx_obj_lbl_1_bss_8FDA8[i].unk_B = 0;
+        fzgx_obj_lbl_1_bss_8FDA8[i].unk_A = 0;
+        fzgx_obj_lbl_1_bss_8FDA8[i].unk_30 = 0.0f;
+    }
+    lbl_1_bss_8FDA8__fzgx_offset_D0 = 0.0f;
+    fzgx_obj_lbl_1_bss_8FE7C = 0;
+}
+/* fzgx:end fn_1_15E27C */
 
 /* fzgx:begin fn_1_15E330 */
 void fn_1_15E330(s32 index, u32 value, void *arg) {

@@ -1581,9 +1581,6 @@ void fn_1_FA84(void) {
 /* fzgx:end fn_1_FA84 */
 
 /* fzgx:begin fn_1_FB50 */
-
-
-
 void fn_1_FB50(LiveCam_FB50 *cam) {
     if (cam->mode == 0) {
         cam->saved = cam->position;
@@ -1748,8 +1745,6 @@ u32 fn_1_101C0(void) {
 /* fzgx:end fn_1_101C0 */
 
 /* fzgx:begin fn_1_101D0 */
-
-
 void fn_1_101D0(Fn_1_101D0_State *self) {
     Obj_1_bss_17C4_At0 *base;
     u32 count;
@@ -1975,8 +1970,6 @@ void fn_1_103B0(LiveCamState *cam) {
 /* fzgx:end fn_1_103B0 */
 
 /* fzgx:begin fn_1_1138C */
-
-
 #pragma opt_propagation off
 static inline void fn_1_1138C_read_pointer(Cam *c, Obj_1_data_4754 *base, s32 index)
 {
@@ -2031,7 +2024,6 @@ void fn_1_1138C(Cam *c)
 /* fzgx:end fn_1_1138C */
 
 /* fzgx:begin fn_1_11544 */
-
 typedef struct {
     u8 pad_0[0xA];
     u16 unk_A;
@@ -2107,6 +2099,100 @@ void fn_1_11544(fn_1_11544_LiveCamera *cam) {
     lbl_8006DB30();
 }
 /* fzgx:end fn_1_11544 */
+
+/* fzgx:begin fn_1_11748 noprologue */
+#include "types.h"
+
+typedef struct {
+    f32 x, y, z;
+} V3;
+
+#pragma section code_type ".fzgxpool"
+static const u32 fzgx_pool_table1[5] = {0x3F800000, 0x43960000, 0x43A00000, 0x436A0000, 0x43660000};  /* fzgx-allow: A1 retail pool bytes */
+__declspec(section ".fzgxpool") static void fzgx_pool_keep1(void) { const u32 *volatile cp; cp = fzgx_pool_table1; }  /* fzgx-allow: S2 pool primer sink */
+__declspec(section ".fzgxpool") static void fzgx_pool_prime2(void) {
+    volatile f32 s;  /* fzgx-allow: S2 pool primer sink */
+    s = 0.0f;
+}
+static const u32 fzgx_pool_table3[68] = {0x3F000000, 0x40000000, 0x3C23D70A, 0x3CA3D70A, 0x0032FFFF, 0x000000FF, 0x000000FF, 0x00000000, 0x3FC99999, 0x9999999A, 0x3F19999A, 0x42780000, 0x41800000, 0x3E4CCCCD, 0x40400000, 0x446B0000, 0x44228000, 0x42100000, 0x43300000, 0x80000000, 0x43300000, 0x00000000, 0x46121800, 0x44E10000, 0x406A4000, 0x00000000, 0x42000000, 0x43F20000, 0x43D40000, 0x44130000, 0x43DD8000, 0x43F00000, 0x43D70000, 0x00000000, 0x3FE80000, 0x00000000, 0x3FE99999, 0x9999999A, 0x3FF00000, 0x00000000, 0x38D1B717, 0x43480000, 0x00000000, 0x00000000, 0x00000000, 0x40E00000, 0x46FFFE00, 0x00000000, 0x00000000, 0x00000000, 0x3FE00000, 0x00000000, 0x3FEC0000, 0x00000000, 0xBE000000, 0x41F00000, 0x3F947AE1, 0x47AE147B, 0x40504000, 0x00000000, 0x3FA99999, 0x9999999A, 0x40240000, 0x00000000, 0x40100000, 0x00000000, 0x40800000, 0x3D4CCCCD};  /* fzgx-allow: A1 retail pool bytes */
+__declspec(section ".fzgxpool") static void fzgx_pool_keep3(void) { const u32 *volatile cp; cp = fzgx_pool_table3; }  /* fzgx-allow: S2 pool primer sink */
+__declspec(section ".fzgxpool") static void fzgx_pool_prime4(void) {
+    volatile f32 s;  /* fzgx-allow: S2 pool primer sink */
+    s = 55.0f;
+}
+static const u32 fzgx_pool_table5[9] = {0x00000000, 0x40310000, 0x00000000, 0xBFF00000, 0x00000000, 0x3ECCCCCD, 0x00000000, 0x3FD99999, 0x9999999A};  /* fzgx-allow: A1 retail pool bytes */
+__declspec(section ".fzgxpool") static void fzgx_pool_keep5(void) { const u32 *volatile cp; cp = fzgx_pool_table5; }  /* fzgx-allow: S2 pool primer sink */
+#pragma section code_type ".text"
+
+typedef struct {
+    u8 pad_0[0x1C];
+    s32 unk_1C;
+} Entry;
+
+typedef struct {
+    u8 unk_0;
+    u8 pad_1[3];
+    s16 unk_4;
+    s16 unk_6;
+    u8 pad_8[0xC];
+    s16 unk_14;
+    u8 pad_16[6];
+    u8 unk_1C[0x18];
+    V3 unk_34;
+    u8 pad_40[0x18];
+    f32 unk_58;
+    u8 pad_5C[0xC];
+    s16 unk_68;
+    u8 pad_6A[4];
+    s16 unk_6E;
+    V3 unk_70;
+    u8 unk_7C[0x40];
+} Cam;
+
+extern f32 lbl_1_bss_17F0;
+extern f32 lbl_1_bss_17F4;
+extern u32 lbl_801A63C0;
+extern Entry lbl_1_data_47B4[];
+extern void fn_1_862A8(int, V3 *);
+extern void fn_1_8636C(int, void *);
+extern void fn_1_862D4(int, V3 *);
+extern void fn_1_8645C(int, void *);
+extern void lbl_8006DBAC(void *);
+extern void lbl_8006E1B0(void *, void *);
+
+void fn_1_11748(Cam *c)
+{
+    V3 pos;
+    u32 state;
+    u32 r;
+
+    if (c->unk_0 == 5 || c->unk_0 <= 1 || c->unk_0 == 2) {
+        state = lbl_801A63C0 * 0x676a4b6b + 0x33cb;
+        lbl_801A63C0 = state;
+        r = (state >> 16) & 0x7fff;
+        c->unk_14 = r % 20;
+        c->unk_4 = r % 20;
+    }
+    c->unk_68 = 2;
+    {
+        V3 v = {0.0f, 0.0f, 0.0f};
+
+        c->unk_34 = v;
+    }
+    c->unk_6E = 0;
+    lbl_1_bss_17F0 = 0.0f;
+    lbl_1_bss_17F4 = 0.0f;
+    fn_1_862A8(c->unk_6, &c->unk_70);
+    fn_1_8636C(c->unk_6, c->unk_7C);
+    c->unk_58 = 55.0f;
+    fn_1_862D4(c->unk_6, &pos);
+    if (lbl_1_data_47B4[c->unk_4].unk_1C != 0) {
+        fn_1_8645C(c->unk_6, c->unk_7C);
+        lbl_8006DBAC(c->unk_7C);
+        lbl_8006E1B0(&lbl_1_data_47B4[c->unk_4], c->unk_1C);
+    }
+}
+/* fzgx:end fn_1_11748 */
 
 /* fzgx:begin fn_1_1189C noprologue */
 #include "types.h"
@@ -2293,8 +2379,6 @@ void fn_1_11ABC(fn_1_11ABC_LiveCamera *camera) {
 /* fzgx:end fn_1_11ABC */
 
 /* fzgx:begin fn_1_11E98 */
-
-
 typedef void (*Cam11E98Handler)(Cam11E98 *, void *);
 
 
@@ -2780,7 +2864,6 @@ u32 *fn_1_1289C(u32 *state) {
 /* fzgx:end fn_1_1289C */
 
 /* fzgx:begin fn_1_12B88 */
-
 static inline void lz_clear(u8 *buf, int n) {
     int i;
 
@@ -2889,7 +2972,6 @@ u32 fn_1_12F78(void *arg0, u32 arg1) {
 /* fzgx:end fn_1_12F78 */
 
 /* fzgx:begin fn_1_12FD4 */
-
 u32 fn_1_12FD4(u32 arg0, u32 arg1, u32 arg2) {
     u32 *t0;
     /* Publish the cleared header before updating the request fields. */

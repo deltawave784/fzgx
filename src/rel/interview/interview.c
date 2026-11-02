@@ -59707,6 +59707,55 @@ void fn_17_7728(IvCam *cam) {
 }
 /* fzgx:end fn_17_7728 */
 
+/* fzgx:begin fn_17_7F94 */
+typedef struct {
+    f32 x, y, z;
+} fn_17_7F94_Vec;
+
+/* local view of the camera_get_state_object() record (main_rel's CameraState), fields as this function stores them */
+typedef struct {
+    u32 unk_0;
+    fn_17_7F94_Vec unk_4;
+    fn_17_7F94_Vec unk_10;
+    f32 unk_1C;
+    s16 unk_20;
+} fn_17_7F94_Camera;
+
+extern fn_17_7F94_Camera *camera_get_state_object(void);
+extern void camera_save_parameters(f32, f32);
+
+/* retail .rodata 0x0-0x25F ahead of this function's constants, so they land at their retail offsets; the
+ * function reuses the literals 30.0f (0x1C) and 0.5f (0x3C) */
+#pragma section code_type ".fzgxpool"
+static const u32 fzgx_pool_rodata_0[7] = {0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0xC1200000, 0x3F800000};  /* fzgx-allow: A1 retail pool bytes */
+__declspec(section ".fzgxpool") static void fzgx_pool_keep_0(void) { const u32 *volatile cp; cp = fzgx_pool_rodata_0; }  /* fzgx-allow: S2 pool primer sink */
+__declspec(section ".fzgxpool") static void fzgx_pool_prime_1C(void) { volatile f32 s; s = 30.0f; }  /* fzgx-allow: S2 pool primer sink */
+static const u32 fzgx_pool_rodata_20[7] = {0x00000000, 0x3DCCCCCD, 0x47AFC800, 0x00FF00FF, 0x808080FF, 0xFFFFFFFF, 0x80808000};  /* fzgx-allow: A1 retail pool bytes */
+__declspec(section ".fzgxpool") static void fzgx_pool_keep_20(void) { const u32 *volatile cp; cp = fzgx_pool_rodata_20; }  /* fzgx-allow: S2 pool primer sink */
+__declspec(section ".fzgxpool") static void fzgx_pool_prime_3C(void) { volatile f32 s; s = 0.5f; }  /* fzgx-allow: S2 pool primer sink */
+static const u32 fzgx_pool_rodata_40[136] = {0x3E4CCCCD, 0x82FF0000, 0xFF780000, 0x00000000, 0x3F947AE1, 0x47AE147B, 0x3FB99999, 0x9999999A, 0x43300000, 0x00000000, 0x43300000, 0x80000000, 0xFFFFFF00, 0x00000000, 0x00000000, 0x00000000, 0x3FF00000, 0x00000000, 0x40240000, 0x00000000, 0x3FECCCCC, 0xCCCCCCCD, 0x3A1D4952, 0x40000000, 0x43A00000, 0x434D0000, 0x40A00000, 0x00000000, 0x3FE99999, 0x9999999A, 0x437A0000, 0x43340000, 0x41200000, 0x43480000, 0x42400000, 0x42480000, 0x42960000, 0x00000000, 0x00000000, 0x43480000, 0x3F19999A, 0x000000FF, 0x404040FF, 0x404088FF, 0xAAAAAAFF, 0xFF0000FF, 0xBF000000, 0x00000000, 0xBFE1EB85, 0x1EB851EC, 0x00000000, 0x00000000, 0xBC23D70A, 0x3C23D70A, 0x43700000, 0x44228000, 0xC3480000, 0x395C3372, 0x00000000, 0x00000000, 0xBC23D70A, 0x00000000, 0x00000000, 0xBC23D70A, 0x3F889374, 0xBC6A7EFA, 0x3F8EB851, 0xEB851EB8, 0xBC23D70A, 0x00000000, 0x3F8A9FBE, 0x76C8B439, 0x3F10E885, 0x9C8C9321, 0x47000000, 0x47800000, 0x44CA8000, 0x45800000, 0x44610000, 0x44160000, 0x432E0000, 0x42B40000, 0x42FA0000, 0x3749539C, 0x3A83126F, 0x42C80000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x40400000, 0x46FFFE00, 0x3F666666, 0x00000000, 0x00000000, 0x00000000, 0x3E23D70A, 0x00000000, 0x00000000, 0xBFE66666, 0x00000000, 0x00000000, 0xBEA3D70A, 0xC1C00000, 0x3FC00000, 0x3E99999A, 0xBE19999A, 0x40E66667, 0x3F4CCCCD, 0xC1A80000, 0x41100000, 0x3D23D70A, 0x3F851EB8, 0xBFD9999A, 0xC1C00000, 0x425C0000, 0x00FF00FF, 0x808080FF, 0xFFFFFFFF, 0x000000FF, 0x00000000, 0x00000000, 0xBC23D70A, 0x42D40000, 0x432F0000, 0x3F333333, 0x42140000, 0xC2C80000, 0x3B449BA6, 0x40133333, 0xC1A90A3D, 0xBFE66666, 0xC0800000, 0xFFFFFFFF};  /* fzgx-allow: A1 retail pool bytes */
+__declspec(section ".fzgxpool") static void fzgx_pool_keep_40(void) { const u32 *volatile cp; cp = fzgx_pool_rodata_40; }  /* fzgx-allow: S2 pool primer sink */
+#pragma section code_type ".text"
+
+void fn_17_7F94(void) {
+    /* a local, so the negation stays a retail fneg of the pooled 1.2f */
+    f32 z = 1.2f;
+    fn_17_7F94_Camera *camera = camera_get_state_object();
+    fn_17_7F94_Vec eye = {0.0f, 0.85f, 0.0f};
+
+    eye.z = -z;
+    camera->unk_4 = eye;
+    {
+        /* block-scoped: retail copies this initializer straight into the record, not through the stack */
+        fn_17_7F94_Vec target = {0.0f, 0.85f, 0.0f};
+        camera->unk_10 = target;
+    }
+    camera->unk_20 = 0;
+    camera->unk_1C = 30.0f;
+    camera_save_parameters(0.5f, 0.02f);
+}
+/* fzgx:end fn_17_7F94 */
+
 /* fzgx:begin fn_17_802C */
 /* Retail addresses the whole TU literal pool (lbl_17_rodata_0) through one base register.
  * The primer below lays the pool out in retail order ahead of the function, so the
