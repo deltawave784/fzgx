@@ -5,7 +5,7 @@
       "command": "uv",
       "args": ["run", "tools/fzgx_mcp.py"],
       "env": {
-        "FZGX_MAX_ATTEMPTS": "12"
+        "FZGX_MAX_ATTEMPTS": "999"
       }
     }
   }
