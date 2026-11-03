@@ -1588,19 +1588,29 @@ def save_improved_attempts(p,engine,report,margin=0.05):
     The search ranks by masked word score, so a TU layout candidate that fixes the retail
     `addi rX, rBase, off; lwzx` shape while perturbing registers stayed buried in report.json
     (fn_1_45A58: layout 89.2% under the module compiler, saved body 77.2%, agents seeded
-    from 76.1%). Candidates: each symbol's best row, its layout rows and its five best words."""
+    from 76.1%). Candidates: each symbol's best row, its layout rows and its five best words.
+    Ranking is `oracle.progress_better`: fewer differing rows after pool binding first, the
+    score only when the rows tie or are unknown (the seed's rows come from its own check: a
+    layout variant that closed fn_10_1615C's prologue, 13 -> 9 rows, scored 99.40 under the
+    13-row seed's 99.42 and was never saved)."""
     from . import api
     from .ledger import Ledger
     ledger=Ledger();saved=[]
     by_symbol=defaultdict(list)
+    seeds=defaultdict(list)
     for r in report['records']:
         if r.get('object') and r.get('score',-1)>=0 and not r.get('matched'):
             by_symbol[r['symbol']].append(r)
+        if r.get('object') and not r.get('parent'):
+            seeds[r['symbol']].append(r)
     for symbol,rows in by_symbol.items():
         if report['best'].get(symbol,{}).get('matched'):
             continue
         pick=sorted(rows,key=lambda r:-r['score'])[:5]
         pick+=[r for r in rows if r.get('label','').startswith(('define retail TU','define indexed element'))]
+        # the measured rows too: a candidate whose word score trails can still have the fewest
+        # differing rows after pool binding (the frontier's `differing_rows` slot)
+        pick+=sorted((r for r in rows if r.get('differing_rows') is not None),key=lambda r:(r['differing_rows'],-r['score']))[:2]
         best=None
         for row in {r['id']:r for r in pick}.values():
             # never save a body whose first statement on a local reads it (`x_2 = x_2 + k`): it
@@ -1610,14 +1620,27 @@ def save_improved_attempts(p,engine,report,margin=0.05):
             result=engine.check(row)
             if result.ok:
                 score=oracle.progress_score(result)
-                if best is None or score>best[0]:
-                    best=(score,row,result)
+                nrows=oracle.progress_rows(result)
+                if best is None or oracle.progress_better(score,nrows,best[0],best[3]):
+                    best=(score,row,result,nrows)
         if best is None:
             continue
         key=api._key(p,symbol)
         prior=ledger.db.execute('SELECT MAX(best_in_attempt) FROM attempts WHERE symbol=?',(key,)).fetchone()[0] or 0.0
-        score,row,result=best
-        if score<=prior+margin:
+        score,row,result,nrows=best
+        # the seed's own rows (a saved body re-checked by this run) decide before the score
+        prior_rows=None
+        for seed in seeds.get(symbol,()):
+            if seed.get('matched'):
+                continue
+            try:
+                sr=engine.check(seed)
+            except Exception:
+                continue
+            srows=oracle.progress_rows(sr) if sr.ok else None
+            if srows is not None and (prior_rows is None or srows<prior_rows):
+                prior_rows=srows
+        if not oracle.progress_better(score,nrows,prior,prior_rows,margin):
             continue
         agent='claude-fixup-attempt'
         c=api.claim(p,symbol,agent,max_attempts=999,no_carve=True,local_seed=False)
@@ -1629,7 +1652,7 @@ def save_improved_attempts(p,engine,report,margin=0.05):
         best_path.write_text(body)
         best_path.with_suffix('.json').write_text(json.dumps(dict(sha256=digest(best_path.read_bytes()),mw=row['mw'],
             flags=row['flags'] or None,percent=score))+'\n')
-        ledger.bump_checks(key,score,result.instruction_rows)
+        ledger.bump_checks(key,score,nrows)
         rel=api.release(p,symbol,f"fixup: {row.get('label')}: {prior:.2f} -> {score:.2f}",agent=agent,save_only=True)
         engine.emit(dict(stage='save-attempt',symbol=symbol,prior=prior,percent=score,label=row.get('label'),mw=row['mw'],ok=rel.get('ok'),saved=rel.get('saved')))
         if rel.get('ok'):

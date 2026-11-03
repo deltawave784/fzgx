@@ -903,3 +903,28 @@ replay 132/132 colours) and probe compiles:
   first sine web is a window temporary (v134, `fmr f31, f1`) where retail has a pass-1 web
   (f20): a helper-local `sine`, a returned sine and `opt_lifetimes off` all leave it a
   temporary.
+
+## Named-extern section clusters: ranking by rows (tooling round T11, 2026-11-03)
+
+Census of the 167 saved best bodies at 95%+ outside the Karamzov modules (`check` rows,
+`fixup_layout._base_materializations`): 92 address a section through a named extern where
+retail materialises an anonymous section base (`.bss` 59, `.data` 42, `.rodata` 30; 34 bodies
+with two or three sections), 58 already have anonymous bases (order/register cases, T9's law), 17 have
+no base. The levers for the named class already exist (`define retail TU data objects` splits
+the block at every referenced dtk object, so a per-site string table becomes its own object
+and `addi rX, rBase, off` a lowering temporary; the pool pipeline for `.rodata`; `tu_objects`
+for `.bss`, whose `filler` already emits 1-byte holes as scalar `u8`). What dropped their
+results was ranking: objdiff's percent counts every pool-bound row (`...data.N` bound to the
+retail symbol by the oracle) as a mismatch, so a layout that closed fn_10_1615C's prologue
+(13 -> 9 rows) scored 99.40 under the 13-row body's 99.42 and fn_4_3128's data layout
+(13 -> 7 rows) 97.91 under 98.80; `sweep --land`, `fixup`'s attempt saving and
+`stuck.best_bodies` all compared percents. `oracle.progress_better` (fewer differing rows after
+pool binding first, percent only on a tie) now decides in all three, the same rule T8 gave
+`api._better_body`. Measured with the sweep's own rounds (no family change): fn_10_1615C
+13 -> 9 rows (one r29/r23 web left), fn_4_3128 13 -> 4 rows (layout, then the shared-pool
+primer, then retail initializers composed across rounds; the last four rows are one
+`lwz`/`addi` temporary order at a single table site).
+Not reachable by layout alone: fn_1_C4ABC passes its `.bss` model to a `static inline` helper
+(`tu_objects` rejects a model used other than through `->`), fn_7_2538 is a 115-row
+callee-saved permutation, fn_17_DB4's `.bss` base is a pass-1 local against a far `.data`
+carrier (declaration order, not layout).

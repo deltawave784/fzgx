@@ -5,7 +5,10 @@ minutes; `fzgx fixup`'s per-seed rounds took hours over the same corpus (2026-09
 bodies at 90%+, four rounds, 17 minutes: 5 matches, 167 improved).
 
 `fzgx sweep --min-percent 90` climbs every saved best body at 90%+; `--land` submits exact
-matches (pool matches included) and saves improved bodies as attempts.
+matches (pool matches included) and saves improved bodies as attempts. Gain is measured by
+`oracle.progress_better`: fewer differing rows after pool binding first, the percent only on a
+tie (T11: objdiff's percent counts pool-bound rows as mismatches, so a TU-layout candidate that
+closed fn_10_1615C's prologue, 13 -> 9 rows, ranked under the 13-row body and was dropped).
 """
 from __future__ import annotations
 
@@ -241,7 +244,7 @@ def climb(p: Project, selection: Dict[str, str], outdir: Path, rounds: int = 4,
         if r and r.ok:
             mw, flags = settings.get(s, (None, None))
             state[s] = dict(base=_score(r), percent=_score(r), rows=oracle.progress_rows(r), file=str(f),
-                            matched=r.matched, history=[], check=r, mw=mw, flags=flags)
+                            base_rows=oracle.progress_rows(r), matched=r.matched, history=[], check=r, mw=mw, flags=flags)
     print('functions', len(state))
     # scratch this run writes (candidate C, their objects, compile chunk directories):
     # everything outside the final per-function files is removed before returning
@@ -335,12 +338,20 @@ def climb(p: Project, selection: Dict[str, str], outdir: Path, rounds: int = 4,
     print('pruned scratch', rep_pruned)
     (outdir / 'report.json').write_text(json.dumps(rep, indent=1))
     matched = [s for s, x in rep.items() if x['matched']]
-    improved = [s for s, x in rep.items() if x['percent'] > x['base'] + 0.05]
+    # fewer differing rows after pool binding is the gain; the percent only when the rows tie
+    # (fn_10_1615C: the layout that closed the prologue, 13 -> 9 rows, scored 99.40 under 99.42)
+    improved = [s for s, x in rep.items() if _improved(x)]
     print('matched', len(matched), matched)
     print('improved', len(improved))
     for s in sorted(improved, key=lambda s: -rep[s]['percent'])[:25]:
-        print(f"  {s:16s} {rep[s]['base']:6.2f} -> {rep[s]['percent']:6.2f}  {rep[s]['history']}")
+        print(f"  {s:16s} {rep[s]['base']:6.2f} -> {rep[s]['percent']:6.2f}  rows {rep[s].get('base_rows')} -> {rep[s].get('rows')}  {rep[s]['history']}")
     return rep
+
+
+def _improved(r: dict) -> bool:
+    """Did the climb improve this function's body? `oracle.progress_better`: fewer differing
+    rows after pool binding first, then the percent by more than 0.05."""
+    return oracle.progress_better(r.get('percent') or 0.0, r.get('rows'), r.get('base'), r.get('base_rows'), 0.05)
 
 
 def land(p: Project, rep: Dict[str, dict], label: str) -> Dict[str, list]:
@@ -351,7 +362,7 @@ def land(p: Project, rep: Dict[str, dict], label: str) -> Dict[str, list]:
         pct = r.get('percent')
         if pct is None or not r.get('file'):
             continue
-        if not r.get('matched') and pct <= r['base'] + 0.05:
+        if not r.get('matched') and not _improved(r):
             continue
         body = Path(r['file']).read_text()
         if not r.get('matched') and oracle.self_seeded_locals(body):

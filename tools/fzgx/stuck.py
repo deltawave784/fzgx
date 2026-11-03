@@ -158,7 +158,7 @@ def best_bodies(p: Project, min_percent: float, module: Optional[str] = None,
                 max_size: Optional[int] = None) -> Dict[str, Tuple[str, float, int, str]]:
     """{symbol: (body path, best %, size, module)} for unmatched functions at or above min_percent."""
     db = sqlite3.connect(str(STATE_DIR / "ledger.db"))
-    q = """select f.symbol, f.best_percent, f.size, f.module, a.best_body_path, a.best_in_attempt from functions f
+    q = """select f.symbol, f.best_percent, f.size, f.module, a.best_body_path, a.best_in_attempt, a.best_rows from functions f
            join attempts a on a.symbol=f.symbol where f.status='unmatched' and f.best_percent>=? and a.best_body_path is not null"""
     args = [min_percent]
     if module:
@@ -168,11 +168,16 @@ def best_bodies(p: Project, min_percent: float, module: Optional[str] = None,
         q += " and f.size<=?"
         args.append(max_size)
     out: Dict[str, tuple] = {}
-    for s, bp, size, mod, path, pct in db.execute(q, args):
+    rows_of: Dict[str, Optional[int]] = {}
+    for s, bp, size, mod, path, pct, rows in db.execute(q, args):
         if not Path(path).exists():
             path = str(STATE_DIR / "attempts" / Path(path).name)
-        if Path(path).exists() and (s not in out or (pct or 0) > out[s][1]):
+        # between two saved attempts the one with fewer differing rows after pool binding is
+        # the seed (`oracle.progress_better`): a sweep/fixup landing records the body's own
+        # rows, and `api._better_body` keeps an agent attempt's best body by rows too
+        if Path(path).exists() and (s not in out or oracle.progress_better(pct or 0.0, rows, out[s][1], rows_of[s])):
             out[s] = (path, pct or 0.0, size, mod)
+            rows_of[s] = rows
     return out
 
 

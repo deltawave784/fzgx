@@ -111,6 +111,20 @@ def progress_rows(res: CheckResult) -> Optional[int]:
     return res.differing_rows if res.instruction_rows else None
 
 
+def progress_better(score: float, rows: Optional[int], prior_score: Optional[float],
+                    prior_rows: Optional[int], margin: float = 0.0) -> bool:
+    """Ranking only (never acceptance): does a checked body improve on a prior one? When both
+    sides carry a row count (`progress_rows`) and they differ, fewer differing rows win;
+    otherwise the score must lead by more than `margin`. The same rule as `api._better_body`
+    (T8) for the attempt's saved best: objdiff's percent counts a pool-bound row (a `...data.N`
+    base the oracle binds to the retail symbol) as a mismatch, so a layout candidate that closed
+    fn_10_1615C's prologue (13 -> 9 rows, 99.400%) ranked under the 13-row body (99.423%) and
+    `sweep --land` / `fixup`'s attempt saving dropped it."""
+    if rows is not None and prior_rows is not None and rows != prior_rows:
+        return rows < prior_rows
+    return score > (prior_score or 0.0) + margin
+
+
 def run(cmd: List[str], cwd: Path = ROOT, timeout: int = 600) -> subprocess.CompletedProcess:
     return subprocess.run(cmd, cwd=cwd, text=True, capture_output=True, timeout=timeout)
 
