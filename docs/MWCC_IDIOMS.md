@@ -868,3 +868,38 @@ where we emit two `li` (census "copy-coalesce": fn_1_14CEB8, fn_8_C038, fn_10_11
   order, i.e. a capture (`capture132.sh`) of the carrier body, not another spelling search.
 - The join copy `lwz r0 | li r0, 0` then `mr r25, r0` (fn_1_9C724's ternary) is a different
   case: ternary, `if/else`, inline helper, scalar or carrier temporaries all coalesce into v6.
+
+## FPR temporary order in 99%+ near misses (tooling round T10, GC/1.3.2 captures, 2026-11-03)
+
+Source read from the recovered backend (rayanht/mwcc `InstrSelection.c`, `CExpr.c`,
+`IrOptimizer.c`) and confirmed by captures of fn_10_1F688 (`.fzgx/capture/fn_10_1F688`, FPR
+replay 132/132 colours) and probe compiles:
+
+- `emit_binary_fpr_instruction` generates the LEFT operand first, then the right, unless the
+  right operand contains a call (`right->hascall`): FPR temporaries are numbered in source
+  operand order and the instruction keeps that order (`fmuls rD, left, right`).
+- `optimizecomm` (frontend, on `+` and `*`) moves a float constant to the LEFT operand
+  (`x * 0.5f` and `0.5f * x` both lower to `fmuls rD, const, x`), and for two non-constant
+  operands puts the cheaper tree first (`cost`: leaves 0, each nesting level +1, calls 200,
+  `/` and shifts +2). `x / 2.0f` is a division node (not commutative) that the backend
+  strength-reduces to a multiply with the reciprocal materialised LAST: retail's
+  `fmuls f16, sum, f0(0.5)` with the constant in f0 (the highest temporary, coloured first)
+  can only come from a division. The existing `reciprocal_divisions` family now also sees the
+  literal through a constant local (`textScale = 0.5f; w = textScale * E;`), one local per
+  candidate (a hoisted loop constant such as `c05` stays a register variable).
+- A call result converted inside the consumer (`v = call(); ... (f32)v ...`) is forwarded into
+  the use, so the bias/load/`fsubs` temporaries are numbered among the consumer's. Writing
+  `vf = (f32)(u16)call();` keeps the conversion a statement of its own (the optimizer never
+  forwards an expression holding a call) and the converted value a pass-1 web: retail coloured
+  it f4 below the consumer's five temporaries. New family `call_result_conversions`
+  (`convcall` in sweep/fixup).
+- `x = E; f(a - x, c);` lowers `a`'s load after E's temporaries; `f(a - (x = E), c)` creates
+  it before them (`expression_embedded_assignments` now also handles a call statement, and
+  allows `x` inside its own E).
+- fn_10_1F688 closed with the three levers composed (8 rows -> 7 -> 3 -> 0, each step a word-
+  score gain, so the engine's rounds reach it). fn_1_106084 (16 rows at the `height` product)
+  does not fit any renumbering of its captured graph (40,320 orderings of the eight implicated
+  temporaries, best 6 of 9 colours): its interference differs, not its numbering. fn_1_DF6AC's
+  first sine web is a window temporary (v134, `fmr f31, f1`) where retail has a pass-1 web
+  (f20): a helper-local `sine`, a returned sine and `opt_lifetimes off` all leave it a
+  temporary.

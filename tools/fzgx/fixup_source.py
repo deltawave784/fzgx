@@ -54,6 +54,8 @@ def _locals(body: str, span) -> List[Tuple[int, int, str, str, str]]:
             continue
         if not line.strip():
             continue
+        if line.lstrip().startswith('#'):
+            continue  # a `#define` among the declarations (an access macro) is not the body's start
         dm = DECL_RE.match(line.rstrip("\n"))
         if not dm:
             # Inline record declarations used to hide every subsequent local
@@ -973,7 +975,106 @@ def _close(code: str, i: int, n: int) -> Optional[int]:
     return j if not want else None
 
 
-def reciprocal_divisions(body: str, name: str) -> List[Tuple[str, str]]:
+def _declared_scalars(inner: str, base: int) -> List[Tuple[int, int, str, str]]:
+    """(line start, line end, type, name) for every scalar declared in the function's inner
+    text (masked), at any block depth, including comma lists; uninitialised, no arrays."""
+    out: List[Tuple[int, int, str, str]] = []
+    for m in re.finditer(r'(?m)^[ \t]*((?:(?:unsigned|signed)\s+)?(?:[us](?:8|16|32)|f32|f64|float|double|int|short|long|char|BOOL|bool))\s+'
+                         r'([A-Za-z_]\w*(?:\s*,\s*[A-Za-z_]\w*)*);[ \t]*(?:/\*.*?\*/)?[ \t]*$', inner):
+        for var in m.group(2).split(','):
+            out.append((base + m.start(), base + m.end(), m.group(1).strip(), var.strip()))
+    return out
+
+
+def _fold_constant_float_locals(body: str, name: str, span, accept) -> List[Tuple[str, str]]:
+    """(local, body) per scalar float local assigned exactly once, by a statement `v = LIT;`
+    whose literal `accept` admits, with that local alone spelled as the literal at its uses
+    and the assignment dropped (the declaration stays). One local per body: a hoisted loop
+    constant (`c05 = 0.5f;` kept in a callee-saved register) must not be folded together with
+    the statement-level constant that hides the literal from a rewrite."""
+    from .sdkimport import masked
+    lo, hi = span[1], span[2]
+    inner = masked(body)[lo:hi]
+    out: List[Tuple[str, str]] = []
+    for s0, e0, typ, var in _declared_scalars(inner, lo):
+        if typ not in ('f32', 'float', 'f64', 'double'):
+            continue
+        v = re.escape(var)
+        if re.search(r'&\s*' + v + r'\b|\b' + v + r'\s*(?:\+\+|--|[-+*/%&|^]=)|(?:\+\+|--)\s*' + v + r'\b', inner):
+            continue
+        writes = list(re.finditer(r'(?<![\w.>])' + v + r'\s*=(?!=)', inner))
+        if len(writes) != 1:
+            continue
+        line_start = max(0, inner.rfind('\n', 0, writes[0].start()))
+        stmt = re.compile(r'(?m)^[ \t]*' + v + r' = (' + _FLOAT_LIT.pattern + r');\n').search(inner, line_start)
+        if not stmt or stmt.start() > writes[0].start() or accept(stmt.group(2)) is None:
+            continue
+        uses = [u for u in re.finditer(r'(?<![\w.>])' + v + r'(?!\w)', inner)
+                if not (stmt.start() <= u.start() < stmt.end()) and not (s0 <= lo + u.start() < e0)]
+        if not uses:
+            continue
+        lit = stmt.group(1)
+        edits = [(lo + u.start(), lo + u.end(), lit) for u in uses] + [(lo + stmt.start(), lo + stmt.end(), '')]
+        text = body
+        for a, b, rep in sorted(edits, reverse=True):
+            text = text[:a] + rep + text[b:]
+        out.append((var, text))
+        if len(out) >= 6:
+            break
+    return out
+
+
+def call_result_conversions(body: str, name: str) -> List[Tuple[str, str]]:
+    """`v = call(...); ... (f32)v ...` with v an integer local read only inside that cast ->
+    `vf = (f32)(T)call(...);` with a new f32 local: the conversion stays a statement of its own
+    (the optimizer does not forward an expression holding a call), so its bias/load/fsubs
+    temporaries are numbered below the consumer's and the converted value is a pass-1 web
+    (fn_10_1F688: retail colours the font width f4 below the consumer's temporaries). The cast
+    through the narrow type keeps retail's `clrlwi`/`extsh`."""
+    out: List[Tuple[str, str]] = []
+    span = _function_body_span(body, name)
+    if not span:
+        return out
+    from .sdkimport import masked
+    code = masked(body)
+    inner = code[span[1]:span[2]]
+    narrow = {'u16': '(u16)', 's16': '(s16)', 'u8': '(u8)', 's8': '(s8)', 'short': '(short)', 'unsigned short': '(u16)', 'char': '(char)', 'unsigned char': '(u8)'}
+    for s0, e0, t, var in _declared_scalars(inner, span[1]):
+        if t not in ('u16', 's16', 'u8', 's8', 'u32', 's32', 'int', 'short', 'char', 'long', 'unsigned short', 'unsigned char', 'unsigned int', 'unsigned long'):
+            continue
+        mentions = [u for u in re.finditer(r'(?<![\w.>])' + re.escape(var) + r'(?!\w)', inner) if not (s0 <= span[1] + u.start() < e0)]
+        if len(mentions) != 2:
+            continue
+        asg = re.compile(r'(?m)^([ \t]+)' + re.escape(var) + r' = ([A-Za-z_]\w*\([^;\n{}]*\));\n').search(inner, max(0, inner.rfind('\n', 0, mentions[0].start())))
+        if not asg or asg.start() > mentions[0].start() or mentions[0].start() >= asg.end():
+            continue
+        use = mentions[1]
+        cast = re.compile(r'\(\s*(?:f32|float)\s*\)\s*$').search(inner[:use.start()])
+        if not cast or re.match(r'\s*(?:\[|\(|\.|->)', inner[use.end():]):
+            continue
+        new = f"{var}_f"
+        if re.search(r'\b' + re.escape(new) + r'\b', body):
+            continue
+        fs = span[1]
+        text = body
+        # the cast expression becomes the new local; the assignment converts at the call
+        text = text[:fs + cast.start()] + new + text[fs + use.end():]
+        text = text[:fs + asg.start()] + f"{asg.group(1)}{new} = (f32){narrow.get(t, '')}{asg.group(2)};\n" + text[fs + asg.end():]
+        # the integer local is no longer read: its declaration slot carries the f32 local
+        # (a comma list keeps its members; the f32 local follows the line)
+        line = body[s0:e0]
+        if ',' not in line:
+            text = text[:s0] + re.sub(r'\b' + re.escape(var) + r'\b', new, line.replace(t, 'f32', 1), count=1) + text[e0:]
+        else:
+            ind = re.match(r'[ \t]*', line).group(0)
+            text = text[:e0] + f"\n{ind}f32 {new};" + text[e0:]
+        out.append((f"convert {var} to f32 at its call", text))
+        if len(out) >= 8:
+            break
+    return out
+
+
+def reciprocal_divisions(body: str, name: str, _fold: bool = True) -> List[Tuple[str, str]]:
     """A multiply by an exact power-of-two reciprocal written as the division retail used.
 
     MWCC strength-reduces `x / 2.0f` to a multiply by 0.5f with the variable as the FIRST
@@ -984,6 +1085,15 @@ def reciprocal_divisions(body: str, name: str) -> List[Tuple[str, str]]:
     span = _function_body_span(body, name)
     if not span:
         return out
+    # a float local assigned the literal once and never written again (`textScale = 0.5f;
+    # w = textScale * E;`, fn_10_1F688) hides the literal from the search: MWCC propagates
+    # it, so the uses are spelled with the literal and the dead assignment dropped first
+    if _fold:
+        seen = {body}
+        for var, folded in _fold_constant_float_locals(body, name, span, _reciprocal_power):
+            for label, text in reciprocal_divisions(folded, name, _fold=False):
+                if text not in seen and len(out) < 12:
+                    seen.add(text); out.append((f"{label} ({var} folded)", text))
     from .sdkimport import masked
     code = masked(body)
     lo, hi = span[1], span[2]
@@ -1607,6 +1717,33 @@ def expression_embedded_assignments(body: str, name: str, lines=None,
         s0, e0 = span[1] + m.start(), span[1] + m.end()
         out.append((f"embed {x} = ... in the next statement's operand",
                     body[:s0] + f"{ind2}{lhs} = {new_rhs};\n" + body[e0:]))
+    # form B: the next statement is a call whose argument uses x once (fn_10_1F688: `width = E;
+    # f(PF(loc, 4) - width, 248.0f);` -> `f(PF(loc, 4) - (width = E), 248.0f)` creates the
+    # argument's load temporary before E's, which retail's FPR colours require)
+    call_pat = re.compile(r'(?m)^([ \t]+)([A-Za-z_]\w*) = ([^;\n{}]+);\n([ \t]+)([A-Za-z_]\w*)\(([^;\n{}]*)\);\n')
+    k = 0
+    while len(out) < limit:
+        m = call_pat.search(inner, k)
+        if not m:
+            break
+        k = m.start() + len(m.group(1)) + 1
+        ind, x, expr, ind2, callee, args = m.groups()
+        if x == name or callee in ('if', 'while', 'for', 'switch', 'return', 'sizeof'):
+            continue  # x may appear in its own E: `(x = E(x))` is sequenced after E
+        uses = list(re.finditer(r'(?<![\w.>&])' + re.escape(x) + r'(?![\w\[(])(?!\s*(?:=[^=]|\+\+|--))', args))
+        if len(uses) != 1 or len(re.findall(r'\b' + re.escape(x) + r'\b', args)) != 1:
+            continue
+        u = uses[0]
+        if re.fullmatch(r'\s*', args[:u.start()]) and re.match(r'\s*(?:,|$)', args[u.end():]):
+            continue  # `f(x, ...)`: the whole argument, not an operand of one
+        if near is not None:
+            ln = base_line + inner.count('\n', 0, m.start())
+            if ln not in near and ln + 1 not in near:
+                continue
+        new_args = args[:u.start()] + f"({x} = {expr.strip()})" + args[u.end():]
+        s0, e0 = span[1] + m.start(), span[1] + m.end()
+        out.append((f"embed {x} = ... in the next call's argument",
+                    body[:s0] + f"{ind2}{callee}({new_args});\n" + body[e0:]))
     return out
 
 
@@ -2736,6 +2873,7 @@ def extra_families(body: str, name: str) -> List[Tuple[str, str, str]]:
     # 10. measured idioms: a power-of-two division strength-reduced to a multiply with the
     #     variable first; a constant local turned into an inlined helper's parameter
     out += [("recipdiv", l, t) for l, t in reciprocal_divisions(body, name)]
+    out += [("convcall", l, t) for l, t in call_result_conversions(body, name)]
     out += [("inlineparam", l, t) for l, t in constant_inline_parameters(body, name)]
     out += [("inlineregion", l, t) for l, t in region_inline_helpers(body, name)]
     return out

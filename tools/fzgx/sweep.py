@@ -129,6 +129,8 @@ def generate(p: Project, s: str, sym, path: Path, body: str, check, outdir: Path
     add('lockedcache', lambda: fixup_source.locked_cache_columns(body, sym.name))
     add('shiftprod', lambda: fixup_source.shift_products(body, sym.name))
     add('recipdiv', lambda: fixup_source.reciprocal_divisions(body, sym.name))
+    # an integer call result read only through `(f32)v`: convert at the call (fn_10_1F688)
+    add('convcall', lambda: fixup_source.call_result_conversions(body, sym.name))
     add('compound', lambda: fixup_source.compound_assignments(body, sym.name))
     add('inlineparam', lambda: fixup_source.constant_inline_parameters(body, sym.name))
     add('inlineregion', lambda: fixup_source.region_inline_helpers(body, sym.name))
