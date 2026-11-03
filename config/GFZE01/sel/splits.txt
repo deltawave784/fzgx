@@ -878,3 +878,6 @@ rel/sel/sel/fn_10_7A10.c:
 
 rel/sel/sel/fn_10_111E8.c:
 	.text       start:0x000111E8 end:0x000117D0 align:4
+
+rel/sel/sel/fn_10_1E9CC.c:
+	.text       start:0x0001E9CC end:0x0001EF04 align:4
