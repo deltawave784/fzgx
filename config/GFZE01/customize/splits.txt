@@ -776,3 +776,9 @@ rel/customize/emblem/fn_3_152BC.c:
 
 rel/customize/emblem/fn_3_14E18.c:
 	.text       start:0x00014E18 end:0x00015240 align:4
+
+rel/customize/toolkit/fn_3_29508.c:
+	.text       start:0x00029508 end:0x00029C94 align:4
+
+rel/customize/toolkit/fn_3_20B3C.c:
+	.text       start:0x00020B3C end:0x00021300 align:4

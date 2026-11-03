@@ -9170,3 +9170,27 @@ rel/main_rel/accessory/fn_1_1201E4.c:
 
 rel/main_rel/ghost/fn_1_F0508.c:
 	.text       start:0x000F0508 end:0x000F0B5C align:4
+
+rel/main_rel/load/fn_1_47330.c:
+	.text       start:0x00047330 end:0x000479B0 align:4
+
+rel/main_rel/accessory/fn_1_12295C.c:
+	.text       start:0x0012295C end:0x00123050 align:4
+
+rel/main_rel/sound/fn_1_A02F0.c:
+	.text       start:0x000A02F0 end:0x000A04AC align:4
+
+rel/main_rel/sound/fn_1_A0AA4.c:
+	.text       start:0x000A0AA4 end:0x000A0C68 align:4
+
+rel/main_rel/sound/fn_1_A1364.c:
+	.text       start:0x000A1364 end:0x000A1588 align:4
+
+rel/main_rel/bg_cas/fn_1_1018BC.c:
+	.text       start:0x001018BC end:0x00101AE8 align:4
+
+rel/main_rel/driver/fn_1_A948C.c:
+	.text       start:0x000A948C end:0x000A96BC align:4
+
+rel/main_rel/sound/fn_1_A0680.c:
+	.text       start:0x000A0680 end:0x000A0978 align:4

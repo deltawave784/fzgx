@@ -1611,6 +1611,121 @@ void fn_1_A9464(u16 arg0, u16 arg1) {
 }
 /* fzgx:end fn_1_A9464 */
 
+/* fzgx:begin fn_1_A948C pool noprologue */
+#include "types.h"
+
+typedef struct {
+    u8 unk_0;
+    u8 unk_1;
+    u8 unk_2;
+    u8 pad_3;
+    s16 unk_4;
+    s16 unk_6;
+    s16 unk_8;
+    u8 pad_A[2];
+    char *unk_C;
+} fn_1_A948C_Header;
+
+/* an entry of the font table lbl_1_data_1AEA8 */
+typedef struct {
+    u8 pad_0[4];
+    u8 unk_4;
+    u8 unk_5;
+    u8 pad_6[0x32];
+} fn_1_A948C_Font;
+
+extern fn_1_A948C_Font lbl_1_data_1AEA8[];
+extern size_t strlen(const char *);
+extern char *strchr(const char *, int);
+extern char *strrchr(const char *, int);
+extern char *fn_80083DB0(char *, const char *);
+extern void OSReport(const char *, ...);
+
+/* the retail TU's .data and .bss objects this function uses, at their retail offsets, so MWCC addresses them
+ * off one section base each */
+u32 fzgx_obj_lbl_1_data_35990[3] = {3, 3, 0};
+s32 fzgx_obj_lbl_1_data_3599C = 1;
+
+fn_1_A948C_Header fzgx_obj_lbl_1_bss_6F648;
+char lbl_1_bss_6F648__fzgx_offset_10[0x1000];
+fn_1_A948C_Header fzgx_obj_lbl_1_bss_70658[0x100];
+s32 fzgx_obj_lbl_1_bss_71658;
+s32 lbl_1_bss_71658__fzgx_offset_4;
+s32 lbl_1_bss_71658__fzgx_offset_8;
+
+#pragma section code_type ".fzgxpool"
+__declspec(section ".fzgxpool") static void fzgx_bss_prime(void) {
+    volatile u32 s;  /* fzgx-allow: S2 primer sink */
+    s = fzgx_obj_lbl_1_data_35990[0];
+    s = fzgx_obj_lbl_1_data_3599C;
+    s = fzgx_obj_lbl_1_bss_6F648.unk_0;
+    s = lbl_1_bss_6F648__fzgx_offset_10[0];
+    s = fzgx_obj_lbl_1_bss_70658[0].unk_0;
+    s = fzgx_obj_lbl_1_bss_71658;
+    s = lbl_1_bss_71658__fzgx_offset_4;
+    s = lbl_1_bss_71658__fzgx_offset_8;
+}
+#pragma section code_type ".text"
+
+/* opt_lifetimes off keeps end one variable across both assignments, so the size and the end pointer share
+ * a register as in retail (addi r28,r3,1; add r28,r5,r28) */
+#pragma opt_lifetimes off
+int fn_1_A948C(const char *str) {
+    char *end = (char *)strlen(str) + 1;
+    char *dst = fzgx_obj_lbl_1_bss_6F648.unk_C;
+    s32 scale_x;
+    s32 scale_y;
+    s32 lines;
+    fn_1_A948C_Header *p;
+
+    end = dst + (u32)end;
+
+    if (fzgx_obj_lbl_1_data_3599C == 0) {
+        return 0;
+    }
+    if (end >= lbl_1_bss_6F648__fzgx_offset_10 + sizeof(lbl_1_bss_6F648__fzgx_offset_10)) {
+        if (lbl_1_bss_71658__fzgx_offset_4 == 0) {
+            OSReport("[ERROR] print.c : all_str\n");
+            lbl_1_bss_71658__fzgx_offset_4 = 1;
+        }
+        return 0;
+    }
+    if (fzgx_obj_lbl_1_bss_71658 + 1 >= 0x100) {
+        if (lbl_1_bss_71658__fzgx_offset_8 == 0) {
+            OSReport("[ERROR] print.c : ps_comm\n");
+            lbl_1_bss_71658__fzgx_offset_8 = 1;
+        }
+        return 0;
+    }
+    fzgx_obj_lbl_1_bss_70658[fzgx_obj_lbl_1_bss_71658] = fzgx_obj_lbl_1_bss_6F648;
+    fn_80083DB0(dst, str);
+    p = &fzgx_obj_lbl_1_bss_6F648;
+    fzgx_obj_lbl_1_bss_71658++;
+    fzgx_obj_lbl_1_bss_6F648.unk_C = end;
+    if ((p->unk_2 >> 1) & 1) {
+        scale_x = lbl_1_data_1AEA8[fzgx_obj_lbl_1_data_35990[fzgx_obj_lbl_1_bss_6F648.unk_0]].unk_4;
+    } else {
+        scale_x = 1;
+    }
+    if ((p->unk_2 >> 1) & 1) {
+        scale_y = lbl_1_data_1AEA8[fzgx_obj_lbl_1_data_35990[fzgx_obj_lbl_1_bss_6F648.unk_0]].unk_5;
+    } else {
+        scale_y = 1;
+    }
+    if (strrchr(str, '\n') != NULL) {
+        fzgx_obj_lbl_1_bss_6F648.unk_8 = scale_x * (strlen(strrchr(str, '\n')) - 1);
+    } else {
+        fzgx_obj_lbl_1_bss_6F648.unk_8 += scale_x * strlen(str);
+    }
+    for (lines = 0; strchr(str, '\n') != NULL; lines++) {
+        str = strchr(str, '\n') + 1;
+    }
+    fzgx_obj_lbl_1_bss_6F648.unk_6 += lines * scale_y;
+    return 1;
+}
+#pragma opt_lifetimes reset
+/* fzgx:end fn_1_A948C */
+
 /* fzgx:begin fn_1_A96BC pool noprologue */
 #include "types.h"
 #include "rel/main_rel/globals.h"
