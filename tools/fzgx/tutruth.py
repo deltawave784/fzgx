@@ -72,6 +72,8 @@ def param_type(part: str) -> str:
 
 def _sig(decl: str) -> Optional[Tuple[str, str, List[str]]]:
     """(return type, name, [parameter types]) of a prototype line, or None for data."""
+    if tutidy.FNPTR_OBJECT_RE.match(decl):
+        return None  # a function-pointer object (`void (*tbl[0x45])(void *);`) is data
     m = PROTO_RE.match(decl.strip())
     if not m:
         return None
@@ -88,17 +90,83 @@ def _same(a: str, b: str) -> bool:
     return n(a) == n(b)
 
 
+# a definition's head: the type and name on one line (the old per-symbol pattern let `[\w\s\*]*?`
+# cross newlines and backtrack across 20,000-line files), parameters and the brace may wrap
+DEF_HEAD_RE = re.compile(r'^((?:[A-Za-z_][\w \t\*]*?)\b([A-Za-z_]\w*)\s*\(([^;{}()]*)\))\s*\{', re.M)
+_NOT_DEFINITIONS = {'if', 'else', 'while', 'for', 'switch', 'do', 'return', 'sizeof'}
+_DEF_INDEX: Dict[str, Tuple[int, int, Dict[str, str]]] = {}  # path -> (mtime_ns, size, {name: decl})
+
+
+def definition_index(p: Project) -> Dict[str, str]:
+    """`extern <signature>;` of every function the project's sources define, first file in
+    sorted order winning, parsed once per file and re-read only when the file changed
+    (tutruth asked `project_definition` 37 times on avline.c and each call re-read ~3,000
+    files: 65% of its runtime; car.c and memcard.c never finished)."""
+    merged: Dict[str, str] = {}
+    for f in sorted((ROOT / 'src').rglob('*.c')):
+        st = f.stat()
+        key = str(f)
+        hit = _DEF_INDEX.get(key)
+        if hit is None or hit[0] != st.st_mtime_ns or hit[1] != st.st_size:
+            defs: Dict[str, str] = {}
+            for m in DEF_HEAD_RE.finditer(f.read_text()):
+                name = m.group(2)
+                if name in _NOT_DEFINITIONS or name in defs:
+                    continue
+                defs[name] = 'extern ' + re.sub(r'\s+', ' ', m.group(1)).strip() + ';'
+            hit = (st.st_mtime_ns, st.st_size, defs)
+            _DEF_INDEX[key] = hit
+        for n, d in hit[2].items():
+            merged.setdefault(n, d)
+    return merged
+
+
 def project_definition(p: Project, name: str) -> Optional[str]:
     """`extern <signature>;` of the project's matched definition of `name`, if any."""
-    pat = re.compile(r'^((?:[A-Za-z_][\w\s\*]*?)\b' + re.escape(name) + r'\s*\(([^;{}()]*)\))\s*\{', re.M)
-    for f in sorted((ROOT / 'src').rglob('*.c')):
-        text = f.read_text()
-        if name not in text:
+    return definition_index(p).get(name)
+
+
+def _decl_key(ln: str) -> Tuple:
+    """What the compiler compares two declarations of one symbol by: a prototype's return and
+    parameter types (parameter names are free), a data declaration's text."""
+    sig = _sig(ln)
+    if sig:
+        norm = lambda s: re.sub(r'\s+', '', s)
+        return ('F', norm(sig[0]), tuple(norm(t) for t in sig[2]))
+    return ('D', re.sub(r'\s+', ' ', ln).strip())
+
+
+def include_conflicts(prologue: str, includes: List[str]) -> Tuple[List[str], Dict[str, List[Tuple[str, str, str]]]]:
+    """Split the block includes to promote into (compatible, {include: [(symbol, prologue
+    declaration, header declaration)]}). A header whose declarations contradict one the
+    prologue's headers (or an earlier promoted header) already make is not promoted: stcoli's
+    prologue has stcoli_types.h (`extern struct fn_1_2B478_lbl_801A6D00 lbl_801A6D00;`) and one
+    self-contained block included camera_types.h (`extern Transform *lbl_801A6D00;`); promoting
+    it broke the prologue for all 121 blocks (librarian 19)."""
+    have: Dict[str, Tuple[Tuple, str]] = {}
+    seen_headers: set = set()
+    for h in tutidy.included_headers(prologue):
+        seen_headers.add(h.rel)
+        for n, ln in h.decls:
+            have.setdefault(n, (_decl_key(ln), ln))
+    ok: List[str] = []
+    conflicts: Dict[str, List[Tuple[str, str, str]]] = {}
+    for inc in includes:
+        new_headers = [h for h in tutidy.included_headers(inc) if h.rel not in seen_headers]
+        bad = []
+        for h in new_headers:
+            for n, ln in h.decls:
+                if n in have and have[n][0] != _decl_key(ln):
+                    bad.append((n, have[n][1], ln))
+        if bad:
+            conflicts[inc] = bad
             continue
-        m = pat.search(text)
-        if m:
-            return 'extern ' + re.sub(r'\s+', ' ', m.group(1)).strip() + ';'
-    return None
+        ok.append(inc)
+        for h in new_headers:
+            seen_headers.add(h.rel)
+            for n, ln in h.decls:
+                have.setdefault(n, (_decl_key(ln), ln))
+    return ok, conflicts
 
 
 def split_args(text: str, start: int) -> Optional[Tuple[List[Tuple[int, int]], int]]:
@@ -652,6 +720,19 @@ def resolve(p: Project, tu_source: str, v, apply: bool = True,
             if ln.strip() and ln.strip() not in {x.strip() for x in tf.prologue.splitlines()} and ln.strip() not in block_includes:
                 block_includes.append(ln.strip())
         b.body = rest.lstrip('\n')
+    # a block include whose header contradicts the prologue's headers is not promoted: the
+    # blocks that carried it are verified under the prologue like everyone else, and the ones
+    # that fail go straight back to their self-contained form (no candidate search can fix a
+    # header the prologue does not include)
+    conflict_bound: Dict[str, List[str]] = {}
+    if block_includes:
+        block_includes, conflicts = include_conflicts(tf.prologue, block_includes)
+        if conflicts:
+            report['include_conflicts'] = {inc: [f'{n}: {a} | {b}' for n, a, b in bad] for inc, bad in conflicts.items()}
+            for b in tf.blocks:
+                owned = [inc for inc in own_includes[b.name] if inc in conflicts]
+                if owned:
+                    conflict_bound[b.name] = owned
     if block_includes:
         tf.prologue = tufile.merge_prologue(tf.prologue, block_includes)
         report['promoted_includes'] = block_includes
@@ -667,8 +748,12 @@ def resolve(p: Project, tu_source: str, v, apply: bool = True,
     # block typedefs that collide with a header or prologue typedef: an identical definition
     # is dropped (the prologue carries it), a different one gets the block's prefix
     prologue_typedefs = set(TYPE_TAIL_RE.findall(tf.prologue)) | set(re.findall(r'^(?:typedef\s+)?struct\s+([A-Za-z_]\w*)\s*\{', tf.prologue, re.M))
+    # header struct/union tags collide too: two stcoli blocks defined an identical private
+    # `struct fn_1_2D524_Copy200 { char *a[10][5]; }` that stcoli_types.h defines with `u32`;
+    # unseen as a collision it was hoisted as a shared type and redefined the header's tag
+    header_type_names = set(header_typedefs) | tutidy.header_types(tf.prologue)
     for b in tf.blocks:
-        for t in sorted((set(TYPE_TAIL_RE.findall(b.body)) | set(re.findall(r'^(?:typedef\s+)?struct\s+([A-Za-z_]\w*)\s*\{', b.body, re.M))) & (set(header_typedefs) | prologue_typedefs)):
+        for t in sorted((set(TYPE_TAIL_RE.findall(b.body)) | set(re.findall(r'^(?:typedef\s+)?struct\s+([A-Za-z_]\w*)\s*\{', b.body, re.M))) & (header_type_names | prologue_typedefs)):
             span = type_definition_span(b.body, t)
             pspan = type_definition_span(tf.prologue, t)
             if span and pspan and re.sub(r'\s+', ' ', b.body[span[0]:span[1]]).strip() == re.sub(r'\s+', ' ', tf.prologue[pspan[0]:pspan[1]]).strip():
@@ -754,9 +839,15 @@ def resolve(p: Project, tu_source: str, v, apply: bool = True,
     private_types = set()
     for b in tf.blocks:
         private_types |= private_type_names(b.body)
-    known_types = SCALAR | set(header_typedefs) | private_types | private_type_names(tf.prologue) | {'struct', 'union', 'enum', 'extern', 'const', 'volatile', 'static', 'inline', 'unsigned', 'signed'}
+    # struct/union tags the headers define count as visible types too (spline_types.h declares
+    # `extern struct fn_1_F8DC4_Table lbl_1_rodata_6FF0;`; with tags unknown the header truth was
+    # inadmissible, the symbol fell back to each block's own line and every block collided)
+    known_types = SCALAR | set(header_typedefs) | tutidy.header_types(tf.prologue) | private_types | private_type_names(tf.prologue) | {'struct', 'union', 'enum', 'extern', 'const', 'volatile', 'static', 'inline', 'unsigned', 'signed'}
+    header_lines = {ln.strip() for ln in hdecl.values()}
 
     def admissible(decl: str) -> bool:
+        if decl.strip() in header_lines:
+            return True  # an included header's own line compiles wherever the header does
         sig = _sig(decl)
         stripped = re.sub(r'\[[^\]]*\]', '', decl.split('=')[0])  # array dimensions are not types
         words = set(re.findall(r'(?<![\w])[A-Za-z_]\w*', sig[0] + ' ' + ' '.join(sig[2]))) if sig else set(re.findall(r'(?<![\w])[A-Za-z_]\w*', stripped))
@@ -765,11 +856,16 @@ def resolve(p: Project, tu_source: str, v, apply: bool = True,
         return all(w in known_types or w == '...' for w in words)
 
     candidates: Dict[str, List[Tuple[str, str]]] = {}
+    project_defs: Optional[Dict[str, str]] = None  # built once, on first need
     for n in symbols:
         c: List[Tuple[str, str]] = []
         if n in hdecl:
             c.append(('header', hdecl[n]))
-        d = definitions.get(n) or project_definition(p, n)
+        d = definitions.get(n)
+        if not d:
+            if project_defs is None:
+                project_defs = definition_index(p)
+            d = project_defs.get(n)
         if d:
             c.append(('definition', d))
         if n in pdecl:
@@ -924,7 +1020,8 @@ def resolve(p: Project, tu_source: str, v, apply: bool = True,
     scratch = STATE_DIR / 'work' / 'tutruth' / Path(tu_source).stem
     scratch.mkdir(parents=True, exist_ok=True)
 
-    memo: Dict[Tuple[str, str], bool] = {}
+    memo: Dict[Tuple[str, str], Tuple[bool, bool]] = {}  # (name, text) -> (matches, compiled)
+    compiled: Dict[str, bool] = {}  # each block's compile state at its latest verification
 
     def verify(names_: List[str]) -> Dict[str, bool]:
         """Direct oracle verdicts on the current state: prologue + block per unit, memoised by
@@ -934,7 +1031,7 @@ def resolve(p: Project, tu_source: str, v, apply: bool = True,
         for n_ in names_:
             text = tufile.gen_text(tf, n_)
             if (n_, text) in memo:
-                out[n_] = memo[(n_, text)]
+                out[n_], compiled[n_] = memo[(n_, text)]
                 continue
             path = scratch / f'{n_}.c'
             path.write_text(text)
@@ -945,9 +1042,15 @@ def resolve(p: Project, tu_source: str, v, apply: bool = True,
                 r_ = res.get(k)
                 ok = bool(r_ and r_.ok and (r_.matched or r_.matched_pool) and oracle.unit_fully_matches(r_) is None)
                 n_ = k.split(':', 1)[1]
-                memo[(n_, text)] = ok
-                out[n_] = ok
+                memo[(n_, text)] = (ok, bool(r_ and r_.ok))
+                out[n_], compiled[n_] = memo[(n_, text)]
         return out
+
+    def prologue_broken() -> bool:
+        """Most blocks do not even compile: the shared prologue is at fault, and a per-block
+        candidate search cannot change its types (stcoli spent 10 minutes searching all 121
+        blocks under a redefined struct tag and rewrote none)."""
+        return bool(names) and sum(1 for n_ in names if not compiled.get(n_)) > len(names) // 2
 
     def rebuild() -> None:
         for b in tf.blocks:
@@ -965,8 +1068,18 @@ def resolve(p: Project, tu_source: str, v, apply: bool = True,
         report['first_round_error'] = res0.error[-900:] if not res0.ok else f'{first}: {res0.percent}'
         report['first_round_prologue'] = tf.prologue
     failing = [n for n in names if not verdict.get(n)]
+    searched_broken = False  # one representative search while the prologue is broken
     for bname in list(failing):
         fixed = False
+        if bname in conflict_bound:
+            # its header is not in the prologue by decision, not by candidate choice
+            report.setdefault('conflict_bound', {})[bname] = conflict_bound[bname]
+            continue
+        if prologue_broken():
+            if searched_broken:
+                report['prologue_broken'] = report.get('first_round_error')
+                continue
+            searched_broken = True
         forced.add(bname)
         rebuild()
         if verify([bname]).get(bname):
@@ -1025,11 +1138,15 @@ def resolve(p: Project, tu_source: str, v, apply: bool = True,
             b.flags.append('noprologue')
 
     report['prologue'] = tf.prologue
+    broken = prologue_broken()
     for bname in failing:
         report.setdefault('adapted', {})[bname] = tf.get(bname).body
-        res_ = oracle.check(p, f'{module}:{bname}', 12, source=scratch / f'{bname}.c')
-        report.setdefault('why', {})[bname] = (res_.error[-500:] if not res_.ok else
-                                              f'{res_.percent:.2f} ' + ' | '.join(l for l in res_.diff if l[0] in '?<>')[:600])
+        if broken and not compiled.get(bname) and len(report.get('why', {})) >= 3:
+            report.setdefault('why', {})[bname] = 'prologue error (see prologue_broken)'
+        else:
+            res_ = oracle.check(p, f'{module}:{bname}', 12, source=scratch / f'{bname}.c')
+            report.setdefault('why', {})[bname] = (res_.error[-500:] if not res_.ok else
+                                                  f'{res_.percent:.2f} ' + ' | '.join(l for l in res_.diff if l[0] in '?<>')[:600])
         restore(bname)
     final = verify(names)
     for n in [n for n, ok in final.items() if not ok]:

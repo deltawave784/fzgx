@@ -207,7 +207,10 @@ def tidy(p: Project, tu_source: str, dry_run: bool = False, check_fn=None) -> Di
 DECL_LINE_RE = re.compile(r"^\s*(?:extern\b[^{]*;|(?:const\s+)?[A-Za-z_]\w*[\w\s\*]*?\b[A-Za-z_]\w*\s*\([^;{}]*\)\s*;)\s*$")
 
 
-FNPTR_OBJECT_RE = re.compile(r"^\s*(?:extern\s+)?[A-Za-z_][\w\s\*]*\(\s*\*\s*([A-Za-z_]\w*)\s*\)\s*\(")
+# a function-pointer object, scalar or array: `void (*cb)(s32);`, `void (*tbl[0x45])(void *);`
+# (avline.h's handler table; without the dimensions the line parsed as a prototype named `void`
+# and the header's declaration was invisible to tutruth, so the prologue variant collided with it)
+FNPTR_OBJECT_RE = re.compile(r"^\s*(?:extern\s+)?[A-Za-z_][\w\s\*]*\(\s*\*\s*([A-Za-z_]\w*)\s*(?:\[[^\]]*\]\s*)*\)\s*\(")
 
 
 def _decl_name(line: str) -> Optional[str]:

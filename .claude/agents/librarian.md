@@ -49,7 +49,10 @@ the defect in your report instead); `orig/`, `build/`, `.fzgx/` contents; the le
    follow it and re-verifies each rewritten block through the oracle; blocks that cannot follow stay
    self-contained and are reported. Matched definitions that disagree with a stale header or prologue are the
    usual source of the conflicts in the queue (wrong return type, extra or missing parameters, `u32` vs `s32`,
-   array vs struct view of one object).
+   array vs struct view of one object). Report keys to act on: `include_conflicts` (a self-contained block's
+   header contradicts the TU's headers, e.g. two `*_types.h` declaring one symbol differently: a header
+   decision, the blocks under `conflict_bound` stay self-contained until it is made); `prologue_broken` (the
+   committed prologue itself does not compile: fix the named definition, nothing else was searched).
 4. **TU finish.** `fzgx tu-finish --module M` (include, tidy, hoist, reflag, collapse); it emits the fixed list
    of blocks that cannot compile under their prologue (a `revise-` batch handles those: report them, do not
    edit them). `fzgx tu-check rel/<module>/<tu>.c` compiles the whole file as one unit: the goal state;
