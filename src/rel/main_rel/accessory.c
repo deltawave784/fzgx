@@ -3700,6 +3700,168 @@ void fn_1_10D7D4(Work *arg0) {
 #pragma opt_common_subs reset
 /* fzgx:end fn_1_10D7D4 */
 
+/* fzgx:begin fn_1_10DDE4 noprologue */
+#include "types.h"
+
+typedef struct Vec3 {
+    f32 x;
+    f32 y;
+    f32 z;
+} Vec3;
+
+typedef struct RopeNode {
+    u8 unk_0;
+    u8 pad_1[0xF];
+    Vec3 unk_10;
+    u8 pad_1C[0x24];
+    f32 unk_40;
+} RopeNode;
+
+typedef struct Link {
+    RopeNode *unk_0;
+    RopeNode *unk_4;
+    f32 unk_8;
+} Link;
+
+typedef struct RopeOwner {
+    u8 pad_0[0x8C];
+    s32 unk_8C;
+} RopeOwner;
+
+typedef struct Rope {
+    u8 pad_0[0xC];
+    RopeOwner *unk_C;
+    u8 pad_10[0x8];
+    u32 unk_18;
+    u32 unk_1C;
+    u8 pad_20[0x4];
+    RopeNode *unk_24;
+    Link *unk_28;
+} Rope;
+
+extern u32 lbl_801A6410;
+extern char lbl_1_data_40530[];
+extern void fn_1_10846C(Rope *);
+extern void fn_1_128884(void *, void *, s32);
+extern void *fn_1_4630(u32, u32, const char *, s32);
+extern f32 fn_1_1289BC(RopeNode *, RopeNode *);
+
+void fn_1_10DDE4(Rope *rope) {
+    u32 i;
+    u32 m;
+    RopeNode *b;
+    RopeNode *a;
+    RopeNode *p;
+    RopeNode *n;
+    s32 last;
+    u32 c;
+    u32 j;
+    RopeNode *q;
+    u32 k;
+    u32 rows;
+    struct { s32 value; } cols;
+
+    if (rope == NULL) {
+        return;
+    }
+    cols.value = 13;
+    if (rope->unk_C->unk_8C == 2) {
+        cols.value = 7;
+    }
+    fn_1_10846C(rope);
+
+    for (i = 0, n = rope->unk_24; i < rope->unk_18; i++, n++) {
+        if (n->unk_0 & 1) {
+            n->unk_0 = 0;
+            n->unk_40 = -1.0f;
+        } else {
+            n->unk_0 = 1;
+            n->unk_40 = 0.0f;
+        }
+    }
+
+    for (i = 0, a = rope->unk_24; i < rope->unk_18; i++, a++) {
+        for (j = i + 1, b = &rope->unk_24[i] + 1; j < rope->unk_18; j++, b++) {
+            if (a->unk_0 == 0 && b->unk_0 != 0) {
+                fn_1_128884(a, b, sizeof(RopeNode));
+            }
+        }
+    }
+
+    for (i = 0, a = rope->unk_24; i < rope->unk_18; i++, a++) {
+        for (j = i + 1, b = &rope->unk_24[i] + 1; j < rope->unk_18; j++, b++) {
+            if (a->unk_0 == b->unk_0 && a->unk_10.x < b->unk_10.x) {
+                fn_1_128884(a, b, sizeof(RopeNode));
+            }
+        }
+    }
+
+    for (i = 0, a = &rope->unk_24[3]; i < cols.value; i++, a++) {
+        for (j = i + 1, b = a + 1; j < cols.value; j++, b++) {
+            if (a->unk_10.z > b->unk_10.z) {
+                fn_1_128884(a, b, sizeof(RopeNode));
+            }
+        }
+    }
+
+    p = rope->unk_24;
+    for (i = 0; i < rope->unk_18; i++) {
+        if (p->unk_0 != 0 && p[1].unk_0 == 0) {
+            break;
+        }
+        p++;
+    }
+    p++;
+
+    rows = (rope->unk_18 - (p - rope->unk_24)) / cols.value;
+    for (j = 0; j < rows; j++) {
+        for (c = 0; c < cols.value; c++) {
+            p[c].unk_40 = -(f32)(j + 1) / (f32)(rows + 1);
+        }
+        for (c = 0, n = p; c < cols.value; c++, n++) {
+            for (m = c + 1, q = n + 1; m < cols.value; m++, q++) {
+                if (n->unk_10.z > q->unk_10.z) {
+                    fn_1_128884(n, q, sizeof(RopeNode));
+                }
+            }
+        }
+        p += cols.value;
+    }
+
+    rows = (rope->unk_18 - 3) / cols.value;
+    rope->unk_1C = rows * (cols.value - 1) + (rows - 1) * cols.value + (cols.value - 1) * 2;
+    rope->unk_28 = fn_1_4630(lbl_801A6410, rope->unk_1C * sizeof(Link), lbl_1_data_40530, 0xF31);
+
+    last = (u32)cols.value - 1;
+    for (i = 0, k = 0, a = &rope->unk_24[3]; i < last; i++, a++) {
+        rope->unk_28[k].unk_0 = a;
+        rope->unk_28[k].unk_4 = a + cols.value + 1;
+        rope->unk_28[k].unk_8 = fn_1_1289BC(rope->unk_28[k].unk_0, rope->unk_28[k].unk_4);
+        k++;
+    }
+    for (i = 0, a = &rope->unk_24[3]; i < last; i++, a++) {
+        rope->unk_28[k].unk_0 = a + 1;
+        rope->unk_28[k].unk_4 = a + cols.value;
+        rope->unk_28[k].unk_8 = fn_1_1289BC(rope->unk_28[k].unk_0, rope->unk_28[k].unk_4);
+        k++;
+    }
+    for (i = 3, a = &rope->unk_24[3]; i < rope->unk_18 - 1; i++, a++) {
+        if ((i - 2) % cols.value != 0) {
+            rope->unk_28[k].unk_0 = a;
+            rope->unk_28[k].unk_4 = a + 1;
+            rope->unk_28[k].unk_8 = fn_1_1289BC(a, a + 1);
+            k++;
+        }
+    }
+    for (i = 3, a = &rope->unk_24[3]; i < rope->unk_18 - cols.value; i++, a++) {
+        rope->unk_28[k].unk_0 = a;
+        rope->unk_28[k].unk_4 = a + (u32)cols.value;
+        rope->unk_28[k].unk_8 = fn_1_1289BC(a, a + (u32)cols.value);
+        k++;
+    }
+}
+/* fzgx:end fn_1_10DDE4 */
+
 /* fzgx:begin fn_1_110008 noprologue */
 #include "types.h"
 #include "game/main_rel/accessory_types.h"
@@ -5319,6 +5481,189 @@ void fn_1_1132E4(Rope *rope) {
     }
 }
 /* fzgx:end fn_1_1132E4 */
+
+/* fzgx:begin fn_1_1137E4 noprologue */
+#include "types.h"
+
+/* the module .rodata pool from lbl_1_rodata_7AB8 up to this function's last literal (retail bytes), so its
+ * float literals land at retail's offsets from one pool base */
+#pragma section code_type ".fzgxpool"
+static const u32 fzgx_pool_table1[20] = {0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x3E800000, 0x00000000, 0x3C23D70A, 0x00000000, 0x00000000, 0x00000000, 0x3E7AD7F2, 0x9ABCAF48, 0x00000000, 0x00000000, 0x00000000, 0x3F000000, 0x3E800000, 0x00000000};  /* fzgx-allow: A1 retail pool bytes */
+__declspec(section ".fzgxpool") static void fzgx_pool_keep1(void) { const u32 *volatile cp; cp = fzgx_pool_table1; }  /* fzgx-allow: S2 pool primer sink */
+__declspec(section ".fzgxpool") static void fzgx_pool_prime1(void) {
+    volatile f32 s; volatile f64 d;  /* fzgx-allow: S2 pool primer sinks */
+    d = 4503599627370496.0;
+}
+static const u32 fzgx_pool_table2[3] = {0x3F564CE9, 0xF49F49F4, 0x3B326750};  /* fzgx-allow: A1 retail pool bytes */
+__declspec(section ".fzgxpool") static void fzgx_pool_keep2(void) { const u32 *volatile cp; cp = fzgx_pool_table2; }  /* fzgx-allow: S2 pool primer sink */
+__declspec(section ".fzgxpool") static void fzgx_pool_prime2(void) {
+    volatile f32 s; volatile f64 d;  /* fzgx-allow: S2 pool primer sinks */
+    s = -1.0f;
+    s = 0.0f;
+}
+static const u32 fzgx_pool_table3[73] = {0xC0000000, 0x40000000, 0x34000000, 0xBF800001, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0xBAB26750, 0xBB326750, 0x38D1B717, 0x3F800000, 0x39D1B717, 0x3CCCCCCD, 0x3B8A71DE, 0x3FB33333, 0x28F5C28F, 0x3FD33333, 0x33333333, 0xBC9BA5E3, 0x3D6978D5, 0x3A7BEB9E, 0x00000000, 0x3FA4FDF3, 0xB1EB851F, 0xBFF00000, 0x00000000, 0x3F400000, 0xBE800000, 0xBF800000, 0x00000000, 0x00000000, 0x3F800000, 0x00000000, 0x00000000, 0x3E0D4FDF, 0x3B83126F, 0x3DED9168, 0x3D851EB8, 0x3D8523F6, 0x00000000, 0x40200000, 0x00000000, 0x3B800000, 0x00000000, 0x3FA99999, 0x9999999A, 0x3F664CEA, 0x00000000, 0x3F947AE1, 0x47AE147B, 0x3F1A36E2, 0xEB1C432D, 0x00000000, 0x00000000, 0x00000000, 0x3D48B439, 0x3B23D70B, 0x3D4CCCCD, 0xBE000000, 0x00000000, 0x3F8EB851, 0xEB851EB8, 0xBF000000, 0x00000000, 0x3FA70A3D, 0x70A3D70A, 0x396BEDFA, 0x00000000, 0x3FC99999, 0x9999999A};  /* fzgx-allow: A1 retail pool bytes */
+__declspec(section ".fzgxpool") static void fzgx_pool_keep3(void) { const u32 *volatile cp; cp = fzgx_pool_table3; }  /* fzgx-allow: S2 pool primer sink */
+__declspec(section ".fzgxpool") static void fzgx_pool_prime3(void) {
+    volatile f32 s; volatile f64 d;  /* fzgx-allow: S2 pool primer sinks */
+    d = 0.8;
+}
+static const u32 fzgx_pool_table4[52] = {0x3FE00000, 0x00000000, 0x3CF5C28F, 0x3A83126F, 0x3DEB851F, 0x3CA52EFA, 0x3E116873, 0x3C8C9539, 0x3E0624DD, 0x3DA3D70A, 0x3CB851EC, 0x3E19999A, 0x3E4CCCCD, 0x3D23D70B, 0x3CDD2F1B, 0x3C8637BE, 0x3E03126F, 0x3E10624E, 0x3C8A71DE, 0x3E051EB8, 0x3D50E560, 0x3C68038B, 0x3DF3B646, 0x3E3B645A, 0x3C58ADAC, 0x3E989375, 0x3F4CCCCD, 0x41100000, 0x3A9D4952, 0x46FFFE00, 0x3B9D4952, 0x3A1D4952, 0xC7000000, 0x47800000, 0x421C0000, 0x3B03126F, 0x41E80000, 0xBA83126F, 0x3F0CCCCD, 0x3ECCCCCD, 0x3DCCCCCD, 0x00000000, 0x43300000, 0x80000000, 0x3727C5AC, 0x3B378034, 0x3B16BB99, 0x3CB37005, 0x3E178D50, 0x3CECBFB2, 0x3E2E147B, 0x3C23D70B};  /* fzgx-allow: A1 retail pool bytes */
+__declspec(section ".fzgxpool") static void fzgx_pool_keep4(void) { const u32 *volatile cp; cp = fzgx_pool_table4; }  /* fzgx-allow: S2 pool primer sink */
+__declspec(section ".fzgxpool") static void fzgx_pool_prime4(void) {
+    volatile f32 s; volatile f64 d;  /* fzgx-allow: S2 pool primer sinks */
+    d = 1.0;
+    s = 32768.0f;
+    s = 12.0f;
+}
+#pragma section code_type ".text"
+
+typedef struct Vec3 {
+    f32 x;
+    f32 y;
+    f32 z;
+} Vec3;
+
+typedef struct RopeNode {
+    u8 flags;
+    u8 pad_1;
+    u8 linkCount;
+    u8 pad_3;
+    u16 links[6];
+    Vec3 pos;
+    Vec3 prev;
+    Vec3 local;
+    Vec3 vel;
+    f32 mass;
+} RopeNode;
+
+typedef struct Link {
+    RopeNode *a;
+    RopeNode *b;
+    f32 length;
+} Link;
+
+typedef struct RopeOwner {
+    u8 pad_0[0x8C];
+    s32 unk_8C;
+} RopeOwner;
+
+typedef struct Rope {
+    u8 flags;
+    u8 pad_1[0x7];
+    u32 kind;
+    RopeOwner *owner;
+    void *skin;
+    u8 pad_14[0x4];
+    u32 count;
+    u32 linkCount;
+    u8 pad_20[0x4];
+    RopeNode *nodes;
+    Link *links;
+} Rope;
+
+extern u32 lbl_801A6410;
+extern char lbl_1_data_40530[];
+extern void fn_1_10846C(Rope *);
+extern void fn_1_128884(void *, void *, s32);
+extern void *fn_1_4630(u32, u32, const char *, s32);
+extern f32 fn_1_1289BC(RopeNode *, RopeNode *);
+extern f32 lbl_8006D188(s32);
+
+void fn_1_1137E4(Rope *rope) {
+    u32 i;
+    u32 c;
+    RopeNode *a;
+    RopeNode *n;
+    u32 m;
+    u32 j;
+    RopeNode *b;
+    u32 k;
+    u32 rows;
+    s32 cols;
+
+    if (rope == NULL) {
+        return;
+    }
+    j = 13;
+    if (rope->owner->unk_8C == 2) {
+        j = 9;
+    }
+    cols = j;
+    fn_1_10846C(rope);
+
+    for (i = 0, a = rope->nodes; i < rope->count; i++, a++) {
+        if (a->flags & 1) {
+            a->flags = 0;
+            a->mass = -1.0f;
+        } else {
+            a->flags = 1;
+            a->mass = 0.0f;
+        }
+    }
+
+    for (i = 0, a = rope->nodes; i < rope->count; i++, a++) {
+        for (m = i + 1, b = &rope->nodes[i] + 1; m < rope->count; m++, b++) {
+            if (a->pos.x < b->pos.x) {
+                fn_1_128884(a, b, sizeof(RopeNode));
+            }
+        }
+    }
+
+    rows = rope->count / cols;
+    for (i = 0, a = rope->nodes; i < rows; i++, a += cols) {
+        for (m = 0, b = a; m < cols; m++, b++) {
+            for (c = m + 1, n = b + 1; c < cols; c++, n++) {
+                if (b->pos.z > n->pos.z) {
+                    fn_1_128884(b, n, sizeof(RopeNode));
+                }
+            }
+        }
+    }
+
+    for (i = 0, a = rope->nodes; i < rows; i++, a += cols) {
+        for (m = 0, b = a; m < cols; m++, b++) {
+            for (c = m + 1, n = b + 1; c < cols; c++, n++) {
+                if (b->pos.z > 0.0f && n->pos.z > 0.0f && b->pos.y < n->pos.y) {
+                    fn_1_128884(b, n, sizeof(RopeNode));
+                } else if (b->pos.z <= 0.0f && n->pos.z <= 0.0f && b->pos.y > n->pos.y) {
+                    fn_1_128884(b, n, sizeof(RopeNode));
+                }
+            }
+        }
+    }
+
+    rows = rope->count / cols;
+    for (i = 0, a = rope->nodes; i < rows; i++, a += cols) {
+        for (m = 0, b = a; m < cols; m++, b++) {
+            if (b->flags & 1) {
+                b->mass = 0.0f;
+            } else {
+                b->mass = (f32)(i + 1) / (f32)rows;
+                b->mass *= -(1.0 - (f64)(0.8 * lbl_8006D188(32768.0f * m / 12.0f)));
+            }
+        }
+    }
+
+    rows = rope->count / cols;
+    rope->linkCount = rows * (cols - 1) + (rows - 1) * cols;
+    rope->links = fn_1_4630(lbl_801A6410, rope->linkCount * sizeof(Link), lbl_1_data_40530, 0x143E);
+
+    for (i = 0, k = 0, a = rope->nodes; i < rope->count - 1; i++, a++) {
+        if ((i + 1) % cols != 0) {
+            rope->links[k].a = a;
+            rope->links[k].b = a + 1;
+            rope->links[k].length = fn_1_1289BC(a, a + 1);
+            k++;
+        }
+    }
+    for (i = 0, a = rope->nodes; i < rope->count - cols; i++, a++) {
+        rope->links[k].a = a;
+        rope->links[k].b = a + (u32)cols;
+        rope->links[k].length = fn_1_1289BC(a, a + (u32)cols);
+        k++;
+    }
+}
+/* fzgx:end fn_1_1137E4 */
 
 /* fzgx:begin fn_1_113C58 noprologue */
 #include "dolphin/types.h"
@@ -7549,6 +7894,162 @@ void fn_1_11A774(Work *arg0) {
 #pragma opt_common_subs reset
 /* fzgx:end fn_1_11A774 */
 
+/* fzgx:begin fn_1_11B4E4 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+
+typedef struct Node11B4E4 {
+    u8 unk_0;
+    u8 pad_1[0xF];
+    f32 unk_10;
+    f32 unk_14;
+    f32 unk_18;
+    u8 pad_1C[0x24];
+    f32 unk_40;
+} Node11B4E4;
+
+typedef struct Link11B4E4 {
+    Node11B4E4 *unk_0;
+    Node11B4E4 *unk_4;
+    f32 unk_8;
+} Link11B4E4;
+
+typedef struct Obj11B4E4 {
+    u8 pad_0[0x18];
+    u32 unk_18;
+    u32 unk_1C;
+    u8 pad_20[4];
+    Node11B4E4 *unk_24;
+    Link11B4E4 *unk_28;
+} Obj11B4E4;
+
+extern void fn_1_10846C(Obj11B4E4 *);
+extern void fn_1_128884(void *, void *, s32);
+extern f32 fn_1_1289BC(Node11B4E4 *, Node11B4E4 *);
+extern void *fn_1_4630(void *, u32, const char *, s32);
+extern void *lbl_801A6410;
+
+void fn_1_11B4E4(Obj11B4E4 *obj) {
+    u32 c0;
+    Node11B4E4 *e4;
+    Node11B4E4 *e0;
+    Node11B4E4 *front;
+    Node11B4E4 *back;
+    Node11B4E4 *src;
+    u32 k;
+    u32 m;
+    Node11B4E4 *e;
+    Node11B4E4 *dst;
+    Node11B4E4 *e3;
+    Node11B4E4 *ring_2;
+    Node11B4E4 sorted[8];
+    u32 g;
+    u32 ja;
+    u32 jb;
+    u32 i;
+    u32 idx;
+    f32 t;
+    Node11B4E4 *ring;
+    Node11B4E4 *pb;
+    Node11B4E4 *pc;
+
+    if (obj == NULL) {
+        return;
+    }
+    fn_1_10846C(obj);
+
+    c0 = 0;
+    e0 = obj->unk_24;
+    for (; c0 < obj->unk_18; c0++, e0++) {
+        if (e0->unk_0 & 1) {
+            e0->unk_40 = -1.0f;
+            e0->unk_0 = 0;
+        } else {
+            e0->unk_40 = 0.0f;
+            e0->unk_0 = 1;
+        }
+    }
+
+    e0 = obj->unk_24;
+    for (c0 = 0; c0 < obj->unk_18; c0++, e0++) {
+        pb = &obj->unk_24[c0] + 1;
+        for (ja = c0 + 1; ja < obj->unk_18; ja++, pb++) {
+            if (e0->unk_10 > pb->unk_10) {
+                fn_1_128884(e0, pb, sizeof(Node11B4E4));
+            }
+        }
+    }
+
+    ring = obj->unk_24;
+    for (g = 0; g < obj->unk_18 / 8; g++, ring += 8) {
+        for (jb = 0, ring_2 = ring; jb < 8; jb++, ring_2++) {
+            i = jb + 1;
+            pc = ring_2 + 1;
+            for (; i < 8; i++, pc++) {
+                if (ring_2->unk_14 < pc->unk_14) {
+                    fn_1_128884(ring_2, pc, sizeof(Node11B4E4));
+                }
+            }
+        }
+        front = sorted;
+        *front = ring[0];
+        front++;
+        back = sorted;
+        back += 7;
+        e = ring + 1;
+        for (k = 1; k < 8; k++, e++) {
+            if (e->unk_18 > 0.0f) {
+                *front = *e;
+                front++;
+            } else {
+                *back = *e;
+                back--;
+            }
+        }
+        t = -(f32)g;
+        dst = ring;
+        src = sorted;
+        for (m = 0; m < 8; m++, src++, dst++) {
+            *dst = *src;
+            if (g == obj->unk_18 / 8 - 1) {
+                dst->unk_40 = 0.0f;
+            } else {
+                dst->unk_40 = t / (f32)(obj->unk_18 / 8 - 1);
+            }
+        }
+    }
+
+    obj->unk_1C = 0x60;
+    obj->unk_28 = fn_1_4630(lbl_801A6410, obj->unk_1C * sizeof(Link11B4E4), (const char *)&lbl_1_data_40530, 0x1E57);
+
+    idx = 0;
+    ring_2 = obj->unk_24;
+    for (g = 0; g < obj->unk_18 / 8 - 1; g++, ring_2 += 8) {
+        e3 = ring_2;
+        for (i = 0; i < 7; i++, e3++) {
+            obj->unk_28[idx].unk_0 = e3;
+            obj->unk_28[idx].unk_4 = e3 + 1;
+            obj->unk_28[idx].unk_8 = fn_1_1289BC(e3, e3 + 1);
+            idx++;
+        }
+        obj->unk_28[idx].unk_0 = &ring_2[7];
+        obj->unk_28[idx].unk_4 = ring_2;
+        obj->unk_28[idx].unk_8 = fn_1_1289BC(&ring_2[7], ring_2);
+        idx++;
+    }
+    ring_2 = obj->unk_24;
+    for (g = 0; g < obj->unk_18 / 8 - 1; g++, ring_2 += 8) {
+        e4 = ring_2;
+        for (i = 0; i < 8; i++, e4++) {
+            obj->unk_28[idx].unk_0 = e4;
+            obj->unk_28[idx].unk_4 = e4 + 8;
+            obj->unk_28[idx].unk_8 = fn_1_1289BC(e4, e4 + 8);
+            idx++;
+        }
+    }
+}
+/* fzgx:end fn_1_11B4E4 */
+
 /* fzgx:begin fn_1_11B958 noprologue */
 #include "types.h"
 #include "game/main_rel/car_test_types.h"
@@ -8943,6 +9444,173 @@ void fn_1_11F250(Work *arg0) {
 }
 #pragma opt_common_subs reset
 /* fzgx:end fn_1_11F250 */
+
+/* fzgx:begin fn_1_1201E4 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+
+typedef struct Vec3 {
+    f32 x;
+    f32 y;
+    f32 z;
+} Vec3;
+
+typedef struct RopeNode {
+    u8 unk_0;
+    u8 pad_1[0xF];
+    Vec3 unk_10;
+    u8 pad_1C[0x24];
+    f32 unk_40;
+} RopeNode;
+
+typedef struct Link {
+    RopeNode *unk_0;
+    RopeNode *unk_4;
+    f32 unk_8;
+} Link;
+
+typedef struct RopeOwner {
+    u8 pad_0[0x8C];
+    s32 unk_8C;
+} RopeOwner;
+
+typedef struct Rope {
+    u8 pad_0[0xC];
+    RopeOwner *unk_C;
+    u8 pad_10[0x8];
+    u32 unk_18;
+    u32 unk_1C;
+    u8 pad_20[0x4];
+    RopeNode *unk_24;
+    Link *unk_28;
+} Rope;
+
+extern u32 lbl_801A6410;
+extern void fn_1_10846C(Rope *);
+extern void fn_1_128884(void *, void *, s32);
+extern void *fn_1_4630(u32, u32, const char *, s32);
+extern f32 fn_1_1289BC(RopeNode *, RopeNode *);
+
+void fn_1_1201E4(Rope *rope) {
+    u32 i;
+    u32 m;
+    RopeNode *b;
+    RopeNode *a;
+    RopeNode *p;
+    RopeNode *n;
+    s32 last;
+    u32 c;
+    u32 j;
+    RopeNode *q;
+    u32 k;
+    u32 rows;
+    s32 cols;
+
+    if (rope == NULL) {
+        return;
+    }
+    cols = (rope->unk_C->unk_8C == 2) ? 9 : 13;
+    fn_1_10846C(rope);
+
+    for (i = 0, n = rope->unk_24; i < rope->unk_18; i++, n++) {
+        if (n->unk_0 & 1) {
+            n->unk_0 = 0;
+            n->unk_40 = -1.0f;
+        } else {
+            n->unk_0 = 1;
+            n->unk_40 = 0.0f;
+        }
+    }
+
+    for (i = 0, a = rope->unk_24; i < rope->unk_18; i++, a++) {
+        for (j = i + 1, b = &rope->unk_24[i] + 1; j < rope->unk_18; j++, b++) {
+            if (a->unk_0 == 0 && b->unk_0 != 0) {
+                fn_1_128884(a, b, sizeof(RopeNode));
+            }
+        }
+    }
+
+    for (i = 0, a = rope->unk_24; i < rope->unk_18; i++, a++) {
+        for (j = i + 1, b = &rope->unk_24[i] + 1; j < rope->unk_18; j++, b++) {
+            if (a->unk_0 == b->unk_0 && a->unk_10.x < b->unk_10.x) {
+                fn_1_128884(a, b, sizeof(RopeNode));
+            }
+        }
+    }
+
+    for (i = 0, a = rope->unk_24; i < cols; i++, a++) {
+        for (j = i + 1, b = a + 1; j < cols; j++, b++) {
+            if (a->unk_10.z > b->unk_10.z) {
+                fn_1_128884(a, b, sizeof(RopeNode));
+            }
+        }
+    }
+
+    for (i = cols, a = &rope->unk_24[cols]; i < cols * 2; i++, a++) {
+        for (j = i + 1, b = a + 1; j < cols * 2; j++, b++) {
+            if (a->unk_10.z > b->unk_10.z) {
+                fn_1_128884(a, b, sizeof(RopeNode));
+            }
+        }
+    }
+
+    p = rope->unk_24;
+    for (i = 0; i < rope->unk_18; i++) {
+        if (p->unk_0 != 0 && p[1].unk_0 == 0) {
+            break;
+        }
+        p++;
+    }
+    p++;
+
+    rows = (rope->unk_18 - (p - rope->unk_24)) / cols;
+    for (j = 0; j < rows; j++) {
+        for (c = 0; c < cols; c++) {
+            p[c].unk_40 = -(f32)(j + 1) / (f32)(rows + 1);
+        }
+        for (c = 0, n = p; c < cols; c++, n++) {
+            for (m = c + 1, q = n + 1; m < cols; m++, q++) {
+                if (n->unk_10.z > q->unk_10.z) {
+                    fn_1_128884(n, q, sizeof(RopeNode));
+                }
+            }
+        }
+        p += cols;
+    }
+
+    rows = rope->unk_18 / cols;
+    rope->unk_1C = rows * ((u32)cols - 1) + (rows - 1) * cols + (cols - 1) * 2;
+    rope->unk_28 = fn_1_4630(lbl_801A6410, rope->unk_1C * sizeof(Link), (const char *)&lbl_1_data_40530, 0x248F);
+
+    last = cols - 1;
+    for (i = 0, k = 0, a = rope->unk_24; i < last; i++, a++) {
+        rope->unk_28[k].unk_0 = a;
+        rope->unk_28[k].unk_4 = a + cols + 1;
+        rope->unk_28[k].unk_8 = fn_1_1289BC(rope->unk_28[k].unk_0, rope->unk_28[k].unk_4);
+        k++;
+    }
+    for (i = 0, a = rope->unk_24; i < last; i++, a++) {
+        rope->unk_28[k].unk_0 = a + 1;
+        rope->unk_28[k].unk_4 = a + cols;
+        rope->unk_28[k].unk_8 = fn_1_1289BC(rope->unk_28[k].unk_0, rope->unk_28[k].unk_4);
+        k++;
+    }
+    for (i = 0, a = rope->unk_24; i < rope->unk_18 - 1; i++, a++) {
+        if ((i + 1) % cols != 0) {
+            rope->unk_28[k].unk_0 = a;
+            rope->unk_28[k].unk_4 = a + 1;
+            rope->unk_28[k].unk_8 = fn_1_1289BC(a, a + 1);
+            k++;
+        }
+    }
+    for (i = 0, a = rope->unk_24; i < rope->unk_18 - cols; i++, a++) {
+        rope->unk_28[k].unk_0 = a;
+        rope->unk_28[k].unk_4 = a + (u32)cols;
+        rope->unk_28[k].unk_8 = fn_1_1289BC(a, a + (u32)cols);
+        k++;
+    }
+}
+/* fzgx:end fn_1_1201E4 */
 
 /* fzgx:begin fn_1_122348 noprologue */
 #include "types.h"

@@ -770,3 +770,9 @@ rel/customize/emblem/fn_3_14BBC.c:
 
 rel/customize/emb_paste_editor/fn_3_10260.c:
 	.text       start:0x00010260 end:0x000104C4 align:4
+
+rel/customize/emblem/fn_3_152BC.c:
+	.text       start:0x000152BC end:0x0001552C align:4
+
+rel/customize/emblem/fn_3_14E18.c:
+	.text       start:0x00014E18 end:0x00015240 align:4

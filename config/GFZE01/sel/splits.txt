@@ -872,3 +872,9 @@ rel/sel/sel/fn_10_18C54.c:
 
 rel/sel/sel/fn_10_19C90.c:
 	.text       start:0x00019C90 end:0x00019EC8 align:4
+
+rel/sel/sel/fn_10_7A10.c:
+	.text       start:0x00007A10 end:0x00007E84 align:4
+
+rel/sel/sel/fn_10_111E8.c:
+	.text       start:0x000111E8 end:0x000117D0 align:4

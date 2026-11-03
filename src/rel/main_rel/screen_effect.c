@@ -1255,6 +1255,185 @@ void *fn_1_729F8(struct fn_1_729F8_Arg0 *arg0)
 }
 /* fzgx:end fn_1_729F8 */
 
+/* fzgx:begin fn_1_75D84 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/screen_effect.h"
+
+extern u32 lbl_1_bss_6C8DC[2];
+extern u32 lbl_801A6410;
+extern void fn_1_46B4(u32 arg0, u32 arg1, void *arg2, u32 arg3);
+extern void fn_1_727BC(u32 arg0, u32 arg1, void *arg2);
+extern void fn_1_76A94(void *arg0, u32 arg1);
+extern void fn_1_76DBC(void);
+extern void fn_1_4E500(void);
+extern void fn_1_4E638(int);
+extern void fn_1_4E6F4(void);
+extern void fn_80073778(void *arg0, int arg1);
+extern s32 fn_1_A5D9C(void);
+extern const f32 lbl_1_rodata_31AC;
+extern u32 fn_80008E84(u32 arg);
+extern void fn_1_77238(void);
+extern void fn_1_772E0(void);
+extern void fn_1_77384(void *arg);
+extern void fn_80072864(int arg0);
+extern void fn_800745A4(int arg0, int arg1, int arg2, int arg3, int arg4, int arg5);
+extern void fn_80074660(int arg0);
+extern void fn_80073678(int arg0);
+extern void fn_80073898(int arg0);
+extern void fn_80074788(int arg0);
+extern void fn_800738E0(int arg0, int arg1, int arg2);
+extern void fn_80073D60(int arg0, int arg1, int arg2, int arg3, int arg4);
+extern void fn_800734A8(int arg0, int arg1, int arg2, int arg3);
+extern void fn_80072EDC(int arg0, int arg1);
+extern f32 lbl_1_rodata_31B0[10];
+extern const f64 lbl_1_rodata_31A0;
+extern void lbl_8006D784(f32 *arg);
+extern void fn_80073A58(int arg0, f32 *arg1, int arg2);
+extern void fn_800739E0(int arg0, int arg1, int arg2);
+extern void GXLoadTexMtxImm(f32 *arg0, int arg1, int arg2);
+extern void fn_8006FDEC(void);
+extern void fn_8006FEFC(void);
+extern void fn_8006FD1C(void);
+extern void fn_1_79810(void);
+extern void fn_1_79948(void);
+extern void fn_1_791B0(void);
+extern void fn_1_9A1E8(void);
+extern void fn_1_9A864(void);
+extern u8 fn_1_7B074(void);
+extern void fn_80071718(void *arg);
+extern void fn_800711A8(void *arg);
+extern void fn_1_14CB4(void);
+extern void fn_1_FA84(void);
+extern const f32 lbl_1_rodata_32CC;
+extern void fn_1_79C88(void *arg0, s32 arg1, f32 arg2, s32 arg3);
+extern void lbl_8006DBAC(void *arg0);
+extern void lbl_8006E1B0(void *arg0, void *arg1);
+extern void sprintf(char *dst, const char *format, ...);
+extern void fn_1_465D0(char *text, int arg);
+extern void fn_1_14D5C(void *object, int arg);
+extern void fn_1_46EA8(int value);
+extern void fn_1_12620(void *object);
+extern void fn_1_46DC4(void *obj);
+
+extern void fn_1_727BC();
+extern void fn_8006FDEC(void);
+extern void fn_80071718(void *);
+extern void fn_800711A8(void *);
+extern u32 fn_8003526C(u32, u32);
+extern u32 fn_80074300(u32, u32, u32, u32);
+extern u32 fn_80074438(u32, u32, u32, u32);
+
+#pragma section code_type ".fzgxpool"
+static const u32 fzgx_pool_table1[8] = {0xFFFFFFFF, 0xFFFFFFFF, 0xFF910000, 0xFF760044, 0x6600FF32, 0x94009494, 0xCB0005CF, 0x00FF0000};  /* fzgx-allow: A1 retail pool bytes */
+__declspec(section ".fzgxpool") static void fzgx_pool_keep1(void) { const u32 *volatile cp; cp = fzgx_pool_table1; }  /* fzgx-allow: S2 pool primer sink */
+__declspec(section ".fzgxpool") static void fzgx_pool_prime2(void) {
+    volatile f32 s; volatile f64 d;  /* fzgx-allow: S2 pool primer sinks */
+    s = 0.0f;
+    s = 255.0f;
+    s = 40.0f;
+    s = 1.0f;
+    s = 0.5f;
+    s = 0.02500000037252903f;
+    s = 40.959999084472656f;
+    s = 409.6000061035156f;
+    s = 2.0f;
+    s = -2.0f;
+    s = 0.009999999776482582f;
+    s = 0.003000000026077032f;
+    s = 5.0f;
+    s = 15.0f;
+    d = 4503601774854144.0;
+    d = 4503599627370496.0;
+    s = 480.0f;
+    s = 0.949999988079071f;
+}
+#pragma section code_type ".text"
+
+typedef struct {
+    s16 unk_0;
+    s16 unk_2;
+    s16 unk_4;
+    s16 unk_6;
+    s16 unk_8;
+    s16 unk_A;
+} fn_1_75D84_Rect;
+
+typedef struct {
+    s16 unk_0;
+    s16 unk_2;
+    s16 unk_4;
+    s16 unk_6;
+} fn_1_75D84_Size;
+
+typedef union {
+    u8 u8;
+    u16 u16;
+    u32 u32;
+    f32 f32;
+} WGPipe;
+
+volatile WGPipe GXWGFifo : 0xCC008000; /* fzgx-allow: A1 write-gather FIFO port */
+
+extern u16 fn_1_A5DB0(void);
+extern void fn_8003462C(u32, u32, u32);
+extern void OSPanic(const char *, int, const char *, ...);
+extern u8 lbl_1_data_1DAC0[0x44];
+extern u8 lbl_1_data_1DB9C[0x24];
+
+static inline void GXPosition3f32(const f32 x, const f32 y, const f32 z) {
+    GXWGFifo.f32 = x;
+    GXWGFifo.f32 = y;
+    GXWGFifo.f32 = z;
+}
+
+static inline void GXTexCoord2f32(const f32 s, const f32 t) {
+    GXWGFifo.f32 = s;
+    GXWGFifo.f32 = t;
+}
+
+static inline BOOL fn_1_75D84_in_unit(f32 v) {
+    if (v > 1.0f) {
+        return FALSE;
+    }
+    if (v < 0.0f) {
+        return FALSE;
+    }
+    return TRUE;
+}
+
+void fn_1_75D84(const f32 *pos, const fn_1_75D84_Rect *rect, fn_1_75D84_Size *size) {
+    f32 s[4];
+    f32 t[4];
+    s32 h;
+    s32 y;
+    s32 i;
+
+    s[0] = s[3] = (f32)(rect->unk_0 - size->unk_0) / (f32)size->unk_4;
+    s[1] = s[2] = (f32)(rect->unk_0 + rect->unk_4 - size->unk_0) / (f32)size->unk_4;
+    t[0] = t[1] = (f32)((s32)((f32)(rect->unk_2 * fn_1_A5DB0()) / 480.0f) - size->unk_2) / (f32)size->unk_6;
+    h = (s32)((f32)(rect->unk_6 * fn_1_A5DB0()) / 480.0f);
+    y = (s32)((f32)(rect->unk_2 * fn_1_A5DB0()) / 480.0f);
+    t[2] = t[3] = (f32)(y + h - size->unk_2) / (f32)size->unk_6;
+
+    for (i = 0; i < 4; i++) {
+        if (!fn_1_75D84_in_unit(s[i]) || !fn_1_75D84_in_unit(t[i])) {
+            OSPanic((const char *)lbl_1_data_1DAC0, 1939, (const char *)lbl_1_data_1DB9C);
+        }
+    }
+
+    fn_8003462C(0x80, 0, 4);
+    GXPosition3f32(pos[0] + rect->unk_8, pos[1] + rect->unk_A, 0.0f);
+    GXTexCoord2f32(s[0], t[0]);
+    GXPosition3f32(pos[3] + rect->unk_8, pos[4] + rect->unk_A, 0.0f);
+    GXTexCoord2f32(s[1], t[1]);
+    GXPosition3f32(pos[6] + rect->unk_8, pos[7] + rect->unk_A, 0.0f);
+    GXTexCoord2f32(s[2], t[2]);
+    GXPosition3f32(pos[9] + rect->unk_8, pos[10] + rect->unk_A, 0.0f);
+    GXTexCoord2f32(s[3], t[3]);
+}
+/* fzgx:end fn_1_75D84 */
+
 /* fzgx:begin fn_1_761B8 */
 void fn_1_761B8(struct fn_1_761B8_Arg0 *arg0, u32 arg1) {
     u32 v0;

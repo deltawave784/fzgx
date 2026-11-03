@@ -2014,6 +2014,135 @@ void fn_1_F8580(void) {
 }
 /* fzgx:end fn_1_F8580 */
 
+/* fzgx:begin fn_1_F85A0 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/spline.h"
+
+extern void mathutil_quat_mult(f32 *, f32 *, f32 *);
+extern void fn_1_F56F8(f32 *out, f32 *in);
+extern const f32 lbl_1_rodata_6D78;
+extern void fn_1_F57A8(f32 *out, f32 *in);
+extern const f32 lbl_1_rodata_6D70;
+extern f64 fn_80088538(f32);
+extern f64 fn_800883E8(f32);
+extern f32 lbl_8006D0B4(f32);
+extern f64 fn_80087E80(f32);
+extern void fn_8006E8DC(void *);
+extern void fn_1_9A508(Obj_1_data_2A7E0 *arg0);
+extern void fn_1_F5B88(Obj_1_data_2A7E0_At3C *arg0);
+extern void fn_1_9AD88(void);
+extern void fn_1_F65A0(Obj_1_data_2A7E0_At3C *);
+extern void fn_1_F7578(void);
+extern void fn_8001D32C(u32 *);
+extern void fn_80008BEC(void *dst, s32 value, u32 size);
+extern void fn_1_F75D8(void *, int, int, int);
+extern void fn_1_F8918(u8 *, u8 *);
+extern s32 fn_8008023C(u8 *, Obj_1_bss_7F0C0 *, u32);
+extern void fn_1_F85A0(Obj_1_bss_7F0C0 *, u8 *);
+extern u16 lbl_1_data_414[36];
+extern int fn_1_8D5F0(s16 value);
+extern void fn_1_F7CAC(s16);
+extern s32 fn_1_F7BE4(s16);
+extern void fn_1_F7F48(s16 value);
+extern int fn_1_14D6D8(s16 value);
+extern void fn_1_F83F0(s16 value);
+extern void fn_1_F8214(s16 value);
+extern void fn_1_F8A04(void);
+extern void fn_1_F8A90(void);
+extern void fn_1_F8A7C(void);
+extern void fn_1_F8AFC(u32 value);
+extern void fn_1_F8B64(void);
+extern void fn_1_F8BA8(void);
+extern void fn_1_F8B7C(void);
+extern void fn_1_F8BD4(void);
+extern void fn_1_F8C28(s32 value);
+extern void fn_1_F8CCC(s32 value);
+extern void fn_1_F8CA0(s32 value);
+extern struct Table lbl_1_rodata_6FF0;
+extern void fn_80083DB0(void *arg0, u32 arg1);
+extern void fn_1_F9D04(u8 index);
+extern void fn_1_F9D90(void);
+extern void fn_1_F9E38(void);
+extern void fn_1_F9EE4(s32 value);
+extern u8 fn_1_FA69C(s32 index);
+extern void fn_1_3EF14(void *);
+extern s32 fn_1_58C4(void);
+extern void fn_1_FA89C(Obj_1_data_2A7E0_At3C *obj);
+extern void fn_1_76BF8(void);
+extern void fn_1_72648(void);
+extern void fn_1_FB0B4(Obj_1_bss_84428 *data);
+extern void fn_1_FB180(int *value);
+extern void fn_1_9AD54(void);
+extern void fn_1_FB18C(void);
+
+extern void fn_1_F8918(u8 *, u8 *);
+extern u16 lbl_1_data_414[36];
+extern void fn_8001D3E4(int index, int value);
+extern u32 lbl_801A66A0;
+
+extern u32 OSGetTick(void);
+extern u32 lbl_801A63C0;
+
+static inline s32 next_rand(void) {
+    lbl_801A63C0 = lbl_801A63C0 * 0x676a4b6b + 0x33cb;
+    return (lbl_801A63C0 >> 16) & 0x7fff;
+}
+
+/* as a helper the shuffle body is large enough that MWCC unrolls its 100 passes by 2, as retail does */
+static inline s32 rand_index(void) {
+    return next_rand() % 32;
+}
+
+/* Encodes the block into dst: a key made from the time base is stored at +0x60 with its 32 bits in a shuffled
+ * order, and every other byte is XORed with the generator seeded from it. fn_1_F8918 reverses it. */
+void fn_1_F85A0(Obj_1_bss_7F0C0 *save, u8 *dst) {
+    u8 order[32];
+    u8 *src;
+    u8 *hdr;
+    u8 *out;
+    u32 tick;
+    u32 key;
+    u32 i;
+    u32 tmp;  /* u32, not u8: a u8 swaps tmp's and a's registers */
+    u8 a;
+    u8 b;
+
+    tick = OSGetTick();
+    key = (tick >> 14) + (tick << 18);
+    lbl_801A63C0 = key ^ 0xcae87fb5;
+    for (i = 0; i < 32; i++) {
+        order[i] = i;
+    }
+    for (i = 0; i < 100; i++) {
+        a = rand_index();
+        b = rand_index();
+        tmp = order[a];
+        order[a] = order[b];
+        order[b] = tmp;
+    }
+    /* tick is reused for the shuffled key: a fresh local takes a saved register that retail gives key */
+    tick = 0;
+    for (i = 0; i < 32; i++) {
+        tick += ((key & (1 << order[i])) >> order[i]) << i;
+    }
+    src = (u8 *)save;
+    hdr = src + 0x60;
+    *(u32 *)hdr = tick;
+    lbl_801A63C0 = tick ^ 0xcae87fb5;
+    out = dst;
+    for (i = 0; i < 0x5360; i++) {
+        if (src < hdr || hdr + 4 <= src) {
+            *out = *src ^ (next_rand() % 255 + 1);
+        } else {
+            *out = *src;
+        }
+        src++;
+        out++;
+    }
+}
+/* fzgx:end fn_1_F85A0 */
+
 /* fzgx:begin fn_1_F8918 noprologue */
 #include "types.h"
 #include "rel/main_rel/globals.h"

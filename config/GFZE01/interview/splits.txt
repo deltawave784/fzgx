@@ -212,3 +212,6 @@ rel/interview/interview/fn_17_65F4.c:
 
 rel/interview/interview/fn_17_7F94.c:
 	.text       start:0x00007F94 end:0x0000802C align:4
+
+rel/interview/interview/fn_17_7A74.c:
+	.text       start:0x00007A74 end:0x00007F94 align:4

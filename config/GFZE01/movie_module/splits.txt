@@ -2279,3 +2279,12 @@ rel/movie_module/fn_12_2E8C8.c:
 
 rel/movie_module/fn_12_38704.c:
 	.text       start:0x00038704 end:0x000388C4 align:4
+
+rel/movie_module/fn_12_25AAC.c:
+	.text       start:0x00025AAC end:0x00025DA8 align:4
+
+rel/movie_module/fn_12_3710.c:
+	.text       start:0x00003710 end:0x00003A64 align:4
+
+rel/movie_module/fn_12_3A64.c:
+	.text       start:0x00003A64 end:0x00003DB8 align:4

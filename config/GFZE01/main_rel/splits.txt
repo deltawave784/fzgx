@@ -9095,3 +9095,78 @@ rel/main_rel/sel_static_disp/fn_1_148738.c:
 
 rel/main_rel/stcoli/fn_1_2C97C.c:
 	.text       start:0x0002C97C end:0x0002CBAC align:4
+
+rel/main_rel/bg_common/fn_1_1171B8.c:
+	.text       start:0x001171B8 end:0x00117424 align:4
+
+rel/main_rel/car/fn_1_82C70.c:
+	.text       start:0x00082C70 end:0x00082EDC align:4
+
+rel/main_rel/mdlload/fn_1_D523C.c:
+	.text       start:0x000D523C end:0x000D550C align:4
+
+rel/main_rel/enemy_ctrl/fn_1_D0428.c:
+	.text       start:0x000D0428 end:0x000D0728 align:4
+
+rel/main_rel/sel_static_disp/fn_1_14E2DC.c:
+	.text       start:0x0014E2DC end:0x0014E5E4 align:4
+
+rel/main_rel/car/fn_1_85934.c:
+	.text       start:0x00085934 end:0x00085C58 align:4
+
+rel/main_rel/archive/fn_1_12C110.c:
+	.text       start:0x0012C110 end:0x0012C47C align:4
+
+rel/main_rel/spline/fn_1_F85A0.c:
+	.text       start:0x000F85A0 end:0x000F8918 align:4
+
+rel/main_rel/sel_static_disp/fn_1_147188.c:
+	.text       start:0x00147188 end:0x00147508 align:4
+
+rel/main_rel/cloth/fn_1_102C08.c:
+	.text       start:0x00102C08 end:0x00102FD0 align:4
+
+rel/main_rel/ghost/fn_1_EF0A8.c:
+	.text       start:0x000EF0A8 end:0x000EF484 align:4
+
+rel/main_rel/stcoli/fn_1_290E8.c:
+	.text       start:0x000290E8 end:0x000294D0 align:4
+
+rel/main_rel/sel_static_disp/fn_1_144A5C.c:
+	.text       start:0x00144A5C end:0x00144E90 align:4
+
+rel/main_rel/screen_effect/fn_1_75D84.c:
+	.text       start:0x00075D84 end:0x000761B8 align:4
+
+rel/main_rel/camera/fn_1_AFC8.c:
+	.text       start:0x0000AFC8 end:0x0000B42C align:4
+
+rel/main_rel/accessory/fn_1_1137E4.c:
+	.text       start:0x001137E4 end:0x00113C58 align:4
+
+rel/main_rel/accessory/fn_1_11B4E4.c:
+	.text       start:0x0011B4E4 end:0x0011B958 align:4
+
+rel/main_rel/driver/fn_1_A9B70.c:
+	.text       start:0x000A9B70 end:0x000A9FFC align:4
+
+rel/main_rel/cloth/fn_1_102750.c:
+	.text       start:0x00102750 end:0x00102C08 align:4
+
+rel/main_rel/bg_lig/fn_1_D6748.c:
+	.text       start:0x000D6748 end:0x000D6C10 align:4
+
+rel/main_rel/car_test/fn_1_7E1DC.c:
+	.text       start:0x0007E1DC end:0x0007E7A4 align:4
+
+rel/main_rel/accessory/fn_1_10DDE4.c:
+	.text       start:0x0010DDE4 end:0x0010E3B4 align:4
+
+rel/main_rel/bg_san/fn_1_D9D8C.c:
+	.text       start:0x000D9D8C end:0x000DA3A0 align:4
+
+rel/main_rel/accessory/fn_1_1201E4.c:
+	.text       start:0x001201E4 end:0x00120804 align:4
+
+rel/main_rel/ghost/fn_1_F0508.c:
+	.text       start:0x000F0508 end:0x000F0B5C align:4
