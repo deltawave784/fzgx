@@ -9,7 +9,6 @@
 #include "game/vec3.h"
 
 
-
 typedef union fn_1_10A6A0_Vec {
     u32 w[3];
     struct {
@@ -54,17 +53,7 @@ typedef struct fn_1_10A6A0_Object {
     fn_1_10A6A0_Part *unk_24;
 } fn_1_10A6A0_Object;
 
-typedef struct { Node *a,*b; f32 length; } Link;
-
 typedef struct { f32 x,y,z; } Sig_fn_1_1286F4_Vec3f;
-
-struct fn_1_10AD18_Sig_fn_80077B14_fn_80077B14_Arg0 {
- u8 pad_0[4]; u32 unk_4; u8 pad_8[0x18]; u32 unk_20;
-};
-
-typedef struct { u8 flags; u8 pad[7]; u32 index; fn_1_10AD18_Owner *owner;
- struct fn_1_10AD18_Sig_fn_80077B14_fn_80077B14_Arg0 *obj;
- u32 pad14,count,linkCount,pad20; fn_1_10AD18_Node *nodes; Link *links; } Work;
 
 typedef struct {
     u32 w[3];
@@ -74,222 +63,16 @@ typedef struct RopeMtx {
     u8 data[0x40];
 } RopeMtx;
 
-struct fn_1_10BE3C_Sig_fn_80077B14_fn_80077B14_Arg0 {
- u8 pad_0[4]; u32 unk_4; u8 pad_8[0x18]; u32 unk_20;
-};
-
-struct fn_1_10CC38_Sig_fn_80077B14_fn_80077B14_Arg0 { u8 pad_0[4]; u32 unk_4; u8 pad_8[0x18]; u32 unk_20; };
-
-struct fn_1_10D7D4_Sig_fn_80077B14_fn_80077B14_Arg0 {
- u8 pad_0[4]; u32 unk_4; u8 pad_8[0x18]; u32 unk_20;
-};
-
-struct fn_1_110478_Sig_fn_80077B14_fn_80077B14_Arg0 {
- u8 pad_0[4]; u32 unk_4; u8 pad_8[0x18]; u32 unk_20;
-};
-
-struct fn_1_111980_Sig_fn_80077B14_fn_80077B14_Arg0 {
- u8 pad_0[4]; u32 unk_4; u8 pad_8[0x18]; u32 unk_20;
-};
-
-struct fn_1_1188CC_Sig_fn_80077B14_fn_80077B14_Arg0 {
-    u8 pad_0[0x4];
-    u32 unk_4;
-    u8 pad_8[0x18];
-    u32 unk_20;
-};
-
-struct fn_1_1192D0_Sig_fn_80077B14_fn_80077B14_Arg0 {
- u8 pad_0[4]; u32 unk_4; u8 pad_8[0x18]; u32 unk_20;
-};
-
-struct fn_1_11A774_Sig_fn_80077B14_fn_80077B14_Arg0 {
- u8 pad_0[4]; u32 unk_4; u8 pad_8[0x18]; u32 unk_20;
-};
-
-struct fn_1_11B958_Sig_fn_80077B14_fn_80077B14_Arg0 {
- u8 pad_0[4]; u32 unk_4; u8 pad_8[0x18]; u32 unk_20;
-};
-
-struct fn_1_11C440_Sig_fn_80077B14_fn_80077B14_Arg0 {
-u8 pad_0[4]; u32 unk_4; u8 pad_8[0x18]; u32 unk_20;
-};
-
-struct fn_1_11CD3C_Sig_fn_80077B14_fn_80077B14_Arg0 {
- u8 pad_0[4]; u32 unk_4; u8 pad_8[0x18]; u32 unk_20;
-};
-
-struct fn_1_11F250_Sig_fn_80077B14_fn_80077B14_Arg0 {
- u8 pad_0[4]; u32 unk_4; u8 pad_8[0x18]; u32 unk_20;
-};
-
-struct fn_1_124AD4_Sig_fn_80077B14_fn_80077B14_Arg0 {
- u8 pad_0[4]; u32 unk_4; u8 pad_8[0x18]; u32 unk_20;
-};
-
-struct fn_1_1256EC_Sig_fn_80077B14_fn_80077B14_Arg0 {
- u8 pad_0[4]; u32 unk_4; u8 pad_8[0x18]; u32 unk_20;
-};
-
-struct fn_1_125DF0_Sig_fn_80077B14_fn_80077B14_Arg0 {
- u8 pad_0[4]; u32 unk_4; u8 pad_8[0x18]; u32 unk_20;
-};
-
-struct fn_1_126774_Sig_fn_80077B14_fn_80077B14_Arg0 {
-u8 pad_0[4]; u32 unk_4; u8 pad_8[0x18]; u32 unk_20;
-};
-
-struct fn_1_12744C_Sig_fn_80077B14_fn_80077B14_Arg0 {
- u8 pad_0[4]; u32 unk_4; u8 pad_8[0x18]; u32 unk_20;
-};
 
 typedef struct {
     u32 w[3];
 } Word3_10846C;
 
-typedef struct fn_1_10AD18_Vec3 {
-    f32 x;
-    f32 y;
-    f32 z;
-} fn_1_10AD18_Vec3;
-
-typedef struct fn_1_10BE3C_Vec3 {
-    f32 x;
-    f32 y;
-    f32 z;
-} fn_1_10BE3C_Vec3;
-
-typedef struct fn_1_10D7D4_Vec3 {
-    f32 x;
-    f32 y;
-    f32 z;
-} fn_1_10D7D4_Vec3;
-
-typedef struct fn_1_110478_Vec3 {
-    f32 x;
-    f32 y;
-    f32 z;
-} fn_1_110478_Vec3;
-
-typedef struct fn_1_111980_Vec3 {
-    f32 x;
-    f32 y;
-    f32 z;
-} fn_1_111980_Vec3;
-
-typedef struct fn_1_1192D0_Vec3 {
-    f32 x;
-    f32 y;
-    f32 z;
-} fn_1_1192D0_Vec3;
-
-typedef struct fn_1_11A774_Vec3 {
-    f32 x;
-    f32 y;
-    f32 z;
-} fn_1_11A774_Vec3;
-
-typedef struct fn_1_11C440_Vec3 {
-f32 x;
-f32 y;
-f32 z;
-} fn_1_11C440_Vec3;
-
-typedef struct fn_1_11CD3C_Vec3 {
-    f32 x;
-    f32 y;
-    f32 z;
-} fn_1_11CD3C_Vec3;
-
-typedef struct fn_1_11F250_Vec3 {
-    f32 x;
-    f32 y;
-    f32 z;
-} fn_1_11F250_Vec3;
-
-typedef struct fn_1_1256EC_Vec3 {
-    f32 x;
-    f32 y;
-    f32 z;
-} fn_1_1256EC_Vec3;
-
-typedef struct fn_1_125DF0_Vec3 {
-    f32 x;
-    f32 y;
-    f32 z;
-} fn_1_125DF0_Vec3;
-
-typedef struct fn_1_126774_Vec3 {
-f32 x;
-f32 y;
-f32 z;
-} fn_1_126774_Vec3;
-
-typedef struct fn_1_12744C_Vec3 {
-    f32 x;
-    f32 y;
-    f32 z;
-} fn_1_12744C_Vec3;
 
 typedef struct RopeVec {
     f32 x, y, z;
 } RopeVec;
 
-typedef struct fn_1_10AD18_Vec3f {
-    f32 x, y, z;
-} fn_1_10AD18_Vec3f;
-
-typedef struct fn_1_10BE3C_Vec3f {
-    f32 x, y, z;
-} fn_1_10BE3C_Vec3f;
-
-typedef struct fn_1_10D7D4_Vec3f {
-    f32 x, y, z;
-} fn_1_10D7D4_Vec3f;
-
-typedef struct fn_1_110478_Vec3f {
-    f32 x, y, z;
-} fn_1_110478_Vec3f;
-
-typedef struct fn_1_111980_Vec3f {
-    f32 x, y, z;
-} fn_1_111980_Vec3f;
-
-typedef struct fn_1_1192D0_Vec3f {
-    f32 x, y, z;
-} fn_1_1192D0_Vec3f;
-
-typedef struct fn_1_11A774_Vec3f {
-    f32 x, y, z;
-} fn_1_11A774_Vec3f;
-
-typedef struct fn_1_11C440_Vec3f {
-f32 x, y, z;
-} fn_1_11C440_Vec3f;
-
-typedef struct fn_1_11CD3C_Vec3f {
-    f32 x, y, z;
-} fn_1_11CD3C_Vec3f;
-
-typedef struct fn_1_11F250_Vec3f {
-    f32 x, y, z;
-} fn_1_11F250_Vec3f;
-
-typedef struct fn_1_1256EC_Vec3f {
-    f32 x, y, z;
-} fn_1_1256EC_Vec3f;
-
-typedef struct fn_1_125DF0_Vec3f {
-    f32 x, y, z;
-} fn_1_125DF0_Vec3f;
-
-typedef struct fn_1_126774_Vec3f {
-f32 x, y, z;
-} fn_1_126774_Vec3f;
-
-typedef struct fn_1_12744C_Vec3f {
-    f32 x, y, z;
-} fn_1_12744C_Vec3f;
 
 typedef struct {
     f32 x, y, z;
@@ -412,24 +195,7 @@ typedef struct {
     Fn108EECPoint *points;
 } Fn108EECObj;
 
-typedef struct {
-    u8 pad_0[0x9];
-    u8 count;           /* 0x9 */
-    u8 pad_A[0x14A6];
-} fn_1_12999C_Info_12999C;
 
-typedef struct {
-    u32 flags;          /* 0x0 */
-    u8 pad_4[0x148];
-    u8 body[0x329];     /* 0x14c */
-    s8 slot;            /* 0x475 */
-    u8 pad_476[0x26];
-    u8 *info;           /* 0x49c */
-} fn_1_12999C_Entry_12999C;
-
-typedef struct {
-    u32 words[6];
-} fn_1_12999C_Tmp_12999C;
 extern void * lbl_801A6410;
 extern u32 fn_1_4630();
 extern void *fn_80077B14(void *);
@@ -550,6 +316,7 @@ extern void fn_80074918(u8 arg0, s32 arg1, u8 arg2);
 extern f64 fzgx_pool_primer_188(void);
 extern f64 fzgx_pool_primer_190(void);
 extern f64 fzgx_pool_primer_198(void);
+
 
 /* fzgx:begin fn_1_10846C noprologue */
 #include "types.h"
