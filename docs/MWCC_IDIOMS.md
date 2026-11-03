@@ -970,3 +970,8 @@ Not reachable by layout alone: fn_1_C4ABC passes its `.bss` model to a `static i
 (`tu_objects` rejects a model used other than through `->`), fn_7_2538 is a 115-row
 callee-saved permutation, fn_17_DB4's `.bss` base is a pass-1 local against a far `.data`
 carrier (declaration order, not layout).
+- `headers --oversize` "furthest" offsets past a symbol that dtk already bounds by the next label
+  are section-base addressing, not under-sized symbols (librarian pass 21, customize): lbl_3_bss_0
+  (8 bytes, accesses to +0x7EBA0), lbl_3_data_0 (0xA8, to +0x191C), lbl_3_bss_A2460 (8, to +0x56;
+  A2468/A248C follow). Keep the dtk sizes; fn_3_15A0, fn_3_5070, fn_3_6AC4 and fn_3_7038 matched
+  through `tu_section_layout`-style per-object definitions, never through a widened header struct.
