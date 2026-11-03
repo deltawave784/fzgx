@@ -266,7 +266,20 @@ def claim(p: Project, symbol: str, agent: str, ttl: int = DEFAULT_TTL,
         drifted = fixup_source.header_drift_replacement(p, symbol, seed_body, seed.get('mw'), seed.get('flags'))
         if drifted:
             seed_body = drifted[1]
-            seed = dict(seed, sha256=hashlib.sha256(seed_body.encode()).hexdigest(), respelled=drifted[0])
+            seed = dict(seed, sha256=hashlib.sha256(seed_body.encode()).hexdigest(), respelled=drifted[0],
+                        respell_reason='The saved text no longer compiled under the current headers; it was '
+                                       'respelled mechanically and compiles now.')
+        if re.search(r'\basm\s*(?:volatile\s*)?[{(]', seed_body):
+            # a seed carrying pasted copies of include/psvec.h's inline-assembly helpers: every
+            # write_unit of it is refused ("inline asm is not allowed") until the agent replaces
+            # them with the include (fn_1_90E0 and fn_1_120804 spent their patches on that)
+            from .lint import lint_text
+            helpers = fixup_source.header_helper_includes(seed_body, lint_text(seed_body))
+            if helpers and not re.search(r'\basm\s*(?:volatile\s*)?[{(]', helpers[0][1]):
+                seed_body = helpers[0][1]
+                seed = dict(seed, sha256=hashlib.sha256(seed_body.encode()).hexdigest(), respelled=helpers[0][0],
+                            respell_reason='The saved text pasted the inline-assembly helpers of include/psvec.h, '
+                                           'which write_unit refuses; they were replaced by the include (same code).')
     shadow = _is_shadow(agent)
     held = l.get(key)
     if held and held["status"] == "claimed" and held["claimed_by"] == agent and l.current_attempt(key):
@@ -337,8 +350,8 @@ def claim(p: Project, symbol: str, agent: str, ttl: int = DEFAULT_TTL,
                 "last edit do not apply to it, so do not spend checks restoring an earlier body.")
         if seed.get('respelled'):
             out['seed']['instruction'] += (
-                f" The saved text no longer compiled under the current headers; it was respelled mechanically "
-                f"({seed['respelled']}) and compiles now. Keep that spelling.")
+                f" {seed.get('respell_reason') or 'The saved text was respelled mechanically.'} "
+                f"({seed['respelled']}). Keep that spelling.")
     else:
         out['next'] = ('Write the complete function with write_unit, then call check(symbol, versions="all") once '
                        '(one check; it keeps the best compiler) before further edits.')
@@ -822,6 +835,20 @@ def _effective_score(percent: Optional[float], implicit: bool) -> float:
     return (percent or 0.0) - (IMPLICIT_MARGIN if implicit else 0.0)
 
 
+def _better_body(score: float, rows: Optional[int], implicit: bool, saved: dict) -> bool:
+    """Does a checked body replace the attempt's saved best? Between two bodies of the same
+    soundness that both have a row alignment, fewer differing instruction rows decide (a
+    length difference counts as differing rows): objdiff's similarity ranked fn_1_10E3B4's
+    328-row body (98.13%) above its 148-row body (98.03%) and the release saved the worse one.
+    Otherwise, or when the saved body predates `rows`, the effective score (undeclared callees
+    and never-assigned reads cost IMPLICIT_MARGIN) decides as before."""
+    saved_implicit = bool(saved.get('implicit_calls') or saved.get('uninitialized_reads'))
+    saved_rows = saved.get('rows')
+    if rows is not None and saved_rows is not None and implicit == saved_implicit and rows != saved_rows:
+        return rows < saved_rows
+    return _effective_score(score, implicit) > _effective_score(saved.get('percent'), saved_implicit)
+
+
 def _best_meta(key: str) -> Optional[dict]:
     """The saved best body's metadata, only while it describes the file beside it."""
     meta = STATE_DIR / "attempts" / f"{fs_key(key)}.best.json"
@@ -865,18 +892,18 @@ def _record_check(p: Project, key: str, src: Optional[Path], res: oracle.CheckRe
         # IMPLICIT_MARGIN, and a sound body replaces an undeclared one within that margin
         saved = _best_meta(key)
         implicit = _unsound(res)
+        rows = _differing_rows(res)
         if saved is None:
-            replace = bool(stats.get("improved"))
+            replace = bool(stats.get("improved") or stats.get("progress"))
         else:
-            replace = _effective_score(score, implicit) > _effective_score(
-                saved.get('percent'), bool(saved.get('implicit_calls') or saved.get('uninitialized_reads')))
+            replace = _better_body(score, rows, implicit, saved)
         if replace:
             best = STATE_DIR / "attempts" / f"{fs_key(key)}.best.c"
             best.parent.mkdir(parents=True, exist_ok=True)
             shutil.copy(src, best)
             best.with_suffix('.json').write_text(json.dumps(dict(
                 sha256=hashlib.sha256(best.read_bytes()).hexdigest(),
-                mw=res.mw_version, flags=res.extra_cflags, percent=score,
+                mw=res.mw_version, flags=res.extra_cflags, percent=score, rows=rows,
                 implicit_calls=list(res.implicit_calls or []),
                 uninitialized_reads=list(getattr(res, 'uninitialized_reads', None) or []))) + '\n')
         stats['saved_best'] = replace
