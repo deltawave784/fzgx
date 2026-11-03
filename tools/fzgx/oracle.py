@@ -1000,8 +1000,17 @@ def _pool_byte_note(private: str, anchor_name: str, ours: bytes, retail: Optiona
     words = [(i, ours[i:i + 4], retail[i:i + 4]) for i in range(0, len(ours), 4) if ours[i:i + 4] != retail[i:i + 4]]
     shown = ", ".join(f"+0x{base_offset + i:X} ours {a.hex()} retail {b.hex()}" for i, a, b in words[:5])
     more = f" (+{len(words) - 5} more words)" if len(words) > 5 else ""
+    # diagnostics only: a `...rodata.N` pool paired with a `.data`/`.bss` symbol means the entry
+    # `lis/addi` rows paired by position across swapped section bases (fn_10_1615C: retail
+    # creates the `.data` base first, the unit the pool base first), not a byte mismatch
+    ours_section = re.match(r'\.\.\.(\w+)\.\d+$', private or '')
+    retail_section = re.match(r'lbl_\d+_(data|bss|rodata)_', anchor_name or '')
+    swapped = ""
+    if ours_section and retail_section and ours_section[1] != retail_section[1]:
+        swapped = (f"; the sections differ (.{ours_section[1]} against .{retail_section[1]}): the entry rows pair by "
+                   f"position, so the section bases are created in the other order (primer order, `fzgx fixup`)")
     return f"pool {private} differs from retail {anchor_name} in {len(words)} of {len(ours) // 4} words: {shown}{more}" \
-        + _pool_shift_hint(ours, retail, words, base_offset)
+        + _pool_shift_hint(ours, retail, words, base_offset) + swapped
 
 
 def _pool_shift_hint(ours: bytes, retail: bytes, words, base_offset: int) -> str:

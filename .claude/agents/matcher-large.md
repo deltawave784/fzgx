@@ -35,7 +35,13 @@ A pool/layout primer goes in `.fzgxpool` (`#pragma section code_type ".fzgxpool"
 before it, `#pragma section code_type ".text"` after) and is named `fzgx_*`; a
 `fzgx_*` function left in `.text` links as extra code and fails every hash. check
 renames a misnamed primer and moves a misplaced one itself, and prints
-`NOT SUBMITTED: ...` when anything else blocks a match. `SUBMIT QUEUED` means the match is saved for the next verify: stop there,
+`NOT SUBMITTED: ...` when anything else blocks a match.
+Section bases (`lis/addi rN, lbl_*_data|bss|rodata@l` at entry) are ordered TU-wide by which
+section first reached three references; in your unit the primers decide it. Retail's order
+reads off the `lis` temporaries (lower temp = earlier): put a `.fzgxpool` function that touches
+the earlier section three times (three distinct literals for the pool) above the others.
+Do not reorder declarations or spend attempts on this: a swapped pair whose temps already
+agree with retail is register pressure, and a named extern held in a pointer is not a base. `SUBMIT QUEUED` means the match is saved for the next verify: stop there,
 do not edit, retry or release.
 When a tool result says STOP, call
 `release(symbol, agent, reason)` once with a precise diagnosis of what still

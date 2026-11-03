@@ -2465,30 +2465,79 @@ def primer_repair(body: str, extras, in_pool) -> Optional[Tuple[str, Dict[str, s
 _SECTION_BASE = re.compile(r'addi (r\d+), r\d+, (\S+?)(?:\+0x[0-9A-Fa-f]+)?@l$')
 
 
-def _base_registers(rows, syms, anonymous_only=False):
-    """section -> callee-saved register holding its base, one side of the diff rows (retail:
-    named objects of the section; ours: MWCC's anonymous `...data.0` section bases). When
-    retail addresses several named objects of one section, the base is the lowest one
-    (fn_3_11FF0: `lbl_3_bss_7EDC0` r27 is the `.bss` base, `lbl_3_bss_7EE40` r19 a later
-    object addressed by name; the section used to be dropped as ambiguous)."""
+_SECTION_BASE_FULL = re.compile(r'addi (r\d+), (r\d+), (\S+?)(?:\+0x[0-9A-Fa-f]+)?@l$')
+
+
+def _base_materializations(rows, syms, anonymous_only=False):
+    """section -> (callee-saved register holding its base, `lis` temp register, row index), one
+    side of the diff rows (retail: named objects of the section; ours: MWCC's anonymous
+    `...data.0` section bases). The base of a section is its first materialization in row
+    order: MWCC emits every section base at function entry (`emit_trailing_object_reg_moves`,
+    before the first statement), a named object addressed later is the function's own CSE
+    (fn_3_11FF0: `lbl_3_bss_7EDC0` r27 at entry is the `.bss` base, `lbl_3_bss_7EE40` r19 a
+    later object; fn_1_E5CC4: the lowest-address rule picked a later `lbl_1_bss_*` r27 over
+    the entry's `lbl_1_bss_7AE88` r30 and misread the section's register)."""
     out = {}
-    for row in rows:
-        m = _SECTION_BASE.match(((row.get('instruction') or {}).get('formatted') or ''))
+    for index, row in enumerate(rows):
+        m = _SECTION_BASE_FULL.match(((row.get('instruction') or {}).get('formatted') or ''))
         if not m or int(m[1][1:]) < 14:
             continue
-        anonymous = re.fullmatch(r'\.\.\.(\w+)\.\d+', m[2])
-        known = syms.get(m[2])
+        anonymous = re.fullmatch(r'\.\.\.(\w+)\.\d+', m[3])
+        known = syms.get(m[3])
         if anonymous_only and not anonymous:
             continue
         section = '.' + anonymous[1] if anonymous else (known.section if known and known.kind == 'object' else None)
         if section in ('.data', '.rodata', '.bss'):
-            out.setdefault(section, {}).setdefault(m[1], set()).add(-1 if anonymous else known.addr)
+            addr = -1 if anonymous else known.addr
+            out.setdefault(section, {}).setdefault(m[1], []).append((index, addr, m[2]))
     result = {}
     for section, regs in out.items():
-        lowest = sorted((min(addrs), reg) for reg, addrs in regs.items())
-        if len(lowest) == 1 or lowest[0][0] != lowest[1][0]:
-            result[section] = lowest[0][1]
+        index, _, reg, uses = min((min(i for i, _, _ in uses), min(a for _, a, _ in uses), reg, uses) for reg, uses in regs.items())
+        result[section] = (reg, min(uses)[2], index)
     return result
+
+
+def _base_registers(rows, syms, anonymous_only=False):
+    """section -> callee-saved register holding its base (see `_base_materializations`)."""
+    return {s: v[0] for s, v in _base_materializations(rows, syms, anonymous_only).items()}
+
+
+def _arrival_order(bases):
+    """Sections in the order the translation unit first referenced them three times, read from
+    one side's base materializations. The compiler keeps one TU-wide list of section bases
+    (`gTrailingObjectList`, prepended when a section's third reference is rewritten, reset
+    once per TU) and emits the entry `lis/addi` pairs by walking it, so the base emitted last
+    arrived first; its `lis` temporary is created last, numbered highest and coloured first,
+    taking the lowest free scratch register (capture-free reading, measured on fn_1_9BBE4
+    data r7 / rodata r8 -> data first; fn_10_1615C rodata r6 / data r7 -> rodata first;
+    fn_1_E5CC4 rodata r4 / bss r5 -> rodata first). Equal temporaries (the scratch register
+    reused after a dead pair) fall back to the register rank: the first referenced section
+    takes the highest callee-saved register."""
+    return sorted(bases, key=lambda s: (int(bases[s][1][1:]), -int(bases[s][0][1:])))
+
+
+def _pool_order_literals(body, code, at, items, count=3):
+    """The first `count` distinct floating literals of the unit in pool order (the first pool
+    primer's, else the function's), as `s = X;`/`d = X;` statements for a `.rodata` order
+    primer. Three references of one literal do not do: the optimizer merges equal constants
+    into one load before the section-base pass counts references (fn_1_E5CC4: `s = -1.0f;`
+    three times changed nothing; `-1.0f, 0.0f, 5.0f` gave retail's order). Reusing the
+    pool's own first literals keeps its first-use layout."""
+    from .sdkimport import masked
+    sources = [it[1] for it in items if it[2] == 'primer'] + [body[at:]]
+    seen, out = set(), []
+    for text in sources:
+        for m in _FLOAT_LITERAL.finditer(masked(text)):
+            lit = m.group(0)
+            value = lit.rstrip('fF')
+            key = (value, lit[-1] in 'fF')
+            if key in seen:
+                continue
+            seen.add(key)
+            out.append(('s' if key[1] else 'd') + ' = ' + lit + ';')
+            if len(out) >= count:
+                return out
+    return out if len(out) >= count else []
 
 
 def _touched_sections(region, before, syms):
@@ -2573,13 +2622,24 @@ def section_base_order(p, symbol, body, check, obj=None):
     syms = p.symbols(sym.module)
     # only MWCC's anonymous section bases follow the TU's first reference; a named extern's
     # address is the function's own CSE (fn_4_63D4: retail's data r30 over `lbl_4_bss_0` r29)
-    retail, ours = _base_registers(rows[0], syms), _base_registers(rows[1], syms, anonymous_only=True)
+    retail = _base_materializations(rows[0], syms)
+    ours = _base_materializations(rows[1], syms, anonymous_only=True)
     shared = [s for s in retail if s in ours]
-    # the ranking of the shared sections' registers is what the first-reference order sets;
-    # the registers themselves also depend on the locals (fn_16_2560: retail data r28 /
-    # rodata r29 under two locals, ours rodata r29 / data r30 above them)
-    desired = sorted(shared, key=lambda s: -int(retail[s][1:]))
-    if len(shared) < 2 or desired == sorted(shared, key=lambda s: -int(ours[s][1:])):
+    if len(shared) < 2:
+        return []
+    # the TU-wide arrival order (`_arrival_order`): the `lis` temporaries read it directly, and
+    # the ranking of the shared sections' registers follows it (the registers themselves also
+    # depend on the locals: fn_16_2560 retail data r28 / rodata r29 under two locals, ours
+    # rodata r29 / data r30 above them); after a layout the registers can already agree while
+    # the entry pairs are still emitted in the other order (fn_10_1615C), so both are compared
+    desired = _arrival_order({s: retail[s] for s in shared})
+    current = _arrival_order({s: ours[s] for s in shared})
+    ranks = lambda side: sorted(shared, key=lambda s: -int(side[s][0][1:]))
+    tied = lambda side: len({side[s][1] for s in shared}) < len(shared)
+    if desired == current and not ((tied(retail) or tied(ours)) and ranks(retail) != ranks(ours)):
+        # the same arrival order with other registers is register pressure, not order
+        # (fn_16_3BCC: bss r3 / rodata r6 / data r7 on both sides, retail data r31 over
+        # ours r27; fn_14_B484): reordering the primers reproduces the same object
         return []
     from .sdkimport import masked
     from .fixup_source import _function_body_span
@@ -2590,7 +2650,7 @@ def section_base_order(p, symbol, body, check, obj=None):
     at = code.rfind('\n', 0, span[0]) + 1
     items, _tail = _section_items(body, code, at)
     objects = {it[4]: it[3] for it in items if it[2] == 'obj'}
-    primers = {}
+    primers, untagged = {}, []
     for k, it in enumerate(items):
         if it[2] == 'primer':
             section = _primer_section(it[1], objects)
@@ -2602,21 +2662,35 @@ def section_base_order(p, symbol, body, check, obj=None):
             if section is not None:
                 items[k] = (it[0], it[1], it[2], section, it[4], it[5])
                 primers.setdefault(section, []).append(items[k])
+            else:
+                # a hand-written primer touching several sections (fn_1_E5CC4's
+                # `fzgx_pool_primer`: seven `.bss` addresses, then the literals) arrives in
+                # its own statement order; it stays where it is, below the ordered block
+                untagged.append(it)
     ordered, synthesized = [], []
     for s in desired:
         if primers.get(s):
             ordered.extend(primers[s])
             continue
-        defined = [it for it in items if it[2] == 'obj' and it[3] == s]
-        if not defined or s == '.rodata':
-            # nothing of this section is defined, so its first reference cannot move; the
-            # literal pool's first use is the pool primer's business (`shared_pool_primer`):
-            # touching a `static const` object by address or value changed nothing on
-            # fn_16_2560 (its one-word array is merged into the pool; a scalar read folds)
-            return []
         tag = s.lstrip('.')
-        sink = '    volatile u8 s;  /* fzgx-allow: S2 layout primer sink: the TU references %s in retail order */\n' % s
-        uses = ''.join(f'    s = *(u8 *)&{it[4]};\n' for it in defined)
+        if s == '.rodata':
+            # the literal pool's first use belongs to the pool primer (`shared_pool_primer`);
+            # when there is none (or only a mixed one), three distinct literals of the pool's
+            # own first-use order make the section arrive without moving a literal. Touching
+            # a `static const` object changed nothing on fn_16_2560 (its one-word array is
+            # merged into the pool; a scalar read folds); equal literals merge (fn_1_E5CC4)
+            literals = _pool_order_literals(body, code, at, items)
+            if not literals:
+                return []
+            sink = '    volatile float s; volatile double d;  /* fzgx-allow: S2 pool primer sinks: the TU references %s in retail order */\n' % s
+            uses = ''.join('    %s\n' % l for l in literals)
+        else:
+            defined = [it for it in items if it[2] == 'obj' and it[3] == s]
+            if not defined:
+                # nothing of this section is defined, so its first reference cannot move
+                return []
+            sink = '    volatile u8 s;  /* fzgx-allow: S2 layout primer sink: the TU references %s in retail order */\n' % s
+            uses = ''.join(f'    s = *(u8 *)&{it[4]};\n' for it in defined)
         text = 'static void fzgx_base_order_%s(void) {\n%s%s}\n' % (tag, sink, uses)
         item = ('', text, 'primer', s, 'fzgx_base_order_' + tag, None)
         ordered.append(item)
@@ -2652,6 +2726,8 @@ def section_base_order(p, symbol, body, check, obj=None):
     ordered = [it for s in desired for it in (primers.get(s) or [o for o in ordered if o[3] == s and o[5] is None])]
     touched = {n for it in ordered for n in set(re.findall(r'\b[A-Za-z_]\w*\b', masked(it[1]))) if n in objects}
     pos = min((located[id(it)][0] for it in ordered if id(it) in located), default=at)
+    # a mixed primer arrives in its own order: the ordered block goes above it
+    pos = min([pos] + [located[id(it)][0] for it in untagged if id(it) in located])
     for it in items:
         if it[2] == 'obj' and it[4] in touched:
             pos = max(pos, located[id(it)][1])
@@ -2671,7 +2747,7 @@ def section_base_order(p, symbol, body, check, obj=None):
     if re.sub(r'\n{3,}', '\n\n', body) == text:
         return []
     order = ' before '.join(desired)
-    label = f'section base order: {order} (first reference takes the highest register)'
+    label = f'section base order: {order} (the TU-wide arrival order of the section bases)'
     if synthesized:
         label += ', primer added for ' + ', '.join(synthesized)
     return [(label, text)]

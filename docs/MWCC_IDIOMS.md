@@ -390,6 +390,29 @@ Each line is a family that turned a 60–99% body into a match; the count is how
   `fn_1_B5F20`'s data r29/pool r30 into retail's pool r29/data r30.
   `fixup_layout.tu_data_objects` emits this layout (whole block, pointer words as
   `__fzgx_offset_` initializers, `.fzgxpool` primer in retail order).
+- Section-base order is TU-wide (recovered backend `TOC.c`/`CodeGen.c`, probe-confirmed on
+  GC/1.3.2, 2026-11-03): a section becomes a base when a function's pre-codegen pass rewrites
+  its *third* reference (`add_toc_reference` -> `make_objectref_offset`), which prepends the
+  section's link object to `gTrailingObjectList`. The per-function reset
+  (`Operands_ClearTrailingObjectInfo`) clears each object's register info and `toc_references`
+  but not that list; only `CodeGen_InitializeLists` resets it, once per TU, and an object already
+  listed is never re-added. So the order in which a TU's sections reach three references in
+  *any earlier function* fixes, for every later function, the order of the entry `lis/addi`
+  pairs (`emit_trailing_object_reg_moves` walks the list: the base emitted last arrived first,
+  its `lis` temporary is numbered highest and takes the lowest free scratch register) and the
+  bases' vreg order (last arrived numbers highest, so with equal pressure it takes r31). Read
+  retail's arrival order from the temporaries: lower `lis` temp = arrived earlier (fn_1_9BBE4
+  data r7 / rodata r8: data first; fn_10_1615C rodata r6 / data r7: rodata first; fn_1_E5CC4
+  rodata r4 / bss r5: rodata first). In a per-function unit the primers *are* the earlier
+  functions: a `.fzgxpool` function compiled before the target that references a section three
+  times sets its arrival. Three references of one literal do not count (the optimizer merges
+  equal constants into one load before the pass): use three distinct literals, the pool's own
+  first ones so the first-use layout is unchanged. A named extern held in a pointer local is a
+  pass-1 web, not a base: its register and order never follow this rule (39 of the 46 near
+  misses at 90%+ that carry the shape; they need the section defined in the unit first).
+  `fixup_layout.section_base_order` emits the primer order (fn_1_9BBE4 98.45 -> 98.73,
+  fn_1_E5CC4 95.97 -> 96.17, fn_1_77C5C 92.33 -> 92.35); the same arrival with other registers
+  (fn_16_3BCC, fn_14_B484) is register pressure and is left alone.
 - Indexed table reads `addi rX, rBase, off; lbzx/lhzx/lwzx rD, rX, rI` (probe compiles,
   2026-10-11): the shape belongs to an array object the TU *defines*, indexed by a variable,
   and only under GC/1.3.2. Every extern spelling folds into `add rY, rBase, rI; lbz off(rY)`
