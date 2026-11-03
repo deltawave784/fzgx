@@ -195,7 +195,252 @@ typedef struct {
     Fn108EECPoint *points;
 } Fn108EECObj;
 
+struct fn_1_10AD18_Sig_fn_80077B14_fn_80077B14_Arg0 {
+ u8 pad_0[4]; u32 unk_4; u8 pad_8[0x18]; u32 unk_20;
+};
 
+struct fn_1_10BE3C_Sig_fn_80077B14_fn_80077B14_Arg0 {
+ u8 pad_0[4]; u32 unk_4; u8 pad_8[0x18]; u32 unk_20;
+};
+
+struct fn_1_10CC38_Sig_fn_80077B14_fn_80077B14_Arg0 { u8 pad_0[4]; u32 unk_4; u8 pad_8[0x18]; u32 unk_20; };
+
+struct fn_1_10D7D4_Sig_fn_80077B14_fn_80077B14_Arg0 {
+ u8 pad_0[4]; u32 unk_4; u8 pad_8[0x18]; u32 unk_20;
+};
+
+struct fn_1_110478_Sig_fn_80077B14_fn_80077B14_Arg0 {
+ u8 pad_0[4]; u32 unk_4; u8 pad_8[0x18]; u32 unk_20;
+};
+
+struct fn_1_111980_Sig_fn_80077B14_fn_80077B14_Arg0 {
+ u8 pad_0[4]; u32 unk_4; u8 pad_8[0x18]; u32 unk_20;
+};
+
+struct fn_1_1188CC_Sig_fn_80077B14_fn_80077B14_Arg0 {
+    u8 pad_0[0x4];
+    u32 unk_4;
+    u8 pad_8[0x18];
+    u32 unk_20;
+};
+
+struct fn_1_1192D0_Sig_fn_80077B14_fn_80077B14_Arg0 {
+ u8 pad_0[4]; u32 unk_4; u8 pad_8[0x18]; u32 unk_20;
+};
+
+struct fn_1_11A774_Sig_fn_80077B14_fn_80077B14_Arg0 {
+ u8 pad_0[4]; u32 unk_4; u8 pad_8[0x18]; u32 unk_20;
+};
+
+struct fn_1_11B958_Sig_fn_80077B14_fn_80077B14_Arg0 {
+ u8 pad_0[4]; u32 unk_4; u8 pad_8[0x18]; u32 unk_20;
+};
+
+struct fn_1_11C440_Sig_fn_80077B14_fn_80077B14_Arg0 {
+u8 pad_0[4]; u32 unk_4; u8 pad_8[0x18]; u32 unk_20;
+};
+
+struct fn_1_11CD3C_Sig_fn_80077B14_fn_80077B14_Arg0 {
+ u8 pad_0[4]; u32 unk_4; u8 pad_8[0x18]; u32 unk_20;
+};
+
+struct fn_1_11F250_Sig_fn_80077B14_fn_80077B14_Arg0 {
+ u8 pad_0[4]; u32 unk_4; u8 pad_8[0x18]; u32 unk_20;
+};
+
+struct fn_1_124AD4_Sig_fn_80077B14_fn_80077B14_Arg0 {
+ u8 pad_0[4]; u32 unk_4; u8 pad_8[0x18]; u32 unk_20;
+};
+
+struct fn_1_1256EC_Sig_fn_80077B14_fn_80077B14_Arg0 {
+ u8 pad_0[4]; u32 unk_4; u8 pad_8[0x18]; u32 unk_20;
+};
+
+struct fn_1_125DF0_Sig_fn_80077B14_fn_80077B14_Arg0 {
+ u8 pad_0[4]; u32 unk_4; u8 pad_8[0x18]; u32 unk_20;
+};
+
+struct fn_1_126774_Sig_fn_80077B14_fn_80077B14_Arg0 {
+u8 pad_0[4]; u32 unk_4; u8 pad_8[0x18]; u32 unk_20;
+};
+
+struct fn_1_12744C_Sig_fn_80077B14_fn_80077B14_Arg0 {
+ u8 pad_0[4]; u32 unk_4; u8 pad_8[0x18]; u32 unk_20;
+};
+
+typedef struct fn_1_10AD18_Vec3 {
+    f32 x;
+    f32 y;
+    f32 z;
+} fn_1_10AD18_Vec3;
+
+typedef struct fn_1_10BE3C_Vec3 {
+    f32 x;
+    f32 y;
+    f32 z;
+} fn_1_10BE3C_Vec3;
+
+typedef struct fn_1_10D7D4_Vec3 {
+    f32 x;
+    f32 y;
+    f32 z;
+} fn_1_10D7D4_Vec3;
+
+typedef struct fn_1_110478_Vec3 {
+    f32 x;
+    f32 y;
+    f32 z;
+} fn_1_110478_Vec3;
+
+typedef struct fn_1_111980_Vec3 {
+    f32 x;
+    f32 y;
+    f32 z;
+} fn_1_111980_Vec3;
+
+typedef struct fn_1_1192D0_Vec3 {
+    f32 x;
+    f32 y;
+    f32 z;
+} fn_1_1192D0_Vec3;
+
+typedef struct fn_1_11A774_Vec3 {
+    f32 x;
+    f32 y;
+    f32 z;
+} fn_1_11A774_Vec3;
+
+typedef struct fn_1_11C440_Vec3 {
+f32 x;
+f32 y;
+f32 z;
+} fn_1_11C440_Vec3;
+
+typedef struct fn_1_11CD3C_Vec3 {
+    f32 x;
+    f32 y;
+    f32 z;
+} fn_1_11CD3C_Vec3;
+
+typedef struct fn_1_11F250_Vec3 {
+    f32 x;
+    f32 y;
+    f32 z;
+} fn_1_11F250_Vec3;
+
+typedef struct fn_1_1256EC_Vec3 {
+    f32 x;
+    f32 y;
+    f32 z;
+} fn_1_1256EC_Vec3;
+
+typedef struct fn_1_125DF0_Vec3 {
+    f32 x;
+    f32 y;
+    f32 z;
+} fn_1_125DF0_Vec3;
+
+typedef struct fn_1_126774_Vec3 {
+f32 x;
+f32 y;
+f32 z;
+} fn_1_126774_Vec3;
+
+typedef struct fn_1_12744C_Vec3 {
+    f32 x;
+    f32 y;
+    f32 z;
+} fn_1_12744C_Vec3;
+
+typedef struct fn_1_10AD18_Vec3f {
+    f32 x, y, z;
+} fn_1_10AD18_Vec3f;
+
+typedef struct fn_1_10BE3C_Vec3f {
+    f32 x, y, z;
+} fn_1_10BE3C_Vec3f;
+
+typedef struct fn_1_10D7D4_Vec3f {
+    f32 x, y, z;
+} fn_1_10D7D4_Vec3f;
+
+typedef struct fn_1_110478_Vec3f {
+    f32 x, y, z;
+} fn_1_110478_Vec3f;
+
+typedef struct fn_1_111980_Vec3f {
+    f32 x, y, z;
+} fn_1_111980_Vec3f;
+
+typedef struct fn_1_1192D0_Vec3f {
+    f32 x, y, z;
+} fn_1_1192D0_Vec3f;
+
+typedef struct fn_1_11A774_Vec3f {
+    f32 x, y, z;
+} fn_1_11A774_Vec3f;
+
+typedef struct fn_1_11C440_Vec3f {
+f32 x, y, z;
+} fn_1_11C440_Vec3f;
+
+typedef struct fn_1_11CD3C_Vec3f {
+    f32 x, y, z;
+} fn_1_11CD3C_Vec3f;
+
+typedef struct fn_1_11F250_Vec3f {
+    f32 x, y, z;
+} fn_1_11F250_Vec3f;
+
+typedef struct fn_1_1256EC_Vec3f {
+    f32 x, y, z;
+} fn_1_1256EC_Vec3f;
+
+typedef struct fn_1_125DF0_Vec3f {
+    f32 x, y, z;
+} fn_1_125DF0_Vec3f;
+
+typedef struct fn_1_126774_Vec3f {
+f32 x, y, z;
+} fn_1_126774_Vec3f;
+
+typedef struct fn_1_12744C_Vec3f {
+    f32 x, y, z;
+} fn_1_12744C_Vec3f;
+
+typedef struct { u8 flags; u8 pad[0xF]; fn_1_108A90_Vec3 pos; f32 w; u8 rest[0x44 - 0x20]; } fn_1_108A90_Ent;
+
+typedef struct { u8 p0[0xC]; struct { u8 p[0x150]; Inner *in; } *c; u8 p1[0x8]; u32 count; u8 p2[0x8]; fn_1_108A90_Ent *ents; } fn_1_108A90_Obj;
+
+typedef struct {
+    u8 pad_0[0x9];
+    u8 count;           /* 0x9 */
+    u8 pad_A[0x14A6];
+} fn_1_12999C_Info_12999C;
+
+typedef struct {
+    u32 flags;          /* 0x0 */
+    u8 pad_4[0x148];
+    u8 body[0x329];     /* 0x14c */
+    s8 slot;            /* 0x475 */
+    u8 pad_476[0x26];
+    u8 *info;           /* 0x49c */
+} fn_1_12999C_Entry_12999C;
+
+typedef struct {
+    u32 words[6];
+} fn_1_12999C_Tmp_12999C;
+
+struct fn_1_129D9C_fn_1_129D9C_vec {
+    f32 unk_0;
+    f32 unk_4;
+    f32 unk_8;
+};
+
+struct fn_1_129D9C_fn_1_129D9C_obj {
+    u8 pad_0[0x10];
+    u8 unk_10;
+};
 extern void * lbl_801A6410;
 extern u32 fn_1_4630();
 extern void *fn_80077B14(void *);
@@ -203,6 +448,7 @@ extern void fn_1_46B4(u32 arg0, u32 arg1, const char *arg2, int arg3);
 extern void fn_80008BEC(void *dest, int value, u32 size);
 extern const f64 lbl_1_rodata_7AE8;
 extern Word3_10846C lbl_1_rodata_7ADC;
+extern void fn_1_108920(void *accessory);
 extern void lbl_8006DBAC(void *);
 extern f32 lbl_8006D0E8(f32);
 extern f32 lbl_8006D0B4(f32);
@@ -216,7 +462,7 @@ extern void fn_1_10846C();
 extern void fn_1_128884(void *, void *, s32);
 extern const f32 lbl_1_rodata_7B1C;
 extern const f32 lbl_1_rodata_7B20;
-extern s16 fn_1_14D670(void);
+extern s32 fn_1_14D670(void);
 extern u32 lbl_801A66A0;
 extern u8 fn_1_86678(int index);
 extern u32 lbl_1_bss_897AC[1741];
@@ -226,7 +472,7 @@ extern void lbl_8006DAEC(void);
 extern void lbl_8006DBE4(void);
 extern void lbl_8006DC20(void);
 extern const f64 lbl_1_rodata_7BF8;
-extern void fn_80008BA8(u32 arg0, u32 arg1, u32 arg2);
+extern void fn_80008BA8(void *dst, void *src, int size);
 extern s32 fn_1_45D0();
 extern void fn_1_105744(void);
 extern s32 fn_1_106DB4(u32 arg0, u32 arg1);
@@ -255,13 +501,12 @@ extern f32 lbl_8006D188(s32);
 extern f64 __fabs(f64);
 extern void fn_1_1286F4(fn_1_1286F4_Vec3f *out);
 extern f32 lbl_8006D118(f32, f32 *);
-extern const u8 lbl_1_rodata_7AB8[];
-extern f32 fn_1_128AAC(s32, f32);
+extern f32 fn_1_128AAC(s32 exponent, f32 value);
 extern u32 lbl_801A63C0;
 extern const char *fn_1_950E8(void *);
 extern int fn_80083BCC(const char *s1, const char *s2);
 extern void fn_1_108128(void *, s32);
-extern void fn_1_108A90(Obj *o, s32 idx, f32 r, f32 x, f32 y, f32 z);
+extern void fn_1_108A90(fn_1_108A90_Obj *o, s32 idx, f32 r, f32 x, f32 y, f32 z);
 extern void fn_1_109114(fn_1_109114_AccessoryObject *self);
 extern void lbl_8006D758(void);
 extern void lbl_8006E0A4(void *);
@@ -270,13 +515,13 @@ extern void fn_1_108EEC(Fn108EECObj *obj, s32 from, s32 to, f32 radius, f32 x, f
 extern void mathutil_mtxA_rotate_z(s32);
 extern fn_1_1286F4_Vec3f lbl_1_bss_88B40;
 extern f32 lbl_8006D6FC(void *, void *);
-extern u8 fn_1_86624(void);
+extern u8 lbl_1_bss_89780;
+extern s8 fn_1_86624(void);
 extern s32 fn_1_58C4(void);
 extern s16 fn_1_6B48(s32 index);
 extern f32 fn_1_8CAF4(u32 a, s32 b);
 extern const f32 lbl_1_rodata_806C[];
 extern s8 lbl_1_bss_9C[8];
-extern u8 lbl_1_bss_89780;
 extern u8 lbl_1_bss_7CA58[];
 extern s32 lbl_801A66B4;
 extern s16 fn_1_3F0C8(void);
@@ -286,14 +531,17 @@ extern f32 fn_1_A71AC(void);
 extern s32 fn_1_40B20(void);
 extern void *fn_1_86254(int index);
 extern s32 fn_1_5910(void);
-extern s8 fn_1_12A24C(s8 arg);
+extern s8 fn_1_12A24C(s8);
 extern int fn_1_D66BC(void *unused, void *arg);
 extern void fn_1_129D9C();
 extern u32 fn_1_F1D60(void);
 extern int fn_1_4C10(void);
 extern char *fn_1_F1C54(int idx);
-extern u8 fn_1_EB0B0(void);
+extern u32 fn_1_EB0B0(void);
 extern u8 *fn_80083970(u8 *str, const u8 *needle);
+extern void fn_1_12A080(void);
+extern void fn_800737E4(void *, s32);
+extern void fn_80074918(u8 arg0, s32 arg1, u8 arg2);
 extern void fn_1_520A0(void);
 extern void fn_1_52070(u32 value);
 extern void fn_1_49410(void);
@@ -301,7 +549,6 @@ extern void fn_1_494DC(s16 index);
 extern void fn_1_49514(u32 *value);
 extern void fn_1_4954C(f32 value);
 extern void fn_1_496FC(f32 value1, f32 value2);
-extern void fn_1_12A080(void);
 extern void fn_1_49738(u32 value);
 extern void fn_1_495FC(void);
 extern void fn_1_495C8(u8 value);
@@ -310,27 +557,12 @@ extern void fn_1_4955C(f32 value1, f32 value2);
 extern void fn_1_4966C(f32 value1, f32 value2);
 extern void fn_1_4A0D8(const char *);
 extern void fn_1_520CC(void);
-extern void fn_1_108920(void *accessory);
-extern void fn_800737E4(void *, s32);
-extern void fn_80074918(u8 arg0, s32 arg1, u8 arg2);
 extern f64 fzgx_pool_primer_188(void);
 extern f64 fzgx_pool_primer_190(void);
 extern f64 fzgx_pool_primer_198(void);
 
+/* fzgx:begin fn_1_10846C */
 
-/* fzgx:begin fn_1_10846C noprologue */
-#include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/accessory.h"
-#include "game/main_rel/accessory_types.h"
-
-typedef struct {
-    f32 x, y, z;
-} Vec10846C;
-
-typedef struct {
-    u32 w[3];
-} Word3_10846C;
 
 /* model vertex, 0x40 bytes */
 typedef struct {
@@ -342,34 +574,7 @@ typedef struct {
 } Vert10846C;
 
 /* welded vertex group, 0x44 bytes */
-typedef struct {
-    u8 flags;             /* 0x00 */
-    u8 unk_1;             /* 0x01 */
-    u8 count;             /* 0x02 */
-    u8 pad_3;
-    u16 idx[4];           /* 0x04 */
-    u8 pad_C[4];
-    Vec10846C p10;        /* 0x10 */
-    Vec10846C p1C;        /* 0x1C */
-    Vec10846C p28;        /* 0x28 */
-    Word3_10846C c34;     /* 0x34 */
-    u8 pad_40[4];
-} Group10846C;
 
-typedef struct {
-    u8 pad_0[0x10];
-    void *model;          /* 0x10 */
-    u8 pad_14[4];
-    u32 groupCount;       /* 0x18 */
-    u32 unk_1C;           /* 0x1C */
-    u8 pad_20[4];
-    Group10846C *groups;  /* 0x24 */
-    void *unk_28;         /* 0x28 */
-    u8 pad_2C[4];
-    void *srcModel;       /* 0x30 */
-    u8 pad_34[0x30];
-    Vec10846C *positions; /* 0x64 */
-} Obj10846C;
 
 static inline f32 distSq10846C(Vec10846C *a, Vec10846C *b) {
     f32 dx = a->x;
@@ -384,15 +589,10 @@ static inline f32 distSq10846C(Vec10846C *a, Vec10846C *b) {
     return dx;
 }
 
-extern void *lbl_801A6410;
-extern u32 fn_1_4630();
-extern void *fn_80077B14(void *);
-extern void fn_1_46B4(u32 arg0, u32 arg1, const char *arg2, int arg3);
-extern void fn_80008BEC(void *dest, int value, u32 size);
-extern const f64 lbl_1_rodata_7AE8;
-extern Word3_10846C lbl_1_rodata_7ADC;
 
-void fn_1_10846C(Obj10846C *obj) {
+void fn_1_10846C(obj)
+Obj10846C *obj;
+{
     void *model = obj->model;
     u32 *count;
     Vert10846C *verts;
@@ -426,22 +626,22 @@ void fn_1_10846C(Obj10846C *obj) {
     obj->groupCount = 0;
     obj->unk_1C = 0;
     if (obj->groups != NULL) {
-        fn_1_46B4((u32)lbl_801A6410, (u32)obj->groups, lbl_1_data_40530, 988);
+        fn_1_46B4((u32)((void *)lbl_801A6410), (u32)obj->groups, lbl_1_data_40530, 988);
         obj->groups = NULL;
     }
     if (obj->unk_28 != NULL) {
-        fn_1_46B4((u32)lbl_801A6410, (u32)obj->unk_28, lbl_1_data_40530, 989);
+        fn_1_46B4((u32)((void *)lbl_801A6410), (u32)obj->unk_28, lbl_1_data_40530, 989);
         obj->unk_28 = NULL;
     }
     if (obj->positions != NULL) {
-        fn_1_46B4((u32)lbl_801A6410, (u32)obj->positions, lbl_1_data_40530, 991);
+        fn_1_46B4((u32)((void *)lbl_801A6410), (u32)obj->positions, lbl_1_data_40530, 991);
         obj->positions = NULL;
     }
 
     count = fn_80077B64(model);
     verts = fn_80077B14(model);
-    obj->groups = (Group10846C *)fn_1_4630(lbl_801A6410, *count * sizeof(Group10846C), lbl_1_data_40530, 998);
-    obj->positions = (Vec10846C *)fn_1_4630(lbl_801A6410, *count * sizeof(Vec10846C), lbl_1_data_40530, 999);
+    obj->groups = (Group10846C *)fn_1_4630(((void *)lbl_801A6410), *count * sizeof(Group10846C), lbl_1_data_40530, 998);
+    obj->positions = (Vec10846C *)fn_1_4630(((void *)lbl_801A6410), *count * sizeof(Vec10846C), lbl_1_data_40530, 999);
     for (i = 0; i < *count; i++) {
         obj->positions[i] = verts->pos;
         verts++;
@@ -484,14 +684,7 @@ void fn_1_10846C(Obj10846C *obj) {
 }
 /* fzgx:end fn_1_10846C */
 
-/* fzgx:begin fn_1_108870 noprologue */
-#include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/accessory.h"
-#include "rel/main_rel/cloth.h"
-#include "psvec.h"
-#include "game/main_rel/accessory_types.h"
-
+/* fzgx:begin fn_1_108870 */
 typedef struct {
     u8 pad_0[0xc];
     u32 unk_c;
@@ -510,15 +703,7 @@ fn_1_108870_AccessoryEntry *fn_1_108870(void) {
 }
 /* fzgx:end fn_1_108870 */
 
-/* fzgx:begin fn_1_1088B8 noprologue */
-#include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/accessory.h"
-#include "rel/main_rel/cloth.h"
-#include "psvec.h"
-#include "game/main_rel/accessory_types.h"
-
-extern void fn_1_108920(void *accessory);
+/* fzgx:begin fn_1_1088B8 */
 
 typedef struct {
     u8 pad_0[0xc];
@@ -538,19 +723,7 @@ void fn_1_1088B8(void *arg) {
 }
 /* fzgx:end fn_1_1088B8 */
 
-/* fzgx:begin fn_1_108920 noprologue */
-#include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/accessory.h"
-#include "rel/main_rel/cloth.h"
-#include "psvec.h"
-#include "game/main_rel/accessory_types.h"
-
-extern void * lbl_801A6410;
-extern void fn_1_108920(void *accessory);
-extern void *fn_80077B14(void *);
-extern void fn_1_46B4(u32 arg0, u32 arg1, const char *arg2, int arg3);
-extern void fn_80008BEC(void *dest, int value, u32 size);
+/* fzgx:begin fn_1_108920 */
 
 struct fn_1_108920_Copy12 { u32 a[3]; };
 
@@ -657,55 +830,15 @@ void fn_1_108A90(Obj *o, s32 idx, f32 r, f32 x, f32 y, f32 z)
 #pragma opt_propagation on
 /* fzgx:end fn_1_108A90 */
 
-/* fzgx:begin fn_1_108EEC noprologue */
-#include "dolphin/types.h"
+/* fzgx:begin fn_1_108EEC */
 
-typedef struct {
-    f32 x;
-    f32 y;
-    f32 z;
-} V3;
+ /* 0x44 */
 
-typedef struct {
-    u8 flags;
-    u8 pad_1[0xF];
-    V3 pos;
-    u8 pad_1C[0x28];
-} Fn108EECPoint; /* 0x44 */
+ /* 0x18C */
 
-typedef struct {
-    u8 pad_0[0x88];
-    u8 mtx[0x18C - 0x88];
-} Fn108EECElem; /* 0x18C */
 
-typedef struct {
-    u8 pad_0[0x8];
-    Fn108EECElem *elems;
-} Fn108EECList;
 
-typedef struct {
-    u8 pad_0[0x150];
-    Fn108EECList *list;
-} Fn108EECOwner;
 
-typedef struct {
-    u8 pad_0[0xC];
-    Fn108EECOwner *owner;
-    u8 pad_10[0x8];
-    u32 count;
-    u8 pad_1C[0x8];
-    Fn108EECPoint *points;
-} Fn108EECObj;
-
-extern void lbl_8006DBAC(void *);
-extern void lbl_8006E1B0(void *, void *);
-extern f32 lbl_8006D0B4(f32);
-extern void fn_8006E250(void *, void *);
-extern f32 lbl_8006D668(void *);
-extern void fn_8006E978(void *, void *, void *);
-extern void mathutil_mtxA_from_quat(void *);
-extern void lbl_8006DB74(void *);
-extern void lbl_8006DFC4(void *);
 
 void fn_1_108EEC(Fn108EECObj *obj, s32 from, s32 to, f32 radius, f32 x, f32 y, f32 z)
 {
@@ -732,7 +865,7 @@ void fn_1_108EEC(Fn108EECObj *obj, s32 from, s32 to, f32 radius, f32 x, f32 y, f
     center.y = y;
     center.z = z;
     lbl_8006DBAC(elem->mtx);
-    lbl_8006E1B0(&center, &center);
+    lbl_8006E1B0( (Fn183D28Vec3 *)(void *)(&center), (Fn183D28Vec3 *)(void *)(&center));
     elem = &obj->owner->list->elems[to];
     p = obj->points;
     for (i = 0; i < obj->count; i++, p++) {
@@ -756,7 +889,7 @@ void fn_1_108EEC(Fn108EECObj *obj, s32 from, s32 to, f32 radius, f32 x, f32 y, f
             fn_8006E250(&orig, &orig);
             lbl_8006D668(&delta);
             lbl_8006D668(&orig);
-            fn_8006E978(quat, &orig, &delta);
+            fn_8006E978( (f32 *)(void *)(quat), (Vec3 *)(void *)(&orig), (Vec3 *)(void *)(&delta));
             mathutil_mtxA_from_quat(quat);
             lbl_8006DB74(mtx);
             q = obj->points;
@@ -766,43 +899,16 @@ void fn_1_108EEC(Fn108EECObj *obj, s32 from, s32 to, f32 radius, f32 x, f32 y, f
                 fn_8006E250(&delta, &delta);
                 lbl_8006DBAC(elem->mtx);
                 lbl_8006DFC4(mtx);
-                lbl_8006E1B0(&delta, &q->pos);
+                lbl_8006E1B0( (Fn183D28Vec3 *)(void *)(&delta), (Fn183D28Vec3 *)(void *)(&q->pos));
             }
         }
     }
 }
 /* fzgx:end fn_1_108EEC */
 
-/* fzgx:begin fn_1_109114 noprologue */
-#include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/accessory.h"
-#include "rel/main_rel/cloth.h"
-#include "psvec.h"
-#include "game/main_rel/accessory_types.h"
+/* fzgx:begin fn_1_109114 */
 
-extern void lbl_8006DBAC(void *);
-extern void *fn_80077B14(void *);
-extern void fn_8006E250(void *, void *);
 
-typedef struct {
-    u8 pad_0[0x150];
-    struct {
-        u8 pad_0[8];
-        u8 *unk_8;
-    } *unk_150;
-} fn_1_109114_AccessoryData;
-
-typedef struct {
-    u8 pad_0[0x8];
-    u32 unk_8;
-    fn_1_109114_AccessoryData *unk_C;
-    void *unk_10;
-    u8 pad_14[4];
-    u32 unk_18;
-    u8 pad_1C[8];
-    u8 *unk_24;
-} fn_1_109114_AccessoryObject;
 
 void fn_1_109114(fn_1_109114_AccessoryObject *self) {
     void *base;
@@ -1054,18 +1160,7 @@ void fn_1_1091D4(u32 arg0) {
 #pragma opt_common_subs reset
 /* fzgx:end fn_1_1091D4 */
 
-/* fzgx:begin fn_1_10A43C noprologue */
-#include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/accessory.h"
-#include "rel/main_rel/cloth.h"
-#include "psvec.h"
-#include "game/main_rel/accessory_types.h"
-
-extern void fn_1_10846C();
-extern void fn_1_128884(void *arg0, void *arg1, s32 type);
-extern const f32 lbl_1_rodata_7B1C;
-extern const f32 lbl_1_rodata_7B20;
+/* fzgx:begin fn_1_10A43C */
 
 void fn_1_10A43C(AccessoryObject *self) {
     int i;
@@ -1121,110 +1216,13 @@ void fn_1_10A43C(AccessoryObject *self) {
 }
 /* fzgx:end fn_1_10A43C */
 
-/* fzgx:begin fn_1_10A6A0 noprologue */
-#include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/accessory.h"
+/* fzgx:begin fn_1_10A6A0 */
 
-extern void *fn_80077B14(void *);
-extern void lbl_8006DBAC(void *);
-extern void fn_8006E250(void *, void *);
-extern void fn_1_10846C(void);
-extern f32 lbl_1_rodata_7B1C;
-extern f32 lbl_1_rodata_7B20;
-extern s32 fn_1_14D670(void);
-extern u32 lbl_801A66A0;
-extern s32 fn_1_86678(s32 arg);
-extern u32 lbl_1_bss_897AC[1741];
-extern u32 lbl_1_bss_897A4;
-extern u32 lbl_1_bss_897A8;
-extern void * lbl_801A6410;
-extern void lbl_8006DAEC(void);
-extern void lbl_8006DBE4(void);
-extern void lbl_8006E1B0(void *, void *);
-extern void lbl_8006DC20(void);
-extern const f64 lbl_1_rodata_7BF8;
-extern void fn_80008BA8(void *dst, void *src, int size);
-extern void *fn_1_45D0(void *manager, int type, void *data, int code);
-extern void fn_1_105744(void);
-extern void fn_1_106DB4(void);
-extern void fn_1_9D0EC(u32, u32, void*, void*);
-extern void fn_1_103AA8(void);
-extern u32 lbl_1_bss_85288[2];
-extern void fn_1_103AD4(void);
-extern void fn_1_105768(void);
-extern void fn_1_9E5B8(void *);
-extern f32 lbl_1_rodata_7B58[40];
-extern u8 lbl_1_rodata_8058[16];
-extern int mathutil_mtxA_rotate_z__fzgx_offset_C();
-extern struct fn_1_129D9C_system *lbl_801A6D00;
-extern void lbl_8006DCA4(void);
-extern void lbl_8006E1C0(void *, void *);
-extern void lbl_8006DFC4(void *);
-extern void lbl_8006D7B0(void);
-extern void lbl_8006D668(void *);
-extern void lbl_8006E0B4(f32, f32, f32);
-extern void lbl_8006E14C(f32);
-extern void lbl_8006DB74(void *);
-extern void fn_80072558(void);
-extern void fn_80083DB0(void *, void *);
-extern void *fn_1_55210(void *);
-extern void *fn_1_548AC(u32);
-extern void *fn_1_5448C(void *);
-extern void fn_1_5489C(void *, void *);
-extern void fn_1_12A0E0(void);
 
-extern void *fn_80077B14(void *);
-extern void lbl_8006DBAC(void *);
-extern void lbl_8006DAEC(void);
-extern void lbl_8006DBE4(void);
-extern void lbl_8006E1B0(void *, void *);
-extern void lbl_8006DC20(void);
-extern void fn_8006E250(void *, void *);
 
-typedef union fn_1_10A6A0_Vec {
-    u32 w[3];
-    struct {
-        f32 x;
-        f32 y;
-        f32 z;
-    };
-} fn_1_10A6A0_Vec;
 
-typedef struct fn_1_10A6A0_Part {
-    s8 unk_0;
-    u8 pad_1;
-    u8 unk_2;
-    u8 pad_3;
-    u16 unk_4[6];
-    fn_1_10A6A0_Vec unk_10;
-    fn_1_10A6A0_Vec unk_1C;
-    fn_1_10A6A0_Vec unk_28;
-    fn_1_10A6A0_Vec unk_34;
-    u32 unk_40;
-} fn_1_10A6A0_Part;
 
-typedef struct fn_1_10A6A0_Model {
-    u8 pad_0[0x8];
-    u8 *unk_8;
-} fn_1_10A6A0_Model;
 
-typedef struct fn_1_10A6A0_Data {
-    u8 pad_0[0x150];
-    fn_1_10A6A0_Model *unk_150;
-} fn_1_10A6A0_Data;
-
-typedef struct fn_1_10A6A0_Object {
-    u8 unk_0;
-    u8 pad_1[7];
-    u32 unk_8;
-    fn_1_10A6A0_Data *unk_C;
-    void *unk_10;
-    u32 pad_14;
-    u32 unk_18;
-    u8 pad_1C[8];
-    fn_1_10A6A0_Part *unk_24;
-} fn_1_10A6A0_Object;
 
 static inline void fn_1_10A6A0_reset_parts(fn_1_10A6A0_Object *self)
 {
@@ -1234,7 +1232,7 @@ static inline void fn_1_10A6A0_reset_parts(fn_1_10A6A0_Object *self)
     p = self->unk_24;
     for (i = 0; i < self->unk_18; i++, p++) {
         lbl_8006DBE4();
-        lbl_8006E1B0(&p->unk_28, &p->unk_10);
+        lbl_8006E1B0( (Fn183D28Vec3 *)(void *)(&p->unk_28), (Fn183D28Vec3 *)(void *)(&p->unk_10));
     }
 }
 
@@ -1286,7 +1284,7 @@ void fn_1_10A6A0(fn_1_10A6A0_Object *self)
     for (i = 0; i < self->unk_18; i++, part++) {
         if (part->unk_0 & 1) {
             lbl_8006DBAC(pool + 0x88);
-            lbl_8006E1B0(&part->unk_28, &part->unk_10);
+            lbl_8006E1B0( (Fn183D28Vec3 *)(void *)(&part->unk_28), (Fn183D28Vec3 *)(void *)(&part->unk_10));
         }
         else {
             part->unk_10 = ((fn_1_10A6A0_Vec *)&lbl_1_bss_88B50)[n];
@@ -1308,9 +1306,7 @@ void fn_1_10A6A0(fn_1_10A6A0_Object *self)
 }
 /* fzgx:end fn_1_10A6A0 */
 
-/* fzgx:begin fn_1_10A8D0 noprologue */
-#include "types.h"
-
+/* fzgx:begin fn_1_10A8D0 */
 #pragma section code_type ".fzgxpool"
 static const u32 fzgx_pool_table1[6] = {0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000};  /* fzgx-allow: A1 retail pool bytes */
 __declspec(section ".fzgxpool") static void fzgx_pool_keep1(void) { const u32 *volatile cp; cp = fzgx_pool_table1; }  /* fzgx-allow: S2 pool primer sink */
@@ -1398,14 +1394,6 @@ typedef struct Graph_10A8D0 {
     Edge_10A8D0 *edges;
 } Graph_10A8D0;
 
-extern u32 lbl_801A6410;
-extern char lbl_1_data_40530[];
-extern void fn_1_10846C(Graph_10A8D0 *);
-extern void fn_1_128884(void *, void *, s32);
-extern void *fn_1_4630(u32, u32, const char *, s32);
-extern f32 fn_1_1289BC(Node_10A8D0 *, Node_10A8D0 *);
-extern f32 lbl_8006D188(s16);
-extern f64 __fabs(f64);
 
 void fn_1_10A8D0(Graph_10A8D0 *g) {
     struct { u32 value; } offset;
@@ -1425,7 +1413,7 @@ void fn_1_10A8D0(Graph_10A8D0 *g) {
     if (g == NULL) {
         return;
     }
-    fn_1_10846C(g);
+    fn_1_10846C( (u32)(Graph_10A8D0 *)(g));
 
     p = g->nodes;
     for (i = 0; i < g->nodeCount; i++, p++) {
@@ -1485,7 +1473,7 @@ void fn_1_10A8D0(Graph_10A8D0 *g) {
     half = g->nodeCount / 2;
     inner.value = (half - 1) * 2;
     g->edgeCount = inner.value + half;
-    g->edges = fn_1_4630(lbl_801A6410, g->edgeCount * sizeof(Edge_10A8D0), lbl_1_data_40530, 0x8e1);
+    g->edges = (void *)fn_1_4630((*((u32 *)&lbl_801A6410)), g->edgeCount * sizeof(Edge_10A8D0), (((char *)&lbl_1_data_40530)), 0x8e1);
 
     i = 0;
     edgeOffset.value = i;
@@ -1495,7 +1483,7 @@ void fn_1_10A8D0(Graph_10A8D0 *g) {
         if (a->flag == a[1].flag) {
             ((Edge_10A8D0 *)((u8 *)g->edges + edgeOffset.value))->a = a;
             ((Edge_10A8D0 *)((u8 *)g->edges + edgeOffset.value))->b = a + 1;
-            ((Edge_10A8D0 *)((u8 *)g->edges + edgeOffset.value))->weight = fn_1_1289BC(a, a + 1);
+            ((Edge_10A8D0 *)((u8 *)g->edges + edgeOffset.value))->weight = fn_1_1289BC( (const Point1024C4 *)(Node_10A8D0 *)(a), (const Point1024C4 *)(Node_10A8D0 *)(a + 1));
             edgeOffset.value += sizeof(Edge_10A8D0);
             k++;
         }
@@ -1515,7 +1503,7 @@ void fn_1_10A8D0(Graph_10A8D0 *g) {
     for (crossIndex.value = 0; crossIndex.value < g->nodeCount; crossIndex.value++, pairA.value++, c++) {
         ((Edge_10A8D0 *)((u8 *)g->edges + inner.value))->a = pairA.value;
         ((Edge_10A8D0 *)((u8 *)g->edges + inner.value))->b = c;
-        ((Edge_10A8D0 *)((u8 *)g->edges + inner.value))->weight = fn_1_1289BC(pairA.value, c);
+        ((Edge_10A8D0 *)((u8 *)g->edges + inner.value))->weight = fn_1_1289BC( (const Point1024C4 *)(Node_10A8D0 *)(pairA.value), (const Point1024C4 *)(Node_10A8D0 *)(c));
         inner.value += sizeof(Edge_10A8D0);
         if (pairA.value->flag != pairA.value[1].flag) {
             break;
@@ -1786,18 +1774,7 @@ void fn_1_10AD18(Work *arg0) {
 #pragma opt_common_subs reset
 /* fzgx:end fn_1_10AD18 */
 
-/* fzgx:begin fn_1_10B344 noprologue */
-#include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/accessory.h"
-#include "rel/main_rel/cloth.h"
-#include "psvec.h"
-#include "game/main_rel/accessory_types.h"
-
-extern void fn_1_10846C();
-extern void fn_1_128884(void *arg0, void *arg1, s32 type);
-extern const f32 lbl_1_rodata_7B1C;
-extern const f32 lbl_1_rodata_7B20;
+/* fzgx:begin fn_1_10B344 */
 
 typedef signed long s32;
 
@@ -1855,7 +1832,7 @@ fn_1_128884(entry_i, entry_j, sizeof(AccessoryEntry));
 }
 /* fzgx:end fn_1_10B344 */
 
-/* fzgx:begin fn_1_10B5A8 noprologue */
+/* fzgx:begin fn_1_10B5A8 */
 typedef signed char s8;
 
 typedef signed long s32;
@@ -1867,72 +1844,17 @@ typedef unsigned long u32;
 typedef float f32;
 
 /* lbl_1_data_3FFBC: .data size 0x574, referenced by 31 functions, shape {} */
-extern u8 lbl_1_data_3FFBC[0x574];
 
-/* lbl_1_bss_88B50: .bss size 0xC00, 8 refs from accessory.c */
+/* (*((fn_1_10B5A8_Obj_1_bss_88B50 *)&lbl_1_bss_88B50)): .bss size 0xC00, 8 refs from accessory.c */
 typedef struct {
 u32 unk_0; /* 4 loads, 4 stores */
 u32 unk_4; /* 5 loads, 5 stores */
 u32 unk_8; /* 4 loads, 4 stores */
 u8 pad_C[0xBF4];
-} Obj_1_bss_88B50;
-extern Obj_1_bss_88B50 lbl_1_bss_88B50;
+} fn_1_10B5A8_Obj_1_bss_88B50;
 
-extern void *fn_80077B14(void *);
-extern void lbl_8006DBAC(void *);
-extern void fn_8006E250(void *, void *);
 
-extern void lbl_8006DAEC(void);
-extern void lbl_8006DBE4(void);
-extern void lbl_8006E1B0(void *, void *);
-extern void lbl_8006DC20(void);
 
-extern void *fn_80077B14(void *);
-extern void lbl_8006DBAC(void *);
-extern void lbl_8006DAEC(void);
-extern void lbl_8006DBE4(void);
-extern void lbl_8006E1B0(void *, void *);
-extern void lbl_8006DC20(void);
-extern void fn_8006E250(void *, void *);
-typedef union fn_1_10A6A0_Vec {
-u32 w[3];
-struct {
-f32 x;
-f32 y;
-f32 z;
-};
-} fn_1_10A6A0_Vec;
-typedef struct fn_1_10A6A0_Part {
-s8 unk_0;
-u8 pad_1;
-u8 unk_2;
-u8 pad_3;
-u16 unk_4[6];
-fn_1_10A6A0_Vec unk_10;
-fn_1_10A6A0_Vec unk_1C;
-fn_1_10A6A0_Vec unk_28;
-fn_1_10A6A0_Vec unk_34;
-u32 unk_40;
-} fn_1_10A6A0_Part;
-typedef struct fn_1_10A6A0_Model {
-u8 pad_0[0x8];
-u8 *unk_8;
-} fn_1_10A6A0_Model;
-typedef struct fn_1_10A6A0_Data {
-u8 pad_0[0x150];
-fn_1_10A6A0_Model *unk_150;
-} fn_1_10A6A0_Data;
-typedef struct fn_1_10A6A0_Object {
-u8 unk_0;
-u8 pad_1[7];
-u32 unk_8;
-fn_1_10A6A0_Data *unk_C;
-void *unk_10;
-u32 pad_14;
-u32 unk_18;
-u8 pad_1C[8];
-fn_1_10A6A0_Part *unk_24;
-} fn_1_10A6A0_Object;
 static inline void fn_1_10A6A0_reset_parts(fn_1_10A6A0_Object *self)
 {
 s32 i;
@@ -1940,7 +1862,7 @@ fn_1_10A6A0_Part *p;
 p = self->unk_24;
 for (i = 0; i < self->unk_18; i++, p++) {
 lbl_8006DBE4();
-lbl_8006E1B0(&p->unk_28, &p->unk_10);
+lbl_8006E1B0( (Fn183D28Vec3 *)(void *)(&p->unk_28), (Fn183D28Vec3 *)(void *)(&p->unk_10));
 }
 }
 static inline void fn_1_10A6A0_attach_parts(fn_1_10A6A0_Object *self, u8 *tbl)
@@ -1986,10 +1908,10 @@ part = self->unk_24;
 for (i = 0; i < self->unk_18; i++, part++) {
 if (part->unk_0 & 1) {
 lbl_8006DBAC(pool + 0x88);
-lbl_8006E1B0(&part->unk_28, &part->unk_10);
+lbl_8006E1B0( (Fn183D28Vec3 *)(void *)(&part->unk_28), (Fn183D28Vec3 *)(void *)(&part->unk_10));
 }
 else {
-part->unk_10 = ((fn_1_10A6A0_Vec *)&lbl_1_bss_88B50)[n];
+part->unk_10 = ((fn_1_10A6A0_Vec *)((fn_1_10B5A8_Obj_1_bss_88B50 *)&lbl_1_bss_88B50))[n];
 n++;
 }
 }
@@ -2006,15 +1928,7 @@ fn_1_10A6A0_attach_parts(self, tbl);
 }
 /* fzgx:end fn_1_10B5A8 */
 
-/* fzgx:begin fn_1_10B7D8 noprologue */
-#include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/accessory.h"
-#include "rel/main_rel/cloth.h"
-#include "psvec.h"
-#include "game/main_rel/accessory_types.h"
-
-extern void fn_1_10846C();
+/* fzgx:begin fn_1_10B7D8 */
 
 // Initializes accessory data only when an accessory object is present.
 void fn_1_10B7D8(void *accessory) {
@@ -2024,10 +1938,7 @@ void fn_1_10B7D8(void *accessory) {
 }
 /* fzgx:end fn_1_10B7D8 */
 
-/* fzgx:begin fn_1_10BA00 noprologue */
-#include "types.h"
-#include "game/main_rel/accessory_types.h"
-
+/* fzgx:begin fn_1_10BA00 */
 #pragma section code_type ".fzgxpool"
 static const unsigned long fzgx_pool_table1[6] = {0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000};  /* fzgx-allow: A1 retail pool bytes */
 __declspec(section ".fzgxpool") static void fzgx_pool_keep1(void) { const unsigned long *volatile cp; cp = fzgx_pool_table1; }  /* fzgx-allow: S2 pool primer sink */
@@ -2142,13 +2053,6 @@ typedef struct {
     Edge10BA00 *edges;
 } Obj10BA00;
 
-extern f32 fn_1_1289BC(const Point1024C4 *, const Point1024C4 *);
-extern f32 fn_1_128AAC(s32, f32);
-extern void *fn_1_4630(u32, u32, const char *, s32);
-extern char lbl_1_data_40530[0x6C];
-extern u32 lbl_801A6410;
-extern void fn_1_10846C(Obj10BA00 *);
-extern void fn_1_128884(void *, void *, s32);
 
 #define LINK(e, p, q)                                                              \
     obj->edges[e].a = (p);                                                         \
@@ -2165,7 +2069,7 @@ void fn_1_10BA00(Obj10BA00 *obj) {
     Group10BA00 *h;
 
     if (obj != NULL) {
-        fn_1_10846C(obj);
+        fn_1_10846C( (u32)(Obj10BA00 *)(obj));
 
         for (i = 0, g = obj->groups; i < obj->groupCount; i++, g++) {
             if (g->flags & 1) {
@@ -2211,7 +2115,7 @@ void fn_1_10BA00(Obj10BA00 *obj) {
 
         n = obj->groupCount >> 2;
         obj->edgeCount = (n - 1) * 4 + n * 3;
-        obj->edges = fn_1_4630(lbl_801A6410, obj->edgeCount * sizeof(Edge10BA00), lbl_1_data_40530, 0xB4F);
+        obj->edges = (void *)fn_1_4630((*((u32 *)&lbl_801A6410)), obj->edgeCount * sizeof(Edge10BA00), lbl_1_data_40530, 0xB4F);
 
         for (i = 0, e = 0, g = obj->groups; i < obj->groupCount; i += 4, g += 4) {
             LINK(e, g, g + 1);
@@ -2486,16 +2390,7 @@ void fn_1_10BE3C(Work *arg0) {
 #pragma opt_common_subs reset
 /* fzgx:end fn_1_10BE3C */
 
-/* fzgx:begin fn_1_10C4E4 noprologue */
-#include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/accessory.h"
-#include "rel/main_rel/cloth.h"
-#include "psvec.h"
-#include "game/main_rel/accessory_types.h"
-
-extern void fn_1_10846C();
-extern void fn_1_128884(void *arg0, void *arg1, s32 type);
+/* fzgx:begin fn_1_10C4E4 */
 
 #pragma section code_type ".fzgxpool"
 static const u32 fzgx_pool_table1[6] = {0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000};  /* fzgx-allow: A1 retail pool bytes */
@@ -2636,22 +2531,7 @@ void fn_1_10C4E4(Graph10C4E4 *g) {
 }
 /* fzgx:end fn_1_10C4E4 */
 
-/* fzgx:begin fn_1_10C7B4 noprologue */
-#include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/accessory.h"
-#include "rel/main_rel/cloth.h"
-#include "psvec.h"
-#include "game/main_rel/accessory_types.h"
-
-extern void lbl_8006DBAC(void *);
-extern void *fn_80077B14(void *);
-extern void fn_8006E250(void *, void *);
-extern void lbl_8006DAEC(void);
-extern void lbl_8006DBE4(void);
-extern void lbl_8006E1B0(void *, void *);
-extern void lbl_8006DC20(void);
-extern const f64 lbl_1_rodata_7BF8;
+/* fzgx:begin fn_1_10C7B4 */
 
 typedef struct {
     u8 pad_0[0x150];
@@ -2714,7 +2594,7 @@ void fn_1_10C7B4(fn_1_10C7B4_AccessoryObject *self) {
                 i = 0;
                 while (i < self->unk_18) {
                     lbl_8006DBE4();
-                    lbl_8006E1B0((u8 *)item + 0x28, (u8 *)item + 0x10);
+                    lbl_8006E1B0( (Fn183D28Vec3 *)(void *)((u8 *)item + 0x28), (Fn183D28Vec3 *)(void *)((u8 *)item + 0x10));
                     i++;
                     item = (AccessoryItem *)((u8 *)item + 0x44);
                 }
@@ -2772,9 +2652,7 @@ void fn_1_10C7B4(fn_1_10C7B4_AccessoryObject *self) {
 }
 /* fzgx:end fn_1_10C7B4 */
 
-/* fzgx:begin fn_1_10C9B0 noprologue */
-#include "types.h"
-
+/* fzgx:begin fn_1_10C9B0 */
 #pragma section code_type ".fzgxpool"
 static const unsigned long fzgx_pool_table1[6] = {0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000};  /* fzgx-allow: A1 retail pool bytes */
 __declspec(section ".fzgxpool") static void fzgx_pool_keep1(void) { const unsigned long *volatile cp; cp = fzgx_pool_table1; }  /* fzgx-allow: S2 pool primer sink */
@@ -2826,8 +2704,6 @@ typedef struct Fn10C9B0List {
     Fn10C9B0Entry *entries;
 } Fn10C9B0List;
 
-extern void fn_1_10846C();
-extern void fn_1_128884(void *arg0, void *arg1, s32 type);
 
 void fn_1_10C9B0(Fn10C9B0List *list) {
     u32 i;
@@ -2891,56 +2767,38 @@ void fn_1_10C9B0(Fn10C9B0List *list) {
 }
 /* fzgx:end fn_1_10C9B0 */
 
-/* fzgx:begin fn_1_10CC38 noprologue */
-#include "types.h"
-#include "game/main_rel/car_test_types.h"
-#include "game/vec3.h"
-#include "rel/main_rel/accessory.h"
-
-struct Sig_fn_80077B14_fn_80077B14_Arg0 { u8 pad_0[4]; u32 unk_4; u8 pad_8[0x18]; u32 unk_20; };
-struct fn_1_10CC38_lbl_1_rodata_7AB8 {
- u8 pad_0[0x58]; f64 unk_58; f32 unk_60; u8 pad_64[0x38]; f32 unk_9C;
- u8 pad_A0[0xA8]; Vec3f unk_148; f32 unk_154, unk_158, unk_15C, unk_160;
-};
-extern const struct fn_1_10CC38_lbl_1_rodata_7AB8 lbl_1_rodata_7AB8;
-extern s32 fn_80077B14(struct Sig_fn_80077B14_fn_80077B14_Arg0 *);
-extern void lbl_8006DBAC(Vec3 *);
-extern void lbl_8006DAEC(void);
-extern void lbl_8006DBE4(void);
-extern void lbl_8006DC20(void);
-extern f32 lbl_8006D0B4(f32);
-extern void fn_8006E250(Vec3f *, Vec3f *);
-typedef struct Particle {
+/* fzgx:begin fn_1_10CC38 */
+typedef struct fn_1_10CC38_Particle {
  u8 flags; u8 pad1; u8 count; u8 pad3; u16 links[6];
  Vec3f pos, prev, local, vel; f32 mass;
-} Particle;
+} fn_1_10CC38_Particle;
 typedef struct ModelData { u8 pad[8]; u8 *data; } ModelData;
-typedef struct Owner { u8 pad[0x150]; ModelData *model; } Owner;
-typedef struct Rope {
- u8 flags; u8 pad[7]; u32 index; Owner *owner; struct Sig_fn_80077B14_fn_80077B14_Arg0 *handle;
- u32 unk14, count, unk1c, unk20; Particle *particles;
-} Rope;
+typedef struct fn_1_10CC38_Owner { u8 pad[0x150]; ModelData *model; } fn_1_10CC38_Owner;
+typedef struct fn_1_10CC38_Rope {
+ u8 flags; u8 pad[7]; u32 index; fn_1_10CC38_Owner *owner; struct fn_1_10CC38_Sig_fn_80077B14_fn_80077B14_Arg0 *handle;
+ u32 unk14, count, unk1c, unk20; fn_1_10CC38_Particle *particles;
+} fn_1_10CC38_Rope;
 #define BASE(r) ((r)->owner->model->data + ((u32 *)lbl_1_data_3FFBC)[(r)->index] * 0x18c)
-#define SETMAT(b) lbl_8006DBAC((Vec3 *)((b) + 0x88))
+#define SETMAT(b) lbl_8006DBAC( (void *)((Vec3 *)((b) + 0x88)))
 #define TRANS(a,b) lbl_8006E1B0((Fn183D28Vec3 *)(a),(Fn183D28Vec3 *)(b))
 #pragma opt_lifetimes off
-void fn_1_10CC38(Rope *arg0) {
-    Particle * p_r2;
+void fn_1_10CC38(fn_1_10CC38_Rope *arg0) {
+    fn_1_10CC38_Particle * p_r2;
     u32 i_r2;
-    Particle * p_r3;
+    fn_1_10CC38_Particle * p_r3;
     f32 dx_r2;
     f32 dy_r2;
     f32 len_r2;
     f32 dz_r2;
     f32 scale_r2;
     u32 i_r3;
-    Particle * p_r4;
+    fn_1_10CC38_Particle * p_r4;
     u32 i_r4;
  f32 z, y, x;
  f32 s;
- const struct fn_1_10CC38_lbl_1_rodata_7AB8 *pool = &lbl_1_rodata_7AB8;
- Particle *group;
- Particle *p;
+ const struct fn_1_10CC38_lbl_1_rodata_7AB8 *pool = ((const struct fn_1_10CC38_lbl_1_rodata_7AB8 *)&lbl_1_rodata_7AB8);
+ fn_1_10CC38_Particle *group;
+ fn_1_10CC38_Particle *p;
  u32 i;
  struct { u8 *value; } base_holder;
 #define base base_holder.value
@@ -2954,7 +2812,7 @@ void fn_1_10CC38(Rope *arg0) {
  f32 dx,dy,dz;
  f32 limit;
  if (arg0 && arg0->handle) {
- fn_80077B14(arg0->handle);
+ fn_80077B14( (void *)(struct fn_1_10CC38_Sig_fn_80077B14_fn_80077B14_Arg0 *)(arg0->handle));
  if (arg0->flags & 2) {
  arg0->flags &= ~2;
  SETMAT(BASE(arg0));
@@ -2981,7 +2839,7 @@ void fn_1_10CC38(Rope *arg0) {
  if(p_r3->flags&1) { lbl_8006DBE4(); TRANS(&p_r3->local,&p_r3->pos); }
  lbl_8006DC20();
  } }
-{ u32 k; Particle *q; u8 *b3;
+{ u32 k; fn_1_10CC38_Particle *q; u8 *b3;
  b3=BASE(arg0); q=arg0->particles; limit=pool->unk_9C;
  for(k=0;k<arg0->count;k++,q++) {
  SETMAT(b3); TRANS(&q->local,&loc_8);
@@ -3003,7 +2861,7 @@ void fn_1_10CC38(Rope *arg0) {
  {
  u8 *matrix=arg0->owner->model->data;
  loc_20=pool->unk_148;
- lbl_8006DBAC((Vec3 *)(matrix+0x844));
+ lbl_8006DBAC( (void *)((Vec3 *)(matrix+0x844)));
  s=pool->unk_154;
  {
  x=*(f32 *)(0xE0000008); y=*(f32 *)(0xE0000018); z=*(f32 *)(0xE0000028);
@@ -3011,7 +2869,7 @@ void fn_1_10CC38(Rope *arg0) {
  *(f32 *)(0xE000000C)=x; *(f32 *)(0xE000001C)=y; *(f32 *)(0xE000002C)=z; }
  TRANS(&loc_20,&loc_20);
  }
- { u32 k; Particle *q;
+ { u32 k; fn_1_10CC38_Particle *q;
  base=BASE(arg0); q=arg0->particles;
  for(k=0;k<arg0->count;k++,q++) {
  if(!(q->flags&1)) {
@@ -3048,14 +2906,14 @@ void fn_1_10CC38(Rope *arg0) {
  p_r4->vel.y=(accel/p_r4->mass)*(p_r4->pos.y-p_r4->prev.y);
  p_r4->vel.z=(accel/p_r4->mass)*(p_r4->pos.z-p_r4->prev.z);
  }
- vertices=(u8 *)fn_80077B14(arg0->handle);
+ vertices=(u8 *)fn_80077B14( (void *)(struct fn_1_10CC38_Sig_fn_80077B14_fn_80077B14_Arg0 *)(arg0->handle));
  SETMAT(BASE(arg0));
- { Particle *q; s32 l; u32 k; u16 *link;
+ { fn_1_10CC38_Particle *q; s32 l; u32 k; u16 *link;
  q=arg0->particles;
  for(k=0;k<arg0->count;k++,q++) {
  link=(u16 *)q;
  for(l=0;l<q->count;link++,l++) {
- fn_8006E250(&q->pos,(Vec3f *)(vertices+(link[2]<<6)));
+ fn_8006E250( (void *)(Vec3f *)(&q->pos), (void *)((Vec3f *)(vertices+(link[2]<<6))));
  }
  }
  }
@@ -3467,63 +3325,55 @@ void fn_1_10D7D4(Work *arg0) {
 #pragma opt_common_subs reset
 /* fzgx:end fn_1_10D7D4 */
 
-/* fzgx:begin fn_1_10DDE4 noprologue */
-#include "types.h"
-
-typedef struct Vec3 {
+/* fzgx:begin fn_1_10DDE4 */
+typedef struct fn_1_10DDE4_Vec3 {
     f32 x;
     f32 y;
     f32 z;
-} Vec3;
+} fn_1_10DDE4_Vec3;
 
-typedef struct RopeNode {
+typedef struct fn_1_10DDE4_RopeNode {
     u8 unk_0;
     u8 pad_1[0xF];
-    Vec3 unk_10;
+    fn_1_10DDE4_Vec3 unk_10;
     u8 pad_1C[0x24];
     f32 unk_40;
-} RopeNode;
+} fn_1_10DDE4_RopeNode;
 
-typedef struct Link {
-    RopeNode *unk_0;
-    RopeNode *unk_4;
+typedef struct fn_1_10DDE4_Link {
+    fn_1_10DDE4_RopeNode *unk_0;
+    fn_1_10DDE4_RopeNode *unk_4;
     f32 unk_8;
-} Link;
+} fn_1_10DDE4_Link;
 
-typedef struct RopeOwner {
+typedef struct fn_1_10DDE4_RopeOwner {
     u8 pad_0[0x8C];
     s32 unk_8C;
-} RopeOwner;
+} fn_1_10DDE4_RopeOwner;
 
-typedef struct Rope {
+typedef struct fn_1_10DDE4_Rope {
     u8 pad_0[0xC];
-    RopeOwner *unk_C;
+    fn_1_10DDE4_RopeOwner *unk_C;
     u8 pad_10[0x8];
     u32 unk_18;
     u32 unk_1C;
     u8 pad_20[0x4];
-    RopeNode *unk_24;
-    Link *unk_28;
-} Rope;
+    fn_1_10DDE4_RopeNode *unk_24;
+    fn_1_10DDE4_Link *unk_28;
+} fn_1_10DDE4_Rope;
 
-extern u32 lbl_801A6410;
-extern char lbl_1_data_40530[];
-extern void fn_1_10846C(Rope *);
-extern void fn_1_128884(void *, void *, s32);
-extern void *fn_1_4630(u32, u32, const char *, s32);
-extern f32 fn_1_1289BC(RopeNode *, RopeNode *);
 
-void fn_1_10DDE4(Rope *rope) {
+void fn_1_10DDE4(fn_1_10DDE4_Rope *rope) {
     u32 i;
     u32 m;
-    RopeNode *b;
-    RopeNode *a;
-    RopeNode *p;
-    RopeNode *n;
+    fn_1_10DDE4_RopeNode *b;
+    fn_1_10DDE4_RopeNode *a;
+    fn_1_10DDE4_RopeNode *p;
+    fn_1_10DDE4_RopeNode *n;
     s32 last;
     u32 c;
     u32 j;
-    RopeNode *q;
+    fn_1_10DDE4_RopeNode *q;
     u32 k;
     u32 rows;
     struct { s32 value; } cols;
@@ -3535,7 +3385,7 @@ void fn_1_10DDE4(Rope *rope) {
     if (rope->unk_C->unk_8C == 2) {
         cols.value = 7;
     }
-    fn_1_10846C(rope);
+    fn_1_10846C( (u32)(fn_1_10DDE4_Rope *)(rope));
 
     for (i = 0, n = rope->unk_24; i < rope->unk_18; i++, n++) {
         if (n->unk_0 & 1) {
@@ -3550,7 +3400,7 @@ void fn_1_10DDE4(Rope *rope) {
     for (i = 0, a = rope->unk_24; i < rope->unk_18; i++, a++) {
         for (j = i + 1, b = &rope->unk_24[i] + 1; j < rope->unk_18; j++, b++) {
             if (a->unk_0 == 0 && b->unk_0 != 0) {
-                fn_1_128884(a, b, sizeof(RopeNode));
+                fn_1_128884(a, b, sizeof(fn_1_10DDE4_RopeNode));
             }
         }
     }
@@ -3558,7 +3408,7 @@ void fn_1_10DDE4(Rope *rope) {
     for (i = 0, a = rope->unk_24; i < rope->unk_18; i++, a++) {
         for (j = i + 1, b = &rope->unk_24[i] + 1; j < rope->unk_18; j++, b++) {
             if (a->unk_0 == b->unk_0 && a->unk_10.x < b->unk_10.x) {
-                fn_1_128884(a, b, sizeof(RopeNode));
+                fn_1_128884(a, b, sizeof(fn_1_10DDE4_RopeNode));
             }
         }
     }
@@ -3566,7 +3416,7 @@ void fn_1_10DDE4(Rope *rope) {
     for (i = 0, a = &rope->unk_24[3]; i < cols.value; i++, a++) {
         for (j = i + 1, b = a + 1; j < cols.value; j++, b++) {
             if (a->unk_10.z > b->unk_10.z) {
-                fn_1_128884(a, b, sizeof(RopeNode));
+                fn_1_128884(a, b, sizeof(fn_1_10DDE4_RopeNode));
             }
         }
     }
@@ -3588,7 +3438,7 @@ void fn_1_10DDE4(Rope *rope) {
         for (c = 0, n = p; c < cols.value; c++, n++) {
             for (m = c + 1, q = n + 1; m < cols.value; m++, q++) {
                 if (n->unk_10.z > q->unk_10.z) {
-                    fn_1_128884(n, q, sizeof(RopeNode));
+                    fn_1_128884(n, q, sizeof(fn_1_10DDE4_RopeNode));
                 }
             }
         }
@@ -3597,48 +3447,39 @@ void fn_1_10DDE4(Rope *rope) {
 
     rows = (rope->unk_18 - 3) / cols.value;
     rope->unk_1C = rows * (cols.value - 1) + (rows - 1) * cols.value + (cols.value - 1) * 2;
-    rope->unk_28 = fn_1_4630(lbl_801A6410, rope->unk_1C * sizeof(Link), lbl_1_data_40530, 0xF31);
+    rope->unk_28 = (void *)fn_1_4630((*((u32 *)&lbl_801A6410)), rope->unk_1C * sizeof(fn_1_10DDE4_Link), (((char *)&lbl_1_data_40530)), 0xF31);
 
     last = (u32)cols.value - 1;
     for (i = 0, k = 0, a = &rope->unk_24[3]; i < last; i++, a++) {
         rope->unk_28[k].unk_0 = a;
         rope->unk_28[k].unk_4 = a + cols.value + 1;
-        rope->unk_28[k].unk_8 = fn_1_1289BC(rope->unk_28[k].unk_0, rope->unk_28[k].unk_4);
+        rope->unk_28[k].unk_8 = fn_1_1289BC( (const Point1024C4 *)(fn_1_10DDE4_RopeNode *)(rope->unk_28[k].unk_0), (const Point1024C4 *)(fn_1_10DDE4_RopeNode *)(rope->unk_28[k].unk_4));
         k++;
     }
     for (i = 0, a = &rope->unk_24[3]; i < last; i++, a++) {
         rope->unk_28[k].unk_0 = a + 1;
         rope->unk_28[k].unk_4 = a + cols.value;
-        rope->unk_28[k].unk_8 = fn_1_1289BC(rope->unk_28[k].unk_0, rope->unk_28[k].unk_4);
+        rope->unk_28[k].unk_8 = fn_1_1289BC( (const Point1024C4 *)(fn_1_10DDE4_RopeNode *)(rope->unk_28[k].unk_0), (const Point1024C4 *)(fn_1_10DDE4_RopeNode *)(rope->unk_28[k].unk_4));
         k++;
     }
     for (i = 3, a = &rope->unk_24[3]; i < rope->unk_18 - 1; i++, a++) {
         if ((i - 2) % cols.value != 0) {
             rope->unk_28[k].unk_0 = a;
             rope->unk_28[k].unk_4 = a + 1;
-            rope->unk_28[k].unk_8 = fn_1_1289BC(a, a + 1);
+            rope->unk_28[k].unk_8 = fn_1_1289BC( (const Point1024C4 *)(fn_1_10DDE4_RopeNode *)(a), (const Point1024C4 *)(fn_1_10DDE4_RopeNode *)(a + 1));
             k++;
         }
     }
     for (i = 3, a = &rope->unk_24[3]; i < rope->unk_18 - cols.value; i++, a++) {
         rope->unk_28[k].unk_0 = a;
         rope->unk_28[k].unk_4 = a + (u32)cols.value;
-        rope->unk_28[k].unk_8 = fn_1_1289BC(a, a + (u32)cols.value);
+        rope->unk_28[k].unk_8 = fn_1_1289BC( (const Point1024C4 *)(fn_1_10DDE4_RopeNode *)(a), (const Point1024C4 *)(fn_1_10DDE4_RopeNode *)(a + (u32)cols.value));
         k++;
     }
 }
 /* fzgx:end fn_1_10DDE4 */
 
-/* fzgx:begin fn_1_110008 noprologue */
-#include "types.h"
-#include "game/main_rel/accessory_types.h"
-
-extern void fn_1_10846C(fn_1_10D2F0_Obj *);
-extern const f32 lbl_1_rodata_7B1C;
-extern const f32 lbl_1_rodata_7B20;
-extern void fn_1_128884(void *, void *, s32);
-extern void *fn_1_4630(u32, u32, const char *, s32);
-extern u32 lbl_801A6410;
+/* fzgx:begin fn_1_110008 */
 
 void fn_1_110008(fn_1_10D2F0_Obj *obj) {
     u32 i;
@@ -3654,7 +3495,7 @@ void fn_1_110008(fn_1_10D2F0_Obj *obj) {
     fn_1_10D2F0_Entry *p;
 
     if (obj != NULL) {
-        fn_1_10846C(obj);
+        fn_1_10846C( (u32)(fn_1_10D2F0_Obj *)(obj));
 
         p = obj->unk_24;
         for (i = 0; i < obj->unk_18; i++, p++) {
@@ -3720,7 +3561,7 @@ void fn_1_110008(fn_1_10D2F0_Obj *obj) {
         }
 
         obj->unk_1C = (obj->unk_18 / 9) * 8 + (obj->unk_18 / 9 - 1) * 9;
-        obj->unk_28 = fn_1_4630(lbl_801A6410, obj->unk_1C * sizeof(fn_1_10D2F0_Link), lbl_1_data_40530, 4277);
+        obj->unk_28 = (void *)fn_1_4630((*((u32 *)&lbl_801A6410)), obj->unk_1C * sizeof(fn_1_10D2F0_Link), lbl_1_data_40530, 4277);
 
         c = 0;
         a = obj->unk_24;
@@ -4262,16 +4103,7 @@ void fn_1_110478(Work *arg0) {
 #pragma opt_common_subs reset
 /* fzgx:end fn_1_110478 */
 
-/* fzgx:begin fn_1_111510 noprologue */
-#include "types.h"
-#include "game/main_rel/accessory_types.h"
-
-extern void fn_1_10846C(fn_1_10D2F0_Obj *);
-extern const f32 lbl_1_rodata_7B1C;
-extern const f32 lbl_1_rodata_7B20;
-extern void fn_1_128884(void *, void *, s32);
-extern void *fn_1_4630(u32, u32, const char *, s32);
-extern u32 lbl_801A6410;
+/* fzgx:begin fn_1_111510 */
 
 void fn_1_111510(fn_1_10D2F0_Obj *obj) {
     u32 i;
@@ -4287,7 +4119,7 @@ void fn_1_111510(fn_1_10D2F0_Obj *obj) {
     fn_1_10D2F0_Entry *p;
 
     if (obj != NULL) {
-        fn_1_10846C(obj);
+        fn_1_10846C( (u32)(fn_1_10D2F0_Obj *)(obj));
 
         p = obj->unk_24;
         for (i = 0; i < obj->unk_18; i++, p++) {
@@ -4353,7 +4185,7 @@ void fn_1_111510(fn_1_10D2F0_Obj *obj) {
         }
 
         obj->unk_1C = (obj->unk_18 / 9) * 8 + (obj->unk_18 / 9 - 1) * 9;
-        obj->unk_28 = fn_1_4630(lbl_801A6410, obj->unk_1C * sizeof(fn_1_10D2F0_Link), lbl_1_data_40530, 4596);
+        obj->unk_28 = (void *)fn_1_4630((*((u32 *)&lbl_801A6410)), obj->unk_1C * sizeof(fn_1_10D2F0_Link), lbl_1_data_40530, 4596);
 
         c = 0;
         a = obj->unk_24;
@@ -4904,14 +4736,7 @@ void fn_1_111980(Work *arg0) {
 #pragma opt_common_subs reset
 /* fzgx:end fn_1_111980 */
 
-/* fzgx:begin fn_1_112F40 noprologue */
-#include "types.h"
-#include "game/main_rel/accessory_types.h"
-
-extern void fn_1_10846C(fn_1_10D2F0_Obj *);
-extern void fn_1_128884(void *, void *, s32);
-extern void *fn_1_4630(u32, u32, const char *, s32);
-extern u32 lbl_801A6410;
+/* fzgx:begin fn_1_112F40 */
 
 void fn_1_112F40(fn_1_10D2F0_Obj *obj) {
     u32 i;
@@ -4926,7 +4751,7 @@ void fn_1_112F40(fn_1_10D2F0_Obj *obj) {
     if (obj == NULL) {
         return;
     }
-    fn_1_10846C(obj);
+    fn_1_10846C( (u32)(fn_1_10D2F0_Obj *)(obj));
 
     for (i = 0, a = obj->unk_24; i < obj->unk_18; i++, a++) {
         if (a->unk_0 & 1) {
@@ -4968,7 +4793,7 @@ void fn_1_112F40(fn_1_10D2F0_Obj *obj) {
 
     n = obj->unk_18 / 2;
     obj->unk_1C = (((n - 1)) << 1) + n;
-    obj->unk_28 = fn_1_4630(lbl_801A6410, obj->unk_1C * sizeof(fn_1_10D2F0_Link), lbl_1_data_40530, 0x1330);
+    obj->unk_28 = (void *)fn_1_4630((*((u32 *)&lbl_801A6410)), obj->unk_1C * sizeof(fn_1_10D2F0_Link), lbl_1_data_40530, 0x1330);
 
     count = 0;
     for (i = 0, a = obj->unk_24; i < obj->unk_18 - 1; i++, a++) {
@@ -5000,14 +4825,9 @@ void fn_1_112F40(fn_1_10D2F0_Obj *obj) {
 }
 /* fzgx:end fn_1_112F40 */
 
-/* fzgx:begin fn_1_1132E4 noprologue */
-#include "types.h"
+/* fzgx:begin fn_1_1132E4 */
 
-typedef struct RopeVec {
-    f32 x, y, z;
-} RopeVec;
-
-typedef struct RopeNode {
+typedef struct fn_1_1132E4_RopeNode {
     u8 flags;
     u8 pad_1;
     u8 count;
@@ -5018,11 +4838,11 @@ typedef struct RopeNode {
     RopeVec local; /* 0x28 */
     RopeVec vel;   /* 0x34 */
     f32 mass;      /* 0x40 */
-} RopeNode;
+} fn_1_1132E4_RopeNode;
 
 typedef struct RopeLink {
-    RopeNode *a;
-    RopeNode *b;
+    fn_1_1132E4_RopeNode *a;
+    fn_1_1132E4_RopeNode *b;
     f32 len;
 } RopeLink;
 
@@ -5036,51 +4856,28 @@ typedef struct RopeOwnerSub {
     RopeEntry *entries;
 } RopeOwnerSub;
 
-typedef struct RopeOwner {
+typedef struct fn_1_1132E4_RopeOwner {
     u8 pad_0[0x150];
     RopeOwnerSub *sub;
-} RopeOwner;
+} fn_1_1132E4_RopeOwner;
 
-typedef struct RopeMtx {
-    u8 data[0x40];
-} RopeMtx;
 
-typedef struct Rope {
+typedef struct fn_1_1132E4_Rope {
     u8 flags;
     u8 pad_1[7];
     s32 type;         /* 0x08 */
-    RopeOwner *owner; /* 0x0C */
+    fn_1_1132E4_RopeOwner *owner; /* 0x0C */
     void *model;      /* 0x10 */
     u8 pad_14[4];
     u32 nodeCount;    /* 0x18 */
     u32 linkCount;    /* 0x1C */
     u8 pad_20[4];
-    RopeNode *nodes;  /* 0x24 */
+    fn_1_1132E4_RopeNode *nodes;  /* 0x24 */
     RopeLink *links;  /* 0x28 */
-} Rope;
+} fn_1_1132E4_Rope;
 
 /* accessory.c literal pool */
-typedef struct RopePool {
-    u8 pad_0[0x58];
-    f64 gravityHalf; /* 0x58 */
-    f32 gravity;     /* 0x60 */
-    u8 pad_64[0x38];
-    f32 slack;       /* 0x9C */
-    f32 one;         /* 0xA0 */
-    f32 maxDist2;    /* 0xA4 */
-} RopePool;
 
-extern const RopePool lbl_1_rodata_7AB8;
-extern u8 lbl_1_data_3FFBC[0x574];
-extern RopeMtx *fn_80077B14(void *);
-extern void lbl_8006DBAC(void *);
-extern void lbl_8006DAEC(void);
-extern void lbl_8006DBE4(void);
-extern void lbl_8006E1B0(RopeVec *, RopeVec *);
-extern void lbl_8006DC20(void);
-extern f32 lbl_8006D118(f32 *, f32);
-extern f32 lbl_8006D0B4(f32);
-extern void fn_8006E250(RopeVec *, RopeMtx *);
 
 #define ROPE_ENTRY(r) (&(r)->owner->sub->entries[((s32 *)lbl_1_data_3FFBC)[(r)->type]])
 
@@ -5090,8 +4887,8 @@ static inline void RopeVecSet(f32 *v, f32 x, f32 y, f32 z) {
     v[2] = z;
 }
 
-void fn_1_1132E4(Rope *rope) {
-    const RopePool *pool = &lbl_1_rodata_7AB8;
+void fn_1_1132E4(fn_1_1132E4_Rope *rope) {
+    const RopePool *pool = ((const RopePool *)&lbl_1_rodata_7AB8);
     RopeMtx *mtx;
     f32 inv;
     f32 s;
@@ -5114,11 +4911,11 @@ void fn_1_1132E4(Rope *rope) {
             lbl_8006DBAC(ROPE_ENTRY(rope)->mtx);
             lbl_8006DAEC();
             {
-                RopeNode *n = rope->nodes;
+                fn_1_1132E4_RopeNode *n = rope->nodes;
                 u32 i;
                 for (i = 0; i < rope->nodeCount; i++, n++) {
                     lbl_8006DBE4();
-                    lbl_8006E1B0(&n->local, &n->pos);
+                    lbl_8006E1B0( (Fn183D28Vec3 *)(RopeVec *)(&n->local), (Fn183D28Vec3 *)(RopeVec *)(&n->pos));
                 }
             }
             lbl_8006DC20();
@@ -5127,7 +4924,7 @@ void fn_1_1132E4(Rope *rope) {
         /* integrate free nodes under gravity */
         {
             u32 i;
-            RopeNode *n = rope->nodes;
+            fn_1_1132E4_RopeNode *n = rope->nodes;
             for (i = 0; i < rope->nodeCount; i++, n++) {
                 if (!(n->flags & 1)) {
                     n->prev = n->pos;
@@ -5139,7 +4936,7 @@ void fn_1_1132E4(Rope *rope) {
 
         /* pinned nodes follow their attachment matrix */
         {
-            RopeNode *n;
+            fn_1_1132E4_RopeNode *n;
             RopeEntry *entry = ROPE_ENTRY(rope);
             u32 i;
             n = rope->nodes;
@@ -5148,7 +4945,7 @@ void fn_1_1132E4(Rope *rope) {
                 lbl_8006DAEC();
                 if (n->flags & 1) {
                     lbl_8006DBE4();
-                    lbl_8006E1B0(&n->local, &n->pos);
+                    lbl_8006E1B0( (Fn183D28Vec3 *)(RopeVec *)(&n->local), (Fn183D28Vec3 *)(RopeVec *)(&n->pos));
                 }
                 lbl_8006DC20();
             }
@@ -5157,7 +4954,7 @@ void fn_1_1132E4(Rope *rope) {
         /* distance constraints */
         {
             RopeLink *link = rope->links;
-            RopeNode *a, *b;
+            fn_1_1132E4_RopeNode *a, *b;
             u32 i;
             f32 t;
             for (i = 0; i < rope->linkCount; i++, link++) {
@@ -5172,7 +4969,7 @@ void fn_1_1132E4(Rope *rope) {
                     d2 = t;
                     dx = t - pool->slack;
                     if (dx > link->len) {
-                        inv = lbl_8006D118(&d2, t);
+                        inv = lbl_8006D118(t, &d2);
                         d2 = inv * (d2 - lbl_8006D0B4(link->len));
                         e[0] *= d2;
                         e[1] *= d2;
@@ -5194,14 +4991,14 @@ void fn_1_1132E4(Rope *rope) {
         /* keep every node within reach of its anchor */
         {
             u32 i;
-            RopeNode *n;
+            fn_1_1132E4_RopeNode *n;
             RopeEntry *entry = ROPE_ENTRY(rope);
             f32 t;
             n = rope->nodes;
             k = pool->maxDist2;
             for (i = 0; i < rope->nodeCount; i++, n++) {
                 lbl_8006DBAC(entry->mtx);
-                lbl_8006E1B0(&n->local, &c);
+                lbl_8006E1B0( (Fn183D28Vec3 *)(RopeVec *)(&n->local), (Fn183D28Vec3 *)(RopeVec *)(&c));
                 dx = n->pos.x - c.x;
                 dy = n->pos.y - c.y;
                 dz = n->pos.z - c.z;
@@ -5222,7 +5019,7 @@ void fn_1_1132E4(Rope *rope) {
 
         {
             u32 i;
-            RopeNode *n = rope->nodes;
+            fn_1_1132E4_RopeNode *n = rope->nodes;
             for (i = 0; i < rope->nodeCount; i++, n++) {
                 n->vel.x = n->pos.x - n->prev.x;
                 n->vel.y = n->pos.y - n->prev.y;
@@ -5232,16 +5029,16 @@ void fn_1_1132E4(Rope *rope) {
 
         {
             u16 *indices;
-            RopeNode *n;
+            fn_1_1132E4_RopeNode *n;
             s32 j;
             u32 i;
-            mtx = fn_80077B14(rope->model);
+            mtx = (RopeMtx *)fn_80077B14(rope->model);
             lbl_8006DBAC(ROPE_ENTRY(rope)->mtx);
             n = rope->nodes;
             for (i = 0; i < rope->nodeCount; i++, n++) {
                 indices = (u16 *)n;
                 for (j = 0; j < n->count; indices++, j++) {
-                    fn_8006E250(&n->pos, &mtx[indices[2]]);
+                    fn_8006E250( (void *)(RopeVec *)(&n->pos), (void *)(RopeMtx *)(&mtx[indices[2]]));
                 }
             }
         }
@@ -5249,10 +5046,8 @@ void fn_1_1132E4(Rope *rope) {
 }
 /* fzgx:end fn_1_1132E4 */
 
-/* fzgx:begin fn_1_1137E4 noprologue */
-#include "types.h"
-
-/* the module .rodata pool from lbl_1_rodata_7AB8 up to this function's last literal (retail bytes), so its
+/* fzgx:begin fn_1_1137E4 */
+/* the module .rodata pool from (((const u8 *)&lbl_1_rodata_7AB8)) up to this function's last literal (retail bytes), so its
  * float literals land at retail's offsets from one pool base */
 #pragma section code_type ".fzgxpool"
 static const u32 fzgx_pool_table1[20] = {0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x3E800000, 0x00000000, 0x3C23D70A, 0x00000000, 0x00000000, 0x00000000, 0x3E7AD7F2, 0x9ABCAF48, 0x00000000, 0x00000000, 0x00000000, 0x3F000000, 0x3E800000, 0x00000000};  /* fzgx-allow: A1 retail pool bytes */
@@ -5284,66 +5079,59 @@ __declspec(section ".fzgxpool") static void fzgx_pool_prime4(void) {
 }
 #pragma section code_type ".text"
 
-typedef struct Vec3 {
+typedef struct fn_1_1137E4_Vec3 {
     f32 x;
     f32 y;
     f32 z;
-} Vec3;
+} fn_1_1137E4_Vec3;
 
-typedef struct RopeNode {
+typedef struct fn_1_1137E4_RopeNode {
     u8 flags;
     u8 pad_1;
     u8 linkCount;
     u8 pad_3;
     u16 links[6];
-    Vec3 pos;
-    Vec3 prev;
-    Vec3 local;
-    Vec3 vel;
+    fn_1_1137E4_Vec3 pos;
+    fn_1_1137E4_Vec3 prev;
+    fn_1_1137E4_Vec3 local;
+    fn_1_1137E4_Vec3 vel;
     f32 mass;
-} RopeNode;
+} fn_1_1137E4_RopeNode;
 
-typedef struct Link {
-    RopeNode *a;
-    RopeNode *b;
+typedef struct fn_1_1137E4_Link {
+    fn_1_1137E4_RopeNode *a;
+    fn_1_1137E4_RopeNode *b;
     f32 length;
-} Link;
+} fn_1_1137E4_Link;
 
-typedef struct RopeOwner {
+typedef struct fn_1_1137E4_RopeOwner {
     u8 pad_0[0x8C];
     s32 unk_8C;
-} RopeOwner;
+} fn_1_1137E4_RopeOwner;
 
-typedef struct Rope {
+typedef struct fn_1_1137E4_Rope {
     u8 flags;
     u8 pad_1[0x7];
     u32 kind;
-    RopeOwner *owner;
+    fn_1_1137E4_RopeOwner *owner;
     void *skin;
     u8 pad_14[0x4];
     u32 count;
     u32 linkCount;
     u8 pad_20[0x4];
-    RopeNode *nodes;
-    Link *links;
-} Rope;
+    fn_1_1137E4_RopeNode *nodes;
+    fn_1_1137E4_Link *links;
+} fn_1_1137E4_Rope;
 
-extern u32 lbl_801A6410;
-extern char lbl_1_data_40530[];
-extern void fn_1_10846C(Rope *);
-extern void fn_1_128884(void *, void *, s32);
-extern void *fn_1_4630(u32, u32, const char *, s32);
-extern f32 fn_1_1289BC(RopeNode *, RopeNode *);
-extern f32 lbl_8006D188(s32);
 
-void fn_1_1137E4(Rope *rope) {
+void fn_1_1137E4(fn_1_1137E4_Rope *rope) {
     u32 i;
     u32 c;
-    RopeNode *a;
-    RopeNode *n;
+    fn_1_1137E4_RopeNode *a;
+    fn_1_1137E4_RopeNode *n;
     u32 m;
     u32 j;
-    RopeNode *b;
+    fn_1_1137E4_RopeNode *b;
     u32 k;
     u32 rows;
     s32 cols;
@@ -5356,7 +5144,7 @@ void fn_1_1137E4(Rope *rope) {
         j = 9;
     }
     cols = j;
-    fn_1_10846C(rope);
+    fn_1_10846C( (u32)(fn_1_1137E4_Rope *)(rope));
 
     for (i = 0, a = rope->nodes; i < rope->count; i++, a++) {
         if (a->flags & 1) {
@@ -5371,7 +5159,7 @@ void fn_1_1137E4(Rope *rope) {
     for (i = 0, a = rope->nodes; i < rope->count; i++, a++) {
         for (m = i + 1, b = &rope->nodes[i] + 1; m < rope->count; m++, b++) {
             if (a->pos.x < b->pos.x) {
-                fn_1_128884(a, b, sizeof(RopeNode));
+                fn_1_128884(a, b, sizeof(fn_1_1137E4_RopeNode));
             }
         }
     }
@@ -5381,7 +5169,7 @@ void fn_1_1137E4(Rope *rope) {
         for (m = 0, b = a; m < cols; m++, b++) {
             for (c = m + 1, n = b + 1; c < cols; c++, n++) {
                 if (b->pos.z > n->pos.z) {
-                    fn_1_128884(b, n, sizeof(RopeNode));
+                    fn_1_128884(b, n, sizeof(fn_1_1137E4_RopeNode));
                 }
             }
         }
@@ -5391,9 +5179,9 @@ void fn_1_1137E4(Rope *rope) {
         for (m = 0, b = a; m < cols; m++, b++) {
             for (c = m + 1, n = b + 1; c < cols; c++, n++) {
                 if (b->pos.z > 0.0f && n->pos.z > 0.0f && b->pos.y < n->pos.y) {
-                    fn_1_128884(b, n, sizeof(RopeNode));
+                    fn_1_128884(b, n, sizeof(fn_1_1137E4_RopeNode));
                 } else if (b->pos.z <= 0.0f && n->pos.z <= 0.0f && b->pos.y > n->pos.y) {
-                    fn_1_128884(b, n, sizeof(RopeNode));
+                    fn_1_128884(b, n, sizeof(fn_1_1137E4_RopeNode));
                 }
             }
         }
@@ -5413,20 +5201,20 @@ void fn_1_1137E4(Rope *rope) {
 
     rows = rope->count / cols;
     rope->linkCount = rows * (cols - 1) + (rows - 1) * cols;
-    rope->links = fn_1_4630(lbl_801A6410, rope->linkCount * sizeof(Link), lbl_1_data_40530, 0x143E);
+    rope->links = (void *)fn_1_4630((*((u32 *)&lbl_801A6410)), rope->linkCount * sizeof(fn_1_1137E4_Link), (((char *)&lbl_1_data_40530)), 0x143E);
 
     for (i = 0, k = 0, a = rope->nodes; i < rope->count - 1; i++, a++) {
         if ((i + 1) % cols != 0) {
             rope->links[k].a = a;
             rope->links[k].b = a + 1;
-            rope->links[k].length = fn_1_1289BC(a, a + 1);
+            rope->links[k].length = fn_1_1289BC( (const Point1024C4 *)(fn_1_1137E4_RopeNode *)(a), (const Point1024C4 *)(fn_1_1137E4_RopeNode *)(a + 1));
             k++;
         }
     }
     for (i = 0, a = rope->nodes; i < rope->count - cols; i++, a++) {
         rope->links[k].a = a;
         rope->links[k].b = a + (u32)cols;
-        rope->links[k].length = fn_1_1289BC(a, a + (u32)cols);
+        rope->links[k].length = fn_1_1289BC( (const Point1024C4 *)(fn_1_1137E4_RopeNode *)(a), (const Point1024C4 *)(fn_1_1137E4_RopeNode *)(a + (u32)cols));
         k++;
     }
 }
@@ -5770,10 +5558,7 @@ void fn_1_113C58(AccessoryObjectLocal *arg0) {
 }
 /* fzgx:end fn_1_113C58 */
 
-/* fzgx:begin fn_1_1145C8 noprologue */
-#include "types.h"
-#include "game/main_rel/accessory_types.h"
-
+/* fzgx:begin fn_1_1145C8 */
 typedef struct Accessory1145C8Node {
     u8 flag;
     u8 pad_1[0xF];
@@ -5806,12 +5591,6 @@ typedef struct Accessory1145C8 {
     Accessory1145C8Edge *edges;
 } Accessory1145C8;
 
-extern const f32 lbl_1_rodata_7B1C;
-extern const f32 lbl_1_rodata_7B20;
-extern u32 lbl_801A6410;
-extern void fn_1_10846C(Accessory1145C8 *);
-extern void fn_1_128884(void *, void *, s32);
-extern void *fn_1_4630(u32, u32, const char *, s32);
 
 void fn_1_1145C8(Accessory1145C8 *obj) {
     u32 i;
@@ -5830,7 +5609,7 @@ void fn_1_1145C8(Accessory1145C8 *obj) {
     f32 value;
 
     if (obj != NULL) {
-        fn_1_10846C(obj);
+        fn_1_10846C( (u32)(Accessory1145C8 *)(obj));
         for (i = 0, e = obj->nodes; i < obj->count; i++, e++) {
             if (e->flag & 1) {
                 e->flag = 0;
@@ -5875,7 +5654,7 @@ void fn_1_1145C8(Accessory1145C8 *obj) {
         }
 
         obj->edgeCount = (obj->count / 5) * 4 + (obj->count / 5 - 1) * 5;
-        obj->edges = fn_1_4630(lbl_801A6410, obj->edgeCount * sizeof(Accessory1145C8Edge), lbl_1_data_40530, 0x1563);
+        obj->edges = (void *)fn_1_4630((*((u32 *)&lbl_801A6410)), obj->edgeCount * sizeof(Accessory1145C8Edge), lbl_1_data_40530, 0x1563);
 
         k = 0;
         for (i = 0, e = obj->nodes; i < obj->count - 1; i++, e++) {
@@ -5897,17 +5676,7 @@ void fn_1_1145C8(Accessory1145C8 *obj) {
 }
 /* fzgx:end fn_1_1145C8 */
 
-/* fzgx:begin fn_1_1154D0 noprologue */
-#include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/accessory.h"
-#include "rel/main_rel/cloth.h"
-#include "psvec.h"
-#include "game/main_rel/accessory_types.h"
-
-extern void fn_1_10846C();
-extern const f32 lbl_1_rodata_7B1C;
-extern const f32 lbl_1_rodata_7B20;
+/* fzgx:begin fn_1_1154D0 */
 
 typedef struct {
     u8 active;
@@ -6090,17 +5859,7 @@ void fn_1_115560(Rope *arg0) {
 }
 /* fzgx:end fn_1_115560 */
 
-/* fzgx:begin fn_1_115B58 noprologue */
-#include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/accessory.h"
-#include "rel/main_rel/cloth.h"
-#include "psvec.h"
-#include "game/main_rel/accessory_types.h"
-
-extern void fn_1_10846C();
-extern const f32 lbl_1_rodata_7B1C;
-extern const f32 lbl_1_rodata_7B20;
+/* fzgx:begin fn_1_115B58 */
 
 typedef struct {
     u8 active;
@@ -6144,17 +5903,7 @@ void fn_1_115B58(Fn115B58Object *obj) {
 }
 /* fzgx:end fn_1_115B58 */
 
-/* fzgx:begin fn_1_1166EC noprologue */
-#include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/accessory.h"
-#include "rel/main_rel/cloth.h"
-#include "psvec.h"
-#include "game/main_rel/accessory_types.h"
-
-extern void fn_1_10846C();
-extern const f32 lbl_1_rodata_7B1C;
-extern const f32 lbl_1_rodata_7B20;
+/* fzgx:begin fn_1_1166EC */
 
 typedef struct {
     u8 active;
@@ -6198,13 +5947,8 @@ void fn_1_1166EC(Fn1166ECObject *obj) {
 }
 /* fzgx:end fn_1_1166EC */
 
-/* fzgx:begin fn_1_1188CC noprologue */
-#include "types.h"
-#include "game/vec3.h"
-#include "game/main_rel/car_test_types.h"
-#include "rel/main_rel/accessory.h"
-
-typedef struct RopeNode {
+/* fzgx:begin fn_1_1188CC */
+typedef struct fn_1_1188CC_RopeNode {
     u8 flags;
     u8 pad_1;
     u8 linkCount;
@@ -6215,7 +5959,7 @@ typedef struct RopeNode {
     Vec3 local;
     Vec3 vel;
     f32 mass;
-} RopeNode;
+} fn_1_1188CC_RopeNode;
 
 typedef struct RopeModel {
     u8 pad_0[0x88];
@@ -6228,42 +5972,29 @@ typedef struct RopeModelList {
     RopeModel *models;
 } RopeModelList;
 
-typedef struct RopeOwner {
+typedef struct fn_1_1188CC_RopeOwner {
     u8 pad_0[0x150];
     RopeModelList *list;
-} RopeOwner;
+} fn_1_1188CC_RopeOwner;
 
-typedef struct Rope {
+typedef struct fn_1_1188CC_Rope {
     u8 flags;
     u8 pad_1[0x7];
     u32 kind;
-    RopeOwner *owner;
-    struct Sig_fn_80077B14_fn_80077B14_Arg0 *skin;
+    fn_1_1188CC_RopeOwner *owner;
+    struct fn_1_1188CC_Sig_fn_80077B14_fn_80077B14_Arg0 *skin;
     u8 pad_14[0x4];
     u32 count;
     u8 pad_1C[0x8];
-    RopeNode *nodes;
-} Rope;
+    fn_1_1188CC_RopeNode *nodes;
+} fn_1_1188CC_Rope;
 
-struct Sig_fn_80077B14_fn_80077B14_Arg0 {
-    u8 pad_0[0x4];
-    u32 unk_4;
-    u8 pad_8[0x18];
-    u32 unk_20;
-};
 
 typedef struct SkinMtx {
     Vec3f v;
     u8 pad_C[0x34];
 } SkinMtx;
 
-extern s32 fn_80077B14(struct Sig_fn_80077B14_fn_80077B14_Arg0 *);
-extern void lbl_8006DBAC(Vec3 *);
-extern void lbl_8006DAEC(void);
-extern void lbl_8006DBE4(void);
-extern void lbl_8006E1B0(Fn183D28Vec3 *, Fn183D28Vec3 *);
-extern void lbl_8006DC20(void);
-extern void fn_8006E250(Vec3f *, Vec3f *);
 
 #pragma section code_type ".fzgxpool"
 static const unsigned long fzgx_pool_table1[4] = {0x00000000, 0x00000000, 0x00000000, 0x00000000};  /* fzgx-allow: A1 retail pool bytes */
@@ -6553,11 +6284,11 @@ __declspec(section ".fzgxpool") static void fzgx_pool_prime42(void) {
 #define ROPE_INDEX(r) (((u32 *)lbl_1_data_3FFBC)[(r)->kind])
 
 /* Place every node at its model-space rest position. */
-static inline void rope_reset_nodes(Rope *rope) {
+static inline void rope_reset_nodes(fn_1_1188CC_Rope *rope) {
     u32 i;
-    RopeNode *n;
+    fn_1_1188CC_RopeNode *n;
 
-    lbl_8006DBAC(&ROPE_MODELS(rope)[ROPE_INDEX(rope)].mtx);
+    lbl_8006DBAC( (void *)(Vec3 *)(&ROPE_MODELS(rope)[ROPE_INDEX(rope)].mtx));
     lbl_8006DAEC();
     for (i = 0, n = rope->nodes; i < rope->count; i++, n++) {
         lbl_8006DBE4();
@@ -6567,15 +6298,15 @@ static inline void rope_reset_nodes(Rope *rope) {
 }
 
 /* Snap fixed (flag 1) nodes back to their model-space positions. */
-static inline void rope_pin_fixed_nodes(Rope *rope) {
+static inline void rope_pin_fixed_nodes(fn_1_1188CC_Rope *rope) {
     u32 i;
     RopeModel *model;
-    RopeNode *n;
+    fn_1_1188CC_RopeNode *n;
 
     n = rope->nodes;
     model = &ROPE_MODELS(rope)[ROPE_INDEX(rope)];
     for (i = 0; i < rope->count; i++, n++) {
-        lbl_8006DBAC(&model->mtx);
+        lbl_8006DBAC( (void *)(Vec3 *)(&model->mtx));
         lbl_8006DAEC();
         if (n->flags & 1) {
             lbl_8006DBE4();
@@ -6585,32 +6316,32 @@ static inline void rope_pin_fixed_nodes(Rope *rope) {
     }
 }
 
-void fn_1_1188CC(Rope *rope) {
+void fn_1_1188CC(fn_1_1188CC_Rope *rope) {
     u32 i1;
-    RopeNode *n7;
+    fn_1_1188CC_RopeNode *n7;
     s32 k7;
     u32 i7;
     SkinMtx *skin;
     u8 *i3;
     u32 i;
-    RopeNode *node;
+    fn_1_1188CC_RopeNode *node;
     RopeModel *model;
-    RopeNode *n3;
+    fn_1_1188CC_RopeNode *n3;
     RopeModel *m3;
-    RopeNode *n1;
+    fn_1_1188CC_RopeNode *n1;
     u32 j;
-    RopeNode *n4;
+    fn_1_1188CC_RopeNode *n4;
     u32 i4;
-    RopeNode *n2;
+    fn_1_1188CC_RopeNode *n2;
     u32 i2;
-    RopeNode *n6;
+    fn_1_1188CC_RopeNode *n6;
     u32 i6;
     f32 scale;
     Vec3 delta;
     Vec3 tmp;
 
     if (rope != NULL && rope->skin != NULL) {
-    fn_80077B14(rope->skin);
+    fn_80077B14( (void *)(struct fn_1_1188CC_Sig_fn_80077B14_fn_80077B14_Arg0 *)(rope->skin));
     if (rope->flags & 2) {
         rope->flags &= ~2;
         rope_reset_nodes(rope);
@@ -6633,7 +6364,7 @@ void fn_1_1188CC(Rope *rope) {
     model = &ROPE_MODELS(rope)[ROPE_INDEX(rope)];
     for (i4 = 0; i4 < rope->count; i4++, n4++) {
         if (!(n4->flags & 1)) {
-            lbl_8006DBAC(&model->mtx);
+            lbl_8006DBAC( (void *)(Vec3 *)(&model->mtx));
             lbl_8006E1B0((Fn183D28Vec3 *)&n4->local, (Fn183D28Vec3 *)&tmp);
             scale = -0.25f / n4->mass;
             delta.x = scale * (tmp.x - n4->pos.x);
@@ -6647,7 +6378,7 @@ void fn_1_1188CC(Rope *rope) {
 
     node = rope->nodes;
     for (i = 0; i < (rope->count - 1) / 4; i++, node += 4) {
-        lbl_8006DBAC(&model->mtx);
+        lbl_8006DBAC( (void *)(Vec3 *)(&model->mtx));
         lbl_8006E1B0((Fn183D28Vec3 *)&node->local, (Fn183D28Vec3 *)&delta);
         node->prev = delta;
         delta.x = node->pos.x - delta.x;
@@ -6655,7 +6386,7 @@ void fn_1_1188CC(Rope *rope) {
         delta.z = node->pos.z - delta.z;
         node->prev = node->pos;
         for (j = 1; j < 4; j++) {
-            lbl_8006DBAC(&model->mtx);
+            lbl_8006DBAC( (void *)(Vec3 *)(&model->mtx));
             lbl_8006E1B0((Fn183D28Vec3 *)&node[j].local, (Fn183D28Vec3 *)&node[j].pos);
             node[j].pos.x += delta.x;
             node[j].pos.y += delta.y;
@@ -6671,28 +6402,21 @@ void fn_1_1188CC(Rope *rope) {
         n6->vel.z = 1.2f * (n6->pos.z - n6->prev.z);
     }
 
-    skin = (SkinMtx *)fn_80077B14(rope->skin);
-    lbl_8006DBAC(&ROPE_MODELS(rope)[ROPE_INDEX(rope)].mtx);
+    skin = (SkinMtx *)fn_80077B14( (void *)(struct fn_1_1188CC_Sig_fn_80077B14_fn_80077B14_Arg0 *)(rope->skin));
+    lbl_8006DBAC( (void *)(Vec3 *)(&ROPE_MODELS(rope)[ROPE_INDEX(rope)].mtx));
     for (i7 = 0, n7 = rope->nodes; i7 < rope->count; i7++, n7++) {
         for (k7 = 0; k7 < n7->linkCount; k7++) {
-            fn_8006E250((Vec3f *)&n7->pos, &skin[n7->links[k7]].v);
+            fn_8006E250( (void *)((Vec3f *)&n7->pos), (void *)(Vec3f *)(&skin[n7->links[k7]].v));
         }
     }
     }
 }
 /* fzgx:end fn_1_1188CC */
 
-/* fzgx:begin fn_1_118D90 noprologue */
-#include "types.h"
-#include "game/main_rel/accessory_types.h"
-#include "rel/main_rel/accessory.h"
-
+/* fzgx:begin fn_1_118D90 */
 typedef struct {
     f32 x, y, z;
-} Sig_fn_1_10846C_Vec10846C;
-typedef struct {
-    u32 w[3];
-} Sig_fn_1_10846C_Word3_10846C;
+} fn_1_118D90_Sig_fn_1_10846C_Vec10846C;
 typedef struct {
     u8 flags;
     u8 unk_1;
@@ -6700,12 +6424,12 @@ typedef struct {
     u8 pad_3;
     u16 idx[4];
     u8 pad_C[4];
-    Sig_fn_1_10846C_Vec10846C p10;
-    Sig_fn_1_10846C_Vec10846C p1C;
-    Sig_fn_1_10846C_Vec10846C p28;
+    fn_1_118D90_Sig_fn_1_10846C_Vec10846C p10;
+    fn_1_118D90_Sig_fn_1_10846C_Vec10846C p1C;
+    fn_1_118D90_Sig_fn_1_10846C_Vec10846C p28;
     Sig_fn_1_10846C_Word3_10846C c34;
     u8 pad_40[4];
-} Sig_fn_1_10846C_Group10846C;
+} fn_1_118D90_Sig_fn_1_10846C_Group10846C;
 typedef struct {
     u8 pad_0[0x10];
     void *model;
@@ -6713,13 +6437,13 @@ typedef struct {
     u32 groupCount;
     u32 unk_1C;
     u8 pad_20[4];
-    Sig_fn_1_10846C_Group10846C *groups;
+    fn_1_118D90_Sig_fn_1_10846C_Group10846C *groups;
     void *unk_28;
     u8 pad_2C[4];
     void *srcModel;
     u8 pad_34[0x30];
-    Sig_fn_1_10846C_Vec10846C *positions;
-} Sig_fn_1_10846C_Obj10846C;
+    fn_1_118D90_Sig_fn_1_10846C_Vec10846C *positions;
+} fn_1_118D90_Sig_fn_1_10846C_Obj10846C;
 struct fn_1_118D90_lbl_1_rodata_7AB8 {
     u8 pad_0[0x64];
     f32 unk_64;
@@ -6729,11 +6453,6 @@ struct fn_1_118D90_lbl_1_rodata_7AB8 {
     u8 pad_AC[0x110];
     f32 unk_1BC;
 };
-extern u32 lbl_801A6410;
-extern f32 fn_1_1289BC(const Point1024C4 *, const Point1024C4 *);
-extern u32 fn_1_4630(u32, u32, const char *, s32);
-extern void fn_1_10846C(Sig_fn_1_10846C_Obj10846C *);
-extern void fn_1_128884(void *, void *, s32);
 
 void fn_1_118D90(u32 arg0, f32 arg1) {
     struct fn_1_118D90_lbl_1_rodata_7AB8 *p_lbl_1_rodata_7AB8;
@@ -6774,11 +6493,11 @@ void fn_1_118D90(u32 arg0, f32 arg1) {
     f32 t10;
     f32 t11;
     f32 t12;
-    p_lbl_1_rodata_7AB8 = (struct fn_1_118D90_lbl_1_rodata_7AB8 *)&lbl_1_rodata_7AB8;
+    p_lbl_1_rodata_7AB8 = (struct fn_1_118D90_lbl_1_rodata_7AB8 *)((const u8 (*)[])&lbl_1_rodata_7AB8);
     v0 = arg1;
     v1 = arg0;
     if (arg0 != 0) {
-        fn_1_10846C((Sig_fn_1_10846C_Obj10846C *)v1);
+        fn_1_10846C( (u32)((fn_1_118D90_Sig_fn_1_10846C_Obj10846C *)v1));
         v7 = *(u32 *)((u8 *)arg0 + 36);
         v2 = 0;
         v0 = p_lbl_1_rodata_7AB8->unk_64;
@@ -6894,7 +6613,7 @@ void fn_1_118D90(u32 arg0, f32 arg1) {
             }
         }
         *(u32 *)((u8 *)arg0 + 28) = 20;
-        v1 = lbl_801A6410;
+        v1 = (*((u32 *)&lbl_801A6410));
         t9 = fn_1_4630(v1, *(u32 *)((u8 *)arg0 + 28) * 12, lbl_1_data_40530, 0x1c51);
         *(u32 *)((u8 *)arg0 + 40) = t9;
         {
@@ -7252,15 +6971,7 @@ void fn_1_1192D0(Work *arg0) {
 #pragma opt_common_subs reset
 /* fzgx:end fn_1_1192D0 */
 
-/* fzgx:begin fn_1_11A158 noprologue */
-#include "types.h"
-#include "game/main_rel/accessory_types.h"
-#include "rel/main_rel/accessory.h"
-
-extern u32 fn_1_4630(u32, u32, const char *, s32);
-extern u32 lbl_801A6410;
-extern void fn_1_10846C(void *);
-extern void fn_1_128884(void *, void *, s32);
+/* fzgx:begin fn_1_11A158 */
 
 typedef fn_1_10D2F0_Entry Entry;
 
@@ -7280,7 +6991,7 @@ void fn_1_11A158(fn_1_10D2F0_Obj *obj) {
     f32 num;
 
     if (obj != NULL) {
-        fn_1_10846C(obj);
+        fn_1_10846C( (u32)(void *)(obj));
 
         for (i = 0, p = obj->unk_24; i < obj->unk_18; i++, p++) {
             if (p->unk_0 & 1) {
@@ -7359,7 +7070,7 @@ void fn_1_11A158(fn_1_10D2F0_Obj *obj) {
 
         q = obj->unk_18 / 13;
         obj->unk_1C = q * 12 + (q - 1) * 13;
-        obj->unk_28 = (fn_1_10D2F0_Link *)fn_1_4630(lbl_801A6410, obj->unk_1C * sizeof(fn_1_10D2F0_Link), lbl_1_data_40530, 0x1D66);
+        obj->unk_28 = (fn_1_10D2F0_Link *)fn_1_4630((*((u32 *)&lbl_801A6410)), obj->unk_1C * sizeof(fn_1_10D2F0_Link), lbl_1_data_40530, 0x1D66);
 
         n = 0;
         p = obj->unk_24;
@@ -7661,10 +7372,7 @@ void fn_1_11A774(Work *arg0) {
 #pragma opt_common_subs reset
 /* fzgx:end fn_1_11A774 */
 
-/* fzgx:begin fn_1_11B4E4 noprologue */
-#include "types.h"
-#include "rel/main_rel/globals.h"
-
+/* fzgx:begin fn_1_11B4E4 */
 typedef struct Node11B4E4 {
     u8 unk_0;
     u8 pad_1[0xF];
@@ -7690,11 +7398,6 @@ typedef struct Obj11B4E4 {
     Link11B4E4 *unk_28;
 } Obj11B4E4;
 
-extern void fn_1_10846C(Obj11B4E4 *);
-extern void fn_1_128884(void *, void *, s32);
-extern f32 fn_1_1289BC(Node11B4E4 *, Node11B4E4 *);
-extern void *fn_1_4630(void *, u32, const char *, s32);
-extern void *lbl_801A6410;
 
 void fn_1_11B4E4(Obj11B4E4 *obj) {
     u32 c0;
@@ -7723,7 +7426,7 @@ void fn_1_11B4E4(Obj11B4E4 *obj) {
     if (obj == NULL) {
         return;
     }
-    fn_1_10846C(obj);
+    fn_1_10846C( (u32)(Obj11B4E4 *)(obj));
 
     c0 = 0;
     e0 = obj->unk_24;
@@ -7787,7 +7490,7 @@ void fn_1_11B4E4(Obj11B4E4 *obj) {
     }
 
     obj->unk_1C = 0x60;
-    obj->unk_28 = fn_1_4630(lbl_801A6410, obj->unk_1C * sizeof(Link11B4E4), (const char *)&lbl_1_data_40530, 0x1E57);
+    obj->unk_28 = (void *)fn_1_4630(((void *)lbl_801A6410), obj->unk_1C * sizeof(Link11B4E4), (const char *)&lbl_1_data_40530, 0x1E57);
 
     idx = 0;
     ring_2 = obj->unk_24;
@@ -7796,12 +7499,12 @@ void fn_1_11B4E4(Obj11B4E4 *obj) {
         for (i = 0; i < 7; i++, e3++) {
             obj->unk_28[idx].unk_0 = e3;
             obj->unk_28[idx].unk_4 = e3 + 1;
-            obj->unk_28[idx].unk_8 = fn_1_1289BC(e3, e3 + 1);
+            obj->unk_28[idx].unk_8 = fn_1_1289BC( (const Point1024C4 *)(Node11B4E4 *)(e3), (const Point1024C4 *)(Node11B4E4 *)(e3 + 1));
             idx++;
         }
         obj->unk_28[idx].unk_0 = &ring_2[7];
         obj->unk_28[idx].unk_4 = ring_2;
-        obj->unk_28[idx].unk_8 = fn_1_1289BC(&ring_2[7], ring_2);
+        obj->unk_28[idx].unk_8 = fn_1_1289BC( (const Point1024C4 *)(Node11B4E4 *)(&ring_2[7]), (const Point1024C4 *)(Node11B4E4 *)(ring_2));
         idx++;
     }
     ring_2 = obj->unk_24;
@@ -7810,7 +7513,7 @@ void fn_1_11B4E4(Obj11B4E4 *obj) {
         for (i = 0; i < 8; i++, e4++) {
             obj->unk_28[idx].unk_0 = e4;
             obj->unk_28[idx].unk_4 = e4 + 8;
-            obj->unk_28[idx].unk_8 = fn_1_1289BC(e4, e4 + 8);
+            obj->unk_28[idx].unk_8 = fn_1_1289BC( (const Point1024C4 *)(Node11B4E4 *)(e4), (const Point1024C4 *)(Node11B4E4 *)(e4 + 8));
             idx++;
         }
     }
@@ -8416,9 +8119,7 @@ fn_8006E250((Vec3f *)&fn->pos,(Vec3f *)(fmodel+(lp[2]<<6)));
 #pragma opt_common_subs reset
 /* fzgx:end fn_1_11C440 */
 
-/* fzgx:begin fn_1_11CAB4 noprologue */
-#include "types.h"
-
+/* fzgx:begin fn_1_11CAB4 */
 const u32 fzgx_pool_table_000[20] = {
     0x00000000, 0x00000000, 0x00000000, 0x00000000,
     0x00000000, 0x00000000, 0x3E800000, 0x00000000,
@@ -8471,33 +8172,31 @@ const u32 fzgx_pool_table_06C[240] = {
 
 typedef struct {
     f32 x, y, z;
-} Vec3f;
+} fn_1_11CAB4_Vec3f;
 
 typedef struct {
     u8 flags;
     u8 pad1[0xF];
-    Vec3f pos;
+    fn_1_11CAB4_Vec3f pos;
     u8 pad1C[0x24];
     f32 weight;
-} Node;
+} fn_1_11CAB4_Node;
 
 typedef struct {
     u8 pad0[0x18];
     u32 count;
     u8 pad1C[0x8];
-    Node *nodes;
+    fn_1_11CAB4_Node *nodes;
 } NodeSet;
 
-extern void fn_1_10846C(NodeSet *set);
-extern f32 lbl_8006D0B4(f32 x);
 
-static inline void nodeset_vec_sub(Vec3f *a, Vec3f *b, Vec3f *out) {
+static inline void nodeset_vec_sub(fn_1_11CAB4_Vec3f *a, fn_1_11CAB4_Vec3f *b, fn_1_11CAB4_Vec3f *out) {
     out->x = a->x - b->x;
     out->y = a->y - b->y;
     out->z = a->z - b->z;
 }
 
-static inline f32 nodeset_vec_mag(Vec3f *v) {
+static inline f32 nodeset_vec_mag(fn_1_11CAB4_Vec3f *v) {
     f32 *p = (f32 *)v;
     f32 x = p[0];
     f32 y = p[1];
@@ -8511,13 +8210,13 @@ static inline f32 nodeset_vec_mag(Vec3f *v) {
 
 void fn_1_11CAB4(NodeSet *set) {
     u32 i;
-    Node *n;
-    Node * n_2;
+    fn_1_11CAB4_Node *n;
+    fn_1_11CAB4_Node * n_2;
 
     if (set == NULL) {
         return;
     }
-    fn_1_10846C(set);
+    fn_1_10846C( (u32)(NodeSet *)(set));
 
     n = set->nodes;
     for (i = 0; i < set->count; i++, n++) {
@@ -8531,8 +8230,8 @@ void fn_1_11CAB4(NodeSet *set) {
     }
 
     {
-        Vec3f center = {0};
-        Vec3f d;
+        fn_1_11CAB4_Vec3f center = {0};
+        fn_1_11CAB4_Vec3f d;
         u32 active;
         f32 maxDist;
 
@@ -8777,53 +8476,41 @@ void fn_1_11CD3C(Work *arg0) {
 #pragma opt_common_subs reset
 /* fzgx:end fn_1_11CD3C */
 
-/* fzgx:begin fn_1_11ED0C noprologue */
-#include "types.h"
-#include "rel/main_rel/accessory.h"
-#include "game/main_rel/accessory_types.h"
-
-typedef struct { f32 x,y,z; } Sig_fn_1_10846C_Vec10846C;
-typedef struct { u32 w[3]; } Sig_fn_1_10846C_Word3_10846C;
+/* fzgx:begin fn_1_11ED0C */
+typedef struct { f32 x,y,z; } fn_1_11ED0C_Sig_fn_1_10846C_Vec10846C;
 typedef struct {
  u8 flags,unk_1,count,pad_3;
  u16 idx[4]; u8 pad_C[4];
- Sig_fn_1_10846C_Vec10846C p10,p1C,p28;
+ fn_1_11ED0C_Sig_fn_1_10846C_Vec10846C p10,p1C,p28;
  Sig_fn_1_10846C_Word3_10846C c34;
  u8 pad_40[4];
-} Sig_fn_1_10846C_Group10846C;
+} fn_1_11ED0C_Sig_fn_1_10846C_Group10846C;
 typedef struct {
  u8 pad_0[0x10]; void *model; u8 pad_14[4];
  u32 groupCount,unk_1C; u8 pad_20[4];
- Sig_fn_1_10846C_Group10846C *groups;
+ fn_1_11ED0C_Sig_fn_1_10846C_Group10846C *groups;
  void *unk_28; u8 pad_2C[4]; void *srcModel;
- u8 pad_34[0x30]; Sig_fn_1_10846C_Vec10846C *positions;
-} Sig_fn_1_10846C_Obj10846C;
-extern const f32 lbl_1_rodata_7B1C;
-extern const f32 lbl_1_rodata_7B20;
-extern void fn_1_10846C(Sig_fn_1_10846C_Obj10846C *);
-extern void fn_1_128884(void *,void *,s32);
-extern u32 lbl_801A6410;
-extern void *fn_1_4630(u32,u32,const char *,u32);
-extern f32 fn_1_1289BC(const Point1024C4 *,const Point1024C4 *);
-typedef struct { Sig_fn_1_10846C_Group10846C *a,*b; f32 value; } Edge;
+ u8 pad_34[0x30]; fn_1_11ED0C_Sig_fn_1_10846C_Vec10846C *positions;
+} fn_1_11ED0C_Sig_fn_1_10846C_Obj10846C;
+typedef struct { fn_1_11ED0C_Sig_fn_1_10846C_Group10846C *a,*b; f32 value; } fn_1_11ED0C_Edge;
 #pragma opt_propagation off
 static inline u32 edge_base(u32 n) {
  return (n-1)*11+20;
 }
 #pragma opt_propagation on
-void fn_1_11ED0C(Sig_fn_1_10846C_Obj10846C *obj) {
+void fn_1_11ED0C(fn_1_11ED0C_Sig_fn_1_10846C_Obj10846C *obj) {
  u32 m;
- Sig_fn_1_10846C_Group10846C *q;
+ fn_1_11ED0C_Sig_fn_1_10846C_Group10846C *q;
  u32 j;
  u32 i;
- Sig_fn_1_10846C_Group10846C *p;
+ fn_1_11ED0C_Sig_fn_1_10846C_Group10846C *p;
  u32 k;
- Sig_fn_1_10846C_Group10846C *base;
+ fn_1_11ED0C_Sig_fn_1_10846C_Group10846C *base;
  u32 e;
  u32 n;
  s32 cnt;
  if (!obj) return;
- fn_1_10846C(obj);
+ fn_1_10846C( (u32)(fn_1_11ED0C_Sig_fn_1_10846C_Obj10846C *)(obj));
  for(i=0,p=obj->groups;i<obj->groupCount;i++,p++) {
   if(p->flags&1) { p->flags=0; *(f32 *)p->pad_40=lbl_1_rodata_7B1C; }
   else { p->flags=1; *(f32 *)p->pad_40=lbl_1_rodata_7B20; }
@@ -8868,33 +8555,33 @@ void fn_1_11ED0C(Sig_fn_1_10846C_Obj10846C *obj) {
  cnt=(u32)((u64)((n-1)*11+20)|0x100000000ULL);
  n*=10;
  obj->unk_1C=n+cnt;
- obj->unk_28=fn_1_4630(lbl_801A6410,obj->unk_1C*12,lbl_1_data_40530,0x2349);
+ obj->unk_28=(void *)fn_1_4630((*((u32 *)&lbl_801A6410)),obj->unk_1C*12,lbl_1_data_40530,0x2349);
  e=0;
  p=obj->groups;
  for(i=0;i<10;i++,p++) {
-  ((Edge *)obj->unk_28)[e].a=p;
-  ((Edge *)obj->unk_28)[e].b=p+12;
-  ((Edge *)obj->unk_28)[e].value=fn_1_1289BC((const Point1024C4 *)p,(const Point1024C4 *)(p+12)); e++;
+  ((fn_1_11ED0C_Edge *)obj->unk_28)[e].a=p;
+  ((fn_1_11ED0C_Edge *)obj->unk_28)[e].b=p+12;
+  ((fn_1_11ED0C_Edge *)obj->unk_28)[e].value=fn_1_1289BC((const Point1024C4 *)p,(const Point1024C4 *)(p+12)); e++;
  }
  p=obj->groups;
  for(i=0;i<10;i++,p++) {
-  ((Edge *)obj->unk_28)[e].a=p+1;
-  ((Edge *)obj->unk_28)[e].b=p+11;
-  ((Edge *)obj->unk_28)[e].value=fn_1_1289BC((const Point1024C4 *)(p+1),(const Point1024C4 *)(p+11)); e++;
+  ((fn_1_11ED0C_Edge *)obj->unk_28)[e].a=p+1;
+  ((fn_1_11ED0C_Edge *)obj->unk_28)[e].b=p+11;
+  ((fn_1_11ED0C_Edge *)obj->unk_28)[e].value=fn_1_1289BC((const Point1024C4 *)(p+1),(const Point1024C4 *)(p+11)); e++;
  }
  p=obj->groups;
  for(i=0;i<obj->groupCount-1;i++,p++) {
   if((i+1)%11) {
-   ((Edge *)obj->unk_28)[e].a=p;
-   ((Edge *)obj->unk_28)[e].b=p+1;
-   ((Edge *)obj->unk_28)[e].value=fn_1_1289BC((const Point1024C4 *)p,(const Point1024C4 *)(p+1)); e++;
+   ((fn_1_11ED0C_Edge *)obj->unk_28)[e].a=p;
+   ((fn_1_11ED0C_Edge *)obj->unk_28)[e].b=p+1;
+   ((fn_1_11ED0C_Edge *)obj->unk_28)[e].value=fn_1_1289BC((const Point1024C4 *)p,(const Point1024C4 *)(p+1)); e++;
   }
  }
  p=obj->groups;
  for(i=0;i<obj->groupCount-11;i++,p++) {
-  ((Edge *)obj->unk_28)[e].a=p;
-  ((Edge *)obj->unk_28)[e].b=p+11;
-  ((Edge *)obj->unk_28)[e].value=fn_1_1289BC((const Point1024C4 *)p,(const Point1024C4 *)(p+11)); e++;
+  ((fn_1_11ED0C_Edge *)obj->unk_28)[e].a=p;
+  ((fn_1_11ED0C_Edge *)obj->unk_28)[e].b=p+11;
+  ((fn_1_11ED0C_Edge *)obj->unk_28)[e].value=fn_1_1289BC((const Point1024C4 *)p,(const Point1024C4 *)(p+11)); e++;
  }
 }
 /* fzgx:end fn_1_11ED0C */
@@ -9212,63 +8899,55 @@ void fn_1_11F250(Work *arg0) {
 #pragma opt_common_subs reset
 /* fzgx:end fn_1_11F250 */
 
-/* fzgx:begin fn_1_1201E4 noprologue */
-#include "types.h"
-#include "rel/main_rel/globals.h"
-
-typedef struct Vec3 {
+/* fzgx:begin fn_1_1201E4 */
+typedef struct fn_1_1201E4_Vec3 {
     f32 x;
     f32 y;
     f32 z;
-} Vec3;
+} fn_1_1201E4_Vec3;
 
-typedef struct RopeNode {
+typedef struct fn_1_1201E4_RopeNode {
     u8 unk_0;
     u8 pad_1[0xF];
-    Vec3 unk_10;
+    fn_1_1201E4_Vec3 unk_10;
     u8 pad_1C[0x24];
     f32 unk_40;
-} RopeNode;
+} fn_1_1201E4_RopeNode;
 
-typedef struct Link {
-    RopeNode *unk_0;
-    RopeNode *unk_4;
+typedef struct fn_1_1201E4_Link {
+    fn_1_1201E4_RopeNode *unk_0;
+    fn_1_1201E4_RopeNode *unk_4;
     f32 unk_8;
-} Link;
+} fn_1_1201E4_Link;
 
-typedef struct RopeOwner {
+typedef struct fn_1_1201E4_RopeOwner {
     u8 pad_0[0x8C];
     s32 unk_8C;
-} RopeOwner;
+} fn_1_1201E4_RopeOwner;
 
-typedef struct Rope {
+typedef struct fn_1_1201E4_Rope {
     u8 pad_0[0xC];
-    RopeOwner *unk_C;
+    fn_1_1201E4_RopeOwner *unk_C;
     u8 pad_10[0x8];
     u32 unk_18;
     u32 unk_1C;
     u8 pad_20[0x4];
-    RopeNode *unk_24;
-    Link *unk_28;
-} Rope;
+    fn_1_1201E4_RopeNode *unk_24;
+    fn_1_1201E4_Link *unk_28;
+} fn_1_1201E4_Rope;
 
-extern u32 lbl_801A6410;
-extern void fn_1_10846C(Rope *);
-extern void fn_1_128884(void *, void *, s32);
-extern void *fn_1_4630(u32, u32, const char *, s32);
-extern f32 fn_1_1289BC(RopeNode *, RopeNode *);
 
-void fn_1_1201E4(Rope *rope) {
+void fn_1_1201E4(fn_1_1201E4_Rope *rope) {
     u32 i;
     u32 m;
-    RopeNode *b;
-    RopeNode *a;
-    RopeNode *p;
-    RopeNode *n;
+    fn_1_1201E4_RopeNode *b;
+    fn_1_1201E4_RopeNode *a;
+    fn_1_1201E4_RopeNode *p;
+    fn_1_1201E4_RopeNode *n;
     s32 last;
     u32 c;
     u32 j;
-    RopeNode *q;
+    fn_1_1201E4_RopeNode *q;
     u32 k;
     u32 rows;
     s32 cols;
@@ -9277,7 +8956,7 @@ void fn_1_1201E4(Rope *rope) {
         return;
     }
     cols = (rope->unk_C->unk_8C == 2) ? 9 : 13;
-    fn_1_10846C(rope);
+    fn_1_10846C( (u32)(fn_1_1201E4_Rope *)(rope));
 
     for (i = 0, n = rope->unk_24; i < rope->unk_18; i++, n++) {
         if (n->unk_0 & 1) {
@@ -9292,7 +8971,7 @@ void fn_1_1201E4(Rope *rope) {
     for (i = 0, a = rope->unk_24; i < rope->unk_18; i++, a++) {
         for (j = i + 1, b = &rope->unk_24[i] + 1; j < rope->unk_18; j++, b++) {
             if (a->unk_0 == 0 && b->unk_0 != 0) {
-                fn_1_128884(a, b, sizeof(RopeNode));
+                fn_1_128884(a, b, sizeof(fn_1_1201E4_RopeNode));
             }
         }
     }
@@ -9300,7 +8979,7 @@ void fn_1_1201E4(Rope *rope) {
     for (i = 0, a = rope->unk_24; i < rope->unk_18; i++, a++) {
         for (j = i + 1, b = &rope->unk_24[i] + 1; j < rope->unk_18; j++, b++) {
             if (a->unk_0 == b->unk_0 && a->unk_10.x < b->unk_10.x) {
-                fn_1_128884(a, b, sizeof(RopeNode));
+                fn_1_128884(a, b, sizeof(fn_1_1201E4_RopeNode));
             }
         }
     }
@@ -9308,7 +8987,7 @@ void fn_1_1201E4(Rope *rope) {
     for (i = 0, a = rope->unk_24; i < cols; i++, a++) {
         for (j = i + 1, b = a + 1; j < cols; j++, b++) {
             if (a->unk_10.z > b->unk_10.z) {
-                fn_1_128884(a, b, sizeof(RopeNode));
+                fn_1_128884(a, b, sizeof(fn_1_1201E4_RopeNode));
             }
         }
     }
@@ -9316,7 +8995,7 @@ void fn_1_1201E4(Rope *rope) {
     for (i = cols, a = &rope->unk_24[cols]; i < cols * 2; i++, a++) {
         for (j = i + 1, b = a + 1; j < cols * 2; j++, b++) {
             if (a->unk_10.z > b->unk_10.z) {
-                fn_1_128884(a, b, sizeof(RopeNode));
+                fn_1_128884(a, b, sizeof(fn_1_1201E4_RopeNode));
             }
         }
     }
@@ -9338,7 +9017,7 @@ void fn_1_1201E4(Rope *rope) {
         for (c = 0, n = p; c < cols; c++, n++) {
             for (m = c + 1, q = n + 1; m < cols; m++, q++) {
                 if (n->unk_10.z > q->unk_10.z) {
-                    fn_1_128884(n, q, sizeof(RopeNode));
+                    fn_1_128884(n, q, sizeof(fn_1_1201E4_RopeNode));
                 }
             }
         }
@@ -9347,41 +9026,39 @@ void fn_1_1201E4(Rope *rope) {
 
     rows = rope->unk_18 / cols;
     rope->unk_1C = rows * ((u32)cols - 1) + (rows - 1) * cols + (cols - 1) * 2;
-    rope->unk_28 = fn_1_4630(lbl_801A6410, rope->unk_1C * sizeof(Link), (const char *)&lbl_1_data_40530, 0x248F);
+    rope->unk_28 = (void *)fn_1_4630((*((u32 *)&lbl_801A6410)), rope->unk_1C * sizeof(fn_1_1201E4_Link), (const char *)&lbl_1_data_40530, 0x248F);
 
     last = cols - 1;
     for (i = 0, k = 0, a = rope->unk_24; i < last; i++, a++) {
         rope->unk_28[k].unk_0 = a;
         rope->unk_28[k].unk_4 = a + cols + 1;
-        rope->unk_28[k].unk_8 = fn_1_1289BC(rope->unk_28[k].unk_0, rope->unk_28[k].unk_4);
+        rope->unk_28[k].unk_8 = fn_1_1289BC( (const Point1024C4 *)(fn_1_1201E4_RopeNode *)(rope->unk_28[k].unk_0), (const Point1024C4 *)(fn_1_1201E4_RopeNode *)(rope->unk_28[k].unk_4));
         k++;
     }
     for (i = 0, a = rope->unk_24; i < last; i++, a++) {
         rope->unk_28[k].unk_0 = a + 1;
         rope->unk_28[k].unk_4 = a + cols;
-        rope->unk_28[k].unk_8 = fn_1_1289BC(rope->unk_28[k].unk_0, rope->unk_28[k].unk_4);
+        rope->unk_28[k].unk_8 = fn_1_1289BC( (const Point1024C4 *)(fn_1_1201E4_RopeNode *)(rope->unk_28[k].unk_0), (const Point1024C4 *)(fn_1_1201E4_RopeNode *)(rope->unk_28[k].unk_4));
         k++;
     }
     for (i = 0, a = rope->unk_24; i < rope->unk_18 - 1; i++, a++) {
         if ((i + 1) % cols != 0) {
             rope->unk_28[k].unk_0 = a;
             rope->unk_28[k].unk_4 = a + 1;
-            rope->unk_28[k].unk_8 = fn_1_1289BC(a, a + 1);
+            rope->unk_28[k].unk_8 = fn_1_1289BC( (const Point1024C4 *)(fn_1_1201E4_RopeNode *)(a), (const Point1024C4 *)(fn_1_1201E4_RopeNode *)(a + 1));
             k++;
         }
     }
     for (i = 0, a = rope->unk_24; i < rope->unk_18 - cols; i++, a++) {
         rope->unk_28[k].unk_0 = a;
         rope->unk_28[k].unk_4 = a + (u32)cols;
-        rope->unk_28[k].unk_8 = fn_1_1289BC(a, a + (u32)cols);
+        rope->unk_28[k].unk_8 = fn_1_1289BC( (const Point1024C4 *)(fn_1_1201E4_RopeNode *)(a), (const Point1024C4 *)(fn_1_1201E4_RopeNode *)(a + (u32)cols));
         k++;
     }
 }
 /* fzgx:end fn_1_1201E4 */
 
-/* fzgx:begin fn_1_122348 noprologue */
-#include "types.h"
-
+/* fzgx:begin fn_1_122348 */
 typedef struct {
     u8 flags;
     u8 pad_1[0xF];
@@ -9406,10 +9083,6 @@ typedef struct {
     Group122348 *groups;
 } Obj122348;
 
-extern const f32 lbl_1_rodata_7B1C;
-extern const f32 lbl_1_rodata_7B20;
-extern void fn_1_10846C(Obj122348 *);
-extern void fn_1_128884(void *, void *, s32);
 
 void fn_1_122348(Obj122348 *obj) {
     Group122348 *h;
@@ -9427,7 +9100,7 @@ void fn_1_122348(Obj122348 *obj) {
         return;
     }
     num = (obj->owner->mode == 2) ? 9 : 13;
-    fn_1_10846C(obj);
+    fn_1_10846C( (u32)(Obj122348 *)(obj));
 
     k = 0;
     g = obj->groups;
@@ -9507,114 +9180,9 @@ void fn_1_122348(Obj122348 *obj) {
 }
 /* fzgx:end fn_1_122348 */
 
-/* fzgx:begin fn_1_12277C noprologue */
-#include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/accessory.h"
+/* fzgx:begin fn_1_12277C */
 
-extern void *fn_80077B14(void *);
-extern void lbl_8006DBAC(void *);
-extern void fn_8006E250(void *, void *);
-extern void fn_1_10846C(void);
-extern f32 lbl_1_rodata_7B1C;
-extern f32 lbl_1_rodata_7B20;
-extern s32 fn_1_14D670(void);
-extern u32 lbl_801A66A0;
-extern s32 fn_1_86678(s32 arg);
-extern u32 lbl_1_bss_897AC[1741];
-extern u32 lbl_1_bss_897A4;
-extern u32 lbl_1_bss_897A8;
-extern void * lbl_801A6410;
-extern void lbl_8006DAEC(void);
-extern void lbl_8006DBE4(void);
-extern void lbl_8006E1B0(void *, void *);
-extern void lbl_8006DC20(void);
-extern const f64 lbl_1_rodata_7BF8;
-extern void fn_80008BA8(void *dst, void *src, int size);
-extern void *fn_1_45D0(void *manager, int type, void *data, int code);
-extern void fn_1_105744(void);
-extern void fn_1_106DB4(void);
-extern void fn_1_9D0EC(u32, u32, void*, void*);
-extern void fn_1_103AA8(void);
-extern u32 lbl_1_bss_85288[2];
-extern void fn_1_103AD4(void);
-extern void fn_1_105768(void);
-extern void fn_1_9E5B8(void *);
-extern f32 lbl_1_rodata_7B58[40];
-extern u8 lbl_1_rodata_8058[16];
-extern int mathutil_mtxA_rotate_z__fzgx_offset_C();
-extern struct fn_1_129D9C_system *lbl_801A6D00;
-extern void lbl_8006DCA4(void);
-extern void lbl_8006E1C0(void *, void *);
-extern void lbl_8006DFC4(void *);
-extern void lbl_8006D7B0(void);
-extern void lbl_8006D668(void *);
-extern void lbl_8006E0B4(f32, f32, f32);
-extern void lbl_8006E14C(f32);
-extern void lbl_8006DB74(void *);
-extern void fn_80072558(void);
-extern void fn_80083DB0(void *, void *);
-extern void *fn_1_55210(void *);
-extern void *fn_1_548AC(u32);
-extern void *fn_1_5448C(void *);
-extern void fn_1_5489C(void *, void *);
-extern void fn_1_12A0E0(void);
 
-extern void *fn_80077B14(void *);
-extern void lbl_8006DBAC(void *);
-extern void fn_8006E250(void *, void *);
-extern void fn_1_10846C(void);
-extern f32 lbl_1_rodata_7B1C;
-extern f32 lbl_1_rodata_7B20;
-extern s32 fn_1_14D670(void);
-extern u32 lbl_801A66A0;
-extern s32 fn_1_86678(s32 arg);
-extern u32 lbl_1_bss_897AC[1741];
-extern u32 lbl_1_bss_897A4;
-extern u32 lbl_1_bss_897A8;
-extern void * lbl_801A6410;
-extern void lbl_8006DAEC(void);
-extern void lbl_8006DBE4(void);
-extern void lbl_8006E1B0(void *, void *);
-extern void lbl_8006DC20(void);
-extern const f64 lbl_1_rodata_7BF8;
-extern void fn_80008BA8(void *dst, void *src, int size);
-extern void *fn_1_45D0(void *manager, int type, void *data, int code);
-extern void fn_1_105744(void);
-extern void fn_1_106DB4(void);
-extern void fn_1_9D0EC(u32, u32, void*, void*);
-extern void fn_1_103AA8(void);
-extern u32 lbl_1_bss_85288[2];
-extern void fn_1_103AD4(void);
-extern void fn_1_105768(void);
-extern void fn_1_9E5B8(void *);
-extern f32 lbl_1_rodata_7B58[40];
-extern u8 lbl_1_rodata_8058[16];
-extern int mathutil_mtxA_rotate_z__fzgx_offset_C();
-extern struct fn_1_129D9C_system *lbl_801A6D00;
-extern void lbl_8006DCA4(void);
-extern void lbl_8006E1C0(void *, void *);
-extern void lbl_8006DFC4(void *);
-extern void lbl_8006D7B0(void);
-extern void lbl_8006D668(void *);
-extern void lbl_8006E0B4(f32, f32, f32);
-extern void lbl_8006E14C(f32);
-extern void lbl_8006DB74(void *);
-extern void fn_80072558(void);
-extern void fn_80083DB0(void *, void *);
-extern void *fn_1_55210(void *);
-extern void *fn_1_548AC(u32);
-extern void *fn_1_5448C(void *);
-extern void fn_1_5489C(void *, void *);
-extern void fn_1_12A0E0(void);
-
-extern void *fn_80077B14(void *);
-extern void lbl_8006DBAC(void *);
-extern void lbl_8006DAEC(void);
-extern void lbl_8006DBE4(void);
-extern void lbl_8006E1B0(void *, void *);
-extern void lbl_8006DC20(void);
-extern void fn_8006E250(void *, void *);
 
 typedef union fn_1_12277C_Vec {
     u32 w[3];
@@ -9668,7 +9236,7 @@ static inline void fn_1_12277C_reset_parts(fn_1_12277C_Object *self)
     p = self->unk_24;
     for (i = 0; i < self->unk_18; i++, p++) {
         lbl_8006DBE4();
-        lbl_8006E1B0(&p->unk_28, &p->unk_10);
+        lbl_8006E1B0( (Fn183D28Vec3 *)(void *)(&p->unk_28), (Fn183D28Vec3 *)(void *)(&p->unk_10));
     }
 }
 
@@ -9718,7 +9286,7 @@ void fn_1_12277C(fn_1_12277C_Object *self)
     for (i = 0; i < self->unk_18; i++, part++) {
         if (part->unk_0 & 1) {
             lbl_8006DBAC(pool + 0x88);
-            lbl_8006E1B0(&part->unk_28, &part->unk_10);
+            lbl_8006E1B0( (Fn183D28Vec3 *)(void *)(&part->unk_28), (Fn183D28Vec3 *)(void *)(&part->unk_10));
         }
         else {
             part->unk_10 = ((fn_1_12277C_Vec *)&lbl_1_bss_88B50)[n];
@@ -9733,62 +9301,54 @@ void fn_1_12277C(fn_1_12277C_Object *self)
 }
 /* fzgx:end fn_1_12277C */
 
-/* fzgx:begin fn_1_12295C noprologue */
-#include "types.h"
-#include "rel/main_rel/globals.h"
-
-typedef struct Vec3 {
+/* fzgx:begin fn_1_12295C */
+typedef struct fn_1_12295C_Vec3 {
     f32 x;
     f32 y;
     f32 z;
-} Vec3;
+} fn_1_12295C_Vec3;
 
-typedef struct RopeNode {
+typedef struct fn_1_12295C_RopeNode {
     u8 unk_0;
     u8 pad_1[0xF];
-    Vec3 unk_10;
+    fn_1_12295C_Vec3 unk_10;
     u8 pad_1C[0x24];
     f32 unk_40;
-} RopeNode;
+} fn_1_12295C_RopeNode;
 
-typedef struct Link {
-    RopeNode *unk_0;
-    RopeNode *unk_4;
+typedef struct fn_1_12295C_Link {
+    fn_1_12295C_RopeNode *unk_0;
+    fn_1_12295C_RopeNode *unk_4;
     f32 unk_8;
-} Link;
+} fn_1_12295C_Link;
 
-typedef struct RopeOwner {
+typedef struct fn_1_12295C_RopeOwner {
     u8 pad_0[0x8C];
     s32 unk_8C;
-} RopeOwner;
+} fn_1_12295C_RopeOwner;
 
-typedef struct Rope {
+typedef struct fn_1_12295C_Rope {
     u8 pad_0[0xC];
-    RopeOwner *unk_C;
+    fn_1_12295C_RopeOwner *unk_C;
     u8 pad_10[0x8];
     u32 unk_18;
     u32 unk_1C;
     u8 pad_20[0x4];
-    RopeNode *unk_24;
-    Link *unk_28;
-} Rope;
+    fn_1_12295C_RopeNode *unk_24;
+    fn_1_12295C_Link *unk_28;
+} fn_1_12295C_Rope;
 
-extern u32 lbl_801A6410;
-extern void fn_1_10846C(Rope *);
-extern void fn_1_128884(void *, void *, s32);
-extern void *fn_1_4630(u32, u32, const char *, s32);
-extern f32 fn_1_1289BC(RopeNode *, RopeNode *);
 
-void fn_1_12295C(Rope *rope) {
+void fn_1_12295C(fn_1_12295C_Rope *rope) {
     u32 i;
     u32 m;
-    RopeNode *b;
-    RopeNode *a;
-    RopeNode *p;
-    RopeNode *n;
+    fn_1_12295C_RopeNode *b;
+    fn_1_12295C_RopeNode *a;
+    fn_1_12295C_RopeNode *p;
+    fn_1_12295C_RopeNode *n;
     s32 last;
     u32 j;
-    RopeNode *q;
+    fn_1_12295C_RopeNode *q;
     u32 k;
     u32 rows;
     s32 cols;
@@ -9797,7 +9357,7 @@ void fn_1_12295C(Rope *rope) {
         return;
     }
     cols = (rope->unk_C->unk_8C == 2) ? 8 : 12;
-    fn_1_10846C(rope);
+    fn_1_10846C( (u32)(fn_1_12295C_Rope *)(rope));
 
     for (i = 0, n = rope->unk_24; i < rope->unk_18; i++, n++) {
         if (n->unk_0 & 1) {
@@ -9812,7 +9372,7 @@ void fn_1_12295C(Rope *rope) {
     for (i = 0, a = rope->unk_24; i < rope->unk_18; i++, a++) {
         for (j = i + 1, b = &rope->unk_24[i] + 1; j < rope->unk_18; j++, b++) {
             if (a->unk_0 == 0 && b->unk_0 != 0) {
-                fn_1_128884(a, b, sizeof(RopeNode));
+                fn_1_128884(a, b, sizeof(fn_1_12295C_RopeNode));
             }
         }
     }
@@ -9820,7 +9380,7 @@ void fn_1_12295C(Rope *rope) {
     for (i = 0, a = rope->unk_24; i < rope->unk_18; i++, a++) {
         for (j = i + 1, b = &rope->unk_24[i] + 1; j < rope->unk_18; j++, b++) {
             if (a->unk_0 == b->unk_0 && a->unk_10.x > b->unk_10.x) {
-                fn_1_128884(a, b, sizeof(RopeNode));
+                fn_1_128884(a, b, sizeof(fn_1_12295C_RopeNode));
             }
         }
     }
@@ -9828,7 +9388,7 @@ void fn_1_12295C(Rope *rope) {
     for (i = 0, a = rope->unk_24; i < cols; i++, a++) {
         for (j = i + 1, b = a + 1; j < cols; j++, b++) {
             if (a->unk_10.z > b->unk_10.z) {
-                fn_1_128884(a, b, sizeof(RopeNode));
+                fn_1_128884(a, b, sizeof(fn_1_12295C_RopeNode));
             }
         }
     }
@@ -9836,7 +9396,7 @@ void fn_1_12295C(Rope *rope) {
     for (i = cols, a = &rope->unk_24[cols]; i < cols * 2; i++, a++) {
         for (j = i + 1, b = a + 1; j < cols * 2; j++, b++) {
             if (a->unk_10.z > b->unk_10.z) {
-                fn_1_128884(a, b, sizeof(RopeNode));
+                fn_1_128884(a, b, sizeof(fn_1_12295C_RopeNode));
             }
         }
     }
@@ -9858,7 +9418,7 @@ void fn_1_12295C(Rope *rope) {
         for (i = 0, n = p; i < cols; i++, n++) {
             for (m = i + 1, q = n + 1; m < cols; m++, q++) {
                 if (n->unk_10.z > q->unk_10.z) {
-                    fn_1_128884(n, q, sizeof(RopeNode));
+                    fn_1_128884(n, q, sizeof(fn_1_12295C_RopeNode));
                 }
             }
         }
@@ -9867,55 +9427,51 @@ void fn_1_12295C(Rope *rope) {
 
     rows = rope->unk_18 / cols;
     rope->unk_1C = rows * ((u32)cols - 1) + (rows - 1) * cols + (cols - 1) * 4;
-    rope->unk_28 = fn_1_4630(lbl_801A6410, rope->unk_1C * sizeof(Link), (const char *)&lbl_1_data_40530, 0x279A);
+    rope->unk_28 = (void *)fn_1_4630((*((u32 *)&lbl_801A6410)), rope->unk_1C * sizeof(fn_1_12295C_Link), (const char *)&lbl_1_data_40530, 0x279A);
 
     last = cols - 1;
     for (i = 0, k = 0, a = rope->unk_24; i < last; i++, a++) {
         rope->unk_28[k].unk_0 = a;
         rope->unk_28[k].unk_4 = a + cols + 1;
-        rope->unk_28[k].unk_8 = fn_1_1289BC(rope->unk_28[k].unk_0, rope->unk_28[k].unk_4);
+        rope->unk_28[k].unk_8 = fn_1_1289BC( (const Point1024C4 *)(fn_1_12295C_RopeNode *)(rope->unk_28[k].unk_0), (const Point1024C4 *)(fn_1_12295C_RopeNode *)(rope->unk_28[k].unk_4));
         k++;
     }
     for (i = 0, a = rope->unk_24; i < last; i++, a++) {
         rope->unk_28[k].unk_0 = a + 1;
         rope->unk_28[k].unk_4 = a + cols;
-        rope->unk_28[k].unk_8 = fn_1_1289BC(rope->unk_28[k].unk_0, rope->unk_28[k].unk_4);
+        rope->unk_28[k].unk_8 = fn_1_1289BC( (const Point1024C4 *)(fn_1_12295C_RopeNode *)(rope->unk_28[k].unk_0), (const Point1024C4 *)(fn_1_12295C_RopeNode *)(rope->unk_28[k].unk_4));
         k++;
     }
     for (i = 0, a = rope->unk_24; i < last; i++, a++) {
         rope->unk_28[k].unk_0 = a + cols;
         rope->unk_28[k].unk_4 = a + cols + 1 + cols;
-        rope->unk_28[k].unk_8 = fn_1_1289BC(rope->unk_28[k].unk_0, rope->unk_28[k].unk_4);
+        rope->unk_28[k].unk_8 = fn_1_1289BC( (const Point1024C4 *)(fn_1_12295C_RopeNode *)(rope->unk_28[k].unk_0), (const Point1024C4 *)(fn_1_12295C_RopeNode *)(rope->unk_28[k].unk_4));
         k++;
     }
     for (i = 0, b = rope->unk_24; i < last; i++, b++) {
         rope->unk_28[k].unk_0 = b + cols + 1;
         rope->unk_28[k].unk_4 = b + cols + cols;
-        rope->unk_28[k].unk_8 = fn_1_1289BC(rope->unk_28[k].unk_0, rope->unk_28[k].unk_4);
+        rope->unk_28[k].unk_8 = fn_1_1289BC( (const Point1024C4 *)(fn_1_12295C_RopeNode *)(rope->unk_28[k].unk_0), (const Point1024C4 *)(fn_1_12295C_RopeNode *)(rope->unk_28[k].unk_4));
         k++;
     }
     for (i = 0, a = rope->unk_24; i < rope->unk_18 - 1; i++, a++) {
         if ((i + 1) % cols != 0) {
             rope->unk_28[k].unk_0 = a;
             rope->unk_28[k].unk_4 = a + 1;
-            rope->unk_28[k].unk_8 = fn_1_1289BC(a, a + 1);
+            rope->unk_28[k].unk_8 = fn_1_1289BC( (const Point1024C4 *)(fn_1_12295C_RopeNode *)(a), (const Point1024C4 *)(fn_1_12295C_RopeNode *)(a + 1));
             k++;
         }
     }
     for (i = 0, a = rope->unk_24; i < rope->unk_18 - cols; i++, a++) {
         rope->unk_28[k].unk_0 = a;
         rope->unk_28[k].unk_4 = a + (u32)cols;
-        rope->unk_28[k].unk_8 = fn_1_1289BC(a, a + (u32)cols);
+        rope->unk_28[k].unk_8 = fn_1_1289BC( (const Point1024C4 *)(fn_1_12295C_RopeNode *)(a), (const Point1024C4 *)(fn_1_12295C_RopeNode *)(a + (u32)cols));
         k++;
     }
 }
 /* fzgx:end fn_1_12295C */
 
-/* fzgx:begin fn_1_1244F0 noprologue */
-#include "types.h"
-#include "game/main_rel/accessory_types.h"
-#include "rel/main_rel/accessory.h"
-
+/* fzgx:begin fn_1_1244F0 */
 typedef struct {
     u8 flags;
     u8 pad_1[0xF];
@@ -9941,11 +9497,6 @@ typedef struct {
     Link1244F0 *links;
 } Obj1244F0;
 
-extern f32 fn_1_1289BC(const Point1024C4 *, const Point1024C4 *);
-extern void *fn_1_4630(u32, u32, const char *, s32);
-extern u32 lbl_801A6410;
-extern void fn_1_10846C(Obj1244F0 *);
-extern void fn_1_128884(void *, void *, s32);
 
 #pragma opt_lifetimes on
 void fn_1_1244F0(Obj1244F0 *obj) {
@@ -9969,7 +9520,7 @@ void fn_1_1244F0(Obj1244F0 *obj) {
     u32 j4;
 
     if (obj != NULL) {
-        fn_1_10846C(obj);
+        fn_1_10846C( (u32)(Obj1244F0 *)(obj));
 
         g = obj->groups;
         for (i = 0; i < obj->groupCount; i++, g++) {
@@ -10052,7 +9603,7 @@ void fn_1_1244F0(Obj1244F0 *obj) {
         }
 
         obj->linkCount = (obj->groupCount / 9) * 8 + (obj->groupCount / 9 - 1) * 9;
-        obj->links = fn_1_4630(lbl_801A6410, obj->linkCount * sizeof(Link1244F0), lbl_1_data_40530, 0x2904);
+        obj->links = (void *)fn_1_4630((*((u32 *)&lbl_801A6410)), obj->linkCount * sizeof(Link1244F0), lbl_1_data_40530, 0x2904);
 
         n = 0;
         p = obj->groups;
@@ -10246,15 +9797,7 @@ void fn_1_124AD4(Work *arg0) {
 #pragma opt_common_subs reset
 /* fzgx:end fn_1_124AD4 */
 
-/* fzgx:begin fn_1_1250D0 noprologue */
-#include "types.h"
-#include "game/main_rel/accessory_types.h"
-#include "rel/main_rel/accessory.h"
-
-extern u32 fn_1_4630(u32, u32, const char *, s32);
-extern u32 lbl_801A6410;
-extern void fn_1_10846C(void *);
-extern void fn_1_128884(void *, void *, s32);
+/* fzgx:begin fn_1_1250D0 */
 
 typedef fn_1_10D2F0_Entry Entry;
 
@@ -10274,7 +9817,7 @@ void fn_1_1250D0(fn_1_10D2F0_Obj *obj) {
     f32 num;
 
     if (obj != NULL) {
-        fn_1_10846C(obj);
+        fn_1_10846C( (u32)(void *)(obj));
 
         for (i = 0, p = obj->unk_24; i < obj->unk_18; i++, p++) {
             if (p->unk_0 & 1) {
@@ -10353,7 +9896,7 @@ void fn_1_1250D0(fn_1_10D2F0_Obj *obj) {
 
         q = obj->unk_18 / 13;
         obj->unk_1C = q * 12 + (q - 1) * 13;
-        obj->unk_28 = (fn_1_10D2F0_Link *)fn_1_4630(lbl_801A6410, obj->unk_1C * sizeof(fn_1_10D2F0_Link), lbl_1_data_40530, 0x29F7);
+        obj->unk_28 = (fn_1_10D2F0_Link *)fn_1_4630((*((u32 *)&lbl_801A6410)), obj->unk_1C * sizeof(fn_1_10D2F0_Link), lbl_1_data_40530, 0x29F7);
 
         n = 0;
         p = obj->unk_24;
@@ -10601,15 +10144,7 @@ void fn_1_1256EC(Work *arg0) {
 #pragma opt_common_subs reset
 /* fzgx:end fn_1_1256EC */
 
-/* fzgx:begin fn_1_125CE8 noprologue */
-#include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/accessory.h"
-#include "rel/main_rel/cloth.h"
-#include "psvec.h"
-#include "game/main_rel/accessory_types.h"
-
-extern void fn_1_10846C();
+/* fzgx:begin fn_1_125CE8 */
 
 typedef struct {
     u8 active;
@@ -10636,7 +10171,7 @@ void fn_1_125CE8(fn_1_125CE8_AccessoryData *data) {
     f32 value_off;
     f32 value_on;
 
-    constants = (((f32 *)&lbl_1_rodata_7AB8));
+    constants = (((f32 *)((const u8 (*)[])&lbl_1_rodata_7AB8)));
     if (data != 0) {
         fn_1_10846C(data);
 
@@ -10886,11 +10421,8 @@ void fn_1_125DF0(Work *arg0) {
 #pragma opt_common_subs reset
 /* fzgx:end fn_1_125DF0 */
 
-/* fzgx:begin fn_1_1262A4 noprologue */
-#include "types.h"
-#include "game/main_rel/accessory_types.h"
-
-/* The TU's shared literal pool (lbl_1_rodata_7AB8...), primed in retail order. */
+/* fzgx:begin fn_1_1262A4 */
+/* The TU's shared literal pool ((((const u8 *)&lbl_1_rodata_7AB8))...), primed in retail order. */
 #pragma section code_type ".fzgxpool"
 static const unsigned long fzgx_pool_table1[6] = {0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000};  /* fzgx-allow: A1 retail pool bytes */
 __declspec(section ".fzgxpool") static void fzgx_pool_keep1(void) { const unsigned long *volatile cp; cp = fzgx_pool_table1; }  /* fzgx-allow: S2 pool primer sink */
@@ -11010,11 +10542,6 @@ typedef struct ClothObj1262A4 {
     ClothLink1262A4 *links;
 } ClothObj1262A4;
 
-extern void fn_1_10846C(void *);
-extern void fn_1_128884(void *, void *, s32);
-extern void *fn_1_4630(u32, u32, const char *, s32);
-extern u32 lbl_801A6410;
-extern char lbl_1_data_40530[0x6C];
 
 void fn_1_1262A4(ClothObj1262A4 *obj) {
     u32 c0;
@@ -11045,7 +10572,7 @@ void fn_1_1262A4(ClothObj1262A4 *obj) {
     if (obj == NULL) {
         return;
     }
-    fn_1_10846C(obj);
+    fn_1_10846C( (u32)(void *)(obj));
 
     c0 = 0;
     e0 = obj->nodes;
@@ -11120,7 +10647,7 @@ void fn_1_1262A4(ClothObj1262A4 *obj) {
     }
 
     obj->linkCount = 0x40;
-    obj->links = fn_1_4630(lbl_801A6410, obj->linkCount * sizeof(ClothLink1262A4), lbl_1_data_40530, 0x2DF1);
+    obj->links = (void *)fn_1_4630((*((u32 *)&lbl_801A6410)), obj->linkCount * sizeof(ClothLink1262A4), lbl_1_data_40530, 0x2DF1);
 
     idx = 0;
     ring_2 = obj->nodes;
@@ -11756,16 +11283,7 @@ void fn_1_12744C(Work *arg0) {
 #pragma opt_common_subs reset
 /* fzgx:end fn_1_12744C */
 
-/* fzgx:begin fn_1_127FB8 noprologue */
-#include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/accessory.h"
-#include "rel/main_rel/cloth.h"
-#include "psvec.h"
-#include "game/main_rel/accessory_types.h"
-
-extern void fn_1_10846C();
-extern const f32 lbl_1_rodata_7B20;
+/* fzgx:begin fn_1_127FB8 */
 
 typedef struct {
     u8 active;
@@ -11805,10 +11323,7 @@ void fn_1_127FB8(Fn127FB8Object *obj) {
 }
 /* fzgx:end fn_1_127FB8 */
 
-/* fzgx:begin fn_1_128038 noprologue */
-#include "types.h"
-#include "rel/main_rel/accessory.h"
-
+/* fzgx:begin fn_1_128038 */
 #pragma pool_data on
 
 typedef struct {
@@ -11834,21 +11349,6 @@ typedef struct {
     u8 *unk_24;
 } fn_1_128038_AccessoryObject;
 
-extern void *fn_80077B14(void *);
-extern const char *fn_1_950E8(void *);
-extern int fn_80083BCC(const char *, const char *);
-extern void fn_1_108EEC(void *, u32, u32, f32, f32, f32, f32);
-extern void mathutil_mtxA_rotate_z(s32);
-extern void lbl_8006DBAC(void *);
-extern void lbl_8006DAEC(void);
-extern void lbl_8006DBE4(void);
-extern void lbl_8006E1B0(void *, void *);
-extern void lbl_8006DC20(void);
-extern void lbl_8006D758(void);
-extern void lbl_8006DB74(void *);
-extern void lbl_8006DFC4(void *);
-extern void fn_8006E250(void *, void *);
-extern f32 lbl_1_rodata_7AB8[];
 
 #pragma opt_propagation off
 static inline u32 *fn_1_128038_model_indices(u8 *base) {
@@ -11857,7 +11357,7 @@ static inline u32 *fn_1_128038_model_indices(u8 *base) {
 }
 
 void fn_1_128038(fn_1_128038_AccessoryObject *self) {
-    f32 *k = lbl_1_rodata_7AB8;
+    f32 *k = (((f32 *)&lbl_1_rodata_7AB8));
     u8 *data = lbl_1_data_3F510;
     /* model index table and the type-name strings live in this TU's .data block */
 #define table fn_1_128038_model_indices(data)
@@ -11881,7 +11381,7 @@ void fn_1_128038(fn_1_128038_AccessoryObject *self) {
             i = 0;
             while (i < self->unk_18) {
                 lbl_8006DBE4();
-                lbl_8006E1B0(item + 0x28, item + 0x10);
+                lbl_8006E1B0( (Fn183D28Vec3 *)(void *)(item + 0x28), (Fn183D28Vec3 *)(void *)(item + 0x10));
                 i++;
                 item += 0x44;
             }
@@ -11927,7 +11427,7 @@ void fn_1_128038(fn_1_128038_AccessoryObject *self) {
             while (i < self->unk_18) {
                 lbl_8006DBAC(model + 0x88);
                 lbl_8006DFC4(mtx);
-                lbl_8006E1B0(item + 0x28, item + 0x10);
+                lbl_8006E1B0( (Fn183D28Vec3 *)(void *)(item + 0x28), (Fn183D28Vec3 *)(void *)(item + 0x10));
                 i++;
                 item += 0x44;
             }
@@ -11935,43 +11435,43 @@ void fn_1_128038(fn_1_128038_AccessoryObject *self) {
 
         type = self->unk_C->unk_88;
         if (type == 0x18) {
-            fn_1_108EEC(self, 1, 12, k[0x4d0 / 4], k[0x304 / 4], k[0x560 / 4], k[0x564 / 4]);
+            fn_1_108EEC( (Fn108EECObj *)(void *)(self), 1, 12, k[0x4d0 / 4], k[0x304 / 4], k[0x560 / 4], k[0x564 / 4]);
             if (fn_80083BCC(fn_1_950E8(self->unk_C->unk_148), (const char *)(data + 0x10a0)) != 0 &&
                 fn_80083BCC(fn_1_950E8(self->unk_C->unk_148), (const char *)(data + 0x1040)) != 0) {
-                fn_1_108EEC(self, 12, 12, k[0x2a8 / 4], k[0xa8 / 4], k[0x224 / 4], k[0x488 / 4]);
-                fn_1_108EEC(self, 12, 12, k[0x2bc / 4], k[0x568 / 4], k[0x1a4 / 4], k[0x56c / 4]);
-                fn_1_108EEC(self, 12, 12, k[0x15c / 4], k[0x570 / 4], k[0x574 / 4], k[0x294 / 4]);
-                fn_1_108EEC(self, 13, 12, k[0x578 / 4], k[0x68 / 4], k[0x1a4 / 4], k[0x414 / 4]);
-                fn_1_108EEC(self, 13, 12, k[0x578 / 4], k[0x2cc / 4], k[0x358 / 4], k[0x57c / 4]);
-                fn_1_108EEC(self, 13, 12, k[0x564 / 4], k[0x580 / 4], k[0x358 / 4], k[0x57c / 4]);
+                fn_1_108EEC( (Fn108EECObj *)(void *)(self), 12, 12, k[0x2a8 / 4], k[0xa8 / 4], k[0x224 / 4], k[0x488 / 4]);
+                fn_1_108EEC( (Fn108EECObj *)(void *)(self), 12, 12, k[0x2bc / 4], k[0x568 / 4], k[0x1a4 / 4], k[0x56c / 4]);
+                fn_1_108EEC( (Fn108EECObj *)(void *)(self), 12, 12, k[0x15c / 4], k[0x570 / 4], k[0x574 / 4], k[0x294 / 4]);
+                fn_1_108EEC( (Fn108EECObj *)(void *)(self), 13, 12, k[0x578 / 4], k[0x68 / 4], k[0x1a4 / 4], k[0x414 / 4]);
+                fn_1_108EEC( (Fn108EECObj *)(void *)(self), 13, 12, k[0x578 / 4], k[0x2cc / 4], k[0x358 / 4], k[0x57c / 4]);
+                fn_1_108EEC( (Fn108EECObj *)(void *)(self), 13, 12, k[0x564 / 4], k[0x580 / 4], k[0x358 / 4], k[0x57c / 4]);
             }
         } else if (type == 6) {
-            fn_1_108EEC(self, 1, 12, k[0x4d0 / 4], k[0x304 / 4], k[0x560 / 4], k[0x564 / 4]);
+            fn_1_108EEC( (Fn108EECObj *)(void *)(self), 1, 12, k[0x4d0 / 4], k[0x304 / 4], k[0x560 / 4], k[0x564 / 4]);
             if (fn_80083BCC(fn_1_950E8(self->unk_C->unk_148), (const char *)(data + 0x1048)) != 0) {
-                fn_1_108EEC(self, 12, 12, k[0x2a8 / 4], k[0xa8 / 4], k[0x224 / 4], k[0x488 / 4]);
-                fn_1_108EEC(self, 12, 12, k[0x2bc / 4], k[0x568 / 4], k[0x1a4 / 4], k[0x56c / 4]);
-                fn_1_108EEC(self, 12, 12, k[0x15c / 4], k[0x570 / 4], k[0x574 / 4], k[0x294 / 4]);
-                fn_1_108EEC(self, 13, 12, k[0x578 / 4], k[0x68 / 4], k[0x1a4 / 4], k[0x414 / 4]);
-                fn_1_108EEC(self, 13, 12, k[0x578 / 4], k[0x2cc / 4], k[0x358 / 4], k[0x57c / 4]);
-                fn_1_108EEC(self, 13, 12, k[0x564 / 4], k[0x580 / 4], k[0x358 / 4], k[0x57c / 4]);
+                fn_1_108EEC( (Fn108EECObj *)(void *)(self), 12, 12, k[0x2a8 / 4], k[0xa8 / 4], k[0x224 / 4], k[0x488 / 4]);
+                fn_1_108EEC( (Fn108EECObj *)(void *)(self), 12, 12, k[0x2bc / 4], k[0x568 / 4], k[0x1a4 / 4], k[0x56c / 4]);
+                fn_1_108EEC( (Fn108EECObj *)(void *)(self), 12, 12, k[0x15c / 4], k[0x570 / 4], k[0x574 / 4], k[0x294 / 4]);
+                fn_1_108EEC( (Fn108EECObj *)(void *)(self), 13, 12, k[0x578 / 4], k[0x68 / 4], k[0x1a4 / 4], k[0x414 / 4]);
+                fn_1_108EEC( (Fn108EECObj *)(void *)(self), 13, 12, k[0x578 / 4], k[0x2cc / 4], k[0x358 / 4], k[0x57c / 4]);
+                fn_1_108EEC( (Fn108EECObj *)(void *)(self), 13, 12, k[0x564 / 4], k[0x580 / 4], k[0x358 / 4], k[0x57c / 4]);
             }
         } else if (type == 1) {
             if (table[self->unk_8] == 11) {
-                fn_1_108EEC(self, 1, 12, k[0x41c / 4], k[0x304 / 4], k[0x560 / 4], k[0x564 / 4]);
-                fn_1_108EEC(self, 12, 12, k[0x584 / 4], k[0xa8 / 4], k[0x224 / 4], k[0x488 / 4]);
-                fn_1_108EEC(self, 12, 12, k[0x588 / 4], k[0x568 / 4], k[0x1a4 / 4], k[0x56c / 4]);
-                fn_1_108EEC(self, 12, 12, k[0x1a0 / 4], k[0x570 / 4], k[0x574 / 4], k[0x294 / 4]);
-                fn_1_108EEC(self, 13, 12, k[0x2a0 / 4], k[0x68 / 4], k[0x1a4 / 4], k[0x414 / 4]);
-                fn_1_108EEC(self, 13, 12, k[0x2a0 / 4], k[0x2cc / 4], k[0x358 / 4], k[0x57c / 4]);
-                fn_1_108EEC(self, 13, 12, k[0x58c / 4], k[0x580 / 4], k[0x358 / 4], k[0x57c / 4]);
+                fn_1_108EEC( (Fn108EECObj *)(void *)(self), 1, 12, k[0x41c / 4], k[0x304 / 4], k[0x560 / 4], k[0x564 / 4]);
+                fn_1_108EEC( (Fn108EECObj *)(void *)(self), 12, 12, k[0x584 / 4], k[0xa8 / 4], k[0x224 / 4], k[0x488 / 4]);
+                fn_1_108EEC( (Fn108EECObj *)(void *)(self), 12, 12, k[0x588 / 4], k[0x568 / 4], k[0x1a4 / 4], k[0x56c / 4]);
+                fn_1_108EEC( (Fn108EECObj *)(void *)(self), 12, 12, k[0x1a0 / 4], k[0x570 / 4], k[0x574 / 4], k[0x294 / 4]);
+                fn_1_108EEC( (Fn108EECObj *)(void *)(self), 13, 12, k[0x2a0 / 4], k[0x68 / 4], k[0x1a4 / 4], k[0x414 / 4]);
+                fn_1_108EEC( (Fn108EECObj *)(void *)(self), 13, 12, k[0x2a0 / 4], k[0x2cc / 4], k[0x358 / 4], k[0x57c / 4]);
+                fn_1_108EEC( (Fn108EECObj *)(void *)(self), 13, 12, k[0x58c / 4], k[0x580 / 4], k[0x358 / 4], k[0x57c / 4]);
             } else {
-                fn_1_108EEC(self, 1, 7, k[0x41c / 4], k[0x304 / 4], k[0x560 / 4], k[0x564 / 4]);
-                fn_1_108EEC(self, 7, 7, k[0x584 / 4], k[0xa8 / 4], k[0x224 / 4], k[0x488 / 4]);
-                fn_1_108EEC(self, 7, 7, k[0x588 / 4], k[0x568 / 4], k[0x1a4 / 4], k[0x56c / 4]);
-                fn_1_108EEC(self, 7, 7, k[0x1a0 / 4], k[0x570 / 4], k[0x574 / 4], k[0x294 / 4]);
-                fn_1_108EEC(self, 13, 7, k[0x2a0 / 4], k[0x68 / 4], k[0x1a4 / 4], k[0x414 / 4]);
-                fn_1_108EEC(self, 13, 7, k[0x2a0 / 4], k[0x2cc / 4], k[0x358 / 4], k[0x57c / 4]);
-                fn_1_108EEC(self, 13, 7, k[0x58c / 4], k[0x580 / 4], k[0x358 / 4], k[0x57c / 4]);
+                fn_1_108EEC( (Fn108EECObj *)(void *)(self), 1, 7, k[0x41c / 4], k[0x304 / 4], k[0x560 / 4], k[0x564 / 4]);
+                fn_1_108EEC( (Fn108EECObj *)(void *)(self), 7, 7, k[0x584 / 4], k[0xa8 / 4], k[0x224 / 4], k[0x488 / 4]);
+                fn_1_108EEC( (Fn108EECObj *)(void *)(self), 7, 7, k[0x588 / 4], k[0x568 / 4], k[0x1a4 / 4], k[0x56c / 4]);
+                fn_1_108EEC( (Fn108EECObj *)(void *)(self), 7, 7, k[0x1a0 / 4], k[0x570 / 4], k[0x574 / 4], k[0x294 / 4]);
+                fn_1_108EEC( (Fn108EECObj *)(void *)(self), 13, 7, k[0x2a0 / 4], k[0x68 / 4], k[0x1a4 / 4], k[0x414 / 4]);
+                fn_1_108EEC( (Fn108EECObj *)(void *)(self), 13, 7, k[0x2a0 / 4], k[0x2cc / 4], k[0x358 / 4], k[0x57c / 4]);
+                fn_1_108EEC( (Fn108EECObj *)(void *)(self), 13, 7, k[0x58c / 4], k[0x580 / 4], k[0x358 / 4], k[0x57c / 4]);
             }
         }
 
@@ -12430,19 +11930,7 @@ void fn_1_1286F4(Vec3f *out) {
 }
 /* fzgx:end fn_1_1286F4 */
 
-/* fzgx:begin fn_1_128884 noprologue */
-#include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/accessory.h"
-#include "rel/main_rel/cloth.h"
-#include "psvec.h"
-#include "game/main_rel/accessory_types.h"
-
-extern void fn_1_128884(void *arg0, void *arg1, s32 type);
-extern void * lbl_801A6410;
-extern void fn_1_46B4(u32 arg0, u32 arg1, const char *arg2, int arg3);
-extern void fn_80008BA8(void *dst, void *src, int size);
-extern s32 fn_1_45D0();
+/* fzgx:begin fn_1_128884 */
 
 void fn_1_128884(void *arg0, void *arg1, s32 type) {
     u8 tmp1[0x44];
@@ -12475,14 +11963,7 @@ void fn_1_128884(void *arg0, void *arg1, s32 type) {
 }
 /* fzgx:end fn_1_128884 */
 
-/* fzgx:begin fn_1_1289BC noprologue */
-#include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/accessory.h"
-#include "rel/main_rel/cloth.h"
-#include "psvec.h"
-#include "game/main_rel/accessory_types.h"
-
+/* fzgx:begin fn_1_1289BC */
 f32 fn_1_1289BC(const Point1024C4 *a, const Point1024C4 *b) {
     f32 dz = a->v[2] - b->v[2];
     f32 dy = a->v[1] - b->v[1];
@@ -12494,12 +11975,7 @@ f32 fn_1_1289BC(const Point1024C4 *a, const Point1024C4 *b) {
 }
 /* fzgx:end fn_1_1289BC */
 
-/* fzgx:begin fn_1_1289F0 noprologue */
-#include "psvec.h"
-
-extern const f32 lbl_1_rodata_7B58[];
-extern f32 lbl_8006D6FC(void *, void *);
-extern f32 lbl_8006D0B4(f32);
+/* fzgx:begin fn_1_1289F0 */
 
 static inline f32 fn_1_1289F0_array_read(f32 *array, s32 index) { return array[index]; }
 #pragma opt_propagation off
@@ -12514,20 +11990,12 @@ f32 fn_1_1289F0(f32 *a, f32 *b, f32 *c) {
     len += fn_1_1289F0_array_read(d1, 1) * fn_1_1289F0_array_read(d1, 1);
     len += fn_1_1289F0_array_read(d1, 2) * fn_1_1289F0_array_read(d1, 2);
     len = lbl_8006D0B4(len);
-    return len * lbl_8006D0B4(lbl_1_rodata_7B58[0] - (f32)(fn_1_1289F0_array_read(d2, 0) * fn_1_1289F0_array_read(d2, 0)));
+    return len * lbl_8006D0B4((((const f32 *)&lbl_1_rodata_7B58))[0] - (f32)(fn_1_1289F0_array_read(d2, 0) * fn_1_1289F0_array_read(d2, 0)));
 }
 #pragma opt_propagation reset
 /* fzgx:end fn_1_1289F0 */
 
-/* fzgx:begin fn_1_128AAC noprologue */
-#include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/accessory.h"
-#include "rel/main_rel/cloth.h"
-#include "psvec.h"
-#include "game/main_rel/accessory_types.h"
-
-extern f32 lbl_1_rodata_7B58[40];
+/* fzgx:begin fn_1_128AAC */
 
 f32 fn_1_128AAC(s32 exponent, f32 value) {
     s32 sign;
@@ -12551,15 +12019,7 @@ f32 fn_1_128AAC(s32 exponent, f32 value) {
 }
 /* fzgx:end fn_1_128AAC */
 
-/* fzgx:begin fn_1_128B00 noprologue */
-#include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/accessory.h"
-#include "rel/main_rel/cloth.h"
-#include "psvec.h"
-#include "game/main_rel/accessory_types.h"
-
-extern s32 fn_1_14D670(void);
+/* fzgx:begin fn_1_128B00 */
 
 s32 fn_1_128B00(s16 value) {
     switch (value) {
@@ -12575,10 +12035,7 @@ s32 fn_1_128B00(s16 value) {
 }
 /* fzgx:end fn_1_128B00 */
 
-/* fzgx:begin fn_1_128B60 noprologue */
-#include "types.h"
-
-extern u32 lbl_801A63C0;
+/* fzgx:begin fn_1_128B60 */
 
 /* Local linear congruential generator over the shared seed. */
 static inline s32 fn_1_128B60_rand(void) {
@@ -12609,14 +12066,7 @@ void fn_1_128B60(u8 *a0, u8 *a1, u8 *a2, u8 *b0, u8 *b1, u8 *b2, u8 *c0, u8 *c1,
 }
 /* fzgx:end fn_1_128B60 */
 
-/* fzgx:begin fn_1_128DD8 noprologue */
-#include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/accessory.h"
-#include "rel/main_rel/cloth.h"
-#include "psvec.h"
-#include "game/main_rel/accessory_types.h"
-
+/* fzgx:begin fn_1_128DD8 */
 // Return the table index for a matching accessory value, or the first unused index.
 u8 fn_1_128DD8(u8 value) {
     u8 *table;
@@ -12635,15 +12085,7 @@ u8 fn_1_128DD8(u8 value) {
 }
 /* fzgx:end fn_1_128DD8 */
 
-/* fzgx:begin fn_1_128E10 noprologue */
-#include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/accessory.h"
-#include "rel/main_rel/cloth.h"
-#include "psvec.h"
-#include "game/main_rel/accessory_types.h"
-
-extern u8 lbl_1_rodata_8058[16];
+/* fzgx:begin fn_1_128E10 */
 
 #pragma pack(push, 1)
 typedef struct {
@@ -12675,15 +12117,7 @@ u8 fn_1_128E10(u8 value) {
 }
 /* fzgx:end fn_1_128E10 */
 
-/* fzgx:begin fn_1_128E8C noprologue */
-#include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/accessory.h"
-#include "rel/main_rel/cloth.h"
-#include "psvec.h"
-#include "game/main_rel/accessory_types.h"
-
-extern u32 lbl_801A66A0;
+/* fzgx:begin fn_1_128E8C */
 
 typedef struct {
     u8 field_0;
@@ -12722,17 +12156,7 @@ void fn_1_128E8C(u32 unused, FnData *data) {
 }
 /* fzgx:end fn_1_128E8C */
 
-/* fzgx:begin fn_1_128F10 pool noprologue */
-#include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/accessory.h"
-#include "rel/main_rel/cloth.h"
-#include "psvec.h"
-#include "game/main_rel/accessory_types.h"
-
-extern u8 lbl_1_bss_89780;
-extern u32 lbl_1_bss_897A4;
-extern u32 lbl_1_bss_897A8;
+/* fzgx:begin fn_1_128F10 pool */
 
 struct fn_1_129D9C_rodata;
 
@@ -12784,16 +12208,7 @@ void fn_1_128F10(void) {
 }
 /* fzgx:end fn_1_128F10 */
 
-/* fzgx:begin fn_1_128F54 noprologue */
-#include "dolphin/types.h"
-#include "rel/main_rel/accessory.h"
-
-extern s8 fn_1_86624(void);
-extern s32 fn_1_58C4(void);
-extern s16 fn_1_6B48(s32);
-extern f32 fn_1_8CAF4(u32, s32);
-extern const f32 lbl_1_rodata_8068;
-extern const f32 lbl_1_rodata_806C[];
+/* fzgx:begin fn_1_128F54 */
 
 void fn_1_128F54(void)
 {
@@ -12813,7 +12228,7 @@ void fn_1_128F54(void)
     for (i = 0; i < entries.value; i++) {
         machine.value = fn_1_6B48(i);
         if (machine.value == (u32)-1) {
-            (&lbl_1_bss_89770.unk_0)[i] = lbl_1_rodata_8068;
+            (&lbl_1_bss_89770.unk_0)[i] = (*((const f32 *)&lbl_1_rodata_8068));
             (&lbl_1_bss_89760.unk_0)[i] = 0;
         } else {
             found = 0;
@@ -12835,45 +12250,27 @@ void fn_1_128F54(void)
             }
             if (found == 0) {
                 (&lbl_1_bss_89760.unk_0)[i] = 0;
-                (&lbl_1_bss_89770.unk_0)[i] = lbl_1_rodata_8068;
+                (&lbl_1_bss_89770.unk_0)[i] = (*((const f32 *)&lbl_1_rodata_8068));
             }
         }
     }
 }
 /* fzgx:end fn_1_128F54 */
 
-/* fzgx:begin fn_1_12999C noprologue */
-#include "types.h"
-
+/* fzgx:begin fn_1_12999C */
 typedef struct {
     f32 x;
     f32 y;
     f32 z;
-} Vec3_12999C;
+} fn_1_12999C_Vec3_12999C;
 
-typedef struct {
-    u32 flags;          /* 0x0 */
-    u8 pad_4[0x148];
-    u8 body[0x329];     /* 0x14c */
-    s8 slot;            /* 0x475 */
-    u8 pad_476[0x26];
-    u8 *info;           /* 0x49c */
-} Entry_12999C;
 
 typedef struct {
     u8 pad_0[0x8];
     u32 *items;         /* 0x8, 8-byte entries */
 } Table_12999C;
 
-typedef struct {
-    u8 pad_0[0x9];
-    u8 count;           /* 0x9 */
-    u8 pad_A[0x14A6];
-} Info_12999C;
 
-typedef struct {
-    u32 words[6];
-} Tmp_12999C;
 
 /* literal pool of the TU */
 typedef struct {
@@ -12884,39 +12281,15 @@ typedef struct {
     u32 tbl3[3];        /* 0x78 */
     u32 tbl4[4];        /* 0x84 */
     u8 str[4];          /* 0x94 */
-} Pool_12999C;
+} fn_1_12999C_Pool_12999C;
 
-extern Pool_12999C lbl_1_rodata_8068;
-extern s16 lbl_1_bss_960;
-extern s8 lbl_1_bss_9C[8];
-extern u8 lbl_1_bss_89780;
-extern Table_12999C *lbl_1_bss_38458;
-extern u8 lbl_1_bss_7CA58[];
-extern s32 lbl_801A66B4;
-extern u32 lbl_1_data_405EC;
 
-extern s16 fn_1_3F0C8(void);
-extern s32 fn_1_F2F34(void);
-extern void fn_1_3EF14(Info_12999C *);
-extern f32 fn_1_A71AC(void);
-extern s32 fn_1_40B20(void);
-extern Entry_12999C *fn_1_86254(int);
-extern u32 fn_1_5910(void);
-extern s8 fn_1_12A24C(s8);
-extern u32 fn_1_862A8(u32, Vec3_12999C *);
-extern int fn_1_D66BC(u8, Tmp_12999C *);
-extern void fn_1_129D9C(void *, Vec3_12999C *, void *, f32, void *, u8, u8, u8);
-extern s32 fn_1_F1D60(void);
-extern int fn_1_4C10(void);
-extern u8 *fn_1_F1C54(u32);
-extern u32 fn_1_EB0B0(void);
-extern u8 *fn_80083970(u8 *, void *);
 
 void fn_1_12999C(void) {
     u32 mask;
-    Entry_12999C *e;
+    fn_1_12999C_Entry_12999C *e;
     s32 count;
-    Pool_12999C *pool = &lbl_1_rodata_8068;
+    fn_1_12999C_Pool_12999C *pool = ((fn_1_12999C_Pool_12999C *)&lbl_1_rodata_8068);
     s32 i;
     u8 *info;
     s32 flag;
@@ -12924,13 +12297,13 @@ void fn_1_12999C(void) {
     u8 last;
     u32 j;
     u8 *name;
-    Info_12999C buf;
-    Tmp_12999C tmp;
+    fn_1_12999C_Info_12999C buf;
+    fn_1_12999C_Tmp_12999C tmp;
     u32 tbl3[3];
     u32 tbl4[4];
-    Vec3_12999C pos;
-    Vec3_12999C v1;
-    Vec3_12999C v2;
+    fn_1_12999C_Vec3_12999C pos;
+    fn_1_12999C_Vec3_12999C v1;
+    fn_1_12999C_Vec3_12999C v2;
     f32 scale;
 
     tbl3[0] = pool->tbl3[0];
@@ -12956,10 +12329,10 @@ void fn_1_12999C(void) {
         }
         break;
     }
-    if (fn_1_F2F34() != 0) {
+    if ((s32)fn_1_F2F34() != 0) {
         return;
     }
-    fn_1_3EF14(&buf);
+    fn_1_3EF14( (void *)(fn_1_12999C_Info_12999C *)(&buf));
     scale = fn_1_A71AC();
     count = fn_1_40B20();
     if (lbl_1_bss_960 == 9) {
@@ -12967,13 +12340,13 @@ void fn_1_12999C(void) {
     }
     mask = 0x08000880;
     for (i = 0; i < buf.count; i++) {
-        e = fn_1_86254(i);
+        e = (fn_1_12999C_Entry_12999C *)fn_1_86254(i);
         if (e->flags & mask) {
             continue;
         }
         info = e->info;
         if (e->slot != -1) {
-            if ((u32)e->slot == fn_1_5910()) {
+            if ((u32)e->slot == (u32)fn_1_5910()) {
                 continue;
             }
         }
@@ -12987,32 +12360,32 @@ void fn_1_12999C(void) {
         if (e->flags & 0x10000) {
             continue;
         }
-        fn_1_862A8(i, &pos);
+        fn_1_862A8(i, (Vec3_12999C *)(fn_1_12999C_Vec3_12999C *)(&pos));
         if (slot != -1) {
-            if (lbl_1_bss_89780 != 0 && (u8)fn_1_D66BC((u8)slot, &tmp)) {
+            if (lbl_1_bss_89780 != 0 && (u8)fn_1_D66BC( (void *)((u8)slot), (void *)(fn_1_12999C_Tmp_12999C *)(&tmp))) {
                 fn_1_129D9C(e->body, &pos, &tmp, scale, NULL, 0, last, 0);
             } else {
-                fn_1_129D9C(e->body, &pos, NULL, scale, (void *)lbl_1_bss_38458->items[tbl4[slot] * 2], 0, last, 0);
+                fn_1_129D9C(e->body, &pos, NULL, scale, (void *)((Table_12999C *)lbl_1_bss_38458)->items[tbl4[slot] * 2], 0, last, 0);
             }
         } else if (flag != 0 && info[0x115] < 3) {
-            fn_1_129D9C(e->body, &pos, NULL, scale, (void *)lbl_1_bss_38458->items[tbl3[info[0x115]] * 2], 0, last, 0);
+            fn_1_129D9C(e->body, &pos, NULL, scale, (void *)((Table_12999C *)lbl_1_bss_38458)->items[tbl3[info[0x115]] * 2], 0, last, 0);
         } else if (last != 0) {
             fn_1_129D9C(e->body, &pos, NULL, scale, NULL, 0, last, 0);
         }
     }
-    if (fn_1_F1D60() != 0 && lbl_1_bss_960 == 9 && lbl_1_bss_9C[6] == -2) {
+    if ((s32)fn_1_F1D60() != 0 && lbl_1_bss_960 == 9 && lbl_1_bss_9C[6] == -2) {
         v1.x = pool->zero;
         v1.y = pool->one;
         v1.z = pool->zero;
         fn_1_129D9C(lbl_1_bss_7CA58, &v1, NULL, scale, NULL, 1, 1, 0);
-    } else if (fn_1_F1D60() != 0) {
+    } else if ((s32)fn_1_F1D60() != 0) {
         v2.x = pool->zero;
         v2.y = pool->one;
         v2.z = pool->zero;
         if (fn_1_4C10() == 0) {
             for (j = 0; j < fn_1_EB0B0(); j++) {
-                name = fn_1_F1C54(j);
-                if (lbl_801A66B4 != 5 && fn_80083970(name, &lbl_1_data_405EC) != NULL) {
+                name = (u8 *)fn_1_F1C54(j);
+                if (lbl_801A66B4 != 5 && fn_80083970(name, (const u8 *)(void *)(&lbl_1_data_405EC)) != NULL) {
                     name = pool->str;
                 }
                 fn_1_129D9C(&lbl_1_bss_7CA58[j * 0x30], &v2, name, scale, NULL, 1, 0, 0);
@@ -13235,17 +12608,7 @@ void fn_1_129D9C(void *arg0, struct fn_1_129D9C_vec *arg1, struct fn_1_129D9C_ob
 #pragma opt_common_subs reset
 /* fzgx:end fn_1_129D9C */
 
-/* fzgx:begin fn_1_12A080 noprologue */
-#include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/accessory.h"
-#include "rel/main_rel/cloth.h"
-#include "psvec.h"
-#include "game/main_rel/accessory_types.h"
-
-extern void fn_1_12A080(void);
-extern void fn_800737E4(void *, s32);
-extern void fn_80074918(u8 arg0, s32 arg1, u8 arg2);
+/* fzgx:begin fn_1_12A080 */
 
 struct fn_1_12A080_lbl_1_rodata_8068_pool {
     f32 unk_0;
@@ -13276,34 +12639,7 @@ void fn_1_12A080(void) {
 #pragma opt_propagation reset
 /* fzgx:end fn_1_12A080 */
 
-/* fzgx:begin fn_1_12A0E0 noprologue */
-#include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/accessory.h"
-#include "rel/main_rel/cloth.h"
-#include "psvec.h"
-#include "game/main_rel/accessory_types.h"
-
-extern f32 fn_1_A71AC(void);
-extern void fn_1_520A0(void);
-extern void fn_1_52070(u32 value);
-extern void fn_1_49410(void);
-extern void fn_1_494DC(s16 index);
-extern void fn_1_49514(u32 *value);
-extern void fn_1_4954C(f32 value);
-extern void fn_1_496FC(f32 value1, f32 value2);
-extern void fn_1_12A080(void);
-extern void fn_1_49738(u32 value);
-extern void fn_1_495FC(void);
-extern void fn_1_495C8(u8 value);
-extern void fn_1_495A0(f32 value);
-extern void fn_1_4955C(f32 value1, f32 value2);
-extern void fn_1_4966C(f32 value1, f32 value2);
-extern void fn_1_4A0D8(const char *);
-extern void fn_1_520CC(void);
-extern void lbl_8006DBAC(void *);
-extern int fn_80083BCC(const char *s1, const char *s2);
-extern void fn_1_12A0E0(u8 *p);
+/* fzgx:begin fn_1_12A0E0 */
 
 #pragma section code_type ".fzgxpool"
 __declspec(section ".fzgxpool") static void fzgx_pool_prime1(void) {
@@ -13411,16 +12747,7 @@ void fn_1_12A0E0(u8 *p) {
 }
 /* fzgx:end fn_1_12A0E0 */
 
-/* fzgx:begin fn_1_12A24C noprologue */
-#include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/accessory.h"
-#include "rel/main_rel/cloth.h"
-#include "psvec.h"
-#include "game/main_rel/accessory_types.h"
-
-extern s8 fn_1_12A24C(s8);
-extern u8 fn_1_86678(int index);
+/* fzgx:begin fn_1_12A24C */
 
 s8 fn_1_12A24C(s8 arg) {
     if ((s8)fn_1_86678((s32)arg) == -1) {
@@ -13430,15 +12757,7 @@ s8 fn_1_12A24C(s8 arg) {
 }
 /* fzgx:end fn_1_12A24C */
 
-/* fzgx:begin fn_1_12A290 noprologue */
-#include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/accessory.h"
-#include "rel/main_rel/cloth.h"
-#include "psvec.h"
-#include "game/main_rel/accessory_types.h"
-
-extern u32 lbl_1_bss_897AC[1741];
+/* fzgx:begin fn_1_12A290 */
 
 u32 fn_1_12A290(s32 index) {
     if (index == -1) {
@@ -13448,30 +12767,14 @@ u32 fn_1_12A290(s32 index) {
 }
 /* fzgx:end fn_1_12A290 */
 
-/* fzgx:begin fn_1_12A2B8 noprologue */
-#include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/accessory.h"
-#include "rel/main_rel/cloth.h"
-#include "psvec.h"
-#include "game/main_rel/accessory_types.h"
-
-extern u32 lbl_1_bss_897A4;
+/* fzgx:begin fn_1_12A2B8 */
 
 void fn_1_12A2B8(u32 value) {
     lbl_1_bss_897A4 = value;
 }
 /* fzgx:end fn_1_12A2B8 */
 
-/* fzgx:begin fn_1_12A2C4 noprologue */
-#include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/accessory.h"
-#include "rel/main_rel/cloth.h"
-#include "psvec.h"
-#include "game/main_rel/accessory_types.h"
-
-extern u32 lbl_1_bss_897A8;
+/* fzgx:begin fn_1_12A2C4 */
 
 void fn_1_12A2C4(u32 value) {
     lbl_1_bss_897A8 = value;
