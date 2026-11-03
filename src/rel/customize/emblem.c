@@ -21,6 +21,13 @@ struct fn_3_13508_fn_3_13508_Table {
         struct { u8 pad_0[0x8]; u16 flags; u8 pad_A[0xA]; } fn_3_13508_e[1];
     };
 };
+
+typedef struct {
+    u8 r;
+    u8 g;
+    u8 b;
+    u8 a;
+} Color;
 extern u32 lbl_801A6410;
 extern u32 fn_1_435C(u32 value);
 extern void fn_1_426C(u32 idx);
@@ -40,27 +47,30 @@ extern void fn_3_156D0(void);
 extern void fn_1_4A00(s32 fadeIn, u8 steps, u32 arg);
 extern void fn_1_A2D84(u32 arg0);
 extern struct fn_3_137AC_lbl_3_bss_A17D0 lbl_3_bss_A17D0;
-extern f32 lbl_3_rodata_4E0[22];
 extern FontDrawPacket lbl_1_rodata_26F8;
 extern void fn_1_133DBC(void* arg0);
 extern void fn_1_134AD4(void);
-extern u32 fn_1_13ABA8(u32);
+extern void fn_1_13ABA8(u32 arg0);
 extern s32 fn_1_1318D4(void);
-extern s32 fn_1_B8EDC(u32);
-extern u32 fn_3_18960(s16);
-extern u32 fn_3_15F44(s16);
+extern s32 fn_1_B8EDC(s32 index);
+extern void fn_3_18960(u32 arg0);
+extern void fn_3_15F44();
 extern u32 fn_3_17854(s16);
-extern u32 fn_3_BF1C(void);
-extern u32 fn_3_139F0(void);
+extern void fn_3_BF1C();
+extern void fn_3_139F0(void);
 extern s32 fn_1_45D0();
 extern void fn_80008BEC(void *dest, int value, u32 size);
 extern u32 fn_3_17820(void);
 extern void fn_80008BA8(void *, void *, u32);
 extern void fn_3_17830(void);
-extern void fn_3_177AC(u32 *);
+extern void fn_3_177AC(Color color);
 extern u32 *lbl_3_bss_A1770;
 extern u32 *lbl_3_bss_A1774;
 extern s32 fn_3_14600(void);
+extern void *memset(void *, int, u32);
+extern void * memcpy(void *, const void *, u32);
+extern u32 fn_3_149AC(const u8 *, s16, s16);
+extern f32 lbl_3_rodata_4E0[22];
 extern void fn_1_4CC0(void);
 extern s16 lbl_3_bss_A17D2;
 extern u16 lbl_1_bss_96A;
@@ -70,8 +80,8 @@ extern void fn_1_458A0(void *, void *, u32, u32);
 extern void fn_1_45850(void *);
 extern s32 fn_1_F7BE4(u32);
 extern u16 lbl_3_bss_A23DA[3];
-extern void fn_3_14BBC(void *, s16, s16, s16, u32 *);
-extern void fn_3_14E18(void *, s16, void *, s16, void *);
+extern void fn_3_14BBC(u8 *canvas, s16 x, s16 y, s16 n, Color *color);
+extern void fn_3_14E18(u8 *canvas, s16 x0, s16 y0, s16 x1, s16 y1);
 
 /* fzgx:begin fn_3_1338C pool noprologue */
 #include "types.h"
@@ -326,7 +336,46 @@ void fn_3_13508(void) {
 }
 /* fzgx:end fn_3_13508 */
 
-/* fzgx:begin fn_3_137AC */
+/* fzgx:begin fn_3_137AC noprologue */
+#include "types.h"
+#include "rel/customize/globals.h"
+#include "font.h"
+#include "rel/customize/emblem.h"
+
+
+struct fn_3_137AC_lbl_3_bss_A17D0 { u8 unk_0; u8 unk_1; };
+
+struct fn_3_13508_Entry { u16 unk_0; u8 pad_2[0x12]; };
+
+struct fn_3_13508_Table {
+    union {
+        struct { u8 pad_8[0x8]; struct fn_3_13508_Entry unk_8[1]; };
+        struct { u8 pad_0[0x8]; u16 flags; u8 pad_A[0xA]; } e[1];
+    };
+};
+
+struct fn_3_13508_fn_3_13508_Table {
+    union {
+        struct { u8 pad_8[0x8]; struct fn_3_13508_Entry unk_8[1]; };
+        struct { u8 pad_0[0x8]; u16 flags; u8 pad_A[0xA]; } fn_3_13508_e[1];
+    };
+};
+extern u8 fn_3_19C94(void);
+extern u32 fn_3_19CE0(void);
+extern struct fn_3_137AC_lbl_3_bss_A17D0 lbl_3_bss_A17D0;
+extern f32 lbl_3_rodata_4E0[22];
+extern FontDrawPacket lbl_1_rodata_26F8;
+extern void fn_1_133DBC(void* arg0);
+extern void fn_1_134AD4(void);
+extern u32 fn_1_13ABA8(u32);
+extern s32 fn_1_1318D4(void);
+extern s32 fn_1_B8EDC(u32);
+extern u32 fn_3_18960(s16);
+extern u32 fn_3_15F44(s16);
+extern u32 fn_3_17854(s16);
+extern u32 fn_3_BF1C(void);
+extern u32 fn_3_139F0(void);
+
 extern struct fn_3_137AC_lbl_3_bss_A17D0 lbl_3_bss_A17D0;
 extern FontDrawPacket lbl_1_rodata_26F8;
 extern void fn_1_133DBC(void *);
@@ -861,7 +910,7 @@ void fn_3_146C0(void *arg0, s16 x, s16 y, s16 delta, u32 *arg4) {
         return;
     }
     value = *arg4;
-    fn_3_14BBC(arg0, x, y, delta, &value);
+    fn_3_14BBC( (u8 *)(void *)(arg0), x, y, delta, (Color *)(u32 *)(&value));
 }
 /* fzgx:end fn_3_146C0 */
 
@@ -883,22 +932,9 @@ void fn_3_14778(u16 width, u16 height, u8 format, u32 data) {
 }
 /* fzgx:end fn_3_14778 */
 
-/* fzgx:begin fn_3_14794 noprologue */
-#include "types.h"
+/* fzgx:begin fn_3_14794 */
 
-extern u8 lbl_3_bss_A17A0[44];
-extern s16 lbl_3_bss_A17CC;
-extern u32 lbl_3_bss_A176C;
-extern u32 *lbl_3_bss_A1770;
-extern u32 *lbl_3_bss_A1774;
-extern u8 lbl_3_data_3574[60];
-extern u32 lbl_801A6410;
-extern void fn_1_46B4(u32, u32, u8 *, s32);
 
-extern u16 lbl_3_bss_A23D8;
-extern u32 lbl_3_bss_A23E0;
-
-extern void *memset(void *, int, u32);
 
 /* colour c (r, g, b, a bytes) as a texel: RGB565, or RGB5A3 (opaque with 5 bits per colour from alpha 0xE0 up,
  * otherwise 3 bits of alpha and 4 bits per colour) */
@@ -951,7 +987,6 @@ void fn_3_14794(u8 *__restrict canvas, s16 x, s16 y, const u8 *color) {
 /* fzgx:end fn_3_14794 */
 
 /* fzgx:begin fn_3_149AC */
-extern void * memcpy(void *, const void *, u32);
 
 typedef struct EmblemColor {
     u8 r;
@@ -961,7 +996,7 @@ typedef struct EmblemColor {
 } EmblemColor;
 
 /* Reads one texel of the emblem texture (4x4 tiles) as an RGBA8 color. */
-u32 fn_3_149AC(u8 *data, s16 x, s16 y) {
+u32 fn_3_149AC(const u8 *data, s16 x, s16 y) {
     u16 pix;
     EmblemColor color;
     s16 tileX;
@@ -1021,29 +1056,10 @@ done:
 }
 /* fzgx:end fn_3_149AC */
 
-/* fzgx:begin fn_3_14BBC noprologue */
-#include "types.h"
+/* fzgx:begin fn_3_14BBC */
 
-extern u8 lbl_3_bss_A17A0[44];
-extern s16 lbl_3_bss_A17CC;
-extern u32 lbl_3_bss_A176C;
-extern u32 *lbl_3_bss_A1770;
-extern u32 *lbl_3_bss_A1774;
-extern u8 lbl_3_data_3574[60];
-extern u32 lbl_801A6410;
-extern void fn_1_46B4(u32, u32, u8 *, s32);
 
-extern u16 lbl_3_bss_A23D8;
-extern u32 lbl_3_bss_A23E0;
 
-extern void *memset(void *, int, u32);
-
-typedef struct {
-    u8 r;
-    u8 g;
-    u8 b;
-    u8 a;
-} Color;
 
 /* colour c as a texel: RGB565, or RGB5A3 (opaque with 5 bits per colour from alpha 0xE0 up, otherwise 3 bits of
  * alpha and 4 bits per colour) */
@@ -1101,31 +1117,11 @@ void fn_3_14BBC(u8 *canvas, s16 x, s16 y, s16 n, Color *color) {
 }
 /* fzgx:end fn_3_14BBC */
 
-/* fzgx:begin fn_3_14E18 noprologue */
-#include "types.h"
+/* fzgx:begin fn_3_14E18 */
 
-extern u8 lbl_3_bss_A17A0[44];
-extern s16 lbl_3_bss_A17CC;
-extern u32 lbl_3_bss_A176C;
-extern u32 *lbl_3_bss_A1770;
-extern u32 *lbl_3_bss_A1774;
-extern u8 lbl_3_data_3574[60];
-extern u32 lbl_801A6410;
-extern void fn_1_46B4(u32, u32, u8 *, s32);
 
-extern u16 lbl_3_bss_A23D8;
-extern u32 lbl_3_bss_A23E0;
 
-extern void *memset(void *, int, u32);
 
-typedef struct {
-    u8 r;
-    u8 g;
-    u8 b;
-    u8 a;
-} Color;
-
-extern u32 fn_3_149AC(const u8 *canvas, s16 x, s16 y);
 
 /* colour c as a texel: RGB565, or RGB5A3 (opaque with 5 bits per colour from alpha 0xE0 up, otherwise 3 bits of
  * alpha and 4 bits per colour) */
@@ -1187,7 +1183,32 @@ void fn_3_14E18(u8 *canvas, s16 x0, s16 y0, s16 x1, s16 y1) {
 }
 /* fzgx:end fn_3_14E18 */
 
-/* fzgx:begin fn_3_15240 */
+/* fzgx:begin fn_3_15240 noprologue */
+#include "types.h"
+#include "rel/customize/globals.h"
+#include "font.h"
+#include "rel/customize/emblem.h"
+
+
+struct fn_3_137AC_lbl_3_bss_A17D0 { u8 unk_0; u8 unk_1; };
+
+struct fn_3_13508_Entry { u16 unk_0; u8 pad_2[0x12]; };
+
+struct fn_3_13508_Table {
+    union {
+        struct { u8 pad_8[0x8]; struct fn_3_13508_Entry unk_8[1]; };
+        struct { u8 pad_0[0x8]; u16 flags; u8 pad_A[0xA]; } e[1];
+    };
+};
+
+struct fn_3_13508_fn_3_13508_Table {
+    union {
+        struct { u8 pad_8[0x8]; struct fn_3_13508_Entry unk_8[1]; };
+        struct { u8 pad_0[0x8]; u16 flags; u8 pad_A[0xA]; } fn_3_13508_e[1];
+    };
+};
+extern void fn_3_14E18(void *, s16, void *, s16, void *);
+
 void fn_3_15240(void *arg0, s16 arg1, void *arg2, u16 arg3, s16 arg4, void *arg5) {
     s32 i;
     s32 j;
@@ -1207,29 +1228,10 @@ void fn_3_15240(void *arg0, s16 arg1, void *arg2, u16 arg3, s16 arg4, void *arg5
 }
 /* fzgx:end fn_3_15240 */
 
-/* fzgx:begin fn_3_152BC noprologue */
-#include "types.h"
+/* fzgx:begin fn_3_152BC */
 
-extern u8 lbl_3_bss_A17A0[44];
-extern s16 lbl_3_bss_A17CC;
-extern u32 lbl_3_bss_A176C;
-extern u32 *lbl_3_bss_A1770;
-extern u32 *lbl_3_bss_A1774;
-extern u8 lbl_3_data_3574[60];
-extern u32 lbl_801A6410;
-extern void fn_1_46B4(u32, u32, u8 *, s32);
 
-extern u16 lbl_3_bss_A23D8;
-extern u32 lbl_3_bss_A23E0;
 
-extern void *memset(void *, int, u32);
-
-typedef struct {
-    u8 r;
-    u8 g;
-    u8 b;
-    u8 a;
-} Color;
 
 /* colour c as a texel: RGB565, or RGB5A3 (opaque with 5 bits per colour from alpha 0xE0 up, otherwise 3 bits of
  * alpha and 4 bits per colour) */

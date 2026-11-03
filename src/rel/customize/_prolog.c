@@ -270,6 +270,22 @@ typedef struct {
     s16 unk_2;
     char unk_4[0x20];
 } MenuEntry;
+
+typedef struct {
+    u8 pad_0[0x8];
+    u16 trig;             /* 0x08 */
+    u8 pad_A[0x6];
+    volatile u16 rep;     /* 0x10 */
+    volatile u16 rep2;    /* 0x12 */
+} fn_3_6270_Pad;
+
+typedef struct {
+    u8 pad_0[8];
+    u16 pressed;
+    u8 pad_A[6];
+    u16 repeat;
+    u16 held;
+} fn_3_15A0_CustomizeInput;
 extern s16 lbl_3_bss_20[104];
 extern void fn_80008BA8(u32 arg0, u32 arg1, u32 arg2);
 extern s16 fn_1_14F118(s16 value, void *table);
@@ -286,140 +302,63 @@ extern s16 lbl_1_bss_962;
 extern s32 lbl_1_bss_970;
 extern s16 lbl_1_bss_968;
 extern u32 lbl_1_bss_6EAB4;
-extern void fn_3_11FA0(void);
-extern void fn_3_130A8(void);
-extern void fn_8006CE1C(f32 arg0);
-extern void fn_1_3C78(void);
-extern u32 fn_1_435C(u32 value);
-extern void fn_1_41A8(void);
-extern void fn_1_6400(void);
-extern void fn_1_46B4(u32 arg0, u32 arg1, const char *arg2, int arg3);
-extern void OSReport(const char *format, ...);
-extern void fn_1_8D168(void *);
-extern void fn_1_48140(int index);
-extern void fn_1_412A0(u32 index);
-extern void fn_80008BEC(void *dest, int value, u32 size);
-extern void fn_1_56298(f32 value0, f32 value1, f32 value2, f32 value3);
-extern void fn_1_A0AA4(void);
-extern s32 fn_1_46DC4(s32 value);
-extern u32 lbl_801A6410;
-extern u32 lbl_801A66C8[];
-extern u32 fn_800081C8(Color arg0, Color arg1, f32 arg2);
-extern void fn_1_4955C(f32 value1, f32 value2);
-extern void fn_1_495C8(u8 value);
+extern f32 lbl_3_rodata_0[];
+extern u8 lbl_3_bss_2437C[44];
+extern s32 lbl_801A66B4;
+extern void fn_3_BFC(char *destination, void *unused, const char *source, const char *suffix);
+extern u32 fn_1_4AEC0(u32 value);
+extern void fn_1_4AEB4(f32 value);
+extern void fn_1_49410(void);
+extern void fn_1_4966C(f32 value1, f32 value2);
 extern void fn_1_495B0(u32 value);
 extern void fn_1_49590(f32 value);
-extern void fn_1_4966C(f32 value1, f32 value2);
+extern void fn_1_53C9C(u8 *color, s32 id, f32 x, f32 y, f32 z, f32 s, f32 t);
+extern void fn_1_4955C(f32 value1, f32 value2);
+extern void fn_1_4954C(f32 value);
+extern void fn_1_495C8(u8 value);
+extern void fn_1_496FC(f32 value1, f32 value2);
+extern void fn_3_E64();
+extern void fn_1_4AE0C(const char* format, ...);
+extern u32 fn_800081C8(Color arg0, Color arg1, f32 arg2);
 extern void fn_1_4D494(void);
 extern void fn_1_49514(u32 *value);
 extern void fn_1_49528(u32 *value);
-extern void fn_1_4954C(f32 value);
 extern u32 fn_1_4D4C8(Color, f32, f32);
 extern CustomizeNameEntry lbl_3_data_E80[2];
 extern char lbl_3_data_15D4[3];
-extern s32 lbl_801A66B4;
-extern void fn_1_49410(void);
-extern void fn_1_496FC(f32 value1, f32 value2);
-extern void fn_1_4AE0C(const char* format, ...);
 extern void fzgx_pool_f32(f32);
 extern void fzgx_pool_f64(f64);
 extern void fzgx_pool_addr(void *);
 extern void fn_1_53BD8(void *, f32, f32, f32, f32, f32);
-extern s16 lbl_1_bss_96A;
-extern s32 lbl_3_data_B8;
-extern void fn_3_968C();
-extern void fn_3_4A84(void);
 extern void fn_1_130EE8(u32 arg0, u32 arg1);
+extern u32 fn_1_435C(u32 value);
 extern s32 fn_1_3F8C(u32 arg3, u32 arg0, u32 arg1, u32 index);
 extern void fn_1_47F74(s32 index);
-extern void fn_3_4218(void);
-extern void fn_3_4C58(void);
-extern void fn_3_7CF8(void);
-extern void fn_3_9800(void);
-extern void fn_3_255DC(void);
-extern void fn_3_273F4(void);
-extern void fn_3_29508(void);
-extern void fn_3_29C94(void);
-extern void fn_3_2AAF4(void);
-extern u32 lbl_3_data_B4;
-extern s32 fn_1_1310E0(void);
-extern int fn_1_4C10(void);
-extern void fn_1_131050(u32 value, u32 state);
-extern void fn_1_1310B8(void);
-extern void fn_3_3438(void);
-extern u32 fn_1_B7F08(void);
-extern s32 fn_1_F7954(void);
-extern void fn_1_131004(void);
-extern Pad_1_bss_9F8 lbl_1_bss_9F8[];
-extern s16 lbl_3_bss_2C580;
-extern void fn_3_0(s16, s32);
-extern void fn_1_495D8(u16 value1, u16 value2, f32 value3);
-extern void fn_1_4A0D8(const char *);
 extern void fn_1_A176C(void *h, s32 track);
+extern void fn_3_2BFB4(void);
+extern char lbl_3_data_15D8[];
+extern u32 lbl_3_data_BC[2];
 extern u32 lbl_1_bss_6EAD0;
-extern s32 lbl_3_bss_120;
-extern u32 lbl_3_bss_243A8[6];
-extern void fn_3_2C164(void);
-extern u32 lbl_801A66A8;
-extern s16 lbl_1_bss_966;
-extern Fn3_4380_Bss8B3A0 lbl_1_bss_8B3A0;
-extern s32 fn_8006FDEC(void);
-extern void fn_1_152208(void *, s32, void *, s32, s32);
-extern s32 fn_1_152970(s16 *, s16 *, s16, u32, void *, s16, s16);
-extern void fn_3_7A08(s16 *arg0, s16 *arg1, int arg2);
-extern s16 lbl_3_data_C4;
-extern u32 fn_1_152CB4(s16, s32, s32, void *, s16, s16);
-extern u32 fn_1_8D5F0(s16 index);
-extern s32 fn_1_F7BE4();
-extern u32 lbl_3_bss_2C584[98];
-extern void fn_3_BD00(u32 arg0, u32 arg1, u32 arg2, u32 arg3);
-extern u32 lbl_3_bss_243C0;
-extern s32 fn_3_837C(s16 arg0);
-extern s32 fn_3_4538(void);
-extern int fn_3_AF8(Fn3AF8Arg *arg);
-extern void fn_1_1280(u32 arg0);
-extern u32 fn_1_426C(u32);
-extern u8 lbl_3_data_1698[380];
-extern void fn_3_6F90(void);
-extern void fn_3_5A50(void);
-extern void fn_1_14E9E4(int arg0, void *arg1);
-extern s16 fn_1_14F014(void);
-extern void fn_1_FE004(void);
-extern const s16 lbl_3_rodata_19C[4];
-extern u8 lbl_3_bss_6DD74;
-extern fn_3_5E88_CustomizeEntry lbl_3_bss_20860[4];
-extern u32 lbl_3_bss_20848;
-extern u8 lbl_3_bss_21960[];
-extern u32 lbl_1_bss_6D82C;
-extern s32 fn_1_80CC4(s32 id, s32 mode, s32 suffix, void *arg3);
-extern void fn_1_12AB38(void *arg0);
-extern void fn_1_D3884();
-extern void fn_1_14DB48(u32 *state, void *arg1, u32 arg2);
-extern CustomizeSlot lbl_3_bss_7DB60[41];
-extern fn_3_5F28_CustomizeEntry *lbl_3_bss_20854;
-extern void fn_1_80058(s8 arg0, u8 *arg1);
-extern void fn_1_12A32C(void *arg0);
-extern void fn_1_12A2B8(u32 value);
-extern void fn_1_80C18(u8 *arg0, u8 *arg1, s8 arg2);
-extern void __fzgx_pool_sink(void *);
-extern u8 lbl_1_bss_7F0C0[];
-extern void fn_1_7B4C0(void);
-extern void fn_1_7B2E8(s16);
-extern s32 fn_1_F9028(s16 arg0);
-extern void fn_1_F946C(s16 arg0);
-extern void fn_1_F9888(s16 arg0);
-extern u16 lbl_3_bss_7E084[220];
-extern struct fn_3_60C8_lbl_3_data_11D4 lbl_3_data_11D4;
-extern void fn_1_12A2D0(s32 value);
-extern u32 fn_1_12A734(u32);
-extern void fn_1_7F934(void *arg0);
-extern void fn_80071718(u32);
-extern u32 fn_1_F9A80(void);
-extern void fn_3_23524(void);
-extern void fn_3_78C8(s32);
-extern void fn_1_12A2C4(u32 value);
-extern void fn_1_14D994(u8 *arg0, u32 arg1, int flag);
-extern void fn_1_151BDC(u32 value);
+extern Pad_1_bss_9F8 lbl_1_bss_9F8[];
+extern s16 lbl_1_bss_96A;
+extern u8 fn_1_B7C00(void);
+extern void fn_1_54278(u32 arg0, u32 arg1);
+extern void fn_1_5428C(f32 value);
+extern void fn_80008BEC(void *dest, int value, u32 size);
+extern int fn_1_B7EC4(int index);
+extern void fn_1_4A0D8(const char *);
+extern int fn_1_B800C(int index);
+extern void fn_1_B80F0(int index);
+extern s32 fn_1_B7C6C(u32 arg0);
+extern s32 fn_1_B8338(s32 chan);
+extern void fn_1_B8E84(s32 card, u8 *out_flags, u32 *out_a, u32 *out_b);
+extern void fn_1_131084(u32 arg0, u32 arg1);
+extern u32 fn_1_B7C5C(void);
+extern int fn_1_B7E98(int index);
+extern int sprintf(char *s, const char *format, ...);
+extern void fn_1_131050(u32 value, u32 state);
+extern void fn_3_CB4(const char *);
+extern void fn_3_10A4(u8 *);
 extern u8 fn_1_12B4__fzgx_offset_0[];
 extern u8 fn_1_12FC__fzgx_offset_0[];
 extern u8 fn_1_1300__fzgx_offset_0[];
@@ -443,36 +382,6 @@ extern u8 fn_3_1338C__fzgx_offset_0[];
 extern u8 fn_3_1349C__fzgx_offset_0[];
 extern u8 fn_3_14E4__fzgx_offset_0[];
 extern u8 fn_3_15A0__fzgx_offset_0[];
-extern u8 fn_3_15A0__fzgx_offset_10B4[];
-extern u8 fn_3_15A0__fzgx_offset_10DC[];
-extern u8 fn_3_15A0__fzgx_offset_1110[];
-extern u8 fn_3_15A0__fzgx_offset_1130[];
-extern u8 fn_3_15A0__fzgx_offset_114[];
-extern u8 fn_3_15A0__fzgx_offset_12D8[];
-extern u8 fn_3_15A0__fzgx_offset_12F8[];
-extern u8 fn_3_15A0__fzgx_offset_1570[];
-extern u8 fn_3_15A0__fzgx_offset_158[];
-extern u8 fn_3_15A0__fzgx_offset_1720[];
-extern u8 fn_3_15A0__fzgx_offset_1738[];
-extern u8 fn_3_15A0__fzgx_offset_1934[];
-extern u8 fn_3_15A0__fzgx_offset_1ACC[];
-extern u8 fn_3_15A0__fzgx_offset_574[];
-extern u8 fn_3_15A0__fzgx_offset_580[];
-extern u8 fn_3_15A0__fzgx_offset_61C[];
-extern u8 fn_3_15A0__fzgx_offset_644[];
-extern u8 fn_3_15A0__fzgx_offset_8EC[];
-extern u8 fn_3_15A0__fzgx_offset_90C[];
-extern u8 fn_3_15A0__fzgx_offset_AFC[];
-extern u8 fn_3_15A0__fzgx_offset_B1C[];
-extern u8 fn_3_15A0__fzgx_offset_CCC[];
-extern u8 fn_3_15A0__fzgx_offset_CE4[];
-extern u8 fn_3_15A0__fzgx_offset_D14[];
-extern u8 fn_3_15A0__fzgx_offset_D3C[];
-extern u8 fn_3_15A0__fzgx_offset_D88[];
-extern u8 fn_3_15A0__fzgx_offset_D98[];
-extern u8 fn_3_15A0__fzgx_offset_DB0[];
-extern u8 fn_3_15A0__fzgx_offset_DEC[];
-extern u8 fn_3_15A0__fzgx_offset_E0C[];
 extern u8 fn_3_33A0__fzgx_offset_0[];
 extern u8 fn_3_368C__fzgx_offset_0[];
 extern u8 fn_3_381C__fzgx_offset_0[];
@@ -492,16 +401,6 @@ extern u8 fn_3_5CBC__fzgx_offset_0[];
 extern u8 fn_3_61B8__fzgx_offset_0[];
 extern u8 fn_3_6270__fzgx_offset_0[];
 extern u8 fn_3_6540__fzgx_offset_0[];
-extern u8 fn_3_65B0__fzgx_offset_10C[];
-extern u8 fn_3_65B0__fzgx_offset_128[];
-extern u8 fn_3_65B0__fzgx_offset_144[];
-extern u8 fn_3_65B0__fzgx_offset_160[];
-extern u8 fn_3_65B0__fzgx_offset_17C[];
-extern u8 fn_3_65B0__fzgx_offset_198[];
-extern u8 fn_3_65B0__fzgx_offset_1BC[];
-extern u8 fn_3_65B0__fzgx_offset_30[];
-extern u8 fn_3_65B0__fzgx_offset_3C[];
-extern u8 fn_3_65B0__fzgx_offset_48[];
 extern u8 fn_3_680C__fzgx_offset_0[];
 extern u8 fn_3_6D2C__fzgx_offset_0[];
 extern u8 fn_3_6E14__fzgx_offset_0[];
@@ -586,6 +485,128 @@ extern u8 lbl_3_data_F18__fzgx_offset_0[];
 extern u8 lbl_3_data_F60__fzgx_offset_0[];
 extern u8 lbl_3_data_FA4__fzgx_offset_0[];
 extern u8 lbl_3_data_FF4__fzgx_offset_0[];
+extern s32 lbl_3_data_B8;
+extern void fn_3_968C();
+extern void fn_3_4A84(void);
+extern void fn_1_48140(int index);
+extern void fn_3_4218(void);
+extern void fn_3_4C58(void);
+extern void fn_3_7CF8(void);
+extern void fn_3_9800(void);
+extern void fn_3_255DC(void);
+extern void fn_3_273F4(void);
+extern void fn_3_29508(void);
+extern void fn_3_29C94(void);
+extern void fn_3_2AAF4(void);
+extern u32 lbl_3_data_B4;
+extern s32 fn_1_1310E0(void);
+extern int fn_1_4C10(void);
+extern void fn_1_1310B8(void);
+extern s32 lbl_3_bss_120;
+extern u32 lbl_3_bss_243A8[6];
+extern void fn_3_2C164(void);
+extern u32 lbl_801A66A8;
+extern s16 lbl_1_bss_966;
+extern Fn3_4380_Bss8B3A0 lbl_1_bss_8B3A0;
+extern s32 fn_8006FDEC(void);
+extern void fn_1_152208(void *, s32, void *, s32, s32);
+extern s32 fn_1_152970(s16 *, s16 *, s16, u32, void *, s16, s16);
+extern void fn_3_7A08(s16 *, s16 *, int);
+extern s16 lbl_3_data_C4;
+extern u32 fn_1_152CB4(s16, s32, s32, void *, s16, s16);
+extern u32 fn_1_8D5F0(s16 index);
+extern s32 fn_1_F7BE4();
+extern u32 lbl_3_bss_2C584[98];
+extern void fn_3_BD00(u32 arg0, u32 arg1, u32 arg2, u32 arg3);
+extern u32 lbl_3_bss_243C0;
+extern s32 fn_3_837C(s16);
+extern s32 fn_3_4538(void);
+extern int fn_3_AF8(Fn3AF8Arg *arg);
+extern void fn_1_1280(u32 arg0);
+extern u32 fn_1_426C(u32);
+extern u8 lbl_3_data_1698[380];
+extern void fn_3_0(s16 idx, s32 check);
+extern void fn_3_6F90(void);
+extern void fn_3_5A50(void);
+extern void fn_1_14E9E4(int arg0, void *arg1);
+extern s16 fn_1_14F014(void);
+extern void fn_1_FE004(void);
+extern const s16 lbl_3_rodata_19C[4];
+extern u8 lbl_3_bss_6DD74;
+extern fn_3_5E88_CustomizeEntry lbl_3_bss_20860[4];
+extern u32 lbl_3_bss_20848;
+extern u8 lbl_3_bss_21960[];
+extern u32 lbl_1_bss_6D82C;
+extern s32 fn_1_80CC4(s32 id, s32 mode, s32 suffix, void *arg3);
+extern void fn_1_12AB38(void *arg0);
+extern void fn_1_D3884();
+extern void fn_1_14DB48(u32 *state, void *arg1, u32 arg2);
+extern CustomizeSlot lbl_3_bss_7DB60[41];
+extern fn_3_5F28_CustomizeEntry *lbl_3_bss_20854;
+extern void fn_1_80058(s8 arg0, u8 *arg1);
+extern void fn_1_12A32C(void *arg0);
+extern void fn_1_12A2B8(u32 value);
+extern void fn_1_80C18(u8 *arg0, u8 *arg1, s8 arg2);
+extern void fn_3_679C(void);
+extern void __fzgx_pool_sink(void *);
+extern u8 lbl_1_bss_7F0C0[];
+extern void fn_1_7B4C0(void);
+extern void fn_1_7B2E8(s16);
+extern s32 fn_1_F9028(s16 arg0);
+extern void fn_1_F946C(s16 arg0);
+extern void fn_1_F9888(s16 arg0);
+extern u16 lbl_3_bss_7E084[220];
+extern struct fn_3_60C8_lbl_3_data_11D4 lbl_3_data_11D4;
+extern void fn_1_12A2D0(s32 value);
+extern u32 fn_1_12A734(u32);
+extern void fn_1_7F934(void *arg0);
+extern void fn_80071718(u32);
+extern void fn_1_F9A80(void);
+extern void fn_3_23524(void);
+extern void fn_3_78C8(s32 enabled);
+extern void fn_1_12A2C4(u32 value);
+extern void fn_1_14D994(u8 *arg0, u32 arg1, int flag);
+extern void fn_1_151BDC(u32 value);
+extern u8 fn_3_15A0__fzgx_offset_10B4[];
+extern u8 fn_3_15A0__fzgx_offset_10DC[];
+extern u8 fn_3_15A0__fzgx_offset_1110[];
+extern u8 fn_3_15A0__fzgx_offset_1130[];
+extern u8 fn_3_15A0__fzgx_offset_114[];
+extern u8 fn_3_15A0__fzgx_offset_12D8[];
+extern u8 fn_3_15A0__fzgx_offset_12F8[];
+extern u8 fn_3_15A0__fzgx_offset_1570[];
+extern u8 fn_3_15A0__fzgx_offset_158[];
+extern u8 fn_3_15A0__fzgx_offset_1720[];
+extern u8 fn_3_15A0__fzgx_offset_1738[];
+extern u8 fn_3_15A0__fzgx_offset_1934[];
+extern u8 fn_3_15A0__fzgx_offset_1ACC[];
+extern u8 fn_3_15A0__fzgx_offset_574[];
+extern u8 fn_3_15A0__fzgx_offset_580[];
+extern u8 fn_3_15A0__fzgx_offset_61C[];
+extern u8 fn_3_15A0__fzgx_offset_644[];
+extern u8 fn_3_15A0__fzgx_offset_8EC[];
+extern u8 fn_3_15A0__fzgx_offset_90C[];
+extern u8 fn_3_15A0__fzgx_offset_AFC[];
+extern u8 fn_3_15A0__fzgx_offset_B1C[];
+extern u8 fn_3_15A0__fzgx_offset_CCC[];
+extern u8 fn_3_15A0__fzgx_offset_CE4[];
+extern u8 fn_3_15A0__fzgx_offset_D14[];
+extern u8 fn_3_15A0__fzgx_offset_D3C[];
+extern u8 fn_3_15A0__fzgx_offset_D88[];
+extern u8 fn_3_15A0__fzgx_offset_D98[];
+extern u8 fn_3_15A0__fzgx_offset_DB0[];
+extern u8 fn_3_15A0__fzgx_offset_DEC[];
+extern u8 fn_3_15A0__fzgx_offset_E0C[];
+extern u8 fn_3_65B0__fzgx_offset_10C[];
+extern u8 fn_3_65B0__fzgx_offset_128[];
+extern u8 fn_3_65B0__fzgx_offset_144[];
+extern u8 fn_3_65B0__fzgx_offset_160[];
+extern u8 fn_3_65B0__fzgx_offset_17C[];
+extern u8 fn_3_65B0__fzgx_offset_198[];
+extern u8 fn_3_65B0__fzgx_offset_1BC[];
+extern u8 fn_3_65B0__fzgx_offset_30[];
+extern u8 fn_3_65B0__fzgx_offset_3C[];
+extern u8 fn_3_65B0__fzgx_offset_48[];
 extern int fn_1_F8334(s16 value);
 extern u32 fn_1_14D6D8(s16 index);
 extern s16 fn_1_14F344(s16 index);
@@ -595,10 +616,11 @@ extern u32 lbl_3_bss_6DE20;
 extern void fn_3_7A30(void);
 extern s16 lbl_3_bss_7EBB0[41];
 extern s16 lbl_3_bss_7EC02;
-extern s32 fn_8008023C(u32 arg0, u32 arg1, u32 arg2);
+extern s32 fn_8008023C(const void *, const void *, u32);
 extern s32 lbl_3_data_11D8;
 extern void fn_1_14DC68(void *, int);
 extern void fn_3_7B94(void);
+extern u32 lbl_801A6410;
 extern s32 fn_1_45D0();
 extern void *fn_1_7F254(void *arg0, void *arg1);
 extern u32 fn_1_FD844(void *, void *);
@@ -629,14 +651,30 @@ extern char lbl_3_data_6F0[];
 extern char lbl_3_data_754[];
 extern char lbl_3_data_784[];
 extern s32 fn_3_B30(Fn3B30Data *data);
-extern void fn_3_BFC(char *, void *, const char *, const char *);
-extern void fn_3_E64();
 extern s32 fn_3_9CA8(void);
 extern void fn_1_FDFF4(void);
-extern u32 fn_1_4AEC0(u32 value);
-extern void fn_1_4AEB4(f32 value);
 extern void fn_1_DCED0(Sig_fn_1_DCED0_BgForObject *);
 extern void fzgx_sink(const void *);
+extern void fn_3_11FA0(void);
+extern void fn_3_130A8(void);
+extern void fn_8006CE1C(f32 arg0);
+extern void fn_1_3C78(void);
+extern void fn_1_41A8(void);
+extern void fn_1_6400(void);
+extern void fn_1_46B4(u32 arg0, u32 arg1, const char *arg2, int arg3);
+extern void OSReport(const char *format, ...);
+extern void fn_1_8D168(void *);
+extern void fn_1_412A0(u32 index);
+extern void fn_1_56298(f32 value0, f32 value1, f32 value2, f32 value3);
+extern void fn_1_A0AA4(void);
+extern s32 fn_1_46DC4(s32 value);
+extern u32 lbl_801A66C8[];
+extern void fn_3_3438(void);
+extern u32 fn_1_B7F08(void);
+extern s32 fn_1_F7954(void);
+extern void fn_1_131004(void);
+extern s16 lbl_3_bss_2C580;
+extern void fn_1_495D8(u16 value1, u16 value2, f32 value3);
 extern void fn_1_80F1C(s32 arg0, void *arg1);
 extern void fn_1_14DBCC(void *);
 extern u32 lbl_3_bss_2084C;
@@ -651,9 +689,7 @@ extern u8 *fn_80083970(u8 *str, const u8 *needle);
 extern size_t strlen(const char *str);
 extern char *strncpy(char *dst, const char *src, size_t n);
 extern char *strcat(char *dest, const char *src);
-extern u8 lbl_3_bss_2437C[44];
 extern char lbl_3_data_15CC[5];
-extern u32 lbl_3_data_BC[2];
 extern void fn_3_5F28(void);
 extern void fn_3_60C8(void);
 extern s32 lbl_3_bss_2C70C[45];
@@ -698,9 +734,7 @@ extern u8 lbl_3_data_11DC[84];
 extern void fn_1_BC29C(void);
 extern void fn_1_B9C0C(void);
 extern char lbl_3_data_1A1C[17];
-extern u8 fn_1_B7C00(void);
 extern u8 fn_1_B7CD4(void);
-extern u32 fn_1_B7C5C(void);
 extern u32 lbl_3_bss_A179C;
 extern u32 lbl_3_data_1A14;
 extern s16 fn_3_7360(void);
@@ -1722,19 +1756,7 @@ void fn_3_14C4(void) {
 }
 /* fzgx:end fn_3_14C4 */
 
-/* fzgx:begin fn_3_14E4 noprologue */
-#include "types.h"
-
-extern void fn_1_4A00(s32, u8, u32);
-extern void fn_1_130EE8(u32, u32);
-extern u32 fn_1_435C(u32);
-extern s32 fn_1_3F8C(void *, void *, u32, u32);
-extern void fn_1_47F74(s32);
-extern void fn_1_A176C(u32, s32);
-extern void fn_3_2BFB4(void);
-extern char lbl_3_data_15D8[];
-extern u32 lbl_3_data_BC[2];
-extern u8 lbl_1_bss_6EAD0[1800];
+/* fzgx:begin fn_3_14E4 */
 
 /* the retail TU's .bss objects this function uses, at their retail offsets, so MWCC addresses them off one
  * section base; the fzgx_pool_gap_ objects span the retail objects in between, which this function does not touch */
@@ -1771,20 +1793,18 @@ void fn_3_14E4(void) {
     fn_1_4A00(1, 0xf, fzgx_obj_lbl_3_bss_20850);
     fn_1_130EE8(fzgx_obj_lbl_3_bss_2084C, fzgx_obj_lbl_3_bss_20850);
     fn_1_435C(fzgx_obj_lbl_3_bss_20850);
-    lbl_3_data_BC[0] = fn_1_3F8C(lbl_3_data_15D8, fn_3_2BFB4, 0, 8);
+    lbl_3_data_BC[0] = fn_1_3F8C( (u32)(void *)(lbl_3_data_15D8), (u32)(void *)(fn_3_2BFB4), 0, 8);
     fn_1_47F74(0x85);
     fn_1_47F74(0xa1);
     lbl_3_bss_2437C__fzgx_offset_1 = 0;
     lbl_3_bss_2437C__fzgx_offset_2 = 0xff;
     lbl_3_bss_2437C__fzgx_offset_4 = 0;
-    fn_1_A176C(**(u32 **)lbl_1_bss_6EAD0, 8);
+    fn_1_A176C( (void *)(u32)(**(u32 **)(((u8 *)&lbl_1_bss_6EAD0))), 8);
     lbl_3_bss_2437C__fzgx_offset_8 = 0;
 }
 /* fzgx:end fn_3_14E4 */
 
-/* fzgx:begin fn_3_15A0 pool noprologue */
-#include "rel/customize/globals.h"
-
+/* fzgx:begin fn_3_15A0 pool */
 typedef struct {
     u8 pad_0[6];
     s16 controller;
@@ -1792,50 +1812,8 @@ typedef struct {
 
 typedef struct { u8 r, g, b, a; } CustomizeColor;
 
-typedef struct {
-    u8 pad_0[8];
-    u16 pressed;
-    u8 pad_A[6];
-    u16 repeat;
-    u16 held;
-} CustomizeInput;
 
-extern CustomizeInput lbl_1_bss_9F8[];
-extern s16 lbl_1_bss_96A;
-extern s32 lbl_801A66B4;
 
-extern u8 fn_1_B7C00(void);
-extern void fn_1_54278(u32, u32);
-extern void fn_1_5428C(f32);
-extern void fn_80008BEC(void *, int, u32);
-extern int fn_1_B7EC4(int);
-extern void fn_1_A2D84(u32);
-extern void fn_1_53BD8(void *, f32, f32, f32, f32, f32);
-extern u32 fn_1_4AEC0(u32);
-extern void fn_1_4AEB4(f32);
-extern void fn_1_49410(void);
-extern void fn_1_4955C(f32, f32);
-extern void fn_1_4954C(f32);
-extern void fn_1_495C8(u8);
-extern void fn_1_496FC(f32, f32);
-extern void fn_1_4966C(f32, f32);
-extern void fn_1_495B0(u32);
-extern void fn_1_49590(f32);
-extern void fn_1_4A0D8(const char *);
-extern int fn_1_B800C(int);
-extern void fn_1_B80F0(int);
-extern s32 fn_1_B7C6C(u32);
-extern void fn_1_B8338(u32);
-extern void fn_1_B8E84(u32, void *, void *, void *);
-extern void fn_1_131084(void *, u32);
-extern u32 fn_1_B7C5C(void);
-extern int fn_1_B7E98(int);
-extern int sprintf(char *, const char *, ...);
-extern void fn_1_131050(void *, u32);
-extern void fn_3_BFC(char *, void *, const char *, const char *);
-extern void fn_3_CB4(const char *);
-extern void fn_3_10A4(u8 *);
-extern void fn_3_E64(u8 *);
 
 #define save_slot           fzgx_obj_lbl_3_bss_2437C
 #define save_state          lbl_3_bss_2437C__fzgx_offset_1
@@ -1849,257 +1827,131 @@ extern void fn_3_E64(u8 *);
 #define save_choice         lbl_3_bss_2437C__fzgx_offset_1C
 #define save_timer          lbl_3_bss_2437C__fzgx_offset_20
 
-extern u8 fn_1_12B4__fzgx_offset_0[];
 
-extern u8 fn_1_12FC__fzgx_offset_0[];
 
-extern u8 fn_1_1300__fzgx_offset_0[];
 
-extern u8 fn_3_11FF0__fzgx_offset_0[];
 
-extern u8 fn_3_12910__fzgx_offset_0[];
 
-extern u8 fn_3_12B14__fzgx_offset_0[];
 
-extern u8 fn_3_1304C__fzgx_offset_0[];
 
-extern u8 fn_3_13050__fzgx_offset_0[];
 
-extern u8 fn_3_13054__fzgx_offset_0[];
 
-extern u8 fn_3_13058__fzgx_offset_0[];
 
-extern u8 fn_3_1305C__fzgx_offset_0[];
 
-extern u8 fn_3_13060__fzgx_offset_0[];
 
-extern u8 fn_3_13064__fzgx_offset_0[];
 
-extern u8 fn_3_13068__fzgx_offset_0[];
 
-extern u8 fn_3_1306C__fzgx_offset_0[];
 
-extern u8 fn_3_13070__fzgx_offset_0[];
 
-extern u8 fn_3_13074__fzgx_offset_0[];
 
-extern u8 fn_3_13078__fzgx_offset_0[];
 
-extern u8 fn_3_130C8__fzgx_offset_0[];
 
-extern u8 fn_3_1338C__fzgx_offset_0[];
 
-extern u8 fn_3_1349C__fzgx_offset_0[];
 
-extern u8 fn_3_14E4__fzgx_offset_0[];
 
-extern u8 fn_3_15A0__fzgx_offset_0[];
 
-extern u8 fn_3_33A0__fzgx_offset_0[];
 
-extern u8 fn_3_368C__fzgx_offset_0[];
 
-extern u8 fn_3_381C__fzgx_offset_0[];
 
-extern u8 fn_3_39F0__fzgx_offset_0[];
 
-extern u8 fn_3_3E58__fzgx_offset_0[];
 
-extern u8 fn_3_3F20__fzgx_offset_0[];
 
-extern u8 fn_3_41B0__fzgx_offset_0[];
 
-extern u8 fn_3_4380__fzgx_offset_0[];
 
-extern u8 fn_3_48E0__fzgx_offset_0[];
 
-extern u8 fn_3_4BEC__fzgx_offset_0[];
 
-extern u8 fn_3_4F08__fzgx_offset_0[];
 
-extern u8 fn_3_5500__fzgx_offset_0[];
 
-extern u8 fn_3_5B9C__fzgx_offset_0[];
 
-extern u8 fn_3_5C4C__fzgx_offset_0[];
 
-extern u8 fn_3_5C8C__fzgx_offset_0[];
 
-extern u8 fn_3_5CBC__fzgx_offset_0[];
 
-extern u8 fn_3_61B8__fzgx_offset_0[];
 
-extern u8 fn_3_6270__fzgx_offset_0[];
 
-extern u8 fn_3_6540__fzgx_offset_0[];
 
-extern u8 fn_3_680C__fzgx_offset_0[];
 
-extern u8 fn_3_6D2C__fzgx_offset_0[];
 
-extern u8 fn_3_6E14__fzgx_offset_0[];
 
-extern u8 fn_3_7038__fzgx_offset_0[];
 
-extern u8 fn_3_7594__fzgx_offset_0[];
 
-extern u8 fn_3_7688__fzgx_offset_0[];
 
-extern u8 fn_3_7770__fzgx_offset_0[];
 
-extern u8 fn_3_77B0__fzgx_offset_0[];
 
-extern u8 fn_3_7864__fzgx_offset_0[];
 
-extern u8 fn_3_7868__fzgx_offset_0[];
 
-extern u8 fn_3_786C__fzgx_offset_0[];
 
-extern u8 fn_3_7870__fzgx_offset_0[];
 
-extern u8 fn_3_7E5C__fzgx_offset_0[];
 
-extern u8 fn_3_8A90__fzgx_offset_0[];
 
-extern u8 fn_3_9710__fzgx_offset_0[];
 
-extern u8 fn_3_990C__fzgx_offset_0[];
 
-extern u8 fn_3_A12C__fzgx_offset_0[];
 
-extern u8 fn_3_ACF4__fzgx_offset_0[];
 
-extern u8 fn_3_AE74__fzgx_offset_0[];
 
-extern u8 fn_3_B5FC__fzgx_offset_0[];
 
-extern u8 fn_3_B6E4__fzgx_offset_0[];
 
-extern u8 lbl_3_data_100__fzgx_offset_0[];
 
-extern u8 lbl_3_data_1018__fzgx_offset_0[];
 
-extern u8 lbl_3_data_103C__fzgx_offset_0[];
 
-extern u8 lbl_3_data_104__fzgx_offset_0[];
 
-extern u8 lbl_3_data_1060__fzgx_offset_0[];
 
-extern u8 lbl_3_data_1084__fzgx_offset_0[];
 
-extern u8 lbl_3_data_10A8__fzgx_offset_0[];
 
-extern u8 lbl_3_data_10F0__fzgx_offset_0[];
 
-extern u8 lbl_3_data_1134__fzgx_offset_0[];
 
-extern u8 lbl_3_data_178__fzgx_offset_0[];
 
-extern u8 lbl_3_data_1C0__fzgx_offset_0[];
 
-extern u8 lbl_3_data_240__fzgx_offset_0[];
 
-extern u8 lbl_3_data_288__fzgx_offset_0[];
 
-extern u8 lbl_3_data_2FC__fzgx_offset_0[];
 
-extern u8 lbl_3_data_318__fzgx_offset_0[];
 
-extern u8 lbl_3_data_374__fzgx_offset_0[];
 
-extern u8 lbl_3_data_3B4__fzgx_offset_0[];
 
-extern u8 lbl_3_data_404__fzgx_offset_0[];
 
-extern u8 lbl_3_data_420__fzgx_offset_0[];
 
-extern u8 lbl_3_data_460__fzgx_offset_0[];
 
-extern u8 lbl_3_data_554__fzgx_offset_0[];
 
-extern u8 lbl_3_data_648__fzgx_offset_0[];
 
-extern u8 lbl_3_data_684__fzgx_offset_0[];
 
-extern u8 lbl_3_data_6B8__fzgx_offset_0[];
 
-extern u8 lbl_3_data_6F0__fzgx_offset_0[];
 
-extern u8 lbl_3_data_754__fzgx_offset_0[];
 
-extern u8 lbl_3_data_784__fzgx_offset_0[];
 
-extern u8 lbl_3_data_7D4__fzgx_offset_0[];
 
-extern u8 lbl_3_data_818__fzgx_offset_0[];
 
-extern u8 lbl_3_data_870__fzgx_offset_0[];
 
-extern u8 lbl_3_data_8A0__fzgx_offset_0[];
 
-extern u8 lbl_3_data_8F8__fzgx_offset_0[];
 
-extern u8 lbl_3_data_93C__fzgx_offset_0[];
 
-extern u8 lbl_3_data_974__fzgx_offset_0[];
 
-extern u8 lbl_3_data_9D0__fzgx_offset_0[];
 
-extern u8 lbl_3_data_A10__fzgx_offset_0[];
 
-extern u8 lbl_3_data_A78__fzgx_offset_0[];
 
-extern u8 lbl_3_data_A94__fzgx_offset_0[];
 
-extern u8 lbl_3_data_AD8__fzgx_offset_0[];
 
-extern u8 lbl_3_data_AF8__fzgx_offset_0[];
 
-extern u8 lbl_3_data_B44__fzgx_offset_0[];
 
-extern u8 lbl_3_data_BE8__fzgx_offset_0[];
 
-extern u8 lbl_3_data_C8__fzgx_offset_0[];
 
-extern u8 lbl_3_data_CA4__fzgx_offset_0[];
 
-extern u8 lbl_3_data_CEC__fzgx_offset_0[];
 
-extern u8 lbl_3_data_D50__fzgx_offset_0[];
 
-extern u8 lbl_3_data_D70__fzgx_offset_0[];
 
-extern u8 lbl_3_data_DC0__fzgx_offset_0[];
 
-extern u8 lbl_3_data_DDC__fzgx_offset_0[];
 
-extern u8 lbl_3_data_E10__fzgx_offset_0[];
 
-extern u8 lbl_3_data_E14__fzgx_offset_0[];
 
-extern u8 lbl_3_data_E34__fzgx_offset_0[];
 
-extern u8 lbl_3_data_E38__fzgx_offset_0[];
 
-extern u8 lbl_3_data_E58__fzgx_offset_0[];
 
-extern u8 lbl_3_data_E60__fzgx_offset_0[];
 
-extern u8 lbl_3_data_E6C__fzgx_offset_0[];
 
-extern u8 lbl_3_data_E74__fzgx_offset_0[];
 
-extern u8 lbl_3_data_EB0__fzgx_offset_0[];
 
-extern u8 lbl_3_data_ECC__fzgx_offset_0[];
 
-extern u8 lbl_3_data_F18__fzgx_offset_0[];
 
-extern u8 lbl_3_data_F60__fzgx_offset_0[];
 
-extern u8 lbl_3_data_FA4__fzgx_offset_0[];
 
-extern u8 lbl_3_data_FF4__fzgx_offset_0[];
 
 #define SLOT_LABEL ((const char *)fzgx_pool_data_lbl_3_data_15CC)
 #define SLOT_NAMES ((const char *(*)[6])fzgx_pool_data_lbl_3_data_E80)
@@ -2626,15 +2478,15 @@ static inline void customize_save_text(const char *text, f32 y) {
     fn_1_4AEB4(fzgx_rodata_44);
 }
 static inline s32 customize_save_move_impl(s32 controller, u8 *choice) {
-    s32 offset = controller * sizeof(CustomizeInput);
-    u16 *repeat = (u16 *)((u8 *)lbl_1_bss_9F8 + offset);
+    s32 offset = controller * sizeof(fn_3_15A0_CustomizeInput);
+    u16 *repeat = (u16 *)((u8 *)(((fn_3_15A0_CustomizeInput *)&lbl_1_bss_9F8)) + offset);
     if (((*(repeat += 8) >> 0) & 1) ||
-        (((((CustomizeInput *)((u8 *)lbl_1_bss_9F8 + offset))->held >> 0) & 1))) {
+        (((((fn_3_15A0_CustomizeInput *)((u8 *)(((fn_3_15A0_CustomizeInput *)&lbl_1_bss_9F8)) + offset))->held >> 0) & 1))) {
         *choice = 0;
         fn_1_A2D84(0xA9000000 | (0x11300));
     }
     if (((*repeat >> 1) & 1) ||
-        (((((CustomizeInput *)((u8 *)lbl_1_bss_9F8 + offset))->held >> 1) & 1))) {
+        (((((fn_3_15A0_CustomizeInput *)((u8 *)(((fn_3_15A0_CustomizeInput *)&lbl_1_bss_9F8)) + offset))->held >> 1) & 1))) {
         *choice = 1;
         fn_1_A2D84(0xA9000000 | (0x11300));
     }
@@ -2698,7 +2550,7 @@ void fn_3_15A0(void) {
             customize_save_text(MESSAGE(fzgx_pool_data_lbl_3_data_0_8E0), fzgx_rodata_DC);
             fn_3_10A4(&save_slot);
             customize_save_move(controller, &save_slot);
-            pressed = (volatile u16 *)((u8 *)lbl_1_bss_9F8 + input_offset);  /* fzgx-allow: S2 volatile view keeps the verified load order */
+            pressed = (volatile u16 *)((u8 *)(((fn_3_15A0_CustomizeInput *)&lbl_1_bss_9F8)) + input_offset);  /* fzgx-allow: S2 volatile view keeps the verified load order */
             if (((*(pressed += 4) >> 8) & 1)) {
                 fn_1_A2D84(0xA9000000 | (0x11100));
                 save_result = fn_1_B800C(save_slot);
@@ -2729,7 +2581,7 @@ void fn_3_15A0(void) {
             save_state = 6;
         } else if (!fn_1_B7C6C(save_slot)) {
             fn_1_B8338(save_slot);
-            fn_1_B8E84(3, &save_error, &save_free_blocks, &save_free_files);
+            fn_1_B8E84(3, (u8 *)(void *)(&save_error), (u32 *)(void *)(&save_free_blocks), (u32 *)(void *)(&save_free_files));
             if (save_error) save_state = 8;
             else if (save_free_blocks >= 18 && save_free_files > 0) save_state = 13;
             else save_state = 15;
@@ -2755,7 +2607,7 @@ void fn_3_15A0(void) {
             customize_save_text(MESSAGE(fzgx_pool_data_lbl_3_data_0_9B8), fzgx_rodata_8);
             fn_3_E64(&save_choice);
             customize_save_move(controller, &save_choice);
-            pressed = (volatile u16 *)((u8 *)lbl_1_bss_9F8 + input_offset);  /* fzgx-allow: S2 volatile view keeps the verified load order */
+            pressed = (volatile u16 *)((u8 *)(((fn_3_15A0_CustomizeInput *)&lbl_1_bss_9F8)) + input_offset);  /* fzgx-allow: S2 volatile view keeps the verified load order */
             if (((*(pressed += 4) >> 8) & 1)) {
                 if (save_choice == 0) {
                     fn_1_A2D84(0xA9000000 | (0x11100));
@@ -2780,11 +2632,11 @@ void fn_3_15A0(void) {
             customize_save_panel();
             fn_3_CB4(MESSAGE(fzgx_pool_data_lbl_3_data_0_858));
             customize_save_text(MESSAGE(fzgx_pool_data_lbl_3_data_0_924), fzgx_rodata_E0);
-            if (((lbl_1_bss_9F8[0].pressed >> 8) & 1)) {
+            if ((((((fn_3_15A0_CustomizeInput *)&lbl_1_bss_9F8))[0].pressed >> 8) & 1)) {
                 fn_1_A2D84(0xA9000000 | (0x11100));
                 save_timer = 120;
                 save_state = 17;
-            } else if (((lbl_1_bss_9F8[0].pressed >> 11) & 1)) {
+            } else if ((((((fn_3_15A0_CustomizeInput *)&lbl_1_bss_9F8))[0].pressed >> 11) & 1)) {
                 fn_1_A2D84(0xA9000000 | (0x11000));
                 save_state = 22;
             }
@@ -2818,7 +2670,7 @@ void fn_3_15A0(void) {
         break;
     case 8:
         if (!fn_1_B7C00()) {
-            fn_1_131084(&lbl_3_bss_140, save_slot);
+            fn_1_131084( (u32)(void *)(&lbl_3_bss_140), save_slot);
             save_state = 9;
         }
         break;
@@ -2864,7 +2716,7 @@ void fn_3_15A0(void) {
             customize_save_text(MESSAGE(fzgx_pool_data_lbl_3_data_0_C8C), fzgx_rodata_8);
             fn_3_E64(&save_choice);
             customize_save_move(controller, &save_choice);
-            pressed = (volatile u16 *)((u8 *)lbl_1_bss_9F8 + input_offset);  /* fzgx-allow: S2 volatile view keeps the verified load order */
+            pressed = (volatile u16 *)((u8 *)(((fn_3_15A0_CustomizeInput *)&lbl_1_bss_9F8)) + input_offset);  /* fzgx-allow: S2 volatile view keeps the verified load order */
             if (((*(pressed += 4) >> 8) & 1)) {
                 if (save_choice == 0) {
                     fn_1_A2D84(0xA9000000 | (0x11100));
@@ -2879,7 +2731,7 @@ void fn_3_15A0(void) {
         break;
     case 18:
         if (!fn_1_B7C00()) {
-            fn_1_131050(&lbl_3_bss_140, save_slot);
+            fn_1_131050( (u32)(void *)(&lbl_3_bss_140), save_slot);
             save_state = 19;
         }
         break;
@@ -2917,7 +2769,7 @@ void fn_3_15A0(void) {
             customize_save_text(MESSAGE(fzgx_pool_data_lbl_3_data_0_9B8), fzgx_rodata_8);
             fn_3_E64(&save_choice);
             customize_save_move(controller, &save_choice);
-            pressed = (volatile u16 *)((u8 *)lbl_1_bss_9F8 + input_offset);  /* fzgx-allow: S2 volatile view keeps the verified load order */
+            pressed = (volatile u16 *)((u8 *)(((fn_3_15A0_CustomizeInput *)&lbl_1_bss_9F8)) + input_offset);  /* fzgx-allow: S2 volatile view keeps the verified load order */
             if (((*(pressed += 4) >> 8) & 1)) {
                 if (save_choice == 0) {
                     fn_1_A2D84(0xA9000000 | (0x11100));
@@ -2950,8 +2802,8 @@ void fn_3_15A0(void) {
             customize_save_panel();
             fn_3_CB4(MESSAGE(fzgx_pool_data_lbl_3_data_0_7BC));
             customize_save_text(MESSAGE(fzgx_pool_data_lbl_3_data_0_D38), fzgx_rodata_E4);
-            pressed = (volatile u16 *)lbl_1_bss_9F8;  /* fzgx-allow: S2 volatile view keeps the verified load order */
-            pressed += controller * (sizeof(CustomizeInput) / sizeof(u16));
+            pressed = (volatile u16 *)(((fn_3_15A0_CustomizeInput *)&lbl_1_bss_9F8));  /* fzgx-allow: S2 volatile view keeps the verified load order */
+            pressed += controller * (sizeof(fn_3_15A0_CustomizeInput) / sizeof(u16));
             if (((*(pressed += 4) >> 8) & 1)) {
                 fn_1_A2D84(0xA9000000 | (0x11100));
                 save_state = 0;
@@ -2974,8 +2826,8 @@ void fn_3_15A0(void) {
             customize_save_panel();
             customize_save_text(MESSAGE(fzgx_pool_data_lbl_3_data_0_AC0), fzgx_rodata_E8);
             customize_save_text(MESSAGE(fzgx_pool_data_lbl_3_data_0_DF8), fzgx_rodata_4);
-            pressed = (volatile u16 *)lbl_1_bss_9F8;  /* fzgx-allow: S2 volatile view keeps the verified load order */
-            pressed += controller * (sizeof(CustomizeInput) / sizeof(u16));
+            pressed = (volatile u16 *)(((fn_3_15A0_CustomizeInput *)&lbl_1_bss_9F8));  /* fzgx-allow: S2 volatile view keeps the verified load order */
+            pressed += controller * (sizeof(fn_3_15A0_CustomizeInput) / sizeof(u16));
             if (((*(pressed += 4) >> 8) & 1)) {
                 fn_1_A2D84(0xA9000000 | (0x11100));
                 save_slot = 2;
@@ -6724,7 +6576,7 @@ void fn_3_7CF8(void) {
 
 /* fzgx:begin fn_3_837C */
 s32 fn_3_837C(s16 arg0) {
-    return fn_8008023C((u32)(&lbl_3_bss_243C0), (u32)(((u8 *)(&(*((u32 *)&lbl_3_bss_140))) + (arg0 * 0x81C0))), 0x81C0U) != 0;
+    return fn_8008023C( (const void *)((u32)(&lbl_3_bss_243C0)), (const void *)((u32)(((u8 *)(&(*((u32 *)&lbl_3_bss_140))) + (arg0 * 0x81C0)))), 0x81C0U) != 0;
 }
 /* fzgx:end fn_3_837C */
 

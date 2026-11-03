@@ -1,7 +1,9 @@
 #include "types.h"
+#include "dolphin/types.h"
 #include "rel/customize/globals.h"
 #include "rel/customize/editor.h"
 #include "font.h"
+
 
 
 
@@ -63,6 +65,93 @@ struct Obj {
     u8 pad_1D[3];
     void *unk_20;
 };
+
+typedef struct {
+    u8 r;
+    u8 g;
+    u8 b;
+    u8 a;
+} Color;
+
+typedef struct {
+    u8 pad_0[2];
+    u16 unk_2;
+    u8 pad_4[0xE];
+    u16 unk_12;
+} PadInput17100;
+
+typedef struct { u32 unk_0; } Sig_fn_1_4FC50_InputObject;
+
+struct fn_3_15F44_lbl_3_rodata_538 {
+    u8 pad_0[4];
+    f32 unk_4, unk_8, unk_C, unk_10, unk_14;
+    f32 unk_18, unk_1C, unk_20, unk_24, unk_28;
+    f32 unk_2C, unk_30, unk_34, unk_38, unk_3C;
+    f32 unk_40, unk_44, unk_48, unk_4C, unk_50;
+    f32 unk_54, unk_58, unk_5C, unk_60, unk_64, unk_68, unk_6C;
+    f64 unk_70, unk_78;
+};
+
+struct fn_3_15F44_lbl_801A66A0 { u32 unk_0; };
+
+typedef struct fn_3_18960_FontVertex {
+f32 x, y, z;
+} fn_3_18960_FontVertex;
+
+typedef struct fn_3_18960_FontDrawPacket fn_3_18960_FontDrawPacket;
+
+struct fn_3_18960_FontDrawPacket {
+u32 image;
+f32 x, y, z;
+f32 scale_x, scale_y;
+f32 u0, v0, u1, v1;
+s16 rotation_z, rotation_y;
+f32 alpha;
+u32 flags;
+f32 depth;
+u8 color[4], color_add[4];
+u32 format;
+u16 width, height;
+void* pixels;
+fn_3_18960_FontDrawPacket* secondary;
+void (*vertex_callback)(fn_3_18960_FontDrawPacket* packet, fn_3_18960_FontVertex* vertices);
+u32 unk_54;
+};
+
+struct Arg0 {
+    u8 pad_0[4];
+    f32 unk_4;
+    f32 unk_8;
+};
+
+typedef struct {
+    f32 x;
+    f32 y;
+    u8 pad[0x18];
+} StickInput;
+
+struct fn_3_17100_lbl_1_bss_BF0_0_E32 {
+    u8 pad_0[0x8];
+    f32 unk_8;
+    u8 pad_C[0x14];
+};
+
+struct fn_3_17100_lbl_1_bss_BF0 {
+    struct fn_3_17100_lbl_1_bss_BF0_0_E32 unk_0[1];
+};
+
+struct fn_3_17100_lbl_1_bss_D58 {
+    u8 pad_0[0x12];
+    u16 unk_12;
+};
+
+struct fn_3_17100_lbl_3_rodata_5F0 {
+    u32 unk_0;
+    u32 unk_4;
+    u32 unk_8;
+    f32 unk_C;
+    f64 unk_10;
+};
 extern u8 *fn_3_14074(void);
 extern void fn_80008BEC(void *dest, int value, u32 size);
 extern u8 fn_3_19C94(void);
@@ -72,7 +161,7 @@ extern void fn_3_1445C(void);
 extern s32 fn_3_14600(void);
 extern void fn_3_19F7C();
 extern void fn_3_17830(void);
-extern void fn_3_177AC(void *);
+extern void fn_3_177AC(Color color);
 extern void fn_3_16FD0(u32 arg0);
 extern void fn_3_19CA4(void);
 extern void fn_3_19CCC(void);
@@ -80,26 +169,119 @@ extern void DCInvalidateRange(void *, u32);
 extern void DCStoreRange(void *, u32);
 extern void fn_1_A2D84(u32 arg0);
 extern PadInput lbl_1_bss_9F8[];
+extern f32 lbl_8006D188(u32);
+extern s32 fn_1_4FC50(void *, u32, u16, u16, u32);
+extern u8 lbl_3_rodata_538[];
+extern struct fn_3_15F44_lbl_801A66A0 lbl_801A66A0;
+extern u16 fn_1_48690(u32 unused);
+extern u32 fn_1_52690();
+extern const Packet16E14 lbl_1_rodata_26F8;
+extern void GXInvalidateTexAll(void);
+extern void fn_3_1683C(struct Arg0 *arg0, s16 off, s16 size);
+extern void fn_3_16E14();
+extern StickInput lbl_1_bss_BF0[];
+extern f64 __fabs(f64);
+extern struct fn_3_17100_lbl_1_bss_D58 lbl_1_bss_D58;
+extern struct fn_3_17100_lbl_3_rodata_5F0 lbl_3_rodata_5F0;
 extern u8 lbl_3_bss_A2408[8];
 extern s32 fn_1_45D0();
+extern void fn_3_17100(void);
 extern u32 lbl_801A6410;
+extern void fn_1_46B4(u32 arg0, u32 arg1, const char *arg2, int arg3);
+extern const f32 lbl_3_rodata_5FC[3];
+extern u32 lbl_3_rodata_608[38];
+extern void fn_1_49410(void);
+extern void fn_1_495B0(u32 value);
+extern void fn_1_495C8(u8 value);
+extern void fn_1_496FC(f32 value1, f32 value2);
+extern void fn_1_4954C(f32 value);
+extern void fn_1_49590(f32 value);
+extern void fn_1_4955C(f32 value1, f32 value2);
+extern void fn_1_50A90(void *arg0, u32 arg1, u32 arg2, u32 arg3, u32 arg4);
+extern s32 fn_1_A5DC4(void);
+extern u8 lbl_3_bss_A2458[8];
+extern s32 lbl_3_bss_A179C;
+extern u32 lbl_3_bss_A1798;
+extern s32 lbl_801A66B4[1];
+extern u32 fn_3_1402C(u8 index);
+extern u32 fn_3_14064(void);
+extern void fn_3_146BC(u32);
+extern u8 fn_3_19D14__fzgx_offset_0[];
+extern u8 fn_3_19D88__fzgx_offset_0[];
+extern u8 fn_3_19DC8__fzgx_offset_0[];
+extern u8 fn_3_19E40__fzgx_offset_0[];
+extern u8 fn_3_19EB8__fzgx_offset_0[];
+extern u8 fn_3_19EFC__fzgx_offset_0[];
+extern u8 fn_3_19F40__fzgx_offset_0[];
+extern u8 fn_3_19F9C__fzgx_offset_0[];
+extern u8 fn_3_19FE0__fzgx_offset_0[];
+extern u8 fn_3_1A024__fzgx_offset_0[];
+extern u8 fn_3_1A068__fzgx_offset_0[];
+extern u8 fn_3_1A0F4__fzgx_offset_0[];
+extern u8 fn_3_1A1B8__fzgx_offset_0[];
+extern u8 fn_3_1A1D8__fzgx_offset_0[];
+extern u8 fn_3_1A264__fzgx_offset_0[];
+extern u8 fn_3_1A2EC__fzgx_offset_0[];
+extern u8 fn_3_1A488__fzgx_offset_0[];
+extern u8 fn_3_1A648__fzgx_offset_0[];
+extern u8 lbl_3_data_3780__fzgx_offset_0[];
+extern u8 lbl_3_data_3788__fzgx_offset_0[];
+extern u8 lbl_3_data_378C__fzgx_offset_0[];
+extern u8 lbl_3_data_379C__fzgx_offset_0[];
+extern u8 lbl_3_data_37A4__fzgx_offset_0[];
+extern u8 lbl_3_data_37B4__fzgx_offset_0[];
+extern u8 lbl_3_data_37BC__fzgx_offset_0[];
+extern u8 lbl_3_data_37CC__fzgx_offset_0[];
+extern u8 lbl_3_data_37D8__fzgx_offset_0[];
+extern u8 lbl_3_data_37E8__fzgx_offset_0[];
+extern u8 lbl_3_data_37F8__fzgx_offset_0[];
+extern u8 lbl_3_data_3808__fzgx_offset_0[];
+extern u8 lbl_3_data_381C__fzgx_offset_0[];
+extern u8 lbl_3_data_3830__fzgx_offset_0[];
+extern u8 lbl_3_data_3848__fzgx_offset_0[];
+extern u8 lbl_3_data_3864__fzgx_offset_0[];
+extern u8 lbl_3_data_387C__fzgx_offset_0[];
+extern u8 lbl_3_data_3898__fzgx_offset_0[];
+extern u8 lbl_3_data_38B4__fzgx_offset_0[];
+extern u8 lbl_3_data_38D4__fzgx_offset_0[];
+extern u8 lbl_3_data_38E4__fzgx_offset_0[];
+extern u8 lbl_3_data_38FC__fzgx_offset_0[];
+extern u8 lbl_3_data_390C__fzgx_offset_0[];
+extern u8 lbl_3_data_3924__fzgx_offset_0[];
+extern u8 lbl_3_data_3934__fzgx_offset_0[];
+extern u8 lbl_3_data_394C__fzgx_offset_0[];
+extern u8 lbl_3_data_395C__fzgx_offset_0[];
+extern u8 lbl_3_data_3974__fzgx_offset_0[];
+extern u8 lbl_3_data_3984__fzgx_offset_0[];
+extern u8 lbl_3_data_3998__fzgx_offset_0[];
+extern u8 lbl_3_data_39A8__fzgx_offset_0[];
+extern u8 lbl_3_data_39C0__fzgx_offset_0[];
+extern u8 lbl_3_data_39CC__fzgx_offset_0[];
+extern u8 lbl_3_data_39E8__fzgx_offset_0[];
+extern u8 lbl_3_data_39F4__fzgx_offset_0[];
+extern u8 lbl_3_data_3A10__fzgx_offset_0[];
+extern u8 lbl_3_data_3A24__fzgx_offset_0[];
+extern u8 lbl_3_data_3BEC__fzgx_offset_0[];
+extern u8 lbl_3_data_3C00__fzgx_offset_0[];
+extern u8 lbl_3_data_3C1C__fzgx_offset_0[];
+extern u8 lbl_3_data_3C34__fzgx_offset_0[];
+extern u8 lbl_3_data_3C58__fzgx_offset_0[];
+extern u8 lbl_3_data_3C68__fzgx_offset_0[];
+extern u8 lbl_3_data_3C84__fzgx_offset_0[];
+extern u8 lbl_3_data_3C88__fzgx_offset_0[];
+extern u8 lbl_3_data_3C90__fzgx_offset_0[];
+extern u8 lbl_3_data_3C94__fzgx_offset_0[];
 extern void fn_3_19CB8(void);
 extern void fn_3_15620(void);
 extern void fn_3_1560C(void);
 extern const Col4 lbl_3_rodata_5B8;
 extern const Col4 lbl_3_rodata_5BC;
-extern s32 fn_1_A5DC4(void);
 extern void fn_1_A9868();
 extern u32 fn_1_A9FFC(s16, s16, s16, s16, void *);
 extern void fn_1_AA538(void);
 extern void fn_1_4E0F4(void);
-extern const Packet16E14 lbl_1_rodata_26F8;
-extern u8 lbl_3_rodata_538[];
 extern Col4 lbl_3_rodata_5EC;
 extern u32 fn_3_14794(u32, s16, s16, void *);
-extern void fn_3_17100(void);
-extern void fn_1_46B4(u32 arg0, u32 arg1, const char *arg2, int arg3);
-extern const f32 lbl_3_rodata_5FC[3];
 
 /* fzgx:begin fn_3_1552C */
 void fn_3_1552C(void) {
@@ -349,17 +531,12 @@ void fn_3_156D0(void) {
 }
 /* fzgx:end fn_3_156D0 */
 
-/* fzgx:begin fn_3_15F44 noprologue */
-#include "types.h"
-#include "font.h"
-#include "rel/customize/editor.h"
-
+/* fzgx:begin fn_3_15F44 */
 struct Sig_fn_3_1683C_Arg0 {
     u8 pad_0[4];
     f32 unk_4;
     f32 unk_8;
 };
-typedef struct { u32 unk_0; } Sig_fn_1_4FC50_InputObject;
 struct fn_3_15F44_Copy88 {
     union {
         u32 a[22];
@@ -370,30 +547,6 @@ struct fn_3_15F44_Copy88 {
         } named;
     };
 };
-struct fn_3_15F44_lbl_3_rodata_538 {
-    u8 pad_0[4];
-    f32 unk_4, unk_8, unk_C, unk_10, unk_14;
-    f32 unk_18, unk_1C, unk_20, unk_24, unk_28;
-    f32 unk_2C, unk_30, unk_34, unk_38, unk_3C;
-    f32 unk_40, unk_44, unk_48, unk_4C, unk_50;
-    f32 unk_54, unk_58, unk_5C, unk_60, unk_64, unk_68, unk_6C;
-    f64 unk_70, unk_78;
-};
-struct fn_3_15F44_lbl_801A66A0 { u32 unk_0; };
-extern f32 lbl_8006D188(u32);
-extern int fn_1_4F734(FontDrawPacket *);
-extern s32 fn_1_4FC50(Sig_fn_1_4FC50_InputObject *, u32, u16, u16, u32);
-extern struct fn_3_15F44_lbl_3_rodata_538 lbl_3_rodata_538;
-extern struct fn_3_15F44_lbl_801A66A0 lbl_801A66A0;
-extern u16 fn_1_48690(u32);
-extern u32 fn_1_52690();
-extern u32 fn_3_17820(void);
-extern u32 lbl_1_rodata_26F8;
-extern u8 *fn_3_14074(void);
-extern void GXInvalidateTexAll(void);
-extern void fn_1_517EC(FontDrawPacket *, s16, s16, s16, s16, s16, s16);
-extern void fn_3_1683C(struct Sig_fn_3_1683C_Arg0 *, s16, s16);
-extern void fn_3_16E14(s16, s16);
 
 #define PF(off) (*(f32 *)((u8 *)&loc_C + (off)))
 #define PB(off) (*((u8 *)&loc_C + (off)))
@@ -470,7 +623,7 @@ void fn_3_15F44(void) {
     u16 t3;
     u32 t15;
     f32 t16;
-    p_lbl_3_rodata_538 = &lbl_3_rodata_538;
+    p_lbl_3_rodata_538 = ((struct fn_3_15F44_lbl_3_rodata_538 *)&lbl_3_rodata_538);
     t0 = fn_3_14074();
     p_flags = &lbl_3_bss_A23EC;
     if ((p_flags->unk_C & 0x20000000) != 0) {
@@ -490,7 +643,7 @@ void fn_3_15F44(void) {
     if (v6 - v5 < 0) v6 = v5;
     else if (v6 + v5 >= 64) v6 = 64 - v5;
 
-    loc_C = *(struct fn_3_15F44_Copy88 *)&lbl_1_rodata_26F8;
+    loc_C = *(struct fn_3_15F44_Copy88 *)((u32 *)&lbl_1_rodata_26F8);
     v7 = 32.0f;
     v8 = 192.0f;
     v9 = 105.0f;
@@ -505,7 +658,7 @@ void fn_3_15F44(void) {
     loc_C.a[20] = (u32)fn_3_1683C;
     fn_1_4F734((FontDrawPacket *)&loc_C);
 
-    loc_C = *(struct fn_3_15F44_Copy88 *)&lbl_1_rodata_26F8;
+    loc_C = *(struct fn_3_15F44_Copy88 *)((u32 *)&lbl_1_rodata_26F8);
     v13 = 184.0f;
     v14 = 86.0f;
     loc_C.a[0] = 0x8607;
@@ -519,7 +672,7 @@ void fn_3_15F44(void) {
     fn_1_4F734((FontDrawPacket *)&loc_C);
     if ((*(u32 *)t0 & 0x80000000) != 0) fn_3_16E14(192, 105);
 
-    loc_C = *(struct fn_3_15F44_Copy88 *)&lbl_1_rodata_26F8;
+    loc_C = *(struct fn_3_15F44_Copy88 *)((u32 *)&lbl_1_rodata_26F8);
     v22 = lbl_3_bss_A23EC.unk_14;
     v16 = 175.0f;
     v17 = 88.0f;
@@ -548,7 +701,7 @@ void fn_3_15F44(void) {
     loc_C.a[12] |= 0x80000;
     fn_1_4F734((FontDrawPacket *)&loc_C);
 
-    loc_C = *(struct fn_3_15F44_Copy88 *)&lbl_1_rodata_26F8;
+    loc_C = *(struct fn_3_15F44_Copy88 *)((u32 *)&lbl_1_rodata_26F8);
     v29 = p_lbl_3_bss_A23EC->unk_11;
     loc_C.a[0] = 0x8603;
     v30 = v4;
@@ -564,7 +717,7 @@ void fn_3_15F44(void) {
     fn_1_4F734((FontDrawPacket *)&loc_C);
     GXInvalidateTexAll();
 
-    loc_C = *(struct fn_3_15F44_Copy88 *)&lbl_1_rodata_26F8;
+    loc_C = *(struct fn_3_15F44_Copy88 *)((u32 *)&lbl_1_rodata_26F8);
     v36 = p_lbl_3_bss_A23EC->unk_11;
     v37 = 320.0f;
     v38 = 232.0f;
@@ -576,9 +729,9 @@ void fn_3_15F44(void) {
     loc_C.a[12] = 0x400000A;
     loc_C.named.callback = (void (*)(void))fn_1_52690;
     if (v36 > 1) fn_1_517EC((FontDrawPacket *)&loc_C, v30-v3, v33-v5, v3<<1, v5<<1, 64, 64);
-    fn_1_4FC50((Sig_fn_1_4FC50_InputObject *)&loc_C, 5, 64, 64, *(u32 *)(t0 + 32));
+    fn_1_4FC50( (void *)((Sig_fn_1_4FC50_InputObject *)&loc_C), 5, 64, 64, *(u32 *)(t0 + 32));
 
-    loc_C = *(struct fn_3_15F44_Copy88 *)&lbl_1_rodata_26F8;
+    loc_C = *(struct fn_3_15F44_Copy88 *)((u32 *)&lbl_1_rodata_26F8);
     v42 = 480.0f;
     v43 = 92.0f;
     v44 = 50.0f;
@@ -586,7 +739,7 @@ void fn_3_15F44(void) {
     PF(4) = v42; PF(8) = v43; PF(12) = v44;
     PF(16) = v45; PF(20) = 1.0714285373687744f;
     loc_C.a[12] = 5;
-    fn_1_4FC50((Sig_fn_1_4FC50_InputObject *)&loc_C, 5, 64, 64, *(u32 *)(t0 + 32));
+    fn_1_4FC50( (void *)((Sig_fn_1_4FC50_InputObject *)&loc_C), 5, 64, 64, *(u32 *)(t0 + 32));
 
     t15 = fn_3_17820();
     v46 = lbl_801A66A0.unk_0;
@@ -598,7 +751,7 @@ void fn_3_15F44(void) {
     v54 = (lbl_3_bss_A23EC.unk_18 * p_lbl_3_bss_A23EC->unk_11) & 0xFF;
     v56 = (s32)(64.0f * (f32)(1.0f + lbl_8006D188((s32)(v53 / 119.0f))));
 
-    loc_C = *(struct fn_3_15F44_Copy88 *)&lbl_1_rodata_26F8;
+    loc_C = *(struct fn_3_15F44_Copy88 *)((u32 *)&lbl_1_rodata_26F8);
     v36 = p_lbl_3_bss_A23EC->unk_11;
     PF(4) = 320.0f;
     PF(8) = 232.0f;
@@ -618,9 +771,9 @@ void fn_3_15F44(void) {
     if (p_lbl_3_bss_A23EC->unk_11 > 1)
         fn_1_517EC((FontDrawPacket *)&loc_C, v52 + (v30-v3), v54 + (v33-v5), v3<<1, v5<<1, 64, 64);
     textures = &lbl_3_bss_A23EC.unk_4;
-    fn_1_4FC50((Sig_fn_1_4FC50_InputObject *)&loc_C, 5, 64, 64, textures[(lbl_3_bss_A23EC.unk_0 + 1) % 2]);
+    fn_1_4FC50( (void *)((Sig_fn_1_4FC50_InputObject *)&loc_C), 5, 64, 64, textures[(lbl_3_bss_A23EC.unk_0 + 1) % 2]);
 
-    loc_C = *(struct fn_3_15F44_Copy88 *)&lbl_1_rodata_26F8;
+    loc_C = *(struct fn_3_15F44_Copy88 *)((u32 *)&lbl_1_rodata_26F8);
     PF(4) = 480.0f;
     PF(8) = 92.0f;
     PF(12) = 30.0f;
@@ -634,17 +787,12 @@ void fn_3_15F44(void) {
         PB(0x38) = PB(0x39) = PB(0x3A) = 255;
         PB(0x3C) = PB(0x3D) = PB(0x3A) = 0;
     }
-    fn_1_4FC50((Sig_fn_1_4FC50_InputObject *)&loc_C, 5, 64, 64, textures[(lbl_3_bss_A23EC.unk_0 + 1) % 2]);
+    fn_1_4FC50( (void *)((Sig_fn_1_4FC50_InputObject *)&loc_C), 5, 64, 64, textures[(lbl_3_bss_A23EC.unk_0 + 1) % 2]);
     lbl_3_bss_A23EC.unk_0 = (lbl_3_bss_A23EC.unk_0 + 1) % 2;
 }
 /* fzgx:end fn_3_15F44 */
 
 /* fzgx:begin fn_3_1683C */
-struct Arg0 {
-    u8 pad_0[4];
-    f32 unk_4;
-    f32 unk_8;
-};
 
 
 void fn_3_1683C(struct Arg0 *arg0, s16 off, s16 size) {
@@ -1300,28 +1448,9 @@ void fn_3_17100(void) {
 }
 /* fzgx:end fn_3_17100 */
 
-/* fzgx:begin fn_3_177AC noprologue */
-#include "types.h"
-#include "rel/customize/globals.h"
-#include "rel/customize/editor.h"
+/* fzgx:begin fn_3_177AC */
 
-extern struct Obj *fn_3_14074(void);
-extern u8 lbl_3_bss_A2408[8];
-extern void *fn_1_45D0(void *, u32, char *, u32);
-extern void fn_80008BEC(void *, u32, u32);
-extern void fn_3_17100(void);
-extern u32 lbl_801A6410;
-extern void fn_1_46B4(u32, u32, char *, int);
-extern const f32 lbl_3_rodata_5FC[3];
 
-extern u32 lbl_3_rodata_608[38];
-
-typedef struct {
-    u8 r;
-    u8 g;
-    u8 b;
-    u8 a;
-} Color;
 
 void fn_3_177AC(Color color) {
     *(Color *)&lbl_3_bss_A2410.unk_4 = color;

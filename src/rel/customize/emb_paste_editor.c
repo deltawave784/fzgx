@@ -97,6 +97,23 @@ FontDrawPacket* secondary;
 void (*vertex_callback)(FontDrawPacket* packet, FontVertex* vertices);
 u32 unk_54;
 };
+
+typedef struct { s16 v[3]; } PasteTri;
+
+typedef struct { f32 v[6]; } PasteSix;
+
+typedef struct {
+    s16 unk_0;
+    u8 pad_2[0x2];
+    u32 flags;
+    PasteTri unk_8;
+    u8 pad_E[0x2];
+    f32 unk_10;
+    f32 unk_14;
+    u8 pad_18[0x10];
+    PasteSix unk_28;
+    u8 pad_40[0x2020];
+} fn_3_FD30_PasteEntry;
 extern u32 lbl_3_rodata_288[60];
 extern void fn_1_A2D84(u32 arg0);
 extern void fn_80008BEC(void *dest, int value, u32 size);
@@ -266,7 +283,7 @@ extern void fn_1_47F74(s32 index);
 extern int fn_1_B7E98(int index);
 extern s32 fn_1_B8338(s32 chan);
 extern void fn_1_1317C4(void);
-extern u32 fn_3_11A38(void);
+extern void fn_3_11A38(void);
 extern u8 lbl_3_bss_8F200[];
 extern u8 lbl_3_bss_A1778[12];
 extern s16 lbl_1_bss_96A;
