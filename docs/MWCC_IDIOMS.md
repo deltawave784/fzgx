@@ -712,6 +712,30 @@ A WSL capture (`tools/capture/capture132.sh`) runs in ~11 s and the replay repro
   runs from 98.0% (these swaps are 98.3-98.9% on long functions), and treats a symbol pair the
   oracle already bound (`lbl_10_rodata_158` against `...rodata.0`) as a renaming. Open: a source
   form in which `x` is a window web (a rename region) without an extra `mr`.
+- **Same-scan law** (tooling round T12, 2026-11-03, GC/1.3.2 captures of fn_17_2414, fn_1_5EB98,
+  fn_10_75D4, fn_1_59EE4; replay 100% on each). In every one of these callee-saved near-misses
+  all long-lived webs (the declared locals, the `lis/addi` section and pool bases, the far
+  `addis +0x60000` view, the hoisted `lis 0x4330` word) survive simplify scan 1 and drop below K
+  together in scan 2, so the callee-saved order is nothing but the descending vreg order of that
+  one scan: fn_17_2414 colours v125 (0x4330) r31, v76 (bss base) r30, v74 (pool) r29, v40..v34
+  (colors, row, tbl, i, d) r28..r24. Exchanging two numbers inside the scan only exchanges the
+  two registers; no declaration order, carrier or pragma numbers a pass-1 local above a lowering
+  temporary. Retail's r31 web in fn_17_2414 is the far section view itself (a temporary the
+  compiler creates when the TU's objects are defined in the unit) and its 0x4330 word is a
+  loop-invariant object numbered below the induction/CSE objects: the body's
+  `#pragma opt_loop_invariants off` (written to stop `d + 0x2dd8` being hoisted) is what puts
+  the 0x4330 word on top. Retail keeps those table bases in the loop because they are
+  address-of-object operands materialised at lowering, not IR adds on a byte pointer: the lever
+  is the far-view `.data` block (`tu_data_objects` from the section's first object), not the
+  local. `tu_data_objects` also misses a `register u8 *d;` declaration (storage class before the
+  type), and with the keyword removed its layout addressed the view as one named object
+  (lis/addi per site, 89%), so the far-view block for a body whose uses are struct casts of the
+  view is still open. fn_1_5EB98 is the other face: our 0x4330 word is pushed in scan 1, two
+  interferences short of K at its turn; the replay with `105:+2` gives retail's r31 and moves
+  nine callee-saved colours into place (the local order v0, v44, vout then agrees). The capture
+  verdict (`fixup_capture.analyse`) now names the 0x4330 web, prints each target's and blocker's
+  scan, states `same scan N/M: coloured in descending vreg order` or the measured degree lever,
+  and the hint says which of the two it is instead of "structural".
 
 ## Capture verdicts in batch (tooling round T1, 2026-10-28)
 

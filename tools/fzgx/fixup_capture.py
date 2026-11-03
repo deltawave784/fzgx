@@ -279,13 +279,110 @@ def _base_temps(cap: Path, idx: str) -> set:
     return out
 
 
+def _constant_temps(cap: Path, idx: str) -> set:
+    """GPR webs defined by `lis rT, 0x4330`: the hoisted high word of MWCC's int-to-float
+    conversion (one web per function, live from the first conversion site to the last). A
+    lowering temporary like a section base, but with no symbol: `_base_temps` cannot see it."""
+    f = cap / f'allocator-{idx}.json'
+    if not f.exists():
+        return set()
+    out: set = set()
+    for b in json.loads(f.read_text()).get('blocks', []):
+        for ins in b.get('instructions', []):
+            if (ins.get('opcode_descriptor') or {}).get('mnemonic') != 'LIS':
+                continue
+            ops = ins.get('operands') or []
+            regs = [o for o in ops if o.get('kind') == 0 and o.get('class') == 4]
+            # the 12-byte operand keeps a plain immediate (kind 2) in its +2 halfword, which the
+            # reader reports as `flags` (`lis rT, 0x4330`: kind 2, flags 0x4330); a symbolic
+            # immediate (kind 3) carries the full value
+            imm = [o for o in ops if o.get('kind') in (2, 3)]
+            if not regs or not imm or not regs[0].get('flags', 0) & 2:
+                continue
+            o = imm[0]
+            if (o.get('kind') == 2 and o.get('flags') == 0x4330) or (o.get('kind') == 3 and (o.get('value_unsigned', 0) >> 16) == 0x4330):
+                out.add(regs[0]['reg'])
+    return out
+
+
+def _scans(graph) -> Tuple[Dict[int, int], int]:
+    """{vreg: simplify scan that pushed it} and the scan count, replaying `Graph.simplify` on a
+    copy (the recovery model: ascending scans push every node below K; a spill-cost push counts
+    as its own scan). Webs pushed in the last scan are coloured first, in descending vreg order;
+    the measured near-miss class (2026-11-03: fn_17_2414, fn_1_5EB98, fn_10_75D4) has every
+    long-lived web in that one scan, so no declaration order moves a local past a temporary."""
+    degree = dict(graph.degree0)
+    done = set(graph.coalesced)
+    scan_of: Dict[int, int] = {}
+    n = 0
+
+    def push(v):
+        for w in graph.neighbors[v]:
+            degree[w] -= 1
+        done.add(v)
+        scan_of[v] = n
+
+    def scan():
+        removed, remaining = False, []
+        for v in range(32, graph.count):
+            if v not in graph.nodes or v in done:
+                continue
+            if degree[v] < graph.k:
+                push(v)
+                removed = True
+            else:
+                remaining.insert(0, v)
+        return removed, remaining
+
+    removed, remaining = True, []
+    while removed:
+        n += 1
+        removed, remaining = scan()
+    while remaining:
+        best, best_cost = None, None
+        for v in remaining:
+            c = graph.cost[v] / degree[v]
+            if best is None or c < best_cost:
+                best, best_cost = v, c
+        n += 1
+        push(best)
+        changed = True
+        while changed:
+            n += 1
+            changed, remaining = scan()
+    # the count is the last scan that pushed anything (the loop always ends on an empty scan)
+    return scan_of, (max(scan_of.values()) if scan_of else 0)
+
+
+def _degree_lever(sr, before, cls: str, v: int, want: int, limit: int = 12) -> Optional[Tuple[int, int]]:
+    """(N, callee-saved webs whose colour changes) for the smallest `v:+N` degree bump under
+    which V takes WANT, or None. A target pushed in an earlier scan than its blocker is short of
+    K interferences at its turn; N measures by how much (fn_1_5EB98's 0x4330 web: +2)."""
+    for n in range(1, limit + 1):
+        g = sr.Graph(before, cls)
+        g.apply(f'{v}:+{n}')
+        color = g.select(g.simplify())
+        if color.get(v) == want:
+            base = sr.Graph(before, cls)
+            base_color = base.select(base.simplify())
+            moved = sum(1 for w, c in color.items() if w >= 32 and c in CALLEE_SAVED['r' if cls == 'gpr' else 'f']
+                        and base_color.get(w) != c)
+            return n, moved
+    return None
+
+
 def analyse(check, residual, classes, cap: Path, symbol: str) -> Optional[dict]:
     """Classify every target web and the web that blocks its retail register.
 
     For a target T (coloured G, retail R): if an interfering web coloured before T holds R the
     blocker is that occupant; else if T took a claimed register G below... the web that first
     claimed G before T is the blocker (T would have claimed R itself otherwise); else R lies
-    below every claimed register at T's turn ('needs earlier claims')."""
+    below every claimed register at T's turn ('needs earlier claims').
+
+    Every target and blocker also carries the simplify scan that pushed it (`scan`); a
+    callee-saved target gets `structure` ('same scan N' when it and its blockers were pushed in
+    one scan, so their order is descending vreg number and cannot be changed by declaration
+    order, or 'earlier scan' with the measured degree lever `v:+N`)."""
     sr, vm, _ = _recovery()
     idx = _capture_index(cap, symbol)
     if idx is None:
@@ -295,10 +392,20 @@ def analyse(check, residual, classes, cap: Path, symbol: str) -> Optional[dict]:
         bases = _base_temps(cap, idx)
     except (OSError, ValueError, KeyError, TypeError):
         bases = set()
+    try:
+        constants = _constant_temps(cap, idx)
+    except (OSError, ValueError, KeyError, TypeError):
+        constants = set()
 
     def kind(w, row):
         # a declared local assigned the address (`data = &lbl + 0x60000`) stays a local
-        return 'base' if w in bases and _class(row) == 'temp' else _class(row)
+        if _class(row) != 'temp':
+            return _class(row)
+        return 'base' if w in bases else 'constant' if w in constants else 'temp'
+
+    def label(w, row):
+        name = (row or {}).get('name', '?')
+        return '0x4330' if name == '?' and w in constants else name
 
     for cls in sorted(classes):
         rcls = {'r': 'gpr', 'f': 'fpr'}[cls]
@@ -314,29 +421,51 @@ def analyse(check, residual, classes, cap: Path, symbol: str) -> Optional[dict]:
             r = color.get(v)
             if r is not None and r in CALLEE_SAVED[cls] and r not in claimed_by:
                 claimed_by[r] = v
+        try:
+            scan_of, scans = _scans(sr.Graph(before, rcls))
+        except (KeyError, ValueError, ZeroDivisionError, TypeError):
+            scan_of, scans = {}, 0
+
+        def web(w, role):
+            r = rows.get(w)
+            return {'vreg': w, 'name': label(w, r), 'class': kind(w, r) if cls == 'r' else _class(r),
+                    'region': (r or {}).get('region', '?'), 'scan': scan_of.get(w), 'role': role}
+
         for v, want in sorted(targets.items()):
             got = color.get(v)
             row = rows.get(v, {})
-            t = {'vreg': v, 'name': row.get('name', '?'), 'class': kind(v, row) if cls == 'r' else _class(row), 'region': row.get('region', '?'),
-                 'degree': row.get('degree'), 'want': f'{cls}{want}', 'got': f'{cls}{got}', 'blockers': []}
+            t = {'vreg': v, 'name': label(v, row), 'class': kind(v, row) if cls == 'r' else _class(row), 'region': row.get('region', '?'),
+                 'degree': row.get('degree'), 'scan': scan_of.get(v), 'scans': scans,
+                 'want': f'{cls}{want}', 'got': f'{cls}{got}', 'blockers': []}
             if got == want or v not in rank:
                 out['targets'].append(t)
                 continue
             before_me = [w for w in graph.neighbors.get(v, []) if w in rank and rank[w] < rank[v]]
             occupants = [w for w in before_me if color.get(w) == want]
             if occupants:
-                t['blockers'] = [{'vreg': w, 'name': rows.get(w, {}).get('name', '?'), 'class': kind(w, rows.get(w)) if cls == 'r' else _class(rows.get(w)),
-                                  'region': rows.get(w, {}).get('region', '?'), 'role': 'holds ' + t['want']}
-                                 for w in occupants]
+                t['blockers'] = [web(w, 'holds ' + t['want']) for w in occupants]
             elif got in claimed_by and rank.get(claimed_by[got], 1 << 30) < rank[v] and want in claimed_by \
                     and rank[claimed_by[want]] < rank[v]:
-                w = claimed_by[got]
-                t['blockers'] = [{'vreg': w, 'name': rows.get(w, {}).get('name', '?'), 'class': kind(w, rows.get(w)) if cls == 'r' else _class(rows.get(w)),
-                                  'region': rows.get(w, {}).get('region', '?'), 'role': f'claimed {t["got"]} first'}]
+                t['blockers'] = [web(claimed_by[got], f'claimed {t["got"]} first')]
             else:
                 role = (f'{t["want"]} free at its turn: numbered later than retail' if want not in CALLEE_SAVED[cls]
                         else f'{t["want"]} unclaimed at its turn')
-                t['blockers'] = [{'vreg': None, 'name': '-', 'class': 'order', 'region': '-', 'role': role}]
+                t['blockers'] = [{'vreg': None, 'name': '-', 'class': 'order', 'region': '-', 'scan': None, 'role': role}]
+            # the simplify structure behind a callee-saved miss: pushed in the same scan as its
+            # blockers (order = descending vreg, fixed by numbering class), or in an earlier
+            # scan (short of K interferences at its turn: the degree lever, measured by replay)
+            if want in CALLEE_SAVED[cls] and t['scan'] is not None:
+                bscans = {b['scan'] for b in t['blockers'] if b.get('scan') is not None}
+                if bscans and bscans == {t['scan']}:
+                    t['structure'] = f'same scan {t["scan"]}/{scans}: coloured in descending vreg order'
+                elif bscans and min(bscans) > t['scan'] or (not bscans and t['scan'] < scans):
+                    t['structure'] = f'pushed in scan {t["scan"]}/{scans}, before its blockers'
+                    try:
+                        lever = _degree_lever(sr, before, rcls, v, want)
+                    except (KeyError, ValueError, ZeroDivisionError, TypeError):
+                        lever = None
+                    if lever:
+                        t['degree_lever'] = {'bump': f'{v}:+{lever[0]}', 'moved': lever[1]}
             out['targets'].append(t)
     if not out['targets']:
         return None
@@ -346,13 +475,46 @@ def analyse(check, residual, classes, cap: Path, symbol: str) -> Optional[dict]:
 
 def verdict_text(a: dict) -> str:
     parts = []
+    structure = []
     for t in a['targets']:
         if t['want'] == t['got']:
             continue
-        who = ', '.join(f"{b['name']} ({b['class']} {b['region']}, {b['role']})" for b in t['blockers']) or 'none'
-        parts.append(f"{t['name']} ({t['class']} v{t['vreg']}) wants {t['want']} got {t['got']}: {who}")
+        who = ', '.join(f"{b['name']} ({b['class']} {b['region']}"
+                        + (f", scan {b['scan']}" if b.get('scan') is not None else '') + f", {b['role']})"
+                        for b in t['blockers']) or 'none'
+        tag = f" [scan {t['scan']}]" if t.get('scan') is not None else ''
+        parts.append(f"{t['name']} ({t['class']} v{t['vreg']}{tag}) wants {t['want']} got {t['got']}: {who}")
+        if t.get('structure'):
+            line = f"{t['name']} v{t['vreg']}: {t['structure']}"
+            if t.get('degree_lever'):
+                line += (f"; replay {t['degree_lever']['bump']} gives {t['want']} "
+                         f"({t['degree_lever']['moved']} callee-saved colours move)")
+            structure.append(line)
     kinds = {b['class'] for t in a['targets'] for b in t['blockers']} | {t['class'] for t in a['targets'] if t['want'] != t['got']}
-    if 'base' in kinds:
+    same_scan = [t for t in a['targets'] if (t.get('structure') or '').startswith('same scan')]
+    levers = [t for t in a['targets'] if t.get('degree_lever')]
+    if same_scan and {t['class'] for t in same_scan} & {'local', 'parameter'} and \
+            {b['class'] for t in same_scan for b in t['blockers']} & {'temp', 'base', 'constant'}:
+        # measured 2026-11-03 (fn_17_2414, fn_10_75D4 GC/1.3.2 captures): every long-lived web
+        # (declared locals, the section bases, the hoisted 0x4330 word) drops below K in the same
+        # scan, so the callee-saved order is the descending vreg order of that scan alone; a
+        # pass-1 local is numbered below every lowering temporary and no declaration order,
+        # carrier or pragma renumbers it above one. Retail's web in that slot is itself a
+        # lowering temporary (a far section view `addis rX, rBase, N` the compiler creates when
+        # the TU's objects are defined in the unit): the lever is the object's definition, not
+        # the local (tu_section_layout / the far-view block; a byte-pointer local of the view
+        # keeps the web a local)
+        blockers = {b['class'] for t in same_scan for b in t['blockers']}
+        hint = ('same-scan law: the callee-saved order is the descending vreg order of one simplify scan; a '
+                'declared local cannot pass a lowering temporary in it')
+        if blockers & {'base', 'constant'}:
+            hint += ('. Retail holds that slot with a compiler-created web (section base, 0x4330 word): spell '
+                     'the value so MWCC creates it (far section view defined in the unit, tu_section_layout), '
+                     'not as a local')
+        else:
+            hint += ('; only the expression creating the temporary (or dropping the local so the value becomes '
+                     'a compiler web) changes their relative numbering')
+    elif 'base' in kinds:
         # measured 2026-10-28 (fn_10_13B24, fn_17_8B44 GC/1.3.2 captures): the literal-pool or
         # section base (`lis/addi sym@l`, `addis +0x60000`) is a lowering temporary, numbered after
         # every parameter, declared local and @N shadow; when both webs are pushed in the same
@@ -388,7 +550,17 @@ def verdict_text(a: dict) -> str:
         hint = 'parameter copy'
     else:
         hint = 'structural'
-    return '; '.join(parts) + f' => {hint}'
+    if levers:
+        # measured 2026-11-03 (fn_1_5EB98 GC/1.3.2 capture): the 0x4330 word was pushed in scan 1
+        # two interferences short of K; with +2 it survives to the last scan and, numbered above
+        # every local, claims r31 as retail does
+        hint += ('; degree: ' + ', '.join(f"{t['name']} v{t['vreg']} needs {t['degree_lever']['bump'].split(':')[1]} "
+                                          f"interferences at its scan-{t['scan']} turn" for t in levers)
+                 + ' (live across more webs: created earlier or used later), after which its numbering class colours it')
+    text = '; '.join(parts)
+    if structure:
+        text += ' | simplify structure: ' + '; '.join(structure)
+    return text + f' => {hint}'
 
 
 # ----------------------------------------------------------------------------- proposals
