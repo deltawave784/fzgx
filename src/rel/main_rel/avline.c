@@ -4,9 +4,31 @@
 #include "dolphin/hw_regs.h"
 #include "game/main_rel/avline_types.h"
 
+typedef struct {
+    f32 x;
+    f32 y;
+    f32 z;
+} Avl60880Vec;
+
+typedef struct {
+    f32 x;
+    f32 y;
+    f32 z;
+} fn_1_61370_Vec;
+extern s16 fn_1_3F0C8(void);
+extern void fn_1_3BDC(s32);
+extern void fn_1_3C18(s32);
+extern s32 lbl_1_bss_6C85C;
+extern s32 fn_1_66B8(void *arg0, f32 arg1);
+extern void lbl_8006D8D8(s16);
+extern void mathutil_mtxA_rotate_x(s16);
+extern void mathutil_mtxA_rotate_z(s16);
+extern void lbl_8006E1C0(Avl60880Vec *, Avl60880Vec *);
+extern f32 lbl_8006D0B4(f32);
+extern s32 lbl_1_bss_6C868;
 extern u32 lbl_801A6D00;
 extern void GXLoadPosMtxImm(u32, u32);
-extern void fn_800720B0(u32);
+extern void fn_800720B0(s32 arg0);
 extern void lbl_8006DCA4(void);
 extern void fn_8003462C(u32 arg0, u32 arg1, u32 arg2);
 extern void fn_8007245C(u32 value);
@@ -21,9 +43,6 @@ extern void fn_80074788(u32 arg0);
 extern void fn_800747D0(u32 arg0, u32 arg1, s32 arg2, s32 arg3, u32 arg4, s32 arg5, s32 arg6);
 extern void fn_80074918(u8 arg0, s32 arg1, u8 arg2);
 extern void fn_800746A8();
-extern s16 fn_1_3F0C8(void);
-extern void fn_1_3BDC(s32);
-extern void fn_1_3C18(s32);
 extern u32 lbl_801A6410;
 extern s32 fn_1_45D0();
 extern void fn_1_46B4(u32 arg0, u32 arg1, const char *arg2, int arg3);
@@ -367,10 +386,7 @@ void fn_1_591A0(s32 id) {
 }
 /* fzgx:end fn_1_591A0 */
 
-/* fzgx:begin fn_1_60880 noprologue */
-#include "types.h"
-#include "rel/main_rel/avline.h"
-
+/* fzgx:begin fn_1_60880 */
 #pragma section code_type ".fzgxpool"
 __declspec(section ".fzgxpool") static void fzgx_pool_prime1(void) {
     volatile f32 s; volatile f64 d;  /* fzgx-allow: S2 pool primer sinks */
@@ -532,11 +548,6 @@ __declspec(section ".fzgxpool") static void fzgx_pool_prime21(void) {
 }
 #pragma section code_type ".text"
 
-typedef struct {
-    f32 x;
-    f32 y;
-    f32 z;
-} Avl60880Vec;
 
 typedef struct {
     u8 state;           // 0x00
@@ -553,13 +564,6 @@ typedef struct {
     s16 spinZ;          // 0x5e
 } Avl60880Obj;
 
-extern s32 lbl_1_bss_6C85C;
-extern s32 fn_1_66B8(Avl60880Vec *, f32);
-extern void lbl_8006D8D8(s16);
-extern void mathutil_mtxA_rotate_x(s16);
-extern void mathutil_mtxA_rotate_z(s16);
-extern void lbl_8006E1C0(Avl60880Vec *, Avl60880Vec *);
-extern f32 lbl_8006D0B4(f32);
 
 #pragma opt_dead_assignments off
 void fn_1_60880(Avl60880Obj *obj) {
@@ -580,7 +584,7 @@ void fn_1_60880(Avl60880Obj *obj) {
     if (++lbl_1_bss_6C85C > 200) {
         obj->state = 3;
     }
-    if (fn_1_66B8(&obj->pos, 4.0f) == 0) {
+    if (fn_1_66B8( (void *)(Avl60880Vec *)(&obj->pos), 4.0f) == 0) {
         obj->state = 3;
     }
 
@@ -641,10 +645,7 @@ void fn_1_60880(Avl60880Obj *obj) {
 #pragma opt_dead_assignments reset
 /* fzgx:end fn_1_60880 */
 
-/* fzgx:begin fn_1_61370 noprologue */
-#include "types.h"
-#include "rel/main_rel/avline.h"
-
+/* fzgx:begin fn_1_61370 */
 #pragma section code_type ".fzgxpool"
 __declspec(section ".fzgxpool") static void fzgx_pool_prime1(void) {
     volatile float s; volatile double d;  /* fzgx-allow: S2 pool primer sinks */
@@ -809,11 +810,6 @@ __declspec(section ".fzgxpool") static void fzgx_pool_prime21(void) {
 }
 #pragma section code_type ".text"
 
-typedef struct {
-    f32 x;
-    f32 y;
-    f32 z;
-} fn_1_61370_Vec;
 
 typedef struct {
     u8 pad_0[0x14];
@@ -830,10 +826,6 @@ typedef struct {
     s16 unk_AC;
 } fn_1_61370_Obj;
 
-extern void lbl_8006D8D8(s32);
-extern void mathutil_mtxA_rotate_x(s32);
-extern void mathutil_mtxA_rotate_z(s32);
-extern void lbl_8006E1C0(fn_1_61370_Vec *, fn_1_61370_Vec *);
 
 static inline f32 fn_1_61370_read_pointer(fn_1_61370_Vec * owner) { return owner->z; }
 #pragma opt_propagation off
@@ -857,7 +849,7 @@ void fn_1_61370(fn_1_61370_Obj *p) {
     up.x = 0.0f;
     up.y = 1.0f;
     up.z = 0.0f;
-    lbl_8006E1C0(&up, &up);
+    lbl_8006E1C0( (Avl60880Vec *)(fn_1_61370_Vec *)(&up), (Avl60880Vec *)(fn_1_61370_Vec *)(&up));
 
     /* reflect the velocity off the rotated up axis */
     {
@@ -1112,8 +1104,6 @@ typedef struct {
     s16 rot[3];
 } Debris_62C84;
 
-extern s32 lbl_1_bss_6C868;
-extern s32 fn_1_66B8(f32 *pos, f32 radius);
 
 void fn_1_62C84(Debris_62C84 *p)
 {
@@ -1123,7 +1113,7 @@ void fn_1_62C84(Debris_62C84 *p)
     if (++lbl_1_bss_6C868 > 50) {
         p->state = 3;
     }
-    if (fn_1_66B8(p->pos, 1.0f) == 0) {
+    if (fn_1_66B8( (void *)(f32 *)(p->pos), 1.0f) == 0) {
         p->state = 3;
     }
     p->vel[0] += (f64)(0.03 * target->unk_0);
