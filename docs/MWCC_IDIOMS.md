@@ -736,6 +736,24 @@ A WSL capture (`tools/capture/capture132.sh`) runs in ~11 s and the replay repro
   verdict (`fixup_capture.analyse`) now names the 0x4330 web, prints each target's and blocker's
   scan, states `same scan N/M: coloured in descending vreg order` or the measured degree lever,
   and the hint says which of the two it is instead of "structural".
+- **Far-view `.data` block closed (tooling round T13, 2026-11-03, fn_17_2414 41 -> 4 rows, pool
+  match with one respelling).** The layout path now reads the body the preprocessor sees:
+  `fixup_layout.expand_local_macros` expands the body's own macros first (`#define data
+  dataBase.value` carriers, `AT(u32, data, 0x11D4)`, pasted member names `ids##n`; verified
+  oracle-identical on fn_17_2414, fn_10_75D4, fn_3_680C, fn_1_10E3B4), `cast_struct_views`
+  turns `((IvHigh *)d)->ids1` over a byte view into `d + 0x2dd8`, `tu_data_objects` accepts a
+  `register` view declaration and `d - 0x112C` below a far view's origin (retail's `subi r3,
+  r31, 0x112c` is `lbl_17_data_5EED4`'s address), and every layout is also offered without
+  `opt_loop_invariants off`. Measured on fn_17_2414 (GC/1.3.2): with the retail objects
+  defined the five table bases stay inside the loop as address-of-object operands with no
+  pragma; `opt_propagation off` is what lifts the 0x4330 word to r31 (retail r24) once the
+  objects are defined, so the winning layout drops it; the far `addis` web takes r31 only when
+  the `.bss` objects are defined too (an extern `lbl_17_bss_0` is a named global and claims
+  r31 first), and `data before bss before rodata` gives retail's r29/r30. The last four rows
+  are a fold the matcher's `IvStringImpl` carrier prevented under `opt_propagation off`:
+  `(u8 *)obj + ((id << 2) - 4)` folds to `addi r3, r3, 0x2774; lwzx r23, r3, r31`, while the
+  array spelling `((const char **)obj)[id - 1]` gives retail's `addi r3, r31, 0x2778; subi
+  r0, r4, 4; lwzx` (pool match: the 917-pointer `.data` block is not proven byte-equal).
 
 ## Capture verdicts in batch (tooling round T1, 2026-10-28)
 

@@ -460,6 +460,187 @@ def data_struct_views(p, symbol, text):
                 return None, notes + [f'{pvar}: declaration not found']
             out = out[:dm.start()] + f"{dm[1]}u8 *{pvar};" + out[dm.end():]
         notes.append(f'{base}: {len(names)} fields of {tname} as byte views')
+    cast, cast_notes = cast_struct_views(p, symbol, out)
+    notes += cast_notes
+    if cast:
+        out = cast
+    return (out if out != text else None), notes
+
+
+def expand_local_macros(text, limit=8):
+    """The body's own macros expanded in place, as the preprocessor does it (textual
+    substitution, `##` pasting, arguments parsed at the invocation), so the layout families
+    read the spelling the compiler sees: `#define data dataBase.value` over a one-member
+    carrier (fn_10_75D4), `AT(u32, data, 0x11D4)` over `(*(T *)((base) + (off)))`
+    (fn_3_680C), `IvGet(((IvHigh *)d)->ids##n, ...)` whose member name only exists after
+    pasting (fn_17_2414). A macro is expanded from its definition to its `#undef` (or the end
+    of the file); one that stringifies (`#x`), takes variadic arguments, or whose invocations
+    do not all parse is left alone, as are the headers' macros. A parameter written `(p)` and
+    substituted by a bare identifier or number loses the parentheses, so `(data) + (0x11D4)`
+    is the `data + 0x11D4` the use scan reads. Returns the text (unchanged when nothing
+    expanded)."""
+    from .sdkimport import masked
+    define = re.compile(r'(?m)^[ \t]*#\s*define[ \t]+(\w+)(\(([^)\n]*)\))?(?:[ \t]+(.*))?$')
+    directive = re.compile(r'(?m)^[ \t]*#\s*(?:define|undef|ifdef|ifndef|if|elif)\b.*$')
+    # the preprocessor's first step: a backslash-newline is a line splice, so a continued
+    # `#define` is read as one line (the original text is returned when nothing expands)
+    out = text.replace(chr(92) + chr(10), ' ')
+    expanded = False
+    for _ in range(limit):
+        code = masked(out)
+        changed = False
+        for d in define.finditer(code):
+            name, params = d[1], d[3]
+            raw_body = out[d.start(4):d.end(4)].strip() if d[4] is not None else ''
+            if d[2] is None and not raw_body:
+                continue
+            if re.search(r'(?<!#)#(?!#)', raw_body) or '...' in (params or '') or '__VA_ARGS__' in raw_body:
+                continue
+            plist = [x.strip() for x in params.split(',') if x.strip()] if params is not None else None
+            if plist is not None and any(not re.fullmatch(r'[A-Za-z_]\w*', x) for x in plist):
+                continue
+            undef = re.compile(r'(?m)^[ \t]*#\s*undef[ \t]+%s\b.*\n?' % re.escape(name))
+            um = undef.search(code, d.end())
+            region_end = um.start() if um else len(out)
+            # every token of the name after its definition, outside the directive lines
+            # naming it (`#define`/`#undef`/`#ifdef`): the preprocessor's scope
+            skip = [(m.start(), m.end()) for m in directive.finditer(code, d.end(), region_end)]
+            hits = []
+            for m in re.compile(r'(?<![\w$])%s\b' % re.escape(name)).finditer(code, d.end(), region_end):
+                if any(a <= m.start() < b for a, b in skip):
+                    continue
+                if plist is None:
+                    hits.append((m.start(), m.end(), raw_body))
+                    continue
+                pm = re.compile(r'\s*\(').match(code, m.end())
+                if not pm:
+                    continue
+                spans = _argument_spans(code, pm.end() - 1)
+                if spans is None or (len(spans) != len(plist) and not (not plist and spans and not code[spans[0][0]:spans[0][1]].strip())):
+                    hits = None
+                    break
+                args = [out[a:b].strip() for a, b in spans]
+                expansion = raw_body
+                for param, arg in zip(plist, args):
+                    if re.fullmatch(r'[A-Za-z_]\w*|0[xX][\da-fA-F]+|\d+', arg):
+                        expansion = re.sub(r'\(\s*%s\s*\)(?=\s*(?:[-+*/%%)\],;<>=&|^?:]|\[))' % re.escape(param),
+                                           lambda _, arg=arg: arg, expansion)
+                    expansion = re.sub(r'(?<![\w$])%s\b' % re.escape(param), lambda _, arg=arg: arg, expansion)
+                expansion = re.sub(r'\s*##\s*', '', expansion)
+                hits.append((m.start(), spans[-1][1] + 1 if spans else pm.end(), expansion))
+            if not hits:
+                # unparsable invocations, or an unused definition (left where it is)
+                continue
+            pieces, pos = [], 0
+            for s, e, rep in hits:
+                pieces.append(out[pos:s] + rep)
+                pos = e
+            pieces.append(out[pos:])
+            new = ''.join(pieces)
+            # the definition and its `#undef` go once nothing names the macro any more (another
+            # macro's body may still: `ITEMS(lo) AT(...)` expands to `AT(...)` on a later pass)
+            rest = masked(new[:d.start()] + new[d.end():])
+            if not re.search(r'(?<![\w$])%s\b' % re.escape(name), rest):
+                new = new[:d.start()] + re.sub(r'^\n', '', new[d.end():], count=1)
+                if um:
+                    new = undef.sub('', new, count=1)
+            out, changed, expanded = new, True, True
+            break
+        if not changed:
+            break
+    return out if expanded else text
+
+
+def _argument_spans(code, start):
+    """(begin, end) of every top-level argument of the call whose '(' is at `start`, or None
+    when the parenthesis never closes."""
+    depth, spans, cur = 0, [], start + 1
+    for i in range(start, len(code)):
+        c = code[i]
+        if c in '([{':
+            depth += 1
+        elif c in ')]}':
+            depth -= 1
+            if depth == 0:
+                spans.append((cur, i))
+                return spans
+        elif c == ',' and depth == 1:
+            spans.append((cur, i))
+            cur = i + 1
+    return None
+
+
+def cast_struct_views(p, symbol, text):
+    """Struct casts of a byte view of a same-module `.data` object (`((IvHigh *)d)->ids1` over
+    `u8 *d = (u8 *)&lbl + 0x60000;`, fn_17_2414) as byte offsets of the view, so that
+    `tu_data_objects` cuts the retail objects at the members it addresses instead of
+    addressing the view as one named object (lis/addi at every site, 89%): retail keeps each
+    table base as an address-of-object operand inside the loop. Member offsets come from an
+    MWCC probe of the body's own struct; the view keeps its other uses."""
+    from .sdkimport import masked
+    from .fixup_source import _function_body_span
+    sym = p.resolve(symbol)
+    syms = p.symbols(sym.module)
+    code = masked(text)
+    span = _function_body_span(code, sym.name)
+    if not span:
+        return None, []
+    head, lo, hi = span
+    pvars = {}
+    for m in re.finditer(r'(?<![\w.>])(\w+)\s*=\s*(?:\(\s*%s\s*\*\s*\)\s*)?&?\s*(lbl_\w+)\s*(?:\+\s*(?:0x[\da-fA-F]+|\d+)\s*)?;' % BYTE_TYPES, code[lo:hi]):
+        var, label = m[1], m[2]
+        known = syms.get(label)
+        if not known or known.section not in DATA_SECTIONS or known.kind != 'object':
+            continue
+        if not re.search(r'(?m)^[ \t]*(?:register\s+)?%s\s*\*\s*%s\s*;' % (BYTE_TYPES, re.escape(var)), code[lo:hi]):
+            continue
+        if len(re.findall(r'(?<![\w.>])%s\s*=(?!=)' % re.escape(var), code[lo:hi])) != 1:
+            continue
+        pvars[var] = label
+    if not pvars:
+        return None, []
+    expanded = expand_local_macros(text)
+    out, notes, cache = expanded, [], {}
+    access = re.compile(r'\(\s*\(\s*(?:struct\s+)?(\w+)\s*\*\s*\)\s*(%s)\s*\)\s*->\s*(\w+)' % '|'.join(re.escape(v) for v in pvars))
+    groups = {}
+    for m in access.finditer(out):
+        groups.setdefault((m[1], m[2]), set()).add(m[3])
+    if not groups:
+        return None, []
+    fm = re.search(r"\n[^\n;{}]*\b%s\s*\([^;{}]*\)\s*\{" % re.escape(sym.name), out)
+    if not fm:
+        return None, []
+    prefix = out[:fm.start() + 1]
+    for (tname, pvar), names in sorted(groups.items()):
+        if tname in SCALAR:
+            continue
+        st = struct_text(tname, out)
+        if st is None:
+            notes.append(f'{tname}: struct text not found'); continue
+        decls = field_decls(st)
+        names = sorted(names)
+        if any(n not in decls or decls[n][0] is None for n in names):
+            notes.append(f'{pvar}: {tname} fields without declaration text'); continue
+        is_alias = re.search(r"\}\s*%s\s*;|typedef\s+struct\s+\w+\s+%s\s*;" % (re.escape(tname), re.escape(tname)), prefix + include_text())
+        key = (tname, tuple(names))
+        if key not in cache:
+            cache[key] = probe_layout(p, sym.module, prefix, tname if is_alias else 'struct ' + tname, names, decls, symbol)
+        layout, err = cache[key]
+        if layout is None:
+            notes.append(f'{tname}: probe failed: {err}'); continue
+
+        def view(u):
+            if u[1] != tname or u[2] != pvar:
+                return u[0]
+            ttext, dims, _ = decls[u[3]]
+            off = layout[u[3]][0]
+            where = f"{pvar} + {off:#x}" if off else pvar
+            if dims:
+                inner = ''.join(f'[{d}]' for d in dims[1:])
+                return f"(({ttext} (*){inner})({where}))" if inner else f"(({ttext} *)({where}))"
+            return f"(*({ttext} *)({where}))"
+        out = access.sub(view, out)
+        notes.append(f'{pvars[pvar]}: {len(names)} members of {tname} cast on {pvar} as byte views')
     return (out if out != text else None), notes
 
 
@@ -1713,7 +1894,9 @@ def tu_data_objects(p, symbol, text, top=False, limit=0x100000):
         """label -> ([(token, pointee type)], edits removing the byte-pointer models)"""
         found = {}
         # `(?<![\w.>])`: a carrier member `w.value = lbl;` is not a plain local `value`
-        for m in re.finditer(r'(?:\b(%s)\s*\*\s*)?(?<![\w.>])(\w+(?:\.\w+)?)\s*=\s*(?:\(\s*(?:%s|void)\s*\*\s*\)\s*)?(&\s*)?\b(lbl_\w+)\s*(?:\+\s*(0x[\da-fA-F]+|\d+)\s*)?;'
+        # `register u8 *d = ...;` / `register u8 *d;` (fn_17_2414): the storage class is part
+        # of the declaration the edit removes
+        for m in re.finditer(r'(?:\b(?:register\s+)?(%s)\s*\*\s*)?(?<![\w.>])(\w+(?:\.\w+)?)\s*=\s*(?:\(\s*(?:%s|void)\s*\*\s*\)\s*)?(&\s*)?\b(lbl_\w+)\s*(?:\+\s*(0x[\da-fA-F]+|\d+)\s*)?;'
                              % (BYTE_TYPES, BYTE_TYPES), code[lo:hi]):
             declared, var, amp, label, base = m.groups()
             # `table = lbl + 0x60000;`: a view of the far part of a large block (retail
@@ -1746,7 +1929,7 @@ def tu_data_objects(p, symbol, text, top=False, limit=0x100000):
                 ptype = d[1]
                 edits.append((lo + d.start(), lo + d.end()))
             elif ptype is None:
-                d = re.search(r'(?m)^[ \t]*(%s)\s*\*\s*%s\s*;[ \t]*\n?' % (BYTE_TYPES, re.escape(var)), code[lo:hi])
+                d = re.search(r'(?m)^[ \t]*(?:register\s+)?(%s)\s*\*\s*%s\s*;[ \t]*\n?' % (BYTE_TYPES, re.escape(var)), code[lo:hi])
                 if not d:
                     continue
                 ptype = d[1]
@@ -1801,8 +1984,10 @@ def tu_data_objects(p, symbol, text, top=False, limit=0x100000):
             helpers.add(helper)
         uses = []
         for a, b, tok in regions:
-            # `x[K + e]` / `x[e + K]`: an index expression into the object at K
-            for m in re.finditer(r'(?<![\w.>])(%s)\b(?!\s*=[^=])(?:\s*\+\s*(\()?\s*(0x[\da-fA-F]+|\d+)\b(?(2)\s*\))'
+            # `x[K + e]` / `x[e + K]`: an index expression into the object at K; `x - N` is an
+            # object below a far view's origin (fn_17_2414's `d - 0x112C` over `lbl + 0x60000`:
+            # retail's `subi r3, r31, 0x112c` is that object's address off the far web)
+            for m in re.finditer(r'(?<![\w.>])(%s)\b(?!\s*=[^=])(?:\s*([-+])\s*(\()?\s*(0x[\da-fA-F]+|\d+)\b(?(3)\s*\))'
                                  r'|\s*\[\s*(0x[\da-fA-F]+|\d+)\s*\]'
                                  r'|\s*\[\s*(0x[\da-fA-F]+|\d+)\s*\+\s*(\w+)\s*\]'
                                  r'|\s*\[\s*(\w+)\s*\+\s*(0x[\da-fA-F]+|\d+)\s*\])?' % tok, code[a:b]):
@@ -1811,14 +1996,19 @@ def tu_data_objects(p, symbol, text, top=False, limit=0x100000):
                     continue
                 if re.search(r'&\s*$', code[max(0, s - 4):s]):
                     break
-                off, index = m[3], m[4]
-                if m[5] or m[8]:
-                    uses.append((s, e, origins.get(m[1], 0) + int(m[5] or m[8], 0), ('xindex', m[6] or m[7]), types[m[1]]))
+                sign, off, index = m[2], m[4], m[5]
+                if m[6] or m[9]:
+                    uses.append((s, e, origins.get(m[1], 0) + int(m[6] or m[9], 0), ('xindex', m[7] or m[8]), types[m[1]]))
                     continue
-                if off and not m[2] and re.match(r'\s*[*/%\[]', code[e:]):
+                if off and not m[3] and re.match(r'\s*[*/%\[]', code[e:]):
                     # `x + 4 * i`: only the pointer itself is a constant address
-                    e, off = s + len(m[1]), None
-                uses.append((s, e, origins.get(m[1], 0) + int(off or index or '0', 0), 'index' if index else 'ptr', types[m[1]]))
+                    e, off, sign = s + len(m[1]), None, None
+                delta = int(off or index or '0', 0)
+                if sign == '-':
+                    if not origins.get(m[1]) or delta > origins[m[1]]:
+                        break
+                    delta = -delta
+                uses.append((s, e, origins.get(m[1], 0) + delta, 'index' if index else 'ptr', types[m[1]]))
             else:
                 continue
             uses = None
@@ -3243,6 +3433,13 @@ def tu_section_layout(p, symbol, body, check):
     each also with the TU's string run reproduced, and the string run alone."""
     if not re.search(r"\blbl_(?:\d+_(?:bss|data|rodata)_[0-9A-F]+|[0-9A-F]{8})\b|\bfzgx_(?:pool|obj)_\w+", body):
         return []
+    # the body's own macros expanded first: a view spelled `#define data dataBase.value` or
+    # `AT(u32, data, 0x11D4)` is invisible to every family below until the preprocessor's
+    # text is what they read (fn_10_75D4, fn_3_680C, fn_17_2414's pasted member names)
+    try:
+        body = expand_local_macros(body)
+    except (ValueError, IndexError, AttributeError, TypeError, re.error):
+        pass
     out = []
     cache = {}
     bases = []
@@ -3376,7 +3573,21 @@ def tu_section_layout(p, symbol, body, check):
     # a section layout changes what the base register holds; a file-scope
     # `opt_propagation off` written for the old extern view can then rematerialize
     # `addis rX, rBase, N` at every far access (fn_1_2FAA0): offer each layout without it
+    # `opt_loop_invariants off` likewise: written to keep `d + 0x2dd8` table bases inside a
+    # loop over an extern view, it is redundant once the objects are defined (retail keeps
+    # address-of-object operands in the loop anyway), and with the objects defined the pair
+    # of pragmas numbers a hoisted conversion word above every section base (fn_17_2414:
+    # 0x4330 took r31 under `opt_propagation off`, retail's r24 without it)
     pragma = re.compile(r"(?m)^[ \t]*#\s*pragma\s+opt_propagation\s+(?:off|reset)[ \t]*\n")
-    out += [(label + ' without opt_propagation pragma', pragma.sub('', text))
-            for label, text in list(out) if label.startswith('define retail') and pragma.search(text)]
+    invariants = re.compile(r"(?m)^[ \t]*#\s*pragma\s+opt_loop_invariants\s+(?:off|reset)[ \t]*\n")
+    seen = {t for _, t in out}
+    for label, text in list(out):
+        if 'define retail' not in label:  # the layouts and their section-order variants
+            continue
+        for tag, stripped in (('opt_propagation', pragma.sub('', text)),
+                              ('opt_loop_invariants', invariants.sub('', text)),
+                              ('opt_propagation and opt_loop_invariants', invariants.sub('', pragma.sub('', text)))):
+            if stripped != text and stripped not in seen:
+                seen.add(stripped)
+                out.append((f'{label} without {tag} pragma', stripped))
     return out
