@@ -403,8 +403,6 @@ void fn_3_ACF4(void) {
 /* fzgx:end fn_3_ACF4 */
 
 /* fzgx:begin fn_3_AE74 */
-
-
 typedef struct {
     u8 pad_0[0xC4];
     s16 unk_C4;
@@ -1409,7 +1407,6 @@ void fn_3_BEF0(void) {
 /* fzgx:end fn_3_BEF0 */
 
 /* fzgx:begin fn_3_BF1C */
-
 typedef struct {
     u8 r, g, b, a;
 } fn_3_BF1C_Color;

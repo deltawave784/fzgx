@@ -1460,7 +1460,6 @@ void fn_3_F878(void) {
 /* fzgx:end fn_3_F878 */
 
 /* fzgx:begin fn_3_F948 */
-
 s16 fn_3_F948(MemCardSlot *slot) {
     s16 i;
     s16 count = 0;

@@ -422,6 +422,11 @@ extern void fn_3_1BA20(void *arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4, s32 *
 extern void fn_3_1BF08(void *data, s16 x1, s16 y1, s16 x2, s16 y2, u32 *color);
 extern void fn_3_156A8(void);
 extern void fn_3_1ACE4(void *data, s32 first_a, s32 second_a, s32 first_b, s32 second_b, u32 *values);
+extern s32 fn_1_F7EDC(s16);
+extern s32 fn_1_F7C48(s16);
+extern s16 fn_1_8D640(s16);
+extern s32 fn_3_20374(struct fn_3_20374_Arg0 *arg0);
+extern u32 fn_3_278F8(s16, s16, u32, s16, s16, s16, s16, s16, u32, u32, u32);
 
 /* fzgx:begin fn_3_1857C noprologue */
 #include "types.h"
@@ -630,12 +635,12 @@ struct QView {
     u8 unk_10;
 };
 
-typedef struct CustomizeData {
+typedef struct fn_3_19F40_CustomizeData {
     u32 unk_00[2];
     u32 unk_08;
     u8 pad_0c[0x14];
     void *unk_20;
-} CustomizeData;
+} fn_3_19F40_CustomizeData;
 
 struct fn_3_1A1D8_lbl_1_bss_9F8_0_E20 {
     u8 pad_0[0x10];
@@ -659,7 +664,7 @@ struct fn_3_1A264_lbl_1_bss_9F8 {
 
 typedef struct {
     u8 r, g, b, a;
-} QColor;
+} fn_3_19F40_QColor;
 
 typedef struct { u32 id; f32 x,y,z; u32 rest[18]; } Packet23524;
 
@@ -689,7 +694,7 @@ struct fn_3_23724_Copy88 {
 typedef struct {
     u32 flags;
     u8 pad[0x1c];
-} fn_3_1F81C_CustomizeEntry;
+} fn_3_19F40_fn_3_1F81C_CustomizeEntry;
 
 typedef struct CustomizeObject CustomizeObject;
 
@@ -697,24 +702,24 @@ struct CustomizeObject {
     u8 pad0[0x18];
     u16 count;
     u8 pad1[0x26];
-    fn_3_1F81C_CustomizeEntry entries[1];
+    fn_3_19F40_fn_3_1F81C_CustomizeEntry entries[1];
     u8 pad2[0xc];
     f32 value;
 };
 
 typedef struct {
     CustomizeObject *object;
-} CustomizeSlot;
+} fn_3_19F40_CustomizeSlot;
 
 typedef struct {
     u8 pad0[8];
-    CustomizeSlot *slot;
-} CustomizeManager;
+    fn_3_19F40_CustomizeSlot *slot;
+} fn_3_19F40_CustomizeManager;
 
 typedef struct {
     u8 pad0[0xc];
-    CustomizeManager *manager;
-} CustomizeRoot;
+    fn_3_19F40_CustomizeManager *manager;
+} fn_3_19F40_CustomizeRoot;
 
 struct fn_3_20374_lbl_1_data_1E5C0 {
 u32 unk_0,unk_4,unk_8; f32 unk_C,unk_10,unk_14; u32 unk_18,unk_1C,unk_20,unk_24,unk_28,unk_2C,unk_30;
@@ -762,11 +767,11 @@ u8 pad_18C[0x6C]; f64 unk_1F8; u8 pad_200[0x28]; f32 unk_228;
 u8 pad_22C[0x5C]; f32 unk_288,unk_28C,unk_290,unk_294,unk_298,unk_29C,unk_2A0,unk_2A4,unk_2A8;
 };
 
-typedef struct Sig_fn_1_87610_Fn187610Data {
+typedef struct fn_3_19F40_Sig_fn_1_87610_Fn187610Data {
 u8 pad_000[2]; s8 field_002; u8 pad_003[0x205]; u8 field_208[0x120];
-} Sig_fn_1_87610_Fn187610Data;
+} fn_3_19F40_Sig_fn_1_87610_Fn187610Data;
 
-typedef struct Sig_fn_8006F038_Vec3 { f32 x,y,z; } Sig_fn_8006F038_Vec3;
+typedef struct fn_3_19F40_Sig_fn_8006F038_Vec3 { f32 x,y,z; } fn_3_19F40_Sig_fn_8006F038_Vec3;
 
 struct fn_3_2B268_lbl_1_bss_7F0C0 {
     u8 pad_0[0x48F8];
@@ -1556,21 +1561,21 @@ void fn_3_1B008(void *data, u32 x1, u32 y1, u32 x2, u32 y2) {
 #include "font.h"
 #include "game/vec3.h"
 
-typedef struct Rgba {
+typedef struct fn_3_1B130_Rgba {
     u8 r, g, b, a;
-} Rgba;
+} fn_3_1B130_Rgba;
 
-extern Rgba fn_3_149AC(void *, s16, s16);
-extern void fn_3_146C0(void *, s16, s16, s16, Rgba *);
+extern fn_3_1B130_Rgba fn_3_149AC(void *, s16, s16);
+extern void fn_3_146C0(void *, s16, s16, s16, fn_3_1B130_Rgba *);
 extern void fn_80008BEC(void *, int, u32);
 
 /* Scanline flood fill of the region whose colour equals the pixel at (x, y). */
-void fn_3_1B130(void *data, s16 x, s16 y, Rgba color) {
+void fn_3_1B130(void *data, s16 x, s16 y, fn_3_1B130_Rgba color) {
     s16 queue_x[0x1000];
     s16 queue_y[0x1000];
-    Rgba pixel;
-    Rgba target;
-    Rgba fill;
+    fn_3_1B130_Rgba pixel;
+    fn_3_1B130_Rgba target;
+    fn_3_1B130_Rgba fill;
     s16 left;
     s16 right;
     s16 head = 0;
@@ -7590,6 +7595,11 @@ void fn_3_286BC(void) {
 /* fzgx:begin fn_3_28EBC noprologue */
 #include "types.h"
 #include "font.h"
+#include "game/vec3.h"
+
+extern u32 lbl_1_rodata_26F8;
+extern u32 lbl_801A66A0;
+extern f32 lbl_3_rodata_768[];
 
 #pragma force_active on
 static const u32 fzgx_pool_table_0[] = {0x3F333333,0xFFFFFF00,0xFFFF0000,0xFF000000,0x0000FF00,0xFFF200FF,0xFFFF0000,0x3EEAAAAB,0x438E0000,0x43A48000,0x42C80000,0x3F6AAAAB,0x43B40000,0x3F0AAAAB,0x43DC8000,0x43A60000,0x43AC8000,0x43B30000,0x3EF99999,0x43C58000,0x43A58000,0x43B38000,0x43A00000,0x43B50000,0x43480000,0x43A18000,0x43BE8000,0x41500000,0x3C008081,0x40C00000,0x40E00000,0x3E189899,0x3E048485,0x43040000,0x43160000,0x3F4CCCCD,0x3E99999A,0x00000000};
@@ -7634,9 +7644,6 @@ struct fn_3_28EBC_lbl_3_rodata_768 {
     u8 pad200[0x28];
     f32 degrees;
 };
-extern struct fn_3_28EBC_lbl_3_rodata_768 lbl_3_rodata_768;
-extern struct fn_3_28EBC_Copy88 lbl_1_rodata_26F8;
-extern u32 lbl_801A66A0;
 extern void fn_3_2406C(void);
 extern f32 lbl_8006D188(u32);
 
@@ -7658,10 +7665,10 @@ void fn_3_28EBC(u32 arg0, u32 arg1, u32 arg2, u32 arg3, u32 arg4, u32 arg5, u32 
     void (*cb)(void);
     f32 back;
     v0 = (s16)arg2;
-    p_lbl_3_rodata_768 = (struct fn_3_28EBC_lbl_3_rodata_768 *)&lbl_3_rodata_768;
+    p_lbl_3_rodata_768 = (struct fn_3_28EBC_lbl_3_rodata_768 *)&(*(struct fn_3_28EBC_lbl_3_rodata_768 *)&lbl_3_rodata_768);
     back = (f32)(v0 - 20);
     cb = fn_3_2406C;
-    p = lbl_1_rodata_26F8;
+    p = (*(struct fn_3_28EBC_Copy88 *)&lbl_1_rodata_26F8);
     p.id = arg6;
     p.x = (s16)arg0;
     p.y = (s16)arg1;
@@ -7674,7 +7681,7 @@ void fn_3_28EBC(u32 arg0, u32 arg1, u32 arg2, u32 arg3, u32 arg4, u32 arg5, u32 
     p.alpha = 1.0f;
     fn_1_4F734((FontDrawPacket *)&p);
     if ((s16)arg4) {
-        p = lbl_1_rodata_26F8;
+        p = (*(struct fn_3_28EBC_Copy88 *)&lbl_1_rodata_26F8);
         p.id = 0x892a;
         p.x = (s16)arg0;
         p.y = (s16)arg1;
@@ -7683,7 +7690,7 @@ void fn_3_28EBC(u32 arg0, u32 arg1, u32 arg2, u32 arg3, u32 arg4, u32 arg5, u32 
         finish(&p, cb, p_lbl_3_rodata_768->one);
     }
     if ((s16)arg5) {
-        p = lbl_1_rodata_26F8;
+        p = (*(struct fn_3_28EBC_Copy88 *)&lbl_1_rodata_26F8);
         p.id = 0x8908;
         p.x = (s16)arg0;
         p.y = (s16)arg1;
@@ -7692,7 +7699,7 @@ void fn_3_28EBC(u32 arg0, u32 arg1, u32 arg2, u32 arg3, u32 arg4, u32 arg5, u32 
         p.angle = (f32)(lbl_801A66A0 % 360) * 182.04444885253906f;
         p.sx = p.sy = 1.0f + (f32)(0.125f * lbl_8006D188((s32)((f32)((lbl_801A66A0 * 2) % 360) * 182.04444885253906f)));
         finish(&p, cb, p_lbl_3_rodata_768->one);
-        p = lbl_1_rodata_26F8;
+        p = (*(struct fn_3_28EBC_Copy88 *)&lbl_1_rodata_26F8);
         p.id = 0x8907;
         p.x = (s16)arg0;
         p.y = (s16)arg1;
@@ -7702,7 +7709,7 @@ void fn_3_28EBC(u32 arg0, u32 arg1, u32 arg2, u32 arg3, u32 arg4, u32 arg5, u32 
     }
     if ((s16)arg7) {
         s32 arrow_x;
-        p = lbl_1_rodata_26F8;
+        p = (*(struct fn_3_28EBC_Copy88 *)&lbl_1_rodata_26F8);
         arrow_x = (s16)arg0;
         p.id = 0x8923;
         p.x = arrow_x - 26;
@@ -7717,7 +7724,7 @@ void fn_3_28EBC(u32 arg0, u32 arg1, u32 arg2, u32 arg3, u32 arg4, u32 arg5, u32 
     }
     if (arg8) {
         s32 arrow_x;
-        p = lbl_1_rodata_26F8;
+        p = (*(struct fn_3_28EBC_Copy88 *)&lbl_1_rodata_26F8);
         arrow_x = (s16)arg0;
         p.id = 0x8923;
         p.x = arrow_x + 26;

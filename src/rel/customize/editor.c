@@ -793,8 +793,6 @@ void fn_3_15F44(void) {
 /* fzgx:end fn_3_15F44 */
 
 /* fzgx:begin fn_3_1683C */
-
-
 void fn_3_1683C(struct Arg0 *arg0, s16 off, s16 size) {
     s16 x;
     s16 y;
@@ -1449,9 +1447,6 @@ void fn_3_17100(void) {
 /* fzgx:end fn_3_17100 */
 
 /* fzgx:begin fn_3_177AC */
-
-
-
 void fn_3_177AC(Color color) {
     *(Color *)&lbl_3_bss_A2410.unk_4 = color;
     if (__rlwnm(lbl_3_bss_A2410.unk_8, 3, 31, 31)) {

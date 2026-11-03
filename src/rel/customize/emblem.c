@@ -933,9 +933,6 @@ void fn_3_14778(u16 width, u16 height, u8 format, u32 data) {
 /* fzgx:end fn_3_14778 */
 
 /* fzgx:begin fn_3_14794 */
-
-
-
 /* colour c (r, g, b, a bytes) as a texel: RGB565, or RGB5A3 (opaque with 5 bits per colour from alpha 0xE0 up,
  * otherwise 3 bits of alpha and 4 bits per colour) */
 #define RGB565(c) ((u16)((((c)[0] & 0xF8) << 8) | (((c)[1] & 0xFC) << 3) | (((c)[2] & 0xF8) >> 3)))
@@ -987,7 +984,6 @@ void fn_3_14794(u8 *__restrict canvas, s16 x, s16 y, const u8 *color) {
 /* fzgx:end fn_3_14794 */
 
 /* fzgx:begin fn_3_149AC */
-
 typedef struct EmblemColor {
     u8 r;
     u8 g;
@@ -1057,10 +1053,6 @@ done:
 /* fzgx:end fn_3_149AC */
 
 /* fzgx:begin fn_3_14BBC */
-
-
-
-
 /* colour c as a texel: RGB565, or RGB5A3 (opaque with 5 bits per colour from alpha 0xE0 up, otherwise 3 bits of
  * alpha and 4 bits per colour) */
 #define RGB565(c) ((u16)((((c).r & 0xF8) << 8) | (((c).g & 0xFC) << 3) | (((c).b & 0xF8) >> 3)))
@@ -1118,11 +1110,6 @@ void fn_3_14BBC(u8 *canvas, s16 x, s16 y, s16 n, Color *color) {
 /* fzgx:end fn_3_14BBC */
 
 /* fzgx:begin fn_3_14E18 */
-
-
-
-
-
 /* colour c as a texel: RGB565, or RGB5A3 (opaque with 5 bits per colour from alpha 0xE0 up, otherwise 3 bits of
  * alpha and 4 bits per colour) */
 #define RGB565(c) ((u16)((((c).r & 0xF8) << 8) | (((c).g & 0xFC) << 3) | (((c).b & 0xF8) >> 3)))
@@ -1185,10 +1172,7 @@ void fn_3_14E18(u8 *canvas, s16 x0, s16 y0, s16 x1, s16 y1) {
 
 /* fzgx:begin fn_3_15240 noprologue */
 #include "types.h"
-#include "rel/customize/globals.h"
 #include "font.h"
-#include "rel/customize/emblem.h"
-
 
 struct fn_3_137AC_lbl_3_bss_A17D0 { u8 unk_0; u8 unk_1; };
 
@@ -1229,10 +1213,6 @@ void fn_3_15240(void *arg0, s16 arg1, void *arg2, u16 arg3, s16 arg4, void *arg5
 /* fzgx:end fn_3_15240 */
 
 /* fzgx:begin fn_3_152BC */
-
-
-
-
 /* colour c as a texel: RGB565, or RGB5A3 (opaque with 5 bits per colour from alpha 0xE0 up, otherwise 3 bits of
  * alpha and 4 bits per colour) */
 #define RGB565(c) ((u16)((((c).r & 0xF8) << 8) | (((c).g & 0xFC) << 3) | (((c).b & 0xF8) >> 3)))

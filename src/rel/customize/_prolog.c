@@ -1162,7 +1162,9 @@ void fn_3_CB4(char *name) {
 
 /* fzgx:begin fn_3_E64 pool noprologue */
 #include "types.h"
-#include "rel/customize/globals.h"
+#include "dolphin/types.h"
+
+extern f32 lbl_3_rodata_0[];
 
 typedef struct CustomizeNameEntry {
     const char *names[6];
@@ -1198,13 +1200,13 @@ typedef struct {
     u8 pad_A[6];
     volatile u16 unk_10; /* Volatile: retail rereads controller flags for each direction. */
     volatile u16 unk_12; /* Volatile: retail rereads alternate controller flags for each direction. */
-} Controller;
+} fn_3_E64_Controller;
 
-typedef struct fn_3_78C8_CustomizeEntry {
+typedef struct fn_3_E64_fn_3_78C8_CustomizeEntry {
     u8 pad[0x20];
     s16 count;
     s16 values[0x0a];
-} fn_3_78C8_CustomizeEntry;
+} fn_3_E64_fn_3_78C8_CustomizeEntry;
 
 typedef struct {
     s16 index;
@@ -1241,7 +1243,7 @@ typedef struct {
     u32 mask;
     u8 flags;
     u8 pad_9[0x17];
-} CustomizeSlot;
+} fn_3_E64_CustomizeSlot;
 
 typedef struct {
     u8 pad[0x324];
@@ -1282,7 +1284,6 @@ extern void fn_1_4AE0C(const char* format, ...);
 extern void fn_1_496FC(f32, f32);
 extern void fn_1_4AE0C(const char *, ...);
 
-#include "types.h"
 
 typedef struct { u8 r, g, b, a; } Color;
 
@@ -1627,6 +1628,7 @@ void fn_3_10A4(u8 *arg0) {
 /* fzgx:end fn_3_10A4 */
 
 /* fzgx:begin fn_3_12D4 noprologue */
+#include "types.h"
 #include "dolphin/types.h"
 
 extern void fn_1_53BD8(void *, f32, f32, f32, f32, f32);
@@ -1757,7 +1759,6 @@ void fn_3_14C4(void) {
 /* fzgx:end fn_3_14C4 */
 
 /* fzgx:begin fn_3_14E4 */
-
 /* the retail TU's .bss objects this function uses, at their retail offsets, so MWCC addresses them off one
  * section base; the fzgx_pool_gap_ objects span the retail objects in between, which this function does not touch */
 u32 fzgx_obj_lbl_3_bss_0[2];
@@ -6366,14 +6367,15 @@ void fn_3_7870(void) {
 
 /* fzgx:begin fn_3_78C8 noprologue */
 #include "types.h"
+#include "dolphin/types.h"
 
 extern s16 lbl_3_bss_20[104];
 
-typedef struct fn_3_78C8_CustomizeEntry {
+typedef struct fn_3_78C8_fn_3_78C8_CustomizeEntry {
     u8 pad[0x20];
     s16 count;
     s16 values[0x0a];
-} fn_3_78C8_CustomizeEntry;
+} fn_3_78C8_fn_3_78C8_CustomizeEntry;
 
 extern void fn_80008BEC(void *, s32, u32);
 extern s32 fn_1_F8334(s32);
@@ -6384,28 +6386,28 @@ extern s32 fn_1_F809C(s32);
 void fn_3_78C8(s32 enabled) {
     s32 i;
 
-    fn_80008BEC((u8 *)(*(fn_3_78C8_CustomizeEntry (*)[3])&lbl_3_bss_20) + 0x20, 0, 0xa2);
+    fn_80008BEC((u8 *)(*(fn_3_78C8_fn_3_78C8_CustomizeEntry (*)[3])&lbl_3_bss_20) + 0x20, 0, 0xa2);
     i = 0;
     while ((s16)i < 0x4b) {
         if (enabled != 0) {
             if (fn_1_F8334(i) != 0 &&
                 (fn_1_14D6D8(i) & 0x40000000) == 0) {
                 s16 index = fn_1_14F344(i);
-                fn_3_78C8_CustomizeEntry *entry = &(*(fn_3_78C8_CustomizeEntry (*)[3])&lbl_3_bss_20)[index];
+                fn_3_78C8_fn_3_78C8_CustomizeEntry *entry = &(*(fn_3_78C8_fn_3_78C8_CustomizeEntry (*)[3])&lbl_3_bss_20)[index];
 
                 entry->values[entry->count++] = (s16)i;
             }
         } else if (fn_1_F809C(i) != 0) {
             s16 index = fn_1_14F344(i);
-            fn_3_78C8_CustomizeEntry *entry = &(*(fn_3_78C8_CustomizeEntry (*)[3])&lbl_3_bss_20)[index];
+            fn_3_78C8_fn_3_78C8_CustomizeEntry *entry = &(*(fn_3_78C8_fn_3_78C8_CustomizeEntry (*)[3])&lbl_3_bss_20)[index];
 
             entry->values[entry->count++] = (s16)i;
         }
         i++;
     }
-    (*(fn_3_78C8_CustomizeEntry (*)[3])&lbl_3_bss_20)[0].values[(*(fn_3_78C8_CustomizeEntry (*)[3])&lbl_3_bss_20)[0].count] = -1;
-    (*(fn_3_78C8_CustomizeEntry (*)[3])&lbl_3_bss_20)[1].values[(*(fn_3_78C8_CustomizeEntry (*)[3])&lbl_3_bss_20)[1].count] = -1;
-    (*(fn_3_78C8_CustomizeEntry (*)[3])&lbl_3_bss_20)[2].values[(*(fn_3_78C8_CustomizeEntry (*)[3])&lbl_3_bss_20)[2].count] = -1;
+    (*(fn_3_78C8_fn_3_78C8_CustomizeEntry (*)[3])&lbl_3_bss_20)[0].values[(*(fn_3_78C8_fn_3_78C8_CustomizeEntry (*)[3])&lbl_3_bss_20)[0].count] = -1;
+    (*(fn_3_78C8_fn_3_78C8_CustomizeEntry (*)[3])&lbl_3_bss_20)[1].values[(*(fn_3_78C8_fn_3_78C8_CustomizeEntry (*)[3])&lbl_3_bss_20)[1].count] = -1;
+    (*(fn_3_78C8_fn_3_78C8_CustomizeEntry (*)[3])&lbl_3_bss_20)[2].values[(*(fn_3_78C8_fn_3_78C8_CustomizeEntry (*)[3])&lbl_3_bss_20)[2].count] = -1;
 }
 /* fzgx:end fn_3_78C8 */
 
@@ -6854,6 +6856,7 @@ s32 fn_3_83CC(void)
 
 /* fzgx:begin fn_3_968C noprologue */
 #include "types.h"
+#include "dolphin/types.h"
 
 extern u32 lbl_3_bss_6DE20;
 
