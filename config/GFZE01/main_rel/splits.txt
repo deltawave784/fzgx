@@ -9260,3 +9260,6 @@ rel/main_rel/ghost/fn_1_EF5E0.c:
 
 rel/main_rel/sel_static_disp/fn_1_14083C.c:
 	.text       start:0x0014083C end:0x00140EE8 align:4
+
+rel/main_rel/camera/fn_1_B724.c:
+	.text       start:0x0000B724 end:0x0000B81C align:4

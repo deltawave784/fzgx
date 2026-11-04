@@ -348,7 +348,6 @@ s8 fn_1_5370(s8 arg0, s16 arg1) {
 /* fzgx:end fn_1_5370 */
 
 /* fzgx:begin fn_1_56B8 */
-
 /* lbl_1_bss_F68 heads a run of three camera pointers */
 typedef struct {
     Obj_1_bss_F68_Target *target;
@@ -440,7 +439,6 @@ void fn_1_56B8(void) {
 /* fzgx:end fn_1_56B8 */
 
 /* fzgx:begin fn_1_6400 */
-
 typedef struct {
     u32 unk_0;
     u32 unk_4;
@@ -475,7 +473,6 @@ s32 camera_get_state(void) {
 /* fzgx:end camera_get_state */
 
 /* fzgx:begin camera_get_status */
-
 // Return the camera status when a camera exists and is not marked inactive.
 u32 camera_get_status(void) {
     Obj_1_bss_F68_Target *camera = lbl_1_bss_F68;
@@ -494,7 +491,6 @@ u32 camera_get_status(void) {
 /* fzgx:end camera_get_status */
 
 /* fzgx:begin fn_1_6514 */
-
 s32 fn_1_6514(s32 value) {
     Obj_1_bss_F68_Target *camera = lbl_1_bss_F68;
     s8 mode;
@@ -546,8 +542,6 @@ u32 camera_get_flags(void) {
 /* fzgx:end camera_get_flags */
 
 /* fzgx:begin camera_update */
-
-
 // Dispatches the camera update according to the camera state flag.
 void camera_update(void) {
     CameraState *state = camera_get_state_object();
@@ -585,7 +579,6 @@ void camera_update_state(__typeof__(lbl_1_bss_F68) state) {
 /* fzgx:end camera_update_state */
 
 /* fzgx:begin fn_1_66B8 */
-
 typedef Obj_1_bss_F68_Target fn_1_66B8_Obj;
 
 struct fn_1_66B8_Global {
@@ -854,7 +847,6 @@ void fn_1_6990(u32 index, u32 *output) {
 /* fzgx:end fn_1_6990 */
 
 /* fzgx:begin fn_1_6A0C pool */
-
 #pragma force_active on
 Obj_1_bss_F68_Target *lbl_1_bss_F68;
 u8 *lbl_1_bss_F6C;
@@ -899,7 +891,6 @@ void fn_1_6A0C(u32 index, u32 arg) {
 /* fzgx:end fn_1_6A0C */
 
 /* fzgx:begin camera_get_mode */
-
 // Return the normalized camera status, treating inactive states as zero.
 s16 camera_get_mode(void) {
     Obj_1_bss_F68_Target *state = lbl_1_bss_F68;
@@ -948,7 +939,6 @@ s16 camera_get_output(void) {
 /* fzgx:end camera_get_output */
 
 /* fzgx:begin fn_1_6B48 */
-
 /* The three camera pointers are one cluster of this TU's .bss; retail
  * addresses them off a single base register. MWCC lays .bss out in
  * first-access order, so the primer below (a section mwld ignores) fixes
@@ -986,7 +976,6 @@ s16 fn_1_6B48(s32 index) {
 /* fzgx:end fn_1_6B48 */
 
 /* fzgx:begin fn_1_6BC0 */
-
 // lbl_1_bss_9F8.unk_8 read as a 16-bit button word; bits 0/1 select previous/next camera
 typedef struct {
     u8 pad_0[0x8];
@@ -1040,7 +1029,6 @@ void camera_set_result(s16 value) {
 /* fzgx:end camera_set_result */
 
 /* fzgx:begin camera_forward_status */
-
 // Forward the camera state's status to the next update stage.
 void camera_forward_status(void) {
     Obj_1_bss_F68_Target *state = lbl_1_bss_F68;
@@ -1059,7 +1047,6 @@ void camera_forward_status(void) {
 /* fzgx:end camera_forward_status */
 
 /* fzgx:begin fn_1_6D2C */
-
 typedef struct {
     u32 unk_0;
     u8 unk_4;
@@ -1122,7 +1109,6 @@ u32 fn_1_6D2C(u32 index) {
 /* fzgx:end fn_1_6D2C */
 
 /* fzgx:begin fn_1_6DD0 */
-
 typedef struct {
     u32 unk_0;
     u8 unk_4;
@@ -1255,9 +1241,6 @@ s32 fn_1_7000(void) {
 /* fzgx:end fn_1_7000 */
 
 /* fzgx:begin fn_1_707C */
-
-
-
 typedef struct {
     u8 pad_0[2];
     s16 unk_2;
@@ -1335,7 +1318,6 @@ for (fzgx_loop_i_1063 = 0; fzgx_loop_i_1063 < count; fzgx_loop_i_1063++) {
 /* fzgx:end fn_1_707C */
 
 /* fzgx:begin camera_set_entry_field_0xa8 */
-
 void camera_set_entry_field_0xa8(u8 index, s16 value) {
     // Store the selected camera entry's parameter.
     game_camera_entries[index].unk_A8 = value;
@@ -1343,7 +1325,6 @@ void camera_set_entry_field_0xa8(u8 index, s16 value) {
 /* fzgx:end camera_set_entry_field_0xa8 */
 
 /* fzgx:begin fn_1_715C */
-
 void fn_1_715C(u8 index, s16 value) {
     // Toggle the camera effect associated with this entry before storing its state.
     if (game_camera_entries[index].unk_A8 == 0 && index < 4) {
@@ -1365,7 +1346,6 @@ void fn_1_715C(u8 index, s16 value) {
 /* fzgx:end fn_1_715C */
 
 /* fzgx:begin camera_get_entry_field_0xa8 */
-
 s16 camera_get_entry_field_0xa8(u32 index) {
     // Return the selected camera entry's stored value.
     return game_camera_entries[(u8)index].unk_A8;
@@ -1373,7 +1353,6 @@ s16 camera_get_entry_field_0xa8(u32 index) {
 /* fzgx:end camera_get_entry_field_0xa8 */
 
 /* fzgx:begin camera_get_entry_field_0xa4 */
-
 s16 camera_get_entry_field_0xa4(u32 index) {
     // Return the selected camera entry's stored value.
     return game_camera_entries[(u8)index].unk_A4;
@@ -1381,7 +1360,6 @@ s16 camera_get_entry_field_0xa4(u32 index) {
 /* fzgx:end camera_get_entry_field_0xa4 */
 
 /* fzgx:begin fn_1_727C */
-
 typedef struct {
     u8 pad_0[0x48];
     s8 unk_48;
@@ -1480,7 +1458,6 @@ s32 camera_compare_values(const u8 *lhs_index, const u8 *rhs_index) {
 /* fzgx:end camera_compare_values */
 
 /* fzgx:begin fn_1_8298 */
-
 extern GameCameraEntry *game_camera_entries;  // array of 0x1FC-byte records
 
 // Initializes camera entry selections and updates the camera mode from the available entries.
@@ -1614,7 +1591,6 @@ void fn_1_847C(s8 mode) {
 /* fzgx:end fn_1_847C */
 
 /* fzgx:begin fn_1_857C */
-
 typedef struct {
     u32 unk_0;
     u16 entries[15];
@@ -1668,7 +1644,6 @@ s16 camera_get_entry_field_0x2(u32 index) {
 /* fzgx:end camera_get_entry_field_0x2 */
 
 /* fzgx:begin camera_set_selected_value */
-
 // Cache the selected camera value for subsequent camera processing.
 void camera_set_selected_value(u8 value) {
     lbl_1_bss_F74 = value;
@@ -1676,7 +1651,6 @@ void camera_set_selected_value(u8 value) {
 /* fzgx:end camera_set_selected_value */
 
 /* fzgx:begin camera_set_state_flag */
-
 // Store the camera state flag used by subsequent camera updates.
 void camera_set_state_flag(u8 value) {
     lbl_1_bss_F75 = value;
@@ -1684,7 +1658,6 @@ void camera_set_state_flag(u8 value) {
 /* fzgx:end camera_set_state_flag */
 
 /* fzgx:begin camera_get_values */
-
 // Reads the camera values, falling back when the camera state cannot provide them.
 s32 camera_get_values(f32 *value0, f32 *value1) {
     f32 result0;
@@ -1716,7 +1689,6 @@ s32 camera_get_values(f32 *value0, f32 *value1) {
 /* fzgx:end camera_get_values */
 
 /* fzgx:begin fn_1_8708 */
-
 s32 fn_1_8708(s32 mode, f32 *value0, f32 *value1) {
     Obj_1_bss_F68_Target **pp;
     Obj_1_bss_F68_Target *obj;
@@ -1738,7 +1710,6 @@ s32 fn_1_8708(s32 mode, f32 *value0, f32 *value1) {
 /* fzgx:end fn_1_8708 */
 
 /* fzgx:begin live_camera_set_shake */
-
 // Marks the camera state active, accumulates a position delta, and tracks the highest value.
 void live_camera_set_shake(s32 value, const f32 *delta) {
     LiveCamera *state;
@@ -1762,7 +1733,6 @@ void live_camera_set_shake(s32 value, const f32 *delta) {
 /* fzgx:end live_camera_set_shake */
 
 /* fzgx:begin fn_1_8840 */
-
 void fn_1_8840(void) {
     LiveCamera *state;
     f32 value;
@@ -1791,7 +1761,6 @@ void fn_1_8840(void) {
 /* fzgx:end fn_1_8840 */
 
 /* fzgx:begin game_camera_set_shake */
-
 extern GameCameraEntry *game_camera_entries;  // array of 0x1FC-byte records
 
 // Updates the selected camera state with a movement delta and tracks its highest value.
@@ -1829,7 +1798,6 @@ void game_camera_set_shake(s16 index, s16 mode, s32 value, const f32 *delta) {
 /* fzgx:end game_camera_set_shake */
 
 /* fzgx:begin fn_1_8A0C */
-
 void fn_1_8A0C(s16 index) {
     GameCameraEntry *entry;
     f32 value;
@@ -1859,7 +1827,6 @@ void fn_1_8A0C(s16 index) {
 /* fzgx:end fn_1_8A0C */
 
 /* fzgx:begin camera_init */
-
 // Initialize camera state before passing the shared camera object onward.
 void camera_init(void) {
     fn_1_A6FE8();
@@ -1882,9 +1849,6 @@ GameCameraEntry *game_camera_get(void) {
 /* fzgx:end game_camera_get */
 
 /* fzgx:begin fn_1_8B10 */
-
-
-
 typedef struct CameraData {
     u8 pad_000[0x118];
     f32 x;
@@ -2477,7 +2441,6 @@ f32 fn_1_A888(Cam *cam) {
 /* fzgx:end fn_1_A888 */
 
 /* fzgx:begin fn_1_AA54 */
-
 struct fn_1_AA54_Arg0 {
     u8 pad_0[0x2];
     s16 unk_2;
@@ -2937,7 +2900,6 @@ void fn_1_AFC8(Camera *cam) {
 /* fzgx:end fn_1_AFC8 */
 
 /* fzgx:begin camera_get_target_orientation */
-
 typedef struct camera_get_target_orientation_CameraObject {
     u8 pad_49c[0x49c];
     Transform *unk_49C;
@@ -3054,6 +3016,91 @@ void fn_1_B4D4(struct fn_1_B4D4_Camera *cam) {
 #pragma fp_contract reset
 /* fzgx:end fn_1_B4D4 */
 
+/* fzgx:begin fn_1_B724 pool noprologue */
+#include "types.h"
+
+extern f64 lbl_1_rodata_400[15];
+extern f32 lbl_8006D0B4(f32);
+
+typedef struct { f32 x, y, z; } B724Vec;
+typedef struct {
+    u32 unk_0;
+    B724Vec start;
+    B724Vec end;
+    f32 duration;
+    s16 mode;
+} B724Transition;
+typedef struct {
+    s32 unk_0;
+    s32 unk_4;
+    s32 unk_8;
+    f32 unk_C;
+} B724Fade;
+
+/* retail lbl_1_bss_1010 cluster: each field is its own TU object */
+static s32 fzgx_obj_lbl_1_bss_1010;
+static u8 fzgx_obj_lbl_1_bss_1014;
+static u8 fzgx_obj_lbl_1_bss_1015;
+static B724Transition fzgx_obj_lbl_1_bss_1018;
+static f32 fzgx_obj_lbl_1_bss_103C;
+static f32 fzgx_obj_lbl_1_bss_1040;
+static f32 fzgx_obj_lbl_1_bss_1044;
+static u8 fzgx_obj_lbl_1_bss_1048;
+static u8 fzgx_obj_lbl_1_bss_1049;
+static B724Fade fzgx_obj_lbl_1_bss_104C;
+
+#pragma section code_type ".fzgxpool"
+void fzgx_layout_B724(void)
+{
+    volatile s32 sink;  /* fzgx-allow: S2 volatile keeps the verified access order */
+    sink = fzgx_obj_lbl_1_bss_1010;
+    sink = fzgx_obj_lbl_1_bss_1014;
+    sink = fzgx_obj_lbl_1_bss_1015;
+    sink = fzgx_obj_lbl_1_bss_1018.unk_0;
+    sink = fzgx_obj_lbl_1_bss_103C;
+    sink = fzgx_obj_lbl_1_bss_1040;
+    sink = fzgx_obj_lbl_1_bss_1044;
+    sink = fzgx_obj_lbl_1_bss_1048;
+    sink = fzgx_obj_lbl_1_bss_1049;
+    sink = fzgx_obj_lbl_1_bss_104C.unk_0;
+}
+#pragma section code_type ".text"
+
+static inline f32 B724SetTransition(B724Transition *transition, B724Vec *start, B724Vec *end, f32 duration, s16 mode)
+{
+    B724Vec delta;
+    transition->start = *start;
+    transition->end = *end;
+    transition->duration = duration;
+    transition->mode = mode;
+    delta.z = transition->start.z;
+    delta.y = transition->start.y;
+    delta.x = transition->start.x;
+    delta.x -= transition->end.x;
+    delta.y -= transition->end.y;
+    delta.z -= transition->end.z;
+    delta.x = delta.x * delta.x;
+    delta.x = delta.x + delta.y * delta.y;
+    delta.x = delta.x + delta.z * delta.z;
+    return lbl_8006D0B4(delta.x);
+}
+
+void fn_1_B724(B724Vec *start, B724Vec *end, f32 duration, s16 mode)
+{
+    fzgx_obj_lbl_1_bss_103C = B724SetTransition(&fzgx_obj_lbl_1_bss_1018, start, end, duration, mode);
+    fzgx_obj_lbl_1_bss_1040 = 1.0f;
+    fzgx_obj_lbl_1_bss_1044 = 0.1f;
+    fzgx_obj_lbl_1_bss_1048 = 1;
+    fzgx_obj_lbl_1_bss_1049 = 1;
+    fzgx_obj_lbl_1_bss_1014 = 0;
+    fzgx_obj_lbl_1_bss_1015 = 0;
+    fzgx_obj_lbl_1_bss_104C.unk_0 = 0;
+    fzgx_obj_lbl_1_bss_104C.unk_4 = 0;
+    fzgx_obj_lbl_1_bss_104C.unk_8 = 200;
+    fzgx_obj_lbl_1_bss_104C.unk_C = 0.01f;
+}
+/* fzgx:end fn_1_B724 */
+
 /* fzgx:begin fn_1_B81C noprologue */
 #include "types.h"
 #include "rel/main_rel/globals.h"
@@ -3070,7 +3117,6 @@ void fn_1_B81C(struct fn_1_B81C_Copy12 *first, struct fn_1_B81C_Copy12 *second, 
 /* fzgx:end fn_1_B81C */
 
 /* fzgx:begin camera_save_parameters */
-
 // Saves the two current camera parameters for later processing.
 void camera_save_parameters(f32 first_parameter, f32 second_parameter) {
     lbl_1_bss_1040 = first_parameter;
@@ -3239,8 +3285,6 @@ void fn_1_B870(void) {
 /* fzgx:end fn_1_B870 */
 
 /* fzgx:begin fn_1_BFA0 pool */
-
-
 /* file-scope objects of the retail TU, in retail order: MWCC addresses them off one section base */
 u32 fzgx_obj_lbl_1_bss_1010;
 u8 lbl_1_bss_1014;
@@ -3288,7 +3332,6 @@ void fn_1_BFA0(void) {
 /* fzgx:end fn_1_BFA0 */
 
 /* fzgx:begin fn_1_C038 */
-
 void fn_1_C038(s32 value, f32 start, f32 end) {
     f32 difference;
     f32 ratio;
@@ -3409,7 +3452,6 @@ void fn_1_C10C(u8 idx) {
 /* fzgx:end fn_1_C10C */
 
 /* fzgx:begin fn_1_C178 */
-
 typedef struct {
     u8 pad_0[0x4]; f32 unk_4; f32 unk_8; f32 unk_C; f32 unk_10; f32 unk_14; f32 unk_18; f32 unk_1C;
     s16 unk_20; u8 pad_22[0x6]; f32 unk_28; f32 unk_2C; f32 unk_30; f32 unk_34; f32 unk_38; f32 unk_3C; f32 unk_40;
@@ -3429,7 +3471,6 @@ void fn_1_C178(void *self) {
 /* fzgx:end fn_1_C178 */
 
 /* fzgx:begin camera_report_position */
-
 // Reports the camera's current position values for debugging.
 void camera_report_position(void) {
     OSReport((const char *)lbl_1_data_4128, lbl_1_bss_10D8.unk_10,
@@ -3438,7 +3479,6 @@ void camera_report_position(void) {
 /* fzgx:end camera_report_position */
 
 /* fzgx:begin fn_1_C268 */
-
 #pragma opt_common_subs off
 #pragma opt_strength_reduction off
 void fn_1_C268(s32 arg) {
@@ -3462,7 +3502,6 @@ void fn_1_C268(s32 arg) {
 /* fzgx:end fn_1_C268 */
 
 /* fzgx:begin fn_1_C304 */
-
 // Reports the camera parameters and caller-supplied value for debugging.
 void fn_1_C304(s32 arg) {
     OSReport((const char *)lbl_1_data_4198,
@@ -4268,7 +4307,6 @@ void fn_1_CC5C(void) {
 /* fzgx:end fn_1_CC5C */
 
 /* fzgx:begin camera_get_state_object */
-
 // Returns the camera state object's base address.
 CameraState * camera_get_state_object(void) {
     return &camera_state;
@@ -4318,7 +4356,6 @@ u32* camera_get_state_field_0x18(void) {
 /* fzgx:end camera_get_state_field_0x18 */
 
 /* fzgx:begin camera_get_state_storage */
-
 // Returns the camera state storage used by the surrounding camera code.
 u8* camera_get_state_storage(void) {
     return lbl_1_bss_103C;
@@ -4326,7 +4363,6 @@ u8* camera_get_state_storage(void) {
 /* fzgx:end camera_get_state_storage */
 
 /* fzgx:begin camera_get_extended_state_storage */
-
 // Returns the storage reserved for the camera's extended state.
 u8* camera_get_extended_state_storage(void) {
     return lbl_1_bss_108C;
@@ -4334,7 +4370,6 @@ u8* camera_get_extended_state_storage(void) {
 /* fzgx:end camera_get_extended_state_storage */
 
 /* fzgx:begin camera_get_state_flag */
-
 // Returns the current camera state flag.
 u8 camera_get_state_flag(void) {
     return lbl_1_bss_1014;
