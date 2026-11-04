@@ -22,8 +22,17 @@ attempt's saved best, so a sound body within that margin seeds the next attempt.
 The primary key is the number of rows still differing (`oracle.progress_rows`), not the
 percentage: objdiff's similarity can rank a body with more differing rows above one with fewer
 (fn_1_5CA00: a 25-row 99.2% seed over a 12-row 97.1% body; fn_8_D034: 63 rows at 99.0% over
-22 rows at 96.8%), and the matcher's remaining work is the rows. Dropped semantic rows count
-DROPPED_ROWS extra rows each; percent minus the penalties breaks ties.
+22 rows at 96.8%), and the matcher's remaining work is the rows. Dropped semantic rows and
+known store-value conflicts (`CheckResult.value_flow`: a store whose value provably differs
+from retail's) count DROPPED_ROWS extra rows each (`effective_rows`); percent minus the
+penalties breaks ties. `api._better_body` (the attempt's saved best) and `stuck.best_bodies`
+(sweep/fixup seeds) apply the same `effective_rows`, so every path serves the same body (T14).
+
+Candidates are offered best-recorded-percent first and only the top MAX_MEASURED distinct
+bodies within WINDOW are compiled; the newest RECENT bodies are measured as well, whatever
+their recorded percent: a released attempt's rewrite with pool rows bound and fewer differing
+rows (fn_10_12024's 94.0% final, 23rd by percent) was never measured, so the claim seeded the
+old 97.1% body again.
 
 Results are cached per (symbol, body hash, compiler, flags) in
 .fzgx/seedrank.json, so a ranking compiles each candidate body once.
@@ -46,7 +55,9 @@ WINDOW = 15.0          # candidates further below the top than this are never pr
 IMPLICIT_PENALTY = 2.0  # a body calling undeclared functions (api.IMPLICIT_MARGIN: wrong C that still compiles)
 DROPPED_ROWS = 2       # extra rows per dropped semantic row (it already counts once as a differing row)
 MAX_MEASURED = 12      # distinct bodies measured per ranking (each is one cached compile)
+RECENT = 4             # newest saved bodies measured regardless of their recorded percent
 CACHE = STATE_DIR / "seedrank.json"
+_MISSING = object()
 _LOCK = threading.Lock()
 
 ARITH_IMM = {"addi", "addic", "addic.", "addis", "mulli", "subfic", "ori", "oris", "xori", "xoris",
@@ -155,7 +166,7 @@ def measure(p: Project, symbol: str, path: Path, mw: Optional[str] = None, flags
         diag = (oracle.body_diagnostics(p, sym.module, Path(path), res.mw_version, res.extra_cflags) if sym
                 else {"implicit": [], "uninitialized": []})
         out = {"percent": round(oracle.progress_score(res), 4), "rows": oracle.progress_rows(res),
-               "dropped": dropped_for(res) or [],
+               "dropped": dropped_for(res) or [], "conflicts": len(getattr(res, "value_flow", None) or ()),
                "implicit": diag["implicit"], "uninitialized": diag["uninitialized"]}
     with _LOCK:
         cache = _load()
@@ -164,29 +175,64 @@ def measure(p: Project, symbol: str, path: Path, mw: Optional[str] = None, flags
     return out
 
 
+def effective_rows(rows: Optional[int], dropped: int = 0, conflicts: int = 0) -> Optional[int]:
+    """Differing rows weighted for selection: each dropped semantic row and each known
+    store-value conflict (both capped at MAX_PENALTY // PENALTY) counts DROPPED_ROWS extra.
+    None without a row alignment. Ranking only, never acceptance."""
+    if rows is None:
+        return None
+    cap = int(MAX_PENALTY // PENALTY)
+    return rows + DROPPED_ROWS * (min(int(dropped or 0), cap) + min(int(conflicts or 0), cap))
+
+
 def rank_key(m: dict) -> tuple:
     """Sort key of a measured body (lower ranks first): a sound body before one calling undeclared
-    functions or reading unassigned locals, then fewest differing rows (dropped semantic rows
-    weigh DROPPED_ROWS extra each; a body without row alignment ranks after every aligned one),
-    then the higher percent - penalty(dropped)."""
+    functions or reading unassigned locals, then fewest `effective_rows` (a body without row
+    alignment ranks after every aligned one), then the higher percent - penalty(dropped)."""
     unsound = bool(m.get("implicit") or m.get("uninitialized"))
-    rows = m.get("rows")
-    dropped = min(len(m.get("dropped") or ()), int(MAX_PENALTY // PENALTY))
-    return (unsound, float("inf") if rows is None else rows + DROPPED_ROWS * dropped,
+    rows = effective_rows(m.get("rows"), len(m.get("dropped") or ()), m.get("conflicts") or 0)
+    return (unsound, float("inf") if rows is None else rows,
             -(m["percent"] - penalty(m.get("dropped"))))
 
 
-def pick(p: Project, symbol: str, candidates: Sequence[Tuple[float, Path, Optional[str], Optional[str]]]) -> Optional[int]:
+def cached(symbol: str, path: Path, mw: Optional[str] = None, flags: Optional[str] = None) -> Optional[dict]:
+    """The cached measurement of a saved body (no compile): mw/flags default to the body's
+    attempt sidecar (`PATH.json`). None when the body was never measured or does not exist;
+    `{"failed": True}` when it was measured and did not compile."""
+    try:
+        body = Path(path).read_text()
+    except OSError:
+        return None
+    if mw is None and flags is None:
+        try:
+            meta = json.loads(Path(path).with_suffix(".json").read_text())
+            mw, flags = meta.get("mw") or None, meta.get("flags") or None
+        except (OSError, ValueError):
+            pass
+    with _LOCK:
+        hit = _load().get(_key(symbol, body, mw, flags), _MISSING)
+    if hit is _MISSING:
+        return None
+    return hit if hit is not None else {"failed": True}  # measured: it did not compile
+
+
+def pick(p: Project, symbol: str, candidates: Sequence[Tuple[float, Path, Optional[str], Optional[str]]],
+         always: Iterable[int] = ()) -> Optional[int]:
     """Index of the candidate to seed from. `candidates` is (recorded percent, body path, mw,
-    flags), best recorded first. Only bodies within WINDOW of the top are measured (at most
-    MAX_MEASURED distinct ones); the winner has the lowest `rank_key`, ties keep the recorded order."""
+    flags), best recorded first. Only bodies within WINDOW of the top are measured: the first
+    MAX_MEASURED distinct ones plus every index in `always` (the newest saved bodies, which
+    `ledger.ranked_local_attempt` names); the winner has the lowest `rank_key`, ties keep the
+    recorded order."""
     if not candidates:
         return None
+    always = set(always)
     top = candidates[0][0] or 0.0
     best, best_key, seen = 0, None, set()
     for i, (percent, path, mw, flags) in enumerate(candidates):
         if (percent or 0.0) < top - WINDOW:
             break
+        if len(seen) >= MAX_MEASURED and i not in always:
+            continue
         try:
             digest = (hashlib.sha256(Path(path).read_bytes()).hexdigest(), mw, flags)
         except OSError:
@@ -200,6 +246,4 @@ def pick(p: Project, symbol: str, candidates: Sequence[Tuple[float, Path, Option
         key = rank_key(m)
         if best_key is None or key < best_key:
             best, best_key = i, key
-        if len(seen) >= MAX_MEASURED:
-            break
     return best

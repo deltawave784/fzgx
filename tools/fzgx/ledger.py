@@ -206,8 +206,12 @@ class Ledger:
             except (OSError, ValueError):
                 pass
             candidates.append((row["best_in_attempt"] or row["final_percent"] or 0.0, path, mw, flags))
+        # the newest saved bodies (the last attempts' best and final copies) are measured whatever
+        # their recorded percent: a rewrite with bound pool rows and fewer differing rows can sit
+        # far down the percent order (fn_10_12024's 94.0% final was 23rd, beyond MAX_MEASURED)
+        newest = sorted(range(len(found)), key=lambda i: found[i][0]["id"], reverse=True)[:seedrank.RECENT]
         try:
-            return found[seedrank.pick(project, symbol, candidates) or 0]
+            return found[seedrank.pick(project, symbol, candidates, always=newest) or 0]
         except Exception:
             return found[0]  # ranking is advisory: never lose the seed over it
 

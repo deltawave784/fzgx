@@ -167,15 +167,28 @@ def best_bodies(p: Project, min_percent: float, module: Optional[str] = None,
     if max_size is not None:
         q += " and f.size<=?"
         args.append(max_size)
+    from . import seedrank
     out: Dict[str, tuple] = {}
     rows_of: Dict[str, Optional[int]] = {}
     for s, bp, size, mod, path, pct, rows in db.execute(q, args):
         if not Path(path).exists():
             path = str(STATE_DIR / "attempts" / Path(path).name)
+        if not Path(path).exists():
+            continue
         # between two saved attempts the one with fewer differing rows after pool binding is
         # the seed (`oracle.progress_better`): a sweep/fixup landing records the body's own
-        # rows, and `api._better_body` keeps an agent attempt's best body by rows too
-        if Path(path).exists() and (s not in out or oracle.progress_better(pct or 0.0, rows, out[s][1], rows_of[s])):
+        # rows, and `api._better_body` keeps an agent attempt's best body by rows too. Attempt
+        # rows older than `best_rows` (and every released final copy before T14) carry none:
+        # the claim seed's measurement (`seedrank` cache, no compile) supplies them, with the
+        # same dropped-row / store-conflict weighting, so sweep, fixup and claim agree.
+        m = seedrank.cached(s, Path(path))
+        if m is not None:
+            if m.get("failed") or m.get("rows") is None:
+                rows, pct = None, 0.0  # measured: it no longer compiles or has no row alignment
+            else:
+                rows = seedrank.effective_rows(m["rows"], len(m.get("dropped") or ()), m.get("conflicts") or 0)
+                pct = m.get("percent") if pct is None else pct
+        if s not in out or oracle.progress_better(pct or 0.0, rows, out[s][1], rows_of[s]):
             out[s] = (path, pct or 0.0, size, mod)
             rows_of[s] = rows
     return out

@@ -218,6 +218,22 @@ def _local_seed(l: Ledger, key: str, p: Optional[Project] = None) -> dict:
     return seed
 
 
+def _seed_measurement(key: str, body: Path, seed: dict) -> dict:
+    """The seed body's ranking numbers from the seedrank cache (no compile), in the shape
+    `_better_body` reads from `.best.json`: without them the first check of any compiled edit
+    replaced the seed as the attempt's saved best (percent None scores 0), so a worse rewrite
+    was what release kept. Empty when the seed was never measured or was respelled."""
+    if seed.get('respelled'):
+        return {}
+    from . import seedrank
+    m = seedrank.cached(key, body, seed.get('mw'), seed.get('flags'))
+    if not m or m.get('rows') is None:
+        return {}
+    return dict(percent=m.get('percent'), rows=m.get('rows'), dropped=len(m.get('dropped') or ()),
+                conflicts=m.get('conflicts') or 0, implicit_calls=list(m.get('implicit') or []),
+                uninitialized_reads=list(m.get('uninitialized') or []), measured_from='seedrank cache')
+
+
 def _compiler_options(p: Project, key: str) -> dict:
     options = _seed_record(key)
     path = p.work_path(key).with_suffix('.compiler.json')
@@ -318,7 +334,8 @@ def claim(p: Project, symbol: str, agent: str, ttl: int = DEFAULT_TTL,
         best.parent.mkdir(parents=True, exist_ok=True)
         best.write_text(seed_body)
         best.with_suffix('.json').write_text(json.dumps(dict(
-            sha256=seed['sha256'], mw=seed.get('mw'), flags=seed.get('flags'))) + '\n')
+            sha256=seed['sha256'], mw=seed.get('mw'), flags=seed.get('flags'),
+            **_seed_measurement(key, best, seed))) + '\n')
         attempt = l.current_attempt(key)
         if seed.get('kind') == 'best_attempt' and attempt and (seed.get('mw') or seed.get('flags')):
             # a manifest seed's compiler reaches checks through _seed_record; a local one through
@@ -835,15 +852,20 @@ def _effective_score(percent: Optional[float], implicit: bool) -> float:
     return (percent or 0.0) - (IMPLICIT_MARGIN if implicit else 0.0)
 
 
-def _better_body(score: float, rows: Optional[int], implicit: bool, saved: dict) -> bool:
+def _better_body(score: float, rows: Optional[int], implicit: bool, saved: dict,
+                 dropped: int = 0, conflicts: int = 0) -> bool:
     """Does a checked body replace the attempt's saved best? Between two bodies of the same
     soundness that both have a row alignment, fewer differing instruction rows decide (a
     length difference counts as differing rows): objdiff's similarity ranked fn_1_10E3B4's
     328-row body (98.13%) above its 148-row body (98.03%) and the release saved the worse one.
+    Rows are `seedrank.effective_rows`: a dropped retail store/addend or a known store-value
+    conflict weighs extra, the same rule the claim seed and `stuck.best_bodies` rank by.
     Otherwise, or when the saved body predates `rows`, the effective score (undeclared callees
     and never-assigned reads cost IMPLICIT_MARGIN) decides as before."""
+    from . import seedrank
     saved_implicit = bool(saved.get('implicit_calls') or saved.get('uninitialized_reads'))
-    saved_rows = saved.get('rows')
+    saved_rows = seedrank.effective_rows(saved.get('rows'), saved.get('dropped') or 0, saved.get('conflicts') or 0)
+    rows = seedrank.effective_rows(rows, dropped, conflicts)
     if rows is not None and saved_rows is not None and implicit == saved_implicit and rows != saved_rows:
         return rows < saved_rows
     return _effective_score(score, implicit) > _effective_score(saved.get('percent'), saved_implicit)
@@ -893,10 +915,16 @@ def _record_check(p: Project, key: str, src: Optional[Path], res: oracle.CheckRe
         saved = _best_meta(key)
         implicit = _unsound(res)
         rows = _differing_rows(res)
+        from . import seedrank
+        dropped = len(seedrank.dropped_for(res) or ()) if res.ok else 0
+        conflicts = len(getattr(res, 'value_flow', None) or ()) if res.ok else 0
+        digest = hashlib.sha256(Path(src).read_bytes()).hexdigest()
         if saved is None:
             replace = bool(stats.get("improved") or stats.get("progress"))
+        elif saved.get('sha256') == digest and res.ok:
+            replace = True  # the saved body itself (the seed's first check): refresh its numbers
         else:
-            replace = _better_body(score, rows, implicit, saved)
+            replace = _better_body(score, rows, implicit, saved, dropped, conflicts)
         if replace:
             best = STATE_DIR / "attempts" / f"{fs_key(key)}.best.c"
             best.parent.mkdir(parents=True, exist_ok=True)
@@ -904,6 +932,7 @@ def _record_check(p: Project, key: str, src: Optional[Path], res: oracle.CheckRe
             best.with_suffix('.json').write_text(json.dumps(dict(
                 sha256=hashlib.sha256(best.read_bytes()).hexdigest(),
                 mw=res.mw_version, flags=res.extra_cflags, percent=score, rows=rows,
+                dropped=dropped, conflicts=conflicts,
                 implicit_calls=list(res.implicit_calls or []),
                 uninitialized_reads=list(getattr(res, 'uninitialized_reads', None) or []))) + '\n')
         stats['saved_best'] = replace
@@ -1552,12 +1581,21 @@ def release(p: Project, symbol: str, reason: str, harness: Optional[str] = None,
         # work copy; release notes describing an unsaved mid-edit work copy misled readers into
         # believing the seed was broken or worse (round 42)
         saved_from = 'best checked body' if src == best else 'work copy'
+        saved_rows = _differing_rows(base) if base else None
         dest.with_suffix('.json').write_text(json.dumps(dict(
             sha256=saved_sha, mw=base.mw_version if base else seed.get('mw'),
             flags=base.extra_cflags if base else seed.get('flags'),
-            percent=saved_percent, saved_from=saved_from,
+            percent=saved_percent, rows=saved_rows, saved_from=saved_from,
             checks=_archived_check_numbers(key, saved_sha))) + '\n')
         body_path = str(dest)
+        if base is not None and base.ok:
+            # the attempt row ranks this body for the next claim, `stuck.best_bodies` and seed
+            # manifests: it must carry the saved body's own score and rows. The attempt's maximum
+            # was a different, unsaved body (fn_1_21E4: 96.83% recorded, 96.47% / 229 rows saved);
+            # `functions.best_percent` keeps the maximum (the reachable score).
+            with l.db:
+                l.db.execute("UPDATE attempts SET best_in_attempt=?, best_rows=? WHERE symbol=? AND ended IS NULL",
+                             (saved_percent, saved_rows, key))
     attempt_row = dict(l.current_attempt(key) or {})
     final = _save_final_copy(p, symbol, key, row, attempt_row, body_path, shadow, harness, model, save_only)
     best.unlink(missing_ok=True)
@@ -1614,6 +1652,7 @@ def _save_final_copy(p: Project, symbol: str, key: str, row, attempt_row: dict, 
         info['compiled'] = bool(res.ok)
         if res.ok:
             info['percent'] = round(check_score(res), 5)
+            info['rows'] = _differing_rows(res)
             info['mw'], info['flags'] = res.mw_version, res.extra_cflags
             info['implicit_calls'] = _implicit_calls(p, symbol, work, res)
             info['uninitialized_reads'] = list(getattr(res, 'uninitialized_reads', None) or [])
@@ -1631,9 +1670,9 @@ def _save_final_copy(p: Project, symbol: str, key: str, row, attempt_row: dict, 
     with Ledger().db as db:
         db.execute(
             "INSERT INTO attempts(symbol, agent, harness, model, started, ended, checks, final_percent, best_in_attempt, "
-            "outcome, notes, best_body_path) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)",
+            "outcome, notes, best_body_path, best_rows) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)",
             (key, row["claimed_by"], harness, model, now, now, 0, score, score,
-             ('shadow-' if shadow else '') + 'released-final', note, str(dest)))
+             ('shadow-' if shadow else '') + 'released-final', note, str(dest), info.get('rows')))
     return dict(saved=str(dest), percent=info['percent'], compiled=info['compiled'], mw=info['mw'],
                 implicit_calls=info.get('implicit_calls') or [])
 
