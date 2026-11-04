@@ -408,6 +408,26 @@ Each line is a family that turned a 60–99% body into a match; the count is how
   `fn_1_B5F20`'s data r29/pool r30 into retail's pool r29/data r30.
   `fixup_layout.tu_data_objects` emits this layout (whole block, pointer words as
   `__fzgx_offset_` initializers, `.fzgxpool` primer in retail order).
+- `.bss` section bases (probe compiles, GC/1.3.2, tooling round T21, 2026-11-04): the same
+  three-distinct-objects rule holds for `.bss`. Uninitialized file-scope definitions, `static`
+  or global, give `...bss.0` exactly like initialized `.data` (an `extern` alone never does);
+  `= {0}` is never needed and moves the objects into `.data`. What blocked the agents was merged
+  objects: fn_3_E6F8's `CustomizeHeader` covered dtk's `lbl_3_bss_7EDC0` and `lbl_3_bss_7EDCC`
+  (retail `0x0(r28)` and `0xc(r28)`), leaving two distinct near objects, so every object was
+  addressed by name. Splitting it gave retail's `r28` base and `addis r31, r28, 1` (83.91 ->
+  97.38, fixup 97.47). fn_80071D30's one 0xD38-byte `State` became three uninitialized objects
+  at retail's base offsets 0x0, 0x38 (`addi r7, r31, 0x38`) and 0xB8 (dtk `lbl_8019E308`):
+  81.36 -> 92.62 in `.bss` (fixup 95.33; only the two `@sda21` colour loads still schedule
+  early). Each base-relative offset retail touches is the start of its own object. Name them
+  `fzgx_obj_<lbl>` or `<owner>__fzgx_offset_<HEX>` so `oracle._bss_base_rows` binds them.
+  GC/1.3.2 also addresses some objects by name even when the section has a base (1.2.5n puts
+  every one of them base-relative). An object of 0x8000 or more bytes whose extent crosses a
+  64 KB `@ha` window boundary is addressed by name (retail fn_3_E6F8's `lbl_3_bss_7EE40`,
+  0x81C0 bytes at +0x80; `lbl_3_bss_87040`, the same size at +0x8280, is base-relative). In
+  small probes the far window (`addis rF, rB, 1`) needed four distinct far objects in the
+  function. Retail fn_3_E6F8 has two and the split body reproduces it, so that count is not a
+  fixed rule. First-use order fixes `.bss` placement: an object that only a later function
+  references is laid out after the target's objects.
 - Section-base order is TU-wide (recovered backend `TOC.c`/`CodeGen.c`, probe-confirmed on
   GC/1.3.2, 2026-11-03): a section becomes a base when a function's pre-codegen pass rewrites
   its *third* reference (`add_toc_reference` -> `make_objectref_offset`), which prepends the

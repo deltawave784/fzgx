@@ -54,6 +54,10 @@ pragma reproduces it over an extern struct (all fold to `0x1d(r29)`). Define the
 separate file-scope objects in retail order (`fzgx_obj_<lbl>` names, aggregates where retail shows
 the `addi`, a `.fzgxpool` primer touching them in order) and index the aggregate directly
 (`obj[1]`, no masking helper); a `.data` cluster in the same function needs the same treatment.
+A `.bss` cluster gets a base only when the function names three or more distinct objects of it
+(uninitialized definitions are fine; never `= {0}`, which moves them to `.data`): split a struct
+that spans several dtk symbols or retail base offsets (`0x0`, `0xc`, `addi rX, rB, 0x38`) into one
+object per offset. Under GC/1.3.2 an object of 0x8000+ bytes crossing a 64 KB `@ha` window is by name.
 `SUBMIT QUEUED` means the match is saved for the next verify: stop there,
 do not edit, retry or release.
 When a tool result says STOP, call
