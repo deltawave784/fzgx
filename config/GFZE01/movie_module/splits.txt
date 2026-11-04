@@ -2303,3 +2303,6 @@ rel/movie_module/fn_12_CBC8.c:
 
 rel/movie_module/fn_12_284F8.c:
 	.text       start:0x000284F8 end:0x00028CC4 align:4
+
+rel/movie_module/fn_12_11204.c:
+	.text       start:0x00011204 end:0x00011254 align:4
