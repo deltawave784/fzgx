@@ -9242,3 +9242,6 @@ rel/main_rel/stcoli/fn_1_1C0D0.c:
 
 rel/main_rel/stcoli/fn_1_19AE0.c:
 	.text       start:0x00019AE0 end:0x0001ACC0 align:4
+
+rel/main_rel/sel_static_disp/fn_1_14CAC8.c:
+	.text       start:0x0014CAC8 end:0x0014CEB8 align:4
