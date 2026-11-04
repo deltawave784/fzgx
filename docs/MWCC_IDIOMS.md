@@ -228,6 +228,24 @@ file from what actually unblocked functions; keep each item one or two lines.
   237 -> 87 rows). Not this class: ED540's `addi r20, r31, 0x19c8 ... addi r20, r20, 0x620`
   (a struct model member, folded by copy propagation under every spelling tried) and bodies
   that pass the model pointer to inline helpers (fn_1_BA144).
+  Confirmed again 2026-11-04 (tooling round T20, GC/1.3.2 probes) on fn_1_C42F4 (`addi r4, r29,
+  0x1c; lbz r5, 0x1(r4)` for a sprintf argument, landed as a pool match) and fn_1_DF74 (`addi r3,
+  r30, 0x18; stfs 0/4/8(r3)`, 10 -> 6 rows; the rest is an unrelated inline register). Spellings
+  that fold to `lbz 0x1d(r29)` / `stfs 0x18(r30)` over an extern struct (do not retry): pointer
+  locals, `register` pointers, one-member struct carriers, inline helpers taking the pointer,
+  `(u32)p & ~1` masking helpers (these add `clrrwi` and a frame slot even once the layout is
+  right), `opt_propagation off`, `opt_address_propagation`. What works: one file-scope object per
+  referenced field, in retail order, an aggregate (`u8 x[2]`, `f32 v[3]`, union) where retail
+  materializes the `addi`, scalars where it addresses base-relative; filler objects keep their
+  own natural alignment (a `u8[7]` filler is pushed to 4-alignment and shifts every later
+  offset). A second cluster the function uses (fn_1_C42F4's `.data` format strings, held in a
+  pointer local) must be defined too, or the named extern takes the base's register (28 rows
+  of r28/r29 swap). `fixup_layout.cast_uncast_models` (T20) makes `T *p; ... p = &lbl;` and
+  `T *p = &lbl_data;` models visible to the layout families, and the single-model split bss
+  layout now also feeds the `.data` struct views (fn_1_10688C 18 -> 14 rows). Unsupported yet:
+  anonymous `union { } f;` fields (field_decls), byte pad arrays referenced at `pad + K`
+  (DF74's ids at +0x60C inside `pad_60A`). Not this class: pointer-parameter interiors
+  (fn_12_28CC4's struct copies) and `&local.field` frame addresses (fn_1_10069C).
 - **Lowering-temporary swaps: embed the assignment in its first use** (2026-10-26, GC/1.3.2
   capture). When the capture verdict says two temps are swapped ("numbered later than retail"),
   renumber the window in the replay (`Graph.relabel` over permutations of the target block's

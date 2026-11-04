@@ -3428,11 +3428,57 @@ def row_array_views(text):
     return out if out != text else None
 
 
+def cast_uncast_models(p, symbol, text):
+    """Spell every uncast struct model of a same-module `.bss`/`.data` object with its cast.
+
+    `DbgState *st; ... st = &lbl_1_bss_7AC48;` and `DS *d = &lbl_1_data_3D138;` are the
+    models the layout families read, but their detectors expect `p = (T *)&lbl;` (or, for bss,
+    the declaration `T *p = &lbl;`), so these bodies never got a TU layout. Retail's interior
+    addresses (`addi r4, r29, 0x1c; lbz r5, 0x1(r4)`, fn_1_C42F4) come only from aggregate
+    objects the TU defines off its section base; with both models cast, the split bss layout
+    plus the `.data` byte views reproduce them. The type is the pointer's declared type, kept
+    only when the object's extern declares that same aggregate."""
+    sym = p.resolve(symbol)
+    if sym is None:
+        return None
+    syms = p.symbols(sym.module)
+    externs = text + include_text()
+    out = text
+    pat = re.compile(r"(?:(?:struct\s+)?(\w+)\s*\*\s*)?(?<![\w.>*])(\w+)\s*=\s*&\s*"
+                     r"(lbl_\d+_(?:bss|data|rodata)_[0-9A-F]+|lbl_[0-9A-F]{8})\s*;")
+    for m in list(pat.finditer(text)):
+        declared, pvar, base = m.groups()
+        known = syms.get(base)
+        if not known or known.kind != 'object' or known.section not in ('.bss',) + tuple(DATA_SECTIONS):
+            continue
+        tname = declared
+        if tname is None:
+            dm = re.findall(r"(?m)^[ \t]*(?:struct\s+)?(\w+)\s*\*\s*%s\s*;" % re.escape(pvar), out)
+            if len(dm) != 1:
+                continue
+            tname = dm[0]
+        if tname in SCALAR or tname == 'void':
+            continue
+        if not re.search(r"\bextern\s+(?:const\s+)?(?:struct\s+)?%s\s+%s\s*;" % (re.escape(tname), re.escape(base)), externs):
+            continue
+        if len(re.findall(r"(?<![\w.>])%s\s*=(?!=)" % re.escape(pvar), out)) != 1 or m[0] not in out:
+            continue
+        lead = m[0][:m.start(2) - m.start()] if declared else ''
+        out = out.replace(m[0], f"{lead}{pvar} = ({tname} *)&{base};", 1)
+    return out if out != text else None
+
+
 def tu_section_layout(p, symbol, body, check):
     """Proposals: retail BSS objects defined in the unit (per dtk symbol / per referenced field),
     each also with the TU's string run reproduced, and the string run alone."""
     if not re.search(r"\blbl_(?:\d+_(?:bss|data|rodata)_[0-9A-F]+|[0-9A-F]{8})\b|\bfzgx_(?:pool|obj)_\w+", body):
         return []
+    # uncast models (`st = &lbl;` under a separate `T *st;`) in the cast spelling every
+    # detector below reads (fn_1_C42F4's bss and .data clusters were invisible to them)
+    try:
+        body = cast_uncast_models(p, symbol, body) or body
+    except (ValueError, KeyError, IndexError, AttributeError, TypeError, re.error):
+        pass
     # the body's own macros expanded first: a view spelled `#define data dataBase.value` or
     # `AT(u32, data, 0x11D4)` is invisible to every family below until the preprocessor's
     # text is what they read (fn_10_75D4, fn_3_680C, fn_17_2414's pasted member names)
@@ -3463,8 +3509,11 @@ def tu_section_layout(p, symbol, body, check):
             if text and text not in {t for _, t in out}:
                 label = mode if only is None else f'{mode}, {next(iter(only))} only'
                 out.append((f'define retail TU bss objects ({label})', text))
-                if only is None and mode != 'merge':
-                    bases.append((mode, text))
+                # one model's split layout is a base too: the joint layout also defines another
+                # TU's cluster (fn_1_C42F4's lbl_1_bss_9F8, addressed by name in retail), so only
+                # the single-model split plus the `.data` views below gives both section bases
+                if mode != 'merge' and (only is None or mode == 'split'):
+                    bases.append((label, text))
             # the same layout defined ahead of the unit's initialized data (section base order)
             try:
                 text, notes = tu_objects(p, symbol, body, mode, cache, retail_bases, only, early=True)

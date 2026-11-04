@@ -45,7 +45,16 @@ section first reached three references; in your unit the primers decide it. Reta
 reads off the `lis` temporaries (lower temp = earlier): put a `.fzgxpool` function that touches
 the earlier section three times (three distinct literals for the pool) above the others.
 Do not reorder declarations or spend attempts on this: a swapped pair whose temps already
-agree with retail is register pressure, and a named extern held in a pointer is not a base. `SUBMIT QUEUED` means the match is saved for the next verify: stop there,
+agree with retail is register pressure, and a named extern held in a pointer is not a base.
+Interior address kept in a register (`addi rX, rBase, 0x1c; lbz r5, 0x1(rX)`, `addi r3, r30, 0x18;
+stfs 0/4/8(r3)`) when rBase is a section base (`lis/addi` of a `lbl_*_bss|data` at entry): retail
+defines each field as its own TU object, and an aggregate (array/struct/union) object's address is
+materialized before every access. No pointer local, `register`, carrier struct, inline helper or
+pragma reproduces it over an extern struct (all fold to `0x1d(r29)`). Define the cluster as
+separate file-scope objects in retail order (`fzgx_obj_<lbl>` names, aggregates where retail shows
+the `addi`, a `.fzgxpool` primer touching them in order) and index the aggregate directly
+(`obj[1]`, no masking helper); a `.data` cluster in the same function needs the same treatment.
+`SUBMIT QUEUED` means the match is saved for the next verify: stop there,
 do not edit, retry or release.
 When a tool result says STOP, call
 `release(symbol, agent, reason)` once with a precise diagnosis of what still
