@@ -861,14 +861,17 @@ def _better_body(score: float, rows: Optional[int], implicit: bool, saved: dict,
     Rows are `seedrank.effective_rows`: a dropped retail store/addend or a known store-value
     conflict weighs extra, the same rule the claim seed and `stuck.best_bodies` rank by.
     Otherwise, or when the saved body predates `rows`, the effective score (undeclared callees
-    and never-assigned reads cost IMPLICIT_MARGIN) decides as before."""
+    and never-assigned reads cost IMPLICIT_MARGIN) decides as before.
+    Rows against score is `oracle.progress_better` (T19): a few rows no longer outweigh any
+    score gap (fn_14_2590's 81-row 91.74% seed was saved over the agent's 88-row 95.94%)."""
     from . import seedrank
     saved_implicit = bool(saved.get('implicit_calls') or saved.get('uninitialized_reads'))
     saved_rows = seedrank.effective_rows(saved.get('rows'), saved.get('dropped') or 0, saved.get('conflicts') or 0)
     rows = seedrank.effective_rows(rows, dropped, conflicts)
-    if rows is not None and saved_rows is not None and implicit == saved_implicit and rows != saved_rows:
-        return rows < saved_rows
-    return _effective_score(score, implicit) > _effective_score(saved.get('percent'), saved_implicit)
+    if implicit != saved_implicit:
+        rows = saved_rows = None
+    return oracle.progress_better(_effective_score(score, implicit), rows,
+                                  _effective_score(saved.get('percent'), saved_implicit), saved_rows)
 
 
 def _best_meta(key: str) -> Optional[dict]:

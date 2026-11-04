@@ -119,10 +119,24 @@ def progress_better(score: float, rows: Optional[int], prior_score: Optional[flo
     (T8) for the attempt's saved best: objdiff's percent counts a pool-bound row (a `...data.N`
     base the oracle binds to the retail symbol) as a mismatch, so a layout candidate that closed
     fn_10_1615C's prologue (13 -> 9 rows, 99.400%) ranked under the 13-row body (99.423%) and
-    `sweep --land` / `fixup`'s attempt saving dropped it."""
-    if rows is not None and prior_rows is not None and rows != prior_rows:
-        return rows < prior_rows
-    return score > (prior_score or 0.0) + margin
+    `sweep --land` / `fixup`'s attempt saving dropped it.
+
+    T19: rows alone overruled any score gap, so a few rows bought several points: release saved
+    fn_14_2590's 81-row 91.74% seed over the agent's 88-row 95.94% body, fn_10_12E34's 28-row
+    86.14% over the 38-row 91.97%. When rows and score disagree, the body with fewer rows wins
+    only if the share of rows it removes, times ROW_TRADE points, covers the score it gives up
+    (half the rows is worth 3.5 points): fn_1_5CA00 (25 -> 12 rows for 2.1 points), fn_8_D034
+    (63 -> 22 for 2.2), fn_1_10E3B4 and fn_10_1615C still go to the fewer rows."""
+    prior_score = prior_score or 0.0
+    if rows is None or prior_rows is None or rows == prior_rows:
+        return score > prior_score + margin
+    trade = ROW_TRADE * abs(prior_rows - rows) / max(rows, prior_rows)
+    if rows < prior_rows:
+        return score >= prior_score - trade
+    return score > prior_score + max(margin, trade)
+
+
+ROW_TRADE = 7.0  # progress_better: points one body's worth of differing rows trades against
 
 
 def run(cmd: List[str], cwd: Path = ROOT, timeout: int = 600) -> subprocess.CompletedProcess:

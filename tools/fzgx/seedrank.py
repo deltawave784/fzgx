@@ -27,6 +27,8 @@ known store-value conflicts (`CheckResult.value_flow`: a store whose value prova
 from retail's) count DROPPED_ROWS extra rows each (`effective_rows`); percent minus the
 penalties breaks ties. `api._better_body` (the attempt's saved best) and `stuck.best_bodies`
 (sweep/fixup seeds) apply the same `effective_rows`, so every path serves the same body (T14).
+Rows decide against the percent only within `oracle.progress_better`'s trade (T19): the share
+of rows a body removes, times ROW_TRADE points, must cover the percent it gives up.
 
 Candidates are offered best-recorded-percent first and only the top MAX_MEASURED distinct
 bodies within WINDOW are compiled; the newest RECENT bodies are measured as well, whatever
@@ -189,13 +191,15 @@ def measure(p: Project, symbol: str, path: Path, mw: Optional[str] = None, flags
 
 
 def effective_rows(rows: Optional[int], dropped: int = 0, conflicts: int = 0) -> Optional[int]:
-    """Differing rows weighted for selection: each dropped semantic row and each known
-    store-value conflict (both capped at MAX_PENALTY // PENALTY) counts DROPPED_ROWS extra.
-    None without a row alignment. Ranking only, never acceptance."""
+    """Differing rows weighted for selection: each dropped semantic row (capped at
+    MAX_PENALTY // PENALTY) counts DROPPED_ROWS extra, known store-value conflicts count
+    DROPPED_ROWS once: they cascade from one wrong value into every store it reaches
+    (fn_800463E4's single extra `extsb` reports 9, which ranked its 1-row 98.63% body under a
+    3-row 97.18% one). None without a row alignment. Ranking only, never acceptance."""
     if rows is None:
         return None
     cap = int(MAX_PENALTY // PENALTY)
-    return rows + DROPPED_ROWS * (min(int(dropped or 0), cap) + min(int(conflicts or 0), cap))
+    return rows + DROPPED_ROWS * (min(int(dropped or 0), cap) + min(int(conflicts or 0), 1))
 
 
 def rank_key(m: dict) -> tuple:
@@ -234,8 +238,10 @@ def pick(p: Project, symbol: str, candidates: Sequence[Tuple[float, Path, Option
     """Index of the candidate to seed from. `candidates` is (recorded percent, body path, mw,
     flags), best recorded first. Only bodies within WINDOW of the top are measured: the first
     MAX_MEASURED distinct ones plus every index in `always` (the newest saved bodies, which
-    `ledger.ranked_local_attempt` names); the winner has the lowest `rank_key`, ties keep the
-    recorded order."""
+    `ledger.ranked_local_attempt` names); soundness first, then `oracle.progress_better` over
+    the percent and `effective_rows` (the rule `api._better_body` saves the attempt's best by,
+    T19); ties keep the recorded order."""
+    from . import oracle
     if not candidates:
         return None
     always = set(always)
@@ -256,7 +262,18 @@ def pick(p: Project, symbol: str, candidates: Sequence[Tuple[float, Path, Option
         m = measure(p, symbol, Path(path), mw, flags)
         if m is None:
             continue
-        key = rank_key(m)
-        if best_key is None or key < best_key:
-            best, best_key = i, key
+        if best_key is None or _ranks_above(m, best_key, oracle):
+            best, best_key = i, m
     return best
+
+
+def _ranks_above(m: dict, prior: dict, oracle) -> bool:
+    """Pairwise form of `rank_key` with the T19 rows/score trade (`oracle.progress_better`)."""
+    unsound, prior_unsound = (bool(x.get("implicit") or x.get("uninitialized")) for x in (m, prior))
+    if unsound != prior_unsound:
+        return prior_unsound
+    rows = effective_rows(m.get("rows"), len(m.get("dropped") or ()), m.get("conflicts") or 0)
+    prior_rows = effective_rows(prior.get("rows"), len(prior.get("dropped") or ()), prior.get("conflicts") or 0)
+    if (rows is None) != (prior_rows is None):
+        return rows is not None
+    return oracle.progress_better(m["percent"], rows, prior["percent"], prior_rows)
