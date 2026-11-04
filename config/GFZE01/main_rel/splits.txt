@@ -9248,3 +9248,9 @@ rel/main_rel/sel_static_disp/fn_1_14CAC8.c:
 
 rel/main_rel/memcard/fn_1_C42F4.c:
 	.text       start:0x000C42F4 end:0x000C47B4 align:4
+
+rel/main_rel/cloth/fn_1_10688C.c:
+	.text       start:0x0010688C end:0x00106B68 align:4
+
+rel/main_rel/bg_for/fn_1_DE4B0.c:
+	.text       start:0x000DE4B0 end:0x000DE9C4 align:4
