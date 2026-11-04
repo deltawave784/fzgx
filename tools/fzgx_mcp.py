@@ -19,6 +19,7 @@ from __future__ import annotations
 
 import json
 import os
+import re
 import subprocess
 import sys
 import tempfile
@@ -27,10 +28,83 @@ from pathlib import Path
 from typing import List, Optional
 
 import anyio
+import pydantic_core
 from mcp.server.fastmcp import FastMCP
 
 ROOT = Path(__file__).resolve().parent.parent
 CLI = ROOT / "tools" / "fzgx.py"
+
+# Claude Code does not hand a tool result of 50,000 characters or more to the model: it writes
+# it to `<session>/tool-results/mcp-fzgx-<tool>-<epoch ms>.txt` and returns that path. The name
+# carries no request id, so two claims that complete in the same millisecond (eleven matchers
+# start together) share one file and the later write wins: `claim fn_1_4A0D8` read
+# fn_1_12F4A8's bundle (batches fable-20261103i and -n; 107 of 130 claim results of one
+# session were above the threshold). Results that would cross it are written here instead,
+# to a file named by the symbol and the agent, and the inline result stays small.
+CLIENT_RESULT_LIMIT = 45_000
+BUNDLES = ROOT / ".fzgx" / "work" / "claims"
+
+
+def _result_text(obj) -> str:
+    """The text Claude Code measures: FastMCP's own serialization of a dict result."""
+    return obj if isinstance(obj, str) else pydantic_core.to_json(obj, fallback=str, indent=2).decode()
+
+
+def _bundle_path(kind: str, symbol: str, agent: str = "") -> Path:
+    safe = lambda s: re.sub(r"[^A-Za-z0-9_.-]+", "_", s)
+    BUNDLES.mkdir(parents=True, exist_ok=True)
+    return BUNDLES / ".".join(p for p in (safe(symbol), safe(agent), kind, "md") if p)
+
+
+def _bundle_file(path: Path, text: str) -> dict:
+    tmp = path.with_name(path.name + f".{os.getpid()}.{threading.get_ident()}.tmp")
+    tmp.write_text(text, encoding="utf-8")
+    os.replace(tmp, path)
+    return {"bundle_file": path.as_posix(), "bundle_lines": text.count("\n") + 1, "bundle_chars": len(text)}
+
+
+def _deliver_claim(r, symbol: str, agent: str):
+    """A claim result the client can carry inline, or one that points at this agent's own
+    bundle file. Also refuses a bundle that names another function (the CLI echoes the
+    requested symbol and labels the context with it: equality is the invariant)."""
+    if not isinstance(r, dict):
+        return r
+    wanted = symbol.rsplit(":", 1)[-1]
+    label = re.search(r"# Match task: `([^`]+)`", r.get("context") or "")
+    labelled = label.group(1).rsplit(":", 1)[-1] if label else wanted
+    if r.get("ok") and (r.get("symbol") != symbol or labelled != wanted):
+        return {"ok": False, "symbol": symbol, "agent": agent,
+                "error": (f"claim crosstalk: you asked for {symbol}, the bundle is labelled "
+                          f"{r.get('symbol')}/{labelled}; call claim({symbol}, {agent}) again")}
+    if len(_result_text(r)) < CLIENT_RESULT_LIMIT:
+        return r
+    out = dict(r)
+    context = out.pop("context", "") or ""
+    seed = dict(out.get("seed") or {})
+    parts = [f"# claim {symbol} for {agent}: full bundle", "",
+             "Private to this symbol and agent. The inline claim result holds everything but the",
+             "text below; read this file completely (offset/limit) before editing.", ""]
+    if len(_result_text({**out, "context": ""})) >= CLIENT_RESULT_LIMIT - 1000 and seed.get("source"):
+        # the seed alone is too large to carry: it is also the work copy (check/patch_unit act on it)
+        source = seed.pop("source")
+        seed["source"] = f"({len(source)} characters: in bundle_file under '## seed.source' and already in your work copy)"
+        out["seed"] = seed
+        parts += ["## seed.source", "", "```c", source.rstrip("\n"), "```", ""]
+    parts += ["## context", "", context]
+    out.update(_bundle_file(_bundle_path("claim", symbol, agent), "\n".join(parts)))
+    out["context"] = (f"({len(context)} characters) saved to bundle_file: Read it completely with offset/limit "
+                      f"({out['bundle_lines']} lines) before writing anything. It is your own file; "
+                      "ignore any other tool-results file.")
+    return out
+
+
+def _deliver_text(text, kind: str, symbol: str):
+    if not isinstance(text, str) or len(text) < CLIENT_RESULT_LIMIT:
+        return text
+    info = _bundle_file(_bundle_path(kind, symbol), text)
+    head = text[:2000]
+    return (f"({len(text)} characters) saved to {info['bundle_file']}: Read it completely with offset/limit "
+            f"({info['bundle_lines']} lines).\n\n--- first lines ---\n{head}")
 
 mcp = FastMCP("fzgx", instructions=(
     "F-Zero GX matching oracle. The runner supplies the assignment, C and initial diff. "
@@ -87,14 +161,15 @@ def _notes_args(notes: Optional[List[dict]]) -> List[str]:
 
 @mcp.tool()
 async def claim(symbol: str, agent: str) -> dict:
-    """Claim SYMBOL for AGENT, initialize its private work copy and return the full context bundle (retail asm, symbols, callers, nearby matched C, flags, idioms, rules) in `context`. Seeded claims include the complete existing candidate in `seed.source`."""
-    return await _run("claim", symbol, "--agent", agent)
+    """Claim SYMBOL for AGENT, initialize its private work copy and return the full context bundle (retail asm, symbols, callers, nearby matched C, flags, idioms, rules) in `context`. Seeded claims include the complete existing candidate in `seed.source`. A large bundle comes back as `bundle_file` (a file private to SYMBOL and AGENT): Read it completely before editing."""
+    return _deliver_claim(await _run("claim", symbol, "--agent", agent), symbol, agent)
 
 
 @mcp.tool()
 async def context(symbol: str, budget_tokens: int = 6000) -> str:
     """Context bundle: retail assembly, referenced symbols with declarations, callers, nearby matched C, current unit source, compiler flags, idioms, rules."""
-    return await _run("context", symbol, "--budget-tokens", str(budget_tokens), as_json=False)
+    return _deliver_text(await _run("context", symbol, "--budget-tokens", str(budget_tokens), as_json=False),
+                         "context", symbol)
 
 
 @mcp.tool()

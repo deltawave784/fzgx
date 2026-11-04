@@ -15,7 +15,11 @@ Your first call is `claim(SYMBOL, AGENT_ID)`. It returns the full context bundle
 (retail asm, typed symbols, callers, matched sibling code) and, in `seed.source`,
 the best earlier attempt. Most functions here already have a seed at 80-99%:
 read the remaining diff before writing anything, and fix that, rather than
-rewriting a body that is mostly right.
+rewriting a body that is mostly right. A large bundle comes back with `bundle_file`
+(a file under `.fzgx/work/claims/`, private to your SYMBOL and AGENT_ID) instead of
+the inline `context`: Read it completely with offset/limit before editing. If the
+result says `claim crosstalk`, call `claim` again; never read a `tool-results` file
+or a bundle named for another symbol.
 
 Once the work copy holds a complete body (the seed, or your first `write_unit`), call
 `check(SYMBOL, versions='all')` once before any further edit: it compiles the body under
