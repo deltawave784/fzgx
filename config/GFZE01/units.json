@@ -26438,6 +26438,20 @@
   },
   {
     "module": "main",
+    "source": "dol/fn_8005FDE0.c",
+    "symbols": [
+      "fn_8005FDE0"
+    ],
+    "status": "matching",
+    "mw_version": "GC/1.3.2",
+    "extra_cflags": [],
+    "pool": {
+      "@151": "jumptable_80132680",
+      "@152": "jumptable_801325D8"
+    }
+  },
+  {
+    "module": "main",
     "source": "dol/fn_8006060C.c",
     "symbols": [
       "fn_8006060C"
