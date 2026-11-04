@@ -56087,6 +56087,18 @@
   },
   {
     "module": "main_rel",
+    "source": "rel/main_rel/ghost/fn_1_EF5E0.c",
+    "symbols": [
+      "fn_1_EF5E0"
+    ],
+    "status": "nonmatching",
+    "mw_version": "GC/1.3.2",
+    "extra_cflags": [],
+    "tu": "rel/main_rel/ghost.c",
+    "pool": true
+  },
+  {
+    "module": "main_rel",
     "source": "rel/main_rel/ghost/fn_1_EF764.c",
     "symbols": [
       "fn_1_EF764"
@@ -65651,6 +65663,20 @@
       "@186": "jumptable_1_data_42174",
       "@187": "jumptable_1_data_42154",
       "@188": "jumptable_1_data_42134"
+    }
+  },
+  {
+    "module": "main_rel",
+    "source": "rel/main_rel/sel_static_disp/fn_1_14083C.c",
+    "symbols": [
+      "fn_1_14083C"
+    ],
+    "status": "matching",
+    "mw_version": "GC/1.3",
+    "extra_cflags": [],
+    "tu": "rel/main_rel/sel_static_disp.c",
+    "pool": {
+      "@117": "lbl_1_rodata_8600"
     }
   },
   {
