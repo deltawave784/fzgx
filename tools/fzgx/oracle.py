@@ -1673,10 +1673,50 @@ def body_diagnostics(project: Project, module: str, source: Path, mw_version: Op
         if ident and ident.group(0) not in names:
             names.append(ident.group(0))
     try:  # the reads MWCC stays silent about: a local's first statement reading it
-        uninitialized += [n for n in self_seeded_locals(source.read_text()) if n not in uninitialized]
+        text = source.read_text()
+        uninitialized += [n for n in self_seeded_locals(text) if n not in uninitialized]
+        uninitialized += [n for n in self_cancelling(project, module, text) if n not in uninitialized]
     except OSError:
         pass
     return {"implicit": names, "uninitialized": uninitialized}
+
+
+# `x = x - x;`, `x = (x ^ x);`, `x = (f32)(x - x);`
+_CANCEL_RE = re.compile(r"(?m)^[ \t]*([A-Za-z_]\w*)[ \t]*=[ \t]*(?:\([ \t]*(?:\w+[ \t]*\)[ \t]*\()?[ \t]*)?"
+                        r"\1[ \t]*([-^])[ \t]*\1[ \t]*\)?[ \t]*;")
+_SELF_OP_RE = re.compile(r"^(?:fsubs?|fsub|subf|xor)\.? \w+, (\w+), (\w+)$")
+_C_NOISE_RE = re.compile(r"/\*.*?\*/|//[^\n]*|\"(?:\\.|[^\"\\\n])*\"|'(?:\\.|[^'\\\n])*'|^[ \t]*#[^\n]*", re.S | re.M)
+
+
+def self_cancelling(project: Project, module: str, text: str) -> List[str]:
+    """`x = x - x;` / `x = x ^ x;` (casts and parentheses allowed around the right side): the
+    lifter's lost operand when one name stood for two registers. fn_1_1D0CC's
+    `v70 = v81; v70 = v70 - v70;` discards v81 and ranked first for weeks while its sound
+    alternatives waited. Reported only when the retail functions the body defines carry fewer
+    self-operand `fsub(s)/subf/xor` instructions than the body has distinct such statements
+    (retail with `fsubs f0, f0, f0` keeps the spelling). `i = n - n` keeps `n` and is not
+    reported. Textual and diagnostic only: ranking demotes the body, acceptance never reads it."""
+    code = _C_NOISE_RE.sub(lambda m: re.sub(r"[^\n]", " ", m.group(0)), text)
+    found = list(dict.fromkeys(f"{m.group(1)} = {m.group(1)} {m.group(2)} {m.group(1)}"
+                               for m in _CANCEL_RE.finditer(code)))
+    if not found:
+        return []
+    try:
+        functions = project.function_asm(module)
+    except Exception:
+        return []
+    defined = [f for name, f in functions.items()
+               if re.search(r"\b" + re.escape(name) + r"\s*\([^;{]*\)\s*\{", code)]
+    if not defined:
+        return []  # no retail function to compare with: say nothing
+    retail = 0
+    for f in defined:
+        for ln in f.asm:
+            m = _SELF_OP_RE.match(ln.split(": ", 1)[-1].strip())
+            retail += bool(m and m.group(1) == m.group(2))
+    if len(found) <= retail:
+        return []
+    return [f"self-cancelling '{e}'" for e in found]
 
 
 def implicit_calls(project: Project, module: str, source: Path, mw_version: Optional[str] = None,

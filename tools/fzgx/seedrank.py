@@ -158,6 +158,18 @@ def measure(p: Project, symbol: str, path: Path, mw: Optional[str] = None, flags
     with _LOCK:
         hit = _load().get(key)
     if hit is not None:
+        if "cancelling" not in hit:
+            # measured before `oracle.self_cancelling` joined body_diagnostics (T16): textual,
+            # no compile, so the cache keeps its key and only gains the verdict
+            sym = p.resolve(symbol)
+            hit["cancelling"] = oracle.self_cancelling(p, sym.module, body) if sym else []
+            if hit["cancelling"]:
+                hit["uninitialized"] = list(hit.get("uninitialized") or []) + [
+                    n for n in hit["cancelling"] if n not in (hit.get("uninitialized") or [])]
+                with _LOCK:
+                    cache = _load()
+                    cache[key] = hit
+                    write_atomic(CACHE, json.dumps(cache))
         return hit
     res = oracle.check(p, symbol, 0, source=Path(path), mw_version=mw, extra_cflags=flags)
     out = None
@@ -167,7 +179,8 @@ def measure(p: Project, symbol: str, path: Path, mw: Optional[str] = None, flags
                 else {"implicit": [], "uninitialized": []})
         out = {"percent": round(oracle.progress_score(res), 4), "rows": oracle.progress_rows(res),
                "dropped": dropped_for(res) or [], "conflicts": len(getattr(res, "value_flow", None) or ()),
-               "implicit": diag["implicit"], "uninitialized": diag["uninitialized"]}
+               "implicit": diag["implicit"], "uninitialized": diag["uninitialized"],
+               "cancelling": [n for n in diag["uninitialized"] if n.startswith("self-cancelling")]}
     with _LOCK:
         cache = _load()
         cache[key] = out

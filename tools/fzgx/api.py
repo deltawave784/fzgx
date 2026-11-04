@@ -941,7 +941,7 @@ def _record_check(p: Project, key: str, src: Optional[Path], res: oracle.CheckRe
             if res.implicit_calls:
                 why.append(f"it calls undeclared {', '.join(res.implicit_calls)}")
             if getattr(res, 'uninitialized_reads', None):
-                why.append(f"it reads never-assigned {', '.join(res.uninitialized_reads)}")
+                why.append(f"it reads never-assigned or self-cancelled locals ({', '.join(res.uninitialized_reads)})")
             stats['not_saved'] = (
                 f"not saved as the attempt's best: {' and '.join(why)} "
                 f"and leads the sound saved body ({saved.get('percent') or 0:.2f}%) by less than "
@@ -988,9 +988,10 @@ def format_check(res: Dict[str, Any]) -> str:
                      + ' (MWCC assumed `int f()`: float arguments widen to double, the result is int; '
                      'declare the prototype or define the helper before relying on this score)')
     if res.get('uninitialized_reads'):
-        lines.append('local(s) read but never assigned: ' + ', '.join(res['uninitialized_reads'])
+        lines.append('local(s) read but never assigned, or self-cancelling statements: ' + ', '.join(res['uninitialized_reads'])
                      + ' (MWCC: "not initialized before being used"; whatever register it happens to '
-                     'hold is not a match: assign the value retail computes before relying on this score)')
+                     'hold is not a match; `x = x - x` discards a value retail uses: assign the value '
+                     'retail computes before relying on this score)')
     if (res.get('budget') or {}).get('not_saved'):
         lines.append(res['budget']['not_saved'])
     if res.get('primer_renamed'):
