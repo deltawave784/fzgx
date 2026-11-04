@@ -9269,3 +9269,6 @@ rel/main_rel/burner/fn_1_9A5CC.c:
 
 rel/main_rel/shadowmap/fn_1_56D4C.c:
 	.text       start:0x00056D4C end:0x000571E8 align:4
+
+rel/main_rel/effect/fn_1_5EB98.c:
+	.text       start:0x0005EB98 end:0x0005F5C4 align:4
