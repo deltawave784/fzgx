@@ -785,3 +785,6 @@ rel/customize/toolkit/fn_3_20B3C.c:
 
 rel/customize/_prolog/fn_3_15A0.c:
 	.text       start:0x000015A0 end:0x000033A0 align:4
+
+rel/customize/emb_memcard/fn_3_C400.c:
+	.text       start:0x0000C400 end:0x0000CE94 align:4
