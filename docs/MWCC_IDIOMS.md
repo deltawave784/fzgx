@@ -993,3 +993,9 @@ carrier (declaration order, not layout).
   (8 bytes, accesses to +0x7EBA0), lbl_3_data_0 (0xA8, to +0x191C), lbl_3_bss_A2460 (8, to +0x56;
   A2468/A248C follow). Keep the dtk sizes; fn_3_15A0, fn_3_5070, fn_3_6AC4 and fn_3_7038 matched
   through `tu_section_layout`-style per-object definitions, never through a widened header struct.
+- `dcbi` and the 64-bit time-base retry loop (`mftbu; mftb; mftbu; cmpw; bne`) have no MWCC 1.3.2
+  intrinsic (`__dcbi` compiles to `bl __dcbi`): `include/ppc_ops.h` carries them as inline-asm helpers
+  (`ppc_dcbi(base, off)`, `ppc_get_time_base()`), probe-verified byte for byte against retail
+  fn_12_D038 (seven `ppc_dcbi(buf, off); off += 0x20;` per iteration, 13 iterations) and fn_12_335B8
+  (`if (lbl_12_bss_1B778 == 1) return 0; return ppc_get_time_base();`, s64). Inline the time-base
+  helper at most once per function (its asm label is function-scoped).
