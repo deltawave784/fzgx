@@ -41680,6 +41680,23 @@
   },
   {
     "module": "main_rel",
+    "source": "rel/main_rel/camera/fn_1_5948.c",
+    "symbols": [
+      "fn_1_5948"
+    ],
+    "status": "matching",
+    "mw_version": "GC/1.3.2",
+    "extra_cflags": [],
+    "tu": "rel/main_rel/camera.c",
+    "pool": {
+      "@101": "lbl_1_rodata_188",
+      "@103": "lbl_1_rodata_1E0",
+      "@105": "jumptable_1_data_3584",
+      "@106": "jumptable_1_data_3558"
+    }
+  },
+  {
+    "module": "main_rel",
     "source": "rel/main_rel/camera/fn_1_6400.c",
     "symbols": [
       "fn_1_6400"
