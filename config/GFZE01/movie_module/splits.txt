@@ -2309,3 +2309,6 @@ rel/movie_module/fn_12_11204.c:
 
 rel/movie_module/fn_12_7870.c:
 	.text       start:0x00007870 end:0x000078C0 align:4
+
+rel/movie_module/fn_12_847C.c:
+	.text       start:0x0000847C end:0x000086B8 align:4
