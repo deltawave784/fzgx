@@ -275,7 +275,6 @@ extern void fzgx_pool_sink(const void *);
 extern void fn_1_F5D94(void *arg0);
 
 /* fzgx:begin fn_1_F4F08 */
-
 /* Natural cubic spline setup: computes second derivatives y2[] for the
  * knots (x[], y[]) by tridiagonal elimination. */
 void fn_1_F4F08(u32 n, f32 *x, f32 *y, f32 *y2) {
@@ -376,7 +375,6 @@ void fn_1_F5458(Sig_fn_8006EB4C_Quat *out, u32 n, f32 *keys, Sig_fn_8006EB4C_Qua
 /* fzgx:end fn_1_F5458 */
 
 /* fzgx:begin fn_1_F55C4 */
-
 void fn_1_F55C4(f32 *out, f32 *arg1, f32 *in, f32 *arg3) {
     f32 temp[4];
 
@@ -402,7 +400,6 @@ void fn_1_F55C4(f32 *out, f32 *arg1, f32 *in, f32 *arg3) {
 /* fzgx:end fn_1_F55C4 */
 
 /* fzgx:begin fn_1_F56F8 */
-
 void fn_1_F56F8(f32 *out, f32 *in) {
     f32 value;
     f32 scale;
@@ -425,7 +422,6 @@ void fn_1_F56F8(f32 *out, f32 *in) {
 /* fzgx:end fn_1_F56F8 */
 
 /* fzgx:begin fn_1_F57A8 */
-
 void fn_1_F57A8(f32 *out, f32 *in) {
     f32 length;
     f32 scale;
@@ -448,7 +444,6 @@ void fn_1_F57A8(f32 *out, f32 *in) {
 /* fzgx:end fn_1_F57A8 */
 
 /* fzgx:begin fn_1_F588C */
-
 #pragma fp_contract off
 
 
@@ -508,7 +503,6 @@ void fn_1_F5AAC(void) {
 /* fzgx:end fn_1_F5AAC */
 
 /* fzgx:begin fn_1_F5AB0 */
-
 void fn_1_F5AB0(void) {
     Obj_1_data_2A7E0_At3C *arg0 = lbl_1_data_2A7E0.unk_3C;
     fn_1_9A508(&lbl_1_data_2A7E0);
@@ -523,7 +517,6 @@ void fn_1_F5AEC(void) {
 /* fzgx:end fn_1_F5AEC */
 
 /* fzgx:begin fn_1_F5AF0 */
-
 // Update the spline state after refreshing the shared data.
 void fn_1_F5AF0(void) {
     Obj_1_data_2A7E0_At3C *state;
@@ -543,7 +536,6 @@ void fn_1_F5B38(void) {
 /* fzgx:end fn_1_F5B38 */
 
 /* fzgx:begin fn_1_F5B3C */
-
 void fn_1_F5B3C(void) {
     Obj_1_data_2A7E0_At3C *obj = lbl_1_data_2A7E0.unk_3C;
 
@@ -561,7 +553,6 @@ void fn_1_F5B84(void) {
 /* fzgx:end fn_1_F5B84 */
 
 /* fzgx:begin fn_1_F5B88 */
-
 typedef struct {
     f32 x, y, z;
 } fn_1_F5B88_Vec3f;
@@ -632,7 +623,6 @@ void fn_1_F5B88(Obj_1_data_2A7E0_At3C *arg0) {
 /* fzgx:end fn_1_F5B88 */
 
 /* fzgx:begin fn_1_F5D94 */
-
 #pragma section code_type ".fzgxpool"
 void fzgx_fn_1_F5D94_pool_primer(volatile f32 *p, volatile f64 *q) {  /* fzgx-allow: S2 volatile keeps the verified access order */
     *p = 0.0f; *p = 6.0f; *p = 32767.0f; *p = 0.02f;
@@ -769,6 +759,377 @@ void fn_1_F5D94(void *arg0) {
 }
 /* fzgx:end fn_1_F5D94 */
 
+/* fzgx:begin fn_1_F65A0 noprologue */
+#include "types.h"
+#include "game/main_rel/burner_types.h"
+#include "game/main_rel/camera_types.h"
+#include "game/main_rel/car_test_types.h"
+#include "rel/main_rel/globals.h"
+#include "dolphin/gx.h"
+
+typedef struct F65Vec { f32 x, y, z; } F65Vec;
+
+typedef struct F65Node {
+    F65Vec pos;     /* 0x00 */
+    F65Vec unk_C;   /* 0x0C */
+    F65Vec prev;    /* 0x18 */
+    f32 alpha;      /* 0x24 */
+    f32 size;       /* 0x28 */
+    f32 unk_2C;
+    s32 unk_30;
+} F65Node; /* 0x34 */
+
+struct fn_1_F65A0_Arg0 {
+    void *unk_0;
+    u8 pad_4[4];
+    f32 unk_8;
+    u8 pad_C[8];
+    F65Node nodes[36]; /* 0x14 */
+};
+
+typedef struct F65Color { u8 r, g, b, a; } F65Color;
+typedef struct F65Mtx { f32 m[3][4]; } F65Mtx;
+
+extern f32 lbl_8006D668(void *);
+extern f32 lbl_8006D0B4(f32);
+extern s32 fn_1_54E34(void *, f32);
+extern u32 GXLoadPosMtxImm(u32, u32);
+extern u32 fn_800720B0(u32);
+extern void fn_800736C0(u32, F65Color);
+extern s16 lbl_8006D24C(f32, f32);
+extern u32 lbl_8006D7DC(void *);
+extern u32 lbl_8006DB74(void *);
+extern u32 lbl_8006E0C8(void *);
+extern u32 mathutil_mtxA_rotate_z(s16);
+extern void fn_8003462C(u32, u32, u32);
+extern void fn_8007245C(u32);
+extern void fn_800724C8(void);
+extern void fn_80072864(u32);
+extern void fn_800728A8(s32, s32, s32, s32);
+extern void fn_80072C24(s32, s32, s32, s32, s32);
+extern void fn_80072CC4(s32, s32, s32, s32, s32);
+extern void fn_80072D64(s32, s32, s32, s32, u8, s32);
+extern void fn_80072E20(s32, s32, s32, s32, u8, s32);
+extern void fn_800734A8(u32, s32, s32, s32);
+extern void fn_800735C8(s32, s32);
+extern void fn_80073620(s32, s32);
+extern void fn_80073678(u32);
+extern void fn_80073778(void *, s32);
+extern void fn_80073898(u32);
+extern void fn_80073C6C(s32);
+extern void fn_800745A4(u32, s32, s32, u32, u32, u32);
+extern void fn_80074660(u32);
+extern void fn_80074788(u32);
+extern void fn_80074918(u8, s32, u8);
+extern void lbl_8006D758(void);
+extern void lbl_8006DBAC(Vec3 *);
+extern void lbl_8006E0A4(void *);
+extern void lbl_8006E15C(f32, f32, f32);
+
+static inline F65Color F65AssignColor(F65Color *dst, F65Color src) {
+    *dst = src;
+    return src;
+}
+
+#pragma section code_type ".fzgxpool"
+static void fzgx_pool_primer(f32 *f, f64 *g) {
+ *f++ = 0.0000000000000000f;
+ *f++ = 6.0000000000000000f;
+ *f++ = 32767.000000000000f;
+ *f++ = 0.019999999552965164f;
+ *f++ = 1.0000000000000000f;
+ *f++ = 15.000000000000000f;
+ *g++ = 4503601774854144.0;
+ *f++ = 0.10000000149011612f;
+ *f++ = 36.000000000000000f;
+ *g++ = 0.50000000000000000;
+ *f++ = 1.5000000000000000f;
+ *f++ = 2.0000000000000000f;
+ *f++ = 0.40000000596046448f;
+ *f++ = 0.50000000000000000f;
+ *f++ = 0.20000000298023224f;
+ *f++ = 30.000000000000000f;
+ *f++ = 180.00000000000000f;
+ *f++ = 2.5000000000000000f;
+ *f++ = 0.025000000372529030f;
+ *f++ = 0.00050000002374872565f;
+ *f++ = 0.039999999105930328f;
+ *f++ = 0.050000000745058060f;
+ *f++ = 0.80000001192092896f;
+ *f++ = 0.049999997019767761f;
+ *f++ = -10.000000000000000f;
+ *f++ = 0.16666667163372040f;
+ *f++ = 20.000000000000000f;
+ *f++ = 3.7999999523162842f;
+ *g++ = -0.10000000000000001;
+ *f++ = 10.000000000000000f;
+ *f++ = 9.0000000000000000f;
+ *f++ = 255.00000000000000f;
+ *f++ = 127.50000000000000f;
+ *f++ = 25.500000000000000f;
+}
+#pragma section code_type ".text"
+
+/* Eight dummy vertices that flush the previous draw state. */
+#define F65_DUMMY_QUADS()                                                   \
+    do {                                                                    \
+        F65_DUMMY_VTX(); F65_DUMMY_VTX(); F65_DUMMY_VTX(); F65_DUMMY_VTX(); \
+        F65_DUMMY_VTX(); F65_DUMMY_VTX(); F65_DUMMY_VTX(); F65_DUMMY_VTX(); \
+    } while (0)
+#define F65_DUMMY_VTX()                                                     \
+    GXWGFifo.f32 = 0.0f;                                                    \
+    GXWGFifo.f32 = 0.0f;                                                    \
+    GXWGFifo.f32 = -10.0f;                                                  \
+    GXWGFifo.f32 = 0.0f;                                                    \
+    GXWGFifo.f32 = 0.0f
+
+/* Byte view of the current colour: indexed access keeps &cur.g/&cur.b live. */
+#define CUR(i) (((u8 *)&cur)[i])
+
+static inline f32 F65Scale(f32 factor, f32 age) {
+    return 1.0f - (f32)((age - 1.0f) * factor);
+}
+
+static inline f32 F65SquaredXY(f32 x, f32 y) {
+    return x * x + y * y;
+}
+
+static inline f32 F65SquareAdd(f32 value, f32 sum) {
+    return sum + value * value;
+}
+
+static inline f32 F65LengthSq(const F65Vec *v) {
+    return v->x * v->x + v->y * v->y + v->z * v->z;
+}
+
+static inline f32 F65SquaredYX(f32 y, f32 x) {
+    return x * x + y * y;
+}
+
+void fn_1_F65A0(struct fn_1_F65A0_Arg0 *obj) {
+#define arg0 effect
+    F65Vec quad[4];
+    F65Mtx mtxA;
+    F65Mtx mtxB;
+    F65Mtx mtxC;
+    F65Mtx mtxD;
+    F65Vec pos;
+    F65Vec dir;
+    f32 snap[3];
+    f32 offset[3];
+    F65Color cur;
+    F65Color newColor;
+    s32 n;
+    F65Node *node;
+    s32 k;
+    f32 one;
+    f32 scale;
+    f32 alpha;
+    f32 size;
+    f32 grow;
+    f32 dist;
+    f32 ratio;
+    f32 width;
+    f32 len;
+    f32 ex;
+    f32 ey;
+    struct fn_1_F65A0_Arg0 *effect;
+    s32 i;
+    register s32 j;
+    s16 angle;
+
+    effect = obj;
+    scale = F65Scale(0.049999997f, arg0->unk_8);
+    scale = scale < 0.8f ? 0.8f : scale > 1.0f ? 1.0f : scale;
+
+    fn_80073778(arg0->unk_0, 0);
+    fn_800728A8(1, 1, 1, 0);
+    fn_80074918(1, 3, 0);
+    fn_800720B0(0);
+    fn_80072864(0);
+    fn_80073C6C(0);
+    fn_800745A4(0, 1, 4, 60, 0, 125);
+    fn_800734A8(0, 0, 0, 255);
+    fn_800735C8(0, 12);
+    fn_80073620(0, 28);
+    fn_80072C24(0, 15, 8, 14, 15);
+    fn_80072D64(0, 0, 0, 0, 1, 0);
+    fn_80072CC4(0, 7, 4, 6, 7);
+    fn_80072E20(0, 0, 0, 0, 1, 0);
+    fn_80073678(1);
+    fn_80074660(1);
+    fn_80073898(0);
+    fn_80074788(0);
+    fn_800724C8();
+    fn_8007245C(0x2200);
+    lbl_8006D758();
+    GXLoadPosMtxImm((u32)lbl_801A6D00, 0);
+
+    CUR(0) = 216;
+    CUR(1) = 122;
+    CUR(2) = 76;
+    CUR(3) = 255;
+    fn_800736C0(0, cur);
+    fn_8003462C(0x90, 0, 8);
+    F65_DUMMY_QUADS();
+
+    lbl_8006DBAC((Vec3 *)((u8 *)lbl_801A6D00 + 0x30));
+    fn_8006E294((fn_1_9CCE8_Vec3 *)snap);
+    if (snap[0] < 0.0f) {
+        snap[0] -= 6.0f;
+    }
+    if (snap[1] < 0.0f) {
+        snap[1] -= 6.0f;
+    }
+    if (snap[2] < 0.0f) {
+        snap[2] -= 6.0f;
+    }
+    snap[0] = 6.0f * (s32)(0.16666667f * snap[0]);
+    snap[1] = 6.0f * (s32)(0.16666667f * snap[1]);
+    snap[2] = 6.0f * (s32)(0.16666667f * snap[2]);
+    lbl_8006E0A4(snap);
+    lbl_8006DB74(&mtxA);
+    lbl_8006DBAC((Vec3 *)lbl_801A66CC);
+    lbl_8006E0A4(snap);
+    lbl_8006DB74(&mtxB);
+
+    for (i = -1; i <= 1; i++) {
+        offset[2] = 6.0f * i;
+        for (j = -1; j <= 1; j++) {
+            offset[1] = 6.0f * j;
+            for (k = -1; k <= 1; k++) {
+                offset[0] = 6.0f * k;
+                lbl_8006DBAC((Vec3 *)&mtxA);
+                lbl_8006E0A4(offset);
+                lbl_8006DB74(&mtxC);
+                lbl_8006DBAC((Vec3 *)&mtxB);
+                lbl_8006E0A4(offset);
+                lbl_8006DB74(&mtxD);
+
+                node = arg0->nodes;
+                n = 36;
+                do {
+                    alpha = node->alpha * scale;
+                    /* goto: shared loop-step exit for every rejected node */
+                    if (alpha <= 0.0f) {
+                        goto next; /* Keep the verified branch to next. */
+                    }
+                    size = 2.0f * node->size;
+                    ratio = (f32)(3.8f * arg0->unk_8) + 1.0f;
+                    grow = ratio < 1.0f ? 1.0f : ratio > 20.0f ? 20.0f : ratio;
+                    lbl_8006DBAC((Vec3 *)&mtxC);
+                    if (fn_1_54E34(node, size * grow) == 0) {
+                        goto next; /* goto: loop step */
+                    }
+                    lbl_8006E1B0((Fn183D28Vec3 *)node, (Fn183D28Vec3 *)&pos);
+                    if (pos.z >= -0.1) {
+                        goto next; /* goto: loop step */
+                    }
+                    dist = pos.x * pos.x;
+                    dist = F65SquareAdd(pos.y, dist);
+                    dist += pos.z * pos.z;
+                    dist = lbl_8006D0B4(dist);
+                    if (dist > 10.0f) {
+                        goto next; /* goto: loop step */
+                    }
+                    if (dist > 9.0f) {
+                        alpha *= 10.0f - dist;
+                    } else if (dist < 1.0f) {
+                        alpha *= dist;
+                    }
+                    lbl_8006DBAC((Vec3 *)&mtxD);
+                    dir.x = node->pos.x - node->prev.x;
+                    dir.y = node->pos.y - node->prev.y;
+                    dir.z = node->pos.z - node->prev.z;
+                    lbl_8006E1B0((Fn183D28Vec3 *)&dir, (Fn183D28Vec3 *)&dir);
+                    if (dir.z >= -0.1) {
+                        goto next; /* goto: loop step */
+                    }
+                    if (dir.z >= -0.1) {
+                        goto next; /* goto: loop step */
+                    }
+                    {
+                        f32 left = pos.x - size;
+                        f32 bottom = pos.y - size;
+                        f32 right = pos.x + size;
+                        f32 top = pos.y + size;
+                        quad[0].z = pos.z;
+                        quad[1].z = pos.z;
+                        quad[2].z = pos.z;
+                        quad[3].z = pos.z;
+                        quad[0].x = left;
+                        quad[0].y = bottom;
+                        quad[1].x = right;
+                        quad[1].y = bottom;
+                        quad[2].x = right;
+                        quad[2].y = top;
+                        quad[3].x = left;
+                        quad[3].y = top;
+                        dir.x = dir.x * (pos.z / dir.z);
+                        dir.y = dir.y * (pos.z / dir.z);
+                        dir.z = pos.z;
+                        snap[0] = dir.x - pos.x;
+                        snap[1] = dir.y - pos.y;
+                    }
+                    if (0.0f != snap[0] || 0.0f != snap[1]) {
+                        snap[2] = 0.0f;
+                        len = lbl_8006D668(snap);
+                        width = 2.0f * size;
+                        pos.x -= (f32)(size * snap[0]);
+                        pos.y -= (f32)(size * snap[1]);
+                        dir.x += (f32)(size * snap[0]);
+                        dir.y += (f32)(size * snap[1]);
+                        len += width;
+                        angle = lbl_8006D24C(snap[1], snap[0]);
+                        lbl_8006D7DC(&pos);
+                        mathutil_mtxA_rotate_z(angle);
+                        lbl_8006E15C(len / width, 1.0f, 1.0f);
+                        mathutil_mtxA_rotate_z((s16)-angle);
+                        lbl_8006E0C8(&pos);
+                        lbl_8006E1B0((Fn183D28Vec3 *)&quad[0], (Fn183D28Vec3 *)&quad[0]);
+                        lbl_8006E1B0((Fn183D28Vec3 *)&quad[1], (Fn183D28Vec3 *)&quad[1]);
+                        lbl_8006E1B0((Fn183D28Vec3 *)&quad[2], (Fn183D28Vec3 *)&quad[2]);
+                        lbl_8006E1B0((Fn183D28Vec3 *)&quad[3], (Fn183D28Vec3 *)&quad[3]);
+                    }
+                    newColor.r = 255.0f * alpha;
+                    newColor.g = 127.5f * alpha;
+                    newColor.b = 25.5f * alpha;
+                    if (CUR(0) != newColor.r || CUR(1) != newColor.g || CUR(2) != newColor.b) {
+                        newColor.a = 255;
+                        fn_800736C0(0, F65AssignColor(&cur, newColor));
+                        fn_8003462C(0x90, 0, 8);
+                        F65_DUMMY_QUADS();
+                    }
+                    fn_8003462C(0x80, 0, 4);
+                    GXWGFifo.f32 = quad[0].x;
+                    GXWGFifo.f32 = quad[0].y;
+                    GXWGFifo.f32 = quad[0].z;
+                    GXWGFifo.f32 = 0.0f;
+                    GXWGFifo.f32 = 0.0f;
+                    GXWGFifo.f32 = quad[1].x;
+                    GXWGFifo.f32 = quad[1].y;
+                    GXWGFifo.f32 = quad[1].z;
+                    GXWGFifo.f32 = 1.0f;
+                    GXWGFifo.f32 = 0.0f;
+                    GXWGFifo.f32 = quad[2].x;
+                    GXWGFifo.f32 = quad[2].y;
+                    GXWGFifo.f32 = quad[2].z;
+                    GXWGFifo.f32 = 1.0f;
+                    GXWGFifo.f32 = 1.0f;
+                    GXWGFifo.f32 = quad[3].x;
+                    GXWGFifo.f32 = quad[3].y;
+                    GXWGFifo.f32 = quad[3].z;
+                    GXWGFifo.f32 = 0.0f;
+                    GXWGFifo.f32 = 1.0f;
+                next:
+                    node++;
+                } while (--n > 0);
+            }
+        }
+    }
+}
+/* fzgx:end fn_1_F65A0 */
+
 /* fzgx:begin fn_1_F70C0 */
 // fn_1_F70C0: returns a constant.
 int fn_1_F70C0(void) {
@@ -784,7 +1145,6 @@ int fn_1_F70C8(void) {
 /* fzgx:end fn_1_F70C8 */
 
 /* fzgx:begin fn_1_F70D0 */
-
 // Clear the spline state buffers and mark the state as initialized.
 void fn_1_F70D0(void) {
     u32 *state = (u32 *)&lbl_1_bss_7F028;
@@ -796,7 +1156,6 @@ void fn_1_F70D0(void) {
 /* fzgx:end fn_1_F70D0 */
 
 /* fzgx:begin fn_1_F7128 */
-
 void fn_1_F7128(void) {
     int i;
     Obj_1_bss_7F03C *dst;
@@ -857,7 +1216,6 @@ void fn_1_F7128(void) {
 /* fzgx:end fn_1_F7128 */
 
 /* fzgx:begin fn_1_F7308 */
-
 void fn_1_F7308(void) {
     fn_1_F7578();
     lbl_1_bss_7F028 &= 0xFE;
@@ -865,7 +1223,6 @@ void fn_1_F7308(void) {
 /* fzgx:end fn_1_F7308 */
 
 /* fzgx:begin fn_1_F7338 */
-
 void fn_1_F7338(int arg0, void *arg1, void *arg2) {
     s8 value;
 
@@ -981,7 +1338,6 @@ u8 fn_1_F7568(void) {
 /* fzgx:end fn_1_F7568 */
 
 /* fzgx:begin fn_1_F7578 */
-
 // Initialize the spline work buffers to their default values.
 
 void fn_1_F7578(void) {
@@ -998,10 +1354,6 @@ void fn_1_F7578(void) {
 /* fzgx:end fn_1_F7578 */
 
 /* fzgx:begin fn_1_F75D8 pool */
-
-
-
-
 /* Per-player light overrides: a TU-local block of five 4-entry tables at lbl_1_bss_7F050. */
 static s32 fzgx_obj_lbl_1_bss_7F050[4];
 static LightColor_F75D8 sAmbient_F75D8[4];
@@ -1081,7 +1433,6 @@ void fn_1_F75D8(LightDesc_F75D8 **lights, s32 useOverride, s32 mode) {
 /* fzgx:end fn_1_F75D8 */
 
 /* fzgx:begin fn_1_F7870 */
-
 void fn_1_F7870(u32 value) {
     u32 values[2];
 
@@ -1092,21 +1443,18 @@ void fn_1_F7870(u32 value) {
 /* fzgx:end fn_1_F7870 */
 
 /* fzgx:begin fn_1_F78AC */
-
 void fn_1_F78AC(void *arg0) {
     fn_1_F75D8(arg0, 1, 0, 0);
 }
 /* fzgx:end fn_1_F78AC */
 
 /* fzgx:begin fn_1_F78D8 */
-
 void fn_1_F78D8(void *arg0) {
     fn_1_F75D8(arg0, 1, 0, 1);
 }
 /* fzgx:end fn_1_F78D8 */
 
 /* fzgx:begin fn_1_F7904 */
-
 // Builds the spline workspace and reports whether its serialized data is valid.
 s32 fn_1_F7904(void) {
     u8 buffer[0x5360];
@@ -1117,7 +1465,6 @@ s32 fn_1_F7904(void) {
 /* fzgx:end fn_1_F7904 */
 
 /* fzgx:begin fn_1_F7954 */
-
 s32 fn_1_F7954(void) {
     u8 buffer[0x5360];
     u8 *workspace;
@@ -1133,7 +1480,6 @@ s32 fn_1_F7954(void) {
 /* fzgx:end fn_1_F7954 */
 
 /* fzgx:begin fn_1_F79C8 */
-
 // Initialize spline data and publish the active spline region.
 void fn_1_F79C8(void) {
     fn_1_F8918(&lbl_1_bss_718E0.pad_1A2[0x1e], (u8 *)&lbl_1_bss_7F0C0);
@@ -1235,7 +1581,6 @@ void fn_1_F7A20(void)
 /* fzgx:end fn_1_F7A20 */
 
 /* fzgx:begin fn_1_F7B2C */
-
 void fn_1_F7B2C(void) {
     s16 i;
 
@@ -1270,7 +1615,6 @@ s16 fn_1_F7B80(void) {
 /* fzgx:end fn_1_F7B80 */
 
 /* fzgx:begin fn_1_F7BE4 */
-
 s32 fn_1_F7BE4(arg0, arg1)
 u32 arg0;
 u32 arg1;
@@ -1305,7 +1649,6 @@ s16 fn_1_F7C48(s16 arg) {
 /* fzgx:end fn_1_F7C48 */
 
 /* fzgx:begin fn_1_F7CAC */
-
 void fn_1_F7CAC(s16 value) {
     u64 mask = (u64)1 << value;
 
@@ -1315,7 +1658,6 @@ void fn_1_F7CAC(s16 value) {
 /* fzgx:end fn_1_F7CAC */
 
 /* fzgx:begin fn_1_F7D18 */
-
 void fn_1_F7D18(void) {
     s16 i;
 
@@ -1328,7 +1670,6 @@ void fn_1_F7D18(void) {
 /* fzgx:end fn_1_F7D18 */
 
 /* fzgx:begin fn_1_F7D6C */
-
 void fn_1_F7D6C(void) {
     s16 i;
 
@@ -1341,7 +1682,6 @@ void fn_1_F7D6C(void) {
 /* fzgx:end fn_1_F7D6C */
 
 /* fzgx:begin fn_1_F7DC0 */
-
 enum {
     SIGN_BIT = (u32)1 << 31
 };
@@ -1359,7 +1699,6 @@ void fn_1_F7DC0(void) {
 /* fzgx:end fn_1_F7DC0 */
 
 /* fzgx:begin fn_1_F7E24 */
-
 void fn_1_F7E24(void) {
     s16 i;
 
@@ -1374,7 +1713,6 @@ void fn_1_F7E24(void) {
 /* fzgx:end fn_1_F7E24 */
 
 /* fzgx:begin fn_1_F7E88 */
-
 void fn_1_F7E88(void) {
     s16 i;
 
@@ -1443,7 +1781,6 @@ void fn_1_F8030(void) {
 /* fzgx:end fn_1_F8030 */
 
 /* fzgx:begin fn_1_F8048 */
-
 void fn_1_F8048(void) {
     s16 i;
 
@@ -1482,7 +1819,6 @@ s32 fn_1_F809C(s32 value) {
 /* fzgx:end fn_1_F809C */
 
 /* fzgx:begin fn_1_F8158 */
-
 s32 fn_1_F8158(s32 value) {
     u64 mask;
     if ((s16)value > 63) {
@@ -1495,8 +1831,6 @@ s32 fn_1_F8158(s32 value) {
 /* fzgx:end fn_1_F8158 */
 
 /* fzgx:begin fn_1_F8214 */
-
-
 void fn_1_F8214(s16 value) {
     u64 mask;
     if (value > 63) {
@@ -1512,7 +1846,6 @@ void fn_1_F8214(s16 value) {
 /* fzgx:end fn_1_F8214 */
 
 /* fzgx:begin fn_1_F82E0 */
-
 void fn_1_F82E0(void) {
     s16 i;
 
@@ -1539,7 +1872,6 @@ int fn_1_F8334(s16 value) {
 /* fzgx:end fn_1_F8334 */
 
 /* fzgx:begin fn_1_F83F0 */
-
 void fn_1_F83F0(s16 id) {
     s32 ok = 0;
     s32 busy;
@@ -1589,9 +1921,6 @@ void fn_1_F8580(void) {
 /* fzgx:end fn_1_F8580 */
 
 /* fzgx:begin fn_1_F85A0 */
-
-
-
 static inline s32 next_rand(void) {
     lbl_801A63C0 = lbl_801A63C0 * 0x676a4b6b + 0x33cb;
     return (lbl_801A63C0 >> 16) & 0x7fff;
@@ -1652,7 +1981,6 @@ void fn_1_F85A0(Obj_1_bss_7F0C0 *save, u8 *dst) {
 /* fzgx:end fn_1_F85A0 */
 
 /* fzgx:begin fn_1_F8918 */
-
 void fn_1_F8918(u8 *src, u8 *dst) {
     u8 *hdr = src + 0x60;
     u32 seed = *(u32 *)hdr ^ 0xcae87fb5;
@@ -1676,7 +2004,6 @@ void fn_1_F8918(u8 *src, u8 *dst) {
 /* fzgx:end fn_1_F8918 */
 
 /* fzgx:begin fn_1_F89C0 */
-
 void fn_1_F89C0(void) {
     fn_1_F8A04();
     fn_1_F8A90();
@@ -1691,7 +2018,6 @@ u32 fn_1_F89E4(u8 value) {
 /* fzgx:end fn_1_F89E4 */
 
 /* fzgx:begin fn_1_F8A04 */
-
 // Clears the spline object's reset flag.
 void fn_1_F8A04(void) {
     ((u32 *)&lbl_1_bss_7F0C0)[4672] = 0;
@@ -1699,7 +2025,6 @@ void fn_1_F8A04(void) {
 /* fzgx:end fn_1_F8A04 */
 
 /* fzgx:begin fn_1_F8A18 */
-
 void fn_1_F8A18(void) {
     fn_1_F8A7C();
 }
@@ -1720,7 +2045,6 @@ void fn_1_F8A58(u32 value) {
 /* fzgx:end fn_1_F8A58 */
 
 /* fzgx:begin fn_1_F8A7C */
-
 // Clears the spline object's state field.
 void fn_1_F8A7C(void) {
     ((u32 *)&lbl_1_bss_7F0C0)[4673] = 0;
@@ -1728,7 +2052,6 @@ void fn_1_F8A7C(void) {
 /* fzgx:end fn_1_F8A7C */
 
 /* fzgx:begin fn_1_F8A90 */
-
 void fn_1_F8A90(void) {
     u32 i;
 
@@ -1748,7 +2071,6 @@ void fn_1_F8AD4(u32 value) {
 /* fzgx:end fn_1_F8AD4 */
 
 /* fzgx:begin fn_1_F8AFC */
-
 struct fn_1_F8AFC_lbl_1_bss_7F0C0 {
     u8 pad_0[0x4900];
     u32 unk_4900;
@@ -1763,7 +2085,6 @@ void fn_1_F8AFC(u32 arg0) {
 /* fzgx:end fn_1_F8AFC */
 
 /* fzgx:begin fn_1_F8B24 */
-
 void fn_1_F8B24(void) {
     fn_1_F8B64();
     fn_1_F8BA8();
@@ -1780,7 +2101,6 @@ void fn_1_F8B50(void) {
 /* fzgx:end fn_1_F8B50 */
 
 /* fzgx:begin fn_1_F8B64 */
-
 // Clear the spline state counters.
 void fn_1_F8B64(void) {
     ((u32 *)&lbl_1_bss_7F0C0)[4676] = 0;
@@ -1789,7 +2109,6 @@ void fn_1_F8B64(void) {
 /* fzgx:end fn_1_F8B64 */
 
 /* fzgx:begin fn_1_F8B7C */
-
 void fn_1_F8B7C(void) {
     fn_1_F8C28(0x80000000u);
     fn_1_F8C28(0x40000000u);
@@ -1797,7 +2116,6 @@ void fn_1_F8B7C(void) {
 /* fzgx:end fn_1_F8B7C */
 
 /* fzgx:begin fn_1_F8BA8 */
-
 void fn_1_F8BA8(void) {
     fn_1_F8CCC(0x80000000u);
     fn_1_F8CCC(0x40000000u);
@@ -1805,7 +2123,6 @@ void fn_1_F8BA8(void) {
 /* fzgx:end fn_1_F8BA8 */
 
 /* fzgx:begin fn_1_F8BD4 */
-
 void fn_1_F8BD4(void) {
     fn_1_F8CA0(0);
     fn_1_F8CA0(1);
@@ -1821,7 +2138,6 @@ void fn_1_F8C00(s32 value) {
 /* fzgx:end fn_1_F8C00 */
 
 /* fzgx:begin fn_1_F8C28 */
-
 // Clears the bit corresponding to the spline index.
 void fn_1_F8C28(s32 value) {
     value *= 2;
@@ -1853,7 +2169,6 @@ void fn_1_F8C74(s32 value) {
 /* fzgx:end fn_1_F8C74 */
 
 /* fzgx:begin fn_1_F8CA0 */
-
 // Clears the bit corresponding to the spline index.
 void fn_1_F8CA0(s32 value) {
     value *= 2;
@@ -1862,7 +2177,6 @@ void fn_1_F8CA0(s32 value) {
 /* fzgx:end fn_1_F8CA0 */
 
 /* fzgx:begin fn_1_F8CCC */
-
 // Clears the bit selected by value from the spline state mask.
 void fn_1_F8CCC(s32 value) {
     ((u32 *)&lbl_1_bss_7F0C0)[4677] &= ~(((u32)1 << 31) >> (31 - value));
@@ -1899,7 +2213,6 @@ void fn_1_F8D38(u32 value) {
 /* fzgx:end fn_1_F8D38 */
 
 /* fzgx:begin fn_1_F8D5C */
-
 struct fn_1_F8D5C_Copy440 { u32 a[110]; };
 
 
@@ -2601,7 +2914,6 @@ void fn_1_F9A80(void) {
 /* fzgx:end fn_1_F9A80 */
 
 /* fzgx:begin fn_1_F9C6C */
-
 void fn_1_F9C6C(void) {
     fn_1_F9D04(0);
     fn_1_F9D04(1);
@@ -2610,7 +2922,6 @@ void fn_1_F9C6C(void) {
 /* fzgx:end fn_1_F9C6C */
 
 /* fzgx:begin fn_1_F9CA0 */
-
 // Returns the selected high-to-low flag bit for a spline entry.
 u32 fn_1_F9CA0(u32 arg0, u32 arg1) {
     return (&lbl_1_bss_7F0C0.unk_64)[(u8)arg0 * 24] & ((s32)0x8000 >> (u8)arg1);
@@ -2618,7 +2929,6 @@ u32 fn_1_F9CA0(u32 arg0, u32 arg1) {
 /* fzgx:end fn_1_F9CA0 */
 
 /* fzgx:begin fn_1_F9CD0 */
-
 // Sets the requested flag in an indexed spline record.
 void fn_1_F9CD0(u8 index, u8 shift) {
     u16 *flags = &lbl_1_bss_7F0C0.unk_64;
@@ -2627,7 +2937,6 @@ void fn_1_F9CD0(u8 index, u8 shift) {
 /* fzgx:end fn_1_F9CD0 */
 
 /* fzgx:begin fn_1_F9D04 */
-
 // Clear the selected spline entry's status field.
 void fn_1_F9D04(u8 index) {
     (&lbl_1_bss_7F0C0.unk_64)[index * 0x18] = 0;
@@ -2635,7 +2944,6 @@ void fn_1_F9D04(u8 index) {
 /* fzgx:end fn_1_F9D04 */
 
 /* fzgx:begin fn_1_F9D24 */
-
 void fn_1_F9D24(void) {
     fn_1_F9D90();
 }
@@ -2655,7 +2963,6 @@ void fn_1_F9D68(u32 arg) {
 /* fzgx:end fn_1_F9D68 */
 
 /* fzgx:begin fn_1_F9D90 */
-
 // Clear the spline object's active flags.
 void fn_1_F9D90(void) {
     lbl_1_bss_7F0C0.unk_68 = 0;
@@ -2663,7 +2970,6 @@ void fn_1_F9D90(void) {
 /* fzgx:end fn_1_F9D90 */
 
 /* fzgx:begin fn_1_F9DA4 */
-
 void fn_1_F9DA4(void) {
     fn_1_F9E38();
 }
@@ -2690,7 +2996,6 @@ void fn_1_F9E10(u32 param) {
 /* fzgx:end fn_1_F9E10 */
 
 /* fzgx:begin fn_1_F9E38 */
-
 // Clear the spline object's status field.
 void fn_1_F9E38(void) {
     lbl_1_bss_7F0C0.unk_6A = 0;
@@ -2698,7 +3003,6 @@ void fn_1_F9E38(void) {
 /* fzgx:end fn_1_F9E38 */
 
 /* fzgx:begin fn_1_F9E4C */
-
 void fn_1_F9E4C(void) {
     fn_1_F9EE4(0);
     fn_1_F9EE4(1);
@@ -2750,7 +3054,6 @@ u32 fn_1_F9EB0(u32 arg0, u32 arg1) {
 /* fzgx:end fn_1_F9EB0 */
 
 /* fzgx:begin fn_1_F9EE4 */
-
 // Reset one spline slot and clear its working buffer.
 void fn_1_F9EE4(s32 arg0) {
     *(u16 *)((u8 *)&lbl_1_bss_7F0C0 + ((arg0 & 0xFF) * 0x30) + 0x66) = 0;
@@ -3134,7 +3437,6 @@ void fn_1_FA1D8(u32 arg0, u32 arg1, SplineTimeTable *table) {
 /* fzgx:end fn_1_FA1D8 */
 
 /* fzgx:begin fn_1_FA450 */
-
 // Store the value when initialization permits the update.
 void fn_1_FA450(u8 value) {
     u8 local[0x14c0];
@@ -3158,8 +3460,6 @@ u8 fn_1_FA4C0(void) {
 /* fzgx:end fn_1_FA4C0 */
 
 /* fzgx:begin fn_1_FA4D4 */
-
-
 /* View of the object lbl_1_bss_84420 points to (the header types the pointer as u32). */
 struct SplineWork {
     u8 pad_0[0xa];
@@ -3214,7 +3514,6 @@ u32 fn_1_FA5E0(u32 arg0, u32 arg1) {
 /* fzgx:end fn_1_FA5E0 */
 
 /* fzgx:begin fn_1_FA61C */
-
 // Clears the low flag bit in the spline state.
 void fn_1_FA61C(void) {
     ((u8 *)lbl_1_bss_84420)[0x85] &= 0xfe;
@@ -3254,7 +3553,6 @@ void fn_1_FA67C(s32 index) {
 /* fzgx:end fn_1_FA67C */
 
 /* fzgx:begin fn_1_FA69C */
-
 // Return the spline entry value for an in-range index.
 u8 fn_1_FA69C(s32 index) {
     u8 *base;
@@ -3268,7 +3566,6 @@ u8 fn_1_FA69C(s32 index) {
 /* fzgx:end fn_1_FA69C */
 
 /* fzgx:begin fn_1_FA6C0 */
-
 struct fn_1_FA6C0_lbl_1_data_2A7E0 {
     u8 pad_0[0x3C];
     u32 unk_3C;
@@ -3299,7 +3596,6 @@ void fn_1_FA6C0(void) {
 /* fzgx:end fn_1_FA6C0 */
 
 /* fzgx:begin fn_1_FA75C */
-
 // Reset spline state while preserving the active spline entry.
 void fn_1_FA75C(void) {
     s32 spline_index;
@@ -3344,7 +3640,6 @@ void fn_1_FA82C(void) {
 /* fzgx:end fn_1_FA82C */
 
 /* fzgx:begin fn_1_FA830 */
-
 void fn_1_FA830(void) {
     fn_1_9AD54();
     fn_1_FB18C();
@@ -3352,7 +3647,6 @@ void fn_1_FA830(void) {
 /* fzgx:end fn_1_FA830 */
 
 /* fzgx:begin fn_1_FA854 */
-
 void fn_1_FA854(void) {
     fn_1_76BF8();
     fn_1_72648();
@@ -3360,7 +3654,6 @@ void fn_1_FA854(void) {
 /* fzgx:end fn_1_FA854 */
 
 /* fzgx:begin fn_1_FA878 */
-
 void fn_1_FA878(void) {
     fn_1_9AD88();
 }
@@ -3373,7 +3666,6 @@ void fn_1_FA898(void) {
 /* fzgx:end fn_1_FA898 */
 
 /* fzgx:begin fn_1_FA89C */
-
 void fn_1_FA89C(SplineViewportHolder *holder) {
     int count;
     u32 x, w, y, h;
@@ -3416,7 +3708,6 @@ Obj_1_bss_84428 *fn_1_FB0A8(void) {
 /* fzgx:end fn_1_FB0A8 */
 
 /* fzgx:begin fn_1_FB0B4 */
-
 void fn_1_FB0B4(Obj_1_bss_84428 *data) {
     u32 first[3];
     u32 second[3];
@@ -3442,7 +3733,6 @@ void fn_1_FB0B4(Obj_1_bss_84428 *data) {
 /* fzgx:end fn_1_FB0B4 */
 
 /* fzgx:begin fn_1_FB180 */
-
 // Set the destination value to one.
 void fn_1_FB180(int *value) {
     *value = 1;

@@ -9329,3 +9329,9 @@ rel/main_rel/memcard/fn_1_B4AC0.c:
 
 rel/main_rel/sel_static_disp/fn_1_133E04.c:
 	.text       start:0x00133E04 end:0x00134A4C align:4
+
+rel/main_rel/spline/fn_1_F65A0.c:
+	.text       start:0x000F65A0 end:0x000F70C0 align:4
+
+rel/main_rel/effect_car/fn_1_68B6C.c:
+	.text       start:0x00068B6C end:0x000694A4 align:4
