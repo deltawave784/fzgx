@@ -1,5 +1,5 @@
 {
- "generated": 1793835286,
+ "generated": 1793842191,
  "functions": [
   {
    "symbol": "car_colchg:_prolog",
@@ -897122,9 +897122,9 @@
    "detail": "phys.h declares lbl_1_bss_7AE88 as a 0x30-byte Obj_1_bss_7AE88, but this function also reads s16 fields at 0x2C6 and 0x2F0 and passes the vector at 0x2D4; extend the shared layout before replacing the seed's larger state declaration.",
    "source": "agent:codex-20261030d-codex-71",
    "created_at": 1793395549,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1793837341
   },
   {
    "id": 588,
@@ -897254,9 +897254,9 @@
    "detail": "A canonical SDK low-memory bus-clock accessor is needed: OS_BUS_CLOCK is undefined in dolphin/os.h and dolphin/os/OSTime.h, while the seed's ordinary extern __OSBusClock adds an address-materialization instruction; raw hardcoded addresses are prohibited.",
    "source": "agent:codex-20261031a-codex-71",
    "created_at": 1793441904,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1793837338
   },
   {
    "id": 599,
@@ -897278,9 +897278,9 @@
    "detail": "sel_static_disp.h declares Obj_1_bss_8E518 with only unk_0 and unk_4 (size 8), but fn_1_14C35C accesses fields through s32 unk_78 (minimum size 0x7C); compiling the required typed accesses fails at p->unk_40. Expand the shared header layout from the supplied reconstruction before replacing the seed'",
    "source": "agent:codex-20261031a-codex-142",
    "created_at": 1793445094,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1793837343
   },
   {
    "id": 601,
@@ -897338,9 +897338,9 @@
    "detail": "Provide an approved SDK low-memory bus-clock macro/accessor for cached boot-info offset 0xF8: OS_BUS_CLOCK and OS_BASE_CACHED are absent, OSPhysicalToCached is an out-of-line function, and extern __OSBusClock adds an unmatched pointer-materialization instruction.",
    "source": "agent:codex-20261031c-codex-70",
    "created_at": 1793456752,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1793837338
   },
   {
    "id": 606,
@@ -897398,9 +897398,9 @@
    "detail": "Obj_1_bss_8E428 declares only offsets 0x0..0x10 (size 0x14), but retail fn_1_144F40 also accesses u32 scissor fields at offsets 0x14 and 0x18; confirm and extend the header object layout rather than retaining out-of-bounds clip[5]/clip[6] accesses.",
    "source": "agent:codex-20261031d-codex-113",
    "created_at": 1793469283,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1793837342
   },
   {
    "id": 611,
@@ -897470,9 +897470,9 @@
    "detail": "dolphin/os.h exposes neither OS_BUS_CLOCK nor OS_BASE_CACHED/OS_CACHED_REGION_PREFIX; reproducing the retail low-memory access without hardcoded addresses requires a suitable SDK header accessor.",
    "source": "agent:codex-20261031g-codex-68",
    "created_at": 1793486704,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1793837339
   },
   {
    "id": 617,
@@ -897494,9 +897494,9 @@
    "detail": "lbl_1_data_3E358 is declared u8[0xC] in include/rel/main_rel/phys.h, but fn_1_EA314 reads fields at 0x1D4/0x1D8/0x1DC and strings at 0x2D4..0x3AC from it; the object is at least 0x3AC bytes (a file-name string plus format strings).",
    "source": "agent:opus-fn_1_EA314-20261102e",
    "created_at": 1793680120,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1793837343
   },
   {
    "id": 619,
@@ -897614,9 +897614,9 @@
    "detail": "Obj_1_bss_7AE88 (lbl_1_bss_7AE88) is declared as 0x30 bytes, but fn_1_E7764 writes s16 fields at +0x2F0 and +0x2F2, so the object is at least 0x2F4 bytes. The header layout is undersized.",
    "source": "agent:opus-fn_1_E7764-20261103m",
    "created_at": 1793752948,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1793837341
   },
   {
    "id": 629,
@@ -897626,9 +897626,9 @@
    "detail": "fn_1_CEB38 seed declares `void fn_1_CEB38(f32 v1, f32 v3)` using parameters as scratch locals; retail never reads f1/f2 on entry, so the true prototype is likely void(void). Check caller fn_1_C72D4.",
    "source": "agent:opus-fn_1_CEB38-20261103n",
    "created_at": 1793754322,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1793837339
   },
   {
    "id": 630,
@@ -897722,9 +897722,9 @@
    "detail": "fn_1_10976C: the LC_BASE matrix translate (lfs m[2],m[3],m[6],m[7],m[10],m[11]; fmadds x,x,z,t in place; stfs m[3],m[7],m[11]; also the m[0],m[4],m[8] column variant) looks like an inline-asm kernel. Consider adding psvec-style translate_x/translate_z kernels to include/psvec.h.",
    "source": "agent:opus-fn_1_10976C-20261104j",
    "created_at": 1793805622,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1793841999
   },
   {
    "id": 638,
@@ -897734,9 +897734,9 @@
    "detail": "lbl_1_bss_84: retail fn_1_CEB38 loads +0 base-relative (lwz r7, lbl_1_bss_84@l(r3)) in one site and via materialised base (addi; lwz 0x0 / lwz 0x10) elsewhere; the header's extern struct Obj_1_bss_84 (and every scalar/split spelling under GC/1.3.2) cannot produce the direct form.",
    "source": "agent:fable-fn_1_CEB38-20261104n",
    "created_at": 1793817117,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1793837340
   },
   {
    "id": 639,
@@ -897854,9 +897854,9 @@
    "detail": "Obj_1_bss_6E960 currently ends at +0x18, but fn_1_913FC accesses state words at +0x18, +0x1c, and +0x24, as represented by the supplied DbgState reconstruction.",
    "source": "agent:codex-20261104c-codex-60",
    "created_at": 1793832895,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1793837342
   },
   {
    "id": 649,

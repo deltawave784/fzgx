@@ -1019,3 +1019,12 @@ carrier (declaration order, not layout).
   fn_12_D038 (seven `ppc_dcbi(buf, off); off += 0x20;` per iteration, 13 iterations) and fn_12_335B8
   (`if (lbl_12_bss_1B778 == 1) return 0; return ppc_get_time_base();`, s64). Inline the time-base
   helper at most once per function (its asm label is function-scoped).
+- A global's `lis; addi rB, rA, sym@l; lwz rD, 0(rB)` folds to `lis rA; lwz rD, sym@l(rA)` by statement position, not by the
+  declaration (librarian pass 23, probes on GC/1.3.2, 2026-11-04). Every spelling of the same read in isolation (scalar extern,
+  struct member, cast view) gives the `addi` form; a load written *after* struct copies from other globals folds, and the same load
+  written before them does not: `l1 = s1; l2 = s2; v = o.p;` folds, `v = o.p; l1 = s1; l2 = s2;` keeps the `addi`. So a mixed
+  `lwz sym@l` / `addi; lwz 0` function is not a header problem. fn_1_CEB38 goes 98.78 -> 99.88 by moving `v0 = lbl_1_bss_84.unk_0`
+  below the two rodata copies (and its `f32 v1, v3` parameters become locals declared `v3` then `v1`: retail's prototype is `void (void)`).
+- Offsets past a symbol that dtk bounds by the next label are section-base addressing, the customize rule of pass 21, also in main_rel:
+  lbl_1_bss_7AE88+0x2C6..0x2F2 are lbl_1_bss_7B14C, lbl_1_bss_8E428+0x14/0x18 are lbl_1_bss_8E43C/8E440, lbl_1_bss_6E960+0x18/0x24
+  are lbl_1_bss_6E978/6E984, lbl_1_data_3E358+0x1D4 is lbl_1_data_3E52C. Keep the dtk sizes and spell the neighbouring symbol.
