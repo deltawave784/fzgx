@@ -20553,5 +20553,78 @@
       }
     ],
     "link": "pool"
+  },
+  "fn_12_7870": {
+    "seed_symbol": "fn_12_11204",
+    "generator": "fzgx fixup",
+    "transform": "bind exact clone",
+    "seed": "#include \"types.h\"\n\nstruct fn_12_7870_Arg2 {\n    u32 unk_0;\n    s32 unk_4;\n};\nstruct fn_12_7870_Arg3 {\n    u8 pad_0[0xC];\n    s16 unk_C;\n    s16 unk_E;\n};\n\n#pragma opt_propagation off\n#pragma opt_lifetimes off\nstatic inline u8 fn_12_7870_array_read(s32 index, u8 *array) { return array[index]; }\nvoid fn_12_11204(u32 arg0, u32 arg1, struct fn_12_7870_Arg2 *arg2, struct fn_12_7870_Arg3 *arg3) {\n    u8 *entry;\n    s16 y;\n    s8 a;\n    s8 b;\n    s32 a8;\n\n    y = arg3->unk_E;\n    arg1 <<= 1;\n    entry = (u8 *)arg1 + 0x1344;\n    entry = (u8 *)arg0 + (u32)entry;\n    a = (s8)entry[0];\n    b = (s8)entry[1];\n    a8 = a << 3;\n    arg2->unk_0 = (a8 * arg3->unk_C) + (b << 3);\n    arg2->unk_4 = (a << 4) * y + (b << 4);\n}\n#pragma opt_lifetimes reset\n#pragma opt_propagation reset\n",
+    "seed_sha256": "661d053ca6c2be35ab0b8d06fa9034f9b54f42c363f0d7fc4261625d29b3b00d",
+    "generated_sha256": "5698f11b167cbdc602876c833cd91f9bab2d6c0ae7ac5e39bd3498e1d965b295",
+    "generated_source": "\ntypedef signed char s8;\ntypedef signed short s16;\ntypedef signed long s32;\n\ntypedef unsigned char u8;\n\ntypedef unsigned long u32;\n\nstruct fn_12_7870_Arg2 {\nu32 unk_0;\ns32 unk_4;\n};\nstruct fn_12_7870_Arg3 {\nu8 pad_0[0xC];\ns16 unk_C;\ns16 unk_E;\n};\n#pragma opt_propagation off\n#pragma opt_lifetimes off\nstatic inline u8 fn_12_7870_array_read(s32 index, u8 *array) { return array[index]; }\nvoid fn_12_7870(u32 arg0, u32 arg1, struct fn_12_7870_Arg2 *arg2, struct fn_12_7870_Arg3 *arg3) {\nu8 *entry;\ns16 y;\ns8 a;\ns8 b;\ns32 a8;\ny = arg3->unk_E;\narg1 <<= 1;\nentry = (u8 *)arg1 + 0x1344;\nentry = (u8 *)arg0 + (u32)entry;\na = (s8)entry[0];\nb = (s8)entry[1];\na8 = a << 3;\narg2->unk_0 = (a8 * arg3->unk_C) + (b << 3);\narg2->unk_4 = (a << 4) * y + (b << 4);\n}\n#pragma opt_lifetimes reset\n#pragma opt_propagation reset\n",
+    "compiler": "GC/1.3.2",
+    "flags": "",
+    "source": "rel/movie_module/fn_12_7870.c",
+    "bytes": 80,
+    "headers_sha256": "2be748c53a824b4e3448c83afb90095256171f0861a3032be303577e371dba1f",
+    "oracle_sha256": "d46cd39ca2eb42ad1793f5b89602c8ae2efd51b7f27d8c59654252233f035f29",
+    "recipe": [
+      {
+        "label": "expand owned clone declarations",
+        "input_sha256": "661d053ca6c2be35ab0b8d06fa9034f9b54f42c363f0d7fc4261625d29b3b00d",
+        "output_sha256": "2bdd677649588fb42a589704184d4334e3b91f0a2fa9c83b818f8c8311014924",
+        "input_symbol": "fn_12_11204",
+        "output_symbol": "fn_12_11204",
+        "edits": [
+          [
+            0,
+            18,
+            "\ntypedef signed char s8;\ntypedef signed short s16;\ntypedef signed long s32;\n\ntypedef unsigned char u8;\n\ntypedef unsigned long u32;"
+          ],
+          [
+            45,
+            64,
+            "u32 unk_0;\n"
+          ],
+          [
+            103,
+            141,
+            "u8 pad_0[0xC];\ns16 unk_C;\n"
+          ],
+          [
+            155,
+            156,
+            ""
+          ],
+          [
+            395,
+            675,
+            "u8 *entry;\ns16 y;\ns8 a;\ns8 b;\ns32 a8;\ny = arg3->unk_E;\narg1 <<= 1;\nentry = (u8 *)arg1 + 0x1344;\nentry = (u8 *)arg0 + (u32)entry;\na = (s8)entry[0];\nb = (s8)entry[1];\na8 = a << 3;\narg2->unk_0 = (a8 * arg3->unk_C) + (b << 3);\n"
+          ]
+        ]
+      },
+      {
+        "label": "bind exact clone",
+        "input_sha256": "2bdd677649588fb42a589704184d4334e3b91f0a2fa9c83b818f8c8311014924",
+        "output_sha256": "5698f11b167cbdc602876c833cd91f9bab2d6c0ae7ac5e39bd3498e1d965b295",
+        "input_symbol": "fn_12_11204",
+        "output_symbol": "fn_12_7870",
+        "edits": [
+          [
+            398,
+            403,
+            "7870"
+          ]
+        ],
+        "clone": {
+          "donor": "fn_12_11204",
+          "recipient": "fn_12_7870",
+          "bindings": {
+            "fn_12_11204": "fn_12_7870"
+          }
+        }
+      }
+    ],
+    "link": "pending"
   }
 }
