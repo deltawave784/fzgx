@@ -15762,6 +15762,501 @@ void fn_1_B9DE8(MemcardArg *arg0) {
 #pragma opt_dead_assignments reset
 /* fzgx:end fn_1_B9DE8 */
 
+/* fzgx:begin fn_1_BA144 pool noprologue */
+#include "types.h"
+#include "game/main_rel/ghost_types.h"
+#include "rel/main_rel/memcard.h"
+#include "dolphin/card.h"
+
+/* Memory card port state (0xA0 bytes). */
+typedef struct BAPort {
+    u8 unk_0;
+    u8 unk_1;
+    u8 unk_2;
+    u8 pad_3[9];
+    void *unk_C;
+    u8 pad_10[0x2C];
+    s32 unk_3C;
+    s32 unk_40;
+    u8 pad_44[0x54];
+    u64 unk_98;
+} BAPort;
+typedef struct fn_1_BA144_file {
+    u8 unk_0, unk_1, unk_2;
+    u8 pad_3[0x21];
+    void *unk_24;
+    u32 unk_28;
+    void *unk_2C;
+} BAFile;
+
+/* The TU's .bss objects (retail lbl_1_bss_716C0 cluster), in address order. */
+u8 fzgx_obj_lbl_1_bss_716C0[8];
+BAPort gPorts[2];          /* +0x8 */
+u8 fzgx_bss_148[8];
+BAPort gPortX;             /* +0x150 */
+u8 fzgx_bss_1F0[4];
+s32 gCardResult;           /* +0x1F4 */
+u8 gCardBusy;              /* +0x1F8 */
+u8 fzgx_bss_1FC[0x5AC4];
+BAFile gFiles[2][128];     /* +0x5CC0 */
+u8 fzgx_bss_8CC0[8];
+u64 gSerials[2];           /* +0x8CC8 */
+u8 gFlag8CD8;              /* +0x8CD8 */
+u8 gMeta[2][127][8];       /* +0x8CDC */
+u8 gFlag94CC;              /* +0x94CC */
+
+struct fn_1_BA144_lbl_801A6410 { u32 unk_0; };
+extern struct fn_1_BA144_lbl_801A6410 lbl_801A6410;
+extern void fn_1_46B4(u32, void *, const char *, int);
+extern void *fn_1_45D0(u32, u32, const char *, int);
+extern void fn_1_B8338(s32);
+extern s32 fn_1_B88C4(void);
+extern void fn_1_AA6D8(u32, u32, void *);
+extern s32 fn_8002DFE0(s32, void *, CARDCallback);
+extern void fn_80008BEC(void *, int, u32);
+extern void fn_80008BA8(void *, const void *, u32);
+extern void fn_1_F4810(void *, void *, void *, void *, void *, void *, void *, void *, void *);
+extern void fn_1_A2DC4(u32);
+
+#pragma section code_type ".fzgxpool"
+void fzgx_bss_order(void) {
+    fn_80008BEC(fzgx_obj_lbl_1_bss_716C0, 0, 0);
+    fn_80008BEC(gPorts, 0, 0);
+    fn_80008BEC(fzgx_bss_148, 0, 0);
+    fn_80008BEC(&gPortX, 0, 0);
+    fn_80008BEC(fzgx_bss_1F0, 0, 0);
+    fn_80008BEC(&gCardResult, 0, 0);
+    fn_80008BEC(&gCardBusy, 0, 0);
+    fn_80008BEC(fzgx_bss_1FC, 0, 0);
+    fn_80008BEC(gFiles, 0, 0);
+    fn_80008BEC(fzgx_bss_8CC0, 0, 0);
+    fn_80008BEC(gSerials, 0, 0);
+    fn_80008BEC(&gFlag8CD8, 0, 0);
+    fn_80008BEC(gMeta, 0, 0);
+    fn_80008BEC(&gFlag94CC, 0, 0);
+}
+#pragma section code_type ".text"
+
+typedef struct BAState {
+    u32 unk_0;
+    u8 unk_4;
+    s8 unk_5;
+    u8 pad_6[0xE];
+    s8 unk_14;
+    u8 pad_15;
+    s16 unk_16, unk_18, unk_1A, unk_1C;
+    u8 unk_1E[2];
+    u8 unk_20[2];
+    u8 unk_22;
+    u8 pad_23[0xD];
+    s16 unk_30[2];
+    s32 unk_34;
+    u8 pad_38[4];
+    u8 unk_3C, unk_3D, unk_3E;
+    u8 pad_3F;
+    s32 unk_40[2];
+} BAState;
+typedef struct BARequest {
+    u8 unk_0;
+    u8 pad_1[0xB];
+    BAFile *unk_C;
+    u8 pad_10[0x10];
+    u32 unk_20;
+} BARequest;
+
+static inline u8 BA_pending(void) {
+    u8 bits = 0;
+    if (gPorts[0].unk_2 != 255) bits |= 1;
+    if (gPorts[1].unk_2 != 255) bits |= 2;
+    if (gPortX.unk_2 != 255) bits |= 4;
+    return bits;
+}
+static inline s8 BA_status(s32 chan) {
+    return gPorts[chan].unk_1;
+}
+static inline s32 BA_busy(void) {
+    return gCardBusy;
+}
+static inline s32 BA_available(s32 chan) {
+    s32 result = 0;
+    if ((s8)gPorts[chan].unk_1 != -1 && (s8)gPorts[chan].unk_1 != -3) result = 1;
+    return result;
+}
+static inline void BA_clear(s32 chan) {
+    s32 i;
+    for (i = 0; i < 127; i++) {
+        if (gFiles[chan][i].unk_2C)
+            fn_1_46B4(lbl_801A6410.unk_0, gFiles[chan][i].unk_2C, lbl_1_data_3C7B8, 0x2776);
+        gFiles[chan][i].unk_1 = 0;
+        gFiles[chan][i].unk_2 = 0;
+        gFiles[chan][i].unk_24 = 0;
+        gFiles[chan][i].unk_28 = 0;
+        gFiles[chan][i].unk_2C = 0;
+    }
+}
+static inline s32 BA_start_mount(s32 chan) {
+    s32 result;
+    BAPort *port = &gPorts[chan];
+    port->unk_C = fn_1_45D0(lbl_801A6410.unk_0, 0xA000, lbl_1_data_3C7B8, 0x256D);
+    do { result = fn_8002DFE0(chan, port->unk_C, 0); } while (result == -1);
+    if (result != 0 && result != -6) {
+        if (port->unk_C) {
+            fn_1_46B4(lbl_801A6410.unk_0, port->unk_C, lbl_1_data_3C7B8, 0x2573);
+            port->unk_C = 0;
+        }
+    } else {
+        s32 check;
+        do { check = CARDCheck(chan); } while (check == -1);
+        result = check;
+    }
+    return result;
+}
+static inline void BA_finish_mount(s32 chan) {
+    BAPort *port = &gPorts[chan];
+    while (CARDUnmount(chan) == -1) {}
+    if (port->unk_C) {
+        fn_1_46B4(lbl_801A6410.unk_0, port->unk_C, lbl_1_data_3C7B8, 0x258C);
+        port->unk_C = 0;
+    }
+}
+/* serialp refers to one caller-owned pointer shared by both mount sites. */
+#define BA_mount(chan, serial) BA_mount_into(&(serial), chan)
+static inline void BA_mount_into(u64 **serialp, s32 chan) {
+    s32 result = BA_start_mount(chan);
+    if (result == 0) {
+        *serialp = (u64 *)((u8 *)gPorts + (0x98 + chan * sizeof(BAPort)));
+        if (CARDGetSerialNo(chan, *serialp) != 0) **serialp = 0;
+        gSerials[chan] = **serialp;
+    } else gSerials[chan] = 0;
+    BA_finish_mount(chan);
+}
+#define BA_request(chan, flags) BA_request_flags(chan, &(flags))
+static inline void BA_request_flags(s32 chan, u32 *flagsp) {
+    s32 flags = *flagsp;
+    s32 count;
+    BARequest request;
+    if (BA_available(chan)) {
+        count = 0;
+        if (flags & 0x10) count = 1;
+        if (flags & 0x20) count++;
+        if (flags & 4) count++;
+        fn_80008BEC(&request, 0, 0x24);
+        fn_80008BEC(&gFiles[chan][0], 0, 0x30);
+        request.unk_C = &gFiles[chan][0];
+        request.unk_20 = flags;
+        if (count == 1) {
+            if (flags & 0x10) request.unk_0 = 4;
+            else if (flags & 4) request.unk_0 = 2;
+            else if (flags & 0x20) request.unk_0 = 5;
+        }
+        fn_1_AA6D8(4, chan, &request);
+    }
+}
+
+#define BA_enabled(chan, flags) BA_enabled_state(chan, flags)
+static inline s32 BA_enabled_state(s32 chan, s32 flags) {
+    return (s8)flags & (1 << chan);
+}
+
+#pragma opt_dead_assignments off
+s32 fn_1_BA144(fn_1_EF4F8_Obj_1_bss_7ECB4 *arg0) {
+    s16 * fzgx_live;
+    BAState *st = (BAState *)arg0;
+    u32 i;
+    u32 count;
+    s32 rank;
+    struct { u8 a, b, c; u8 pad[9]; } out20;
+    u32 out1c, out18, out14;
+    u8 out13, out12, out11, out10;
+    s16 n;
+    u64 *serial;
+    if (BA_pending()) {
+        if ((s8)gPorts[st->unk_16].unk_1 == -3) {
+            if (st->unk_16 == 0) st->unk_1E[0] = 0;
+            else st->unk_1E[1] = 0;
+        }
+    }
+    if (BA_pending()) return 2;
+    if (BA_available(0) && gPorts[0].unk_98 != gSerials[0]) {
+        gSerials[0] = gPorts[0].unk_98;
+        BA_clear(0);
+        st->unk_5 &= ~1;
+        st->unk_40[0] = 0;
+        st->unk_1E[0] = 0;
+        st->unk_20[0] = 0;
+        st->unk_22 = 3;
+        st->unk_3E &= ~1;
+        return 2;
+    }
+    if (BA_available(1) && gPorts[1].unk_98 != gSerials[1]) {
+        gSerials[1] = gPorts[1].unk_98;
+        BA_clear(1);
+        st->unk_5 &= ~2;
+        st->unk_40[1] = 0;
+        st->unk_1E[1] = 0;
+        st->unk_20[1] = 0;
+        st->unk_22 = 3;
+        st->unk_3E &= ~1;
+        return 2;
+    }
+    if (BA_available(st->unk_16) &&
+        gPorts[st->unk_16].unk_3C == -1 &&
+        gPorts[st->unk_16].unk_40 == -1) fn_1_B8338(st->unk_16);
+    if (st->unk_3E & 1) {
+        if (BA_busy() && (st->unk_3E & 1)) {
+            if (st->unk_16 == 0) st->unk_1E[0] = 1;
+            else st->unk_1E[1] = 1;
+        }
+        st->unk_40[st->unk_16] = gCardResult;
+        if (gCardResult == -123) {
+            BA_clear(st->unk_16);
+            st->unk_5 &= ~(1 << st->unk_16);
+            if (st->unk_16 == 0) st->unk_1E[0] = 0;
+            if (st->unk_16 == 1) st->unk_1E[1] = 0;
+            st->unk_3E &= ~1;
+            return 2;
+        }
+    }
+    if (!BA_busy() && (st->unk_3E & 1) &&
+        ((s8)st->unk_5 & (1 << st->unk_16))) {
+        BA_clear(st->unk_16);
+        st->unk_5 &= ~(1 << st->unk_16);
+        st->unk_3E &= ~1;
+        if (gCardResult == -121) {
+            if (st->unk_16 == 0) { st->unk_20[0] = 0; st->unk_1E[0] = 0; }
+            else { st->unk_20[1] = 0; st->unk_1E[1] = 0; }
+        }
+        return 2;
+    }
+    if ((s8)st->unk_22 != 1 && (s8)st->unk_22 != 2) {
+        st->unk_20[0] = st->unk_1E[0];
+        if (BA_available(0)) st->unk_1E[0] = 1;
+        else st->unk_1E[0] = 0;
+        if (st->unk_20[0] != 0 || st->unk_1E[0] != 0) {
+            if (st->unk_20[0] == 0 && st->unk_1E[0] == 1) {
+                BA_clear(0);
+                BA_mount(0, serial);
+                BA_request(0, st->unk_0);
+                st->unk_5 |= 1;
+                st->unk_16 = 0;
+                st->unk_3C = 255;
+                st->unk_3D = 0;
+                st->unk_22 = 1;
+                st->unk_3E |= 1;
+                return 2;
+            } else if (st->unk_20[0] == 1 && st->unk_1E[0] == 0) {
+                BA_clear(0);
+                st->unk_5 &= ~1;
+                st->unk_40[0] = 0;
+                st->unk_20[0] = 0;
+                if (st->unk_16 == 0) st->unk_22 = 4;
+                return 2;
+            } else if (st->unk_20[0] == 1 && st->unk_1E[0] == 1) st->unk_3E &= ~1;
+        }
+    } else if (st->unk_1E[0] == 1 && BA_status(0) == -3) {
+        BA_clear(0);
+        st->unk_5 &= ~1;
+        st->unk_40[0] = 0;
+        st->unk_1E[0] = 0;
+        st->unk_20[0] = 0;
+        st->unk_22 = 3;
+        st->unk_3E &= ~1;
+        return 2;
+    }
+    if ((s8)st->unk_22 != 1 && (s8)st->unk_22 != 2) {
+        st->unk_20[1] = st->unk_1E[1];
+        if (BA_available(1)) st->unk_1E[1] = 1;
+        else st->unk_1E[1] = 0;
+        if (st->unk_20[1] != 0 || st->unk_1E[1] != 0) {
+            if (st->unk_20[1] == 0 && st->unk_1E[1] == 1) {
+                BA_clear(1);
+                BA_mount(1, serial);
+                BA_request(1, st->unk_0);
+                st->unk_5 |= 2;
+                st->unk_16 = 1;
+                st->unk_3C = 255;
+                st->unk_3D = 0;
+                st->unk_22 = 1;
+                st->unk_3E |= 1;
+                return 2;
+            } else if (st->unk_20[1] == 1 && st->unk_1E[1] == 0) {
+                BA_clear(1);
+                st->unk_5 &= ~2;
+                st->unk_40[1] = 0;
+                st->unk_20[1] = 0;
+                if (st->unk_16 == 1) st->unk_22 = 4;
+                return 2;
+            } else if (st->unk_20[1] == 1 && st->unk_1E[1] == 1) st->unk_3E &= ~1;
+        }
+    } else if (st->unk_1E[1] == 1 && BA_status(1) == -3) {
+        BA_clear(1);
+        st->unk_5 &= ~2;
+        st->unk_40[1] = 0;
+        st->unk_1E[1] = 0;
+        st->unk_20[1] = 0;
+        st->unk_22 = 3;
+        st->unk_3E &= ~1;
+        return 2;
+    }
+    switch ((s8)st->unk_22) {
+    case 1:
+        if (fn_1_B88C4() && lbl_1_bss_960 != 12 && (lbl_1_bss_960 != 5 || !(st->unk_4 & 2))) {
+            gFlag8CD8 = 0;
+            st->unk_22 = 2;
+        } else st->unk_22 = 3;
+        break;
+    case 2:
+        if (gFlag8CD8 != 0) st->unk_22 = 3;
+        break;
+    case 3:
+        {
+        s32 j;
+        for (j = 0; j < 127; j++) {
+            if (gFiles[0][j].unk_1 == 5) {
+                if (lbl_1_bss_960 == 2)
+                    fn_80008BA8(gMeta[0][j], gFiles[0][j].unk_2C, 8);
+                else {
+                    fn_1_F4810(gFiles[0][j].unk_2C, &out14, &out1c, &out12, &out11, &out10, &out13, &out18, &out20);
+                    gMeta[0][j][0] = *(u8 *)&out14;
+                    gMeta[0][j][1] = out11;
+                    gMeta[0][j][2] = out10;
+                    gMeta[0][j][3] = *(u8 *)&out1c;
+                    gMeta[0][j][4] = *(u8 *)&out18;
+                    gMeta[0][j][5] = out20.a;
+                    gMeta[0][j][6] = out20.b;
+                    gMeta[0][j][7] = out20.c;
+                }
+            }
+        }
+        for (j = 0; j < 127; j++) {
+            if (gFiles[1][j].unk_1 == 5) {
+                if (lbl_1_bss_960 == 2)
+                    fn_80008BA8(gMeta[1][j], gFiles[1][j].unk_2C, 8);
+                else {
+                    fn_1_F4810(gFiles[1][j].unk_2C, &out14, &out1c, &out12, &out11, &out10, &out13, &out18, &out20);
+                    gMeta[1][j][0] = *(u8 *)&out14;
+                    gMeta[1][j][1] = out11;
+                    gMeta[1][j][2] = out10;
+                    gMeta[1][j][3] = *(u8 *)&out1c;
+                    gMeta[1][j][4] = *(u8 *)&out18;
+                    gMeta[1][j][5] = out20.a;
+                    gMeta[1][j][6] = out20.b;
+                    gMeta[1][j][7] = out20.c;
+                }
+            }
+        }
+        }
+        st->unk_22 = 4;
+        break;
+    case 4:
+        fzgx_live = st->unk_30;
+        fzgx_live[0] = 0;
+        fzgx_live = st->unk_30;
+        fzgx_live[1] = 0;
+        for (i = 0; i < 127; i++) {
+            if (gFiles[0][i].unk_24) st->unk_30[0]++;
+            if (gFiles[1][i].unk_24) st->unk_30[1]++;
+        }
+        fzgx_live = st->unk_30;
+        fzgx_live[0]++;
+        fzgx_live = st->unk_30;
+        fzgx_live[1]++;
+        if (((lbl_1_bss_9F8.unk_10 >> 3) & 1) || ((lbl_1_bss_9F8.unk_12 >> 3) & 1)) { st->unk_18--; fn_1_A2DC4(0xA9011300); }
+        if (((lbl_1_bss_9F8.unk_10 >> 2) & 1) || ((lbl_1_bss_9F8.unk_12 >> 2) & 1)) { st->unk_18++; fn_1_A2DC4(0xA9011300); }
+        if ((lbl_1_bss_9F8.unk_10 & 1) || (lbl_1_bss_9F8.unk_12 & 1)) { st->unk_16 = 0; fn_1_A2DC4(0xA9011300); }
+        if (((lbl_1_bss_9F8.unk_10 >> 1) & 1) || ((lbl_1_bss_9F8.unk_12 >> 1) & 1)) { st->unk_16 = 1; fn_1_A2DC4(0xA9011300); }
+        n = st->unk_30[st->unk_16];
+        st->unk_18 = (st->unk_18 + n) % n;
+        count = lbl_1_bss_9F8.unk_8;
+        if ((count >> 9) & 1) { fn_1_A2DC4(0xA9011000); return 1; }
+        if (BA_enabled(st->unk_16, st->unk_5) && ((count >> 8) & 1)) {
+            if (st->unk_30[st->unk_16] - 1 != st->unk_18 || (st->unk_4 & 1)) {
+                fn_1_A2DC4(0xA9011100);
+                st->unk_22 = 6;
+            }
+        }
+        break;
+    case 6: {
+        u32 count;
+        count = 0;
+        for (i = 0; i < 4; i++) if ((s8)st->unk_4 & (1 << i)) count++;
+        if (count == 1) {
+            st->unk_1A = st->unk_16;
+            st->unk_1C = st->unk_18;
+            st->unk_14 = st->unk_4;
+            if (st->unk_4 & 0x10) st->unk_22 = 5;
+            else return 0;
+            break;
+        }
+        if (((lbl_1_bss_9F8.unk_10 >> 3) & 1) || ((lbl_1_bss_9F8.unk_12 >> 3) & 1)) { st->unk_34--; fn_1_A2DC4(0xA9011300); }
+        if (((lbl_1_bss_9F8.unk_10 >> 2) & 1) || ((lbl_1_bss_9F8.unk_12 >> 2) & 1)) { st->unk_34++; fn_1_A2DC4(0xA9011300); }
+        if (st->unk_34 < 0) st->unk_34 = 0;
+        if ((u32)st->unk_34 > count - 1) st->unk_34 = count - 1;
+        rank = 0;
+        for (i = 0; i < 4; i++) {
+            if ((s8)st->unk_4 & (1 << i)) {
+                if (rank == st->unk_34) st->unk_14 = 1 << i;
+                rank++;
+            }
+        }
+        if (lbl_1_bss_960 == 2 && (st->unk_0 & 0x20) && st->unk_14 == 1 &&
+            st->unk_30[st->unk_16] - 1 != st->unk_18) st->unk_14 = 8;
+        if (st->unk_30[st->unk_16] - 1 == st->unk_18) st->unk_14 = 1;
+        if (gFiles[st->unk_16][st->unk_18].unk_0 != 0 &&
+            st->unk_18 < st->unk_30[st->unk_16] - 1) st->unk_14 = 8;
+        if ((lbl_1_bss_9F8.unk_8 >> 8) & 1) {
+            fn_1_A2DC4(0xA9011100);
+            st->unk_1A = st->unk_16;
+            st->unk_1C = st->unk_18;
+            if ((s8)st->unk_14 == 4) st->unk_22 = 5;
+            else if ((s8)st->unk_14 == 8) {
+                st->unk_22 = 7;
+                gFlag94CC = 1;
+            } else return 0;
+        } else if ((lbl_1_bss_9F8.unk_8 >> 9) & 1) {
+            fn_1_A2DC4(0xA9011000);
+            st->unk_22 = 4;
+        }
+        break;
+    }
+    case 7:
+        if ((lbl_1_bss_9F8.unk_10 & 1) || (lbl_1_bss_9F8.unk_12 & 1)) { gFlag94CC = 0; fn_1_A2DC4(0xA9011300); }
+        if (((lbl_1_bss_9F8.unk_10 >> 1) & 1) || ((lbl_1_bss_9F8.unk_12 >> 1) & 1)) { gFlag94CC = 1; fn_1_A2DC4(0xA9011300); }
+        if ((lbl_1_bss_9F8.unk_8 >> 9) & 1) *(u8 *)((u8 *)&gFlag94CC) = 1;
+        if (((lbl_1_bss_9F8.unk_8 >> 8) & 1) || ((lbl_1_bss_9F8.unk_8 >> 9) & 1)) {
+            if (gFlag94CC == 0) { fn_1_A2DC4(0xA9011100); return 0; }
+            fn_1_A2DC4(0xA9011000);
+            st->unk_22 = 6;
+        }
+        break;
+    case 5:
+        if ((lbl_1_bss_9F8.unk_10 & 1) || (lbl_1_bss_9F8.unk_12 & 1)) { st->unk_16 = 0; fn_1_A2DC4(0xA9011300); }
+        if (((lbl_1_bss_9F8.unk_10 >> 1) & 1) || ((lbl_1_bss_9F8.unk_12 >> 1) & 1)) { st->unk_16 = 1; fn_1_A2DC4(0xA9011300); }
+        fzgx_live = st->unk_30;
+        st->unk_18 = fzgx_live[st->unk_16] - 1;
+        if ((lbl_1_bss_9F8.unk_8 >> 8) & 1) {
+            if (st->unk_16 != st->unk_1A || st->unk_18 != st->unk_1C) { fn_1_A2DC4(0xA9011100); return 0; }
+        } else if ((lbl_1_bss_9F8.unk_8 >> 9) & 1) {
+            fn_1_A2DC4(0xA9011000);
+            st->unk_16 = st->unk_1A;
+            st->unk_18 = st->unk_1C;
+            st->unk_1A = -1;
+            st->unk_1C = -1;
+            st->unk_22 = 4;
+        }
+        break;
+    case 8:
+        if (((lbl_1_bss_9F8.unk_10 >> 3) & 1) || ((lbl_1_bss_9F8.unk_12 >> 3) & 1)) st->unk_34--;
+        if (((lbl_1_bss_9F8.unk_10 >> 2) & 1) || ((lbl_1_bss_9F8.unk_12 >> 2) & 1)) st->unk_34++;
+        if (st->unk_34 < 0) st->unk_34 = 0;
+        if (st->unk_34 > 1) st->unk_34 = 1;
+        break;
+    }
+    return 2;
+}
+#pragma opt_dead_assignments reset
+/* fzgx:end fn_1_BA144 */
+
 /* fzgx:begin fn_1_BC29C noprologue */
 #include "types.h"
 #include "rel/main_rel/globals.h"
