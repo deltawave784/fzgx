@@ -18,8 +18,8 @@ file from what actually unblocked functions; keep each item one or two lines.
   in fn_1_BA144; `enabled(st->unk_16, st->unk_5)` with `static inline s32 enabled(s32 chan, s32 flags) {
   return (s8)flags & (1 << chan); }` closed them. Arguments bind to parameter variables before the first
   statement, and those variables number above every declared local. The helper's parameter order alone
-  changed nothing there; its local declaration order does change registers (fn_1_C96A4 17 -> 7 rows,
-  fn_1_5EB98, fn_1_56D4C). `fixup` and `sweep` now propose this: `inline_local_moves`, `inline_parameter_orders`,
+  changed nothing there (no row improved by it in the 174-row sweep either); its local declaration order does
+  change registers (fn_1_C96A4 17 -> 7 rows). `fixup` and `sweep` now propose this: `inline_local_moves`, `inline_parameter_orders`,
   and, on the lines the diff implicates, `attributed_region_helpers` (statements in any block) and
   `attributed_expression_helpers` (member reads as parameters).
 - **Large inline helpers** (GC/1.3.2 probes, 2026-10-28): `-inline auto` inlines a `static inline` helper

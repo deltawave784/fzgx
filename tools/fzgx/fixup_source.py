@@ -1263,9 +1263,10 @@ def _sdk_masked(text: str) -> str:
 def inline_parameter_orders(body: str, name: str, limit: int = 60) -> List[Tuple[str, str]]:
     """A static inline helper's parameters in another order, definition, prototypes and every
     call site (macro bodies included) together. The inliner binds arguments to parameter
-    variables in declaration order, so the order renumbers the helper's webs and the caller's
-    argument temporaries without touching the operations (Sol's fn_1_BA144: `mount(chan,
-    serialp)` as `mount(serialp, chan)`). Four parameters or fewer: every order; more: the
+    variables in declaration order, so the order can renumber the helper's webs and the caller's
+    argument temporaries without touching the operations. Unproven: fn_1_BA144's landed swap had
+    no effect when replayed, and no row gained from this family alone in the T22 sweep; it stays
+    as a cheap second step after a region helper. Four parameters or fewer: every order; more: the
     reversal and each pairwise swap. A helper whose name is taken as a value is left alone."""
     from itertools import permutations
     out: List[Tuple[str, str]] = []
