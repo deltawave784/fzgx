@@ -1,21 +1,123 @@
 #include "types.h"
-#include "rel/main_rel/globals.h"
 #include "game/main_rel/_prolog_types.h"
+#include "dolphin/types.h"
+#include "rel/main_rel/globals.h"
+#include "dolphin/hw_regs.h"
 
+typedef struct Sig_fn_8001CF80_PADStatus {
+    u16 button;
+    s8 stickX;
+    s8 stickY;
+    s8 substickX;
+    s8 substickY;
+    u8 triggerLeft;
+    u8 triggerRight;
+    u8 analogA;
+    u8 analogB;
+    s8 err;
+} Sig_fn_8001CF80_PADStatus;
+
+typedef struct InputPad {
+    u16 button;
+    s8 stickX;
+    s8 stickY;
+    s8 substickX;
+    s8 substickY;
+    u8 triggerLeft;
+    u8 triggerRight;
+    u8 analogA;
+    u8 analogB;
+    s8 err;
+} InputPad;
+
+typedef struct InputAxes {
+    s8 stickX;
+    s8 stickY;
+    s8 substickX;
+    s8 substickY;
+    u8 triggerLeft;
+    u8 triggerRight;
+    u8 analogA;
+    u8 analogB;
+} InputAxes;
+
+typedef struct InputControl {
+    u8 unk_0;
+    s8 unk_1;
+    s8 unk_2;
+    s8 unk_3;
+    u8 unk_4;
+    u8 unk_5;
+} InputControl;
+
+struct fn_1_3CF0_lbl_1_data_2B80 {
+    u8 pad_0[0x18];
+    void *unk_18;
+    char message[0x28];
+    u8 unk_44[0xAC];
+};
+
+typedef struct fn_1_3CF0_Node fn_1_3CF0_Node;
+
+struct fn_1_3CF0_Node {
+    void (*func)(void);
+    u32 unk_4;
+    struct fn_1_3CF0_Node *next;
+    struct fn_1_3CF0_Node *prev;
+    u32 id;
+    u32 unk_14;
+    u32 unk_18;
+    u32 unk_1C;
+    void *data;
+};
+
+struct fn_1_3CF0_Mgr {
+    struct fn_1_3CF0_Node *free_list;
+    struct fn_1_3CF0_Node *fixed;
+    u32 unk_8;
+    u32 count;
+    u32 unk_10;
+    u32 unk_14;
+    struct fn_1_3CF0_Node *slots[32];
+    struct fn_1_3CF0_Node nodes[32];
+};
+extern void fn_1_15665C(void *owner, s32 index);
+extern void fn_1_156730(s32 index);
+extern void fn_1_D332C(u16 *data);
+extern u32 fn_80008BA8(void *, void *, u32);
+extern void fn_8001CF80(void *);
+extern void SIProbe();
+extern s32 fn_8006B294(s32 index, u32 *out);
+extern s32 fn_8006B470(s8 *out);
+extern u32 fn_80008BEC(void *, u32, u32);
+extern BOOL fn_8001CC64(u32 mask);
+extern int fn_8001CB64(u32 mask);
+extern u32 lbl_1_data_2B78;
+extern void fn_1_1304(Sig_fn_8001CF80_PADStatus *pads);
+extern void PADClamp(InputPad *pads);
+extern void fn_1_1C00(const u8 *values, u32 flags, u16 *result);
+extern u32 fn_1_3FC28(void);
+extern s32 fn_1_3EFA8(void);
+extern void fn_1_21E4(InputAxes *axes);
+extern void fn_1_F2820(InputControl *controls, u8 *newly, u8 *previous);
+extern void fn_1_2F04(void);
+extern u32 lbl_1_data_2B68[4];
+extern u8 lbl_1_data_2B64;
+extern s32 fn_1_D357C(void);
 extern u32 fn_1_128C(void);
 extern void fn_1_12F194(void);
 extern void fn_1_3C98(void);
 extern void fn_1_3CC4(void);
 extern u32 lbl_801A66C0;
+extern u8 lbl_1_rodata_C4[60];
+extern u32 lbl_1_bss_D7C;
+extern u32 OSGetTick();
+extern struct fn_1_3CF0_lbl_1_data_2B80 lbl_1_data_2B80;
+extern u32 lbl_1_bss_DAC;
+extern u32 OSReport(u32, ...);
+extern void fn_1_4370(void);
 extern void camera_set_state_flag(u8 value);
 extern void fn_1_D31E0(void);
-extern u32 lbl_1_data_2B68[4];
-extern u8 lbl_1_data_2B64;
-extern s32 fn_1_D357C(void);
-extern void fn_8001CF80(void *);
-extern u32 SIProbe(u32);
-extern void fn_8006B470(void *);
-extern void fn_1_D332C(u16 *data);
 extern u32 OSGetArenaHi(void);
 extern void* OSGetArenaLo(void);
 extern void fn_1_481E8(int arg0);
@@ -26,7 +128,6 @@ extern void fn_80009064(u32 arg0);
 extern u32 fn_80009FA4(u32 arg0);
 extern void fn_80077848(void);
 extern u32 fn_8007785C(u32 count, s32 useArena);
-extern u32 fn_80008BEC(void *, u32, u32);
 extern u8 lbl_1_bss_8E6B0[308];
 extern void fn_1_14FCE4(u32 arg0, s16 arg1);
 extern void OSSetArenaLo(u32 arg0);
@@ -44,9 +145,6 @@ extern u32 lbl_1_bss_96C;
 extern u32 lbl_1_data_2A20;
 extern void fn_1_15659C();
 extern u8 lbl_1_bss_978[];
-extern u32 lbl_1_data_2B78;
-extern u32 OSGetTick(u32);
-extern u32 lbl_1_bss_D7C;
 extern u8 lbl_1_bss_DA4;
 extern char lbl_1_data_2C9C[20];
 extern char lbl_1_data_2CB0[31];
@@ -59,7 +157,6 @@ extern u32 fn_800793D4(u8 *arg0, u32 arg1, u32 arg2);
 extern u32 lbl_801A6CFC;
 extern u8 lbl_1_bss_AA0[336];
 extern u8 lbl_1_rodata_108[88];
-extern u32 fn_80008BA8(void *, void *, u32);
 extern void fn_1_3BDC(u32 arg0);
 extern u32 fn_1_3C18(s32);
 extern u32 fn_1_15B970(u32);
@@ -70,16 +167,14 @@ extern s32 fn_1_45730(void *, void *);
 extern u32 fn_1_45850(void *);
 extern void fn_1_458A0(void *, u32, u32, u32);
 extern u32 fn_1_45B2C(void *);
-extern u32 OSReport(u32, ...);
 extern void fn_1_3BC0();
 extern u32 fn_1_A59AC(void);
-extern u32 fn_800090A4(u32);
-extern u32 fn_80009830();
+extern s32 fn_800090A4(s32 id);
+extern void * fn_80009830();
 extern u32 lbl_1_data_2C74;
 extern u32 lbl_1_bss_DB0[2];
 extern u32 lbl_1_bss_DA8;
 extern void fn_1_43A4(void);
-extern u32 lbl_1_bss_DAC;
 extern u32 fn_80008EC8(u32, u32, u32);
 
 /* fzgx:begin fn_1_634 */
@@ -373,12 +468,6 @@ void fn_1_E9C(void) {
 /* fzgx:end fn_1_E9C */
 
 /* fzgx:begin fn_1_ECC */
-extern u32 fn_1_128C(void);
-extern void fn_1_12F194(void);
-extern void fn_1_3C98(void);
-extern void fn_1_3CC4(void);
-extern u32 lbl_801A66C0;
-
 /* file-scope objects of the retail TU, in retail order: MWCC addresses them off one section base */
 s16 fzgx_obj_lbl_1_bss_960;   /* scene */
 s16 fzgx_obj_lbl_1_bss_962;   /* overlay */
@@ -781,9 +870,7 @@ void fn_1_1304(Sig_fn_8001CF80_PADStatus *pads) {
 #pragma opt_loop_invariants reset
 /* fzgx:end fn_1_1304 */
 
-/* fzgx:begin fn_1_17C8 pool noprologue */
-#include "types.h"
-
+/* fzgx:begin fn_1_17C8 pool */
 typedef struct {
     s8 x;
     s8 y;
@@ -1067,7 +1154,6 @@ struct fn_1_1FE8_Arg1 {
     s8 unk_0; s8 unk_1; s8 unk_2; s8 unk_3;
     u8 unk_4; u8 unk_5; u8 unk_6; u8 unk_7;
 };
-extern u8 lbl_1_rodata_C4[60];
 static inline s32 absval(s32 x) { return __abs(x); }
 s8 fn_1_1FE8(u16 *arg0, struct fn_1_1FE8_Arg1 *arg1, u32 arg2, s8 arg3) {
     u32 v1 = (u16)arg2;
@@ -1794,17 +1880,11 @@ void fn_1_3BDC(u32 arg0) {
 }
 /* fzgx:end fn_1_3BDC */
 
-/* fzgx:begin fn_1_3C18 noprologue */
-#include "dolphin/types.h"
-#include "dolphin/hw_regs.h"
-
-extern u8 lbl_1_bss_D7C[40];
-extern u32 OSGetTick(void);
-
+/* fzgx:begin fn_1_3C18 */
 /* Milliseconds elapsed since the tick stored in slot arg0. */
 u32 fn_1_3C18(volatile s32 arg0) /* volatile: retail spills the slot index to the frame across OSGetTick */
 {
-    return ((OSGetTick() - ((u32 *)lbl_1_bss_D7C)[arg0]) * 8) / (OS_TIMER_CLOCK / 125000);
+    return ((OSGetTick() - ((u32 *)(((u8 *)&lbl_1_bss_D7C)))[arg0]) * 8) / (OS_TIMER_CLOCK / 125000);
 }
 /* fzgx:end fn_1_3C18 */
 
@@ -1834,44 +1914,11 @@ void fn_1_3CC4(void) {
 }
 /* fzgx:end fn_1_3CC4 */
 
-/* fzgx:begin fn_1_3CF0 noprologue */
-#include "types.h"
-
+/* fzgx:begin fn_1_3CF0 */
 /* 0x24-byte work node: 32 fixed nodes follow the manager, then `count` extra nodes */
-struct fn_1_3CF0_Node {
-    void (*func)(void);
-    u32 unk_4;
-    struct fn_1_3CF0_Node *next;
-    struct fn_1_3CF0_Node *prev;
-    u32 id;
-    u32 unk_14;
-    u32 unk_18;
-    u32 unk_1C;
-    void *data;
-};
 
-struct fn_1_3CF0_Mgr {
-    struct fn_1_3CF0_Node *free_list;
-    struct fn_1_3CF0_Node *fixed;
-    u32 unk_8;
-    u32 count;
-    u32 unk_10;
-    u32 unk_14;
-    struct fn_1_3CF0_Node *slots[32];
-    struct fn_1_3CF0_Node nodes[32];
-};
 
-struct fn_1_3CF0_lbl_1_data_2B80 {
-    u8 pad_0[0x18];
-    void *unk_18;
-    char message[0x28];
-    u8 unk_44[0xAC];
-};
 
-extern struct fn_1_3CF0_lbl_1_data_2B80 lbl_1_data_2B80;
-extern struct fn_1_3CF0_Mgr *lbl_1_bss_DAC;
-extern void OSReport(const char *, ...);
-extern void fn_1_4370(void);
 
 #pragma opt_propagation off
 static inline void fn_1_3CF0_init_fixed(struct fn_1_3CF0_Mgr *mgr, struct fn_1_3CF0_Node *nodes, struct fn_1_3CF0_lbl_1_data_2B80 *data, u32 j) {
@@ -1899,9 +1946,9 @@ void fn_1_3CF0(struct fn_1_3CF0_Mgr *buf, u32 count) {
     u32 i;
 
     if (count == 0) {
-        OSReport(data->message);
+        OSReport( (u32)(const char *)(data->message));
     }
-    lbl_1_bss_DAC = buf;
+    (*((struct fn_1_3CF0_Mgr * *)&lbl_1_bss_DAC)) = buf;
     mgr = buf;
     buf->unk_8 = 0;
     nodes = buf->nodes;
@@ -2376,7 +2423,6 @@ struct fn_1_451C_State {
     u32 unk_10;
 };
 
-extern struct fn_1_44B4_lbl_1_bss_DB8 lbl_1_bss_DB8;
 
 // Releases unused heaps and rebuilds the arena allocation state.
 u32 fn_1_451C(void) {
@@ -2416,11 +2462,11 @@ s32 fn_1_45D0(u32 arg0, u32 arg1) {
     v0 = t0;
     v0 = 0;
     } else {
-    t1 = fn_80009830(v0);
+    t1 = (u32)fn_80009830(v0);
     v0 = t1;
     if (v0 == 0) {
     v0 = arg0;
-    t2 = fn_800090A4(v0);
+    t2 = (u32)fn_800090A4(v0);
     v0 = t2;
     v0 = 0;
     }
@@ -2442,11 +2488,11 @@ u32 fn_1_4630(u32 arg0, u32 arg1) {
     v0 = t0;
     v1 = 0;
     } else {
-    t1 = fn_80009830();
+    t1 = (u32)fn_80009830();
     v0 = t1;
     if (v0 == 0) {
     v0 = v1;
-    t2 = fn_800090A4(v0);
+    t2 = (u32)fn_800090A4( (u32)(v0));
     v0 = t2;
     v1 = 0;
     } else {
