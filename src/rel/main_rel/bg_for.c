@@ -1698,6 +1698,233 @@ void fn_1_DF6AC(Vec *a, Vec *b, Vec *c, Vec *out_b, Vec *out_c, f32 scale_b, f32
 #pragma opt_common_subs reset
 /* fzgx:end fn_1_DF6AC */
 
+/* fzgx:begin fn_1_E1408 noprologue */
+#include "types.h"
+#include "psvec.h"
+
+typedef struct {
+    f32 x;
+    f32 y;
+    f32 z;
+} E1408Vec;
+
+typedef struct {
+    u8 pad0[0x18];
+    f32 field18;
+    f32 field1C;
+    u8 pad20[0x24];
+    E1408Vec field44;
+    f32 field50;
+    E1408Vec pos;
+    E1408Vec vel;
+    u8 pad6C[0x18];
+    f32 field84;
+    u8 pad88[0x6c];
+    f32 fieldF4;
+    u8 padF8[0x40];
+    union {
+        u64 flags;
+        struct {
+            u32 hi;
+            u32 lo;
+        } w;
+    } f138;
+    u32 mask140;
+    void *other;
+} E1408Object;
+
+typedef struct {
+    f32 unk_0;
+    u8 pad4[0x1c];
+    f32 unk_20;
+    u8 pad24[0x10];
+    f32 unk_34;
+    u8 pad38[0x3c];
+    f32 unk_74;
+    u8 pad78[0x4];
+    f32 unk_7C;
+    u8 pad80[0x34];
+    f32 unk_B4;
+    u8 padB8[0x14];
+    f32 unk_CC;
+} E1408Pool;
+
+extern E1408Pool lbl_1_rodata_6780;
+extern void fn_1_DF6AC(void *, void *, void *, void *, void *, f32, f32, f32, f32, f32, f32);
+extern f32 lbl_8006D0B4(f32);
+extern void lbl_8006D5A4(void *, void *, void *, f32);
+extern void lbl_8006D5F0(void *, f32, void *);
+
+/* Earliest time t at which two moving spheres of combined radius r touch. */
+#pragma opt_propagation off
+#pragma opt_lifetimes off
+static inline f32 E1408_length(f32 u, f32 v, f32 w) {
+    f32 length = u * u;
+    length += v * v;
+    length += w * w;
+    return length;
+}
+#pragma opt_lifetimes off
+static inline s32 E1408_sweep(E1408Pool *pool, E1408Vec *dp, E1408Vec *dv, f32 r, f32 *t) {
+    f32 B;
+    f32 A;
+    f32 C;
+    f32 length;
+    f32 u;
+    f32 zero;
+    f32 disc;
+    f32 y = dp->y;
+    f32 x = dp->x;
+    f32 z = dp->z;
+
+    A = x * x;
+    A += y * y;
+    A += z * z;
+    if (A < pool->unk_7C) {
+        return 0;
+    }
+
+    {
+        f32 v = dv->y;
+        f32 w = dv->z;
+        u = *(volatile f32 *)&dv->x;  /* fzgx-allow: S2 volatile view keeps the verified load order */
+        length = u * u;
+        length += v * v;
+        length += w * w;
+        B = u * x;
+        B += v * y;
+        B += w * z;
+        C = length - (f32)(r * r);
+    }
+    zero = pool->unk_20;
+    disc = (f32)(B * B) - (f32)(A * C);
+    if (disc < zero) {
+        return 0;
+    }
+    if (C <= zero) {
+        *t = zero;
+        return 1;
+    }
+    if (C + (B + (A + B)) > zero) {
+        if (B >= zero) {
+            return 0;
+        }
+        if (-B >= A) {
+            return 0;
+        }
+    }
+    *t = -(B + lbl_8006D0B4(disc)) / A;
+    return 1;
+}
+
+/* Whether `me` may push `other` out of the way. */
+#pragma opt_propagation off
+static inline u32 E1408_pushes(u64 me, u64 other, u32 result) {
+
+    if (((me & 0x80000) != 0 && (other & 0x80000) == 0) || ((me & 0x40000) == 0 && (other & 0x40000) != 0)) {
+        result = 1;
+    }
+    return result;
+}
+
+#pragma opt_propagation off
+static inline u64 E1408_flags_core(u64 fa, u64 fb, u32 pa, u32 pb) {
+    if (((fa & 0x80000) != 0 && (fb & 0x80000) == 0) || ((fa & 0x40000) == 0 && (fb & 0x40000) != 0)) {
+        pa = 1;
+    }
+    if (((fb & 0x80000) != 0 && (fa & 0x80000) == 0) || ((fb & 0x40000) == 0 && (fa & 0x40000) != 0)) {
+        pb = 1;
+    }
+    return ((u64)pb << 32) | pa;
+}
+static inline u64 E1408_flags(u32 pb, u32 pa, u32 fb, u64 fa) {
+    fa = (u32)fa;
+    if (((fa & 0x80000) != 0 && ((u64)fb & 0x80000) == 0) || ((fa & 0x40000) == 0 && ((u64)fb & 0x40000) != 0)) {
+        pa = 1;
+    }
+    if ((((u64)fb & 0x80000) != 0 && (fa & 0x80000) == 0) || (((u64)fb & 0x40000) == 0 && (fa & 0x40000) != 0)) {
+        pb = 1;
+    }
+    return pb | ((u64)pa << 32);
+}
+
+#pragma opt_propagation reset
+static inline f32 fn_1_E1408_read_pointer(E1408Object * owner) { return owner->fieldF4; }
+#pragma opt_propagation off
+static inline void E1408_add_reverse(E1408Vec *pos, E1408Vec *delta, f32 scale) {
+    psvec_add(pos, delta, pos);
+    psvec_scale(delta, scale, delta);
+}
+static inline void E1408_separate(E1408Vec *a, E1408Vec *b, E1408Vec *delta, f32 scale) {
+    psvec_add(a, delta, a);
+    psvec_scale(delta, scale, delta);
+    psvec_add(b, delta, b);
+}
+#pragma opt_propagation on
+s32 fn_1_E1408(E1408Object *a, E1408Object *b) {
+    E1408Vec n;
+    E1408Vec dp;
+    E1408Vec dv;
+    E1408Vec t20;
+    E1408Vec t14;
+    E1408Vec t8;
+    E1408Pool *pool;
+    u32 pushA;
+    u32 pushB;
+    f32 r;
+    f32 t;
+    u64 fa;
+    u64 fb;
+
+    pool = &lbl_1_rodata_6780;
+    if ((a->f138.flags & 0x40) != 0 || (b->f138.flags & 0x40) != 0) {
+        return 0;
+    }
+    if ((a->mask140 & b->mask140) == 0) {
+        return 0;
+    }
+
+    psvec_sub(&a->vel, &b->vel, &dv);
+    psvec_sub(&a->pos, &b->pos, &dp);
+    psvec_sub(&dp, &dv, &dp);
+    r = (f32)(pool->unk_CC * a->field84 * fn_1_E1408_read_pointer(a)) + (f32)(pool->unk_CC * b->field84 * fn_1_E1408_read_pointer(b));
+    if (E1408_sweep(pool, &dp, &dv, r, &t) == 0) {
+        return 0;
+    }
+
+    lbl_8006D5A4(&a->vel, &a->pos, &a->pos, t);
+    lbl_8006D5A4(&b->vel, &b->pos, &b->pos, t);
+    psvec_sub(&b->pos, &a->pos, &n);
+
+    fa = E1408_flags(0, 0, (u32)b->f138.flags, (u64)(u32)a->f138.flags);
+    pushA = (u32)(fa >> 32);
+    pushB = (u32)fa;
+
+    if (pushB == 1) {
+        lbl_8006D5F0(&n, pool->unk_74 * r, &t20);
+        psvec_add(&a->pos, &t20, &b->pos);
+    } else if (pushA == 1) {
+        lbl_8006D5F0(&n, -(pool->unk_74 * r), &t14);
+        psvec_add(&b->pos, &t14, &a->pos);
+    } else {
+        lbl_8006D5F0(&n, -(pool->unk_B4 * r), &t8);
+        E1408_separate(&a->pos, &b->pos, &t8, pool->unk_0);
+    }
+
+    if ((a->f138.flags & 0x800000) != 0 || (b->f138.flags & 0x800000) != 0) {
+        return 0;
+    }
+    fn_1_DF6AC(&n, &a->field44, &b->field44, &a->field44, &b->field44, a->field50, b->field50, a->field1C,
+               b->field1C, pool->unk_34 * (a->field18 + b->field18), pool->unk_20);
+    a->f138.flags |= 0x20000000;
+    b->f138.flags |= 0x20000000;
+    a->other = b;
+    b->other = a;
+    return 1;
+}
+#pragma opt_propagation reset
+/* fzgx:end fn_1_E1408 */
+
 /* fzgx:begin fn_1_E1934 */
 typedef struct {
     u8 pad0[0x8];
