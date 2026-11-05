@@ -13,6 +13,15 @@ file from what actually unblocked functions; keep each item one or two lines.
   the indexed `psq_lx` forms from C, so scalar or `__vec2x32float__` code can never match.
   Pass loads straight as `psvec_set` arguments; loading them into locals first changes
   the registers.
+- **Helpers reach what caller spellings cannot** (tooling round T22, 2026-11-05, measured by replaying
+  Sol's landed bodies against their seeds): `(s8)st->unk_5 & (1 << st->unk_16)` in the caller left six rows
+  in fn_1_BA144; `enabled(st->unk_16, st->unk_5)` with `static inline s32 enabled(s32 chan, s32 flags) {
+  return (s8)flags & (1 << chan); }` closed them. Arguments bind to parameter variables before the first
+  statement, and those variables number above every declared local. The helper's parameter order alone
+  changed nothing there; its local declaration order does change registers (fn_1_C96A4 17 -> 7 rows,
+  fn_1_5EB98, fn_1_56D4C). `fixup` and `sweep` now propose this: `inline_local_moves`, `inline_parameter_orders`,
+  and, on the lines the diff implicates, `attributed_region_helpers` (statements in any block) and
+  `attributed_expression_helpers` (member reads as parameters).
 - **Large inline helpers** (GC/1.3.2 probes, 2026-10-28): `-inline auto` inlines a `static inline` helper
   only up to MWCC's default `inline_max_size` (a helper of 40 one-line `if (a > k) ext(a + k);` inlines,
   48 is called). `-inline on/deferred/all` and `#pragma inline_depth` do not lift the limit. What does is

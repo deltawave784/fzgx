@@ -1255,6 +1255,250 @@ def compound_assignments(body: str, name: str) -> List[Tuple[str, str]]:
 _CONST_RE = r'-?\s*(?:0[xX][0-9a-fA-F]+[uUlL]*|\d+\.\d*(?:[eE][+-]?\d+)?[fF]?|\.\d+(?:[eE][+-]?\d+)?[fF]?|\d+[uUlL]*)'
 
 
+def _sdk_masked(text: str) -> str:
+    from .sdkimport import masked
+    return masked(text)
+
+
+def inline_parameter_orders(body: str, name: str, limit: int = 60) -> List[Tuple[str, str]]:
+    """A static inline helper's parameters in another order, definition, prototypes and every
+    call site (macro bodies included) together. The inliner binds arguments to parameter
+    variables in declaration order, so the order renumbers the helper's webs and the caller's
+    argument temporaries without touching the operations (Sol's fn_1_BA144: `mount(chan,
+    serialp)` as `mount(serialp, chan)`). Four parameters or fewer: every order; more: the
+    reversal and each pairwise swap. A helper whose name is taken as a value is left alone."""
+    from itertools import permutations
+    out: List[Tuple[str, str]] = []
+    helpers = []
+    for m in _INLINE_PARAMS_DEF.finditer(body):
+        if m.group(1) != name and m.group(1) not in helpers:
+            helpers.append(m.group(1))
+    calls = call_sites(body)
+    for helper in helpers:
+        sites = [c for c in calls if c[0] == helper]
+        uses = len(re.findall(rf"{re.escape(helper)}", _sdk_masked(body)))
+        if len(sites) < 2 or uses != len(sites):
+            continue
+        n = len(sites[0][3])
+        if not 2 <= n <= 6 or any(len(c[3]) != n for c in sites):
+            continue
+        if any('...' in body[a:b] for c in sites for a, b in c[3]):
+            continue
+        if n <= 4:
+            orders = [o for o in permutations(range(n)) if o != tuple(range(n))]
+        else:
+            orders = [tuple(reversed(range(n)))]
+            for i in range(n):
+                for j in range(i + 1, n):
+                    o = list(range(n))
+                    o[i], o[j] = o[j], o[i]
+                    orders.append(tuple(o))
+        for order in orders:
+            text = body
+            for c in reversed(sites):
+                args = [body[a:b].strip() for a, b in c[3]]
+                text = text[:c[3][0][0]] + ', '.join(args[k] for k in order) + text[c[3][-1][1]:]
+            out.append((f"{helper} parameters in order {''.join(str(k) for k in order)}", text))
+            if len(out) >= limit:
+                return out
+    return out
+
+
+def inline_local_moves(body: str, name: str) -> List[Tuple[str, str]]:
+    """Every single move of one leading local declaration of each static inline helper. An
+    inlined helper's locals are numbered at the inline site, so their order is a register lever
+    of the caller exactly like the caller's own (Sol's fn_1_5EB98 `f32 z=v[2], x=v[0], y=v[1]`,
+    fn_1_56D4C's cross product); the caller-only move families never reach them."""
+    out: List[Tuple[str, str]] = []
+    for m in _INLINE_PARAMS_DEF.finditer(body):
+        helper = m.group(1)
+        if helper == name:
+            continue
+        a = _decl_anchor(body, helper)
+        if not a:
+            continue
+        locs = [d for d in a[1] if d[2].strip(' *') not in ('return', 'goto', 'break', 'continue', 'case', 'else', 'do')]
+        if len(locs) != len(a[1]) or not 2 <= len(locs) <= 10:
+            continue
+        texts = [body[s:e] for s, e, _, _, _ in locs]
+        head, tail = body[:locs[0][0]], body[locs[-1][1]:]
+        for i in range(len(locs)):
+            for j in range(len(locs)):
+                if i != j:
+                    order = list(range(len(locs)))
+                    order.pop(i)
+                    order.insert(j, i)
+                    out.append((f"{helper}: move {locs[i][3]} to {j}", head + ''.join(texts[k] for k in order) + tail))
+    return out
+
+
+def _block_declarations(code: str, spans) -> dict:
+    """{name: (statement index, type)} of a block's scalar and pointer declarations."""
+    found = {}
+    for k, (a, b) in enumerate(spans):
+        dm = DECL_RE.match(' '.join(code[a:b].split()))
+        if dm and dm.group(1).strip() not in ('return', 'goto', 'else') and not dm.group(3):
+            found[dm.group(2)] = (k, dm.group(1).strip())
+    return found
+
+
+def _nested_statement_lists(code: str, start: int, end: int, scope=None):
+    """(statement spans, enclosing declarations {name: type}, own declarations) of the block
+    `code[start:end]` and of every block nested in it."""
+    raw = _top_statements(code[start:end])
+    if not raw:
+        return
+    scope = scope or {}
+    spans = [(start + a, start + b) for a, b in raw]
+    own = _block_declarations(code, spans)
+    yield spans, scope, own
+    inner_scope = dict(scope)
+    inner_scope.update({v: typ for v, (_, typ) in own.items()})
+    for a, b in spans:
+        depth, at = 0, None
+        for i in range(a, b):
+            c = code[i]
+            if c == '{':
+                if depth == 0:
+                    at = i
+                depth += 1
+            elif c == '}':
+                depth -= 1
+                if depth == 0 and at is not None:
+                    yield from _nested_statement_lists(code, at + 1, i, inner_scope)
+
+
+def _implicated_texts(body: str, lines) -> set:
+    """Stripped text of the source lines a diff implicates: a family that first normalizes the
+    declarations shifts line numbers, the text survives."""
+    source = body.split('\n')
+    return {source[n - 1].strip() for n in lines if 0 < n <= len(source) and source[n - 1].strip()}
+
+
+def _free_helper_name(body: str, name: str, tag: str) -> str:
+    k = 0
+    while re.search(rf'\b{name}_{tag}{k}\b', body):
+        k += 1
+    return f'{name}_{tag}{k}'
+
+
+def attributed_region_helpers(body: str, name: str, lines, limit: int = 80) -> List[Tuple[str, str]]:
+    """The statements a diff implicates moved into an inlined static helper, in any block. An
+    inlined helper's parameters and locals live in the coalesce window above every declared
+    local, and its arguments bind before its first statement, so the same operations take other
+    registers and another load order than any caller-level spelling can reach. Sol closed
+    repeatedly released rows this way (fn_1_5EB98's length, fn_3_10CB8's set_vec, fn_1_56D4C's
+    cross product); `region_inline_helpers` only fires on a pair of equal constants at top level."""
+    out: List[Tuple[str, str]] = []
+    wanted = _implicated_texts(body, lines)
+    frame = _region_frame(body, name) if wanted else None
+    if frame is None:
+        return out
+    body, code, span, head_start, stmts, first, body_stmts, decls, variables = frame
+    if first >= len(stmts):
+        return out
+    helper = _free_helper_name(body, name, 'fzgx_rgn')
+
+    def implicated(a, b):
+        return any(l.strip() in wanted for l in body[a:b].split('\n'))
+
+    outer = stmts[:first]
+    tried = set()
+    for block, scope, own in _nested_statement_lists(code, stmts[first][0], span[2]):
+        # the code around this block is one pseudo-statement each side: only its references
+        # are read (a loop's carried values are a wrong candidate at worst; the oracle decides)
+        local = list(outer)
+        if stmts[first][0] < block[0][0]:
+            local.append((stmts[first][0], block[0][0]))
+        at = len(local)
+        local += block
+        if block[-1][1] < span[2]:
+            local.append((block[-1][1], span[2]))
+        ids = list(range(first, len(local)))
+        hits = [k for k in range(len(block)) if implicated(*block[k])]
+        for k in hits:
+            for lo in range(max(0, k - 2), k + 1):
+                for hi in range(k, min(len(block), lo + 6)):
+                    key = (block[lo][0], block[hi][1])
+                    if key in tried:
+                        continue
+                    tried.add(key)
+                    # a block-scope local the region reads is an input like a parameter; one
+                    # declared inside the region stays there
+                    visible = dict(scope)
+                    visible.update({v: typ for v, (d, typ) in own.items() if d < lo})
+                    visible.update(variables)
+                    built = _region_helper(body, code, name, helper, local, ids, decls, visible, head_start,
+                                           span, at + lo, at + hi, '    ')
+                    for label, text in built or ():
+                        sized = inline_size_pragmas(text, name)
+                        out.append((f"statements at {key[0] - span[1]}..{key[1] - span[1]} inlined{label}",
+                                    sized[0][1] if sized else text))
+                    if len(out) >= limit:
+                        return out
+    return out
+
+
+_EXPR_LVALUE = re.compile(r"(?<![\w.>])[A-Za-z_]\w*(?:\s*(?:->|\.)\s*[A-Za-z_]\w*|\[[^\[\]]*\])+")
+
+
+def attributed_expression_helpers(body: str, name: str, lines, limit: int = 60) -> List[Tuple[str, str]]:
+    """A parenthesized expression on an implicated line as a call of an inlined helper whose
+    parameters are the expression's member reads: the reads bind to parameter variables before
+    the operation, in argument order, instead of being lowered inside it (Sol's fn_1_BA144:
+    `(s8)st->unk_5 & (1 << st->unk_16)` as `enabled(st->unk_16, st->unk_5)`, six rows closed).
+    Text order and reversed; parameters as s32, or f32 with a floating literal or cast in sight."""
+    out: List[Tuple[str, str]] = []
+    wanted = _implicated_texts(body, lines)
+    span = _function_body_span(body, name) if wanted else None
+    if not span:
+        return out
+    from .sdkimport import masked
+    code = masked(body)
+    fn = code[:span[0]].rfind('\n') + 1
+    helper = _free_helper_name(body, name, 'fzgx_expr')
+    seen = set()
+    for lm in re.finditer(r'[^\n]+', code[span[1]:span[2]]):
+        if body[span[1] + lm.start():span[1] + lm.end()].strip() not in wanted:
+            continue
+        line, base = lm.group(0), span[1] + lm.start()
+        stack = []
+        for i, c in enumerate(line):
+            if c == '(':
+                stack.append(i)
+            elif c == ')' and stack:
+                a = stack.pop()
+                text = line[a + 1:i]
+                if text in seen or re.search(r'[A-Za-z_]\w*\s*\(|(?<![=!<>])=(?!=)|\+\+|--|"', text):
+                    continue
+                # a bare cast's type or a call's argument list is no expression
+                if re.search(r'[A-Za-z_]\w*\s*$', line[:a]) or not re.search(r'[-+*/&|^<>]|==|!=', text.replace('->', '')):
+                    continue
+                reads = []
+                for m in _EXPR_LVALUE.finditer(text):
+                    if m.group(0) not in reads:
+                        reads.append(m.group(0))
+                if not 1 <= len(reads) <= 4:
+                    continue
+                seen.add(text)
+                inner = text
+                params = [f'fzgx_a{k}' for k in range(len(reads))]
+                for r, prm in sorted(zip(reads, params), key=lambda x: -len(x[0])):
+                    inner = re.sub(r'(?<![\w.>])' + re.escape(r) + r'(?![\w\[])', prm, inner)
+                float_near = bool(re.search(r'\d\.\d*f?\b|\bf(?:32|64)\b', text))
+                ids = list(range(len(reads)))
+                for typ in (('f32', 's32') if float_near else ('s32',)):
+                    for order in ((ids, ids[::-1]) if len(ids) > 1 else (ids,)):
+                        hdef = (f"static inline {typ} {helper}(" + ', '.join(f"{typ} {params[k]}" for k in order)
+                                + f") {{\n    return {inner};\n}}\n\n")
+                        call = f"{helper}(" + ', '.join(reads[k] for k in order) + ")"
+                        new = body[:fn] + hdef + body[fn:base + a] + '(' + call + ')' + body[base + i + 1:]
+                        out.append((f"{text.strip()[:50]} as helper({typ}, order {order})", new))
+                        if len(out) >= limit:
+                            return out
+    return out
+
+
 def constant_inline_parameters(body: str, name: str) -> List[Tuple[str, str]]:
     """A local set to a constant turned into an inlined helper's parameter.
 
@@ -1387,52 +1631,34 @@ def _region_defines_first(code: str, var: str) -> bool:
     return not any(r < end for r in refs[1:]) if end >= 0 else False
 
 
-def region_inline_helpers(body: str, name: str) -> List[Tuple[str, str]]:
-    """Two locals holding the same constant moved, with the statements around them, into an
-    inlined static helper.
-
-    MWCC's second value-numbering pass (ValueNumbering.c, `PC_LI` case) only numbers a `li`
-    whose destination lies in the coalesce window: compiler temporaries, which include the
-    locals and parameters of an inlined function (CodeGen.c, `@`-named objects allocated after
-    `Registers_BeginCoalesceWindow`). Two such temporaries loaded with one constant become
-    `li rA, K; mr rB, rA`, and the copy survives coalescing when both are modified later.
-    Declared locals of the function itself never take part, so every spelling of
-    `a = 0; b = a;` in the caller folds to two `li`. Measured on mwcceppc 1.3.2 (probe
-    compiles, fn_4_A0C `li r29,0; mr r27,r29` for a strength-reduced counter, fn_1_C24A4
-    `li r4,0; mr r5,r4; ori r0,r4,1`). A whole-body helper is no answer for large functions:
-    MWCC's default `inline_max_size` leaves it out of line. The helper therefore spans only the
-    top-level statements from the constant assignment to the last use of the pair, receives
-    the outer values it reads by value and returns the one outer variable it defines; locals
-    used only there (or dead on entry and exit) move inside. Inlined locals are numbered in
-    the opposite order to declared locals, so the reversed declaration order is tried too."""
-    out: List[Tuple[str, str]] = []
+def _region_frame(body: str, name: str):
+    """(body, masked code, span, head start, statements, first body statement, body statement
+    indices, declarations, variables) of a function, the declaration groups split first; None
+    when unreadable."""
     split = split_declaration_groups(body, name)
     if split:
         body = split[0][1]
     span = _function_body_span(body, name)
     if not span:
-        return out
+        return None
     from .sdkimport import masked
     code = masked(body)
     head_start = max(code.rfind('\n', 0, span[0]), code.rfind(';', 0, span[0]), code.rfind('}', 0, span[0])) + 1
-    helper = f"{name}_fzgx_region"
-    if re.search(rf'\b{helper}\b', body):
-        return out
     popen = code.index('(', span[0])
     pclose = code.rfind(')', popen, span[1])
     params = body[popen + 1:pclose].strip()
     ptypes: Dict[str, str] = {}
     if params and params != 'void':
         if '(' in params or '...' in params:
-            return out
+            return None
         for prm in params.split(','):
             pm = re.fullmatch(r'\s*(.*?)\s*\b([A-Za-z_]\w*)\s*', prm)
             if not pm or '[' in prm:
-                return out
+                return None
             ptypes[pm.group(2)] = pm.group(1)
     raw = _top_statements(code[span[1] + 1:span[2]])
     if not raw:
-        return out
+        return None
     base = span[1] + 1
     stmts: List[Tuple[int, int]] = []
     for a, b in raw:
@@ -1461,9 +1687,38 @@ def region_inline_helpers(body: str, name: str) -> List[Tuple[str, str]]:
         break
     body_stmts = list(range(first, len(stmts)))
     if not body_stmts:
-        return out
+        return None
     variables = {v: t for v, (_, t, d, _) in decls.items()}
     variables.update(ptypes)
+    return body, code, span, head_start, stmts, first, body_stmts, decls, variables
+
+
+def region_inline_helpers(body: str, name: str) -> List[Tuple[str, str]]:
+    """Two locals holding the same constant moved, with the statements around them, into an
+    inlined static helper.
+
+    MWCC's second value-numbering pass (ValueNumbering.c, `PC_LI` case) only numbers a `li`
+    whose destination lies in the coalesce window: compiler temporaries, which include the
+    locals and parameters of an inlined function (CodeGen.c, `@`-named objects allocated after
+    `Registers_BeginCoalesceWindow`). Two such temporaries loaded with one constant become
+    `li rA, K; mr rB, rA`, and the copy survives coalescing when both are modified later.
+    Declared locals of the function itself never take part, so every spelling of
+    `a = 0; b = a;` in the caller folds to two `li`. Measured on mwcceppc 1.3.2 (probe
+    compiles, fn_4_A0C `li r29,0; mr r27,r29` for a strength-reduced counter, fn_1_C24A4
+    `li r4,0; mr r5,r4; ori r0,r4,1`). A whole-body helper is no answer for large functions:
+    MWCC's default `inline_max_size` leaves it out of line. The helper therefore spans only the
+    top-level statements from the constant assignment to the last use of the pair, receives
+    the outer values it reads by value and returns the one outer variable it defines; locals
+    used only there (or dead on entry and exit) move inside. Inlined locals are numbered in
+    the opposite order to declared locals, so the reversed declaration order is tried too."""
+    out: List[Tuple[str, str]] = []
+    frame = _region_frame(body, name)
+    if frame is None:
+        return out
+    body, code, span, head_start, stmts, first, body_stmts, decls, variables = frame
+    helper = f"{name}_fzgx_region"
+    if re.search(rf'\b{helper}\b', body):
+        return out
 
     def stext(i):
         return code[stmts[i][0]:stmts[i][1]]
@@ -1598,7 +1853,8 @@ def _region_text(body, code, name, helper, stmts, body_stmts, decls, variables, 
             inputs.append(v)
     if output is None and not inside:
         return None
-    rtype = variables[output] if output else 'void'
+    # `register f32 v`: a storage class is no return type
+    rtype = re.sub(r'\b(?:register|volatile)\s+', '', variables[output]) if output else 'void'
     hparams = ', '.join(f"{variables[v]} {v}" for v in inputs) or 'void'
     args = ', '.join(inputs)
     region_text = body[stmts[lo][0]:stmts[hi][1]]

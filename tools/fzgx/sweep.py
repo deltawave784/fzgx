@@ -141,6 +141,8 @@ def generate(p: Project, s: str, sym, path: Path, body: str, check, outdir: Path
     # top of inline helpers, `extern const` read-only tables, every tree of a flat 3..6-term sum
     add('barrier', lambda: fixup_source.self_assignment_barriers(body, sym.name, limit=24))
     add('inlinebarrier', lambda: fixup_source.inline_parameter_barriers(body, sym.name))
+    add('inlineorder', lambda: fixup_source.inline_parameter_orders(body, sym.name))
+    add('inlinedecl', lambda: fixup_source.inline_local_moves(body, sym.name))
     add('consttable', lambda: fixup_source.const_extern_tables(body, sym.name))
     add('addtree', lambda: fixup_source.add_trees(body, sym.name, cap=120))
     add('pragmas', lambda: fixup_evidence.optimizer_pragmas(body, sym.name))
@@ -154,11 +156,16 @@ def generate(p: Project, s: str, sym, path: Path, body: str, check, outdir: Path
     # uninverted `bCC next; b exit` pairs and dead dispatch branches: early-exit chains
     add('exits', lambda: fixup_evidence.exit_branch_pairs(body, sym.name, check))
     rl: Dict[int, int] = {}
-    if not families or 'attr' in families or 'regorder' in families:
+    if not families or {'attr', 'regorder', 'attrregion', 'attrexpr'} & set(families):
         try:
             rl = row_lines(p, sym, path, check, outdir, settings)
         except Exception:
             rl = {}
+    # statements and member-read expressions the diff implicates, as inlined helpers (their
+    # webs number above every declared local; arguments bind before the first statement)
+    lines = set(rl.values()) | {n + d for n in rl.values() for d in (-1, 1)}
+    add('attrregion', lambda: fixup_source.attributed_region_helpers(body, sym.name, lines))
+    add('attrexpr', lambda: fixup_source.attributed_expression_helpers(body, sym.name, lines))
     # register-only residuals: every order of the implicated class's function-scope locals
     # (bounded above six), block-scoped locals of that class hoisted; the line attribution
     # names the locals whose moves are tried when the class is large

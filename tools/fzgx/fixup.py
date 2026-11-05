@@ -232,6 +232,12 @@ class Engine:
             self.emit({'stage': 'generate-serial', 'reason': str(error)[:200]})
         return [self.prioritise(seed, list(itertools.islice(self.proposals(seed, cap), limit * 10)))[:limit] for _, seed, cap in tasks]
 
+    def implicated_lines(self, seed):
+        """The source lines the seed's differing rows attribute to, one line either side: the
+        scheduler interleaves neighbouring statements."""
+        lines = set(self.row_lines(seed).values())
+        return lines | {n + d for n in lines for d in (-1, 1)}
+
     def row_lines(self, seed):
         """{differing row index: source line} for the seed (MWCC's `.line` table from a
         `-sym on` compile of the same source; the code is byte-identical). A retail-only
@@ -723,6 +729,8 @@ class Engine:
             yield from self._family(row, 'evidence.paired_vector_kernels', lambda: evidence.paired_vector_kernels(self.project, row['symbol'], body, check))
             yield from self._family(row, 'evidence.attributed_type_flips', lambda: evidence.attributed_type_flips(self.project, row['symbol'], body, check, self.row_lines(row)))
             yield from self._family(row, 'evidence.attributed_inlines', lambda: evidence.attributed_inlines(self.project, row['symbol'], body, check, self.row_lines(row)))
+            yield from self._family(row, 'source.attributed_region_helpers', lambda: source.attributed_region_helpers(body, name, self.implicated_lines(row)))
+            yield from self._family(row, 'source.attributed_expression_helpers', lambda: source.attributed_expression_helpers(body, name, self.implicated_lines(row)))
             yield from self._family(row, 'evidence.attributed_declaration_swaps', lambda: evidence.attributed_declaration_swaps(self.project, row['symbol'], body, check, self.row_lines(row)))
             # a register-only residual: every order of the implicated register class's locals
             # (fn_4_1444: five f32 among ten locals, reachable by neither family above)
@@ -804,7 +812,7 @@ class Engine:
                          ('missing_values', 'expression_trees', 'commutations', 'shift_products',
                           # karamzov123's levers (CC0, 2026-10-29): zero-cost `v = v;` barriers, an
                           # inline helper's `p = p;`, const read-only tables, every tree of a flat sum
-                          'self_assignment_barriers', 'inline_parameter_barriers', 'const_extern_tables', 'add_trees')])
+                          'self_assignment_barriers', 'inline_parameter_barriers', 'inline_parameter_orders', 'inline_local_moves', 'const_extern_tables', 'add_trees')])
         families.append(self._family(row, 'source.probes', lambda: source.probes(body,name,64)))
         families.append(self._family(row, 'source.all_rewrites', lambda: [(family+': '+label,text) for family,label,text in source.all_rewrites(body,name)]))
         # Inlined helpers contribute instructions and stack lifetimes to this
