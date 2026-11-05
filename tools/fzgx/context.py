@@ -146,6 +146,7 @@ def build_context(project: Project, ledger: Optional[Ledger], symbol: str,
     unit_cfg = units.get(unit_src or "", {})
 
     parts: List[str] = []
+    measured = None
     parts.append(f"# Match task: `{symbol}`")
     parts.append(
         f"- module: `{module}`  section: `{sym.section}`  address: `0x{sym.addr:08X}`  "
@@ -349,6 +350,13 @@ def build_context(project: Project, ledger: Optional[Ledger], symbol: str,
                         pass
             except Exception:
                 pass
+            # what earlier sessions already measured on this body, so the session spends its
+            # plateau on something new
+            try:
+                from . import tried as _tried
+                measured = _tried.section(project.key(sym), body)
+            except Exception:
+                measured = None
 
     # the lifter's draft: a mechanical translation of the disassembly, structurally right by
     # construction (calls, layouts, loops), shown with the rows it still misses so the agent
@@ -432,4 +440,5 @@ def build_context(project: Project, ledger: Optional[Ledger], symbol: str,
     limit = required_chars + budget_tokens * 4
     if len(text) > limit:
         text = text[:limit] + "\n\n[context truncated to budget]"
-    return text
+    # after the cut: this history is specific to the seed; the budget above bounds generic examples
+    return text + chr(10) + measured if measured else text

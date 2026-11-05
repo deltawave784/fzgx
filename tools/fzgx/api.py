@@ -892,6 +892,7 @@ def _record_check(p: Project, key: str, src: Optional[Path], res: oracle.CheckRe
     """Archive the body and compiler settings together, including version probes.
     count=False archives without spending a check (each compiler of a version probe);
     archive=False spends the check without archiving again (the probe's one charge)."""
+    repeat = None
     if src is not None and archive:
         # every checked body is kept with its score: the (before, after) pairs of a function that
         # went on to match are the exemplars a prompt with examples needs
@@ -900,12 +901,19 @@ def _record_check(p: Project, key: str, src: Optional[Path], res: oracle.CheckRe
             hdir.mkdir(parents=True, exist_ok=True)
             n = len(list(hdir.glob("*.c")))
             body = Path(src).read_text()
+            recorded = {}
+            try:  # advisory history: it must never cost the check
+                from . import tried
+                recorded = tried.fields(Path(src).read_bytes(), res)
+                repeat = tried.seen_before(key, recorded, res)
+            except Exception:
+                repeat = None
             (hdir / f"{n:03d}.c").write_text(body)
             with (hdir / "index.jsonl").open("a") as f:
                 f.write(json.dumps({"n": n, "t": int(time.time()), "ok": res.ok, "percent": res.percent if res.ok else None,
                                     "adjusted": res.percent_adjusted if res.ok else None, "matched": bool(res.ok and (res.matched or res.matched_pool)),
                                     "rows": res.pool_rows if res.ok else None,
-                                    "mw": res.mw_version, "flags": res.extra_cflags}) + "\n")
+                                    "mw": res.mw_version, "flags": res.extra_cflags, **recorded}) + "\n")
         except OSError:
             pass
     if src is not None and count:
@@ -939,6 +947,8 @@ def _record_check(p: Project, key: str, src: Optional[Path], res: oracle.CheckRe
                 implicit_calls=list(res.implicit_calls or []),
                 uninitialized_reads=list(getattr(res, 'uninitialized_reads', None) or []))) + '\n')
         stats['saved_best'] = replace
+        if repeat and stats.get('checks', 0) > 1:  # the first check is the seed itself, not an edit
+            stats['repeat'] = repeat
         if implicit and not replace and saved is not None:
             why = []
             if res.implicit_calls:
@@ -1063,6 +1073,12 @@ def format_check(res: Dict[str, Any]) -> str:
                      + (": progress (plateau counter reset)" if b.get('progress')
                         else f": no progress ({b['stale']} stale check(s); the plateau stop fires at {b.get('stale_limit', '?')})"))
         lines.append(line + ". Progress is a higher score (objdiff or adjusted, whichever is better) or fewer differing rows.")
+        repeat = b.get('repeat')
+        if repeat:
+            lines.append((f"REPEAT: this exact source was already compiled at archived check {repeat['check']}"
+                          if repeat['kind'] == 'source' else
+                          f"NO NEW STATE: archived check {repeat['check']} compiled other source to these same instructions")
+                         + f" ({repeat.get('percent') or 0:.2f}%), so this edit taught nothing new. Change what the differing rows come from.")
     if res.get("stop"):
         lines.append(f"STOP: {res['stop']}. Do not write again.")
     return "\n".join(lines)
