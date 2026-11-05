@@ -797,3 +797,6 @@ rel/customize/emb_paste_editor/fn_3_F984.c:
 
 rel/customize/toolkit/fn_3_29C94.c:
 	.text       start:0x00029C94 end:0x0002A2F8 align:4
+
+rel/customize/toolkit/fn_3_21300.c:
+	.text       start:0x00021300 end:0x000225F8 align:4
