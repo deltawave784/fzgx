@@ -9323,3 +9323,6 @@ rel/main_rel/memcard/fn_1_BA144.c:
 
 rel/main_rel/phys/fn_1_E9770.c:
 	.text       start:0x000E9770 end:0x000E9BA8 align:4
+
+rel/main_rel/memcard/fn_1_B4AC0.c:
+	.text       start:0x000B4AC0 end:0x000B5258 align:4
