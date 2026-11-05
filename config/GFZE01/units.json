@@ -4290,6 +4290,18 @@
     "pool": true
   },
   {
+    "module": "customize",
+    "source": "rel/customize/toolkit/fn_3_2C73C.c",
+    "symbols": [
+      "fn_3_2C73C"
+    ],
+    "status": "nonmatching",
+    "mw_version": "GC/1.3.2",
+    "extra_cflags": [],
+    "tu": "rel/customize/toolkit.c",
+    "pool": true
+  },
+  {
     "module": "interview",
     "source": "rel/interview/fn_17_1794.c",
     "symbols": [
