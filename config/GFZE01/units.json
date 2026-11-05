@@ -62021,6 +62021,18 @@
   },
   {
     "module": "main_rel",
+    "source": "rel/main_rel/phys/fn_1_E9770.c",
+    "symbols": [
+      "fn_1_E9770"
+    ],
+    "status": "nonmatching",
+    "mw_version": "GC/2.0",
+    "extra_cflags": [],
+    "tu": "rel/main_rel/phys.c",
+    "pool": true
+  },
+  {
+    "module": "main_rel",
     "source": "rel/main_rel/phys/fn_1_E9BA8.c",
     "symbols": [
       "fn_1_E9BA8"
