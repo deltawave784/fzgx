@@ -9326,3 +9326,6 @@ rel/main_rel/phys/fn_1_E9770.c:
 
 rel/main_rel/memcard/fn_1_B4AC0.c:
 	.text       start:0x000B4AC0 end:0x000B5258 align:4
+
+rel/main_rel/sel_static_disp/fn_1_133E04.c:
+	.text       start:0x00133E04 end:0x00134A4C align:4
