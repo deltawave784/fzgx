@@ -791,3 +791,9 @@ rel/customize/emb_memcard/fn_3_C400.c:
 
 rel/customize/emb_paste_editor/fn_3_10CB8.c:
 	.text       start:0x00010CB8 end:0x000113AC align:4
+
+rel/customize/emb_paste_editor/fn_3_F984.c:
+	.text       start:0x0000F984 end:0x0000FD30 align:4
+
+rel/customize/toolkit/fn_3_29C94.c:
+	.text       start:0x00029C94 end:0x0002A2F8 align:4

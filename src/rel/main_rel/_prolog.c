@@ -411,6 +411,160 @@ void fn_1_958(void) {
 }
 /* fzgx:end fn_1_958 */
 
+/* fzgx:begin fn_1_95C noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+
+extern struct ArenaData lbl_1_data_8;
+extern u32 OSGetArenaLo(void);
+extern u32 OSGetArenaHi(void);
+extern void OSSetArenaLo(u32 arena_lo);
+extern u16 lbl_1_bss_990[28];
+extern u8 lbl_1_bss_D78;
+extern u8 lbl_1_bss_DA6;
+extern u32 lbl_1_bss_DB0[2];
+extern u32 lbl_1_bss_DA8;
+extern void fn_1_43A4(void);
+extern u32 lbl_1_data_2C70;
+extern void fn_80008E84(u32 value);
+extern u32 lbl_1_bss_DAC;
+extern struct fn_1_634_lbl_1_bss_54 lbl_1_bss_54;
+extern u32 fn_8006FFC4(u32);
+extern u32 fn_1_48780(void);
+extern u32 lbl_801A66B4;
+extern u32 lbl_801A66BC;
+extern struct fn_1_904_lbl_1_bss_4 lbl_1_bss_4;
+extern struct fn_1_914_lbl_1_bss_0 lbl_1_bss_0;
+extern u16 lbl_1_bss_96A;
+extern u32 fn_1_37E98(void);
+extern u32 lbl_1_bss_96C;
+extern u32 camera_set_state_flag(u32);
+extern u32 fn_1_D31E0(u32);
+extern struct fn_1_12B4_lbl_1_bss_962 lbl_1_bss_962;
+extern u32 lbl_1_data_2A20;
+extern u32 lbl_1_data_7C0;
+extern u32 fn_1_15659C(u32);
+extern u32 fn_80008BEC(void *, u32, u32);
+extern u8 lbl_1_bss_978[];
+extern u32 lbl_1_data_2B78;
+extern u32 OSGetTick(u32);
+extern u32 lbl_1_bss_D7C;
+extern u8 lbl_1_bss_DA4;
+extern char lbl_1_data_2C9C[20];
+extern char lbl_1_data_2CB0[31];
+extern void OSPanic(const char *message, int line, const char *file, ...);
+extern void fn_80009AA8(u32 value, u32 count, const char *file, int line);
+extern u32 fn_1_156754(u32);
+extern u32 fn_1_A5864(void);
+extern u32 fn_1_F7578(void);
+extern struct fn_1_3C98_lbl_1_bss_DA5 lbl_1_bss_DA5;
+extern u32 fn_80008EC8(u32, u32, u32);
+extern u32 fn_800793D4(u32, u32, u32);
+extern struct fn_1_48B0_lbl_801A6CF8 lbl_801A6CF8;
+extern u32 lbl_801A6CFC;
+extern struct fn_1_44B4_lbl_1_bss_DB8 lbl_1_bss_DB8;
+extern struct fn_1_4438_lbl_1_bss_DC4 lbl_1_bss_DC4;
+extern u8 lbl_1_bss_8E6B0[308];
+extern void fn_1_14FCE4(void *data, s32 value);
+extern struct fn_1_798_slot lbl_1_bss_8E7E4[];
+extern u8 lbl_1_bss_AA0[336];
+extern u8 lbl_1_rodata_108[88];
+extern u32 fn_80008BA8(void *, void *, u32);
+extern void fn_1_3BDC(u32 arg0);
+extern u32 fn_1_3C18(s32);
+
+extern u32 OSGetArenaHi(void);
+extern void OSSetArenaHi(u32 arena_hi);
+extern u32 fn_80008BEC(void *, u32, u32);
+extern void fn_80006E10(char *path);
+extern u32 fn_1_12B88(char *path, u8 *dest, u8 *work);
+extern void fn_800074C4(u32 mapped, u8 *data, u32 size, u32 arg3, u32 arg4, u32 arg5);
+extern void fn_800075AC(u8 *data, u32 size, u32 arg2);
+extern void DCFlushRange(void *addr, u32 size);
+extern size_t strlen(const char *s);
+extern s32 fn_1_15C35C(s32 a, s32 b, s32 c, s32 d);
+extern char lbl_1_data_45C[3];
+
+/*
+ * Loads game/cardata.lz once before the first frame into 0x6000 bytes below the arena top, turns every
+ * word of each 0xB4-byte block high byte first except the four bytes at 0x48, puts each block's name
+ * address in its word 0, and maps the table at 0x23800000. fn_1_15C35C(a, b, c, d) is a * b - c + d:
+ * every constant goes through it.
+ */
+void fn_1_95C(void) {
+    char path[16];
+    u32 *part;
+    u32 w;
+    u32 *dst;
+    u8 *data;
+    u32 *machine;
+    u32 j;
+    char *name;
+    u32 i;
+    u32 size;
+    u8 *group;
+
+    /* "game" (the directory), then "cardata.lz" */
+    path[0] = 'g';
+    fn_80008BEC(&path[1], 'a', 10);
+    path[2] += 12;
+    path[4] = 0;
+    path[3] += 4;
+    fn_80006E10(path);
+    path[0] -= 4;
+    path[2] += 5;
+    path[3] -= 1;
+    path[4] += 'a';
+    path[5] += 0x13;
+    path[7] -= 0x33;
+    path[8] += 0xB;
+    path[9] += 0x19;
+    path[10] = 0;
+
+    size = fn_1_15C35C(60, 400, 0, 576); /* 0x6000 */
+    data = (u8 *)((OSGetArenaHi() - size) & ~0xFFF);
+    if (fn_1_12B88(path, data, data - 0x2000) != 0) {
+        OSSetArenaHi((u32)data);
+        fn_80008BEC(path, 0, 12);
+        /* 0x23800000, 0x6000 */
+        fn_800074C4(fn_1_15C35C(224, 0x280000, 0xFF953892, 0x153892), data, fn_1_15C35C(60, 400, 0, 576), 0, 0, 3);
+
+        /* the 41 machines, last id first, each taking the next name from 0x23801CE0 */
+        name = (char *)(fn_1_15C35C(458, 0x140000, 0x645892, 0x1C5892) + 0x1CE0);
+        for (i = 0; i < fn_1_15C35C(10, 8, 54, 15); i++) {
+            machine = (u32 *)(data + fn_1_15C35C(3, 8, 4, 20) * 0xB4 - i * 0xB4);
+            for (w = 0, dst = machine; w < 45; dst++, w++) {
+                if (w != 18) {
+                    *dst = __lwbrx(machine, w * 4);
+                }
+            }
+            machine[0] = (u32)name;
+            name += strlen(name) + 1;
+        }
+
+        /* the custom parts from 0x1F04: 25 bodies, 25 cockpits, 25 boosters, all named 0x238053C0 */
+        name = (char *)(fn_1_15C35C(458, 0x140000, 0x645892, 0x1C5892) + 0x53C0);
+        size = (u32)data + 0x1F04; /* size is free again: it holds the parts base (retail register order) */
+        for (j = 0; j < 3; j++) {
+            group = (u8 *)size + j * fn_1_15C35C(6, 2, j + 7, j + 20) * 0xB4;
+            for (i = 0; i < fn_1_15C35C(2, 6, 7, 20); i++) {
+                part = (u32 *)(group + fn_1_15C35C(10, 3, 8, 2) * 0xB4 - i * 0xB4);
+                for (w = 0, dst = part; w < 45; dst++, w++) {
+                    if (w != 18) {
+                        *dst = __lwbrx(part, w * 4);
+                    }
+                }
+                part[0] = (u32)name;
+            }
+        }
+
+        DCFlushRange(data, fn_1_15C35C(60, 400, 0, 576));
+        fn_800075AC(data, fn_1_15C35C(60, 400, 0, 576), 1);
+    }
+    fn_80006E10(lbl_1_data_45C);
+}
+/* fzgx:end fn_1_95C */
+
 /* fzgx:begin fn_1_E34 */
 void fn_1_E34(void) {
     s32 v0;
