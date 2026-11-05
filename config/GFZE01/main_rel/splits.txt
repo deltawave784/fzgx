@@ -9338,3 +9338,6 @@ rel/main_rel/effect_car/fn_1_68B6C.c:
 
 rel/main_rel/bg_for/fn_1_E1408.c:
 	.text       start:0x000E1408 end:0x000E1934 align:4
+
+rel/main_rel/burner/fn_1_84860.c:
+	.text       start:0x00084860 end:0x000850C4 align:4
