@@ -9368,3 +9368,6 @@ rel/main_rel/sel_static_disp/fn_1_141C10.c:
 
 rel/main_rel/effect/fn_1_638E8.c:
 	.text       start:0x000638E8 end:0x00064098 align:4
+
+rel/main_rel/bg_for/fn_1_DF2A4.c:
+	.text       start:0x000DF2A4 end:0x000DF6AC align:4

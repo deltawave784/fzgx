@@ -1512,6 +1512,223 @@ void fn_1_DE9C4(fn_1_DE9C4_Obj *obj) {
 }
 /* fzgx:end fn_1_DE9C4 */
 
+/* fzgx:begin fn_1_DF2A4 noprologue */
+#include "types.h"
+#include "psvec.h"
+
+#pragma fp_contract on
+#pragma opt_propagation off
+
+typedef struct DF2A4Vec { f32 x, y, z; } DF2A4Vec;
+typedef struct DF2A4Mtx { f32 m[3][4]; } DF2A4Mtx;
+
+extern u8 lbl_1_rodata_6780[];
+extern void lbl_8006DBAC(void *);
+extern void fn_80008BEC(void *, int, u32);
+extern void fn_8006E2B0(void *, void *);
+extern f32 lbl_8006D534(void *, void *);
+extern void lbl_8006D5F0(void *, void *, f32);
+extern void fn_8006E250(void *, void *);
+extern void mathutil_mtxA_rotate_x(s32);
+extern void lbl_8006E0A4(void *);
+extern void lbl_8006DB74(void *);
+extern void lbl_8006DC34(void *);
+extern void lbl_8006D7DC(void *);
+extern void lbl_8006DFC4(void *);
+extern void lbl_8006D758(void);
+extern s32 fn_1_DEDC4(void *, void *, void *, DF2A4Vec *, DF2A4Vec *, DF2A4Vec *, DF2A4Vec *, f32);
+
+static inline f32 vec_dot_read_pointer(DF2A4Vec * owner) { return owner->y; }
+static inline void vec_dot(DF2A4Vec *a, DF2A4Vec *b, f32 *dot) {
+    f32 result;
+    f32 ax;
+    f32 bx;
+    f32 by;
+    f32 ay;
+    ax = a->x;
+    bx = b->x;
+    by = b->y;
+    ay = a->y;
+    bx = ax * bx;
+    bx += ay * by;
+    bx += a->z * b->z;
+    *dot = bx;
+}
+
+#pragma opt_common_subs off
+static inline void vec_dot_plane(DF2A4Vec *a, DF2A4Vec *b, f32 *dot) {
+    f32 result;
+    f32 ay;
+    f32 az;
+    f32 ax;
+    f32 bx;
+    f32 by;
+    f32 bz;
+    bx = b->x;
+    ax = a->x;
+    by = b->y;
+    ay = a->y;
+    bz = b->z;
+    az = a->z;
+    result = ax * bx;
+    result += ay * by;
+    result += az * bz;
+    *dot = result;
+}
+static inline s32 distance_outside(f32 bound, f32 distance) {
+    return distance * distance > bound;
+}
+
+static inline void plane_distance(DF2A4Vec *a, DF2A4Vec *b, DF2A4Vec *normal, f32 *dot) {
+    DF2A4Vec d;
+    psvec_sub(a, b, &d);
+    vec_dot(&d, normal, dot);
+}
+
+static inline void plane_distance_second(DF2A4Vec *a, DF2A4Vec *b, DF2A4Vec *normal, DF2A4Vec *hit, const f32 *scale) {
+    f32 dist;
+    DF2A4Vec d;
+    psvec_sub(a, b, &d);
+    vec_dot_plane(&d, normal, &dist);
+    lbl_8006D5F0(normal, hit, *scale * dist);
+}
+
+static inline s32 plane_outside(DF2A4Vec *a, DF2A4Vec *b, DF2A4Vec *normal, f32 bound) {
+    f32 dist;
+    plane_distance(a, b, normal, &dist);
+    return dist * dist > bound;
+}
+
+static inline void fn_1_DF2A4_bound(f32 radius, f32 height, f32 *bound) {
+    f32 result = radius * radius;
+    result += height * height;
+    *bound = result;
+}
+static inline f32 fn_1_DF2A4_operand_pointer(const f32 *left, f32 right) {
+    f32 result = *left * right;
+    return result;
+}
+#define fn_1_DF2A4_operand(left, right) fn_1_DF2A4_operand_pointer(&(left), right)
+static inline void fn_1_DF2A4_translation(DF2A4Vec *out) {
+    f32 x = *(f32 *)(0xE0000000 + 0x0C);
+    f32 y = *(f32 *)(0xE0000000 + 0x1C);
+    f32 z = *(f32 *)(0xE0000000 + 0x2C);
+    psvec_set(out, z, y, x);
+}
+#pragma opt_lifetimes off
+s16 fn_1_DF2A4(DF2A4Vec *pos, DF2A4Vec * __restrict prev, void *mtx, DF2A4Vec *point, DF2A4Vec *normal,
+               DF2A4Vec *hit, DF2A4Vec *out, f32 radius, f32 height) {
+    u8 *pool = lbl_1_rodata_6780;
+    DF2A4Mtx mtxB;
+    DF2A4Mtx mtxA;
+    DF2A4Vec up;
+    DF2A4Vec nrm;
+    DF2A4Vec p68;
+    DF2A4Vec p5c;
+    DF2A4Vec off;
+    DF2A4Vec lpos;
+    DF2A4Vec lprev;
+    DF2A4Vec rot;
+    DF2A4Vec pt;
+    f32 finalY, finalX;
+    f32 dist;
+    f32 boundSquared;
+    register f32 cosv;
+    f32 firstY, firstX;
+    f32 secondY, secondX;
+    f32 dd;
+    f32 side;
+    s16 sign;
+    s16 result;
+
+    up = *(DF2A4Vec *)(pool + 0xC0);
+    lbl_8006DBAC(mtx);
+    {
+    f32 dist;
+    fn_1_DF2A4_bound(radius, height, &dist);
+    plane_distance(prev, point, normal, &boundSquared);
+    boundSquared *= boundSquared;
+    if (boundSquared > dist) {
+        fn_80008BEC(out, 0, 12);
+        return 0;
+    }
+    }
+    fn_8006E2B0(normal, &nrm);
+    cosv = lbl_8006D534(&up, &nrm);
+    if (__fabs(cosv) < *(f64 *)(pool + 0x18)) {
+        fn_80008BEC(out, 0, 12);
+        lbl_8006D5F0(normal, &off, -radius);
+        psvec_add(pos, &off, &p5c);
+        psvec_add(prev, &off, &p68);
+        {
+        f32 px, py, pz;
+        f32 nx, ny, nz;
+        f32 sx, sy;
+        f32 tx, ty;
+        f32 dotPoint, dotPos, dotPrev;
+        nx = normal->x;
+        sx = p5c.x;
+        tx = p68.x;
+        ny = normal->y;
+        sy = p5c.y;
+        ty = p68.y;
+        nz = normal->z;
+        dotPoint = nx * point->x;
+        dotPoint += ny * point->y;
+        dotPoint += nz * point->z;
+        dotPos = nx * sx;
+        dotPos += ny * sy;
+        dotPos += nz * p5c.z;
+        dotPrev = nx * tx;
+        dotPrev += ny * ty;
+        dotPrev += nz * p68.z;
+        dd = -dotPoint;
+        side = (dd + dotPos) * (dd + dotPrev);
+        }
+        if (side < *(f32 *)(pool + 0x78)) {
+            sign = -1;
+        } else if (side > *(f32 *)(pool + 0x7C)) {
+            sign = 1;
+        } else {
+            sign = 0;
+        }
+        if (sign > 0) {
+            return 0;
+        }
+        plane_distance_second(&p68, point, normal, hit, (f32 *)(pool + 0xB8));
+        fn_8006E250(&p68, out);
+        return 2;
+    }
+    height = *(f32 *)(pool + 0x34) * height;
+    fn_8006E250(point, &pt);
+    fn_80008BEC(&rot, 0, 12);
+    rot.y = height;
+    if (cosv > *(f32 *)(pool + 0x20)) {
+        mathutil_mtxA_rotate_x(-0x8000);
+    }
+    lbl_8006E0A4(&rot);
+    lbl_8006DB74(&mtxB);
+    psvec_set(&lpos, *(f32 *)(0xE0000000 + 0x2C), *(f32 *)(0xE0000000 + 0x1C), *(f32 *)(0xE0000000 + 0x0C));
+    lbl_8006DC34(&mtxA);
+    lbl_8006D7DC(pos);
+    lbl_8006DFC4(&mtxA);
+    lbl_8006E0A4(&rot);
+    psvec_set(&lprev, *(f32 *)(0xE0000000 + 0x2C), *(f32 *)(0xE0000000 + 0x1C), *(f32 *)(0xE0000000 + 0x0C));
+    result = fn_1_DEDC4(&lprev, &lpos, &mtxB, point, normal, hit, out, radius);
+    if (result != 0) {
+        lbl_8006D758();
+        if (cosv > *(f32 *)(pool + 0x20)) {
+            mathutil_mtxA_rotate_x(-0x8000);
+        }
+        out->y = height;
+        lbl_8006E0A4(out);
+        fn_1_DF2A4_translation(out);
+    }
+    return result;
+}
+#pragma opt_lifetimes reset
+/* fzgx:end fn_1_DF2A4 */
+
 /* fzgx:begin fn_1_DF6AC noprologue */
 #include "types.h"
 #include "rel/main_rel/globals.h"
