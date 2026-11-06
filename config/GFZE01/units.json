@@ -87536,6 +87536,18 @@
   },
   {
     "module": "sel",
+    "source": "rel/sel/sel/fn_10_1615C.c",
+    "symbols": [
+      "fn_10_1615C"
+    ],
+    "status": "nonmatching",
+    "mw_version": "GC/1.3.2",
+    "extra_cflags": [],
+    "tu": "rel/sel/sel.c",
+    "pool": true
+  },
+  {
+    "module": "sel",
     "source": "rel/sel/sel/fn_10_175F0.c",
     "symbols": [
       "fn_10_175F0"
