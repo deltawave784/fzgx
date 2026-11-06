@@ -7,10 +7,20 @@ the most common spelling. A block that declared other parameter types keeps its 
 casting each argument to the type it relied on (`fn((u8)x, y, (u8)z)`): the conversion the
 old prototype implied is now explicit. Every rewritten block is re-verified under the new
 prologue; a block that no longer matches is reverted and reported.
+
+`run` is the command's entry point. The search result is stored under
+`.fzgx/tutruth/<tu>.json`, keyed by hashes of everything the result depends on (`input_hashes`),
+and reused while every hash still agrees; any disagreement forces a new search and the report
+names the inputs that changed. An apply never trusts the stored verdicts: every block of the
+exact text about to be written is compiled and diffed again (`apply_result`), and the inputs are
+compared once more immediately before the write.
 """
 from __future__ import annotations
 
+import hashlib
+import json
 import re
+import time
 from pathlib import Path
 from collections import Counter, OrderedDict
 from typing import Dict, List, Optional, Tuple
@@ -691,14 +701,126 @@ def drop_leading_args(body: str, name: str, k: int) -> str:
     return out
 
 
+_TOP_DEF_RE = re.compile(r'^(?:typedef\b|(?:struct|union|enum)\b[^;()]*\{)')
+
+
+def _block_items(body: str) -> List[Tuple[int, int, set]]:
+    """(first line, end line, names defined) of each file-scope type definition and `extern`
+    declaration line of a block. Anything else (functions, data, macros) is never an item."""
+    lines = body.splitlines()
+    items: List[Tuple[int, int, set]] = []
+    depth, i = 0, 0
+    while i < len(lines):
+        ln = lines[i]
+        if depth == 0 and _TOP_DEF_RE.match(ln):
+            j, d = i, 0
+            closed = False
+            while j < len(lines):
+                d += lines[j].count('{') - lines[j].count('}')
+                if d == 0 and lines[j].rstrip().endswith(';'):
+                    closed = True
+                    break
+                j += 1
+            if not closed:
+                return items  # a shape this reader does not follow: no further items
+            text = '\n'.join(lines[i:j + 1]) + '\n'
+            if re.match(r'^(?:typedef\s+)?enum\b', text):
+                names = set(re.findall(r'[A-Za-z_]\w*', text)) - {'typedef', 'enum'}
+            else:
+                names = private_type_names(text) | set(re.findall(r'^typedef\s+struct\s+([A-Za-z_]\w*)\s+\1\s*;', text))
+            if names:
+                items.append((i, j + 1, names))
+            i = j + 1
+            continue
+        # a line declaring several data symbols names only its first: never an item
+        if depth == 0 and ln.startswith('extern') and tutidy.DECL_LINE_RE.match(ln) and tutidy._decl_name(ln) \
+                and ('(' in ln or ',' not in ln):
+            items.append((i, i + 1, {tutidy._decl_name(ln)}))
+        depth = max(depth + ln.count('{') - ln.count('}'), 0)
+        i += 1
+    return items
+
+
+def strip_unreferenced(body: str) -> str:
+    """The block without the type definitions and `extern` lines nothing else in it names:
+    `restore` copies every type of the old prologue into a self-contained block (stcoli: 36
+    blocks, 4663 duplicate lines). A proposal only: the caller keeps it after the oracle says
+    the block still matches."""
+    lines = body.splitlines()
+    items = _block_items(body)
+    word = re.compile(r'[A-Za-z_]\w*')
+    total = Counter(word.findall(body))
+    counts = [Counter(word.findall('\n'.join(lines[a:b]))) for a, b, _ in items]
+    # definitions sharing a name (a forward typedef and its struct) stand or fall together
+    groups: List[List[int]] = []
+    for k, (_, _, names) in enumerate(items):
+        hit = [g for g in groups if any(items[x][2] & names for x in g)]
+        groups = [g for g in groups if g not in hit] + [[k] + [x for g in hit for x in g]]
+    dropped: set = set()
+    changed = True
+    while changed:
+        changed = False
+        for g in groups:
+            if g[0] in dropped:
+                continue
+            inside: Counter = Counter()
+            for x in g:
+                inside.update(counts[x])
+            if all(total[n] <= inside[n] for x in g for n in items[x][2]):
+                dropped.update(g)
+                total.subtract(inside)
+                changed = True
+    gone = {ln for k in dropped for ln in range(items[k][0], items[k][1])}
+    out = '\n'.join(ln for i, ln in enumerate(lines) if i not in gone)
+    return out + ('\n' if body.endswith('\n') else '')
+
+
+def _matches(r_) -> bool:
+    return bool(r_ and r_.ok and (r_.matched or r_.matched_pool) and oracle.unit_fully_matches(r_) is None)
+
+
+def _measure(text: str) -> Dict[str, int]:
+    return {'lines': len(text.splitlines()), 'bytes': len(text.encode('utf-8', 'replace'))}
+
+
+def _copied_prologue_lines(tf: tufile.TuFile) -> int:
+    """Non-blank lines of self-contained blocks that repeat a line of the TU's prologue."""
+    pro = {ln.strip() for ln in tf.prologue.splitlines() if ln.strip()}
+    return sum(1 for b in tf.blocks if 'noprologue' in b.flags
+               for ln in b.body.splitlines() if ln.strip() in pro)
+
+
+def _size_report(before_text: str, after: tufile.TuFile) -> Dict[str, object]:
+    before = tufile.parse(before_text)
+    was, now = _measure(before_text), _measure(after.render())
+    return {'before': was, 'after': now,
+            'delta_lines': now['lines'] - was['lines'], 'delta_bytes': now['bytes'] - was['bytes'],
+            'self_contained_before': sum(1 for b in before.blocks if 'noprologue' in b.flags),
+            'self_contained_after': sum(1 for b in after.blocks if 'noprologue' in b.flags),
+            'copied_prologue_lines_before': _copied_prologue_lines(before),
+            'copied_prologue_lines_after': _copied_prologue_lines(after)}
+
+
+def _prologue_summary(before: str, after: str) -> Dict[str, object]:
+    return {'before': _measure(before), 'after': _measure(after),
+            'includes': [ln.strip() for ln in after.splitlines() if tufile.INCLUDE_RE.match(ln)],
+            'declarations': sum(1 for ln in after.splitlines() if tutidy.DECL_LINE_RE.match(ln)),
+            'types': len(private_type_names(after))}
+
+
 def resolve(p: Project, tu_source: str, v, apply: bool = True,
-            extra_blocks: Optional[Dict[str, str]] = None) -> Dict[str, object]:
+            extra_blocks: Optional[Dict[str, str]] = None,
+            verdicts: Optional['VerdictCache'] = None) -> Dict[str, object]:
     """`extra_blocks` ({name: body}) join the TU as unverified members (unmatched functions'
     best bodies): their declarations are reconciled and adapted like everyone else's, they
-    are never restored, and the result is only reported, never written."""
+    are never restored, and the result is only reported, never written. `verdicts` carries
+    this search's oracle verdicts across an interrupted run; `apply_result` never reads it."""
     module = tu_source.split('/')[1] if tu_source.startswith('rel/') else 'main'
     units = {u['symbols'][0]: u for u in p.load_units() if u.get('tu') == tu_source}
+    committed_path = tufile.tu_path(p, tu_source)
+    committed_text = committed_path.read_text() if committed_path.exists() else ''
     tf = tufile.load(p, tu_source)
+    committed_prologue = tf.prologue
     extra_names = set()
     if extra_blocks:
         apply = False
@@ -1025,25 +1147,32 @@ def resolve(p: Project, tu_source: str, v, apply: bool = True,
 
     def verify(names_: List[str]) -> Dict[str, bool]:
         """Direct oracle verdicts on the current state: prologue + block per unit, memoised by
-        the generated text within this run (no persistent cache)."""
+        the generated text within this run and, under `verdicts`, across runs with the same
+        compiler, header and retail inputs. The scratch file always holds the current text:
+        `why` and `first_round_error` re-check it by path."""
         out: Dict[str, bool] = {}
         items = []
         for n_ in names_:
             text = tufile.gen_text(tf, n_)
-            if (n_, text) in memo:
-                out[n_], compiled[n_] = memo[(n_, text)]
-                continue
             path = scratch / f'{n_}.c'
             path.write_text(text)
+            hit = memo.get((n_, text))
+            if hit is None and verdicts is not None:
+                hit = verdicts.get(n_, text)
+            if hit is not None:
+                memo[(n_, text)] = hit
+                out[n_], compiled[n_] = hit
+                continue
             items.append((f'{module}:{n_}', path, text))
         if items:
             res = oracle.check_many(p, [(k, path) for k, path, _ in items], 20)
             for k, path, text in items:
                 r_ = res.get(k)
-                ok = bool(r_ and r_.ok and (r_.matched or r_.matched_pool) and oracle.unit_fully_matches(r_) is None)
                 n_ = k.split(':', 1)[1]
-                memo[(n_, text)] = (ok, bool(r_ and r_.ok))
+                memo[(n_, text)] = (_matches(r_), bool(r_ and r_.ok))
                 out[n_], compiled[n_] = memo[(n_, text)]
+                if verdicts is not None:
+                    verdicts.put(n_, text, memo[(n_, text)])
         return out
 
     def prologue_broken() -> bool:
@@ -1077,7 +1206,7 @@ def resolve(p: Project, tu_source: str, v, apply: bool = True,
             continue
         if prologue_broken():
             if searched_broken:
-                report['prologue_broken'] = report.get('first_round_error')
+                report['prologue_broken'] = report.get('first_round_error') or BROKEN_TEXT
                 continue
             searched_broken = True
         forced.add(bname)
@@ -1139,6 +1268,8 @@ def resolve(p: Project, tu_source: str, v, apply: bool = True,
 
     report['prologue'] = tf.prologue
     broken = prologue_broken()
+    if broken:
+        report.setdefault('prologue_broken', report.get('first_round_error') or BROKEN_TEXT)
     for bname in failing:
         report.setdefault('adapted', {})[bname] = tf.get(bname).body
         if broken and not compiled.get(bname) and len(report.get('why', {})) >= 3:
@@ -1152,6 +1283,20 @@ def resolve(p: Project, tu_source: str, v, apply: bool = True,
     for n in [n for n, ok in final.items() if not ok]:
         restore(n)
     final.update(verify([n for n, ok in final.items() if not ok]))
+    # a self-contained block keeps only what it names, when the oracle agrees it still matches
+    copies = {b.name: b.body for b in tf.blocks if 'noprologue' in b.flags and b.name in names and final.get(b.name)}
+    proposals = [n_ for n_, body in copies.items() if strip_unreferenced(body) != body]
+    if proposals:
+        for n_ in proposals:
+            tf.get(n_).body = strip_unreferenced(copies[n_])
+        kept = verify(proposals)
+        for n_ in proposals:
+            if not kept.get(n_):
+                tf.get(n_).body = copies[n_]
+        final.update(verify(proposals))
+        report['stripped'] = {'blocks': sum(1 for n_ in proposals if kept.get(n_)),
+                              'rejected': [n_ for n_ in proposals if not kept.get(n_)],
+                              'lines': sum(len(copies[n_].splitlines()) - len(tf.get(n_).body.splitlines()) for n_ in proposals)}
     report['final_matching'] = sum(1 for x in final.values() if x)
     report['final_failing'] = [n for n, ok in final.items() if not ok]
     report['self_contained'] = [b.name for b in tf.blocks if 'noprologue' in b.flags]
@@ -1165,30 +1310,276 @@ def resolve(p: Project, tu_source: str, v, apply: bool = True,
                 report.setdefault('extra_errors', {})[n_] = res_.error[-300:]
         report['extra_compiles'] = compiles
         report['tu_text'] = tf.render()
-    if apply and not report['final_failing']:
-        tufile._write_atomic(tufile.tu_path(p, tu_source), tf.render())
-        for u in units.values():
-            tufile.write_gen(p, u, tf)
-        # a rewritten block may renumber its private literals: keep pool mappings current
-        for u in list(units.values()):
-            if isinstance(u.get('pool'), dict):
-                res = oracle.check(p, f"{module}:{u['symbols'][0]}", 20)
-                # only a re-derived map under which the block matches outright replaces the old
-                # one: a pool match whose private sections cannot all be emptied (a unit that
-                # keeps its own BSS definitions, identity bindings) returns an empty `pool_map`,
-                # and writing it dropped fn_1_128F10's bindings (multiply-defined link, pass 18)
-                if not (res.ok and res.matched and res.pool_map):
-                    if not (res.ok and (res.matched or res.matched_pool)):
-                        report.setdefault('pool_unverified', []).append(u['symbols'][0])
-                    continue
-                if res.pool_map != u['pool']:
-                    with oracle.build_lock('units.lock'):
-                        all_units = p.load_units()
-                        for x in all_units:
-                            if x['source'] == u['source']:
-                                x['pool'] = dict(res.pool_map)
-                        p.save_units(all_units)
-                    report.setdefault('pool_remapped', []).append(u['symbols'][0])
-        for u in units.values():
-            tufile.write_gen(p, u, tf)
+    # the text an apply writes: what a parse of it renders back to
+    report['tu_text'] = tufile.parse(tf.render()).render()
+    report['size'] = _size_report(committed_text, tufile.parse(report['tu_text']))
+    report['prologue_summary'] = _prologue_summary(committed_prologue, tf.prologue)
+    if apply:
+        apply_result(p, tu_source, report)
     return report
+
+
+BROKEN_TEXT = 'most blocks do not compile under the shared prologue'
+
+
+def write_refusal(report: Dict[str, object]) -> Optional[str]:
+    """Why this result may not be written. A broken prologue must not reach the tree even when
+    every block passes in the end: each block that failed was restored self-contained, so the
+    final count says nothing about the prologue the TU would carry."""
+    if 'prologue_broken' in report:
+        return f"prologue_broken: {str(report['prologue_broken'])[-400:]}"
+    if report.get('final_failing'):
+        return f"final_failing: {len(report['final_failing'])} blocks do not match: {report['final_failing'][:8]}"
+    return None
+
+
+def apply_result(p: Project, tu_source: str, report: Dict[str, object],
+                 key: Optional[Dict[str, str]] = None) -> bool:
+    """Write a resolved TU after the gates: refusal reasons, a fresh oracle verdict for every
+    block of the exact parsed text (no memo, no store), and, given `key`, the same input hashes
+    immediately before the write. Sets `applied` and, when it declines, `refused`."""
+    report['applied'] = False
+    why = write_refusal(report)
+    if why:
+        report['refused'] = why
+        return False
+    module = tu_source.split('/')[1] if tu_source.startswith('rel/') else 'main'
+    units = {u['symbols'][0]: u for u in p.load_units() if u.get('tu') == tu_source}
+    tf = tufile.parse(report['tu_text'])
+    lost = sorted({b.name for b in tufile.load(p, tu_source).blocks} - {b.name for b in tf.blocks})
+    if lost:
+        report['refused'] = f'result drops blocks: {lost[:8]}'
+        return False
+    names = [b.name for b in tf.blocks if b.name in units]
+    scratch = STATE_DIR / 'work' / 'tutruth' / Path(tu_source).stem
+    scratch.mkdir(parents=True, exist_ok=True)
+    items = []
+    for n_ in names:
+        path = scratch / f'{n_}.c'
+        path.write_text(tufile.gen_text(tf, n_))
+        items.append((f'{module}:{n_}', path))
+    res = oracle.check_many(p, items, 20)
+    failing = [n_ for n_ in names if not _matches(res.get(f'{module}:{n_}'))]
+    report['apply_verified'] = len(names) - len(failing)
+    if failing:
+        report['apply_failing'] = failing
+        report['refused'] = f'the fresh oracle check rejected {len(failing)} blocks: {failing[:8]}'
+        return False
+    path = tufile.tu_path(p, tu_source)
+    lock = tufile._lock(path)
+    try:
+        if key is not None:
+            moved = changed_inputs(key, input_hashes(p, tu_source))
+            if moved:
+                report['refused'] = f'inputs changed while verifying: {moved}'
+                return False
+        tufile._write_atomic(path, tf.render())
+    finally:
+        lock.close()
+    report['applied'] = True
+    for u in units.values():
+        tufile.write_gen(p, u, tf)
+    # a rewritten block may renumber its private literals: keep pool mappings current
+    for u in list(units.values()):
+        if isinstance(u.get('pool'), dict):
+            res = oracle.check(p, f"{module}:{u['symbols'][0]}", 20)
+            # only a re-derived map under which the block matches outright replaces the old
+            # one: a pool match whose private sections cannot all be emptied (a unit that
+            # keeps its own BSS definitions, identity bindings) returns an empty `pool_map`,
+            # and writing it dropped fn_1_128F10's bindings (multiply-defined link, pass 18)
+            if not (res.ok and res.matched and res.pool_map):
+                if not (res.ok and (res.matched or res.matched_pool)):
+                    report.setdefault('pool_unverified', []).append(u['symbols'][0])
+                continue
+            if res.pool_map != u['pool']:
+                with oracle.build_lock('units.lock'):
+                    all_units = p.load_units()
+                    for x in all_units:
+                        if x['source'] == u['source']:
+                            x['pool'] = dict(res.pool_map)
+                    p.save_units(all_units)
+                report.setdefault('pool_remapped', []).append(u['symbols'][0])
+    for u in units.values():
+        tufile.write_gen(p, u, tf)
+    return True
+
+
+# ------------------------------------------------------------------ the stored result
+STORE_SCHEMA = 1
+# inputs of one block's oracle verdict (the TU text and other TUs' definitions choose the text)
+VERDICT_INPUTS = ('units', 'compile', 'compilers', 'headers', 'retail', 'config', 'tools')
+
+
+def _sha(data: bytes) -> str:
+    return hashlib.sha256(data).hexdigest()
+
+
+def _sha_files(paths) -> str:
+    h = hashlib.sha256()
+    for f in sorted(Path(x) for x in paths):
+        h.update(f.as_posix().encode() + b'\0')
+        h.update(f.read_bytes() if f.exists() else b'(missing)')
+        h.update(b'\0')
+    return h.hexdigest()
+
+
+def _sha_json(value: object) -> str:
+    return _sha(json.dumps(value, sort_keys=True, default=str).encode())
+
+
+def input_hashes(p: Project, tu_source: str) -> Dict[str, str]:
+    """A hash per input of the search and its verdicts, over-approximated on purpose: a header,
+    tool, configuration or retail change anywhere forces a new search, which costs time; missing
+    one would apply a stale result."""
+    module = tu_source.split('/')[1] if tu_source.startswith('rel/') else 'main'
+    path = tufile.tu_path(p, tu_source)
+    raw = path.read_bytes()
+    text = path.read_text()
+    tf = tufile.parse(text)
+    units = sorted((u for u in p.load_units() if u.get('tu') == tu_source), key=lambda u: u['source'])
+    versions = {mw for mw, _ in oracle.version_candidates(p, module)} | {u['mw_version'] for u in units if u.get('mw_version')}
+    versions.add(oracle.module_flags(p, module)[1])
+    retail = []
+    for b in tf.blocks:
+        sym = p.resolve(f'{module}:{b.name}')
+        target = p.target_object_for(sym) if sym else None
+        if target is not None:
+            retail.append(target)
+    idents = set(re.findall(r'[A-Za-z_]\w*', text))
+    index = definition_index(p)
+    config = ROOT / 'config' / p.version
+    return {
+        'schema': str(STORE_SCHEMA),
+        'tu_file': _sha(raw),
+        'tu_prologue': _sha(tf.prologue.encode('utf-8', 'replace')),
+        'tu_blocks': _sha_json([[b.name, b.flags, b.body] for b in tf.blocks]),
+        'definitions': _sha_json({n: index[n] for n in idents if n in index}),
+        'units': _sha_json(units),
+        'compile': _sha_json([oracle.module_flags(p, module), oracle.version_candidates(p, module),
+                              [[v_, oracle.compile_command(p, module, v_)] for v_ in sorted(versions)]]),
+        'compilers': _sha_files([ROOT / 'build' / 'compilers' / v_ / 'mwcceppc.exe' for v_ in sorted(versions)]),
+        'headers': _sha_files([f for d in (ROOT / 'include', p.build_dir / 'include') for f in d.rglob('*') if f.is_file()]),
+        'retail': _sha_files(retail),
+        'config': _sha_files(list(config.rglob('symbols.txt')) + list(config.rglob('splits.txt'))
+                             + [config / 'ldscript.tpl', config / 'config.yml']),
+        'tools': _sha_files(list((ROOT / 'tools' / 'fzgx').glob('*.py')) + [oracle.OBJDIFF]),
+    }
+
+
+def changed_inputs(stored: Dict[str, str], current: Dict[str, str]) -> List[str]:
+    return sorted(k for k in set(stored) | set(current) if stored.get(k) != current.get(k))
+
+
+def store_stem(tu_source: str) -> Path:
+    return STATE_DIR / 'tutruth' / tu_source.replace('/', '__')
+
+
+class VerdictCache:
+    """Oracle verdicts of one TU's search, kept across an interrupted or re-keyed run while the
+    inputs of a verdict (`VERDICT_INPUTS`) are unchanged. Append-only so a killed search keeps
+    what it paid for. It serves the search and the dry-run report; an apply re-checks."""
+
+    def __init__(self, tu_source: str, key: Dict[str, str]):
+        self.path = Path(str(store_stem(tu_source)) + '.verdicts.jsonl')
+        self.env = _sha_json({k: key.get(k) for k in VERDICT_INPUTS})
+        self.rows: Dict[str, Tuple[bool, bool]] = {}
+        self.hits = 0
+        self.path.parent.mkdir(parents=True, exist_ok=True)
+        if self.path.exists():
+            with self.path.open() as fh:
+                if fh.readline().strip() == self.env:
+                    for ln in fh:
+                        try:
+                            k, ok, comp = json.loads(ln)
+                        except ValueError:
+                            continue  # a line cut short by a killed run
+                        self.rows[k] = (bool(ok), bool(comp))
+        if not self.rows:
+            self.reset()
+
+    def reset(self) -> None:
+        self.rows = {}
+        self.path.write_text(self.env + '\n')
+
+    @staticmethod
+    def _key(name: str, text: str) -> str:
+        return _sha((name + '\0' + text).encode('utf-8', 'replace'))
+
+    def get(self, name: str, text: str) -> Optional[Tuple[bool, bool]]:
+        hit = self.rows.get(self._key(name, text))
+        self.hits += hit is not None
+        return hit
+
+    def put(self, name: str, text: str, verdict: Tuple[bool, bool]) -> None:
+        k = self._key(name, text)
+        self.rows[k] = verdict
+        with self.path.open('a') as fh:
+            fh.write(json.dumps([k, verdict[0], verdict[1]]) + '\n')
+
+
+def _save_store(tu_source: str, key: Dict[str, str], report: Dict[str, object], elapsed: float,
+                invalid: Optional[str] = None) -> None:
+    stem = str(store_stem(tu_source))
+    tufile._write_atomic(Path(stem + '.json'), json.dumps({
+        'key': key, 'report': report, 'search_seconds': round(elapsed, 1), 'invalid': invalid,
+        'saved': time.strftime('%Y-%m-%d %H:%M:%S')}))
+    # the proposal in a readable form: `git diff --no-index src/<tu> .fzgx/tutruth/<...>.after.c`
+    tufile._write_atomic(Path(stem + '.after.c'), str(report.get('tu_text') or ''))
+    tufile._write_atomic(Path(stem + '.prologue.h'), str(report.get('prologue') or ''))
+
+
+def run(p: Project, tu_source: str, apply: bool = False, fresh: bool = False) -> Dict[str, object]:
+    """Dry-run or apply through the store: reuse while every input hash agrees, search otherwise.
+    `fresh` searches regardless and ignores the saved verdicts; an apply re-checks either way."""
+    start = time.monotonic()
+    stem = str(store_stem(tu_source))
+    key = input_hashes(p, tu_source)
+    stored = None
+    if not fresh and Path(stem + '.json').exists():
+        try:
+            stored = json.loads(Path(stem + '.json').read_text())
+        except ValueError:
+            stored = None
+    if fresh:
+        changed = ['(--fresh)']
+    elif stored is None:
+        changed = ['(no stored result)']
+    elif stored.get('invalid'):
+        changed = [f"(invalidated: {stored['invalid']})"]
+    else:
+        changed = changed_inputs(stored.get('key') or {}, key)
+    if changed:
+        verdicts = None if fresh else VerdictCache(tu_source, key)
+        report = resolve(p, tu_source, None, apply=False, verdicts=verdicts)
+        searched = time.monotonic() - start
+        moved = changed_inputs(key, input_hashes(p, tu_source))
+        info = {'reused': False, 'recomputed_because': changed, 'search_seconds': round(searched, 1),
+                'saved_verdicts_reused': verdicts.hits if verdicts else 0}
+        if moved:
+            info['not_stored_inputs_moved'] = moved
+        else:
+            _save_store(tu_source, key, report, searched)
+    else:
+        report = stored['report']
+        info = {'reused': True, 'stored_search_seconds': stored.get('search_seconds'), 'saved': stored.get('saved')}
+    info.update(path=stem + '.json', proposal=stem + '.after.c', prologue=stem + '.prologue.h')
+    report['store'] = info
+    if apply:
+        if not apply_result(p, tu_source, report, key) and report.get('apply_failing'):
+            # the key agreed and the oracle did not: that result is never offered again
+            _save_store(tu_source, key, report, 0.0, invalid=report['refused'])
+            VerdictCache(tu_source, key).reset()
+    else:
+        report['would_refuse'] = write_refusal(report)
+    info['total_seconds'] = round(time.monotonic() - start, 1)
+    return report
+
+
+REPORT_ONLY_IN_STORE = ('prologue', 'adapted', 'tu_text', 'truth', 'first_round_prologue')
+
+
+def summary(report: Dict[str, object]) -> Dict[str, object]:
+    """The report for the terminal: the bulky texts stay in the store (`store.path`)."""
+    out = {k: v for k, v in report.items() if k not in REPORT_ONLY_IN_STORE}
+    out['truth_symbols'] = len(report.get('truth') or {})
+    return out

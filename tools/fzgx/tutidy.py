@@ -204,7 +204,7 @@ def tidy(p: Project, tu_source: str, dry_run: bool = False, check_fn=None) -> Di
 
 
 # an extern line, or a prototype written without extern: `s32 fn_1_9D260(void);`
-DECL_LINE_RE = re.compile(r"^\s*(?:extern\b[^{]*;|(?:const\s+)?[A-Za-z_]\w*[\w\s\*]*?\b[A-Za-z_]\w*\s*\([^;{}]*\)\s*;)\s*$")
+DECL_LINE_RE = re.compile(r"^\s*(?:extern\b[^{]*;|(?!(?:else|do)\b)(?:const\s+)?[A-Za-z_]\w*[\w\s\*]*?\b[A-Za-z_]\w*\s*\([^;{}]*\)\s*;)\s*$")
 
 
 # a function-pointer object, scalar or array: `void (*cb)(s32);`, `void (*tbl[0x45])(void *);`
@@ -214,8 +214,8 @@ FNPTR_OBJECT_RE = re.compile(r"^\s*(?:extern\s+)?[A-Za-z_][\w\s\*]*\(\s*\*\s*([A
 
 
 def _decl_name(line: str) -> Optional[str]:
-    if line.lstrip().startswith(("typedef", "static", "return", "if", "while", "for")):
-        return None
+    if re.match(r"\s*(?:typedef|static|return|if|else|do|while|for)\b", line):
+        return None  # `else if(a<b) c=d;` reads as a prototype named `if` otherwise
     fp = FNPTR_OBJECT_RE.match(line)
     if fp:
         return fp.group(1)  # a function-pointer object `void (*cb)(s32);`, not a function `void`
