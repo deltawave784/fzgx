@@ -5669,6 +5669,225 @@ void fn_1_9D3E8(void *arg0, s32 arg1, s32 arg2) {
 }
 /* fzgx:end fn_1_9D3E8 */
 
+/* fzgx:begin fn_1_9D420 noprologue */
+#include "types.h"
+#include "rel/main_rel/burner.h"
+
+typedef struct {
+    const char *name;
+    u8 pad_4[0x8];
+} fn_1_9D420_NameEntry;
+
+typedef struct {
+    u8 pad_0[0x8];
+    u8 unk_8;
+} fn_1_9D420_Info;
+
+typedef struct {
+    u8 pad_0[0x24];
+    void *unk_24;
+} fn_1_9D420_Sub;
+
+typedef struct {
+    s32 index;
+    fn_1_9D420_Sub *sub;
+    u32 unk_8;
+    fn_1_9D420_Info *info;
+} fn_1_9D420_Slot;
+
+typedef struct {
+    u8 pad_0[0x4];
+    const char *name;
+} fn_1_9D420_Desc;
+
+typedef struct {
+    u8 pad_0[0x8];
+    fn_1_9D420_Desc *desc;
+} fn_1_9D420_Ref;
+
+typedef struct {
+    u32 flags;
+    u8 pad_4[0x4];
+    fn_1_9D420_Ref *ref;
+    u8 pad_C[0x2C];
+    fn_1_9D420_Slot *slot;
+    u8 pad_3C[0x4];
+} fn_1_9D420_Object;
+
+typedef struct {
+    u8 pad_0[0x5C];
+} fn_1_9D420_LoadResult;
+
+/* Allocators may update the active heap through this global. */
+extern struct {
+    void *value;
+} lbl_801A6410;
+#define lbl_801A6410 (lbl_801A6410.value)
+extern u16 **lbl_1_bss_6EA78;
+extern u16 **lbl_1_bss_6EA7C;
+
+extern void fn_80006E10(const char *);
+extern void *fn_1_4630(void *, u32, const char *, u32);
+extern void *fn_1_45D0(void *, u32, const char *, u32);
+extern s32 strlen(const char *);
+extern s32 fn_8006FC5C(const char *, const char *, s32);
+extern int sprintf(char *, const char *, ...);
+extern int fn_1_45730(char *, fn_1_9D420_LoadResult *);
+extern u32 fn_1_45B2C(fn_1_9D420_LoadResult *);
+extern void fn_1_458A0(fn_1_9D420_LoadResult *, void *, u32, u32);
+extern void fn_1_45850(fn_1_9D420_LoadResult *);
+extern void fn_1_4247C(void *, void *, void *);
+extern void fn_1_426E4(fn_1_9D420_Sub *, void *);
+extern u32 fn_1_41488(void *, u8 *);
+extern void fn_1_4270C(fn_1_9D420_Sub *, u32, u32);
+
+#pragma opt_propagation on
+#pragma opt_lifetimes off
+static inline fn_1_9D420_Sub *fn_1_9D420_MakeLabel(fn_1_9D420_Slot *slot, u8 *temp) {
+    u8 digit;
+    u32 letter;
+    fn_1_9D420_Sub *sub;
+    letter = 0x4d;
+    digit = (u8)(slot->info->unk_8 + 0x30);
+    sub = slot->sub;
+    temp[0] = letter;
+    temp[1] = digit;
+    temp[2] = 0;
+    return sub;
+}
+
+#pragma opt_propagation on
+#pragma opt_propagation off
+#pragma scheduling off
+static inline void *fn_1_9D420_Allocate(void *heap, const char *file, u32 size, register volatile u32 line) {  /* fzgx-allow: S2 volatile keeps the verified access order */
+    u64 request;
+    request = ((u64)size << 32) | line;
+    return fn_1_45D0(heap, (u32)(request >> 32), file, (u32)request);
+}
+#pragma opt_propagation off
+
+static inline void *fn_1_9D420_LoadAllocate(fn_1_9D420_LoadResult *result, void *volatile *heap, const char *file, u32 line, u32 *size) {  /* fzgx-allow: S2 volatile keeps the verified access order */
+    u32 bytes;
+    void *allocHeap;
+    bytes = fn_1_45B2C(result);
+    allocHeap = *heap;
+    *size = (bytes + 0x1f) & ~0x1f;
+    return fn_1_9D420_Allocate(allocHeap, file, *size, line);
+}
+
+#pragma opt_propagation on
+#pragma opt_lifetimes off
+#pragma scheduling on
+#pragma optimize_for_size off
+void fn_1_9D420(fn_1_9D420_Object *obj, s32 count) {
+    struct { u32 value; } allocLine;
+#define line allocLine.value
+    void *heap;
+    u32 diff;
+    s32 len2;
+    s32 n;
+    s32 i;
+    const char *name;
+    struct { fn_1_9D420_NameEntry *value; } entry;
+    struct { u8 *value; } data;
+#define d data.value
+    u32 size;
+    s32 len1;
+    const char *str;
+    struct { u16 **value; } table2;
+    fn_1_9D420_LoadResult result;
+    char buf[0x80];
+    u8 temp[3];
+
+    entry.value = (fn_1_9D420_NameEntry *)lbl_1_data_2A0C0;
+    d = (u8 *)entry.value;
+    fn_80006E10((char *)(d + 0x2b78));
+    lbl_1_bss_6EA78 = fn_1_4630(lbl_801A6410, 0x14, (char *)(d + 0x2aa0), 0x8d3);
+    lbl_1_bss_6EA7C = fn_1_4630(lbl_801A6410, 0x14, (char *)(d + 0x2aa0), 0x8d4);
+
+    for (n = 0; n < count; n++, obj++) {
+        if ((obj->flags & 0x1000) && obj->slot != 0) {
+            i = 0;
+            entry.value = (fn_1_9D420_NameEntry *)(d + 0x2770);
+            for (; i < 5; i++, entry.value++) {
+                name = entry.value->name;
+                str = obj->ref->desc->name;
+                len1 = strlen(name);
+                len2 = strlen(str);
+                diff = len2 - len1;
+                /* accept either suffix, then fall into the name compare */
+                if (diff == 5) {
+                    if (fn_8006FC5C(str + (len2 - 5), (char *)(d + 0x2b80), strlen((char *)(d + 0x2b80))) != 0) {
+                        goto suffix_ok; /* Keep the verified branch to suffix_ok. */
+                    }
+                }
+                if (diff != 4) {
+                    continue;
+                }
+                if (fn_8006FC5C(str + (len2 - 4), (char *)(d + 0x2b88), strlen((char *)(d + 0x2b88))) == 0) {
+                    continue;
+                }
+suffix_ok:
+                if (fn_8006FC5C(name, str, len1) != 0) {
+                    entry.value = (fn_1_9D420_NameEntry *)lbl_1_bss_6EA7C;
+                    if (((u16 **)entry.value)[i] == 0) {
+                        sprintf(buf, (char *)(d + 0x2b90), name);
+                        if (fn_1_45730(buf, &result) != 0) {
+                            line = 0x8f5;
+                            ((u16 **)entry.value)[i] = fn_1_9D420_LoadAllocate(&result, &lbl_801A6410, (char *)(d + 0x2aa0), line, &diff);
+                            line -= 0x8f5;
+                            fn_1_458A0(&result, ((u16 **)entry.value)[i], diff, line);
+                            fn_1_45850(&result);
+                        }
+                    }
+                    if (((u16 **)entry.value)[i] != 0) {
+                        obj->slot->index = i;
+                        obj->slot->sub = fn_1_45D0(lbl_801A6410, ((u16 **)entry.value)[i][0] * 0x18c + 0x70, (char *)(d + 0x2aa0), 0x8fc);
+                        fn_1_4247C(obj->slot->sub, (u8 *)obj->slot->sub + 0x70, ((u16 **)entry.value)[i]);
+                    }
+                    table2.value = lbl_1_bss_6EA78;
+                    if (table2.value[i] == 0) {
+                        sprintf(buf, (char *)(d + 0x2b98), name);
+                        if (fn_1_45730(buf, &result) != 0) {
+                            line = 0x907;
+                            table2.value[i] = fn_1_9D420_Allocate(lbl_801A6410, (char *)(d + 0x2aa0), size = (fn_1_45B2C(&result) + 0x1f) & ~0x1f, line);
+                            fn_1_458A0(&result, table2.value[i], size, 0);
+                            fn_1_45850(&result);
+                        }
+                    }
+                    if (table2.value[i] != 0) {
+                        u32 letter;
+                        u32 digit;
+                        fn_1_9D420_Info *info;
+                        fn_1_9D420_Slot *slot;
+                        u32 ret;
+
+                        fn_1_426E4(obj->slot->sub, table2.value[i]);
+                        slot = obj->slot;
+                        info = slot->info;
+                        digit = info->unk_8;
+                        digit += 0x30;
+                        letter = 0x4d;
+                        name = (const char *)slot->sub;
+                        temp[0] = letter;
+                        temp[1] = digit;
+                        temp[2] = 0;
+                        ret = fn_1_41488(((fn_1_9D420_Sub *)name)->unk_24, temp);
+                        if (ret == 0xffffffff) {
+                            ret = 0;
+                        }
+                        fn_1_4270C((fn_1_9D420_Sub *)name, 0, ret & 0xffff);
+                    }
+                    break;
+                }
+            }
+        }
+    }
+
+    fn_80006E10((char *)(d + 0x2ba4));
+}
+/* fzgx:end fn_1_9D420 */
+
 /* fzgx:begin fn_1_F8E30 */
 /* Formats a text entry for the given index and column into out. */
 char *fn_1_F8E30(s16 index, s16 col, char *out) {
