@@ -9380,3 +9380,6 @@ rel/main_rel/accessory/fn_1_123050.c:
 
 rel/main_rel/sel_static_disp/fn_1_14C35C.c:
 	.text       start:0x0014C35C end:0x0014C6F8 align:4
+
+rel/main_rel/replay/fn_1_F3BC0.c:
+	.text       start:0x000F3BC0 end:0x000F43F0 align:4
