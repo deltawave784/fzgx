@@ -1269,6 +1269,24 @@
    "source": "cached upstream dcd0c3352c57a93fd4e2c338ea4d6c0f8aa0678b"
   }
  },
+ "fn_17_7098": {
+  "commit": "e26b7706f92e17856a9d77071ba6b79d19cc2449",
+  "flags": "",
+  "kind": "raw",
+  "landed": 1793954855,
+  "mw": "GC/1.3.2",
+  "ref_name": "fn_17_7098",
+  "ref_unit_options": {
+   "compiler_options": null,
+   "extra_cflags": [],
+   "mw_version": null
+  },
+  "sha256": "c8c2cb7c1fe2cc23013a096195bff60fdce3151478fb4ff403aeeac8ae5b112f",
+  "source": "karamzov123/fzero-gx-decomp@e26b7706f (CC0)",
+  "status": "matched",
+  "unit": "rel/interview/interview.c",
+  "upstream": null
+ },
  "fn_17_7A74": {
   "commit": "b5daeed39e04c5c80858e48b2d6de16a17f50954",
   "flags": "",
@@ -3237,6 +3255,24 @@
   },
   "sha256": "1144cdefd1fae225a20d6a2155396e459994de231ca25208c7d795faf31c42e0",
   "source": "karamzov123/fzero-gx-decomp@a8c6fe13 (CC0)",
+  "status": "matched",
+  "unit": "rel/main_rel/game.c",
+  "upstream": null
+ },
+ "fn_1_4068C": {
+  "commit": "e26b7706f92e17856a9d77071ba6b79d19cc2449",
+  "flags": "",
+  "kind": "raw",
+  "landed": 1793954694,
+  "mw": "GC/1.3.2",
+  "ref_name": "fn_1_4068C",
+  "ref_unit_options": {
+   "compiler_options": null,
+   "extra_cflags": [],
+   "mw_version": null
+  },
+  "sha256": "f855d7378d75c011b604d3876f3f64a1dd5a2e5972ca94105463b75cd6fc8bd1",
+  "source": "karamzov123/fzero-gx-decomp@e26b7706f (CC0)",
   "status": "matched",
   "unit": "rel/main_rel/game.c",
   "upstream": null
