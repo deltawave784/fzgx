@@ -31298,6 +31298,252 @@ void fn_17_49BC(void) {
 }
 /* fzgx:end fn_17_49BC */
 
+/* fzgx:begin fn_17_49DC */
+#include "rel/interview/interview.h"
+
+typedef struct {
+    u32 flags;
+    u8 unk_4;
+    u8 unk_5;
+    u8 unk_6;
+    u8 unk_7;
+    u8 pad_8[0x81A0 - 0x8];
+    u8 unk_81A0;
+    u8 pad_81A1[3];
+    u8 unk_81A4;
+    u8 pad_81A5[7];
+    u8 unk_81AC;
+    u8 pad_81AD[7];
+    u8 unk_81B4;
+} Fn17Racer;
+
+typedef struct {
+    Fn17Racer *racer;
+    u8 unk_4;
+    u8 unk_5;
+    u8 unk_6;
+    u8 unk_7;
+} Fn17Unit;
+
+typedef struct {
+    u8 pad_0[0x324];
+    s32 unk_324;
+    u8 pad_328[0x390 - 0x328];
+    u32 unk_390;
+    u8 pad_394[0x3A0 - 0x394];
+    void *unk_3A0;
+    void *unk_3A4;
+    u8 pad_3A8[0x3BA - 0x3A8];
+    s16 unk_3BA;
+} Fn17Disp;
+
+typedef struct {
+    Fn17Disp *unk_0;
+    u8 unk_4;
+    u8 pad_5[3];
+    f32 unk_8;
+    u32 unk_C;
+    u8 pad_10[0x10420 - 0x10];
+    u32 unk_10420;
+    u32 unk_10424;
+    void *unk_10428;
+    void *unk_1042C;
+} Fn17Ctx;
+
+typedef struct {
+    u8 pad_0[8];
+    Fn17Ctx *unk_8;
+    u8 pad_C[4];
+    Fn17Unit *unk_10;
+    u8 pad_14[0x304 - 0x14];
+    u16 unk_304;
+    u8 pad_306[2];
+    Fn17Disp *unk_308;
+    void *unk_30C;
+} Fn17Bss;
+
+typedef struct {
+    s16 unk_0;
+    s16 unk_2;
+    s16 unk_4;
+    u8 pad_6[2];
+    u32 unk_8;
+    u8 pad_C[4];
+} Fn17Source;
+
+typedef struct {
+    s16 unk_0;
+    s16 index;
+    u32 unk_4;
+    u8 unk_8;
+    u8 pad_9[3];
+    u32 flags;
+    Fn17Source source;
+} Fn17Info;
+
+
+extern u32 lbl_801A6410;
+extern u32 lbl_1_bss_6D82C;
+
+extern void fn_80008BEC(void *, int, u32);
+extern void fn_1_80058(s8, Fn17Info *);
+extern void *fn_1_4630(u32 heap, u32 size, const char *file, int line);
+extern void *fn_1_45D0(u32 heap, u32 size, const char *file, int line);
+extern void fn_80006E10(const char *);
+extern void fn_1_14D728(Fn17Source *, void *);
+extern void DCFlushRange(void *, u32);
+extern char *fn_1_7F518(s16, char *, s32);
+extern int sprintf(char *, const char *, ...);
+extern s32 fn_1_12A350(char *, u32);
+extern void fn_1_12AB38(const char *);
+extern u32 fn_1_12AC00(const char *);
+extern void fn_1_12A2B8(u32);
+extern void fn_1_12A2D0(s32);
+extern void fn_1_80294(Fn17Info *, Fn17Disp *, u32);
+extern void fn_1_12A734(s32);
+extern void fn_1_81164(Fn17Disp *, u32, s16);
+extern void *fn_1_7F254(Fn17Racer *, u32);
+extern void fn_1_FE004(void);
+extern int fn_1_FD844(Fn17Racer *, Fn17Ctx *);
+extern void fn_1_FDEC8(void);
+extern void fn_1_FDC00(void);
+
+extern const f32 lbl_17_rodata_18;
+
+#define STR(off) ((const char *)(u32)data.value + ((off) - 0x60000))
+
+#pragma opt_lifetimes on
+#pragma opt_propagation on
+#pragma opt_common_subs off
+void fn_17_49DC(void) {
+    struct { u64 value; } data;
+#define bss ((Fn17Bss *)(u32)(data.value >> 32))
+    Fn17Unit *unit;
+    Fn17Racer *racer;
+    struct { s32 value; } mode;
+    Fn17Info info;
+    char text[0x20];
+    char name[0x20];
+    char * tmp_call5;
+    Fn17Disp *disp;
+
+    data.value = ((u64)(u32)&lbl_17_bss_0 << 32) | (u32)((const char *)&lbl_17_data_0 + 0x60000);
+    bss->unk_304 = 0;
+    unit = bss->unk_10;
+    fn_80008BEC(&info, 0, sizeof(info));
+    fn_1_80058((s8)unit->unk_5, &info);
+    info.unk_0 = 0;
+    info.index = unit->unk_5;
+    info.unk_4 = 1;
+    info.unk_8 = 1;
+    if (info.index >= 41) {
+        racer = unit->racer;
+        if (racer != NULL && (racer->flags & 0x80000000)) {
+            fn_80008BEC(&info.source, 0, sizeof(info.source));
+            if (racer->flags & 0x40000000) {
+                info.flags |= 0x4000000;
+                info.source.unk_0 = racer->unk_81A4;
+                info.source.unk_2 = racer->unk_81AC;
+                info.source.unk_4 = racer->unk_81B4;
+            } else {
+                info.index = racer->unk_81A0;
+            }
+            info.source.unk_8 = info.unk_4;
+        }
+    }
+    fn_80008BEC(&bss->unk_308, 0, 4);
+    fn_80008BEC(&bss->unk_30C, 0, 4);
+    if (info.flags & 0x4000000) {
+        bss->unk_30C = fn_1_4630(lbl_801A6410, 0xA20, STR(0x63E50), 0xB78);
+        fn_80006E10(STR(0x640F8));
+        fn_1_14D728(&info.source, bss->unk_30C);
+        fn_80006E10(STR(0x64108));
+        disp = fn_1_4630(lbl_801A6410, 0x440, STR(0x63E50), 0xB7E);
+        bss->unk_308 = disp;
+        disp->unk_3BA = 0;
+        bss->unk_308->unk_3A0 = bss->unk_30C;
+        bss->unk_308->unk_390 = 0x4000000;
+        bss->unk_308->unk_324 = -1;
+    } else {
+        disp = fn_1_4630(lbl_801A6410, 0x440, STR(0x63E50), 0xB87);
+        bss->unk_308 = disp;
+        disp->unk_3BA = 0;
+        DCFlushRange(bss->unk_308, 0x460);
+        tmp_call5 = fn_1_7F518(info.index, name, 0);
+        tmp_call5;
+        if (bss->unk_308->unk_3BA == 1) {
+            sprintf(text, STR(0x6410C), name);
+        } else {
+            sprintf(text, STR(0x64120), name);
+        }
+        bss->unk_308->unk_324 = fn_1_12A350(text, 1);
+        if (lbl_1_bss_6D82C == 0) {
+            fn_1_12AB38(STR(0x64134));
+            lbl_1_bss_6D82C = fn_1_12AC00(STR(0x64140));
+            fn_1_12AB38(STR(0x64108));
+        }
+        fn_1_12A2B8(1);
+        fn_1_12A2D0(bss->unk_308->unk_324);
+        fn_1_12AB38(STR(0x64134));
+        fn_1_80294(&info, bss->unk_308, 1);
+        fn_1_12AB38(STR(0x64108));
+        fn_1_12A2B8(0);
+        if (bss->unk_308->unk_324 != -1) {
+            fn_1_12A734(bss->unk_308->unk_324);
+            bss->unk_308->unk_324 = -1;
+        }
+        bss->unk_308->unk_3A0 = NULL;
+        bss->unk_308->unk_390 = 0;
+        mode.value = 0;
+        switch ((31 - __cntlzw(unit->unk_6)) & 3) {
+        case 0:
+            mode.value = 0;
+            break;
+        case 1:
+            mode.value = 1;
+            break;
+        case 2:
+            mode.value = 2;
+            break;
+        case 3:
+            mode.value = 3;
+            break;
+        default:
+            mode.value = 0;
+            break;
+        }
+        fn_1_81164(bss->unk_308, 0, mode.value);
+    }
+
+    racer = unit->racer;
+    if (racer == NULL || bss->unk_308 == NULL) {
+        return;
+    }
+    if (racer->unk_7 == 0) {
+        return;
+    }
+    if (!(racer->flags & 0x80000000)) {
+        return;
+    }
+    if (racer->flags & 0x40000000) {
+        return;
+    }
+    bss->unk_8 = fn_1_45D0(lbl_801A6410, 0x10440, STR(0x63E50), 0xBE3);
+    racer->unk_5 = racer->unk_81A0;
+    bss->unk_8->unk_10424 = 0;
+    bss->unk_8->unk_10428 = fn_1_FDC00;
+    bss->unk_8->unk_10420 = 0;
+    bss->unk_8->unk_1042C = fn_1_FDEC8;
+    bss->unk_8->unk_4 = 4;
+    bss->unk_8->unk_8 = lbl_17_rodata_18;
+    bss->unk_8->unk_0 = bss->unk_308;
+    bss->unk_8->unk_C = 0x20000000;
+    bss->unk_308->unk_3A4 = fn_1_7F254(racer, 1);
+    fn_1_FE004();
+    fn_1_FD844(racer, bss->unk_8);
+}
+/* fzgx:end fn_17_49DC */
+
 /* fzgx:begin fn_17_4E50 */
 // fn_17_4E50: empty in retail (single blr).
 void fn_17_4E50(void) {
