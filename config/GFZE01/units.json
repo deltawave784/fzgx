@@ -5064,6 +5064,28 @@
   },
   {
     "module": "interview",
+    "source": "rel/interview/interview/fn_17_7098.c",
+    "symbols": [
+      "fn_17_7098"
+    ],
+    "status": "matching",
+    "mw_version": null,
+    "extra_cflags": [],
+    "tu": "rel/interview/interview.c",
+    "pool": {
+      "...bss.0": "lbl_17_bss_0",
+      "fzgx_obj_lbl_17_bss_0": "lbl_17_bss_0",
+      "fzgx_obj_lbl_17_bss_1": "lbl_17_bss_1",
+      "fzgx_obj_lbl_17_bss_2": "lbl_17_bss_2",
+      "fzgx_obj_lbl_17_bss_3": "lbl_17_bss_3",
+      "fzgx_obj_lbl_17_bss_198": "lbl_17_bss_198",
+      "lbl_17_bss_198__fzgx_offset_178": "lbl_17_bss_198+0x178",
+      "lbl_17_bss_198__fzgx_offset_179": "lbl_17_bss_198+0x179",
+      "lbl_17_bss_198__fzgx_offset_17A": "lbl_17_bss_198+0x17A"
+    }
+  },
+  {
+    "module": "interview",
     "source": "rel/interview/interview/fn_17_71C0.c",
     "symbols": [
       "fn_17_71C0"
@@ -56238,6 +56260,25 @@
     "extra_cflags": [],
     "tu": "rel/main_rel/game.c",
     "pool": true
+  },
+  {
+    "module": "main_rel",
+    "source": "rel/main_rel/game/fn_1_4068C.c",
+    "symbols": [
+      "fn_1_4068C"
+    ],
+    "status": "matching",
+    "mw_version": null,
+    "extra_cflags": [],
+    "tu": "rel/main_rel/game.c",
+    "pool": {
+      "...rodata.0": "lbl_1_rodata_BD8",
+      "@9": "lbl_1_rodata_BE4+0x14",
+      "@18": "lbl_1_rodata_D48+0xC",
+      "@19": "lbl_1_rodata_D48+0x10",
+      "@36": "lbl_1_rodata_EB4+0x5C",
+      "@28": "lbl_1_rodata_D48+0x18"
+    }
   },
   {
     "module": "main_rel",

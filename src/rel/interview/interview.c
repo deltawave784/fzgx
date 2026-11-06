@@ -74542,6 +74542,68 @@ void fn_17_7020(InterviewObject *object) {
 }
 /* fzgx:end fn_17_7020 */
 
+/* fzgx:begin fn_17_7098 */
+typedef struct fn_17_7098_Interview {
+    u32 unk_0;
+    u32 unk_4;
+    u8 pad_8[4];
+    s16 unk_C;
+    u8 pad_E[2];
+    u32 unk_10;
+    u32 unk_14;
+} fn_17_7098_Interview;
+
+/* the retail TU's .bss objects this function uses, at their retail offsets */
+u8 fzgx_obj_lbl_17_bss_0;
+u8 fzgx_obj_lbl_17_bss_1;
+u8 fzgx_obj_lbl_17_bss_2;
+u8 fzgx_obj_lbl_17_bss_3;
+u8 fzgx_pool_gap_4[0x198 - 0x4];
+u8 fzgx_obj_lbl_17_bss_198[0x178];
+u8 lbl_17_bss_198__fzgx_offset_178;
+u8 lbl_17_bss_198__fzgx_offset_179;
+u8 lbl_17_bss_198__fzgx_offset_17A;
+
+#pragma section code_type ".fzgxpool"
+__declspec(section ".fzgxpool") static void fzgx_bss_prime(void) {
+    volatile u32 s;  /* fzgx-allow: S2 primer sink: MWCC emits .bss objects in first-access order */
+    s = fzgx_obj_lbl_17_bss_0;
+    s = fzgx_obj_lbl_17_bss_1;
+    s = fzgx_obj_lbl_17_bss_2;
+    s = fzgx_obj_lbl_17_bss_3;
+    s = fzgx_pool_gap_4[0];
+    s = fzgx_obj_lbl_17_bss_198[0];
+    s = lbl_17_bss_198__fzgx_offset_178;
+    s = lbl_17_bss_198__fzgx_offset_179;
+    s = lbl_17_bss_198__fzgx_offset_17A;
+}
+#pragma section code_type ".text"
+
+extern u32 lbl_801A63C0;
+extern void fn_17_74C0(fn_17_7098_Interview *);
+extern void fn_1_154ED0(u32);
+
+static inline s32 fn_17_7098_rand(void) {
+    lbl_801A63C0 = lbl_801A63C0 * 0x676A4B6B + 0x33CB;
+    return (lbl_801A63C0 >> 16) & 0x7FFF;
+}
+
+void fn_17_7098(fn_17_7098_Interview *interview) {
+    interview->unk_0 = 0;
+    interview->unk_4 &= ~1;
+    interview->unk_4 = 2;
+    interview->unk_14 = interview->unk_10 + interview->unk_C * 0x138;
+    fn_17_74C0(interview);
+    fn_1_154ED0(interview->unk_14);
+    fzgx_obj_lbl_17_bss_1 = 0;
+    fzgx_obj_lbl_17_bss_2 = 0;
+    fzgx_obj_lbl_17_bss_3 = 0;
+    lbl_17_bss_198__fzgx_offset_178 = fn_17_7098_rand() % 6;
+    lbl_17_bss_198__fzgx_offset_179 = fn_17_7098_rand() % 5;
+    lbl_17_bss_198__fzgx_offset_17A = fn_17_7098_rand() % 5;
+}
+/* fzgx:end fn_17_7098 */
+
 /* fzgx:begin fn_17_71C0 */
 typedef struct InterviewState {
     u8 pad[4];
