@@ -9365,3 +9365,6 @@ rel/main_rel/burner/fn_1_9D420.c:
 
 rel/main_rel/sel_static_disp/fn_1_141C10.c:
 	.text       start:0x00141C10 end:0x00141F94 align:4
+
+rel/main_rel/effect/fn_1_638E8.c:
+	.text       start:0x000638E8 end:0x00064098 align:4
