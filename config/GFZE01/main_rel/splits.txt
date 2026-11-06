@@ -9350,3 +9350,6 @@ rel/main_rel/font/fn_1_48D80.c:
 
 rel/main_rel/accessory/fn_1_117424.c:
 	.text       start:0x00117424 end:0x001177C4 align:4
+
+rel/main_rel/accessory/fn_1_11677C.c:
+	.text       start:0x0011677C end:0x001171B8 align:4
