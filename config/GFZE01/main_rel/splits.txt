@@ -9353,3 +9353,6 @@ rel/main_rel/accessory/fn_1_117424.c:
 
 rel/main_rel/accessory/fn_1_11677C.c:
 	.text       start:0x0011677C end:0x001171B8 align:4
+
+rel/main_rel/live_camera/fn_1_107B8.c:
+	.text       start:0x000107B8 end:0x00010AF0 align:4
