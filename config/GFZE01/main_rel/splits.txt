@@ -9347,3 +9347,6 @@ rel/main_rel/memcard/fn_1_BC310.c:
 
 rel/main_rel/font/fn_1_48D80.c:
 	.text       start:0x00048D80 end:0x000492F0 align:4
+
+rel/main_rel/accessory/fn_1_117424.c:
+	.text       start:0x00117424 end:0x001177C4 align:4
