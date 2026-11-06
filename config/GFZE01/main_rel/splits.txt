@@ -9344,3 +9344,6 @@ rel/main_rel/burner/fn_1_84860.c:
 
 rel/main_rel/memcard/fn_1_BC310.c:
 	.text       start:0x000BC310 end:0x000BE978 align:4
+
+rel/main_rel/font/fn_1_48D80.c:
+	.text       start:0x00048D80 end:0x000492F0 align:4
