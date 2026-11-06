@@ -166,7 +166,8 @@ running), with `git status` clean.
 **Steps:**
 1. Census: from the last batches' release lines in `.fzgx/reports/waves.md`, the saved best bodies (`check` of each
    with `oracle.check` / `fzgx stuck`) and the oracle's `pool_notes`, rank blocker classes by functions blocked and
-   bytes; skip classes the notes mark as needing the allocator capture (no macOS VM here). Also read
+   bytes; allocator rows are read through `fzgx fixup --verdicts @stuck` (captures run in WSL; the verdicts also
+   reach the claim context, so run it after `fzgx stuck` at a close-out too; repeat runs skip current bodies). Also read
    `state/pending_tooling/` (unapplied D patches are not re-proposed).
 2. If no class blocks at least 3 functions, stop the round (log "tooling round: nothing worth fixing"), which costs
    only the census.

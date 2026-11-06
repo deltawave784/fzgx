@@ -908,6 +908,42 @@ Reported by the karamzov123 fork (same tooling base) and restated here. Items ma
     retail's): no declaration order or tie re-sweep can close them, only a source change in the
     value webs. This agrees with the T1 verdicts above (no class closed by order alone).
 
+## Capture verdicts for the pure-allocation rows (tooling round T25, 2026-11-06)
+
+A stale `.fzgx/capture/.capture.lock` (a capture killed on 2026-11-04) had made every capture return
+`None` for two days: `fixup_capture.capture` treats a held lock as "another capture runs", so
+per-symbol fixups ran with no capture-directed proposals and `--verdicts` reported `capture unavailable`.
+A lock older than the capture timeout is now taken over.
+
+`fixup --verdicts` over `fzgx stuck`'s 34 `pure: regalloc` rows: unresolved 10, web-split 8,
+base-temp 4, inline-region 3, expression-order 2, copy-coalesce 2, parameter-copy 2, row-order 1,
+operand-order 1, degree 1, declaration-order 0. Target webs: 82 compiler shadows, 79 lowering
+temporaries, 43 declared locals, 25 section/pool bases, 2 parameters. The replay reaches every mapped
+colour by renumbering on 12 rows, always through a compiler web, so no row closes by declaration order
+alone (T1 said the same of its 23 near-misses).
+
+- `pure: regalloc` in `stuck` is register text only. fn_1_13E080's three rows are the same `extsh`
+  instructions in another order, fn_1_C96A4's two are commutative operand swaps. Read as renamings they
+  gave a false `web-split`; `fixup_verdicts.row_shapes` names them `row-order` and `operand-order`.
+- An exchange `a=b` moves both webs, so a local/shadow exchange is reachable from either side
+  (`fixup_verdicts.alternatives`): the `held-local` and `inline-region` families both run (7 rows).
+- The candidate cap was hiding results. 23 rows at 99%+ through the directed families at
+  `--max-candidates 1500` (one round): fn_1_90E0 reached an object match, fn_3_11A38 went 5 -> 2 rows,
+  fn_1_E07B8 32 -> 30, fn_1_739C 159 -> 155, fn_1_14BFD8 33 -> 15 rows (percent 99.24 -> 98.07). The same
+  rows at the default 80 (rounds 1 and 2 of 240) improved only fn_1_14BFD8. So `fzgx fixup SYMBOL` with
+  a verdict now searches 1,500 candidates per seed.
+- fn_1_90E0's object match sat behind source lint (`object_matched`, `source_lint`): one more round
+  of the engine's lint families made it clean, so a one-round deep run must be followed by a second.
+- fn_1_13E080 with the fifth parameter of `fn_1_1358BC` declared `s16` (no explicit cast) fixes the
+  `extsh` order, then `lfs f3` schedules last with its base in r11 (6 rows, 99.45). Open.
+- fn_1_D0F60 `44=47`: wrapping `pX` in a one-member struct did not change the rows (99.37, 11 rows); reading
+  through it at every site regressed to 98.01. fn_1_11DE2C `v57->v60`: a block-scoped counter changed
+  nothing, a separate top-level counter regressed to 99.83. Open.
+
+The verdict now reaches the claim context (`fixup_verdicts.section`), and `fzgx fixup SYMBOL` refreshes
+a missing or stale verdict for bodies at 98%+. `fzgx fixup --verdicts @stuck` is the repeatable pass
+over the last `fzgx stuck`.
+
 ## Scheduler replay (GC/1.3.2 capture, tooling round T6, 2026-10-31)
 
 `capture132.sh` now also writes `pcode-sched-NNNN-before.json` at every Scheduler entry

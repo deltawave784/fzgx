@@ -25,7 +25,11 @@ search:
        expression-order    two compiler webs: creation (expression/statement) order
        degree              only an interference count change reproduces retail: lifetime splits
      plus `structural` (no register row maps), `compiler` (no 1.3.2-equivalent object),
-     `unresolved` (no override reproduces every mapped colour; `partial_class` names the best).
+     `unresolved` (no override reproduces every mapped colour; `partial_class` names the best),
+     `operand-order` / `row-order` (the only rows left are a commutative operand swap or the same
+     instructions in another order: no web has the wrong colour, fn_1_C96A4, fn_1_13E080).
+     Exchanging two numbers moves both webs, so a local/window swap is reachable from either side:
+     both levers' families run (`also`).
 
 One row per function goes to `.fzgx/capture/verdicts.json`, keyed by symbol with the body's
 sha256. `fixup.Engine.proposals` reads it: the verdict's families (CLASS_FAMILIES) run first for
@@ -46,7 +50,7 @@ VERDICTS = fc.CAPTURE_ROOT / 'verdicts.json'
 DEGREES = (1, 2, 3, 4, 6, 8, 12, 16)
 MAX_REPLAYS = 6000
 BEAM, DEPTH, MAX_TOTAL = 6, 3, 40000   # replays are ~1 ms (fn_1_DF6AC, 174 FPR webs)
-ORDER = ['base-temp', 'parameter-copy', 'copy-coalesce', 'web-split', 'held-local', 'inline-region',
+ORDER = ['operand-order', 'row-order', 'base-temp', 'parameter-copy', 'copy-coalesce', 'web-split', 'held-local', 'inline-region',
          'declaration-order', 'expression-order', 'degree', 'unresolved']
 # class -> engine family keys (fixup.Engine.directed maps each key to its generator)
 CLASS_FAMILIES = {
@@ -73,8 +77,45 @@ CLASS_FAMILIES = {
     # a web's class without changing code, then the read-only table qualifier (scheduling)
     'unresolved': ['source.self_assignment_barriers', 'source.inline_parameter_barriers',
                    'source.const_extern_tables', 'source.forwarded_locals', 'source.definition_moves'],
+    # the same instructions in another order, or a commutative pair spelled the other way: not
+    # the allocator. The expression tree or the argument/initialisation order decides it
+    'operand-order': ['source.commutations', 'source.add_trees', 'source.expression_trees',
+                      'source.initialization_orders', 'evidence.attributed_inlines'],
+    'row-order': ['source.definition_moves', 'source.initialization_orders', 'source.argument_lifetimes',
+                  'source.expression_trees', 'evidence.fusion_control', 'evidence.attributed_type_flips'],
     'base-temp': [],
 }
+
+# what a session should know of each class: the lever, and what the replay rules out
+CLASS_TEXT = {
+    'declaration-order': 'two declared locals exchange numbers: declaration order reaches it (first declared is numbered highest).',
+    'held-local': 'a compiler web (@N shadow or temporary) must be numbered below a declared local. Declaration order cannot do it: '
+                  'compiler webs are numbered above every local. Spell the value so it IS a declared local used at every site '
+                  '(de-CSE a repeated expression, hold a call result, one-member struct around a constant pointer, a stepped pointer '
+                  'local for an indexed loop access).',
+    'inline-region': 'a declared local must be numbered above a compiler web. Declaration order cannot do it: move the value out of '
+                     'the pass-1 locals (write the expression at its uses without the local when nothing it reads changes, or make it '
+                     'a local of an inlined helper; inlined locals are numbered in the window).',
+    'parameter-copy': "a parameter's web moves: parameters are numbered below every local, so use a local copy declared at the position retail implies.",
+    'base-temp': 'a section or literal-pool base (lowering temporary) is involved: it is numbered after every local and shadow. No '
+                 'declaration order, carrier or pragma has ever renumbered it (docs/MWCC_IDIOMS.md, "Section base outranks a declared '
+                 "local\"); the lever is how the TU's objects are defined, or none.",
+    'expression-order': 'two compiler webs exchange numbers: they number in creation order, so reorder the expressions or statements '
+                        'that create them. Declaration order cannot reach them.',
+    'degree': "only a web's interference count changes the result (`v:+N` / `v:-N`): retail keeps it live across more or fewer "
+              'webs. Move its definition or a neighbouring short-lived value; numbering edits cannot reach it.',
+    'copy-coalesce': 'retail defines a local directly where we compute a temporary and copy it: write the value straight into the local '
+                     '(or remove the copy). Renumbering cannot reach it.',
+    'web-split': 'retail gives one of our webs two registers: the value lives in two variables in retail. Renumbering cannot reach it.',
+    'unresolved': 'no bounded renumbering or degree change reproduces every colour, so a single swap of declarations will not close it: '
+                  'the webs themselves differ (a value is split, merged or created elsewhere in retail).',
+    'operand-order': 'no web has the wrong colour: a commutative operation has its operands the other way round. The expression tree '
+                     '(`a + (b + c)` against `(a + b) + c`, operand order at the source) decides it, not the allocator.',
+    'row-order': "no web has the wrong colour: the same instructions run in another order. Argument or statement order, or a cast "
+                 "that moves a value's conversion, decides it, not the allocator.",
+}
+COMMUTATIVE = {'add', 'and', 'or', 'xor', 'nand', 'nor', 'mullw', 'fadd', 'fadds', 'fmul', 'fmuls'}
+ROW_GAP = 6   # differing rows at most this far apart belong to one reordered cluster
 
 
 # ----------------------------------------------------------------------------- row mapping
@@ -97,6 +138,33 @@ def _pairs(check) -> Tuple[list, int]:
         else:
             other += 1
     return out, other
+
+
+def row_shapes(pairs) -> Tuple[set, set]:
+    """(rows that are a commutative operand swap, rows that belong to a cluster holding the same
+    instructions as retail in another order). Neither is a renaming: read as one, the row gives its
+    web a second retail register and the function a false `web-split`."""
+    swapped, moved = set(), set()
+    differing = []
+    for k, retail, our in pairs:
+        if retail == our:
+            continue
+        differing.append((k, retail, our))
+        rop, _, rargs = retail.partition(' ')
+        oop, _, oargs = our.partition(' ')
+        ra, oa = rargs.split(', '), oargs.split(', ')
+        if rop == oop and rop.rstrip('.') in COMMUTATIVE and len(ra) == 3 and len(oa) == 3 \
+                and ra[0] == oa[0] and ra[1] == oa[2] and ra[2] == oa[1]:
+            swapped.add(k)
+    cluster: list = []
+    for row in differing + [None]:
+        if row is not None and (not cluster or row[0] - cluster[-1][0] <= ROW_GAP):
+            cluster.append(row)
+            continue
+        if len(cluster) >= 2 and sorted(r[1] for r in cluster) == sorted(r[2] for r in cluster):
+            moved |= {r[0] for r in cluster}
+        cluster = [row] if row is not None else []
+    return swapped, moved
 
 
 def retail_colors(check, pairs, cap: Path, idx: str, cls: str) -> Tuple[Dict[int, int], Dict[int, int], Dict[int, list]]:
@@ -340,6 +408,19 @@ def classify(hyps, rows, bases, cls) -> Tuple[str, List[dict]]:
     return min(kinds, key=ORDER.index), webs
 
 
+def alternatives(hyps, rows, bases, cls) -> List[str]:
+    """The levers of each exchange in HYPS: `a=b` moves both webs, so a local/window exchange is
+    reached by raising the local (inline-region) as well as by lowering the window web (held-local)."""
+    out: List[str] = []
+    for h in hyps or []:
+        if h[0] != 'swap':
+            continue
+        kinds = {_web(rows, bases, h[1], cls)['class'], _web(rows, bases, h[2], cls)['class']}
+        if 'local' in kinds and len(kinds) == 2 and not kinds & {'base', 'parameter'}:
+            out += ['held-local', 'inline-region']
+    return out
+
+
 def _capture_compiler(p: Project, symbol: str, body: str, mw: str, flags: Optional[str], check):
     """(GC/1.3.2 check of BODY, note) when the capture compiler reproduces the recorded one's rows."""
     if mw == fc.CAPTURE_VERSION:
@@ -359,8 +440,9 @@ def _capture_compiler(p: Project, symbol: str, body: str, mw: str, flags: Option
 
 
 def diagnose(p: Project, symbol: str, path: Optional[Path] = None, mw: Optional[str] = None,
-             flags: Optional[str] = None, run_capture: bool = True) -> dict:
-    """One verdict row for SYMBOL's saved best body (or PATH under MW/FLAGS)."""
+             flags: Optional[str] = None, run_capture: bool = True, min_percent: float = 0.0) -> dict:
+    """One verdict row for SYMBOL's saved best body (or PATH under MW/FLAGS). A body below
+    MIN_PERCENT gets class `far` without a capture."""
     from .ledger import Ledger
     sym = p.resolve(symbol)
     if sym is None:
@@ -384,7 +466,11 @@ def diagnose(p: Project, symbol: str, path: Optional[Path] = None, mw: Optional[
     out.update(percent=round(check.percent, 3), rows=oracle.progress_rows(check))
     if check.matched:
         return {**out, 'class': 'matched'}
+    if check.percent < min_percent:
+        return {**out, 'class': 'far'}
     pairs, other = _pairs(check)
+    swapped, reordered = row_shapes(pairs)
+    colored = [row for row in pairs if row[0] not in swapped and row[0] not in reordered]
     out['register_only'] = bool(fc.residual_rows(check)[0])
     out['structural_rows'] = other
     ccheck, note = _capture_compiler(p, symbol, body, mw, flags, check)
@@ -408,7 +494,7 @@ def diagnose(p: Project, symbol: str, path: Optional[Path] = None, mw: Optional[
             before, after = sr.load(cap, idx, rcls)
         except FileNotFoundError:
             continue
-        want, mine, split = retail_colors(ccheck, pairs, cap, idx, cls)
+        want, mine, split = retail_colors(ccheck, colored, cap, idx, cls)
         if not want and not split:
             continue
         g = sr.Graph(before, rcls)
@@ -438,13 +524,25 @@ def diagnose(p: Project, symbol: str, path: Optional[Path] = None, mw: Optional[
                         for v in res['targets']],
             'override': ' '.join(_label(h) for h in res['best'] or []), 'override_agree': res['best_agree'],
             'solutions': [' '.join(_label(h) for h in sol) for sol in res['solutions'][:6]],
-            'class': kind, 'partial_class': partial, 'webs': webs, 'replays': res.get('replays')}
+            'class': kind, 'partial_class': partial, 'also': alternatives(res['best'], rows, bases, cls),
+            'webs': webs, 'replays': res.get('replays')}
         found.append(kind)
+    shapes = (['operand-order'] if swapped else []) + (['row-order'] if reordered else [])
+    if shapes:
+        out['row_shapes'] = {'operand-order': sorted(swapped), 'row-order': sorted(reordered)}
+    if not found and shapes:
+        out['class'] = min(shapes, key=ORDER.index)
+        out['families'] = directed_families(out)
+        return out
     if not found:
         out['class'] = 'structural' if other else 'unresolved'
         out['note'] = 'no differing register row maps to a captured web'
         return out
     out['class'] = min(found, key=ORDER.index)
+    # a reordered or commuted row is the visible difference; what is left of the colours has no
+    # renumbering (a row's alignment noise), so the shape names the lever, not the leftover
+    if shapes and all(c['class'] in ('unresolved', 'web-split') for c in out['classes'].values()):
+        out['class'] = min(shapes, key=ORDER.index)
     if other:
         out['note'] = f'{other} rows are not register renamings; the class covers the register rows'
     out['families'] = directed_families(out)
@@ -455,9 +553,9 @@ def diagnose(p: Project, symbol: str, path: Optional[Path] = None, mw: Optional[
 
 def directed_families(verdict: dict) -> List[str]:
     """Engine family keys of a verdict: the function's class first, then each register file's."""
-    classes = [verdict.get('class')]
+    classes = [verdict.get('class')] + [k for k, rows in (verdict.get('row_shapes') or {}).items() if rows]
     for c in verdict.get('classes', {}).values():
-        classes += [c.get('class'), c.get('partial_class')]
+        classes += [c.get('class'), c.get('partial_class')] + list(c.get('also') or [])
     out: List[str] = []
     for k in classes:
         for f in CLASS_FAMILIES.get(k or '', []):
@@ -488,16 +586,77 @@ def verdict_for(symbol: str, body: str) -> Optional[dict]:
     """SYMBOL's verdict for exactly BODY, else its verdict marked `stale` (the class still picks
     the families of a derived body; the names may have moved)."""
     v = load_verdicts().get(symbol)
-    if not v or v.get('class') in (None, 'error', 'matched', 'compiler', 'structural', 'base-temp'):
+    if not v or v.get('class') in (None, 'error', 'matched', 'compiler', 'structural', 'base-temp', 'far'):
         return None
     # families follow the current CLASS_FAMILIES, not the ones saved with the row
     v = dict(v, families=directed_families(v))
     return v if v.get('sha256') == fc._digest(body) else dict(v, stale=True)
 
 
+def section(symbol: str, body: str) -> Optional[str]:
+    """The verdict as a claim-context section: which webs retail colours differently, the smallest
+    renumbering that reproduces retail in the exact replay, and what that rules out. Advisory."""
+    v = load_verdicts().get(symbol)
+    if not v or v.get('class') in (None, 'error', 'matched', 'compiler', 'far'):
+        return None
+    exact = v.get('sha256') == fc._digest(body)
+    head = ('of this exact body' if exact else 'of an earlier body of this function: the class usually holds, '
+            'the names and numbers may have moved')
+    lines = [f"### Allocator capture verdict: {v['class']}", f"Measured from a GC/1.3.2 capture {head}; the replay reproduces the compiler's colours."]
+    kinds = {'local': 'declared local', 'parameter': 'parameter', 'shadow': 'compiler shadow', 'temp': 'lowering temporary',
+             'base': 'section/pool base', 'constant': 'hoisted constant'}
+    seen = [v['class']]
+    for rcls, c in v.get('classes', {}).items():
+        shown = [f"{t.get('name', '?')} ({kinds.get(t.get('class'), t.get('class'))}, v{t['vreg']}) {t['got']} -> retail {t['want']}"
+                 for t in c.get('targets', [])[:6]]
+        more = len(c.get('targets', [])) - len(shown)
+        solved = c.get('override') and c.get('override_agree') == c.get('mapped')
+        how = (f"renumbering `{c['override']}` reproduces all {c['mapped']} mapped webs" if solved else
+               f"no bounded renumbering reproduces all {c.get('mapped')} mapped webs"
+               + (f" (best `{c['override']}`: {c.get('override_agree')})" if c.get('override') else ''))
+        lines.append(f"- {rcls}: {c.get('agree')}/{c.get('mapped')} webs already agree; {how}."
+                     + (f" Targets: {'; '.join(shown)}" + (f"; {more} more" if more > 0 else '') + '.' if shown else ''))
+        seen += [c.get('class')] + list(c.get('also') or [])
+    shapes = v.get('row_shapes') or {}
+    for kind, rows in shapes.items():
+        if rows:
+            lines.append(f"- {kind} rows: {', '.join(map(str, rows[:12]))}.")
+            seen.append(kind)
+    done = []
+    for k in seen:
+        if k in CLASS_TEXT and k not in done:
+            done.append(k)
+            lines.append(f"- {k}: {CLASS_TEXT[k]}")
+    return '\n'.join(lines)
+
+
+def refresh(p: Project, symbol: str) -> Optional[dict]:
+    """Capture SYMBOL's saved best body when it has no verdict of exactly that body (the engine's
+    directed families and the claim context read the row). Bodies below the capture threshold and
+    an unavailable capture leave the saved row alone."""
+    from .ledger import Ledger
+    if p.resolve(symbol) is None or not fc.available():
+        return None
+    found = Ledger().ranked_local_attempt(p, symbol)
+    if not found:
+        return None
+    try:
+        if _current(p, symbol, load_verdicts()):
+            return None
+        v = diagnose(p, symbol, min_percent=fc.MIN_PERCENT)
+    except Exception as error:  # a verdict is advisory: it never stops the repair
+        print(f'{symbol}: no verdict: {type(error).__name__}: {error}'[:300], flush=True)
+        return None
+    save_verdicts([v])
+    return v
+
+
 def save_verdicts(rows: List[dict]) -> None:
     data = load_verdicts()
     for r in rows:
+        # a capture that could not run says nothing about the body: keep what was measured
+        if r.get('class') == 'error' and data.get(r['symbol'], {}).get('class') not in (None, 'error'):
+            continue
         data[r['symbol']] = r
     VERDICTS.parent.mkdir(parents=True, exist_ok=True)
     write_atomic(VERDICTS, json.dumps(data, indent=1))
@@ -518,8 +677,30 @@ def prioritise(candidates: List[Tuple[str, str]], body: str, names: List[str]) -
     return sorted(candidates, key=miss)
 
 
+def stuck_symbols(min_percent: float = fc.MIN_PERCENT) -> List[str]:
+    """`--verdicts @stuck`: the rows of the last `fzgx stuck` whose residual is only allocation or
+    allocation plus schedule, nearest first."""
+    from .project import STATE_DIR
+    rows = json.loads((STATE_DIR / 'stuck.json').read_text())['results']
+    return [r['symbol'] for r in sorted(rows, key=lambda r: -r['percent'])
+            if r.get('pure') in ('regalloc', 'regalloc+schedule') and r['percent'] >= min_percent]
+
+
+def _current(p: Project, symbol: str, have: dict) -> bool:
+    """Whether SYMBOL's saved best body already has a verdict of exactly that body."""
+    from .ledger import Ledger
+    row = have.get(symbol)
+    found = Ledger().ranked_local_attempt(p, symbol)
+    return bool(row and found and row.get('class') != 'error'
+                and row.get('sha256') == fc._digest(Path(found[1]).read_text()))
+
+
 def command(p: Project, symbols: List[str], run_capture: bool = True) -> List[dict]:
     rows = []
+    if symbols == ['@stuck']:
+        # repeatable: a body that already has its exact verdict costs nothing
+        have = load_verdicts()
+        symbols = [s for s in stuck_symbols() if not _current(p, s, have)]
     for s in symbols:
         try:
             v = diagnose(p, s, run_capture=run_capture)

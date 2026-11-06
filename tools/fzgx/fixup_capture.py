@@ -28,6 +28,7 @@ import re
 import shutil
 import subprocess
 import sys
+import time
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple
 
@@ -107,6 +108,14 @@ def capture(p: Project, symbol: str, body: str, flags: Optional[str], timeout: i
     # one capture at a time: every capture drives the guest's single gdb port (1234), and the
     # engine generates candidates in forked workers; a second caller skips rather than collides
     lock = scratch.parent / '.capture.lock'
+    # a killed capture leaves its lock behind (.capture.lock of 2026-11-04 silently disabled every
+    # capture for two days): a lock older than any capture's timeout has no live owner
+    try:
+        if time.time() - lock.stat().st_mtime > timeout + 60:
+            print(f'capture: removing stale {lock.name}', file=sys.stderr, flush=True)
+            lock.unlink(missing_ok=True)
+    except OSError:
+        pass
     try:
         fd = os.open(str(lock), os.O_CREAT | os.O_EXCL | os.O_WRONLY)
     except OSError:

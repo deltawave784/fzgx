@@ -147,6 +147,7 @@ def build_context(project: Project, ledger: Optional[Ledger], symbol: str,
 
     parts: List[str] = []
     measured = None
+    capture_verdict = None
     parts.append(f"# Match task: `{symbol}`")
     parts.append(
         f"- module: `{module}`  section: `{sym.section}`  address: `0x{sym.addr:08X}`  "
@@ -357,6 +358,12 @@ def build_context(project: Project, ledger: Optional[Ledger], symbol: str,
                 measured = _tried.section(project.key(sym), body)
             except Exception:
                 measured = None
+            # what the allocator capture proved about this body's remaining register rows
+            try:
+                from . import fixup_verdicts as _verdicts
+                capture_verdict = _verdicts.section(symbol, body)
+            except Exception:
+                capture_verdict = None
 
     # the lifter's draft: a mechanical translation of the disassembly, structurally right by
     # construction (calls, layouts, loops), shown with the rows it still misses so the agent
@@ -441,4 +448,7 @@ def build_context(project: Project, ledger: Optional[Ledger], symbol: str,
     if len(text) > limit:
         text = text[:limit] + "\n\n[context truncated to budget]"
     # after the cut: this history is specific to the seed; the budget above bounds generic examples
-    return text + chr(10) + measured if measured else text
+    for extra in (capture_verdict, measured):
+        if extra:
+            text += chr(10) + extra
+    return text

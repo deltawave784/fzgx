@@ -608,6 +608,8 @@ class Engine:
             'evidence.induction_indexing': lambda: evidence.induction_indexing(self.project, sym, body, check),
             'evidence.parameter_copies': lambda: evidence.parameter_copies(self.project, sym, body, check),
             'evidence.scalar_lifetimes': lambda: evidence.scalar_lifetimes(self.project, sym, body, check),
+            'evidence.fusion_control': lambda: evidence.fusion_control(self.project, sym, body, check),
+            'evidence.attributed_type_flips': lambda: evidence.attributed_type_flips(self.project, sym, body, check, self.row_lines(row)),
             'source.rewrites': lambda: [('regalloc: ' + l, t) for l, t in source.rewrites(body, name)],
         }
         names = fixup_verdicts.target_names(verdict)
@@ -1668,6 +1670,9 @@ def save_improved_attempts(p,engine,report,margin=0.05):
     return saved
 
 
+VERDICT_MAX_CANDIDATES=1500
+
+
 def command(p,args):
     if args.min_percent is None:
         args.min_percent = 0 if getattr(args, 'clones', False) else 95
@@ -1687,6 +1692,15 @@ def command(p,args):
             raise SystemExit(1)
         return result
     output=(args.output or STATE_DIR/'fixup'/'corpus').resolve()
+    if args.symbol and not args.saved and not args.corpus and not args.body:
+        # one symbol: its directed families and the next claim's context read this verdict
+        from . import fixup_verdicts
+        fixup_verdicts.refresh(p,args.symbol)
+        # T25: a body with a verdict has a register residual worth the deep search. The default 80
+        # candidates per seed never reached the spelling that object-matched fn_1_90E0 (6056 B);
+        # 1,500 did (fn_3_11A38 5 -> 2 rows too). An explicit --max-candidates or --budget still rules.
+        if args.max_candidates==80 and fixup_verdicts.load_verdicts().get(args.symbol,{}).get('classes'):
+            args.max_candidates=VERDICT_MAX_CANDIDATES
     if args.saved:
         report=json.loads((output/'report.json').read_text())
     else:
