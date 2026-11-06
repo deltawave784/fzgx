@@ -9383,3 +9383,6 @@ rel/main_rel/sel_static_disp/fn_1_14C35C.c:
 
 rel/main_rel/replay/fn_1_F3BC0.c:
 	.text       start:0x000F3BC0 end:0x000F43F0 align:4
+
+rel/main_rel/effect/fn_1_662D8.c:
+	.text       start:0x000662D8 end:0x00067294 align:4

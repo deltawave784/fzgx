@@ -27872,6 +27872,544 @@ void fn_1_662D4(void) {
 }
 /* fzgx:end fn_1_662D4 */
 
+/* fzgx:begin fn_1_662D8 noprologue */
+#include "types.h"
+#include "psvec.h"
+#include "game/main_rel/car_test_types.h"
+#include "game/main_rel/car_types.h"
+#include "rel/main_rel/effect.h"
+
+struct Sig_fn_1_862A8_fn_1_862A8_Arg1 {
+    u32 unk_0;
+    u32 unk_4;
+    u32 unk_8;
+};
+typedef struct {
+    u32 x;
+    u32 y;
+    u32 z;
+} Sig_fn_1_8658C_Vec3U32;
+
+struct fn_1_662D8_lbl_1_rodata_2950 {
+    u8 pad_0[0x50];
+    f32 unk_50;
+    u8 pad_54[0x124];
+    f32 unk_178;
+    u8 pad_17C[0x8];
+    f32 unk_184;
+    u8 pad_188[0x248];
+    f32 unk_3D0;
+    f32 unk_3D4;
+};
+typedef struct {
+    s8 active;
+    u8 pad_1;
+    s16 index;
+    s16 serial;
+    u8 pad_6[6];
+    s16 type;
+    u8 pad_E[2];
+    s32 life;
+    u8 pad_14[4];
+    s16 car;
+    u16 mode;
+    f32 color_x, color_y, color_z;
+    f32 param_28, param_2C;
+    u8 pad_30[4];
+    u32 asset;
+    u8 pad_38[4];
+    Fn183D28Vec3 pos;
+    Fn183D28Vec3 vel;
+    s16 angle_x, angle_y, angle_z;
+    s16 unk_5A, unk_5C;
+    u8 pad_5E[0x12];
+    Fn183D28Vec3 direction;
+    u8 pad_7C[0xC];
+    f32 param_88, param_8C;
+    u8 pad_90[4];
+    Fn183D28Vec3 anchor;
+    Fn183D28Vec3 aux;
+    s16 unk_AC;
+    u8 pad_AE[0x3A];
+} Fn662D8Effect;
+typedef struct {
+    u8 pad_0[0x148];
+    u32 unk_148;
+    u8 pad_14C[0x1C];
+    u32 unk_168;
+} Fn662D8Assets;
+extern f32 fn_1_8652C(int);
+extern f32 lbl_8006D0B4(f32);
+extern void lbl_8006D5F0(void *, void *, f32);
+extern void *lbl_8006DC6C(void *);
+extern void fn_1_862D4(int, Triple *);
+extern void fn_1_8636C(int, void *);
+extern void fn_1_8658C(int, Sig_fn_1_8658C_Vec3U32 *);
+extern u32 fn_1_862A8(u32, struct Sig_fn_1_862A8_fn_1_862A8_Arg1 *);
+extern void lbl_8006E1B0(Fn183D28Vec3 *, Fn183D28Vec3 *);
+extern void *memset(void *, int, u32);
+extern void *memcpy(void *, const void *, u32);
+extern s32 fn_1_3FC58(void);
+extern u32 mathutil_mtxA_rotate_y(u32);
+extern u32 mathutil_mtxA_rotate_x(u32);
+typedef struct { f32 x, y, z, pad; } Sig_fn_8006FA24_Vector;
+typedef struct { Sig_fn_8006FA24_Vector a, b, c; } Sig_fn_8006FA24_Basis;
+extern f32 lbl_8006D668(Sig_fn_8006FA24_Basis *);
+extern u32 lbl_801A63C0;
+
+static inline u16 effect_rand(void) {
+    lbl_1_data_1D628 = lbl_1_data_1D628 * 1103515245 + 12345;
+    return (lbl_1_data_1D628 >> 16) & 0x7FFF;
+}
+static inline s32 effect_rand2(void) {
+    lbl_801A63C0 = lbl_801A63C0 * 0x676A4B6B + 13259;
+    return (lbl_801A63C0 >> 16) & 0x7FFF;
+}
+/* Preserve the module's shared literal-pool ordering. */
+#pragma section code_type ".fzgxpool"
+f32 fzgx_pool_primer_0(void) { return 60.0f; }
+#pragma section code_type ".text"
+const u32 fzgx_pool_table_4[1] = {0x3DCCCCCD};
+#pragma section code_type ".fzgxpool"
+f32 fzgx_pool_primer_8(void) { return 32767.0f; }
+#pragma section code_type ".text"
+const u32 fzgx_pool_table_C[5] = {0x3D4CCCCD, 0x3FB1EB85, 0x1EB851EC, 0x469C4000, 0x00000000};
+#pragma section code_type ".fzgxpool"
+f64 fzgx_pool_primer_20(void) { return 4503599627370496.0; }
+#pragma section code_type ".text"
+#pragma section code_type ".fzgxpool"
+f32 fzgx_pool_primer_28(void) { return 1.0f; }
+#pragma section code_type ".text"
+const u32 fzgx_pool_table_2C[3] = {0xBCF5C28F, 0x402E0000, 0x00000000};
+#pragma section code_type ".fzgxpool"
+f64 fzgx_pool_primer_38(void) { return 4503601774854144.0; }
+#pragma section code_type ".text"
+const u32 fzgx_pool_table_40[2] = {0x3FF80000, 0x00000000};
+#pragma section code_type ".fzgxpool"
+f64 fzgx_pool_primer_48(void) { return 0.5; }
+#pragma section code_type ".text"
+#pragma section code_type ".fzgxpool"
+f32 fzgx_pool_primer_50(void) { return 0.0f; }
+#pragma section code_type ".text"
+#pragma section code_type ".fzgxpool"
+f32 fzgx_pool_primer_54(void) { return 0.5f; }
+#pragma section code_type ".text"
+const u32 fzgx_pool_table_58[1] = {0x41000000};
+#pragma section code_type ".fzgxpool"
+f32 fzgx_pool_primer_5C(void) { return 255.0f; }
+#pragma section code_type ".text"
+const u32 fzgx_pool_table_60[1] = {0x41700000};
+#pragma section code_type ".fzgxpool"
+f32 fzgx_pool_primer_64(void) { return 0.2f; }
+#pragma section code_type ".text"
+const u32 fzgx_pool_table_68[1] = {0x3DA3D70A};
+#pragma section code_type ".fzgxpool"
+f32 fzgx_pool_primer_6C(void) { return 0.25f; }
+#pragma section code_type ".text"
+const u32 fzgx_pool_table_70[22] = {0x3F7AE148, 0x3F7D70A4, 0x42200000, 0x41A00000, 0x3FC00000, 0x3EE66666, 0xC0000000, 0x3DAAAAAB, 0x3E19999A, 0x3E000000, 0xBECCCCCD, 0xBE99999A, 0x40000000, 0x437A0000, 0x3FE33333, 0x33333333, 0x3FD99999, 0x9999999A, 0x3E99999A, 0xBB83126F, 0x3C888889, 0x47800000};
+#pragma section code_type ".fzgxpool"
+f32 fzgx_pool_primer_C8(void) { return 4096.0f; }
+#pragma section code_type ".text"
+const u32 fzgx_pool_table_CC[1] = {0x3F75C28F};
+const u32 fzgx_pool_float_D0[1] = {0x3ECCCCCD};
+#define fzgx_pool_primer_D0() (*(const f32 *)fzgx_pool_float_D0)
+const u32 fzgx_pool_table_D4[3] = {0x3D4ED917, 0x3D50E560, 0x3F733333};
+#pragma section code_type ".fzgxpool"
+f32 fzgx_pool_primer_E0(void) { return 0.9f; }
+#pragma section code_type ".text"
+const u32 fzgx_pool_table_E4[13] = {0x00000000, 0x4062C000, 0x00000000, 0x40240000, 0x00000000, 0x40080000, 0x00000000, 0x00000000, 0x3DCCCCCD, 0xC019999A, 0x40A00000, 0x3FF33333, 0x33333333};
+#pragma section code_type ".fzgxpool"
+f64 fzgx_pool_primer_118(void) { return 0.1; }
+#pragma section code_type ".text"
+const u32 fzgx_pool_table_120[14] = {0x41200000, 0x41900000, 0x3FE66666, 0x66666666, 0x40490000, 0x00000000, 0x00000000, 0x3DCCCCCD, 0xC019999A, 0x41980000, 0x40380000, 0x00000000, 0x3F3504F3, 0x00000000};
+#pragma section code_type ".fzgxpool"
+f64 fzgx_pool_primer_158(void) { return 0.0; }
+#pragma section code_type ".text"
+const u32 fzgx_pool_table_160[6] = {0x406FE000, 0x00000000, 0x3FECCCCC, 0xCCCCCCCD, 0x3B83126F, 0x3A83126F};
+#pragma section code_type ".fzgxpool"
+f32 fzgx_pool_primer_178(void) { return 0.01f; }
+#pragma section code_type ".text"
+const u32 fzgx_pool_table_17C[2] = {0xB4000000, 0x43700000};
+#pragma section code_type ".fzgxpool"
+f32 fzgx_pool_primer_184(void) { return 100.0f; }
+#pragma section code_type ".text"
+const u32 fzgx_pool_table_188[5] = {0x43960000, 0x43480000, 0x461C4000, 0x459C4000, 0x434C0000};
+#pragma section code_type ".fzgxpool"
+f32 fzgx_pool_primer_19C(void) { return 85.0f; }
+#pragma section code_type ".text"
+const u32 fzgx_pool_table_1A0[15] = {0xBD4CCCCD, 0x40800000, 0xBD75C28F, 0xBF000000, 0xBF800000, 0x00000000, 0x3FC99999, 0x9999999A, 0x44000000, 0x3CF5C28F, 0x424C0000, 0x42B00000, 0xC0080000, 0x00000000, 0x40900000};
+#pragma section code_type ".fzgxpool"
+f32 fzgx_pool_primer_1DC(void) { return 6.0f; }
+#pragma section code_type ".text"
+const u32 fzgx_pool_table_1E0[15] = {0x3F8CCCCD, 0x00000000, 0x3F666666, 0xBF8CCCCD, 0x00000000, 0x3F666666, 0x00000000, 0x00000000, 0xBF333333, 0x00000000, 0x00000000, 0x00000000, 0x3F99999A, 0x42480000, 0x3CCCCCCD};
+#pragma section code_type ".fzgxpool"
+f32 fzgx_pool_primer_21C(void) { return 0.8f; }
+#pragma section code_type ".text"
+const u32 fzgx_pool_table_220[1] = {0x3D800000};
+#pragma section code_type ".fzgxpool"
+f32 fzgx_pool_primer_224(void) { return 2.5f; }
+#pragma section code_type ".text"
+const u32 fzgx_pool_table_228[14] = {0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0xC0400000, 0x00000000, 0x3F847AE1, 0x47AE147B, 0x3FEE147B, 0x00000000, 0x406A4000, 0x00000000};
+#pragma section code_type ".fzgxpool"
+f64 fzgx_pool_primer_260(void) { return 0.02; }
+#pragma section code_type ".text"
+const u32 fzgx_pool_table_268[20] = {0x3F689374, 0xBC6A7EFA, 0xBFE66666, 0x60000000, 0xBF9EB851, 0xE0000000, 0x3FC20C49, 0xBA5E353F, 0x3FE66666, 0x60000000, 0x3FF00000, 0x00000000, 0x3FD33333, 0x33333333, 0x3FE99999, 0xA0000000, 0x40280000, 0x00000000, 0xBF666666, 0x3D8F5C29};
+#pragma section code_type ".fzgxpool"
+f32 fzgx_pool_primer_2B8(void) { return 0.6f; }
+#pragma section code_type ".text"
+const u32 fzgx_pool_table_2BC[3] = {0x41F00000, 0x3F87AE14, 0x41E00000};
+#pragma section code_type ".fzgxpool"
+f64 fzgx_pool_primer_2C8(void) { return 5.0; }
+#pragma section code_type ".text"
+#pragma section code_type ".fzgxpool"
+f32 fzgx_pool_primer_2D0(void) { return 3.5f; }
+#pragma section code_type ".text"
+const u32 fzgx_pool_table_2D4[3] = {0x43340000, 0xFFFFFFFF, 0xFFFFFFFF};
+#pragma section code_type ".fzgxpool"
+f64 fzgx_pool_primer_2E0(void) { return 30.0; }
+#pragma section code_type ".text"
+const u32 fzgx_pool_table_2E8[10] = {0x3F9EB851, 0xEB851EB8, 0x3F70A3D7, 0xBDA3D70A, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000};
+#pragma section code_type ".fzgxpool"
+f32 fzgx_pool_primer_310(void) { return 136.0f; }
+#pragma section code_type ".text"
+const u32 fzgx_pool_table_314[4] = {0x3C03126F, 0x3B94F209, 0x3C6A0EA1, 0x44FA0000};
+#pragma section code_type ".fzgxpool"
+f32 fzgx_pool_primer_324(void) { return 1000.0f; }
+#pragma section code_type ".text"
+const u32 fzgx_pool_table_328[39] = {0x40066666, 0x00000000, 0x00000000, 0x00000000, 0x3FA47AE1, 0x47AE147B, 0x3FEF5C28, 0xF5C28F5C, 0x3FEEB851, 0xEB851EB8, 0x3F999999, 0x9999999A, 0xBFF00000, 0x00000000, 0x3FE99999, 0x9999999A, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0xBD23D70A, 0x00000000, 0x40000000, 0x00000000, 0x40E00000, 0x00000000, 0x3FED70A3, 0xDE666666, 0xBF947AE1, 0x47AE147B, 0xBCCCCCCD, 0x00000000, 0x00000000, 0x00000000, 0x43360B61, 0x44400000, 0x41E80000};
+const u32 fzgx_pool_table_3C4[1] = {0};
+const u32 fzgx_pool_table_3C8[1] = {0};
+const u32 fzgx_pool_table_3CC[1] = {0};
+#pragma section code_type ".fzgxpool"
+f32 fzgx_pool_primer_3D0(void) { return 0.7f; }
+#pragma section code_type ".text"
+#pragma section code_type ".fzgxpool"
+f32 fzgx_pool_primer_3D4(void) { return 500.0f; }
+#pragma section code_type ".text"
+#pragma section code_type ".fzgxpool"
+f32 fzgx_pool_primer_3D8(void) { return 800.0f; }
+#pragma section code_type ".text"
+#pragma section code_type ".fzgxpool"
+f32 fzgx_pool_primer_3DC(void) { return 102.0f; }
+#pragma section code_type ".text"
+#pragma section code_type ".fzgxpool"
+f32 fzgx_pool_primer_3E0(void) { return 2500.0f; }
+#pragma section code_type ".text"
+#pragma section code_type ".fzgxpool"
+f32 fzgx_pool_primer_3E4(void) { return 224.0f; }
+#pragma section code_type ".text"
+#pragma section code_type ".fzgxpool"
+f32 fzgx_pool_primer_3E8(void) { return 176.0f; }
+#pragma section code_type ".text"
+const u32 fzgx_pool_table_3EC[1] = {0x00000000};
+#pragma section code_type ".fzgxpool"
+f64 fzgx_pool_primer_3F0(void) { return 0.0003; }
+#pragma section code_type ".text"
+#pragma section code_type ".fzgxpool"
+f64 fzgx_pool_primer_3F8(void) { return 0.20000000298023224; }
+#pragma section code_type ".text"
+#pragma section code_type ".fzgxpool"
+f32 fzgx_pool_primer_400(void) { return 16.0f; }
+#pragma section code_type ".text"
+#pragma section code_type ".fzgxpool"
+f32 fzgx_pool_primer_404(void) { return 3.0f; }
+#pragma section code_type ".text"
+#define effect_random() ((f32)effect_rand() / 32767.0f)
+#define effect_random2() ((f32)effect_rand2() / 32767.0f)
+#pragma opt_propagation off
+static inline f32 effect_saved_random(void) {
+    return effect_random();
+}
+#pragma opt_fp_constants off
+#pragma opt_deadstores off
+static inline void effect_cross_store(const Fn183D28Vec3 *a, const Fn183D28Vec3 *b, Fn183D28Vec3 *out) {
+    f32 ax, ay, az;
+    f32 x, y, z;
+    ay = a->y;
+    az = a->z;
+    ax = a->x;
+    x = (f32)(ay * b->z);
+    y = (f32)(az * b->x);
+    z = (f32)(ax * b->y);
+    x = x - az * b->y;
+    y = y - ax * b->z;
+    z = z - ay * b->x;
+    /* The cross-product intermediate is materialized in the retail frame. */
+    *(volatile f32 *)&out->x = x;
+    /* Materialize the cross-product y component. */
+    out->y = y;
+    /* Materialize the cross-product z component. */
+    *(volatile f32 *)&out->z = z;
+}
+#define effect_cross(a, b, out) effect_cross_store(a, b, out)
+static inline f64 effect_jitter(f32 scale) {
+    return scale * (effect_random() - 0.5);
+}
+static inline u32 effect_aux_jitter(Fn183D28Vec3 *v) {
+    f32 x, y;
+    u32 z;
+    x = effect_random();
+    y = effect_random();
+    v->x += (f32)(0.25f * (f32)(x - 0.5f));
+    /* Materialize the y component before the remaining RNG samples. */
+    *(volatile f32 *)&v->y = v->y + (f32)(0.25f * (f32)(y - 0.5f));
+    z = effect_rand();
+    return z;
+}
+#pragma opt_propagation on
+static inline f32 effect_size_random(u32 sample) {
+    f32 z = (f32)sample / 32767.0f;
+    return z;
+}
+#pragma opt_propagation on
+static inline s32 effect_slot(void) {
+    s32 i;
+    Fn662D8Effect *p = *(Fn662D8Effect **)&lbl_1_bss_6C848;
+    for (i = 0; i < 190; i++, p++) {
+        if (p->active == 0) {
+            p->active = 1;
+            return i;
+        }
+    }
+    return -1;
+}
+static inline void effect_emit(Fn662D8Effect *src) {
+    s32 i;
+    Fn662D8Effect *dst;
+    if (fn_1_3FC58() == 0) {
+        i = effect_slot();
+        if (i >= 0) {
+            dst = *(Fn662D8Effect **)&lbl_1_bss_6C848 + i;
+            memcpy(dst, src, 0xE8);
+            dst->active = 1;
+            dst->index = i;
+            ((void (**)(Fn662D8Effect *))lbl_1_data_1D1D8)[dst->type](dst);
+            dst->serial = lbl_1_bss_6C850.unk_0;
+            if (++lbl_1_bss_6C850.unk_0 < 0) lbl_1_bss_6C850.unk_0 = 0;
+        }
+    }
+}
+
+typedef Fn662D8Effect Fn662D8Source;
+#define unk_28 param_28
+#define unk_2C param_2C
+#define drift vel
+#define velocity anchor
+
+#pragma fp_contract on
+#pragma opt_propagation off
+static inline f32 effect_madd(f32 c, f32 a, f32 b) {
+    return a * b + c;
+}
+static inline f32 effect_multiply(f32 a, f32 b) {
+    return a * b;
+}
+static inline f32 effect_half_brightness(f32 size) {
+    f32 result = 1.0f + size;
+    result = 0.5f * result;
+    return result;
+}
+static inline f32 effect_sqnorm(const Fn183D28Vec3 *v) {
+    f32 x = v->x;
+    f32 y = v->y;
+    f32 z = v->z;
+    f32 result = x * x;
+    result = y * y + result;
+    result = z * z + result;
+    return result;
+}
+#pragma opt_propagation on
+#pragma opt_deadstores off
+#pragma opt_propagation on
+#pragma fp_contract on
+void fn_1_662D8(Fn662D8Source *arg0) {
+    s16 angle_y;
+    s16 v0;
+    f32 v1, v2, v8, v9;
+    u8 v13;
+    f32 speed_factor;
+    f32 velocity_factor;
+    f64 phase;
+    f32 size_factor;
+    f32 random_z, random_y, random_x;
+    f32 random_aux_z;
+    Fn662D8Effect effect;
+    struct { u32 a[12]; } loc_5C;
+    Fn183D28Vec3 loc_50;
+    struct Sig_fn_1_862A8_fn_1_862A8_Arg1 loc_44;
+    Triple loc_38;
+    Sig_fn_1_8658C_Vec3U32 loc_2C;
+    Fn183D28Vec3 loc_20;
+    Fn183D28Vec3 loc_14;
+    Fn183D28Vec3 loc_8;
+    f32 t4;
+    f32 t5;
+    f32 tz, ty, tx;
+    f64 clamped;
+    v0 = arg0->car;
+    fn_1_8636C(v0, &loc_5C);
+    fn_1_862D4(v0, &loc_38);
+    fn_1_862A8(v0, &loc_44);
+    fn_1_8658C(v0, &loc_2C);
+    t4 = fn_1_8652C(arg0->car);
+    if (t4 < 100.0f) {
+        if ((s32)effect_rand() % 3 != 0) return;
+    } else {
+        if ((s32)effect_rand() % 3 == 0) return;
+    }
+    v8 = arg0->unk_28;
+    arg0->unk_28 = v8 + (f32)(0.01f * (arg0->unk_2C - v8));
+    t5 = lbl_8006D0B4(effect_sqnorm(&arg0->velocity));
+    v2 = t5;
+    if (v2 < 0.0f) v2 = 0.0f;
+    else if (v2 > 0.7f) v2 = 0.7f;
+    lbl_8006D5F0(&arg0->velocity, &loc_50, v2);
+    lbl_8006DC6C(&loc_5C);
+    /* Volatile x preserves the locked-cache column's load order. */
+    tx = *(volatile f32 *)((u8 *)&loc_38 + 0);
+    ty = *(f32 *)((u8 *)&loc_38 + 4);
+    tz = *(f32 *)((u8 *)&loc_38 + 8);
+    *(f32 *)(0xE0000000 + 0x0C) = tx;
+    *(f32 *)(0xE0000000 + 0x1C) = ty;
+    *(f32 *)(0xE0000000 + 0x2C) = tz;
+    lbl_8006E1B0(&loc_50, &loc_50);
+    arg0->pos = loc_50;
+    psvec_sub(&loc_38, &loc_2C, &arg0->drift);
+    if (t4 < 500.0f) v13 = 1;
+    if (500.0f <= t4 && t4 < 800.0f) v13 = 2;
+    if (800.0f <= t4 && t4 < 1000.0f) v13 = 2;
+    if (1000.0f <= t4) v13 = 2;
+    while (v13) {
+        memset(&effect, 0, 0xE8);
+        velocity_factor = t4 / 2500.0f;
+        speed_factor = t4 / 500.0f;
+        {
+        f32 pz, py, px;
+        f32 randvz;
+        f32 rvz, rvy, rvx;
+        effect.car = arg0->car;
+        effect.type = 29;
+        effect.mode = 0xFFFF;
+        effect.asset = ((Fn662D8Assets *)lbl_1_bss_38458->unk_8)->unk_148;
+        effect.color_x = 255.0f;
+        effect.color_y = 102.0f;
+        effect.color_z = 0.0f;
+        effect.pos = loc_50;
+        px = effect.pos.x;
+        py = effect.pos.y;
+        pz = effect.pos.z;
+        effect.vel = arg0->drift;
+        random_x = 60.0f * (0.9f + (f32)(0.6f * effect_random()));
+        effect.life = (s32)random_x;
+        effect.vel.x += (f64)(fzgx_pool_primer_D0() * (effect_random() - 0.5));
+        randvz = effect_random();
+        effect.vel.z += (f64)(fzgx_pool_primer_D0() * (randvz - 0.5));
+        effect.vel.x += (f32)((*(Fn183D28Vec3 *)&loc_44).x * velocity_factor);
+        effect.vel.y += (f32)((*(Fn183D28Vec3 *)&loc_44).y * velocity_factor);
+        effect.vel.z += (f32)((*(Fn183D28Vec3 *)&loc_44).z * velocity_factor);
+        effect.pos.x = px - effect.vel.x;
+        effect.pos.y = py - effect.vel.y;
+        effect.pos.z = pz - effect.vel.z;
+        }
+        clamped = speed_factor < 0.0 ? 0.0 : speed_factor > 2.5f ? 2.5f : speed_factor;
+        effect.param_28 = 0.1 + clamped;
+        effect.param_2C = 30.0 + (f64)(5.0 * effect_random());
+        size_factor = 0.8f + (f32)(0.2f * effect_random());
+        effect.color_x = (f32)(255.0f * (f32)(0.5f * (1.0f + size_factor))) / 255.0f;
+        effect.color_y = (f32)(224.0f * size_factor) / 255.0f;
+        effect.color_z = (f32)(176.0f * size_factor) / 255.0f;
+        effect.param_88 = 0.0003 * effect_random();
+        effect.param_8C = (f32)(0.02 + t4 / 1000.0f);
+        effect.unk_AC = 364;
+        effect_emit(&effect);
+        memset(&effect, 0, 0xE8);
+        effect.type = 22;
+        effect.mode = 0xFFFF;
+        effect.asset = ((Fn662D8Assets *)lbl_1_bss_38458->unk_8)->unk_168;
+        effect.pos.x = loc_50.x + (f64)(0.20000000298023224 * (effect_random() - 0.5));
+        effect.pos.y = loc_50.y + (f64)(0.20000000298023224 * (effect_random() - 0.5));
+        effect.pos.z = loc_50.z + (f64)(0.20000000298023224 * (effect_random() - 0.5));
+        effect.vel = arg0->drift;
+        effect.pos.x -= effect.vel.x;
+        effect.pos.y -= effect.vel.y;
+        effect.pos.z -= effect.vel.z;
+        size_factor = 0.8f + (f32)(0.2f * effect_random());
+        effect.param_2C = 3.5f * size_factor;
+        clamped = speed_factor < 0.0 ? 0.0 : speed_factor > 2.5f ? 2.5f : speed_factor;
+        effect.color_z = 0.0f;
+        effect.param_28 = size_factor * (0.5 + clamped);
+        size_factor = 0.8f + (f32)(0.2f * effect_random());
+        effect.life = 22;
+        effect.angle_z = effect_rand();
+        effect.color_x = (f32)(255.0f * (f32)(0.5f * (1.0f + size_factor))) / 255.0f;
+        effect.color_y = (f32)(136.0f * size_factor) / 255.0f;
+        effect_emit(&effect);
+        v13--;
+    }
+    memset(&effect, 0, 0xE8);
+    effect.car = arg0->car;
+    effect.type = 16;
+    effect.mode = 1;
+    effect.angle_x = effect_rand();
+    {
+        angle_y = effect_rand();
+        effect.angle_y = angle_y;
+        effect.unk_5A = (s16)(16.0f + (f32)(4096.0f * effect_random()));
+        effect.unk_5C = (s16)(16.0f + (f32)(4096.0f * effect_random()));
+    }
+    effect.param_28 = 3.0f * (fzgx_pool_primer_D0() + (f32)(0.6f * effect_random2()));
+    effect.param_2C = 6.0f * (0.8f + (f32)(0.2f * effect_random2()));
+    lbl_8006DC6C(&loc_5C);
+    {
+        f32 z, y, x;
+        /* Volatile x preserves the locked-cache column's load order. */
+        x = *(volatile f32 *)((u8 *)&loc_38 + 0);
+        y = *(f32 *)((u8 *)&loc_38 + 4);
+        z = *(f32 *)((u8 *)&loc_38 + 8);
+        *(f32 *)(0xE0000000 + 0x0C) = x;
+        *(f32 *)(0xE0000000 + 0x1C) = y;
+        *(f32 *)(0xE0000000 + 0x2C) = z;
+    }
+    mathutil_mtxA_rotate_y(effect.angle_y);
+    mathutil_mtxA_rotate_x(effect.angle_x);
+    {
+        *(u32 *)&loc_8.x = fzgx_pool_table_3C4[0];
+        *(u32 *)&loc_8.y = fzgx_pool_table_3C8[0];
+        *(u32 *)&loc_8.z = fzgx_pool_table_3CC[0];
+        loc_8.z = -effect.param_28;
+        loc_20 = loc_8;
+        lbl_8006E1B0(&loc_20, &effect.pos);
+    }
+    effect.anchor.x = (f32)(0.5f * (effect.pos.x + (*(Fn183D28Vec3 *)&loc_38).x));
+    effect.anchor.y = (f32)(0.5f * (effect.pos.y + (*(Fn183D28Vec3 *)&loc_38).y));
+    effect.anchor.z = (f32)(0.5f * (effect.pos.z + (*(Fn183D28Vec3 *)&loc_38).z));
+    effect.aux.x = arg0->drift.x;
+    effect.aux.y = arg0->drift.y;
+    effect.aux.z = arg0->drift.z;
+    {
+        u32 sample = effect_aux_jitter(&effect.aux);
+        random_aux_z = effect_size_random(sample);
+        effect.aux.z += (f32)(0.25f * (f32)(random_aux_z - 0.5f));
+        v9 = effect_size_random(effect_rand());
+        size_factor = 0.8f + effect_multiply(0.2f, v9);
+        effect.color_x = effect_multiply((f32)(255.0f * (f32)(0.5f * (1.0f + size_factor))) / 255.0f, 1.0f);
+        size_factor = (f32)(85.0f * size_factor) / 255.0f;
+        effect.color_y = size_factor;
+        effect.color_z = effect_multiply(size_factor, 0.0f);
+    }
+
+    {
+        effect_cross(&arg0->drift, &effect.aux, &loc_14);
+        effect.direction.x = loc_14.x + (f32)(fzgx_pool_primer_D0() * (f32)(effect_random() - 0.5f));
+        effect.direction.y = loc_14.y + (f32)(fzgx_pool_primer_D0() * (f32)(effect_random() - 0.5f));
+        effect.direction.z = loc_14.z + (f32)(fzgx_pool_primer_D0() * (f32)(effect_random() - 0.5f));
+    }
+    lbl_8006D668((Sig_fn_8006FA24_Basis *)&effect.direction);
+    effect.unk_AC = 24;
+    effect_emit(&effect);
+}
+/* fzgx:end fn_1_662D8 */
+
 /* fzgx:begin fn_1_67294 noprologue */
 #include "rel/main_rel/effect.h"
 #include "psvec.h"
