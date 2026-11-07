@@ -526,10 +526,28 @@ def min_call_args(body: str, name: str) -> Optional[int]:
     return least
 
 
-def view_rewrite(body: str, name: str, decl: str, truth_is_pointer: bool = False) -> Optional[str]:
+def decl_justification(body: str, name: str) -> Optional[str]:
+    """The comment that justifies the block's own declaration of `name` (lint S2 reads it on the
+    declaration's line or the line above), without its delimiters."""
+    prev = ''
+    for ln in body.splitlines():
+        if tutidy.DECL_LINE_RE.match(ln) and tutidy._decl_name(ln) == name:
+            for text in (ln, prev):
+                m = re.search(r'/\*\s*(.*?)\s*\*/|//\s*(.*?)\s*$', text)
+                if m and (m.group(1) or m.group(2)):
+                    return m.group(1) or m.group(2)
+            return None
+        prev = ln
+    return None
+
+
+def view_rewrite(body: str, name: str, decl: str, truth_is_pointer: bool = False,
+                 justification: Optional[str] = None) -> Optional[str]:
     """Every use of a data symbol goes through the block's own view of the object:
     `extern T n;` -> `(*(T *)&n)`, `extern T n[..];` -> `((T *)&n)`, `extern T *n;` -> `((T)n)`
-    when the truth is a pointer too. The address is the same symbol."""
+    when the truth is a pointer too. The address is the same symbol. A `volatile` view moves the
+    qualifier from the dropped declaration onto each use, so its justification moves too: every
+    rewritten line keeps lint S2 satisfied (memcard.c fn_1_B7CE4, librarian pass 26)."""
     m = re.match(r'^\s*extern\s+(.*?)\s*\b' + re.escape(name) + r'\s*((?:\[[^\]]*\])*)\s*;', decl.strip())
     if not m:
         return None
@@ -583,6 +601,9 @@ def view_rewrite(body: str, name: str, decl: str, truth_is_pointer: bool = False
             return ln[k + 1:j + 1] in ('return', 'case', 'else', 'sizeof')
         return True
 
+    note = None
+    if re.search(r'\bvolatile\b', t):
+        note = f'/* {justification or "volatile view keeps the access order of the verified block"} */'
     out_lines = []
     for ln in body.splitlines():
         if tutidy.DECL_LINE_RE.match(ln) and tutidy._decl_name(ln) == name:
@@ -595,7 +616,12 @@ def view_rewrite(body: str, name: str, decl: str, truth_is_pointer: bool = False
             pieces.append(address)
             last = am.end()
         pieces.append(ident.sub(view, ln[last:]))
-        out_lines.append(''.join(pieces))
+        new = ''.join(pieces)
+        if note and new != ln and not re.search(r'//|/\*', new) and not re.search(r'//|/\*', out_lines[-1] if out_lines else ''):
+            # before a macro's line continuation: nothing may follow the backslash
+            stripped = new.rstrip()
+            new = f'{stripped[:-1].rstrip()} {note} \\' if stripped.endswith('\\') else f'{stripped} {note}'
+        out_lines.append(new)
     return '\n'.join(out_lines) + ('\n' if body.endswith('\n') else '')
 
 
@@ -603,6 +629,7 @@ def adapt(body: str, n: str, old_decl: Optional[str], truth: str, report_bad: Li
     """The block's body under `truth` for symbol n, given the declaration it was written
     against (`old_decl`: its private line, or the old prologue line, or None). Returns None
     when no mechanical adaptation exists (a data view whose declaration cannot be parsed)."""
+    justification = decl_justification(body, n)
     lines = [x for x in body.splitlines() if not (tutidy.DECL_LINE_RE.match(x) and tutidy._decl_name(x) == n)]
     body = '\n'.join(lines) + ('\n' if body.endswith('\n') else '')
     if old_decl is None or old_decl.strip() == truth.strip():
@@ -630,7 +657,7 @@ def adapt(body: str, n: str, old_decl: Optional[str], truth: str, report_bad: Li
         return body
     if not sv and not st:
         truth_ptr = bool(re.match(r'^\s*extern\s+.*\*\s*' + re.escape(n) + r'\s*;', truth))
-        return view_rewrite(body, n, old_decl, truth_is_pointer=truth_ptr)
+        return view_rewrite(body, n, old_decl, truth_is_pointer=truth_ptr, justification=justification)
     return None
 
 
@@ -1528,6 +1555,28 @@ def _save_store(tu_source: str, key: Dict[str, str], report: Dict[str, object], 
     tufile._write_atomic(Path(stem + '.prologue.h'), str(report.get('prologue') or ''))
 
 
+def new_lint_findings(p: Project, tu_source: str, report: Dict[str, object]) -> List[str]:
+    """Lint findings the proposal would add to the file: the oracle cannot see them, so a clean
+    dry-run could otherwise be followed by a failing gate. Diagnostic only."""
+    from . import lint
+    text = report.get('tu_text')
+    if not text:
+        return []
+    source = ROOT / 'src' / tu_source
+    current = source.read_text(errors='replace') if source.exists() else ''
+    def rows(body: str):
+        lines = body.splitlines()
+        return [(rule, lines[line - 1].strip() if 0 < line <= len(lines) else '', why) for rule, line, why in lint.lint_text(body)]
+    existing = Counter(rows(current))
+    added = []
+    for row in rows(text):
+        if existing[row] > 0:
+            existing[row] -= 1
+        else:
+            added.append(f'{row[0]}: {row[2]}: {row[1][:120]}')
+    return added
+
+
 def run(p: Project, tu_source: str, apply: bool = False, fresh: bool = False) -> Dict[str, object]:
     """Dry-run or apply through the store: reuse while every input hash agrees, search otherwise.
     `fresh` searches regardless and ignores the saved verdicts; an apply re-checks either way."""
@@ -1564,6 +1613,7 @@ def run(p: Project, tu_source: str, apply: bool = False, fresh: bool = False) ->
         info = {'reused': True, 'stored_search_seconds': stored.get('search_seconds'), 'saved': stored.get('saved')}
     info.update(path=stem + '.json', proposal=stem + '.after.c', prologue=stem + '.prologue.h')
     report['store'] = info
+    report['new_lint'] = new_lint_findings(p, tu_source, report)
     if apply:
         if not apply_result(p, tu_source, report, key) and report.get('apply_failing'):
             # the key agreed and the oracle did not: that result is never offered again
