@@ -6503,3 +6503,6 @@ dol/fn_8003BB30.c:
 
 dol/fn_800736C0.c:
 	.text       start:0x800736C0 end:0x80073778 align:4
+
+dol/fn_80065F34.c:
+	.text       start:0x80065F34 end:0x80066C14 align:4
