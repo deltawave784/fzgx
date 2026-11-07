@@ -96,7 +96,7 @@ extern void fn_1_458A0(void *arg0, void *arg1, u32 arg2, u32 arg3);
 extern void fn_1_45850(void *arg0);
 extern s32 fn_1_45B2C(void *arg0);
 extern void *fn_1_45D0(u32 arg0, u32 arg1, const char *file, int line);
-extern void fn_1_46B4(u32 arg0, void *arg1, const char *arg2, int arg3);
+extern void fn_1_46B4(u32 arg0, u32 arg1, const char *arg2, int arg3);
 extern u32 fn_1_12FD4();
 extern void DCFlushRange(void *addr, u32 size);
 extern s32 fn_8006A480(void *arg0, void *arg1, void *arg2);
@@ -118,7 +118,7 @@ extern void fn_1_12C47C(void *arg0, void *arg1, s32 arg2);
 extern u32 fn_1_12D404(u32, u32, u32, void *, u32, u32, void *, u32, u32, u32 *, u32);
 extern u32 fn_1_435C();
 extern s32 fn_1_3F8C(u32 arg3, u32 arg0, u32 arg1, u32 index);
-extern void fn_1_12F1E8(s32 value);
+extern void fn_1_12F1E8(s32);
 extern void fn_1_132488(void *arg0);
 extern void fn_1_A2D84(u32 arg0);
 extern int fn_1_8623C(void);
@@ -126,13 +126,13 @@ extern u8* fn_1_36AD0(void);
 extern u32 fn_1_151BE8(s16 arg0, s16 arg1);
 extern u8 lbl_1_bss_A48[64];
 extern int fn_1_4C10(void);
-extern void fn_1_12E0B8(s16 slot, s16 id, Fn12E0B8_Car *car, Fn12E0B8_Car *others, s32 check, const char **names, u32 index);
-extern void fn_1_12F150(s16 index, u32 value_100, u32 value_110);
+extern void fn_1_12E0B8(s16, s16, Fn12E0B8_Car *, Fn12E0B8_Car *, s32, const char **, u32);
+extern void fn_1_12F150(s16, u32, u32);
 extern s32 fn_1_467F4(void);
 extern void fn_1_A5344(u8 value, s16 index);
 extern void fn_1_12B664(s16 idx, Menu_12B664 *obj, Slot_12B664 *slots);
 extern u32 fn_1_12F228(void);
-extern void fn_1_12ECA8(s16 arg0, s16 arg1, void *arg2, void *arg3, void *arg4);
+extern void fn_1_12ECA8(s16, s16, void *, void *, void *);
 extern int fn_1_D6698(void);
 extern int fn_1_D6690(void);
 extern void fn_1_12F17C(void);
@@ -175,7 +175,7 @@ extern void fn_1_12AC00(void *arg0);
 extern void fn_1_8F198(void *, s32, void *, u32);
 extern void fn_1_8F45C();
 extern void fn_1_8F62C(u8 *car);
-extern void fn_1_12CEA8(s16 id, u8 *car, void *arg2, u32 arg3, s32 arg4);
+extern void fn_1_12CEA8(s16, u8 *, void *, u32, s32);
 extern void *fn_1_12A4B0(void *info, s32 readHeader, s32 temp);
 extern s32 fn_8006A3DC(void *, void *);
 extern size_t strlen(const char *str);
@@ -364,7 +364,7 @@ fzgx_elem_lbl_1_bss_897AC fzgx_obj_lbl_1_bss_897AC[0x40];
 /* Releases archive slot idx if it is in use, otherwise panics. */
 void fn_1_12A734(s32 idx) {
     if (fzgx_obj_lbl_1_bss_897AC[idx].state == 1) {
-        fn_1_46B4(*(u32 *)&lbl_801A6410, (void *)(u32)(fzgx_obj_lbl_1_bss_897AC[idx].handle), (const char *)lbl_1_data_40608, 0x145);
+        fn_1_46B4(*(u32 *)&lbl_801A6410, (u32)((void *)(u32)(fzgx_obj_lbl_1_bss_897AC[idx].handle)), (const char *)lbl_1_data_40608, 0x145);
         fzgx_obj_lbl_1_bss_897AC[idx].state = 0;
     } else {
         OSPanic((char *)lbl_1_data_40608, 0x149, (char *)lbl_1_data_40720);
@@ -590,7 +590,7 @@ void fn_1_12AB38(void *arg0) {
 // Register the archive table only on its first use.
 void fn_1_12ABB4(void *archive) {
     if (lbl_1_bss_897A4 == 0) {
-        fn_1_46B4( (u32)(void *)(lbl_801A6410), (void *)((u32)(void *)(archive)), (const char *)(unsigned char *)(lbl_1_data_40608), 0x1e0);
+        fn_1_46B4( (u32)(void *)(lbl_801A6410), (u32)((void *)((u32)(void *)(archive))), (const char *)(unsigned char *)(lbl_1_data_40608), 0x1e0);
     }
 }
 /* fzgx:end fn_1_12ABB4 */
@@ -691,25 +691,6 @@ void fn_1_12ADA0(void *arg0, void *arg1) {
 /* fzgx:begin fn_1_12ADC8 noprologue */
 #include "types.h"
 
-typedef struct Sig_fn_8006A9B4_Fn8006A9B4Entry {
-    u32 flags;
-    u32 b;
-    u32 c;
-} Sig_fn_8006A9B4_Fn8006A9B4Entry;
-typedef struct Sig_fn_8006A9B4_Fn8006A9B4Data {
-    u8 _pad0[4];
-    Sig_fn_8006A9B4_Fn8006A9B4Entry *entries;
-    u8 _pad8[0x10];
-    s32 index;
-} Sig_fn_8006A9B4_Fn8006A9B4Data;
-struct Sig_fn_8006A998_fn_8006A998_Arg0 {
-    u32 unk_0;
-    u32 unk_4;
-};
-typedef struct Sig_fn_8006A9AC_Fn8006A9ACData {
-    u8 _pad[8];
-    u32 value;
-} Sig_fn_8006A9AC_Fn8006A9ACData;
 
 typedef struct fn_1_12ADC8_ArchiveState {
     s32 count;
@@ -1072,12 +1053,6 @@ typedef struct {
 } Big_12B664;
 
 /* 0x14-byte pad state records at lbl_1_bss_9F8 */
-typedef struct {
-    u8 pad_0[0xA];
-    volatile u16 unk_A;  /* volatile: each button test re-reads the word */
-    u8 pad_C[0x6];
-    volatile u16 unk_12; /* volatile: each button test re-reads the word */
-} Pad_12B664;
 
 #define PAD(i) (*(Obj_1_bss_9F8 *)((u8 *)&lbl_1_bss_9F8.unk_0 + (u32)(s32)(i) * 0x14))
 #define WRAP(v) ((v) > 3 ? 0 : ((v) < 0 ? 3 : (v)))
@@ -1486,57 +1461,9 @@ void fn_1_12C0EC(fn_1_12C0EC_FnData *arg) {
 #include "rel/main_rel/globals.h"
 #include "rel/main_rel/archive.h"
 
-extern void OSPanic(u8 *arg0, s32 arg1, u8 *arg2, ...);
-extern void fn_1_12A350(void *arg0, s32 arg1);
-extern s32 fn_8006A480(void *arg0, void *arg1, void *arg2);
-extern s32 fn_8006A998(void *arg0);
-extern void fn_8006A9AC(void *arg0);
-extern void fn_1_12AC28(void *arg0, s32 arg1, s32 arg2);
-extern void fn_1_12ADC8(void *arg0, void *arg1, s32 arg2, s32 arg3);
-extern void fn_1_12BB18(void *arg0, void *arg1, void *arg2, void *arg3, void *arg4);
-extern void fn_1_8D168(void *arg);
-extern void fn_1_14DB48(void *arg0, void *arg1, u32 arg2);
-extern void fn_1_14DBCC(void *arg);
-extern u32 fn_1_95120(void *arg);
-extern const struct Table lbl_1_rodata_8230;
-extern u32 lbl_801A66A0;
-extern void fn_1_7B2E8(u8 value);
-extern void fn_1_13C1A0(void);
-extern void *fn_1_3F8C(void *table, void (*callback)(void), void *arg1, void *arg2);
-extern void fn_1_426C(s32 value);
-extern void fn_1_7B4C0(void);
-extern void fn_1_C2454(void);
-extern s32 fn_1_C24A4(void);
-extern u8 fn_1_B7C00(void);
 
-extern s32 lbl_1_bss_897A4;
-extern void *lbl_801A6410;
-extern void fn_1_46B4(void *arg0, void *arg1, unsigned char *arg2, s32 arg3);
-extern void OSPanic(u8 *arg0, s32 arg1, u8 *arg2, ...);
 
-extern void OSPanic(u8 *arg0, s32 arg1, u8 *arg2, ...);
-extern s32 lbl_1_bss_8CA44[10];
 
-extern void OSPanic(u8 *arg0, s32 arg1, u8 *arg2, ...);
-extern void fn_1_435C();
-extern s32 fn_1_45730(void *arg0, void *arg1);
-extern s32 fn_1_45B2C(void *arg0);
-extern void *fn_1_45D0(u32 arg0, u32 arg1, void *arg2, u32 arg3);
-extern void fn_1_458A0(void *arg0, void *arg1, u32 arg2, u32 arg3);
-extern void fn_1_45850(void *arg0);
-extern void fn_8006A9B4(void *arg0, void *arg1);
-extern void fn_80006E10(void *arg0);
-extern u32 fn_1_12DAEC(u32, u32, u32, void *, u32, u32, u32);
-extern u32 fn_1_12C524(u32);
-extern void fn_1_12C000(void *arg, s16 count);
-extern void fn_1_8CED0(void *arg, u16 a, u16 b);
-extern void fn_1_8D0A4(void *arg);
-extern s16 fn_1_12C930(s16 arg);
-extern u8 lbl_1_data_20D1C[180];
-extern u8 lbl_1_bss_8B4EC[128];
-extern void fn_80083DB0(void *arg0, char *arg1);
-extern void strcat(void *arg0, void *arg1);
-extern s32 fn_1_F89E4(u8 value);
 
 /* the menu state's four 0x20-byte player entries (+0xE: machine) */
 typedef struct {
