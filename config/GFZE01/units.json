@@ -41996,10 +41996,10 @@
     "extra_cflags": [],
     "tu": "rel/main_rel/camera.c",
     "pool": {
-      "@101": "lbl_1_rodata_188",
-      "@103": "lbl_1_rodata_1E0",
-      "@105": "jumptable_1_data_3584",
-      "@106": "jumptable_1_data_3558"
+      "@119": "lbl_1_rodata_188",
+      "@121": "lbl_1_rodata_1E0",
+      "@123": "jumptable_1_data_3584",
+      "@124": "jumptable_1_data_3558"
     }
   },
   {
