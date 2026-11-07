@@ -8314,6 +8314,16 @@
   },
   {
     "module": "main",
+    "source": "dol/GXLoadTexMtxImm.c",
+    "symbols": [
+      "GXLoadTexMtxImm"
+    ],
+    "status": "matching",
+    "mw_version": "GC/1.2.5n",
+    "extra_cflags": []
+  },
+  {
+    "module": "main",
     "source": "dol/GXPeekZ.c",
     "symbols": [
       "GXPeekZ"

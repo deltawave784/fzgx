@@ -6488,3 +6488,6 @@ dol/fn_800643F4.c:
 
 dol/func_8008D6BC.c:
 	.text       start:0x80078D48 end:0x80078D60 align:4
+
+dol/GXLoadTexMtxImm.c:
+	.text       start:0x80038D34 end:0x80038DE8 align:4
