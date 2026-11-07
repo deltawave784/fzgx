@@ -1,5 +1,5 @@
 {
- "generated": 1794018975,
+ "generated": 1794043587,
  "functions": [
   {
    "symbol": "car_colchg:_prolog",
@@ -21662,19 +21662,19 @@
   {
    "symbol": "fn_800356B8",
    "module": "main",
-   "unit": null,
+   "unit": "dol/fn_800356B8.c",
    "addr": 2147702456,
    "size": 124,
-   "status": "unmatched",
-   "attempts": 46,
-   "best_percent": 67.70968,
+   "status": "matched",
+   "attempts": 48,
+   "best_percent": 68.41936,
    "claimed_by": null,
    "claimed_at": null,
    "claim_ttl": null,
-   "matched_commit": null,
+   "matched_commit": "7fa3bcf21",
    "blocked_reason": null,
    "prev_status": null,
-   "link_state": null
+   "link_state": "verified"
   },
   {
    "symbol": "fn_80035734",
@@ -22920,19 +22920,19 @@
   {
    "symbol": "GXLoadTexMtxImm",
    "module": "main",
-   "unit": null,
+   "unit": "dol/GXLoadTexMtxImm.c",
    "addr": 2147716404,
    "size": 180,
-   "status": "unmatched",
-   "attempts": 45,
-   "best_percent": 68.888885,
+   "status": "matched",
+   "attempts": 48,
+   "best_percent": 100.0,
    "claimed_by": null,
    "claimed_at": null,
    "claim_ttl": null,
-   "matched_commit": null,
+   "matched_commit": "7fa3bcf21",
    "blocked_reason": null,
    "prev_status": null,
-   "link_state": null
+   "link_state": "verified"
   },
   {
    "symbol": "fn_80038DE8",
@@ -23413,36 +23413,36 @@
   {
    "symbol": "fn_8003B9AC",
    "module": "main",
-   "unit": null,
+   "unit": "dol/fn_8003B9AC.c",
    "addr": 2147727788,
    "size": 388,
-   "status": "unmatched",
-   "attempts": 41,
-   "best_percent": 30.247423,
+   "status": "matched",
+   "attempts": 42,
+   "best_percent": 96.08247,
    "claimed_by": null,
    "claimed_at": null,
    "claim_ttl": null,
-   "matched_commit": null,
+   "matched_commit": "f32a4d6c2",
    "blocked_reason": null,
    "prev_status": null,
-   "link_state": null
+   "link_state": "verified"
   },
   {
    "symbol": "fn_8003BB30",
    "module": "main",
-   "unit": null,
+   "unit": "dol/fn_8003BB30.c",
    "addr": 2147728176,
    "size": 436,
-   "status": "unmatched",
-   "attempts": 41,
-   "best_percent": 18.330275,
+   "status": "matched",
+   "attempts": 42,
+   "best_percent": 53.477066,
    "claimed_by": null,
    "claimed_at": null,
    "claim_ttl": null,
-   "matched_commit": null,
+   "matched_commit": "f32a4d6c2",
    "blocked_reason": null,
    "prev_status": null,
-   "link_state": null
+   "link_state": "verified"
   },
   {
    "symbol": "fn_8003BCE4",
@@ -28466,7 +28466,7 @@
    "addr": 2147807144,
    "size": 100,
    "status": "unmatched",
-   "attempts": 46,
+   "attempts": 47,
    "best_percent": 94.04,
    "claimed_by": null,
    "claimed_at": null,
@@ -32529,7 +32529,7 @@
    "addr": 2147861624,
    "size": 336,
    "status": "unmatched",
-   "attempts": 44,
+   "attempts": 45,
    "best_percent": 84.583336,
    "claimed_by": null,
    "claimed_at": null,
@@ -34586,7 +34586,7 @@
    "addr": 2147934720,
    "size": 80,
    "status": "unmatched",
-   "attempts": 45,
+   "attempts": 46,
    "best_percent": 33.0,
    "claimed_by": null,
    "claimed_at": null,
@@ -35198,7 +35198,7 @@
    "addr": 2147941404,
    "size": 64,
    "status": "unmatched",
-   "attempts": 46,
+   "attempts": 47,
    "best_percent": 59.0625,
    "claimed_by": null,
    "claimed_at": null,
@@ -35215,7 +35215,7 @@
    "addr": 2147941468,
    "size": 88,
    "status": "unmatched",
-   "attempts": 44,
+   "attempts": 45,
    "best_percent": 54.31818,
    "claimed_by": null,
    "claimed_at": null,
@@ -36218,7 +36218,7 @@
    "addr": 2147950612,
    "size": 156,
    "status": "unmatched",
-   "attempts": 45,
+   "attempts": 46,
    "best_percent": 65.333336,
    "claimed_by": null,
    "claimed_at": null,
@@ -38768,7 +38768,7 @@
    "addr": 2147982708,
    "size": 176,
    "status": "unmatched",
-   "attempts": 43,
+   "attempts": 44,
    "best_percent": 90.34091,
    "claimed_by": null,
    "claimed_at": null,
@@ -55819,8 +55819,8 @@
    "addr": 311660,
    "size": 3192,
    "status": "unmatched",
-   "attempts": 49,
-   "best_percent": 81.309525,
+   "attempts": 50,
+   "best_percent": 96.0376,
    "claimed_by": null,
    "claimed_at": null,
    "claim_ttl": null,
@@ -102943,8 +102943,8 @@
    "addr": 73564,
    "size": 392,
    "status": "unmatched",
-   "attempts": 44,
-   "best_percent": 86.45918,
+   "attempts": 45,
+   "best_percent": 91.66327,
    "claimed_by": null,
    "claimed_at": null,
    "claim_ttl": null,
@@ -103007,19 +103007,19 @@
   {
    "symbol": "fn_12_12324",
    "module": "movie_module",
-   "unit": null,
+   "unit": "rel/movie_module/fn_12_12324.c",
    "addr": 74532,
    "size": 380,
-   "status": "unmatched",
-   "attempts": 40,
-   "best_percent": 45.978947,
+   "status": "matched",
+   "attempts": 43,
+   "best_percent": 100.0,
    "claimed_by": null,
    "claimed_at": null,
    "claim_ttl": null,
-   "matched_commit": null,
+   "matched_commit": "f32a4d6c2",
    "blocked_reason": null,
    "prev_status": null,
-   "link_state": null
+   "link_state": "verified"
   },
   {
    "symbol": "fn_12_124A0",
@@ -1112846,6 +1112846,566 @@
    "stale_checks": 0,
    "best_in_attempt": 88.983604,
    "best_rows": 14
+  },
+  {
+   "id": 49428,
+   "symbol": "fn_8004EFA8",
+   "agent": "opus-fn_8004EFA8-20261107a",
+   "harness": null,
+   "model": null,
+   "started": 1794037377,
+   "ended": 1794037634,
+   "checks": 8,
+   "final_percent": 84.16,
+   "tokens_in": 0,
+   "tokens_out": 0,
+   "cost_usd": 0.0,
+   "outcome": "released",
+   "notes": "Plateau. The natural body, with no locals or volatile (non-volatile `extern s32 lbl[]; u32 arg8, s16 arg9, s16 arg10; if (lbl[0] == 0) a(...) else b(...)`), scores 83% with 6 rows. It reproduces every retail register: a8=r31, a9=r12, a10=r11, mode=r0, lis r11. Only the order within the entry block differs. Ours: lis, stw r0, lha r12, stw r31, lwz r31, lwz r0, lha r11, cmpwi, bne. Retail: lis, stw r0, stw r31, lwz r0, lwz r31, cmpwi, lha r12, lha r11, bne. I read this as probably the original source shape, with the residual purely in the scheduler. That diagnosis is inferred from the diffs; I could not run the scheduler or a capture. All-volatile params with `mode = lbl; a8; a9; a10; if (mode == 0)` give retail's exact instruction order at 90.2%, but the registers are wrong (a10=r0, a9=r11, a8=r12, no r31 frame save). The apparent cause is that the first scheduling pass moves cmpwi ahead of the last load, so a10 no longer interferes with mode. Retail needs a10 to interfere with mode while keeping the chain order lwz lbl -> lwz a8 -> lha a9 -> lha a10. Tried this session: #pragma scheduling 750 and 604 are identical to the natural body; 601 is worse (82.2%, 13 rows). Volatile lbl plus volatile arg8 only gives 82.6%. Volatile params with non-volatile lbl and a10/a9/a8 declaration order gives 84.2%, with an added `extsh`. Untested leads: a copy on the mode load that survives the first scheduling pass and coalesces at allocation (`opt_propagation off` on the natural body with a local, or an inline helper result); #pragma scheduling 603 or other per-function optimizer pragmas on the natural body; a capture of the first-pass schedule. The best saved seed (92.5%, 7 rows on its check) has a bool mode and is not the right shape; start from the natural body instead.",
+   "best_body_path": "C:\\Users\\tyler\\Documents\\Git\\FZero-GX-Decomp\\.fzgx\\attempts\\fn_8004EFA8.1794037634.c",
+   "stale_checks": 5,
+   "best_in_attempt": 92.52,
+   "best_rows": 7
+  },
+  {
+   "id": 49429,
+   "symbol": "fn_8006FC1C",
+   "agent": "sonnet-fn_8006FC1C-20261107a",
+   "harness": null,
+   "model": null,
+   "started": 1794037379,
+   "ended": 1794037430,
+   "checks": 4,
+   "final_percent": 35.625,
+   "tokens_in": 0,
+   "tokens_out": 0,
+   "cost_usd": 0.0,
+   "outcome": "released",
+   "notes": "Best 56.6% (seed). Retail's merged conditional-return and bnelr with cr1/cr5 compares is not reproduced by any C spelling tried; compiler emits beq/blr/li pairs instead.",
+   "best_body_path": "C:\\Users\\tyler\\Documents\\Git\\FZero-GX-Decomp\\.fzgx\\attempts\\fn_8006FC1C.1794037429.c",
+   "stale_checks": 3,
+   "best_in_attempt": 56.5625,
+   "best_rows": 16
+  },
+  {
+   "id": 49430,
+   "symbol": "fn_80072014",
+   "agent": "opus-fn_80072014-20261107a",
+   "harness": null,
+   "model": "opus",
+   "started": 1794037381,
+   "ended": 1794037615,
+   "checks": 8,
+   "final_percent": 60.871796,
+   "tokens_in": 0,
+   "tokens_out": 0,
+   "cost_usd": 0.0,
+   "outcome": "released",
+   "notes": "Plateau STOP, best still the 63.0% seed (29 rows). Retail chains `rlwinm r0,x; mr r10,r0; rlwimi r10,..` twice, then `clrlwi r3,r10,8; oris r10,r3,0xf200`, with r10 as the result at each stage. Closest shape, last check 60.9% (29 rows), no helper, `#pragma opt_lifetimes off`, one single-def local per stage: `t=b&0xFFFF00FF; reg=__rlwimi(t,g,8,16,23); t2=reg&0xFF00FFFF; reg2=__rlwimi(t2,r,16,8,15); reg3=(reg2&0xFFFFFF)|0xF2000000`. It reproduced `rlwinm r0,r5; stb r5,0x22(r6); mr r5,r0; rlwimi r5,r9` for the FIRST stage only: the result stays in r5 (retail r10) and b's register is reused. The second stage coalesced (`rlwinm r3,r5; rlwimi r3,r10`) and the last gives `clrlwi r5,r3; oris r5,r5`. Reusing one multi-def `t` instead keeps the mr at stage 2 and coalesces stage 1 (56.6%). Untested: keeping reg live past each stage so it cannot share b's or t2's register, and getting both mr copies at once. Register shift also differs from the top: oldR r11 vs r9, base1 r7 vs r8, and g/r/0x61 stores and loads are scheduled later than retail (`stb r9,0x20` and `stb r7,0x21` must sit between the inserts). Ruled out: bitfield struct local goes to stack, with a frame (46%); `(reg&M)|((g&0xFF)<<8)` makes the compiler shift first and insert the other operand (`clrlslwi; rlwimi r9,r8,0,24,31`, 54.7%), because b is known u8.",
+   "best_body_path": "C:\\Users\\tyler\\Documents\\Git\\FZero-GX-Decomp\\.fzgx\\attempts\\fn_80072014.1794037615.c",
+   "stale_checks": 5,
+   "best_in_attempt": 63.025642,
+   "best_rows": 29
+  },
+  {
+   "id": 49431,
+   "symbol": "GXLoadTexMtxImm",
+   "agent": "opus-GXLoadTexMtxImm-20261107a",
+   "harness": null,
+   "model": null,
+   "started": 1794037381,
+   "ended": 1794037465,
+   "checks": 3,
+   "final_percent": 0.0,
+   "tokens_in": 0,
+   "tokens_out": 0,
+   "cost_usd": 0.0,
+   "outcome": "released",
+   "notes": "Best remains 68.9%. Rows 0-20 (id/type header, FIFO writes) already match; the 22 differing rows are the two matrix copies: retail has addi r4,r4,-0x8000 then psq_l/psq_st with displacement, ours lfd/stfdu/stfd. Cause (from retail shape plus psvec.h and the idiom notes, not compiled here): the SDK's WriteMTXPS4x3/4x2 inline-asm helpers, which also explain the addi as &GXWGFifo.f32 bound to a register parameter. No C spelling tried reaches it: __psq_l is not an intrinsic under 1.2.5n (compiled as an undeclared call), __vec2x32float__ failed to parse in my volatile-pointer spelling, so that route is unmeasured here; the idiom notes say it only gives indexed psq_lx. All psvec.h kernels also emit lfs/stfs, so none fits. I did not write inline asm in the unit: project rules forbid it in src/ and a match would auto-submit. The asm helper is therefore untested, and whether it reaches 100% is unverified. Next step needs a librarian: add psq-only helpers to include/psvec.h, or make this an asm unit like sibling GXLoadPosMtxImm (src/dol/GXLoadPosMtxImm.s). Further C edits to this unit are unlikely to help.",
+   "best_body_path": "C:\\Users\\tyler\\Documents\\Git\\FZero-GX-Decomp\\.fzgx\\attempts\\GXLoadTexMtxImm.1794037465.c",
+   "stale_checks": 1,
+   "best_in_attempt": 68.888885,
+   "best_rows": 22
+  },
+  {
+   "id": 49432,
+   "symbol": "fn_8006E200",
+   "agent": "sonnet-fn_8006E200-20261107a",
+   "harness": null,
+   "model": null,
+   "started": 1794037381,
+   "ended": 1794037411,
+   "checks": 0,
+   "final_percent": null,
+   "tokens_in": 0,
+   "tokens_out": 0,
+   "cost_usd": 0.0,
+   "outcome": "released",
+   "notes": "Needs displacement-form psq_l, ps_sum0 and live-in paired f1/f3/f0 args; C __vec2x32float__ only emits indexed psq_lx, and psvec.h has no matching helper (no 3x4 matrix-vector kernel); prior 45 attempts plateau at 33%.",
+   "best_body_path": "C:\\Users\\tyler\\Documents\\Git\\FZero-GX-Decomp\\.fzgx\\attempts\\fn_8006E200.1794037411.c",
+   "stale_checks": 0,
+   "best_in_attempt": 0.0,
+   "best_rows": 35
+  },
+  {
+   "id": 49433,
+   "symbol": "fn_1_4C16C",
+   "agent": "opus-fn_1_4C16C-20261107a",
+   "harness": null,
+   "model": "claude-opus-5-5",
+   "started": 1794037383,
+   "ended": 1794038186,
+   "checks": 24,
+   "final_percent": 0.0,
+   "tokens_in": 0,
+   "tokens_out": 0,
+   "cost_usd": 0.0,
+   "outcome": "released",
+   "notes": "Stopped at 96.0% with the check budget used up (24 of 24). The last 3 edits failed to compile because of a half-finished patch, so continue from the saved 96.0% body, not the work copy. That body is a clean rewrite with no optimizer pragmas except fp_contract off: the sibling helpers (fn_1_49410, 494DC, 4955C, 496FC, 49514/49528, 4AC20) are static inlines, and .data and .rodata are defined in the unit with fzgx_keep/fzgx_prime functions, each table placed immediately before its keep function. Frame 0x1b0, _savegpr_22, section base lis/addi order and nearly all rows now align. What remains: (1) DATA BYTES: the pool ...data.0 and ...rodata.0 words differ and leave rows marked `?`; apply the read_evidence(section=datainit) patch last. Its rodata hint says a table is 1 word short from +0x40, which still needs resolving. (2) COLOR LITERALS: in the 96.0% body only c_16D0/c_16D4 are in-block `FC w = {..}; *(FC *)&S.unk_10 = w;`, which stopped LICM hoisting them and fixed the frame, but it moved 320/150/12/2 to +0x16E0.. (retail +0x16D8..), 8 bytes late. The other seven colors are still function-level `static const FC`. Untested next step: make all nine colors in-block locals with struct copy, in retail order 16B4 gray, 16B8 white, 16BC yellow, 16C0 white, 16C4 yellow, 16C8 red, 16CC red, 16D0 white, 16D4 black. Only white goes through a stack home at 0xC (`FC white` read in the 1387-entry loop). Literal offsets under that form are unverified. (3) REGISTERS: ours at 96.0% is S r30, M r29, data r28, ro r27, entry r25, cols r24, rows r23; retail is entry r31, cols r30, i-shadow/cols-1 r29, S r28, M r27, data r26, ro r25, total/c r24, rows/i r23, p r22. entry and cols were r31/r30 in the 95.6% version with statics for all colors, then dropped to r25/r24 once the 16D0/16D4 locals went in; cause not established. Expect to reorder declarations after (2). (4) FPRs in the width/reset block: ours f0/f1 for conv and constant, retail f1/f2, probably a temp-order fix. (5) Int-to-float slots in font_put_glyph: retail c==0 has row@0x180, col@0x178 and c==10 has row@0x178, col@0x180. u-before-v matched c==0 in an earlier version; c==10 was not re-read and may need its own statement order.",
+   "best_body_path": "C:\\Users\\tyler\\Documents\\Git\\FZero-GX-Decomp\\.fzgx\\attempts\\fn_1_4C16C.1794038185.c",
+   "stale_checks": 0,
+   "best_in_attempt": 95.64411,
+   "best_rows": 363
+  },
+  {
+   "id": 49434,
+   "symbol": "fn_800356B8",
+   "agent": "opus-fn_800356B8-20261107a",
+   "harness": null,
+   "model": null,
+   "started": 1794037383,
+   "ended": 1794037496,
+   "checks": 3,
+   "final_percent": 26.32258,
+   "tokens_in": 0,
+   "tokens_out": 0,
+   "cost_usd": 0.0,
+   "outcome": "released",
+   "notes": "Blocked at 67.7% (saved seed): needs a shared asm helper, and CLAUDE.md forbids inline asm in src/, so I did not write one in the unit. This is SDK GXLoadLightObjImm; the 12 psq_l/psq_st displacement rows are the upload kernel (WriteLightObj in other SDK decomps, recalled, not checked here). Probed this session: __psq_l/__psq_st are not intrinsics (compiled as undeclared calls); native __vec2x32float__ struct fields and a volatile union pipe give psq_lx/psq_stx with li index (26.3%), so C reaches no displacement form. Seed's other rows: lis GXWGFifo@ha/stbu vs retail lis 0xcc01; stb -0x8000(r4); stwu -0x8000(r4) (the literal GX_FIFO_BASE gives lis 0xcc01 and stb -0x8000 but stw, no update form), and xor r5 vs xor r6. Expect the stwu and r6 rows to follow from passing the literal FIFO address to a register-parameter asm helper, with xor r6,r6,r6 inside it; that is untested. No asm body was compiled, so no match with the helper is proven. Next step is librarian: add the helper to include/psvec.h, then call it from the C body.",
+   "best_body_path": "C:\\Users\\tyler\\Documents\\Git\\FZero-GX-Decomp\\.fzgx\\attempts\\fn_800356B8.1794037496.c",
+   "stale_checks": 2,
+   "best_in_attempt": 67.70968,
+   "best_rows": 20
+  },
+  {
+   "id": 49435,
+   "symbol": "fn_12_12324",
+   "agent": "opus-fn_12_12324-20261107a",
+   "harness": null,
+   "model": null,
+   "started": 1794037384,
+   "ended": 1794037505,
+   "checks": 1,
+   "final_percent": 21.894737,
+   "tokens_in": 0,
+   "tokens_out": 0,
+   "cost_usd": 0.0,
+   "outcome": "released",
+   "notes": "Not reachable from C by a matcher. Every differing row comes from retail's displacement psq_l/psq_st with qr3 (72 rows): C via __vec2x32float__ gives only psq_lx/psq_stx with qr0, and the 40 earlier attempts plus compiler probes (all 21.89%) did not move it. Only inline asm can emit this form; write_unit refuses it (\"inline asm is not allowed\") and CODING/CLAUDE rules forbid it in src/, so I did not try to get round that. I checked include/psvec.h, psvec_fill.h and ppc_ops.h: all psq helpers there are hardcoded qr0 and store-or-vector kernels, none copies with qr3. The inline-asm probe was rejected before compiling, so a helper's register allocation (dst r7, stride r6, count r5, tbl r4, src r3) is UNVERIFIED. Control flow and C-side rows are understood: `tbl = arg1 + 4; count = 6; do { dst = tbl[0]; stride = tbl[1]; tbl += 2; if (dst & 0x1f) == 0 {2x CTR loop of 4 blocks with dcbz} else {same without dcbz}; src += 0x40 per trip } while (--count > 0)`. Work copy unchanged from the 21.89% seed. Further matcher attempts will not help until the librarian acts.",
+   "best_body_path": "C:\\Users\\tyler\\Documents\\Git\\FZero-GX-Decomp\\.fzgx\\attempts\\fn_12_12324.1794037505.c",
+   "stale_checks": 0,
+   "best_in_attempt": 21.894737,
+   "best_rows": 117
+  },
+  {
+   "id": 49436,
+   "symbol": "fn_8006FC5C",
+   "agent": "sonnet-fn_8006FC5C-20261107a",
+   "harness": null,
+   "model": null,
+   "started": 1794037385,
+   "ended": 1794037434,
+   "checks": 4,
+   "final_percent": 19.318182,
+   "tokens_in": 0,
+   "tokens_out": 0,
+   "cost_usd": 0.0,
+   "outcome": "released",
+   "notes": "Plain-C strncmp-like loop reaches 43.9%, below the 54.3% seed. Retail's cr1/cr5/cr6 predicates and bnelr early exits are not reproduced by any C shape tried.",
+   "best_body_path": "C:\\Users\\tyler\\Documents\\Git\\FZero-GX-Decomp\\.fzgx\\attempts\\fn_8006FC5C.1794037434.c",
+   "stale_checks": 2,
+   "best_in_attempt": 54.31818,
+   "best_rows": 17
+  },
+  {
+   "id": 49437,
+   "symbol": "fn_8005C478",
+   "agent": "opus-fn_8005C478-20261107a",
+   "harness": null,
+   "model": null,
+   "started": 1794037386,
+   "ended": 1794037679,
+   "checks": 10,
+   "final_percent": 79.2619,
+   "tokens_in": 0,
+   "tokens_out": 0,
+   "cost_usd": 0.0,
+   "outcome": "released",
+   "notes": "Plateau stop; best remains 84.6% (28 rows). Remaining rows are base/soff allocation, the ternary result's web, and scheduling that follows the registers. Findings: (1) `accum = (s8)a[0xa] + q->x + (s32)t` compiles to retail's add order, add(qx, t) then add(a0xa, prev). The right-nested and two-statement forms rotate to add(t, a0xa), add(qx, prev), so never use those. (2) A separate `initial` local declared FIRST in the function goes volatile (r10; retail r8), with andc on it. (3) Under `#pragma opt_propagation off` the andc lands in r31 and accum holds r31 for every add, as retail (r30 offset, r29 a/y). That compile's remaining gap: soff is in r28, base in r4, and p/q/initial sit one register off (r12/r11/r10; retail p r11, q r10, initial r8). Stack homes also flip while `fine` is a named local. (4) Dropping `fine` and writing `(s32)(lbl_801A7228 * (f64)y + lbl_801A7220 * (f64)(s32)accum)` gave correct conversion stack slots; lfd f1/f4 still swapped and the r>>8 / r>>2 adds swapped (row 0xC4, without opt_propagation effect isolated). (5) Moving `base` last or dropping `register` compiles to identical code. A one-member struct wrapper for base, tested only combined with (4) under propagation off, gave base r9 and soff r28, with accum in r30 and offset in r31, so r31/r30 were lost. Untried: making soff non-local (CSE of `offset + 0x1414`) so it numbers above the locals and base takes r28; float operand order without the swap of (4); keeping accum in r31 by checking which local claims first once base is wrapped. Retail's mask r9 above initial r8 suggests initial is numbered above the mask, e.g. an inline helper's local, but this is unverified.",
+   "best_body_path": "C:\\Users\\tyler\\Documents\\Git\\FZero-GX-Decomp\\.fzgx\\attempts\\fn_8005C478.1794037679.c",
+   "stale_checks": 8,
+   "best_in_attempt": 84.583336,
+   "best_rows": 28
+  },
+  {
+   "id": 49438,
+   "symbol": "fn_12_11F5C",
+   "agent": "opus-fn_12_11F5C-20261107a",
+   "harness": null,
+   "model": "claude-opus-5-5",
+   "started": 1794037391,
+   "ended": 1794037991,
+   "checks": 16,
+   "final_percent": 70.72449,
+   "tokens_in": 0,
+   "tokens_out": 0,
+   "cost_usd": 0.0,
+   "outcome": "released",
+   "notes": "Best 91.7% / 31 rows (saved). The gain came from moving `v20 = v0 << 4; v11 = <6948 lookup>` above `v6 = ...` (6948 lookup before the chroma offset, 6968 lookup after it), which fixes the lis order and the base+off/products colours. Remaining rows are mostly volatile colours plus their post-RA schedule. Retail has x=r6, x/2=r5, 6968ha=r4, x/4=r10, (y&1)<<3=r11, base+off=r12, a2[1]=r4, a2[0]=r11, sum `add r23,r12,r11`, `clrlwi r23,r6,31`. Ours has x=r5, x/2=r4, 6968ha=r6, x/4=r12, (y&1)<<3=r10, base+off=r11, v15(a2[1])=r23, v14(a2[0])=r6, sum coalesced into r11, `clrlwi r4`. Likely cause: retail colours something into r4 before x/2 and x. a2[1] and the lis would both fit r4; I could not tell which it is. The sum in r23 looks low-numbered, so possibly a reused variable. Measured from the 91.7% body: inlining v7 gave 70.7%; loading arg2[1] before arg2[0] gave 87.7% (fixes add r29 before add r28); dropping v14/v15 gave 85.3% (y/2 moves off r25, r25 goes to x/4); a named row pointer gave 76.7%. Separate yhp var (`yhp = v3&1` before the 6948 lookup, `yhp &= v0` after) reproduces retail's `clrlwi r23; and r23,r23,r24` shape, but scored 87.3% with v20 declared after v16 and 81.0% declared last (v20 reaches r23 but y/2 goes to r19). Untested next: yhp with v20 declared between those positions, and an undeclared a2 load as a late temp. 3D `[2][2][2]` array views scored 71.4% at best. Moving declarations in the old seed compiled identically. A capture with autotarget should settle the r4 question. Two failed compiles also counted toward the plateau stop.",
+   "best_body_path": "C:\\Users\\tyler\\Documents\\Git\\FZero-GX-Decomp\\.fzgx\\attempts\\fn_12_11F5C.1794037990.c",
+   "stale_checks": 8,
+   "best_in_attempt": 91.66327,
+   "best_rows": 31
+  },
+  {
+   "id": 49439,
+   "symbol": "fn_80079D74",
+   "agent": "sonnet-fn_80079D74-20261107a",
+   "harness": null,
+   "model": null,
+   "started": 1794037392,
+   "ended": 1794037422,
+   "checks": 1,
+   "final_percent": 90.34091,
+   "tokens_in": 0,
+   "tokens_out": 0,
+   "cost_usd": 0.0,
+   "outcome": "released",
+   "notes": "90.3% plateau: retail's addic/addze/addze carry chain and the carry-setting subic (not subi) can't be produced from C; the register differences follow from that. No compiler version beats GC/1.3.",
+   "best_body_path": "C:\\Users\\tyler\\Documents\\Git\\FZero-GX-Decomp\\.fzgx\\attempts\\fn_80079D74.1794037422.c",
+   "stale_checks": 0,
+   "best_in_attempt": 90.34091,
+   "best_rows": 13
+  },
+  {
+   "id": 49440,
+   "symbol": "fn_8006FC1C",
+   "agent": "sonnet-fn_8006FC1C-20261107a",
+   "harness": null,
+   "model": null,
+   "started": 1794037430,
+   "ended": 1794037430,
+   "checks": 0,
+   "final_percent": 35.625,
+   "tokens_in": 0,
+   "tokens_out": 0,
+   "cost_usd": 0.0,
+   "outcome": "released-final",
+   "notes": "final work copy of attempt 49429: 35.62% under GC/1.2.5n",
+   "best_body_path": "C:\\Users\\tyler\\Documents\\Git\\FZero-GX-Decomp\\.fzgx\\attempts\\fn_8006FC1C.final.1794037430.c",
+   "stale_checks": 0,
+   "best_in_attempt": 35.625,
+   "best_rows": 18
+  },
+  {
+   "id": 49441,
+   "symbol": "fn_8006FC5C",
+   "agent": "sonnet-fn_8006FC5C-20261107a",
+   "harness": null,
+   "model": null,
+   "started": 1794037434,
+   "ended": 1794037434,
+   "checks": 0,
+   "final_percent": 19.31818,
+   "tokens_in": 0,
+   "tokens_out": 0,
+   "cost_usd": 0.0,
+   "outcome": "released-final",
+   "notes": "final work copy of attempt 49436: 19.32% under GC/1.3",
+   "best_body_path": "C:\\Users\\tyler\\Documents\\Git\\FZero-GX-Decomp\\.fzgx\\attempts\\fn_8006FC5C.final.1794037434.c",
+   "stale_checks": 0,
+   "best_in_attempt": 19.31818,
+   "best_rows": 26
+  },
+  {
+   "id": 49442,
+   "symbol": "GXLoadTexMtxImm",
+   "agent": "opus-GXLoadTexMtxImm-20261107a",
+   "harness": null,
+   "model": null,
+   "started": 1794037465,
+   "ended": 1794037465,
+   "checks": 0,
+   "final_percent": 0.0,
+   "tokens_in": 0,
+   "tokens_out": 0,
+   "cost_usd": 0.0,
+   "outcome": "released-final",
+   "notes": "final work copy of attempt 49431: did not compile",
+   "best_body_path": "C:\\Users\\tyler\\Documents\\Git\\FZero-GX-Decomp\\.fzgx\\attempts\\GXLoadTexMtxImm.final.1794037465.c",
+   "stale_checks": 0,
+   "best_in_attempt": 0.0,
+   "best_rows": null
+  },
+  {
+   "id": 49443,
+   "symbol": "fn_800356B8",
+   "agent": "opus-fn_800356B8-20261107a",
+   "harness": null,
+   "model": null,
+   "started": 1794037496,
+   "ended": 1794037496,
+   "checks": 0,
+   "final_percent": 26.32258,
+   "tokens_in": 0,
+   "tokens_out": 0,
+   "cost_usd": 0.0,
+   "outcome": "released-final",
+   "notes": "final work copy of attempt 49434: 26.32% under GC/1.3",
+   "best_body_path": "C:\\Users\\tyler\\Documents\\Git\\FZero-GX-Decomp\\.fzgx\\attempts\\fn_800356B8.final.1794037496.c",
+   "stale_checks": 0,
+   "best_in_attempt": 26.32258,
+   "best_rows": 36
+  },
+  {
+   "id": 49444,
+   "symbol": "fn_80072014",
+   "agent": "opus-fn_80072014-20261107a",
+   "harness": null,
+   "model": "opus",
+   "started": 1794037615,
+   "ended": 1794037615,
+   "checks": 0,
+   "final_percent": 60.8718,
+   "tokens_in": 0,
+   "tokens_out": 0,
+   "cost_usd": 0.0,
+   "outcome": "released-final",
+   "notes": "final work copy of attempt 49430: 60.87% under GC/1.3.2",
+   "best_body_path": "C:\\Users\\tyler\\Documents\\Git\\FZero-GX-Decomp\\.fzgx\\attempts\\fn_80072014.final.1794037615.c",
+   "stale_checks": 0,
+   "best_in_attempt": 60.8718,
+   "best_rows": 29
+  },
+  {
+   "id": 49445,
+   "symbol": "fn_8004EFA8",
+   "agent": "opus-fn_8004EFA8-20261107a",
+   "harness": null,
+   "model": null,
+   "started": 1794037634,
+   "ended": 1794037634,
+   "checks": 0,
+   "final_percent": 84.16,
+   "tokens_in": 0,
+   "tokens_out": 0,
+   "cost_usd": 0.0,
+   "outcome": "released-final",
+   "notes": "final work copy of attempt 49428: 84.16% under GC/1.3.2",
+   "best_body_path": "C:\\Users\\tyler\\Documents\\Git\\FZero-GX-Decomp\\.fzgx\\attempts\\fn_8004EFA8.final.1794037634.c",
+   "stale_checks": 0,
+   "best_in_attempt": 84.16,
+   "best_rows": 8
+  },
+  {
+   "id": 49446,
+   "symbol": "fn_8005C478",
+   "agent": "opus-fn_8005C478-20261107a",
+   "harness": null,
+   "model": null,
+   "started": 1794037679,
+   "ended": 1794037679,
+   "checks": 0,
+   "final_percent": 79.2619,
+   "tokens_in": 0,
+   "tokens_out": 0,
+   "cost_usd": 0.0,
+   "outcome": "released-final",
+   "notes": "final work copy of attempt 49437: 79.26% under GC/1.3.2",
+   "best_body_path": "C:\\Users\\tyler\\Documents\\Git\\FZero-GX-Decomp\\.fzgx\\attempts\\fn_8005C478.final.1794037679.c",
+   "stale_checks": 0,
+   "best_in_attempt": 79.2619,
+   "best_rows": 46
+  },
+  {
+   "id": 49447,
+   "symbol": "fn_12_11F5C",
+   "agent": "opus-fn_12_11F5C-20261107a",
+   "harness": null,
+   "model": "claude-opus-5-5",
+   "started": 1794037991,
+   "ended": 1794037991,
+   "checks": 0,
+   "final_percent": 70.72449,
+   "tokens_in": 0,
+   "tokens_out": 0,
+   "cost_usd": 0.0,
+   "outcome": "released-final",
+   "notes": "final work copy of attempt 49438: 70.72% under GC/1.3.2",
+   "best_body_path": "C:\\Users\\tyler\\Documents\\Git\\FZero-GX-Decomp\\.fzgx\\attempts\\fn_12_11F5C.final.1794037991.c",
+   "stale_checks": 0,
+   "best_in_attempt": 70.72449,
+   "best_rows": 86
+  },
+  {
+   "id": 49448,
+   "symbol": "fn_1_4C16C",
+   "agent": "opus-fn_1_4C16C-20261107a",
+   "harness": null,
+   "model": "claude-opus-5-5",
+   "started": 1794038186,
+   "ended": 1794038186,
+   "checks": 0,
+   "final_percent": 0.0,
+   "tokens_in": 0,
+   "tokens_out": 0,
+   "cost_usd": 0.0,
+   "outcome": "released-final",
+   "notes": "final work copy of attempt 49433: did not compile",
+   "best_body_path": "C:\\Users\\tyler\\Documents\\Git\\FZero-GX-Decomp\\.fzgx\\attempts\\fn_1_4C16C.final.1794038186.c",
+   "stale_checks": 0,
+   "best_in_attempt": 0.0,
+   "best_rows": null
+  },
+  {
+   "id": 49449,
+   "symbol": "GXLoadTexMtxImm",
+   "agent": "tooling-T26",
+   "harness": null,
+   "model": null,
+   "started": 1794038945,
+   "ended": 1794039002,
+   "checks": 1,
+   "final_percent": 100.0,
+   "tokens_in": 0,
+   "tokens_out": 0,
+   "cost_usd": 0.0,
+   "outcome": "matched",
+   "notes": "oracle match accepted automatically",
+   "best_body_path": null,
+   "stale_checks": 0,
+   "best_in_attempt": 100.0,
+   "best_rows": 0
+  },
+  {
+   "id": 49450,
+   "symbol": "GXLoadTexMtxImm",
+   "agent": "tooling-T26",
+   "harness": "tooling",
+   "model": "claude-opus-5-5",
+   "started": 1794039208,
+   "ended": 1794039208,
+   "checks": 0,
+   "final_percent": null,
+   "tokens_in": 0,
+   "tokens_out": 0,
+   "cost_usd": 0.0,
+   "outcome": "matched",
+   "notes": "T26 paired-single kernel",
+   "best_body_path": null,
+   "stale_checks": 0,
+   "best_in_attempt": 0.0,
+   "best_rows": null
+  },
+  {
+   "id": 49451,
+   "symbol": "fn_800356B8",
+   "agent": "tooling-T26",
+   "harness": "tooling",
+   "model": "claude-opus-5-5",
+   "started": 1794039210,
+   "ended": 1794039320,
+   "checks": 1,
+   "final_percent": 68.41936,
+   "tokens_in": 0,
+   "tokens_out": 0,
+   "cost_usd": 0.0,
+   "outcome": "matched",
+   "notes": "T26 paired-single kernel",
+   "best_body_path": null,
+   "stale_checks": 0,
+   "best_in_attempt": 68.41936,
+   "best_rows": 24
+  },
+  {
+   "id": 49452,
+   "symbol": "fn_12_12324",
+   "agent": "tooling-T26",
+   "harness": null,
+   "model": null,
+   "started": 1794039321,
+   "ended": 1794039377,
+   "checks": 1,
+   "final_percent": 100.0,
+   "tokens_in": 0,
+   "tokens_out": 0,
+   "cost_usd": 0.0,
+   "outcome": "matched",
+   "notes": "oracle match accepted automatically",
+   "best_body_path": null,
+   "stale_checks": 0,
+   "best_in_attempt": 100.0,
+   "best_rows": 0
+  },
+  {
+   "id": 49453,
+   "symbol": "fn_12_12324",
+   "agent": "tooling-T26",
+   "harness": "tooling",
+   "model": "claude-opus-5-5",
+   "started": 1794039567,
+   "ended": 1794039567,
+   "checks": 0,
+   "final_percent": null,
+   "tokens_in": 0,
+   "tokens_out": 0,
+   "cost_usd": 0.0,
+   "outcome": "matched",
+   "notes": "T26 paired-single kernel",
+   "best_body_path": null,
+   "stale_checks": 0,
+   "best_in_attempt": 0.0,
+   "best_rows": null
+  },
+  {
+   "id": 49454,
+   "symbol": "fn_8003B9AC",
+   "agent": "tooling-T26",
+   "harness": "tooling",
+   "model": "claude-opus-5-5",
+   "started": 1794039568,
+   "ended": 1794039627,
+   "checks": 1,
+   "final_percent": 96.08247,
+   "tokens_in": 0,
+   "tokens_out": 0,
+   "cost_usd": 0.0,
+   "outcome": "matched",
+   "notes": "T26 paired-single kernel",
+   "best_body_path": null,
+   "stale_checks": 0,
+   "best_in_attempt": 96.08247,
+   "best_rows": 16
+  },
+  {
+   "id": 49455,
+   "symbol": "fn_8003BB30",
+   "agent": "tooling-T26",
+   "harness": "tooling",
+   "model": "claude-opus-5-5",
+   "started": 1794039629,
+   "ended": 1794039686,
+   "checks": 1,
+   "final_percent": 53.477066,
+   "tokens_in": 0,
+   "tokens_out": 0,
+   "cost_usd": 0.0,
+   "outcome": "matched",
+   "notes": "T26 paired-single kernel",
+   "best_body_path": null,
+   "stale_checks": 0,
+   "best_in_attempt": 53.477066,
+   "best_rows": 67
   }
  ],
  "names": [
@@ -1115886,9 +1116446,9 @@
    "detail": "fn_8003BB30 needs GQR-quantized psq_lu/psq_stu (qr2/qr7) with update addressing inside a compiler-unrolled C loop. Inline asm is rejected in units, so it needs a static inline header helper (like include/psvec.h) for the 10-instruction kernel taking (dst, src0, src1, src2, k01, k02, bias), or an asm",
    "source": "agent:opus-fn_8003BB30-20261010c",
    "created_at": 1791663356,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1794040395
   },
   {
    "id": 220,
@@ -1117710,9 +1118270,9 @@
    "detail": "Provide an approved psvec.h helper for QR3 conversion: four paired loads at source offsets 0,4,8,12 and four paired stores at destination offsets 0,2,4,6, preserving f0-f3; current work cannot express these without prohibited inline assembly.",
    "source": "agent:codex-20261019b-codex-92",
    "created_at": 1792440103,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1794040395
   },
   {
    "id": 372,
@@ -1117734,9 +1118294,9 @@
    "detail": "A supported psvec.h helper for the GX light-object FIFO upload block is needed; the supplied generic vector helpers do not express its six paired loads followed by three zero words, the color word, and six paired FIFO stores.",
    "source": "agent:codex-20261019b-codex-91",
    "created_at": 1792440146,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1794040395
   },
   {
    "id": 374,
@@ -1117782,9 +1118342,9 @@
    "detail": "Provide a shared JPEG/YUV paired-single helper supporting psq_lu/psq_stu with qr2/qr7, ps_sum0/ps_sum1 and ps_merge10; these operations require assembly support outside this unit under the no-inline-asm restriction.",
    "source": "agent:codex-20261019b-codex-112",
    "created_at": 1792440711,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1794040395
   },
   {
    "id": 378,
@@ -1118646,9 +1119206,9 @@
    "detail": "Provide psvec.h inline helpers that copy 12 or 8 floats to a fixed FIFO address using displacement-form psq_l/psq_st, loading all pairs before storing; GXLoadTexMtxImm's packet header already matches.",
    "source": "agent:codex-20261022e-codex-114",
    "created_at": 1792713656,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1794040395
   },
   {
    "id": 450,
@@ -1118742,9 +1119302,9 @@
    "detail": "Provide a psvec.h helper for the qr2 quantized update-load/update-store and ps_merge00/10/01/11 interleave kernel; __PSQ_L, __psq_l, __vec_ld and builtin-name variants are ordinary external calls under GC/1.3.2, and inline assembly is disallowed in the unit.",
    "source": "agent:codex-20261022e-codex-136",
    "created_at": 1792714879,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1794040395
   },
   {
    "id": 458,
@@ -1118826,9 +1119386,9 @@
    "detail": "The seed calls nonexistent __PSQ_L/__PSQ_ST, __PS_SUM0/__PS_SUM1, __PS_MERGE00/__PS_MERGE10 and __PS_MADD helpers; shared inline helpers for qr2/qr7 update loads, qr2 update stores and lane sums are needed before this unit can match without forbidden inline assembly.",
    "source": "agent:codex-20261022e-codex-141",
    "created_at": 1792715079,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1794040395
   },
   {
    "id": 465,
@@ -1119558,9 +1120118,9 @@
    "detail": "include/psvec.h lacks a kernel that copies 4 or 6 consecutive f32 pairs to the GX FIFO (psq_l 0/8/0x10.. then psq_st 0(rFifo)); GXLoadTexMtxImm (and likely GXLoadPosMtxImm/GXLoadNrmMtxImm) need it.",
    "source": "agent:sonnet-GXLoadTexMtxImm-20261026e",
    "created_at": 1793001761,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1794040395
   },
   {
    "id": 526,
@@ -1120998,9 +1121558,9 @@
    "detail": "An approved psvec.h interface is needed for 12-float and 8-float FIFO copies: load six or four pairs with psq_l, then write all pairs to the same volatile FIFO address with psq_st; the supplied helper interfaces do not expose these sequences.",
    "source": "agent:codex-20261104c-astra-codex-8",
    "created_at": 1793832611,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1794040395
   },
   {
    "id": 646,
@@ -1121010,9 +1121570,9 @@
    "detail": "A sanctioned GX light FIFO-copy helper is needed in psvec.h: load six paired singles from object offsets 0x10..0x38, then write three zero words, object+0xC, and the six pairs to the same FIFO address.",
    "source": "agent:codex-20261104c-astra-codex-9",
    "created_at": 1793832725,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1794040395
   },
   {
    "id": 647,
@@ -1121058,9 +1121618,9 @@
    "detail": "Provide an approved psvec.h helper for the QR2 quantized load-update, scale/bias, lane-merge, and store-update conversion step; the supplied __PSQ_L/__PSQ_ST/__PS_MERGE* declarations generate calls, and inline assembly is prohibited in this unit.",
    "source": "agent:codex-20261104c-astra-codex-17",
    "created_at": 1793833278,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1794040395
   },
   {
    "id": 651,
@@ -1121070,9 +1121630,9 @@
    "detail": "Matching requires an approved reusable helper for D-form GQR3 paired loads/stores in psvec.h; inline assembly is prohibited in this unit, and the supplied vector macros discard the quantization selector.",
    "source": "agent:codex-20261104c-astra-codex-18",
    "created_at": 1793833303,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1794040395
   },
   {
    "id": 652,
@@ -1121082,9 +1121642,9 @@
    "detail": "Matching fn_8003BB30 requires supported paired-single helpers for psq_lu/psq_stu with qr2 and qr7, ps_sum0/ps_sum1, and lane merges; the supplied psvec.h helpers do not cover these operations, and the seed's __PS* names are unresolved external calls.",
    "source": "agent:codex-20261104c-astra-codex-20",
    "created_at": 1793833365,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1794040395
   },
   {
    "id": 653,
@@ -1121118,9 +1121678,9 @@
    "detail": "Expose paired-single FIFO-copy helpers in psvec.h for 3x4 and 2x4 matrices: load six/four pairs at offsets 0,8,... into descending FPRs, then store all pairs to offset 0 of the FIFO pointer. Existing C produces lfd/stfd; inline assembly is prohibited in this unit.",
    "source": "agent:codex-20261104d-astra-codex-10",
    "created_at": 1793843764,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1794040395
   },
   {
    "id": 656,
@@ -1121142,9 +1121702,9 @@
    "detail": "Provide a psvec helper for the QR2 psq_lu/psq_stu conversion-and-interleave block; __PSQ_L/__PSQ_ST/__PS_MERGE* and __vec_ld/__vec_st/__vec_merge* compile as external calls under GC/1.3.2.",
    "source": "agent:codex-20261104d-astra-codex-17",
    "created_at": 1793844289,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1794040396
   },
   {
    "id": 658,
@@ -1121154,9 +1121714,9 @@
    "detail": "Provide a shared quantized paired-single helper for four qr3 loads at source offsets 0,4,8,12 and four qr3 stores at destination offsets 0,2,4,6, with source-offset variants 16,32,48; psvec.h does not define the seed's __PSQ_L/__PSQ_ST operations.",
    "source": "agent:codex-20261104d-astra-codex-18",
    "created_at": 1793844375,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1794040396
   },
   {
    "id": 659,
@@ -1121178,9 +1121738,9 @@
    "detail": "A shared psvec.h helper is needed for GXLoadLightObjImm-style emission: FIFO byte command and update-form word command, zero/color words, and six psq_l/psq_st pairs at object offsets 0x10..0x38; inline assembly is prohibited in this unit.",
    "source": "agent:codex-20261104e-astra-codex-1",
    "created_at": 1793845848,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1794040396
   },
   {
    "id": 661,
@@ -1121202,9 +1121762,9 @@
    "detail": "Provide a supported psvec.h helper for QR3 quantized row copies (four loads at source offsets 0,4,8,12 and four stores at destination offsets 0,2,4,6); plain vector dereferences discard quantization, and unit-local inline assembly is prohibited.",
    "source": "agent:codex-20261104e-astra-codex-7",
    "created_at": 1793846133,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1794040396
   },
   {
    "id": 663,
@@ -1121238,9 +1121798,9 @@
    "detail": "Expose paired-single matrix-to-FIFO inline helpers in psvec.h: load six/four pairs at offsets 0,8,... before storing each pair to FIFO offset 0; tested matrix helper names are undeclared, and direct inline assembly is prohibited in this unit.",
    "source": "agent:codex-20261104e-codex-150",
    "created_at": 1793848438,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1794040396
   },
   {
    "id": 666,
@@ -1121262,9 +1121822,9 @@
    "detail": "Provide approved psvec.h FIFO-copy helpers equivalent to WriteMTXPS4x3 and WriteMTXPS4x2: load six or four paired-single registers from matrix offsets 0,8,..., then store each to FIFO offset 0; current headers leave both SDK helper names undeclared, and this unit may not define inline assembly.",
    "source": "agent:codex-20261105b-astra-codex-17",
    "created_at": 1793869640,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1794040396
   },
   {
    "id": 668,
@@ -1121274,9 +1121834,9 @@
    "detail": "Missing psvec light-object FIFO helper: retail loads color at +0xC and six paired singles at +0x10 through +0x38, then writes three zero words, color, and the six pairs to the write-gather FIFO; a shared assembly helper is needed because inline assembly is disallowed in this unit.",
    "source": "agent:codex-20261105b-astra-codex-18",
    "created_at": 1793869761,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1794040396
   },
   {
    "id": 669,
@@ -1121298,9 +1121858,9 @@
    "detail": "Expose a supported psvec helper for four qr3 paired loads at source offsets 0/4/8/12 and four qr3 stores at destination offsets 0/2/4/6, with selectable source block offset; __psq_l/__psq_st compile as external calls, while the seed macros ignore their quantization arguments.",
    "source": "agent:codex-20261105b-astra-codex-24",
    "created_at": 1793870114,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1794040396
   },
   {
    "id": 671,
@@ -1121322,9 +1121882,9 @@
    "detail": "Provide a reusable paired-single helper for the QR2 psq_lu/psq_stu conversion-and-interleave sequence; the supplied __psq_l/__psq_st/__ps_merge* declarations are not recognized intrinsics under GC/1.3.2, and unit-local inline assembly is prohibited.",
    "source": "agent:codex-20261105b-astra-codex-23",
    "created_at": 1793870176,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1794040396
   },
   {
    "id": 673,
@@ -1121334,9 +1121894,9 @@
    "detail": "Need exposed psvec.h helpers for 3x4 and 2x4 matrix FIFO transfers, taking source and FIFO pointers: load six/four paired singles at source offsets 0,8,... before storing every pair at FIFO offset 0; the supplied helper API does not identify these routines.",
    "source": "agent:codex-20261105c-astra-codex-16",
    "created_at": 1793873668,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1794040396
   },
   {
    "id": 674,
@@ -1121370,9 +1121930,9 @@
    "detail": "Provide an approved psvec.h helper for the GX light-object FIFO transfer: load six paired singles from source offsets 0x10..0x38, write three zero words and the word at 0xC, then store all six pairs to the FIFO; the documented vector-arithmetic helpers do not express this sequence.",
    "source": "agent:codex-20261105c-astra-codex-17",
    "created_at": 1793873846,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1794040396
   },
   {
    "id": 677,
@@ -1121394,9 +1121954,9 @@
    "detail": "A supported shared helper for QR2 paired-single loads/stores with pointer update and lane merges is needed; the seed's __vec_ld, __vec_st, and __vec_merge* declarations resolve to external calls rather than MWCC intrinsics.",
    "source": "agent:codex-20261105c-astra-codex-22",
    "created_at": 1793874058,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1794040396
   },
   {
    "id": 679,
@@ -1121418,9 +1121978,9 @@
    "detail": "Provide an approved paired-single helper for four GQR3 loads at source offsets 0/4/8/12 and stores at destination offsets 0/2/4/6; ordinary vector dereferences discard quantization, and inline assembly is prohibited in this unit.",
    "source": "agent:codex-20261105c-astra-codex-23",
    "created_at": 1793874131,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1794040396
   },
   {
    "id": 681,
@@ -1121430,9 +1121990,9 @@
    "detail": "This reconstruction needs approved paired-single helpers for quantized update loads/stores (GQR2/GQR7), paired sums, and lane merges; both __PS* and lowercase __ps_* declarations compile as external calls under GC/1.3.2.",
    "source": "agent:codex-20261105c-astra-codex-26",
    "created_at": 1793874248,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1794040396
   },
   {
    "id": 682,
@@ -1121442,9 +1122002,9 @@
    "detail": "Expose psvec.h inline helpers for FIFO matrix transfers: load six pairs at offsets 0,8,16,24,32,40 then store all six to destination offset 0, and a four-pair variant at offsets 0,8,16,24; these are needed by GXLoadTexMtxImm without adding prohibited inline assembly to the unit.",
    "source": "agent:codex-20261105d-astra-codex-11",
    "created_at": 1793875921,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1794040396
   },
   {
    "id": 683,
@@ -1121454,9 +1122014,9 @@
    "detail": "Matching fn_8003B9AC requires an approved psvec.h inline helper for QR2 paired-byte loads/stores with two-byte pointer updates and paired merges; the available helpers do not expose these operations, and local inline assembly is prohibited.",
    "source": "agent:codex-20261105d-astra-codex-17",
    "created_at": 1793876201,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1794040396
   },
   {
    "id": 684,
@@ -1121478,9 +1122038,9 @@
    "detail": "A supported psvec.h helper for the QR3 quantized four-pair row transfer is needed: loads at source offsets 0/4/8/12 and stores at destination offsets 0/2/4/6; native vector dereferences instead emit QR0 indexed accesses, and inline assembly is prohibited in the unit.",
    "source": "agent:codex-20261105d-astra-codex-18",
    "created_at": 1793876281,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1794040396
   },
   {
    "id": 686,
@@ -1121490,9 +1122050,9 @@
    "detail": "fn_8003BB30 needs supported paired-single helpers for qr2/qr7 update loads, qr2 update stores, merges and ps_sum0/ps_sum1; the seed's __PS_* names and tested lowercase/__builtin_ps_* variants compile as external calls. Native vector a*b+c does emit ps_madd.",
    "source": "agent:codex-20261105d-astra-codex-21",
    "created_at": 1793876494,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1794040396
   },
   {
    "id": 687,
@@ -1121514,9 +1122074,9 @@
    "detail": "Expose shared psvec.h helpers for 3x4 and 2x4 matrix-to-FIFO transfers: load all six/four pairs with psq_l (qr0, W=0), then psq_st each pair to the same FIFO address. No such helper interface is supplied in this task's context.",
    "source": "agent:codex-20261105e-astra-codex-11",
    "created_at": 1793883442,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1794040396
   },
   {
    "id": 689,
@@ -1121526,9 +1122086,9 @@
    "detail": "A supported psvec.h light-object FIFO upload helper/prototype is needed for the retail lwz/xor, six psq_l, four stw, and six psq_st sequence; the supplied f64 fallback emits lfd/stfd and inline assembly is prohibited in this unit.",
    "source": "agent:codex-20261105e-astra-codex-12",
    "created_at": 1793883692,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1794040396
   },
   {
    "id": 690,
@@ -1121550,9 +1122110,9 @@
    "detail": "An approved psvec helper implementing QR2 update-form paired-single loads/stores and merges is needed; declaring __vec_ld/__vec_st or __psq_l/__psq_st under pragma intrinsic on still produces external calls in GC/1.3.2.",
    "source": "agent:codex-20261105e-astra-codex-17",
    "created_at": 1793884009,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1794040396
   },
   {
    "id": 692,
@@ -1121562,9 +1122122,9 @@
    "detail": "A shared quantized paired-copy helper is needed in psvec.h: four QR3 loads at source offsets 0,4,8,12 followed by QR3 stores at destination offsets 0,2,4,6, with source-offset variants 16,32,48; the seed macros ignore the quantizer and are not semantically equivalent, while unit-local inline assembl",
    "source": "agent:codex-20261105e-astra-codex-18",
    "created_at": 1793884063,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1794040396
   },
   {
    "id": 693,
@@ -1121598,9 +1122158,9 @@
    "detail": "GXLoadTexMtxImm needs shared paired-single FIFO helpers for 3x4 and 2x4 matrices: load six/four pairs from source offsets 0,8,... into descending FPRs, then store all pairs to destination offset 0. The SDK helper spellings WriteMTXPS4x3 and WriteMTXPS4x2 are undeclared; adding inline-assembly helper",
    "source": "agent:codex-20261105f-astra-codex-10",
    "created_at": 1793886341,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1794040396
   },
   {
    "id": 696,
@@ -1121610,9 +1122170,9 @@
    "detail": "Provide a psvec.h helper for the GX light-object FIFO transfer: load color at +0xC, clear the zero register, load six paired singles at +0x10 through +0x38, then write three zero words, color, and the six pairs to the FIFO; the documented vector arithmetic helpers do not express this sequence and in",
    "source": "agent:codex-20261105f-astra-codex-11",
    "created_at": 1793886510,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1794040396
   },
   {
    "id": 697,
@@ -1121646,9 +1122206,9 @@
    "detail": "A shared paired-single helper is needed for qr3 conversion: four loads at source offsets 0/4/8/12 and four stores at destination offsets 0/2/4/6, with equivalent source-offset groups 16, 32 and 48; the seed macros ignore the GQR argument and therefore are not semantically equivalent to retail. The s",
    "source": "agent:codex-20261105f-astra-codex-17",
    "created_at": 1793886769,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1794040396
   },
   {
    "id": 700,
@@ -1121658,9 +1122218,9 @@
    "detail": "fn_8003B9AC needs a shared paired-single helper for its qr2 load-update, multiply-add, merge, and store-update kernel; the supplied __psq_l/__psq_st/__ps_merge* declarations are not recognized intrinsics under GC/1.3.2.",
    "source": "agent:codex-20261105f-astra-codex-16",
    "created_at": 1793886824,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1794040396
   },
   {
    "id": 701,
@@ -1121670,9 +1122230,9 @@
    "detail": "The seed's __PSQ_L, __PSQ_ST, __PS_SUM0, __PS_SUM1 and merge declarations resolve to external calls, not compiler intrinsics; matching requires shared psvec helpers for quantized update loads/stores, paired sums and merges.",
    "source": "agent:codex-20261105f-astra-codex-20",
    "created_at": 1793887069,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1794040396
   },
   {
    "id": 702,
@@ -1121706,9 +1122266,9 @@
    "detail": "Matching this unit requires shared psvec helpers exposing qr2 psq_lu/psq_stu and paired lane merges; the supplied __psq_l/__psq_st/__ps_merge* declarations produce external calls, while inline assembly is prohibited in the unit.",
    "source": "agent:codex-20261105g-astra-codex-15",
    "created_at": 1793889236,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1794040396
   },
   {
    "id": 705,
@@ -1121718,9 +1122278,9 @@
    "detail": "The __PSQ_L, __PSQ_ST, __PS_SUM0, __PS_SUM1, and merge declarations are not recognized compiler intrinsics; this unit needs supported paired-single helper definitions outside the unit because inline assembly is prohibited.",
    "source": "agent:codex-20261105g-astra-codex-19",
    "created_at": 1793889475,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1794040397
   },
   {
    "id": 706,
@@ -1121766,9 +1122326,9 @@
    "detail": "Provide approved psvec.h helpers for loading six or four consecutive paired-single values and then storing every pair to the same volatile FIFO address; SDK helper name WriteMTXPS4x3 is undeclared, and local inline assembly is prohibited.",
    "source": "agent:codex-20261105i-astra-codex-8",
    "created_at": 1793896222,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1794040397
   },
   {
    "id": 710,
@@ -1121778,9 +1122338,9 @@
    "detail": "Provide an approved psvec.h helper for GXLoadLightObjImm's bulk FIFO payload: load color at +0xC, zero scratch r6, load six pairs at +0x10..+0x38, write three zero words then color, then store all six pairs to the FIFO.",
    "source": "agent:codex-20261105i-astra-codex-9",
    "created_at": 1793896365,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1794040397
   },
   {
    "id": 711,
@@ -1121790,9 +1122350,9 @@
    "detail": "fn_800356B8 is GXLoadLightObjImm: its semantic signature has the light-object pointer and light-ID only; r6 is a zeroed assembly scratch register, not a fourth input argument.",
    "source": "agent:codex-20261105i-astra-codex-9",
    "created_at": 1793896365,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1794040397
   },
   {
    "id": 712,
@@ -1121814,9 +1122374,9 @@
    "detail": "Provide psvec.h helpers equivalent to SDK WriteMTXPS4x3 and WriteMTXPS4x2: load six or four pairs at offsets 0, 8, ... into descending FPRs, then store all pairs to offset zero of a FIFO pointer. The documented psvec arithmetic helpers cannot express these sequences, and inline assembly in this unit",
    "source": "agent:codex-20261105j-astra-codex-11",
    "created_at": 1793899333,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1794040397
   },
   {
    "id": 714,
@@ -1121838,9 +1122398,9 @@
    "detail": "An approved GX light-load helper is needed in psvec.h to express the nonindexed paired-single FIFO transfer block without forbidden inline assembly.",
    "source": "agent:codex-20261105j-astra-codex-12",
    "created_at": 1793899522,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1794040397
   },
   {
    "id": 716,
@@ -1121886,9 +1122446,9 @@
    "detail": "Provide psvec.h helpers for 3x4 and 2x4 matrix FIFO uploads: load six/four pairs at offsets 0,8,... into f5..f0/f3..f0, then psq_st every pair to offset 0 of the FIFO pointer, all using qr0 with W=0. The existing GXLoadTexMtxImm command setup already matches; these helpers would replace only its two",
    "source": "agent:codex-20261105k-astra-codex-7",
    "created_at": 1793902824,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1794040397
   },
   {
    "id": 720,
@@ -1121898,9 +1122458,9 @@
    "detail": "An approved psvec.h helper for loading the light object's six paired-single values at offsets 0x10..0x38 and streaming them to the write-gather FIFO is needed; existing scalar C cannot emit the nonindexed paired-single transfers.",
    "source": "agent:codex-20261105k-astra-codex-8",
    "created_at": 1793902991,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1794040397
   },
   {
    "id": 721,
@@ -1121922,9 +1122482,9 @@
    "detail": "A shared paired-single helper for QR2 quantized update-form loads/stores and lane merges is needed; the supplied __psq_l/__psq_st/__ps_merge* declarations are not recognized as MWCC intrinsics and introduce calls plus register-save frames.",
    "source": "agent:codex-20261105k-astra-codex-13",
    "created_at": 1793903569,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1794040397
   },
   {
    "id": 723,
@@ -1121934,9 +1122494,9 @@
    "detail": "Expose an approved psvec.h helper for the qr3 quantized row copies (four paired loads at offsets 0,4,8,12 and stores at 0,2,4,6); the seed's vector-dereference macros ignore the quantization argument and emit qr0 psq_lx/psq_stx.",
    "source": "agent:codex-20261105k-astra-codex-14",
    "created_at": 1793903709,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1794040397
   },
   {
    "id": 724,
@@ -1121970,9 +1122530,9 @@
    "detail": "Provide supported inline paired-single FIFO helpers in psvec.h for 3x4 and 2x4 matrices: respectively six and four psq_l loads at consecutive 8-byte offsets followed by psq_st stores to one FIFO address; WriteMTXPS3x4 and WriteMTXPS2x4 currently compile as undeclared external calls.",
    "source": "agent:codex-20261105l-astra-codex-7",
    "created_at": 1793906101,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1794040397
   },
   {
    "id": 727,
@@ -1122006,9 +1122566,9 @@
    "detail": "An approved inline helper is needed for the GX light FIFO transfer: load the word at +0xC and six paired-single values at +0x10 through +0x38, then write three zero words, the loaded word, and the six pairs to the FIFO; the supplied psvec operations do not expose this transfer.",
    "source": "agent:codex-20261105l-astra-codex-8",
    "created_at": 1793906272,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1794040397
   },
   {
    "id": 730,
@@ -1122042,9 +1122602,9 @@
    "detail": "Provide a sanctioned psvec.h helper for quantized byte rescale/interleave: four source paired loads and four destination paired stores using qr2, each updating its pointer by 2, with paired multiply-add and merge00/10/01/11; the seed's __builtin_psq_l/st and merge declarations are unresolved externa",
    "source": "agent:codex-20261105l-astra-codex-13",
    "created_at": 1793906806,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1794040397
   },
   {
    "id": 733,
@@ -1122054,9 +1122614,9 @@
    "detail": "Matching requires an approved GQR3 paired-load/store helper; the documented psvec helpers cover qr0 operations, and inline assembly is prohibited in this unit.",
    "source": "agent:codex-20261105l-astra-codex-14",
    "created_at": 1793906945,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1794040397
   },
   {
    "id": 734,
@@ -1122078,9 +1122638,9 @@
    "detail": "The seed relies on unde\ufb01ned __PSQ_L/__PSQ_ST and paired merge/sum helpers; psvec.h needs quantized update-load/store and paired arithmetic helpers for this function to be representable without adding inline assembly to the unit.",
    "source": "agent:codex-20261105l-astra-codex-17",
    "created_at": 1793907314,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1794040397
   },
   {
    "id": 736,
@@ -1122102,9 +1122662,9 @@
    "detail": "Expose or document psvec.h helpers for matrix-to-FIFO copies: one loads six paired singles at offsets 0,8,16,24,32,40 before storing all six to FIFO offset 0; another loads four at 0,8,16,24 before storing all four to FIFO offset 0. The supplied helper documentation covers vector arithmetic/set only",
    "source": "agent:codex-20261105m-astra-codex-7",
    "created_at": 1793909265,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1794040397
   },
   {
    "id": 738,
@@ -1122126,9 +1122686,9 @@
    "detail": "This unit needs a shared psvec.h helper for the retail QR2 load-update, scale/bias, lane-merge, and store-update block; ordinary vector C cannot emit the required immediate update forms, and unit-local inline assembly is prohibited.",
    "source": "agent:codex-20261105m-astra-codex-13",
    "created_at": 1793909804,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1794040397
   },
   {
    "id": 740,
@@ -1122138,9 +1122698,9 @@
    "detail": "Provide a shared psvec.h helper for four qr3 paired loads at source offsets 0,4,8,12 and stores at destination offsets 0,2,4,6, with selectable source-row offset; the current __PSQ_L/__PSQ_ST macros incorrectly dereference qr0 vectors, and removing them confirms these names are undeclared. Inline as",
    "source": "agent:codex-20261105m-astra-codex-14",
    "created_at": 1793909883,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1794040397
   },
   {
    "id": 741,
@@ -1122162,9 +1122722,9 @@
    "detail": "A shared paired-single helper is needed for qr2/qr7 update-form loads/stores and ps_sum0/ps_sum1/ps_merge10; the declared __PS_* names compile as external calls, while new inline assembly is prohibited.",
    "source": "agent:codex-20261105m-astra-codex-17",
    "created_at": 1793910186,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1794040397
   },
   {
    "id": 743,
@@ -1122270,9 +1122830,9 @@
    "detail": "Expose paired-single matrix-to-FIFO helpers for six pairs (48 bytes) and four pairs (32 bytes), loading all pairs before repeatedly storing to the same FIFO address; the documented vector helpers do not implement these sequences.",
    "source": "agent:codex-20261105o-astra-codex-13",
    "created_at": 1793925940,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1794040397
   },
   {
    "id": 752,
@@ -1122282,9 +1122842,9 @@
    "detail": "The supplied helper interface lacks a GX light-object FIFO transfer helper for the block at 0x800356DC\u20130x80035720: load color at +0xC, zero scratch r6, load six paired-single values at +0x10 through +0x38, write three zero words and color, then write the six pairs. Expose a sanctioned inline helper ",
    "source": "agent:codex-20261105o-astra-codex-15",
    "created_at": 1793926371,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1794040397
   },
   {
    "id": 753,
@@ -1122318,9 +1122878,9 @@
    "detail": "Provide an approved psvec helper for the qr2 quantized load/scale/interleave/store block: the seed's __PSQ_L/__PSQ_ST/__PS_MERGE* declarations and tested lowercase variants remain external calls under GC/1.3.2, while local inline assembly is prohibited.",
    "source": "agent:codex-20261105p-astra-codex-3",
    "created_at": 1793927035,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1794040397
   },
   {
    "id": 756,
@@ -1122366,9 +1122926,9 @@
    "detail": "Provide an approved psvec.h helper for the qr3 four-pair copy sequence (source offsets 0/4/8/12, destination offsets 0/2/4/6), with variants or an offset parameter for source rows 16, 32, and 48; direct vector dereferences select qr0 and inline assembly is prohibited in this unit.",
    "source": "agent:codex-20261105p-astra-codex-4",
    "created_at": 1793927092,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1794040397
   },
   {
    "id": 760,
@@ -1122378,9 +1122938,9 @@
    "detail": "Provide a shared inline GX light-object transfer helper for the retail block from lwz r0, 0xc(r3) through the sixth psq_st; the supplied psvec helper interface does not cover this transfer.",
    "source": "agent:codex-20261105p-astra-codex-7",
    "created_at": 1793927162,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1794040397
   },
   {
    "id": 761,
@@ -1122438,9 +1122998,9 @@
    "detail": "Please expose/document psvec.h inline helpers for copying six or four paired singles from matrix offsets 0,8,... to FIFO offset 0; the supplied context documents only vector arithmetic helpers, insufficient for this retail transport sequence.",
    "source": "agent:codex-20261105p-codex-150",
    "created_at": 1793929366,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1794040397
   },
   {
    "id": 766,
@@ -1122474,9 +1123034,9 @@
    "detail": "Provide a shared psvec.h helper for qr3 paired loads/stores (four pairs loaded at byte offsets 0,4,8,12 and stored at 0,2,4,6); C vector dereferences hardcode qr0 and emit indexed forms, while inline assembly in this unit is prohibited.",
    "source": "agent:codex-20261105q-astra-codex-4",
    "created_at": 1793937184,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1794040397
   },
   {
    "id": 769,
@@ -1122498,9 +1123058,9 @@
    "detail": "Provide supported inline helpers for quantized paired-single update loads/stores (qr2/qr7), ps_sum0/ps_sum1, and paired merges/madd; the seed's __PS_* names are ordinary unresolved extern functions, not compiler intrinsics.",
    "source": "agent:codex-20261105q-astra-codex-6",
    "created_at": 1793937234,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1794040397
   },
   {
    "id": 771,
@@ -1122534,9 +1123094,9 @@
    "detail": "Provide a shared QR2 paired-single conversion helper for the 16-instruction load/multiply-add/merge/store block; the existing __psq_l/__psq_st/__ps_merge* declarations resolve to external calls, not compiler intrinsics.",
    "source": "agent:codex-20261105r-astra-codex-2",
    "created_at": 1793943891,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1794040397
   },
   {
    "id": 774,
@@ -1122558,9 +1123118,9 @@
    "detail": "Provide a shared helper for the qr3 four-pair load/store row (source offsets 0, 4, 8, 12; destination offsets 0, 2, 4, 6), with variants for source offsets 16, 32, and 48; native vector accesses discard the required quantization and emit indexed instructions, while unit-local inline assembly is proh",
    "source": "agent:codex-20261105r-astra-codex-3",
    "created_at": 1793943943,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1794040398
   },
   {
    "id": 776,
@@ -1122630,9 +1123190,9 @@
    "detail": "Expose approved psvec.h helpers equivalent to SDK WriteMTXPS4x3 and WriteMTXPS4x2: load six/four pairs with psq_l at offsets 0,8,..., then psq_st each pair to offset 0 of a volatile FIFO pointer; custom inline asm is prohibited in this unit.",
    "source": "agent:codex-20261105r-codex-146",
    "created_at": 1793946821,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1794040398
   },
   {
    "id": 782,
@@ -1122666,9 +1123226,9 @@
    "detail": "An approved shared paired-single helper interface is needed for qr2/qr7 psq_lu/psq_stu and ps_sum0/ps_sum1; the supplied __PS_* declarations are external calls, and defining assembly helpers within this unit is prohibited.",
    "source": "agent:codex-20261105s-astra-codex-3",
    "created_at": 1793947453,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1794040398
   },
   {
    "id": 785,
@@ -1122678,9 +1123238,9 @@
    "detail": "Provide shared psvec.h helpers for displacement-form QR3 paired loads/stores (source offsets 0..60 by 4, destination offsets 0,2,4,6); the existing vector-dereference macros ignore their quantization arguments, and inline assembly is forbidden in this unit.",
    "source": "agent:codex-20261105s-astra-codex-1",
    "created_at": 1793947467,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1794040398
   },
   {
    "id": 786,
@@ -1122702,9 +1123262,9 @@
    "detail": "fn_8003B9AC needs an approved psvec helper for its QR2 update-load/store conversion block; ordinary vector C and the supplied pseudo-intrinsic declarations do not emit the required instructions.",
    "source": "agent:codex-20261105s-codex-150",
    "created_at": 1793949842,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1794040398
   },
   {
    "id": 788,
@@ -1122714,9 +1123274,9 @@
    "detail": "Add shared psvec.h inline helpers for 3x4 and 2x4 FIFO matrix transfers: load all six/four pairs with psq_l at offsets 0,8,... before psq_st of each pair at FIFO offset 0; inline assembly is prohibited in the assigned unit.",
    "source": "agent:codex-20261105s-codex-144",
    "created_at": 1793949901,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1794040398
   },
   {
    "id": 789,
@@ -1122726,9 +1123286,9 @@
    "detail": "Missing psvec.h helper for the GXLoadLightObjImm transfer: load color at +0xC, zero a scratch GPR, load six paired singles at +0x10..+0x38, write three zero words and color, then write the six pairs to the FIFO. Raw inline assembly is prohibited in this unit.",
    "source": "agent:codex-20261105s-codex-145",
    "created_at": 1793949968,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1794040398
   },
   {
    "id": 790,
@@ -1122738,9 +1123298,9 @@
    "detail": "fn_800356B8 is GXLoadLightObjImm-like and consumes only r3/r4; the inferred arg2/arg3 are scratch registers, since xor r6,r6,r6 does not read an incoming argument.",
    "source": "agent:codex-20261105s-codex-145",
    "created_at": 1793949968,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1794040398
   },
   {
    "id": 791,
@@ -1122750,9 +1123310,9 @@
    "detail": "GXLoadTexMtxImm needs psvec.h helpers that load six pairs (3x4) or four pairs (2x4) from a matrix, then psq_st every pair to offset zero of the FIFO pointer; the documented psvec arithmetic/set helpers do not provide this operation, and unit-local inline assembly is prohibited.",
    "source": "agent:codex-20261105t-astra-codex-3",
    "created_at": 1793950776,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1794040398
   },
   {
    "id": 792,
@@ -1122762,9 +1123322,9 @@
    "detail": "Matching requires an approved psvec.h helper that loads six float pairs at source offsets 0x10..0x38, then streams three zero words, the source word at 0xC, and those six pairs to the FIFO; scalar f64 accesses cannot generate the retail paired-single instructions.",
    "source": "agent:codex-20261105t-astra-codex-5",
    "created_at": 1793951131,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1794040398
   },
   {
    "id": 793,
@@ -1122822,9 +1123382,9 @@
    "detail": "This unit needs a supported paired-single helper for qr2 quantized loads/stores with pointer updates and the four merge operations; the supplied builtin spellings are ordinary external calls under GC/1.3.2, while inline assembly is prohibited in this task.",
    "source": "agent:codex-20261105t-astra-codex-10",
    "created_at": 1793951574,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1794040398
   },
   {
    "id": 798,
@@ -1122846,9 +1123406,9 @@
    "detail": "A shared psvec.h helper for the qr3 quantized four-pair load/store sequence is needed: source offsets 0/4/8/12, destination offsets 0/2/4/6, preserving four simultaneous paired values; plain C vector accesses cannot express the retail quantization or displacement forms under GC/1.3.2.",
    "source": "agent:codex-20261105t-astra-codex-11",
    "created_at": 1793951655,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1794040398
   },
   {
    "id": 800,
@@ -1122918,9 +1123478,9 @@
    "detail": "Expose psvec.h inline helpers for 3x4 and 2x4 matrix-to-FIFO transfers (all paired loads before stores); these require immediate-offset psq_l/psq_st, which ordinary C cannot generate under the no-inline-assembly constraint.",
    "source": "agent:codex-20261105u-astra-codex-4",
    "created_at": 1793956107,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1794040398
   },
   {
    "id": 806,
@@ -1122942,9 +1123502,9 @@
    "detail": "Provide an approved psvec.h helper for the qr2 update-form paired-single load, multiply-add, merge, and store sequence; the documented qr0 helpers cannot express this function, and inline assembly is prohibited in the unit.",
    "source": "agent:codex-20261105u-astra-codex-11",
    "created_at": 1793956634,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1794040398
   },
   {
    "id": 808,
@@ -1122966,9 +1123526,9 @@
    "detail": "Provide a shared quantized paired-single copy helper for qr3: load four pairs at source offsets 0, 4, 8, 12 and store them at destination offsets 0, 2, 4, 6; the existing __PSQ_L/__PSQ_ST macros discard their GQR argument, changing conversion semantics. Immediate-offset variants for source offsets 1",
    "source": "agent:codex-20261105u-astra-codex-12",
    "created_at": 1793956693,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1794040398
   },
   {
    "id": 810,
@@ -1123026,9 +1123586,9 @@
    "detail": "The supplied helper interface does not expose a matrix-to-FIFO operation. Please provide psvec.h inline helpers for loading six (3x4) or four (2x4) consecutive paired singles before storing every pair to the same FIFO address; the target uses descending FPRs f5..f0 or f3..f0. These can replace the t",
    "source": "agent:codex-20261105v-astra-codex-4",
    "created_at": 1793958977,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1794040398
   },
   {
    "id": 815,
@@ -1123038,9 +1123598,9 @@
    "detail": "Expose a shared light-object FIFO helper through psvec.h: load the word at object +0x0C and six paired singles at +0x10 through +0x38, then write three zero words, the loaded word, and the six pairs to the FIFO.",
    "source": "agent:codex-20261105v-astra-codex-6",
    "created_at": 1793959304,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1794040398
   },
   {
    "id": 816,
@@ -1123062,9 +1123622,9 @@
    "detail": "Matching requires an approved shared helper for the qr2 update-addressing paired-single conversion/interleave block; existing psvec helpers cover different operations, while __builtin_psq_l/__builtin_psq_st and merge spellings remain external calls.",
    "source": "agent:codex-20261105v-astra-codex-11",
    "created_at": 1793959617,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1794040398
   },
   {
    "id": 818,
@@ -1123074,9 +1123634,9 @@
    "detail": "Please expose a supported psvec.h quantized-copy helper: load four pairs with qr3 at source offsets 0/4/8/12 and store them with qr3 at destination offsets 0/2/4/6, allowing source offsets 16/32/48 for subsequent rows. The supplied vector-dereference macros ignore the GQR argument, and inline assemb",
    "source": "agent:codex-20261105v-astra-codex-12",
    "created_at": 1793959689,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1794040398
   },
   {
    "id": 819,
@@ -1123110,9 +1123670,9 @@
    "detail": "A shared paired-single helper is needed for psq_lu/psq_stu (qr2/qr7), ps_sum0/ps_sum1, ps_merge10 and ps_madd; the seed's declared __PS_* names are not recognized intrinsics, and inline assembly is disallowed in this unit.",
    "source": "agent:codex-20261105v-astra-codex-14",
    "created_at": 1793959769,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1794040398
   },
   {
    "id": 822,
@@ -1123218,9 +1123778,9 @@
    "detail": "Expose shared paired-single 3x4 and 2x4 matrix-to-FIFO copy helpers (six or four paired loads followed by stores to one volatile FIFO address); ordinary C cannot reproduce the required immediate-form psq_l/psq_st instructions.",
    "source": "agent:codex-20261105w-astra-codex-4",
    "created_at": 1793961812,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1794040398
   },
   {
    "id": 831,
@@ -1123230,9 +1123790,9 @@
    "detail": "Provide a shared psvec.h helper for the GX light-object FIFO transfer: load color at +0xC and six paired singles at +0x10 through +0x38, then write three zero words, color, and all six pairs to the FIFO; the existing helpers do not express this block.",
    "source": "agent:codex-20261105w-astra-codex-6",
    "created_at": 1793962153,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1794040398
   },
   {
    "id": 832,
@@ -1123278,9 +1123838,9 @@
    "detail": "A shared helper supporting qr2 quantized update loads/stores and paired merges is needed outside this unit; the supplied psvec.h helpers cannot express this leaf conversion loop.",
    "source": "agent:codex-20261105w-astra-codex-11",
    "created_at": 1793962532,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1794040398
   },
   {
    "id": 836,
@@ -1123314,9 +1123874,9 @@
    "detail": "This unit needs approved GQR3 quantized paired-load/store helpers exposed through psvec.h; the supplied vector-dereference macros ignore their quantization argument, and adding inline assembly in the unit is prohibited.",
    "source": "agent:codex-20261105w-astra-codex-12",
    "created_at": 1793962598,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1794040398
   },
   {
    "id": 839,
@@ -1123386,9 +1123946,9 @@
    "detail": "Provide shared inline paired-single matrix-to-FIFO helpers for six pairs (3x4) and four pairs (2x4), loading all pairs before storing; no such helper is identified in the supplied psvec.h context.",
    "source": "agent:codex-20261105x-astra-codex-4",
    "created_at": 1793964841,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1794040398
   },
   {
    "id": 845,
@@ -1123398,9 +1123958,9 @@
    "detail": "A shared paired-single light-object FIFO helper is missing: load color at +0x0C, clear a scratch GPR with xor, load six pairs at +0x10 through +0x38, then write three zero words, color, and the six pairs to the FIFO; the supplied psvec arithmetic helpers cannot express this sequence, and unit-local ",
    "source": "agent:codex-20261105x-astra-codex-6",
    "created_at": 1793965060,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1794040399
   },
   {
    "id": 846,
@@ -1123434,9 +1123994,9 @@
    "detail": "Matching fn_8003B9AC requires an approved inline helper for its qr2 quantized load-update/store-update, ps_madd, and ps_merge00/10/01/11 block; current declared builtins are external calls, not MWCC intrinsics.",
    "source": "agent:codex-20261105x-astra-codex-11",
    "created_at": 1793965453,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1794040399
   },
   {
    "id": 849,
@@ -1123470,9 +1124030,9 @@
    "detail": "A paired-single helper is needed for four GQR3 loads at source offsets 0, 4, 8, 12 followed by four GQR3 stores at destination offsets 0, 2, 4, 6, supporting source row offsets 0, 16, 32, 48 without extra address instructions; ordinary __vec2x32float__ accesses emit indexed GQR0 operations, while __",
    "source": "agent:codex-20261105x-astra-codex-12",
    "created_at": 1793965565,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1794040399
   },
   {
    "id": 852,
@@ -1123542,9 +1124102,9 @@
    "detail": "Provide shared inline helpers in psvec.h for 48-byte and 32-byte matrix FIFO uploads: load six pairs at offsets 0,8,16,24,32,40 into f5..f0 (or four into f3..f0), then psq_st each to offset 0 of the FIFO pointer, with W=0 and qr0. The integer command setup already matches; new inline assembly is pro",
    "source": "agent:codex-20261105y-astra-codex-4",
    "created_at": 1793967740,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1794040399
   },
   {
    "id": 858,
@@ -1123602,9 +1124162,9 @@
    "detail": "A quantized paired-single helper is needed for four QR3 loads at source offsets 0/4/8/12 and stores at destination offsets 0/2/4/6, with source-base offsets 0/16/32/48; the supplied psvec helper interface does not identify an operation supporting this sequence, and inline assembly is prohibited in t",
    "source": "agent:codex-20261105y-astra-codex-12",
    "created_at": 1793968421,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1794040399
   },
   {
    "id": 863,
@@ -1123686,9 +1124246,9 @@
    "detail": "Expose paired-single GX FIFO stream helpers in psvec.h for 3x4 and 2x4 matrices: load all six or four pairs at offsets 0,8,... into descending FPRs, then store each pair to offset zero of the FIFO pointer. These helpers are needed to replace the remaining f64 transfer blocks without adding inline as",
    "source": "agent:codex-20261105z-astra-codex-4",
    "created_at": 1793970562,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1794040399
   },
   {
    "id": 870,
@@ -1123710,9 +1124270,9 @@
    "detail": "A shared psvec.h helper for the light-object FIFO payload is needed to express the six displacement-form paired-single loads and six FIFO stores without unit-local inline assembly.",
    "source": "agent:codex-20261105z-astra-codex-6",
    "created_at": 1793970777,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1794040399
   },
   {
    "id": 872,
@@ -1123734,9 +1124294,9 @@
    "detail": "A shared paired-single helper implementing qr2 update loads/stores and merge00/10/01/11 is needed outside this unit; the seed's __builtin_psq_* and __builtin_ps_merge* declarations resolve to external calls.",
    "source": "agent:codex-20261105z-astra-codex-11",
    "created_at": 1793971207,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1794040399
   },
   {
    "id": 874,
@@ -1123746,9 +1124306,9 @@
    "detail": "Provide or identify a quantized paired-single helper for four qr3 pair loads at source offsets 0,4,8,12 and stores at destination offsets 0,2,4,6; ordinary __vec2x32float__ accesses cannot express retail's displacement-form qr3 instructions.",
    "source": "agent:codex-20261105z-astra-codex-12",
    "created_at": 1793971227,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1794040399
   },
   {
    "id": 875,
@@ -1123818,9 +1124378,9 @@
    "detail": "Provide approved psvec.h helpers for 3x4 and 2x4 FIFO transfers: load all six or four float pairs at offsets 0,8,... from the matrix, then psq_st each pair to offset zero of the FIFO pointer. The listed vector helpers do not express these batched transfers.",
    "source": "agent:codex-20261106a-astra-codex-4",
    "created_at": 1793996554,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1794040399
   },
   {
    "id": 881,
@@ -1123830,9 +1124390,9 @@
    "detail": "Add a shared psvec.h light-object FIFO helper for the color load, three zero words, and six displacement-form psq_l/psq_st pairs; this assembly region cannot be expressed by the available C vector operations.",
    "source": "agent:codex-20261106a-astra-codex-6",
    "created_at": 1793996777,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1794040399
   },
   {
    "id": 882,
@@ -1123878,9 +1124438,9 @@
    "detail": "A shared inline paired-single helper is needed for the qr2 load/scale/lane-interleave/store block; the seed's __builtin_psq_l, __builtin_psq_st, and __builtin_ps_merge* spellings compile as external calls.",
    "source": "agent:codex-20261106a-astra-codex-11",
    "created_at": 1793997076,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1794040399
   },
   {
    "id": 886,
@@ -1123890,9 +1124450,9 @@
    "detail": "Provide a psvec.h helper for copying four pairs from source offsets 0,4,8,12 to destination offsets 0,2,4,6 using GQR3, with variants for source offsets 16,32,48; the supplied qr0 helpers cannot represent these quantized accesses, and inline assembly is prohibited in this unit.",
    "source": "agent:codex-20261106a-astra-codex-12",
    "created_at": 1793997122,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1794040399
   },
   {
    "id": 887,
@@ -1123914,9 +1124474,9 @@
    "detail": "fn_8003BB30 needs a supported paired-single helper for quantized loads/stores (qr2/qr7), ps_sum0/ps_sum1, lane merges, and multiply-add; the seed's __ps_* declarations produce unresolved external calls even with pragma intrinsic.",
    "source": "agent:codex-20261106a-astra-codex-14",
    "created_at": 1793997261,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1794040399
   },
   {
    "id": 889,
@@ -1123950,9 +1124510,9 @@
    "detail": "Expose inline paired-single FIFO transfer helpers (SDK WriteMTXPS4x3 and WriteMTXPS4x2 equivalents) through psvec.h: load six/four pairs at offsets 0,8,... into descending FPRs, then psq_st each to FIFO offset 0. The supplied context exposes only vector arithmetic/set helpers; scalar or f64 C cannot",
    "source": "agent:codex-20261106b-astra-codex-4",
    "created_at": 1793999110,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1794040399
   },
   {
    "id": 892,
@@ -1123998,9 +1124558,9 @@
    "detail": "Provide a reusable quantized paired-single copy helper supporting qr3: four loads at source offsets 0, 4, 8, 12 followed by stores at destination offsets 0, 2, 4, 6, with corresponding source-offset variants 16, 32, and 48. The existing vector-dereference reconstruction ignores the quantization argu",
    "source": "agent:codex-20261106b-astra-codex-12",
    "created_at": 1793999696,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1794040399
   },
   {
    "id": 896,
@@ -1124010,9 +1124570,9 @@
    "detail": "Matching this unit requires an approved paired-single helper supporting qr2 psq_lu/psq_stu and the four lane-merge operations; the seed's __builtin_psq_l, __builtin_psq_st, and __builtin_ps_mergeXX spellings compile as external calls.",
    "source": "agent:codex-20261106b-astra-codex-11",
    "created_at": 1793999722,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1794040399
   },
   {
    "id": 897,
@@ -1124106,9 +1124666,9 @@
    "detail": "Provide shared paired-single FIFO-copy helpers for 3x4 and 2x4 matrices: load six/four pairs from source offsets 0,8,... into f5..f0/f3..f0 before storing every pair at destination offset 0, using psq_l/psq_st with W=0 and qr0. Existing scalar f64 copying cannot reproduce these instructions under th",
    "source": "agent:codex-20261106c-astra-codex-4",
    "created_at": 1794001817,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1794040399
   },
   {
    "id": 905,
@@ -1124118,9 +1124678,9 @@
    "detail": "Provide an approved psvec.h helper for the GX light-object upload: load six pairs at offsets 0x10..0x38, then store all six pairs to the FIFO at offset zero; ordinary __vec2x32float__ accesses generate indexed PSQ instructions instead of retail's immediate forms.",
    "source": "agent:codex-20261106c-astra-codex-6",
    "created_at": 1794001925,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1794040400
   },
   {
    "id": 906,
@@ -1124154,9 +1124714,9 @@
    "detail": "Provide or expose a paired-single helper for the qr3 conversion: four loads at source offsets 0, 4, 8, 12 followed by four stores at destination offsets 0, 2, 4, 6, with variants for source offsets 16, 32, and 48; the supplied psvec helper descriptions do not cover these operations.",
    "source": "agent:codex-20261106c-astra-codex-12",
    "created_at": 1794002424,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1794040400
   },
   {
    "id": 909,
@@ -1124202,9 +1124762,9 @@
    "detail": "Add psvec.h helpers for copying 12 or 8 matrix floats to the volatile GX FIFO: load six or four pairs with psq_l at offsets 0,8,..., then store every pair with psq_st at FIFO offset 0. Existing vector arithmetic/set helpers cannot express GXLoadTexMtxImm's retail blocks.",
    "source": "agent:codex-20261106d-astra-codex-4",
    "created_at": 1794003900,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1794040400
   },
   {
    "id": 913,
@@ -1124226,9 +1124786,9 @@
    "detail": "An approved psvec light-object FIFO upload helper is needed to express the six immediate-displacement paired-single loads and stores without unit-local inline assembly.",
    "source": "agent:codex-20261106d-astra-codex-6",
    "created_at": 1794004352,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1794040400
   },
   {
    "id": 915,
@@ -1124274,9 +1124834,9 @@
    "detail": "A shared paired-single helper is needed for the 16-instruction qr2 load/scale/interleave/store block; existing psvec helpers do not cover this operation.",
    "source": "agent:codex-20261106d-astra-codex-11",
    "created_at": 1794004553,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1794040400
   },
   {
    "id": 919,
@@ -1124286,9 +1124846,9 @@
    "detail": "fn_12_12324 needs an approved quantized-copy helper in psvec.h: four paired-single loads using qr3 at source offsets 0,4,8,12, followed by four paired-single stores using qr3 at destination offsets 0,2,4,6; source groups begin at 0,16,32,48. The current __PSQ_L/__PSQ_ST macros ignore the quantizatio",
    "source": "agent:codex-20261106d-astra-codex-12",
    "created_at": 1794004611,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1794040400
   },
   {
    "id": 920,
@@ -1124310,9 +1124870,9 @@
    "detail": "Provide permitted paired-single helpers for quantized update loads/stores and sum/merge operations; the seed's __ps_* names are not recognized as GC/1.3.2 intrinsics.",
    "source": "agent:codex-20261106d-astra-codex-14",
    "created_at": 1794004745,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1794040400
   },
   {
    "id": 922,
@@ -1124346,9 +1124906,9 @@
    "detail": "Expose psvec.h inline helpers for loading six or four consecutive paired singles from a matrix and writing all pairs to one volatile FIFO address; GXLoadTexMtxImm needs these fixed-offset psq_l/psq_st sequences, and inline assembly cannot be added within this unit.",
    "source": "agent:codex-20261106e-astra-codex-4",
    "created_at": 1794006918,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1794040400
   },
   {
    "id": 925,
@@ -1124358,9 +1124918,9 @@
    "detail": "Provide an approved psvec.h light-upload helper for the retail sequence: load word +0xC, zero three FIFO words, write that word, and transfer six paired-single values from +0x10 through +0x38 to the FIFO; direct inline assembly is prohibited in this unit.",
    "source": "agent:codex-20261106e-astra-codex-6",
    "created_at": 1794007035,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1794040400
   },
   {
    "id": 926,
@@ -1124406,9 +1124966,9 @@
    "detail": "Provide an approved psvec.h helper for qr3 quantized paired loads/stores (four pairs per row, source offsets 0/4/8/12 and destination offsets 0/2/4/6, with four rows per loop); plain __vec2x32float__ accesses emit psq_lx/psq_stx with qr0, and new inline assembly is prohibited.",
    "source": "agent:codex-20261106e-astra-codex-12",
    "created_at": 1794007481,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1794040400
   },
   {
    "id": 930,
@@ -1124430,9 +1124990,9 @@
    "detail": "fn_8003BB30 needs an approved paired-single kernel helper: its __ps_* declarations are emitted as external calls, while retail uses psq_lu/psq_stu with qr2/qr7, ps_sum0/ps_sum1, ps_merge10, and ps_madd.",
    "source": "agent:codex-20261106e-astra-codex-14",
    "created_at": 1794007600,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1794040400
   },
   {
    "id": 932,
@@ -1124502,9 +1125062,9 @@
    "detail": "Provide inline paired-single FIFO-copy helpers that load six or four pairs from consecutive matrix offsets before storing every pair to offset zero of the FIFO pointer; the documented psvec helpers do not expose these operations.",
    "source": "agent:codex-20261106f-astra-codex-4",
    "created_at": 1794009872,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1794040400
   },
   {
    "id": 938,
@@ -1124514,9 +1125074,9 @@
    "detail": "A light-upload helper is missing: it must load color at +0xC, zero the three reserved FIFO words, load six paired singles at +0x10 through +0x38, then write color and the six pairs to the FIFO using displacement-form psq_l/psq_st. Existing psvec operations cannot express this instruction sequence wi",
    "source": "agent:codex-20261106f-astra-codex-6",
    "created_at": 1794010209,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1794040400
   },
   {
    "id": 939,
@@ -1124550,9 +1125110,9 @@
    "detail": "A supported paired-single helper is needed for qr2 update-form loads/stores and lane merges; the seed's __builtin_psq_l, __builtin_psq_st, and __builtin_ps_merge* declarations currently emit external calls.",
    "source": "agent:codex-20261106f-astra-codex-11",
    "created_at": 1794010457,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1794040400
   },
   {
    "id": 942,
@@ -1124562,9 +1125122,9 @@
    "detail": "A shared psvec.h helper is needed for the four-pair GQR3 conversion (source offsets 0/4/8/12, destination offsets 0/2/4/6); the supplied vector-access macros discard the quantization arguments, and inline assembly is prohibited in this unit.",
    "source": "agent:codex-20261106f-astra-codex-12",
    "created_at": 1794010529,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1794040400
   },
   {
    "id": 943,
@@ -1124574,9 +1125134,9 @@
    "detail": "An approved psvec helper is needed for qr2/qr7 quantized loads, paired sums/merges, and updating stores; the declared __ps_* names are not recognized as intrinsics, and inline assembly is prohibited in this unit.",
    "source": "agent:codex-20261106f-astra-codex-14",
    "created_at": 1794010678,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1794040400
   },
   {
    "id": 944,
@@ -1124586,9 +1125146,9 @@
    "detail": "Provide approved inline helpers in psvec.h for WriteMTXPS4x3 and WriteMTXPS4x2: load six/four float pairs at successive 8-byte source offsets, then psq_st every pair to offset 0 of the FIFO pointer, using qr0 and W=0. The existing scalar copies cannot reproduce those instructions.",
    "source": "agent:codex-20261107a-astra-codex-4",
    "created_at": 1794013185,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1794040400
   },
   {
    "id": 945,
@@ -1124598,9 +1125158,9 @@
    "detail": "Provide a psvec.h light-upload helper for the retail block: load color at +0xC, zero a GPR with xor, load six pairs at +0x10 through +0x38, then write three zero words, color, and six pairs to the FIFO; available C vector forms cannot emit its immediate-displacement paired-single transfers.",
    "source": "agent:codex-20261107a-astra-codex-6",
    "created_at": 1794013397,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1794040400
   },
   {
    "id": 946,
@@ -1124658,9 +1125218,9 @@
    "detail": "fn_8003B9AC needs a shared helper exposing qr2 quantized paired-single load/store-update operations and lane merges; the supplied psvec helpers do not cover this operation.",
    "source": "agent:codex-20261107a-astra-codex-11",
    "created_at": 1794013770,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1794040400
   },
   {
    "id": 951,
@@ -1124670,9 +1125230,9 @@
    "detail": "The available documented psvec.h helpers do not expose the retail qr3 row conversion (four paired loads at source offsets 0,4,8,12 followed by four paired stores at destination offsets 0,2,4,6); provide a supported helper for this operation before further register-allocation tuning.",
    "source": "agent:codex-20261107a-astra-codex-12",
    "created_at": 1794013775,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1794040400
   },
   {
    "id": 952,
@@ -1124694,9 +1125254,9 @@
    "detail": "GXLoadTexMtxImm needs exposed inline helpers for 3x4 and 2x4 matrix-to-FIFO transfers (six or four paired-single loads followed by stores to one FIFO address); the documented psvec arithmetic/set helpers do not express these sequences, and new inline assembly is prohibited in this unit.",
    "source": "agent:codex-20261107b-astra-codex-4",
    "created_at": 1794015387,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1794040400
   },
   {
    "id": 954,
@@ -1124706,9 +1125266,9 @@
    "detail": "Missing light-upload helper: load color at object+0xC, zero three FIFO words, write color, and transfer six paired singles from object+0x10..0x38 to FIFO+0; retail loads all six pairs before the stores, requiring immediate psq_l/psq_st forms unavailable from ordinary C.",
    "source": "agent:codex-20261107b-astra-codex-6",
    "created_at": 1794015699,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1794040400
   },
   {
    "id": 955,
@@ -1124742,9 +1125302,9 @@
    "detail": "A shared quantized paired-access helper is needed for the GQR3 loads/stores in fn_12_12324; the supplied __PSQ_L/__PSQ_ST macros discard their quantization arguments and emit GQR0 accesses.",
    "source": "agent:codex-20261107b-astra-codex-12",
    "created_at": 1794016013,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1794040400
   },
   {
    "id": 958,
@@ -1124778,9 +1125338,9 @@
    "detail": "GXLoadTexMtxImm needs sanctioned inline WriteMTXPS4x3/WriteMTXPS4x2 equivalents in a shared header: six/four psq_l loads at offsets 0,8,... followed by six/four psq_st stores to FIFO offset 0, all W=0, qr0. A WriteMTXPS4x3 call is currently undeclared. Inline assembly is prohibited in this unit; ret",
    "source": "agent:codex-20261107c-astra-codex-4",
    "created_at": 1794017601,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1794040400
   },
   {
    "id": 961,
@@ -1124790,9 +1125350,9 @@
    "detail": "Provide a shared GX light-object upload helper: load the word at +0xC and six paired singles at +0x10 through +0x38, write three zero words and the loaded word to the FIFO, then store all six pairs to that same FIFO address; the unit cannot implement the required immediate psq_l/psq_st forms without",
    "source": "agent:codex-20261107c-astra-codex-6",
    "created_at": 1794017844,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1794040400
   },
   {
    "id": 962,
@@ -1124814,9 +1125374,9 @@
    "detail": "A paired-single helper supporting qr2 update loads/stores and the four merge operations is needed for fn_8003B9AC; the supplied __builtin_psq_* and __builtin_ps_merge* spellings generate external calls.",
    "source": "agent:codex-20261107c-astra-codex-11",
    "created_at": 1794018096,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1794040400
   },
   {
    "id": 964,
@@ -1124826,9 +1125386,9 @@
    "detail": "Matching requires an approved psvec.h helper for QR3 quantized loads/stores with immediate offsets; inline assembly is prohibited in this unit, and the supplied vector dereferences emit indexed QR0 accesses.",
    "source": "agent:codex-20261107c-astra-codex-12",
    "created_at": 1794018163,
-   "status": "open",
-   "resolved_by": null,
-   "resolved_at": null
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1794040400
   },
   {
    "id": 965,
@@ -1124850,6 +1125410,78 @@
    "detail": "A shared helper is needed for paired-register sample mixing and FPSCR-rounded fctiw/stfiwx stores; the supplied psvec helper API does not expose this operation.",
    "source": "agent:codex-20261107c-astra-codex-15",
    "created_at": 1794018216,
+   "status": "open",
+   "resolved_by": null,
+   "resolved_at": null
+  },
+  {
+   "id": 967,
+   "symbol": "GXLoadTexMtxImm",
+   "kind": "other",
+   "tu": "src/dol/GXLoadTexMtxImm.c",
+   "detail": "GXLoadTexMtxImm needs psq-only helpers WriteMTXPS4x3/4x2 (psq_l 0,8..0x28(mtx); psq_st 0(dest)) in include/psvec.h, as no existing kernel fits and inline asm is barred from src/. Alternative: fzgx asm-unit, as sibling GXLoadPosMtxImm has. Untested; check whether GXLoadNrmMtxImm etc. share this.",
+   "source": "agent:opus-GXLoadTexMtxImm-20261107a",
+   "created_at": 1794037465,
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1794040401
+  },
+  {
+   "id": 968,
+   "symbol": "fn_800356B8",
+   "kind": "other",
+   "tu": "src/dol/fn_800356B8.c",
+   "detail": "fn_800356B8 (GXLoadLightObjImm) needs a psvec.h kernel: (volatile void *dst, const void *src): lwz color,12(src); xor zero,zero,zero; psq_l p0-p5 at 16..56(src); stw zero x3, stw color, psq_st p0-p5 at 0(dst). Regs per retail: r6 zero, r0 color, f5..f0. Untested.",
+   "source": "agent:opus-fn_800356B8-20261107a",
+   "created_at": 1794037496,
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1794040401
+  },
+  {
+   "id": 969,
+   "symbol": "fn_12_12324",
+   "kind": "other",
+   "tu": "rel/movie_module",
+   "detail": "fn_12_12324 needs psq_l/psq_st displacement forms with qr3 and dcbz: unreachable from C, no header helper has them. Needs a new librarian header kernel (not psvec.h, per its @N warning) or `fzgx asm-unit fn_12_12324`. Stop assigning it to matchers until then.",
+   "source": "agent:opus-fn_12_12324-20261107a",
+   "created_at": 1794037505,
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1794040401
+  },
+  {
+   "id": 970,
+   "symbol": "fn_12_12324",
+   "kind": "prototype",
+   "tu": "rel/movie_module",
+   "detail": "fn_12_12324 is declared (void *, void *, void *) by fn_12_124A0 and the seed, but retail never reads r5 on entry (it overwrites it with li r5, 6). The third parameter is unused by the body; the caller does pass module->unk_040 in r5, so it may be a genuine unused argument.",
+   "source": "agent:opus-fn_12_12324-20261107a",
+   "created_at": 1794037505,
+   "status": "resolved",
+   "resolved_by": "librarian",
+   "resolved_at": 1794040401
+  },
+  {
+   "id": 971,
+   "symbol": "fn_1_4C16C",
+   "kind": "data",
+   "tu": "rel/main_rel/font.c",
+   "detail": "lbl_1_data_1A3B8 is declared in font.h as size 0xAD8, but fn_1_4C16C addresses it to +0x2130 as one section base: u16 table to +0xAF0, fonts at +0xAF0 (lbl_1_data_1AEA8), name tables +0x180C/+0x18F4, strings +0x1CFC..+0x2128.",
+   "source": "agent:opus-fn_1_4C16C-20261107a",
+   "created_at": 1794038186,
+   "status": "open",
+   "resolved_by": null,
+   "resolved_at": null
+  },
+  {
+   "id": 972,
+   "symbol": "fn_1_4C16C",
+   "kind": "data",
+   "tu": "rel/main_rel/font.c",
+   "detail": "lbl_1_rodata_FD0 is a section base read to +0x16E8 by fn_1_4C16C. Word colors at +0x118/+0x11C and +0x16B4..+0x16D4 are local FC initializers, and the f32 literals sit in between, so the dtk size of 0xF0 understates it.",
+   "source": "agent:opus-fn_1_4C16C-20261107a",
+   "created_at": 1794038186,
    "status": "open",
    "resolved_by": null,
    "resolved_at": null
