@@ -406,15 +406,23 @@ def data_struct_views(p, symbol, text):
     field starts and the oracle still proves the whole section before binding."""
     sym = p.resolve(symbol)
     syms = p.symbols(sym.module)
-    pat = (r"(?:(?:struct\s+)?(\w+)\s*\*\s*)?(?<![\w.>])(\w+)\s*=\s*\((?:struct\s+)?(\w+)\s*\*\)\s*"
+    # the cast is optional for a declared model of the object itself, `T *d = &lbl;`
+    # (fn_1_DF74's `Obj_1_data_43B8 *data`: uncast, the model kept the named data base,
+    # which takes its register ahead of the anonymous `.bss` base)
+    pat = (r"(?:(?:struct\s+)?(\w+)\s*\*\s*)?(?<![\w.>])(\w+)\s*=\s*(?:\((?:struct\s+)?(\w+)\s*\*\)\s*)?"
            r"(?:\(\s*(?:\(\s*(?:u8|s8|char)\s*\*\s*\)\s*)?&?\s*(lbl_\d+_(?:ro)?data_[0-9A-F]+|lbl_[0-9A-F]{8})\s*\+\s*(0x[0-9A-Fa-f]+|\d+)\s*\)"
-           r"|&?\s*(lbl_\d+_(?:ro)?data_[0-9A-F]+|lbl_[0-9A-F]{8}))\s*;")  # an array decays: `(BgData *)lbl` (fn_1_107F74)
+           r"|(&)?\s*(lbl_\d+_(?:ro)?data_[0-9A-F]+|lbl_[0-9A-F]{8}))\s*;")  # an array decays: `(BgData *)lbl` (fn_1_107F74)
     fm = re.search(r"\n[^\n;{}]*\b%s\s*\([^;{}]*\)\s*\{" % re.escape(sym.name), text)
     if not fm:
         return None, ['function definition not found']
     out, notes, cache = text, [], {}
     for m in list(re.finditer(pat, text)):
-        declared, pvar, tname, base = m[1], m[2], m[3], m[4] or m[6]
+        declared, pvar, tname, base = m[1], m[2], m[3], m[4] or m[7]
+        if tname is None:
+            # uncast: only `T *d = &lbl;` with T a struct type
+            if not declared or m[4] or not m[6]:
+                continue
+            tname = declared
         offset = int(m[5], 0) if m[5] else 0
         known = syms.get(base)
         if not known or known.section not in DATA_SECTIONS or known.kind != 'object' or tname in SCALAR or (declared and declared != tname):
@@ -431,6 +439,15 @@ def data_struct_views(p, symbol, text):
             notes.append(f'{pvar}: fields without declaration text'); continue
         rest = without_member_names(access.sub(' ', out.replace(m[0], ' ')))
         rest = re.sub(r"(?:struct\s+)?%s\s*\*\s*%s\s*;" % (re.escape(tname), re.escape(pvar)), ' ', rest)
+        # a static inline helper's parameter of the same name and type receives the model
+        # (fn_1_DF74's `camera_plain(..., data, ...)`): the file-wide `->` rewrite covers its
+        # uses, so the parameter becomes the same byte view; the model passed as an argument
+        # is then not another use
+        params = list(re.finditer(r"(?<=[(,])(\s*)(?:struct\s+)?%s\s*\*\s*%s\s*(?=[,)])" % (re.escape(tname), re.escape(pvar)), out))
+        params = [pm for pm in params if re.search(r"\bstatic\s+inline\b[^;{}]*$", out[:pm.start()])]
+        if params:
+            rest = re.sub(r"(?<=[(,])\s*(?:struct\s+)?%s\s*\*\s*%s\s*(?=[,)])" % (re.escape(tname), re.escape(pvar)), ' ', rest)
+            rest = re.sub(r"(?<=[(,])\s*%s\s*(?=[,)])" % re.escape(pvar), ' ', rest)
         if re.search(r"\b%s\b" % re.escape(pvar), rest):
             notes.append(f'{pvar}: used other than through ->'); continue
         prefix = out[:re.search(r"\n[^\n;{}]*\b%s\s*\([^;{}]*\)\s*\{" % re.escape(sym.name), out).start() + 1]
@@ -448,9 +465,16 @@ def data_struct_views(p, symbol, text):
             where = f"{pvar} + {off:#x}" if off else pvar
             if dims:
                 inner = ''.join(f'[{d}]' for d in dims[1:])
+                if not inner and ttext in ('u8', 'char', 'unsigned char') and not off:
+                    # the byte view itself: `(char *)d + 0x1D8` stays an offset use the byte-view
+                    # pass cuts an object at (fn_1_DF74's format strings off `d->pad_0`)
+                    return pvar
                 return f"(({ttext} (*){inner})({where}))" if inner else f"(({ttext} *)({where}))"
             return f"(*({ttext} *)({where}))"
         out = access.sub(view, out)
+        if params:
+            out = re.sub(r"(?<=[(,])(\s*)(?:struct\s+)?%s\s*\*\s*%s\s*(?=[,)])" % (re.escape(tname), re.escape(pvar)),
+                         lambda pm: pm[1] + f"u8 *{pvar}" if re.search(r"\bstatic\s+inline\b[^;{}]*$", out[:pm.start()]) else pm[0], out)
         if declared:
             out = out.replace(m[0], f"u8 *{pvar} = (u8 *)&{base};", 1)
         else:
@@ -950,6 +974,13 @@ def tu_objects(p, symbol, text, mode, cache, retail_bases=(), only=None, derive=
     sym = p.resolve(symbol)
     syms = p.symbols(sym.module)
     notes = []
+    # 'split+': the split layout with every interior byte address (`(T *)((u32)p + 0x18)`)
+    # defined as a byte array up to the next referenced field instead of one byte and fillers
+    # (fn_1_DF74's 12-byte vector at +0x18: as `u8` plus fillers the scheduler moved the store
+    # of a neighbouring object across the vector's stores)
+    wide = mode == 'split+'
+    if wide:
+        mode = 'split'
     if derive:
         derived = derived_models(text, syms)
         if derived == text:
@@ -1066,6 +1097,23 @@ def tu_objects(p, symbol, text, mode, cache, retail_bases=(), only=None, derive=
             fname = f"fzgx_byte_{n:X}"
             synthetic[fname] = n
             return f"(u8 *)&{pvar}->{fname}"
+        # pointer arithmetic on a header's byte padding array, `p->pad_60A + 2` (fn_1_DF74's
+        # id table at +0x60C): the address is the interior byte, not the pad. As a field the
+        # pad began off a word boundary and failed every split layout; the pad's name is its
+        # offset in the generated headers, checked against the probe below
+        pad_views = {}
+        def _padoff(mm):
+            fname, k = mm.group(1), int(mm.group(2), 0)
+            d = decls.get(fname)
+            if not d or not d[1] or d[0] not in ('u8', 's8', 'char', 'unsigned char', 'signed char'):
+                return mm.group(0)
+            n = int(fname[4:], 16) + k
+            pad_views[fname] = int(fname[4:], 16)
+            synthetic[f"fzgx_byte_{n:X}"] = n
+            return f"(u8 *)&{pvar}->fzgx_byte_{n:X}"
+        if not byte_model:
+            out_text = re.sub(r"(?<![&\w])\b%s->(pad_[0-9A-Fa-f]+)\s*\+\s*(0x[0-9A-Fa-f]+|\d+)\b(?!\s*[*/%%\[(])" % re.escape(pvar),
+                              _padoff, out_text)
         out_text = re.sub(r"\(u8 \*\)\s*(?:\(u32\)\s*)?\b%s\b\s*\+\s*(0x[0-9A-Fa-f]+|\d+)" % re.escape(pvar), _byteoff, out_text)
         # the integer spelling of the same interior address, `(u32)p + 8` (fn_1_C24A4's port
         # array, fn_1_BA144): retail keeps that address as an object address (`addi r3, r30, 0x8;
@@ -1096,7 +1144,7 @@ def tu_objects(p, symbol, text, mode, cache, retail_bases=(), only=None, derive=
             notes.append(f'{pvar}: used other than through ->'); return None, notes
         if not uses:
             notes.append(f'{pvar}: no uses'); return None, notes
-        names = sorted({u.group(2) for u in uses if u.group(2) not in synthetic})
+        names = sorted({u.group(2) for u in uses if u.group(2) not in synthetic} | set(pad_views))
         missing = [n for n in names if n not in decls]
         if missing:
             notes.append(f'{tname}: fields without declaration text: {missing[:3]}'); return None, notes
@@ -1108,6 +1156,8 @@ def tu_objects(p, symbol, text, mode, cache, retail_bases=(), only=None, derive=
             layout, err = cache[key]
             if layout is None:
                 notes.append(f'{tname}: probe failed: {err}'); return None, notes
+            if any(layout.get(f, (None,))[0] != off for f, off in pad_views.items()):
+                notes.append(f'{tname}: a pad name is not its offset'); return None, notes
         else:
             layout = {}
         for fname, v in synthetic.items():
@@ -1282,6 +1332,12 @@ def tu_objects(p, symbol, text, mode, cache, retail_bases=(), only=None, derive=
                     dims = decls[fname][1]
                     if a % max(ealign, 1) or (dims and a % 4):
                         notes.append(f'{s.name}: field {fname} misaligned as an object'); return None, notes
+                    nxt = min([s.addr + i for i in fl if i > inner] + [s.end])
+                    if wide and fname.startswith('fzgx_byte_') and a % 4 == 0 and nxt - a >= 4:
+                        defs.append((a, f"u8 {name}[{nxt - a:#x}];", name))
+                        access[(s.name, inner)] = name
+                        q = nxt
+                        continue
                     defs.append((a, fdef(decls[fname], name), name))
                     access[(s.name, inner)] = name
                     q = a + fsize
@@ -1798,6 +1854,75 @@ def _call_arguments(code, start):
             args.append(code[cur:i].strip())
             cur = i + 1
     return None
+
+
+def helper_offset_arguments(text):
+    """A static inline helper that reads only `P + Q` of a byte-pointer parameter P and an
+    integer parameter Q, called with an integer literal for Q at every site, receives `X + K`
+    and 0 instead (the same address). The byte-view pass then sees every site's own object:
+    fn_1_DF74's `camera_plain(..., data, n, 41, 0x1E0)` read three retail format strings off
+    the `.data` base, and as one object at +0 the TU's data stayed addressed by name."""
+    from .sdkimport import masked
+    from .fixup_source import _function_body_span
+    code = masked(text)
+    edits = []
+    for d in re.finditer(r'\bstatic\s+inline\b[^;{}()]*?\b(\w+)\s*\(([^;{}()]*)\)\s*\{', code):
+        name, params = d[1], [x.strip() for x in d[2].split(',')]
+        span = _function_body_span(code, name)
+        if not span or span[0] != d.start(1):
+            continue
+        body = code[span[1]:span[2]]
+        calls = [m for m in re.finditer(r'(?<![\w.>])%s\s*\(' % re.escape(name), code) if m.start() != d.start(1)]
+        if not calls:
+            continue
+        argsets = [(m, _call_arguments(code, m.end() - 1)) for m in calls]
+        if any(a is None or len(a) != len(params) for _, a in argsets):
+            continue
+        pairs = []
+        for i, pt in enumerate(params):
+            pm = re.fullmatch(r'%s\s*\*\s*(\w+)' % BYTE_TYPES, pt)
+            for j, qt in enumerate(params):
+                qm = re.fullmatch(r'(?:const\s+)?(?:s32|u32|int|s16|u16|long)\s+(\w+)', qt)
+                if pm and qm and j != i:
+                    pairs.append((i, j, pm[1], qm[1]))
+        for i, j, P, Q in pairs:
+            pair = re.compile(r'(?<![\w.>])%s\s*\+\s*%s\b' % (re.escape(P), re.escape(Q)))
+            n = len(pair.findall(body))
+            if not n or len(re.findall(r'(?<![\w.>])%s\b' % re.escape(P), body)) != n \
+                    or len(re.findall(r'(?<![\w.>])%s\b' % re.escape(Q), body)) != n:
+                continue
+            if not all(re.fullmatch(r'0x[0-9A-Fa-f]+|\d+', a[j]) for _, a in argsets):
+                continue
+            if all(int(a[j], 0) == 0 for _, a in argsets):
+                continue
+            found = []
+            for m, a in argsets:
+                # argument texts from the source (the masked code blanks string literals)
+                ta = _call_arguments(text, m.end() - 1)
+                depth, end = 0, None
+                for x in range(m.end() - 1, len(code)):
+                    depth += code[x] == '('
+                    depth -= code[x] == ')'
+                    if depth == 0:
+                        end = x
+                        break
+                if ta is None or len(ta) != len(a) or end is None:
+                    found = None
+                    break
+                k = int(a[j], 0)
+                if k:
+                    ta[i] = f'{ta[i]} + {k:#x}' if re.fullmatch(r'\w+', ta[i]) else f'({ta[i]}) + {k:#x}'
+                ta[j] = '0'
+                found.append((m.end(), end, ', '.join(ta)))
+            if found:
+                edits += found
+                break
+    if not edits:
+        return None
+    out = text
+    for s, e, v in sorted(set(edits), reverse=True):
+        out = out[:s] + v + out[e:]
+    return out
 
 
 def _helper_aliases(code, lo, hi, tokens):
@@ -3501,7 +3626,7 @@ def tu_section_layout(p, symbol, body, check):
     # layout regresses the body cannot hide another's gain
     selections = [None] + ([{b} for b in same_module[:4]] if len(same_module) > 1 else [])
     for only in selections:
-        for mode in ('dtk', 'split', 'merge'):
+        for mode in ('dtk', 'split', 'split+', 'merge'):
             try:
                 text, notes = tu_objects(p, symbol, body, mode, cache, retail_bases, only)
             except (ValueError, KeyError, IndexError, AttributeError, OSError):
@@ -3579,7 +3704,15 @@ def tu_section_layout(p, symbol, body, check):
             text = None
         if text:
             viewed.append((name + ', data struct views', text))
-    for name, base in bases + [('body', body)] + viewed:
+    folded = []
+    for name, base in viewed:
+        try:
+            text = helper_offset_arguments(base)
+        except (ValueError, KeyError, IndexError, AttributeError, TypeError):
+            text = None
+        if text:
+            folded.append((name + ', helper offsets at the call sites', text))
+    for name, base in bases + [('body', body)] + viewed + folded:
         for top in (False, True):
             try:
                 text, notes = tu_data_objects(p, symbol, base, top)
