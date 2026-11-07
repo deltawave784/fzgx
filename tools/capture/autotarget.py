@@ -1,7 +1,8 @@
 """autotarget.py SYM BODY MW [FLAGS]: map residual register rows to captured webs and print solver targets.
 
 Both register classes are mapped: GPR rows (`rN`, operand class 4) and FPR rows (`fN`, operand class 3).
-The solver runs once per class that has targets (`--class gpr|fpr`)."""
+The solver runs once per class that has targets (`--class gpr|fpr`); levers.py then reports which
+numbering group or degree change reaches the targets (`verdict=`)."""
 import sys, json, re, subprocess
 import paths
 from pathlib import Path
@@ -57,3 +58,7 @@ for cls,(rx,opclass,prefix) in CLASSES.items():
         print(out.stdout[-2500:]); print(out.stderr[-600:])
     except subprocess.TimeoutExpired:
         print('status=timeout')
+    # which lever (declaration, parameter, compiler-object, shadow or temporary numbering; interference degree)
+    # reaches the targets: the solver above only permutes the named locals
+    import levers
+    print(f'[{cls}] ' + levers.report(levers.analyse(cap, idx, {v: c for v, c in targets.items() if v not in bad}, cls)))
