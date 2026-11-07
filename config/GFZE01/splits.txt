@@ -6494,3 +6494,9 @@ dol/GXLoadTexMtxImm.c:
 
 dol/fn_800356B8.c:
 	.text       start:0x800356B8 end:0x80035734 align:4
+
+dol/fn_8003B9AC.c:
+	.text       start:0x8003B9AC end:0x8003BB30 align:4
+
+dol/fn_8003BB30.c:
+	.text       start:0x8003BB30 end:0x8003BCE4 align:4

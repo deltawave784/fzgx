@@ -20988,6 +20988,29 @@
   },
   {
     "module": "main",
+    "source": "dol/fn_8003B9AC.c",
+    "symbols": [
+      "fn_8003B9AC"
+    ],
+    "status": "matching",
+    "mw_version": "GC/1.2.5n",
+    "extra_cflags": []
+  },
+  {
+    "module": "main",
+    "source": "dol/fn_8003BB30.c",
+    "symbols": [
+      "fn_8003BB30"
+    ],
+    "status": "matching",
+    "mw_version": "GC/1.2.5n",
+    "extra_cflags": [
+      "-use_lmw_stmw",
+      "on"
+    ]
+  },
+  {
+    "module": "main",
     "source": "dol/fn_8003BCE4.c",
     "symbols": [
       "fn_8003BCE4"
