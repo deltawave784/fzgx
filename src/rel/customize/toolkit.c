@@ -1442,6 +1442,42 @@ void fn_3_1ACE4(void *data, s32 first_a, s32 second_a, s32 first_b, s32 second_b
 }
 /* fzgx:end fn_3_1ACE4 */
 
+/* fzgx:begin fn_3_1ADA4 noprologue */
+#include "types.h"
+#include "rel/customize/globals.h"
+#include "rel/customize/toolkit.h"
+
+extern u32 lbl_801A6410;
+extern void fn_1_46B4(u32, u32, u8 *, int);
+extern const f32 lbl_3_rodata_740;
+extern void fn_3_1ABD8(void *arg0, s16 x1, s16 y1, s16 x2, s16 y2, u32 *value);
+extern void fn_3_1B130(void *, s16, s16, u32 *);
+extern void fn_3_149AC(void);
+extern void fn_3_1BA20(void *target, s16 x, s16 y, s16 z, s16 w, s32 *value);
+extern void fn_3_1BF08(void *, s16, s16, s16, s16, u32 *);
+extern u8 lbl_3_bss_A2458[8];
+extern void fn_3_BD98(void);
+extern void fn_3_BEF0(void);
+extern void fn_3_BE88(void);
+extern void fn_3_156A8(void);
+extern void fn_80074188(s16, s16, s16, s16);
+extern void fn_1_5233C(void *, void *);
+extern struct fn_3_1A1D8_lbl_1_bss_9F8 lbl_1_bss_9F8;
+
+extern void fn_3_15240(void *, s32, s16, u16, s32, s16);
+
+/* Flips the rectangle vertically by swapping row pairs from the outside in. */
+void fn_3_1ADA4(void *canvas, s32 left, s16 top, s16 right, s16 bottom) {
+    s32 i;
+    s16 half;
+
+    half = (bottom - top) / 2;
+    for (i = 0; (s16)i < half; i++) {
+        fn_3_15240(canvas, left, top + i, right - (s16)left, left, bottom - i - 1);
+    }
+}
+/* fzgx:end fn_3_1ADA4 */
+
 /* fzgx:begin fn_3_1AE40 */
 /* Mirror the left half of a region onto its right half, row by row. */
 void fn_3_1AE40(void *data, u32 x1, u32 y1, s16 x2, s16 y2) {

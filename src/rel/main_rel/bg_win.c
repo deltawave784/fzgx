@@ -831,6 +831,465 @@ f32 fn_1_15C5A4(void * arg0, void * arg1) {
 #pragma opt_common_subs reset
 /* fzgx:end fn_1_15C5A4 */
 
+/* fzgx:begin fn_1_15C6C0 pool noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/bg_win.h"
+#include "font.h"
+
+extern u32 lbl_1_bss_8FD60[2];
+extern int fn_1_15BCDC(void *);
+extern void fn_1_4060(void);
+
+extern u32 lbl_1_bss_8FE80[8];
+
+extern void *fn_1_435C(void *);
+extern void fn_1_15E220(u8 *value);
+extern void fn_1_3F8C(void *, void *, u8 *, s32);
+extern u32 lbl_1_bss_8FEA0;
+extern u8 lbl_1_bss_8FE7C;
+extern u32 strlen(const char *str);
+extern s32 fn_8006FC1C(const char *a, const char *b);
+extern void fn_1_15E1E8(u8 *value);
+
+
+extern u32 lbl_1_bss_8FD60[2];
+extern int fn_1_15BCDC(void *);
+extern void fn_1_4060(void);
+
+extern u32 lbl_1_bss_8FE80[8];
+
+extern void *fn_1_435C(void *);
+extern void fn_1_15E220(u8 *value);
+extern void fn_1_3F8C(void *, void *, u8 *, s32);
+extern u32 lbl_1_bss_8FEA0;
+extern u8 lbl_1_bss_8FE7C;
+extern u32 strlen(const char *str);
+extern s32 fn_8006FC1C(const char *a, const char *b);
+extern void fn_1_15E1E8(u8 *value);
+
+
+typedef struct { s32 x,y,w,h; } Strip;
+typedef struct { Strip strips[6]; } Strips;
+#pragma section code_type ".fzgxpool"
+__declspec(section ".fzgxpool") static void fzgx_pool_prime1(void) {
+    volatile f32 s; volatile f64 d;  /* fzgx-allow: S2 pool primer sinks */
+    s = 1000000.0f;
+}
+static const u32 fzgx_pool_table2[1] = {0x00000000};  /* fzgx-allow: A1 retail pool bytes */
+__declspec(section ".fzgxpool") static void fzgx_pool_keep2(void) { const u32 *volatile cp; cp = fzgx_pool_table2; }  /* fzgx-allow: S2 pool primer sink */
+__declspec(section ".fzgxpool") static void fzgx_pool_prime3(void) {
+    volatile f32 s; volatile f64 d;  /* fzgx-allow: S2 pool primer sinks */
+    d = 4503601774854144.0;
+}
+static const u32 fzgx_pool_table4[1] = {0xFFFFFF00};  /* fzgx-allow: A1 retail pool bytes */
+__declspec(section ".fzgxpool") static void fzgx_pool_keep4(void) { const u32 *volatile cp; cp = fzgx_pool_table4; }  /* fzgx-allow: S2 pool primer sink */
+__declspec(section ".fzgxpool") static void fzgx_pool_prime5(void) {
+    volatile f32 s; volatile f64 d;  /* fzgx-allow: S2 pool primer sinks */
+    s = 320.0f;
+    s = 240.0f;
+    s = 1.0f;
+    s = 0.800000011920929f;
+    s = 464.0f;
+    s = 5.0f;
+    s = 0.699999988079071f;
+    s = 255.0f;
+    s = 3.299999952316284f;
+    s = 20.0f;
+    s = 0.5f;
+    s = 0.0f;
+    s = 800.0f;
+    s = 42.0f;
+    s = 30.0f;
+    s = 16384.0f;
+    s = 32768.0f;
+    s = 0.0010000000474974513f;
+    s = 3.0f;
+    s = 8.0f;
+}
+static const Strips result_strips = {{{0,0,75,100},{76,0,35,100},{152,0,75,100},{76,0,35,100},{228,0,75,100},{304,0,75,100}}};
+__declspec(section ".fzgxpool") static void fzgx_pool_keep6(void) { const u32 *volatile cp; cp = (const u32 *)&result_strips; }  /* fzgx-allow: S2 pool primer sink */
+__declspec(section ".fzgxpool") static void fzgx_pool_prime7(void) {
+    volatile f32 s; volatile f64 d;  /* fzgx-allow: S2 pool primer sinks */
+    s = 120.0f;
+    s = 10.0f;
+    s = 2.0f;
+    s = -10.0f;
+    s = 0.25f;
+    s = 100.0f;
+    s = 60.0f;
+    s = 5120.0f;
+    s = 1.5f;
+    s = 208.0f;
+    s = 0.8999999761581421f;
+    s = 50.0f;
+    s = 370.0f;
+}
+#pragma section code_type ".text"
+
+typedef struct { u8 pad[4]; s16 index; } Player;
+typedef struct { u8 pad[0x24]; u32 times[4]; } PlayerRecord;
+typedef struct { u32 words[14]; } Rank;
+typedef struct { u8 m, s; u16 ms; u8 pad[0x14]; u16 valid; } Time;
+typedef void (*VertexCallback)(FontDrawPacket *, FontVertex *);
+extern FontDrawPacket lbl_1_rodata_26F8;
+extern void *fn_1_86254(s32);
+extern u16 fn_1_486C4(u32);
+extern s32 fn_1_156218(s16, void *, void *, void *);
+extern s32 fn_1_F1B94(void);
+extern f32 fn_1_51B84(f32);
+extern f32 fn_1_51BFC(f32);
+extern f32 fn_1_519FC(f32);
+extern f32 fn_1_51AC0(f32);
+extern f32 fn_1_15C5A4(void *, void *);
+extern void fn_1_12EF80(s16, s16 *, s16 *);
+extern void fn_1_128E8C(u32, Time *);
+extern s32 fn_1_3F864(void);
+extern void fn_1_A2D84(u32);
+extern void fn_1_15C4EC(void *);
+extern s8 fn_1_149FB4(s32);
+extern void fn_1_A5244(u8);
+extern void fn_1_51564(s16, s16, s16, s16, s16, s16);
+extern void fn_1_5158C(FontDrawPacket *, u32, s16, s16);
+extern f32 lbl_8006D21C(s32);
+extern f32 lbl_8006D188(s32);
+
+#define CLAMP(v, lo, hi) ((v) < (lo) ? (lo) : ((v) > (hi) ? (hi) : (v)))
+#define CONVERT(p) \
+    (p).scale_x = fn_1_51B84((p).scale_x); \
+    (p).scale_y = fn_1_51BFC((p).scale_y); \
+    (p).x = fn_1_519FC((p).x); \
+    (p).y = fn_1_51AC0((p).y)
+#define SET_COLOR(p, v) (p).color_add[0] = (p).color_add[1] = (p).color_add[2] = (v)
+#define SET_VALUE(p, v) (*(f32 *)&(p).unk_54 = (v))
+
+static inline s32 fn_1_15C6C0_ordinal(s32 n) {
+    s32 teen = 0;
+    s32 last;
+    n %= 100;
+    if (n >= 10 && n <= 20) teen = 1;
+    if (teen) return 3;
+    teen = 0;
+    last = n % 10;
+    if (last >= 4 || last == 0) teen = 1;
+    return teen ? 3 : last - 1;
+}
+
+#pragma opt_lifetimes off
+void fn_1_15C6C0(s32 arg0, s32 arg1) {
+    FontDrawPacket p;
+    Strips strips;
+    Rank rank1, rank2, rank3;
+    Rank rank4, rank5, rank6;
+    Time time;
+    s16 a, b;
+    u8 digit;
+    s32 number;
+    u8 suffix;
+    u32 record;
+    s32 i;
+    s32 height;
+    s32 width;
+    s32 x;
+    s32 other;
+    PlayerRecord *entry2;
+    PlayerRecord *entry;
+    s32 bad;
+    s32 current;
+    s32 work;
+    s32 total;
+    s32 best;
+    u8 place;
+    f32 fade, fade5, scale, stretch;
+    u32 record2;
+    s32 clamped;
+    f32 fade4, stretch3, stretch4, stretch5;
+    s32 start;
+    s32 y;
+    s32 otherY;
+    s32 id;
+
+    strips = result_strips;
+    if (lbl_1_bss_3C30.unk_0 & 0x1000) return;
+    if (lbl_1_bss_3C30.unk_5 == 2) start = 0;
+    else if (lbl_1_bss_3C30.unk_0 & 0x4000000) start = 0;
+    else start = 300;
+
+    entry = (PlayerRecord *)((u8 *)&lbl_1_bss_3C30 + ((Player *)fn_1_86254(arg1))->index * 0xA0 + 0xD4);
+    height = (fn_1_486C4(0x941D) >> 1) & 0x7FFF;
+    width = fn_1_486C4(0x941D);
+    fn_1_156218(lbl_1_bss_3C30.unk_6, &rank1, &rank2, &rank3);
+    if (rank1.words[0] > (record = entry->times[lbl_1_bss_3C30.unk_A7]) || record < lbl_1_bss_3C30.unk_1464) {
+        if (lbl_1_bss_3C30.unk_5 == 2 && fn_1_F1B94()) {
+            other = fn_1_486C4(0x9420);
+            y = (s32)(240.0f - (f32)(height / 2) - (f32)(width / 2));
+            otherY = (s32)(240.0f + (f32)(height / 2) + (f32)(other / 2));
+        } else {
+            other = fn_1_486C4(0x941B);
+            y = (s32)(240.0f - (f32)(height / 2) - (f32)(width / 2));
+            otherY = (s32)(240.0f + (f32)(height / 2) + (f32)(other / 2));
+        }
+    } else {
+        if (lbl_1_bss_3C30.unk_5 == 2 && fn_1_F1B94()) { y = 240; otherY = 0; }
+        else { y = 240; otherY = 0; }
+    }
+
+    if (lbl_1_bss_3C30.unk_5 == 2 && fn_1_F1B94()) {
+        work = 480 - arg0;
+        fade = CLAMP((f32)work / 120.0f, 0.0f, 1.0f);
+        if (fn_1_F1B94() == 1) {
+            f32 amount = CLAMP((f32)work / 10.0f, 0.0f, 1.0f);
+            f32 growth;
+            p = lbl_1_rodata_26F8;
+            growth = 20.0f * (1.0f - amount);
+            p.image = 0x9434;
+            p.x = 320.0f;
+            p.y = (f32)y;
+            p.flags = 10;
+            p.alpha = amount;
+            stretch = 1.0f + growth;
+            p.scale_x *= stretch;
+            p.scale_y /= stretch;
+            SET_COLOR(p, (s32)((f32)(255.0f * growth) / 10.0f));
+            CONVERT(p);
+            fn_1_4F734(&p);
+        } else {
+            p = lbl_1_rodata_26F8;
+            p.image = 0x9420;
+            p.x = 320.0f;
+            p.y = (f32)y;
+            p.flags = 10;
+            CONVERT(p);
+            p.alpha = fade;
+            fn_1_4F734(&p);
+        }
+    } else {
+        total = 0;
+        for (i = 0; i < 5; i++) {
+            total += strips.strips[i].w;
+            total++;
+        }
+        total += strips.strips[5].w;
+        total += (f32)strips.strips[0].h * lbl_8006D21C(0xAAA);
+        x = 320.0f - (f32)(total / 2);
+        for (i = 0; i < 6; i++) {
+            if (arg0 <= 480 - i * 5 && arg0 >= start) {
+                f32 zoom;
+                zoom = (f32)arg0 - (f32)(480 - (i + 1) * 5);
+                if (zoom < 1.0f) {
+                    if (zoom < 0.0f && zoom > -10.0f) {
+                        zoom = 1.0f + (f32)(0.25f * lbl_8006D188((s32)((32768.0f * -zoom) / 10.0f)));
+                    } else {
+                        zoom = 1.0f;
+                    }
+                }
+                p = lbl_1_rodata_26F8;
+                p.image = 0x941B;
+                fn_1_51678(&p, p.image, strips.strips[i].x, strips.strips[i].y,
+                           strips.strips[i].w, strips.strips[i].h);
+                p.x = (f32)(x + strips.strips[i].w / 2);
+                p.y = (f32)y;
+                p.z = 100.0f - zoom;
+                p.alpha = 1.0f - (f32)(0.5f * (zoom - 1.0f)) / 5.0f;
+                if (arg0 < start + 10) {
+                    stretch3 = 2.0f * (f32)(start + 10 - arg0);
+                    p.scale_x *= stretch3;
+                    p.scale_y /= stretch3;
+                    SET_COLOR(p, (s32)((f32)(255.0f * stretch3) / 10.0f));
+                    p.alpha = 1.0f - stretch3 / 20.0f;
+                }
+                p.scale_x *= zoom;
+                p.scale_y *= zoom;
+                CONVERT(p);
+                p.vertex_callback = (VertexCallback)fn_1_15C5A4;
+                SET_VALUE(p, fn_1_51B84((f32)strips.strips[i].h * lbl_8006D21C(0xAAA)) + (f32)(arg1 * 1000000));
+                p.flags = 0x400000A;
+                fn_1_4F734(&p);
+                x += strips.strips[i].w;
+                x++;
+            }
+        }
+    }
+
+    if (lbl_1_bss_3C30.unk_5 == 2) {
+        entry2 = (PlayerRecord *)((u8 *)&lbl_1_bss_3C30 + ((Player *)fn_1_86254(arg1))->index * 0xA0 + 0xD4);
+        bad = 0;
+        fn_1_12EF80(lbl_1_bss_3C30.unk_6, &a, &b);
+        best = lbl_1_bss_3C30.unk_1464;
+        fn_1_128E8C((u8)b, &time);
+        current = time.s * 1000 + time.m * 60000 + time.ms;
+        if (time.valid == 0 || (u32)current == 0x7FFFF) bad = 1;
+        if (current > best) bad = 1;
+        fn_1_156218(lbl_1_bss_3C30.unk_6, &rank4, &rank5, &rank6);
+        if (rank4.words[0] > (record2 = entry2->times[lbl_1_bss_3C30.unk_A7])) {
+            work = 1;
+            id = 0x941D;
+            if (fn_1_3F864()) {
+                if (arg0 == 420) fn_1_A2D84(0xA9064900);
+                if (arg0 == 360) fn_1_A2D84(0xA9064A00);
+            }
+        } else if (bad && record2 < lbl_1_bss_3C30.unk_1464) {
+            work = 0;
+        } else if ((u32)current > record2) {
+            work = 0;
+            if (fn_1_3F864() && arg0 == 420) fn_1_A2D84(0xA9072A00);
+        } else {
+            work = 0;
+        }
+        if (work && arg0 > start && arg0 < 480) {
+            p = lbl_1_rodata_26F8;
+            p.image = id;
+            p.x = 320.0f;
+            p.y = (f32)otherY;
+            p.flags = 0x400000A;
+            clamped = arg0 < 420 ? 420 : arg0 > 480 ? 480 : arg0;
+            fade4 = (f32)(480 - clamped) / 60.0f;
+            p.alpha = fade4;
+            if (work == 1 && fade4 < 1.0f) {
+                f32 amount = 1.0f - fade4;
+                f32 growth = 1.0f + (f32)(10.0f * amount);
+                p.x = 320.0f + (f32)(5120.0f * amount);
+                p.scale_x *= growth;
+                p.scale_y /= growth;
+                p.alpha = fade4 / 1.5f;
+            }
+            if (arg0 < start + 10) {
+                stretch4 = 2.0f * (f32)(start + 10 - arg0);
+                p.scale_x *= stretch4;
+                p.scale_y /= stretch4;
+                SET_COLOR(p, (s32)((f32)(255.0f * stretch4) / 10.0f));
+                p.alpha = 1.0f - stretch4 / 20.0f;
+            }
+            CONVERT(p);
+            p.vertex_callback = (VertexCallback)fn_1_15C4EC;
+            SET_VALUE(p, (f32)arg1);
+            fn_1_4F734(&p);
+            if (work == 1 && p.alpha < 1.0f) {
+                p.x = 320.0f - (f32)(5120.0f * (1.0f - p.alpha));
+                p.x = fn_1_519FC(p.x);
+                fn_1_4F734(&p);
+            }
+        }
+    } else if (arg0 <= start) {
+        place = fn_1_149FB4(arg1);
+        number = place + 1;
+        suffix = fn_1_15C6C0_ordinal(number);
+        scale = 20.0f - (f32)(start - arg0);
+        if (scale < 1.0f) scale = 1.0f;
+        fade5 = 1.0f - (f32)(0.5f * (scale - 1.0f)) / 20.0f;
+        if (arg0 == start - 5) fn_1_A5244(place);
+        if (place < 3) {
+            p = lbl_1_rodata_26F8;
+            p.image = 0x9459;
+            fn_1_51564(0, 0, 112, fn_1_486C4(p.image), 3, 1);
+            fn_1_5158C(&p, p.image, place, 0);
+            p.x = 320.0f;
+            p.y = (f32)(((fn_1_486C4(p.image) >> 1) & 0x7FFF) + 144);
+            p.scale_x *= scale;
+            p.scale_y *= scale;
+            p.alpha = fade5;
+            p.flags = 0x400000B;
+            CONVERT(p);
+            p.vertex_callback = (VertexCallback)fn_1_15C4EC;
+            SET_VALUE(p, (f32)arg1);
+            fn_1_4F734(&p);
+
+            p = lbl_1_rodata_26F8;
+            p.image = 0x9424;
+            fn_1_51564(0, 0, 120, fn_1_486C4(p.image), 3, 1);
+            fn_1_5158C(&p, p.image, suffix, 0);
+            p.x = 320.0f;
+            p.y = 208.0f;
+            p.scale_x *= scale;
+            p.scale_y *= scale;
+            p.alpha = fade5;
+            p.flags = 0x4000005;
+            CONVERT(p);
+            p.vertex_callback = (VertexCallback)fn_1_15C4EC;
+            SET_VALUE(p, (f32)arg1);
+            fn_1_4F734(&p);
+        } else if (place < 9) {
+            p = lbl_1_rodata_26F8;
+            p.image = 0x945A;
+            fn_1_51564(0, 0, 112, (fn_1_486C4(p.image) >> 1) & 0x7FFF, 5, 2);
+            fn_1_5158C(&p, p.image, number % 5, number / 5);
+            p.x = 320.0f;
+            p.y = (f32)((s32)((fn_1_486C4(p.image) >> 1) & 0x7FFF) / 2 + 144);
+            p.scale_x *= scale;
+            p.scale_y *= scale;
+            p.alpha = fade5;
+            p.flags = 0x400000B;
+            CONVERT(p);
+            p.vertex_callback = (VertexCallback)fn_1_15C4EC;
+            SET_VALUE(p, (f32)arg1);
+            fn_1_4F734(&p);
+
+            p = lbl_1_rodata_26F8;
+            p.image = 0x9426;
+            fn_1_51564(0, 0, 120, fn_1_486C4(p.image), 4, 1);
+            fn_1_5158C(&p, p.image, suffix, 0);
+            p.x = 320.0f;
+            p.y = 208.0f;
+            p.scale_x *= scale;
+            p.scale_y *= scale;
+            p.alpha = fade5;
+            p.flags = 0x4000005;
+            CONVERT(p);
+            p.vertex_callback = (VertexCallback)fn_1_15C4EC;
+            SET_VALUE(p, (f32)arg1);
+            fn_1_4F734(&p);
+        } else {
+            p = lbl_1_rodata_26F8;
+            p.image = 0x945A;
+            fn_1_51564(0, 0, 112, (fn_1_486C4(p.image) >> 1) & 0x7FFF, 5, 2);
+            digit = number % 10;
+            fn_1_5158C(&p, p.image, digit % 5, digit / 5);
+            p.x = 320.0f;
+            p.y = (f32)((s32)((fn_1_486C4(p.image) >> 1) & 0x7FFF) / 2 + 144);
+            stretch5 = 0.9f * scale;
+            p.scale_x *= stretch5;
+            p.scale_y *= scale;
+            p.flags = 0x400000A;
+            CONVERT(p);
+            p.vertex_callback = (VertexCallback)fn_1_15C4EC;
+            SET_VALUE(p, (f32)arg1);
+            fn_1_4F734(&p);
+
+            p = lbl_1_rodata_26F8;
+            p.image = 0x945A;
+            fn_1_51564(0, 0, 112, (fn_1_486C4(p.image) >> 1) & 0x7FFF, 5, 2);
+            digit = number / 10;
+            fn_1_5158C(&p, p.image, digit % 5, digit / 5);
+            p.x = 320.0f - (f32)(50.0f * scale);
+            p.y = (f32)((s32)((fn_1_486C4(p.image) >> 1) & 0x7FFF) / 2 + 144);
+            p.scale_x *= stretch5;
+            p.scale_y *= scale;
+            p.flags = 0x400000B;
+            CONVERT(p);
+            p.vertex_callback = (VertexCallback)fn_1_15C4EC;
+            SET_VALUE(p, (f32)arg1);
+            fn_1_4F734(&p);
+
+            p = lbl_1_rodata_26F8;
+            p.image = 0x9426;
+            fn_1_51564(0, 0, 120, fn_1_486C4(p.image), 4, 1);
+            fn_1_5158C(&p, p.image, suffix, 0);
+            p.x = 370.0f;
+            p.y = 208.0f;
+            p.scale_x *= scale;
+            p.scale_y *= scale;
+            p.alpha = fade5;
+            p.flags = 0x4000005;
+            CONVERT(p);
+            p.vertex_callback = (VertexCallback)fn_1_15C4EC;
+            SET_VALUE(p, (f32)arg1);
+            fn_1_4F734(&p);
+        }
+    }
+}
+#pragma opt_lifetimes reset
+/* fzgx:end fn_1_15C6C0 */
+
 /* fzgx:begin fn_1_15DD7C */
 /* Literal-pool primer: this TU's shared pool (retail lbl_1_rodata_DD58) is laid out in
  * first-use order across the whole TU, so the words that precede this function's own
