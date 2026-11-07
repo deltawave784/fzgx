@@ -9410,3 +9410,6 @@ rel/main_rel/bg_win/fn_1_15C6C0.c:
 
 rel/main_rel/accessory/fn_1_11D1FC.c:
 	.text       start:0x0011D1FC end:0x0011DE2C align:4
+
+rel/main_rel/accessory/fn_1_11DE2C.c:
+	.text       start:0x0011DE2C end:0x0011ED0C align:4
