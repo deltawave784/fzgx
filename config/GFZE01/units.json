@@ -57102,7 +57102,7 @@
     "extra_cflags": [],
     "tu": "rel/main_rel/ghost.c",
     "pool": {
-      "@70": "lbl_1_rodata_6B68",
+      "@88": "lbl_1_rodata_6B68",
       "...bss.0": "lbl_1_bss_7B180",
       "fzgx_obj_lbl_1_bss_7B180": "lbl_1_bss_7B180",
       "fzgx_obj_lbl_1_bss_7B190": "lbl_1_bss_7B190",
@@ -57365,8 +57365,8 @@
     "extra_cflags": [],
     "tu": "rel/main_rel/ghost.c",
     "pool": {
-      "@84": "lbl_1_rodata_6B60",
-      "@86": "lbl_1_rodata_6B68",
+      "@102": "lbl_1_rodata_6B60",
+      "@104": "lbl_1_rodata_6B68",
       "...bss.0": "lbl_1_bss_7B180",
       "fzgx_obj_lbl_1_bss_7B180": "lbl_1_bss_7B180",
       "fzgx_obj_lbl_1_bss_7C584": "lbl_1_bss_7C584",
@@ -57411,7 +57411,7 @@
     "extra_cflags": [],
     "tu": "rel/main_rel/ghost.c",
     "pool": {
-      "@16": "lbl_1_rodata_6B68",
+      "@34": "lbl_1_rodata_6B68",
       "...bss.0": "lbl_1_bss_7B180",
       "fzgx_obj_lbl_1_bss_7B180": "lbl_1_bss_7B180",
       "fzgx_obj_lbl_1_bss_7C584": "lbl_1_bss_7C584",
