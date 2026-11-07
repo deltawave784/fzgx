@@ -13,6 +13,18 @@ file from what actually unblocked functions; keep each item one or two lines.
   the indexed `psq_lx` forms from C, so scalar or `__vec2x32float__` code can never match.
   Pass loads straight as `psvec_set` arguments; loading them into locals first changes
   the registers.
+- **A displacement `psq` row without a `psvec.h` kernel is still normally C** (tooling round T26, 2026-11-07, measured).
+  Five rows that dozens of attempts and notes called unreachable or hand-written match byte-exact with one inline-asm helper
+  in a header around ordinary C: `include/psvec_fifo.h` (`WriteMTXPS4x3/4x2`, `WriteLightObjPS`: GXLoadTexMtxImm, fn_800356B8)
+  and `include/psvec_quant.h` (`psq3_row`, `psq2_merge4`, `psq27_merge2`: fn_12_12324, fn_8003B9AC, fn_8003BB30). Non-zero
+  GQRs, `dcbz` (`__dcbz`) and update forms are no evidence of an assembly function. An asm block in a loop is still loop body:
+  MWCC hoists constant loads above the guard, unrolls it (`srwi. r0, n, 2; mtctr r0; beq`, `andi. n, n, 3; beqlr`, remainder
+  loop) and `blelr`/`beqlr` are compiler output; `(n + 3) >> 2` with `cmplwi n, 0` is the trip count of `i < n; i += 4`, not a
+  source expression. Update forms need a macro: an inline function's parameters are copies, so `psq_lu` must name the
+  caller's register variable. New kernels go in a new header, never an included one (`@N` renumbering, psvec_fill.h).
+  Evidence of real assembly, by contrast (structural, not an exhausted search): entry by fallthrough from outside the symbol or a non-ABI live-in
+  (fn_8006E200's f0, reached from `lbl_8006E1F0`), a `b` over code only outside callers can enter (func_80008378), integer
+  compares on cr1-cr7 (zero of 6,986 matched C functions; only fn_80023D00, fn_800248D4, __mod2i, fn_8006FC1C, fn_8006FC5C).
 - **Helpers reach what caller spellings cannot** (tooling round T22, 2026-11-05, measured by replaying
   Sol's landed bodies against their seeds): `(s8)st->unk_5 & (1 << st->unk_16)` in the caller left six rows
   in fn_1_BA144; `enabled(st->unk_16, st->unk_5)` with `static inline s32 enabled(s32 chan, s32 flags) {
