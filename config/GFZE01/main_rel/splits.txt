@@ -9389,3 +9389,6 @@ rel/main_rel/effect/fn_1_662D8.c:
 
 rel/main_rel/effect/fn_1_5B7F8.c:
 	.text       start:0x0005B7F8 end:0x0005BF6C align:4
+
+rel/main_rel/car/fn_1_92554.c:
+	.text       start:0x00092554 end:0x000933D8 align:4

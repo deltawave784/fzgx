@@ -19085,6 +19085,613 @@ void fn_1_92530(void *arg0) {
 }
 /* fzgx:end fn_1_92530 */
 
+/* fzgx:begin fn_1_92554 noprologue */
+#include "dolphin/hw_regs.h"
+#include "types.h"
+#include "rel/main_rel/car.h"
+#include "psvec.h"
+
+typedef struct Fn92554Vec { f32 x, y, z; } Fn92554Vec;
+typedef struct Fn92554Pair { Fn92554Vec v[2]; } Fn92554Pair;
+typedef struct Fn92554Strings { u32 count; char *strings; } Fn92554Strings;
+typedef struct Fn92554Source {
+    u8 pad_0[8];
+    u8 *bones;
+    u8 pad_c[0x40];
+    f32 time;
+} Fn92554Source;
+typedef struct Fn92554Slot {
+    u16 id;
+    u8 pad_2[6];
+    Fn92554Source *source;
+    Fn92554Strings *strings;
+    u8 pad_10[0x10];
+} Fn92554Slot;
+typedef struct Fn92554Entry {
+    u16 unk_0;
+    u16 bone;
+    char *name;
+    u8 *indices;
+    f32 rot_x, rot_y, rot_z;
+    Fn92554Vec pos;
+} Fn92554Entry;
+typedef struct Fn92554Piece {
+    u32 flags;
+    u8 pad_4[0xc];
+    u32 options;
+    u8 pad_14[0xc];
+} Fn92554Piece;
+typedef struct Fn92554Model {
+    u32 unk_0;
+    u32 flags;
+    Fn92554Vec center;
+    f32 radius;
+    u16 piece_count;
+    u8 pad_1a[4];
+    u8 bone_count;
+    u8 pad_1f[0x21];
+    Fn92554Piece pieces[1];
+} Fn92554Model;
+typedef struct Fn92554Arg {
+    u8 pad_0[0x18];
+    u32 flags;
+    u8 pad_1c[0x6c];
+    s32 type;
+    s32 selection;
+    u8 pad_90[0x10];
+    s16 angle_y, angle_x, angle_z;
+    u8 pad_a6[2];
+    Fn92554Vec pos;
+    f32 offset_y;
+    f32 scale;
+    Fn92554Entry *entries[5];
+    s32 counts[5];
+    void *packages[5];
+    u8 pad_f8[0x50];
+    u16 id;
+    u8 pad_14a[6];
+    Fn92554Source *source;
+    Fn92554Strings *strings;
+    u8 pad_158[0x18];
+    Fn92554Source *source_170;
+    u8 pad_174[0x1c];
+    Fn92554Source *source_190;
+    u8 pad_194[0x1c];
+    Fn92554Source *source_1b0;
+    u8 pad_1b4[0x1c];
+    Fn92554Source *source_1d0;
+    u8 pad_1d4[0x1c];
+    Fn92554Source *source_1f0;
+    u8 pad_1f4[0x14];
+    Fn92554Slot slots[20];
+    s8 extra;
+    u8 pad_489[0x33];
+    u32 timers[4];
+} Fn92554Arg;
+
+extern void **fn_80077A18(void);
+extern void fn_1_56298(f32, f32, f32, f32);
+extern char *fn_1_41418(Fn92554Strings *, u32);
+extern s32 fn_1_54E34(void *, f32);
+extern u32 fn_1_56018(s32);
+extern void fn_1_5616C(s32, f32, f32);
+extern void fn_1_557C4(void *);
+extern void fn_1_556B8(void *);
+extern void fn_1_977BC(void *, void *);
+extern void fn_1_107F50(void *);
+extern void fn_1_107F2C(void *);
+extern void *fn_1_5448C(void *);
+extern void *fn_1_548EC(void);
+extern void fn_1_55924(void *, void *);
+extern s16 lbl_1_bss_6E988;
+extern u32 lbl_801A63C0;
+extern int fn_80083BCC(const char *, const char *);
+extern char *fn_80083970(const char *, const char *);
+extern int sprintf(char *, const char *, ...);
+extern int strncmp(const char *, const char *, u32);
+extern u32 strlen(const char *);
+extern char *strncpy(char *, const char *, u32);
+extern Fn92554Model *fn_80071268(void *, const char *);
+extern void lbl_8006DCA4(void);
+extern void lbl_8006E0B4(f32, f32, f32);
+extern void mathutil_mtxA_rotate_z(s32);
+extern void mathutil_mtxA_rotate_y(s32);
+extern void mathutil_mtxA_rotate_x(s32);
+extern void lbl_8006E14C(f32);
+extern void lbl_8006DAEC(void);
+extern void lbl_8006DFC4(void *);
+extern void lbl_8006DC20(void);
+extern void lbl_8006DB30(void);
+extern void lbl_8006E0A4(void *);
+extern void *fn_80077A20(void *, void **);
+extern void fn_80072558(void);
+extern void lbl_8006D9D8(void *);
+
+static inline s32 fn92554_rand(void) {
+    lbl_801A63C0 = lbl_801A63C0 * 0x676a4b6b + 0x33cb;
+    return (lbl_801A63C0 >> 16) & 0x7fff;
+}
+
+#pragma section code_type ".fzgxpool"
+typedef struct Fn92554Matrix { f32 m[3][4]; } Fn92554Matrix;
+static inline void fn92554_get_pos(void *pos, void *cache) {
+    volatile Fn92554Matrix *mtx = (volatile Fn92554Matrix *)LC_BASE; /* Locked-cache matrix is updated by matrix helpers. */
+    psvec_set(pos, mtx->m[2][3], mtx->m[1][3], mtx->m[0][3]);
+}
+
+typedef struct Fn92554BoneInline { u8 pad_0[0x88]; f32 matrix[3][4]; u8 pad_b8[0xd4]; } Fn92554BoneInline;
+static inline void fn92554_type20(Fn92554Arg *car, u8 *data, Fn92554Vec *pos, Fn92554Pair *first, Fn92554Pair *second) {
+    Fn92554BoneInline *bone_array;
+    void **matrices;
+    void *pkg;
+    Fn92554Vec *point;
+    f32 *prev;
+    s32 n;
+    f32 factor;
+    bone_array = (Fn92554BoneInline *)car->source->bones;
+    matrices = (void **)LC_BASE;
+    pkg = car->packages[car->selection];
+    point = first->v;
+    prev = (f32 *)(data + 0x70f0);
+    factor = 65535.0f;
+    for (n = 0; n < 2; n++) {
+        f32 z, delta;
+        s16 old_angle;
+        s32 change;
+        lbl_8006D9D8(&car->pos);
+        lbl_8006DFC4(bone_array[21].matrix);
+        fn92554_get_pos(pos, matrices);
+        lbl_8006E0A4(point);
+        mathutil_mtxA_rotate_x(lbl_1_bss_6E988);
+        fn_80072558();
+        z = pos->z;
+        delta = z - *prev;
+        change = (s32)(factor * delta);
+        old_angle = lbl_1_bss_6E988;
+        *prev = z;
+        lbl_1_bss_6E988 = old_angle - change;
+        fn_1_556B8(fn_80071268(pkg, (char *)data + 0x7190));
+        point++;
+        prev++;
+    }
+    matrices = (void **)LC_BASE;
+    bone_array = (Fn92554BoneInline *)car->source->bones;
+    point = second->v;
+    prev = (f32 *)(data + 0x70f8);
+    factor = 65535.0f;
+    n = 0;
+    do {
+        f32 z, delta;
+        s16 old_angle;
+        s32 change;
+        lbl_8006D9D8(&car->pos);
+        lbl_8006DFC4(bone_array[26].matrix);
+        fn92554_get_pos(pos, matrices);
+        lbl_8006E0A4(point);
+        mathutil_mtxA_rotate_x(lbl_1_bss_6E988);
+        fn_80072558();
+        z = pos->z;
+        delta = z - *prev;
+        change = (s32)(factor * delta);
+        old_angle = lbl_1_bss_6E988;
+        *prev = z;
+        lbl_1_bss_6E988 = old_angle - change;
+        fn_1_556B8(fn_80071268(pkg, (char *)data + 0x7190));
+        n++;
+        point++;
+        prev++;
+    } while (n < 2);
+}
+
+#pragma opt_propagation off
+static inline void fn92554_loopfirst(Fn92554Arg *car, u8 *data, Fn92554Vec *pos, Fn92554Pair *first, Fn92554Pair *second,
+    void ***matrices, void **pkg, Fn92554Vec **point, f32 **prev, s32 *n, f32 *factor,
+    f32 *z, f32 *delta, s16 *old_angle, s32 *change,
+    f32 *z2, f32 *delta2, s16 *old_angle2, s32 *change2, Fn92554BoneInline *bone_array) {
+    *pkg = car->packages[car->selection];
+    *point = first->v;
+    *prev = (f32 *)(data + 0x70f0);
+    *factor = 65535.0f;
+    for (*n = 0, *matrices = (void **)LC_BASE; *n < 2; (*n)++) {
+        lbl_8006D9D8(&car->pos);
+        lbl_8006DFC4(bone_array[21].matrix);
+        psvec_set(pos, ((volatile Fn92554Matrix *)*matrices)->m[2][3], ((volatile Fn92554Matrix *)*matrices)->m[1][3], ((volatile Fn92554Matrix *)*matrices)->m[0][3]);  /* fzgx-allow: S2 volatile view keeps the verified load order */
+        lbl_8006E0A4(*point);
+        mathutil_mtxA_rotate_x(lbl_1_bss_6E988);
+        fn_80072558();
+        *z = pos->z;
+        *delta = *z - **prev;
+        *change = (s32)(*factor * *delta);
+        *old_angle = lbl_1_bss_6E988;
+        **prev = *z;
+        lbl_1_bss_6E988 = *old_angle - *change;
+        fn_1_556B8(fn_80071268(*pkg, (char *)data + 0x7190));
+        (*point)++;
+        (*prev)++;
+    }
+}
+static inline void fn92554_loopsecond(Fn92554Arg *car, u8 *data, Fn92554Vec *pos, Fn92554Pair *first, Fn92554Pair *second,
+    void ***matrices, void **pkg, Fn92554Vec **point, f32 **prev, s32 *n, f32 *factor,
+    f32 *z, f32 *delta, s16 *old_angle, s32 *change,
+    f32 *z2, f32 *delta2, s16 *old_angle2, s32 *change2, Fn92554BoneInline *bone_array) {
+    *matrices = (void **)LC_BASE; /* Updated by matrix helpers. */
+    *matrices = (*point = second->v,
+        *prev = (f32 *)(data + 0x70f8),
+        *factor = 65535.0f,
+        *n = 0, (void **)LC_BASE); /* Updated by matrix helpers. */
+    do {
+        lbl_8006D9D8(&car->pos);
+        lbl_8006DFC4(bone_array[26].matrix);
+        psvec_set(pos, ((volatile Fn92554Matrix *)*matrices)->m[2][3], ((volatile Fn92554Matrix *)*matrices)->m[1][3], ((volatile Fn92554Matrix *)*matrices)->m[0][3]);  /* fzgx-allow: S2 volatile view keeps the verified load order */
+        lbl_8006E0A4(*point);
+        mathutil_mtxA_rotate_x(lbl_1_bss_6E988);
+        fn_80072558();
+        *z2 = pos->z;
+        *delta2 = *z2 - **prev;
+        *change2 = (s32)(*factor * *delta2);
+        *old_angle2 = lbl_1_bss_6E988;
+        **prev = *z2;
+        lbl_1_bss_6E988 = *old_angle2 - *change2;
+        fn_1_556B8(fn_80071268(*pkg, (char *)data + 0x7190));
+        (*n)++;
+        (*point)++;
+        (*prev)++;
+    } while (*n < 2);
+}
+static inline void fn92554_type20_refs_impl(Fn92554Arg *car, u8 *data, Fn92554Vec *pos, Fn92554Pair *first, Fn92554Pair *second,
+    void ***matrices, void **pkg, Fn92554Vec **point, f32 **prev, s32 *n, f32 *factor,
+    f32 *z, f32 *delta, s16 *old_angle, s32 *change,
+    f32 *z2, f32 *delta2, s16 *old_angle2, s32 *change2, void ***matrices2) {
+    fn92554_loopfirst(car, data, pos, first, second, matrices, pkg, point, prev, n, factor,
+        z, delta, old_angle, change, z2, delta2, old_angle2, change2, (Fn92554BoneInline *)car->source->bones);
+    fn92554_loopsecond(car, data, pos, first, second, matrices, pkg, point, prev, n, factor,
+        z, delta, old_angle, change, z2, delta2, old_angle2, change2, (Fn92554BoneInline *)car->source->bones);
+}
+#pragma opt_loop_invariants off
+#pragma opt_propagation on
+
+static const u32 fzgx_pool_prefix[73] = {0};
+static void fn92554_pool_a(void) {
+    volatile f32 x;  /* fzgx-allow: S2 volatile keeps the verified access order */
+    x = 0.0f;
+    x = 1.0f;
+    x = 100.0f;
+    x = 180.0f;
+    x = 32767.0f;
+}
+static const u32 fzgx_pool_words_a[3] = {0x43300000, 0x80000000, 0xffffffff};
+static void fn92554_pool_b(void) {
+    volatile f32 x;  /* fzgx-allow: S2 volatile keeps the verified access order */
+    x = -1.0f;
+}
+static const u32 fzgx_pool_words_b[1] = {0xffffffff};
+static void fn92554_pool_c(void) {
+    volatile f32 x;  /* fzgx-allow: S2 volatile keeps the verified access order */
+    x = 55.0f;
+    x = 30.0f;
+    x = 1000.0f;
+}
+static const u32 fzgx_pool_words_c[1] = {0x404040ff};
+
+#pragma section code_type ".text"
+
+#pragma opt_loop_invariants off
+#pragma opt_common_subs off
+void fn_1_92554(Fn92554Arg *car, s32 mode) {
+    u8 *p_lbl_1_data_209C0;
+    f32 v0;
+    register u8 *bones;
+    void **matrices;
+    void *package;
+    Fn92554Source *source;
+    s32 offset;
+    s32 item;
+    Fn92554Entry *entry;
+    s32 special;
+    s32 flag;
+    Fn92554Model *model;
+    s32 selection;
+    s32 j;
+    char name[0x100];
+    char trimmed[0x100];
+    char slot_name[0x100];
+
+    v0 = 0.0f;
+    p_lbl_1_data_209C0 = (u8 *)&lbl_1_data_209C0;
+    fn_1_56298(v0, v0, v0, v0);
+    if ((car->flags & 0x40000000) == 0) {
+        matrices = fn_80077A18();
+        package = car->packages[car->selection];
+        item = 0;
+        offset = 0;
+        while (item < car->counts[selection = car->selection]) {
+            entry = (Fn92554Entry *)((u8 *)car->entries[selection] + offset);
+            special = 1;
+            flag = 0;
+            if (fn_80083BCC(entry->name, (char *)p_lbl_1_data_209C0 + 0x27d0) == 0 ||
+                fn_80083BCC(entry->name, (char *)p_lbl_1_data_209C0 + 0x2a60) == 0 ||
+                fn_80083BCC(entry->name, (char *)p_lbl_1_data_209C0 + 0x2cf0) == 0 ||
+                fn_80083BCC(entry->name, (char *)p_lbl_1_data_209C0 + 0x3958) == 0 ||
+                fn_80083BCC(entry->name, (char *)p_lbl_1_data_209C0 + 0x3c78) == 0 ||
+                fn_80083970(entry->name, (char *)p_lbl_1_data_209C0 + 0x7100) != 0 ||
+                fn_80083970(entry->name, (char *)p_lbl_1_data_209C0 + 0x710c) != 0 ||
+                fn_80083970(entry->name, (char *)p_lbl_1_data_209C0 + 0x7118) != 0) {
+                flag = 1;
+            }
+            if (flag == 0 && fn_80083970(entry->name, (char *)p_lbl_1_data_209C0 + 0x2084) == 0) {
+                special = 0;
+            }
+            {
+                Fn92554Arg *scan;
+                s32 found;
+                scan = car;
+                found = 0;
+                for (j = 0; j < 20; j++, scan = (Fn92554Arg *)((u8 *)scan + 0x20)) {
+                    if (scan->slots[0].source != 0 && scan->slots[0].strings != 0 && special != 0) {
+                        if (fn_80083BCC(entry->name, (char *)p_lbl_1_data_209C0 + 0x27d0) == 0) {
+                            sprintf(name, (char *)p_lbl_1_data_209C0 + 0x7120, fn_1_41418(car->strings, car->id));
+                        } else {
+                            sprintf(name, (char *)p_lbl_1_data_209C0 + 0x7128, fn_1_41418(car->strings, car->id), entry->name);
+                        }
+                        if (fn_80083BCC(fn_1_41418(scan->slots[0].strings, scan->slots[0].id), name) == 0) {
+                            found = 1;
+                        }
+                        if (strncmp(fn_1_41418(car->strings, car->id), (char *)p_lbl_1_data_209C0 + 0x7130, 4) == 0 &&
+                            fn_80083970(entry->name, (char *)p_lbl_1_data_209C0 + 0x3958) != 0) {
+                            found = 1;
+                        }
+                    }
+                }
+                if (found == 0 && special != 0) goto next_item; /* Keep the verified branch to next_item. */
+            }
+            if (fn_80083970(entry->name, (char *)p_lbl_1_data_209C0 + 0x7100) != 0 ||
+                fn_80083970(entry->name, (char *)p_lbl_1_data_209C0 + 0x710c) != 0 ||
+                fn_80083970(entry->name, (char *)p_lbl_1_data_209C0 + 0x7118) != 0) {
+                strncpy(trimmed, entry->name, strlen(entry->name) - 2);
+                trimmed[strlen(entry->name) - 2] = 0;
+                model = fn_80071268(package, trimmed);
+            } else {
+                model = fn_80071268(package, entry->name);
+            }
+            if (model == 0) goto next_item; /* Keep the verified branch to next_item. */
+            lbl_8006DCA4();
+            lbl_8006E0B4(car->pos.x, car->pos.y + car->offset_y, car->pos.z);
+            mathutil_mtxA_rotate_z(car->angle_z);
+            mathutil_mtxA_rotate_y(car->angle_y);
+            mathutil_mtxA_rotate_x(car->angle_x);
+            lbl_8006E14C(car->scale);
+            lbl_8006DAEC();
+            flag = 0;
+            if (special != 0) {
+                flag = 1;
+            } else {
+                lbl_8006DFC4(car->source->bones + entry->bone * 0x18c + 0x88);
+            }
+            if (fn_1_54E34(&model->center, model->radius) != 0 || flag != 0) {
+                flag = 1;
+            } else {
+                flag = 0;
+            }
+            if (entry->bone != 0) lbl_8006DC20();
+            else lbl_8006DB30();
+            lbl_8006E0A4(&entry->pos);
+            mathutil_mtxA_rotate_z((s32)(182.04444885253906f * entry->rot_z));
+            mathutil_mtxA_rotate_y((s32)(182.04444885253906f * entry->rot_y));
+            mathutil_mtxA_rotate_x((s32)(182.04444885253906f * entry->rot_x));
+            if (fn_80083970(entry->name, (char *)p_lbl_1_data_209C0 + 0x6924) != 0 &&
+                fn_80083970(fn_1_41418(car->strings, car->id), (char *)p_lbl_1_data_209C0 + 0x7130) != 0) {
+                fn_80077A20(model, 0);
+                lbl_8006DFC4(car->source->bones + 0x214);
+                lbl_8006E0B4(0.2025f, 0.065f, 0.085f);
+                mathutil_mtxA_rotate_z(-0x8000);
+                mathutil_mtxA_rotate_y(0x560b);
+                mathutil_mtxA_rotate_x(0x8000);
+            } else {
+                u32 flags = model->flags & 0xc;
+                if (flags != 0 && entry->indices != 0) {
+                    void **out;
+                    s32 k;
+                    Fn92554Source *source_a;
+                    Fn92554Source *source_b;
+                    if (fn_80083970(entry->name, (char *)p_lbl_1_data_209C0 + 0x205c) != 0 ||
+                        fn_80083970(entry->name, (char *)p_lbl_1_data_209C0 + 0x4530) != 0) {
+                        source = car->source;
+                    } else if (fn_80083970(entry->name, (char *)p_lbl_1_data_209C0 + 0x206c) != 0) {
+                        source = car->source_190;
+                    } else if (fn_80083970(entry->name, (char *)p_lbl_1_data_209C0 + 0x2074) != 0) {
+                        source = car->source_170;
+                    } else if (special != 0) {
+                        if (fn_80083BCC(entry->name, (char *)p_lbl_1_data_209C0 + 0x27d0) == 0) {
+                            sprintf(slot_name, (char *)p_lbl_1_data_209C0 + 0x7120, fn_1_41418(car->strings, car->id));
+                        } else {
+                            sprintf(slot_name, (char *)p_lbl_1_data_209C0 + 0x7128, fn_1_41418(car->strings, car->id), entry->name);
+                        }
+                        for (j = 0; j < 20; j++) {
+                            if (car->slots[j].source != 0 && car->slots[j].strings != 0 &&
+                                fn_80083BCC(fn_1_41418(car->slots[j].strings, car->slots[j].id), slot_name) == 0) {
+                                source = car->slots[j].source;
+                                break;
+                            }
+                        }
+                    } else {
+                        source = car->source_1b0;
+                    }
+                    if (lbl_1_bss_960 == 1) {
+                        source_b = car->source_1f0;
+                        source_a = 0;
+                    } else if (car->extra != 0) {
+                        source_a = car->source_1d0;
+                        source_b = car->source_1f0;
+                    } else {
+                        source_a = 0;
+                        source_b = 0;
+                    }
+                    out = matrices;
+                    k = 0;
+                    while (k < model->bone_count) {
+                        u8 *bone;
+                        if (source_a != 0 && source == car->source_1b0 && entry->indices[k] >= 1 && entry->indices[k] <= 0x12) {
+                            bone = source_a->bones + entry->indices[k] * 0x18c;
+                        } else if (source_b != 0 && source == car->source_1b0 && entry->indices[k] >= 0x1c && entry->indices[k] <= 0x30) {
+                            bone = source_b->bones + entry->indices[k] * 0x18c - 0x29c4;
+                        } else {
+                            bone = source->bones + entry->indices[k] * 0x18c;
+                        }
+                        *out = bone + 0x88;
+                        k++;
+                        out++;
+                    }
+                } else if (flags != 0) {
+                    fn_80077A20(model, 0);
+                }
+            }
+            if (fn_80083970(entry->name, (char *)p_lbl_1_data_209C0 + 0x207c) != 0) goto next_item; /* Keep the verified branch to next_item. */
+            if (mode != 0 && flag == 0) goto next_item; /* Keep the verified branch to next_item. */
+            fn_80072558();
+            if (fn_80083BCC(entry->name, (char *)p_lbl_1_data_209C0 + 0x2084) == 0 && (car->flags & 0x08000000) == 0) {
+                Fn92554Piece *piece;
+                *(u32 *)(p_lbl_1_data_209C0 + 0x6e30) = *(u32 *)(p_lbl_1_data_209C0 + 0x6e30) * 0x676a4b6b + 0x33cb;
+                fn_1_56018(0);
+                piece = model->pieces;
+                for (special = 0; (u32)special < model->piece_count; piece++, special++) {
+                    if (piece->flags & 0x20000) {
+                        u32 options = piece->options;
+                        u32 index = (options >> 8) & 3;
+                        s32 timer_offset = ((options & 0x300) >> 6) + 0x4bc;
+                        u32 timer = *(u32 *)((u8 *)car + timer_offset);
+                        f32 value = (f32)(timer % 1000) / 1000.0f;
+                        if ((u32)special == 1) {
+                            *(u32 *)((u8 *)car + timer_offset) += fn92554_rand() % 2 + 18;
+                        } else {
+                            *(u32 *)((u8 *)car + timer_offset) += fn92554_rand() % 2 + 30;
+                        }
+                        fn_1_5616C(index, 0.0f, value);
+                    }
+                }
+                fn_1_56018(1);
+                fn_1_557C4(model);
+                fn_1_56018(0);
+            } else {
+                fn_1_556B8(model);
+            }
+            if (car->flags & 0x08000000) fn_80077A20(model, 0);
+            if (car->type == 0x19 && fn_80083BCC(entry->name, (char *)p_lbl_1_data_209C0 + 0x2a60) == 0) {
+                fn_1_977BC(car, source);
+            }
+next_item:
+            offset += 0x24;
+            item++;
+        }
+        if (mode != 0) fn_1_107F50(car);
+        else fn_1_107F2C(car);
+        if (car->type == 0x10 && (car->selection == 0 || car->selection == 1)) {
+            u8 simple = 1;
+            u8 *bones;
+            Fn92554Model *extra_model;
+            if (strncmp(fn_1_41418(car->strings, car->id), (char *)p_lbl_1_data_209C0 + 0x7138, 6) == 0) {
+                s32 frame = (s32)car->source->time;
+                if (frame >= 0 && frame < 0x48) {
+                    extra_model = fn_80071268(car->packages[car->selection], (char *)p_lbl_1_data_209C0 + 0x7140);
+                } else if (frame >= 0x48 && frame < 0xa4) {
+                    extra_model = fn_80071268(car->packages[car->selection], (char *)p_lbl_1_data_209C0 + 0x7150);
+                    simple = 0;
+                } else if (frame >= 0xa4 && frame < 0xea) {
+                    extra_model = fn_80071268(car->packages[car->selection], (char *)p_lbl_1_data_209C0 + 0x715c);
+                    simple = 0;
+                } else if (frame >= 0xea && frame < 0x14a) {
+                    extra_model = 0;
+                } else if (frame >= 0x14a && frame < 0x1cc) {
+                    extra_model = fn_80071268(car->packages[car->selection], (char *)p_lbl_1_data_209C0 + 0x7140);
+                } else {
+                    extra_model = fn_80071268(car->packages[car->selection], (char *)p_lbl_1_data_209C0 + 0x7168);
+                    simple = 0;
+                }
+            } else {
+                extra_model = fn_80071268(car->packages[car->selection], (char *)p_lbl_1_data_209C0 + 0x7140);
+            }
+            if (extra_model != 0) {
+                f64 zero;
+                void *font;
+                bones = car->source->bones;
+                lbl_8006DCA4();
+                lbl_8006E0B4(car->pos.x, car->pos.y + car->offset_y, car->pos.z);
+                mathutil_mtxA_rotate_z(car->angle_z);
+                mathutil_mtxA_rotate_y(car->angle_y);
+                mathutil_mtxA_rotate_x(car->angle_x);
+                lbl_8006E14C(car->scale);
+                lbl_8006DFC4(bones + 0x844);
+                {
+                    f32 zero_f = 0.0f;
+                    zero = 0.05 * zero_f;
+                }
+                lbl_8006E0B4(zero, zero, zero);
+                mathutil_mtxA_rotate_z(0);
+                mathutil_mtxA_rotate_y(0);
+                mathutil_mtxA_rotate_x(0);
+                fn_80072558();
+                fn_1_5448C(&extra_model->center);
+                font = fn_1_548EC();
+                if (simple) fn_1_556B8(extra_model);
+                else fn_1_55924(extra_model, (u8 *)font + j);
+            }
+        }
+        if (car->type == 0x23 && car->selection == 0 &&
+            strncmp(fn_1_41418(car->strings, car->id), (char *)p_lbl_1_data_209C0 + 0x7178, 6) == 0) {
+            s32 frame = (s32)car->source->time;
+            Fn92554Model *extra_model = fn_80071268(car->packages[car->selection], (char *)p_lbl_1_data_209C0 + 0x7180);
+            if (extra_model != 0 && frame >= 0x56 && frame <= 0x165) {
+                u8 *bones = car->source->bones;
+                lbl_8006DCA4();
+                lbl_8006E0B4(car->pos.x, car->pos.y + car->offset_y, car->pos.z);
+                mathutil_mtxA_rotate_z(car->angle_z);
+                mathutil_mtxA_rotate_y(car->angle_y);
+                mathutil_mtxA_rotate_x(car->angle_x);
+                lbl_8006E14C(car->scale);
+                lbl_8006DFC4(bones + 0x17bc);
+                lbl_8006E0B4(0.05f, 0.005f, -0.0175f);
+                mathutil_mtxA_rotate_z(-0x2000);
+                mathutil_mtxA_rotate_y(-0x293e);
+                mathutil_mtxA_rotate_x(0xb60);
+                fn_80072558();
+                fn_1_556B8(extra_model);
+            }
+        }
+        if (car != 0 && car->type == 0x20) {
+            Fn92554Vec pos = {0.0f, 0.0f, 0.0f};
+            Fn92554Pair first = {{{0.0045850002f, -0.058060002f, -0.072865002f}, {0.0045850002f, -0.058060002f, 0.02932f}}};
+            Fn92554Pair second = {{{-0.0045850002f, -0.058060002f, -0.072865002f}, {-0.0045850002f, -0.058060002f, 0.02932f}}};
+            typedef struct Fn92554Bone { u8 pad_0[0x88]; f32 matrix[3][4]; u8 pad_b8[0xd4]; } Fn92554Bone;
+            if (car->selection == 0 || car->selection == 1) {
+                void **matrices;
+                void **matrices2;
+                Fn92554Vec *point2;
+                f32 *prev2;
+                s32 n2;
+                void *pkg;
+                Fn92554Vec *point;
+                f32 *prev;
+                s32 n;
+                f32 factor;
+                f32 z, delta;
+                s16 old_angle;
+                s32 change;
+                f32 z2, delta2;
+                s16 old_angle2;
+                s32 change2;
+                fn92554_loopfirst(car, p_lbl_1_data_209C0, &pos, &first, &second,
+                    &matrices, &pkg, &point, &prev, &n, &factor,
+                    &z, &delta, &old_angle, &change, &z2, &delta2, &old_angle2, &change2,
+                    (Fn92554BoneInline *)car->source->bones);
+                fn92554_loopsecond(car, p_lbl_1_data_209C0, &pos, &first, &second,
+                    &matrices2, &pkg, &point2, &prev2, &n2, &factor,
+                    &z, &delta, &old_angle, &change, &z2, &delta2, &old_angle2, &change2,
+                    (Fn92554BoneInline *)car->source->bones);
+            }
+        }
+    }
+}
+/* fzgx:end fn_1_92554 */
+
 /* fzgx:begin fn_1_933D8 noprologue */
 #include "types.h"
 #include "game/main_rel/car_types.h"
