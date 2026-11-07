@@ -6485,3 +6485,6 @@ dol/fn_80075240.c:
 
 dol/fn_800643F4.c:
 	.text       start:0x800643F4 end:0x800647B8 align:4
+
+dol/func_8008D6BC.c:
+	.text       start:0x80078D48 end:0x80078D60 align:4
