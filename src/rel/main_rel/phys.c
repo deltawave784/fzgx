@@ -95,65 +95,285 @@ typedef struct {
 } E5164Tbl;
 
 typedef struct { f32 x; f32 y; f32 z; } E5AE0Vec;
-extern u32 fn_1_7B064(void);
-extern struct fn_1_E252C_lbl_1_bss_384B4 lbl_1_bss_384B4;
-extern f32 lbl_1_rodata_6780[236];
-extern struct fn_1_E252C_lbl_801A63C0 lbl_801A63C0;
-extern u32 fn_1_E86FC(StringValueTable* table, const char* string);
-extern void fn_1_E1E9C(fn_1_E1E9C_PhysObj *obj);
-extern s16 fn_1_E5430(s16);
+
+typedef struct {
+    f32 x;
+    f32 y;
+    f32 z;
+} Vec3;
+
+struct fn_1_E35F0_fn_1_E35F0_lbl_801A6410 {
+    u32 unk_0;
+};
+
+struct fn_1_E7E00_fn_1_E7E00_lbl_801A6410 {
+    u32 unk_0;
+};
+
+typedef struct {
+    f32 x;
+    f32 y;
+    f32 z;
+} E3C38Vec;
+
+typedef struct {
+    u8 pad_0[0x4];
+    f32 unk_4;
+    u8 pad_8[0x14];
+    f32 unk_1C;
+    f32 unk_20;
+    f32 unk_24;
+    f32 unk_28;
+    E3C38Vec unk_2C;
+    E3C38Vec unk_38;
+    E3C38Vec unk_44;
+    f32 unk_50;
+    E3C38Vec unk_54;
+    E3C38Vec unk_60;
+    E3C38Vec unk_6C;
+    E3C38Vec unk_78;
+    f32 unk_84;
+    u8 pad_88[0xC];
+    E3C38Vec unk_94;
+    E3C38Vec unk_A0;
+    u8 unk_AC[0x10];
+    u32 unk_BC;
+    u32 unk_C0;
+    u8 unk_C4[0x30];
+    u8 unk_F4[0xC];
+    u8 unk_100[0x1C];
+    E3C38Vec unk_11C;
+    E3C38Vec unk_128;
+    u8 pad_134[0x4];
+    u64 unk_138;
+    u8 pad_140[0x4];
+    u32 unk_144;
+    u32 unk_148;
+    u32 unk_14C;
+    u32 unk_150;
+    u8 pad_154[0x4];
+    u32 unk_158;
+    u8 pad_15C[0x4C];
+} E3C38Obj;
+
+typedef struct {
+    u8 pad_0[0x7C];
+    E3C38Vec unk_7C;
+    u8 pad_88[0x3EC];
+    s8 unk_474;
+} E3C38Car;
+
+typedef struct E8938Vec { f32 x, y, z; } E8938Vec;
+
+typedef struct E8938State { u8 pad0[0x90]; s32 *current; } E8938State;
+
+typedef struct Sig_fn_1_24F10_Fn_1_24F10 {
+int flags;
+unsigned char pad04[0x2c];
+f32 field30;
+unsigned char pad34[0x150];
+f32 field184;
+unsigned char pad188[0x34];
+E8938Vec field1bc;
+unsigned char pad1c8[0x4c];
+u16 field214;
+unsigned char pad216[0x0e];
+f32 field224;
+unsigned char pad228[0x24d];
+u8 field475;
+unsigned char pad476[0x26];
+E8938State *field49c;
+unsigned char pad4a0[0xc];
+f32 field4ac;
+unsigned char pad4b0[0xe3];
+u8 field593;
+unsigned char pad594[0x46];
+u16 field5da;
+} Sig_fn_1_24F10_Fn_1_24F10;
+
+typedef struct { f32 x; f32 y; f32 z; } E7F88Vec;
+
+typedef struct { u8 r; u8 g; u8 b; u8 a; } E7F88Color;
+
+typedef struct {
+    u8 pad_0[0xA];
+    s16 unk_A;
+    u8 pad_C[0xC];
+    f32 unk_18;
+    f32 unk_1C;
+    f32 unk_20;
+    f32 unk_24;
+    f32 unk_28;
+} PhysDebugObj;
+
+typedef struct {
+    u32 flags;
+    s32 unk_4;
+    u32 unk_8;
+    u32 unk_C;
+} Sig_fn_1_45730_LoadEntry;
+
+typedef struct {
+    u32 unk_0;
+    u8 pad_4[0x48];
+    Sig_fn_1_45730_LoadEntry entry;
+} Sig_fn_1_45730_LoadResult;
 extern void * fn_1_E54A8(s16 type, s16 index);
-extern u8 *fn_1_14F04(void);
-extern s32 fn_1_20A5C(void *, f32 *);
-extern void fn_1_17920(s32, void *, f32);
 extern s16 fn_1_7B054(void);
+extern f32 fn_1_9E14C(f32, u32, u32);
+extern void fn_80008BEC(void *dest, int value, u32 size);
 extern void fn_80008BA8(void *, void *, u32);
-extern void lbl_8006D668(void *);
+extern void lbl_8006DAEC(void);
+extern void lbl_8006DB30(void);
+extern void lbl_8006D7DC(void *);
+extern void lbl_8006E0B4(f32, f32, f32);
+extern void mathutil_mtxA_rotate_x(s32);
+extern void mathutil_mtxA_rotate_y(s32);
+extern void mathutil_mtxA_rotate_z(s32);
+extern void fn_8006F6A8(s16 *);
+extern u8 lbl_1_bss_9C;
 extern u32 lbl_801A6410;
 extern void fn_1_46B4(u32 arg0, u32 arg1, const char *arg2, int arg3);
-extern u32 fn_1_E3C38(u32, u32);
 extern void lbl_8006DCA4();
 extern f32 fn_1_A71AC(void);
 extern void fn_8006F828(void *base, f32 *out);
+extern f32 lbl_1_rodata_67A8;
+extern u32 lbl_1_rodata_6A8C[3];
+extern u32 fn_80083970(const u8* left, const char* right);
+extern size_t strlen(const char *str);
+extern void fn_1_8CED0(void* object, s32 value0, s32 value1);
+extern void fn_1_8D0A4(void* object);
+extern void fn_800734A8(u32 arg0, s32 arg1, s32 arg2, s32 arg3);
+extern void fn_80072EDC(s32 arg0, s32 arg1);
+extern void fn_800745A4(u32 arg0, s32 arg1, s32 arg2, u32 arg3, u32 arg4, u32 arg5);
+extern void fn_80073778(void *obj, s32 index);
+extern void fn_80015C1C(f32 *out, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, f32 arg6, f32 arg7, f32 arg8, f32 arg9);
+extern void lbl_8006DFFC(void *, void *, void *);
+extern void GXLoadTexMtxImm(void *, u32, s32);
+extern f32 lbl_1_rodata_6780[236];
+extern f32 fn_1_A6FE8(void);
+extern s32 fn_1_E8938(u32 arg0, u32 arg1);
+extern void fn_1_8D1C8(u32 arg0, u32 arg1, u32 arg2);
+extern u32 fn_1_3F8C0(void);
+extern u32 fn_80008E84(u32 arg0);
+extern u32 lbl_1_bss_7C94C[67];
+extern void fn_1_EE530(void);
+extern u8 lbl_1_bss_7ECB4[72];
+extern void fn_1_BC29C();
+extern void fn_1_B9C0C(void);
+extern void fn_1_1596DC(int index);
+extern void fn_1_484CC(s32 index);
+extern void fn_1_12EF80(s16 value, s16 *row, s16 *column);
+extern void fn_1_9C724(void);
+extern void fn_1_DD890(void *);
+extern void fn_1_9CC40(void);
+extern u32 lbl_801A66A0;
+extern void fn_1_DE9C4(E3C38Obj *obj);
+extern void fn_1_DE4B0(E3C38Obj *obj, E3C38Vec *normal);
+extern f32 lbl_8006D0B4(f32 value);
+extern f32 lbl_8006D534(E3C38Vec *a, E3C38Vec *b);
+extern void lbl_8006D5F0(E3C38Vec *a, E3C38Vec *out, f32 scale);
+extern void lbl_8006D668(void *);
+extern void fn_1_E1934(E3C38Obj *obj, E3C38Obj *base, s16 limit);
+extern u8 fn_1_86624(void);
+extern void *fn_1_86254(int index);
+extern void fn_1_DFBBC(E3C38Car *car, E3C38Obj *obj);
+extern void fn_1_E07B8(E3C38Obj *obj);
+extern void fn_1_E57FC(void *object, void *source);
+extern void fn_1_E5988(void *base, void *value);
+extern void fn_1_E58CC(void *base, const void *value);
+extern void fn_1_E1A00(void *obj, void *str);
+extern void lbl_8006E13C(void *);
+extern void lbl_8006DB74(void *);
+extern void fn_1_E3C38(E3C38Obj *objs, s16 count);
+extern s16 fn_1_E5430(s16 index);
 extern E5164Tbl lbl_1_rodata_69D0;
 extern void fn_1_4AE0C(const char* format, ...);
 extern void fn_1_496FC(f32 value1, f32 value2);
 extern void fn_1_4955C(f32 value1, f32 value2);
 extern void fn_1_A8DD4(const char *format, ...);
 extern void fn_1_A8EF8(u16 arg0, u16 arg1);
-extern u32 lbl_1_rodata_6A98[50];
-extern void fn_1_57714(u8 value);
-extern f32 lbl_1_rodata_67B4[19];
-extern f64 lbl_1_rodata_6800;
+extern void lbl_8006E0A4(void *);
+extern void fn_80072558(void);
+extern void fn_1_E5AE0(s16 a, s16 b, f32 w, f32 h);
+extern void fn_80077E0C(void *);
+extern void fn_80076134(void);
 extern void fn_1_5773C(E5AE0Vec *a, E5AE0Vec *b, u8 *c);
-extern void fn_80008BEC(void *dest, int value, u32 size);
-extern u16 lbl_1_bss_7B14C[26];
-extern void fn_1_49514(u32 *value);
-extern u8 fn_1_E1A00__fzgx_offset_174[];
-extern u8 fn_1_E1A00__fzgx_offset_184[];
-extern u8 fn_1_E1A00__fzgx_offset_194[];
-extern u8 fn_1_E1A00__fzgx_offset_1A4[];
-extern u8 fn_1_E1A00__fzgx_offset_1B4[];
-extern u8 fn_1_E1A00__fzgx_offset_1C4[];
-extern u8 fn_1_E1A00__fzgx_offset_1D4[];
-extern u8 fn_1_E1A00__fzgx_offset_1E4[];
-extern u8 fn_1_E1A00__fzgx_offset_50[];
-extern u8 fn_1_E1A00__fzgx_offset_60[];
-extern u8 fn_1_E1A00__fzgx_offset_70[];
-extern u8 fn_1_E1A00__fzgx_offset_80[];
-extern u8 fn_1_E1A00__fzgx_offset_90[];
-extern u8 fn_1_E1A00__fzgx_offset_A0[];
-extern u8 fn_1_E1A00__fzgx_offset_B0[];
-extern u8 fn_1_E1A00__fzgx_offset_C0[];
-extern u8 lbl_1_data_3DC98__fzgx_offset_0[];
-extern u8 lbl_1_data_3DCA0__fzgx_offset_0[];
-extern u8 lbl_1_data_3DCA8__fzgx_offset_0[];
-extern u8 lbl_1_data_3DCB0__fzgx_offset_0[];
-extern u8 lbl_1_data_3DCB8__fzgx_offset_0[];
-extern u8 lbl_1_data_3DCC0__fzgx_offset_0[];
-extern int fn_1_4C10(void);
-extern u32 fn_1_3F8C0(void);
-extern u32 fn_80008E84(u32 arg0);
+extern void fn_1_E7524(PhysDebugObj *obj);
+extern void lbl_8006DBAC(void *);
+extern void lbl_8006E1C0(void *, void *);
+extern void lbl_8006D758(void);
+extern void lbl_8006E1B0(void *, void *);
+extern void fn_1_E733C(u8 *obj, s16 count);
+extern void fn_1_E5CC4(u8 *obj, s16 count);
+extern f32 lbl_1_bss_BF0[32];
+extern s32 fn_8006FC5C(void *, void *, size_t);
+extern void lbl_8006DFE8(void *);
+extern void fn_1_5621C(f32 value0, f32 value1, f32 value2, f32 value3);
+extern s32 fn_1_54E34(void *arg0, f32 arg1);
+extern void fn_1_556B8(void *value);
+extern s32 fn_1_54F5C(void *arg0, f32 arg1, f32 arg2);
+extern int sprintf(char *s, const char *format, ...);
+extern void fn_80074918(u8 arg0, s32 arg1, u8 arg2);
+extern void fn_1_681C(u32 index, u32 *output);
+extern void fn_8006E978(f32 *arg0, Vec3 *arg1, Vec3 *arg2);
+extern void mathutil_mtxA_from_quat(void *);
+extern void lbl_8006E15C(f32,f32,f32);
+extern void fn_800728A8(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
+extern void fn_80072864(u32 arg0);
+extern void fn_80037E30(u8 numEdges);
+extern u8 lbl_1_data_3DF68__fzgx_offset_0[];
+extern u8 lbl_1_data_3DF70__fzgx_offset_0[];
+extern u8 lbl_1_data_3DF78__fzgx_offset_0[];
+extern u8 lbl_1_data_3DF80__fzgx_offset_0[];
+extern u8 lbl_1_data_3DF8C__fzgx_offset_0[];
+extern u8 lbl_1_data_3DF98__fzgx_offset_0[];
+extern u8 lbl_1_data_3DFA4__fzgx_offset_0[];
+extern u8 lbl_1_data_3DFB0__fzgx_offset_0[];
+extern u8 lbl_1_data_3DFB8__fzgx_offset_0[];
+extern u8 lbl_1_data_3DFC0__fzgx_offset_0[];
+extern u8 lbl_1_data_3DFC8__fzgx_offset_0[];
+extern u8 lbl_1_data_3DFD8__fzgx_offset_0[];
+extern u8 lbl_1_data_3DFE4__fzgx_offset_0[];
+extern u8 lbl_1_data_3DFF0__fzgx_offset_0[];
+extern u8 lbl_1_data_3DFF8__fzgx_offset_0[];
+extern u8 lbl_1_data_3E004__fzgx_offset_0[];
+extern u8 lbl_1_data_3E00C__fzgx_offset_0[];
+extern u8 lbl_1_data_3E01C__fzgx_offset_0[];
+extern u8 lbl_1_data_3E02C__fzgx_offset_0[];
+extern u8 lbl_1_data_3E034__fzgx_offset_0[];
+extern u8 lbl_1_data_3E03C__fzgx_offset_0[];
+extern u8 lbl_1_data_3E048__fzgx_offset_0[];
+extern u8 lbl_1_data_3E058__fzgx_offset_0[];
+extern u8 lbl_1_data_3E064__fzgx_offset_0[];
+extern u8 lbl_1_data_3E070__fzgx_offset_0[];
+extern u8 lbl_1_data_3E07C__fzgx_offset_0[];
+extern u8 lbl_1_data_3E088__fzgx_offset_0[];
+extern u8 lbl_1_data_3E094__fzgx_offset_0[];
+extern u8 lbl_1_data_3E09C__fzgx_offset_0[];
+extern u8 lbl_1_data_3E0A4__fzgx_offset_0[];
+extern u8 lbl_1_data_3E0B0__fzgx_offset_0[];
+extern u8 lbl_1_data_3E0B8__fzgx_offset_0[];
+extern u8 lbl_1_data_3E0C0__fzgx_offset_0[];
+extern u8 lbl_1_data_3E0CC__fzgx_offset_0[];
+extern u8 lbl_1_data_3E0D8__fzgx_offset_0[];
+extern u8 lbl_1_data_3E0E4__fzgx_offset_0[];
+extern u8 lbl_1_data_3E0E8__fzgx_offset_0[];
+extern u8 lbl_1_data_3E0F4__fzgx_offset_0[];
+extern u8 lbl_1_data_3E100__fzgx_offset_0[];
+extern u8 lbl_1_data_3E10C__fzgx_offset_0[];
+extern u8 lbl_1_data_3E114__fzgx_offset_0[];
+extern u8 lbl_1_data_3E120__fzgx_offset_0[];
+extern u8 lbl_1_data_3E128__fzgx_offset_0[];
+extern u8 lbl_1_data_3E130__fzgx_offset_0[];
+extern u8 lbl_1_data_3E138__fzgx_offset_0[];
+extern u8 lbl_1_data_3E140__fzgx_offset_0[];
+extern u8 lbl_1_data_3E148__fzgx_offset_0[];
+extern u8 lbl_1_data_3E198__fzgx_offset_0[];
+extern u8 lbl_1_data_3E19C__fzgx_offset_0[];
+extern u8 lbl_1_data_3E1A0__fzgx_offset_0[];
+extern u8 lbl_1_data_3E1A4__fzgx_offset_0[];
+extern u8 lbl_1_data_3E1A8__fzgx_offset_0[];
 extern u8 fn_1_ECDFC__fzgx_offset_0[];
 extern u8 fn_1_ECE00__fzgx_offset_0[];
 extern u8 fn_1_ECE04__fzgx_offset_0[];
@@ -206,6 +426,21 @@ extern u8 lbl_1_data_3E4BC__fzgx_offset_0[];
 extern u8 lbl_1_data_3E4C8__fzgx_offset_0[];
 extern u8 lbl_1_data_3E4F4__fzgx_offset_0[];
 extern u8 lbl_1_data_3E504__fzgx_offset_0[];
+extern u32 fn_1_4630();
+extern u32 fn_1_435C(u32 value);
+extern void fn_1_E9BA8(void);
+extern void fn_1_E9C68(void);
+extern s32 fn_1_3F8C(u32 arg3, u32 arg0, u32 arg1, u32 index);
+extern s32 fn_80016DF8(const char *pathPtr);
+extern void OSReport(const char *format, ...);
+extern int fn_1_45730(void *, Sig_fn_1_45730_LoadResult *);
+extern u32 fn_1_45B2C(Sig_fn_1_45730_LoadResult *);
+extern void DCFlushRange(void *, u32);
+extern void fn_1_458A0(Sig_fn_1_45730_LoadResult *, void *, u32, u32);
+extern void fn_1_45850(Sig_fn_1_45730_LoadResult *);
+extern void fn_1_F0508(void);
+extern void fn_1_F1D8C(s32 index);
+extern void fn_1_F1A24(void);
 extern u32 fn_1_8627C(s32 index);
 extern const f32 lbl_1_rodata_6B60;
 extern const f32 lbl_1_rodata_6C90;
@@ -213,17 +448,47 @@ extern u32 fn_1_F2F34(void);
 extern void fn_1_ECF88(void);
 extern void fn_1_98634(f32);
 extern void fn_1_983CC(void *, void *);
+extern u32 fn_1_7B064(void);
+extern struct fn_1_E252C_lbl_1_bss_384B4 lbl_1_bss_384B4;
+extern struct fn_1_E252C_lbl_801A63C0 lbl_801A63C0;
+extern u32 fn_1_E86FC(StringValueTable* table, const char* string);
+extern void fn_1_E1E9C(fn_1_E1E9C_PhysObj *obj);
+extern u8 * fn_1_14F04(void);
+extern s32 fn_1_20A5C(void *, f32 *);
+extern void fn_1_17920(s32 index, void *arg1, f32 t);
+extern u32 lbl_1_rodata_6A98[50];
+extern void fn_1_57714(u8 value);
+extern f32 lbl_1_rodata_67B4[19];
+extern f64 lbl_1_rodata_6800;
+extern u16 lbl_1_bss_7B14C[26];
+extern void fn_1_49514(u32 *value);
+extern u8 fn_1_E1A00__fzgx_offset_174[];
+extern u8 fn_1_E1A00__fzgx_offset_184[];
+extern u8 fn_1_E1A00__fzgx_offset_194[];
+extern u8 fn_1_E1A00__fzgx_offset_1A4[];
+extern u8 fn_1_E1A00__fzgx_offset_1B4[];
+extern u8 fn_1_E1A00__fzgx_offset_1C4[];
+extern u8 fn_1_E1A00__fzgx_offset_1D4[];
+extern u8 fn_1_E1A00__fzgx_offset_1E4[];
+extern u8 fn_1_E1A00__fzgx_offset_50[];
+extern u8 fn_1_E1A00__fzgx_offset_60[];
+extern u8 fn_1_E1A00__fzgx_offset_70[];
+extern u8 fn_1_E1A00__fzgx_offset_80[];
+extern u8 fn_1_E1A00__fzgx_offset_90[];
+extern u8 fn_1_E1A00__fzgx_offset_A0[];
+extern u8 fn_1_E1A00__fzgx_offset_B0[];
+extern u8 fn_1_E1A00__fzgx_offset_C0[];
+extern u8 lbl_1_data_3DC98__fzgx_offset_0[];
+extern u8 lbl_1_data_3DCA0__fzgx_offset_0[];
+extern u8 lbl_1_data_3DCA8__fzgx_offset_0[];
+extern u8 lbl_1_data_3DCB0__fzgx_offset_0[];
+extern u8 lbl_1_data_3DCB8__fzgx_offset_0[];
+extern u8 lbl_1_data_3DCC0__fzgx_offset_0[];
+extern int fn_1_4C10(void);
 extern u8 lbl_1_data_2B0D4[112];
 extern u32 lbl_1_bss_85288[2];
 extern char *fn_80083DB0(char *dst, const char *src);
-extern size_t strlen(const char *str);
-extern s32 fn_8006FC5C(void *, void *, size_t);
 extern s32 fn_1_A5DC4(void);
-extern void fn_1_9C724(void);
-extern void fn_1_DD890(void *);
-extern void fn_1_9CC40(void);
-extern void fn_80077E0C(void *);
-extern void fn_80076134(void);
 extern char *strcat(char *dest, const char *src);
 extern f32 lbl_1_rodata_6808;
 extern f32 lbl_1_rodata_69CC;
@@ -244,30 +509,6 @@ extern void * fn_1_E57D4(void *base);
 extern void * fn_1_E57DC(void *base);
 extern f32 fn_1_E57E4(void *base);
 extern f32 fn_1_E57EC(void *base);
-extern void fn_1_12EF80(s16 value, s16 *row, s16 *column);
-extern f32 lbl_1_rodata_67A8;
-extern u32 lbl_1_rodata_6A8C[3];
-extern u32 fn_80083970(const u8* left, const char* right);
-extern void fn_1_8CED0(void* object, s32 value0, s32 value1);
-extern void fn_1_8D0A4(void* object);
-extern void fn_800734A8(u32 arg0, s32 arg1, s32 arg2, s32 arg3);
-extern void fn_80072EDC(s32 arg0, s32 arg1);
-extern void fn_800745A4(u32 arg0, s32 arg1, s32 arg2, u32 arg3, u32 arg4, u32 arg5);
-extern void fn_80073778(void *obj, s32 index);
-extern void fn_80015C1C(f32 *out, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, f32 arg6, f32 arg7, f32 arg8, f32 arg9);
-extern void lbl_8006DFFC(void *, void *, void *);
-extern void GXLoadTexMtxImm(void *, u32, s32);
-extern f32 fn_1_A6FE8(void);
-extern void fn_1_E8938(void);
-extern void fn_1_8D1C8(u32 arg0, u32 arg1, u32 arg2);
-extern u32 lbl_1_bss_7C94C[67];
-extern void fn_1_EE530(void);
-extern u8 lbl_1_bss_7ECB4[72];
-extern void fn_1_BC29C();
-extern void fn_1_B9C0C(void);
-extern void fn_1_1596DC(int index);
-extern void fn_1_484CC(s32 index);
-extern u32 fn_1_4630();
 extern u8 lbl_1_bss_7C8CE;
 
 /* fzgx:begin fn_1_E1C10 */
@@ -960,12 +1201,7 @@ void fn_1_E2AE8(void) {
 #pragma opt_dead_assignments reset
 /* fzgx:end fn_1_E2AE8 */
 
-/* fzgx:begin fn_1_E2DCC noprologue */
-#include "types.h"
-#include "psvec.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/phys.h"
-
+/* fzgx:begin fn_1_E2DCC */
 #pragma section code_type ".fzgxpool"
 static const u32 fzgx_pool_table1[6] = {0xBF800000, 0x3F7FFFFE, 0x3F800001, 0xBF800001, 0xBF7FFFFE, 0x00000000};  /* fzgx-allow: A1 retail pool bytes */
 __declspec(section ".fzgxpool") static void fzgx_pool_keep1(void) { const u32 *volatile cp; cp = fzgx_pool_table1; }  /* fzgx-allow: S2 pool primer sink */
@@ -1047,11 +1283,6 @@ __declspec(section ".fzgxpool") static void fzgx_pool_prime15(void) {
 }
 #pragma section code_type ".text"
 
-typedef struct {
-    f32 x;
-    f32 y;
-    f32 z;
-} Vec3;
 
 /* a 0x24-byte record of the course header's list at +0xA8 */
 typedef struct {
@@ -1100,21 +1331,7 @@ typedef struct {
     Vec3 *unk_16C;
 } PhysObj;
 
-extern PhysObj *fn_1_E54A8(s16, s16);
-extern s16 fn_1_7B054(void);
 /* retail evaluates the float argument first; the definition passes it through unnamed */
-extern f32 fn_1_9E14C(f32, u32, u32);
-extern void fn_80008BEC(void *dst, s32 value, u32 size);
-extern void fn_80008BA8(void *dst, void *src, u32 size);
-extern void lbl_8006DAEC(void);
-extern void lbl_8006DB30(void);
-extern void lbl_8006D7DC(Vec3 *);
-extern void lbl_8006E0B4(f32, f32, f32);
-extern void mathutil_mtxA_rotate_x(s32);
-extern void mathutil_mtxA_rotate_y(s32);
-extern void mathutil_mtxA_rotate_z(s32);
-extern void fn_8006F6A8(s16 *);
-extern u8 lbl_1_bss_9C;
 
 /* opt_propagation off keeps cp and mtx as locals: retail colours &counts, group and 0xE0000000 below the pool base */
 #pragma opt_propagation off
@@ -1146,7 +1363,7 @@ void fn_1_E2DCC(void) {
             continue;
         }
         cp = counts;
-        obj = fn_1_E54A8(type, cp[type]);
+        obj = (PhysObj *)fn_1_E54A8(type, cp[type]);
         fn_80008BA8(&obj->unk_54, &rec->unk_0, 12);
         fn_80008BA8(&obj->unk_60, &rec->unk_0, 12);
         fn_80008BA8(&obj->unk_F4, &rec->unk_14, 12);
@@ -1164,7 +1381,7 @@ void fn_1_E2DCC(void) {
             group = (*(s16 *)&lbl_1_bss_960 == 9) ? (&lbl_1_bss_9C)[1] : 0;
             for (j = 0; j < (s32)lbl_1_bss_3BE0->unk_B4; j++, story++) {
                 if ((story->unk_3 & 0xFU) == group) {
-                    obj = fn_1_E54A8(1, counts[1]);
+                    obj = (PhysObj *)fn_1_E54A8(1, counts[1]);
                     fn_80008BA8(&obj->unk_54, &story->unk_2C, 12);
                     fn_80008BA8(&obj->unk_60, &story->unk_2C, 12);
                     fn_80008BA8(&obj->unk_F4, &story->unk_14, 12);
@@ -1178,7 +1395,7 @@ void fn_1_E2DCC(void) {
         } else {
             lbl_8006DAEC();
             for (k = 0; k < (s32)lbl_1_bss_3BE0->unk_B4; k++, story++) {
-                obj = fn_1_E54A8(2, k);
+                obj = (PhysObj *)fn_1_E54A8(2, k);
                 curves = story->unk_10;
                 obj->unk_E = story->unk_3;
                 obj->unk_15C = -story->unk_2 * 20;
@@ -1186,7 +1403,7 @@ void fn_1_E2DCC(void) {
                 obj->unk_164 = &story->unk_14;
                 obj->unk_168 = &story->unk_20;
                 obj->unk_16C = &story->unk_2C;
-                lbl_8006D7DC(&story->unk_2C);
+                lbl_8006D7DC( (void *)(Vec3 *)(&story->unk_2C));
                 mathutil_mtxA_rotate_z(182.04444885253906f * story->unk_20.z);
                 mathutil_mtxA_rotate_y(182.04444885253906f * story->unk_20.y);
                 mathutil_mtxA_rotate_x(182.04444885253906f * story->unk_20.x);
@@ -1222,27 +1439,6 @@ typedef struct Sig_fn_1_8D168_Fn1_8D168State {
     u32 field_60;
 } Sig_fn_1_8D168_Fn1_8D168State;
 
-struct fn_1_E35F0_lbl_1_bss_7AE88 {
-    u32 unk_0;
-    u16 unk_4;
-    u8 pad_6[0x2];
-    u32 unk_8;
-    u16 unk_C;
-    u8 pad_E[0x2];
-    u32 unk_10;
-    u16 unk_14;
-    u8 pad_16[0x2];
-    u32 unk_18;
-    u16 unk_1C;
-    u8 pad_1E[0x2];
-    u32 unk_20;
-    u16 unk_24;
-    u8 pad_26[0x2];
-    u32 unk_28;
-    u16 unk_2C;
-    u8 pad_2E[0x2];
-    u32 unk_30;
-};
 struct fn_1_E35F0_lbl_801A6410 {
     u32 unk_0;
 };
@@ -1574,49 +1770,13 @@ void fn_1_E39F0(void) {
 #include "rel/main_rel/phys.h"
 #include "psvec.h"
 
-extern void lbl_8006DCA4(void *base, void *arg);
-extern void fn_1_A71AC(void);
-extern void fn_8006F828(void *base, f32 *out);
-extern void fn_1_E4A38(void *base, s32 x, s32 y, void *arg);
 extern void fn_80008BEC(void *dst, void *value, u32 size);
 extern void fn_80008BA8(void *dst, void *value, u32 size);
-extern f32 lbl_1_rodata_67A8;
-extern u32 lbl_1_rodata_6A8C[3];
-extern u32 fn_80083970(const u8* left, const char* right);
-extern u32 strlen(const char* string);
-extern void fn_1_8CED0(void* object, s32 value0, s32 value1);
-extern void fn_1_8D0A4(void* object);
-extern void fn_800734A8(u32, u32, u32, u32);
-extern void fn_80072EDC(u32, s32);
-extern void fn_800745A4(u32, s32, s32, u32, s32, s32);
-extern void fn_80073778(void *, u32);
-extern void fn_80015C1C(void *, f32, f32, f32, f32, f32, f32, f32, f32, f32);
-extern void lbl_8006DFFC(void *, void *, void *);
-extern void GXLoadTexMtxImm(void *, u32, s32);
-extern f32 lbl_1_rodata_6780[236];
-extern f32 fn_1_A6FE8(void);
-extern void fn_1_E8938(void);
-extern void fn_1_8D1C8(void *object, void (*callback)(void), int arg);
-extern u32 fn_1_3F8C0(void);
-extern u32 fn_80008E84(u32 value);
-extern u32 lbl_1_bss_7C94C[67];
-extern void fn_1_EE530(void);
-extern u8 lbl_1_bss_7ECB4[72];
-extern void fn_1_BC29C(u8 *);
-extern void fn_1_B9C0C(void);
-extern void fn_1_1596DC(s32);
-extern void fn_1_484CC(s32);
 
 extern void fn_80008BEC(void *dst, void *value, u32 size);
 extern void fn_80008BA8(void *dst, void *value, u32 size);
 
-extern f32 lbl_1_rodata_67A8;
-extern u32 lbl_1_rodata_6A8C[3];
 extern void fn_80008BA8(void *dst, void *value, u32 size);
-extern void fn_1_12EF80(s16 arg, s16 *out_group, s16 *out_entry);
-extern void fn_1_9C724(void);
-extern void fn_1_DD890(void *);
-extern void fn_1_9CC40(void);
 
 
 typedef struct {
@@ -3082,17 +3242,6 @@ void fn_1_E733C(u8 *obj, s16 count) {
 
 /* fzgx:begin fn_1_E7524 */
 typedef struct {
-    u8 pad_0[0xA];
-    s16 unk_A;
-    u8 pad_C[0xC];
-    f32 unk_18;
-    f32 unk_1C;
-    f32 unk_20;
-    f32 unk_24;
-    f32 unk_28;
-} PhysDebugObj;
-
-typedef struct {
     u8 pad_0[0x2C4];
     s16 unk_2C4;
     u8 pad_2C6[0x1A];
@@ -3209,27 +3358,6 @@ typedef struct Sig_fn_1_8D168_Fn1_8D168State {
     u32 field_60;
 } Sig_fn_1_8D168_Fn1_8D168State;
 
-struct fn_1_E7E00_lbl_1_bss_7AE88 {
-    u32 unk_0;
-    u16 unk_4;
-    u8 pad_6[0x2];
-    u32 unk_8;
-    u16 unk_C;
-    u8 pad_E[0x2];
-    u32 unk_10;
-    u16 unk_14;
-    u8 pad_16[0x2];
-    u32 unk_18;
-    u16 unk_1C;
-    u8 pad_1E[0x2];
-    u32 unk_20;
-    u16 unk_24;
-    u8 pad_26[0x2];
-    u32 unk_28;
-    u16 unk_2C;
-    u8 pad_2E[0x2];
-    u32 unk_30;
-};
 struct fn_1_E7E00_lbl_801A6410 {
     u32 unk_0;
 };
@@ -3346,27 +3474,7 @@ void fn_1_E7E00(void) {
 }
 /* fzgx:end fn_1_E7E00 */
 
-/* fzgx:begin fn_1_E7F88 noprologue */
-#include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/phys.h"
-
-extern void lbl_8006DCA4(void);
-extern void lbl_8006E0A4(void *);
-extern void mathutil_mtxA_rotate_z(s32);
-extern void fn_80072558(void);
-extern void fn_1_E5AE0(s16 a, s16 b, f32 w, f32 h);
-extern void fn_1_9C724(void);
-extern void fn_1_DD890(void *);
-extern void fn_80077E0C(void *);
-extern void fn_80076134(void);
-extern void fn_1_9CC40(void);
-
-typedef struct { f32 x; f32 y; f32 z; } E7F88Vec;
-typedef struct { u8 r; u8 g; u8 b; u8 a; } E7F88Color;
-extern void fn_1_5773C(E7F88Vec *a, E7F88Vec *b, E7F88Color *c);
-extern void fn_1_E7524(void *obj);
-
+/* fzgx:begin fn_1_E7F88 */
 /* the retail TU's .bss words this function uses, at their retail offsets, so MWCC addresses them off one section
  * base; the fzgx_pool_gap_ objects span the retail data in between, which this function does not touch */
 u32 fzgx_obj_lbl_1_bss_7AE88;
@@ -3516,7 +3624,7 @@ void fn_1_E7F88(void) {
         }
         {
             E7F88Vec origin = {0.0f, 0.0f, 0.0f};
-            fn_1_5773C(&origin, &lbl_1_bss_7B14C__fzgx_offset_10, color);
+            fn_1_5773C( (E5AE0Vec *)(E7F88Vec *)(&origin), (E5AE0Vec *)(E7F88Vec *)(&lbl_1_bss_7B14C__fzgx_offset_10), (u8 *)(E7F88Color *)(color));
         }
     }
     E7F88Objects();
@@ -3538,72 +3646,13 @@ void fn_1_E7F88(void) {
     if (lbl_1_bss_7AE88__fzgx_offset_2C != 0) {
         obj = (void *)lbl_1_bss_7AE88__fzgx_offset_28;
     }
-    fn_1_E7524(obj);
+    fn_1_E7524( (PhysDebugObj *)(void *)(obj));
 }
 /* fzgx:end fn_1_E7F88 */
 
-/* fzgx:begin fn_1_E828C noprologue */
-#include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/phys.h"
-
-extern void lbl_8006DCA4(void *base, void *arg);
-extern void fn_1_A71AC(void);
-extern void fn_8006F828(void *base, f32 *out);
-extern void fn_1_E4A38(void *base, s32 x, s32 y, void *arg);
-extern void fn_80008BEC(void *dst, void *value, u32 size);
-extern void fn_80008BA8(void *dst, void *value, u32 size);
-extern f32 lbl_1_rodata_67A8;
-extern u32 lbl_1_rodata_6A8C[3];
-extern u32 fn_80083970(const u8* left, const char* right);
-extern u32 strlen(const char* string);
-extern void fn_1_8CED0(void* object, s32 value0, s32 value1);
-extern void fn_1_8D0A4(void* object);
-extern void fn_800734A8(u32, u32, u32, u32);
-extern void fn_80072EDC(u32, s32);
-extern void fn_800745A4(u32, s32, s32, u32, s32, s32);
-extern void fn_80073778(void *, u32);
-extern void fn_80015C1C(void *, f32, f32, f32, f32, f32, f32, f32, f32, f32);
-extern void lbl_8006DFFC(void *, void *, void *);
-extern void GXLoadTexMtxImm(void *, u32, s32);
-extern f32 lbl_1_rodata_6780[236];
-extern f32 fn_1_A6FE8(void);
-extern void fn_1_E8938(void);
-extern void fn_1_8D1C8(void *object, void (*callback)(void), int arg);
-extern u32 fn_1_3F8C0(void);
-extern u32 fn_80008E84(u32 value);
-extern u32 lbl_1_bss_7C94C[67];
-extern void fn_1_EE530(void);
-extern u8 lbl_1_bss_7ECB4[72];
-extern void fn_1_BC29C(u8 *);
-extern void fn_1_B9C0C(void);
-extern void fn_1_1596DC(s32);
-extern void fn_1_484CC(s32);
-
-extern void fn_80008BEC(void *dst, void *value, u32 size);
-extern void fn_80008BA8(void *dst, void *value, u32 size);
-
-extern f32 lbl_1_rodata_67A8;
-extern u32 lbl_1_rodata_6A8C[3];
-extern void fn_80008BA8(void *dst, void *value, u32 size);
-extern void fn_1_12EF80(s16 arg, s16 *out_group, s16 *out_entry);
-extern void fn_1_9C724(void);
-extern void fn_1_DD890(void *);
-extern void fn_1_9CC40(void);
-
+/* fzgx:begin fn_1_E828C */
 typedef struct { f32 x; f32 y; f32 z; } E828CVec;
 
-extern void lbl_8006D7DC(void *);
-extern void mathutil_mtxA_rotate_z(s32);
-extern void mathutil_mtxA_rotate_y(s32);
-extern void lbl_8006DB74(void *);
-extern void lbl_8006DBAC(void *);
-extern void lbl_8006E1C0(void *, void *);
-extern void lbl_8006D758(void);
-extern void lbl_8006E1B0(void *, void *);
-extern void fn_1_E733C(u8 *obj, s16 count);
-extern void fn_1_E5CC4(u8 *obj, s16 count);
-extern f32 lbl_1_bss_BF0[32];
 
 /* the retail TU's .bss words this function uses, at their retail offsets, so MWCC addresses them off one section
  * base; the fzgx_pool_gap_ objects span the retail data in between, which this function does not touch */
@@ -3881,9 +3930,7 @@ void fn_1_E87FC(fn_1_E87FC_PhysObj *obj) {
 }
 /* fzgx:end fn_1_E87FC */
 
-/* fzgx:begin fn_1_E8938 noprologue */
-#include "psvec.h"
-
+/* fzgx:begin fn_1_E8938 */
 typedef signed short s16;
 typedef signed long s32;
 
@@ -3893,12 +3940,12 @@ typedef unsigned long u32;
 typedef unsigned long long u64;
 typedef float f32;
 
-/* lbl_1_bss_8B3A0: .bss size 0x14C, referenced by 87 functions, shape {'object': 253} */
-/* object reached through lbl_1_bss_8B3A0.unk_A4 */
+/* (*((fn_1_E8938_Obj_1_bss_8B3A0 *)&lbl_1_bss_8B3A0)): .bss size 0x14C, referenced by 87 functions, shape {'object': 253} */
+/* object reached through (*((fn_1_E8938_Obj_1_bss_8B3A0 *)&lbl_1_bss_8B3A0)).unk_A4 */
 typedef struct {
 u8 pad_0[0x19];
 u8 unk_19; /* 1 loads, 0 stores */
-} Obj_1_bss_8B3A0_AtA4;
+} fn_1_E8938_Obj_1_bss_8B3A0_AtA4;
 typedef struct {
 s16 unk_0; /* 12 loads, 2 stores */
 u8 pad_2[0x2];
@@ -3921,7 +3968,7 @@ u8 pad_98[0x6];
 u8 unk_9E; /* 7 loads, 0 stores */
 u8 unk_9F; /* 8 loads, 3 stores */
 u8 pad_A0[0x4];
-Obj_1_bss_8B3A0_AtA4 *unk_A4; /* 4 loads, 0 stores */
+fn_1_E8938_Obj_1_bss_8B3A0_AtA4 *unk_A4; /* 4 loads, 0 stores */
 u8 pad_A8[0x8];
 s16 unk_B0; /* 1 loads, 1 stores */
 s16 unk_B2; /* 1 loads, 1 stores */
@@ -3968,9 +4015,8 @@ u8 pad_144[0x2];
 s16 unk_146; /* 4 loads, 0 stores */
 s16 unk_148; /* 2 loads, 0 stores */
 u8 pad_14A[0x2];
-} Obj_1_bss_8B3A0;
-extern Obj_1_bss_8B3A0 lbl_1_bss_8B3A0;
-/* lbl_1_bss_3BE0: .bss size 0x4, referenced by 77 functions, shape {'object': 259, 'pointer': 61} */
+} fn_1_E8938_Obj_1_bss_8B3A0;
+/* ((fn_1_E8938_Obj_1_bss_3BE0_Target *)lbl_1_bss_3BE0): .bss size 0x4, referenced by 77 functions, shape {'object': 259, 'pointer': 61} */
 typedef struct {
 u32 unk_0; /* 7 loads, 0 stores */
 f32 unk_4; /* 1 loads, 0 stores */
@@ -4026,12 +4072,11 @@ f32 unk_C8; /* 1 loads, 0 stores */
 f32 unk_CC; /* 1 loads, 0 stores */
 u32 unk_D0; /* 3 loads, 0 stores */
 u32 unk_D4; /* 2 loads, 0 stores */
-} Obj_1_bss_3BE0_Target;
-extern Obj_1_bss_3BE0_Target *lbl_1_bss_3BE0;
+} fn_1_E8938_Obj_1_bss_3BE0_Target;
 
 /* Generated by `fzgx headers --module main_rel --tu phys.c`: globals of phys.c (referenced by its */
 /* functions or living in its .data block), layouts recovered from every access in the module. */
-/* lbl_1_bss_7AE88: .bss size 0x30, 11 refs from phys.c */
+/* (*((fn_1_E8938_Obj_1_bss_7AE88 *)&lbl_1_bss_7AE88)): .bss size 0x30, 11 refs from phys.c */
 /* one layout for every TU header that declares this symbol (librarian, typedefs.json) */
 typedef struct {
 u8 pad_0[0x554];
@@ -4058,7 +4103,7 @@ u8 pad_77A0[0x24];
 f32 unk_77C4; /* 2 loads, 0 stores */
 u8 pad_77C8[0x6C];
 f32 unk_7834; /* 2 loads, 0 stores */
-} Obj_1_bss_7AE88_At10;
+} fn_1_E8938_Obj_1_bss_7AE88_At10;
 typedef struct {
 u32 unk_0; /* 13 loads, 3 stores */
 s16 unk_4; /* 12 loads, 3 stores */
@@ -4066,7 +4111,7 @@ u8 pad_6[0x2];
 u32 unk_8; /* 12 loads, 3 stores */
 s16 unk_C; /* 11 loads, 5 stores */
 u8 pad_E[0x2];
-Obj_1_bss_7AE88_At10 *unk_10; /* 20 loads, 3 stores */
+fn_1_E8938_Obj_1_bss_7AE88_At10 *unk_10; /* 20 loads, 3 stores */
 s16 unk_14; /* 11 loads, 5 stores */
 u8 pad_16[0x2];
 u32 unk_18; /* 12 loads, 3 stores */
@@ -4078,11 +4123,9 @@ u8 pad_26[0x2];
 u32 unk_28; /* 12 loads, 3 stores */
 s16 unk_2C; /* 12 loads, 5 stores */
 u8 pad_2E[0x2];
-} Obj_1_bss_7AE88;
-extern Obj_1_bss_7AE88 lbl_1_bss_7AE88;
+} fn_1_E8938_Obj_1_bss_7AE88;
 
 /* lbl_1_data_3DC98: .data size 0x6, 4 refs from phys.c */
-extern u32 lbl_1_data_3DC98;
 
 /* Paired-single vector kernels recovered from retail code (2026-09-15).
  *
@@ -4095,31 +4138,6 @@ extern u32 lbl_1_data_3DC98;
  * typedef can be passed without a cast. */
 /* ab = a - b */
 #pragma fp_contract on
-typedef struct E8938Vec { f32 x, y, z; } E8938Vec;
-typedef struct E8938State { u8 pad0[0x90]; s32 *current; } E8938State;
-typedef struct Sig_fn_1_24F10_Fn_1_24F10 {
-int flags;
-unsigned char pad04[0x2c];
-f32 field30;
-unsigned char pad34[0x150];
-f32 field184;
-unsigned char pad188[0x34];
-E8938Vec field1bc;
-unsigned char pad1c8[0x4c];
-u16 field214;
-unsigned char pad216[0x0e];
-f32 field224;
-unsigned char pad228[0x24d];
-u8 field475;
-unsigned char pad476[0x26];
-E8938State *field49c;
-unsigned char pad4a0[0xc];
-f32 field4ac;
-unsigned char pad4b0[0xe3];
-u8 field593;
-unsigned char pad594[0x46];
-u16 field5da;
-} Sig_fn_1_24F10_Fn_1_24F10;
 typedef struct E8938Render {
 u8 pad0[8]; E8938Vec center; f32 radius;
 u8 pad18[0xc]; void *field24;
@@ -4136,43 +4154,16 @@ u8 pad104[0x34]; u64 flags; u8 pad140[0x68];
 } E8938Phys;
 typedef struct E8938Angles { s16 x,y,z; } E8938Angles;
 typedef struct E8938Mtx { f32 m[12]; } E8938Mtx;
-extern Sig_fn_1_24F10_Fn_1_24F10 *fn_1_86254(int);
-extern u32 strlen(const char *);
-extern s32 fn_8006FC5C(void *, void *, u32);
-extern void fn_80073778(void *, s32);
-extern void lbl_8006D7DC(void *);
-extern void lbl_8006DB74(void *);
-extern void lbl_8006DFE8(void *);
-extern void fn_80072558(void);
-extern void fn_1_5621C(f32,f32,f32,f32);
-extern s32 fn_1_54E34(void *,f32);
-extern void fn_1_556B8(void *);
-extern s32 fn_1_54F5C(void *,f32,f32);
-extern int sprintf(char *, const char *, ...);
-extern void fn_80074918(u8,s32,u8);
-extern void fn_1_681C(u32,void *);
-extern void mathutil_mtxA_rotate_x(s32);
-extern void mathutil_mtxA_rotate_y(s32);
-extern void mathutil_mtxA_rotate_z(s32);
-extern void fn_80008BA8(void *,void *,u32);
-extern void fn_8006E978(void *,void *,void *);
-extern void mathutil_mtxA_from_quat(void *);
-extern void fn_8006F6A8(void *);
-extern void lbl_8006E0A4(void *);
-extern void lbl_8006E15C(f32,f32,f32);
-extern void fn_800728A8(s32,s32,s32,s32);
-extern void fn_80072864(u32);
-extern u32 fn_80037E30(u8);
 static inline E8938Entry *E8938_find(char *name) {
 s16 i;
-for (i=0; i < (s32)lbl_1_bss_3BE0->unk_48; i++) {
-if (fn_8006FC5C(((E8938Entry *)lbl_1_bss_3BE0->unk_54)[i].model->frames->name,
-name,strlen(name)))
-return &((E8938Entry *)lbl_1_bss_3BE0->unk_54)[i];
+for (i=0; i < (s32)((fn_1_E8938_Obj_1_bss_3BE0_Target *)lbl_1_bss_3BE0)->unk_48; i++) {
+if (fn_8006FC5C(((E8938Entry *)((fn_1_E8938_Obj_1_bss_3BE0_Target *)lbl_1_bss_3BE0)->unk_54)[i].model->frames->name,
+name,(u32)strlen(name)))
+return &((E8938Entry *)((fn_1_E8938_Obj_1_bss_3BE0_Target *)lbl_1_bss_3BE0)->unk_54)[i];
 }
 return 0;
 }
-static inline E8938Phys *E8938_get_impl(Obj_1_bss_7AE88 *groups,s16 group,s16 index) {
+static inline E8938Phys *E8938_get_impl(fn_1_E8938_Obj_1_bss_7AE88 *groups,s16 group,s16 index) {
 switch(group) {
 case 0: return &((E8938Phys *)groups->unk_0)[index];
 case 1: return &((E8938Phys *)groups->unk_8)[index];
@@ -4183,7 +4174,7 @@ case 5: return &((E8938Phys *)groups->unk_28)[index];
 }
 return 0;
 }
-static inline s16 E8938_count_impl(Obj_1_bss_7AE88 *groups,s16 group) {
+static inline s16 E8938_count_impl(fn_1_E8938_Obj_1_bss_7AE88 *groups,s16 group) {
 switch(group) {
 case 0: return groups->unk_4;
 case 1: return groups->unk_C;
@@ -4195,58 +4186,6 @@ case 5: return groups->unk_2C;
 return -1;
 }
 #if 0
-extern u8 lbl_1_data_3DF68__fzgx_offset_0[];
-extern u8 lbl_1_data_3DF70__fzgx_offset_0[];
-extern u8 lbl_1_data_3DF78__fzgx_offset_0[];
-extern u8 lbl_1_data_3DF80__fzgx_offset_0[];
-extern u8 lbl_1_data_3DF8C__fzgx_offset_0[];
-extern u8 lbl_1_data_3DF98__fzgx_offset_0[];
-extern u8 lbl_1_data_3DFA4__fzgx_offset_0[];
-extern u8 lbl_1_data_3DFB0__fzgx_offset_0[];
-extern u8 lbl_1_data_3DFB8__fzgx_offset_0[];
-extern u8 lbl_1_data_3DFC0__fzgx_offset_0[];
-extern u8 lbl_1_data_3DFC8__fzgx_offset_0[];
-extern u8 lbl_1_data_3DFD8__fzgx_offset_0[];
-extern u8 lbl_1_data_3DFE4__fzgx_offset_0[];
-extern u8 lbl_1_data_3DFF0__fzgx_offset_0[];
-extern u8 lbl_1_data_3DFF8__fzgx_offset_0[];
-extern u8 lbl_1_data_3E004__fzgx_offset_0[];
-extern u8 lbl_1_data_3E00C__fzgx_offset_0[];
-extern u8 lbl_1_data_3E01C__fzgx_offset_0[];
-extern u8 lbl_1_data_3E02C__fzgx_offset_0[];
-extern u8 lbl_1_data_3E034__fzgx_offset_0[];
-extern u8 lbl_1_data_3E03C__fzgx_offset_0[];
-extern u8 lbl_1_data_3E048__fzgx_offset_0[];
-extern u8 lbl_1_data_3E058__fzgx_offset_0[];
-extern u8 lbl_1_data_3E064__fzgx_offset_0[];
-extern u8 lbl_1_data_3E070__fzgx_offset_0[];
-extern u8 lbl_1_data_3E07C__fzgx_offset_0[];
-extern u8 lbl_1_data_3E088__fzgx_offset_0[];
-extern u8 lbl_1_data_3E094__fzgx_offset_0[];
-extern u8 lbl_1_data_3E09C__fzgx_offset_0[];
-extern u8 lbl_1_data_3E0A4__fzgx_offset_0[];
-extern u8 lbl_1_data_3E0B0__fzgx_offset_0[];
-extern u8 lbl_1_data_3E0B8__fzgx_offset_0[];
-extern u8 lbl_1_data_3E0C0__fzgx_offset_0[];
-extern u8 lbl_1_data_3E0CC__fzgx_offset_0[];
-extern u8 lbl_1_data_3E0D8__fzgx_offset_0[];
-extern u8 lbl_1_data_3E0E4__fzgx_offset_0[];
-extern u8 lbl_1_data_3E0E8__fzgx_offset_0[];
-extern u8 lbl_1_data_3E0F4__fzgx_offset_0[];
-extern u8 lbl_1_data_3E100__fzgx_offset_0[];
-extern u8 lbl_1_data_3E10C__fzgx_offset_0[];
-extern u8 lbl_1_data_3E114__fzgx_offset_0[];
-extern u8 lbl_1_data_3E120__fzgx_offset_0[];
-extern u8 lbl_1_data_3E128__fzgx_offset_0[];
-extern u8 lbl_1_data_3E130__fzgx_offset_0[];
-extern u8 lbl_1_data_3E138__fzgx_offset_0[];
-extern u8 lbl_1_data_3E140__fzgx_offset_0[];
-extern u8 lbl_1_data_3E148__fzgx_offset_0[];
-extern u8 lbl_1_data_3E198__fzgx_offset_0[];
-extern u8 lbl_1_data_3E19C__fzgx_offset_0[];
-extern u8 lbl_1_data_3E1A0__fzgx_offset_0[];
-extern u8 lbl_1_data_3E1A4__fzgx_offset_0[];
-extern u8 lbl_1_data_3E1A8__fzgx_offset_0[];
 static const u32 fzgx_pool_rodata_lbl_1_rodata_6780[8] = {  /* fzgx-allow: A1 retail data bytes and bindings */
     0xBF800000, 0x3F7FFFFE, 0x3F800001, 0xBF800001, 0xBF7FFFFE, 0x0, 0x3E800000, 0x0
 };
@@ -4319,7 +4258,6 @@ static void fzgx_data_layout_lbl_1_rodata_6780(void) {
 }
 #pragma section code_type ".text"
 #endif
-extern const f32 lbl_1_rodata_6780[];
 #define fzgx_pool_rodata_lbl_1_rodata_6780 (pool)
 #define fzgx_pool_rodata_lbl_1_rodata_6780_20 (pool+0x20)
 #define fzgx_pool_rodata_lbl_1_rodata_67A8 (pool+0x28)
@@ -4328,7 +4266,6 @@ extern const f32 lbl_1_rodata_6780[];
 #define fzgx_pool_rodata_lbl_1_rodata_6780_390 (pool+0x390)
 #define fzgx_pool_rodata_lbl_1_rodata_6780_39C (pool+0x39c)
 #define fzgx_pool_rodata_lbl_1_rodata_6780_3A0 (pool+0x3a0)
-extern void *game_camera_get(void);
 static inline f32 E8938_lensq(E8938Vec *v) {
 f32 mag;
 mag=v->x*v->x;
@@ -4349,7 +4286,7 @@ return 0;
 s32 fn_1_E8938(u32 arg0, u32 arg1) {
 u8 *p_lbl_1_data_3DC98;
 u8 *pool;
-Obj_1_bss_7AE88 *p_lbl_1_bss_7AE88;
+fn_1_E8938_Obj_1_bss_7AE88 *p_lbl_1_bss_7AE88;
 s32 v0;
 s32 v1;
 Sig_fn_1_24F10_Fn_1_24F10 *v2;
@@ -4380,10 +4317,10 @@ f32 size;
 f32 depth;
 f32 f;
 p_lbl_1_data_3DC98=(u8 *)&lbl_1_data_3DC98;
-p_lbl_1_bss_7AE88=(Obj_1_bss_7AE88 *)&lbl_1_bss_7AE88;
-pool=(u8 *)lbl_1_rodata_6780;
+p_lbl_1_bss_7AE88=(fn_1_E8938_Obj_1_bss_7AE88 *)((fn_1_E8938_Obj_1_bss_7AE88 *)&lbl_1_bss_7AE88);
+pool=(u8 *)(((const f32 *)&lbl_1_rodata_6780));
 
-t0=fn_1_86254(lbl_1_bss_8B3A0.unk_9E);
+t0=(Sig_fn_1_24F10_Fn_1_24F10 *)fn_1_86254((*((fn_1_E8938_Obj_1_bss_8B3A0 *)&lbl_1_bss_8B3A0)).unk_9E);
 v0=0;
 v1=0;
 v2=t0;
@@ -4434,7 +4371,7 @@ else if(middle==1) mode=6;
 base=*(E8938Vec *)(((u8 *)fzgx_pool_rodata_lbl_1_rodata_6780_390));
 size=p->sx*p->scale;
 depth=(*(f32 *)(((u8 *)fzgx_pool_rodata_lbl_1_rodata_6780_D0))) *size;
-fn_1_681C(v2->field475,&delta);
+fn_1_681C(v2->field475, (u32 *)(void *)(&delta));
 psvec_sub(&p->pos,&delta,&delta);
 delta.y=(*(f32 *)(((u8 *)fzgx_pool_rodata_lbl_1_rodata_6780_20))) ;
 mathutil_mtxA_rotate_x(0x4000);
@@ -4451,16 +4388,16 @@ f=mag;
 if(((*(f32 *)(((u8 *)fzgx_pool_rodata_lbl_1_rodata_6780_D0))) +size)*((*(f32 *)(((u8 *)fzgx_pool_rodata_lbl_1_rodata_6780_D0))) +size)>=f) {
 if(*(s16 *)((u8 *)game_camera_get()+0xa4)==0) continue;
 fn_80008BA8(&facing,&v2->field1bc,12);
-fn_8006E978(quat,&base,&facing);
+fn_8006E978( (f32 *)(void *)(quat), (Vec3 *)(void *)(&base), (Vec3 *)(void *)(&facing));
 mathutil_mtxA_from_quat(quat);
-fn_8006F6A8(&angles);
+fn_8006F6A8( (s16 *)(void *)(&angles));
 factor1=(*(f32 *)(((u8 *)fzgx_pool_rodata_lbl_1_rodata_6780_39C))) *size;
 psvec_scale(&facing,factor1,&facing);
 } else {
 facing.x=(*(f32 *)(((u8 *)fzgx_pool_rodata_lbl_1_rodata_6780_20))) ; facing.y=(*(f32 *)(((u8 *)fzgx_pool_rodata_lbl_1_rodata_67A8))) ; facing.z=(*(f32 *)(((u8 *)fzgx_pool_rodata_lbl_1_rodata_6780_20))) ;
-fn_8006E978(quat,&base,&facing);
+fn_8006E978( (f32 *)(void *)(quat), (Vec3 *)(void *)(&base), (Vec3 *)(void *)(&facing));
 mathutil_mtxA_from_quat(quat);
-fn_8006F6A8(&angles);
+fn_8006F6A8( (s16 *)(void *)(&angles));
 factor2=(*(f32 *)(((u8 *)fzgx_pool_rodata_lbl_1_rodata_6780_3A0))) *size;
 psvec_scale(&facing,factor2,&facing);
 }
@@ -5182,19 +5119,6 @@ int fn_1_EB248(void) {
 /* fzgx:begin fn_1_EB29C pool noprologue */
 #include "types.h"
 
-struct S {
-    u8 pad_0[0x16CC];
-    u8 a;
-    u8 pad_16CD[0x81];
-    u8 b;
-    u8 pad_174F[0x5];
-    u8 c;
-    u8 pad_1755[0x7B];
-    s16 h[5];
-    u8 pad_17DA[0x2];
-    u32 w[5];
-    u8 d[15];
-};
 
 
 /* file-scope objects of the retail TU, in retail order: MWCC addresses them off one section base */
@@ -5307,43 +5231,6 @@ void fn_1_EB29C(void) {
 /* fzgx:begin fn_1_ECE04 pool noprologue */
 #include "rel/main_rel/phys.h"
 
-typedef struct {
-    u32 w0;
-    u32 w4;
-    u32 w8;
-    u32 wc;
-    u32 w10;
-    u32 w14;
-    u8 pad18[0x16e4 - 0x18];
-    u32 w16e4;
-    u32 w16e8;
-    u8 pad16ec[0x174c - 0x16ec];
-    u8 b174c;
-    u8 b174d;
-    u8 count;
-    u8 pad174f[0x1794 - 0x174f];
-    void *a1794[5];
-    void *a17a8[13];
-    s32 a17dc[8];
-    u8 pad17fc[0x1820 - 0x17fc];
-    u32 w1820;
-    u8 pad1824[0x19c8 - 0x1824];
-    u8 e19c8_row0[0x620]; u8 e19c8_row1[0x620]; u8 e19c8_row2[0x620]; u8 e19c8_row3[0x620];
-    u8 pad_e[0x3894 - 0x19c8 - 4 * 0x620];
-    u32 w3894;
-    void *p3898;
-    f32 f389c;
-    f32 f38a0;
-    u8 b38a4;
-    u8 b38a5;
-    u8 b38a6;
-    u8 pad38a7;
-    u32 w38a8;
-    u32 w38ac;
-    u32 w38b0;
-    u32 w38b4;
-    u32 w38b8;
-} PhysBlk;
 
 extern void *fn_1_8627C(s32);
 extern const f32 lbl_1_rodata_6B60;
