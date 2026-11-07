@@ -7703,6 +7703,206 @@ void fn_1_5BFF0(struct fn_1_5BFF0_Arg0 *arg0) {
 }
 /* fzgx:end fn_1_5BFF0 */
 
+/* fzgx:begin fn_1_5C058 noprologue */
+#include "dolphin/hw_regs.h"
+#include "types.h"
+#include "game/main_rel/car_test_types.h"
+#include "game/main_rel/car_types.h"
+#include "rel/main_rel/effect.h"
+#include "dolphin/os/OSFastCast.h"
+
+struct fn_1_5C058_Arg0 {
+    u8 pad_0[0x10];
+    s32 unk_10;
+    u8 pad_14[4];
+    s16 unk_18;
+    u8 pad_1A[2];
+    f32 unk_1C, unk_20, unk_24;
+    u8 pad_28[0x6C];
+    f32 unk_94, unk_98;
+    u8 pad_9C[0x10];
+    s16 unk_AC;
+};
+extern void fn5C058PoolF(f32);
+extern void fn5C058PoolD(f64);
+#pragma section code_type ".fzgxpool"
+#pragma force_active on
+static void fzgx_fn5C058PoolPrimer(void) {
+    fn5C058PoolF(60.0f); fn5C058PoolF(0.1f);
+    fn5C058PoolF(32767.0f); fn5C058PoolF(0.05f);
+    fn5C058PoolD(0.07); fn5C058PoolF(20000.0f);
+    fn5C058PoolD(4503599627370496.0);
+    fn5C058PoolF(1.0f); fn5C058PoolF(-0.03f);
+    fn5C058PoolD(15.0); fn5C058PoolD(4503601774854144.0);
+    fn5C058PoolD(1.5); fn5C058PoolD(0.5);
+    fn5C058PoolF(0.0f); fn5C058PoolF(0.5f);
+    fn5C058PoolF(8.0f); fn5C058PoolF(255.0f);
+    fn5C058PoolF(15.0f); fn5C058PoolF(0.2f);
+    fn5C058PoolF(0.08f); fn5C058PoolF(0.25f);
+    fn5C058PoolF(0.98f); fn5C058PoolF(0.99f);
+    fn5C058PoolF(40.0f); fn5C058PoolF(20.0f);
+    fn5C058PoolF(1.5f); fn5C058PoolF(0.45f);
+    fn5C058PoolF(-2.0f); fn5C058PoolF(1.0f / 12.0f);
+    fn5C058PoolF(0.15f); fn5C058PoolF(0.125f);
+    fn5C058PoolF(-0.4f); fn5C058PoolF(-0.3f);
+    fn5C058PoolF(2.0f); fn5C058PoolF(250.0f);
+    fn5C058PoolD(0.6); fn5C058PoolD(0.4);
+    fn5C058PoolF(0.3f); fn5C058PoolF(-0.004f);
+    fn5C058PoolF(1.0f / 60.0f); fn5C058PoolF(65536.0f);
+    fn5C058PoolF(4096.0f); fn5C058PoolF(0.96f);
+    fn5C058PoolF(0.4f); fn5C058PoolF(0.0505f);
+    fn5C058PoolF(0.051f); fn5C058PoolF(0.95f);
+    fn5C058PoolF(0.9f); fn5C058PoolD(150.0);
+    fn5C058PoolD(10.0); fn5C058PoolD(3.0);
+}
+static const union { u32 w[3]; const Fn183D28Vec3 v; } fzgx_pool_init_fn5C058PrimerVector = {{  /* fzgx-allow: A1 retail data bytes and bindings */
+    0x0, 0x3DCCCCCD, 0xC019999A  /* fzgx-allow: A1 retail data bytes */
+}};
+static void fn5C058PoolPrimer2(void) {
+    fn5C058PoolF(5.0f); fn5C058PoolD(1.2);
+    fn5C058PoolD(0.1); fn5C058PoolF(10.0f);
+    fn5C058PoolF(18.0f); fn5C058PoolD(0.7);
+    fn5C058PoolD(50.0);
+}
+#pragma section code_type ".text"
+#pragma force_active reset
+static const union { u32 w[3]; const Fn183D28Vec3 v; } fzgx_pool_init_fn5C058ZeroVector = {{  /* fzgx-allow: A1 retail data bytes and bindings */
+    0x0, 0x3DCCCCCD, 0xC019999A  /* fzgx-allow: A1 retail data bytes */
+}};
+typedef struct { Fn183D28Vec3 pos; s32 color; } Fn5C058Vertex;
+extern f32 lbl_8006D188(u32);
+extern u32 lbl_8006DCA4(void);
+extern void lbl_8006DC6C(void *);
+extern void fn_1_57714(u8);
+extern void fn_1_57720(u32, u32, u32, u32);
+extern void fn_1_57A70(u16, Fn5C058Vertex *);
+extern void fn_1_862D4(int, Triple *);
+extern void fn_1_8636C(int, void *);
+
+static inline void fn5C058Translation(volatile f32 *mtx, volatile Fn183D28Vec3 *v) {  /* fzgx-allow: S2 volatile keeps the verified access order */
+    f32 x, y, z;
+    /* Preserve the locked-cache translation-column load ordering. */
+    x = v->x;
+    y = v->y;
+    z = v->z;
+    mtx[3] = x;
+    mtx[7] = y;
+    mtx[11] = z;
+}
+
+#pragma opt_propagation off
+static inline void fn5C058TransformVector(Fn183D28Vec3 *out, Fn183D28Vec3 *in) {
+    Fn183D28Vec3 *translated = out;
+    fn5C058Translation((f32 *)LC_BASE, translated);
+    lbl_8006E1B0(in, translated);
+}
+#pragma opt_propagation reset
+
+static inline int fn5C058CacheInit(volatile f32 **cache) {  /* fzgx-allow: S2 volatile keeps the verified access order */
+    *cache = (f32 *)LC_BASE;
+    return 1;
+}
+
+static inline u32 fn5C058Rand(void) {
+    lbl_1_data_1D628 = lbl_1_data_1D628 * 0x41C64E6D + 12345;
+    return (lbl_1_data_1D628 >> 16) & 0x7FFF;
+}
+#define fn5C058Random() ((f32)fn5C058Rand() / 32767.0f)
+
+#pragma opt_lifetimes off
+void fn_1_5C058(struct fn_1_5C058_Arg0 *arg0) {
+    f32 v13, v14, v16;
+    volatile f32 *cache;  /* fzgx-allow: S2 volatile keeps the verified access order */
+    u32 color;
+    f32 *v25;
+    s32 v24;
+    Fn5C058Vertex *v23;
+    s32 v42;
+    f32 v41;
+    Fn5C058Vertex loc_98[15];
+    f32 loc_68[3][4];
+    Fn5C058Vertex loc_48[2];
+    Triple loc_3C;
+    Fn183D28Vec3 loc_30;
+    Fn183D28Vec3 loc_24;
+    Fn183D28Vec3 loc_18;
+    u8 loc_14[4];
+    f32 v4;
+    fn_1_862D4(arg0->unk_18, &loc_3C);
+    fn_1_8636C(arg0->unk_18, &loc_68);
+    loc_24 = *(Fn183D28Vec3 *)&loc_3C;
+    loc_18 = fzgx_pool_init_fn5C058ZeroVector.v;
+    lbl_8006DC6C(&loc_68);
+    fn5C058TransformVector(&loc_24, &loc_18);
+    v4 = 0.05f * (f32)arg0->unk_10;
+    if (v4 > 1.0f) {
+        v13 = (f32)(5.0f * (fn5C058Random() - 0.5f)) + (f32)(255.0f * arg0->unk_1C);
+        v14 = (f32)(5.0f * (fn5C058Random() - 0.5f)) + (f32)(255.0f * arg0->unk_20);
+        v16 = (f32)(5.0f * (fn5C058Random() - 0.5f)) + (f32)(255.0f * arg0->unk_24);
+    } else {
+        v13 = 255.0f * (f32)(arg0->unk_1C * v4);
+        v14 = 255.0f * (f32)(arg0->unk_20 * v4);
+        v16 = 255.0f * (f32)(arg0->unk_24 * v4);
+    }
+    loc_14[0] = __OSf32tou8(v13);
+    loc_14[1] = __OSf32tou8(v14);
+    loc_14[2] = __OSf32tou8(v16);
+    loc_14[3] = 255;
+    loc_98[0].pos = loc_24;
+    loc_98[0].color = *(u32 *)loc_14;
+    loc_18.x = arg0->unk_94;
+    for (v25 = &lbl_1_data_1D730.unk_8, v23 = &loc_98[1], v24 = 1; v24 < arg0->unk_AC; v25 += 2, v24++, v23++) {
+        fn5C058CacheInit(&cache);
+        loc_30.x = 0.4 * loc_18.x;
+        loc_30.y = v25[0] * lbl_8006D188((s32)arg0->unk_98);
+        loc_30.z = v25[1];
+        if (v24 == 14) {
+            loc_30.z = loc_30.z + (f64)(3.0 * fn5C058Random());
+        }
+        lbl_8006DC6C(&loc_68);
+        fn5C058Translation((f32 *)cache, &loc_24);
+        lbl_8006E1B0(&loc_30, &v23->pos);
+        v23->color = *(u32 *)loc_14;
+        v41 = 0.1 * (f64)v24;
+        v23->pos.x += (f32)(v41 * (fn5C058Random() - 0.5f));
+        v23->pos.y += (f32)(v41 * (fn5C058Random() - 0.5f));
+        v23->pos.z += (f32)(v41 * (fn5C058Random() - 0.5f));
+        loc_18.x += arg0->unk_94;
+    }
+    if (arg0->unk_10 >= 10) {
+        v42 = (s32)(10.0f + (f32)(19.0f * (fn5C058Random() - 0.5f)));
+    } else {
+        v42 = arg0->unk_10;
+    }
+    fn_1_57714(v42);
+    fn_1_57720(1, 1, 1, 0);
+    lbl_8006DCA4();
+    if (arg0->unk_AC > 4) {
+        fn_1_57A70(arg0->unk_AC - 3, loc_98);
+        loc_48[0] = loc_98[arg0->unk_AC - 4];
+        v25 = (f32 *)&loc_98[-3];
+        loc_48[1] = ((Fn5C058Vertex *)v25)[arg0->unk_AC];
+        v42 *= 0.7;
+        fn_1_57714(v42);
+        fn_1_57A70(2, loc_48);
+        loc_48[0] = ((Fn5C058Vertex *)v25)[arg0->unk_AC];
+        cache = (f32 *)&loc_98[-2];
+        loc_48[1] = ((Fn5C058Vertex *)cache)[arg0->unk_AC];
+        v42 *= 0.5;
+        fn_1_57714(v42);
+        fn_1_57A70(2, loc_48);
+        loc_48[0] = ((Fn5C058Vertex *)cache)[arg0->unk_AC];
+        loc_48[1] = loc_98[arg0->unk_AC - 1];
+        v42 *= 0.5;
+        fn_1_57714(v42);
+        fn_1_57A70(2, loc_48);
+    } else {
+        fn_1_57A70(arg0->unk_AC, loc_98);
+    }
+}
+#pragma opt_lifetimes reset
+/* fzgx:end fn_1_5C058 */
+
 /* fzgx:begin fn_1_5C780 noprologue */
 #include "types.h"
 #include "game/main_rel/effect_types.h"
