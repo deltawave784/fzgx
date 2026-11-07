@@ -7048,6 +7048,285 @@ void fn_1_5B780(Fn15B780 *effect) {
 }
 /* fzgx:end fn_1_5B780 */
 
+/* fzgx:begin fn_1_5B7F8 noprologue */
+#include "types.h"
+#include "game/main_rel/car_test_types.h"
+#include "game/main_rel/car_types.h"
+#include "rel/main_rel/effect.h"
+#include "dolphin/os/OSFastCast.h"
+#include "dolphin/os/OSCache.h"
+
+struct fn_1_5B7F8_Arg0 {
+    u8 pad_0[0x10];
+    s32 unk_10;
+    s32 unk_14;
+    s16 unk_18;
+    u8 pad_1A[2];
+    f32 unk_1C;
+    f32 unk_20;
+    f32 unk_24;
+    u8 pad_28[0x6C];
+    f32 unk_94;
+    f32 unk_98;
+    u8 pad_9C[0x10];
+    s16 unk_AC;
+};
+
+typedef struct {
+    u8 r, g, b, a;
+} fn_1_5B7F8_Color;
+
+typedef struct {
+    Fn183D28Vec3 pos;
+    fn_1_5B7F8_Color color;
+} fn_1_5B7F8_Point;
+
+extern f32 lbl_8006D188(s32);
+extern u32 lbl_8006DCA4(void);
+extern void fn_1_57A70(u16, fn_1_5B7F8_Point *);
+extern void *lbl_8006DC6C(void *);
+extern void fn_1_57714(u8);
+extern void fn_1_57720(u32, u32, u32, u32);
+extern void fn_1_862D4(int, Fn183D28Vec3 *);
+extern void fn_1_8636C(int, void *);
+
+#pragma section code_type ".fzgxpool"
+/* Primes the TU literal pool (lbl_1_rodata_2950) in retail order. */
+void fzgx_pool_fn_1_5B7F8_a(f32 *f, f64 *d, u32 u) {
+    f[0] = 60.0f;
+    f[1] = 0.1f;
+    f[2] = 32767.0f;
+    f[3] = 0.05f;
+    d[0] = 0.07;
+    f[4] = 20000.0f;
+    f[5] = (f32)u;
+}
+void fzgx_pool_fn_1_5B7F8_b(f32 *f, f64 *d, s32 s) {
+    f[6] = 1.0f;
+    f[7] = -0.03f;
+    d[1] = 15.0;
+    f[8] = (f32)s;
+}
+void fzgx_pool_fn_1_5B7F8_c(f32 *f, f64 *d) {
+    d[2] = 1.5;
+    d[3] = 0.5;
+    f[9] = 0.0f;
+    f[10] = 0.5f;
+    f[11] = 8.0f;
+    f[12] = 255.0f;
+    f[13] = 15.0f;
+    f[14] = 0.2f;
+    f[15] = 0.08f;
+    f[16] = 0.25f;
+    f[17] = 0.98f;
+    f[18] = 0.99f;
+    f[19] = 40.0f;
+    f[20] = 20.0f;
+    f[21] = 1.5f;
+    f[22] = 0.45f;
+    f[23] = -2.0f;
+    f[24] = 0.0833333358f;
+    f[25] = 0.15f;
+    f[26] = 0.125f;
+    f[27] = -0.4f;
+    f[28] = -0.3f;
+    f[29] = 2.0f;
+    f[30] = 250.0f;
+    d[4] = 0.6;
+    d[5] = 0.4;
+    f[31] = 0.3f;
+    f[32] = -0.004f;
+    f[33] = 0.0166666675f;
+    f[34] = 65536.0f;
+    f[35] = 4096.0f;
+    f[36] = 0.96f;
+    f[37] = 0.4f;
+    f[38] = 0.0505f;
+    f[39] = 0.051f;
+    f[40] = 0.95f;
+    f[41] = 0.9f;
+    d[6] = 150.0;
+    d[7] = 10.0;
+    d[8] = 3.0;
+}
+#pragma section code_type ".text"
+
+#define FN_1_5B7F8_RAND() \
+    (lbl_1_data_1D628 = lbl_1_data_1D628 * 0x41C64E6D + 12345, \
+     (f32)((lbl_1_data_1D628 >> 16) & 0x7FFF) / 32767.0f)
+
+/* lbl_1_data_1D6C0 is a table of (y, z) offsets, 8 bytes per point. */
+typedef struct {
+    f32 y, z;
+} fn_1_5B7F8_Wave;
+#define FN_1_5B7F8_WAVE ((fn_1_5B7F8_Wave *)&lbl_1_data_1D6C0)
+
+#pragma fp_contract off
+
+static inline void fn_1_5B7F8_init_out(Fn183D28Vec3 **dest, Fn183D28Vec3 *src) {
+    *dest = src;
+}
+
+static inline void fn_1_5B7F8_transform(void *mtx, Fn183D28Vec3 *out, Fn183D28Vec3 *t, Fn183D28Vec3 *in) {
+    f32 x;
+    f32 y;
+    f32 z;
+    Fn183D28Vec3 *dest;
+    Fn183D28Vec3 *source;
+    f32 *lc = (f32 *)LC_BASE;
+    lbl_8006DC6C(mtx);
+    fn_1_5B7F8_init_out(&dest, out);
+    fn_1_5B7F8_init_out(&source, in);
+    x = *(volatile f32 *)&dest->x; /* fzgx-allow: S2 in-place locked-cache translation load order */
+    y = *(volatile f32 *)&dest->y; /* fzgx-allow: S2 preserve locked-cache column load order */
+    z = *(volatile f32 *)&dest->z; /* fzgx-allow: S2 preserve locked-cache column load order */
+    lc[3] = x;
+    lc[7] = y;
+    lc[11] = z;
+    lbl_8006E1B0(source, dest);
+}
+
+/* Locked-cache transform scratch: the stores must follow the three loads in order. */
+#define FN_1_5B7F8_SET_TRANS(v, tag) \
+    do { \
+        f32 tag##_z; \
+        f32 tag##_y; \
+        f32 tag##_x; \
+        tag##_x = *(volatile f32 *)&(v).x; /* fzgx-allow: S2 volatile keeps the column loads in order */ \
+        tag##_y = (v).y; \
+        tag##_z = (v).z; \
+        lc[3] = tag##_x; \
+        lc[7] = tag##_y; \
+        lc[11] = tag##_z; \
+    } while (0)
+
+static inline void fn_1_5B7F8_apply(Fn183D28Vec3 *out, Fn183D28Vec3 *in) {
+    lbl_8006E1B0(in, out);
+}
+
+static inline void fn_1_5B7F8_init_lc(volatile f32 **cache) {  /* fzgx-allow: S2 volatile keeps the verified access order */
+    *cache = (volatile f32 *)LC_BASE; /* Locked-cache transform matrix. */
+}
+
+void fn_1_5B7F8(struct fn_1_5B7F8_Arg0 *e) {
+    volatile f32 *lc; /* Locked-cache transform matrix. */
+    fn_1_5B7F8_Wave *wave;
+    fn_1_5B7F8_Point pts[14];
+    int j;
+    s32 i;
+    fn_1_5B7F8_Point seg[2];
+    Fn183D28Vec3 origin;
+    Fn183D28Vec3 off;
+    fn_1_5B7F8_Color color;
+    f32 mtx[3][4];
+    f32 t;
+    f32 r;
+    f32 g;
+    f32 b;
+    f32 s;
+    f32 scale;
+    f32 y;
+
+    if (e->unk_10 <= e->unk_14) {
+    fn_1_862D4(e->unk_18, &origin);
+    fn_1_8636C(e->unk_18, mtx);
+    {
+    union {
+        Fn183D28Vec3 pos;
+        f32 xyz[3];
+    } position;
+    position.pos = origin;
+    {
+    Fn183D28Vec3 dir = { 0.0f, 0.1f, -2.4f };
+    {
+        fn_1_5B7F8_transform(mtx, (Fn183D28Vec3 *)position.xyz, &position.pos, &dir);
+    }
+
+    t = 0.05f * (f32)e->unk_10;
+    if (t > 1.0f) {
+        r = 255.0f * e->unk_1C + 5.0f * (FN_1_5B7F8_RAND() - 0.5f);
+        g = 255.0f * e->unk_20 + 5.0f * (FN_1_5B7F8_RAND() - 0.5f);
+        b = 255.0f * e->unk_24 + 5.0f * (FN_1_5B7F8_RAND() - 0.5f);
+    } else {
+        r = 255.0f * (e->unk_1C * t);
+        g = 255.0f * (e->unk_20 * t);
+        b = 255.0f * (e->unk_24 * t);
+    }
+    color.r = __OSf32tou8(r);
+    color.g = __OSf32tou8(g);
+    color.b = __OSf32tou8(b);
+    color.a = 255;
+
+    i = 2;
+    do {
+        fn_1_5B7F8_Point *p;
+        s32 n;
+        wave = FN_1_5B7F8_WAVE;
+        ++wave;
+        /* The table base is kept separate from the current row. */
+        pts[0].pos = position.pos;
+        pts[0].color = color;
+        dir.x = e->unk_94;
+        p = pts;
+        ++p;
+        for (j = 1; j < e->unk_AC; j++, p++) {
+            fn_1_5B7F8_init_lc(&lc);
+            off.x = 0.4 * dir.x;
+            s = lbl_8006D188(e->unk_98);
+            off.z = wave->z;
+            y = wave->y;
+            y *= s;
+            off.y = 1.2 * y;
+            if (j == 13) {
+                off.z += 3.0 * FN_1_5B7F8_RAND();
+            }
+            lbl_8006DC6C(mtx);
+            FN_1_5B7F8_SET_TRANS(position.pos, loop);
+            lbl_8006E1B0(&off, &p->pos);
+            p->color = color;
+            ++wave;
+            scale = 0.1 * j;
+            p->pos.x += scale * (FN_1_5B7F8_RAND() - 0.5f);
+            p->pos.y += scale * (FN_1_5B7F8_RAND() - 0.5f);
+            p->pos.z += scale * (FN_1_5B7F8_RAND() - 0.5f);
+            dir.x += e->unk_94;
+        }
+
+        if (e->unk_10 >= 25) {
+            n = 10.0f + 18.0f * (FN_1_5B7F8_RAND() - 0.5f);
+        } else {
+            n = e->unk_10;
+        }
+        fn_1_57714(n);
+        fn_1_57720(1, 1, 1, 0);
+        lbl_8006DCA4();
+        if (e->unk_AC > 4) {
+            fn_1_57A70(e->unk_AC - 3, pts);
+            seg[0] = pts[e->unk_AC - 4];
+            seg[1] = pts[e->unk_AC - 3];
+            n *= 0.7;
+            fn_1_57714(n);
+            fn_1_57A70(2, seg);
+            seg[0] = pts[e->unk_AC - 3];
+            seg[1] = pts[e->unk_AC - 2];
+            n *= 0.5;
+            fn_1_57714(n);
+            fn_1_57A70(2, seg);
+            seg[0] = pts[e->unk_AC - 2];
+            seg[1] = pts[e->unk_AC - 1];
+            n *= 0.5;
+            fn_1_57714(n);
+            fn_1_57A70(2, seg);
+        } else {
+            fn_1_57A70(e->unk_AC, pts);
+        }
+    } while (--i > 0);
+    }
+    }
+    }
+}
+/* fzgx:end fn_1_5B7F8 */
+
 /* fzgx:begin fn_1_5BF6C noprologue */
 #include "types.h"
 #include "game/main_rel/effect_types.h"
