@@ -2,14 +2,57 @@
 #include "rel/main_rel/globals.h"
 #include "rel/main_rel/bg_win.h"
 #include "font.h"
+
+struct fn_1_15E7F4_lbl_1_rodata_DD58 {
+    u8 pad_0[8]; f64 unk_8;
+    u8 pad_10[4]; f32 unk_14;
+    u8 pad_18[4]; f32 unk_1C; f32 unk_20;
+    u8 pad_24[12]; f32 unk_30;
+    u8 pad_34[8]; f32 unk_3C;
+    u8 pad_40[24]; f32 unk_58;
+    u8 pad_5C[108]; f32 unk_C8; f32 unk_CC;
+    u8 pad_D0[20]; f32 unk_E4;
+    u8 pad_E8[20]; f32 unk_FC;
+    u8 pad_100[8]; f64 unk_108;
+    u32 unk_110; u32 unk_114; u32 unk_118; u32 unk_11C;
+    u32 unk_120; u32 unk_124; u32 unk_128; u32 unk_12C;
+    u32 unk_130; u32 unk_134; u32 unk_138; u32 unk_13C;
+    u32 unk_140; u32 unk_144; u32 unk_148; u32 unk_14C;
+    u32 unk_150; u32 unk_154; u32 unk_158; u32 unk_15C;
+    f32 unk_160; f32 unk_164; f32 unk_168; f32 unk_16C;
+};
+
+typedef struct {
+    u8 r, g, b, a;
+} BgWinColor;
+
+typedef struct {
+    u8 flags;
+    u8 pad_1[0x7];
+    u8 slot;
+    u8 timer;
+    u8 pad_A[0x2];
+    u32 time;
+} BgWinTimeEntry;
+extern void OSPanic(const char *file, int line, const char *msg, ...);
+extern void fn_80008BEC(void *dest, int value, u32 size);
+extern void fn_1_15C0AC(void);
+extern void fn_1_15BEBC(u16 mask, Obj_1_bss_8F8E0 *state);
+extern u32 fn_1_15BE38(void);
+extern u16 lbl_1_bss_8F980[16];
+extern u16 lbl_1_bss_8F9A0[480];
 extern s32 fn_1_5910(void);
 extern void fn_80038F10(f32* out);
-extern void fn_1_15EFEC(int);
-extern void fn_1_15DFD4(int index, int flags);
+extern void fn_1_15EFEC(s32 arg0);
+extern void fn_1_15DFD4(int, int);
 extern u32 fn_1_485A8(s32 index);
 extern void fn_1_49410(void);
 extern void fn_1_49728(u8 value);
 extern void fn_1_1420A4(void);
+extern u32 fn_80074188(u32 arg0, u32 arg1, u32 arg2, u32 arg3);
+extern f32 lbl_1_rodata_DD58;
+extern f64 lbl_1_rodata_DD60;
+extern u32 __cvt_fp2unsigned(f32);
 extern f32 lbl_1_rodata_DD6C[11];
 extern f32 lbl_1_rodata_DE50[39];
 extern void fn_1_496FC(f32 value1, f32 value2);
@@ -19,22 +62,34 @@ extern void fn_1_15DD7C(s32 timer);
 extern void fn_1_15C6C0(u16, int);
 extern void fn_1_49614(void);
 extern void fn_1_A4C9C(s32 index, u8 value);
-extern FontDrawPacket lbl_1_rodata_26F8;
-extern u32 fn_1_58C4(void);
-extern f32 fn_1_519FC(f32 value);
-extern f32 fn_1_51AC0(f32 value);
-extern u32 fn_1_435C(u32 value);
-extern s32 fn_1_3F8C(u32 arg3, u32 arg0, u32 arg1, u32 index);
-extern void fn_1_15E220(u8 *value);
 extern u32 lbl_1_bss_8FD60[2];
-extern int fn_1_15BCDC(void *);
+extern s32 fn_1_15BCDC(u32 *p);
 extern u32 fn_1_4060(void);
 extern u32 lbl_1_bss_8FE80[8];
+extern u32 fn_1_435C(u32 value);
+extern void fn_1_15E220(u8 *value);
+extern s32 fn_1_3F8C(u32 arg3, u32 arg0, u32 arg1, u32 index);
 extern u32 lbl_1_bss_8FEA0;
 extern u8 lbl_1_bss_8FE7C;
 extern size_t strlen(const char *str);
 extern s32 fn_8006FC1C(const char *a, const char *b);
 extern void fn_1_15E1E8(u8 *value);
+extern f32 fn_1_519FC(f32 value);
+extern f32 fn_1_51AC0(f32 value);
+extern f32 lbl_8006D188(s32);
+extern u32 fn_1_15C4EC(void*);
+extern FontDrawPacket lbl_1_rodata_26F8;
+extern s32 fn_1_3F864(void);
+extern s32 fn_1_58C4(void);
+extern void fn_1_A2D84(u32 arg0);
+extern void fn_1_49514(u32 *value);
+extern void fn_1_494DC(s16 index);
+extern void fn_1_495B0(u32 value);
+extern void fn_1_495A0(f32 value);
+extern void fn_1_4955C(f32, f32);
+extern f32 lbl_8006D0B4(f32);
+extern void fn_1_15E7F4(void *arg0, s32 arg1);
+extern void fn_1_15EC40(BgWinTimeEntry *entry);
 
 /* fzgx:begin fn_1_15B70C */
 typedef struct {
@@ -48,7 +103,6 @@ typedef struct {
     u32 unk_3C;
 } BgWinItem;
 
-extern void OSPanic(const char *, int, const char *, ...);
 
 #define BGWIN_ADD(obj, count, max, base, item) \
     do {                                       \
@@ -207,16 +261,6 @@ char *fn_1_15BA78(char *name) {
 
 extern void fn_80008BEC(void *, int, u32);
 
-typedef struct {
-    u8 pad_0[0x20];
-    u8 a[0x20];
-    u8 pad_40[0x60];
-    u8 b[0x20];
-    u8 c[0x3C0];
-    u32 unk_480;
-    u16 unk_484;
-    u16 unk_486;
-} WinState;
 
 #pragma opt_lifetimes off
 /* file-scope objects of the retail TU, in retail order: MWCC addresses them off one section base */
@@ -277,15 +321,6 @@ extern u32 fn_1_15BE38(void);
 extern void fn_80008BEC(void *, int, u32);
 
 typedef struct { u8 pad[4]; u16 val; u16 pad2; } Ent;
-typedef struct {
-    u8 pad0[0x20];
-    Ent ent[16];
-    u16 idx[16];
-    u16 tbl[15][32];
-    u8 pad2[0x484 - 0xc0 - 0x3c0];
-    u16 cur;
-    u16 timer;
-} WinS;
 
 /* file-scope objects of the retail TU, in retail order: MWCC addresses them off one section base */
 u32 fzgx_obj_lbl_1_bss_8F8E0[8];
@@ -372,12 +407,7 @@ u16 fn_1_15BBC4(void) {
 #pragma opt_strength_reduction reset
 /* fzgx:end fn_1_15BBC4 */
 
-/* fzgx:begin fn_1_15BCDC noprologue */
-#include "types.h"
-
-extern u16 lbl_1_bss_8F980[16];
-extern u16 lbl_1_bss_8F9A0[480];
-
+/* fzgx:begin fn_1_15BCDC */
 s32 fn_1_15BCDC(u32 *p) {
     s32 j;
     s32 base;
@@ -445,7 +475,7 @@ u32 fn_1_15BE38(void) {
     offset = 0;
     index = 0;
     while (index < (*(ItemList **)&lbl_1_bss_8FD60)->count) {
-        if (fn_1_15BCDC((*(ItemList **)&lbl_1_bss_8FD60)->items[offset >> 2]) != 0) {
+        if (fn_1_15BCDC( (u32 *)(void *)((*(ItemList **)&lbl_1_bss_8FD60)->items[offset >> 2])) != 0) {
             return index & 0xffff;
         }
         offset += 4;
@@ -772,15 +802,7 @@ void fn_1_15C4EC(fn_1_15C4EC_Arg *__restrict arg0) {
 }
 /* fzgx:end fn_1_15C4EC */
 
-/* fzgx:begin fn_1_15C5A4 noprologue */
-#include "types.h"
-
-extern f32 lbl_1_rodata_DD58;
-extern f64 lbl_1_rodata_DD60;
-extern u32 __cvt_fp2unsigned(f32);
-extern u32 fn_80074188(u32, u32, u32, u32);
-extern u32 lbl_1_bss_8FD68;
-
+/* fzgx:begin fn_1_15C5A4 */
 #pragma opt_common_subs off
 #pragma opt_dead_assignments off
 f32 fn_1_15C5A4(void * arg0, void * arg1) {
@@ -792,10 +814,10 @@ f32 fn_1_15C5A4(void * arg0, void * arg1) {
     f32 v5;
     v0 = (s32)(f32)(*(f32 *)((u8 *)arg0 + 84) / lbl_1_rodata_DD58);
     v1 = (v0 << 4);
-    fn_80074188(__cvt_fp2unsigned(*(f32 *)((u8 *)&lbl_1_bss_8FD68 + v1)),
-        __cvt_fp2unsigned(*(f32 *)((u8 *)&lbl_1_bss_8FD68 + v1 + 4)),
-        __cvt_fp2unsigned(*(f32 *)((u8 *)&lbl_1_bss_8FD68 + v1 + 8)),
-        __cvt_fp2unsigned(*(f32 *)((u8 *)&lbl_1_bss_8FD68 + v1 + 12)));
+    fn_80074188(__cvt_fp2unsigned(*(f32 *)((u8 *)((u32 *)&lbl_1_bss_8FD68) + v1)),
+        __cvt_fp2unsigned(*(f32 *)((u8 *)((u32 *)&lbl_1_bss_8FD68) + v1 + 4)),
+        __cvt_fp2unsigned(*(f32 *)((u8 *)((u32 *)&lbl_1_bss_8FD68) + v1 + 8)),
+        __cvt_fp2unsigned(*(f32 *)((u8 *)((u32 *)&lbl_1_bss_8FD68) + v1 + 12)));
     v2 = (v0 * (0xF0000 + 16960));
     v3 = *(f32 *)((u8 *)arg0 + 84);
     v4 = *(f32 *)((u8 *)arg1 + 0);
@@ -880,7 +902,7 @@ void fn_1_15DD7C(s32 timer) {
     packet.image = 0x942B;
     packet.flags = 10;
 
-    if (fn_1_58C4() > 1 || lbl_1_bss_3C30.unk_13F6 == 0) {
+    if ((u32)fn_1_58C4() > 1 || lbl_1_bss_3C30.unk_13F6 == 0) {
         if (240.0f < (f32)timer) {
             packet.alpha = 2.0f * (((f32)timer - 240.0f) / 60.0f);
             if (packet.alpha > 1.0f) {
@@ -909,8 +931,8 @@ void fn_1_15DD7C(s32 timer) {
     packet.x = fn_1_519FC(packet.x);
     packet.y = fn_1_51AC0(packet.y);
     packet.z = 2.0f;
-    packet.scale_x *= (fn_1_58C4() == 1) ? 1.0f : 0.8f;
-    packet.scale_y *= (fn_1_58C4() == 1) ? 1.0f : 0.8f;
+    packet.scale_x *= ((u32)fn_1_58C4() == 1) ? 1.0f : 0.8f;
+    packet.scale_y *= ((u32)fn_1_58C4() == 1) ? 1.0f : 0.8f;
     fn_1_4F734(&packet);
 }
 /* fzgx:end fn_1_15DD7C */
@@ -1044,26 +1066,7 @@ void fn_1_15E260(s32 index) {
 }
 /* fzgx:end fn_1_15E260 */
 
-/* fzgx:begin fn_1_15E27C noprologue */
-#include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/bg_win.h"
-
-extern u32 lbl_1_bss_8FD60[2];
-extern int fn_1_15BCDC(void *);
-extern void fn_1_4060(void);
-
-extern u32 lbl_1_bss_8FE80[8];
-
-extern void *fn_1_435C(void *);
-extern void fn_1_15E220(u8 *value);
-extern void fn_1_3F8C(void *, void *, u8 *, s32);
-extern u32 lbl_1_bss_8FEA0;
-extern u8 lbl_1_bss_8FE7C;
-extern u32 strlen(const char *str);
-extern s32 fn_8006FC1C(const char *a, const char *b);
-extern void fn_1_15E1E8(u8 *value);
-
+/* fzgx:begin fn_1_15E27C */
 typedef struct {
     u8 unk_0;
     u8 unk_1;
@@ -1158,15 +1161,6 @@ extern u32 fn_1_435C(u32 value);
 extern s32 fn_1_3F8C(u32, u32, u32, u32);
 extern void fn_1_15E1E8(u8 *value);
 
-typedef struct {
-    Obj_1_bss_8FD68 header;
-    Obj_1_bss_8FDA8 entries;
-    u8 unk_114;
-    u8 pad_115[3];
-    s32 unk_118;
-    u8 pad_11C[0x1c];
-    u32 unk_138;
-} WindowState;
 
 /* file-scope objects of the retail TU, in retail order: MWCC addresses them off one section base */
 u32 fzgx_obj_lbl_1_bss_8FD68[16];
@@ -1276,28 +1270,7 @@ void fn_1_15E764(s32 index, void *arg) {
 }
 /* fzgx:end fn_1_15E764 */
 
-/* fzgx:begin fn_1_15E7F4 noprologue */
-#include "types.h"
-#include "rel/main_rel/globals.h"
-#include "rel/main_rel/bg_win.h"
-#include "font.h"
-
-extern u32 lbl_1_bss_8FD60[2];
-extern int fn_1_15BCDC(void *);
-extern void fn_1_4060(void);
-
-extern u32 lbl_1_bss_8FE80[8];
-
-extern void *fn_1_435C(void *);
-extern void fn_1_15E220(u8 *value);
-extern void fn_1_3F8C(void *, void *, u8 *, s32);
-extern u32 lbl_1_bss_8FEA0;
-extern u8 lbl_1_bss_8FE7C;
-extern u32 strlen(const char *str);
-extern s32 fn_8006FC1C(const char *a, const char *b);
-extern void fn_1_15E1E8(u8 *value);
-
-
+/* fzgx:begin fn_1_15E7F4 */
 #pragma section code_type ".fzgxpool"
 __declspec(section ".fzgxpool") static void fzgx_pool_prime1(void) {
     volatile f32 s; volatile f64 d;  /* fzgx-allow: S2 pool primer sinks */
@@ -1411,34 +1384,6 @@ __declspec(section ".fzgxpool") static void fzgx_pool_prime30(void) {
 #pragma section code_type ".text"
 
 struct fn_1_15E7F4_Copy88 { u32 a[22]; };
-struct fn_1_15E7F4_lbl_1_rodata_DD58 {
-    u8 pad_0[8]; f64 unk_8;
-    u8 pad_10[4]; f32 unk_14;
-    u8 pad_18[4]; f32 unk_1C; f32 unk_20;
-    u8 pad_24[12]; f32 unk_30;
-    u8 pad_34[8]; f32 unk_3C;
-    u8 pad_40[24]; f32 unk_58;
-    u8 pad_5C[108]; f32 unk_C8; f32 unk_CC;
-    u8 pad_D0[20]; f32 unk_E4;
-    u8 pad_E8[20]; f32 unk_FC;
-    u8 pad_100[8]; f64 unk_108;
-    u32 unk_110; u32 unk_114; u32 unk_118; u32 unk_11C;
-    u32 unk_120; u32 unk_124; u32 unk_128; u32 unk_12C;
-    u32 unk_130; u32 unk_134; u32 unk_138; u32 unk_13C;
-    u32 unk_140; u32 unk_144; u32 unk_148; u32 unk_14C;
-    u32 unk_150; u32 unk_154; u32 unk_158; u32 unk_15C;
-    f32 unk_160; f32 unk_164; f32 unk_168; f32 unk_16C;
-};
-extern f32 fn_1_519FC(f32);
-extern f32 fn_1_51AC0(f32);
-extern f32 lbl_8006D188(s32);
-extern int fn_1_4F734(FontDrawPacket *);
-extern struct fn_1_15E7F4_lbl_1_rodata_DD58 lbl_1_rodata_DD58;
-extern u32 fn_1_15C4EC(void *);
-extern u32 lbl_1_rodata_26F8;
-extern s32 fn_1_3F864(void);
-extern u32 fn_1_58C4(void);
-extern void fn_1_A2D84(u32);
 
 #pragma opt_strength_reduction off
 static inline u32 * fn_1_15E7F4_read_pointer(struct fn_1_15E7F4_Copy88 * owner) { return owner->a; }
@@ -1476,19 +1421,19 @@ void fn_1_15E7F4(void *arg0, s32 arg1) {
     struct fn_1_15E7F4_Copy88 loc_58;
     struct { u32 a[16]; } loc_18;
     struct { u32 a[4]; } loc_8;
-    p_lbl_1_rodata_DD58 = &lbl_1_rodata_DD58;
+    p_lbl_1_rodata_DD58 = ((struct fn_1_15E7F4_lbl_1_rodata_DD58 *)&lbl_1_rodata_DD58);
     if (*(u8 *)((u8 *)arg0 + 2) == 255) {
         if (fn_1_3F864() != 0) fn_1_A2D84(0xA9061700);
         *(u8 *)((u8 *)arg0 + 2) = 120;
     }
-    loc_58 = *(struct fn_1_15E7F4_Copy88 *)&lbl_1_rodata_26F8;
+    loc_58 = *(struct fn_1_15E7F4_Copy88 *)((u32 *)&lbl_1_rodata_26F8);
     fn_1_15E7F4_read_pointer(&loc_58)[0] = 0x941A;
     *(f32 *)((u8 *)&loc_58 + 4) = fn_1_519FC((320.0f));
     *(f32 *)((u8 *)&loc_58 + 8) = fn_1_51AC0((150.0f));
     *(f32 *)((u8 *)&loc_58 + 12) = (0.00100000005f);
-    v0 = fn_1_58C4() == 1 ? (1.0f) : (0.800000012f);
+    v0 = (u32)fn_1_58C4() == 1 ? (1.0f) : (0.800000012f);
     *(f32 *)((u8 *)&loc_58 + 16) *= v0;
-    v1 = fn_1_58C4() == 1 ? (1.0f) : (0.800000012f);
+    v1 = (u32)fn_1_58C4() == 1 ? (1.0f) : (0.800000012f);
     v3 = *(f32 *)((u8 *)&loc_58 + 20) * v1;
     fn_1_15E7F4_read_pointer(&loc_58)[12] = 0x400000A;
     *(f32 *)((u8 *)&loc_58 + 20) = v3;
@@ -1573,9 +1518,9 @@ void fn_1_15E7F4(void *arg0, s32 arg1) {
             v4 = (f32)((90.0f) * v25);
             *(f32 *)((u8 *)&loc_58 + 8) -= v4;
             v26 = v23 + (f32)((2.0f) * v25);
-            v4 = fn_1_58C4() == 1 ? (1.0f) : (0.800000012f);
+            v4 = (u32)fn_1_58C4() == 1 ? (1.0f) : (0.800000012f);
             *(f32 *)((u8 *)&loc_58 + 16) = (f32)((1.5f) * v26) * v4;
-            v4 = fn_1_58C4() == 1 ? (1.0f) : (0.800000012f);
+            v4 = (u32)fn_1_58C4() == 1 ? (1.0f) : (0.800000012f);
             *(f32 *)((u8 *)&loc_58 + 20) = v26 * v4;
         }
         fn_1_4F734((FontDrawPacket *)&loc_58);
@@ -1587,31 +1532,6 @@ void fn_1_15E7F4(void *arg0, s32 arg1) {
 /* fzgx:end fn_1_15E7F4 */
 
 /* fzgx:begin fn_1_15EC40 */
-typedef struct {
-    u8 r, g, b, a;
-} BgWinColor;
-
-typedef struct {
-    u8 flags;
-    u8 pad_1[0x7];
-    u8 slot;
-    u8 timer;
-    u8 pad_A[0x2];
-    u32 time;
-} BgWinTimeEntry;
-
-extern void fn_1_49514(BgWinColor *);
-extern void fn_1_494DC(s16);
-extern void fn_1_495B0(u32);
-extern void fn_1_495A0(f32);
-extern u32 fn_1_58C4(void);
-extern void fn_1_4955C(f32, f32);
-extern f32 fn_1_51AC0(f32);
-extern f32 fn_1_519FC(f32);
-extern void fn_1_496FC(f32, f32);
-extern void fn_1_4AE0C(const char *, ...);
-extern void fn_1_49728(u8 value);
-
 /* Literal-pool primer: this TU's shared pool (retail lbl_1_rodata_DD58) is laid out in
  * first-use order across the whole TU, so the words that precede this function's own
  * literals are referenced here, in retail order, from a section the link drops. */
@@ -1775,24 +1695,24 @@ void fn_1_15EC40(BgWinTimeEntry *entry) {
 
     if (ahead) {
         BgWinColor c = {0x00, 0xFF, 0x00, 0x00};
-        fn_1_49514(&c);
+        fn_1_49514( (u32 *)(BgWinColor *)(&c));
         sign = ';';
     } else {
         BgWinColor c = {0xE6, 0x00, 0x00, 0xFF};
-        fn_1_49514(&c);
+        fn_1_49514( (u32 *)(BgWinColor *)(&c));
         sign = ':';
     }
     fn_1_494DC(10);
     fn_1_495B0(0x80000000);
     fn_1_495A0(scale);
-    s0 = (fn_1_58C4() == 1) ? 1.0f : 0.8f;
-    s1 = (fn_1_58C4() == 1) ? 1.0f : 0.8f;
+    s0 = ((u32)fn_1_58C4() == 1) ? 1.0f : 0.8f;
+    s1 = ((u32)fn_1_58C4() == 1) ? 1.0f : 0.8f;
     fn_1_4955C(0.885f * t * s1, 0.9f * s0);
     fn_1_496FC(fn_1_519FC(315.0f), fn_1_51AC0(250.0f));
     fn_1_4AE0C((const char *)lbl_1_data_4C9B0, sign, (diff >> 20) & 0xFF, (diff >> 12) & 0xFF, diff & 0xFFF);
     {
         BgWinColor c = {0xFF, 0xFF, 0xFF, 0x00};
-        fn_1_49514(&c);
+        fn_1_49514( (u32 *)(BgWinColor *)(&c));
     }
 }
 /* fzgx:end fn_1_15EC40 */
@@ -1802,11 +1722,6 @@ void fn_1_15EC40(BgWinTimeEntry *entry) {
 #include "font.h"
 #include "rel/main_rel/bg_win.h"
 
-struct fn_1_15EFEC_lbl_1_rodata_DD58 {
- u8 pad_0[8]; f64 unk_8; u8 pad_10[4]; f32 unk_14; u8 pad_18[4]; f32 unk_1C; f32 unk_20;
- u8 pad_24[12]; f32 unk_30; u8 pad_34[8]; f32 unk_3C; u8 pad_40[24]; f32 unk_58; f32 unk_5C;
- u8 pad_60[132]; f32 unk_E4; u8 pad_E8[4]; f32 unk_EC; u8 pad_F0[12]; f32 unk_FC; f32 unk_100; u8 pad_104[4]; f64 unk_108; u8 pad_110[96]; f32 unk_170; f32 unk_174; u8 pad_178[24]; f32 unk_190;
-};
 /* Shared literal-pool primer: lays the TU's pool out in retail order so this
  * function's literals land on the retail offsets. Dropped at integration. */
 #pragma section code_type ".fzgxpool"
