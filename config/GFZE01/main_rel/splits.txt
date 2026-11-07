@@ -9419,3 +9419,6 @@ rel/main_rel/som/fn_1_13B98.c:
 
 rel/main_rel/effect_car/fn_1_69BCC.c:
 	.text       start:0x00069BCC end:0x0006A7A4 align:4
+
+rel/main_rel/live_camera/fn_1_DF74.c:
+	.text       start:0x0000DF74 end:0x0000E174 align:4
