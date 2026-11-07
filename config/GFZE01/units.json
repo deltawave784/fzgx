@@ -69535,6 +69535,30 @@
   },
   {
     "module": "main_rel",
+    "source": "rel/main_rel/som/fn_1_13B98.c",
+    "symbols": [
+      "fn_1_13B98"
+    ],
+    "status": "matching",
+    "mw_version": null,
+    "extra_cflags": [],
+    "tu": "rel/main_rel/som.c",
+    "pool": {
+      "...data.0": "lbl_1_data_5190",
+      "...rodata.0": "lbl_1_rodata_6B0",
+      "@538": "lbl_1_data_5194",
+      "@539": "lbl_1_data_5194+0x1C",
+      "@540": "lbl_1_data_51C8",
+      "@541": "lbl_1_data_51C8+0xC",
+      "@542": "lbl_1_data_51C8+0x18",
+      "@543": "lbl_1_rodata_6B0",
+      "@544": "lbl_1_rodata_6B0+0x4",
+      "@545": "lbl_1_rodata_6B0+0x8",
+      "lbl_1_data_5190": "lbl_1_data_5190"
+    }
+  },
+  {
+    "module": "main_rel",
     "source": "rel/main_rel/som/fn_1_14D5C.c",
     "symbols": [
       "fn_1_14D5C"
