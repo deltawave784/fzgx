@@ -9500,3 +9500,6 @@ rel/main_rel/accessory/fn_1_120804.c:
 
 rel/main_rel/car/fn_1_818BC.c:
 	.text       start:0x000818BC end:0x00082724 align:4
+
+rel/main_rel/car/fn_1_80294.c:
+	.text       start:0x00080294 end:0x00080C18 align:4
