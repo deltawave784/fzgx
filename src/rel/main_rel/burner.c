@@ -5924,6 +5924,242 @@ char *fn_1_F8E30(s16 index, s16 col, char *out) {
 }
 /* fzgx:end fn_1_F8E30 */
 
+/* fzgx:begin fn_1_139440 noprologue */
+#include "types.h"
+#include "psvec_conv.h"
+#include "rel/main_rel/burner.h"
+
+struct Sig_fn_1_22B10_fn_1_22B10_Arg0 {
+    u8 pad_0[0x4];
+    f32 unk_4;
+    f32 unk_8;
+    f32 unk_C;
+    f32 unk_10;
+    f32 unk_14;
+    u8 pad_18[0x4];
+    f32 unk_1C;
+    f32 unk_20;
+    u8 pad_24[0x10];
+    f32 unk_34;
+    u8 pad_38[0x4];
+    f32 unk_3C;
+    u8 pad_40[0x74];
+};
+
+/* The interpolation branches reload their threshold. */
+
+extern const f32 lbl_1_rodata_85F0;
+extern const f32 lbl_1_rodata_861C;
+extern const f32 lbl_1_rodata_8638;
+extern const f32 lbl_1_rodata_863C;
+extern const f32 lbl_1_rodata_87DC;
+extern const f32 lbl_1_rodata_88B8;
+extern const f32 lbl_1_rodata_8B98;
+extern u32 lbl_1_rodata_8B88;
+extern u32 lbl_1_rodata_8B8C;
+extern u32 lbl_1_rodata_8B90;
+extern u32 lbl_1_rodata_8B94;
+extern s32 lbl_801A66A0;
+extern int fn_1_139A3C(s16);
+typedef struct Sig_fn_1_539CC_FrameColor { u8 r, g, b, a; } Sig_fn_1_539CC_FrameColor;
+extern Sig_fn_1_539CC_FrameColor fn_1_539CC(const Sig_fn_1_539CC_FrameColor *, const Sig_fn_1_539CC_FrameColor *, f32);
+extern u32 fn_800720B0(u32);
+extern u8 *fn_1_36AD0(void);
+extern void *fn_1_229EC(void *, void *, void *);
+extern void fn_1_14FC80(s16, u32);
+extern void fn_1_22B10(struct Sig_fn_1_22B10_fn_1_22B10_Arg0 *, f32);
+extern void fn_1_A9868(void);
+extern void fn_1_AA350(s16 *, s16 *, u8 *, u32);
+extern void fn_1_AA538(void);
+extern void fn_80008BA8(void *, const void *, u32);
+extern void fn_8007245C(u32);
+extern void fn_800724C8(void);
+extern f32 fn_800728A8(s32, s32, s32, s32);
+extern void fn_80072864(u32);
+extern void fn_80072AB0(s32, s32, s32);
+extern void fn_80072C24(s32, s32, s32, s32, s32);
+extern void fn_80072CC4(s32, s32, s32, s32, s32);
+extern void fn_80072D64(s32, s32, s32, s32, u8, s32);
+extern void fn_80072E20(s32, s32, s32, s32, u8, s32);
+extern void fn_800734A8(u32, s32, s32, s32);
+extern void fn_80073678(u32);
+extern void fn_80073898(u32);
+extern void fn_80073C6C(s32);
+extern void fn_800745A4(u32, s32, s32, u32, u32, u32);
+extern void fn_80074660(u32);
+extern void fn_80074788(u32);
+extern void fn_800747D0(u32, u32, s32, s32, u32, s32, s32);
+extern void fn_80074918(u8, s32, u8);
+
+#pragma inline deferred
+#pragma opt_lifetimes off
+#pragma opt_registers off
+static inline f32 truncate_float(f32 value, FzConvHome *home) {
+    f32 v = value;
+    return v - (f32)FZ_FCTIWZ(*home, v);
+}
+#pragma opt_registers on
+#pragma opt_lifetimes on
+
+#pragma inline deferred
+#pragma opt_loop_invariants off
+void fn_1_139440(s32 arg0, s32 arg1, register s32 arg2, s32 arg3, u32 arg4, s16 arg5, f32 arg6) {
+    int t0;
+    void * lab_t0;
+    u32 *p0, *p1, *p2, *p3;
+    s32 *pt;
+    s32 v0;
+    s32 v1;
+    s16 v2;
+    s32 v3;
+    u8 v4;
+    s32 v13;
+    u32 *v5;
+    u32 *v6;
+    s32 v7;
+    s32 v12;
+    s16 *v11;
+    s16 *v10;
+    u8 *v9;
+    s32 v17;
+    f32 v21;
+    f32 v22;
+    f32 v23;
+    s32 v27;
+    s16 loc_CC4[302];
+    s16 loc_A68[302];
+    u32 loc_100[602];
+    struct Sig_fn_1_22B10_fn_1_22B10_Arg0 loc_4C;
+    FzConvHome conv;
+    f32 loc_40;
+    f32 loc_3C;
+    Sig_fn_1_539CC_FrameColor col;
+    Sig_fn_1_539CC_FrameColor c3;
+    Sig_fn_1_539CC_FrameColor c2;
+    Sig_fn_1_539CC_FrameColor c1;
+    Sig_fn_1_539CC_FrameColor c0;
+    u8 *t2;
+    u8 *t3;
+    f32 one;
+
+    v0 = (s16)arg5;
+    loc_40 = lbl_1_rodata_861C;
+    loc_3C = lbl_1_rodata_861C;
+    v1 = v0;
+    v11 = loc_CC4;
+    v10 = loc_A68;
+    v9 = (u8 *)loc_100;
+    if ((lbl_1_bss_8B3A0.unk_94 & 0x40000000) != 0) {
+        v1 = 0;
+    }
+    t0 = fn_1_139A3C((s16)v1);
+    v2 = (s16)arg4;
+    if (v2 < 41) {
+        lab_t0 = &loc_4C;
+        fn_80008BA8(lab_t0, (u8 *)&lbl_1_data_28060 + v2 * 180, 180);
+    } else {
+        t2 = fn_1_36AD0();
+        v3 = v0 * 0x81C0;
+        if ((*(u32 *)(t2 + v3) & 0x40000000) == 0) {
+            lab_t0 = &loc_4C;
+            fn_80008BA8(lab_t0, (u8 *)&lbl_1_data_28060 + (v4 = *(u8 *)((t3 = fn_1_36AD0()) + v3 + 0x81A0)) * 180, 180);
+        } else {
+            fn_1_14FC80(arg5, (u32)&loc_4C);
+        }
+    }
+    fn_1_22B10(&loc_4C, arg6);
+    v5 = &lbl_1_bss_8B3A0.unk_F0 + v1;
+    v6 = &lbl_1_bss_8B3A0.unk_100 + v1;
+    v7 = arg1 + arg3;
+    p0 = &lbl_1_rodata_8B88;
+    p1 = &lbl_1_rodata_8B8C;
+    p2 = &lbl_1_rodata_8B90;
+    p3 = &lbl_1_rodata_8B94;
+    pt = &lbl_801A66A0;
+    v12 = 0;
+    v13 = 0;
+    do {
+        *(u32 *)&c3 = *p0;
+        *(u32 *)&c2 = *p1;
+        *(u32 *)&c1 = *p2;
+        *(u32 *)&c0 = *p3;
+        v17 = *pt;
+        fn_1_229EC(&loc_4C, &loc_40, &loc_3C);
+        arg6 = loc_40;
+        if (v12 % 10 == 0 || v12 == 749) {
+            v23 = truncate_float((f32)((f32)(1.0f + (f32)(0.5f * (f32)((f32)v12 / lbl_1_rodata_8B98))) - (f32)((f32)(v17 % 220) / lbl_1_rodata_88B8)), &conv);
+            if (t0 != 0 && ((u32)(v17 - *v5) > (u32)(v12 / 50) || (s32)*v6 == 9)) {
+                /* Reload the interpolation constants in each branch. */
+                if (v23 < *(volatile const f32 *)&lbl_1_rodata_85F0) {
+                    Sig_fn_1_539CC_FrameColor left, right;
+                    right = c0;
+                    left = c1;
+                    col = fn_1_539CC(&left, &right, (f32)((one = *(volatile const f32 *)&lbl_1_rodata_863C), one - (f32)(lbl_1_rodata_8638 * v23)));  /* fzgx-allow: S2 volatile keeps the verified access order */
+                } else {
+                    Sig_fn_1_539CC_FrameColor left, right;
+                    right = c1;
+                    left = c0;
+                    col = fn_1_539CC(&left, &right, (f32)((one = *(volatile const f32 *)&lbl_1_rodata_863C), one - (f32)((f32)(lbl_1_rodata_8638 * v23) - one)));  /* fzgx-allow: S2 volatile keeps the verified access order */
+                }
+            } else {
+                /* Reload the interpolation constants in each branch. */
+                if (v23 < *(volatile const f32 *)&lbl_1_rodata_85F0) {
+                    Sig_fn_1_539CC_FrameColor left, right;
+                    right = c2;
+                    left = c3;
+                    col = fn_1_539CC(&left, &right, (f32)((one = *(volatile const f32 *)&lbl_1_rodata_863C), one - (f32)(lbl_1_rodata_8638 * v23)));  /* fzgx-allow: S2 volatile keeps the verified access order */
+                } else {
+                    Sig_fn_1_539CC_FrameColor left, right;
+                    right = c3;
+                    left = c2;
+                    col = fn_1_539CC(&left, &right, (f32)((one = *(volatile const f32 *)&lbl_1_rodata_863C), one - (f32)((f32)(lbl_1_rodata_8638 * v23) - one)));  /* fzgx-allow: S2 volatile keeps the verified access order */
+                }
+            }
+            {
+                col.a = 160;
+                v27 = arg0 + v13 / 750;
+                *(u32 *)(v9 + 0) = *(u32 *)&col;
+                v11[0] = v27;
+                v10[0] = v7;
+                v21 = (f32)v7;
+                v11[1] = v27;
+                v11 += 2;
+                *(u32 *)(v9 + 4) = *(u32 *)&col;
+                v9 += 8;
+                v10[1] = (s32)(f32)(v21 - (f32)((f32)((f32)arg3 * arg6) / lbl_1_rodata_87DC));
+                v10 += 2;
+            }
+        }
+        v12++;
+        v13 += arg2;
+    } while (v12 < 750);
+    fn_800728A8(1, 4, 5, 0);
+    fn_1_A9868();
+    fn_1_AA350(loc_CC4, loc_A68, (u8 *)loc_100, 152);
+    fn_1_AA538();
+    fn_800724C8();
+    fn_8007245C(8704);
+    fn_80074788(0);
+    fn_80074660(1);
+    fn_80073678(1);
+    fn_80073898(0);
+    fn_80073C6C(0);
+    fn_800745A4(0, 1, 4, 60, 0, 125);
+    fn_800734A8(0, 0, 0, 255);
+    fn_80072AB0(0, 0, 0);
+    fn_80072C24(0, 15, 2, 8, 4);
+    fn_80072D64(0, 0, 0, 0, 1, 0);
+    fn_80072CC4(0, 7, 1, 4, 2);
+    fn_80072E20(0, 0, 0, 0, 1, 0);
+    fn_800747D0(4, 0, 0, 0, 0, 2, 2);
+    fn_80074918(1, 7, 0);
+    fn_800728A8(1, 4, 5, 0);
+    fn_800720B0(0);
+    fn_80072864(2);
+}
+#pragma opt_loop_invariants reset
+/* fzgx:end fn_1_139440 */
+
 /* fzgx:begin fn_1_13EE60 */
 typedef struct {
     u32 flags;

@@ -9422,3 +9422,6 @@ rel/main_rel/effect_car/fn_1_69BCC.c:
 
 rel/main_rel/live_camera/fn_1_DF74.c:
 	.text       start:0x0000DF74 end:0x0000E174 align:4
+
+rel/main_rel/burner/fn_1_139440.c:
+	.text       start:0x00139440 end:0x00139A3C align:4
