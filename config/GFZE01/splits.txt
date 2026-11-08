@@ -6207,12 +6207,6 @@ dol/__flush_cache.c:
 dol/__init_registers.c:
 	.init       start:0x800032B0 end:0x80003340 align:4
 
-dol/GXLoadNrmMtxImm.c:
-	.text       start:0x80038CAC end:0x80038CFC align:4
-
-dol/GXLoadPosMtxImm.c:
-	.text       start:0x80038C5C end:0x80038CAC align:4
-
 dol/mathutil_mtxA_rotate_z.c:
 	.text       start:0x8006E424 end:0x8006E498 align:4
 
@@ -6506,3 +6500,9 @@ dol/fn_800736C0.c:
 
 dol/fn_80065F34.c:
 	.text       start:0x80065F34 end:0x80066C14 align:4
+
+dol/GXLoadPosMtxImm.c:
+	.text       start:0x80038C5C end:0x80038CAC align:4
+
+dol/GXLoadNrmMtxImm.c:
+	.text       start:0x80038CAC end:0x80038CFC align:4
