@@ -2321,3 +2321,9 @@ rel/movie_module/fn_12_3DBE0.c:
 
 rel/movie_module/fn_12_12324.c:
 	.text       start:0x00012324 end:0x000124A0 align:4
+
+rel/movie_module/fn_12_28CC4.c:
+	.text       start:0x00028CC4 end:0x00029524 align:4
+
+rel/movie_module/fn_12_21C8.c:
+	.text       start:0x000021C8 end:0x00002F04 align:4

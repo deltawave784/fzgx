@@ -818,3 +818,12 @@ rel/customize/toolkit/fn_3_255DC.c:
 
 rel/customize/_prolog/fn_3_5500.c:
 	.text       start:0x00005500 end:0x00005A50 align:4
+
+rel/customize/_prolog/fn_3_7360.c:
+	.text       start:0x00007360 end:0x00007594 align:4
+
+rel/customize/toolkit/fn_3_278F8.c:
+	.text       start:0x000278F8 end:0x00028378 align:4
+
+rel/customize/editor/fn_3_17854.c:
+	.text       start:0x00017854 end:0x0001857C align:4
