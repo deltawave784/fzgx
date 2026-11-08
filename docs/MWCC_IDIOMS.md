@@ -1085,3 +1085,9 @@ carrier (declaration order, not layout).
 - Offsets past a symbol that dtk bounds by the next label are section-base addressing, the customize rule of pass 21, also in main_rel:
   lbl_1_bss_7AE88+0x2C6..0x2F2 are lbl_1_bss_7B14C, lbl_1_bss_8E428+0x14/0x18 are lbl_1_bss_8E43C/8E440, lbl_1_bss_6E960+0x18/0x24
   are lbl_1_bss_6E978/6E984, lbl_1_data_3E358+0x1D4 is lbl_1_data_3E52C. Keep the dtk sizes and spell the neighbouring symbol.
+- sel's `lbl_10_bss_0` is the .bss section base, not one struct (librarian pass 28, GC/1.3, 2026-11-07): matched sel.c blocks define
+  `lbl_10_bss_0[0x14]`, `lbl_10_bss_14/18/1A/1C` and 51758/51768/51B0C/51B10 as separate objects, so the header keeps 0x14. The
+  `addi r3, rHi, 0x1b14` + `stw rX, 4..0x60(r3)` shape of fn_10_5230 (config passed to fn_1_12B120) is not a struct member: a member
+  `&lbl_10_bss_0.config` folds every store into `0x1b18(rBase)` (95.42, from 93.08 for other reasons), and in-unit section-layout
+  definitions with 0x51B14 as its own object fold them too (83.42). A private whole-section struct (`{ Obj_10_bss_0 lo; pad;
+  SelWorkHi hi; }` at 0x50000) removes fn_10_75D4's scheduling rows (96.90 -> 99.41, only the r28/r30 hi/data swap left).
