@@ -705,6 +705,11 @@ class Engine:
             yield from self._family(row, 'list', lambda: scoped[:32])
             deferred_graph.extend((graph[32:],carriers[32:],scoped[32:]))
         if check.ok:
+            # hand-built 0x43300000 word pairs, `cv` unions and `__fsubs` helpers give fsub; frsp
+            # where retail has MWCC's own conversion (fsubs off the pooled 2^52 bias). Few
+            # candidates, only for bodies holding such a pair: ahead of the capped families, so
+            # the next round's shared_pool_primer can place the compiler's bias
+            yield from self._family(row, 'evidence.hand_conversions', lambda: evidence.hand_conversions(self.project, row['symbol'], body, check))
             yield from self._family(row, 'evidence.aggregate_initializers', lambda: evidence.aggregate_initializers(self.project, row['symbol'], body, check))
             yield from self._family(row, 'evidence.native_pool_objects', lambda: evidence.native_pool_objects(self.project, row['symbol'], body, check))
             yield from self._family(row, 'evidence.shared_pool_primer', lambda: evidence.shared_pool_primer(self.project, row['symbol'], body, check))
@@ -1004,7 +1009,9 @@ class Engine:
                         # (and in the DOL, whose game code is 1.3.2 next to 1.2.5n SDK code, the
                         # defined-table `addi base,off; lXzx` shape needs GC/1.3.2: fn_8005C9D8,
                         # seeded under GC/1.3, 81.2 -> 89.5): score them under every candidate version
-                        if label.startswith(('define retail TU', 'define indexed element')):
+                        # (and a native int-to-float conversion: GC/1.3.2 hoists the primed bias
+                        # off the pool base like retail where GC/1.3 reloads it at the use)
+                        if label.startswith(('define retail TU', 'define indexed element', 'native int-to-float conversion')):
                             for version in self.layout_versions(symbol):
                                 if version!=seed['mw']:
                                     rows.append(self.record(symbol,text,version,seed['flags'],label=label+f' ({version})',parent=seed['id'],seed=seed.get('seed',seed['id'])))

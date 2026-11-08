@@ -1897,6 +1897,240 @@ def encoded_conversions(p, symbol, body, check):
     return out
 
 
+CONVERSION_BIASES = {4503601774854144.0: 's32', 4503599627370496.0: 'u32'}
+
+
+def _balanced_operand(code, i):
+    """End of the primary expression starting at `i` (a parenthesized group, a float literal
+    or an identifier chain with member/index postfixes), or None."""
+    n = len(code)
+    while i < n and code[i].isspace():
+        i += 1
+    start = i
+    if i < n and code[i] == '(':
+        depth = 0
+        while i < n:
+            depth += (code[i] == '(') - (code[i] == ')'); i += 1
+            if not depth:
+                break
+        if depth:
+            return None
+    else:
+        m = re.match(r'(?:\d+\.\d*(?:[eE][-+]?\d+)?[fF]?|[A-Za-z_]\w*)', code[i:])
+        if not m:
+            return None
+        i += m.end()
+    while True:
+        m = re.match(r'\s*(?:->|\.)\s*[A-Za-z_]\w*|\s*\[[^\[\];]*\]', code[i:])
+        if not m:
+            break
+        i += m.end()
+    return (start, i) if i > start else None
+
+
+def hand_conversions(p, symbol, body, check):
+    """Rewrite hand-built int-to-float conversions into MWCC's own conversion.
+
+    Saved bodies spell retail's `lfd bias; stw 0x43300000; lfd; fsubs` as a word pair
+    (`X.hi = 0x43300000; X.lo = v`, a `u32 [2]` view of a union, a `u32` array punned
+    through `*(f64 *)&a[k]`, an inline `__fsubs(view, bias)` helper) and subtract the
+    bias themselves. That gives `fsub; frsp` where retail has `fsubs`, keeps the bias
+    load outside MWCC's own pool constant and holds the scratch words in a declared
+    home. The rewrite is `(f32)(s32)v` / `(f32)(u32)v` (signed when the low word is
+    xored with 0x80000000), or the `(f64)` form when the difference is not converted
+    to f32 at the site; `shared_pool_primer` then lays the compiler's bias onto
+    retail's pool offset in a later round. Carrier declarations left unreferenced are
+    dropped in one variant and kept in another (they own frame bytes)."""
+    from .sdkimport import masked
+    code = masked(body)
+    sym = p.resolve(symbol)
+    try:
+        constants = {(a, b): value for a, b, value in pool_scalar_reads(p, symbol, body, check)}
+    except Exception:  # an unparsable view: literals are still checked below
+        constants = {}
+    lvalue = r'[A-Za-z_]\w*(?:\s*(?:->|\.)\s*[A-Za-z_]\w*|\s*\[\s*\d+\s*\])*'
+    functions, depth, opened = [], 0, 0
+    for i, ch in enumerate(code):
+        if ch == '{':
+            if not depth:
+                opened = i
+            depth += 1
+        elif ch == '}' and depth:
+            depth -= 1
+            if not depth:
+                functions.append((opened, i))
+    sites = []
+    for hi in re.finditer(r'(?<![\w.>\]])(' + lvalue + r')\s*=\s*0x43300000[uU]?\s*;', code):
+        target = re.sub(r'\s+', '', hi[1])
+        last = re.fullmatch(r'(.*?)(?:\.(\w+)|\[(\d+)\])', target)
+        if not last or not last[1]:
+            continue
+        base, member, index = last[1], last[2], last[3]
+        # the function holding the word stores bounds the conversion's read (the stores
+        # may sit in an inner block whose local the read outlives: fn_10_6518's `ticks`)
+        region = next(((a, b) for a, b in functions if a <= hi.start() < b), None)
+        if region is None:
+            continue
+        begin, end = max(region[0], hi.start() - 400), region[1]
+        spaced = r'\s*'.join(re.escape(part) for part in re.findall(r'\w+|->|[.\[\]]', base))
+        if index is not None:
+            low_pattern = spaced + r'\s*\[\s*' + str(int(index) + 1) + r'\s*\]'
+        else:
+            low_pattern = spaced + r'\s*\.\s*(?!' + re.escape(member) + r'\b)\w+'
+        lows = [m for m in re.finditer(r'(?<![\w.>\]])(' + low_pattern + r')\s*=(?!=)\s*([^;{}]+?)\s*;', code[begin:end])
+                if abs(begin + m.start() - hi.start()) < 400]
+        if len(lows) != 1:
+            continue
+        low = lows[0]; low_span = (begin + low.start(), begin + low.end()); value = low[2]
+        if re.search(r'\+\+|--|(?<![=!<>])=(?!=)', value):
+            continue
+        signed = re.fullmatch(r'(.+?)\s*\^\s*0x80000000[uU]?', value)
+        if signed:
+            value = re.sub(r'^\(\s*(?:u32|s32|int|unsigned int)\s*\)\s*', '', signed[1].strip())
+        integer = 's32' if signed else 'u32'
+        after = max(hi.end(), low_span[1])
+        views = [r'\*\s*\(\s*(?:const\s+)?(?:f64|double)\s*\*\s*\)\s*&\s*\(?\s*' + spaced + (r'\s*\[\s*' + index + r'\s*\]' if index is not None else '') + r'\s*\)?(?![\w.\[]|\s*->)']
+        union = re.fullmatch(r'(.*?)(?:\.(\w+)|\[(\d+)\])', base)
+        if index is None:
+            views.append(r'\*\s*\(\s*(?:const\s+)?(?:f64|double)\s*\*\s*\)\s*&\s*\(?\s*' + spaced + r'\s*\)?(?![\w.\[]|\s*->)')
+            if union and union[1] and union[2]:
+                views.append(r'\s*'.join(re.escape(part) for part in re.findall(r'\w+|->|[.\[\]]', union[1]))
+                             + r'\s*\.\s*(?!' + re.escape(union[2]) + r'\b)\w+(?![\w.\[]|\s*->)')
+        elif re.fullmatch(r'.*\.\w+', base) and union and union[1]:
+            views.append(r'\s*'.join(re.escape(part) for part in re.findall(r'\w+|->|[.\[\]]', union[1]))
+                         + r'\s*\.\s*(?!' + re.escape(union[2] or '') + r'\b)\w+(?![\w.\[]|\s*->)')
+        read = None
+        for kind, view in enumerate(views):
+            for m in re.finditer(r'(?<![\w.>])(?:' + view + ')', code[after:end]):
+                if kind == len(views) - 1 and union and union[1] and not view.startswith(r'\*'):
+                    # a union's f64 member: never a sibling word pair (`cv.cv2` beside `cv.cv1`)
+                    named = re.search(r'(\w+)\s*$', m[0])[1]
+                    if re.search(r'(?<![\w.>])' + r'\s*'.join(re.escape(part) for part in re.findall(r'\w+|->|[.\[\]]', union[1]))
+                                 + r'\s*\.\s*' + re.escape(named) + r'\s*(?:\.|\[|->)', code) or re.search(r'&\s*\(?\s*$', code[:after + m.start()]):
+                        continue
+                if read is None or m.start() < read.start():
+                    read = m
+                break
+        if read is None:
+            continue
+        r0, r1 = after + read.start(), after + read.end()
+        if re.search(r'(?<![\w.>\]])' + re.escape(hi[1]) + r'\s*=(?!=)', code[after:r0]):
+            continue
+        # `VIEW - BIAS` or `helper(VIEW, BIAS)`
+        precise = None
+        minus = re.match(r'\s*-\s*', code[r1:])
+        if minus:
+            operand = _balanced_operand(code, r1 + minus.end())
+            if not operand:
+                continue
+            bias = operand; lo, hi_end = r0, operand[1]
+            wrap = re.search(r'\(\s*(f32|float|f64|double)\s*\)\s*\(\s*$', code[:r0])
+            close = re.match(r'\s*\)', code[hi_end:])
+            if wrap and close:
+                lo, hi_end, precise = wrap.start(), hi_end + close.end(), wrap[1]
+        else:
+            call = re.search(r'\b(\w+)\s*\(\s*$', code[:r0])
+            comma = re.match(r'\s*,\s*', code[r1:])
+            if not call or not comma:
+                continue
+            operand = _balanced_operand(code, r1 + comma.end())
+            close = operand and re.match(r'\s*\)', code[operand[1]:])
+            helper = re.search(r'\b(?:static\s+)?inline\s+(f32|float)\s+' + re.escape(call[1])
+                               + r'\s*\(\s*(?:f64|double)\s+(\w+)\s*,\s*(?:f64|double)\s+(\w+)\s*\)\s*\{[^{}]*\b\2\s*-\s*\3\b[^{}]*\}', code)
+            if not close or not helper:
+                continue
+            bias = operand; lo, hi_end, precise = call.start(), operand[1] + close.end(), 'f32'
+        text = code[bias[0]:bias[1]].strip()
+        known = constants.get(bias)
+        if known is None:
+            try:
+                known = repr(float(text.rstrip('fF').strip('() ')))
+            except ValueError:
+                known = None
+        if known is not None:
+            try:
+                kind = CONVERSION_BIASES.get(float(str(known).rstrip('fF')))
+            except ValueError:
+                kind = None
+            if kind != integer:
+                continue
+        scoped = re.fullmatch(r'[A-Za-z_]\w*', value.strip()) and list(re.finditer(
+            r'\b(?:u32|s32|u16|s16|u8|s8|int|unsigned int|unsigned)\s+' + re.escape(value.strip()) + r'\s*=\s*([^;{}]+);', code[begin:low_span[0]]))
+        if scoped:
+            # the low word's block-local source would not survive the move to the read
+            init = scoped[-1]; between = code[begin + init.end():r0]
+            if between.count('}') > between.count('{') and not re.search(r'\b' + re.escape(value.strip()) + r'\s*(?:=(?!=)|[+*/&|^-]=|\+\+|--)', between):
+                value = init[1].strip()
+        removes = set()
+        for a, b in {(hi.start(), hi.end()), low_span}:
+            # a statement alone on its line takes the line with it
+            line = code.rfind('\n', 0, a) + 1; stop = code.find('\n', b)
+            if stop >= 0 and not code[line:a].strip() and not code[b:stop].strip():
+                a, b = line, stop + 1
+            removes.add((a, b))
+        removes = sorted(removes)
+        forms = [precise] if precise else ['f32', 'f64']
+        sites.append((removes, (lo, hi_end), forms, integer, value.strip(), re.match(r'\w+', target)[0]))
+    if not sites:
+        return []
+
+    def declaration(text, name):
+        return re.search(r'(?:(?:union|struct)\s*\{(?:[^{}]|\{(?:[^{}]|\{[^{}]*\})*\})*\}\s*|\b(?:u32|s32|unsigned int|unsigned|int|f64|double)\s+)'
+                         + re.escape(name) + r'\s*(?:\[\s*\d+\s*\])?\s*;', text)
+
+    def drop_carriers(text, roots):
+        # a carrier whose every use was rewritten: its `#define` alias, its declaration,
+        # and the member of an owning storage struct the alias named (fn_10_1B6CC, fn_4_4DF8)
+        for root in sorted(roots):
+            alias = re.search(r'(?m)^[ \t]*#define\s+' + re.escape(root) + r'\s+([^\n]+)\n', text)
+            rest = text[:alias.start()] + text[alias.end():] if alias else text
+            decl = declaration(rest, root)
+            uses = [m for m in re.finditer(r'\b' + re.escape(root) + r'\b', rest)
+                    if not decl or not decl.start() <= m.start() < decl.end()]
+            if uses or not (alias or decl):
+                continue
+            text = rest[:decl.start()] + rest[decl.end():] if decl else rest
+            owner = alias and re.match(r'\s*(\w+)\s*\.\s*(\w+)', alias[1])
+            if owner and owner[2] != root and not re.search(r'\b' + re.escape(owner[1]) + r'\s*\.\s*' + re.escape(owner[2]) + r'\b', text):
+                member = declaration(text, owner[2])
+                if member:
+                    text = text[:member.start()] + text[member.end():]
+        return text
+
+    out = []
+    groups = [sites] + ([[site] for site in sites] if len(sites) > 1 else [])
+    for group in groups:
+        for form in ('f32', 'f64'):
+            edits = []
+            for removes, (lo, hi_end), forms, integer, value, root in group:
+                chosen = forms[0] if len(forms) == 1 else form
+                edits.append((lo, hi_end, f'({chosen})({integer})({value})'))
+                edits.extend((a, b, '') for a, b in removes)
+            edits = sorted(set(edits), reverse=True)
+            if any(edits[i][0] < edits[i + 1][1] for i in range(len(edits) - 1)):
+                continue
+            text = body
+            for a, b, replacement in edits:
+                text = text[:a] + replacement + text[b:]
+            label = f'native int-to-float conversion ({len(group)} sites, {form})'
+            out.append((label, text))
+            dropped = drop_carriers(text, {site[5] for site in group})
+            if dropped != text:
+                out.append((label + ' without carrier', dropped))
+            if all(len(site[2]) == 1 for site in group):
+                break
+    out = list(dict.fromkeys(out))
+    # MWCC's own bias is a private literal until the pool is primed: an unprimed native body
+    # scores below its seed and would leave the frontier before the primer saw it (as for
+    # `native_pool_literals`), so the leading candidates are offered primed at once
+    composed = []
+    for label, text in out[:4]:
+        for plabel, ptext in native_pool_literals(p, symbol, text, check) + shared_pool_primer(p, symbol, text, check, native=True):
+            if plabel.startswith(('recover native shared-pool literals', 'prime ')):
+                composed.append((label + '; ' + plabel, ptext))
+    return list(dict.fromkeys(out + composed))
+
+
 def aggregate_initializers(p, symbol, body, check):
     """Restore named aggregate bytes using their recovered field types."""
     from .sdkimport import masked
