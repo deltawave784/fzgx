@@ -448,9 +448,6 @@ def data_struct_views(p, symbol, text):
         if params:
             rest = re.sub(r"(?<=[(,])\s*(?:struct\s+)?%s\s*\*\s*%s\s*(?=[,)])" % (re.escape(tname), re.escape(pvar)), ' ', rest)
             rest = re.sub(r"(?<=[(,])\s*%s\s*(?=[,)])" % re.escape(pvar), ' ', rest)
-        # a byte cast of the model (`(u8 *)d + 0x3008`) is the same address once the model is
-        # the byte view itself (fn_14_1090's `D(o)` macro beside its `->` fields)
-        rest = re.sub(r"\(\s*%s\s*\*\s*\)\s*%s\b" % (BYTE_TYPES, re.escape(pvar)), ' ', rest)
         if re.search(r"\b%s\b" % re.escape(pvar), rest):
             notes.append(f'{pvar}: used other than through ->'); continue
         prefix = out[:re.search(r"\n[^\n;{}]*\b%s\s*\([^;{}]*\)\s*\{" % re.escape(sym.name), out).start() + 1]
@@ -3080,21 +3077,6 @@ _DEFINITION = re.compile(r'^(?!\s*(?:extern|typedef|struct\s+\w+\s*\{|union\s+\w
                          r'(?P<spec>[^=;()\[]*?)\b(?P<name>[A-Za-z_]\w*)\s*(?P<dims>(?:\[[^\]]*\]\s*)*)(?P<init>=.*)?;\s*$', re.S)
 
 
-def _collapse_anonymous_aggregate(stmt: str) -> str:
-    """`[static] [const] union|struct { members } rest` -> the same text without the member
-    list (masked code: braces in comments and strings are already blanked)."""
-    m = re.match(r'(?:(?:static|const|volatile)\s+)*(?:struct|union)\s*\{', stmt)
-    if not m:
-        return stmt
-    depth = 0
-    for i in range(m.end() - 1, len(stmt)):
-        depth += stmt[i] == '{'
-        depth -= stmt[i] == '}'
-        if depth == 0:
-            return stmt[:m.end() - 1] + ' ' + stmt[i + 1:]
-    return stmt
-
-
 def _section_items(body: str, code: str, at: int):
     """The file-scope items of `body[:at]`: (lead, text, kind, section, name, start). `lead` is the
     comment/blank text an item carries; `kind` is `obj` (a defined object), `primer` (a
@@ -3109,13 +3091,10 @@ def _section_items(body: str, code: str, at: int):
         # the code-type pragma in force at this statement
         for m in re.finditer(r'(?m)^[ \t]*#pragma[ \t]+section[ \t]+code_type[ \t]+"([^"\n]*)"', gap):
             pool = m[1] == '.fzgxpool'
-        # the lead is read on the raw gap: `start` is a position in `body`, and a lead taken
-        # after stripping a section pragma that sat right above the statement reached back
-        # into that pragma line (`#pragma section code_type ".fzgxpool` without its quote
-        # survived into the prefix, fn_14_1090)
+        gap = _SECTION_PRAGMA.sub('', gap)
         lead = _TRAILING_LEAD.search(gap)
         lead_text = lead.group(0) if lead else ''
-        rest = _SECTION_PRAGMA.sub('', gap[:len(gap) - len(lead_text)])
+        rest = gap[:len(gap) - len(lead_text)]
         if rest.strip():
             items.append(('', rest, 'decl', None, None, prev_end))
         start = a - len(lead_text)
@@ -3127,12 +3106,7 @@ def _section_items(body: str, code: str, at: int):
             primer = pool or _POOL_DECLSPEC.search(stmt) or PRIMER_NAME.search(name)
             items.append((lead_text, text, 'primer' if primer else 'helper', None, name, start))
         else:
-            # an anonymous aggregate type's body (`static const union { u32 w[21]; u8 v[84]; }
-            # fzgx_pool_init_X = {{...}};`, the data-initializer families' spelling) is not part
-            # of the specifier `_DEFINITION` reads: left in, its `[` made every such definition a
-            # `decl`, hoisted above the run, which reordered the literal pool and kept `.data`
-            # definitions out of the section-group permutations (fn_15_4578)
-            d = _DEFINITION.match(_collapse_anonymous_aggregate(stmt.strip()))
+            d = _DEFINITION.match(stmt.strip())
             # `struct foo;` is a forward declaration; `struct foo bar;` defines bar
             if d and '(' not in d['spec'] and not re.fullmatch(r'\s*(?:struct|union|enum)\s*', d['spec']):
                 spec = re.sub(r'^\s*static\s+', '', d['spec'].strip())
@@ -3183,11 +3157,6 @@ def section_group_orders(p, symbol, body, check):
         if kind == 'primer':
             kinds = {objects[n] for n in set(re.findall(r'\b[A-Za-z_]\w*\b', masked(text))) if n in objects}
             if _FLOAT_LITERAL.search(masked(text)) or re.search(r'\bfzgx_pool_(?:prime|keep|table)\d', text):
-                kinds.add('.rodata')
-            # an int-to-float conversion primer (`fzgx_pool_bias(s32 x) { return (f32)x; }`)
-            # creates MWCC's 0x43300000_80000000 pool constant: it belongs to the pool's run
-            # (left untagged it fell below every definition and shifted the pool, fn_15_4578)
-            if re.search(r'\(\s*(?:f32|f64|float|double)\s*\)\s*\w', masked(text)) and not kinds:
                 kinds.add('.rodata')
             for s in re.findall(r'\bfzgx_pool_(data|rodata)_', text):
                 kinds.add('.' + s)
@@ -3584,52 +3553,6 @@ def row_array_views(text):
     return out if out != text else None
 
 
-def integer_address_views(p, symbol, text):
-    """An object address held in an integer local and used only through one struct cast
-    (`u32 a = (u32)&lbl_14_data_0; #define d ((struct D *)a)`, fn_14_1090) as the struct model
-    `struct D *a = (struct D *)&lbl;`: every `(struct D *)a` becomes `a`, a byte cast of it
-    stays one. The detectors (`data_struct_views`, `tu_data_objects`) read pointer models only,
-    so the integer spelling kept the extern named `.data` base, which takes r31 ahead of the
-    TU's anonymous section bases. Call on macro-expanded text; the integer local's now dead
-    `#define` lines go with it."""
-    sym = p.resolve(symbol)
-    if sym is None:
-        return None
-    syms = p.symbols(sym.module)
-    out = text
-    pat = re.compile(r"(?m)^([ \t]*)(?:u32|s32|int|unsigned\s+(?:int|long)|long)\s+(\w+)\s*=\s*\(\s*(?:u32|s32|int|unsigned\s+(?:int|long)|long)\s*\)\s*"
-                     r"&\s*(lbl_\d+_(?:bss|data|rodata)_[0-9A-F]+|lbl_[0-9A-F]{8})\s*;")
-    for m in list(pat.finditer(text)):
-        indent, var, base = m.groups()
-        known = syms.get(base)
-        if not known or known.kind != 'object' or m[0] not in out:
-            continue
-        v = re.escape(var)
-        if len(re.findall(r"(?<![\w.>])%s\s*=(?!=)" % v, out)) != 1:
-            continue
-        lines = list(re.finditer(r"(?m)^[ \t]*#\s*define\s+(\w+)\b[^\n]*\b%s\b[^\n]*\n" % v, out))
-        live = re.sub(r"(?m)^[ \t]*#\s*define\b[^\n]*\n", '', out)  # the expanded macros' own lines
-        if any(re.search(r"\b%s\b" % re.escape(d[1]), live) for d in lines):
-            continue  # an unexpanded macro still spells the integer
-        defines = re.compile(r"(?m)^[ \t]*#\s*define\s+\w+\b[^\n]*\b%s\b[^\n]*\n" % v)
-        body = defines.sub('', out.replace(m[0], ''))
-        casts = re.findall(r"\(\s*(struct\s+)?(\w+)\s*\*\s*\)\s*%s\b" % v, body)
-        types = {(bool(s), t) for s, t in casts if t not in SCALAR}
-        if len(types) != 1:
-            continue
-        tagged, tname = types.pop()
-        spelled = ('struct ' if tagged else '') + tname
-        cast = r"\(\s*%s%s\s*\*\s*\)\s*%s\b" % (r'struct\s+' if tagged else '', re.escape(tname), v)
-        # every use is the struct cast: nothing else may read the integer
-        if re.search(r"(?<![\w.>])%s\b" % v, re.sub(cast, ' ', body)):
-            continue
-        out = defines.sub('', out)
-        out = re.sub(r"\(\s*%s\s*\)" % cast, var, out)
-        out = re.sub(cast, var, out)
-        out = out.replace(m[0], f"{indent}{spelled} *{var} = ({spelled} *)&{base};", 1)
-    return out if out != text else None
-
-
 def cast_uncast_models(p, symbol, text):
     """Spell every uncast struct model of a same-module `.bss`/`.data` object with its cast.
 
@@ -3774,18 +3697,7 @@ def tu_section_layout(p, symbol, body, check):
     # `.data` struct models (fn_1_854D4, fn_1_107F74, fn_1_9A7BC) as byte views, beside the
     # bss layouts and alone
     viewed = []
-    # an address held in an integer local behind a struct-cast macro, as the pointer model the
-    # views below read (fn_14_1090)
-    # (also over each bss layout: both clusters must be TU-defined for the anonymous bases)
-    integer = []
     for name, base in bases + [('body', body)]:
-        try:
-            ints = integer_address_views(p, symbol, base)
-        except (ValueError, KeyError, IndexError, AttributeError, TypeError, re.error):
-            ints = None
-        if ints:
-            integer.append((name + ', integer address views', ints))
-    for name, base in bases + [('body', body)] + integer:
         try:
             text, notes = data_struct_views(p, symbol, base)
         except (ValueError, KeyError, IndexError, AttributeError, TypeError, OSError):
@@ -3800,7 +3712,7 @@ def tu_section_layout(p, symbol, body, check):
             text = None
         if text:
             folded.append((name + ', helper offsets at the call sites', text))
-    for name, base in bases + [('body', body)] + integer + viewed + folded:
+    for name, base in bases + [('body', body)] + viewed + folded:
         for top in (False, True):
             try:
                 text, notes = tu_data_objects(p, symbol, base, top)
