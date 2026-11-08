@@ -9515,3 +9515,6 @@ rel/main_rel/font/fn_1_4C16C.c:
 
 rel/main_rel/memcard/fn_1_C00EC.c:
 	.text       start:0x000C00EC end:0x000C023C align:4
+
+rel/main_rel/ghost/fn_1_EFA8C.c:
+	.text       start:0x000EFA8C end:0x000F0164 align:4
