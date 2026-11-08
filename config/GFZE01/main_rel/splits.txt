@@ -9518,3 +9518,6 @@ rel/main_rel/memcard/fn_1_C00EC.c:
 
 rel/main_rel/ghost/fn_1_EFA8C.c:
 	.text       start:0x000EFA8C end:0x000F0164 align:4
+
+rel/main_rel/stcoli/fn_1_2EE3C.c:
+	.text       start:0x0002EE3C end:0x0002F294 align:4
