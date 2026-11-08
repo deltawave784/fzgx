@@ -815,3 +815,6 @@ rel/customize/_prolog/fn_3_8A90.c:
 
 rel/customize/toolkit/fn_3_255DC.c:
 	.text       start:0x000255DC end:0x000268D0 align:4
+
+rel/customize/_prolog/fn_3_5500.c:
+	.text       start:0x00005500 end:0x00005A50 align:4
