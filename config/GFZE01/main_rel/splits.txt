@@ -9527,3 +9527,6 @@ rel/main_rel/screen_effect/fn_1_7B2E8.c:
 
 rel/main_rel/memcard/fn_1_B5654.c:
 	.text       start:0x000B5654 end:0x000B5A3C align:4
+
+rel/main_rel/memcard/fn_1_B5A3C.c:
+	.text       start:0x000B5A3C end:0x000B5F00 align:4
