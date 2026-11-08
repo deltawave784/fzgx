@@ -9503,3 +9503,6 @@ rel/main_rel/car/fn_1_818BC.c:
 
 rel/main_rel/car/fn_1_80294.c:
 	.text       start:0x00080294 end:0x00080C18 align:4
+
+rel/main_rel/live_camera/fn_1_10AF0.c:
+	.text       start:0x00010AF0 end:0x0001138C align:4
