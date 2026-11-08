@@ -827,3 +827,6 @@ rel/customize/toolkit/fn_3_278F8.c:
 
 rel/customize/editor/fn_3_17854.c:
 	.text       start:0x00017854 end:0x0001857C align:4
+
+rel/customize/_prolog/fn_3_680C.c:
+	.text       start:0x0000680C end:0x00006AC4 align:4
