@@ -417,7 +417,8 @@ def cmd_reuse(a, p):
 
 def cmd_harvest(a, p):
     from . import harvest
-    _print(harvest.run(p, a.ref, a.label, a.land, a.workers, a.limit, a.symbol or None), a.json)
+    _print(harvest.run(p, a.ref, a.label, a.land, a.workers, a.limit, a.symbol or None,
+                       refine_min=None if a.no_refine else a.refine_min, refine_budget=a.refine_budget), a.json)
     return 0
 
 
@@ -862,6 +863,9 @@ def build_parser() -> argparse.ArgumentParser:
     s.add_argument("--land", action="store_true", help="submit oracle matches (default: screen only)")
     s.add_argument("--workers", type=int, default=4); s.add_argument("--limit", type=int)
     s.add_argument("--symbol", action="append", help="restrict to these symbols (repeatable)")
+    s.add_argument("--refine-min", type=float, default=85.0, help="with --land: run `fzgx fixup SYM --body BEST --apply` on every partial row at or above this score (default 85)")
+    s.add_argument("--refine-budget", type=float, default=300.0, help="search seconds per refined row (default 300)")
+    s.add_argument("--no-refine", action="store_true", help="with --land: skip the fixup pass over partial rows")
     s = sub.add_parser('lift', help='lift unmatched functions in a TU or callers of a shared interface'); s.set_defaults(fn=cmd_lift)
     scope = s.add_mutually_exclusive_group(required=True)
     scope.add_argument('--tu', help='TU path relative to src/, e.g. rel/main_rel/accessory.c')

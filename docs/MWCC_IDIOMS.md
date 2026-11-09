@@ -1091,3 +1091,18 @@ carrier (declaration order, not layout).
   `&lbl_10_bss_0.config` folds every store into `0x1b18(rBase)` (95.42, from 93.08 for other reasons), and in-unit section-layout
   definitions with 0x51B14 as its own object fold them too (83.42). A private whole-section struct (`{ Obj_10_bss_0 lo; pad;
   SelWorkHi hi; }` at 0x50000) removes fn_10_75D4's scheduling rows (96.90 -> 99.41, only the r28/r30 hi/data swap left).
+
+## Retail initializers for defined `.data` objects (tooling round T34, 2026-11-08)
+
+`fixup_layout.defined_data_initializers` (the `datainit` evidence and fixup family) rewrites a
+body's own TU `.data` objects with retail bytes. Two MWCC placement facts decide whether the
+rewrite keeps the layout (probe compiles, GC/1.3.2):
+
+- Every union is 4-aligned. `union { u8 w[2]; s16 v; }` for an `s16` at 0x30F6 moves to 0x30F8
+  and shifts every later object (fn_14_A3DC). An object off a word boundary or of sub-word size
+  keeps its own integer declarator with element initializers; only word-aligned word-sized
+  objects become unions (their pointer words need the `u32` member).
+- A zero-initialized object goes to `.bss`, even a `static` scalar between initialized ones.
+  The object diff still matched (the alignment gap it left in `.data` was zero), but the unit's
+  stray `.bss` bytes moved main_rel's `.bss` and failed the link hash (fn_1_8E7D0).
+  `#pragma explicit_zero_data on` ... `reset` around the definition keeps it in `.data`.

@@ -1452,6 +1452,10 @@ def load_records(engine,args):
                 if recorded.get('sha256')==digest(body.encode()) and recorded.get('mw'):
                     add(args.symbol,body,recorded['mw'],recorded.get('flags'),label='saved-body')
                     break
+        if getattr(args,'body_mw',None):
+            # the compiler the body was checked under elsewhere (a harvested fork body's own
+            # unit options): searched first, the probed version below stays a second seed
+            add(args.symbol,body,args.body_mw,getattr(args,'body_flags',None) or None,label='saved-body')
         mw,flags=oracle.version_for(p,sym,source_path)
         add(args.symbol,body,mw,flags,label='saved-body')
     elif args.corpus:

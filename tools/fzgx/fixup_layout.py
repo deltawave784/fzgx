@@ -2286,6 +2286,40 @@ def _reloc_map(elf, section):
     return out
 
 
+_PLAIN_WIDTHS = {'u8': (1, False), 's8': (1, True), 'char': (1, True), 'unsigned char': (1, False),
+                 'signed char': (1, True), 'u16': (2, False), 's16': (2, True), 'short': (2, True),
+                 'unsigned short': (2, False), 'u32': (4, False), 's32': (4, True), 'int': (4, True),
+                 'unsigned int': (4, False), 'long': (4, True), 'unsigned long': (4, False),
+                 'unsigned': (4, False)}
+
+
+def _zero_data(definition, raw, pointers):
+    """`definition` kept in its section when retail's bytes are all zero: MWCC places a
+    zero-initialized object in .bss, where it takes room the link does not have (fn_1_8E7D0's
+    three one-byte gap objects matched in the object, then shifted main_rel's .bss and failed
+    the hash). `explicit_zero_data` keeps it in .data at its offset."""
+    if pointers or any(raw):
+        return definition
+    return '#pragma explicit_zero_data on\n' + definition + '\n#pragma explicit_zero_data reset'
+
+
+def _plain_initializer(member, raw):
+    """(type, dimensions, element initializers) of an integer object declared as `member`
+    (`s16 v`, `u8 v[0x27FC - 4]`, `const char v[5]`) holding the big-endian bytes `raw`, or
+    None when the type is not a plain integer or its width does not divide the object."""
+    m = re.fullmatch(r'\s*((?:const\s+|volatile\s+)*)([A-Za-z_][\w ]*?)\s+v\s*((?:\[[^\[\]]*\]\s*)*)', member)
+    if not m or m[2] not in _PLAIN_WIDTHS:
+        return None
+    width, signed = _PLAIN_WIDTHS[m[2]]
+    if not raw or len(raw) % width or (not m[3] and len(raw) != width):
+        return None
+    values = []
+    for i in range(0, len(raw), width):
+        value = int.from_bytes(raw[i:i + width], 'big', signed=signed)
+        values.append(str(value) if value < 0 else '0x%X' % value)
+    return (m[1] + m[2]).strip(), m[3].strip(), values
+
+
 def defined_data_initializers(p, symbol, body, check):
     """Retail initializers for the TU data objects a body already defines.
 
@@ -2439,18 +2473,38 @@ def defined_data_initializers(p, symbol, body, check):
             elif any(lo <= o < lo + size for o in relocs):
                 continue
             else:
-                first, items = 'u8 w[%d]' % size, ['0x%X' % x for x in expected[lo:lo + size]]
+                # an object off a word boundary or of a sub-word size keeps its own declarator:
+                # MWCC aligns every union to 4, so `union { u8 w[2]; s16 v; }` at 0x30F6 moved
+                # the object to 0x30F8 and every later one with it (fn_14_A3DC's s16 timers,
+                # fn_1_8E7D0's single-byte gap objects after a 5-byte string)
+                plain = _plain_initializer(member, expected[lo:lo + size])
+                if plain is None:
+                    continue
+                native = 'fzgx_pool_init_' + name
+                storage = 'static const' if section['name'] == '.rodata' else 'static'
+                ptype, dims, values = plain
+                if dims:
+                    rows = '\n'.join(allow_address_words('    ' + ', '.join(values[i:i + 8]) + (',' if i + 8 < len(values) else ''))
+                                     for i in range(0, len(values), 8))
+                    init = '{  /* fzgx-allow: A1 retail data bytes */\n' + rows + '\n}'
+                else:
+                    init = values[0] + ';  /* fzgx-allow: A1 retail data bytes */'
+                if ptype.startswith('const '):
+                    storage = 'static'
+                definition = f'{storage} {ptype} {native}{dims} = {init}' + (';' if dims else '')
+                edits.append((a, b, _zero_data(definition, expected[lo:lo + size], inside), owner, native, ''))
+                continue
             lines = '\n'.join(allow_address_words('    ' + ', '.join(items[i:i + 8]) + (',' if i + 8 < len(items) else ''))
                               for i in range(0, len(items), 8))
             native = 'fzgx_pool_init_' + name
             storage = 'static const' if section['name'] == '.rodata' else 'static'
             definition = (f'{storage} union {{ {first}; {member}; }} {native} = {{{{  '
                           f'/* fzgx-allow: A1 retail data bytes and bindings */\n{lines}\n}}}};')
-            edits.append((a, b, definition, owner, native))
+            edits.append((a, b, _zero_data(definition, expected[lo:lo + size], inside), owner, native, '.v'))
     if not edits:
         return []
     replacements = []
-    for a, b, definition, owner, native in edits:
+    for a, b, definition, owner, native, suffix in edits:
         replacements.append((a, b, definition))
         for m in owner.finditer(code):
             if any(x <= m.start() < y for x, y, *_ in edits):
@@ -2463,7 +2517,7 @@ def defined_data_initializers(p, symbol, body, check):
                 end = st[1] + 1 if code[st[1]:st[1] + 1] == '\n' else st[1]
                 replacements.append((st[0], end, ''))
                 continue
-            replacements.append((m.start(), m.end(), native + '.v'))
+            replacements.append((m.start(), m.end(), native + suffix))
     text = body
     for s, e, value in sorted(set(replacements), reverse=True):
         text = text[:s] + value + text[e:]

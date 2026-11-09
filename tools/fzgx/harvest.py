@@ -764,8 +764,47 @@ def land(p: Project, results: List[dict], agent: str, label: str, provenance: Pa
     return dict(landed=len(landed), failed=failed, verifies=verifies)
 
 
+def refine(p: Project, results: List[dict], label: str, provenance: Path, sha: str = '',
+           min_percent: float = 85.0, budget: float = 300.0, max_candidates: int = 400) -> dict:
+    """The deterministic fixup engine over every `partial` row's best body (>= `min_percent`,
+    still open here): `fzgx fixup SYM --body BEST --apply` under the body's own compiler
+    options, `budget` search seconds each. A fork body that compiles to a near miss here is
+    usually one header-drift spelling, data initializer or register lever away: run by hand
+    over one harvest's 41 partial rows at 85%+ this closed 30 (2026-11-08). Exact results are
+    submitted, linked and committed by the engine's own integration (all 16 hashes); landed
+    rows are credited in the harvest provenance with kind `fixup:<kind>`."""
+    from . import cli, fixup
+    status = dict(Ledger().db.execute('SELECT symbol, status FROM functions'))
+    todo = sorted((r for r in results if r.get('status') == 'partial' and r.get('best')
+                   and (r['best'].get('percent') or 0) >= min_percent
+                   and status.get(r['symbol']) in OPEN_HERE),
+                  key=lambda r: -(r['best'].get('percent') or 0))
+    landed, failed = [], []
+    for r in todo:
+        sym, b = r['symbol'], r['best']
+        args = cli.build_parser().parse_args(['fixup', sym, '--body', b['body'], '--apply',
+                                              '--budget', str(budget), '--max-candidates', str(max_candidates)])
+        args.body_mw, args.body_flags = b.get('mw'), b.get('flags') or None
+        try:
+            summary = _retrying(fixup.command, p, args)
+        except Exception as error:  # one failed search never stops the pass
+            failed.append(dict(symbol=sym, error=f'{type(error).__name__}: {error}'[:300]))
+            continue
+        row = Ledger().get(p.key(p.resolve(sym)))
+        if sym in (summary or {}).get('matches', ()) and row and row['status'] == 'matched':
+            landed.append(sym)
+            prov = json.loads(provenance.read_text()) if provenance.exists() else {}
+            prov[sym] = dict(source=label, commit=sha, kind='fixup:' + b['kind'], status='matched',
+                             mw=b.get('mw'), flags=b.get('flags'), ref_name=r.get('ref_name'), unit=r.get('ref_unit'),
+                             seed_percent=b.get('percent'), landed=int(time.time()))
+            provenance.parent.mkdir(parents=True, exist_ok=True)
+            provenance.write_text(json.dumps(prov, indent=1, sort_keys=True) + '\n')
+    return dict(rows=len(todo), landed=landed, failed=failed)
+
+
 def run(p: Project, ref: str, label: Optional[str] = None, do_land: bool = False,
-        workers: int = 4, limit: Optional[int] = None, symbols: Optional[List[str]] = None) -> dict:
+        workers: int = 4, limit: Optional[int] = None, symbols: Optional[List[str]] = None,
+        refine_min: Optional[float] = 85.0, refine_budget: float = 300.0) -> dict:
     tree = export(ref)
     sha = (tree / '.complete').read_text().strip()
     label = label or f'{ref}@{sha[:8]}'
@@ -788,4 +827,7 @@ def run(p: Project, ref: str, label: Optional[str] = None, do_land: bool = False
         owner = re.sub(r'[^\w.-]+', '-', label.split('@')[0].split('/')[0]).strip('-') or 'harvest'
         out['land'] = land(p, results, f'harvest-{owner}', label, ROOT / 'state/forkimports' / f'{owner}.json',
                            sha=sha)
+        if refine_min is not None:
+            out['refine'] = refine(p, results, label, ROOT / 'state/forkimports' / f'{owner}.json', sha=sha,
+                                   min_percent=refine_min, budget=refine_budget)
     return out
