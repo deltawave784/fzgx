@@ -9548,3 +9548,6 @@ rel/main_rel/phys/fn_1_E9CFC.c:
 
 rel/main_rel/phys/fn_1_EA314.c:
 	.text       start:0x000EA314 end:0x000EB074 align:4
+
+rel/main_rel/game/fn_1_36330.c:
+	.text       start:0x00036330 end:0x00036A94 align:4
