@@ -24120,6 +24120,7 @@
     "headers_sha256": "5d12cfaf0baf2e9d56c573a2c22bd1fc741f77a3275087d973589dbffdf2de65",
     "oracle_sha256": "d46cd39ca2eb42ad1793f5b89602c8ae2efd51b7f27d8c59654252233f035f29",
     "recipe": [],
-    "link": "pending"
+    "link": "verified",
+    "commit": "b9aea5082"
   }
 }
