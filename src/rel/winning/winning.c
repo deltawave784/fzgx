@@ -1,4 +1,5 @@
 #include "types.h"
+#include "rel/winning/globals.h"
 #include "font.h"
 #include "rel/main_rel/camera.h"
 #include "rel/main_rel/sound.h"
@@ -6,6 +7,7 @@
 #include "dolphin/hw_regs.h"
 #include "psvec.h"
 #include "sofdec/adxt.h"
+
 
 struct _prolog_lbl_1_bss_96A {
     u16 unk_0;
