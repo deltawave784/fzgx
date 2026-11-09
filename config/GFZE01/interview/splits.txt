@@ -239,3 +239,6 @@ rel/interview/interview/fn_17_DB4.c:
 
 rel/interview/interview/fn_17_1DA4.c:
 	.text       start:0x00001DA4 end:0x00002414 align:4
+
+rel/interview/interview/fn_17_424C.c:
+	.text       start:0x0000424C end:0x00004540 align:4
