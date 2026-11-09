@@ -23,19 +23,19 @@ typedef struct {
     u32 unk_8;  // 4 loads, 0 stores
     u32 unk_C;  // 2 loads, 0 stores
     u32 unk_10;  // 1 loads, 0 stores
-} Obj_15_data_90;
-extern Obj_15_data_90 lbl_15_data_90;
-
-// jumptable_15_data_1DC: .data size 0x64, 1 refs from winning.c (own data block)
-extern u8 jumptable_15_data_1DC[0x64];
-
-// jumptable_15_data_1F20: .data size 0x50, 1 refs from winning.c (own data block)
-extern u8 jumptable_15_data_1F20[0x50];
+} WinningTimeline;
+extern WinningTimeline lbl_15_data_90;
 
 // lbl_15_data_154: .data size 0xE, 1 refs from winning.c (own data block)
 extern u8 lbl_15_data_154[0xE];
 
 // lbl_15_data_164: .data size 0x78, 1 refs from winning.c (own data block)
 extern u8 lbl_15_data_164[0x78];
+
+// jumptable_15_data_1DC: .data size 0x64, 1 refs from winning.c (own data block)
+extern u8 jumptable_15_data_1DC[0x64];
+
+// jumptable_15_data_1F20: .data size 0x50, 1 refs from winning.c (own data block)
+extern u8 jumptable_15_data_1F20[0x50];
 
 #endif  // REL_WINNING_WINNING_H

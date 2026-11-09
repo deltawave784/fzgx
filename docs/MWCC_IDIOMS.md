@@ -1106,3 +1106,8 @@ rewrite keeps the layout (probe compiles, GC/1.3.2):
   The object diff still matched (the alignment gap it left in `.data` was zero), but the unit's
   stray `.bss` bytes moved main_rel's `.bss` and failed the link hash (fn_1_8E7D0).
   `#pragma explicit_zero_data on` ... `reset` around the definition keeps it in `.data`.
+- winning's `lbl_15_bss_0` (dtk 0x2) is the .bss section base, not a 0x154/0x3C6-byte struct (librarian pass 29, 2026-11-08):
+  the offsets matchers read off it (0x14, 0x21, 0x2C, 0x35, 0x74...0x3F8) are dtk's `lbl_15_bss_14/21/2C/35/74/78/88/9C/D0/D4/154/3F8`;
+  likewise `lbl_15_data_0` +0x1F1C and `lbl_15_rodata_0` past 0x64. The header keeps dtk sizes. Under tutruth the 19 blocks whose
+  match depends on a private whole-section view stay self-contained (fn_15_3B24 drops 100 -> 95.22 through `(*(T *)&lbl_15_bss_0)`,
+  fn_15_4124 to 94.47): closing the whole-TU compile needs the TU's own .bss/.data objects defined in retail order, not a bigger header.
