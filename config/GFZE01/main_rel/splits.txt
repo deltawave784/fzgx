@@ -9530,3 +9530,6 @@ rel/main_rel/memcard/fn_1_B5654.c:
 
 rel/main_rel/memcard/fn_1_B5A3C.c:
 	.text       start:0x000B5A3C end:0x000B5F00 align:4
+
+rel/main_rel/stcoli/fn_1_2F294.c:
+	.text       start:0x0002F294 end:0x0002FAA0 align:4
