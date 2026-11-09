@@ -9536,3 +9536,6 @@ rel/main_rel/stcoli/fn_1_2F294.c:
 
 rel/main_rel/memcard/fn_1_B5310.c:
 	.text       start:0x000B5310 end:0x000B5654 align:4
+
+rel/main_rel/memcard/fn_1_C4ABC.c:
+	.text       start:0x000C4ABC end:0x000C6ED4 align:4
