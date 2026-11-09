@@ -833,3 +833,6 @@ rel/customize/_prolog/fn_3_680C.c:
 
 rel/customize/_prolog/fn_3_7E5C.c:
 	.text       start:0x00007E5C end:0x0000837C align:4
+
+rel/customize/_prolog/_prolog.c:
+	.text       start:0x0000042C end:0x00000844 align:4
