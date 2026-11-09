@@ -46390,6 +46390,31 @@
   },
   {
     "module": "main_rel",
+    "source": "rel/main_rel/car/fn_1_8E7D0.c",
+    "symbols": [
+      "fn_1_8E7D0"
+    ],
+    "status": "matching",
+    "mw_version": "GC/1.3.2",
+    "extra_cflags": [],
+    "tu": "rel/main_rel/car.c",
+    "pool": {
+      "...data.0": "lbl_1_data_209C0",
+      "...rodata.0": "lbl_1_rodata_3E48",
+      "@210": "lbl_1_rodata_3F6C",
+      "@211": "lbl_1_rodata_3F70",
+      "@65": "lbl_1_rodata_3E70+0x10",
+      "@86": "lbl_1_rodata_3E70+0x1C",
+      "@87": "lbl_1_rodata_3E70+0x3C",
+      "@88": "lbl_1_rodata_3E70+0x5C",
+      "@89": "lbl_1_rodata_3E70+0x7C",
+      "@90": "lbl_1_rodata_3E70+0x9C",
+      "@91": "lbl_1_rodata_3E70+0xBC",
+      "@96": "lbl_1_rodata_3E70+0xDC"
+    }
+  },
+  {
+    "module": "main_rel",
     "source": "rel/main_rel/car/fn_1_8F198.c",
     "symbols": [
       "fn_1_8F198"

@@ -9539,3 +9539,6 @@ rel/main_rel/memcard/fn_1_B5310.c:
 
 rel/main_rel/memcard/fn_1_C4ABC.c:
 	.text       start:0x000C4ABC end:0x000C6ED4 align:4
+
+rel/main_rel/car/fn_1_8E7D0.c:
+	.text       start:0x0008E7D0 end:0x0008F198 align:4
