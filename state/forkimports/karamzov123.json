@@ -3856,6 +3856,24 @@
   "unit": "rel/main_rel/font.c",
   "upstream": null
  },
+ "fn_1_4A0D8": {
+  "commit": "b0d9455281a1d9530d477ae03ef9b409ed0f733d",
+  "flags": "",
+  "kind": "raw",
+  "landed": 1794284186,
+  "mw": "GC/1.3.2",
+  "ref_name": "fn_1_4A0D8",
+  "ref_unit_options": {
+   "compiler_options": null,
+   "extra_cflags": [],
+   "mw_version": "GC/1.3.2"
+  },
+  "sha256": "7e1e963713b8d005fedd2c15b75bc5aea891c1954854498b5f1755f7e7384237",
+  "source": "karamzov123/fzero-gx-decomp PR296@b0d945528 (CC0)",
+  "status": "pool",
+  "unit": "rel/main_rel/bitmap.c",
+  "upstream": null
+ },
  "fn_1_4BB5C": {
   "commit": "b5daeed39e04c5c80858e48b2d6de16a17f50954",
   "flags": "",
