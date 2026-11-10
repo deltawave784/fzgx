@@ -9608,3 +9608,6 @@ rel/main_rel/bg_lig/fn_1_D7EF4.c:
 
 rel/main_rel/sel_static_disp/fn_1_144F40.c:
 	.text       start:0x00144F40 end:0x00145B58 align:4
+
+rel/main_rel/archive/fn_1_12F4A8.c:
+	.text       start:0x0012F4A8 end:0x00130B8C align:4
