@@ -1539,6 +1539,24 @@
   "unit": "rel/main_rel/bg_common.c",
   "upstream": null
  },
+ "fn_1_10976C": {
+  "commit": "3b2d6c3a034e1ee0ad3c497043d2ddd02423e8a8",
+  "flags": "",
+  "kind": "selective",
+  "landed": 1794295376,
+  "mw": "GC/1.3.2",
+  "ref_name": "fn_1_10976C",
+  "ref_unit_options": {
+   "compiler_options": null,
+   "extra_cflags": [],
+   "mw_version": "GC/1.3.2"
+  },
+  "sha256": "180762accafcd16f64447fdf6d772b99135661c7685c51dcc25dad04c9e98741",
+  "source": "karamzov123/fzero-gx-decomp@3b2d6c3a0 (CC0)",
+  "status": "matched",
+  "unit": "rel/main_rel/accessory.c",
+  "upstream": null
+ },
  "fn_1_10A6A0": {
   "commit": "a8c6fe13345e6c9bc32ce28362153b13e4478f82",
   "flags": "",
@@ -2252,6 +2270,24 @@
   "sha256": "9c1481c58d56d0b77278ca2be15dc1883098bc1059544afed99b116eb0bcae69",
   "source": "karamzov123/fzero-gx-decomp@b5daeed (CC0)",
   "status": "matched",
+  "unit": "rel/main_rel/sel_static_disp.c",
+  "upstream": null
+ },
+ "fn_1_144F40": {
+  "commit": "3b2d6c3a034e1ee0ad3c497043d2ddd02423e8a8",
+  "flags": "",
+  "kind": "selective",
+  "landed": 1794295694,
+  "mw": "GC/1.3.2",
+  "ref_name": "fn_1_144F40",
+  "ref_unit_options": {
+   "compiler_options": null,
+   "extra_cflags": [],
+   "mw_version": "GC/1.3.2"
+  },
+  "sha256": "d1a75e829832022457bb66e779e4408779b9bb69f3cc832fbea5510a0df3789c",
+  "source": "karamzov123/fzero-gx-decomp@3b2d6c3a0 (CC0)",
+  "status": "pool",
   "unit": "rel/main_rel/sel_static_disp.c",
   "upstream": null
  },
@@ -4510,6 +4546,24 @@
   "unit": "rel/main_rel/_prolog.c",
   "upstream": null
  },
+ "fn_1_98F28": {
+  "commit": "3b2d6c3a034e1ee0ad3c497043d2ddd02423e8a8",
+  "flags": "",
+  "kind": "selective+trim",
+  "landed": 1794295569,
+  "mw": "GC/1.3.2",
+  "ref_name": "fn_1_98F28",
+  "ref_unit_options": {
+   "compiler_options": null,
+   "extra_cflags": [],
+   "mw_version": "GC/1.3.2"
+  },
+  "sha256": "8fe6d983d807a7e4d56b7b5e311b59aa745017236a08c5b0a92acf2f82d5fe00",
+  "source": "karamzov123/fzero-gx-decomp@3b2d6c3a0 (CC0)",
+  "status": "matched",
+  "unit": "rel/main_rel/burner.c",
+  "upstream": null
+ },
  "fn_1_9A1E8": {
   "commit": "d50be05a45b82bfa8c800d671acf4cf237799889",
   "flags": "",
@@ -5228,6 +5282,42 @@
   "unit": "rel/main_rel/bg_lig.c",
   "upstream": null
  },
+ "fn_1_D7EF4": {
+  "commit": "3b2d6c3a034e1ee0ad3c497043d2ddd02423e8a8",
+  "flags": "",
+  "kind": "raw",
+  "landed": 1794295628,
+  "mw": "GC/1.3.2",
+  "ref_name": "fn_1_D7EF4",
+  "ref_unit_options": {
+   "compiler_options": null,
+   "extra_cflags": [],
+   "mw_version": "GC/1.3.2"
+  },
+  "sha256": "aef32729a6c9673ca99d41b40561ba1eb98f0b39d290419f5b32569a51a6e367",
+  "source": "karamzov123/fzero-gx-decomp@3b2d6c3a0 (CC0)",
+  "status": "pool",
+  "unit": "rel/main_rel/bg_lig.c",
+  "upstream": null
+ },
+ "fn_1_D9224": {
+  "commit": "3b2d6c3a034e1ee0ad3c497043d2ddd02423e8a8",
+  "flags": "",
+  "kind": "raw",
+  "landed": 1794295178,
+  "mw": "GC/1.3.2",
+  "ref_name": "fn_1_D9224",
+  "ref_unit_options": {
+   "compiler_options": null,
+   "extra_cflags": [],
+   "mw_version": "GC/1.3.2"
+  },
+  "sha256": "554524c8577fbe6cb1aa5db95bd1d2f9a4d5dc3e4c1561a2f4766bd7b94f74ac",
+  "source": "karamzov123/fzero-gx-decomp@3b2d6c3a0 (CC0)",
+  "status": "matched",
+  "unit": "rel/main_rel/bg_san.c",
+  "upstream": null
+ },
  "fn_1_D9D8C": {
   "commit": "b5daeed39e04c5c80858e48b2d6de16a17f50954",
   "flags": "",
@@ -5296,6 +5386,24 @@
   },
   "sha256": "f4a9868e82933c9bcd3cf029bd3eb5fcb01a18cbbe2eec730cc5c21ffa6da24b",
   "source": "karamzov123/fzero-gx-decomp@b5daeed (CC0)",
+  "status": "matched",
+  "unit": "rel/main_rel/bg_for.c",
+  "upstream": null
+ },
+ "fn_1_DEDC4": {
+  "commit": "3b2d6c3a034e1ee0ad3c497043d2ddd02423e8a8",
+  "flags": "",
+  "kind": "selective",
+  "landed": 1794294982,
+  "mw": "GC/1.3.2",
+  "ref_name": "fn_1_DEDC4",
+  "ref_unit_options": {
+   "compiler_options": null,
+   "extra_cflags": [],
+   "mw_version": "GC/1.3.2"
+  },
+  "sha256": "74a4285f111694f95eef583fff5011ecb32abfd7242a089aa71f23089522a3d0",
+  "source": "karamzov123/fzero-gx-decomp@3b2d6c3a0 (CC0)",
   "status": "matched",
   "unit": "rel/main_rel/bg_for.c",
   "upstream": null
