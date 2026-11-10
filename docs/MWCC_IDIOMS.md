@@ -1125,3 +1125,12 @@ Measured under GC/1.3.2 while closing an 11-row FPR near miss:
   keeps the subtrahend a temp.
 - A one-member struct wrapper around an f32 local (the lifter's carrier) changes its colour order;
   a plain `f32` local restored retail's f28/f29 pair. Try unwrapping carriers on FPR swaps.
+
+## Stack parameters loaded in the body (fable-20261110e, fn_8004313C 95.7 -> 99.6, 2026-11-10)
+
+GC/1.3.2 loads a scalar stack parameter (9th GPR argument and later, `lwz rX, 0x48(r1)`) at function
+entry under every plain spelling (plain/K&R/volatile parameters, copies). Retail loads them late, after
+the first loop setup. Reading them through a pointer to the first stack parameter reproduces it:
+`{ s32 **extra = &arg8; a8 = extra[0]; a9 = extra[1]; a10 = (s16 *)extra[2]; }` placed where retail
+loads them, with the receiving locals declared after the existing ones. Candidates with the same
+symptom: fn_8004F55C (`lha r30, 0x2a(r1)` after `li r10, 0`), fn_8004EFA8 (entry-block order).
