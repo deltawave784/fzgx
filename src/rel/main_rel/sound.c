@@ -4568,6 +4568,209 @@ void fn_1_A4268(void *arg0, u32 arg1, u32 arg2, u32 arg3) {
 }
 /* fzgx:end fn_1_A4268 */
 
+/* fzgx:begin fn_1_A47F4 noprologue */
+#include "types.h"
+#include "dolphin/os/OSFastCast.h"
+
+typedef struct {
+    f32 x;
+    f32 y;
+    f32 z;
+} SoundVec;
+
+typedef struct {
+    u8 flags;
+    u8 id;
+    u8 pad[14];
+    f32 pitch;
+} SoundPitchEntry;
+
+extern SoundPitchEntry lbl_1_bss_6F1E4[];
+
+extern void fn_1_862D4(s32, SoundVec *);
+extern void fn_1_8658C(s32, SoundVec *);
+extern f32 fn_1_8652C(s32);
+extern void fn_1_681C(u32, SoundVec *);
+extern void fn_1_6898(u32, SoundVec *);
+extern f32 lbl_8006D0B4(f32);
+extern s16 camera_get_mode(void);
+extern s32 camera_get_state(void);
+extern double __fabs(double);
+
+extern const f64 lbl_1_rodata_4598;
+extern const f32 lbl_1_rodata_45A4[];
+extern const f32 lbl_1_rodata_45A8;
+extern const f32 lbl_1_rodata_45A0;
+extern const f32 lbl_1_rodata_45AC;
+extern const f32 lbl_1_rodata_45B0;
+extern const f32 lbl_1_rodata_4470;
+extern const f32 lbl_1_rodata_45B4;
+extern const f64 lbl_1_rodata_45B8;
+extern const f32 lbl_1_rodata_45C0;
+extern f32 lbl_1_rodata_45C4;
+extern const f32 lbl_1_rodata_45C8;
+extern const f32 lbl_1_rodata_45CC;
+
+#pragma pool_data off
+static inline f32 sound_delta(f32 value, f32 reference) {
+    value -= reference;
+    return value;
+}
+
+static inline f32 sound_delta_x(f32 reference, f32 value) {
+    value -= reference;
+    return value;
+}
+
+static inline f32 sound_delta_p(f32 value, const f32 *reference) {
+    value -= *reference;
+    return value;
+}
+
+static inline s32 pitch_cast(f32 value) {
+    return __OSf32tos8(value);
+}
+
+static inline s32 pitch_clamp(s32 value, s32 low, s32 high) {
+    return value < low ? low : (value > high ? high : value);
+}
+
+#pragma opt_dead_assignments off
+s32 fn_1_A47F4(s32 idx, u8 speed, u32 player, s8 *coarseArg, s8 *fineArg) {
+    f32 fzgx_live;
+    SoundVec srcPos;
+    SoundVec srcPrev;
+    SoundVec lisPos;
+    SoundVec lisPrev;
+    s32 approaching;
+    s8 *outFine = fineArg;
+    s8 *outCoarse = coarseArg;
+    struct { f32 y, z; } prevDelta;
+    f32 ez;
+    f32 dx;
+    f32 dz;
+    f32 dy;
+    f32 ex;
+    f32 nowLength;
+    f32 prevLength;
+    s32 receding;
+    s32 mode;
+    s32 state;
+    f32 srcDist;
+    f32 lisSpeed;
+    f32 base;
+    f32 lisTerm;
+    f32 diff;
+    f32 scale;
+    f32 pitch;
+    f32 lo;
+    s32 id;
+    s32 r;
+    s32 v;
+
+    id = lbl_1_bss_6F1E4[idx].id;
+    fn_1_862D4(id, &srcPos);
+    fn_1_8658C(id, &srcPrev);
+    srcDist = fn_1_8652C(id);
+    fn_1_681C(player, &lisPos);
+    fn_1_6898(player, &lisPrev);
+    fzgx_live = lisPos.x;
+    dx = fzgx_live;
+    dx -= lisPrev.x;
+    dy = lisPos.y;
+    dy -= lisPrev.y;
+    dz = lisPos.z;
+    dz -= lisPrev.z;
+    dx = dx * dx;
+    dx += dy * dy;
+    dx += dz * dz;
+    lisSpeed = (f32)(lbl_1_rodata_4598 * lbl_8006D0B4(dx));
+    dx = sound_delta_x(lisPrev.x, srcPrev.x);
+    prevDelta.z = sound_delta_p(srcPrev.z, &lisPrev.z);
+    prevDelta.y = sound_delta_p(srcPrev.y, &lisPrev.y);
+    ex = srcPos.x;
+    fzgx_live = lisPos.x;
+    ex = ex - fzgx_live;
+{
+    f32 ey;
+    ey = sound_delta_x(lisPos.y, srcPos.y);
+    ez = srcPos.z;
+    ez -= lisPos.z;
+    prevLength = dx * dx;
+    prevLength += prevDelta.y * prevDelta.y;
+    prevLength += prevDelta.z * prevDelta.z;
+    nowLength = ex * ex;
+    nowLength += ey * ey;
+}
+    nowLength += ez * ez;
+    if (nowLength <= prevLength) {
+        approaching = 1;
+    } else {
+        approaching = 0;
+    }
+    if (lisSpeed > srcDist) {
+        receding = 1;
+    } else {
+        receding = 0;
+    }
+    base = lbl_1_rodata_45A0 + (f32)(lbl_1_rodata_45A4[0] * __OSu8tof32(&speed));
+    diff = lisSpeed - srcDist;
+    if (srcDist >= 1025.0f) {
+        srcDist = 1025.0f;
+    }
+    if (lisSpeed >= lbl_1_rodata_45AC) {
+        lisSpeed = lbl_1_rodata_45AC;
+    }
+    srcDist = lbl_1_rodata_45B0 - srcDist;
+    lisSpeed = lbl_1_rodata_45B0 - lisSpeed;
+    mode = camera_get_mode();
+    state = camera_get_state();
+    if (mode == id && (s8)state != 9) {
+        scale = lbl_1_rodata_4470;
+    } else if (receding) {
+        scale = lbl_1_rodata_4470;
+    } else {
+        f32 ad = (f32)__fabs(diff);
+        if (ad > lbl_1_rodata_45B4) {
+            scale = lbl_1_rodata_45B4 / ad;
+        } else {
+            scale = lbl_1_rodata_4470;
+        }
+    }
+    pitch = base * (lisSpeed / (srcDist * scale));
+    pitch = (pitch - base) / lbl_1_rodata_45B8;
+    pitch = lbl_1_rodata_45C0 * pitch;
+    lo = pitch < -3.0f ? -3.0f : (pitch > lbl_1_rodata_45C8 ? lbl_1_rodata_45C8 : pitch);
+    pitch = lo;
+    if (approaching | (lbl_1_bss_6F1E4[idx].flags & 1)) {
+        lbl_1_bss_6F1E4[idx].pitch = lo;
+    } else {
+        f32 lo2;
+        pitch = lbl_1_bss_6F1E4[idx].pitch;
+        pitch -= lbl_1_rodata_4470;
+        if (pitch < lbl_1_rodata_45C4) {
+            lo2 = lbl_1_rodata_45C4;
+        } else if (pitch > lbl_1_rodata_45C8) {
+            lo2 = lbl_1_rodata_45C8;
+        } else {
+            lo2 = pitch;
+        }
+        pitch = lo2;
+        lbl_1_bss_6F1E4[idx].pitch = lo2;
+    }
+    *outCoarse = pitch_cast(pitch);
+    pitch = (pitch - __OSs8tof32(outCoarse)) / lbl_1_rodata_45CC;
+    *outFine = pitch_cast(pitch);
+
+    *outCoarse = pitch_clamp(*outCoarse, -3, 32);
+    v = *outFine;
+    r = pitch_clamp(v, -64, 63);
+    *outFine = r;
+    return r;
+}
+#pragma opt_dead_assignments reset
+/* fzgx:end fn_1_A47F4 */
+
 /* fzgx:begin fn_1_A4BC8 */
 typedef struct {
     u8 pad[0x10C];

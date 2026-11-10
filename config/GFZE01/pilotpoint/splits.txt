@@ -206,3 +206,6 @@ rel/pilotpoint/pilotpoint/fn_14_A3DC.c:
 
 rel/pilotpoint/pilotpoint/fn_14_2590.c:
 	.text       start:0x00002590 end:0x00002AFC align:4
+
+rel/pilotpoint/pilotpoint/fn_14_6758.c:
+	.text       start:0x00006758 end:0x00007584 align:4

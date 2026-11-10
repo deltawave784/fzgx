@@ -9611,3 +9611,6 @@ rel/main_rel/sel_static_disp/fn_1_144F40.c:
 
 rel/main_rel/archive/fn_1_12F4A8.c:
 	.text       start:0x0012F4A8 end:0x00130B8C align:4
+
+rel/main_rel/sound/fn_1_A47F4.c:
+	.text       start:0x000A47F4 end:0x000A4BC8 align:4
