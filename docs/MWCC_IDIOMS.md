@@ -1111,3 +1111,17 @@ rewrite keeps the layout (probe compiles, GC/1.3.2):
   likewise `lbl_15_data_0` +0x1F1C and `lbl_15_rodata_0` past 0x64. The header keeps dtk sizes. Under tutruth the 19 blocks whose
   match depends on a private whole-section view stay self-contained (fn_15_3B24 drops 100 -> 95.22 through `(*(T *)&lbl_15_bss_0)`,
   fn_15_4124 to 94.47): closing the whole-TU compile needs the TU's own .bss/.data objects defined in retail order, not a bigger header.
+
+## Inline-helper result order (fable-20261110d, fn_1_A47F4 landed 21c546024, 2026-11-10)
+
+Measured under GC/1.3.2 while closing an 11-row FPR near miss:
+
+- Inline-helper result webs are coloured in source-statement order: an earlier call gets the higher
+  vreg and is coloured first, regardless of where its destination is declared. Reordering the calls
+  (`prevDelta.z = h(...); prevDelta.y = h(...);`) moves their colours; reordering declarations does not.
+- By-value inline arguments are evaluated right to left, so `h(reference, minuend)` loads the minuend first.
+- A `*ptr` read inside the inline is a pure lowering temporary (coloured first); a by-value parameter
+  copy colours after every result web. `static inline f32 d(f32 v, const f32 *r) { v -= *r; return v; }`
+  keeps the subtrahend a temp.
+- A one-member struct wrapper around an f32 local (the lifter's carrier) changes its colour order;
+  a plain `f32` local restored retail's f28/f29 pair. Try unwrapping carriers on FPR swaps.
