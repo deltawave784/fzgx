@@ -917,3 +917,6 @@ rel/sel/sel/fn_10_75D4.c:
 
 rel/sel/sel/fn_10_5230.c:
 	.text       start:0x00005230 end:0x00005780 align:4
+
+rel/sel/_prolog/_prolog.c:
+	.text       start:0x00000044 end:0x00000834 align:4

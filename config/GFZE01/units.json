@@ -88828,6 +88828,18 @@
   },
   {
     "module": "sel",
+    "source": "rel/sel/_prolog/_prolog.c",
+    "symbols": [
+      "_prolog"
+    ],
+    "status": "nonmatching",
+    "mw_version": "GC/1.3.2",
+    "extra_cflags": [],
+    "tu": "rel/sel/_prolog.c",
+    "pool": true
+  },
+  {
+    "module": "sel",
     "source": "rel/sel/_prolog/fn_10_0.c",
     "symbols": [
       "fn_10_0"
