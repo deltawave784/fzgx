@@ -232,6 +232,66 @@ def copies(cap: Path, idx: str, cls: str) -> Dict[int, set]:
     return out
 
 
+def web_lines(p: Project, sym, body_path: Path, flags: Optional[str], cap: Path, idx: str,
+              cls: str) -> Dict[int, Tuple[int, int]]:
+    """{web: (first source line defining it, last source line touching it)} from a `-sym on`
+    compile of the captured body (byte-identical code) and the capture's final PCode, which is
+    the object's instruction order 1:1. Empty when the two do not align."""
+    from . import linemap
+    try:
+        fin = json.loads((cap / f'pcode-{idx}-final.json').read_text())
+        sch = json.loads((cap / f'pcode-{idx}-scheduled.json').read_text())
+    except (OSError, ValueError):
+        return {}
+    obj = cap / 'lines' / (sym.name + '.sym.o')
+    obj.parent.mkdir(parents=True, exist_ok=True)
+    try:
+        oracle.compile_source(p, sym.module, Path(body_path), obj, fc.CAPTURE_VERSION,
+                              ' '.join(x for x in (flags or '', '-sym on') if x))
+        table = linemap.tables(obj).get(sym.name, []) if obj.exists() else []
+    except Exception:
+        return {}
+    if not table:
+        return {}
+    byaddr = {i['address']: i for b in sch['blocks'] for i in b['instructions']}
+    opclass = {'r': 4, 'f': 3}[cls]
+    out: Dict[int, Tuple[int, int]] = {}
+    for n, ins in enumerate(i for b in fin['blocks'] for i in b['instructions']):
+        ln = linemap.line_of(table, 4 * n)
+        if not ln:
+            continue
+        for o in byaddr.get(ins['address'], {'operands': []})['operands']:
+            if o.get('kind') != 0 or o.get('class') != opclass or o.get('reg', 0) < 32:
+                continue
+            v = o['reg']
+            first, last = out.get(v, (None, ln))
+            if first is None and o.get('flags', 0) & 2:
+                first = ln
+            out[v] = (first, max(last, ln))
+    return {v: (f if f is not None else l, l) for v, (f, l) in out.items()}
+
+
+def placement(hyps, rows: Dict[int, dict], lines: Dict[int, Tuple[int, int]], count: int) -> List[str]:
+    """Where the override HYPS puts each moved web, named by its neighbours' source lines: a
+    compiler web (@N, temporary) is numbered at its creation, so 'numbered between X (line A)
+    and Y (line B)' says which statements must create it (fn_1_59EE4's `length`)."""
+    def name(v):
+        r = rows.get(v) or {}
+        ln = lines.get(v)
+        where = f', line {ln[0]}' + (f'-{ln[1]}' if ln[1] != ln[0] else '') if ln else ''
+        return f"{r.get('name', '?')} (v{v} {fc._class(r)}{where})"
+    out: List[str] = []
+    for h in hyps or []:
+        if h[0] == 'swap':
+            out.append(f'{name(h[1])} takes the number of {name(h[2])}, and the reverse')
+        elif h[0] == 'move':
+            a, to = h[1], h[2]
+            below, above = (to, to + 1) if a < to else (to - 1, to)
+            nb = [v for v in (below, above) if 32 <= v < count and v != a and v in rows]
+            out.append(f'{name(a)} numbered between ' + ' and '.join(name(v) for v in nb))
+    return out
+
+
 def _blocks(cap: Path, idx: str) -> List[int]:
     """Instruction count of every final PCode block (scheduling regions end at block edges)."""
     try:
@@ -504,6 +564,7 @@ def diagnose(p: Project, symbol: str, path: Optional[Path] = None, mw: Optional[
         if not res['targets'] and not split:
             continue
         rows = {r['vreg']: r for r in vm.rows(cap, idx, rcls)}
+        lines = web_lines(p, sym, Path(path), flags, cap, idx, cls) if res['best'] else {}
         solved = res['best'] is not None and res['best_agree'] == res['mapped']
         kind, webs = classify(res['best'] if solved else None, rows, bases, cls)
         partial = classify(res['best'], rows, bases, cls)[0] if (not solved and res['best']) else None
@@ -525,7 +586,9 @@ def diagnose(p: Project, symbol: str, path: Optional[Path] = None, mw: Optional[
             'override': ' '.join(_label(h) for h in res['best'] or []), 'override_agree': res['best_agree'],
             'solutions': [' '.join(_label(h) for h in sol) for sol in res['solutions'][:6]],
             'class': kind, 'partial_class': partial, 'also': alternatives(res['best'], rows, bases, cls),
-            'webs': webs, 'replays': res.get('replays')}
+            'webs': webs, 'replays': res.get('replays'),
+            'placement': placement(res['best'], rows, lines, g.count),
+            'target_lines': {t: list(lines[t]) for t in res['targets'] if t in lines}}
         found.append(kind)
     shapes = (['operand-order'] if swapped else []) + (['row-order'] if reordered else [])
     if shapes:
@@ -616,6 +679,9 @@ def section(symbol: str, body: str) -> Optional[str]:
                + (f" (best `{c['override']}`: {c.get('override_agree')})" if c.get('override') else ''))
         lines.append(f"- {rcls}: {c.get('agree')}/{c.get('mapped')} webs already agree; {how}."
                      + (f" Targets: {'; '.join(shown)}" + (f"; {more} more" if more > 0 else '') + '.' if shown else ''))
+        if c.get('placement') and exact:
+            lines.append(f"  Placement (source lines of this body; a compiler web is numbered where its statement creates it): "
+                         + '; '.join(c['placement']) + '.')
         seen += [c.get('class')] + list(c.get('also') or [])
     shapes = v.get('row_shapes') or {}
     for kind, rows in shapes.items():
@@ -710,6 +776,7 @@ def command(p: Project, symbols: List[str], run_capture: bool = True) -> List[di
         save_verdicts([v])
         detail = '; '.join(f"{k} {c['class']} [{c['override'] or '-'}] {c['override_agree']}/{c['mapped']} "
                            + ','.join(f"{t['name']}:{t['got']}->{t['want']}" for t in c['targets'][:4])
+                           + ''.join(f"\n{'':18}placement: {x}" for x in c.get('placement') or [])
                            for k, c in v.get('classes', {}).items())
         print(f"{s:16} {v.get('percent', '-'):>7} rows {v.get('rows', '-')!s:>4} {v['class']:17} "
               f"{detail or v.get('note', '')}", flush=True)

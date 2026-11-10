@@ -78,6 +78,17 @@ def tables(obj: Path) -> Dict[str, List[Tuple[int, int]]]:
             q += 10
         if name:
             out.setdefault(name, []).extend(rows)
+            # MWCC writes one table per code section, based at its first function: every later
+            # function of the section (a primer or helper defined before the target, fn_1_145C6C)
+            # has its rows in that table at section offsets, and no table of its own
+            first = next((s for s in syms if s[0] == name and s[2] > 0), None)
+            if first is not None:
+                for fname, value, size, shndx in syms:
+                    if shndx != first[3] or size <= 0 or not fname or fname == name or fname in out:
+                        continue
+                    own = [(first[1] + d - value, ln) for d, ln in rows if value <= first[1] + d < value + size]
+                    if own:
+                        out[fname] = own
         pos += length
     return out
 

@@ -1134,3 +1134,42 @@ the first loop setup. Reading them through a pointer to the first stack paramete
 `{ s32 **extra = &arg8; a8 = extra[0]; a9 = extra[1]; a10 = (s16 *)extra[2]; }` placed where retail
 loads them, with the receiving locals declared after the existing ones. Candidates with the same
 symptom: fn_8004F55C (`lha r30, 0x2a(r1)` after `li r10, 0`), fn_8004EFA8 (entry-block order).
+
+## Capture verdicts for the last GC/1.3.2 allocation near misses (tooling round T36, 2026-11-10)
+
+`fzgx fixup --verdicts` now prints a **placement** for every renumbering it finds: each moved web and
+its new neighbours with the source lines that first define and last touch them (`fixup_verdicts.
+web_lines`: a `-sym on` compile of the captured body aligned 1:1 with the final PCode). A compiler web
+(@N, lowering temporary) is numbered where its statement creates it, so the line pair says which
+statements must create the value. The claim context shows it for the exact body. `linemap.tables`
+also had a gap: MWCC writes one `.line` table per code section, based at the section's first
+function, so a target defined after a pool primer or helper in `.text` had no line attribution at
+all (10 of the 151 stuck bodies: fn_1_145C6C, fn_1_D0F60, fn_7_2538, ...). The sweep's and fixup's
+line-attributed families were silent on those bodies; every function of the section now gets its rows.
+
+Verdicts (replay exact on every capture):
+- fn_1_977BC (98.8, r31/r30 swap): object_param (v32, a parameter) and `v0` (v41, the last pass-1
+  local) drop below K in the same scan, so v0 is coloured first. Retail is reproduced by object
+  numbered v42-v60 (a pass-1 web above v0: `32=42` .. `32=60`) or v0 numbered at v73 or in the
+  window (>= v100), never by declaration order: every flat copy of the parameter is propagated back
+  into it (plain local, one-member carrier, `object = object;`, `object_param = 0` after the copy,
+  `*&object_param`, a copy declared after v0: all byte-identical). An inline helper returning
+  `arg1->unk_8` is folded into the local (no change). Wrapping the whole body in an
+  `always_inline` helper with v0 as its by-value parameter does give object r31 (v0 then r28), but
+  the inlined `fn_1_977BC_name` calls start sharing `&arg0->unk_148` (96.6). Open: a spelling in
+  which object is a non-propagated pass-1 web.
+- fn_1_145C6C (99.07): idx (v39, declared local) needs to be numbered between the hoisted `lis
+  0x4330` word (v68, created at the loop header) and the loop body's first int-to-float conversion
+  (v69): a value created while the loop is lowered. Plain/u32/s32/carrier/self-assigned/twice-defined
+  idx, a `for` initializer and a block-scoped idx are identical or worse; reading `arg1+52` inside
+  the loop reloads it every trip (42%). Open.
+- fn_1_59EE4 (99.25, FPR): `length` is a CSE shadow (@254, v53) created after the colour inputs;
+  retail numbers it between @185 (line `psvec_scale(&arg0->unk_1C, colorBrightness, ...)`) and @193
+  (the first `__OSf32tou8`). A local result inside `fn59_magnitude`, `fn59_segment_length(&delta,
+  &length)`, `radius = length = ...`, `radius = ...; length = radius;` and `length = length;` do not
+  move it the right way (the first two give f19, 99.13).
+- fn_8004313C (99.64): no single exchange, move or degree change of the captured graph gives
+  `one` r4 with the -1 constant and `size` in r0 (searched every swap/move of v45, v89, v93 and
+  degrees -12..+12): the webs differ from retail (`web-split`), not their numbering.
+- fn_15_4578 (98.76, FPR): best partial `39=156` (114/115): `unit` must take the number of the
+  window temporary created on the same line (1009) and v62 stays wrong. Unresolved.
