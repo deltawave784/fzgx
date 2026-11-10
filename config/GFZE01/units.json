@@ -2280,6 +2280,18 @@
   },
   {
     "module": "customize",
+    "source": "rel/customize/emb_memcard/fn_3_E6F8.c",
+    "symbols": [
+      "fn_3_E6F8"
+    ],
+    "status": "nonmatching",
+    "mw_version": null,
+    "extra_cflags": [],
+    "tu": "rel/customize/emb_memcard.c",
+    "pool": true
+  },
+  {
+    "module": "customize",
     "source": "rel/customize/emb_memcard/fn_3_F044.c",
     "symbols": [
       "fn_3_F044"
@@ -2468,6 +2480,38 @@
     "mw_version": null,
     "extra_cflags": [],
     "tu": "rel/customize/emb_paste_editor.c"
+  },
+  {
+    "module": "customize",
+    "source": "rel/customize/emb_paste_editor/fn_3_11A38.c",
+    "symbols": [
+      "fn_3_11A38"
+    ],
+    "status": "matching",
+    "mw_version": null,
+    "extra_cflags": [],
+    "tu": "rel/customize/emb_paste_editor.c",
+    "pool": {
+      "...rodata.0": "lbl_3_rodata_288",
+      "@24": "lbl_3_rodata_288+0x34",
+      "@196": "lbl_3_rodata_378+0xE8",
+      "@197": "lbl_3_rodata_378+0xF0",
+      "@198": "lbl_3_rodata_378+0xF4",
+      "@199": "lbl_3_rodata_378+0xF8",
+      "@29": "lbl_3_rodata_288+0x48",
+      "@200": "lbl_3_rodata_378+0xFC",
+      "@201": "lbl_3_rodata_378+0x100",
+      "@44": "lbl_3_rodata_288+0xBC",
+      "@202": "lbl_3_rodata_378+0x104",
+      "@34": "lbl_3_rodata_288+0x6C",
+      "@23": "lbl_3_rodata_288+0x30",
+      "@203": "lbl_3_rodata_378+0x108",
+      "@54": "lbl_3_rodata_378+0xD4",
+      "@204": "lbl_3_rodata_378+0x110",
+      "@49": "lbl_3_rodata_378+0xAC",
+      "@205": "lbl_3_rodata_378+0x118",
+      "@39": "lbl_3_rodata_288+0xA8"
+    }
   },
   {
     "module": "customize",
@@ -16048,6 +16092,26 @@
   },
   {
     "module": "main",
+    "source": "dol/fn_8000659C.c",
+    "symbols": [
+      "fn_8000659C"
+    ],
+    "status": "matching",
+    "mw_version": "GC/1.3.2",
+    "extra_cflags": [],
+    "pool": {
+      "@128": "jumptable_8012208C",
+      "@123": "lbl_801A6ED0",
+      "@124": "lbl_801A6ED8",
+      "@130": "lbl_801A6EF0",
+      "@125": "lbl_801A6EE0",
+      "@126": "lbl_801A6EB0",
+      "@122": "lbl_801A6EB8",
+      "@127": "lbl_801A6EE8"
+    }
+  },
+  {
+    "module": "main",
     "source": "dol/fn_800068F4.c",
     "symbols": [
       "fn_800068F4"
@@ -26914,6 +26978,21 @@
   },
   {
     "module": "main",
+    "source": "dol/fn_8005C478.c",
+    "symbols": [
+      "fn_8005C478"
+    ],
+    "status": "matching",
+    "mw_version": "GC/1.3.2",
+    "extra_cflags": [],
+    "pool": {
+      "@31": "lbl_801A7218",
+      "@29": "lbl_801A7228",
+      "@28": "lbl_801A7220"
+    }
+  },
+  {
+    "module": "main",
     "source": "dol/fn_8005C5C8.c",
     "symbols": [
       "fn_8005C5C8"
@@ -29185,6 +29264,16 @@
     "source": "dol/fn_80071ED4.c",
     "symbols": [
       "fn_80071ED4"
+    ],
+    "status": "matching",
+    "mw_version": "GC/1.3.2",
+    "extra_cflags": []
+  },
+  {
+    "module": "main",
+    "source": "dol/fn_80072014.c",
+    "symbols": [
+      "fn_80072014"
     ],
     "status": "matching",
     "mw_version": "GC/1.3.2",
@@ -53062,6 +53151,26 @@
   },
   {
     "module": "main_rel",
+    "source": "rel/main_rel/enemy_ctrl/fn_1_D0F60.c",
+    "symbols": [
+      "fn_1_D0F60"
+    ],
+    "status": "matching",
+    "mw_version": null,
+    "extra_cflags": [],
+    "tu": "rel/main_rel/enemy_ctrl.c",
+    "pool": {
+      "...rodata.0": "lbl_1_rodata_6078",
+      "@65": "lbl_1_rodata_6080+0x18",
+      "@63": "lbl_1_rodata_6080+0x10",
+      "white$25": "lbl_1_rodata_6080+0x8",
+      "white$29": "lbl_1_rodata_6080+0xC",
+      "@6": "lbl_1_rodata_6080",
+      "@5": "lbl_1_rodata_6078"
+    }
+  },
+  {
+    "module": "main_rel",
     "source": "rel/main_rel/enemy_ctrl/fn_1_D123C.c",
     "symbols": [
       "fn_1_D123C"
@@ -56629,6 +56738,18 @@
       "lbl_1_bss_26C68__fzgx_offset_3": "lbl_1_bss_26C68+0x3",
       "lbl_1_bss_26C68__fzgx_offset_4": "lbl_1_bss_26C68+0x4"
     }
+  },
+  {
+    "module": "main_rel",
+    "source": "rel/main_rel/game/fn_1_3867C.c",
+    "symbols": [
+      "fn_1_3867C"
+    ],
+    "status": "nonmatching",
+    "mw_version": null,
+    "extra_cflags": [],
+    "tu": "rel/main_rel/game.c",
+    "pool": true
   },
   {
     "module": "main_rel",
@@ -60675,6 +60796,18 @@
   },
   {
     "module": "main_rel",
+    "source": "rel/main_rel/mdlload/fn_1_D550C.c",
+    "symbols": [
+      "fn_1_D550C"
+    ],
+    "status": "nonmatching",
+    "mw_version": null,
+    "extra_cflags": [],
+    "tu": "rel/main_rel/mdlload.c",
+    "pool": true
+  },
+  {
+    "module": "main_rel",
     "source": "rel/main_rel/mdlload/fn_1_D5958.c",
     "symbols": [
       "fn_1_D5958"
@@ -62750,6 +62883,21 @@
     "mw_version": "GC/1.3",
     "extra_cflags": [],
     "tu": "rel/main_rel/memcard.c"
+  },
+  {
+    "module": "main_rel",
+    "source": "rel/main_rel/memcard/fn_1_C1CFC.c",
+    "symbols": [
+      "fn_1_C1CFC"
+    ],
+    "status": "matching",
+    "mw_version": null,
+    "extra_cflags": [],
+    "tu": "rel/main_rel/memcard.c",
+    "pool": {
+      "@96": "lbl_1_rodata_4CB8",
+      "@94": "lbl_1_rodata_4CC0"
+    }
   },
   {
     "module": "main_rel",
@@ -67256,6 +67404,48 @@
   },
   {
     "module": "main_rel",
+    "source": "rel/main_rel/screen_effect/fn_1_77384.c",
+    "symbols": [
+      "fn_1_77384"
+    ],
+    "status": "matching",
+    "mw_version": null,
+    "extra_cflags": [],
+    "tu": "rel/main_rel/screen_effect.c",
+    "pool": {
+      "...rodata.0": "lbl_1_rodata_3180",
+      "...data.0": "lbl_1_data_1D960",
+      "@32": "lbl_1_rodata_31EC+0x8",
+      "@173": "jumptable_1_data_1DCC8",
+      "@27": "lbl_1_rodata_31D8",
+      "@34": "lbl_1_rodata_31EC+0x10",
+      "@33": "lbl_1_rodata_31EC+0xC",
+      "@36": "lbl_1_rodata_31EC+0x18",
+      "@37": "lbl_1_rodata_31EC+0x1C",
+      "@35": "lbl_1_rodata_31EC+0x14",
+      "@46": "lbl_1_rodata_31EC+0x24",
+      "@47": "lbl_1_rodata_31EC+0x2C",
+      "@48": "lbl_1_rodata_31EC+0x34",
+      "@49": "lbl_1_rodata_31EC+0x3C",
+      "@50": "lbl_1_rodata_31EC+0x40",
+      "@51": "lbl_1_rodata_31EC+0x44",
+      "lbl_1_data_1D960": "lbl_1_data_1D960",
+      "lbl_1_data_1D9B8": "lbl_1_data_1D9B8",
+      "lbl_1_data_1D9B8__fzgx_offset_F8": "lbl_1_data_1D9B8+0xF8",
+      "lbl_1_data_1D9B8__fzgx_offset_FC": "lbl_1_data_1D9B8+0xFC",
+      "lbl_1_data_1D9B8__fzgx_offset_100": "lbl_1_data_1D9B8+0x100",
+      "lbl_1_data_1D9B8__fzgx_offset_104": "lbl_1_data_1D9B8+0x104",
+      "lbl_1_data_1DAC0": "lbl_1_data_1DAC0",
+      "jumptable_1_data_1DB04": "jumptable_1_data_1DB04",
+      "lbl_1_data_1DB9C": "lbl_1_data_1DB9C",
+      "jumptable_1_data_1DBC0": "jumptable_1_data_1DBC0",
+      "lbl_1_data_1DC54": "lbl_1_data_1DC54",
+      "lbl_1_data_1DC80": "lbl_1_data_1DC80",
+      "lbl_1_data_1DC80__fzgx_offset_34": "lbl_1_data_1DC80+0x34"
+    }
+  },
+  {
+    "module": "main_rel",
     "source": "rel/main_rel/screen_effect/fn_1_77B80.c",
     "symbols": [
       "fn_1_77B80"
@@ -68437,6 +68627,38 @@
     "tu": "rel/main_rel/sel_static_disp.c",
     "pool": {
       "@34": "lbl_1_rodata_8608"
+    }
+  },
+  {
+    "module": "main_rel",
+    "source": "rel/main_rel/sel_static_disp/fn_1_13C5EC.c",
+    "symbols": [
+      "fn_1_13C5EC"
+    ],
+    "status": "matching",
+    "mw_version": null,
+    "extra_cflags": [],
+    "tu": "rel/main_rel/sel_static_disp.c",
+    "pool": {
+      "@108": "lbl_1_rodata_8600",
+      "@98": "lbl_1_rodata_8898",
+      "@103": "lbl_1_rodata_85E8",
+      "@87": "lbl_1_rodata_8D88",
+      "@90": "lbl_1_rodata_8B30",
+      "@105": "lbl_1_rodata_8608",
+      "@89": "lbl_1_rodata_8B2C",
+      "@88": "lbl_1_rodata_863C",
+      "@92": "lbl_1_rodata_8A3C",
+      "@91": "lbl_1_rodata_87B4",
+      "@93": "lbl_1_rodata_861C",
+      "@95": "lbl_1_rodata_87D0",
+      "@94": "lbl_1_rodata_8D8C",
+      "@97": "lbl_1_rodata_8D90",
+      "@96": "lbl_1_rodata_85F0",
+      "@99": "lbl_1_rodata_8D94",
+      "@100": "lbl_1_rodata_8D98",
+      "@101": "lbl_1_rodata_8638",
+      "@102": "lbl_1_rodata_8D9C"
     }
   },
   {
@@ -76096,6 +76318,17 @@
     ],
     "status": "matching",
     "mw_version": "GC/1.3.2",
+    "extra_cflags": [],
+    "tu": "rel/movie/_prolog.c"
+  },
+  {
+    "module": "movie",
+    "source": "rel/movie/_prolog/_prolog.c",
+    "symbols": [
+      "_prolog"
+    ],
+    "status": "matching",
+    "mw_version": null,
     "extra_cflags": [],
     "tu": "rel/movie/_prolog.c"
   },
@@ -87597,6 +87830,17 @@
     "status": "matching",
     "mw_version": "GC/1.3.2",
     "extra_cflags": []
+  },
+  {
+    "module": "profile",
+    "source": "rel/profile/_prolog.c",
+    "symbols": [
+      "_prolog"
+    ],
+    "status": "nonmatching",
+    "mw_version": null,
+    "extra_cflags": [],
+    "pool": true
   },
   {
     "module": "profile",

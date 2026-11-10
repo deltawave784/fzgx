@@ -4684,6 +4684,135 @@ void fn_1_D0E74(void) {
 }
 /* fzgx:end fn_1_D0E74 */
 
+/* fzgx:begin fn_1_D0F60 noprologue */
+#include "types.h"
+#include "rel/main_rel/globals.h"
+#include "rel/main_rel/enemy_ctrl.h"
+
+extern u32 lbl_1_bss_7AC48[5];
+extern void *lbl_801A6410;
+extern void fn_1_46B4(void *, u32, void *, u32);
+extern void fn_1_C489C(void);
+extern u32 lbl_1_bss_7AC54[4];
+extern u8 lbl_1_bss_7AC90[12];
+extern u32 lbl_1_rodata_5D40[7];
+extern u32 fn_1_5910(void *);
+extern u8 fn_1_86810(void *);
+extern u32 fn_1_3F7E0(void);
+extern void fn_1_49410(void);
+extern void fn_1_494DC(u32);
+extern const f32 lbl_1_rodata_5C3C;
+extern const f32 lbl_1_rodata_5D18;
+extern void fn_1_496FC(f32, f32);
+extern void fn_1_495C8(u32);
+extern void fn_1_49728(u32);
+extern void fn_1_4AE0C(void *, ...);
+extern const f32 lbl_1_rodata_5D5C;
+extern const f32 lbl_1_rodata_5D60;
+extern f32 lbl_1_rodata_26F8[22];
+extern const f32 lbl_1_rodata_5D64;
+extern const f32 lbl_1_rodata_5D68;
+extern void fn_1_51E60(void *);
+extern const f32 lbl_1_rodata_5D6C;
+extern void fn_1_C8DC0(void);
+extern void fn_80008E84(u32);
+extern const f32 lbl_1_rodata_5D88;
+extern const f32 lbl_1_rodata_5D8C;
+extern void fn_1_4955C(f32, f32);
+extern const f32 lbl_1_rodata_5CD4;
+extern const f32 lbl_1_rodata_5D90;
+extern void fn_1_4966C(f32, f32);
+extern const f64 lbl_1_rodata_5C00;
+extern const f32 lbl_1_rodata_5CFC;
+extern const f32 lbl_1_rodata_5DC8;
+extern const f32 lbl_1_rodata_5E0C;
+extern int sprintf(char *, const char *, ...);
+extern s16 fn_1_12C7B8(s16);
+extern s32 fn_1_465D0(char *, s32);
+extern s8 fn_1_86690(s8);
+extern u32 fn_1_12C930(u32);
+extern u8 fn_1_86624(void);
+extern u8 lbl_1_bss_9C;
+extern void *fn_1_868C0(s8);
+extern void fn_80006E10(u32);
+
+typedef struct {
+    u8 r;
+    u8 g;
+    u8 b;
+    u8 a;
+} GXColor;
+
+#pragma section code_type ".fzgxpool"
+static void fzgx_pool_primer(volatile f64 *d, volatile f32 *f) {  /* fzgx-allow: S2 pool primer sinks */
+    *f = 480.0f;
+    *d = 4503599627370496.0;
+}
+#pragma section code_type ".text"
+
+extern void fn_1_A9868(void);
+extern u16 fn_1_A5DB0(void);
+extern void fn_1_A9FFC(s16 x, s16 y, s16 w, s16 h, GXColor color);
+extern void fn_1_A9B70(s16 x, s16 y, s16 w, s16 h, GXColor color);
+extern void fn_1_AA538(void);
+extern void fn_8003432C(u16 x, u16 y, u32 *color);
+
+/* Debug EFB magnifier: reads the (cols+1) x (rows+1) framebuffer pixels around (unk_4, unk_6)
+ * with GXPeekARGB (fn_8003432C) and draws each as a cell_w x cell_h square at (x0, y0), outlining
+ * the centre cell and the sampled area in white. Off-screen pixels are skipped. */
+void fn_1_D0F60(void) {
+    s32 cell_w;
+    s32 cell_h;
+    s32 i;
+    s32 j;
+    s32 x0;
+    s32 y0;
+    s32 cols;
+    s32 rows;
+    s32 hw;
+    s32 hh;
+    s32 y;
+    u32 argb;
+    GXColor c;
+
+    cols = lbl_1_data_3D648.unk_10;
+    rows = lbl_1_data_3D648.unk_12;
+    x0 = lbl_1_data_3D648.unk_16;
+    y0 = lbl_1_data_3D648.unk_18;
+    cell_w = lbl_1_data_3D648.unk_14;
+    cell_h = lbl_1_data_3D648.unk_14;
+    hw = cols / 2;
+    hh = rows / 2;
+    fn_1_A9868();
+    for (i = -hw; i <= hw; i++) {
+        for (j = -hh; j <= hh; j++) {
+            if (((lbl_1_data_3D648.unk_4 + i) > 639.0f ? 0 : (lbl_1_data_3D648.unk_4 + i) >= 0)
+                && ((y = lbl_1_data_3D648.unk_6 + j) > fn_1_A5DB0() - 1 ? 0 : y >= 0)) {
+                fn_8003432C(lbl_1_data_3D648.unk_4 + i, y, &argb);
+                c.a = (argb & 0xFF000000) >> 24;
+                c.r = (argb & 0xFF0000) >> 16;
+                c.g = (argb & 0xFF00) >> 8;
+                c.b = argb & 0xFF;
+                fn_1_A9FFC(x0 + i * cell_w + 1, y0 + j * cell_h + 1, cell_w - 1, cell_h - 1, c);
+                if (i == 0 && j == 0) {
+                    static const GXColor white = {0xFF, 0xFF, 0xFF, 0xFF};
+                    fn_1_A9B70(x0 - 1, y0 - 1, cell_w + 2, cell_h + 2, white);
+                }
+            }
+        }
+    }
+    {
+        static const GXColor white = {0xFF, 0xFF, 0xFF, 0xFF};
+        fn_1_A9B70(lbl_1_data_3D648.unk_4 - hw - 1,
+                   480.0f * (lbl_1_data_3D648.unk_6 - hh - 1) / fn_1_A5DB0(),
+                   cols + 2,
+                   480.0f * (rows + 2) / fn_1_A5DB0(),
+                   white);
+    }
+    fn_1_AA538();
+}
+/* fzgx:end fn_1_D0F60 */
+
 /* fzgx:begin fn_1_D123C */
 s32 fn_1_D123C(u32 arg0) {
     u8 *base = (u8 *)&lbl_1_data_3D670;
