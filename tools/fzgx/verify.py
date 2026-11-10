@@ -34,6 +34,25 @@ def _units_for(p: Project, keys: List[str]) -> Dict[str, str]:
     return out
 
 
+def _untracked_includes(sources) -> List[str]:
+    """`include/` headers the committed sources include that git does not track yet (a kernel
+    header `fzgx harvest` imported for the match). The link that was just hash-checked compiled
+    against them, so the commit must carry them or it does not build in CI."""
+    import re
+    names = set()
+    for source in sources:
+        if Path(source).is_file():
+            names.update(re.findall(r'^[ \t]*#[ \t]*include[ \t]*"([^"]+)"',
+                                    Path(source).read_text(errors='replace'), re.M))
+    headers = sorted(str(ROOT / 'include' / n) for n in names if (ROOT / 'include' / n).is_file())
+    if not headers:
+        return []
+    tracked = set(subprocess.run(['git', 'ls-files', '--', *headers], cwd=ROOT, capture_output=True,
+                                 text=True).stdout.split())
+    tracked = {str((ROOT / t).resolve()) for t in tracked}
+    return [h for h in headers if str(Path(h).resolve()) not in tracked]
+
+
 def _set_status(p: Project, sources: List[str], status: str) -> None:
     units = p.load_units()
     changed = False
@@ -132,6 +151,7 @@ def verify(p: Project, message: Optional[str] = None) -> Dict[str, object]:
                 d = p.module_config_dir(mod)
                 files += [str(d / "splits.txt"), str(d / "symbols.txt")]
             files.extend(dependencies)
+            files.extend(_untracked_includes(sources))
             files = sorted(path for path in set(files) if Path(path).exists() or
                            subprocess.run(['git', 'ls-files', '--error-unmatch', path],
                                           cwd=ROOT, capture_output=True).returncode == 0)

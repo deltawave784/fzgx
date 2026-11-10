@@ -25,6 +25,14 @@ candidates are matched to our ledger by (module, address) rather than by name, a
 `state/compiler_options.json` supplies options its units.json does not record, lint findings
 are never suppressed mechanically (`tidy` adds no `fzgx-allow`), and provenance records the
 ref commit and unit path of every landed function.
+
+Inline-asm kernel headers: a ref header this tree lacks whose text carries an `asm { }` body
+(the ref's validated kernel headers, e.g. mathutil.h) is imported into `include/` instead of
+being inlined. Inlined, its kernel lands in the function's own C and lint A3 refuses it: the
+saved body matches exactly and never lands (fn_1_1177C4, fn_1_117D5C: 100% in every harvest
+since PR261). Kernel headers live in include/ like include/psvec*.h. An imported header that no
+landed match includes is removed again at the end of the run; one that is used enters the
+next verified commit through the verify dependency journal.
 """
 from __future__ import annotations
 
@@ -36,6 +44,7 @@ import subprocess
 import tarfile
 import io
 import os
+import threading
 import time
 from contextlib import contextmanager
 from concurrent.futures import ThreadPoolExecutor
@@ -48,6 +57,8 @@ from .ledger import Ledger
 from .project import ROOT, STATE_DIR, Project
 
 INC_RE = re.compile(r'^[ \t]*#[ \t]*include[ \t]*[<"]([^">]+)[">].*$', re.M)
+ASM_BODY_RE = re.compile(r'\b(?:asm|__asm__)\s*(?:volatile\s*)?\{')
+_KERNEL_LOCK = threading.Lock()
 BRACES = r'\{(?:[^{}]|\{(?:[^{}]|\{[^{}]*\})*\})*\}'
 SYM_RE = re.compile(r'^(\S+)\s*=\s*(\.[\w.]+):0x([0-9A-Fa-f]+);')
 PRAGMA_RE = re.compile(r'(?m)^[ \t]*#pragma[^\n]*')
@@ -169,6 +180,7 @@ class Source:
         self.options: Dict[str, dict] = json.loads(opts.read_text()) if opts.exists() else {}
         self.our_include = [ROOT / 'include', ROOT / 'build/GFZE01/include']
         self._headers: Optional[List[str]] = None
+        self.installed: set = set()  # include/ paths this run imported (kernel headers)
         units = tree / 'config/GFZE01/units.json'
         # A ref in the pre-fzgx layout (dtk `splits.txt` + `src/game`, `src/dolphin`) has no
         # units.json and no fzgx blocks: it has no candidate this tool can screen.
@@ -264,6 +276,41 @@ class Source:
     def _ours(self, name: str) -> Optional[Path]:
         return next((d / name for d in self.our_include if (d / name).exists()), None)
 
+    def import_kernel_header(self, name: str) -> bool:
+        """Import the ref's `name` into include/ when this tree lacks it and it is an inline-asm
+        kernel header: self-contained (it includes only headers this tree has) and carrying an
+        `asm { }` body. Inlining it would put the kernel in the function's C, which lint A3
+        refuses however exactly it matches. Nothing existing is touched: no includer of ours
+        reaches a new file, so no other unit's code or @N numbering can change."""
+        if not re.fullmatch(r'[\w-]+(?:/[\w-]+)*\.h', name):
+            return False
+        theirs = self.tree / 'include' / name
+        if not theirs.exists():
+            return False
+        text = theirs.read_text(errors='replace')
+        if not ASM_BODY_RE.search(text) or any(self._ours(n) is None for n in INC_RE.findall(text)):
+            return False
+        dest = ROOT / 'include' / name
+        with _KERNEL_LOCK:
+            if self._ours(name) is None:
+                dest.parent.mkdir(parents=True, exist_ok=True)
+                dest.write_text(f'/* imported by fzgx harvest from {self.origin} */\n' + text)
+                self.installed.add(dest)
+        return True
+
+    def release_unused_kernel_headers(self, used: set) -> List[str]:
+        """Remove the imported headers no landed body includes; return the kept ones (relative
+        paths), which the caller journals for the next verified commit."""
+        kept = []
+        for dest in sorted(self.installed):
+            rel = dest.relative_to(ROOT / 'include').as_posix()
+            if rel in used:
+                kept.append(dest.relative_to(ROOT).as_posix())
+            else:
+                dest.unlink(missing_ok=True)
+        self.installed.clear()
+        return kept
+
     def expand(self, text: str, force: frozenset = frozenset(), seen: Optional[set] = None, depth: int = 0) -> str:
         """Inline the ref's headers that this tree lacks (and those in `force`); keep the rest."""
         seen = set() if seen is None else seen
@@ -273,6 +320,8 @@ class Source:
             theirs = self.tree / 'include' / name
             if (self._ours(name) is not None and name not in force) or not theirs.exists() or depth > 12:
                 return m[0]
+            if name not in force and self.import_kernel_header(name):
+                return m[0]  # now ours: the include stays and keeps the header's lint exemption
             if name in seen:
                 return f'/* {name}: inlined above */'
             seen.add(name)
@@ -670,9 +719,12 @@ def _bound(agent: str, label: str):
 
 
 def land(p: Project, results: List[dict], agent: str, label: str, provenance: Path,
-         skip: frozenset = frozenset(), sha: str = '', chunk: int = 40) -> dict:
+         skip: frozenset = frozenset(), sha: str = '', chunk: int = 40,
+         imported: frozenset = frozenset()) -> dict:
     """Submit every clean match, then `fzgx verify` once per `chunk` submissions (verify bisects
-    and uncarves anything that breaks the link; provenance keeps only what stays matched)."""
+    and uncarves anything that breaks the link; provenance keeps only what stays matched).
+    `imported` names the include/ headers this run imported (`Source.import_kernel_header`): a
+    landed body that includes one journals it, so the verified commit carries the header."""
     upstream = upstream_imports(sha) if sha else {}
     prov = json.loads(provenance.read_text()) if provenance.exists() else {}
     ledger = Ledger()
@@ -742,6 +794,10 @@ def land(p: Project, results: List[dict], agent: str, label: str, provenance: Pa
                 pass
             continue
         if s.get('ok'):
+            needs = sorted({'include/' + n for n in INC_RE.findall(body) if n in imported})
+            if needs:
+                with (STATE_DIR / 'verify_dependencies.jsonl').open('a') as out:
+                    out.write(json.dumps(needs) + '\n')
             prov[sym] = dict(source=label, commit=sha, kind=b['kind'], status=r['status'], mw=b.get('mw'),
                              flags=b.get('flags'), ref_name=r.get('ref_name'), unit=r.get('ref_unit'),
                              ref_unit_options=r.get('ref_unit_options'), upstream=upstream.get(r.get('ref_name') or sym),
@@ -826,8 +882,24 @@ def run(p: Project, ref: str, label: Optional[str] = None, do_land: bool = False
     if do_land:
         owner = re.sub(r'[^\w.-]+', '-', label.split('@')[0].split('/')[0]).strip('-') or 'harvest'
         out['land'] = land(p, results, f'harvest-{owner}', label, ROOT / 'state/forkimports' / f'{owner}.json',
-                           sha=sha)
+                           sha=sha, imported=frozenset(d.relative_to(ROOT / 'include').as_posix()
+                                                       for d in src.installed))
         if refine_min is not None:
             out['refine'] = refine(p, results, label, ROOT / 'state/forkimports' / f'{owner}.json', sha=sha,
                                    min_percent=refine_min, budget=refine_budget)
+    if src.installed:
+        # kernel headers stay only where a landed (committed) body includes them
+        ledger, used = Ledger(), set()
+        for r in results:
+            sym, body = p.resolve(r['symbol']), Path((r.get('best') or {}).get('body') or '')
+            row = ledger.get(p.key(sym)) if sym else None
+            if row and row['status'] == 'matched' and body.is_file():
+                used.update(INC_RE.findall(body.read_text()))
+        kept = src.release_unused_kernel_headers(used)
+        untracked = [k for k in kept if subprocess.run(['git', 'ls-files', '--error-unmatch', k], cwd=ROOT,
+                                                       capture_output=True).returncode != 0]
+        if untracked:  # a refine landing included one after the last verify: the next verify commits it
+            with (STATE_DIR / 'verify_dependencies.jsonl').open('a') as journal:
+                journal.write(json.dumps(untracked) + '\n')
+        out['kernel_headers'] = kept
     return out
