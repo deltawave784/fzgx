@@ -41898,6 +41898,18 @@
   },
   {
     "module": "main_rel",
+    "source": "rel/main_rel/bitmap/fn_1_4A0D8.c",
+    "symbols": [
+      "fn_1_4A0D8"
+    ],
+    "status": "nonmatching",
+    "mw_version": null,
+    "extra_cflags": [],
+    "tu": "rel/main_rel/bitmap.c",
+    "pool": true
+  },
+  {
+    "module": "main_rel",
     "source": "rel/main_rel/bitmap/fn_1_4AEE8.c",
     "symbols": [
       "fn_1_4AEE8"
